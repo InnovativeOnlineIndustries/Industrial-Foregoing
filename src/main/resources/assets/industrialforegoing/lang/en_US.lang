@@ -1,0 +1,20 @@
+itemGroup.industrialforegoing=Industrial Foregoing
+
+text.display.burning=Burning time:
+text.display.producing=Producing:
+text.display.amount=Amount:
+text.display.block=Block:
+text.display.empty=Empty
+
+tile.industrialforegoing_petrified_fuel_generator.name=Petrified Fuel Generator
+tile.industrialforegoing_enchantment_refiner.name=Enchantment Refiner
+tile.industrialforegoing_enchantment_extractor.name=Enchantment Extractor
+tile.industrialforegoing_enchantment_aplicator.name=Enchantment Aplicator
+tile.industrialforegoing_mob_relocator.name=Mob Relocator
+tile.industrialforegoing_potion_enervator.name=Potion Enervator
+tile.industrialforegoing_animal_independence_selector.name=Animal Independence Selector
+tile.industrialforegoing_animal_stock_increaser.name=Animal Stock Increaser
+tile.industrialforegoing_crop_sower.name=Crop Sower
+tile.industrialforegoing_crop_recolector.name=Crop Recolector
+tile.industrialforegoing_crop_enrich_material_injector.name=Crop Enrich Material Injector
+tile.industrialforegoing_black_hole_unit.name=Black Hole Unit
