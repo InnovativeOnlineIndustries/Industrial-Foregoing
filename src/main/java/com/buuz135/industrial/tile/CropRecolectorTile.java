@@ -54,7 +54,7 @@ public class CropRecolectorTile extends WorkingAreaElectricMachine {
                 BoundingRectangle box = this.getBoundingBox();
                 int i = 0;
                 for (int y = 0; y < 3; y++) {
-                    for (int x = 0; x < 4; x++) {
+                    for (int x = 0; x < 6; x++) {
                         slots.add(new FilteredSlot(this.getItemHandlerForContainer(), i, box.getLeft() + 1 + x * 18, box.getTop() + 1 + y * 18));
                         ++i;
                     }
