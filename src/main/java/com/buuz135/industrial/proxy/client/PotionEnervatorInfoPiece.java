@@ -1,6 +1,6 @@
 package com.buuz135.industrial.proxy.client;
 
-import com.buuz135.industrial.tile.PotionEnervatorTile;
+import com.buuz135.industrial.tile.magic.PotionEnervatorTile;
 import net.minecraft.util.ResourceLocation;
 import net.ndrei.teslacorelib.gui.BasicRenderedGuiPiece;
 

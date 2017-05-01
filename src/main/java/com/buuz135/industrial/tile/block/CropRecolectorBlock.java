@@ -1,6 +1,6 @@
 package com.buuz135.industrial.tile.block;
 
-import com.buuz135.industrial.tile.CropRecolectorTile;
+import com.buuz135.industrial.tile.crop.CropRecolectorTile;
 import net.minecraft.block.material.Material;
 
 public class CropRecolectorBlock extends CustomOrientedBlock<CropRecolectorTile> {

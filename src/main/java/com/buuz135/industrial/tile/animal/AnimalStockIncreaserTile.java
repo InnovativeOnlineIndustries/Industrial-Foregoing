@@ -1,5 +1,6 @@
-package com.buuz135.industrial.tile;
+package com.buuz135.industrial.tile.animal;
 
+import com.buuz135.industrial.tile.WorkingAreaElectricMachine;
 import net.minecraft.entity.passive.EntityAnimal;
 import net.minecraft.inventory.Slot;
 import net.minecraft.item.EnumDyeColor;

@@ -1,4 +1,4 @@
-package com.buuz135.industrial.tile;
+package com.buuz135.industrial.tile.magic;
 
 import com.buuz135.industrial.utils.ItemStackRenderUtils;
 import com.buuz135.industrial.utils.Reference;

@@ -1,6 +1,6 @@
 package com.buuz135.industrial.proxy.client;
 
-import com.buuz135.industrial.tile.BlackHoleUnitTile;
+import com.buuz135.industrial.tile.misc.BlackHoleUnitTile;
 import com.buuz135.industrial.utils.ItemStackRenderUtils;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;

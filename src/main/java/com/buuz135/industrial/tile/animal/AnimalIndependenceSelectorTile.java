@@ -1,5 +1,6 @@
-package com.buuz135.industrial.tile;
+package com.buuz135.industrial.tile.animal;
 
+import com.buuz135.industrial.tile.WorkingAreaElectricMachine;
 import net.minecraft.entity.EntityAgeable;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.AxisAlignedBB;

@@ -1,6 +1,6 @@
 package com.buuz135.industrial.proxy.client;
 
-import com.buuz135.industrial.tile.PetrifiedFuelGeneratorTile;
+import com.buuz135.industrial.tile.generator.PetrifiedFuelGeneratorTile;
 import com.buuz135.industrial.utils.Reference;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;

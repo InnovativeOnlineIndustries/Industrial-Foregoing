@@ -1,4 +1,4 @@
-package com.buuz135.industrial.tile;
+package com.buuz135.industrial.tile.magic;
 
 import net.minecraft.init.Items;
 import net.minecraft.inventory.Slot;

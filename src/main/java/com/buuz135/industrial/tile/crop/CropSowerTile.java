@@ -1,6 +1,7 @@
-package com.buuz135.industrial.tile;
+package com.buuz135.industrial.tile.crop;
 
 import com.buuz135.industrial.IndustrialForegoing;
+import com.buuz135.industrial.tile.WorkingAreaElectricMachine;
 import com.buuz135.industrial.utils.BlockUtils;
 import net.minecraft.block.BlockFarmland;
 import net.minecraft.init.Blocks;

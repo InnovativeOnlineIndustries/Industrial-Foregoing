@@ -1,6 +1,7 @@
-package com.buuz135.industrial.tile;
+package com.buuz135.industrial.tile.animal;
 
 import com.buuz135.industrial.proxy.FluidsRegistry;
+import com.buuz135.industrial.tile.WorkingAreaElectricMachine;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.monster.EntityMob;
 import net.minecraft.inventory.Slot;

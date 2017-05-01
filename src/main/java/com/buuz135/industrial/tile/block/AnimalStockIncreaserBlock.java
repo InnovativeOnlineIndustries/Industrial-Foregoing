@@ -1,6 +1,6 @@
 package com.buuz135.industrial.tile.block;
 
-import com.buuz135.industrial.tile.AnimalStockIncreaserTile;
+import com.buuz135.industrial.tile.animal.AnimalStockIncreaserTile;
 import net.minecraft.block.material.Material;
 
 public class AnimalStockIncreaserBlock extends CustomOrientedBlock<AnimalStockIncreaserTile> {

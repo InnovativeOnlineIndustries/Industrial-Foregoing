@@ -1,6 +1,6 @@
 package com.buuz135.industrial.tile.block;
 
-import com.buuz135.industrial.tile.EnchantmentAplicatorTile;
+import com.buuz135.industrial.tile.magic.EnchantmentAplicatorTile;
 import net.minecraft.block.material.Material;
 
 public class EnchantmentAplicatorBlock extends CustomOrientedBlock<EnchantmentAplicatorTile> {

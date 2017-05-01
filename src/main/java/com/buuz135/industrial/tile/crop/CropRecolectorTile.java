@@ -1,17 +1,17 @@
-package com.buuz135.industrial.tile;
+package com.buuz135.industrial.tile.crop;
 
-import com.buuz135.industrial.IndustrialForegoing;
+import com.buuz135.industrial.tile.WorkingAreaElectricMachine;
 import com.buuz135.industrial.utils.BlockUtils;
 import net.minecraft.block.BlockCrops;
+import net.minecraft.block.BlockNetherWart;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.inventory.Slot;
 import net.minecraft.item.EnumDyeColor;
-import net.minecraft.item.ItemDye;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
-import net.minecraftforge.common.util.FakePlayer;
+import net.minecraftforge.items.ItemHandlerHelper;
 import net.minecraftforge.items.ItemStackHandler;
 import net.ndrei.teslacorelib.containers.BasicTeslaContainer;
 import net.ndrei.teslacorelib.containers.FilteredSlot;
@@ -23,32 +23,30 @@ import net.ndrei.teslacorelib.inventory.ColoredItemHandler;
 
 import java.util.List;
 
-public class CropEnrichMaterialInjectorTile extends WorkingAreaElectricMachine {
+public class CropRecolectorTile extends WorkingAreaElectricMachine {
 
     private static String NBT_POINTER = "pointer";
 
-    private ItemStackHandler inFert;
+    private ItemStackHandler outItems;
     private int pointer;
 
-
-    public CropEnrichMaterialInjectorTile() {
-        super(CropEnrichMaterialInjectorTile.class.getName().hashCode());
-        pointer = 0;
+    public CropRecolectorTile() {
+        super(CropRecolectorTile.class.getName().hashCode());
     }
 
     @Override
     protected void initializeInventories() {
         super.initializeInventories();
-        inFert = new ItemStackHandler(12);
-        this.addInventory(new ColoredItemHandler(inFert, EnumDyeColor.GREEN, "Fertilizer input", new BoundingRectangle(18 * 5 + 3, 25, 18 * 4, 18 * 3)) {
+        outItems = new ItemStackHandler(3 * 6);
+        this.addInventory(new ColoredItemHandler(outItems, EnumDyeColor.ORANGE, "Crops output", new BoundingRectangle(18 * 3, 25, 18 * 4, 18 * 3)) {
             @Override
             public boolean canInsertItem(int slot, ItemStack stack) {
-                return true;
+                return false;
             }
 
             @Override
             public boolean canExtractItem(int slot) {
-                return false;
+                return true;
             }
 
             @Override
@@ -57,7 +55,7 @@ public class CropEnrichMaterialInjectorTile extends WorkingAreaElectricMachine {
                 BoundingRectangle box = this.getBoundingBox();
                 int i = 0;
                 for (int y = 0; y < 3; y++) {
-                    for (int x = 0; x < 4; x++) {
+                    for (int x = 0; x < 6; x++) {
                         slots.add(new FilteredSlot(this.getItemHandlerForContainer(), i, box.getLeft() + 1 + x * 18, box.getTop() + 1 + y * 18));
                         ++i;
                     }
@@ -71,13 +69,13 @@ public class CropEnrichMaterialInjectorTile extends WorkingAreaElectricMachine {
 
                 BoundingRectangle box = this.getBoundingBox();
                 pieces.add(new TiledRenderedGuiPiece(box.getLeft(), box.getTop(), 18, 18,
-                        4, 3,
-                        BasicTeslaGuiContainer.MACHINE_BACKGROUND, 108, 225, EnumDyeColor.GREEN));
+                        6, 3,
+                        BasicTeslaGuiContainer.MACHINE_BACKGROUND, 108, 225, EnumDyeColor.ORANGE));
 
                 return pieces;
             }
         });
-        this.addInventoryToStorage(inFert, "crop_fert_in");
+        this.addInventoryToStorage(outItems, "crop_recolector_out");
     }
 
     @Override
@@ -91,27 +89,46 @@ public class CropEnrichMaterialInjectorTile extends WorkingAreaElectricMachine {
     protected float performWork() {
         List<BlockPos> blockPos = BlockUtils.getBlockPosInAABB(getWorkingArea());
         if (pointer < blockPos.size()) {
-            if (this.world.getBlockState(blockPos.get(pointer)).getBlock() instanceof BlockCrops) {
-                ItemStack stack = getFirstItem();
-                if (!stack.isEmpty()) {
-                    FakePlayer player = IndustrialForegoing.getFakePlayer(this.world);
-                    ItemDye.applyBonemeal(stack, this.world, blockPos.get(pointer), player, EnumHand.MAIN_HAND);
+            IBlockState state = this.world.getBlockState(blockPos.get(pointer));
+            if ((state.getBlock() instanceof BlockCrops && ((BlockCrops) state.getBlock()).isMaxAge(state)) || (state.getBlock() instanceof BlockNetherWart && state.getValue(BlockNetherWart.AGE) >= 3)) {
+                List<ItemStack> drops = state.getBlock().getDrops(this.world, blockPos.get(pointer), state, 0);
+                boolean canInsert = true;
+                for (ItemStack stack : drops) {
+                    if (!ItemHandlerHelper.insertItem(outItems, stack, true).isEmpty()) {
+                        canInsert = false;
+                        break;
+                    }
+                }
+                if (canInsert) {
+                    for (ItemStack stack : drops) {
+                        ItemHandlerHelper.insertItem(outItems, stack, false);
+                    }
+                    this.world.setBlockToAir(blockPos.get(pointer));
                     ++pointer;
                     if (pointer >= blockPos.size()) pointer = 0;
-                    return 1;
                 }
+                return 1;
             }
         } else {
             pointer = 0;
         }
-        return 1;
+        return 0;
     }
 
-    private ItemStack getFirstItem() {
-        for (int i = 0; i < inFert.getSlots(); ++i)
-            if (!inFert.getStackInSlot(i).isEmpty()) return inFert.getStackInSlot(i);
-        return ItemStack.EMPTY;
+    @Override
+    public NBTTagCompound writeToNBT(NBTTagCompound compound) {
+        NBTTagCompound tagCompound = super.writeToNBT(compound);
+        tagCompound.setInteger(NBT_POINTER, pointer);
+        return tagCompound;
     }
+
+    @Override
+    public void readFromNBT(NBTTagCompound compound) {
+        super.readFromNBT(compound);
+        if (!compound.hasKey(NBT_POINTER)) pointer = 0;
+        else pointer = compound.getInteger(NBT_POINTER);
+    }
+
 
     @Override
     protected int getEnergyForWorkRate() {
@@ -132,19 +149,4 @@ public class CropEnrichMaterialInjectorTile extends WorkingAreaElectricMachine {
     public long getWorkEnergyCapacity() {
         return 100;
     }
-
-    @Override
-    public NBTTagCompound writeToNBT(NBTTagCompound compound) {
-        NBTTagCompound tagCompound = super.writeToNBT(compound);
-        tagCompound.setInteger(NBT_POINTER, pointer);
-        return tagCompound;
-    }
-
-    @Override
-    public void readFromNBT(NBTTagCompound compound) {
-        super.readFromNBT(compound);
-        if (!compound.hasKey(NBT_POINTER)) pointer = 0;
-        else pointer = compound.getInteger(NBT_POINTER);
-    }
-
 }

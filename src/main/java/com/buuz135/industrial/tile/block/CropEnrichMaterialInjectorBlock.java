@@ -1,6 +1,6 @@
 package com.buuz135.industrial.tile.block;
 
-import com.buuz135.industrial.tile.CropEnrichMaterialInjectorTile;
+import com.buuz135.industrial.tile.crop.CropEnrichMaterialInjectorTile;
 import net.minecraft.block.material.Material;
 
 public class CropEnrichMaterialInjectorBlock extends CustomOrientedBlock<CropEnrichMaterialInjectorTile> {

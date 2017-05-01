@@ -1,4 +1,4 @@
-package com.buuz135.industrial.tile;
+package com.buuz135.industrial.tile.generator;
 
 import com.buuz135.industrial.proxy.client.PetrifiedFuelInfoPiece;
 import net.minecraft.inventory.Slot;

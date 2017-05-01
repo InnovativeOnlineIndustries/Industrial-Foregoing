@@ -1,4 +1,4 @@
-package com.buuz135.industrial.tile;
+package com.buuz135.industrial.tile.misc;
 
 import com.buuz135.industrial.proxy.client.BlackHoleInfoPiece;
 import net.minecraft.inventory.Slot;

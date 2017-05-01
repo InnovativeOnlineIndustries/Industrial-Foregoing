@@ -1,6 +1,6 @@
 package com.buuz135.industrial.tile.block;
 
-import com.buuz135.industrial.tile.PetrifiedFuelGeneratorTile;
+import com.buuz135.industrial.tile.generator.PetrifiedFuelGeneratorTile;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.util.EnumFacing;
