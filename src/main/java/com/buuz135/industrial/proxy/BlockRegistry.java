@@ -18,6 +18,7 @@ public class BlockRegistry {
     public static CropRecolectorBlock cropRecolectorBlock;
     public static BlackHoleUnitBlock blackHoleUnitBlock;
     public static WaterCondensatorBlock waterCondensatorBlock;
+    public static WaterResourcesCollectorBlock waterResourcesCollectorBlock;
 
     public static BlockFluidXP XP;
 
@@ -35,6 +36,7 @@ public class BlockRegistry {
         (cropRecolectorBlock = new CropRecolectorBlock()).register();
         (blackHoleUnitBlock = new BlackHoleUnitBlock()).register();
         (waterCondensatorBlock = new WaterCondensatorBlock()).register();
+        (waterResourcesCollectorBlock = new WaterResourcesCollectorBlock()).register();
 
         (XP = new BlockFluidXP(FluidsRegistry.XP, "xp_block")).register();
     }
