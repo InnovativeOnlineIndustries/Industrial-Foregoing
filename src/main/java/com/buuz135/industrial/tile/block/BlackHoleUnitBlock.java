@@ -33,6 +33,7 @@ public class BlackHoleUnitBlock extends CustomOrientedBlock<BlackHoleUnitTile> {
                 stack.getTagCompound().setInteger(BlackHoleUnitTile.NBT_AMOUNT, tile.getAmount());
                 stack.getTagCompound().setString(BlackHoleUnitTile.NBT_ITEMSTACK, tile.getStack().getItem().getRegistryName().toString());
                 stack.getTagCompound().setInteger(BlackHoleUnitTile.NBT_META, tile.getStack().getMetadata());
+                if (tile.getStack().hasTagCompound())stack.getTagCompound().setTag(BlackHoleUnitTile.NBT_ITEM_NBT,tile.getStack().getTagCompound());
             }
             float f = 0.7F;
             float d0 = world.rand.nextFloat() * f + (1.0F - f) * 0.5F;
@@ -61,7 +62,9 @@ public class BlackHoleUnitBlock extends CustomOrientedBlock<BlackHoleUnitTile> {
         if (stack.hasTagCompound() && world.getTileEntity(pos) != null && world.getTileEntity(pos) instanceof BlackHoleUnitTile) {
             BlackHoleUnitTile tile = (BlackHoleUnitTile) world.getTileEntity(pos);
             if (stack.getTagCompound().hasKey(BlackHoleUnitTile.NBT_ITEMSTACK) && stack.getTagCompound().hasKey(BlackHoleUnitTile.NBT_META)) {
-                tile.setStack(new ItemStack(Item.getByNameOrId(stack.getTagCompound().getString(BlackHoleUnitTile.NBT_ITEMSTACK)), 1, stack.getTagCompound().getInteger(BlackHoleUnitTile.NBT_META)));
+                ItemStack item = new ItemStack(Item.getByNameOrId(stack.getTagCompound().getString(BlackHoleUnitTile.NBT_ITEMSTACK)), 1, stack.getTagCompound().getInteger(BlackHoleUnitTile.NBT_META));
+                if (stack.getTagCompound().hasKey(BlackHoleUnitTile.NBT_ITEM_NBT))item.setTagCompound(stack.getTagCompound().getCompoundTag(BlackHoleUnitTile.NBT_ITEM_NBT));
+                tile.setStack(item);
             }
             if (stack.getTagCompound().hasKey(BlackHoleUnitTile.NBT_AMOUNT))
                 tile.setAmount(stack.getTagCompound().getInteger(BlackHoleUnitTile.NBT_AMOUNT));

@@ -29,6 +29,7 @@ public class BlackHoleUnitTile extends SidedTileEntity {
     public static final String NBT_ITEMSTACK = "itemstack";
     public static final String NBT_AMOUNT = "amount";
     public static final String NBT_META = "meta";
+    public static final String NBT_ITEM_NBT = "stack_nbt";
     //TODO Save NBT item
     private ItemStackHandler inItems;
     private ItemStackHandler outItems;
@@ -54,10 +55,10 @@ public class BlackHoleUnitTile extends SidedTileEntity {
         }
         if (outItems.getStackInSlot(0).isEmpty()) {
             ItemStack stack = this.stack.copy();
-            stack.setCount(Math.min(64, amount));
+            stack.setCount(Math.min(stack.getMaxStackSize(), amount));
             amount -= stack.getCount();
             ItemHandlerHelper.insertItem(outItems, stack, false);
-        } else if (outItems.getStackInSlot(0).getCount() < 64) {
+        } else if (outItems.getStackInSlot(0).getCount() < outItems.getStackInSlot(0).getMaxStackSize()) {
             ItemStack stack = outItems.getStackInSlot(0);
             int increment = Math.min(amount, 64 - stack.getCount());
             stack.setCount(stack.getCount() + increment);
@@ -160,6 +161,7 @@ public class BlackHoleUnitTile extends SidedTileEntity {
         tagCompound.setString(NBT_ITEMSTACK, stack.getItem().getRegistryName().toString());
         tagCompound.setInteger(NBT_AMOUNT, amount);
         tagCompound.setInteger(NBT_META, stack.getMetadata());
+        tagCompound.setTag(NBT_ITEM_NBT,stack.hasTagCompound() ? stack.getTagCompound() : new NBTTagCompound());
         return tagCompound;
     }
 
@@ -171,6 +173,7 @@ public class BlackHoleUnitTile extends SidedTileEntity {
             Item item = Item.getByNameOrId(compound.getString(NBT_ITEMSTACK));
             if (item != null) {
                 stack = new ItemStack(item, 1, compound.hasKey(NBT_META) ? compound.getInteger(NBT_META) : 0);
+                if (compound.hasKey(NBT_ITEM_NBT)) stack.setTagCompound(compound.getCompoundTag(NBT_ITEM_NBT));
             }
         }
         if (!compound.hasKey(NBT_AMOUNT)) amount = 0;
@@ -188,7 +191,7 @@ public class BlackHoleUnitTile extends SidedTileEntity {
     }
 
     public boolean canInsertItem(ItemStack stack) {
-        return Integer.MAX_VALUE >= stack.getCount() + amount && (BlackHoleUnitTile.this.stack.isEmpty() || (stack.getItem() == BlackHoleUnitTile.this.stack.getItem() && stack.getMetadata() == BlackHoleUnitTile.this.stack.getMetadata()));
+        return Integer.MAX_VALUE >= stack.getCount() + amount && (BlackHoleUnitTile.this.stack.isEmpty() || (stack.getItem() == BlackHoleUnitTile.this.stack.getItem() && stack.getMetadata() == BlackHoleUnitTile.this.stack.getMetadata() && (!(stack.hasTagCompound() && BlackHoleUnitTile.this.stack.hasTagCompound()) || stack.getTagCompound().equals(BlackHoleUnitTile.this.stack.getTagCompound()))));
     }
 
     public ItemStack getStack() {
