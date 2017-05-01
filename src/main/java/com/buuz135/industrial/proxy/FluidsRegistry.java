@@ -16,7 +16,6 @@ public class FluidsRegistry {
     public static Fluid XP;
 
     public static void registerFluids() {
-        //FluidRegistry.enableUniversalBucket();
         XP = new XPFluid();
         FluidRegistry.registerFluid(XP);
         FluidRegistry.addBucketForFluid(XP);
@@ -30,6 +29,7 @@ public class FluidsRegistry {
         ModelBakery.registerItemVariants(fluid);
         ModelLoader.setCustomMeshDefinition(fluid, stack -> new ModelResourceLocation(Reference.MOD_ID, "fluid"));
         ModelLoader.setCustomStateMapper(BlockRegistry.XP, new StateMapperBase() {
+            @Override
             protected ModelResourceLocation getModelResourceLocation(IBlockState state) {
                 return new ModelResourceLocation(Reference.MOD_ID, "fluid");
             }

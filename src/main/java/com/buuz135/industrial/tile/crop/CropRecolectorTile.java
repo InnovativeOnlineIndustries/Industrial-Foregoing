@@ -38,7 +38,7 @@ public class CropRecolectorTile extends WorkingAreaElectricMachine {
     protected void initializeInventories() {
         super.initializeInventories();
         outItems = new ItemStackHandler(3 * 6);
-        this.addInventory(new ColoredItemHandler(outItems, EnumDyeColor.ORANGE, "Crops output", new BoundingRectangle(18 * 3, 25, 18 * 4, 18 * 3)) {
+        this.addInventory(new ColoredItemHandler(outItems, EnumDyeColor.ORANGE, "Crops output", new BoundingRectangle(18 * 3, 25, 18 * 6, 18 * 3)) {
             @Override
             public boolean canInsertItem(int slot, ItemStack stack) {
                 return false;
@@ -104,15 +104,15 @@ public class CropRecolectorTile extends WorkingAreaElectricMachine {
                         ItemHandlerHelper.insertItem(outItems, stack, false);
                     }
                     this.world.setBlockToAir(blockPos.get(pointer));
-                    ++pointer;
-                    if (pointer >= blockPos.size()) pointer = 0;
                 }
-                return 1;
+
             }
         } else {
             pointer = 0;
         }
-        return 0;
+        ++pointer;
+        if (pointer >= blockPos.size()) pointer = 0;
+        return 1;
     }
 
     @Override

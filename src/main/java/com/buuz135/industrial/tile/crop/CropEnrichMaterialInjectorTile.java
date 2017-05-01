@@ -4,6 +4,7 @@ import com.buuz135.industrial.IndustrialForegoing;
 import com.buuz135.industrial.tile.WorkingAreaElectricMachine;
 import com.buuz135.industrial.utils.BlockUtils;
 import net.minecraft.block.BlockCrops;
+import net.minecraft.init.Items;
 import net.minecraft.inventory.Slot;
 import net.minecraft.item.EnumDyeColor;
 import net.minecraft.item.ItemDye;
@@ -44,7 +45,7 @@ public class CropEnrichMaterialInjectorTile extends WorkingAreaElectricMachine {
         this.addInventory(new ColoredItemHandler(inFert, EnumDyeColor.GREEN, "Fertilizer input", new BoundingRectangle(18 * 5 + 3, 25, 18 * 4, 18 * 3)) {
             @Override
             public boolean canInsertItem(int slot, ItemStack stack) {
-                return true;
+                return stack.getItem() == Items.DYE && stack.getMetadata() == 15;
             }
 
             @Override

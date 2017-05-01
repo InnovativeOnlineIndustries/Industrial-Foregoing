@@ -8,6 +8,7 @@ import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldServer;
+import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.SidedProxy;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
@@ -55,5 +56,9 @@ public class IndustrialForegoing {
             return fakePlayer;
         }
         return null;
+    }
+
+    static {
+        if (!FluidRegistry.isUniversalBucketEnabled())FluidRegistry.enableUniversalBucket();
     }
 }
