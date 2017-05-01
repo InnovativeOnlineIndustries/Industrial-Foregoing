@@ -228,16 +228,16 @@ public class BlackHoleUnitTile extends SidedTileEntity {
 
         @Override
         public int getSlots() {
-            return tile.getAmount() / 64 + 2;
+            return tile.getAmount() / tile.getStack().getMaxStackSize() + 2;
         }
 
         @Nonnull
         @Override
         public ItemStack getStackInSlot(int slot) {
-            double stacks = tile.getAmount() / 64D;
-            if (getAmount() <= 64 && slot == 0) return outItems.getStackInSlot(0);
+            double stacks = tile.getAmount() / (double)tile.getStack().getMaxStackSize();
+            if (getAmount() <= tile.getStack().getMaxStackSize() && slot == 0) return outItems.getStackInSlot(0);
             ItemStack stack = tile.stack.copy();
-            stack.setCount(slot < (int) stacks ? 64 : slot == (int) stacks ? (int) ((stacks - tile.getAmount() / 64) * 64) : 0);
+            stack.setCount(slot < (int) stacks ? tile.getStack().getMaxStackSize() : slot == (int) stacks ? (int) ((stacks - tile.getAmount() / tile.getStack().getMaxStackSize()) * tile.getStack().getMaxStackSize()) : 0);
             return stack;
         }
 
