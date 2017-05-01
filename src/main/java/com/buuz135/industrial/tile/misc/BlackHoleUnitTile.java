@@ -161,7 +161,7 @@ public class BlackHoleUnitTile extends SidedTileEntity {
         tagCompound.setString(NBT_ITEMSTACK, stack.getItem().getRegistryName().toString());
         tagCompound.setInteger(NBT_AMOUNT, amount);
         tagCompound.setInteger(NBT_META, stack.getMetadata());
-        tagCompound.setTag(NBT_ITEM_NBT,stack.hasTagCompound() ? stack.getTagCompound() : new NBTTagCompound());
+        tagCompound.setTag(NBT_ITEM_NBT, stack.hasTagCompound() ? stack.getTagCompound() : new NBTTagCompound());
         return tagCompound;
     }
 
@@ -234,7 +234,7 @@ public class BlackHoleUnitTile extends SidedTileEntity {
         @Nonnull
         @Override
         public ItemStack getStackInSlot(int slot) {
-            double stacks = tile.getAmount() / (double)tile.getStack().getMaxStackSize();
+            double stacks = tile.getAmount() / (double) tile.getStack().getMaxStackSize();
             if (getAmount() <= tile.getStack().getMaxStackSize() && slot == 0) return outItems.getStackInSlot(0);
             ItemStack stack = tile.stack.copy();
             stack.setCount(slot < (int) stacks ? tile.getStack().getMaxStackSize() : slot == (int) stacks ? (int) ((stacks - tile.getAmount() / tile.getStack().getMaxStackSize()) * tile.getStack().getMaxStackSize()) : 0);

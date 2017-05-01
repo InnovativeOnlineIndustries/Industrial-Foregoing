@@ -5,21 +5,25 @@ import com.buuz135.industrial.utils.Reference;
 import net.minecraft.block.material.Material;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fluids.BlockFluidClassic;
-import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 
-public class BlockFluidXP extends BlockFluidClassic {
+public class IFCustomFluidBlock extends BlockFluidClassic {
 
 
-    public BlockFluidXP(Fluid fluid, String name) {
-        super(fluid, Material.WATER);
-        setRegistryName(new ResourceLocation(Reference.MOD_ID, name));
-        setUnlocalizedName(name);
+    public IFCustomFluidBlock(IFCustomFluid fluid, Material material) {
+        super(fluid, material);
+        setRegistryName(new ResourceLocation(Reference.MOD_ID, fluid.getName()));
+        setUnlocalizedName(fluidName);
         setCreativeTab(IndustrialForegoing.creativeTab);
     }
 
     public void register() {
         GameRegistry.register(this);
-
     }
+
+    public String getName() {
+        return fluidName;
+    }
+
+
 }

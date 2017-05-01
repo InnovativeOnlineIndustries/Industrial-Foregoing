@@ -59,6 +59,6 @@ public class IndustrialForegoing {
     }
 
     static {
-        if (!FluidRegistry.isUniversalBucketEnabled())FluidRegistry.enableUniversalBucket();
+        if (!FluidRegistry.isUniversalBucketEnabled()) FluidRegistry.enableUniversalBucket();
     }
 }

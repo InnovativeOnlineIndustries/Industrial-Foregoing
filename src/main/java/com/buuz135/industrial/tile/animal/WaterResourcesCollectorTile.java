@@ -5,8 +5,6 @@ import com.buuz135.industrial.utils.BlockUtils;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.inventory.Slot;
 import net.minecraft.item.EnumDyeColor;
-import net.minecraft.item.ItemSeedFood;
-import net.minecraft.item.ItemSeeds;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
@@ -37,7 +35,7 @@ public class WaterResourcesCollectorTile extends WorkingAreaElectricMachine {
     @Override
     protected void initializeInventories() {
         super.initializeInventories();
-        outFish = new ItemStackHandler(3*6);
+        outFish = new ItemStackHandler(3 * 6);
         this.addInventory(new ColoredItemHandler(outFish, EnumDyeColor.GREEN, "Fish output", new BoundingRectangle(18 * 3, 25, 18 * 6, 18 * 3)) {
             @Override
             public boolean canInsertItem(int slot, ItemStack stack) {
@@ -82,15 +80,16 @@ public class WaterResourcesCollectorTile extends WorkingAreaElectricMachine {
     protected float performWork() {
         List<BlockPos> blockPos = BlockUtils.getBlockPosInAABB(getWorkingArea());
         boolean allWaterSources = true;
-        for (BlockPos pos : blockPos){
+        for (BlockPos pos : blockPos) {
             IBlockState state = this.world.getBlockState(pos);
-            if (!(state.getBlock().equals(FluidRegistry.WATER.getBlock()) && state.getBlock().getMetaFromState(state) == 0)) allWaterSources = false;
+            if (!(state.getBlock().equals(FluidRegistry.WATER.getBlock()) && state.getBlock().getMetaFromState(state) == 0))
+                allWaterSources = false;
         }
-        if (allWaterSources){
-            LootContext.Builder lootcontext= new LootContext.Builder((WorldServer)this.world);
+        if (allWaterSources) {
+            LootContext.Builder lootcontext = new LootContext.Builder((WorldServer) this.world);
             List<ItemStack> items = this.world.getLootTableManager().getLootTableFromLocation(LootTableList.GAMEPLAY_FISHING).generateLootForPools(this.world.rand, lootcontext.build());
-            for (ItemStack stack : items){
-                ItemHandlerHelper.insertItem(outFish,stack,false);
+            for (ItemStack stack : items) {
+                ItemHandlerHelper.insertItem(outFish, stack, false);
             }
             return 1;
         }
@@ -103,6 +102,7 @@ public class WaterResourcesCollectorTile extends WorkingAreaElectricMachine {
         BlockPos corner1 = new BlockPos(0, -1, 0);
         return this.getBlockType().getSelectedBoundingBox(this.world.getBlockState(this.pos), this.world, this.pos).offset(corner1).expand(r, 0, r);
     }
+
     @Override
     protected int getEnergyForWork() {
         return 2000;

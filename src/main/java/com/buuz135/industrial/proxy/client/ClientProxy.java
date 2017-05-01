@@ -1,7 +1,6 @@
 package com.buuz135.industrial.proxy.client;
 
 import com.buuz135.industrial.proxy.CommonProxy;
-import com.buuz135.industrial.proxy.FluidsRegistry;
 import com.buuz135.industrial.utils.Reference;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.client.model.obj.OBJLoader;
@@ -15,7 +14,7 @@ public class ClientProxy extends CommonProxy {
     public void preInit() {
         super.preInit();
         OBJLoader.INSTANCE.addDomain(Reference.MOD_ID);
-        FluidsRegistry.registerRender();
+        FluidsRenderRegistry.registerRender();
         BlockRenderRegistry.registerRender();
 
         MinecraftForge.EVENT_BUS.register(new MachineWorkAreaRender());

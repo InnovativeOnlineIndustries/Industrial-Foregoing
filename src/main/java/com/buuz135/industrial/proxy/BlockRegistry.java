@@ -1,7 +1,8 @@
 package com.buuz135.industrial.proxy;
 
-import com.buuz135.industrial.fluid.BlockFluidXP;
+import com.buuz135.industrial.fluid.IFCustomFluidBlock;
 import com.buuz135.industrial.tile.block.*;
+import net.minecraft.block.material.Material;
 
 public class BlockRegistry {
 
@@ -19,8 +20,11 @@ public class BlockRegistry {
     public static BlackHoleUnitBlock blackHoleUnitBlock;
     public static WaterCondensatorBlock waterCondensatorBlock;
     public static WaterResourcesCollectorBlock waterResourcesCollectorBlock;
+    public static AnimalResourceHarvesterBlock animalResourceHarvesterBlock;
 
-    public static BlockFluidXP XP;
+    public static IFCustomFluidBlock BLOCK_XP;
+    public static IFCustomFluidBlock BLOCK_MILK;
+    public static IFCustomFluidBlock BLOCK_MEAT;
 
     public static void registerBlocks() {
         (petrifiedFuelGeneratorBlock = new PetrifiedFuelGeneratorBlock()).register();
@@ -37,7 +41,10 @@ public class BlockRegistry {
         (blackHoleUnitBlock = new BlackHoleUnitBlock()).register();
         (waterCondensatorBlock = new WaterCondensatorBlock()).register();
         (waterResourcesCollectorBlock = new WaterResourcesCollectorBlock()).register();
+        (animalResourceHarvesterBlock = new AnimalResourceHarvesterBlock()).register();
 
-        (XP = new BlockFluidXP(FluidsRegistry.XP, "xp_block")).register();
+        (BLOCK_XP = new IFCustomFluidBlock(FluidsRegistry.XP, Material.WATER)).register();
+        (BLOCK_MILK = new IFCustomFluidBlock(FluidsRegistry.MILK, Material.WATER)).register();
+        (BLOCK_MEAT = new IFCustomFluidBlock(FluidsRegistry.MEAT, Material.WATER)).register();
     }
 }
