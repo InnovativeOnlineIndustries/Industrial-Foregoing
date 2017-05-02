@@ -11,7 +11,7 @@ apply plugin: 'net.minecraftforge.gradle.forge'
 //Only edit below this line, the above code adds and enables the necessary things for Forge to be setup.
 
 
-version= "${project.minecraft_version}-${project.mod_version}"
+version = "${project.minecraft_version}-${project.mod_version}"
 group = "com.buuz135.industrial.IndustrialForegoing" // http://maven.apache.org/guides/mini/guide-naming-conventions.html
 archivesBaseName = "industrialforegoing"
 
@@ -23,7 +23,7 @@ compileJava {
 minecraft {
     version = "1.11.2-13.20.0.2282"
     runDir = "run"
-    
+
     // the mappings can be changed at any time, and must be in the following format.
     // snapshot_YYYYMMDD   snapshot are built nightly.
     // stable_#            stables are built at the discretion of the MCP team.
@@ -55,11 +55,11 @@ processResources {
     // replace stuff in mcmod.info, nothing else
     from(sourceSets.main.resources.srcDirs) {
         include 'mcmod.info'
-                
+
         // replace version and mcversion
-        expand 'version':project.version, 'mcversion':project.minecraft.version
+        expand 'version': project.version, 'mcversion': project.minecraft.version
     }
-        
+
     // copy everything else except the mcmod.info
     from(sourceSets.main.resources.srcDirs) {
         exclude 'mcmod.info'

@@ -10,7 +10,7 @@ public class CommonProxy {
         random = new Random();
         FluidsRegistry.registerFluids();
         BlockRegistry.registerBlocks();
-
+        ItemRegistry.registerItems();
     }
 
     public void init() {

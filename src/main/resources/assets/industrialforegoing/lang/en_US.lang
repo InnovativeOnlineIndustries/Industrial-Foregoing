@@ -18,3 +18,7 @@ tile.industrialforegoing_crop_sower.name=Crop Sower
 tile.industrialforegoing_crop_recolector.name=Crop Recolector
 tile.industrialforegoing_crop_enrich_material_injector.name=Crop Enrich Material Injector
 tile.industrialforegoing_black_hole_unit.name=Black Hole Unit
+
+fluid.xpfluid=Liquid Experience
+fluid.milk=Milk
+fluid.meat=Liquid meat
