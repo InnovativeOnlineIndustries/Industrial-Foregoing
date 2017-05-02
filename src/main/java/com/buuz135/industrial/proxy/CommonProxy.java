@@ -2,7 +2,6 @@ package com.buuz135.industrial.proxy;
 
 import net.minecraft.util.DamageSource;
 import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.fml.common.FMLCommonHandler;
 
 import java.util.Random;
 

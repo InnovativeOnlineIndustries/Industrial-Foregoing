@@ -9,16 +9,16 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 public class MeatFeederTickHandler {
 
     @SubscribeEvent
-    public void onTick(LivingEvent.LivingUpdateEvent event){
-        if (!event.getEntityLiving().getEntityWorld().isRemote  && event.getEntityLiving() instanceof EntityPlayer){
+    public void onTick(LivingEvent.LivingUpdateEvent event) {
+        if (!event.getEntityLiving().getEntityWorld().isRemote && event.getEntityLiving() instanceof EntityPlayer) {
             EntityPlayer player = (EntityPlayer) event.getEntityLiving();
-            if (player.getFoodStats().needFood()){
-                for (ItemStack stack : player.inventory.mainInventory){
-                    if (stack.getItem().equals(ItemRegistry.meatFeederItem)){
-                        int filledAmount = ((MeatFeederItem)stack.getItem()).getFilledAmount(stack);
-                        if (filledAmount >= 200){
-                            ((MeatFeederItem)stack.getItem()).drain(stack,200);
-                            player.getFoodStats().setFoodLevel(player.getFoodStats().getFoodLevel()+1);
+            if (player.getFoodStats().needFood()) {
+                for (ItemStack stack : player.inventory.mainInventory) {
+                    if (stack.getItem().equals(ItemRegistry.meatFeederItem)) {
+                        int filledAmount = ((MeatFeederItem) stack.getItem()).getFilledAmount(stack);
+                        if (filledAmount >= 200) {
+                            ((MeatFeederItem) stack.getItem()).drain(stack, 200);
+                            player.getFoodStats().setFoodLevel(player.getFoodStats().getFoodLevel() + 1);
                             return;
                         }
                     }

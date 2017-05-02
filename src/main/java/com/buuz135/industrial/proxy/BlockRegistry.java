@@ -1,7 +1,6 @@
 package com.buuz135.industrial.proxy;
 
 import com.buuz135.industrial.fluid.IFCustomFluidBlock;
-import com.buuz135.industrial.tile.animal.MobSlaughterFactoryTile;
 import com.buuz135.industrial.tile.block.*;
 import net.minecraft.block.material.Material;
 

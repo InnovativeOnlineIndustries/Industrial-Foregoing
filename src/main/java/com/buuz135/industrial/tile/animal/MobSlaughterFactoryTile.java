@@ -4,18 +4,13 @@ import com.buuz135.industrial.proxy.CommonProxy;
 import com.buuz135.industrial.proxy.FluidsRegistry;
 import com.buuz135.industrial.tile.WorkingAreaElectricMachine;
 import net.minecraft.entity.EntityLiving;
-import net.minecraft.entity.item.EntityItem;
-import net.minecraft.entity.monster.EntityMob;
 import net.minecraft.item.EnumDyeColor;
-import net.minecraft.util.DamageSource;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.IFluidTank;
-import net.minecraftforge.items.ItemHandlerHelper;
 import net.ndrei.teslacorelib.inventory.BoundingRectangle;
-import scala.tools.nsc.backend.icode.TypeKinds;
 
 import java.util.List;
 
@@ -68,7 +63,7 @@ public class MobSlaughterFactoryTile extends WorkingAreaElectricMachine {
         List<EntityLiving> mobs = this.getWorld().getEntitiesWithinAABB(EntityLiving.class, area);
         if (mobs.size() == 0) return 0;
         EntityLiving mob = mobs.get(this.getWorld().rand.nextInt(mobs.size()));
-        this.outMeat.fill(new FluidStack(FluidsRegistry.MEAT, (int) mob.getHealth()*5), true);
+        this.outMeat.fill(new FluidStack(FluidsRegistry.MEAT, (int) mob.getHealth() * 5), true);
         mob.setDropItemsWhenDead(false);
         mob.attackEntityFrom(CommonProxy.custom, mob.getMaxHealth());
 //        List<EntityItem> items = this.getWorld().getEntitiesWithinAABB(EntityItem.class, area);

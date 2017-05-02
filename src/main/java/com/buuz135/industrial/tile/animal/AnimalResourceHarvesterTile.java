@@ -37,9 +37,9 @@ public class AnimalResourceHarvesterTile extends WorkingAreaElectricMachine {
     @Override
     protected void initializeInventories() {
         super.initializeInventories();
-        milkTank = this.addFluidTank(FluidsRegistry.MILK,8000, EnumDyeColor.WHITE,"Milk tank",new BoundingRectangle(50, 25, 18, 54));
+        milkTank = this.addFluidTank(FluidsRegistry.MILK, 8000, EnumDyeColor.WHITE, "Milk tank", new BoundingRectangle(50, 25, 18, 54));
         outItems = new ItemStackHandler(3 * 4);
-        this.addInventory(new ColoredItemHandler(outItems, EnumDyeColor.ORANGE, "Fish output", new BoundingRectangle(18 * 5+3, 25, 18 * 4, 18 * 3)) {
+        this.addInventory(new ColoredItemHandler(outItems, EnumDyeColor.ORANGE, "Fish output", new BoundingRectangle(18 * 5 + 3, 25, 18 * 4, 18 * 3)) {
             @Override
             public boolean canInsertItem(int slot, ItemStack stack) {
                 return false;
@@ -94,14 +94,14 @@ public class AnimalResourceHarvesterTile extends WorkingAreaElectricMachine {
         for (EntitySheep sheep : animals) {
             if (!sheep.getSheared()) {
                 List<ItemStack> stacks = sheep.onSheared(new ItemStack(Items.SHEARS), this.world, null, 0);
-                for (ItemStack stack : stacks){
-                    ItemHandlerHelper.insertItem(outItems,stack,false);
+                for (ItemStack stack : stacks) {
+                    ItemHandlerHelper.insertItem(outItems, stack, false);
                 }
                 return 1;
             }
         }
         List<EntityCow> cows = this.world.getEntitiesWithinAABB(EntityCow.class, getWorkingArea());
-        milkTank.fill(new FluidStack(FluidsRegistry.MILK,cows.size()*1000),true);
+        milkTank.fill(new FluidStack(FluidsRegistry.MILK, cows.size() * 1000), true);
         return 1;
     }
 }

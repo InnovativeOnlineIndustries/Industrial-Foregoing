@@ -13,7 +13,7 @@ import net.minecraftforge.fluids.capability.templates.FluidHandlerItemStack;
 import javax.annotation.Nullable;
 import java.util.List;
 
-public class MeatFeederItem extends IFCustomItem{
+public class MeatFeederItem extends IFCustomItem {
 
     public MeatFeederItem() {
         super("meat_feeder");
@@ -45,13 +45,13 @@ public class MeatFeederItem extends IFCustomItem{
         tooltip.add(getFilledAmount(stack) + "/" + handlerItemStack.getTankProperties()[0].getCapacity() + "mb of Meat");
     }
 
-    public int getFilledAmount(ItemStack stack){
+    public int getFilledAmount(ItemStack stack) {
         FluidHandlerItemStack handlerItemStack = (FluidHandlerItemStack) stack.getCapability(CapabilityFluidHandler.FLUID_HANDLER_ITEM_CAPABILITY, EnumFacing.DOWN);
         return (handlerItemStack.getFluid() == null ? 0 : handlerItemStack.getFluid().amount);
     }
 
-    public void drain(ItemStack stack, int amount){
+    public void drain(ItemStack stack, int amount) {
         FluidHandlerItemStack handlerItemStack = (FluidHandlerItemStack) stack.getCapability(CapabilityFluidHandler.FLUID_HANDLER_ITEM_CAPABILITY, EnumFacing.DOWN);
-        handlerItemStack.drain(new FluidStack(FluidsRegistry.MEAT,amount),true);
+        handlerItemStack.drain(new FluidStack(FluidsRegistry.MEAT, amount), true);
     }
 }
