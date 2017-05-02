@@ -39,7 +39,7 @@ public class AnimalResourceHarvesterTile extends WorkingAreaElectricMachine {
         super.initializeInventories();
         milkTank = this.addFluidTank(FluidsRegistry.MILK,8000, EnumDyeColor.WHITE,"Milk tank",new BoundingRectangle(50, 25, 18, 54));
         outItems = new ItemStackHandler(3 * 4);
-        this.addInventory(new ColoredItemHandler(outItems, EnumDyeColor.ORANGE, "Fish output", new BoundingRectangle(18 * 5+3, 25, 18 * 6, 18 * 3)) {
+        this.addInventory(new ColoredItemHandler(outItems, EnumDyeColor.ORANGE, "Fish output", new BoundingRectangle(18 * 5+3, 25, 18 * 4, 18 * 3)) {
             @Override
             public boolean canInsertItem(int slot, ItemStack stack) {
                 return false;

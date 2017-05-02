@@ -2,6 +2,7 @@ package com.buuz135.industrial.tile.animal;
 
 import com.buuz135.industrial.proxy.FluidsRegistry;
 import com.buuz135.industrial.tile.WorkingAreaElectricMachine;
+import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.monster.EntityMob;
 import net.minecraft.inventory.Slot;
@@ -37,7 +38,7 @@ public class MobRelocatorTile extends WorkingAreaElectricMachine {
     @Override
     protected void initializeInventories() {
         super.initializeInventories();
-        outExp = this.addFluidTank(FluidsRegistry.XP, 32000, EnumDyeColor.LIME, "Experience tank", new BoundingRectangle(50, 25, 18, 54));
+        outExp = this.addFluidTank(FluidsRegistry.XP, 8000, EnumDyeColor.LIME, "Experience tank", new BoundingRectangle(50, 25, 18, 54));
         outItems = new ItemStackHandler(12);
         this.addInventory(new ColoredItemHandler(outItems, EnumDyeColor.ORANGE, "Mob drops", new BoundingRectangle(18 * 5 + 3, 25, 18 * 4, 18 * 3)) {
             @Override
@@ -82,9 +83,9 @@ public class MobRelocatorTile extends WorkingAreaElectricMachine {
     @Override
     protected float performWork() {
         AxisAlignedBB area = getWorkingArea();
-        List<EntityMob> mobs = this.getWorld().getEntitiesWithinAABB(EntityMob.class, area);
+        List<EntityLiving> mobs = this.getWorld().getEntitiesWithinAABB(EntityLiving.class, area);
         if (mobs.size() == 0) return 0;
-        EntityMob mob = mobs.get(this.getWorld().rand.nextInt(mobs.size()));
+        EntityLiving mob = mobs.get(this.getWorld().rand.nextInt(mobs.size()));
         this.outExp.fill(new FluidStack(FluidsRegistry.XP, (int) mob.getHealth()), true);
         mob.attackEntityFrom(DamageSource.GENERIC, mob.getHealth());
         List<EntityItem> items = this.getWorld().getEntitiesWithinAABB(EntityItem.class, area);

@@ -1,6 +1,7 @@
 package com.buuz135.industrial.proxy;
 
 import com.buuz135.industrial.fluid.IFCustomFluidBlock;
+import com.buuz135.industrial.tile.animal.MobSlaughterFactoryTile;
 import com.buuz135.industrial.tile.block.*;
 import net.minecraft.block.material.Material;
 
@@ -21,6 +22,7 @@ public class BlockRegistry {
     public static WaterCondensatorBlock waterCondensatorBlock;
     public static WaterResourcesCollectorBlock waterResourcesCollectorBlock;
     public static AnimalResourceHarvesterBlock animalResourceHarvesterBlock;
+    public static MobSlaughterFactoryBlock mobSlaughterFactoryBlock;
 
     public static IFCustomFluidBlock BLOCK_XP;
     public static IFCustomFluidBlock BLOCK_MILK;
@@ -42,6 +44,7 @@ public class BlockRegistry {
         (waterCondensatorBlock = new WaterCondensatorBlock()).register();
         (waterResourcesCollectorBlock = new WaterResourcesCollectorBlock()).register();
         (animalResourceHarvesterBlock = new AnimalResourceHarvesterBlock()).register();
+        (mobSlaughterFactoryBlock = new MobSlaughterFactoryBlock()).register();
 
         (BLOCK_XP = new IFCustomFluidBlock(FluidsRegistry.XP, Material.WATER)).register();
         (BLOCK_MILK = new IFCustomFluidBlock(FluidsRegistry.MILK, Material.WATER)).register();
