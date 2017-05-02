@@ -22,3 +22,5 @@ tile.industrialforegoing_black_hole_unit.name=Black Hole Unit
 fluid.xpfluid=Liquid Experience
 fluid.milk=Milk
 fluid.meat=Liquid meat
+
+item.meat_feeder.name=Meat Feeder

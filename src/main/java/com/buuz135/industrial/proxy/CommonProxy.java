@@ -1,5 +1,8 @@
 package com.buuz135.industrial.proxy;
 
+import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.fml.common.FMLCommonHandler;
+
 import java.util.Random;
 
 public class CommonProxy {
@@ -11,6 +14,8 @@ public class CommonProxy {
         FluidsRegistry.registerFluids();
         BlockRegistry.registerBlocks();
         ItemRegistry.registerItems();
+
+        MinecraftForge.EVENT_BUS.register(new MeatFeederTickHandler());
     }
 
     public void init() {
