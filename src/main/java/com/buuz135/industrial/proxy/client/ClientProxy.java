@@ -18,6 +18,7 @@ public class ClientProxy extends CommonProxy {
         BlockRenderRegistry.registerRender();
 
         MinecraftForge.EVENT_BUS.register(new MachineWorkAreaRender());
+        MinecraftForge.EVENT_BUS.register(new MobRenderInPrisonHandler());
     }
 
     @Override
