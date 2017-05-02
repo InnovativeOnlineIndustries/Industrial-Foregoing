@@ -45,7 +45,7 @@ public class IndustrialForegoing {
         proxy.postInit();
     }
 
-    private static HashMap<Integer, IFFakePlayer> worldFakePlayer = new HashMap<>();
+    private static HashMap<Integer, IFFakePlayer> worldFakePlayer = new HashMap<Integer, IFFakePlayer>();
 
     public static IFFakePlayer getFakePlayer(World world) {
         if (worldFakePlayer.containsKey(world.provider.getDimension()))
