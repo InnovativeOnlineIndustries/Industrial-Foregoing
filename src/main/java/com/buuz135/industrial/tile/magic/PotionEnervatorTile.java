@@ -288,4 +288,11 @@ public class PotionEnervatorTile extends ElectricMachine {
         else action = compound.getInteger(NBT_ACTION);
     }
 
+    public IFluidTank getFluidTank() {
+        return fluidTank;
+    }
+
+    public ItemStackHandler getOutputPotions() {
+        return outputPotions;
+    }
 }
