@@ -24,6 +24,7 @@ public class BlockRegistry {
     public static AnimalResourceHarvesterBlock animalResourceHarvesterBlock;
     public static MobSlaughterFactoryBlock mobSlaughterFactoryBlock;
     public static MobDuplicatorBlock mobDuplicatorBlock;
+    public static BlockDestroyerBlock blockDestroyerBlock;
 
     public static IFCustomFluidBlock BLOCK_XP;
     public static IFCustomFluidBlock BLOCK_MILK;
@@ -47,6 +48,7 @@ public class BlockRegistry {
         (animalResourceHarvesterBlock = new AnimalResourceHarvesterBlock()).register();
         (mobSlaughterFactoryBlock = new MobSlaughterFactoryBlock()).register();
         (mobDuplicatorBlock = new MobDuplicatorBlock()).register();
+        (blockDestroyerBlock = new BlockDestroyerBlock()).register();
 
         (BLOCK_XP = new IFCustomFluidBlock(FluidsRegistry.XP, Material.WATER)).register();
         (BLOCK_MILK = new IFCustomFluidBlock(FluidsRegistry.MILK, Material.WATER)).register();
