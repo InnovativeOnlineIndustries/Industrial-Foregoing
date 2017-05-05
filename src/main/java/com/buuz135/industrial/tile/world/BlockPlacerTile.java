@@ -3,11 +3,13 @@ package com.buuz135.industrial.tile.world;
 import com.buuz135.industrial.tile.WorkingAreaElectricMachine;
 import com.buuz135.industrial.utils.BlockUtils;
 import net.minecraft.block.Block;
+import net.minecraft.init.Blocks;
 import net.minecraft.inventory.Slot;
 import net.minecraft.item.EnumDyeColor;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
+import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.items.ItemHandlerHelper;
 import net.minecraftforge.items.ItemStackHandler;
 import net.ndrei.teslacorelib.containers.BasicTeslaContainer;
@@ -20,23 +22,22 @@ import net.ndrei.teslacorelib.inventory.ColoredItemHandler;
 
 import java.util.List;
 
-public class BlockDestroyerTile extends WorkingAreaElectricMachine {
+public class BlockPlacerTile extends WorkingAreaElectricMachine {
 
+    private ItemStackHandler inItems;
 
-    private ItemStackHandler outItems;
-
-    public BlockDestroyerTile() {
-        super(BlockDestroyerTile.class.getName().hashCode());
+    public BlockPlacerTile() {
+        super(BlockPlacerTile.class.getName().hashCode());
     }
 
     @Override
     protected void initializeInventories() {
         super.initializeInventories();
-        outItems = new ItemStackHandler(3*6);
-        this.addInventory(new ColoredItemHandler(outItems, EnumDyeColor.ORANGE,"Broken items", new BoundingRectangle(18 * 3, 25, 18 *6, 18 *3)){
+        inItems = new ItemStackHandler(3*6);
+        this.addInventory(new ColoredItemHandler(inItems, EnumDyeColor.BLUE,"Input items", new BoundingRectangle(18 * 3, 25, 18 * 6, 18 * 3)){
             @Override
             public boolean canInsertItem(int slot, ItemStack stack) {
-                return false;
+                return true;
             }
 
             @Override
@@ -65,12 +66,12 @@ public class BlockDestroyerTile extends WorkingAreaElectricMachine {
                 BoundingRectangle box = this.getBoundingBox();
                 pieces.add(new TiledRenderedGuiPiece(box.getLeft(), box.getTop(), 18, 18,
                         6, 3,
-                        BasicTeslaGuiContainer.MACHINE_BACKGROUND, 108, 225, EnumDyeColor.ORANGE));
+                        BasicTeslaGuiContainer.MACHINE_BACKGROUND, 108, 225, EnumDyeColor.BLUE));
 
                 return pieces;
             }
         });
-        this.addInventoryToStorage(outItems,"block_destroyer_out");
+        this.addInventoryToStorage(inItems,"block_destroyer_out");
     }
 
     @Override
@@ -82,25 +83,21 @@ public class BlockDestroyerTile extends WorkingAreaElectricMachine {
     protected float performWork() {
         List<BlockPos> blockPosList = BlockUtils.getBlockPosInAABB(getWorkingArea());
         for (BlockPos pos : blockPosList){
-            if (!this.world.isAirBlock(pos)){
-                Block block = this.world.getBlockState(pos).getBlock();
-                List<ItemStack> drops = block.getDrops(this.world, pos, this.world.getBlockState(pos),0);
-                boolean canInsert = true;
-                for (ItemStack stack : drops){
-                    if (!ItemHandlerHelper.insertItem(outItems,stack,true).isEmpty()){
-                        canInsert = false;
-                        break;
-                    }
-                }
-                if (canInsert){
-                    for (ItemStack stack : drops){
-                        ItemHandlerHelper.insertItem(outItems,stack,false);
-                    }
-                    this.world.setBlockToAir(pos);
-                    return 1;
-                }
+            if (this.world.isAirBlock(pos)){
+                ItemStack stack = getFirstStackHasBlock();
+                if (stack.isEmpty()) return 0;
+                this.world.setBlockState(pos,Block.getBlockFromItem(stack.getItem()).getDefaultState());
+                stack.setCount(stack.getCount()-1);
+                return 1;
             }
         }
         return 0;
+    }
+
+    private ItemStack getFirstStackHasBlock(){
+        for (int i = 0; i < inItems.getSlots(); ++i){
+            if (!inItems.getStackInSlot(i).isEmpty() && !Block.getBlockFromItem(inItems.getStackInSlot(i).getItem()).equals(Blocks.AIR)) return inItems.getStackInSlot(i);
+        }
+        return ItemStack.EMPTY;
     }
 }

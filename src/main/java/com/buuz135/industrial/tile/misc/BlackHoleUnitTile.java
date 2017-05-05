@@ -44,6 +44,7 @@ public class BlackHoleUnitTile extends SidedTileEntity {
 
     @Override
     protected void innerUpdate() {
+        if (this.getWorld().isRemote) return;
         if (!inItems.getStackInSlot(0).isEmpty()) {
             ItemStack in = inItems.getStackInSlot(0);
             if (stack.isEmpty()) {

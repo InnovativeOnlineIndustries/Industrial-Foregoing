@@ -1,9 +1,17 @@
 package com.buuz135.industrial.utils;
 
+import net.minecraft.block.Block;
+import net.minecraft.block.state.IBlockState;
+import net.minecraft.init.Items;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.World;
+import net.minecraftforge.oredict.OreDictionary;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 public class BlockUtils {
@@ -18,5 +26,18 @@ public class BlockUtils {
             }
         }
         return blocks;
+    }
+
+    public static boolean isLog(World world, BlockPos pos){
+        IBlockState state = world.getBlockState(pos);
+        Item item = Item.getItemFromBlock(state.getBlock());
+        if (!item.equals(Items.AIR)){
+            ItemStack stack = new ItemStack(item);
+            int id = OreDictionary.getOreID("logWood");
+            for (int i  : OreDictionary.getOreIDs(stack)){
+                if (i == id) return true;
+            }
+        }
+        return false;
     }
 }

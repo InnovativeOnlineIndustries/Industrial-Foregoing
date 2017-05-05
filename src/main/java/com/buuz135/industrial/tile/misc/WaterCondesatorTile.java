@@ -19,6 +19,7 @@ public class WaterCondesatorTile extends SidedTileEntity {
 
     @Override
     protected void innerUpdate() {
+        if (this.getWorld().isRemote) return;
         int fillValue = getWaterSources() * 100;
         fluidTank.fill(new FluidStack(FluidRegistry.WATER, fillValue), true);
 

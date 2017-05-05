@@ -18,10 +18,22 @@ tile.industrialforegoing_crop_sower.name=Crop Sower
 tile.industrialforegoing_crop_recolector.name=Crop Recolector
 tile.industrialforegoing_crop_enrich_material_injector.name=Crop Enrich Material Injector
 tile.industrialforegoing_black_hole_unit.name=Black Hole Unit
+tile.industrialforegoing_water_condensator.name=Water Condensator
+tile.industrialforegoing_water_resources_collector.name=Water Resources Collector
+tile.industrialforegoing_animal_resource_harvester.name=Animal Resource Harvester
+tile.industrialforegoing_mob_slaughter_factory.name=Mob Slaughter Factory
+tile.industrialforegoing_mob_duplicator.name=Mob Duplicator
+tile.industrialforegoing_block_destroyer.name=Block Destroyer
+tile.industrialforegoing_block_placer.name=Block Placer
+tile.industrialforegoing_tree_fluid_extractor.name=Tree Fluid Extractor
+tile.industrialforegoing_latex_processing_unit.name=Latex Processing Unit
 
 fluid.xpfluid=Liquid Experience
 fluid.milk=Milk
-fluid.meat=Liquid meat
+fluid.meat=Liquid Meat
 
 item.meat_feeder.name=Meat Feeder
 item.mob_imprisonment_tool.name=Mob Imprisonment Tool
+item.tinydryrubber.name=Tiny Dry Rubber
+item.dryrubber.name=Dry Rubber
+item.plastic.name= Plastic

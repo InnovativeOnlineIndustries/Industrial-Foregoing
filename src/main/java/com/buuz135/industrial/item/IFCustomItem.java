@@ -22,7 +22,6 @@ public class IFCustomItem extends Item {
     }
 
     public void registerRender() {
-        ModelLoader.setCustomModelResourceLocation(this, 0, new ModelResourceLocation(this.getRegistryName(), "inventory")
-        );
+        ModelLoader.setCustomModelResourceLocation(this, 0, new ModelResourceLocation(this.getRegistryName(), "inventory"));
     }
 }
