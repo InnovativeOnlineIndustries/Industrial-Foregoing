@@ -1,6 +1,0 @@
-{
-  "parent": "industrialforegoing:block/base_block",
-  "textures": {
-    "north": "industrialforegoing:blocks/petrified_fuel_generator_front"
-  }
-}
