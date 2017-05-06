@@ -112,10 +112,8 @@ public class CropRecolectorTile extends WorkingAreaElectricMachine {
                 }
 
             } else if (BlockUtils.isLog(this.world, pos)) {
-                long nanos = System.currentTimeMillis();
                 doRecursiveChopping(world, pos, new ArrayList<BlockPos>(), new ArrayList<BlockPos>());
                 needPointerIncrease = false;
-                System.out.println(System.currentTimeMillis()-nanos);
             }
         } else {
             pointer = 0;

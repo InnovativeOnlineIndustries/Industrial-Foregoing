@@ -18,7 +18,7 @@ public class PetrifiedFuelInfoPiece extends BasicRenderedGuiPiece {
     private PetrifiedFuelGeneratorTile tile;
 
     public PetrifiedFuelInfoPiece(PetrifiedFuelGeneratorTile tile, int left, int top) {
-        super(left, top, 76, 60, new ResourceLocation(Reference.MOD_ID, "textures/gui/machines.png"), 1, 1);
+        super(left, top, 76, 55, new ResourceLocation(Reference.MOD_ID, "textures/gui/machines.png"), 1, 1);
         this.tile = tile;
     }
 
