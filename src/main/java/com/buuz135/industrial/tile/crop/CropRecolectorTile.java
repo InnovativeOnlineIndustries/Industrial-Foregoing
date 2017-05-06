@@ -9,8 +9,10 @@ import net.minecraft.inventory.Slot;
 import net.minecraft.item.EnumDyeColor;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.World;
 import net.minecraftforge.items.ItemHandlerHelper;
 import net.minecraftforge.items.ItemStackHandler;
 import net.ndrei.teslacorelib.containers.BasicTeslaContainer;
@@ -21,6 +23,7 @@ import net.ndrei.teslacorelib.gui.TiledRenderedGuiPiece;
 import net.ndrei.teslacorelib.inventory.BoundingRectangle;
 import net.ndrei.teslacorelib.inventory.ColoredItemHandler;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class CropRecolectorTile extends WorkingAreaElectricMachine {
@@ -88,7 +91,9 @@ public class CropRecolectorTile extends WorkingAreaElectricMachine {
     @Override
     protected float performWork() {
         List<BlockPos> blockPos = BlockUtils.getBlockPosInAABB(getWorkingArea());
+        boolean needPointerIncrease = true;
         if (pointer < blockPos.size()) {
+            BlockPos pos = blockPos.get(pointer);
             IBlockState state = this.world.getBlockState(blockPos.get(pointer));
             if ((state.getBlock() instanceof BlockCrops && ((BlockCrops) state.getBlock()).isMaxAge(state)) || (state.getBlock() instanceof BlockNetherWart && state.getValue(BlockNetherWart.AGE) >= 3)) {
                 List<ItemStack> drops = state.getBlock().getDrops(this.world, blockPos.get(pointer), state, 0);
@@ -106,11 +111,16 @@ public class CropRecolectorTile extends WorkingAreaElectricMachine {
                     this.world.setBlockToAir(blockPos.get(pointer));
                 }
 
+            } else if (BlockUtils.isLog(this.world, pos)) {
+                long nanos = System.currentTimeMillis();
+                doRecursiveChopping(world, pos, new ArrayList<BlockPos>(), new ArrayList<BlockPos>());
+                needPointerIncrease = false;
+                System.out.println(System.currentTimeMillis()-nanos);
             }
         } else {
             pointer = 0;
         }
-        ++pointer;
+        if (needPointerIncrease) ++pointer;
         if (pointer >= blockPos.size()) pointer = 0;
         return 1;
     }
@@ -148,5 +158,36 @@ public class CropRecolectorTile extends WorkingAreaElectricMachine {
     @Override
     public long getWorkEnergyCapacity() {
         return 100;
+    }
+
+    public void doRecursiveChopping(World world, BlockPos current, List<BlockPos> blocksChecked, List<BlockPos> blocksChopped) {
+        for (EnumFacing facing : new EnumFacing[]{EnumFacing.EAST, EnumFacing.NORTH, EnumFacing.WEST, EnumFacing.SOUTH, EnumFacing.UP}) {
+            if (BlockUtils.isLeaves(world, current.offset(facing)) && !blocksChecked.contains(current.offset(facing))) {
+                blocksChecked.add(current.offset(facing));
+                doRecursiveChopping(world, current.offset(facing), blocksChecked, blocksChopped);
+            }
+        }
+        for (EnumFacing facing : new EnumFacing[]{EnumFacing.EAST, EnumFacing.NORTH, EnumFacing.WEST, EnumFacing.SOUTH, EnumFacing.UP}) {
+            if (BlockUtils.isLog(world, current.offset(facing)) && !blocksChecked.contains(current.offset(facing))) {
+                blocksChecked.add(current.offset(facing));
+                doRecursiveChopping(world, current.offset(facing), blocksChecked, blocksChopped);
+            }
+        }
+        if (blocksChopped.size() > 25) return;
+        blocksChopped.add(current);
+        List<ItemStack> drops = world.getBlockState(current).getBlock().getDrops(world, current, world.getBlockState(current), 0);
+        boolean canInsert = true;
+        for (ItemStack stack : drops) {
+            if (!ItemHandlerHelper.insertItem(outItems, stack, true).isEmpty()) {
+                canInsert = false;
+                break;
+            }
+        }
+        if (canInsert) {
+            for (ItemStack stack : drops) {
+                ItemHandlerHelper.insertItem(outItems, stack, false);
+            }
+            this.world.setBlockToAir(current);
+        }
     }
 }

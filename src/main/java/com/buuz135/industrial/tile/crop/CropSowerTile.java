@@ -3,10 +3,12 @@ package com.buuz135.industrial.tile.crop;
 import com.buuz135.industrial.IndustrialForegoing;
 import com.buuz135.industrial.tile.WorkingAreaElectricMachine;
 import com.buuz135.industrial.utils.BlockUtils;
+import com.buuz135.industrial.utils.ItemStackUtils;
 import net.minecraft.block.BlockFarmland;
 import net.minecraft.init.Blocks;
 import net.minecraft.inventory.Slot;
 import net.minecraft.item.*;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.AxisAlignedBB;
@@ -27,10 +29,11 @@ import java.util.List;
 
 public class CropSowerTile extends WorkingAreaElectricMachine {
 
+    private static String NBT_POINTER = "pointer";
+
     private ItemStackHandler inPlant;
     private IFluidTank waterTank;
-
-    private FakePlayer fakePlayer;
+    private int pointer;
 
     public CropSowerTile() {
         super(CropSowerTile.class.getName().hashCode());
@@ -44,7 +47,7 @@ public class CropSowerTile extends WorkingAreaElectricMachine {
         this.addInventory(new ColoredItemHandler(inPlant, EnumDyeColor.GREEN, "Seeds input", new BoundingRectangle(18 * 5 + 3, 25, 18 * 4, 18 * 3)) {
             @Override
             public boolean canInsertItem(int slot, ItemStack stack) {
-                return stack.getItem() instanceof ItemSeeds || stack.getItem() instanceof ItemSeedFood;
+                return stack.getItem() instanceof ItemSeeds || stack.getItem() instanceof ItemSeedFood || ItemStackUtils.isStackOreDict(stack,"treeSapling");
             }
 
             @Override
@@ -91,15 +94,13 @@ public class CropSowerTile extends WorkingAreaElectricMachine {
     @Override
     protected float performWork() {
         List<BlockPos> blockPos = BlockUtils.getBlockPosInAABB(getWorkingArea());
-        for (BlockPos pos : blockPos) {
-            if (this.world.getBlockState(pos.add(0, -1, 0)).getBlock().equals(Blocks.DIRT)) {
-                this.world.setBlockState(pos.add(0, -1, 0), Blocks.FARMLAND.getDefaultState());
-                return 1;
-            }
-            if (this.world.getBlockState(pos.add(0, -1, 0)).getBlock().equals(Blocks.FARMLAND) && this.world.getBlockState(pos.add(0, -1, 0)).getValue(BlockFarmland.MOISTURE) <= 6 && waterTank.getFluidAmount() > 50) {
-                this.world.setBlockState(pos.add(0, -1, 0), this.world.getBlockState(pos.add(0, -1, 0)).withProperty(BlockFarmland.MOISTURE, 7));
+        ++pointer;
+        if (pointer >= blockPos.size()) pointer = 0;
+        if (pointer < blockPos.size()) {
+            BlockPos pos = blockPos.get(pointer);
+            if (this.world.getBlockState(pos.offset(EnumFacing.DOWN)).getBlock().equals(Blocks.FARMLAND) && this.world.getBlockState(pos.offset(EnumFacing.DOWN)).getValue(BlockFarmland.MOISTURE) <= 6 && waterTank.getFluidAmount() > 50) {
+                this.world.setBlockState(pos.offset(EnumFacing.DOWN), this.world.getBlockState(pos.offset(EnumFacing.DOWN)).withProperty(BlockFarmland.MOISTURE, 7));
                 waterTank.drain(50, true);
-                return 1;
             }
             if (this.world.isAirBlock(pos)) {
                 FakePlayer player = IndustrialForegoing.getFakePlayer(this.world);
@@ -108,10 +109,17 @@ public class CropSowerTile extends WorkingAreaElectricMachine {
                     Item seeds = stack.getItem();
                     player.setHeldItem(EnumHand.MAIN_HAND, stack);
                     seeds.onItemUse(player, world, pos.offset(EnumFacing.DOWN), EnumHand.MAIN_HAND, EnumFacing.UP, 0, 0, 0);
+                    if (!ItemStackUtils.isStackOreDict(stack,"treeSapling") && (this.world.getBlockState(pos.offset(EnumFacing.DOWN)).getBlock().equals(Blocks.DIRT) || this.world.getBlockState(pos.offset(EnumFacing.DOWN)).getBlock().equals(Blocks.GRASS))) {
+                        this.world.setBlockState(pos.offset(EnumFacing.DOWN), Blocks.FARMLAND.getDefaultState());
+                        return 1;
+                    }
                     return 1;
                 }
             }
+        }else{
+            pointer = 0;
         }
+
         return 1;
     }
 
@@ -139,5 +147,19 @@ public class CropSowerTile extends WorkingAreaElectricMachine {
     @Override
     public long getWorkEnergyCapacity() {
         return 100;
+    }
+
+    @Override
+    public NBTTagCompound writeToNBT(NBTTagCompound compound) {
+        NBTTagCompound tagCompound = super.writeToNBT(compound);
+        tagCompound.setInteger(NBT_POINTER, pointer);
+        return tagCompound;
+    }
+
+    @Override
+    public void readFromNBT(NBTTagCompound compound) {
+        super.readFromNBT(compound);
+        if (!compound.hasKey(NBT_POINTER)) pointer = 0;
+        else pointer = compound.getInteger(NBT_POINTER);
     }
 }

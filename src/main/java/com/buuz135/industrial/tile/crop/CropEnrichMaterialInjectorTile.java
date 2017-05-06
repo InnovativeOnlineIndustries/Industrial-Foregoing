@@ -3,7 +3,9 @@ package com.buuz135.industrial.tile.crop;
 import com.buuz135.industrial.IndustrialForegoing;
 import com.buuz135.industrial.tile.WorkingAreaElectricMachine;
 import com.buuz135.industrial.utils.BlockUtils;
+import com.buuz135.industrial.utils.ItemStackUtils;
 import net.minecraft.block.BlockCrops;
+import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.inventory.Slot;
 import net.minecraft.item.EnumDyeColor;
@@ -92,14 +94,15 @@ public class CropEnrichMaterialInjectorTile extends WorkingAreaElectricMachine {
     @Override
     protected float performWork() {
         List<BlockPos> blockPos = BlockUtils.getBlockPosInAABB(getWorkingArea());
+        ++pointer;
+        if (pointer >= blockPos.size()) pointer = 0;
         if (pointer < blockPos.size()) {
-            if (this.world.getBlockState(blockPos.get(pointer)).getBlock() instanceof BlockCrops) {
+            BlockPos pos = blockPos.get(pointer);
+            if ((this.world.getBlockState(pos).getBlock() instanceof BlockCrops &&  this.world.getBlockState(pos).getValue(BlockCrops.AGE) < 7) || this.world.getBlockState(pos).getBlock().equals(Blocks.SAPLING)) {
                 ItemStack stack = getFirstItem();
                 if (!stack.isEmpty()) {
                     FakePlayer player = IndustrialForegoing.getFakePlayer(this.world);
-                    ItemDye.applyBonemeal(stack, this.world, blockPos.get(pointer), player, EnumHand.MAIN_HAND);
-                    ++pointer;
-                    if (pointer >= blockPos.size()) pointer = 0;
+                    ItemDye.applyBonemeal(stack, this.world, pos, player, EnumHand.MAIN_HAND);
                     return 1;
                 }
             }

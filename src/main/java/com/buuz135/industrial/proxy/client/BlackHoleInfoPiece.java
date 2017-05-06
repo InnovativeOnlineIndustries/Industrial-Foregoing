@@ -1,7 +1,7 @@
 package com.buuz135.industrial.proxy.client;
 
 import com.buuz135.industrial.tile.misc.BlackHoleUnitTile;
-import com.buuz135.industrial.utils.ItemStackRenderUtils;
+import com.buuz135.industrial.utils.ItemStackUtils;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.renderer.GlStateManager;
@@ -28,7 +28,7 @@ public class BlackHoleInfoPiece extends BasicRenderedGuiPiece {
             GlStateManager.translate(this.getLeft() + 2, this.getTop() + 8, 0);
             GlStateManager.scale(1, 1, 1);
             if (!tile.getStack().isEmpty()) {
-                ItemStackRenderUtils.renderItemIntoGUI(tile.getStack(), 1, 0, 7);
+                ItemStackUtils.renderItemIntoGUI(tile.getStack(), 1, 0, 7);
                 String display = new TextComponentTranslation(tile.getStack().getUnlocalizedName() + ".name").getUnformattedText();
                 renderer.drawString(TextFormatting.DARK_GRAY + display.substring(0, Math.min(display.length(), 21)) + (display.length() > 21 ? "." : ""), 20, 4, 0xFFFFFF);
                 renderer.drawString(TextFormatting.DARK_GRAY + new TextComponentTranslation("text.display.amount").getUnformattedText() + " " + tile.getAmount(), 4, (renderer.FONT_HEIGHT) * 3, 0xFFFFFF);

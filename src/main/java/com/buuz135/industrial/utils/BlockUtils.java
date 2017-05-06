@@ -28,16 +28,24 @@ public class BlockUtils {
         return blocks;
     }
 
-    public static boolean isLog(World world, BlockPos pos){
+    public static boolean isBlockOreDict(World world, BlockPos pos,String ore){
         IBlockState state = world.getBlockState(pos);
         Item item = Item.getItemFromBlock(state.getBlock());
         if (!item.equals(Items.AIR)){
             ItemStack stack = new ItemStack(item);
-            int id = OreDictionary.getOreID("logWood");
+            int id = OreDictionary.getOreID(ore);
             for (int i  : OreDictionary.getOreIDs(stack)){
                 if (i == id) return true;
             }
         }
         return false;
+    }
+
+    public static boolean isLog(World world, BlockPos pos){
+        return isBlockOreDict(world,pos,"logWood");
+    }
+
+    public static boolean isLeaves(World world, BlockPos pos){
+        return isBlockOreDict(world,pos,"treeLeaves");
     }
 }

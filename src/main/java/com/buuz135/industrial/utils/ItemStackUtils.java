@@ -15,11 +15,12 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumFacing;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import net.minecraftforge.oredict.OreDictionary;
 import org.lwjgl.opengl.GL11;
 
 import java.util.List;
 
-public class ItemStackRenderUtils {
+public class ItemStackUtils {
 
     @SideOnly(Side.CLIENT)
     public static void renderItemIntoGUI(ItemStack stack, int x, int y, int gl) {
@@ -134,5 +135,14 @@ public class ItemStackRenderUtils {
         GlStateManager.setActiveTexture(OpenGlHelper.lightmapTexUnit);
         GlStateManager.disableTexture2D();
         GlStateManager.setActiveTexture(OpenGlHelper.defaultTexUnit);
+    }
+
+    public static boolean isStackOreDict(ItemStack stack, String string) {
+        if (stack.isEmpty()) return false;
+        int id = OreDictionary.getOreID(string);
+        for (int i : OreDictionary.getOreIDs(stack)) {
+            if (i == id) return true;
+        }
+        return false;
     }
 }
