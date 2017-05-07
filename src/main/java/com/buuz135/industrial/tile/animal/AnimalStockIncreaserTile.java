@@ -33,7 +33,7 @@ public class AnimalStockIncreaserTile extends WorkingAreaElectricMachine {
     protected void initializeInventories() {
         super.initializeInventories();
         inFeedItems = new ItemStackHandler(3 * 6);
-        this.addInventory(new ColoredItemHandler(inFeedItems, EnumDyeColor.GREEN, "Mob drops", new BoundingRectangle(18 * 3, 25, 18 * 4, 18 * 3)) {
+        this.addInventory(new ColoredItemHandler(inFeedItems, EnumDyeColor.GREEN, "Food items", new BoundingRectangle(18 * 3, 25, 18 * 6, 18 * 3)) {
             @Override
             public boolean canInsertItem(int slot, ItemStack stack) {
                 return true;

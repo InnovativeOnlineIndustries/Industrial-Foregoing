@@ -1,43 +1,31 @@
 {
   "forge_marker": 1,
   "defaults": {
-    "custom": {
-      "flip-v": true
-    },
-    "model": "industrialforegoing:petrified_fuel_generator.obj"
+    "model": "industrialforegoing:petrified_fuel_generator"
   },
   "variants": {
     "normal": [
       {}
     ],
     "inventory": [
-      {
-        "transform": "forge:default-block"
-      }
+      {}
     ],
     "facing": {
-      "down": {
-        "model": "industrialforegoing:petrified_fuel_generator.obj",
-        "x": 90
-      },
-      "up": {
-        "model": "industrialforegoing:petrified_fuel_generator.obj",
-        "x": 270
-      },
-      "north": {
-        "model": "industrialforegoing:petrified_fuel_generator.obj"
-      },
+      "north": {},
       "south": {
-        "model": "industrialforegoing:petrified_fuel_generator.obj",
         "y": 180
       },
       "west": {
-        "model": "industrialforegoing:petrified_fuel_generator.obj",
         "y": 270
       },
       "east": {
-        "model": "industrialforegoing:petrified_fuel_generator.obj",
         "y": 90
+      },
+      "up": {
+        "x": -90
+      },
+      "down": {
+        "x": 90
       }
     }
   }

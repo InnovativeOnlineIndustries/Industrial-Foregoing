@@ -1,9 +1,7 @@
 package com.buuz135.industrial.proxy;
 
 import com.buuz135.industrial.fluid.IFCustomFluidBlock;
-import com.buuz135.industrial.tile.animal.MobDuplicatorTile;
 import com.buuz135.industrial.tile.block.*;
-import com.buuz135.industrial.tile.world.BlockPlacerTile;
 import net.minecraft.block.material.Material;
 
 public class BlockRegistry {
@@ -30,7 +28,7 @@ public class BlockRegistry {
     public static TreeFluidExtractorBlock treeFluidExtractorBlock;
     public static LatexProcessingUnitBlock latexProcessingUnitBlock;
 
-    public static IFCustomFluidBlock BLOCK_XP;
+    public static IFCustomFluidBlock BLOCK_ESSENCE;
     public static IFCustomFluidBlock BLOCK_MILK;
     public static IFCustomFluidBlock BLOCK_MEAT;
     public static IFCustomFluidBlock BLOCK_LATEX;
@@ -58,7 +56,7 @@ public class BlockRegistry {
         (treeFluidExtractorBlock = new TreeFluidExtractorBlock()).register();
         (latexProcessingUnitBlock = new LatexProcessingUnitBlock()).register();
 
-        (BLOCK_XP = new IFCustomFluidBlock(FluidsRegistry.XP, Material.WATER)).register();
+        (BLOCK_ESSENCE = new IFCustomFluidBlock(FluidsRegistry.ESSENCE, Material.WATER)).register();
         (BLOCK_MILK = new IFCustomFluidBlock(FluidsRegistry.MILK, Material.WATER)).register();
         (BLOCK_MEAT = new IFCustomFluidBlock(FluidsRegistry.MEAT, Material.WATER)).register();
         (BLOCK_LATEX = new IFCustomFluidBlock(FluidsRegistry.LATEX, Material.WATER)).register();

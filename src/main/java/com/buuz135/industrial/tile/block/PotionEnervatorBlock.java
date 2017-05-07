@@ -14,19 +14,4 @@ public class PotionEnervatorBlock extends CustomOrientedBlock<PotionEnervatorTil
         super("potion_enervator", PotionEnervatorTile.class, Material.ROCK);
     }
 
-    @Override
-    public boolean isNormalCube(IBlockState state, IBlockAccess world, BlockPos pos) {
-        return false;
-    }
-
-    @Override
-    @SideOnly(Side.CLIENT)
-    public boolean shouldSideBeRendered(IBlockState blockState, IBlockAccess worldIn, BlockPos pos, EnumFacing side) {
-        return false;
-    }
-
-    @Override
-    public boolean isOpaqueCube(IBlockState blockState) {
-        return false;
-    }
 }

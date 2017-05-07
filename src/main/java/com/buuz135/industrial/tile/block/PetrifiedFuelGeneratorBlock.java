@@ -15,20 +15,5 @@ public class PetrifiedFuelGeneratorBlock extends CustomOrientedBlock<PetrifiedFu
         super("petrified_fuel_generator", PetrifiedFuelGeneratorTile.class, Material.ROCK);
     }
 
-    @Override
-    public boolean isNormalCube(IBlockState state, IBlockAccess world, BlockPos pos) {
-        return false;
-    }
-
-    @Override
-    @SideOnly(Side.CLIENT)
-    public boolean shouldSideBeRendered(IBlockState blockState, IBlockAccess worldIn, BlockPos pos, EnumFacing side) {
-        return false;
-    }
-
-    @Override
-    public boolean isOpaqueCube(IBlockState blockState) {
-        return false;
-    }
 
 }

@@ -1,10 +1,10 @@
 {
   "forge_marker": 1,
   "variants": {
-    "xpfluid": {
+    "essence": {
       "model": "forge:fluid",
       "custom": {
-        "fluid": "xpfluid"
+        "fluid": "essence"
       }
     },
     "milk": {

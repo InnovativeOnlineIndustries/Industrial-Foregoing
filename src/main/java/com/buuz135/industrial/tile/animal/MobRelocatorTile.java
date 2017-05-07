@@ -37,7 +37,7 @@ public class MobRelocatorTile extends WorkingAreaElectricMachine {
     @Override
     protected void initializeInventories() {
         super.initializeInventories();
-        outExp = this.addFluidTank(FluidsRegistry.XP, 8000, EnumDyeColor.LIME, "Experience tank", new BoundingRectangle(50, 25, 18, 54));
+        outExp = this.addFluidTank(FluidsRegistry.ESSENCE, 8000, EnumDyeColor.LIME, "Experience tank", new BoundingRectangle(50, 25, 18, 54));
         outItems = new ItemStackHandler(12);
         this.addInventory(new ColoredItemHandler(outItems, EnumDyeColor.ORANGE, "Mob drops", new BoundingRectangle(18 * 5 + 3, 25, 18 * 4, 18 * 3)) {
             @Override
@@ -85,7 +85,7 @@ public class MobRelocatorTile extends WorkingAreaElectricMachine {
         List<EntityLiving> mobs = this.getWorld().getEntitiesWithinAABB(EntityLiving.class, area);
         if (mobs.size() == 0) return 0;
         EntityLiving mob = mobs.get(this.getWorld().rand.nextInt(mobs.size()));
-        this.outExp.fill(new FluidStack(FluidsRegistry.XP, (int) mob.getHealth()), true);
+        this.outExp.fill(new FluidStack(FluidsRegistry.ESSENCE, (int) mob.getHealth()), true);
         mob.attackEntityFrom(DamageSource.GENERIC, mob.getHealth());
         List<EntityItem> items = this.getWorld().getEntitiesWithinAABB(EntityItem.class, area);
         for (EntityItem item : items) {

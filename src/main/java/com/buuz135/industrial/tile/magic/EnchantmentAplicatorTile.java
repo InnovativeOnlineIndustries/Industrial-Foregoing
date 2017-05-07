@@ -44,8 +44,7 @@ public class EnchantmentAplicatorTile extends ElectricMachine {
     }
 
     private void initInputInv() {
-        this.experienceTank = this.addFluidTank(FluidsRegistry.XP, 32000, EnumDyeColor.LIME, "Experience tank", new BoundingRectangle(50, 25, 18, 54));
-        this.experienceTank.fill(FluidRegistry.getFluidStack(FluidsRegistry.XP.getName(), 32000), true);
+        this.experienceTank = this.addFluidTank(FluidsRegistry.ESSENCE, 32000, EnumDyeColor.LIME, "Experience tank", new BoundingRectangle(50, 25, 18, 54));
 
         inEnchantedBook = new ItemStackHandler(1) {
             @Override

@@ -15,7 +15,7 @@ import net.minecraftforge.client.model.ModelLoader;
 public class FluidsRenderRegistry {
 
     public static void registerRender() {
-        register(BlockRegistry.BLOCK_XP);
+        register(BlockRegistry.BLOCK_ESSENCE);
         register(BlockRegistry.BLOCK_MILK);
         register(BlockRegistry.BLOCK_MEAT);
     }

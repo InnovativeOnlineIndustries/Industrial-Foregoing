@@ -1,0 +1,9 @@
+{
+  "parent": "industrialforegoing:block/base_block",
+  "textures": {
+    "south": "industrialforegoing:blocks/mob_slaughter_factory_back",
+    "west": "industrialforegoing:blocks/mob_slaughter_factory_side",
+    "east": "industrialforegoing:blocks/mob_slaughter_factory_side",
+    "north": "industrialforegoing:blocks/mob_slaughter_factory_side"
+  }
+}

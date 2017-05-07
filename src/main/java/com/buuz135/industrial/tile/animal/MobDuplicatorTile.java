@@ -5,7 +5,6 @@ import com.buuz135.industrial.proxy.FluidsRegistry;
 import com.buuz135.industrial.proxy.ItemRegistry;
 import com.buuz135.industrial.tile.WorkingAreaElectricMachine;
 import com.buuz135.industrial.utils.BlockUtils;
-import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.inventory.Slot;
 import net.minecraft.item.EnumDyeColor;
@@ -36,7 +35,7 @@ public class MobDuplicatorTile extends WorkingAreaElectricMachine {
     @Override
     protected void initializeInventories() {
         super.initializeInventories();
-        this.experienceTank = this.addFluidTank(FluidsRegistry.XP, 8000, EnumDyeColor.LIME, "Experience tank", new BoundingRectangle(50, 25, 18, 54));
+        this.experienceTank = this.addFluidTank(FluidsRegistry.ESSENCE, 8000, EnumDyeColor.LIME, "Experience tank", new BoundingRectangle(50, 25, 18, 54));
         mobTool = new ItemStackHandler(1);
         this.addInventory(new ColoredItemHandler(mobTool, EnumDyeColor.ORANGE, "Mob imprisonment Tool", new BoundingRectangle(18 * 5 + 3, 25, 18, 18)) {
             @Override

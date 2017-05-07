@@ -1,6 +1,10 @@
 {
   "parent": "industrialforegoing:block/base_block",
   "textures": {
-    "north": "industrialforegoing:blocks/enchantment_aplicator"
+    "north": "industrialforegoing:blocks/enchantment_aplicator_front",
+    "south": "industrialforegoing:blocks/enchantment_aplicator_front",
+    "west": "industrialforegoing:blocks/enchantment_aplicator_side",
+    "east": "industrialforegoing:blocks/enchantment_aplicator_side",
+    "up": "industrialforegoing:blocks/enchantment_aplicator_top"
   }
 }

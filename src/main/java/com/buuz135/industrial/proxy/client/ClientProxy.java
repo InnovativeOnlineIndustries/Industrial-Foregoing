@@ -23,7 +23,7 @@ public class ClientProxy extends CommonProxy {
         MinecraftForge.EVENT_BUS.register(new MachineWorkAreaRender());
         MinecraftForge.EVENT_BUS.register(new MobRenderInPrisonHandler());
 
-        ClientRegistry.bindTileEntitySpecialRenderer(PotionEnervatorTile.class, new PotionEnervatorSpecialRenderer());
+        //ClientRegistry.bindTileEntitySpecialRenderer(PotionEnervatorTile.class, new PotionEnervatorSpecialRenderer());
     }
 
     @Override
