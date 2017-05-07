@@ -27,6 +27,7 @@ public class BlockRegistry {
     public static BlockPlacerBlock blockPlacerBlock;
     public static TreeFluidExtractorBlock treeFluidExtractorBlock;
     public static LatexProcessingUnitBlock latexProcessingUnitBlock;
+    public static SliderBlock sliderBlock;
 
     public static IFCustomFluidBlock BLOCK_ESSENCE;
     public static IFCustomFluidBlock BLOCK_MILK;
@@ -55,6 +56,7 @@ public class BlockRegistry {
         (blockPlacerBlock = new BlockPlacerBlock()).register();
         (treeFluidExtractorBlock = new TreeFluidExtractorBlock()).register();
         (latexProcessingUnitBlock = new LatexProcessingUnitBlock()).register();
+        (sliderBlock = new SliderBlock()).register();
 
         (BLOCK_ESSENCE = new IFCustomFluidBlock(FluidsRegistry.ESSENCE, Material.WATER)).register();
         (BLOCK_MILK = new IFCustomFluidBlock(FluidsRegistry.MILK, Material.WATER)).register();

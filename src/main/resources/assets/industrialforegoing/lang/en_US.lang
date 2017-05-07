@@ -27,6 +27,7 @@ tile.industrialforegoing_block_destroyer.name=Block Destroyer
 tile.industrialforegoing_block_placer.name=Block Placer
 tile.industrialforegoing_tree_fluid_extractor.name=Tree Fluid Extractor
 tile.industrialforegoing_latex_processing_unit.name=Latex Processing Unit
+tile.slider.name=Slider
 
 fluid.xpfluid=Liquid Experience
 fluid.milk=Milk

@@ -6,6 +6,6 @@ import net.minecraft.block.material.Material;
 public class BlockPlacerBlock extends CustomOrientedBlock<BlockPlacerTile> {
 
     public BlockPlacerBlock() {
-        super("block_placer",BlockPlacerTile.class,Material.ROCK);
+        super("block_placer", BlockPlacerTile.class, Material.ROCK);
     }
 }

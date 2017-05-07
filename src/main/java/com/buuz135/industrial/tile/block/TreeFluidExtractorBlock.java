@@ -6,6 +6,6 @@ import net.minecraft.block.material.Material;
 public class TreeFluidExtractorBlock extends CustomOrientedBlock<TreeFluidExtractorTile> {
 
     public TreeFluidExtractorBlock() {
-        super("tree_fluid_extractor",TreeFluidExtractorTile.class,Material.ROCK);
+        super("tree_fluid_extractor", TreeFluidExtractorTile.class, Material.ROCK);
     }
 }

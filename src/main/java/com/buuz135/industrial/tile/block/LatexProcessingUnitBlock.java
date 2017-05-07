@@ -6,6 +6,6 @@ import net.minecraft.block.material.Material;
 public class LatexProcessingUnitBlock extends CustomOrientedBlock<LatexProcessingUnitTile> {
 
     public LatexProcessingUnitBlock() {
-        super("latex_processing_unit",LatexProcessingUnitTile.class, Material.ROCK);
+        super("latex_processing_unit", LatexProcessingUnitTile.class, Material.ROCK);
     }
 }

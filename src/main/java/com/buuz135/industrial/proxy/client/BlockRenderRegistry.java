@@ -26,5 +26,6 @@ public class BlockRenderRegistry {
         blockPlacerBlock.registerRenderer();
         treeFluidExtractorBlock.registerRenderer();
         latexProcessingUnitBlock.registerRenderer();
+        sliderBlock.registerRenderer();
     }
 }
