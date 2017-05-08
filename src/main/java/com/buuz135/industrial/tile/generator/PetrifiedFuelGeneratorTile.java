@@ -1,6 +1,6 @@
 package com.buuz135.industrial.tile.generator;
 
-import com.buuz135.industrial.proxy.client.PetrifiedFuelInfoPiece;
+import com.buuz135.industrial.proxy.client.infopiece.PetrifiedFuelInfoPiece;
 import net.minecraft.inventory.Slot;
 import net.minecraft.item.EnumDyeColor;
 import net.minecraft.item.ItemStack;

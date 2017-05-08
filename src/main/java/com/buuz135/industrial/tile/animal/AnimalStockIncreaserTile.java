@@ -26,7 +26,7 @@ public class AnimalStockIncreaserTile extends WorkingAreaElectricMachine {
     public ItemStackHandler inFeedItems;
 
     public AnimalStockIncreaserTile() {
-        super(AnimalStockIncreaserTile.class.getName().hashCode());
+        super(AnimalStockIncreaserTile.class.getName().hashCode(),2,2);
     }
 
     @Override
@@ -75,11 +75,9 @@ public class AnimalStockIncreaserTile extends WorkingAreaElectricMachine {
 
     @Override
     public AxisAlignedBB getWorkingArea() {
-        int r = 2;
-        int h = 2;
         EnumFacing f = this.getFacing().getOpposite();
-        BlockPos corner1 = new BlockPos(0, 0, 0).offset(f, r + 1);
-        return this.getBlockType().getSelectedBoundingBox(this.world.getBlockState(this.pos), this.world, this.pos).offset(corner1).expand(r, 0, r).setMaxY(this.getPos().getY() + h);
+        BlockPos corner1 = new BlockPos(0, 0, 0).offset(f, getRadius() + 1);
+        return this.getBlockType().getSelectedBoundingBox(this.world.getBlockState(this.pos), this.world, this.pos).offset(corner1).expand(getRadius(), 0, getRadius()).setMaxY(this.getPos().getY() + getHeight());
     }
 
     @Override

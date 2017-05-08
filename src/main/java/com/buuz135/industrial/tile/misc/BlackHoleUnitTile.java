@@ -1,6 +1,6 @@
 package com.buuz135.industrial.tile.misc;
 
-import com.buuz135.industrial.proxy.client.BlackHoleInfoPiece;
+import com.buuz135.industrial.proxy.client.infopiece.BlackHoleInfoPiece;
 import net.minecraft.inventory.Slot;
 import net.minecraft.item.EnumDyeColor;
 import net.minecraft.item.Item;
@@ -30,7 +30,6 @@ public class BlackHoleUnitTile extends SidedTileEntity {
     public static final String NBT_AMOUNT = "amount";
     public static final String NBT_META = "meta";
     public static final String NBT_ITEM_NBT = "stack_nbt";
-    //TODO Save NBT item
     private ItemStackHandler inItems;
     private ItemStackHandler outItems;
     private ItemStack stack;
@@ -44,7 +43,6 @@ public class BlackHoleUnitTile extends SidedTileEntity {
 
     @Override
     protected void innerUpdate() {
-        if (this.getWorld().isRemote) return;
         if (!inItems.getStackInSlot(0).isEmpty()) {
             ItemStack in = inItems.getStackInSlot(0);
             if (stack.isEmpty()) {
@@ -74,7 +72,7 @@ public class BlackHoleUnitTile extends SidedTileEntity {
     protected void initializeInventories() {
         super.initializeInventories();
         inItems = new ItemStackHandler(1);
-        this.addInventory(new ColoredItemHandler(inItems, EnumDyeColor.BLUE, "Input items", new BoundingRectangle(18, 25, 18, 18)) {
+        this.addInventory(new ColoredItemHandler(inItems, EnumDyeColor.BLUE, "Input items", new BoundingRectangle(16, 25, 18, 18)) {
             @Override
             public boolean canInsertItem(int slot, ItemStack stack) {
                 return BlackHoleUnitTile.this.canInsertItem(stack);
@@ -108,7 +106,7 @@ public class BlackHoleUnitTile extends SidedTileEntity {
         });
         this.addInventoryToStorage(inItems, "block_hole_in");
         outItems = new ItemStackHandler(1);
-        this.addInventory(new ColoredItemHandler(outItems, EnumDyeColor.ORANGE, "Output items", new BoundingRectangle(18, 25 + 18 * 2, 18, 18)) {
+        this.addInventory(new ColoredItemHandler(outItems, EnumDyeColor.ORANGE, "Output items", new BoundingRectangle(16, 25 + 18 * 2, 18, 18)) {
             @Override
             public boolean canInsertItem(int slot, ItemStack stack) {
                 return false;

@@ -31,7 +31,7 @@ public class MobRelocatorTile extends WorkingAreaElectricMachine {
     private ItemStackHandler outItems;
 
     public MobRelocatorTile() {
-        super(MobRelocatorTile.class.getName().hashCode());
+        super(MobRelocatorTile.class.getName().hashCode(),2,1);
     }
 
     @Override
@@ -119,11 +119,9 @@ public class MobRelocatorTile extends WorkingAreaElectricMachine {
 
     @Override
     public AxisAlignedBB getWorkingArea() {
-        int r = 2;
-        int h = 1;
         EnumFacing f = this.getFacing().getOpposite();
-        BlockPos corner1 = new BlockPos(0, 0, 0).offset(f, r + 1).offset(EnumFacing.UP, h);
-        return this.getBlockType().getSelectedBoundingBox(this.world.getBlockState(this.pos), this.world, this.pos).expand(r, h, r).offset(corner1);
+        BlockPos corner1 = new BlockPos(0, 0, 0).offset(f, getRadius() + 1).offset(EnumFacing.UP, getHeight());
+        return this.getBlockType().getSelectedBoundingBox(this.world.getBlockState(this.pos), this.world, this.pos).expand(getRadius(),getHeight(),getRadius()).offset(corner1);
     }
 
 

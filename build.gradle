@@ -15,10 +15,11 @@ version = "${project.minecraft_version}-${project.mod_version}"
 group = "com.buuz135.industrial.IndustrialForegoing" // http://maven.apache.org/guides/mini/guide-naming-conventions.html
 archivesBaseName = "industrialforegoing"
 
-//sourceCompatibility = targetCompatibility = "1.8" // Need this here so eclipse task generates correctly.
-//compileJava {
-//    sourceCompatibility = targetCompatibility = "1.8"
-//}
+sourceCompatibility = "1.8"
+targetCompatibility = "1.8" // Need this here so eclipse task generates correctly.
+compileJava {
+    sourceCompatibility = targetCompatibility = "1.8"
+}
 
 minecraft {
     version = "1.11.2-13.20.0.2282"

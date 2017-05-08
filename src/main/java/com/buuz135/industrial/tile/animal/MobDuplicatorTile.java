@@ -29,7 +29,7 @@ public class MobDuplicatorTile extends WorkingAreaElectricMachine {
     private ItemStackHandler mobTool;
 
     public MobDuplicatorTile() {
-        super(MobDuplicatorTile.class.getName().hashCode());
+        super(MobDuplicatorTile.class.getName().hashCode(),4,1);
     }
 
     @Override
@@ -73,10 +73,8 @@ public class MobDuplicatorTile extends WorkingAreaElectricMachine {
 
     @Override
     public AxisAlignedBB getWorkingArea() {
-        int r = 4;
-        int h = 1;
         BlockPos corner1 = new BlockPos(0, 0, 0);
-        return this.getBlockType().getSelectedBoundingBox(this.world.getBlockState(this.pos), this.world, this.pos).expand(r, h, r).offset(corner1);
+        return this.getBlockType().getSelectedBoundingBox(this.world.getBlockState(this.pos), this.world, this.pos).expand(getRadius(), getHeight(), getRadius()).offset(corner1);
     }
 
     @Override

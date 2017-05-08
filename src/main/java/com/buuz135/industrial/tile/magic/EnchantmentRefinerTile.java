@@ -1,5 +1,6 @@
 package com.buuz135.industrial.tile.magic;
 
+import com.buuz135.industrial.tile.CustomElectricMachine;
 import net.minecraft.init.Items;
 import net.minecraft.inventory.Slot;
 import net.minecraft.item.EnumDyeColor;
@@ -17,7 +18,7 @@ import net.ndrei.teslacorelib.tileentities.ElectricMachine;
 
 import java.util.List;
 
-public class EnchantmentRefinerTile extends ElectricMachine {
+public class EnchantmentRefinerTile extends CustomElectricMachine {
 
     private ItemStackHandler input;
     private ItemStackHandler outputNoEnch;

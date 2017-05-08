@@ -1,5 +1,6 @@
 package com.buuz135.industrial.tile.magic;
 
+import com.buuz135.industrial.tile.CustomElectricMachine;
 import com.buuz135.industrial.utils.ItemStackUtils;
 import com.buuz135.industrial.utils.Reference;
 import net.minecraft.init.Items;
@@ -28,7 +29,7 @@ import net.ndrei.teslacorelib.tileentities.ElectricMachine;
 import java.util.Arrays;
 import java.util.List;
 
-public class PotionEnervatorTile extends ElectricMachine {
+public class PotionEnervatorTile extends CustomElectricMachine {
 
     private static final String NBT_ACTION = "action";
 

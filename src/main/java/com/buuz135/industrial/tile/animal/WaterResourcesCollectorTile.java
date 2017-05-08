@@ -29,7 +29,7 @@ public class WaterResourcesCollectorTile extends WorkingAreaElectricMachine {
     private ItemStackHandler outFish;
 
     public WaterResourcesCollectorTile() {
-        super(WaterResourcesCollectorTile.class.getName().hashCode());
+        super(WaterResourcesCollectorTile.class.getName().hashCode(),1,0);
     }
 
     @Override
@@ -98,9 +98,8 @@ public class WaterResourcesCollectorTile extends WorkingAreaElectricMachine {
 
     @Override
     public AxisAlignedBB getWorkingArea() {
-        int r = 1;
         BlockPos corner1 = new BlockPos(0, -1, 0);
-        return this.getBlockType().getSelectedBoundingBox(this.world.getBlockState(this.pos), this.world, this.pos).offset(corner1).expand(r, 0, r);
+        return this.getBlockType().getSelectedBoundingBox(this.world.getBlockState(this.pos), this.world, this.pos).offset(corner1).expand(getRadius(), 0, getRadius());
     }
 
     @Override

@@ -2,7 +2,10 @@ package com.buuz135.industrial.tile;
 
 import com.buuz135.industrial.proxy.CommonProxy;
 import com.buuz135.industrial.proxy.client.ClientProxy;
+import net.minecraft.item.EnumDyeColor;
+import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.AxisAlignedBB;
+import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import net.ndrei.teslacorelib.gui.BasicTeslaGuiContainer;
@@ -11,17 +14,28 @@ import net.ndrei.teslacorelib.gui.ToggleButtonPiece;
 import net.ndrei.teslacorelib.inventory.BoundingRectangle;
 import net.ndrei.teslacorelib.tileentities.ElectricMachine;
 
+import javax.annotation.Nonnull;
 import java.util.Arrays;
 import java.util.List;
 
-public abstract class WorkingAreaElectricMachine extends ElectricMachine {
+public abstract class WorkingAreaElectricMachine extends CustomElectricMachine {
 
     private int color;
     private boolean showArea;
+    private int radius;
+    private int height;
 
-    protected WorkingAreaElectricMachine(int typeId) {
+    protected WorkingAreaElectricMachine(int typeId, int radius, int height) {
         super(typeId);
         color = CommonProxy.random.nextInt();
+        this.radius = radius;
+        this.height = height;
+    }
+
+    @Override
+    protected void initializeInventories() {
+        super.initializeInventories();
+
     }
 
     @Override
@@ -79,4 +93,13 @@ public abstract class WorkingAreaElectricMachine extends ElectricMachine {
     public boolean isShowArea() {
         return showArea;
     }
+
+    public int getRadius() {
+        return radius;
+    }
+
+    public int getHeight() {
+        return height;
+    }
+
 }

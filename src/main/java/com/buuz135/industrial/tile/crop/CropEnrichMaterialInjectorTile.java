@@ -36,7 +36,7 @@ public class CropEnrichMaterialInjectorTile extends WorkingAreaElectricMachine {
 
 
     public CropEnrichMaterialInjectorTile() {
-        super(CropEnrichMaterialInjectorTile.class.getName().hashCode());
+        super(CropEnrichMaterialInjectorTile.class.getName().hashCode(),1,0);
         pointer = 0;
     }
 
@@ -86,9 +86,8 @@ public class CropEnrichMaterialInjectorTile extends WorkingAreaElectricMachine {
 
     @Override
     public AxisAlignedBB getWorkingArea() {
-        int r = 1;
-        BlockPos corner1 = new BlockPos(0, 0, 0).offset(this.getFacing().getOpposite(), r + 1);
-        return this.getBlockType().getSelectedBoundingBox(this.world.getBlockState(this.pos), this.world, this.pos).offset(corner1).expand(r, 0, r);
+        BlockPos corner1 = new BlockPos(0, 0, 0).offset(this.getFacing().getOpposite(), getRadius()+ 1);
+        return this.getBlockType().getSelectedBoundingBox(this.world.getBlockState(this.pos), this.world, this.pos).offset(corner1).expand(getRadius(), 0, getRadius());
     }
 
     @Override

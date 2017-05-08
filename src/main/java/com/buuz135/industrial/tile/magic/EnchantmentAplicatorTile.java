@@ -2,6 +2,7 @@ package com.buuz135.industrial.tile.magic;
 
 
 import com.buuz135.industrial.proxy.FluidsRegistry;
+import com.buuz135.industrial.tile.CustomElectricMachine;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.init.Items;
 import net.minecraft.inventory.Slot;
@@ -25,7 +26,7 @@ import net.ndrei.teslacorelib.tileentities.ElectricMachine;
 
 import java.util.List;
 
-public class EnchantmentAplicatorTile extends ElectricMachine {
+public class EnchantmentAplicatorTile extends CustomElectricMachine {
 
     private ItemStackHandler inEnchantedBook;
     private ItemStackHandler inItem;

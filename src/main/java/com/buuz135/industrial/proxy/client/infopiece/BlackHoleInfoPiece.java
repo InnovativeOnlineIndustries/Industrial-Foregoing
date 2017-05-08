@@ -1,5 +1,6 @@
-package com.buuz135.industrial.proxy.client;
+package com.buuz135.industrial.proxy.client.infopiece;
 
+import com.buuz135.industrial.proxy.client.ClientProxy;
 import com.buuz135.industrial.tile.misc.BlackHoleUnitTile;
 import com.buuz135.industrial.utils.ItemStackUtils;
 import net.minecraft.client.Minecraft;
@@ -32,9 +33,9 @@ public class BlackHoleInfoPiece extends BasicRenderedGuiPiece {
                 String display = new TextComponentTranslation(tile.getStack().getUnlocalizedName() + ".name").getUnformattedText();
                 renderer.drawString(TextFormatting.DARK_GRAY + display.substring(0, Math.min(display.length(), 21)) + (display.length() > 21 ? "." : ""), 20, 4, 0xFFFFFF);
                 renderer.drawString(TextFormatting.DARK_GRAY + new TextComponentTranslation("text.display.amount").getUnformattedText() + " " + tile.getAmount(), 4, (renderer.FONT_HEIGHT) * 3, 0xFFFFFF);
-            } else
+            } else {
                 renderer.drawString(TextFormatting.DARK_GRAY + new TextComponentTranslation("text.display.empty").getFormattedText(), 4, 4, 0xFFFFFF);
-
+            }
             GlStateManager.popMatrix();
         }
     }

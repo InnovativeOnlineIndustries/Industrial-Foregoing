@@ -1,4 +1,4 @@
-package com.buuz135.industrial.proxy.client;
+package com.buuz135.industrial.proxy.client.infopiece;
 
 import com.buuz135.industrial.tile.generator.PetrifiedFuelGeneratorTile;
 import com.buuz135.industrial.utils.Reference;

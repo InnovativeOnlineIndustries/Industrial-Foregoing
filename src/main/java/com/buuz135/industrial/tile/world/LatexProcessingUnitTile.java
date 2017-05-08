@@ -2,6 +2,7 @@ package com.buuz135.industrial.tile.world;
 
 import com.buuz135.industrial.proxy.FluidsRegistry;
 import com.buuz135.industrial.proxy.ItemRegistry;
+import com.buuz135.industrial.tile.CustomElectricMachine;
 import net.minecraft.inventory.Slot;
 import net.minecraft.item.EnumDyeColor;
 import net.minecraft.item.ItemStack;
@@ -20,7 +21,7 @@ import net.ndrei.teslacorelib.tileentities.ElectricMachine;
 
 import java.util.List;
 
-public class LatexProcessingUnitTile extends ElectricMachine {
+public class LatexProcessingUnitTile extends CustomElectricMachine {
 
     private IFluidTank waterTank;
     private IFluidTank latexTank;
