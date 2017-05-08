@@ -1,6 +1,7 @@
 package com.buuz135.industrial.tile.magic;
 
 import com.buuz135.industrial.tile.CustomElectricMachine;
+import com.buuz135.industrial.tile.block.CustomOrientedBlock;
 import com.buuz135.industrial.utils.ItemStackUtils;
 import com.buuz135.industrial.utils.Reference;
 import net.minecraft.init.Items;
@@ -24,7 +25,6 @@ import net.ndrei.teslacorelib.gui.IGuiContainerPiece;
 import net.ndrei.teslacorelib.gui.TiledRenderedGuiPiece;
 import net.ndrei.teslacorelib.inventory.BoundingRectangle;
 import net.ndrei.teslacorelib.inventory.ColoredItemHandler;
-import net.ndrei.teslacorelib.tileentities.ElectricMachine;
 
 import java.util.Arrays;
 import java.util.List;
@@ -230,8 +230,7 @@ public class PotionEnervatorTile extends CustomElectricMachine {
 
     @Override
     public float performWork() {
-        //FILL BOTTLES
-        //System.out.println(action);
+        if (((CustomOrientedBlock)this.getBlockType()).isWorkDisabled()) return 0;
         if (action > 5) action = 0;
         if (action != 0 && outputPotions.getStackInSlot(0).isEmpty() && outputPotions.getStackInSlot(1).isEmpty() && outputPotions.getStackInSlot(2).isEmpty()) {
             action = 0;

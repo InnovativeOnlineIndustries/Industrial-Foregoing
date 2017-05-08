@@ -2,8 +2,8 @@ package com.buuz135.industrial.tile.crop;
 
 import com.buuz135.industrial.IndustrialForegoing;
 import com.buuz135.industrial.tile.WorkingAreaElectricMachine;
+import com.buuz135.industrial.tile.block.CustomOrientedBlock;
 import com.buuz135.industrial.utils.BlockUtils;
-import com.buuz135.industrial.utils.ItemStackUtils;
 import net.minecraft.block.BlockCrops;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
@@ -36,7 +36,7 @@ public class CropEnrichMaterialInjectorTile extends WorkingAreaElectricMachine {
 
 
     public CropEnrichMaterialInjectorTile() {
-        super(CropEnrichMaterialInjectorTile.class.getName().hashCode(),1,0);
+        super(CropEnrichMaterialInjectorTile.class.getName().hashCode(), 1, 0);
         pointer = 0;
     }
 
@@ -86,18 +86,19 @@ public class CropEnrichMaterialInjectorTile extends WorkingAreaElectricMachine {
 
     @Override
     public AxisAlignedBB getWorkingArea() {
-        BlockPos corner1 = new BlockPos(0, 0, 0).offset(this.getFacing().getOpposite(), getRadius()+ 1);
+        BlockPos corner1 = new BlockPos(0, 0, 0).offset(this.getFacing().getOpposite(), getRadius() + 1);
         return this.getBlockType().getSelectedBoundingBox(this.world.getBlockState(this.pos), this.world, this.pos).offset(corner1).expand(getRadius(), 0, getRadius());
     }
 
     @Override
     protected float performWork() {
+        if (((CustomOrientedBlock)this.getBlockType()).isWorkDisabled()) return 0;
         List<BlockPos> blockPos = BlockUtils.getBlockPosInAABB(getWorkingArea());
         ++pointer;
         if (pointer >= blockPos.size()) pointer = 0;
         if (pointer < blockPos.size()) {
             BlockPos pos = blockPos.get(pointer);
-            if ((this.world.getBlockState(pos).getBlock() instanceof BlockCrops &&  this.world.getBlockState(pos).getValue(BlockCrops.AGE) < 7) || this.world.getBlockState(pos).getBlock().equals(Blocks.SAPLING)) {
+            if ((this.world.getBlockState(pos).getBlock() instanceof BlockCrops && this.world.getBlockState(pos).getValue(BlockCrops.AGE) < 7) || this.world.getBlockState(pos).getBlock().equals(Blocks.SAPLING)) {
                 ItemStack stack = getFirstItem();
                 if (!stack.isEmpty()) {
                     FakePlayer player = IndustrialForegoing.getFakePlayer(this.world);

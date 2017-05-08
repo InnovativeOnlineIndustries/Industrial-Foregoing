@@ -15,8 +15,6 @@ import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
@@ -24,11 +22,8 @@ import net.minecraft.util.math.Vec3i;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.client.model.ModelLoader;
-import net.minecraftforge.common.util.Constants;
 import net.minecraftforge.fml.common.registry.GameRegistry;
-import net.ndrei.teslacorelib.TeslaCoreLib;
 import net.ndrei.teslacorelib.Utils;
-import net.ndrei.teslacorelib.compatibility.ItemStackUtil;
 
 
 public class SliderBlock extends Block {
@@ -103,7 +98,7 @@ public class SliderBlock extends Block {
     public void onEntityCollidedWithBlock(World worldIn, BlockPos pos, IBlockState state, Entity entityIn) {
         EnumFacing facing = state.getValue(FACING).getOpposite();
         Vec3i vec3i = facing.getDirectionVec();
-        entityIn.setVelocity(vec3i.getX()/4D,vec3i.getY()/4D,vec3i.getZ()/4D);
+        entityIn.setVelocity(vec3i.getX() / 4D, vec3i.getY() / 4D, vec3i.getZ() / 4D);
     }
 
     @Override

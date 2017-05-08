@@ -1,6 +1,7 @@
 package com.buuz135.industrial.tile.generator;
 
 import com.buuz135.industrial.proxy.client.infopiece.PetrifiedFuelInfoPiece;
+import com.buuz135.industrial.tile.block.CustomOrientedBlock;
 import net.minecraft.inventory.Slot;
 import net.minecraft.item.EnumDyeColor;
 import net.minecraft.item.ItemStack;
@@ -94,6 +95,7 @@ public class PetrifiedFuelGeneratorTile extends ElectricGenerator {
 
     @Override
     public long consumeFuel() { //TODO fix buckets
+        if (((CustomOrientedBlock)this.getBlockType()).isWorkDisabled()) return 0;
         ItemStack temp = this.getFirstFuel(true);
         if (temp.isEmpty()) {
             return 0;

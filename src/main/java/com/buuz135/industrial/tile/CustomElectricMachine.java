@@ -26,4 +26,5 @@ public class CustomElectricMachine extends ElectricMachine {
     protected float performWork() {
         return 0;
     }
+
 }

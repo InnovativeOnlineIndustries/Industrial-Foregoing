@@ -3,6 +3,7 @@ package com.buuz135.industrial.tile.world;
 import com.buuz135.industrial.proxy.FluidsRegistry;
 import com.buuz135.industrial.proxy.ItemRegistry;
 import com.buuz135.industrial.tile.CustomElectricMachine;
+import com.buuz135.industrial.tile.block.CustomOrientedBlock;
 import net.minecraft.inventory.Slot;
 import net.minecraft.item.EnumDyeColor;
 import net.minecraft.item.ItemStack;
@@ -17,7 +18,6 @@ import net.ndrei.teslacorelib.gui.IGuiContainerPiece;
 import net.ndrei.teslacorelib.gui.TiledRenderedGuiPiece;
 import net.ndrei.teslacorelib.inventory.BoundingRectangle;
 import net.ndrei.teslacorelib.inventory.ColoredItemHandler;
-import net.ndrei.teslacorelib.tileentities.ElectricMachine;
 
 import java.util.List;
 
@@ -35,10 +35,10 @@ public class LatexProcessingUnitTile extends CustomElectricMachine {
     @Override
     protected void initializeInventories() {
         super.initializeInventories();
-        waterTank = this.addFluidTank(FluidRegistry.WATER, 8000, EnumDyeColor.BLUE, "Water tank", new BoundingRectangle(17*2+12, 25, 18, 54));
-        latexTank = this.addFluidTank(FluidsRegistry.LATEX, 8000, EnumDyeColor.GRAY, "Latex tank", new BoundingRectangle(17*3+16, 25, 18, 54));
-        itemOut = new ItemStackHandler(3*3);
-        this.addInventory(new ColoredItemHandler(itemOut, EnumDyeColor.ORANGE,"Output items", new BoundingRectangle(18 * 6+3, 25, 18 * 3, 18 * 3)){
+        waterTank = this.addFluidTank(FluidRegistry.WATER, 8000, EnumDyeColor.BLUE, "Water tank", new BoundingRectangle(17 * 2 + 12, 25, 18, 54));
+        latexTank = this.addFluidTank(FluidsRegistry.LATEX, 8000, EnumDyeColor.GRAY, "Latex tank", new BoundingRectangle(17 * 3 + 16, 25, 18, 54));
+        itemOut = new ItemStackHandler(3 * 3);
+        this.addInventory(new ColoredItemHandler(itemOut, EnumDyeColor.ORANGE, "Output items", new BoundingRectangle(18 * 6 + 3, 25, 18 * 3, 18 * 3)) {
             @Override
             public boolean canInsertItem(int slot, ItemStack stack) {
                 return false;
@@ -73,15 +73,16 @@ public class LatexProcessingUnitTile extends CustomElectricMachine {
                 return pieces;
             }
         });
-        this.addInventoryToStorage(itemOut,"latex_processing_unit_out");
+        this.addInventoryToStorage(itemOut, "latex_processing_unit_out");
     }
 
     @Override
     protected float performWork() {
-        if (waterTank.drain(1000,false).amount == 1000 && latexTank.drain(75,false).amount == 75 && ItemHandlerHelper.insertItem(itemOut,new ItemStack(ItemRegistry.tinyDryRubber,1),true).isEmpty()){
-            waterTank.drain(1000,true);
-            latexTank.drain(75,true);
-            ItemHandlerHelper.insertItem(itemOut,new ItemStack(ItemRegistry.tinyDryRubber,1),false);
+        if (((CustomOrientedBlock)this.getBlockType()).isWorkDisabled()) return 0;
+        if (waterTank.drain(1000, false).amount == 1000 && latexTank.drain(75, false).amount == 75 && ItemHandlerHelper.insertItem(itemOut, new ItemStack(ItemRegistry.tinyDryRubber, 1), true).isEmpty()) {
+            waterTank.drain(1000, true);
+            latexTank.drain(75, true);
+            ItemHandlerHelper.insertItem(itemOut, new ItemStack(ItemRegistry.tinyDryRubber, 1), false);
             return 1;
         }
         return 0;

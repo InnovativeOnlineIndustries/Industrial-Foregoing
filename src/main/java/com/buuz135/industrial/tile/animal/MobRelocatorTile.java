@@ -2,6 +2,7 @@ package com.buuz135.industrial.tile.animal;
 
 import com.buuz135.industrial.proxy.FluidsRegistry;
 import com.buuz135.industrial.tile.WorkingAreaElectricMachine;
+import com.buuz135.industrial.tile.block.CustomOrientedBlock;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.inventory.Slot;
@@ -31,7 +32,7 @@ public class MobRelocatorTile extends WorkingAreaElectricMachine {
     private ItemStackHandler outItems;
 
     public MobRelocatorTile() {
-        super(MobRelocatorTile.class.getName().hashCode(),2,1);
+        super(MobRelocatorTile.class.getName().hashCode(), 2, 1);
     }
 
     @Override
@@ -81,6 +82,7 @@ public class MobRelocatorTile extends WorkingAreaElectricMachine {
 
     @Override
     protected float performWork() {
+        if (((CustomOrientedBlock)this.getBlockType()).isWorkDisabled()) return 0;
         AxisAlignedBB area = getWorkingArea();
         List<EntityLiving> mobs = this.getWorld().getEntitiesWithinAABB(EntityLiving.class, area);
         if (mobs.size() == 0) return 0;
@@ -121,7 +123,7 @@ public class MobRelocatorTile extends WorkingAreaElectricMachine {
     public AxisAlignedBB getWorkingArea() {
         EnumFacing f = this.getFacing().getOpposite();
         BlockPos corner1 = new BlockPos(0, 0, 0).offset(f, getRadius() + 1).offset(EnumFacing.UP, getHeight());
-        return this.getBlockType().getSelectedBoundingBox(this.world.getBlockState(this.pos), this.world, this.pos).expand(getRadius(),getHeight(),getRadius()).offset(corner1);
+        return this.getBlockType().getSelectedBoundingBox(this.world.getBlockState(this.pos), this.world, this.pos).expand(getRadius(), getHeight(), getRadius()).offset(corner1);
     }
 
 

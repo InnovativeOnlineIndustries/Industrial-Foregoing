@@ -1,6 +1,5 @@
 package com.buuz135.industrial.utils;
 
-import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Items;
 import net.minecraft.item.Item;
@@ -11,7 +10,6 @@ import net.minecraft.world.World;
 import net.minecraftforge.oredict.OreDictionary;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 public class BlockUtils {
@@ -28,24 +26,24 @@ public class BlockUtils {
         return blocks;
     }
 
-    public static boolean isBlockOreDict(World world, BlockPos pos,String ore){
+    public static boolean isBlockOreDict(World world, BlockPos pos, String ore) {
         IBlockState state = world.getBlockState(pos);
         Item item = Item.getItemFromBlock(state.getBlock());
-        if (!item.equals(Items.AIR)){
+        if (!item.equals(Items.AIR)) {
             ItemStack stack = new ItemStack(item);
             int id = OreDictionary.getOreID(ore);
-            for (int i  : OreDictionary.getOreIDs(stack)){
+            for (int i : OreDictionary.getOreIDs(stack)) {
                 if (i == id) return true;
             }
         }
         return false;
     }
 
-    public static boolean isLog(World world, BlockPos pos){
-        return isBlockOreDict(world,pos,"logWood");
+    public static boolean isLog(World world, BlockPos pos) {
+        return isBlockOreDict(world, pos, "logWood");
     }
 
-    public static boolean isLeaves(World world, BlockPos pos){
-        return isBlockOreDict(world,pos,"treeLeaves");
+    public static boolean isLeaves(World world, BlockPos pos) {
+        return isBlockOreDict(world, pos, "treeLeaves");
     }
 }

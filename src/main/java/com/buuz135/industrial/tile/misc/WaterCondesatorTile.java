@@ -1,5 +1,6 @@
 package com.buuz135.industrial.tile.misc;
 
+import com.buuz135.industrial.tile.block.CustomOrientedBlock;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.item.EnumDyeColor;
 import net.minecraft.util.EnumFacing;
@@ -19,6 +20,7 @@ public class WaterCondesatorTile extends SidedTileEntity {
 
     @Override
     protected void innerUpdate() {
+        if (((CustomOrientedBlock)this.getBlockType()).isWorkDisabled()) return;
         if (this.getWorld().isRemote) return;
         int fillValue = getWaterSources() * 100;
         fluidTank.fill(new FluidStack(FluidRegistry.WATER, fillValue), true);

@@ -17,7 +17,7 @@ import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 
 import java.util.HashMap;
 
-@Mod(modid = Reference.MOD_ID, name = Reference.MOD_ID, version = Reference.VERSION, dependencies = "after:teslacorelib")
+@Mod(modid = Reference.MOD_ID, name = Reference.MOD_ID, version = Reference.VERSION, dependencies = "after:teslacorelib", guiFactory = Reference.GUI_FACTORY)
 public class IndustrialForegoing {
 
     @SidedProxy(clientSide = Reference.PROXY_CLIENT, serverSide = Reference.PROXY_COMMON)
@@ -30,9 +30,10 @@ public class IndustrialForegoing {
         }
     };
 
+
     @Mod.EventHandler
     public void preInit(FMLPreInitializationEvent event) {
-        proxy.preInit();
+        proxy.preInit(event);
     }
 
     @Mod.EventHandler

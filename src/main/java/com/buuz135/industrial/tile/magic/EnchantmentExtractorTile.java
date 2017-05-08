@@ -1,6 +1,7 @@
 package com.buuz135.industrial.tile.magic;
 
 import com.buuz135.industrial.tile.CustomElectricMachine;
+import com.buuz135.industrial.tile.block.CustomOrientedBlock;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.init.Items;
 import net.minecraft.inventory.Slot;
@@ -16,7 +17,6 @@ import net.ndrei.teslacorelib.gui.IGuiContainerPiece;
 import net.ndrei.teslacorelib.gui.TiledRenderedGuiPiece;
 import net.ndrei.teslacorelib.inventory.BoundingRectangle;
 import net.ndrei.teslacorelib.inventory.ColoredItemHandler;
-import net.ndrei.teslacorelib.tileentities.ElectricMachine;
 
 import java.util.List;
 
@@ -213,6 +213,7 @@ public class EnchantmentExtractorTile extends CustomElectricMachine {
 
     @Override
     protected float performWork() {
+        if (((CustomOrientedBlock)this.getBlockType()).isWorkDisabled()) return 0;
         if (!hasBooks() || getItem().isEmpty()) return 0;
         ItemStack enchantedItem = getItem();
         ItemStack enchantedBook = new ItemStack(Items.ENCHANTED_BOOK);

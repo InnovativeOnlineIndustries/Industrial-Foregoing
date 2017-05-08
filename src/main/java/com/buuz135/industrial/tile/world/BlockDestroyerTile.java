@@ -1,6 +1,7 @@
 package com.buuz135.industrial.tile.world;
 
 import com.buuz135.industrial.tile.WorkingAreaElectricMachine;
+import com.buuz135.industrial.tile.block.CustomOrientedBlock;
 import com.buuz135.industrial.utils.BlockUtils;
 import net.minecraft.block.Block;
 import net.minecraft.inventory.Slot;
@@ -26,14 +27,14 @@ public class BlockDestroyerTile extends WorkingAreaElectricMachine {
     private ItemStackHandler outItems;
 
     public BlockDestroyerTile() {
-        super(BlockDestroyerTile.class.getName().hashCode(),0,0);
+        super(BlockDestroyerTile.class.getName().hashCode(), 0, 0);
     }
 
     @Override
     protected void initializeInventories() {
         super.initializeInventories();
-        outItems = new ItemStackHandler(3*6);
-        this.addInventory(new ColoredItemHandler(outItems, EnumDyeColor.ORANGE,"Broken items", new BoundingRectangle(18 * 3, 25, 18 *6, 18 *3)){
+        outItems = new ItemStackHandler(3 * 6);
+        this.addInventory(new ColoredItemHandler(outItems, EnumDyeColor.ORANGE, "Broken items", new BoundingRectangle(18 * 3, 25, 18 * 6, 18 * 3)) {
             @Override
             public boolean canInsertItem(int slot, ItemStack stack) {
                 return false;
@@ -70,31 +71,32 @@ public class BlockDestroyerTile extends WorkingAreaElectricMachine {
                 return pieces;
             }
         });
-        this.addInventoryToStorage(outItems,"block_destroyer_out");
+        this.addInventoryToStorage(outItems, "block_destroyer_out");
     }
 
     @Override
     public AxisAlignedBB getWorkingArea() {
-        return this.getBlockType().getSelectedBoundingBox(this.world.getBlockState(this.pos), this.world, this.pos).offset(new BlockPos(0,0,0).offset(this.getFacing().getOpposite()));
+        return this.getBlockType().getSelectedBoundingBox(this.world.getBlockState(this.pos), this.world, this.pos).offset(new BlockPos(0, 0, 0).offset(this.getFacing().getOpposite()));
     }
 
     @Override
     protected float performWork() {
+        if (((CustomOrientedBlock)this.getBlockType()).isWorkDisabled()) return 0;
         List<BlockPos> blockPosList = BlockUtils.getBlockPosInAABB(getWorkingArea());
-        for (BlockPos pos : blockPosList){
-            if (!this.world.isAirBlock(pos)){
+        for (BlockPos pos : blockPosList) {
+            if (!this.world.isAirBlock(pos)) {
                 Block block = this.world.getBlockState(pos).getBlock();
-                List<ItemStack> drops = block.getDrops(this.world, pos, this.world.getBlockState(pos),0);
+                List<ItemStack> drops = block.getDrops(this.world, pos, this.world.getBlockState(pos), 0);
                 boolean canInsert = true;
-                for (ItemStack stack : drops){
-                    if (!ItemHandlerHelper.insertItem(outItems,stack,true).isEmpty()){
+                for (ItemStack stack : drops) {
+                    if (!ItemHandlerHelper.insertItem(outItems, stack, true).isEmpty()) {
                         canInsert = false;
                         break;
                     }
                 }
-                if (canInsert){
-                    for (ItemStack stack : drops){
-                        ItemHandlerHelper.insertItem(outItems,stack,false);
+                if (canInsert) {
+                    for (ItemStack stack : drops) {
+                        ItemHandlerHelper.insertItem(outItems, stack, false);
                     }
                     this.world.setBlockToAir(pos);
                     return 1;

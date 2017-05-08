@@ -1,6 +1,7 @@
 package com.buuz135.industrial.tile.animal;
 
 import com.buuz135.industrial.tile.WorkingAreaElectricMachine;
+import com.buuz135.industrial.tile.block.CustomOrientedBlock;
 import net.minecraft.entity.passive.EntityAnimal;
 import net.minecraft.inventory.Slot;
 import net.minecraft.item.EnumDyeColor;
@@ -26,7 +27,7 @@ public class AnimalStockIncreaserTile extends WorkingAreaElectricMachine {
     public ItemStackHandler inFeedItems;
 
     public AnimalStockIncreaserTile() {
-        super(AnimalStockIncreaserTile.class.getName().hashCode(),2,2);
+        super(AnimalStockIncreaserTile.class.getName().hashCode(), 2, 2);
     }
 
     @Override
@@ -82,6 +83,7 @@ public class AnimalStockIncreaserTile extends WorkingAreaElectricMachine {
 
     @Override
     protected float performWork() {
+        if (((CustomOrientedBlock)this.getBlockType()).isWorkDisabled()) return 0;
         AxisAlignedBB area = getWorkingArea();
         List<EntityAnimal> animals = this.world.getEntitiesWithinAABB(EntityAnimal.class, area);
         if (animals.size() == 0 || animals.size() > 20) return 0;

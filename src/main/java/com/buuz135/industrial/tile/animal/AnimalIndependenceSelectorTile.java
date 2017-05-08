@@ -1,6 +1,7 @@
 package com.buuz135.industrial.tile.animal;
 
 import com.buuz135.industrial.tile.WorkingAreaElectricMachine;
+import com.buuz135.industrial.tile.block.CustomOrientedBlock;
 import net.minecraft.entity.EntityAgeable;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.AxisAlignedBB;
@@ -12,12 +13,13 @@ public class AnimalIndependenceSelectorTile extends WorkingAreaElectricMachine {
 
 
     public AnimalIndependenceSelectorTile() {
-        super(AnimalIndependenceSelectorTile.class.getName().hashCode(),2,2);
+        super(AnimalIndependenceSelectorTile.class.getName().hashCode(), 2, 2);
     }
 
 
     @Override
     protected float performWork() {
+        if (((CustomOrientedBlock)this.getBlockType()).isWorkDisabled()) return 0;
         AxisAlignedBB area = getWorkingArea();
         List<EntityAgeable> animals = this.world.getEntitiesWithinAABB(EntityAgeable.class, area);
         if (animals.size() == 0) return 0;

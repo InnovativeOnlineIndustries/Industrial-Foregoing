@@ -2,6 +2,7 @@ package com.buuz135.industrial.tile.animal;
 
 import com.buuz135.industrial.proxy.FluidsRegistry;
 import com.buuz135.industrial.tile.WorkingAreaElectricMachine;
+import com.buuz135.industrial.tile.block.CustomOrientedBlock;
 import net.minecraft.entity.passive.EntityCow;
 import net.minecraft.entity.passive.EntitySheep;
 import net.minecraft.init.Items;
@@ -31,7 +32,7 @@ public class AnimalResourceHarvesterTile extends WorkingAreaElectricMachine {
     private IFluidTank milkTank;
 
     public AnimalResourceHarvesterTile() {
-        super(AnimalResourceHarvesterTile.class.getName().hashCode(),2,2);
+        super(AnimalResourceHarvesterTile.class.getName().hashCode(), 2, 2);
     }
 
     @Override
@@ -82,12 +83,13 @@ public class AnimalResourceHarvesterTile extends WorkingAreaElectricMachine {
     @Override
     public AxisAlignedBB getWorkingArea() {
         EnumFacing f = this.getFacing().getOpposite();
-        BlockPos corner1 = new BlockPos(0, 0, 0).offset(f, getRadius()+ 1);
+        BlockPos corner1 = new BlockPos(0, 0, 0).offset(f, getRadius() + 1);
         return this.getBlockType().getSelectedBoundingBox(this.world.getBlockState(this.pos), this.world, this.pos).offset(corner1).expand(getRadius(), 0, getRadius()).setMaxY(this.getPos().getY() + getHeight());
     }
 
     @Override
     protected float performWork() {
+        if (((CustomOrientedBlock)this.getBlockType()).isWorkDisabled()) return 0;
         List<EntitySheep> animals = this.world.getEntitiesWithinAABB(EntitySheep.class, getWorkingArea());
         for (EntitySheep sheep : animals) {
             if (!sheep.getSheared()) {

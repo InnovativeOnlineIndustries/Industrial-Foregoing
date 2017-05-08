@@ -1,6 +1,7 @@
 package com.buuz135.industrial.tile.animal;
 
 import com.buuz135.industrial.tile.WorkingAreaElectricMachine;
+import com.buuz135.industrial.tile.block.CustomOrientedBlock;
 import com.buuz135.industrial.utils.BlockUtils;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.inventory.Slot;
@@ -29,7 +30,7 @@ public class WaterResourcesCollectorTile extends WorkingAreaElectricMachine {
     private ItemStackHandler outFish;
 
     public WaterResourcesCollectorTile() {
-        super(WaterResourcesCollectorTile.class.getName().hashCode(),1,0);
+        super(WaterResourcesCollectorTile.class.getName().hashCode(), 1, 0);
     }
 
     @Override
@@ -78,6 +79,7 @@ public class WaterResourcesCollectorTile extends WorkingAreaElectricMachine {
 
     @Override
     protected float performWork() {
+        if (((CustomOrientedBlock)this.getBlockType()).isWorkDisabled()) return 0;
         List<BlockPos> blockPos = BlockUtils.getBlockPosInAABB(getWorkingArea());
         boolean allWaterSources = true;
         for (BlockPos pos : blockPos) {

@@ -1,6 +1,7 @@
 package com.buuz135.industrial.tile.crop;
 
 import com.buuz135.industrial.tile.WorkingAreaElectricMachine;
+import com.buuz135.industrial.tile.block.CustomOrientedBlock;
 import com.buuz135.industrial.utils.BlockUtils;
 import net.minecraft.block.BlockCrops;
 import net.minecraft.block.BlockNetherWart;
@@ -34,7 +35,7 @@ public class CropRecolectorTile extends WorkingAreaElectricMachine {
     private int pointer;
 
     public CropRecolectorTile() {
-        super(CropRecolectorTile.class.getName().hashCode(),1,0);
+        super(CropRecolectorTile.class.getName().hashCode(), 1, 0);
     }
 
     @Override
@@ -89,6 +90,7 @@ public class CropRecolectorTile extends WorkingAreaElectricMachine {
 
     @Override
     protected float performWork() {
+        if (((CustomOrientedBlock)this.getBlockType()).isWorkDisabled()) return 0;
         List<BlockPos> blockPos = BlockUtils.getBlockPosInAABB(getWorkingArea());
         boolean needPointerIncrease = true;
         if (pointer < blockPos.size()) {

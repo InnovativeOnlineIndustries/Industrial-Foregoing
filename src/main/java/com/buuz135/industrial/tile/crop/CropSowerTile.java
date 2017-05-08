@@ -3,6 +3,7 @@ package com.buuz135.industrial.tile.crop;
 import com.buuz135.industrial.IndustrialForegoing;
 import com.buuz135.industrial.proxy.client.infopiece.CropSowerFilterInfoPiece;
 import com.buuz135.industrial.tile.WorkingAreaElectricMachine;
+import com.buuz135.industrial.tile.block.CustomOrientedBlock;
 import com.buuz135.industrial.utils.BlockUtils;
 import com.buuz135.industrial.utils.ItemStackUtils;
 import net.minecraft.block.BlockFarmland;
@@ -26,8 +27,6 @@ import net.ndrei.teslacorelib.gui.TiledRenderedGuiPiece;
 import net.ndrei.teslacorelib.inventory.BoundingRectangle;
 import net.ndrei.teslacorelib.inventory.ColoredItemHandler;
 
-import javax.annotation.Nonnull;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -45,9 +44,9 @@ public class CropSowerTile extends WorkingAreaElectricMachine {
     private int pointer;
 
     public CropSowerTile() {
-        super(CropSowerTile.class.getName().hashCode(),1,1);
+        super(CropSowerTile.class.getName().hashCode(), 1, 1);
         filterStorage = new ItemStack[9];
-        Arrays.fill(filterStorage,ItemStack.EMPTY);
+        Arrays.fill(filterStorage, ItemStack.EMPTY);
     }
 
     @Override
@@ -58,7 +57,7 @@ public class CropSowerTile extends WorkingAreaElectricMachine {
         this.addInventory(new ColoredItemHandler(inPlant, EnumDyeColor.GREEN, "Seeds input", new BoundingRectangle(18 * 5 + 3, 25, 18 * 4, 18 * 3)) {
             @Override
             public boolean canInsertItem(int slot, ItemStack stack) {
-                return stack.getItem() instanceof ItemSeeds || stack.getItem() instanceof ItemSeedFood || ItemStackUtils.isStackOreDict(stack,"treeSapling");
+                return stack.getItem() instanceof ItemSeeds || stack.getItem() instanceof ItemSeedFood || ItemStackUtils.isStackOreDict(stack, "treeSapling");
             }
 
             @Override
@@ -94,14 +93,14 @@ public class CropSowerTile extends WorkingAreaElectricMachine {
         });
         this.addInventoryToStorage(inPlant, "crop_sower_in");
         filter = new ItemStackHandler(9);
-        this.addInventory(new ColoredItemHandler(filter,EnumDyeColor.WHITE,"Filter", new BoundingRectangle(-18 * 4+ 14, 25, 18 * 3, 18 * 3)){
+        this.addInventory(new ColoredItemHandler(filter, EnumDyeColor.WHITE, "Filter", new BoundingRectangle(-18 * 4 + 14, 25, 18 * 3, 18 * 3)) {
             @Override
             public boolean canInsertItem(int slot, ItemStack stack) {
-                if (stack.getItem() instanceof ItemSeeds || stack.getItem() instanceof ItemSeedFood || ItemStackUtils.isStackOreDict(stack,"treeSapling")){
+                if (stack.getItem() instanceof ItemSeeds || stack.getItem() instanceof ItemSeedFood || ItemStackUtils.isStackOreDict(stack, "treeSapling")) {
                     ItemStack clone = stack.copy();
                     clone.setCount(1);
                     filterStorage[slot] = clone;
-                }else{
+                } else {
                     filterStorage[slot] = ItemStack.EMPTY;
                 }
                 return false;
@@ -125,13 +124,14 @@ public class CropSowerTile extends WorkingAreaElectricMachine {
                 }
                 return slots;
             }
+
             @Override
             public List<IGuiContainerPiece> getGuiContainerPieces(BasicTeslaGuiContainer container) {
                 List<IGuiContainerPiece> pieces = super.getGuiContainerPieces(container);
                 BoundingRectangle box = this.getBoundingBox();
                 int i = 0;
-                for (EnumDyeColor color : new EnumDyeColor[]{EnumDyeColor.RED,EnumDyeColor.YELLOW,EnumDyeColor.GREEN,EnumDyeColor.CYAN,EnumDyeColor.WHITE,EnumDyeColor.BLUE,EnumDyeColor.PURPLE,EnumDyeColor.MAGENTA,EnumDyeColor.BLACK}){
-                    pieces.add(new TiledRenderedGuiPiece(box.getLeft()+18*(i%3), box.getTop()+(18*(i/3)), 18, 18, 1, 1, BasicTeslaGuiContainer.MACHINE_BACKGROUND, 108, 225, color));
+                for (EnumDyeColor color : new EnumDyeColor[]{EnumDyeColor.RED, EnumDyeColor.YELLOW, EnumDyeColor.GREEN, EnumDyeColor.CYAN, EnumDyeColor.WHITE, EnumDyeColor.BLUE, EnumDyeColor.PURPLE, EnumDyeColor.MAGENTA, EnumDyeColor.BLACK}) {
+                    pieces.add(new TiledRenderedGuiPiece(box.getLeft() + 18 * (i % 3), box.getTop() + (18 * (i / 3)), 18, 18, 1, 1, BasicTeslaGuiContainer.MACHINE_BACKGROUND, 108, 225, color));
                     ++i;
                 }
 
@@ -149,10 +149,11 @@ public class CropSowerTile extends WorkingAreaElectricMachine {
 
     @Override
     protected float performWork() {
+        if (((CustomOrientedBlock)this.getBlockType()).isWorkDisabled()) return 0;
         List<BlockPos> blockPos = BlockUtils.getBlockPosInAABB(getWorkingArea());
         ++pointer;
         if (pointer >= blockPos.size()) pointer = 0;
-        for (BlockPos pos : blockPos){
+        for (BlockPos pos : blockPos) {
             if (this.world.getBlockState(pos.offset(EnumFacing.DOWN)).getBlock().equals(Blocks.FARMLAND) && this.world.getBlockState(pos.offset(EnumFacing.DOWN)).getValue(BlockFarmland.MOISTURE) <= 6 && waterTank.getFluidAmount() > 50) {
                 this.world.setBlockState(pos.offset(EnumFacing.DOWN), this.world.getBlockState(pos.offset(EnumFacing.DOWN)).withProperty(BlockFarmland.MOISTURE, 7));
                 waterTank.drain(50, true);
@@ -167,7 +168,7 @@ public class CropSowerTile extends WorkingAreaElectricMachine {
                 if (!stack.isEmpty()) {
                     Item seeds = stack.getItem();
                     player.setHeldItem(EnumHand.MAIN_HAND, stack);
-                    if (!ItemStackUtils.isStackOreDict(stack,"treeSapling") && (this.world.getBlockState(pos.offset(EnumFacing.DOWN)).getBlock().equals(Blocks.DIRT) || this.world.getBlockState(pos.offset(EnumFacing.DOWN)).getBlock().equals(Blocks.GRASS))) {
+                    if (!ItemStackUtils.isStackOreDict(stack, "treeSapling") && (this.world.getBlockState(pos.offset(EnumFacing.DOWN)).getBlock().equals(Blocks.DIRT) || this.world.getBlockState(pos.offset(EnumFacing.DOWN)).getBlock().equals(Blocks.GRASS))) {
                         this.world.setBlockState(pos.offset(EnumFacing.DOWN), Blocks.FARMLAND.getDefaultState());
                     }
                     seeds.onItemUse(player, world, pos.offset(EnumFacing.DOWN), EnumHand.MAIN_HAND, EnumFacing.UP, 0, 0, 0);
@@ -175,7 +176,7 @@ public class CropSowerTile extends WorkingAreaElectricMachine {
                     return 1;
                 }
             }
-        }else{
+        } else {
             pointer = 0;
         }
 
@@ -185,8 +186,9 @@ public class CropSowerTile extends WorkingAreaElectricMachine {
     private ItemStack getFirstItem(BlockPos pos) {
         int slot = getFilteredSlot(pos);
         for (int i = 0; i < inPlant.getSlots(); ++i)
-            if (!inPlant.getStackInSlot(i).isEmpty()&& filterStorage[slot] != null && !filterStorage[slot].isEmpty() &&
-                    filterStorage[slot].getItem().equals(inPlant.getStackInSlot(i).getItem()) && filterStorage[slot].getMetadata() == inPlant.getStackInSlot(i).getMetadata()) return inPlant.getStackInSlot(i);
+            if (!inPlant.getStackInSlot(i).isEmpty() && filterStorage[slot] != null && !filterStorage[slot].isEmpty() &&
+                    filterStorage[slot].getItem().equals(inPlant.getStackInSlot(i).getItem()) && filterStorage[slot].getMetadata() == inPlant.getStackInSlot(i).getMetadata())
+                return inPlant.getStackInSlot(i);
         return ItemStack.EMPTY;
     }
 
@@ -216,16 +218,16 @@ public class CropSowerTile extends WorkingAreaElectricMachine {
         tagCompound.setInteger(NBT_POINTER, pointer);
         NBTTagCompound filterComp = new NBTTagCompound();
         int i = 0;
-        for (ItemStack filter : filterStorage){
-            if (filter != null && !filter.isEmpty()){
+        for (ItemStack filter : filterStorage) {
+            if (filter != null && !filter.isEmpty()) {
                 NBTTagCompound tag = new NBTTagCompound();
-                tag.setString(NBT_NAME,filter.getItem().getRegistryName().toString());
-                tag.setInteger(NBT_DATA,filter.getMetadata());
-                filterComp.setTag(String.valueOf(i),tag);
+                tag.setString(NBT_NAME, filter.getItem().getRegistryName().toString());
+                tag.setInteger(NBT_DATA, filter.getMetadata());
+                filterComp.setTag(String.valueOf(i), tag);
             }
             ++i;
         }
-        tagCompound.setTag(NBT_FILTER,filterComp);
+        tagCompound.setTag(NBT_FILTER, filterComp);
         return tagCompound;
     }
 
@@ -237,13 +239,13 @@ public class CropSowerTile extends WorkingAreaElectricMachine {
         filterStorage = new ItemStack[9];
         if (compound.hasKey(NBT_FILTER)) {
             NBTTagCompound filterComp = compound.getCompoundTag(NBT_FILTER);
-            for (int i = 0; i < 9; ++i){
+            for (int i = 0; i < 9; ++i) {
                 filterStorage[i] = ItemStack.EMPTY;
-                if (filterComp.hasKey(String.valueOf(i))){
+                if (filterComp.hasKey(String.valueOf(i))) {
                     NBTTagCompound tag = filterComp.getCompoundTag(String.valueOf(i));
                     Item item = Item.getByNameOrId(tag.getString(NBT_NAME));
-                    if (item != null){
-                        filterStorage[i] = new ItemStack(item,1,tag.getInteger(NBT_DATA));
+                    if (item != null) {
+                        filterStorage[i] = new ItemStack(item, 1, tag.getInteger(NBT_DATA));
                     }
                 }
             }
@@ -252,8 +254,8 @@ public class CropSowerTile extends WorkingAreaElectricMachine {
 
     @Override
     public List<IGuiContainerPiece> getGuiContainerPieces(BasicTeslaGuiContainer container) {
-        List<IGuiContainerPiece> pieces =  super.getGuiContainerPieces(container);
-        pieces.add(new CropSowerFilterInfoPiece(this,-18 * 4+ 7, 19));
+        List<IGuiContainerPiece> pieces = super.getGuiContainerPieces(container);
+        pieces.add(new CropSowerFilterInfoPiece(this, -18 * 4 + 7, 19));
         return pieces;
     }
 

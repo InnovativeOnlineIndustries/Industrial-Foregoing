@@ -1,7 +1,7 @@
 [
 {
-  "modid": "examplemod",
-  "name": "Example Mod",
+  "modid": "industrialforegoing",
+  "name": "Industrial Foregoing",
   "description": "Example placeholder mod.",
   "version": "${version}",
   "mcversion": "${mcversion}",

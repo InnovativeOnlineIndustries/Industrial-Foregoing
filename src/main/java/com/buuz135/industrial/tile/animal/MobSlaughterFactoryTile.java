@@ -3,6 +3,7 @@ package com.buuz135.industrial.tile.animal;
 import com.buuz135.industrial.proxy.CommonProxy;
 import com.buuz135.industrial.proxy.FluidsRegistry;
 import com.buuz135.industrial.tile.WorkingAreaElectricMachine;
+import com.buuz135.industrial.tile.block.CustomOrientedBlock;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.item.EnumDyeColor;
 import net.minecraft.util.EnumFacing;
@@ -19,7 +20,7 @@ public class MobSlaughterFactoryTile extends WorkingAreaElectricMachine {
     private IFluidTank outMeat;
 
     public MobSlaughterFactoryTile() {
-        super(MobSlaughterFactoryTile.class.getName().hashCode(),2,1);
+        super(MobSlaughterFactoryTile.class.getName().hashCode(), 2, 1);
     }
 
     @Override
@@ -57,6 +58,7 @@ public class MobSlaughterFactoryTile extends WorkingAreaElectricMachine {
 
     @Override
     protected float performWork() {
+        if (((CustomOrientedBlock)this.getBlockType()).isWorkDisabled()) return 0;
         AxisAlignedBB area = getWorkingArea();
         List<EntityLiving> mobs = this.getWorld().getEntitiesWithinAABB(EntityLiving.class, area);
         if (mobs.size() == 0) return 0;

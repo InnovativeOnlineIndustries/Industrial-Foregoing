@@ -1,7 +1,7 @@
 {
   "forge_marker": 1,
   "defaults": {
-    "textures" : {
+    "textures": {
       "rim": "minecraft:blocks/iron_block"
     },
     "model": "industrialforegoing:slider"

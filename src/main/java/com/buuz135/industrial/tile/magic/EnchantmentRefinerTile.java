@@ -1,6 +1,7 @@
 package com.buuz135.industrial.tile.magic;
 
 import com.buuz135.industrial.tile.CustomElectricMachine;
+import com.buuz135.industrial.tile.block.CustomOrientedBlock;
 import net.minecraft.init.Items;
 import net.minecraft.inventory.Slot;
 import net.minecraft.item.EnumDyeColor;
@@ -14,7 +15,6 @@ import net.ndrei.teslacorelib.gui.IGuiContainerPiece;
 import net.ndrei.teslacorelib.gui.TiledRenderedGuiPiece;
 import net.ndrei.teslacorelib.inventory.BoundingRectangle;
 import net.ndrei.teslacorelib.inventory.ColoredItemHandler;
-import net.ndrei.teslacorelib.tileentities.ElectricMachine;
 
 import java.util.List;
 
@@ -171,6 +171,7 @@ public class EnchantmentRefinerTile extends CustomElectricMachine {
 
     @Override
     protected float performWork() {
+        if (((CustomOrientedBlock)this.getBlockType()).isWorkDisabled()) return 0;
         ItemStack stack = getFirstItem();
         if (stack.isEmpty()) {
             return 0;
