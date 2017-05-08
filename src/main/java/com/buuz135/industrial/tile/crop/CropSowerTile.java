@@ -130,7 +130,7 @@ public class CropSowerTile extends WorkingAreaElectricMachine {
                 List<IGuiContainerPiece> pieces = super.getGuiContainerPieces(container);
                 BoundingRectangle box = this.getBoundingBox();
                 int i = 0;
-                for (EnumDyeColor color : new EnumDyeColor[]{EnumDyeColor.RED, EnumDyeColor.YELLOW, EnumDyeColor.GREEN, EnumDyeColor.CYAN, EnumDyeColor.WHITE, EnumDyeColor.BLUE, EnumDyeColor.PURPLE, EnumDyeColor.MAGENTA, EnumDyeColor.BLACK}) {
+                for (EnumDyeColor color : new EnumDyeColor[]{EnumDyeColor.RED, EnumDyeColor.YELLOW, EnumDyeColor.LIME, EnumDyeColor.CYAN, EnumDyeColor.WHITE, EnumDyeColor.BLUE, EnumDyeColor.PURPLE, EnumDyeColor.MAGENTA, EnumDyeColor.BLACK}) {
                     pieces.add(new TiledRenderedGuiPiece(box.getLeft() + 18 * (i % 3), box.getTop() + (18 * (i / 3)), 18, 18, 1, 1, BasicTeslaGuiContainer.MACHINE_BACKGROUND, 108, 225, color));
                     ++i;
                 }
@@ -161,7 +161,6 @@ public class CropSowerTile extends WorkingAreaElectricMachine {
         }
         if (pointer < blockPos.size()) {
             BlockPos pos = blockPos.get(pointer);
-            System.out.println(getFilteredSlot(pos));
             if (this.world.isAirBlock(pos)) {
                 FakePlayer player = IndustrialForegoing.getFakePlayer(this.world);
                 ItemStack stack = getFirstItem(pos);
@@ -172,7 +171,6 @@ public class CropSowerTile extends WorkingAreaElectricMachine {
                         this.world.setBlockState(pos.offset(EnumFacing.DOWN), Blocks.FARMLAND.getDefaultState());
                     }
                     seeds.onItemUse(player, world, pos.offset(EnumFacing.DOWN), EnumHand.MAIN_HAND, EnumFacing.UP, 0, 0, 0);
-
                     return 1;
                 }
             }
