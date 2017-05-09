@@ -6,6 +6,6 @@ import net.minecraft.block.material.Material;
 public class CropRecolectorBlock extends CustomOrientedBlock<CropRecolectorTile> {
 
     public CropRecolectorBlock() {
-        super("crop_recolector", CropRecolectorTile.class, Material.ROCK);
+        super("crop_recolector", CropRecolectorTile.class, Material.ROCK,400,40);
     }
 }

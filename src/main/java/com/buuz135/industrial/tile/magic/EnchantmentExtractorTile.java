@@ -17,6 +17,7 @@ import net.ndrei.teslacorelib.gui.IGuiContainerPiece;
 import net.ndrei.teslacorelib.gui.TiledRenderedGuiPiece;
 import net.ndrei.teslacorelib.inventory.BoundingRectangle;
 import net.ndrei.teslacorelib.inventory.ColoredItemHandler;
+import net.ndrei.teslacorelib.tileentities.ElectricMachine;
 
 import java.util.List;
 
@@ -47,7 +48,7 @@ public class EnchantmentExtractorTile extends CustomElectricMachine {
             }
         };
 
-        this.addInventory(new ColoredItemHandler(this.inBook, EnumDyeColor.BROWN, "Input books", new BoundingRectangle(18 * 3, 25, 18, 18)) {
+        super.addInventory(new ColoredItemHandler(this.inBook, EnumDyeColor.BROWN, "Input books", new BoundingRectangle(18 * 3, 25, 18, 18)) {
             @Override
             public boolean canInsertItem(int slot, ItemStack stack) {
                 return stack.getItem().equals(Items.BOOK);
@@ -84,7 +85,7 @@ public class EnchantmentExtractorTile extends CustomElectricMachine {
 
 
         });
-        this.addInventoryToStorage(this.inBook, "ench_ext_in_books");
+        super.addInventoryToStorage(this.inBook, "ench_books");
 
         inEnchanted = new ItemStackHandler(1) {
             @Override
@@ -230,28 +231,4 @@ public class EnchantmentExtractorTile extends CustomElectricMachine {
         return 0;
     }
 
-    @Override
-    protected int getEnergyForWork() {
-        return 2000;
-    }
-
-    @Override
-    public long getWorkEnergyCapacity() {
-        return 2000;
-    }
-
-    @Override
-    public long getWorkEnergyTick() {
-        return 50;
-    }
-
-    @Override
-    public boolean supportsSpeedUpgrades() {
-        return true;
-    }
-
-    @Override
-    public boolean supportsEnergyUpgrades() {
-        return true;
-    }
 }

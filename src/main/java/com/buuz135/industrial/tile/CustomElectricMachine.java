@@ -1,6 +1,8 @@
 package com.buuz135.industrial.tile;
 
+import com.buuz135.industrial.tile.block.CustomOrientedBlock;
 import net.minecraft.item.EnumDyeColor;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumFacing;
 import net.ndrei.teslacorelib.tileentities.ElectricMachine;
 
@@ -25,6 +27,16 @@ public class CustomElectricMachine extends ElectricMachine {
     @Override
     protected float performWork() {
         return 0;
+    }
+
+    @Override
+    protected int getEnergyForWork() {
+        return this.getBlockType() instanceof CustomOrientedBlock ? ((CustomOrientedBlock) this.getBlockType()).getEnergyForWork() : Integer.MAX_VALUE;
+    }
+
+    @Override
+    protected int getEnergyForWorkRate() {
+        return this.getBlockType() instanceof CustomOrientedBlock ? ((CustomOrientedBlock) this.getBlockType()).getEnergyRate() : Integer.MAX_VALUE;
     }
 
 }

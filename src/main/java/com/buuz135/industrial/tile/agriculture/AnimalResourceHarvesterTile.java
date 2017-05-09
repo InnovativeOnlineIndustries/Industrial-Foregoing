@@ -1,4 +1,4 @@
-package com.buuz135.industrial.tile.animal;
+package com.buuz135.industrial.tile.agriculture;
 
 import com.buuz135.industrial.proxy.FluidsRegistry;
 import com.buuz135.industrial.tile.WorkingAreaElectricMachine;
@@ -39,7 +39,12 @@ public class AnimalResourceHarvesterTile extends WorkingAreaElectricMachine {
     protected void initializeInventories() {
         super.initializeInventories();
         milkTank = this.addFluidTank(FluidsRegistry.MILK, 8000, EnumDyeColor.WHITE, "Milk tank", new BoundingRectangle(50, 25, 18, 54));
-        outItems = new ItemStackHandler(3 * 4);
+        outItems = new ItemStackHandler(3 * 4){
+            @Override
+            protected void onContentsChanged(int slot) {
+                AnimalResourceHarvesterTile.this.markDirty();
+            }
+        };
         this.addInventory(new ColoredItemHandler(outItems, EnumDyeColor.ORANGE, "Fish output", new BoundingRectangle(18 * 5 + 3, 25, 18 * 4, 18 * 3)) {
             @Override
             public boolean canInsertItem(int slot, ItemStack stack) {
@@ -77,7 +82,7 @@ public class AnimalResourceHarvesterTile extends WorkingAreaElectricMachine {
                 return pieces;
             }
         });
-        this.addInventoryToStorage(outItems, "animal_resource_harvester_out");
+        this.addInventoryToStorage(outItems, "animal_out");
     }
 
     @Override
@@ -104,4 +109,5 @@ public class AnimalResourceHarvesterTile extends WorkingAreaElectricMachine {
         milkTank.fill(new FluidStack(FluidsRegistry.MILK, cows.size() * 1000), true);
         return 1;
     }
+
 }

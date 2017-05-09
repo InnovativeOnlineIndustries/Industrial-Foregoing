@@ -8,12 +8,14 @@ public class FluidsRegistry {
     public static IFCustomFluid MILK;
     public static IFCustomFluid MEAT;
     public static IFCustomFluid LATEX;
+    public static IFCustomFluid SEWAGE;
 
     public static void registerFluids() {
         (ESSENCE = new IFCustomFluid("essence")).register();
         (MILK = new IFCustomFluid("milk")).register();
         (MEAT = new IFCustomFluid("meat")).register();
         (LATEX = new IFCustomFluid("latex")).register();
+        (SEWAGE = new IFCustomFluid("sewage")).register();
     }
 
 

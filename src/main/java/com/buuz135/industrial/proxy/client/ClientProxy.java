@@ -15,6 +15,7 @@ public class ClientProxy extends CommonProxy {
     public void preInit(FMLPreInitializationEvent event) {
         super.preInit(event);
         OBJLoader.INSTANCE.addDomain(Reference.MOD_ID);
+        ItemRenderRegistry.registerRender();
         FluidsRenderRegistry.registerRender();
         BlockRenderRegistry.registerRender();
 

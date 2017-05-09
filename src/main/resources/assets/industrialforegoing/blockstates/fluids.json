@@ -18,6 +18,12 @@
       "custom": {
         "fluid": "meat"
       }
+    },
+    "sewage": {
+      "model": "forge:fluid",
+      "custom": {
+        "fluid": "sewage"
+      }
     }
   }
 }

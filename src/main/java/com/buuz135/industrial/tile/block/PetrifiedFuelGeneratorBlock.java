@@ -6,7 +6,7 @@ import net.minecraft.block.material.Material;
 public class PetrifiedFuelGeneratorBlock extends CustomOrientedBlock<PetrifiedFuelGeneratorTile> {
 
     public PetrifiedFuelGeneratorBlock() {
-        super("petrified_fuel_generator", PetrifiedFuelGeneratorTile.class, Material.ROCK);
+        super("petrified_fuel_generator", PetrifiedFuelGeneratorTile.class, Material.ROCK,0,0);
     }
 
 

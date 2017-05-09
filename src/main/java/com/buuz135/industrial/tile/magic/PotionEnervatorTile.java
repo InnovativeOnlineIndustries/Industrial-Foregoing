@@ -265,16 +265,6 @@ public class PotionEnervatorTile extends CustomElectricMachine {
     }
 
     @Override
-    protected int getEnergyForWork() {
-        return 5000;
-    }
-
-    @Override
-    protected int getEnergyForWorkRate() {
-        return 40;
-    }
-
-    @Override
     public NBTTagCompound writeToNBT(NBTTagCompound compound) {
         NBTTagCompound tagCompound = super.writeToNBT(compound);
         tagCompound.setInteger(NBT_ACTION, action);

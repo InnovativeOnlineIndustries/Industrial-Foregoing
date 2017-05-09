@@ -119,26 +119,6 @@ public class CropEnrichMaterialInjectorTile extends WorkingAreaElectricMachine {
     }
 
     @Override
-    protected int getEnergyForWorkRate() {
-        return 20;
-    }
-
-    @Override
-    protected int getMinimumWorkTicks() {
-        return 10;
-    }
-
-    @Override
-    protected int getEnergyForWork() {
-        return 100;
-    }
-
-    @Override
-    public long getWorkEnergyCapacity() {
-        return 100;
-    }
-
-    @Override
     public NBTTagCompound writeToNBT(NBTTagCompound compound) {
         NBTTagCompound tagCompound = super.writeToNBT(compound);
         tagCompound.setInteger(NBT_POINTER, pointer);

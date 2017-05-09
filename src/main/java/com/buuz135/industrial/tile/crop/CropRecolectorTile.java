@@ -138,27 +138,6 @@ public class CropRecolectorTile extends WorkingAreaElectricMachine {
         else pointer = compound.getInteger(NBT_POINTER);
     }
 
-
-    @Override
-    protected int getEnergyForWorkRate() {
-        return 20;
-    }
-
-    @Override
-    protected int getMinimumWorkTicks() {
-        return 10;
-    }
-
-    @Override
-    protected int getEnergyForWork() {
-        return 100;
-    }
-
-    @Override
-    public long getWorkEnergyCapacity() {
-        return 100;
-    }
-
     public void doRecursiveChopping(World world, BlockPos current, List<BlockPos> blocksChecked, List<BlockPos> blocksChopped) {
         for (EnumFacing facing : new EnumFacing[]{EnumFacing.EAST, EnumFacing.NORTH, EnumFacing.WEST, EnumFacing.SOUTH, EnumFacing.UP}) {
             if (BlockUtils.isLeaves(world, current.offset(facing)) && !blocksChecked.contains(current.offset(facing))) {

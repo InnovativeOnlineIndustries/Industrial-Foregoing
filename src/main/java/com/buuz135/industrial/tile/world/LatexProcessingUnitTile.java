@@ -79,7 +79,7 @@ public class LatexProcessingUnitTile extends CustomElectricMachine {
     @Override
     protected float performWork() {
         if (((CustomOrientedBlock)this.getBlockType()).isWorkDisabled()) return 0;
-        if (waterTank.drain(1000, false).amount == 1000 && latexTank.drain(75, false).amount == 75 && ItemHandlerHelper.insertItem(itemOut, new ItemStack(ItemRegistry.tinyDryRubber, 1), true).isEmpty()) {
+        if (waterTank.getFluid() != null && latexTank.getFluid() != null && waterTank.drain(1000, false).amount == 1000 && latexTank.drain(75, false).amount == 75 && ItemHandlerHelper.insertItem(itemOut, new ItemStack(ItemRegistry.tinyDryRubber, 1), true).isEmpty()) {
             waterTank.drain(1000, true);
             latexTank.drain(75, true);
             ItemHandlerHelper.insertItem(itemOut, new ItemStack(ItemRegistry.tinyDryRubber, 1), false);

@@ -1,4 +1,4 @@
-package com.buuz135.industrial.tile.animal;
+package com.buuz135.industrial.tile.agriculture;
 
 import com.buuz135.industrial.item.MobImprisonmentToolItem;
 import com.buuz135.industrial.proxy.FluidsRegistry;
@@ -108,26 +108,5 @@ public class MobDuplicatorTile extends WorkingAreaElectricMachine {
             --spawnAmount;
         }
         return 1;
-    }
-
-
-    @Override
-    protected int getEnergyForWorkRate() {
-        return 50;
-    }
-
-    @Override
-    protected int getMinimumWorkTicks() {
-        return 10;
-    }
-
-    @Override
-    protected int getEnergyForWork() {
-        return 4000;
-    }
-
-    @Override
-    public long getWorkEnergyCapacity() {
-        return 4000;
     }
 }

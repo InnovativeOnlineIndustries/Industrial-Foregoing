@@ -217,19 +217,4 @@ public class EnchantmentAplicatorTile extends CustomElectricMachine {
         }
         return 0;
     }
-
-    @Override
-    protected int getEnergyForWork() {
-        return 2000;
-    }
-
-    @Override
-    public long getWorkEnergyCapacity() {
-        return 2000;
-    }
-
-    @Override
-    public long getWorkEnergyTick() {
-        return 50;
-    }
 }

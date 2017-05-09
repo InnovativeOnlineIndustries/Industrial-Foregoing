@@ -1,4 +1,4 @@
-package com.buuz135.industrial.tile.animal;
+package com.buuz135.industrial.tile.agriculture;
 
 import com.buuz135.industrial.proxy.FluidsRegistry;
 import com.buuz135.industrial.tile.WorkingAreaElectricMachine;
@@ -97,26 +97,6 @@ public class MobRelocatorTile extends WorkingAreaElectricMachine {
             }
         }
         return 1;
-    }
-
-    @Override
-    protected int getEnergyForWorkRate() {
-        return 20;
-    }
-
-    @Override
-    protected int getMinimumWorkTicks() {
-        return 10;
-    }
-
-    @Override
-    protected int getEnergyForWork() {
-        return 100;
-    }
-
-    @Override
-    public long getWorkEnergyCapacity() {
-        return 100;
     }
 
     @Override

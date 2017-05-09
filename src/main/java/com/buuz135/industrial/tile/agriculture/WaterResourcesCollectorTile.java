@@ -1,4 +1,4 @@
-package com.buuz135.industrial.tile.animal;
+package com.buuz135.industrial.tile.agriculture;
 
 import com.buuz135.industrial.tile.WorkingAreaElectricMachine;
 import com.buuz135.industrial.tile.block.CustomOrientedBlock;
@@ -104,13 +104,4 @@ public class WaterResourcesCollectorTile extends WorkingAreaElectricMachine {
         return this.getBlockType().getSelectedBoundingBox(this.world.getBlockState(this.pos), this.world, this.pos).offset(corner1).expand(getRadius(), 0, getRadius());
     }
 
-    @Override
-    protected int getEnergyForWork() {
-        return 2000;
-    }
-
-    @Override
-    protected int getEnergyForWorkRate() {
-        return 20;
-    }
 }

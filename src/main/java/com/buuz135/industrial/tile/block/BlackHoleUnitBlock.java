@@ -20,7 +20,7 @@ import java.util.List;
 public class BlackHoleUnitBlock extends CustomOrientedBlock<BlackHoleUnitTile> {
 
     public BlackHoleUnitBlock() {
-        super("black_hole_unit", BlackHoleUnitTile.class, Material.ROCK);
+        super("black_hole_unit", BlackHoleUnitTile.class, Material.ROCK,0,0);
     }
 
     @Override

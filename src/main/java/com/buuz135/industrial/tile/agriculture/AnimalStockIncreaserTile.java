@@ -1,4 +1,4 @@
-package com.buuz135.industrial.tile.animal;
+package com.buuz135.industrial.tile.agriculture;
 
 import com.buuz135.industrial.tile.WorkingAreaElectricMachine;
 import com.buuz135.industrial.tile.block.CustomOrientedBlock;
@@ -118,13 +118,5 @@ public class AnimalStockIncreaserTile extends WorkingAreaElectricMachine {
     }
 
 
-    @Override
-    protected int getEnergyForWork() {
-        return 1000;
-    }
 
-    @Override
-    protected int getEnergyForWorkRate() {
-        return 8;
-    }
 }

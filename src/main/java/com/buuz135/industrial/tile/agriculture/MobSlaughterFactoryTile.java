@@ -1,4 +1,4 @@
-package com.buuz135.industrial.tile.animal;
+package com.buuz135.industrial.tile.agriculture;
 
 import com.buuz135.industrial.proxy.CommonProxy;
 import com.buuz135.industrial.proxy.FluidsRegistry;
@@ -27,26 +27,6 @@ public class MobSlaughterFactoryTile extends WorkingAreaElectricMachine {
     protected void initializeInventories() {
         super.initializeInventories();
         outMeat = this.addFluidTank(FluidsRegistry.MEAT, 8000, EnumDyeColor.BROWN, "Meat tank", new BoundingRectangle(50, 25, 18, 54));
-    }
-
-    @Override
-    protected int getEnergyForWorkRate() {
-        return 20;
-    }
-
-    @Override
-    protected int getMinimumWorkTicks() {
-        return 10;
-    }
-
-    @Override
-    protected int getEnergyForWork() {
-        return 100;
-    }
-
-    @Override
-    public long getWorkEnergyCapacity() {
-        return 100;
     }
 
     @Override
