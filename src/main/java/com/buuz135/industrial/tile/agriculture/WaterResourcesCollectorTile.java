@@ -104,4 +104,8 @@ public class WaterResourcesCollectorTile extends WorkingAreaElectricMachine {
         return this.getBlockType().getSelectedBoundingBox(this.world.getBlockState(this.pos), this.world, this.pos).offset(corner1).expand(getRadius(), 0, getRadius());
     }
 
+    @Override
+    public boolean canAcceptRangeUpgrades() {
+        return false;
+    }
 }

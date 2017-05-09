@@ -1,0 +1,6 @@
+{
+  "parent":"industrialforegoing:item/item",
+  "textures": {
+    "layer0":"industrialforegoing:items/range_addon6"
+  }
+}

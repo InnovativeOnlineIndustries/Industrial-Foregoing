@@ -13,5 +13,6 @@ public class ItemRenderRegistry {
         fertilizer.registerRender();
 
         adultFilterAddomItem.registerRenderer();
+        rangeAddonItem.registerRenderer();
     }
 }

@@ -1,6 +1,8 @@
 package com.buuz135.industrial.tile.crop;
 
 import com.buuz135.industrial.IndustrialForegoing;
+import com.buuz135.industrial.proxy.ItemRegistry;
+import com.buuz135.industrial.tile.CustomColoredItemHandler;
 import com.buuz135.industrial.tile.WorkingAreaElectricMachine;
 import com.buuz135.industrial.tile.block.CustomOrientedBlock;
 import com.buuz135.industrial.utils.BlockUtils;
@@ -44,10 +46,10 @@ public class CropEnrichMaterialInjectorTile extends WorkingAreaElectricMachine {
     protected void initializeInventories() {
         super.initializeInventories();
         inFert = new ItemStackHandler(12);
-        this.addInventory(new ColoredItemHandler(inFert, EnumDyeColor.GREEN, "Fertilizer input", new BoundingRectangle(18 * 5 + 3, 25, 18 * 4, 18 * 3)) {
+        this.addInventory(new CustomColoredItemHandler(inFert, EnumDyeColor.GREEN, "Fertilizer input",18 * 5 + 3, 25,  4,  3) {
             @Override
             public boolean canInsertItem(int slot, ItemStack stack) {
-                return stack.getItem() == Items.DYE && stack.getMetadata() == 15;
+                return (stack.getItem().equals(Items.DYE) && stack.getMetadata() == 15) || stack.getItem().equals(ItemRegistry.fertilizer);
             }
 
             @Override
@@ -55,33 +57,8 @@ public class CropEnrichMaterialInjectorTile extends WorkingAreaElectricMachine {
                 return false;
             }
 
-            @Override
-            public List<Slot> getSlots(BasicTeslaContainer container) {
-                List<Slot> slots = super.getSlots(container);
-                BoundingRectangle box = this.getBoundingBox();
-                int i = 0;
-                for (int y = 0; y < 3; y++) {
-                    for (int x = 0; x < 4; x++) {
-                        slots.add(new FilteredSlot(this.getItemHandlerForContainer(), i, box.getLeft() + 1 + x * 18, box.getTop() + 1 + y * 18));
-                        ++i;
-                    }
-                }
-                return slots;
-            }
-
-            @Override
-            public List<IGuiContainerPiece> getGuiContainerPieces(BasicTeslaGuiContainer container) {
-                List<IGuiContainerPiece> pieces = super.getGuiContainerPieces(container);
-
-                BoundingRectangle box = this.getBoundingBox();
-                pieces.add(new TiledRenderedGuiPiece(box.getLeft(), box.getTop(), 18, 18,
-                        4, 3,
-                        BasicTeslaGuiContainer.MACHINE_BACKGROUND, 108, 225, EnumDyeColor.GREEN));
-
-                return pieces;
-            }
         });
-        this.addInventoryToStorage(inFert, "crop_fert_in");
+        this.addInventoryToStorage(inFert, "inFert");
     }
 
     @Override

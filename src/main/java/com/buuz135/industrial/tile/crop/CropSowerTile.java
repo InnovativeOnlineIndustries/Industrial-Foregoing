@@ -154,9 +154,9 @@ public class CropSowerTile extends WorkingAreaElectricMachine {
         ++pointer;
         if (pointer >= blockPos.size()) pointer = 0;
         for (BlockPos pos : blockPos) {
-            if (this.world.getBlockState(pos.offset(EnumFacing.DOWN)).getBlock().equals(Blocks.FARMLAND) && this.world.getBlockState(pos.offset(EnumFacing.DOWN)).getValue(BlockFarmland.MOISTURE) <= 6 && waterTank.getFluidAmount() > 50) {
+            if (this.world.getBlockState(pos.offset(EnumFacing.DOWN)).getBlock().equals(Blocks.FARMLAND) && this.world.getBlockState(pos.offset(EnumFacing.DOWN)).getValue(BlockFarmland.MOISTURE) < 7 && waterTank.getFluidAmount() > 1) {
                 this.world.setBlockState(pos.offset(EnumFacing.DOWN), this.world.getBlockState(pos.offset(EnumFacing.DOWN)).withProperty(BlockFarmland.MOISTURE, 7));
-                waterTank.drain(50, true);
+                waterTank.drain(1, true);
             }
         }
         if (pointer < blockPos.size()) {

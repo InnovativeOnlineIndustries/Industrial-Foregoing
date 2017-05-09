@@ -1,5 +1,6 @@
 package com.buuz135.industrial.tile;
 
+import com.buuz135.industrial.item.addon.RangeAddonItem;
 import com.buuz135.industrial.proxy.CommonProxy;
 import com.buuz135.industrial.proxy.client.ClientProxy;
 import net.minecraft.util.math.AxisAlignedBB;
@@ -30,7 +31,6 @@ public abstract class WorkingAreaElectricMachine extends CustomElectricMachine {
     @Override
     protected void initializeInventories() {
         super.initializeInventories();
-
     }
 
     @Override
@@ -90,11 +90,15 @@ public abstract class WorkingAreaElectricMachine extends CustomElectricMachine {
     }
 
     public int getRadius() {
-        return radius;
+        return radius +(this.hasAddon(RangeAddonItem.class)  ? (this.getAddonStack(RangeAddonItem.class).getMetadata() <= 0 ? -1: this.getAddonStack(RangeAddonItem.class).getMetadata()): 0);
     }
 
     public int getHeight() {
         return height;
+    }
+
+    public boolean canAcceptRangeUpgrades(){
+        return true;
     }
 
 }
