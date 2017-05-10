@@ -30,6 +30,7 @@ tile.industrialforegoing_latex_processing_unit.name=Latex Processing Unit
 tile.industrialforegoing_sewage_composter_solidifier.name=Sewage Compost Solidifier
 tile.industrialforegoing_animal_byproduct_recolector.name=Animal Byproduct Recolector
 tile.industrialforegoing_sludge_refiner.name=Sludge Refiner
+tile.industrialforegoing_mod_detector.name=Mob Detector
 
 tile.slider.name=Slider
 
@@ -46,3 +47,4 @@ item.dryrubber.name=Dry Rubber
 item.plastic.name=Plastic
 item.fertilizer.name=Fertilizer
 item.industrialforegoing_range_addon.name=Range Addon
+item.industrialforegoing_adult_filter.name=Adult Filter

@@ -1,5 +1,6 @@
 package com.buuz135.industrial.tile.world;
 
+import com.buuz135.industrial.tile.CustomColoredItemHandler;
 import com.buuz135.industrial.tile.WorkingAreaElectricMachine;
 import com.buuz135.industrial.tile.block.CustomOrientedBlock;
 import com.buuz135.industrial.utils.BlockUtils;
@@ -33,8 +34,13 @@ public class BlockDestroyerTile extends WorkingAreaElectricMachine {
     @Override
     protected void initializeInventories() {
         super.initializeInventories();
-        outItems = new ItemStackHandler(3 * 6);
-        this.addInventory(new ColoredItemHandler(outItems, EnumDyeColor.ORANGE, "Broken items", new BoundingRectangle(18 * 3, 25, 18 * 6, 18 * 3)) {
+        outItems = new ItemStackHandler(3 * 6){
+            @Override
+            protected void onContentsChanged(int slot) {
+                BlockDestroyerTile.this.markDirty();
+            }
+        };
+        this.addInventory(new CustomColoredItemHandler(outItems, EnumDyeColor.ORANGE, "Broken items",18 * 3, 25, 6,  3) {
             @Override
             public boolean canInsertItem(int slot, ItemStack stack) {
                 return false;
@@ -45,31 +51,6 @@ public class BlockDestroyerTile extends WorkingAreaElectricMachine {
                 return true;
             }
 
-            @Override
-            public List<Slot> getSlots(BasicTeslaContainer container) {
-                List<Slot> slots = super.getSlots(container);
-                BoundingRectangle box = this.getBoundingBox();
-                int i = 0;
-                for (int y = 0; y < 3; y++) {
-                    for (int x = 0; x < 6; x++) {
-                        slots.add(new FilteredSlot(this.getItemHandlerForContainer(), i, box.getLeft() + 1 + x * 18, box.getTop() + 1 + y * 18));
-                        ++i;
-                    }
-                }
-                return slots;
-            }
-
-            @Override
-            public List<IGuiContainerPiece> getGuiContainerPieces(BasicTeslaGuiContainer container) {
-                List<IGuiContainerPiece> pieces = super.getGuiContainerPieces(container);
-
-                BoundingRectangle box = this.getBoundingBox();
-                pieces.add(new TiledRenderedGuiPiece(box.getLeft(), box.getTop(), 18, 18,
-                        6, 3,
-                        BasicTeslaGuiContainer.MACHINE_BACKGROUND, 108, 225, EnumDyeColor.ORANGE));
-
-                return pieces;
-            }
         });
         this.addInventoryToStorage(outItems, "block_destroyer_out");
     }

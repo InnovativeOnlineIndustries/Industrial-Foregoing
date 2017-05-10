@@ -30,7 +30,7 @@ public class WaterCondesatorTile extends SidedTileEntity {
     @Override
     protected void initializeInventories() {
         super.initializeInventories();
-        fluidTank = this.addFluidTank(FluidRegistry.WATER, 8000, EnumDyeColor.BLUE, "Water tank", new BoundingRectangle(17, 25, 18, 54));
+        fluidTank = this.addFluidTank(FluidRegistry.WATER, 8000, EnumDyeColor.BLUE, "Water tank", new BoundingRectangle(16, 25, 18, 54));
     }
 
     private int getWaterSources() {
