@@ -1,6 +1,6 @@
 package com.buuz135.industrial.tile.block;
 
-import com.buuz135.industrial.tile.agriculture.MobDuplicatorTile;
+import com.buuz135.industrial.tile.mob.MobDuplicatorTile;
 import net.minecraft.block.material.Material;
 
 public class MobDuplicatorBlock extends CustomOrientedBlock<MobDuplicatorTile> {

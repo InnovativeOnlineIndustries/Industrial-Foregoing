@@ -1,8 +1,10 @@
-package com.buuz135.industrial.tile.agriculture;
+package com.buuz135.industrial.tile.mob;
 
 import com.buuz135.industrial.proxy.FluidsRegistry;
+import com.buuz135.industrial.tile.CustomColoredItemHandler;
 import com.buuz135.industrial.tile.WorkingAreaElectricMachine;
 import com.buuz135.industrial.tile.block.CustomOrientedBlock;
+import com.buuz135.industrial.tile.block.MobRelocatorBlock;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.inventory.Slot;
@@ -39,8 +41,13 @@ public class MobRelocatorTile extends WorkingAreaElectricMachine {
     protected void initializeInventories() {
         super.initializeInventories();
         outExp = this.addFluidTank(FluidsRegistry.ESSENCE, 8000, EnumDyeColor.LIME, "Experience tank", new BoundingRectangle(50, 25, 18, 54));
-        outItems = new ItemStackHandler(12);
-        this.addInventory(new ColoredItemHandler(outItems, EnumDyeColor.ORANGE, "Mob drops", new BoundingRectangle(18 * 5 + 3, 25, 18 * 4, 18 * 3)) {
+        outItems = new ItemStackHandler(12){
+            @Override
+            protected void onContentsChanged(int slot) {
+                MobRelocatorTile.this.markDirty();
+            }
+        };
+        this.addInventory(new CustomColoredItemHandler(outItems, EnumDyeColor.ORANGE, "Mob drops",18 * 5 + 3, 25, 4,  3) {
             @Override
             public boolean canInsertItem(int slot, ItemStack stack) {
                 return false;
@@ -51,31 +58,6 @@ public class MobRelocatorTile extends WorkingAreaElectricMachine {
                 return true;
             }
 
-            @Override
-            public List<Slot> getSlots(BasicTeslaContainer container) {
-                List<Slot> slots = super.getSlots(container);
-                BoundingRectangle box = this.getBoundingBox();
-                int i = 0;
-                for (int y = 0; y < 3; y++) {
-                    for (int x = 0; x < 4; x++) {
-                        slots.add(new FilteredSlot(this.getItemHandlerForContainer(), i, box.getLeft() + 1 + x * 18, box.getTop() + 1 + y * 18));
-                        ++i;
-                    }
-                }
-                return slots;
-            }
-
-            @Override
-            public List<IGuiContainerPiece> getGuiContainerPieces(BasicTeslaGuiContainer container) {
-                List<IGuiContainerPiece> pieces = super.getGuiContainerPieces(container);
-
-                BoundingRectangle box = this.getBoundingBox();
-                pieces.add(new TiledRenderedGuiPiece(box.getLeft(), box.getTop(), 18, 18,
-                        4, 3,
-                        BasicTeslaGuiContainer.MACHINE_BACKGROUND, 108, 225, EnumDyeColor.ORANGE));
-
-                return pieces;
-            }
         });
         this.addInventoryToStorage(outItems, "mob_relocator_out");
     }
@@ -83,11 +65,12 @@ public class MobRelocatorTile extends WorkingAreaElectricMachine {
     @Override
     protected float performWork() {
         if (((CustomOrientedBlock)this.getBlockType()).isWorkDisabled()) return 0;
+
         AxisAlignedBB area = getWorkingArea();
         List<EntityLiving> mobs = this.getWorld().getEntitiesWithinAABB(EntityLiving.class, area);
         if (mobs.size() == 0) return 0;
         EntityLiving mob = mobs.get(this.getWorld().rand.nextInt(mobs.size()));
-        this.outExp.fill(new FluidStack(FluidsRegistry.ESSENCE, (int) mob.getHealth()), true);
+        this.outExp.fill(new FluidStack(FluidsRegistry.ESSENCE, (int) (mob.getHealth()* ((MobRelocatorBlock) this.getBlockType()).getEssenceMultiplier())), true);
         mob.attackEntityFrom(DamageSource.GENERIC, mob.getHealth());
         List<EntityItem> items = this.getWorld().getEntitiesWithinAABB(EntityItem.class, area);
         for (EntityItem item : items) {
@@ -96,6 +79,7 @@ public class MobRelocatorTile extends WorkingAreaElectricMachine {
                 item.setDead();
             }
         }
+
         return 1;
     }
 

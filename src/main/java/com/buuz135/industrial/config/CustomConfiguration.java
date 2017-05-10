@@ -35,6 +35,7 @@ public class CustomConfiguration {
             sewageCompostSolidiferBlock.getMachineConfig();
             animalByproductRecolectorBlock.getMachineConfig();
             sludgeRefinerBlock.getMachineConfig();
+            mobDetectorBlock.getMachineConfig();
             //sliderBlock.getMachineConfig();
         } catch (Exception e) {
 

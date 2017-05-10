@@ -3,6 +3,7 @@ package com.buuz135.industrial.proxy;
 import com.buuz135.industrial.fluid.IFCustomFluid;
 import com.buuz135.industrial.fluid.IFCustomFluidBlock;
 import com.buuz135.industrial.tile.block.*;
+import com.buuz135.industrial.tile.mob.MobDetectorTile;
 import net.minecraft.block.material.Material;
 
 public class BlockRegistry {
@@ -31,6 +32,7 @@ public class BlockRegistry {
     public static SewageCompostSolidiferBlock sewageCompostSolidiferBlock;
     public static AnimalByproductRecolectorBlock animalByproductRecolectorBlock;
     public static SludgeRefinerBlock sludgeRefinerBlock;
+    public static MobDetectorBlock mobDetectorBlock;
 
     public static SliderBlock sliderBlock;
 
@@ -66,6 +68,7 @@ public class BlockRegistry {
         (sewageCompostSolidiferBlock = new SewageCompostSolidiferBlock()).register();
         (animalByproductRecolectorBlock = new AnimalByproductRecolectorBlock()).register();
         (sludgeRefinerBlock = new SludgeRefinerBlock()).register();
+        (mobDetectorBlock = new MobDetectorBlock()).register();
 
         (sliderBlock = new SliderBlock()).register();
 

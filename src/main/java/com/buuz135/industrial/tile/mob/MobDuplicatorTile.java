@@ -1,10 +1,12 @@
-package com.buuz135.industrial.tile.agriculture;
+package com.buuz135.industrial.tile.mob;
 
 import com.buuz135.industrial.item.MobImprisonmentToolItem;
 import com.buuz135.industrial.proxy.FluidsRegistry;
 import com.buuz135.industrial.proxy.ItemRegistry;
+import com.buuz135.industrial.tile.CustomColoredItemHandler;
 import com.buuz135.industrial.tile.WorkingAreaElectricMachine;
 import com.buuz135.industrial.tile.block.CustomOrientedBlock;
+import com.buuz135.industrial.tile.block.MobDuplicatorBlock;
 import com.buuz135.industrial.utils.BlockUtils;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.inventory.Slot;
@@ -37,8 +39,13 @@ public class MobDuplicatorTile extends WorkingAreaElectricMachine {
     protected void initializeInventories() {
         super.initializeInventories();
         this.experienceTank = this.addFluidTank(FluidsRegistry.ESSENCE, 8000, EnumDyeColor.LIME, "Experience tank", new BoundingRectangle(50, 25, 18, 54));
-        mobTool = new ItemStackHandler(1);
-        this.addInventory(new ColoredItemHandler(mobTool, EnumDyeColor.ORANGE, "Mob imprisonment Tool", new BoundingRectangle(18 * 5 + 3, 25, 18, 18)) {
+        mobTool = new ItemStackHandler(1){
+            @Override
+            protected void onContentsChanged(int slot) {
+                MobDuplicatorTile.this.markDirty();
+            }
+        };
+        this.addInventory(new CustomColoredItemHandler(mobTool, EnumDyeColor.ORANGE, "Mob imprisonment Tool", 18 * 5 + 3, 25, 1, 1) {
             @Override
             public boolean canInsertItem(int slot, ItemStack stack) {
                 return stack.getItem().equals(ItemRegistry.mobImprisonmentToolItem) && ((MobImprisonmentToolItem) stack.getItem()).containsEntity(stack);
@@ -49,33 +56,13 @@ public class MobDuplicatorTile extends WorkingAreaElectricMachine {
                 return true;
             }
 
-            @Override
-            public List<Slot> getSlots(BasicTeslaContainer container) {
-                List<Slot> slots = super.getSlots(container);
-                BoundingRectangle box = this.getBoundingBox();
-                slots.add(new FilteredSlot(this.getItemHandlerForContainer(), 0, box.getLeft() + 1, box.getTop() + 1));
-                return slots;
-            }
-
-            @Override
-            public List<IGuiContainerPiece> getGuiContainerPieces(BasicTeslaGuiContainer container) {
-                List<IGuiContainerPiece> pieces = super.getGuiContainerPieces(container);
-
-                BoundingRectangle box = this.getBoundingBox();
-                pieces.add(new TiledRenderedGuiPiece(box.getLeft(), box.getTop(), 18, 18,
-                        1, 1,
-                        BasicTeslaGuiContainer.MACHINE_BACKGROUND, 108, 225, EnumDyeColor.ORANGE));
-
-                return pieces;
-            }
         });
         this.addInventoryToStorage(mobTool, "mob_replicator_tool");
     }
 
     @Override
     public AxisAlignedBB getWorkingArea() {
-        BlockPos corner1 = new BlockPos(0, 0, 0);
-        return this.getBlockType().getSelectedBoundingBox(this.world.getBlockState(this.pos), this.world, this.pos).expand(getRadius(), getHeight(), getRadius()).offset(corner1);
+        return this.getBlockType().getSelectedBoundingBox(this.world.getBlockState(this.pos), this.world, this.pos).expand(getRadius(), getHeight(), getRadius());
     }
 
     @Override

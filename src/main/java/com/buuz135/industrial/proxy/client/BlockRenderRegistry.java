@@ -29,6 +29,7 @@ public class BlockRenderRegistry {
         sewageCompostSolidiferBlock.registerRenderer();
         animalByproductRecolectorBlock.registerRenderer();
         sludgeRefinerBlock.registerRenderer();
+        mobDetectorBlock.registerRenderer();
 
         sliderBlock.registerRenderer();
     }
