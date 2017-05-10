@@ -9,9 +9,5 @@ public class AnimalIndependenceSelectorBlock extends CustomOrientedBlock<AnimalI
         super("animal_independence_selector", AnimalIndependenceSelectorTile.class, Material.ROCK, 20*20, 20);
     }
 
-    @Override
-    public void getMachineConfig() {
-        super.getMachineConfig();
 
-    }
 }

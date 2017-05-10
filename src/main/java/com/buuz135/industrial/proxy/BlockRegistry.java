@@ -29,6 +29,7 @@ public class BlockRegistry {
     public static TreeFluidExtractorBlock treeFluidExtractorBlock;
     public static LatexProcessingUnitBlock latexProcessingUnitBlock;
     public static SewageCompostSolidiferBlock sewageCompostSolidiferBlock;
+    public static AnimalByproductRecolectorBlock animalByproductRecolectorBlock;
 
     public static SliderBlock sliderBlock;
 
@@ -37,6 +38,7 @@ public class BlockRegistry {
     public static IFCustomFluidBlock BLOCK_MEAT;
     public static IFCustomFluidBlock BLOCK_LATEX;
     public static IFCustomFluidBlock BLOCK_SEWAGE;
+    public static IFCustomFluidBlock BLOCK_SLUDGE;
 
     public static void registerBlocks() {
         (petrifiedFuelGeneratorBlock = new PetrifiedFuelGeneratorBlock()).register();
@@ -61,6 +63,7 @@ public class BlockRegistry {
         (treeFluidExtractorBlock = new TreeFluidExtractorBlock()).register();
         (latexProcessingUnitBlock = new LatexProcessingUnitBlock()).register();
         (sewageCompostSolidiferBlock = new SewageCompostSolidiferBlock()).register();
+        (animalByproductRecolectorBlock = new AnimalByproductRecolectorBlock()).register();
 
         (sliderBlock = new SliderBlock()).register();
 
@@ -69,5 +72,6 @@ public class BlockRegistry {
         (BLOCK_MEAT = new IFCustomFluidBlock(FluidsRegistry.MEAT, Material.WATER)).register();
         (BLOCK_LATEX = new IFCustomFluidBlock(FluidsRegistry.LATEX, Material.WATER)).register();
         (BLOCK_SEWAGE = new IFCustomFluidBlock(FluidsRegistry.SEWAGE, Material.WATER)).register();
+        (BLOCK_SLUDGE = new IFCustomFluidBlock(FluidsRegistry.SLUDGE, Material.WATER)).register();
     }
 }

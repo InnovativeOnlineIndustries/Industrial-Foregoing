@@ -24,6 +24,12 @@
       "custom": {
         "fluid": "sewage"
       }
+    },
+    "sludge": {
+      "model": "forge:fluid",
+      "custom": {
+        "fluid": "sludge"
+      }
     }
   }
 }

@@ -1,7 +1,8 @@
-package com.buuz135.industrial.tile.crop;
+package com.buuz135.industrial.tile.agriculture;
 
 import com.buuz135.industrial.IndustrialForegoing;
 import com.buuz135.industrial.proxy.client.infopiece.CropSowerFilterInfoPiece;
+import com.buuz135.industrial.tile.CustomColoredItemHandler;
 import com.buuz135.industrial.tile.WorkingAreaElectricMachine;
 import com.buuz135.industrial.tile.block.CustomOrientedBlock;
 import com.buuz135.industrial.utils.BlockUtils;
@@ -40,7 +41,6 @@ public class CropSowerTile extends WorkingAreaElectricMachine {
     private ItemStackHandler inPlant;
     private ItemStackHandler filter;
     private ItemStack[] filterStorage;
-    private IFluidTank waterTank;
     private int pointer;
 
     public CropSowerTile() {
@@ -52,9 +52,13 @@ public class CropSowerTile extends WorkingAreaElectricMachine {
     @Override
     protected void initializeInventories() {
         super.initializeInventories();
-        waterTank = this.addFluidTank(FluidRegistry.WATER, 8000, EnumDyeColor.BLUE, "Water tank", new BoundingRectangle(50, 25, 18, 54));
-        inPlant = new ItemStackHandler(12);
-        this.addInventory(new ColoredItemHandler(inPlant, EnumDyeColor.GREEN, "Seeds input", new BoundingRectangle(18 * 5 + 3, 25, 18 * 4, 18 * 3)) {
+        inPlant = new ItemStackHandler(6*4){
+            @Override
+            protected void onContentsChanged(int slot) {
+                CropSowerTile.this.markDirty();
+            }
+        };
+        this.addInventory(new CustomColoredItemHandler(inPlant, EnumDyeColor.GREEN, "Seeds input",18 * 3, 25,  6,  3) {
             @Override
             public boolean canInsertItem(int slot, ItemStack stack) {
                 return stack.getItem() instanceof ItemSeeds || stack.getItem() instanceof ItemSeedFood || ItemStackUtils.isStackOreDict(stack, "treeSapling");
@@ -65,35 +69,10 @@ public class CropSowerTile extends WorkingAreaElectricMachine {
                 return false;
             }
 
-            @Override
-            public List<Slot> getSlots(BasicTeslaContainer container) {
-                List<Slot> slots = super.getSlots(container);
-                BoundingRectangle box = this.getBoundingBox();
-                int i = 0;
-                for (int y = 0; y < 3; y++) {
-                    for (int x = 0; x < 4; x++) {
-                        slots.add(new FilteredSlot(this.getItemHandlerForContainer(), i, box.getLeft() + 1 + x * 18, box.getTop() + 1 + y * 18));
-                        ++i;
-                    }
-                }
-                return slots;
-            }
-
-            @Override
-            public List<IGuiContainerPiece> getGuiContainerPieces(BasicTeslaGuiContainer container) {
-                List<IGuiContainerPiece> pieces = super.getGuiContainerPieces(container);
-
-                BoundingRectangle box = this.getBoundingBox();
-                pieces.add(new TiledRenderedGuiPiece(box.getLeft(), box.getTop(), 18, 18,
-                        4, 3,
-                        BasicTeslaGuiContainer.MACHINE_BACKGROUND, 108, 225, EnumDyeColor.GREEN));
-
-                return pieces;
-            }
         });
-        this.addInventoryToStorage(inPlant, "crop_sower_in");
+        this.addInventoryToStorage(inPlant, "inPlant");
         filter = new ItemStackHandler(9);
-        this.addInventory(new ColoredItemHandler(filter, EnumDyeColor.WHITE, "Filter", new BoundingRectangle(-18 * 4 + 14, 25, 18 * 3, 18 * 3)) {
+        this.addInventory(new CustomColoredItemHandler(filter, EnumDyeColor.WHITE, "Filter",-18 * 4 + 14, 25, 3,  3) {
             @Override
             public boolean canInsertItem(int slot, ItemStack stack) {
                 if (stack.getItem() instanceof ItemSeeds || stack.getItem() instanceof ItemSeedFood || ItemStackUtils.isStackOreDict(stack, "treeSapling")) {
@@ -109,33 +88,6 @@ public class CropSowerTile extends WorkingAreaElectricMachine {
             @Override
             public boolean canExtractItem(int slot) {
                 return false;
-            }
-
-            @Override
-            public List<Slot> getSlots(BasicTeslaContainer container) {
-                List<Slot> slots = super.getSlots(container);
-                BoundingRectangle box = this.getBoundingBox();
-                int i = 0;
-                for (int y = 0; y < 3; y++) {
-                    for (int x = 0; x < 3; x++) {
-                        slots.add(new FilteredSlot(this.getItemHandlerForContainer(), i, box.getLeft() + 1 + x * 18, box.getTop() + 1 + y * 18));
-                        ++i;
-                    }
-                }
-                return slots;
-            }
-
-            @Override
-            public List<IGuiContainerPiece> getGuiContainerPieces(BasicTeslaGuiContainer container) {
-                List<IGuiContainerPiece> pieces = super.getGuiContainerPieces(container);
-                BoundingRectangle box = this.getBoundingBox();
-                int i = 0;
-                for (EnumDyeColor color : new EnumDyeColor[]{EnumDyeColor.RED, EnumDyeColor.YELLOW, EnumDyeColor.LIME, EnumDyeColor.CYAN, EnumDyeColor.WHITE, EnumDyeColor.BLUE, EnumDyeColor.PURPLE, EnumDyeColor.MAGENTA, EnumDyeColor.BLACK}) {
-                    pieces.add(new TiledRenderedGuiPiece(box.getLeft() + 18 * (i % 3), box.getTop() + (18 * (i / 3)), 18, 18, 1, 1, BasicTeslaGuiContainer.MACHINE_BACKGROUND, 108, 225, color));
-                    ++i;
-                }
-
-                return pieces;
             }
         });
 
@@ -153,12 +105,6 @@ public class CropSowerTile extends WorkingAreaElectricMachine {
         List<BlockPos> blockPos = BlockUtils.getBlockPosInAABB(getWorkingArea());
         ++pointer;
         if (pointer >= blockPos.size()) pointer = 0;
-        for (BlockPos pos : blockPos) {
-            if (this.world.getBlockState(pos.offset(EnumFacing.DOWN)).getBlock().equals(Blocks.FARMLAND) && this.world.getBlockState(pos.offset(EnumFacing.DOWN)).getValue(BlockFarmland.MOISTURE) < 7 && waterTank.getFluidAmount() > 1) {
-                this.world.setBlockState(pos.offset(EnumFacing.DOWN), this.world.getBlockState(pos.offset(EnumFacing.DOWN)).withProperty(BlockFarmland.MOISTURE, 7));
-                waterTank.drain(1, true);
-            }
-        }
         if (pointer < blockPos.size()) {
             BlockPos pos = blockPos.get(pointer);
             if (this.world.isAirBlock(pos)) {

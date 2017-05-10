@@ -1,0 +1,10 @@
+{
+  "parent": "industrialforegoing:block/base_block",
+  "textures": {
+    "north": "industrialforegoing:blocks/animal_byproduct_recolector_side",
+    "south": "industrialforegoing:blocks/animal_byproduct_recolector_side",
+    "west": "industrialforegoing:blocks/animal_byproduct_recolector_side",
+    "east": "industrialforegoing:blocks/animal_byproduct_recolector_side",
+    "up": "industrialforegoing:blocks/animal_byproduct_recolector_top"
+  }
+}

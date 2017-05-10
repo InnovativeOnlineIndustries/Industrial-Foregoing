@@ -1,12 +1,14 @@
-package com.buuz135.industrial.tile.crop;
+package com.buuz135.industrial.tile.agriculture;
 
+import com.buuz135.industrial.proxy.FluidsRegistry;
+import com.buuz135.industrial.tile.CustomColoredItemHandler;
 import com.buuz135.industrial.tile.WorkingAreaElectricMachine;
+import com.buuz135.industrial.tile.block.CropRecolectorBlock;
 import com.buuz135.industrial.tile.block.CustomOrientedBlock;
 import com.buuz135.industrial.utils.BlockUtils;
 import net.minecraft.block.BlockCrops;
 import net.minecraft.block.BlockNetherWart;
 import net.minecraft.block.state.IBlockState;
-import net.minecraft.inventory.Slot;
 import net.minecraft.item.EnumDyeColor;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -14,15 +16,11 @@ import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
+import net.minecraftforge.fluids.FluidStack;
+import net.minecraftforge.fluids.IFluidTank;
 import net.minecraftforge.items.ItemHandlerHelper;
 import net.minecraftforge.items.ItemStackHandler;
-import net.ndrei.teslacorelib.containers.BasicTeslaContainer;
-import net.ndrei.teslacorelib.containers.FilteredSlot;
-import net.ndrei.teslacorelib.gui.BasicTeslaGuiContainer;
-import net.ndrei.teslacorelib.gui.IGuiContainerPiece;
-import net.ndrei.teslacorelib.gui.TiledRenderedGuiPiece;
 import net.ndrei.teslacorelib.inventory.BoundingRectangle;
-import net.ndrei.teslacorelib.inventory.ColoredItemHandler;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -31,6 +29,7 @@ public class CropRecolectorTile extends WorkingAreaElectricMachine {
 
     private static String NBT_POINTER = "pointer";
 
+    private IFluidTank sludge;
     private ItemStackHandler outItems;
     private int pointer;
 
@@ -41,8 +40,14 @@ public class CropRecolectorTile extends WorkingAreaElectricMachine {
     @Override
     protected void initializeInventories() {
         super.initializeInventories();
-        outItems = new ItemStackHandler(3 * 6);
-        this.addInventory(new ColoredItemHandler(outItems, EnumDyeColor.ORANGE, "Crops output", new BoundingRectangle(18 * 3, 25, 18 * 6, 18 * 3)) {
+        sludge = this.addFluidTank(FluidsRegistry.SLUDGE,8000, EnumDyeColor.BLACK,"Sludge tank", new BoundingRectangle(50, 25, 18, 54));
+        outItems = new ItemStackHandler(3 * 4){
+            @Override
+            protected void onContentsChanged(int slot) {
+                CropRecolectorTile.this.markDirty();
+            }
+        };
+        this.addInventory(new CustomColoredItemHandler(outItems, EnumDyeColor.ORANGE, "Crops output",18 * 5+3, 25, 4,  3) {
             @Override
             public boolean canInsertItem(int slot, ItemStack stack) {
                 return false;
@@ -53,33 +58,8 @@ public class CropRecolectorTile extends WorkingAreaElectricMachine {
                 return true;
             }
 
-            @Override
-            public List<Slot> getSlots(BasicTeslaContainer container) {
-                List<Slot> slots = super.getSlots(container);
-                BoundingRectangle box = this.getBoundingBox();
-                int i = 0;
-                for (int y = 0; y < 3; y++) {
-                    for (int x = 0; x < 6; x++) {
-                        slots.add(new FilteredSlot(this.getItemHandlerForContainer(), i, box.getLeft() + 1 + x * 18, box.getTop() + 1 + y * 18));
-                        ++i;
-                    }
-                }
-                return slots;
-            }
-
-            @Override
-            public List<IGuiContainerPiece> getGuiContainerPieces(BasicTeslaGuiContainer container) {
-                List<IGuiContainerPiece> pieces = super.getGuiContainerPieces(container);
-
-                BoundingRectangle box = this.getBoundingBox();
-                pieces.add(new TiledRenderedGuiPiece(box.getLeft(), box.getTop(), 18, 18,
-                        6, 3,
-                        BasicTeslaGuiContainer.MACHINE_BACKGROUND, 108, 225, EnumDyeColor.ORANGE));
-
-                return pieces;
-            }
         });
-        this.addInventoryToStorage(outItems, "crop_recolector_out");
+        this.addInventoryToStorage(outItems, "outItems");
     }
 
     @Override
@@ -109,12 +89,13 @@ public class CropRecolectorTile extends WorkingAreaElectricMachine {
                     for (ItemStack stack : drops) {
                         ItemHandlerHelper.insertItem(outItems, stack, false);
                     }
+                    sludge.fill(new FluidStack(FluidsRegistry.SLUDGE,((CropRecolectorBlock)this.getBlockType()).getSludgeOperation()),true);
                     this.world.setBlockToAir(blockPos.get(pointer));
                 }
-
             } else if (BlockUtils.isLog(this.world, pos)) {
-                doRecursiveChopping(world, pos, new ArrayList<BlockPos>(), new ArrayList<BlockPos>());
+                List<BlockPos> chopped = doRecursiveChopping(world, pos, new ArrayList<>(), new ArrayList<>());
                 needPointerIncrease = false;
+                sludge.fill(new FluidStack(FluidsRegistry.SLUDGE,((CropRecolectorBlock)this.getBlockType()).getSludgeOperation()*chopped.size()),true);
             }
         } else {
             pointer = 0;
@@ -138,7 +119,7 @@ public class CropRecolectorTile extends WorkingAreaElectricMachine {
         else pointer = compound.getInteger(NBT_POINTER);
     }
 
-    public void doRecursiveChopping(World world, BlockPos current, List<BlockPos> blocksChecked, List<BlockPos> blocksChopped) {
+    public List<BlockPos> doRecursiveChopping(World world, BlockPos current, List<BlockPos> blocksChecked, List<BlockPos> blocksChopped) {
         for (EnumFacing facing : new EnumFacing[]{EnumFacing.EAST, EnumFacing.NORTH, EnumFacing.WEST, EnumFacing.SOUTH, EnumFacing.UP}) {
             if (BlockUtils.isLeaves(world, current.offset(facing)) && !blocksChecked.contains(current.offset(facing))) {
                 blocksChecked.add(current.offset(facing));
@@ -151,7 +132,7 @@ public class CropRecolectorTile extends WorkingAreaElectricMachine {
                 doRecursiveChopping(world, current.offset(facing), blocksChecked, blocksChopped);
             }
         }
-        if (blocksChopped.size() > 25) return;
+        if (blocksChopped.size() > ((CropRecolectorBlock)this.getBlockType()).getTreeOperations()) return blocksChopped;
         blocksChopped.add(current);
         List<ItemStack> drops = world.getBlockState(current).getBlock().getDrops(world, current, world.getBlockState(current), 0);
         boolean canInsert = true;
@@ -167,5 +148,8 @@ public class CropRecolectorTile extends WorkingAreaElectricMachine {
             }
             this.world.setBlockToAir(current);
         }
+        return blocksChopped;
     }
+
+
 }

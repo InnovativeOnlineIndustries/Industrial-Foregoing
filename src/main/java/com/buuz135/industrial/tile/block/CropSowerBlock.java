@@ -1,6 +1,6 @@
 package com.buuz135.industrial.tile.block;
 
-import com.buuz135.industrial.tile.crop.CropSowerTile;
+import com.buuz135.industrial.tile.agriculture.CropSowerTile;
 import net.minecraft.block.material.Material;
 
 public class CropSowerBlock extends CustomOrientedBlock<CropSowerTile> {

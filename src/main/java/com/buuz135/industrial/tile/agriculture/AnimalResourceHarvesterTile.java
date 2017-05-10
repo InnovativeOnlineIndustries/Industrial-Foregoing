@@ -1,6 +1,7 @@
 package com.buuz135.industrial.tile.agriculture;
 
 import com.buuz135.industrial.proxy.FluidsRegistry;
+import com.buuz135.industrial.tile.CustomColoredItemHandler;
 import com.buuz135.industrial.tile.WorkingAreaElectricMachine;
 import com.buuz135.industrial.tile.block.CustomOrientedBlock;
 import net.minecraft.entity.passive.EntityCow;
@@ -45,7 +46,7 @@ public class AnimalResourceHarvesterTile extends WorkingAreaElectricMachine {
                 AnimalResourceHarvesterTile.this.markDirty();
             }
         };
-        this.addInventory(new ColoredItemHandler(outItems, EnumDyeColor.ORANGE, "Fish output", new BoundingRectangle(18 * 5 + 3, 25, 18 * 4, 18 * 3)) {
+        this.addInventory(new CustomColoredItemHandler(outItems, EnumDyeColor.ORANGE, "Fish output",18 * 5 + 3, 25,  4, 3) {
             @Override
             public boolean canInsertItem(int slot, ItemStack stack) {
                 return false;
@@ -55,34 +56,8 @@ public class AnimalResourceHarvesterTile extends WorkingAreaElectricMachine {
             public boolean canExtractItem(int slot) {
                 return true;
             }
-
-            @Override
-            public List<Slot> getSlots(BasicTeslaContainer container) {
-                List<Slot> slots = super.getSlots(container);
-                BoundingRectangle box = this.getBoundingBox();
-                int i = 0;
-                for (int y = 0; y < 3; y++) {
-                    for (int x = 0; x < 4; x++) {
-                        slots.add(new FilteredSlot(this.getItemHandlerForContainer(), i, box.getLeft() + 1 + x * 18, box.getTop() + 1 + y * 18));
-                        ++i;
-                    }
-                }
-                return slots;
-            }
-
-            @Override
-            public List<IGuiContainerPiece> getGuiContainerPieces(BasicTeslaGuiContainer container) {
-                List<IGuiContainerPiece> pieces = super.getGuiContainerPieces(container);
-
-                BoundingRectangle box = this.getBoundingBox();
-                pieces.add(new TiledRenderedGuiPiece(box.getLeft(), box.getTop(), 18, 18,
-                        4, 3,
-                        BasicTeslaGuiContainer.MACHINE_BACKGROUND, 108, 225, EnumDyeColor.ORANGE));
-
-                return pieces;
-            }
         });
-        this.addInventoryToStorage(outItems, "animal_out");
+        this.addInventoryToStorage(outItems, "outItems");
     }
 
     @Override

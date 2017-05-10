@@ -39,6 +39,7 @@ public class MobSlaughterFactoryTile extends WorkingAreaElectricMachine {
     @Override
     protected float performWork() {
         if (((CustomOrientedBlock)this.getBlockType()).isWorkDisabled()) return 0;
+
         AxisAlignedBB area = getWorkingArea();
         List<EntityLiving> mobs = this.getWorld().getEntitiesWithinAABB(EntityLiving.class, area);
         if (mobs.size() == 0) return 0;
@@ -52,6 +53,7 @@ public class MobSlaughterFactoryTile extends WorkingAreaElectricMachine {
 //                item.setDead();
 //            }
 //        }
+
         return 1;
     }
 }

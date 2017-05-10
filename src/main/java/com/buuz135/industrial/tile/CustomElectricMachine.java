@@ -10,7 +10,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-public class CustomElectricMachine extends ElectricMachine {
+public abstract class CustomElectricMachine extends ElectricMachine {
 
     protected CustomElectricMachine(int typeId) {
         super(typeId);
@@ -24,10 +24,6 @@ public class CustomElectricMachine extends ElectricMachine {
         this.sideConfig.setSidesForColor(EnumDyeColor.LIGHT_BLUE, facings);
     }
 
-    @Override
-    protected float performWork() {
-        return 0;
-    }
 
     @Override
     protected int getEnergyForWork() {

@@ -27,6 +27,7 @@ public class BlockRenderRegistry {
         treeFluidExtractorBlock.registerRenderer();
         latexProcessingUnitBlock.registerRenderer();
         sewageCompostSolidiferBlock.registerRenderer();
+        animalByproductRecolectorBlock.registerRenderer();
 
         sliderBlock.registerRenderer();
     }

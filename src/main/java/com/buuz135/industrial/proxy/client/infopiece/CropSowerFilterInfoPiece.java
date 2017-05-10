@@ -1,7 +1,7 @@
 package com.buuz135.industrial.proxy.client.infopiece;
 
 import com.buuz135.industrial.proxy.client.ClientProxy;
-import com.buuz135.industrial.tile.crop.CropSowerTile;
+import com.buuz135.industrial.tile.agriculture.CropSowerTile;
 import com.buuz135.industrial.utils.ItemStackUtils;
 import net.minecraft.item.ItemStack;
 import net.ndrei.teslacorelib.gui.BasicRenderedGuiPiece;

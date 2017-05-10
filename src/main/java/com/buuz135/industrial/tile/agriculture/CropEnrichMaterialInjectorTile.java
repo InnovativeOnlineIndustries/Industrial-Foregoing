@@ -1,4 +1,4 @@
-package com.buuz135.industrial.tile.crop;
+package com.buuz135.industrial.tile.agriculture;
 
 import com.buuz135.industrial.IndustrialForegoing;
 import com.buuz135.industrial.proxy.ItemRegistry;
@@ -9,7 +9,6 @@ import com.buuz135.industrial.utils.BlockUtils;
 import net.minecraft.block.BlockCrops;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
-import net.minecraft.inventory.Slot;
 import net.minecraft.item.EnumDyeColor;
 import net.minecraft.item.ItemDye;
 import net.minecraft.item.ItemStack;
@@ -19,13 +18,6 @@ import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraftforge.common.util.FakePlayer;
 import net.minecraftforge.items.ItemStackHandler;
-import net.ndrei.teslacorelib.containers.BasicTeslaContainer;
-import net.ndrei.teslacorelib.containers.FilteredSlot;
-import net.ndrei.teslacorelib.gui.BasicTeslaGuiContainer;
-import net.ndrei.teslacorelib.gui.IGuiContainerPiece;
-import net.ndrei.teslacorelib.gui.TiledRenderedGuiPiece;
-import net.ndrei.teslacorelib.inventory.BoundingRectangle;
-import net.ndrei.teslacorelib.inventory.ColoredItemHandler;
 
 import java.util.List;
 
@@ -45,7 +37,12 @@ public class CropEnrichMaterialInjectorTile extends WorkingAreaElectricMachine {
     @Override
     protected void initializeInventories() {
         super.initializeInventories();
-        inFert = new ItemStackHandler(12);
+        inFert = new ItemStackHandler(12){
+            @Override
+            protected void onContentsChanged(int slot) {
+                CropEnrichMaterialInjectorTile.this.markDirty();
+            }
+        };
         this.addInventory(new CustomColoredItemHandler(inFert, EnumDyeColor.GREEN, "Fertilizer input",18 * 5 + 3, 25,  4,  3) {
             @Override
             public boolean canInsertItem(int slot, ItemStack stack) {

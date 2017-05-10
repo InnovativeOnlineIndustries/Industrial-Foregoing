@@ -28,6 +28,7 @@ tile.industrialforegoing_block_placer.name=Block Placer
 tile.industrialforegoing_tree_fluid_extractor.name=Tree Fluid Extractor
 tile.industrialforegoing_latex_processing_unit.name=Latex Processing Unit
 tile.industrialforegoing_sewage_composter_solidifier.name=Sewage Compost Solidifier
+tile.industrialforegoing_animal_byproduct_recolector.name=Animal Byproduct Recolector
 
 tile.slider.name=Slider
 
@@ -35,6 +36,7 @@ fluid.xpfluid=Liquid Experience
 fluid.milk=Milk
 fluid.meat=Liquid Meat
 fluid.sewage=Sewage
+fluid.sludge=Sludge
 
 item.meat_feeder.name=Meat Feeder
 item.mob_imprisonment_tool.name=Mob Imprisonment Tool
