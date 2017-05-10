@@ -4,6 +4,7 @@ import com.buuz135.industrial.proxy.CommonProxy;
 import com.buuz135.industrial.proxy.FluidsRegistry;
 import com.buuz135.industrial.tile.WorkingAreaElectricMachine;
 import com.buuz135.industrial.tile.block.CustomOrientedBlock;
+import com.buuz135.industrial.tile.block.MobSlaughterFactoryBlock;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.item.EnumDyeColor;
 import net.minecraft.util.EnumFacing;
@@ -44,7 +45,7 @@ public class MobSlaughterFactoryTile extends WorkingAreaElectricMachine {
         List<EntityLiving> mobs = this.getWorld().getEntitiesWithinAABB(EntityLiving.class, area);
         if (mobs.size() == 0) return 0;
         EntityLiving mob = mobs.get(this.getWorld().rand.nextInt(mobs.size()));
-        this.outMeat.fill(new FluidStack(FluidsRegistry.MEAT, (int) mob.getHealth() * 5), true);
+        this.outMeat.fill(new FluidStack(FluidsRegistry.MEAT, (int) (mob.getHealth() * ((MobSlaughterFactoryBlock)this.getBlockType()).getMeatValue())), true);
         mob.setDropItemsWhenDead(false);
         mob.attackEntityFrom(CommonProxy.custom, mob.getMaxHealth());
 //        List<EntityItem> items = this.getWorld().getEntitiesWithinAABB(EntityItem.class, area);

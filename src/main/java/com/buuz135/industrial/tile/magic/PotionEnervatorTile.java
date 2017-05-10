@@ -1,5 +1,6 @@
 package com.buuz135.industrial.tile.magic;
 
+import com.buuz135.industrial.tile.CustomColoredItemHandler;
 import com.buuz135.industrial.tile.CustomElectricMachine;
 import com.buuz135.industrial.tile.block.CustomOrientedBlock;
 import com.buuz135.industrial.utils.ItemStackUtils;
@@ -53,8 +54,13 @@ public class PotionEnervatorTile extends CustomElectricMachine {
 
     private void initInputInventories() {
         fluidTank = this.addFluidTank(FluidRegistry.WATER, 8000, EnumDyeColor.BLUE, "Water tank", new BoundingRectangle(44, 25, 18, 54));
-        inputGlassBottles = new ItemStackHandler(1);
-        this.addInventory(new ColoredItemHandler(inputGlassBottles, EnumDyeColor.ORANGE, "Glass bottles input", new BoundingRectangle(18 * 4 + 10, 25 + 18 * 2, 18, 18)) {
+        inputGlassBottles = new ItemStackHandler(1){
+            @Override
+            protected void onContentsChanged(int slot) {
+                PotionEnervatorTile.this.markDirty();
+            }
+        };
+        this.addInventory(new CustomColoredItemHandler(inputGlassBottles, EnumDyeColor.ORANGE, "Glass bottles input", 18 * 4 + 10, 25 + 18 * 2, 1, 1) {
             @Override
             public boolean canInsertItem(int slot, ItemStack stack) {
                 return stack.getItem().equals(Items.GLASS_BOTTLE);
@@ -65,30 +71,15 @@ public class PotionEnervatorTile extends CustomElectricMachine {
                 return false;
             }
 
-            @Override
-            public List<Slot> getSlots(BasicTeslaContainer container) {
-                List<Slot> slots = super.getSlots(container);
-                BoundingRectangle box = this.getBoundingBox();
-                for (int x = 0; x < this.getItemHandlerForContainer().getSlots(); x++) {
-                    slots.add(new FilteredSlot(this.getItemHandlerForContainer(), x, box.getLeft() + 1 + x * 18, box.getTop() + 1));
-                }
-                return slots;
-            }
-
-            @Override
-            public List<IGuiContainerPiece> getGuiContainerPieces(BasicTeslaGuiContainer container) {
-                List<IGuiContainerPiece> pieces = super.getGuiContainerPieces(container);
-                BoundingRectangle box = this.getBoundingBox();
-                pieces.add(new TiledRenderedGuiPiece(box.getLeft(), box.getTop(), 18, 18,
-                        this.getItemHandlerForContainer().getSlots(), 1,
-                        BasicTeslaGuiContainer.MACHINE_BACKGROUND, 108, 225, EnumDyeColor.ORANGE));
-
-                return pieces;
-            }
         });
         this.addInventoryToStorage(inputGlassBottles, "pot_ener_in_glass");
-        inputIngredients = new ItemStackHandler(5);
-        this.addInventory(new ColoredItemHandler(inputIngredients, EnumDyeColor.GREEN, "Ingredients items", new BoundingRectangle(18 * 4 + 10, 25, 18 * 5, 18)) {
+        inputIngredients = new ItemStackHandler(5){
+            @Override
+            protected void onContentsChanged(int slot) {
+                PotionEnervatorTile.this.markDirty();
+            }
+        };
+        this.addInventory(new CustomColoredItemHandler(inputIngredients, EnumDyeColor.GREEN, "Ingredients items", 18 * 4 + 10, 25,  5, 1) {
             @Override
             public boolean canInsertItem(int slot, ItemStack stack) {
                 if (stack.getItem().equals(Items.GLASS_BOTTLE)) return false;
@@ -104,33 +95,18 @@ public class PotionEnervatorTile extends CustomElectricMachine {
             public boolean canExtractItem(int slot) {
                 return false;
             }
-
-            @Override
-            public List<Slot> getSlots(BasicTeslaContainer container) {
-                List<Slot> slots = super.getSlots(container);
-                BoundingRectangle box = this.getBoundingBox();
-                for (int x = 0; x < this.getItemHandlerForContainer().getSlots(); x++) {
-                    slots.add(new FilteredSlot(this.getItemHandlerForContainer(), x, box.getLeft() + 1 + x * 18, box.getTop() + 1));
-                }
-                return slots;
-            }
-
-            @Override
-            public List<IGuiContainerPiece> getGuiContainerPieces(BasicTeslaGuiContainer container) {
-                List<IGuiContainerPiece> pieces = super.getGuiContainerPieces(container);
-                BoundingRectangle box = this.getBoundingBox();
-                pieces.add(new TiledRenderedGuiPiece(box.getLeft(), box.getTop(), 18, 18,
-                        this.getItemHandlerForContainer().getSlots(), 1,
-                        BasicTeslaGuiContainer.MACHINE_BACKGROUND, 108, 225, EnumDyeColor.GREEN));
-                return pieces;
-            }
         });
         this.addInventoryToStorage(inputIngredients, "pot_ener_in");
     }
 
     private void initOutputInventories() {
-        outputPotions = new ItemStackHandler(3);
-        this.addInventory(new ColoredItemHandler(outputPotions, EnumDyeColor.PURPLE, "Potions items", new BoundingRectangle(18 * 6 + 10, 25 + 18 * 2, 18 * 3, 18)) {
+        outputPotions = new ItemStackHandler(3){
+            @Override
+            protected void onContentsChanged(int slot) {
+                PotionEnervatorTile.this.markDirty();
+            }
+        };
+        this.addInventory(new CustomColoredItemHandler(outputPotions, EnumDyeColor.PURPLE, "Potions items", 18 * 6 + 10, 25 + 18 * 2,  3, 1) {
             @Override
             public boolean canInsertItem(int slot, ItemStack stack) {
                 return false;
@@ -141,27 +117,6 @@ public class PotionEnervatorTile extends CustomElectricMachine {
                 return true;
             }
 
-            @Override
-            public List<Slot> getSlots(BasicTeslaContainer container) {
-                List<Slot> slots = super.getSlots(container);
-                BoundingRectangle box = this.getBoundingBox();
-                for (int x = 0; x < this.getItemHandlerForContainer().getSlots(); x++) {
-                    slots.add(new FilteredSlot(this.getItemHandlerForContainer(), x, box.getLeft() + 1 + x * 18, box.getTop() + 1));
-                }
-                return slots;
-            }
-
-            @Override
-            public List<IGuiContainerPiece> getGuiContainerPieces(BasicTeslaGuiContainer container) {
-                List<IGuiContainerPiece> pieces = super.getGuiContainerPieces(container);
-
-                BoundingRectangle box = this.getBoundingBox();
-                pieces.add(new TiledRenderedGuiPiece(box.getLeft(), box.getTop(), 18, 18,
-                        this.getItemHandlerForContainer().getSlots(), 1,
-                        BasicTeslaGuiContainer.MACHINE_BACKGROUND, 108, 225, EnumDyeColor.PURPLE));
-
-                return pieces;
-            }
         });
         this.addInventoryToStorage(outputPotions, "pot_ener_out");
     }

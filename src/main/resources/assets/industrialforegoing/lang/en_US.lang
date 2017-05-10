@@ -29,6 +29,7 @@ tile.industrialforegoing_tree_fluid_extractor.name=Tree Fluid Extractor
 tile.industrialforegoing_latex_processing_unit.name=Latex Processing Unit
 tile.industrialforegoing_sewage_composter_solidifier.name=Sewage Compost Solidifier
 tile.industrialforegoing_animal_byproduct_recolector.name=Animal Byproduct Recolector
+tile.industrialforegoing_sludge_refiner.name=Sludge Refiner
 
 tile.slider.name=Slider
 

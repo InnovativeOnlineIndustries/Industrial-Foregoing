@@ -20,6 +20,7 @@ public class FluidsRenderRegistry {
         register(BlockRegistry.BLOCK_MEAT);
         register(BlockRegistry.BLOCK_LATEX);
         register(BlockRegistry.BLOCK_SEWAGE);
+        register(BlockRegistry.BLOCK_SLUDGE);
     }
 
     public static void register(IFCustomFluidBlock base) {

@@ -1,5 +1,6 @@
 package com.buuz135.industrial.tile.magic;
 
+import com.buuz135.industrial.tile.CustomColoredItemHandler;
 import com.buuz135.industrial.tile.CustomElectricMachine;
 import com.buuz135.industrial.tile.block.CustomOrientedBlock;
 import net.minecraft.enchantment.Enchantment;
@@ -48,7 +49,7 @@ public class EnchantmentExtractorTile extends CustomElectricMachine {
             }
         };
 
-        super.addInventory(new ColoredItemHandler(this.inBook, EnumDyeColor.BROWN, "Input books", new BoundingRectangle(18 * 3, 25, 18, 18)) {
+        super.addInventory(new CustomColoredItemHandler(this.inBook, EnumDyeColor.BROWN, "Input books", 18 * 3, 25, 1, 1) {
             @Override
             public boolean canInsertItem(int slot, ItemStack stack) {
                 return stack.getItem().equals(Items.BOOK);
@@ -59,31 +60,6 @@ public class EnchantmentExtractorTile extends CustomElectricMachine {
                 return false;
             }
 
-            @Override
-            public List<Slot> getSlots(BasicTeslaContainer container) {
-                List<Slot> slots = super.getSlots(container);
-                BoundingRectangle box = this.getBoundingBox();
-                for (int x = 0; x < this.handler.getSlots(); x++) {
-                    slots.add(new FilteredSlot(this.getItemHandlerForContainer(), x, box.getLeft() + 1, box.getTop() + 1 + x * 18));
-                }
-                return slots;
-            }
-
-            @Override
-            public List<IGuiContainerPiece> getGuiContainerPieces(BasicTeslaGuiContainer container) {
-                List<IGuiContainerPiece> pieces = super.getGuiContainerPieces(container);
-
-                BoundingRectangle box = this.getBoundingBox();
-                TiledRenderedGuiPiece piece = new TiledRenderedGuiPiece(box.getLeft(), box.getTop(), 18, 18,
-                        1, this.getItemHandlerForContainer().getSlots(),
-                        BasicTeslaGuiContainer.MACHINE_BACKGROUND, 108, 225, EnumDyeColor.BROWN);
-
-                pieces.add(piece);
-
-                return pieces;
-            }
-
-
         });
         super.addInventoryToStorage(this.inBook, "ench_books");
 
@@ -93,7 +69,7 @@ public class EnchantmentExtractorTile extends CustomElectricMachine {
                 EnchantmentExtractorTile.this.markDirty();
             }
         };
-        this.addInventory(new ColoredItemHandler(this.inEnchanted, EnumDyeColor.PURPLE, "Input enchanted items", new BoundingRectangle(18 * 3, 25 + 18 * 2, 18, 18)) {
+        this.addInventory(new CustomColoredItemHandler(this.inEnchanted, EnumDyeColor.PURPLE, "Input enchanted items",18 * 3, 25 + 18 * 2, 1, 1) {
             @Override
             public boolean canInsertItem(int slot, ItemStack stack) {
                 return stack.isItemEnchanted();
@@ -103,36 +79,19 @@ public class EnchantmentExtractorTile extends CustomElectricMachine {
             public boolean canExtractItem(int slot) {
                 return false;
             }
-
-            @Override
-            public List<Slot> getSlots(BasicTeslaContainer container) {
-                List<Slot> slots = super.getSlots(container);
-                BoundingRectangle box = this.getBoundingBox();
-                for (int x = 0; x < this.handler.getSlots(); x++) {
-                    slots.add(new FilteredSlot(this.getItemHandlerForContainer(), x, box.getLeft() + 1, box.getTop() + 1 + x * 18));
-                }
-                return slots;
-            }
-
-            @Override
-            public List<IGuiContainerPiece> getGuiContainerPieces(BasicTeslaGuiContainer container) {
-                List<IGuiContainerPiece> pieces = super.getGuiContainerPieces(container);
-
-                BoundingRectangle box = this.getBoundingBox();
-                pieces.add(new TiledRenderedGuiPiece(box.getLeft(), box.getTop(), 18, 18,
-                        1, this.getItemHandlerForContainer().getSlots(),
-                        BasicTeslaGuiContainer.MACHINE_BACKGROUND, 108, 225, EnumDyeColor.PURPLE));
-
-                return pieces;
-            }
         });
         this.addInventoryToStorage(this.inEnchanted, "ench_ext_in_items");
     }
 
 
     private void initOutputInv() {
-        outEnchanted = new ItemStackHandler(4);
-        this.addInventory(new ColoredItemHandler(outEnchanted, EnumDyeColor.MAGENTA, "Enchanted Books", new BoundingRectangle(18 * 4 + 14, 25, 18 * 4, 18)) {
+        outEnchanted = new ItemStackHandler(4){
+            @Override
+            protected void onContentsChanged(int slot) {
+                EnchantmentExtractorTile.this.markDirty();
+            }
+        };
+        this.addInventory(new CustomColoredItemHandler(outEnchanted, EnumDyeColor.MAGENTA, "Enchanted Books", 18 * 4 + 14, 25,  4, 1) {
             @Override
             public boolean canInsertItem(int slot, ItemStack stack) {
                 return false;
@@ -143,32 +102,16 @@ public class EnchantmentExtractorTile extends CustomElectricMachine {
                 return true;
             }
 
-            @Override
-            public List<Slot> getSlots(BasicTeslaContainer container) {
-                List<Slot> slots = super.getSlots(container);
-                BoundingRectangle box = this.getBoundingBox();
-                for (int x = 0; x < this.handler.getSlots(); x++) {
-                    slots.add(new FilteredSlot(this.getItemHandlerForContainer(), x, box.getLeft() + 1 + x * 18, box.getTop() + 1));
-                }
-                return slots;
-            }
-
-            @Override
-            public List<IGuiContainerPiece> getGuiContainerPieces(BasicTeslaGuiContainer container) {
-                List<IGuiContainerPiece> pieces = super.getGuiContainerPieces(container);
-
-                BoundingRectangle box = this.getBoundingBox();
-                pieces.add(new TiledRenderedGuiPiece(box.getLeft(), box.getTop(), 18, 18,
-                        this.getItemHandlerForContainer().getSlots(), 1,
-                        BasicTeslaGuiContainer.MACHINE_BACKGROUND, 108, 225, EnumDyeColor.MAGENTA));
-
-                return pieces;
-            }
         });
         this.addInventoryToStorage(outEnchanted, "ench_ext_out_book");
 
-        outItem = new ItemStackHandler(4);
-        this.addInventory(new ColoredItemHandler(outItem, EnumDyeColor.YELLOW, "Enchantless Items", new BoundingRectangle(18 * 4 + 14, 25 + 18 * 2, 18 * 4, 18)) {
+        outItem = new ItemStackHandler(4){
+            @Override
+            protected void onContentsChanged(int slot) {
+                EnchantmentExtractorTile.this.markDirty();
+            }
+        };
+        this.addInventory(new CustomColoredItemHandler(outItem, EnumDyeColor.YELLOW, "Enchantless Items", 18 * 4 + 14, 25 + 18 * 2,  4, 1) {
             @Override
             public boolean canInsertItem(int slot, ItemStack stack) {
                 return false;
@@ -179,27 +122,6 @@ public class EnchantmentExtractorTile extends CustomElectricMachine {
                 return true;
             }
 
-            @Override
-            public List<Slot> getSlots(BasicTeslaContainer container) {
-                List<Slot> slots = super.getSlots(container);
-                BoundingRectangle box = this.getBoundingBox();
-                for (int x = 0; x < this.handler.getSlots(); x++) {
-                    slots.add(new FilteredSlot(this.getItemHandlerForContainer(), x, box.getLeft() + 1 + x * 18, box.getTop() + 1));
-                }
-                return slots;
-            }
-
-            @Override
-            public List<IGuiContainerPiece> getGuiContainerPieces(BasicTeslaGuiContainer container) {
-                List<IGuiContainerPiece> pieces = super.getGuiContainerPieces(container);
-
-                BoundingRectangle box = this.getBoundingBox();
-                pieces.add(new TiledRenderedGuiPiece(box.getLeft(), box.getTop(), 18, 18,
-                        this.getItemHandlerForContainer().getSlots(), 1,
-                        BasicTeslaGuiContainer.MACHINE_BACKGROUND, 108, 225, EnumDyeColor.YELLOW));
-
-                return pieces;
-            }
         });
         this.addInventoryToStorage(outItem, "ench_ext_out_items");
     }
@@ -215,6 +137,7 @@ public class EnchantmentExtractorTile extends CustomElectricMachine {
     @Override
     protected float performWork() {
         if (((CustomOrientedBlock)this.getBlockType()).isWorkDisabled()) return 0;
+
         if (!hasBooks() || getItem().isEmpty()) return 0;
         ItemStack enchantedItem = getItem();
         ItemStack enchantedBook = new ItemStack(Items.ENCHANTED_BOOK);
@@ -228,6 +151,7 @@ public class EnchantmentExtractorTile extends CustomElectricMachine {
             enchantedItem.setCount(enchantedItem.getCount() - 1);
             return 500;
         }
+
         return 0;
     }
 

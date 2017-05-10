@@ -34,6 +34,7 @@ public class CustomConfiguration {
             latexProcessingUnitBlock.getMachineConfig();
             sewageCompostSolidiferBlock.getMachineConfig();
             animalByproductRecolectorBlock.getMachineConfig();
+            sludgeRefinerBlock.getMachineConfig();
             //sliderBlock.getMachineConfig();
         } catch (Exception e) {
 

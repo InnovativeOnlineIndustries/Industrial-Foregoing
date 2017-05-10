@@ -30,6 +30,7 @@ public class BlockRegistry {
     public static LatexProcessingUnitBlock latexProcessingUnitBlock;
     public static SewageCompostSolidiferBlock sewageCompostSolidiferBlock;
     public static AnimalByproductRecolectorBlock animalByproductRecolectorBlock;
+    public static SludgeRefinerBlock sludgeRefinerBlock;
 
     public static SliderBlock sliderBlock;
 
@@ -64,6 +65,7 @@ public class BlockRegistry {
         (latexProcessingUnitBlock = new LatexProcessingUnitBlock()).register();
         (sewageCompostSolidiferBlock = new SewageCompostSolidiferBlock()).register();
         (animalByproductRecolectorBlock = new AnimalByproductRecolectorBlock()).register();
+        (sludgeRefinerBlock = new SludgeRefinerBlock()).register();
 
         (sliderBlock = new SliderBlock()).register();
 
