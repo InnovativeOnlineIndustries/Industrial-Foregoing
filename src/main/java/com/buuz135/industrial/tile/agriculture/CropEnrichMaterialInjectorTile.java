@@ -30,7 +30,7 @@ public class CropEnrichMaterialInjectorTile extends WorkingAreaElectricMachine {
 
 
     public CropEnrichMaterialInjectorTile() {
-        super(CropEnrichMaterialInjectorTile.class.getName().hashCode(), 1, 0);
+        super(CropEnrichMaterialInjectorTile.class.getName().hashCode(), 1, 0, true);
         pointer = 0;
     }
 

@@ -35,7 +35,7 @@ public class CropSowerTile extends WorkingAreaElectricMachine {
     private int pointer;
 
     public CropSowerTile() {
-        super(CropSowerTile.class.getName().hashCode(), 1, 1);
+        super(CropSowerTile.class.getName().hashCode(), 1, 1, true);
         filterStorage = new ItemStack[9];
         Arrays.fill(filterStorage, ItemStack.EMPTY);
     }

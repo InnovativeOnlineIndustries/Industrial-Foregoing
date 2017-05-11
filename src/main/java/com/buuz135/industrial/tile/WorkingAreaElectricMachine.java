@@ -20,12 +20,14 @@ public abstract class WorkingAreaElectricMachine extends CustomElectricMachine {
     private boolean showArea;
     private int radius;
     private int height;
+    private boolean acceptsRangeAddon;
 
-    protected WorkingAreaElectricMachine(int typeId, int radius, int height) {
+    protected WorkingAreaElectricMachine(int typeId, int radius, int height, boolean acceptsRangeAddon) {
         super(typeId);
         color = CommonProxy.random.nextInt();
         this.radius = radius;
         this.height = height;
+        this.acceptsRangeAddon = acceptsRangeAddon;
     }
 
     @Override
@@ -98,7 +100,7 @@ public abstract class WorkingAreaElectricMachine extends CustomElectricMachine {
     }
 
     public boolean canAcceptRangeUpgrades() {
-        return true;
+        return acceptsRangeAddon;
     }
 
 }

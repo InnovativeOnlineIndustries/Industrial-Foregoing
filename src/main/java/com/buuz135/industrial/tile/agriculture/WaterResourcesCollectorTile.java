@@ -23,7 +23,7 @@ public class WaterResourcesCollectorTile extends WorkingAreaElectricMachine {
     private ItemStackHandler outFish;
 
     public WaterResourcesCollectorTile() {
-        super(WaterResourcesCollectorTile.class.getName().hashCode(), 1, 0);
+        super(WaterResourcesCollectorTile.class.getName().hashCode(), 1, 0,false);
     }
 
     @Override
@@ -76,8 +76,4 @@ public class WaterResourcesCollectorTile extends WorkingAreaElectricMachine {
         return this.getBlockType().getSelectedBoundingBox(this.world.getBlockState(this.pos), this.world, this.pos).offset(corner1).expand(getRadius(), 0, getRadius());
     }
 
-    @Override
-    public boolean canAcceptRangeUpgrades() {
-        return false;
-    }
 }

@@ -34,7 +34,7 @@ public class CropRecolectorTile extends WorkingAreaElectricMachine {
     private int pointer;
 
     public CropRecolectorTile() {
-        super(CropRecolectorTile.class.getName().hashCode(), 1, 0);
+        super(CropRecolectorTile.class.getName().hashCode(), 1, 0, true);
     }
 
     @Override

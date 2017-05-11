@@ -20,7 +20,7 @@ public class BlockDestroyerTile extends WorkingAreaElectricMachine {
     private ItemStackHandler outItems;
 
     public BlockDestroyerTile() {
-        super(BlockDestroyerTile.class.getName().hashCode(), 0, 0);
+        super(BlockDestroyerTile.class.getName().hashCode(), 0, 0, true);
     }
 
     @Override

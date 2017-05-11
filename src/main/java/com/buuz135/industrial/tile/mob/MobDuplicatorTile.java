@@ -24,7 +24,7 @@ public class MobDuplicatorTile extends WorkingAreaElectricMachine {
     private ItemStackHandler mobTool;
 
     public MobDuplicatorTile() {
-        super(MobDuplicatorTile.class.getName().hashCode(), 4, 1);
+        super(MobDuplicatorTile.class.getName().hashCode(), 4, 1,false);
     }
 
     @Override

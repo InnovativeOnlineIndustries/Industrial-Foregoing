@@ -13,7 +13,7 @@ public class MobDetectorTile extends WorkingAreaElectricMachine {
     private int redstoneSignal;
 
     public MobDetectorTile() {
-        super(MobDetectorTile.class.getName().hashCode(), 2, 1);
+        super(MobDetectorTile.class.getName().hashCode(), 2, 1,false);
         redstoneSignal = 0;
     }
 
@@ -31,11 +31,6 @@ public class MobDetectorTile extends WorkingAreaElectricMachine {
         redstoneSignal = living.size() > 15 ? 15 : living.size();
         this.world.notifyNeighborsOfStateChange(this.pos, this.getBlockType(), true);
         return 1;
-    }
-
-    @Override
-    public boolean canAcceptRangeUpgrades() {
-        return false;
     }
 
     public int getRedstoneSignal() {

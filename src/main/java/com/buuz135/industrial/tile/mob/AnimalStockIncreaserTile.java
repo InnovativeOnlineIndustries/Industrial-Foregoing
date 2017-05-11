@@ -20,7 +20,7 @@ public class AnimalStockIncreaserTile extends WorkingAreaElectricMachine {
     public ItemStackHandler inFeedItems;
 
     public AnimalStockIncreaserTile() {
-        super(AnimalStockIncreaserTile.class.getName().hashCode(), 2, 2);
+        super(AnimalStockIncreaserTile.class.getName().hashCode(), 2, 2, false);
     }
 
     @Override
@@ -91,6 +91,7 @@ public class AnimalStockIncreaserTile extends WorkingAreaElectricMachine {
         }
         return ItemStack.EMPTY;
     }
+
 
 
 }

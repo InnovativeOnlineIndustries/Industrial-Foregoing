@@ -21,7 +21,7 @@ public class MobSlaughterFactoryTile extends WorkingAreaElectricMachine {
     private IFluidTank outMeat;
 
     public MobSlaughterFactoryTile() {
-        super(MobSlaughterFactoryTile.class.getName().hashCode(), 2, 1);
+        super(MobSlaughterFactoryTile.class.getName().hashCode(), 2, 1, false);
     }
 
     @Override

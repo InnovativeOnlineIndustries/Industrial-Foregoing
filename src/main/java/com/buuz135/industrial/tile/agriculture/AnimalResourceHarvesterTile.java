@@ -26,7 +26,7 @@ public class AnimalResourceHarvesterTile extends WorkingAreaElectricMachine {
     private IFluidTank milkTank;
 
     public AnimalResourceHarvesterTile() {
-        super(AnimalResourceHarvesterTile.class.getName().hashCode(), 2, 2);
+        super(AnimalResourceHarvesterTile.class.getName().hashCode(), 2, 2, false);
     }
 
     @Override

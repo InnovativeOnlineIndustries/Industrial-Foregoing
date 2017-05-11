@@ -27,7 +27,7 @@ public class MobRelocatorTile extends WorkingAreaElectricMachine {
     private ItemStackHandler outItems;
 
     public MobRelocatorTile() {
-        super(MobRelocatorTile.class.getName().hashCode(), 2, 1);
+        super(MobRelocatorTile.class.getName().hashCode(), 2, 1,false);
     }
 
     @Override

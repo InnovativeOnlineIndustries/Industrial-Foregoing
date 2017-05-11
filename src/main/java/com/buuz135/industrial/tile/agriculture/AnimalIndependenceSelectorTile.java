@@ -13,7 +13,7 @@ import java.util.List;
 public class AnimalIndependenceSelectorTile extends WorkingAreaElectricMachine {
 
     public AnimalIndependenceSelectorTile() {
-        super(AnimalIndependenceSelectorTile.class.getName().hashCode(), 2, 2);
+        super(AnimalIndependenceSelectorTile.class.getName().hashCode(), 2, 2, false);
     }
 
     @Override

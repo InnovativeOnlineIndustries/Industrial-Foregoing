@@ -19,7 +19,7 @@ public class BlockPlacerTile extends WorkingAreaElectricMachine {
     private ItemStackHandler inItems;
 
     public BlockPlacerTile() {
-        super(BlockPlacerTile.class.getName().hashCode(), 0, 0);
+        super(BlockPlacerTile.class.getName().hashCode(), 0, 0, true);
     }
 
     @Override
