@@ -31,6 +31,7 @@ public class BlockRegistry {
     public static AnimalByproductRecolectorBlock animalByproductRecolectorBlock;
     public static SludgeRefinerBlock sludgeRefinerBlock;
     public static MobDetectorBlock mobDetectorBlock;
+    public static LavaFabricatorBlock lavaFabricatorBlock;
 
     public static SliderBlock sliderBlock;
 
@@ -67,6 +68,7 @@ public class BlockRegistry {
         (animalByproductRecolectorBlock = new AnimalByproductRecolectorBlock()).register();
         (sludgeRefinerBlock = new SludgeRefinerBlock()).register();
         (mobDetectorBlock = new MobDetectorBlock()).register();
+        (lavaFabricatorBlock = new LavaFabricatorBlock()).register();
 
         (sliderBlock = new SliderBlock()).register();
 

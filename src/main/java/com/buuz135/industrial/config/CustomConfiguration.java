@@ -36,6 +36,7 @@ public class CustomConfiguration {
             animalByproductRecolectorBlock.getMachineConfig();
             sludgeRefinerBlock.getMachineConfig();
             mobDetectorBlock.getMachineConfig();
+            lavaFabricatorBlock.getMachineConfig();
             //sliderBlock.getMachineConfig();
         } catch (Exception e) {
 

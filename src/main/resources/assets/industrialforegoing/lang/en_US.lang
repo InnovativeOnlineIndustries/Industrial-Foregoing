@@ -31,6 +31,7 @@ tile.industrialforegoing_sewage_composter_solidifier.name=Sewage Compost Solidif
 tile.industrialforegoing_animal_byproduct_recolector.name=Animal Byproduct Recolector
 tile.industrialforegoing_sludge_refiner.name=Sludge Refiner
 tile.industrialforegoing_mod_detector.name=Mob Detector
+tile.industrialforegoing_lava_fabricator.name=Lava Fabricator
 
 tile.slider.name=Slider
 

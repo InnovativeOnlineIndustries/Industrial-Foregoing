@@ -126,4 +126,9 @@ public class PetrifiedFuelGeneratorTile extends ElectricGenerator {
     public ItemStack getCurrent() {
         return current;
     }
+
+    @Override
+    protected long getEnergyOutputRate() {
+        return Integer.MAX_VALUE;
+    }
 }

@@ -21,6 +21,7 @@ public abstract class CustomElectricMachine extends ElectricMachine {
         List<EnumFacing> facings = new ArrayList<>();
         facings.addAll(Arrays.asList(EnumFacing.values()));
         this.sideConfig.setSidesForColor(EnumDyeColor.LIGHT_BLUE, facings);
+
     }
 
 
@@ -32,6 +33,11 @@ public abstract class CustomElectricMachine extends ElectricMachine {
     @Override
     protected int getEnergyForWorkRate() {
         return this.getBlockType() instanceof CustomOrientedBlock ? ((CustomOrientedBlock) this.getBlockType()).getEnergyRate() : Integer.MAX_VALUE;
+    }
+
+    @Override
+    protected long getEnergyInputRate() {
+        return 4000;
     }
 
 }

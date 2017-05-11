@@ -30,6 +30,7 @@ public class BlockRenderRegistry {
         animalByproductRecolectorBlock.registerRenderer();
         sludgeRefinerBlock.registerRenderer();
         mobDetectorBlock.registerRenderer();
+        lavaFabricatorBlock.registerRenderer();
 
         sliderBlock.registerRenderer();
     }
