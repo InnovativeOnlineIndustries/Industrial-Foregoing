@@ -37,13 +37,13 @@ public class CropEnrichMaterialInjectorTile extends WorkingAreaElectricMachine {
     @Override
     protected void initializeInventories() {
         super.initializeInventories();
-        inFert = new ItemStackHandler(12){
+        inFert = new ItemStackHandler(12) {
             @Override
             protected void onContentsChanged(int slot) {
                 CropEnrichMaterialInjectorTile.this.markDirty();
             }
         };
-        this.addInventory(new CustomColoredItemHandler(inFert, EnumDyeColor.GREEN, "Fertilizer input",18 * 5 + 3, 25,  4,  3) {
+        this.addInventory(new CustomColoredItemHandler(inFert, EnumDyeColor.GREEN, "Fertilizer input", 18 * 5 + 3, 25, 4, 3) {
             @Override
             public boolean canInsertItem(int slot, ItemStack stack) {
                 return (stack.getItem().equals(Items.DYE) && stack.getMetadata() == 15) || stack.getItem().equals(ItemRegistry.fertilizer);
@@ -66,7 +66,7 @@ public class CropEnrichMaterialInjectorTile extends WorkingAreaElectricMachine {
 
     @Override
     protected float performWork() {
-        if (((CustomOrientedBlock)this.getBlockType()).isWorkDisabled()) return 0;
+        if (((CustomOrientedBlock) this.getBlockType()).isWorkDisabled()) return 0;
         List<BlockPos> blockPos = BlockUtils.getBlockPosInAABB(getWorkingArea());
         ++pointer;
         if (pointer >= blockPos.size()) pointer = 0;

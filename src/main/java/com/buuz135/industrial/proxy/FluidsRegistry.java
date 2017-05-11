@@ -1,7 +1,6 @@
 package com.buuz135.industrial.proxy;
 
 import com.buuz135.industrial.fluid.IFCustomFluid;
-import com.buuz135.industrial.item.IFCustomItem;
 
 public class FluidsRegistry {
 

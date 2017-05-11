@@ -5,22 +5,11 @@ import com.buuz135.industrial.tile.CustomElectricMachine;
 import com.buuz135.industrial.tile.block.CustomOrientedBlock;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.init.Items;
-import net.minecraft.inventory.Slot;
 import net.minecraft.item.EnumDyeColor;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraftforge.items.ItemHandlerHelper;
 import net.minecraftforge.items.ItemStackHandler;
-import net.ndrei.teslacorelib.containers.BasicTeslaContainer;
-import net.ndrei.teslacorelib.containers.FilteredSlot;
-import net.ndrei.teslacorelib.gui.BasicTeslaGuiContainer;
-import net.ndrei.teslacorelib.gui.IGuiContainerPiece;
-import net.ndrei.teslacorelib.gui.TiledRenderedGuiPiece;
-import net.ndrei.teslacorelib.inventory.BoundingRectangle;
-import net.ndrei.teslacorelib.inventory.ColoredItemHandler;
-import net.ndrei.teslacorelib.tileentities.ElectricMachine;
-
-import java.util.List;
 
 
 public class EnchantmentExtractorTile extends CustomElectricMachine {
@@ -69,7 +58,7 @@ public class EnchantmentExtractorTile extends CustomElectricMachine {
                 EnchantmentExtractorTile.this.markDirty();
             }
         };
-        this.addInventory(new CustomColoredItemHandler(this.inEnchanted, EnumDyeColor.PURPLE, "Input enchanted items",18 * 3, 25 + 18 * 2, 1, 1) {
+        this.addInventory(new CustomColoredItemHandler(this.inEnchanted, EnumDyeColor.PURPLE, "Input enchanted items", 18 * 3, 25 + 18 * 2, 1, 1) {
             @Override
             public boolean canInsertItem(int slot, ItemStack stack) {
                 return stack.isItemEnchanted();
@@ -85,13 +74,13 @@ public class EnchantmentExtractorTile extends CustomElectricMachine {
 
 
     private void initOutputInv() {
-        outEnchanted = new ItemStackHandler(4){
+        outEnchanted = new ItemStackHandler(4) {
             @Override
             protected void onContentsChanged(int slot) {
                 EnchantmentExtractorTile.this.markDirty();
             }
         };
-        this.addInventory(new CustomColoredItemHandler(outEnchanted, EnumDyeColor.MAGENTA, "Enchanted Books", 18 * 4 + 14, 25,  4, 1) {
+        this.addInventory(new CustomColoredItemHandler(outEnchanted, EnumDyeColor.MAGENTA, "Enchanted Books", 18 * 4 + 14, 25, 4, 1) {
             @Override
             public boolean canInsertItem(int slot, ItemStack stack) {
                 return false;
@@ -105,13 +94,13 @@ public class EnchantmentExtractorTile extends CustomElectricMachine {
         });
         this.addInventoryToStorage(outEnchanted, "ench_ext_out_book");
 
-        outItem = new ItemStackHandler(4){
+        outItem = new ItemStackHandler(4) {
             @Override
             protected void onContentsChanged(int slot) {
                 EnchantmentExtractorTile.this.markDirty();
             }
         };
-        this.addInventory(new CustomColoredItemHandler(outItem, EnumDyeColor.YELLOW, "Enchantless Items", 18 * 4 + 14, 25 + 18 * 2,  4, 1) {
+        this.addInventory(new CustomColoredItemHandler(outItem, EnumDyeColor.YELLOW, "Enchantless Items", 18 * 4 + 14, 25 + 18 * 2, 4, 1) {
             @Override
             public boolean canInsertItem(int slot, ItemStack stack) {
                 return false;
@@ -136,7 +125,7 @@ public class EnchantmentExtractorTile extends CustomElectricMachine {
 
     @Override
     protected float performWork() {
-        if (((CustomOrientedBlock)this.getBlockType()).isWorkDisabled()) return 0;
+        if (((CustomOrientedBlock) this.getBlockType()).isWorkDisabled()) return 0;
 
         if (!hasBooks() || getItem().isEmpty()) return 0;
         ItemStack enchantedItem = getItem();

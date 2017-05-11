@@ -6,6 +6,6 @@ import net.minecraft.block.material.Material;
 public class WaterResourcesCollectorBlock extends CustomOrientedBlock<WaterResourcesCollectorTile> {
 
     public WaterResourcesCollectorBlock() {
-        super("water_resources_collector", WaterResourcesCollectorTile.class, Material.ROCK, 5000,80);
+        super("water_resources_collector", WaterResourcesCollectorTile.class, Material.ROCK, 5000, 80);
     }
 }

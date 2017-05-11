@@ -7,7 +7,6 @@ import com.buuz135.industrial.tile.block.CustomOrientedBlock;
 import net.minecraft.entity.passive.EntityCow;
 import net.minecraft.entity.passive.EntitySheep;
 import net.minecraft.init.Items;
-import net.minecraft.inventory.Slot;
 import net.minecraft.item.EnumDyeColor;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumFacing;
@@ -17,13 +16,7 @@ import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.IFluidTank;
 import net.minecraftforge.items.ItemHandlerHelper;
 import net.minecraftforge.items.ItemStackHandler;
-import net.ndrei.teslacorelib.containers.BasicTeslaContainer;
-import net.ndrei.teslacorelib.containers.FilteredSlot;
-import net.ndrei.teslacorelib.gui.BasicTeslaGuiContainer;
-import net.ndrei.teslacorelib.gui.IGuiContainerPiece;
-import net.ndrei.teslacorelib.gui.TiledRenderedGuiPiece;
 import net.ndrei.teslacorelib.inventory.BoundingRectangle;
-import net.ndrei.teslacorelib.inventory.ColoredItemHandler;
 
 import java.util.List;
 
@@ -40,13 +33,13 @@ public class AnimalResourceHarvesterTile extends WorkingAreaElectricMachine {
     protected void initializeInventories() {
         super.initializeInventories();
         milkTank = this.addFluidTank(FluidsRegistry.MILK, 8000, EnumDyeColor.WHITE, "Milk tank", new BoundingRectangle(50, 25, 18, 54));
-        outItems = new ItemStackHandler(3 * 4){
+        outItems = new ItemStackHandler(3 * 4) {
             @Override
             protected void onContentsChanged(int slot) {
                 AnimalResourceHarvesterTile.this.markDirty();
             }
         };
-        this.addInventory(new CustomColoredItemHandler(outItems, EnumDyeColor.ORANGE, "Fish output",18 * 5 + 3, 25,  4, 3) {
+        this.addInventory(new CustomColoredItemHandler(outItems, EnumDyeColor.ORANGE, "Fish output", 18 * 5 + 3, 25, 4, 3) {
             @Override
             public boolean canInsertItem(int slot, ItemStack stack) {
                 return false;
@@ -69,7 +62,7 @@ public class AnimalResourceHarvesterTile extends WorkingAreaElectricMachine {
 
     @Override
     protected float performWork() {
-        if (((CustomOrientedBlock)this.getBlockType()).isWorkDisabled()) return 0;
+        if (((CustomOrientedBlock) this.getBlockType()).isWorkDisabled()) return 0;
         List<EntitySheep> animals = this.world.getEntitiesWithinAABB(EntitySheep.class, getWorkingArea());
         for (EntitySheep sheep : animals) {
             if (!sheep.getSheared()) {

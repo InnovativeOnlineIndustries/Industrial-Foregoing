@@ -6,6 +6,6 @@ import net.minecraft.block.material.Material;
 public class EnchantmentRefinerBlock extends CustomOrientedBlock<EnchantmentRefinerTile> {
 
     public EnchantmentRefinerBlock() {
-        super("enchantment_refiner", EnchantmentRefinerTile.class, Material.ROCK,400,10);
+        super("enchantment_refiner", EnchantmentRefinerTile.class, Material.ROCK, 400, 10);
     }
 }

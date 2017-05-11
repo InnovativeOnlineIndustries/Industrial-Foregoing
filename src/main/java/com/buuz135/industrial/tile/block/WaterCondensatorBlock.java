@@ -7,6 +7,6 @@ public class WaterCondensatorBlock extends CustomOrientedBlock<WaterCondesatorTi
 
 
     public WaterCondensatorBlock() {
-        super("water_condensator", WaterCondesatorTile.class, Material.ROCK,0,0);
+        super("water_condensator", WaterCondesatorTile.class, Material.ROCK, 0, 0);
     }
 }

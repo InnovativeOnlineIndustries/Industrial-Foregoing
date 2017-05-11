@@ -18,9 +18,9 @@ public class AnimalByproductRecolectorBlock extends CustomOrientedBlock<AnimalBy
     @Override
     public void getMachineConfig() {
         super.getMachineConfig();
-        sewageAdult = CustomConfiguration.config.getInt("sewageAdult", "machines"+Configuration.CATEGORY_SPLITTER+this.getRegistryName().getResourcePath().toString(),15, 1, Integer.MAX_VALUE ,"Sewage produced by an adult animal");
-        sewageBaby = CustomConfiguration.config.getInt("sewageBaby", "machines"+Configuration.CATEGORY_SPLITTER+this.getRegistryName().getResourcePath().toString(),5, 1, Integer.MAX_VALUE ,"Sewage produced by a baby animal");
-        maxSludgeOperation = CustomConfiguration.config.getInt("maxSludgeOperation", "machines"+Configuration.CATEGORY_SPLITTER+this.getRegistryName().getResourcePath().toString(),150, 1, Integer.MAX_VALUE ,"Max sludge produced in an operation");
+        sewageAdult = CustomConfiguration.config.getInt("sewageAdult", "machines" + Configuration.CATEGORY_SPLITTER + this.getRegistryName().getResourcePath().toString(), 15, 1, Integer.MAX_VALUE, "Sewage produced by an adult animal");
+        sewageBaby = CustomConfiguration.config.getInt("sewageBaby", "machines" + Configuration.CATEGORY_SPLITTER + this.getRegistryName().getResourcePath().toString(), 5, 1, Integer.MAX_VALUE, "Sewage produced by a baby animal");
+        maxSludgeOperation = CustomConfiguration.config.getInt("maxSludgeOperation", "machines" + Configuration.CATEGORY_SPLITTER + this.getRegistryName().getResourcePath().toString(), 150, 1, Integer.MAX_VALUE, "Max sludge produced in an operation");
     }
 
     public int getSewageAdult() {

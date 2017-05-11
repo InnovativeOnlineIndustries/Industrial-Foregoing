@@ -2,7 +2,6 @@ package com.buuz135.industrial.tile;
 
 import com.buuz135.industrial.tile.block.CustomOrientedBlock;
 import net.minecraft.item.EnumDyeColor;
-import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumFacing;
 import net.ndrei.teslacorelib.tileentities.ElectricMachine;
 

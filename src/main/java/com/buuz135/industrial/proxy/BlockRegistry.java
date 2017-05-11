@@ -1,9 +1,7 @@
 package com.buuz135.industrial.proxy;
 
-import com.buuz135.industrial.fluid.IFCustomFluid;
 import com.buuz135.industrial.fluid.IFCustomFluidBlock;
 import com.buuz135.industrial.tile.block.*;
-import com.buuz135.industrial.tile.mob.MobDetectorTile;
 import net.minecraft.block.material.Material;
 
 public class BlockRegistry {

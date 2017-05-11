@@ -10,13 +10,13 @@ public class MobSlaughterFactoryBlock extends CustomOrientedBlock<MobSlaughterFa
     private float meatValue;
 
     public MobSlaughterFactoryBlock() {
-        super("mob_slaughter_factory", MobSlaughterFactoryTile.class, Material.ROCK,1000,40);
+        super("mob_slaughter_factory", MobSlaughterFactoryTile.class, Material.ROCK, 1000, 40);
     }
 
     @Override
     public void getMachineConfig() {
         super.getMachineConfig();
-        meatValue = CustomConfiguration.config.getFloat("meatValue", "machines"+Configuration.CATEGORY_SPLITTER+this.getRegistryName().getResourcePath().toString(),5, 1, Integer.MAX_VALUE,"Mob health multiplier, mobHealth * meatValue = meat mb produced");
+        meatValue = CustomConfiguration.config.getFloat("meatValue", "machines" + Configuration.CATEGORY_SPLITTER + this.getRegistryName().getResourcePath().toString(), 5, 1, Integer.MAX_VALUE, "Mob health multiplier, mobHealth * meatValue = meat mb produced");
     }
 
     public float getMeatValue() {

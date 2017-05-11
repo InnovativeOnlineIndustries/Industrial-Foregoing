@@ -20,7 +20,7 @@ public class WaterCondesatorTile extends SidedTileEntity {
 
     @Override
     protected void innerUpdate() {
-        if (((CustomOrientedBlock)this.getBlockType()).isWorkDisabled()) return;
+        if (((CustomOrientedBlock) this.getBlockType()).isWorkDisabled()) return;
         if (this.getWorld().isRemote) return;
         int fillValue = getWaterSources() * 100;
         fluidTank.fill(new FluidStack(FluidRegistry.WATER, fillValue), true);

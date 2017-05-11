@@ -1,7 +1,6 @@
 package com.buuz135.industrial.item.addon;
 
 import com.buuz135.industrial.tile.WorkingAreaElectricMachine;
-
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.player.EntityPlayer;
@@ -28,17 +27,18 @@ public class RangeAddonItem extends CustomAddon {
 
     @Override
     public void getSubItems(Item itemIn, CreativeTabs tab, NonNullList<ItemStack> subItems) {
-        for (int i = 0; i < 12; ++i) subItems.add(new ItemStack(this,1,i));
+        for (int i = 0; i < 12; ++i) subItems.add(new ItemStack(this, 1, i));
     }
 
     @Override
     public void registerRenderer() {
-        for (int i = 0; i < 12; ++i) ModelLoader.setCustomModelResourceLocation(this, i, new ModelResourceLocation(this.getRegistryName().toString()+i, "inventory"));
+        for (int i = 0; i < 12; ++i)
+            ModelLoader.setCustomModelResourceLocation(this, i, new ModelResourceLocation(this.getRegistryName().toString() + i, "inventory"));
     }
 
     @Override
     public void addInformation(ItemStack stack, EntityPlayer playerIn, List<String> tooltip, boolean advanced) {
         super.addInformation(stack, playerIn, tooltip, advanced);
-        tooltip.add("Tier: "+stack.getMetadata());
+        tooltip.add("Tier: " + stack.getMetadata());
     }
 }

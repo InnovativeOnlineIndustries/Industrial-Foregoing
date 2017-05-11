@@ -4,20 +4,10 @@ import com.buuz135.industrial.tile.CustomColoredItemHandler;
 import com.buuz135.industrial.tile.CustomElectricMachine;
 import com.buuz135.industrial.tile.block.CustomOrientedBlock;
 import net.minecraft.init.Items;
-import net.minecraft.inventory.Slot;
 import net.minecraft.item.EnumDyeColor;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.items.ItemHandlerHelper;
 import net.minecraftforge.items.ItemStackHandler;
-import net.ndrei.teslacorelib.containers.BasicTeslaContainer;
-import net.ndrei.teslacorelib.containers.FilteredSlot;
-import net.ndrei.teslacorelib.gui.BasicTeslaGuiContainer;
-import net.ndrei.teslacorelib.gui.IGuiContainerPiece;
-import net.ndrei.teslacorelib.gui.TiledRenderedGuiPiece;
-import net.ndrei.teslacorelib.inventory.BoundingRectangle;
-import net.ndrei.teslacorelib.inventory.ColoredItemHandler;
-
-import java.util.List;
 
 public class EnchantmentRefinerTile extends CustomElectricMachine {
 
@@ -46,7 +36,7 @@ public class EnchantmentRefinerTile extends CustomElectricMachine {
             }
         };
 
-        this.addInventory(new CustomColoredItemHandler(this.input, EnumDyeColor.GREEN, "Input items", 18 * 3, 25,1, 3) {
+        this.addInventory(new CustomColoredItemHandler(this.input, EnumDyeColor.GREEN, "Input items", 18 * 3, 25, 1, 3) {
             @Override
             public boolean canInsertItem(int slot, ItemStack stack) {
                 return true;
@@ -68,7 +58,7 @@ public class EnchantmentRefinerTile extends CustomElectricMachine {
                 EnchantmentRefinerTile.this.markDirty();
             }
         };
-        this.addInventory(new CustomColoredItemHandler(outputEnch, EnumDyeColor.PURPLE, "Enchanted Items",18 * 4 + 14, 25,  4, 1) {
+        this.addInventory(new CustomColoredItemHandler(outputEnch, EnumDyeColor.PURPLE, "Enchanted Items", 18 * 4 + 14, 25, 4, 1) {
             @Override
             public boolean canInsertItem(int slot, ItemStack stack) {
                 return false;
@@ -82,13 +72,13 @@ public class EnchantmentRefinerTile extends CustomElectricMachine {
         });
         this.addInventoryToStorage(outputEnch, "ench_ref_out_yes");
 
-        outputNoEnch = new ItemStackHandler(4){
+        outputNoEnch = new ItemStackHandler(4) {
             @Override
             protected void onContentsChanged(int slot) {
                 EnchantmentRefinerTile.this.markDirty();
             }
         };
-        this.addInventory(new CustomColoredItemHandler(outputNoEnch, EnumDyeColor.YELLOW, "No enchanted Items", 18 * 4 + 14, 25 + 18 * 2,  4, 1) {
+        this.addInventory(new CustomColoredItemHandler(outputNoEnch, EnumDyeColor.YELLOW, "No enchanted Items", 18 * 4 + 14, 25 + 18 * 2, 4, 1) {
             @Override
             public boolean canInsertItem(int slot, ItemStack stack) {
                 return false;
@@ -114,7 +104,7 @@ public class EnchantmentRefinerTile extends CustomElectricMachine {
 
     @Override
     protected float performWork() {
-        if (((CustomOrientedBlock)this.getBlockType()).isWorkDisabled()) return 0;
+        if (((CustomOrientedBlock) this.getBlockType()).isWorkDisabled()) return 0;
 
         ItemStack stack = getFirstItem();
         if (stack.isEmpty()) {

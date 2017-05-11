@@ -16,21 +16,21 @@ public class SludgeRefinerBlock extends CustomOrientedBlock<SludgeRefinerTile> {
     private List<ItemStackWeightedItem> itemStackWeightedItems;
 
     public SludgeRefinerBlock() {
-        super("sludge_refiner", SludgeRefinerTile.class, Material.ROCK, 200,10);
+        super("sludge_refiner", SludgeRefinerTile.class, Material.ROCK, 200, 10);
         itemStackWeightedItems = new ArrayList<>();
     }
 
     @Override
     public void getMachineConfig() {
         super.getMachineConfig();
-        String[] items = CustomConfiguration.config.getStringList("sludgeDrops","machines"+ Configuration.CATEGORY_SPLITTER+this.getRegistryName().getResourcePath().toString(),new String[]{"minecraft:clay_ball 0 4","minecraft:clay 0 1","minecraft:dirt 0 4","minecraft:gravel 0 4","minecraft:mycelium 0 4","minecraft:dirt 2 1","minecraft:sand 1 4","minecraft:sand 0 4","minecraft:soul_sand 0 4"},"List of posible sludge drops changes. Format: 'id metadata weight'");
-        for (String string : items){
+        String[] items = CustomConfiguration.config.getStringList("sludgeDrops", "machines" + Configuration.CATEGORY_SPLITTER + this.getRegistryName().getResourcePath().toString(), new String[]{"minecraft:clay_ball 0 4", "minecraft:clay 0 1", "minecraft:dirt 0 4", "minecraft:gravel 0 4", "minecraft:mycelium 0 4", "minecraft:dirt 2 1", "minecraft:sand 1 4", "minecraft:sand 0 4", "minecraft:soul_sand 0 4"}, "List of posible sludge drops changes. Format: 'id metadata weight'");
+        for (String string : items) {
             String itemName = string.split(" ")[0];
             int meta = Integer.parseInt(string.split(" ")[1]);
             int weight = Integer.parseInt(string.split(" ")[2]);
-            if (Item.getByNameOrId(itemName) != null){
-                ItemStack stack = new ItemStack(Item.getByNameOrId(itemName),1,meta);
-                itemStackWeightedItems.add(new ItemStackWeightedItem(stack,weight));
+            if (Item.getByNameOrId(itemName) != null) {
+                ItemStack stack = new ItemStack(Item.getByNameOrId(itemName), 1, meta);
+                itemStackWeightedItems.add(new ItemStackWeightedItem(stack, weight));
             }
         }
     }

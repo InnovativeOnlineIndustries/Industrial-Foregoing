@@ -1,6 +1,5 @@
 package com.buuz135.industrial.utils;
 
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.WeightedRandom;
 

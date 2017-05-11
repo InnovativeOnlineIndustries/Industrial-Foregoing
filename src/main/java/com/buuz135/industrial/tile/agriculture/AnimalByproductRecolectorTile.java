@@ -19,32 +19,32 @@ public class AnimalByproductRecolectorTile extends WorkingAreaElectricMachine {
     private IFluidTank tank;
 
     public AnimalByproductRecolectorTile() {
-        super(AnimalByproductRecolectorTile.class.getName().hashCode(), 0,0);
+        super(AnimalByproductRecolectorTile.class.getName().hashCode(), 0, 0);
     }
 
     @Override
     protected void initializeInventories() {
         super.initializeInventories();
-        tank = this.addFluidTank(FluidsRegistry.SEWAGE,8000, EnumDyeColor.BROWN,"Sewage tank", new BoundingRectangle(50, 25, 18, 54));
+        tank = this.addFluidTank(FluidsRegistry.SEWAGE, 8000, EnumDyeColor.BROWN, "Sewage tank", new BoundingRectangle(50, 25, 18, 54));
     }
 
     @Override
     public AxisAlignedBB getWorkingArea() {
-        return this.getBlockType().getSelectedBoundingBox(this.world.getBlockState(this.pos), this.world, this.pos).offset(new BlockPos(0,1,0)).expand(getRadius(),0,getRadius());
+        return this.getBlockType().getSelectedBoundingBox(this.world.getBlockState(this.pos), this.world, this.pos).offset(new BlockPos(0, 1, 0)).expand(getRadius(), 0, getRadius());
     }
 
     @Override
     protected float performWork() {
-        if (((CustomOrientedBlock)this.getBlockType()).isWorkDisabled()) return 0;
+        if (((CustomOrientedBlock) this.getBlockType()).isWorkDisabled()) return 0;
 
         AxisAlignedBB area = getWorkingArea();
         List<EntityAgeable> animals = this.world.getEntitiesWithinAABB(EntityAgeable.class, area);
         int totalFluidAdded = 0;
-        for (EntityAgeable animal : animals){
-            int toFill = animal.isChild() ? ((AnimalByproductRecolectorBlock)this.getBlockType()).getSewageBaby(): ((AnimalByproductRecolectorBlock)this.getBlockType()).getSewageAdult();
-            tank.fill(new FluidStack(FluidsRegistry.SEWAGE,toFill),true);
+        for (EntityAgeable animal : animals) {
+            int toFill = animal.isChild() ? ((AnimalByproductRecolectorBlock) this.getBlockType()).getSewageBaby() : ((AnimalByproductRecolectorBlock) this.getBlockType()).getSewageAdult();
+            tank.fill(new FluidStack(FluidsRegistry.SEWAGE, toFill), true);
             totalFluidAdded += toFill;
-            if (totalFluidAdded > ((AnimalByproductRecolectorBlock)this.getBlockType()).getMaxSludgeOperation()){
+            if (totalFluidAdded > ((AnimalByproductRecolectorBlock) this.getBlockType()).getMaxSludgeOperation()) {
                 break;
             }
         }

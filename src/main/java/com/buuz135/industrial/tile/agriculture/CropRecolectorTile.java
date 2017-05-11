@@ -40,14 +40,14 @@ public class CropRecolectorTile extends WorkingAreaElectricMachine {
     @Override
     protected void initializeInventories() {
         super.initializeInventories();
-        sludge = this.addFluidTank(FluidsRegistry.SLUDGE,8000, EnumDyeColor.BLACK,"Sludge tank", new BoundingRectangle(50, 25, 18, 54));
-        outItems = new ItemStackHandler(3 * 4){
+        sludge = this.addFluidTank(FluidsRegistry.SLUDGE, 8000, EnumDyeColor.BLACK, "Sludge tank", new BoundingRectangle(50, 25, 18, 54));
+        outItems = new ItemStackHandler(3 * 4) {
             @Override
             protected void onContentsChanged(int slot) {
                 CropRecolectorTile.this.markDirty();
             }
         };
-        this.addInventory(new CustomColoredItemHandler(outItems, EnumDyeColor.ORANGE, "Crops output",18 * 5+3, 25, 4,  3) {
+        this.addInventory(new CustomColoredItemHandler(outItems, EnumDyeColor.ORANGE, "Crops output", 18 * 5 + 3, 25, 4, 3) {
             @Override
             public boolean canInsertItem(int slot, ItemStack stack) {
                 return false;
@@ -70,7 +70,7 @@ public class CropRecolectorTile extends WorkingAreaElectricMachine {
 
     @Override
     protected float performWork() {
-        if (((CustomOrientedBlock)this.getBlockType()).isWorkDisabled()) return 0;
+        if (((CustomOrientedBlock) this.getBlockType()).isWorkDisabled()) return 0;
         List<BlockPos> blockPos = BlockUtils.getBlockPosInAABB(getWorkingArea());
         boolean needPointerIncrease = true;
         if (pointer < blockPos.size()) {
@@ -89,13 +89,13 @@ public class CropRecolectorTile extends WorkingAreaElectricMachine {
                     for (ItemStack stack : drops) {
                         ItemHandlerHelper.insertItem(outItems, stack, false);
                     }
-                    sludge.fill(new FluidStack(FluidsRegistry.SLUDGE,((CropRecolectorBlock)this.getBlockType()).getSludgeOperation()),true);
+                    sludge.fill(new FluidStack(FluidsRegistry.SLUDGE, ((CropRecolectorBlock) this.getBlockType()).getSludgeOperation()), true);
                     this.world.setBlockToAir(blockPos.get(pointer));
                 }
             } else if (BlockUtils.isLog(this.world, pos)) {
                 List<BlockPos> chopped = doRecursiveChopping(world, pos, new ArrayList<>(), new ArrayList<>());
                 needPointerIncrease = false;
-                sludge.fill(new FluidStack(FluidsRegistry.SLUDGE,((CropRecolectorBlock)this.getBlockType()).getSludgeOperation()*chopped.size()),true);
+                sludge.fill(new FluidStack(FluidsRegistry.SLUDGE, ((CropRecolectorBlock) this.getBlockType()).getSludgeOperation() * chopped.size()), true);
             }
         } else {
             pointer = 0;
@@ -132,7 +132,8 @@ public class CropRecolectorTile extends WorkingAreaElectricMachine {
                 doRecursiveChopping(world, current.offset(facing), blocksChecked, blocksChopped);
             }
         }
-        if (blocksChopped.size() > ((CropRecolectorBlock)this.getBlockType()).getTreeOperations()) return blocksChopped;
+        if (blocksChopped.size() > ((CropRecolectorBlock) this.getBlockType()).getTreeOperations())
+            return blocksChopped;
         blocksChopped.add(current);
         List<ItemStack> drops = world.getBlockState(current).getBlock().getDrops(world, current, world.getBlockState(current), 0);
         boolean canInsert = true;

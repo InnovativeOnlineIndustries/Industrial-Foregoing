@@ -26,14 +26,14 @@ public class SludgeRefinerTile extends CustomElectricMachine {
     @Override
     protected void initializeInventories() {
         super.initializeInventories();
-        tank = this.addFluidTank(FluidsRegistry.SLUDGE,8000, EnumDyeColor.BLACK,"Sludge tank",new BoundingRectangle(50, 25, 18, 54));
-        outItems = new ItemStackHandler(4*3){
+        tank = this.addFluidTank(FluidsRegistry.SLUDGE, 8000, EnumDyeColor.BLACK, "Sludge tank", new BoundingRectangle(50, 25, 18, 54));
+        outItems = new ItemStackHandler(4 * 3) {
             @Override
             protected void onContentsChanged(int slot) {
                 SludgeRefinerTile.this.markDirty();
             }
         };
-        this.addInventory(new CustomColoredItemHandler(outItems,EnumDyeColor.BROWN,"Output items", 18*5+3,25,4,3){
+        this.addInventory(new CustomColoredItemHandler(outItems, EnumDyeColor.BROWN, "Output items", 18 * 5 + 3, 25, 4, 3) {
             @Override
             public boolean canInsertItem(int slot, ItemStack stack) {
                 return false;
@@ -44,19 +44,19 @@ public class SludgeRefinerTile extends CustomElectricMachine {
                 return true;
             }
         });
-        this.addInventoryToStorage(outItems,"outItems");
+        this.addInventoryToStorage(outItems, "outItems");
     }
 
     @Override
     protected float performWork() {
-        if (((CustomOrientedBlock)this.getBlockType()).isWorkDisabled()) return 0;
+        if (((CustomOrientedBlock) this.getBlockType()).isWorkDisabled()) return 0;
 
-        if (tank.getFluid() != null && tank.getFluidAmount() >= 1000){
+        if (tank.getFluid() != null && tank.getFluidAmount() >= 1000) {
             SludgeRefinerBlock block = (SludgeRefinerBlock) this.getBlockType();
-            ItemStackWeightedItem itemStack = WeightedRandom.getRandomItem(this.world.rand,block.getItemStackWeightedItems());
-            if (ItemHandlerHelper.insertItem(outItems,itemStack.getStack(),true).isEmpty()){
-                tank.drain(1000,true);
-                ItemHandlerHelper.insertItem(outItems,itemStack.getStack().copy(),false);
+            ItemStackWeightedItem itemStack = WeightedRandom.getRandomItem(this.world.rand, block.getItemStackWeightedItems());
+            if (ItemHandlerHelper.insertItem(outItems, itemStack.getStack(), true).isEmpty()) {
+                tank.drain(1000, true);
+                ItemHandlerHelper.insertItem(outItems, itemStack.getStack().copy(), false);
                 return 1;
             }
         }

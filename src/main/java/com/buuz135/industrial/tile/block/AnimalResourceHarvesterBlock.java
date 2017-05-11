@@ -6,6 +6,6 @@ import net.minecraft.block.material.Material;
 public class AnimalResourceHarvesterBlock extends CustomOrientedBlock<AnimalResourceHarvesterTile> {
 
     public AnimalResourceHarvesterBlock() {
-        super("animal_resource_harvester", AnimalResourceHarvesterTile.class, Material.ROCK,400,20);
+        super("animal_resource_harvester", AnimalResourceHarvesterTile.class, Material.ROCK, 400, 20);
     }
 }

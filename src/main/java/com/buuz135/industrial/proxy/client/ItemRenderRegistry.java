@@ -4,7 +4,7 @@ import static com.buuz135.industrial.proxy.ItemRegistry.*;
 
 public class ItemRenderRegistry {
 
-    public static void registerRender(){
+    public static void registerRender() {
         meatFeederItem.registerRender();
         mobImprisonmentToolItem.registerRender();
         tinyDryRubber.registerRender();

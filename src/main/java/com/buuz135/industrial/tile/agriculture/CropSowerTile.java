@@ -7,9 +7,7 @@ import com.buuz135.industrial.tile.WorkingAreaElectricMachine;
 import com.buuz135.industrial.tile.block.CustomOrientedBlock;
 import com.buuz135.industrial.utils.BlockUtils;
 import com.buuz135.industrial.utils.ItemStackUtils;
-import net.minecraft.block.BlockFarmland;
 import net.minecraft.init.Blocks;
-import net.minecraft.inventory.Slot;
 import net.minecraft.item.*;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumFacing;
@@ -17,16 +15,9 @@ import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraftforge.common.util.FakePlayer;
-import net.minecraftforge.fluids.FluidRegistry;
-import net.minecraftforge.fluids.IFluidTank;
 import net.minecraftforge.items.ItemStackHandler;
-import net.ndrei.teslacorelib.containers.BasicTeslaContainer;
-import net.ndrei.teslacorelib.containers.FilteredSlot;
 import net.ndrei.teslacorelib.gui.BasicTeslaGuiContainer;
 import net.ndrei.teslacorelib.gui.IGuiContainerPiece;
-import net.ndrei.teslacorelib.gui.TiledRenderedGuiPiece;
-import net.ndrei.teslacorelib.inventory.BoundingRectangle;
-import net.ndrei.teslacorelib.inventory.ColoredItemHandler;
 
 import java.util.Arrays;
 import java.util.List;
@@ -52,13 +43,13 @@ public class CropSowerTile extends WorkingAreaElectricMachine {
     @Override
     protected void initializeInventories() {
         super.initializeInventories();
-        inPlant = new ItemStackHandler(6*4){
+        inPlant = new ItemStackHandler(6 * 4) {
             @Override
             protected void onContentsChanged(int slot) {
                 CropSowerTile.this.markDirty();
             }
         };
-        this.addInventory(new CustomColoredItemHandler(inPlant, EnumDyeColor.GREEN, "Seeds input",18 * 3, 25,  6,  3) {
+        this.addInventory(new CustomColoredItemHandler(inPlant, EnumDyeColor.GREEN, "Seeds input", 18 * 3, 25, 6, 3) {
             @Override
             public boolean canInsertItem(int slot, ItemStack stack) {
                 return stack.getItem() instanceof ItemSeeds || stack.getItem() instanceof ItemSeedFood || ItemStackUtils.isStackOreDict(stack, "treeSapling");
@@ -72,7 +63,7 @@ public class CropSowerTile extends WorkingAreaElectricMachine {
         });
         this.addInventoryToStorage(inPlant, "inPlant");
         filter = new ItemStackHandler(9);
-        this.addInventory(new CustomColoredItemHandler(filter, EnumDyeColor.WHITE, "Filter",-18 * 4 + 14, 25, 3,  3) {
+        this.addInventory(new CustomColoredItemHandler(filter, EnumDyeColor.WHITE, "Filter", -18 * 4 + 14, 25, 3, 3) {
             @Override
             public boolean canInsertItem(int slot, ItemStack stack) {
                 if (stack.getItem() instanceof ItemSeeds || stack.getItem() instanceof ItemSeedFood || ItemStackUtils.isStackOreDict(stack, "treeSapling")) {
@@ -101,7 +92,7 @@ public class CropSowerTile extends WorkingAreaElectricMachine {
 
     @Override
     protected float performWork() {
-        if (((CustomOrientedBlock)this.getBlockType()).isWorkDisabled()) return 0;
+        if (((CustomOrientedBlock) this.getBlockType()).isWorkDisabled()) return 0;
         List<BlockPos> blockPos = BlockUtils.getBlockPosInAABB(getWorkingArea());
         ++pointer;
         if (pointer >= blockPos.size()) pointer = 0;

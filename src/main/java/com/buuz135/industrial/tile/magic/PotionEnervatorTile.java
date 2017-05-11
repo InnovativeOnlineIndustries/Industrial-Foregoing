@@ -6,7 +6,6 @@ import com.buuz135.industrial.tile.block.CustomOrientedBlock;
 import com.buuz135.industrial.utils.ItemStackUtils;
 import com.buuz135.industrial.utils.Reference;
 import net.minecraft.init.Items;
-import net.minecraft.inventory.Slot;
 import net.minecraft.item.EnumDyeColor;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -18,14 +17,10 @@ import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fluids.IFluidTank;
 import net.minecraftforge.items.ItemHandlerHelper;
 import net.minecraftforge.items.ItemStackHandler;
-import net.ndrei.teslacorelib.containers.BasicTeslaContainer;
-import net.ndrei.teslacorelib.containers.FilteredSlot;
 import net.ndrei.teslacorelib.gui.BasicRenderedGuiPiece;
 import net.ndrei.teslacorelib.gui.BasicTeslaGuiContainer;
 import net.ndrei.teslacorelib.gui.IGuiContainerPiece;
-import net.ndrei.teslacorelib.gui.TiledRenderedGuiPiece;
 import net.ndrei.teslacorelib.inventory.BoundingRectangle;
-import net.ndrei.teslacorelib.inventory.ColoredItemHandler;
 
 import java.util.Arrays;
 import java.util.List;
@@ -54,7 +49,7 @@ public class PotionEnervatorTile extends CustomElectricMachine {
 
     private void initInputInventories() {
         fluidTank = this.addFluidTank(FluidRegistry.WATER, 8000, EnumDyeColor.BLUE, "Water tank", new BoundingRectangle(44, 25, 18, 54));
-        inputGlassBottles = new ItemStackHandler(1){
+        inputGlassBottles = new ItemStackHandler(1) {
             @Override
             protected void onContentsChanged(int slot) {
                 PotionEnervatorTile.this.markDirty();
@@ -73,13 +68,13 @@ public class PotionEnervatorTile extends CustomElectricMachine {
 
         });
         this.addInventoryToStorage(inputGlassBottles, "pot_ener_in_glass");
-        inputIngredients = new ItemStackHandler(5){
+        inputIngredients = new ItemStackHandler(5) {
             @Override
             protected void onContentsChanged(int slot) {
                 PotionEnervatorTile.this.markDirty();
             }
         };
-        this.addInventory(new CustomColoredItemHandler(inputIngredients, EnumDyeColor.GREEN, "Ingredients items", 18 * 4 + 10, 25,  5, 1) {
+        this.addInventory(new CustomColoredItemHandler(inputIngredients, EnumDyeColor.GREEN, "Ingredients items", 18 * 4 + 10, 25, 5, 1) {
             @Override
             public boolean canInsertItem(int slot, ItemStack stack) {
                 if (stack.getItem().equals(Items.GLASS_BOTTLE)) return false;
@@ -100,13 +95,13 @@ public class PotionEnervatorTile extends CustomElectricMachine {
     }
 
     private void initOutputInventories() {
-        outputPotions = new ItemStackHandler(3){
+        outputPotions = new ItemStackHandler(3) {
             @Override
             protected void onContentsChanged(int slot) {
                 PotionEnervatorTile.this.markDirty();
             }
         };
-        this.addInventory(new CustomColoredItemHandler(outputPotions, EnumDyeColor.PURPLE, "Potions items", 18 * 6 + 10, 25 + 18 * 2,  3, 1) {
+        this.addInventory(new CustomColoredItemHandler(outputPotions, EnumDyeColor.PURPLE, "Potions items", 18 * 6 + 10, 25 + 18 * 2, 3, 1) {
             @Override
             public boolean canInsertItem(int slot, ItemStack stack) {
                 return false;
@@ -185,7 +180,7 @@ public class PotionEnervatorTile extends CustomElectricMachine {
 
     @Override
     public float performWork() {
-        if (((CustomOrientedBlock)this.getBlockType()).isWorkDisabled()) return 0;
+        if (((CustomOrientedBlock) this.getBlockType()).isWorkDisabled()) return 0;
         if (action > 5) action = 0;
         if (action != 0 && outputPotions.getStackInSlot(0).isEmpty() && outputPotions.getStackInSlot(1).isEmpty() && outputPotions.getStackInSlot(2).isEmpty()) {
             action = 0;

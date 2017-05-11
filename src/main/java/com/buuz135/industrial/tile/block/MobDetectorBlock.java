@@ -12,9 +12,8 @@ import javax.annotation.Nullable;
 public class MobDetectorBlock extends CustomOrientedBlock<MobDetectorTile> {
 
     public MobDetectorBlock() {
-        super("mob_detector",MobDetectorTile.class, Material.ROCK,100,10);
+        super("mob_detector", MobDetectorTile.class, Material.ROCK, 100, 10);
     }
-
 
 
     @Override
@@ -24,7 +23,7 @@ public class MobDetectorBlock extends CustomOrientedBlock<MobDetectorTile> {
 
     @Override
     public boolean canConnectRedstone(IBlockState state, IBlockAccess world, BlockPos pos, @Nullable EnumFacing side) {
-        if (world.getTileEntity(pos) != null && world.getTileEntity(pos) instanceof MobDetectorTile){
+        if (world.getTileEntity(pos) != null && world.getTileEntity(pos) instanceof MobDetectorTile) {
             MobDetectorTile tile = (MobDetectorTile) world.getTileEntity(pos);
             return side.equals(tile.getFacing().getOpposite());
         }
@@ -33,9 +32,9 @@ public class MobDetectorBlock extends CustomOrientedBlock<MobDetectorTile> {
 
     @Override
     public int getWeakPower(IBlockState blockState, IBlockAccess blockAccess, BlockPos pos, EnumFacing side) {
-        if (blockAccess.getTileEntity(pos) != null && blockAccess.getTileEntity(pos) instanceof MobDetectorTile){
+        if (blockAccess.getTileEntity(pos) != null && blockAccess.getTileEntity(pos) instanceof MobDetectorTile) {
             MobDetectorTile tile = (MobDetectorTile) blockAccess.getTileEntity(pos);
-            if (side.equals(tile.getFacing().getOpposite())){
+            if (side.equals(tile.getFacing().getOpposite())) {
                 return tile.getRedstoneSignal();
             }
         }
@@ -44,9 +43,9 @@ public class MobDetectorBlock extends CustomOrientedBlock<MobDetectorTile> {
 
     @Override
     public int getStrongPower(IBlockState blockState, IBlockAccess blockAccess, BlockPos pos, EnumFacing side) {
-        if (blockAccess.getTileEntity(pos) != null && blockAccess.getTileEntity(pos) instanceof MobDetectorTile){
+        if (blockAccess.getTileEntity(pos) != null && blockAccess.getTileEntity(pos) instanceof MobDetectorTile) {
             MobDetectorTile tile = (MobDetectorTile) blockAccess.getTileEntity(pos);
-            if (side.equals(tile.getFacing().getOpposite())){
+            if (side.equals(tile.getFacing().getOpposite())) {
                 return tile.getRedstoneSignal();
             }
         }

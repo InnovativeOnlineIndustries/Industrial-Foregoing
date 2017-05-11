@@ -95,7 +95,7 @@ public class PetrifiedFuelGeneratorTile extends ElectricGenerator {
 
     @Override
     public long consumeFuel() { //TODO fix buckets
-        if (((CustomOrientedBlock)this.getBlockType()).isWorkDisabled()) return 0;
+        if (((CustomOrientedBlock) this.getBlockType()).isWorkDisabled()) return 0;
         ItemStack temp = this.getFirstFuel(true);
         if (temp.isEmpty()) {
             return 0;

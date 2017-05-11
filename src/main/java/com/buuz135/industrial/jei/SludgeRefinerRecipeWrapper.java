@@ -26,7 +26,7 @@ public class SludgeRefinerRecipeWrapper implements IRecipeWrapper {
     @Override
     public void getIngredients(IIngredients ingredients) {
         ingredients.setInput(ItemStack.class, UniversalBucket.getFilledBucket(ForgeModContainer.getInstance().universalBucket, FluidsRegistry.SLUDGE));
-        ingredients.setOutput(ItemStack.class,item.getStack());
+        ingredients.setOutput(ItemStack.class, item.getStack());
     }
 
     @Override
@@ -36,7 +36,7 @@ public class SludgeRefinerRecipeWrapper implements IRecipeWrapper {
 
     @Override
     public List<String> getTooltipStrings(int mouseX, int mouseY) {
-        return Arrays.asList("Chance: "+new DecimalFormat("##.##").format((item.itemWeight/(double)maxWeight)*100)+"%");
+        return Arrays.asList("Chance: " + new DecimalFormat("##.##").format((item.itemWeight / (double) maxWeight) * 100) + "%");
     }
 
     @Override

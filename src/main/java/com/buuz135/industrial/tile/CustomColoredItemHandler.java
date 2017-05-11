@@ -21,7 +21,7 @@ public class CustomColoredItemHandler extends ColoredItemHandler {
     private int slotsY;
 
     public CustomColoredItemHandler(IItemHandler handler, EnumDyeColor color, String name, int posX, int posY, int slotsX, int slotsY) {
-        super(handler, color, name, new BoundingRectangle(posX,posY,18*slotsX,18*slotsY));
+        super(handler, color, name, new BoundingRectangle(posX, posY, 18 * slotsX, 18 * slotsY));
         this.posX = posX;
         this.posY = posY;
         this.slotsX = slotsX;

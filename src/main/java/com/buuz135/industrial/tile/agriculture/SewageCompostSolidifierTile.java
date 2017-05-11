@@ -5,7 +5,6 @@ import com.buuz135.industrial.proxy.ItemRegistry;
 import com.buuz135.industrial.tile.CustomColoredItemHandler;
 import com.buuz135.industrial.tile.CustomElectricMachine;
 import com.buuz135.industrial.tile.block.CustomOrientedBlock;
-
 import net.minecraft.item.EnumDyeColor;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.fluids.IFluidTank;
@@ -26,13 +25,13 @@ public class SewageCompostSolidifierTile extends CustomElectricMachine {
     protected void initializeInventories() {
         super.initializeInventories();
         sewage = this.addFluidTank(FluidsRegistry.SEWAGE, 8000, EnumDyeColor.BROWN, "Sewage tank", new BoundingRectangle(50, 25, 18, 54));
-        outFertilizer = new ItemStackHandler(4*3){
+        outFertilizer = new ItemStackHandler(4 * 3) {
             @Override
             protected void onContentsChanged(int slot) {
                 SewageCompostSolidifierTile.this.markDirty();
             }
         };
-        this.addInventory(new CustomColoredItemHandler(outFertilizer, EnumDyeColor.ORANGE,"Fertilizer output", 18*5+3,25,4,3){
+        this.addInventory(new CustomColoredItemHandler(outFertilizer, EnumDyeColor.ORANGE, "Fertilizer output", 18 * 5 + 3, 25, 4, 3) {
             @Override
             public boolean canInsertItem(int slot, ItemStack stack) {
                 return false;
@@ -43,17 +42,17 @@ public class SewageCompostSolidifierTile extends CustomElectricMachine {
                 return true;
             }
         });
-        this.addInventoryToStorage(outFertilizer,"outFertilizer");
+        this.addInventoryToStorage(outFertilizer, "outFertilizer");
     }
 
     @Override
     protected float performWork() {
-        if (((CustomOrientedBlock)this.getBlockType()).isWorkDisabled()) return 0;
+        if (((CustomOrientedBlock) this.getBlockType()).isWorkDisabled()) return 0;
 
-        ItemStack stack = new ItemStack(ItemRegistry.fertilizer,1);
-        if (sewage.getFluid() != null && sewage.drain(2000,false).amount == 2000 && ItemHandlerHelper.insertItem(outFertilizer,stack,true).isEmpty()){
-            sewage.drain(2000,true);
-            ItemHandlerHelper.insertItem(outFertilizer,stack,false);
+        ItemStack stack = new ItemStack(ItemRegistry.fertilizer, 1);
+        if (sewage.getFluid() != null && sewage.drain(2000, false).amount == 2000 && ItemHandlerHelper.insertItem(outFertilizer, stack, true).isEmpty()) {
+            sewage.drain(2000, true);
+            ItemHandlerHelper.insertItem(outFertilizer, stack, false);
             return 1;
         }
 

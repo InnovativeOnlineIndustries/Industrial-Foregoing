@@ -44,7 +44,7 @@ public class BlackHoleUnitTile extends SidedTileEntity {
 
     @Override
     protected void innerUpdate() {
-        if (((CustomOrientedBlock)this.getBlockType()).isWorkDisabled()) return;
+        if (((CustomOrientedBlock) this.getBlockType()).isWorkDisabled()) return;
         if (!inItems.getStackInSlot(0).isEmpty()) {
             ItemStack in = inItems.getStackInSlot(0);
             if (stack.isEmpty()) {

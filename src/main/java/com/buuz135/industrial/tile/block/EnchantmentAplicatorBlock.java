@@ -6,6 +6,6 @@ import net.minecraft.block.material.Material;
 public class EnchantmentAplicatorBlock extends CustomOrientedBlock<EnchantmentAplicatorTile> {
 
     public EnchantmentAplicatorBlock() {
-        super("enchantment_aplicator", EnchantmentAplicatorTile.class, Material.ROCK,5000,100);
+        super("enchantment_aplicator", EnchantmentAplicatorTile.class, Material.ROCK, 5000, 100);
     }
 }

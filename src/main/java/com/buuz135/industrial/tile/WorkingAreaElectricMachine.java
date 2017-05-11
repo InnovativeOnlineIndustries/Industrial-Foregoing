@@ -90,14 +90,14 @@ public abstract class WorkingAreaElectricMachine extends CustomElectricMachine {
     }
 
     public int getRadius() {
-        return radius +(this.hasAddon(RangeAddonItem.class)  ? (this.getAddonStack(RangeAddonItem.class).getMetadata() <= 0 ? -1: this.getAddonStack(RangeAddonItem.class).getMetadata()): 0);
+        return radius + (this.hasAddon(RangeAddonItem.class) ? (this.getAddonStack(RangeAddonItem.class).getMetadata() <= 0 ? -1 : this.getAddonStack(RangeAddonItem.class).getMetadata()) : 0);
     }
 
     public int getHeight() {
         return height;
     }
 
-    public boolean canAcceptRangeUpgrades(){
+    public boolean canAcceptRangeUpgrades() {
         return true;
     }
 

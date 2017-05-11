@@ -10,13 +10,13 @@ public class MobRelocatorBlock extends CustomOrientedBlock<MobRelocatorTile> {
     private float essenceMultiplier;
 
     public MobRelocatorBlock() {
-        super("mob_relocator", MobRelocatorTile.class, Material.ROCK,1000,40);
+        super("mob_relocator", MobRelocatorTile.class, Material.ROCK, 1000, 40);
     }
 
     @Override
     public void getMachineConfig() {
         super.getMachineConfig();
-        essenceMultiplier = CustomConfiguration.config.getFloat("essenceMultiplier","machines"+ Configuration.CATEGORY_SPLITTER+this.getRegistryName().getResourcePath().toString(),1,0,Integer.MAX_VALUE,"Mob essence multiplier based on the mob health. Essence mb = mobHealth*essenceMultiplier");
+        essenceMultiplier = CustomConfiguration.config.getFloat("essenceMultiplier", "machines" + Configuration.CATEGORY_SPLITTER + this.getRegistryName().getResourcePath().toString(), 1, 0, Integer.MAX_VALUE, "Mob essence multiplier based on the mob health. Essence mb = mobHealth*essenceMultiplier");
     }
 
     public float getEssenceMultiplier() {

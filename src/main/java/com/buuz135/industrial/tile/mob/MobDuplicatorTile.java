@@ -6,23 +6,15 @@ import com.buuz135.industrial.proxy.ItemRegistry;
 import com.buuz135.industrial.tile.CustomColoredItemHandler;
 import com.buuz135.industrial.tile.WorkingAreaElectricMachine;
 import com.buuz135.industrial.tile.block.CustomOrientedBlock;
-import com.buuz135.industrial.tile.block.MobDuplicatorBlock;
 import com.buuz135.industrial.utils.BlockUtils;
 import net.minecraft.entity.EntityLiving;
-import net.minecraft.inventory.Slot;
 import net.minecraft.item.EnumDyeColor;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraftforge.fluids.IFluidTank;
 import net.minecraftforge.items.ItemStackHandler;
-import net.ndrei.teslacorelib.containers.BasicTeslaContainer;
-import net.ndrei.teslacorelib.containers.FilteredSlot;
-import net.ndrei.teslacorelib.gui.BasicTeslaGuiContainer;
-import net.ndrei.teslacorelib.gui.IGuiContainerPiece;
-import net.ndrei.teslacorelib.gui.TiledRenderedGuiPiece;
 import net.ndrei.teslacorelib.inventory.BoundingRectangle;
-import net.ndrei.teslacorelib.inventory.ColoredItemHandler;
 
 import java.util.List;
 
@@ -39,7 +31,7 @@ public class MobDuplicatorTile extends WorkingAreaElectricMachine {
     protected void initializeInventories() {
         super.initializeInventories();
         this.experienceTank = this.addFluidTank(FluidsRegistry.ESSENCE, 8000, EnumDyeColor.LIME, "Experience tank", new BoundingRectangle(50, 25, 18, 54));
-        mobTool = new ItemStackHandler(1){
+        mobTool = new ItemStackHandler(1) {
             @Override
             protected void onContentsChanged(int slot) {
                 MobDuplicatorTile.this.markDirty();
@@ -67,7 +59,7 @@ public class MobDuplicatorTile extends WorkingAreaElectricMachine {
 
     @Override
     protected float performWork() {
-        if (((CustomOrientedBlock)this.getBlockType()).isWorkDisabled()) return 0;
+        if (((CustomOrientedBlock) this.getBlockType()).isWorkDisabled()) return 0;
         if (mobTool.getStackInSlot(0).isEmpty()) return 0;
         if (experienceTank.getFluid() == null) return 0;
         AxisAlignedBB alignedBB = getWorkingArea();
