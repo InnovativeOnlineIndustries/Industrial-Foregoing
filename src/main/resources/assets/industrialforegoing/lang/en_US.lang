@@ -32,6 +32,7 @@ tile.industrialforegoing_animal_byproduct_recolector.name=Animal Byproduct Recol
 tile.industrialforegoing_sludge_refiner.name=Sludge Refiner
 tile.industrialforegoing_mod_detector.name=Mob Detector
 tile.industrialforegoing_lava_fabricator.name=Lava Fabricator
+tile.industrialforegoing_bioreactor.name=Bioreactor
 
 tile.slider.name=Slider
 
@@ -40,6 +41,7 @@ fluid.milk=Milk
 fluid.meat=Liquid Meat
 fluid.sewage=Sewage
 fluid.sludge=Sludge
+fluid.biofuel=Biofuel
 
 item.meat_feeder.name=Meat Feeder
 item.mob_imprisonment_tool.name=Mob Imprisonment Tool

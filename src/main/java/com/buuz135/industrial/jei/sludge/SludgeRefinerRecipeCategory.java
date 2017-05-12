@@ -1,4 +1,4 @@
-package com.buuz135.industrial.jei;
+package com.buuz135.industrial.jei.sludge;
 
 import com.buuz135.industrial.utils.Reference;
 import mezz.jei.api.IGuiHelper;

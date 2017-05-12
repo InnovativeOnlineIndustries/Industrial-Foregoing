@@ -1,5 +1,6 @@
-package com.buuz135.industrial.jei;
+package com.buuz135.industrial.jei.bioreactor;
 
+import com.buuz135.industrial.proxy.BlockRegistry;
 import com.buuz135.industrial.proxy.FluidsRegistry;
 import com.buuz135.industrial.utils.ItemStackWeightedItem;
 import mezz.jei.api.ingredients.IIngredients;
@@ -7,26 +8,26 @@ import mezz.jei.api.recipe.IRecipeWrapper;
 import net.minecraft.client.Minecraft;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.common.ForgeModContainer;
+import net.minecraftforge.fluids.Fluid;
+import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.UniversalBucket;
 
 import java.text.DecimalFormat;
 import java.util.Arrays;
 import java.util.List;
 
-public class SludgeRefinerRecipeWrapper implements IRecipeWrapper {
+public class BioReactorRecipeWrapper implements IRecipeWrapper {
 
-    private ItemStackWeightedItem item;
-    private int maxWeight;
+    private ItemStack stack;
 
-    public SludgeRefinerRecipeWrapper(ItemStackWeightedItem item, int maxWeight) {
-        this.item = item;
-        this.maxWeight = maxWeight;
+    public BioReactorRecipeWrapper(ItemStack stack) {
+        this.stack = stack;
     }
 
     @Override
     public void getIngredients(IIngredients ingredients) {
-        ingredients.setInput(ItemStack.class, UniversalBucket.getFilledBucket(ForgeModContainer.getInstance().universalBucket, FluidsRegistry.SLUDGE));
-        ingredients.setOutput(ItemStack.class, item.getStack());
+        ingredients.setInput(ItemStack.class, stack);
+        ingredients.setOutput(ItemStack.class,  UniversalBucket.getFilledBucket(ForgeModContainer.getInstance().universalBucket, FluidsRegistry.BIOFUEL));
     }
 
     @Override
@@ -36,7 +37,7 @@ public class SludgeRefinerRecipeWrapper implements IRecipeWrapper {
 
     @Override
     public List<String> getTooltipStrings(int mouseX, int mouseY) {
-        return Arrays.asList("Chance: " + new DecimalFormat("##.##").format((item.itemWeight / (double) maxWeight) * 100) + "%");
+        return Arrays.asList("Efficiency", " Min: "+ BlockRegistry.bioReactorBlock.getBaseAmount()+"mb/item"," Max: "+BlockRegistry.bioReactorBlock.getBaseAmount()*2+"mb/item");
     }
 
     @Override

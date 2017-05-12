@@ -10,6 +10,7 @@ public class FluidsRegistry {
     public static IFCustomFluid LATEX;
     public static IFCustomFluid SEWAGE;
     public static IFCustomFluid SLUDGE;
+    public static IFCustomFluid BIOFUEL;
 
     public static void registerFluids() {
         (ESSENCE = new IFCustomFluid("essence")).register();
@@ -18,6 +19,7 @@ public class FluidsRegistry {
         (LATEX = new IFCustomFluid("latex")).register();
         (SEWAGE = new IFCustomFluid("sewage")).register();
         (SLUDGE = new IFCustomFluid("sludge")).register();
+        (BIOFUEL = new IFCustomFluid("biofuel")).register();
     }
 
 

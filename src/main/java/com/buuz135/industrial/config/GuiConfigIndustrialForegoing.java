@@ -10,7 +10,7 @@ import net.minecraftforge.fml.client.config.GuiConfig;
 public class GuiConfigIndustrialForegoing extends GuiConfig {
 
     public GuiConfigIndustrialForegoing(GuiScreen parent) {
-        super(parent, new ConfigElement(CustomConfiguration.config.getCategory(Configuration.CATEGORY_GENERAL)).getChildElements(), Reference.MOD_ID, false, false, "Industrial Foregoing Config");
+        super(parent, new ConfigElement(CustomConfiguration.config.getCategory("")).getChildElements(), Reference.MOD_ID, false, false, "Industrial Foregoing Config");
     }
 
     @Override

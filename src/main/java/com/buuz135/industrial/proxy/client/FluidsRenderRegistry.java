@@ -21,6 +21,7 @@ public class FluidsRenderRegistry {
         register(BlockRegistry.BLOCK_LATEX);
         register(BlockRegistry.BLOCK_SEWAGE);
         register(BlockRegistry.BLOCK_SLUDGE);
+        register(BlockRegistry.BLOCK_BIOFUEL);
     }
 
     public static void register(IFCustomFluidBlock base) {

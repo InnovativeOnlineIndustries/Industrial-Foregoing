@@ -37,6 +37,7 @@ public class CustomConfiguration {
             sludgeRefinerBlock.getMachineConfig();
             mobDetectorBlock.getMachineConfig();
             lavaFabricatorBlock.getMachineConfig();
+            bioReactorBlock.getMachineConfig();
             //sliderBlock.getMachineConfig();
         } catch (Exception e) {
 

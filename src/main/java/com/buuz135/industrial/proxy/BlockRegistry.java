@@ -1,5 +1,6 @@
 package com.buuz135.industrial.proxy;
 
+import com.buuz135.industrial.fluid.IFCustomFluid;
 import com.buuz135.industrial.fluid.IFCustomFluidBlock;
 import com.buuz135.industrial.tile.block.*;
 import net.minecraft.block.material.Material;
@@ -32,6 +33,7 @@ public class BlockRegistry {
     public static SludgeRefinerBlock sludgeRefinerBlock;
     public static MobDetectorBlock mobDetectorBlock;
     public static LavaFabricatorBlock lavaFabricatorBlock;
+    public static BioReactorBlock bioReactorBlock;
 
     public static SliderBlock sliderBlock;
 
@@ -41,6 +43,7 @@ public class BlockRegistry {
     public static IFCustomFluidBlock BLOCK_LATEX;
     public static IFCustomFluidBlock BLOCK_SEWAGE;
     public static IFCustomFluidBlock BLOCK_SLUDGE;
+    public static IFCustomFluidBlock BLOCK_BIOFUEL;
 
     public static void registerBlocks() {
         (petrifiedFuelGeneratorBlock = new PetrifiedFuelGeneratorBlock()).register();
@@ -69,6 +72,7 @@ public class BlockRegistry {
         (sludgeRefinerBlock = new SludgeRefinerBlock()).register();
         (mobDetectorBlock = new MobDetectorBlock()).register();
         (lavaFabricatorBlock = new LavaFabricatorBlock()).register();
+        (bioReactorBlock = new BioReactorBlock()).register();
 
         (sliderBlock = new SliderBlock()).register();
 
@@ -78,5 +82,6 @@ public class BlockRegistry {
         (BLOCK_LATEX = new IFCustomFluidBlock(FluidsRegistry.LATEX, Material.WATER)).register();
         (BLOCK_SEWAGE = new IFCustomFluidBlock(FluidsRegistry.SEWAGE, Material.WATER)).register();
         (BLOCK_SLUDGE = new IFCustomFluidBlock(FluidsRegistry.SLUDGE, Material.WATER)).register();
+        (BLOCK_BIOFUEL = new IFCustomFluidBlock(FluidsRegistry.BIOFUEL, Material.WATER)).register();
     }
 }

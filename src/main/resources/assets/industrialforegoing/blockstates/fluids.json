@@ -30,6 +30,12 @@
       "custom": {
         "fluid": "sludge"
       }
+    },
+    "biofuel": {
+      "model": "forge:fluid",
+      "custom": {
+        "fluid": "biofuel"
+      }
     }
   }
 }
