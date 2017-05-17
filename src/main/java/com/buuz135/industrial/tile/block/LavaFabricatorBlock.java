@@ -5,6 +5,6 @@ import net.minecraft.block.material.Material;
 
 public class LavaFabricatorBlock extends CustomOrientedBlock<LavaFabricatorTile> {
     public LavaFabricatorBlock() {
-        super("lava_fabricator",LavaFabricatorTile.class,Material.ROCK, 200000,200000);
+        super("lava_fabricator", LavaFabricatorTile.class, Material.ROCK, 200000, 200000);
     }
 }

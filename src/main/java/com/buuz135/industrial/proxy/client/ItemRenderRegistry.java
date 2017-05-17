@@ -11,6 +11,7 @@ public class ItemRenderRegistry {
         dryRubber.registerRender();
         plastic.registerRender();
         fertilizer.registerRender();
+        laserLensItem.registerRender();
 
         adultFilterAddomItem.registerRenderer();
         rangeAddonItem.registerRenderer();

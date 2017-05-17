@@ -30,9 +30,12 @@ tile.industrialforegoing_latex_processing_unit.name=Latex Processing Unit
 tile.industrialforegoing_sewage_composter_solidifier.name=Sewage Compost Solidifier
 tile.industrialforegoing_animal_byproduct_recolector.name=Animal Byproduct Recolector
 tile.industrialforegoing_sludge_refiner.name=Sludge Refiner
-tile.industrialforegoing_mod_detector.name=Mob Detector
+tile.industrialforegoing_mob_detector.name=Mob Detector
 tile.industrialforegoing_lava_fabricator.name=Lava Fabricator
 tile.industrialforegoing_bioreactor.name=Bioreactor
+tile.industrialforegoing_biofuel_generator.name=Biofuel Generator
+tile.industrialforegoing_laser_base.name=Laser Base
+tile.industrialforegoing_laser_drill.name=Laser Drill
 
 tile.slider.name=Slider
 
@@ -49,5 +52,6 @@ item.tinydryrubber.name=Tiny Dry Rubber
 item.dryrubber.name=Dry Rubber
 item.plastic.name=Plastic
 item.fertilizer.name=Fertilizer
+item.laser_lens.name=Laser Lens
 item.industrialforegoing_range_addon.name=Range Addon
 item.industrialforegoing_adult_filter.name=Adult Filter

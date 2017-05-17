@@ -19,7 +19,7 @@ public class AnimalByproductRecolectorTile extends WorkingAreaElectricMachine {
     private IFluidTank tank;
 
     public AnimalByproductRecolectorTile() {
-        super(AnimalByproductRecolectorTile.class.getName().hashCode(), 0, 0,true);
+        super(AnimalByproductRecolectorTile.class.getName().hashCode(), 0, 0, true);
     }
 
     @Override

@@ -93,5 +93,4 @@ public class AnimalStockIncreaserTile extends WorkingAreaElectricMachine {
     }
 
 
-
 }

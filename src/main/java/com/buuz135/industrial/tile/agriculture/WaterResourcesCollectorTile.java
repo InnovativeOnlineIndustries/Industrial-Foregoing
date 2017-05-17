@@ -23,7 +23,7 @@ public class WaterResourcesCollectorTile extends WorkingAreaElectricMachine {
     private ItemStackHandler outFish;
 
     public WaterResourcesCollectorTile() {
-        super(WaterResourcesCollectorTile.class.getName().hashCode(), 1, 0,false);
+        super(WaterResourcesCollectorTile.class.getName().hashCode(), 1, 0, false);
     }
 
     @Override

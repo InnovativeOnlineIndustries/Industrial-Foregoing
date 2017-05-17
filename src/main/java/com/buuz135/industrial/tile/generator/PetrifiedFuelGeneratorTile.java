@@ -1,6 +1,7 @@
 package com.buuz135.industrial.tile.generator;
 
 import com.buuz135.industrial.proxy.client.infopiece.PetrifiedFuelInfoPiece;
+import com.buuz135.industrial.tile.CustomGeneratorMachine;
 import com.buuz135.industrial.tile.block.CustomOrientedBlock;
 import net.minecraft.inventory.Slot;
 import net.minecraft.item.EnumDyeColor;
@@ -14,11 +15,10 @@ import net.ndrei.teslacorelib.gui.IGuiContainerPiece;
 import net.ndrei.teslacorelib.gui.TiledRenderedGuiPiece;
 import net.ndrei.teslacorelib.inventory.BoundingRectangle;
 import net.ndrei.teslacorelib.inventory.ColoredItemHandler;
-import net.ndrei.teslacorelib.tileentities.ElectricGenerator;
 
 import java.util.List;
 
-public class PetrifiedFuelGeneratorTile extends ElectricGenerator {
+public class PetrifiedFuelGeneratorTile extends CustomGeneratorMachine {
 
     private ItemStackHandler inStackHandler;
     private ItemStackHandler invisibleSlot;
@@ -127,8 +127,5 @@ public class PetrifiedFuelGeneratorTile extends ElectricGenerator {
         return current;
     }
 
-    @Override
-    protected long getEnergyOutputRate() {
-        return Integer.MAX_VALUE;
-    }
+
 }

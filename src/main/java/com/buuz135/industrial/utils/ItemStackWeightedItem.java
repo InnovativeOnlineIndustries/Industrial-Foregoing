@@ -15,4 +15,6 @@ public class ItemStackWeightedItem extends WeightedRandom.Item {
     public ItemStack getStack() {
         return stack;
     }
+
+
 }

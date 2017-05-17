@@ -38,6 +38,9 @@ public class CustomConfiguration {
             mobDetectorBlock.getMachineConfig();
             lavaFabricatorBlock.getMachineConfig();
             bioReactorBlock.getMachineConfig();
+            biofuelGeneratorBlock.getMachineConfig();
+            laserBaseBlock.getMachineConfig();
+            laserDrillBlock.getMachineConfig();
             //sliderBlock.getMachineConfig();
         } catch (Exception e) {
 

@@ -18,14 +18,14 @@ public class BioReactorBlock extends CustomOrientedBlock<BioReactorTile> {
     private int baseAmount;
 
     public BioReactorBlock() {
-        super("bioreactor", BioReactorTile.class,Material.ROCK,2000,10);
+        super("bioreactor", BioReactorTile.class, Material.ROCK, 2000, 10);
         itemsAccepted = new ArrayList<>();
     }
 
     @Override
     public void getMachineConfig() {
         super.getMachineConfig();
-        baseAmount = CustomConfiguration.config.getInt("baseBiofuel","machines" + Configuration.CATEGORY_SPLITTER + this.getRegistryName().getResourcePath().toString(),80,1,4000,"Base biofuel amount in mb");
+        baseAmount = CustomConfiguration.config.getInt("baseBiofuel", "machines" + Configuration.CATEGORY_SPLITTER + this.getRegistryName().getResourcePath().toString(), 80, 1, 4000, "Base biofuel amount in mb");
         String[] items = CustomConfiguration.config.getStringList("acceptedItems", "machines" + Configuration.CATEGORY_SPLITTER + this.getRegistryName().getResourcePath().toString(), new String[]{
                 "minecraft:wheat_seeds",
                 "minecraft:pumpkin_seeds",
@@ -40,10 +40,10 @@ public class BioReactorBlock extends CustomOrientedBlock<BioReactorTile> {
                 "dye",
                 "minecraft:chorus_flower"
         }, "It can accept oreDictionary entries and item ids");
-        for (String s : items){
-            if (s.contains(":")){
-                if (Item.getByNameOrId(s) != null)itemsAccepted.add(new ItemStack(Item.getByNameOrId(s)));
-            }else{
+        for (String s : items) {
+            if (s.contains(":")) {
+                if (Item.getByNameOrId(s) != null) itemsAccepted.add(new ItemStack(Item.getByNameOrId(s)));
+            } else {
                 itemsAccepted.addAll(OreDictionary.getOres(s));
             }
         }

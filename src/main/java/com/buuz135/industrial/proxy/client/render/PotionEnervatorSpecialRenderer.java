@@ -1,4 +1,4 @@
-package com.buuz135.industrial.render;
+package com.buuz135.industrial.proxy.client.render;
 
 import com.buuz135.industrial.tile.magic.PotionEnervatorTile;
 import net.minecraft.client.Minecraft;

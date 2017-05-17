@@ -13,7 +13,7 @@ public class MobDetectorTile extends WorkingAreaElectricMachine {
     private int redstoneSignal;
 
     public MobDetectorTile() {
-        super(MobDetectorTile.class.getName().hashCode(), 2, 1,false);
+        super(MobDetectorTile.class.getName().hashCode(), 2, 1, false);
         redstoneSignal = 0;
     }
 

@@ -1,6 +1,5 @@
 package com.buuz135.industrial.proxy;
 
-import com.buuz135.industrial.fluid.IFCustomFluid;
 import com.buuz135.industrial.fluid.IFCustomFluidBlock;
 import com.buuz135.industrial.tile.block.*;
 import net.minecraft.block.material.Material;
@@ -34,6 +33,9 @@ public class BlockRegistry {
     public static MobDetectorBlock mobDetectorBlock;
     public static LavaFabricatorBlock lavaFabricatorBlock;
     public static BioReactorBlock bioReactorBlock;
+    public static BiofuelGeneratorBlock biofuelGeneratorBlock;
+    public static LaserBaseBlock laserBaseBlock;
+    public static LaserDrillBlock laserDrillBlock;
 
     public static SliderBlock sliderBlock;
 
@@ -73,6 +75,9 @@ public class BlockRegistry {
         (mobDetectorBlock = new MobDetectorBlock()).register();
         (lavaFabricatorBlock = new LavaFabricatorBlock()).register();
         (bioReactorBlock = new BioReactorBlock()).register();
+        (biofuelGeneratorBlock = new BiofuelGeneratorBlock()).register();
+        (laserBaseBlock = new LaserBaseBlock()).register();
+        (laserDrillBlock = new LaserDrillBlock()).register();
 
         (sliderBlock = new SliderBlock()).register();
 

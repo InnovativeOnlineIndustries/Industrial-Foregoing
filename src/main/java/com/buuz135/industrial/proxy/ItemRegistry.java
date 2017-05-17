@@ -1,6 +1,7 @@
 package com.buuz135.industrial.proxy;
 
 import com.buuz135.industrial.item.IFCustomItem;
+import com.buuz135.industrial.item.LaserLensItem;
 import com.buuz135.industrial.item.MeatFeederItem;
 import com.buuz135.industrial.item.MobImprisonmentToolItem;
 import com.buuz135.industrial.item.addon.AdultFilterAddonItem;
@@ -14,6 +15,7 @@ public class ItemRegistry {
     public static IFCustomItem dryRubber;
     public static IFCustomItem plastic;
     public static IFCustomItem fertilizer;
+    public static LaserLensItem laserLensItem;
 
     public static AdultFilterAddonItem adultFilterAddomItem;
     public static RangeAddonItem rangeAddonItem;
@@ -25,6 +27,7 @@ public class ItemRegistry {
         (dryRubber = new IFCustomItem("dryrubber")).register();
         (plastic = new IFCustomItem("plastic")).register();
         (fertilizer = new IFCustomItem("fertilizer")).register();
+        (laserLensItem = new LaserLensItem()).register();
 
         (adultFilterAddomItem = new AdultFilterAddonItem()).register();
         (rangeAddonItem = new RangeAddonItem()).register();

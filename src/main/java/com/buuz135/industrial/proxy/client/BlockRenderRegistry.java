@@ -32,6 +32,9 @@ public class BlockRenderRegistry {
         mobDetectorBlock.registerRenderer();
         lavaFabricatorBlock.registerRenderer();
         bioReactorBlock.registerRenderer();
+        biofuelGeneratorBlock.registerRenderer();
+        laserBaseBlock.registerRenderer();
+        laserDrillBlock.registerRenderer();
 
         sliderBlock.registerRenderer();
     }
