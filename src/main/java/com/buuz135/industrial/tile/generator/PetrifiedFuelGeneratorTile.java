@@ -3,10 +3,12 @@ package com.buuz135.industrial.tile.generator;
 import com.buuz135.industrial.proxy.client.infopiece.PetrifiedFuelInfoPiece;
 import com.buuz135.industrial.tile.CustomGeneratorMachine;
 import com.buuz135.industrial.tile.block.CustomOrientedBlock;
+import net.minecraft.init.Items;
 import net.minecraft.inventory.Slot;
 import net.minecraft.item.EnumDyeColor;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntityFurnace;
+import net.minecraftforge.common.ForgeModContainer;
 import net.minecraftforge.items.ItemStackHandler;
 import net.ndrei.teslacorelib.containers.BasicTeslaContainer;
 import net.ndrei.teslacorelib.containers.FilteredSlot;
@@ -74,7 +76,7 @@ public class PetrifiedFuelGeneratorTile extends CustomGeneratorMachine {
     }
 
     private boolean acceptsInputStack(int slot, ItemStack stack) {
-        return !stack.isEmpty() && TileEntityFurnace.isItemFuel(stack);
+        return !stack.isEmpty() && TileEntityFurnace.isItemFuel(stack) && !stack.getItem().equals(Items.LAVA_BUCKET) && !stack.getItem().equals(ForgeModContainer.getInstance().universalBucket);
     }
 
     private ItemStack current = ItemStack.EMPTY;

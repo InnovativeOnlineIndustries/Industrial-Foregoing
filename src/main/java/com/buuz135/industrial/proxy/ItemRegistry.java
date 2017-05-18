@@ -16,6 +16,7 @@ public class ItemRegistry {
     public static IFCustomItem plastic;
     public static IFCustomItem fertilizer;
     public static LaserLensItem laserLensItem;
+    public static IFCustomItem machineHull;
 
     public static AdultFilterAddonItem adultFilterAddomItem;
     public static RangeAddonItem rangeAddonItem;
@@ -28,6 +29,7 @@ public class ItemRegistry {
         (plastic = new IFCustomItem("plastic")).register();
         (fertilizer = new IFCustomItem("fertilizer")).register();
         (laserLensItem = new LaserLensItem()).register();
+        (machineHull = new IFCustomItem("machinehull")).register();
 
         (adultFilterAddomItem = new AdultFilterAddonItem()).register();
         (rangeAddonItem = new RangeAddonItem()).register();

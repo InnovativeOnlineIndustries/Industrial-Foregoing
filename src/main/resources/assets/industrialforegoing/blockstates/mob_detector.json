@@ -8,7 +8,7 @@
       {}
     ],
     "inventory": [
-      {}
+      {"y":180}
     ],
     "facing": {
       "north": {},

@@ -36,6 +36,12 @@
       "custom": {
         "fluid": "biofuel"
       }
+    },
+    "latex": {
+      "model": "forge:fluid",
+      "custom": {
+        "fluid": "latex"
+      }
     }
   }
 }

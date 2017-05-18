@@ -40,12 +40,13 @@ tile.industrialforegoing_ore_processor.name=Ore Processor
 
 tile.slider.name=Slider
 
-fluid.xpfluid=Liquid Experience
+fluid.essence=Essence
 fluid.milk=Milk
 fluid.meat=Liquid Meat
 fluid.sewage=Sewage
 fluid.sludge=Sludge
 fluid.biofuel=Biofuel
+fluid.latex=Latex
 
 item.industrialforegoing_meat_feeder.name=Meat Feeder
 item.industrialforegoing_mob_imprisonment_tool.name=Mob Imprisonment Tool
@@ -56,3 +57,4 @@ item.industrialforegoing_fertilizer.name=Fertilizer
 item.industrialforegoing_laser_lens.name=Laser Lens
 item.industrialforegoing_range_addon.name=Range Addon
 item.industrialforegoing_adult_filter.name=Adult Filter
+item.industrialforegoing_machinehull.name=Machine Hull
