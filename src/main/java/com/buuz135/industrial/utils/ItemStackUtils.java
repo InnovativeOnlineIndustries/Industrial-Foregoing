@@ -145,4 +145,12 @@ public class ItemStackUtils {
         }
         return false;
     }
+
+    public static boolean isOre(ItemStack stack){
+        if (stack.isEmpty()) return false;
+        for (int i : OreDictionary.getOreIDs(stack)){
+            if (OreDictionary.getOreName(i).startsWith("ore")) return true;
+        }
+        return false;
+    }
 }

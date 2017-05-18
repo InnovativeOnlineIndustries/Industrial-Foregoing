@@ -36,6 +36,7 @@ tile.industrialforegoing_bioreactor.name=Bioreactor
 tile.industrialforegoing_biofuel_generator.name=Biofuel Generator
 tile.industrialforegoing_laser_base.name=Laser Base
 tile.industrialforegoing_laser_drill.name=Laser Drill
+tile.industrialforegoing_ore_processor.name=Ore Processor
 
 tile.slider.name=Slider
 

@@ -41,6 +41,7 @@ public class CustomConfiguration {
             biofuelGeneratorBlock.getMachineConfig();
             laserBaseBlock.getMachineConfig();
             laserDrillBlock.getMachineConfig();
+            oreProcessorBlock.getMachineConfig();
             //sliderBlock.getMachineConfig();
         } catch (Exception e) {
 

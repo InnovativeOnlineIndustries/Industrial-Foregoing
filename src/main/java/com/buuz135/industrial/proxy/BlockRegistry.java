@@ -36,6 +36,7 @@ public class BlockRegistry {
     public static BiofuelGeneratorBlock biofuelGeneratorBlock;
     public static LaserBaseBlock laserBaseBlock;
     public static LaserDrillBlock laserDrillBlock;
+    public static OreProcessorBlock oreProcessorBlock;
 
     public static SliderBlock sliderBlock;
 
@@ -78,6 +79,7 @@ public class BlockRegistry {
         (biofuelGeneratorBlock = new BiofuelGeneratorBlock()).register();
         (laserBaseBlock = new LaserBaseBlock()).register();
         (laserDrillBlock = new LaserDrillBlock()).register();
+        (oreProcessorBlock = new OreProcessorBlock()).register();
 
         (sliderBlock = new SliderBlock()).register();
 

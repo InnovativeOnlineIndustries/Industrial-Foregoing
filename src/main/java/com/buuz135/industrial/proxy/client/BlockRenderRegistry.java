@@ -35,6 +35,7 @@ public class BlockRenderRegistry {
         biofuelGeneratorBlock.registerRenderer();
         laserBaseBlock.registerRenderer();
         laserDrillBlock.registerRenderer();
+        oreProcessorBlock.registerRenderer();
 
         sliderBlock.registerRenderer();
     }
