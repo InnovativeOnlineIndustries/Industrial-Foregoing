@@ -8,6 +8,7 @@ import com.buuz135.industrial.jei.laser.LaserRecipeWrapper;
 import com.buuz135.industrial.jei.sludge.SludgeRefinerRecipeCategory;
 import com.buuz135.industrial.jei.sludge.SludgeRefinerRecipeWrapper;
 import com.buuz135.industrial.proxy.BlockRegistry;
+import com.buuz135.industrial.proxy.ItemRegistry;
 import com.buuz135.industrial.utils.ItemStackWeightedItem;
 import mezz.jei.api.*;
 import mezz.jei.api.ingredients.IModIngredientRegistration;
@@ -58,7 +59,17 @@ public class JEICustomPlugin implements IModPlugin {
         BlockRegistry.laserBaseBlock.getColoreOres().keySet().forEach(integer -> BlockRegistry.laserBaseBlock.getColoreOres().get(integer).forEach(temp -> laserRecipeWrappers.add(new LaserRecipeWrapper(temp, laserMaxWeight, integer))));
         registry.addRecipes(laserRecipeWrappers, laserRecipeCategory.getUid());
         registry.addRecipeCategoryCraftingItem(new ItemStack(BlockRegistry.laserDrillBlock), laserRecipeCategory.getUid());
+        registry.addRecipeCategoryCraftingItem(new ItemStack(BlockRegistry.laserBaseBlock),laserRecipeCategory.getUid());
 
+
+        //Descriptions
+        registry.addDescription(new ItemStack(ItemRegistry.meatFeederItem),"The meat feeder will keep fed if it has liquid meat. (Don't ask where the meat comes, you won't like it)");
+        registry.addDescription(new ItemStack(ItemRegistry.mobImprisonmentToolItem), "This tool can capture mobs to be used in the Mob duplicator.");
+        registry.addDescription(new ItemStack(ItemRegistry.tinyDryRubber), "Produced in the latex processing unit.");
+        registry.addDescription(new ItemStack(ItemRegistry.fertilizer), "It can be used in the Plant Enrich Material Injector to make plants frow faster. Produced in the Sewer Compost Solidifier");
+
+        registry.addDescription(new ItemStack(BlockRegistry.petrifiedFuelGeneratorBlock),"This generator will generate power depending the burntime of the solid fuel. The more burn time it has the more power/tick will create. (All fuels will burn the same amount of time)");
+        registry.addDescription(new ItemStack(BlockRegistry.enchantmentRefinerBlock), "The enchantent refiner, when provider with power, it will sort enchanted items from unenchanted items.");
     }
 
     @Override

@@ -1,11 +1,15 @@
 package com.buuz135.industrial.item;
 
+import com.buuz135.industrial.proxy.ItemRegistry;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityList;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.crafting.IRecipe;
+import net.minecraft.item.crafting.ShapedRecipes;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumActionResult;
 import net.minecraft.util.EnumFacing;
@@ -61,7 +65,6 @@ public class MobImprisonmentToolItem extends IFCustomItem {
     }
 
     public boolean containsEntity(ItemStack stack) {
-        ;
         return !stack.isEmpty() && stack.hasTagCompound() && stack.getTagCompound().hasKey("entity");
     }
 
@@ -83,4 +86,10 @@ public class MobImprisonmentToolItem extends IFCustomItem {
         return entity;
     }
 
+    @Override
+    public IRecipe getRecipe() {
+        return new ShapedRecipes(3,3,new ItemStack[]{ItemStack.EMPTY, new ItemStack(ItemRegistry.plastic),ItemStack.EMPTY,
+                new ItemStack(ItemRegistry.plastic), new ItemStack(Items.GHAST_TEAR), new ItemStack(ItemRegistry.plastic),
+                ItemStack.EMPTY, new ItemStack(ItemRegistry.plastic),ItemStack.EMPTY},new ItemStack(this));
+    }
 }

@@ -17,8 +17,8 @@ public class CommonProxy {
     public void preInit(FMLPreInitializationEvent event) {
         random = new Random();
         FluidsRegistry.registerFluids();
-        BlockRegistry.registerBlocks();
         ItemRegistry.registerItems();
+        BlockRegistry.registerBlocks();
 
         MinecraftForge.EVENT_BUS.register(new MeatFeederTickHandler());
         MinecraftForge.EVENT_BUS.register(new MobDeathHandler());

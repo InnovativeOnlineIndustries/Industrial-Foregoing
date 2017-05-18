@@ -26,7 +26,6 @@ public class CustomOrientedBlock<T extends SidedTileEntity> extends OrientedBloc
 
     public void getMachineConfig() {
         workDisabled = CustomConfiguration.config.getBoolean("workDisabled", "machines" + Configuration.CATEGORY_SPLITTER + this.getRegistryName().getResourcePath().toString(), false, "Machine can perform a work action");
-        Class<T> type = null;
         if (energyForWork != 0 && energyRate != 0) {
             energyForWork = CustomConfiguration.config.getInt("energyForWork", "machines" + Configuration.CATEGORY_SPLITTER + this.getRegistryName().getResourcePath().toString(), energyForWork, 1, Integer.MAX_VALUE, "How much energy needs a machine to work");
             energyRate = CustomConfiguration.config.getInt("energyRate", "machines" + Configuration.CATEGORY_SPLITTER + this.getRegistryName().getResourcePath().toString(), energyRate, 1, Integer.MAX_VALUE, "Energy input rate of a machine");

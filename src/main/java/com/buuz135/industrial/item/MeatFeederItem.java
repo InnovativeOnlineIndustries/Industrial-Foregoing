@@ -1,14 +1,19 @@
 package com.buuz135.industrial.item;
 
+import com.buuz135.industrial.IndustrialForegoing;
 import com.buuz135.industrial.proxy.FluidsRegistry;
+import com.buuz135.industrial.proxy.ItemRegistry;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumFacing;
 import net.minecraftforge.common.capabilities.ICapabilityProvider;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
 import net.minecraftforge.fluids.capability.templates.FluidHandlerItemStack;
+import net.minecraftforge.oredict.ShapedOreRecipe;
 
 import javax.annotation.Nullable;
 import java.util.List;
@@ -17,11 +22,6 @@ public class MeatFeederItem extends IFCustomItem {
 
     public MeatFeederItem() {
         super("meat_feeder");
-    }
-
-    @Override
-    public void register() {
-        super.register();
     }
 
     @Nullable
@@ -53,5 +53,13 @@ public class MeatFeederItem extends IFCustomItem {
     public void drain(ItemStack stack, int amount) {
         FluidHandlerItemStack handlerItemStack = (FluidHandlerItemStack) stack.getCapability(CapabilityFluidHandler.FLUID_HANDLER_ITEM_CAPABILITY, EnumFacing.DOWN);
         handlerItemStack.drain(new FluidStack(FluidsRegistry.MEAT, amount), true);
+    }
+
+    @Override
+    public IRecipe getRecipe() {
+        return  new ShapedOreRecipe(new ItemStack(this),"pip","gig"," i ",
+                'p', ItemRegistry.plastic,
+                'i', "ingotIron",
+                'g', Items.GLASS_BOTTLE);
     }
 }
