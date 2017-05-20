@@ -1,11 +1,18 @@
 package com.buuz135.industrial.tile.block;
 
+import com.buuz135.industrial.proxy.ItemRegistry;
 import com.buuz135.industrial.tile.mob.MobDetectorTile;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.init.Blocks;
+import net.minecraft.init.Items;
+import net.minecraft.item.ItemStack;
+import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
+import net.minecraftforge.oredict.ShapedOreRecipe;
+import net.ndrei.teslacorelib.TeslaCoreLib;
 
 import javax.annotation.Nullable;
 
@@ -50,5 +57,15 @@ public class MobDetectorBlock extends CustomOrientedBlock<MobDetectorTile> {
             }
         }
         return super.getStrongPower(blockState, blockAccess, pos, side);
+    }
+
+    @Override
+    protected IRecipe getRecipe() {
+        return new ShapedOreRecipe(new ItemStack(this), "ppp", "rcr", "imi",
+                'p', ItemRegistry.plastic,
+                'r', Items.REPEATER,
+                'c', Items.COMPARATOR,
+                'i', Blocks.OBSERVER,
+                'm', TeslaCoreLib.machineCase);
     }
 }

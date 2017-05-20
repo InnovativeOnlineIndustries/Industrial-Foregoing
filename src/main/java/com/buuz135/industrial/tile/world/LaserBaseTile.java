@@ -89,7 +89,7 @@ public class LaserBaseTile extends SidedTileEntity {
             BlockRegistry.laserBaseBlock.getColoreOres().keySet().forEach(integer -> BlockRegistry.laserBaseBlock.getColoreOres().get(integer).forEach(itemStackWeightedItem -> {
                 int increase = 0;
                 for (int i = 0; i < lensItems.getSlots(); ++i) {
-                    if (lensItems.getStackInSlot(i).getMetadata() == integer) {
+                    if (!lensItems.getStackInSlot(i).isEmpty() && lensItems.getStackInSlot(i).getMetadata() == integer) {
                         increase += BlockRegistry.laserBaseBlock.getLenseChanceIncrease();
                     }
                 }

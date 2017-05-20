@@ -1,9 +1,15 @@
 package com.buuz135.industrial.tile.block;
 
 import com.buuz135.industrial.config.CustomConfiguration;
+import com.buuz135.industrial.proxy.ItemRegistry;
 import com.buuz135.industrial.tile.agriculture.CropRecolectorTile;
 import net.minecraft.block.material.Material;
+import net.minecraft.init.Items;
+import net.minecraft.item.ItemStack;
+import net.minecraft.item.crafting.IRecipe;
 import net.minecraftforge.common.config.Configuration;
+import net.minecraftforge.oredict.ShapedOreRecipe;
+import net.ndrei.teslacorelib.TeslaCoreLib;
 
 public class CropRecolectorBlock extends CustomOrientedBlock<CropRecolectorTile> {
 
@@ -28,5 +34,16 @@ public class CropRecolectorBlock extends CustomOrientedBlock<CropRecolectorTile>
 
     public int getTreeOperations() {
         return treeOperations;
+    }
+
+    @Override
+    protected IRecipe getRecipe() {
+        return new ShapedOreRecipe(new ItemStack(this), "php", "ama", "grg",
+                'p', ItemRegistry.plastic,
+                'h', Items.IRON_HOE,
+                'a', Items.IRON_AXE,
+                'm', TeslaCoreLib.machineCase,
+                'g', "gearGold",
+                'r', Items.REDSTONE);
     }
 }

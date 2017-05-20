@@ -1,15 +1,20 @@
 package com.buuz135.industrial.tile.block;
 
 import com.buuz135.industrial.config.CustomConfiguration;
+import com.buuz135.industrial.proxy.ItemRegistry;
 import com.buuz135.industrial.tile.world.LaserBaseTile;
 import com.buuz135.industrial.utils.ItemStackWeightedItem;
 import com.google.common.collect.ArrayListMultimap;
 import com.google.common.collect.Multimap;
 import net.minecraft.block.material.Material;
+import net.minecraft.init.Blocks;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.crafting.IRecipe;
 import net.minecraftforge.common.config.Configuration;
 import net.minecraftforge.oredict.OreDictionary;
+import net.minecraftforge.oredict.ShapedOreRecipe;
+import net.ndrei.teslacorelib.TeslaCoreLib;
 
 public class LaserBaseBlock extends CustomOrientedBlock<LaserBaseTile> {
 
@@ -36,10 +41,29 @@ public class LaserBaseBlock extends CustomOrientedBlock<LaserBaseTile> {
                 "3 oreDiamond 0 4",
                 "14 oreRedstone 0 6",
                 "0 oreQuartz 0 4",
-                "5 oreEmerald 0 2"
+                "5 oreEmerald 0 2",
+                "13 oreUranium 0 3",
+                "4 oreSulfur 0 8",
+                "10 oreGalena 0 6",
+                "0 oreIridium 0 2",
+                "14 oreRuby 0 7",
+                "11 oreSapphire 0 7",
+                "12 oreBauxite 0 5",
+                "12 orePyrite 0 5",
+                "14 oreCinnabar 0 8",
+                "12 oreSphalerite 0 4",
+                "15 oreTungsten 0 3",
+                "0 oreSheldonite 0 1",
+                "3 orePlatinum 0 2",
+                "13 orePeridot 0 7",
+                "11 oreSoladite 0 4",
+                "14 oreTetrahedrite 0 4",
+                "8 oreTin 0 8",
+                "10 oreLead 0 5",
+                "7 oreSilver 0 5",
+                "1 oreCopper 0 10"
         }, "List of ores, format 'lensMetada itemID/oredictEntry itemMeta weight'");//TODO add modded ores
         for (String s : entries) {
-            System.out.println("adding" + s);
             String[] temp = s.split(" ");
             int lens = Integer.parseInt(temp[0]);
             int meta = Integer.parseInt(temp[2]);
@@ -67,7 +91,15 @@ public class LaserBaseBlock extends CustomOrientedBlock<LaserBaseTile> {
         return lenseChanceIncrease;
     }
 
-
+    @Override
+    protected IRecipe getRecipe() {
+        return new ShapedOreRecipe(new ItemStack(this), "pwp", "gwg", "dmd",
+                'p', ItemRegistry.plastic,
+                'w', Blocks.GLOWSTONE,
+                'g', "gearGold",
+                'd', "gearDiamond",
+                'm', TeslaCoreLib.machineCase);
+    }
 }
 
 

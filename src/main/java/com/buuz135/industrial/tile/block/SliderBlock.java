@@ -2,6 +2,7 @@ package com.buuz135.industrial.tile.block;
 
 
 import com.buuz135.industrial.IndustrialForegoing;
+import com.buuz135.industrial.proxy.ItemRegistry;
 import com.buuz135.industrial.utils.Reference;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockHorizontal;
@@ -23,6 +24,7 @@ import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.client.model.ModelLoader;
 import net.minecraftforge.fml.common.registry.GameRegistry;
+import net.minecraftforge.oredict.ShapedOreRecipe;
 import net.ndrei.teslacorelib.Utils;
 
 
@@ -41,6 +43,7 @@ public class SliderBlock extends Block {
     public void register() {
         GameRegistry.register(this);
         GameRegistry.register(new ItemBlock(this), this.getRegistryName());
+        GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(this, 3), "ppp", "iii", 'p', ItemRegistry.plastic, 'i', "ingotIron"));
     }
 
     public void registerRenderer() {

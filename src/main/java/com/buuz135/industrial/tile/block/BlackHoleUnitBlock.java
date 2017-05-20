@@ -1,18 +1,23 @@
 package com.buuz135.industrial.tile.block;
 
+import com.buuz135.industrial.proxy.ItemRegistry;
 import com.buuz135.industrial.tile.misc.BlackHoleUnitTile;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
+import net.minecraftforge.oredict.ShapedOreRecipe;
+import net.ndrei.teslacorelib.TeslaCoreLib;
 
 import java.util.Arrays;
 import java.util.List;
@@ -85,5 +90,15 @@ public class BlackHoleUnitBlock extends CustomOrientedBlock<BlackHoleUnitTile> {
         }
 
         tooltip.add("\"the BHU\"");
+    }
+
+    @Override
+    protected IRecipe getRecipe() {
+        return new ShapedOreRecipe(new ItemStack(this), "ppp", "eae", "cmc",
+                'p', ItemRegistry.plastic,
+                'e', Items.ENDER_EYE,
+                'a', Items.ENDER_PEARL,
+                'c', "chestWood",
+                'm', TeslaCoreLib.machineCase);
     }
 }

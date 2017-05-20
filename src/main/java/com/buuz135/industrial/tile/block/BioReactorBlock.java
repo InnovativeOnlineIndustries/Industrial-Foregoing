@@ -1,12 +1,17 @@
 package com.buuz135.industrial.tile.block;
 
 import com.buuz135.industrial.config.CustomConfiguration;
+import com.buuz135.industrial.proxy.ItemRegistry;
 import com.buuz135.industrial.tile.generator.BioReactorTile;
 import net.minecraft.block.material.Material;
+import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.crafting.IRecipe;
 import net.minecraftforge.common.config.Configuration;
 import net.minecraftforge.oredict.OreDictionary;
+import net.minecraftforge.oredict.ShapedOreRecipe;
+import net.ndrei.teslacorelib.TeslaCoreLib;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -55,5 +60,16 @@ public class BioReactorBlock extends CustomOrientedBlock<BioReactorTile> {
 
     public int getBaseAmount() {
         return baseAmount;
+    }
+
+    @Override
+    protected IRecipe getRecipe() {
+        return new ShapedOreRecipe(new ItemStack(this), "pep", "sms", "bcb",
+                'p', ItemRegistry.plastic,
+                'e', Items.FERMENTED_SPIDER_EYE,
+                's', Items.SLIME_BALL,
+                'm', TeslaCoreLib.machineCase,
+                'b', Items.BRICK,
+                'c', Items.SUGAR);
     }
 }
