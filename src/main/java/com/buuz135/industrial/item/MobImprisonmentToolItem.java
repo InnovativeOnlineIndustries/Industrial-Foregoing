@@ -14,6 +14,7 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumActionResult;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
@@ -46,7 +47,7 @@ public class MobImprisonmentToolItem extends IFCustomItem {
         if (target.getEntityWorld().isRemote) return false;
         if (target instanceof EntityPlayer) return false;
         if (containsEntity(stack)) return false;
-        String entityID = EntityList.getEntityString(target);
+        String entityID = EntityList.getKey(target).toString();
         if (isBlacklisted(entityID)) return false;
         NBTTagCompound nbt = new NBTTagCompound();
         nbt.setString("entity", entityID);
@@ -81,7 +82,7 @@ public class MobImprisonmentToolItem extends IFCustomItem {
     }
 
     public Entity getEntitFromStack(ItemStack stack, World world, boolean withInfo) {
-        Entity entity = EntityList.createEntityByID(stack.getTagCompound().getInteger("id"), world);
+        Entity entity = EntityList.createEntityByIDFromName(new ResourceLocation(stack.getTagCompound().getString("entity")), world);
         if (withInfo) entity.readFromNBT(stack.getTagCompound());
         return entity;
     }

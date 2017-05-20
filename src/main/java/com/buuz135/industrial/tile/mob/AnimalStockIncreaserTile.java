@@ -62,11 +62,11 @@ public class AnimalStockIncreaserTile extends WorkingAreaElectricMachine {
         List<EntityAnimal> animals = this.world.getEntitiesWithinAABB(EntityAnimal.class, area);
         if (animals.size() == 0 || animals.size() > 20) return 0;
         EntityAnimal animal1 = animals.get(0);
-        while ((animal1.isChild() || animal1.getGrowingAge() != 0 || getFirstBreedingItem(animal1).isEmpty()) && animals.indexOf(animal1) + 1 < animals.size())
+        while ((animal1.isChild() || animal1.getGrowingAge() != 0 || getFirstBreedingItem(animal1).isEmpty() || animal1.isInLove()) && animals.indexOf(animal1) + 1 < animals.size())
             animal1 = animals.get(animals.indexOf(animal1) + 1);
         if (animal1.isChild() || animal1.getGrowingAge() != 0) return 0;
         EntityAnimal animal2 = animals.get(0);
-        while ((animal2.equals(animal1) || animal2.isChild() || animal2.getGrowingAge() != 0 || getFirstBreedingItem(animal2).isEmpty()) && animals.indexOf(animal2) + 1 < animals.size())
+        while ((animal2.equals(animal1) || animal2.isChild() || animal2.getGrowingAge() != 0 || getFirstBreedingItem(animal2).isEmpty() || animal1.isInLove()) && animals.indexOf(animal2) + 1 < animals.size())
             animal2 = animals.get(animals.indexOf(animal2) + 1);
         if (animal2.equals(animal1) || animal2.isChild() || animal2.getGrowingAge() != 0) return 0;
         if (animal1.getClass() != animal2.getClass()) return 0;
