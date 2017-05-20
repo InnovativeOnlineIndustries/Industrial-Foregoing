@@ -2,13 +2,10 @@
 {
   "modid": "industrialforegoing",
   "name": "Industrial Foregoing",
-  "description": "Example placeholder mod.",
-  "version": "${version}",
-  "mcversion": "${mcversion}",
-  "url": "",
-  "updateUrl": "",
-  "authorList": ["ExampleDude"],
-  "credits": "The Forge and FML guys, for making this example",
+  "description": "A small reinvention of Minefactory Reloaded.",
+  "version": "0.1.0-BETA",
+  "mcversion": "1.11.2",
+  "authorList": ["Buuz135"],
   "logoFile": "",
   "screenshots": [],
   "requiredMods": ["teslacorelib"]

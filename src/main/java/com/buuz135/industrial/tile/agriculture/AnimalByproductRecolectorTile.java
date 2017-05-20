@@ -30,7 +30,7 @@ public class AnimalByproductRecolectorTile extends WorkingAreaElectricMachine {
 
     @Override
     public AxisAlignedBB getWorkingArea() {
-        return this.getBlockType().getSelectedBoundingBox(this.world.getBlockState(this.pos), this.world, this.pos).offset(new BlockPos(0, 1, 0)).expand(getRadius(), 0, getRadius());
+        return new AxisAlignedBB(this.pos.getX(), this.pos.getY(), this.pos.getZ(), this.pos.getX() + 1, this.pos.getY() + 1, this.pos.getZ() + 1).offset(new BlockPos(0, 1, 0)).expand(getRadius(), 0, getRadius());
     }
 
     @Override

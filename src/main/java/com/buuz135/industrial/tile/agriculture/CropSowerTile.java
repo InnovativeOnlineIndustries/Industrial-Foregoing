@@ -87,7 +87,7 @@ public class CropSowerTile extends WorkingAreaElectricMachine {
     @Override
     public AxisAlignedBB getWorkingArea() {
         BlockPos corner1 = new BlockPos(0, 2, 0);
-        return this.getBlockType().getSelectedBoundingBox(this.world.getBlockState(this.pos), this.world, this.pos).offset(corner1).expand(getRadius(), 0, getRadius());
+        return new AxisAlignedBB(this.pos.getX(), this.pos.getY(), this.pos.getZ(), this.pos.getX() + 1, this.pos.getY() + 1, this.pos.getZ() + 1).offset(corner1).expand(getRadius(), 0, getRadius());
     }
 
     @Override
