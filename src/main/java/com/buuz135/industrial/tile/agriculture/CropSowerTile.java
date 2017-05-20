@@ -120,10 +120,13 @@ public class CropSowerTile extends WorkingAreaElectricMachine {
 
     private ItemStack getFirstItem(BlockPos pos) {
         int slot = getFilteredSlot(pos);
-        for (int i = 0; i < inPlant.getSlots(); ++i)
+        for (int i = 0; i < inPlant.getSlots(); ++i) {
+            if (!inPlant.getStackInSlot(i).isEmpty() && (filterStorage[slot] == null || filterStorage[slot].isEmpty()))
+                return inPlant.getStackInSlot(i);
             if (!inPlant.getStackInSlot(i).isEmpty() && filterStorage[slot] != null && !filterStorage[slot].isEmpty() &&
                     filterStorage[slot].getItem().equals(inPlant.getStackInSlot(i).getItem()) && filterStorage[slot].getMetadata() == inPlant.getStackInSlot(i).getMetadata())
                 return inPlant.getStackInSlot(i);
+        }
         return ItemStack.EMPTY;
     }
 

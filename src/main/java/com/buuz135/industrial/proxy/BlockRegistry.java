@@ -38,7 +38,7 @@ public class BlockRegistry {
     public static LaserDrillBlock laserDrillBlock;
     public static OreProcessorBlock oreProcessorBlock;
 
-    public static SliderBlock sliderBlock;
+    //public static SliderBlock sliderBlock;
 
     public static IFCustomFluidBlock BLOCK_ESSENCE;
     public static IFCustomFluidBlock BLOCK_MILK;
@@ -81,7 +81,7 @@ public class BlockRegistry {
         (laserDrillBlock = new LaserDrillBlock()).register();
         (oreProcessorBlock = new OreProcessorBlock()).register();
 
-        (sliderBlock = new SliderBlock()).register();
+        //(sliderBlock = new SliderBlock()).register();
 
         (BLOCK_ESSENCE = new IFCustomFluidBlock(FluidsRegistry.ESSENCE, Material.WATER)).register();
         (BLOCK_MILK = new IFCustomFluidBlock(FluidsRegistry.MILK, Material.WATER)).register();

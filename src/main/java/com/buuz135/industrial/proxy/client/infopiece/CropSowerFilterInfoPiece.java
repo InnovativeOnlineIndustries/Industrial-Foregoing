@@ -12,7 +12,7 @@ public class CropSowerFilterInfoPiece extends BasicRenderedGuiPiece {
     private CropSowerTile tile;
 
     public CropSowerFilterInfoPiece(CropSowerTile tile, int left, int top) {
-        super(left, top, 67, 73, ClientProxy.GUI, 1, 72);
+        super(left, top, 67, 67, ClientProxy.GUI, 1, 72);
         this.tile = tile;
     }
 

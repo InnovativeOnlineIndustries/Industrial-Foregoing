@@ -101,7 +101,10 @@ public class SliderBlock extends Block {
     public void onEntityCollidedWithBlock(World worldIn, BlockPos pos, IBlockState state, Entity entityIn) {
         EnumFacing facing = state.getValue(FACING).getOpposite();
         Vec3i vec3i = facing.getDirectionVec();
-        entityIn.setVelocity(vec3i.getX() / 4D, vec3i.getY() / 4D, vec3i.getZ() / 4D);
+        BlockPos p = entityIn.getPosition();
+        float value = 1000000;
+        System.out.println(vec3i.getZ() / value);
+        entityIn.setPosition(p.getX() + vec3i.getX() / value, p.getY() + vec3i.getY() / value, p.getZ() + vec3i.getZ() / value);
     }
 
     @Override

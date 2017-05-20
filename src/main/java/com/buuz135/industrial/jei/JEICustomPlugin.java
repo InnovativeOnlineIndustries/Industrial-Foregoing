@@ -103,7 +103,7 @@ public class JEICustomPlugin implements IModPlugin {
         registry.addDescription(new ItemStack(BlockRegistry.laserBaseBlock), "Creates ores when charged with Laser Drills, can be focused with Laser Lenses");
         registry.addDescription(new ItemStack(BlockRegistry.laserDrillBlock), "Charges the Laser Base when it is a block away from it.");
         registry.addDescription(new ItemStack(BlockRegistry.oreProcessorBlock), "Breaks down ores into components.");
-        registry.addDescription(new ItemStack(BlockRegistry.sliderBlock), "Pushes entites around.");
+        //registry.addDescription(new ItemStack(BlockRegistry.sliderBlock), "Pushes entites around.");
     }
 
     @Override

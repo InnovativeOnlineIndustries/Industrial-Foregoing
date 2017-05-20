@@ -13,7 +13,7 @@ public class MobRenderInPrisonHandler {
 
     @SubscribeEvent
     public void onTooltip(RenderTooltipEvent.PostText event) {
-        if (event.getStack().isEmpty()) return;
+        if (event.getStack() == null || event.getStack().isEmpty()) return;
         if (event.getStack().getItem() instanceof MobImprisonmentToolItem && ((MobImprisonmentToolItem) event.getStack().getItem()).containsEntity(event.getStack())) {
             try {
                 Entity entity = EntityList.createEntityByID(event.getStack().getTagCompound().getInteger("id"), Minecraft.getMinecraft().world);
