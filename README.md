@@ -1,1 +1,3 @@
-[![Build Status](https://travis-ci.com/Buuz135/Industrial-Foregoing.svg?token=Hzdg9AGBY54xm6ox1wyC&branch=master)](https://travis-ci.com/Buuz135/Industrial-Foregoing)
+Insert decent readme here.
+
+Textures by CyanideX and the Unity team: https://mods.curse.com/texture-packs/minecraft/222097-unity
