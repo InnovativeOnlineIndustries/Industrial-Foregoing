@@ -1,6 +1,8 @@
 package com.buuz135.industrial;
 
+import com.buuz135.industrial.proxy.BlockRegistry;
 import com.buuz135.industrial.proxy.CommonProxy;
+import com.buuz135.industrial.proxy.ItemRegistry;
 import com.buuz135.industrial.utils.IFFakePlayer;
 import com.buuz135.industrial.utils.Reference;
 import net.minecraft.creativetab.CreativeTabs;
@@ -26,7 +28,7 @@ public class IndustrialForegoing {
     public static CreativeTabs creativeTab = new CreativeTabs(Reference.MOD_ID) {
         @Override
         public ItemStack getTabIconItem() {
-            return new ItemStack(Items.COAL);
+            return new ItemStack(BlockRegistry.blackHoleUnitBlock);
         }
     };
 
@@ -46,7 +48,7 @@ public class IndustrialForegoing {
         proxy.postInit();
     }
 
-    private static HashMap<Integer, IFFakePlayer> worldFakePlayer = new HashMap<Integer, IFFakePlayer>();
+    private static HashMap<Integer, IFFakePlayer> worldFakePlayer = new HashMap<>();
 
     public static IFFakePlayer getFakePlayer(World world) {
         if (worldFakePlayer.containsKey(world.provider.getDimension()))
