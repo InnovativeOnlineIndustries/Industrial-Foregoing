@@ -38,8 +38,7 @@ public abstract class WorkingAreaElectricMachine extends CustomElectricMachine {
     @Override
     public List<IGuiContainerPiece> getGuiContainerPieces(BasicTeslaGuiContainer container) {
         List<IGuiContainerPiece> list = super.getGuiContainerPieces(container);
-
-        list.add(new ToggleButtonPiece(152, 83, 16, 16) {
+        list.add(new ToggleButtonPiece(153, 84, 1, 14) {
             @Override
             protected int getCurrentState() {
                 return showArea ? 1 : 0;
@@ -55,10 +54,10 @@ public abstract class WorkingAreaElectricMachine extends CustomElectricMachine {
                 super.drawBackgroundLayer(container, guiX, guiY, partialTicks, mouseX, mouseY);
                 if (getCurrentState() == 0) {
                     container.mc.getTextureManager().bindTexture(ClientProxy.GUI);
-                    container.drawTexturedRect(this.getLeft(), this.getTop(), 78, 1, 16, 16);
+                    container.drawTexturedRect(this.getLeft()-1, this.getTop()-1, 78, 1, 16, 16);
                 } else {
                     container.mc.getTextureManager().bindTexture(ClientProxy.GUI);
-                    container.drawTexturedRect(this.getLeft(), this.getTop(),
+                    container.drawTexturedRect(this.getLeft()-1, this.getTop()-1,
                             78, 17, 16, 16);
                 }
             }
