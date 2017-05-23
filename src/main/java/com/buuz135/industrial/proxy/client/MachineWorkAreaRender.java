@@ -1,7 +1,6 @@
 package com.buuz135.industrial.proxy.client;
 
 import com.buuz135.industrial.tile.WorkingAreaElectricMachine;
-import com.buuz135.industrial.tile.world.LaserBaseTile;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.EntityPlayerSP;
 import net.minecraft.client.renderer.GlStateManager;
@@ -14,8 +13,6 @@ import net.minecraftforge.client.event.RenderWorldLastEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import org.lwjgl.opengl.GL11;
 
-import javax.vecmath.Vector2d;
-import javax.vecmath.Vector3d;
 import java.awt.*;
 
 public class MachineWorkAreaRender {

@@ -60,11 +60,11 @@ public class JEICustomPlugin implements IModPlugin {
         BlockRegistry.laserBaseBlock.getColoreOres().keySet().forEach(integer -> BlockRegistry.laserBaseBlock.getColoreOres().get(integer).forEach(temp -> laserRecipeWrappers.add(new LaserRecipeWrapper(temp, laserMaxWeight, integer))));
         registry.addRecipes(laserRecipeWrappers, laserRecipeCategory.getUid());
         registry.addRecipeCategoryCraftingItem(new ItemStack(BlockRegistry.laserDrillBlock), laserRecipeCategory.getUid());
-        registry.addRecipeCategoryCraftingItem(new ItemStack(BlockRegistry.laserBaseBlock),laserRecipeCategory.getUid());
+        registry.addRecipeCategoryCraftingItem(new ItemStack(BlockRegistry.laserBaseBlock), laserRecipeCategory.getUid());
 
 
         //Descriptions
-        registry.addDescription(new ItemStack(ItemRegistry.meatFeederItem),"The meat feeder will keep fed if it has liquid meat. (Don't ask where the meat comes, you won't like it)");
+        registry.addDescription(new ItemStack(ItemRegistry.meatFeederItem), "The meat feeder will keep fed if it has liquid meat. (Don't ask where the meat comes, you won't like it)");
         registry.addDescription(new ItemStack(ItemRegistry.mobImprisonmentToolItem), "This tool can capture mobs to be used in the Mob duplicator.");
         registry.addDescription(new ItemStack(ItemRegistry.tinyDryRubber), "Produced in the latex processing unit.");
         registry.addDescription(new ItemStack(ItemRegistry.fertilizer), "It can be used in the Plant Enrich Material Injector to make plants frow faster. Produced in the Sewer Compost Solidifier");
@@ -72,7 +72,7 @@ public class JEICustomPlugin implements IModPlugin {
         registry.addDescription(new ItemStack(ItemRegistry.adultFilterAddomItem), "It will change the filter to adults to the Animal Independence Selector.");
         registry.addDescription(new ItemStack(ItemRegistry.rangeAddonItem, 1, OreDictionary.WILDCARD_VALUE), "The range addon will increase the range of the working area of some machines.");
 
-        registry.addDescription(new ItemStack(BlockRegistry.petrifiedFuelGeneratorBlock),"This generator will generate power depending the burntime of the solid fuel. The more burn time it has the more power/tick will create. (All fuels will burn the same amount of time)");
+        registry.addDescription(new ItemStack(BlockRegistry.petrifiedFuelGeneratorBlock), "This generator will generate power depending the burntime of the solid fuel. The more burn time it has the more power/tick will create. (All fuels will burn the same amount of time)");
         registry.addDescription(new ItemStack(BlockRegistry.enchantmentRefinerBlock), "The enchantent refiner, when provider with power, it will sort enchanted items from unenchanted items.");
         registry.addDescription(new ItemStack(BlockRegistry.enchantmentExtractorBlock), "When provided with books and enchanted items it will remove the enchantment of the item and apply it to the book.");
         registry.addDescription(new ItemStack(BlockRegistry.enchantmentAplicatorBlock), "When provided with an Essence, enchanted books and items it will apply the enchantment tothe item.");
@@ -103,7 +103,7 @@ public class JEICustomPlugin implements IModPlugin {
         registry.addDescription(new ItemStack(BlockRegistry.laserBaseBlock), "Creates ores when charged with Laser Drills, can be focused with Laser Lenses");
         registry.addDescription(new ItemStack(BlockRegistry.laserDrillBlock), "Charges the Laser Base when it is a block away from it.");
         registry.addDescription(new ItemStack(BlockRegistry.oreProcessorBlock), "Breaks down ores into components.");
-        //registry.addDescription(new ItemStack(BlockRegistry.sliderBlock), "Pushes entites around.");
+        registry.addDescription(new ItemStack(BlockRegistry.blackHoleControllerBlock), "Holds up to 9 Black Hole Units allowing you to access the items that are inside of them.");
     }
 
     @Override

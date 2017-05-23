@@ -13,7 +13,7 @@ import net.ndrei.teslacorelib.TeslaCoreLib;
 public class OreProcessorBlock extends CustomOrientedBlock<OreProcessorTile> {
 
     public OreProcessorBlock() {
-        super("ore_processor", OreProcessorTile.class, Material.ROCK, 1000,40);
+        super("ore_processor", OreProcessorTile.class, Material.ROCK, 1000, 40);
     }
 
     @Override

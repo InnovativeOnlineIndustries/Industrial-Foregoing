@@ -29,14 +29,14 @@ public class ItemRegistry {
 
     public static void registerItems() {
         (tinyDryRubber = new IFCustomItem("tinydryrubber")).register();
-        (dryRubber = new IFCustomItem("dryrubber"){
+        (dryRubber = new IFCustomItem("dryrubber") {
             @Override
             public IRecipe getRecipe() {
-                return new ShapelessRecipes(new ItemStack(this), Arrays.asList(new ItemStack(tinyDryRubber),new ItemStack(tinyDryRubber),new ItemStack(tinyDryRubber),new ItemStack(tinyDryRubber),new ItemStack(tinyDryRubber),new ItemStack(tinyDryRubber),new ItemStack(tinyDryRubber),new ItemStack(tinyDryRubber),new ItemStack(tinyDryRubber)));
+                return new ShapelessRecipes(new ItemStack(this), Arrays.asList(new ItemStack(tinyDryRubber), new ItemStack(tinyDryRubber), new ItemStack(tinyDryRubber), new ItemStack(tinyDryRubber), new ItemStack(tinyDryRubber), new ItemStack(tinyDryRubber), new ItemStack(tinyDryRubber), new ItemStack(tinyDryRubber), new ItemStack(tinyDryRubber)));
             }
         }).register();
         (plastic = new IFCustomItem("plastic")).register();
-        GameRegistry.addSmelting(dryRubber,new ItemStack(plastic),0);
+        GameRegistry.addSmelting(dryRubber, new ItemStack(plastic), 0);
         (fertilizer = new IFCustomItem("fertilizer")).register();
         (meatFeederItem = new MeatFeederItem()).register();
         (mobImprisonmentToolItem = new MobImprisonmentToolItem()).register();

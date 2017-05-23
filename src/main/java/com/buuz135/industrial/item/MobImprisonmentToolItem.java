@@ -89,8 +89,8 @@ public class MobImprisonmentToolItem extends IFCustomItem {
 
     @Override
     public IRecipe getRecipe() {
-        return new ShapedRecipes(3,3,new ItemStack[]{ItemStack.EMPTY, new ItemStack(ItemRegistry.plastic),ItemStack.EMPTY,
+        return new ShapedRecipes(3, 3, new ItemStack[]{ItemStack.EMPTY, new ItemStack(ItemRegistry.plastic), ItemStack.EMPTY,
                 new ItemStack(ItemRegistry.plastic), new ItemStack(Items.GHAST_TEAR), new ItemStack(ItemRegistry.plastic),
-                ItemStack.EMPTY, new ItemStack(ItemRegistry.plastic),ItemStack.EMPTY},new ItemStack(this));
+                ItemStack.EMPTY, new ItemStack(ItemRegistry.plastic), ItemStack.EMPTY}, new ItemStack(this));
     }
 }

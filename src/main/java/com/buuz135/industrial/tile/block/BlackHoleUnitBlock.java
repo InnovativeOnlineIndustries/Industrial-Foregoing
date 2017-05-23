@@ -83,7 +83,7 @@ public class BlackHoleUnitBlock extends CustomOrientedBlock<BlackHoleUnitTile> {
         super.addInformation(stack, player, tooltip, advanced);
         if (stack.hasTagCompound()) {
             if (stack.getTagCompound().hasKey(BlackHoleUnitTile.NBT_ITEMSTACK) && stack.getTagCompound().hasKey(BlackHoleUnitTile.NBT_META)) {
-                tooltip.add(new TextComponentTranslation("text.display.block").getUnformattedText() + " " + new TextComponentTranslation(new ItemStack(Item.getByNameOrId(stack.getTagCompound().getString(BlackHoleUnitTile.NBT_ITEMSTACK)), 1, stack.getTagCompound().getInteger(BlackHoleUnitTile.NBT_META)).getUnlocalizedName() + ".name").getUnformattedText());
+                tooltip.add(new TextComponentTranslation("text.display.item").getUnformattedText() + " " + new TextComponentTranslation(new ItemStack(Item.getByNameOrId(stack.getTagCompound().getString(BlackHoleUnitTile.NBT_ITEMSTACK)), 1, stack.getTagCompound().getInteger(BlackHoleUnitTile.NBT_META)).getUnlocalizedName() + ".name").getUnformattedText());
             }
             if (stack.getTagCompound().hasKey(BlackHoleUnitTile.NBT_AMOUNT))
                 tooltip.add(new TextComponentTranslation("text.display.amount").getUnformattedText() + " " + stack.getTagCompound().getInteger(BlackHoleUnitTile.NBT_AMOUNT));
@@ -101,4 +101,34 @@ public class BlackHoleUnitBlock extends CustomOrientedBlock<BlackHoleUnitTile> {
                 'c', "chestWood",
                 'm', TeslaCoreLib.machineCase);
     }
+
+    public ItemStack getItemStack(ItemStack blackHole) {
+        NBTTagCompound compound = blackHole.getTagCompound();
+        ItemStack stack = ItemStack.EMPTY;
+        if (compound == null || !compound.hasKey(BlackHoleUnitTile.NBT_ITEMSTACK)) return stack;
+        Item item = Item.getByNameOrId(compound.getString(BlackHoleUnitTile.NBT_ITEMSTACK));
+        if (item != null) {
+            stack = new ItemStack(item, 1, compound.hasKey(BlackHoleUnitTile.NBT_META) ? compound.getInteger(BlackHoleUnitTile.NBT_META) : 0);
+            if (compound.hasKey(BlackHoleUnitTile.NBT_ITEM_NBT))
+                stack.setTagCompound(compound.getCompoundTag(BlackHoleUnitTile.NBT_ITEM_NBT));
+        }
+        return stack;
+    }
+
+    public int getAmount(ItemStack blackHole) {
+        NBTTagCompound compound = blackHole.getTagCompound();
+        int amount = 0;
+        if (compound != null && compound.hasKey(BlackHoleUnitTile.NBT_AMOUNT)) {
+            amount = compound.getInteger(BlackHoleUnitTile.NBT_AMOUNT);
+        }
+        return amount;
+    }
+
+    public void setAmount(ItemStack blackHole, int amount) {
+        NBTTagCompound compound = blackHole.getTagCompound();
+        if (compound != null) {
+            compound.setInteger(BlackHoleUnitTile.NBT_AMOUNT, amount);
+        }
+    }
+
 }

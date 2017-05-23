@@ -1,6 +1,5 @@
 package com.buuz135.industrial.item;
 
-import com.buuz135.industrial.IndustrialForegoing;
 import com.buuz135.industrial.proxy.FluidsRegistry;
 import com.buuz135.industrial.proxy.ItemRegistry;
 import net.minecraft.entity.player.EntityPlayer;
@@ -57,7 +56,7 @@ public class MeatFeederItem extends IFCustomItem {
 
     @Override
     public IRecipe getRecipe() {
-        return  new ShapedOreRecipe(new ItemStack(this),"pip","gig"," i ",
+        return new ShapedOreRecipe(new ItemStack(this), "pip", "gig", " i ",
                 'p', ItemRegistry.plastic,
                 'i', "ingotIron",
                 'g', Items.GLASS_BOTTLE);

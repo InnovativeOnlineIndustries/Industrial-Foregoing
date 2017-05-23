@@ -10,9 +10,6 @@ import net.minecraft.item.crafting.ShapedRecipes;
 import net.minecraft.util.NonNullList;
 import net.minecraftforge.client.model.ModelLoader;
 import net.minecraftforge.fml.common.registry.GameRegistry;
-import scala.xml.dtd.EMPTY;
-
-import java.util.Arrays;
 
 public class LaserLensItem extends IFCustomItem {
 
@@ -30,9 +27,10 @@ public class LaserLensItem extends IFCustomItem {
     @Override
     public void register() {
         super.register();
-        for (int i = 0; i < 16; ++i) GameRegistry.addRecipe(new ShapedRecipes(3,3, new ItemStack[]{ItemStack.EMPTY,new ItemStack(Items.IRON_INGOT),ItemStack.EMPTY,
-                new ItemStack(Items.IRON_INGOT), new ItemStack(Blocks.STAINED_GLASS_PANE,1,i),new ItemStack(Items.IRON_INGOT),
-                ItemStack.EMPTY,new ItemStack(Items.IRON_INGOT),ItemStack.EMPTY},new ItemStack(this,1,i)));
+        for (int i = 0; i < 16; ++i)
+            GameRegistry.addRecipe(new ShapedRecipes(3, 3, new ItemStack[]{ItemStack.EMPTY, new ItemStack(Items.IRON_INGOT), ItemStack.EMPTY,
+                    new ItemStack(Items.IRON_INGOT), new ItemStack(Blocks.STAINED_GLASS_PANE, 1, i), new ItemStack(Items.IRON_INGOT),
+                    ItemStack.EMPTY, new ItemStack(Items.IRON_INGOT), ItemStack.EMPTY}, new ItemStack(this, 1, i)));
     }
 
     @Override

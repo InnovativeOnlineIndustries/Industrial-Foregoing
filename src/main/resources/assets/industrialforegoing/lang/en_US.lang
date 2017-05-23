@@ -4,6 +4,7 @@ text.display.burning=Burning time:
 text.display.producing=Producing:
 text.display.amount=Amount:
 text.display.block=Block:
+text.display.item=Item:
 text.display.empty=Empty
 
 tile.industrialforegoing_petrified_fuel_generator.name=Petrified Fuel Generator
@@ -37,6 +38,7 @@ tile.industrialforegoing_biofuel_generator.name=Biofuel Generator
 tile.industrialforegoing_laser_base.name=Laser Base
 tile.industrialforegoing_laser_drill.name=Laser Drill
 tile.industrialforegoing_ore_processor.name=Ore Processor
+tile.industrialforegoing_black_hole_controller.name=Black Hole Controller
 
 tile.slider.name=Slider
 

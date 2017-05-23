@@ -1,16 +1,14 @@
 {
   "forge_marker": 1,
   "defaults": {
-    "model": "industrialforegoing:mob_slaughter_factory"
+    "model": "industrialforegoing:black_hole_controller"
   },
   "variants": {
     "normal": [
       {}
     ],
     "inventory": [
-      {
-        "y": 180
-      }
+      {}
     ],
     "facing": {
       "north": {},

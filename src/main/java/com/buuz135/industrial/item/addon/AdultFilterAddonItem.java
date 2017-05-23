@@ -20,8 +20,8 @@ public class AdultFilterAddonItem extends CustomAddon {
 
     @Override
     protected IRecipe getRecipe() {
-        return new ShapedOreRecipe(new ItemStack(this),"gpg","gmg","gpg",
-                'g',"nuggetGold",
+        return new ShapedOreRecipe(new ItemStack(this), "gpg", "gmg", "gpg",
+                'g', "nuggetGold",
                 'p', ItemRegistry.plastic,
                 'm', "egg");
     }

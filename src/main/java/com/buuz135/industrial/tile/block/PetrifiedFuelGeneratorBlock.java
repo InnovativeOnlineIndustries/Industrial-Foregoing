@@ -6,7 +6,6 @@ import net.minecraft.block.material.Material;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.IRecipe;
-import net.minecraft.item.crafting.ShapedRecipes;
 import net.minecraftforge.oredict.ShapedOreRecipe;
 import net.ndrei.teslacorelib.TeslaCoreLib;
 
@@ -18,7 +17,7 @@ public class PetrifiedFuelGeneratorBlock extends CustomOrientedBlock<PetrifiedFu
 
     @Override
     protected IRecipe getRecipe() {
-        return new ShapedOreRecipe(new ItemStack(this,1),"pdp","gmg","pfp",
+        return new ShapedOreRecipe(new ItemStack(this, 1), "pdp", "gmg", "pfp",
                 'p', ItemRegistry.plastic,
                 'd', "gemDiamond",
                 'g', "gearGold",
