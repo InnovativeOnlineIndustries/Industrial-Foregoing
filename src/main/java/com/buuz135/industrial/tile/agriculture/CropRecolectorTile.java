@@ -6,8 +6,10 @@ import com.buuz135.industrial.tile.WorkingAreaElectricMachine;
 import com.buuz135.industrial.tile.block.CropRecolectorBlock;
 import com.buuz135.industrial.tile.block.CustomOrientedBlock;
 import com.buuz135.industrial.utils.BlockUtils;
+import net.minecraft.block.BlockCactus;
 import net.minecraft.block.BlockCrops;
 import net.minecraft.block.BlockNetherWart;
+import net.minecraft.block.BlockReed;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.item.EnumDyeColor;
 import net.minecraft.item.ItemStack;
@@ -78,24 +80,26 @@ public class CropRecolectorTile extends WorkingAreaElectricMachine {
             IBlockState state = this.world.getBlockState(blockPos.get(pointer));
             if ((state.getBlock() instanceof BlockCrops && ((BlockCrops) state.getBlock()).isMaxAge(state)) || (state.getBlock() instanceof BlockNetherWart && state.getValue(BlockNetherWart.AGE) >= 3)) {
                 List<ItemStack> drops = state.getBlock().getDrops(this.world, blockPos.get(pointer), state, 0);
-                boolean canInsert = true;
-                for (ItemStack stack : drops) {
-                    if (!ItemHandlerHelper.insertItem(outItems, stack, true).isEmpty()) {
-                        canInsert = false;
-                        break;
-                    }
-                }
-                if (canInsert) {
-                    for (ItemStack stack : drops) {
-                        ItemHandlerHelper.insertItem(outItems, stack, false);
-                    }
-                    sludge.fill(new FluidStack(FluidsRegistry.SLUDGE, ((CropRecolectorBlock) this.getBlockType()).getSludgeOperation()), true);
-                    this.world.setBlockToAir(blockPos.get(pointer));
+                if (canInsertAll(drops,outItems)) {
+                    insertItemsAndRemove(drops,pos,outItems);
                 }
             } else if (BlockUtils.isLog(this.world, pos)) {
                 List<BlockPos> chopped = doRecursiveChopping(world, pos, new ArrayList<>(), new ArrayList<>());
                 needPointerIncrease = false;
                 sludge.fill(new FluidStack(FluidsRegistry.SLUDGE, ((CropRecolectorBlock) this.getBlockType()).getSludgeOperation() * chopped.size()), true);
+            }else if ((state.getBlock() instanceof BlockCactus || state.getBlock() instanceof BlockReed)){
+                if (state.getBlock().equals(this.world.getBlockState(pos.offset(EnumFacing.UP,2)).getBlock())){
+                    List<ItemStack> drops = state.getBlock().getDrops(this.world, blockPos.get(pointer), state, 0);
+                    if (canInsertAll(drops,outItems)){
+                        insertItemsAndRemove(drops,pos.offset(EnumFacing.UP,2), outItems);
+                    }
+                }
+                if (state.getBlock().equals(this.world.getBlockState(pos.offset(EnumFacing.UP,1)).getBlock())){
+                    List<ItemStack> drops = state.getBlock().getDrops(this.world, blockPos.get(pointer), state, 0);
+                    if (canInsertAll(drops,outItems)){
+                        insertItemsAndRemove(drops,pos.offset(EnumFacing.UP,1), outItems);
+                    }
+                }
             }
         } else {
             pointer = 0;
@@ -152,5 +156,22 @@ public class CropRecolectorTile extends WorkingAreaElectricMachine {
         return blocksChopped;
     }
 
+    private boolean canInsertAll(List<ItemStack> drops, ItemStackHandler outItems){
+        boolean canInsert = true;
+        for (ItemStack stack : drops) {
+            if (!ItemHandlerHelper.insertItem(outItems, stack, true).isEmpty()) {
+                canInsert = false;
+                break;
+            }
+        }
+        return canInsert;
+    }
 
+    private void insertItemsAndRemove(List<ItemStack> drops, BlockPos blockPos, ItemStackHandler outItems){
+        for (ItemStack stack : drops) {
+            ItemHandlerHelper.insertItem(outItems, stack, false);
+        }
+        sludge.fill(new FluidStack(FluidsRegistry.SLUDGE, ((CropRecolectorBlock) this.getBlockType()).getSludgeOperation()), true);
+        this.world.setBlockToAir(blockPos);
+    }
 }
