@@ -36,7 +36,7 @@ public class BlockRenderRegistry {
         laserBaseBlock.registerRenderer();
         laserDrillBlock.registerRenderer();
         oreProcessorBlock.registerRenderer();
-
+        blackHoleControllerBlock.registerRenderer();
         //sliderBlock.registerRenderer();
     }
 }
