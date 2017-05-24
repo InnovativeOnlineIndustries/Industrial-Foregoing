@@ -43,6 +43,7 @@ public class CustomConfiguration {
             laserDrillBlock.getMachineConfig();
             oreProcessorBlock.getMachineConfig();
             blackHoleControllerBlock.getMachineConfig();
+            dyeMixerBlock.getMachineConfig();
             //sliderBlock.getMachineConfig();
         } catch (Exception e) {
 

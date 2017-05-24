@@ -202,7 +202,6 @@ public class BlackHoleControllerTile extends SidedTileEntity {
                 }
             }
             return ItemStack.EMPTY;
-
         }
 
         @Nonnull

@@ -38,6 +38,7 @@ public class BlockRegistry {
     public static LaserDrillBlock laserDrillBlock;
     public static OreProcessorBlock oreProcessorBlock;
     public static BlackHoleControllerBlock blackHoleControllerBlock;
+    public static DyeMixerBlock dyeMixerBlock;
 
     //public static SliderBlock sliderBlock;
 
@@ -82,6 +83,7 @@ public class BlockRegistry {
         (laserDrillBlock = new LaserDrillBlock()).register();
         (oreProcessorBlock = new OreProcessorBlock()).register();
         (blackHoleControllerBlock = new BlackHoleControllerBlock()).register();
+        (dyeMixerBlock = new DyeMixerBlock()).register();
 
         //(sliderBlock = new SliderBlock()).register();
 

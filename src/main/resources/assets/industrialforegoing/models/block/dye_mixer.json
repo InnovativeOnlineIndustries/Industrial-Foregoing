@@ -1,0 +1,7 @@
+{
+  "parent": "industrialforegoing:block/base_block",
+  "textures": {
+    "up": "industrialforegoing:blocks/dye_mixer_top",
+    "north": "industrialforegoing:blocks/dye_mixer_front"
+  }
+}
