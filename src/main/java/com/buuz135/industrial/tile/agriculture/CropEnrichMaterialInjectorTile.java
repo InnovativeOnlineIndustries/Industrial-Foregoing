@@ -7,6 +7,7 @@ import com.buuz135.industrial.tile.WorkingAreaElectricMachine;
 import com.buuz135.industrial.tile.block.CustomOrientedBlock;
 import com.buuz135.industrial.utils.BlockUtils;
 import net.minecraft.block.BlockCrops;
+import net.minecraft.block.BlockDoublePlant;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.EnumDyeColor;
@@ -72,7 +73,7 @@ public class CropEnrichMaterialInjectorTile extends WorkingAreaElectricMachine {
         if (pointer >= blockPos.size()) pointer = 0;
         if (pointer < blockPos.size()) {
             BlockPos pos = blockPos.get(pointer);
-            if ((this.world.getBlockState(pos).getBlock() instanceof BlockCrops && this.world.getBlockState(pos).getValue(BlockCrops.AGE) < 7) || this.world.getBlockState(pos).getBlock().equals(Blocks.SAPLING)) {
+            if ((this.world.getBlockState(pos).getBlock() instanceof BlockCrops && this.world.getBlockState(pos).getValue(BlockCrops.AGE) < 7) || this.world.getBlockState(pos).getBlock().equals(Blocks.SAPLING) || this.world.getBlockState(pos).getBlock() instanceof BlockDoublePlant) {
                 ItemStack stack = getFirstItem();
                 if (!stack.isEmpty()) {
                     FakePlayer player = IndustrialForegoing.getFakePlayer(this.world);
