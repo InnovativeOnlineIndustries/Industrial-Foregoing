@@ -38,7 +38,7 @@ public abstract class WorkingAreaElectricMachine extends CustomElectricMachine {
     @Override
     public List<IGuiContainerPiece> getGuiContainerPieces(BasicTeslaGuiContainer container) {
         List<IGuiContainerPiece> list = super.getGuiContainerPieces(container);
-        list.add(new ToggleButtonPiece(153, 84, 1, 14) {
+        list.add(new ToggleButtonPiece(153, 84, 14, 14) {
             @Override
             protected int getCurrentState() {
                 return showArea ? 1 : 0;
