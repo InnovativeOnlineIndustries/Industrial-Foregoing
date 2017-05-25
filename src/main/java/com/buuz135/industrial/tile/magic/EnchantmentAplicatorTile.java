@@ -6,6 +6,7 @@ import com.buuz135.industrial.tile.CustomColoredItemHandler;
 import com.buuz135.industrial.tile.CustomElectricMachine;
 import com.buuz135.industrial.tile.block.CustomOrientedBlock;
 import net.minecraft.enchantment.Enchantment;
+import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.init.Items;
 import net.minecraft.item.EnumDyeColor;
 import net.minecraft.item.ItemEnchantedBook;
@@ -104,20 +105,11 @@ public class EnchantmentAplicatorTile extends CustomElectricMachine {
 
     public double getLevels() {
         NBTTagList list = ((ItemEnchantedBook) inEnchantedBook.getStackInSlot(0).getItem()).getEnchantments(inEnchantedBook.getStackInSlot(0));
-        double amount = list.tagCount();
+        double amount = 0;
         for (int i = 0; i < list.tagCount(); ++i) {
             NBTTagCompound compound = ((NBTTagCompound) list.get(i));
-            //Enchantment enchantment = Enchantment.getEnchantmentByID()
-            amount *= (1 + compound.getShort("lvl") / 10D);
-        }
-        if (inItem.getStackInSlot(0).isItemEnchanted()) {
-            list = inItem.getStackInSlot(0).getEnchantmentTagList();
-            amount *= list.tagCount();
-            for (int i = 0; i < list.tagCount(); ++i) {
-                NBTTagCompound compound = ((NBTTagCompound) list.get(i));
-                //Enchantment enchantment = Enchantment.getEnchantmentByID()
-                amount *= (1 + compound.getShort("lvl") / 10D);
-            }
+            amount += EnchantmentHelper.calcItemStackEnchantability(this.world.rand, compound.getInteger("id"), compound.getShort("lvl"), inItem.getStackInSlot(0));
+
         }
         return amount;
     }
@@ -129,25 +121,23 @@ public class EnchantmentAplicatorTile extends CustomElectricMachine {
     @Override
     protected float performWork() {
         if (((CustomOrientedBlock) this.getBlockType()).isWorkDisabled()) return 0;
-
+        //EnchantmentHelper.buildEnchantmentList(this.world.rand,ItemStack.EMPTY,30, true); //TODO the auto enchanting
         if (!canWork()) return 0;
-        int xp = (int) (getLevels() * 1000);
+        int xp = (int) (getLevels() * 100);
         if (experienceTank.getFluidAmount() >= xp && ItemHandlerHelper.insertItem(outEnchantedItem, inItem.getStackInSlot(0), true).isEmpty()) {
             NBTTagList list = ((ItemEnchantedBook) inEnchantedBook.getStackInSlot(0).getItem()).getEnchantments(inEnchantedBook.getStackInSlot(0));
+            ItemStack stack = inItem.getStackInSlot(0).copy();
             for (int i = 0; i < list.tagCount(); ++i) {
                 NBTTagCompound compound = ((NBTTagCompound) list.get(i));
                 Enchantment enchantment = Enchantment.getEnchantmentByID(compound.getShort("id"));
-                ItemStack stack = inItem.getStackInSlot(0).copy();
                 stack.addEnchantment(enchantment, compound.getShort("lvl"));
-                ItemHandlerHelper.insertItem(outEnchantedItem, stack, false);
-
-                inItem.getStackInSlot(0).setCount(0);
-                inEnchantedBook.getStackInSlot(0).setCount(0);
-                experienceTank.drain(xp, true);
-                return 500;
             }
+            ItemHandlerHelper.insertItem(outEnchantedItem, stack, false);
+            inItem.getStackInSlot(0).setCount(0);
+            inEnchantedBook.getStackInSlot(0).setCount(0);
+            experienceTank.drain(xp, true);
+            return 500;
         }
-
         return 0;
     }
 }
