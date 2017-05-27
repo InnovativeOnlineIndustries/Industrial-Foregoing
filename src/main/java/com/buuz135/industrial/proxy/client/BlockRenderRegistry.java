@@ -38,6 +38,7 @@ public class BlockRenderRegistry {
         oreProcessorBlock.registerRenderer();
         blackHoleControllerBlock.registerRenderer();
         dyeMixerBlock.registerRenderer();
+        enchantmentInvokerBlock.registerRenderer();
         //sliderBlock.registerRenderer();
     }
 }
