@@ -1,40 +1,42 @@
-package com.buuz135.industrial.tile.magic;
+package com.buuz135.industrial.tile.agriculture;
 
-import com.buuz135.industrial.proxy.FluidsRegistry;
 import com.buuz135.industrial.tile.CustomColoredItemHandler;
 import com.buuz135.industrial.tile.CustomElectricMachine;
-import com.buuz135.industrial.tile.block.CustomOrientedBlock;
-import net.minecraft.enchantment.EnchantmentHelper;
+import net.minecraft.block.Block;
+import net.minecraft.init.Blocks;
 import net.minecraft.item.EnumDyeColor;
 import net.minecraft.item.ItemStack;
+import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fluids.IFluidTank;
 import net.minecraftforge.items.ItemHandlerHelper;
 import net.minecraftforge.items.ItemStackHandler;
 import net.ndrei.teslacorelib.inventory.BoundingRectangle;
 
-public class EnchantmentInvokerTile extends CustomElectricMachine {
+public class SporesRecreatorTile extends CustomElectricMachine {
 
-    private IFluidTank essenceTank;
+    private IFluidTank waterTank;
     private ItemStackHandler input;
     private ItemStackHandler output;
 
-    public EnchantmentInvokerTile() {
-        super(EnchantmentInvokerTile.class.getName().hashCode());
+    public SporesRecreatorTile() {
+        super(SporesRecreatorTile.class.getName().hashCode());
     }
 
     @Override
     protected void initializeInventories() {
         super.initializeInventories();
+        waterTank = this.addFluidTank(FluidRegistry.WATER, 8000, EnumDyeColor.BLUE, "Water tank", new BoundingRectangle(18 * 2 + 13, 25, 18, 54));
         input = new ItemStackHandler(3) {
             @Override
             protected void onContentsChanged(int slot) {
-                EnchantmentInvokerTile.this.markDirty();
+                SporesRecreatorTile.this.markDirty();
             }
         };
-        this.addInventory(new CustomColoredItemHandler(input, EnumDyeColor.BLUE, "Input items", 18 * 2 + 13, 25, 1, 3) {
+        this.addInventory(new CustomColoredItemHandler(input, EnumDyeColor.RED, "Input items", 18 * 5, 25, 1, 3) {
             @Override
             public boolean canInsertItem(int slot, ItemStack stack) {
-                return stack.isItemEnchantable();
+                Block block = Block.getBlockFromItem(stack.getItem());
+                return block.equals(Blocks.BROWN_MUSHROOM) || block.equals(Blocks.RED_MUSHROOM);
             }
 
             @Override
@@ -43,11 +45,10 @@ public class EnchantmentInvokerTile extends CustomElectricMachine {
             }
         });
         this.addInventoryToStorage(input, "input");
-        essenceTank = this.addFluidTank(FluidsRegistry.ESSENCE, 32000, EnumDyeColor.LIME, "Experience tank", new BoundingRectangle(18 * 4, 25, 18, 54));
         output = new ItemStackHandler(9) {
             @Override
             protected void onContentsChanged(int slot) {
-                EnchantmentInvokerTile.this.markDirty();
+                SporesRecreatorTile.this.markDirty();
             }
         };
         this.addInventory(new CustomColoredItemHandler(output, EnumDyeColor.ORANGE, "Output items", 18 * 6 + 5, 25, 3, 3) {
@@ -66,13 +67,13 @@ public class EnchantmentInvokerTile extends CustomElectricMachine {
 
     @Override
     protected float performWork() {
-        if (((CustomOrientedBlock) this.getBlockType()).isWorkDisabled()) return 0;//enchantment_invoker
-
         ItemStack stack = getFirstItem();
-        if (essenceTank.getFluidAmount() >= 3000 && !stack.isEmpty() && ItemHandlerHelper.insertItem(output, stack, true).isEmpty()) {
-            essenceTank.drain(3000, true);
-            ItemHandlerHelper.insertItem(output, EnchantmentHelper.addRandomEnchantment(this.world.rand, stack.copy(), 30, true), false);
-            stack.setCount(0);
+        if (!stack.isEmpty() && waterTank.getFluidAmount() >= 500 && ItemHandlerHelper.insertItem(output, stack.copy(), true).isEmpty()) {
+            ItemStack out = stack.copy();
+            out.setCount(2);
+            ItemHandlerHelper.insertItem(output, out, false);
+            waterTank.drain(500, true);
+            stack.setCount(stack.getCount() - 1);
             return 1;
         }
         return 0;

@@ -39,6 +39,7 @@ public class BlockRenderRegistry {
         blackHoleControllerBlock.registerRenderer();
         dyeMixerBlock.registerRenderer();
         enchantmentInvokerBlock.registerRenderer();
+        sporesRecreatorBlock.registerRenderer();
         //sliderBlock.registerRenderer();
     }
 }

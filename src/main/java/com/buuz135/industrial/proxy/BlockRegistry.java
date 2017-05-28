@@ -40,6 +40,7 @@ public class BlockRegistry {
     public static BlackHoleControllerBlock blackHoleControllerBlock;
     public static DyeMixerBlock dyeMixerBlock;
     public static EnchantmentInvokerBlock enchantmentInvokerBlock;
+    public static SporesRecreatorBlock sporesRecreatorBlock;
 
     //public static SliderBlock sliderBlock;
 
@@ -86,6 +87,7 @@ public class BlockRegistry {
         (blackHoleControllerBlock = new BlackHoleControllerBlock()).register();
         (dyeMixerBlock = new DyeMixerBlock()).register();
         (enchantmentInvokerBlock = new EnchantmentInvokerBlock()).register();
+        (sporesRecreatorBlock = new SporesRecreatorBlock()).register();
 
         //(sliderBlock = new SliderBlock()).register();
 

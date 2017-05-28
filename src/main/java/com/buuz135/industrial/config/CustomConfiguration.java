@@ -45,6 +45,7 @@ public class CustomConfiguration {
             blackHoleControllerBlock.getMachineConfig();
             dyeMixerBlock.getMachineConfig();
             enchantmentInvokerBlock.getMachineConfig();
+            sporesRecreatorBlock.getMachineConfig();
             //sliderBlock.getMachineConfig();
         } catch (Exception e) {
 

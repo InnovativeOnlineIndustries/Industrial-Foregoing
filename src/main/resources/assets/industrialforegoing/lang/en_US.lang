@@ -41,6 +41,7 @@ tile.industrialforegoing_ore_processor.name=Ore Processor
 tile.industrialforegoing_black_hole_controller.name=Black Hole Controller
 tile.industrialforegoing_dye_mixer.name=Dye Mixer
 tile.industrialforegoing_enchantment_invoker.name=Enchantment Invoker
+tile.industrialforegoing_spores_recreator.name=Spores Recreator
 
 tile.slider.name=Slider
 
