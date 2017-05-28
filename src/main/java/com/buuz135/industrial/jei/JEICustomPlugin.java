@@ -104,6 +104,9 @@ public class JEICustomPlugin implements IModPlugin {
         registry.addDescription(new ItemStack(BlockRegistry.laserDrillBlock), "Charges the Laser Base when it is a block away from it.");
         registry.addDescription(new ItemStack(BlockRegistry.oreProcessorBlock), "Breaks down ores into components.");
         registry.addDescription(new ItemStack(BlockRegistry.blackHoleControllerBlock), "Holds up to 9 Black Hole Units allowing you to access the items that are inside of them.");
+        registry.addDescription(new ItemStack(BlockRegistry.dyeMixerBlock), "Makes dyes more efficiently, needs a lens to select the color.");
+        registry.addDescription(new ItemStack(BlockRegistry.enchantmentInvokerBlock), "Enchants items with a level 30 enchant using 3 buckets of essence.");
+        registry.addDescription(new ItemStack(BlockRegistry.sporesRecreatorBlock), "Spreads mushrooms spores to grow mushrooms");
     }
 
     @Override
