@@ -10,8 +10,17 @@ buildscript {
 apply plugin: 'net.minecraftforge.gradle.forge'
 //Only edit below this line, the above code adds and enables the necessary things for Forge to be setup.
 
+String build = ""
+if (project.hasProperty("teamcity")) {
+    build = System.getenv("BUILD_NUMBER")
+}
 
-version = "${project.minecraft_version}-${project.mod_version}"
+if (build == null || build == ""){
+    version = "${config.minecraft_version}-${config.mod_version}"
+}else{
+    version = "${config.minecraft_version}-${config.mod_version}-"+ build
+}
+
 group = "com.buuz135.industrial.IndustrialForegoing" // http://maven.apache.org/guides/mini/guide-naming-conventions.html
 archivesBaseName = "industrialforegoing"
 
