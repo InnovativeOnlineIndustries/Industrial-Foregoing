@@ -88,37 +88,12 @@ public class BioReactorTile extends CustomElectricMachine {
         return pieces;
     }
 
-    @Override
-    public void protectedUpdate() {
-        super.protectedUpdate();
-        for (int i = 0; i < buffer.getSlots() - 1; ++i) {
-            if (buffer.getStackInSlot(i).isEmpty()) {
-                int tempI = i;
-                while (tempI < buffer.getSlots()) {
-                    if (!buffer.getStackInSlot(tempI).isEmpty()) {
-                        buffer.setStackInSlot(i, buffer.getStackInSlot(tempI).copy());
-                        buffer.setStackInSlot(tempI, ItemStack.EMPTY);
-                        break;
-                    }
-                    ++tempI;
-                }
-            }
-        }
-        for (int i = 0; i < input.getSlots(); ++i) {
-            if (!alreadyContains(buffer, input.getStackInSlot(i), 16)) {
-                ItemStack out = input.getStackInSlot(i).copy();
-                out.setCount(1);
-                if (ItemHandlerHelper.insertItem(buffer, out, true).isEmpty()) {
-                    ItemHandlerHelper.insertItem(buffer, out, false);
-                    input.getStackInSlot(i).setCount(input.getStackInSlot(i).getCount() - 1);
-                }
-            }
-        }
-    }
 
     @Override
     protected float performWork() {
         if (((CustomOrientedBlock) this.getBlockType()).isWorkDisabled()) return 0;
+
+        for (int z = 0; z < 4; ++z) moveItems();
 
         if (getEfficiency() < 0) return 0;
         FluidStack stack = new FluidStack(FluidsRegistry.BIOFUEL, getProducedAmountItem() * getItemAmount());
@@ -128,6 +103,7 @@ public class BioReactorTile extends CustomElectricMachine {
                 if (!buffer.getStackInSlot(i).isEmpty())
                     buffer.getStackInSlot(i).setCount(buffer.getStackInSlot(i).getCount() - 1);
             }
+            moveItems();
             return 1;
         }
         return 0;
@@ -159,5 +135,31 @@ public class BioReactorTile extends CustomElectricMachine {
         if (eff < 0) return 0;
         int base = ((BioReactorBlock) this.getBlockType()).getBaseAmount();
         return (int) (getEfficiency() * base + base);
+    }
+
+    public void moveItems(){
+        for (int i = 0; i < buffer.getSlots() - 1; ++i) {
+            if (buffer.getStackInSlot(i).isEmpty()) {
+                int tempI = i;
+                while (tempI < buffer.getSlots()) {
+                    if (!buffer.getStackInSlot(tempI).isEmpty()) {
+                        buffer.setStackInSlot(i, buffer.getStackInSlot(tempI).copy());
+                        buffer.setStackInSlot(tempI, ItemStack.EMPTY);
+                        break;
+                    }
+                    ++tempI;
+                }
+            }
+        }
+        for (int i = 0; i < input.getSlots(); ++i) {
+            if (!alreadyContains(buffer, input.getStackInSlot(i), 16)) {
+                ItemStack out = input.getStackInSlot(i).copy();
+                out.setCount(1);
+                if (ItemHandlerHelper.insertItem(buffer, out, true).isEmpty()) {
+                    ItemHandlerHelper.insertItem(buffer, out, false);
+                    input.getStackInSlot(i).setCount(input.getStackInSlot(i).getCount() - 1);
+                }
+            }
+        }
     }
 }
