@@ -1,6 +1,5 @@
 package com.buuz135.industrial.tile.block;
 
-import com.buuz135.industrial.proxy.ItemRegistry;
 import com.buuz135.industrial.tile.world.LatexProcessingUnitTile;
 import net.minecraft.block.material.Material;
 import net.minecraft.init.Blocks;
@@ -19,7 +18,7 @@ public class LatexProcessingUnitBlock extends CustomOrientedBlock<LatexProcessin
     @Override
     protected IRecipe getRecipe() {
         return new ShapedOreRecipe(new ItemStack(this), "prp", "fmf", "pgp",
-                'p', ItemRegistry.plastic,
+                'p', "ingotIron",
                 'r', Items.REDSTONE,
                 'f', Blocks.FURNACE,
                 'm', TeslaCoreLib.machineCase,
