@@ -10,6 +10,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.item.crafting.ShapelessRecipes;
 import net.minecraftforge.fml.common.registry.GameRegistry;
+import net.minecraftforge.oredict.OreDictionary;
 
 import java.util.Arrays;
 
@@ -36,6 +37,7 @@ public class ItemRegistry {
             }
         }).register();
         (plastic = new IFCustomItem("plastic")).register();
+        OreDictionary.registerOre("itemRubber", plastic);
         GameRegistry.addSmelting(dryRubber, new ItemStack(plastic), 0);
         (fertilizer = new IFCustomItem("fertilizer")).register();
         (meatFeederItem = new MeatFeederItem()).register();
