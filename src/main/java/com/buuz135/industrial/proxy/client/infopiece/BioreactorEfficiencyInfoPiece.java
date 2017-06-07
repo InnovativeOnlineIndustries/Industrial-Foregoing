@@ -13,7 +13,7 @@ public class BioreactorEfficiencyInfoPiece extends BasicRenderedGuiPiece {
     private BioReactorTile tile;
 
     public BioreactorEfficiencyInfoPiece(BioReactorTile tile, int left, int top) {
-        super(left, top, 50, 14, ClientProxy.GUI, 1, 140);
+        super(left, top, 18, 54, ClientProxy.GUI, 93, 72);
         this.tile = tile;
     }
 
@@ -21,7 +21,8 @@ public class BioreactorEfficiencyInfoPiece extends BasicRenderedGuiPiece {
     public void drawBackgroundLayer(BasicTeslaGuiContainer container, int guiX, int guiY, float partialTicks, int mouseX, int mouseY) {
         super.drawBackgroundLayer(container, guiX, guiY, partialTicks, mouseX, mouseY);
         container.mc.getTextureManager().bindTexture(ClientProxy.GUI);
-        container.drawTexturedRect(this.getLeft() + 1, this.getTop() + 1, 1, 155, (int) (50 * this.tile.getEfficiency()), 12);
+        double work = tile.getEfficiency();
+        container.drawTexturedRect(this.getLeft() + 3, (int) (this.getTop() + 3 + (50 - (50 * work))), 112, (int) (72 + (50 - (50 * work))), 12, (int) (work * 50));
 
     }
 

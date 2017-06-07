@@ -21,7 +21,6 @@ import java.util.List;
 public class BioReactorTile extends CustomElectricMachine {
 
     private ItemStackHandler input;
-    private ItemStackHandler buffer;
     private IFluidTank tank;
 
     public BioReactorTile() {
@@ -31,26 +30,8 @@ public class BioReactorTile extends CustomElectricMachine {
     @Override
     protected void initializeInventories() {
         super.initializeInventories();
-        tank = this.addFluidTank(FluidsRegistry.BIOFUEL, 8000, EnumDyeColor.PURPLE, "Biofuel tank", new BoundingRectangle(44, 25, 18, 54));
+        tank = this.addFluidTank(FluidsRegistry.BIOFUEL, 8000, EnumDyeColor.PURPLE, "Biofuel tank", new BoundingRectangle(48, 25, 18, 54));
         input = new ItemStackHandler(9) {
-            @Override
-            protected void onContentsChanged(int slot) {
-                BioReactorTile.this.markDirty();
-            }
-        };
-        this.addInventory(new CustomColoredItemHandler(input, EnumDyeColor.BLUE, "Input items", 18 * 4 + 10, 25, 3, 3) {
-            @Override
-            public boolean canInsertItem(int slot, ItemStack stack) {
-                return ((BioReactorBlock) BioReactorTile.this.getBlockType()).getItemsAccepted().stream().anyMatch(stack1 -> stack.getItem().equals(stack1.getItem())) && !alreadyContains(input, stack, 64);
-            }
-
-            @Override
-            public boolean canExtractItem(int slot) {
-                return false;
-            }
-        });
-        this.addInventoryToStorage(input, "input");
-        buffer = new ItemStackHandler(9) {
             @Override
             protected void onContentsChanged(int slot) {
                 BioReactorTile.this.markDirty();
@@ -61,30 +42,25 @@ public class BioReactorTile extends CustomElectricMachine {
                 return 16;
             }
         };
-        this.addInventory(new CustomColoredItemHandler(buffer, EnumDyeColor.YELLOW, "Buffer", 18 * 7 + 12, 25, 3, 3) {
+        this.addInventory(new CustomColoredItemHandler(input, EnumDyeColor.BLUE, "Input items", 18 * 5, 25, 3, 3) {
             @Override
             public boolean canInsertItem(int slot, ItemStack stack) {
-                return false;
+                return ((BioReactorBlock) BioReactorTile.this.getBlockType()).getItemsAccepted().stream().anyMatch(stack1 -> stack.getItem().equals(stack1.getItem())) && !alreadyContains(input, stack, 16);
             }
 
             @Override
             public boolean canExtractItem(int slot) {
-                return true;
+                return false;
             }
-
         });
-        this.addInventoryToStorage(buffer, "buffer");
+        this.addInventoryToStorage(input, "input");
     }
 
-    @Override
-    protected void createAddonsInventory() {
-
-    }
 
     @Override
     public List<IGuiContainerPiece> getGuiContainerPieces(BasicTeslaGuiContainer container) {
         List<IGuiContainerPiece> pieces = super.getGuiContainerPieces(container);
-        pieces.add(new BioreactorEfficiencyInfoPiece(this, 117, 83));
+        pieces.add(new BioreactorEfficiencyInfoPiece(this, 149, 25));
         return pieces;
     }
 
@@ -93,17 +69,14 @@ public class BioReactorTile extends CustomElectricMachine {
     protected float performWork() {
         if (((CustomOrientedBlock) this.getBlockType()).isWorkDisabled()) return 0;
 
-        for (int z = 0; z < 4; ++z) moveItems();
-
         if (getEfficiency() < 0) return 0;
         FluidStack stack = new FluidStack(FluidsRegistry.BIOFUEL, getProducedAmountItem() * getItemAmount());
         if (tank.getFluid() == null || (stack.amount + tank.getFluidAmount() <= tank.getCapacity())) {
             tank.fill(stack, true);
-            for (int i = 0; i < buffer.getSlots(); ++i) {
-                if (!buffer.getStackInSlot(i).isEmpty())
-                    buffer.getStackInSlot(i).setCount(buffer.getStackInSlot(i).getCount() - 1);
+            for (int i = 0; i < input.getSlots(); ++i) {
+                if (!input.getStackInSlot(i).isEmpty())
+                    input.getStackInSlot(i).setCount(input.getStackInSlot(i).getCount() - 1);
             }
-            moveItems();
             return 1;
         }
         return 0;
@@ -120,8 +93,8 @@ public class BioReactorTile extends CustomElectricMachine {
 
     public int getItemAmount() {
         int am = 0;
-        for (int i = 0; i < buffer.getSlots(); ++i) {
-            if (!buffer.getStackInSlot(i).isEmpty()) ++am;
+        for (int i = 0; i < input.getSlots(); ++i) {
+            if (!input.getStackInSlot(i).isEmpty()) ++am;
         }
         return am;
     }
@@ -137,29 +110,10 @@ public class BioReactorTile extends CustomElectricMachine {
         return (int) (getEfficiency() * base + base);
     }
 
-    public void moveItems(){
-        for (int i = 0; i < buffer.getSlots() - 1; ++i) {
-            if (buffer.getStackInSlot(i).isEmpty()) {
-                int tempI = i;
-                while (tempI < buffer.getSlots()) {
-                    if (!buffer.getStackInSlot(tempI).isEmpty()) {
-                        buffer.setStackInSlot(i, buffer.getStackInSlot(tempI).copy());
-                        buffer.setStackInSlot(tempI, ItemStack.EMPTY);
-                        break;
-                    }
-                    ++tempI;
-                }
-            }
-        }
-        for (int i = 0; i < input.getSlots(); ++i) {
-            if (!alreadyContains(buffer, input.getStackInSlot(i), 16)) {
-                ItemStack out = input.getStackInSlot(i).copy();
-                out.setCount(1);
-                if (ItemHandlerHelper.insertItem(buffer, out, true).isEmpty()) {
-                    ItemHandlerHelper.insertItem(buffer, out, false);
-                    input.getStackInSlot(i).setCount(input.getStackInSlot(i).getCount() - 1);
-                }
-            }
-        }
+    @Override
+    public void protectedUpdate() {
+        super.protectedUpdate();
     }
+
+
 }

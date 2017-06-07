@@ -40,4 +40,8 @@ public abstract class CustomElectricMachine extends ElectricMachine {
         return 4000;
     }
 
+    @Override
+    public boolean supportsSpeedUpgrades() {
+        return super.supportsSpeedUpgrades();
+    }
 }
