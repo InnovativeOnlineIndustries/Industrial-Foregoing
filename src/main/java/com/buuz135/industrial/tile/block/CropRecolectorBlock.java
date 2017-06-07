@@ -24,7 +24,7 @@ public class CropRecolectorBlock extends CustomOrientedBlock<CropRecolectorTile>
     public void getMachineConfig() {
         super.getMachineConfig();
         sludgeOperation = CustomConfiguration.config.getInt("sludgeOperation", "machines" + Configuration.CATEGORY_SPLITTER + this.getRegistryName().getResourcePath().toString(), 20, 1, 8000, "How much sludge is produced when the machine does an operation");
-        treeOperations = CustomConfiguration.config.getInt("treeOperations", "machines" + Configuration.CATEGORY_SPLITTER + this.getRegistryName().getResourcePath().toString(), 25, 1, 64, "Amount of operations done when chopping a tree");
+        treeOperations = CustomConfiguration.config.getInt("treeOperations", "machines" + Configuration.CATEGORY_SPLITTER + this.getRegistryName().getResourcePath().toString(), 10, 1, 64, "Amount of operations done when chopping a tree");
     }
 
     public int getSludgeOperation() {
