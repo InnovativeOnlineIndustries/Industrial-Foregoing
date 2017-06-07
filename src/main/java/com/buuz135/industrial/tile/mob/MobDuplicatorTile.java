@@ -58,7 +58,7 @@ public class MobDuplicatorTile extends WorkingAreaElectricMachine {
     }
 
     @Override
-    protected float performWork() {
+    public float work() {
         if (((CustomOrientedBlock) this.getBlockType()).isWorkDisabled()) return 0;
         if (mobTool.getStackInSlot(0).isEmpty()) return 0;
         if (experienceTank.getFluid() == null) return 0;

@@ -29,12 +29,7 @@ public class AnimalByproductRecolectorTile extends WorkingAreaElectricMachine {
     }
 
     @Override
-    public AxisAlignedBB getWorkingArea() {
-        return new AxisAlignedBB(this.pos.getX(), this.pos.getY(), this.pos.getZ(), this.pos.getX() + 1, this.pos.getY() + 1, this.pos.getZ() + 1).offset(new BlockPos(0, 1, 0)).expand(getRadius(), 0, getRadius());
-    }
-
-    @Override
-    protected float performWork() {
+    public float work() {
         if (((CustomOrientedBlock) this.getBlockType()).isWorkDisabled()) return 0;
 
         AxisAlignedBB area = getWorkingArea();
@@ -51,4 +46,11 @@ public class AnimalByproductRecolectorTile extends WorkingAreaElectricMachine {
 
         return 1;
     }
+
+    @Override
+    public AxisAlignedBB getWorkingArea() {
+        return new AxisAlignedBB(this.pos.getX(), this.pos.getY(), this.pos.getZ(), this.pos.getX() + 1, this.pos.getY() + 1, this.pos.getZ() + 1).offset(new BlockPos(0, 1, 0)).expand(getRadius(), 0, getRadius());
+    }
+
+
 }

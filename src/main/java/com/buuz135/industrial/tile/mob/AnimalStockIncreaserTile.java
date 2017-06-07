@@ -55,7 +55,7 @@ public class AnimalStockIncreaserTile extends WorkingAreaElectricMachine {
     }
 
     @Override
-    protected float performWork() {
+    public float work() {
         if (((CustomOrientedBlock) this.getBlockType()).isWorkDisabled()) return 0;
 
         AxisAlignedBB area = getWorkingArea();

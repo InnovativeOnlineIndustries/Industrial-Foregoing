@@ -91,7 +91,7 @@ public class CropSowerTile extends WorkingAreaElectricMachine {
     }
 
     @Override
-    protected float performWork() {
+    public float work() {
         if (((CustomOrientedBlock) this.getBlockType()).isWorkDisabled()) return 0;
         List<BlockPos> blockPos = BlockUtils.getBlockPosInAABB(getWorkingArea());
         ++pointer;

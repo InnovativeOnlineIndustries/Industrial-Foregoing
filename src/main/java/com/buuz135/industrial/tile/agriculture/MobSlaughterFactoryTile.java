@@ -38,7 +38,7 @@ public class MobSlaughterFactoryTile extends WorkingAreaElectricMachine {
     }
 
     @Override
-    protected float performWork() {
+    public float work() {
         if (((CustomOrientedBlock) this.getBlockType()).isWorkDisabled()) return 0;
 
         AxisAlignedBB area = getWorkingArea();
@@ -48,12 +48,6 @@ public class MobSlaughterFactoryTile extends WorkingAreaElectricMachine {
         this.outMeat.fill(new FluidStack(FluidsRegistry.MEAT, (int) (mob.getHealth() * ((MobSlaughterFactoryBlock) this.getBlockType()).getMeatValue())), true);
         mob.setDropItemsWhenDead(false);
         mob.attackEntityFrom(CommonProxy.custom, mob.getMaxHealth());
-//        List<EntityItem> items = this.getWorld().getEntitiesWithinAABB(EntityItem.class, area);
-//        for (EntityItem item : items) {
-//            if (!item.getEntityItem().isEmpty()) {
-//                item.setDead();
-//            }
-//        }
 
         return 1;
     }

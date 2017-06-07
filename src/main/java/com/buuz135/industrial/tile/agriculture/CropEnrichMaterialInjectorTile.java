@@ -60,13 +60,7 @@ public class CropEnrichMaterialInjectorTile extends WorkingAreaElectricMachine {
     }
 
     @Override
-    public AxisAlignedBB getWorkingArea() {
-        BlockPos corner1 = new BlockPos(0, 0, 0).offset(this.getFacing().getOpposite(), getRadius() + 1);
-        return new AxisAlignedBB(this.pos.getX(), this.pos.getY(), this.pos.getZ(), this.pos.getX() + 1, this.pos.getY() + 1, this.pos.getZ() + 1).offset(corner1).expand(getRadius(), 0, getRadius());
-    }
-
-    @Override
-    protected float performWork() {
+    public float work() {
         if (((CustomOrientedBlock) this.getBlockType()).isWorkDisabled()) return 0;
         List<BlockPos> blockPos = BlockUtils.getBlockPosInAABB(getWorkingArea());
         ++pointer;
@@ -86,6 +80,14 @@ public class CropEnrichMaterialInjectorTile extends WorkingAreaElectricMachine {
         }
         return 1;
     }
+
+    @Override
+    public AxisAlignedBB getWorkingArea() {
+        BlockPos corner1 = new BlockPos(0, 0, 0).offset(this.getFacing().getOpposite(), getRadius() + 1);
+        return new AxisAlignedBB(this.pos.getX(), this.pos.getY(), this.pos.getZ(), this.pos.getX() + 1, this.pos.getY() + 1, this.pos.getZ() + 1).offset(corner1).expand(getRadius(), 0, getRadius());
+    }
+
+
 
     private ItemStack getFirstItem() {
         for (int i = 0; i < inFert.getSlots(); ++i)

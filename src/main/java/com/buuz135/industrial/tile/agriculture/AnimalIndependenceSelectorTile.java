@@ -16,8 +16,9 @@ public class AnimalIndependenceSelectorTile extends WorkingAreaElectricMachine {
         super(AnimalIndependenceSelectorTile.class.getName().hashCode(), 2, 2, false);
     }
 
+
     @Override
-    protected float performWork() {
+    public float work() {
         if (((CustomOrientedBlock) this.getBlockType()).isWorkDisabled()) return 0;
 
         AxisAlignedBB area = getWorkingArea();

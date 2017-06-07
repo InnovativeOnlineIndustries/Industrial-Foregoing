@@ -56,7 +56,7 @@ public class MobRelocatorTile extends WorkingAreaElectricMachine {
     }
 
     @Override
-    protected float performWork() {
+    public float work() {
         if (((CustomOrientedBlock) this.getBlockType()).isWorkDisabled()) return 0;
 
         AxisAlignedBB area = getWorkingArea();
@@ -72,9 +72,9 @@ public class MobRelocatorTile extends WorkingAreaElectricMachine {
                 item.setDead();
             }
         }
-
         return 1;
     }
+
 
     @Override
     public AxisAlignedBB getWorkingArea() {

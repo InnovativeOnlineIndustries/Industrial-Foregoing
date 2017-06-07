@@ -54,14 +54,7 @@ public class AnimalResourceHarvesterTile extends WorkingAreaElectricMachine {
     }
 
     @Override
-    public AxisAlignedBB getWorkingArea() {
-        EnumFacing f = this.getFacing().getOpposite();
-        BlockPos corner1 = new BlockPos(0, 0, 0).offset(f, getRadius() + 1);
-        return new AxisAlignedBB(this.pos.getX(), this.pos.getY(), this.pos.getZ(), this.pos.getX() + 1, this.pos.getY() + 1, this.pos.getZ() + 1).offset(corner1).expand(getRadius(), 0, getRadius()).setMaxY(this.getPos().getY() + getHeight());
-    }
-
-    @Override
-    protected float performWork() {
+    public float work() {
         if (((CustomOrientedBlock) this.getBlockType()).isWorkDisabled()) return 0;
         List<EntitySheep> animals = this.world.getEntitiesWithinAABB(EntitySheep.class, getWorkingArea());
         for (EntitySheep sheep : animals) {
@@ -77,5 +70,14 @@ public class AnimalResourceHarvesterTile extends WorkingAreaElectricMachine {
         milkTank.fill(new FluidStack(FluidsRegistry.MILK, cows.size() * 1000), true);
         return 1;
     }
+
+    @Override
+    public AxisAlignedBB getWorkingArea() {
+        EnumFacing f = this.getFacing().getOpposite();
+        BlockPos corner1 = new BlockPos(0, 0, 0).offset(f, getRadius() + 1);
+        return new AxisAlignedBB(this.pos.getX(), this.pos.getY(), this.pos.getZ(), this.pos.getX() + 1, this.pos.getY() + 1, this.pos.getZ() + 1).offset(corner1).expand(getRadius(), 0, getRadius()).setMaxY(this.getPos().getY() + getHeight());
+    }
+
+
 
 }
