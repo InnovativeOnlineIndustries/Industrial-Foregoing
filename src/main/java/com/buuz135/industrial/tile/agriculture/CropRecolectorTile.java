@@ -6,6 +6,7 @@ import com.buuz135.industrial.tile.WorkingAreaElectricMachine;
 import com.buuz135.industrial.tile.block.CropRecolectorBlock;
 import com.buuz135.industrial.tile.block.CustomOrientedBlock;
 import com.buuz135.industrial.utils.BlockUtils;
+import com.buuz135.industrial.utils.ItemStackUtils;
 import net.minecraft.block.BlockCactus;
 import net.minecraft.block.BlockCrops;
 import net.minecraft.block.BlockNetherWart;
@@ -23,6 +24,7 @@ import net.minecraftforge.fluids.IFluidTank;
 import net.minecraftforge.items.ItemHandlerHelper;
 import net.minecraftforge.items.ItemStackHandler;
 import net.ndrei.teslacorelib.inventory.BoundingRectangle;
+import org.lwjgl.Sys;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -34,9 +36,12 @@ public class CropRecolectorTile extends WorkingAreaElectricMachine {
     private IFluidTank sludge;
     private ItemStackHandler outItems;
     private int pointer;
+    private List<BlockPos> blocksChecked;
+
 
     public CropRecolectorTile() {
         super(CropRecolectorTile.class.getName().hashCode(), 1, 0, true);
+        blocksChecked = new ArrayList<>();
     }
 
     @Override
@@ -73,8 +78,10 @@ public class CropRecolectorTile extends WorkingAreaElectricMachine {
     @Override
     public float work() {
         if (((CustomOrientedBlock) this.getBlockType()).isWorkDisabled()) return 0;
+        if (ItemStackUtils.isInventoryFull(outItems)) return 0;
         List<BlockPos> blockPos = BlockUtils.getBlockPosInAABB(getWorkingArea());
         boolean needPointerIncrease = true;
+        boolean treeOperation = false;
         if (pointer < blockPos.size()) {
             BlockPos pos = blockPos.get(pointer);
             IBlockState state = this.world.getBlockState(blockPos.get(pointer));
@@ -84,9 +91,30 @@ public class CropRecolectorTile extends WorkingAreaElectricMachine {
                     insertItemsAndRemove(drops,pos,outItems);
                 }
             } else if (BlockUtils.isLog(this.world, pos)) {
-                List<BlockPos> chopped = doRecursiveChopping(world, pos, new ArrayList<>(), new ArrayList<>());
+                if (blocksChecked.isEmpty()){
+                    blocksChecked.add(pos);
+                    checkForTrees(this.world,pos);
+                }
                 needPointerIncrease = false;
-                sludge.fill(new FluidStack(FluidsRegistry.SLUDGE, ((CropRecolectorBlock) this.getBlockType()).getSludgeOperation() * chopped.size()), true);
+                treeOperation = true;
+                System.out.println(blocksChecked.size());
+                for (int i = 0; i < ((CropRecolectorBlock) this.getBlockType()).getTreeOperations(); ++i){
+                    if (blocksChecked.isEmpty()) break;
+                    BlockPos p = blocksChecked.get(blocksChecked.size()-1);
+                    if (BlockUtils.isLeaves(world, p) || BlockUtils.isLog(world, p)){
+                        IBlockState s = world.getBlockState(p);
+                        List<ItemStack> drops = s.getBlock().getDrops(world, p, s,0);
+                        for (ItemStack drop : drops){
+                            if (!ItemHandlerHelper.insertItem(outItems, drop, true).isEmpty()) break;
+                            ItemHandlerHelper.insertItem(outItems, drop, false);
+                        }
+                        world.setBlockToAir(p);
+                        sludge.fill(new FluidStack(FluidsRegistry.SLUDGE, ((CropRecolectorBlock) this.getBlockType()).getSludgeOperation()), true);
+
+                    }
+                    blocksChecked.remove(blocksChecked.size()-1);
+                }
+                if (blocksChecked.isEmpty()) needPointerIncrease = true;
             }else if ((state.getBlock() instanceof BlockCactus || state.getBlock() instanceof BlockReed)){
                 if (state.getBlock().equals(this.world.getBlockState(pos.offset(EnumFacing.UP,2)).getBlock())){
                     List<ItemStack> drops = state.getBlock().getDrops(this.world, blockPos.get(pointer), state, 0);
@@ -106,6 +134,7 @@ public class CropRecolectorTile extends WorkingAreaElectricMachine {
         }
         if (needPointerIncrease) ++pointer;
         if (pointer >= blockPos.size()) pointer = 0;
+        if (treeOperation) return -1;
         return 1;
     }
 
@@ -123,37 +152,19 @@ public class CropRecolectorTile extends WorkingAreaElectricMachine {
         else pointer = compound.getInteger(NBT_POINTER);
     }
 
-    public List<BlockPos> doRecursiveChopping(World world, BlockPos current, List<BlockPos> blocksChecked, List<BlockPos> blocksChopped) {
+    public void checkForTrees(World world, BlockPos current) {
         for (EnumFacing facing : new EnumFacing[]{EnumFacing.EAST, EnumFacing.NORTH, EnumFacing.WEST, EnumFacing.SOUTH, EnumFacing.UP}) {
             if (BlockUtils.isLeaves(world, current.offset(facing)) && !blocksChecked.contains(current.offset(facing))) {
                 blocksChecked.add(current.offset(facing));
-                doRecursiveChopping(world, current.offset(facing), blocksChecked, blocksChopped);
+                if (blocksChecked.size() <= 35) checkForTrees(world, current.offset(facing));
             }
         }
-        for (EnumFacing facing : new EnumFacing[]{EnumFacing.EAST, EnumFacing.NORTH, EnumFacing.WEST, EnumFacing.SOUTH, EnumFacing.UP}) {
+        for (EnumFacing facing : new EnumFacing[]{EnumFacing.UP}) {
             if (BlockUtils.isLog(world, current.offset(facing)) && !blocksChecked.contains(current.offset(facing))) {
                 blocksChecked.add(current.offset(facing));
-                doRecursiveChopping(world, current.offset(facing), blocksChecked, blocksChopped);
+                checkForTrees(world, current.offset(facing));
             }
         }
-        if (blocksChopped.size() > ((CropRecolectorBlock) this.getBlockType()).getTreeOperations())
-            return blocksChopped;
-        blocksChopped.add(current);
-        List<ItemStack> drops = world.getBlockState(current).getBlock().getDrops(world, current, world.getBlockState(current), 0);
-        boolean canInsert = true;
-        for (ItemStack stack : drops) {
-            if (!ItemHandlerHelper.insertItem(outItems, stack, true).isEmpty()) {
-                canInsert = false;
-                break;
-            }
-        }
-        if (canInsert) {
-            for (ItemStack stack : drops) {
-                ItemHandlerHelper.insertItem(outItems, stack, false);
-            }
-            this.world.setBlockToAir(current);
-        }
-        return blocksChopped;
     }
 
     private boolean canInsertAll(List<ItemStack> drops, ItemStackHandler outItems){

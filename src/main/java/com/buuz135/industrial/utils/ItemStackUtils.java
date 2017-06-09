@@ -15,6 +15,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumFacing;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import net.minecraftforge.items.ItemStackHandler;
 import net.minecraftforge.oredict.OreDictionary;
 import org.lwjgl.opengl.GL11;
 
@@ -152,5 +153,12 @@ public class ItemStackUtils {
             if (OreDictionary.getOreName(i).startsWith("ore")) return true;
         }
         return false;
+    }
+
+    public static boolean isInventoryFull(ItemStackHandler handler){
+        for (int i = 0; i < handler.getSlots(); ++i){
+            if (handler.getStackInSlot(i).isEmpty()) return false;
+        }
+        return true;
     }
 }

@@ -87,6 +87,7 @@ public abstract class WorkingAreaElectricMachine extends CustomElectricMachine {
         float work = 0;
         for (int i = 0; i < getActionsWork(); ++i) {
             float temp = work();
+            if (temp < 0) return 1;
             if (temp > work) {
                 work = temp;
             }
