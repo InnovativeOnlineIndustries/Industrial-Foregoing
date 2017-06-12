@@ -1,15 +1,19 @@
 package com.buuz135.industrial.tile.mob;
 
+import com.buuz135.industrial.IndustrialForegoing;
 import com.buuz135.industrial.proxy.FluidsRegistry;
 import com.buuz135.industrial.tile.CustomColoredItemHandler;
 import com.buuz135.industrial.tile.WorkingAreaElectricMachine;
 import com.buuz135.industrial.tile.block.CustomOrientedBlock;
 import com.buuz135.industrial.tile.block.MobRelocatorBlock;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.item.EntityItem;
+import net.minecraft.entity.item.EntityXPOrb;
 import net.minecraft.item.EnumDyeColor;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.DamageSource;
+import net.minecraft.util.EntityDamageSource;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
@@ -56,6 +60,12 @@ public class MobRelocatorTile extends WorkingAreaElectricMachine {
     }
 
     @Override
+    public void protectedUpdate() {
+        super.protectedUpdate();
+        this.getWorld().getEntitiesWithinAABB(EntityXPOrb.class, getWorkingArea().expand(2,2,2)).forEach(Entity::setDead);
+    }
+
+    @Override
     public float work() {
         if (((CustomOrientedBlock) this.getBlockType()).isWorkDisabled()) return 0;
 
@@ -64,7 +74,7 @@ public class MobRelocatorTile extends WorkingAreaElectricMachine {
         if (mobs.size() == 0) return 0;
         EntityLiving mob = mobs.get(this.getWorld().rand.nextInt(mobs.size()));
         this.outExp.fill(new FluidStack(FluidsRegistry.ESSENCE, (int) (mob.getHealth() * ((MobRelocatorBlock) this.getBlockType()).getEssenceMultiplier())), true);
-        mob.attackEntityFrom(DamageSource.GENERIC, mob.getHealth());
+        mob.attackEntityFrom(DamageSource.causePlayerDamage(IndustrialForegoing.getFakePlayer(world)), mob.getHealth());
         List<EntityItem> items = this.getWorld().getEntitiesWithinAABB(EntityItem.class, area);
         for (EntityItem item : items) {
             if (!item.getEntityItem().isEmpty()) {
