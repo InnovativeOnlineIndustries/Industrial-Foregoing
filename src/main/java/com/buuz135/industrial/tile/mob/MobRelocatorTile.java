@@ -74,7 +74,7 @@ public class MobRelocatorTile extends WorkingAreaElectricMachine {
         if (mobs.size() == 0) return 0;
         EntityLiving mob = mobs.get(this.getWorld().rand.nextInt(mobs.size()));
         this.outExp.fill(new FluidStack(FluidsRegistry.ESSENCE, (int) (mob.getHealth() * ((MobRelocatorBlock) this.getBlockType()).getEssenceMultiplier())), true);
-        mob.attackEntityFrom(DamageSource.causePlayerDamage(IndustrialForegoing.getFakePlayer(world)), mob.getHealth());
+        mob.attackEntityFrom(DamageSource.causePlayerDamage(IndustrialForegoing.getFakePlayer(world)), mob.getMaxHealth());
         List<EntityItem> items = this.getWorld().getEntitiesWithinAABB(EntityItem.class, area);
         for (EntityItem item : items) {
             if (!item.getEntityItem().isEmpty()) {
