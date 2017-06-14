@@ -245,14 +245,14 @@ public class BlackHoleUnitTile extends SidedTileEntity {
         @Nonnull
         @Override
         public ItemStack insertItem(int slot, @Nonnull ItemStack stack, boolean simulate) {
-            if (tile.canInsertItem(stack)) return inItems.insertItem(slot, stack, simulate);
+            if (tile.canInsertItem(stack)) return inItems.insertItem(0, stack, simulate);
             return stack;
         }
 
         @Nonnull
         @Override
         public ItemStack extractItem(int slot, int amount, boolean simulate) {
-            return outItems.extractItem(slot, amount, simulate);
+            return outItems.extractItem(0, amount, simulate);
         }
 
         @Override
