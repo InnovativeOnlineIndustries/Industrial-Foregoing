@@ -97,7 +97,7 @@ public class CropRecolectorTile extends WorkingAreaElectricMachine {
                 }
                 needPointerIncrease = false;
                 treeOperation = true;
-                System.out.println(blocksChecked.size());
+
                 for (int i = 0; i < ((CropRecolectorBlock) this.getBlockType()).getTreeOperations(); ++i){
                     if (blocksChecked.isEmpty()) break;
                     BlockPos p = blocksChecked.get(blocksChecked.size()-1);

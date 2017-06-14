@@ -103,7 +103,6 @@ public class SliderBlock extends Block {
         Vec3i vec3i = facing.getDirectionVec();
         BlockPos p = entityIn.getPosition();
         float value = 1000000;
-        System.out.println(vec3i.getZ() / value);
         entityIn.setPosition(p.getX() + vec3i.getX() / value, p.getY() + vec3i.getY() / value, p.getZ() + vec3i.getZ() / value);
     }
 

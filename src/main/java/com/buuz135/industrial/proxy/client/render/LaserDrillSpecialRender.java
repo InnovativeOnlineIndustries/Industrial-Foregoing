@@ -25,7 +25,6 @@ public class LaserDrillSpecialRender extends TileEntitySpecialRenderer<LaserDril
 
     private void drawLine(VertexBuffer tess, Vector3d v1, Vector3d v2, LaserBaseTile tile) {
         tess.pos(v1.getX(), v1.getY(), v1.getZ()).endVertex();
-        System.out.println(v2.toString());
         double x = ((int) v1.getX()) == -1 ? 0 : ((int) v1.getX()) == 2 ? 1 : v2.x;
         double z = (((int) v1.getZ()) == -1 ? 0 : ((int) v1.getZ()) == 2 ? 1 : v2.z);
         double time = (tile.getWorld().getWorldTime() % 80);
@@ -35,7 +34,6 @@ public class LaserDrillSpecialRender extends TileEntitySpecialRenderer<LaserDril
         else if (x == -1) x = time > 40 ? -2 + time / 40f : -time / 40f;
         else if (z == 0) x = time > 40 ? -1 + time / 40f : 1 - time / 40f;
         else if (z == 1) x = time < 40 ? time / 40f : 2 - time / 40f;
-        System.out.println(x + ":" + z);
         tess.pos(x, -1 + tile.getCurrentWork() / (double) tile.getMaxWork(), z).endVertex();
     }
 
