@@ -62,4 +62,9 @@ public class SludgeRefinerRecipeCategory implements IRecipeCategory<SludgeRefine
     public List<String> getTooltipStrings(int mouseX, int mouseY) {
         return new ArrayList<>();
     }
+
+    @Override
+    public String getModName() {
+        return Reference.NAME;
+    }
 }

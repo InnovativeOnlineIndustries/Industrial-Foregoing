@@ -34,6 +34,11 @@ public class BioReactorRecipeCategory implements IRecipeCategory<BioReactorRecip
     }
 
     @Override
+    public String getModName() {
+        return Reference.NAME;
+    }
+
+    @Override
     public IDrawable getBackground() {
         return guiHelper.createDrawable(new ResourceLocation(Reference.MOD_ID, "textures/gui/jei.png"), 0, 0, 82, 26);
     }

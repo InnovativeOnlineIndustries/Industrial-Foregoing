@@ -62,4 +62,9 @@ public class LaserRecipeCategory implements IRecipeCategory<LaserRecipeWrapper> 
     public List<String> getTooltipStrings(int mouseX, int mouseY) {
         return new ArrayList<>();
     }
+
+    @Override
+    public String getModName() {
+        return Reference.NAME;
+    }
 }
