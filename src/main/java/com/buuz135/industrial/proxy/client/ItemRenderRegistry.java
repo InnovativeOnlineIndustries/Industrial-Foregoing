@@ -15,5 +15,6 @@ public class ItemRenderRegistry {
 
         adultFilterAddomItem.registerRenderer();
         rangeAddonItem.registerRenderer();
+        redstoneInvertedAddon.registerRenderer();
     }
 }

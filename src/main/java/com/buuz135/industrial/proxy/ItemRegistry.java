@@ -6,6 +6,7 @@ import com.buuz135.industrial.item.MeatFeederItem;
 import com.buuz135.industrial.item.MobImprisonmentToolItem;
 import com.buuz135.industrial.item.addon.AdultFilterAddonItem;
 import com.buuz135.industrial.item.addon.RangeAddonItem;
+import com.buuz135.industrial.item.addon.RedstoneInvertedAddon;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.item.crafting.ShapelessRecipes;
@@ -27,6 +28,7 @@ public class ItemRegistry {
 
     public static AdultFilterAddonItem adultFilterAddomItem;
     public static RangeAddonItem rangeAddonItem;
+    public static RedstoneInvertedAddon redstoneInvertedAddon;
 
     public static void registerItems() {
         (tinyDryRubber = new IFCustomItem("tinydryrubber")).register();
@@ -47,5 +49,6 @@ public class ItemRegistry {
 
         (adultFilterAddomItem = new AdultFilterAddonItem()).register();
         (rangeAddonItem = new RangeAddonItem()).register();
+        (redstoneInvertedAddon = new RedstoneInvertedAddon()).register();
     }
 }
