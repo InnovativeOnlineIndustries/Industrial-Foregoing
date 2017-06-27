@@ -3,6 +3,7 @@ package com.buuz135.industrial.tile;
 import com.buuz135.industrial.item.addon.RangeAddonItem;
 import com.buuz135.industrial.proxy.CommonProxy;
 import com.buuz135.industrial.proxy.client.ClientProxy;
+import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -84,6 +85,7 @@ public abstract class WorkingAreaElectricMachine extends CustomElectricMachine {
 
     @Override
     protected float performWork() {
+        if (this.world.isBlockPowered(this.pos)) return 0;
         float work = 0;
         for (int i = 0; i < getActionsWork(); ++i) {
             float temp = work();
