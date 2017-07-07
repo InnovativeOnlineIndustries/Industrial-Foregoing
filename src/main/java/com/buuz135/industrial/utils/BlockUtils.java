@@ -38,6 +38,7 @@ public class BlockUtils {
             ItemStack stack = new ItemStack(item);
             int id = OreDictionary.getOreID(ore);
             for (int i : OreDictionary.getOreIDs(stack)) {
+                System.out.println(OreDictionary.getOreName(i));
                 if (i == id) return true;
             }
         }
@@ -45,7 +46,7 @@ public class BlockUtils {
     }
 
     public static boolean isLog(World world, BlockPos pos) {
-        return isBlockOreDict(world, pos, "logWood");
+        return isBlockOreDict(world, pos, "logWood") || isBlockOreDict(world, pos, "blockSlimeCongealed");
     }
 
     public static boolean isLeaves(World world, BlockPos pos) {
