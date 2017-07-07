@@ -3,6 +3,7 @@ package com.buuz135.industrial.tile.misc;
 import com.buuz135.industrial.proxy.BlockRegistry;
 import com.buuz135.industrial.tile.CustomColoredItemHandler;
 import com.buuz135.industrial.tile.block.CustomOrientedBlock;
+import net.minecraft.inventory.InventoryHelper;
 import net.minecraft.item.EnumDyeColor;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -11,6 +12,7 @@ import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.ItemStackHandler;
+import net.ndrei.teslacorelib.compatibility.ItemStackUtil;
 import net.ndrei.teslacorelib.tileentities.SidedTileEntity;
 
 import javax.annotation.Nonnull;
@@ -49,6 +51,7 @@ public class BlackHoleControllerTile extends SidedTileEntity {
                 return super.canExtractItem(slot);
             }
         });
+
         this.addInventoryToStorage(input, "input");
         storage = new ItemStackHandler(9) {
             @Override
@@ -96,6 +99,17 @@ public class BlackHoleControllerTile extends SidedTileEntity {
     @Override
     protected void createAddonsInventory() {
 
+    }
+
+    public void dropItems(){
+        for (ItemStackHandler items : new ItemStackHandler[]{input, storage, output}){
+            for (int i = 0; i < items.getSlots(); ++i){
+                ItemStack stack = items.getStackInSlot(i);
+                if (!ItemStackUtil.isEmpty(stack)) {
+                    InventoryHelper.spawnItemStack(this.getWorld(), pos.getX(), pos.getY(), pos.getZ(), stack);
+                }
+            }
+        }
     }
 
     @Override
