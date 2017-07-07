@@ -52,6 +52,7 @@ public class WaterResourcesCollectorTile extends WorkingAreaElectricMachine {
     @Override
     public float work() {
         if (((CustomOrientedBlock) this.getBlockType()).isWorkDisabled()) return 0;
+        if (this.world.rand.nextBoolean() && this.world.rand.nextBoolean()) return 1;
         List<BlockPos> blockPos = BlockUtils.getBlockPosInAABB(getWorkingArea());
         boolean allWaterSources = true;
         for (BlockPos pos : blockPos) {
