@@ -111,7 +111,7 @@ public class BlackHoleControllerTile extends SidedTileEntity {
                     if (!in.isEmpty() && in.getCount()+amount < Integer.MAX_VALUE) {
                         BlockRegistry.blackHoleUnitBlock.setAmount(stack, amount + in.getCount());
                         in.setCount(0);
-                        return;
+                        continue;
                     }
                     ItemStack out = output.getStackInSlot(i);
                     if (out.isEmpty()) { // Slot is empty
@@ -119,13 +119,13 @@ public class BlackHoleControllerTile extends SidedTileEntity {
                         out.setCount(Math.min(amount, 64));
                         BlockRegistry.blackHoleUnitBlock.setAmount(stack, amount - out.getCount());
                         output.setStackInSlot(i, out);
-                        return;
+                        continue;
                     }
                     if (out.getCount() < out.getMaxStackSize()) {
                         int increase = Math.min(amount, out.getMaxStackSize() - out.getCount());
                         out.setCount(out.getCount() + increase);
                         BlockRegistry.blackHoleUnitBlock.setAmount(stack, amount - increase);
-                        return;
+                        continue;
                     }
                 }
             }

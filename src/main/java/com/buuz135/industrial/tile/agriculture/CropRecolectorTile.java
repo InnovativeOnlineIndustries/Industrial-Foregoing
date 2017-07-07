@@ -156,7 +156,7 @@ public class CropRecolectorTile extends WorkingAreaElectricMachine {
         for (EnumFacing facing : new EnumFacing[]{EnumFacing.EAST, EnumFacing.NORTH, EnumFacing.WEST, EnumFacing.SOUTH, EnumFacing.UP}) {
             if (BlockUtils.isLeaves(world, current.offset(facing)) && !blocksChecked.contains(current.offset(facing))) {
                 blocksChecked.add(current.offset(facing));
-                if (blocksChecked.size() <= 35) checkForTrees(world, current.offset(facing));
+                if (blocksChecked.size() <= 250) checkForTrees(world, current.offset(facing));
             }
         }
         for (EnumFacing facing : new EnumFacing[]{EnumFacing.UP}) {

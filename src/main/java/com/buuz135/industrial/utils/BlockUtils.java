@@ -38,7 +38,6 @@ public class BlockUtils {
             ItemStack stack = new ItemStack(item);
             int id = OreDictionary.getOreID(ore);
             for (int i : OreDictionary.getOreIDs(stack)) {
-                System.out.println(OreDictionary.getOreName(i));
                 if (i == id) return true;
             }
         }
