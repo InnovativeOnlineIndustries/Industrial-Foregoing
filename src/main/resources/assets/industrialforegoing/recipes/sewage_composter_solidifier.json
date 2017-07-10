@@ -1,0 +1,31 @@
+{
+  "result": {
+    "item": "industrialforegoing:sewage_composter_solidifier"
+  },
+  "pattern": [
+    "pfp",
+    "imi",
+    "brb"
+  ],
+  "type": "minecraft:crafting_shaped",
+  "key": {
+    "p": {
+      "item": "industrialforegoing:plastic"
+    },
+    "b": {
+      "item": "minecraft:brick"
+    },
+    "r": {
+      "item": "minecraft:redstone"
+    },
+    "f": {
+      "item": "minecraft:furnace"
+    },
+    "i": {
+      "item": "minecraft:piston"
+    },
+    "m": {
+      "item": "teslacorelib:machine_case"
+    }
+  }
+}

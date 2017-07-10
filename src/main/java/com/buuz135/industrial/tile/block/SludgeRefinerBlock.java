@@ -4,15 +4,14 @@ import com.buuz135.industrial.config.CustomConfiguration;
 import com.buuz135.industrial.proxy.ItemRegistry;
 import com.buuz135.industrial.tile.agriculture.SludgeRefinerTile;
 import com.buuz135.industrial.utils.ItemStackWeightedItem;
+import com.buuz135.industrial.utils.RecipeUtils;
 import net.minecraft.block.material.Material;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.item.crafting.IRecipe;
 import net.minecraftforge.common.config.Configuration;
-import net.minecraftforge.oredict.ShapedOreRecipe;
-import net.ndrei.teslacorelib.TeslaCoreLib;
+import net.ndrei.teslacorelib.items.MachineCaseItem;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -44,13 +43,12 @@ public class SludgeRefinerBlock extends CustomOrientedBlock<SludgeRefinerTile> {
         return itemStackWeightedItems;
     }
 
-    @Override
-    protected IRecipe getRecipe() {
-        return new ShapedOreRecipe(new ItemStack(this), "pbp", "fmf", "igi",
+    public void createRecipe() {
+        RecipeUtils.addShapedRecipe(new ItemStack(this), "pbp", "fmf", "igi",
                 'p', ItemRegistry.plastic,
                 'b', Items.BUCKET,
                 'f', Blocks.FURNACE,
-                'm', TeslaCoreLib.machineCase,
+                'm', MachineCaseItem.INSTANCE,
                 'i', "gearIron",
                 'g', "gearGold");
     }

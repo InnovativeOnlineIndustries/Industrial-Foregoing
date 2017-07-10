@@ -1,0 +1,31 @@
+{
+  "result": {
+    "item": "industrialforegoing:mob_duplicator"
+  },
+  "pattern": [
+    "pwp",
+    "cmc",
+    "ere"
+  ],
+  "type": "forge:ore_shaped",
+  "key": {
+    "p": {
+      "item": "industrialforegoing:plastic"
+    },
+    "r": {
+      "item": "minecraft:redstone"
+    },
+    "c": {
+      "item": "minecraft:magma_cream"
+    },
+    "e": {
+      "item": "#GEMEMERALD"
+    },
+    "w": {
+      "item": "minecraft:nether_wart"
+    },
+    "m": {
+      "item": "teslacorelib:machine_case"
+    }
+  }
+}

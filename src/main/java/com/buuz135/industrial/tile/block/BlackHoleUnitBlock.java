@@ -2,23 +2,23 @@ package com.buuz135.industrial.tile.block;
 
 import com.buuz135.industrial.proxy.ItemRegistry;
 import com.buuz135.industrial.tile.misc.BlackHoleUnitTile;
+import com.buuz135.industrial.utils.RecipeUtils;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.item.EntityItem;
-import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
-import net.minecraftforge.oredict.ShapedOreRecipe;
-import net.ndrei.teslacorelib.TeslaCoreLib;
+import net.ndrei.teslacorelib.items.MachineCaseItem;
 
+import javax.annotation.Nullable;
 import java.util.Arrays;
 import java.util.List;
 
@@ -48,7 +48,7 @@ public class BlackHoleUnitBlock extends CustomOrientedBlock<BlackHoleUnitTile> {
             EntityItem entityitem = new EntityItem(world, pos.getX() + d0, pos.getY() + d1, pos.getZ() + d2, stack);
             entityitem.setDefaultPickupDelay();
             if (stack.hasTagCompound()) {
-                entityitem.getEntityItem().setTagCompound(stack.getTagCompound().copy());
+                entityitem.getItem().setTagCompound(stack.getTagCompound().copy());
             }
             world.spawnEntity(entityitem);
 
@@ -78,8 +78,9 @@ public class BlackHoleUnitBlock extends CustomOrientedBlock<BlackHoleUnitTile> {
         }
     }
 
+
     @Override
-    public void addInformation(ItemStack stack, EntityPlayer player, List<String> tooltip, boolean advanced) {
+    public void addInformation(ItemStack stack, @Nullable World player, List<String> tooltip, ITooltipFlag advanced) {
         super.addInformation(stack, player, tooltip, advanced);
         if (stack.hasTagCompound()) {
             if (stack.getTagCompound().hasKey(BlackHoleUnitTile.NBT_ITEMSTACK) && stack.getTagCompound().hasKey(BlackHoleUnitTile.NBT_META)) {
@@ -92,14 +93,13 @@ public class BlackHoleUnitBlock extends CustomOrientedBlock<BlackHoleUnitTile> {
         tooltip.add("\"the BHU\"");
     }
 
-    @Override
-    protected IRecipe getRecipe() {
-        return new ShapedOreRecipe(new ItemStack(this), "ppp", "eae", "cmc",
+    public void createRecipe() {
+        RecipeUtils.addShapedRecipe(new ItemStack(this), "ppp", "eae", "cmc",
                 'p', ItemRegistry.plastic,
                 'e', Items.ENDER_EYE,
                 'a', Items.ENDER_PEARL,
                 'c', "chestWood",
-                'm', TeslaCoreLib.machineCase);
+                'm', MachineCaseItem.INSTANCE);
     }
 
     public ItemStack getItemStack(ItemStack blackHole) {

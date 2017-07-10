@@ -1,21 +1,21 @@
 package com.buuz135.industrial.item.addon;
 
+import com.buuz135.industrial.IndustrialForegoing;
 import com.buuz135.industrial.proxy.ItemRegistry;
 import com.buuz135.industrial.tile.WorkingAreaElectricMachine;
+import com.buuz135.industrial.utils.RecipeUtils;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
+import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.creativetab.CreativeTabs;
-import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.util.NonNullList;
+import net.minecraft.world.World;
 import net.minecraftforge.client.model.ModelLoader;
-import net.minecraftforge.oredict.ShapedOreRecipe;
 import net.ndrei.teslacorelib.tileentities.SidedTileEntity;
 
-import java.util.ArrayList;
+import javax.annotation.Nullable;
 import java.util.List;
 
 public class RangeAddonItem extends CustomAddon {
@@ -32,9 +32,10 @@ public class RangeAddonItem extends CustomAddon {
     }
 
     @Override
-    public void getSubItems(Item itemIn, CreativeTabs tab, NonNullList<ItemStack> subItems) {
-        for (int i = 0; i < 12; ++i) subItems.add(new ItemStack(this, 1, i));
+    public void getSubItems(CreativeTabs tab, NonNullList<ItemStack> items) {
+        if (tab == IndustrialForegoing.creativeTab) for (int i = 0; i < 12; ++i) items.add(new ItemStack(this, 1, i));
     }
+
 
     @Override
     public void registerRenderer() {
@@ -43,21 +44,19 @@ public class RangeAddonItem extends CustomAddon {
     }
 
     @Override
-    public void addInformation(ItemStack stack, EntityPlayer playerIn, List<String> tooltip, boolean advanced) {
-        super.addInformation(stack, playerIn, tooltip, advanced);
+    public void addInformation(ItemStack stack, @Nullable World worldIn, List<String> tooltip, ITooltipFlag flagIn) {
+        super.addInformation(stack, worldIn, tooltip, flagIn);
         tooltip.add("Tier: " + stack.getMetadata());
     }
 
-    @Override
-    protected List<IRecipe> getRecipes() {
-        List<IRecipe> recipes = new ArrayList<>();
+    public void createRecipe() {
         ItemStack[] items = new ItemStack[]{new ItemStack(Blocks.COBBLESTONE), new ItemStack(Items.DYE, 1, 4), new ItemStack(Items.COAL), new ItemStack(Items.QUARTZ), new ItemStack(Blocks.RED_SANDSTONE), new ItemStack(Blocks.GLOWSTONE), new ItemStack(Items.IRON_INGOT), new ItemStack(Items.GOLD_INGOT), new ItemStack(Blocks.IRON_BLOCK), new ItemStack(Items.DIAMOND), new ItemStack(Items.PRISMARINE_SHARD), new ItemStack(Items.EMERALD)};
         for (int i = 0; i < 12; ++i) {
-            recipes.add(new ShapedOreRecipe(new ItemStack(this, 1, i), "ipi", "igi", "ipi",
+            RecipeUtils.addShapedRecipe(new ItemStack(this, 1, i), "ipi", "igi", "ipi",
                     'i', items[i],
                     'p', ItemRegistry.plastic,
-                    'g', "paneGlass"));
+                    'g', "paneGlass");
         }
-        return recipes;
+
     }
 }

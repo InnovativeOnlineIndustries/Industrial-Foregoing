@@ -1,0 +1,24 @@
+{
+  "result": {
+    "item": "industrialforegoing:range_addon",
+    "data": 2
+  },
+  "pattern": [
+    "ipi",
+    "igi",
+    "ipi"
+  ],
+  "type": "forge:ore_shaped",
+  "key": {
+    "p": {
+      "item": "industrialforegoing:plastic"
+    },
+    "g": {
+      "item": "#PANEGLASS"
+    },
+    "i": {
+      "item": "minecraft:coal",
+      "data": 0
+    }
+  }
+}

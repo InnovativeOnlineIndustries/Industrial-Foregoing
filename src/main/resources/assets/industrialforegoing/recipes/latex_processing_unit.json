@@ -1,0 +1,28 @@
+{
+  "result": {
+    "item": "industrialforegoing:latex_processing_unit"
+  },
+  "pattern": [
+    "prp",
+    "fmf",
+    "pgp"
+  ],
+  "type": "forge:ore_shaped",
+  "key": {
+    "p": {
+      "item": "#INGOTIRON"
+    },
+    "r": {
+      "item": "minecraft:redstone"
+    },
+    "f": {
+      "item": "minecraft:furnace"
+    },
+    "g": {
+      "item": "#GEARIRON"
+    },
+    "m": {
+      "item": "teslacorelib:machine_case"
+    }
+  }
+}

@@ -6,14 +6,12 @@ import com.buuz135.industrial.item.MeatFeederItem;
 import com.buuz135.industrial.item.MobImprisonmentToolItem;
 import com.buuz135.industrial.item.addon.AdultFilterAddonItem;
 import com.buuz135.industrial.item.addon.RangeAddonItem;
-import com.buuz135.industrial.item.addon.RedstoneInvertedAddon;
+import com.buuz135.industrial.utils.RecipeUtils;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.item.crafting.IRecipe;
-import net.minecraft.item.crafting.ShapelessRecipes;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.oredict.OreDictionary;
-
-import java.util.Arrays;
+import net.minecraftforge.registries.IForgeRegistry;
 
 
 public class ItemRegistry {
@@ -28,27 +26,28 @@ public class ItemRegistry {
 
     public static AdultFilterAddonItem adultFilterAddomItem;
     public static RangeAddonItem rangeAddonItem;
-    public static RedstoneInvertedAddon redstoneInvertedAddon;
 
-    public static void registerItems() {
-        (tinyDryRubber = new IFCustomItem("tinydryrubber")).register();
-        (dryRubber = new IFCustomItem("dryrubber") {
-            @Override
-            public IRecipe getRecipe() {
-                return new ShapelessRecipes(new ItemStack(this), Arrays.asList(new ItemStack(tinyDryRubber), new ItemStack(tinyDryRubber), new ItemStack(tinyDryRubber), new ItemStack(tinyDryRubber), new ItemStack(tinyDryRubber), new ItemStack(tinyDryRubber), new ItemStack(tinyDryRubber), new ItemStack(tinyDryRubber), new ItemStack(tinyDryRubber)));
-            }
-        }).register();
-        (plastic = new IFCustomItem("plastic")).register();
+
+    public static void registerItems(IForgeRegistry<Item> itemRegistry) {
+        (tinyDryRubber = new IFCustomItem("tinydryrubber")).register(itemRegistry);
+        (dryRubber = new IFCustomItem("dryrubber")).register(itemRegistry);
+        RecipeUtils.addShapelessRecipe(new ItemStack(dryRubber), new ItemStack(tinyDryRubber), new ItemStack(tinyDryRubber), new ItemStack(tinyDryRubber), new ItemStack(tinyDryRubber), new ItemStack(tinyDryRubber), new ItemStack(tinyDryRubber), new ItemStack(tinyDryRubber), new ItemStack(tinyDryRubber), new ItemStack(tinyDryRubber));
+        (plastic = new IFCustomItem("plastic")).register(itemRegistry);
         OreDictionary.registerOre("itemRubber", plastic);
         GameRegistry.addSmelting(dryRubber, new ItemStack(plastic), 0);
-        (fertilizer = new IFCustomItem("fertilizer")).register();
-        (meatFeederItem = new MeatFeederItem()).register();
-        (mobImprisonmentToolItem = new MobImprisonmentToolItem()).register();
+        (fertilizer = new IFCustomItem("fertilizer")).register(itemRegistry);
+        (meatFeederItem = new MeatFeederItem()).register(itemRegistry);
+        (mobImprisonmentToolItem = new MobImprisonmentToolItem()).register(itemRegistry);
 
-        (laserLensItem = new LaserLensItem()).register();
+        (laserLensItem = new LaserLensItem()).register(itemRegistry);
 
-        (adultFilterAddomItem = new AdultFilterAddonItem()).register();
-        (rangeAddonItem = new RangeAddonItem()).register();
-        (redstoneInvertedAddon = new RedstoneInvertedAddon()).register();
+        (adultFilterAddomItem = new AdultFilterAddonItem()).register(itemRegistry);
+        (rangeAddonItem = new RangeAddonItem()).register(itemRegistry);
+
+        meatFeederItem.createRecipe();
+        mobImprisonmentToolItem.createRecipe();
+        laserLensItem.createRecipe();
+        adultFilterAddomItem.createRecipe();
+        rangeAddonItem.createRecipe();
     }
 }

@@ -4,7 +4,7 @@ import com.buuz135.industrial.proxy.client.ClientProxy;
 import com.buuz135.industrial.tile.world.LaserBaseTile;
 import com.buuz135.industrial.tile.world.LaserDrillTile;
 import com.buuz135.industrial.utils.BlockUtils;
-import net.minecraft.client.renderer.VertexBuffer;
+import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
 
 import javax.vecmath.Vector3d;
@@ -14,7 +14,7 @@ public class LaserDrillSpecialRender extends TileEntitySpecialRenderer<LaserDril
 
 
     @Override
-    public void renderTileEntityAt(LaserDrillTile tile, double x, double y, double z, float partialTicks, int destroyStage) {
+    public void render(LaserDrillTile tile, double x, double y, double z, float partialTicks, int destroyStage, float alpha) {
         if (tile.getLaserBasePos() == null) {
             drawNameplate(tile, "No Laser Base", x, y, z, 16);
             return;
@@ -23,7 +23,7 @@ public class LaserDrillSpecialRender extends TileEntitySpecialRenderer<LaserDril
         BlockUtils.renderLaserBeam(tile, x, y, z, tile.getFacing().getOpposite(), partialTicks, 1);
     }
 
-    private void drawLine(VertexBuffer tess, Vector3d v1, Vector3d v2, LaserBaseTile tile) {
+    private void drawLine(BufferBuilder tess, Vector3d v1, Vector3d v2, LaserBaseTile tile) {
         tess.pos(v1.getX(), v1.getY(), v1.getZ()).endVertex();
         double x = ((int) v1.getX()) == -1 ? 0 : ((int) v1.getX()) == 2 ? 1 : v2.x;
         double z = (((int) v1.getZ()) == -1 ? 0 : ((int) v1.getZ()) == 2 ? 1 : v2.z);

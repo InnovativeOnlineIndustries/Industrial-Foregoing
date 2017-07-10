@@ -13,7 +13,6 @@ import net.minecraft.entity.item.EntityXPOrb;
 import net.minecraft.item.EnumDyeColor;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.DamageSource;
-import net.minecraft.util.EntityDamageSource;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
@@ -62,7 +61,7 @@ public class MobRelocatorTile extends WorkingAreaElectricMachine {
     @Override
     public void protectedUpdate() {
         super.protectedUpdate();
-        this.getWorld().getEntitiesWithinAABB(EntityXPOrb.class, getWorkingArea().expand(2,2,2)).forEach(Entity::setDead);
+        this.getWorld().getEntitiesWithinAABB(EntityXPOrb.class, getWorkingArea().expand(2, 2, 2)).forEach(Entity::setDead);
     }
 
     @Override
@@ -77,8 +76,8 @@ public class MobRelocatorTile extends WorkingAreaElectricMachine {
         mob.attackEntityFrom(DamageSource.causePlayerDamage(IndustrialForegoing.getFakePlayer(world)), mob.getMaxHealth());
         List<EntityItem> items = this.getWorld().getEntitiesWithinAABB(EntityItem.class, area);
         for (EntityItem item : items) {
-            if (!item.getEntityItem().isEmpty()) {
-                ItemHandlerHelper.insertItem(outItems, item.getEntityItem(), false);
+            if (!item.getItem().isEmpty()) {
+                ItemHandlerHelper.insertItem(outItems, item.getItem(), false);
                 item.setDead();
             }
         }
@@ -90,7 +89,7 @@ public class MobRelocatorTile extends WorkingAreaElectricMachine {
     public AxisAlignedBB getWorkingArea() {
         EnumFacing f = this.getFacing().getOpposite();
         BlockPos corner1 = new BlockPos(0, 0, 0).offset(f, getRadius() + 1).offset(EnumFacing.UP, getHeight());
-        return new AxisAlignedBB(this.pos.getX(), this.pos.getY(), this.pos.getZ(), this.pos.getX() + 1, this.pos.getY() + 1, this.pos.getZ() + 1).expand(getRadius(), getHeight(), getRadius()).offset(corner1);
+        return new AxisAlignedBB(this.pos.getX(), this.pos.getY(), this.pos.getZ(), this.pos.getX() + 1, this.pos.getY() + 1, this.pos.getZ() + 1).grow(getRadius(), getHeight(), getRadius()).offset(corner1);
     }
 
 

@@ -7,6 +7,7 @@ import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.EnchantmentData;
 import net.minecraft.init.Items;
 import net.minecraft.item.EnumDyeColor;
+import net.minecraft.item.ItemEnchantedBook;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraftforge.items.ItemHandlerHelper;
@@ -133,7 +134,7 @@ public class EnchantmentExtractorTile extends CustomElectricMachine {
         ItemStack enchantedBook = new ItemStack(Items.ENCHANTED_BOOK);
         if (ItemHandlerHelper.insertItem(outEnchanted, enchantedBook, true).isEmpty() && ItemHandlerHelper.insertItem(outItem, enchantedItem, true).isEmpty()) {
             NBTTagCompound base = (NBTTagCompound) enchantedItem.getEnchantmentTagList().get(0);
-            Items.ENCHANTED_BOOK.addEnchantment(enchantedBook, new EnchantmentData(Enchantment.getEnchantmentByID(base.getShort("id")), base.getShort("lvl")));
+            ((ItemEnchantedBook) Items.ENCHANTED_BOOK).addEnchantment(enchantedBook, new EnchantmentData(Enchantment.getEnchantmentByID(base.getShort("id")), base.getShort("lvl")));
             enchantedItem.getEnchantmentTagList().removeTag(0);
             ItemHandlerHelper.insertItem(outEnchanted, enchantedBook, false);
             ItemHandlerHelper.insertItem(outItem, enchantedItem.copy(), false);

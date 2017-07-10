@@ -3,6 +3,7 @@ package com.buuz135.industrial.tile.misc;
 import com.buuz135.industrial.proxy.BlockRegistry;
 import com.buuz135.industrial.tile.CustomColoredItemHandler;
 import com.buuz135.industrial.tile.block.CustomOrientedBlock;
+import net.minecraft.inventory.InventoryHelper;
 import net.minecraft.item.EnumDyeColor;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -20,6 +21,7 @@ public class BlackHoleControllerTile extends SidedTileEntity {
     private ItemStackHandler input;
     private ItemStackHandler storage;
     private ItemStackHandler output;
+    private BlackHoleControllerHandler itemHandler = new BlackHoleControllerHandler(this);
 
     public BlackHoleControllerTile() {
         super(BlackHoleControllerTile.class.getName().hashCode());
@@ -94,8 +96,8 @@ public class BlackHoleControllerTile extends SidedTileEntity {
     }
 
     @Override
-    protected void createAddonsInventory() {
-
+    protected boolean supportsAddons() {
+        return false;
     }
 
     @Override
@@ -108,10 +110,10 @@ public class BlackHoleControllerTile extends SidedTileEntity {
                 ItemStack s = BlockRegistry.blackHoleUnitBlock.getItemStack(stack);
                 if (!s.isEmpty()) {
                     ItemStack in = input.getStackInSlot(i);
-                    if (!in.isEmpty() && in.getCount()+amount < Integer.MAX_VALUE) {
+                    if (!in.isEmpty() && in.getCount() + amount < Integer.MAX_VALUE) {
                         BlockRegistry.blackHoleUnitBlock.setAmount(stack, amount + in.getCount());
                         in.setCount(0);
-                        return;
+                        continue;
                     }
                     ItemStack out = output.getStackInSlot(i);
                     if (out.isEmpty()) { // Slot is empty
@@ -119,13 +121,13 @@ public class BlackHoleControllerTile extends SidedTileEntity {
                         out.setCount(Math.min(amount, 64));
                         BlockRegistry.blackHoleUnitBlock.setAmount(stack, amount - out.getCount());
                         output.setStackInSlot(i, out);
-                        return;
+                        continue;
                     }
                     if (out.getCount() < out.getMaxStackSize()) {
                         int increase = Math.min(amount, out.getMaxStackSize() - out.getCount());
                         out.setCount(out.getCount() + increase);
                         BlockRegistry.blackHoleUnitBlock.setAmount(stack, amount - increase);
-                        return;
+                        continue;
                     }
                 }
             }
@@ -144,8 +146,6 @@ public class BlackHoleControllerTile extends SidedTileEntity {
         return output;
     }
 
-    private BlackHoleControllerHandler itemHandler = new BlackHoleControllerHandler(this);
-
     @Override
     public boolean hasCapability(Capability<?> capability, EnumFacing facing) {
         if (capability == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY)
@@ -158,6 +158,17 @@ public class BlackHoleControllerTile extends SidedTileEntity {
         if (capability == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY)
             return (T) itemHandler;
         return super.getCapability(capability, facing);
+    }
+
+    public void dropItems() {
+        for (ItemStackHandler items : new ItemStackHandler[]{input, storage, output}) {
+            for (int i = 0; i < items.getSlots(); ++i) {
+                ItemStack stack = items.getStackInSlot(i);
+                if (!stack.isEmpty()) {
+                    InventoryHelper.spawnItemStack(this.getWorld(), pos.getX(), pos.getY(), pos.getZ(), stack);
+                }
+            }
+        }
     }
 
     private class BlackHoleControllerHandler implements IItemHandler {

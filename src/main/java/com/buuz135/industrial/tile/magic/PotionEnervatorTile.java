@@ -11,7 +11,6 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.datafix.fixes.PotionItems;
 import net.minecraftforge.common.brewing.BrewingRecipeRegistry;
 import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fluids.IFluidTank;
@@ -77,6 +76,7 @@ public class PotionEnervatorTile extends CustomElectricMachine {
         this.addInventory(new CustomColoredItemHandler(inputIngredients, EnumDyeColor.GREEN, "Ingredients items", 18 * 4 + 10, 25, 5, 1) {
             @Override
             public boolean canInsertItem(int slot, ItemStack stack) {
+                System.out.println(stack.getTagCompound());
                 if (stack.getItem().equals(Items.GLASS_BOTTLE)) return false;
                 if (slot == 0) {
                     return stack.getItem().equals(Items.NETHER_WART);
@@ -188,7 +188,10 @@ public class PotionEnervatorTile extends CustomElectricMachine {
         }
         if (action == 0 && inputGlassBottles.getStackInSlot(0).getCount() >= 3 && ItemHandlerHelper.insertItem(outputPotions, new ItemStack(Items.POTIONITEM, 3), true).isEmpty() && fluidTank.getFluidAmount() >= 3000) { //DUMMY STACK
             ItemStack bottles = new ItemStack(Items.POTIONITEM, 3);
-            bottles.setTagCompound(new PotionItems().fixTagCompound(bottles.getTagCompound() == null ? new NBTTagCompound() : bottles.getTagCompound()));
+            NBTTagCompound c = new NBTTagCompound();
+            c.setString("Potion", "minecraft:water");
+            bottles.setTagCompound(c);
+            //bottles.setTagCompound(new PotionItems().fixTagCompound(bottles.getTagCompound() == null ? new NBTTagCompound() : bottles.getTagCompound()));
             ItemHandlerHelper.insertItem(outputPotions, bottles, false);
             fluidTank.drain(3000, true);
             inputGlassBottles.getStackInSlot(0).setCount(inputGlassBottles.getStackInSlot(0).getCount() - 3);

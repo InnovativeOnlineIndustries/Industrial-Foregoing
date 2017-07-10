@@ -1,10 +1,8 @@
 package com.buuz135.industrial.tile;
 
 import com.buuz135.industrial.item.addon.RangeAddonItem;
-import com.buuz135.industrial.item.addon.RedstoneInvertedAddon;
 import com.buuz135.industrial.proxy.CommonProxy;
 import com.buuz135.industrial.proxy.client.ClientProxy;
-import com.buuz135.industrial.tile.mob.MobDetectorTile;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -42,7 +40,7 @@ public abstract class WorkingAreaElectricMachine extends CustomElectricMachine {
     @Override
     public List<IGuiContainerPiece> getGuiContainerPieces(BasicTeslaGuiContainer container) {
         List<IGuiContainerPiece> list = super.getGuiContainerPieces(container);
-        list.add(new ToggleButtonPiece(153, 84, 14, 14) {
+        list.add(new ToggleButtonPiece(135, 84, 13, 13) {
             @Override
             protected int getCurrentState() {
                 return showArea ? 1 : 0;
@@ -58,10 +56,10 @@ public abstract class WorkingAreaElectricMachine extends CustomElectricMachine {
                 super.drawBackgroundLayer(container, guiX, guiY, partialTicks, mouseX, mouseY);
                 if (getCurrentState() == 0) {
                     container.mc.getTextureManager().bindTexture(ClientProxy.GUI);
-                    container.drawTexturedRect(this.getLeft()-1, this.getTop()-1, 78, 1, 16, 16);
+                    container.drawTexturedRect(this.getLeft() - 1, this.getTop() - 1, 78, 1, 16, 16);
                 } else {
                     container.mc.getTextureManager().bindTexture(ClientProxy.GUI);
-                    container.drawTexturedRect(this.getLeft()-1, this.getTop()-1,
+                    container.drawTexturedRect(this.getLeft() - 1, this.getTop() - 1,
                             78, 17, 16, 16);
                 }
             }
@@ -75,7 +73,7 @@ public abstract class WorkingAreaElectricMachine extends CustomElectricMachine {
             public void drawForegroundLayer(BasicTeslaGuiContainer container, int guiX, int guiY, int mouseX, int mouseY) {
                 super.drawForegroundLayer(container, guiX, guiY, mouseX, mouseY);
                 if (isInside(container, mouseX, mouseY))
-                    container.drawTooltip(Arrays.asList("Show working area"), mouseX - guiX, mouseY - guiY);
+                    container.drawTooltip(Arrays.asList(getCurrentState() == 0 ? "Show working area" : "Hide working area"), mouseX - guiX, mouseY - guiY);
             }
         });
 
@@ -86,8 +84,6 @@ public abstract class WorkingAreaElectricMachine extends CustomElectricMachine {
 
     @Override
     protected float performWork() {
-        if (this.world.isBlockPowered(this.pos) == !hasAddon(RedstoneInvertedAddon.class) && !(this instanceof MobDetectorTile))
-            return 0;
         float work = 0;
         for (int i = 0; i < getActionsWork(); ++i) {
             float temp = work();

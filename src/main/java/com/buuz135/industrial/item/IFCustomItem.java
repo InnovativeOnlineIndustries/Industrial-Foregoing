@@ -4,10 +4,9 @@ import com.buuz135.industrial.IndustrialForegoing;
 import com.buuz135.industrial.utils.Reference;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.item.Item;
-import net.minecraft.item.crafting.CraftingManager;
 import net.minecraft.item.crafting.IRecipe;
 import net.minecraftforge.client.model.ModelLoader;
-import net.minecraftforge.fml.common.registry.GameRegistry;
+import net.minecraftforge.registries.IForgeRegistry;
 
 public class IFCustomItem extends Item {
 
@@ -18,12 +17,8 @@ public class IFCustomItem extends Item {
         setRegistryName(Reference.MOD_ID, name);
     }
 
-    public void register() {
-        GameRegistry.register(this);
-        IRecipe recipe = this.getRecipe();
-        if (recipe != null) {
-            CraftingManager.getInstance().addRecipe(recipe);
-        }
+    public void register(IForgeRegistry<Item> items) {
+        items.register(this);
     }
 
     public void registerRender() {

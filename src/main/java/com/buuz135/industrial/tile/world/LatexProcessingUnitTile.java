@@ -69,7 +69,7 @@ public class LatexProcessingUnitTile extends CustomElectricMachine {
                 BoundingRectangle box = this.getBoundingBox();
                 pieces.add(new TiledRenderedGuiPiece(box.getLeft(), box.getTop(), 18, 18,
                         3, 3,
-                        BasicTeslaGuiContainer.MACHINE_BACKGROUND, 108, 225, EnumDyeColor.ORANGE));
+                        BasicTeslaGuiContainer.Companion.getMACHINE_BACKGROUND(), 108, 225, EnumDyeColor.ORANGE));
                 return pieces;
             }
         });

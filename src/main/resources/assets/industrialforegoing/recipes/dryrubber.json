@@ -1,0 +1,35 @@
+{
+  "result": {
+    "item": "industrialforegoing:dryrubber"
+  },
+  "ingredients": [
+    {
+      "item": "industrialforegoing:tinydryrubber"
+    },
+    {
+      "item": "industrialforegoing:tinydryrubber"
+    },
+    {
+      "item": "industrialforegoing:tinydryrubber"
+    },
+    {
+      "item": "industrialforegoing:tinydryrubber"
+    },
+    {
+      "item": "industrialforegoing:tinydryrubber"
+    },
+    {
+      "item": "industrialforegoing:tinydryrubber"
+    },
+    {
+      "item": "industrialforegoing:tinydryrubber"
+    },
+    {
+      "item": "industrialforegoing:tinydryrubber"
+    },
+    {
+      "item": "industrialforegoing:tinydryrubber"
+    }
+  ],
+  "type": "minecraft:crafting_shapeless"
+}

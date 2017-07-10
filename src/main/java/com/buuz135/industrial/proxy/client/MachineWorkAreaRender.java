@@ -42,7 +42,7 @@ public class MachineWorkAreaRender {
                             GL11.glDisable(GL11.GL_TEXTURE_2D);
                             EntityPlayerSP player = Minecraft.getMinecraft().player;
                             Vec3d playerPos = player.getPositionEyes(event.getPartialTicks());
-                            GL11.glTranslated(pos.getX() - playerPos.xCoord, pos.getY() - playerPos.yCoord + player.getEyeHeight(), pos.getZ() - playerPos.zCoord);
+                            GL11.glTranslated(pos.getX() - playerPos.x, pos.getY() - playerPos.y + player.getEyeHeight(), pos.getZ() - playerPos.z);
                             axis = new AxisAlignedBB(axis.minX - pos.getX(), axis.minY - pos.getY(), axis.minZ - pos.getZ(), axis.maxX - pos.getX(), axis.maxY - pos.getY(), axis.maxZ - pos.getZ());
 
                             int color = areaElectricMachine.getColor();

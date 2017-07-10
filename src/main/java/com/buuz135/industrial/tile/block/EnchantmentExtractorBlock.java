@@ -2,13 +2,12 @@ package com.buuz135.industrial.tile.block;
 
 import com.buuz135.industrial.proxy.ItemRegistry;
 import com.buuz135.industrial.tile.magic.EnchantmentExtractorTile;
+import com.buuz135.industrial.utils.RecipeUtils;
 import net.minecraft.block.material.Material;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
-import net.minecraft.item.crafting.IRecipe;
-import net.minecraftforge.oredict.ShapedOreRecipe;
-import net.ndrei.teslacorelib.TeslaCoreLib;
+import net.ndrei.teslacorelib.items.MachineCaseItem;
 
 public class EnchantmentExtractorBlock extends CustomOrientedBlock<EnchantmentExtractorTile> {
 
@@ -16,13 +15,12 @@ public class EnchantmentExtractorBlock extends CustomOrientedBlock<EnchantmentEx
         super("enchantment_extractor", EnchantmentExtractorTile.class, Material.ROCK, 5000, 100);
     }
 
-    @Override
-    protected IRecipe getRecipe() {
-        return new ShapedOreRecipe(new ItemStack(this), "pnp", "bmb", "dgd",
+    public void createRecipe() {
+        RecipeUtils.addShapedRecipe(new ItemStack(this), "pnp", "bmb", "dgd",
                 'p', ItemRegistry.plastic,
                 'n', Blocks.NETHER_BRICK,
                 'b', Items.BOOK,
-                'm', TeslaCoreLib.machineCase,
+                'm', MachineCaseItem.INSTANCE,
                 'd', "gemDiamond",
                 'g', "gearGold");
     }

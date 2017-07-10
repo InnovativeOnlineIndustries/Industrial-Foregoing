@@ -1,0 +1,31 @@
+{
+  "result": {
+    "item": "industrialforegoing:enchantment_refiner"
+  },
+  "pattern": [
+    "pep",
+    "bmn",
+    "pgp"
+  ],
+  "type": "forge:ore_shaped",
+  "key": {
+    "p": {
+      "item": "industrialforegoing:plastic"
+    },
+    "b": {
+      "item": "minecraft:book"
+    },
+    "e": {
+      "item": "minecraft:ender_pearl"
+    },
+    "g": {
+      "item": "#GEARDIAMOND"
+    },
+    "m": {
+      "item": "teslacorelib:machine_case"
+    },
+    "n": {
+      "item": "minecraft:enchanted_book"
+    }
+  }
+}

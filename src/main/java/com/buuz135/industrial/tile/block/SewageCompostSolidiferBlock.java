@@ -2,13 +2,12 @@ package com.buuz135.industrial.tile.block;
 
 import com.buuz135.industrial.proxy.ItemRegistry;
 import com.buuz135.industrial.tile.agriculture.SewageCompostSolidifierTile;
+import com.buuz135.industrial.utils.RecipeUtils;
 import net.minecraft.block.material.Material;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
-import net.minecraft.item.crafting.IRecipe;
-import net.minecraftforge.oredict.ShapedOreRecipe;
-import net.ndrei.teslacorelib.TeslaCoreLib;
+import net.ndrei.teslacorelib.items.MachineCaseItem;
 
 public class SewageCompostSolidiferBlock extends CustomOrientedBlock<SewageCompostSolidifierTile> {
 
@@ -16,13 +15,12 @@ public class SewageCompostSolidiferBlock extends CustomOrientedBlock<SewageCompo
         super("sewage_composter_solidifier", SewageCompostSolidifierTile.class, Material.ROCK, 1000, 10);
     }
 
-    @Override
-    protected IRecipe getRecipe() {
-        return new ShapedOreRecipe(new ItemStack(this), "pfp", "imi", "brb",
+    public void createRecipe() {
+        RecipeUtils.addShapedRecipe(new ItemStack(this), "pfp", "imi", "brb",
                 'p', ItemRegistry.plastic,
                 'f', Blocks.FURNACE,
                 'i', Blocks.PISTON,
-                'm', TeslaCoreLib.machineCase,
+                'm', MachineCaseItem.INSTANCE,
                 'b', Items.BRICK,
                 'r', Items.REDSTONE);
     }

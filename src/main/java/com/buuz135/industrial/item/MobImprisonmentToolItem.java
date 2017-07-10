@@ -1,6 +1,8 @@
 package com.buuz135.industrial.item;
 
 import com.buuz135.industrial.proxy.ItemRegistry;
+import com.buuz135.industrial.utils.RecipeUtils;
+import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityList;
 import net.minecraft.entity.EntityLiving;
@@ -8,8 +10,6 @@ import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
-import net.minecraft.item.crafting.IRecipe;
-import net.minecraft.item.crafting.ShapedRecipes;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumActionResult;
 import net.minecraft.util.EnumFacing;
@@ -18,6 +18,7 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
+import javax.annotation.Nullable;
 import java.util.List;
 
 public class MobImprisonmentToolItem extends IFCustomItem {
@@ -70,8 +71,8 @@ public class MobImprisonmentToolItem extends IFCustomItem {
     }
 
     @Override
-    public void addInformation(ItemStack stack, EntityPlayer playerIn, List<String> tooltip, boolean advanced) {
-        super.addInformation(stack, playerIn, tooltip, advanced);
+    public void addInformation(ItemStack stack, @Nullable World worldIn, List<String> tooltip, ITooltipFlag flagIn) {
+        super.addInformation(stack, worldIn, tooltip, flagIn);
         if (containsEntity(stack)) {
             tooltip.add("Mob: " + stack.getTagCompound().getString("entity"));
             tooltip.add("Health: " + stack.getTagCompound().getDouble("Health"));
@@ -87,10 +88,8 @@ public class MobImprisonmentToolItem extends IFCustomItem {
         return entity;
     }
 
-    @Override
-    public IRecipe getRecipe() {
-        return new ShapedRecipes(3, 3, new ItemStack[]{ItemStack.EMPTY, new ItemStack(ItemRegistry.plastic), ItemStack.EMPTY,
-                new ItemStack(ItemRegistry.plastic), new ItemStack(Items.GHAST_TEAR), new ItemStack(ItemRegistry.plastic),
-                ItemStack.EMPTY, new ItemStack(ItemRegistry.plastic), ItemStack.EMPTY}, new ItemStack(this));
+    public void createRecipe() {
+        RecipeUtils.addShapedRecipe(new ItemStack(this), " p ", "pgp", " p ", 'p', new ItemStack(ItemRegistry.plastic), 'g',
+                new ItemStack(Items.GHAST_TEAR));
     }
 }

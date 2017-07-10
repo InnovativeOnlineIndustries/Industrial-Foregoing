@@ -6,10 +6,6 @@ import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
 
 public class LaserBaseSpecialRender extends TileEntitySpecialRenderer<LaserBaseTile> {
 
-    @Override
-    public void renderTileEntityAt(LaserBaseTile te, double x, double y, double z, float partialTicks, int destroyStage) {
-
-    }
 
 //    private void drawLine(Tessellator tess, Vector2d v1, Vector2d v2, float partial) {
 //

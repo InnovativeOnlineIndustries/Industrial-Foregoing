@@ -56,7 +56,7 @@ public class ItemStackUtils {
                 TileEntityItemStackRenderer.instance.renderByItem(stack);
             } else {
                 Tessellator tessellator = Tessellator.getInstance();
-                VertexBuffer vertexbuffer = tessellator.getBuffer();
+                BufferBuilder vertexbuffer = tessellator.getBuffer();
                 vertexbuffer.begin(gl, DefaultVertexFormats.ITEM);
                 for (EnumFacing enumfacing : EnumFacing.values()) {
                     renderQuads(vertexbuffer, bakedmodel.getQuads(null, enumfacing, 0L), -1, stack);
@@ -75,7 +75,7 @@ public class ItemStackUtils {
     }
 
 
-    private static void renderQuads(VertexBuffer renderer, List<BakedQuad> quads, int color, ItemStack stack) {
+    private static void renderQuads(BufferBuilder renderer, List<BakedQuad> quads, int color, ItemStack stack) {
         boolean flag = color == -1 && !stack.isEmpty();
         int i = 0;
 
@@ -155,8 +155,8 @@ public class ItemStackUtils {
         return false;
     }
 
-    public static boolean isInventoryFull(ItemStackHandler handler){
-        for (int i = 0; i < handler.getSlots(); ++i){
+    public static boolean isInventoryFull(ItemStackHandler handler) {
+        for (int i = 0; i < handler.getSlots(); ++i) {
             if (handler.getStackInSlot(i).isEmpty()) return false;
         }
         return true;

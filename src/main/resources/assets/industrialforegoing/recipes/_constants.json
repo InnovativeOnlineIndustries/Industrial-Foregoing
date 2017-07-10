@@ -1,0 +1,107 @@
+[
+  {
+    "ingredient": {
+      "type": "forge:ore_dict",
+      "ore": "blockGlassColorless"
+    },
+    "name": "BLOCKGLASSCOLORLESS"
+  },
+  {
+    "ingredient": {
+      "type": "forge:ore_dict",
+      "ore": "chestWood"
+    },
+    "name": "CHESTWOOD"
+  },
+  {
+    "ingredient": {
+      "type": "forge:ore_dict",
+      "ore": "dyeBlue"
+    },
+    "name": "DYEBLUE"
+  },
+  {
+    "ingredient": {
+      "type": "forge:ore_dict",
+      "ore": "dyeGreen"
+    },
+    "name": "DYEGREEN"
+  },
+  {
+    "ingredient": {
+      "type": "forge:ore_dict",
+      "ore": "dyePurple"
+    },
+    "name": "DYEPURPLE"
+  },
+  {
+    "ingredient": {
+      "type": "forge:ore_dict",
+      "ore": "dyeRed"
+    },
+    "name": "DYERED"
+  },
+  {
+    "ingredient": {
+      "type": "forge:ore_dict",
+      "ore": "egg"
+    },
+    "name": "EGG"
+  },
+  {
+    "ingredient": {
+      "type": "forge:ore_dict",
+      "ore": "gearDiamond"
+    },
+    "name": "GEARDIAMOND"
+  },
+  {
+    "ingredient": {
+      "type": "forge:ore_dict",
+      "ore": "gearGold"
+    },
+    "name": "GEARGOLD"
+  },
+  {
+    "ingredient": {
+      "type": "forge:ore_dict",
+      "ore": "gearIron"
+    },
+    "name": "GEARIRON"
+  },
+  {
+    "ingredient": {
+      "type": "forge:ore_dict",
+      "ore": "gemDiamond"
+    },
+    "name": "GEMDIAMOND"
+  },
+  {
+    "ingredient": {
+      "type": "forge:ore_dict",
+      "ore": "gemEmerald"
+    },
+    "name": "GEMEMERALD"
+  },
+  {
+    "ingredient": {
+      "type": "forge:ore_dict",
+      "ore": "ingotIron"
+    },
+    "name": "INGOTIRON"
+  },
+  {
+    "ingredient": {
+      "type": "forge:ore_dict",
+      "ore": "nuggetGold"
+    },
+    "name": "NUGGETGOLD"
+  },
+  {
+    "ingredient": {
+      "type": "forge:ore_dict",
+      "ore": "paneGlass"
+    },
+    "name": "PANEGLASS"
+  }
+]

@@ -46,7 +46,7 @@ public class CustomColoredItemHandler extends ColoredItemHandler {
     public List<IGuiContainerPiece> getGuiContainerPieces(BasicTeslaGuiContainer container) {
         List<IGuiContainerPiece> pieces = super.getGuiContainerPieces(container);
         BoundingRectangle box = this.getBoundingBox();
-        pieces.add(new TiledRenderedGuiPiece(box.getLeft(), box.getTop(), 18, 18, slotsX, slotsY, BasicTeslaGuiContainer.MACHINE_BACKGROUND, 108, 225, getColor()));
+        pieces.add(new TiledRenderedGuiPiece(box.getLeft(), box.getTop(), 18, 18, slotsX, slotsY, BasicTeslaGuiContainer.Companion.getMACHINE_BACKGROUND(), 108, 225, getColor()));
         return pieces;
     }
 }

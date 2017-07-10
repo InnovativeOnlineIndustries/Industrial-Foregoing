@@ -45,7 +45,7 @@ public class BlockUtils {
     }
 
     public static boolean isLog(World world, BlockPos pos) {
-        return isBlockOreDict(world, pos, "logWood");
+        return isBlockOreDict(world, pos, "logWood") || isBlockOreDict(world, pos, "blockSlimeCongealed");
     }
 
     public static boolean isLeaves(World world, BlockPos pos) {
@@ -89,7 +89,7 @@ public class BlockUtils {
         GL11.glDisable(GL11.GL_BLEND);
         GL11.glDepthMask(true);
         GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE);
-        VertexBuffer buffer = tess.getBuffer();
+        BufferBuilder buffer = tess.getBuffer();
         buffer.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_TEX);
         double d1 = -(tile.getWorld().getWorldTime() % 15) / 15D;
         double d2 = (tile.getWorld().getWorldTime() % 40) / 2D;

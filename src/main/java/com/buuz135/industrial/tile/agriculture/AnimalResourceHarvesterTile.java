@@ -75,9 +75,8 @@ public class AnimalResourceHarvesterTile extends WorkingAreaElectricMachine {
     public AxisAlignedBB getWorkingArea() {
         EnumFacing f = this.getFacing().getOpposite();
         BlockPos corner1 = new BlockPos(0, 0, 0).offset(f, getRadius() + 1);
-        return new AxisAlignedBB(this.pos.getX(), this.pos.getY(), this.pos.getZ(), this.pos.getX() + 1, this.pos.getY() + 1, this.pos.getZ() + 1).offset(corner1).expand(getRadius(), 0, getRadius()).setMaxY(this.getPos().getY() + getHeight());
+        return new AxisAlignedBB(this.pos.getX(), this.pos.getY(), this.pos.getZ(), this.pos.getX() + 1, this.pos.getY() + 1, this.pos.getZ() + 1).offset(corner1).grow(getRadius(), 0, getRadius()).setMaxY(this.getPos().getY() + getHeight());
     }
-
 
 
 }

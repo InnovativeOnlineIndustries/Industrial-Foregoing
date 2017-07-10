@@ -24,7 +24,8 @@ public class PetrifiedFuelGeneratorTile extends CustomGeneratorMachine {
 
     private ItemStackHandler inStackHandler;
     private ItemStackHandler invisibleSlot;
-
+    private ItemStack current = ItemStack.EMPTY;
+    private int burnTime = 0;
 
     public PetrifiedFuelGeneratorTile() {
         super(PetrifiedFuelGeneratorTile.class.getName().hashCode());
@@ -57,7 +58,7 @@ public class PetrifiedFuelGeneratorTile extends CustomGeneratorMachine {
                 List<IGuiContainerPiece> pieces = super.getGuiContainerPieces(container);
                 BoundingRectangle box = this.getBoundingBox();
                 pieces.add(new TiledRenderedGuiPiece(box.getLeft(), box.getTop(), 18, 18, 1, 3,
-                        BasicTeslaGuiContainer.MACHINE_BACKGROUND, 108, 225, EnumDyeColor.GREEN));
+                        BasicTeslaGuiContainer.Companion.getMACHINE_BACKGROUND(), 108, 225, EnumDyeColor.GREEN));
                 return pieces;
             }
 
@@ -65,7 +66,7 @@ public class PetrifiedFuelGeneratorTile extends CustomGeneratorMachine {
             public List<Slot> getSlots(BasicTeslaContainer container) {
                 List<Slot> slots = super.getSlots(container);
                 BoundingRectangle boundingRectangle = this.getBoundingBox();
-                for (int y = 0; y < this.handler.getSlots(); y++) {
+                for (int y = 0; y < this.getInnerHandler().getSlots(); y++) {
                     slots.add(new FilteredSlot(this.getItemHandlerForContainer(), y, boundingRectangle.getLeft() + 1, boundingRectangle.getTop() + 1 + y * 18));
                 }
                 return slots;
@@ -79,8 +80,6 @@ public class PetrifiedFuelGeneratorTile extends CustomGeneratorMachine {
         return !stack.isEmpty() && TileEntityFurnace.isItemFuel(stack) && !stack.getItem().equals(Items.LAVA_BUCKET) && !stack.getItem().equals(ForgeModContainer.getInstance().universalBucket);
     }
 
-    private ItemStack current = ItemStack.EMPTY;
-
     public ItemStack getFirstFuel(boolean replace) {
         if (!replace) return this.current;
         for (int i = 0; i < inStackHandler.getSlots(); ++i) {
@@ -92,8 +91,6 @@ public class PetrifiedFuelGeneratorTile extends CustomGeneratorMachine {
         }
         return current = ItemStack.EMPTY;
     }
-
-    private int burnTime = 0;
 
     @Override
     public long consumeFuel() { //TODO fix buckets

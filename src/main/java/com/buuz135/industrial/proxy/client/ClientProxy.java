@@ -11,8 +11,8 @@ import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 
 public class ClientProxy extends CommonProxy {
 
-    public static ResourceLocation GUI = new ResourceLocation(Reference.MOD_ID, "textures/gui/machines.png");
     public static final ResourceLocation beacon = new ResourceLocation("textures/entity/beacon_beam.png");
+    public static ResourceLocation GUI = new ResourceLocation(Reference.MOD_ID, "textures/gui/machines.png");
 
     @Override
     public void preInit(FMLPreInitializationEvent event) {

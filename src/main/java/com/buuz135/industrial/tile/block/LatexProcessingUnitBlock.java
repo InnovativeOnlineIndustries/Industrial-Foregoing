@@ -1,13 +1,12 @@
 package com.buuz135.industrial.tile.block;
 
 import com.buuz135.industrial.tile.world.LatexProcessingUnitTile;
+import com.buuz135.industrial.utils.RecipeUtils;
 import net.minecraft.block.material.Material;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
-import net.minecraft.item.crafting.IRecipe;
-import net.minecraftforge.oredict.ShapedOreRecipe;
-import net.ndrei.teslacorelib.TeslaCoreLib;
+import net.ndrei.teslacorelib.items.MachineCaseItem;
 
 public class LatexProcessingUnitBlock extends CustomOrientedBlock<LatexProcessingUnitTile> {
 
@@ -15,13 +14,12 @@ public class LatexProcessingUnitBlock extends CustomOrientedBlock<LatexProcessin
         super("latex_processing_unit", LatexProcessingUnitTile.class, Material.ROCK, 200, 5);
     }
 
-    @Override
-    protected IRecipe getRecipe() {
-        return new ShapedOreRecipe(new ItemStack(this), "prp", "fmf", "pgp",
+    public void createRecipe() {
+        RecipeUtils.addShapedRecipe(new ItemStack(this), "prp", "fmf", "pgp",
                 'p', "ingotIron",
                 'r', Items.REDSTONE,
                 'f', Blocks.FURNACE,
-                'm', TeslaCoreLib.machineCase,
+                'm', MachineCaseItem.INSTANCE,
                 'g', "gearIron");
     }
 }

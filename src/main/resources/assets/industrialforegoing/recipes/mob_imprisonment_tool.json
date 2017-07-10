@@ -1,0 +1,19 @@
+{
+  "result": {
+    "item": "industrialforegoing:mob_imprisonment_tool"
+  },
+  "pattern": [
+    " p ",
+    "pgp",
+    " p "
+  ],
+  "type": "minecraft:crafting_shaped",
+  "key": {
+    "p": {
+      "item": "industrialforegoing:plastic"
+    },
+    "g": {
+      "item": "minecraft:ghast_tear"
+    }
+  }
+}

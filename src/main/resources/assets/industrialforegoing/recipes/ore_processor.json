@@ -1,0 +1,31 @@
+{
+  "result": {
+    "item": "industrialforegoing:ore_processor"
+  },
+  "pattern": [
+    "pip",
+    "ama",
+    "brb"
+  ],
+  "type": "minecraft:crafting_shaped",
+  "key": {
+    "p": {
+      "item": "industrialforegoing:plastic"
+    },
+    "a": {
+      "item": "minecraft:iron_pickaxe"
+    },
+    "b": {
+      "item": "minecraft:book"
+    },
+    "r": {
+      "item": "minecraft:redstone"
+    },
+    "i": {
+      "item": "minecraft:piston"
+    },
+    "m": {
+      "item": "teslacorelib:machine_case"
+    }
+  }
+}

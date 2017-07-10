@@ -52,6 +52,7 @@ public class WaterResourcesCollectorTile extends WorkingAreaElectricMachine {
     @Override
     public float work() {
         if (((CustomOrientedBlock) this.getBlockType()).isWorkDisabled()) return 0;
+        if (this.world.rand.nextBoolean() && this.world.rand.nextBoolean()) return 1;
         List<BlockPos> blockPos = BlockUtils.getBlockPosInAABB(getWorkingArea());
         boolean allWaterSources = true;
         for (BlockPos pos : blockPos) {
@@ -73,7 +74,7 @@ public class WaterResourcesCollectorTile extends WorkingAreaElectricMachine {
     @Override
     public AxisAlignedBB getWorkingArea() {
         BlockPos corner1 = new BlockPos(0, -1, 0);
-        return new AxisAlignedBB(this.pos.getX(), this.pos.getY(), this.pos.getZ(), this.pos.getX() + 1, this.pos.getY() + 1, this.pos.getZ() + 1).offset(corner1).expand(getRadius(), 0, getRadius());
+        return new AxisAlignedBB(this.pos.getX(), this.pos.getY(), this.pos.getZ(), this.pos.getX() + 1, this.pos.getY() + 1, this.pos.getZ() + 1).offset(corner1).grow(getRadius(), 0, getRadius());
     }
 
 }

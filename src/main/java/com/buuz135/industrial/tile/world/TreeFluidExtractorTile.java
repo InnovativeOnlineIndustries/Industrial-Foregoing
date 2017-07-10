@@ -17,9 +17,11 @@ import net.ndrei.teslacorelib.tileentities.SidedTileEntity;
 public class TreeFluidExtractorTile extends SidedTileEntity {
 
     private IFluidTank tank;
+    private int tick;
 
     public TreeFluidExtractorTile() {
         super(TreeFluidExtractorTile.class.getName().hashCode());
+        tick = 0;
     }
 
     @Override
@@ -29,16 +31,19 @@ public class TreeFluidExtractorTile extends SidedTileEntity {
     }
 
     @Override
-    protected void createAddonsInventory() {
-
+    protected boolean supportsAddons() {
+        return false;
     }
 
     @Override
     protected void innerUpdate() {
         if (((CustomOrientedBlock) this.getBlockType()).isWorkDisabled()) return;
         if (this.getWorld().isRemote) return;
-        if (this.world.getWorldTime() % 5 == 0 && BlockUtils.isLog(this.world, this.pos.offset(this.getFacing().getOpposite())))
+        if (tick >= 5 && BlockUtils.isLog(this.world, this.pos.offset(this.getFacing().getOpposite()))) {
             tank.fill(new FluidStack(FluidsRegistry.LATEX, 1), true);
+            tick = 0;
+        }
+        ++tick;
     }
 
 

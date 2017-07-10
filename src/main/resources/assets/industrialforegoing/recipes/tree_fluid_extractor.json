@@ -1,0 +1,26 @@
+{
+  "result": {
+    "item": "industrialforegoing:tree_fluid_extractor"
+  },
+  "pattern": [
+    "srs",
+    "sfs",
+    "sgs"
+  ],
+  "type": "forge:ore_shaped",
+  "key": {
+    "r": {
+      "item": "minecraft:redstone"
+    },
+    "s": {
+      "item": "minecraft:stone",
+      "data": 0
+    },
+    "f": {
+      "item": "minecraft:furnace"
+    },
+    "g": {
+      "item": "#GEARIRON"
+    }
+  }
+}

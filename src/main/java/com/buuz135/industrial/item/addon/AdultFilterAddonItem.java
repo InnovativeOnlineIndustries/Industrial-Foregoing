@@ -2,9 +2,8 @@ package com.buuz135.industrial.item.addon;
 
 import com.buuz135.industrial.proxy.ItemRegistry;
 import com.buuz135.industrial.tile.agriculture.AnimalIndependenceSelectorTile;
+import com.buuz135.industrial.utils.RecipeUtils;
 import net.minecraft.item.ItemStack;
-import net.minecraft.item.crafting.IRecipe;
-import net.minecraftforge.oredict.ShapedOreRecipe;
 import net.ndrei.teslacorelib.tileentities.SidedTileEntity;
 
 public class AdultFilterAddonItem extends CustomAddon {
@@ -18,9 +17,8 @@ public class AdultFilterAddonItem extends CustomAddon {
         return machine instanceof AnimalIndependenceSelectorTile;
     }
 
-    @Override
-    protected IRecipe getRecipe() {
-        return new ShapedOreRecipe(new ItemStack(this), "gpg", "gmg", "gpg",
+    public void createRecipe() {
+        RecipeUtils.addShapedRecipe(new ItemStack(this), "gpg", "gmg", "gpg",
                 'g', "nuggetGold",
                 'p', ItemRegistry.plastic,
                 'm', "egg");

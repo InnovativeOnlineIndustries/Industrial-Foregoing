@@ -20,7 +20,7 @@ public abstract class CustomElectricMachine extends ElectricMachine {
         super.initializeInventories();
         List<EnumFacing> facings = new ArrayList<>();
         facings.addAll(Arrays.asList(EnumFacing.values()));
-        this.sideConfig.setSidesForColor(EnumDyeColor.LIGHT_BLUE, facings);
+        this.getSideConfig().setSidesForColor(EnumDyeColor.LIGHT_BLUE, facings);
     }
 
 
@@ -37,11 +37,6 @@ public abstract class CustomElectricMachine extends ElectricMachine {
     @Override
     protected long getEnergyInputRate() {
         return 4000;
-    }
-
-    @Override
-    public boolean supportsSpeedUpgrades() {
-        return super.supportsSpeedUpgrades();
     }
 
 

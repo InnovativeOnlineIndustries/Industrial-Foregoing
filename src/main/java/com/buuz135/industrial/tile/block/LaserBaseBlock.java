@@ -4,17 +4,16 @@ import com.buuz135.industrial.config.CustomConfiguration;
 import com.buuz135.industrial.proxy.ItemRegistry;
 import com.buuz135.industrial.tile.world.LaserBaseTile;
 import com.buuz135.industrial.utils.ItemStackWeightedItem;
+import com.buuz135.industrial.utils.RecipeUtils;
 import com.google.common.collect.ArrayListMultimap;
 import com.google.common.collect.Multimap;
 import net.minecraft.block.material.Material;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.item.crafting.IRecipe;
 import net.minecraftforge.common.config.Configuration;
 import net.minecraftforge.oredict.OreDictionary;
-import net.minecraftforge.oredict.ShapedOreRecipe;
-import net.ndrei.teslacorelib.TeslaCoreLib;
+import net.ndrei.teslacorelib.items.MachineCaseItem;
 
 public class LaserBaseBlock extends CustomOrientedBlock<LaserBaseTile> {
 
@@ -91,14 +90,13 @@ public class LaserBaseBlock extends CustomOrientedBlock<LaserBaseTile> {
         return lenseChanceIncrease;
     }
 
-    @Override
-    protected IRecipe getRecipe() {
-        return new ShapedOreRecipe(new ItemStack(this), "pwp", "gwg", "dmd",
+    public void createRecipe() {
+        RecipeUtils.addShapedRecipe(new ItemStack(this), "pwp", "gwg", "dmd",
                 'p', ItemRegistry.plastic,
                 'w', Blocks.GLOWSTONE,
                 'g', "gearGold",
                 'd', "gearDiamond",
-                'm', TeslaCoreLib.machineCase);
+                'm', MachineCaseItem.INSTANCE);
     }
 }
 

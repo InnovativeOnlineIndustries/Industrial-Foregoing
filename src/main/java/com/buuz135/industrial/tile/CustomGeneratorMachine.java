@@ -19,7 +19,7 @@ public abstract class CustomGeneratorMachine extends ElectricGenerator {
         super.initializeInventories();
         List<EnumFacing> facings = new ArrayList<>();
         facings.addAll(Arrays.asList(EnumFacing.values()));
-        this.sideConfig.setSidesForColor(EnumDyeColor.LIGHT_BLUE, facings);
+        this.getSideConfig().setSidesForColor(EnumDyeColor.LIGHT_BLUE, facings);
     }
 
     @Override

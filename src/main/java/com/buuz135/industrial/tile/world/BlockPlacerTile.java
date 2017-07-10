@@ -59,7 +59,7 @@ public class BlockPlacerTile extends WorkingAreaElectricMachine {
             if (this.world.isAirBlock(pos)) {
                 ItemStack stack = getFirstStackHasBlock();
                 if (stack.isEmpty()) return 0;
-                this.world.setBlockState(pos, Block.getBlockFromItem(stack.getItem()).getDefaultState());
+                this.world.setBlockState(pos, Block.getBlockFromItem(stack.getItem()).getStateFromMeta(stack.getMetadata()));
                 stack.setCount(stack.getCount() - 1);
                 return 1;
             }
