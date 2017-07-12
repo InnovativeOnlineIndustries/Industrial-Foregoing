@@ -25,8 +25,7 @@ import net.minecraftforge.items.ItemHandlerHelper;
 import net.minecraftforge.items.ItemStackHandler;
 import net.ndrei.teslacorelib.inventory.BoundingRectangle;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 public class CropRecolectorTile extends WorkingAreaElectricMachine {
 
@@ -35,12 +34,12 @@ public class CropRecolectorTile extends WorkingAreaElectricMachine {
     private IFluidTank sludge;
     private ItemStackHandler outItems;
     private int pointer;
-    private List<BlockPos> blocksChecked;
+    private Queue<BlockPos> blockCache;
 
 
     public CropRecolectorTile() {
         super(CropRecolectorTile.class.getName().hashCode(), 1, 0, true);
-        blocksChecked = new ArrayList<>();
+        blockCache = new PriorityQueue<>(Comparator.comparingDouble(value -> ((BlockPos)value).distanceSq(pos.getX(),pos.getY(), pos.getZ())).reversed());
     }
 
     @Override
@@ -90,16 +89,15 @@ public class CropRecolectorTile extends WorkingAreaElectricMachine {
                     insertItemsAndRemove(drops, pos, outItems);
                 }
             } else if (BlockUtils.isLog(this.world, pos)) {
-                if (blocksChecked.isEmpty()) {
-                    blocksChecked.add(pos);
+                if (blockCache.isEmpty()) {
                     checkForTrees(this.world, pos);
                 }
                 needPointerIncrease = false;
                 treeOperation = true;
 
                 for (int i = 0; i < ((CropRecolectorBlock) this.getBlockType()).getTreeOperations(); ++i) {
-                    if (blocksChecked.isEmpty()) break;
-                    BlockPos p = blocksChecked.get(blocksChecked.size() - 1);
+                    if (blockCache.isEmpty()) break;
+                    BlockPos p = blockCache.peek();
                     if (BlockUtils.isLeaves(world, p) || BlockUtils.isLog(world, p)) {
                         IBlockState s = world.getBlockState(p);
                         List<ItemStack> drops = s.getBlock().getDrops(world, p, s, 0);
@@ -111,9 +109,9 @@ public class CropRecolectorTile extends WorkingAreaElectricMachine {
                         sludge.fill(new FluidStack(FluidsRegistry.SLUDGE, ((CropRecolectorBlock) this.getBlockType()).getSludgeOperation()), true);
 
                     }
-                    blocksChecked.remove(blocksChecked.size() - 1);
+                    blockCache.poll();
                 }
-                if (blocksChecked.isEmpty()) needPointerIncrease = true;
+                if (blockCache.isEmpty()) needPointerIncrease = true;
             } else if ((state.getBlock() instanceof BlockCactus || state.getBlock() instanceof BlockReed)) {
                 if (state.getBlock().equals(this.world.getBlockState(pos.offset(EnumFacing.UP, 2)).getBlock())) {
                     List<ItemStack> drops = state.getBlock().getDrops(this.world, blockPos.get(pointer), state, 0);
@@ -152,18 +150,32 @@ public class CropRecolectorTile extends WorkingAreaElectricMachine {
     }
 
     public void checkForTrees(World world, BlockPos current) {
-        for (EnumFacing facing : new EnumFacing[]{EnumFacing.EAST, EnumFacing.NORTH, EnumFacing.WEST, EnumFacing.SOUTH, EnumFacing.UP}) {
-            if (BlockUtils.isLeaves(world, current.offset(facing)) && !blocksChecked.contains(current.offset(facing))) {
-                blocksChecked.add(current.offset(facing));
-                if (blocksChecked.size() <= 250) checkForTrees(world, current.offset(facing));
+        Stack<BlockPos> tree = new Stack<>();
+        tree.push(current);
+        while (!tree.isEmpty()){
+            BlockPos checking = tree.pop();
+            if (BlockUtils.isLog(world, checking) || BlockUtils.isLeaves(world, checking)){
+                Iterable<BlockPos> area = BlockPos.getAllInBox(checking.offset(EnumFacing.DOWN).offset(EnumFacing.SOUTH).offset(EnumFacing.WEST), checking.offset(EnumFacing.UP).offset(EnumFacing.NORTH).offset(EnumFacing.EAST));
+                for (BlockPos blockPos : area) {
+                    if (!blockCache.contains(blockPos) && blockPos.distanceSq(pos.getX(), pos.getY(), pos.getZ()) <= 500 && (BlockUtils.isLog(world, blockPos) || BlockUtils.isLeaves(world, blockPos))){
+                        tree.push(blockPos);
+                        blockCache.add(blockPos);
+                    }
+                }
             }
         }
-        for (EnumFacing facing : new EnumFacing[]{EnumFacing.UP}) {
-            if (BlockUtils.isLog(world, current.offset(facing)) && !blocksChecked.contains(current.offset(facing))) {
-                blocksChecked.add(current.offset(facing));
-                checkForTrees(world, current.offset(facing));
-            }
-        }
+//        for (EnumFacing facing : new EnumFacing[]{EnumFacing.EAST, EnumFacing.NORTH, EnumFacing.WEST, EnumFacing.SOUTH, EnumFacing.UP}) {
+//            if (BlockUtils.isLeaves(world, current.offset(facing)) && !blocksChecked.contains(current.offset(facing))) {
+//                blocksChecked.add(current.offset(facing));
+//                if (blocksChecked.size() <= 250) checkForTrees(world, current.offset(facing));
+//            }
+//        }
+//        for (EnumFacing facing : new EnumFacing[]{EnumFacing.UP}) {
+//            if (BlockUtils.isLog(world, current.offset(facing)) && !blocksChecked.contains(current.offset(facing))) {
+//                blocksChecked.add(current.offset(facing));
+//                checkForTrees(world, current.offset(facing));
+//            }
+//        }
     }
 
     private boolean canInsertAll(List<ItemStack> drops, ItemStackHandler outItems) {

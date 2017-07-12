@@ -57,6 +57,7 @@ repositories {
         name = "ModMaven"
         url = "modmaven.k-4u.nl"
     }
+    maven { url 'http://maven.covers1624.net/' }
 }
 
 dependencies {
@@ -67,8 +68,7 @@ dependencies {
     deobfCompile "mezz.jei:jei_${minecraft_version}:${jei_version}:api"
     // at runtime, use the full JEI jar
     runtime "mezz.jei:jei_${minecraft_version}:${jei_version}"
-    //runtime "net.ndrei.tesla-core-lib:tesla-core-lib:${minecraft_version}-${tesla_core_version}"
-    //runtime "net.darkhax.tesla:Tesla-1.12:${tesla_version}"
+    compile "cofh:RedstoneFlux:1.12-$redstoneflux_version:universal"
 }
 
 processResources {
