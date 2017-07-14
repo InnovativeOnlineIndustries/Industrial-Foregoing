@@ -7,6 +7,7 @@ import com.buuz135.industrial.tile.CustomColoredItemHandler;
 import com.buuz135.industrial.tile.WorkingAreaElectricMachine;
 import com.buuz135.industrial.tile.block.CustomOrientedBlock;
 import com.buuz135.industrial.utils.BlockUtils;
+import net.minecraft.entity.EntityList;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.item.EnumDyeColor;
 import net.minecraft.item.ItemStack;
@@ -17,6 +18,7 @@ import net.minecraftforge.items.ItemStackHandler;
 import net.ndrei.teslacorelib.inventory.BoundingRectangle;
 
 import java.util.List;
+import java.util.UUID;
 
 public class MobDuplicatorTile extends WorkingAreaElectricMachine {
 
@@ -66,7 +68,7 @@ public class MobDuplicatorTile extends WorkingAreaElectricMachine {
         List<EntityLiving> livings = this.getWorld().getEntitiesWithinAABB(EntityLiving.class, alignedBB);
         if (livings.size() > 20) return 0;
         ItemStack stack = mobTool.getStackInSlot(0);
-        EntityLiving entity = (EntityLiving) ((MobImprisonmentToolItem) stack.getItem()).getEntitFromStack(stack, this.world, false);
+        EntityLiving entity = (EntityLiving) ((MobImprisonmentToolItem) stack.getItem()).getEntityFromStack(stack, this.world, false);
         int canSpawn = (int) ((experienceTank.getFluid() == null ? 0 : experienceTank.getFluid().amount) / (entity.getHealth() * 2));
         if (canSpawn == 0) return 0;
         int spawnAmount = 1 + this.world.rand.nextInt(Math.min(canSpawn, 4));
@@ -79,7 +81,9 @@ public class MobDuplicatorTile extends WorkingAreaElectricMachine {
                     random = blocks.get(this.world.rand.nextInt(blocks.size()));
                     --tries;
                 }
-                entity = (EntityLiving) ((MobImprisonmentToolItem) stack.getItem()).getEntitFromStack(stack, this.world, false);
+                entity = (EntityLiving) ((MobImprisonmentToolItem) stack.getItem()).getEntityFromStack(stack, this.world, false);
+                entity.setUniqueId(UUID.randomUUID());
+                entity.onInitialSpawn(world.getDifficultyForLocation(this.pos), null);
                 entity.setPosition(random.getX() + 0.5, random.getY(), random.getZ() + 0.5);
                 this.world.spawnEntity(entity);
                 experienceTank.drain((int) (entity.getHealth() * 2), true);

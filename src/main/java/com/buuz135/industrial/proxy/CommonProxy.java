@@ -33,7 +33,7 @@ public class CommonProxy {
         MinecraftForge.EVENT_BUS.register(new MobDeathHandler());
 
         CustomConfiguration.config = new Configuration(event.getSuggestedConfigurationFile());
-        CustomConfiguration.sync();
+
     }
 
     public void init() {
@@ -41,6 +41,6 @@ public class CommonProxy {
     }
 
     public void postInit() {
-
+        CustomConfiguration.sync();
     }
 }
