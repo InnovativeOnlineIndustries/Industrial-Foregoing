@@ -1,5 +1,6 @@
 package com.buuz135.industrial.tile.agriculture;
 
+import com.buuz135.industrial.IndustrialForegoing;
 import com.buuz135.industrial.proxy.FluidsRegistry;
 import com.buuz135.industrial.tile.CustomColoredItemHandler;
 import com.buuz135.industrial.tile.WorkingAreaElectricMachine;
@@ -10,10 +11,13 @@ import net.minecraft.init.Items;
 import net.minecraft.item.EnumDyeColor;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumFacing;
+import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
-import net.minecraftforge.fluids.FluidStack;
+import net.minecraftforge.common.util.FakePlayer;
 import net.minecraftforge.fluids.IFluidTank;
+import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
+import net.minecraftforge.fluids.capability.IFluidHandlerItem;
 import net.minecraftforge.items.ItemHandlerHelper;
 import net.minecraftforge.items.ItemStackHandler;
 import net.ndrei.teslacorelib.inventory.BoundingRectangle;
@@ -23,7 +27,7 @@ import java.util.List;
 public class AnimalResourceHarvesterTile extends WorkingAreaElectricMachine {
 
     private ItemStackHandler outItems;
-    private IFluidTank milkTank;
+    private IFluidTank tank;
 
     public AnimalResourceHarvesterTile() {
         super(AnimalResourceHarvesterTile.class.getName().hashCode(), 2, 2, false);
@@ -32,7 +36,7 @@ public class AnimalResourceHarvesterTile extends WorkingAreaElectricMachine {
     @Override
     protected void initializeInventories() {
         super.initializeInventories();
-        milkTank = this.addFluidTank(FluidsRegistry.MILK, 8000, EnumDyeColor.WHITE, "Milk tank", new BoundingRectangle(50, 25, 18, 54));
+        tank = this.addFluidTank(FluidsRegistry.MILK, 8000, EnumDyeColor.WHITE, "Milk tank", new BoundingRectangle(50, 25, 18, 54));
         outItems = new ItemStackHandler(3 * 4) {
             @Override
             protected void onContentsChanged(int slot) {
@@ -66,8 +70,17 @@ public class AnimalResourceHarvesterTile extends WorkingAreaElectricMachine {
                 return 1;
             }
         }
-        List<EntityCow> cows = this.world.getEntitiesWithinAABB(EntityCow.class, getWorkingArea());
-        milkTank.fill(new FluidStack(FluidsRegistry.MILK, cows.size() * 1000), true);
+        for (EntityCow cow : this.world.getEntitiesWithinAABB(EntityCow.class, getWorkingArea())) {
+            FakePlayer player = IndustrialForegoing.getFakePlayer(this.world);
+            player.setHeldItem(EnumHand.MAIN_HAND, new ItemStack(Items.BUCKET));
+            if (cow.processInteract(player, EnumHand.MAIN_HAND)) {
+                ItemStack stack = player.getHeldItem(EnumHand.MAIN_HAND);
+                if (stack.hasCapability(CapabilityFluidHandler.FLUID_HANDLER_ITEM_CAPABILITY, null)) {
+                    IFluidHandlerItem fluidHandlerItem = stack.getCapability(CapabilityFluidHandler.FLUID_HANDLER_ITEM_CAPABILITY, null);
+                    tank.fill(fluidHandlerItem.drain(Integer.MAX_VALUE, true), true);
+                }
+            }
+        }
         return 1;
     }
 
@@ -77,7 +90,6 @@ public class AnimalResourceHarvesterTile extends WorkingAreaElectricMachine {
         BlockPos corner1 = new BlockPos(0, 0, 0).offset(f, getRadius() + 1);
         return new AxisAlignedBB(this.pos.getX(), this.pos.getY(), this.pos.getZ(), this.pos.getX() + 1, this.pos.getY() + 1, this.pos.getZ() + 1).offset(corner1).expand(getRadius(), 0, getRadius()).setMaxY(this.getPos().getY() + getHeight());
     }
-
 
 
 }

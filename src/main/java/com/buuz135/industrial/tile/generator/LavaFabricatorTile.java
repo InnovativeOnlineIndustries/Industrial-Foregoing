@@ -46,11 +46,11 @@ public class LavaFabricatorTile extends CustomElectricMachine {
     @Override
     protected void processFluidItems(ItemStackHandler fluidItems) {
         ItemStack stack = fluidItems.getStackInSlot(0);
-        if (!stack.isEmpty() && fluidItems.getStackInSlot(1).isEmpty() && tank.getFluidAmount() >= 1000){
+        if (!stack.isEmpty() && fluidItems.getStackInSlot(1).isEmpty() && tank.getFluidAmount() >= 1000) {
             ItemStack out = UniversalBucket.getFilledBucket(ForgeModContainer.getInstance().universalBucket, FluidRegistry.LAVA);
-            tank.drain(1000,true);
-            stack.setCount(stack.getCount()-1);
-            fluidItems.setStackInSlot(1,out);
+            tank.drain(1000, true);
+            stack.setCount(stack.getCount() - 1);
+            fluidItems.setStackInSlot(1, out);
         }
     }
 }

@@ -22,6 +22,7 @@ public class BlackHoleControllerTile extends SidedTileEntity {
     private ItemStackHandler input;
     private ItemStackHandler storage;
     private ItemStackHandler output;
+    private BlackHoleControllerHandler itemHandler = new BlackHoleControllerHandler(this);
 
     public BlackHoleControllerTile() {
         super(BlackHoleControllerTile.class.getName().hashCode());
@@ -101,9 +102,9 @@ public class BlackHoleControllerTile extends SidedTileEntity {
 
     }
 
-    public void dropItems(){
-        for (ItemStackHandler items : new ItemStackHandler[]{input, storage, output}){
-            for (int i = 0; i < items.getSlots(); ++i){
+    public void dropItems() {
+        for (ItemStackHandler items : new ItemStackHandler[]{input, storage, output}) {
+            for (int i = 0; i < items.getSlots(); ++i) {
                 ItemStack stack = items.getStackInSlot(i);
                 if (!ItemStackUtil.isEmpty(stack)) {
                     InventoryHelper.spawnItemStack(this.getWorld(), pos.getX(), pos.getY(), pos.getZ(), stack);
@@ -122,7 +123,7 @@ public class BlackHoleControllerTile extends SidedTileEntity {
                 ItemStack s = BlockRegistry.blackHoleUnitBlock.getItemStack(stack);
                 if (!s.isEmpty()) {
                     ItemStack in = input.getStackInSlot(i);
-                    if (!in.isEmpty() && in.getCount()+amount < Integer.MAX_VALUE) {
+                    if (!in.isEmpty() && in.getCount() + amount < Integer.MAX_VALUE) {
                         BlockRegistry.blackHoleUnitBlock.setAmount(stack, amount + in.getCount());
                         in.setCount(0);
                         continue;
@@ -157,8 +158,6 @@ public class BlackHoleControllerTile extends SidedTileEntity {
     public ItemStackHandler getOutput() {
         return output;
     }
-
-    private BlackHoleControllerHandler itemHandler = new BlackHoleControllerHandler(this);
 
     @Override
     public boolean hasCapability(Capability<?> capability, EnumFacing facing) {

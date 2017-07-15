@@ -88,7 +88,6 @@ public class CropEnrichMaterialInjectorTile extends WorkingAreaElectricMachine {
     }
 
 
-
     private ItemStack getFirstItem() {
         for (int i = 0; i < inFert.getSlots(); ++i)
             if (!inFert.getStackInSlot(i).isEmpty()) return inFert.getStackInSlot(i);

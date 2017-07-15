@@ -35,6 +35,7 @@ public class BlackHoleUnitTile extends SidedTileEntity {
     private ItemStackHandler outItems;
     private ItemStack stack;
     private int amount;
+    private BlackHoleHandler itemHandler = new BlackHoleHandler(this);
 
     public BlackHoleUnitTile() {
         super(BlackHoleUnitTile.class.getName().hashCode());
@@ -183,14 +184,6 @@ public class BlackHoleUnitTile extends SidedTileEntity {
         }
     }
 
-    public void setStack(ItemStack stack) {
-        this.stack = stack;
-    }
-
-    public void setAmount(int amount) {
-        this.amount = amount;
-    }
-
     public boolean canInsertItem(ItemStack stack) {
         return Integer.MAX_VALUE >= stack.getCount() + amount && (BlackHoleUnitTile.this.stack.isEmpty() || (stack.getItem() == BlackHoleUnitTile.this.stack.getItem() && stack.getMetadata() == BlackHoleUnitTile.this.stack.getMetadata() && (!(stack.hasTagCompound() && BlackHoleUnitTile.this.stack.hasTagCompound()) || stack.getTagCompound().equals(BlackHoleUnitTile.this.stack.getTagCompound()))));
     }
@@ -199,11 +192,17 @@ public class BlackHoleUnitTile extends SidedTileEntity {
         return stack;
     }
 
+    public void setStack(ItemStack stack) {
+        this.stack = stack;
+    }
+
     public int getAmount() {
         return amount + (outItems.getStackInSlot(0).isEmpty() ? 0 : outItems.getStackInSlot(0).getCount());
     }
 
-    private BlackHoleHandler itemHandler = new BlackHoleHandler(this);
+    public void setAmount(int amount) {
+        this.amount = amount;
+    }
 
     @Override
     public boolean hasCapability(Capability<?> capability, EnumFacing facing) {

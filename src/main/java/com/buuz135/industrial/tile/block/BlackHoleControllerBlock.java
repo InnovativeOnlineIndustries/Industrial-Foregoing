@@ -13,7 +13,6 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.oredict.ShapedOreRecipe;
 import net.ndrei.teslacorelib.TeslaCoreLib;
-import net.ndrei.teslacorelib.tileentities.ElectricTileEntity;
 
 public class BlackHoleControllerBlock extends CustomOrientedBlock<BlackHoleControllerTile> {
 
@@ -23,7 +22,7 @@ public class BlackHoleControllerBlock extends CustomOrientedBlock<BlackHoleContr
 
     @Override
     protected IRecipe getRecipe() {
-        return new ShapedOreRecipe(new ItemStack(this), "pdp", "ece","pmp",
+        return new ShapedOreRecipe(new ItemStack(this), "pdp", "ece", "pmp",
                 'p', ItemRegistry.plastic,
                 'd', Blocks.DIAMOND_BLOCK,
                 'e', Items.ENDER_EYE,

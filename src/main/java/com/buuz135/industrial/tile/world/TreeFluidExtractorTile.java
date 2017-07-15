@@ -18,6 +18,8 @@ public class TreeFluidExtractorTile extends SidedTileEntity {
 
     private IFluidTank tank;
     private int tick;
+    private int progress;
+    private int id;
 
     public TreeFluidExtractorTile() {
         super(TreeFluidExtractorTile.class.getName().hashCode());
@@ -39,9 +41,19 @@ public class TreeFluidExtractorTile extends SidedTileEntity {
     protected void innerUpdate() {
         if (((CustomOrientedBlock) this.getBlockType()).isWorkDisabled()) return;
         if (this.getWorld().isRemote) return;
-        if (tick == 5 && BlockUtils.isLog(this.world, this.pos.offset(this.getFacing().getOpposite()))) {
+        if (!BlockUtils.isLog(this.world, this.pos.offset(this.getFacing().getOpposite()))) progress = 0;
+        if (tick % 5 == 0 && BlockUtils.isLog(this.world, this.pos.offset(this.getFacing().getOpposite()))) {
             tank.fill(new FluidStack(FluidsRegistry.LATEX, 1), true);
-            tick = 0;
+            if (id == 0) id = this.world.rand.nextInt();
+            if (world.rand.nextDouble() <= 0.005) ++progress;
+            if (progress > 7) {
+                progress = 0;
+                this.world.setBlockToAir(this.pos.offset(this.getFacing().getOpposite()));
+            }
+            if (tick > 404 && progress > 0) {
+                this.world.sendBlockBreakProgress(this.world.rand.nextInt(), this.pos.offset(this.getFacing().getOpposite()), progress - 1);
+                tick = 0;
+            }
         }
         ++tick;
     }

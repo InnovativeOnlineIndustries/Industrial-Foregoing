@@ -155,8 +155,8 @@ public class ItemStackUtils {
         return false;
     }
 
-    public static boolean isInventoryFull(ItemStackHandler handler){
-        for (int i = 0; i < handler.getSlots(); ++i){
+    public static boolean isInventoryFull(ItemStackHandler handler) {
+        for (int i = 0; i < handler.getSlots(); ++i) {
             if (handler.getStackInSlot(i).isEmpty()) return false;
         }
         return true;

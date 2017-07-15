@@ -32,7 +32,7 @@ public class MobImprisonmentToolItem extends IFCustomItem {
         ItemStack stack = player.getHeldItem(hand);
         if (player.getEntityWorld().isRemote) return EnumActionResult.FAIL;
         if (!containsEntity(stack)) return EnumActionResult.FAIL;
-        Entity entity = getEntitFromStack(stack, worldIn, true);
+        Entity entity = getEntityFromStack(stack, worldIn, true);
         BlockPos blockPos = pos.offset(facing);
         entity.setPositionAndRotation(blockPos.getX() + 0.5, blockPos.getY(), blockPos.getZ() + 0.5, 0, 0);
         stack.setTagCompound(new NBTTagCompound());
@@ -81,10 +81,14 @@ public class MobImprisonmentToolItem extends IFCustomItem {
         }
     }
 
-    public Entity getEntitFromStack(ItemStack stack, World world, boolean withInfo) {
+    public Entity getEntityFromStack(ItemStack stack, World world, boolean withInfo) {
         Entity entity = EntityList.createEntityByIDFromName(new ResourceLocation(stack.getTagCompound().getString("entity")), world);
         if (withInfo) entity.readFromNBT(stack.getTagCompound());
         return entity;
+    }
+
+    public String getID(ItemStack stack) {
+        return stack.getTagCompound().getString("entity");
     }
 
     @Override

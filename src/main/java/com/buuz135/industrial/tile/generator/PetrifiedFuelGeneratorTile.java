@@ -24,7 +24,8 @@ public class PetrifiedFuelGeneratorTile extends CustomGeneratorMachine {
 
     private ItemStackHandler inStackHandler;
     private ItemStackHandler invisibleSlot;
-
+    private ItemStack current = ItemStack.EMPTY;
+    private int burnTime = 0;
 
     public PetrifiedFuelGeneratorTile() {
         super(PetrifiedFuelGeneratorTile.class.getName().hashCode());
@@ -79,8 +80,6 @@ public class PetrifiedFuelGeneratorTile extends CustomGeneratorMachine {
         return !stack.isEmpty() && TileEntityFurnace.isItemFuel(stack) && !stack.getItem().equals(Items.LAVA_BUCKET) && !stack.getItem().equals(ForgeModContainer.getInstance().universalBucket);
     }
 
-    private ItemStack current = ItemStack.EMPTY;
-
     public ItemStack getFirstFuel(boolean replace) {
         if (!replace) return this.current;
         for (int i = 0; i < inStackHandler.getSlots(); ++i) {
@@ -92,8 +91,6 @@ public class PetrifiedFuelGeneratorTile extends CustomGeneratorMachine {
         }
         return current = ItemStack.EMPTY;
     }
-
-    private int burnTime = 0;
 
     @Override
     public long consumeFuel() { //TODO fix buckets

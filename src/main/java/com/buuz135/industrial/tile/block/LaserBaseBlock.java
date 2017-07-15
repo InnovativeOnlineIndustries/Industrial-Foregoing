@@ -69,8 +69,8 @@ public class LaserBaseBlock extends CustomOrientedBlock<LaserBaseTile> {
             int meta = Integer.parseInt(temp[2]);
             int weight = Integer.parseInt(temp[3]);
             if (temp[1].contains(":")) {
-                if (Item.getByNameOrId(s) != null)
-                    coloreOres.put(lens, new ItemStackWeightedItem(new ItemStack(Item.getByNameOrId(s), meta), weight));
+                if (Item.getByNameOrId(temp[1]) != null)
+                    coloreOres.put(lens, new ItemStackWeightedItem(new ItemStack(Item.getByNameOrId(temp[1]), 1, meta), weight));
             } else {
                 for (ItemStack stack : OreDictionary.getOres(temp[1])) {
                     coloreOres.put(lens, new ItemStackWeightedItem(stack, weight));

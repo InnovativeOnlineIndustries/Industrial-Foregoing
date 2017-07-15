@@ -24,10 +24,8 @@ import net.minecraftforge.fluids.IFluidTank;
 import net.minecraftforge.items.ItemHandlerHelper;
 import net.minecraftforge.items.ItemStackHandler;
 import net.ndrei.teslacorelib.inventory.BoundingRectangle;
-import org.lwjgl.Sys;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 public class CropRecolectorTile extends WorkingAreaElectricMachine {
 
@@ -36,12 +34,12 @@ public class CropRecolectorTile extends WorkingAreaElectricMachine {
     private IFluidTank sludge;
     private ItemStackHandler outItems;
     private int pointer;
-    private List<BlockPos> blocksChecked;
+    private Queue<BlockPos> blockCache;
 
 
     public CropRecolectorTile() {
         super(CropRecolectorTile.class.getName().hashCode(), 1, 0, true);
-        blocksChecked = new ArrayList<>();
+        blockCache = new PriorityQueue<>(Comparator.comparingDouble(value -> ((BlockPos) value).distanceSq(pos.getX(), pos.getY(), pos.getZ())).reversed());
     }
 
     @Override
@@ -87,24 +85,23 @@ public class CropRecolectorTile extends WorkingAreaElectricMachine {
             IBlockState state = this.world.getBlockState(blockPos.get(pointer));
             if ((state.getBlock() instanceof BlockCrops && ((BlockCrops) state.getBlock()).isMaxAge(state)) || (state.getBlock() instanceof BlockNetherWart && state.getValue(BlockNetherWart.AGE) >= 3)) {
                 List<ItemStack> drops = state.getBlock().getDrops(this.world, blockPos.get(pointer), state, 0);
-                if (canInsertAll(drops,outItems)) {
-                    insertItemsAndRemove(drops,pos,outItems);
+                if (canInsertAll(drops, outItems)) {
+                    insertItemsAndRemove(drops, pos, outItems);
                 }
             } else if (BlockUtils.isLog(this.world, pos)) {
-                if (blocksChecked.isEmpty()){
-                    blocksChecked.add(pos);
-                    checkForTrees(this.world,pos);
+                if (blockCache.isEmpty()) {
+                    checkForTrees(this.world, pos);
                 }
                 needPointerIncrease = false;
                 treeOperation = true;
 
-                for (int i = 0; i < ((CropRecolectorBlock) this.getBlockType()).getTreeOperations(); ++i){
-                    if (blocksChecked.isEmpty()) break;
-                    BlockPos p = blocksChecked.get(blocksChecked.size()-1);
-                    if (BlockUtils.isLeaves(world, p) || BlockUtils.isLog(world, p)){
+                for (int i = 0; i < ((CropRecolectorBlock) this.getBlockType()).getTreeOperations(); ++i) {
+                    if (blockCache.isEmpty()) break;
+                    BlockPos p = blockCache.peek();
+                    if (BlockUtils.isLeaves(world, p) || BlockUtils.isLog(world, p)) {
                         IBlockState s = world.getBlockState(p);
-                        List<ItemStack> drops = s.getBlock().getDrops(world, p, s,0);
-                        for (ItemStack drop : drops){
+                        List<ItemStack> drops = s.getBlock().getDrops(world, p, s, 0);
+                        for (ItemStack drop : drops) {
                             if (!ItemHandlerHelper.insertItem(outItems, drop, true).isEmpty()) break;
                             ItemHandlerHelper.insertItem(outItems, drop, false);
                         }
@@ -112,20 +109,20 @@ public class CropRecolectorTile extends WorkingAreaElectricMachine {
                         sludge.fill(new FluidStack(FluidsRegistry.SLUDGE, ((CropRecolectorBlock) this.getBlockType()).getSludgeOperation()), true);
 
                     }
-                    blocksChecked.remove(blocksChecked.size()-1);
+                    blockCache.poll();
                 }
-                if (blocksChecked.isEmpty()) needPointerIncrease = true;
-            }else if ((state.getBlock() instanceof BlockCactus || state.getBlock() instanceof BlockReed)){
-                if (state.getBlock().equals(this.world.getBlockState(pos.offset(EnumFacing.UP,2)).getBlock())){
+                if (blockCache.isEmpty()) needPointerIncrease = true;
+            } else if ((state.getBlock() instanceof BlockCactus || state.getBlock() instanceof BlockReed)) {
+                if (state.getBlock().equals(this.world.getBlockState(pos.offset(EnumFacing.UP, 2)).getBlock())) {
                     List<ItemStack> drops = state.getBlock().getDrops(this.world, blockPos.get(pointer), state, 0);
-                    if (canInsertAll(drops,outItems)){
-                        insertItemsAndRemove(drops,pos.offset(EnumFacing.UP,2), outItems);
+                    if (canInsertAll(drops, outItems)) {
+                        insertItemsAndRemove(drops, pos.offset(EnumFacing.UP, 2), outItems);
                     }
                 }
-                if (state.getBlock().equals(this.world.getBlockState(pos.offset(EnumFacing.UP,1)).getBlock())){
+                if (state.getBlock().equals(this.world.getBlockState(pos.offset(EnumFacing.UP, 1)).getBlock())) {
                     List<ItemStack> drops = state.getBlock().getDrops(this.world, blockPos.get(pointer), state, 0);
-                    if (canInsertAll(drops,outItems)){
-                        insertItemsAndRemove(drops,pos.offset(EnumFacing.UP,1), outItems);
+                    if (canInsertAll(drops, outItems)) {
+                        insertItemsAndRemove(drops, pos.offset(EnumFacing.UP, 1), outItems);
                     }
                 }
             }
@@ -153,21 +150,23 @@ public class CropRecolectorTile extends WorkingAreaElectricMachine {
     }
 
     public void checkForTrees(World world, BlockPos current) {
-        for (EnumFacing facing : new EnumFacing[]{EnumFacing.EAST, EnumFacing.NORTH, EnumFacing.WEST, EnumFacing.SOUTH, EnumFacing.UP}) {
-            if (BlockUtils.isLeaves(world, current.offset(facing)) && !blocksChecked.contains(current.offset(facing))) {
-                blocksChecked.add(current.offset(facing));
-                if (blocksChecked.size() <= 250) checkForTrees(world, current.offset(facing));
-            }
-        }
-        for (EnumFacing facing : new EnumFacing[]{EnumFacing.UP}) {
-            if (BlockUtils.isLog(world, current.offset(facing)) && !blocksChecked.contains(current.offset(facing))) {
-                blocksChecked.add(current.offset(facing));
-                checkForTrees(world, current.offset(facing));
+        Stack<BlockPos> tree = new Stack<>();
+        tree.push(current);
+        while (!tree.isEmpty()) {
+            BlockPos checking = tree.pop();
+            if (BlockUtils.isLog(world, checking) || BlockUtils.isLeaves(world, checking)) {
+                Iterable<BlockPos> area = BlockPos.getAllInBox(checking.offset(EnumFacing.DOWN).offset(EnumFacing.SOUTH).offset(EnumFacing.WEST), checking.offset(EnumFacing.UP).offset(EnumFacing.NORTH).offset(EnumFacing.EAST));
+                for (BlockPos blockPos : area) {
+                    if (!blockCache.contains(blockPos) && blockPos.distanceSq(pos.getX(), pos.getY(), pos.getZ()) <= 1000 && (BlockUtils.isLog(world, blockPos) || BlockUtils.isLeaves(world, blockPos))) {
+                        tree.push(blockPos);
+                        blockCache.add(blockPos);
+                    }
+                }
             }
         }
     }
 
-    private boolean canInsertAll(List<ItemStack> drops, ItemStackHandler outItems){
+    private boolean canInsertAll(List<ItemStack> drops, ItemStackHandler outItems) {
         boolean canInsert = true;
         for (ItemStack stack : drops) {
             if (!ItemHandlerHelper.insertItem(outItems, stack, true).isEmpty()) {
@@ -178,7 +177,7 @@ public class CropRecolectorTile extends WorkingAreaElectricMachine {
         return canInsert;
     }
 
-    private void insertItemsAndRemove(List<ItemStack> drops, BlockPos blockPos, ItemStackHandler outItems){
+    private void insertItemsAndRemove(List<ItemStack> drops, BlockPos blockPos, ItemStackHandler outItems) {
         for (ItemStack stack : drops) {
             ItemHandlerHelper.insertItem(outItems, stack, false);
         }

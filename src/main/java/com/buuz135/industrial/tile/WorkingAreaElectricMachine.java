@@ -58,10 +58,10 @@ public abstract class WorkingAreaElectricMachine extends CustomElectricMachine {
                 super.drawBackgroundLayer(container, guiX, guiY, partialTicks, mouseX, mouseY);
                 if (getCurrentState() == 0) {
                     container.mc.getTextureManager().bindTexture(ClientProxy.GUI);
-                    container.drawTexturedRect(this.getLeft()-1, this.getTop()-1, 78, 1, 16, 16);
+                    container.drawTexturedRect(this.getLeft() - 1, this.getTop() - 1, 78, 1, 16, 16);
                 } else {
                     container.mc.getTextureManager().bindTexture(ClientProxy.GUI);
-                    container.drawTexturedRect(this.getLeft()-1, this.getTop()-1,
+                    container.drawTexturedRect(this.getLeft() - 1, this.getTop() - 1,
                             78, 17, 16, 16);
                 }
             }

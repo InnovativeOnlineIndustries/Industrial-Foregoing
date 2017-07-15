@@ -31,7 +31,8 @@ public class JEICustomPlugin implements IModPlugin {
     private LaserRecipeCategory laserRecipeCategory;
 
     @Override
-    public void registerItemSubtypes(ISubtypeRegistry subtypeRegistry) { }
+    public void registerItemSubtypes(ISubtypeRegistry subtypeRegistry) {
+    }
 
     @Override
     public void registerIngredients(IModIngredientRegistration registry) {

@@ -45,11 +45,11 @@ public class BlockUtils {
     }
 
     public static boolean isLog(World world, BlockPos pos) {
-        return isBlockOreDict(world, pos, "logWood") || isBlockOreDict(world, pos, "blockSlimeCongealed");
+        return world.getBlockState(pos).getBlock().isWood(world, pos) || isBlockOreDict(world, pos, "blockSlimeCongealed");
     }
 
     public static boolean isLeaves(World world, BlockPos pos) {
-        return isBlockOreDict(world, pos, "treeLeaves");
+        return world.getBlockState(pos).getBlock().isLeaves(world.getBlockState(pos), world, pos) || isBlockOreDict(world, pos, "treeLeaves");
     }
 
     public static void renderLaserBeam(TileEntity tile, double x, double y, double z, EnumFacing direction, float partialTicks, int length) {

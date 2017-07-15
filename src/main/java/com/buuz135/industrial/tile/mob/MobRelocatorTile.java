@@ -13,7 +13,6 @@ import net.minecraft.entity.item.EntityXPOrb;
 import net.minecraft.item.EnumDyeColor;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.DamageSource;
-import net.minecraft.util.EntityDamageSource;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
@@ -62,7 +61,7 @@ public class MobRelocatorTile extends WorkingAreaElectricMachine {
     @Override
     public void protectedUpdate() {
         super.protectedUpdate();
-        this.getWorld().getEntitiesWithinAABB(EntityXPOrb.class, getWorkingArea().expand(2,2,2)).forEach(Entity::setDead);
+        this.getWorld().getEntitiesWithinAABB(EntityXPOrb.class, getWorkingArea().expand(2, 2, 2)).forEach(Entity::setDead);
     }
 
     @Override

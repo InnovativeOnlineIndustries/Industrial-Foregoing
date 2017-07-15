@@ -25,6 +25,21 @@ import java.util.List;
 
 public class DyeMixerTile extends CustomElectricMachine {
 
+    private static ColorUsage[] colorUsages = {new ColorUsage(1, 1, 1),//1
+            new ColorUsage(1, 0, 1),//2
+            new ColorUsage(0, 0, 1),//3
+            new ColorUsage(0, 1, 1),//4
+            new ColorUsage(0, 1, 0),//5
+            new ColorUsage(1, 0, 0),//6
+            new ColorUsage(1, 1, 1),//7
+            new ColorUsage(1, 1, 1),//8
+            new ColorUsage(0, 0, 1),//9
+            new ColorUsage(1, 0, 1),//10
+            new ColorUsage(0, 0, 3),//11
+            new ColorUsage(1, 1, 1),//12
+            new ColorUsage(0, 3, 0),//13
+            new ColorUsage(3, 0, 0),//14
+            new ColorUsage(1, 1, 1)};//15
     private ItemStackHandler inputDyes;
     private ItemStackHandler lens;
     private ItemStackHandler output;
@@ -143,22 +158,6 @@ public class DyeMixerTile extends CustomElectricMachine {
         g = values[1];
         b = values[2];
     }
-
-    private static ColorUsage[] colorUsages = {new ColorUsage(1, 1, 1),//1
-            new ColorUsage(1, 0, 1),//2
-            new ColorUsage(0, 0, 1),//3
-            new ColorUsage(0, 1, 1),//4
-            new ColorUsage(0, 1, 0),//5
-            new ColorUsage(1, 0, 0),//6
-            new ColorUsage(1, 1, 1),//7
-            new ColorUsage(1, 1, 1),//8
-            new ColorUsage(0, 0, 1),//9
-            new ColorUsage(1, 0, 1),//10
-            new ColorUsage(0, 0, 3),//11
-            new ColorUsage(1, 1, 1),//12
-            new ColorUsage(0, 3, 0),//13
-            new ColorUsage(3, 0, 0),//14
-            new ColorUsage(1, 1, 1)};//15
 
     @Override
     protected float performWork() {
