@@ -157,7 +157,7 @@ public class CropRecolectorTile extends WorkingAreaElectricMachine {
             if (BlockUtils.isLog(world, checking) || BlockUtils.isLeaves(world, checking)){
                 Iterable<BlockPos> area = BlockPos.getAllInBox(checking.offset(EnumFacing.DOWN).offset(EnumFacing.SOUTH).offset(EnumFacing.WEST), checking.offset(EnumFacing.UP).offset(EnumFacing.NORTH).offset(EnumFacing.EAST));
                 for (BlockPos blockPos : area) {
-                    if (!blockCache.contains(blockPos) && blockPos.distanceSq(pos.getX(), pos.getY(), pos.getZ()) <= 500 && (BlockUtils.isLog(world, blockPos) || BlockUtils.isLeaves(world, blockPos))){
+                    if (!blockCache.contains(blockPos) && blockPos.distanceSq(pos.getX(), pos.getY(), pos.getZ()) <= 1000 && (BlockUtils.isLog(world, blockPos) || BlockUtils.isLeaves(world, blockPos))){
                         tree.push(blockPos);
                         blockCache.add(blockPos);
                     }
