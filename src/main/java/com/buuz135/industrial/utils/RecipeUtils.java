@@ -147,6 +147,7 @@ public class RecipeUtils {
     }
 
     public static void generateConstants() {
+        if (!RECIPE_DIR.exists()) return;
         List<Map<String, Object>> json = new ArrayList<>();
         for (String s : USED_OD_NAMES) {
             Map<String, Object> entry = new HashMap<>();
