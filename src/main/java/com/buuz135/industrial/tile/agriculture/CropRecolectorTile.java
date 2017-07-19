@@ -34,12 +34,14 @@ public class CropRecolectorTile extends WorkingAreaElectricMachine {
     private IFluidTank sludge;
     private ItemStackHandler outItems;
     private int pointer;
-    private Queue<BlockPos> blockCache;
+    private Queue<BlockPos> woodCache;
+    private Queue<BlockPos> leavesCache;
 
 
     public CropRecolectorTile() {
         super(CropRecolectorTile.class.getName().hashCode(), 1, 0, true);
-        blockCache = new PriorityQueue<>(Comparator.comparingDouble(value -> ((BlockPos) value).distanceSq(pos.getX(), pos.getY(), pos.getZ())).reversed());
+        woodCache = new PriorityQueue<>(Comparator.comparingDouble(value -> ((BlockPos) value).distanceSq(((BlockPos) value).getX(), pos.getY(), ((BlockPos) value).getZ())).reversed());
+        leavesCache = new PriorityQueue<>(Comparator.comparingDouble(value -> ((BlockPos) value).distanceSq(((BlockPos) value).getX(), pos.getY(), ((BlockPos) value).getZ())).reversed());
     }
 
     @Override
@@ -89,29 +91,19 @@ public class CropRecolectorTile extends WorkingAreaElectricMachine {
                     insertItemsAndRemove(drops, pos, outItems);
                 }
             } else if (BlockUtils.isLog(this.world, pos)) {
-                if (blockCache.isEmpty()) {
+                if (woodCache.isEmpty()) {
                     checkForTrees(this.world, pos);
                 }
                 needPointerIncrease = false;
                 treeOperation = true;
 
                 for (int i = 0; i < ((CropRecolectorBlock) this.getBlockType()).getTreeOperations(); ++i) {
-                    if (blockCache.isEmpty()) break;
-                    BlockPos p = blockCache.peek();
-                    if (BlockUtils.isLeaves(world, p) || BlockUtils.isLog(world, p)) {
-                        IBlockState s = world.getBlockState(p);
-                        List<ItemStack> drops = s.getBlock().getDrops(world, p, s, 0);
-                        for (ItemStack drop : drops) {
-                            if (!ItemHandlerHelper.insertItem(outItems, drop, true).isEmpty()) break;
-                            ItemHandlerHelper.insertItem(outItems, drop, false);
-                        }
-                        world.setBlockToAir(p);
-                        sludge.fill(new FluidStack(FluidsRegistry.SLUDGE, ((CropRecolectorBlock) this.getBlockType()).getSludgeOperation()), true);
-
-                    }
-                    blockCache.poll();
+                    //System.out.println(leavesCache.size());
+                    if (woodCache.isEmpty() && leavesCache.isEmpty()) break;
+                    if (!leavesCache.isEmpty()) chop(leavesCache);
+                    else chop(woodCache);
                 }
-                if (blockCache.isEmpty()) needPointerIncrease = true;
+                if (woodCache.isEmpty()) needPointerIncrease = true;
             } else if ((state.getBlock() instanceof BlockCactus || state.getBlock() instanceof BlockReed)) {
                 if (state.getBlock().equals(this.world.getBlockState(pos.offset(EnumFacing.UP, 2)).getBlock())) {
                     List<ItemStack> drops = state.getBlock().getDrops(this.world, blockPos.get(pointer), state, 0);
@@ -157,9 +149,12 @@ public class CropRecolectorTile extends WorkingAreaElectricMachine {
             if (BlockUtils.isLog(world, checking) || BlockUtils.isLeaves(world, checking)) {
                 Iterable<BlockPos> area = BlockPos.getAllInBox(checking.offset(EnumFacing.DOWN).offset(EnumFacing.SOUTH).offset(EnumFacing.WEST), checking.offset(EnumFacing.UP).offset(EnumFacing.NORTH).offset(EnumFacing.EAST));
                 for (BlockPos blockPos : area) {
-                    if (!blockCache.contains(blockPos) && blockPos.distanceSq(pos.getX(), pos.getY(), pos.getZ()) <= 1000 && (BlockUtils.isLog(world, blockPos) || BlockUtils.isLeaves(world, blockPos))) {
+                    if (BlockUtils.isLog(world, blockPos) && !woodCache.contains(blockPos) && blockPos.distanceSq(pos.getX(), pos.getY(), pos.getZ()) <= 1000) {
                         tree.push(blockPos);
-                        blockCache.add(blockPos);
+                        woodCache.add(blockPos);
+                    } else if (BlockUtils.isLeaves(world, blockPos) && !leavesCache.contains(blockPos) && blockPos.distanceSq(pos.getX(), pos.getY(), pos.getZ()) <= 1000) {
+                        tree.push(blockPos);
+                        leavesCache.add(blockPos);
                     }
                 }
             }
@@ -184,4 +179,21 @@ public class CropRecolectorTile extends WorkingAreaElectricMachine {
         sludge.fill(new FluidStack(FluidsRegistry.SLUDGE, ((CropRecolectorBlock) this.getBlockType()).getSludgeOperation()), true);
         this.world.setBlockToAir(blockPos);
     }
+
+    private void chop(Queue<BlockPos> cache) {
+        BlockPos p = cache.peek();
+        if (BlockUtils.isLeaves(world, p) || BlockUtils.isLog(world, p)) {
+            IBlockState s = world.getBlockState(p);
+            List<ItemStack> drops = s.getBlock().getDrops(world, p, s, 0);
+            for (ItemStack drop : drops) {
+                if (!ItemHandlerHelper.insertItem(outItems, drop, true).isEmpty()) break;
+                ItemHandlerHelper.insertItem(outItems, drop, false);
+            }
+            world.setBlockToAir(p);
+            sludge.fill(new FluidStack(FluidsRegistry.SLUDGE, ((CropRecolectorBlock) this.getBlockType()).getSludgeOperation()), true);
+
+        }
+        cache.poll();
+    }
 }
+

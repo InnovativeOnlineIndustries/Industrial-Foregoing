@@ -228,7 +228,7 @@ public class BlackHoleUnitTile extends SidedTileEntity {
 
         @Override
         public int getSlots() {
-            return tile.getAmount() / tile.getStack().getMaxStackSize() + 2;
+            return (int) Math.ceil(tile.getAmount() / (double) tile.getStack().getMaxStackSize());
         }
 
         @Nonnull
