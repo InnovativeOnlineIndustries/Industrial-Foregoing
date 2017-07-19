@@ -98,7 +98,6 @@ public class CropRecolectorTile extends WorkingAreaElectricMachine {
                 treeOperation = true;
 
                 for (int i = 0; i < ((CropRecolectorBlock) this.getBlockType()).getTreeOperations(); ++i) {
-                    //System.out.println(leavesCache.size());
                     if (woodCache.isEmpty() && leavesCache.isEmpty()) break;
                     if (!leavesCache.isEmpty()) chop(leavesCache);
                     else chop(woodCache);

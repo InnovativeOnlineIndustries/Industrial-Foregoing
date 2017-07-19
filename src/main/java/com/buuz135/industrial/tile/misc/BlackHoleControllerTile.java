@@ -239,7 +239,6 @@ public class BlackHoleControllerTile extends SidedTileEntity {
                     ItemStack s = BlockRegistry.blackHoleUnitBlock.getItemStack(hole);
                     int a = BlockRegistry.blackHoleUnitBlock.getAmount(hole) + tile.getOutput().getStackInSlot(i).getCount();
                     double toAdd = Math.ceil(a / (double) s.getMaxStackSize());
-                    System.out.println(i + ":" + slots + ":" + toAdd + ":" + slot);
                     if (slots == slot) {
                         slots = i;
                         break;
