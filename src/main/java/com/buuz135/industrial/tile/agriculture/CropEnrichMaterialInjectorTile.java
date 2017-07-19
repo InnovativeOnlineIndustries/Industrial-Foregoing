@@ -6,9 +6,6 @@ import com.buuz135.industrial.tile.CustomColoredItemHandler;
 import com.buuz135.industrial.tile.WorkingAreaElectricMachine;
 import com.buuz135.industrial.tile.block.CustomOrientedBlock;
 import com.buuz135.industrial.utils.BlockUtils;
-import net.minecraft.block.BlockCrops;
-import net.minecraft.block.BlockDoublePlant;
-import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.EnumDyeColor;
 import net.minecraft.item.ItemDye;
@@ -63,21 +60,22 @@ public class CropEnrichMaterialInjectorTile extends WorkingAreaElectricMachine {
     public float work() {
         if (((CustomOrientedBlock) this.getBlockType()).isWorkDisabled()) return 0;
         List<BlockPos> blockPos = BlockUtils.getBlockPosInAABB(getWorkingArea());
-        ++pointer;
+        boolean needsToIncrease = true;
         if (pointer >= blockPos.size()) pointer = 0;
         if (pointer < blockPos.size()) {
             BlockPos pos = blockPos.get(pointer);
-            if ((this.world.getBlockState(pos).getBlock() instanceof BlockCrops && this.world.getBlockState(pos).getValue(BlockCrops.AGE) < 7) || this.world.getBlockState(pos).getBlock().equals(Blocks.SAPLING) || this.world.getBlockState(pos).getBlock() instanceof BlockDoublePlant) {
+            if (!this.world.isAirBlock(pos)) {
                 ItemStack stack = getFirstItem();
                 if (!stack.isEmpty()) {
                     FakePlayer player = IndustrialForegoing.getFakePlayer(this.world);
-                    ItemDye.applyBonemeal(stack, this.world, pos, player, EnumHand.MAIN_HAND);
-                    return 1;
+                    if (ItemDye.applyBonemeal(stack, this.world, pos, player, EnumHand.MAIN_HAND))
+                        needsToIncrease = false;
                 }
             }
         } else {
             pointer = 0;
         }
+        if (needsToIncrease) ++pointer;
         return 1;
     }
 

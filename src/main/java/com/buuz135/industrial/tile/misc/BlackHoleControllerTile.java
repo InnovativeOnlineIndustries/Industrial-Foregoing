@@ -148,6 +148,7 @@ public class BlackHoleControllerTile extends SidedTileEntity {
 
     @Override
     public boolean hasCapability(Capability<?> capability, EnumFacing facing) {
+        if (capability == null) return false;
         if (capability == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY)
             return true;
         return super.hasCapability(capability, facing);
@@ -187,10 +188,10 @@ public class BlackHoleControllerTile extends SidedTileEntity {
                 if (!stack.isEmpty()) {
                     int amount = BlockRegistry.blackHoleUnitBlock.getAmount(stack) + tile.getOutput().getStackInSlot(i).getCount();
                     ItemStack s = BlockRegistry.blackHoleUnitBlock.getItemStack(stack);
-                    slots += amount / s.getMaxStackSize() + 1;
+                    slots += Math.ceil(amount / (double) s.getMaxStackSize());
                 }
             }
-            return slots + 8;
+            return slots;
         }
 
         @Nonnull
@@ -234,17 +235,18 @@ public class BlackHoleControllerTile extends SidedTileEntity {
             for (int i = 0; i < 9; ++i) {
                 ItemStack hole = tile.getStorage().getStackInSlot(i);
                 if (!hole.isEmpty()) {
-                    int a = BlockRegistry.blackHoleUnitBlock.getAmount(hole);
                     ItemStack s = BlockRegistry.blackHoleUnitBlock.getItemStack(hole);
-                    double toAdd = a / (double) s.getMaxStackSize();
-                    if (slot >= slots && slot <= slots + toAdd) {
-                        slot = i;
+                    int a = BlockRegistry.blackHoleUnitBlock.getAmount(hole) + tile.getOutput().getStackInSlot(i).getCount();
+                    double toAdd = Math.ceil(a / (double) s.getMaxStackSize());
+                    System.out.println(i + ":" + slots + ":" + toAdd + ":" + slot);
+                    if (slots == slot) {
+                        slots = i;
                         break;
                     }
                     slots += toAdd;
                 }
             }
-            return tile.getOutput().extractItem(slot, amount, simulate);
+            return tile.getOutput().extractItem(slots, amount, simulate);
         }
 
         @Override

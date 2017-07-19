@@ -206,6 +206,7 @@ public class BlackHoleUnitTile extends SidedTileEntity {
 
     @Override
     public boolean hasCapability(Capability<?> capability, EnumFacing facing) {
+        if (capability == null) return false;
         if (capability == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY)
             return true;
         return super.hasCapability(capability, facing);
@@ -228,7 +229,7 @@ public class BlackHoleUnitTile extends SidedTileEntity {
 
         @Override
         public int getSlots() {
-            return tile.getAmount() / tile.getStack().getMaxStackSize() + 2;
+            return (int) Math.ceil(tile.getAmount() / (double) tile.getStack().getMaxStackSize());
         }
 
         @Nonnull
