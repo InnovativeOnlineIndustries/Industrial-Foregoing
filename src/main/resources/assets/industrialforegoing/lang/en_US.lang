@@ -42,6 +42,7 @@ tile.industrialforegoing.black_hole_controller.name=Black Hole Controller
 tile.industrialforegoing.dye_mixer.name=Dye Mixer
 tile.industrialforegoing.enchantment_invoker.name=Enchantment Invoker
 tile.industrialforegoing.spores_recreator.name=Spores Recreator
+tile.industrialforegoing.animal_growth_increaser.name=Animal Growth Increaser
 
 tile.slider.name=Slider
 

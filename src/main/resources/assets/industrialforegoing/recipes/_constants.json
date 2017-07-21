@@ -103,5 +103,12 @@
       "ore": "paneGlass"
     },
     "name": "PANEGLASS"
+  },
+  {
+    "ingredient": {
+      "type": "forge:ore_dict",
+      "ore": "wheat"
+    },
+    "name": "WHEAT"
   }
 ]

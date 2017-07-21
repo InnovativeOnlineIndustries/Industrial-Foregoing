@@ -40,6 +40,7 @@ public class BlockRenderRegistry {
         dyeMixerBlock.registerRenderer();
         enchantmentInvokerBlock.registerRenderer();
         sporesRecreatorBlock.registerRenderer();
+        animalGrowthIncreaserBlock.registerRenderer();
         //sliderBlock.registerRenderer();
     }
 }

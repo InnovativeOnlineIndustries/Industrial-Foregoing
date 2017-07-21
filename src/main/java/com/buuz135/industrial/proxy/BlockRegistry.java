@@ -45,6 +45,7 @@ public class BlockRegistry {
     public static DyeMixerBlock dyeMixerBlock;
     public static EnchantmentInvokerBlock enchantmentInvokerBlock;
     public static SporesRecreatorBlock sporesRecreatorBlock;
+    public static AnimalGrowthIncreaserBlock animalGrowthIncreaserBlock;
 
     public static IFCustomFluidBlock BLOCK_ESSENCE;
     public static IFCustomFluidBlock BLOCK_MILK;
@@ -90,6 +91,7 @@ public class BlockRegistry {
         (dyeMixerBlock = new DyeMixerBlock()).register(block, item);
         (enchantmentInvokerBlock = new EnchantmentInvokerBlock()).register(block, item);
         (sporesRecreatorBlock = new SporesRecreatorBlock()).register(block, item);
+        (animalGrowthIncreaserBlock = new AnimalGrowthIncreaserBlock()).register(block, item);
 
 
         (BLOCK_ESSENCE = new IFCustomFluidBlock(FluidsRegistry.ESSENCE, Material.WATER)).register(block);
@@ -135,7 +137,7 @@ public class BlockRegistry {
         dyeMixerBlock.createRecipe();
         enchantmentInvokerBlock.createRecipe();
         sporesRecreatorBlock.createRecipe();
-
+        animalGrowthIncreaserBlock.createRecipe();
 
     }
 }

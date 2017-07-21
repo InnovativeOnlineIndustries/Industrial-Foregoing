@@ -46,6 +46,7 @@ public class CustomConfiguration {
             dyeMixerBlock.getMachineConfig();
             enchantmentInvokerBlock.getMachineConfig();
             sporesRecreatorBlock.getMachineConfig();
+            animalGrowthIncreaserBlock.getMachineConfig();
             //sliderBlock.getMachineConfig();
         } catch (Exception e) {
 
