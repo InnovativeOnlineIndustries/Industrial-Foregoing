@@ -2,7 +2,6 @@ package com.buuz135.industrial.tile.misc;
 
 import com.buuz135.industrial.proxy.client.infopiece.BlackHoleInfoPiece;
 import com.buuz135.industrial.tile.block.CustomOrientedBlock;
-import net.minecraft.inventory.Slot;
 import net.minecraft.item.EnumDyeColor;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -12,14 +11,12 @@ import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.ItemHandlerHelper;
-import net.minecraftforge.items.ItemStackHandler;
-import net.ndrei.teslacorelib.containers.BasicTeslaContainer;
-import net.ndrei.teslacorelib.containers.FilteredSlot;
 import net.ndrei.teslacorelib.gui.BasicTeslaGuiContainer;
 import net.ndrei.teslacorelib.gui.IGuiContainerPiece;
-import net.ndrei.teslacorelib.gui.TiledRenderedGuiPiece;
+import net.ndrei.teslacorelib.gui.LockedInventoryTogglePiece;
 import net.ndrei.teslacorelib.inventory.BoundingRectangle;
 import net.ndrei.teslacorelib.inventory.ColoredItemHandler;
+import net.ndrei.teslacorelib.inventory.LockableItemHandler;
 import net.ndrei.teslacorelib.tileentities.SidedTileEntity;
 
 import javax.annotation.Nonnull;
@@ -31,8 +28,8 @@ public class BlackHoleUnitTile extends SidedTileEntity {
     public static final String NBT_AMOUNT = "amount";
     public static final String NBT_META = "meta";
     public static final String NBT_ITEM_NBT = "stack_nbt";
-    private ItemStackHandler inItems;
-    private ItemStackHandler outItems;
+    private LockableItemHandler inItems;
+    private LockableItemHandler outItems;
     private ItemStack stack;
     private int amount;
     private BlackHoleHandler itemHandler = new BlackHoleHandler(this);
@@ -46,6 +43,8 @@ public class BlackHoleUnitTile extends SidedTileEntity {
     @Override
     protected void innerUpdate() {
         if (((CustomOrientedBlock) this.getBlockType()).isWorkDisabled()) return;
+        inItems.setLocked(outItems.getLocked());
+        inItems.setFilter(outItems.getFilter());
         if (!inItems.getStackInSlot(0).isEmpty()) {
             ItemStack in = inItems.getStackInSlot(0);
             if (stack.isEmpty()) {
@@ -74,7 +73,12 @@ public class BlackHoleUnitTile extends SidedTileEntity {
     @Override
     protected void initializeInventories() {
         super.initializeInventories();
-        inItems = new ItemStackHandler(1);
+        inItems = new LockableItemHandler(1) {
+            @Override
+            protected void onContentsChanged(int slot) {
+                BlackHoleUnitTile.this.markDirty();
+            }
+        };
         this.addInventory(new ColoredItemHandler(inItems, EnumDyeColor.BLUE, "Input items", new BoundingRectangle(16, 25, 18, 18)) {
             @Override
             public boolean canInsertItem(int slot, ItemStack stack) {
@@ -87,28 +91,17 @@ public class BlackHoleUnitTile extends SidedTileEntity {
             }
 
             @Override
-            public List<Slot> getSlots(BasicTeslaContainer container) {
-                List<Slot> slots = super.getSlots(container);
-                BoundingRectangle box = this.getBoundingBox();
-                slots.add(new FilteredSlot(this.getItemHandlerForContainer(), 0, box.getLeft() + 1, box.getTop() + 1));
-                return slots;
-            }
-
-            @Override
-            public List<IGuiContainerPiece> getGuiContainerPieces(BasicTeslaGuiContainer container) {
-                List<IGuiContainerPiece> pieces = super.getGuiContainerPieces(container);
-                BoundingRectangle box = this.getBoundingBox();
-                pieces.add(new TiledRenderedGuiPiece(box.getLeft(), box.getTop(), 18, 18, 1, 1, BasicTeslaGuiContainer.Companion.getMACHINE_BACKGROUND(), 108, 225, EnumDyeColor.BLUE));
-                return pieces;
-            }
-
-            @Override
             public void setStackInSlot(int slot, @Nonnull ItemStack stack) {
                 super.setStackInSlot(slot, stack);
             }
         });
         this.addInventoryToStorage(inItems, "block_hole_in");
-        outItems = new ItemStackHandler(1);
+        outItems = new LockableItemHandler(1) {
+            @Override
+            protected void onContentsChanged(int slot) {
+                BlackHoleUnitTile.this.markDirty();
+            }
+        };
         this.addInventory(new ColoredItemHandler(outItems, EnumDyeColor.ORANGE, "Output items", new BoundingRectangle(16, 25 + 18 * 2, 18, 18)) {
             @Override
             public boolean canInsertItem(int slot, ItemStack stack) {
@@ -118,22 +111,6 @@ public class BlackHoleUnitTile extends SidedTileEntity {
             @Override
             public boolean canExtractItem(int slot) {
                 return true;
-            }
-
-            @Override
-            public List<Slot> getSlots(BasicTeslaContainer container) {
-                List<Slot> slots = super.getSlots(container);
-                BoundingRectangle box = this.getBoundingBox();
-                slots.add(new FilteredSlot(this.getItemHandlerForContainer(), 0, box.getLeft() + 1, box.getTop() + 1));
-                return slots;
-            }
-
-            @Override
-            public List<IGuiContainerPiece> getGuiContainerPieces(BasicTeslaGuiContainer container) {
-                List<IGuiContainerPiece> pieces = super.getGuiContainerPieces(container);
-                BoundingRectangle box = this.getBoundingBox();
-                pieces.add(new TiledRenderedGuiPiece(box.getLeft(), box.getTop(), 18, 18, 1, 1, BasicTeslaGuiContainer.Companion.getMACHINE_BACKGROUND(), 108, 225, EnumDyeColor.ORANGE));
-                return pieces;
             }
 
             @Override
@@ -148,6 +125,7 @@ public class BlackHoleUnitTile extends SidedTileEntity {
     @Override
     public List<IGuiContainerPiece> getGuiContainerPieces(BasicTeslaGuiContainer container) {
         List<IGuiContainerPiece> list = super.getGuiContainerPieces(container);
+        list.add(new LockedInventoryTogglePiece(18 * 2 + 9, 83, this, EnumDyeColor.ORANGE));
         list.add(new BlackHoleInfoPiece(this, 18 * 2 + 8, 25));
         return list;
     }

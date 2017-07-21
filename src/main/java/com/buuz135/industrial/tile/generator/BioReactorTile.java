@@ -2,7 +2,6 @@ package com.buuz135.industrial.tile.generator;
 
 import com.buuz135.industrial.proxy.FluidsRegistry;
 import com.buuz135.industrial.proxy.client.infopiece.BioreactorEfficiencyInfoPiece;
-import com.buuz135.industrial.tile.CustomColoredItemHandler;
 import com.buuz135.industrial.tile.CustomElectricMachine;
 import com.buuz135.industrial.tile.block.BioReactorBlock;
 import com.buuz135.industrial.tile.block.CustomOrientedBlock;
@@ -13,13 +12,16 @@ import net.minecraftforge.fluids.IFluidTank;
 import net.minecraftforge.items.ItemStackHandler;
 import net.ndrei.teslacorelib.gui.BasicTeslaGuiContainer;
 import net.ndrei.teslacorelib.gui.IGuiContainerPiece;
+import net.ndrei.teslacorelib.gui.LockedInventoryTogglePiece;
 import net.ndrei.teslacorelib.inventory.BoundingRectangle;
+import net.ndrei.teslacorelib.inventory.ColoredItemHandler;
+import net.ndrei.teslacorelib.inventory.LockableItemHandler;
 
 import java.util.List;
 
 public class BioReactorTile extends CustomElectricMachine {
 
-    private ItemStackHandler input;
+    private LockableItemHandler input;
     private IFluidTank tank;
 
     public BioReactorTile() {
@@ -30,7 +32,7 @@ public class BioReactorTile extends CustomElectricMachine {
     protected void initializeInventories() {
         super.initializeInventories();
         tank = this.addFluidTank(FluidsRegistry.BIOFUEL, 8000, EnumDyeColor.PURPLE, "Biofuel tank", new BoundingRectangle(48, 25, 18, 54));
-        input = new ItemStackHandler(9) {
+        input = new LockableItemHandler(9) {
             @Override
             protected void onContentsChanged(int slot) {
                 BioReactorTile.this.markDirty();
@@ -41,7 +43,7 @@ public class BioReactorTile extends CustomElectricMachine {
                 return 16;
             }
         };
-        this.addInventory(new CustomColoredItemHandler(input, EnumDyeColor.BLUE, "Input items", 18 * 5, 25, 3, 3) {
+        this.addInventory(new ColoredItemHandler(input, EnumDyeColor.BLUE, "Input items", new BoundingRectangle(18 * 5, 25, 3 * 18, 3 * 18)) {
             @Override
             public boolean canInsertItem(int slot, ItemStack stack) {
                 return ((BioReactorBlock) BioReactorTile.this.getBlockType()).getItemsAccepted().stream().anyMatch(stack1 -> stack.getItem().equals(stack1.getItem())) && !alreadyContains(input, stack, 16);
@@ -60,6 +62,7 @@ public class BioReactorTile extends CustomElectricMachine {
     public List<IGuiContainerPiece> getGuiContainerPieces(BasicTeslaGuiContainer container) {
         List<IGuiContainerPiece> pieces = super.getGuiContainerPieces(container);
         pieces.add(new BioreactorEfficiencyInfoPiece(this, 149, 25));
+        pieces.add(new LockedInventoryTogglePiece(18 * 7 + 9, 83, this, EnumDyeColor.BLUE));
         return pieces;
     }
 

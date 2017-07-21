@@ -1,7 +1,6 @@
 package com.buuz135.industrial.tile.misc;
 
 import com.buuz135.industrial.proxy.BlockRegistry;
-import com.buuz135.industrial.tile.CustomColoredItemHandler;
 import com.buuz135.industrial.tile.block.CustomOrientedBlock;
 import net.minecraft.inventory.InventoryHelper;
 import net.minecraft.item.EnumDyeColor;
@@ -12,15 +11,22 @@ import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.ItemStackHandler;
+import net.ndrei.teslacorelib.gui.BasicTeslaGuiContainer;
+import net.ndrei.teslacorelib.gui.IGuiContainerPiece;
+import net.ndrei.teslacorelib.gui.LockedInventoryTogglePiece;
+import net.ndrei.teslacorelib.inventory.BoundingRectangle;
+import net.ndrei.teslacorelib.inventory.ColoredItemHandler;
+import net.ndrei.teslacorelib.inventory.LockableItemHandler;
 import net.ndrei.teslacorelib.tileentities.SidedTileEntity;
 
 import javax.annotation.Nonnull;
+import java.util.List;
 
 public class BlackHoleControllerTile extends SidedTileEntity {
 
-    private ItemStackHandler input;
+    private LockableItemHandler input;
     private ItemStackHandler storage;
-    private ItemStackHandler output;
+    private LockableItemHandler output;
     private BlackHoleControllerHandler itemHandler = new BlackHoleControllerHandler(this);
 
     public BlackHoleControllerTile() {
@@ -30,13 +36,13 @@ public class BlackHoleControllerTile extends SidedTileEntity {
     @Override
     protected void initializeInventories() {
         super.initializeInventories();
-        input = new ItemStackHandler(9) {
+        input = new LockableItemHandler(9) {
             @Override
             protected void onContentsChanged(int slot) {
                 BlackHoleControllerTile.this.markDirty();
             }
         };
-        this.addInventory(new CustomColoredItemHandler(input, EnumDyeColor.BLUE, "Input items", 15, 18, 9, 1) {
+        this.addInventory(new ColoredItemHandler(input, EnumDyeColor.BLUE, "Input items", new BoundingRectangle(15, 18, 9 * 18, 18)) {
             @Override
             public boolean canInsertItem(int slot, ItemStack stack) {
                 if (stack.getItem().equals(Item.getItemFromBlock(BlockRegistry.blackHoleUnitBlock))) return false;
@@ -63,7 +69,7 @@ public class BlackHoleControllerTile extends SidedTileEntity {
                 return 1;
             }
         };
-        this.addInventory(new CustomColoredItemHandler(storage, EnumDyeColor.YELLOW, "Black hole units", 15, 22 + 18, 9, 1) {
+        this.addInventory(new ColoredItemHandler(storage, EnumDyeColor.YELLOW, "Black hole units", new BoundingRectangle(15, 22 + 18, 9 * 18, 18)) {
             @Override
             public boolean canInsertItem(int slot, ItemStack stack) {
                 return stack.getItem().equals(Item.getItemFromBlock(BlockRegistry.blackHoleUnitBlock));
@@ -75,13 +81,13 @@ public class BlackHoleControllerTile extends SidedTileEntity {
             }
         });
         this.addInventoryToStorage(storage, "storage");
-        output = new ItemStackHandler(9) {
+        output = new LockableItemHandler(9) {
             @Override
             protected void onContentsChanged(int slot) {
                 BlackHoleControllerTile.this.markDirty();
             }
         };
-        this.addInventory(new CustomColoredItemHandler(output, EnumDyeColor.ORANGE, "Output items", 15, 27 + 18 * 2, 9, 1) {
+        this.addInventory(new ColoredItemHandler(output, EnumDyeColor.ORANGE, "Output items", new BoundingRectangle(15, 27 + 18 * 2, 9 * 18, 18)) {
             @Override
             public boolean canInsertItem(int slot, ItemStack stack) {
                 return false;
@@ -93,6 +99,7 @@ public class BlackHoleControllerTile extends SidedTileEntity {
             }
         });
         this.addInventoryToStorage(output, "output");
+
     }
 
     @Override
@@ -103,6 +110,8 @@ public class BlackHoleControllerTile extends SidedTileEntity {
     @Override
     protected void innerUpdate() {
         if (((CustomOrientedBlock) this.getBlockType()).isWorkDisabled()) return;
+        input.setLocked(output.getLocked());
+        input.setFilter(output.getFilter());
         for (int i = 0; i < 9; ++i) {
             ItemStack stack = storage.getStackInSlot(i);
             if (!stack.isEmpty()) {
@@ -170,6 +179,13 @@ public class BlackHoleControllerTile extends SidedTileEntity {
                 }
             }
         }
+    }
+
+    @Override
+    public List<IGuiContainerPiece> getGuiContainerPieces(BasicTeslaGuiContainer<?> container) {
+        List<IGuiContainerPiece> pieces = super.getGuiContainerPieces(container);
+        pieces.add(new LockedInventoryTogglePiece(18 * 8 + 9, 83, this, EnumDyeColor.ORANGE));
+        return pieces;
     }
 
     private class BlackHoleControllerHandler implements IItemHandler {

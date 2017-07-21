@@ -21,7 +21,12 @@ public class AnimalGrowthIncreaserTile extends WorkingAreaElectricMachine {
     @Override
     protected void initializeInventories() {
         super.initializeInventories();
-        items = new ItemStackHandler(6 * 3);
+        items = new ItemStackHandler(6 * 3) {
+            @Override
+            protected void onContentsChanged(int slot) {
+                AnimalGrowthIncreaserTile.this.markDirty();
+            }
+        };
         this.addInventory(new CustomColoredItemHandler(items, EnumDyeColor.GREEN, "Food items", 18 * 3, 25, 6, 3));
         this.addInventoryToStorage(items, "items");
     }

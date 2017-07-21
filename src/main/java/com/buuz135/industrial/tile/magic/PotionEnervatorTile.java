@@ -19,7 +19,10 @@ import net.minecraftforge.items.ItemStackHandler;
 import net.ndrei.teslacorelib.gui.BasicRenderedGuiPiece;
 import net.ndrei.teslacorelib.gui.BasicTeslaGuiContainer;
 import net.ndrei.teslacorelib.gui.IGuiContainerPiece;
+import net.ndrei.teslacorelib.gui.LockedInventoryTogglePiece;
 import net.ndrei.teslacorelib.inventory.BoundingRectangle;
+import net.ndrei.teslacorelib.inventory.ColoredItemHandler;
+import net.ndrei.teslacorelib.inventory.LockableItemHandler;
 
 import java.util.Arrays;
 import java.util.List;
@@ -29,8 +32,8 @@ public class PotionEnervatorTile extends CustomElectricMachine {
     private static final String NBT_ACTION = "action";
 
     private IFluidTank fluidTank;
-    private ItemStackHandler inputGlassBottles;
-    private ItemStackHandler inputIngredients;
+    private LockableItemHandler inputGlassBottles;
+    private LockableItemHandler inputIngredients;
     private ItemStackHandler outputPotions;
 
     private int action = 0;
@@ -48,13 +51,13 @@ public class PotionEnervatorTile extends CustomElectricMachine {
 
     private void initInputInventories() {
         fluidTank = this.addFluidTank(FluidRegistry.WATER, 8000, EnumDyeColor.BLUE, "Water tank", new BoundingRectangle(44, 25, 18, 54));
-        inputGlassBottles = new ItemStackHandler(1) {
+        inputGlassBottles = new LockableItemHandler(1) {
             @Override
             protected void onContentsChanged(int slot) {
                 PotionEnervatorTile.this.markDirty();
             }
         };
-        this.addInventory(new CustomColoredItemHandler(inputGlassBottles, EnumDyeColor.ORANGE, "Glass bottles input", 18 * 4 + 10, 25 + 18 * 2, 1, 1) {
+        this.addInventory(new ColoredItemHandler(inputGlassBottles, EnumDyeColor.ORANGE, "Glass bottles input", new BoundingRectangle(18 * 4 + 10, 25 + 18 * 2, 18, 18)) {
             @Override
             public boolean canInsertItem(int slot, ItemStack stack) {
                 return stack.getItem().equals(Items.GLASS_BOTTLE);
@@ -67,13 +70,13 @@ public class PotionEnervatorTile extends CustomElectricMachine {
 
         });
         this.addInventoryToStorage(inputGlassBottles, "pot_ener_in_glass");
-        inputIngredients = new ItemStackHandler(5) {
+        inputIngredients = new LockableItemHandler(5) {
             @Override
             protected void onContentsChanged(int slot) {
                 PotionEnervatorTile.this.markDirty();
             }
         };
-        this.addInventory(new CustomColoredItemHandler(inputIngredients, EnumDyeColor.GREEN, "Ingredients items", 18 * 4 + 10, 25, 5, 1) {
+        this.addInventory(new ColoredItemHandler(inputIngredients, EnumDyeColor.GREEN, "Ingredients items", new BoundingRectangle(18 * 4 + 10, 25, 5 * 18, 18)) {
             @Override
             public boolean canInsertItem(int slot, ItemStack stack) {
                 if (stack.getItem().equals(Items.GLASS_BOTTLE)) return false;
@@ -116,8 +119,15 @@ public class PotionEnervatorTile extends CustomElectricMachine {
     }
 
     @Override
+    public void innerUpdate() {
+        super.innerUpdate();
+        if (inputIngredients.getLocked() != inputGlassBottles.getLocked()) toggleInventoryLock(EnumDyeColor.GREEN);
+    }
+
+    @Override
     public List<IGuiContainerPiece> getGuiContainerPieces(BasicTeslaGuiContainer container) {
         List<IGuiContainerPiece> pieces = super.getGuiContainerPieces(container);
+        pieces.add(new LockedInventoryTogglePiece(18 * 7 + 9, 83, this, EnumDyeColor.ORANGE));
         pieces.add(new BasicRenderedGuiPiece(0, 0, 16, 16, new ResourceLocation(Reference.MOD_ID, "textures/gui/machines.png"), 16, 16) {
             @Override
             public void drawBackgroundLayer(BasicTeslaGuiContainer container, int guiX, int guiY, float partialTicks, int mouseX, int mouseY) {
@@ -151,23 +161,23 @@ public class PotionEnervatorTile extends CustomElectricMachine {
             @Override
             public void drawMiddleLayer(BasicTeslaGuiContainer container, int guiX, int guiY, float partialTicks, int mouseX, int mouseY) {
                 super.drawMiddleLayer(container, guiX, guiY, partialTicks, mouseX, mouseY);
-                if (inputGlassBottles.getStackInSlot(0).isEmpty())
+                if (inputGlassBottles.getStackInSlot(0).isEmpty() && inputGlassBottles.getFilterStack(0).isEmpty())
                     ItemStackUtils.renderItemIntoGUI(new ItemStack(Items.GLASS_BOTTLE), container.getGuiLeft() + 18 * 4 + 11, container.getGuiTop() + 26 + 18 * 2, 8);
-                if (inputIngredients.getStackInSlot(0).isEmpty())
+                if (inputIngredients.getStackInSlot(0).isEmpty() && inputIngredients.getFilterStack(0).isEmpty())
                     ItemStackUtils.renderItemIntoGUI(new ItemStack(Items.NETHER_WART), container.getGuiLeft() + 18 * 4 + 11, container.getGuiTop() + 26, 8);
-                if (inputIngredients.getStackInSlot(1).isEmpty()) {
+                if (inputIngredients.getStackInSlot(1).isEmpty() && inputIngredients.getFilterStack(1).isEmpty()) {
                     ItemStackUtils.renderItemIntoGUI(new ItemStack(Items.REDSTONE), container.getGuiLeft() + 18 * 5 + 11, container.getGuiTop() + 26, 9);
                     ItemStackUtils.renderItemIntoGUI(new ItemStack(Items.GUNPOWDER), container.getGuiLeft() + 18 * 5 + 11, container.getGuiTop() + 26, 8);
                 }
-                if (inputIngredients.getStackInSlot(2).isEmpty()) {
+                if (inputIngredients.getStackInSlot(2).isEmpty() && inputIngredients.getFilterStack(2).isEmpty()) {
                     ItemStackUtils.renderItemIntoGUI(new ItemStack(Items.SUGAR), container.getGuiLeft() + 18 * 6 + 11, container.getGuiTop() + 26, 9);
                     ItemStackUtils.renderItemIntoGUI(new ItemStack(Items.GLOWSTONE_DUST), container.getGuiLeft() + 18 * 6 + 11, container.getGuiTop() + 26, 8);
                 }
-                if (inputIngredients.getStackInSlot(3).isEmpty()) {
+                if (inputIngredients.getStackInSlot(3).isEmpty() && inputIngredients.getFilterStack(3).isEmpty()) {
                     ItemStackUtils.renderItemIntoGUI(new ItemStack(Items.FERMENTED_SPIDER_EYE), container.getGuiLeft() + 18 * 7 + 11, container.getGuiTop() + 26, 9);
                     ItemStackUtils.renderItemIntoGUI(new ItemStack(Items.MAGMA_CREAM), container.getGuiLeft() + 18 * 7 + 11, container.getGuiTop() + 26, 8);
                 }
-                if (inputIngredients.getStackInSlot(4).isEmpty()) {
+                if (inputIngredients.getStackInSlot(4).isEmpty() && inputIngredients.getFilterStack(4).isEmpty()) {
                     ItemStackUtils.renderItemIntoGUI(new ItemStack(Items.GHAST_TEAR), container.getGuiLeft() + 18 * 8 + 11, container.getGuiTop() + 26, 9);
                     ItemStackUtils.renderItemIntoGUI(new ItemStack(Items.DRAGON_BREATH), container.getGuiLeft() + 18 * 8 + 11, container.getGuiTop() + 26, 8);
                 }
