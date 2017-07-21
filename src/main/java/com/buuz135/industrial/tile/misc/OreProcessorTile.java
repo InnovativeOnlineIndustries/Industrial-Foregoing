@@ -1,5 +1,7 @@
 package com.buuz135.industrial.tile.misc;
 
+import com.buuz135.industrial.proxy.BlockRegistry;
+import com.buuz135.industrial.proxy.FluidsRegistry;
 import com.buuz135.industrial.tile.CustomColoredItemHandler;
 import com.buuz135.industrial.tile.CustomElectricMachine;
 import com.buuz135.industrial.tile.block.CustomOrientedBlock;
@@ -8,14 +10,17 @@ import net.minecraft.block.Block;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.EnumDyeColor;
 import net.minecraft.item.ItemStack;
+import net.minecraftforge.fluids.IFluidTank;
 import net.minecraftforge.items.ItemHandlerHelper;
 import net.minecraftforge.items.ItemStackHandler;
+import net.ndrei.teslacorelib.inventory.BoundingRectangle;
 
 import java.util.List;
 
 public class OreProcessorTile extends CustomElectricMachine {
 
     private ItemStackHandler input;
+    private IFluidTank tank;
     private ItemStackHandler output;
 
     public OreProcessorTile() {
@@ -52,13 +57,14 @@ public class OreProcessorTile extends CustomElectricMachine {
             }
         });
         this.addInventoryToStorage(input, "input");
-        output = new ItemStackHandler(3 * 5) {
+        tank = this.addFluidTank(FluidsRegistry.ESSENCE, 8000, EnumDyeColor.GREEN, "Essence tank", new BoundingRectangle(18 * 4 - 2, 25, 18, 54));
+        output = new ItemStackHandler(3 * 3) {
             @Override
             protected void onContentsChanged(int slot) {
                 OreProcessorTile.this.markDirty();
             }
         };
-        this.addInventory(new CustomColoredItemHandler(output, EnumDyeColor.ORANGE, "Processed ores output", 18 * 4 + 2, 25, 5, 3) {
+        this.addInventory(new CustomColoredItemHandler(output, EnumDyeColor.ORANGE, "Processed ores output", 18 * 6 + 2, 25, 3, 3) {
             @Override
             public boolean canInsertItem(int slot, ItemStack stack) {
                 return false;
@@ -86,7 +92,9 @@ public class OreProcessorTile extends CustomElectricMachine {
         ItemStack stack = getFirstStack();
         if (stack.isEmpty()) return 0;
         Block block = Block.getBlockFromItem(stack.getItem());
-        List<ItemStack> drops = block.getDrops(OreProcessorTile.this.world, null, block.getDefaultState(), 0);
+        int fortune = getFortuneLevel();
+        tank.drain(fortune * BlockRegistry.oreProcessorBlock.getEssenceFortune(), true);
+        List<ItemStack> drops = block.getDrops(OreProcessorTile.this.world, null, block.getDefaultState(), fortune);
         boolean canInsert = true;
         for (ItemStack temp : drops) {
             if (!ItemHandlerHelper.insertItem(output, temp, true).isEmpty()) {
@@ -100,6 +108,13 @@ public class OreProcessorTile extends CustomElectricMachine {
             }
             stack.setCount(stack.getCount() - 1);
             return 1;
+        }
+        return 0;
+    }
+
+    private int getFortuneLevel() {
+        for (int i = 3; i > 0; i--) {
+            if (i * BlockRegistry.oreProcessorBlock.getEssenceFortune() <= tank.getFluidAmount()) return i;
         }
         return 0;
     }
