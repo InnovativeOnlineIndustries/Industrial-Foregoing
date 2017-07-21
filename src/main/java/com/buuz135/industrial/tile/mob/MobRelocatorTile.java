@@ -6,7 +6,6 @@ import com.buuz135.industrial.tile.CustomColoredItemHandler;
 import com.buuz135.industrial.tile.WorkingAreaElectricMachine;
 import com.buuz135.industrial.tile.block.CustomOrientedBlock;
 import com.buuz135.industrial.tile.block.MobRelocatorBlock;
-import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.item.EntityXPOrb;
@@ -61,7 +60,10 @@ public class MobRelocatorTile extends WorkingAreaElectricMachine {
     @Override
     public void protectedUpdate() {
         super.protectedUpdate();
-        this.getWorld().getEntitiesWithinAABB(EntityXPOrb.class, getWorkingArea().expand(2, 2, 2)).forEach(Entity::setDead);
+        this.getWorld().getEntitiesWithinAABB(EntityXPOrb.class, getWorkingArea().expand(2, 2, 2)).forEach(entityXPOrb -> {
+            this.outExp.fill(new FluidStack(FluidsRegistry.ESSENCE, (int) (entityXPOrb.getXpValue() * 20 * ((MobRelocatorBlock) this.getBlockType()).getEssenceMultiplier())), true);
+            entityXPOrb.setDead();
+        });
     }
 
     @Override
@@ -71,9 +73,7 @@ public class MobRelocatorTile extends WorkingAreaElectricMachine {
         AxisAlignedBB area = getWorkingArea();
         List<EntityLiving> mobs = this.getWorld().getEntitiesWithinAABB(EntityLiving.class, area);
         if (mobs.size() == 0) return 0;
-        EntityLiving mob = mobs.get(this.getWorld().rand.nextInt(mobs.size()));
-        this.outExp.fill(new FluidStack(FluidsRegistry.ESSENCE, (int) (mob.getHealth() * ((MobRelocatorBlock) this.getBlockType()).getEssenceMultiplier())), true);
-        mob.attackEntityFrom(DamageSource.causePlayerDamage(IndustrialForegoing.getFakePlayer(world)), mob.getMaxHealth());
+        mobs.forEach(entityLiving -> entityLiving.attackEntityFrom(DamageSource.causePlayerDamage(IndustrialForegoing.getFakePlayer(world)), Integer.MAX_VALUE));
         List<EntityItem> items = this.getWorld().getEntitiesWithinAABB(EntityItem.class, area);
         for (EntityItem item : items) {
             if (!item.getItem().isEmpty()) {
