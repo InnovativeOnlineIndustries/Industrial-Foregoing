@@ -18,6 +18,8 @@ import net.minecraftforge.items.ItemHandlerHelper;
 import net.minecraftforge.items.ItemStackHandler;
 import net.ndrei.teslacorelib.inventory.BoundingRectangle;
 
+import java.util.Map;
+
 public class EnchantmentAplicatorTile extends CustomElectricMachine {
 
     private ItemStackHandler inEnchantedBook;
@@ -121,17 +123,23 @@ public class EnchantmentAplicatorTile extends CustomElectricMachine {
     @Override
     protected float performWork() {
         if (((CustomOrientedBlock) this.getBlockType()).isWorkDisabled()) return 0;
-        //EnchantmentHelper.buildEnchantmentList(this.world.rand,ItemStack.EMPTY,30, true); //TODO the auto enchanting
         if (!canWork()) return 0;
         int xp = (int) (getLevels() * 100);
         if (experienceTank.getFluidAmount() >= xp && ItemHandlerHelper.insertItem(outEnchantedItem, inItem.getStackInSlot(0), true).isEmpty()) {
-            NBTTagList list = ((ItemEnchantedBook) inEnchantedBook.getStackInSlot(0).getItem()).getEnchantments(inEnchantedBook.getStackInSlot(0));
-            ItemStack stack = inItem.getStackInSlot(0).copy();
-            for (int i = 0; i < list.tagCount(); ++i) {
-                NBTTagCompound compound = ((NBTTagCompound) list.get(i));
-                Enchantment enchantment = Enchantment.getEnchantmentByID(compound.getShort("id"));
-                stack.addEnchantment(enchantment, compound.getShort("lvl"));
+            Map<Enchantment, Integer> mapFirst = EnchantmentHelper.getEnchantments(inEnchantedBook.getStackInSlot(0));
+            Map<Enchantment, Integer> mapSecond = EnchantmentHelper.getEnchantments(inItem.getStackInSlot(0));
+            for (Enchantment enchantmentFirst : mapFirst.keySet()) {
+                if (enchantmentFirst != null) {
+                    if (mapSecond.containsKey(enchantmentFirst) && mapFirst.get(enchantmentFirst) == mapSecond.get(enchantmentFirst) && mapFirst.get(enchantmentFirst) >= enchantmentFirst.getMaxLevel())
+                        return 0;
+                    int value = mapSecond.containsKey(enchantmentFirst) && mapFirst.get(enchantmentFirst) == mapSecond.get(enchantmentFirst) ? Math.min(mapFirst.get(enchantmentFirst) + 1, enchantmentFirst.getMaxLevel()) : mapFirst.get(enchantmentFirst);
+                    if (mapSecond.replace(enchantmentFirst, value) == null) {
+                        mapSecond.put(enchantmentFirst, value);
+                    }
+                }
             }
+            ItemStack stack = inItem.getStackInSlot(0).copy();
+            EnchantmentHelper.setEnchantments(mapSecond, stack);
             ItemHandlerHelper.insertItem(outEnchantedItem, stack, false);
             inItem.getStackInSlot(0).setCount(0);
             inEnchantedBook.getStackInSlot(0).setCount(0);
