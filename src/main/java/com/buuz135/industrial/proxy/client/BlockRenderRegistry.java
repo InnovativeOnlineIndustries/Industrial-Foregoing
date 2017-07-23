@@ -41,6 +41,7 @@ public class BlockRenderRegistry {
         enchantmentInvokerBlock.registerRenderer();
         sporesRecreatorBlock.registerRenderer();
         animalGrowthIncreaserBlock.registerRenderer();
+        materialStoneWorkFactoryBlock.registerRenderer();
         //sliderBlock.registerRenderer();
     }
 }

@@ -1,0 +1,34 @@
+{
+  "result": {
+    "item": "industrialforegoing:material_stonework_factory"
+  },
+  "pattern": [
+    "pip",
+    "ama",
+    "lrw"
+  ],
+  "type": "minecraft:crafting_shaped",
+  "key": {
+    "p": {
+      "item": "industrialforegoing:plastic"
+    },
+    "a": {
+      "item": "minecraft:iron_pickaxe"
+    },
+    "r": {
+      "item": "minecraft:redstone"
+    },
+    "w": {
+      "item": "minecraft:water_bucket"
+    },
+    "i": {
+      "item": "minecraft:piston"
+    },
+    "l": {
+      "item": "minecraft:lava_bucket"
+    },
+    "m": {
+      "item": "teslacorelib:machine_case"
+    }
+  }
+}

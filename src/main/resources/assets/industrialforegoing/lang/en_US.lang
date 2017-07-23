@@ -43,6 +43,7 @@ tile.industrialforegoing.dye_mixer.name=Dye Mixer
 tile.industrialforegoing.enchantment_invoker.name=Enchantment Invoker
 tile.industrialforegoing.spores_recreator.name=Spores Recreator
 tile.industrialforegoing.animal_growth_increaser.name=Animal Growth Increaser
+tile.industrialforegoing.material_stonework_factory.name=Material StoneWork Factory
 
 tile.slider.name=Slider
 

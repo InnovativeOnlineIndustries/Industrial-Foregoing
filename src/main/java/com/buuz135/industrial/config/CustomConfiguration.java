@@ -47,6 +47,7 @@ public class CustomConfiguration {
             enchantmentInvokerBlock.getMachineConfig();
             sporesRecreatorBlock.getMachineConfig();
             animalGrowthIncreaserBlock.getMachineConfig();
+            materialStoneWorkFactoryBlock.getMachineConfig();
             //sliderBlock.getMachineConfig();
         } catch (Exception e) {
 

@@ -3,6 +3,8 @@ package com.buuz135.industrial.tile;
 import com.buuz135.industrial.tile.block.CustomOrientedBlock;
 import net.minecraft.item.EnumDyeColor;
 import net.minecraft.util.EnumFacing;
+import net.ndrei.teslacorelib.items.SpeedUpgradeTier1;
+import net.ndrei.teslacorelib.items.SpeedUpgradeTier2;
 import net.ndrei.teslacorelib.tileentities.ElectricMachine;
 
 import java.util.ArrayList;
@@ -39,5 +41,9 @@ public abstract class CustomElectricMachine extends ElectricMachine {
         return 4000;
     }
 
-
+    public int speedUpgradeLevel() {
+        if (this.hasAddon(SpeedUpgradeTier2.class)) return 2;
+        if (this.hasAddon(SpeedUpgradeTier1.class)) return 1;
+        return 0;
+    }
 }

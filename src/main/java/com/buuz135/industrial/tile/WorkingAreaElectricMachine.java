@@ -10,8 +10,6 @@ import net.ndrei.teslacorelib.gui.BasicTeslaGuiContainer;
 import net.ndrei.teslacorelib.gui.IGuiContainerPiece;
 import net.ndrei.teslacorelib.gui.ToggleButtonPiece;
 import net.ndrei.teslacorelib.inventory.BoundingRectangle;
-import net.ndrei.teslacorelib.items.SpeedUpgradeTier1;
-import net.ndrei.teslacorelib.items.SpeedUpgradeTier2;
 
 import java.util.Arrays;
 import java.util.List;
@@ -122,9 +120,5 @@ public abstract class WorkingAreaElectricMachine extends CustomElectricMachine {
         return 1 + (getRadius() / 4) * speedUpgradeLevel();
     }
 
-    public int speedUpgradeLevel() {
-        if (this.hasAddon(SpeedUpgradeTier2.class)) return 2;
-        if (this.hasAddon(SpeedUpgradeTier1.class)) return 1;
-        return 0;
-    }
+
 }

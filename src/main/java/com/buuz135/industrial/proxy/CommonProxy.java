@@ -1,6 +1,7 @@
 package com.buuz135.industrial.proxy;
 
 import com.buuz135.industrial.config.CustomConfiguration;
+import com.buuz135.industrial.utils.CraftingUtils;
 import com.buuz135.industrial.utils.RecipeUtils;
 import net.minecraft.block.Block;
 import net.minecraft.item.Item;
@@ -42,5 +43,6 @@ public class CommonProxy {
 
     public void postInit() {
         CustomConfiguration.sync();
+        CraftingUtils.generateCrushedRecipes();
     }
 }
