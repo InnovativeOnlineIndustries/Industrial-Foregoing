@@ -26,7 +26,7 @@ public class MeatFeederItem extends IFCustomItem {
     @Nullable
     @Override
     public ICapabilityProvider initCapabilities(ItemStack stack, @Nullable NBTTagCompound nbt) {
-        FluidHandlerItemStack handlerItemStack = new FluidHandlerItemStack(stack, 64000) {
+        FluidHandlerItemStack handlerItemStack = new FluidHandlerItemStack(stack, 128000) {
             @Override
             public boolean canFillFluidType(FluidStack fluid) {
                 return fluid.getFluid().equals(FluidsRegistry.MEAT);
