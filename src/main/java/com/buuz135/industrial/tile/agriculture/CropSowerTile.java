@@ -6,12 +6,15 @@ import com.buuz135.industrial.tile.block.CustomOrientedBlock;
 import com.buuz135.industrial.utils.BlockUtils;
 import com.buuz135.industrial.utils.ItemStackUtils;
 import net.minecraft.init.Blocks;
-import net.minecraft.item.*;
+import net.minecraft.item.EnumDyeColor;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
+import net.minecraftforge.common.IPlantable;
 import net.minecraftforge.common.util.FakePlayer;
 import net.minecraftforge.items.ItemStackHandler;
 import net.ndrei.teslacorelib.gui.BasicTeslaGuiContainer;
@@ -49,7 +52,7 @@ public class CropSowerTile extends WorkingAreaElectricMachine {
         this.addInventory(new ColoredItemHandler(inPlant, EnumDyeColor.GREEN, "Seeds input", new BoundingRectangle(18 * 3, 25, 18 * 3, 18 * 3)) {
             @Override
             public boolean canInsertItem(int slot, ItemStack stack) {
-                return super.canInsertItem(slot, stack) && (stack.getItem() instanceof ItemSeeds || stack.getItem() instanceof ItemSeedFood || ItemStackUtils.isStackOreDict(stack, "treeSapling"));
+                return super.canInsertItem(slot, stack) && (stack.getItem() instanceof IPlantable || ItemStackUtils.isStackOreDict(stack, "treeSapling"));
             }
 
             @Override
