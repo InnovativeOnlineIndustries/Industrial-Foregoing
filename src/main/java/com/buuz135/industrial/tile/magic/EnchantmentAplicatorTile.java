@@ -4,7 +4,7 @@ package com.buuz135.industrial.tile.magic;
 import com.buuz135.industrial.proxy.FluidsRegistry;
 import com.buuz135.industrial.tile.CustomColoredItemHandler;
 import com.buuz135.industrial.tile.CustomElectricMachine;
-import com.buuz135.industrial.tile.block.CustomOrientedBlock;
+import com.buuz135.industrial.utils.WorkUtils;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.init.Items;
@@ -120,7 +120,7 @@ public class EnchantmentAplicatorTile extends CustomElectricMachine {
 
     @Override
     protected float performWork() {
-        if (((CustomOrientedBlock) this.getBlockType()).isWorkDisabled()) return 0;
+        if (WorkUtils.isDisabled(this.getBlockType())) return 0;
         //EnchantmentHelper.buildEnchantmentList(this.world.rand,ItemStack.EMPTY,30, true); //TODO the auto enchanting
         if (!canWork()) return 0;
         int xp = (int) (getLevels() * 100);

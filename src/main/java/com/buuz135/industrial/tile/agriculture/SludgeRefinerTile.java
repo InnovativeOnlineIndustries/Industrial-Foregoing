@@ -3,9 +3,9 @@ package com.buuz135.industrial.tile.agriculture;
 import com.buuz135.industrial.proxy.FluidsRegistry;
 import com.buuz135.industrial.tile.CustomColoredItemHandler;
 import com.buuz135.industrial.tile.CustomElectricMachine;
-import com.buuz135.industrial.tile.block.CustomOrientedBlock;
 import com.buuz135.industrial.tile.block.SludgeRefinerBlock;
 import com.buuz135.industrial.utils.ItemStackWeightedItem;
+import com.buuz135.industrial.utils.WorkUtils;
 import net.minecraft.item.EnumDyeColor;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.WeightedRandom;
@@ -49,7 +49,7 @@ public class SludgeRefinerTile extends CustomElectricMachine {
 
     @Override
     protected float performWork() {
-        if (((CustomOrientedBlock) this.getBlockType()).isWorkDisabled()) return 0;
+        if (WorkUtils.isDisabled(this.getBlockType())) return 0;
 
         if (tank.getFluid() != null && tank.getFluidAmount() >= 1000) {
             SludgeRefinerBlock block = (SludgeRefinerBlock) this.getBlockType();

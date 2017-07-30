@@ -1,7 +1,7 @@
 package com.buuz135.industrial.tile.world;
 
 import com.buuz135.industrial.tile.CustomElectricMachine;
-import com.buuz135.industrial.tile.block.CustomOrientedBlock;
+import com.buuz135.industrial.utils.WorkUtils;
 import net.minecraft.util.math.BlockPos;
 
 
@@ -19,7 +19,7 @@ public class LaserDrillTile extends CustomElectricMachine {
 
     @Override
     protected float performWork() {
-        if (((CustomOrientedBlock) this.getBlockType()).isWorkDisabled()) return 0;
+        if (WorkUtils.isDisabled(this.getBlockType())) return 0;
 
         BlockPos pos = getLaserBasePos();
         if (pos != null) {

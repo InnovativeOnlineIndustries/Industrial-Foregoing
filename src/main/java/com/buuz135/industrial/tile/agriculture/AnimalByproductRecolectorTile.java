@@ -3,7 +3,7 @@ package com.buuz135.industrial.tile.agriculture;
 import com.buuz135.industrial.proxy.FluidsRegistry;
 import com.buuz135.industrial.tile.WorkingAreaElectricMachine;
 import com.buuz135.industrial.tile.block.AnimalByproductRecolectorBlock;
-import com.buuz135.industrial.tile.block.CustomOrientedBlock;
+import com.buuz135.industrial.utils.WorkUtils;
 import net.minecraft.entity.EntityAgeable;
 import net.minecraft.item.EnumDyeColor;
 import net.minecraft.util.math.AxisAlignedBB;
@@ -30,7 +30,7 @@ public class AnimalByproductRecolectorTile extends WorkingAreaElectricMachine {
 
     @Override
     public float work() {
-        if (((CustomOrientedBlock) this.getBlockType()).isWorkDisabled()) return 0;
+        if (WorkUtils.isDisabled(this.getBlockType())) return 0;
 
         AxisAlignedBB area = getWorkingArea();
         List<EntityAgeable> animals = this.world.getEntitiesWithinAABB(EntityAgeable.class, area);

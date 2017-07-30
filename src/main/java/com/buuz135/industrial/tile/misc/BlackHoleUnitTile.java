@@ -1,7 +1,7 @@
 package com.buuz135.industrial.tile.misc;
 
 import com.buuz135.industrial.proxy.client.infopiece.BlackHoleInfoPiece;
-import com.buuz135.industrial.tile.block.CustomOrientedBlock;
+import com.buuz135.industrial.utils.WorkUtils;
 import net.minecraft.inventory.Slot;
 import net.minecraft.item.EnumDyeColor;
 import net.minecraft.item.Item;
@@ -45,7 +45,7 @@ public class BlackHoleUnitTile extends SidedTileEntity {
 
     @Override
     protected void innerUpdate() {
-        if (((CustomOrientedBlock) this.getBlockType()).isWorkDisabled()) return;
+        if (WorkUtils.isDisabled(this.getBlockType())) return;
         if (!inItems.getStackInSlot(0).isEmpty()) {
             ItemStack in = inItems.getStackInSlot(0);
             if (stack.isEmpty()) {

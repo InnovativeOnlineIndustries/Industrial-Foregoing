@@ -2,7 +2,7 @@ package com.buuz135.industrial.tile.generator;
 
 import com.buuz135.industrial.proxy.FluidsRegistry;
 import com.buuz135.industrial.tile.CustomGeneratorMachine;
-import com.buuz135.industrial.tile.block.CustomOrientedBlock;
+import com.buuz135.industrial.utils.WorkUtils;
 import net.minecraft.item.EnumDyeColor;
 import net.minecraftforge.fluids.IFluidTank;
 import net.ndrei.teslacorelib.inventory.BoundingRectangle;
@@ -23,7 +23,7 @@ public class BiofuelGeneratorTile extends CustomGeneratorMachine {
 
     @Override
     protected long consumeFuel() {
-        if (((CustomOrientedBlock) this.getBlockType()).isWorkDisabled()) return 0;
+        if (WorkUtils.isDisabled(this.getBlockType())) return 0;
         if (tank.getFluid() != null && tank.getFluidAmount() > 1) {
             tank.drain(1, true);
             return 160 * 7;

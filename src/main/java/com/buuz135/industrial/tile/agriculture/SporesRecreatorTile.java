@@ -2,6 +2,7 @@ package com.buuz135.industrial.tile.agriculture;
 
 import com.buuz135.industrial.tile.CustomColoredItemHandler;
 import com.buuz135.industrial.tile.CustomElectricMachine;
+import com.buuz135.industrial.utils.WorkUtils;
 import net.minecraft.block.Block;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.EnumDyeColor;
@@ -67,6 +68,7 @@ public class SporesRecreatorTile extends CustomElectricMachine {
 
     @Override
     protected float performWork() {
+        if (WorkUtils.isDisabled(this.getBlockType())) return 0;
         ItemStack stack = getFirstItem();
         if (!stack.isEmpty() && waterTank.getFluidAmount() >= 500 && ItemHandlerHelper.insertItem(output, stack.copy(), true).isEmpty()) {
             ItemStack out = stack.copy();

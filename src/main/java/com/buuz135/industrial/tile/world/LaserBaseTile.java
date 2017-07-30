@@ -6,6 +6,7 @@ import com.buuz135.industrial.proxy.client.infopiece.LaserBaseInfoPiece;
 import com.buuz135.industrial.tile.CustomColoredItemHandler;
 import com.buuz135.industrial.tile.block.LaserBaseBlock;
 import com.buuz135.industrial.utils.ItemStackWeightedItem;
+import com.buuz135.industrial.utils.WorkUtils;
 import net.minecraft.item.EnumDyeColor;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -84,23 +85,24 @@ public class LaserBaseTile extends SidedTileEntity {
     @Override
     protected void innerUpdate() {
         if (this.world.isRemote) return;
-        if (currentWork >= getMaxWork()) {
-            List<ItemStackWeightedItem> items = new ArrayList<>();
-            BlockRegistry.laserBaseBlock.getColoreOres().keySet().forEach(integer -> BlockRegistry.laserBaseBlock.getColoreOres().get(integer).forEach(itemStackWeightedItem -> {
-                int increase = 0;
-                for (int i = 0; i < lensItems.getSlots(); ++i) {
-                    if (!lensItems.getStackInSlot(i).isEmpty() && lensItems.getStackInSlot(i).getMetadata() == integer) {
-                        increase += BlockRegistry.laserBaseBlock.getLenseChanceIncrease();
+        if (WorkUtils.isDisabled(this.getBlockType()))
+            if (currentWork >= getMaxWork()) {
+                List<ItemStackWeightedItem> items = new ArrayList<>();
+                BlockRegistry.laserBaseBlock.getColoreOres().keySet().forEach(integer -> BlockRegistry.laserBaseBlock.getColoreOres().get(integer).forEach(itemStackWeightedItem -> {
+                    int increase = 0;
+                    for (int i = 0; i < lensItems.getSlots(); ++i) {
+                        if (!lensItems.getStackInSlot(i).isEmpty() && lensItems.getStackInSlot(i).getMetadata() == integer) {
+                            increase += BlockRegistry.laserBaseBlock.getLenseChanceIncrease();
+                        }
                     }
+                    items.add(new ItemStackWeightedItem(itemStackWeightedItem.getStack(), itemStackWeightedItem.itemWeight + increase));
+                }));
+                ItemStack stack = WeightedRandom.getRandomItem(this.world.rand, items).getStack().copy();
+                if (ItemHandlerHelper.insertItem(outItems, stack, true).isEmpty()) {
+                    ItemHandlerHelper.insertItem(outItems, stack, false);
                 }
-                items.add(new ItemStackWeightedItem(itemStackWeightedItem.getStack(), itemStackWeightedItem.itemWeight + increase));
-            }));
-            ItemStack stack = WeightedRandom.getRandomItem(this.world.rand, items).getStack().copy();
-            if (ItemHandlerHelper.insertItem(outItems, stack, true).isEmpty()) {
-                ItemHandlerHelper.insertItem(outItems, stack, false);
+                currentWork = 0;
             }
-            currentWork = 0;
-        }
     }
 
     @Override

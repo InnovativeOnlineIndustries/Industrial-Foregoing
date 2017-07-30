@@ -1,8 +1,8 @@
 package com.buuz135.industrial.tile.world;
 
 import com.buuz135.industrial.proxy.FluidsRegistry;
-import com.buuz135.industrial.tile.block.CustomOrientedBlock;
 import com.buuz135.industrial.utils.BlockUtils;
+import com.buuz135.industrial.utils.WorkUtils;
 import net.minecraft.init.Items;
 import net.minecraft.item.EnumDyeColor;
 import net.minecraft.item.ItemStack;
@@ -39,7 +39,7 @@ public class TreeFluidExtractorTile extends SidedTileEntity {
 
     @Override
     protected void innerUpdate() {
-        if (((CustomOrientedBlock) this.getBlockType()).isWorkDisabled()) return;
+        if (WorkUtils.isDisabled(this.getBlockType())) return;
         if (this.getWorld().isRemote) return;
         if (!BlockUtils.isLog(this.world, this.pos.offset(this.getFacing().getOpposite()))) progress = 0;
         if (tick % 5 == 0 && BlockUtils.isLog(this.world, this.pos.offset(this.getFacing().getOpposite()))) {

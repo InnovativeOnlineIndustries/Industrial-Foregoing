@@ -1,7 +1,7 @@
 package com.buuz135.industrial.tile.generator;
 
 import com.buuz135.industrial.tile.CustomElectricMachine;
-import com.buuz135.industrial.tile.block.CustomOrientedBlock;
+import com.buuz135.industrial.utils.WorkUtils;
 import net.minecraft.init.Items;
 import net.minecraft.item.EnumDyeColor;
 import net.minecraft.item.ItemStack;
@@ -29,7 +29,7 @@ public class LavaFabricatorTile extends CustomElectricMachine {
 
     @Override
     protected float performWork() {
-        if (((CustomOrientedBlock) this.getBlockType()).isWorkDisabled()) return 0;
+        if (WorkUtils.isDisabled(this.getBlockType())) return 0;
 
         if (tank.getFluid() == null || tank.getFluidAmount() <= 7000) {
             tank.fill(new FluidStack(FluidRegistry.LAVA, 1000), true);

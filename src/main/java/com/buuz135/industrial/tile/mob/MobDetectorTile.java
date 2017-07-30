@@ -1,6 +1,7 @@
 package com.buuz135.industrial.tile.mob;
 
 import com.buuz135.industrial.tile.WorkingAreaElectricMachine;
+import com.buuz135.industrial.utils.WorkUtils;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.AxisAlignedBB;
@@ -27,6 +28,7 @@ public class MobDetectorTile extends WorkingAreaElectricMachine {
 
     @Override
     public float work() {
+        if (WorkUtils.isDisabled(this.getBlockType())) return 0;
         List<EntityLiving> living = this.world.getEntitiesWithinAABB(EntityLiving.class, getWorkingArea());
         redstoneSignal = living.size() > 15 ? 15 : living.size();
         this.world.notifyNeighborsOfStateChange(this.pos, this.getBlockType(), true);
