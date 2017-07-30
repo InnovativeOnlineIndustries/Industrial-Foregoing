@@ -4,8 +4,8 @@ import com.buuz135.industrial.proxy.ItemRegistry;
 import com.buuz135.industrial.proxy.client.infopiece.DyeTankInfoPiece;
 import com.buuz135.industrial.tile.CustomColoredItemHandler;
 import com.buuz135.industrial.tile.CustomElectricMachine;
-import com.buuz135.industrial.tile.block.CustomOrientedBlock;
 import com.buuz135.industrial.utils.ItemStackUtils;
+import com.buuz135.industrial.utils.WorkUtils;
 import net.minecraft.init.Items;
 import net.minecraft.inventory.Slot;
 import net.minecraft.item.EnumDyeColor;
@@ -162,7 +162,7 @@ public class DyeMixerTile extends CustomElectricMachine {
 
     @Override
     protected float performWork() {
-        if (((CustomOrientedBlock) this.getBlockType()).isWorkDisabled()) return 0;
+        if (WorkUtils.isDisabled(this.getBlockType())) return 0;
 
         ItemStack stack = lens.getStackInSlot(0);
         if (!stack.isEmpty()) {

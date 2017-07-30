@@ -3,7 +3,7 @@ package com.buuz135.industrial.tile.magic;
 import com.buuz135.industrial.proxy.FluidsRegistry;
 import com.buuz135.industrial.tile.CustomColoredItemHandler;
 import com.buuz135.industrial.tile.CustomElectricMachine;
-import com.buuz135.industrial.tile.block.CustomOrientedBlock;
+import com.buuz135.industrial.utils.WorkUtils;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.item.EnumDyeColor;
 import net.minecraft.item.ItemStack;
@@ -66,7 +66,7 @@ public class EnchantmentInvokerTile extends CustomElectricMachine {
 
     @Override
     protected float performWork() {
-        if (((CustomOrientedBlock) this.getBlockType()).isWorkDisabled()) return 0;//enchantment_invoker
+        if (WorkUtils.isDisabled(this.getBlockType())) return 0;//enchantment_invoker
 
         ItemStack stack = getFirstItem();
         if (essenceTank.getFluidAmount() >= 3000 && !stack.isEmpty() && ItemHandlerHelper.insertItem(output, stack, true).isEmpty()) {

@@ -8,7 +8,12 @@ import net.minecraftforge.common.config.Configuration;
 import net.ndrei.teslacorelib.blocks.OrientedBlock;
 import net.ndrei.teslacorelib.tileentities.SidedTileEntity;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class CustomOrientedBlock<T extends SidedTileEntity> extends OrientedBlock {
+
+    public static List<CustomOrientedBlock> blockList = new ArrayList<>();
 
     private boolean workDisabled;
     private int energyForWork;
@@ -16,12 +21,14 @@ public class CustomOrientedBlock<T extends SidedTileEntity> extends OrientedBloc
 
     protected CustomOrientedBlock(String registryName, Class teClass) {
         super(Reference.MOD_ID, IndustrialForegoing.creativeTab, registryName, teClass);
+        blockList.add(this);
     }
 
     protected CustomOrientedBlock(String registryName, Class teClass, Material material, int energyForWork, int energyRate) {
         super(Reference.MOD_ID, IndustrialForegoing.creativeTab, registryName, teClass, material);
         this.energyForWork = energyForWork;
         this.energyRate = energyRate;
+        blockList.add(this);
     }
 
     public void getMachineConfig() {

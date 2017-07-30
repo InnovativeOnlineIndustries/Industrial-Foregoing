@@ -2,7 +2,7 @@ package com.buuz135.industrial.tile.magic;
 
 import com.buuz135.industrial.tile.CustomColoredItemHandler;
 import com.buuz135.industrial.tile.CustomElectricMachine;
-import com.buuz135.industrial.tile.block.CustomOrientedBlock;
+import com.buuz135.industrial.utils.WorkUtils;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.EnchantmentData;
 import net.minecraft.init.Items;
@@ -127,7 +127,7 @@ public class EnchantmentExtractorTile extends CustomElectricMachine {
 
     @Override
     protected float performWork() {
-        if (((CustomOrientedBlock) this.getBlockType()).isWorkDisabled()) return 0;
+        if (WorkUtils.isDisabled(this.getBlockType())) return 0;
 
         if (!hasBooks() || getItem().isEmpty()) return 0;
         ItemStack enchantedItem = getItem();

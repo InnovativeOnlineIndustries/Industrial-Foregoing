@@ -13,6 +13,7 @@ import net.minecraftforge.common.config.Configuration;
 import net.ndrei.teslacorelib.items.MachineCaseItem;
 
 public class OreProcessorBlock extends CustomOrientedBlock<OreProcessorTile> {
+
     @Getter
     private int essenceFortune;
 

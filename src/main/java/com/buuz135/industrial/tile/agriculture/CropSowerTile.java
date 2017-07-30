@@ -2,9 +2,9 @@ package com.buuz135.industrial.tile.agriculture;
 
 import com.buuz135.industrial.IndustrialForegoing;
 import com.buuz135.industrial.tile.WorkingAreaElectricMachine;
-import com.buuz135.industrial.tile.block.CustomOrientedBlock;
 import com.buuz135.industrial.utils.BlockUtils;
 import com.buuz135.industrial.utils.ItemStackUtils;
+import com.buuz135.industrial.utils.WorkUtils;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.EnumDyeColor;
 import net.minecraft.item.Item;
@@ -85,7 +85,7 @@ public class CropSowerTile extends WorkingAreaElectricMachine {
 
     @Override
     public float work() {
-        if (((CustomOrientedBlock) this.getBlockType()).isWorkDisabled()) return 0;
+        if (WorkUtils.isDisabled(this.getBlockType())) return 0;
         List<BlockPos> blockPos = BlockUtils.getBlockPosInAABB(getWorkingArea());
         ++pointer;
         if (pointer >= blockPos.size()) pointer = 0;

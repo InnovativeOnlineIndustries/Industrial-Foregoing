@@ -1,8 +1,13 @@
 package com.buuz135.industrial.tile.world;
 
+import com.buuz135.industrial.proxy.client.render.LaserDrillSpecialRender;
 import com.buuz135.industrial.tile.CustomElectricMachine;
-import com.buuz135.industrial.tile.block.CustomOrientedBlock;
+import com.buuz135.industrial.utils.WorkUtils;
+import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
+import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.BlockPos;
+
+import java.util.List;
 
 
 public class LaserDrillTile extends CustomElectricMachine {
@@ -19,7 +24,7 @@ public class LaserDrillTile extends CustomElectricMachine {
 
     @Override
     protected float performWork() {
-        if (((CustomOrientedBlock) this.getBlockType()).isWorkDisabled()) return 0;
+        if (WorkUtils.isDisabled(this.getBlockType())) return 0;
 
         BlockPos pos = getLaserBasePos();
         if (pos != null) {
@@ -36,4 +41,11 @@ public class LaserDrillTile extends CustomElectricMachine {
         return null;
     }
 
+
+    @Override
+    public List<TileEntitySpecialRenderer<TileEntity>> getRenderers() {
+        List<TileEntitySpecialRenderer<TileEntity>> render = super.getRenderers();
+        render.add(new LaserDrillSpecialRender());
+        return render;
+    }
 }

@@ -31,7 +31,7 @@ compileJava {
 }
 
 minecraft {
-    version = "1.12-14.21.1.2405"
+    version = "1.12-14.21.1.2426"
     runDir = "run"
     
     // the mappings can be changed at any time, and must be in the following format.
@@ -41,6 +41,10 @@ minecraft {
     // simply re-run your setup task after changing the mappings to update your workspace.
     mappings = "snapshot_20170624"
     // makeObfSourceJar = false // an Srg named sources jar is made by default. uncomment this to disable.
+}
+
+configurations {
+    all { resolutionStrategy.cacheChangingModulesFor 0, 'seconds' }
 }
 
 repositories {
@@ -62,7 +66,7 @@ repositories {
 
 dependencies {
     compile "net.darkhax.tesla:Tesla-1.12:${tesla_version}:deobf"
-    compile "net.ndrei.tesla-core-lib:tesla-core-lib:${minecraft_version}-${tesla_core_version}:deobf"
+    compile ("net.ndrei:tesla-core-lib:${project.minecraft_version}-${project.tesla_core_version}:deobf") { changing = true }
     compileOnly "org.projectlombok:lombok:1.16.16"
     // compile against the JEI API
     deobfCompile "mezz.jei:jei_${minecraft_version}:${jei_version}:api"

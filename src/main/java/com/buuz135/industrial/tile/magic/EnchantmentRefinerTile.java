@@ -2,7 +2,7 @@ package com.buuz135.industrial.tile.magic;
 
 import com.buuz135.industrial.tile.CustomColoredItemHandler;
 import com.buuz135.industrial.tile.CustomElectricMachine;
-import com.buuz135.industrial.tile.block.CustomOrientedBlock;
+import com.buuz135.industrial.utils.WorkUtils;
 import net.minecraft.init.Items;
 import net.minecraft.item.EnumDyeColor;
 import net.minecraft.item.ItemStack;
@@ -104,7 +104,7 @@ public class EnchantmentRefinerTile extends CustomElectricMachine {
 
     @Override
     protected float performWork() {
-        if (((CustomOrientedBlock) this.getBlockType()).isWorkDisabled()) return 0;
+        if (WorkUtils.isDisabled(this.getBlockType())) return 0;
 
         ItemStack stack = getFirstItem();
         if (stack.isEmpty()) {

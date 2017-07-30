@@ -144,7 +144,7 @@ public class MaterialStoneWorkFactoryTile extends CustomElectricMachine {
     public void nextMode(int id) {
         Map.Entry<ItemStackHandler, Mode> it = getEntry(id);
         modeList.replace(it.getKey(), Mode.values()[(Arrays.asList(Mode.values()).indexOf(it.getValue()) + 1) % Mode.values().length]);
-        if (TeslaCoreLib.Companion.isClientSide()) {
+        if (TeslaCoreLib.INSTANCE.isClientSide()) {
             NBTTagCompound compound = this.setupSpecialNBTMessage("CHANGE_MODE");
             Map.Entry<ItemStackHandler, Mode> mode = getEntry(id);
             compound.setInteger("id", id);

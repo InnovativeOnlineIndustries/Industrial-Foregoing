@@ -1,6 +1,7 @@
 package com.buuz135.industrial.proxy.client.render;
 
 import com.buuz135.industrial.proxy.client.ClientProxy;
+import com.buuz135.industrial.tile.CustomElectricMachine;
 import com.buuz135.industrial.tile.world.LaserBaseTile;
 import com.buuz135.industrial.tile.world.LaserDrillTile;
 import com.buuz135.industrial.utils.BlockUtils;
@@ -10,7 +11,7 @@ import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
 import javax.vecmath.Vector3d;
 
 
-public class LaserDrillSpecialRender extends TileEntitySpecialRenderer<LaserDrillTile> {
+public class LaserDrillSpecialRender<L extends CustomElectricMachine> extends TileEntitySpecialRenderer<LaserDrillTile> {
 
 
     @Override

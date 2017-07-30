@@ -88,7 +88,7 @@ public class MobImprisonmentToolItem extends IFCustomItem {
         return entity;
     }
 
-    public String getID(ItemStack stack){
+    public String getID(ItemStack stack) {
         return stack.getTagCompound().getString("entity");
     }
 

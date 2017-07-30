@@ -3,7 +3,7 @@ package com.buuz135.industrial.tile.world;
 import com.buuz135.industrial.proxy.FluidsRegistry;
 import com.buuz135.industrial.proxy.ItemRegistry;
 import com.buuz135.industrial.tile.CustomElectricMachine;
-import com.buuz135.industrial.tile.block.CustomOrientedBlock;
+import com.buuz135.industrial.utils.WorkUtils;
 import net.minecraft.inventory.Slot;
 import net.minecraft.item.EnumDyeColor;
 import net.minecraft.item.ItemStack;
@@ -78,7 +78,7 @@ public class LatexProcessingUnitTile extends CustomElectricMachine {
 
     @Override
     protected float performWork() {
-        if (((CustomOrientedBlock) this.getBlockType()).isWorkDisabled()) return 0;
+        if (WorkUtils.isDisabled(this.getBlockType())) return 0;
         if (waterTank.getFluid() != null && latexTank.getFluid() != null && waterTank.drain(1000, false).amount == 1000 && latexTank.drain(75, false).amount == 75 && ItemHandlerHelper.insertItem(itemOut, new ItemStack(ItemRegistry.tinyDryRubber, 1), true).isEmpty()) {
             waterTank.drain(1000, true);
             latexTank.drain(75, true);

@@ -4,6 +4,7 @@ import com.buuz135.industrial.proxy.ItemRegistry;
 import com.buuz135.industrial.tile.agriculture.AnimalGrowthIncreaserTile;
 import com.buuz135.industrial.utils.RecipeUtils;
 import net.minecraft.block.material.Material;
+import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import net.ndrei.teslacorelib.items.MachineCaseItem;
 
@@ -16,7 +17,7 @@ public class AnimalGrowthIncreaserBlock extends CustomOrientedBlock<AnimalGrowth
     public void createRecipe() {
         RecipeUtils.addShapedRecipe(new ItemStack(this), "pep", "eme", "dgd",
                 'p', ItemRegistry.plastic,
-                'e', "wheat",
+                'e', Items.WHEAT,
                 'm', MachineCaseItem.INSTANCE,
                 'd', "dyePurple",
                 'g', "gearGold");

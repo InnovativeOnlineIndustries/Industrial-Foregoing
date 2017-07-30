@@ -1,8 +1,8 @@
 package com.buuz135.industrial.tile.world;
 
 import com.buuz135.industrial.proxy.FluidsRegistry;
-import com.buuz135.industrial.tile.block.CustomOrientedBlock;
 import com.buuz135.industrial.utils.BlockUtils;
+import com.buuz135.industrial.utils.WorkUtils;
 import net.minecraft.init.Items;
 import net.minecraft.item.EnumDyeColor;
 import net.minecraft.item.ItemStack;
@@ -39,19 +39,19 @@ public class TreeFluidExtractorTile extends SidedTileEntity {
 
     @Override
     protected void innerUpdate() {
-        if (((CustomOrientedBlock) this.getBlockType()).isWorkDisabled()) return;
+        if (WorkUtils.isDisabled(this.getBlockType())) return;
         if (this.getWorld().isRemote) return;
         if (!BlockUtils.isLog(this.world, this.pos.offset(this.getFacing().getOpposite()))) progress = 0;
         if (tick % 5 == 0 && BlockUtils.isLog(this.world, this.pos.offset(this.getFacing().getOpposite()))) {
             tank.fill(new FluidStack(FluidsRegistry.LATEX, 1), true);
             if (id == 0) id = this.world.rand.nextInt();
             if (world.rand.nextDouble() <= 0.005) ++progress;
-            if (progress > 7){
+            if (progress > 7) {
                 progress = 0;
                 this.world.setBlockToAir(this.pos.offset(this.getFacing().getOpposite()));
             }
-            if (tick > 404 && progress > 0){
-                this.world.sendBlockBreakProgress(this.world.rand.nextInt(),this.pos.offset(this.getFacing().getOpposite()), progress-1);
+            if (tick > 404 && progress > 0) {
+                this.world.sendBlockBreakProgress(this.world.rand.nextInt(), this.pos.offset(this.getFacing().getOpposite()), progress - 1);
                 tick = 0;
             }
         }

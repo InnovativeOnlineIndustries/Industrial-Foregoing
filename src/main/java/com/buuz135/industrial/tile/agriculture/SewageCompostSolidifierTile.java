@@ -4,7 +4,7 @@ import com.buuz135.industrial.proxy.FluidsRegistry;
 import com.buuz135.industrial.proxy.ItemRegistry;
 import com.buuz135.industrial.tile.CustomColoredItemHandler;
 import com.buuz135.industrial.tile.CustomElectricMachine;
-import com.buuz135.industrial.tile.block.CustomOrientedBlock;
+import com.buuz135.industrial.utils.WorkUtils;
 import net.minecraft.item.EnumDyeColor;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.fluids.IFluidTank;
@@ -47,7 +47,7 @@ public class SewageCompostSolidifierTile extends CustomElectricMachine {
 
     @Override
     protected float performWork() {
-        if (((CustomOrientedBlock) this.getBlockType()).isWorkDisabled()) return 0;
+        if (WorkUtils.isDisabled(this.getBlockType())) return 0;
 
         ItemStack stack = new ItemStack(ItemRegistry.fertilizer, 1);
         if (sewage.getFluid() != null && sewage.drain(2000, false).amount == 2000 && ItemHandlerHelper.insertItem(outFertilizer, stack, true).isEmpty()) {

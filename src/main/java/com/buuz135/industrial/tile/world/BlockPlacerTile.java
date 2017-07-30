@@ -2,8 +2,8 @@ package com.buuz135.industrial.tile.world;
 
 import com.buuz135.industrial.tile.CustomColoredItemHandler;
 import com.buuz135.industrial.tile.WorkingAreaElectricMachine;
-import com.buuz135.industrial.tile.block.CustomOrientedBlock;
 import com.buuz135.industrial.utils.BlockUtils;
+import com.buuz135.industrial.utils.WorkUtils;
 import net.minecraft.block.Block;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.EnumDyeColor;
@@ -53,7 +53,7 @@ public class BlockPlacerTile extends WorkingAreaElectricMachine {
 
     @Override
     public float work() {
-        if (((CustomOrientedBlock) this.getBlockType()).isWorkDisabled()) return 0;
+        if (WorkUtils.isDisabled(this.getBlockType())) return 0;
         List<BlockPos> blockPosList = BlockUtils.getBlockPosInAABB(getWorkingArea());
         for (BlockPos pos : blockPosList) {
             if (this.world.isAirBlock(pos)) {

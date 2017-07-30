@@ -2,7 +2,7 @@ package com.buuz135.industrial.tile.agriculture;
 
 import com.buuz135.industrial.item.addon.AdultFilterAddonItem;
 import com.buuz135.industrial.tile.WorkingAreaElectricMachine;
-import com.buuz135.industrial.tile.block.CustomOrientedBlock;
+import com.buuz135.industrial.utils.WorkUtils;
 import net.minecraft.entity.EntityAgeable;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.AxisAlignedBB;
@@ -19,7 +19,7 @@ public class AnimalIndependenceSelectorTile extends WorkingAreaElectricMachine {
 
     @Override
     public float work() {
-        if (((CustomOrientedBlock) this.getBlockType()).isWorkDisabled()) return 0;
+        if (WorkUtils.isDisabled(this.getBlockType())) return 0;
 
         AxisAlignedBB area = getWorkingArea();
         List<EntityAgeable> animals = this.world.getEntitiesWithinAABB(EntityAgeable.class, area);

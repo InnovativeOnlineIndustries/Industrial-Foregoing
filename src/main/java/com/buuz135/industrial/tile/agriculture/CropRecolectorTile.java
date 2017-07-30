@@ -4,9 +4,9 @@ import com.buuz135.industrial.proxy.FluidsRegistry;
 import com.buuz135.industrial.tile.CustomColoredItemHandler;
 import com.buuz135.industrial.tile.WorkingAreaElectricMachine;
 import com.buuz135.industrial.tile.block.CropRecolectorBlock;
-import com.buuz135.industrial.tile.block.CustomOrientedBlock;
 import com.buuz135.industrial.utils.BlockUtils;
 import com.buuz135.industrial.utils.ItemStackUtils;
+import com.buuz135.industrial.utils.WorkUtils;
 import net.minecraft.block.BlockCactus;
 import net.minecraft.block.BlockCrops;
 import net.minecraft.block.BlockNetherWart;
@@ -77,7 +77,7 @@ public class CropRecolectorTile extends WorkingAreaElectricMachine {
 
     @Override
     public float work() {
-        if (((CustomOrientedBlock) this.getBlockType()).isWorkDisabled()) return 0;
+        if (WorkUtils.isDisabled(this.getBlockType())) return 0;
         if (ItemStackUtils.isInventoryFull(outItems)) return 0;
         List<BlockPos> blockPos = BlockUtils.getBlockPosInAABB(getWorkingArea());
         boolean needPointerIncrease = true;
@@ -143,9 +143,9 @@ public class CropRecolectorTile extends WorkingAreaElectricMachine {
     public void checkForTrees(World world, BlockPos current) {
         Stack<BlockPos> tree = new Stack<>();
         tree.push(current);
-        while (!tree.isEmpty()){
+        while (!tree.isEmpty()) {
             BlockPos checking = tree.pop();
-            if (BlockUtils.isLog(world, checking) || BlockUtils.isLeaves(world, checking)){
+            if (BlockUtils.isLog(world, checking) || BlockUtils.isLeaves(world, checking)) {
                 Iterable<BlockPos> area = BlockPos.getAllInBox(checking.offset(EnumFacing.DOWN).offset(EnumFacing.SOUTH).offset(EnumFacing.WEST), checking.offset(EnumFacing.UP).offset(EnumFacing.NORTH).offset(EnumFacing.EAST));
                 for (BlockPos blockPos : area) {
                     if (BlockUtils.isLog(world, blockPos) && !woodCache.contains(blockPos) && blockPos.distanceSq(pos.getX(), pos.getY(), pos.getZ()) <= 1000) {

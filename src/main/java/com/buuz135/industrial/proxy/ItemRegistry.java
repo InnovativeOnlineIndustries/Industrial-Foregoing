@@ -41,8 +41,8 @@ public class ItemRegistry {
 
         (laserLensItem = new LaserLensItem()).register(itemRegistry);
 
-        (adultFilterAddomItem = new AdultFilterAddonItem()).register(itemRegistry);
-        (rangeAddonItem = new RangeAddonItem()).register(itemRegistry);
+        (adultFilterAddomItem = new AdultFilterAddonItem()).registerItem(itemRegistry);
+        (rangeAddonItem = new RangeAddonItem()).registerItem(itemRegistry);
 
         meatFeederItem.createRecipe();
         mobImprisonmentToolItem.createRecipe();

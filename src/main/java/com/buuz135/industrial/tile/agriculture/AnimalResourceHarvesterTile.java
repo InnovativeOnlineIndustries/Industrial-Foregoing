@@ -4,7 +4,7 @@ import com.buuz135.industrial.IndustrialForegoing;
 import com.buuz135.industrial.proxy.FluidsRegistry;
 import com.buuz135.industrial.tile.CustomColoredItemHandler;
 import com.buuz135.industrial.tile.WorkingAreaElectricMachine;
-import com.buuz135.industrial.tile.block.CustomOrientedBlock;
+import com.buuz135.industrial.utils.WorkUtils;
 import net.minecraft.entity.passive.EntityCow;
 import net.minecraft.entity.passive.EntitySheep;
 import net.minecraft.init.Items;
@@ -15,7 +15,6 @@ import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraftforge.common.util.FakePlayer;
-import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.IFluidTank;
 import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
 import net.minecraftforge.fluids.capability.IFluidHandlerItem;
@@ -60,7 +59,7 @@ public class AnimalResourceHarvesterTile extends WorkingAreaElectricMachine {
 
     @Override
     public float work() {
-        if (((CustomOrientedBlock) this.getBlockType()).isWorkDisabled()) return 0;
+        if (WorkUtils.isDisabled(this.getBlockType())) return 0;
         List<EntitySheep> animals = this.world.getEntitiesWithinAABB(EntitySheep.class, getWorkingArea());
         for (EntitySheep sheep : animals) {
             if (!sheep.getSheared()) {
@@ -71,12 +70,12 @@ public class AnimalResourceHarvesterTile extends WorkingAreaElectricMachine {
                 return 1;
             }
         }
-        for (EntityCow cow : this.world.getEntitiesWithinAABB(EntityCow.class, getWorkingArea())){
+        for (EntityCow cow : this.world.getEntitiesWithinAABB(EntityCow.class, getWorkingArea())) {
             FakePlayer player = IndustrialForegoing.getFakePlayer(this.world);
             player.setHeldItem(EnumHand.MAIN_HAND, new ItemStack(Items.BUCKET));
-            if (cow.processInteract(player, EnumHand.MAIN_HAND)){
+            if (cow.processInteract(player, EnumHand.MAIN_HAND)) {
                 ItemStack stack = player.getHeldItem(EnumHand.MAIN_HAND);
-                if (stack.hasCapability(CapabilityFluidHandler.FLUID_HANDLER_ITEM_CAPABILITY, null)){
+                if (stack.hasCapability(CapabilityFluidHandler.FLUID_HANDLER_ITEM_CAPABILITY, null)) {
                     IFluidHandlerItem fluidHandlerItem = stack.getCapability(CapabilityFluidHandler.FLUID_HANDLER_ITEM_CAPABILITY, null);
                     tank.fill(fluidHandlerItem.drain(Integer.MAX_VALUE, true), true);
                 }

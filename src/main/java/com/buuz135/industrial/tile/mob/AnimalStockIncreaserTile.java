@@ -2,7 +2,7 @@ package com.buuz135.industrial.tile.mob;
 
 import com.buuz135.industrial.tile.CustomColoredItemHandler;
 import com.buuz135.industrial.tile.WorkingAreaElectricMachine;
-import com.buuz135.industrial.tile.block.CustomOrientedBlock;
+import com.buuz135.industrial.utils.WorkUtils;
 import net.minecraft.entity.passive.EntityAnimal;
 import net.minecraft.item.EnumDyeColor;
 import net.minecraft.item.Item;
@@ -56,7 +56,7 @@ public class AnimalStockIncreaserTile extends WorkingAreaElectricMachine {
 
     @Override
     public float work() {
-        if (((CustomOrientedBlock) this.getBlockType()).isWorkDisabled()) return 0;
+        if (WorkUtils.isDisabled(this.getBlockType())) return 0;
 
         AxisAlignedBB area = getWorkingArea();
         List<EntityAnimal> animals = this.world.getEntitiesWithinAABB(EntityAnimal.class, area);
