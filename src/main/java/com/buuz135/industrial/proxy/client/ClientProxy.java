@@ -19,10 +19,7 @@ public class ClientProxy extends CommonProxy {
     public void preInit(FMLPreInitializationEvent event) {
         super.preInit(event);
 
-
-        MinecraftForge.EVENT_BUS.register(new MachineWorkAreaRender());
         MinecraftForge.EVENT_BUS.register(new MobRenderInPrisonHandler());
-
     }
 
     @Override
