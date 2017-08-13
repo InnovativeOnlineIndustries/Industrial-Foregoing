@@ -1,12 +1,15 @@
 package com.buuz135.industrial.tile.misc;
 
+import com.buuz135.industrial.utils.ItemStackUtils;
 import com.buuz135.industrial.utils.WorkUtils;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.item.EnumDyeColor;
+import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumFacing;
 import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.IFluidTank;
+import net.minecraftforge.items.ItemStackHandler;
 import net.ndrei.teslacorelib.inventory.BoundingRectangle;
 import net.ndrei.teslacorelib.tileentities.SidedTileEntity;
 
@@ -41,5 +44,15 @@ public class WaterCondesatorTile extends SidedTileEntity {
                 ++sources;
         }
         return sources;
+    }
+
+    @Override
+    protected boolean acceptsFluidItem(ItemStack stack) {
+        return ItemStackUtils.acceptsFluidItem(stack);
+    }
+
+    @Override
+    protected void processFluidItems(ItemStackHandler fluidItems) {
+        ItemStackUtils.processFluidItems(fluidItems, fluidTank);
     }
 }

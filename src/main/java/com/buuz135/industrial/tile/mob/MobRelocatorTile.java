@@ -5,6 +5,7 @@ import com.buuz135.industrial.proxy.FluidsRegistry;
 import com.buuz135.industrial.tile.CustomColoredItemHandler;
 import com.buuz135.industrial.tile.WorkingAreaElectricMachine;
 import com.buuz135.industrial.tile.block.MobRelocatorBlock;
+import com.buuz135.industrial.utils.ItemStackUtils;
 import com.buuz135.industrial.utils.WorkUtils;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.item.EntityItem;
@@ -92,5 +93,13 @@ public class MobRelocatorTile extends WorkingAreaElectricMachine {
         return new AxisAlignedBB(this.pos.getX(), this.pos.getY(), this.pos.getZ(), this.pos.getX() + 1, this.pos.getY() + 1, this.pos.getZ() + 1).grow(getRadius(), getHeight(), getRadius()).offset(corner1);
     }
 
+    @Override
+    protected boolean acceptsFluidItem(ItemStack stack) {
+        return ItemStackUtils.acceptsFluidItem(stack);
+    }
 
+    @Override
+    protected void processFluidItems(ItemStackHandler fluidItems) {
+        ItemStackUtils.processFluidItems(fluidItems, outExp);
+    }
 }

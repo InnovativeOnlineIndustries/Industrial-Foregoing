@@ -1,15 +1,13 @@
 package com.buuz135.industrial.tile.generator;
 
 import com.buuz135.industrial.tile.CustomElectricMachine;
+import com.buuz135.industrial.utils.ItemStackUtils;
 import com.buuz135.industrial.utils.WorkUtils;
-import net.minecraft.init.Items;
 import net.minecraft.item.EnumDyeColor;
 import net.minecraft.item.ItemStack;
-import net.minecraftforge.common.ForgeModContainer;
 import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.IFluidTank;
-import net.minecraftforge.fluids.UniversalBucket;
 import net.minecraftforge.items.ItemStackHandler;
 import net.ndrei.teslacorelib.inventory.BoundingRectangle;
 
@@ -41,17 +39,11 @@ public class LavaFabricatorTile extends CustomElectricMachine {
 
     @Override
     protected boolean acceptsFluidItem(ItemStack stack) {
-        return stack.getItem().equals(Items.BUCKET);
+        return ItemStackUtils.acceptsFluidItem(stack);
     }
 
     @Override
     protected void processFluidItems(ItemStackHandler fluidItems) {
-        ItemStack stack = fluidItems.getStackInSlot(0);
-        if (!stack.isEmpty() && fluidItems.getStackInSlot(1).isEmpty() && tank.getFluidAmount() >= 1000) {
-            ItemStack out = UniversalBucket.getFilledBucket(ForgeModContainer.getInstance().universalBucket, FluidRegistry.LAVA);
-            tank.drain(1000, true);
-            stack.setCount(stack.getCount() - 1);
-            fluidItems.setStackInSlot(1, out);
-        }
+        ItemStackUtils.processFluidItems(fluidItems, tank);
     }
 }

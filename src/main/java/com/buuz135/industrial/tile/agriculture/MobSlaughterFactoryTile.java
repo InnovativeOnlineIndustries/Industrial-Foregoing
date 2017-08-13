@@ -4,14 +4,17 @@ import com.buuz135.industrial.proxy.CommonProxy;
 import com.buuz135.industrial.proxy.FluidsRegistry;
 import com.buuz135.industrial.tile.WorkingAreaElectricMachine;
 import com.buuz135.industrial.tile.block.MobSlaughterFactoryBlock;
+import com.buuz135.industrial.utils.ItemStackUtils;
 import com.buuz135.industrial.utils.WorkUtils;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.item.EnumDyeColor;
+import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.IFluidTank;
+import net.minecraftforge.items.ItemStackHandler;
 import net.ndrei.teslacorelib.inventory.BoundingRectangle;
 
 import java.util.List;
@@ -50,5 +53,15 @@ public class MobSlaughterFactoryTile extends WorkingAreaElectricMachine {
         mob.attackEntityFrom(CommonProxy.custom, mob.getMaxHealth());
 
         return 1;
+    }
+
+    @Override
+    protected boolean acceptsFluidItem(ItemStack stack) {
+        return ItemStackUtils.acceptsFluidItem(stack);
+    }
+
+    @Override
+    protected void processFluidItems(ItemStackHandler fluidItems) {
+        ItemStackUtils.processFluidItems(fluidItems, outMeat);
     }
 }

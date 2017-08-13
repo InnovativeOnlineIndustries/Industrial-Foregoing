@@ -11,8 +11,14 @@ import net.minecraft.client.renderer.texture.TextureUtil;
 import net.minecraft.client.renderer.tileentity.TileEntityItemStackRenderer;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumFacing;
+import net.minecraftforge.common.ForgeModContainer;
+import net.minecraftforge.fluids.FluidUtil;
+import net.minecraftforge.fluids.IFluidTank;
+import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
+import net.minecraftforge.fluids.capability.IFluidHandlerItem;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraftforge.items.ItemStackHandler;
@@ -160,5 +166,28 @@ public class ItemStackUtils {
             if (handler.getStackInSlot(i).isEmpty()) return false;
         }
         return true;
+    }
+
+
+    public static boolean acceptsFluidItem(ItemStack stack) {
+        return stack.hasCapability(CapabilityFluidHandler.FLUID_HANDLER_ITEM_CAPABILITY, null) && !stack.getItem().equals(ForgeModContainer.getInstance().universalBucket);
+    }
+
+    public static void processFluidItems(ItemStackHandler fluidItems, IFluidTank tank) {
+        ItemStack stack = fluidItems.getStackInSlot(0);
+        if (!stack.isEmpty() && fluidItems.getStackInSlot(1).isEmpty()) {
+            int filled;
+            if (stack.getItem().equals(Items.BUCKET) && tank.getFluidAmount() >= 1000) {
+                filled = 1000;
+                fluidItems.setStackInSlot(1, FluidUtil.getFilledBucket(tank.getFluid()));
+                stack.shrink(1);
+            } else {
+                IFluidHandlerItem cap = stack.getCapability(CapabilityFluidHandler.FLUID_HANDLER_ITEM_CAPABILITY, null);
+                filled = cap.fill(tank.getFluid(), true);
+                fluidItems.setStackInSlot(1, stack.copy());
+                stack.shrink(1);
+            }
+            tank.drain(filled, true);
+        }
     }
 }

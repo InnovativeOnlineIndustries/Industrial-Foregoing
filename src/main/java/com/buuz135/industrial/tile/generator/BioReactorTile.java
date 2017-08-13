@@ -4,6 +4,7 @@ import com.buuz135.industrial.proxy.FluidsRegistry;
 import com.buuz135.industrial.proxy.client.infopiece.BioreactorEfficiencyInfoPiece;
 import com.buuz135.industrial.tile.CustomElectricMachine;
 import com.buuz135.industrial.tile.block.BioReactorBlock;
+import com.buuz135.industrial.utils.ItemStackUtils;
 import com.buuz135.industrial.utils.WorkUtils;
 import net.minecraft.item.EnumDyeColor;
 import net.minecraft.item.ItemStack;
@@ -113,9 +114,12 @@ public class BioReactorTile extends CustomElectricMachine {
     }
 
     @Override
-    public void protectedUpdate() {
-        super.protectedUpdate();
+    protected boolean acceptsFluidItem(ItemStack stack) {
+        return ItemStackUtils.acceptsFluidItem(stack);
     }
 
-
+    @Override
+    protected void processFluidItems(ItemStackHandler fluidItems) {
+        ItemStackUtils.processFluidItems(fluidItems, tank);
+    }
 }

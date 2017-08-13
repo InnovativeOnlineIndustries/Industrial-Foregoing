@@ -194,4 +194,14 @@ public class CropRecolectorTile extends WorkingAreaElectricMachine {
         }
         cache.poll();
     }
+
+    @Override
+    protected boolean acceptsFluidItem(ItemStack stack) {
+        return ItemStackUtils.acceptsFluidItem(stack);
+    }
+
+    @Override
+    protected void processFluidItems(ItemStackHandler fluidItems) {
+        ItemStackUtils.processFluidItems(fluidItems, sludge);
+    }
 }
