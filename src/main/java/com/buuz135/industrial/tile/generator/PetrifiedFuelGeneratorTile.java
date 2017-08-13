@@ -2,6 +2,7 @@ package com.buuz135.industrial.tile.generator;
 
 import com.buuz135.industrial.proxy.client.infopiece.PetrifiedFuelInfoPiece;
 import com.buuz135.industrial.tile.CustomGeneratorMachine;
+import com.buuz135.industrial.tile.block.PetrifiedFuelGeneratorBlock;
 import com.buuz135.industrial.utils.WorkUtils;
 import net.minecraft.init.Items;
 import net.minecraft.inventory.Slot;
@@ -93,7 +94,7 @@ public class PetrifiedFuelGeneratorTile extends CustomGeneratorMachine {
     }
 
     @Override
-    public long consumeFuel() { //TODO fix buckets
+    public long consumeFuel() {
         if (WorkUtils.isDisabled(this.getBlockType())) return 0;
         ItemStack temp = this.getFirstFuel(true);
         if (temp.isEmpty()) {
@@ -101,7 +102,6 @@ public class PetrifiedFuelGeneratorTile extends CustomGeneratorMachine {
         }
         burnTime = TileEntityFurnace.getItemBurnTime(temp);
         temp.setCount(temp.getCount() - 1);
-        //this.invisibleSlot.setStackInSlot(0,new ItemStack(temp.getItem(),1));
         return (long) burnTime * 100;
     }
 
@@ -114,7 +114,7 @@ public class PetrifiedFuelGeneratorTile extends CustomGeneratorMachine {
 
     @Override
     public long getEnergyFillRate() {
-        return burnTime / 10;
+        return burnTime / ((PetrifiedFuelGeneratorBlock) this.getBlockType()).getTimeModifier();
     }
 
 
