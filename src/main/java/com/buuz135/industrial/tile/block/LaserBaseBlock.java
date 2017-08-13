@@ -73,6 +73,7 @@ public class LaserBaseBlock extends CustomOrientedBlock<LaserBaseTile> {
             } else {
                 for (ItemStack stack : OreDictionary.getOres(temp[1])) {
                     coloreOres.put(lens, new ItemStackWeightedItem(stack, weight));
+                    break;
                 }
             }
         }
