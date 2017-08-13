@@ -10,6 +10,7 @@ public class ItemRenderRegistry {
         tinyDryRubber.registerRender();
         dryRubber.registerRender();
         plastic.registerRender();
+        strawItem.registerRender();
         fertilizer.registerRender();
         laserLensItem.registerRender();
 

@@ -2,8 +2,11 @@ package com.buuz135.industrial;
 
 import com.buuz135.industrial.proxy.BlockRegistry;
 import com.buuz135.industrial.proxy.CommonProxy;
+import com.buuz135.industrial.proxy.FluidsRegistry;
 import com.buuz135.industrial.utils.IFFakePlayer;
 import com.buuz135.industrial.utils.Reference;
+import com.buuz135.industrial.utils.StrawUtils;
+import com.buuz135.industrial.utils.drinkhandlers.*;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
@@ -45,6 +48,17 @@ public class IndustrialForegoing {
         return null;
     }
 
+    public static void registerDrinkHandlers() {
+        StrawUtils.register(FluidRegistry.WATER, new DrinkHandlerWater());
+        StrawUtils.register(FluidRegistry.LAVA, new DrinkHandlerLava());
+        StrawUtils.register(FluidsRegistry.BIOFUEL, new DrinkHandlerBiofuel());
+        StrawUtils.register(FluidsRegistry.SLUDGE, new DrinkHandlerSludge());
+        StrawUtils.register(FluidsRegistry.SEWAGE, new DrinkHandlerSewage());
+        StrawUtils.register(FluidsRegistry.MILK, new DrinkHandlerMilk());
+        StrawUtils.register(FluidsRegistry.ESSENCE, new DrinkHandlerEssence());
+        StrawUtils.register(FluidsRegistry.MEAT, new DrinkHandlerMeat());
+    }
+
     @Mod.EventHandler
     public void preInit(FMLPreInitializationEvent event) {
         proxy.preInit(event);
@@ -57,6 +71,7 @@ public class IndustrialForegoing {
 
     @Mod.EventHandler
     public void postInit(FMLPostInitializationEvent event) {
+        registerDrinkHandlers();
         proxy.postInit();
     }
 }

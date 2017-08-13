@@ -1,0 +1,16 @@
+{
+  "result": {
+    "item": "industrialforegoing:straw"
+  },
+  "pattern": [
+    "xx",
+    "x ",
+    "x "
+  ],
+  "type": "minecraft:crafting_shaped",
+  "key": {
+    "x": {
+      "item": "industrialforegoing:plastic"
+    }
+  }
+}

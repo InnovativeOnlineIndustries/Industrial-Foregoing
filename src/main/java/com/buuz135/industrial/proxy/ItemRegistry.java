@@ -1,9 +1,6 @@
 package com.buuz135.industrial.proxy;
 
-import com.buuz135.industrial.item.IFCustomItem;
-import com.buuz135.industrial.item.LaserLensItem;
-import com.buuz135.industrial.item.MeatFeederItem;
-import com.buuz135.industrial.item.MobImprisonmentToolItem;
+import com.buuz135.industrial.item.*;
 import com.buuz135.industrial.item.addon.AdultFilterAddonItem;
 import com.buuz135.industrial.item.addon.RangeAddonItem;
 import com.buuz135.industrial.utils.RecipeUtils;
@@ -24,6 +21,8 @@ public class ItemRegistry {
     public static IFCustomItem fertilizer;
     public static LaserLensItem laserLensItem;
 
+    public static ItemStraw strawItem;
+
     public static AdultFilterAddonItem adultFilterAddomItem;
     public static RangeAddonItem rangeAddonItem;
 
@@ -40,6 +39,8 @@ public class ItemRegistry {
         (mobImprisonmentToolItem = new MobImprisonmentToolItem()).register(itemRegistry);
 
         (laserLensItem = new LaserLensItem()).register(itemRegistry);
+
+        (strawItem=new ItemStraw()).register(itemRegistry);
 
         (adultFilterAddomItem = new AdultFilterAddonItem()).registerItem(itemRegistry);
         (rangeAddonItem = new RangeAddonItem()).registerItem(itemRegistry);
