@@ -4,6 +4,7 @@ import com.buuz135.industrial.api.IFluidDrinkHandler;
 import com.buuz135.industrial.utils.StrawUtils;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.EnumAction;
@@ -23,6 +24,8 @@ import net.minecraftforge.fluids.capability.IFluidHandler;
 import net.minecraftforge.fluids.capability.IFluidTankProperties;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+import java.util.List;
 import java.util.Map;
 
 public class ItemStraw extends IFCustomItem {
@@ -124,5 +127,11 @@ public class ItemStraw extends IFCustomItem {
     @Override
     public EnumAction getItemUseAction(ItemStack stack) {
         return EnumAction.DRINK;
+    }
+
+    @Override
+    public void addInformation(ItemStack stack, @Nullable World worldIn, List<String> tooltip, ITooltipFlag flagIn) {
+        super.addInformation(stack, worldIn, tooltip, flagIn);
+        tooltip.add("\"The One Who Codes\"");
     }
 }
