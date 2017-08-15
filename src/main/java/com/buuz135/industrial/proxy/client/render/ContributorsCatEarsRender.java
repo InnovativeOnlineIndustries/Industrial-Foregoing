@@ -7,6 +7,7 @@ import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.client.renderer.entity.layers.LayerRenderer;
 import net.minecraft.client.renderer.texture.TextureMap;
+import net.minecraft.entity.player.EnumPlayerModelParts;
 import org.lwjgl.opengl.GL11;
 
 import java.util.Arrays;
@@ -17,7 +18,8 @@ public class ContributorsCatEarsRender implements LayerRenderer<AbstractClientPl
 
     @Override
     public void doRenderLayer(AbstractClientPlayer entitylivingbaseIn, float limbSwing, float limbSwingAmount, float partialTicks, float ageInTicks, float netHeadYaw, float headPitch, float scale) {
-        if (!Arrays.asList(contributors.names).contains(entitylivingbaseIn.getName())) return;
+        if (!Arrays.asList(contributors.uuid).contains(entitylivingbaseIn.getUniqueID().toString())) return;
+        if (!entitylivingbaseIn.isWearing(EnumPlayerModelParts.CAPE)) return;
         GlStateManager.pushMatrix();
         GlStateManager.enableBlend();
         GlStateManager.disableCull();
@@ -49,6 +51,6 @@ public class ContributorsCatEarsRender implements LayerRenderer<AbstractClientPl
 
     public class Contributors {
 
-        public String[] names;
+        public String[] uuid;
     }
 }
