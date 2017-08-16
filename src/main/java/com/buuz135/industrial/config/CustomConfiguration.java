@@ -48,6 +48,7 @@ public class CustomConfiguration {
             sporesRecreatorBlock.getMachineConfig();
             animalGrowthIncreaserBlock.getMachineConfig();
             materialStoneWorkFactoryBlock.getMachineConfig();
+            blackHoleTankBlock.getMachineConfig();
             //sliderBlock.getMachineConfig();
         } catch (Exception e) {
 

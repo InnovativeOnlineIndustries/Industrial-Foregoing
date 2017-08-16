@@ -51,6 +51,7 @@ public class BlockRegistry {
     public static SporesRecreatorBlock sporesRecreatorBlock = new SporesRecreatorBlock();
     public static AnimalGrowthIncreaserBlock animalGrowthIncreaserBlock = new AnimalGrowthIncreaserBlock();
     public static MaterialStoneWorkFactoryBlock materialStoneWorkFactoryBlock = new MaterialStoneWorkFactoryBlock();
+    public static BlackHoleTankBlock blackHoleTankBlock = new BlackHoleTankBlock();
 
     public static IFCustomFluidBlock BLOCK_ESSENCE = new IFCustomFluidBlock(FluidsRegistry.ESSENCE, Material.WATER);
     public static IFCustomFluidBlock BLOCK_MILK = new IFCustomFluidBlock(FluidsRegistry.MILK, Material.WATER);
@@ -98,6 +99,7 @@ public class BlockRegistry {
         sporesRecreatorBlock.createRecipe();
         animalGrowthIncreaserBlock.createRecipe();
         materialStoneWorkFactoryBlock.createRecipe();
+        blackHoleTankBlock.createRecipe();
     }
 
     @SubscribeEvent
