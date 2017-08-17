@@ -1,6 +1,7 @@
 package com.buuz135.industrial.tile.misc;
 
 import com.buuz135.industrial.proxy.client.infopiece.BlackHoleInfoPiece;
+import com.buuz135.industrial.proxy.client.infopiece.IHasDisplayStack;
 import com.buuz135.industrial.utils.WorkUtils;
 import net.minecraft.item.EnumDyeColor;
 import net.minecraft.item.Item;
@@ -22,7 +23,7 @@ import net.ndrei.teslacorelib.tileentities.SidedTileEntity;
 import javax.annotation.Nonnull;
 import java.util.List;
 
-public class BlackHoleUnitTile extends SidedTileEntity {
+public class BlackHoleUnitTile extends SidedTileEntity implements IHasDisplayStack {
 
     public static final String NBT_ITEMSTACK = "itemstack";
     public static final String NBT_AMOUNT = "amount";
@@ -166,16 +167,21 @@ public class BlackHoleUnitTile extends SidedTileEntity {
         return Integer.MAX_VALUE >= stack.getCount() + amount && (BlackHoleUnitTile.this.stack.isEmpty() || (stack.getItem() == BlackHoleUnitTile.this.stack.getItem() && stack.getMetadata() == BlackHoleUnitTile.this.stack.getMetadata() && (!(stack.hasTagCompound() && BlackHoleUnitTile.this.stack.hasTagCompound()) || stack.getTagCompound().equals(BlackHoleUnitTile.this.stack.getTagCompound()))));
     }
 
-    public ItemStack getStack() {
-        return stack;
-    }
-
     public void setStack(ItemStack stack) {
         this.stack = stack;
     }
 
+
+    public ItemStack getItemStack() {
+        return stack;
+    }
+
     public int getAmount() {
         return amount + (outItems.getStackInSlot(0).isEmpty() ? 0 : outItems.getStackInSlot(0).getCount());
+    }
+
+    public String getDisplayNameUnlocalized() {
+        return getItemStack().getUnlocalizedName() + ".name";
     }
 
     public void setAmount(int amount) {
@@ -207,16 +213,16 @@ public class BlackHoleUnitTile extends SidedTileEntity {
 
         @Override
         public int getSlots() {
-            return (int) Math.ceil(tile.getAmount() / (double) tile.getStack().getMaxStackSize());
+            return (int) Math.ceil(tile.getAmount() / (double) tile.getItemStack().getMaxStackSize());
         }
 
         @Nonnull
         @Override
         public ItemStack getStackInSlot(int slot) {
-            double stacks = tile.getAmount() / (double) tile.getStack().getMaxStackSize();
-            if (getAmount() <= tile.getStack().getMaxStackSize() && slot == 0) return outItems.getStackInSlot(0);
+            double stacks = tile.getAmount() / (double) tile.getItemStack().getMaxStackSize();
+            if (getAmount() <= tile.getItemStack().getMaxStackSize() && slot == 0) return outItems.getStackInSlot(0);
             ItemStack stack = tile.stack.copy();
-            stack.setCount(slot < (int) stacks ? tile.getStack().getMaxStackSize() : slot == (int) stacks ? (int) ((stacks - tile.getAmount() / tile.getStack().getMaxStackSize()) * tile.getStack().getMaxStackSize()) : 0);
+            stack.setCount(slot < (int) stacks ? tile.getItemStack().getMaxStackSize() : slot == (int) stacks ? (int) ((stacks - tile.getAmount() / tile.getItemStack().getMaxStackSize()) * tile.getItemStack().getMaxStackSize()) : 0);
             return stack;
         }
 

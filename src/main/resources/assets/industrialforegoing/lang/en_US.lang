@@ -6,6 +6,7 @@ text.display.amount=Amount:
 text.display.block=Block:
 text.display.item=Item:
 text.display.empty=Empty
+text.display.fluid=Fluid:
 
 tile.industrialforegoing.petrified_fuel_generator.name=Petrified Fuel Generator
 tile.industrialforegoing.enchantment_refiner.name=Enchantment Refiner
@@ -44,6 +45,7 @@ tile.industrialforegoing.enchantment_invoker.name=Enchantment Invoker
 tile.industrialforegoing.spores_recreator.name=Spores Recreator
 tile.industrialforegoing.animal_growth_increaser.name=Animal Growth Increaser
 tile.industrialforegoing.material_stonework_factory.name=Material StoneWork Factory
+tile.industrialforegoing.black_hole_tank.name=Black Hole Tank
 
 tile.slider.name=Slider
 

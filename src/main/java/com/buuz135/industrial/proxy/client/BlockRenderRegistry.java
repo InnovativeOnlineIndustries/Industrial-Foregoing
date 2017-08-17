@@ -42,6 +42,7 @@ public class BlockRenderRegistry {
         sporesRecreatorBlock.registerRenderer();
         animalGrowthIncreaserBlock.registerRenderer();
         materialStoneWorkFactoryBlock.registerRenderer();
+        blackHoleTankBlock.registerRenderer();
         //sliderBlock.registerRenderer();
     }
 }

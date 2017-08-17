@@ -36,10 +36,10 @@ public class BlackHoleUnitBlock extends CustomOrientedBlock<BlackHoleUnitTile> {
             if (tile.getAmount() > 0) {
                 if (!stack.hasTagCompound()) stack.setTagCompound(new NBTTagCompound());
                 stack.getTagCompound().setInteger(BlackHoleUnitTile.NBT_AMOUNT, tile.getAmount());
-                stack.getTagCompound().setString(BlackHoleUnitTile.NBT_ITEMSTACK, tile.getStack().getItem().getRegistryName().toString());
-                stack.getTagCompound().setInteger(BlackHoleUnitTile.NBT_META, tile.getStack().getMetadata());
-                if (tile.getStack().hasTagCompound())
-                    stack.getTagCompound().setTag(BlackHoleUnitTile.NBT_ITEM_NBT, tile.getStack().getTagCompound());
+                stack.getTagCompound().setString(BlackHoleUnitTile.NBT_ITEMSTACK, tile.getItemStack().getItem().getRegistryName().toString());
+                stack.getTagCompound().setInteger(BlackHoleUnitTile.NBT_META, tile.getItemStack().getMetadata());
+                if (tile.getItemStack().hasTagCompound())
+                    stack.getTagCompound().setTag(BlackHoleUnitTile.NBT_ITEM_NBT, tile.getItemStack().getTagCompound());
             }
             float f = 0.7F;
             float d0 = world.rand.nextFloat() * f + (1.0F - f) * 0.5F;
@@ -51,7 +51,6 @@ public class BlackHoleUnitBlock extends CustomOrientedBlock<BlackHoleUnitTile> {
                 entityitem.getItem().setTagCompound(stack.getTagCompound().copy());
             }
             world.spawnEntity(entityitem);
-
         }
         super.breakBlock(world, pos, state);
     }
