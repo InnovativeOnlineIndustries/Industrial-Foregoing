@@ -51,7 +51,7 @@ public class CropSowerTile extends WorkingAreaElectricMachine {
 
             @Override
             public int getSlotLimit(int slot) {
-                return 8;
+                return 16;
             }
         };
         this.addInventory(new ColoredItemHandler(inPlant, EnumDyeColor.GREEN, "Seeds input", new BoundingRectangle(18 * 3, 25, 18 * 3, 18 * 3)) {
