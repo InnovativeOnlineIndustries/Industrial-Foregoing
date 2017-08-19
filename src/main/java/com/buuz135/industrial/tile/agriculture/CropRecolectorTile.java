@@ -7,10 +7,7 @@ import com.buuz135.industrial.tile.block.CropRecolectorBlock;
 import com.buuz135.industrial.utils.BlockUtils;
 import com.buuz135.industrial.utils.ItemStackUtils;
 import com.buuz135.industrial.utils.WorkUtils;
-import net.minecraft.block.BlockCactus;
-import net.minecraft.block.BlockCrops;
-import net.minecraft.block.BlockNetherWart;
-import net.minecraft.block.BlockReed;
+import net.minecraft.block.*;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.item.EnumDyeColor;
 import net.minecraft.item.ItemStack;
@@ -115,6 +112,11 @@ public class CropRecolectorTile extends WorkingAreaElectricMachine {
                     if (canInsertAll(drops, outItems)) {
                         insertItemsAndRemove(drops, pos.offset(EnumFacing.UP, 1), outItems);
                     }
+                }
+            } else if (state.getBlock() instanceof BlockMelon || state.getBlock() instanceof BlockPumpkin) {
+                List<ItemStack> drops = state.getBlock().getDrops(this.world, blockPos.get(pointer), state, 0);
+                if (canInsertAll(drops, outItems)) {
+                    insertItemsAndRemove(drops, pos, outItems);
                 }
             }
         } else {
