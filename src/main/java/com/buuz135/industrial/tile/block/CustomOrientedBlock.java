@@ -11,7 +11,7 @@ import net.ndrei.teslacorelib.tileentities.SidedTileEntity;
 import java.util.ArrayList;
 import java.util.List;
 
-public class CustomOrientedBlock<T extends SidedTileEntity> extends OrientedBlock {
+public abstract class CustomOrientedBlock<T extends SidedTileEntity> extends OrientedBlock {
 
     public static List<CustomOrientedBlock> blockList = new ArrayList<>();
 
@@ -50,4 +50,6 @@ public class CustomOrientedBlock<T extends SidedTileEntity> extends OrientedBloc
     public int getEnergyRate() {
         return energyRate;
     }
+
+    public abstract void createRecipe();
 }

@@ -1,3 +1,7 @@
+##1.2
++ Added Resourceful Furnace, it produces Essence when doing furnace operations
+
+
 ##1.1
 + Added Black Hole Tank
 + Decreased slot stack size limit to 16 for the Plant Sower

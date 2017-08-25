@@ -52,6 +52,7 @@ public class BlockRegistry {
     public static AnimalGrowthIncreaserBlock animalGrowthIncreaserBlock = new AnimalGrowthIncreaserBlock();
     public static MaterialStoneWorkFactoryBlock materialStoneWorkFactoryBlock = new MaterialStoneWorkFactoryBlock();
     public static BlackHoleTankBlock blackHoleTankBlock = new BlackHoleTankBlock();
+    public static ResourcefulFurnaceBlock resourcefulFurnaceBlock = new ResourcefulFurnaceBlock();
 
     public static IFCustomFluidBlock BLOCK_ESSENCE = new IFCustomFluidBlock(FluidsRegistry.ESSENCE, Material.WATER);
     public static IFCustomFluidBlock BLOCK_MILK = new IFCustomFluidBlock(FluidsRegistry.MILK, Material.WATER);
@@ -100,6 +101,7 @@ public class BlockRegistry {
         animalGrowthIncreaserBlock.createRecipe();
         materialStoneWorkFactoryBlock.createRecipe();
         blackHoleTankBlock.createRecipe();
+        resourcefulFurnaceBlock.createRecipe();
     }
 
     @SubscribeEvent

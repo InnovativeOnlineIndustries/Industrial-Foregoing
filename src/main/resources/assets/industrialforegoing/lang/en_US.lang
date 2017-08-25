@@ -46,6 +46,7 @@ tile.industrialforegoing.spores_recreator.name=Spores Recreator
 tile.industrialforegoing.animal_growth_increaser.name=Animal Growth Increaser
 tile.industrialforegoing.material_stonework_factory.name=Material StoneWork Factory
 tile.industrialforegoing.black_hole_tank.name=Black Hole Tank
+tile.industrialforegoing.resourceful_furnace.name=Resourceful Furnace
 
 tile.slider.name=Slider
 
