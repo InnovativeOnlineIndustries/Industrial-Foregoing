@@ -1,5 +1,6 @@
 ##1.2
 + Added Resourceful Furnace, it produces Essence when doing furnace operations
++ Made all inputs of the machine enabled by default.
 
 
 ##1.1
