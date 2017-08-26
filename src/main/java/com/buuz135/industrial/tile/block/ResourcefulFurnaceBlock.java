@@ -1,7 +1,6 @@
 package com.buuz135.industrial.tile.block;
 
 import com.buuz135.industrial.config.CustomConfiguration;
-import com.buuz135.industrial.proxy.ItemRegistry;
 import com.buuz135.industrial.tile.misc.ResourcefulFurnaceTile;
 import com.buuz135.industrial.utils.RecipeUtils;
 import lombok.Getter;
@@ -31,7 +30,7 @@ public class ResourcefulFurnaceBlock extends CustomOrientedBlock<ResourcefulFurn
     @Override
     public void createRecipe() {
         RecipeUtils.addShapedRecipe(new ItemStack(this, 1), "pbp", "rmr", "pgp",
-                'p', ItemRegistry.plastic,
+                'p', "itemRubber",
                 'b', Items.BUCKET,
                 'r', Blocks.FURNACE,
                 'm', MachineCaseItem.INSTANCE,

@@ -1,6 +1,5 @@
 package com.buuz135.industrial.tile.block;
 
-import com.buuz135.industrial.proxy.ItemRegistry;
 import com.buuz135.industrial.tile.magic.EnchantmentRefinerTile;
 import com.buuz135.industrial.utils.RecipeUtils;
 import net.minecraft.block.material.Material;
@@ -16,7 +15,7 @@ public class EnchantmentRefinerBlock extends CustomOrientedBlock<EnchantmentRefi
 
     public void createRecipe() {
         RecipeUtils.addShapedRecipe(new ItemStack(this, 1), "pep", "bmn", "pgp",
-                'p', ItemRegistry.plastic,
+                'p', "itemRubber",
                 'e', Items.ENDER_PEARL,
                 'b', Items.BOOK,
                 'm', MachineCaseItem.INSTANCE,

@@ -1,7 +1,6 @@
 package com.buuz135.industrial.tile.block;
 
 import com.buuz135.industrial.config.CustomConfiguration;
-import com.buuz135.industrial.proxy.ItemRegistry;
 import com.buuz135.industrial.tile.agriculture.CropRecolectorTile;
 import com.buuz135.industrial.utils.RecipeUtils;
 import net.minecraft.block.material.Material;
@@ -37,7 +36,7 @@ public class CropRecolectorBlock extends CustomOrientedBlock<CropRecolectorTile>
 
     public void createRecipe() {
         RecipeUtils.addShapedRecipe(new ItemStack(this), "php", "ama", "grg",
-                'p', ItemRegistry.plastic,
+                'p', "itemRubber",
                 'h', Items.IRON_HOE,
                 'a', Items.IRON_AXE,
                 'm', MachineCaseItem.INSTANCE,

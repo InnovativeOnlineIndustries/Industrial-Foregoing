@@ -1,6 +1,5 @@
 package com.buuz135.industrial.tile.block;
 
-import com.buuz135.industrial.proxy.ItemRegistry;
 import com.buuz135.industrial.tile.world.BlockDestroyerTile;
 import com.buuz135.industrial.utils.RecipeUtils;
 import net.minecraft.block.material.Material;
@@ -16,7 +15,7 @@ public class BlockDestroyerBlock extends CustomOrientedBlock<BlockDestroyerTile>
 
     public void createRecipe() {
         RecipeUtils.addShapedRecipe(new ItemStack(this), "pgp", "ams", "iri",
-                'p', ItemRegistry.plastic,
+                'p', "itemRubber",
                 'g', "gearGold",
                 'a', Items.IRON_PICKAXE,
                 'm', MachineCaseItem.INSTANCE,

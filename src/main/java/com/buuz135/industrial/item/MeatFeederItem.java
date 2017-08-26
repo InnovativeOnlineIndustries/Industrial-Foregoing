@@ -1,7 +1,6 @@
 package com.buuz135.industrial.item;
 
 import com.buuz135.industrial.proxy.FluidsRegistry;
-import com.buuz135.industrial.proxy.ItemRegistry;
 import com.buuz135.industrial.utils.RecipeUtils;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.init.Items;
@@ -56,7 +55,7 @@ public class MeatFeederItem extends IFCustomItem {
 
     public void createRecipe() {
         RecipeUtils.addShapedRecipe(new ItemStack(this), "pip", "gig", " i ",
-                'p', ItemRegistry.plastic,
+                'p', "itemRubber",
                 'i', "ingotIron",
                 'g', Items.GLASS_BOTTLE);
     }

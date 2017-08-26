@@ -1,6 +1,5 @@
 package com.buuz135.industrial.tile.block;
 
-import com.buuz135.industrial.proxy.ItemRegistry;
 import com.buuz135.industrial.tile.misc.BlackHoleUnitTile;
 import com.buuz135.industrial.utils.RecipeUtils;
 import net.minecraft.block.material.Material;
@@ -94,7 +93,7 @@ public class BlackHoleUnitBlock extends CustomOrientedBlock<BlackHoleUnitTile> {
 
     public void createRecipe() {
         RecipeUtils.addShapedRecipe(new ItemStack(this), "ppp", "eae", "cmc",
-                'p', ItemRegistry.plastic,
+                'p', "itemRubber",
                 'e', Items.ENDER_EYE,
                 'a', Items.ENDER_PEARL,
                 'c', "chestWood",

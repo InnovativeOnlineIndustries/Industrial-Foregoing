@@ -1,6 +1,5 @@
 package com.buuz135.industrial.tile.block;
 
-import com.buuz135.industrial.proxy.ItemRegistry;
 import com.buuz135.industrial.tile.generator.LavaFabricatorTile;
 import com.buuz135.industrial.utils.RecipeUtils;
 import net.minecraft.block.material.Material;
@@ -16,7 +15,7 @@ public class LavaFabricatorBlock extends CustomOrientedBlock<LavaFabricatorTile>
 
     public void createRecipe() {
         RecipeUtils.addShapedRecipe(new ItemStack(this), "pop", "cmc", "brb",
-                'p', ItemRegistry.plastic,
+                'p', "itemRubber",
                 'o', Blocks.OBSIDIAN,
                 'c', Items.MAGMA_CREAM,
                 'm', MachineCaseItem.INSTANCE,

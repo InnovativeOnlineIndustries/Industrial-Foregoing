@@ -1,6 +1,5 @@
 package com.buuz135.industrial.tile.block;
 
-import com.buuz135.industrial.proxy.ItemRegistry;
 import com.buuz135.industrial.tile.magic.EnchantmentAplicatorTile;
 import com.buuz135.industrial.utils.RecipeUtils;
 import net.minecraft.block.material.Material;
@@ -16,7 +15,7 @@ public class EnchantmentAplicatorBlock extends CustomOrientedBlock<EnchantmentAp
 
     public void createRecipe() {
         RecipeUtils.addShapedRecipe(new ItemStack(this), "ppp", "ama", "gag",
-                'p', ItemRegistry.plastic,
+                'p', "itemRubber",
                 'a', Blocks.ANVIL,
                 'm', MachineCaseItem.INSTANCE,
                 'g', "gearIron");
