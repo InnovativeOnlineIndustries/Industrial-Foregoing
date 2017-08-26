@@ -1,7 +1,11 @@
 ##1.2
 + Added Resourceful Furnace, it produces Essence when doing furnace operations
 + Made all inputs of the machine enabled by default.
-
++ Fixed issue [#31](https://github.com/Buuz135/Industrial-Foregoing/issues/31) 
+  1) OreDicted Recipes that Contained Plastic
+  2) Fixed Space Checking for the entities when they were spawned
+  4) Added some extra space for the BHU when empty
+  5) Added a config option for the Mob Duplicator to increase essence used based con health (Default 12)
 
 ##1.1
 + Added Black Hole Tank

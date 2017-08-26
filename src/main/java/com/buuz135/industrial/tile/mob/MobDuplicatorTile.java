@@ -1,6 +1,7 @@
 package com.buuz135.industrial.tile.mob;
 
 import com.buuz135.industrial.item.MobImprisonmentToolItem;
+import com.buuz135.industrial.proxy.BlockRegistry;
 import com.buuz135.industrial.proxy.FluidsRegistry;
 import com.buuz135.industrial.proxy.ItemRegistry;
 import com.buuz135.industrial.tile.CustomColoredItemHandler;
@@ -10,6 +11,7 @@ import com.buuz135.industrial.utils.WorkUtils;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.item.EnumDyeColor;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraftforge.fluids.IFluidTank;
@@ -63,32 +65,43 @@ public class MobDuplicatorTile extends WorkingAreaElectricMachine {
         if (WorkUtils.isDisabled(this.getBlockType())) return 0;
         if (mobTool.getStackInSlot(0).isEmpty()) return 0;
         if (experienceTank.getFluid() == null) return 0;
-        AxisAlignedBB alignedBB = getWorkingArea();
-        List<EntityLiving> livings = this.getWorld().getEntitiesWithinAABB(EntityLiving.class, alignedBB);
-        if (livings.size() > 20) return 0;
+
         ItemStack stack = mobTool.getStackInSlot(0);
         EntityLiving entity = (EntityLiving) ((MobImprisonmentToolItem) stack.getItem()).getEntityFromStack(stack, this.world, false);
-        int canSpawn = (int) ((experienceTank.getFluid() == null ? 0 : experienceTank.getFluid().amount) / (entity.getHealth() * 2));
+
+        int livingAround = world.getEntitiesWithinAABB(entity.getClass(), (new AxisAlignedBB((double) pos.getX(), (double) pos.getY(), (double) pos.getZ(), (double) (pos.getX() + 1), (double) (pos.getY() + 1), (double) (pos.getZ() + 1))).grow((double) 16)).size();
+        if (livingAround > 32) return 0;
+
+        int canSpawn = (int) ((experienceTank.getFluid() == null ? 0 : experienceTank.getFluid().amount) / (entity.getHealth() * 4));
         if (canSpawn == 0) return 0;
+
         int spawnAmount = 1 + this.world.rand.nextInt(Math.min(canSpawn, 4));
-        List<BlockPos> blocks = BlockUtils.getBlockPosInAABB(alignedBB);
+        List<BlockPos> blocks = BlockUtils.getBlockPosInAABB(getWorkingArea());
+        int essenceNeeded = (int) (entity.getHealth() * BlockRegistry.mobDuplicatorBlock.essenceNeeded);
         while (spawnAmount > 0) {
-            if (experienceTank.getFluid() != null && experienceTank.getFluid().amount > entity.getHealth() * 2) {
+            if (experienceTank.getFluid() != null && experienceTank.getFluid().amount > essenceNeeded) {
+                entity = (EntityLiving) ((MobImprisonmentToolItem) stack.getItem()).getEntityFromStack(stack, this.world, false);
                 int tries = 20;
-                BlockPos random = blocks.get(this.world.rand.nextInt(blocks.size()));
-                while (tries > 0 && !this.world.isAirBlock(random)) {
+                BlockPos random = blocks.get(this.world.rand.nextInt(blocks.size())).add(0.5, 0, 0.5);
+                entity.setUniqueId(UUID.randomUUID());
+                entity.setLocationAndAngles(random.getX(), random.getY(), random.getZ(), world.rand.nextFloat() * 360F, 0);
+                while (tries > 0 && (!this.world.isAirBlock(random) || !this.world.isAirBlock(random.offset(EnumFacing.UP)))) {
                     random = blocks.get(this.world.rand.nextInt(blocks.size()));
+                    entity.setLocationAndAngles(random.getX(), random.getY(), random.getZ(), world.rand.nextFloat() * 360F, 0);
                     --tries;
                 }
-                entity = (EntityLiving) ((MobImprisonmentToolItem) stack.getItem()).getEntityFromStack(stack, this.world, false);
-                entity.setUniqueId(UUID.randomUUID());
+
+                if (tries <= 0) continue;
                 entity.onInitialSpawn(world.getDifficultyForLocation(this.pos), null);
-                entity.setPosition(random.getX() + 0.5, random.getY(), random.getZ() + 0.5);
+
                 this.world.spawnEntity(entity);
-                experienceTank.drain((int) (entity.getHealth() * 2), true);
+
+                if (entity != null) entity.spawnExplosionParticle();
+                experienceTank.drain(essenceNeeded, true);
             }
             --spawnAmount;
         }
+
         return 1;
     }
 }
