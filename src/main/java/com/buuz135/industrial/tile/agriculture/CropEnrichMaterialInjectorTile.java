@@ -16,7 +16,6 @@ import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraftforge.common.util.FakePlayer;
 import net.minecraftforge.items.ItemStackHandler;
-import net.ndrei.teslacorelib.utils.BlockCube;
 
 import java.util.List;
 
@@ -45,7 +44,7 @@ public class CropEnrichMaterialInjectorTile extends WorkingAreaElectricMachine {
         this.addInventory(new CustomColoredItemHandler(inFert, EnumDyeColor.GREEN, "Fertilizer input", 18 * 5 + 3, 25, 4, 3) {
             @Override
             public boolean canInsertItem(int slot, ItemStack stack) {
-                return (stack.getItem().equals(Items.DYE) && stack.getMetadata() == 15) || stack.getItem().equals(ItemRegistry.fertilizer);
+                return isValidFertilizer(stack);
             }
 
             @Override
@@ -105,6 +104,12 @@ public class CropEnrichMaterialInjectorTile extends WorkingAreaElectricMachine {
         super.readFromNBT(compound);
         if (!compound.hasKey(NBT_POINTER)) pointer = 0;
         else pointer = compound.getInteger(NBT_POINTER);
+    }
+
+    public boolean isValidFertilizer(ItemStack stack) {
+        if (stack.getItem().getRegistryName().toString().equals("forestry:fertilizer_compound")) return true;
+
+        return (stack.getItem().equals(Items.DYE) && stack.getMetadata() == 15) || stack.getItem().equals(ItemRegistry.fertilizer);
     }
 
 }
