@@ -213,7 +213,7 @@ public class BlackHoleUnitTile extends SidedTileEntity implements IHasDisplaySta
 
         @Override
         public int getSlots() {
-            return (int) Math.ceil(tile.getAmount() / (double) tile.getItemStack().getMaxStackSize());
+            return (int) Math.ceil((tile.getAmount() + 1) / (double) tile.getItemStack().getMaxStackSize());
         }
 
         @Nonnull
