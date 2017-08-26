@@ -67,4 +67,13 @@ public class TreeFluidExtractorTile extends SidedTileEntity {
         ItemStackUtils.processFluidItems(fluidItems, tank);
     }
 
+    @Override
+    public boolean getAllowRedstoneControl() {
+        return false;
+    }
+
+    @Override
+    protected boolean getShowPauseDrawerPiece() {
+        return false;
+    }
 }

@@ -270,4 +270,14 @@ public class BlackHoleControllerTile extends SidedTileEntity {
         }
     }
 
+    @Override
+    public boolean getAllowRedstoneControl() {
+        return false;
+    }
+
+    @Override
+    protected boolean getShowPauseDrawerPiece() {
+        return false;
+    }
+
 }

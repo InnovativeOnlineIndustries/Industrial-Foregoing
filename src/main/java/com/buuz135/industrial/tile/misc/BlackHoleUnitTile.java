@@ -244,4 +244,14 @@ public class BlackHoleUnitTile extends SidedTileEntity implements IHasDisplaySta
             return 64;
         }
     }
+
+    @Override
+    public boolean getAllowRedstoneControl() {
+        return false;
+    }
+
+    @Override
+    protected boolean getShowPauseDrawerPiece() {
+        return false;
+    }
 }

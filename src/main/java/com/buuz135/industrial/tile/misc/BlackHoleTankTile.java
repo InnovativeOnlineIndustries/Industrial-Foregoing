@@ -71,4 +71,14 @@ public class BlackHoleTankTile extends SidedTileEntity implements IHasDisplaySta
     public IFluidTank getTank() {
         return tank;
     }
+
+    @Override
+    public boolean getAllowRedstoneControl() {
+        return false;
+    }
+
+    @Override
+    protected boolean getShowPauseDrawerPiece() {
+        return false;
+    }
 }
