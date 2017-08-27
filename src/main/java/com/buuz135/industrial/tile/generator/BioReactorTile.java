@@ -47,7 +47,7 @@ public class BioReactorTile extends CustomElectricMachine {
         this.addInventory(new ColoredItemHandler(input, EnumDyeColor.BLUE, "Input items", new BoundingRectangle(18 * 5, 25, 3 * 18, 3 * 18)) {
             @Override
             public boolean canInsertItem(int slot, ItemStack stack) {
-                return ((BioReactorBlock) BioReactorTile.this.getBlockType()).getItemsAccepted().stream().anyMatch(stack1 -> stack.getItem().equals(stack1.getItem())) && !alreadyContains(input, stack, 16);
+                return ((BioReactorBlock) BioReactorTile.this.getBlockType()).getItemsAccepted().stream().anyMatch(stack1 -> stack.getItem().equals(stack1.getItem())) && canInsert(slot, input, stack);
             }
 
             @Override
@@ -85,12 +85,15 @@ public class BioReactorTile extends CustomElectricMachine {
         return 0;
     }
 
-    private boolean alreadyContains(ItemStackHandler handler, ItemStack stack, int amountAtleast) {
-        for (int i = 0; i < handler.getSlots(); ++i) {
-            if (stack.getItem().equals(handler.getStackInSlot(i).getItem()) && stack.getMetadata() == handler.getStackInSlot(i).getMetadata() && handler.getStackInSlot(i).getCount() >= amountAtleast)
-                return true;
+    private boolean canInsert(int slot, ItemStackHandler handler, ItemStack stack) {
+        if (handler.getStackInSlot(slot).isItemEqual(stack)) {
+            return true;
         }
-        return false;
+        for (int i = 0; i < handler.getSlots(); ++i) {
+            if (stack.isItemEqual(handler.getStackInSlot(i)))
+                return false;
+        }
+        return true;
     }
 
 

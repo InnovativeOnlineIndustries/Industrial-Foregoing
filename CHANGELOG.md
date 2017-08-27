@@ -10,6 +10,7 @@
 + Added support for Forestry fertilizer in Crop Enrich Material Injector (Closes [#33](https://github.com/Buuz135/Industrial-Foregoing/issues/33))
 + Improved JEI Plugins
 + Fixed Plant Sower Filter Colors
++ Fixed Bioreactor allowing more of the same type of input
 
 ##1.1
 + Added Black Hole Tank
