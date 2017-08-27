@@ -6,9 +6,9 @@ import mezz.jei.api.ingredients.IIngredients;
 import mezz.jei.api.recipe.IRecipeWrapper;
 import net.minecraft.client.Minecraft;
 import net.minecraft.item.ItemStack;
-import net.minecraftforge.common.ForgeModContainer;
-import net.minecraftforge.fluids.UniversalBucket;
+import net.minecraftforge.fluids.FluidStack;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -23,7 +23,7 @@ public class BioReactorRecipeWrapper implements IRecipeWrapper {
     @Override
     public void getIngredients(IIngredients ingredients) {
         ingredients.setInput(ItemStack.class, stack);
-        ingredients.setOutput(ItemStack.class, UniversalBucket.getFilledBucket(ForgeModContainer.getInstance().universalBucket, FluidsRegistry.BIOFUEL));
+        ingredients.setOutput(FluidStack.class, new FluidStack(FluidsRegistry.BIOFUEL, BlockRegistry.bioReactorBlock.getBaseAmount()));
     }
 
     @Override
@@ -33,7 +33,9 @@ public class BioReactorRecipeWrapper implements IRecipeWrapper {
 
     @Override
     public List<String> getTooltipStrings(int mouseX, int mouseY) {
-        return Arrays.asList("Efficiency", " Min: " + BlockRegistry.bioReactorBlock.getBaseAmount() + "mb/item", " Max: " + BlockRegistry.bioReactorBlock.getBaseAmount() * 2 + "mb/item");
+        if (mouseX >= 18 && mouseX <= 58)
+            return Arrays.asList("Efficiency", " Min: " + BlockRegistry.bioReactorBlock.getBaseAmount() + "mb/item", " Max: " + BlockRegistry.bioReactorBlock.getBaseAmount() * 2 + "mb/item");
+        return new ArrayList<>();
     }
 
     @Override

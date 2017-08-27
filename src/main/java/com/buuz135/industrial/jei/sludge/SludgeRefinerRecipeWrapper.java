@@ -6,8 +6,7 @@ import mezz.jei.api.ingredients.IIngredients;
 import mezz.jei.api.recipe.IRecipeWrapper;
 import net.minecraft.client.Minecraft;
 import net.minecraft.item.ItemStack;
-import net.minecraftforge.common.ForgeModContainer;
-import net.minecraftforge.fluids.UniversalBucket;
+import net.minecraftforge.fluids.FluidStack;
 
 import java.text.DecimalFormat;
 import java.util.Arrays;
@@ -25,7 +24,7 @@ public class SludgeRefinerRecipeWrapper implements IRecipeWrapper {
 
     @Override
     public void getIngredients(IIngredients ingredients) {
-        ingredients.setInput(ItemStack.class, UniversalBucket.getFilledBucket(ForgeModContainer.getInstance().universalBucket, FluidsRegistry.SLUDGE));
+        ingredients.setInput(FluidStack.class, new FluidStack(FluidsRegistry.SEWAGE, 1000));
         ingredients.setOutput(ItemStack.class, item.getStack());
     }
 
@@ -36,7 +35,9 @@ public class SludgeRefinerRecipeWrapper implements IRecipeWrapper {
 
     @Override
     public List<String> getTooltipStrings(int mouseX, int mouseY) {
-        return Arrays.asList("Chance: " + new DecimalFormat("##.##").format((item.itemWeight / (double) maxWeight) * 100) + "%");
+        if (mouseX >= 18 && mouseX <= 58)
+            return Arrays.asList("Chance: " + new DecimalFormat("##.##").format((item.itemWeight / (double) maxWeight) * 100) + "%");
+        return Arrays.asList();
     }
 
     @Override

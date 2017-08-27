@@ -7,7 +7,8 @@
   4) Added some extra space for the BHU when empty.
   5) Added a config option for the Mob Duplicator to increase essence used based con health (Default 12).
 + Removed some GUI pieces that weren't needed.
-+ Added support for Forestry fertilizer in Crop Enrich Material Injector (Closes #33)
++ Added support for Forestry fertilizer in Crop Enrich Material Injector (Closes [#33](https://github.com/Buuz135/Industrial-Foregoing/issues/33))
++ Improved JEI Plugins
 
 ##1.1
 + Added Black Hole Tank
