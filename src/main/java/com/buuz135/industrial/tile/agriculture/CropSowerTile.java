@@ -31,7 +31,7 @@ public class CropSowerTile extends WorkingAreaElectricMachine {
 
     private static final String NBT_POINTER = "pointer";
 
-    public static EnumDyeColor[] colors = new EnumDyeColor[]{EnumDyeColor.RED, EnumDyeColor.YELLOW, EnumDyeColor.GREEN, EnumDyeColor.CYAN, EnumDyeColor.WHITE, EnumDyeColor.BLUE, EnumDyeColor.PURPLE, EnumDyeColor.MAGENTA, EnumDyeColor.BLACK};
+    public static EnumDyeColor[] colors = new EnumDyeColor[]{EnumDyeColor.RED, EnumDyeColor.CYAN, EnumDyeColor.PURPLE, EnumDyeColor.YELLOW, EnumDyeColor.WHITE, EnumDyeColor.MAGENTA, EnumDyeColor.LIME, EnumDyeColor.BLUE, EnumDyeColor.BLACK};
 
     private ItemStackHandler inPlant;
     private int pointer;

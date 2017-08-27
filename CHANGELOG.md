@@ -9,6 +9,7 @@
 + Removed some GUI pieces that weren't needed.
 + Added support for Forestry fertilizer in Crop Enrich Material Injector (Closes [#33](https://github.com/Buuz135/Industrial-Foregoing/issues/33))
 + Improved JEI Plugins
++ Fixed Plant Sower Filter Colors
 
 ##1.1
 + Added Black Hole Tank
