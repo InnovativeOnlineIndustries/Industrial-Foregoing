@@ -13,7 +13,12 @@
 + Fixed Bioreactor allowing more of the same type of input
 + Added API Support for the BioReactor
 + Added API Support for the Laser Drill
-
++ Added Support for the BioReactor in Crafttweaker
+   ```
+   import mods.industrialforegoing.BioReactor;
+   
+   BioReactor.add(<minecraft:diamond>);
+   ```
 ##1.1
 + Added Black Hole Tank
 + Decreased slot stack size limit to 16 for the Plant Sower
