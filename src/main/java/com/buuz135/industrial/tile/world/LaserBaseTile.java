@@ -1,5 +1,6 @@
 package com.buuz135.industrial.tile.world;
 
+import com.buuz135.industrial.api.recipe.LaserDrillEntry;
 import com.buuz135.industrial.proxy.BlockRegistry;
 import com.buuz135.industrial.proxy.ItemRegistry;
 import com.buuz135.industrial.proxy.client.infopiece.LaserBaseInfoPiece;
@@ -86,15 +87,15 @@ public class LaserBaseTile extends SidedTileEntity {
         if (this.world.isRemote) return;
         if (currentWork >= getMaxWork()) {
             List<ItemStackWeightedItem> items = new ArrayList<>();
-            BlockRegistry.laserBaseBlock.getColoreOres().keySet().forEach(integer -> BlockRegistry.laserBaseBlock.getColoreOres().get(integer).forEach(itemStackWeightedItem -> {
+            LaserDrillEntry.LASER_DRILL_ENTRIES.forEach(entry -> {
                 int increase = 0;
                 for (int i = 0; i < lensItems.getSlots(); ++i) {
-                    if (!lensItems.getStackInSlot(i).isEmpty() && lensItems.getStackInSlot(i).getMetadata() == integer) {
+                    if (!lensItems.getStackInSlot(i).isEmpty() && lensItems.getStackInSlot(i).getMetadata() == entry.getLaserMeta()) {
                         increase += BlockRegistry.laserBaseBlock.getLenseChanceIncrease();
                     }
                 }
-                items.add(new ItemStackWeightedItem(itemStackWeightedItem.getStack(), itemStackWeightedItem.itemWeight + increase));
-            }));
+                items.add(new ItemStackWeightedItem(entry.getStack(), entry.getWeight() + increase));
+            });
             ItemStack stack = WeightedRandom.getRandomItem(this.world.rand, items).getStack().copy();
             if (ItemHandlerHelper.insertItem(outItems, stack, true).isEmpty()) {
                 ItemHandlerHelper.insertItem(outItems, stack, false);

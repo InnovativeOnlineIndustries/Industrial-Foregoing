@@ -22,6 +22,7 @@ public class CommonProxy {
 
         FluidsRegistry.registerFluids();
         RecipeHandlers.loadBioReactorEntries();
+        RecipeHandlers.loadLaserLensEntries();
 
         MinecraftForge.EVENT_BUS.register(new BlockRegistry());
         MinecraftForge.EVENT_BUS.register(new ItemRegistry());

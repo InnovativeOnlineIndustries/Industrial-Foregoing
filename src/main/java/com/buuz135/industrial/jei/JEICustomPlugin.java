@@ -2,6 +2,7 @@ package com.buuz135.industrial.jei;
 
 
 import com.buuz135.industrial.api.recipe.BioReactorEntry;
+import com.buuz135.industrial.api.recipe.LaserDrillEntry;
 import com.buuz135.industrial.jei.bioreactor.BioReactorRecipeCategory;
 import com.buuz135.industrial.jei.bioreactor.BioReactorRecipeWrapper;
 import com.buuz135.industrial.jei.laser.LaserRecipeCategory;
@@ -66,10 +67,10 @@ public class JEICustomPlugin implements IModPlugin {
         registry.addRecipeCatalyst(new ItemStack(BlockRegistry.bioReactorBlock), bioReactorRecipeCategory.getUid());
 
         List<ItemStackWeightedItem> item = new ArrayList<>();
-        BlockRegistry.laserBaseBlock.getColoreOres().keySet().forEach(integer -> item.addAll(BlockRegistry.laserBaseBlock.getColoreOres().get(integer)));
+        LaserDrillEntry.LASER_DRILL_ENTRIES.forEach(entry -> item.add(new ItemStackWeightedItem(entry.getStack(), entry.getWeight())));
         final int laserMaxWeight = WeightedRandom.getTotalWeight(item);
         List<LaserRecipeWrapper> laserRecipeWrappers = new ArrayList<>();
-        BlockRegistry.laserBaseBlock.getColoreOres().keySet().forEach(integer -> BlockRegistry.laserBaseBlock.getColoreOres().get(integer).forEach(temp -> laserRecipeWrappers.add(new LaserRecipeWrapper(temp, laserMaxWeight, integer))));
+        LaserDrillEntry.LASER_DRILL_ENTRIES.forEach(entry -> laserRecipeWrappers.add(new LaserRecipeWrapper(new ItemStackWeightedItem(entry.getStack(), entry.getWeight()), laserMaxWeight, entry.getLaserMeta())));
         registry.addRecipes(laserRecipeWrappers, laserRecipeCategory.getUid());
         registry.addRecipeCatalyst(new ItemStack(BlockRegistry.laserDrillBlock), laserRecipeCategory.getUid());
         registry.addRecipeCatalyst(new ItemStack(BlockRegistry.laserBaseBlock), laserRecipeCategory.getUid());

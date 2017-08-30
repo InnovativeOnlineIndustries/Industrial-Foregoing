@@ -12,6 +12,7 @@
 + Fixed Plant Sower Filter Colors
 + Fixed Bioreactor allowing more of the same type of input
 + Added API Support for the BioReactor
++ Added API Support for the Laser Drill
 
 ##1.1
 + Added Black Hole Tank
