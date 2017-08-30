@@ -1,4 +1,4 @@
-package com.buuz135.industrial.api;
+package com.buuz135.industrial.api.fluid;
 
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.math.BlockPos;

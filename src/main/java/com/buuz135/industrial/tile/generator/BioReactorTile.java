@@ -1,5 +1,6 @@
 package com.buuz135.industrial.tile.generator;
 
+import com.buuz135.industrial.api.recipe.BioReactorEntry;
 import com.buuz135.industrial.proxy.FluidsRegistry;
 import com.buuz135.industrial.proxy.client.infopiece.BioreactorEfficiencyInfoPiece;
 import com.buuz135.industrial.tile.CustomElectricMachine;
@@ -47,7 +48,7 @@ public class BioReactorTile extends CustomElectricMachine {
         this.addInventory(new ColoredItemHandler(input, EnumDyeColor.BLUE, "Input items", new BoundingRectangle(18 * 5, 25, 3 * 18, 3 * 18)) {
             @Override
             public boolean canInsertItem(int slot, ItemStack stack) {
-                return ((BioReactorBlock) BioReactorTile.this.getBlockType()).getItemsAccepted().stream().anyMatch(stack1 -> stack.getItem().equals(stack1.getItem())) && canInsert(slot, input, stack);
+                return canInsert(slot, input, stack);
             }
 
             @Override
@@ -86,6 +87,9 @@ public class BioReactorTile extends CustomElectricMachine {
     }
 
     private boolean canInsert(int slot, ItemStackHandler handler, ItemStack stack) {
+        if (BioReactorEntry.BIO_REACTOR_ENTRIES.stream().noneMatch(entry -> entry.doesStackMatch(stack))) {
+            return false;
+        }
         if (handler.getStackInSlot(slot).isItemEqual(stack)) {
             return true;
         }

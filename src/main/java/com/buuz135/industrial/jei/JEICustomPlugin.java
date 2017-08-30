@@ -1,6 +1,7 @@
 package com.buuz135.industrial.jei;
 
 
+import com.buuz135.industrial.api.recipe.BioReactorEntry;
 import com.buuz135.industrial.jei.bioreactor.BioReactorRecipeCategory;
 import com.buuz135.industrial.jei.bioreactor.BioReactorRecipeWrapper;
 import com.buuz135.industrial.jei.laser.LaserRecipeCategory;
@@ -60,7 +61,7 @@ public class JEICustomPlugin implements IModPlugin {
 
 
         List<BioReactorRecipeWrapper> bioreactor = new ArrayList<>();
-        BlockRegistry.bioReactorBlock.getItemsAccepted().forEach(stack -> bioreactor.add(new BioReactorRecipeWrapper(stack)));
+        BioReactorEntry.BIO_REACTOR_ENTRIES.forEach(entry -> bioreactor.add(new BioReactorRecipeWrapper(entry.getStack())));
         registry.addRecipes(bioreactor, bioReactorRecipeCategory.getUid());
         registry.addRecipeCatalyst(new ItemStack(BlockRegistry.bioReactorBlock), bioReactorRecipeCategory.getUid());
 

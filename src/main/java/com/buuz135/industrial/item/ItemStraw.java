@@ -1,6 +1,6 @@
 package com.buuz135.industrial.item;
 
-import com.buuz135.industrial.api.IFluidDrinkHandler;
+import com.buuz135.industrial.api.fluid.IFluidDrinkHandler;
 import com.buuz135.industrial.utils.StrawUtils;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;

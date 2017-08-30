@@ -1,6 +1,6 @@
 package com.buuz135.industrial.utils;
 
-import com.buuz135.industrial.api.IFluidDrinkHandler;
+import com.buuz135.industrial.api.fluid.IFluidDrinkHandler;
 import net.minecraftforge.fluids.Fluid;
 
 import java.util.HashMap;

@@ -1,6 +1,6 @@
 package com.buuz135.industrial.utils.drinkhandlers;
 
-import com.buuz135.industrial.api.IFluidDrinkHandler;
+import com.buuz135.industrial.api.fluid.IFluidDrinkHandler;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
