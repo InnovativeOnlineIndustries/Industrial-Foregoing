@@ -1,4 +1,4 @@
-##1.2
+#1.2
 + Added Resourceful Furnace, it produces Essence when doing furnace operations.
 + Made all inputs of the machine enabled by default.
 + Fixed issue [#31](https://github.com/Buuz135/Industrial-Foregoing/issues/31) 
@@ -11,15 +11,21 @@
 + Improved JEI Plugins
 + Fixed Plant Sower Filter Colors
 + Fixed Bioreactor allowing more of the same type of input
-+ Added API Support for the BioReactor
-+ Added API Support for the Laser Drill
++ Added API Support for the BioReactor (Removed Config support for the entries)
++ Added API Support for the Laser Drill (Removed Config support for the entries)
 + Added Support for the BioReactor in Crafttweaker
    ```
    import mods.industrialforegoing.BioReactor;
    
    BioReactor.add(<minecraft:diamond>);
    ```
-##1.1
++ Added Support for the Laser Drill in Craftweaker
+  ```
+  import mods.industrialforegoing.LaserDrill;
+  
+  LaserDrill.add(1, <minecraft:stone>, 10); // Arguments: (LaserItemMetadata, ItemStack, ItemWeight)
+  ```
+#1.1
 + Added Black Hole Tank
 + Decreased slot stack size limit to 16 for the Plant Sower
 + Added a Contributor Reward as a Patreon Reward http://i.imgur.com/ReDZDWP.png https://www.patreon.com/buuz135
