@@ -126,8 +126,9 @@ configurations {
 dependencies {
     deployerJars "org.apache.maven.wagon:wagon-ftp:2.2"
 }
-if (System.hasProperty('username') && System.hasProperty('password')) {
-    uploadArchives {
+
+uploadArchives {
+    if (System.hasProperty('username') && System.hasProperty('password')) {
         repositories {
             mavenDeployer {
                 configuration = configurations.deployerJars
