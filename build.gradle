@@ -9,6 +9,7 @@ buildscript {
     }
 }
 apply plugin: 'net.minecraftforge.gradle.forge'
+apply plugin: 'maven'
 //Only edit below this line, the above code adds and enables the necessary things for Forge to be setup.
 
 
@@ -44,7 +45,7 @@ minecraft {
     // makeObfSourceJar = false // an Srg named sources jar is made by default. uncomment this to disable.
 
     replace '@MINECRAFT-VERSION@', project.minecraft_version
-    replace '@VERSION@', project.mod_version
+    replace '@VERSION@', version
 }
 
 configurations {
@@ -87,7 +88,7 @@ dependencies {
 
 processResources {
     // this will ensure that this task is redone when the versions change.
-    inputs.property "version", project.version
+    inputs.property "version", version
     inputs.property "mcversion", project.minecraft.version
 
     // replace stuff in mcmod.info, nothing else
@@ -95,11 +96,80 @@ processResources {
         include 'mcmod.info'
 
         // replace version and mcversion
-        expand 'version': project.mod_version, 'mcversion': project.minecraft_version
+        expand 'version': version, 'mcversion': project.minecraft_version
     }
 
     // copy everything else except the mcmod.info
     from(sourceSets.main.resources.srcDirs) {
         exclude 'mcmod.info'
+    }
+}
+
+task devJar(type: Jar, dependsOn: 'classes') {
+    from(sourceSets.main.output) {
+        include '**'
+    }
+    extension = 'jar'
+    classifier = 'deobf'
+}
+
+artifacts {
+    archives devJar
+}
+
+configurations {
+    deployerJars
+}
+
+dependencies {
+    deployerJars "org.apache.maven.wagon:wagon-ftp:2.2"
+}
+
+uploadArchives {
+    repositories {
+        mavenDeployer {
+            Configuration = configurations.deployerJars
+            //repository(url: System.properties['URL']) {
+            repository(url: "ftp://dyonovan.com/srv/http/maven2") {
+                authentication(userName: "${username}", password: "${password}")
+            }
+            pom {
+                groupId = project.group
+                version = project.version
+                artifactId = project.archivesBaseName
+
+                pom.project {
+                    name = project.archivesBaseName
+                    packaging 'jar'
+                    description 'Industrial Foregoing'
+                    url 'https://github.com/Buuz135/Industrial-Foregoing'
+                    scm {
+                        url 'https://github.com/Buuz135/Industrial-Foregoing'
+                        connection 'scm:git:git@github.com/Buuz135/Industrial-Foregoing'
+                        developerConnection 'scm:git:git@github.com/Buuz135/Industrial-Foregoing'
+                    }
+                    issueManagement {
+                        system 'github'
+                        url 'https://github.com/Buuz135/Industrial-Foregoing/issues'
+                    }
+                    licenses {
+                        license {
+                            name 'MIT License'
+                            url 'https://opensource.org/licenses/MIT'
+                            distribution 'repo'
+                        }
+                    }
+                    developers {
+                        developer {
+                            id 'Buuz135'
+                            name 'Buuz135'
+                            roles {
+                                role 'developer'
+                            }
+                        }
+                    }
+                }
+            }
+        }
     }
 }
