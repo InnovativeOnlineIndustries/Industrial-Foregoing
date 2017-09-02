@@ -128,7 +128,7 @@ dependencies {
 }
 
 uploadArchives {
-    if (System.hasProperty('username') && System.hasProperty('password')) {
+    if (project.hasProperty('username') && project.hasProperty('password')) {
         repositories {
             mavenDeployer {
                 configuration = configurations.deployerJars
