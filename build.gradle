@@ -126,51 +126,54 @@ configurations {
 dependencies {
     deployerJars "org.apache.maven.wagon:wagon-ftp:2.2"
 }
-if (project.hasProperty('userName') && project.hasProperty('password')) {
+if (System.hasProperty('username') && System.hasProperty('password')) {
     uploadArchives {
-        repositories.mavenDeployer {
-            configuration = configurations.deployerJars
-            //repository(url: System.properties['URL']) {
-            repository(url: "ftp://dyonovan.com/srv/http/maven2") {
-                authentication(userName: "${username}", password: "${password}")
-            }
-            pom {
-                groupId = project.group
-                version = project.version
-                artifactId = project.archivesBaseName
+        repositories {
+            mavenDeployer {
+                configuration = configurations.deployerJars
+                //repository(url: System.properties['URL']) {
+                repository(url: "ftp://dyonovan.com/srv/http/maven2") {
+                    authentication(userName: "${username}", password: "${password}")
+                }
+                pom {
+                    groupId = project.group
+                    version = project.version
+                    artifactId = project.archivesBaseName
 
-                pom.project {
-                    name = project.archivesBaseName
-                    packaging 'jar'
-                    description 'Industrial Foregoing'
-                    url 'https://github.com/Buuz135/Industrial-Foregoing'
-                    scm {
+                    pom.project {
+                        name = project.archivesBaseName
+                        packaging 'jar'
+                        description 'Industrial Foregoing'
                         url 'https://github.com/Buuz135/Industrial-Foregoing'
-                        connection 'scm:git:git@github.com/Buuz135/Industrial-Foregoing'
-                        developerConnection 'scm:git:git@github.com/Buuz135/Industrial-Foregoing'
-                    }
-                    issueManagement {
-                        system 'github'
-                        url 'https://github.com/Buuz135/Industrial-Foregoing/issues'
-                    }
-                    licenses {
-                        license {
-                            name 'MIT License'
-                            url 'https://opensource.org/licenses/MIT'
-                            distribution 'repo'
+                        scm {
+                            url 'https://github.com/Buuz135/Industrial-Foregoing'
+                            connection 'scm:git:git@github.com/Buuz135/Industrial-Foregoing'
+                            developerConnection 'scm:git:git@github.com/Buuz135/Industrial-Foregoing'
                         }
-                    }
-                    developers {
-                        developer {
-                            id 'Buuz135'
-                            name 'Buuz135'
-                            roles {
-                                role 'developer'
+                        issueManagement {
+                            system 'github'
+                            url 'https://github.com/Buuz135/Industrial-Foregoing/issues'
+                        }
+                        licenses {
+                            license {
+                                name 'MIT License'
+                                url 'https://opensource.org/licenses/MIT'
+                                distribution 'repo'
+                            }
+                        }
+                        developers {
+                            developer {
+                                id 'Buuz135'
+                                name 'Buuz135'
+                                roles {
+                                    role 'developer'
+                                }
                             }
                         }
                     }
                 }
             }
+
         }
     }
 }
