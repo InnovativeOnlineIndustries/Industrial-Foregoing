@@ -18,10 +18,10 @@ if (project.hasProperty("teamcity")) {
     build = System.getenv("BUILD_NUMBER")
 }
 
-if (build == null || build == ""){
+if (build == null || build == "") {
     version = "${project.minecraft_version}-${project.mod_version}"
-}else{
-    version = "${project.minecraft_version}-${project.mod_version}-"+ build
+} else {
+    version = "${project.minecraft_version}-${project.mod_version}-" + build
 }
 group = "com.buuz135.industrial.IndustrialForegoing" // http://maven.apache.org/guides/mini/guide-naming-conventions.html
 archivesBaseName = "industrialforegoing"
@@ -35,7 +35,7 @@ compileJava {
 minecraft {
     version = "1.12-14.21.1.2443"
     runDir = "run"
-    
+
     // the mappings can be changed at any time, and must be in the following format.
     // snapshot_YYYYMMDD   snapshot are built nightly.
     // stable_#            stables are built at the discretion of the MCP team.
@@ -76,7 +76,9 @@ repositories {
 dependencies {
     compileOnly "org.jetbrains.kotlin:kotlin-stdlib-jre8:1.1.3-2"
     compile "net.darkhax.tesla:Tesla-1.12:${tesla_version}:deobf"
-    compile ("net.ndrei:tesla-core-lib:${project.minecraft_version}-${project.tesla_core_version}:deobf") { changing = true }
+    compile("net.ndrei:tesla-core-lib:${project.minecraft_version}-${project.tesla_core_version}:deobf") {
+        changing = true
+    }
     compileOnly "org.projectlombok:lombok:1.16.16"
     // compile against the JEI API
     deobfCompile "mezz.jei:jei_${minecraft_version}:${jei_version}:api"
@@ -124,10 +126,9 @@ configurations {
 dependencies {
     deployerJars "org.apache.maven.wagon:wagon-ftp:2.2"
 }
-
-uploadArchives {
-    repositories {
-        mavenDeployer {
+if (project.hasProperty('userName') && project.hasProperty('password')) {
+    uploadArchives {
+        repositories.mavenDeployer {
             configuration = configurations.deployerJars
             //repository(url: System.properties['URL']) {
             repository(url: "ftp://dyonovan.com/srv/http/maven2") {
