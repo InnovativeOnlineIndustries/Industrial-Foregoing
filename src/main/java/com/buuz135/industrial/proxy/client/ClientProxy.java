@@ -26,9 +26,8 @@ import java.util.Map;
 public class ClientProxy extends CommonProxy {
 
     public static final ResourceLocation beacon = new ResourceLocation("textures/entity/beacon_beam.png");
-    public static ResourceLocation GUI = new ResourceLocation(Reference.MOD_ID, "textures/gui/machines.png");
-
     public static final String CONTRIBUTORS_FILE = "https://raw.githubusercontent.com/Buuz135/Industrial-Foregoing/master/contributors.json";
+    public static ResourceLocation GUI = new ResourceLocation(Reference.MOD_ID, "textures/gui/machines.png");
     public static IBakedModel ears_baked;
     public static IModel ears_model;
 

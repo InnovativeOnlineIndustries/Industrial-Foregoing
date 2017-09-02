@@ -100,7 +100,7 @@ public abstract class WorkingAreaElectricMachine extends CustomElectricMachine i
     }
 
     public BlockCube getWorkArea() {
-        return new BlockCube(new BlockPos(getWorkingArea().minX,getWorkingArea().minY, getWorkingArea().minZ), new BlockPos(getWorkingArea().maxX-1, getWorkingArea().maxY-1, getWorkingArea().maxZ-1));
+        return new BlockCube(new BlockPos(getWorkingArea().minX, getWorkingArea().minY, getWorkingArea().minZ), new BlockPos(getWorkingArea().maxX - 1, getWorkingArea().maxY - 1, getWorkingArea().maxZ - 1));
     }
 
     @SideOnly(Side.CLIENT)
@@ -127,7 +127,7 @@ public abstract class WorkingAreaElectricMachine extends CustomElectricMachine i
     @Override
     public List<TileEntitySpecialRenderer<TileEntity>> getRenderers() {
         List<TileEntitySpecialRenderer<TileEntity>> renderers = super.getRenderers();
-        if (showArea)renderers.add(WorkingAreaRenderer.INSTANCE);
+        if (showArea) renderers.add(WorkingAreaRenderer.INSTANCE);
         return renderers;
     }
 

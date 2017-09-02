@@ -40,7 +40,7 @@ public class ItemRegistry {
 
         (laserLensItem = new LaserLensItem()).register(itemRegistry);
 
-        (strawItem=new ItemStraw()).register(itemRegistry);
+        (strawItem = new ItemStraw()).register(itemRegistry);
 
         (adultFilterAddomItem = new AdultFilterAddonItem()).registerItem(itemRegistry);
         (rangeAddonItem = new RangeAddonItem()).registerItem(itemRegistry);

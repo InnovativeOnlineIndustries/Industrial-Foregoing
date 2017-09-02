@@ -1,5 +1,6 @@
 package com.buuz135.industrial.tile.agriculture;
 
+import com.buuz135.industrial.api.plant.IPlantRecollectable;
 import com.buuz135.industrial.proxy.FluidsRegistry;
 import com.buuz135.industrial.tile.CustomColoredItemHandler;
 import com.buuz135.industrial.tile.WorkingAreaElectricMachine;
@@ -7,7 +8,6 @@ import com.buuz135.industrial.tile.block.CropRecolectorBlock;
 import com.buuz135.industrial.utils.BlockUtils;
 import com.buuz135.industrial.utils.ItemStackUtils;
 import com.buuz135.industrial.utils.WorkUtils;
-import net.minecraft.block.*;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.item.EnumDyeColor;
 import net.minecraft.item.ItemStack;
@@ -77,55 +77,22 @@ public class CropRecolectorTile extends WorkingAreaElectricMachine {
         if (WorkUtils.isDisabled(this.getBlockType())) return 0;
         if (ItemStackUtils.isInventoryFull(outItems)) return 0;
         List<BlockPos> blockPos = BlockUtils.getBlockPosInAABB(getWorkingArea());
-        boolean needPointerIncrease = true;
-        boolean treeOperation = false;
+        boolean shouldPointerIncrease = true;
+        boolean didWork = false;
         if (pointer < blockPos.size()) {
             BlockPos pos = blockPos.get(pointer);
             IBlockState state = this.world.getBlockState(blockPos.get(pointer));
-            if ((state.getBlock() instanceof BlockCrops && ((BlockCrops) state.getBlock()).isMaxAge(state)) || (state.getBlock() instanceof BlockNetherWart && state.getValue(BlockNetherWart.AGE) >= 3)) {
-                List<ItemStack> drops = state.getBlock().getDrops(this.world, blockPos.get(pointer), state, 0);
-                if (canInsertAll(drops, outItems)) {
-                    insertItemsAndRemove(drops, pos, outItems);
-                }
-            } else if (BlockUtils.isLog(this.world, pos)) {
-                if (woodCache.isEmpty()) {
-                    checkForTrees(this.world, pos);
-                }
-                needPointerIncrease = false;
-                treeOperation = true;
-
-                for (int i = 0; i < ((CropRecolectorBlock) this.getBlockType()).getTreeOperations(); ++i) {
-                    if (woodCache.isEmpty() && leavesCache.isEmpty()) break;
-                    if (!leavesCache.isEmpty()) chop(leavesCache);
-                    else chop(woodCache);
-                }
-                if (woodCache.isEmpty()) needPointerIncrease = true;
-            } else if ((state.getBlock() instanceof BlockCactus || state.getBlock() instanceof BlockReed)) {
-                if (state.getBlock().equals(this.world.getBlockState(pos.offset(EnumFacing.UP, 2)).getBlock())) {
-                    List<ItemStack> drops = state.getBlock().getDrops(this.world, blockPos.get(pointer), state, 0);
-                    if (canInsertAll(drops, outItems)) {
-                        insertItemsAndRemove(drops, pos.offset(EnumFacing.UP, 2), outItems);
-                    }
-                }
-                if (state.getBlock().equals(this.world.getBlockState(pos.offset(EnumFacing.UP, 1)).getBlock())) {
-                    List<ItemStack> drops = state.getBlock().getDrops(this.world, blockPos.get(pointer), state, 0);
-                    if (canInsertAll(drops, outItems)) {
-                        insertItemsAndRemove(drops, pos.offset(EnumFacing.UP, 1), outItems);
-                    }
-                }
-            } else if (state.getBlock() instanceof BlockMelon || state.getBlock() instanceof BlockPumpkin) {
-                List<ItemStack> drops = state.getBlock().getDrops(this.world, blockPos.get(pointer), state, 0);
-                if (canInsertAll(drops, outItems)) {
-                    insertItemsAndRemove(drops, pos, outItems);
-                }
+            Optional<IPlantRecollectable> recollectable = IPlantRecollectable.PLANT_RECOLLECTABLES.stream().filter(iPlantRecollectable -> iPlantRecollectable.canBeHarvested(this.world, pos, state)).findFirst();
+            if (recollectable.isPresent()) {
+                IPlantRecollectable iPlantRecollectable = recollectable.get();
+                insertItems(iPlantRecollectable.doHarvestOperation(this.world, pos, state), outItems);
+                if (!iPlantRecollectable.shouldCheckNextPlant(this.world, pos, state)) shouldPointerIncrease = false;
             }
-        } else {
-            pointer = 0;
+            didWork = recollectable.isPresent();
         }
-        if (needPointerIncrease) ++pointer;
+        if (shouldPointerIncrease) ++pointer;
         if (pointer >= blockPos.size()) pointer = 0;
-        if (treeOperation) return -1;
-        return 1;
+        return didWork ? 1 : 0.2f;
     }
 
     @Override
@@ -173,12 +140,11 @@ public class CropRecolectorTile extends WorkingAreaElectricMachine {
         return canInsert;
     }
 
-    private void insertItemsAndRemove(List<ItemStack> drops, BlockPos blockPos, ItemStackHandler outItems) {
+    private void insertItems(List<ItemStack> drops, ItemStackHandler outItems) {
         for (ItemStack stack : drops) {
             ItemHandlerHelper.insertItem(outItems, stack, false);
         }
-        sludge.fill(new FluidStack(FluidsRegistry.SLUDGE, ((CropRecolectorBlock) this.getBlockType()).getSludgeOperation()), true);
-        this.world.setBlockToAir(blockPos);
+        sludge.fill(new FluidStack(FluidsRegistry.SLUDGE, ((CropRecolectorBlock) this.getBlockType()).getSludgeOperation() * drops.size()), true);
     }
 
     private void chop(Queue<BlockPos> cache) {

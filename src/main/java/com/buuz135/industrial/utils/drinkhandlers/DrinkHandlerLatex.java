@@ -11,7 +11,7 @@ import net.minecraftforge.fluids.FluidStack;
 public class DrinkHandlerLatex implements IFluidDrinkHandler {
     @Override
     public void onDrink(World world, BlockPos pos, FluidStack stack, EntityPlayer player, boolean fromFluidContainer) {
-        player.addPotionEffect(new PotionEffect(MobEffects.POISON, 1200,2));
-        player.addPotionEffect(new PotionEffect(MobEffects.SLOWNESS, 1200,2));
+        player.addPotionEffect(new PotionEffect(MobEffects.POISON, 1200, 2));
+        player.addPotionEffect(new PotionEffect(MobEffects.SLOWNESS, 1200, 2));
     }
 }

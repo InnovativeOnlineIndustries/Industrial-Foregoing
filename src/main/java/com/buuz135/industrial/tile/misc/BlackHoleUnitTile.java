@@ -180,12 +180,12 @@ public class BlackHoleUnitTile extends SidedTileEntity implements IHasDisplaySta
         return amount + (outItems.getStackInSlot(0).isEmpty() ? 0 : outItems.getStackInSlot(0).getCount());
     }
 
-    public String getDisplayNameUnlocalized() {
-        return getItemStack().getUnlocalizedName() + ".name";
-    }
-
     public void setAmount(int amount) {
         this.amount = amount;
+    }
+
+    public String getDisplayNameUnlocalized() {
+        return getItemStack().getUnlocalizedName() + ".name";
     }
 
     @Override
@@ -201,6 +201,16 @@ public class BlackHoleUnitTile extends SidedTileEntity implements IHasDisplaySta
         if (capability == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY)
             return (T) itemHandler;
         return super.getCapability(capability, facing);
+    }
+
+    @Override
+    public boolean getAllowRedstoneControl() {
+        return false;
+    }
+
+    @Override
+    protected boolean getShowPauseDrawerPiece() {
+        return false;
     }
 
     private class BlackHoleHandler implements IItemHandler {
@@ -243,15 +253,5 @@ public class BlackHoleUnitTile extends SidedTileEntity implements IHasDisplaySta
         public int getSlotLimit(int slot) {
             return 64;
         }
-    }
-
-    @Override
-    public boolean getAllowRedstoneControl() {
-        return false;
-    }
-
-    @Override
-    protected boolean getShowPauseDrawerPiece() {
-        return false;
     }
 }

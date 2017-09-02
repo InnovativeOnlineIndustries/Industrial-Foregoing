@@ -25,6 +25,7 @@ public class CommonProxy {
         FluidsRegistry.registerFluids();
         RecipeHandlers.loadBioReactorEntries();
         RecipeHandlers.loadLaserLensEntries();
+        RecipeHandlers.registerRecollectables();
         if (Loader.isModLoaded("crafttweaker")) CraftTweakerHelper.register();
 
         MinecraftForge.EVENT_BUS.register(new BlockRegistry());

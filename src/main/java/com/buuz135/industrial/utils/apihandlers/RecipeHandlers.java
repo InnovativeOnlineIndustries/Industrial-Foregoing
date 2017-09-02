@@ -3,6 +3,7 @@ package com.buuz135.industrial.utils.apihandlers;
 import com.buuz135.industrial.api.IndustrialForegoingHelper;
 import com.buuz135.industrial.api.recipe.BioReactorEntry;
 import com.buuz135.industrial.api.recipe.LaserDrillEntry;
+import com.buuz135.industrial.utils.apihandlers.plant.*;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
@@ -54,6 +55,15 @@ public class RecipeHandlers {
         checkAndAddLaserDrill(10, "oreLead", 5);
         checkAndAddLaserDrill(7, "oreSilver", 5);
         checkAndAddLaserDrill(1, "oreCopper", 10);
+    }
+
+
+    public static void registerRecollectables() {
+        IndustrialForegoingHelper.addPlantRecollectable(new BlockCropPlantRecollectable());
+        IndustrialForegoingHelper.addPlantRecollectable(new BlockNetherWartRecollectable());
+        IndustrialForegoingHelper.addPlantRecollectable(new DoubleTallPlantRecollectable());
+        IndustrialForegoingHelper.addPlantRecollectable(new PumpkinMelonPlantRecollectable());
+        IndustrialForegoingHelper.addPlantRecollectable(new TreePlantRecollectable());
     }
 
     public static void checkAndAddLaserDrill(int meta, String oreDict, int weight) {

@@ -61,10 +61,10 @@ public class ItemStraw extends IFCustomItem {
                                     fluid = stack.getFluid();
                                     if (fluid != null && map.containsKey(fluid.getName()) && stack.amount >= Fluid.BUCKET_VOLUME) {
                                         FluidStack copiedStack = stack.copy();
-                                        copiedStack.amount=Fluid.BUCKET_VOLUME;
+                                        copiedStack.amount = Fluid.BUCKET_VOLUME;
                                         FluidStack out = handler.drain(copiedStack, false);
                                         if (out != null && out.amount == 1000) {
-                                            map.get(fluid.getName()).onDrink(world, pos,out, player, true);
+                                            map.get(fluid.getName()).onDrink(world, pos, out, player, true);
                                             handler.drain(copiedStack, true);
                                             return heldStack;
                                         }

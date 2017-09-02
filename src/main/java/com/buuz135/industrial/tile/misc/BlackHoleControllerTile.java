@@ -188,6 +188,16 @@ public class BlackHoleControllerTile extends SidedTileEntity {
         return pieces;
     }
 
+    @Override
+    public boolean getAllowRedstoneControl() {
+        return false;
+    }
+
+    @Override
+    protected boolean getShowPauseDrawerPiece() {
+        return false;
+    }
+
     private class BlackHoleControllerHandler implements IItemHandler {
 
         private BlackHoleControllerTile tile;
@@ -268,16 +278,6 @@ public class BlackHoleControllerTile extends SidedTileEntity {
         public int getSlotLimit(int slot) {
             return 64;
         }
-    }
-
-    @Override
-    public boolean getAllowRedstoneControl() {
-        return false;
-    }
-
-    @Override
-    protected boolean getShowPauseDrawerPiece() {
-        return false;
     }
 
 }

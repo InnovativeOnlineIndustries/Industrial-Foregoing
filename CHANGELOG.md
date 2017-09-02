@@ -25,6 +25,8 @@
   
   LaserDrill.add(1, <minecraft:stone>, 10); // Arguments: (LaserItemMetadata, ItemStack, ItemWeight)
   ```
++ Added a PlantRecollector API to add custom ways to harvest plants.
+
 #1.1
 + Added Black Hole Tank
 + Decreased slot stack size limit to 16 for the Plant Sower

@@ -32,7 +32,7 @@ compileJava {
 }
 
 minecraft {
-    version = "1.12-14.21.1.2428"
+    version = "1.12-14.21.1.2443"
     runDir = "run"
     
     // the mappings can be changed at any time, and must be in the following format.

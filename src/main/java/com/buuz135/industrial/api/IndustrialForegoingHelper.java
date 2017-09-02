@@ -1,6 +1,7 @@
 package com.buuz135.industrial.api;
 
 
+import com.buuz135.industrial.api.plant.IPlantRecollectable;
 import com.buuz135.industrial.api.recipe.BioReactorEntry;
 import com.buuz135.industrial.api.recipe.LaserDrillEntry;
 import net.minecraft.item.ItemStack;
@@ -38,5 +39,9 @@ public class IndustrialForegoingHelper {
             LaserDrillEntry.LASER_DRILL_ENTRIES = LaserDrillEntry.LASER_DRILL_ENTRIES.stream().filter(entry -> !entry.getStack().isItemEqual(stack)).collect(Collectors.toList());
         }
         return false;
+    }
+
+    public static void addPlantRecollectable(IPlantRecollectable recollectable) {
+        IPlantRecollectable.PLANT_RECOLLECTABLES.add(0, recollectable);
     }
 }

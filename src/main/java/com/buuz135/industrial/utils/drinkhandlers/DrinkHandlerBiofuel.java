@@ -11,7 +11,7 @@ import net.minecraftforge.fluids.FluidStack;
 public class DrinkHandlerBiofuel implements IFluidDrinkHandler {
     @Override
     public void onDrink(World world, BlockPos pos, FluidStack stack, EntityPlayer player, boolean fromFluidContainer) {
-        player.addPotionEffect(new PotionEffect(MobEffects.SPEED, 800,0));
-        player.addPotionEffect(new PotionEffect(MobEffects.HASTE, 800,0));
+        player.addPotionEffect(new PotionEffect(MobEffects.SPEED, 800, 0));
+        player.addPotionEffect(new PotionEffect(MobEffects.HASTE, 800, 0));
     }
 }

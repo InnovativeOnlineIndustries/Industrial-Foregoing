@@ -47,5 +47,8 @@ public abstract class CustomElectricMachine extends ElectricMachine {
         return 0;
     }
 
-
+    @Override
+    protected int getMinimumWorkTicks() {
+        return 4;
+    }
 }

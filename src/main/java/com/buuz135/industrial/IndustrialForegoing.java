@@ -14,10 +14,14 @@ import net.minecraft.world.WorldServer;
 import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.SidedProxy;
+import net.minecraftforge.fml.common.event.FMLConstructionEvent;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
+import net.ndrei.teslacorelib.config.TeslaCoreLibConfig;
+import net.ndrei.teslacorelib.items.gears.CoreGearType;
 
+import java.util.Arrays;
 import java.util.HashMap;
 
 @Mod(modid = Reference.MOD_ID, name = Reference.MOD_ID, version = Reference.VERSION, dependencies = "required-after:teslacorelib", guiFactory = Reference.GUI_FACTORY)
@@ -73,5 +77,19 @@ public class IndustrialForegoing {
     public void postInit(FMLPostInitializationEvent event) {
         registerDrinkHandlers();
         proxy.postInit();
+    }
+
+    @Mod.EventHandler
+    public void construction(FMLConstructionEvent event) {
+        Arrays.asList(TeslaCoreLibConfig.REGISTER_GEARS,
+                "${TeslaCoreLibConfig.REGISTER_GEAR_TYPES}#${CoreGearType.WOOD.material}",
+                "${TeslaCoreLibConfig.REGISTER_GEAR_TYPES}#${CoreGearType.STONE.material}",
+                TeslaCoreLibConfig.REGISTER_GEAR_TYPES + "#" + CoreGearType.IRON.getMaterial(),
+                TeslaCoreLibConfig.REGISTER_GEAR_TYPES + "#" + CoreGearType.GOLD.getMaterial(),
+                TeslaCoreLibConfig.REGISTER_GEAR_TYPES + "#" + CoreGearType.DIAMOND.getMaterial(),
+                TeslaCoreLibConfig.REGISTER_MACHINE_CASE,
+                TeslaCoreLibConfig.REGISTER_ADDONS,
+                TeslaCoreLibConfig.REGISTER_SPEED_ADDONS,
+                TeslaCoreLibConfig.REGISTER_ENERGY_ADDONS).forEach(s -> TeslaCoreLibConfig.INSTANCE.setDefaultFlag(s, true));
     }
 }

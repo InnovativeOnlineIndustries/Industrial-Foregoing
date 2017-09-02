@@ -11,7 +11,7 @@ import net.minecraftforge.fluids.FluidStack;
 public class DrinkHandlerSewage implements IFluidDrinkHandler {
     @Override
     public void onDrink(World world, BlockPos pos, FluidStack stack, EntityPlayer player, boolean fromFluidContainer) {
-        player.addPotionEffect(new PotionEffect(MobEffects.NAUSEA, 1200,0));
-        player.addPotionEffect(new PotionEffect(MobEffects.SLOWNESS, 1200,0));
+        player.addPotionEffect(new PotionEffect(MobEffects.NAUSEA, 1200, 0));
+        player.addPotionEffect(new PotionEffect(MobEffects.SLOWNESS, 1200, 0));
     }
 }
