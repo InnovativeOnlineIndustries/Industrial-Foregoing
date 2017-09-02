@@ -10,6 +10,10 @@ import java.util.stream.Collectors;
 
 public class IndustrialForegoingHelper {
 
+    public static final String MOD_ID = "industrialforegoing";
+    public static final String API_VERSION = "1";
+    public static final String API_ID = MOD_ID + "api";
+
     public static boolean addBioReactorEntry(BioReactorEntry entry) {
         if (BioReactorEntry.BIO_REACTOR_ENTRIES.stream().noneMatch(entry1 -> entry.doesStackMatch(entry1.getStack()))) {
             BioReactorEntry.BIO_REACTOR_ENTRIES.add(entry);
