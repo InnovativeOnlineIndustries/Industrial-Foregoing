@@ -27,6 +27,7 @@
   ```
 + Added a PlantRecollector API to add custom ways to harvest plants.
 + Reduced PlantRecollector and sower waiting time. (Fixes #34)
++ Changed Block Placer to use a FakePlayer to place the block.
 
 #1.1
 + Added Black Hole Tank

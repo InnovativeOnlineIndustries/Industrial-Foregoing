@@ -1,15 +1,17 @@
 package com.buuz135.industrial.tile.world;
 
+import com.buuz135.industrial.IndustrialForegoing;
 import com.buuz135.industrial.tile.CustomColoredItemHandler;
 import com.buuz135.industrial.tile.WorkingAreaElectricMachine;
 import com.buuz135.industrial.utils.BlockUtils;
 import com.buuz135.industrial.utils.WorkUtils;
-import net.minecraft.block.Block;
-import net.minecraft.init.Blocks;
 import net.minecraft.item.EnumDyeColor;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.EnumFacing;
+import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
+import net.minecraftforge.common.util.FakePlayer;
 import net.minecraftforge.items.ItemStackHandler;
 
 import java.util.List;
@@ -59,18 +61,21 @@ public class BlockPlacerTile extends WorkingAreaElectricMachine {
             if (this.world.isAirBlock(pos)) {
                 ItemStack stack = getFirstStackHasBlock();
                 if (stack.isEmpty()) return 0;
-                this.world.setBlockState(pos, Block.getBlockFromItem(stack.getItem()).getStateFromMeta(stack.getMetadata()));
-                stack.setCount(stack.getCount() - 1);
-                return 1;
+                if (this.world.isAirBlock(pos)) {
+                    FakePlayer player = IndustrialForegoing.getFakePlayer(this.world);
+                    player.setHeldItem(EnumHand.MAIN_HAND, stack);
+                    stack.getItem().onItemUse(player, world, pos.offset(EnumFacing.DOWN), EnumHand.MAIN_HAND, EnumFacing.UP, 0, 0, 0);
+                    return 1;
+                }
             }
         }
+
         return 0;
     }
 
     private ItemStack getFirstStackHasBlock() {
         for (int i = 0; i < inItems.getSlots(); ++i) {
-            if (!inItems.getStackInSlot(i).isEmpty() && !Block.getBlockFromItem(inItems.getStackInSlot(i).getItem()).equals(Blocks.AIR))
-                return inItems.getStackInSlot(i);
+            if (!inItems.getStackInSlot(i).isEmpty()) return inItems.getStackInSlot(i);
         }
         return ItemStack.EMPTY;
     }
