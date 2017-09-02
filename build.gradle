@@ -128,7 +128,7 @@ dependencies {
 uploadArchives {
     repositories {
         mavenDeployer {
-            Configuration = configurations.deployerJars
+            configuration = configurations.deployerJars
             //repository(url: System.properties['URL']) {
             repository(url: "ftp://dyonovan.com/srv/http/maven2") {
                 authentication(userName: "${username}", password: "${password}")
