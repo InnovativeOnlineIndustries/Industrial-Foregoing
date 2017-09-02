@@ -26,6 +26,7 @@
   LaserDrill.add(1, <minecraft:stone>, 10); // Arguments: (LaserItemMetadata, ItemStack, ItemWeight)
   ```
 + Added a PlantRecollector API to add custom ways to harvest plants.
++ Reduced PlantRecollector and sower waiting time. (Fixes #34)
 
 #1.1
 + Added Black Hole Tank
