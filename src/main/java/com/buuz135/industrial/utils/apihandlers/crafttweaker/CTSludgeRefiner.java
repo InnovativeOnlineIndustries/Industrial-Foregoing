@@ -1,7 +1,7 @@
 package com.buuz135.industrial.utils.apihandlers.crafttweaker;
 
 import com.buuz135.industrial.api.recipe.SludgeEntry;
-import com.google.common.collect.LinkedListMultimap;
+import com.buuz135.industrial.utils.apihandlers.RecipeHandlers;
 import crafttweaker.CraftTweakerAPI;
 import crafttweaker.IAction;
 import crafttweaker.api.item.IItemStack;
@@ -11,8 +11,6 @@ import stanhebben.zenscript.annotations.ZenMethod;
 
 @ZenClass("mods.industrialforegoing.SludgeRefiner")
 public class CTSludgeRefiner {
-
-    public static final LinkedListMultimap<CTAction, SludgeEntry> ENTRIES = LinkedListMultimap.create();
 
     @ZenMethod
     public static void add(IItemStack output, int weight) {
@@ -35,7 +33,7 @@ public class CTSludgeRefiner {
 
         @Override
         public void apply() {
-            ENTRIES.put(CTAction.ADD, entry);
+            RecipeHandlers.SLUDGE_ENTRIES.put(CTAction.ADD, entry);
         }
 
         @Override
@@ -54,7 +52,7 @@ public class CTSludgeRefiner {
 
         @Override
         public void apply() {
-            ENTRIES.put(CTAction.REMOVE, new SludgeEntry(stack, 0));
+            RecipeHandlers.SLUDGE_ENTRIES.put(CTAction.REMOVE, new SludgeEntry(stack, 0));
         }
 
         @Override

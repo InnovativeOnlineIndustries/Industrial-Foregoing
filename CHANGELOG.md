@@ -1,3 +1,6 @@
+#1.2.1
++ Fixed issue [#37](https://github.com/Buuz135/Industrial-Foregoing/issues/37)
+
 #1.2
 + Added Resourceful Furnace, it produces Essence when doing furnace operations.
 + Made all inputs of the machine enabled by default.
@@ -35,6 +38,7 @@
   SludgeRefiner.add(<minecraft:wheat_seeds>, 10); //Arguments: (ItemStack, ItemWeight)
   ```
 + Fixed some wierdness with creative tabs (Closes #36)
+
 #1.1
 + Added Black Hole Tank
 + Decreased slot stack size limit to 16 for the Plant Sower
