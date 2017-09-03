@@ -14,11 +14,11 @@ public class LaserDrillEntry {
     private int weight;
 
     /**
-     * Represents an entry for the laser drill
+     * Represents an entry for the laser drill.
      *
-     * @param laserMeta The metadata of the lens item
-     * @param stack     The ItemStack as an output
-     * @param weight    The weight in the global pool of items
+     * @param laserMeta The metadata of the lens item.
+     * @param stack     The ItemStack as an output.
+     * @param weight    The weight in the global pool of items.
      */
     public LaserDrillEntry(int laserMeta, ItemStack stack, int weight) {
         this.laserMeta = laserMeta;

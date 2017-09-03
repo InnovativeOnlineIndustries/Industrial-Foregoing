@@ -24,7 +24,7 @@ public class SludgeRefinerRecipeWrapper implements IRecipeWrapper {
 
     @Override
     public void getIngredients(IIngredients ingredients) {
-        ingredients.setInput(FluidStack.class, new FluidStack(FluidsRegistry.SEWAGE, 1000));
+        ingredients.setInput(FluidStack.class, new FluidStack(FluidsRegistry.SLUDGE, 1000));
         ingredients.setOutput(ItemStack.class, item.getStack());
     }
 

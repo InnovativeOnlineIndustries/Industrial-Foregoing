@@ -1,7 +1,7 @@
 package com.buuz135.industrial.item;
 
 import com.buuz135.industrial.api.fluid.IFluidDrinkHandler;
-import com.buuz135.industrial.utils.StrawUtils;
+import com.buuz135.industrial.api.fluid.StrawHelper;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.util.ITooltipFlag;
@@ -40,7 +40,7 @@ public class ItemStraw extends IFCustomItem {
             EntityPlayer player = (EntityPlayer) entity;
             RayTraceResult result = rayTrace(world, player, true);
             if (result != null && result.typeOfHit == RayTraceResult.Type.BLOCK) {
-                Map<String, IFluidDrinkHandler> map = StrawUtils.getDrinkHandlers();
+                Map<String, IFluidDrinkHandler> map = StrawHelper.getDrinkHandlers();
                 BlockPos pos = result.getBlockPos();
                 IBlockState state = world.getBlockState(pos);
                 Block block = state.getBlock();
@@ -85,7 +85,7 @@ public class ItemStraw extends IFCustomItem {
     public ActionResult<ItemStack> onItemRightClick(World worldIn, EntityPlayer playerIn, @Nonnull EnumHand handIn) {
         RayTraceResult result = rayTrace(worldIn, playerIn, true);
         if (result != null && result.typeOfHit == RayTraceResult.Type.BLOCK) {
-            Map<String, IFluidDrinkHandler> map = StrawUtils.getDrinkHandlers();
+            Map<String, IFluidDrinkHandler> map = StrawHelper.getDrinkHandlers();
             BlockPos pos = result.getBlockPos();
             IBlockState state = worldIn.getBlockState(pos);
             Block block = state.getBlock();

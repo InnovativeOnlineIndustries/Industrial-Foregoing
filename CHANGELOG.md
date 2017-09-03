@@ -19,7 +19,7 @@
    
    BioReactor.add(<minecraft:diamond>);
    ```
-+ Added Support for the Laser Drill in Craftweaker
++ Added Support for the Laser Drill in Crafttweaker
   ```
   import mods.industrialforegoing.LaserDrill;
   
@@ -28,7 +28,13 @@
 + Added a PlantRecollector API to add custom ways to harvest plants.
 + Reduced PlantRecollector and sower waiting time. (Fixes #34)
 + Changed Block Placer to use a FakePlayer to place the block.
-
++ Added Support for the Sludge Refiner in Crafttweaker
+  ```
+  import mods.industrialforegoing.SludgeRefiner;
+  
+  SludgeRefiner.add(<minecraft:wheat_seeds>, 10); //Arguments: (ItemStack, ItemWeight)
+  ```
++ Fixed some wierdness with creative tabs (Closes #36)
 #1.1
 + Added Black Hole Tank
 + Decreased slot stack size limit to 16 for the Plant Sower

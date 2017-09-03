@@ -1,6 +1,5 @@
 package com.buuz135.industrial.item.addon;
 
-import com.buuz135.industrial.IndustrialForegoing;
 import com.buuz135.industrial.tile.WorkingAreaElectricMachine;
 import com.buuz135.industrial.utils.RecipeUtils;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
@@ -32,7 +31,7 @@ public class RangeAddonItem extends CustomAddon {
 
     @Override
     public void getSubItems(CreativeTabs tab, NonNullList<ItemStack> items) {
-        if (tab == IndustrialForegoing.creativeTab) for (int i = 0; i < 12; ++i) items.add(new ItemStack(this, 1, i));
+        if (isInCreativeTab(tab)) for (int i = 0; i < 12; ++i) items.add(new ItemStack(this, 1, i));
     }
 
 

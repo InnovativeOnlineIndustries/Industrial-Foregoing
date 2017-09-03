@@ -1,13 +1,22 @@
 package com.buuz135.industrial.utils.apihandlers;
 
 import com.buuz135.industrial.api.IndustrialForegoingHelper;
+import com.buuz135.industrial.api.fluid.StrawHelper;
 import com.buuz135.industrial.api.recipe.BioReactorEntry;
 import com.buuz135.industrial.api.recipe.LaserDrillEntry;
+import com.buuz135.industrial.api.recipe.SludgeEntry;
+import com.buuz135.industrial.proxy.FluidsRegistry;
+import com.buuz135.industrial.utils.apihandlers.crafttweaker.CTAction;
+import com.buuz135.industrial.utils.apihandlers.crafttweaker.CTBioReactor;
+import com.buuz135.industrial.utils.apihandlers.crafttweaker.CTLaserDrill;
+import com.buuz135.industrial.utils.apihandlers.crafttweaker.CTSludgeRefiner;
 import com.buuz135.industrial.utils.apihandlers.plant.*;
+import com.buuz135.industrial.utils.drinkhandlers.*;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.NonNullList;
+import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.oredict.OreDictionary;
 
 public class RecipeHandlers {
@@ -25,6 +34,10 @@ public class RecipeHandlers {
         IndustrialForegoingHelper.addBioReactorEntry(new BioReactorEntry(new ItemStack(Blocks.CHORUS_FLOWER)));
         getRealOredictedItems("dye").forEach(stack -> IndustrialForegoingHelper.addBioReactorEntry(new BioReactorEntry(stack)));
         getRealOredictedItems("treeSapling").stream().filter(stack -> !stack.getItem().getRegistryName().getResourcePath().equals("forestry")).forEach(stack -> IndustrialForegoingHelper.addBioReactorEntry(new BioReactorEntry(stack)));
+        CTBioReactor.ENTRIES.forEach((ctAction, entry) -> {
+            if (ctAction == CTAction.ADD) IndustrialForegoingHelper.addBioReactorEntry(entry);
+            else IndustrialForegoingHelper.removeBioReactorEntry(entry.getStack());
+        });
     }
 
     public static void loadLaserLensEntries() {
@@ -55,8 +68,11 @@ public class RecipeHandlers {
         checkAndAddLaserDrill(10, "oreLead", 5);
         checkAndAddLaserDrill(7, "oreSilver", 5);
         checkAndAddLaserDrill(1, "oreCopper", 10);
+        CTLaserDrill.ENTRIES.forEach((ctAction, entry) -> {
+            if (ctAction == CTAction.ADD) IndustrialForegoingHelper.addLaserDrillEntry(entry);
+            else IndustrialForegoingHelper.removeLaserDrillEntry(entry.getStack());
+        });
     }
-
 
     public static void registerRecollectables() {
         IndustrialForegoingHelper.addPlantRecollectable(new BlockCropPlantRecollectable());
@@ -64,6 +80,33 @@ public class RecipeHandlers {
         IndustrialForegoingHelper.addPlantRecollectable(new DoubleTallPlantRecollectable());
         IndustrialForegoingHelper.addPlantRecollectable(new PumpkinMelonPlantRecollectable());
         IndustrialForegoingHelper.addPlantRecollectable(new TreePlantRecollectable());
+    }
+
+    public static void loadSludgeRefinerEntries() {
+        IndustrialForegoingHelper.addSludgeRefinerEntry(new SludgeEntry(new ItemStack(Items.CLAY_BALL), 4));
+        IndustrialForegoingHelper.addSludgeRefinerEntry(new SludgeEntry(new ItemStack(Blocks.CLAY), 1));
+        IndustrialForegoingHelper.addSludgeRefinerEntry(new SludgeEntry(new ItemStack(Blocks.DIRT), 4));
+        IndustrialForegoingHelper.addSludgeRefinerEntry(new SludgeEntry(new ItemStack(Blocks.GRAVEL), 4));
+        IndustrialForegoingHelper.addSludgeRefinerEntry(new SludgeEntry(new ItemStack(Blocks.MYCELIUM), 1));
+        IndustrialForegoingHelper.addSludgeRefinerEntry(new SludgeEntry(new ItemStack(Blocks.DIRT, 1, 2), 1));
+        IndustrialForegoingHelper.addSludgeRefinerEntry(new SludgeEntry(new ItemStack(Blocks.SAND), 4));
+        IndustrialForegoingHelper.addSludgeRefinerEntry(new SludgeEntry(new ItemStack(Blocks.SAND, 1, 1), 4));
+        IndustrialForegoingHelper.addSludgeRefinerEntry(new SludgeEntry(new ItemStack(Blocks.SOUL_SAND), 4));
+        CTSludgeRefiner.ENTRIES.forEach((ctAction, entry) -> {
+            if (ctAction == CTAction.ADD) IndustrialForegoingHelper.addSludgeRefinerEntry(entry);
+            else IndustrialForegoingHelper.removeSludgeRefinerEntry(entry.getStack());
+        });
+    }
+
+    public static void registerDrinkHandlers() {
+        StrawHelper.register(FluidRegistry.WATER, new DrinkHandlerWater());
+        StrawHelper.register(FluidRegistry.LAVA, new DrinkHandlerLava());
+        StrawHelper.register(FluidsRegistry.BIOFUEL, new DrinkHandlerBiofuel());
+        StrawHelper.register(FluidsRegistry.SLUDGE, new DrinkHandlerSludge());
+        StrawHelper.register(FluidsRegistry.SEWAGE, new DrinkHandlerSewage());
+        StrawHelper.register(FluidsRegistry.MILK, new DrinkHandlerMilk());
+        StrawHelper.register(FluidsRegistry.ESSENCE, new DrinkHandlerEssence());
+        StrawHelper.register(FluidsRegistry.MEAT, new DrinkHandlerMeat());
     }
 
     public static void checkAndAddLaserDrill(int meta, String oreDict, int weight) {
@@ -75,11 +118,16 @@ public class RecipeHandlers {
     public static NonNullList<ItemStack> getRealOredictedItems(String oredit) {
         NonNullList<ItemStack> stacks = NonNullList.create();
         for (ItemStack ore : OreDictionary.getOres(oredit)) {
-            if (ore.getItem().getCreativeTab() != null)
+            if (ore.getMetadata() == OreDictionary.WILDCARD_VALUE && ore.getItem().getCreativeTab() != null)
                 ore.getItem().getSubItems(ore.getItem().getCreativeTab(), stacks);
+            else {
+                stacks.add(ore);
+                break;
+            }
         }
         return stacks;
     }
+
 }
 
 

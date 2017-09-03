@@ -1,7 +1,7 @@
 package com.buuz135.industrial.utils.apihandlers.crafttweaker;
 
-import com.buuz135.industrial.api.IndustrialForegoingHelper;
 import com.buuz135.industrial.api.recipe.BioReactorEntry;
+import com.google.common.collect.LinkedListMultimap;
 import crafttweaker.CraftTweakerAPI;
 import crafttweaker.IAction;
 import crafttweaker.api.item.IItemStack;
@@ -11,6 +11,8 @@ import stanhebben.zenscript.annotations.ZenMethod;
 
 @ZenClass("mods.industrialforegoing.BioReactor")
 public class CTBioReactor {
+
+    public static final LinkedListMultimap<CTAction, BioReactorEntry> ENTRIES = LinkedListMultimap.create();
 
     @ZenMethod
     public static void add(IItemStack input) {
@@ -34,7 +36,7 @@ public class CTBioReactor {
 
         @Override
         public void apply() {
-            IndustrialForegoingHelper.addBioReactorEntry(entry);
+            ENTRIES.put(CTAction.ADD, entry);
         }
 
         @Override
@@ -53,7 +55,7 @@ public class CTBioReactor {
 
         @Override
         public void apply() {
-            IndustrialForegoingHelper.removeBioReactorEntry(stack);
+            ENTRIES.put(CTAction.REMOVE, new BioReactorEntry(stack));
         }
 
         @Override

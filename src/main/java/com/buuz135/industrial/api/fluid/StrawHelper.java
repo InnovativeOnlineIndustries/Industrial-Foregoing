@@ -1,15 +1,15 @@
-package com.buuz135.industrial.utils;
+package com.buuz135.industrial.api.fluid;
 
-import com.buuz135.industrial.api.fluid.IFluidDrinkHandler;
 import net.minecraftforge.fluids.Fluid;
 
 import java.util.HashMap;
 import java.util.Map;
 
-public class StrawUtils {
+public class StrawHelper {
+
     public static final Map<String, IFluidDrinkHandler> DRINK_HANDLER_MAP = new HashMap<>();
 
-    private StrawUtils() {
+    private StrawHelper() {
     }
 
     public static void register(Fluid fluid, IFluidDrinkHandler handler) {

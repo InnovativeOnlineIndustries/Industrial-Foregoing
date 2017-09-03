@@ -23,10 +23,7 @@ public class CommonProxy {
         random = new Random();
 
         FluidsRegistry.registerFluids();
-        RecipeHandlers.loadBioReactorEntries();
-        RecipeHandlers.loadLaserLensEntries();
-        RecipeHandlers.registerRecollectables();
-        if (Loader.isModLoaded("crafttweaker")) CraftTweakerHelper.register();
+
 
         MinecraftForge.EVENT_BUS.register(new BlockRegistry());
         MinecraftForge.EVENT_BUS.register(new ItemRegistry());
@@ -35,9 +32,14 @@ public class CommonProxy {
 
         CustomConfiguration.config = new Configuration(event.getSuggestedConfigurationFile());
 
+        if (Loader.isModLoaded("crafttweaker")) CraftTweakerHelper.register();
     }
 
     public void init() {
+        RecipeHandlers.registerRecollectables();
+        RecipeHandlers.loadBioReactorEntries();
+        RecipeHandlers.loadLaserLensEntries();
+        RecipeHandlers.loadSludgeRefinerEntries();
 
     }
 
@@ -46,5 +48,6 @@ public class CommonProxy {
         CraftingUtils.generateCrushedRecipes();
         BlockRegistry.createRecipes();
         RecipeUtils.generateConstants();
+        RecipeHandlers.registerDrinkHandlers();
     }
 }

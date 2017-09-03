@@ -1,6 +1,6 @@
 package com.buuz135.industrial.utils.apihandlers.crafttweaker;
 
-import com.buuz135.industrial.api.recipe.LaserDrillEntry;
+import com.buuz135.industrial.api.recipe.SludgeEntry;
 import com.google.common.collect.LinkedListMultimap;
 import crafttweaker.CraftTweakerAPI;
 import crafttweaker.IAction;
@@ -9,30 +9,29 @@ import net.minecraft.item.ItemStack;
 import stanhebben.zenscript.annotations.ZenClass;
 import stanhebben.zenscript.annotations.ZenMethod;
 
-@ZenClass("mods.industrialforegoing.LaserDrill")
-public class CTLaserDrill {
+@ZenClass("mods.industrialforegoing.SludgeRefiner")
+public class CTSludgeRefiner {
 
-    public static final LinkedListMultimap<CTAction, LaserDrillEntry> ENTRIES = LinkedListMultimap.create();
+    public static final LinkedListMultimap<CTAction, SludgeEntry> ENTRIES = LinkedListMultimap.create();
 
     @ZenMethod
-    public static void add(int meta, IItemStack output, int weight) {
-        LaserDrillEntry entry = new LaserDrillEntry(meta, (ItemStack) output.getInternal(), weight);
+    public static void add(IItemStack output, int weight) {
+        SludgeEntry entry = new SludgeEntry((ItemStack) output.getInternal(), weight);
         CraftTweakerAPI.apply(new Add(entry));
     }
 
     @ZenMethod
-    public static void remove(IItemStack input) {
-        CraftTweakerAPI.apply(new Remove((ItemStack) input.getInternal()));
+    public static void remove(IItemStack output) {
+        CraftTweakerAPI.apply(new Remove((ItemStack) output.getInternal()));
     }
 
     private static class Add implements IAction {
 
-        private final LaserDrillEntry entry;
+        private final SludgeEntry entry;
 
-        private Add(LaserDrillEntry entry) {
+        private Add(SludgeEntry entry) {
             this.entry = entry;
         }
-
 
         @Override
         public void apply() {
@@ -41,7 +40,7 @@ public class CTLaserDrill {
 
         @Override
         public String describe() {
-            return "Adding Laser drill " + entry.getStack().getDisplayName();
+            return "Adding Sludge Refiner " + entry.getStack().getDisplayName();
         }
     }
 
@@ -55,12 +54,12 @@ public class CTLaserDrill {
 
         @Override
         public void apply() {
-            ENTRIES.put(CTAction.REMOVE, new LaserDrillEntry(0, stack, 0));
+            ENTRIES.put(CTAction.REMOVE, new SludgeEntry(stack, 0));
         }
 
         @Override
         public String describe() {
-            return "Removing Laser Drill entry " + stack.getDisplayName();
+            return "Removing Sludge Refiner " + stack.getDisplayName();
         }
     }
 }

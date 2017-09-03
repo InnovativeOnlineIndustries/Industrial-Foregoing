@@ -1,5 +1,6 @@
 package com.buuz135.industrial.tile.agriculture;
 
+import com.buuz135.industrial.proxy.BlockRegistry;
 import com.buuz135.industrial.proxy.FluidsRegistry;
 import com.buuz135.industrial.tile.CustomColoredItemHandler;
 import com.buuz135.industrial.tile.CustomElectricMachine;
@@ -15,6 +16,7 @@ import net.minecraftforge.items.ItemStackHandler;
 import net.ndrei.teslacorelib.inventory.BoundingRectangle;
 
 public class SludgeRefinerTile extends CustomElectricMachine {
+
 
     private IFluidTank tank;
     private ItemStackHandler outItems;
@@ -53,7 +55,7 @@ public class SludgeRefinerTile extends CustomElectricMachine {
 
         if (tank.getFluid() != null && tank.getFluidAmount() >= 1000) {
             SludgeRefinerBlock block = (SludgeRefinerBlock) this.getBlockType();
-            ItemStackWeightedItem itemStack = WeightedRandom.getRandomItem(this.world.rand, block.getItemStackWeightedItems());
+            ItemStackWeightedItem itemStack = getRandomItem();
             if (ItemHandlerHelper.insertItem(outItems, itemStack.getStack(), true).isEmpty()) {
                 tank.drain(1000, true);
                 ItemHandlerHelper.insertItem(outItems, itemStack.getStack().copy(), false);
@@ -62,5 +64,9 @@ public class SludgeRefinerTile extends CustomElectricMachine {
         }
 
         return 0;
+    }
+
+    public ItemStackWeightedItem getRandomItem() {
+        return WeightedRandom.getRandomItem(this.world.rand, BlockRegistry.sludgeRefinerBlock.getItems());
     }
 }

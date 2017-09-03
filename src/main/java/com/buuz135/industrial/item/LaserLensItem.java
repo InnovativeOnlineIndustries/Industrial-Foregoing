@@ -1,6 +1,5 @@
 package com.buuz135.industrial.item;
 
-import com.buuz135.industrial.IndustrialForegoing;
 import com.buuz135.industrial.utils.RecipeUtils;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.creativetab.CreativeTabs;
@@ -22,7 +21,7 @@ public class LaserLensItem extends IFCustomItem {
 
     @Override
     public void getSubItems(CreativeTabs tab, NonNullList<ItemStack> subItems) {
-        if (tab == IndustrialForegoing.creativeTab)
+        if (isInCreativeTab(tab))
             for (int i = 0; i < 16; ++i) subItems.add(new ItemStack(this, 1, i));
     }
 

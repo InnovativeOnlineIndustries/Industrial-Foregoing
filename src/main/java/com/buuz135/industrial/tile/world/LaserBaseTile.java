@@ -129,4 +129,8 @@ public class LaserBaseTile extends SidedTileEntity {
         ++currentWork;
     }
 
+    @Override
+    protected boolean getShowPauseDrawerPiece() {
+        return false;
+    }
 }
