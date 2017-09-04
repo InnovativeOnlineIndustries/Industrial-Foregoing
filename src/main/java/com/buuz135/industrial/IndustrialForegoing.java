@@ -21,7 +21,7 @@ import net.ndrei.teslacorelib.items.gears.CoreGearType;
 import java.util.Arrays;
 import java.util.HashMap;
 
-@Mod(modid = Reference.MOD_ID, name = Reference.MOD_ID, version = Reference.VERSION, dependencies = "required-after:teslacorelib;before:crafttweaker", guiFactory = Reference.GUI_FACTORY)
+@Mod(modid = Reference.MOD_ID, name = Reference.MOD_ID, version = Reference.VERSION, dependencies = "required-after:teslacorelib", guiFactory = Reference.GUI_FACTORY)
 public class IndustrialForegoing {
 
     public static CreativeTabs creativeTab = new CreativeTabs(Reference.MOD_ID) {
