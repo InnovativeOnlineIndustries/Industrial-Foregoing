@@ -1,5 +1,6 @@
 package com.buuz135.industrial.tile.block;
 
+import com.buuz135.industrial.proxy.ItemRegistry;
 import com.buuz135.industrial.tile.agriculture.CropSowerTile;
 import com.buuz135.industrial.utils.RecipeUtils;
 import net.minecraft.block.material.Material;
@@ -16,7 +17,7 @@ public class CropSowerBlock extends CustomOrientedBlock<CropSowerTile> {
 
     public void createRecipe() {
         RecipeUtils.addShapedRecipe(new ItemStack(this), "pfp", "ama", "grg",
-                'p', "itemRubber",
+                'p', ItemRegistry.plastic,
                 'f', Items.FLOWER_POT,
                 'a', Blocks.PISTON,
                 'm', MachineCaseItem.INSTANCE,

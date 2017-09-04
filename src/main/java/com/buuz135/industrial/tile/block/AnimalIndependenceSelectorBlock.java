@@ -1,5 +1,6 @@
 package com.buuz135.industrial.tile.block;
 
+import com.buuz135.industrial.proxy.ItemRegistry;
 import com.buuz135.industrial.tile.agriculture.AnimalIndependenceSelectorTile;
 import com.buuz135.industrial.utils.RecipeUtils;
 import net.minecraft.block.material.Material;
@@ -14,7 +15,7 @@ public class AnimalIndependenceSelectorBlock extends CustomOrientedBlock<AnimalI
 
     public void createRecipe() {
         RecipeUtils.addShapedRecipe(new ItemStack(this), "pep", "eme", "dgd",
-                'p', "itemRubber",
+                'p', ItemRegistry.plastic,
                 'e', "gemEmerald",
                 'm', MachineCaseItem.INSTANCE,
                 'd', "dyePurple",

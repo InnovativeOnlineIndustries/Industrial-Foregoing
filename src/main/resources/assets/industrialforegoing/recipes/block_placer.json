@@ -7,10 +7,10 @@
     "dmd",
     "prp"
   ],
-  "type": "forge:ore_shaped",
+  "type": "minecraft:crafting_shaped",
   "key": {
     "p": {
-      "item": "#ITEMRUBBER"
+      "item": "industrialforegoing:plastic"
     },
     "r": {
       "item": "minecraft:redstone"

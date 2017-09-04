@@ -1,5 +1,6 @@
 package com.buuz135.industrial.tile.block;
 
+import com.buuz135.industrial.proxy.ItemRegistry;
 import com.buuz135.industrial.tile.world.BlockPlacerTile;
 import com.buuz135.industrial.utils.RecipeUtils;
 import net.minecraft.block.material.Material;
@@ -16,7 +17,7 @@ public class BlockPlacerBlock extends CustomOrientedBlock<BlockPlacerTile> {
 
     public void createRecipe() {
         RecipeUtils.addShapedRecipe(new ItemStack(this), "pdp", "dmd", "prp",
-                'p', "itemRubber",
+                'p', ItemRegistry.plastic,
                 'd', Blocks.DROPPER,
                 'm', MachineCaseItem.INSTANCE,
                 'r', Items.REDSTONE);

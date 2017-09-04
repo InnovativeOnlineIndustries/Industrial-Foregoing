@@ -1,5 +1,6 @@
 package com.buuz135.industrial.tile.block;
 
+import com.buuz135.industrial.proxy.ItemRegistry;
 import com.buuz135.industrial.tile.mob.AnimalStockIncreaserTile;
 import com.buuz135.industrial.utils.RecipeUtils;
 import net.minecraft.block.material.Material;
@@ -15,7 +16,7 @@ public class AnimalStockIncreaserBlock extends CustomOrientedBlock<AnimalStockIn
 
     public void createRecipe() {
         RecipeUtils.addShapedRecipe(new ItemStack(this), "pgp", "cmc", "dad",
-                'p', "itemRubber",
+                'p', ItemRegistry.plastic,
                 'g', Items.GOLDEN_APPLE,
                 'c', Items.GOLDEN_CARROT,
                 'm', MachineCaseItem.INSTANCE,

@@ -1,5 +1,6 @@
 package com.buuz135.industrial.tile.block;
 
+import com.buuz135.industrial.proxy.ItemRegistry;
 import com.buuz135.industrial.tile.misc.DyeMixerTile;
 import com.buuz135.industrial.utils.RecipeUtils;
 import net.minecraft.block.material.Material;
@@ -14,7 +15,7 @@ public class DyeMixerBlock extends CustomOrientedBlock<DyeMixerTile> {
 
     public void createRecipe() {
         RecipeUtils.addShapedRecipe(new ItemStack(this), "pgp", "rmb", "pop",
-                'p', "itemRubber",
+                'p', ItemRegistry.plastic,
                 'g', "dyeGreen",
                 'r', "dyeRed",
                 'm', MachineCaseItem.INSTANCE,

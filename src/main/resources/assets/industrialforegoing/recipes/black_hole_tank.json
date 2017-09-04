@@ -7,10 +7,10 @@
     "eae",
     "cmc"
   ],
-  "type": "forge:ore_shaped",
+  "type": "minecraft:crafting_shaped",
   "key": {
     "p": {
-      "item": "#ITEMRUBBER"
+      "item": "industrialforegoing:plastic"
     },
     "a": {
       "item": "minecraft:ender_pearl"

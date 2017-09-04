@@ -16,7 +16,7 @@ public class LaserDrillBlock extends CustomOrientedBlock<LaserDrillTile> {
 
     public void createRecipe() {
         RecipeUtils.addShapedRecipe(new ItemStack(this), "plp", "gwg", "omo",
-                'p', "itemRubber",
+                'p', ItemRegistry.plastic,
                 'l', ItemRegistry.laserLensItem,
                 'g', "blockGlassColorless",
                 'w', Blocks.GLOWSTONE,

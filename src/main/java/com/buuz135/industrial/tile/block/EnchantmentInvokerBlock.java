@@ -1,5 +1,6 @@
 package com.buuz135.industrial.tile.block;
 
+import com.buuz135.industrial.proxy.ItemRegistry;
 import com.buuz135.industrial.tile.magic.EnchantmentInvokerTile;
 import com.buuz135.industrial.utils.RecipeUtils;
 import net.minecraft.block.material.Material;
@@ -16,7 +17,7 @@ public class EnchantmentInvokerBlock extends CustomOrientedBlock<EnchantmentInvo
 
     public void createRecipe() {
         RecipeUtils.addShapedRecipe(new ItemStack(this), "pbp", "dmd", "ooo",
-                'p', "itemRubber",
+                'p', ItemRegistry.plastic,
                 'b', Items.BOOK,
                 'd', "gemDiamond",
                 'm', MachineCaseItem.INSTANCE,

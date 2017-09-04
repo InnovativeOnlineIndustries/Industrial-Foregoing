@@ -1,5 +1,6 @@
 package com.buuz135.industrial.tile.block;
 
+import com.buuz135.industrial.proxy.ItemRegistry;
 import com.buuz135.industrial.tile.misc.WaterCondesatorTile;
 import com.buuz135.industrial.utils.RecipeUtils;
 import net.minecraft.block.material.Material;
@@ -16,7 +17,7 @@ public class WaterCondensatorBlock extends CustomOrientedBlock<WaterCondesatorTi
 
     public void createRecipe() {
         RecipeUtils.addShapedRecipe(new ItemStack(this), "pwp", "fmf", "grg",
-                'p', "itemRubber",
+                'p', ItemRegistry.plastic,
                 'w', Items.WATER_BUCKET,
                 'f', Blocks.PISTON,
                 'm', MachineCaseItem.INSTANCE,

@@ -43,7 +43,8 @@ public class IndustrialForegoingHelper {
         return false;
     }
 
-    /** Adds a new LaserEntry entry that wasn't already there.
+    /**
+     * Adds a new LaserEntry entry that wasn't already there.
      *
      * @param entry The LaserEntry entry to add.
      * @return true if it is added, false if don't.
@@ -56,7 +57,8 @@ public class IndustrialForegoingHelper {
         return false;
     }
 
-    /** Removes a LaserDrill entry.
+    /**
+     * Removes a LaserDrill entry.
      *
      * @param stack The ItemStack of a LaserDrill entry to remove.
      * @return true if it is removed, false if don't.
@@ -68,7 +70,8 @@ public class IndustrialForegoingHelper {
         return false;
     }
 
-    /** Adds a new SludgeRefiner entry that wasn't already there.
+    /**
+     * Adds a new SludgeRefiner entry that wasn't already there.
      *
      * @param entry The SludgeRefiner entry to add.
      * @return true if it is added, false if don't.
@@ -81,7 +84,8 @@ public class IndustrialForegoingHelper {
         return false;
     }
 
-    /** Removes a SludgeRefiner entry.
+    /**
+     * Removes a SludgeRefiner entry.
      *
      * @param stack The ItemStack of a SludgeRefiner entry to remove.
      * @return true if it is removed, false if don't.
@@ -94,7 +98,8 @@ public class IndustrialForegoingHelper {
         return false;
     }
 
-    /** Registers a new IPlantRecollectable at the start of the list giving it preference over the others that are already there.
+    /**
+     * Registers a new IPlantRecollectable at the start of the list giving it preference over the others that are already there.
      *
      * @param recollectable The IPlantRecollectable to register
      */

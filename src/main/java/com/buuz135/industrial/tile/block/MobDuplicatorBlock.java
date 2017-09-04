@@ -1,6 +1,7 @@
 package com.buuz135.industrial.tile.block;
 
 import com.buuz135.industrial.config.CustomConfiguration;
+import com.buuz135.industrial.proxy.ItemRegistry;
 import com.buuz135.industrial.tile.mob.MobDuplicatorTile;
 import com.buuz135.industrial.utils.RecipeUtils;
 import net.minecraft.block.material.Material;
@@ -19,7 +20,7 @@ public class MobDuplicatorBlock extends CustomOrientedBlock<MobDuplicatorTile> {
 
     public void createRecipe() {
         RecipeUtils.addShapedRecipe(new ItemStack(this), "pwp", "cmc", "ere",
-                'p', "itemRubber",
+                'p', ItemRegistry.plastic,
                 'w', Items.NETHER_WART,
                 'c', Items.MAGMA_CREAM,
                 'm', MachineCaseItem.INSTANCE,

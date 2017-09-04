@@ -1,5 +1,6 @@
 package com.buuz135.industrial.tile.block;
 
+import com.buuz135.industrial.proxy.ItemRegistry;
 import com.buuz135.industrial.tile.mob.MobDetectorTile;
 import com.buuz135.industrial.utils.RecipeUtils;
 import net.minecraft.block.material.Material;
@@ -59,7 +60,7 @@ public class MobDetectorBlock extends CustomOrientedBlock<MobDetectorTile> {
 
     public void createRecipe() {
         RecipeUtils.addShapedRecipe(new ItemStack(this), "ppp", "rcr", "imi",
-                'p', "itemRubber",
+                'p', ItemRegistry.plastic,
                 'r', Items.REPEATER,
                 'c', Items.COMPARATOR,
                 'i', Blocks.OBSERVER,

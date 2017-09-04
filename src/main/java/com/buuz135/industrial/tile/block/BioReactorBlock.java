@@ -1,6 +1,7 @@
 package com.buuz135.industrial.tile.block;
 
 import com.buuz135.industrial.config.CustomConfiguration;
+import com.buuz135.industrial.proxy.ItemRegistry;
 import com.buuz135.industrial.tile.generator.BioReactorTile;
 import com.buuz135.industrial.utils.RecipeUtils;
 import net.minecraft.block.material.Material;
@@ -31,7 +32,7 @@ public class BioReactorBlock extends CustomOrientedBlock<BioReactorTile> {
 
     public void createRecipe() {
         RecipeUtils.addShapedRecipe(new ItemStack(this), "pep", "sms", "bcb",
-                'p', "itemRubber",
+                'p', ItemRegistry.plastic,
                 'e', Items.FERMENTED_SPIDER_EYE,
                 's', Items.SLIME_BALL,
                 'm', MachineCaseItem.INSTANCE,

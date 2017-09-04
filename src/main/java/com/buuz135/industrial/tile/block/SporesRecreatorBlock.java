@@ -1,5 +1,6 @@
 package com.buuz135.industrial.tile.block;
 
+import com.buuz135.industrial.proxy.ItemRegistry;
 import com.buuz135.industrial.tile.agriculture.SporesRecreatorTile;
 import com.buuz135.industrial.utils.RecipeUtils;
 import net.minecraft.block.material.Material;
@@ -15,7 +16,7 @@ public class SporesRecreatorBlock extends CustomOrientedBlock<SporesRecreatorTil
 
     public void createRecipe() {
         RecipeUtils.addShapedRecipe(new ItemStack(this), "ppp", "omo", "pgp",
-                'p', "itemRubber",
+                'p', ItemRegistry.plastic,
                 'o', Blocks.RED_MUSHROOM,
                 'm', MachineCaseItem.INSTANCE,
                 'g', "gearIron");

@@ -1,5 +1,6 @@
 package com.buuz135.industrial.item.addon;
 
+import com.buuz135.industrial.proxy.ItemRegistry;
 import com.buuz135.industrial.tile.WorkingAreaElectricMachine;
 import com.buuz135.industrial.utils.RecipeUtils;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
@@ -52,7 +53,7 @@ public class RangeAddonItem extends CustomAddon {
         for (int i = 0; i < 12; ++i) {
             RecipeUtils.addShapedRecipe(new ItemStack(this, 1, i), "ipi", "igi", "ipi",
                     'i', items[i],
-                    'p', "itemRubber",
+                    'p', ItemRegistry.plastic,
                     'g', "paneGlass");
         }
 

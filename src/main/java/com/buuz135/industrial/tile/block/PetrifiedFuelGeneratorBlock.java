@@ -1,6 +1,7 @@
 package com.buuz135.industrial.tile.block;
 
 import com.buuz135.industrial.config.CustomConfiguration;
+import com.buuz135.industrial.proxy.ItemRegistry;
 import com.buuz135.industrial.tile.generator.PetrifiedFuelGeneratorTile;
 import com.buuz135.industrial.utils.RecipeUtils;
 import lombok.Getter;
@@ -21,7 +22,7 @@ public class PetrifiedFuelGeneratorBlock extends CustomOrientedBlock<PetrifiedFu
 
     public void createRecipe() {
         RecipeUtils.addShapedRecipe(new ItemStack(this, 1), "pdp", "gmg", "pfp",
-                'p', "itemRubber",
+                'p', ItemRegistry.plastic,
                 'd', "gemDiamond",
                 'g', "gearGold",
                 'm', MachineCaseItem.INSTANCE,

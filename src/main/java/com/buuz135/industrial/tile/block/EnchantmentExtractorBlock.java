@@ -1,5 +1,6 @@
 package com.buuz135.industrial.tile.block;
 
+import com.buuz135.industrial.proxy.ItemRegistry;
 import com.buuz135.industrial.tile.magic.EnchantmentExtractorTile;
 import com.buuz135.industrial.utils.RecipeUtils;
 import net.minecraft.block.material.Material;
@@ -16,7 +17,7 @@ public class EnchantmentExtractorBlock extends CustomOrientedBlock<EnchantmentEx
 
     public void createRecipe() {
         RecipeUtils.addShapedRecipe(new ItemStack(this), "pnp", "bmb", "dgd",
-                'p', "itemRubber",
+                'p', ItemRegistry.plastic,
                 'n', Blocks.NETHER_BRICK,
                 'b', Items.BOOK,
                 'm', MachineCaseItem.INSTANCE,

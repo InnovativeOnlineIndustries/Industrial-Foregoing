@@ -1,5 +1,6 @@
 #1.2.2
 + Removed crafttweaker loading dep to fix [#38](https://github.com/Buuz135/Industrial-Foregoing/issues/38)
++ Reverted Plastic Oredictionary in recipes
 
 #1.2.1
 + Fixed issue [#37](https://github.com/Buuz135/Industrial-Foregoing/issues/37)

@@ -1,6 +1,7 @@
 package com.buuz135.industrial.tile.block;
 
 import com.buuz135.industrial.api.recipe.SludgeEntry;
+import com.buuz135.industrial.proxy.ItemRegistry;
 import com.buuz135.industrial.tile.agriculture.SludgeRefinerTile;
 import com.buuz135.industrial.utils.ItemStackWeightedItem;
 import com.buuz135.industrial.utils.RecipeUtils;
@@ -37,7 +38,7 @@ public class SludgeRefinerBlock extends CustomOrientedBlock<SludgeRefinerTile> {
 
     public void createRecipe() {
         RecipeUtils.addShapedRecipe(new ItemStack(this), "pbp", "fmf", "igi",
-                'p', "itemRubber",
+                'p', ItemRegistry.plastic,
                 'b', Items.BUCKET,
                 'f', Blocks.FURNACE,
                 'm', MachineCaseItem.INSTANCE,

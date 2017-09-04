@@ -10,7 +10,7 @@
   "type": "forge:ore_shaped",
   "key": {
     "p": {
-      "item": "#ITEMRUBBER"
+      "item": "industrialforegoing:plastic"
     },
     "g": {
       "item": "minecraft:glass_bottle"

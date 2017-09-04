@@ -1,5 +1,6 @@
 package com.buuz135.industrial.tile.block;
 
+import com.buuz135.industrial.proxy.ItemRegistry;
 import com.buuz135.industrial.tile.misc.BlackHoleTankTile;
 import com.buuz135.industrial.utils.RecipeUtils;
 import net.minecraft.block.state.IBlockState;
@@ -30,7 +31,7 @@ public class BlackHoleTankBlock extends CustomOrientedBlock<BlackHoleTankTile> {
 
     public void createRecipe() {
         RecipeUtils.addShapedRecipe(new ItemStack(this), "ppp", "eae", "cmc",
-                'p', "itemRubber",
+                'p', ItemRegistry.plastic,
                 'e', Items.ENDER_EYE,
                 'a', Items.ENDER_PEARL,
                 'c', Items.BUCKET,

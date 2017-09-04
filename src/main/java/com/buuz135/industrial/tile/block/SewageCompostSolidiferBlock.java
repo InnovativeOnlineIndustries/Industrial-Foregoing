@@ -1,5 +1,6 @@
 package com.buuz135.industrial.tile.block;
 
+import com.buuz135.industrial.proxy.ItemRegistry;
 import com.buuz135.industrial.tile.agriculture.SewageCompostSolidifierTile;
 import com.buuz135.industrial.utils.RecipeUtils;
 import net.minecraft.block.material.Material;
@@ -16,7 +17,7 @@ public class SewageCompostSolidiferBlock extends CustomOrientedBlock<SewageCompo
 
     public void createRecipe() {
         RecipeUtils.addShapedRecipe(new ItemStack(this), "pfp", "imi", "brb",
-                'p', "itemRubber",
+                'p', ItemRegistry.plastic,
                 'f', Blocks.FURNACE,
                 'i', Blocks.PISTON,
                 'm', MachineCaseItem.INSTANCE,

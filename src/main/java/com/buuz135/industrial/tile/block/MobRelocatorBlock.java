@@ -1,6 +1,7 @@
 package com.buuz135.industrial.tile.block;
 
 import com.buuz135.industrial.config.CustomConfiguration;
+import com.buuz135.industrial.proxy.ItemRegistry;
 import com.buuz135.industrial.tile.mob.MobRelocatorTile;
 import com.buuz135.industrial.utils.RecipeUtils;
 import net.minecraft.block.material.Material;
@@ -29,7 +30,7 @@ public class MobRelocatorBlock extends CustomOrientedBlock<MobRelocatorTile> {
 
     public void createRecipe() {
         RecipeUtils.addShapedRecipe(new ItemStack(this), "psp", "bmb", "grg",
-                'p', "itemRubber",
+                'p', ItemRegistry.plastic,
                 's', Items.IRON_SWORD,
                 'b', Items.BOOK,
                 'm', MachineCaseItem.INSTANCE,

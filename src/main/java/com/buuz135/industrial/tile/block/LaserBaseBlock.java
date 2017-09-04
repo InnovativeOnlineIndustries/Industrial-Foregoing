@@ -1,6 +1,7 @@
 package com.buuz135.industrial.tile.block;
 
 import com.buuz135.industrial.config.CustomConfiguration;
+import com.buuz135.industrial.proxy.ItemRegistry;
 import com.buuz135.industrial.tile.world.LaserBaseTile;
 import com.buuz135.industrial.utils.RecipeUtils;
 import net.minecraft.block.material.Material;
@@ -38,7 +39,7 @@ public class LaserBaseBlock extends CustomOrientedBlock<LaserBaseTile> {
 
     public void createRecipe() {
         RecipeUtils.addShapedRecipe(new ItemStack(this), "pwp", "gwg", "dmd",
-                'p', "itemRubber",
+                'p', ItemRegistry.plastic,
                 'w', Blocks.GLOWSTONE,
                 'g', "gearGold",
                 'd', "gearDiamond",

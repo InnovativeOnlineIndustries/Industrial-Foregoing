@@ -1,5 +1,6 @@
 package com.buuz135.industrial.tile.block;
 
+import com.buuz135.industrial.proxy.ItemRegistry;
 import com.buuz135.industrial.tile.agriculture.AnimalGrowthIncreaserTile;
 import com.buuz135.industrial.utils.RecipeUtils;
 import net.minecraft.block.material.Material;
@@ -15,7 +16,7 @@ public class AnimalGrowthIncreaserBlock extends CustomOrientedBlock<AnimalGrowth
 
     public void createRecipe() {
         RecipeUtils.addShapedRecipe(new ItemStack(this), "pep", "eme", "dgd",
-                'p', "itemRubber",
+                'p', ItemRegistry.plastic,
                 'e', Items.WHEAT,
                 'm', MachineCaseItem.INSTANCE,
                 'd', "dyePurple",

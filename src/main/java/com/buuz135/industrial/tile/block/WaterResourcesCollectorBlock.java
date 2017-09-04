@@ -1,5 +1,6 @@
 package com.buuz135.industrial.tile.block;
 
+import com.buuz135.industrial.proxy.ItemRegistry;
 import com.buuz135.industrial.tile.agriculture.WaterResourcesCollectorTile;
 import com.buuz135.industrial.utils.RecipeUtils;
 import net.minecraft.block.material.Material;
@@ -15,7 +16,7 @@ public class WaterResourcesCollectorBlock extends CustomOrientedBlock<WaterResou
 
     public void createRecipe() {
         RecipeUtils.addShapedRecipe(new ItemStack(this), "pfp", "bmb", "grg",
-                'p', "itemRubber",
+                'p', ItemRegistry.plastic,
                 'f', Items.FISHING_ROD,
                 'b', Items.BUCKET,
                 'm', MachineCaseItem.INSTANCE,

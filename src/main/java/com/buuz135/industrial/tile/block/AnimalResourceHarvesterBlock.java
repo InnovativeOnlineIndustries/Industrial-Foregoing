@@ -1,5 +1,6 @@
 package com.buuz135.industrial.tile.block;
 
+import com.buuz135.industrial.proxy.ItemRegistry;
 import com.buuz135.industrial.tile.agriculture.AnimalResourceHarvesterTile;
 import com.buuz135.industrial.utils.RecipeUtils;
 import net.minecraft.block.material.Material;
@@ -15,7 +16,7 @@ public class AnimalResourceHarvesterBlock extends CustomOrientedBlock<AnimalReso
 
     public void createRecipe() {
         RecipeUtils.addShapedRecipe(new ItemStack(this), "ppp", "sbs", "gmg",
-                'p', "itemRubber",
+                'p', ItemRegistry.plastic,
                 's', Items.SHEARS,
                 'b', Items.BUCKET,
                 'g', "gearGold",
