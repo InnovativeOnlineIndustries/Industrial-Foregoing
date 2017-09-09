@@ -174,8 +174,9 @@ public class BlackHoleUnitTile extends SidedTileEntity {
         else {
             Item item = Item.getByNameOrId(compound.getString(NBT_ITEMSTACK));
             if (item != null) {
-                stack = new ItemStack(item, 1, compound.hasKey(NBT_META) ? compound.getInteger(NBT_META) : 0);
-                if (compound.hasKey(NBT_ITEM_NBT)) stack.setTagCompound(compound.getCompoundTag(NBT_ITEM_NBT));
+                stack = new ItemStack(item, 1, compound.getInteger(NBT_META));
+                NBTTagCompound nbttag = compound.getCompoundTag(NBT_ITEM_NBT);
+                if (!nbttag.hasNoTags()) stack.setTagCompound(nbttag);
             }
         }
         if (!compound.hasKey(NBT_AMOUNT)) amount = 0;
