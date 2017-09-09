@@ -1,9 +1,10 @@
-#1.2.2
-+ Removed crafttweaker loading dep to fix [#38](https://github.com/Buuz135/Industrial-Foregoing/issues/38)
-+ Reverted Plastic Oredictionary in recipes
+#1.3
++ Added a Machine Produce JEI Handler that shows what produces some of the machines
 
 #1.2.1
 + Fixed issue [#37](https://github.com/Buuz135/Industrial-Foregoing/issues/37)
++ Removed crafttweaker loading dep to fix [#38](https://github.com/Buuz135/Industrial-Foregoing/issues/38)
++ Reverted Plastic Oredictionary in recipes
 
 #1.2
 + Added Resourceful Furnace, it produces Essence when doing furnace operations.

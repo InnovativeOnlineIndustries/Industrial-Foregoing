@@ -7,21 +7,30 @@ import com.buuz135.industrial.jei.bioreactor.BioReactorRecipeCategory;
 import com.buuz135.industrial.jei.bioreactor.BioReactorRecipeWrapper;
 import com.buuz135.industrial.jei.laser.LaserRecipeCategory;
 import com.buuz135.industrial.jei.laser.LaserRecipeWrapper;
+import com.buuz135.industrial.jei.machineproduce.MachineProduceCategory;
+import com.buuz135.industrial.jei.machineproduce.MachineProduceWrapper;
 import com.buuz135.industrial.jei.sludge.SludgeRefinerRecipeCategory;
 import com.buuz135.industrial.jei.sludge.SludgeRefinerRecipeWrapper;
 import com.buuz135.industrial.proxy.BlockRegistry;
 import com.buuz135.industrial.proxy.ItemRegistry;
+import com.buuz135.industrial.tile.world.MaterialStoneWorkFactoryTile;
+import com.buuz135.industrial.utils.CraftingUtils;
 import com.buuz135.industrial.utils.ItemStackWeightedItem;
 import mezz.jei.api.*;
 import mezz.jei.api.ingredients.IModIngredientRegistration;
 import mezz.jei.api.recipe.IRecipeCategoryRegistration;
 import mezz.jei.api.recipe.VanillaRecipeCategoryUid;
+import net.minecraft.init.Blocks;
+import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.crafting.FurnaceRecipes;
+import net.minecraft.util.NonNullList;
 import net.minecraft.util.WeightedRandom;
 import net.minecraftforge.oredict.OreDictionary;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 
@@ -32,6 +41,7 @@ public class JEICustomPlugin implements IModPlugin {
     private SludgeRefinerRecipeCategory sludgeRefinerRecipeCategory;
     private BioReactorRecipeCategory bioReactorRecipeCategory;
     private LaserRecipeCategory laserRecipeCategory;
+    private MachineProduceCategory machineProduceCategory;
 
     @Override
     public void registerItemSubtypes(ISubtypeRegistry subtypeRegistry) {
@@ -50,6 +60,8 @@ public class JEICustomPlugin implements IModPlugin {
         registry.addRecipeCategories(bioReactorRecipeCategory);
         laserRecipeCategory = new LaserRecipeCategory(registry.getJeiHelpers().getGuiHelper());
         registry.addRecipeCategories(laserRecipeCategory);
+        machineProduceCategory = new MachineProduceCategory(registry.getJeiHelpers().getGuiHelper());
+        registry.addRecipeCategories(machineProduceCategory);
     }
 
     @Override
@@ -76,7 +88,20 @@ public class JEICustomPlugin implements IModPlugin {
         registry.addRecipeCatalyst(new ItemStack(BlockRegistry.laserBaseBlock), laserRecipeCategory.getUid());
 
         registry.addRecipeCatalyst(new ItemStack(BlockRegistry.resourcefulFurnaceBlock), VanillaRecipeCategoryUid.SMELTING);
+        registry.addRecipeCatalyst(new ItemStack(BlockRegistry.potionEnervatorBlock), VanillaRecipeCategoryUid.BREWING);
 
+        registry.addRecipes(Arrays.asList(
+                new MachineProduceWrapper(BlockRegistry.sporesRecreatorBlock, new ItemStack(Blocks.BROWN_MUSHROOM)),
+                new MachineProduceWrapper(BlockRegistry.sporesRecreatorBlock, new ItemStack(Blocks.RED_MUSHROOM)),
+                new MachineProduceWrapper(BlockRegistry.sewageCompostSolidiferBlock, new ItemStack(ItemRegistry.fertilizer)),
+                new MachineProduceWrapper(BlockRegistry.dyeMixerBlock, new ItemStack(Items.DYE, 1, OreDictionary.WILDCARD_VALUE)),
+                new MachineProduceWrapper(BlockRegistry.lavaFabricatorBlock, new ItemStack(Items.LAVA_BUCKET)),
+                new MachineProduceWrapper(BlockRegistry.waterResourcesCollectorBlock, new ItemStack(Items.FISH, 1, OreDictionary.WILDCARD_VALUE))),
+                machineProduceCategory.getUid());
+
+        NonNullList<ItemStack> wrappers = NonNullList.create();
+        findAllStoneWorkOutputs(wrappers, new ItemStack(Blocks.COBBLESTONE), 0);
+        wrappers.stream().filter(stack -> !stack.isEmpty()).forEach(stack -> registry.addRecipes(Collections.singletonList(new MachineProduceWrapper(BlockRegistry.materialStoneWorkFactoryBlock, stack)), machineProduceCategory.getUid()));
 
         //Descriptions
         registry.addIngredientInfo(Arrays.asList(new ItemStack(ItemRegistry.meatFeederItem)), ItemStack.class, "The meat feeder will keep fed if it has liquid meat. (Don't ask where the meat comes, you won't like it)");
@@ -127,5 +152,25 @@ public class JEICustomPlugin implements IModPlugin {
     @Override
     public void onRuntimeAvailable(IJeiRuntime jeiRuntime) {
 
+    }
+
+    public ItemStack getStoneWorkOutputFrom(ItemStack stack, MaterialStoneWorkFactoryTile.Mode mode) {
+        if (mode == MaterialStoneWorkFactoryTile.Mode.FURNACE)
+            return FurnaceRecipes.instance().getSmeltingResult(stack).copy();
+        if (mode == MaterialStoneWorkFactoryTile.Mode.CRAFT_BIG || mode == MaterialStoneWorkFactoryTile.Mode.CRAFT_SMALL) {
+            return CraftingUtils.findOutput(mode == MaterialStoneWorkFactoryTile.Mode.CRAFT_BIG ? 3 : 2, stack, null);
+        }
+        if (mode == MaterialStoneWorkFactoryTile.Mode.GRIND) {
+            return CraftingUtils.getCrushOutput(stack);
+        }
+        return ItemStack.EMPTY;
+    }
+
+    public void findAllStoneWorkOutputs(NonNullList<ItemStack> stacks, ItemStack last, int deep) {
+        for (MaterialStoneWorkFactoryTile.Mode mode : MaterialStoneWorkFactoryTile.Mode.values()) {
+            ItemStack out = getStoneWorkOutputFrom(last, mode);
+            if (stacks.stream().noneMatch(stack -> stack.isItemEqual(out))) stacks.add(out);
+            if (deep < 3) findAllStoneWorkOutputs(stacks, out, deep + 1);
+        }
     }
 }
