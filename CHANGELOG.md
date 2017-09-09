@@ -1,5 +1,6 @@
 #1.3
 + Added a Machine Produce JEI Handler that shows what produces some of the machines
++ Fixed [#40](https://github.com/Buuz135/Industrial-Foregoing/issues/40)
 
 #1.2.1
 + Fixed issue [#37](https://github.com/Buuz135/Industrial-Foregoing/issues/37)

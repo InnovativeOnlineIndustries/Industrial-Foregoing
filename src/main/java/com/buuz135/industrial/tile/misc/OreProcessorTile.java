@@ -10,12 +10,11 @@ import net.minecraft.block.Block;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.EnumDyeColor;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.NonNullList;
 import net.minecraftforge.fluids.IFluidTank;
 import net.minecraftforge.items.ItemHandlerHelper;
 import net.minecraftforge.items.ItemStackHandler;
 import net.ndrei.teslacorelib.inventory.BoundingRectangle;
-
-import java.util.List;
 
 public class OreProcessorTile extends CustomElectricMachine {
 
@@ -42,8 +41,9 @@ public class OreProcessorTile extends CustomElectricMachine {
                 if (ItemStackUtils.isOre(stack)) {
                     if (Block.getBlockFromItem(stack.getItem()) != Blocks.AIR) {
                         Block block = Block.getBlockFromItem(stack.getItem());
-                        List<ItemStack> drops = block.getDrops(OreProcessorTile.this.world, null, block.getDefaultState(), 0);
-                        if (drops.size() > 0 && !drops.get(0).getItem().equals(stack.getItem())) {
+                        NonNullList<ItemStack> stacks = NonNullList.create();
+                        block.getDrops(stacks, OreProcessorTile.this.world, OreProcessorTile.this.pos, block.getStateFromMeta(stack.getMetadata()), 0);
+                        if (stacks.size() > 0 && !stacks.get(0).isItemEqual(stack)) {
                             return true;
                         }
                     }
@@ -94,16 +94,17 @@ public class OreProcessorTile extends CustomElectricMachine {
         Block block = Block.getBlockFromItem(stack.getItem());
         int fortune = getFortuneLevel();
         tank.drain(fortune * BlockRegistry.oreProcessorBlock.getEssenceFortune(), true);
-        List<ItemStack> drops = block.getDrops(OreProcessorTile.this.world, null, block.getDefaultState(), fortune);
+        NonNullList<ItemStack> stacks = NonNullList.create();
+        block.getDrops(stacks, OreProcessorTile.this.world, OreProcessorTile.this.pos, block.getStateFromMeta(stack.getMetadata()), fortune);
         boolean canInsert = true;
-        for (ItemStack temp : drops) {
+        for (ItemStack temp : stacks) {
             if (!ItemHandlerHelper.insertItem(output, temp, true).isEmpty()) {
                 canInsert = false;
                 break;
             }
         }
         if (canInsert) {
-            for (ItemStack temp : drops) {
+            for (ItemStack temp : stacks) {
                 ItemHandlerHelper.insertItem(output, temp, false);
             }
             stack.setCount(stack.getCount() - 1);
