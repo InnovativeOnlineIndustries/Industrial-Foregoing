@@ -49,7 +49,7 @@ tile.industrialforegoing.black_hole_tank.name=Black Hole Tank
 tile.industrialforegoing.resourceful_furnace.name=Resourceful Furnace
 tile.industrialforegoing.villager_trade_exchanger.name=Villager Trade Exchanger
 
-tile.slider.name=Slider
+entity.pink_slime.name=Pink Slime
 
 fluid.essence=Essence
 fluid.milk=Milk

@@ -20,6 +20,7 @@ public class ItemRegistry {
     public static IFCustomItem plastic;
     public static IFCustomItem fertilizer;
     public static LaserLensItem laserLensItem;
+    public static IFCustomItem pinkSlime;
 
     public static ItemStraw strawItem;
 
@@ -37,10 +38,9 @@ public class ItemRegistry {
         (fertilizer = new IFCustomItem("fertilizer")).register(itemRegistry);
         (meatFeederItem = new MeatFeederItem()).register(itemRegistry);
         (mobImprisonmentToolItem = new MobImprisonmentToolItem()).register(itemRegistry);
-
         (laserLensItem = new LaserLensItem()).register(itemRegistry);
-
         (strawItem = new ItemStraw()).register(itemRegistry);
+        (pinkSlime = new IFCustomItem("pink_slime")).register(itemRegistry);
 
         (adultFilterAddomItem = new AdultFilterAddonItem()).registerItem(itemRegistry);
         (rangeAddonItem = new RangeAddonItem()).registerItem(itemRegistry);

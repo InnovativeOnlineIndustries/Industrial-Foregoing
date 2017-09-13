@@ -30,9 +30,11 @@ public class IndustrialForegoing {
             return new ItemStack(BlockRegistry.blackHoleUnitBlock);
         }
     };
+
     @SidedProxy(clientSide = Reference.PROXY_CLIENT, serverSide = Reference.PROXY_COMMON)
     private static CommonProxy proxy;
     private static HashMap<Integer, IFFakePlayer> worldFakePlayer = new HashMap<>();
+    public static IndustrialForegoing instance;
 
     static {
         if (!FluidRegistry.isUniversalBucketEnabled()) FluidRegistry.enableUniversalBucket();
@@ -51,6 +53,7 @@ public class IndustrialForegoing {
 
     @Mod.EventHandler
     public void preInit(FMLPreInitializationEvent event) {
+        instance = this;
         proxy.preInit(event);
     }
 
