@@ -47,6 +47,7 @@ tile.industrialforegoing.animal_growth_increaser.name=Animal Growth Increaser
 tile.industrialforegoing.material_stonework_factory.name=Material StoneWork Factory
 tile.industrialforegoing.black_hole_tank.name=Black Hole Tank
 tile.industrialforegoing.resourceful_furnace.name=Resourceful Furnace
+tile.industrialforegoing.villager_trade_exchanger.name=Villager Trade Exchanger
 
 tile.slider.name=Slider
 

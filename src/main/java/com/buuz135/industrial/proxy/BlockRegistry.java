@@ -53,6 +53,7 @@ public class BlockRegistry {
     public static MaterialStoneWorkFactoryBlock materialStoneWorkFactoryBlock = new MaterialStoneWorkFactoryBlock();
     public static BlackHoleTankBlock blackHoleTankBlock = new BlackHoleTankBlock();
     public static ResourcefulFurnaceBlock resourcefulFurnaceBlock = new ResourcefulFurnaceBlock();
+    public static VillagerTradeExchangerBlock villagerTradeExchangerBlock = new VillagerTradeExchangerBlock();
 
     public static IFCustomFluidBlock BLOCK_ESSENCE = new IFCustomFluidBlock(FluidsRegistry.ESSENCE, Material.WATER);
     public static IFCustomFluidBlock BLOCK_MILK = new IFCustomFluidBlock(FluidsRegistry.MILK, Material.WATER);
@@ -63,45 +64,7 @@ public class BlockRegistry {
     public static IFCustomFluidBlock BLOCK_BIOFUEL = new IFCustomFluidBlock(FluidsRegistry.BIOFUEL, Material.WATER);
 
     public static void createRecipes() {
-        petrifiedFuelGeneratorBlock.createRecipe();
-        enchantmentRefinerBlock.createRecipe();
-        enchantmentExtractorBlock.createRecipe();
-        enchantmentAplicatorBlock.createRecipe();
-        mobRelocatorBlock.createRecipe();
-        potionEnervatorBlock.createRecipe();
-        animalIndependenceSelectorBlock.createRecipe();
-        animalStockIncreaserBlock.createRecipe();
-        cropSowerBlock.createRecipe();
-        cropEnrichMaterialInjectorBlock.createRecipe();
-        cropRecolectorBlock.createRecipe();
-        blackHoleUnitBlock.createRecipe();
-        waterCondensatorBlock.createRecipe();
-        waterResourcesCollectorBlock.createRecipe();
-        animalResourceHarvesterBlock.createRecipe();
-        mobSlaughterFactoryBlock.createRecipe();
-        mobDuplicatorBlock.createRecipe();
-        blockDestroyerBlock.createRecipe();
-        blockPlacerBlock.createRecipe();
-        treeFluidExtractorBlock.createRecipe();
-        latexProcessingUnitBlock.createRecipe();
-        sewageCompostSolidiferBlock.createRecipe();
-        animalByproductRecolectorBlock.createRecipe();
-        sludgeRefinerBlock.createRecipe();
-        mobDetectorBlock.createRecipe();
-        lavaFabricatorBlock.createRecipe();
-        bioReactorBlock.createRecipe();
-        biofuelGeneratorBlock.createRecipe();
-        laserBaseBlock.createRecipe();
-        laserDrillBlock.createRecipe();
-        oreProcessorBlock.createRecipe();
-        blackHoleControllerBlock.createRecipe();
-        dyeMixerBlock.createRecipe();
-        enchantmentInvokerBlock.createRecipe();
-        sporesRecreatorBlock.createRecipe();
-        animalGrowthIncreaserBlock.createRecipe();
-        materialStoneWorkFactoryBlock.createRecipe();
-        blackHoleTankBlock.createRecipe();
-        resourcefulFurnaceBlock.createRecipe();
+        CustomOrientedBlock.blockList.forEach(CustomOrientedBlock::createRecipe);
     }
 
     @SubscribeEvent
