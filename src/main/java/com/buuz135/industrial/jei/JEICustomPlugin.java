@@ -9,6 +9,8 @@ import com.buuz135.industrial.jei.laser.LaserRecipeCategory;
 import com.buuz135.industrial.jei.laser.LaserRecipeWrapper;
 import com.buuz135.industrial.jei.machineproduce.MachineProduceCategory;
 import com.buuz135.industrial.jei.machineproduce.MachineProduceWrapper;
+import com.buuz135.industrial.jei.petrifiedgen.PetrifiedBurnTimeCategory;
+import com.buuz135.industrial.jei.petrifiedgen.PetrifiedBurnTimeWrapper;
 import com.buuz135.industrial.jei.sludge.SludgeRefinerRecipeCategory;
 import com.buuz135.industrial.jei.sludge.SludgeRefinerRecipeWrapper;
 import com.buuz135.industrial.proxy.BlockRegistry;
@@ -22,8 +24,10 @@ import mezz.jei.api.recipe.IRecipeCategoryRegistration;
 import mezz.jei.api.recipe.VanillaRecipeCategoryUid;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
+import net.minecraft.item.ItemBucket;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.FurnaceRecipes;
+import net.minecraft.tileentity.TileEntityFurnace;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.WeightedRandom;
 import net.minecraftforge.oredict.OreDictionary;
@@ -37,11 +41,11 @@ import java.util.List;
 @JEIPlugin
 public class JEICustomPlugin implements IModPlugin {
 
-
     private SludgeRefinerRecipeCategory sludgeRefinerRecipeCategory;
     private BioReactorRecipeCategory bioReactorRecipeCategory;
     private LaserRecipeCategory laserRecipeCategory;
     private MachineProduceCategory machineProduceCategory;
+    private PetrifiedBurnTimeCategory petrifiedBurnTimeCategory;
 
     @Override
     public void registerItemSubtypes(ISubtypeRegistry subtypeRegistry) {
@@ -62,6 +66,8 @@ public class JEICustomPlugin implements IModPlugin {
         registry.addRecipeCategories(laserRecipeCategory);
         machineProduceCategory = new MachineProduceCategory(registry.getJeiHelpers().getGuiHelper());
         registry.addRecipeCategories(machineProduceCategory);
+        petrifiedBurnTimeCategory = new PetrifiedBurnTimeCategory(registry.getJeiHelpers().getGuiHelper());
+        registry.addRecipeCategories(petrifiedBurnTimeCategory);
     }
 
     @Override
@@ -102,6 +108,11 @@ public class JEICustomPlugin implements IModPlugin {
         NonNullList<ItemStack> wrappers = NonNullList.create();
         findAllStoneWorkOutputs(wrappers, new ItemStack(Blocks.COBBLESTONE), 0);
         wrappers.stream().filter(stack -> !stack.isEmpty()).forEach(stack -> registry.addRecipes(Collections.singletonList(new MachineProduceWrapper(BlockRegistry.materialStoneWorkFactoryBlock, stack)), machineProduceCategory.getUid()));
+
+        List<PetrifiedBurnTimeWrapper> petrifiedBurnTimeWrappers = new ArrayList<>();
+        registry.getIngredientRegistry().getFuels().stream().filter(stack -> !(stack.getItem() instanceof ItemBucket)).forEach(stack -> petrifiedBurnTimeWrappers.add(new PetrifiedBurnTimeWrapper(stack, TileEntityFurnace.getItemBurnTime(stack))));
+        registry.addRecipes(petrifiedBurnTimeWrappers, petrifiedBurnTimeCategory.getUid());
+        registry.addRecipeCatalyst(new ItemStack(BlockRegistry.petrifiedFuelGeneratorBlock), petrifiedBurnTimeCategory.getUid());
 
         //Descriptions
         registry.addIngredientInfo(Arrays.asList(new ItemStack(ItemRegistry.meatFeederItem)), ItemStack.class, "The meat feeder will keep fed if it has liquid meat. (Don't ask where the meat comes, you won't like it)");

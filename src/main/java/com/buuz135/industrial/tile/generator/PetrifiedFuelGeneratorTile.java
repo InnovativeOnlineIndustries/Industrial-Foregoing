@@ -1,8 +1,8 @@
 package com.buuz135.industrial.tile.generator;
 
+import com.buuz135.industrial.proxy.BlockRegistry;
 import com.buuz135.industrial.proxy.client.infopiece.PetrifiedFuelInfoPiece;
 import com.buuz135.industrial.tile.CustomGeneratorMachine;
-import com.buuz135.industrial.tile.block.PetrifiedFuelGeneratorBlock;
 import com.buuz135.industrial.utils.WorkUtils;
 import net.minecraft.init.Items;
 import net.minecraft.inventory.Slot;
@@ -112,11 +112,15 @@ public class PetrifiedFuelGeneratorTile extends CustomGeneratorMachine {
         return list;
     }
 
-    @Override
-    public long getEnergyFillRate() {
-        return burnTime / ((PetrifiedFuelGeneratorBlock) this.getBlockType()).getTimeModifier();
+
+    public static long getEnergyProduced(int burnTime) {
+        return burnTime / BlockRegistry.petrifiedFuelGeneratorBlock.getTimeModifier();
     }
 
+    @Override
+    protected long getEnergyFillRate() {
+        return getEnergyProduced(burnTime);
+    }
 
     public ItemStackHandler getInvisibleSlot() {
         return invisibleSlot;
