@@ -11,7 +11,7 @@ import net.minecraftforge.registries.IForgeRegistry;
 public class StrawRegistry {
 
     @SubscribeEvent
-    public static void register(RegistryEvent.Register<StrawHandler> event) {
+    public void register(RegistryEvent.Register<StrawHandler> event) {
         IForgeRegistry<StrawHandler> registry = event.getRegistry();
         registry.registerAll(new WaterStrawHandler(), new LavaStrawHandler(), new MilkStrawHandler(), new EssenceStrawHandler());
         registry.register(new PotionStrawHandler(FluidsRegistry.BIOFUEL)
