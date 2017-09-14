@@ -20,6 +20,7 @@ import com.buuz135.industrial.utils.CraftingUtils;
 import com.buuz135.industrial.utils.ItemStackWeightedItem;
 import mezz.jei.api.*;
 import mezz.jei.api.ingredients.IModIngredientRegistration;
+import mezz.jei.api.recipe.IFocus;
 import mezz.jei.api.recipe.IRecipeCategoryRegistration;
 import mezz.jei.api.recipe.VanillaRecipeCategoryUid;
 import net.minecraft.init.Blocks;
@@ -46,6 +47,9 @@ public class JEICustomPlugin implements IModPlugin {
     private LaserRecipeCategory laserRecipeCategory;
     private MachineProduceCategory machineProduceCategory;
     private PetrifiedBurnTimeCategory petrifiedBurnTimeCategory;
+
+    private static IRecipesGui recipesGui;
+    private static IRecipeRegistry recipeRegistry;
 
     @Override
     public void registerItemSubtypes(ISubtypeRegistry subtypeRegistry) {
@@ -161,9 +165,8 @@ public class JEICustomPlugin implements IModPlugin {
         registry.addIngredientInfo(new ItemStack(BlockRegistry.sporesRecreatorBlock), ItemStack.class, "Spreads mushrooms spores to grow mushrooms");
     }
 
-    @Override
-    public void onRuntimeAvailable(IJeiRuntime jeiRuntime) {
-
+    public static void showUses(ItemStack stack) {
+        recipesGui.show(recipeRegistry.createFocus(IFocus.Mode.INPUT, stack));
     }
 
     public ItemStack getStoneWorkOutputFrom(ItemStack stack, MaterialStoneWorkFactoryTile.Mode mode) {
@@ -184,5 +187,11 @@ public class JEICustomPlugin implements IModPlugin {
             if (stacks.stream().noneMatch(stack -> stack.isItemEqual(out))) stacks.add(out);
             if (deep < 3) findAllStoneWorkOutputs(stacks, out, deep + 1);
         }
+    }
+
+    @Override
+    public void onRuntimeAvailable(IJeiRuntime jeiRuntime) {
+        recipesGui = jeiRuntime.getRecipesGui();
+        recipeRegistry = jeiRuntime.getRecipeRegistry();
     }
 }
