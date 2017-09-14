@@ -3,6 +3,7 @@ package com.buuz135.industrial.proxy;
 import com.buuz135.industrial.IndustrialForegoing;
 import com.buuz135.industrial.config.CustomConfiguration;
 import com.buuz135.industrial.entity.EntityPinkSlime;
+import com.buuz135.industrial.registry.IFRegistries;
 import com.buuz135.industrial.utils.CraftingUtils;
 import com.buuz135.industrial.utils.RecipeUtils;
 import com.buuz135.industrial.utils.Reference;
@@ -27,12 +28,14 @@ public class CommonProxy {
     public static ResourceLocation PINK_SLIME_LOOT;
 
     public void preInit(FMLPreInitializationEvent event) {
+        IFRegistries.poke();
         random = new Random();
 
         FluidsRegistry.registerFluids();
 
         MinecraftForge.EVENT_BUS.register(new BlockRegistry());
         MinecraftForge.EVENT_BUS.register(new ItemRegistry());
+        MinecraftForge.EVENT_BUS.register(new StrawRegistry());
         MinecraftForge.EVENT_BUS.register(new MeatFeederTickHandler());
         MinecraftForge.EVENT_BUS.register(new MobDeathHandler());
 
@@ -57,6 +60,5 @@ public class CommonProxy {
         CraftingUtils.generateCrushedRecipes();
         BlockRegistry.createRecipes();
         RecipeUtils.generateConstants();
-        RecipeHandlers.registerDrinkHandlers();
     }
 }
