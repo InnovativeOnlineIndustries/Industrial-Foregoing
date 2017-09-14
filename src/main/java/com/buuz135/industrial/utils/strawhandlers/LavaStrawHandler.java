@@ -1,6 +1,5 @@
-package com.buuz135.industrial.utils.drinkhandlers;
+package com.buuz135.industrial.utils.strawhandlers;
 
-import com.buuz135.industrial.api.fluid.IFluidDrinkHandler;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.DamageSource;
@@ -8,7 +7,15 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.fluids.FluidStack;
 
-public class DrinkHandlerLava implements IFluidDrinkHandler {
+import javax.annotation.ParametersAreNonnullByDefault;
+
+@ParametersAreNonnullByDefault
+public class LavaStrawHandler extends StrawHandlerBase {
+    public LavaStrawHandler() {
+        super("lava");
+        setRegistryName("lava");
+    }
+
     @Override
     public void onDrink(World world, BlockPos pos, FluidStack stack, EntityPlayer player, boolean fromFluidContainer) {
         player.attackEntityFrom(DamageSource.LAVA, 7);

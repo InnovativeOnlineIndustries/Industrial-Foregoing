@@ -1,7 +1,7 @@
 package com.buuz135.industrial.item;
 
-import com.buuz135.industrial.api.fluid.IFluidDrinkHandler;
-import com.buuz135.industrial.api.fluid.StrawHelper;
+import com.buuz135.industrial.api.straw.StrawHandler;
+import com.buuz135.industrial.utils.StrawUtils;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.util.ITooltipFlag;
@@ -22,11 +22,13 @@ import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
 import net.minecraftforge.fluids.capability.IFluidHandler;
 import net.minecraftforge.fluids.capability.IFluidTankProperties;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.List;
-import java.util.Map;
+import java.util.Optional;
 
 public class ItemStraw extends IFCustomItem {
     public ItemStraw() {
@@ -35,18 +37,19 @@ public class ItemStraw extends IFCustomItem {
     }
 
     @Override
-    public ItemStack onItemUseFinish(ItemStack heldStack, World world, EntityLivingBase entity) {
+    @Nonnull
+    public ItemStack onItemUseFinish(@Nonnull ItemStack heldStack, World world, EntityLivingBase entity) {
         if (!world.isRemote && entity instanceof EntityPlayer) {
             EntityPlayer player = (EntityPlayer) entity;
             RayTraceResult result = rayTrace(world, player, true);
             if (result != null && result.typeOfHit == RayTraceResult.Type.BLOCK) {
-                Map<String, IFluidDrinkHandler> map = StrawHelper.getDrinkHandlers();
                 BlockPos pos = result.getBlockPos();
                 IBlockState state = world.getBlockState(pos);
                 Block block = state.getBlock();
                 Fluid fluid = FluidRegistry.lookupFluidForBlock(block);
-                if (fluid != null && map.containsKey(fluid.getName())) {
-                    map.get(fluid.getName()).onDrink(world, pos, new FluidStack(fluid, Fluid.BUCKET_VOLUME), player, false);
+                if (fluid != null) {
+                    FluidStack stack = new FluidStack(fluid, Fluid.BUCKET_VOLUME);
+                    StrawUtils.getStrawHandler(stack).ifPresent(handler -> handler.onDrink(world, pos, stack, player, false));
                     world.setBlockToAir(pos);
                     return heldStack;
                 } else if (block.hasTileEntity(state)) {
@@ -59,12 +62,12 @@ public class ItemStraw extends IFCustomItem {
                                 FluidStack stack = properties.getContents();
                                 if (stack != null) {
                                     fluid = stack.getFluid();
-                                    if (fluid != null && map.containsKey(fluid.getName()) && stack.amount >= Fluid.BUCKET_VOLUME) {
+                                    if (fluid != null && stack.amount >= Fluid.BUCKET_VOLUME) {
                                         FluidStack copiedStack = stack.copy();
                                         copiedStack.amount = Fluid.BUCKET_VOLUME;
                                         FluidStack out = handler.drain(copiedStack, false);
                                         if (out != null && out.amount == 1000) {
-                                            map.get(fluid.getName()).onDrink(world, pos, out, player, true);
+                                            StrawUtils.getStrawHandler(stack).ifPresent(strawHandler -> strawHandler.onDrink(world, pos, stack, player, true));
                                             handler.drain(copiedStack, true);
                                             return heldStack;
                                         }
@@ -75,7 +78,6 @@ public class ItemStraw extends IFCustomItem {
                     }
                 }
             }
-
         }
         return super.onItemUseFinish(heldStack, world, entity);
     }
@@ -85,13 +87,14 @@ public class ItemStraw extends IFCustomItem {
     public ActionResult<ItemStack> onItemRightClick(World worldIn, EntityPlayer playerIn, @Nonnull EnumHand handIn) {
         RayTraceResult result = rayTrace(worldIn, playerIn, true);
         if (result != null && result.typeOfHit == RayTraceResult.Type.BLOCK) {
-            Map<String, IFluidDrinkHandler> map = StrawHelper.getDrinkHandlers();
             BlockPos pos = result.getBlockPos();
             IBlockState state = worldIn.getBlockState(pos);
             Block block = state.getBlock();
             Fluid fluid = FluidRegistry.lookupFluidForBlock(block);
-            if (fluid != null && map.containsKey(fluid.getName())) {
-                playerIn.setActiveHand(handIn);
+            if (fluid != null) {
+                Optional<StrawHandler> handler = StrawUtils.getStrawHandler(new FluidStack(fluid, Fluid.BUCKET_VOLUME));
+                if (handler.isPresent())
+                    playerIn.setActiveHand(handIn);
                 return ActionResult.newResult(EnumActionResult.SUCCESS, playerIn.getHeldItem(handIn));
             } else if (block.hasTileEntity(state)) {
                 TileEntity tile = worldIn.getTileEntity(pos);
@@ -103,7 +106,8 @@ public class ItemStraw extends IFCustomItem {
                             FluidStack stack = properties.getContents();
                             if (stack != null) {
                                 fluid = stack.getFluid();
-                                if (fluid != null && map.containsKey(fluid.getName()) && stack.amount >= Fluid.BUCKET_VOLUME) {
+                                Optional<StrawHandler> strawHandler = StrawUtils.getStrawHandler(stack);
+                                if (fluid != null && strawHandler.isPresent() && stack.amount >= Fluid.BUCKET_VOLUME) {
                                     FluidStack out = handler.drain(stack, false);
                                     if (out != null && out.amount >= 1000) {
                                         playerIn.setActiveHand(handIn);
@@ -125,11 +129,13 @@ public class ItemStraw extends IFCustomItem {
     }
 
     @Override
+    @Nonnull
     public EnumAction getItemUseAction(ItemStack stack) {
         return EnumAction.DRINK;
     }
 
     @Override
+    @SideOnly(Side.CLIENT)
     public void addInformation(ItemStack stack, @Nullable World worldIn, List<String> tooltip, ITooltipFlag flagIn) {
         super.addInformation(stack, worldIn, tooltip, flagIn);
         tooltip.add("\"The One Who Codes\"");

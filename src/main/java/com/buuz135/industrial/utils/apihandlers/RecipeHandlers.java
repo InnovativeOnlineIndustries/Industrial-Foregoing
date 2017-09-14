@@ -1,20 +1,16 @@
 package com.buuz135.industrial.utils.apihandlers;
 
 import com.buuz135.industrial.api.IndustrialForegoingHelper;
-import com.buuz135.industrial.api.fluid.StrawHelper;
 import com.buuz135.industrial.api.recipe.BioReactorEntry;
 import com.buuz135.industrial.api.recipe.LaserDrillEntry;
 import com.buuz135.industrial.api.recipe.SludgeEntry;
-import com.buuz135.industrial.proxy.FluidsRegistry;
 import com.buuz135.industrial.utils.apihandlers.crafttweaker.CTAction;
 import com.buuz135.industrial.utils.apihandlers.plant.*;
-import com.buuz135.industrial.utils.drinkhandlers.*;
 import com.google.common.collect.LinkedListMultimap;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.NonNullList;
-import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.oredict.OreDictionary;
 
 public class RecipeHandlers {
@@ -98,17 +94,6 @@ public class RecipeHandlers {
             if (ctAction == CTAction.ADD) IndustrialForegoingHelper.addSludgeRefinerEntry(entry);
             else IndustrialForegoingHelper.removeSludgeRefinerEntry(entry.getStack());
         });
-    }
-
-    public static void registerDrinkHandlers() {
-        StrawHelper.register(FluidRegistry.WATER, new DrinkHandlerWater());
-        StrawHelper.register(FluidRegistry.LAVA, new DrinkHandlerLava());
-        StrawHelper.register(FluidsRegistry.BIOFUEL, new DrinkHandlerBiofuel());
-        StrawHelper.register(FluidsRegistry.SLUDGE, new DrinkHandlerSludge());
-        StrawHelper.register(FluidsRegistry.SEWAGE, new DrinkHandlerSewage());
-        StrawHelper.register(FluidsRegistry.MILK, new DrinkHandlerMilk());
-        StrawHelper.register(FluidsRegistry.ESSENCE, new DrinkHandlerEssence());
-        StrawHelper.register(FluidsRegistry.MEAT, new DrinkHandlerMeat());
     }
 
     public static void checkAndAddLaserDrill(int meta, String oreDict, int weight) {
