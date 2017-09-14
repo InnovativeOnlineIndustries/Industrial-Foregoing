@@ -15,4 +15,8 @@ public abstract class StrawHandler extends IForgeRegistryEntry.Impl<StrawHandler
     public abstract boolean validFluid(FluidStack stack);
 
     public abstract void onDrink(World world, BlockPos pos, FluidStack stack, EntityPlayer player, boolean fromFluidContainer);
+
+    public int getPriority() {
+        return 0;
+    }
 }
