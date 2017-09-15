@@ -12,10 +12,8 @@ import net.minecraft.block.state.IBlockState;
 import net.minecraft.item.EnumDyeColor;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.IFluidTank;
 import net.minecraftforge.items.ItemHandlerHelper;
@@ -109,37 +107,6 @@ public class CropRecolectorTile extends WorkingAreaElectricMachine {
         else pointer = compound.getInteger(NBT_POINTER);
     }
 
-    public void checkForTrees(World world, BlockPos current) {
-        Stack<BlockPos> tree = new Stack<>();
-        tree.push(current);
-        while (!tree.isEmpty()) {
-            BlockPos checking = tree.pop();
-            if (BlockUtils.isLog(world, checking) || BlockUtils.isLeaves(world, checking)) {
-                Iterable<BlockPos> area = BlockPos.getAllInBox(checking.offset(EnumFacing.DOWN).offset(EnumFacing.SOUTH).offset(EnumFacing.WEST), checking.offset(EnumFacing.UP).offset(EnumFacing.NORTH).offset(EnumFacing.EAST));
-                for (BlockPos blockPos : area) {
-                    if (BlockUtils.isLog(world, blockPos) && !woodCache.contains(blockPos) && blockPos.distanceSq(pos.getX(), pos.getY(), pos.getZ()) <= 1000) {
-                        tree.push(blockPos);
-                        woodCache.add(blockPos);
-                    } else if (BlockUtils.isLeaves(world, blockPos) && !leavesCache.contains(blockPos) && blockPos.distanceSq(pos.getX(), pos.getY(), pos.getZ()) <= 1000) {
-                        tree.push(blockPos);
-                        leavesCache.add(blockPos);
-                    }
-                }
-            }
-        }
-    }
-
-    private boolean canInsertAll(List<ItemStack> drops, ItemStackHandler outItems) {
-        boolean canInsert = true;
-        for (ItemStack stack : drops) {
-            if (!ItemHandlerHelper.insertItem(outItems, stack, true).isEmpty()) {
-                canInsert = false;
-                break;
-            }
-        }
-        return canInsert;
-    }
-
     private void insertItems(List<ItemStack> drops, ItemStackHandler outItems) {
         for (ItemStack stack : drops) {
             ItemHandlerHelper.insertItem(outItems, stack, false);
@@ -147,21 +114,6 @@ public class CropRecolectorTile extends WorkingAreaElectricMachine {
         sludge.fill(new FluidStack(FluidsRegistry.SLUDGE, ((CropRecolectorBlock) this.getBlockType()).getSludgeOperation() * drops.size()), true);
     }
 
-    private void chop(Queue<BlockPos> cache) {
-        BlockPos p = cache.peek();
-        if (BlockUtils.isLeaves(world, p) || BlockUtils.isLog(world, p)) {
-            IBlockState s = world.getBlockState(p);
-            List<ItemStack> drops = s.getBlock().getDrops(world, p, s, 0);
-            for (ItemStack drop : drops) {
-                if (!ItemHandlerHelper.insertItem(outItems, drop, true).isEmpty()) break;
-                ItemHandlerHelper.insertItem(outItems, drop, false);
-            }
-            world.setBlockToAir(p);
-            sludge.fill(new FluidStack(FluidsRegistry.SLUDGE, ((CropRecolectorBlock) this.getBlockType()).getSludgeOperation()), true);
-
-        }
-        cache.poll();
-    }
 
     @Override
     protected boolean acceptsFluidItem(ItemStack stack) {

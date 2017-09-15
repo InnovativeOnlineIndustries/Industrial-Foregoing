@@ -5,15 +5,18 @@ import com.buuz135.industrial.proxy.ItemRegistry;
 import com.buuz135.industrial.tile.world.LaserBaseTile;
 import com.buuz135.industrial.utils.RecipeUtils;
 import net.minecraft.block.material.Material;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
+import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.World;
 import net.minecraftforge.common.config.Configuration;
 import net.ndrei.teslacorelib.items.MachineCaseItem;
 
 public class LaserBaseBlock extends CustomOrientedBlock<LaserBaseTile> {
 
     private int workNeeded;
-    //private Multimap<Integer, ItemStackWeightedItem> coloreOres;
     private int lenseChanceIncrease;
 
     public LaserBaseBlock() {
@@ -32,7 +35,6 @@ public class LaserBaseBlock extends CustomOrientedBlock<LaserBaseTile> {
         return workNeeded;
     }
 
-
     public int getLenseChanceIncrease() {
         return lenseChanceIncrease;
     }
@@ -44,6 +46,15 @@ public class LaserBaseBlock extends CustomOrientedBlock<LaserBaseTile> {
                 'g', "gearGold",
                 'd', "gearDiamond",
                 'm', MachineCaseItem.INSTANCE);
+    }
+
+    @Override
+    public void breakBlock(World worldIn, BlockPos pos, IBlockState state) {
+        TileEntity entity = worldIn.getTileEntity(pos);
+        if (entity != null && entity instanceof LaserBaseTile) {
+            ((LaserBaseTile) entity).onBlockBroken();
+        }
+        super.breakBlock(worldIn, pos, state);
     }
 }
 
