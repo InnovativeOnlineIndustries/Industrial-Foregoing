@@ -5,6 +5,7 @@
 + Added a Villager Trade Exchanger that trades with villagers automatically
 + Added JEI Handler to show how much power it would produce something in the Petrified Fuel Generator
 + Added Pink Slime Entity
++ Fixed [#47](https://github.com/Buuz135/Industrial-Foregoing/issues/47)
 
 #1.2.1
 + Fixed issue [#37](https://github.com/Buuz135/Industrial-Foregoing/issues/37)
