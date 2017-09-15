@@ -176,15 +176,19 @@ public class ItemStackUtils {
     public static void processFluidItems(ItemStackHandler fluidItems, IFluidTank tank) {
         ItemStack stack = fluidItems.getStackInSlot(0);
         if (!stack.isEmpty() && fluidItems.getStackInSlot(1).isEmpty()) {
-            int filled;
+            int filled = 0;
             if (stack.getItem().equals(Items.BUCKET) && tank.getFluidAmount() >= 1000) {
                 filled = 1000;
-                fluidItems.setStackInSlot(1, FluidUtil.getFilledBucket(tank.getFluid()));
+                ItemStack stack1 = FluidUtil.getFilledBucket(tank.getFluid());
+                stack1.setCount(1);
+                fluidItems.setStackInSlot(1, stack1);
                 stack.shrink(1);
-            } else {
-                IFluidHandlerItem cap = stack.getCapability(CapabilityFluidHandler.FLUID_HANDLER_ITEM_CAPABILITY, null);
+            } else if (!stack.getItem().equals(Items.BUCKET)) {
+                ItemStack stack1 = stack.copy();
+                stack1.setCount(1);
+                IFluidHandlerItem cap = stack1.getCapability(CapabilityFluidHandler.FLUID_HANDLER_ITEM_CAPABILITY, null);
                 filled = cap.fill(tank.getFluid(), true);
-                fluidItems.setStackInSlot(1, stack.copy());
+                fluidItems.setStackInSlot(1, stack1);
                 stack.shrink(1);
             }
             tank.drain(filled, true);
