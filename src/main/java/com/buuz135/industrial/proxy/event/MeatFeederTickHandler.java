@@ -1,6 +1,7 @@
-package com.buuz135.industrial.proxy;
+package com.buuz135.industrial.proxy.event;
 
 import com.buuz135.industrial.item.MeatFeederItem;
+import com.buuz135.industrial.proxy.ItemRegistry;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.event.entity.living.LivingEvent;

@@ -3,6 +3,9 @@ package com.buuz135.industrial.proxy;
 import com.buuz135.industrial.IndustrialForegoing;
 import com.buuz135.industrial.config.CustomConfiguration;
 import com.buuz135.industrial.entity.EntityPinkSlime;
+import com.buuz135.industrial.proxy.event.MeatFeederTickHandler;
+import com.buuz135.industrial.proxy.event.MobDeathHandler;
+import com.buuz135.industrial.proxy.event.WorldTickHandler;
 import com.buuz135.industrial.registry.IFRegistries;
 import com.buuz135.industrial.utils.CraftingUtils;
 import com.buuz135.industrial.utils.RecipeUtils;
@@ -38,6 +41,7 @@ public class CommonProxy {
         MinecraftForge.EVENT_BUS.register(new StrawRegistry());
         MinecraftForge.EVENT_BUS.register(new MeatFeederTickHandler());
         MinecraftForge.EVENT_BUS.register(new MobDeathHandler());
+        MinecraftForge.EVENT_BUS.register(new WorldTickHandler());
 
         CustomConfiguration.config = new Configuration(event.getSuggestedConfigurationFile());
 
