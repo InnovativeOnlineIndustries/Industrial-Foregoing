@@ -1,6 +1,7 @@
 package com.buuz135.industrial.tile.misc;
 
 import com.buuz135.industrial.proxy.BlockRegistry;
+import com.buuz135.industrial.tile.CustomSidedTileEntity;
 import com.buuz135.industrial.utils.WorkUtils;
 import net.minecraft.inventory.InventoryHelper;
 import net.minecraft.item.EnumDyeColor;
@@ -17,12 +18,11 @@ import net.ndrei.teslacorelib.gui.LockedInventoryTogglePiece;
 import net.ndrei.teslacorelib.inventory.BoundingRectangle;
 import net.ndrei.teslacorelib.inventory.ColoredItemHandler;
 import net.ndrei.teslacorelib.inventory.LockableItemHandler;
-import net.ndrei.teslacorelib.tileentities.SidedTileEntity;
 
 import javax.annotation.Nonnull;
 import java.util.List;
 
-public class BlackHoleControllerTile extends SidedTileEntity {
+public class BlackHoleControllerTile extends CustomSidedTileEntity {
 
     private LockableItemHandler input;
     private ItemStackHandler storage;

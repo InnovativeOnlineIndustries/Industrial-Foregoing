@@ -1,6 +1,7 @@
 package com.buuz135.industrial.tile.world;
 
 import com.buuz135.industrial.proxy.FluidsRegistry;
+import com.buuz135.industrial.tile.CustomSidedTileEntity;
 import com.buuz135.industrial.utils.BlockUtils;
 import com.buuz135.industrial.utils.ItemStackUtils;
 import com.buuz135.industrial.utils.WorkUtils;
@@ -13,13 +14,12 @@ import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.IFluidTank;
 import net.minecraftforge.items.ItemStackHandler;
 import net.ndrei.teslacorelib.inventory.BoundingRectangle;
-import net.ndrei.teslacorelib.tileentities.SidedTileEntity;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
-public class TreeFluidExtractorTile extends SidedTileEntity {
+public class TreeFluidExtractorTile extends CustomSidedTileEntity {
 
     private IFluidTank tank;
     private int tick;

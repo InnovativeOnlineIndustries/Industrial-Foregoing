@@ -20,7 +20,7 @@ public class LaserDrillBlock extends CustomOrientedBlock<LaserDrillTile> {
                 'l', ItemRegistry.laserLensItem,
                 'g', "blockGlassColorless",
                 'w', Blocks.GLOWSTONE,
-                'o', "gearGold",
+                'o', "gearDiamond",
                 'm', MachineCaseItem.INSTANCE);
     }
 }

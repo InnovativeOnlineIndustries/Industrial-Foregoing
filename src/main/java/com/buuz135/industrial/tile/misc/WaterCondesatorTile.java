@@ -1,5 +1,6 @@
 package com.buuz135.industrial.tile.misc;
 
+import com.buuz135.industrial.tile.CustomSidedTileEntity;
 import com.buuz135.industrial.utils.ItemStackUtils;
 import com.buuz135.industrial.utils.WorkUtils;
 import net.minecraft.block.state.IBlockState;
@@ -11,9 +12,8 @@ import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.IFluidTank;
 import net.minecraftforge.items.ItemStackHandler;
 import net.ndrei.teslacorelib.inventory.BoundingRectangle;
-import net.ndrei.teslacorelib.tileentities.SidedTileEntity;
 
-public class WaterCondesatorTile extends SidedTileEntity {
+public class WaterCondesatorTile extends CustomSidedTileEntity {
 
     private IFluidTank fluidTank;
 

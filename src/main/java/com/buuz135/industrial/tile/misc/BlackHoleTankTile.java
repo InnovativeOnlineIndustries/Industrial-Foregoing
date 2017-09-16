@@ -2,6 +2,7 @@ package com.buuz135.industrial.tile.misc;
 
 import com.buuz135.industrial.proxy.client.infopiece.BlackHoleInfoPiece;
 import com.buuz135.industrial.proxy.client.infopiece.IHasDisplayStack;
+import com.buuz135.industrial.tile.CustomSidedTileEntity;
 import net.minecraft.init.Items;
 import net.minecraft.item.EnumDyeColor;
 import net.minecraft.item.ItemStack;
@@ -11,11 +12,10 @@ import net.minecraftforge.fluids.IFluidTank;
 import net.ndrei.teslacorelib.gui.BasicTeslaGuiContainer;
 import net.ndrei.teslacorelib.gui.IGuiContainerPiece;
 import net.ndrei.teslacorelib.inventory.BoundingRectangle;
-import net.ndrei.teslacorelib.tileentities.SidedTileEntity;
 
 import java.util.List;
 
-public class BlackHoleTankTile extends SidedTileEntity implements IHasDisplayStack {
+public class BlackHoleTankTile extends CustomSidedTileEntity implements IHasDisplayStack {
 
     private IFluidTank tank;
 

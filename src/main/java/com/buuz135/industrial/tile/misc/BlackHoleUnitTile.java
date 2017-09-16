@@ -2,6 +2,7 @@ package com.buuz135.industrial.tile.misc;
 
 import com.buuz135.industrial.proxy.client.infopiece.BlackHoleInfoPiece;
 import com.buuz135.industrial.proxy.client.infopiece.IHasDisplayStack;
+import com.buuz135.industrial.tile.CustomSidedTileEntity;
 import com.buuz135.industrial.utils.WorkUtils;
 import net.minecraft.item.EnumDyeColor;
 import net.minecraft.item.Item;
@@ -18,12 +19,11 @@ import net.ndrei.teslacorelib.gui.LockedInventoryTogglePiece;
 import net.ndrei.teslacorelib.inventory.BoundingRectangle;
 import net.ndrei.teslacorelib.inventory.ColoredItemHandler;
 import net.ndrei.teslacorelib.inventory.LockableItemHandler;
-import net.ndrei.teslacorelib.tileentities.SidedTileEntity;
 
 import javax.annotation.Nonnull;
 import java.util.List;
 
-public class BlackHoleUnitTile extends SidedTileEntity implements IHasDisplayStack {
+public class BlackHoleUnitTile extends CustomSidedTileEntity implements IHasDisplayStack {
 
     public static final String NBT_ITEMSTACK = "itemstack";
     public static final String NBT_AMOUNT = "amount";

@@ -5,6 +5,7 @@ import com.buuz135.industrial.item.LaserLensItem;
 import com.buuz135.industrial.proxy.BlockRegistry;
 import com.buuz135.industrial.proxy.client.infopiece.LaserBaseInfoPiece;
 import com.buuz135.industrial.tile.CustomColoredItemHandler;
+import com.buuz135.industrial.tile.CustomSidedTileEntity;
 import com.buuz135.industrial.tile.block.LaserBaseBlock;
 import com.buuz135.industrial.utils.ItemStackWeightedItem;
 import net.minecraft.item.EnumDyeColor;
@@ -17,12 +18,11 @@ import net.minecraftforge.items.ItemStackHandler;
 import net.ndrei.teslacorelib.gui.BasicTeslaGuiContainer;
 import net.ndrei.teslacorelib.gui.IGuiContainerPiece;
 import net.ndrei.teslacorelib.inventory.SyncProviderLevel;
-import net.ndrei.teslacorelib.tileentities.SidedTileEntity;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class LaserBaseTile extends SidedTileEntity {
+public class LaserBaseTile extends CustomSidedTileEntity {
 
     private static String NBT_CURRENT = "currentWork";
 
