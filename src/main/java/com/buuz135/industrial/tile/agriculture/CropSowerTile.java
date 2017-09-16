@@ -132,7 +132,7 @@ public class CropSowerTile extends WorkingAreaElectricMachine {
     @Override
     public List<IGuiContainerPiece> getGuiContainerPieces(BasicTeslaGuiContainer container) {
         List<IGuiContainerPiece> pieces = super.getGuiContainerPieces(container);
-        pieces.add(new LockedInventoryTogglePiece(18 * 6 + 2, 27, this, EnumDyeColor.GREEN));
+        pieces.add(1, new LockedInventoryTogglePiece(18 * 6 + 2, 27, this, EnumDyeColor.GREEN));
         return pieces;
     }
 

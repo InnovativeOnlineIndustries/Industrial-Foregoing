@@ -31,7 +31,7 @@ public class SewageCompostSolidifierTile extends CustomElectricMachine {
                 SewageCompostSolidifierTile.this.markDirty();
             }
         };
-        this.addInventory(new CustomColoredItemHandler(outFertilizer, EnumDyeColor.ORANGE, "Fertilizer output", 18 * 5 + 3, 25, 4, 3) {
+        this.addInventory(new CustomColoredItemHandler(outFertilizer, EnumDyeColor.ORANGE, "Output Items", 18 * 5 + 3, 25, 4, 3) {
             @Override
             public boolean canInsertItem(int slot, ItemStack stack) {
                 return false;

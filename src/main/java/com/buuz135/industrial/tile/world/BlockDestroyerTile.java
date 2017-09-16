@@ -32,7 +32,7 @@ public class BlockDestroyerTile extends WorkingAreaElectricMachine {
                 BlockDestroyerTile.this.markDirty();
             }
         };
-        this.addInventory(new CustomColoredItemHandler(outItems, EnumDyeColor.ORANGE, "Broken items", 18 * 3, 25, 6, 3) {
+        this.addInventory(new CustomColoredItemHandler(outItems, EnumDyeColor.ORANGE, "Output items", 18 * 3, 25, 6, 3) {
             @Override
             public boolean canInsertItem(int slot, ItemStack stack) {
                 return false;

@@ -9,6 +9,7 @@ import net.minecraft.init.Items;
 import net.minecraft.item.EnumDyeColor;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.NBTTagInt;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.common.brewing.BrewingRecipeRegistry;
@@ -23,6 +24,7 @@ import net.ndrei.teslacorelib.gui.LockedInventoryTogglePiece;
 import net.ndrei.teslacorelib.inventory.BoundingRectangle;
 import net.ndrei.teslacorelib.inventory.ColoredItemHandler;
 import net.ndrei.teslacorelib.inventory.LockableItemHandler;
+import net.ndrei.teslacorelib.inventory.SyncProviderLevel;
 
 import java.util.Arrays;
 import java.util.List;
@@ -94,6 +96,7 @@ public class PotionEnervatorTile extends CustomElectricMachine {
             }
         });
         this.addInventoryToStorage(inputIngredients, "pot_ener_in");
+        registerSyncIntPart(NBT_ACTION, nbtTagInt -> action = nbtTagInt.getInt(), () -> new NBTTagInt(action), SyncProviderLevel.GUI);
     }
 
     private void initOutputInventories() {
@@ -128,11 +131,9 @@ public class PotionEnervatorTile extends CustomElectricMachine {
     @Override
     public List<IGuiContainerPiece> getGuiContainerPieces(BasicTeslaGuiContainer container) {
         List<IGuiContainerPiece> pieces = super.getGuiContainerPieces(container);
-        pieces.add(new LockedInventoryTogglePiece(18 * 7 + 9, 83, this, EnumDyeColor.ORANGE));
         pieces.add(new BasicRenderedGuiPiece(0, 0, 16, 16, new ResourceLocation(Reference.MOD_ID, "textures/gui/machines.png"), 16, 16) {
             @Override
             public void drawBackgroundLayer(BasicTeslaGuiContainer container, int guiX, int guiY, float partialTicks, int mouseX, int mouseY) {
-                //super.drawBackgroundLayer(container, guiX, guiY, partialTicks, mouseX, mouseY);
                 container.mc.getTextureManager().bindTexture(new ResourceLocation(Reference.MOD_ID, "textures/gui/machines.png"));
                 if (action == 0) {
                     container.drawTexturedRect(18 * 4 + 11, 44, 78, 16 * 3, 15, 15);
@@ -156,7 +157,7 @@ public class PotionEnervatorTile extends CustomElectricMachine {
         pieces.add(new BasicRenderedGuiPiece(18 * 4 + 10, 25 + 18 * 2, 0, 0, new ResourceLocation(Reference.MOD_ID, "textures/gui/machines.png"), 0, 0) {
             @Override
             public void drawBackgroundLayer(BasicTeslaGuiContainer container, int guiX, int guiY, float partialTicks, int mouseX, int mouseY) {
-                super.drawBackgroundLayer(container, guiX, guiY, partialTicks, mouseX, mouseY);
+                //super.drawBackgroundLayer(container, guiX, guiY, partialTicks, mouseX, mouseY);
             }
 
             @Override
@@ -184,7 +185,7 @@ public class PotionEnervatorTile extends CustomElectricMachine {
                 }
             }
         });
-
+        pieces.add(1, new LockedInventoryTogglePiece(18 * 7 + 9, 83, this, EnumDyeColor.ORANGE));
         return pieces;
     }
 
@@ -194,6 +195,7 @@ public class PotionEnervatorTile extends CustomElectricMachine {
         if (action > 5) action = 0;
         if (action != 0 && outputPotions.getStackInSlot(0).isEmpty() && outputPotions.getStackInSlot(1).isEmpty() && outputPotions.getStackInSlot(2).isEmpty()) {
             action = 0;
+            partialSync(NBT_ACTION, true);
             return 1;
         }
         if (action == 0 && inputGlassBottles.getStackInSlot(0).getCount() >= 3 && ItemHandlerHelper.insertItem(outputPotions, new ItemStack(Items.POTIONITEM, 3), true).isEmpty() && fluidTank.getFluidAmount() >= 3000) { //DUMMY STACK
@@ -201,11 +203,11 @@ public class PotionEnervatorTile extends CustomElectricMachine {
             NBTTagCompound c = new NBTTagCompound();
             c.setString("Potion", "minecraft:water");
             bottles.setTagCompound(c);
-            //bottles.setTagCompound(new PotionItems().fixTagCompound(bottles.getTagCompound() == null ? new NBTTagCompound() : bottles.getTagCompound()));
             ItemHandlerHelper.insertItem(outputPotions, bottles, false);
             fluidTank.drain(3000, true);
             inputGlassBottles.getStackInSlot(0).setCount(inputGlassBottles.getStackInSlot(0).getCount() - 3);
             action = 1;
+            partialSync(NBT_ACTION, true);
             return 1;
         } else if (action > 0) {
             ItemStack ingredient = inputIngredients.getStackInSlot(action - 1);
@@ -220,6 +222,7 @@ public class PotionEnervatorTile extends CustomElectricMachine {
                     ++action;
                     ingredient.setCount(ingredient.getCount() - 1);
                     if (action > 5) action = 0;
+                    partialSync(NBT_ACTION, true);
                     return 1;
                 }
             }

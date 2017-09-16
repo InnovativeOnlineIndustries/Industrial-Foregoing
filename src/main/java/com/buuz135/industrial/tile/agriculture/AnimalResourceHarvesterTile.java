@@ -1,7 +1,6 @@
 package com.buuz135.industrial.tile.agriculture;
 
 import com.buuz135.industrial.IndustrialForegoing;
-import com.buuz135.industrial.proxy.FluidsRegistry;
 import com.buuz135.industrial.tile.CustomColoredItemHandler;
 import com.buuz135.industrial.tile.WorkingAreaElectricMachine;
 import com.buuz135.industrial.utils.ItemStackUtils;
@@ -21,7 +20,7 @@ import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
 import net.minecraftforge.fluids.capability.IFluidHandlerItem;
 import net.minecraftforge.items.ItemHandlerHelper;
 import net.minecraftforge.items.ItemStackHandler;
-import net.ndrei.teslacorelib.inventory.BoundingRectangle;
+import net.ndrei.teslacorelib.inventory.FluidTankType;
 
 import java.util.List;
 
@@ -37,14 +36,14 @@ public class AnimalResourceHarvesterTile extends WorkingAreaElectricMachine {
     @Override
     protected void initializeInventories() {
         super.initializeInventories();
-        tank = this.addFluidTank(FluidsRegistry.MILK, 8000, EnumDyeColor.WHITE, "Milk tank", new BoundingRectangle(50, 25, 18, 54));
+        tank = this.addSimpleFluidTank(8000, "tank", EnumDyeColor.WHITE, 50, 25, FluidTankType.OUTPUT, fluidStack -> null, fluidStack -> true);
         outItems = new ItemStackHandler(3 * 4) {
             @Override
             protected void onContentsChanged(int slot) {
                 AnimalResourceHarvesterTile.this.markDirty();
             }
         };
-        this.addInventory(new CustomColoredItemHandler(outItems, EnumDyeColor.ORANGE, "Fish output", 18 * 5 + 3, 25, 4, 3) {
+        this.addInventory(new CustomColoredItemHandler(outItems, EnumDyeColor.ORANGE, "Output Items", 18 * 5 + 3, 25, 4, 3) {
             @Override
             public boolean canInsertItem(int slot, ItemStack stack) {
                 return false;

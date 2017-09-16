@@ -64,7 +64,7 @@ public class BioReactorTile extends CustomElectricMachine {
     public List<IGuiContainerPiece> getGuiContainerPieces(BasicTeslaGuiContainer container) {
         List<IGuiContainerPiece> pieces = super.getGuiContainerPieces(container);
         pieces.add(new BioreactorEfficiencyInfoPiece(this, 149, 25));
-        pieces.add(new LockedInventoryTogglePiece(18 * 7 + 9, 83, this, EnumDyeColor.BLUE));
+        pieces.add(1, new LockedInventoryTogglePiece(18 * 7 + 9, 83, this, EnumDyeColor.BLUE));
         return pieces;
     }
 

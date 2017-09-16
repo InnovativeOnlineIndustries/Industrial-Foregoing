@@ -10,11 +10,13 @@ import com.buuz135.industrial.utils.ItemStackWeightedItem;
 import net.minecraft.item.EnumDyeColor;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.NBTTagInt;
 import net.minecraft.util.WeightedRandom;
 import net.minecraftforge.items.ItemHandlerHelper;
 import net.minecraftforge.items.ItemStackHandler;
 import net.ndrei.teslacorelib.gui.BasicTeslaGuiContainer;
 import net.ndrei.teslacorelib.gui.IGuiContainerPiece;
+import net.ndrei.teslacorelib.inventory.SyncProviderLevel;
 import net.ndrei.teslacorelib.tileentities.SidedTileEntity;
 
 import java.util.ArrayList;
@@ -73,6 +75,7 @@ public class LaserBaseTile extends SidedTileEntity {
             }
         });
         this.addInventoryToStorage(outItems, "outItems");
+        registerSyncIntPart(NBT_CURRENT, nbtTagInt -> currentWork = nbtTagInt.getInt(), () -> new NBTTagInt(currentWork), SyncProviderLevel.GUI);
     }
 
     @Override
@@ -128,6 +131,7 @@ public class LaserBaseTile extends SidedTileEntity {
     }
 
     public void increaseWork() {
+        partialSync(NBT_CURRENT, true);
         ++currentWork;
     }
 

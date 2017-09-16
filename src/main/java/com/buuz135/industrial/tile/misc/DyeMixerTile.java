@@ -11,6 +11,7 @@ import net.minecraft.inventory.Slot;
 import net.minecraft.item.EnumDyeColor;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.NBTTagInt;
 import net.minecraftforge.items.ItemHandlerHelper;
 import net.minecraftforge.items.ItemStackHandler;
 import net.ndrei.teslacorelib.containers.BasicTeslaContainer;
@@ -20,6 +21,7 @@ import net.ndrei.teslacorelib.gui.IGuiContainerPiece;
 import net.ndrei.teslacorelib.gui.TiledRenderedGuiPiece;
 import net.ndrei.teslacorelib.inventory.BoundingRectangle;
 import net.ndrei.teslacorelib.inventory.ColoredItemHandler;
+import net.ndrei.teslacorelib.inventory.SyncProviderLevel;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -133,6 +135,9 @@ public class DyeMixerTile extends CustomElectricMachine {
             }
         });
         this.addInventoryToStorage(output, "output");
+        registerSyncIntPart("red", nbtTagInt -> r = nbtTagInt.getInt(), () -> new NBTTagInt(r), SyncProviderLevel.GUI);
+        registerSyncIntPart("green", nbtTagInt -> g = nbtTagInt.getInt(), () -> new NBTTagInt(g), SyncProviderLevel.GUI);
+        registerSyncIntPart("blue", nbtTagInt -> b = nbtTagInt.getInt(), () -> new NBTTagInt(b), SyncProviderLevel.GUI);
     }
 
     @Override
@@ -174,6 +179,9 @@ public class DyeMixerTile extends CustomElectricMachine {
                     g -= usage.getG();
                     b -= usage.getB();
                     ItemHandlerHelper.insertItem(output, out, false);
+                    partialSync("red", true);
+                    partialSync("green", true);
+                    partialSync("blue", true);
                     return 1;
                 }
             }
