@@ -42,6 +42,12 @@
       "custom": {
         "fluid": "latex"
       }
+    },
+    "if.pink_slime": {
+      "model": "forge:fluid",
+      "custom": {
+        "fluid": "if.pink_slime"
+      }
     }
   }
 }

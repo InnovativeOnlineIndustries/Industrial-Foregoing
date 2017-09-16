@@ -11,6 +11,7 @@ public class FluidsRegistry {
     public static IFCustomFluid SEWAGE;
     public static IFCustomFluid SLUDGE;
     public static IFCustomFluid BIOFUEL;
+    public static IFCustomFluid PINK_SLIME;
 
     public static void registerFluids() {
         (ESSENCE = new IFCustomFluid("essence")).register();
@@ -20,6 +21,7 @@ public class FluidsRegistry {
         (SEWAGE = new IFCustomFluid("sewage")).register();
         (SLUDGE = new IFCustomFluid("sludge")).register();
         (BIOFUEL = new IFCustomFluid("biofuel")).register();
+        (PINK_SLIME = new IFCustomFluid("if.pink_slime")).register();
     }
 
 
