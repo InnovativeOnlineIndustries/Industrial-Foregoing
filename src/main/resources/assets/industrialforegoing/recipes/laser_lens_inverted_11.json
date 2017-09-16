@@ -1,0 +1,21 @@
+{
+  "result": {
+    "item": "industrialforegoing:laser_lens_inverted",
+    "data": 11
+  },
+  "pattern": [
+    " i ",
+    "ipi",
+    " i "
+  ],
+  "type": "minecraft:crafting_shaped",
+  "key": {
+    "p": {
+      "item": "minecraft:stained_glass_pane",
+      "data": 11
+    },
+    "i": {
+      "item": "minecraft:iron_ingot"
+    }
+  }
+}

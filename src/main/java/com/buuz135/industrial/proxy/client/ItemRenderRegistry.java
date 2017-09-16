@@ -13,6 +13,7 @@ public class ItemRenderRegistry {
         strawItem.registerRender();
         fertilizer.registerRender();
         laserLensItem.registerRender();
+        laserLensItem_inverted.registerRender();
         pinkSlime.registerRender();
 
         adultFilterAddomItem.registerRenderer();

@@ -20,6 +20,7 @@ public class ItemRegistry {
     public static IFCustomItem plastic;
     public static IFCustomItem fertilizer;
     public static LaserLensItem laserLensItem;
+    public static LaserLensItem laserLensItem_inverted;
     public static IFCustomItem pinkSlime;
 
     public static ItemStraw strawItem;
@@ -38,7 +39,8 @@ public class ItemRegistry {
         (fertilizer = new IFCustomItem("fertilizer")).register(itemRegistry);
         (meatFeederItem = new MeatFeederItem()).register(itemRegistry);
         (mobImprisonmentToolItem = new MobImprisonmentToolItem()).register(itemRegistry);
-        (laserLensItem = new LaserLensItem()).register(itemRegistry);
+        (laserLensItem = new LaserLensItem(false)).register(itemRegistry);
+        (laserLensItem_inverted = new LaserLensItem(true)).register(itemRegistry);
         (strawItem = new ItemStraw()).register(itemRegistry);
         (pinkSlime = new IFCustomItem("pink_slime")).register(itemRegistry);
 
@@ -48,6 +50,7 @@ public class ItemRegistry {
         meatFeederItem.createRecipe();
         mobImprisonmentToolItem.createRecipe();
         laserLensItem.createRecipe();
+        laserLensItem_inverted.createRecipe();
         adultFilterAddomItem.createRecipe();
         rangeAddonItem.createRecipe();
     }

@@ -1,8 +1,8 @@
 package com.buuz135.industrial.tile.world;
 
 import com.buuz135.industrial.api.recipe.LaserDrillEntry;
+import com.buuz135.industrial.item.LaserLensItem;
 import com.buuz135.industrial.proxy.BlockRegistry;
-import com.buuz135.industrial.proxy.ItemRegistry;
 import com.buuz135.industrial.proxy.client.infopiece.LaserBaseInfoPiece;
 import com.buuz135.industrial.tile.CustomColoredItemHandler;
 import com.buuz135.industrial.tile.block.LaserBaseBlock;
@@ -45,7 +45,7 @@ public class LaserBaseTile extends SidedTileEntity {
         this.addInventory(new CustomColoredItemHandler(lensItems, EnumDyeColor.GREEN, "Lens items", 18 * 2, 25, 2, 3) {
             @Override
             public boolean canInsertItem(int slot, ItemStack stack) {
-                return stack.getItem().equals(ItemRegistry.laserLensItem);
+                return stack.getItem() instanceof LaserLensItem;
             }
 
             @Override
@@ -90,8 +90,10 @@ public class LaserBaseTile extends SidedTileEntity {
             LaserDrillEntry.LASER_DRILL_ENTRIES.forEach(entry -> {
                 int increase = 0;
                 for (int i = 0; i < lensItems.getSlots(); ++i) {
-                    if (!lensItems.getStackInSlot(i).isEmpty() && lensItems.getStackInSlot(i).getMetadata() == entry.getLaserMeta()) {
-                        increase += BlockRegistry.laserBaseBlock.getLenseChanceIncrease();
+                    if (!lensItems.getStackInSlot(i).isEmpty() && lensItems.getStackInSlot(i).getMetadata() == entry.getLaserMeta() && lensItems.getStackInSlot(i).getItem() instanceof LaserLensItem) {
+                        if (((LaserLensItem) lensItems.getStackInSlot(i).getItem()).isInverted())
+                            increase -= BlockRegistry.laserBaseBlock.getLenseChanceIncrease();
+                        else increase += BlockRegistry.laserBaseBlock.getLenseChanceIncrease();
                     }
                 }
                 items.add(new ItemStackWeightedItem(entry.getStack(), entry.getWeight() + increase));

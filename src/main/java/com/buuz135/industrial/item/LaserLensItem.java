@@ -1,6 +1,8 @@
 package com.buuz135.industrial.item;
 
+import com.buuz135.industrial.proxy.ItemRegistry;
 import com.buuz135.industrial.utils.RecipeUtils;
+import lombok.Getter;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.init.Blocks;
@@ -13,10 +15,14 @@ import net.minecraftforge.registries.IForgeRegistry;
 
 public class LaserLensItem extends IFCustomItem {
 
-    public LaserLensItem() {
-        super("laser_lens");
+    @Getter
+    private boolean inverted;
+
+    public LaserLensItem(boolean inverted) {
+        super("laser_lens" + (inverted ? "_inverted" : ""));
         setMaxStackSize(1);
         setHasSubtypes(true);
+        this.inverted = inverted;
     }
 
     @Override
@@ -32,7 +38,7 @@ public class LaserLensItem extends IFCustomItem {
 
     public void createRecipe() {
         for (int i = 0; i < 16; ++i)
-            RecipeUtils.addShapedRecipe(new ItemStack(this, 1, i), " i ", "ipi", " i ", 'i', new ItemStack(Items.IRON_INGOT),
+            RecipeUtils.addShapedRecipe(new ItemStack(this, 1, i), " i ", "ipi", " i ", 'i', inverted ? new ItemStack(Items.IRON_INGOT) : new ItemStack(ItemRegistry.pinkSlime),
                     'p', new ItemStack(Blocks.STAINED_GLASS_PANE, 1, i));
     }
 
