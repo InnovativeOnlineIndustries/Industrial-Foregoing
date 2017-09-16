@@ -16,12 +16,14 @@ import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.IFluidTank;
 import net.minecraftforge.items.ItemStackHandler;
 import net.ndrei.teslacorelib.inventory.BoundingRectangle;
+import net.ndrei.teslacorelib.inventory.FluidTankType;
 
 import java.util.List;
 
 public class MobSlaughterFactoryTile extends WorkingAreaElectricMachine {
 
     private IFluidTank outMeat;
+    private IFluidTank outPink;
 
     public MobSlaughterFactoryTile() {
         super(MobSlaughterFactoryTile.class.getName().hashCode(), 2, 1, false);
@@ -30,7 +32,8 @@ public class MobSlaughterFactoryTile extends WorkingAreaElectricMachine {
     @Override
     protected void initializeInventories() {
         super.initializeInventories();
-        outMeat = this.addFluidTank(FluidsRegistry.MEAT, 8000, EnumDyeColor.BROWN, "Meat tank", new BoundingRectangle(50, 25, 18, 54));
+        outMeat = this.addFluidTank(FluidsRegistry.MEAT, 8000, EnumDyeColor.BROWN, "Meat tank", new BoundingRectangle(46, 25, 18, 54));
+        outPink = this.addSimpleFluidTank(8000, "Pink Slime Tank", EnumDyeColor.PINK, 46 + 20, 25, FluidTankType.OUTPUT, fluidStack -> null, fluidStack -> true);
     }
 
     @Override
@@ -49,6 +52,7 @@ public class MobSlaughterFactoryTile extends WorkingAreaElectricMachine {
         if (mobs.size() == 0) return 0;
         EntityLiving mob = mobs.get(this.getWorld().rand.nextInt(mobs.size()));
         this.outMeat.fill(new FluidStack(FluidsRegistry.MEAT, (int) (mob.getHealth() * ((MobSlaughterFactoryBlock) this.getBlockType()).getMeatValue())), true);
+        this.outPink.fill(new FluidStack(FluidsRegistry.PINK_SLIME, (int) mob.getHealth()), true);
         mob.setDropItemsWhenDead(false);
         mob.attackEntityFrom(CommonProxy.custom, mob.getMaxHealth());
 

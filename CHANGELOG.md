@@ -5,6 +5,7 @@
 + Added Pink Slime Entity
 + Fixed [#47](https://github.com/Buuz135/Industrial-Foregoing/issues/47), [#45](https:/github.com/Buuz135/Industrial-Foregoing/issues/45), [#19](https://github.com/Buuz135/Industrial-Foregoing/issues/19), [#40](https://github.com/Buuz135/Industrial-Foregoing/issues/40), [#43](https://github.com/Buuz135/Industrial-Foregoing/issues/43)
 + Improved Block break rendering for the Tree Fluid Extractor and now its shared between blocks
++ Added Pink Slime Creation in the Mob Slaughter Factory
 
 #1.2.1
 + Fixed issue [#37](https://github.com/Buuz135/Industrial-Foregoing/issues/37)
