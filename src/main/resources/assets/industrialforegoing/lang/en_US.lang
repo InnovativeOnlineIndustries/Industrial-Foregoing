@@ -58,6 +58,7 @@ fluid.sewage=Sewage
 fluid.sludge=Sludge
 fluid.biofuel=Biofuel
 fluid.latex=Latex
+fluid.if.pink_slime=Pink Slime
 
 item.industrialforegoing_meat_feeder.name=Meat Feeder
 item.industrialforegoing_mob_imprisonment_tool.name=Mob Imprisonment Tool
@@ -66,6 +67,7 @@ item.industrialforegoing_dryrubber.name=Dry Rubber
 item.industrialforegoing_plastic.name=Plastic
 item.industrialforegoing_fertilizer.name=Fertilizer
 item.industrialforegoing_laser_lens.name=Laser Lens
+item.industrialforegoing_laser_lens_inverted.name=Laser Lens (Inverted)
 item.industrialforegoing.range_addon.name=Range Addon
 item.industrialforegoing.adult_filter.name=Adult Filter
 item.industrialforegoing_redstone_inverted.name=Inverted Redstone Control
