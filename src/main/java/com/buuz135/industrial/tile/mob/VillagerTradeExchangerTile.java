@@ -66,7 +66,7 @@ public class VillagerTradeExchangerTile extends CustomElectricMachine {
 
     @Override
     protected float performWork() {
-        if (merchantRecipes != null) {
+        if (merchantRecipes != null && merchantRecipes.size() > current) {
             MerchantRecipe recipe = merchantRecipes.get(current);
             if (ItemHandlerHelper.insertItem(output, recipe.getItemToSell().copy(), true).isEmpty()) {
                 if (recipe.getItemToBuy().isItemEqual(input.getStackInSlot(0)) && input.getStackInSlot(0).getCount() >= recipe.getItemToBuy().getCount()) {
@@ -102,7 +102,7 @@ public class VillagerTradeExchangerTile extends CustomElectricMachine {
         pieces.add(new ArrowInfoPiece(138, 28, 17, 56, "Select previous trade") {
             @Override
             protected void clicked() {
-                if (merchantRecipes == null) return;
+                if (merchantRecipes == null || merchantRecipes.size() == 0) return;
                 current = (current - 1);
                 if (current < 0) current = merchantRecipes.size() - 1;
 
@@ -111,7 +111,7 @@ public class VillagerTradeExchangerTile extends CustomElectricMachine {
         pieces.add(new ArrowInfoPiece(156, 28, 33, 56, "Select next trade") {
             @Override
             protected void clicked() {
-                if (merchantRecipes == null) return;
+                if (merchantRecipes == null || merchantRecipes.size() == 0) return;
                 current = (current + 1) % merchantRecipes.size();
             }
         });

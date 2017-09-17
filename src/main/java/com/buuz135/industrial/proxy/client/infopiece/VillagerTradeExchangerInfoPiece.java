@@ -22,17 +22,17 @@ public class VillagerTradeExchangerInfoPiece extends BasicRenderedGuiPiece {
     @Override
     public void drawBackgroundLayer(BasicTeslaGuiContainer<?> container, int guiX, int guiY, float partialTicks, int mouseX, int mouseY) {
         super.drawBackgroundLayer(container, guiX, guiY, partialTicks, mouseX, mouseY);
-        if (tile.getMerchantRecipes() != null) {
+        if (tile.getMerchantRecipes() != null && tile.getMerchantRecipes().size() > tile.getCurrent()) {
             MerchantRecipe currentRecipe = tile.getMerchantRecipes().get(tile.getCurrent());
-            ItemStackUtils.renderItemIntoGUI(currentRecipe.getItemToBuy(), guiX + this.getLeft() + 1, guiY + this.getHeight() + 1, 9);
-            ItemStackUtils.renderItemIntoGUI(currentRecipe.getItemToSell(), guiX + this.getLeft() + 1 + 59, guiY + this.getHeight() + 1, 9);
+            ItemStackUtils.renderItemIntoGUI(currentRecipe.getItemToBuy(), guiX + this.getLeft() + 1, guiY + this.getHeight() + 1, 7);
+            ItemStackUtils.renderItemIntoGUI(currentRecipe.getItemToSell(), guiX + this.getLeft() + 1 + 59, guiY + this.getHeight() + 1, 7);
         }
     }
 
     @Override
     public void drawForegroundTopLayer(BasicTeslaGuiContainer<?> container, int guiX, int guiY, int mouseX, int mouseY) {
         super.drawForegroundTopLayer(container, guiX, guiY, mouseX, mouseY);
-        if (tile.getMerchantRecipes() != null) {
+        if (tile.getMerchantRecipes() != null && tile.getMerchantRecipes().size() > tile.getCurrent()) {
             MerchantRecipe currentRecipe = tile.getMerchantRecipes().get(tile.getCurrent());
             if (mouseX > guiX + this.getLeft() && mouseY > guiY + this.getHeight() && mouseX < guiX + this.getLeft() + 18 && mouseY < guiY + this.getHeight() + 18) {
                 container.drawTooltip(Collections.singletonList(currentRecipe.getItemToBuy().getCount() + "x " + currentRecipe.getItemToBuy().getDisplayName()), mouseX - guiX, mouseY - guiY);

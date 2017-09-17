@@ -73,6 +73,7 @@ item.industrialforegoing.adult_filter.name=Adult Filter
 item.industrialforegoing_redstone_inverted.name=Inverted Redstone Control
 item.industrialforegoing_machinehull.name=Machine Hull
 item.industrialforegoing_straw.name=Straw
+item.industrialforegoing_pink_slime.name=Pink Slime
 
 gui.industrialforegoing.side_config.fuel_input=Fuel Input
 gui.industrialforegoing.side_config.input_items=Input Items
