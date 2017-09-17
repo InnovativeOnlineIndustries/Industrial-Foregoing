@@ -2,7 +2,6 @@ package com.buuz135.industrial;
 
 import com.buuz135.industrial.proxy.BlockRegistry;
 import com.buuz135.industrial.proxy.CommonProxy;
-import com.buuz135.industrial.registry.IFRegistries;
 import com.buuz135.industrial.utils.IFFakePlayer;
 import com.buuz135.industrial.utils.Reference;
 import net.minecraft.creativetab.CreativeTabs;
@@ -22,7 +21,7 @@ import net.ndrei.teslacorelib.items.gears.CoreGearType;
 import java.util.Arrays;
 import java.util.HashMap;
 
-@Mod(modid = Reference.MOD_ID, name = Reference.MOD_ID, version = Reference.VERSION, dependencies = "required-after:teslacorelib", guiFactory = Reference.GUI_FACTORY)
+@Mod(modid = Reference.MOD_ID, name = Reference.MOD_ID, version = Reference.VERSION, dependencies = "required-after:teslacorelib@[1.0.9,)", guiFactory = Reference.GUI_FACTORY)
 public class IndustrialForegoing {
 
     public static CreativeTabs creativeTab = new CreativeTabs(Reference.MOD_ID) {
