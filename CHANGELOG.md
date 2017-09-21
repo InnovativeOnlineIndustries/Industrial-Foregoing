@@ -1,4 +1,7 @@
-#1.3
+# 1.3.1
++ Changed some names
+
+# 1.3
 + Added a Machine Produce JEI Handler that shows what produces some of the machines
 + Added a Villager Trade Exchanger that trades with villagers automatically
 + Added JEI Handler to show how much power it would produce something in the Petrified Fuel Generator
@@ -12,12 +15,12 @@
 + Made the Laser Drill a bit more expensive
 + Made Non Electric machines more abstract to open it's sideness easier
 
-#1.2.1
+# 1.2.1
 + Fixed issue [#37](https://github.com/Buuz135/Industrial-Foregoing/issues/37)
 + Removed crafttweaker loading dep to fix [#38](https://github.com/Buuz135/Industrial-Foregoing/issues/38)
 + Reverted Plastic Oredictionary in recipes
 
-#1.2
+# 1.2
 + Added Resourceful Furnace, it produces Essence when doing furnace operations.
 + Made all inputs of the machine enabled by default.
 + Fixed issue [#31](https://github.com/Buuz135/Industrial-Foregoing/issues/31) 
@@ -55,7 +58,7 @@
   ```
 + Fixed some wierdness with creative tabs (Closes #36)
 
-#1.1
+# 1.1
 + Added Black Hole Tank
 + Decreased slot stack size limit to 16 for the Plant Sower
 + Added a Contributor Reward as a Patreon Reward http://i.imgur.com/ReDZDWP.png https://www.patreon.com/buuz135
