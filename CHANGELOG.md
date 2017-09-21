@@ -1,5 +1,6 @@
 # 1.3.1
 + Changed some names
++ Improved ItemStack handling of the Black Hole Unit a lot. Closes [#51](https://github.com/Buuz135/Industrial-Foregoing/issues/51)
 
 # 1.3
 + Added a Machine Produce JEI Handler that shows what produces some of the machines

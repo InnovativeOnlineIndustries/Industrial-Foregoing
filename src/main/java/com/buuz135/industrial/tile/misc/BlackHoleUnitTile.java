@@ -165,7 +165,7 @@ public class BlackHoleUnitTile extends CustomSidedTileEntity implements IHasDisp
     }
 
     public boolean canInsertItem(ItemStack stack) {
-        return Integer.MAX_VALUE >= stack.getCount() + amount && (BlackHoleUnitTile.this.stack.isEmpty() || (stack.getItem() == BlackHoleUnitTile.this.stack.getItem() && stack.getMetadata() == BlackHoleUnitTile.this.stack.getMetadata() && (!(stack.hasTagCompound() && BlackHoleUnitTile.this.stack.hasTagCompound()) || stack.getTagCompound().equals(BlackHoleUnitTile.this.stack.getTagCompound()))));
+        return Integer.MAX_VALUE >= stack.getCount() + amount && (BlackHoleUnitTile.this.stack.isEmpty() || (stack.isItemEqual(this.stack) && (!(stack.hasTagCompound() && this.stack.hasTagCompound()) || stack.getTagCompound().equals(BlackHoleUnitTile.this.stack.getTagCompound()))));
     }
 
     public void setStack(ItemStack stack) {
@@ -224,23 +224,23 @@ public class BlackHoleUnitTile extends CustomSidedTileEntity implements IHasDisp
 
         @Override
         public int getSlots() {
-            return (int) Math.ceil((tile.getAmount() + 1) / (double) tile.getItemStack().getMaxStackSize());
+            return 1;
         }
 
         @Nonnull
         @Override
         public ItemStack getStackInSlot(int slot) {
-            double stacks = tile.getAmount() / (double) tile.getItemStack().getMaxStackSize();
-            if (getAmount() <= tile.getItemStack().getMaxStackSize() && slot == 0) return outItems.getStackInSlot(0);
-            ItemStack stack = tile.stack.copy();
-            stack.setCount(slot < (int) stacks ? tile.getItemStack().getMaxStackSize() : slot == (int) stacks ? (int) ((stacks - tile.getAmount() / tile.getItemStack().getMaxStackSize()) * tile.getItemStack().getMaxStackSize()) : 0);
+            ItemStack stack = tile.getItemStack().copy();
+            stack.setCount(tile.getAmount());
             return stack;
         }
 
         @Nonnull
         @Override
         public ItemStack insertItem(int slot, @Nonnull ItemStack stack, boolean simulate) {
-            if (tile.canInsertItem(stack)) return inItems.insertItem(0, stack, simulate);
+            if (tile.canInsertItem(stack)) {
+                return inItems.insertItem(0, stack, simulate);
+            }
             return stack;
         }
 
@@ -252,7 +252,7 @@ public class BlackHoleUnitTile extends CustomSidedTileEntity implements IHasDisp
 
         @Override
         public int getSlotLimit(int slot) {
-            return 64;
+            return Integer.MAX_VALUE;
         }
     }
 }
