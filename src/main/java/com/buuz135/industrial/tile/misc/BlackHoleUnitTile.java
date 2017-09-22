@@ -46,15 +46,6 @@ public class BlackHoleUnitTile extends CustomSidedTileEntity implements IHasDisp
         if (WorkUtils.isDisabled(this.getBlockType())) return;
         inItems.setLocked(outItems.getLocked());
         inItems.setFilter(outItems.getFilter());
-        if (!inItems.getStackInSlot(0).isEmpty()) {
-            ItemStack in = inItems.getStackInSlot(0);
-            if (stack.isEmpty()) {
-                stack = in;
-                amount = 0;
-            }
-            amount += in.getCount();
-            inItems.setStackInSlot(0, ItemStack.EMPTY);
-        }
         if (outItems.getStackInSlot(0).isEmpty()) {
             ItemStack stack = this.stack.copy();
             stack.setCount(Math.min(stack.getMaxStackSize(), amount));
@@ -77,6 +68,13 @@ public class BlackHoleUnitTile extends CustomSidedTileEntity implements IHasDisp
         inItems = new LockableItemHandler(1) {
             @Override
             protected void onContentsChanged(int slot) {
+                ItemStack in = inItems.getStackInSlot(0);
+                if (stack.isEmpty()) {
+                    stack = in;
+                    amount = 0;
+                }
+                amount += in.getCount();
+                inItems.setStackInSlot(0, ItemStack.EMPTY);
                 BlackHoleUnitTile.this.markDirty();
             }
         };

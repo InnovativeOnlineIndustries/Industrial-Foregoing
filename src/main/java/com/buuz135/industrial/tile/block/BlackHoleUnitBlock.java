@@ -52,7 +52,7 @@ public class BlackHoleUnitBlock extends CustomOrientedBlock<BlackHoleUnitTile> {
             }
             world.spawnEntity(entityitem);
         }
-        super.breakBlock(world, pos, state);
+        world.removeTileEntity(pos);
     }
 
     @Override
@@ -129,5 +129,6 @@ public class BlackHoleUnitBlock extends CustomOrientedBlock<BlackHoleUnitTile> {
             compound.setInteger(BlackHoleUnitTile.NBT_AMOUNT, amount);
         }
     }
+
 
 }
