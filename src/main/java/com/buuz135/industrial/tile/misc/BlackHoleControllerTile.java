@@ -39,6 +39,13 @@ public class BlackHoleControllerTile extends CustomSidedTileEntity {
         input = new LockableItemHandler(9) {
             @Override
             protected void onContentsChanged(int slot) {
+                if (slot < 0) return;
+                ItemStack in = input.getStackInSlot(slot);
+                int amount = BlockRegistry.blackHoleUnitBlock.getAmount(storage.getStackInSlot(slot));
+                if (!in.isEmpty() && in.getCount() + amount < Integer.MAX_VALUE) {
+                    BlockRegistry.blackHoleUnitBlock.setAmount(storage.getStackInSlot(slot), amount + in.getCount());
+                    in.setCount(0);
+                }
                 BlackHoleControllerTile.this.markDirty();
             }
         };
@@ -118,12 +125,6 @@ public class BlackHoleControllerTile extends CustomSidedTileEntity {
                 int amount = BlockRegistry.blackHoleUnitBlock.getAmount(stack);
                 ItemStack s = BlockRegistry.blackHoleUnitBlock.getItemStack(stack);
                 if (!s.isEmpty()) {
-                    ItemStack in = input.getStackInSlot(i);
-                    if (!in.isEmpty() && in.getCount() + amount < Integer.MAX_VALUE) {
-                        BlockRegistry.blackHoleUnitBlock.setAmount(stack, amount + in.getCount());
-                        in.setCount(0);
-                        continue;
-                    }
                     ItemStack out = output.getStackInSlot(i);
                     if (out.isEmpty()) { // Slot is empty
                         out = s.copy();
