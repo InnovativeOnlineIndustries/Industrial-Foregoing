@@ -208,36 +208,16 @@ public class BlackHoleControllerTile extends CustomSidedTileEntity {
 
         @Override
         public int getSlots() {
-            int slots = 0;
-            for (int i = 0; i < 9; ++i) {
-                ItemStack stack = tile.getStorage().getStackInSlot(i);
-                if (!stack.isEmpty()) {
-                    int amount = BlockRegistry.blackHoleUnitBlock.getAmount(stack) + tile.getOutput().getStackInSlot(i).getCount();
-                    ItemStack s = BlockRegistry.blackHoleUnitBlock.getItemStack(stack);
-                    slots += Math.ceil(amount / (double) s.getMaxStackSize());
-                }
-            }
-            return slots;
+            return 9;
         }
 
         @Nonnull
         @Override
         public ItemStack getStackInSlot(int slot) {
-            int slots = 0;
-            for (int i = 0; i < 9; ++i) {
-                ItemStack hole = tile.getStorage().getStackInSlot(i);
-                if (!hole.isEmpty()) {
-                    int amount = BlockRegistry.blackHoleUnitBlock.getAmount(hole) + tile.getOutput().getStackInSlot(i).getCount();
-                    ItemStack s = BlockRegistry.blackHoleUnitBlock.getItemStack(hole);
-                    double toAdd = (amount / (double) s.getMaxStackSize());
-                    if (slot >= slots && slot < slots + toAdd) {
-                        ItemStack stack = s.copy();
-                        int z = slot - slots;
-                        stack.setCount(z < (int) toAdd ? s.getMaxStackSize() : z == (int) toAdd ? (int) ((toAdd - (int) toAdd) * s.getMaxStackSize()) : 0);
-                        return stack;
-                    }
-                    slots += Math.ceil(toAdd);
-                }
+            if (!storage.getStackInSlot(slot).isEmpty()) {
+                ItemStack stack = BlockRegistry.blackHoleUnitBlock.getItemStack(storage.getStackInSlot(slot));
+                stack.setCount(BlockRegistry.blackHoleUnitBlock.getAmount(storage.getStackInSlot(slot)) + output.getStackInSlot(slot).getCount());
+                return stack;
             }
             return ItemStack.EMPTY;
         }
@@ -257,26 +237,12 @@ public class BlackHoleControllerTile extends CustomSidedTileEntity {
         @Nonnull
         @Override
         public ItemStack extractItem(int slot, int amount, boolean simulate) {
-            int slots = 0;
-            for (int i = 0; i < 9; ++i) {
-                ItemStack hole = tile.getStorage().getStackInSlot(i);
-                if (!hole.isEmpty()) {
-                    ItemStack s = BlockRegistry.blackHoleUnitBlock.getItemStack(hole);
-                    int a = BlockRegistry.blackHoleUnitBlock.getAmount(hole) + tile.getOutput().getStackInSlot(i).getCount();
-                    double toAdd = Math.ceil(a / (double) s.getMaxStackSize());
-                    if (slots == slot) {
-                        slots = i;
-                        break;
-                    }
-                    slots += toAdd;
-                }
-            }
-            return tile.getOutput().extractItem(slots, amount, simulate);
+            return tile.getOutput().extractItem(slot, amount, simulate);
         }
 
         @Override
         public int getSlotLimit(int slot) {
-            return 64;
+            return Integer.MAX_VALUE;
         }
     }
 
