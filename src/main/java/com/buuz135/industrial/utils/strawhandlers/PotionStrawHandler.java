@@ -37,7 +37,7 @@ public class PotionStrawHandler extends StrawHandlerBase {
     @Override
     public void onDrink(World world, BlockPos pos, FluidStack stack, EntityPlayer player, boolean fromFluidContainer) {
         for(Triple<Potion,Integer,Integer> triple : potions) {
-            player.addPotionEffect(new PotionEffect(triple.getA(), triple.getB(), triple.getB()));
+            player.addPotionEffect(new PotionEffect(triple.getA(), triple.getB(), triple.getC()));
         }
     }
 }
