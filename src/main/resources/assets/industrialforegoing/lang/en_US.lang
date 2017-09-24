@@ -114,4 +114,4 @@ gui.industrialforegoing.side_config.villager_mob_imprisonment_tool=Villager Mob 
 gui.industrialforegoing.side_config.trade_input=Trade Input
 gui.industrialforegoing.side_config.trade_output=Trade Output
 gui.industrialforegoing.side_config.dye_items=Dye Items
-gui.industrialforegoing.side_config.lens_item=Lens Item
+gui.industrialforegoing.side_config.lens_items=Lens Items

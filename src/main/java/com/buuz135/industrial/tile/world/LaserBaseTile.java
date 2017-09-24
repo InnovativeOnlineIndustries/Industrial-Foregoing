@@ -6,7 +6,6 @@ import com.buuz135.industrial.proxy.BlockRegistry;
 import com.buuz135.industrial.proxy.client.infopiece.LaserBaseInfoPiece;
 import com.buuz135.industrial.tile.CustomColoredItemHandler;
 import com.buuz135.industrial.tile.CustomSidedTileEntity;
-import com.buuz135.industrial.tile.block.LaserBaseBlock;
 import com.buuz135.industrial.utils.ItemStackWeightedItem;
 import net.minecraft.item.EnumDyeColor;
 import net.minecraft.item.ItemStack;
@@ -57,13 +56,13 @@ public class LaserBaseTile extends CustomSidedTileEntity {
         });
         this.addInventoryToStorage(lensItems, "lensItems");
 
-        outItems = new ItemStackHandler(3 * 5) {
+        outItems = new ItemStackHandler(3 * 6) {
             @Override
             protected void onContentsChanged(int slot) {
                 LaserBaseTile.this.markDirty();
             }
         };
-        this.addInventory(new CustomColoredItemHandler(outItems, EnumDyeColor.ORANGE, "Output items", 18 * 4 + 6, 25, 5, 3) {
+        this.addInventory(new CustomColoredItemHandler(outItems, EnumDyeColor.ORANGE, "Output items", 18 * 4 + 6, 25, 6, 3) {
             @Override
             public boolean canInsertItem(int slot, ItemStack stack) {
                 return false;
@@ -127,16 +126,26 @@ public class LaserBaseTile extends CustomSidedTileEntity {
     }
 
     public int getMaxWork() {
-        return ((LaserBaseBlock) this.getBlockType()).getWorkNeeded();
+        return BlockRegistry.laserBaseBlock.getWorkNeeded();
     }
 
     public void increaseWork() {
-        partialSync(NBT_CURRENT, true);
         ++currentWork;
+        partialSync(NBT_CURRENT, true);
     }
 
     @Override
     protected boolean getShowPauseDrawerPiece() {
+        return false;
+    }
+
+    @Override
+    protected boolean getShowRedstoneControlPiece() {
+        return false;
+    }
+
+    @Override
+    protected boolean supportsAddons() {
         return false;
     }
 }
