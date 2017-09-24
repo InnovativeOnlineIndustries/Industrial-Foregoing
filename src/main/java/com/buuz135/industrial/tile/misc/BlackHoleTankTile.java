@@ -30,10 +30,12 @@ public class BlackHoleTankTile extends CustomSidedTileEntity implements IHasDisp
             @Override
             protected void onContentsChanged() {
                 super.onContentsChanged();
+                forceSync();
                 BlackHoleTankTile.this.markDirty();
             }
         };
         this.addFluidTank(tank, EnumDyeColor.CYAN, "Tank", new BoundingRectangle(6, 25, 18, 54));
+
     }
 
     @Override

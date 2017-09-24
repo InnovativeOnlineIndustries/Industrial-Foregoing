@@ -8,6 +8,7 @@ import net.minecraft.item.EnumDyeColor;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.NBTTagInt;
 import net.minecraft.util.EnumFacing;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.items.CapabilityItemHandler;
@@ -19,6 +20,7 @@ import net.ndrei.teslacorelib.gui.LockedInventoryTogglePiece;
 import net.ndrei.teslacorelib.inventory.BoundingRectangle;
 import net.ndrei.teslacorelib.inventory.ColoredItemHandler;
 import net.ndrei.teslacorelib.inventory.LockableItemHandler;
+import net.ndrei.teslacorelib.inventory.SyncProviderLevel;
 
 import javax.annotation.Nonnull;
 import java.util.List;
@@ -75,7 +77,7 @@ public class BlackHoleUnitTile extends CustomSidedTileEntity implements IHasDisp
                 }
                 amount += in.getCount();
                 inItems.setStackInSlot(0, ItemStack.EMPTY);
-                BlackHoleUnitTile.this.markDirty();
+                BlackHoleUnitTile.this.partialSync(NBT_AMOUNT, true);
             }
         };
         this.addInventory(new ColoredItemHandler(inItems, EnumDyeColor.BLUE, "Input items", new BoundingRectangle(16, 25, 18, 18)) {
@@ -98,7 +100,7 @@ public class BlackHoleUnitTile extends CustomSidedTileEntity implements IHasDisp
         outItems = new LockableItemHandler(1) {
             @Override
             protected void onContentsChanged(int slot) {
-                BlackHoleUnitTile.this.markDirty();
+                BlackHoleUnitTile.this.partialSync(NBT_AMOUNT, true);
             }
         };
         this.addInventory(new ColoredItemHandler(outItems, EnumDyeColor.ORANGE, "Output items", new BoundingRectangle(16, 25 + 18 * 2, 18, 18)) {
@@ -119,6 +121,7 @@ public class BlackHoleUnitTile extends CustomSidedTileEntity implements IHasDisp
 
         });
         this.addInventoryToStorage(outItems, "black_hole_out");
+        this.registerSyncIntPart(NBT_AMOUNT, nbtTagInt -> amount = nbtTagInt.getInt(), () -> new NBTTagInt(amount), SyncProviderLevel.GUI);
     }
 
     @Override

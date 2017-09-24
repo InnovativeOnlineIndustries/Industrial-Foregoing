@@ -1,5 +1,6 @@
 # 1.4
 + Fix [#54](https://github.com/Buuz135/Industrial-Foregoing/issues/54)
++ Better GUI Syncing for some machines
 
 # 1.3.1
 + Changed some names
