@@ -21,7 +21,7 @@ import java.util.List;
 
 public class OreDictionaryConverterTile extends CustomSidedTileEntity {
 
-    public static final String[] ACCEPTED_ENTRIES = {"ore", "ingot", "nugget", "gem", "dust", "block", "gear"};
+    public static final String[] ACCEPTED_ENTRIES = {"ore", "ingot", "nugget", "gem", "dust", "block", "gear", "plate"};
     private static final String MOD_ID = "ModId";
     private static final String ORE_DICT = "OreDict";
 
