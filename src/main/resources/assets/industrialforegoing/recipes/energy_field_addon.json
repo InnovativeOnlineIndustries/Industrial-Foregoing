@@ -1,0 +1,23 @@
+{
+  "result": {
+    "item": "industrialforegoing:energy_field_addon"
+  },
+  "pattern": [
+    "rpr",
+    "pup",
+    "rpr"
+  ],
+  "type": "minecraft:crafting_shaped",
+  "key": {
+    "p": {
+      "item": "industrialforegoing:pink_slime"
+    },
+    "r": {
+      "item": "minecraft:redstone"
+    },
+    "u": {
+      "item": "industrialforegoing:range_addon",
+      "data": 9
+    }
+  }
+}

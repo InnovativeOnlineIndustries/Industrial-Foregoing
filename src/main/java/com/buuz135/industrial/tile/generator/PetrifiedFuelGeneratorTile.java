@@ -33,6 +33,10 @@ public class PetrifiedFuelGeneratorTile extends CustomGeneratorMachine {
 
     }
 
+    public static long getEnergyProduced(int burnTime) {
+        return burnTime / BlockRegistry.petrifiedFuelGeneratorBlock.getTimeModifier();
+    }
+
     @Override
     protected void initializeInventories() {
         super.initializeInventories();
@@ -110,11 +114,6 @@ public class PetrifiedFuelGeneratorTile extends CustomGeneratorMachine {
         List<IGuiContainerPiece> list = super.getGuiContainerPieces(container);
         list.add(new PetrifiedFuelInfoPiece(this, 88, 25));
         return list;
-    }
-
-
-    public static long getEnergyProduced(int burnTime) {
-        return burnTime / BlockRegistry.petrifiedFuelGeneratorBlock.getTimeModifier();
     }
 
     @Override

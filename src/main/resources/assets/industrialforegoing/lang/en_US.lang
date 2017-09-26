@@ -48,6 +48,7 @@ tile.industrialforegoing.material_stonework_factory.name=Material StoneWork Fact
 tile.industrialforegoing.black_hole_tank.name=Black Hole Tank
 tile.industrialforegoing.resourceful_furnace.name=Resourceful Furnace
 tile.industrialforegoing.villager_trade_exchanger.name=Villager Trade Exchanger
+tile.industrialforegoing.energy_field_provider.name=Energy Field Provider
 
 entity.pink_slime.name=Pink Slime
 
@@ -74,6 +75,7 @@ item.industrialforegoing_redstone_inverted.name=Inverted Redstone Control
 item.industrialforegoing_machinehull.name=Machine Hull
 item.industrialforegoing_straw.name=Straw
 item.industrialforegoing_pink_slime.name=Pink Slime
+item.industrialforegoing.energy_field_addon.name=Energy Field Addon
 
 gui.industrialforegoing.side_config.fuel_input=Fuel Input
 gui.industrialforegoing.side_config.input_items=Input Items

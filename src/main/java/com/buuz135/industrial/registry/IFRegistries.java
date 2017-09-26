@@ -14,5 +14,6 @@ public class IFRegistries {
             .setType(StrawHandler.class)
             .create();
 
-    public static void poke() {}
+    public static void poke() {
+    }
 }

@@ -30,11 +30,10 @@ public class IndustrialForegoing {
             return new ItemStack(BlockRegistry.blackHoleUnitBlock);
         }
     };
-
+    public static IndustrialForegoing instance;
     @SidedProxy(clientSide = Reference.PROXY_CLIENT, serverSide = Reference.PROXY_COMMON)
     private static CommonProxy proxy;
     private static HashMap<Integer, IFFakePlayer> worldFakePlayer = new HashMap<>();
-    public static IndustrialForegoing instance;
 
     static {
         if (!FluidRegistry.isUniversalBucketEnabled()) FluidRegistry.enableUniversalBucket();

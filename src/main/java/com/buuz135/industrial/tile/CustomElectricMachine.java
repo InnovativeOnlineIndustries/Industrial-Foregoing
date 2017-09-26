@@ -1,10 +1,18 @@
 package com.buuz135.industrial.tile;
 
+import com.buuz135.industrial.item.addon.EnergyFieldAddon;
 import com.buuz135.industrial.jei.JEIHelper;
+import com.buuz135.industrial.proxy.ItemRegistry;
 import com.buuz135.industrial.tile.block.CustomOrientedBlock;
+import com.buuz135.industrial.tile.block.EnergyFieldProviderBlock;
+import com.buuz135.industrial.tile.world.EnergyFieldProviderTile;
 import net.minecraft.item.EnumDyeColor;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumFacing;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.Vec3d;
+import net.minecraftforge.energy.CapabilityEnergy;
+import net.minecraftforge.energy.IEnergyStorage;
 import net.ndrei.teslacorelib.compatibility.FontRendererUtil;
 import net.ndrei.teslacorelib.gui.BasicTeslaGuiContainer;
 import net.ndrei.teslacorelib.gui.IGuiContainerPiece;
@@ -78,5 +86,30 @@ public abstract class CustomElectricMachine extends ElectricMachine {
             }
         });
         return pieces;
+    }
+
+    @Override
+    public void protectedUpdate() {
+        super.protectedUpdate();
+        if (hasAddon(EnergyFieldAddon.class)) {
+            ItemStack addon = getAddonStack(EnergyFieldAddon.class);
+            if (addon.hasCapability(CapabilityEnergy.ENERGY, null)) {
+                IEnergyStorage storage = addon.getCapability(CapabilityEnergy.ENERGY, null);
+                storage.extractEnergy((int) this.getEnergyStorage().givePower(storage.extractEnergy(512, true)), false);
+                BlockPos pos = ItemRegistry.energyFieldAddon.getLinkedBlockPos(addon);
+                if (this.world.getBlockState(pos).getBlock() instanceof EnergyFieldProviderBlock && this.world.isAreaLoaded(pos, pos)) {
+                    EnergyFieldProviderTile tile = (EnergyFieldProviderTile) this.world.getTileEntity(pos);
+                    if (tile.getWorkingArea().grow(1).contains(new Vec3d(this.pos.getX(), this.pos.getY(), this.pos.getZ()))) {
+                        float pull = tile.consumeWorkEnergy(Math.min(storage.getMaxEnergyStored() - storage.getEnergyStored(), 1000));
+                        storage.receiveEnergy((int) pull, false);
+                    }
+                }
+                this.forceSync();
+            }
+        }
+    }
+
+    public boolean canAcceptEnergyFieldAddon() {
+        return !hasAddon(EnergyFieldAddon.class);
     }
 }

@@ -1,6 +1,6 @@
 package com.buuz135.industrial.utils;
 
-public class Triple<A,B,C> {
+public class Triple<A, B, C> {
     private final A a;
     private final B b;
     private final C c;

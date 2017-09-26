@@ -46,14 +46,17 @@ import java.util.List;
 @JEIPlugin
 public class JEICustomPlugin implements IModPlugin {
 
+    private static IRecipesGui recipesGui;
+    private static IRecipeRegistry recipeRegistry;
     private SludgeRefinerRecipeCategory sludgeRefinerRecipeCategory;
     private BioReactorRecipeCategory bioReactorRecipeCategory;
     private LaserRecipeCategory laserRecipeCategory;
     private MachineProduceCategory machineProduceCategory;
     private PetrifiedBurnTimeCategory petrifiedBurnTimeCategory;
 
-    private static IRecipesGui recipesGui;
-    private static IRecipeRegistry recipeRegistry;
+    public static void showUses(ItemStack stack) {
+        recipesGui.show(recipeRegistry.createFocus(IFocus.Mode.INPUT, stack));
+    }
 
     @Override
     public void registerItemSubtypes(ISubtypeRegistry subtypeRegistry) {
@@ -178,10 +181,6 @@ public class JEICustomPlugin implements IModPlugin {
         registry.addIngredientInfo(new ItemStack(BlockRegistry.dyeMixerBlock), ItemStack.class, "Makes dyes more efficiently, needs a lens to select the color.");
         registry.addIngredientInfo(new ItemStack(BlockRegistry.enchantmentInvokerBlock), ItemStack.class, "Enchants items with a level 30 enchant using 3 buckets of essence.");
         registry.addIngredientInfo(new ItemStack(BlockRegistry.sporesRecreatorBlock), ItemStack.class, "Spreads mushrooms spores to grow mushrooms");
-    }
-
-    public static void showUses(ItemStack stack) {
-        recipesGui.show(recipeRegistry.createFocus(IFocus.Mode.INPUT, stack));
     }
 
     public ItemStack getStoneWorkOutputFrom(ItemStack stack, MaterialStoneWorkFactoryTile.Mode mode) {

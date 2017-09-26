@@ -15,7 +15,7 @@ import java.util.List;
 
 @ParametersAreNonnullByDefault
 public class PotionStrawHandler extends StrawHandlerBase {
-    private List<Triple<Potion,Integer,Integer>> potions = new ArrayList<>();
+    private List<Triple<Potion, Integer, Integer>> potions = new ArrayList<>();
 
     public PotionStrawHandler(String fluidName) {
         super(fluidName);
@@ -26,17 +26,17 @@ public class PotionStrawHandler extends StrawHandlerBase {
     }
 
     public PotionStrawHandler addPotion(PotionEffect effect) {
-        return addPotion(effect.getPotion(),effect.getDuration(),effect.getAmplifier());
+        return addPotion(effect.getPotion(), effect.getDuration(), effect.getAmplifier());
     }
 
-    public PotionStrawHandler addPotion(Potion potion,Integer duration,Integer amplifier) {
+    public PotionStrawHandler addPotion(Potion potion, Integer duration, Integer amplifier) {
         potions.add(new Triple<>(potion, duration, amplifier));
         return this;
     }
 
     @Override
     public void onDrink(World world, BlockPos pos, FluidStack stack, EntityPlayer player, boolean fromFluidContainer) {
-        for(Triple<Potion,Integer,Integer> triple : potions) {
+        for (Triple<Potion, Integer, Integer> triple : potions) {
             player.addPotionEffect(new PotionEffect(triple.getA(), triple.getB(), triple.getC()));
         }
     }

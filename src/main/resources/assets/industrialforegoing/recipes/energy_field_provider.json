@@ -1,0 +1,28 @@
+{
+  "result": {
+    "item": "industrialforegoing:energy_field_provider"
+  },
+  "pattern": [
+    "gug",
+    "gtg",
+    "rdr"
+  ],
+  "type": "forge:ore_shaped",
+  "key": {
+    "r": {
+      "item": "minecraft:repeater"
+    },
+    "t": {
+      "item": "teslacorelib:machine_case"
+    },
+    "d": {
+      "item": "#GEARDIAMOND"
+    },
+    "u": {
+      "item": "industrialforegoing:energy_field_addon"
+    },
+    "g": {
+      "item": "#INGOTGOLD"
+    }
+  }
+}

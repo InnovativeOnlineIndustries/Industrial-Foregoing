@@ -1,6 +1,7 @@
 # 1.4
 + Fix [#54](https://github.com/Buuz135/Industrial-Foregoing/issues/54)
 + Better GUI Syncing for some machines
++ Added Energy Field Addon and Energy Field Provider to wireless power machines. (Place an Energy Field Provider and give it power, Get an Energy Field Addon Shift+Right Click to the Provider Block and add it to another machine in the range of the Energy Field Provider)
 
 # 1.3.1
 + Changed some names
