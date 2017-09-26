@@ -187,7 +187,7 @@ public class BlackHoleUnitTile extends CustomSidedTileEntity implements IHasDisp
     }
 
     public String getDisplayNameUnlocalized() {
-        return getItemStack().getUnlocalizedName() + ".name";
+        return getItemStack().getUnlocalizedName().endsWith(".name") ? getItemStack().getUnlocalizedName() : getItemStack().getUnlocalizedName() + ".name";
     }
 
     @Override

@@ -25,6 +25,7 @@ import net.minecraftforge.items.ItemStackHandler;
 import net.minecraftforge.oredict.OreDictionary;
 import org.lwjgl.opengl.GL11;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class ItemStackUtils {
@@ -168,6 +169,13 @@ public class ItemStackUtils {
         return true;
     }
 
+    public static List<String> getOreDictionaryEntries(ItemStack stack) {
+        List<String> dict = new ArrayList<>();
+        for (int i : OreDictionary.getOreIDs(stack)) {
+            dict.add(OreDictionary.getOreName(i));
+        }
+        return dict;
+    }
 
     public static boolean acceptsFluidItem(ItemStack stack) {
         return stack.hasCapability(CapabilityFluidHandler.FLUID_HANDLER_ITEM_CAPABILITY, null) && !stack.getItem().equals(ForgeModContainer.getInstance().universalBucket);

@@ -24,7 +24,7 @@ public class BiofuelGeneratorTile extends CustomGeneratorMachine {
     @Override
     protected long consumeFuel() {
         if (WorkUtils.isDisabled(this.getBlockType())) return 0;
-        if (tank.getFluid() != null && tank.getFluidAmount() > 1) {
+        if (tank.getFluid() != null && tank.getFluidAmount() >= 1) {
             tank.drain(1, true);
             return 160 * 7;
         }

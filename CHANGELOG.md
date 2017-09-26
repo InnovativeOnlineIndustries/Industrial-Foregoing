@@ -3,6 +3,7 @@
 + Better GUI Syncing for some machines
 + Added Energy Field Addon and Energy Field Provider to wireless power machines. (Place an Energy Field Provider and give it power, Get an Energy Field Addon Shift+Right Click to the Provider Block and add it to another machine in the range of the Energy Field Provider)
 + Fixed Bioreactor not filtering the slots
++ Added OreDictionary Converter to convert between different types of OreDictionary Entries. Supported types: "ore", "ingot", "nugget", "gem", "dust", "block", "gear"
 
 # 1.3.1
 + Changed some names

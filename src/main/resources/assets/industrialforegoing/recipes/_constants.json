@@ -9,6 +9,13 @@
   {
     "ingredient": {
       "type": "forge:ore_dict",
+      "ore": "blockIron"
+    },
+    "name": "BLOCKIRON"
+  },
+  {
+    "ingredient": {
+      "type": "forge:ore_dict",
       "ore": "chestWood"
     },
     "name": "CHESTWOOD"
@@ -103,6 +110,13 @@
       "ore": "nuggetGold"
     },
     "name": "NUGGETGOLD"
+  },
+  {
+    "ingredient": {
+      "type": "forge:ore_dict",
+      "ore": "nuggetIron"
+    },
+    "name": "NUGGETIRON"
   },
   {
     "ingredient": {

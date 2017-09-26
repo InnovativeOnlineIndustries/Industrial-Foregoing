@@ -49,6 +49,7 @@ tile.industrialforegoing.black_hole_tank.name=Black Hole Tank
 tile.industrialforegoing.resourceful_furnace.name=Resourceful Furnace
 tile.industrialforegoing.villager_trade_exchanger.name=Villager Trade Exchanger
 tile.industrialforegoing.energy_field_provider.name=Energy Field Provider
+tile.industrialforegoing.oredictionary_converter.name=Ore Dictionary Converter
 
 entity.pink_slime.name=Pink Slime
 
@@ -117,3 +118,5 @@ gui.industrialforegoing.side_config.trade_input=Trade Input
 gui.industrialforegoing.side_config.trade_output=Trade Output
 gui.industrialforegoing.side_config.dye_items=Dye Items
 gui.industrialforegoing.side_config.lens_items=Lens Items
+gui.industrialforegoing.side_config.filter=Item Type Filter
+gui.industrialforegoing.side_config.change=Transformed Items
