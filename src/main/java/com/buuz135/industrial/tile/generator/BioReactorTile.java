@@ -19,6 +19,7 @@ import net.ndrei.teslacorelib.inventory.BoundingRectangle;
 import net.ndrei.teslacorelib.inventory.ColoredItemHandler;
 import net.ndrei.teslacorelib.inventory.LockableItemHandler;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class BioReactorTile extends CustomElectricMachine {
@@ -48,7 +49,7 @@ public class BioReactorTile extends CustomElectricMachine {
         this.addInventory(new ColoredItemHandler(input, EnumDyeColor.BLUE, "Input items", new BoundingRectangle(18 * 5, 25, 3 * 18, 3 * 18)) {
             @Override
             public boolean canInsertItem(int slot, ItemStack stack) {
-                return canInsert(slot, input, stack);
+                return super.canInsertItem(slot, stack) && canInsert(slot, input, stack);
             }
 
             @Override
@@ -77,9 +78,14 @@ public class BioReactorTile extends CustomElectricMachine {
         FluidStack stack = new FluidStack(FluidsRegistry.BIOFUEL, getProducedAmountItem() * getItemAmount());
         if (tank.getFluid() == null || (stack.amount + tank.getFluidAmount() <= tank.getCapacity())) {
             tank.fill(stack, true);
+            List<ItemStack> used = new ArrayList<>();
             for (int i = 0; i < input.getSlots(); ++i) {
-                if (!input.getStackInSlot(i).isEmpty())
+                int finalI = i;
+                if (!input.getStackInSlot(i).isEmpty() && used.stream().noneMatch((stack1 -> stack1.isItemEqual(input.getStackInSlot(finalI))))) {
+                    used.add(input.getStackInSlot(i).copy());
                     input.getStackInSlot(i).setCount(input.getStackInSlot(i).getCount() - 1);
+                }
+
             }
             return 1;
         }
@@ -102,11 +108,20 @@ public class BioReactorTile extends CustomElectricMachine {
 
 
     public int getItemAmount() {
-        int am = 0;
+        List<ItemStack> stacks = new ArrayList<>();
         for (int i = 0; i < input.getSlots(); ++i) {
-            if (!input.getStackInSlot(i).isEmpty()) ++am;
+            if (!input.getStackInSlot(i).isEmpty()) {
+                boolean isItNew = true;
+                for (ItemStack stack : stacks) {
+                    if (stack.isItemEqual(input.getStackInSlot(i))) {
+                        isItNew = false;
+                        break;
+                    }
+                }
+                if (isItNew) stacks.add(input.getStackInSlot(i));
+            }
         }
-        return am;
+        return stacks.size();
     }
 
     public float getEfficiency() {
