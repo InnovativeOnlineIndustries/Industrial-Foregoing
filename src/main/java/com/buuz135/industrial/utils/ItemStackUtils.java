@@ -91,7 +91,7 @@ public class ItemStackUtils {
             int k = color;
 
             if (flag && bakedquad.hasTintIndex()) {
-                k = Minecraft.getMinecraft().getItemColors().getColorFromItemstack(stack, bakedquad.getTintIndex());
+                k = Minecraft.getMinecraft().getItemColors().colorMultiplier(stack, bakedquad.getTintIndex());
                 if (EntityRenderer.anaglyphEnable) {
                     k = TextureUtil.anaglyphColor(k);
                 }
@@ -129,7 +129,7 @@ public class ItemStackUtils {
         RenderManager rendermanager = Minecraft.getMinecraft().getRenderManager();
         rendermanager.setPlayerViewY(180.0F);
         rendermanager.setRenderShadow(false);
-        rendermanager.doRenderEntity(ent, 0.0D, 0.0D, 0.0D, 0.0F, 0F, false);
+        rendermanager.renderEntity(ent, 0.0D, 0.0D, 0.0D, 0.0F, 0F, false);
         rendermanager.setRenderShadow(true);
         ent.renderYawOffset = f;
         ent.rotationYaw = f1;
