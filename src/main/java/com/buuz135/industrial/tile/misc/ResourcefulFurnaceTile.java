@@ -46,16 +46,17 @@ public class ResourcefulFurnaceTile extends CustomElectricMachine {
     protected float performWork() {
         if (WorkUtils.isDisabled(this.getBlockType())) return 0;
 
+        boolean operation = false;
         for (int i = 0; i < input.getSlots(); ++i) {
             if (input.getStackInSlot(i).isEmpty()) continue;
             if (output.getStackInSlot(i).isEmpty() || (FurnaceRecipes.instance().getSmeltingResult(input.getStackInSlot(i)).isItemEqual(output.getStackInSlot(i)) && output.getStackInSlot(i).getCount() < output.getStackInSlot(i).getMaxStackSize())) {
                 output.insertItem(i, FurnaceRecipes.instance().getSmeltingResult(input.getStackInSlot(i)).copy(), false);
                 input.getStackInSlot(i).shrink(1);
                 tank.fill(new FluidStack(FluidsRegistry.ESSENCE, (int) (FurnaceRecipes.instance().getSmeltingExperience(output.getStackInSlot(i)) * BlockRegistry.resourcefulFurnaceBlock.getExperienceMultiplier())), true);
-                return 1;
+                operation = true;
             }
         }
-        return 0;
+        return operation ? 1 : 0;
     }
 
     @NotNull

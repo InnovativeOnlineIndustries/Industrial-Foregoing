@@ -1,5 +1,8 @@
 package com.buuz135.industrial.tile.block;
 
+import com.buuz135.industrial.api.book.IPage;
+import com.buuz135.industrial.api.book.page.PageText;
+import com.buuz135.industrial.book.BookCategory;
 import com.buuz135.industrial.proxy.ItemRegistry;
 import com.buuz135.industrial.tile.mob.MobDetectorTile;
 import com.buuz135.industrial.utils.RecipeUtils;
@@ -14,6 +17,7 @@ import net.minecraft.world.IBlockAccess;
 import net.ndrei.teslacorelib.items.MachineCaseItem;
 
 import javax.annotation.Nullable;
+import java.util.List;
 
 public class MobDetectorBlock extends CustomOrientedBlock<MobDetectorTile> {
 
@@ -65,5 +69,17 @@ public class MobDetectorBlock extends CustomOrientedBlock<MobDetectorTile> {
                 'c', Items.COMPARATOR,
                 'i', Blocks.OBSERVER,
                 'm', MachineCaseItem.INSTANCE);
+    }
+
+    @Override
+    public BookCategory getCategory() {
+        return BookCategory.MOB;
+    }
+
+    @Override
+    public List<IPage> getBookDescriptionPages() {
+        List<IPage> pages = super.getBookDescriptionPages();
+        pages.add(0, new PageText("It will emit a " + PageText.bold("Redstone Signal") + " to the back depending on the amount of entities in front of it."));
+        return pages;
     }
 }

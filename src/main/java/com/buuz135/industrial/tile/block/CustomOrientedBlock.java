@@ -1,6 +1,9 @@
 package com.buuz135.industrial.tile.block;
 
 import com.buuz135.industrial.IndustrialForegoing;
+import com.buuz135.industrial.api.book.IPage;
+import com.buuz135.industrial.api.book.page.PageRecipe;
+import com.buuz135.industrial.book.IHasBookDescription;
 import com.buuz135.industrial.config.CustomConfiguration;
 import com.buuz135.industrial.utils.Reference;
 import net.minecraft.block.material.Material;
@@ -11,7 +14,7 @@ import net.ndrei.teslacorelib.tileentities.SidedTileEntity;
 import java.util.ArrayList;
 import java.util.List;
 
-public abstract class CustomOrientedBlock<T extends SidedTileEntity> extends OrientedBlock {
+public abstract class CustomOrientedBlock<T extends SidedTileEntity> extends OrientedBlock implements IHasBookDescription {
 
     public static List<CustomOrientedBlock> blockList = new ArrayList<>();
 
@@ -52,4 +55,12 @@ public abstract class CustomOrientedBlock<T extends SidedTileEntity> extends Ori
     }
 
     public abstract void createRecipe();
+
+    @Override
+    public List<IPage> getBookDescriptionPages() {
+        List<IPage> pages = new ArrayList<>();
+        pages.add(new PageRecipe(this.getRegistryName()));
+        return pages;
+    }
+
 }

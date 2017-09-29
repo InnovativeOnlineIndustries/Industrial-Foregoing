@@ -1,5 +1,8 @@
 package com.buuz135.industrial.tile.block;
 
+import com.buuz135.industrial.api.book.IPage;
+import com.buuz135.industrial.api.book.page.PageText;
+import com.buuz135.industrial.book.BookCategory;
 import com.buuz135.industrial.config.CustomConfiguration;
 import com.buuz135.industrial.proxy.ItemRegistry;
 import com.buuz135.industrial.tile.mob.MobRelocatorTile;
@@ -9,6 +12,8 @@ import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.common.config.Configuration;
 import net.ndrei.teslacorelib.items.MachineCaseItem;
+
+import java.util.List;
 
 public class MobRelocatorBlock extends CustomOrientedBlock<MobRelocatorTile> {
 
@@ -36,5 +41,17 @@ public class MobRelocatorBlock extends CustomOrientedBlock<MobRelocatorTile> {
                 'm', MachineCaseItem.INSTANCE,
                 'g', "gearGold",
                 'r', Items.REDSTONE);
+    }
+
+    @Override
+    public BookCategory getCategory() {
+        return BookCategory.MOB;
+    }
+
+    @Override
+    public List<IPage> getBookDescriptionPages() {
+        List<IPage> pages = super.getBookDescriptionPages();
+        pages.add(0, new PageText("When provided with power it will " + PageText.bold("kill") + " any entity in front of it as if a player would.\n\nIt will " + PageText.bold("collect") + " the dropped items and it will transform the experience orbs into " + PageText.bold("Essence") + "."));
+        return pages;
     }
 }

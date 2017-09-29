@@ -1,5 +1,6 @@
 package com.buuz135.industrial.proxy.client;
 
+import com.buuz135.industrial.book.IFManual;
 import com.buuz135.industrial.entity.EntityPinkSlime;
 import com.buuz135.industrial.proxy.CommonProxy;
 import com.buuz135.industrial.proxy.client.entity.RenderPinkSlime;
@@ -88,7 +89,7 @@ public class ClientProxy extends CommonProxy {
     @Override
     public void postInit() {
         super.postInit();
-
+        IFManual.buildManual();
     }
 
 }

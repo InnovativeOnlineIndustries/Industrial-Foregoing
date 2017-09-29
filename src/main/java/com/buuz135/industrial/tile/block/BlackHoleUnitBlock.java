@@ -1,5 +1,8 @@
 package com.buuz135.industrial.tile.block;
 
+import com.buuz135.industrial.api.book.IPage;
+import com.buuz135.industrial.api.book.page.PageText;
+import com.buuz135.industrial.book.BookCategory;
 import com.buuz135.industrial.proxy.ItemRegistry;
 import com.buuz135.industrial.tile.misc.BlackHoleUnitTile;
 import com.buuz135.industrial.utils.RecipeUtils;
@@ -19,6 +22,7 @@ import net.minecraft.world.World;
 import net.ndrei.teslacorelib.items.MachineCaseItem;
 
 import javax.annotation.Nullable;
+import java.text.DecimalFormat;
 import java.util.Arrays;
 import java.util.List;
 
@@ -130,5 +134,15 @@ public class BlackHoleUnitBlock extends CustomOrientedBlock<BlackHoleUnitTile> {
         }
     }
 
+    @Override
+    public BookCategory getCategory() {
+        return BookCategory.STORAGE;
+    }
 
+    @Override
+    public List<IPage> getBookDescriptionPages() {
+        List<IPage> pages = super.getBookDescriptionPages();
+        pages.add(0, new PageText("It can can hold up to " + PageText.bold(new DecimalFormat().format(Integer.MAX_VALUE)) + " of one item."));
+        return pages;
+    }
 }

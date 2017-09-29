@@ -1,5 +1,8 @@
 package com.buuz135.industrial.tile.block;
 
+import com.buuz135.industrial.api.book.IPage;
+import com.buuz135.industrial.api.book.page.PageText;
+import com.buuz135.industrial.book.BookCategory;
 import com.buuz135.industrial.proxy.ItemRegistry;
 import com.buuz135.industrial.tile.misc.BlackHoleTankTile;
 import com.buuz135.industrial.utils.RecipeUtils;
@@ -20,6 +23,7 @@ import net.minecraftforge.fluids.FluidStack;
 import net.ndrei.teslacorelib.items.MachineCaseItem;
 
 import javax.annotation.Nullable;
+import java.text.DecimalFormat;
 import java.util.Arrays;
 import java.util.List;
 
@@ -84,5 +88,17 @@ public class BlackHoleTankBlock extends CustomOrientedBlock<BlackHoleTankTile> {
             tooltip.add(new TextComponentTranslation("text.display.fluid").getUnformattedText() + " " + new TextComponentTranslation(FluidRegistry.getFluid(stack.getTagCompound().getString("FluidName")).getUnlocalizedName()).getUnformattedText());
             tooltip.add(new TextComponentTranslation("text.display.amount").getUnformattedText() + " " + stack.getTagCompound().getInteger("Amount"));
         }
+    }
+
+    @Override
+    public BookCategory getCategory() {
+        return BookCategory.STORAGE;
+    }
+
+    @Override
+    public List<IPage> getBookDescriptionPages() {
+        List<IPage> pages = super.getBookDescriptionPages();
+        pages.add(0, new PageText("It can can hold up to " + PageText.bold(new DecimalFormat().format(Integer.MAX_VALUE)) + "mb of one fluid."));
+        return pages;
     }
 }

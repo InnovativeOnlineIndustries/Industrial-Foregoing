@@ -1,5 +1,8 @@
 package com.buuz135.industrial.tile.block;
 
+import com.buuz135.industrial.api.book.IPage;
+import com.buuz135.industrial.api.book.page.PageText;
+import com.buuz135.industrial.book.BookCategory;
 import com.buuz135.industrial.config.CustomConfiguration;
 import com.buuz135.industrial.proxy.ItemRegistry;
 import com.buuz135.industrial.tile.agriculture.MobSlaughterFactoryTile;
@@ -10,7 +13,10 @@ import net.minecraft.item.ItemStack;
 import net.minecraftforge.common.config.Configuration;
 import net.ndrei.teslacorelib.items.MachineCaseItem;
 
-public class MobSlaughterFactoryBlock extends CustomOrientedBlock<MobSlaughterFactoryTile> {
+import java.util.List;
+
+public class
+MobSlaughterFactoryBlock extends CustomOrientedBlock<MobSlaughterFactoryTile> {
 
     private float meatValue;
 
@@ -36,5 +42,18 @@ public class MobSlaughterFactoryBlock extends CustomOrientedBlock<MobSlaughterFa
                 'm', MachineCaseItem.INSTANCE,
                 'a', Items.IRON_AXE,
                 'r', Items.REDSTONE);
+    }
+
+    @Override
+    public BookCategory getCategory() {
+        return BookCategory.MOB;
+    }
+
+
+    @Override
+    public List<IPage> getBookDescriptionPages() {
+        List<IPage> pages = super.getBookDescriptionPages();
+        pages.add(0, new PageText("When provided with power it will " + PageText.bold("grind") + " any entity in front of it and produce " + PageText.bold("Liquid Meat") + " from it.\n\nIt will " + PageText.bold("not") + " drop items or experience in the process.\n\nIt will also produce " + PageText.bold("some pink") + " slime in the process."));
+        return pages;
     }
 }

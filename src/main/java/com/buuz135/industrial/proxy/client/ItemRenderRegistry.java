@@ -16,6 +16,7 @@ public class ItemRenderRegistry {
         laserLensItem_inverted.registerRender();
         pinkSlime.registerRender();
         energyFieldAddon.registerRenderer();
+        bookManualItem.registerRender();
 
         adultFilterAddomItem.registerRenderer();
         rangeAddonItem.registerRenderer();

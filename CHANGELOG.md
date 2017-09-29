@@ -5,6 +5,7 @@
 + Fixed Bioreactor not filtering the slots
 + Added OreDictionary Converter to convert between different types of OreDictionary Entries. Supported types: "ore", "ingot", "nugget", "gem", "dust", "block", "gear" and "plate"
 + Fixed Villager Trade Exchanger not syncing to server. Closes [#55](https://github.com/Buuz135/Industrial-Foregoing/issues/55)
++ Added a manual and documentation 
 
 # 1.3.1
 + Changed some names

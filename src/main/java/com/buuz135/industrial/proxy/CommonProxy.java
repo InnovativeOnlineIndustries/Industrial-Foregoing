@@ -3,6 +3,7 @@ package com.buuz135.industrial.proxy;
 import com.buuz135.industrial.IndustrialForegoing;
 import com.buuz135.industrial.config.CustomConfiguration;
 import com.buuz135.industrial.entity.EntityPinkSlime;
+import com.buuz135.industrial.gui.GuiHandler;
 import com.buuz135.industrial.proxy.event.MeatFeederTickHandler;
 import com.buuz135.industrial.proxy.event.MobDeathHandler;
 import com.buuz135.industrial.proxy.event.WorldTickHandler;
@@ -19,6 +20,7 @@ import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.config.Configuration;
 import net.minecraftforge.fml.common.Loader;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
+import net.minecraftforge.fml.common.network.NetworkRegistry;
 import net.minecraftforge.fml.common.registry.EntityRegistry;
 
 import java.util.Random;
@@ -42,6 +44,8 @@ public class CommonProxy {
         MinecraftForge.EVENT_BUS.register(new MeatFeederTickHandler());
         MinecraftForge.EVENT_BUS.register(new MobDeathHandler());
         MinecraftForge.EVENT_BUS.register(new WorldTickHandler());
+
+        NetworkRegistry.INSTANCE.registerGuiHandler(IndustrialForegoing.instance, new GuiHandler());
 
         CustomConfiguration.config = new Configuration(event.getSuggestedConfigurationFile());
 

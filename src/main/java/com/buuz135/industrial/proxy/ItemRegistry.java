@@ -23,6 +23,7 @@ public class ItemRegistry {
     public static LaserLensItem laserLensItem;
     public static LaserLensItem laserLensItem_inverted;
     public static IFCustomItem pinkSlime;
+    public static BookManualItem bookManualItem;
 
     public static ItemStraw strawItem;
 
@@ -44,6 +45,7 @@ public class ItemRegistry {
         (laserLensItem_inverted = new LaserLensItem(true)).register(itemRegistry);
         (strawItem = new ItemStraw()).register(itemRegistry);
         (pinkSlime = new IFCustomItem("pink_slime")).register(itemRegistry);
+        (bookManualItem = new BookManualItem()).register(itemRegistry);
 
         (adultFilterAddomItem = new AdultFilterAddonItem()).registerItem(itemRegistry);
         (rangeAddonItem = new RangeAddonItem()).registerItem(itemRegistry);
@@ -56,5 +58,6 @@ public class ItemRegistry {
         adultFilterAddomItem.createRecipe();
         rangeAddonItem.createRecipe();
         energyFieldAddon.createRecipe();
+        bookManualItem.createRecipe();
     }
 }

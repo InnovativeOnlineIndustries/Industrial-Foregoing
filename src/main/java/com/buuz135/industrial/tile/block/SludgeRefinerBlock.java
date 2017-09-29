@@ -1,6 +1,10 @@
 package com.buuz135.industrial.tile.block;
 
+import com.buuz135.industrial.api.book.IPage;
+import com.buuz135.industrial.api.book.page.PageItemList;
+import com.buuz135.industrial.api.book.page.PageText;
 import com.buuz135.industrial.api.recipe.SludgeEntry;
+import com.buuz135.industrial.book.BookCategory;
 import com.buuz135.industrial.proxy.ItemRegistry;
 import com.buuz135.industrial.tile.agriculture.SludgeRefinerTile;
 import com.buuz135.industrial.utils.ItemStackWeightedItem;
@@ -13,6 +17,7 @@ import net.ndrei.teslacorelib.items.MachineCaseItem;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class SludgeRefinerBlock extends CustomOrientedBlock<SludgeRefinerTile> {
 
@@ -44,5 +49,19 @@ public class SludgeRefinerBlock extends CustomOrientedBlock<SludgeRefinerTile> {
                 'm', MachineCaseItem.INSTANCE,
                 'i', "gearIron",
                 'g', "gearGold");
+    }
+
+    @Override
+    public BookCategory getCategory() {
+        return BookCategory.AGRICULTURE;
+    }
+
+    @Override
+    public List<IPage> getBookDescriptionPages() {
+        List<IPage> pages = new ArrayList<>();
+        pages.add(new PageText("When provided with power and " + PageText.bold("1") + " bucket of Sludge (Produced in the Plant Gatherer), it will produce " + PageText.bold("earth like") + " materials.\n\n" + PageText.bold("If JEI is installed look the uses of the Sludge Refiner to check the chance of the produced materials.")));
+        pages.addAll(PageItemList.generatePagesFromItemStacks(SludgeEntry.SLUDGE_RECIPES.stream().map(SludgeEntry::getStack).collect(Collectors.toList()), "Sludge produced items:"));
+        pages.addAll(super.getBookDescriptionPages());
+        return pages;
     }
 }
