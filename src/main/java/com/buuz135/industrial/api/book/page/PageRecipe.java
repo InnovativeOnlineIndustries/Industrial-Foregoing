@@ -44,7 +44,7 @@ public class PageRecipe implements IPage {
     @Override
     public void drawScreenPost(CategoryEntry entry, GUIBookBase base, int mouseX, int mouseY, float partialTicks, FontRenderer renderer) {
         for (int pos = 0; pos < 9; ++pos) {
-            if (mouseX >= base.getGuiLeft() + 25 + (pos % 3) * 18 && mouseX <= base.getGuiLeft() + 25 + (pos % 3) * 18 + 18 && mouseY >= base.getGuiTop() + 69 + (pos / 3) * 18 && mouseY <= base.getGuiTop() + 69 + (pos / 3) * 18 + 18) {
+            if (mouseX >= base.getGuiLeft() + 25 + (pos % 3) * 18 && mouseX <= base.getGuiLeft() + 25 + (pos % 3) * 18 + 16 && mouseY >= base.getGuiTop() + 69 + (pos / 3) * 18 && mouseY <= base.getGuiTop() + 69 + (pos / 3) * 18 + 16) {
                 ItemStack stack = recipe.getIngredients().get(pos).getMatchingStacks()[0];
                 base.drawHoveringText(stack.getTooltip(null, ITooltipFlag.TooltipFlags.NORMAL), mouseX, mouseY);
             }
