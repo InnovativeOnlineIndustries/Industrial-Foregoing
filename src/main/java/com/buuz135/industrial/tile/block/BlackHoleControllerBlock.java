@@ -51,7 +51,7 @@ public class BlackHoleControllerBlock extends CustomOrientedBlock<BlackHoleContr
     @Override
     public List<IPage> getBookDescriptionPages() {
         List<IPage> pages = super.getBookDescriptionPages();
-        pages.add(0, new PageText("It can can hold 9 " + PageText.bold("Black Hole Units") + " and access it's items. That means 9 times " + PageText.bold(new DecimalFormat().format(Integer.MAX_VALUE)) + " of items."));
+        pages.add(0, new PageText("It can hold 9 " + PageText.bold("Black Hole Units") + " and access it's items. That means 9 times " + PageText.bold(new DecimalFormat().format(Integer.MAX_VALUE)) + " of items."));
         return pages;
     }
 }

@@ -19,7 +19,7 @@ public class IFManual {
 
     public static void buildManual() {
         BookCategory.GETTING_STARTED.getEntries().put(new ResourceLocation(Reference.MOD_ID, "introduction"), new CategoryEntry("Introduction", new ItemStack(ItemRegistry.plastic),
-                Arrays.asList(new PageText("Welcome to Industrial Foregoing's Manual!\n\nTo get started you need to place a Tree Fluid Extractor in front of a log to collect Latex and pump into Latex Processing Unit with some water to get Tiny Rubber. \n\n" + TextFormatting.RED + "NOTE: Machines don't auto eject, neither they pull! Machines accept any time of power."))));
+                Arrays.asList(new PageText("Welcome to Industrial Foregoing's Manual!\n\nTo get started you need to place a Tree Fluid Extractor in front of a log to collect Latex and pump into Latex Processing Unit with some water to get Tiny Rubber. \n\n" + TextFormatting.RED + "NOTE: Machines don't auto eject, neither they pull! Machines accept RF, FE, Tesla and Mek power."))));
         CustomOrientedBlock.blockList.forEach(customOrientedBlock -> customOrientedBlock.getCategory().getEntries().put(customOrientedBlock.getRegistryName(), new CategoryEntry(customOrientedBlock.getLocalizedName(), new ItemStack(customOrientedBlock), customOrientedBlock.getBookDescriptionPages())));
         BookCategory.MOB.getEntries().put(ItemRegistry.mobImprisonmentToolItem.getRegistryName(), new CategoryEntry(ItemRegistry.mobImprisonmentToolItem.getItemStackDisplayName(new ItemStack(ItemRegistry.mobImprisonmentToolItem)), new ItemStack(ItemRegistry.mobImprisonmentToolItem),
                 Arrays.asList(new PageText("When right clicked an entity with the item in the hand it will " + PageText.bold("hold") + " the entity inside it."))));
@@ -28,7 +28,7 @@ public class IFManual {
         addItemEntry(ItemRegistry.rangeAddonItem, new PageText("It will increase the working " + PageText.bold("range") + " of some machines. Not all of the machines will accept them."));
         addItemEntry(ItemRegistry.strawItem, new PageText("It allows you to " + PageText.bold("drink") + " in world fluids or in tanks. It can cause different " + PageText.bold("effects") + " depending on the fluid.\n\n\n\n\n(I'm not responsible of the bad effects that the straw can cause)"));
         addItemEntry(ItemRegistry.pinkSlime, new PageText("Can be obtained by killing a " + PageText.bold("Pink Slime") + " that will spawned when placing some " + PageText.bold("Pink Slime Fluid") + " in the world."));
-        BookCategory.ITEM.getEntries().put(new ResourceLocation(Reference.MOD_ID, "upgrades"), new CategoryEntry("Upgrades", new ItemStack(ItemRegistry.dryRubber), Arrays.asList(new PageText("Industrial Foregoing doesn't have speed upgrades but you can used " + PageText.bold("Energy Upgrades") + " and " + PageText.bold("Speed Upgrades") + " from Tesla Core Lib to speed up machines."))));
+        BookCategory.ITEM.getEntries().put(new ResourceLocation(Reference.MOD_ID, "upgrades"), new CategoryEntry("Upgrades", new ItemStack(ItemRegistry.dryRubber), Arrays.asList(new PageText("Industrial Foregoing doesn't have speed upgrades but you can used " + PageText.bold("Energy Upgrades") + " and " + PageText.bold("Speed Upgrades") + " from Tesla Core Lib to speed up machines. They need the previous tier to be installed to be able to add the next one."))));
 
     }
 

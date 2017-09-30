@@ -37,7 +37,7 @@ public class LavaFabricatorBlock extends CustomOrientedBlock<LavaFabricatorTile>
     @Override
     public List<IPage> getBookDescriptionPages() {
         List<IPage> pages = super.getBookDescriptionPages();
-        pages.add(0, new PageText("When provided with provided with large amounts of power, it will produce " + PageText.bold("lava") + "."));
+        pages.add(0, new PageText("When provided with large amounts of power, it will produce " + PageText.bold("lava") + "."));
         return pages;
     }
 }

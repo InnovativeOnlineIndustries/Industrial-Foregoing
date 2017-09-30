@@ -185,7 +185,7 @@ public class GUIBookBase extends GuiScreen {
                     CategoryEntry entry = category.getEntries().get(location);
                     for (IPage page : entry.getPages()) {
                         if (page instanceof PageText) {
-                            if (((PageText) page).getText().toLowerCase().contains(text.toLowerCase())) {
+                            if (((PageText) page).getText().toLowerCase().contains(text.toLowerCase()) && buttonList.stream().filter(guiButton -> guiButton instanceof CategoryEntryButton).noneMatch(guiButton -> ((CategoryEntryButton) guiButton).getEntry().equals(entry))) {
                                 this.addButton(new CategoryEntryButton(-315 - buttonsAdded, this.getGuiLeft() + 16, this.getGuiTop() + 32 + GUIBookCantegoryEntries.SPACE * buttonsAdded, this.getGuiXSize() - 32, GUIBookCantegoryEntries.SPACE, entry.getName(), entry));
                                 ++buttonsAdded;
                                 if (buttonsAdded >= 9) {

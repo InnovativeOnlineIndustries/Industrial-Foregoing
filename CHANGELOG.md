@@ -1,3 +1,7 @@
+# 1.4.1
++ Fixed some book stuff
++ Fix [#57](https://github.com/Buuz135/Industrial-Foregoing/issues/57)
+
 # 1.4
 + Fix [#54](https://github.com/Buuz135/Industrial-Foregoing/issues/54)
 + Better GUI Syncing for some machines
