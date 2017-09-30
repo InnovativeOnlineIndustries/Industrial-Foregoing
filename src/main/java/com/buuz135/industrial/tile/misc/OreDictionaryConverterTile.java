@@ -90,7 +90,7 @@ public class OreDictionaryConverterTile extends CustomSidedTileEntity {
         this.addInventory(new CustomColoredItemHandler(change, EnumDyeColor.ORANGE, "change", 18, 25 + 18 * 2, 9, 1) {
             @Override
             public boolean canInsertItem(int slot, ItemStack stack) {
-                return !filter.getStackInSlot(0).isEmpty() && !filter.getStackInSlot(0).isItemEqual(stack);
+                return !filter.getStackInSlot(0).isEmpty() && !filter.getStackInSlot(0).isItemEqual(stack) && ItemStackUtils.getOreDictionaryEntries(stack).contains(oreDict);
             }
 
             @Override
