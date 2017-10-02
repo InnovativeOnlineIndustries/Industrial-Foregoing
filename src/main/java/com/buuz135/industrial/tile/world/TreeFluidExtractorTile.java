@@ -105,7 +105,6 @@ public class TreeFluidExtractorTile extends CustomSidedTileEntity {
 
         public static void remove(World world, BlockPos pos) {
             woodLodProgressList = woodLodProgressList.stream().filter(woodLodProgress -> !(woodLodProgress.getBlockPos().equals(pos) && woodLodProgress.getWorld().equals(world))).collect(Collectors.toList());
-            ;
         }
     }
 }

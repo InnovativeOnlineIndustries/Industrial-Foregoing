@@ -36,7 +36,7 @@ public class AnimalResourceHarvesterTile extends WorkingAreaElectricMachine {
     @Override
     protected void initializeInventories() {
         super.initializeInventories();
-        tank = this.addSimpleFluidTank(8000, "tank", EnumDyeColor.WHITE, 50, 25, FluidTankType.OUTPUT, fluidStack -> null, fluidStack -> true);
+        tank = this.addSimpleFluidTank(8000, "tank", EnumDyeColor.WHITE, 50, 25, FluidTankType.OUTPUT, fluidStack -> false, fluidStack -> true);
         outItems = new ItemStackHandler(3 * 4) {
             @Override
             protected void onContentsChanged(int slot) {

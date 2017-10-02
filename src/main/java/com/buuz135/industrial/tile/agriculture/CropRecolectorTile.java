@@ -20,7 +20,8 @@ import net.minecraftforge.items.ItemHandlerHelper;
 import net.minecraftforge.items.ItemStackHandler;
 import net.ndrei.teslacorelib.inventory.BoundingRectangle;
 
-import java.util.*;
+import java.util.List;
+import java.util.Optional;
 
 public class CropRecolectorTile extends WorkingAreaElectricMachine {
 
@@ -29,14 +30,9 @@ public class CropRecolectorTile extends WorkingAreaElectricMachine {
     private IFluidTank sludge;
     private ItemStackHandler outItems;
     private int pointer;
-    private Queue<BlockPos> woodCache;
-    private Queue<BlockPos> leavesCache;
-
 
     public CropRecolectorTile() {
         super(CropRecolectorTile.class.getName().hashCode(), 1, 0, true);
-        woodCache = new PriorityQueue<>(Comparator.comparingDouble(value -> ((BlockPos) value).distanceSq(((BlockPos) value).getX(), pos.getY(), ((BlockPos) value).getZ())).reversed());
-        leavesCache = new PriorityQueue<>(Comparator.comparingDouble(value -> ((BlockPos) value).distanceSq(((BlockPos) value).getX(), pos.getY(), ((BlockPos) value).getZ())).reversed());
     }
 
     @Override

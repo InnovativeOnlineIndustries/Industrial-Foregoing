@@ -39,7 +39,7 @@ public class ResourcefulFurnaceTile extends CustomElectricMachine {
         super.initializeInventories();
         input = addSimpleInventory(3, "input", EnumDyeColor.BLUE, "Input items", new BoundingRectangle(54, 25, 18, 18 * 3), (i, slot) -> !FurnaceRecipes.instance().getSmeltingResult(i).isEmpty(), (o, slot) -> false, false, null);
         output = addSimpleInventory(3, "Output", EnumDyeColor.ORANGE, "Output items", new BoundingRectangle(54 + 32 + 16, 25, 18, 18 * 3), (i, slot) -> !FurnaceRecipes.instance().getSmeltingResult(i).isEmpty(), (o, slot) -> false, false, null);
-        tank = addSimpleFluidTank(8000, "Tank", EnumDyeColor.LIME, 128, 25, FluidTankType.OUTPUT, (o) -> null, (o) -> true);
+        tank = addSimpleFluidTank(8000, "Tank", EnumDyeColor.LIME, 128, 25, FluidTankType.OUTPUT, (o) -> false, (o) -> true);
     }
 
     @Override

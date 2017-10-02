@@ -1,3 +1,6 @@
+# 1.4.2
++ Fixed an issue where some machines would crash if you tried to insert fluid into them when you weren't supposed to.
+
 # 1.4.1
 + Fixed some book stuff
 + Fix [#57](https://github.com/Buuz135/Industrial-Foregoing/issues/57)
