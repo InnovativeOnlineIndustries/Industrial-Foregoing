@@ -1,5 +1,6 @@
 # 1.4.2
 + Fixed an issue where some machines would crash if you tried to insert fluid into them when you weren't supposed to.
++ Added some ores to the Laser Drill: Aluminum, Nickel, Draconium, Yellorium, Cobalt, Osmium and Ardite.
 
 # 1.4.1
 + Fixed some book stuff

@@ -66,6 +66,13 @@ public class RecipeHandlers {
         checkAndAddLaserDrill(10, "oreLead", 5);
         checkAndAddLaserDrill(7, "oreSilver", 5);
         checkAndAddLaserDrill(1, "oreCopper", 10);
+        checkAndAddLaserDrill(12, "oreAluminum", 5);
+        checkAndAddLaserDrill(12, "oreNickel", 4);
+        checkAndAddLaserDrill(10, "oreDraconium", 2);
+        checkAndAddLaserDrill(4, "oreYellorium", 2);
+        checkAndAddLaserDrill(11, "oreCobalt", 2);
+        checkAndAddLaserDrill(3, "oreOsmium", 4);
+        checkAndAddLaserDrill(4, "oreArdite", 1);
         LASER_ENTRIES.forEach((ctAction, entry) -> {
             if (ctAction == CTAction.ADD) IndustrialForegoingHelper.addLaserDrillEntry(entry);
             else IndustrialForegoingHelper.removeLaserDrillEntry(entry.getStack());
