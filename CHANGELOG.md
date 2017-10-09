@@ -1,3 +1,6 @@
+# 1.4.3
++ Fixed [#65](https://github.com/Buuz135/Industrial-Foregoing/issues/65)
+
 # 1.4.2
 + Fixed an issue where some machines would crash if you tried to insert fluid into them when you weren't supposed to.
 + Added some ores to the Laser Drill: Aluminum, Nickel, Draconium, Yellorium, Cobalt, Osmium and Ardite.
