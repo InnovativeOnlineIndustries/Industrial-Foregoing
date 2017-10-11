@@ -5,10 +5,15 @@ import com.buuz135.industrial.tile.WorkingAreaElectricMachine;
 import com.buuz135.industrial.utils.BlockUtils;
 import com.buuz135.industrial.utils.WorkUtils;
 import net.minecraft.block.Block;
+import net.minecraft.inventory.IInventory;
+import net.minecraft.inventory.InventoryHelper;
 import net.minecraft.item.EnumDyeColor;
 import net.minecraft.item.ItemStack;
+import net.minecraft.tileentity.TileEntity;
+import net.minecraft.tileentity.TileEntityShulkerBox;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.IWorldNameable;
 import net.minecraftforge.items.ItemHandlerHelper;
 import net.minecraftforge.items.ItemStackHandler;
 
@@ -59,10 +64,16 @@ public class BlockDestroyerTile extends WorkingAreaElectricMachine {
         for (BlockPos pos : blockPosList) {
             if (!this.world.isAirBlock(pos)) {
                 Block block = this.world.getBlockState(pos).getBlock();
+                TileEntity tile = world.getTileEntity(pos);
                 if (block.getBlockHardness(this.world.getBlockState(pos), this.world, pos) < 0) continue;
                 List<ItemStack> drops = block.getDrops(this.world, pos, this.world.getBlockState(pos), 0);
                 boolean canInsert = true;
                 for (ItemStack stack : drops) {
+                    if(tile instanceof IWorldNameable) {
+                        if(((IWorldNameable) tile).hasCustomName()) {
+                            stack.setStackDisplayName(((IWorldNameable) tile).getName());
+                        }
+                    }
                     if (!ItemHandlerHelper.insertItem(outItems, stack, true).isEmpty()) {
                         canInsert = false;
                         break;
@@ -71,6 +82,10 @@ public class BlockDestroyerTile extends WorkingAreaElectricMachine {
                 if (canInsert) {
                     for (ItemStack stack : drops) {
                         ItemHandlerHelper.insertItem(outItems, stack, false);
+                    }
+                    if(tile instanceof TileEntityShulkerBox) {
+                        InventoryHelper.dropInventoryItems(this.world, pos, (IInventory)tile);
+                        ((TileEntityShulkerBox) tile).clear();
                     }
                     this.world.setBlockToAir(pos);
                     return 1;
