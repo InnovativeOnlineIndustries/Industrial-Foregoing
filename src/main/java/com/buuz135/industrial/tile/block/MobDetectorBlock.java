@@ -35,7 +35,7 @@ public class MobDetectorBlock extends CustomOrientedBlock<MobDetectorTile> {
     public boolean canConnectRedstone(IBlockState state, IBlockAccess world, BlockPos pos, @Nullable EnumFacing side) {
         if (world.getTileEntity(pos) != null && world.getTileEntity(pos) instanceof MobDetectorTile) {
             MobDetectorTile tile = (MobDetectorTile) world.getTileEntity(pos);
-            return side.equals(tile.getFacing().getOpposite());
+            return side == null || side.equals(tile.getFacing().getOpposite());
         }
         return true;
     }
