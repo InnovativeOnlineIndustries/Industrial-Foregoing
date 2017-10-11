@@ -14,14 +14,14 @@ public class FluidsRegistry {
     public static IFCustomFluid PINK_SLIME;
 
     public static void registerFluids() {
-        (ESSENCE = new IFCustomFluid("essence")).register();
-        (MILK = new IFCustomFluid("milk")).register();
-        (MEAT = new IFCustomFluid("meat")).register();
-        (LATEX = new IFCustomFluid("latex")).register();
-        (SEWAGE = new IFCustomFluid("sewage")).register();
-        (SLUDGE = new IFCustomFluid("sludge")).register();
-        (BIOFUEL = new IFCustomFluid("biofuel")).register();
-        (PINK_SLIME = new IFCustomFluid("if.pink_slime")).register();
+        (ESSENCE = new IFCustomFluid("essence", 300)).register();
+        (MILK = new IFCustomFluid("milk", 300)).register();
+        (MEAT = new IFCustomFluid("meat", 600)).register();
+        (LATEX = new IFCustomFluid("latex", 600)).register();
+        (SEWAGE = new IFCustomFluid("sewage", 600)).register();
+        (SLUDGE = new IFCustomFluid("sludge", 600)).register();
+        (BIOFUEL = new IFCustomFluid("biofuel", 600)).register();
+        (PINK_SLIME = new IFCustomFluid("if.pink_slime", 300)).register();
     }
 
 
