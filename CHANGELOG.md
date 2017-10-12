@@ -5,6 +5,7 @@
 + Fixed [#68](https://github.com/Buuz135/Industrial-Foregoing/issues/68)
 + Fixed dupe bug with shulkerboxes and not keeping their custom name
 + Added Item Splitter
++ Spoopyfied the month for contributors
 
 # 1.4.2
 + Fixed an issue where some machines would crash if you tried to insert fluid into them when you weren't supposed to.

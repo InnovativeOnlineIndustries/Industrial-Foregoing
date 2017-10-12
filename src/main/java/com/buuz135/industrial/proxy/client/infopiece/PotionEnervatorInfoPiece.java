@@ -1,4 +1,4 @@
-package com.buuz135.industrial.proxy.client;
+package com.buuz135.industrial.proxy.client.infopiece;
 
 import com.buuz135.industrial.tile.magic.PotionEnervatorTile;
 import net.minecraft.util.ResourceLocation;

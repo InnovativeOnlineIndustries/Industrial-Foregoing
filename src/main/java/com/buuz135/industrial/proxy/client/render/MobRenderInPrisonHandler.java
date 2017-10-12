@@ -1,4 +1,4 @@
-package com.buuz135.industrial.proxy.client;
+package com.buuz135.industrial.proxy.client.render;
 
 import com.buuz135.industrial.item.MobImprisonmentToolItem;
 import com.buuz135.industrial.utils.ItemStackUtils;

@@ -6,6 +6,7 @@ import com.buuz135.industrial.proxy.CommonProxy;
 import com.buuz135.industrial.proxy.client.entity.RenderPinkSlime;
 import com.buuz135.industrial.proxy.client.event.IFTextureStichEvent;
 import com.buuz135.industrial.proxy.client.render.ContributorsCatEarsRender;
+import com.buuz135.industrial.proxy.client.render.MobRenderInPrisonHandler;
 import com.buuz135.industrial.utils.Reference;
 import com.google.gson.GsonBuilder;
 import net.minecraft.client.Minecraft;
