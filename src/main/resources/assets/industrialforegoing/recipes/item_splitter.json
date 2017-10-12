@@ -1,0 +1,28 @@
+{
+  "result": {
+    "item": "industrialforegoing:item_splitter"
+  },
+  "pattern": [
+    "pcp",
+    "hmh",
+    "pgp"
+  ],
+  "type": "forge:ore_shaped",
+  "key": {
+    "p": {
+      "item": "industrialforegoing:plastic"
+    },
+    "c": {
+      "item": "#CHESTWOOD"
+    },
+    "g": {
+      "item": "#GEARIRON"
+    },
+    "h": {
+      "item": "minecraft:hopper"
+    },
+    "m": {
+      "item": "teslacorelib:machine_case"
+    }
+  }
+}

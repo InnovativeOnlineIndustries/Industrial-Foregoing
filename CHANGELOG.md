@@ -3,6 +3,8 @@
 + Added polish localization.  Thanks to @Kaperios
 + Fixed [#66](https://github.com/Buuz135/Industrial-Foregoing/issues/66)
 + Fixed [#68](https://github.com/Buuz135/Industrial-Foregoing/issues/68)
++ Fixed dupe bug with shulkerboxes and not keeping their custom name
++ Added Item Splitter
 
 # 1.4.2
 + Fixed an issue where some machines would crash if you tried to insert fluid into them when you weren't supposed to.
