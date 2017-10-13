@@ -1,6 +1,7 @@
 package com.buuz135.industrial.registry;
 
 import com.buuz135.industrial.api.IndustrialForegoingHelper;
+import com.buuz135.industrial.api.rednet.IRednetReader;
 import com.buuz135.industrial.api.straw.StrawHandler;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.registries.ForgeRegistry;
@@ -12,6 +13,12 @@ public class IFRegistries {
             .setName(new ResourceLocation(IndustrialForegoingHelper.MOD_ID + ":straw"))
             .setIDRange(1, Integer.MAX_VALUE - 1)
             .setType(StrawHandler.class)
+            .create();
+
+    public static final ForgeRegistry<IRednetReader> REDNET_READER_REGISTRY = (ForgeRegistry<IRednetReader>) new RegistryBuilder<IRednetReader>()
+            .setName(new ResourceLocation(IndustrialForegoingHelper.MOD_ID + ":rednetreader"))
+            .setIDRange(1, Integer.MAX_VALUE - 1)
+            .setType(IRednetReader.class)
             .create();
 
     public static void poke() {
