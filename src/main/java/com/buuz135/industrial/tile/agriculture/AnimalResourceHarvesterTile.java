@@ -72,6 +72,7 @@ public class AnimalResourceHarvesterTile extends WorkingAreaElectricMachine {
         }
         for (EntityCow cow : this.world.getEntitiesWithinAABB(EntityCow.class, getWorkingArea())) {
             FakePlayer player = IndustrialForegoing.getFakePlayer(this.world);
+            player.setPosition(cow.posX, cow.posY, cow.posZ);
             player.setHeldItem(EnumHand.MAIN_HAND, new ItemStack(Items.BUCKET));
             if (cow.processInteract(player, EnumHand.MAIN_HAND)) {
                 ItemStack stack = player.getHeldItem(EnumHand.MAIN_HAND);

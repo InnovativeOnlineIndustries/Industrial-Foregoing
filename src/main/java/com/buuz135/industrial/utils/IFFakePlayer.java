@@ -1,6 +1,7 @@
 package com.buuz135.industrial.utils;
 
 import com.mojang.authlib.GameProfile;
+import net.minecraft.item.ItemStack;
 import net.minecraft.world.WorldServer;
 import net.minecraftforge.common.util.FakePlayer;
 
@@ -16,4 +17,8 @@ public class IFFakePlayer extends FakePlayer {
         super(worldIn, PROFILE);
     }
 
+    @Override
+    protected void playEquipSound(ItemStack stack) {
+
+    }
 }

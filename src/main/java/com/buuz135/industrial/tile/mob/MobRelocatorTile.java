@@ -16,6 +16,7 @@ import net.minecraft.util.DamageSource;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
+import net.minecraftforge.common.util.FakePlayer;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.IFluidTank;
 import net.minecraftforge.items.ItemHandlerHelper;
@@ -74,7 +75,8 @@ public class MobRelocatorTile extends WorkingAreaElectricMachine {
         AxisAlignedBB area = getWorkingArea();
         List<EntityLiving> mobs = this.getWorld().getEntitiesWithinAABB(EntityLiving.class, area);
         if (mobs.size() == 0) return 0;
-        mobs.forEach(entityLiving -> entityLiving.attackEntityFrom(DamageSource.causePlayerDamage(IndustrialForegoing.getFakePlayer(world)), Integer.MAX_VALUE));
+        FakePlayer player = IndustrialForegoing.getFakePlayer(world);
+        mobs.forEach(entityLiving -> entityLiving.attackEntityFrom(DamageSource.causePlayerDamage(player), Integer.MAX_VALUE));
         List<EntityItem> items = this.getWorld().getEntitiesWithinAABB(EntityItem.class, area);
         for (EntityItem item : items) {
             if (!item.getItem().isEmpty()) {
