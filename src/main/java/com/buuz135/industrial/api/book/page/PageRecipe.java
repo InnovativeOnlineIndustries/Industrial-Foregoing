@@ -11,6 +11,8 @@ import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.item.crafting.Ingredient;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.common.registry.ForgeRegistries;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class PageRecipe implements IPage {
 
@@ -22,6 +24,7 @@ public class PageRecipe implements IPage {
         this.recipe = ForgeRegistries.RECIPES.getValue(recipeLocation);
     }
 
+    @SideOnly(Side.CLIENT)
     @Override
     public void drawScreenPre(CategoryEntry entry, GUIBookBase base, int mouseX, int mouseY, float partialTicks, FontRenderer renderer) {
         //base.drawCenteredString(renderer, TextFormatting.AQUA+"Recipe"+TextFormatting.RESET, base.getGuiLeft()+base.getGuiXSize()/2,base.getGuiTop()+30,0xFFFFFF);
@@ -30,7 +33,8 @@ public class PageRecipe implements IPage {
         int pos = 0;
         RenderHelper.enableGUIStandardItemLighting();
         for (Ingredient ingredient : recipe.getIngredients()) {
-            base.mc.getRenderItem().renderItemIntoGUI(ingredient.getMatchingStacks()[0], base.getGuiLeft() + 25 + (pos % 3) * 18, base.getGuiTop() + 69 + (pos / 3) * 18);
+            if (ingredient != null && ingredient.getMatchingStacks().length > 0)
+                base.mc.getRenderItem().renderItemIntoGUI(ingredient.getMatchingStacks()[0], base.getGuiLeft() + 25 + (pos % 3) * 18, base.getGuiTop() + 69 + (pos / 3) * 18);
             ++pos;
         }
         base.mc.getRenderItem().renderItemIntoGUI(recipe.getRecipeOutput(), base.getGuiLeft() + 25 + 94, base.getGuiTop() + 69 + 18);
@@ -41,6 +45,7 @@ public class PageRecipe implements IPage {
 
     }
 
+    @SideOnly(Side.CLIENT)
     @Override
     public void drawScreenPost(CategoryEntry entry, GUIBookBase base, int mouseX, int mouseY, float partialTicks, FontRenderer renderer) {
         for (int pos = 0; pos < 9; ++pos) {
