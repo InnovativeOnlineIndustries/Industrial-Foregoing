@@ -12,6 +12,7 @@ import com.buuz135.industrial.utils.CraftingUtils;
 import com.buuz135.industrial.utils.RecipeUtils;
 import com.buuz135.industrial.utils.Reference;
 import com.buuz135.industrial.utils.apihandlers.CraftTweakerHelper;
+import com.buuz135.industrial.utils.apihandlers.PlantRecollectableRegistryHandler;
 import com.buuz135.industrial.utils.apihandlers.RecipeHandlers;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.ResourceLocation;
@@ -44,6 +45,7 @@ public class CommonProxy {
         MinecraftForge.EVENT_BUS.register(new MeatFeederTickHandler());
         MinecraftForge.EVENT_BUS.register(new MobDeathHandler());
         MinecraftForge.EVENT_BUS.register(new WorldTickHandler());
+        MinecraftForge.EVENT_BUS.register(new PlantRecollectableRegistryHandler());
 
         NetworkRegistry.INSTANCE.registerGuiHandler(IndustrialForegoing.instance, new GuiHandler());
 
@@ -56,7 +58,6 @@ public class CommonProxy {
     }
 
     public void init() {
-        RecipeHandlers.registerRecollectables();
         RecipeHandlers.loadBioReactorEntries();
         RecipeHandlers.loadLaserLensEntries();
         RecipeHandlers.loadSludgeRefinerEntries();

@@ -5,7 +5,6 @@ import com.buuz135.industrial.api.recipe.BioReactorEntry;
 import com.buuz135.industrial.api.recipe.LaserDrillEntry;
 import com.buuz135.industrial.api.recipe.SludgeEntry;
 import com.buuz135.industrial.utils.apihandlers.crafttweaker.CTAction;
-import com.buuz135.industrial.utils.apihandlers.plant.*;
 import com.google.common.collect.LinkedListMultimap;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
@@ -78,15 +77,6 @@ public class RecipeHandlers {
             else IndustrialForegoingHelper.removeLaserDrillEntry(entry.getStack());
         });
     }
-
-    public static void registerRecollectables() {
-        IndustrialForegoingHelper.addPlantRecollectable(new BlockCropPlantRecollectable());
-        IndustrialForegoingHelper.addPlantRecollectable(new BlockNetherWartRecollectable());
-        IndustrialForegoingHelper.addPlantRecollectable(new DoubleTallPlantRecollectable());
-        IndustrialForegoingHelper.addPlantRecollectable(new PumpkinMelonPlantRecollectable());
-        IndustrialForegoingHelper.addPlantRecollectable(new TreePlantRecollectable());
-    }
-
     public static void loadSludgeRefinerEntries() {
         IndustrialForegoingHelper.addSludgeRefinerEntry(new SludgeEntry(new ItemStack(Items.CLAY_BALL), 4));
         IndustrialForegoingHelper.addSludgeRefinerEntry(new SludgeEntry(new ItemStack(Blocks.CLAY), 1));

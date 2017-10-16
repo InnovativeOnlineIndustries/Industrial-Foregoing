@@ -1,6 +1,6 @@
 package com.buuz135.industrial.utils.apihandlers.plant;
 
-import com.buuz135.industrial.api.plant.IPlantRecollectable;
+import com.buuz135.industrial.api.plant.PlantRecollectable;
 import com.buuz135.industrial.proxy.BlockRegistry;
 import com.buuz135.industrial.utils.BlockUtils;
 import net.minecraft.block.state.IBlockState;
@@ -12,11 +12,12 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-public class TreePlantRecollectable implements IPlantRecollectable {
+public class TreePlantRecollectable extends PlantRecollectable {
 
     private final HashMap<BlockPos, TreeCache> treeCache;
 
     public TreePlantRecollectable() {
+        super("tree");
         this.treeCache = new HashMap<>();
     }
 

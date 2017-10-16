@@ -1,6 +1,7 @@
 # 1.5
 + Try to fix [#71](https://github.com/Buuz135/Industrial-Foregoing/issues/71) as it is hard to track
-+ Fixed [#70](https://github.com/Buuz135/Industrial-Foregoing/issues/70)
++ Fixed [#70](https://github.com/Buuz135/Industrial-Foregoing/issues/70
++ Changed `IPlantRecollectable` to `PlantRecollectable` and changed to a IForgeRegistry )
 
 # 1.4.3
 + Fixed [#65](https://github.com/Buuz135/Industrial-Foregoing/issues/65)

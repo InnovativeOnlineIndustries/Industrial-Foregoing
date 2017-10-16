@@ -1,6 +1,6 @@
 package com.buuz135.industrial.utils.apihandlers.plant;
 
-import com.buuz135.industrial.api.plant.IPlantRecollectable;
+import com.buuz135.industrial.api.plant.PlantRecollectable;
 import net.minecraft.block.BlockCrops;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.item.ItemStack;
@@ -10,7 +10,12 @@ import net.minecraft.world.World;
 
 import java.util.List;
 
-public class BlockCropPlantRecollectable implements IPlantRecollectable {
+public class BlockCropPlantRecollectable extends PlantRecollectable {
+
+    public BlockCropPlantRecollectable() {
+        super("blockcropplant");
+    }
+
     @Override
     public boolean canBeHarvested(World world, BlockPos pos, IBlockState blockState) {
         return blockState.getBlock() instanceof BlockCrops && ((BlockCrops) blockState.getBlock()).isMaxAge(blockState);

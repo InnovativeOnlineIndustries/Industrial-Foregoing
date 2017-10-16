@@ -1,6 +1,6 @@
 package com.buuz135.industrial.utils.apihandlers.plant;
 
-import com.buuz135.industrial.api.plant.IPlantRecollectable;
+import com.buuz135.industrial.api.plant.PlantRecollectable;
 import net.minecraft.block.BlockMelon;
 import net.minecraft.block.BlockPumpkin;
 import net.minecraft.block.state.IBlockState;
@@ -11,7 +11,12 @@ import net.minecraft.world.World;
 
 import java.util.List;
 
-public class PumpkinMelonPlantRecollectable implements IPlantRecollectable {
+public class PumpkinMelonPlantRecollectable extends PlantRecollectable {
+
+    public PumpkinMelonPlantRecollectable() {
+        super("blockpumpkingandmelon");
+    }
+
     @Override
     public boolean canBeHarvested(World world, BlockPos pos, IBlockState blockState) {
         return blockState.getBlock() instanceof BlockPumpkin || blockState.getBlock() instanceof BlockMelon;

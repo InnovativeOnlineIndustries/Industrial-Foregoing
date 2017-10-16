@@ -1,7 +1,6 @@
 package com.buuz135.industrial.api;
 
 
-import com.buuz135.industrial.api.plant.IPlantRecollectable;
 import com.buuz135.industrial.api.recipe.BioReactorEntry;
 import com.buuz135.industrial.api.recipe.LaserDrillEntry;
 import com.buuz135.industrial.api.recipe.SludgeEntry;
@@ -12,7 +11,7 @@ import java.util.stream.Collectors;
 public class IndustrialForegoingHelper {
 
     public static final String MOD_ID = "industrialforegoing";
-    public static final String API_VERSION = "2";
+    public static final String API_VERSION = "3";
     public static final String API_ID = MOD_ID + "api";
 
     /**
@@ -98,12 +97,4 @@ public class IndustrialForegoingHelper {
         return false;
     }
 
-    /**
-     * Registers a new IPlantRecollectable at the start of the list giving it preference over the others that are already there.
-     *
-     * @param recollectable The IPlantRecollectable to register
-     */
-    public static void addPlantRecollectable(IPlantRecollectable recollectable) {
-        IPlantRecollectable.PLANT_RECOLLECTABLES.add(0, recollectable);
-    }
 }

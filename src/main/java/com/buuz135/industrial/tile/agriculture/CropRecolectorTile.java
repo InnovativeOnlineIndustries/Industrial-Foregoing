@@ -1,7 +1,8 @@
 package com.buuz135.industrial.tile.agriculture;
 
-import com.buuz135.industrial.api.plant.IPlantRecollectable;
+import com.buuz135.industrial.api.plant.PlantRecollectable;
 import com.buuz135.industrial.proxy.FluidsRegistry;
+import com.buuz135.industrial.registry.IFRegistries;
 import com.buuz135.industrial.tile.CustomColoredItemHandler;
 import com.buuz135.industrial.tile.WorkingAreaElectricMachine;
 import com.buuz135.industrial.tile.block.CropRecolectorBlock;
@@ -20,6 +21,7 @@ import net.minecraftforge.items.ItemHandlerHelper;
 import net.minecraftforge.items.ItemStackHandler;
 import net.ndrei.teslacorelib.inventory.BoundingRectangle;
 
+import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
 
@@ -76,11 +78,11 @@ public class CropRecolectorTile extends WorkingAreaElectricMachine {
         if (pointer < blockPos.size()) {
             BlockPos pos = blockPos.get(pointer);
             IBlockState state = this.world.getBlockState(blockPos.get(pointer));
-            Optional<IPlantRecollectable> recollectable = IPlantRecollectable.PLANT_RECOLLECTABLES.stream().filter(iPlantRecollectable -> iPlantRecollectable.canBeHarvested(this.world, pos, state)).findFirst();
+            Optional<PlantRecollectable> recollectable = IFRegistries.PLANT_RECOLLECTABLES_REGISTRY.getValues().stream().sorted(Comparator.comparingInt(PlantRecollectable::getPriority)).filter(iPlantRecollectable -> iPlantRecollectable.canBeHarvested(this.world, pos, state)).findFirst();
             if (recollectable.isPresent()) {
-                IPlantRecollectable iPlantRecollectable = recollectable.get();
-                insertItems(iPlantRecollectable.doHarvestOperation(this.world, pos, state), outItems);
-                if (!iPlantRecollectable.shouldCheckNextPlant(this.world, pos, state)) shouldPointerIncrease = false;
+                PlantRecollectable plantRecollectable = recollectable.get();
+                insertItems(plantRecollectable.doHarvestOperation(this.world, pos, state), outItems);
+                if (!plantRecollectable.shouldCheckNextPlant(this.world, pos, state)) shouldPointerIncrease = false;
             }
             didWork = recollectable.isPresent();
         }
