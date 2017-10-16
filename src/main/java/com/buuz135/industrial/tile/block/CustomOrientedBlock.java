@@ -8,6 +8,7 @@ import com.buuz135.industrial.config.CustomConfiguration;
 import com.buuz135.industrial.utils.Reference;
 import net.minecraft.block.material.Material;
 import net.minecraftforge.common.config.Configuration;
+import net.minecraftforge.fml.common.registry.ForgeRegistries;
 import net.ndrei.teslacorelib.blocks.OrientedBlock;
 import net.ndrei.teslacorelib.tileentities.SidedTileEntity;
 
@@ -59,7 +60,8 @@ public abstract class CustomOrientedBlock<T extends SidedTileEntity> extends Ori
     @Override
     public List<IPage> getBookDescriptionPages() {
         List<IPage> pages = new ArrayList<>();
-        pages.add(new PageRecipe(this.getRegistryName()));
+        if (ForgeRegistries.RECIPES.getValue(this.getRegistryName()) != null)
+            pages.add(new PageRecipe(this.getRegistryName()));
         return pages;
     }
 
