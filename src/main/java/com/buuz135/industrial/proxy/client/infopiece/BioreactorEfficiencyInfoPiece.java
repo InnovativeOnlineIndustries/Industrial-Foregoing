@@ -1,7 +1,9 @@
 package com.buuz135.industrial.proxy.client.infopiece;
 
 import com.buuz135.industrial.proxy.client.ClientProxy;
-import com.buuz135.industrial.tile.generator.BioReactorTile;
+import com.buuz135.industrial.tile.generator.AbstractReactorTile;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 import net.ndrei.teslacorelib.gui.BasicRenderedGuiPiece;
 import net.ndrei.teslacorelib.gui.BasicTeslaGuiContainer;
 
@@ -10,13 +12,14 @@ import java.util.Arrays;
 
 public class BioreactorEfficiencyInfoPiece extends BasicRenderedGuiPiece {
 
-    private BioReactorTile tile;
+    private AbstractReactorTile tile;
 
-    public BioreactorEfficiencyInfoPiece(BioReactorTile tile, int left, int top) {
+    public BioreactorEfficiencyInfoPiece(AbstractReactorTile tile, int left, int top) {
         super(left, top, 18, 54, ClientProxy.GUI, 93, 72);
         this.tile = tile;
     }
 
+    @SideOnly(Side.CLIENT)
     @Override
     public void drawBackgroundLayer(BasicTeslaGuiContainer container, int guiX, int guiY, float partialTicks, int mouseX, int mouseY) {
         super.drawBackgroundLayer(container, guiX, guiY, partialTicks, mouseX, mouseY);
@@ -26,6 +29,7 @@ public class BioreactorEfficiencyInfoPiece extends BasicRenderedGuiPiece {
 
     }
 
+    @SideOnly(Side.CLIENT)
     @Override
     public void drawForegroundLayer(BasicTeslaGuiContainer container, int guiX, int guiY, int mouseX, int mouseY) {
         super.drawForegroundLayer(container, guiX, guiY, mouseX, mouseY);

@@ -69,8 +69,8 @@ public class BlockDestroyerTile extends WorkingAreaElectricMachine {
                 List<ItemStack> drops = block.getDrops(this.world, pos, this.world.getBlockState(pos), 0);
                 boolean canInsert = true;
                 for (ItemStack stack : drops) {
-                    if(tile instanceof IWorldNameable) {
-                        if(((IWorldNameable) tile).hasCustomName()) {
+                    if (tile instanceof IWorldNameable) {
+                        if (((IWorldNameable) tile).hasCustomName()) {
                             stack.setStackDisplayName(((IWorldNameable) tile).getName());
                         }
                     }
@@ -83,8 +83,8 @@ public class BlockDestroyerTile extends WorkingAreaElectricMachine {
                     for (ItemStack stack : drops) {
                         ItemHandlerHelper.insertItem(outItems, stack, false);
                     }
-                    if(tile instanceof TileEntityShulkerBox) {
-                        InventoryHelper.dropInventoryItems(this.world, pos, (IInventory)tile);
+                    if (tile instanceof TileEntityShulkerBox) {
+                        InventoryHelper.dropInventoryItems(this.world, pos, (IInventory) tile);
                         ((TileEntityShulkerBox) tile).clear();
                     }
                     this.world.setBlockToAir(pos);

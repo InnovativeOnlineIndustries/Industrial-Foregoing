@@ -13,6 +13,7 @@ public abstract class PlantRecollectable extends IForgeRegistryEntry.Impl<PlantR
     public PlantRecollectable(String name) {
         setRegistryName(name);
     }
+
     /**
      * Checks if the Block can be harvested.
      *

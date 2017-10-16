@@ -1,14 +1,18 @@
 [
-{
-  "modid": "industrialforegoing",
-  "name": "Industrial Foregoing",
-  "description": "A small reinvention of Minefactory Reloaded.",
-  "version": "${version}",
-  "mcversion": "${mcversion}",
-  "authorList": ["Buuz135"],
-  "url": "https://minecraft.curseforge.com/projects/industrial-foregoing",
-  "logoFile": "",
-  "screenshots": [],
-  "requiredMods": ["teslacorelib"]
-}
+  {
+    "modid": "industrialforegoing",
+    "name": "Industrial Foregoing",
+    "description": "A small reinvention of Minefactory Reloaded.",
+    "version": "${version}",
+    "mcversion": "${mcversion}",
+    "authorList": [
+      "Buuz135"
+    ],
+    "url": "https://minecraft.curseforge.com/projects/industrial-foregoing",
+    "logoFile": "",
+    "screenshots": [],
+    "requiredMods": [
+      "teslacorelib"
+    ]
+  }
 ]

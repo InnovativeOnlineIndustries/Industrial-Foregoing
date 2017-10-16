@@ -9,9 +9,9 @@ import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.List;
 
-public class BioReactorEntry {
+public class BioReactorEntry implements IReactorEntry {
 
-    public static List<BioReactorEntry> BIO_REACTOR_ENTRIES = new ArrayList<>();
+    public static List<IReactorEntry> BIO_REACTOR_ENTRIES = new ArrayList<>();
 
     private ItemStack stack;
     private Predicate<NBTTagCompound> nbtCheck;

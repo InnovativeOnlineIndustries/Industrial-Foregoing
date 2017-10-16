@@ -77,6 +77,7 @@ public class RecipeHandlers {
             else IndustrialForegoingHelper.removeLaserDrillEntry(entry.getStack());
         });
     }
+
     public static void loadSludgeRefinerEntries() {
         IndustrialForegoingHelper.addSludgeRefinerEntry(new SludgeEntry(new ItemStack(Items.CLAY_BALL), 4));
         IndustrialForegoingHelper.addSludgeRefinerEntry(new SludgeEntry(new ItemStack(Blocks.CLAY), 1));
