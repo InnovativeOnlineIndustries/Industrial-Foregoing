@@ -31,6 +31,10 @@ public class StrawRegistry {
                 .addPotion(MobEffects.ABSORPTION, 100, 2)
                 .addPotion(MobEffects.SATURATION, 300, 2)
                 .setRegistryName("meat"));
+        registry.register(new PotionStrawHandler(FluidsRegistry.PROTEIN)
+                .addPotion(MobEffects.ABSORPTION, 100, 3)
+                .addPotion(MobEffects.SATURATION, 300, 3)
+                .setRegistryName("protein"));
         registry.register(new PotionStrawHandler(FluidsRegistry.LATEX)
                 .addPotion(MobEffects.POISON, 1000, 2)
                 .addPotion(MobEffects.SLOWNESS, 1000, 2)
