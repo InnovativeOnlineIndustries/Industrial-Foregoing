@@ -134,6 +134,14 @@ public class BlackHoleUnitBlock extends CustomOrientedBlock<BlackHoleUnitTile> {
         }
     }
 
+    public void setItemStack(ItemStack hole, ItemStack item) {
+        if (!hole.hasTagCompound()) hole.setTagCompound(new NBTTagCompound());
+        hole.getTagCompound().setString(BlackHoleUnitTile.NBT_ITEMSTACK, item.getItem().getRegistryName().toString());
+        hole.getTagCompound().setInteger(BlackHoleUnitTile.NBT_META, item.getMetadata());
+        if (item.hasTagCompound())
+            hole.getTagCompound().setTag(BlackHoleUnitTile.NBT_ITEM_NBT, item.getTagCompound());
+    }
+
     @Override
     public BookCategory getCategory() {
         return BookCategory.STORAGE;
