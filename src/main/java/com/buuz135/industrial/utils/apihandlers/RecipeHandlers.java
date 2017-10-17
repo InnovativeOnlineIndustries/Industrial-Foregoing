@@ -3,6 +3,7 @@ package com.buuz135.industrial.utils.apihandlers;
 import com.buuz135.industrial.api.IndustrialForegoingHelper;
 import com.buuz135.industrial.api.recipe.BioReactorEntry;
 import com.buuz135.industrial.api.recipe.LaserDrillEntry;
+import com.buuz135.industrial.api.recipe.ProteinReactorEntry;
 import com.buuz135.industrial.api.recipe.SludgeEntry;
 import com.buuz135.industrial.utils.apihandlers.crafttweaker.CTAction;
 import com.google.common.collect.LinkedListMultimap;
@@ -17,6 +18,7 @@ public class RecipeHandlers {
     public static final LinkedListMultimap<CTAction, BioReactorEntry> BIOREACTOR_ENTRIES = LinkedListMultimap.create();
     public static final LinkedListMultimap<CTAction, LaserDrillEntry> LASER_ENTRIES = LinkedListMultimap.create();
     public static final LinkedListMultimap<CTAction, SludgeEntry> SLUDGE_ENTRIES = LinkedListMultimap.create();
+    public static final LinkedListMultimap<CTAction, ProteinReactorEntry> PROTEIN_REACTOR_ENTRIES = LinkedListMultimap.create();
 
     public static void loadBioReactorEntries() {
         IndustrialForegoingHelper.addBioReactorEntry(new BioReactorEntry(new ItemStack(Items.WHEAT_SEEDS)));
@@ -94,6 +96,27 @@ public class RecipeHandlers {
         });
     }
 
+    public static void loadProteinReactorEntries() {
+        IndustrialForegoingHelper.addProteinReactorEntry(new ProteinReactorEntry(new ItemStack(Items.PORKCHOP)));
+        IndustrialForegoingHelper.addProteinReactorEntry(new ProteinReactorEntry(new ItemStack(Items.BEEF)));
+        IndustrialForegoingHelper.addProteinReactorEntry(new ProteinReactorEntry(new ItemStack(Items.CHICKEN)));
+        IndustrialForegoingHelper.addProteinReactorEntry(new ProteinReactorEntry(new ItemStack(Items.RABBIT)));
+        IndustrialForegoingHelper.addProteinReactorEntry(new ProteinReactorEntry(new ItemStack(Items.MUTTON)));
+        IndustrialForegoingHelper.addProteinReactorEntry(new ProteinReactorEntry(new ItemStack(Items.RABBIT_FOOT)));
+        IndustrialForegoingHelper.addProteinReactorEntry(new ProteinReactorEntry(new ItemStack(Items.ROTTEN_FLESH)));
+        IndustrialForegoingHelper.addProteinReactorEntry(new ProteinReactorEntry(new ItemStack(Items.EGG)));
+        IndustrialForegoingHelper.addProteinReactorEntry(new ProteinReactorEntry(new ItemStack(Items.SPIDER_EYE)));
+        IndustrialForegoingHelper.addProteinReactorEntry(new ProteinReactorEntry(new ItemStack(Items.PORKCHOP)));
+        NonNullList<ItemStack> stacks = NonNullList.create();
+        getSubItems(stacks, new ItemStack(Items.FISH));
+        getSubItems(stacks, new ItemStack(Items.SKULL));
+        stacks.forEach(stack -> IndustrialForegoingHelper.addProteinReactorEntry(new ProteinReactorEntry(stack)));
+        PROTEIN_REACTOR_ENTRIES.forEach((ctAction, entry) -> {
+            if (ctAction == CTAction.ADD) IndustrialForegoingHelper.addProteinReactorEntry(entry);
+            else IndustrialForegoingHelper.removeProteinReactorEntry(entry.getStack());
+        });
+    }
+
     public static void checkAndAddLaserDrill(int meta, String oreDict, int weight) {
         NonNullList<ItemStack> stacks = getRealOredictedItems(oreDict);
         if (stacks.size() > 0)
@@ -111,6 +134,12 @@ public class RecipeHandlers {
             }
         }
         return stacks;
+    }
+
+    public static void getSubItems(NonNullList<ItemStack> list, ItemStack stack) {
+        if (stack.getItem().getCreativeTab() != null)
+            stack.getItem().getSubItems(stack.getItem().getCreativeTab(), list);
+
     }
 
 }

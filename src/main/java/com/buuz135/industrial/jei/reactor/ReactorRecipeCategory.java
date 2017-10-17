@@ -1,4 +1,4 @@
-package com.buuz135.industrial.jei.bioreactor;
+package com.buuz135.industrial.jei.reactor;
 
 import com.buuz135.industrial.utils.Reference;
 import mezz.jei.api.IGuiHelper;
@@ -17,24 +17,26 @@ import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.List;
 
-public class BioReactorRecipeCategory implements IRecipeCategory<BioReactorRecipeWrapper> {
+public class ReactorRecipeCategory implements IRecipeCategory<ReactorRecipeWrapper> {
 
     private IGuiHelper guiHelper;
     private IDrawable tankOverlay;
+    private String title;
 
-    public BioReactorRecipeCategory(IGuiHelper guiHelper) {
+    public ReactorRecipeCategory(IGuiHelper guiHelper, String title) {
         this.guiHelper = guiHelper;
         tankOverlay = guiHelper.createDrawable(new ResourceLocation(Reference.MOD_ID, "textures/gui/jei.png"), 1, 207, 12, 48);
+        this.title = title;
     }
 
     @Override
     public String getUid() {
-        return "bioreactor_category";
+        return title.toLowerCase().replaceAll(" ", "_");
     }
 
     @Override
     public String getTitle() {
-        return "Bioreactor accepted items";
+        return title;
     }
 
     @Override
@@ -59,7 +61,7 @@ public class BioReactorRecipeCategory implements IRecipeCategory<BioReactorRecip
     }
 
     @Override
-    public void setRecipe(IRecipeLayout recipeLayout, BioReactorRecipeWrapper recipeWrapper, IIngredients ingredients) {
+    public void setRecipe(IRecipeLayout recipeLayout, ReactorRecipeWrapper recipeWrapper, IIngredients ingredients) {
         IGuiItemStackGroup guiItemStackGroup = recipeLayout.getItemStacks();
         guiItemStackGroup.init(0, true, 0, 16);
 

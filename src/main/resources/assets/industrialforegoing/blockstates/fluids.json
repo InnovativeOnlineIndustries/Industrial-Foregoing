@@ -48,6 +48,12 @@
       "custom": {
         "fluid": "if.pink_slime"
       }
+    },
+    "if.protein": {
+      "model": "forge:fluid",
+      "custom": {
+        "fluid": "if.protein"
+      }
     }
   }
 }

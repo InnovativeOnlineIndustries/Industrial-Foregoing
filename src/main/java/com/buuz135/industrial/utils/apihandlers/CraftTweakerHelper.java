@@ -2,6 +2,7 @@ package com.buuz135.industrial.utils.apihandlers;
 
 import com.buuz135.industrial.utils.apihandlers.crafttweaker.CTBioReactor;
 import com.buuz135.industrial.utils.apihandlers.crafttweaker.CTLaserDrill;
+import com.buuz135.industrial.utils.apihandlers.crafttweaker.CTProteinReactor;
 import com.buuz135.industrial.utils.apihandlers.crafttweaker.CTSludgeRefiner;
 import crafttweaker.CraftTweakerAPI;
 
@@ -11,5 +12,6 @@ public class CraftTweakerHelper {
         CraftTweakerAPI.registerClass(CTBioReactor.class);
         CraftTweakerAPI.registerClass(CTLaserDrill.class);
         CraftTweakerAPI.registerClass(CTSludgeRefiner.class);
+        CraftTweakerAPI.registerClass(CTProteinReactor.class);
     }
 }

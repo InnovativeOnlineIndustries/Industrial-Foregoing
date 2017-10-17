@@ -3,14 +3,15 @@ package com.buuz135.industrial.jei;
 
 import com.buuz135.industrial.api.recipe.BioReactorEntry;
 import com.buuz135.industrial.api.recipe.LaserDrillEntry;
-import com.buuz135.industrial.jei.bioreactor.BioReactorRecipeCategory;
-import com.buuz135.industrial.jei.bioreactor.BioReactorRecipeWrapper;
+import com.buuz135.industrial.api.recipe.ProteinReactorEntry;
 import com.buuz135.industrial.jei.laser.LaserRecipeCategory;
 import com.buuz135.industrial.jei.laser.LaserRecipeWrapper;
 import com.buuz135.industrial.jei.machineproduce.MachineProduceCategory;
 import com.buuz135.industrial.jei.machineproduce.MachineProduceWrapper;
 import com.buuz135.industrial.jei.petrifiedgen.PetrifiedBurnTimeCategory;
 import com.buuz135.industrial.jei.petrifiedgen.PetrifiedBurnTimeWrapper;
+import com.buuz135.industrial.jei.reactor.ReactorRecipeCategory;
+import com.buuz135.industrial.jei.reactor.ReactorRecipeWrapper;
 import com.buuz135.industrial.jei.sludge.SludgeRefinerRecipeCategory;
 import com.buuz135.industrial.jei.sludge.SludgeRefinerRecipeWrapper;
 import com.buuz135.industrial.proxy.BlockRegistry;
@@ -49,7 +50,8 @@ public class JEICustomPlugin implements IModPlugin {
     private static IRecipesGui recipesGui;
     private static IRecipeRegistry recipeRegistry;
     private SludgeRefinerRecipeCategory sludgeRefinerRecipeCategory;
-    private BioReactorRecipeCategory bioReactorRecipeCategory;
+    private ReactorRecipeCategory bioReactorRecipeCategory;
+    private ReactorRecipeCategory proteinReactorRecipeCategory;
     private LaserRecipeCategory laserRecipeCategory;
     private MachineProduceCategory machineProduceCategory;
     private PetrifiedBurnTimeCategory petrifiedBurnTimeCategory;
@@ -71,8 +73,10 @@ public class JEICustomPlugin implements IModPlugin {
     public void registerCategories(IRecipeCategoryRegistration registry) {
         sludgeRefinerRecipeCategory = new SludgeRefinerRecipeCategory(registry.getJeiHelpers().getGuiHelper());
         registry.addRecipeCategories(sludgeRefinerRecipeCategory);
-        bioReactorRecipeCategory = new BioReactorRecipeCategory(registry.getJeiHelpers().getGuiHelper());
+        bioReactorRecipeCategory = new ReactorRecipeCategory(registry.getJeiHelpers().getGuiHelper(), "Bioreactor accepted items");
         registry.addRecipeCategories(bioReactorRecipeCategory);
+        proteinReactorRecipeCategory = new ReactorRecipeCategory(registry.getJeiHelpers().getGuiHelper(), "Protein reactor accepted items");
+        registry.addRecipeCategories(proteinReactorRecipeCategory);
         laserRecipeCategory = new LaserRecipeCategory(registry.getJeiHelpers().getGuiHelper());
         registry.addRecipeCategories(laserRecipeCategory);
         machineProduceCategory = new MachineProduceCategory(registry.getJeiHelpers().getGuiHelper());
@@ -90,10 +94,15 @@ public class JEICustomPlugin implements IModPlugin {
         registry.addRecipeCatalyst(new ItemStack(BlockRegistry.sludgeRefinerBlock), sludgeRefinerRecipeCategory.getUid());
 
 
-        List<BioReactorRecipeWrapper> bioreactor = new ArrayList<>();
-        BioReactorEntry.BIO_REACTOR_ENTRIES.forEach(entry -> bioreactor.add(new BioReactorRecipeWrapper(entry.getStack())));
+        List<ReactorRecipeWrapper> bioreactor = new ArrayList<>();
+        BioReactorEntry.BIO_REACTOR_ENTRIES.forEach(entry -> bioreactor.add(new ReactorRecipeWrapper(entry.getStack(), FluidsRegistry.BIOFUEL, BlockRegistry.bioReactorBlock.getBaseAmount())));
         registry.addRecipes(bioreactor, bioReactorRecipeCategory.getUid());
         registry.addRecipeCatalyst(new ItemStack(BlockRegistry.bioReactorBlock), bioReactorRecipeCategory.getUid());
+
+        List<ReactorRecipeWrapper> proteinreactor = new ArrayList<>();
+        ProteinReactorEntry.PROTEIN_REACTOR_ENTRIES.forEach(entry -> proteinreactor.add(new ReactorRecipeWrapper(entry.getStack(), FluidsRegistry.PROTEIN, BlockRegistry.proteinReactorBlock.getBaseAmount())));
+        registry.addRecipes(proteinreactor, proteinReactorRecipeCategory.getUid());
+        registry.addRecipeCatalyst(new ItemStack(BlockRegistry.proteinReactorBlock), proteinReactorRecipeCategory.getUid());
 
         List<ItemStackWeightedItem> item = new ArrayList<>();
         LaserDrillEntry.LASER_DRILL_ENTRIES.forEach(entry -> item.add(new ItemStackWeightedItem(entry.getStack(), entry.getWeight())));

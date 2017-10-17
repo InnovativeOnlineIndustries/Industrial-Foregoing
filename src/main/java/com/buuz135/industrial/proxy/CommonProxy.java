@@ -61,7 +61,7 @@ public class CommonProxy {
         RecipeHandlers.loadBioReactorEntries();
         RecipeHandlers.loadLaserLensEntries();
         RecipeHandlers.loadSludgeRefinerEntries();
-
+        RecipeHandlers.loadProteinReactorEntries();
     }
 
     public void postInit() {

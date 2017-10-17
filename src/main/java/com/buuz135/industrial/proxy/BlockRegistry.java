@@ -63,6 +63,8 @@ public class BlockRegistry {
     public static VillagerTradeExchangerBlock villagerTradeExchangerBlock = new VillagerTradeExchangerBlock();
     public static EnergyFieldProviderBlock energyFieldProviderBlock = new EnergyFieldProviderBlock();
     public static OreDictionaryConverterBlock oreDictionaryConverterBlock = new OreDictionaryConverterBlock();
+    public static ProteinReactorBlock proteinReactorBlock = new ProteinReactorBlock();
+
     public static IFCustomFluidBlock BLOCK_ESSENCE = new IFCustomFluidBlock(FluidsRegistry.ESSENCE, Material.WATER);
     public static IFCustomFluidBlock BLOCK_MILK = new IFCustomFluidBlock(FluidsRegistry.MILK, Material.WATER);
     public static IFCustomFluidBlock BLOCK_MEAT = new IFCustomFluidBlock(FluidsRegistry.MEAT, Material.WATER);
@@ -81,6 +83,8 @@ public class BlockRegistry {
             }
         }
     }.setTickRandomly(true);
+    public static IFCustomFluidBlock BLOCK_PROTEIN = new IFCustomFluidBlock(FluidsRegistry.PROTEIN, Material.WATER);
+
     private static ItemSplitterBlock itemSplitterBlock = new ItemSplitterBlock();
 
     public static void createRecipes() {
@@ -98,6 +102,7 @@ public class BlockRegistry {
         BLOCK_SLUDGE.register(ev.getRegistry());
         BLOCK_BIOFUEL.register(ev.getRegistry());
         BLOCK_PINK_SLIME.register(ev.getRegistry());
+        BLOCK_PROTEIN.register(ev.getRegistry());
     }
 
     @SubscribeEvent

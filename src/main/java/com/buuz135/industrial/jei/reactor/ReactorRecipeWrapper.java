@@ -1,29 +1,33 @@
-package com.buuz135.industrial.jei.bioreactor;
+package com.buuz135.industrial.jei.reactor;
 
 import com.buuz135.industrial.proxy.BlockRegistry;
-import com.buuz135.industrial.proxy.FluidsRegistry;
 import mezz.jei.api.ingredients.IIngredients;
 import mezz.jei.api.recipe.IRecipeWrapper;
 import net.minecraft.client.Minecraft;
 import net.minecraft.item.ItemStack;
+import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidStack;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-public class BioReactorRecipeWrapper implements IRecipeWrapper {
+public class ReactorRecipeWrapper implements IRecipeWrapper {
 
     private ItemStack stack;
+    private Fluid fluid;
+    private int amount;
 
-    public BioReactorRecipeWrapper(ItemStack stack) {
+    public ReactorRecipeWrapper(ItemStack stack, Fluid fluid, int amount) {
         this.stack = stack;
+        this.fluid = fluid;
+        this.amount = amount;
     }
 
     @Override
     public void getIngredients(IIngredients ingredients) {
         ingredients.setInput(ItemStack.class, stack);
-        ingredients.setOutput(FluidStack.class, new FluidStack(FluidsRegistry.BIOFUEL, BlockRegistry.bioReactorBlock.getBaseAmount()));
+        ingredients.setOutput(FluidStack.class, new FluidStack(fluid, amount));
     }
 
     @Override

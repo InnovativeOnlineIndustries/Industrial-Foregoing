@@ -1,10 +1,8 @@
 package com.buuz135.industrial.tile.generator;
 
 import com.buuz135.industrial.api.recipe.IReactorEntry;
-import com.buuz135.industrial.proxy.FluidsRegistry;
 import com.buuz135.industrial.proxy.client.infopiece.BioreactorEfficiencyInfoPiece;
 import com.buuz135.industrial.tile.CustomElectricMachine;
-import com.buuz135.industrial.tile.block.BioReactorBlock;
 import com.buuz135.industrial.utils.ItemStackUtils;
 import com.buuz135.industrial.utils.WorkUtils;
 import net.minecraft.item.EnumDyeColor;
@@ -76,7 +74,7 @@ public abstract class AbstractReactorTile extends CustomElectricMachine {
         if (WorkUtils.isDisabled(this.getBlockType())) return 0;
 
         if (getEfficiency() < 0) return 0;
-        FluidStack stack = new FluidStack(FluidsRegistry.BIOFUEL, getProducedAmountItem() * getItemAmount());
+        FluidStack stack = new FluidStack(getProducedFluid(), getProducedAmountItem() * getItemAmount());
         if (tank.getFluid() == null || (stack.amount + tank.getFluidAmount() <= tank.getCapacity())) {
             tank.fill(stack, true);
             List<ItemStack> used = new ArrayList<>();
@@ -132,7 +130,7 @@ public abstract class AbstractReactorTile extends CustomElectricMachine {
     public int getProducedAmountItem() {
         float eff = getEfficiency();
         if (eff < 0) return 0;
-        int base = ((BioReactorBlock) this.getBlockType()).getBaseAmount();
+        int base = amountProduced();
         return (int) (getEfficiency() * base + base);
     }
 
@@ -149,4 +147,6 @@ public abstract class AbstractReactorTile extends CustomElectricMachine {
     public abstract List<IReactorEntry> getReactorsEntries();
 
     public abstract Fluid getProducedFluid();
+
+    public abstract int amountProduced();
 }

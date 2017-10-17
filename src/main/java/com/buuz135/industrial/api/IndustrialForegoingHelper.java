@@ -3,6 +3,7 @@ package com.buuz135.industrial.api;
 
 import com.buuz135.industrial.api.recipe.BioReactorEntry;
 import com.buuz135.industrial.api.recipe.LaserDrillEntry;
+import com.buuz135.industrial.api.recipe.ProteinReactorEntry;
 import com.buuz135.industrial.api.recipe.SludgeEntry;
 import net.minecraft.item.ItemStack;
 
@@ -92,6 +93,34 @@ public class IndustrialForegoingHelper {
     public static boolean removeSludgeRefinerEntry(ItemStack stack) {
         if (SludgeEntry.SLUDGE_RECIPES.stream().anyMatch(entry -> entry.getStack().isItemEqual(stack))) {
             SludgeEntry.SLUDGE_RECIPES = SludgeEntry.SLUDGE_RECIPES.stream().filter(entry -> !entry.getStack().isItemEqual(stack)).collect(Collectors.toList());
+            return true;
+        }
+        return false;
+    }
+
+    /**
+     * Adds a new ProteinReactor entry that wasn't already there.
+     *
+     * @param entry The ProteinReactor entry to add.
+     * @return true if it is added, false if don't.
+     */
+    public static boolean addProteinReactorEntry(ProteinReactorEntry entry) {
+        if (ProteinReactorEntry.PROTEIN_REACTOR_ENTRIES.stream().noneMatch(entry1 -> entry.doesStackMatch(entry1.getStack()))) {
+            ProteinReactorEntry.PROTEIN_REACTOR_ENTRIES.add(entry);
+            return true;
+        }
+        return false;
+    }
+
+    /**
+     * Removes a ProteinReactor entry.
+     *
+     * @param stack The ItemStack of a BioReactor entry to remove.
+     * @return true if it is removed, false if don't.
+     */
+    public static boolean removeProteinReactorEntry(ItemStack stack) {
+        if (ProteinReactorEntry.PROTEIN_REACTOR_ENTRIES.stream().anyMatch(entry -> entry.doesStackMatch(stack))) {
+            ProteinReactorEntry.PROTEIN_REACTOR_ENTRIES = ProteinReactorEntry.PROTEIN_REACTOR_ENTRIES.stream().filter(entry -> !entry.doesStackMatch(stack)).collect(Collectors.toList());
             return true;
         }
         return false;
