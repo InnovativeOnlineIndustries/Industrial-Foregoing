@@ -132,8 +132,8 @@ public class JEICustomPlugin implements IModPlugin {
                 new MachineProduceWrapper(BlockRegistry.treeFluidExtractorBlock, FluidUtil.getFilledBucket(new FluidStack(FluidsRegistry.LATEX, 1000))),
                 new MachineProduceWrapper(BlockRegistry.latexProcessingUnitBlock, new ItemStack(ItemRegistry.tinyDryRubber)),
                 new MachineProduceWrapper(BlockRegistry.animalByproductRecolectorBlock, FluidUtil.getFilledBucket(new FluidStack(FluidsRegistry.SEWAGE, 1000))),
-                new MachineProduceWrapper(BlockRegistry.lavaFabricatorBlock, FluidUtil.getFilledBucket(new FluidStack(FluidRegistry.LAVA, 1000)))),
-
+                new MachineProduceWrapper(BlockRegistry.lavaFabricatorBlock, FluidUtil.getFilledBucket(new FluidStack(FluidRegistry.LAVA, 1000))),
+                new MachineProduceWrapper(BlockRegistry.proteinReactorBlock, FluidUtil.getFilledBucket(new FluidStack(FluidsRegistry.PROTEIN, 1000)))),
                 machineProduceCategory.getUid());
 
         NonNullList<ItemStack> wrappers = NonNullList.create();

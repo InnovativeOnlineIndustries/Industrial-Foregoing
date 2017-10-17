@@ -1,0 +1,28 @@
+{
+  "result": {
+    "item": "industrialforegoing:protein_generator"
+  },
+  "pattern": [
+    "pfp",
+    "imi",
+    "rir"
+  ],
+  "type": "minecraft:crafting_shaped",
+  "key": {
+    "p": {
+      "item": "industrialforegoing:plastic"
+    },
+    "r": {
+      "item": "minecraft:spider_eye"
+    },
+    "f": {
+      "item": "minecraft:furnace"
+    },
+    "i": {
+      "item": "minecraft:piston"
+    },
+    "m": {
+      "item": "industrialforegoing:biofuel_generator"
+    }
+  }
+}

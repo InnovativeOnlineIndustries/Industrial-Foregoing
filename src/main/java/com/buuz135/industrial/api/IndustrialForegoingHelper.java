@@ -115,7 +115,7 @@ public class IndustrialForegoingHelper {
     /**
      * Removes a ProteinReactor entry.
      *
-     * @param stack The ItemStack of a BioReactor entry to remove.
+     * @param stack The ItemStack of a ProteinReactor entry to remove.
      * @return true if it is removed, false if don't.
      */
     public static boolean removeProteinReactorEntry(ItemStack stack) {
