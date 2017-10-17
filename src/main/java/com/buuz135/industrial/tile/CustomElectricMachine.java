@@ -41,7 +41,6 @@ public abstract class CustomElectricMachine extends ElectricMachine {
         Arrays.stream(EnumDyeColor.values()).forEach(enumDyeColor -> this.getSideConfig().setSidesForColor(enumDyeColor, facings));
     }
 
-
     @Override
     protected int getEnergyForWork() {
         return this.getBlockType() instanceof CustomOrientedBlock ? ((CustomOrientedBlock) this.getBlockType()).getEnergyForWork() : Integer.MAX_VALUE;

@@ -20,7 +20,7 @@ public class GuiHandler implements IGuiHandler {
     @Nullable
     @Override
     public Object getClientGuiElement(int ID, EntityPlayer player, World world, int x, int y, int z) {
-        if (ID == BOOK) return new GUIBookMain();
+        if (ID == BOOK) return new GUIBookMain(world, x, y, z);
         return null;
     }
 }
