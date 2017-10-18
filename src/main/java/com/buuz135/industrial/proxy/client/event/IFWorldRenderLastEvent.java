@@ -20,7 +20,8 @@ public class IFWorldRenderLastEvent {
     @SubscribeEvent
     public void onRender(RenderGameOverlayEvent.Post event) {
         EntityPlayerSP playerIn = Minecraft.getMinecraft().player;
-        if (!playerIn.getHeldItemMainhand().getItem().equals(ItemRegistry.bookManualItem)) return;
+        if (!playerIn.getHeldItemMainhand().getItem().equals(ItemRegistry.bookManualItem) || Minecraft.getMinecraft().currentScreen != null)
+            return;
         float f = playerIn.rotationPitch;
         float f1 = playerIn.rotationYaw;
         double d0 = playerIn.posX;

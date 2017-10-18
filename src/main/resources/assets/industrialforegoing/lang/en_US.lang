@@ -54,6 +54,7 @@ tile.industrialforegoing.oredictionary_converter.name=Ore Dictionary Converter
 tile.industrialforegoing.item_splitter.name=Item Splitter
 tile.industrialforegoing.protein_reactor.name=Protein Reactor
 tile.industrialforegoing.protein_generator.name=Protein Generator
+tile.industrialforegoing.hydrator.name=Hydrator
 
 entity.pink_slime.name=Pink Slime
 

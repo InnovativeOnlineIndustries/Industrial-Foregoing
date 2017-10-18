@@ -6,6 +6,7 @@
 + Added Protein Generator that produces 320RF/t with protein.
 + Sneak+Right Click a IF Block with the manual in the hand will open the manual entry of the block directly
 + Fixed BHUC not being able to insert into a BHU if it was empty
++ Added Hydrator Block to help plant growth
 
 # 1.4.3
 + Fixed [#65](https://github.com/Buuz135/Industrial-Foregoing/issues/65)

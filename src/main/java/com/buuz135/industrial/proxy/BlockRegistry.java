@@ -65,6 +65,7 @@ public class BlockRegistry {
     public static OreDictionaryConverterBlock oreDictionaryConverterBlock = new OreDictionaryConverterBlock();
     public static ProteinReactorBlock proteinReactorBlock = new ProteinReactorBlock();
     public static ProteinGeneratorBlock proteinGeneratorBlock = new ProteinGeneratorBlock();
+    public static HydratorBlock hydratorBlock = new HydratorBlock();
 
     public static IFCustomFluidBlock BLOCK_ESSENCE = new IFCustomFluidBlock(FluidsRegistry.ESSENCE, Material.WATER);
     public static IFCustomFluidBlock BLOCK_MILK = new IFCustomFluidBlock(FluidsRegistry.MILK, Material.WATER);
