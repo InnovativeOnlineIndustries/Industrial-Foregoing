@@ -42,6 +42,7 @@ public class ItemSplitterTile extends CustomSidedTileEntity implements IHasDispl
         input = this.addSimpleInventory(3, "input", EnumDyeColor.BLUE, "input items", new BoundingRectangle(18, 25, 18, 18 * 3), (stack, integer) -> true, (stack, integer) -> false, true, 0);
         fakeOut = this.addSimpleInventory(0, "out", EnumDyeColor.ORANGE, "output items", new BoundingRectangle(30, 90, 0, 0), (stack, integer) -> false, (stack, integer) -> false, false, 0);
         tick = 1;
+        size = 1;
         registerSyncIntPart("size", nbtTagInt -> size = nbtTagInt.getInt(), () -> new NBTTagInt(size), SyncProviderLevel.GUI);
     }
 
@@ -59,9 +60,10 @@ public class ItemSplitterTile extends CustomSidedTileEntity implements IHasDispl
                     ItemStack posible = getStack(handler.getStackInSlot(i));
                     if (!posible.isEmpty()) {
                         ItemStack def = posible.copy();
-                        posible.shrink(1);
                         def.setCount(1);
-                        handler.insertItem(i, def, false);
+                        def = handler.insertItem(i, def, false);
+                        if (def.isEmpty()) posible.shrink(1);
+                        else continue;
                         break;
                     }
                 }
