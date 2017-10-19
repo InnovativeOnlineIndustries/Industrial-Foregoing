@@ -69,6 +69,7 @@ public class ClientProxy extends CommonProxy {
     @Override
     public void init() {
         super.init();
+        IFManual.buildManual();
         try {
             ears_model = OBJLoader.INSTANCE.loadModel(new ResourceLocation(Reference.MOD_ID, "models/block/catears.obj"));
             ears_baked = ears_model.bake(TRSRTransformation.identity(), DefaultVertexFormats.BLOCK, ModelLoader.defaultTextureGetter());
@@ -92,7 +93,7 @@ public class ClientProxy extends CommonProxy {
     @Override
     public void postInit() {
         super.postInit();
-        IFManual.buildManual();
+
     }
 
 }

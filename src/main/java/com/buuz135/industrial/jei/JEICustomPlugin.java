@@ -4,10 +4,13 @@ package com.buuz135.industrial.jei;
 import com.buuz135.industrial.api.recipe.BioReactorEntry;
 import com.buuz135.industrial.api.recipe.LaserDrillEntry;
 import com.buuz135.industrial.api.recipe.ProteinReactorEntry;
+import com.buuz135.industrial.book.BookCategory;
 import com.buuz135.industrial.jei.laser.LaserRecipeCategory;
 import com.buuz135.industrial.jei.laser.LaserRecipeWrapper;
 import com.buuz135.industrial.jei.machineproduce.MachineProduceCategory;
 import com.buuz135.industrial.jei.machineproduce.MachineProduceWrapper;
+import com.buuz135.industrial.jei.manual.ManualCategory;
+import com.buuz135.industrial.jei.manual.ManualWrapper;
 import com.buuz135.industrial.jei.petrifiedgen.PetrifiedBurnTimeCategory;
 import com.buuz135.industrial.jei.petrifiedgen.PetrifiedBurnTimeWrapper;
 import com.buuz135.industrial.jei.reactor.ReactorRecipeCategory;
@@ -42,6 +45,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
+import java.util.stream.Collectors;
 
 
 @JEIPlugin
@@ -55,6 +59,7 @@ public class JEICustomPlugin implements IModPlugin {
     private LaserRecipeCategory laserRecipeCategory;
     private MachineProduceCategory machineProduceCategory;
     private PetrifiedBurnTimeCategory petrifiedBurnTimeCategory;
+    private ManualCategory manualCategory;
 
     public static void showUses(ItemStack stack) {
         recipesGui.show(recipeRegistry.createFocus(IFocus.Mode.INPUT, stack));
@@ -83,6 +88,8 @@ public class JEICustomPlugin implements IModPlugin {
         registry.addRecipeCategories(machineProduceCategory);
         petrifiedBurnTimeCategory = new PetrifiedBurnTimeCategory(registry.getJeiHelpers().getGuiHelper());
         registry.addRecipeCategories(petrifiedBurnTimeCategory);
+        manualCategory = new ManualCategory(registry.getJeiHelpers().getGuiHelper());
+        registry.addRecipeCategories(manualCategory);
     }
 
     @Override
@@ -145,7 +152,10 @@ public class JEICustomPlugin implements IModPlugin {
         registry.addRecipes(petrifiedBurnTimeWrappers, petrifiedBurnTimeCategory.getUid());
         registry.addRecipeCatalyst(new ItemStack(BlockRegistry.petrifiedFuelGeneratorBlock), petrifiedBurnTimeCategory.getUid());
 
-
+        for (BookCategory category : BookCategory.values()) {
+            registry.addRecipes(category.getEntries().values().stream().map(ManualWrapper::new).collect(Collectors.toList()), manualCategory.getUid());
+        }
+        registry.addRecipeCatalyst(new ItemStack(ItemRegistry.bookManualItem), manualCategory.getUid());
         //Descriptions
     }
 
