@@ -1,5 +1,6 @@
 package com.buuz135.industrial.utils;
 
+import net.minecraft.block.Block;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.inventory.Container;
@@ -7,7 +8,9 @@ import net.minecraft.inventory.InventoryCrafting;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.CraftingManager;
 import net.minecraft.util.NonNullList;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
+import net.minecraftforge.fml.common.Loader;
 import net.minecraftforge.oredict.OreDictionary;
 
 import java.util.HashMap;
@@ -43,7 +46,12 @@ public class CraftingUtils {
         crushedRecipes.put(new ItemStack(Blocks.STONE), new ItemStack(Blocks.COBBLESTONE));
         crushedRecipes.put(new ItemStack(Blocks.COBBLESTONE), new ItemStack(Blocks.GRAVEL));
         crushedRecipes.put(new ItemStack(Blocks.GRAVEL), new ItemStack(Blocks.SAND));
+        ItemStack latest = new ItemStack(Blocks.SAND);
+        if (Loader.isModLoaded("exnihilocreatio")) {
+            Block dust = Block.REGISTRY.getObject(new ResourceLocation("exnihilocreatio:block_dust"));
+            crushedRecipes.put(new ItemStack(Blocks.SAND), latest = new ItemStack(dust));
+        }
         NonNullList<ItemStack> items = OreDictionary.getOres("itemSilicon");
-        if (items.size() > 0) crushedRecipes.put(new ItemStack(Blocks.SAND), items.get(0));
+        if (items.size() > 0) crushedRecipes.put(latest, items.get(0));
     }
 }
