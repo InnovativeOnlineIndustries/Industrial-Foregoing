@@ -7,10 +7,11 @@
     "1.4.1": "https://github.com/Buuz135/Industrial-Foregoing/blob/master/CHANGELOG.md",
     "1.4.2": "https://github.com/Buuz135/Industrial-Foregoing/blob/master/CHANGELOG.md",
     "1.4.3": "https://github.com/Buuz135/Industrial-Foregoing/blob/master/CHANGELOG.md",
-    "1.5.0": "https://github.com/Buuz135/Industrial-Foregoing/blob/master/CHANGELOG.md"
+    "1.5.0": "https://github.com/Buuz135/Industrial-Foregoing/blob/master/CHANGELOG.md",
+    "1.5.1": "https://github.com/Buuz135/Industrial-Foregoing/blob/master/CHANGELOG.md"
   },
   "promos": {
-    "1.12-latest": "1.5.0",
-    "1.12-recommended": "1.5.0"
+    "1.12-latest": "1.5.1",
+    "1.12-recommended": "1.5.1"
   }
 }

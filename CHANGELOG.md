@@ -1,3 +1,6 @@
+# 1.5.1
++ Updated TCL Version fixing some GUI issues like [#74](https://github.com/Buuz135/Industrial-Foregoing/issues/74)
+
 # 1.5
 + Try to fix [#71](https://github.com/Buuz135/Industrial-Foregoing/issues/71) as it is hard to track
 + Fixed [#70](https://github.com/Buuz135/Industrial-Foregoing/issues/70)

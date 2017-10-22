@@ -15,7 +15,7 @@ public class MaterialStoneWorkInfoPiece extends ToggleButtonPiece {
     private int id;
 
     public MaterialStoneWorkInfoPiece(MaterialStoneWorkFactoryTile tile, int left, int top, int id) {
-        super(left, top, 17, 17);
+        super(left, top, 17, 17, 0);
         this.tile = tile;
         this.id = id;
     }
