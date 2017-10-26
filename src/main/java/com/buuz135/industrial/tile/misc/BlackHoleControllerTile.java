@@ -3,6 +3,7 @@ package com.buuz135.industrial.tile.misc;
 import com.buuz135.industrial.proxy.BlockRegistry;
 import com.buuz135.industrial.tile.CustomSidedTileEntity;
 import com.buuz135.industrial.utils.WorkUtils;
+import net.minecraft.entity.item.EntityItem;
 import net.minecraft.inventory.InventoryHelper;
 import net.minecraft.item.EnumDyeColor;
 import net.minecraft.item.Item;
@@ -117,7 +118,7 @@ public class BlackHoleControllerTile extends CustomSidedTileEntity {
 
     @Override
     protected void innerUpdate() {
-        if (WorkUtils.isDisabled(this.getBlockType())) return;
+        if (WorkUtils.isDisabled(this.getBlockType()) || world.isRemote) return;
         input.setLocked(output.getLocked());
         input.setFilter(output.getFilter());
         for (int i = 0; i < 9; ++i) {
@@ -141,6 +142,14 @@ public class BlackHoleControllerTile extends CustomSidedTileEntity {
                         continue;
                     }
                 }
+            } else if (stack.isEmpty() && !output.getStackInSlot(i).isEmpty()) {
+                float f = 0.7F;
+                float d0 = world.rand.nextFloat() * f + (1.0F - f) * 0.5F;
+                float d1 = world.rand.nextFloat() * f + (1.0F - f) * 0.5F;
+                float d2 = world.rand.nextFloat() * f + (1.0F - f) * 0.5F;
+                EntityItem entityitem = new EntityItem(world, pos.getX() + d0, pos.getY() + d1, pos.getZ() + d2, output.getStackInSlot(i).copy());
+                output.setStackInSlot(i, ItemStack.EMPTY);
+                world.spawnEntity(entityitem);
             }
         }
     }
