@@ -61,6 +61,7 @@ public class VillagerTradeExchangerTile extends CustomElectricMachine {
         super.protectedUpdate();
         if (!villager.getStackInSlot(0).isEmpty() && villager.getStackInSlot(0).getTagCompound().hasKey("Offers")) {
             merchantRecipes = new MerchantRecipeList(villager.getStackInSlot(0).getTagCompound().getCompoundTag("Offers"));
+            merchantRecipes.removeIf(MerchantRecipe::hasSecondItemToBuy); // TODO this is a temporary fix until we add actual support for trades with 2 items (#77)
         } else {
             merchantRecipes = null;
             current = 0;
