@@ -2,11 +2,13 @@ package com.buuz135.industrial.utils.apihandlers.plant;
 
 import com.buuz135.industrial.utils.BlockUtils;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
+import net.minecraftforge.common.IShearable;
 
 import java.util.*;
 
@@ -40,12 +42,16 @@ public class TreeCache {
     }
 
 
-    public List<ItemStack> chop(Queue<BlockPos> cache) {
+    public List<ItemStack> chop(Queue<BlockPos> cache, boolean shear) {
         BlockPos p = cache.peek();
         NonNullList<ItemStack> stacks = NonNullList.create();
         if (BlockUtils.isLeaves(world, p) || BlockUtils.isLog(world, p)) {
             IBlockState s = world.getBlockState(p);
-            s.getBlock().getDrops(stacks, world, p, s, 0);
+            if (s.getBlock() instanceof IShearable && shear) {
+                stacks.addAll(((IShearable) s.getBlock()).onSheared(new ItemStack(Items.SHEARS), world, p, 0));
+            } else {
+                s.getBlock().getDrops(stacks, world, p, s, 0);
+            }
             world.setBlockToAir(p);
         }
         cache.poll();

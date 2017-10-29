@@ -81,7 +81,7 @@ public class CropRecolectorTile extends WorkingAreaElectricMachine {
             Optional<PlantRecollectable> recollectable = IFRegistries.PLANT_RECOLLECTABLES_REGISTRY.getValues().stream().sorted(Comparator.comparingInt(PlantRecollectable::getPriority)).filter(iPlantRecollectable -> iPlantRecollectable.canBeHarvested(this.world, pos, state)).findFirst();
             if (recollectable.isPresent()) {
                 PlantRecollectable plantRecollectable = recollectable.get();
-                insertItems(plantRecollectable.doHarvestOperation(this.world, pos, state), outItems);
+                insertItems(plantRecollectable.doHarvestOperation(this.world, pos, state, false), outItems);
                 if (!plantRecollectable.shouldCheckNextPlant(this.world, pos, state)) shouldPointerIncrease = false;
             }
             didWork = recollectable.isPresent();

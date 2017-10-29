@@ -33,13 +33,20 @@ public class TreePlantRecollectable extends PlantRecollectable {
 
     @Override
     public List<ItemStack> doHarvestOperation(World world, BlockPos pos, IBlockState blockState) {
+        return new ArrayList<>();
+    }
+
+
+    @Override
+    public List<ItemStack> doHarvestOperation(World world, BlockPos pos, IBlockState blockState, Object... extras) {
         List<ItemStack> itemStacks = new ArrayList<>();
         if (treeCache.containsKey(pos)) {
             TreeCache cache = treeCache.get(pos);
             for (int i = 0; i < BlockRegistry.cropRecolectorBlock.getTreeOperations(); ++i) {
                 if (cache.getWoodCache().isEmpty() && cache.getLeavesCache().isEmpty()) break;
-                if (!cache.getLeavesCache().isEmpty()) itemStacks.addAll(cache.chop(cache.getLeavesCache()));
-                else itemStacks.addAll(cache.chop(cache.getWoodCache()));
+                if (!cache.getLeavesCache().isEmpty())
+                    itemStacks.addAll(cache.chop(cache.getLeavesCache(), (Boolean) extras[0]));
+                else itemStacks.addAll(cache.chop(cache.getWoodCache(), (Boolean) extras[0]));
             }
             if (cache.getWoodCache().isEmpty() && cache.getLeavesCache().isEmpty()) treeCache.remove(pos);
         }

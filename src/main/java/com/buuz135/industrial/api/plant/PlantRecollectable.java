@@ -34,6 +34,18 @@ public abstract class PlantRecollectable extends IForgeRegistryEntry.Impl<PlantR
      */
     public abstract List<ItemStack> doHarvestOperation(World world, BlockPos pos, IBlockState blockState);
 
+    /**
+     * Harvests the block
+     *
+     * @param world      The world where the Block is located.
+     * @param pos        The position where the Block is located.
+     * @param blockState The IBlockState of the Block.
+     * @param extras     An extra of values inserted in the Gatherer.
+     * @return A list of the drops of that Block.
+     */
+    public List<ItemStack> doHarvestOperation(World world, BlockPos pos, IBlockState blockState, Object... extras) {
+        return doHarvestOperation(world, pos, blockState);
+    }
 
     /**
      * Checks if the next block should be checked from the harvester.
