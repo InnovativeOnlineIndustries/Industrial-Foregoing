@@ -121,7 +121,7 @@ public class BlockUtils {
         tess.draw();
         RenderHelper.enableStandardItemLighting();
         GL11.glEnable(GL11.GL_CULL_FACE);
-        GL11.glEnable(GL11.GL_BLEND);
+        //GL11.glEnable(GL11.GL_BLEND);
 
         GlStateManager.popMatrix();
     }
