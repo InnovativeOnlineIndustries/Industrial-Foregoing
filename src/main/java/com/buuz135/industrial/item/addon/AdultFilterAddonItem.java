@@ -14,7 +14,7 @@ public class AdultFilterAddonItem extends CustomAddon {
 
     @Override
     public boolean canBeAddedTo(SidedTileEntity machine) {
-        return machine instanceof AnimalIndependenceSelectorTile;
+        return machine instanceof AnimalIndependenceSelectorTile && !((AnimalIndependenceSelectorTile) machine).hasAdultFilterAddon();
     }
 
     public void createRecipe() {

@@ -40,5 +40,8 @@ public class AnimalIndependenceSelectorTile extends WorkingAreaElectricMachine {
         return new AxisAlignedBB(this.pos.getX(), this.pos.getY(), this.pos.getZ(), this.pos.getX() + 1, this.pos.getY() + 1, this.pos.getZ() + 1).offset(corner1).grow(getRadius(), 0, getRadius()).setMaxY(this.getPos().getY() + getHeight());
     }
 
+    public boolean hasAdultFilterAddon() {
+        return this.hasAddon(AdultFilterAddonItem.class);
+    }
 
 }

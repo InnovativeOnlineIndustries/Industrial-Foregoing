@@ -1,6 +1,7 @@
 package com.buuz135.industrial.tile.agriculture;
 
 import com.buuz135.industrial.api.plant.PlantRecollectable;
+import com.buuz135.industrial.item.addon.LeafShearingAddonItem;
 import com.buuz135.industrial.proxy.FluidsRegistry;
 import com.buuz135.industrial.registry.IFRegistries;
 import com.buuz135.industrial.tile.CustomColoredItemHandler;
@@ -81,7 +82,7 @@ public class CropRecolectorTile extends WorkingAreaElectricMachine {
             Optional<PlantRecollectable> recollectable = IFRegistries.PLANT_RECOLLECTABLES_REGISTRY.getValues().stream().sorted(Comparator.comparingInt(PlantRecollectable::getPriority)).filter(iPlantRecollectable -> iPlantRecollectable.canBeHarvested(this.world, pos, state)).findFirst();
             if (recollectable.isPresent()) {
                 PlantRecollectable plantRecollectable = recollectable.get();
-                insertItems(plantRecollectable.doHarvestOperation(this.world, pos, state, false), outItems);
+                insertItems(plantRecollectable.doHarvestOperation(this.world, pos, state, hasShearingAddon()), outItems);
                 if (!plantRecollectable.shouldCheckNextPlant(this.world, pos, state)) shouldPointerIncrease = false;
             }
             didWork = recollectable.isPresent();
@@ -121,5 +122,9 @@ public class CropRecolectorTile extends WorkingAreaElectricMachine {
     @Override
     protected void processFluidItems(ItemStackHandler fluidItems) {
         ItemStackUtils.processFluidItems(fluidItems, sludge);
+    }
+
+    public boolean hasShearingAddon() {
+        return hasAddon(LeafShearingAddonItem.class);
     }
 }

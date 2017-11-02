@@ -3,6 +3,7 @@ package com.buuz135.industrial.proxy;
 import com.buuz135.industrial.item.*;
 import com.buuz135.industrial.item.addon.AdultFilterAddonItem;
 import com.buuz135.industrial.item.addon.EnergyFieldAddon;
+import com.buuz135.industrial.item.addon.LeafShearingAddonItem;
 import com.buuz135.industrial.item.addon.RangeAddonItem;
 import com.buuz135.industrial.utils.RecipeUtils;
 import net.minecraft.item.Item;
@@ -30,6 +31,7 @@ public class ItemRegistry {
     public static AdultFilterAddonItem adultFilterAddomItem;
     public static RangeAddonItem rangeAddonItem;
     public static EnergyFieldAddon energyFieldAddon;
+    public static LeafShearingAddonItem leafShearingAddonItem;
 
     public static void registerItems(IForgeRegistry<Item> itemRegistry) {
         (tinyDryRubber = new IFCustomItem("tinydryrubber")).register(itemRegistry);
@@ -50,6 +52,7 @@ public class ItemRegistry {
         (adultFilterAddomItem = new AdultFilterAddonItem()).registerItem(itemRegistry);
         (rangeAddonItem = new RangeAddonItem()).registerItem(itemRegistry);
         (energyFieldAddon = new EnergyFieldAddon()).registerItem(itemRegistry);
+        (leafShearingAddonItem = new LeafShearingAddonItem()).registerItem(itemRegistry);
 
         meatFeederItem.createRecipe();
         mobImprisonmentToolItem.createRecipe();
@@ -59,5 +62,6 @@ public class ItemRegistry {
         rangeAddonItem.createRecipe();
         energyFieldAddon.createRecipe();
         bookManualItem.createRecipe();
+        leafShearingAddonItem.createRecipe();
     }
 }

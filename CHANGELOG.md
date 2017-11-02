@@ -1,6 +1,7 @@
 # 1.6.0
 + Added some changes to be able to pass information from the Gatherer to the Recollectable
 + Fixed [#83](https://github.com/Buuz135/Industrial-Foregoing/issues/83)
++ Added Leaf Shearing Addon for the Plant Gatherer
 
 # 1.5.2
 + Fixed dirt to diamonds

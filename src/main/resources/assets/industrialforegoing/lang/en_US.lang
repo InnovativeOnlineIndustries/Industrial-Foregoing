@@ -83,6 +83,7 @@ item.industrialforegoing_machinehull.name=Machine Hull
 item.industrialforegoing_straw.name=Straw
 item.industrialforegoing_pink_slime.name=Pink Slime
 item.industrialforegoing.energy_field_addon.name=Energy Field Addon
+item.industrialforegoing.leaf_shearing.name=Leaf Shearing Addon
 item.industrialforegoing_book_manual.name=Industrial Foregoing's Manual
 
 gui.industrialforegoing.side_config.fuel_input=Fuel Input
