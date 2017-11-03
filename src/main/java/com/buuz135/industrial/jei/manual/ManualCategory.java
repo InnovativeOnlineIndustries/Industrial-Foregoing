@@ -12,7 +12,7 @@ public class ManualCategory implements IRecipeCategory<ManualWrapper> {
     private final IDrawable drawable;
 
     public ManualCategory(IGuiHelper helper) {
-        this.drawable = helper.createBlankDrawable(160, 220);
+        this.drawable = helper.createBlankDrawable(160, 125);
     }
 
     @Override
