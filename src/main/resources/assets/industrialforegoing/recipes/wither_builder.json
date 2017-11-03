@@ -1,0 +1,29 @@
+{
+  "result": {
+    "item": "industrialforegoing:wither_builder"
+  },
+  "pattern": [
+    "pnp",
+    "sms",
+    "ggg"
+  ],
+  "type": "minecraft:crafting_shaped",
+  "key": {
+    "p": {
+      "item": "industrialforegoing:plastic"
+    },
+    "s": {
+      "item": "minecraft:skull",
+      "data": 1
+    },
+    "g": {
+      "item": "minecraft:soul_sand"
+    },
+    "m": {
+      "item": "teslacorelib:machine_case"
+    },
+    "n": {
+      "item": "minecraft:nether_star"
+    }
+  }
+}

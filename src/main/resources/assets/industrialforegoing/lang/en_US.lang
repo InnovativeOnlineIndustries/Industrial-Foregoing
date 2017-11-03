@@ -55,6 +55,7 @@ tile.industrialforegoing.item_splitter.name=Item Splitter
 tile.industrialforegoing.protein_reactor.name=Protein Reactor
 tile.industrialforegoing.protein_generator.name=Protein Generator
 tile.industrialforegoing.hydrator.name=Hydrator
+tile.industrialforegoing.wither_builder.name=Wither Builder
 
 entity.pink_slime.name=Pink Slime
 
@@ -129,3 +130,5 @@ gui.industrialforegoing.side_config.lens_items=Lens Items
 gui.industrialforegoing.side_config.filter=Item Type Filter
 gui.industrialforegoing.side_config.change=Transformed Items
 gui.industrialforegoing.side_config.output_tank=Output Tank
+gui.industrialforegoing.side_config.wither_skulls=Wither Skulls
+gui.industrialforegoing.side_config.soulsand=Soulsand

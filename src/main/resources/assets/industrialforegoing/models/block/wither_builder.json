@@ -1,0 +1,10 @@
+{
+  "parent": "industrialforegoing:block/base_block",
+  "textures": {
+    "north": "industrialforegoing:blocks/wither_builder_side",
+    "south": "industrialforegoing:blocks/wither_builder_side",
+    "west": "industrialforegoing:blocks/wither_builder_side",
+    "east": "industrialforegoing:blocks/wither_builder_side",
+    "up": "industrialforegoing:blocks/wither_builder_top"
+  }
+}
