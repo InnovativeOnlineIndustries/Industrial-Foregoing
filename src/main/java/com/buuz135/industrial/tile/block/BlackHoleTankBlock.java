@@ -75,7 +75,7 @@ public class BlackHoleTankBlock extends CustomOrientedBlock<BlackHoleTankTile> {
     @Override
     public void onBlockPlacedBy(World world, BlockPos pos, IBlockState state, EntityLivingBase placer, ItemStack stack) {
         super.onBlockPlacedBy(world, pos, state, placer, stack);
-        if (stack.hasTagCompound() && world.getTileEntity(pos) != null && world.getTileEntity(pos) instanceof BlackHoleTankTile && FluidRegistry.getFluid(stack.getTagCompound().getString("FluidName")) != null) {
+        if (stack.hasTagCompound() && world.getTileEntity(pos) != null && world.getTileEntity(pos) instanceof BlackHoleTankTile && FluidRegistry.isFluidRegistered(stack.getTagCompound().getString("FluidName"))) {
             BlackHoleTankTile tile = (BlackHoleTankTile) world.getTileEntity(pos);
             tile.getTank().fill(new FluidStack(FluidRegistry.getFluid(stack.getTagCompound().getString("FluidName")), stack.getTagCompound().getInteger("Amount")), true);
         }
@@ -84,7 +84,7 @@ public class BlackHoleTankBlock extends CustomOrientedBlock<BlackHoleTankTile> {
     @Override
     public void addInformation(ItemStack stack, @Nullable World player, List<String> tooltip, ITooltipFlag advanced) {
         super.addInformation(stack, player, tooltip, advanced);
-        if (stack.hasTagCompound() && FluidRegistry.getFluid(stack.getTagCompound().getString("FluidName")) != null) {
+        if (stack.hasTagCompound() && FluidRegistry.isFluidRegistered(stack.getTagCompound().getString("FluidName"))) {
             tooltip.add(new TextComponentTranslation("text.display.fluid").getUnformattedText() + " " + new TextComponentTranslation(FluidRegistry.getFluid(stack.getTagCompound().getString("FluidName")).getUnlocalizedName()).getUnformattedText());
             tooltip.add(new TextComponentTranslation("text.display.amount").getUnformattedText() + " " + stack.getTagCompound().getInteger("Amount"));
         }
