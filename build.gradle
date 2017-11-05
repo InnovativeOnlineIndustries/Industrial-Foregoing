@@ -85,7 +85,7 @@ dependencies {
     // compile against the JEI API
     deobfCompile "mezz.jei:jei_1.12.1:${project.jei_version}:api"
     // at runtime, use the full JEI jar
-    runtime "mezz.jei:jei_${project.minecraft_version}:${project.jei_version}"
+    runtime "mezz.jei:jei_1.12.1:${project.jei_version}"
     compile "cofh:RedstoneFlux:1.12-${project.redstoneflux_version}:universal"
     compileOnly "CraftTweaker2:CraftTweaker2-MC1120-Main:1.12-4.+"
 }
