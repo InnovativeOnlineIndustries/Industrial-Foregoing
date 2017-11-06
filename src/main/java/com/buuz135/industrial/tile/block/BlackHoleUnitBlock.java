@@ -68,7 +68,7 @@ public class BlackHoleUnitBlock extends CustomOrientedBlock<BlackHoleUnitTile> {
     @Override
     public void onBlockPlacedBy(World world, BlockPos pos, IBlockState state, EntityLivingBase placer, ItemStack stack) {
         super.onBlockPlacedBy(world, pos, state, placer, stack);
-        if (stack.hasTagCompound() && world.getTileEntity(pos) != null && world.getTileEntity(pos) instanceof BlackHoleUnitTile) {
+        if (stack.hasTagCompound() && world.getTileEntity(pos) != null && world.getTileEntity(pos) instanceof BlackHoleUnitTile && Item.getByNameOrId(stack.getTagCompound().getString(BlackHoleUnitTile.NBT_ITEMSTACK)) != null) {
             BlackHoleUnitTile tile = (BlackHoleUnitTile) world.getTileEntity(pos);
             if (stack.getTagCompound().hasKey(BlackHoleUnitTile.NBT_ITEMSTACK) && stack.getTagCompound().hasKey(BlackHoleUnitTile.NBT_META)) {
                 ItemStack item = new ItemStack(Item.getByNameOrId(stack.getTagCompound().getString(BlackHoleUnitTile.NBT_ITEMSTACK)), 1, stack.getTagCompound().getInteger(BlackHoleUnitTile.NBT_META));
@@ -85,7 +85,7 @@ public class BlackHoleUnitBlock extends CustomOrientedBlock<BlackHoleUnitTile> {
     @Override
     public void addInformation(ItemStack stack, @Nullable World player, List<String> tooltip, ITooltipFlag advanced) {
         super.addInformation(stack, player, tooltip, advanced);
-        if (stack.hasTagCompound()) {
+        if (stack.hasTagCompound() && Item.getByNameOrId(stack.getTagCompound().getString(BlackHoleUnitTile.NBT_ITEMSTACK)) != null) {
             if (stack.getTagCompound().hasKey(BlackHoleUnitTile.NBT_ITEMSTACK) && stack.getTagCompound().hasKey(BlackHoleUnitTile.NBT_META)) {
                 tooltip.add(new TextComponentTranslation("text.display.item").getUnformattedText() + " " + new TextComponentTranslation(new ItemStack(Item.getByNameOrId(stack.getTagCompound().getString(BlackHoleUnitTile.NBT_ITEMSTACK)), 1, stack.getTagCompound().getInteger(BlackHoleUnitTile.NBT_META)).getUnlocalizedName() + ".name").getUnformattedText());
             }
