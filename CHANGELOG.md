@@ -1,3 +1,7 @@
+# 1.5.4
++ Fixed [#87](https://github.com/Buuz135/Industrial-Foregoing/issues/87)
++ Added some safety checks for the BHU and BHT
+
 # 1.5.3
 + Added some changes to be able to pass information from the Gatherer to the Recollectable
 + Fixed [#83](https://github.com/Buuz135/Industrial-Foregoing/issues/83)
