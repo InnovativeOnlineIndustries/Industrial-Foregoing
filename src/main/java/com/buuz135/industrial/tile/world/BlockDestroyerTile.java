@@ -80,8 +80,7 @@ public class BlockDestroyerTile extends WorkingAreaElectricMachine {
                         break;
                     }
                 }
-                this.world.setBlockToAir(pos);
-                if (canInsert && this.world.isAirBlock(pos)) {
+                if (canInsert && this.world.destroyBlock(pos, false)) {
                     for (ItemStack stack : drops) {
                         ItemHandlerHelper.insertItem(outItems, stack, false);
                     }
