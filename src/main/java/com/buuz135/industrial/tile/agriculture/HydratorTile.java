@@ -12,7 +12,7 @@ import java.util.List;
 public class HydratorTile extends WorkingAreaElectricMachine {
 
     public HydratorTile() {
-        super(HydratorTile.class.getName().hashCode(), 1, 1, false);
+        super(HydratorTile.class.getName().hashCode(), 2, 1, false);
     }
 
     @Override
@@ -31,6 +31,6 @@ public class HydratorTile extends WorkingAreaElectricMachine {
 
     @Override
     public AxisAlignedBB getWorkingArea() {
-        return new AxisAlignedBB(this.pos.getX(), this.pos.getY(), this.pos.getZ(), this.pos.getX() + 1, this.pos.getY() + 1, this.pos.getZ() + 1).grow(1, 0, 1);
+        return new AxisAlignedBB(this.pos.getX(), this.pos.getY(), this.pos.getZ(), this.pos.getX() + 1, this.pos.getY() + 1, this.pos.getZ() + 1).grow(getRadius(), 0, getRadius());
     }
 }

@@ -26,7 +26,7 @@ import java.util.Random;
 public class HydratorBlock extends CustomOrientedBlock<HydratorTile> {
 
     public HydratorBlock() {
-        super("hydrator", HydratorTile.class, Material.WATER, 1000, 10);
+        super("hydrator", HydratorTile.class, Material.ROCK, 1000, 10);
     }
 
     @Override
@@ -48,7 +48,7 @@ public class HydratorBlock extends CustomOrientedBlock<HydratorTile> {
     @Override
     public List<IPage> getBookDescriptionPages() {
         List<IPage> pages = super.getBookDescriptionPages();
-        pages.add(0, new PageText("Without power it will simply act as a " + PageText.bold("water source") + " and keep nearby farmland hydrated.\n\nWhen provided with power it will increase the " + PageText.bold("grow speed") + " of the crops in the working area."));
+        pages.add(0, new PageText("When provided with power it will increase the " + PageText.bold("grow speed") + " of the crops in the working area."));
         return pages;
     }
 
@@ -56,7 +56,7 @@ public class HydratorBlock extends CustomOrientedBlock<HydratorTile> {
     @Override
     public void randomDisplayTick(IBlockState stateIn, World worldIn, BlockPos pos, Random rand) {
         super.randomDisplayTick(stateIn, worldIn, pos, rand);
-        for (BlockPos pos1 : BlockPos.getAllInBoxMutable(pos.add(-4, 0, -4), pos.add(4, 0, 4))) {
+        for (BlockPos pos1 : BlockPos.getAllInBoxMutable(pos.add(-2, 0, -2), pos.add(2, 0, 2))) {
             if (worldIn.getBlockState(pos1).getBlock() instanceof IGrowable && rand.nextBoolean() && rand.nextBoolean() && rand.nextBoolean()) {
                 worldIn.spawnParticle(EnumParticleTypes.WATER_WAKE, pos1.getX() + rand.nextDouble(), pos1.getY(), pos1.getZ() + rand.nextDouble(), 0.0D, 0.0D, 0.0D);
             }

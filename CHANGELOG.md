@@ -1,3 +1,6 @@
+# 1.5.5 
++ Removed the farmland part of the Hydrator to fix [#88](https://github.com/Buuz135/Industrial-Foregoing/issues/88) but increased the range by 1
+
 # 1.5.4
 + Fixed [#87](https://github.com/Buuz135/Industrial-Foregoing/issues/87)
 + Added some safety checks for the BHU and BHT
