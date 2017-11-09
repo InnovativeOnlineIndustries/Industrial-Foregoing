@@ -1,5 +1,6 @@
 package com.buuz135.industrial.tile.world;
 
+import com.buuz135.industrial.IndustrialForegoing;
 import com.buuz135.industrial.tile.CustomColoredItemHandler;
 import com.buuz135.industrial.tile.WorkingAreaElectricMachine;
 import com.buuz135.industrial.utils.BlockUtils;
@@ -62,7 +63,7 @@ public class BlockDestroyerTile extends WorkingAreaElectricMachine {
         if (WorkUtils.isDisabled(this.getBlockType())) return 0;
         List<BlockPos> blockPosList = BlockUtils.getBlockPosInAABB(getWorkingArea());
         for (BlockPos pos : blockPosList) {
-            if (!this.world.isAirBlock(pos)) {
+            if (!this.world.isAirBlock(pos) && IndustrialForegoing.getFakePlayer(this.world).canHarvestBlock(this.world.getBlockState(pos))) {
                 Block block = this.world.getBlockState(pos).getBlock();
                 TileEntity tile = world.getTileEntity(pos);
                 if (block.getBlockHardness(this.world.getBlockState(pos), this.world, pos) < 0) continue;
