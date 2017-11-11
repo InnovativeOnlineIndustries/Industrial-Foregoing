@@ -1,3 +1,7 @@
+# 1.5.6
++ Changed how the mobs are grown in the AnimalGrower
++ Added cleaning recipes for the Black Hole Units and Black Hole Tank
+
 # 1.5.5 
 + Removed the farmland part of the Hydrator to fix [#88](https://github.com/Buuz135/Industrial-Foregoing/issues/88) but increased the range by 1
 + Added another check to fix #87 again. Maybe?

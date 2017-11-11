@@ -1,0 +1,11 @@
+{
+  "result": {
+    "item": "industrialforegoing:black_hole_unit"
+  },
+  "ingredients": [
+    {
+      "item": "industrialforegoing:black_hole_unit"
+    }
+  ],
+  "type": "minecraft:crafting_shapeless"
+}

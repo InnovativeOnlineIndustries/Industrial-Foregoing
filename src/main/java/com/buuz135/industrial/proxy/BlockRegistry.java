@@ -92,6 +92,8 @@ public class BlockRegistry {
 
     public static void createRecipes() {
         CustomOrientedBlock.blockList.forEach(CustomOrientedBlock::createRecipe);
+        //RecipeUtils.addShapelessRecipe(new ItemStack(blackHoleUnitBlock), blackHoleUnitBlock);
+        //RecipeUtils.addShapelessRecipe(new ItemStack(blackHoleTankBlock), blackHoleTankBlock);
     }
 
     @SubscribeEvent
