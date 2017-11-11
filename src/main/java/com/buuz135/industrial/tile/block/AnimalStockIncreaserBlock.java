@@ -37,7 +37,7 @@ public class AnimalStockIncreaserBlock extends CustomOrientedBlock<AnimalStockIn
     @Override
     public List<IPage> getBookDescriptionPages() {
         List<IPage> pages = super.getBookDescriptionPages();
-        pages.add(0, new PageText("When provider with power and " + PageText.bold("food") + " for the animals it will feed them and put them in the mood. It needs the breeding item for the animal."));
+        pages.add(0, new PageText("When provider with power and " + PageText.bold("food") + " for the animals it will feed them and put them in the mood. It needs the breeding item for the animal.\n\nThere can only be " + PageText.bold("20") + " animals at the same time in the working area."));
         return pages;
     }
 }

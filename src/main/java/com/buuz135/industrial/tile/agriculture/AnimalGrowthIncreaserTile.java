@@ -36,7 +36,7 @@ public class AnimalGrowthIncreaserTile extends WorkingAreaElectricMachine {
         world.getEntitiesWithinAABB(EntityAnimal.class, getWorkingArea()).stream().filter(EntityAgeable::isChild).forEach(entityAnimal -> {
             for (int i = 0; i < items.getSlots(); ++i) {
                 if (entityAnimal.isBreedingItem(items.getStackInSlot(i))) {
-                    entityAnimal.setGrowingAge(entityAnimal.getGrowingAge() + 1000);
+                    entityAnimal.ageUp(30, true);
                     items.getStackInSlot(i).shrink(1);
                     break;
                 }
