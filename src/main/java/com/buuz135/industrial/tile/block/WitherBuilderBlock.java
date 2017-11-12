@@ -18,6 +18,7 @@ public class WitherBuilderBlock extends CustomOrientedBlock<WitherBuilderTile> {
 
     public WitherBuilderBlock() {
         super("wither_builder", WitherBuilderTile.class, Material.ROCK, 20000, 500);
+        this.setResistance(Float.MAX_VALUE);
     }
 
     @Override

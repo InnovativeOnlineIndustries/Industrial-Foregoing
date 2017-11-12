@@ -135,7 +135,7 @@ public class WitherBuilderTile extends WorkingAreaElectricMachine {
             if (secondRow) {
                 for (int i = 0; i < 3; ++i) {
                     BlockPos temp = pos.add(i - 1, 2, 0);
-                    if (this.world.getBlockState(temp).getBlock().equals(Blocks.AIR) && !top.getStackInSlot(i).isEmpty()) {
+                    if (this.world.getBlockState(temp).getBlock().equals(Blocks.AIR) && !top.getStackInSlot(i).isEmpty() && this.world.getBlockState(temp.add(0, -1, 0)).getBlock().equals(Blocks.SOUL_SAND)) {
                         FakePlayer player = IndustrialForegoing.getFakePlayer(this.world);
                         player.setHeldItem(EnumHand.MAIN_HAND, top.getStackInSlot(i));
                         top.getStackInSlot(i).onItemUse(player, world, temp.offset(EnumFacing.DOWN), EnumHand.MAIN_HAND, EnumFacing.UP, 0, 0, 0);
