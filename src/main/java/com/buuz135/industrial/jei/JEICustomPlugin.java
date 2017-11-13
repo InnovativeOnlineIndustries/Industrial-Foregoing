@@ -62,7 +62,8 @@ public class JEICustomPlugin implements IModPlugin {
     private ManualCategory manualCategory;
 
     public static void showUses(ItemStack stack) {
-        recipesGui.show(recipeRegistry.createFocus(IFocus.Mode.INPUT, stack));
+        if (recipesGui != null && recipeRegistry != null)
+            recipesGui.show(recipeRegistry.createFocus(IFocus.Mode.INPUT, stack));
     }
 
     @Override

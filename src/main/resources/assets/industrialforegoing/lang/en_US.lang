@@ -8,6 +8,7 @@ text.display.item=Item:
 text.display.empty=Empty
 text.display.fluid=Fluid:
 text.display.stacksize=Stack Size:
+text.display.filter=Filter:
 
 tile.industrialforegoing.petrified_fuel_generator.name=Petrified Fuel Generator
 tile.industrialforegoing.enchantment_refiner.name=Enchantment Sorter
@@ -56,6 +57,7 @@ tile.industrialforegoing.protein_reactor.name=Protein Reactor
 tile.industrialforegoing.protein_generator.name=Protein Generator
 tile.industrialforegoing.hydrator.name=Hydrator
 tile.industrialforegoing.wither_builder.name=Wither Builder
+tile.industrialforegoing.fluid_pump.name=Fluid Pump
 
 entity.pink_slime.name=Pink Slime
 

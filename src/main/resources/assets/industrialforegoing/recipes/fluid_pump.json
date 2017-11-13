@@ -1,0 +1,31 @@
+{
+  "result": {
+    "item": "industrialforegoing:fluid_pump"
+  },
+  "pattern": [
+    "pbp",
+    "lmw",
+    "pgp"
+  ],
+  "type": "forge:ore_shaped",
+  "key": {
+    "p": {
+      "item": "industrialforegoing:plastic"
+    },
+    "b": {
+      "item": "minecraft:bucket"
+    },
+    "w": {
+      "item": "minecraft:water_bucket"
+    },
+    "g": {
+      "item": "#GEARGOLD"
+    },
+    "l": {
+      "item": "minecraft:lava_bucket"
+    },
+    "m": {
+      "item": "teslacorelib:machine_case"
+    }
+  }
+}
