@@ -248,7 +248,22 @@ public class BlackHoleUnitTile extends CustomSidedTileEntity implements IHasDisp
         @Nonnull
         @Override
         public ItemStack extractItem(int slot, int amount, boolean simulate) {
-            return outItems.extractItem(0, amount, simulate);
+            if (amount == 0) return ItemStack.EMPTY;
+            ItemStack existing = tile.getItemStack().copy();
+            if (existing.isEmpty()) return ItemStack.EMPTY;
+            if (tile.getAmount() <= amount) {
+                if (!simulate) {
+                    tile.setAmount(0);
+                    outItems.setStackInSlot(0, ItemStack.EMPTY);
+                }
+                return ItemHandlerHelper.copyStackWithSize(existing, tile.getAmount());
+            } else {
+                if (!simulate) {
+                    tile.setAmount(tile.amount - amount);
+                    outItems.setStackInSlot(0, ItemHandlerHelper.copyStackWithSize(existing, Math.min(64, tile.getAmount())));
+                }
+                return ItemHandlerHelper.copyStackWithSize(existing, amount);
+            }
         }
 
         @Override

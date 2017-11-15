@@ -1,6 +1,5 @@
 package com.buuz135.industrial.tile.misc;
 
-import com.buuz135.industrial.proxy.BlockRegistry;
 import com.buuz135.industrial.tile.CustomSidedTileEntity;
 import com.buuz135.industrial.utils.WorkUtils;
 import net.minecraft.entity.item.EntityItem;
@@ -12,6 +11,7 @@ import net.minecraft.util.EnumFacing;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.IItemHandler;
+import net.minecraftforge.items.ItemHandlerHelper;
 import net.minecraftforge.items.ItemStackHandler;
 import net.ndrei.teslacorelib.gui.BasicTeslaGuiContainer;
 import net.ndrei.teslacorelib.gui.IGuiContainerPiece;
@@ -22,6 +22,8 @@ import net.ndrei.teslacorelib.inventory.LockableItemHandler;
 
 import javax.annotation.Nonnull;
 import java.util.List;
+
+import static com.buuz135.industrial.proxy.BlockRegistry.blackHoleUnitBlock;
 
 public class BlackHoleControllerTile extends CustomSidedTileEntity {
 
@@ -42,10 +44,10 @@ public class BlackHoleControllerTile extends CustomSidedTileEntity {
             protected void onContentsChanged(int slot) {
                 if (slot < 0) return;
                 ItemStack in = input.getStackInSlot(slot);
-                int amount = BlockRegistry.blackHoleUnitBlock.getAmount(storage.getStackInSlot(slot));
+                int amount = blackHoleUnitBlock.getAmount(storage.getStackInSlot(slot));
                 if (!in.isEmpty() && in.getCount() + amount < Integer.MAX_VALUE) {
-                    BlockRegistry.blackHoleUnitBlock.setItemStack(storage.getStackInSlot(slot), in);
-                    BlockRegistry.blackHoleUnitBlock.setAmount(storage.getStackInSlot(slot), amount + in.getCount());
+                    blackHoleUnitBlock.setItemStack(storage.getStackInSlot(slot), in);
+                    blackHoleUnitBlock.setAmount(storage.getStackInSlot(slot), amount + in.getCount());
                     in.setCount(0);
                 }
                 BlackHoleControllerTile.this.markDirty();
@@ -54,9 +56,9 @@ public class BlackHoleControllerTile extends CustomSidedTileEntity {
         this.addInventory(new ColoredItemHandler(input, EnumDyeColor.BLUE, "Input items", new BoundingRectangle(15, 18, 9 * 18, 18)) {
             @Override
             public boolean canInsertItem(int slot, ItemStack stack) {
-                if (stack.getItem().equals(Item.getItemFromBlock(BlockRegistry.blackHoleUnitBlock))) return false;
+                if (stack.getItem().equals(Item.getItemFromBlock(blackHoleUnitBlock))) return false;
                 if (storage.getStackInSlot(slot).isEmpty()) return false;
-                ItemStack contained = BlockRegistry.blackHoleUnitBlock.getItemStack(storage.getStackInSlot(slot));
+                ItemStack contained = blackHoleUnitBlock.getItemStack(storage.getStackInSlot(slot));
                 if (contained.isEmpty() || stack.isItemEqual(contained)) return true;
                 return false;
             }
@@ -81,7 +83,7 @@ public class BlackHoleControllerTile extends CustomSidedTileEntity {
         this.addInventory(new ColoredItemHandler(storage, EnumDyeColor.YELLOW, "Black hole units", new BoundingRectangle(15, 22 + 18, 9 * 18, 18)) {
             @Override
             public boolean canInsertItem(int slot, ItemStack stack) {
-                return stack.getItem().equals(Item.getItemFromBlock(BlockRegistry.blackHoleUnitBlock));
+                return stack.getItem().equals(Item.getItemFromBlock(blackHoleUnitBlock));
             }
 
             @Override
@@ -124,21 +126,21 @@ public class BlackHoleControllerTile extends CustomSidedTileEntity {
         for (int i = 0; i < 9; ++i) {
             ItemStack stack = storage.getStackInSlot(i);
             if (!stack.isEmpty()) {
-                int amount = BlockRegistry.blackHoleUnitBlock.getAmount(stack);
-                ItemStack s = BlockRegistry.blackHoleUnitBlock.getItemStack(stack);
+                int amount = blackHoleUnitBlock.getAmount(stack);
+                ItemStack s = blackHoleUnitBlock.getItemStack(stack);
                 if (!s.isEmpty()) {
                     ItemStack out = output.getStackInSlot(i);
                     if (out.isEmpty()) { // Slot is empty
                         out = s.copy();
                         out.setCount(Math.min(amount, 64));
-                        BlockRegistry.blackHoleUnitBlock.setAmount(stack, amount - out.getCount());
+                        blackHoleUnitBlock.setAmount(stack, amount - out.getCount());
                         output.setStackInSlot(i, out);
                         continue;
                     }
                     if (out.getCount() < out.getMaxStackSize()) {
                         int increase = Math.min(amount, out.getMaxStackSize() - out.getCount());
                         out.setCount(out.getCount() + increase);
-                        BlockRegistry.blackHoleUnitBlock.setAmount(stack, amount - increase);
+                        blackHoleUnitBlock.setAmount(stack, amount - increase);
                         continue;
                     }
                 }
@@ -226,8 +228,8 @@ public class BlackHoleControllerTile extends CustomSidedTileEntity {
         @Override
         public ItemStack getStackInSlot(int slot) {
             if (!storage.getStackInSlot(slot).isEmpty()) {
-                ItemStack stack = BlockRegistry.blackHoleUnitBlock.getItemStack(storage.getStackInSlot(slot));
-                stack.setCount(BlockRegistry.blackHoleUnitBlock.getAmount(storage.getStackInSlot(slot)) + output.getStackInSlot(slot).getCount());
+                ItemStack stack = blackHoleUnitBlock.getItemStack(storage.getStackInSlot(slot)).copy();
+                stack.setCount(blackHoleUnitBlock.getAmount(storage.getStackInSlot(slot)) + output.getStackInSlot(slot).getCount());
                 return stack;
             }
             return ItemStack.EMPTY;
@@ -237,7 +239,7 @@ public class BlackHoleControllerTile extends CustomSidedTileEntity {
         @Override
         public ItemStack insertItem(int slot, @Nonnull ItemStack stack, boolean simulate) {
             for (int i = 0; i < 9; ++i) {
-                ItemStack contained = BlockRegistry.blackHoleUnitBlock.getItemStack(storage.getStackInSlot(i));
+                ItemStack contained = blackHoleUnitBlock.getItemStack(storage.getStackInSlot(i));
                 if (stack.isItemEqual(contained)) {
                     return tile.getInput().insertItem(i, stack, simulate);
                 }
@@ -248,7 +250,23 @@ public class BlackHoleControllerTile extends CustomSidedTileEntity {
         @Nonnull
         @Override
         public ItemStack extractItem(int slot, int amount, boolean simulate) {
-            return tile.getOutput().extractItem(slot, amount, simulate);
+            if (storage.getStackInSlot(slot).isEmpty() || amount == 0) return ItemStack.EMPTY;
+            ItemStack existing = blackHoleUnitBlock.getItemStack(storage.getStackInSlot(slot)).copy();
+            if (existing.isEmpty()) return ItemStack.EMPTY;
+            int visualAmount = blackHoleUnitBlock.getAmount(storage.getStackInSlot(slot)) + output.getStackInSlot(slot).getCount();
+            if (visualAmount <= amount) {
+                if (!simulate) {
+                    blackHoleUnitBlock.setAmount(storage.getStackInSlot(slot), 0);
+                    output.setStackInSlot(slot, ItemStack.EMPTY);
+                }
+                return ItemHandlerHelper.copyStackWithSize(existing, visualAmount);
+            } else {
+                if (!simulate) {
+                    blackHoleUnitBlock.setAmount(storage.getStackInSlot(slot), blackHoleUnitBlock.getAmount(storage.getStackInSlot(slot)) - amount);
+                    output.setStackInSlot(slot, ItemHandlerHelper.copyStackWithSize(existing, Math.min(64, blackHoleUnitBlock.getAmount(storage.getStackInSlot(slot)))));
+                }
+                return ItemHandlerHelper.copyStackWithSize(existing, amount);
+            }
         }
 
         @Override
