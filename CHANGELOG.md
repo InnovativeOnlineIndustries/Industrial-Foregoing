@@ -1,3 +1,6 @@
+# 1.5.7
++ Fixed [#92](https://github.com/Buuz135/Industrial-Foregoing/issues/92)
+
 # 1.5.6
 + Changed how the mobs are grown in the AnimalGrower
 + Added cleaning recipes for the Black Hole Units and Black Hole Tank

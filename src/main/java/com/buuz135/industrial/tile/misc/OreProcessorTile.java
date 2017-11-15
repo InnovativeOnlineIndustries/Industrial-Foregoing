@@ -93,7 +93,6 @@ public class OreProcessorTile extends CustomElectricMachine {
         if (stack.isEmpty()) return 0;
         Block block = Block.getBlockFromItem(stack.getItem());
         int fortune = getFortuneLevel();
-        tank.drain(fortune * BlockRegistry.oreProcessorBlock.getEssenceFortune(), true);
         NonNullList<ItemStack> stacks = NonNullList.create();
         block.getDrops(stacks, OreProcessorTile.this.world, OreProcessorTile.this.pos, block.getStateFromMeta(stack.getMetadata()), fortune);
         boolean canInsert = true;
@@ -107,6 +106,7 @@ public class OreProcessorTile extends CustomElectricMachine {
             for (ItemStack temp : stacks) {
                 ItemHandlerHelper.insertItem(output, temp, false);
             }
+            tank.drain(fortune * BlockRegistry.oreProcessorBlock.getEssenceFortune(), true);
             stack.setCount(stack.getCount() - 1);
             return 1;
         }
