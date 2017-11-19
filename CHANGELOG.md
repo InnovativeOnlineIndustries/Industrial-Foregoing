@@ -1,6 +1,7 @@
 # 1.5.7
 + Fixed [#92](https://github.com/Buuz135/Industrial-Foregoing/issues/92)
 + Fixed [#93](https://github.com/Buuz135/Industrial-Foregoing/issues/93) for BHU and BHUControllers
++ Improved collision checking in the spawner
 
 # 1.5.6
 + Changed how the mobs are grown in the AnimalGrower

@@ -105,7 +105,7 @@ public class DyeMixerTile extends CustomElectricMachine {
             }
         };
         ;
-        this.addInventory(new CustomColoredItemHandler(lens, EnumDyeColor.YELLOW, "Lens item", 18 * 7 + 6, 25, 1, 1) {
+        this.addInventory(new CustomColoredItemHandler(lens, EnumDyeColor.YELLOW, "Lens items", 18 * 7 + 6, 25, 1, 1) {
             @Override
             public boolean canInsertItem(int slot, ItemStack stack) {
                 return stack.getItem().equals(ItemRegistry.laserLensItem) && stack.getMetadata() > 0;

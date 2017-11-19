@@ -9,11 +9,12 @@ import com.buuz135.industrial.tile.WorkingAreaElectricMachine;
 import com.buuz135.industrial.utils.BlockUtils;
 import com.buuz135.industrial.utils.WorkUtils;
 import net.minecraft.entity.EntityLiving;
+import net.minecraft.entity.EnumCreatureType;
 import net.minecraft.item.EnumDyeColor;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.Vec3d;
 import net.minecraftforge.fluids.IFluidTank;
 import net.minecraftforge.items.ItemStackHandler;
 import net.ndrei.teslacorelib.inventory.BoundingRectangle;
@@ -27,7 +28,7 @@ public class MobDuplicatorTile extends WorkingAreaElectricMachine {
     private ItemStackHandler mobTool;
 
     public MobDuplicatorTile() {
-        super(MobDuplicatorTile.class.getName().hashCode(), 4, 1, false);
+        super(MobDuplicatorTile.class.getName().hashCode(), 4, 2, false);
     }
 
     @Override
@@ -85,13 +86,16 @@ public class MobDuplicatorTile extends WorkingAreaElectricMachine {
                 BlockPos random = blocks.get(this.world.rand.nextInt(blocks.size())).add(0.5, 0, 0.5);
                 entity.setUniqueId(UUID.randomUUID());
                 entity.setLocationAndAngles(random.getX(), random.getY(), random.getZ(), world.rand.nextFloat() * 360F, 0);
-                while (tries > 0 && (!this.world.isAirBlock(random) || !this.world.isAirBlock(random.offset(EnumFacing.UP)))) {
+                while (tries > 0 && !canEntitySpawn(entity)) {
                     random = blocks.get(this.world.rand.nextInt(blocks.size()));
                     entity.setLocationAndAngles(random.getX(), random.getY(), random.getZ(), world.rand.nextFloat() * 360F, 0);
                     --tries;
                 }
 
-                if (tries <= 0) continue;
+                if (tries <= 0) {
+                    --spawnAmount;
+                    continue;
+                }
                 entity.onInitialSpawn(world.getDifficultyForLocation(this.pos), null);
 
                 this.world.spawnEntity(entity);
@@ -103,5 +107,11 @@ public class MobDuplicatorTile extends WorkingAreaElectricMachine {
         }
 
         return 1;
+    }
+
+    private boolean canEntitySpawn(EntityLiving living) {
+        return getWorkingArea().contains(new Vec3d(living.getEntityBoundingBox().minX, living.getEntityBoundingBox().minY, living.getEntityBoundingBox().minZ)) &&
+                getWorkingArea().contains(new Vec3d(living.getEntityBoundingBox().maxX, living.getEntityBoundingBox().maxY, living.getEntityBoundingBox().maxZ))
+                && this.world.checkNoEntityCollision(living.getEntityBoundingBox()) && this.world.getCollisionBoxes(living, living.getEntityBoundingBox()).isEmpty() && (!this.world.containsAnyLiquid(living.getEntityBoundingBox()) || living.isCreatureType(EnumCreatureType.WATER_CREATURE, false));
     }
 }
