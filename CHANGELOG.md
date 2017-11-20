@@ -1,3 +1,6 @@
+# 1.5.9
++ Fixed [#97](https://github.com/Buuz135/Industrial-Foregoing/issues/97)
+
 # 1.5.8
 + Fixed [#96](https://github.com/Buuz135/Industrial-Foregoing/issues/96)
 

@@ -15,6 +15,8 @@ import net.minecraft.tileentity.TileEntityShulkerBox;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IWorldNameable;
+import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.event.world.BlockEvent;
 import net.minecraftforge.items.ItemHandlerHelper;
 import net.minecraftforge.items.ItemStackHandler;
 
@@ -63,7 +65,10 @@ public class BlockDestroyerTile extends WorkingAreaElectricMachine {
         if (WorkUtils.isDisabled(this.getBlockType())) return 0;
         List<BlockPos> blockPosList = BlockUtils.getBlockPosInAABB(getWorkingArea());
         for (BlockPos pos : blockPosList) {
-            if (!this.world.isAirBlock(pos) && IndustrialForegoing.getFakePlayer(this.world).canHarvestBlock(this.world.getBlockState(pos))) {
+            if (this.world.isAirBlock(pos)) continue;
+            BlockEvent.BreakEvent event = new BlockEvent.BreakEvent(world, pos, world.getBlockState(pos), IndustrialForegoing.getFakePlayer(world));
+            MinecraftForge.EVENT_BUS.post(event);
+            if (!event.isCanceled()) {
                 Block block = this.world.getBlockState(pos).getBlock();
                 TileEntity tile = world.getTileEntity(pos);
                 if (block.getBlockHardness(this.world.getBlockState(pos), this.world, pos) < 0) continue;
@@ -80,7 +85,8 @@ public class BlockDestroyerTile extends WorkingAreaElectricMachine {
                         break;
                     }
                 }
-                if (canInsert && this.world.destroyBlock(pos, false)) {
+                if (canInsert) {
+                    this.world.setBlockToAir(pos);
                     for (ItemStack stack : drops) {
                         ItemHandlerHelper.insertItem(outItems, stack, false);
                     }
