@@ -1,3 +1,6 @@
+# 1.5.8
++ Fixed [#96](https://github.com/Buuz135/Industrial-Foregoing/issues/96)
+
 # 1.5.7
 + Fixed [#92](https://github.com/Buuz135/Industrial-Foregoing/issues/92)
 + Fixed [#93](https://github.com/Buuz135/Industrial-Foregoing/issues/93) for BHU and BHUControllers

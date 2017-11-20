@@ -16,6 +16,7 @@ import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraft.world.World;
 
 import javax.annotation.Nullable;
@@ -74,11 +75,8 @@ public class MobImprisonmentToolItem extends IFCustomItem {
     public void addInformation(ItemStack stack, @Nullable World worldIn, List<String> tooltip, ITooltipFlag flagIn) {
         super.addInformation(stack, worldIn, tooltip, flagIn);
         if (containsEntity(stack)) {
-            tooltip.add("Mob: " + stack.getTagCompound().getString("entity"));
+            tooltip.add("Mob: " + new TextComponentTranslation(EntityList.getTranslationName(new ResourceLocation(stack.getTagCompound().getString("entity")))).getUnformattedComponentText());
             tooltip.add("Health: " + stack.getTagCompound().getDouble("Health"));
-            tooltip.add("");
-            tooltip.add("");
-            tooltip.add("");
         }
     }
 
