@@ -63,7 +63,7 @@ public class EnchantmentExtractorTile extends CustomElectricMachine {
         this.addInventory(new CustomColoredItemHandler(this.inEnchanted, EnumDyeColor.PURPLE, "Input enchanted items", 18 * 3, 25 + 18 * 2, 1, 1) {
             @Override
             public boolean canInsertItem(int slot, ItemStack stack) {
-                return stack.isItemEnchanted();
+                return stack.isItemEnchanted() && stack.getItem().isEnchantable(stack);
             }
 
             @Override

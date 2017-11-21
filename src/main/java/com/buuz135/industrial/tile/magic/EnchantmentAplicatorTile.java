@@ -18,6 +18,7 @@ import net.minecraftforge.items.ItemHandlerHelper;
 import net.minecraftforge.items.ItemStackHandler;
 import net.ndrei.teslacorelib.inventory.BoundingRectangle;
 
+import javax.annotation.Nonnull;
 import java.util.Map;
 
 public class EnchantmentAplicatorTile extends CustomElectricMachine {
@@ -66,11 +67,16 @@ public class EnchantmentAplicatorTile extends CustomElectricMachine {
             protected void onContentsChanged(int slot) {
                 EnchantmentAplicatorTile.this.markDirty();
             }
+
+            @Override
+            protected int getStackLimit(int slot, @Nonnull ItemStack stack) {
+                return 1;
+            }
         };
         this.addInventory(new CustomColoredItemHandler(this.inItem, EnumDyeColor.GREEN, "Input items", 18 * 7 + 10, 25, 1, 1) {
             @Override
             public boolean canInsertItem(int slot, ItemStack stack) {
-                return true;
+                return stack.getItem().isEnchantable(stack);
             }
 
             @Override
