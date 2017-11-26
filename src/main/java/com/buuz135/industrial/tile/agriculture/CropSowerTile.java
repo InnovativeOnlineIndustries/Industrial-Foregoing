@@ -16,7 +16,6 @@ import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraftforge.common.IPlantable;
 import net.minecraftforge.common.util.FakePlayer;
-import net.minecraftforge.items.ItemStackHandler;
 import net.ndrei.teslacorelib.gui.BasicTeslaGuiContainer;
 import net.ndrei.teslacorelib.gui.IGuiContainerPiece;
 import net.ndrei.teslacorelib.gui.LockedInventoryTogglePiece;
@@ -33,7 +32,7 @@ public class CropSowerTile extends WorkingAreaElectricMachine {
 
     public static EnumDyeColor[] colors = new EnumDyeColor[]{EnumDyeColor.RED, EnumDyeColor.CYAN, EnumDyeColor.PURPLE, EnumDyeColor.YELLOW, EnumDyeColor.WHITE, EnumDyeColor.MAGENTA, EnumDyeColor.LIME, EnumDyeColor.BLUE, EnumDyeColor.BLACK};
 
-    private ItemStackHandler inPlant;
+    private LockableItemHandler inPlant;
     private int pointer;
 
     public CropSowerTile() {
@@ -99,6 +98,15 @@ public class CropSowerTile extends WorkingAreaElectricMachine {
             if (this.world.isAirBlock(pos)) {
                 FakePlayer player = IndustrialForegoing.getFakePlayer(this.world);
                 ItemStack stack = inPlant.getStackInSlot(getFilteredSlot(pos));
+                if (stack.isEmpty() && inPlant.getLocked()) {
+                    ItemStack filter = inPlant.getFilterStack(getFilteredSlot(pos));
+                    for (int i = 0; i < inPlant.getSlots(); ++i) {
+                        if (!inPlant.getStackInSlot(i).isEmpty() && inPlant.getStackInSlot(i).isItemEqual(filter)) {
+                            stack = inPlant.getStackInSlot(i);
+                            break;
+                        }
+                    }
+                }
                 if (!stack.isEmpty()) {
                     Item seeds = stack.getItem();
                     player.setHeldItem(EnumHand.MAIN_HAND, stack);

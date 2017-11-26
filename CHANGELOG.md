@@ -3,6 +3,7 @@
 + Fixed [#99](https://github.com/Buuz135/Industrial-Foregoing/issues/98)
 + The Mob Crusher now picks up the XP Orbs even if the tank is full
 + The Resourceful Furnace now doesn't allow to input items in the output slot
++ The Plant Sower will now get items from another slots if the current slot is empty and it is locked
 
 # 1.5.9
 + Fixed [#97](https://github.com/Buuz135/Industrial-Foregoing/issues/97)
