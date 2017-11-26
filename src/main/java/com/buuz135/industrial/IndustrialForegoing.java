@@ -21,7 +21,7 @@ import net.ndrei.teslacorelib.items.gears.CoreGearType;
 import java.util.Arrays;
 import java.util.HashMap;
 
-@Mod(modid = Reference.MOD_ID, name = Reference.MOD_ID, version = Reference.VERSION, dependencies = "required-after:teslacorelib@[1.0.10,)", guiFactory = Reference.GUI_FACTORY, updateJSON = "https://raw.githubusercontent.com/Buuz135/Industrial-Foregoing/master/update.json")
+@Mod(modid = Reference.MOD_ID, name = Reference.MOD_ID, version = Reference.VERSION, dependencies = "required:forge@[14.23.1.2554,);required-after:teslacorelib@[1.0.10,)", guiFactory = Reference.GUI_FACTORY, updateJSON = "https://raw.githubusercontent.com/Buuz135/Industrial-Foregoing/master/update.json")
 public class IndustrialForegoing {
 
     public static CreativeTabs creativeTab = new CreativeTabs(Reference.MOD_ID) {
