@@ -108,11 +108,11 @@ public class CropSowerTile extends WorkingAreaElectricMachine {
                     }
                 }
                 if (!stack.isEmpty()) {
-                    Item seeds = stack.getItem();
-                    player.setHeldItem(EnumHand.MAIN_HAND, stack);
                     if (!ItemStackUtils.isStackOreDict(stack, "treeSapling") && (this.world.getBlockState(pos.offset(EnumFacing.DOWN)).getBlock().equals(Blocks.DIRT) || this.world.getBlockState(pos.offset(EnumFacing.DOWN)).getBlock().equals(Blocks.GRASS))) {
                         this.world.setBlockState(pos.offset(EnumFacing.DOWN), Blocks.FARMLAND.getDefaultState());
                     }
+                    Item seeds = stack.getItem();
+                    player.setHeldItem(EnumHand.MAIN_HAND, stack);
                     seeds.onItemUse(player, world, pos.offset(EnumFacing.DOWN), EnumHand.MAIN_HAND, EnumFacing.UP, 0, 0, 0);
                     return 1;
                 }
