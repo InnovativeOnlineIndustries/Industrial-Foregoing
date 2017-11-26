@@ -125,7 +125,7 @@ public class FluidPumpTile extends WorkingAreaElectricMachine {
             public void drawForegroundTopLayer(@NotNull BasicTeslaGuiContainer<?> container, int guiX, int guiY, int mouseX, int mouseY) {
                 super.drawForegroundTopLayer(container, guiX, guiY, mouseX, mouseY);
                 if (isInside(container, mouseX, mouseY))
-                    container.drawTooltip(Arrays.asList(FluidRegistry.getFluid(fluid).getLocalizedName(new FluidStack(FluidRegistry.getFluid(fluid), 1000))), mouseX - guiX, mouseY - guiY);
+                    container.drawTooltip(Arrays.asList(fluid != null ? FluidRegistry.getFluid(fluid).getLocalizedName(new FluidStack(FluidRegistry.getFluid(fluid), 1000)) : new TextComponentTranslation("text.display.empty").getUnformattedText()), mouseX - guiX, mouseY - guiY);
             }
         });
         return pieces;
