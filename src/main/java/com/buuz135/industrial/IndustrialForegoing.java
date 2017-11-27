@@ -68,13 +68,10 @@ public class IndustrialForegoing {
 
     @Mod.EventHandler
     public void construction(FMLConstructionEvent event) {
-        Arrays.asList(TeslaCoreLibConfig.REGISTER_GEARS,
-                "${TeslaCoreLibConfig.REGISTER_GEAR_TYPES}#${CoreGearType.WOOD.material}",
-                "${TeslaCoreLibConfig.REGISTER_GEAR_TYPES}#${CoreGearType.STONE.material}",
+        Arrays.asList(TeslaCoreLibConfig.REGISTER_MACHINE_CASE, TeslaCoreLibConfig.REGISTER_GEARS,
                 TeslaCoreLibConfig.REGISTER_GEAR_TYPES + "#" + CoreGearType.IRON.getMaterial(),
                 TeslaCoreLibConfig.REGISTER_GEAR_TYPES + "#" + CoreGearType.GOLD.getMaterial(),
                 TeslaCoreLibConfig.REGISTER_GEAR_TYPES + "#" + CoreGearType.DIAMOND.getMaterial(),
-                TeslaCoreLibConfig.REGISTER_MACHINE_CASE,
                 TeslaCoreLibConfig.REGISTER_ADDONS,
                 TeslaCoreLibConfig.REGISTER_SPEED_ADDONS,
                 TeslaCoreLibConfig.REGISTER_ENERGY_ADDONS).forEach(s -> TeslaCoreLibConfig.INSTANCE.setDefaultFlag(s, true));

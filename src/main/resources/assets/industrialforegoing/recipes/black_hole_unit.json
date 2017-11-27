@@ -22,7 +22,7 @@
       "item": "minecraft:ender_eye"
     },
     "m": {
-      "item": "teslacorelib:machine_case"
+      "item": "#IFCORE"
     }
   }
 }

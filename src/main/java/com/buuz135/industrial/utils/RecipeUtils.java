@@ -6,6 +6,7 @@ import com.google.gson.GsonBuilder;
 import net.minecraft.block.Block;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.ndrei.teslacorelib.items.MachineCaseItem;
 
 import java.io.File;
 import java.io.FileWriter;
@@ -28,6 +29,9 @@ public class RecipeUtils {
         setupDir();
         if (!RECIPE_DIR.exists()) return;
         // GameRegistry.addShapedRecipe(result, components);
+        for (int i = 0; i < components.length; ++i) {
+            if (components[i].equals(MachineCaseItem.INSTANCE)) components[i] = "IFCORE";
+        }
 
         Map<String, Object> json = new HashMap<>();
 
@@ -79,7 +83,9 @@ public class RecipeUtils {
         setupDir();
         if (!RECIPE_DIR.exists()) return;
         // addShapelessRecipe(result, components);
-
+        for (int i = 0; i < components.length; ++i) {
+            if (components[i].equals(MachineCaseItem.INSTANCE)) components[i] = "IFCORE";
+        }
         Map<String, Object> json = new HashMap<>();
 
         boolean isOreDict = false;
@@ -155,7 +161,16 @@ public class RecipeUtils {
             entry.put("ingredient", ImmutableMap.of("type", "forge:ore_dict", "ore", s));
             json.add(entry);
         }
-
+        Map<String, Object> entry = new HashMap<>();
+        entry.put("name", "IFCORE");
+        entry.put("conditions", Arrays.asList(ImmutableMap.of("type", "minecraft:item_exists", "item", "teslacorelib:machine_case")));
+        entry.put("ingredient", ImmutableMap.of("item", "teslacorelib:machine_case"));
+        json.add(entry);
+        entry = new HashMap<>();
+        entry.put("name", "IFCORE");
+        entry.put("conditions", Arrays.asList(ImmutableMap.of("type", "forge:mod_loaded", "modid", "thermalexpansion")));
+        entry.put("ingredient", ImmutableMap.of("item", "thermalexpansion:frame", "data", 0));
+        json.add(entry);
         try (FileWriter w = new FileWriter(new File(RECIPE_DIR, "_constants.json"))) {
             GSON.toJson(json, w);
         } catch (IOException e) {

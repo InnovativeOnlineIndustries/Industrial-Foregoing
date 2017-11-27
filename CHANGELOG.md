@@ -1,3 +1,6 @@
+# 1.5.11
++ Added Thermal Expansion Machine Frame as a frame in the recipes
+
 # 1.5.10
 + Updated to Forge 1.12.2-14.23.1.2554
 + Fixed [#99](https://github.com/Buuz135/Industrial-Foregoing/issues/98)

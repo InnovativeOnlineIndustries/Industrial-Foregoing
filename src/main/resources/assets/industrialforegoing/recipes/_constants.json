@@ -2,6 +2,13 @@
   {
     "ingredient": {
       "type": "forge:ore_dict",
+      "ore": "IFCORE"
+    },
+    "name": "IFCORE"
+  },
+  {
+    "ingredient": {
+      "type": "forge:ore_dict",
       "ore": "blockGlassColorless"
     },
     "name": "BLOCKGLASSCOLORLESS"
@@ -131,5 +138,30 @@
       "ore": "paneGlass"
     },
     "name": "PANEGLASS"
+  },
+  {
+    "ingredient": {
+      "item": "teslacorelib:machine_case"
+    },
+    "name": "IFCORE",
+    "conditions": [
+      {
+        "type": "minecraft:item_exists",
+        "item": "teslacorelib:machine_case"
+      }
+    ]
+  },
+  {
+    "ingredient": {
+      "item": "thermalexpansion:frame",
+      "data": 0
+    },
+    "name": "IFCORE",
+    "conditions": [
+      {
+        "type": "forge:mod_loaded",
+        "modid": "thermalexpansion"
+      }
+    ]
   }
 ]

@@ -25,7 +25,7 @@
       "item": "minecraft:lava_bucket"
     },
     "m": {
-      "item": "teslacorelib:machine_case"
+      "item": "#IFCORE"
     }
   }
 }

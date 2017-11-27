@@ -7,7 +7,7 @@
     "sms",
     "ggg"
   ],
-  "type": "minecraft:crafting_shaped",
+  "type": "forge:ore_shaped",
   "key": {
     "p": {
       "item": "industrialforegoing:plastic"
@@ -20,7 +20,7 @@
       "item": "minecraft:soul_sand"
     },
     "m": {
-      "item": "teslacorelib:machine_case"
+      "item": "#IFCORE"
     },
     "n": {
       "item": "minecraft:nether_star"

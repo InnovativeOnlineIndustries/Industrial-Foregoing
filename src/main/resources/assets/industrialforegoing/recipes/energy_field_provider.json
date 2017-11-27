@@ -13,7 +13,7 @@
       "item": "minecraft:repeater"
     },
     "t": {
-      "item": "teslacorelib:machine_case"
+      "item": "#IFCORE"
     },
     "d": {
       "item": "#GEARDIAMOND"
