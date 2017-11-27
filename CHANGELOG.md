@@ -1,5 +1,6 @@
 # 1.5.11
 + Added Thermal Expansion Machine Frame as a frame in the recipes
++ Added Tooltip descriptions for machines that accept range addons
 
 # 1.5.10
 + Updated to Forge 1.12.2-14.23.1.2554

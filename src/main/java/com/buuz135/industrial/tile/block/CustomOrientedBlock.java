@@ -7,23 +7,30 @@ import com.buuz135.industrial.book.IHasBookDescription;
 import com.buuz135.industrial.config.CustomConfiguration;
 import com.buuz135.industrial.utils.Reference;
 import net.minecraft.block.material.Material;
+import net.minecraft.client.util.ITooltipFlag;
+import net.minecraft.item.ItemStack;
+import net.minecraft.util.text.TextFormatting;
+import net.minecraft.world.World;
 import net.minecraftforge.common.config.Configuration;
 import net.minecraftforge.fml.common.registry.ForgeRegistries;
 import net.ndrei.teslacorelib.blocks.OrientedBlock;
 import net.ndrei.teslacorelib.tileentities.SidedTileEntity;
 
+import javax.annotation.Nullable;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 public abstract class CustomOrientedBlock<T extends SidedTileEntity> extends OrientedBlock implements IHasBookDescription {
 
     public static List<CustomOrientedBlock> blockList = new ArrayList<>();
+    private static List<Class> rangeAcceptingTiles = Arrays.asList(AnimalByproductRecolectorBlock.class, CropEnrichMaterialInjectorBlock.class, CropRecolectorBlock.class, CropSowerBlock.class, EnergyFieldProviderBlock.class, FluidPumpBlock.class);
 
     private boolean workDisabled;
     private int energyForWork;
     private int energyRate;
 
-    protected CustomOrientedBlock(String registryName, Class teClass) {
+    protected CustomOrientedBlock(String registryName, Class<T> teClass) {
         super(Reference.MOD_ID, IndustrialForegoing.creativeTab, registryName, teClass);
         blockList.add(this);
     }
@@ -65,4 +72,9 @@ public abstract class CustomOrientedBlock<T extends SidedTileEntity> extends Ori
         return pages;
     }
 
+    @Override
+    public void addInformation(ItemStack stack, @Nullable World player, List<String> tooltip, ITooltipFlag advanced) {
+        super.addInformation(stack, player, tooltip, advanced);
+        if (rangeAcceptingTiles.contains(this.getClass())) tooltip.add(TextFormatting.GRAY + "Accepts range addons");
+    }
 }
