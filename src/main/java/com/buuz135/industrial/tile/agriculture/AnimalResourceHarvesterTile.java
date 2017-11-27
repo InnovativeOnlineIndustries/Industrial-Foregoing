@@ -5,8 +5,7 @@ import com.buuz135.industrial.tile.CustomColoredItemHandler;
 import com.buuz135.industrial.tile.WorkingAreaElectricMachine;
 import com.buuz135.industrial.utils.ItemStackUtils;
 import com.buuz135.industrial.utils.WorkUtils;
-import net.minecraft.entity.passive.EntityCow;
-import net.minecraft.entity.passive.EntitySheep;
+import net.minecraft.entity.passive.EntityAnimal;
 import net.minecraft.init.Items;
 import net.minecraft.item.EnumDyeColor;
 import net.minecraft.item.ItemStack;
@@ -14,6 +13,7 @@ import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
+import net.minecraftforge.common.IShearable;
 import net.minecraftforge.common.util.FakePlayer;
 import net.minecraftforge.fluids.IFluidTank;
 import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
@@ -60,21 +60,19 @@ public class AnimalResourceHarvesterTile extends WorkingAreaElectricMachine {
     @Override
     public float work() {
         if (WorkUtils.isDisabled(this.getBlockType())) return 0;
-        List<EntitySheep> animals = this.world.getEntitiesWithinAABB(EntitySheep.class, getWorkingArea());
-        for (EntitySheep sheep : animals) {
-            if (!sheep.getSheared()) {
-                List<ItemStack> stacks = sheep.onSheared(new ItemStack(Items.SHEARS), this.world, null, 0);
+        List<EntityAnimal> animals = this.world.getEntitiesWithinAABB(EntityAnimal.class, getWorkingArea());
+        for (EntityAnimal living : animals) {
+            if (living instanceof IShearable && ((IShearable) living).isShearable(new ItemStack(Items.SHEARS), this.world, living.getPosition())) {
+                List<ItemStack> stacks = ((IShearable) living).onSheared(new ItemStack(Items.SHEARS), this.world, null, 0);
                 for (ItemStack stack : stacks) {
                     ItemHandlerHelper.insertItem(outItems, stack, false);
                 }
                 return 1;
             }
-        }
-        for (EntityCow cow : this.world.getEntitiesWithinAABB(EntityCow.class, getWorkingArea())) {
             FakePlayer player = IndustrialForegoing.getFakePlayer(this.world);
-            player.setPosition(cow.posX, cow.posY, cow.posZ);
+            player.setPosition(living.posX, living.posY, living.posZ);
             player.setHeldItem(EnumHand.MAIN_HAND, new ItemStack(Items.BUCKET));
-            if (cow.processInteract(player, EnumHand.MAIN_HAND)) {
+            if (living.processInteract(player, EnumHand.MAIN_HAND)) {
                 ItemStack stack = player.getHeldItem(EnumHand.MAIN_HAND);
                 if (stack.hasCapability(CapabilityFluidHandler.FLUID_HANDLER_ITEM_CAPABILITY, null)) {
                     IFluidHandlerItem fluidHandlerItem = stack.getCapability(CapabilityFluidHandler.FLUID_HANDLER_ITEM_CAPABILITY, null);
@@ -82,8 +80,6 @@ public class AnimalResourceHarvesterTile extends WorkingAreaElectricMachine {
                 }
             }
         }
-
-        //milkTank.fill(new FluidStack(FluidsRegistry.MILK, cows.size() * 1000), true);
         return 1;
     }
 
