@@ -53,7 +53,7 @@ public class BlackHoleUnitTile extends CustomSidedTileEntity implements IHasDisp
             stack.setCount(Math.min(stack.getMaxStackSize(), amount));
             amount -= stack.getCount();
             ItemHandlerHelper.insertItem(outItems, stack, false);
-        } else if (outItems.getStackInSlot(0).getCount() < outItems.getStackInSlot(0).getMaxStackSize()) {
+        } else if (outItems.getStackInSlot(0).getCount() <= outItems.getStackInSlot(0).getMaxStackSize()) {
             ItemStack stack = outItems.getStackInSlot(0);
             int increment = Math.min(amount, 64 - stack.getCount());
             stack.setCount(stack.getCount() + increment);
@@ -252,15 +252,15 @@ public class BlackHoleUnitTile extends CustomSidedTileEntity implements IHasDisp
             ItemStack existing = tile.getItemStack().copy();
             if (existing.isEmpty()) return ItemStack.EMPTY;
             if (tile.getAmount() <= amount) {
+                int newAmount = tile.getAmount();
                 if (!simulate) {
                     tile.setAmount(0);
                     outItems.setStackInSlot(0, ItemStack.EMPTY);
                 }
-                return ItemHandlerHelper.copyStackWithSize(existing, tile.getAmount());
+                return ItemHandlerHelper.copyStackWithSize(existing, newAmount);
             } else {
                 if (!simulate) {
                     tile.setAmount(tile.amount - amount);
-                    outItems.setStackInSlot(0, ItemHandlerHelper.copyStackWithSize(existing, Math.min(64, tile.getAmount())));
                 }
                 return ItemHandlerHelper.copyStackWithSize(existing, amount);
             }

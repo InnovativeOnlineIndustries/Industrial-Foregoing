@@ -1,3 +1,6 @@
+# 1.5.12
++ Fixed BHU being derpy with the new ItemHandler for big stacks
+
 # 1.5.11
 + Added Thermal Expansion Machine Frame as a frame in the recipes
 + Added Tooltip descriptions for machines that accept range addons

@@ -120,7 +120,7 @@ public class BlackHoleControllerTile extends CustomSidedTileEntity {
 
     @Override
     protected void innerUpdate() {
-        if (WorkUtils.isDisabled(this.getBlockType()) || world.isRemote) return;
+        if (WorkUtils.isDisabled(this.getBlockType())) return;
         input.setLocked(output.getLocked());
         input.setFilter(output.getFilter());
         for (int i = 0; i < 9; ++i) {
@@ -262,8 +262,8 @@ public class BlackHoleControllerTile extends CustomSidedTileEntity {
                 return ItemHandlerHelper.copyStackWithSize(existing, visualAmount);
             } else {
                 if (!simulate) {
-                    blackHoleUnitBlock.setAmount(storage.getStackInSlot(slot), blackHoleUnitBlock.getAmount(storage.getStackInSlot(slot)) - amount);
-                    output.setStackInSlot(slot, ItemHandlerHelper.copyStackWithSize(existing, Math.min(64, blackHoleUnitBlock.getAmount(storage.getStackInSlot(slot)))));
+                    blackHoleUnitBlock.setAmount(storage.getStackInSlot(slot), Math.max(0, blackHoleUnitBlock.getAmount(storage.getStackInSlot(slot)) - amount));
+                    output.setStackInSlot(slot, ItemHandlerHelper.copyStackWithSize(existing, Math.min(64, visualAmount - amount)));
                 }
                 return ItemHandlerHelper.copyStackWithSize(existing, amount);
             }
