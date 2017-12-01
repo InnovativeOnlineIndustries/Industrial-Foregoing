@@ -1,3 +1,6 @@
+# 1.5.13
++ Added a config option to enable TE Machine Frames in the recipes
+
 # 1.5.12
 + Fixed BHU being derpy with the new ItemHandler for big stacks
 

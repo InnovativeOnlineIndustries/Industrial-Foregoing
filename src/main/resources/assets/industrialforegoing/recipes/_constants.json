@@ -159,8 +159,17 @@
     "name": "IFCORE",
     "conditions": [
       {
-        "type": "forge:mod_loaded",
-        "modid": "thermalexpansion"
+        "type": "forge:and",
+        "values": [
+          {
+            "type": "forge:mod_loaded",
+            "modid": "thermalexpansion"
+          },
+          {
+            "type": "industrialforegoing:configuration_value",
+            "value": "useTEFrames"
+          }
+        ]
       }
     ]
   }

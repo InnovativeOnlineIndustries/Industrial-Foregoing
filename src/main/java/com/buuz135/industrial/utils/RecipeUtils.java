@@ -168,7 +168,7 @@ public class RecipeUtils {
         json.add(entry);
         entry = new HashMap<>();
         entry.put("name", "IFCORE");
-        entry.put("conditions", Arrays.asList(ImmutableMap.of("type", "forge:mod_loaded", "modid", "thermalexpansion")));
+        entry.put("conditions", Arrays.asList(ImmutableMap.of("type", "forge:and", "values", Arrays.asList(ImmutableMap.of("type", "forge:mod_loaded", "modid", "thermalexpansion"), ImmutableMap.of("type", "industrialforegoing:configuration_value", "value", "useTEFrames")))));
         entry.put("ingredient", ImmutableMap.of("item", "thermalexpansion:frame", "data", 0));
         json.add(entry);
         try (FileWriter w = new FileWriter(new File(RECIPE_DIR, "_constants.json"))) {

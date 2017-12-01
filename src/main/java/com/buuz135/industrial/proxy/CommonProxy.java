@@ -14,16 +14,19 @@ import com.buuz135.industrial.utils.Reference;
 import com.buuz135.industrial.utils.apihandlers.CraftTweakerHelper;
 import com.buuz135.industrial.utils.apihandlers.PlantRecollectableRegistryHandler;
 import com.buuz135.industrial.utils.apihandlers.RecipeHandlers;
+import com.buuz135.industrial.utils.apihandlers.json.ConfigurationConditionFactory;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.storage.loot.LootTableList;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.config.Configuration;
+import net.minecraftforge.common.crafting.CraftingHelper;
 import net.minecraftforge.fml.common.Loader;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 import net.minecraftforge.fml.common.network.NetworkRegistry;
 import net.minecraftforge.fml.common.registry.EntityRegistry;
 
+import java.util.HashMap;
 import java.util.Random;
 
 public class CommonProxy {
@@ -35,6 +38,7 @@ public class CommonProxy {
 
     public void preInit(FMLPreInitializationEvent event) {
         IFRegistries.poke();
+        CraftingHelper.register(new ResourceLocation(Reference.MOD_ID, "configuration_value"), new ConfigurationConditionFactory());
         random = new Random();
 
         FluidsRegistry.registerFluids();
@@ -50,6 +54,9 @@ public class CommonProxy {
         NetworkRegistry.INSTANCE.registerGuiHandler(IndustrialForegoing.instance, new GuiHandler());
 
         CustomConfiguration.config = new Configuration(event.getSuggestedConfigurationFile());
+        CustomConfiguration.config.load();
+        CustomConfiguration.configValues = new HashMap<>();
+        CustomConfiguration.configValues.put("useTEFrames", CustomConfiguration.config.getBoolean("useTEFrames", Configuration.CATEGORY_GENERAL, true, "Use Thermal Expansion Machine Frames instead of Tesla Core Lib"));
 
         if (Loader.isModLoaded("crafttweaker")) CraftTweakerHelper.register();
 
