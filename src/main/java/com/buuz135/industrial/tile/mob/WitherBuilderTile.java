@@ -108,17 +108,17 @@ public class WitherBuilderTile extends WorkingAreaElectricMachine {
     public float work() {
         BlockPos pos = this.pos.add(0, 2, 0);
         float power = 0;
-        if (this.world.getBlockState(pos).getBlock().equals(Blocks.AIR) && !bottom.getStackInSlot(0).isEmpty()) {
+        if (this.world.getBlockState(pos).getBlock().equals(Blocks.AIR) && !getDefaultOrFind(0, bottom, new ItemStack(Blocks.SOUL_SAND)).isEmpty()) {
             this.world.setBlockState(pos, Blocks.SOUL_SAND.getDefaultState());
-            bottom.getStackInSlot(0).shrink(1);
+            getDefaultOrFind(0, bottom, new ItemStack(Blocks.SOUL_SAND)).shrink(1);
             power += 1 / 7f;
         }
         if (this.world.getBlockState(pos).getBlock().equals(Blocks.SOUL_SAND)) {
             for (int i = 0; i < 3; ++i) {
                 BlockPos temp = pos.add(i - 1, 1, 0);
-                if (this.world.getBlockState(temp).getBlock().equals(Blocks.AIR) && !middle.getStackInSlot(i).isEmpty()) {
+                if (this.world.getBlockState(temp).getBlock().equals(Blocks.AIR) && !getDefaultOrFind(i, middle, new ItemStack(Blocks.SOUL_SAND)).isEmpty()) {
                     this.world.setBlockState(temp, Blocks.SOUL_SAND.getDefaultState());
-                    middle.getStackInSlot(i).shrink(1);
+                    getDefaultOrFind(i, middle, new ItemStack(Blocks.SOUL_SAND)).shrink(1);
                     power += 1 / 7f;
                 }
             }
@@ -135,10 +135,11 @@ public class WitherBuilderTile extends WorkingAreaElectricMachine {
             if (secondRow) {
                 for (int i = 0; i < 3; ++i) {
                     BlockPos temp = pos.add(i - 1, 2, 0);
-                    if (this.world.getBlockState(temp).getBlock().equals(Blocks.AIR) && !top.getStackInSlot(i).isEmpty() && this.world.getBlockState(temp.add(0, -1, 0)).getBlock().equals(Blocks.SOUL_SAND)) {
+                    if (this.world.getBlockState(temp).getBlock().equals(Blocks.AIR) && !getDefaultOrFind(i, top, new ItemStack(Items.SKULL, 1, 1)).isEmpty() && this.world.getBlockState(temp.add(0, -1, 0)).getBlock().equals(Blocks.SOUL_SAND)) {
                         FakePlayer player = IndustrialForegoing.getFakePlayer(this.world);
-                        player.setHeldItem(EnumHand.MAIN_HAND, top.getStackInSlot(i));
-                        top.getStackInSlot(i).onItemUse(player, world, temp.offset(EnumFacing.DOWN), EnumHand.MAIN_HAND, EnumFacing.UP, 0, 0, 0);
+                        ItemStack stack = getDefaultOrFind(i, top, new ItemStack(Items.SKULL, 1, 1));
+                        player.setHeldItem(EnumHand.MAIN_HAND, stack);
+                        stack.onItemUse(player, world, temp.offset(EnumFacing.DOWN), EnumHand.MAIN_HAND, EnumFacing.UP, 0, 0, 0);
                         power += 1 / 7f;
                     }
                 }
@@ -150,5 +151,15 @@ public class WitherBuilderTile extends WorkingAreaElectricMachine {
     @Override
     public AxisAlignedBB getWorkingArea() {
         return new AxisAlignedBB(this.pos.getX(), this.pos.getY(), this.pos.getZ(), this.pos.getX() + 1, this.pos.getY() + 1, this.pos.getZ() + 1).grow(1, 1, 0).offset(new BlockPos(0, 3, 0));
+    }
+
+    public ItemStack getDefaultOrFind(int i, ItemStackHandler handler, ItemStack filter) {
+        if (handler.getStackInSlot(i).isItemEqual(filter)) return handler.getStackInSlot(i);
+        for (ItemStackHandler h : new ItemStackHandler[]{top, middle, bottom}) {
+            for (int s = 0; s < h.getSlots(); ++s) {
+                if (h.getStackInSlot(s).isItemEqual(filter)) return h.getStackInSlot(s);
+            }
+        }
+        return ItemStack.EMPTY;
     }
 }
