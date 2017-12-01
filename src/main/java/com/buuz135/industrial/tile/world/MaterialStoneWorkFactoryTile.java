@@ -37,7 +37,7 @@ public class MaterialStoneWorkFactoryTile extends CustomElectricMachine {
     protected void initializeInventories() {
         super.initializeInventories();
         modeList = new LinkedHashMap<>();
-        EnumDyeColor[] colors = new EnumDyeColor[]{EnumDyeColor.YELLOW, EnumDyeColor.BLUE, EnumDyeColor.GREEN, EnumDyeColor.ORANGE, EnumDyeColor.LIGHT_BLUE};
+        EnumDyeColor[] colors = new EnumDyeColor[]{EnumDyeColor.YELLOW, EnumDyeColor.BLUE, EnumDyeColor.GREEN, EnumDyeColor.ORANGE, EnumDyeColor.PURPLE};
         for (int i = 0; i < 5; ++i) {
             ItemStackHandler item = new ItemStackHandler(2);
             this.addInventory(new CustomColoredItemHandler(item, colors[i], "Material process", 50 + 24 * i, 25, 1, 2) {
