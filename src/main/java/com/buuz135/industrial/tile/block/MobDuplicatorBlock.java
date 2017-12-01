@@ -13,11 +13,13 @@ import net.minecraft.item.ItemStack;
 import net.minecraftforge.common.config.Configuration;
 import net.ndrei.teslacorelib.items.MachineCaseItem;
 
+import java.util.Arrays;
 import java.util.List;
 
 public class MobDuplicatorBlock extends CustomOrientedBlock<MobDuplicatorTile> {
 
     public int essenceNeeded;
+    public List<String> blacklistedEntities;
 
     public MobDuplicatorBlock() {
         super("mob_duplicator", MobDuplicatorTile.class, Material.ROCK, 5000, 80);
@@ -37,7 +39,7 @@ public class MobDuplicatorBlock extends CustomOrientedBlock<MobDuplicatorTile> {
     public void getMachineConfig() {
         super.getMachineConfig();
         essenceNeeded = CustomConfiguration.config.getInt("essenceNeeded", "machines" + Configuration.CATEGORY_SPLITTER + this.getRegistryName().getResourcePath().toString(), 12, 1, Integer.MAX_VALUE, "Essence needed based on mob's health (mobHealth*essenceNeeded)");
-
+        blacklistedEntities = Arrays.asList(CustomConfiguration.config.getStringList("blacklistedEntities", "machines" + Configuration.CATEGORY_SPLITTER + this.getRegistryName().getResourcePath().toString(), new String[]{}, "A list of blacklisted entities like minecraft:creeper"));
     }
 
     @Override

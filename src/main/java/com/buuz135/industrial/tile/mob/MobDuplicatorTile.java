@@ -8,6 +8,7 @@ import com.buuz135.industrial.tile.CustomColoredItemHandler;
 import com.buuz135.industrial.tile.WorkingAreaElectricMachine;
 import com.buuz135.industrial.utils.BlockUtils;
 import com.buuz135.industrial.utils.WorkUtils;
+import net.minecraft.entity.EntityList;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.EnumCreatureType;
 import net.minecraft.item.EnumDyeColor;
@@ -68,6 +69,8 @@ public class MobDuplicatorTile extends WorkingAreaElectricMachine {
 
         ItemStack stack = mobTool.getStackInSlot(0);
         EntityLiving entity = (EntityLiving) ((MobImprisonmentToolItem) stack.getItem()).getEntityFromStack(stack, this.world, false);
+        if (BlockRegistry.mobDuplicatorBlock.blacklistedEntities.contains(EntityList.getKey(entity).toString()))
+            return 0;
 
         int livingAround = world.getEntitiesWithinAABB(entity.getClass(), (new AxisAlignedBB((double) pos.getX(), (double) pos.getY(), (double) pos.getZ(), (double) (pos.getX() + 1), (double) (pos.getY() + 1), (double) (pos.getZ() + 1))).grow((double) 16)).size();
         if (livingAround > 32) return 0;

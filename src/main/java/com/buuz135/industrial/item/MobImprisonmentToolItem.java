@@ -1,5 +1,6 @@
 package com.buuz135.industrial.item;
 
+import com.buuz135.industrial.proxy.BlockRegistry;
 import com.buuz135.industrial.proxy.ItemRegistry;
 import com.buuz135.industrial.utils.RecipeUtils;
 import net.minecraft.client.util.ITooltipFlag;
@@ -17,6 +18,7 @@ import net.minecraft.util.EnumHand;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.TextComponentTranslation;
+import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.World;
 
 import javax.annotation.Nullable;
@@ -77,6 +79,8 @@ public class MobImprisonmentToolItem extends IFCustomItem {
         if (containsEntity(stack)) {
             tooltip.add("Mob: " + new TextComponentTranslation(EntityList.getTranslationName(new ResourceLocation(stack.getTagCompound().getString("entity")))).getUnformattedComponentText());
             tooltip.add("Health: " + stack.getTagCompound().getDouble("Health"));
+            if (BlockRegistry.mobDuplicatorBlock.blacklistedEntities.contains(stack.getTagCompound().getString("entity")))
+                tooltip.add(TextFormatting.RED + "Entity blacklisted in the Mob Duplicator");
         }
     }
 
