@@ -6,6 +6,7 @@ import com.buuz135.industrial.tile.WorkingAreaElectricMachine;
 import com.buuz135.industrial.utils.ItemStackUtils;
 import com.buuz135.industrial.utils.WorkUtils;
 import net.minecraft.entity.passive.EntityAnimal;
+import net.minecraft.entity.passive.EntitySquid;
 import net.minecraft.init.Items;
 import net.minecraft.item.EnumDyeColor;
 import net.minecraft.item.ItemStack;
@@ -77,10 +78,17 @@ public class AnimalResourceHarvesterTile extends WorkingAreaElectricMachine {
                 if (stack.hasCapability(CapabilityFluidHandler.FLUID_HANDLER_ITEM_CAPABILITY, null)) {
                     IFluidHandlerItem fluidHandlerItem = stack.getCapability(CapabilityFluidHandler.FLUID_HANDLER_ITEM_CAPABILITY, null);
                     tank.fill(fluidHandlerItem.drain(Integer.MAX_VALUE, true), true);
+                    return 1;
                 }
             }
         }
-        return 1;
+        for (EntitySquid animal : this.world.getEntitiesWithinAABB(EntitySquid.class, getWorkingArea())) {
+            if (world.rand.nextBoolean() && world.rand.nextBoolean() && world.rand.nextBoolean() && world.rand.nextBoolean()) {
+                ItemHandlerHelper.insertItem(outItems, new ItemStack(Items.DYE), false);
+                return 1;
+            }
+        }
+        return 0;
     }
 
     @Override

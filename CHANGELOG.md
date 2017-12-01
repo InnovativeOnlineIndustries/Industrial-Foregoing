@@ -3,6 +3,7 @@
 + Added a blacklist for the mob duplicator, blacklisted entities are shown when captured in the Mob Imprisonment Tools
 + Changed a color in the StoneWork Factory so it's not shared with the power one
 + Wither Builders use items from any slot if they need it
++ Animal Rancher gathers black ink from squids
 
 # 1.5.12
 + Fixed BHU being derpy with the new ItemHandler for big stacks
