@@ -117,8 +117,9 @@ task devJar(type: Jar, dependsOn: 'classes') {
     classifier = 'deobf'
 }
 
-if (project.hasProperty('jarsigner.keystore')){
-    task signUniversal(type: SignJar, dependsOn: devJar) {
+
+task signUniversal(type: SignJar, dependsOn: devJar) {
+    if (project.hasProperty('jarsigner.keystore')) {
         println("Signing the jar!")
 
         def jarsigner = [:]
@@ -132,11 +133,11 @@ if (project.hasProperty('jarsigner.keystore')){
         storePass = jarsigner.storepass
         keyPass = jarsigner.keypass
         keyStore = jarsigner.keystore
-
     }
-
-    build.dependsOn signUniversal
 }
+
+build.dependsOn signUniversal
+
 
 
 
