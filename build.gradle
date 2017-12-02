@@ -117,15 +117,15 @@ task devJar(type: Jar, dependsOn: 'classes') {
     classifier = 'deobf'
 }
 
-if (project.hasProperty('jarsigner')){
-    task signJar(type: SignJar, dependsOn: reobfJar) {
+if (project.hasProperty('jarsigner.keystore')){
+    task signUniversal(type: SignJar, dependsOn: reobfJar) {
         println("Signing the jar!")
         inputFile = jar.archivePath
         outputFile = jar.archivePath
         alias = 'industrialforegoing'
-        storePass = project.jarsigner.storepass
-        keyPass = project.jarsigner.keypass
-        keyStore = project.jarsigner.keystore
+        storePass = system.jarsigner.storepass
+        keyPass = system.jarsigner.keypass
+        keyStore = system.jarsigner.keystore
 
     }
 
