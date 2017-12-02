@@ -135,7 +135,7 @@ if (project.hasProperty('jarsigner.keystore')){
 
     }
 
-    build.dependsOn signJar
+    build.dependsOn signUniversal
 }
 
 
