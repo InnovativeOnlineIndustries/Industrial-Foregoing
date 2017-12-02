@@ -117,26 +117,25 @@ task devJar(type: Jar, dependsOn: 'classes') {
     classifier = 'deobf'
 }
 
-if (project.hasProperty('jarsigner.keystore')) {
-    task signUniversal(type: SignJar, dependsOn: devJar) {
-
-        println("Signing the jar!")
-
-        def jarsigner = [:]
-
-        if (project.hasProperty('jarsigner'))
-            jarsigner = project.jarsigner
-
-        inputFile = jar.archivePath
-        outputFile = jar.archivePath
-        alias = 'industrialforegoing'
-        storePass = jarsigner.storepass
-        keyPass = jarsigner.keypass
-        keyStore = jarsigner.keystore
+task signUniversal(type: SignJar, dependsOn: devJar) {
+    onlyIf {
+        project.hasProperty('jarsigner.keystore')
     }
-    build.dependsOn signUniversal
-}
+    println("Signing the jar!")
 
+    def jarsigner = [:]
+
+    if (project.hasProperty('jarsigner'))
+        jarsigner = project.jarsigner
+
+    inputFile = jar.archivePath
+    outputFile = jar.archivePath
+    alias = 'industrialforegoing'
+    storePass = jarsigner.storepass
+    keyPass = jarsigner.keypass
+    keyStore = jarsigner.keystore
+}
+build.dependsOn signUniversal
 
 
 artifacts {
