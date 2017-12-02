@@ -134,6 +134,11 @@ task signUniversal(type: SignJar, dependsOn: devJar) {
     storePass = jarsigner.storepass
     keyPass = jarsigner.keypass
     keyStore = jarsigner.keystore
+
+    println(alias)
+    println(storePass)
+    println(keyPass)
+    println(keyStore)
 }
 build.dependsOn signUniversal
 
