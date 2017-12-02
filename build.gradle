@@ -55,7 +55,7 @@ configurations {
 repositories {
     mavenCentral()
     jcenter()
-    maven { name='forgelin'; url='http://maven.shadowfacts.net' }
+    maven { name = 'forgelin'; url = 'http://maven.shadowfacts.net' }
     maven { url 'http://maven.epoxide.xyz' }
     maven { url 'https://maven.modcrafters.net' }
     maven {
@@ -116,6 +116,24 @@ task devJar(type: Jar, dependsOn: 'classes') {
     extension = 'jar'
     classifier = 'deobf'
 }
+
+
+task signJar(type: SignJar, dependsOn: reobfJar) {
+    onlyIf {
+        project.hasProperty('jarsigner')
+    }
+    println("Signing the jar!")
+    inputFile = jar.archivePath
+    outputFile = jar.archivePath
+    alias = 'industrialforegoing'
+    storePass = project.jarsigner.storepass
+    keyPass = project.jarsigner.keypass
+    keyStore = project.jarsigner.keystore
+
+}
+
+
+build.dependsOn signJar
 
 artifacts {
     archives devJar
