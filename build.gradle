@@ -21,7 +21,7 @@ if (project.hasProperty("teamcity")) {
 if (b == null || b == "") {
     version = "${project.minecraft_version}-${project.mod_version}"
 } else {
-    version = "${project.minecraft_version}-${project.mod_version}-" + build
+    version = "${project.minecraft_version}-${project.mod_version}-" + b
 }
 group = "com.buuz135.industrial.IndustrialForegoing" // http://maven.apache.org/guides/mini/guide-naming-conventions.html
 archivesBaseName = "industrialforegoing"
