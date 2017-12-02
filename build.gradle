@@ -123,9 +123,9 @@ if (project.hasProperty('jarsigner.keystore')){
         inputFile = jar.archivePath
         outputFile = jar.archivePath
         alias = 'industrialforegoing'
-        storePass = system.jarsigner.storepass
-        keyPass = system.jarsigner.keypass
-        keyStore = system.jarsigner.keystore
+        storePass = project.jarsigner.storepass
+        keyPass = project.jarsigner.keypass
+        keyStore = project.jarsigner.keystore
 
     }
 
