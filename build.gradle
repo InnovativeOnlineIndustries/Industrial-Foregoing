@@ -128,10 +128,12 @@ if (project.hasProperty('jarsigner')){
         keyStore = project.jarsigner.keystore
 
     }
+
+    build.dependsOn signJar
 }
 
 
-build.dependsOn signJar
+
 
 artifacts {
     archives devJar
