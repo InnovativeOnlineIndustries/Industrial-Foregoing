@@ -171,10 +171,28 @@ public class RecipeUtils {
         entry.put("conditions", Arrays.asList(ImmutableMap.of("type", "forge:and", "values", Arrays.asList(ImmutableMap.of("type", "forge:mod_loaded", "modid", "thermalexpansion"), ImmutableMap.of("type", "industrialforegoing:configuration_value", "value", "useTEFrames")))));
         entry.put("ingredient", ImmutableMap.of("item", "thermalexpansion:frame", "data", 0));
         json.add(entry);
+
+        json.addAll(createOreConditionItem("TIER3","ingotTin","minecraft:coal_block"));
+        json.addAll(createOreConditionItem("TIER4","ingotCopper","minecraft:red_sandstone"));
+        json.addAll(createOreConditionItem("TIER5","ingotBronze","minecraft:glowstone"));
+        json.addAll(createOreConditionItem("TIER6","ingotSilver","minecraft:iron_block"));
+        json.addAll(createOreConditionItem("TIER10","ingotPlatinum","minecraft:prismarine_shard"));
+
         try (FileWriter w = new FileWriter(new File(RECIPE_DIR, "_constants.json"))) {
             GSON.toJson(json, w);
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    public static List<Map<String,Object>> createOreConditionItem(String name, String oreDict, String defaultItem){
+        Map<String, Object> def = new HashMap<>();
+        def.put("name", name);
+        def.put("ingredient", ImmutableMap.of("item", defaultItem, "data", 0));
+        Map<String, Object> ore = new HashMap<>();
+        ore.put("name", name);
+        ore.put("conditions", Arrays.asList(ImmutableMap.of("type", "teslacorelib:ore_dict", "ore", oreDict)));
+        ore.put("ingredient", ImmutableMap.of("type", "forge:ore_dict", "ore", oreDict));
+        return Arrays.asList(def, ore);
     }
 }

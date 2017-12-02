@@ -17,8 +17,7 @@
       "item": "#PANEGLASS"
     },
     "i": {
-      "item": "minecraft:red_sandstone",
-      "data": 0
+      "item": "#TIER4"
     }
   }
 }

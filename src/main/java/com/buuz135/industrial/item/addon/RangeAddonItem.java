@@ -49,7 +49,7 @@ public class RangeAddonItem extends CustomAddon {
     }
 
     public void createRecipe() {
-        ItemStack[] items = new ItemStack[]{new ItemStack(Blocks.COBBLESTONE), new ItemStack(Items.DYE, 1, 4), new ItemStack(Items.COAL), new ItemStack(Items.QUARTZ), new ItemStack(Blocks.RED_SANDSTONE), new ItemStack(Blocks.GLOWSTONE), new ItemStack(Items.IRON_INGOT), new ItemStack(Items.GOLD_INGOT), new ItemStack(Blocks.IRON_BLOCK), new ItemStack(Items.DIAMOND), new ItemStack(Items.PRISMARINE_SHARD), new ItemStack(Items.EMERALD)};
+        Object[] items = new Object[]{new ItemStack(Blocks.COBBLESTONE), new ItemStack(Items.DYE, 1, 4), "ingotIron", "TIER3", "TIER4", "TIER5", "TIER6", "ingotGold", new ItemStack(Items.QUARTZ), new ItemStack(Items.DIAMOND), "TIER10", new ItemStack(Items.EMERALD)};
         for (int i = 0; i < 12; ++i) {
             RecipeUtils.addShapedRecipe(new ItemStack(this, 1, i), "ipi", "igi", "ipi",
                     'i', items[i],

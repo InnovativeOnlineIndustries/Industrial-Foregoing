@@ -9,6 +9,41 @@
   {
     "ingredient": {
       "type": "forge:ore_dict",
+      "ore": "TIER10"
+    },
+    "name": "TIER10"
+  },
+  {
+    "ingredient": {
+      "type": "forge:ore_dict",
+      "ore": "TIER3"
+    },
+    "name": "TIER3"
+  },
+  {
+    "ingredient": {
+      "type": "forge:ore_dict",
+      "ore": "TIER4"
+    },
+    "name": "TIER4"
+  },
+  {
+    "ingredient": {
+      "type": "forge:ore_dict",
+      "ore": "TIER5"
+    },
+    "name": "TIER5"
+  },
+  {
+    "ingredient": {
+      "type": "forge:ore_dict",
+      "ore": "TIER6"
+    },
+    "name": "TIER6"
+  },
+  {
+    "ingredient": {
+      "type": "forge:ore_dict",
       "ore": "blockGlassColorless"
     },
     "name": "BLOCKGLASSCOLORLESS"
@@ -170,6 +205,106 @@
             "value": "useTEFrames"
           }
         ]
+      }
+    ]
+  },
+  {
+    "ingredient": {
+      "item": "minecraft:coal_block",
+      "data": 0
+    },
+    "name": "TIER3"
+  },
+  {
+    "ingredient": {
+      "type": "forge:ore_dict",
+      "ore": "ingotTin"
+    },
+    "name": "TIER3",
+    "conditions": [
+      {
+        "type": "teslacorelib:ore_dict",
+        "ore": "ingotTin"
+      }
+    ]
+  },
+  {
+    "ingredient": {
+      "item": "minecraft:red_sandstone",
+      "data": 0
+    },
+    "name": "TIER4"
+  },
+  {
+    "ingredient": {
+      "type": "forge:ore_dict",
+      "ore": "ingotCopper"
+    },
+    "name": "TIER4",
+    "conditions": [
+      {
+        "type": "teslacorelib:ore_dict",
+        "ore": "ingotCopper"
+      }
+    ]
+  },
+  {
+    "ingredient": {
+      "item": "minecraft:glowstone",
+      "data": 0
+    },
+    "name": "TIER5"
+  },
+  {
+    "ingredient": {
+      "type": "forge:ore_dict",
+      "ore": "ingotBronze"
+    },
+    "name": "TIER5",
+    "conditions": [
+      {
+        "type": "teslacorelib:ore_dict",
+        "ore": "ingotBronze"
+      }
+    ]
+  },
+  {
+    "ingredient": {
+      "item": "minecraft:iron_block",
+      "data": 0
+    },
+    "name": "TIER6"
+  },
+  {
+    "ingredient": {
+      "type": "forge:ore_dict",
+      "ore": "ingotSilver"
+    },
+    "name": "TIER6",
+    "conditions": [
+      {
+        "type": "teslacorelib:ore_dict",
+        "ore": "ingotSilver"
+      }
+    ]
+  },
+  {
+    "ingredient": {
+      "item": "minecraft:prismarine_shard",
+      "data": 0
+    },
+    "name": "TIER10"
+  },
+  {
+    "ingredient": {
+      "type": "forge:ore_dict",
+      "ore": "ingotPlatinum"
+    },
+    "name": "TIER10",
+    "conditions": [
+      {
+        "type": "teslacorelib:ore_dict",
+        "ore": "ingotPlatinum"
       }
     ]
   }

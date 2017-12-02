@@ -17,8 +17,7 @@
       "item": "#PANEGLASS"
     },
     "i": {
-      "item": "minecraft:coal",
-      "data": 0
+      "item": "#INGOTIRON"
     }
   }
 }
