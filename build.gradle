@@ -118,7 +118,7 @@ task devJar(type: Jar, dependsOn: 'classes') {
 }
 
 if (project.hasProperty('jarsigner.keystore')){
-    task signUniversal(type: SignJar, dependsOn: reobfJar) {
+    task signUniversal(type: SignJar, dependsOn: devJar) {
         println("Signing the jar!")
 
         def jarsigner = [:]
