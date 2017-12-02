@@ -117,27 +117,6 @@ task devJar(type: Jar, dependsOn: 'classes') {
     classifier = 'deobf'
 }
 
-task signUniversal(type: SignJar, dependsOn: devJar) {
-    onlyIf {
-        project.hasProperty('keystore')
-    }
-    println("Signing the jar!")
-
-    inputFile = jar.archivePath
-    outputFile = jar.archivePath
-    alias = 'industrialforegoing'
-    storePass = project.storepass
-    keyPass = project.keypass
-    keyStore = project.keystore
-
-    println(alias)
-    println(storePass)
-    println(keyPass)
-    println(keyStore)
-}
-build.dependsOn signUniversal
-
-
 artifacts {
     archives devJar
 }
