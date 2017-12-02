@@ -120,12 +120,18 @@ task devJar(type: Jar, dependsOn: 'classes') {
 if (project.hasProperty('jarsigner.keystore')){
     task signUniversal(type: SignJar, dependsOn: reobfJar) {
         println("Signing the jar!")
+
+        def jarsigner = [:]
+
+        if (project.hasProperty('jarsigner'))
+            jarsigner = project.jarsigner
+
         inputFile = jar.archivePath
         outputFile = jar.archivePath
         alias = 'industrialforegoing'
-        storePass = project.jarsigner.storepass
-        keyPass = project.jarsigner.keypass
-        keyStore = project.jarsigner.keystore
+        storePass = jarsigner.storepass
+        keyPass = jarsigner.keypass
+        keyStore = jarsigner.keystore
 
     }
 
