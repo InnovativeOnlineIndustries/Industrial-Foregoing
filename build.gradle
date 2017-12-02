@@ -13,12 +13,12 @@ apply plugin: 'maven'
 //Only edit below this line, the above code adds and enables the necessary things for Forge to be setup.
 
 
-String build = ""
+String b = ""
 if (project.hasProperty("teamcity")) {
-    build = System.getenv("BUILD_NUMBER")
+    b = System.getenv("BUILD_NUMBER")
 }
 
-if (build == null || build == "") {
+if (b == null || b == "") {
     version = "${project.minecraft_version}-${project.mod_version}"
 } else {
     version = "${project.minecraft_version}-${project.mod_version}-" + build
@@ -117,9 +117,9 @@ task devJar(type: Jar, dependsOn: 'classes') {
     classifier = 'deobf'
 }
 
+if (project.hasProperty('jarsigner.keystore')) {
+    task signUniversal(type: SignJar, dependsOn: devJar) {
 
-task signUniversal(type: SignJar, dependsOn: devJar) {
-    if (project.hasProperty('jarsigner.keystore')) {
         println("Signing the jar!")
 
         def jarsigner = [:]
@@ -134,11 +134,8 @@ task signUniversal(type: SignJar, dependsOn: devJar) {
         keyPass = jarsigner.keypass
         keyStore = jarsigner.keystore
     }
+    build.dependsOn signUniversal
 }
-
-build.dependsOn signUniversal
-
-
 
 
 
