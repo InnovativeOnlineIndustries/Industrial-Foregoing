@@ -7,10 +7,12 @@ import com.buuz135.industrial.utils.BlockUtils;
 import com.buuz135.industrial.utils.WorkUtils;
 import net.minecraft.item.EnumDyeColor;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.EnumActionResult;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
+import net.minecraftforge.common.ForgeHooks;
 import net.minecraftforge.common.util.FakePlayer;
 import net.minecraftforge.items.ItemStackHandler;
 
@@ -64,8 +66,8 @@ public class BlockPlacerTile extends WorkingAreaElectricMachine {
                 if (this.world.isAirBlock(pos)) {
                     FakePlayer player = IndustrialForegoing.getFakePlayer(this.world);
                     player.setHeldItem(EnumHand.MAIN_HAND, stack);
-                    stack.getItem().onItemUse(player, world, pos.offset(EnumFacing.DOWN), EnumHand.MAIN_HAND, EnumFacing.UP, 0, 0, 0);
-                    return 1;
+                    EnumActionResult result = ForgeHooks.onPlaceItemIntoWorld(stack, player, world, pos, EnumFacing.UP, 0,0,0, EnumHand.MAIN_HAND);
+                    return result == EnumActionResult.SUCCESS ? 1 : 0;
                 }
             }
         }

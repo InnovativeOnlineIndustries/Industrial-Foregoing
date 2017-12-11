@@ -6,10 +6,12 @@ import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.EnumDyeColor;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.EnumActionResult;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
+import net.minecraftforge.common.ForgeHooks;
 import net.minecraftforge.common.util.FakePlayer;
 import net.minecraftforge.items.ItemStackHandler;
 import net.ndrei.teslacorelib.inventory.BoundingRectangle;
@@ -139,8 +141,8 @@ public class WitherBuilderTile extends WorkingAreaElectricMachine {
                         FakePlayer player = IndustrialForegoing.getFakePlayer(this.world);
                         ItemStack stack = getDefaultOrFind(i, top, new ItemStack(Items.SKULL, 1, 1));
                         player.setHeldItem(EnumHand.MAIN_HAND, stack);
-                        stack.onItemUse(player, world, temp.offset(EnumFacing.DOWN), EnumHand.MAIN_HAND, EnumFacing.UP, 0, 0, 0);
-                        power += 1 / 7f;
+                        EnumActionResult result = ForgeHooks.onPlaceItemIntoWorld(stack, player, world, temp, EnumFacing.UP, 0,0,0, EnumHand.MAIN_HAND);
+                        if (result == EnumActionResult.SUCCESS) power += 1 / 7f;
                     }
                 }
             }

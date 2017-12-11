@@ -66,9 +66,7 @@ public class BlockDestroyerTile extends WorkingAreaElectricMachine {
         List<BlockPos> blockPosList = BlockUtils.getBlockPosInAABB(getWorkingArea());
         for (BlockPos pos : blockPosList) {
             if (this.world.isAirBlock(pos)) continue;
-            BlockEvent.BreakEvent event = new BlockEvent.BreakEvent(world, pos, world.getBlockState(pos), IndustrialForegoing.getFakePlayer(world));
-            MinecraftForge.EVENT_BUS.post(event);
-            if (!event.isCanceled()) {
+            if (BlockUtils.canBlockBeBroken(this.world, pos)) {
                 Block block = this.world.getBlockState(pos).getBlock();
                 TileEntity tile = world.getTileEntity(pos);
                 if (block.getBlockHardness(this.world.getBlockState(pos), this.world, pos) < 0) continue;
