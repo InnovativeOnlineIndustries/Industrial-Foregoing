@@ -1,6 +1,7 @@
 # 1.6.0
 + Fixed BlackHoleController spawning client side items.
 + Fixed a NPE with the Contributors Cat Ears when not connected to the internet.
++ Added adult filter to the mob crusher so it will only kill adults when installed.
 
 # 1.5.13
 + Added a config option to enable TE Machine Frames in the recipes

@@ -1,6 +1,7 @@
 package com.buuz135.industrial.tile.agriculture;
 
 import com.buuz135.industrial.item.addon.AdultFilterAddonItem;
+import com.buuz135.industrial.tile.IAcceptsAdultFilter;
 import com.buuz135.industrial.tile.WorkingAreaElectricMachine;
 import com.buuz135.industrial.utils.WorkUtils;
 import net.minecraft.entity.EntityAgeable;
@@ -10,7 +11,7 @@ import net.minecraft.util.math.BlockPos;
 
 import java.util.List;
 
-public class AnimalIndependenceSelectorTile extends WorkingAreaElectricMachine {
+public class AnimalIndependenceSelectorTile extends WorkingAreaElectricMachine implements IAcceptsAdultFilter{
 
     public AnimalIndependenceSelectorTile() {
         super(AnimalIndependenceSelectorTile.class.getName().hashCode(), 2, 2, false);
@@ -40,8 +41,8 @@ public class AnimalIndependenceSelectorTile extends WorkingAreaElectricMachine {
         return new AxisAlignedBB(this.pos.getX(), this.pos.getY(), this.pos.getZ(), this.pos.getX() + 1, this.pos.getY() + 1, this.pos.getZ() + 1).offset(corner1).grow(getRadius(), 0, getRadius()).setMaxY(this.getPos().getY() + getHeight());
     }
 
-    public boolean hasAdultFilterAddon() {
+    @Override
+    public boolean hasAddon() {
         return this.hasAddon(AdultFilterAddonItem.class);
     }
-
 }
