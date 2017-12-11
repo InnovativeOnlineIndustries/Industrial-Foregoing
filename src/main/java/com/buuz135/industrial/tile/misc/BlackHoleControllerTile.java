@@ -144,7 +144,7 @@ public class BlackHoleControllerTile extends CustomSidedTileEntity {
                         continue;
                     }
                 }
-            } else if (stack.isEmpty() && !output.getStackInSlot(i).isEmpty()) {
+            } else if (stack.isEmpty() && !output.getStackInSlot(i).isEmpty() && !this.world.isRemote) {
                 float f = 0.7F;
                 float d0 = world.rand.nextFloat() * f + (1.0F - f) * 0.5F;
                 float d1 = world.rand.nextFloat() * f + (1.0F - f) * 0.5F;

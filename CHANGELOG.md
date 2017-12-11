@@ -1,3 +1,6 @@
+# 1.6.0
++ Fixed BlackHoleController spawning client side items.
+
 # 1.5.13
 + Added a config option to enable TE Machine Frames in the recipes
 + Added a blacklist for the mob duplicator, blacklisted entities are shown when captured in the Mob Imprisonment Tools
