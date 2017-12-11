@@ -3,6 +3,7 @@
 + Fixed a NPE with the Contributors Cat Ears when not connected to the internet.
 + Added adult filter to the mob crusher so it will only kill adults when installed.
 + Added safety checks to place an remove blocks.
++ Added blast resistance to the Mob Crusher.
 
 # 1.5.13
 + Added a config option to enable TE Machine Frames in the recipes

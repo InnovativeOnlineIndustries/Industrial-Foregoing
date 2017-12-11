@@ -21,6 +21,7 @@ public class MobRelocatorBlock extends CustomOrientedBlock<MobRelocatorTile> {
 
     public MobRelocatorBlock() {
         super("mob_relocator", MobRelocatorTile.class, Material.ROCK, 1000, 40);
+        this.setResistance(Float.MAX_VALUE);
     }
 
     @Override
