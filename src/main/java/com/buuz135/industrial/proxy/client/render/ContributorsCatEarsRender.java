@@ -87,6 +87,6 @@ public class ContributorsCatEarsRender implements LayerRenderer<AbstractClientPl
 
     public class Contributors {
 
-        public String[] uuid;
+        public String[] uuid = new String[0];
     }
 }

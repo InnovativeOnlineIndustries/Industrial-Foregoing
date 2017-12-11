@@ -1,5 +1,6 @@
 # 1.6.0
 + Fixed BlackHoleController spawning client side items.
++ Fixed a NPE with the Contributors Cat Ears when not connected to the internet.
 
 # 1.5.13
 + Added a config option to enable TE Machine Frames in the recipes
