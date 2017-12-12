@@ -2,7 +2,7 @@
 - Item/Fluid extraction wireless
 - Plant simulator
 - Upgrade to move the  working area
-- Mob duplicator exact copy config
 - Filter water for the pump
 - A force spawning method using liquid meat
 - Fluid reactor
+- Cake placer

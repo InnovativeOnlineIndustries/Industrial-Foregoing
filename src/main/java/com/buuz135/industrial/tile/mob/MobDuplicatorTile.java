@@ -79,7 +79,6 @@ public class MobDuplicatorTile extends WorkingAreaElectricMachine {
     @Override
     public float work() {
         if (WorkUtils.isDisabled(this.getBlockType())) return 0;
-        System.out.println(BlockRegistry.mobDuplicatorBlock.enableExactCopy && exactCopy);
         if (!BlockRegistry.mobDuplicatorBlock.enableExactCopy) exactCopy = false;
         if (mobTool.getStackInSlot(0).isEmpty()) return 0;
         if (experienceTank.getFluid() == null) return 0;
