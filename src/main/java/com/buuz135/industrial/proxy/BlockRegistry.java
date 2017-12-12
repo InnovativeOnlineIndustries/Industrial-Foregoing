@@ -68,6 +68,7 @@ public class BlockRegistry {
     public static HydratorBlock hydratorBlock = new HydratorBlock();
     public static WitherBuilderBlock witherBuilderBlock = new WitherBuilderBlock();
     public static FluidPumpBlock fluidPumpBlock = new FluidPumpBlock();
+    public static FluidCrafterBlock fluidCrafterBlock = new FluidCrafterBlock();
 
     public static IFCustomFluidBlock BLOCK_ESSENCE = new IFCustomFluidBlock(FluidsRegistry.ESSENCE, Material.WATER);
     public static IFCustomFluidBlock BLOCK_MILK = new IFCustomFluidBlock(FluidsRegistry.MILK, Material.WATER);

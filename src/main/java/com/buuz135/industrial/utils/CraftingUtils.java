@@ -33,6 +33,19 @@ public class CraftingUtils {
         return CraftingManager.findMatchingResult(inventoryCrafting, world);
     }
 
+    public static ItemStack findOutput(World world, ItemStack... inputs){
+        InventoryCrafting inventoryCrafting = new InventoryCrafting(new Container() {
+            @Override
+            public boolean canInteractWith(EntityPlayer playerIn) {
+                return false;
+            }
+        }, 3, 3);
+        for (int i = 0; i < 9; ++i) {
+            inventoryCrafting.setInventorySlotContents(i, inputs[i]);
+        }
+        return CraftingManager.findMatchingResult(inventoryCrafting, world);
+    }
+
     public static ItemStack getCrushOutput(ItemStack stack) {
         for (Map.Entry<ItemStack, ItemStack> entry : crushedRecipes.entrySet()) {
             if (entry.getKey().isItemEqual(stack)) {

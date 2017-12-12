@@ -4,6 +4,7 @@
 + Added adult filter to the mob crusher so it will only kill adults when installed.
 + Added safety checks to place an remove blocks.
 + Added blast resistance to the Mob Crusher.
++ Added Fluid Crafter.
 
 # 1.5.13
 + Added a config option to enable TE Machine Frames in the recipes
