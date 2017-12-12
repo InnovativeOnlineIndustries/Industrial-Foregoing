@@ -98,7 +98,10 @@ public class MaterialStoneWorkFactoryTile extends CustomElectricMachine {
             Map.Entry<ItemStackHandler, Mode> nextEntry = getEntry(id + 1);
             if (entry.getValue() == Mode.FURNACE) {
                 for (int slot = 0; slot < entry.getKey().getSlots(); ++slot) {
-                    ItemStack result = FurnaceRecipes.instance().getSmeltingResult(new ItemStack(entry.getKey().getStackInSlot(slot).getItem(), 1)).copy();
+                    if (entry.getKey().getStackInSlot(slot).isEmpty()) continue;
+                    ItemStack stack = entry.getKey().getStackInSlot(slot);
+                    stack.setCount(1);
+                    ItemStack result = FurnaceRecipes.instance().getSmeltingResult(stack).copy();
                     result.setCount(work);
                     if (!result.isEmpty() && ItemHandlerHelper.insertItem(nextEntry.getKey(), result, true).isEmpty()) {
                         ItemHandlerHelper.insertItem(nextEntry.getKey(), result, false);

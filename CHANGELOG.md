@@ -1,3 +1,6 @@
+# 1.6.1
++ Added a check for empty inputs in the furnace
+
 # 1.6.0
 + Fixed BlackHoleController spawning client side items.
 + Fixed a NPE with the Contributors Cat Ears when not connected to the internet.
