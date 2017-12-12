@@ -1,5 +1,6 @@
 # 1.6.1
-+ Added a check for empty inputs in the furnace
++ Added a check for empty inputs in the furnace.
++ Nerfed the StoneWork Factory, now it does 1 operation at a time, from left to right https://i.imgur.com/zzL6z1E.gifv
 
 # 1.6.0
 + Fixed BlackHoleController spawning client side items.

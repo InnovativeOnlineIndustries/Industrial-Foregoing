@@ -4,6 +4,7 @@ import com.buuz135.industrial.proxy.client.infopiece.MaterialStoneWorkInfoPiece;
 import com.buuz135.industrial.tile.CustomColoredItemHandler;
 import com.buuz135.industrial.tile.CustomElectricMachine;
 import com.buuz135.industrial.utils.CraftingUtils;
+import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Iterators;
 import lombok.Getter;
 import net.minecraft.init.Blocks;
@@ -18,6 +19,7 @@ import net.ndrei.teslacorelib.TeslaCoreLib;
 import net.ndrei.teslacorelib.gui.BasicTeslaGuiContainer;
 import net.ndrei.teslacorelib.gui.IGuiContainerPiece;
 import net.ndrei.teslacorelib.netsync.SimpleNBTMessage;
+import org.lwjgl.Sys;
 
 import java.util.*;
 
@@ -82,59 +84,59 @@ public class MaterialStoneWorkFactoryTile extends CustomElectricMachine {
     @Override
     protected float performWork() {
         int i = 0;
-        Iterator<Map.Entry<ItemStackHandler, Mode>> it = modeList.entrySet().iterator();
-        int id = 0;
+        ListIterator<Map.Entry<ItemStackHandler, Mode>> it = ImmutableList.copyOf(modeList.entrySet()).reverse().listIterator();
         int work = (int) Math.pow(2, speedUpgradeLevel());
+        Map.Entry<ItemStackHandler, Mode> nextEntry = null;
         while (it.hasNext()) {
-            Map.Entry<ItemStackHandler, Mode> entry = it.next();
-            if (!it.hasNext()) break;
+            Map.Entry<ItemStackHandler, Mode> currentEntry = it.next();
             ItemStack cobble = new ItemStack(Blocks.COBBLESTONE, work);
-            if (id == 0) {
-                if (!cobble.equals(ItemHandlerHelper.insertItem(entry.getKey(), cobble, true))) {
-                    i = 1;
-                    ItemHandlerHelper.insertItem(entry.getKey(), cobble, false);
-                }
-            }
-            Map.Entry<ItemStackHandler, Mode> nextEntry = getEntry(id + 1);
-            if (entry.getValue() == Mode.FURNACE) {
-                for (int slot = 0; slot < entry.getKey().getSlots(); ++slot) {
-                    if (entry.getKey().getStackInSlot(slot).isEmpty()) continue;
-                    ItemStack stack = entry.getKey().getStackInSlot(slot);
-                    stack.setCount(1);
-                    ItemStack result = FurnaceRecipes.instance().getSmeltingResult(stack).copy();
-                    result.setCount(work);
-                    if (!result.isEmpty() && ItemHandlerHelper.insertItem(nextEntry.getKey(), result, true).isEmpty()) {
-                        ItemHandlerHelper.insertItem(nextEntry.getKey(), result, false);
-                        entry.getKey().getStackInSlot(slot).shrink(work);
-                        break;
-                    }
-                }
-            }
-            if (entry.getValue() == Mode.CRAFT_BIG || entry.getValue() == Mode.CRAFT_SMALL) {
-                int size = entry.getValue() == Mode.CRAFT_BIG ? 3 : 2;
-                for (int slot = 0; slot < entry.getKey().getSlots(); ++slot) {
-                    if (entry.getKey().getStackInSlot(slot).getCount() >= size * size) {
-                        ItemStack result = CraftingUtils.findOutput(size, entry.getKey().getStackInSlot(slot), world);
+            if (nextEntry != null){
+                if (currentEntry.getValue() == Mode.FURNACE) {
+                    for (int slot = 0; slot < currentEntry.getKey().getSlots(); ++slot) {
+                        if (currentEntry.getKey().getStackInSlot(slot).isEmpty()) continue;
+                        ItemStack stack = currentEntry.getKey().getStackInSlot(slot).copy();
+                        stack.setCount(1);
+                        ItemStack result = FurnaceRecipes.instance().getSmeltingResult(stack).copy();
+                        result.setCount(work);
                         if (!result.isEmpty() && ItemHandlerHelper.insertItem(nextEntry.getKey(), result, true).isEmpty()) {
                             ItemHandlerHelper.insertItem(nextEntry.getKey(), result, false);
-                            entry.getKey().getStackInSlot(slot).shrink(size * size);
-                            break;
+                            currentEntry.getKey().getStackInSlot(slot).shrink(work);
+                            return 1;
                         }
                     }
                 }
-            }
-            if (entry.getValue() == Mode.GRIND) {
-                for (int slot = 0; slot < entry.getKey().getSlots(); ++slot) {
-                    ItemStack result = CraftingUtils.getCrushOutput(new ItemStack(entry.getKey().getStackInSlot(slot).getItem(), 1)).copy();
-                    result.setCount(work);
-                    if (!result.isEmpty() && ItemHandlerHelper.insertItem(nextEntry.getKey(), result, true).isEmpty()) {
-                        ItemHandlerHelper.insertItem(nextEntry.getKey(), result, false);
-                        entry.getKey().getStackInSlot(slot).shrink(work);
-                        break;
+                if (currentEntry.getValue() == Mode.CRAFT_BIG || currentEntry.getValue() == Mode.CRAFT_SMALL) {
+                    int size = currentEntry.getValue() == Mode.CRAFT_BIG ? 3 : 2;
+                    for (int slot = 0; slot < currentEntry.getKey().getSlots(); ++slot) {
+                        if (currentEntry.getKey().getStackInSlot(slot).getCount() >= size * size) {
+                            ItemStack result = CraftingUtils.findOutput(size, currentEntry.getKey().getStackInSlot(slot), world);
+                            if (!result.isEmpty() && ItemHandlerHelper.insertItem(nextEntry.getKey(), result, true).isEmpty()) {
+                                ItemHandlerHelper.insertItem(nextEntry.getKey(), result, false);
+                                currentEntry.getKey().getStackInSlot(slot).shrink(size * size);
+                                return 1;
+                            }
+                        }
+                    }
+                }
+                if (currentEntry.getValue() == Mode.GRIND) {
+                    for (int slot = 0; slot < currentEntry.getKey().getSlots(); ++slot) {
+                        ItemStack result = CraftingUtils.getCrushOutput(new ItemStack(currentEntry.getKey().getStackInSlot(slot).getItem(), 1)).copy();
+                        result.setCount(work);
+                        if (!result.isEmpty() && ItemHandlerHelper.insertItem(nextEntry.getKey(), result, true).isEmpty()) {
+                            ItemHandlerHelper.insertItem(nextEntry.getKey(), result, false);
+                            currentEntry.getKey().getStackInSlot(slot).shrink(work);
+                            return 1;
+                        }
+                    }
+                }
+                if (!it.hasNext()) {
+                    if (!cobble.equals(ItemHandlerHelper.insertItem(currentEntry.getKey(), cobble, true))) {
+                        ItemHandlerHelper.insertItem(currentEntry.getKey(), cobble, false);
+                        return 1;
                     }
                 }
             }
-            ++id;
+            nextEntry = currentEntry;
         }
         return i;
     }
@@ -167,7 +169,7 @@ public class MaterialStoneWorkFactoryTile extends CustomElectricMachine {
     }
 
     public Map.Entry<ItemStackHandler, Mode> getEntry(int id) {
-        return Iterators.get(modeList.entrySet().iterator(), id);
+        return Iterators.get(ImmutableList.copyOf(modeList.entrySet()).iterator(), id);
     }
 
     public enum Mode {
