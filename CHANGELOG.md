@@ -5,6 +5,7 @@
 + Added safety checks to place an remove blocks.
 + Added blast resistance to the Mob Crusher.
 + Added Fluid Crafter.
++ Added Exact Copy in the mob duplicator as a config disabled by default
 
 # 1.5.13
 + Added a config option to enable TE Machine Frames in the recipes

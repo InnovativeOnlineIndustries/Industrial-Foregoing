@@ -137,8 +137,8 @@ public class FluidCrafterTile extends CustomSidedTileEntity {
             if (stack.isEmpty()) continue;
             if (stack.hasCapability(CapabilityFluidHandler.FLUID_HANDLER_ITEM_CAPABILITY, null)){
                 IFluidHandlerItem fluidHandlerItem = stack.getCapability(CapabilityFluidHandler.FLUID_HANDLER_ITEM_CAPABILITY, null);
-                Fluid fluid = fluidHandlerItem.drain(Integer.MAX_VALUE , false).getFluid();
-                if (!fluids.contains(fluid)) fluids.add(fluid);
+                FluidStack fluid = fluidHandlerItem.drain(Integer.MAX_VALUE , false);
+                if (fluid != null && !fluids.contains(fluid.getFluid())) fluids.add(fluid.getFluid());
             }
         }
         return fluids.size() == 1;
