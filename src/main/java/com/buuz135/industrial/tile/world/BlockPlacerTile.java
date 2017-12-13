@@ -66,7 +66,7 @@ public class BlockPlacerTile extends WorkingAreaElectricMachine {
                 if (this.world.isAirBlock(pos)) {
                     FakePlayer player = IndustrialForegoing.getFakePlayer(this.world);
                     player.setHeldItem(EnumHand.MAIN_HAND, stack);
-                    EnumActionResult result = ForgeHooks.onPlaceItemIntoWorld(stack, player, world, pos, EnumFacing.UP, 0,0,0, EnumHand.MAIN_HAND);
+                    EnumActionResult result = ForgeHooks.onPlaceItemIntoWorld(stack, player, world, pos, EnumFacing.UP, 0, 0, 0, EnumHand.MAIN_HAND);
                     return result == EnumActionResult.SUCCESS ? 1 : 0;
                 }
             }

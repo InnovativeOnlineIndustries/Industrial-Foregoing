@@ -172,11 +172,11 @@ public class RecipeUtils {
         entry.put("ingredient", ImmutableMap.of("item", "thermalexpansion:frame", "data", 0));
         json.add(entry);
 
-        json.addAll(createOreConditionItem("TIER3","ingotTin","minecraft:coal_block"));
-        json.addAll(createOreConditionItem("TIER4","ingotCopper","minecraft:red_sandstone"));
-        json.addAll(createOreConditionItem("TIER5","ingotBronze","minecraft:glowstone"));
-        json.addAll(createOreConditionItem("TIER6","ingotSilver","minecraft:iron_block"));
-        json.addAll(createOreConditionItem("TIER10","ingotPlatinum","minecraft:prismarine_shard"));
+        json.addAll(createOreConditionItem("TIER3", "ingotTin", "minecraft:coal_block"));
+        json.addAll(createOreConditionItem("TIER4", "ingotCopper", "minecraft:red_sandstone"));
+        json.addAll(createOreConditionItem("TIER5", "ingotBronze", "minecraft:glowstone"));
+        json.addAll(createOreConditionItem("TIER6", "ingotSilver", "minecraft:iron_block"));
+        json.addAll(createOreConditionItem("TIER10", "ingotPlatinum", "minecraft:prismarine_shard"));
 
         try (FileWriter w = new FileWriter(new File(RECIPE_DIR, "_constants.json"))) {
             GSON.toJson(json, w);
@@ -185,7 +185,7 @@ public class RecipeUtils {
         }
     }
 
-    public static List<Map<String,Object>> createOreConditionItem(String name, String oreDict, String defaultItem){
+    public static List<Map<String, Object>> createOreConditionItem(String name, String oreDict, String defaultItem) {
         Map<String, Object> def = new HashMap<>();
         def.put("name", name);
         def.put("ingredient", ImmutableMap.of("item", defaultItem, "data", 0));

@@ -13,7 +13,7 @@ import net.ndrei.teslacorelib.items.MachineCaseItem;
 
 import java.util.List;
 
-public class FluidCrafterBlock extends CustomOrientedBlock<FluidCrafterTile>{
+public class FluidCrafterBlock extends CustomOrientedBlock<FluidCrafterTile> {
 
     public FluidCrafterBlock() {
         super("fluid_crafter", FluidCrafterTile.class);
@@ -32,7 +32,7 @@ public class FluidCrafterBlock extends CustomOrientedBlock<FluidCrafterTile>{
     @Override
     public List<IPage> getBookDescriptionPages() {
         List<IPage> pages = super.getBookDescriptionPages();
-        pages.add(0, new PageText("The "+PageText.bold("fluid crafter")+" will craft anything that needs "+PageText.bold("one")+ " fluid type instead of using the "+PageText.bold("buckets")+" in the recipe. To make it work you need to put the items in the grid and "+PageText.bold("lock it")+". After that you can supply the items in the grid and the fluid in the tank.\n\nIf the recipe has multiple of one item you can use "+PageText.bold("Item Splitter")+" to use it easier."));
+        pages.add(0, new PageText("The " + PageText.bold("fluid crafter") + " will craft anything that needs " + PageText.bold("one") + " fluid type instead of using the " + PageText.bold("buckets") + " in the recipe. To make it work you need to put the items in the grid and " + PageText.bold("lock it") + ". After that you can supply the items in the grid and the fluid in the tank.\n\nIf the recipe has multiple of one item you can use " + PageText.bold("Item Splitter") + " to use it easier."));
         return pages;
     }
 

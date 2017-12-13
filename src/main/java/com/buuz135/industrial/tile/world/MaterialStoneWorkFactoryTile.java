@@ -90,7 +90,7 @@ public class MaterialStoneWorkFactoryTile extends CustomElectricMachine {
         while (it.hasNext()) {
             Map.Entry<ItemStackHandler, Mode> currentEntry = it.next();
             ItemStack cobble = new ItemStack(Blocks.COBBLESTONE, work);
-            if (nextEntry != null){
+            if (nextEntry != null) {
                 if (currentEntry.getValue() == Mode.FURNACE) {
                     for (int slot = 0; slot < currentEntry.getKey().getSlots(); ++slot) {
                         if (currentEntry.getKey().getStackInSlot(slot).isEmpty()) continue;

@@ -29,7 +29,7 @@ import net.ndrei.teslacorelib.inventory.BoundingRectangle;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicBoolean;
 
-public class MobRelocatorTile extends WorkingAreaElectricMachine implements IAcceptsAdultFilter{
+public class MobRelocatorTile extends WorkingAreaElectricMachine implements IAcceptsAdultFilter {
 
     private IFluidTank outExp;
     private ItemStackHandler outItems;

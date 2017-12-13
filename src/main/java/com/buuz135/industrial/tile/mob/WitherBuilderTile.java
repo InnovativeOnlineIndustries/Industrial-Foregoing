@@ -141,7 +141,7 @@ public class WitherBuilderTile extends WorkingAreaElectricMachine {
                         FakePlayer player = IndustrialForegoing.getFakePlayer(this.world);
                         ItemStack stack = getDefaultOrFind(i, top, new ItemStack(Items.SKULL, 1, 1));
                         player.setHeldItem(EnumHand.MAIN_HAND, stack);
-                        EnumActionResult result = ForgeHooks.onPlaceItemIntoWorld(stack, player, world, temp, EnumFacing.UP, 0,0,0, EnumHand.MAIN_HAND);
+                        EnumActionResult result = ForgeHooks.onPlaceItemIntoWorld(stack, player, world, temp, EnumFacing.UP, 0, 0, 0, EnumHand.MAIN_HAND);
                         if (result == EnumActionResult.SUCCESS) power += 1 / 7f;
                     }
                 }

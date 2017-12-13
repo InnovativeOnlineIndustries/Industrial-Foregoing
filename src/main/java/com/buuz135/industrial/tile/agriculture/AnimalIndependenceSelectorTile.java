@@ -11,7 +11,7 @@ import net.minecraft.util.math.BlockPos;
 
 import java.util.List;
 
-public class AnimalIndependenceSelectorTile extends WorkingAreaElectricMachine implements IAcceptsAdultFilter{
+public class AnimalIndependenceSelectorTile extends WorkingAreaElectricMachine implements IAcceptsAdultFilter {
 
     public AnimalIndependenceSelectorTile() {
         super(AnimalIndependenceSelectorTile.class.getName().hashCode(), 2, 2, false);

@@ -131,7 +131,7 @@ public class MobDuplicatorTile extends WorkingAreaElectricMachine {
     public List<IGuiContainerPiece> getGuiContainerPieces(BasicTeslaGuiContainer container) {
         List<IGuiContainerPiece> pieces = super.getGuiContainerPieces(container);
         if (BlockRegistry.mobDuplicatorBlock.enableExactCopy) {
-            pieces.add(new ToggleButtonPiece(120,28,13,13,0) {
+            pieces.add(new ToggleButtonPiece(120, 28, 13, 13, 0) {
                 @Override
                 protected void renderState(@NotNull BasicTeslaGuiContainer<?> basicTeslaGuiContainer, int i, @NotNull BoundingRectangle boundingRectangle) {
 
@@ -141,8 +141,8 @@ public class MobDuplicatorTile extends WorkingAreaElectricMachine {
                 public void drawBackgroundLayer(@NotNull BasicTeslaGuiContainer<?> container, int guiX, int guiY, float partialTicks, int mouseX, int mouseY) {
                     super.drawBackgroundLayer(container, guiX, guiY, partialTicks, mouseX, mouseY);
                     container.mc.getTextureManager().bindTexture(ClientProxy.GUI);
-                    if (exactCopy) container.drawTexturedRect(this.getLeft()-1, this.getTop()-1, 1, 72, 16, 16);
-                    else container.drawTexturedRect(this.getLeft()-1, this.getTop()-1, 1, 88, 16, 16);
+                    if (exactCopy) container.drawTexturedRect(this.getLeft() - 1, this.getTop() - 1, 1, 72, 16, 16);
+                    else container.drawTexturedRect(this.getLeft() - 1, this.getTop() - 1, 1, 88, 16, 16);
                 }
 
                 @Override
@@ -162,7 +162,7 @@ public class MobDuplicatorTile extends WorkingAreaElectricMachine {
         return pieces;
     }
 
-    public void sendStateToServer(){
+    public void sendStateToServer() {
         if (TeslaCoreLib.INSTANCE.isClientSide()) {
             NBTTagCompound compound = this.setupSpecialNBTMessage("EXACT_COPY");
             compound.setBoolean("EXACT", exactCopy);

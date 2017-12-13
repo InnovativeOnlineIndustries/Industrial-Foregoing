@@ -7,6 +7,7 @@ import net.minecraft.inventory.Container;
 import net.minecraft.inventory.InventoryCrafting;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.CraftingManager;
+import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
@@ -33,7 +34,11 @@ public class CraftingUtils {
         return CraftingManager.findMatchingResult(inventoryCrafting, world);
     }
 
-    public static ItemStack findOutput(World world, ItemStack... inputs){
+    public static ItemStack findOutput(World world, ItemStack... inputs) {
+        return CraftingManager.findMatchingResult(genCraftingInventory(world, inputs), world);
+    }
+
+    public static InventoryCrafting genCraftingInventory(World world, ItemStack... inputs) {
         InventoryCrafting inventoryCrafting = new InventoryCrafting(new Container() {
             @Override
             public boolean canInteractWith(EntityPlayer playerIn) {
@@ -43,7 +48,11 @@ public class CraftingUtils {
         for (int i = 0; i < 9; ++i) {
             inventoryCrafting.setInventorySlotContents(i, inputs[i]);
         }
-        return CraftingManager.findMatchingResult(inventoryCrafting, world);
+        return inventoryCrafting;
+    }
+
+    public static IRecipe findRecipe(World world, ItemStack... inputs) {
+        return CraftingManager.findMatchingRecipe(genCraftingInventory(world, inputs), world);
     }
 
     public static ItemStack getCrushOutput(ItemStack stack) {
