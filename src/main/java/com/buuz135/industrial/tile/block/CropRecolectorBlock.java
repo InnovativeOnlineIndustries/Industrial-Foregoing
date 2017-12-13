@@ -19,6 +19,7 @@ public class CropRecolectorBlock extends CustomOrientedBlock<CropRecolectorTile>
 
     private int sludgeOperation;
     private int treeOperations;
+    private boolean reducedChunkUpdates;
 
     public CropRecolectorBlock() {
         super("crop_recolector", CropRecolectorTile.class, Material.ROCK, 400, 40);
@@ -29,6 +30,7 @@ public class CropRecolectorBlock extends CustomOrientedBlock<CropRecolectorTile>
         super.getMachineConfig();
         sludgeOperation = CustomConfiguration.config.getInt("sludgeOperation", "machines" + Configuration.CATEGORY_SPLITTER + this.getRegistryName().getResourcePath().toString(), 20, 1, 8000, "How much sludge is produced when the machine does an operation");
         treeOperations = CustomConfiguration.config.getInt("treeOperations", "machines" + Configuration.CATEGORY_SPLITTER + this.getRegistryName().getResourcePath().toString(), 10, 1, 64, "Amount of operations done when chopping a tree");
+        reducedChunkUpdates = CustomConfiguration.config.getBoolean("reducedChunkUpdates","machines" + Configuration.CATEGORY_SPLITTER + this.getRegistryName().getResourcePath().toString(), false, "When enabled it will chop down the tree in one go but still consuming the same power");
     }
 
     public int getSludgeOperation() {
@@ -38,6 +40,10 @@ public class CropRecolectorBlock extends CustomOrientedBlock<CropRecolectorTile>
 
     public int getTreeOperations() {
         return treeOperations;
+    }
+
+    public boolean isReducedChunkUpdates() {
+        return reducedChunkUpdates;
     }
 
     public void createRecipe() {

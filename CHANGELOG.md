@@ -2,6 +2,7 @@
 + Added a check for empty inputs in the furnace.
 + Nerfed the StoneWork Factory, now it does 1 operation at a time, from left to right https://i.imgur.com/zzL6z1E.gifv
 + Fixed Fluid Crafter consuming items that should return
++ Added a reducedChunkUpdates config for the Plant Gatherer where it will chop down the whole tree using the same amount of power and time as before, disabled by default
 
 # 1.6.0
 + Fixed BlackHoleController spawning client side items.

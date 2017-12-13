@@ -29,10 +29,12 @@ import java.util.Optional;
 public class CropRecolectorTile extends WorkingAreaElectricMachine {
 
     private static String NBT_POINTER = "pointer";
+    private static String NBT_OPERATION = "operation";
 
     private IFluidTank sludge;
     private ItemStackHandler outItems;
     private int pointer;
+    private int operationAmount;
 
     public CropRecolectorTile() {
         super(CropRecolectorTile.class.getName().hashCode(), 1, 0, true);
@@ -82,12 +84,16 @@ public class CropRecolectorTile extends WorkingAreaElectricMachine {
             Optional<PlantRecollectable> recollectable = IFRegistries.PLANT_RECOLLECTABLES_REGISTRY.getValues().stream().sorted(Comparator.comparingInt(PlantRecollectable::getPriority)).filter(iPlantRecollectable -> iPlantRecollectable.canBeHarvested(this.world, pos, state)).findFirst();
             if (recollectable.isPresent()) {
                 PlantRecollectable plantRecollectable = recollectable.get();
-                insertItems(plantRecollectable.doHarvestOperation(this.world, pos, state, hasShearingAddon()), outItems);
+                ++operationAmount;
+                insertItems(plantRecollectable.doHarvestOperation(this.world, pos, state, hasShearingAddon(), operationAmount), outItems);
                 if (!plantRecollectable.shouldCheckNextPlant(this.world, pos, state)) shouldPointerIncrease = false;
             }
             didWork = recollectable.isPresent();
         }
-        if (shouldPointerIncrease) ++pointer;
+        if (shouldPointerIncrease){
+            ++pointer;
+            operationAmount = 0;
+        }
         if (pointer >= blockPos.size()) pointer = 0;
         return didWork ? 1 : 0.2f;
     }
@@ -96,14 +102,15 @@ public class CropRecolectorTile extends WorkingAreaElectricMachine {
     public NBTTagCompound writeToNBT(NBTTagCompound compound) {
         NBTTagCompound tagCompound = super.writeToNBT(compound);
         tagCompound.setInteger(NBT_POINTER, pointer);
+        tagCompound.setInteger(NBT_OPERATION, operationAmount);
         return tagCompound;
     }
 
     @Override
     public void readFromNBT(NBTTagCompound compound) {
         super.readFromNBT(compound);
-        if (!compound.hasKey(NBT_POINTER)) pointer = 0;
-        else pointer = compound.getInteger(NBT_POINTER);
+        pointer = compound.getInteger(NBT_POINTER);
+        operationAmount = compound.getInteger(NBT_OPERATION);
     }
 
     private void insertItems(List<ItemStack> drops, ItemStackHandler outItems) {

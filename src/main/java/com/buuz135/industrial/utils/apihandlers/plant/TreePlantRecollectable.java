@@ -42,7 +42,14 @@ public class TreePlantRecollectable extends PlantRecollectable {
         List<ItemStack> itemStacks = new ArrayList<>();
         if (treeCache.containsKey(pos)) {
             TreeCache cache = treeCache.get(pos);
-            for (int i = 0; i < BlockRegistry.cropRecolectorBlock.getTreeOperations(); ++i) {
+            int operations = BlockRegistry.cropRecolectorBlock.getTreeOperations();
+            if (BlockRegistry.cropRecolectorBlock.isReducedChunkUpdates()){
+                operations = 0;
+                if ((cache.getLeavesCache().size()+cache.getWoodCache().size()) <= ((int) extras[1])*BlockRegistry.cropRecolectorBlock.getTreeOperations()){
+                    operations = cache.getLeavesCache().size()+cache.getWoodCache().size();
+                }
+            }
+            for (int i = 0; i < operations; ++i) {
                 if (cache.getWoodCache().isEmpty() && cache.getLeavesCache().isEmpty()) break;
                 if (!cache.getLeavesCache().isEmpty())
                     itemStacks.addAll(cache.chop(cache.getLeavesCache(), (Boolean) extras[0]));
