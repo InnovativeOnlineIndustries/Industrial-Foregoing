@@ -21,14 +21,15 @@ public class MaterialStoneWorkFactoryBlock extends CustomOrientedBlock<MaterialS
     }
 
     public void createRecipe() {
-        RecipeUtils.addShapedRecipe(new ItemStack(this), "pip", "ama", "lrw",
+        RecipeUtils.addShapedRecipe(new ItemStack(this), "pip", "amf", "lrw",
                 'p', ItemRegistry.plastic,
-                'i', Blocks.PISTON,
+                'i', Blocks.CRAFTING_TABLE,
                 'a', Items.IRON_PICKAXE,
+                'f', Blocks.FURNACE,
                 'm', MachineCaseItem.INSTANCE,
                 'l', Items.LAVA_BUCKET,
                 'w', Items.WATER_BUCKET,
-                'r', Items.REDSTONE);
+                'r', ItemRegistry.pinkSlime);
     }
 
     @Override

@@ -4,7 +4,7 @@
   },
   "pattern": [
     "pip",
-    "ama",
+    "amf",
     "lrw"
   ],
   "type": "forge:ore_shaped",
@@ -16,13 +16,16 @@
       "item": "minecraft:iron_pickaxe"
     },
     "r": {
-      "item": "minecraft:redstone"
+      "item": "industrialforegoing:pink_slime"
+    },
+    "f": {
+      "item": "minecraft:furnace"
     },
     "w": {
       "item": "minecraft:water_bucket"
     },
     "i": {
-      "item": "minecraft:piston"
+      "item": "minecraft:crafting_table"
     },
     "l": {
       "item": "minecraft:lava_bucket"
