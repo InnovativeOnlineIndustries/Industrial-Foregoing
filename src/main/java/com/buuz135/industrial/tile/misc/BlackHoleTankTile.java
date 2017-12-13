@@ -6,12 +6,11 @@ import com.buuz135.industrial.tile.CustomSidedTileEntity;
 import net.minecraft.init.Items;
 import net.minecraft.item.EnumDyeColor;
 import net.minecraft.item.ItemStack;
-import net.minecraftforge.fluids.FluidTank;
 import net.minecraftforge.fluids.FluidUtil;
 import net.minecraftforge.fluids.IFluidTank;
 import net.ndrei.teslacorelib.gui.BasicTeslaGuiContainer;
 import net.ndrei.teslacorelib.gui.IGuiContainerPiece;
-import net.ndrei.teslacorelib.inventory.BoundingRectangle;
+import net.ndrei.teslacorelib.inventory.FluidTankType;
 
 import java.util.List;
 
@@ -26,16 +25,7 @@ public class BlackHoleTankTile extends CustomSidedTileEntity implements IHasDisp
     @Override
     protected void initializeInventories() {
         super.initializeInventories();
-        tank = new FluidTank(Integer.MAX_VALUE) {
-            @Override
-            protected void onContentsChanged() {
-                super.onContentsChanged();
-                forceSync();
-                BlackHoleTankTile.this.markDirty();
-            }
-        };
-        this.addFluidTank(tank, EnumDyeColor.CYAN, "Tank", new BoundingRectangle(6, 25, 18, 54));
-
+        tank = this.addSimpleFluidTank(Integer.MAX_VALUE, "Tank", EnumDyeColor.CYAN, 6, 25, FluidTankType.BOTH, fluidStack -> true, fluidStack -> true);
     }
 
     @Override

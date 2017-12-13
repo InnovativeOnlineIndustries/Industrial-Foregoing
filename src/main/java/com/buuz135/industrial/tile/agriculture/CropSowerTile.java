@@ -7,7 +7,6 @@ import com.buuz135.industrial.utils.ItemStackUtils;
 import com.buuz135.industrial.utils.WorkUtils;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.EnumDyeColor;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumActionResult;
@@ -114,7 +113,7 @@ public class CropSowerTile extends WorkingAreaElectricMachine {
                         this.world.setBlockState(pos.offset(EnumFacing.DOWN), Blocks.FARMLAND.getDefaultState());
                     }
                     player.setHeldItem(EnumHand.MAIN_HAND, stack);
-                    EnumActionResult result = ForgeHooks.onPlaceItemIntoWorld(stack, player, world, pos, EnumFacing.UP, 0, 0, 0, EnumHand.MAIN_HAND);
+                    EnumActionResult result = ForgeHooks.onPlaceItemIntoWorld(stack, player, world, pos.add(0, -1, 0), EnumFacing.UP, 0, 0, 0, EnumHand.MAIN_HAND);
                     return result == EnumActionResult.SUCCESS ? 1 : 0;
                 }
             }
