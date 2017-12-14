@@ -38,7 +38,7 @@ public class SewageCompostSolidiferBlock extends CustomOrientedBlock<SewageCompo
     @Override
     public List<IPage> getBookDescriptionPages() {
         List<IPage> pages = super.getBookDescriptionPages();
-        pages.add(0, new PageText("When provided with power and " + PageText.bold("1") + " bucket of Sewage, it will solidify it into " + PageText.bold("Fertilizer") + "."));
+        pages.add(0, new PageText("When provided with power and " + PageText.bold("2") + " buckets of Sewage, it will solidify it into " + PageText.bold("Fertilizer") + "."));
         return pages;
     }
 }
