@@ -75,6 +75,6 @@ public class IndustrialForegoing {
                 TeslaCoreLibConfig.REGISTER_ADDONS,
                 TeslaCoreLibConfig.REGISTER_SPEED_ADDONS,
                 TeslaCoreLibConfig.REGISTER_ENERGY_ADDONS).forEach(s -> TeslaCoreLibConfig.INSTANCE.setDefaultFlag(s, true));
-
+        TeslaCoreLibConfig.INSTANCE.setDefaultFlag(TeslaCoreLibConfig.ALLOW_ENERGY_DISPLAY_CHANGE, false);
     }
 }
