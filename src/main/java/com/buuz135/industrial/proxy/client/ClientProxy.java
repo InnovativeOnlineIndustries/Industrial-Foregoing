@@ -1,6 +1,7 @@
 package com.buuz135.industrial.proxy.client;
 
 import com.buuz135.industrial.book.IFManual;
+import com.buuz135.industrial.config.CustomConfiguration;
 import com.buuz135.industrial.entity.EntityPinkSlime;
 import com.buuz135.industrial.proxy.CommonProxy;
 import com.buuz135.industrial.proxy.client.entity.RenderPinkSlime;
@@ -19,8 +20,11 @@ import net.minecraftforge.client.model.IModel;
 import net.minecraftforge.client.model.ModelLoader;
 import net.minecraftforge.client.model.obj.OBJLoader;
 import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.common.config.Configuration;
 import net.minecraftforge.common.model.TRSRTransformation;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
+import net.ndrei.teslacorelib.config.TeslaCoreLibConfig;
+import net.ndrei.teslacorelib.gui.EnergyDisplayType;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
@@ -62,6 +66,9 @@ public class ClientProxy extends CommonProxy {
         MinecraftForge.EVENT_BUS.register(new IFTextureStichEvent());
         MinecraftForge.EVENT_BUS.register(new IFWorldRenderLastEvent());
 
+        if (CustomConfiguration.config.getBoolean("forceRFMachineDisplay", Configuration.CATEGORY_CLIENT, true, "Enable to force the RF display on machines, disable to freely change it.")) {
+            TeslaCoreLibConfig.INSTANCE.setEnergyDisplay(EnergyDisplayType.RF);
+        }
     }
 
 
