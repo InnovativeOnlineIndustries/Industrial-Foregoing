@@ -1,3 +1,6 @@
+# 1.6.3
++ Updated to tesla core lib 1.0.12. Adding RF display to the machines, click the power bar to change it.
+
 # 1.6.2
 + Fixed seeds not being placed in the Plant sower
 
