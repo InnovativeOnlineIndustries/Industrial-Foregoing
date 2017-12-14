@@ -4,6 +4,7 @@
 + Added pt_BR translation thanks to InterPlay.
 + Added a null check for the Fluid Crafter to prevent NPE in bad recipes.
 + Moved manual construction to later in the game.
++ Fixed config GUI.
 
 # 1.6.2
 + Fixed seeds not being placed in the Plant sower

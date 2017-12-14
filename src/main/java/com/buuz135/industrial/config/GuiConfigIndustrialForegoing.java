@@ -4,12 +4,17 @@ import com.buuz135.industrial.utils.Reference;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraftforge.common.config.ConfigElement;
+import net.minecraftforge.common.config.Configuration;
 import net.minecraftforge.fml.client.config.GuiConfig;
+import net.minecraftforge.fml.client.config.IConfigElement;
+
+import java.util.Arrays;
+import java.util.List;
 
 public class GuiConfigIndustrialForegoing extends GuiConfig {
 
     public GuiConfigIndustrialForegoing(GuiScreen parent) {
-        super(parent, new ConfigElement(CustomConfiguration.config.getCategory("")).getChildElements(), Reference.MOD_ID, false, false, "Industrial Foregoing Config");
+        super(parent, getConfigElements(), Reference.MOD_ID, false, false, "Industrial Foregoing Config");
     }
 
     @Override
@@ -28,5 +33,9 @@ public class GuiConfigIndustrialForegoing extends GuiConfig {
         super.actionPerformed(button);
         if (CustomConfiguration.config.hasChanged()) CustomConfiguration.config.save();
         CustomConfiguration.sync();
+    }
+
+    public static List<IConfigElement> getConfigElements() {
+        return Arrays.asList(new ConfigElement(CustomConfiguration.config.getCategory(Configuration.CATEGORY_CLIENT)), new ConfigElement(CustomConfiguration.config.getCategory(Configuration.CATEGORY_GENERAL)), new ConfigElement(CustomConfiguration.config.getCategory("machines")));
     }
 }
