@@ -1,12 +1,10 @@
 package com.buuz135.industrial.tile.misc;
 
 import com.buuz135.industrial.tile.CustomSidedTileEntity;
-import com.buuz135.industrial.tile.block.FluidCrafterBlock;
 import com.buuz135.industrial.utils.CraftingUtils;
 import com.buuz135.industrial.utils.Reference;
 import net.minecraft.item.EnumDyeColor;
 import net.minecraft.item.ItemStack;
-import net.minecraft.item.crafting.CraftingManager;
 import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.NonNullList;
@@ -61,7 +59,7 @@ public class FluidCrafterTile extends CustomSidedTileEntity {
             FluidStack stack = tank.drain(bucketAmount * 1000, false);
             if (stack != null && stack.getFluid().equals(fluid) && stack.amount == bucketAmount * 1000) {
                 IRecipe recipe = CraftingUtils.findRecipe(world, crafting.getFilter());
-                if (recipe.getRecipeOutput().isEmpty()) return;
+                if (recipe == null || recipe.getRecipeOutput().isEmpty()) return;
                 if (ItemHandlerHelper.insertItem(this.output, recipe.getRecipeOutput().copy(), true).isEmpty() && areAllSolidsPresent()) {
                     NonNullList<ItemStack> remaining = recipe.getRemainingItems(CraftingUtils.genCraftingInventory(world, simulateRecipeEntries()));
                     for (int i = 0; i < crafting.getSlots(); ++i) {
