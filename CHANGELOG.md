@@ -1,6 +1,7 @@
 # 1.6.4
 + Added config options to disable machines from the game
 + Added config option to not show Book entries in JEI
++ More safe fluid crafting for the Fluid Crafter and making the tank fluid the default fluid for the recipe.
 
 # 1.6.3
 + Updated to tesla core lib 1.0.12. Adding RF display to the machines, click the power bar to change it.

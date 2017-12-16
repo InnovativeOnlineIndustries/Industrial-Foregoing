@@ -58,13 +58,12 @@ public class FluidCrafterTile extends CustomSidedTileEntity {
             int bucketAmount = getFluidAmount(fluid);
             FluidStack stack = tank.drain(bucketAmount * 1000, false);
             if (stack != null && stack.getFluid().equals(fluid) && stack.amount == bucketAmount * 1000) {
-                IRecipe recipe = CraftingUtils.findRecipe(world, crafting.getFilter());
+                IRecipe recipe = CraftingUtils.findRecipe(world, simulateRecipeEntries(fluid));
                 if (recipe == null || recipe.getRecipeOutput().isEmpty()) return;
-                if (ItemHandlerHelper.insertItem(this.output, recipe.getRecipeOutput().copy(), true).isEmpty() && areAllSolidsPresent()) {
-                    NonNullList<ItemStack> remaining = recipe.getRemainingItems(CraftingUtils.genCraftingInventory(world, simulateRecipeEntries()));
+                if (ItemHandlerHelper.insertItem(this.output, recipe.getRecipeOutput().copy(), true).isEmpty() && areAllSolidsPresent(fluid)) {
+                    NonNullList<ItemStack> remaining = recipe.getRemainingItems(CraftingUtils.genCraftingInventory(world, simulateRecipeEntries(fluid)));
                     for (int i = 0; i < crafting.getSlots(); ++i) {
-                        if (crafting.getFilter()[i].hasCapability(CapabilityFluidHandler.FLUID_HANDLER_ITEM_CAPABILITY, null))
-                            continue;
+                        if (isStackCurrentFluid(fluid, crafting.getFilterStack(i))) continue;
                         if (remaining.get(i).isEmpty()) crafting.getStackInSlot(i).shrink(1);
                         else crafting.setStackInSlot(i, remaining.get(i).copy());
                     }
@@ -100,6 +99,9 @@ public class FluidCrafterTile extends CustomSidedTileEntity {
     }
 
     public Fluid getRecipeFluid() {
+        if (tank.getFluid() != null) {
+            return tank.getFluid().getFluid();
+        }
         for (ItemStack stack : crafting.getFilter()) {
             if (stack.isEmpty()) continue;
             if (stack.hasCapability(CapabilityFluidHandler.FLUID_HANDLER_ITEM_CAPABILITY, null)) {
@@ -114,21 +116,24 @@ public class FluidCrafterTile extends CustomSidedTileEntity {
         int i = 0;
         for (ItemStack stack : crafting.getFilter()) {
             if (stack.isEmpty()) continue;
-            if (stack.hasCapability(CapabilityFluidHandler.FLUID_HANDLER_ITEM_CAPABILITY, null)) {
-                IFluidHandlerItem fluidHandlerItem = stack.getCapability(CapabilityFluidHandler.FLUID_HANDLER_ITEM_CAPABILITY, null);
-                if (fluidHandlerItem.drain(Integer.MAX_VALUE, false).getFluid().equals(fluid)) ++i;
-            }
+            if (isStackCurrentFluid(fluid, stack)) ++i;
         }
         return i;
     }
 
-    public boolean areAllSolidsPresent() {
+    public boolean areAllSolidsPresent(Fluid fluid) {
         for (int i = 0; i < crafting.getSlots(); ++i) {
-            if (crafting.getFilter()[i].hasCapability(CapabilityFluidHandler.FLUID_HANDLER_ITEM_CAPABILITY, null) || crafting.getFilter()[i].isEmpty())
+            if (isStackCurrentFluid(fluid, crafting.getFilter()[i]) || crafting.getFilter()[i].isEmpty())
                 continue;
             if (crafting.getStackInSlot(i).isEmpty()) return false;
         }
         return true;
+    }
+
+    private boolean isStackCurrentFluid(Fluid fluid, ItemStack stack) {
+        if (!stack.hasCapability(CapabilityFluidHandler.FLUID_HANDLER_ITEM_CAPABILITY, null)) return false;
+        IFluidHandlerItem fluidHandlerItem = stack.getCapability(CapabilityFluidHandler.FLUID_HANDLER_ITEM_CAPABILITY, null);
+        return fluidHandlerItem != null && fluidHandlerItem.drain(Integer.MAX_VALUE, false) != null && fluidHandlerItem.drain(Integer.MAX_VALUE, false).getFluid().equals(fluid);
     }
 
     @Override
@@ -137,6 +142,7 @@ public class FluidCrafterTile extends CustomSidedTileEntity {
     }
 
     public boolean hasOnlyOneFluid() {
+        Fluid tankFluid = tank.getFluid() != null ? tank.getFluid().getFluid() : null;
         List<Fluid> fluids = new ArrayList<>();
         for (ItemStack stack : crafting.getFilter()) {
             if (stack.isEmpty()) continue;
@@ -146,15 +152,16 @@ public class FluidCrafterTile extends CustomSidedTileEntity {
                 if (fluid != null && !fluids.contains(fluid.getFluid())) fluids.add(fluid.getFluid());
             }
         }
+        fluids.remove(tankFluid);
         return fluids.size() == 1;
     }
 
-    public ItemStack[] simulateRecipeEntries() {
+    public ItemStack[] simulateRecipeEntries(Fluid fluid) {
         ItemStack[] itemStacks = new ItemStack[9];
         for (int i = 0; i < crafting.getSlots(); ++i) {
             if (crafting.getFilter()[i].isEmpty()) {
                 itemStacks[i] = ItemStack.EMPTY;
-            } else if (crafting.getFilter()[i].hasCapability(CapabilityFluidHandler.FLUID_HANDLER_ITEM_CAPABILITY, null)) {
+            } else if (isStackCurrentFluid(fluid, crafting.getFilterStack(i))) {
                 itemStacks[i] = crafting.getFilter()[i].copy();
             } else {
                 itemStacks[i] = crafting.getStackInSlot(i);
@@ -162,4 +169,5 @@ public class FluidCrafterTile extends CustomSidedTileEntity {
         }
         return itemStacks;
     }
+
 }

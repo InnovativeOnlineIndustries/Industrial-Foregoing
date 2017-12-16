@@ -25,7 +25,7 @@ public class RecipeUtils {
         }
     }
 
-    public static void addShapedRecipe(ItemStack result, Object... components) { //TODO Skip the ones with empty outputs
+    public static void addShapedRecipe(ItemStack result, Object... components) {
         setupDir();
         if (!RECIPE_DIR.exists() || result.isEmpty()) return;
         // GameRegistry.addShapedRecipe(result, components);
