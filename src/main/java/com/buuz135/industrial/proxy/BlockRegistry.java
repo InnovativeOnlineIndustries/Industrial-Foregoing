@@ -98,9 +98,13 @@ public class BlockRegistry {
         //RecipeUtils.addShapelessRecipe(new ItemStack(blackHoleTankBlock), blackHoleTankBlock);
     }
 
+    public static void poke() {
+
+    }
+
     @SubscribeEvent
     public void registerBlocks(RegistryEvent.Register<Block> ev) {
-        CustomOrientedBlock.blockList.forEach(customOrientedBlock -> customOrientedBlock.registerBlock(ev.getRegistry()));
+        CustomOrientedBlock.blockList.stream().filter(CustomOrientedBlock::isEnabled).forEach(customOrientedBlock -> customOrientedBlock.registerBlock(ev.getRegistry()));
         BLOCK_ESSENCE.register(ev.getRegistry());
         BLOCK_MILK.register(ev.getRegistry());
         BLOCK_MEAT.register(ev.getRegistry());
@@ -114,7 +118,7 @@ public class BlockRegistry {
 
     @SubscribeEvent
     public void registerItems(RegistryEvent.Register<Item> ev) {
-        CustomOrientedBlock.blockList.forEach(customOrientedBlock -> customOrientedBlock.registerItem(ev.getRegistry()));
+        CustomOrientedBlock.blockList.stream().filter(CustomOrientedBlock::isEnabled).forEach(customOrientedBlock -> customOrientedBlock.registerItem(ev.getRegistry()));
         ItemRegistry.registerItems(ev.getRegistry());
         if (TeslaCoreLib.INSTANCE.isClientSide()) {
             ItemRenderRegistry.registerRender();

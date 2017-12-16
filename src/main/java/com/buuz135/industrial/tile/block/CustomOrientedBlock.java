@@ -27,6 +27,7 @@ public abstract class CustomOrientedBlock<T extends SidedTileEntity> extends Ori
     private static List<Class> rangeAcceptingTiles = Arrays.asList(AnimalByproductRecolectorBlock.class, CropEnrichMaterialInjectorBlock.class, CropRecolectorBlock.class, CropSowerBlock.class, EnergyFieldProviderBlock.class, FluidPumpBlock.class);
 
     private boolean workDisabled;
+    private boolean enabled;
     private int energyForWork;
     private int energyRate;
 
@@ -43,6 +44,7 @@ public abstract class CustomOrientedBlock<T extends SidedTileEntity> extends Ori
     }
 
     public void getMachineConfig() {
+        enabled = CustomConfiguration.config.getBoolean("enabled", "machines" + Configuration.CATEGORY_SPLITTER + this.getRegistryName().getResourcePath().toString(), true, "If disabled it will be removed from the game.");
         workDisabled = CustomConfiguration.config.getBoolean("workDisabled", "machines" + Configuration.CATEGORY_SPLITTER + this.getRegistryName().getResourcePath().toString(), false, "Machine can perform a work action");
         if (energyForWork != 0 && energyRate != 0) {
             energyForWork = CustomConfiguration.config.getInt("energyForWork", "machines" + Configuration.CATEGORY_SPLITTER + this.getRegistryName().getResourcePath().toString(), energyForWork, 1, Integer.MAX_VALUE, "How much energy needs a machine to work");
@@ -62,6 +64,10 @@ public abstract class CustomOrientedBlock<T extends SidedTileEntity> extends Ori
         return energyRate;
     }
 
+    public boolean isEnabled() {
+        return enabled;
+    }
+
     public abstract void createRecipe();
 
     @Override
@@ -77,4 +83,6 @@ public abstract class CustomOrientedBlock<T extends SidedTileEntity> extends Ori
         super.addInformation(stack, player, tooltip, advanced);
         if (rangeAcceptingTiles.contains(this.getClass())) tooltip.add(TextFormatting.GRAY + "Accepts range addons");
     }
+
+
 }

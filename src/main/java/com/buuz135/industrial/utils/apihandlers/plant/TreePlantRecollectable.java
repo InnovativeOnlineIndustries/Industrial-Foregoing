@@ -43,10 +43,10 @@ public class TreePlantRecollectable extends PlantRecollectable {
         if (treeCache.containsKey(pos)) {
             TreeCache cache = treeCache.get(pos);
             int operations = BlockRegistry.cropRecolectorBlock.getTreeOperations();
-            if (BlockRegistry.cropRecolectorBlock.isReducedChunkUpdates()){
+            if (BlockRegistry.cropRecolectorBlock.isReducedChunkUpdates()) {
                 operations = 0;
-                if ((cache.getLeavesCache().size()+cache.getWoodCache().size()) <= ((int) extras[1])*BlockRegistry.cropRecolectorBlock.getTreeOperations()){
-                    operations = cache.getLeavesCache().size()+cache.getWoodCache().size();
+                if ((cache.getLeavesCache().size() + cache.getWoodCache().size()) <= ((int) extras[1]) * BlockRegistry.cropRecolectorBlock.getTreeOperations()) {
+                    operations = cache.getLeavesCache().size() + cache.getWoodCache().size();
                 }
             }
             for (int i = 0; i < operations; ++i) {

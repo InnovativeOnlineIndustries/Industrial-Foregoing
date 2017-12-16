@@ -38,4 +38,12 @@ public class MachineProduceWrapper implements IRecipeWrapper {
     public boolean handleClick(Minecraft minecraft, int mouseX, int mouseY, int mouseButton) {
         return false;
     }
+
+    public Block getBlock() {
+        return block;
+    }
+
+    public ItemStack getOutput() {
+        return output;
+    }
 }

@@ -9,12 +9,12 @@ public class CustomConfiguration {
 
     public static Configuration config;
     public static HashMap<String, Boolean> configValues;
+    public static boolean enableBookEntriesInJEI;
 
     public static void sync() {
         try {
             CustomOrientedBlock.blockList.forEach(CustomOrientedBlock::getMachineConfig);
-
-            //sliderBlock.getMachineConfig();
+            enableBookEntriesInJEI = config.getBoolean("enableBookEntriesInJEI", Configuration.CATEGORY_CLIENT, true, "Enable to show book entries in JEI");
         } catch (Exception e) {
 
         } finally {

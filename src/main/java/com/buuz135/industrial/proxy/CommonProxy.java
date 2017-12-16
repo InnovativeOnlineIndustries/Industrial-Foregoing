@@ -38,10 +38,12 @@ public class CommonProxy {
 
     public void preInit(FMLPreInitializationEvent event) {
         IFRegistries.poke();
+
         CraftingHelper.register(new ResourceLocation(Reference.MOD_ID, "configuration_value"), new ConfigurationConditionFactory());
         random = new Random();
 
         FluidsRegistry.registerFluids();
+        BlockRegistry.poke();
 
         MinecraftForge.EVENT_BUS.register(new BlockRegistry());
         MinecraftForge.EVENT_BUS.register(new ItemRegistry());
@@ -55,6 +57,7 @@ public class CommonProxy {
 
         CustomConfiguration.config = new Configuration(event.getSuggestedConfigurationFile());
         CustomConfiguration.config.load();
+        CustomConfiguration.sync();
         CustomConfiguration.configValues = new HashMap<>();
         CustomConfiguration.configValues.put("useTEFrames", CustomConfiguration.config.getBoolean("useTEFrames", Configuration.CATEGORY_GENERAL, true, "Use Thermal Expansion Machine Frames instead of Tesla Core Lib"));
 
@@ -72,7 +75,6 @@ public class CommonProxy {
     }
 
     public void postInit() {
-        CustomConfiguration.sync();
         CraftingUtils.generateCrushedRecipes();
         BlockRegistry.createRecipes();
         RecipeUtils.generateConstants();

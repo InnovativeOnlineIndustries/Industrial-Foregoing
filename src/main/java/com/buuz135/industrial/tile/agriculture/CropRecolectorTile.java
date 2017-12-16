@@ -90,7 +90,7 @@ public class CropRecolectorTile extends WorkingAreaElectricMachine {
             }
             didWork = recollectable.isPresent();
         }
-        if (shouldPointerIncrease){
+        if (shouldPointerIncrease) {
             ++pointer;
             operationAmount = 0;
         }

@@ -16,11 +16,10 @@ import java.util.Arrays;
 
 public class IFManual {
 
-
     public static void buildManual() {
         BookCategory.GETTING_STARTED.getEntries().put(new ResourceLocation(Reference.MOD_ID, "introduction"), new CategoryEntry("Introduction", new ItemStack(ItemRegistry.plastic),
                 Arrays.asList(new PageText("Welcome to Industrial Foregoing's Manual!\n\nTo get started you need to place a Tree Fluid Extractor in front of a log to collect Latex and pump into Latex Processing Unit with some water to get Tiny Rubber. \n\n" + TextFormatting.RED + "NOTE: Machines don't auto eject, neither they pull! Machines accept RF, FE, Tesla and Mek power."))));
-        CustomOrientedBlock.blockList.forEach(customOrientedBlock -> customOrientedBlock.getCategory().getEntries().put(customOrientedBlock.getRegistryName(), new CategoryEntry(customOrientedBlock.getLocalizedName(), new ItemStack(customOrientedBlock), customOrientedBlock.getBookDescriptionPages())));
+        CustomOrientedBlock.blockList.stream().filter(CustomOrientedBlock::isEnabled).forEach(customOrientedBlock -> customOrientedBlock.getCategory().getEntries().put(customOrientedBlock.getRegistryName(), new CategoryEntry(customOrientedBlock.getLocalizedName(), new ItemStack(customOrientedBlock), customOrientedBlock.getBookDescriptionPages())));
         BookCategory.MOB.getEntries().put(ItemRegistry.mobImprisonmentToolItem.getRegistryName(), new CategoryEntry(ItemRegistry.mobImprisonmentToolItem.getItemStackDisplayName(new ItemStack(ItemRegistry.mobImprisonmentToolItem)), new ItemStack(ItemRegistry.mobImprisonmentToolItem),
                 Arrays.asList(new PageText("When right clicked an entity with the item in the hand it will " + PageText.bold("hold") + " the entity inside it."))));
 
