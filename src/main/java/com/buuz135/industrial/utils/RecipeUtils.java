@@ -25,9 +25,9 @@ public class RecipeUtils {
         }
     }
 
-    public static void addShapedRecipe(ItemStack result, Object... components) {
+    public static void addShapedRecipe(ItemStack result, Object... components) { //TODO Skip the ones with empty outputs
         setupDir();
-        if (!RECIPE_DIR.exists()) return;
+        if (!RECIPE_DIR.exists() || result.isEmpty()) return;
         // GameRegistry.addShapedRecipe(result, components);
         for (int i = 0; i < components.length; ++i) {
             if (components[i].equals(MachineCaseItem.INSTANCE)) components[i] = "IFCORE";
@@ -81,7 +81,7 @@ public class RecipeUtils {
 
     public static void addShapelessRecipe(ItemStack result, Object... components) {
         setupDir();
-        if (!RECIPE_DIR.exists()) return;
+        if (!RECIPE_DIR.exists() || result.isEmpty()) return;
         // addShapelessRecipe(result, components);
         for (int i = 0; i < components.length; ++i) {
             if (components[i].equals(MachineCaseItem.INSTANCE)) components[i] = "IFCORE";
