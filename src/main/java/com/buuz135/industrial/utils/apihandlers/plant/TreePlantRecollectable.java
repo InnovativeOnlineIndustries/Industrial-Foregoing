@@ -9,6 +9,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 
@@ -63,5 +64,10 @@ public class TreePlantRecollectable extends PlantRecollectable {
     @Override
     public boolean shouldCheckNextPlant(World world, BlockPos pos, IBlockState blockState) {
         return !canBeHarvested(world, pos, blockState);
+    }
+
+    @Override
+    public List<String> getRecollectablesNames() {
+        return Arrays.asList(" - Any minecraft style tree", " - Tinker's construct slime trees");
     }
 }

@@ -5,6 +5,7 @@ import com.buuz135.industrial.entity.EntityPinkSlime;
 import com.buuz135.industrial.proxy.CommonProxy;
 import com.buuz135.industrial.proxy.client.entity.RenderPinkSlime;
 import com.buuz135.industrial.proxy.client.event.IFTextureStichEvent;
+import com.buuz135.industrial.proxy.client.event.IFTooltipEvent;
 import com.buuz135.industrial.proxy.client.event.IFWorldRenderLastEvent;
 import com.buuz135.industrial.proxy.client.render.ContributorsCatEarsRender;
 import com.buuz135.industrial.utils.Reference;
@@ -61,7 +62,7 @@ public class ClientProxy extends CommonProxy {
         //MinecraftForge.EVENT_BUS.register(new MobRenderInPrisonHandler());
         MinecraftForge.EVENT_BUS.register(new IFTextureStichEvent());
         MinecraftForge.EVENT_BUS.register(new IFWorldRenderLastEvent());
-
+        MinecraftForge.EVENT_BUS.register(new IFTooltipEvent());
     }
 
 

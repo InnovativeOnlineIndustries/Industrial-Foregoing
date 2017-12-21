@@ -27,7 +27,7 @@ public class MobRelocatorBlock extends CustomOrientedBlock<MobRelocatorTile> {
     @Override
     public void getMachineConfig() {
         super.getMachineConfig();
-        essenceMultiplier = CustomConfiguration.config.getFloat("essenceMultiplier", "machines" + Configuration.CATEGORY_SPLITTER + this.getRegistryName().getResourcePath().toString(), 1, 0, Integer.MAX_VALUE, "Mob essence multiplier based on the mob health. Essence mb = mobHealth*essenceMultiplier");
+        essenceMultiplier = CustomConfiguration.config.getFloat("essenceMultiplier", "machines" + Configuration.CATEGORY_SPLITTER + this.getRegistryName().getResourcePath().toString(), 1, 0, Integer.MAX_VALUE, "Mob essence multiplier based on the XP orb. Essence mb = xpOrbValue*20*essenceMultiplier");
     }
 
     public float getEssenceMultiplier() {
@@ -54,5 +54,12 @@ public class MobRelocatorBlock extends CustomOrientedBlock<MobRelocatorTile> {
         List<IPage> pages = super.getBookDescriptionPages();
         pages.add(0, new PageText("When provided with power it will " + PageText.bold("kill") + " any entity in front of it as if a player would.\n\nIt will " + PageText.bold("collect") + " the dropped items and it will transform the experience orbs into " + PageText.bold("Essence") + "."));
         return pages;
+    }
+
+    @Override
+    public List<String> getTooltip(ItemStack stack) {
+        List<String> t = super.getTooltip(stack);
+        t.add("* Accepts Adult Filters");
+        return t;
     }
 }

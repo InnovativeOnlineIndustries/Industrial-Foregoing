@@ -8,7 +8,6 @@ import com.buuz135.industrial.tile.misc.BlackHoleUnitTile;
 import com.buuz135.industrial.utils.RecipeUtils;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
-import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.init.Items;
@@ -21,7 +20,6 @@ import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.ndrei.teslacorelib.items.MachineCaseItem;
 
-import javax.annotation.Nullable;
 import java.text.DecimalFormat;
 import java.util.Arrays;
 import java.util.List;
@@ -81,10 +79,9 @@ public class BlackHoleUnitBlock extends CustomOrientedBlock<BlackHoleUnitTile> {
         }
     }
 
-
     @Override
-    public void addInformation(ItemStack stack, @Nullable World player, List<String> tooltip, ITooltipFlag advanced) {
-        super.addInformation(stack, player, tooltip, advanced);
+    public List<String> getTooltip(ItemStack stack) {
+        List<String> tooltip = super.getTooltip(stack);
         if (stack.hasTagCompound() && Item.getByNameOrId(stack.getTagCompound().getString(BlackHoleUnitTile.NBT_ITEMSTACK)) != null) {
             if (stack.getTagCompound().hasKey(BlackHoleUnitTile.NBT_ITEMSTACK) && stack.getTagCompound().hasKey(BlackHoleUnitTile.NBT_META)) {
                 tooltip.add(new TextComponentTranslation("text.display.item").getUnformattedText() + " " + new TextComponentTranslation(new ItemStack(Item.getByNameOrId(stack.getTagCompound().getString(BlackHoleUnitTile.NBT_ITEMSTACK)), 1, stack.getTagCompound().getInteger(BlackHoleUnitTile.NBT_META)).getUnlocalizedName() + ".name").getUnformattedText());
@@ -92,8 +89,7 @@ public class BlackHoleUnitBlock extends CustomOrientedBlock<BlackHoleUnitTile> {
             if (stack.getTagCompound().hasKey(BlackHoleUnitTile.NBT_AMOUNT))
                 tooltip.add(new TextComponentTranslation("text.display.amount").getUnformattedText() + " " + stack.getTagCompound().getInteger(BlackHoleUnitTile.NBT_AMOUNT));
         }
-
-        tooltip.add("\"the BHU\"");
+        return tooltip;
     }
 
     public void createRecipe() {

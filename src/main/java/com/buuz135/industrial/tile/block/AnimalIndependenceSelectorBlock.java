@@ -38,4 +38,11 @@ public class AnimalIndependenceSelectorBlock extends CustomOrientedBlock<AnimalI
         pages.add(0, new PageText("When provider with power it will move " + PageText.bold("baby") + " animals from the back to the front.\n\nIf " + PageText.bold("Adult Filter") + " is installed it will move adult animals instead of baby animals."));
         return pages;
     }
+
+    @Override
+    public List<String> getTooltip(ItemStack stack) {
+        List<String> t = super.getTooltip(stack);
+        t.add("* Accepts Adult Filters");
+        return t;
+    }
 }

@@ -1,3 +1,6 @@
+# 1.6.5
++ Improved tooltips, Plant Gatherer shows what it can gather.
+
 # 1.6.4
 + Added config options to disable machines from the game
 + Added config option to not show Book entries in JEI

@@ -8,6 +8,7 @@ import net.minecraft.util.NonNullList;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
+import java.util.Arrays;
 import java.util.List;
 
 public class BlockCropPlantRecollectable extends PlantRecollectable {
@@ -34,5 +35,8 @@ public class BlockCropPlantRecollectable extends PlantRecollectable {
         return true;
     }
 
-
+    @Override
+    public List<String> getRecollectablesNames() {
+        return Arrays.asList(" - Any minecraft style crop");
+    }
 }

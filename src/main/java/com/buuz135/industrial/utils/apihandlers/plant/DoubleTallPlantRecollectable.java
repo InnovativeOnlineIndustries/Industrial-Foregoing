@@ -8,8 +8,10 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.World;
 
+import java.util.Arrays;
 import java.util.List;
 
 public class DoubleTallPlantRecollectable extends PlantRecollectable {
@@ -41,5 +43,10 @@ public class DoubleTallPlantRecollectable extends PlantRecollectable {
             world.getBlockState(pos).getBlock().getDrops(stacks, world, pos, world.getBlockState(pos), 0);
             world.setBlockToAir(pos);
         }
+    }
+
+    @Override
+    public List<String> getRecollectablesNames() {
+        return Arrays.asList(" - Sugar cane " + TextFormatting.ITALIC + "(No need for replanting)", " - Cactus " + TextFormatting.ITALIC + "(No need for replanting)");
     }
 }

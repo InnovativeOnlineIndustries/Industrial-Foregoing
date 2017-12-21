@@ -5,6 +5,7 @@ import com.buuz135.industrial.api.book.page.PageText;
 import com.buuz135.industrial.book.BookCategory;
 import com.buuz135.industrial.config.CustomConfiguration;
 import com.buuz135.industrial.proxy.ItemRegistry;
+import com.buuz135.industrial.registry.IFRegistries;
 import com.buuz135.industrial.tile.agriculture.CropRecolectorTile;
 import com.buuz135.industrial.utils.RecipeUtils;
 import net.minecraft.block.material.Material;
@@ -66,5 +67,14 @@ public class CropRecolectorBlock extends CustomOrientedBlock<CropRecolectorTile>
         List<IPage> pages = super.getBookDescriptionPages();
         pages.add(0, new PageText("When provided with power it will " + PageText.bold("harvest") + " fully grown crops and chop down trees, this includes pumpkins, melons and nether wart. Each operation will produce a bit of " + PageText.bold("sludge") + " that can be used in the " + PageText.bold("Sludge Refiner") + " to obtain some material. (Having the tank full will " + PageText.bold("not") + " slow the machine)"));
         return pages;
+    }
+
+    @Override
+    public List<String> getTooltip(ItemStack stack) {
+        List<String> tooltip = super.getTooltip(stack);
+        tooltip.add("* Accepts Leaf Shearing Addon");
+        tooltip.add("* Can harvest: ");
+        IFRegistries.PLANT_RECOLLECTABLES_REGISTRY.getValues().forEach(plantRecollectable -> tooltip.addAll(plantRecollectable.getRecollectablesNames()));
+        return tooltip;
     }
 }

@@ -7,21 +7,18 @@ import com.buuz135.industrial.book.IHasBookDescription;
 import com.buuz135.industrial.config.CustomConfiguration;
 import com.buuz135.industrial.utils.Reference;
 import net.minecraft.block.material.Material;
-import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.text.TextFormatting;
-import net.minecraft.world.World;
 import net.minecraftforge.common.config.Configuration;
 import net.minecraftforge.fml.common.registry.ForgeRegistries;
 import net.ndrei.teslacorelib.blocks.OrientedBlock;
 import net.ndrei.teslacorelib.tileentities.SidedTileEntity;
 
-import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-public abstract class CustomOrientedBlock<T extends SidedTileEntity> extends OrientedBlock implements IHasBookDescription {
+public abstract class CustomOrientedBlock<T extends SidedTileEntity> extends OrientedBlock implements IHasBookDescription, IHasAdvancedTooltip {
 
     public static List<CustomOrientedBlock> blockList = new ArrayList<>();
     private static List<Class> rangeAcceptingTiles = Arrays.asList(AnimalByproductRecolectorBlock.class, CropEnrichMaterialInjectorBlock.class, CropRecolectorBlock.class, CropSowerBlock.class, EnergyFieldProviderBlock.class, FluidPumpBlock.class);
@@ -79,10 +76,9 @@ public abstract class CustomOrientedBlock<T extends SidedTileEntity> extends Ori
     }
 
     @Override
-    public void addInformation(ItemStack stack, @Nullable World player, List<String> tooltip, ITooltipFlag advanced) {
-        super.addInformation(stack, player, tooltip, advanced);
-        if (rangeAcceptingTiles.contains(this.getClass())) tooltip.add(TextFormatting.GRAY + "Accepts range addons");
+    public List<String> getTooltip(ItemStack stack) {
+        List<String> tooltips = new ArrayList<>();
+        if (rangeAcceptingTiles.contains(this.getClass())) tooltips.add(TextFormatting.GRAY + "* Accepts range addons");
+        return tooltips;
     }
-
-
 }

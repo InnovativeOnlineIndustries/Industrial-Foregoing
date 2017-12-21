@@ -8,6 +8,7 @@ import net.minecraft.util.NonNullList;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
+import java.util.Arrays;
 import java.util.List;
 
 public class BlockNetherWartRecollectable extends PlantRecollectable {
@@ -32,5 +33,10 @@ public class BlockNetherWartRecollectable extends PlantRecollectable {
     @Override
     public boolean shouldCheckNextPlant(World world, BlockPos pos, IBlockState blockState) {
         return true;
+    }
+
+    @Override
+    public List<String> getRecollectablesNames() {
+        return Arrays.asList(" - Nether wart");
     }
 }

@@ -6,6 +6,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.registries.IForgeRegistryEntry;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public abstract class PlantRecollectable extends IForgeRegistryEntry.Impl<PlantRecollectable> {
@@ -64,5 +65,14 @@ public abstract class PlantRecollectable extends IForgeRegistryEntry.Impl<PlantR
      */
     public int getPriority() {
         return -1;
+    }
+
+    /**
+     * Returns a list of names of the blocks that can harvest.
+     *
+     * @return The list
+     */
+    public List<String> getRecollectablesNames() {
+        return new ArrayList<>();
     }
 }

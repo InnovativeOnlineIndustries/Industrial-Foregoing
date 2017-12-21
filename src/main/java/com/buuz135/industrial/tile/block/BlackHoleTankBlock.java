@@ -7,7 +7,6 @@ import com.buuz135.industrial.proxy.ItemRegistry;
 import com.buuz135.industrial.tile.misc.BlackHoleTankTile;
 import com.buuz135.industrial.utils.RecipeUtils;
 import net.minecraft.block.state.IBlockState;
-import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.init.Items;
@@ -22,7 +21,6 @@ import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fluids.FluidStack;
 import net.ndrei.teslacorelib.items.MachineCaseItem;
 
-import javax.annotation.Nullable;
 import java.text.DecimalFormat;
 import java.util.Arrays;
 import java.util.List;
@@ -82,12 +80,13 @@ public class BlackHoleTankBlock extends CustomOrientedBlock<BlackHoleTankTile> {
     }
 
     @Override
-    public void addInformation(ItemStack stack, @Nullable World player, List<String> tooltip, ITooltipFlag advanced) {
-        super.addInformation(stack, player, tooltip, advanced);
+    public List<String> getTooltip(ItemStack stack) {
+        List<String> tooltip = super.getTooltip(stack);
         if (stack.hasTagCompound() && FluidRegistry.isFluidRegistered(stack.getTagCompound().getString("FluidName"))) {
             tooltip.add(new TextComponentTranslation("text.display.fluid").getUnformattedText() + " " + new TextComponentTranslation(FluidRegistry.getFluid(stack.getTagCompound().getString("FluidName")).getUnlocalizedName()).getUnformattedText());
             tooltip.add(new TextComponentTranslation("text.display.amount").getUnformattedText() + " " + stack.getTagCompound().getInteger("Amount"));
         }
+        return tooltip;
     }
 
     @Override
