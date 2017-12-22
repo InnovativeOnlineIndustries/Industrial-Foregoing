@@ -21,7 +21,6 @@ public class CropRecolectorBlock extends CustomOrientedBlock<CropRecolectorTile>
     private int sludgeOperation;
     private int treeOperations;
     private boolean reducedChunkUpdates;
-    private int chorusOperations;
 
     public CropRecolectorBlock() {
         super("crop_recolector", CropRecolectorTile.class, Material.ROCK, 400, 40);
@@ -33,8 +32,6 @@ public class CropRecolectorBlock extends CustomOrientedBlock<CropRecolectorTile>
         sludgeOperation = CustomConfiguration.config.getInt("sludgeOperation", "machines" + Configuration.CATEGORY_SPLITTER + this.getRegistryName().getResourcePath().toString(), 20, 1, 8000, "How much sludge is produced when the machine does an operation");
         treeOperations = CustomConfiguration.config.getInt("treeOperations", "machines" + Configuration.CATEGORY_SPLITTER + this.getRegistryName().getResourcePath().toString(), 10, 1, 1024, "Amount of operations done when chopping a tree");
         reducedChunkUpdates = CustomConfiguration.config.getBoolean("reducedChunkUpdates", "machines" + Configuration.CATEGORY_SPLITTER + this.getRegistryName().getResourcePath().toString(), false, "When enabled it will chop down the tree in one go but still consuming the same power");
-        chorusOperations = CustomConfiguration.config.getInt("chorusOperations", "machines" + Configuration.CATEGORY_SPLITTER + this.getRegistryName().getResourcePath().toString(), 256, 1, 1024, "Amount of operations done when chopping a chorus ammount. Low values could make it to drop items in the ground");
-
     }
 
     public int getSludgeOperation() {
@@ -81,7 +78,4 @@ public class CropRecolectorBlock extends CustomOrientedBlock<CropRecolectorTile>
         return tooltip;
     }
 
-    public int getChorusOperations() {
-        return chorusOperations;
-    }
 }

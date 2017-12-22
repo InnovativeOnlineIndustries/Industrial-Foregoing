@@ -1,7 +1,6 @@
 package com.buuz135.industrial.utils.apihandlers.plant;
 
 import com.buuz135.industrial.api.plant.PlantRecollectable;
-import com.buuz135.industrial.proxy.BlockRegistry;
 import com.buuz135.industrial.utils.BlockUtils;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.item.ItemStack;
@@ -41,11 +40,7 @@ public class ChorusFruitRecollectable extends PlantRecollectable {
         List<ItemStack> stacks = new ArrayList<>();
         if (chorusCacheHashMap.containsKey(pos)) {
             ChorusCache chorusCache = chorusCacheHashMap.get(pos);
-            int operations = BlockRegistry.cropRecolectorBlock.getChorusOperations();
-            for (int i = 0; i < operations; ++i) {
-                if (chorusCache.getChorus().isEmpty()) break;
-                stacks.addAll(chorusCache.chop());
-            }
+            stacks.addAll(chorusCache.chop());
             if (chorusCache.getChorus().isEmpty()) chorusCacheHashMap.remove(pos);
         }
         return stacks;

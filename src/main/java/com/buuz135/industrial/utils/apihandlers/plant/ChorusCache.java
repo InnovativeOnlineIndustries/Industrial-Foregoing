@@ -8,16 +8,18 @@ import net.minecraft.util.NonNullList;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Stack;
 
 public class ChorusCache {
 
-    private Queue<BlockPos> chorus;
+    private List<BlockPos> chorus;
     private World world;
 
     public ChorusCache(World world, BlockPos current) {
         this.world = world;
-        chorus = new PriorityQueue<>(Comparator.comparingDouble(value -> ((BlockPos) value).distanceSq(((BlockPos) value).getX(), current.getY(), ((BlockPos) value).getZ())).reversed());
+        this.chorus = new ArrayList<>();
         Stack<BlockPos> chorus = new Stack<>();
         chorus.push(current);
         while (!chorus.isEmpty()) {
@@ -39,19 +41,31 @@ public class ChorusCache {
     }
 
     public List<ItemStack> chop() {
-        BlockPos p = chorus.peek();
         NonNullList<ItemStack> stacks = NonNullList.create();
+        int maxY = getTopRowY();
+        chorus.stream().filter(pos -> pos.getY() == maxY).forEach(pos -> chop(stacks, pos));
+        chorus.removeIf(pos -> pos.getY() == maxY);
+        return stacks;
+    }
+
+    public void chop(NonNullList<ItemStack> stacks, BlockPos p) {
         if (BlockUtils.isChorus(world, p)) {
             if (world.getBlockState(p).getBlock().equals(Blocks.CHORUS_FLOWER))
                 stacks.add(new ItemStack(Blocks.CHORUS_FLOWER));
             world.getBlockState(p).getBlock().getDrops(stacks, world, p, world.getBlockState(p), 0);
             world.setBlockToAir(p);
         }
-        chorus.poll();
-        return stacks;
     }
 
-    public Queue<BlockPos> getChorus() {
+    public int getTopRowY() {
+        int i = 0;
+        for (BlockPos blockPos : chorus) {
+            if (blockPos.getY() > i) i = blockPos.getY();
+        }
+        return i;
+    }
+
+    public List<BlockPos> getChorus() {
         return chorus;
     }
 }
