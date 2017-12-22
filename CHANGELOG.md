@@ -1,10 +1,10 @@
-# 1.6.5
-+ Improved tooltips, Plant Gatherer shows what it can gather.
-
 # 1.6.4
 + Added config options to disable machines from the game
 + Added config option to not show Book entries in JEI
 + More safe fluid crafting for the Fluid Crafter and making the tank fluid the default fluid for the recipe.
++ Improved leaf breaking so it doesn't drop items on the floor, I hope.
++ Added chorus support for the Plant Gatherer
++ Improved tooltips, Plant Gatherer shows what it can gather.
 
 # 1.6.3
 + Updated to tesla core lib 1.0.12. Adding RF display to the machines, click the power bar to change it.

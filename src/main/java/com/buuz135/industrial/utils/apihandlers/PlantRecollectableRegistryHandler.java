@@ -15,5 +15,6 @@ public class PlantRecollectableRegistryHandler {
         iPlantRecollectables.getRegistry().register(new DoubleTallPlantRecollectable());
         iPlantRecollectables.getRegistry().register(new PumpkinMelonPlantRecollectable());
         iPlantRecollectables.getRegistry().register(new TreePlantRecollectable());
+        iPlantRecollectables.getRegistry().register(new ChorusFruitRecollectable());
     }
 }
