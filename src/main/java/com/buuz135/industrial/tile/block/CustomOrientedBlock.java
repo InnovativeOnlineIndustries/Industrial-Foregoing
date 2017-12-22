@@ -78,7 +78,7 @@ public abstract class CustomOrientedBlock<T extends SidedTileEntity> extends Ori
     @Override
     public List<String> getTooltip(ItemStack stack) {
         List<String> tooltips = new ArrayList<>();
-        if (rangeAcceptingTiles.contains(this.getClass())) tooltips.add(TextFormatting.GRAY + "* Accepts range addons");
+        if (rangeAcceptingTiles.contains(this.getClass())) tooltips.add(TextFormatting.GRAY + "* Accepts Range Addon");
         return tooltips;
     }
 }

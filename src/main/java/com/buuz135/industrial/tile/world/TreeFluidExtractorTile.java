@@ -17,7 +17,6 @@ import net.ndrei.teslacorelib.inventory.BoundingRectangle;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 public class TreeFluidExtractorTile extends CustomSidedTileEntity {
 
@@ -104,7 +103,7 @@ public class TreeFluidExtractorTile extends CustomSidedTileEntity {
         }
 
         public static void remove(World world, BlockPos pos) {
-            woodLodProgressList = woodLodProgressList.stream().filter(woodLodProgress -> !(woodLodProgress.getBlockPos().equals(pos) && woodLodProgress.getWorld().equals(world))).collect(Collectors.toList());
+            woodLodProgressList.remove(getWoodLogOrDefault(world, pos));
         }
     }
 }
