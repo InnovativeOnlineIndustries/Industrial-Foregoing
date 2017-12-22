@@ -1,5 +1,6 @@
 package com.buuz135.industrial.utils;
 
+import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.*;
 import net.minecraft.client.renderer.block.model.BakedQuad;
@@ -11,6 +12,7 @@ import net.minecraft.client.renderer.texture.TextureUtil;
 import net.minecraft.client.renderer.tileentity.TileEntityItemStackRenderer;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumFacing;
@@ -175,6 +177,10 @@ public class ItemStackUtils {
             dict.add(OreDictionary.getOreName(i));
         }
         return dict;
+    }
+
+    public static boolean isChorusFlower(ItemStack stack) {
+        return !Block.getBlockFromItem(stack.getItem()).equals(Blocks.AIR) && Block.getBlockFromItem(stack.getItem()).equals(Blocks.CHORUS_FLOWER);
     }
 
     public static boolean acceptsFluidItem(ItemStack stack) {

@@ -57,7 +57,7 @@ public class CropSowerTile extends WorkingAreaElectricMachine {
         this.addInventory(new ColoredItemHandler(inPlant, EnumDyeColor.GREEN, "Seeds input", new BoundingRectangle(18 * 3, 25, 18 * 3, 18 * 3)) {
             @Override
             public boolean canInsertItem(int slot, ItemStack stack) {
-                return super.canInsertItem(slot, stack) && (stack.getItem() instanceof IPlantable || ItemStackUtils.isStackOreDict(stack, "treeSapling"));
+                return super.canInsertItem(slot, stack) && (stack.getItem() instanceof IPlantable || ItemStackUtils.isStackOreDict(stack, "treeSapling") || ItemStackUtils.isChorusFlower(stack));
             }
 
             @Override
@@ -109,7 +109,7 @@ public class CropSowerTile extends WorkingAreaElectricMachine {
                     }
                 }
                 if (!stack.isEmpty()) {
-                    if (!ItemStackUtils.isStackOreDict(stack, "treeSapling") && (this.world.getBlockState(pos.offset(EnumFacing.DOWN)).getBlock().equals(Blocks.DIRT) || this.world.getBlockState(pos.offset(EnumFacing.DOWN)).getBlock().equals(Blocks.GRASS))) {
+                    if (!ItemStackUtils.isChorusFlower(stack) && !ItemStackUtils.isStackOreDict(stack, "treeSapling") && (this.world.getBlockState(pos.offset(EnumFacing.DOWN)).getBlock().equals(Blocks.DIRT) || this.world.getBlockState(pos.offset(EnumFacing.DOWN)).getBlock().equals(Blocks.GRASS))) {
                         this.world.setBlockState(pos.offset(EnumFacing.DOWN), Blocks.FARMLAND.getDefaultState());
                     }
                     player.setHeldItem(EnumHand.MAIN_HAND, stack);
