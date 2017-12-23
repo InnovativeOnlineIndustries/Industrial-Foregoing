@@ -14,7 +14,6 @@ import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
-import net.minecraftforge.common.ForgeHooks;
 import net.minecraftforge.common.IPlantable;
 import net.minecraftforge.common.util.FakePlayer;
 import net.ndrei.teslacorelib.gui.BasicTeslaGuiContainer;
@@ -96,7 +95,7 @@ public class CropSowerTile extends WorkingAreaElectricMachine {
         if (pointer >= blockPos.size()) pointer = 0;
         if (pointer < blockPos.size()) {
             BlockPos pos = blockPos.get(pointer);
-            if (this.world.isAirBlock(pos)) {
+            if (this.world.isAirBlock(pos) && !this.world.isAirBlock(pos.down())) {
                 FakePlayer player = IndustrialForegoing.getFakePlayer(this.world);
                 ItemStack stack = inPlant.getStackInSlot(getFilteredSlot(pos));
                 if (stack.isEmpty() && inPlant.getLocked()) {
@@ -113,7 +112,12 @@ public class CropSowerTile extends WorkingAreaElectricMachine {
                         this.world.setBlockState(pos.offset(EnumFacing.DOWN), Blocks.FARMLAND.getDefaultState());
                     }
                     player.setHeldItem(EnumHand.MAIN_HAND, stack);
-                    EnumActionResult result = ForgeHooks.onPlaceItemIntoWorld(stack, player, world, pos.add(0, -1, 0), EnumFacing.UP, 0, 0, 0, EnumHand.MAIN_HAND);
+                    if (stack.getItem().getRegistryName() != null && stack.getItem().getRegistryName().getResourceDomain().equals("forestry")) {
+                        player.setPositionAndRotation(pos.getX(), pos.getY(), pos.getZ(), 90, 90);
+                        stack.useItemRightClick(this.world, player, EnumHand.MAIN_HAND);
+                        return 1;
+                    }
+                    EnumActionResult result = stack.onItemUse(player, this.world, pos.down(), EnumHand.MAIN_HAND, EnumFacing.UP, 0, 0, 0);
                     return result == EnumActionResult.SUCCESS ? 1 : 0;
                 }
             }

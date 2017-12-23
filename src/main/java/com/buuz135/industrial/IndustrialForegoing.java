@@ -8,6 +8,7 @@ import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldServer;
+import net.minecraftforge.common.util.FakePlayer;
 import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.SidedProxy;
@@ -39,7 +40,7 @@ public class IndustrialForegoing {
         if (!FluidRegistry.isUniversalBucketEnabled()) FluidRegistry.enableUniversalBucket();
     }
 
-    public static IFFakePlayer getFakePlayer(World world) {
+    public static FakePlayer getFakePlayer(World world) {
         if (worldFakePlayer.containsKey(world.provider.getDimension()))
             return worldFakePlayer.get(world.provider.getDimension());
         if (world instanceof WorldServer) {

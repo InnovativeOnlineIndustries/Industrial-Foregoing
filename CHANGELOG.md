@@ -5,6 +5,7 @@
 + Improved leaf breaking so it doesn't drop items on the floor, I hope.
 + Added chorus support for the Plant Gatherer
 + Improved tooltips, Plant Gatherer shows what it can gather.
++ Fixed Forestry Saplings not being planted with the Plant Sower
 
 # 1.6.3
 + Updated to tesla core lib 1.0.12. Adding RF display to the machines, click the power bar to change it.
