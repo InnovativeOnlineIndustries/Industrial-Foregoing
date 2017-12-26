@@ -36,7 +36,7 @@ public class FluidPumpTile extends WorkingAreaElectricMachine {
     private Queue<BlockPos> blocks;
 
     public FluidPumpTile() {
-        super(FluidPumpTile.class.getName().hashCode(), 1, 1, true);
+        super(FluidPumpTile.class.getName().hashCode());
     }
 
     @Override

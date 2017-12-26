@@ -7,7 +7,7 @@ import net.ndrei.teslacorelib.tileentities.ElectricTileEntity;
 public class EnergyFieldProviderTile extends WorkingAreaElectricMachine {
 
     public EnergyFieldProviderTile() {
-        super(ElectricTileEntity.class.getName().hashCode(), 3, 3, true);
+        super(ElectricTileEntity.class.getName().hashCode());
     }
 
     @Override

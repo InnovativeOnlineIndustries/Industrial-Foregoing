@@ -6,6 +6,7 @@
 + Added chorus support for the Plant Gatherer
 + Improved tooltips, Plant Gatherer shows what it can gather.
 + Fixed Forestry Saplings not being planted with the Plant Sower
++ Changed all the machines that had a 5x5 radius and didn't accept Range addons to a 7x7
 
 # 1.6.3
 + Updated to tesla core lib 1.0.12. Adding RF display to the machines, click the power bar to change it.

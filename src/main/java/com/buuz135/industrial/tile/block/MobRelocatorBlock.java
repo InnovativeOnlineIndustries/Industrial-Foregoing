@@ -15,12 +15,12 @@ import net.ndrei.teslacorelib.items.MachineCaseItem;
 
 import java.util.List;
 
-public class MobRelocatorBlock extends CustomOrientedBlock<MobRelocatorTile> {
+public class MobRelocatorBlock extends CustomAreaOrientedBlock<MobRelocatorTile> {
 
     private float essenceMultiplier;
 
     public MobRelocatorBlock() {
-        super("mob_relocator", MobRelocatorTile.class, Material.ROCK, 1000, 40);
+        super("mob_relocator", MobRelocatorTile.class, Material.ROCK, 1000, 40, RangeType.FRONT, 3, 2, false);
         this.setResistance(Float.MAX_VALUE);
     }
 

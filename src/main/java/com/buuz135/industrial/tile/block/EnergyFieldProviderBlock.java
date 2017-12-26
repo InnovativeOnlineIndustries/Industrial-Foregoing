@@ -13,10 +13,10 @@ import net.ndrei.teslacorelib.items.MachineCaseItem;
 
 import java.util.List;
 
-public class EnergyFieldProviderBlock extends CustomOrientedBlock<EnergyFieldProviderTile> {
+public class EnergyFieldProviderBlock extends CustomAreaOrientedBlock<EnergyFieldProviderTile> {
 
     public EnergyFieldProviderBlock() {
-        super("energy_field_provider", EnergyFieldProviderTile.class, Material.ROCK, 1, 1);
+        super("energy_field_provider", EnergyFieldProviderTile.class, Material.ROCK, 1, 1, RangeType.UP, 3, 3, true);
     }
 
     @Override

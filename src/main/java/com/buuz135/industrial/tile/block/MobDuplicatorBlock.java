@@ -16,14 +16,14 @@ import net.ndrei.teslacorelib.items.MachineCaseItem;
 import java.util.Arrays;
 import java.util.List;
 
-public class MobDuplicatorBlock extends CustomOrientedBlock<MobDuplicatorTile> {
+public class MobDuplicatorBlock extends CustomAreaOrientedBlock<MobDuplicatorTile> {
 
     public int essenceNeeded;
     public List<String> blacklistedEntities;
     public boolean enableExactCopy;
 
     public MobDuplicatorBlock() {
-        super("mob_duplicator", MobDuplicatorTile.class, Material.ROCK, 5000, 80);
+        super("mob_duplicator", MobDuplicatorTile.class, Material.ROCK, 5000, 80, RangeType.UP, 4, 2, false);
     }
 
     public void createRecipe() {

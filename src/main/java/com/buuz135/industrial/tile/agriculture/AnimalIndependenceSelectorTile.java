@@ -5,7 +5,6 @@ import com.buuz135.industrial.tile.IAcceptsAdultFilter;
 import com.buuz135.industrial.tile.WorkingAreaElectricMachine;
 import com.buuz135.industrial.utils.WorkUtils;
 import net.minecraft.entity.EntityAgeable;
-import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 
@@ -14,7 +13,7 @@ import java.util.List;
 public class AnimalIndependenceSelectorTile extends WorkingAreaElectricMachine implements IAcceptsAdultFilter {
 
     public AnimalIndependenceSelectorTile() {
-        super(AnimalIndependenceSelectorTile.class.getName().hashCode(), 2, 2, false);
+        super(AnimalIndependenceSelectorTile.class.getName().hashCode());
     }
 
 
@@ -32,13 +31,6 @@ public class AnimalIndependenceSelectorTile extends WorkingAreaElectricMachine i
         BlockPos pos = this.getPos().offset(this.getFacing(), 1);
         animal.setPositionAndUpdate(pos.getX() + 0.5, pos.getY(), pos.getZ() + 0.5);
         return 1;
-    }
-
-    @Override
-    public AxisAlignedBB getWorkingArea() {
-        EnumFacing f = this.getFacing().getOpposite();
-        BlockPos corner1 = new BlockPos(0, 0, 0).offset(f, getRadius() + 1);
-        return new AxisAlignedBB(this.pos.getX(), this.pos.getY(), this.pos.getZ(), this.pos.getX() + 1, this.pos.getY() + 1, this.pos.getZ() + 1).offset(corner1).grow(getRadius(), 0, getRadius()).setMaxY(this.getPos().getY() + getHeight());
     }
 
     @Override

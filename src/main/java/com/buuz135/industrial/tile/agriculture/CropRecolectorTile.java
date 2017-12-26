@@ -14,7 +14,6 @@ import net.minecraft.block.state.IBlockState;
 import net.minecraft.item.EnumDyeColor;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.IFluidTank;
@@ -37,7 +36,7 @@ public class CropRecolectorTile extends WorkingAreaElectricMachine {
     private int operationAmount;
 
     public CropRecolectorTile() {
-        super(CropRecolectorTile.class.getName().hashCode(), 1, 0, true);
+        super(CropRecolectorTile.class.getName().hashCode());
     }
 
     @Override
@@ -63,12 +62,6 @@ public class CropRecolectorTile extends WorkingAreaElectricMachine {
 
         });
         this.addInventoryToStorage(outItems, "outItems");
-    }
-
-    @Override
-    public AxisAlignedBB getWorkingArea() {
-        BlockPos corner1 = new BlockPos(0, 0, 0).offset(this.getFacing().getOpposite(), getRadius() + 1);
-        return new AxisAlignedBB(this.pos.getX(), this.pos.getY(), this.pos.getZ(), this.pos.getX() + 1, this.pos.getY() + 1, this.pos.getZ() + 1).offset(corner1).grow(getRadius(), 0, getRadius());
     }
 
     @Override

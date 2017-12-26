@@ -13,10 +13,10 @@ import net.ndrei.teslacorelib.items.MachineCaseItem;
 
 import java.util.List;
 
-public class AnimalStockIncreaserBlock extends CustomOrientedBlock<AnimalStockIncreaserTile> {
+public class AnimalStockIncreaserBlock extends CustomAreaOrientedBlock<AnimalStockIncreaserTile> {
 
     public AnimalStockIncreaserBlock() {
-        super("animal_stock_increaser", AnimalStockIncreaserTile.class, Material.ROCK, 400, 20);
+        super("animal_stock_increaser", AnimalStockIncreaserTile.class, Material.ROCK, 400, 20, RangeType.FRONT, 3, 1, false);
     }
 
     public void createRecipe() {
@@ -37,7 +37,7 @@ public class AnimalStockIncreaserBlock extends CustomOrientedBlock<AnimalStockIn
     @Override
     public List<IPage> getBookDescriptionPages() {
         List<IPage> pages = super.getBookDescriptionPages();
-        pages.add(0, new PageText("When provider with power and " + PageText.bold("food") + " for the animals it will feed them and put them in the mood. It needs the breeding item for the animal.\n\nThere can only be " + PageText.bold("20") + " animals at the same time in the working area."));
+        pages.add(0, new PageText("When provider with power and " + PageText.bold("food") + " for the animals it will feed them and put them in the mood. It needs the breeding item for the animal.\n\nThere can only be " + PageText.bold("35") + " animals at the same time in the working area."));
         return pages;
     }
 }

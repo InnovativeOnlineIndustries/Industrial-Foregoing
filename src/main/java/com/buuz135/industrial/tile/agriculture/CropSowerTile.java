@@ -36,7 +36,7 @@ public class CropSowerTile extends WorkingAreaElectricMachine {
     private int pointer;
 
     public CropSowerTile() {
-        super(CropSowerTile.class.getName().hashCode(), 1, 1, true);
+        super(CropSowerTile.class.getName().hashCode());
     }
 
     @Override
@@ -83,8 +83,7 @@ public class CropSowerTile extends WorkingAreaElectricMachine {
 
     @Override
     public AxisAlignedBB getWorkingArea() {
-        BlockPos corner1 = new BlockPos(0, 2, 0);
-        return new AxisAlignedBB(this.pos.getX(), this.pos.getY(), this.pos.getZ(), this.pos.getX() + 1, this.pos.getY() + 1, this.pos.getZ() + 1).offset(corner1).grow(getRadius(), 0, getRadius());
+        return super.getWorkingArea().offset(0, 1, 0);
     }
 
     @Override

@@ -16,14 +16,14 @@ import net.ndrei.teslacorelib.items.MachineCaseItem;
 
 import java.util.List;
 
-public class CropRecolectorBlock extends CustomOrientedBlock<CropRecolectorTile> {
+public class CropRecolectorBlock extends CustomAreaOrientedBlock<CropRecolectorTile> {
 
     private int sludgeOperation;
     private int treeOperations;
     private boolean reducedChunkUpdates;
 
     public CropRecolectorBlock() {
-        super("crop_recolector", CropRecolectorTile.class, Material.ROCK, 400, 40);
+        super("crop_recolector", CropRecolectorTile.class, Material.ROCK, 400, 40, RangeType.FRONT, 1, 0, true);
     }
 
     @Override

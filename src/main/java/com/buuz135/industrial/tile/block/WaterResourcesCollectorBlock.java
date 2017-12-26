@@ -13,10 +13,10 @@ import net.ndrei.teslacorelib.items.MachineCaseItem;
 
 import java.util.List;
 
-public class WaterResourcesCollectorBlock extends CustomOrientedBlock<WaterResourcesCollectorTile> {
+public class WaterResourcesCollectorBlock extends CustomAreaOrientedBlock<WaterResourcesCollectorTile> {
 
     public WaterResourcesCollectorBlock() {
-        super("water_resources_collector", WaterResourcesCollectorTile.class, Material.ROCK, 5000, 80);
+        super("water_resources_collector", WaterResourcesCollectorTile.class, Material.ROCK, 5000, 80, RangeType.UP, 1, 0, false);
     }
 
     public void createRecipe() {

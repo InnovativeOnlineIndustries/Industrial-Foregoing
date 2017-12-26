@@ -7,9 +7,7 @@ import net.minecraft.entity.passive.EntityAnimal;
 import net.minecraft.item.EnumDyeColor;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.AxisAlignedBB;
-import net.minecraft.util.math.BlockPos;
 import net.minecraftforge.items.ItemHandlerHelper;
 import net.minecraftforge.items.ItemStackHandler;
 
@@ -20,7 +18,7 @@ public class AnimalStockIncreaserTile extends WorkingAreaElectricMachine {
     public ItemStackHandler inFeedItems;
 
     public AnimalStockIncreaserTile() {
-        super(AnimalStockIncreaserTile.class.getName().hashCode(), 2, 1, false);
+        super(AnimalStockIncreaserTile.class.getName().hashCode());
     }
 
     @Override
@@ -48,19 +46,12 @@ public class AnimalStockIncreaserTile extends WorkingAreaElectricMachine {
     }
 
     @Override
-    public AxisAlignedBB getWorkingArea() {
-        EnumFacing f = this.getFacing().getOpposite();
-        BlockPos corner1 = new BlockPos(0, 0, 0).offset(f, getRadius() + 1).offset(EnumFacing.UP, getHeight());
-        return new AxisAlignedBB(this.pos.getX(), this.pos.getY(), this.pos.getZ(), this.pos.getX() + 1, this.pos.getY() + 1, this.pos.getZ() + 1).grow(getRadius(), getHeight(), getRadius()).offset(corner1);
-    }
-
-    @Override
     public float work() {
         if (WorkUtils.isDisabled(this.getBlockType())) return 0;
 
         AxisAlignedBB area = getWorkingArea();
         List<EntityAnimal> animals = this.world.getEntitiesWithinAABB(EntityAnimal.class, area);
-        if (animals.size() == 0 || animals.size() > 20) return 0;
+        if (animals.size() == 0 || animals.size() > 35) return 0;
         EntityAnimal animal1 = animals.get(0);
         while ((animal1.isChild() || animal1.getGrowingAge() != 0 || getFirstBreedingItem(animal1).isEmpty() || animal1.isInLove()) && animals.indexOf(animal1) + 1 < animals.size())
             animal1 = animals.get(animals.indexOf(animal1) + 1);

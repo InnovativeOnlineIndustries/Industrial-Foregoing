@@ -25,7 +25,7 @@ public class WitherBuilderTile extends WorkingAreaElectricMachine {
     private ItemStackHandler bottom;
 
     public WitherBuilderTile() {
-        super(WitherBuilderTile.class.getName().hashCode(), 0, 0, false);
+        super(WitherBuilderTile.class.getName().hashCode());
     }
 
     @Override

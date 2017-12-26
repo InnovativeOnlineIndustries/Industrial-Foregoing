@@ -10,10 +10,7 @@ import net.minecraft.entity.passive.EntitySquid;
 import net.minecraft.init.Items;
 import net.minecraft.item.EnumDyeColor;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
-import net.minecraft.util.math.AxisAlignedBB;
-import net.minecraft.util.math.BlockPos;
 import net.minecraftforge.common.IShearable;
 import net.minecraftforge.common.util.FakePlayer;
 import net.minecraftforge.fluids.IFluidTank;
@@ -31,7 +28,7 @@ public class AnimalResourceHarvesterTile extends WorkingAreaElectricMachine {
     private IFluidTank tank;
 
     public AnimalResourceHarvesterTile() {
-        super(AnimalResourceHarvesterTile.class.getName().hashCode(), 2, 2, false);
+        super(AnimalResourceHarvesterTile.class.getName().hashCode());
     }
 
     @Override
@@ -89,13 +86,6 @@ public class AnimalResourceHarvesterTile extends WorkingAreaElectricMachine {
             }
         }
         return 0;
-    }
-
-    @Override
-    public AxisAlignedBB getWorkingArea() {
-        EnumFacing f = this.getFacing().getOpposite();
-        BlockPos corner1 = new BlockPos(0, 0, 0).offset(f, getRadius() + 1);
-        return new AxisAlignedBB(this.pos.getX(), this.pos.getY(), this.pos.getZ(), this.pos.getX() + 1, this.pos.getY() + 1, this.pos.getZ() + 1).offset(corner1).grow(getRadius(), 0, getRadius()).setMaxY(this.getPos().getY() + getHeight());
     }
 
     @Override

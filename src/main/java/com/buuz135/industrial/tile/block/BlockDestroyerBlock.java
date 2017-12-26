@@ -13,10 +13,10 @@ import net.ndrei.teslacorelib.items.MachineCaseItem;
 
 import java.util.List;
 
-public class BlockDestroyerBlock extends CustomOrientedBlock<BlockDestroyerTile> {
+public class BlockDestroyerBlock extends CustomAreaOrientedBlock<BlockDestroyerTile> {
 
     public BlockDestroyerBlock() {
-        super("block_destroyer", BlockDestroyerTile.class, Material.ROCK, 100, 20);
+        super("block_destroyer", BlockDestroyerTile.class, Material.ROCK, 100, 20, RangeType.FRONT, 0, 0, true);
     }
 
     public void createRecipe() {

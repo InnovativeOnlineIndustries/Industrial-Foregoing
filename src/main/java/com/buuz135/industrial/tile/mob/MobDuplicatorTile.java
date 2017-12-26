@@ -7,7 +7,6 @@ import com.buuz135.industrial.proxy.ItemRegistry;
 import com.buuz135.industrial.proxy.client.ClientProxy;
 import com.buuz135.industrial.tile.CustomColoredItemHandler;
 import com.buuz135.industrial.tile.WorkingAreaElectricMachine;
-import com.buuz135.industrial.tile.world.MaterialStoneWorkFactoryTile;
 import com.buuz135.industrial.utils.BlockUtils;
 import com.buuz135.industrial.utils.WorkUtils;
 import net.minecraft.entity.EntityList;
@@ -23,7 +22,6 @@ import net.minecraftforge.items.ItemStackHandler;
 import net.ndrei.teslacorelib.TeslaCoreLib;
 import net.ndrei.teslacorelib.gui.BasicTeslaGuiContainer;
 import net.ndrei.teslacorelib.gui.IGuiContainerPiece;
-import net.ndrei.teslacorelib.gui.SideDrawerPiece;
 import net.ndrei.teslacorelib.gui.ToggleButtonPiece;
 import net.ndrei.teslacorelib.inventory.BoundingRectangle;
 import net.ndrei.teslacorelib.netsync.SimpleNBTMessage;
@@ -32,7 +30,6 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.Arrays;
 import java.util.List;
-import java.util.Map;
 import java.util.UUID;
 
 public class MobDuplicatorTile extends WorkingAreaElectricMachine {
@@ -42,7 +39,7 @@ public class MobDuplicatorTile extends WorkingAreaElectricMachine {
     private boolean exactCopy;
 
     public MobDuplicatorTile() {
-        super(MobDuplicatorTile.class.getName().hashCode(), 4, 2, false);
+        super(MobDuplicatorTile.class.getName().hashCode());
     }
 
     @Override

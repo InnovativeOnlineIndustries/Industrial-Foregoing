@@ -19,10 +19,10 @@ import net.ndrei.teslacorelib.items.MachineCaseItem;
 import javax.annotation.Nullable;
 import java.util.List;
 
-public class MobDetectorBlock extends CustomOrientedBlock<MobDetectorTile> {
+public class MobDetectorBlock extends CustomAreaOrientedBlock<MobDetectorTile> {
 
     public MobDetectorBlock() {
-        super("mob_detector", MobDetectorTile.class, Material.ROCK, 100, 10);
+        super("mob_detector", MobDetectorTile.class, Material.ROCK, 100, 10, RangeType.FRONT, 2, 1, false);
     }
 
 

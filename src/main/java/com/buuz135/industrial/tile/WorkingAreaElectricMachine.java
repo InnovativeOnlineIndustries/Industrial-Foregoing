@@ -3,6 +3,7 @@ package com.buuz135.industrial.tile;
 import com.buuz135.industrial.item.addon.RangeAddonItem;
 import com.buuz135.industrial.proxy.CommonProxy;
 import com.buuz135.industrial.proxy.client.ClientProxy;
+import com.buuz135.industrial.utils.WorkUtils;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.AxisAlignedBB;
@@ -24,16 +25,10 @@ public abstract class WorkingAreaElectricMachine extends CustomElectricMachine i
 
     private int color;
     private boolean showArea;
-    private int radius;
-    private int height;
-    private boolean acceptsRangeAddon;
 
-    protected WorkingAreaElectricMachine(int typeId, int radius, int height, boolean acceptsRangeAddon) {
+    protected WorkingAreaElectricMachine(int typeId) {
         super(typeId);
         color = CommonProxy.random.nextInt();
-        this.radius = radius;
-        this.height = height;
-        this.acceptsRangeAddon = acceptsRangeAddon;
     }
 
     @Override
@@ -109,15 +104,15 @@ public abstract class WorkingAreaElectricMachine extends CustomElectricMachine i
     }
 
     public int getRadius() {
-        return radius + (this.hasAddon(RangeAddonItem.class) ? (this.getAddonStack(RangeAddonItem.class).getMetadata() <= 0 ? -1 : this.getAddonStack(RangeAddonItem.class).getMetadata()) : 0);
+        return WorkUtils.getMachineWidth(world, pos) + (this.hasAddon(RangeAddonItem.class) ? (this.getAddonStack(RangeAddonItem.class).getMetadata() <= 0 ? -1 : this.getAddonStack(RangeAddonItem.class).getMetadata()) : 0);
     }
 
     public int getHeight() {
-        return height;
+        return WorkUtils.getMachineHeight(world, pos);
     }
 
     public boolean canAcceptRangeUpgrades() {
-        return acceptsRangeAddon;
+        return WorkUtils.acceptsRangeAddons(world, pos);
     }
 
     public int getActionsWork() {
@@ -131,7 +126,9 @@ public abstract class WorkingAreaElectricMachine extends CustomElectricMachine i
         return renderers;
     }
 
-    public abstract AxisAlignedBB getWorkingArea();
+    public AxisAlignedBB getWorkingArea() {
+        return WorkUtils.getMachineWorkingArea(world, pos, getRadius(), getHeight(), getFacing());
+    }
 
     @Override
     public AxisAlignedBB getRenderBoundingBox() {

@@ -10,7 +10,6 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumActionResult;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
-import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraftforge.common.ForgeHooks;
 import net.minecraftforge.common.util.FakePlayer;
@@ -23,7 +22,7 @@ public class BlockPlacerTile extends WorkingAreaElectricMachine {
     private ItemStackHandler inItems;
 
     public BlockPlacerTile() {
-        super(BlockPlacerTile.class.getName().hashCode(), 0, 0, true);
+        super(BlockPlacerTile.class.getName().hashCode());
     }
 
     @Override
@@ -48,11 +47,6 @@ public class BlockPlacerTile extends WorkingAreaElectricMachine {
 
         });
         this.addInventoryToStorage(inItems, "block_destroyer_out");
-    }
-
-    @Override
-    public AxisAlignedBB getWorkingArea() {
-        return new AxisAlignedBB(this.pos.getX(), this.pos.getY(), this.pos.getZ(), this.pos.getX() + 1, this.pos.getY() + 1, this.pos.getZ() + 1).offset(new BlockPos(0, 0, 0).offset(this.getFacing().getOpposite()));
     }
 
     @Override

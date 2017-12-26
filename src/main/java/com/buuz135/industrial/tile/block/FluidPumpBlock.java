@@ -13,10 +13,10 @@ import net.ndrei.teslacorelib.items.MachineCaseItem;
 
 import java.util.List;
 
-public class FluidPumpBlock extends CustomOrientedBlock<FluidPumpTile> {
+public class FluidPumpBlock extends CustomAreaOrientedBlock<FluidPumpTile> {
 
     public FluidPumpBlock() {
-        super("fluid_pump", FluidPumpTile.class, Material.ROCK, 1000, 40);
+        super("fluid_pump", FluidPumpTile.class, Material.ROCK, 1000, 40, RangeType.UP, 1, 1, true);
     }
 
     @Override

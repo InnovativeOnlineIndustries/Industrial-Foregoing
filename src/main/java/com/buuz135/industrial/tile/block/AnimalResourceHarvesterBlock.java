@@ -13,10 +13,10 @@ import net.ndrei.teslacorelib.items.MachineCaseItem;
 
 import java.util.List;
 
-public class AnimalResourceHarvesterBlock extends CustomOrientedBlock<AnimalResourceHarvesterTile> {
+public class AnimalResourceHarvesterBlock extends CustomAreaOrientedBlock<AnimalResourceHarvesterTile> {
 
     public AnimalResourceHarvesterBlock() {
-        super("animal_resource_harvester", AnimalResourceHarvesterTile.class, Material.ROCK, 400, 20);
+        super("animal_resource_harvester", AnimalResourceHarvesterTile.class, Material.ROCK, 400, 20, RangeType.FRONT, 3, 1, false);
     }
 
     public void createRecipe() {

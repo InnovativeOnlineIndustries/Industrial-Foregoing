@@ -13,10 +13,10 @@ import net.ndrei.teslacorelib.items.MachineCaseItem;
 
 import java.util.List;
 
-public class CropEnrichMaterialInjectorBlock extends CustomOrientedBlock<CropEnrichMaterialInjectorTile> {
+public class CropEnrichMaterialInjectorBlock extends CustomAreaOrientedBlock<CropEnrichMaterialInjectorTile> {
 
     public CropEnrichMaterialInjectorBlock() {
-        super("crop_enrich_material_injector", CropEnrichMaterialInjectorTile.class, Material.ROCK, 400, 40);
+        super("crop_enrich_material_injector", CropEnrichMaterialInjectorTile.class, Material.ROCK, 400, 40, RangeType.FRONT, 1, 0, true);
     }
 
     public void createRecipe() {

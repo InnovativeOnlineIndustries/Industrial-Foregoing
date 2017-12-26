@@ -9,9 +9,7 @@ import com.buuz135.industrial.utils.WorkUtils;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.item.EnumDyeColor;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.AxisAlignedBB;
-import net.minecraft.util.math.BlockPos;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.IFluidTank;
 import net.minecraftforge.items.ItemStackHandler;
@@ -26,7 +24,7 @@ public class MobSlaughterFactoryTile extends WorkingAreaElectricMachine {
     private IFluidTank outPink;
 
     public MobSlaughterFactoryTile() {
-        super(MobSlaughterFactoryTile.class.getName().hashCode(), 2, 1, false);
+        super(MobSlaughterFactoryTile.class.getName().hashCode());
     }
 
     @Override
@@ -34,13 +32,6 @@ public class MobSlaughterFactoryTile extends WorkingAreaElectricMachine {
         super.initializeInventories();
         outMeat = this.addFluidTank(FluidsRegistry.MEAT, 8000, EnumDyeColor.BROWN, "Meat tank", new BoundingRectangle(46, 25, 18, 54));
         outPink = this.addSimpleFluidTank(8000, "Pink Slime Tank", EnumDyeColor.PINK, 46 + 20, 25, FluidTankType.OUTPUT, fluidStack -> false, fluidStack -> true);
-    }
-
-    @Override
-    public AxisAlignedBB getWorkingArea() {
-        EnumFacing f = this.getFacing().getOpposite();
-        BlockPos corner1 = new BlockPos(0, 0, 0).offset(f, getRadius() + 1).offset(EnumFacing.UP, getHeight());
-        return new AxisAlignedBB(this.pos.getX(), this.pos.getY(), this.pos.getZ(), this.pos.getX() + 1, this.pos.getY() + 1, this.pos.getZ() + 1).grow(getRadius(), getHeight(), getRadius()).offset(corner1);
     }
 
     @Override

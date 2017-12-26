@@ -16,9 +16,7 @@ import net.minecraft.entity.item.EntityXPOrb;
 import net.minecraft.item.EnumDyeColor;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.DamageSource;
-import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.AxisAlignedBB;
-import net.minecraft.util.math.BlockPos;
 import net.minecraftforge.common.util.FakePlayer;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.IFluidTank;
@@ -35,7 +33,7 @@ public class MobRelocatorTile extends WorkingAreaElectricMachine implements IAcc
     private ItemStackHandler outItems;
 
     public MobRelocatorTile() {
-        super(MobRelocatorTile.class.getName().hashCode(), 2, 1, false);
+        super(MobRelocatorTile.class.getName().hashCode());
     }
 
     @Override
@@ -97,13 +95,6 @@ public class MobRelocatorTile extends WorkingAreaElectricMachine implements IAcc
         return hasWorked.get() ? 1 : 0;
     }
 
-
-    @Override
-    public AxisAlignedBB getWorkingArea() {
-        EnumFacing f = this.getFacing().getOpposite();
-        BlockPos corner1 = new BlockPos(0, 0, 0).offset(f, getRadius() + 1).offset(EnumFacing.UP, getHeight());
-        return new AxisAlignedBB(this.pos.getX(), this.pos.getY(), this.pos.getZ(), this.pos.getX() + 1, this.pos.getY() + 1, this.pos.getZ() + 1).grow(getRadius(), getHeight(), getRadius()).offset(corner1);
-    }
 
     @Override
     protected boolean acceptsFluidItem(ItemStack stack) {

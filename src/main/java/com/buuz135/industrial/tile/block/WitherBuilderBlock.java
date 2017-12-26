@@ -14,10 +14,10 @@ import net.ndrei.teslacorelib.items.MachineCaseItem;
 
 import java.util.List;
 
-public class WitherBuilderBlock extends CustomOrientedBlock<WitherBuilderTile> {
+public class WitherBuilderBlock extends CustomAreaOrientedBlock<WitherBuilderTile> {
 
     public WitherBuilderBlock() {
-        super("wither_builder", WitherBuilderTile.class, Material.ROCK, 20000, 500);
+        super("wither_builder", WitherBuilderTile.class, Material.ROCK, 20000, 500, RangeType.UP, 0, 0, false);
         this.setResistance(Float.MAX_VALUE);
     }
 

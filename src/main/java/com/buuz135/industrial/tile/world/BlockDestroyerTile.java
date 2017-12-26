@@ -1,6 +1,5 @@
 package com.buuz135.industrial.tile.world;
 
-import com.buuz135.industrial.IndustrialForegoing;
 import com.buuz135.industrial.tile.CustomColoredItemHandler;
 import com.buuz135.industrial.tile.WorkingAreaElectricMachine;
 import com.buuz135.industrial.utils.BlockUtils;
@@ -12,11 +11,8 @@ import net.minecraft.item.EnumDyeColor;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.tileentity.TileEntityShulkerBox;
-import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IWorldNameable;
-import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.event.world.BlockEvent;
 import net.minecraftforge.items.ItemHandlerHelper;
 import net.minecraftforge.items.ItemStackHandler;
 
@@ -28,7 +24,7 @@ public class BlockDestroyerTile extends WorkingAreaElectricMachine {
     private ItemStackHandler outItems;
 
     public BlockDestroyerTile() {
-        super(BlockDestroyerTile.class.getName().hashCode(), 0, 0, true);
+        super(BlockDestroyerTile.class.getName().hashCode());
     }
 
     @Override
@@ -55,10 +51,6 @@ public class BlockDestroyerTile extends WorkingAreaElectricMachine {
         this.addInventoryToStorage(outItems, "block_destroyer_out");
     }
 
-    @Override
-    public AxisAlignedBB getWorkingArea() {
-        return new AxisAlignedBB(this.pos.getX(), this.pos.getY(), this.pos.getZ(), this.pos.getX() + 1, this.pos.getY() + 1, this.pos.getZ() + 1).offset(new BlockPos(0, 0, 0).offset(this.getFacing().getOpposite()));
-    }
 
     @Override
     public float work() {

@@ -23,10 +23,10 @@ import net.ndrei.teslacorelib.items.MachineCaseItem;
 import java.util.List;
 import java.util.Random;
 
-public class HydratorBlock extends CustomOrientedBlock<HydratorTile> {
+public class HydratorBlock extends CustomAreaOrientedBlock<HydratorTile> {
 
     public HydratorBlock() {
-        super("hydrator", HydratorTile.class, Material.ROCK, 1000, 10);
+        super("hydrator", HydratorTile.class, Material.ROCK, 1000, 10, RangeType.UP, 2, 0, false);
     }
 
     @Override

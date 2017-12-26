@@ -12,7 +12,6 @@ import net.minecraft.item.ItemDye;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumHand;
-import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraftforge.common.util.FakePlayer;
 import net.minecraftforge.items.ItemStackHandler;
@@ -28,7 +27,7 @@ public class CropEnrichMaterialInjectorTile extends WorkingAreaElectricMachine {
 
 
     public CropEnrichMaterialInjectorTile() {
-        super(CropEnrichMaterialInjectorTile.class.getName().hashCode(), 1, 0, true);
+        super(CropEnrichMaterialInjectorTile.class.getName().hashCode());
         pointer = 0;
     }
 
@@ -79,13 +78,6 @@ public class CropEnrichMaterialInjectorTile extends WorkingAreaElectricMachine {
         return 1;
     }
 
-    @Override
-    public AxisAlignedBB getWorkingArea() {
-        BlockPos corner1 = new BlockPos(0, 0, 0).offset(this.getFacing().getOpposite(), getRadius() + 1);
-        return new AxisAlignedBB(this.pos.getX(), this.pos.getY(), this.pos.getZ(), this.pos.getX() + 1, this.pos.getY() + 1, this.pos.getZ() + 1).offset(corner1).grow(getRadius(), 0, getRadius());
-    }
-
-
     private ItemStack getFirstItem() {
         for (int i = 0; i < inFert.getSlots(); ++i)
             if (!inFert.getStackInSlot(i).isEmpty()) return inFert.getStackInSlot(i);
@@ -108,7 +100,6 @@ public class CropEnrichMaterialInjectorTile extends WorkingAreaElectricMachine {
 
     public boolean isValidFertilizer(ItemStack stack) {
         if (stack.getItem().getRegistryName().toString().equals("forestry:fertilizer_compound")) return true;
-
         return (stack.getItem().equals(Items.DYE) && stack.getMetadata() == 15) || stack.getItem().equals(ItemRegistry.fertilizer);
     }
 

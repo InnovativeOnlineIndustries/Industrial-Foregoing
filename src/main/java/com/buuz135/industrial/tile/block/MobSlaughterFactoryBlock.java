@@ -16,12 +16,12 @@ import net.ndrei.teslacorelib.items.MachineCaseItem;
 import java.util.List;
 
 public class
-MobSlaughterFactoryBlock extends CustomOrientedBlock<MobSlaughterFactoryTile> {
+MobSlaughterFactoryBlock extends CustomAreaOrientedBlock<MobSlaughterFactoryTile> {
 
     private float meatValue;
 
     public MobSlaughterFactoryBlock() {
-        super("mob_slaughter_factory", MobSlaughterFactoryTile.class, Material.ROCK, 1000, 40);
+        super("mob_slaughter_factory", MobSlaughterFactoryTile.class, Material.ROCK, 1000, 40, RangeType.FRONT, 3, 2, false);
     }
 
     @Override

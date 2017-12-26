@@ -12,10 +12,10 @@ import net.ndrei.teslacorelib.items.MachineCaseItem;
 
 import java.util.List;
 
-public class AnimalIndependenceSelectorBlock extends CustomOrientedBlock<AnimalIndependenceSelectorTile> {
+public class AnimalIndependenceSelectorBlock extends CustomAreaOrientedBlock<AnimalIndependenceSelectorTile> {
 
     public AnimalIndependenceSelectorBlock() {
-        super("animal_independence_selector", AnimalIndependenceSelectorTile.class, Material.ROCK, 20 * 20, 20);
+        super("animal_independence_selector", AnimalIndependenceSelectorTile.class, Material.ROCK, 20 * 20, 20, RangeType.FRONT, 3, 1, false);
     }
 
     public void createRecipe() {

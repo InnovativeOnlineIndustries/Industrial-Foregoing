@@ -16,14 +16,14 @@ import net.ndrei.teslacorelib.items.MachineCaseItem;
 import java.util.List;
 
 
-public class AnimalByproductRecolectorBlock extends CustomOrientedBlock<AnimalByproductRecolectorTile> {
+public class AnimalByproductRecolectorBlock extends CustomAreaOrientedBlock<AnimalByproductRecolectorTile> {
 
     private int sewageAdult;
     private int sewageBaby;
     private int maxSludgeOperation;
 
     public AnimalByproductRecolectorBlock() {
-        super("animal_byproduct_recolector", AnimalByproductRecolectorTile.class, Material.ROCK, 40, 2);
+        super("animal_byproduct_recolector", AnimalByproductRecolectorTile.class, Material.ROCK, 40, 2, RangeType.UP, 0, 0, true);
     }
 
     @Override
