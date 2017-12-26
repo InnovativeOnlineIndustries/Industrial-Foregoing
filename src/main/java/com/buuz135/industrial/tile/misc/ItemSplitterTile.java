@@ -48,6 +48,7 @@ public class ItemSplitterTile extends CustomSidedTileEntity implements IHasDispl
 
     @Override
     protected void innerUpdate() {
+        if (this.world.isRemote) return;
         if (++tick <= 4) return;
         for (EnumFacing facing : this.getSideConfig().getSidesForColor(EnumDyeColor.ORANGE)) {
             BlockPos side = this.pos.offset(facing);
@@ -57,15 +58,24 @@ public class ItemSplitterTile extends CustomSidedTileEntity implements IHasDispl
                 for (int i = 0; i < handler.getSlots(); ++i) {
                     if (!handler.getStackInSlot(i).isEmpty() && (handler.getStackInSlot(i).getCount() >= size || handler.getStackInSlot(i).getCount() >= handler.getStackInSlot(i).getMaxStackSize()))
                         continue;
-                    ItemStack posible = getStack(handler.getStackInSlot(i));
-                    if (!posible.isEmpty()) {
-                        ItemStack def = posible.copy();
-                        def.setCount(1);
-                        def = handler.insertItem(i, def, false);
-                        if (def.isEmpty()) posible.shrink(1);
-                        else continue;
-                        break;
+                    ItemStack handlerStack = handler.getStackInSlot(i);
+                    ItemStack posible = ItemStack.EMPTY;
+                    boolean hasWorked = false;
+                    for (int x = 0; x < input.getSlots(); ++x) {
+                        if (!input.getStackInSlot(x).isEmpty() && (handlerStack.isEmpty() || input.getStackInSlot(x).isItemEqual(handlerStack))) {
+                            posible = input.getStackInSlot(x);
+                            if (!posible.isEmpty()) {
+                                ItemStack def = posible.copy();
+                                def.setCount(1);
+                                def = handler.insertItem(i, def, false);
+                                if (def.isEmpty()) posible.shrink(1);
+                                else continue;
+                                hasWorked = true;
+                                break;
+                            }
+                        }
                     }
+                    if (hasWorked) break;
                 }
             }
         }

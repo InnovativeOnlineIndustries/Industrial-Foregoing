@@ -17,7 +17,7 @@ import java.util.List;
 public class WitherBuilderBlock extends CustomAreaOrientedBlock<WitherBuilderTile> {
 
     public WitherBuilderBlock() {
-        super("wither_builder", WitherBuilderTile.class, Material.ROCK, 20000, 500, RangeType.UP, 0, 0, false);
+        super("wither_builder", WitherBuilderTile.class, Material.ROCK, 20000, 500, RangeType.UP, 1, 1, false);
         this.setResistance(Float.MAX_VALUE);
     }
 
