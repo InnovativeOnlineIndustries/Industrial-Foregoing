@@ -3,9 +3,13 @@ package com.buuz135.industrial.tile.block;
 import com.buuz135.industrial.tile.WorkingAreaElectricMachine;
 import com.buuz135.industrial.utils.WorkUtils;
 import net.minecraft.block.material.Material;
+import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.text.TextFormatting;
+
+import java.util.List;
 
 public abstract class CustomAreaOrientedBlock<T extends WorkingAreaElectricMachine> extends CustomOrientedBlock {
 
@@ -37,6 +41,14 @@ public abstract class CustomAreaOrientedBlock<T extends WorkingAreaElectricMachi
 
     public boolean isAcceptsRangeAddon() {
         return acceptsRangeAddon;
+    }
+
+    @Override
+    public List<String> getTooltip(ItemStack stack) {
+        List<String> tooltips = super.getTooltip(stack);
+        tooltips.add(TextFormatting.GRAY + "* Base Area: " + (width * 2 + 1) + "x" + (height + 1) + " (Width x Height)");
+        if (acceptsRangeAddon) tooltips.add(TextFormatting.GRAY + "* Accepts Range Addon");
+        return tooltips;
     }
 
     public enum RangeType {

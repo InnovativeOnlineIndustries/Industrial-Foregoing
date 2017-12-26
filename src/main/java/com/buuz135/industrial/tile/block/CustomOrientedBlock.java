@@ -8,20 +8,17 @@ import com.buuz135.industrial.config.CustomConfiguration;
 import com.buuz135.industrial.utils.Reference;
 import net.minecraft.block.material.Material;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.text.TextFormatting;
 import net.minecraftforge.common.config.Configuration;
 import net.minecraftforge.fml.common.registry.ForgeRegistries;
 import net.ndrei.teslacorelib.blocks.OrientedBlock;
 import net.ndrei.teslacorelib.tileentities.SidedTileEntity;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 public abstract class CustomOrientedBlock<T extends SidedTileEntity> extends OrientedBlock implements IHasBookDescription, IHasAdvancedTooltip {
 
     public static List<CustomOrientedBlock> blockList = new ArrayList<>();
-    private static List<Class> rangeAcceptingTiles = Arrays.asList(AnimalByproductRecolectorBlock.class, CropEnrichMaterialInjectorBlock.class, CropRecolectorBlock.class, CropSowerBlock.class, EnergyFieldProviderBlock.class, FluidPumpBlock.class);
 
     private boolean workDisabled;
     private boolean enabled;
@@ -78,7 +75,6 @@ public abstract class CustomOrientedBlock<T extends SidedTileEntity> extends Ori
     @Override
     public List<String> getTooltip(ItemStack stack) {
         List<String> tooltips = new ArrayList<>();
-        if (rangeAcceptingTiles.contains(this.getClass())) tooltips.add(TextFormatting.GRAY + "* Accepts Range Addon");
         return tooltips;
     }
 }
