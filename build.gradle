@@ -63,11 +63,6 @@ repositories {
         name = "Progwml6 maven"
         url = "http://dvs1.progwml6.com/files/maven"
     }
-    maven {
-        // location of a maven mirror for JEI files, as a fallback
-        name = "ModMaven"
-        url = "modmaven.k-4u.nl"
-    }
     maven { url 'http://maven.covers1624.net/' }
     maven { // CraftTweaker
         name 'jared maven'
@@ -87,7 +82,7 @@ dependencies {
     // at runtime, use the full JEI jar
     runtime "mezz.jei:jei_1.12.1:${project.jei_version}"
     compile "cofh:RedstoneFlux:1.12-${project.redstoneflux_version}:universal"
-    compileOnly "CraftTweaker2:CraftTweaker2-MC1120-Main:1.12-4.0.10.308"
+    compileOnly "CraftTweaker2:CraftTweaker2-MC1120-Main:1.12-4.0.10.306"
 }
 
 processResources {
