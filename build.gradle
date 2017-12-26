@@ -87,7 +87,7 @@ dependencies {
     // at runtime, use the full JEI jar
     runtime "mezz.jei:jei_1.12.1:${project.jei_version}"
     compile "cofh:RedstoneFlux:1.12-${project.redstoneflux_version}:universal"
-    compileOnly "CraftTweaker2:CraftTweaker2-MC1120-Main:1.12-4.+"
+    compileOnly "CraftTweaker2:CraftTweaker2-MC1120-Main:1.12-4.0.10.308"
 }
 
 processResources {
