@@ -1,3 +1,6 @@
+# 1.6.5 
++ Added the mob in the Mob Imprisonment Tool name for easy searching
+
 # 1.6.4
 + Added config options to disable machines from the game
 + Added config option to not show Book entries in JEI

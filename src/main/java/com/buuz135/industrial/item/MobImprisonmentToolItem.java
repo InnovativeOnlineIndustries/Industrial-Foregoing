@@ -77,7 +77,7 @@ public class MobImprisonmentToolItem extends IFCustomItem {
     public void addInformation(ItemStack stack, @Nullable World worldIn, List<String> tooltip, ITooltipFlag flagIn) {
         super.addInformation(stack, worldIn, tooltip, flagIn);
         if (containsEntity(stack)) {
-            tooltip.add("Mob: " + new TextComponentTranslation(EntityList.getTranslationName(new ResourceLocation(stack.getTagCompound().getString("entity")))).getUnformattedComponentText());
+            tooltip.add("Mob: " + new TextComponentTranslation(EntityList.getTranslationName(new ResourceLocation(getID(stack)))).getUnformattedComponentText());
             tooltip.add("Health: " + stack.getTagCompound().getDouble("Health"));
             if (BlockRegistry.mobDuplicatorBlock.blacklistedEntities.contains(stack.getTagCompound().getString("entity")))
                 tooltip.add(TextFormatting.RED + "Entity blacklisted in the Mob Duplicator");
@@ -98,4 +98,12 @@ public class MobImprisonmentToolItem extends IFCustomItem {
         RecipeUtils.addShapedRecipe(new ItemStack(this), " p ", "pgp", " p ", 'p', ItemRegistry.plastic, 'g',
                 new ItemStack(Items.GHAST_TEAR));
     }
+
+    @Override
+    public String getItemStackDisplayName(ItemStack stack) {
+        if (!containsEntity(stack))
+            return new TextComponentTranslation(super.getUnlocalizedName(stack) + ".name").getUnformattedComponentText();
+        return new TextComponentTranslation(super.getUnlocalizedName(stack) + ".name").getUnformattedComponentText() + " (" + EntityList.getTranslationName(new ResourceLocation(getID(stack))) + ")";
+    }
+
 }
