@@ -152,8 +152,8 @@ public class FluidCrafterTile extends CustomSidedTileEntity {
                 if (fluid != null && !fluids.contains(fluid.getFluid())) fluids.add(fluid.getFluid());
             }
         }
-        fluids.remove(tankFluid);
-        return fluids.size() == 1;
+        if (tankFluid != null) fluids.remove(tankFluid);
+        return fluids.size() <= 1;
     }
 
     public ItemStack[] simulateRecipeEntries(Fluid fluid) {

@@ -1,5 +1,6 @@
 # 1.6.5 
 + Added the mob in the Mob Imprisonment Tool name for easy searching
++ Fixed Fluid Crafter not crafting with only 1 fluid
 
 # 1.6.4
 + Added config options to disable machines from the game
