@@ -8,6 +8,7 @@ text.display.item=物品：
 text.display.empty=空
 text.display.fluid=流体：
 text.display.stacksize=堆叠数量：
+text.display.filter=当前抽取液体：
 
 tile.industrialforegoing.petrified_fuel_generator.name=火力发电机
 tile.industrialforegoing.enchantment_refiner.name=附魔物品分拣机
@@ -55,6 +56,9 @@ tile.industrialforegoing.item_splitter.name=物品分配器
 tile.industrialforegoing.protein_reactor.name=蛋白质反应器
 tile.industrialforegoing.protein_generator.name=蛋白质发电机
 tile.industrialforegoing.hydrator.name=水化器
+tile.industrialforegoing.wither_builder.name=凋灵生成器
+tile.industrialforegoing.fluid_pump.name=流体泵
+tile.industrialforegoing.fluid_crafter.name=流体合成器
 
 entity.pink_slime.name=粉红史莱姆
 
@@ -83,6 +87,7 @@ item.industrialforegoing_machinehull.name=机械外壳
 item.industrialforegoing_straw.name=吸管
 item.industrialforegoing_pink_slime.name=粉红史莱姆球
 item.industrialforegoing.energy_field_addon.name=远程充能附加插件
+item.industrialforegoing.leaf_shearing.name=叶片剪切插件
 item.industrialforegoing_book_manual.name=Industrial Foregoing手册
 
 gui.industrialforegoing.side_config.fuel_input=燃料输入
@@ -125,7 +130,10 @@ gui.industrialforegoing.side_config.trade_input=贸易物品输入
 gui.industrialforegoing.side_config.trade_output=贸易物品输出
 gui.industrialforegoing.side_config.dye_items=染料
 gui.industrialforegoing.side_config.lens_items=镜片
-gui.industrialforegoing.side_config.lens_item=镜片
 gui.industrialforegoing.side_config.filter=物品类型过滤
 gui.industrialforegoing.side_config.change=转化物品
 gui.industrialforegoing.side_config.output_tank=输出液体
+gui.industrialforegoing.side_config.wither_skulls=凋灵骷髅头骨
+gui.industrialforegoing.side_config.soulsand=灵魂沙
+gui.industrialforegoing.side_config.crafting=合成栏
+gui.industrialforegoing.side_config.output=输出
