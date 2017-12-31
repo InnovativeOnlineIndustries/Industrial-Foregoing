@@ -1,3 +1,6 @@
+# 1.6.6
++ Made fake players not mounting entities
+
 # 1.6.5 
 + Added the mob in the Mob Imprisonment Tool name for easy searching
 + Fixed Fluid Crafter not crafting with only 1 fluid
