@@ -1,6 +1,7 @@
 # 1.6.6
 + Made fake players not mounting entities
 + Added a safety check for entities in the Mob Imprisonment Tool
++ Improved Log rendering
 
 # 1.6.5 
 + Added the mob in the Mob Imprisonment Tool name for easy searching

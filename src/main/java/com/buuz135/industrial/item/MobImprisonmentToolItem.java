@@ -76,9 +76,8 @@ public class MobImprisonmentToolItem extends IFCustomItem {
     @Override
     public void addInformation(ItemStack stack, @Nullable World worldIn, List<String> tooltip, ITooltipFlag flagIn) {
         super.addInformation(stack, worldIn, tooltip, flagIn);
-        String entityName = EntityList.getTranslationName(new ResourceLocation(getID(stack)));
-        if (containsEntity(stack) && entityName != null) {
-            tooltip.add("Mob: " + new TextComponentTranslation(entityName).getUnformattedComponentText());
+        if (containsEntity(stack) && EntityList.getTranslationName(new ResourceLocation(getID(stack))) != null) {
+            tooltip.add("Mob: " + new TextComponentTranslation(EntityList.getTranslationName(new ResourceLocation(getID(stack)))).getUnformattedComponentText());
             tooltip.add("Health: " + stack.getTagCompound().getDouble("Health"));
             if (BlockRegistry.mobDuplicatorBlock.blacklistedEntities.contains(stack.getTagCompound().getString("entity")))
                 tooltip.add(TextFormatting.RED + "Entity blacklisted in the Mob Duplicator");
