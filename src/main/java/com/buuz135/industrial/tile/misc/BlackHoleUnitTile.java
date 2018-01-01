@@ -4,12 +4,17 @@ import com.buuz135.industrial.proxy.client.infopiece.BlackHoleInfoPiece;
 import com.buuz135.industrial.proxy.client.infopiece.IHasDisplayStack;
 import com.buuz135.industrial.tile.CustomSidedTileEntity;
 import com.buuz135.industrial.utils.WorkUtils;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.EnumDyeColor;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagInt;
+import net.minecraft.util.EnumActionResult;
 import net.minecraft.util.EnumFacing;
+import net.minecraft.util.EnumHand;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.World;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.IItemHandler;
@@ -21,6 +26,8 @@ import net.ndrei.teslacorelib.inventory.BoundingRectangle;
 import net.ndrei.teslacorelib.inventory.ColoredItemHandler;
 import net.ndrei.teslacorelib.inventory.LockableItemHandler;
 import net.ndrei.teslacorelib.inventory.SyncProviderLevel;
+import net.ndrei.teslacorelib.items.TeslaWrench;
+import org.jetbrains.annotations.NotNull;
 
 import javax.annotation.Nonnull;
 import java.util.List;
@@ -188,6 +195,12 @@ public class BlackHoleUnitTile extends CustomSidedTileEntity implements IHasDisp
 
     public String getDisplayNameUnlocalized() {
         return getItemStack().getUnlocalizedName().endsWith(".name") ? getItemStack().getUnlocalizedName() : getItemStack().getUnlocalizedName() + ".name";
+    }
+
+    @NotNull
+    @Override
+    public EnumActionResult onWrenchUse(@NotNull TeslaWrench wrench, @NotNull EntityPlayer player, @NotNull World world, @NotNull BlockPos pos, @NotNull EnumHand hand, @NotNull EnumFacing facing, float hitX, float hitY, float hitZ) {
+        return EnumActionResult.PASS;
     }
 
     @Override

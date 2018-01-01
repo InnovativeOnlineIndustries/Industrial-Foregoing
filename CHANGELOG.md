@@ -2,6 +2,7 @@
 + Made fake players not mounting entities
 + Added a safety check for entities in the Mob Imprisonment Tool
 + Improved Log rendering
++ Fixed Item Splitter Facing
 
 # 1.6.5 
 + Added the mob in the Mob Imprisonment Tool name for easy searching

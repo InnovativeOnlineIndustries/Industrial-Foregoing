@@ -3,14 +3,22 @@ package com.buuz135.industrial.tile.misc;
 import com.buuz135.industrial.proxy.client.infopiece.BlackHoleInfoPiece;
 import com.buuz135.industrial.proxy.client.infopiece.IHasDisplayStack;
 import com.buuz135.industrial.tile.CustomSidedTileEntity;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Items;
 import net.minecraft.item.EnumDyeColor;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.EnumActionResult;
+import net.minecraft.util.EnumFacing;
+import net.minecraft.util.EnumHand;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.World;
 import net.minecraftforge.fluids.FluidUtil;
 import net.minecraftforge.fluids.IFluidTank;
 import net.ndrei.teslacorelib.gui.BasicTeslaGuiContainer;
 import net.ndrei.teslacorelib.gui.IGuiContainerPiece;
 import net.ndrei.teslacorelib.inventory.FluidTankType;
+import net.ndrei.teslacorelib.items.TeslaWrench;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 
@@ -72,5 +80,11 @@ public class BlackHoleTankTile extends CustomSidedTileEntity implements IHasDisp
     @Override
     protected boolean getShowPauseDrawerPiece() {
         return false;
+    }
+
+    @NotNull
+    @Override
+    public EnumActionResult onWrenchUse(@NotNull TeslaWrench wrench, @NotNull EntityPlayer player, @NotNull World world, @NotNull BlockPos pos, @NotNull EnumHand hand, @NotNull EnumFacing facing, float hitX, float hitY, float hitZ) {
+        return EnumActionResult.PASS;
     }
 }
