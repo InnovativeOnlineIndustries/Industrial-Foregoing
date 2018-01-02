@@ -10,7 +10,7 @@ public class WorldTickHandler {
 
     @SubscribeEvent
     public void onWorldTick(TickEvent.WorldTickEvent event) {
-        if (event.type == TickEvent.Type.WORLD && tick >= 20) {
+        if (event.type == TickEvent.Type.WORLD && tick >= 40) {
             TreeFluidExtractorTile.WoodLodProgress.woodLodProgressList.stream().filter(woodLodProgress -> woodLodProgress.getProgress() > 0).forEach(woodLodProgress -> woodLodProgress.getWorld().sendBlockBreakProgress(woodLodProgress.getBreakID(), woodLodProgress.getBlockPos(), woodLodProgress.getProgress() - 1));
             tick = 0;
         }
