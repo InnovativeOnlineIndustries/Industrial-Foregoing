@@ -27,7 +27,7 @@ public class PetrifiedBurnTimeWrapper implements IRecipeWrapper {
 
     @Override
     public void drawInfo(Minecraft minecraft, int recipeWidth, int recipeHeight, int mouseX, int mouseY) {
-        minecraft.fontRenderer.drawString("Power: " + PetrifiedFuelGeneratorTile.getEnergyProduced(this.burnTime) + " T/tick", 24, 7, Color.gray.getRGB());
+        minecraft.fontRenderer.drawString("Power: " + PetrifiedFuelGeneratorTile.getEnergyProduced(this.burnTime) + " RF/tick", 24, 7, Color.gray.getRGB());
     }
 
     @Override

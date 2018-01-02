@@ -1,7 +1,5 @@
 package com.buuz135.industrial.tile.block;
 
-import com.buuz135.industrial.api.book.IPage;
-import com.buuz135.industrial.api.book.page.PageText;
 import com.buuz135.industrial.api.plant.PlantRecollectable;
 import com.buuz135.industrial.book.BookCategory;
 import com.buuz135.industrial.config.CustomConfiguration;
@@ -62,13 +60,6 @@ public class CropRecolectorBlock extends CustomAreaOrientedBlock<CropRecolectorT
     @Override
     public BookCategory getCategory() {
         return BookCategory.AGRICULTURE;
-    }
-
-    @Override
-    public List<IPage> getBookDescriptionPages() {
-        List<IPage> pages = super.getBookDescriptionPages();
-        pages.add(0, new PageText("When provided with power it will " + PageText.bold("harvest") + " fully grown crops and chop down trees, this includes pumpkins, melons and nether wart. Each operation will produce a bit of " + PageText.bold("sludge") + " that can be used in the " + PageText.bold("Sludge Refiner") + " to obtain some material. (Having the tank full will " + PageText.bold("not") + " slow the machine)"));
-        return pages;
     }
 
     @Override

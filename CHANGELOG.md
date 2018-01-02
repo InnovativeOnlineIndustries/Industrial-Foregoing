@@ -3,8 +3,9 @@
 + Added a safety check for entities in the Mob Imprisonment Tool
 + Improved Log rendering
 + Fixed Item Splitter Facing
-+ Tooltips now are translatable
++ Tooltips are now translatable
 + Fixed Block Breaker and Block Placer accepting range addons
++ Book entries are now translatable
 
 # 1.6.5 
 + Added the mob in the Mob Imprisonment Tool name for easy searching

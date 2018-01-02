@@ -1,7 +1,5 @@
 package com.buuz135.industrial.tile.block;
 
-import com.buuz135.industrial.api.book.IPage;
-import com.buuz135.industrial.api.book.page.PageText;
 import com.buuz135.industrial.book.BookCategory;
 import com.buuz135.industrial.config.CustomConfiguration;
 import com.buuz135.industrial.proxy.ItemRegistry;
@@ -14,8 +12,6 @@ import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.common.config.Configuration;
 import net.ndrei.teslacorelib.items.MachineCaseItem;
-
-import java.util.List;
 
 public class OreProcessorBlock extends CustomOrientedBlock<OreProcessorTile> {
 
@@ -47,10 +43,5 @@ public class OreProcessorBlock extends CustomOrientedBlock<OreProcessorTile> {
         return BookCategory.RESOURCE_PRODUCTION;
     }
 
-    @Override
-    public List<IPage> getBookDescriptionPages() {
-        List<IPage> pages = super.getBookDescriptionPages();
-        pages.add(0, new PageText("It will break down " + PageText.bold("Silk Touched") + " ores into its drops.\n\nProviding it with " + PageText.bold("Essence") + " break them with fortune(" + PageText.bold(essenceFortune + "") + "mb/level)."));
-        return pages;
-    }
+
 }

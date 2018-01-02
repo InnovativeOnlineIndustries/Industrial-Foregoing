@@ -1,7 +1,5 @@
 package com.buuz135.industrial.tile.block;
 
-import com.buuz135.industrial.api.book.IPage;
-import com.buuz135.industrial.api.book.page.PageText;
 import com.buuz135.industrial.book.BookCategory;
 import com.buuz135.industrial.config.CustomConfiguration;
 import com.buuz135.industrial.proxy.ItemRegistry;
@@ -12,8 +10,6 @@ import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.common.config.Configuration;
 import net.ndrei.teslacorelib.items.MachineCaseItem;
-
-import java.util.List;
 
 
 public class AnimalByproductRecolectorBlock extends CustomAreaOrientedBlock<AnimalByproductRecolectorTile> {
@@ -60,10 +56,4 @@ public class AnimalByproductRecolectorBlock extends CustomAreaOrientedBlock<Anim
         return BookCategory.ANIMAL_HUSBANDRY;
     }
 
-    @Override
-    public List<IPage> getBookDescriptionPages() {
-        List<IPage> pages = super.getBookDescriptionPages();
-        pages.add(0, new PageText("When provided with power it will collect " + PageText.bold("Sewage") + " from the animals in top."));
-        return pages;
-    }
 }

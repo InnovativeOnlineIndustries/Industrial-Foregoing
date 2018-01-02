@@ -1,7 +1,5 @@
 package com.buuz135.industrial.tile.block;
 
-import com.buuz135.industrial.api.book.IPage;
-import com.buuz135.industrial.api.book.page.PageText;
 import com.buuz135.industrial.book.BookCategory;
 import com.buuz135.industrial.proxy.ItemRegistry;
 import com.buuz135.industrial.tile.magic.EnchantmentRefinerTile;
@@ -10,8 +8,6 @@ import net.minecraft.block.material.Material;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import net.ndrei.teslacorelib.items.MachineCaseItem;
-
-import java.util.List;
 
 public class EnchantmentRefinerBlock extends CustomOrientedBlock<EnchantmentRefinerTile> {
 
@@ -32,13 +28,6 @@ public class EnchantmentRefinerBlock extends CustomOrientedBlock<EnchantmentRefi
     @Override
     public BookCategory getCategory() {
         return BookCategory.MAGIC;
-    }
-
-    @Override
-    public List<IPage> getBookDescriptionPages() {
-        List<IPage> pages = super.getBookDescriptionPages();
-        pages.add(0, new PageText("When provided with power and " + PageText.bold("any") + " item it will " + PageText.bold("sort") + " enchanted items from non enchanted items.\n\nEnchanted items will go to the " + PageText.bold("top") + " row and the non enchanted ones will go to the " + PageText.bold("bottom") + " row."));
-        return pages;
     }
 
 }

@@ -1,7 +1,5 @@
 package com.buuz135.industrial.tile.block;
 
-import com.buuz135.industrial.api.book.IPage;
-import com.buuz135.industrial.api.book.page.PageText;
 import com.buuz135.industrial.book.BookCategory;
 import com.buuz135.industrial.proxy.ItemRegistry;
 import com.buuz135.industrial.tile.agriculture.WaterResourcesCollectorTile;
@@ -10,8 +8,6 @@ import net.minecraft.block.material.Material;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import net.ndrei.teslacorelib.items.MachineCaseItem;
-
-import java.util.List;
 
 public class WaterResourcesCollectorBlock extends CustomAreaOrientedBlock<WaterResourcesCollectorTile> {
 
@@ -34,10 +30,4 @@ public class WaterResourcesCollectorBlock extends CustomAreaOrientedBlock<WaterR
         return BookCategory.ANIMAL_HUSBANDRY;
     }
 
-    @Override
-    public List<IPage> getBookDescriptionPages() {
-        List<IPage> pages = super.getBookDescriptionPages();
-        pages.add(0, new PageText("When placed over a pool of " + PageText.bold("3x3") + " pool of water it will automatically " + PageText.bold("fish") + "."));
-        return pages;
-    }
 }

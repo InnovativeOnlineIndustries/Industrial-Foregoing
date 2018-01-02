@@ -3,6 +3,7 @@ package com.buuz135.industrial.tile.block;
 import com.buuz135.industrial.IndustrialForegoing;
 import com.buuz135.industrial.api.book.IPage;
 import com.buuz135.industrial.api.book.page.PageRecipe;
+import com.buuz135.industrial.api.book.page.PageText;
 import com.buuz135.industrial.book.IHasBookDescription;
 import com.buuz135.industrial.config.CustomConfiguration;
 import com.buuz135.industrial.utils.Reference;
@@ -67,6 +68,7 @@ public abstract class CustomOrientedBlock<T extends SidedTileEntity> extends Ori
     @Override
     public List<IPage> getBookDescriptionPages() {
         List<IPage> pages = new ArrayList<>();
+        pages.addAll(PageText.createTranslatedPages("text.book." + getRegistryName().getResourcePath()));
         if (ForgeRegistries.RECIPES.getValue(this.getRegistryName()) != null)
             pages.add(new PageRecipe(this.getRegistryName()));
         return pages;

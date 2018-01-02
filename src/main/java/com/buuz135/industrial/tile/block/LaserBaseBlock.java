@@ -2,7 +2,6 @@ package com.buuz135.industrial.tile.block;
 
 import com.buuz135.industrial.api.book.IPage;
 import com.buuz135.industrial.api.book.page.PageItemList;
-import com.buuz135.industrial.api.book.page.PageText;
 import com.buuz135.industrial.api.recipe.LaserDrillEntry;
 import com.buuz135.industrial.book.BookCategory;
 import com.buuz135.industrial.config.CustomConfiguration;
@@ -11,6 +10,7 @@ import com.buuz135.industrial.tile.world.LaserBaseTile;
 import com.buuz135.industrial.utils.RecipeUtils;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.client.resources.I18n;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
@@ -19,7 +19,6 @@ import net.minecraft.world.World;
 import net.minecraftforge.common.config.Configuration;
 import net.ndrei.teslacorelib.items.MachineCaseItem;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -73,10 +72,8 @@ public class LaserBaseBlock extends CustomOrientedBlock<LaserBaseTile> {
 
     @Override
     public List<IPage> getBookDescriptionPages() {
-        List<IPage> pages = new ArrayList<>();
-        pages.add(new PageText("When fully charged with " + PageText.bold("Laser Drills") + " it will produce a random ore.\n\nYou can increase the chance of producing an ore by adding " + PageText.bold("Laser Lens") + " to it.\n\nYou can decrease the chance of an ore by using an " + PageText.bold("Laser Lens (Inverted)") + ", that will increase the chance of the other ores a bit.\n\n" + PageText.bold("Check JEI for chances.")));
-        pages.addAll(PageItemList.generatePagesFromItemStacks(LaserDrillEntry.LASER_DRILL_ENTRIES.stream().map(LaserDrillEntry::getStack).collect(Collectors.toList()), "Produced ores:"));
-        pages.addAll(super.getBookDescriptionPages());
+        List<IPage> pages = super.getBookDescriptionPages();
+        pages.addAll(PageItemList.generatePagesFromItemStacks(LaserDrillEntry.LASER_DRILL_ENTRIES.stream().map(LaserDrillEntry::getStack).collect(Collectors.toList()), I18n.format("text.book.produced_items")));
         return pages;
     }
 

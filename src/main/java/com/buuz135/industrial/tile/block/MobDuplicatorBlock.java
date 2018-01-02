@@ -1,7 +1,5 @@
 package com.buuz135.industrial.tile.block;
 
-import com.buuz135.industrial.api.book.IPage;
-import com.buuz135.industrial.api.book.page.PageText;
 import com.buuz135.industrial.book.BookCategory;
 import com.buuz135.industrial.config.CustomConfiguration;
 import com.buuz135.industrial.proxy.ItemRegistry;
@@ -49,10 +47,4 @@ public class MobDuplicatorBlock extends CustomAreaOrientedBlock<MobDuplicatorTil
         return BookCategory.MOB;
     }
 
-    @Override
-    public List<IPage> getBookDescriptionPages() {
-        List<IPage> pages = super.getBookDescriptionPages();
-        pages.add(0, new PageText("When provided with power, " + PageText.bold("Essence") + " and any entity in a " + PageText.bold("Mob Imprisonment Tool") + " it will spawn them around it.\n\nIt will " + PageText.bold("count") + " the entities nearby and stop spawning if there are too many."));
-        return pages;
-    }
 }

@@ -1,7 +1,5 @@
 package com.buuz135.industrial.tile.block;
 
-import com.buuz135.industrial.api.book.IPage;
-import com.buuz135.industrial.api.book.page.PageText;
 import com.buuz135.industrial.book.BookCategory;
 import com.buuz135.industrial.config.CustomConfiguration;
 import com.buuz135.industrial.proxy.ItemRegistry;
@@ -13,8 +11,6 @@ import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.common.config.Configuration;
 import net.ndrei.teslacorelib.items.MachineCaseItem;
-
-import java.util.List;
 
 public class PetrifiedFuelGeneratorBlock extends CustomOrientedBlock<PetrifiedFuelGeneratorTile> {
 
@@ -43,13 +39,6 @@ public class PetrifiedFuelGeneratorBlock extends CustomOrientedBlock<PetrifiedFu
     @Override
     public BookCategory getCategory() {
         return BookCategory.GENERATORS;
-    }
-
-    @Override
-    public List<IPage> getBookDescriptionPages() {
-        List<IPage> pages = super.getBookDescriptionPages();
-        pages.add(0, new PageText("When provided with any " + PageText.bold("solid fuel") + " will produce power. The " + PageText.bold("power") + "/tick is decided from it's burn time, the more " + PageText.bold("burn time") + " the fuel has the more " + PageText.bold("power") + "/tick it will produce.\n\nNOTE: All fuels burn the same time."));
-        return pages;
     }
 
 }

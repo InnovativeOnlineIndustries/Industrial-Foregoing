@@ -1,7 +1,5 @@
 package com.buuz135.industrial.tile.block;
 
-import com.buuz135.industrial.api.book.IPage;
-import com.buuz135.industrial.api.book.page.PageText;
 import com.buuz135.industrial.book.BookCategory;
 import com.buuz135.industrial.proxy.ItemRegistry;
 import com.buuz135.industrial.tile.agriculture.AnimalIndependenceSelectorTile;
@@ -31,13 +29,6 @@ public class AnimalIndependenceSelectorBlock extends CustomAreaOrientedBlock<Ani
     @Override
     public BookCategory getCategory() {
         return BookCategory.ANIMAL_HUSBANDRY;
-    }
-
-    @Override
-    public List<IPage> getBookDescriptionPages() {
-        List<IPage> pages = super.getBookDescriptionPages();
-        pages.add(0, new PageText("When provider with power it will move " + PageText.bold("baby") + " animals from the back to the front.\n\nIf " + PageText.bold("Adult Filter") + " is installed it will move adult animals instead of baby animals."));
-        return pages;
     }
 
     @Override
