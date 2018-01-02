@@ -37,6 +37,6 @@ public class BlockCropPlantRecollectable extends PlantRecollectable {
 
     @Override
     public List<String> getRecollectablesNames() {
-        return Arrays.asList(" - Any minecraft style crop");
+        return Arrays.asList("text.tooltip.plant.any");
     }
 }

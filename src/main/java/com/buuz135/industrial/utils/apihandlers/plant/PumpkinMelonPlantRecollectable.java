@@ -7,7 +7,6 @@ import net.minecraft.block.state.IBlockState;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.World;
 
 import java.util.Arrays;
@@ -39,6 +38,6 @@ public class PumpkinMelonPlantRecollectable extends PlantRecollectable {
 
     @Override
     public List<String> getRecollectablesNames() {
-        return Arrays.asList(" - Pumpkin " + TextFormatting.ITALIC + "(No need for replanting)", " - Melon " + TextFormatting.ITALIC + "(No need for replanting)");
+        return Arrays.asList("text.tooltip.plant.pumpkin", "text.tooltip.plant.melon");
     }
 }

@@ -16,7 +16,7 @@ import java.util.List;
 public class BlockDestroyerBlock extends CustomAreaOrientedBlock<BlockDestroyerTile> {
 
     public BlockDestroyerBlock() {
-        super("block_destroyer", BlockDestroyerTile.class, Material.ROCK, 100, 20, RangeType.FRONT, 0, 0, true);
+        super("block_destroyer", BlockDestroyerTile.class, Material.ROCK, 100, 20, RangeType.FRONT, 0, 0, false);
     }
 
     public void createRecipe() {

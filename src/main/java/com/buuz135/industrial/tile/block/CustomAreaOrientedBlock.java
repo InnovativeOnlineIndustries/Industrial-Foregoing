@@ -7,7 +7,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.text.TextFormatting;
+import net.minecraft.util.text.TextComponentTranslation;
 
 import java.util.List;
 
@@ -46,8 +46,9 @@ public abstract class CustomAreaOrientedBlock<T extends WorkingAreaElectricMachi
     @Override
     public List<String> getTooltip(ItemStack stack) {
         List<String> tooltips = super.getTooltip(stack);
-        tooltips.add(TextFormatting.GRAY + "* Base Area: " + (width * 2 + 1) + "x" + (height + 1) + " (Width x Height)");
-        if (acceptsRangeAddon) tooltips.add(TextFormatting.GRAY + "* Accepts Range Addon");
+        tooltips.add(new TextComponentTranslation("text.tooltip.range").getFormattedText().replace("{0}", "" + (width * 2 + 1)).replace("{1}", (height + 1) + ""));
+        if (acceptsRangeAddon)
+            tooltips.add(new TextComponentTranslation("text.tooltip.accepts_range_addons").getFormattedText());
         return tooltips;
     }
 

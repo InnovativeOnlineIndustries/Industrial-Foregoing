@@ -8,6 +8,7 @@ import com.buuz135.industrial.tile.agriculture.AnimalIndependenceSelectorTile;
 import com.buuz135.industrial.utils.RecipeUtils;
 import net.minecraft.block.material.Material;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.text.TextComponentTranslation;
 import net.ndrei.teslacorelib.items.MachineCaseItem;
 
 import java.util.List;
@@ -42,7 +43,7 @@ public class AnimalIndependenceSelectorBlock extends CustomAreaOrientedBlock<Ani
     @Override
     public List<String> getTooltip(ItemStack stack) {
         List<String> t = super.getTooltip(stack);
-        t.add("* Accepts Adult Filters");
+        t.add(new TextComponentTranslation("text.tooltip.adult_filter").getFormattedText());
         return t;
     }
 }

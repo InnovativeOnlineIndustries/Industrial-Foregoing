@@ -17,7 +17,7 @@ import java.util.List;
 public class BlockPlacerBlock extends CustomAreaOrientedBlock<BlockPlacerTile> {
 
     public BlockPlacerBlock() {
-        super("block_placer", BlockPlacerTile.class, Material.ROCK, 100, 20, RangeType.FRONT, 0, 0, true);
+        super("block_placer", BlockPlacerTile.class, Material.ROCK, 100, 20, RangeType.FRONT, 0, 0, false);
     }
 
     public void createRecipe() {

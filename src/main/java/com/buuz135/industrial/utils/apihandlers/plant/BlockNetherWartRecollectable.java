@@ -37,6 +37,6 @@ public class BlockNetherWartRecollectable extends PlantRecollectable {
 
     @Override
     public List<String> getRecollectablesNames() {
-        return Arrays.asList(" - Nether wart");
+        return Arrays.asList("text.tooltip.plant.nether_wart");
     }
 }

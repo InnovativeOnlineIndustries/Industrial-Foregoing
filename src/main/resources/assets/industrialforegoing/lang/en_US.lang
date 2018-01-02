@@ -10,6 +10,22 @@ text.display.fluid=Fluid:
 text.display.stacksize=Stack Size:
 text.display.filter=Filter:
 
+text.tooltip.hold_shift=Hold §e§oShift §7for Details
+text.tooltip.accepts_range_addons=* Accepts Range Addon
+text.tooltip.range=* Base Area: {0}x{1} (Width x Height)
+text.tooltip.adult_filter=* Accepts Adult Filters
+text.tooltip.leaf_shearing_addon=* Accepts Leaf Shearing Addon
+text.tooltip.can_harvest=* Can harvest:
+text.tooltip.plant.any= - Any Minecraft style crop
+text.tooltip.plant.nether_wart= - Nether Wart
+text.tooltip.plant.chorus= - Chorus Plant
+text.tooltip.plant.sugar_cane= - Sugar cane §o(No need for replanting)
+text.tooltip.plant.cactus= - Cactus §o(No need for replanting)
+text.tooltip.plant.melon= - Melon §o(No need for replanting)
+text.tooltip.plant.pumpkin= - Pumpkin §o(No need for replanting)
+text.tooltip.plant.any_tree= - Any Minecraft style tree
+text.tooltip.plant.slime_tree= - Tinker's construct slime trees
+
 tile.industrialforegoing.petrified_fuel_generator.name=Petrified Fuel Generator
 tile.industrialforegoing.enchantment_refiner.name=Enchantment Sorter
 tile.industrialforegoing.enchantment_extractor.name=Enchantment Extractor

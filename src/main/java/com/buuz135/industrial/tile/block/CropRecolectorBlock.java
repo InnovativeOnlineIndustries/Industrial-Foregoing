@@ -2,6 +2,7 @@ package com.buuz135.industrial.tile.block;
 
 import com.buuz135.industrial.api.book.IPage;
 import com.buuz135.industrial.api.book.page.PageText;
+import com.buuz135.industrial.api.plant.PlantRecollectable;
 import com.buuz135.industrial.book.BookCategory;
 import com.buuz135.industrial.config.CustomConfiguration;
 import com.buuz135.industrial.proxy.ItemRegistry;
@@ -11,6 +12,7 @@ import com.buuz135.industrial.utils.RecipeUtils;
 import net.minecraft.block.material.Material;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraftforge.common.config.Configuration;
 import net.ndrei.teslacorelib.items.MachineCaseItem;
 
@@ -72,9 +74,13 @@ public class CropRecolectorBlock extends CustomAreaOrientedBlock<CropRecolectorT
     @Override
     public List<String> getTooltip(ItemStack stack) {
         List<String> tooltip = super.getTooltip(stack);
-        tooltip.add("* Accepts Leaf Shearing Addon");
-        tooltip.add("* Can harvest: ");
-        IFRegistries.PLANT_RECOLLECTABLES_REGISTRY.getValues().forEach(plantRecollectable -> tooltip.addAll(plantRecollectable.getRecollectablesNames()));
+        tooltip.add(new TextComponentTranslation("text.tooltip.leaf_shearing_addon").getFormattedText());
+        tooltip.add(new TextComponentTranslation("text.tooltip.can_harvest").getFormattedText());
+        for (PlantRecollectable recollectable : IFRegistries.PLANT_RECOLLECTABLES_REGISTRY.getValues()) {
+            for (String string : recollectable.getRecollectablesNames()) {
+                tooltip.add(new TextComponentTranslation(string).getFormattedText());
+            }
+        }
         return tooltip;
     }
 

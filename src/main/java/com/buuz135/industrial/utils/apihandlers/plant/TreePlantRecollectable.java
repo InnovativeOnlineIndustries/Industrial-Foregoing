@@ -68,6 +68,6 @@ public class TreePlantRecollectable extends PlantRecollectable {
 
     @Override
     public List<String> getRecollectablesNames() {
-        return Arrays.asList(" - Any minecraft style tree", " - Tinker's construct slime trees");
+        return Arrays.asList("text.tooltip.plant.any_tree", "text.tooltip.plant.slime_tree");
     }
 }

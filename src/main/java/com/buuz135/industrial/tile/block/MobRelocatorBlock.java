@@ -10,6 +10,7 @@ import com.buuz135.industrial.utils.RecipeUtils;
 import net.minecraft.block.material.Material;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraftforge.common.config.Configuration;
 import net.ndrei.teslacorelib.items.MachineCaseItem;
 
@@ -59,7 +60,7 @@ public class MobRelocatorBlock extends CustomAreaOrientedBlock<MobRelocatorTile>
     @Override
     public List<String> getTooltip(ItemStack stack) {
         List<String> t = super.getTooltip(stack);
-        t.add("* Accepts Adult Filters");
+        t.add(new TextComponentTranslation("text.tooltip.adult_filter").getFormattedText());
         return t;
     }
 }

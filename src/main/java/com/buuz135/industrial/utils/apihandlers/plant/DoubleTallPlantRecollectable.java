@@ -8,7 +8,6 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.World;
 
 import java.util.Arrays;
@@ -47,6 +46,6 @@ public class DoubleTallPlantRecollectable extends PlantRecollectable {
 
     @Override
     public List<String> getRecollectablesNames() {
-        return Arrays.asList(" - Sugar cane " + TextFormatting.ITALIC + "(No need for replanting)", " - Cactus " + TextFormatting.ITALIC + "(No need for replanting)");
+        return Arrays.asList("text.tooltip.plant.sugar_cane", "text.tooltip.plant.cactus");
     }
 }
