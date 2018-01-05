@@ -132,7 +132,7 @@ tile.industrialforegoing.protein_generator.name=Gerador à Proteína
 tile.industrialforegoing.hydrator.name=Hidratador
 tile.industrialforegoing.wither_builder.name=Montador de Whiters
 tile.industrialforegoing.fluid_pump.name=Bomba de Flúidos
-tile.industrialforegoing.fluid_crafter.name=Fabricado com Fluidos
+tile.industrialforegoing.fluid_crafter.name=Fabricador com Fluidos
 
 entity.pink_slime.name=Slime Rosa
 
