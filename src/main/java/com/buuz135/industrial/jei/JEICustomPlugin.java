@@ -195,9 +195,10 @@ public class JEICustomPlugin implements IModPlugin {
     }
 
     public void findAllStoneWorkOutputs(NonNullList<ItemStack> stacks, ItemStack last, int deep) {
+        if (last.isEmpty()) return;
         for (MaterialStoneWorkFactoryTile.Mode mode : MaterialStoneWorkFactoryTile.Mode.values()) {
             ItemStack out = getStoneWorkOutputFrom(last, mode);
-            if (stacks.stream().noneMatch(stack -> stack.isItemEqual(out))) stacks.add(out);
+            if (!out.isEmpty() && stacks.stream().noneMatch(stack -> stack.isItemEqual(out))) stacks.add(out);
             if (deep < 3) findAllStoneWorkOutputs(stacks, out, deep + 1);
         }
     }
