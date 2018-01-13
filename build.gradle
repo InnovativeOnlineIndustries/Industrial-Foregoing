@@ -47,17 +47,19 @@ minecraft {
 
 repositories {
     mavenCentral()
+    jcenter()
+    maven { name = 'forgelin'; url = 'http://maven.shadowfacts.net' }
     maven { url 'http://maven.epoxide.xyz' }
-    maven { url 'http://maven.ndrei.net' }
+    maven { url 'https://maven.modcrafters.net' }
     maven {
         // location of the maven that hosts JEI files
         name = "Progwml6 maven"
         url = "http://dvs1.progwml6.com/files/maven"
     }
-    maven {
-        // location of a maven mirror for JEI files, as a fallback
-        name = "ModMaven"
-        url = "modmaven.k-4u.nl"
+    maven { url 'http://maven.covers1624.net/' }
+    maven { // CraftTweaker
+        name 'jared maven'
+        url "http://maven.blamejared.com/"
     }
 }
 
