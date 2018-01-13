@@ -33,7 +33,7 @@ compileJava {
 }
 
 minecraft {
-    version = "1.12.2-14.23.1.2555"
+    version = "1.12.2-14.23.1.2577"
     runDir = "run"
 
     // the mappings can be changed at any time, and must be in the following format.
@@ -78,9 +78,9 @@ dependencies {
     }
     compileOnly "org.projectlombok:lombok:1.16.16"
     // compile against the JEI API
-    deobfCompile "mezz.jei:jei_1.12.1:${project.jei_version}:api"
+    deobfCompile "mezz.jei:jei_1.12.2:${project.jei_version}:api"
     // at runtime, use the full JEI jar
-    runtime "mezz.jei:jei_1.12.1:${project.jei_version}"
+    runtime "mezz.jei:jei_1.12.2:${project.jei_version}"
     compile "cofh:RedstoneFlux:1.12-${project.redstoneflux_version}:universal"
     compileOnly "CraftTweaker2:CraftTweaker2-MC1120-Main:1.12-4.0.10.306"
 }
