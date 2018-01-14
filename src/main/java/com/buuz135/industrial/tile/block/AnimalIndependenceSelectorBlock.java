@@ -34,7 +34,7 @@ public class AnimalIndependenceSelectorBlock extends CustomAreaOrientedBlock<Ani
     @Override
     public List<String> getTooltip(ItemStack stack) {
         List<String> t = super.getTooltip(stack);
-        t.add(new TextComponentTranslation("text.tooltip.adult_filter").getFormattedText());
+        t.add(new TextComponentTranslation("text.industrialforegoing.tooltip.adult_filter").getFormattedText());
         return t;
     }
 }

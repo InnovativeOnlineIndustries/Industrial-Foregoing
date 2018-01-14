@@ -1,5 +1,6 @@
 itemGroup.industrialforegoing=Industrial Foregoing
 
+
 text.industrialforegoing.display.burning=T. de Queima:
 text.industrialforegoing.display.producing=Produzindo:
 text.industrialforegoing.display.amount=Quantidade:
@@ -7,6 +8,7 @@ text.industrialforegoing.display.block=Bloco:
 text.industrialforegoing.display.item=Item:
 text.industrialforegoing.display.empty=Vazio
 text.industrialforegoing.display.fluid=Fluido:
+
 text.industrialforegoing.display.stacksize=Tam. do Stack:
 text.industrialforegoing.display.filter=Filtro:
 text.industrialforegoing.display.efficiency=Eficiência:
@@ -108,6 +110,9 @@ text.industrialforegoing.book.range_addon=Aumenta a {área} de trabalho de algum
 text.industrialforegoing.book.straw=O permite {beber} líquidos que estejam no chão ou em tanques. Pode causar diferentes {efeitos}, dependendo do fluido.@L@@L@@L@@L@@L@(Não me responsabiliso por danos que lhe forem causados ao usar o canudo)
 text.industrialforegoing.book.pink_slime=Obtido ao se matar um {Slime Rosa} que são formados ao se colocar Slime Rosa em formato {líquido} no chão.
 text.industrialforegoing.book.upgrades=O Industrial Foregoing não tem melhorias de velocidade, mas você pode usar {Melhorias de Energia} e {Melhorias de Velocidade} do Tesla Core Lib para aumentar a velocidade de suas máquinas. É necessário instalar o nível anterior para que o seguinte seja instalado.
+
+text.industrialforegoing.display.stacksize=Tamanho do Stack:
+text.industrialforegoing.display.filter=Filtro:
 
 tile.industrialforegoing.petrified_fuel_generator.name=Gerador de Combustível Petrificado
 tile.industrialforegoing.enchantment_refiner.name=Organizador de Encantamentos

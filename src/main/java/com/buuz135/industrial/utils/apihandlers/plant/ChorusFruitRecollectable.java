@@ -53,6 +53,6 @@ public class ChorusFruitRecollectable extends PlantRecollectable {
 
     @Override
     public List<String> getRecollectablesNames() {
-        return Arrays.asList("text.tooltip.plant.chorus");
+        return Arrays.asList("text.industrialforegoing.plant.chorus");
     }
 }

@@ -58,7 +58,7 @@ public class BlackHoleTankTile extends CustomSidedTileEntity implements IHasDisp
 
     @Override
     public String getDisplayNameUnlocalized() {
-        return tank.getFluid() == null ? "text.display.empty" : tank.getFluid().getLocalizedName();
+        return tank.getFluid() == null ? "text.industrialforegoing.display.empty" : tank.getFluid().getLocalizedName();
     }
 
     @Override

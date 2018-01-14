@@ -19,7 +19,7 @@ public class IFTooltipEvent {
         Block block = Block.getBlockFromItem(event.getItemStack().getItem());
         if (block instanceof IHasAdvancedTooltip && !((IHasAdvancedTooltip) block).getTooltip(event.getItemStack()).isEmpty()) {
             if (!GuiScreen.isShiftKeyDown()) {
-                event.getToolTip().add(new TextComponentTranslation("text.tooltip.hold_shift").getFormattedText());
+                event.getToolTip().add(new TextComponentTranslation("text.industrialforegoing.tooltip.hold_shift").getFormattedText());
             } else {
                 event.getToolTip().addAll(((IHasAdvancedTooltip) block).getTooltip(event.getItemStack()));
             }

@@ -1,30 +1,30 @@
 itemGroup.industrialforegoing=Industrial Foregoing
 
-text.display.burning=燃烧时间：
-text.display.producing=燃料产能：
-text.display.amount=储量：
-text.display.block=方块：
-text.display.item=物品：
-text.display.empty=空
-text.display.fluid=流体：
-text.display.stacksize=堆叠数量：
-text.display.filter=过滤：
+text.industrialforegoing.display.burning=燃烧时间：
+text.industrialforegoing.display.producing=燃料产能：
+text.industrialforegoing.display.amount=储量：
+text.industrialforegoing.display.block=方块：
+text.industrialforegoing.display.item=物品：
+text.industrialforegoing.display.empty=空
+text.industrialforegoing.display.fluid=流体：
+text.industrialforegoing.display.stacksize=堆叠数量：
+text.industrialforegoing.display.filter=过滤：
 
-text.tooltip.hold_shift=按住§e§oShift §7键获得更多细节
-text.tooltip.accepts_range_addons=* 可以使用范围插件
-text.tooltip.range=* 基础工作区域：{0}x{1}（宽x高）
-text.tooltip.adult_filter=* 可以使用成年生物过滤插件
-text.tooltip.leaf_shearing_addon=* 可以使用叶片剪切插件
-text.tooltip.can_harvest=* 可以收获：
-text.tooltip.plant.any= - 任何Minecraft原版风格的作物
-text.tooltip.plant.nether_wart= - 地狱疣
-text.tooltip.plant.chorus= - 紫颂植物
-text.tooltip.plant.sugar_cane= -甘蔗§o（不需要补种）
-text.tooltip.plant.cactus= - 仙人掌§o（不需要补种）
-text.tooltip.plant.melon= - 西瓜§o（不需要补种）
-text.tooltip.plant.pumpkin= - 南瓜§o（不需要补种）
-text.tooltip.plant.any_tree= - 任何Minecraft原版风格的树
-text.tooltip.plant.slime_tree= - Tinker's construct（匠魂）的史莱姆树
+text.industrialforegoing.tooltip.hold_shift=按住§e§oShift §7键获得更多细节
+text.industrialforegoing.tooltip.accepts_range_addons=* 可以使用范围插件
+text.industrialforegoing.tooltip.range=* 基础工作区域：{0}x{1}（宽x高）
+text.industrialforegoing.tooltip.adult_filter=* 可以使用成年生物过滤插件
+text.industrialforegoing.leaf_shearing_addon=* 可以使用叶片剪切插件
+text.industrialforegoing.can_harvest=* 可以收获：
+text.industrialforegoing.plant.any= - 任何Minecraft原版风格的作物
+text.industrialforegoing.plant.nether_wart= - 地狱疣
+text.industrialforegoing.plant.chorus= - 紫颂植物
+text.industrialforegoing.plant.sugar_cane= -甘蔗§o（不需要补种）
+text.industrialforegoing.plant.cactus= - 仙人掌§o（不需要补种）
+text.industrialforegoing.plant.melon= - 西瓜§o（不需要补种）
+text.industrialforegoing.plant.pumpkin= - 南瓜§o（不需要补种）
+text.industrialforegoing.plant.any_tree= - 任何Minecraft原版风格的树
+text.industrialforegoing.plant.slime_tree= - Tinker's construct（匠魂）的史莱姆树
 
 <!-- PAGE FORMAT HELP
   "@L@" -> Adds a new line

@@ -46,6 +46,6 @@ public class DoubleTallPlantRecollectable extends PlantRecollectable {
 
     @Override
     public List<String> getRecollectablesNames() {
-        return Arrays.asList("text.tooltip.plant.sugar_cane", "text.tooltip.plant.cactus");
+        return Arrays.asList("text.industrialforegoing.plant.sugar_cane", "text.industrialforegoing.plant.cactus");
     }
 }

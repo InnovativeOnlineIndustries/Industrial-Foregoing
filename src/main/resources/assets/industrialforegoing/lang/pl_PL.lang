@@ -1,12 +1,12 @@
 itemGroup.industrialforegoing=Industrial Foregoing
 
-text.display.burning=Czas spalania:
-text.display.producing=Generuje:
-text.display.amount=Ilość:
-text.display.block=Blok:
-text.display.item=Przedmiot:
-text.display.empty=Puste
-text.display.fluid=Płyn:
+text.industrialforegoing.display.burning=Czas spalania:
+text.industrialforegoing.display.producing=Generuje:
+text.industrialforegoing.display.amount=Ilość:
+text.industrialforegoing.display.block=Blok:
+text.industrialforegoing.display.item=Przedmiot:
+text.industrialforegoing.display.empty=Puste
+text.industrialforegoing.display.fluid=Płyn:
 
 tile.industrialforegoing.petrified_fuel_generator.name=Petrified Fuel Generator
 tile.industrialforegoing.enchantment_refiner.name=Sortownik Zaklęć

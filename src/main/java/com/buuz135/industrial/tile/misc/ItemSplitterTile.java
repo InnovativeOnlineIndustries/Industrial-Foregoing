@@ -93,7 +93,7 @@ public class ItemSplitterTile extends CustomSidedTileEntity implements IHasDispl
     public List<IGuiContainerPiece> getGuiContainerPieces(BasicTeslaGuiContainer<?> container) {
         List<IGuiContainerPiece> pieces = super.getGuiContainerPieces(container);
         pieces.add(new LockedInventoryTogglePiece(18 * 2 + 9, 83, this, EnumDyeColor.BLUE));
-        pieces.add(new ArrowInfoPiece(50, 28, 17, 56, "Decrease stack size") {
+        pieces.add(new ArrowInfoPiece(50, 28, 17, 56, "text.industrialforegoing.button.decrease_stack") {
             @Override
             protected void clicked() {
                 if (TeslaCoreLib.INSTANCE.isClientSide()) {
@@ -101,7 +101,7 @@ public class ItemSplitterTile extends CustomSidedTileEntity implements IHasDispl
                 }
             }
         });
-        pieces.add(new ArrowInfoPiece(156, 28, 33, 56, "Increase stack size") {
+        pieces.add(new ArrowInfoPiece(156, 28, 33, 56, "text.industrialforegoing.button.increase_stack") {
             @Override
             protected void clicked() {
                 if (TeslaCoreLib.INSTANCE.isClientSide()) {
@@ -155,6 +155,6 @@ public class ItemSplitterTile extends CustomSidedTileEntity implements IHasDispl
 
     @Override
     public String getString(int id) {
-        return TextFormatting.DARK_GRAY + new TextComponentTranslation("text.display.stacksize").getFormattedText() + " " + TextFormatting.DARK_GRAY + size;
+        return TextFormatting.DARK_GRAY + new TextComponentTranslation("text.industrialforegoing.display.stacksize").getFormattedText() + " " + TextFormatting.DARK_GRAY + size;
     }
 }

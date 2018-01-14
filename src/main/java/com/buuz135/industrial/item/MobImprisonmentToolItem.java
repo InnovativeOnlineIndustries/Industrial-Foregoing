@@ -105,5 +105,4 @@ public class MobImprisonmentToolItem extends IFCustomItem {
             return new TextComponentTranslation(super.getUnlocalizedName(stack) + ".name").getUnformattedComponentText();
         return new TextComponentTranslation(super.getUnlocalizedName(stack) + ".name").getUnformattedComponentText() + " (" + EntityList.getTranslationName(new ResourceLocation(getID(stack))) + ")";
     }
-
 }

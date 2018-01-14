@@ -16,6 +16,7 @@ import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
+import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraft.world.World;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.ICapabilityProvider;
@@ -61,12 +62,12 @@ public class EnergyFieldAddon extends CustomAddon {
         super.addInformation(stack, worldIn, tooltip, flagIn);
         if (stack.hasCapability(CapabilityEnergy.ENERGY, null)) {
             IEnergyStorage storage = stack.getCapability(CapabilityEnergy.ENERGY, null);
-            tooltip.add("Charge: " + new DecimalFormat().format(storage.getEnergyStored()) + " / " + new DecimalFormat().format(storage.getMaxEnergyStored()));
+            tooltip.add(new TextComponentTranslation("text.industrialforegoing.tooltip.energy_field_right_charge").getUnformattedComponentText() + new DecimalFormat().format(storage.getEnergyStored()) + " / " + new DecimalFormat().format(storage.getMaxEnergyStored()));
             if (getLinkedBlockPos(stack) != null) {
                 BlockPos pos = getLinkedBlockPos(stack);
-                tooltip.add("Linked Pos: x=" + pos.getX() + " y=" + pos.getY() + " z=" + pos.getZ());
+                tooltip.add(new TextComponentTranslation("text.industrialforegoing.tooltip.energy_field_right_linked").getUnformattedComponentText() + " x=" + pos.getX() + " y=" + pos.getY() + " z=" + pos.getZ());
             } else {
-                tooltip.add("Right Click into Energy Field Provider to link.");
+                tooltip.add(new TextComponentTranslation("text.industrialforegoing.tooltip.energy_field_right_click").getUnformattedComponentText());
             }
         }
     }

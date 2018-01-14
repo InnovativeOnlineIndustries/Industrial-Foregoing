@@ -68,7 +68,7 @@ public abstract class CustomOrientedBlock<T extends SidedTileEntity> extends Ori
     @Override
     public List<IPage> getBookDescriptionPages() {
         List<IPage> pages = new ArrayList<>();
-        pages.addAll(PageText.createTranslatedPages("text.book." + getRegistryName().getResourcePath()));
+        pages.addAll(PageText.createTranslatedPages("text.industrialforegoing.book." + getRegistryName().getResourcePath()));
         if (ForgeRegistries.RECIPES.getValue(this.getRegistryName()) != null)
             pages.add(new PageRecipe(this.getRegistryName()));
         return pages;
