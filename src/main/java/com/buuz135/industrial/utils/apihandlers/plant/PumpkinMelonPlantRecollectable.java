@@ -38,6 +38,6 @@ public class PumpkinMelonPlantRecollectable extends PlantRecollectable {
 
     @Override
     public List<String> getRecollectablesNames() {
-        return Arrays.asList("text.tooltip.plant.pumpkin", "text.tooltip.plant.melon");
+        return Arrays.asList("text.industrialforegoing.plant.pumpkin", "text.industrialforegoing.plant.melon");
     }
 }

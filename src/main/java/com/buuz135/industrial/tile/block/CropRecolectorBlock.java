@@ -65,8 +65,8 @@ public class CropRecolectorBlock extends CustomAreaOrientedBlock<CropRecolectorT
     @Override
     public List<String> getTooltip(ItemStack stack) {
         List<String> tooltip = super.getTooltip(stack);
-        tooltip.add(new TextComponentTranslation("text.tooltip.leaf_shearing_addon").getFormattedText());
-        tooltip.add(new TextComponentTranslation("text.tooltip.can_harvest").getFormattedText());
+        tooltip.add(new TextComponentTranslation("text.industrialforegoing.leaf_shearing_addon").getFormattedText());
+        tooltip.add(new TextComponentTranslation("text.industrialforegoing.can_harvest").getFormattedText());
         for (PlantRecollectable recollectable : IFRegistries.PLANT_RECOLLECTABLES_REGISTRY.getValues()) {
             for (String string : recollectable.getRecollectablesNames()) {
                 tooltip.add(new TextComponentTranslation(string).getFormattedText());

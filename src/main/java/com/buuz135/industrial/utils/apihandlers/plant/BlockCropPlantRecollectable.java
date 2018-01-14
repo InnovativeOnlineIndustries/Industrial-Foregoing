@@ -37,6 +37,6 @@ public class BlockCropPlantRecollectable extends PlantRecollectable {
 
     @Override
     public List<String> getRecollectablesNames() {
-        return Arrays.asList("text.tooltip.plant.any");
+        return Arrays.asList("text.industrialforegoing.plant.any");
     }
 }

@@ -155,6 +155,6 @@ public class ItemSplitterTile extends CustomSidedTileEntity implements IHasDispl
 
     @Override
     public String getString(int id) {
-        return TextFormatting.DARK_GRAY + new TextComponentTranslation("text.display.stacksize").getFormattedText() + " " + TextFormatting.DARK_GRAY + size;
+        return TextFormatting.DARK_GRAY + new TextComponentTranslation("text.industrialforegoing.display.stacksize").getFormattedText() + " " + TextFormatting.DARK_GRAY + size;
     }
 }

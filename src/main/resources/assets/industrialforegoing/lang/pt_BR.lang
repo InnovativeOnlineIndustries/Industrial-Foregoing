@@ -1,14 +1,14 @@
 itemGroup.industrialforegoing=Industrial Foregoing
 
-text.display.burning=Tempo de queima:
-text.display.producing=Produzindo:
-text.display.amount=Quantidade:
-text.display.block=Bloco:
-text.display.item=Item:
-text.display.empty=Vazio
-text.display.fluid=Fluido:
-text.display.stacksize=Tamanho do Stack:
-text.display.filter=Filtro:
+text.industrialforegoing.display.burning=Tempo de queima:
+text.industrialforegoing.display.producing=Produzindo:
+text.industrialforegoing.display.amount=Quantidade:
+text.industrialforegoing.display.block=Bloco:
+text.industrialforegoing.display.item=Item:
+text.industrialforegoing.display.empty=Vazio
+text.industrialforegoing.display.fluid=Fluido:
+text.industrialforegoing.display.stacksize=Tamanho do Stack:
+text.industrialforegoing.display.filter=Filtro:
 
 tile.industrialforegoing.petrified_fuel_generator.name=Gerador de Combustível Petrificado
 tile.industrialforegoing.enchantment_refiner.name=Organizador de Encantamentos

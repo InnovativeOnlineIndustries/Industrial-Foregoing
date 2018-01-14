@@ -125,7 +125,7 @@ public class FluidPumpTile extends WorkingAreaElectricMachine {
                 GlStateManager.scale(1, 1, 1);
                 FontRenderer renderer = Minecraft.getMinecraft().fontRenderer;
                 ItemStackUtils.renderItemIntoGUI(fluid == null ? new ItemStack(Items.BUCKET) : FluidUtil.getFilledBucket(new FluidStack(FluidRegistry.getFluid(fluid), 1000)), 34, -5, 7);
-                renderer.drawString(TextFormatting.DARK_GRAY + new TextComponentTranslation("text.display.filter").getUnformattedText(), 0, 0, 0xFFFFFF);
+                renderer.drawString(TextFormatting.DARK_GRAY + new TextComponentTranslation("text.industrialforegoing.display.filter").getUnformattedText(), 0, 0, 0xFFFFFF);
                 GlStateManager.popMatrix();
             }
 
@@ -133,7 +133,7 @@ public class FluidPumpTile extends WorkingAreaElectricMachine {
             public void drawForegroundTopLayer(@NotNull BasicTeslaGuiContainer<?> container, int guiX, int guiY, int mouseX, int mouseY) {
                 super.drawForegroundTopLayer(container, guiX, guiY, mouseX, mouseY);
                 if (isInside(container, mouseX, mouseY))
-                    container.drawTooltip(Arrays.asList(fluid != null ? FluidRegistry.getFluid(fluid).getLocalizedName(new FluidStack(FluidRegistry.getFluid(fluid), 1000)) : new TextComponentTranslation("text.display.empty").getUnformattedText()), mouseX - guiX, mouseY - guiY);
+                    container.drawTooltip(Arrays.asList(fluid != null ? FluidRegistry.getFluid(fluid).getLocalizedName(new FluidStack(FluidRegistry.getFluid(fluid), 1000)) : new TextComponentTranslation("text.industrialforegoing.display.empty").getUnformattedText()), mouseX - guiX, mouseY - guiY);
             }
         });
         return pieces;

@@ -80,8 +80,8 @@ public class BlackHoleTankBlock extends CustomOrientedBlock<BlackHoleTankTile> {
     public List<String> getTooltip(ItemStack stack) {
         List<String> tooltip = super.getTooltip(stack);
         if (stack.hasTagCompound() && FluidRegistry.isFluidRegistered(stack.getTagCompound().getString("FluidName"))) {
-            tooltip.add(new TextComponentTranslation("text.display.fluid").getUnformattedText() + " " + new TextComponentTranslation(FluidRegistry.getFluid(stack.getTagCompound().getString("FluidName")).getUnlocalizedName()).getUnformattedText());
-            tooltip.add(new TextComponentTranslation("text.display.amount").getUnformattedText() + " " + stack.getTagCompound().getInteger("Amount"));
+            tooltip.add(new TextComponentTranslation("text.industrialforegoing.display.fluid").getUnformattedText() + " " + new TextComponentTranslation(FluidRegistry.getFluid(stack.getTagCompound().getString("FluidName")).getUnlocalizedName()).getUnformattedText());
+            tooltip.add(new TextComponentTranslation("text.industrialforegoing.display.amount").getUnformattedText() + " " + stack.getTagCompound().getInteger("Amount"));
         }
         return tooltip;
     }

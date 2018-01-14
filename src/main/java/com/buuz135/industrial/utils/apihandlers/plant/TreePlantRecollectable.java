@@ -68,6 +68,6 @@ public class TreePlantRecollectable extends PlantRecollectable {
 
     @Override
     public List<String> getRecollectablesNames() {
-        return Arrays.asList("text.tooltip.plant.any_tree", "text.tooltip.plant.slime_tree");
+        return Arrays.asList("text.industrialforegoing.plant.any_tree", "text.industrialforegoing.plant.slime_tree");
     }
 }
