@@ -3,6 +3,7 @@ package com.buuz135.industrial.proxy.client.infopiece;
 import com.buuz135.industrial.proxy.client.ClientProxy;
 import com.buuz135.industrial.tile.misc.DyeMixerTile;
 import net.minecraft.item.EnumDyeColor;
+import net.minecraft.util.text.TextComponentTranslation;
 import net.ndrei.teslacorelib.gui.BasicRenderedGuiPiece;
 import net.ndrei.teslacorelib.gui.BasicTeslaGuiContainer;
 
@@ -33,7 +34,7 @@ public class DyeTankInfoPiece extends BasicRenderedGuiPiece {
         super.drawForegroundLayer(container, guiX, guiY, mouseX, mouseY);
         if (isInside(container, mouseX, mouseY)) {
             double amount = getColorAmount() / 300D;
-            container.drawTooltip(Arrays.asList("Dye amount: " + new DecimalFormat("##.##").format(100 * amount) + "%"), mouseX - guiX, mouseY - guiY);
+            container.drawTooltip(Arrays.asList(new TextComponentTranslation("text.industrialforegoing.display.dye_amount").getUnformattedComponentText() + " " + new DecimalFormat("##.##").format(100 * amount) + "%"), mouseX - guiX, mouseY - guiY);
         }
     }
 

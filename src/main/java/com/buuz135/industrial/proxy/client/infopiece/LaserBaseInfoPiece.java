@@ -2,6 +2,7 @@ package com.buuz135.industrial.proxy.client.infopiece;
 
 import com.buuz135.industrial.proxy.client.ClientProxy;
 import com.buuz135.industrial.tile.world.LaserBaseTile;
+import net.minecraft.util.text.TextComponentTranslation;
 import net.ndrei.teslacorelib.gui.BasicRenderedGuiPiece;
 import net.ndrei.teslacorelib.gui.BasicTeslaGuiContainer;
 
@@ -31,7 +32,7 @@ public class LaserBaseInfoPiece extends BasicRenderedGuiPiece {
         super.drawForegroundLayer(container, guiX, guiY, mouseX, mouseY);
         if (isInside(container, mouseX, mouseY)) {
             double eff = (this.tile.getCurrentWork() / (double) this.tile.getMaxWork());
-            container.drawTooltip(Arrays.asList("Work: " + new DecimalFormat("##.##").format(100 * eff) + "%"), mouseX - guiX, mouseY - guiY);
+            container.drawTooltip(Arrays.asList(new TextComponentTranslation("text.industrialforegoing.display.work").getUnformattedComponentText() + " " + new DecimalFormat("##.##").format(100 * eff) + "%"), mouseX - guiX, mouseY - guiY);
         }
     }
 }

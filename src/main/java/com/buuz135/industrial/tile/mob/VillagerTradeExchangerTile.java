@@ -103,7 +103,7 @@ public class VillagerTradeExchangerTile extends CustomElectricMachine {
         List<IGuiContainerPiece> pieces = super.getGuiContainerPieces(container);
         pieces.add(new VillagerTradeExchangerInfoPiece(this));
         pieces.add(new BasicRenderedGuiPiece(54 + 18 + 4, 61, 25, 18, new ResourceLocation(Reference.MOD_ID, "textures/gui/jei.png"), 24, 5));
-        pieces.add(new ArrowInfoPiece(138, 28, 17, 56, "Select previous trade") {
+        pieces.add(new ArrowInfoPiece(138, 28, 17, 56, "text.industrialforegoing.button.decrease_trade") {
             @Override
             protected void clicked() {
                 if (TeslaCoreLib.INSTANCE.isClientSide()) {
@@ -111,7 +111,7 @@ public class VillagerTradeExchangerTile extends CustomElectricMachine {
                 }
             }
         });
-        pieces.add(new ArrowInfoPiece(156, 28, 33, 56, "Select next trade") {
+        pieces.add(new ArrowInfoPiece(156, 28, 33, 56, "text.industrialforegoing.button.increase_trade") {
             @Override
             protected void clicked() {
                 if (TeslaCoreLib.INSTANCE.isClientSide()) {

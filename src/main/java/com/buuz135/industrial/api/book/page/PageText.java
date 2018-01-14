@@ -38,7 +38,7 @@ public class PageText implements IPage {
 
     }
 
-    public static List<PageText> createTranslatedPages(String string, String... params) {
+    public static List<IPage> createTranslatedPages(String string, String... params) {
         String translated = I18n.format(string, params).replaceAll("[{]", HIGHLIGHT.toString()).replaceAll("[}]", COLOR.toString()).replaceAll("@L@", "\n");
         return Arrays.stream(translated.split("(@PAGE@)")).map(PageText::new).collect(Collectors.toList());
     }

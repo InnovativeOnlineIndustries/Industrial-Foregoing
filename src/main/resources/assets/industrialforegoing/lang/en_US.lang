@@ -9,11 +9,29 @@ text.industrialforegoing.display.empty=Empty
 text.industrialforegoing.display.fluid=Fluid:
 text.industrialforegoing.display.stacksize=Stack Size:
 text.industrialforegoing.display.filter=Filter:
+text.industrialforegoing.display.efficiency=Efficiency:
+text.industrialforegoing.display.dye_amount=Dye Amount:
+text.industrialforegoing.display.work=Work:
+text.industrialforegoing.display.no_laser_base=No Laser Base
+
+text.industrialforegoing.button.decrease_stack=Decrease Stack Size
+text.industrialforegoing.button.increase_stack=Increase Stack Size
+text.industrialforegoing.button.decrease_trade=Select Previous Trade
+text.industrialforegoing.button.increase_trade=Select Next Trade
+text.industrialforegoing.button.stone.stopped=Stopped
+text.industrialforegoing.button.stone.furnace=Furnace Mode
+text.industrialforegoing.button.stone.two_craft=2x2 Craft
+text.industrialforegoing.button.stone.three_craft=3x3 Craft
+text.industrialforegoing.button.stone.grind=Grind Mode
 
 text.industrialforegoing.tooltip.hold_shift=Hold §e§oShift §7for Details
 text.industrialforegoing.tooltip.accepts_range_addons=* Accepts Range Addon
 text.industrialforegoing.tooltip.range=* Base Area: {0}x{1} (Width x Height)
 text.industrialforegoing.tooltip.adult_filter=* Accepts Adult Filters
+text.industrialforegoing.tooltip.energy_field_charge=Charge:
+text.industrialforegoing.tooltip.energy_field_linked=Linked Pos:
+text.industrialforegoing.tooltip.energy_field_right_click=Right Click into Energy Field Provider to link
+
 text.industrialforegoing.leaf_shearing_addon=* Accepts Leaf Shearing Addon
 text.industrialforegoing.can_harvest=* Can harvest:
 text.industrialforegoing.plant.any= - Any Minecraft style crop
@@ -83,6 +101,13 @@ text.industrialforegoing.book.water_resources_collector=When placed over a pool 
 text.industrialforegoing.book.wither_builder=When provided with power, {3} Wither Skulls and {4} soulsand, it will completely build the wither spawning structure in the working area.
 text.industrialforegoing.book.accepted_items=Accepted items:
 text.industrialforegoing.book.produced_items=Produced items:
+text.industrialforegoing.book.welcome_manual=Welcome to Industrial Foregoing's Manual!@L@@L@To get started you need to place a Tree Fluid Extractor in front of a log to collect Latex and pump into Latex Processing Unit with some water to get Tiny Rubber. @L@@L@{NOTE: Machines don't auto eject, neither they pull! Machines accept RF, FE, Tesla and Mek power.}
+text.industrialforegoing.book.mob_imprisonment_tool=When right clicked an entity with the item in the hand it will {hold} the entity inside it.
+text.industrialforegoing.book.meat_feeder=When the Meat Feeder is in your {inventory} and has some {Liquid Meat} in it, will automatically {feed} you.@L@@L@It acts like a normal fluid container.
+text.industrialforegoing.book.range_addon=It will increase the working {range} of some machines. Not all of the machines will accept them.
+text.industrialforegoing.book.straw=It allows you to {drink} in world fluids or in tanks. It can cause different {effects} depending on the fluid.@L@@L@@L@@L@@L@(I'm not responsible of the bad effects that the straw can cause)
+text.industrialforegoing.book.pink_slime=Can be obtained by killing a {Pink Slime} that will spawned when placing some {Pink Slime Fluid} in the world.
+text.industrialforegoing.book.upgrades=Industrial Foregoing doesn't have speed upgrades but you can used {Energy Upgrades} and {Speed Upgrades} from Tesla Core Lib to speed up machines. They need the previous tier to be installed to be able to add the next one.
 
 tile.industrialforegoing.petrified_fuel_generator.name=Petrified Fuel Generator
 tile.industrialforegoing.enchantment_refiner.name=Enchantment Sorter

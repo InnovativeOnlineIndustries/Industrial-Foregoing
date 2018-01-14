@@ -2,6 +2,7 @@ package com.buuz135.industrial.proxy.client.infopiece;
 
 import com.buuz135.industrial.proxy.client.ClientProxy;
 import com.buuz135.industrial.tile.generator.AbstractReactorTile;
+import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import net.ndrei.teslacorelib.gui.BasicRenderedGuiPiece;
@@ -36,7 +37,8 @@ public class BioreactorEfficiencyInfoPiece extends BasicRenderedGuiPiece {
         if (isInside(container, mouseX, mouseY)) {
             float eff = this.tile.getEfficiency();
             eff = eff < 0 ? 0 : eff;
-            container.drawTooltip(Arrays.asList("Efficiency: " + new DecimalFormat("##.##").format(100 * eff) + "%", "Producing: " + this.tile.getProducedAmountItem() + "mb/item"), mouseX - guiX, mouseY - guiY);
+            container.drawTooltip(Arrays.asList(new TextComponentTranslation("text.industrialforegoing.display.efficiency").getUnformattedComponentText() + " " + new DecimalFormat("##.##").format(100 * eff) + "%",
+                    new TextComponentTranslation("text.industrialforegoing.display.producing").getUnformattedComponentText() + " " + this.tile.getProducedAmountItem() + "mb/item"), mouseX - guiX, mouseY - guiY);
         }
     }
 }

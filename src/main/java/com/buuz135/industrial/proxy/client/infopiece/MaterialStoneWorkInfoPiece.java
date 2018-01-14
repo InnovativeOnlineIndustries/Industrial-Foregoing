@@ -3,6 +3,7 @@ package com.buuz135.industrial.proxy.client.infopiece;
 import com.buuz135.industrial.proxy.client.ClientProxy;
 import com.buuz135.industrial.tile.world.MaterialStoneWorkFactoryTile;
 import com.buuz135.industrial.utils.ItemStackUtils;
+import net.minecraft.util.text.TextComponentTranslation;
 import net.ndrei.teslacorelib.gui.BasicTeslaGuiContainer;
 import net.ndrei.teslacorelib.gui.ToggleButtonPiece;
 import net.ndrei.teslacorelib.inventory.BoundingRectangle;
@@ -31,7 +32,7 @@ public class MaterialStoneWorkInfoPiece extends ToggleButtonPiece {
     public void drawForegroundTopLayer(BasicTeslaGuiContainer<?> container, int guiX, int guiY, int mouseX, int mouseY) {
         super.drawForegroundTopLayer(container, guiX, guiY, mouseX, mouseY);
         if (super.isInside(container, mouseX, mouseY)) {
-            container.drawTooltip(Arrays.asList(tile.getEntry(id).getValue().getName()), this.getLeft() + 8, this.getTop() + 8);
+            container.drawTooltip(Arrays.asList(new TextComponentTranslation(tile.getEntry(id).getValue().getName()).getUnformattedComponentText()), this.getLeft() + 8, this.getTop() + 8);
         }
     }
 

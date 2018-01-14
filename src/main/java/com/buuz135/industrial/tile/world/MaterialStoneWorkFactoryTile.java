@@ -19,7 +19,6 @@ import net.ndrei.teslacorelib.TeslaCoreLib;
 import net.ndrei.teslacorelib.gui.BasicTeslaGuiContainer;
 import net.ndrei.teslacorelib.gui.IGuiContainerPiece;
 import net.ndrei.teslacorelib.netsync.SimpleNBTMessage;
-import org.lwjgl.Sys;
 
 import java.util.*;
 
@@ -173,7 +172,11 @@ public class MaterialStoneWorkFactoryTile extends CustomElectricMachine {
     }
 
     public enum Mode {
-        NONE(new ItemStack(Blocks.BARRIER), "Stopped"), FURNACE(new ItemStack(Blocks.FURNACE), "Furnace mode"), CRAFT_SMALL(new ItemStack(Blocks.PLANKS), "2x2 Craft mode"), GRIND(new ItemStack(Items.DIAMOND_PICKAXE), "Grind mode"), CRAFT_BIG(new ItemStack(Blocks.CRAFTING_TABLE), "3x3 Craft mode");
+        NONE(new ItemStack(Blocks.BARRIER), "text.industrialforegoing.button.stone.stopped"),
+        FURNACE(new ItemStack(Blocks.FURNACE), "text.industrialforegoing.button.stone.furnace"),
+        CRAFT_SMALL(new ItemStack(Blocks.PLANKS), "text.industrialforegoing.button.stone.two_craft"),
+        GRIND(new ItemStack(Items.DIAMOND_PICKAXE), "text.industrialforegoing.button.stone.grind"),
+        CRAFT_BIG(new ItemStack(Blocks.CRAFTING_TABLE), "text.industrialforegoing.button.stone.three_craft");
 
         @Getter
         private ItemStack itemStack;

@@ -39,7 +39,7 @@ public class PetrifiedFuelInfoPiece extends BasicRenderedGuiPiece {
             renderer.drawString(TextFormatting.DARK_GRAY + new TextComponentTranslation("text.industrialforegoing.display.burning").getFormattedText(), 4, 4, 0xFFFFFF);
             renderer.drawString(TextFormatting.DARK_GRAY + getFormatedTime(timeLeft * 1000), 8, (renderer.FONT_HEIGHT) + 5, 0xFFFFFF);
             renderer.drawString(TextFormatting.DARK_GRAY + new TextComponentTranslation("text.industrialforegoing.display.producing").getFormattedText(), 4, 2 * (renderer.FONT_HEIGHT) + 9, 0xFFFFFF);
-            renderer.drawString(TextFormatting.DARK_GRAY + "" + generatingRate + " T/tick", 8, 3 * (renderer.FONT_HEIGHT) + 10, 0xFFFFFF);
+            renderer.drawString(TextFormatting.DARK_GRAY + "" + generatingRate + " RF/tick", 8, 3 * (renderer.FONT_HEIGHT) + 10, 0xFFFFFF);
             GlStateManager.popMatrix();
         }
     }

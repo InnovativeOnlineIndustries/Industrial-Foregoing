@@ -7,6 +7,7 @@ import com.buuz135.industrial.tile.world.LaserDrillTile;
 import com.buuz135.industrial.utils.BlockUtils;
 import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
+import net.minecraft.util.text.TextComponentTranslation;
 
 import javax.vecmath.Vector3d;
 
@@ -17,7 +18,7 @@ public class LaserDrillSpecialRender<L extends CustomElectricMachine> extends Ti
     @Override
     public void render(LaserDrillTile tile, double x, double y, double z, float partialTicks, int destroyStage, float alpha) {
         if (tile.getLaserBasePos() == null) {
-            drawNameplate(tile, "No Laser Base", x, y, z, 16);
+            drawNameplate(tile, new TextComponentTranslation("text.industrialforegoing.display.no_laser_base").getUnformattedComponentText(), x, y, z, 16);
             return;
         }
         bindTexture(ClientProxy.beacon);
