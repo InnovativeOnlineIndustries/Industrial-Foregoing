@@ -3,6 +3,7 @@ package com.buuz135.industrial.tile.world;
 import com.buuz135.industrial.tile.WorkingAreaElectricMachine;
 import com.buuz135.industrial.utils.BlockUtils;
 import com.buuz135.industrial.utils.ItemStackUtils;
+import com.buuz135.industrial.utils.WorkUtils;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.renderer.GlStateManager;
@@ -30,10 +31,12 @@ import java.util.*;
 public class FluidPumpTile extends WorkingAreaElectricMachine {
 
     private static final String NBT_FLUID = "Fluid";
+    private static final String NBT_WORK = "Work";
 
     private IFluidTank tank;
     private String fluid;
     private Queue<BlockPos> blocks;
+    private boolean isWorkFinished;
 
     public FluidPumpTile() {
         super(FluidPumpTile.class.getName().hashCode());
@@ -43,6 +46,7 @@ public class FluidPumpTile extends WorkingAreaElectricMachine {
     protected void initializeInventories() {
         super.initializeInventories();
         tank = this.addSimpleFluidTank(32000, "output tank", EnumDyeColor.ORANGE, 50, 25, FluidTankType.OUTPUT, fluidStack -> false, fluidStack -> true);
+        isWorkFinished = false;
     }
 
     @Override
@@ -54,12 +58,14 @@ public class FluidPumpTile extends WorkingAreaElectricMachine {
 
     @Override
     public float work() {
+        if (WorkUtils.isDisabled(this.getBlockType()) || isWorkFinished) return 0;
         if (tank.getFluidAmount() + 1000 <= tank.getCapacity()) {
             if (blocks == null) {
                 blocks = new PriorityQueue<>(Comparator.comparingDouble(value -> (this.pos).distanceSq(((BlockPos) value).getX(), this.pos.getY() - 1, ((BlockPos) value).getZ())));
                 BlockUtils.getBlockPosInAABB(getWorkingArea()).stream().filter(pos1 -> !this.world.isOutsideBuildHeight(pos1) && FluidRegistry.lookupFluidForBlock(this.world.getBlockState(pos1).getBlock()) != null && FluidRegistry.lookupFluidForBlock(this.world.getBlockState(pos1).getBlock()).getName().equals(fluid)).forEach(pos1 -> blocks.add(pos1));
             }
             if (blocks.isEmpty()) {
+                isWorkFinished = true;
                 blocks = null;
                 return 0;
             }
@@ -93,6 +99,7 @@ public class FluidPumpTile extends WorkingAreaElectricMachine {
     @Override
     public NBTTagCompound writeToNBT(@NotNull NBTTagCompound compound) {
         NBTTagCompound nbtTagCompound = super.writeToNBT(compound);
+        nbtTagCompound.setBoolean(NBT_WORK, isWorkFinished);
         if (fluid != null) nbtTagCompound.setString(NBT_FLUID, fluid);
         return nbtTagCompound;
     }
@@ -100,6 +107,7 @@ public class FluidPumpTile extends WorkingAreaElectricMachine {
     @Override
     public void readFromNBT(@NotNull NBTTagCompound compound) {
         fluid = null;
+        isWorkFinished = compound.getBoolean(NBT_WORK);
         if (compound.hasKey(NBT_FLUID)) fluid = compound.getString(NBT_FLUID);
         if (fluid != null && !FluidRegistry.isFluidRegistered(fluid)) fluid = null;
         super.readFromNBT(compound);
