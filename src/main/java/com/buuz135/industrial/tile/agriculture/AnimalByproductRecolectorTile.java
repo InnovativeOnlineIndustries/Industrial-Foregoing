@@ -1,5 +1,6 @@
 package com.buuz135.industrial.tile.agriculture;
 
+import com.buuz135.industrial.proxy.BlockRegistry;
 import com.buuz135.industrial.proxy.FluidsRegistry;
 import com.buuz135.industrial.tile.WorkingAreaElectricMachine;
 import com.buuz135.industrial.tile.block.AnimalByproductRecolectorBlock;
@@ -39,7 +40,7 @@ public class AnimalByproductRecolectorTile extends WorkingAreaElectricMachine {
         List<EntityAgeable> animals = this.world.getEntitiesWithinAABB(EntityAgeable.class, area);
         int totalFluidAdded = 0;
         for (EntityAgeable animal : animals) {
-            int toFill = animal.isChild() ? ((AnimalByproductRecolectorBlock) this.getBlockType()).getSewageBaby() : ((AnimalByproductRecolectorBlock) this.getBlockType()).getSewageAdult();
+            int toFill = animal.isChild() ? BlockRegistry.animalByproductRecolectorBlock.getSewageBaby() : BlockRegistry.animalByproductRecolectorBlock.getSewageAdult();
             tank.fill(new FluidStack(FluidsRegistry.SEWAGE, toFill), true);
             totalFluidAdded += toFill;
             if (totalFluidAdded > ((AnimalByproductRecolectorBlock) this.getBlockType()).getMaxSludgeOperation()) {
