@@ -7,6 +7,7 @@ import com.buuz135.industrial.book.BookCategory;
 import com.buuz135.industrial.utils.Reference;
 import net.minecraft.block.Block;
 import net.minecraft.client.gui.GuiButton;
+import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
@@ -30,31 +31,13 @@ public class GUIBookMain extends GUIBookBase {
         }
     }
 
-    @Override
-    public void initGui() {
-        super.initGui();
-        if (block != null) {
-            for (BookCategory bookCategory : BookCategory.values()) {
-                for (ResourceLocation entry : bookCategory.getEntries().keySet()) {
-                    CategoryEntry categoryEntry = bookCategory.getEntries().get(entry);
-                    if (categoryEntry.getDisplay().isItemEqual(new ItemStack(block))) {
-                        this.mc.displayGuiScreen(new GUIBookPage(this, this, categoryEntry));
-                        return;
-                    }
-                }
-            }
-        } else {
-            int i = 0;
-            int renderScale = (this.getGuiXSize() - 40) / 3;
-            for (BookCategory category : BookCategory.values()) {
-                ItemStackButton button = new ItemStackButton(-235 - i, 21 + this.getGuiLeft() + ((i % 3) * renderScale), 15 + this.getGuiTop() + ((i / 3) * (renderScale + 4)), renderScale, renderScale, category.getName(), category.getDisplay());
-                this.buttonList.add(button);
-                categoriesButtons.put(button, category);
-                ++i;
-            }
-            searchButton = new TextureButton(-135, this.getGuiLeft() - 5, this.getGuiTop() + 2, 18, 10, BOOK_EXTRAS, 1, 27, "Search");
-            this.buttonList.add(searchButton);
+    public static ItemStack getCategoryItemStack(BookCategory category) {
+        if (category.getEntries().isEmpty()) return new ItemStack(Blocks.BARRIER);
+        if (!category.getDisplay().isEmpty()) category.getDisplay();
+        for (CategoryEntry entry : category.getEntries().values()) {
+            if (!entry.getDisplay().isEmpty()) return entry.getDisplay();
         }
+        return new ItemStack(Blocks.BARRIER);
     }
 
     @Override
@@ -83,15 +66,30 @@ public class GUIBookMain extends GUIBookBase {
     }
 
     @Override
-    protected void actionPerformed(GuiButton button) throws IOException {
-        if (categoriesButtons.containsKey(button)) {
-            this.mc.displayGuiScreen(new GUIBookCantegoryEntries(this, this, categoriesButtons.get(button)));
-        } else if (button == searchButton) {
-            onBackButton();
+    public void initGui() {
+        super.initGui();
+        if (block != null) {
+            for (BookCategory bookCategory : BookCategory.values()) {
+                for (ResourceLocation entry : bookCategory.getEntries().keySet()) {
+                    CategoryEntry categoryEntry = bookCategory.getEntries().get(entry);
+                    if (categoryEntry.getDisplay().isItemEqual(new ItemStack(block))) {
+                        this.mc.displayGuiScreen(new GUIBookPage(this, this, categoryEntry));
+                        return;
+                    }
+                }
+            }
         } else {
-            super.actionPerformed(button);
+            int i = 0;
+            int renderScale = (this.getGuiXSize() - 40) / 3;
+            for (BookCategory category : BookCategory.values()) {
+                ItemStackButton button = new ItemStackButton(-235 - i, 21 + this.getGuiLeft() + ((i % 3) * renderScale), 15 + this.getGuiTop() + ((i / 3) * (renderScale + 4)), renderScale, renderScale, category.getName(), getCategoryItemStack(category));
+                this.buttonList.add(button);
+                categoriesButtons.put(button, category);
+                ++i;
+            }
+            searchButton = new TextureButton(-135, this.getGuiLeft() - 5, this.getGuiTop() + 2, 18, 10, BOOK_EXTRAS, 1, 27, "Search");
+            this.buttonList.add(searchButton);
         }
-
     }
 
     @Override
@@ -114,5 +112,17 @@ public class GUIBookMain extends GUIBookBase {
         });
     }
 
+    @Override
+    protected void actionPerformed(GuiButton button) throws IOException {
+        if (categoriesButtons.containsKey(button)) {
+            if (categoriesButtons.get(button).getEntries().isEmpty()) return;
+            this.mc.displayGuiScreen(new GUIBookCantegoryEntries(this, this, categoriesButtons.get(button)));
+        } else if (button == searchButton) {
+            onBackButton();
+        } else {
+            super.actionPerformed(button);
+        }
+
+    }
 
 }
