@@ -1,4 +1,4 @@
-# 1.6.7
+# 1.7.0
 + Items with enchantability 0 can't be inserted in som enchanting machines anymore
 + Fixed some casting issues
 + Fluid Pump now stop checking its area when the area is finished once
