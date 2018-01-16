@@ -24,7 +24,6 @@ import java.util.List;
 public class PetrifiedFuelGeneratorTile extends CustomGeneratorMachine {
 
     private ItemStackHandler inStackHandler;
-    private ItemStackHandler invisibleSlot;
     private ItemStack current = ItemStack.EMPTY;
     private int burnTime = 0;
 
@@ -46,7 +45,6 @@ public class PetrifiedFuelGeneratorTile extends CustomGeneratorMachine {
                 PetrifiedFuelGeneratorTile.this.markDirty();
             }
         };
-        this.invisibleSlot = new ItemStackHandler(1);
         super.addInventory(new ColoredItemHandler(this.inStackHandler, EnumDyeColor.GREEN, "Fuel input", new BoundingRectangle(61, 25, 18, 54)) {
             @Override
             public boolean canInsertItem(int slot, ItemStack stack) {
@@ -119,10 +117,6 @@ public class PetrifiedFuelGeneratorTile extends CustomGeneratorMachine {
     @Override
     protected long getEnergyFillRate() {
         return getEnergyProduced(burnTime);
-    }
-
-    public ItemStackHandler getInvisibleSlot() {
-        return invisibleSlot;
     }
 
     public ItemStack getCurrent() {

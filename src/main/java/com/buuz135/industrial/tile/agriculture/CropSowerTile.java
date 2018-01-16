@@ -123,7 +123,7 @@ public class CropSowerTile extends WorkingAreaElectricMachine {
         } else {
             pointer = 0;
         }
-        return 0.2f;
+        return 0.1f;
     }
 
     @Override

@@ -1,9 +1,9 @@
 package com.buuz135.industrial.tile.agriculture;
 
+import com.buuz135.industrial.proxy.BlockRegistry;
 import com.buuz135.industrial.proxy.CommonProxy;
 import com.buuz135.industrial.proxy.FluidsRegistry;
 import com.buuz135.industrial.tile.WorkingAreaElectricMachine;
-import com.buuz135.industrial.tile.block.MobSlaughterFactoryBlock;
 import com.buuz135.industrial.utils.ItemStackUtils;
 import com.buuz135.industrial.utils.WorkUtils;
 import net.minecraft.entity.EntityLiving;
@@ -42,7 +42,7 @@ public class MobSlaughterFactoryTile extends WorkingAreaElectricMachine {
         List<EntityLiving> mobs = this.getWorld().getEntitiesWithinAABB(EntityLiving.class, area);
         if (mobs.size() == 0) return 0;
         EntityLiving mob = mobs.get(this.getWorld().rand.nextInt(mobs.size()));
-        this.outMeat.fill(new FluidStack(FluidsRegistry.MEAT, (int) (mob.getHealth() * ((MobSlaughterFactoryBlock) this.getBlockType()).getMeatValue())), true);
+        this.outMeat.fill(new FluidStack(FluidsRegistry.MEAT, (int) (mob.getHealth() * BlockRegistry.mobSlaughterFactoryBlock.getMeatValue())), true);
         this.outPink.fill(new FluidStack(FluidsRegistry.PINK_SLIME, (int) mob.getHealth()), true);
         mob.setDropItemsWhenDead(false);
         mob.attackEntityFrom(CommonProxy.custom, mob.getMaxHealth());

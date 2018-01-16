@@ -4,10 +4,7 @@ import com.buuz135.industrial.IndustrialForegoing;
 import com.buuz135.industrial.config.CustomConfiguration;
 import com.buuz135.industrial.entity.EntityPinkSlime;
 import com.buuz135.industrial.gui.GuiHandler;
-import com.buuz135.industrial.proxy.event.FakePlayerRideEntityHandler;
-import com.buuz135.industrial.proxy.event.MeatFeederTickHandler;
-import com.buuz135.industrial.proxy.event.MobDeathHandler;
-import com.buuz135.industrial.proxy.event.WorldTickHandler;
+import com.buuz135.industrial.proxy.event.*;
 import com.buuz135.industrial.registry.IFRegistries;
 import com.buuz135.industrial.utils.CraftingUtils;
 import com.buuz135.industrial.utils.RecipeUtils;
@@ -54,6 +51,7 @@ public class CommonProxy {
         MinecraftForge.EVENT_BUS.register(new WorldTickHandler());
         MinecraftForge.EVENT_BUS.register(new PlantRecollectableRegistryHandler());
         MinecraftForge.EVENT_BUS.register(new FakePlayerRideEntityHandler());
+        MinecraftForge.EVENT_BUS.register(new PlantInteractorHarvestDropsHandler());
 
         NetworkRegistry.INSTANCE.registerGuiHandler(IndustrialForegoing.instance, new GuiHandler());
 

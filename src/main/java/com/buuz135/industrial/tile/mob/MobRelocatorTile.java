@@ -2,11 +2,11 @@ package com.buuz135.industrial.tile.mob;
 
 import com.buuz135.industrial.IndustrialForegoing;
 import com.buuz135.industrial.item.addon.AdultFilterAddonItem;
+import com.buuz135.industrial.proxy.BlockRegistry;
 import com.buuz135.industrial.proxy.FluidsRegistry;
 import com.buuz135.industrial.tile.CustomColoredItemHandler;
 import com.buuz135.industrial.tile.IAcceptsAdultFilter;
 import com.buuz135.industrial.tile.WorkingAreaElectricMachine;
-import com.buuz135.industrial.tile.block.MobRelocatorBlock;
 import com.buuz135.industrial.utils.ItemStackUtils;
 import com.buuz135.industrial.utils.WorkUtils;
 import net.minecraft.entity.EntityAgeable;
@@ -65,8 +65,8 @@ public class MobRelocatorTile extends WorkingAreaElectricMachine implements IAcc
     public void protectedUpdate() {
         super.protectedUpdate();
         this.getWorld().getEntitiesWithinAABB(EntityXPOrb.class, getWorkingArea().expand(2, 2, 2)).stream().filter(entityXPOrb -> !entityXPOrb.isDead).forEach(entityXPOrb -> {
-            if (this.outExp.fill(new FluidStack(FluidsRegistry.ESSENCE, (int) (entityXPOrb.getXpValue() * 20 * ((MobRelocatorBlock) this.getBlockType()).getEssenceMultiplier())), false) > 0) {
-                this.outExp.fill(new FluidStack(FluidsRegistry.ESSENCE, (int) (entityXPOrb.getXpValue() * 20 * ((MobRelocatorBlock) this.getBlockType()).getEssenceMultiplier())), true);
+            if (this.outExp.fill(new FluidStack(FluidsRegistry.ESSENCE, (int) (entityXPOrb.getXpValue() * 20 * BlockRegistry.mobRelocatorBlock.getEssenceMultiplier())), false) > 0) {
+                this.outExp.fill(new FluidStack(FluidsRegistry.ESSENCE, (int) (entityXPOrb.getXpValue() * 20 * BlockRegistry.mobRelocatorBlock.getEssenceMultiplier())), true);
             }
             entityXPOrb.setDead();
         });

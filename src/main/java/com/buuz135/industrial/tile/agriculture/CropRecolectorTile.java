@@ -88,7 +88,7 @@ public class CropRecolectorTile extends WorkingAreaElectricMachine {
             operationAmount = 0;
         }
         if (pointer >= blockPos.size()) pointer = 0;
-        return didWork ? 1 : 0.2f;
+        return didWork ? 1 : 0.1f;
     }
 
     @Override

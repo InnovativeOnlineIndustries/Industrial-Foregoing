@@ -3,6 +3,7 @@
 + Fixed some casting issues
 + Fluid Pump now stop checking its area when the area is finished once
 + Fixed Book entries missing if a machines was disabled
++ Added Plant Interactor, is like an autonomous activator and a fruit picker had a baby
 
 # 1.6.6
 + Made fake players not mounting entities

@@ -69,6 +69,8 @@ public class BlockRegistry {
     public static WitherBuilderBlock witherBuilderBlock = new WitherBuilderBlock();
     public static FluidPumpBlock fluidPumpBlock = new FluidPumpBlock();
     public static FluidCrafterBlock fluidCrafterBlock = new FluidCrafterBlock();
+    public static PlantInteractorBlock plantInteractorBlock = new PlantInteractorBlock();
+    private static ItemSplitterBlock itemSplitterBlock = new ItemSplitterBlock();
 
     public static IFCustomFluidBlock BLOCK_ESSENCE = new IFCustomFluidBlock(FluidsRegistry.ESSENCE, Material.WATER);
     public static IFCustomFluidBlock BLOCK_MILK = new IFCustomFluidBlock(FluidsRegistry.MILK, Material.WATER);
@@ -89,8 +91,6 @@ public class BlockRegistry {
         }
     }.setTickRandomly(true);
     public static IFCustomFluidBlock BLOCK_PROTEIN = new IFCustomFluidBlock(FluidsRegistry.PROTEIN, Material.WATER);
-
-    private static ItemSplitterBlock itemSplitterBlock = new ItemSplitterBlock();
 
     public static void createRecipes() {
         CustomOrientedBlock.blockList.forEach(CustomOrientedBlock::createRecipe);

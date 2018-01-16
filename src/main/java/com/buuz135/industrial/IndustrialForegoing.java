@@ -6,6 +6,7 @@ import com.buuz135.industrial.utils.IFFakePlayer;
 import com.buuz135.industrial.utils.Reference;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldServer;
 import net.minecraftforge.common.util.FakePlayer;
@@ -49,6 +50,12 @@ public class IndustrialForegoing {
             return fakePlayer;
         }
         return null;
+    }
+
+    public static FakePlayer getFakePlayer(World world, BlockPos pos) {
+        FakePlayer player = getFakePlayer(world);
+        if (player != null) player.setPositionAndRotation(pos.getX(), pos.getY(), pos.getZ(), 90, 90);
+        return player;
     }
 
     @Mod.EventHandler
