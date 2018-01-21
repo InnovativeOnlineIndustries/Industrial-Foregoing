@@ -74,7 +74,7 @@ public class CropRecolectorTile extends WorkingAreaElectricMachine {
         if (pointer < blockPos.size() && BlockUtils.canBlockBeBroken(this.world, blockPos.get(pointer))) {
             BlockPos pos = blockPos.get(pointer);
             IBlockState state = this.world.getBlockState(blockPos.get(pointer));
-            Optional<PlantRecollectable> recollectable = IFRegistries.PLANT_RECOLLECTABLES_REGISTRY.getValues().stream().sorted(Comparator.comparingInt(PlantRecollectable::getPriority)).filter(iPlantRecollectable -> iPlantRecollectable.canBeHarvested(this.world, pos, state)).findFirst();
+            Optional<PlantRecollectable> recollectable = IFRegistries.PLANT_RECOLLECTABLES_REGISTRY.getValuesCollection().stream().sorted(Comparator.comparingInt(PlantRecollectable::getPriority)).filter(iPlantRecollectable -> iPlantRecollectable.canBeHarvested(this.world, pos, state)).findFirst();
             if (recollectable.isPresent()) {
                 PlantRecollectable plantRecollectable = recollectable.get();
                 ++operationAmount;
