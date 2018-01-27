@@ -1,6 +1,5 @@
 itemGroup.industrialforegoing=Industrial Foregoing
 
-
 text.industrialforegoing.display.burning=T. de Queima:
 text.industrialforegoing.display.producing=Produzindo:
 text.industrialforegoing.display.amount=Quantidade:
@@ -8,7 +7,6 @@ text.industrialforegoing.display.block=Bloco:
 text.industrialforegoing.display.item=Item:
 text.industrialforegoing.display.empty=Vazio
 text.industrialforegoing.display.fluid=Fluido:
-
 text.industrialforegoing.display.stacksize=Tam. do Stack:
 text.industrialforegoing.display.filter=Filtro:
 text.industrialforegoing.display.efficiency=Eficiência:
@@ -65,7 +63,7 @@ text.industrialforegoing.book.black_hole_unit=Armazena até {2,147,483,647} de u
 text.industrialforegoing.book.block_destroyer=Quando com energia, {quebra} qualquer bloco a frente de si e o move ao seu inventário.
 text.industrialforegoing.book.block_placer=Quando com energia, {coloca} em frente de si blocos presentes em seu inventário.
 text.industrialforegoing.book.crop_enrich_material_injector=Quando com energia e fertilizante, o usará em plantas e mudas.@L@@L@Fertilizantes aceitos: {Farinha de Osso}, o fertilizante do {Industrial Foregoing} e o do {Forestry}.
-text.industrialforegoing.book.crop_recolector=Quando com energia, {colhe} plantas crescidas e corta árvores. Incluíndo abóboras, melancias e fungos do nether.@L@@L@Cada o peração produz um pouco de {lodo}, que pode ser usado na {Refinaria de Lodo} para obter materiais aleatórios. (Ter seu tanque interno completamente cheio {não} diminui a velocidade da máquina)
+text.industrialforegoing.book.crop_recolector=Quando com energia, {colhe} plantas crescidas e corta árvores. Incluíndo abóboras, melancias e fungos do nether.@L@@L@Cada operação produz um pouco de {lodo}, que pode ser usado na {Refinaria de Lodo} para obter materiais aleatórios. (Ter seu tanque interno completamente cheio {não} diminui a velocidade da máquina)
 text.industrialforegoing.book.crop_sower=Planta sementes e mudas para serem colhidas no {Colhedor de Plantas}. Você pode {travar} os slots clicando no cadeado. Isso {filtrará} as entradas.@L@@L@O fundo {colorido} representa as partes coloridas no {topo} da máquina, que, por sua vez, são as regiões onde cada coisa será plantada.
 text.industrialforegoing.book.dye_mixer=Produz {corante} de maneira mais eficiente que a fabricação manual.@L@@L@Colocando corantes {vermelho}, {verde} e {azul} encherá seu tanque interno. Ao colocar uma {Lente de Laser} criará corantes da mesma cor da lente.
 text.industrialforegoing.book.enchantment_aplicator=Quando com energia, agirá como uma {bigorna}, mas, ao invés de usar níveis de experiência do jogador, usará {Essência}.
@@ -108,11 +106,9 @@ text.industrialforegoing.book.mob_imprisonment_tool=Ao clicar com o botão direi
 text.industrialforegoing.book.meat_feeder=Quando o injetor de comida líquida estiver em seu {inventário} e tiver {Carne Líquida}, ele o {alimentará} automaticamente.@L@@L@Ele funciona como um contêiner normal de fluidos.
 text.industrialforegoing.book.range_addon=Aumenta a {área} de trabalho de algumas máquinas. Nem todas as máquinas o aceitam.
 text.industrialforegoing.book.straw=O permite {beber} líquidos que estejam no chão ou em tanques. Pode causar diferentes {efeitos}, dependendo do fluido.@L@@L@@L@@L@@L@(Não me responsabiliso por danos que lhe forem causados ao usar o canudo)
-text.industrialforegoing.book.pink_slime=Obtido ao se matar um {Slime Rosa} que são formados ao se colocar Slime Rosa em formato {líquido} no chão.
+text.industrialforegoing.book.pink_slime=Obtido ao se matar um {Slime Rosa}, que são formados ao se colocar Slime Rosa no chão em formato {líquido}.
 text.industrialforegoing.book.upgrades=O Industrial Foregoing não tem melhorias de velocidade, mas você pode usar {Melhorias de Energia} e {Melhorias de Velocidade} do Tesla Core Lib para aumentar a velocidade de suas máquinas. É necessário instalar o nível anterior para que o seguinte seja instalado.
-
-text.industrialforegoing.display.stacksize=Tamanho do Stack:
-text.industrialforegoing.display.filter=Filtro:
+text.industrialforegoing.book.plant_interactor=Quando com energia, esta máquina interage com plantas e frutas (Como um jogador apertando {clique direito} do mouse) para colhê-los e os armazena em seu inventário, ou os joga no chão, caso não possam ser armazenados. @L@@L@{*Também funciona com plantas e frutas do HarvestCraft da Pam por padrão.}
 
 tile.industrialforegoing.petrified_fuel_generator.name=Gerador de Combustível Petrificado
 tile.industrialforegoing.enchantment_refiner.name=Organizador de Encantamentos
@@ -163,6 +159,7 @@ tile.industrialforegoing.hydrator.name=Hidratador
 tile.industrialforegoing.wither_builder.name=Montador de Whiters
 tile.industrialforegoing.fluid_pump.name=Bomba de Flúidos
 tile.industrialforegoing.fluid_crafter.name=Fabricador com Fluidos
+tile.industrialforegoing.plant_interactor.name=Catador de Plantas e Frutas
 
 entity.pink_slime.name=Slime Rosa
 
