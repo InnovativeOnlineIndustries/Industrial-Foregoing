@@ -173,6 +173,7 @@ public class BlackHoleUnitTile extends CustomSidedTileEntity implements IHasDisp
     }
 
     public boolean canInsertItem(ItemStack stack) {
+        if (inItems.getLocked()) return inItems.canInsertItem(0, stack);
         return Integer.MAX_VALUE >= stack.getCount() + amount && (BlackHoleUnitTile.this.stack.isEmpty() || (stack.isItemEqual(this.stack) && (!(stack.hasTagCompound() && this.stack.hasTagCompound()) || stack.getTagCompound().equals(BlackHoleUnitTile.this.stack.getTagCompound()))));
     }
 

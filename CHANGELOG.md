@@ -10,6 +10,7 @@
 + Changed BHTank to fill containers when right clicked
 + Added some oredictionary entries to some items
 + Mob Crusher doesn't void xp orbs if full, instead it will reduce the orb lifespan to 1 minute
++ Fixed BHUnit accepting items that doesn't belong if empty
 
 # 1.7.0
 + Items with enchantability 0 can't be inserted in som enchanting machines anymore
