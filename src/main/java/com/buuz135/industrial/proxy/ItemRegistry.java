@@ -38,7 +38,6 @@ public class ItemRegistry {
         (dryRubber = new IFCustomItem("dryrubber")).register(itemRegistry);
         RecipeUtils.addShapelessRecipe(new ItemStack(dryRubber), new ItemStack(tinyDryRubber), new ItemStack(tinyDryRubber), new ItemStack(tinyDryRubber), new ItemStack(tinyDryRubber), new ItemStack(tinyDryRubber), new ItemStack(tinyDryRubber), new ItemStack(tinyDryRubber), new ItemStack(tinyDryRubber), new ItemStack(tinyDryRubber));
         (plastic = new IFCustomItem("plastic")).register(itemRegistry);
-        OreDictionary.registerOre("itemRubber", plastic);
         GameRegistry.addSmelting(dryRubber, new ItemStack(plastic), 0);
         (fertilizer = new IFCustomItem("fertilizer")).register(itemRegistry);
         (meatFeederItem = new MeatFeederItem()).register(itemRegistry);
@@ -63,5 +62,11 @@ public class ItemRegistry {
         energyFieldAddon.createRecipe();
         bookManualItem.createRecipe();
         leafShearingAddonItem.createRecipe();
+
+        OreDictionary.registerOre("itemRubber", plastic);
+        OreDictionary.registerOre("slimeball", pinkSlime);
+        OreDictionary.registerOre("slimeballPink", pinkSlime);
+        OreDictionary.registerOre("dyeBrown", fertilizer);
+        OreDictionary.registerOre("fertilizer", fertilizer);
     }
 }
