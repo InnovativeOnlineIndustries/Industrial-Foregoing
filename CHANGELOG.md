@@ -7,6 +7,7 @@
 + Improved Animal Feeder code to work properly and more efficient
 + Mob Crusher doesn't void items if full, instead it will reduce the item lifespan to 1 minute
 + Cleared fake player cache on world start so it doesn't stop working in world relog
++ Changed BHTank to fill containers when right clicked
 
 # 1.7.0
 + Items with enchantability 0 can't be inserted in som enchanting machines anymore

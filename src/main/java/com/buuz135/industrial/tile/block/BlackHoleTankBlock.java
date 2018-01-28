@@ -7,17 +7,25 @@ import com.buuz135.industrial.utils.RecipeUtils;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.item.EntityItem;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.EnumFacing;
+import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
+import net.minecraftforge.fluids.FluidActionResult;
 import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fluids.FluidStack;
+import net.minecraftforge.fluids.FluidUtil;
+import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
+import net.minecraftforge.fluids.capability.IFluidHandler;
 import net.ndrei.teslacorelib.items.MachineCaseItem;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.Arrays;
 import java.util.List;
@@ -91,4 +99,24 @@ public class BlackHoleTankBlock extends CustomOrientedBlock<BlackHoleTankTile> {
         return BookCategory.STORAGE;
     }
 
+    @Override
+    public boolean onBlockActivated(@Nullable World worldIn, @Nullable BlockPos pos, @Nullable IBlockState state, @Nullable EntityPlayer playerIn, @Nullable EnumHand hand, @Nullable EnumFacing facing, float hitX, float hitY, float hitZ) {
+        if (playerIn != null && hand != null && worldIn != null && pos != null) {
+            ItemStack stack = playerIn.getHeldItem(hand);
+            if (!stack.isEmpty() && stack.hasCapability(CapabilityFluidHandler.FLUID_HANDLER_ITEM_CAPABILITY, null) && worldIn.getTileEntity(pos) instanceof BlackHoleTankTile) {
+                BlackHoleTankTile tile = (BlackHoleTankTile) worldIn.getTileEntity(pos);
+                FluidActionResult result = FluidUtil.tryFillContainer(stack, (IFluidHandler) tile.getTank(), Integer.MAX_VALUE, playerIn, true);
+                if (result.isSuccess()) {
+                    stack.shrink(1);
+                    if (stack.isEmpty()) {
+                        playerIn.setHeldItem(hand, result.result);
+                    } else {
+                        playerIn.addItemStackToInventory(result.result);
+                    }
+                    return true;
+                }
+            }
+        }
+        return super.onBlockActivated(worldIn, pos, state, playerIn, hand, facing, hitX, hitY, hitZ);
+    }
 }
