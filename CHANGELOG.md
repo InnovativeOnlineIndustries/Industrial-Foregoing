@@ -3,6 +3,7 @@
 + Fixed some NPE in the Fluid Crafter
 + Allowed books in the enchantment factory
 + Added a config option to disable the StoneWork integrations
++ Fixed enchanted items not allowed in the Enchantment Applicator 
 
 # 1.7.0
 + Items with enchantability 0 can't be inserted in som enchanting machines anymore
