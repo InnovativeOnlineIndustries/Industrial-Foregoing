@@ -28,9 +28,9 @@ text.industrialforegoing.tooltip.hold_shift=Segure §e§oShift §7para Detalhes
 text.industrialforegoing.tooltip.accepts_range_addons=* Aceita Addon de Alcance
 text.industrialforegoing.tooltip.range=* Área Base: {0}x{1} (Largura x Altura)
 text.industrialforegoing.tooltip.adult_filter=* Aceita Filtro de Adultos
-text.industrialforegoing.industrialforegoing.tooltip.energy_field_charge=Carga:
-text.industrialforegoing.industrialforegoing.tooltip.energy_field_linked=Posição conectada:
-text.industrialforegoing.industrialforegoing.tooltip.energy_field_right_click=Clique num Provedor de Campo de Energia para Conectar
+text.industrialforegoing.tooltip.energy_field_charge=Carga:
+text.industrialforegoing.tooltip.energy_field_linked=Posição conectada:
+text.industrialforegoing.tooltip.energy_field_right_click=Clique num Provedor de Campo de Energia para Conectar
 
 text.industrialforegoing.tooltip.leaf_shearing_addon=* Aceita Addon de Colher Folhas
 text.industrialforegoing.tooltip.can_harvest=* Pode Colher:
