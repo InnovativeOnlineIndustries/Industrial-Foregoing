@@ -1,5 +1,6 @@
 package com.buuz135.industrial.utils;
 
+import com.buuz135.industrial.proxy.BlockRegistry;
 import net.minecraft.block.Block;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
@@ -69,11 +70,13 @@ public class CraftingUtils {
         crushedRecipes.put(new ItemStack(Blocks.COBBLESTONE), new ItemStack(Blocks.GRAVEL));
         crushedRecipes.put(new ItemStack(Blocks.GRAVEL), new ItemStack(Blocks.SAND));
         ItemStack latest = new ItemStack(Blocks.SAND);
-        if (Loader.isModLoaded("exnihilocreatio")) {
+        if (BlockRegistry.materialStoneWorkFactoryBlock.produceExNihiloDust() && Loader.isModLoaded("exnihilocreatio")) {
             Block dust = Block.REGISTRY.getObject(new ResourceLocation("exnihilocreatio:block_dust"));
             crushedRecipes.put(new ItemStack(Blocks.SAND), latest = new ItemStack(dust));
         }
-        NonNullList<ItemStack> items = OreDictionary.getOres("itemSilicon");
-        if (items.size() > 0) crushedRecipes.put(latest, items.get(0));
+        if (BlockRegistry.materialStoneWorkFactoryBlock.produceSilicon()) {
+            NonNullList<ItemStack> items = OreDictionary.getOres("itemSilicon");
+            if (items.size() > 0) crushedRecipes.put(latest, items.get(0));
+        }
     }
 }
