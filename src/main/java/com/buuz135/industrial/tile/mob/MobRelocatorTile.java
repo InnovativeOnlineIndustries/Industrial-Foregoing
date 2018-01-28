@@ -88,8 +88,12 @@ public class MobRelocatorTile extends WorkingAreaElectricMachine implements IAcc
         List<EntityItem> items = this.getWorld().getEntitiesWithinAABB(EntityItem.class, area);
         for (EntityItem item : items) {
             if (!item.getItem().isEmpty()) {
-                ItemHandlerHelper.insertItem(outItems, item.getItem(), false);
-                item.setDead();
+                if (ItemHandlerHelper.insertItem(outItems, item.getItem(), true).isEmpty()) {
+                    ItemHandlerHelper.insertItem(outItems, item.getItem(), false);
+                    item.setDead();
+                } else {
+                    item.lifespan = 20 * 60;
+                }
             }
         }
         return hasWorked.get() ? 1 : 0;
