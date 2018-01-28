@@ -13,10 +13,7 @@ import net.minecraftforge.common.util.FakePlayer;
 import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.SidedProxy;
-import net.minecraftforge.fml.common.event.FMLConstructionEvent;
-import net.minecraftforge.fml.common.event.FMLInitializationEvent;
-import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
-import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
+import net.minecraftforge.fml.common.event.*;
 import net.ndrei.teslacorelib.config.TeslaCoreLibConfig;
 import net.ndrei.teslacorelib.items.gears.CoreGearType;
 
@@ -84,5 +81,10 @@ public class IndustrialForegoing {
                 TeslaCoreLibConfig.REGISTER_SPEED_ADDONS,
                 TeslaCoreLibConfig.REGISTER_ENERGY_ADDONS).forEach(s -> TeslaCoreLibConfig.INSTANCE.setDefaultFlag(s, true));
         TeslaCoreLibConfig.INSTANCE.setDefaultFlag(TeslaCoreLibConfig.ALLOW_ENERGY_DISPLAY_CHANGE, false);
+    }
+
+    @Mod.EventHandler
+    public void serverStart(FMLServerStartingEvent event) {
+        worldFakePlayer.clear();
     }
 }
