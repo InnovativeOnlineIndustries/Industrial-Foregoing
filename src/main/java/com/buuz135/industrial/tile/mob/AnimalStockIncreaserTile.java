@@ -52,28 +52,48 @@ public class AnimalStockIncreaserTile extends WorkingAreaElectricMachine {
         AxisAlignedBB area = getWorkingArea();
         List<EntityAnimal> animals = this.world.getEntitiesWithinAABB(EntityAnimal.class, area);
         if (animals.size() == 0 || animals.size() > 35) return 0;
-        EntityAnimal animal1 = animals.get(0);
-        while ((animal1.isChild() || animal1.getGrowingAge() != 0 || getFirstBreedingItem(animal1).isEmpty() || animal1.isInLove()) && animals.indexOf(animal1) + 1 < animals.size())
-            animal1 = animals.get(animals.indexOf(animal1) + 1);
-        if (animal1.isChild() || animal1.getGrowingAge() != 0) return 0;
-        EntityAnimal animal2 = animals.get(0);
-        while ((animal2.equals(animal1) || animal2.isChild() || animal2.getGrowingAge() != 0 || getFirstBreedingItem(animal2).isEmpty() || animal1.isInLove()) && animals.indexOf(animal2) + 1 < animals.size())
-            animal2 = animals.get(animals.indexOf(animal2) + 1);
-        if (animal2.equals(animal1) || animal2.isChild() || animal2.getGrowingAge() != 0) return 0;
-        if (animal1.getClass() != animal2.getClass()) return 0;
-        ItemStack stack = getFirstBreedingItem(animal1);
-        Item item = stack.getItem();
-        stack.setCount(stack.getCount() - 1);
-        stack = getFirstBreedingItem(animal2);
-        if (stack.isEmpty()) {
-            ItemHandlerHelper.insertItem(inFeedItems, new ItemStack(item, 1), false);
-            return 0;
+        //Removing from the list animals that can't breed
+        animals.removeIf(entityAnimal -> entityAnimal.isChild() || entityAnimal.getGrowingAge() != 0 || getFirstBreedingItem(entityAnimal).isEmpty() || entityAnimal.isInLove());
+        for (EntityAnimal firstParent : animals) {
+            for (EntityAnimal secondParent : animals) {
+                if (!firstParent.equals(secondParent) && firstParent.getClass().equals(secondParent.getClass())) {
+                    ItemStack stack = getFirstBreedingItem(firstParent);
+                    Item item = stack.getItem();
+                    stack.setCount(stack.getCount() - 1);
+                    stack = getFirstBreedingItem(secondParent);
+                    if (stack.isEmpty()) {
+                        ItemHandlerHelper.insertItem(inFeedItems, new ItemStack(item, 1), false);
+                        return 0;
+                    }
+                    stack.setCount(stack.getCount() - 1);
+                    firstParent.setInLove(null);
+                    secondParent.setInLove(null);
+                    return 1;
+                }
+            }
         }
-        stack.setCount(stack.getCount() - 1);
-        animal1.setInLove(null);
-        animal2.setInLove(null);
+//        EntityAnimal animal1 = animals.get(0);
+//        while ((animal1.isChild() || animal1.getGrowingAge() != 0 || getFirstBreedingItem(animal1).isEmpty() || animal1.isInLove()) && animals.indexOf(animal1) + 1 < animals.size())
+//            animal1 = animals.get(animals.indexOf(animal1) + 1);
+//        if (animal1.isChild() || animal1.getGrowingAge() != 0) return 0;
+//        EntityAnimal animal2 = animals.get(0);
+//        while ((animal2.equals(animal1) || animal2.isChild() || animal2.getGrowingAge() != 0 || getFirstBreedingItem(animal2).isEmpty() || animal1.isInLove()) && animals.indexOf(animal2) + 1 < animals.size())
+//            animal2 = animals.get(animals.indexOf(animal2) + 1);
+//        if (animal2.equals(animal1) || animal2.isChild() || animal2.getGrowingAge() != 0) return 0;
+//        if (animal1.getClass() != animal2.getClass()) return 0;
+//        ItemStack stack = getFirstBreedingItem(animal1);
+//        Item item = stack.getItem();
+//        stack.setCount(stack.getCount() - 1);
+//        stack = getFirstBreedingItem(animal2);
+//        if (stack.isEmpty()) {
+//            ItemHandlerHelper.insertItem(inFeedItems, new ItemStack(item, 1), false);
+//            return 0;
+//        }
+//        stack.setCount(stack.getCount() - 1);
+//        animal1.setInLove(null);
+//        animal2.setInLove(null);
 
-        return 1;
+        return 0;
     }
 
     public ItemStack getFirstBreedingItem(EntityAnimal animal) {

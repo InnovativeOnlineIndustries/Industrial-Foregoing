@@ -4,6 +4,7 @@
 + Allowed books in the enchantment factory
 + Added a config option to disable the StoneWork integrations
 + Fixed enchanted items not allowed in the Enchantment Applicator 
++ Improved Animal Feeder code to work properly and more efficient
 
 # 1.7.0
 + Items with enchantability 0 can't be inserted in som enchanting machines anymore
