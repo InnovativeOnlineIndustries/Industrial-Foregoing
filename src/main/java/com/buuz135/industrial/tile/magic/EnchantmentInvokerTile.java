@@ -5,6 +5,7 @@ import com.buuz135.industrial.tile.CustomColoredItemHandler;
 import com.buuz135.industrial.tile.CustomElectricMachine;
 import com.buuz135.industrial.utils.WorkUtils;
 import net.minecraft.enchantment.EnchantmentHelper;
+import net.minecraft.init.Items;
 import net.minecraft.item.EnumDyeColor;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.fluids.IFluidTank;
@@ -34,7 +35,7 @@ public class EnchantmentInvokerTile extends CustomElectricMachine {
         this.addInventory(new CustomColoredItemHandler(input, EnumDyeColor.BLUE, "Input items", 18 * 2 + 13, 25, 1, 3) {
             @Override
             public boolean canInsertItem(int slot, ItemStack stack) {
-                return stack.isItemEnchantable() && stack.getItem().getItemEnchantability(stack) > 0;
+                return stack.isItemEnchantable() && (stack.getItem().getItemEnchantability(stack) > 0 || stack.getItem().equals(Items.BOOK));
             }
 
             @Override

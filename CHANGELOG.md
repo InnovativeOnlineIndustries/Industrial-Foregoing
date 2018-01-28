@@ -1,6 +1,7 @@
 # 1.7.1
 + Updated to forge 14.23.1.2577
 + Fixed some NPE in the Fluid Crafter
++ Allowed books in the enchantment factory
 
 # 1.7.0
 + Items with enchantability 0 can't be inserted in som enchanting machines anymore
