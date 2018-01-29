@@ -1,5 +1,5 @@
 # 1.7.1
-+ Updated to forge 14.23.1.2577
++ Updated to forge 14.23.1.2594
 + Fixed some NPE in the Fluid Crafter
 + Allowed books in the enchantment factory
 + Added a config option to disable the StoneWork integrations
