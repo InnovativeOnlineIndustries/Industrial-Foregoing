@@ -21,23 +21,30 @@ import java.util.Map;
 public class CraftingUtils {
 
     private static HashMap<ItemStack, ItemStack> crushedRecipes = new HashMap<>();
+    private static HashMap<ItemStack, ItemStack> cachedRecipes = new HashMap<>();
 
     public static ItemStack findOutput(int size, ItemStack input, World world) {
+        ItemStack cachedStack = input.copy();
+        cachedStack.setCount(size * size);
+        for (Map.Entry<ItemStack, ItemStack> entry : cachedRecipes.entrySet()) {
+            if (entry.getKey().isItemEqual(cachedStack)) {
+                return entry.getValue().copy();
+            }
+        }
         InventoryCrafting inventoryCrafting = new InventoryCrafting(new Container() {
             @Override
             public boolean canInteractWith(EntityPlayer playerIn) {
                 return false;
             }
         }, size, size);
-        for (int i = 0; i < size * size; ++i) {
+        for (int i = 0; i < size * size; i++) {
             inventoryCrafting.setInventorySlotContents(i, input.copy());
         }
-        return CraftingManager.findMatchingResult(inventoryCrafting, world);
+        ItemStack output = CraftingManager.findMatchingResult(inventoryCrafting, world);
+        cachedRecipes.put(cachedStack, output.copy());
+        return output.copy();
     }
 
-    public static ItemStack findOutput(World world, ItemStack... inputs) {
-        return CraftingManager.findMatchingResult(genCraftingInventory(world, inputs), world);
-    }
 
     public static InventoryCrafting genCraftingInventory(World world, ItemStack... inputs) {
         InventoryCrafting inventoryCrafting = new InventoryCrafting(new Container() {

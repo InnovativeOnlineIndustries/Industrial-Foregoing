@@ -1,3 +1,6 @@
+# 1.7.2
++ Cached some repeating recipes so the don't need to get constantly checked
+
 # 1.7.1
 + Updated to forge 14.23.1.2594
 + Fixed some NPE in the Fluid Crafter
