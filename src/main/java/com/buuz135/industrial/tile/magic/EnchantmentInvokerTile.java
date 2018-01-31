@@ -31,6 +31,11 @@ public class EnchantmentInvokerTile extends CustomElectricMachine {
             protected void onContentsChanged(int slot) {
                 EnchantmentInvokerTile.this.markDirty();
             }
+
+            @Override
+            public int getSlotLimit(int slot) {
+                return 1;
+            }
         };
         this.addInventory(new CustomColoredItemHandler(input, EnumDyeColor.BLUE, "Input items", 18 * 2 + 13, 25, 1, 3) {
             @Override

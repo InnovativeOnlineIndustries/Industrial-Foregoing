@@ -1,5 +1,6 @@
 # 1.7.2
 + Cached some repeating recipes so the don't need to get constantly checked
++ Reduced stack size of the Enchantment Factory input slots to 1
 
 # 1.7.1
 + Updated to forge 14.23.1.2594
