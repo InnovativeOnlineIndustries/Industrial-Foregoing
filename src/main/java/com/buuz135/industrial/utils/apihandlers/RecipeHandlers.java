@@ -33,9 +33,24 @@ public class RecipeHandlers {
         IndustrialForegoingHelper.addBioReactorEntry(new BioReactorEntry(new ItemStack(Blocks.CHORUS_FLOWER)));
         getRealOredictedItems("dye").forEach(stack -> IndustrialForegoingHelper.addBioReactorEntry(new BioReactorEntry(stack)));
         getRealOredictedItems("treeSapling").stream().filter(stack -> !stack.getItem().getRegistryName().getResourcePath().equals("forestry")).forEach(stack -> IndustrialForegoingHelper.addBioReactorEntry(new BioReactorEntry(stack)));
+    }
+
+    public static void executeCraftweakerActions() {
         BIOREACTOR_ENTRIES.forEach((ctAction, entry) -> {
             if (ctAction == CTAction.ADD) IndustrialForegoingHelper.addBioReactorEntry(entry);
             else IndustrialForegoingHelper.removeBioReactorEntry(entry.getStack());
+        });
+        LASER_ENTRIES.forEach((ctAction, entry) -> {
+            if (ctAction == CTAction.ADD) IndustrialForegoingHelper.addLaserDrillEntry(entry);
+            else IndustrialForegoingHelper.removeLaserDrillEntry(entry.getStack());
+        });
+        SLUDGE_ENTRIES.forEach((ctAction, entry) -> {
+            if (ctAction == CTAction.ADD) IndustrialForegoingHelper.addSludgeRefinerEntry(entry);
+            else IndustrialForegoingHelper.removeSludgeRefinerEntry(entry.getStack());
+        });
+        PROTEIN_REACTOR_ENTRIES.forEach((ctAction, entry) -> {
+            if (ctAction == CTAction.ADD) IndustrialForegoingHelper.addProteinReactorEntry(entry);
+            else IndustrialForegoingHelper.removeProteinReactorEntry(entry.getStack());
         });
     }
 
@@ -74,10 +89,6 @@ public class RecipeHandlers {
         checkAndAddLaserDrill(11, "oreCobalt", 2);
         checkAndAddLaserDrill(3, "oreOsmium", 4);
         checkAndAddLaserDrill(4, "oreArdite", 1);
-        LASER_ENTRIES.forEach((ctAction, entry) -> {
-            if (ctAction == CTAction.ADD) IndustrialForegoingHelper.addLaserDrillEntry(entry);
-            else IndustrialForegoingHelper.removeLaserDrillEntry(entry.getStack());
-        });
     }
 
     public static void loadSludgeRefinerEntries() {
@@ -90,10 +101,6 @@ public class RecipeHandlers {
         IndustrialForegoingHelper.addSludgeRefinerEntry(new SludgeEntry(new ItemStack(Blocks.SAND), 4));
         IndustrialForegoingHelper.addSludgeRefinerEntry(new SludgeEntry(new ItemStack(Blocks.SAND, 1, 1), 4));
         IndustrialForegoingHelper.addSludgeRefinerEntry(new SludgeEntry(new ItemStack(Blocks.SOUL_SAND), 4));
-        SLUDGE_ENTRIES.forEach((ctAction, entry) -> {
-            if (ctAction == CTAction.ADD) IndustrialForegoingHelper.addSludgeRefinerEntry(entry);
-            else IndustrialForegoingHelper.removeSludgeRefinerEntry(entry.getStack());
-        });
     }
 
     public static void loadProteinReactorEntries() {
@@ -111,10 +118,6 @@ public class RecipeHandlers {
         getSubItems(stacks, new ItemStack(Items.FISH));
         getSubItems(stacks, new ItemStack(Items.SKULL));
         stacks.forEach(stack -> IndustrialForegoingHelper.addProteinReactorEntry(new ProteinReactorEntry(stack)));
-        PROTEIN_REACTOR_ENTRIES.forEach((ctAction, entry) -> {
-            if (ctAction == CTAction.ADD) IndustrialForegoingHelper.addProteinReactorEntry(entry);
-            else IndustrialForegoingHelper.removeProteinReactorEntry(entry.getStack());
-        });
     }
 
     public static void checkAndAddLaserDrill(int meta, String oreDict, int weight) {
