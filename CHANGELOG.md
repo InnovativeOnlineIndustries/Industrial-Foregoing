@@ -1,3 +1,6 @@
+# 1.8.0
++ Made the fluid crafter not tick every tick when it can't craft
+
 # 1.7.2
 + Cached some repeating recipes so the don't need to get constantly checked
 + Reduced stack size of the Enchantment Factory input slots to 1

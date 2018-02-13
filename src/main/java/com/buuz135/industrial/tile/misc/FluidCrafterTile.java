@@ -52,7 +52,8 @@ public class FluidCrafterTile extends CustomSidedTileEntity {
     protected void innerUpdate() {
         if (this.world.isRemote) return;
         ++tick;
-        if (crafting.getLocked() && tick >= 40 && hasOnlyOneFluid()) {
+        if (tick >= 40) tick = 0;
+        if (crafting.getLocked() && tick == 0 && hasOnlyOneFluid()) {
             Fluid fluid = getRecipeFluid();
             if (fluid == null) return;
             int bucketAmount = getFluidAmount(fluid);
@@ -71,7 +72,6 @@ public class FluidCrafterTile extends CustomSidedTileEntity {
                     ItemHandlerHelper.insertItem(this.output, recipe.getRecipeOutput().copy(), false);
                 }
             }
-            tick = 0;
         }
     }
 
