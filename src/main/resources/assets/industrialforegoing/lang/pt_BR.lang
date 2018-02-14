@@ -50,6 +50,18 @@ text.industrialforegoing.tooltip.plant.slime_tree= - Árvores de Slime do Tinker
   "{" -> Começo da linha colorida em negrito
   "}" -> Fim da linha colorida em negrito -->
 
+text.industrialforegoing.book.title=Manual do Industrial Foregoing
+ 
+text.industrialforegoing.book.category.getting_started=Por Onde Começar
+text.industrialforegoing.book.category.generators=Geradores
+text.industrialforegoing.book.category.agriculture=Agricultura
+text.industrialforegoing.book.category.animal_husbandry=Criação de Animais
+text.industrialforegoing.book.category.magic=Mágica
+text.industrialforegoing.book.category.storage=Armazenagem
+text.industrialforegoing.book.category.mob_interaction=Interação com Mobs
+text.industrialforegoing.book.category.resource_production=Produção de Recursos
+text.industrialforegoing.book.category.items=Itens
+
 text.industrialforegoing.book.animal_byproduct_recolector=Quando com energia, coleta {esgoto} dos animais acima.
 text.industrialforegoing.book.animal_growth_increaser=Quando com energia e com {comida de animais}, alimentará animais bebês para que {crescam} mais rápido.
 text.industrialforegoing.book.animal_independence_selector=Quando com energia, move animais {bebês} da parte de trás para a frente.@L@@L@Se {Filtro de Adultos} estiver instalado, moverá adultos, ao invés de bebês.
