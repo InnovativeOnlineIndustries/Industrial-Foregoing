@@ -80,7 +80,7 @@ public class PetrifiedFuelGeneratorTile extends CustomGeneratorMachine {
     }
 
     private boolean acceptsInputStack(int slot, ItemStack stack) {
-        return !stack.isEmpty() && TileEntityFurnace.isItemFuel(stack) && !stack.getItem().equals(Items.LAVA_BUCKET) && !stack.getItem().equals(ForgeModContainer.getInstance().universalBucket);
+        return !stack.isEmpty() && TileEntityFurnace.isItemFuel(stack) && !stack.getItem().equals(Items.LAVA_BUCKET) && !stack.getItem().equals(ForgeModContainer.getInstance().universalBucket) && getEnergyProduced(TileEntityFurnace.getItemBurnTime(stack)) > 0;
     }
 
     public ItemStack getFirstFuel(boolean replace) {
@@ -104,7 +104,7 @@ public class PetrifiedFuelGeneratorTile extends CustomGeneratorMachine {
         }
         burnTime = TileEntityFurnace.getItemBurnTime(temp);
         temp.setCount(temp.getCount() - 1);
-        return (long) burnTime * 100;
+        return (long) (burnTime * 100 * BlockRegistry.petrifiedFuelGeneratorBlock.getBurnTimeMultiplier());
     }
 
     @Override
