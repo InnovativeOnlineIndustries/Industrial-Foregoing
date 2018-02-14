@@ -1,8 +1,8 @@
 package com.buuz135.industrial.tile.agriculture;
 
 import com.buuz135.industrial.item.addon.AdultFilterAddonItem;
-import com.buuz135.industrial.tile.IAcceptsAdultFilter;
 import com.buuz135.industrial.tile.WorkingAreaElectricMachine;
+import com.buuz135.industrial.tile.api.IAcceptsAdultFilter;
 import com.buuz135.industrial.utils.WorkUtils;
 import net.minecraft.entity.EntityAgeable;
 import net.minecraft.util.math.AxisAlignedBB;

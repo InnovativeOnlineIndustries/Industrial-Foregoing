@@ -5,6 +5,9 @@ import com.buuz135.industrial.item.addon.AdultFilterAddonItem;
 import com.buuz135.industrial.item.addon.EnergyFieldAddon;
 import com.buuz135.industrial.item.addon.LeafShearingAddonItem;
 import com.buuz135.industrial.item.addon.RangeAddonItem;
+import com.buuz135.industrial.item.addon.movility.FluidTransferAddon;
+import com.buuz135.industrial.item.addon.movility.ItemStackTransferAddon;
+import com.buuz135.industrial.item.addon.movility.TransferAddon;
 import com.buuz135.industrial.utils.RecipeUtils;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -32,6 +35,10 @@ public class ItemRegistry {
     public static RangeAddonItem rangeAddonItem;
     public static EnergyFieldAddon energyFieldAddon;
     public static LeafShearingAddonItem leafShearingAddonItem;
+    public static ItemStackTransferAddon itemStackTransferAddonPush;
+    public static ItemStackTransferAddon itemStackTransferAddonPull;
+    public static FluidTransferAddon fluidTransferAddonPush;
+    public static FluidTransferAddon fluidTransferAddonPull;
 
     public static void registerItems(IForgeRegistry<Item> itemRegistry) {
         (tinyDryRubber = new IFCustomItem("tinydryrubber")).register(itemRegistry);
@@ -52,6 +59,10 @@ public class ItemRegistry {
         (rangeAddonItem = new RangeAddonItem()).registerItem(itemRegistry);
         (energyFieldAddon = new EnergyFieldAddon()).registerItem(itemRegistry);
         (leafShearingAddonItem = new LeafShearingAddonItem()).registerItem(itemRegistry);
+        (itemStackTransferAddonPull = new ItemStackTransferAddon(TransferAddon.ActionMode.PULL)).registerItem(itemRegistry);
+        (itemStackTransferAddonPush = new ItemStackTransferAddon(TransferAddon.ActionMode.PUSH)).registerItem(itemRegistry);
+        (fluidTransferAddonPull = new FluidTransferAddon(TransferAddon.ActionMode.PULL)).registerItem(itemRegistry);
+        (fluidTransferAddonPush = new FluidTransferAddon(TransferAddon.ActionMode.PUSH)).registerItem(itemRegistry);
 
         meatFeederItem.createRecipe();
         mobImprisonmentToolItem.createRecipe();
@@ -62,6 +73,10 @@ public class ItemRegistry {
         energyFieldAddon.createRecipe();
         bookManualItem.createRecipe();
         leafShearingAddonItem.createRecipe();
+        fluidTransferAddonPull.createRecipe();
+        fluidTransferAddonPush.createRecipe();
+        itemStackTransferAddonPull.createRecipe();
+        itemStackTransferAddonPush.createRecipe();
 
         OreDictionary.registerOre("itemRubber", plastic);
         OreDictionary.registerOre("slimeball", pinkSlime);

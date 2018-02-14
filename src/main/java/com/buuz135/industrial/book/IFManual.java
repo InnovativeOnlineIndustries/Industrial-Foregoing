@@ -10,6 +10,7 @@ import com.buuz135.industrial.utils.Reference;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.text.TextComponentTranslation;
 
 import java.util.List;
 
@@ -25,6 +26,7 @@ public class IFManual {
         addItemEntry(ItemRegistry.rangeAddonItem, PageText.createTranslatedPages("text.industrialforegoing.book.range_addon"));
         addItemEntry(ItemRegistry.strawItem, PageText.createTranslatedPages("text.industrialforegoing.book.straw"));
         addItemEntry(ItemRegistry.pinkSlime, PageText.createTranslatedPages("text.industrialforegoing.book.pink_slime"));
+        BookCategory.ITEM.getEntries().put(new ResourceLocation(Reference.MOD_ID, "transfer_addons"), new CategoryEntry(new TextComponentTranslation("item.industrialforegoing.itemstack_transfer_addon.name").getUnformattedComponentText(), new ItemStack(ItemRegistry.itemStackTransferAddonPull), PageText.createTranslatedPages("text.industrialforegoing.book.transfer_addon")));
         BookCategory.ITEM.getEntries().put(new ResourceLocation(Reference.MOD_ID, "upgrades"), new CategoryEntry("Upgrades", new ItemStack(ItemRegistry.dryRubber), PageText.createTranslatedPages("text.industrialforegoing.book.upgrades")));
 
     }

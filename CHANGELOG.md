@@ -1,5 +1,6 @@
 # 1.8.0
 + Made the fluid crafter not tick every tick when it can't craft
++ Added transfer addons that can pull and can push items and fluids
 
 # 1.7.2
 + Cached some repeating recipes so the don't need to get constantly checked

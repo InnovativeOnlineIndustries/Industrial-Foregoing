@@ -1,4 +1,4 @@
-package com.buuz135.industrial.tile;
+package com.buuz135.industrial.tile.api;
 
 public interface IConfigurationMachine {
 

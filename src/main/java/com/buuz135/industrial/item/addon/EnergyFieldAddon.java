@@ -62,10 +62,10 @@ public class EnergyFieldAddon extends CustomAddon {
         super.addInformation(stack, worldIn, tooltip, flagIn);
         if (stack.hasCapability(CapabilityEnergy.ENERGY, null)) {
             IEnergyStorage storage = stack.getCapability(CapabilityEnergy.ENERGY, null);
-            tooltip.add(new TextComponentTranslation("text.industrialforegoing.tooltip.energy_field_right_charge").getUnformattedComponentText() + new DecimalFormat().format(storage.getEnergyStored()) + " / " + new DecimalFormat().format(storage.getMaxEnergyStored()));
+            tooltip.add(new TextComponentTranslation("text.industrialforegoing.tooltip.energy_field_charge").getUnformattedComponentText() + " " + new DecimalFormat().format(storage.getEnergyStored()) + " / " + new DecimalFormat().format(storage.getMaxEnergyStored()));
             if (getLinkedBlockPos(stack) != null) {
                 BlockPos pos = getLinkedBlockPos(stack);
-                tooltip.add(new TextComponentTranslation("text.industrialforegoing.tooltip.energy_field_right_linked").getUnformattedComponentText() + " x=" + pos.getX() + " y=" + pos.getY() + " z=" + pos.getZ());
+                tooltip.add(new TextComponentTranslation("text.industrialforegoing.tooltip.energy_field_linked").getUnformattedComponentText() + " x=" + pos.getX() + " y=" + pos.getY() + " z=" + pos.getZ());
             } else {
                 tooltip.add(new TextComponentTranslation("text.industrialforegoing.tooltip.energy_field_right_click").getUnformattedComponentText());
             }

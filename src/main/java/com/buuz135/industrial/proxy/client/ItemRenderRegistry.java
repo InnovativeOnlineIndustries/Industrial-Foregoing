@@ -21,5 +21,10 @@ public class ItemRenderRegistry {
         adultFilterAddomItem.registerRenderer();
         rangeAddonItem.registerRenderer();
         leafShearingAddonItem.registerRenderer();
+
+        itemStackTransferAddonPull.registerRenderer();
+        itemStackTransferAddonPush.registerRenderer();
+        fluidTransferAddonPull.registerRenderer();
+        fluidTransferAddonPush.registerRenderer();
     }
 }

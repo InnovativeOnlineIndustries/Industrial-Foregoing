@@ -1,8 +1,7 @@
 package com.buuz135.industrial.item.addon;
 
 import com.buuz135.industrial.proxy.ItemRegistry;
-import com.buuz135.industrial.tile.IAcceptsAdultFilter;
-import com.buuz135.industrial.tile.agriculture.AnimalIndependenceSelectorTile;
+import com.buuz135.industrial.tile.api.IAcceptsAdultFilter;
 import com.buuz135.industrial.utils.RecipeUtils;
 import net.minecraft.item.ItemStack;
 import net.ndrei.teslacorelib.tileentities.SidedTileEntity;

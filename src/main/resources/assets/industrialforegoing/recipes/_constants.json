@@ -79,6 +79,20 @@
   {
     "ingredient": {
       "type": "forge:ore_dict",
+      "ore": "dyeLightBlue"
+    },
+    "name": "DYELIGHTBLUE"
+  },
+  {
+    "ingredient": {
+      "type": "forge:ore_dict",
+      "ore": "dyeMagenta"
+    },
+    "name": "DYEMAGENTA"
+  },
+  {
+    "ingredient": {
+      "type": "forge:ore_dict",
       "ore": "dyePurple"
     },
     "name": "DYEPURPLE"

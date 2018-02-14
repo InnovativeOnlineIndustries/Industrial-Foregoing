@@ -1,13 +1,16 @@
 package com.buuz135.industrial.tile;
 
 import com.buuz135.industrial.item.addon.EnergyFieldAddon;
+import com.buuz135.industrial.item.addon.movility.TransferAddon;
 import com.buuz135.industrial.jei.JEIHelper;
 import com.buuz135.industrial.proxy.ItemRegistry;
+import com.buuz135.industrial.tile.api.IAcceptsTransferAddons;
 import com.buuz135.industrial.tile.block.CustomOrientedBlock;
 import com.buuz135.industrial.tile.block.EnergyFieldProviderBlock;
 import com.buuz135.industrial.tile.world.EnergyFieldProviderTile;
 import net.minecraft.item.EnumDyeColor;
 import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
@@ -18,6 +21,7 @@ import net.ndrei.teslacorelib.gui.BasicTeslaGuiContainer;
 import net.ndrei.teslacorelib.gui.IGuiContainerPiece;
 import net.ndrei.teslacorelib.gui.SideDrawerPiece;
 import net.ndrei.teslacorelib.inventory.BoundingRectangle;
+import net.ndrei.teslacorelib.items.BaseAddon;
 import net.ndrei.teslacorelib.items.SpeedUpgradeTier1;
 import net.ndrei.teslacorelib.items.SpeedUpgradeTier2;
 import net.ndrei.teslacorelib.tileentities.ElectricMachine;
@@ -27,10 +31,13 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-public abstract class CustomElectricMachine extends ElectricMachine {
+public abstract class CustomElectricMachine extends ElectricMachine implements IAcceptsTransferAddons {
+
+    private int tick;
 
     protected CustomElectricMachine(int typeId) {
         super(typeId);
+        tick = 0;
     }
 
     @Override
@@ -90,6 +97,7 @@ public abstract class CustomElectricMachine extends ElectricMachine {
     @Override
     public void protectedUpdate() {
         super.protectedUpdate();
+        if (this.world.isRemote) return;
         if (hasAddon(EnergyFieldAddon.class)) {
             ItemStack addon = getAddonStack(EnergyFieldAddon.class);
             if (addon.hasCapability(CapabilityEnergy.ENERGY, null)) {
@@ -106,9 +114,39 @@ public abstract class CustomElectricMachine extends ElectricMachine {
                 this.forceSync();
             }
         }
+        if (tick % 10 == 0) {
+            List<ItemStack> stacks = new ArrayList<>();
+            for (BaseAddon addon : this.getAddons()) {
+                stacks.add(this.getAddonStack(addon.getClass()));
+            }
+            workTransferAddon(this, stacks);
+        }
+        ++tick;
+        if (tick >= 20) {
+            tick = 0;
+        }
     }
 
     public boolean canAcceptEnergyFieldAddon() {
         return !hasAddon(EnergyFieldAddon.class);
+    }
+
+    @NotNull
+    @Override
+    public NBTTagCompound writeToNBT(@NotNull NBTTagCompound compound) {
+        compound = super.writeToNBT(compound);
+        compound.setInteger("Tick", tick);
+        return compound;
+    }
+
+    @Override
+    public void readFromNBT(@NotNull NBTTagCompound compound) {
+        super.readFromNBT(compound);
+        tick = compound.getInteger("Tick");
+    }
+
+    @Override
+    public boolean canAcceptAddon(TransferAddon addon) {
+        return !this.hasAddon(addon.getClass()) || (this.getAddon(addon.getClass()) != null && this.getAddon(addon.getClass()).getMode() != addon.getMode());
     }
 }

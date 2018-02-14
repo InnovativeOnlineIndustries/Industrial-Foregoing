@@ -1,0 +1,26 @@
+{
+  "result": {
+    "item": "industrialforegoing:fluid_transfer_addon_pull",
+    "data": 0
+  },
+  "pattern": [
+    "pcp",
+    "dtd",
+    "pcp"
+  ],
+  "type": "forge:ore_shaped",
+  "key": {
+    "p": {
+      "item": "industrialforegoing:plastic"
+    },
+    "c": {
+      "item": "minecraft:bucket"
+    },
+    "d": {
+      "item": "#DYELIGHTBLUE"
+    },
+    "t": {
+      "item": "minecraft:sticky_piston"
+    }
+  }
+}
