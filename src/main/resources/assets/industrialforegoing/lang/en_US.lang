@@ -65,6 +65,18 @@ text.industrialforegoing.plant.slime_tree= - Tinker's construct slime trees
   "{" -> Will start a bold/colored string to be highlighted
   "}" -> Will stop the highlight -->
 
+text.industrialforegoing.book.title=Industrial Foregoing's Manual
+
+text.industrialforegoing.book.category.getting_started=Getting Started
+text.industrialforegoing.book.category.generators=Generators
+text.industrialforegoing.book.category.agriculture=Agriculture
+text.industrialforegoing.book.category.animal_husbandry=Animal Husbandry
+text.industrialforegoing.book.category.magic=Magic
+text.industrialforegoing.book.category.storage=Storage
+text.industrialforegoing.book.category.mob_interaction=Mob Interaction
+text.industrialforegoing.book.category.resource_production=Resource Production
+text.industrialforegoing.book.category.items=Items
+
 text.industrialforegoing.book.animal_byproduct_recolector=When provided with power it will collect {Sewage} from the animals in top.
 text.industrialforegoing.book.animal_growth_increaser=When provided with power and {breeding} food, it will feed baby animals to make them {grow} faster.
 text.industrialforegoing.book.animal_independence_selector=When provided with power it will move {baby} animals from the back to the front.@L@@L@If {Adult Filter} is installed it will move adult animals instead of baby animals.

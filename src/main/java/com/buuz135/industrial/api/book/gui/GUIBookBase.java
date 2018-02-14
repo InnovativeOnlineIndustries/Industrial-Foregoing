@@ -14,6 +14,7 @@ import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.gui.GuiTextField;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraft.util.text.TextFormatting;
 
 import java.io.IOException;
@@ -95,7 +96,7 @@ public class GUIBookBase extends GuiScreen {
     }
 
     public void drawScreenBack(int mouseX, int mouseY, float partialTicks) {
-        this.drawCenteredString(Minecraft.getMinecraft().fontRenderer, TextFormatting.DARK_AQUA + "Industrial Foregoing's Manual", this.getGuiLeft() + 85, this.getGuiTop() - 10, 0xFFFFFF);
+        this.drawCenteredString(Minecraft.getMinecraft().fontRenderer, TextFormatting.DARK_AQUA + new TextComponentTranslation("text.industrialforegoing.book.title").getFormattedText(), this.getGuiLeft() + 85, this.getGuiTop() - 10, 0xFFFFFF);
         GlStateManager.color(1f, 1f, 1f);
         this.mc.getTextureManager().bindTexture(BOOK_BACK);
         drawModalRectWithCustomSizedTexture(this.guiLeft, this.guiTop, 0, 0, this.guiXSize, this.guiYSize, this.guiXSize, this.guiYSize);
