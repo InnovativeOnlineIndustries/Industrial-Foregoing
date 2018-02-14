@@ -1,5 +1,6 @@
 package com.buuz135.industrial.tile.world;
 
+import com.buuz135.industrial.proxy.BlockRegistry;
 import com.buuz135.industrial.tile.WorkingAreaElectricMachine;
 import com.buuz135.industrial.utils.BlockUtils;
 import com.buuz135.industrial.utils.ItemStackUtils;
@@ -83,7 +84,9 @@ public class FluidPumpTile extends WorkingAreaElectricMachine {
             }
             FluidStack stack = new FluidStack(FluidRegistry.lookupFluidForBlock(this.world.getBlockState(peeked).getBlock()), 1000);
             tank.fill(stack, true);
-            this.world.setBlockState(peeked, Blocks.COBBLESTONE.getDefaultState());
+            if (BlockRegistry.fluidPumpBlock.isReplaceFluidWithCobble())
+                this.world.setBlockState(peeked, Blocks.COBBLESTONE.getDefaultState());
+            else world.setBlockToAir(peeked);
             return 1;
         }
         return 0;

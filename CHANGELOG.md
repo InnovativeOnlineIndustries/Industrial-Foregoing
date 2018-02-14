@@ -3,6 +3,7 @@
 + Added transfer addons that can pull and can push items and fluids
 + Added a config option for the petrified fuel generator to change only for how much a fuel burns based in its burn time (Resetting the Petrified Fuel Generator config will show you a better description of the config options if it doesn't change)
 + Fixed Fisher stops working after a while
++ Added a config option to make the Fluid pump not replace fluid with cobblestone
 
 # 1.7.2
 + Cached some repeating recipes so the don't need to get constantly checked
