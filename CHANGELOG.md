@@ -2,6 +2,7 @@
 + Made the fluid crafter not tick every tick when it can't craft
 + Added transfer addons that can pull and can push items and fluids
 + Added a config option for the petrified fuel generator to change only for how much a fuel burns based in its burn time (Resetting the Petrified Fuel Generator config will show you a better description of the config options if it doesn't change)
++ Fixed Fisher stops working after a while
 
 # 1.7.2
 + Cached some repeating recipes so the don't need to get constantly checked

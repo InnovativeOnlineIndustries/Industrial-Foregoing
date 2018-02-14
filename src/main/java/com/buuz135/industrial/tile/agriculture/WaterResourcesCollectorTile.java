@@ -64,11 +64,11 @@ public class WaterResourcesCollectorTile extends WorkingAreaElectricMachine {
             LootContext.Builder lootcontext = new LootContext.Builder((WorldServer) this.world);
             List<ItemStack> items = this.world.getLootTableManager().getLootTableFromLocation(LootTableList.GAMEPLAY_FISHING).generateLootForPools(this.world.rand, lootcontext.build());
             for (ItemStack stack : items) {
-                ItemHandlerHelper.insertItem(outFish, stack, false);
+                ItemHandlerHelper.insertItem(outFish, stack.copy(), false);
             }
             return 1;
         }
-        return 1;
+        return 0;
     }
 
     @Override
