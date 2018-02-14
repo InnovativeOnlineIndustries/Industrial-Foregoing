@@ -31,6 +31,21 @@ text.industrialforegoing.tooltip.adult_filter=* Принимает высшее 
 text.industrialforegoing.tooltip.energy_field_charge=Заряд:
 text.industrialforegoing.tooltip.energy_field_linked=Привязанная позиция:
 text.industrialforegoing.tooltip.energy_field_right_click=Нажмите правой кнопкой мыши по передатчику энергетического поля, чтобы привязать.
+text.industrialforegoing.tooltip.items=предметы
+text.industrialforegoing.tooltip.mb=mb
+text.industrialforegoing.tooltip.max_transfer_amount=Максимальное количество передачи:
+text.industrialforegoing.tooltip.tick_time=10 тиков
+
+text.industrialforegoing.direction=Направление:
+text.industrialforegoing.up=Вверх
+text.industrialforegoing.down=Вниз
+text.industrialforegoing.east=Восток
+text.industrialforegoing.west=Запад
+text.industrialforegoing.north=Север
+text.industrialforegoing.south=Юг
+text.industrialforegoing.action=Действие:
+text.industrialforegoing.push=Толкать
+text.industrialforegoing.pull=Вытаскивать
 
 text.industrialforegoing.leaf_shearing_addon=* Принимает улучшение листовой резки
 text.industrialforegoing.can_harvest=* Можно собирать урожай:
@@ -49,6 +64,18 @@ text.industrialforegoing.plant.slime_tree= - Дерево слизи [Tinker's C
   "@PAGE@" -> Will create a new page and the following text will be in a new page
   "{" -> Will start a bold/colored string to be highlighted
   "}" -> Will stop the highlight -->
+  
+text.industrialforegoing.book.title=Мануал по моду Industrial Foregoing
+
+text.industrialforegoing.book.category.getting_started=Начало развития
+text.industrialforegoing.book.category.generators=Генераторы
+text.industrialforegoing.book.category.agriculture=Агрокультура
+text.industrialforegoing.book.category.animal_husbandry=Разведение животных
+text.industrialforegoing.book.category.magic=Магия
+text.industrialforegoing.book.category.storage=Хранение
+text.industrialforegoing.book.category.mob_interaction=Взаимодействие с мобами
+text.industrialforegoing.book.category.resource_production=Производство ресурсов
+text.industrialforegoing.book.category.items=Предметы
 
 text.industrialforegoing.book.animal_byproduct_recolector=Когда он будет снабжен энергей, то будет собираться {отходы} у животных сверху.
 text.industrialforegoing.book.animal_growth_increaser=Когда он снабжен энергией и {есть} пища, он будет кормить детенышей животных, чтобы сделать их быстрее.
@@ -109,6 +136,7 @@ text.industrialforegoing.book.straw=Это позволяет вам {пить} 
 text.industrialforegoing.book.pink_slime=Может быть получен путем убийства {Розовых слизней}, который будет появляться при размещении {Розовой жидкости} в мире.
 text.industrialforegoing.book.upgrades=В Industrial Foregoing нет улучшений скорости, но вы можете использовать {энергетичесое улучшение} и {улучшение скорости} от Tesla Core Lib для ускорения работы компьютеров. Им нужен предыдущий уровень для установки, чтобы добавить следующий.
 text.industrialforegoing.book.plant_interactor=Когда он снабжен энергией, он {щелкнет правой кнопкой мыши} по урожаю и фруктам, чтобы собрать их и сохранить в инвентаре или оставить их в земле, если они не могут быть сохранены. @L@@L@ {* По умолчанию он работает с Pam's Fruits and Plants.}
+text.industrialforegoing.book.transfer_addon=Улучшения передачи могут быть использованы где угодно, но они могут только передавать {предметы} и {жидкости}, и они могут вытаскивать и толкать {жидкости} или {предметы}.@L@@L@Чтобы изменить направление передачи, просто щёлкните {ПКМ} улучшением, чтобы переключиться между направлениями или нажмите {Shift  + ПКМ} на стороне блока, чтобы выбрать направление. Вы можете зачаровать улучшение {Эффективностью}, чтобы увеличить количество возможной передачи.
 
 tile.industrialforegoing.petrified_fuel_generator.name=Генератор на твердом топливе
 tile.industrialforegoing.enchantment_refiner.name=Сортировщик заклинаний
@@ -190,6 +218,8 @@ item.industrialforegoing_pink_slime.name=Розовая слизь
 item.industrialforegoing.energy_field_addon.name=Улучшение энергетического щита
 item.industrialforegoing.leaf_shearing.name=Улучшение срезания листвы
 item.industrialforegoing_book_manual.name=Руководство по моду Industrial Foregoing
+item.industrialforegoing.itemstack_transfer_addon.name=Улучшение: Транспортировка предметов
+item.industrialforegoing.fluid_transfer_addon.name=Улучшение: Транспортировка жидкостей
 
 gui.industrialforegoing.side_config.fuel_input=Вход для топлива
 gui.industrialforegoing.side_config.input_items=Вход для предметов
