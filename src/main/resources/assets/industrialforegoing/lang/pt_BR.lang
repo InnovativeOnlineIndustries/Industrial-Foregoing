@@ -31,6 +31,21 @@ text.industrialforegoing.tooltip.adult_filter=* Aceita Filtro de Adultos
 text.industrialforegoing.tooltip.energy_field_charge=Carga:
 text.industrialforegoing.tooltip.energy_field_linked=Posição conectada:
 text.industrialforegoing.tooltip.energy_field_right_click=Clique num Provedor de Campo de Energia para Conectar
+text.industrialforegoing.tooltip.items=itens
+text.industrialforegoing.tooltip.mb=mb
+text.industrialforegoing.tooltip.max_transfer_amount=Qtd. de Transf. Máx.:
+text.industrialforegoing.tooltip.tick_time=10 ticks
+
+text.industrialforegoing.direction=Direção:
+text.industrialforegoing.up=Cima
+text.industrialforegoing.down=Baixo
+text.industrialforegoing.east=Leste
+text.industrialforegoing.west=Oeste
+text.industrialforegoing.north=Norte
+text.industrialforegoing.south=Sul
+text.industrialforegoing.action=Ação:
+text.industrialforegoing.push=Empurrar
+text.industrialforegoing.pull=Puxar
 
 text.industrialforegoing.tooltip.leaf_shearing_addon=* Aceita Addon de Colher Folhas
 text.industrialforegoing.tooltip.can_harvest=* Pode Colher:
@@ -49,6 +64,18 @@ text.industrialforegoing.tooltip.plant.slime_tree= - Árvores de Slime do Tinker
   "@PAGE@" -> Cria uma nova página e o texto que vier depois estará nela
   "{" -> Começo da linha colorida em negrito
   "}" -> Fim da linha colorida em negrito -->
+
+text.industrialforegoing.book.title=Manual do Industrial Foregoing
+ 
+text.industrialforegoing.book.category.getting_started=Por Onde Começar
+text.industrialforegoing.book.category.generators=Geradores
+text.industrialforegoing.book.category.agriculture=Agricultura
+text.industrialforegoing.book.category.animal_husbandry=Criação de Animais
+text.industrialforegoing.book.category.magic=Mágica
+text.industrialforegoing.book.category.storage=Armazenagem
+text.industrialforegoing.book.category.mob_interaction=Interação com Mobs
+text.industrialforegoing.book.category.resource_production=Produção de Recursos
+text.industrialforegoing.book.category.items=Itens
 
 text.industrialforegoing.book.animal_byproduct_recolector=Quando com energia, coleta {esgoto} dos animais acima.
 text.industrialforegoing.book.animal_growth_increaser=Quando com energia e com {comida de animais}, alimentará animais bebês para que {crescam} mais rápido.
@@ -109,6 +136,7 @@ text.industrialforegoing.book.straw=O permite {beber} líquidos que estejam no c
 text.industrialforegoing.book.pink_slime=Obtido ao se matar um {Slime Rosa}, que são formados ao se colocar Slime Rosa no chão em formato {líquido}.
 text.industrialforegoing.book.upgrades=O Industrial Foregoing não tem melhorias de velocidade, mas você pode usar {Melhorias de Energia} e {Melhorias de Velocidade} do Tesla Core Lib para aumentar a velocidade de suas máquinas. É necessário instalar o nível anterior para que o seguinte seja instalado.
 text.industrialforegoing.book.plant_interactor=Quando com energia, esta máquina interage com plantas e frutas (Como um jogador apertando {clique direito} do mouse) para colhê-los e os armazena em seu inventário, ou os joga no chão, caso não possam ser armazenados. @L@@L@{*Também funciona com plantas e frutas do HarvestCraft da Pam por padrão.}
+text.industrialforegoing.book.transfer_addon=Os addons de transferência vêm em todas as formas e tamanhos, mas só podem transferir {itens} e {fluidos}. Eles podem puxar e podem empurrar. @L@@L@ Para alterar a direção da ação simplesmente {Clique direito do mouse} para alternar entre as direções ou {Shift + Clique direito} em um lado de um bloco para selecionar essa direção. Você pode encantar o addon com {Eficiência} para aumentar sua quantidade de transferência.
 
 tile.industrialforegoing.petrified_fuel_generator.name=Gerador de Combustível Petrificado
 tile.industrialforegoing.enchantment_refiner.name=Organizador de Encantamentos
@@ -190,6 +218,8 @@ item.industrialforegoing_pink_slime.name=Slime Rosa
 item.industrialforegoing.energy_field_addon.name=Addon: Campo de Energia
 item.industrialforegoing.leaf_shearing.name=Addon: Colher Folhas
 item.industrialforegoing_book_manual.name=Manual do Industrial Foregoing
+item.industrialforegoing.itemstack_transfer_addon.name=Addon: Transferência de Stacks
+item.industrialforegoing.fluid_transfer_addon.name=Addon: Transferência de Fluido
 
 gui.industrialforegoing.side_config.fuel_input=Entrada de Combustível
 gui.industrialforegoing.side_config.input_items=Entrada de Itens
