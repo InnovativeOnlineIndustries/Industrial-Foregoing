@@ -1,3 +1,6 @@
+# 1.8.1
++ Fixed 3x3 recipes now working in the StoneWork Factory
+
 # 1.8.0
 + Made the fluid crafter not tick every tick when it can't craft
 + Added transfer addons that can pull and can push items and fluids

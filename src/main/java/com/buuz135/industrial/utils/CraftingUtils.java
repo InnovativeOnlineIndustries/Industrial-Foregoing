@@ -27,7 +27,7 @@ public class CraftingUtils {
         ItemStack cachedStack = input.copy();
         cachedStack.setCount(size * size);
         for (Map.Entry<ItemStack, ItemStack> entry : cachedRecipes.entrySet()) {
-            if (entry.getKey().isItemEqual(cachedStack)) {
+            if (entry.getKey().isItemEqual(cachedStack) && entry.getKey().getCount() == cachedStack.getCount()) {
                 return entry.getValue().copy();
             }
         }
