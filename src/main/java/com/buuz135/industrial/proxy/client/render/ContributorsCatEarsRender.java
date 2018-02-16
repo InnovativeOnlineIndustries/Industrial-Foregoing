@@ -24,7 +24,8 @@ public class ContributorsCatEarsRender implements LayerRenderer<AbstractClientPl
     @SideOnly(Side.CLIENT)
     @Override
     public void doRenderLayer(AbstractClientPlayer entitylivingbaseIn, float limbSwing, float limbSwingAmount, float partialTicks, float ageInTicks, float netHeadYaw, float headPitch, float scale) {
-        if (!Arrays.asList(contributors.uuid).contains(entitylivingbaseIn.getUniqueID().toString())) return;
+        if (contributors == null) return;
+        if (Arrays.asList(contributors.uuid).contains(entitylivingbaseIn.getUniqueID().toString())) return;
         if (!entitylivingbaseIn.isWearing(EnumPlayerModelParts.CAPE)) return;
         GlStateManager.pushMatrix();
         GlStateManager.enableBlend();
@@ -85,7 +86,7 @@ public class ContributorsCatEarsRender implements LayerRenderer<AbstractClientPl
         return false;
     }
 
-    public class Contributors {
+    public static class Contributors {
 
         public String[] uuid = new String[0];
     }
