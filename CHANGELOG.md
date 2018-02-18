@@ -3,6 +3,7 @@
 + Fixed Mob Slaughter Factory dropping other mods mob drops
 + Fixed some special NPE 
 + Updated some localizations 
++ Fixed a derp with ears
 
 # 1.8.0
 + Made the fluid crafter not tick every tick when it can't craft

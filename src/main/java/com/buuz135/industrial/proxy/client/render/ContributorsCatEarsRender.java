@@ -25,7 +25,7 @@ public class ContributorsCatEarsRender implements LayerRenderer<AbstractClientPl
     @Override
     public void doRenderLayer(AbstractClientPlayer entitylivingbaseIn, float limbSwing, float limbSwingAmount, float partialTicks, float ageInTicks, float netHeadYaw, float headPitch, float scale) {
         if (contributors == null) return;
-        if (Arrays.asList(contributors.uuid).contains(entitylivingbaseIn.getUniqueID().toString())) return;
+        if (!Arrays.asList(contributors.uuid).contains(entitylivingbaseIn.getUniqueID().toString())) return;
         if (!entitylivingbaseIn.isWearing(EnumPlayerModelParts.CAPE)) return;
         GlStateManager.pushMatrix();
         GlStateManager.enableBlend();
