@@ -1,5 +1,6 @@
 package com.buuz135.industrial.utils.apihandlers.plant;
 
+import com.buuz135.industrial.proxy.BlockRegistry;
 import com.buuz135.industrial.utils.BlockUtils;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Items;
@@ -29,10 +30,12 @@ public class TreeCache {
             if (BlockUtils.isLog(world, checking) || BlockUtils.isLeaves(world, checking)) {
                 Iterable<BlockPos> area = BlockPos.getAllInBox(checking.offset(EnumFacing.DOWN).offset(EnumFacing.SOUTH).offset(EnumFacing.WEST), checking.offset(EnumFacing.UP).offset(EnumFacing.NORTH).offset(EnumFacing.EAST));
                 for (BlockPos blockPos : area) {
-                    if (BlockUtils.isLog(world, blockPos) && !woodCache.contains(blockPos) && blockPos.distanceSq(current.getX(), current.getY(), current.getZ()) <= 1000) {
+                    if (world.isAirBlock(blockPos) || woodCache.contains(blockPos) || leavesCache.contains(blockPos) || blockPos.getDistance(current.getX(), current.getY(), current.getZ()) > BlockRegistry.cropRecolectorBlock.getMaxDistranceTreeBlocksScan())
+                        continue;
+                    if (BlockUtils.isLog(world, blockPos)) {
                         tree.push(blockPos);
                         woodCache.add(blockPos);
-                    } else if (BlockUtils.isLeaves(world, blockPos) && !leavesCache.contains(blockPos) && blockPos.distanceSq(current.getX(), current.getY(), current.getZ()) <= 1000) {
+                    } else if (BlockUtils.isLeaves(world, blockPos)) {
                         tree.push(blockPos);
                         leavesCache.add(blockPos);
                     }
