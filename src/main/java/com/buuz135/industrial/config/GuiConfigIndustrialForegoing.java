@@ -17,11 +17,14 @@ public class GuiConfigIndustrialForegoing extends GuiConfig {
         super(parent, getConfigElements(), Reference.MOD_ID, false, false, "Industrial Foregoing Config");
     }
 
+    public static List<IConfigElement> getConfigElements() {
+        return Arrays.asList(new ConfigElement(CustomConfiguration.config.getCategory(Configuration.CATEGORY_CLIENT)), new ConfigElement(CustomConfiguration.config.getCategory(Configuration.CATEGORY_GENERAL)), new ConfigElement(CustomConfiguration.config.getCategory("machines")));
+    }
+
     @Override
     public void initGui() {
         super.initGui();
     }
-
 
     @Override
     public void drawScreen(int mouseX, int mouseY, float partialTicks) {
@@ -33,9 +36,5 @@ public class GuiConfigIndustrialForegoing extends GuiConfig {
         super.actionPerformed(button);
         if (CustomConfiguration.config.hasChanged()) CustomConfiguration.config.save();
         CustomConfiguration.sync();
-    }
-
-    public static List<IConfigElement> getConfigElements() {
-        return Arrays.asList(new ConfigElement(CustomConfiguration.config.getCategory(Configuration.CATEGORY_CLIENT)), new ConfigElement(CustomConfiguration.config.getCategory(Configuration.CATEGORY_GENERAL)), new ConfigElement(CustomConfiguration.config.getCategory("machines")));
     }
 }

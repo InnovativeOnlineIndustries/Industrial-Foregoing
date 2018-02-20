@@ -43,6 +43,10 @@ public class TreePlantRecollectable extends PlantRecollectable {
         List<ItemStack> itemStacks = new ArrayList<>();
         if (treeCache.containsKey(pos)) {
             TreeCache cache = treeCache.get(pos);
+            if (cache.getWoodCache().isEmpty() && cache.getLeavesCache().isEmpty() && canBeHarvested(world, pos, blockState)) {
+                cache.scanForTreeBlockSection();
+                return null;
+            }
             int operations = BlockRegistry.cropRecolectorBlock.getTreeOperations();
             if (BlockRegistry.cropRecolectorBlock.isReducedChunkUpdates()) {
                 operations = 0;

@@ -1,5 +1,6 @@
 # 1.8.2
 + Added a config option to increase the range of tree checking
++ Improved tree checking code a lot so it can harvest huge trees like forestry giant sequoias  
 
 # 1.8.1
 + Fixed 3x3 recipes now working in the StoneWork Factory

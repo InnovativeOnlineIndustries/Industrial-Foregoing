@@ -21,7 +21,7 @@ public class CropRecolectorBlock extends CustomAreaOrientedBlock<CropRecolectorT
     private int sludgeOperation;
     private int treeOperations;
     private boolean reducedChunkUpdates;
-    private int maxDistranceTreeBlocksScan;
+    private int maxDistanceTreeBlocksScan;
 
     public CropRecolectorBlock() {
         super("crop_recolector", CropRecolectorTile.class, Material.ROCK, 400, 40, RangeType.FRONT, 1, 0, true);
@@ -33,7 +33,7 @@ public class CropRecolectorBlock extends CustomAreaOrientedBlock<CropRecolectorT
         sludgeOperation = CustomConfiguration.config.getInt("sludgeOperation", "machines" + Configuration.CATEGORY_SPLITTER + this.getRegistryName().getResourcePath().toString(), 20, 1, 8000, "How much sludge is produced when the machine does an operation");
         treeOperations = CustomConfiguration.config.getInt("treeOperations", "machines" + Configuration.CATEGORY_SPLITTER + this.getRegistryName().getResourcePath().toString(), 10, 1, 1024, "Amount of operations done when chopping a tree");
         reducedChunkUpdates = CustomConfiguration.config.getBoolean("reducedChunkUpdates", "machines" + Configuration.CATEGORY_SPLITTER + this.getRegistryName().getResourcePath().toString(), false, "When enabled it will chop down the tree in one go but still consuming the same power");
-        maxDistranceTreeBlocksScan = CustomConfiguration.config.getInt("maxDistranceTreeBlocksScan", "machines" + Configuration.CATEGORY_SPLITTER + this.getRegistryName().getResourcePath().toString(), 40, 0, Integer.MAX_VALUE, "How far the trees will me scanned to be chopped from the ground. WARNING: Increasing this number with big trees may cause some lag when scanning for a tree.");
+        maxDistanceTreeBlocksScan = CustomConfiguration.config.getInt("maxDistanceTreeBlocksScan", "machines" + Configuration.CATEGORY_SPLITTER + this.getRegistryName().getResourcePath().toString(), 100, 0, Integer.MAX_VALUE, "How far the trees will me scanned to be chopped from the ground. WARNING: Increasing this number with big trees may cause some lag when scanning for a tree.");
     }
 
     public int getSludgeOperation() {
@@ -48,8 +48,8 @@ public class CropRecolectorBlock extends CustomAreaOrientedBlock<CropRecolectorT
         return reducedChunkUpdates;
     }
 
-    public int getMaxDistranceTreeBlocksScan() {
-        return maxDistranceTreeBlocksScan;
+    public int getMaxDistanceTreeBlocksScan() {
+        return maxDistanceTreeBlocksScan;
     }
 
     public void createRecipe() {

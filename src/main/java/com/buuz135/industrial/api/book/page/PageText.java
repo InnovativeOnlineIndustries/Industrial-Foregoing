@@ -28,6 +28,11 @@ public class PageText implements IPage {
         return TextFormatting.GOLD + s + TextFormatting.RESET + COLOR;
     }
 
+    public static List<IPage> createTranslatedPages(String string, String... params) {
+        String translated = I18n.format(string, params).replaceAll("[{]", HIGHLIGHT.toString()).replaceAll("[}]", COLOR.toString()).replaceAll("@L@", "\n");
+        return Arrays.stream(translated.split("(@PAGE@)")).map(PageText::new).collect(Collectors.toList());
+    }
+
     @Override
     public void drawScreenPre(CategoryEntry entry, GUIBookBase base, int mouseX, int mouseY, float partialTicks, FontRenderer renderer) {
         renderer.drawSplitString(COLOR + text, base.getGuiLeft() + 20, base.getGuiTop() + 25, base.getGuiXSize() - 35, 0xFFFFFF);
@@ -36,11 +41,6 @@ public class PageText implements IPage {
     @Override
     public void drawScreen(CategoryEntry entry, GUIBookBase base, int mouseX, int mouseY, float partialTicks, FontRenderer renderer) {
 
-    }
-
-    public static List<IPage> createTranslatedPages(String string, String... params) {
-        String translated = I18n.format(string, params).replaceAll("[{]", HIGHLIGHT.toString()).replaceAll("[}]", COLOR.toString()).replaceAll("@L@", "\n");
-        return Arrays.stream(translated.split("(@PAGE@)")).map(PageText::new).collect(Collectors.toList());
     }
 
     @Override
