@@ -59,13 +59,14 @@ public class AnimalResourceHarvesterTile extends WorkingAreaElectricMachine {
     public float work() {
         if (WorkUtils.isDisabled(this.getBlockType())) return 0;
         List<EntityAnimal> animals = this.world.getEntitiesWithinAABB(EntityAnimal.class, getWorkingArea());
+        boolean hasWorked = false;
         for (EntityAnimal living : animals) {
             if (living instanceof IShearable && ((IShearable) living).isShearable(new ItemStack(Items.SHEARS), this.world, living.getPosition())) {
                 List<ItemStack> stacks = ((IShearable) living).onSheared(new ItemStack(Items.SHEARS), this.world, null, 0);
                 for (ItemStack stack : stacks) {
                     ItemHandlerHelper.insertItem(outItems, stack, false);
                 }
-                return 1;
+                hasWorked = true;
             }
             FakePlayer player = IndustrialForegoing.getFakePlayer(this.world);
             player.setPosition(living.posX, living.posY, living.posZ);
@@ -75,17 +76,17 @@ public class AnimalResourceHarvesterTile extends WorkingAreaElectricMachine {
                 if (stack.hasCapability(CapabilityFluidHandler.FLUID_HANDLER_ITEM_CAPABILITY, null)) {
                     IFluidHandlerItem fluidHandlerItem = stack.getCapability(CapabilityFluidHandler.FLUID_HANDLER_ITEM_CAPABILITY, null);
                     tank.fill(fluidHandlerItem.drain(Integer.MAX_VALUE, true), true);
-                    return 1;
+                    hasWorked = true;
                 }
             }
         }
         for (EntitySquid animal : this.world.getEntitiesWithinAABB(EntitySquid.class, getWorkingArea())) {
             if (world.rand.nextBoolean() && world.rand.nextBoolean() && world.rand.nextBoolean() && world.rand.nextBoolean()) {
                 ItemHandlerHelper.insertItem(outItems, new ItemStack(Items.DYE), false);
-                return 1;
+                hasWorked = true;
             }
         }
-        return 0;
+        return hasWorked ? 1 : 0;
     }
 
     @Override
