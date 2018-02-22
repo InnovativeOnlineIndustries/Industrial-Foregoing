@@ -1,5 +1,6 @@
 # 1.8.3
 + Fixed Animal Rancher only milking cows if there was a cow
++ Meet Feeder now gives some saturation points
 
 # 1.8.2
 + Added a config option to increase the range of tree checking

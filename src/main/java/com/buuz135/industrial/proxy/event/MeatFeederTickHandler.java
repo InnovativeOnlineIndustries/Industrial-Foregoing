@@ -20,6 +20,11 @@ public class MeatFeederTickHandler {
                         if (filledAmount >= 200) {
                             ((MeatFeederItem) stack.getItem()).drain(stack, 200);
                             player.getFoodStats().setFoodLevel(player.getFoodStats().getFoodLevel() + 1);
+                            filledAmount = ((MeatFeederItem) stack.getItem()).getFilledAmount(stack);
+                            if (filledAmount >= 500 && player.getFoodStats().getSaturationLevel() < 10) {
+                                ((MeatFeederItem) stack.getItem()).drain(stack, 500);
+                                player.getFoodStats().setFoodSaturationLevel(8f);
+                            }
                             return;
                         }
                     }
