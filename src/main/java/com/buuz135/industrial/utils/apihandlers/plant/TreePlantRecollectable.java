@@ -47,7 +47,6 @@ public class TreePlantRecollectable extends PlantRecollectable {
             TreeCache cache = treeCache.get(pos);
             if (cache.getWoodCache().isEmpty() && cache.getLeavesCache().isEmpty() && canBeHarvested(world, pos, blockState)) {
                 cache.scanForTreeBlockSection();
-                return null;
             }
             int operations = BlockRegistry.cropRecolectorBlock.getTreeOperations();
             if (BlockRegistry.cropRecolectorBlock.isReducedChunkUpdates()) {

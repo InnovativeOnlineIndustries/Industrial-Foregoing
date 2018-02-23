@@ -79,8 +79,7 @@ public class CropRecolectorTile extends WorkingAreaElectricMachine {
                 PlantRecollectable plantRecollectable = recollectable.get();
                 ++operationAmount;
                 List<ItemStack> items = plantRecollectable.doHarvestOperation(this.world, pos, state, hasShearingAddon(), operationAmount);
-                if (items == null) return 0.01f;
-                insertItems(items, outItems);
+                if (items != null) insertItems(items, outItems);
                 if (!plantRecollectable.shouldCheckNextPlant(this.world, pos, state)) shouldPointerIncrease = false;
             }
             didWork = recollectable.isPresent();
