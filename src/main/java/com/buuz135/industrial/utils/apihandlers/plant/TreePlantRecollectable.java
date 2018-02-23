@@ -26,7 +26,9 @@ public class TreePlantRecollectable extends PlantRecollectable {
     public boolean canBeHarvested(World world, BlockPos pos, IBlockState blockState) {
         if (treeCache.containsKey(pos)) return true;
         if (BlockUtils.isLog(world, pos)) {
-            treeCache.put(pos, new TreeCache(world, pos));
+            TreeCache cache = new TreeCache(world, pos);
+            cache.scanForTreeBlockSection();
+            treeCache.put(pos, cache);
             return true;
         }
         return false;

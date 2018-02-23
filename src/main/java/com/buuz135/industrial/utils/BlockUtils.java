@@ -1,7 +1,8 @@
 package com.buuz135.industrial.utils;
 
 import com.buuz135.industrial.IndustrialForegoing;
-import net.minecraft.block.BlockLeaves;
+import com.google.common.collect.HashMultimap;
+import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.renderer.*;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
@@ -24,6 +25,8 @@ import java.util.List;
 
 public class BlockUtils {
 
+    private static HashMultimap<String, Block> oreDictBlocks = HashMultimap.create();
+
     public static List<BlockPos> getBlockPosInAABB(AxisAlignedBB axisAlignedBB) {
         List<BlockPos> blocks = new ArrayList<BlockPos>();
         for (double x = axisAlignedBB.minX; x < axisAlignedBB.maxX; ++x) {
@@ -38,23 +41,30 @@ public class BlockUtils {
 
     public static boolean isBlockOreDict(World world, BlockPos pos, String ore) {
         IBlockState state = world.getBlockState(pos);
-        Item item = Item.getItemFromBlock(state.getBlock());
+        Block block = state.getBlock();
+        if (oreDictBlocks.containsEntry(ore, block)) {
+            return true;
+        }
+        Item item = Item.getItemFromBlock(block);
         if (!item.equals(Items.AIR)) {
             ItemStack stack = new ItemStack(item);
             int id = OreDictionary.getOreID(ore);
             for (int i : OreDictionary.getOreIDs(stack)) {
-                if (i == id) return true;
+                if (i == id) {
+                    oreDictBlocks.put(ore, block);
+                    return true;
+                }
             }
         }
         return false;
     }
 
     public static boolean isLog(World world, BlockPos pos) {
-        return world.getBlockState(pos).getBlock().isWood(world, pos) || isBlockOreDict(world, pos, "blockSlimeCongealed");
+        return (world.getBlockState(pos).getBlock().isWood(world, pos) || isBlockOreDict(world, pos, "blockSlimeCongealed"));
     }
 
     public static boolean isLeaves(World world, BlockPos pos) {
-        return world.getBlockState(pos).getBlock() instanceof BlockLeaves || isBlockOreDict(world, pos, "treeLeaves");
+        return world.getBlockState(pos).getBlock().isLeaves(world.getBlockState(pos), world, pos);
     }
 
     public static boolean isChorus(World world, BlockPos pos) {

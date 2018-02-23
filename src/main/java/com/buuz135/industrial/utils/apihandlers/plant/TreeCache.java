@@ -26,7 +26,6 @@ public class TreeCache {
         this.current = current;
     }
 
-
     public List<ItemStack> chop(Queue<BlockPos> cache, boolean shear) {
         BlockPos p = cache.peek();
         NonNullList<ItemStack> stacks = NonNullList.create();
@@ -63,17 +62,17 @@ public class TreeCache {
         tree.push(yCheck);
         while (!tree.isEmpty()) {
             BlockPos checking = tree.pop();
-            if (BlockUtils.isLog(world, checking) || BlockUtils.isLeaves(world, checking)) {
+            if (BlockUtils.isLeaves(world, checking) || BlockUtils.isLog(world, checking)) {
                 for (BlockPos blockPos : BlockPos.getAllInBox(checking.add(-1, 0, -1), checking.add(1, 1, 1))) {
                     if (world.isAirBlock(blockPos) || checkedPositions.contains(blockPos) || blockPos.getDistance(current.getX(), current.getY(), current.getZ()) > BlockRegistry.cropRecolectorBlock.getMaxDistanceTreeBlocksScan())
                         continue;
-                    if (BlockUtils.isLog(world, blockPos)) {
-                        tree.push(blockPos);
-                        woodCache.add(blockPos);
-                        checkedPositions.add(blockPos);
-                    } else if (BlockUtils.isLeaves(world, blockPos)) {
+                    if (BlockUtils.isLeaves(world, blockPos)) {
                         tree.push(blockPos);
                         leavesCache.add(blockPos);
+                        checkedPositions.add(blockPos);
+                    } else if (BlockUtils.isLog(world, blockPos)) {
+                        tree.push(blockPos);
+                        woodCache.add(blockPos);
                         checkedPositions.add(blockPos);
                     }
                 }
