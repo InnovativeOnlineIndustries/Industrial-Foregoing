@@ -7,6 +7,7 @@
 + Made entities spawned with the Mob Duplicator not naturally despawn
 + All the transfer addons work now instead of only the first one, generators accepts addons too
 + Increased plant interactor vertical range so it can easily interact with trees
++ Refixed more tree stuff
 
 # 1.8.3
 + Fixed Animal Rancher only milking cows if there was a cow

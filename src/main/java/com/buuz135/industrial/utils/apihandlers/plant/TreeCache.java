@@ -59,7 +59,10 @@ public class TreeCache {
         yCheck = yCheck.add(0, -Math.min(20, yCheck.getY() - current.getY()), 0);
         Set<BlockPos> checkedPositions = new HashSet<>();
         Stack<BlockPos> tree = new Stack<>();
-        tree.push(new BlockPos(current.getX(), yCheck.getY(), current.getZ()));
+        BlockPos test = new BlockPos(current.getX(), yCheck.getY(), current.getZ());
+        for (BlockPos pos : BlockPos.getAllInBox(test.add(1, 0, 0), test.add(0, 0, 1))) {
+            tree.push(pos);
+        }
         while (!tree.isEmpty()) {
             BlockPos checking = tree.pop();
             if (BlockUtils.isLeaves(world, checking) || BlockUtils.isLog(world, checking)) {
