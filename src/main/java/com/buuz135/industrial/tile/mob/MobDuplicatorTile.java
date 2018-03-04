@@ -115,12 +115,14 @@ public class MobDuplicatorTile extends WorkingAreaElectricMachine {
 
                 this.world.spawnEntity(entity);
 
-                if (entity != null) entity.spawnExplosionParticle();
+                if (entity != null) {
+                    entity.spawnExplosionParticle();
+                    entity.enablePersistence();
+                }
                 experienceTank.drain(essenceNeeded, true);
             }
             --spawnAmount;
         }
-
         return 1;
     }
 
