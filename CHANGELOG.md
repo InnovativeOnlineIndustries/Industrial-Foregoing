@@ -3,6 +3,7 @@
 + Made fertilizer apply bonemeal effect
 + Animal rancher will stop milking cows if the tank is full
 + Added a button to change what the Plant Gatherer can harvest trees/plants/anything
++ Added buttons to the Black Hole Unit to fill or empty the player inventory
 
 # 1.8.3
 + Fixed Animal Rancher only milking cows if there was a cow

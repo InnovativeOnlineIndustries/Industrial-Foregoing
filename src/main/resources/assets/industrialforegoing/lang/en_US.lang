@@ -28,6 +28,8 @@ text.industrialforegoing.button.hide_area=Hide working area
 text.industrialforegoing.button.gather.any=Gathering anything
 text.industrialforegoing.button.gather.plant=Gathering plants
 text.industrialforegoing.button.gather.tree=Gathering trees
+text.industrialforegoing.button.blackhole.fill=Fill player inventory with items
+text.industrialforegoing.button.blackhole.empty=Empty player inventory
 
 text.industrialforegoing.tooltip.hold_shift=Hold §e§oShift §7for Details
 text.industrialforegoing.tooltip.accepts_range_addons=* Accepts Range Addon
