@@ -6,6 +6,7 @@
 + Added buttons to the Black Hole Unit to fill or empty the player inventory
 + Made entities spawned with the Mob Duplicator not naturally despawn
 + All the transfer addons work now instead of only the first one, generators accepts addons too
++ Increased plant interactor vertical range so it can easily interact with trees
 
 # 1.8.3
 + Fixed Animal Rancher only milking cows if there was a cow

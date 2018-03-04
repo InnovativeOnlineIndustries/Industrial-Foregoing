@@ -12,7 +12,7 @@ import net.ndrei.teslacorelib.items.MachineCaseItem;
 public class PlantInteractorBlock extends CustomAreaOrientedBlock<PlantInteractorTile> {
 
     public PlantInteractorBlock() {
-        super("plant_interactor", PlantInteractorTile.class, Material.ROCK, 400, 40, RangeType.FRONT, 1, 0, true);
+        super("plant_interactor", PlantInteractorTile.class, Material.ROCK, 400, 40, RangeType.FRONT, 1, 4, true);
     }
 
     @Override
