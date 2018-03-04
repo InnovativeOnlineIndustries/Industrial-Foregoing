@@ -75,4 +75,10 @@ public class TreePlantRecollectable extends PlantRecollectable {
     public List<String> getRecollectablesNames() {
         return Arrays.asList("text.industrialforegoing.plant.any_tree", "text.industrialforegoing.plant.slime_tree");
     }
+
+    @Override
+    public Type getRecollectableType() {
+        return Type.TREE;
+    }
+
 }

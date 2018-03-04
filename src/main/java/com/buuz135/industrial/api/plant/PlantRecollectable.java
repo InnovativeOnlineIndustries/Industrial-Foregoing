@@ -75,4 +75,19 @@ public abstract class PlantRecollectable extends IForgeRegistryEntry.Impl<PlantR
     public List<String> getRecollectablesNames() {
         return new ArrayList<>();
     }
+
+    /**
+     * Returns what type of plant recollects
+     *
+     * @return The type of plant
+     */
+    public Type getRecollectableType() {
+        return Type.PLANT;
+    }
+
+    public enum Type {
+        TREE,
+        PLANT,
+        ANY
+    }
 }

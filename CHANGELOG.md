@@ -2,6 +2,7 @@
 + Fixed a clientside crash when using the meat feeder
 + Made fertilizer apply bonemeal effect
 + Animal rancher will stop milking cows if the tank is full
++ Added a button to change what the Plant Gatherer can harvest trees/plants/anything
 
 # 1.8.3
 + Fixed Animal Rancher only milking cows if there was a cow

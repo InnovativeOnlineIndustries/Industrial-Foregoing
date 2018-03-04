@@ -8,6 +8,7 @@ import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import net.ndrei.teslacorelib.gui.BasicTeslaGuiContainer;
@@ -17,8 +18,9 @@ import net.ndrei.teslacorelib.inventory.BoundingRectangle;
 import net.ndrei.teslacorelib.render.IWorkAreaProvider;
 import net.ndrei.teslacorelib.render.WorkingAreaRenderer;
 import net.ndrei.teslacorelib.utils.BlockCube;
+import org.jetbrains.annotations.NotNull;
 
-import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 public abstract class WorkingAreaElectricMachine extends CustomElectricMachine implements IWorkAreaProvider {
@@ -68,12 +70,13 @@ public abstract class WorkingAreaElectricMachine extends CustomElectricMachine i
                 showArea = !showArea;
             }
 
+
+            @NotNull
             @Override
-            public void drawForegroundLayer(BasicTeslaGuiContainer container, int guiX, int guiY, int mouseX, int mouseY) {
-                super.drawForegroundLayer(container, guiX, guiY, mouseX, mouseY);
-                if (isInside(container, mouseX, mouseY))
-                    container.drawTooltip(Arrays.asList(getCurrentState() == 0 ? "Show working area" : "Hide working area"), mouseX - guiX, mouseY - guiY);
+            protected List<String> getStateToolTip(int state) {
+                return Collections.singletonList(state == 0 ? new TextComponentTranslation("text.industrialforegoing.button.show_area").getFormattedText() : new TextComponentTranslation("text.industrialforegoing.button.hide_area").getFormattedText());
             }
+
         });
 
         return list;
