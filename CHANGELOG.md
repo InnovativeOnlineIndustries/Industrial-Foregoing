@@ -5,6 +5,7 @@
 + Added a button to change what the Plant Gatherer can harvest trees/plants/anything
 + Added buttons to the Black Hole Unit to fill or empty the player inventory
 + Made entities spawned with the Mob Duplicator not naturally despawn
++ All the transfer addons work now instead of only the first one, generators accepts addons too
 
 # 1.8.3
 + Fixed Animal Rancher only milking cows if there was a cow

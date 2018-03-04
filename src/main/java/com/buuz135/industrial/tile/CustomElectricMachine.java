@@ -21,7 +21,6 @@ import net.ndrei.teslacorelib.gui.BasicTeslaGuiContainer;
 import net.ndrei.teslacorelib.gui.IGuiContainerPiece;
 import net.ndrei.teslacorelib.gui.SideDrawerPiece;
 import net.ndrei.teslacorelib.inventory.BoundingRectangle;
-import net.ndrei.teslacorelib.items.BaseAddon;
 import net.ndrei.teslacorelib.items.SpeedUpgradeTier1;
 import net.ndrei.teslacorelib.items.SpeedUpgradeTier2;
 import net.ndrei.teslacorelib.tileentities.ElectricMachine;
@@ -114,12 +113,8 @@ public abstract class CustomElectricMachine extends ElectricMachine implements I
                 this.forceSync();
             }
         }
-        if (tick % 10 == 0) {
-            List<ItemStack> stacks = new ArrayList<>();
-            for (BaseAddon addon : this.getAddons()) {
-                stacks.add(this.getAddonStack(addon.getClass()));
-            }
-            workTransferAddon(this, stacks);
+        if (tick % 10 == 0 && this.getAddonItems() != null) {
+            workTransferAddon(this, this.getAddonItems());
         }
         ++tick;
         if (tick >= 20) {

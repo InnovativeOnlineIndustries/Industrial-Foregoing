@@ -1,8 +1,11 @@
 package com.buuz135.industrial.tile;
 
+import com.buuz135.industrial.item.addon.movility.TransferAddon;
 import com.buuz135.industrial.jei.JEIHelper;
+import com.buuz135.industrial.tile.api.IAcceptsTransferAddons;
 import net.minecraft.item.EnumDyeColor;
 import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumFacing;
 import net.ndrei.teslacorelib.compatibility.FontRendererUtil;
 import net.ndrei.teslacorelib.gui.BasicTeslaGuiContainer;
@@ -16,10 +19,13 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-public abstract class CustomGeneratorMachine extends ElectricGenerator {
+public abstract class CustomGeneratorMachine extends ElectricGenerator implements IAcceptsTransferAddons {
+
+    private int tick;
 
     protected CustomGeneratorMachine(int typeId) {
         super(typeId);
+        tick = 0;
     }
 
     @Override
@@ -53,5 +59,37 @@ public abstract class CustomGeneratorMachine extends ElectricGenerator {
             }
         });
         return pieces;
+    }
+
+    @NotNull
+    @Override
+    public NBTTagCompound writeToNBT(@NotNull NBTTagCompound compound) {
+        compound = super.writeToNBT(compound);
+        compound.setInteger("Tick", tick);
+        return compound;
+    }
+
+    @Override
+    public void readFromNBT(@NotNull NBTTagCompound compound) {
+        super.readFromNBT(compound);
+        tick = compound.getInteger("Tick");
+    }
+
+    @Override
+    public void protectedUpdate() {
+        super.protectedUpdate();
+        if (this.world.isRemote) return;
+        if (tick % 10 == 0 && this.getAddonItems() != null) {
+            workTransferAddon(this, this.getAddonItems());
+        }
+        ++tick;
+        if (tick >= 20) {
+            tick = 0;
+        }
+    }
+
+    @Override
+    public boolean canAcceptAddon(TransferAddon addon) {
+        return !this.hasAddon(addon.getClass()) || (this.getAddon(addon.getClass()) != null && this.getAddon(addon.getClass()).getMode() != addon.getMode());
     }
 }
