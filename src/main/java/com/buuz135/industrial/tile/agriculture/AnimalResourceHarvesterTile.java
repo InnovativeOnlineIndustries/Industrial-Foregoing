@@ -68,15 +68,17 @@ public class AnimalResourceHarvesterTile extends WorkingAreaElectricMachine {
                 }
                 hasWorked = true;
             }
-            FakePlayer player = IndustrialForegoing.getFakePlayer(this.world);
-            player.setPosition(living.posX, living.posY, living.posZ);
-            player.setHeldItem(EnumHand.MAIN_HAND, new ItemStack(Items.BUCKET));
-            if (living.processInteract(player, EnumHand.MAIN_HAND)) {
-                ItemStack stack = player.getHeldItem(EnumHand.MAIN_HAND);
-                if (stack.hasCapability(CapabilityFluidHandler.FLUID_HANDLER_ITEM_CAPABILITY, null)) {
-                    IFluidHandlerItem fluidHandlerItem = stack.getCapability(CapabilityFluidHandler.FLUID_HANDLER_ITEM_CAPABILITY, null);
-                    tank.fill(fluidHandlerItem.drain(Integer.MAX_VALUE, true), true);
-                    hasWorked = true;
+            if (tank.getFluidAmount() <= 7000) {
+                FakePlayer player = IndustrialForegoing.getFakePlayer(this.world);
+                player.setPosition(living.posX, living.posY, living.posZ);
+                player.setHeldItem(EnumHand.MAIN_HAND, new ItemStack(Items.BUCKET));
+                if (living.processInteract(player, EnumHand.MAIN_HAND)) {
+                    ItemStack stack = player.getHeldItem(EnumHand.MAIN_HAND);
+                    if (stack.hasCapability(CapabilityFluidHandler.FLUID_HANDLER_ITEM_CAPABILITY, null)) {
+                        IFluidHandlerItem fluidHandlerItem = stack.getCapability(CapabilityFluidHandler.FLUID_HANDLER_ITEM_CAPABILITY, null);
+                        tank.fill(fluidHandlerItem.drain(Integer.MAX_VALUE, true), true);
+                        hasWorked = true;
+                    }
                 }
             }
         }

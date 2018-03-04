@@ -1,6 +1,7 @@
 # 1.8.4
 + Fixed a clientside crash when using the meat feeder
 + Made fertilizer apply bonemeal effect
++ Animal rancher will stop milking cows if the tank is full
 
 # 1.8.3
 + Fixed Animal Rancher only milking cows if there was a cow
