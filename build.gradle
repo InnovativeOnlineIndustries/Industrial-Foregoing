@@ -57,7 +57,7 @@ repositories {
     jcenter()
     maven { name = 'forgelin'; url = 'http://maven.shadowfacts.net' }
     maven { url 'http://maven.epoxide.xyz' }
-    maven { url 'https://maven.modcrafters.net' }
+    maven { name='TCL'; url='https://maven.mcmoddev.com' }
     maven {
         // location of the maven that hosts JEI files
         name = "Progwml6 maven"
@@ -73,7 +73,7 @@ repositories {
 dependencies {
     compileOnly "org.jetbrains.kotlin:kotlin-stdlib-jre8:1.1.3-2"
 
-    compile("net.ndrei:tesla-core-lib:1.12-${project.tesla_core_version}:deobf") {
+    compile("net.ndrei:tesla-core-lib:${project.teslacorelib_mc_version}-${project.teslacorelib_version}:deobf") {
         changing = true
     }
     compileOnly "org.projectlombok:lombok:1.16.16"
