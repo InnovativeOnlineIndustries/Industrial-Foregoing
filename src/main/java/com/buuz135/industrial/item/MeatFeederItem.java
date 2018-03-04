@@ -21,6 +21,7 @@ public class MeatFeederItem extends IFCustomItem {
 
     public MeatFeederItem() {
         super("meat_feeder");
+        setMaxStackSize(1);
     }
 
     @Nullable

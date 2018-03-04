@@ -1,3 +1,6 @@
+# 1.8.4
++ Fixed a clientside crash when using the meat feeder
+
 # 1.8.3
 + Fixed Animal Rancher only milking cows if there was a cow
 + Meet Feeder now gives some saturation points

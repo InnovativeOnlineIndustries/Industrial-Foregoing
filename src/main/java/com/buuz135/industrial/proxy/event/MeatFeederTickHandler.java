@@ -13,18 +13,13 @@ public class MeatFeederTickHandler {
     public void onTick(LivingEvent.LivingUpdateEvent event) {
         if (!event.getEntityLiving().getEntityWorld().isRemote && event.getEntityLiving() instanceof EntityPlayer) {
             EntityPlayer player = (EntityPlayer) event.getEntityLiving();
-            if (player.getFoodStats().needFood()) {
+            if (player.getFoodStats().needFood() || player.getFoodStats().getSaturationLevel() < 10) {
                 for (ItemStack stack : player.inventory.mainInventory) {
                     if (stack.getItem().equals(ItemRegistry.meatFeederItem)) {
                         int filledAmount = ((MeatFeederItem) stack.getItem()).getFilledAmount(stack);
-                        if (filledAmount >= 200) {
-                            ((MeatFeederItem) stack.getItem()).drain(stack, 200);
-                            player.getFoodStats().setFoodLevel(player.getFoodStats().getFoodLevel() + 1);
-                            filledAmount = ((MeatFeederItem) stack.getItem()).getFilledAmount(stack);
-                            if (filledAmount >= 500 && player.getFoodStats().getSaturationLevel() < 10) {
-                                ((MeatFeederItem) stack.getItem()).drain(stack, 500);
-                                player.getFoodStats().setFoodSaturationLevel(8f);
-                            }
+                        if (filledAmount >= 400 && (player.getFoodStats().getSaturationLevel() < 20 || player.getFoodStats().getFoodLevel() < 20)) {
+                            ((MeatFeederItem) stack.getItem()).drain(stack, 400);
+                            player.getFoodStats().addStats(1, 1);
                             return;
                         }
                     }
