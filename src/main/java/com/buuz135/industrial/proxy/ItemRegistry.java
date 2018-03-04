@@ -23,7 +23,7 @@ public class ItemRegistry {
     public static IFCustomItem tinyDryRubber;
     public static IFCustomItem dryRubber;
     public static IFCustomItem plastic;
-    public static IFCustomItem fertilizer;
+    public static FertilizerItem fertilizer;
     public static LaserLensItem laserLensItem;
     public static LaserLensItem laserLensItem_inverted;
     public static IFCustomItem pinkSlime;
@@ -46,7 +46,7 @@ public class ItemRegistry {
         RecipeUtils.addShapelessRecipe(new ItemStack(dryRubber), new ItemStack(tinyDryRubber), new ItemStack(tinyDryRubber), new ItemStack(tinyDryRubber), new ItemStack(tinyDryRubber), new ItemStack(tinyDryRubber), new ItemStack(tinyDryRubber), new ItemStack(tinyDryRubber), new ItemStack(tinyDryRubber), new ItemStack(tinyDryRubber));
         (plastic = new IFCustomItem("plastic")).register(itemRegistry);
         GameRegistry.addSmelting(dryRubber, new ItemStack(plastic), 0);
-        (fertilizer = new IFCustomItem("fertilizer")).register(itemRegistry);
+        (fertilizer = new FertilizerItem()).register(itemRegistry);
         (meatFeederItem = new MeatFeederItem()).register(itemRegistry);
         (mobImprisonmentToolItem = new MobImprisonmentToolItem()).register(itemRegistry);
         (laserLensItem = new LaserLensItem(false)).register(itemRegistry);
