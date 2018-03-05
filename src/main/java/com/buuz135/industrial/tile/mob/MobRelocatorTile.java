@@ -15,7 +15,7 @@ import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.item.EntityXPOrb;
 import net.minecraft.item.EnumDyeColor;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.DamageSource;
+import net.minecraft.util.EntityDamageSource;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraftforge.common.util.FakePlayer;
 import net.minecraftforge.fluids.FluidStack;
@@ -82,10 +82,10 @@ public class MobRelocatorTile extends WorkingAreaElectricMachine implements IAcc
         AxisAlignedBB area = getWorkingArea();
         List<EntityLiving> mobs = this.getWorld().getEntitiesWithinAABB(EntityLiving.class, area);
         if (mobs.size() == 0) return 0;
-        FakePlayer player = IndustrialForegoing.getFakePlayer(world);
+        FakePlayer player = IndustrialForegoing.getFakePlayer(world, pos);
         AtomicBoolean hasWorked = new AtomicBoolean(false);
         mobs.stream().filter(entityLiving -> !hasAddon() || (!(entityLiving instanceof EntityAgeable) || !entityLiving.isChild())).forEach(entityLiving -> {
-            entityLiving.attackEntityFrom(DamageSource.causePlayerDamage(player), Integer.MAX_VALUE);
+            entityLiving.attackEntityFrom(new EntityDamageSource("mob_crusher", player), Integer.MAX_VALUE);
             hasWorked.set(true);
         });
         List<EntityItem> items = this.getWorld().getEntitiesWithinAABB(EntityItem.class, area);

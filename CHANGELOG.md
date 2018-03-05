@@ -8,6 +8,7 @@
 + All the transfer addons work now instead of only the first one, generators accepts addons too
 + Increased plant interactor vertical range so it can easily interact with trees
 + Refixed more tree stuff
++ Changed how the damage source gets applied in the mob crusher to entities, hopefully getting more player only drops
 
 # 1.8.3
 + Fixed Animal Rancher only milking cows if there was a cow
