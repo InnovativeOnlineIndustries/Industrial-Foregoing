@@ -64,10 +64,12 @@ public class MobRelocatorTile extends WorkingAreaElectricMachine implements IAcc
     @Override
     public void protectedUpdate() {
         super.protectedUpdate();
+        if (this.world.isRemote) return;
         this.getWorld().getEntitiesWithinAABB(EntityXPOrb.class, getWorkingArea().expand(2, 2, 2)).stream().filter(entityXPOrb -> !entityXPOrb.isDead).forEach(entityXPOrb -> {
             if (this.outExp.fill(new FluidStack(FluidsRegistry.ESSENCE, (int) (entityXPOrb.getXpValue() * 20 * BlockRegistry.mobRelocatorBlock.getEssenceMultiplier())), false) > 0) {
                 this.outExp.fill(new FluidStack(FluidsRegistry.ESSENCE, (int) (entityXPOrb.getXpValue() * 20 * BlockRegistry.mobRelocatorBlock.getEssenceMultiplier())), true);
                 entityXPOrb.setDead();
+                this.forceSync();
             } else if (entityXPOrb.xpOrbAge < 4800) {
                 entityXPOrb.xpOrbAge = 4800;
             }

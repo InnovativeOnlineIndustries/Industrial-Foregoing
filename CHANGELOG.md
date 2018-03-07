@@ -1,3 +1,6 @@
+# 1.8.5
++ Made Mob Crusher XP collection server side only
+
 # 1.8.4
 + Fixed a clientside crash when using the meat feeder
 + Made fertilizer apply bonemeal effect
