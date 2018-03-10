@@ -73,7 +73,6 @@ public class MobRelocatorTile extends WorkingAreaElectricMachine implements IAcc
             } else if (entityXPOrb.xpOrbAge < 4800) {
                 entityXPOrb.xpOrbAge = 4800;
             }
-
         });
     }
 
@@ -92,7 +91,7 @@ public class MobRelocatorTile extends WorkingAreaElectricMachine implements IAcc
         });
         List<EntityItem> items = this.getWorld().getEntitiesWithinAABB(EntityItem.class, area);
         for (EntityItem item : items) {
-            if (!item.getItem().isEmpty()) {
+            if (!item.getItem().isEmpty() && !item.isDead) {
                 if (ItemHandlerHelper.insertItem(outItems, item.getItem(), true).isEmpty()) {
                     ItemHandlerHelper.insertItem(outItems, item.getItem(), false);
                     item.setDead();

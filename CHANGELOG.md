@@ -1,5 +1,6 @@
 # 1.8.5
 + Made Mob Crusher XP collection server side only
++ Added a safety check when collecting item in the mob crusher
 
 # 1.8.4
 + Fixed a clientside crash when using the meat feeder
