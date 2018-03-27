@@ -149,6 +149,13 @@ public class CropSowerTile extends WorkingAreaElectricMachine {
 
     private int getFilteredSlot(BlockPos pos) {
         int radius = getRadius();
+        if (radius == 0) {
+            for (int i = 0; i < inPlant.getSlots(); ++i) {
+                if (!inPlant.getStackInSlot(i).isEmpty()) {
+                    return i;
+                }
+            }
+        }
         int x = Math.round(1.49F * (pos.getX() - this.pos.getX()) / radius);
         int z = Math.round(1.49F * (pos.getZ() - this.pos.getZ()) / radius);
         return 4 + x + 3 * z;

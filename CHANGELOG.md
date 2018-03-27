@@ -2,6 +2,7 @@
 + Maybe fixed Mob Crusher sending chat msg on kill
 + Added a config option to make withers only be spawned with the wither builder, players won't be able to place skulls. The recipe will change as the default needs a nether star. (HCWither)
 + Tree Fluid Extractor now stops breaking the log if the tank is full
++ When the tier 0 addon is installed the plant sower will get items from any slot
 
 # 1.8.5
 + Made Mob Crusher XP collection server side only
