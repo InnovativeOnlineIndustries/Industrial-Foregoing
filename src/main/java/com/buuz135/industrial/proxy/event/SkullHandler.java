@@ -11,6 +11,8 @@ import net.minecraftforge.common.util.FakePlayer;
 import net.minecraftforge.event.entity.player.ItemTooltipEvent;
 import net.minecraftforge.event.world.BlockEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class SkullHandler {
 
@@ -25,6 +27,7 @@ public class SkullHandler {
         event.setCanceled(true);
     }
 
+    @SideOnly(Side.CLIENT)
     @SubscribeEvent
     public void onTooltip(ItemTooltipEvent event) {
         if (!BlockRegistry.witherBuilderBlock.isHCWither()) return;
