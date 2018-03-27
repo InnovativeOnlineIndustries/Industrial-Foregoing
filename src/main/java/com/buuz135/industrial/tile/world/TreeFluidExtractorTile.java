@@ -46,6 +46,7 @@ public class TreeFluidExtractorTile extends CustomSidedTileEntity {
         if (this.getWorld().isRemote) return;
         if (!BlockUtils.isLog(this.world, this.pos.offset(this.getFacing().getOpposite())))
             WoodLodProgress.remove(this.world, this.pos.offset(this.getFacing().getOpposite()));
+        if (tank.getFluidAmount() == 8000) return;
         if (tick % 5 == 0 && BlockUtils.isLog(this.world, this.pos.offset(this.getFacing().getOpposite()))) {
             WoodLodProgress woodLog = WoodLodProgress.getWoodLogOrDefault(this.world, this.pos.offset(this.getFacing().getOpposite()));
             tank.fill(new FluidStack(FluidsRegistry.LATEX, 1), true);
