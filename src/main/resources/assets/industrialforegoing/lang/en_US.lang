@@ -42,6 +42,7 @@ text.industrialforegoing.tooltip.items=items
 text.industrialforegoing.tooltip.mb=mb
 text.industrialforegoing.tooltip.max_transfer_amount=Max Transfer Amount:
 text.industrialforegoing.tooltip.tick_time=10 ticks
+text.industrialforegoing.tooltip.no_wither_skull=It seems that you can't place this, maybe a machine can do it.
 
 text.industrialforegoing.direction=Direction:
 text.industrialforegoing.up=Up

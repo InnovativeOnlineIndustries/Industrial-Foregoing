@@ -52,6 +52,7 @@ public class CommonProxy {
         MinecraftForge.EVENT_BUS.register(new PlantRecollectableRegistryHandler());
         MinecraftForge.EVENT_BUS.register(new FakePlayerRideEntityHandler());
         MinecraftForge.EVENT_BUS.register(new PlantInteractorHarvestDropsHandler());
+        MinecraftForge.EVENT_BUS.register(new SkullHandler());
 
         NetworkRegistry.INSTANCE.registerGuiHandler(IndustrialForegoing.instance, new GuiHandler());
 
@@ -60,6 +61,7 @@ public class CommonProxy {
         CustomConfiguration.sync();
         CustomConfiguration.configValues = new HashMap<>();
         CustomConfiguration.configValues.put("useTEFrames", CustomConfiguration.config.getBoolean("useTEFrames", Configuration.CATEGORY_GENERAL, true, "Use Thermal Expansion Machine Frames instead of Tesla Core Lib"));
+        CustomConfiguration.configValues.put("machines.wither_builder.HCWither", CustomConfiguration.config.getBoolean("HCWither", "machines.wither_builder", false, "If enabled, only the wither builder will be able to place wither skulls. That means that players won't be able to place wither skulls. The recipe will change, but that will need a restart."));
 
         if (Loader.isModLoaded("crafttweaker")) CraftTweakerHelper.register();
 

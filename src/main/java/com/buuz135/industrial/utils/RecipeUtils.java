@@ -172,6 +172,17 @@ public class RecipeUtils {
         entry.put("ingredient", ImmutableMap.of("item", "thermalexpansion:frame", "data", 0));
         json.add(entry);
 
+        entry = new HashMap<>();
+        entry.put("name", "IFWITHER");
+        //entry.put("conditions", Arrays.asList(ImmutableMap.of("type", "industrialforegoing:configuration_value", "value", "machines.wither_builder.HCWither")));
+        entry.put("ingredient", ImmutableMap.of("item", "minecraft:nether_star", "data", 0));
+        json.add(entry);
+        entry = new HashMap<>();
+        entry.put("name", "IFWITHER");
+        entry.put("conditions", Arrays.asList(ImmutableMap.of("type", "industrialforegoing:configuration_value", "value", "machines.wither_builder.HCWither")));
+        entry.put("ingredient", ImmutableMap.of("item", "minecraft:skull", "data", 1));
+        json.add(entry);
+
         json.addAll(createOreConditionItem("TIER3", "ingotTin", "minecraft:coal_block"));
         json.addAll(createOreConditionItem("TIER4", "ingotCopper", "minecraft:red_sandstone"));
         json.addAll(createOreConditionItem("TIER5", "ingotBronze", "minecraft:glowstone"));

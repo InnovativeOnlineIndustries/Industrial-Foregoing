@@ -23,7 +23,7 @@
       "item": "#IFCORE"
     },
     "n": {
-      "item": "minecraft:nether_star"
+      "item": "#IFWITHER"
     }
   }
 }

@@ -1,5 +1,6 @@
 # 1.8.6
 + Maybe fixed Mob Crusher sending chat msg on kill
++ Added a config option to make withers only be spawned with the wither builder, players won't be able to place skulls. The recipe will change as the default needs a nether star. (HCWither)
 
 # 1.8.5
 + Made Mob Crusher XP collection server side only

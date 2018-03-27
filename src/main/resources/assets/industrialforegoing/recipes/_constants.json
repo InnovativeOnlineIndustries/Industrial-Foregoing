@@ -9,6 +9,13 @@
   {
     "ingredient": {
       "type": "forge:ore_dict",
+      "ore": "IFWITHER"
+    },
+    "name": "IFWITHER"
+  },
+  {
+    "ingredient": {
+      "type": "forge:ore_dict",
       "ore": "TIER10"
     },
     "name": "TIER10"
@@ -219,6 +226,26 @@
             "value": "useTEFrames"
           }
         ]
+      }
+    ]
+  },
+  {
+    "ingredient": {
+      "item": "minecraft:nether_star",
+      "data": 0
+    },
+    "name": "IFWITHER"
+  },
+  {
+    "ingredient": {
+      "item": "minecraft:skull",
+      "data": 1
+    },
+    "name": "IFWITHER",
+    "conditions": [
+      {
+        "type": "industrialforegoing:configuration_value",
+        "value": "machines.wither_builder.HCWither"
       }
     ]
   },
