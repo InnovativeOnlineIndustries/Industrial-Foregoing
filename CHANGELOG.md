@@ -1,3 +1,6 @@
+# 1.8.6
++ Maybe fixed Mob Crusher sending chat msg on kill
+
 # 1.8.5
 + Made Mob Crusher XP collection server side only
 + Added a safety check when collecting item in the mob crusher

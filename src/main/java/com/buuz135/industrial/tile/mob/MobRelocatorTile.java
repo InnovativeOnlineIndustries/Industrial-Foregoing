@@ -11,12 +11,14 @@ import com.buuz135.industrial.utils.ItemStackUtils;
 import com.buuz135.industrial.utils.WorkUtils;
 import net.minecraft.entity.EntityAgeable;
 import net.minecraft.entity.EntityLiving;
+import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.item.EntityXPOrb;
 import net.minecraft.item.EnumDyeColor;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EntityDamageSource;
 import net.minecraft.util.math.AxisAlignedBB;
+import net.minecraft.util.text.ITextComponent;
 import net.minecraftforge.common.util.FakePlayer;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.IFluidTank;
@@ -86,7 +88,12 @@ public class MobRelocatorTile extends WorkingAreaElectricMachine implements IAcc
         FakePlayer player = IndustrialForegoing.getFakePlayer(world, pos);
         AtomicBoolean hasWorked = new AtomicBoolean(false);
         mobs.stream().filter(entityLiving -> !hasAddon() || (!(entityLiving instanceof EntityAgeable) || !entityLiving.isChild())).forEach(entityLiving -> {
-            entityLiving.attackEntityFrom(new EntityDamageSource("mob_crusher", player), Integer.MAX_VALUE);
+            entityLiving.attackEntityFrom(new EntityDamageSource("mob_crusher", player) {
+                @Override
+                public ITextComponent getDeathMessage(EntityLivingBase entityLivingBaseIn) {
+                    return null;
+                }
+            }, Integer.MAX_VALUE);
             hasWorked.set(true);
         });
         List<EntityItem> items = this.getWorld().getEntitiesWithinAABB(EntityItem.class, area);
