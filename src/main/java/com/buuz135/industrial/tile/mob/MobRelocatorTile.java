@@ -19,6 +19,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.EntityDamageSource;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.TextComponentString;
 import net.minecraftforge.common.util.FakePlayer;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.IFluidTank;
@@ -91,7 +92,7 @@ public class MobRelocatorTile extends WorkingAreaElectricMachine implements IAcc
             entityLiving.attackEntityFrom(new EntityDamageSource("mob_crusher", player) {
                 @Override
                 public ITextComponent getDeathMessage(EntityLivingBase entityLivingBaseIn) {
-                    return null;
+                    return new TextComponentString("");
                 }
             }, Integer.MAX_VALUE);
             hasWorked.set(true);
