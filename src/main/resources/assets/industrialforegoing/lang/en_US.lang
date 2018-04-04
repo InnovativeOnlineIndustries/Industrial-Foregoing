@@ -146,6 +146,8 @@ text.industrialforegoing.book.upgrades=Industrial Foregoing doesn't have speed u
 text.industrialforegoing.book.plant_interactor=When provided with power, it will {right click} crops and fruits to harvest them and store them in its inventory or drop them in the ground if they can't be stored. @L@@L@{*It works with Pam's Fruits and Plants by default.}
 text.industrialforegoing.book.transfer_addon=Transfer addons come in all the shapes and forms but only can transfer {items} and {fluids}, and they can pull and they can push.@L@@L@To change the direction of the action simply {right click} it to cycle between the directions or {shift right click} a side of a block to select that direction. You can enchant the addon with {Efficiency} to increase its transfer amount.
 
+text.industrialforegoing.chat.crusher_kill= %s%d was ground to bits.
+
 tile.industrialforegoing.petrified_fuel_generator.name=Petrified Fuel Generator
 tile.industrialforegoing.enchantment_refiner.name=Enchantment Sorter
 tile.industrialforegoing.enchantment_extractor.name=Enchantment Extractor
