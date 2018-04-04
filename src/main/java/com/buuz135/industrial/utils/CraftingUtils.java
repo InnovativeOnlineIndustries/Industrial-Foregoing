@@ -16,7 +16,9 @@ import net.minecraftforge.fml.common.Loader;
 import net.minecraftforge.oredict.OreDictionary;
 
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
 
 public class CraftingUtils {
 
@@ -59,8 +61,24 @@ public class CraftingUtils {
         return inventoryCrafting;
     }
 
+    public static Set<ItemStack[]> missingRecipes = new HashSet<>();
+
     public static IRecipe findRecipe(World world, ItemStack... inputs) {
-        return CraftingManager.findMatchingRecipe(genCraftingInventory(world, inputs), world);
+        for (ItemStack[] missingRecipe : missingRecipes) {
+            if (doesStackArrayEquals(missingRecipe, inputs)) return null;
+        }
+        IRecipe recipe = CraftingManager.findMatchingRecipe(genCraftingInventory(world, inputs), world);
+        if (recipe == null) missingRecipes.add(inputs);
+        return recipe;
+    }
+
+    public static boolean doesStackArrayEquals(ItemStack[] original, ItemStack[] compare) {
+        if (original.length != compare.length) return false;
+        for (int i = 0; i < original.length; i++) {
+            if (original[i].isEmpty() && compare[i].isEmpty()) continue;
+            if (!original[i].isItemEqual(compare[i])) return false;
+        }
+        return true;
     }
 
     public static ItemStack getCrushOutput(ItemStack stack) {
