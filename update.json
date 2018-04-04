@@ -1,17 +1,46 @@
 {
-  "homepage": "https://minecraft.curseforge.com/projects/industrial-foregoing",
-  "1.12": {
-    "1.3": "https://github.com/Buuz135/Industrial-Foregoing/blob/master/CHANGELOG.md",
-    "1.3.1": "https://github.com/Buuz135/Industrial-Foregoing/blob/master/CHANGELOG.md",
-    "1.4": "https://github.com/Buuz135/Industrial-Foregoing/blob/master/CHANGELOG.md",
-    "1.4.1": "https://github.com/Buuz135/Industrial-Foregoing/blob/master/CHANGELOG.md",
-    "1.4.2": "https://github.com/Buuz135/Industrial-Foregoing/blob/master/CHANGELOG.md",
-    "1.4.3": "https://github.com/Buuz135/Industrial-Foregoing/blob/master/CHANGELOG.md",
-    "1.5.0": "https://github.com/Buuz135/Industrial-Foregoing/blob/master/CHANGELOG.md",
-    "1.5.1": "https://github.com/Buuz135/Industrial-Foregoing/blob/master/CHANGELOG.md"
+  "homepage":"https://minecraft.curseforge.com/projects/industrial-foregoing",
+  "1.12":{
+    "1.3":"https://github.com/Buuz135/Industrial-Foregoing/blob/1e98289b3940c74a1b3adef055e9d55ec5709628/CHANGELOG.md",
+    "1.3.1":"https://github.com/Buuz135/Industrial-Foregoing/blob/04768b4508af82fcde49a0280e124a7240e9f501/CHANGELOG.md",
+    "1.4":"https://github.com/Buuz135/Industrial-Foregoing/blob/92af08b4cf6600a77f17582cf7cccee1a7581ad2/CHANGELOG.md",
+    "1.4.1":"https://github.com/Buuz135/Industrial-Foregoing/blob/e51e3fd24648e60bcbe80742f08e45666de25405/CHANGELOG.md",
+    "1.4.2":"https://github.com/Buuz135/Industrial-Foregoing/blob/4429f1f5f9087dd2f7fd4ddb6eb5822a314f6b5b/CHANGELOG.md",
+    "1.4.3":"https://github.com/Buuz135/Industrial-Foregoing/blob/728e79d753ba9d89cbb003930f82c25f76d76842/CHANGELOG.md",
+    "1.5":"https://github.com/Buuz135/Industrial-Foregoing/blob/12d0bf2266283ae26141c2e6a1f19d932fdd98f7/CHANGELOG.md",
+    "1.5.1":"https://github.com/Buuz135/Industrial-Foregoing/blob/1dc601ba01146453c3e23941dfc0d57aad147543/CHANGELOG.md",
+    "1.5.2":"https://github.com/Buuz135/Industrial-Foregoing/blob/08fd71784f5872e981e6f7044db77678c6df1337/CHANGELOG.md",
+    "1.5.3":"https://github.com/Buuz135/Industrial-Foregoing/blob/10e9b567da5a1e6a02941696d186091d94d79cf7/CHANGELOG.md",
+    "1.5.4":"https://github.com/Buuz135/Industrial-Foregoing/blob/03eb69afa8a5209ac9184a8f24b3a88bac6d3838/CHANGELOG.md",
+    "1.5.5":"https://github.com/Buuz135/Industrial-Foregoing/blob/4c5fc1d206686218b5a09b295e25036827bee072/CHANGELOG.md",
+    "1.5.6":"https://github.com/Buuz135/Industrial-Foregoing/blob/f998185a310903c8c0a3bcc761795bb1fad72212/CHANGELOG.md",
+    "1.5.7":"https://github.com/Buuz135/Industrial-Foregoing/blob/eeb6555f90ecf3e49dc926a8ef773189f9f4dd5c/CHANGELOG.md",
+    "1.5.8":"https://github.com/Buuz135/Industrial-Foregoing/blob/e625ed90313353ac4ccd8f8ac2f5f17ba4acf138/CHANGELOG.md",
+    "1.5.9":"https://github.com/Buuz135/Industrial-Foregoing/blob/16ca0aff6ecac992c114a0e55bc54cf20c4f50a3/CHANGELOG.md",
+    "1.5.10":"https://github.com/Buuz135/Industrial-Foregoing/blob/220e4bc7e10d08528d437e9774caad36a0132239/CHANGELOG.md",
+    "1.5.11":"https://github.com/Buuz135/Industrial-Foregoing/blob/ea0fb39bf4f79333d183ce2e7364bbf7b458e5f3/CHANGELOG.md",
+    "1.5.12":"https://github.com/Buuz135/Industrial-Foregoing/blob/b96d65882717f2527164f8151657fe80a51cf54a/CHANGELOG.md",
+    "1.5.13":"https://github.com/Buuz135/Industrial-Foregoing/blob/4fefcdc9b7ed6e0f8e366f6812c016ca51f894ff/CHANGELOG.md",
+    "1.6.0":"https://github.com/Buuz135/Industrial-Foregoing/blob/69634c36392ec7d461896c5fbeed44a08823cdce/CHANGELOG.md",
+    "1.6.1":"https://github.com/Buuz135/Industrial-Foregoing/blob/721b5efbccc142e8357824ca6e4bd6f5c29282ac/CHANGELOG.md",
+    "1.6.2":"https://github.com/Buuz135/Industrial-Foregoing/blob/2dfd8b6fed63acbd276d1531f35748edba365b1f/CHANGELOG.md",
+    "1.6.3":"https://github.com/Buuz135/Industrial-Foregoing/blob/b91f9590dd3ac76266c3863e5d9486f0cf608be1/CHANGELOG.md",
+    "1.6.4":"https://github.com/Buuz135/Industrial-Foregoing/blob/28e71dcdb1968e4413be6c9420c1c680aadf5ede/CHANGELOG.md",
+    "1.6.5":"https://github.com/Buuz135/Industrial-Foregoing/blob/178f97953532b8b3f6e0cf7bc499eb2e7d5a5130/CHANGELOG.md",
+    "1.6.6":"https://github.com/Buuz135/Industrial-Foregoing/blob/9cd1ef5c1b6b7d4ec3b589f3653b4e31c3070aac/CHANGELOG.md",
+    "1.7.0":"https://github.com/Buuz135/Industrial-Foregoing/blob/a01ef4916194c4fe1c2aa08d64e1f7084df977a3/CHANGELOG.md",
+    "1.7.1":"https://github.com/Buuz135/Industrial-Foregoing/blob/b75e438200809a8989a8ae2845722cd58ebc2d31/CHANGELOG.md",
+    "1.7.2":"https://github.com/Buuz135/Industrial-Foregoing/blob/3da8ccfeb6424af8901892810fd7c5058145471e/CHANGELOG.md",
+    "1.8.0":"https://github.com/Buuz135/Industrial-Foregoing/blob/ba67f50d14881d339745ce6aae9115128ef22996/CHANGELOG.md",
+    "1.8.1":"https://github.com/Buuz135/Industrial-Foregoing/blob/978c1cf3834c27bf606cb1be5c4053d32191e47a/CHANGELOG.md",
+    "1.8.2":"https://github.com/Buuz135/Industrial-Foregoing/blob/f0739d0aedf475b535e54a03b26795f20336f96a/CHANGELOG.md",
+    "1.8.3":"https://github.com/Buuz135/Industrial-Foregoing/blob/89fc6ae05934354eff958faff847d71ffd20623a/CHANGELOG.md",
+    "1.8.4":"https://github.com/Buuz135/Industrial-Foregoing/blob/e88a99e21bae7ccaedc43a9e5884cec92d79b5d8/CHANGELOG.md",
+    "1.8.5":"https://github.com/Buuz135/Industrial-Foregoing/blob/bee1594ea4e5de0821c0dc91834c9a731b6b05e2/CHANGELOG.md",
+    "1.8.6":"https://github.com/Buuz135/Industrial-Foregoing/blob/master/CHANGELOG.md"
   },
-  "promos": {
-    "1.12-latest": "1.5.1",
-    "1.12-recommended": "1.5.1"
+  "promos":{
+    "1.12-latest":"1.8.6",
+    "1.12-recommended":"1.8.6"
   }
 }
