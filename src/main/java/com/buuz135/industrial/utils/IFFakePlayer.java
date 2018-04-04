@@ -2,6 +2,7 @@ package com.buuz135.industrial.utils;
 
 import com.mojang.authlib.GameProfile;
 import net.minecraft.item.ItemStack;
+import net.minecraft.tileentity.TileEntitySign;
 import net.minecraft.world.WorldServer;
 import net.minecraftforge.common.util.FakePlayer;
 
@@ -19,6 +20,11 @@ public class IFFakePlayer extends FakePlayer {
 
     @Override
     protected void playEquipSound(ItemStack stack) {
+
+    }
+
+    @Override
+    public void openEditSign(TileEntitySign signTile) {
 
     }
 }

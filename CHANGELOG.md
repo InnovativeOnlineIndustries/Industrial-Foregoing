@@ -1,5 +1,6 @@
 # 1.8.7
 + Fixed enchantment extractor leaving empty enchantments tags
++ Fixed signs crashing when placed by a block placer
 
 # 1.8.6
 + Maybe fixed Mob Crusher sending chat msg on kill
