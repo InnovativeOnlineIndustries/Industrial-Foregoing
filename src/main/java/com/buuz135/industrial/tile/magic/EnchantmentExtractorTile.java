@@ -136,6 +136,9 @@ public class EnchantmentExtractorTile extends CustomElectricMachine {
             NBTTagCompound base = (NBTTagCompound) enchantedItem.getEnchantmentTagList().get(0);
             ((ItemEnchantedBook) Items.ENCHANTED_BOOK).addEnchantment(enchantedBook, new EnchantmentData(Enchantment.getEnchantmentByID(base.getShort("id")), base.getShort("lvl")));
             enchantedItem.getEnchantmentTagList().removeTag(0);
+            if (enchantedItem.getEnchantmentTagList().hasNoTags()) {
+                enchantedItem.getTagCompound().removeTag("ench");
+            }
             ItemHandlerHelper.insertItem(outEnchanted, enchantedBook, false);
             ItemHandlerHelper.insertItem(outItem, enchantedItem.copy(), false);
             inBook.getStackInSlot(0).setCount(inBook.getStackInSlot(0).getCount() - 1);
