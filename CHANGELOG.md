@@ -2,6 +2,7 @@
 + Fixed enchantment extractor leaving empty enchantments tags
 + Fixed signs crashing when placed by a block placer
 + Fixed Mob Crusher sending null text components
++ Allowed to use any item oredicted with "fertilizer" to be used in the Plant fertilizer
 
 # 1.8.6
 + Maybe fixed Mob Crusher sending chat msg on kill

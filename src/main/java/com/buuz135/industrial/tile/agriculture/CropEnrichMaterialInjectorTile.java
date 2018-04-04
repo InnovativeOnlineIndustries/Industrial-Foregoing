@@ -5,6 +5,7 @@ import com.buuz135.industrial.proxy.ItemRegistry;
 import com.buuz135.industrial.tile.CustomColoredItemHandler;
 import com.buuz135.industrial.tile.WorkingAreaElectricMachine;
 import com.buuz135.industrial.utils.BlockUtils;
+import com.buuz135.industrial.utils.ItemStackUtils;
 import com.buuz135.industrial.utils.WorkUtils;
 import net.minecraft.init.Items;
 import net.minecraft.item.EnumDyeColor;
@@ -99,8 +100,7 @@ public class CropEnrichMaterialInjectorTile extends WorkingAreaElectricMachine {
     }
 
     public boolean isValidFertilizer(ItemStack stack) {
-        if (stack.getItem().getRegistryName().toString().equals("forestry:fertilizer_compound")) return true;
-        return (stack.getItem().equals(Items.DYE) && stack.getMetadata() == 15) || stack.getItem().equals(ItemRegistry.fertilizer);
+        return stack.getItem().getRegistryName().toString().equals("forestry:fertilizer_compound") || (stack.getItem().equals(Items.DYE) && stack.getMetadata() == 15) || stack.getItem().equals(ItemRegistry.fertilizer) || ItemStackUtils.isStackOreDict(stack, "fertilizer");
     }
 
 }
