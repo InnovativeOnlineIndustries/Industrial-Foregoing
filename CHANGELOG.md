@@ -3,6 +3,7 @@
 + Added custom death message from the mob crusher (Katzen48)
 + Added localizations from the fluids placed in the world (superfluke)
 + Fixed shulker boxed dropping twice
++ Horses and llamas can be tamed again but they need to be tamed first as MC rules
 
 # 1.8.7
 + Fixed enchantment extractor leaving empty enchantments tags

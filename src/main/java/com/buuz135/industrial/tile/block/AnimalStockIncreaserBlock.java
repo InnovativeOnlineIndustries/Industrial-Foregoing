@@ -2,7 +2,7 @@ package com.buuz135.industrial.tile.block;
 
 import com.buuz135.industrial.book.BookCategory;
 import com.buuz135.industrial.proxy.ItemRegistry;
-import com.buuz135.industrial.tile.mob.AnimalStockIncreaserTile;
+import com.buuz135.industrial.tile.agriculture.AnimalStockIncreaserTile;
 import com.buuz135.industrial.utils.RecipeUtils;
 import net.minecraft.block.material.Material;
 import net.minecraft.init.Items;

@@ -1,9 +1,13 @@
-package com.buuz135.industrial.tile.mob;
+package com.buuz135.industrial.tile.agriculture;
 
 import com.buuz135.industrial.tile.CustomColoredItemHandler;
 import com.buuz135.industrial.tile.WorkingAreaElectricMachine;
 import com.buuz135.industrial.utils.WorkUtils;
 import net.minecraft.entity.passive.EntityAnimal;
+import net.minecraft.entity.passive.EntityHorse;
+import net.minecraft.entity.passive.EntityLlama;
+import net.minecraft.init.Blocks;
+import net.minecraft.init.Items;
 import net.minecraft.item.EnumDyeColor;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -72,36 +76,18 @@ public class AnimalStockIncreaserTile extends WorkingAreaElectricMachine {
                 }
             }
         }
-//        EntityAnimal animal1 = animals.get(0);
-//        while ((animal1.isChild() || animal1.getGrowingAge() != 0 || getFirstBreedingItem(animal1).isEmpty() || animal1.isInLove()) && animals.indexOf(animal1) + 1 < animals.size())
-//            animal1 = animals.get(animals.indexOf(animal1) + 1);
-//        if (animal1.isChild() || animal1.getGrowingAge() != 0) return 0;
-//        EntityAnimal animal2 = animals.get(0);
-//        while ((animal2.equals(animal1) || animal2.isChild() || animal2.getGrowingAge() != 0 || getFirstBreedingItem(animal2).isEmpty() || animal1.isInLove()) && animals.indexOf(animal2) + 1 < animals.size())
-//            animal2 = animals.get(animals.indexOf(animal2) + 1);
-//        if (animal2.equals(animal1) || animal2.isChild() || animal2.getGrowingAge() != 0) return 0;
-//        if (animal1.getClass() != animal2.getClass()) return 0;
-//        ItemStack stack = getFirstBreedingItem(animal1);
-//        Item item = stack.getItem();
-//        stack.setCount(stack.getCount() - 1);
-//        stack = getFirstBreedingItem(animal2);
-//        if (stack.isEmpty()) {
-//            ItemHandlerHelper.insertItem(inFeedItems, new ItemStack(item, 1), false);
-//            return 0;
-//        }
-//        stack.setCount(stack.getCount() - 1);
-//        animal1.setInLove(null);
-//        animal2.setInLove(null);
-
         return 0;
     }
 
     public ItemStack getFirstBreedingItem(EntityAnimal animal) {
         for (int i = 0; i < inFeedItems.getSlots(); ++i) {
+            if (animal instanceof EntityLlama && inFeedItems.getStackInSlot(i).isItemEqual(new ItemStack(Blocks.HAY_BLOCK)))
+                return inFeedItems.getStackInSlot(i);
+            if (animal instanceof EntityHorse && (inFeedItems.getStackInSlot(i).isItemEqual(new ItemStack(Items.GOLDEN_APPLE)) || inFeedItems.getStackInSlot(i).isItemEqual(new ItemStack(Items.GOLDEN_CARROT))))
+                return inFeedItems.getStackInSlot(i);
             if (animal.isBreedingItem(inFeedItems.getStackInSlot(i))) return inFeedItems.getStackInSlot(i);
         }
         return ItemStack.EMPTY;
     }
-
 
 }
