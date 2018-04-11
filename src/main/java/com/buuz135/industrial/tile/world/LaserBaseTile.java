@@ -85,24 +85,24 @@ public class LaserBaseTile extends SidedTileEntity {
     @Override
     protected void innerUpdate() {
         if (this.world.isRemote) return;
-        if (WorkUtils.isDisabled(this.getBlockType()))
-            if (currentWork >= getMaxWork()) {
-                List<ItemStackWeightedItem> items = new ArrayList<>();
-                BlockRegistry.laserBaseBlock.getColoreOres().keySet().forEach(integer -> BlockRegistry.laserBaseBlock.getColoreOres().get(integer).forEach(itemStackWeightedItem -> {
-                    int increase = 0;
-                    for (int i = 0; i < lensItems.getSlots(); ++i) {
-                        if (!lensItems.getStackInSlot(i).isEmpty() && lensItems.getStackInSlot(i).getMetadata() == integer) {
-                            increase += BlockRegistry.laserBaseBlock.getLenseChanceIncrease();
-                        }
+        if (WorkUtils.isDisabled(this.getBlockType())) return;
+        if (currentWork >= getMaxWork()) {
+            List<ItemStackWeightedItem> items = new ArrayList<>();
+            BlockRegistry.laserBaseBlock.getColoreOres().keySet().forEach(integer -> BlockRegistry.laserBaseBlock.getColoreOres().get(integer).forEach(itemStackWeightedItem -> {
+                int increase = 0;
+                for (int i = 0; i < lensItems.getSlots(); ++i) {
+                    if (!lensItems.getStackInSlot(i).isEmpty() && lensItems.getStackInSlot(i).getMetadata() == integer) {
+                        increase += BlockRegistry.laserBaseBlock.getLenseChanceIncrease();
                     }
-                    items.add(new ItemStackWeightedItem(itemStackWeightedItem.getStack(), itemStackWeightedItem.itemWeight + increase));
-                }));
-                ItemStack stack = WeightedRandom.getRandomItem(this.world.rand, items).getStack().copy();
-                if (ItemHandlerHelper.insertItem(outItems, stack, true).isEmpty()) {
-                    ItemHandlerHelper.insertItem(outItems, stack, false);
                 }
-                currentWork = 0;
+                items.add(new ItemStackWeightedItem(itemStackWeightedItem.getStack(), itemStackWeightedItem.itemWeight + increase));
+            }));
+            ItemStack stack = WeightedRandom.getRandomItem(this.world.rand, items).getStack().copy();
+            if (ItemHandlerHelper.insertItem(outItems, stack, true).isEmpty()) {
+                ItemHandlerHelper.insertItem(outItems, stack, false);
             }
+            currentWork = 0;
+        }
     }
 
     @Override
@@ -127,7 +127,8 @@ public class LaserBaseTile extends SidedTileEntity {
     }
 
     public void increaseWork() {
-        ++currentWork;
+        if(currentWork < getMaxWork())
+            ++currentWork;
     }
 
 }
