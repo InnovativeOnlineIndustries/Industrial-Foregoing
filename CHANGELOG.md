@@ -1,3 +1,6 @@
+# 1.8.8
++ Fixed Potion Brewer mot respecting locked slots
+
 # 1.8.7
 + Fixed enchantment extractor leaving empty enchantments tags
 + Fixed signs crashing when placed by a block placer

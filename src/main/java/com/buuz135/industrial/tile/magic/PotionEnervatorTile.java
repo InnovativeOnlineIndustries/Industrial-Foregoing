@@ -81,13 +81,11 @@ public class PotionEnervatorTile extends CustomElectricMachine {
         this.addInventory(new ColoredItemHandler(inputIngredients, EnumDyeColor.GREEN, "Ingredients items", new BoundingRectangle(18 * 4 + 10, 25, 5 * 18, 18)) {
             @Override
             public boolean canInsertItem(int slot, ItemStack stack) {
+                if (inputIngredients.getLocked()) return super.canInsertItem(slot, stack);
                 if (stack.getItem().equals(Items.GLASS_BOTTLE)) return false;
                 if (slot == 0) {
                     return stack.getItem().equals(Items.NETHER_WART);
-                } else if (!stack.getItem().equals(Items.NETHER_WART)) {
-                    return true;
-                }
-                return false;
+                } else return !stack.getItem().equals(Items.NETHER_WART);
             }
 
             @Override
