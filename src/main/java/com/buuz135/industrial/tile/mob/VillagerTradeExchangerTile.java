@@ -4,18 +4,21 @@ import com.buuz135.industrial.item.MobImprisonmentToolItem;
 import com.buuz135.industrial.proxy.ItemRegistry;
 import com.buuz135.industrial.proxy.client.infopiece.ArrowInfoPiece;
 import com.buuz135.industrial.proxy.client.infopiece.VillagerTradeExchangerInfoPiece;
+import com.buuz135.industrial.tile.CustomColoredItemHandler;
 import com.buuz135.industrial.tile.CustomElectricMachine;
 import com.buuz135.industrial.tile.WorkingAreaElectricMachine;
 import com.buuz135.industrial.utils.Reference;
 import lombok.Getter;
 import net.minecraft.entity.passive.EntityVillager;
 import net.minecraft.item.EnumDyeColor;
+import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.village.MerchantRecipe;
 import net.minecraft.village.MerchantRecipeList;
 import net.minecraftforge.items.IItemHandlerModifiable;
 import net.minecraftforge.items.ItemHandlerHelper;
+import net.minecraftforge.items.ItemStackHandler;
 import net.ndrei.teslacorelib.TeslaCoreLib;
 import net.ndrei.teslacorelib.gui.BasicRenderedGuiPiece;
 import net.ndrei.teslacorelib.gui.BasicTeslaGuiContainer;
@@ -31,7 +34,7 @@ public class VillagerTradeExchangerTile extends CustomElectricMachine {
 
     private static final String NBT_CURRENT = "Current";
 
-    private IItemHandlerModifiable villager;
+    private ItemStackHandler villager;
     @Getter
     private MerchantRecipeList merchantRecipes;
     @Getter
@@ -46,26 +49,42 @@ public class VillagerTradeExchangerTile extends CustomElectricMachine {
     @Override
     protected void initializeInventories() {
         super.initializeInventories();
-        villager = this.addSimpleInventory(1, "villager", EnumDyeColor.BROWN, "Villager Mob Imprisonment Tool", new BoundingRectangle(145, 61, 18, 18),
-                (stack, integer) -> stack.getItem() instanceof MobImprisonmentToolItem && ItemRegistry.mobImprisonmentToolItem.containsEntity(stack) && ItemRegistry.mobImprisonmentToolItem.getEntityFromStack(stack, this.world, false) instanceof EntityVillager,
-                (stack, integer) -> true, false, null);
+        villager = new ItemStackHandler(1) {
+            @Override
+            protected void onContentsChanged(int slot) {
+                super.onContentsChanged(slot);
+                if (!villager.getStackInSlot(0).isEmpty() && villager.getStackInSlot(0).getTagCompound().hasKey("Offers")) {
+                    merchantRecipes = new MerchantRecipeList(villager.getStackInSlot(0).getTagCompound().getCompoundTag("Offers"));
+                    merchantRecipes.removeIf(MerchantRecipe::hasSecondItemToBuy); // TODO this is a temporary fix until we add actual support for trades with 2 items (#77)
+                } else {
+                    merchantRecipes = null;
+                    current = 0;
+                }
+            }
+
+            @Override
+            public void deserializeNBT(NBTTagCompound nbt) {
+                super.deserializeNBT(nbt);
+                this.onContentsChanged(0);
+            }
+        };
+        this.addInventoryToStorage(villager, "villager");
+        this.addInventory(new CustomColoredItemHandler(villager, EnumDyeColor.BROWN, "Villager Mob Imprisonment Tool", 145, 61, 1, 1) {
+            @Override
+            public boolean canInsertItem(int slot, @NotNull ItemStack stack) {
+                return stack.getItem() instanceof MobImprisonmentToolItem && ItemRegistry.mobImprisonmentToolItem.containsEntity(stack) && ItemRegistry.mobImprisonmentToolItem.getEntityFromStack(stack, VillagerTradeExchangerTile.this.world, false) instanceof EntityVillager;
+            }
+
+            @Override
+            public boolean canExtractItem(int slot) {
+                return super.canExtractItem(slot);
+            }
+        });
         input = this.addSimpleInventory(1, "input", EnumDyeColor.BLUE, "Trade input", new BoundingRectangle(52, 61, 18, 18),
                 (stack, integer) -> true, (stack, integer) -> false, false, null);
         output = this.addSimpleInventory(1, "output", EnumDyeColor.ORANGE, "Trade output", new BoundingRectangle(112, 61, 18, 18),
                 (stack, integer) -> false, (stack, integer) -> true, false, null);
 
-    }
-
-    @Override
-    public void protectedUpdate() {
-        super.protectedUpdate();
-        if (!villager.getStackInSlot(0).isEmpty() && villager.getStackInSlot(0).getTagCompound().hasKey("Offers")) {
-            merchantRecipes = new MerchantRecipeList(villager.getStackInSlot(0).getTagCompound().getCompoundTag("Offers"));
-            merchantRecipes.removeIf(MerchantRecipe::hasSecondItemToBuy); // TODO this is a temporary fix until we add actual support for trades with 2 items (#77)
-        } else {
-            merchantRecipes = null;
-            current = 0;
-        }
     }
 
     @Override

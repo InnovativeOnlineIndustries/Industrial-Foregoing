@@ -1,6 +1,7 @@
 package com.buuz135.industrial.proxy.client.infopiece;
 
 import com.buuz135.industrial.proxy.client.ClientProxy;
+import net.minecraft.util.text.TextComponentTranslation;
 import net.ndrei.teslacorelib.gui.BasicTeslaGuiContainer;
 import net.ndrei.teslacorelib.gui.ButtonPiece;
 import net.ndrei.teslacorelib.inventory.BoundingRectangle;
@@ -36,7 +37,7 @@ public abstract class ArrowInfoPiece extends ButtonPiece {
     public void drawForegroundTopLayer(BasicTeslaGuiContainer<?> container, int guiX, int guiY, int mouseX, int mouseY) {
         super.drawForegroundTopLayer(container, guiX, guiY, mouseX, mouseY);
         if (isInside(container, mouseX, mouseY)) {
-            container.drawTooltip(Collections.singletonList(display), mouseX - guiX, mouseY - guiY);
+            container.drawTooltip(Collections.singletonList(new TextComponentTranslation(display).getFormattedText()), mouseX - guiX, mouseY - guiY);
         }
     }
 }
