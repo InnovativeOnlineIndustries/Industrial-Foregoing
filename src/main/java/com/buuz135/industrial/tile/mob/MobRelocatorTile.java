@@ -9,6 +9,8 @@ import com.buuz135.industrial.tile.WorkingAreaElectricMachine;
 import com.buuz135.industrial.tile.api.IAcceptsAdultFilter;
 import com.buuz135.industrial.utils.ItemStackUtils;
 import com.buuz135.industrial.utils.WorkUtils;
+
+import net.minecraft.client.resources.I18n;
 import net.minecraft.entity.EntityAgeable;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.EntityLivingBase;
@@ -20,6 +22,7 @@ import net.minecraft.util.EntityDamageSource;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TextComponentString;
+import net.minecraft.util.text.TextFormatting;
 import net.minecraftforge.common.util.FakePlayer;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.IFluidTank;
@@ -92,7 +95,7 @@ public class MobRelocatorTile extends WorkingAreaElectricMachine implements IAcc
             entityLiving.attackEntityFrom(new EntityDamageSource("mob_crusher", player) {
                 @Override
                 public ITextComponent getDeathMessage(EntityLivingBase entityLivingBaseIn) {
-                    return new TextComponentString("");
+                    return new TextComponentString(I18n.format("text.industrialforegoing.chat.crusher_kill", entityLivingBaseIn.getDisplayName().getFormattedText(), TextFormatting.RESET));
                 }
             }, Integer.MAX_VALUE);
             hasWorked.set(true);
