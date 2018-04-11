@@ -76,7 +76,6 @@ public class BlockDestroyerTile extends WorkingAreaElectricMachine {
                     }
                 }
                 if (canInsert) {
-                    this.world.setBlockToAir(pos);
                     for (ItemStack stack : drops) {
                         ItemHandlerHelper.insertItem(outItems, stack, false);
                     }
@@ -84,6 +83,7 @@ public class BlockDestroyerTile extends WorkingAreaElectricMachine {
                         InventoryHelper.dropInventoryItems(this.world, pos, (IInventory) tile);
                         ((TileEntityShulkerBox) tile).clear();
                     }
+                    this.world.setBlockToAir(pos);
                     return 1;
                 }
             }
