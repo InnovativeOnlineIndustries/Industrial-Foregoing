@@ -1,5 +1,7 @@
 # 1.8.8
 + Fixed Potion Brewer mot respecting locked slots
++ Added custom death message from the mob crusher (Katzen48)
++ Added localizations from the fluids placed in the world (superfluke)
 
 # 1.8.7
 + Fixed enchantment extractor leaving empty enchantments tags
