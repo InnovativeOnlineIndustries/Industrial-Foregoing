@@ -1,0 +1,45 @@
+{
+  "result": {
+    "item": "industrialforegoing:wither_builder"
+  },
+  "pattern": [
+    "pnp",
+    "sms",
+    "ggg"
+  ],
+  "conditions": [
+    {
+      "type": "forge:and",
+      "values": [
+        {
+          "type": "forge:mod_loaded",
+          "modid": "thermalexpansion"
+        },
+        {
+          "type": "industrialforegoing:configuration_value",
+          "value": "useTEFrames"
+        }
+      ]
+    }
+  ],
+  "type": "forge:ore_shaped",
+  "key": {
+    "p": {
+      "item": "industrialforegoing:plastic"
+    },
+    "s": {
+      "item": "minecraft:skull",
+      "data": 1
+    },
+    "g": {
+      "item": "minecraft:soul_sand"
+    },
+    "m": {
+      "item": "thermalexpansion:frame",
+      "data": 0
+    },
+    "n": {
+      "item": "#IFWITHER"
+    }
+  }
+}

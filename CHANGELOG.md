@@ -5,6 +5,7 @@
 + Fixed shulker boxed dropping twice
 + Horses and llamas can be tamed again but they need to be tamed first as MC rules
 + Fixed Villager Trade Exchanger doing stuff when it doesn't need to do stuff and fixed missing button translations
++ Added recipe integrations for EnderIO (if present) all the recipes integrations can be disabled in the config
 
 # 1.8.7
 + Fixed enchantment extractor leaving empty enchantments tags

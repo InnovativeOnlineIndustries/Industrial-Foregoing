@@ -7,6 +7,21 @@
     "bmb",
     "grg"
   ],
+  "conditions": [
+    {
+      "type": "forge:and",
+      "values": [
+        {
+          "type": "forge:mod_loaded",
+          "modid": "industrialforegoing"
+        },
+        {
+          "type": "industrialforegoing:configuration_value",
+          "value": "useOriginalFrames"
+        }
+      ]
+    }
+  ],
   "type": "forge:ore_shaped",
   "key": {
     "p": {
@@ -25,7 +40,7 @@
       "item": "#GEARIRON"
     },
     "m": {
-      "item": "#IFCORE"
+      "item": "teslacorelib:machine_case"
     }
   }
 }

@@ -7,7 +7,22 @@
     "sms",
     "bcb"
   ],
-  "type": "forge:ore_shaped",
+  "conditions": [
+    {
+      "type": "forge:and",
+      "values": [
+        {
+          "type": "forge:mod_loaded",
+          "modid": "industrialforegoing"
+        },
+        {
+          "type": "industrialforegoing:configuration_value",
+          "value": "useOriginalFrames"
+        }
+      ]
+    }
+  ],
+  "type": "minecraft:crafting_shaped",
   "key": {
     "p": {
       "item": "industrialforegoing:plastic"
@@ -25,7 +40,7 @@
       "item": "minecraft:porkchop"
     },
     "m": {
-      "item": "#IFCORE"
+      "item": "teslacorelib:machine_case"
     }
   }
 }

@@ -7,13 +7,28 @@
     "gtg",
     "rdr"
   ],
+  "conditions": [
+    {
+      "type": "forge:and",
+      "values": [
+        {
+          "type": "forge:mod_loaded",
+          "modid": "industrialforegoing"
+        },
+        {
+          "type": "industrialforegoing:configuration_value",
+          "value": "useOriginalFrames"
+        }
+      ]
+    }
+  ],
   "type": "forge:ore_shaped",
   "key": {
     "r": {
       "item": "minecraft:repeater"
     },
     "t": {
-      "item": "#IFCORE"
+      "item": "teslacorelib:machine_case"
     },
     "d": {
       "item": "#GEARDIAMOND"

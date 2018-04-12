@@ -60,8 +60,11 @@ public class CommonProxy {
         CustomConfiguration.config.load();
         CustomConfiguration.sync();
         CustomConfiguration.configValues = new HashMap<>();
-        CustomConfiguration.configValues.put("useTEFrames", CustomConfiguration.config.getBoolean("useTEFrames", Configuration.CATEGORY_GENERAL, true, "Use Thermal Expansion Machine Frames instead of Tesla Core Lib"));
+        CustomConfiguration.configValues.put("useTEFrames", CustomConfiguration.config.getBoolean("useTEFrames", Configuration.CATEGORY_GENERAL, true, "Adds recipes using Thermal Expansion frames"));
+        CustomConfiguration.configValues.put("useEnderIOFrames", CustomConfiguration.config.getBoolean("useEnderIOFrames", Configuration.CATEGORY_GENERAL, true, "Adds recipes using EnderIO frames"));
+        CustomConfiguration.configValues.put("useOriginalFrames", CustomConfiguration.config.getBoolean("useOriginalFrames", Configuration.CATEGORY_GENERAL, true, "Adds recipes using TeslaCoreLib frames"));
         CustomConfiguration.configValues.put("machines.wither_builder.HCWither", CustomConfiguration.config.getBoolean("HCWither", "machines.wither_builder", false, "If enabled, only the wither builder will be able to place wither skulls. That means that players won't be able to place wither skulls. The recipe will change, but that will need a restart."));
+        if (CustomConfiguration.config.hasChanged()) CustomConfiguration.config.save();
 
         if (Loader.isModLoaded("crafttweaker")) CraftTweakerHelper.register();
 

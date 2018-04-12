@@ -29,12 +29,38 @@ public class RecipeUtils {
         setupDir();
         if (!RECIPE_DIR.exists() || result.isEmpty()) return;
         // GameRegistry.addShapedRecipe(result, components);
-        for (int i = 0; i < components.length; ++i) {
-            if (components[i].equals(MachineCaseItem.INSTANCE)) components[i] = "IFCORE";
+        boolean hasGeneratedFrameRecipe = false;
+        for (int i = 0; i < components.length; i++) {
+            if (components[i].equals(MachineCaseItem.INSTANCE)) {
+                hasGeneratedFrameRecipe = true;
+                addShapedRecipe(result, "_enderio", generateOptionalJson("enderio", "useEnderIOFrames"), replaceFrameWith(new FakeItemStack("enderio:item_material", 0), components));
+                addShapedRecipe(result, "_thermal", generateOptionalJson("thermalexpansion", "useTEFrames"), replaceFrameWith(new FakeItemStack("thermalexpansion:frame", 0), components));
+                addShapedRecipe(result, "", generateOptionalJson("industrialforegoing", "useOriginalFrames"), components);
+                break;
+            }
         }
+        if (!hasGeneratedFrameRecipe) {
+            addShapedRecipe(result, "", new HashMap<>(), components);
+        }
+    }
 
-        Map<String, Object> json = new HashMap<>();
+    private static Map<String, Object> generateOptionalJson(String modID, String configValueName) {
+        Map<String, Object> objectMap = new HashMap<>();
+        objectMap.put("conditions", Arrays.asList(ImmutableMap.of("type", "forge:and", "values", Arrays.asList(ImmutableMap.of("type", "forge:mod_loaded", "modid", modID), ImmutableMap.of("type", "industrialforegoing:configuration_value",
+                "value", configValueName)))));
+        return objectMap;
+    }
 
+    private static Object[] replaceFrameWith(Object item, Object... components) {
+        Object[] objects = Arrays.copyOf(components, components.length);
+        for (int i = 0; i < objects.length; i++) {
+            if (objects[i].equals(MachineCaseItem.INSTANCE)) objects[i] = item;
+        }
+        return objects;
+    }
+
+
+    private static void addShapedRecipe(ItemStack result, String nameExtra, Map<String, Object> json, Object... components) {
         List<String> pattern = new ArrayList<>();
         int i = 0;
         while (i < components.length && components[i] instanceof String) {
@@ -69,7 +95,7 @@ public class RecipeUtils {
         // repeatedly adds _alt if a file already exists
         // janky I know but it works
         String suffix = result.getItem().getHasSubtypes() ? "_" + result.getItemDamage() : "";
-        File f = new File(RECIPE_DIR, result.getItem().getRegistryName().getResourcePath() + suffix + ".json");
+        File f = new File(RECIPE_DIR, result.getItem().getRegistryName().getResourcePath() + suffix + nameExtra + ".json");
 
 
         try (FileWriter w = new FileWriter(f)) {
@@ -119,6 +145,13 @@ public class RecipeUtils {
     }
 
     private static Map<String, Object> serializeItem(Object thing) {
+        if (thing instanceof FakeItemStack) {
+            FakeItemStack stack = (FakeItemStack) thing;
+            Map<String, Object> ret = new HashMap<>();
+            ret.put("item", stack.name);
+            ret.put("data", stack.meta);
+            return ret;
+        }
         if (thing instanceof Item) {
             return serializeItem(new ItemStack((Item) thing));
         }
@@ -162,19 +195,8 @@ public class RecipeUtils {
             json.add(entry);
         }
         Map<String, Object> entry = new HashMap<>();
-        entry.put("name", "IFCORE");
-        entry.put("conditions", Arrays.asList(ImmutableMap.of("type", "minecraft:item_exists", "item", "teslacorelib:machine_case")));
-        entry.put("ingredient", ImmutableMap.of("item", "teslacorelib:machine_case"));
-        json.add(entry);
-        entry = new HashMap<>();
-        entry.put("name", "IFCORE");
-        entry.put("conditions", Arrays.asList(ImmutableMap.of("type", "forge:and", "values", Arrays.asList(ImmutableMap.of("type", "forge:mod_loaded", "modid", "thermalexpansion"), ImmutableMap.of("type", "industrialforegoing:configuration_value", "value", "useTEFrames")))));
-        entry.put("ingredient", ImmutableMap.of("item", "thermalexpansion:frame", "data", 0));
-        json.add(entry);
-
-        entry = new HashMap<>();
         entry.put("name", "IFWITHER");
-        //entry.put("conditions", Arrays.asList(ImmutableMap.of("type", "industrialforegoing:configuration_value", "value", "machines.wither_builder.HCWither")));
+        //eentry.put("conditions", Arrays.asList(ImmutableMap.of("type", "industrialforegoing:configuration_value", "value", "machines.wither_builder.HCWither")));
         entry.put("ingredient", ImmutableMap.of("item", "minecraft:nether_star", "data", 0));
         json.add(entry);
         entry = new HashMap<>();
@@ -205,5 +227,15 @@ public class RecipeUtils {
         ore.put("conditions", Arrays.asList(ImmutableMap.of("type", "teslacorelib:ore_dict", "ore", oreDict)));
         ore.put("ingredient", ImmutableMap.of("type", "forge:ore_dict", "ore", oreDict));
         return Arrays.asList(def, ore);
+    }
+
+    private static class FakeItemStack {
+        private String name;
+        private int meta;
+
+        public FakeItemStack(String name, int meta) {
+            this.name = name;
+            this.meta = meta;
+        }
     }
 }
