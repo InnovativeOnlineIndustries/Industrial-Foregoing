@@ -22,6 +22,7 @@ import java.util.Set;
 
 public class CraftingUtils {
 
+    public static Set<ItemStack[]> missingRecipes = new HashSet<>();
     private static HashMap<ItemStack, ItemStack> crushedRecipes = new HashMap<>();
     private static HashMap<ItemStack, ItemStack> cachedRecipes = new HashMap<>();
 
@@ -47,7 +48,6 @@ public class CraftingUtils {
         return output.copy();
     }
 
-
     public static InventoryCrafting genCraftingInventory(World world, ItemStack... inputs) {
         InventoryCrafting inventoryCrafting = new InventoryCrafting(new Container() {
             @Override
@@ -60,8 +60,6 @@ public class CraftingUtils {
         }
         return inventoryCrafting;
     }
-
-    public static Set<ItemStack[]> missingRecipes = new HashSet<>();
 
     public static IRecipe findRecipe(World world, ItemStack... inputs) {
         for (ItemStack[] missingRecipe : missingRecipes) {

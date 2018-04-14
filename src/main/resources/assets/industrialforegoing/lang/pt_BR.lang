@@ -268,3 +268,5 @@ gui.industrialforegoing.side_config.wither_skulls=Crânios de Whiter
 gui.industrialforegoing.side_config.soulsand=Areia de Almas
 gui.industrialforegoing.side_config.crafting=Grade de Fabricação
 gui.industrialforegoing.side_config.output=Saída
+
+text.industrialforegoing.button.none=None Selected

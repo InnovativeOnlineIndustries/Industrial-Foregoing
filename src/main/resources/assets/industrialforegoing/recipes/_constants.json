@@ -44,6 +44,13 @@
   {
     "ingredient": {
       "type": "forge:ore_dict",
+      "ore": "blockGlass"
+    },
+    "name": "BLOCKGLASS"
+  },
+  {
+    "ingredient": {
+      "type": "forge:ore_dict",
       "ore": "blockGlassColorless"
     },
     "name": "BLOCKGLASSCOLORLESS"

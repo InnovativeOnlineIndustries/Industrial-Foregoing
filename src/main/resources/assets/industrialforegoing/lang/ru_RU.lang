@@ -275,3 +275,5 @@ gui.industrialforegoing.side_config.wither_skulls=Головы визер-ске
 gui.industrialforegoing.side_config.soulsand=Песок душ
 gui.industrialforegoing.side_config.crafting=Стол для крафта
 gui.industrialforegoing.side_config.output=Выход
+
+text.industrialforegoing.button.none=None Selected

@@ -121,3 +121,4 @@ gui.industrialforegoing.side_config.dye_items=Barwniki
 gui.industrialforegoing.side_config.lens_items=Soczewki
 gui.industrialforegoing.side_config.filter=Filtr Typu Przedmiotów
 gui.industrialforegoing.side_config.change=Transformowane Przedmioty
+text.industrialforegoing.button.none=None Selected

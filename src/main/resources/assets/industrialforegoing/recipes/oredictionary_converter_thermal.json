@@ -13,11 +13,11 @@
       "values": [
         {
           "type": "forge:mod_loaded",
-          "modid": "industrialforegoing"
+          "modid": "thermalexpansion"
         },
         {
           "type": "industrialforegoing:configuration_value",
-          "value": "useOriginalFrames"
+          "value": "useTEFrames"
         }
       ]
     }
@@ -28,7 +28,8 @@
       "item": "industrialforegoing:plastic"
     },
     "r": {
-      "item": "teslacorelib:machine_case"
+      "item": "thermalexpansion:frame",
+      "data": 0
     },
     "b": {
       "item": "#BLOCKIRON"

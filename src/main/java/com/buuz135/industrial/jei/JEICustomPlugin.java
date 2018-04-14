@@ -2,10 +2,13 @@ package com.buuz135.industrial.jei;
 
 
 import com.buuz135.industrial.api.recipe.BioReactorEntry;
+import com.buuz135.industrial.api.recipe.FluidDictionaryEntry;
 import com.buuz135.industrial.api.recipe.LaserDrillEntry;
 import com.buuz135.industrial.api.recipe.ProteinReactorEntry;
 import com.buuz135.industrial.book.BookCategory;
 import com.buuz135.industrial.config.CustomConfiguration;
+import com.buuz135.industrial.jei.fluiddictionary.FluidDictionaryCategory;
+import com.buuz135.industrial.jei.fluiddictionary.FluidDictionaryWrapper;
 import com.buuz135.industrial.jei.laser.LaserRecipeCategory;
 import com.buuz135.industrial.jei.laser.LaserRecipeWrapper;
 import com.buuz135.industrial.jei.machineproduce.MachineProduceCategory;
@@ -62,6 +65,7 @@ public class JEICustomPlugin implements IModPlugin {
     private MachineProduceCategory machineProduceCategory;
     private PetrifiedBurnTimeCategory petrifiedBurnTimeCategory;
     private ManualCategory manualCategory;
+    private FluidDictionaryCategory fluidDictionaryCategory;
 
     public static void showUses(ItemStack stack) {
         if (recipesGui != null && recipeRegistry != null)
@@ -104,6 +108,10 @@ public class JEICustomPlugin implements IModPlugin {
         if (CustomConfiguration.enableBookEntriesInJEI) {
             manualCategory = new ManualCategory(registry.getJeiHelpers().getGuiHelper());
             registry.addRecipeCategories(manualCategory);
+        }
+        if (BlockRegistry.fluidDictionaryConverterBlock.isEnabled() && !FluidDictionaryEntry.FLUID_DICTIONARY_RECIPES.isEmpty()) {
+            fluidDictionaryCategory = new FluidDictionaryCategory(registry.getJeiHelpers().getGuiHelper());
+            registry.addRecipeCategories(fluidDictionaryCategory);
         }
     }
 
@@ -179,6 +187,10 @@ public class JEICustomPlugin implements IModPlugin {
                 registry.addRecipes(category.getEntries().values().stream().map(ManualWrapper::new).collect(Collectors.toList()), manualCategory.getUid());
             }
             registry.addRecipeCatalyst(new ItemStack(ItemRegistry.bookManualItem), manualCategory.getUid());
+        }
+        if (fluidDictionaryCategory != null) {
+            registry.addRecipeCatalyst(new ItemStack(BlockRegistry.fluidDictionaryConverterBlock), fluidDictionaryCategory.getUid());
+            registry.addRecipes(FluidDictionaryEntry.FLUID_DICTIONARY_RECIPES.stream().map(FluidDictionaryWrapper::new).collect(Collectors.toList()), fluidDictionaryCategory.getUid());
         }
     }
 

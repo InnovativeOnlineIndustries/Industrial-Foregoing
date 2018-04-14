@@ -1,11 +1,11 @@
 {
   "result": {
-    "item": "industrialforegoing:oredictionary_converter"
+    "item": "industrialforegoing:fluiddictionary_converter"
   },
   "pattern": [
     "ppp",
-    "prp",
-    "nib"
+    "grg",
+    "bib"
   ],
   "conditions": [
     {
@@ -31,13 +31,13 @@
       "item": "teslacorelib:machine_case"
     },
     "b": {
-      "item": "#BLOCKIRON"
+      "item": "minecraft:bucket"
+    },
+    "g": {
+      "item": "#BLOCKGLASS"
     },
     "i": {
-      "item": "#INGOTIRON"
-    },
-    "n": {
-      "item": "#NUGGETIRON"
+      "item": "#GEARIRON"
     }
   }
 }

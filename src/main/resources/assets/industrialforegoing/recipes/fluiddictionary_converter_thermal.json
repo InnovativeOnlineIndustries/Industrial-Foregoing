@@ -1,11 +1,11 @@
 {
   "result": {
-    "item": "industrialforegoing:oredictionary_converter"
+    "item": "industrialforegoing:fluiddictionary_converter"
   },
   "pattern": [
     "ppp",
-    "prp",
-    "nib"
+    "grg",
+    "bib"
   ],
   "conditions": [
     {
@@ -13,11 +13,11 @@
       "values": [
         {
           "type": "forge:mod_loaded",
-          "modid": "industrialforegoing"
+          "modid": "thermalexpansion"
         },
         {
           "type": "industrialforegoing:configuration_value",
-          "value": "useOriginalFrames"
+          "value": "useTEFrames"
         }
       ]
     }
@@ -28,16 +28,17 @@
       "item": "industrialforegoing:plastic"
     },
     "r": {
-      "item": "teslacorelib:machine_case"
+      "item": "thermalexpansion:frame",
+      "data": 0
     },
     "b": {
-      "item": "#BLOCKIRON"
+      "item": "minecraft:bucket"
+    },
+    "g": {
+      "item": "#BLOCKGLASS"
     },
     "i": {
-      "item": "#INGOTIRON"
-    },
-    "n": {
-      "item": "#NUGGETIRON"
+      "item": "#GEARIRON"
     }
   }
 }

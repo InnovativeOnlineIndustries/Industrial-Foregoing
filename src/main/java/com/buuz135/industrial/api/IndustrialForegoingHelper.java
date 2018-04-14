@@ -1,18 +1,14 @@
 package com.buuz135.industrial.api;
 
 
-import com.buuz135.industrial.api.recipe.BioReactorEntry;
-import com.buuz135.industrial.api.recipe.LaserDrillEntry;
-import com.buuz135.industrial.api.recipe.ProteinReactorEntry;
-import com.buuz135.industrial.api.recipe.SludgeEntry;
+import com.buuz135.industrial.api.recipe.*;
 import net.minecraft.item.ItemStack;
-
-import java.util.stream.Collectors;
+import net.minecraftforge.fluids.FluidRegistry;
 
 public class IndustrialForegoingHelper {
 
     public static final String MOD_ID = "industrialforegoing";
-    public static final String API_VERSION = "3";
+    public static final String API_VERSION = "4";
     public static final String API_ID = MOD_ID + "api";
 
     /**
@@ -37,7 +33,7 @@ public class IndustrialForegoingHelper {
      */
     public static boolean removeBioReactorEntry(ItemStack stack) {
         if (BioReactorEntry.BIO_REACTOR_ENTRIES.stream().anyMatch(entry -> entry.doesStackMatch(stack))) {
-            BioReactorEntry.BIO_REACTOR_ENTRIES = BioReactorEntry.BIO_REACTOR_ENTRIES.stream().filter(entry -> !entry.doesStackMatch(stack)).collect(Collectors.toList());
+            BioReactorEntry.BIO_REACTOR_ENTRIES.removeIf(entry -> !entry.doesStackMatch(stack));
             return true;
         }
         return false;
@@ -65,7 +61,7 @@ public class IndustrialForegoingHelper {
      */
     public static boolean removeLaserDrillEntry(ItemStack stack) {
         if (LaserDrillEntry.LASER_DRILL_ENTRIES.stream().anyMatch(entry -> stack.isItemEqual(entry.getStack()))) {
-            LaserDrillEntry.LASER_DRILL_ENTRIES = LaserDrillEntry.LASER_DRILL_ENTRIES.stream().filter(entry -> !entry.getStack().isItemEqual(stack)).collect(Collectors.toList());
+            LaserDrillEntry.LASER_DRILL_ENTRIES.removeIf(entry -> !entry.getStack().isItemEqual(stack));
         }
         return false;
     }
@@ -92,7 +88,7 @@ public class IndustrialForegoingHelper {
      */
     public static boolean removeSludgeRefinerEntry(ItemStack stack) {
         if (SludgeEntry.SLUDGE_RECIPES.stream().anyMatch(entry -> entry.getStack().isItemEqual(stack))) {
-            SludgeEntry.SLUDGE_RECIPES = SludgeEntry.SLUDGE_RECIPES.stream().filter(entry -> !entry.getStack().isItemEqual(stack)).collect(Collectors.toList());
+            SludgeEntry.SLUDGE_RECIPES.removeIf(entry -> !entry.getStack().isItemEqual(stack));
             return true;
         }
         return false;
@@ -120,10 +116,37 @@ public class IndustrialForegoingHelper {
      */
     public static boolean removeProteinReactorEntry(ItemStack stack) {
         if (ProteinReactorEntry.PROTEIN_REACTOR_ENTRIES.stream().anyMatch(entry -> entry.doesStackMatch(stack))) {
-            ProteinReactorEntry.PROTEIN_REACTOR_ENTRIES = ProteinReactorEntry.PROTEIN_REACTOR_ENTRIES.stream().filter(entry -> !entry.doesStackMatch(stack)).collect(Collectors.toList());
+            ProteinReactorEntry.PROTEIN_REACTOR_ENTRIES.removeIf(entry -> !entry.doesStackMatch(stack));
             return true;
         }
         return false;
     }
 
+    /**
+     * Adds a FluidDictionaryEntry that wasn't already there
+     *
+     * @param entry The FluidDictionaryEntry to add.
+     * @return true if it's added, false if don't.
+     */
+    public static boolean addFluidDictionaryEntry(FluidDictionaryEntry entry) {
+        if (FluidRegistry.isFluidRegistered(entry.getFluidOrigin()) && FluidRegistry.isFluidRegistered(entry.getFluidResult()) && FluidDictionaryEntry.FLUID_DICTIONARY_RECIPES.stream().noneMatch(entry1 -> entry1.getFluidOrigin().equals(entry.getFluidOrigin()) && entry1.getFluidResult().equals(entry.getFluidResult()))) {
+            FluidDictionaryEntry.FLUID_DICTIONARY_RECIPES.add(entry);
+            return true;
+        }
+        return false;
+    }
+
+    /**
+     * Removes a FluidDictionaryEntry if it exists
+     *
+     * @param entry The Entry to remove
+     * @return true if it is removed, false if don't.
+     */
+    public static boolean removeFluidDictionaryEntry(FluidDictionaryEntry entry) {
+        if (FluidDictionaryEntry.FLUID_DICTIONARY_RECIPES.stream().anyMatch(entry1 -> entry1.getFluidOrigin().equals(entry.getFluidOrigin()) && entry1.getFluidResult().equals(entry.getFluidResult()))) {
+            FluidDictionaryEntry.FLUID_DICTIONARY_RECIPES.removeIf(entry1 -> entry1.getFluidOrigin().equals(entry.getFluidOrigin()) && entry1.getFluidResult().equals(entry.getFluidResult()));
+            return true;
+        }
+        return false;
+    }
 }

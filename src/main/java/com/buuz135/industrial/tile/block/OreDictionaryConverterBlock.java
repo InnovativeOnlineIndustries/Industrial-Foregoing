@@ -4,8 +4,8 @@ import com.buuz135.industrial.book.BookCategory;
 import com.buuz135.industrial.proxy.ItemRegistry;
 import com.buuz135.industrial.tile.misc.OreDictionaryConverterTile;
 import com.buuz135.industrial.utils.RecipeUtils;
-import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
+import net.ndrei.teslacorelib.items.MachineCaseItem;
 
 public class OreDictionaryConverterBlock extends CustomOrientedBlock<OreDictionaryConverterTile> {
 
@@ -17,7 +17,7 @@ public class OreDictionaryConverterBlock extends CustomOrientedBlock<OreDictiona
     public void createRecipe() {
         RecipeUtils.addShapedRecipe(new ItemStack(this), "ppp", "prp", "nib",
                 'p', ItemRegistry.plastic,
-                'r', Blocks.REDSTONE_BLOCK,
+                'r', MachineCaseItem.INSTANCE,
                 'n', "nuggetIron",
                 'i', "ingotIron",
                 'b', "blockIron");

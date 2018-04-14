@@ -13,11 +13,11 @@
       "values": [
         {
           "type": "forge:mod_loaded",
-          "modid": "industrialforegoing"
+          "modid": "enderio"
         },
         {
           "type": "industrialforegoing:configuration_value",
-          "value": "useOriginalFrames"
+          "value": "useEnderIOFrames"
         }
       ]
     }
@@ -28,7 +28,8 @@
       "item": "industrialforegoing:plastic"
     },
     "r": {
-      "item": "teslacorelib:machine_case"
+      "item": "enderio:item_material",
+      "data": 0
     },
     "b": {
       "item": "#BLOCKIRON"

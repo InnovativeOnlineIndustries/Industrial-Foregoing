@@ -1,10 +1,7 @@
 package com.buuz135.industrial.utils.apihandlers;
 
 import com.buuz135.industrial.api.IndustrialForegoingHelper;
-import com.buuz135.industrial.api.recipe.BioReactorEntry;
-import com.buuz135.industrial.api.recipe.LaserDrillEntry;
-import com.buuz135.industrial.api.recipe.ProteinReactorEntry;
-import com.buuz135.industrial.api.recipe.SludgeEntry;
+import com.buuz135.industrial.api.recipe.*;
 import com.buuz135.industrial.utils.apihandlers.crafttweaker.CTAction;
 import com.google.common.collect.LinkedListMultimap;
 import net.minecraft.init.Blocks;
@@ -19,6 +16,7 @@ public class RecipeHandlers {
     public static final LinkedListMultimap<CTAction, LaserDrillEntry> LASER_ENTRIES = LinkedListMultimap.create();
     public static final LinkedListMultimap<CTAction, SludgeEntry> SLUDGE_ENTRIES = LinkedListMultimap.create();
     public static final LinkedListMultimap<CTAction, ProteinReactorEntry> PROTEIN_REACTOR_ENTRIES = LinkedListMultimap.create();
+    public static final LinkedListMultimap<CTAction, FluidDictionaryEntry> FLUID_DICTIONARY_ENTRIES = LinkedListMultimap.create();
 
     public static void loadBioReactorEntries() {
         IndustrialForegoingHelper.addBioReactorEntry(new BioReactorEntry(new ItemStack(Items.WHEAT_SEEDS)));
@@ -51,6 +49,10 @@ public class RecipeHandlers {
         PROTEIN_REACTOR_ENTRIES.forEach((ctAction, entry) -> {
             if (ctAction == CTAction.ADD) IndustrialForegoingHelper.addProteinReactorEntry(entry);
             else IndustrialForegoingHelper.removeProteinReactorEntry(entry.getStack());
+        });
+        FLUID_DICTIONARY_ENTRIES.forEach((ctAction, entry) -> {
+            if (ctAction == CTAction.ADD) IndustrialForegoingHelper.addFluidDictionaryEntry(entry);
+            else IndustrialForegoingHelper.removeFluidDictionaryEntry(entry);
         });
     }
 
@@ -118,6 +120,17 @@ public class RecipeHandlers {
         getSubItems(stacks, new ItemStack(Items.FISH));
         getSubItems(stacks, new ItemStack(Items.SKULL));
         stacks.forEach(stack -> IndustrialForegoingHelper.addProteinReactorEntry(new ProteinReactorEntry(stack)));
+    }
+
+    public static void loadFluidDictionaryEntries() {
+        addFluidEntryDoubleDirectional("essence", "xpjuice", 1);
+        addFluidEntryDoubleDirectional("essence", "experience", 1);
+        addFluidEntryDoubleDirectional("xpjuice", "experience", 1);
+    }
+
+    public static void addFluidEntryDoubleDirectional(String fluidInput, String fluidOutput, double ratio) {
+        IndustrialForegoingHelper.addFluidDictionaryEntry(new FluidDictionaryEntry(fluidInput, fluidOutput, ratio));
+        IndustrialForegoingHelper.addFluidDictionaryEntry(new FluidDictionaryEntry(fluidOutput, fluidInput, 1 / ratio));
     }
 
     public static void checkAndAddLaserDrill(int meta, String oreDict, int weight) {
