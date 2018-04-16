@@ -71,6 +71,7 @@ public class FluidDictionaryConverterTile extends CustomSidedTileEntity {
             outputPointer = 0;
             partialSync("output", true);
         }
+        if (inputPointer == 0 || outputPointer == 0) return;
         if (input.getFluidAmount() >= 100) {
             if (!input.getFluid().getFluid().getName().equals(INPUT_LIST.get(inputPointer - 1))) return;
             FluidDictionaryEntry entry = getRecipe(INPUT_LIST.get(inputPointer - 1), getOutputListFromFluid(INPUT_LIST.get(inputPointer - 1)).get(outputPointer - 1));

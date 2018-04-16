@@ -1,5 +1,6 @@
 # 1.8.9
 + Fixed Server Side Crash with the Mob Crusher
++ Fixed Fluid Dictionary Converted working when no fluid was selected
 
 # 1.8.8
 + Fixed Potion Brewer mot respecting locked slots
