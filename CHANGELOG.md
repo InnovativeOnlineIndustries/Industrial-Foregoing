@@ -1,3 +1,6 @@
+# 1.8.9
++ Fixed Server Side Crash with the Mob Crusher
+
 # 1.8.8
 + Fixed Potion Brewer mot respecting locked slots
 + Added custom death message from the mob crusher (Katzen48)
