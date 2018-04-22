@@ -61,7 +61,7 @@ public class AnimalResourceHarvesterTile extends WorkingAreaElectricMachine {
         List<EntityAnimal> animals = this.world.getEntitiesWithinAABB(EntityAnimal.class, getWorkingArea());
         boolean hasWorked = false;
         for (EntityAnimal living : animals) {
-            if (living instanceof IShearable && ((IShearable) living).isShearable(new ItemStack(Items.SHEARS), this.world, living.getPosition())) {
+            if (!ItemStackUtils.isInventoryFull(outItems) && living instanceof IShearable && ((IShearable) living).isShearable(new ItemStack(Items.SHEARS), this.world, living.getPosition())) {
                 List<ItemStack> stacks = ((IShearable) living).onSheared(new ItemStack(Items.SHEARS), this.world, null, 0);
                 for (ItemStack stack : stacks) {
                     ItemHandlerHelper.insertItem(outItems, stack, false);
@@ -83,7 +83,7 @@ public class AnimalResourceHarvesterTile extends WorkingAreaElectricMachine {
             }
         }
         for (EntitySquid animal : this.world.getEntitiesWithinAABB(EntitySquid.class, getWorkingArea())) {
-            if (world.rand.nextBoolean() && world.rand.nextBoolean() && world.rand.nextBoolean() && world.rand.nextBoolean()) {
+            if (!ItemStackUtils.isInventoryFull(outItems) && world.rand.nextBoolean() && world.rand.nextBoolean() && world.rand.nextBoolean() && world.rand.nextBoolean()) {
                 ItemHandlerHelper.insertItem(outItems, new ItemStack(Items.DYE), false);
                 hasWorked = true;
             }

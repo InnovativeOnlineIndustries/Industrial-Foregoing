@@ -4,6 +4,7 @@
 + The Enchantment Extractor will now accept enchanted books with multiple enchantments and split them up
 + Fluids without buckets are now properly displayed in the Black Hole Unit
 + Added Right Click Harvestability to cocoa beans as no other mod adds it so the Plant Interactor can harvest them (can be disabled in the config)
++ Animal rancher will stop shearing animals if the inventory is full 
 
 # 1.8.9
 + Fixed Server Side Crash with the Mob Crusher
