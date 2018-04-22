@@ -29,8 +29,10 @@ public class BlackHoleInfoPiece extends BasicRenderedGuiPiece {
             GlStateManager.pushMatrix();
             GlStateManager.translate(this.getLeft() + 2, this.getTop() + 8, 0);
             GlStateManager.scale(1, 1, 1);
-            if (!tile.getItemStack().isEmpty()) {
-                ItemStackUtils.renderItemIntoGUI(tile.getItemStack(), 1, 0, 7);
+            if (tile.getAmount() > 0) {
+                if (!tile.getItemStack().isEmpty()) {
+                    ItemStackUtils.renderItemIntoGUI(tile.getItemStack(), 1, 0, 7);
+                }
                 String display = new TextComponentTranslation(tile.getDisplayNameUnlocalized()).getUnformattedText();
                 renderer.drawString(TextFormatting.DARK_GRAY + display.substring(0, Math.min(display.length(), 21)) + (display.length() > 21 ? "." : ""), 20, 4, 0xFFFFFF);
                 renderer.drawString(TextFormatting.DARK_GRAY + new TextComponentTranslation("text.industrialforegoing.display.amount").getUnformattedText() + " " + new DecimalFormat().format(tile.getAmount()), 4, (renderer.FONT_HEIGHT) * 3, 0xFFFFFF);

@@ -48,7 +48,9 @@ public class BlackHoleTankTile extends CustomSidedTileEntity implements IHasDisp
 
     @Override
     public ItemStack getItemStack() {
-        return tank.getFluid() == null ? new ItemStack(Items.BUCKET) : FluidUtil.getFilledBucket(tank.getFluid());
+        if (tank.getFluid() == null || FluidUtil.getFilledBucket(tank.getFluid()).isEmpty())
+            return new ItemStack(Items.BUCKET);
+        return FluidUtil.getFilledBucket(tank.getFluid());
     }
 
     @Override
