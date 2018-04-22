@@ -3,6 +3,7 @@
 + The Enchantment Extractor will keep items in the input slot until they are fully disenchanted
 + The Enchantment Extractor will now accept enchanted books with multiple enchantments and split them up
 + Fluids without buckets are now properly displayed in the Black Hole Unit
++ Added Right Click Harvestability to cocoa beans as no other mod adds it so the Plant Interactor can harvest them (can be disabled in the config)
 
 # 1.8.9
 + Fixed Server Side Crash with the Mob Crusher
