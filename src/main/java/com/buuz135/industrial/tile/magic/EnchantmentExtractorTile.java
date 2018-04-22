@@ -10,6 +10,7 @@ import net.minecraft.item.EnumDyeColor;
 import net.minecraft.item.ItemEnchantedBook;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.NBTTagList;
 import net.minecraftforge.items.ItemHandlerHelper;
 import net.minecraftforge.items.ItemStackHandler;
 
@@ -63,7 +64,7 @@ public class EnchantmentExtractorTile extends CustomElectricMachine {
         this.addInventory(new CustomColoredItemHandler(this.inEnchanted, EnumDyeColor.PURPLE, "Input enchanted items", 18 * 3, 25 + 18 * 2, 1, 1) {
             @Override
             public boolean canInsertItem(int slot, ItemStack stack) {
-                return stack.isItemEnchanted() && stack.getItem().isEnchantable(stack);
+                return stack.isItemEnchanted() && stack.getItem().isEnchantable(stack) || (stack.getItem().equals(Items.ENCHANTED_BOOK) && ItemEnchantedBook.getEnchantments(stack).tagCount() > 1);
             }
 
             @Override
@@ -133,9 +134,19 @@ public class EnchantmentExtractorTile extends CustomElectricMachine {
         ItemStack enchantedItem = getItem();
         ItemStack enchantedBook = new ItemStack(Items.ENCHANTED_BOOK);
         if (ItemHandlerHelper.insertItem(outEnchanted, enchantedBook, true).isEmpty() && ItemHandlerHelper.insertItem(outItem, enchantedItem, true).isEmpty()) {
-            NBTTagCompound base = (NBTTagCompound) enchantedItem.getEnchantmentTagList().get(0);
-            ((ItemEnchantedBook) Items.ENCHANTED_BOOK).addEnchantment(enchantedBook, new EnchantmentData(Enchantment.getEnchantmentByID(base.getShort("id")), base.getShort("lvl")));
-            enchantedItem.getEnchantmentTagList().removeTag(0);
+            NBTTagCompound base;
+            if (enchantedItem.getItem().equals(Items.ENCHANTED_BOOK)) {
+                base = (NBTTagCompound) ItemEnchantedBook.getEnchantments(enchantedItem).get(0);
+                NBTTagCompound tagCompound = enchantedItem.getTagCompound();
+                NBTTagList list = ItemEnchantedBook.getEnchantments(enchantedItem);
+                list.removeTag(0);
+                tagCompound.setTag("StoredEnchantments", list);
+                enchantedItem.setTagCompound(tagCompound);
+            } else {
+                base = (NBTTagCompound) enchantedItem.getEnchantmentTagList().get(0);
+                enchantedItem.getEnchantmentTagList().removeTag(0);
+            }
+            ItemEnchantedBook.addEnchantment(enchantedBook, new EnchantmentData(Enchantment.getEnchantmentByID(base.getShort("id")), base.getShort("lvl")));
             if (enchantedItem.getEnchantmentTagList().hasNoTags()) {
                 enchantedItem.getTagCompound().removeTag("ench");
                 if (enchantedItem.getTagCompound().hasNoTags()) {
@@ -144,7 +155,7 @@ public class EnchantmentExtractorTile extends CustomElectricMachine {
             }
             ItemHandlerHelper.insertItem(outEnchanted, enchantedBook, false);
             inBook.getStackInSlot(0).setCount(inBook.getStackInSlot(0).getCount() - 1);
-            if (!enchantedItem.isItemEnchanted()) {
+            if ((enchantedItem.getItem().equals(Items.ENCHANTED_BOOK) && ItemEnchantedBook.getEnchantments(enchantedItem).tagCount() == 1) || (!enchantedItem.getItem().equals(Items.ENCHANTED_BOOK) && !enchantedItem.isItemEnchanted())) {
                 ItemHandlerHelper.insertItem(outItem, enchantedItem.copy(), false);
                 enchantedItem.setCount(enchantedItem.getCount() - 1);
             }

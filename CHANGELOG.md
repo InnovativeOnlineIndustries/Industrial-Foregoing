@@ -1,6 +1,7 @@
 # 1.8.10
 + Added support for the Adult Filter in the Mob Slaughter Factory
 + The Enchantment Extractor will keep items in the input slot until they are fully disenchanted
++ The Enchantment Extractor will now accept enchanted books with multiple enchantments and split them up
 
 # 1.8.9
 + Fixed Server Side Crash with the Mob Crusher
