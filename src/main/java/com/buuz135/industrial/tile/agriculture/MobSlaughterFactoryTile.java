@@ -1,11 +1,14 @@
 package com.buuz135.industrial.tile.agriculture;
 
+import com.buuz135.industrial.item.addon.AdultFilterAddonItem;
 import com.buuz135.industrial.proxy.BlockRegistry;
 import com.buuz135.industrial.proxy.CommonProxy;
 import com.buuz135.industrial.proxy.FluidsRegistry;
 import com.buuz135.industrial.tile.WorkingAreaElectricMachine;
+import com.buuz135.industrial.tile.api.IAcceptsAdultFilter;
 import com.buuz135.industrial.utils.ItemStackUtils;
 import com.buuz135.industrial.utils.WorkUtils;
+import net.minecraft.entity.EntityAgeable;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.item.EnumDyeColor;
 import net.minecraft.item.ItemStack;
@@ -18,7 +21,7 @@ import net.ndrei.teslacorelib.inventory.FluidTankType;
 
 import java.util.List;
 
-public class MobSlaughterFactoryTile extends WorkingAreaElectricMachine {
+public class MobSlaughterFactoryTile extends WorkingAreaElectricMachine implements IAcceptsAdultFilter {
 
     private IFluidTank outMeat;
     private IFluidTank outPink;
@@ -40,6 +43,7 @@ public class MobSlaughterFactoryTile extends WorkingAreaElectricMachine {
 
         AxisAlignedBB area = getWorkingArea();
         List<EntityLiving> mobs = this.getWorld().getEntitiesWithinAABB(EntityLiving.class, area);
+        if (hasAddon()) mobs.removeIf(entityLiving -> entityLiving instanceof EntityAgeable && entityLiving.isChild());
         if (mobs.size() == 0) return 0;
         EntityLiving mob = mobs.get(this.getWorld().rand.nextInt(mobs.size()));
         this.outMeat.fill(new FluidStack(FluidsRegistry.MEAT, (int) (mob.getHealth() * BlockRegistry.mobSlaughterFactoryBlock.getMeatValue())), true);
@@ -58,5 +62,10 @@ public class MobSlaughterFactoryTile extends WorkingAreaElectricMachine {
     @Override
     protected void processFluidItems(ItemStackHandler fluidItems) {
         ItemStackUtils.processFluidItems(fluidItems, outMeat);
+    }
+
+    @Override
+    public boolean hasAddon() {
+        return this.hasAddon(AdultFilterAddonItem.class);
     }
 }

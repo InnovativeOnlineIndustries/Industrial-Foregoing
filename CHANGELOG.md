@@ -1,3 +1,6 @@
+# 1.8.10
++ Added support for the Adult Filter in the Mob Slaughter Factory
+
 # 1.8.9
 + Fixed Server Side Crash with the Mob Crusher
 + Fixed Fluid Dictionary Converted working when no fluid was selected
