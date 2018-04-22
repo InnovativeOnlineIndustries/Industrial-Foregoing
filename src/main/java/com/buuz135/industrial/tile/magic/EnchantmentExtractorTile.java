@@ -138,12 +138,17 @@ public class EnchantmentExtractorTile extends CustomElectricMachine {
             enchantedItem.getEnchantmentTagList().removeTag(0);
             if (enchantedItem.getEnchantmentTagList().hasNoTags()) {
                 enchantedItem.getTagCompound().removeTag("ench");
+                if (enchantedItem.getTagCompound().hasNoTags()) {
+                    enchantedItem.setTagCompound(null);
+                }
             }
             ItemHandlerHelper.insertItem(outEnchanted, enchantedBook, false);
-            ItemHandlerHelper.insertItem(outItem, enchantedItem.copy(), false);
             inBook.getStackInSlot(0).setCount(inBook.getStackInSlot(0).getCount() - 1);
-            enchantedItem.setCount(enchantedItem.getCount() - 1);
-            return 500;
+            if (!enchantedItem.isItemEnchanted()) {
+                ItemHandlerHelper.insertItem(outItem, enchantedItem.copy(), false);
+                enchantedItem.setCount(enchantedItem.getCount() - 1);
+            }
+            return 1;
         }
 
         return 0;
