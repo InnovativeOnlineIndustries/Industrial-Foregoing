@@ -146,18 +146,20 @@ public class EnchantmentExtractorTile extends CustomElectricMachine {
                 base = (NBTTagCompound) enchantedItem.getEnchantmentTagList().get(0);
                 enchantedItem.getEnchantmentTagList().removeTag(0);
             }
-            ItemEnchantedBook.addEnchantment(enchantedBook, new EnchantmentData(Enchantment.getEnchantmentByID(base.getShort("id")), base.getShort("lvl")));
-            if (enchantedItem.getEnchantmentTagList().hasNoTags()) {
-                enchantedItem.getTagCompound().removeTag("ench");
-                if (enchantedItem.getTagCompound().hasNoTags()) {
-                    enchantedItem.setTagCompound(null);
+            if (Enchantment.getEnchantmentByID(base.getShort("id")) != null) {
+                ItemEnchantedBook.addEnchantment(enchantedBook, new EnchantmentData(Enchantment.getEnchantmentByID(base.getShort("id")), base.getShort("lvl")));
+                if (enchantedItem.getEnchantmentTagList().hasNoTags() && enchantedItem.getTagCompound() != null && enchantedItem.getTagCompound().hasKey("ench")) {
+                    enchantedItem.getTagCompound().removeTag("ench");
+                    if (enchantedItem.getTagCompound().hasNoTags()) {
+                        enchantedItem.setTagCompound(null);
+                    }
                 }
-            }
-            ItemHandlerHelper.insertItem(outEnchanted, enchantedBook, false);
-            inBook.getStackInSlot(0).setCount(inBook.getStackInSlot(0).getCount() - 1);
-            if ((enchantedItem.getItem().equals(Items.ENCHANTED_BOOK) && ItemEnchantedBook.getEnchantments(enchantedItem).tagCount() == 1) || (!enchantedItem.getItem().equals(Items.ENCHANTED_BOOK) && !enchantedItem.isItemEnchanted())) {
-                ItemHandlerHelper.insertItem(outItem, enchantedItem.copy(), false);
-                enchantedItem.setCount(enchantedItem.getCount() - 1);
+                ItemHandlerHelper.insertItem(outEnchanted, enchantedBook, false);
+                inBook.getStackInSlot(0).setCount(inBook.getStackInSlot(0).getCount() - 1);
+                if ((enchantedItem.getItem().equals(Items.ENCHANTED_BOOK) && ItemEnchantedBook.getEnchantments(enchantedItem).tagCount() == 1) || (!enchantedItem.getItem().equals(Items.ENCHANTED_BOOK) && !enchantedItem.isItemEnchanted())) {
+                    ItemHandlerHelper.insertItem(outItem, enchantedItem.copy(), false);
+                    enchantedItem.setCount(enchantedItem.getCount() - 1);
+                }
             }
             return 1;
         }
