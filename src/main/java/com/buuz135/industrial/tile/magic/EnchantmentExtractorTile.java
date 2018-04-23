@@ -134,19 +134,19 @@ public class EnchantmentExtractorTile extends CustomElectricMachine {
         ItemStack enchantedItem = getItem();
         ItemStack enchantedBook = new ItemStack(Items.ENCHANTED_BOOK);
         if (ItemHandlerHelper.insertItem(outEnchanted, enchantedBook, true).isEmpty() && ItemHandlerHelper.insertItem(outItem, enchantedItem, true).isEmpty()) {
-            NBTTagCompound base;
-            if (enchantedItem.getItem().equals(Items.ENCHANTED_BOOK)) {
+            NBTTagCompound base = null;
+            if (enchantedItem.getItem().equals(Items.ENCHANTED_BOOK) && ItemEnchantedBook.getEnchantments(enchantedItem).tagCount() > 0 && ItemEnchantedBook.getEnchantments(enchantedBook).get(0) instanceof NBTTagCompound) {
                 base = (NBTTagCompound) ItemEnchantedBook.getEnchantments(enchantedItem).get(0);
                 NBTTagCompound tagCompound = enchantedItem.getTagCompound();
                 NBTTagList list = ItemEnchantedBook.getEnchantments(enchantedItem);
                 list.removeTag(0);
                 tagCompound.setTag("StoredEnchantments", list);
                 enchantedItem.setTagCompound(tagCompound);
-            } else {
+            } else if (enchantedItem.getEnchantmentTagList().tagCount() > 0 && enchantedItem.getEnchantmentTagList().get(0) instanceof NBTTagCompound) {
                 base = (NBTTagCompound) enchantedItem.getEnchantmentTagList().get(0);
                 enchantedItem.getEnchantmentTagList().removeTag(0);
             }
-            if (Enchantment.getEnchantmentByID(base.getShort("id")) != null) {
+            if (base != null && Enchantment.getEnchantmentByID(base.getShort("id")) != null) {
                 ItemEnchantedBook.addEnchantment(enchantedBook, new EnchantmentData(Enchantment.getEnchantmentByID(base.getShort("id")), base.getShort("lvl")));
                 if (enchantedItem.getEnchantmentTagList().hasNoTags() && enchantedItem.getTagCompound() != null && enchantedItem.getTagCompound().hasKey("ench")) {
                     enchantedItem.getTagCompound().removeTag("ench");
