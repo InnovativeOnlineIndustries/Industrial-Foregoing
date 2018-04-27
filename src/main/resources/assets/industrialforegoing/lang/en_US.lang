@@ -238,6 +238,7 @@ item.industrialforegoing.adult_filter.name=Adult Filter
 item.industrialforegoing_redstone_inverted.name=Inverted Redstone Control
 item.industrialforegoing_machinehull.name=Machine Hull
 item.industrialforegoing_straw.name=Straw
+item.industrialforegoing_artificial_dye.name=Artificial Dye
 item.industrialforegoing_pink_slime.name=Pink Slime
 item.industrialforegoing.energy_field_addon.name=Energy Field Addon
 item.industrialforegoing.leaf_shearing.name=Leaf Shearing Addon

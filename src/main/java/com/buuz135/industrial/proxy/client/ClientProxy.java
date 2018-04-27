@@ -3,6 +3,7 @@ package com.buuz135.industrial.proxy.client;
 import com.buuz135.industrial.book.IFManual;
 import com.buuz135.industrial.entity.EntityPinkSlime;
 import com.buuz135.industrial.proxy.CommonProxy;
+import com.buuz135.industrial.proxy.ItemRegistry;
 import com.buuz135.industrial.proxy.client.entity.RenderPinkSlime;
 import com.buuz135.industrial.proxy.client.event.IFTextureStichEvent;
 import com.buuz135.industrial.proxy.client.event.IFTooltipEvent;
@@ -12,9 +13,13 @@ import com.buuz135.industrial.utils.Reference;
 import com.google.gson.GsonBuilder;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.block.model.IBakedModel;
+import net.minecraft.client.renderer.color.IItemColor;
 import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.client.renderer.entity.RenderPlayer;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
+import net.minecraft.item.EnumDyeColor;
+import net.minecraft.item.ItemDye;
+import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.client.model.IModel;
 import net.minecraftforge.client.model.ModelLoader;
@@ -87,6 +92,7 @@ public class ClientProxy extends CommonProxy {
         }
 
         manager.entityRenderMap.put(EntityPinkSlime.class, new RenderPinkSlime(manager));
+        Minecraft.getMinecraft().getItemColors().registerItemColorHandler((stack, tintIndex) -> ItemDye.DYE_COLORS[EnumDyeColor.byMetadata(stack.getMetadata()).getDyeDamage()], ItemRegistry.artificalDye);
     }
 
     @Override
