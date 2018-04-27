@@ -33,7 +33,7 @@ public class IndustrialForegoingHelper {
      */
     public static boolean removeBioReactorEntry(ItemStack stack) {
         if (BioReactorEntry.BIO_REACTOR_ENTRIES.stream().anyMatch(entry -> entry.doesStackMatch(stack))) {
-            BioReactorEntry.BIO_REACTOR_ENTRIES.removeIf(entry -> !entry.doesStackMatch(stack));
+            BioReactorEntry.BIO_REACTOR_ENTRIES.removeIf(entry -> entry.doesStackMatch(stack));
             return true;
         }
         return false;
@@ -61,7 +61,7 @@ public class IndustrialForegoingHelper {
      */
     public static boolean removeLaserDrillEntry(ItemStack stack) {
         if (LaserDrillEntry.LASER_DRILL_ENTRIES.stream().anyMatch(entry -> stack.isItemEqual(entry.getStack()))) {
-            LaserDrillEntry.LASER_DRILL_ENTRIES.removeIf(entry -> !entry.getStack().isItemEqual(stack));
+            LaserDrillEntry.LASER_DRILL_ENTRIES.removeIf(entry -> entry.getStack().isItemEqual(stack));
         }
         return false;
     }
@@ -88,7 +88,7 @@ public class IndustrialForegoingHelper {
      */
     public static boolean removeSludgeRefinerEntry(ItemStack stack) {
         if (SludgeEntry.SLUDGE_RECIPES.stream().anyMatch(entry -> entry.getStack().isItemEqual(stack))) {
-            SludgeEntry.SLUDGE_RECIPES.removeIf(entry -> !entry.getStack().isItemEqual(stack));
+            SludgeEntry.SLUDGE_RECIPES.removeIf(entry -> entry.getStack().isItemEqual(stack));
             return true;
         }
         return false;
@@ -116,7 +116,7 @@ public class IndustrialForegoingHelper {
      */
     public static boolean removeProteinReactorEntry(ItemStack stack) {
         if (ProteinReactorEntry.PROTEIN_REACTOR_ENTRIES.stream().anyMatch(entry -> entry.doesStackMatch(stack))) {
-            ProteinReactorEntry.PROTEIN_REACTOR_ENTRIES.removeIf(entry -> !entry.doesStackMatch(stack));
+            ProteinReactorEntry.PROTEIN_REACTOR_ENTRIES.removeIf(entry -> entry.doesStackMatch(stack));
             return true;
         }
         return false;

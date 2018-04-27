@@ -1,3 +1,6 @@
+# 1.8.11
++ Fixed the API removing all the entries that instead of just one thing
+
 # 1.8.10
 + Added support for the Adult Filter in the Mob Slaughter Factory
 + The Enchantment Extractor will keep items in the input slot until they are fully disenchanted
