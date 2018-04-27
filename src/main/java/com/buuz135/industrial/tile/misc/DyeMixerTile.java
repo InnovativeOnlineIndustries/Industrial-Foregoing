@@ -6,7 +6,6 @@ import com.buuz135.industrial.tile.CustomColoredItemHandler;
 import com.buuz135.industrial.tile.CustomElectricMachine;
 import com.buuz135.industrial.utils.ItemStackUtils;
 import com.buuz135.industrial.utils.WorkUtils;
-import net.minecraft.init.Items;
 import net.minecraft.inventory.Slot;
 import net.minecraft.item.EnumDyeColor;
 import net.minecraft.item.ItemStack;
@@ -173,7 +172,7 @@ public class DyeMixerTile extends CustomElectricMachine {
         if (!stack.isEmpty()) {
             ColorUsage usage = colorUsages[stack.getMetadata() - 1];
             if (r >= usage.getR() && g >= usage.getG() && b >= usage.getB()) {
-                ItemStack out = new ItemStack(Items.DYE, 1, 15 - stack.getMetadata());
+                ItemStack out = new ItemStack(ItemRegistry.artificalDye, 1, stack.getMetadata());
                 if (ItemHandlerHelper.insertItem(output, out, true).isEmpty()) {
                     r -= usage.getR();
                     g -= usage.getG();

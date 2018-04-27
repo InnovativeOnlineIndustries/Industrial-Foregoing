@@ -17,6 +17,7 @@ public class ItemRenderRegistry {
         pinkSlime.registerRender();
         energyFieldAddon.registerRenderer();
         bookManualItem.registerRender();
+        artificalDye.registerRender();
 
         adultFilterAddomItem.registerRenderer();
         rangeAddonItem.registerRenderer();

@@ -10,6 +10,7 @@
 + Added Right Click Harvestability to cocoa beans as no other mod adds it so the Plant Interactor can harvest them (can be disabled in the config)
 + Animal rancher will stop shearing animals if the inventory is full 
 + Fixed a crash with the enchantment extractor or a couple
++ Added Artificial Dye and made the Dye Mixer output them #306 (Coded)
 
 # 1.8.9
 + Fixed Server Side Crash with the Mob Crusher

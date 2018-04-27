@@ -30,6 +30,7 @@ public class ItemRegistry {
     public static BookManualItem bookManualItem;
 
     public static ItemStraw strawItem;
+    public static ItemArtificalDye artificalDye;
 
     public static AdultFilterAddonItem adultFilterAddomItem;
     public static RangeAddonItem rangeAddonItem;
@@ -52,6 +53,7 @@ public class ItemRegistry {
         (laserLensItem = new LaserLensItem(false)).register(itemRegistry);
         (laserLensItem_inverted = new LaserLensItem(true)).register(itemRegistry);
         (strawItem = new ItemStraw()).register(itemRegistry);
+        (artificalDye = new ItemArtificalDye()).register(itemRegistry);
         (pinkSlime = new IFCustomItem("pink_slime")).register(itemRegistry);
         (bookManualItem = new BookManualItem()).register(itemRegistry);
 
@@ -83,5 +85,11 @@ public class ItemRegistry {
         OreDictionary.registerOre("slimeballPink", pinkSlime);
         OreDictionary.registerOre("dyeBrown", fertilizer);
         OreDictionary.registerOre("fertilizer", fertilizer);
+        OreDictionary.registerOre("dye", new ItemStack(artificalDye, 1, OreDictionary.WILDCARD_VALUE));
+
+        String[] dyes = {"White", "Orange", "Magenta", "LightBlue", "Yellow", "Lime", "Pink", "Gray", "LightGray", "Cyan", "Purple", "Blue", "Brown", "Green", "Red", "Black"};
+        for (int i = 0; i < 16; i++) {
+            OreDictionary.registerOre("dye" + dyes[i], new ItemStack(artificalDye, 1, i));
+        }
     }
 }
