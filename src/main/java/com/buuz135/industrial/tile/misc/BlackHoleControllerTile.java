@@ -59,7 +59,8 @@ public class BlackHoleControllerTile extends CustomSidedTileEntity {
                 if (stack.getItem().equals(Item.getItemFromBlock(blackHoleUnitBlock))) return false;
                 if (storage.getStackInSlot(slot).isEmpty()) return false;
                 ItemStack contained = blackHoleUnitBlock.getItemStack(storage.getStackInSlot(slot));
-                if (contained.isEmpty() || stack.isItemEqual(contained)) return true;
+                if (stack.isItemEqual(contained)) return true;
+                if (!input.getLocked() && contained.isEmpty()) return true;
                 return false;
             }
 
@@ -132,19 +133,25 @@ public class BlackHoleControllerTile extends CustomSidedTileEntity {
                     ItemStack out = output.getStackInSlot(i);
                     if (out.isEmpty()) { // Slot is empty
                         out = s.copy();
-                        out.setCount(Math.min(amount, 64));
+                        out.setCount(Math.min(amount, s.getMaxStackSize()));
                         blackHoleUnitBlock.setAmount(stack, amount - out.getCount());
                         output.setStackInSlot(i, out);
+                        if (blackHoleUnitBlock.getAmount(stack) <= 0) {
+                            stack.setTagCompound(null);
+                        }
                         continue;
                     }
                     if (out.getCount() < out.getMaxStackSize()) {
                         int increase = Math.min(amount, out.getMaxStackSize() - out.getCount());
                         out.setCount(out.getCount() + increase);
                         blackHoleUnitBlock.setAmount(stack, amount - increase);
+                        if (blackHoleUnitBlock.getAmount(stack) <= 0) {
+                            stack.setTagCompound(null);
+                        }
                         continue;
                     }
                 }
-            } else if (stack.isEmpty() && !output.getStackInSlot(i).isEmpty() && !this.world.isRemote) {
+            } else if (!output.getStackInSlot(i).isEmpty() && !this.world.isRemote) {
                 float f = 0.7F;
                 float d0 = world.rand.nextFloat() * f + (1.0F - f) * 0.5F;
                 float d1 = world.rand.nextFloat() * f + (1.0F - f) * 0.5F;

@@ -1,5 +1,6 @@
 # 1.8.11
 + Fixed the API removing all the entries that instead of just one thing
++ If the BHC slots are locked it will not try to fill empty BHU, and fixed some stack size derps
 
 # 1.8.10
 + Added support for the Adult Filter in the Mob Slaughter Factory

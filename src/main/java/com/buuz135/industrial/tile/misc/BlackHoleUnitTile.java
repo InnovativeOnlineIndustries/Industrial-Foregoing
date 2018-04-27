@@ -71,7 +71,7 @@ public class BlackHoleUnitTile extends CustomSidedTileEntity implements IHasDisp
             ItemHandlerHelper.insertItem(outItems, stack, false);
         } else if (outItems.getStackInSlot(0).getCount() <= outItems.getStackInSlot(0).getMaxStackSize()) {
             ItemStack stack = outItems.getStackInSlot(0);
-            int increment = Math.min(amount, 64 - stack.getCount());
+            int increment = Math.min(amount, stack.getMaxStackSize() - stack.getCount());
             stack.setCount(stack.getCount() + increment);
             amount -= increment;
         }
