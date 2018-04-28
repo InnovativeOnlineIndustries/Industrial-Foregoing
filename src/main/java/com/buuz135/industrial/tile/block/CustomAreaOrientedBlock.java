@@ -47,9 +47,10 @@ public abstract class CustomAreaOrientedBlock<T extends WorkingAreaElectricMachi
     @Override
     public List<String> getTooltip(ItemStack stack) {
         List<String> tooltips = super.getTooltip(stack);
-        tooltips.add(new TextComponentTranslation("text.industrialforegoing.tooltip.range").getFormattedText().replace("{0}", "" + (maxWidth * 2 + 1)).replace("{1}", (height + 1) + ""));
         if (acceptsRangeAddon)
             tooltips.add(new TextComponentTranslation("text.industrialforegoing.tooltip.accepts_range_addons").getFormattedText() + TextFormatting.GRAY + " (" + new TextComponentTranslation("text.industrialforegoing.tooltip.max_tier").getFormattedText() + TextFormatting.GRAY + " " + getMaxWidth() + ")");
+        else
+            tooltips.add(new TextComponentTranslation("text.industrialforegoing.tooltip.range").getFormattedText().replace("{0}", "" + (maxWidth * 2 + 1)).replace("{1}", (height + 1) + ""));
         return tooltips;
     }
 
