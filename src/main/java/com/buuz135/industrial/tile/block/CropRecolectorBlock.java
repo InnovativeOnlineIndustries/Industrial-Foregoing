@@ -24,7 +24,7 @@ public class CropRecolectorBlock extends CustomAreaOrientedBlock<CropRecolectorT
     private int maxDistanceTreeBlocksScan;
 
     public CropRecolectorBlock() {
-        super("crop_recolector", CropRecolectorTile.class, Material.ROCK, 400, 40, RangeType.FRONT, 1, 0, true);
+        super("crop_recolector", CropRecolectorTile.class, Material.ROCK, 400, 40, RangeType.FRONT, 11, 0, true);
     }
 
     @Override

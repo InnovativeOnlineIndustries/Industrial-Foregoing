@@ -21,7 +21,7 @@ public class MobDuplicatorBlock extends CustomAreaOrientedBlock<MobDuplicatorTil
     public boolean enableExactCopy;
 
     public MobDuplicatorBlock() {
-        super("mob_duplicator", MobDuplicatorTile.class, Material.ROCK, 5000, 80, RangeType.UP, 4, 2, false);
+        super("mob_duplicator", MobDuplicatorTile.class, Material.ROCK, 5000, 80, RangeType.UP, 5, 2, true);
     }
 
     public void createRecipe() {

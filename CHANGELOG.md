@@ -1,6 +1,11 @@
+# 1.9.0
++ Added Artificial Dye and made the Dye Mixer output them #306 (Coded)
++ Changed how working areas work now all the machines start with a 1x1 area but they accept Range Addons with some of them having a limitation of Addon Tier.
+
 # 1.8.11
 + Fixed the API removing all the entries that instead of just one thing
 + If the BHC slots are locked it will not try to fill empty BHU, and fixed some stack size derps
++ Fixed plant interactor giving Mystical agriculture seeds when its not supposed to
 
 # 1.8.10
 + Added support for the Adult Filter in the Mob Slaughter Factory
@@ -10,7 +15,6 @@
 + Added Right Click Harvestability to cocoa beans as no other mod adds it so the Plant Interactor can harvest them (can be disabled in the config)
 + Animal rancher will stop shearing animals if the inventory is full 
 + Fixed a crash with the enchantment extractor or a couple
-+ Added Artificial Dye and made the Dye Mixer output them #306 (Coded)
 
 # 1.8.9
 + Fixed Server Side Crash with the Mob Crusher

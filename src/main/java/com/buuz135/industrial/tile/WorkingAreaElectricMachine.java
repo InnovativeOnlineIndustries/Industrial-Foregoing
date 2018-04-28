@@ -107,7 +107,7 @@ public abstract class WorkingAreaElectricMachine extends CustomElectricMachine i
     }
 
     public int getRadius() {
-        return WorkUtils.getMachineWidth(world, pos) + (this.hasAddon(RangeAddonItem.class) ? (this.getAddonStack(RangeAddonItem.class).getMetadata() <= 0 ? -1 : this.getAddonStack(RangeAddonItem.class).getMetadata()) : 0);
+        return Math.min(WorkUtils.getMachineWidth(world, pos) + 1, (this.hasAddon(RangeAddonItem.class) ? this.getAddonStack(RangeAddonItem.class).getMetadata() + 1 : 0));
     }
 
     public int getHeight() {

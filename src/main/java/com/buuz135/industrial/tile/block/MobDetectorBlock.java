@@ -19,7 +19,7 @@ import javax.annotation.Nullable;
 public class MobDetectorBlock extends CustomAreaOrientedBlock<MobDetectorTile> {
 
     public MobDetectorBlock() {
-        super("mob_detector", MobDetectorTile.class, Material.ROCK, 100, 10, RangeType.FRONT, 2, 1, false);
+        super("mob_detector", MobDetectorTile.class, Material.ROCK, 100, 10, RangeType.FRONT, 5, 1, true);
     }
 
 

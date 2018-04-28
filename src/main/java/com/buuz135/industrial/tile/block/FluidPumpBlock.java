@@ -18,7 +18,7 @@ public class FluidPumpBlock extends CustomAreaOrientedBlock<FluidPumpTile> {
     private boolean replaceFluidWithCobble;
 
     public FluidPumpBlock() {
-        super("fluid_pump", FluidPumpTile.class, Material.ROCK, 1000, 40, RangeType.UP, 1, 1, true);
+        super("fluid_pump", FluidPumpTile.class, Material.ROCK, 1000, 40, RangeType.UP, 16, 1, true);
     }
 
     @Override

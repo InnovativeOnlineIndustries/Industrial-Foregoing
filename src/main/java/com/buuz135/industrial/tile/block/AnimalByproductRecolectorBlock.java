@@ -19,7 +19,7 @@ public class AnimalByproductRecolectorBlock extends CustomAreaOrientedBlock<Anim
     private int maxSludgeOperation;
 
     public AnimalByproductRecolectorBlock() {
-        super("animal_byproduct_recolector", AnimalByproductRecolectorTile.class, Material.ROCK, 40, 2, RangeType.UP, 0, 0, true);
+        super("animal_byproduct_recolector", AnimalByproductRecolectorTile.class, Material.ROCK, 40, 2, RangeType.UP, 11, 0, true);
     }
 
     @Override

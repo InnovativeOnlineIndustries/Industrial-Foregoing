@@ -8,8 +8,11 @@ import com.buuz135.industrial.utils.RecipeUtils;
 import net.minecraft.block.material.Material;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraftforge.common.config.Configuration;
 import net.ndrei.teslacorelib.items.MachineCaseItem;
+
+import java.util.List;
 
 public class
 MobSlaughterFactoryBlock extends CustomAreaOrientedBlock<MobSlaughterFactoryTile> {
@@ -17,7 +20,7 @@ MobSlaughterFactoryBlock extends CustomAreaOrientedBlock<MobSlaughterFactoryTile
     private float meatValue;
 
     public MobSlaughterFactoryBlock() {
-        super("mob_slaughter_factory", MobSlaughterFactoryTile.class, Material.ROCK, 1000, 40, RangeType.FRONT, 3, 2, false);
+        super("mob_slaughter_factory", MobSlaughterFactoryTile.class, Material.ROCK, 1000, 40, RangeType.FRONT, 5, 2, true);
     }
 
     @Override
@@ -43,6 +46,13 @@ MobSlaughterFactoryBlock extends CustomAreaOrientedBlock<MobSlaughterFactoryTile
     @Override
     public BookCategory getCategory() {
         return BookCategory.MOB;
+    }
+
+    @Override
+    public List<String> getTooltip(ItemStack stack) {
+        List<String> t = super.getTooltip(stack);
+        t.add(new TextComponentTranslation("text.industrialforegoing.tooltip.adult_filter").getFormattedText());
+        return t;
     }
 
 }

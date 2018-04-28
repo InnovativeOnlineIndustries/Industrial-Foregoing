@@ -18,7 +18,7 @@ public class PlantInteractorBlock extends CustomAreaOrientedBlock<PlantInteracto
     private boolean rightClickCocoBeansEnabled;
 
     public PlantInteractorBlock() {
-        super("plant_interactor", PlantInteractorTile.class, Material.ROCK, 400, 40, RangeType.FRONT, 1, 4, true);
+        super("plant_interactor", PlantInteractorTile.class, Material.ROCK, 400, 40, RangeType.FRONT, 11, 4, true);
     }
 
     @Override

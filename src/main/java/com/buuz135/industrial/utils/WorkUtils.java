@@ -19,7 +19,7 @@ public class WorkUtils {
     }
 
     public static int getMachineWidth(World world, BlockPos pos) {
-        return getBlock(world, pos) != null ? getBlock(world, pos).getWidth() : 0;
+        return getBlock(world, pos) != null ? getBlock(world, pos).getMaxWidth() : 0;
     }
 
     public static int getMachineHeight(World world, BlockPos pos) {

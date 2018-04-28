@@ -8,27 +8,28 @@ import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.TextComponentTranslation;
+import net.minecraft.util.text.TextFormatting;
 
 import java.util.List;
 
 public abstract class CustomAreaOrientedBlock<T extends WorkingAreaElectricMachine> extends CustomOrientedBlock {
 
-    private int width;
+    private int maxWidth;
     private int height;
     private boolean acceptsRangeAddon;
     private RangeType type;
 
-    public CustomAreaOrientedBlock(String registryName, Class<T> teClass, Material material, int energyForWork, int energyRate, RangeType type, int width, int height, boolean acceptsRangeAddon) {
+    public CustomAreaOrientedBlock(String registryName, Class<T> teClass, Material material, int energyForWork, int energyRate, RangeType type, int maxWidth, int height, boolean acceptsRangeAddon) {
         super(registryName, teClass, material, energyForWork, energyRate);
-        this.width = width;
+        this.maxWidth = maxWidth;
         this.height = height;
         this.acceptsRangeAddon = acceptsRangeAddon;
         this.type = type;
     }
 
 
-    public int getWidth() {
-        return width;
+    public int getMaxWidth() {
+        return maxWidth;
     }
 
     public int getHeight() {
@@ -46,9 +47,9 @@ public abstract class CustomAreaOrientedBlock<T extends WorkingAreaElectricMachi
     @Override
     public List<String> getTooltip(ItemStack stack) {
         List<String> tooltips = super.getTooltip(stack);
-        tooltips.add(new TextComponentTranslation("text.industrialforegoing.tooltip.range").getFormattedText().replace("{0}", "" + (width * 2 + 1)).replace("{1}", (height + 1) + ""));
+        tooltips.add(new TextComponentTranslation("text.industrialforegoing.tooltip.range").getFormattedText().replace("{0}", "" + (maxWidth * 2 + 1)).replace("{1}", (height + 1) + ""));
         if (acceptsRangeAddon)
-            tooltips.add(new TextComponentTranslation("text.industrialforegoing.tooltip.accepts_range_addons").getFormattedText());
+            tooltips.add(new TextComponentTranslation("text.industrialforegoing.tooltip.accepts_range_addons").getFormattedText() + TextFormatting.GRAY + " (" + new TextComponentTranslation("text.industrialforegoing.tooltip.max_tier").getFormattedText() + TextFormatting.GRAY + " " + getMaxWidth() + ")");
         return tooltips;
     }
 

@@ -12,7 +12,7 @@ import net.ndrei.teslacorelib.items.MachineCaseItem;
 public class EnergyFieldProviderBlock extends CustomAreaOrientedBlock<EnergyFieldProviderTile> {
 
     public EnergyFieldProviderBlock() {
-        super("energy_field_provider", EnergyFieldProviderTile.class, Material.ROCK, 1, 1, RangeType.UP, 3, 3, true);
+        super("energy_field_provider", EnergyFieldProviderTile.class, Material.ROCK, 1, 1, RangeType.UP, 11, 3, true);
     }
 
     @Override

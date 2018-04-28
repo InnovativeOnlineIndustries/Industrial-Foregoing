@@ -19,7 +19,7 @@ public class MobRelocatorBlock extends CustomAreaOrientedBlock<MobRelocatorTile>
     private float essenceMultiplier;
 
     public MobRelocatorBlock() {
-        super("mob_relocator", MobRelocatorTile.class, Material.ROCK, 1000, 40, RangeType.FRONT, 3, 2, false);
+        super("mob_relocator", MobRelocatorTile.class, Material.ROCK, 1000, 40, RangeType.FRONT, 5, 2, true);
         this.setResistance(Float.MAX_VALUE);
     }
 

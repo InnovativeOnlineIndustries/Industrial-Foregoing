@@ -13,7 +13,7 @@ import net.ndrei.teslacorelib.items.MachineCaseItem;
 public class CropSowerBlock extends CustomAreaOrientedBlock<CropSowerTile> {
 
     public CropSowerBlock() {
-        super("crop_sower", CropSowerTile.class, Material.ROCK, 400, 40, RangeType.UP, 1, 0, true);
+        super("crop_sower", CropSowerTile.class, Material.ROCK, 400, 40, RangeType.UP, 11, 0, true);
     }
 
     public void createRecipe() {

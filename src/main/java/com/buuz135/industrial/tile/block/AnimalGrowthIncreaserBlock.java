@@ -12,7 +12,7 @@ import net.ndrei.teslacorelib.items.MachineCaseItem;
 public class AnimalGrowthIncreaserBlock extends CustomAreaOrientedBlock<AnimalGrowthIncreaserTile> {
 
     public AnimalGrowthIncreaserBlock() {
-        super("animal_growth_increaser", AnimalGrowthIncreaserTile.class, Material.ROCK, 20 * 20, 20, RangeType.FRONT, 3, 1, false);
+        super("animal_growth_increaser", AnimalGrowthIncreaserTile.class, Material.ROCK, 20 * 20, 20, RangeType.FRONT, 5, 1, true);
     }
 
     public void createRecipe() {
