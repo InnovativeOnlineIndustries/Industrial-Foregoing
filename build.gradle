@@ -101,6 +101,13 @@ processResources {
     }
 }
 
+task apiJar(type: Jar, dependsOn: 'classes') {
+    classifier = 'api'
+    from(sourceSets.main.output) {
+        include 'com/buuz135/industrial/api/**'
+    }
+}
+
 task devJar(type: Jar, dependsOn: 'classes') {
     from(sourceSets.main.output) {
         include '**'
@@ -111,6 +118,7 @@ task devJar(type: Jar, dependsOn: 'classes') {
 
 artifacts {
     archives devJar
+    archives apiJar
 }
 
 configurations {
