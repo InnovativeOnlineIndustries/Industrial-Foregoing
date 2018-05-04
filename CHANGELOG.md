@@ -1,6 +1,8 @@
 # 1.9.0
 + Added Artificial Dye and made the Dye Mixer output them #306 (Coded)
 + Changed how working areas work now all the machines start with a 1x1 area but they accept Range Addons with some of them having a limitation of Addon Tier.
++ Made the Mob Imprisonment Tool color to the entity contained #322 (Coded)
++ Allow IPlantable (Netherwart) blocks to work with the plant interactor #319 (Coded)
 
 # 1.8.11
 + Fixed the API removing all the entries that instead of just one thing
