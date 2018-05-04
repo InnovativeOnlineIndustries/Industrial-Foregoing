@@ -2,6 +2,7 @@ package com.buuz135.industrial.proxy;
 
 import com.buuz135.industrial.entity.EntityPinkSlime;
 import com.buuz135.industrial.fluid.IFCustomFluidBlock;
+import com.buuz135.industrial.proxy.block.BlockConveyor;
 import com.buuz135.industrial.proxy.client.BlockRenderRegistry;
 import com.buuz135.industrial.proxy.client.FluidsRenderRegistry;
 import com.buuz135.industrial.proxy.client.ItemRenderRegistry;
@@ -94,6 +95,7 @@ public class BlockRegistry {
     }.setTickRandomly(true);
     public static IFCustomFluidBlock BLOCK_PROTEIN = new IFCustomFluidBlock(FluidsRegistry.PROTEIN, Material.WATER);
 
+    public static BlockConveyor blockConveyor = new BlockConveyor();
 
     public static void createRecipes() {
         CustomOrientedBlock.blockList.forEach(CustomOrientedBlock::createRecipe);
@@ -117,16 +119,19 @@ public class BlockRegistry {
         BLOCK_BIOFUEL.register(ev.getRegistry());
         BLOCK_PINK_SLIME.register(ev.getRegistry());
         BLOCK_PROTEIN.register(ev.getRegistry());
+        blockConveyor.registerBlock(ev.getRegistry());
     }
 
     @SubscribeEvent
     public void registerItems(RegistryEvent.Register<Item> ev) {
         CustomOrientedBlock.blockList.stream().filter(CustomOrientedBlock::isEnabled).forEach(customOrientedBlock -> customOrientedBlock.registerItem(ev.getRegistry()));
         ItemRegistry.registerItems(ev.getRegistry());
+        blockConveyor.registerItem(ev.getRegistry());
         if (TeslaCoreLib.INSTANCE.isClientSide()) {
             ItemRenderRegistry.registerRender();
             FluidsRenderRegistry.registerRender();
             BlockRenderRegistry.registerRender();
+            blockConveyor.registerRender();
         }
     }
 }

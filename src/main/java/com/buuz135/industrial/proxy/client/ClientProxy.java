@@ -5,6 +5,7 @@ import com.buuz135.industrial.entity.EntityPinkSlime;
 import com.buuz135.industrial.proxy.BlockRegistry;
 import com.buuz135.industrial.proxy.CommonProxy;
 import com.buuz135.industrial.proxy.ItemRegistry;
+import com.buuz135.industrial.proxy.block.TileEntityConveyor;
 import com.buuz135.industrial.proxy.client.entity.RenderPinkSlime;
 import com.buuz135.industrial.proxy.client.event.IFTextureStichEvent;
 import com.buuz135.industrial.proxy.client.event.IFTooltipEvent;
@@ -17,18 +18,21 @@ import net.minecraft.client.renderer.block.model.IBakedModel;
 import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.client.renderer.entity.RenderPlayer;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
-import net.minecraft.entity.EntityList;
 import net.minecraft.item.EnumDyeColor;
 import net.minecraft.item.ItemDye;
+import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.client.model.IModel;
 import net.minecraftforge.client.model.ModelLoader;
 import net.minecraftforge.client.model.obj.OBJLoader;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.model.TRSRTransformation;
-import net.minecraftforge.common.util.Constants;
+import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
+import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import net.minecraftforge.fml.common.gameevent.TickEvent;
 
+import java.awt.*;
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.net.URL;
@@ -41,6 +45,8 @@ public class ClientProxy extends CommonProxy {
     public static ResourceLocation GUI = new ResourceLocation(Reference.MOD_ID, "textures/gui/machines.png");
     public static IBakedModel ears_baked;
     public static IModel ears_model;
+
+    public static int TICK = 0;
 
     private static String readUrl(String urlString) throws Exception {
         BufferedReader reader = null;
@@ -95,17 +101,22 @@ public class ClientProxy extends CommonProxy {
         manager.entityRenderMap.put(EntityPinkSlime.class, new RenderPinkSlime(manager));
         Minecraft.getMinecraft().getItemColors().registerItemColorHandler((stack, tintIndex) -> ItemDye.DYE_COLORS[EnumDyeColor.byMetadata(stack.getMetadata()).getDyeDamage()], ItemRegistry.artificalDye);
         Minecraft.getMinecraft().getItemColors().registerItemColorHandler((stack, tintIndex) -> {
-            if (tintIndex == 1 || tintIndex == 2 || tintIndex == 3) {
-                EntityList.EntityEggInfo info = null;
-                if (stack.hasTagCompound() && stack.getTagCompound().hasKey("entity", Constants.NBT.TAG_STRING)) {
-                    ResourceLocation id = new ResourceLocation(stack.getTagCompound().getString("entity"));
-                    info = EntityList.ENTITY_EGGS.get(id);
-                }
-                return info == null ? 0x636363 : tintIndex == 3 ? BlockRegistry.mobDuplicatorBlock.blacklistedEntities.contains(info.spawnedID.toString()) ? 0xDB201A : 0x636363 : tintIndex == 1 ? info.primaryColor : info.secondaryColor;
+            if (tintIndex == 0) return ItemDye.DYE_COLORS[EnumDyeColor.byMetadata(stack.getMetadata()).getDyeDamage()];
+            return 0xFFFFFFF;
+        }, BlockRegistry.blockConveyor.getItem());
+        Minecraft.getMinecraft().getBlockColors().registerBlockColorHandler((state, worldIn, pos, tintIndex) -> {
+            if (tintIndex == 0) {
+                TileEntity entity = worldIn.getTileEntity(pos);
+                if (entity instanceof TileEntityConveyor) {
+                    if (((TileEntityConveyor) entity).getColor() == -1) {
 
+                        return Color.getHSBColor(TICK / 300f, 0.75f, 0.5f).getRGB();
+                    }
+                    return ItemDye.DYE_COLORS[((TileEntityConveyor) entity).getColor()];
+                }
             }
-            return 0xFFFFFF;
-        }, ItemRegistry.mobImprisonmentToolItem);
+            return 0xFFFFFFF;
+        }, BlockRegistry.blockConveyor);
     }
 
     @Override
@@ -114,4 +125,16 @@ public class ClientProxy extends CommonProxy {
         IFManual.buildManual();
     }
 
+    @Mod.EventBusSubscriber(modid = Reference.MOD_ID)
+    private static class TickHandler {
+
+        @SubscribeEvent
+        public static void onTick(TickEvent.ClientTickEvent event) {
+            ++TICK;
+            if (TICK > 300) {
+                TICK = 0;
+            }
+        }
+
+    }
 }
