@@ -1,13 +1,12 @@
 package com.buuz135.industrial.api.book.gui;
 
+import com.buuz135.industrial.api.IndustrialForegoingHelper;
 import com.buuz135.industrial.api.book.CategoryEntry;
 import com.buuz135.industrial.api.book.IPage;
 import com.buuz135.industrial.api.book.button.CategoryEntryButton;
 import com.buuz135.industrial.api.book.button.TextureButton;
 import com.buuz135.industrial.api.book.page.PageText;
 import com.buuz135.industrial.book.BookCategory;
-import com.buuz135.industrial.utils.Reference;
-import lombok.Getter;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
@@ -21,18 +20,14 @@ import java.io.IOException;
 
 public class GUIBookBase extends GuiScreen {
 
-    public static final ResourceLocation BOOK_EXTRAS = new ResourceLocation(Reference.MOD_ID, "textures/gui/extras.png");
-    public static final ResourceLocation BOOK_BACK = new ResourceLocation(Reference.MOD_ID, "textures/gui/book_back.png");
+    public static final ResourceLocation BOOK_EXTRAS = new ResourceLocation(IndustrialForegoingHelper.MOD_ID, "textures/gui/extras.png");
+    public static final ResourceLocation BOOK_BACK = new ResourceLocation(IndustrialForegoingHelper.MOD_ID, "textures/gui/book_back.png");
 
     private GuiScreen prevScreen;
     private GUIBookBase prevBase;
-    @Getter
     private int guiXSize;
-    @Getter
     private int guiYSize;
-    @Getter
     private int guiLeft;
-    @Getter
     private int guiTop;
 
     private GuiButton back;
@@ -112,7 +107,7 @@ public class GUIBookBase extends GuiScreen {
         this.buttonList.stream().filter(GuiButton::isMouseOver).forEach(guiButton -> {
             if (guiButton instanceof CategoryEntryButton) {
                 if (((CategoryEntryButton) guiButton).isTextTooBig())
-                    drawHoveringText(guiButton.displayString, guiButton.x + 8, guiButton.y + GUIBookCantegoryEntries.SPACE);
+                    drawHoveringText(guiButton.displayString, guiButton.x + 8, guiButton.y + GUIBookCategoryEntries.SPACE);
             } else {
                 drawHoveringText(guiButton.displayString, mouseX, mouseY);
             }
@@ -173,7 +168,7 @@ public class GUIBookBase extends GuiScreen {
             for (BookCategory category : BookCategory.values()) {
                 for (ResourceLocation location : category.getEntries().keySet()) {
                     if (category.getEntries().get(location).getName().toLowerCase().contains(text.toLowerCase())) {
-                        this.addButton(new CategoryEntryButton(-315 - buttonsAdded, this.getGuiLeft() + 16, this.getGuiTop() + 32 + GUIBookCantegoryEntries.SPACE * buttonsAdded, this.getGuiXSize() - 32, GUIBookCantegoryEntries.SPACE, category.getEntries().get(location).getName(), category.getEntries().get(location)));
+                        this.addButton(new CategoryEntryButton(-315 - buttonsAdded, this.getGuiLeft() + 16, this.getGuiTop() + 32 + GUIBookCategoryEntries.SPACE * buttonsAdded, this.getGuiXSize() - 32, GUIBookCategoryEntries.SPACE, category.getEntries().get(location).getName(), category.getEntries().get(location)));
                         ++buttonsAdded;
                         if (buttonsAdded >= 9) {
                             return;
@@ -187,7 +182,7 @@ public class GUIBookBase extends GuiScreen {
                     for (IPage page : entry.getPages()) {
                         if (page instanceof PageText) {
                             if (((PageText) page).getText().toLowerCase().contains(text.toLowerCase()) && buttonList.stream().filter(guiButton -> guiButton instanceof CategoryEntryButton).noneMatch(guiButton -> ((CategoryEntryButton) guiButton).getEntry().equals(entry))) {
-                                this.addButton(new CategoryEntryButton(-315 - buttonsAdded, this.getGuiLeft() + 16, this.getGuiTop() + 32 + GUIBookCantegoryEntries.SPACE * buttonsAdded, this.getGuiXSize() - 32, GUIBookCantegoryEntries.SPACE, entry.getName(), entry));
+                                this.addButton(new CategoryEntryButton(-315 - buttonsAdded, this.getGuiLeft() + 16, this.getGuiTop() + 32 + GUIBookCategoryEntries.SPACE * buttonsAdded, this.getGuiXSize() - 32, GUIBookCategoryEntries.SPACE, entry.getName(), entry));
                                 ++buttonsAdded;
                                 if (buttonsAdded >= 9) {
                                     return;
@@ -210,5 +205,21 @@ public class GUIBookBase extends GuiScreen {
 
     public void onLeftButton() {
 
+    }
+
+    public int getGuiXSize() {
+        return guiXSize;
+    }
+
+    public int getGuiYSize() {
+        return guiYSize;
+    }
+
+    public int getGuiLeft() {
+        return guiLeft;
+    }
+
+    public int getGuiTop() {
+        return guiTop;
     }
 }

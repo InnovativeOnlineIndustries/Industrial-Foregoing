@@ -1,6 +1,7 @@
 package com.buuz135.industrial.book;
 
 import com.buuz135.industrial.api.book.CategoryEntry;
+import com.buuz135.industrial.api.book.IBookCategory;
 import com.buuz135.industrial.proxy.BlockRegistry;
 import com.buuz135.industrial.proxy.ItemRegistry;
 import net.minecraft.init.Items;
@@ -11,7 +12,7 @@ import net.minecraft.util.text.TextComponentTranslation;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
-public enum BookCategory {
+public enum BookCategory implements IBookCategory {
     GETTING_STARTED("getting_started", new ItemStack(ItemRegistry.plastic)),
     GENERATORS("generators", new ItemStack(BlockRegistry.petrifiedFuelGeneratorBlock)),
     AGRICULTURE("agriculture", new ItemStack(BlockRegistry.cropRecolectorBlock)),

@@ -1,18 +1,18 @@
 package com.buuz135.industrial.api.book.gui;
 
+import com.buuz135.industrial.api.book.IBookCategory;
 import com.buuz135.industrial.api.book.button.CategoryEntryButton;
-import com.buuz135.industrial.book.BookCategory;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.util.ResourceLocation;
 
-public class GUIBookCantegoryEntries extends GUIBookBase {
+public class GUIBookCategoryEntries extends GUIBookBase {
 
     public static final int SPACE = Minecraft.getMinecraft().fontRenderer.FONT_HEIGHT + 8;
 
-    private BookCategory category;
+    private IBookCategory category;
 
-    public GUIBookCantegoryEntries(GuiScreen prevScreen, GUIBookBase prevBase, BookCategory category) {
+    public GUIBookCategoryEntries(GuiScreen prevScreen, GUIBookBase prevBase, IBookCategory category) {
         super(prevScreen, prevBase);
         this.category = category;
     }

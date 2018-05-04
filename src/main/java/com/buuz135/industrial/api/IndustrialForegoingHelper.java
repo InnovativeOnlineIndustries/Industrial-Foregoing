@@ -8,7 +8,7 @@ import net.minecraftforge.fluids.FluidRegistry;
 public class IndustrialForegoingHelper {
 
     public static final String MOD_ID = "industrialforegoing";
-    public static final String API_VERSION = "4";
+    public static final String API_VERSION = "5";
     public static final String API_ID = MOD_ID + "api";
 
     /**

@@ -1,6 +1,6 @@
 package com.buuz135.industrial.gui;
 
-import com.buuz135.industrial.api.book.gui.GUIBookMain;
+import com.buuz135.industrial.book.GUIBookMain;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.common.network.IGuiHandler;

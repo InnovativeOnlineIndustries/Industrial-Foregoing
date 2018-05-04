@@ -3,7 +3,6 @@ package com.buuz135.industrial.api.book.page;
 import com.buuz135.industrial.api.book.CategoryEntry;
 import com.buuz135.industrial.api.book.IPage;
 import com.buuz135.industrial.api.book.gui.GUIBookBase;
-import lombok.Getter;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.util.text.TextFormatting;
@@ -17,7 +16,6 @@ public class PageText implements IPage {
     public static TextFormatting COLOR = TextFormatting.DARK_GRAY;
     public static TextFormatting HIGHLIGHT = TextFormatting.GOLD;
 
-    @Getter
     private String text;
 
     public PageText(String text) {
@@ -46,5 +44,9 @@ public class PageText implements IPage {
     @Override
     public void drawScreenPost(CategoryEntry entry, GUIBookBase base, int mouseX, int mouseY, float partialTicks, FontRenderer renderer) {
 
+    }
+
+    public String getText() {
+        return text;
     }
 }

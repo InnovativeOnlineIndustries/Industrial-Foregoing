@@ -1,12 +1,10 @@
 package com.buuz135.industrial.api.book;
 
-import lombok.Data;
 import net.minecraft.item.ItemStack;
 
 import java.util.List;
 
-public @Data
-class CategoryEntry {
+public class CategoryEntry {
 
     private String name;
     private ItemStack display;
@@ -16,5 +14,17 @@ class CategoryEntry {
         this.name = name;
         this.display = display;
         this.pages = pages;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public ItemStack getDisplay() {
+        return display;
+    }
+
+    public List<IPage> getPages() {
+        return pages;
     }
 }

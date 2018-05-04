@@ -1,10 +1,13 @@
-package com.buuz135.industrial.api.book.gui;
+package com.buuz135.industrial.book;
 
+import com.buuz135.industrial.api.IndustrialForegoingHelper;
 import com.buuz135.industrial.api.book.CategoryEntry;
+import com.buuz135.industrial.api.book.IBookCategory;
 import com.buuz135.industrial.api.book.button.ItemStackButton;
 import com.buuz135.industrial.api.book.button.TextureButton;
-import com.buuz135.industrial.book.BookCategory;
-import com.buuz135.industrial.utils.Reference;
+import com.buuz135.industrial.api.book.gui.GUIBookBase;
+import com.buuz135.industrial.api.book.gui.GUIBookCategoryEntries;
+import com.buuz135.industrial.api.book.gui.GUIBookPage;
 import net.minecraft.block.Block;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.init.Blocks;
@@ -19,19 +22,19 @@ import java.util.LinkedHashMap;
 
 public class GUIBookMain extends GUIBookBase {
 
-    private HashMap<ItemStackButton, BookCategory> categoriesButtons = new LinkedHashMap<>();
+    private HashMap<ItemStackButton, IBookCategory> categoriesButtons = new LinkedHashMap<>();
     private GuiButton searchButton;
     private Block block;
 
     public GUIBookMain(World world, int x, int y, int z) {
         super(null, null);
         BlockPos pos = new BlockPos(x, y, z);
-        if (world.getBlockState(pos).getBlock().getRegistryName().getResourceDomain().equals(Reference.MOD_ID)) {
+        if (world.getBlockState(pos).getBlock().getRegistryName().getResourceDomain().equals(IndustrialForegoingHelper.MOD_ID)) {
             block = world.getBlockState(pos).getBlock();
         }
     }
 
-    public static ItemStack getCategoryItemStack(BookCategory category) {
+    public static ItemStack getCategoryItemStack(IBookCategory category) {
         if (category.getEntries().isEmpty()) return new ItemStack(Blocks.BARRIER);
         if (!category.getDisplay().isEmpty()) category.getDisplay();
         for (CategoryEntry entry : category.getEntries().values()) {
@@ -69,7 +72,7 @@ public class GUIBookMain extends GUIBookBase {
     public void initGui() {
         super.initGui();
         if (block != null) {
-            for (BookCategory bookCategory : BookCategory.values()) {
+            for (IBookCategory bookCategory : BookCategory.values()) {
                 for (ResourceLocation entry : bookCategory.getEntries().keySet()) {
                     CategoryEntry categoryEntry = bookCategory.getEntries().get(entry);
                     if (categoryEntry.getDisplay().isItemEqual(new ItemStack(block))) {
@@ -116,7 +119,7 @@ public class GUIBookMain extends GUIBookBase {
     protected void actionPerformed(GuiButton button) throws IOException {
         if (categoriesButtons.containsKey(button)) {
             if (categoriesButtons.get(button).getEntries().isEmpty()) return;
-            this.mc.displayGuiScreen(new GUIBookCantegoryEntries(this, this, categoriesButtons.get(button)));
+            this.mc.displayGuiScreen(new GUIBookCategoryEntries(this, this, categoriesButtons.get(button)));
         } else if (button == searchButton) {
             onBackButton();
         } else {

@@ -1,7 +1,6 @@
 package com.buuz135.industrial.api.book.button;
 
 import com.buuz135.industrial.api.book.CategoryEntry;
-import lombok.Getter;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.renderer.GlStateManager;
@@ -10,9 +9,7 @@ import net.minecraft.util.text.TextFormatting;
 
 public class CategoryEntryButton extends GuiButton {
 
-    @Getter
     private CategoryEntry entry;
-    @Getter
     private boolean textTooBig;
 
     public CategoryEntryButton(int buttonId, int x, int y, int widthIn, int heightIn, String buttonText, CategoryEntry entry) {
@@ -33,5 +30,13 @@ public class CategoryEntryButton extends GuiButton {
             mc.fontRenderer.drawString(textTooBig ? displayString.substring(0, (displayString.length() * (width - 25)) / sw) + "..." : displayString, x + 20, y + 4, 0xFFFFFF);
 
         }
+    }
+
+    public CategoryEntry getEntry() {
+        return entry;
+    }
+
+    public boolean isTextTooBig() {
+        return textTooBig;
     }
 }
