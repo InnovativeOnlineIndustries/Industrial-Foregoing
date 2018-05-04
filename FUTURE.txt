@@ -5,4 +5,4 @@
 - A force spawning method using liquid meat
 - Fluid reactor
 - Cake placer
-- Make the MIT change color based on the captured entity
+- Make the MIT change color based on the captured entity.
