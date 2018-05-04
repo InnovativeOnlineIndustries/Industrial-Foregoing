@@ -7,7 +7,9 @@ import com.buuz135.industrial.tile.WorkingAreaElectricMachine;
 import com.buuz135.industrial.utils.BlockUtils;
 import com.buuz135.industrial.utils.ItemStackUtils;
 import com.buuz135.industrial.utils.WorkUtils;
+import net.minecraft.block.BlockNetherWart;
 import net.minecraft.block.IGrowable;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.item.EnumDyeColor;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -16,6 +18,7 @@ import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
 import net.minecraftforge.common.ForgeHooks;
+import net.minecraftforge.common.IPlantable;
 import net.minecraftforge.common.util.FakePlayer;
 import net.minecraftforge.event.world.BlockEvent;
 import net.minecraftforge.fluids.FluidStack;
@@ -61,11 +64,12 @@ public class PlantInteractorTile extends WorkingAreaElectricMachine {
             BlockPos pointerPos = blockPos.get(pointer);
             for (int i = 0; i < BlockRegistry.plantInteractorBlock.getHeight() + 1; ++i) {
                 BlockPos tempPos = new BlockPos(pointerPos.getX(), pointerPos.getY() + i, pointerPos.getZ());
-                if (this.world.getBlockState(tempPos).getBlock() instanceof IGrowable) {
+                IBlockState tempState = this.world.getBlockState(tempPos);
+                if (tempState.getBlock() instanceof IPlantable || tempState.getBlock() instanceof IGrowable) {
                     FakePlayer player = IndustrialForegoing.getFakePlayer(this.world, tempPos.up());
                     player.inventory.clear();
                     WORKING_TILES.add(this);
-                    this.world.getBlockState(tempPos).getBlock().onBlockActivated(this.world, tempPos, this.world.getBlockState(tempPos), player, EnumHand.MAIN_HAND, EnumFacing.UP, 0, 0, 0);
+                    tempState.getBlock().onBlockActivated(this.world, tempPos, tempState, player, EnumHand.MAIN_HAND, EnumFacing.UP, 0, 0, 0);
                     ForgeHooks.onRightClickBlock(player, EnumHand.MAIN_HAND, tempPos, EnumFacing.UP, new Vec3d(0, 0, 0));
                     for (ItemStack stack : player.inventory.mainInventory) {
                         if (!stack.isEmpty()) {
