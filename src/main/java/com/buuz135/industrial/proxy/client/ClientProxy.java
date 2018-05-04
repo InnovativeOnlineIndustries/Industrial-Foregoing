@@ -18,6 +18,7 @@ import net.minecraft.client.renderer.block.model.IBakedModel;
 import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.client.renderer.entity.RenderPlayer;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
+import net.minecraft.entity.EntityList;
 import net.minecraft.item.EnumDyeColor;
 import net.minecraft.item.ItemDye;
 import net.minecraft.tileentity.TileEntity;
@@ -27,6 +28,7 @@ import net.minecraftforge.client.model.ModelLoader;
 import net.minecraftforge.client.model.obj.OBJLoader;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.model.TRSRTransformation;
+import net.minecraftforge.common.util.Constants;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
@@ -117,6 +119,17 @@ public class ClientProxy extends CommonProxy {
             }
             return 0xFFFFFFF;
         }, BlockRegistry.blockConveyor);
+        Minecraft.getMinecraft().getItemColors().registerItemColorHandler((stack, tintIndex) -> {
+            if (tintIndex == 1 || tintIndex == 2 || tintIndex == 3) {
+                EntityList.EntityEggInfo info = null;
+                if (stack.hasTagCompound() && stack.getTagCompound().hasKey("entity", Constants.NBT.TAG_STRING)) {
+                    ResourceLocation id = new ResourceLocation(stack.getTagCompound().getString("entity"));
+                    info = EntityList.ENTITY_EGGS.get(id);
+                }
+                return info == null ? 0x636363 : tintIndex == 3 ? BlockRegistry.mobDuplicatorBlock.blacklistedEntities.contains(info.spawnedID.toString()) ? 0xDB201A : 0x636363 : tintIndex == 1 ? info.primaryColor : info.secondaryColor;
+            }
+            return 0xFFFFFF;
+        }, ItemRegistry.mobImprisonmentToolItem);
     }
 
     @Override
