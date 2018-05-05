@@ -100,6 +100,7 @@ public class BlockConveyor extends BlockBase {
         TileEntity entity = worldIn.getTileEntity(pos);
         if (entity instanceof TileEntityConveyor) {
             if (!((TileEntityConveyor) entity).getType().isVertical()) {
+                super.addCollisionBoxToList(state, worldIn, pos, entityBox, collidingBoxes, entityIn, isActualState);
                 return;
             }
             ((TileEntityConveyor) entity).getCollisionBoxes().forEach(axisAlignedBB -> addCollisionBoxToList(pos, entityBox, collidingBoxes, axisAlignedBB));
