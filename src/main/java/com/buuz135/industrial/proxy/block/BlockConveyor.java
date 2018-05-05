@@ -11,6 +11,7 @@ import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Items;
 import net.minecraft.item.EnumDyeColor;
@@ -42,7 +43,6 @@ public class BlockConveyor extends BlockBase {
 
     private ConveyorItem item;
 
-    //TODO Make conveyors drop the correct item and the glowstone
     //TODO Implement fast mode
 
     public BlockConveyor() {
@@ -50,6 +50,7 @@ public class BlockConveyor extends BlockBase {
         this.setDefaultState(this.getDefaultState().withProperty(FACING, EnumFacing.NORTH).withProperty(SIDES, EnumSides.NONE));
         this.item = new ConveyorItem(this);
         this.setCreativeTab(IndustrialForegoing.creativeTab);
+        this.setHardness(2);
     }
 
     @Override
@@ -154,6 +155,32 @@ public class BlockConveyor extends BlockBase {
         ((TileEntityConveyor) tileEntity).setFacing(direction);
         ((TileEntityConveyor) tileEntity).setColor(EnumDyeColor.values()[stack.getMetadata()]);
         updateConveyorPlacing(worldIn, pos, state, true);
+    }
+
+    @Override
+    public void breakBlock(World world, BlockPos pos, IBlockState state) {
+        NonNullList<ItemStack> list = NonNullList.create();
+        getDrops(list, world, pos, state, 0);
+        for (ItemStack stack : list) {
+            float f = 0.7F;
+            float d0 = world.rand.nextFloat() * f + (1.0F - f) * 0.5F;
+            float d1 = world.rand.nextFloat() * f + (1.0F - f) * 0.5F;
+            float d2 = world.rand.nextFloat() * f + (1.0F - f) * 0.5F;
+            EntityItem entityitem = new EntityItem(world, pos.getX() + d0, pos.getY() + d1, pos.getZ() + d2, stack);
+            world.spawnEntity(entityitem);
+        }
+        super.breakBlock(world, pos, state);
+    }
+
+    @Override
+    public void getDrops(NonNullList<ItemStack> drops, IBlockAccess world, BlockPos pos, IBlockState state, int fortune) {
+        TileEntity entity = world.getTileEntity(pos);
+        if (entity instanceof TileEntityConveyor) {
+            drops.add(new ItemStack(this, 1, EnumDyeColor.byDyeDamage(((TileEntityConveyor) entity).getColor()).getMetadata()));
+            if (((TileEntityConveyor) entity).getType().isFast()) {
+                drops.add(new ItemStack(Items.GLOWSTONE_DUST, 1));
+            }
+        }
     }
 
     private void updateConveyorPlacing(World worldIn, BlockPos pos, IBlockState state, boolean first) {
