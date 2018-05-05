@@ -43,8 +43,6 @@ public class BlockConveyor extends BlockBase {
 
     private ConveyorItem item;
 
-    //TODO Implement fast mode
-
     public BlockConveyor() {
         super("conveyor");
         this.setDefaultState(this.getDefaultState().withProperty(FACING, EnumFacing.NORTH).withProperty(SIDES, EnumSides.NONE));

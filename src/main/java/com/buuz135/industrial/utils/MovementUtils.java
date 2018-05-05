@@ -19,6 +19,7 @@ public class MovementUtils {
             return;
 
         double speed = 0.2;
+        if (type.isFast()) speed *= 2;
         Vec3d vec3d = new Vec3d(speed * direction.getDirectionVec().getX(), speed * direction.getDirectionVec().getY(), speed * direction.getDirectionVec().getZ());
         if (type.isVertical()) {
             vec3d = vec3d.addVector(0, type.isUp() ? 0.258 : -0.05, 0);
