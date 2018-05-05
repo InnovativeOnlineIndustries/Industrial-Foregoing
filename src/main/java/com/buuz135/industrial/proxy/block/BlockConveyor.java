@@ -245,7 +245,14 @@ public class BlockConveyor extends BlockBase {
 
     @Override
     public AxisAlignedBB getBoundingBox(IBlockState state, IBlockAccess source, BlockPos pos) {
-        return state.getValue(TYPE).isVertical() ? new AxisAlignedBB(0, 0, 0, 1, 0.25, 1) : new AxisAlignedBB(0, 0, 0, 1, 1 / 16D, 1);
+        TileEntity entity = source.getTileEntity(pos);
+        if (entity instanceof TileEntityConveyor) {
+            if (((TileEntityConveyor) entity).getType().isVertical()) {
+                return new AxisAlignedBB(0, 0, 0, 1, 0.40, 1);
+            }
+            return new AxisAlignedBB(0, 0, 0, 1, 1 / 16D, 1);
+        }
+        return FULL_BLOCK_AABB;
     }
 
     @Override
