@@ -155,7 +155,7 @@ public class JEICustomPlugin implements IModPlugin {
                 new MachineProduceWrapper(BlockRegistry.sporesRecreatorBlock, new ItemStack(Blocks.BROWN_MUSHROOM)),
                 new MachineProduceWrapper(BlockRegistry.sporesRecreatorBlock, new ItemStack(Blocks.RED_MUSHROOM)),
                 new MachineProduceWrapper(BlockRegistry.sewageCompostSolidiferBlock, new ItemStack(ItemRegistry.fertilizer)),
-                new MachineProduceWrapper(BlockRegistry.dyeMixerBlock, new ItemStack(Items.DYE, 1, OreDictionary.WILDCARD_VALUE)),
+                new MachineProduceWrapper(BlockRegistry.dyeMixerBlock, new ItemStack(ItemRegistry.artificalDye, 1, OreDictionary.WILDCARD_VALUE)),
                 new MachineProduceWrapper(BlockRegistry.lavaFabricatorBlock, new ItemStack(Items.LAVA_BUCKET)),
                 new MachineProduceWrapper(BlockRegistry.waterResourcesCollectorBlock, new ItemStack(Items.FISH, 1, OreDictionary.WILDCARD_VALUE)),
                 new MachineProduceWrapper(BlockRegistry.mobRelocatorBlock, FluidUtil.getFilledBucket(new FluidStack(FluidsRegistry.ESSENCE, 1000))),
