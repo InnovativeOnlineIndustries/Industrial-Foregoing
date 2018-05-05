@@ -18,12 +18,29 @@ public class MovementUtils {
         if ((direction == EnumFacing.EAST || direction == EnumFacing.WEST) && ((entity.posZ - pos.getZ() < 0.05) || (entity.posZ - pos.getZ() > 0.95)))
             return;
 
+        //DIRECTION MOVEMENT
         double speed = 0.2;
         if (type.isFast()) speed *= 2;
         Vec3d vec3d = new Vec3d(speed * direction.getDirectionVec().getX(), speed * direction.getDirectionVec().getY(), speed * direction.getDirectionVec().getZ());
         if (type.isVertical()) {
             vec3d = vec3d.addVector(0, type.isUp() ? 0.258 : -0.05, 0);
             entity.onGround = false;
+        }
+
+        //CENTER
+        if (direction == EnumFacing.NORTH || direction == EnumFacing.SOUTH) {
+            if (entity.posX - pos.getX() < 0.45) {
+                vec3d = vec3d.addVector(0.04, 0, 0);
+            } else if (entity.posX - pos.getX() > 0.55) {
+                vec3d = vec3d.addVector(-0.04, 0, 0);
+            }
+        }
+        if (direction == EnumFacing.EAST || direction == EnumFacing.WEST) {
+            if (entity.posZ - pos.getZ() < 0.45) {
+                vec3d = vec3d.addVector(0, 0, 0.04);
+            } else if (entity.posZ - pos.getZ() > 0.55) {
+                vec3d = vec3d.addVector(0, 0, -0.04);
+            }
         }
 
         entity.motionX = vec3d.x;
