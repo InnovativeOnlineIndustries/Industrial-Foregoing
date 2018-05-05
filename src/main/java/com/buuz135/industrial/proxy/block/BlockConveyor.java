@@ -1,7 +1,6 @@
 package com.buuz135.industrial.proxy.block;
 
 import com.buuz135.industrial.IndustrialForegoing;
-import com.buuz135.industrial.proxy.ItemRegistry;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockHorizontal;
 import net.minecraft.block.properties.PropertyDirection;
@@ -42,6 +41,9 @@ public class BlockConveyor extends BlockBase {
     public static final PropertyEnum<EnumSides> SIDES = PropertyEnum.create("sides", EnumSides.class);
 
     private ConveyorItem item;
+
+    //TODO Make conveyors drop the correct item and the glowstone
+    //TODO Implement fast mode
 
     public BlockConveyor() {
         super("conveyor");
@@ -151,10 +153,10 @@ public class BlockConveyor extends BlockBase {
         EnumFacing direction = placer.getHorizontalFacing();
         ((TileEntityConveyor) tileEntity).setFacing(direction);
         ((TileEntityConveyor) tileEntity).setColor(EnumDyeColor.values()[stack.getMetadata()]);
-        updateConveyorPlacing(worldIn, pos, state);
+        updateConveyorPlacing(worldIn, pos, state, true);
     }
 
-    public void updateConveyorPlacing(World worldIn, BlockPos pos, IBlockState state) { //TODO This will update all of the connected ones fix
+    private void updateConveyorPlacing(World worldIn, BlockPos pos, IBlockState state, boolean first) {
         TileEntity entity = worldIn.getTileEntity(pos);
         if (entity instanceof TileEntityConveyor) {
             EnumFacing direction = ((TileEntityConveyor) entity).getFacing();
@@ -166,17 +168,18 @@ public class BlockConveyor extends BlockBase {
                 ((TileEntityConveyor) entity).setType(((TileEntityConveyor) entity).getType().getVertical(EnumFacing.DOWN));
             }
             //UPDATE SURROUNDINGS
+            if (!first) return;
             if (isConveyorAndFacing(pos.offset(direction.getOpposite()).down(), worldIn, direction)) { //BACK DOWN
-                updateConveyorPlacing(worldIn, pos.offset(direction.getOpposite()).down(), state);
+                updateConveyorPlacing(worldIn, pos.offset(direction.getOpposite()).down(), state, false);
             }
             if (isConveyorAndFacing(pos.offset(left).down(), worldIn, right)) { //LEFT DOWN
-                updateConveyorPlacing(worldIn, pos.offset(left).down(), state);
+                updateConveyorPlacing(worldIn, pos.offset(left).down(), state, false);
             }
             if (isConveyorAndFacing(pos.offset(right).down(), worldIn, left)) { //RIGHT DOWN
-                updateConveyorPlacing(worldIn, pos.offset(right).down(), state);
+                updateConveyorPlacing(worldIn, pos.offset(right).down(), state, false);
             }
             if (isConveyorAndFacing(pos.offset(direction).down(), worldIn, direction)) { //FRONT DOWN
-                updateConveyorPlacing(worldIn, pos.offset(direction).down(), state);
+                updateConveyorPlacing(worldIn, pos.offset(direction).down(), state, false);
             }
             worldIn.notifyBlockUpdate(pos, state, state, 3);
         }
@@ -190,10 +193,6 @@ public class BlockConveyor extends BlockBase {
             if (handStack.getItem().equals(Items.GLOWSTONE_DUST) && !((TileEntityConveyor) tileEntity).getType().isFast()) {
                 ((TileEntityConveyor) tileEntity).setType(((TileEntityConveyor) tileEntity).getType().getFast());
                 handStack.shrink(1);
-                return true;
-            }
-            if (handStack.getItem().equals(ItemRegistry.strawItem)) {
-                ((TileEntityConveyor) tileEntity).setColor(-1);
                 return true;
             }
         }

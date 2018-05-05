@@ -29,12 +29,8 @@ import net.minecraftforge.client.model.obj.OBJLoader;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.model.TRSRTransformation;
 import net.minecraftforge.common.util.Constants;
-import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
-import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
-import net.minecraftforge.fml.common.gameevent.TickEvent;
 
-import java.awt.*;
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.net.URL;
@@ -47,8 +43,6 @@ public class ClientProxy extends CommonProxy {
     public static ResourceLocation GUI = new ResourceLocation(Reference.MOD_ID, "textures/gui/machines.png");
     public static IBakedModel ears_baked;
     public static IModel ears_model;
-
-    public static int TICK = 0;
 
     private static String readUrl(String urlString) throws Exception {
         BufferedReader reader = null;
@@ -73,7 +67,6 @@ public class ClientProxy extends CommonProxy {
         super.preInit(event);
         OBJLoader.INSTANCE.addDomain(Reference.MOD_ID);
 
-        //MinecraftForge.EVENT_BUS.register(new MobRenderInPrisonHandler());
         MinecraftForge.EVENT_BUS.register(new IFTextureStichEvent());
         MinecraftForge.EVENT_BUS.register(new IFWorldRenderLastEvent());
         MinecraftForge.EVENT_BUS.register(new IFTooltipEvent());
@@ -110,10 +103,6 @@ public class ClientProxy extends CommonProxy {
             if (tintIndex == 0) {
                 TileEntity entity = worldIn.getTileEntity(pos);
                 if (entity instanceof TileEntityConveyor) {
-                    if (((TileEntityConveyor) entity).getColor() == -1) {
-
-                        return Color.getHSBColor(TICK / 300f, 0.75f, 0.5f).getRGB();
-                    }
                     return ItemDye.DYE_COLORS[((TileEntityConveyor) entity).getColor()];
                 }
             }
@@ -138,16 +127,4 @@ public class ClientProxy extends CommonProxy {
         IFManual.buildManual();
     }
 
-    @Mod.EventBusSubscriber(modid = Reference.MOD_ID)
-    private static class TickHandler {
-
-        @SubscribeEvent
-        public static void onTick(TickEvent.ClientTickEvent event) {
-            ++TICK;
-            if (TICK > 300) {
-                TICK = 0;
-            }
-        }
-
-    }
 }
