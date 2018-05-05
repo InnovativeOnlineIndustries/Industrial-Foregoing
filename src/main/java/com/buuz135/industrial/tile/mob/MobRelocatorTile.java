@@ -86,6 +86,7 @@ public class MobRelocatorTile extends WorkingAreaElectricMachine implements IAcc
 
         AxisAlignedBB area = getWorkingArea();
         List<EntityLiving> mobs = this.getWorld().getEntitiesWithinAABB(EntityLiving.class, area);
+        mobs.removeIf(entityLiving -> entityLiving.isDead);
         if (mobs.size() == 0) return 0;
         FakePlayer player = IndustrialForegoing.getFakePlayer(world, pos);
         AtomicBoolean hasWorked = new AtomicBoolean(false);

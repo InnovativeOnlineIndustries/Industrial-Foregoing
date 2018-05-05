@@ -4,6 +4,7 @@
 + Made the Mob Imprisonment Tool color to the entity contained #322 (Coded)
 + Allow IPlantable (Netherwart) blocks to work with the plant interactor #319 (Coded)
 + Added conveyor belts
++ Dead mobs shouldnt be killed again
 
 # 1.8.11
 + Fixed the API removing all the entries that instead of just one thing

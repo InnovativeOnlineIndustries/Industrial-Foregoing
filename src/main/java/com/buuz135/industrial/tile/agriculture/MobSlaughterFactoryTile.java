@@ -43,6 +43,7 @@ public class MobSlaughterFactoryTile extends WorkingAreaElectricMachine implemen
 
         AxisAlignedBB area = getWorkingArea();
         List<EntityLiving> mobs = this.getWorld().getEntitiesWithinAABB(EntityLiving.class, area);
+        mobs.removeIf(entityLiving -> entityLiving.isDead);
         if (hasAddon()) mobs.removeIf(entityLiving -> entityLiving instanceof EntityAgeable && entityLiving.isChild());
         if (mobs.size() == 0) return 0;
         EntityLiving mob = mobs.get(this.getWorld().rand.nextInt(mobs.size()));
