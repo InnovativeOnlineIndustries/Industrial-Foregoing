@@ -10,6 +10,7 @@ import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
@@ -282,6 +283,21 @@ public class BlockConveyor extends BlockBase {
         if (entity instanceof TileEntityConveyor) {
             ((TileEntityConveyor) entity).handleEntityMovement(entityIn);
         }
+    }
+
+    @Override
+    public boolean canCreatureSpawn(IBlockState state, IBlockAccess world, BlockPos pos, EntityLiving.SpawnPlacementType type) {
+        return true;
+    }
+
+    @Override
+    public boolean canSpawnInBlock() {
+        return true;
+    }
+
+    @Override
+    public boolean canEntitySpawn(IBlockState state, Entity entityIn) {
+        return true;
     }
 
     public ConveyorItem getItem() {
