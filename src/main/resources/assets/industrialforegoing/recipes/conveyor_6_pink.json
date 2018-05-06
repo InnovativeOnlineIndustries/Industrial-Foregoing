@@ -1,0 +1,22 @@
+{
+  "result": {
+    "item": "industrialforegoing:conveyor",
+    "data": 6,
+    "count": 8
+  },
+  "pattern": [
+    "ccc",
+    "cdc",
+    "ccc"
+  ],
+  "type": "forge:ore_shaped",
+  "key": {
+    "c": {
+      "item": "industrialforegoing:conveyor",
+      "data": 32767
+    },
+    "d": {
+      "item": "#DYEPINK"
+    }
+  }
+}

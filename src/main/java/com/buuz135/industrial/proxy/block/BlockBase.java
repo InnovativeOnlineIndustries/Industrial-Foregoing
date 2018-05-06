@@ -10,12 +10,18 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.client.model.ModelLoader;
 import net.minecraftforge.registries.IForgeRegistry;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class BlockBase extends Block {
+
+    public static final List<BlockBase> BLOCKS = new ArrayList<>();
 
     public BlockBase(String name) {
         super(Material.ROCK);
         this.setRegistryName(new ResourceLocation(Reference.MOD_ID, name));
         this.setUnlocalizedName(Reference.MOD_ID + "." + name);
+        BLOCKS.add(this);
     }
 
     public void registerBlock(IForgeRegistry<Block> blocks) {

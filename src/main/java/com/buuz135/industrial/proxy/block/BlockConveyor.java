@@ -1,6 +1,8 @@
 package com.buuz135.industrial.proxy.block;
 
 import com.buuz135.industrial.IndustrialForegoing;
+import com.buuz135.industrial.proxy.ItemRegistry;
+import com.buuz135.industrial.utils.RecipeUtils;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockHorizontal;
 import net.minecraft.block.properties.PropertyDirection;
@@ -23,6 +25,7 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.*;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
@@ -30,10 +33,13 @@ import net.minecraftforge.client.model.ModelLoader;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import net.minecraftforge.oredict.OreDictionary;
 import net.minecraftforge.registries.IForgeRegistry;
+import org.apache.commons.lang3.text.WordUtils;
 
 import javax.annotation.Nullable;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Random;
 
@@ -66,6 +72,19 @@ public class BlockConveyor extends BlockBase {
     }
 
     @Override
+    public void createRecipe() {
+        RecipeUtils.addShapedRecipe(new ItemStack(this, 4, 0), "ppp", "iri", "ppp",
+                'p', ItemRegistry.plastic,
+                'i', "ingotIron",
+                'r', Items.REDSTONE);
+        for (EnumDyeColor color : EnumDyeColor.values()) {
+            RecipeUtils.addShapedRecipe(new ItemStack(this, 8, color.getMetadata()), "_" + color.toString().toLowerCase(), new HashMap<>(), "ccc", "cdc", "ccc",
+                    'c', new ItemStack(this, 1, OreDictionary.WILDCARD_VALUE),
+                    'd', "dye" + WordUtils.capitalize(color.getDyeColorName()));
+        }
+    }
+
+    @Override
     public int getMetaFromState(IBlockState state) {
         return Arrays.asList(EnumFacing.values()).indexOf(state.getValue(FACING));
     }
@@ -73,6 +92,15 @@ public class BlockConveyor extends BlockBase {
     @Override
     public IBlockState getStateFromMeta(int meta) {
         return this.getDefaultState().withProperty(FACING, EnumFacing.values()[meta]);
+    }
+
+    @Override
+    public ItemStack getPickBlock(IBlockState state, RayTraceResult target, World world, BlockPos pos, EntityPlayer player) {
+        TileEntity tileEntity = world.getTileEntity(pos);
+        if (tileEntity instanceof TileEntityConveyor) {
+            return new ItemStack(this, 1, 15 - ((TileEntityConveyor) tileEntity).getColor());
+        }
+        return super.getPickBlock(state, target, world, pos, player);
     }
 
     @Override

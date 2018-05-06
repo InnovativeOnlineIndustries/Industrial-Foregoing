@@ -72,9 +72,37 @@
   {
     "ingredient": {
       "type": "forge:ore_dict",
+      "ore": "dyeBlack"
+    },
+    "name": "DYEBLACK"
+  },
+  {
+    "ingredient": {
+      "type": "forge:ore_dict",
       "ore": "dyeBlue"
     },
     "name": "DYEBLUE"
+  },
+  {
+    "ingredient": {
+      "type": "forge:ore_dict",
+      "ore": "dyeBrown"
+    },
+    "name": "DYEBROWN"
+  },
+  {
+    "ingredient": {
+      "type": "forge:ore_dict",
+      "ore": "dyeCyan"
+    },
+    "name": "DYECYAN"
+  },
+  {
+    "ingredient": {
+      "type": "forge:ore_dict",
+      "ore": "dyeGray"
+    },
+    "name": "DYEGRAY"
   },
   {
     "ingredient": {
@@ -93,9 +121,37 @@
   {
     "ingredient": {
       "type": "forge:ore_dict",
+      "ore": "dyeLight_blue"
+    },
+    "name": "DYELIGHT_BLUE"
+  },
+  {
+    "ingredient": {
+      "type": "forge:ore_dict",
+      "ore": "dyeLime"
+    },
+    "name": "DYELIME"
+  },
+  {
+    "ingredient": {
+      "type": "forge:ore_dict",
       "ore": "dyeMagenta"
     },
     "name": "DYEMAGENTA"
+  },
+  {
+    "ingredient": {
+      "type": "forge:ore_dict",
+      "ore": "dyeOrange"
+    },
+    "name": "DYEORANGE"
+  },
+  {
+    "ingredient": {
+      "type": "forge:ore_dict",
+      "ore": "dyePink"
+    },
+    "name": "DYEPINK"
   },
   {
     "ingredient": {
@@ -110,6 +166,27 @@
       "ore": "dyeRed"
     },
     "name": "DYERED"
+  },
+  {
+    "ingredient": {
+      "type": "forge:ore_dict",
+      "ore": "dyeSilver"
+    },
+    "name": "DYESILVER"
+  },
+  {
+    "ingredient": {
+      "type": "forge:ore_dict",
+      "ore": "dyeWhite"
+    },
+    "name": "DYEWHITE"
+  },
+  {
+    "ingredient": {
+      "type": "forge:ore_dict",
+      "ore": "dyeYellow"
+    },
+    "name": "DYEYELLOW"
   },
   {
     "ingredient": {

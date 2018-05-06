@@ -60,7 +60,7 @@ public class RecipeUtils {
     }
 
 
-    private static void addShapedRecipe(ItemStack result, String nameExtra, Map<String, Object> json, Object... components) {
+    public static void addShapedRecipe(ItemStack result, String nameExtra, Map<String, Object> json, Object... components) {
         List<String> pattern = new ArrayList<>();
         int i = 0;
         while (i < components.length && components[i] instanceof String) {
