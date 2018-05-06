@@ -71,6 +71,7 @@ public class BlockConveyor extends BlockBase {
         }
     }
 
+    @SideOnly(Side.CLIENT)
     @Override
     public void createRecipe() {
         RecipeUtils.addShapedRecipe(new ItemStack(this, 4, 0), "ppp", "iri", "ppp",
