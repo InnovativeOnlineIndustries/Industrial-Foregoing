@@ -21,6 +21,8 @@ import com.buuz135.industrial.jei.reactor.ReactorRecipeCategory;
 import com.buuz135.industrial.jei.reactor.ReactorRecipeWrapper;
 import com.buuz135.industrial.jei.sludge.SludgeRefinerRecipeCategory;
 import com.buuz135.industrial.jei.sludge.SludgeRefinerRecipeWrapper;
+import com.buuz135.industrial.jei.stonework.StoneWorkCategory;
+import com.buuz135.industrial.jei.stonework.StoneWorkWrapper;
 import com.buuz135.industrial.proxy.BlockRegistry;
 import com.buuz135.industrial.proxy.FluidsRegistry;
 import com.buuz135.industrial.proxy.ItemRegistry;
@@ -39,7 +41,6 @@ import net.minecraft.item.ItemBucket;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.FurnaceRecipes;
 import net.minecraft.tileentity.TileEntityFurnace;
-import net.minecraft.util.NonNullList;
 import net.minecraft.util.WeightedRandom;
 import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fluids.FluidStack;
@@ -48,7 +49,6 @@ import net.minecraftforge.oredict.OreDictionary;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -66,6 +66,7 @@ public class JEICustomPlugin implements IModPlugin {
     private PetrifiedBurnTimeCategory petrifiedBurnTimeCategory;
     private ManualCategory manualCategory;
     private FluidDictionaryCategory fluidDictionaryCategory;
+    private StoneWorkCategory stoneWorkCategory;
 
     public static void showUses(ItemStack stack) {
         if (recipesGui != null && recipeRegistry != null)
@@ -112,6 +113,10 @@ public class JEICustomPlugin implements IModPlugin {
         if (BlockRegistry.fluidDictionaryConverterBlock.isEnabled() && !FluidDictionaryEntry.FLUID_DICTIONARY_RECIPES.isEmpty()) {
             fluidDictionaryCategory = new FluidDictionaryCategory(registry.getJeiHelpers().getGuiHelper());
             registry.addRecipeCategories(fluidDictionaryCategory);
+        }
+        if (BlockRegistry.materialStoneWorkFactoryBlock.isEnabled()) {
+            stoneWorkCategory = new StoneWorkCategory(registry.getJeiHelpers().getGuiHelper());
+            registry.addRecipeCategories(stoneWorkCategory);
         }
     }
 
@@ -172,9 +177,28 @@ public class JEICustomPlugin implements IModPlugin {
                 machineProduceCategory.getUid());
 
         if (BlockRegistry.materialStoneWorkFactoryBlock.isEnabled()) {
-            NonNullList<ItemStack> wrappers = NonNullList.create();
-            findAllStoneWorkOutputs(wrappers, new ItemStack(Blocks.COBBLESTONE), 0);
-            wrappers.stream().filter(stack -> !stack.isEmpty()).forEach(stack -> registry.addRecipes(Collections.singletonList(new MachineProduceWrapper(BlockRegistry.materialStoneWorkFactoryBlock, stack)), machineProduceCategory.getUid()));
+            List<StoneWorkWrapper> perfectStoneWorkWrappers = new ArrayList<>();
+            List<StoneWorkWrapper> wrappers = findAllStoneWorkOutputs(new ArrayList<>());
+            for (StoneWorkWrapper workWrapper : new ArrayList<>(wrappers)) {
+                if (perfectStoneWorkWrappers.stream().noneMatch(stoneWorkWrapper -> workWrapper.getOutput().isItemEqual(stoneWorkWrapper.getOutput()))) {
+                    boolean isSomoneShorter = false;
+                    for (StoneWorkWrapper workWrapperCompare : new ArrayList<>(wrappers)) {
+                        if (workWrapper.getOutput().isItemEqual(workWrapperCompare.getOutput())) {
+                            List<MaterialStoneWorkFactoryTile.Mode> workWrapperCompareModes = new ArrayList<>(workWrapperCompare.getModes());
+                            workWrapperCompareModes.removeIf(mode -> mode == MaterialStoneWorkFactoryTile.Mode.NONE);
+                            List<MaterialStoneWorkFactoryTile.Mode> workWrapperModes = new ArrayList<>(workWrapper.getModes());
+                            workWrapperModes.removeIf(mode -> mode == MaterialStoneWorkFactoryTile.Mode.NONE);
+                            if (workWrapperModes.size() > workWrapperCompareModes.size()) {
+                                isSomoneShorter = true;
+                                break;
+                            }
+                        }
+                    }
+                    if (!isSomoneShorter) perfectStoneWorkWrappers.add(workWrapper);
+                }
+            }
+            registry.addRecipes(perfectStoneWorkWrappers, stoneWorkCategory.getUid());
+            registry.addRecipeCatalyst(new ItemStack(BlockRegistry.materialStoneWorkFactoryBlock), stoneWorkCategory.getUid());
         }
         if (BlockRegistry.petrifiedFuelGeneratorBlock.isEnabled()) {
             List<PetrifiedBurnTimeWrapper> petrifiedBurnTimeWrappers = new ArrayList<>();
@@ -206,13 +230,30 @@ public class JEICustomPlugin implements IModPlugin {
         return ItemStack.EMPTY;
     }
 
-    public void findAllStoneWorkOutputs(NonNullList<ItemStack> stacks, ItemStack last, int deep) {
-        if (last.isEmpty()) return;
-        for (MaterialStoneWorkFactoryTile.Mode mode : MaterialStoneWorkFactoryTile.Mode.values()) {
-            ItemStack out = getStoneWorkOutputFrom(last, mode);
-            if (!out.isEmpty() && stacks.stream().noneMatch(stack -> stack.isItemEqual(out))) stacks.add(out);
-            if (deep < 3) findAllStoneWorkOutputs(stacks, out, deep + 1);
+    public ItemStack getStoneWorkOutputFrom(List<MaterialStoneWorkFactoryTile.Mode> modes) {
+        ItemStack stack = new ItemStack(Blocks.COBBLESTONE);
+        for (MaterialStoneWorkFactoryTile.Mode mode : modes) {
+            if (mode == MaterialStoneWorkFactoryTile.Mode.NONE) continue;
+            stack = getStoneWorkOutputFrom(stack.copy(), mode);
+            if (stack.isEmpty()) return ItemStack.EMPTY;
         }
+        return stack;
+    }
+
+    public List<StoneWorkWrapper> findAllStoneWorkOutputs(List<MaterialStoneWorkFactoryTile.Mode> usedModes) {
+        List<StoneWorkWrapper> wrappers = new ArrayList<>();
+        if (usedModes.size() >= 4) return wrappers;
+        for (MaterialStoneWorkFactoryTile.Mode mode : MaterialStoneWorkFactoryTile.Mode.values()) {
+            if (mode == MaterialStoneWorkFactoryTile.Mode.NONE) continue;
+            List<MaterialStoneWorkFactoryTile.Mode> usedModesInternal = new ArrayList<>(usedModes);
+            usedModesInternal.add(mode);
+            ItemStack output = getStoneWorkOutputFrom(new ArrayList<>(usedModesInternal));
+            if (!output.isEmpty()) {
+                wrappers.add(new StoneWorkWrapper(new ArrayList<>(usedModesInternal), output.copy()));
+                wrappers.addAll(findAllStoneWorkOutputs(new ArrayList<>(usedModesInternal)));
+            }
+        }
+        return wrappers;
     }
 
     @Override

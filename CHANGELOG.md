@@ -5,6 +5,7 @@
 + Allow IPlantable (Netherwart) blocks to work with the plant interactor #319 (Coded)
 + Added conveyor belts
 + Dead mobs shouldnt be killed again
++ Added better display for the StoneWork Factory in JEI
 
 # 1.8.11
 + Fixed the API removing all the entries that instead of just one thing
