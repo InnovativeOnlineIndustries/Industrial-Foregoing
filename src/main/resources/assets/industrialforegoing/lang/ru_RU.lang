@@ -45,6 +45,7 @@ text.industrialforegoing.tooltip.mb=mb
 text.industrialforegoing.tooltip.max_transfer_amount=Максимальное количество передачи:
 text.industrialforegoing.tooltip.tick_time=10 тиков
 text.industrialforegoing.tooltip.no_wither_skull=Кажется, вы не можете это сделать, может быть, машина может это сделать.
+text.industrialforegoing.tooltip.max_tier=Макс. уровень:
 
 text.industrialforegoing.direction=Направление:
 text.industrialforegoing.up=Вверх
@@ -55,7 +56,7 @@ text.industrialforegoing.north=Север
 text.industrialforegoing.south=Юг
 text.industrialforegoing.action=Действие:
 text.industrialforegoing.push=Толкать
-text.industrialforegoing.pull=Вытаскивать
+text.industrialforegoing.pull=Тянуть
 
 text.industrialforegoing.leaf_shearing_addon=* Принимает улучшение листовой резки
 text.industrialforegoing.can_harvest=* Можно собирать урожай:
@@ -202,6 +203,7 @@ tile.industrialforegoing.fluid_pump.name=Жидкостный насос
 tile.industrialforegoing.fluid_crafter.name=Жидкостный создатель
 tile.industrialforegoing.plant_interactor.name=Машина взаимодействия с растениями
 tile.industrialforegoing.fluiddictionary_converter.name=Конвертер словаря жидкости
+tile.industrialforegoing.conveyor.name=Конвейерная лента
 
 tile.essence.name=Эссенция
 tile.milk.name=Молоко
@@ -238,6 +240,7 @@ item.industrialforegoing.adult_filter.name=Фильтр: Взрослые
 item.industrialforegoing_redstone_inverted.name=Инвертированный редстоун контроль
 item.industrialforegoing_machinehull.name=Корпус машины
 item.industrialforegoing_straw.name=Солома
+item.industrialforegoing_artificial_dye.name=Искусственный краситель
 item.industrialforegoing_pink_slime.name=Розовая слизь
 item.industrialforegoing.energy_field_addon.name=Улучшение энергетического щита
 item.industrialforegoing.leaf_shearing.name=Улучшение срезания листвы
