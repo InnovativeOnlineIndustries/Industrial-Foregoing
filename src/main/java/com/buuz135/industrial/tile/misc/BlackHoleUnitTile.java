@@ -87,6 +87,7 @@ public class BlackHoleUnitTile extends CustomSidedTileEntity implements IHasDisp
             @Override
             protected void onContentsChanged(int slot) {
                 ItemStack in = inItems.getStackInSlot(0);
+                if (in.isEmpty()) return;
                 if (stack.isEmpty()) {
                     stack = in;
                     amount = 0;
