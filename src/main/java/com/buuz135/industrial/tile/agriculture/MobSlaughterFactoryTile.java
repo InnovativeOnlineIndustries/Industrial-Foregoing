@@ -50,7 +50,7 @@ public class MobSlaughterFactoryTile extends WorkingAreaElectricMachine implemen
         this.outMeat.fill(new FluidStack(FluidsRegistry.MEAT, (int) (mob.getHealth() * BlockRegistry.mobSlaughterFactoryBlock.getMeatValue())), true);
         this.outPink.fill(new FluidStack(FluidsRegistry.PINK_SLIME, (int) mob.getHealth()), true);
         mob.setDropItemsWhenDead(false);
-        mob.attackEntityFrom(CommonProxy.custom, mob.getMaxHealth());
+        mob.attackEntityFrom(CommonProxy.custom, BlockRegistry.mobSlaughterFactoryBlock.getDamage());
 
         return 1;
     }

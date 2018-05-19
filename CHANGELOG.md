@@ -3,6 +3,7 @@
 + Fixed Missing Recipe error from the conveyor recipes #326
 + Fixed server crash with forge versions 14.23.3.2685+ #330
 + Black hole unit extract button now respects stack sizes
++ Mob Crusher and Mob Slaughter Factory do same amount of damage (Configurable, def: 300) #331
 
 # 1.9.0
 + Added Artificial Dye and made the Dye Mixer output them #306 (Coded)
