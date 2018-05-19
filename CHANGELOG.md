@@ -2,6 +2,7 @@
 + Black Hole Tank Block now changes color depending of the fluid it contains
 + Fixed Missing Recipe error from the conveyor recipes #326
 + Fixed server crash with forge versions 14.23.3.2685+ #330
++ Black hole unit extract button now respects stack sizes
 
 # 1.9.0
 + Added Artificial Dye and made the Dye Mixer output them #306 (Coded)

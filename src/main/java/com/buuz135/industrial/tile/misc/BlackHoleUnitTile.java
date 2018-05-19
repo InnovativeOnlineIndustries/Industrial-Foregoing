@@ -157,10 +157,11 @@ public class BlackHoleUnitTile extends CustomSidedTileEntity implements IHasDisp
     protected SimpleNBTMessage processClientMessage(@Nullable String messageType, @Nullable EntityPlayerMP player, @NotNull NBTTagCompound compound) {
         if (player != null && messageType != null) {
             if (messageType.equalsIgnoreCase("FILL_PLAYER")) {
-                ItemStack stack = this.itemHandler.extractItem(0, 64, true);
+                int maxStack = this.stack.getMaxStackSize();
+                ItemStack stack = this.itemHandler.extractItem(0, maxStack, true);
                 while (!stack.isEmpty() && player.inventory.addItemStackToInventory(stack)) {
-                    this.itemHandler.extractItem(0, 64, false);
-                    stack = this.itemHandler.extractItem(0, 64, true);
+                    this.itemHandler.extractItem(0, maxStack, false);
+                    stack = this.itemHandler.extractItem(0, maxStack, true);
                 }
                 forceSync();
             }
