@@ -10,7 +10,7 @@ import java.awt.*;
 public class IFCustomFluid extends Fluid {
 
     public IFCustomFluid(String fluidName, int temperature) {
-        super(fluidName, new ResourceLocation(Reference.MOD_ID, "blocks/fluids/" + fluidName + "_still"), new ResourceLocation(Reference.MOD_ID, "blocks/fluids/" + fluidName + "_flow"));
+        super(fluidName, new ResourceLocation(Reference.MOD_ID, "blocks/fluids/base_still"), new ResourceLocation(Reference.MOD_ID, "blocks/fluids/base_flow"));
         this.setDensity(3000).setViscosity(6000).setTemperature(temperature);
     }
 

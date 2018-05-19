@@ -1,3 +1,6 @@
+# 1.9.1
++ Black Hole Tank Block now changes color depending of the fluid it contains
+
 # 1.9.0
 + Added Artificial Dye and made the Dye Mixer output them #306 (Coded)
 + Changed how working areas work now all the machines start with a 1x1 area but they accept Range Addons with some of them having a limitation of Addon Tier.

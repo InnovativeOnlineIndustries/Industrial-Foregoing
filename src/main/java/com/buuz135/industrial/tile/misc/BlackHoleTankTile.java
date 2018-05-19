@@ -25,6 +25,7 @@ import java.util.List;
 public class BlackHoleTankTile extends CustomSidedTileEntity implements IHasDisplayStack {
 
     private IFluidTank tank;
+    private boolean hadFluid;
 
     public BlackHoleTankTile() {
         super(BlackHoleTankTile.class.getName().hashCode());
@@ -38,7 +39,10 @@ public class BlackHoleTankTile extends CustomSidedTileEntity implements IHasDisp
 
     @Override
     protected void innerUpdate() {
-
+        if (hadFluid != tank.getFluidAmount() > 0) {
+            this.world.notifyBlockUpdate(this.pos, this.world.getBlockState(this.pos), this.world.getBlockState(this.pos), 3);
+            hadFluid = tank.getFluidAmount() > 0;
+        }
     }
 
     @Override
