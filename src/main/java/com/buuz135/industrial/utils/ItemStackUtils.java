@@ -188,6 +188,8 @@ public class ItemStackUtils {
     }
 
     public static void processFluidItems(ItemStackHandler fluidItems, IFluidTank tank) {
+        if (tank.getFluid() == null)
+            return;
         ItemStack stack = fluidItems.getStackInSlot(0);
         if (!stack.isEmpty() && fluidItems.getStackInSlot(1).isEmpty()) {
             int filled = 0;
