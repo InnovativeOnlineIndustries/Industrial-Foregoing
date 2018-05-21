@@ -56,7 +56,6 @@ repositories {
     mavenCentral()
     jcenter()
     maven { name = 'forgelin'; url = 'http://maven.shadowfacts.net' }
-    maven { url 'http://maven.epoxide.xyz' }
     maven { name='TCL'; url='https://maven.mcmoddev.com' }
     maven {
         // location of the maven that hosts JEI files

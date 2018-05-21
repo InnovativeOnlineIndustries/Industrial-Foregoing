@@ -1,3 +1,6 @@
+# 1.9.2
++ Improved fluid handling
+
 # 1.9.1
 + Black Hole Tank Block now changes color depending of the fluid it contains
 + Fixed Missing Recipe error from the conveyor recipes #326
