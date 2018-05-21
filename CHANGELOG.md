@@ -1,3 +1,13 @@
+# 1.9.2
++ Improved fluid handling
+
+# 1.9.1
++ Black Hole Tank Block now changes color depending of the fluid it contains
++ Fixed Missing Recipe error from the conveyor recipes #326
++ Fixed server crash with forge versions 14.23.3.2685+ #330
++ Black hole unit extract button now respects stack sizes
++ Mob Crusher and Mob Slaughter Factory do same amount of damage (Configurable, def: 300) #331
+
 # 1.9.0
 + Added Artificial Dye and made the Dye Mixer output them #306 (Coded)
 + Changed how working areas work now all the machines start with a 1x1 area but they accept Range Addons with some of them having a limitation of Addon Tier.

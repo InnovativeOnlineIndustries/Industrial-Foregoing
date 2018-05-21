@@ -11,6 +11,7 @@ import com.buuz135.industrial.proxy.client.event.IFTextureStichEvent;
 import com.buuz135.industrial.proxy.client.event.IFTooltipEvent;
 import com.buuz135.industrial.proxy.client.event.IFWorldRenderLastEvent;
 import com.buuz135.industrial.proxy.client.render.ContributorsCatEarsRender;
+import com.buuz135.industrial.tile.misc.BlackHoleTankTile;
 import com.buuz135.industrial.utils.Reference;
 import com.google.gson.GsonBuilder;
 import net.minecraft.client.Minecraft;
@@ -29,6 +30,8 @@ import net.minecraftforge.client.model.obj.OBJLoader;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.model.TRSRTransformation;
 import net.minecraftforge.common.util.Constants;
+import net.minecraftforge.fluids.Fluid;
+import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 
 import java.io.BufferedReader;
@@ -119,6 +122,26 @@ public class ClientProxy extends CommonProxy {
             }
             return 0xFFFFFF;
         }, ItemRegistry.mobImprisonmentToolItem);
+        Minecraft.getMinecraft().getBlockColors().registerBlockColorHandler((state, worldIn, pos, tintIndex) -> {
+            if (tintIndex == 0 && worldIn.getTileEntity(pos) instanceof BlackHoleTankTile) {
+                BlackHoleTankTile tank = (BlackHoleTankTile) worldIn.getTileEntity(pos);
+                if (tank != null && tank.getTank().getFluidAmount() > 0) {
+                    if (tank.getTank().getFluid().getFluid() == FluidRegistry.WATER) return 0x0066ff;
+                    if (tank.getTank().getFluid().getFluid() == FluidRegistry.LAVA) return 0xe67300;
+                    return tank.getTank().getFluid().getFluid().getColor(tank.getTank().getFluid());
+                }
+            }
+            return 0xFFFFFF;
+        }, BlockRegistry.blackHoleTankBlock);
+        Minecraft.getMinecraft().getItemColors().registerItemColorHandler((stack, tintIndex) -> {
+            if (tintIndex == 0 && stack.hasTagCompound() && stack.getTagCompound().hasKey("FluidName") && FluidRegistry.isFluidRegistered(stack.getTagCompound().getString("FluidName"))) {
+                Fluid fluid = FluidRegistry.getFluid(stack.getTagCompound().getString("FluidName"));
+                if (fluid == FluidRegistry.WATER) return 0x0066ff;
+                if (fluid == FluidRegistry.LAVA) return 0xe67300;
+                return fluid.getColor();
+            }
+            return 0xFFFFFF;
+        }, BlockRegistry.blackHoleTankBlock);
     }
 
     @Override
