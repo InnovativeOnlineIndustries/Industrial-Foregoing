@@ -1,0 +1,16 @@
+{
+  "result": {
+    "item": "industrialforegoing:laser_lens_inverted",
+    "data": 39
+  },
+  "ingredients": [
+    {
+      "item": "industrialforegoing:laser_lens_inverted",
+      "data": 7
+    },
+    {
+      "item": "minecraft:gold_ingot"
+    }
+  ],
+  "type": "minecraft:crafting_shapeless"
+}

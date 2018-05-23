@@ -1,0 +1,17 @@
+{
+  "result": {
+    "item": "industrialforegoing:laser_lens",
+    "data": 21
+  },
+  "ingredients": [
+    {
+      "item": "industrialforegoing:laser_lens",
+      "data": 5
+    },
+    {
+      "item": "minecraft:coal",
+      "data": 0
+    }
+  ],
+  "type": "minecraft:crafting_shapeless"
+}
