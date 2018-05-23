@@ -12,6 +12,7 @@ import com.buuz135.industrial.proxy.client.event.IFTooltipEvent;
 import com.buuz135.industrial.proxy.client.event.IFWorldRenderLastEvent;
 import com.buuz135.industrial.proxy.client.render.ContributorsCatEarsRender;
 import com.buuz135.industrial.tile.misc.BlackHoleTankTile;
+import com.buuz135.industrial.utils.FluidUtils;
 import com.buuz135.industrial.utils.Reference;
 import com.google.gson.GsonBuilder;
 import net.minecraft.client.Minecraft;
@@ -19,6 +20,7 @@ import net.minecraft.client.renderer.block.model.IBakedModel;
 import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.client.renderer.entity.RenderPlayer;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
+import net.minecraft.client.resources.IReloadableResourceManager;
 import net.minecraft.entity.EntityList;
 import net.minecraft.item.EnumDyeColor;
 import net.minecraft.item.ItemDye;
@@ -97,6 +99,9 @@ public class ClientProxy extends CommonProxy {
         }
 
         manager.entityRenderMap.put(EntityPinkSlime.class, new RenderPinkSlime(manager));
+
+        ((IReloadableResourceManager) Minecraft.getMinecraft().getResourceManager()).registerReloadListener(resourceManager -> FluidUtils.colorCache.clear());
+
         Minecraft.getMinecraft().getItemColors().registerItemColorHandler((stack, tintIndex) -> ItemDye.DYE_COLORS[EnumDyeColor.byMetadata(stack.getMetadata()).getDyeDamage()], ItemRegistry.artificalDye);
         Minecraft.getMinecraft().getItemColors().registerItemColorHandler((stack, tintIndex) -> {
             if (tintIndex == 0) return ItemDye.DYE_COLORS[EnumDyeColor.byMetadata(stack.getMetadata()).getDyeDamage()];
@@ -126,9 +131,8 @@ public class ClientProxy extends CommonProxy {
             if (tintIndex == 0 && worldIn.getTileEntity(pos) instanceof BlackHoleTankTile) {
                 BlackHoleTankTile tank = (BlackHoleTankTile) worldIn.getTileEntity(pos);
                 if (tank != null && tank.getTank().getFluidAmount() > 0) {
-                    if (tank.getTank().getFluid().getFluid() == FluidRegistry.WATER) return 0x0066ff;
-                    if (tank.getTank().getFluid().getFluid() == FluidRegistry.LAVA) return 0xe67300;
-                    return tank.getTank().getFluid().getFluid().getColor(tank.getTank().getFluid());
+                    int color = FluidUtils.getFluidColor(tank.getTank().getFluid());
+                    if (color != -1) return color;
                 }
             }
             return 0xFFFFFF;
@@ -136,9 +140,8 @@ public class ClientProxy extends CommonProxy {
         Minecraft.getMinecraft().getItemColors().registerItemColorHandler((stack, tintIndex) -> {
             if (tintIndex == 0 && stack.hasTagCompound() && stack.getTagCompound().hasKey("FluidName") && FluidRegistry.isFluidRegistered(stack.getTagCompound().getString("FluidName"))) {
                 Fluid fluid = FluidRegistry.getFluid(stack.getTagCompound().getString("FluidName"));
-                if (fluid == FluidRegistry.WATER) return 0x0066ff;
-                if (fluid == FluidRegistry.LAVA) return 0xe67300;
-                return fluid.getColor();
+                int color = FluidUtils.getFluidColor(fluid);
+                if (color != -1) return color;
             }
             return 0xFFFFFF;
         }, BlockRegistry.blackHoleTankBlock);

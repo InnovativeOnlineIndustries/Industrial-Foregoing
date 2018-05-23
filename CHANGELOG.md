@@ -1,5 +1,6 @@
 # 1.9.2
 + Improved fluid handling
++ Improved tank color handling
 
 # 1.9.1
 + Black Hole Tank Block now changes color depending of the fluid it contains
