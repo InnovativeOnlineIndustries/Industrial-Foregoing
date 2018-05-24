@@ -302,3 +302,4 @@ text.industrialforegoing.button.none=None Selected
 conveyor.upgrade.error.name=Invalid Conveyor Upgrade
 conveyor.upgrade.industrialforegoing.insertion.name=Insertion Conveyor Upgrade
 conveyor.upgrade.industrialforegoing.extraction.name=Extraction Conveyor Upgrade
+conveyor.upgrade.industrialforegoing.detection.name=Detection Conveyor Upgrade

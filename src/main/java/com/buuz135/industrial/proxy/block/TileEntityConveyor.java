@@ -64,6 +64,18 @@ public class TileEntityConveyor extends TileEntity implements IConveyorContainer
         return upgradeMap.containsKey(facing);
     }
 
+    public int getPower() {
+        int highestPower = 0;
+        for (ConveyorUpgrade upgrade : upgradeMap.values()) {
+            if (upgrade != null) {
+                int power = upgrade.getRedstoneOutput();
+                if (power > highestPower)
+                    highestPower = power;
+            }
+        }
+        return highestPower;
+    }
+
     public void addUpgrade(EnumFacing facing, ConveyorUpgradeFactory upgrade) {
         if (!hasUpgrade(facing)) {
             upgradeMap.put(facing, upgrade.create(this, facing));
@@ -192,6 +204,10 @@ public class TileEntityConveyor extends TileEntity implements IConveyorContainer
     }
 
     public void handleEntityMovement(Entity entity) {
+        for(ConveyorUpgrade upgrade : upgradeMap.values()) {
+            if(upgrade!=null)
+                upgrade.handleEntity(entity);
+        }
         MovementUtils.handleConveyorMovement(entity, facing, this.pos, type);
     }
 

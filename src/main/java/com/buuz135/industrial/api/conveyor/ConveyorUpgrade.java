@@ -1,6 +1,7 @@
 package com.buuz135.industrial.api.conveyor;
 
 import com.buuz135.industrial.proxy.block.Cuboid;
+import net.minecraft.entity.Entity;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
@@ -38,7 +39,17 @@ public abstract class ConveyorUpgrade {
         return side;
     }
 
-    public abstract void update();
+    public void update() {
+
+    }
+
+    public void handleEntity(Entity entity) {
+
+    }
+
+    public int getRedstoneOutput() {
+        return 0;
+    }
 
     public Cuboid getBoundingBox() {
         return EMPTY_BB;

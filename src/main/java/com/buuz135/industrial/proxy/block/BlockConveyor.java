@@ -102,6 +102,24 @@ public class BlockConveyor extends BlockBase {
     }
 
     @Override
+    public int getWeakPower(IBlockState blockState, IBlockAccess world, BlockPos pos, EnumFacing side) {
+        TileEntity tileEntity = world.getTileEntity(pos);
+        if (tileEntity instanceof TileEntityConveyor) {
+            return ((TileEntityConveyor) tileEntity).getPower();
+        }
+        return super.getWeakPower(blockState, world, pos, side);
+    }
+
+    @Override
+    public int getStrongPower(IBlockState blockState, IBlockAccess world, BlockPos pos, EnumFacing side) {
+        TileEntity tileEntity = world.getTileEntity(pos);
+        if (tileEntity instanceof TileEntityConveyor) {
+            return side==EnumFacing.UP?((TileEntityConveyor) tileEntity).getPower():0;
+        }
+        return super.getStrongPower(blockState, world, pos, side);
+    }
+
+    @Override
     public ItemStack getPickBlock(IBlockState state, RayTraceResult target, World world, BlockPos pos, EntityPlayer player) {
         TileEntity tileEntity = world.getTileEntity(pos);
         if (tileEntity instanceof TileEntityConveyor) {
@@ -193,6 +211,7 @@ public class BlockConveyor extends BlockBase {
         }
     }
 
+    @Override
     public List<Cuboid> getBoundingBoxes(IBlockState state, IBlockAccess source, BlockPos pos) {
         List<Cuboid> cuboids = new ArrayList<>();
         cuboids.add(new Cuboid(getBoundingBox(state, source, pos)));
@@ -295,23 +314,16 @@ public class BlockConveyor extends BlockBase {
         }
     }
 
-    public RayTraceResult rayTrace(IBlockState state, IBlockAccess world, BlockPos pos, EntityPlayer player, double distance) {
-        Vec3d vec3d = player.getPositionEyes(0);
-        Vec3d vec3d1 = player.getLook(0);
-        Vec3d vec3d2 = vec3d.addVector(vec3d1.x * distance, vec3d1.y * distance, vec3d1.z * distance);
-        return rayTraceBoxesClosest(vec3d, vec3d2, pos, getBoundingBoxes(state, world, pos));
-    }
-
     @Override
     public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
         TileEntity tileEntity = worldIn.getTileEntity(pos);
         ItemStack handStack = playerIn.getHeldItem(hand);
         if (tileEntity instanceof TileEntityConveyor) {
             if(playerIn.isSneaking()) {
-                RayTraceResult result = rayTrace(worldIn.getBlockState(pos), worldIn, pos, playerIn, 10);
-                if (result instanceof DistanceRayTraceResult) {
-                    EnumFacing upgradeFacing = EnumFacing.getFront(((Cuboid) result.hitInfo).identifier);
-                    ((TileEntityConveyor) tileEntity).removeUpgrade(upgradeFacing,true);
+                Cuboid hit = getCuboidHit(worldIn, pos, playerIn);
+                if (hit != null) {
+                    EnumFacing upgradeFacing = EnumFacing.getFront(hit.identifier);
+                    ((TileEntityConveyor) tileEntity).removeUpgrade(upgradeFacing, true);
                     return true;
                 }
                 return false;

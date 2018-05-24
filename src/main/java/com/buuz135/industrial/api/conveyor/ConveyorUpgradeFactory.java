@@ -9,6 +9,7 @@ import net.minecraft.world.World;
 import net.minecraftforge.registries.IForgeRegistryEntry;
 
 import javax.annotation.Nonnull;
+import java.util.Collections;
 import java.util.Set;
 
 public abstract class ConveyorUpgradeFactory extends IForgeRegistryEntry.Impl<ConveyorUpgradeFactory> {
@@ -27,6 +28,10 @@ public abstract class ConveyorUpgradeFactory extends IForgeRegistryEntry.Impl<Co
 
     @Nonnull
     public abstract ResourceLocation getItemModel();
+
+    public Set<ResourceLocation> getTextures() {
+        return Collections.emptySet();
+    }
 
     public EnumFacing getSideForPlacement(World world, BlockPos pos, EntityPlayer player) {
         return player.getHorizontalFacing();

@@ -1,8 +1,10 @@
 package com.buuz135.industrial.proxy.client.event;
 
+import com.buuz135.industrial.api.conveyor.ConveyorUpgradeFactory;
 import com.buuz135.industrial.proxy.block.Cuboid;
 import com.buuz135.industrial.proxy.block.DistanceRayTraceResult;
 import com.buuz135.industrial.proxy.client.model.ConveyorBlockModel;
+import com.buuz135.industrial.registry.IFRegistries;
 import com.buuz135.industrial.utils.Reference;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.RenderGlobal;
@@ -21,6 +23,9 @@ public class IFClientEvents {
     @SubscribeEvent
     public void textureStich(TextureStitchEvent.Pre pre) {
         pre.getMap().registerSprite(new ResourceLocation(Reference.MOD_ID, "blocks/catears"));
+        for (ConveyorUpgradeFactory factory : IFRegistries.CONVEYOR_UPGRADE_REGISTRY.getValuesCollection()) {
+            factory.getTextures().forEach(pre.getMap()::registerSprite);
+        }
     }
 
     @SubscribeEvent

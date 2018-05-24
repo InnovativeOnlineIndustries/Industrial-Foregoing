@@ -14,10 +14,13 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.IBlockAccess;
+import net.minecraft.world.World;
 import net.minecraftforge.client.model.ModelLoader;
 import net.minecraftforge.registries.IForgeRegistry;
 
+import javax.annotation.Nullable;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 public class BlockBase extends Block {
@@ -45,6 +48,31 @@ public class BlockBase extends Block {
 
     public void createRecipe() {
 
+    }
+
+    @Nullable
+    @Override
+    public RayTraceResult collisionRayTrace(IBlockState blockState, World worldIn, BlockPos pos, Vec3d start, Vec3d end) {
+        if(hasCustomBoxes())
+            return rayTraceBoxesClosest(start, end, pos, getBoundingBoxes(blockState, worldIn, pos));
+        return super.collisionRayTrace(blockState, worldIn, pos, start, end);
+    }
+
+    public boolean hasCustomBoxes() {
+        return false;
+    }
+
+    @Nullable
+    public Cuboid getCuboidHit(World worldIn, BlockPos pos, EntityPlayer playerIn) {
+        RayTraceResult result = rayTrace(worldIn.getBlockState(pos), worldIn, pos, playerIn, 10);
+        if (result instanceof DistanceRayTraceResult) {
+            return (Cuboid) result.hitInfo;
+        }
+        return null;
+    }
+
+    public List<Cuboid> getBoundingBoxes(IBlockState state, IBlockAccess source, BlockPos pos) {
+        return Collections.emptyList();
     }
 
     protected RayTraceResult rayTraceBoxesClosest(Vec3d start, Vec3d end, BlockPos pos, List<Cuboid> boxes) {
@@ -77,5 +105,12 @@ public class BlockBase extends Block {
             return new DistanceRayTraceResult(hitVec, pos, sideHit, box, dist);
         }
         return null;
+    }
+
+    public RayTraceResult rayTrace(IBlockState state, IBlockAccess world, BlockPos pos, EntityPlayer player, double distance) {
+        Vec3d vec3d = player.getPositionEyes(0);
+        Vec3d vec3d1 = player.getLook(0);
+        Vec3d vec3d2 = vec3d.addVector(vec3d1.x * distance, vec3d1.y * distance, vec3d1.z * distance);
+        return rayTraceBoxesClosest(vec3d, vec3d2, pos, getBoundingBoxes(state, world, pos));
     }
 }
