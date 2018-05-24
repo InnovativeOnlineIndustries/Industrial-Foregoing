@@ -29,15 +29,20 @@ public class ItemConveyorUpgrade extends IFCustomItem {
 
     @Override
     public EnumActionResult onItemUse(EntityPlayer player, World worldIn, BlockPos pos, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
-        TileEntity tile = worldIn.getTileEntity(pos);
-        if (tile instanceof IConveyorContainer) {
-            ConveyorUpgradeFactory factory = IFRegistries.CONVEYOR_UPGRADE_REGISTRY.getValue(player.getHeldItem(hand).getMetadata()+1);
-            if (factory != null&&!((IConveyorContainer) tile).hasUpgrade(player.getHorizontalFacing())) {
-                ((IConveyorContainer) tile).addUpgrade(player.getHorizontalFacing(), factory);
-                return EnumActionResult.SUCCESS;
+        if (!player.isSneaking()) {
+            TileEntity tile = worldIn.getTileEntity(pos);
+            if (tile instanceof IConveyorContainer) {
+                ConveyorUpgradeFactory factory = IFRegistries.CONVEYOR_UPGRADE_REGISTRY.getValue(player.getHeldItem(hand).getMetadata() + 1);
+                if (factory != null) {
+                    EnumFacing side = factory.getSideForPlacement(worldIn, pos, player);
+                    if (!((IConveyorContainer) tile).hasUpgrade(side)) {
+                        ((IConveyorContainer) tile).addUpgrade(side, factory);
+                        return EnumActionResult.SUCCESS;
+                    }
+                }
             }
         }
-        return super.onItemUse(player, worldIn, pos, hand, facing, hitX, hitY, hitZ);
+        return EnumActionResult.PASS;
     }
 
     @Override

@@ -59,6 +59,7 @@ public class ConveyorExtractionUpgrade extends ConveyorUpgrade {
                         item.motionX = 0;
                         item.motionY = 0;
                         item.motionZ = 0;
+                        item.setPickupDelay(40);
                         item.setItem(itemHandler.extractItem(i, 4, false));
                         getWorld().spawnEntity(item);
                         break;
