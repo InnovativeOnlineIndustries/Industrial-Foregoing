@@ -4,11 +4,6 @@
     "model": "industrialforegoing:conveyor"
   },
   "variants": {
-    "inventory": [
-      {
-
-      }
-    ],
     "facing": {
       "north": {},
       "south": {

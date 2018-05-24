@@ -30,6 +30,7 @@ public class ItemRegistry {
     public static BookManualItem bookManualItem;
 
     public static ItemStraw strawItem;
+    public static ItemConveyorUpgrade conveyorUpgradeItem;
     public static ItemArtificalDye artificalDye;
 
     public static AdultFilterAddonItem adultFilterAddomItem;
@@ -53,6 +54,7 @@ public class ItemRegistry {
         (laserLensItem = new LaserLensItem(false)).register(itemRegistry);
         (laserLensItem_inverted = new LaserLensItem(true)).register(itemRegistry);
         (strawItem = new ItemStraw()).register(itemRegistry);
+        (conveyorUpgradeItem = new ItemConveyorUpgrade()).register(itemRegistry);
         (artificalDye = new ItemArtificalDye()).register(itemRegistry);
         (pinkSlime = new IFCustomItem("pink_slime")).register(itemRegistry);
         (bookManualItem = new BookManualItem()).register(itemRegistry);

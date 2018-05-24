@@ -7,7 +7,7 @@ import com.buuz135.industrial.proxy.CommonProxy;
 import com.buuz135.industrial.proxy.ItemRegistry;
 import com.buuz135.industrial.proxy.block.TileEntityConveyor;
 import com.buuz135.industrial.proxy.client.entity.RenderPinkSlime;
-import com.buuz135.industrial.proxy.client.event.IFTextureStichEvent;
+import com.buuz135.industrial.proxy.client.event.IFClientEvents;
 import com.buuz135.industrial.proxy.client.event.IFTooltipEvent;
 import com.buuz135.industrial.proxy.client.event.IFWorldRenderLastEvent;
 import com.buuz135.industrial.proxy.client.render.ContributorsCatEarsRender;
@@ -72,7 +72,7 @@ public class ClientProxy extends CommonProxy {
         super.preInit(event);
         OBJLoader.INSTANCE.addDomain(Reference.MOD_ID);
 
-        MinecraftForge.EVENT_BUS.register(new IFTextureStichEvent());
+        MinecraftForge.EVENT_BUS.register(new IFClientEvents());
         MinecraftForge.EVENT_BUS.register(new IFWorldRenderLastEvent());
         MinecraftForge.EVENT_BUS.register(new IFTooltipEvent());
     }
@@ -104,8 +104,10 @@ public class ClientProxy extends CommonProxy {
 
         Minecraft.getMinecraft().getItemColors().registerItemColorHandler((stack, tintIndex) -> ItemDye.DYE_COLORS[EnumDyeColor.byMetadata(stack.getMetadata()).getDyeDamage()], ItemRegistry.artificalDye);
         Minecraft.getMinecraft().getItemColors().registerItemColorHandler((stack, tintIndex) -> {
-            if (tintIndex == 0) return ItemDye.DYE_COLORS[EnumDyeColor.byMetadata(stack.getMetadata()).getDyeDamage()];
-            return 0xFFFFFFF;
+            if (tintIndex == 1) {
+                return ItemDye.DYE_COLORS[EnumDyeColor.byMetadata(stack.getMetadata()).getDyeDamage()];
+            }
+            return 0xFFFFFF;
         }, BlockRegistry.blockConveyor.getItem());
         Minecraft.getMinecraft().getBlockColors().registerBlockColorHandler((state, worldIn, pos, tintIndex) -> {
             if (tintIndex == 0) {

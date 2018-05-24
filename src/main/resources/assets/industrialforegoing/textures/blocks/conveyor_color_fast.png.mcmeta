@@ -1,3 +1,4 @@
 {
-  "animation": {}
+  "animation": {
+                    "interpolate": true}
 }

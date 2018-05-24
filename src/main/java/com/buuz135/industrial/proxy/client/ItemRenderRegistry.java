@@ -11,6 +11,7 @@ public class ItemRenderRegistry {
         dryRubber.registerRender();
         plastic.registerRender();
         strawItem.registerRender();
+        conveyorUpgradeItem.registerRender();
         fertilizer.registerRender();
         laserLensItem.registerRender();
         laserLensItem_inverted.registerRender();

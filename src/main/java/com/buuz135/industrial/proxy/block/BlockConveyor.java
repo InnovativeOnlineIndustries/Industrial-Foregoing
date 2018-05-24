@@ -1,12 +1,16 @@
 package com.buuz135.industrial.proxy.block;
 
 import com.buuz135.industrial.IndustrialForegoing;
+import com.buuz135.industrial.api.conveyor.ConveyorUpgrade;
 import com.buuz135.industrial.proxy.ItemRegistry;
+import com.buuz135.industrial.proxy.client.model.ConveyorModelData;
+import com.buuz135.industrial.registry.IFRegistries;
 import com.buuz135.industrial.utils.RecipeUtils;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockHorizontal;
 import net.minecraft.block.properties.PropertyDirection;
 import net.minecraft.block.properties.PropertyEnum;
+import net.minecraft.block.state.BlockFaceShape;
 import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
@@ -26,10 +30,12 @@ import net.minecraft.util.*;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.RayTraceResult;
+import net.minecraft.util.math.Vec3d;
 import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.client.model.ModelLoader;
+import net.minecraftforge.common.property.IExtendedBlockState;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -38,10 +44,10 @@ import net.minecraftforge.registries.IForgeRegistry;
 import org.apache.commons.lang3.text.WordUtils;
 
 import javax.annotation.Nullable;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Random;
 
 public class BlockConveyor extends BlockBase {
 
@@ -99,6 +105,12 @@ public class BlockConveyor extends BlockBase {
     public ItemStack getPickBlock(IBlockState state, RayTraceResult target, World world, BlockPos pos, EntityPlayer player) {
         TileEntity tileEntity = world.getTileEntity(pos);
         if (tileEntity instanceof TileEntityConveyor) {
+            if(target instanceof DistanceRayTraceResult) {
+                ConveyorUpgrade upgrade = ((TileEntityConveyor) tileEntity).getUpgradeMap().get(EnumFacing.getFront(((Cuboid) target.hitInfo).identifier));
+                if (upgrade != null) {
+                    return new ItemStack(ItemRegistry.conveyorUpgradeItem, 1, IFRegistries.CONVEYOR_UPGRADE_REGISTRY.getID(upgrade.getFactory()) - 1);
+                }
+            }
             return new ItemStack(this, 1, 15 - ((TileEntityConveyor) tileEntity).getColor());
         }
         return super.getPickBlock(state, target, world, pos, player);
@@ -130,6 +142,10 @@ public class BlockConveyor extends BlockBase {
     public void addCollisionBoxToList(IBlockState state, World worldIn, BlockPos pos, AxisAlignedBB entityBox, List<AxisAlignedBB> collidingBoxes, @Nullable Entity entityIn, boolean isActualState) {
         TileEntity entity = worldIn.getTileEntity(pos);
         if (entity instanceof TileEntityConveyor) {
+            ((TileEntityConveyor) entity).getUpgradeMap().values().forEach(upgrade -> {
+                if (upgrade.getBoundingBox().collidable)
+                    addCollisionBoxToList(pos, entityBox, collidingBoxes, upgrade.getBoundingBox().aabb());
+            });
             if (!((TileEntityConveyor) entity).getType().isVertical()) {
                 super.addCollisionBoxToList(state, worldIn, pos, entityBox, collidingBoxes, entityIn, isActualState);
                 return;
@@ -150,20 +166,52 @@ public class BlockConveyor extends BlockBase {
     }
 
     @Override
-    public void updateTick(World worldIn, BlockPos pos, IBlockState state, Random rand) {
-        super.updateTick(worldIn, pos, state, rand);
+    public IBlockState getExtendedState(IBlockState state, IBlockAccess world, BlockPos pos) {
+        if (state instanceof IExtendedBlockState) {
+            TileEntity tile = world.getTileEntity(pos);
+            if (tile instanceof TileEntityConveyor)
+                return ((IExtendedBlockState) state).withProperty(ConveyorModelData.UPGRADE_PROPERTY, new ConveyorModelData(((TileEntityConveyor) tile).getUpgradeMap()));
+        }
+        return super.getExtendedState(state, world, pos);
+    }
+
+    @Override
+    public BlockFaceShape getBlockFaceShape(IBlockAccess worldIn, IBlockState state, BlockPos pos, EnumFacing face) {
+        return state.getValue(TYPE).isVertical() ? BlockFaceShape.UNDEFINED : face == EnumFacing.DOWN ? BlockFaceShape.SOLID : BlockFaceShape.UNDEFINED;
     }
 
     @Override
     public boolean canPlaceBlockAt(World worldIn, BlockPos pos) {
-        if (worldIn.getBlockState(pos.down()).getBlock() instanceof BlockConveyor) {
-            return false;
+        return worldIn.getBlockState(pos.down()).getBlockFaceShape(worldIn, pos, EnumFacing.UP) == BlockFaceShape.SOLID;
+    }
+
+    @Override
+    public void neighborChanged(IBlockState state, World worldIn, BlockPos pos, Block blockIn, BlockPos fromPos) {
+        super.neighborChanged(state, worldIn, pos, blockIn, fromPos);
+        if (!worldIn.isRemote && !canPlaceBlockAt(worldIn, pos)) {
+            worldIn.destroyBlock(pos, false);
         }
-        return super.canPlaceBlockAt(worldIn, pos);
+    }
+
+    public List<Cuboid> getBoundingBoxes(IBlockState state, IBlockAccess source, BlockPos pos) {
+        List<Cuboid> cuboids = new ArrayList<>();
+        cuboids.add(new Cuboid(getBoundingBox(state, source, pos)));
+        TileEntity tile = source.getTileEntity(pos);
+        if (tile instanceof TileEntityConveyor)
+            for (ConveyorUpgrade upgrade : ((TileEntityConveyor) tile).getUpgradeMap().values())
+                if (upgrade != null)
+                    cuboids.add(upgrade.getBoundingBox());
+        return cuboids;
+    }
+
+    @Nullable
+    @Override
+    public RayTraceResult collisionRayTrace(IBlockState blockState, World worldIn, BlockPos pos, Vec3d start, Vec3d end) {
+        return rayTraceBoxesClosest(start, end, pos, getBoundingBoxes(blockState, worldIn, pos));
     }
 
     protected BlockStateContainer createBlockState() {
-        return new BlockStateContainer(this, FACING, SIDES, TYPE);
+        return new BlockStateContainer.Builder(this).add(FACING, SIDES, TYPE).add(ConveyorModelData.UPGRADE_PROPERTY).build();
     }
 
     @Override
@@ -207,6 +255,9 @@ public class BlockConveyor extends BlockBase {
         TileEntity entity = world.getTileEntity(pos);
         if (entity instanceof TileEntityConveyor) {
             drops.add(new ItemStack(this, 1, EnumDyeColor.byDyeDamage(((TileEntityConveyor) entity).getColor()).getMetadata()));
+            for (ConveyorUpgrade upgrade : ((TileEntityConveyor) entity).getUpgradeMap().values()) {
+                drops.add(new ItemStack(ItemRegistry.conveyorUpgradeItem, 1, IFRegistries.CONVEYOR_UPGRADE_REGISTRY.getID(upgrade.getFactory()) - 1));
+            }
             if (((TileEntityConveyor) entity).getType().isFast()) {
                 drops.add(new ItemStack(Items.GLOWSTONE_DUST, 1));
             }
@@ -219,10 +270,12 @@ public class BlockConveyor extends BlockBase {
             EnumFacing direction = ((TileEntityConveyor) entity).getFacing();
             EnumFacing right = state.getValue(FACING).rotateY();
             EnumFacing left = state.getValue(FACING).rotateYCCW();
-            if (isConveyorAndFacing(pos.up().offset(direction), worldIn, null)) {//SELF UP
-                ((TileEntityConveyor) entity).setType(((TileEntityConveyor) entity).getType().getVertical(EnumFacing.UP));
-            } else if (isConveyorAndFacing(pos.up().offset(direction.getOpposite()), worldIn, null)) { //SELF DOWN
-                ((TileEntityConveyor) entity).setType(((TileEntityConveyor) entity).getType().getVertical(EnumFacing.DOWN));
+            if(((TileEntityConveyor) entity).getUpgradeMap().isEmpty()) {
+                if (isConveyorAndFacing(pos.up().offset(direction), worldIn, null)) {//SELF UP
+                    ((TileEntityConveyor) entity).setType(((TileEntityConveyor) entity).getType().getVertical(EnumFacing.UP));
+                } else if (isConveyorAndFacing(pos.up().offset(direction.getOpposite()), worldIn, null)) { //SELF DOWN
+                    ((TileEntityConveyor) entity).setType(((TileEntityConveyor) entity).getType().getVertical(EnumFacing.DOWN));
+                }
             }
             //UPDATE SURROUNDINGS
             if (!first) return;
@@ -242,11 +295,27 @@ public class BlockConveyor extends BlockBase {
         }
     }
 
+    public RayTraceResult rayTrace(IBlockState state, IBlockAccess world, BlockPos pos, EntityPlayer player, double distance) {
+        Vec3d vec3d = player.getPositionEyes(0);
+        Vec3d vec3d1 = player.getLook(0);
+        Vec3d vec3d2 = vec3d.addVector(vec3d1.x * distance, vec3d1.y * distance, vec3d1.z * distance);
+        return rayTraceBoxesClosest(vec3d, vec3d2, pos, getBoundingBoxes(state, world, pos));
+    }
+
     @Override
     public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
         TileEntity tileEntity = worldIn.getTileEntity(pos);
         ItemStack handStack = playerIn.getHeldItem(hand);
         if (tileEntity instanceof TileEntityConveyor) {
+            if(playerIn.isSneaking()) {
+                RayTraceResult result = rayTrace(worldIn.getBlockState(pos), worldIn, pos, playerIn, 10);
+                if (result instanceof DistanceRayTraceResult) {
+                    EnumFacing upgradeFacing = EnumFacing.getFront(((Cuboid) result.hitInfo).identifier);
+                    ((TileEntityConveyor) tileEntity).removeUpgrade(upgradeFacing,true);
+                    return true;
+                }
+                return false;
+            }
             if (handStack.getItem().equals(Items.GLOWSTONE_DUST) && !((TileEntityConveyor) tileEntity).getType().isFast()) {
                 ((TileEntityConveyor) tileEntity).setType(((TileEntityConveyor) tileEntity).getType().getFast());
                 handStack.shrink(1);

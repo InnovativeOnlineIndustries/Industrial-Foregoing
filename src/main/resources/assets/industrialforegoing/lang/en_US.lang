@@ -298,3 +298,7 @@ gui.industrialforegoing.side_config.output=Output
 gui.industrialforegoing.side_config.input=Input
 
 text.industrialforegoing.button.none=None Selected
+
+conveyor.upgrade.error.name=Invalid Conveyor Upgrade
+conveyor.upgrade.industrialforegoing.insertion.name=Insertion Conveyor Upgrade
+conveyor.upgrade.industrialforegoing.extraction.name=Extraction Conveyor Upgrade
