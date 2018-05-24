@@ -74,8 +74,8 @@ public class ConveyorInsertionUpgrade extends ConveyorUpgrade {
 
         @Override
         @Nonnull
-        public ResourceLocation getModel(EnumFacing facing) {
-            return new ResourceLocation(Reference.MOD_ID, "block/conveyor_upgrade_inserter_" + facing.getName().toLowerCase());
+        public ResourceLocation getModel(EnumFacing upgradeSide, EnumFacing conveyorFacing) {
+            return new ResourceLocation(Reference.MOD_ID, "block/conveyor_upgrade_inserter_" + upgradeSide.getName().toLowerCase());
         }
 
         @Nonnull

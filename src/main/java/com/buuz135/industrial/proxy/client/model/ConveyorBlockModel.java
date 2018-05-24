@@ -1,6 +1,7 @@
 package com.buuz135.industrial.proxy.client.model;
 
 import com.buuz135.industrial.api.conveyor.ConveyorUpgrade;
+import com.buuz135.industrial.proxy.block.BlockConveyor;
 import com.google.common.cache.Cache;
 import com.google.common.cache.CacheBuilder;
 import net.minecraft.block.state.IBlockState;
@@ -60,7 +61,7 @@ public class ConveyorBlockModel implements IBakedModel {
             List<BakedQuad> upgradeQuads = CACHE.getIfPresent(Pair.of(Pair.of(upgrade.getFactory().getRegistryName().toString(), upgrade.getSide()), side));
             if (upgradeQuads == null) {
                 try {
-                    IModel model = ModelLoaderRegistry.getModel(upgrade.getFactory().getModel(upgrade.getSide()));
+                    IModel model = ModelLoaderRegistry.getModel(upgrade.getFactory().getModel(upgrade.getSide(),state.getValue(BlockConveyor.FACING)));
                     upgradeQuads = model.bake(this.state, this.format, location -> Minecraft.getMinecraft().getTextureMapBlocks().getAtlasSprite(location.toString())).getQuads(state, side, rand);
                 } catch (Exception e) {
                     e.printStackTrace();

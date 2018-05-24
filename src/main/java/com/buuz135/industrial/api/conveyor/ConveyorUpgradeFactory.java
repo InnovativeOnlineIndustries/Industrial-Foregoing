@@ -23,7 +23,7 @@ public abstract class ConveyorUpgradeFactory extends IForgeRegistryEntry.Impl<Co
     }
 
     @Nonnull
-    public abstract ResourceLocation getModel(EnumFacing side);
+    public abstract ResourceLocation getModel(EnumFacing upgradeSide, EnumFacing conveyorFacing);
 
     @Nonnull
     public abstract ResourceLocation getItemModel();
