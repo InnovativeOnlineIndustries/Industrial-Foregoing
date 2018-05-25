@@ -5,6 +5,7 @@ import com.buuz135.industrial.api.conveyor.ConveyorUpgrade;
 import com.buuz135.industrial.proxy.ItemRegistry;
 import com.buuz135.industrial.proxy.client.model.ConveyorModelData;
 import com.buuz135.industrial.registry.IFRegistries;
+import com.buuz135.industrial.utils.RayTraceUtils;
 import com.buuz135.industrial.utils.RecipeUtils;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockHorizontal;
@@ -226,7 +227,7 @@ public class BlockConveyor extends BlockBase {
     @Nullable
     @Override
     public RayTraceResult collisionRayTrace(IBlockState blockState, World worldIn, BlockPos pos, Vec3d start, Vec3d end) {
-        return rayTraceBoxesClosest(start, end, pos, getBoundingBoxes(blockState, worldIn, pos));
+        return RayTraceUtils.rayTraceBoxesClosest(start, end, pos, getBoundingBoxes(blockState, worldIn, pos));
     }
 
     protected BlockStateContainer createBlockState() {
