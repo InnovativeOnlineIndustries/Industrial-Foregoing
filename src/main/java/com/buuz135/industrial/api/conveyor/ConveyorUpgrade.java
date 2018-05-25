@@ -2,11 +2,13 @@ package com.buuz135.industrial.api.conveyor;
 
 import com.buuz135.industrial.proxy.block.Cuboid;
 import net.minecraft.entity.Entity;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
+import net.minecraftforge.common.util.INBTSerializable;
 
-public abstract class ConveyorUpgrade {
+public abstract class ConveyorUpgrade implements INBTSerializable<NBTTagCompound> {
     private IConveyorContainer container;
     private ConveyorUpgradeFactory factory;
     private EnumFacing side;
@@ -17,6 +19,16 @@ public abstract class ConveyorUpgrade {
         this.container = container;
         this.factory = factory;
         this.side = side;
+    }
+
+    @Override
+    public NBTTagCompound serializeNBT() {
+        return null;
+    }
+
+    @Override
+    public void deserializeNBT(NBTTagCompound nbt) {
+
     }
 
     public IConveyorContainer getContainer() {

@@ -141,15 +141,18 @@ public class TileEntityConveyor extends TileEntity implements IConveyorContainer
         compound.setString("Type", type.getName());
         compound.setInteger("Color", color);
         NBTTagCompound upgrades = new NBTTagCompound();
-        for(EnumFacing facing : EnumFacing.VALUES) {
-            if(!hasUpgrade(facing))
+        for (EnumFacing facing : EnumFacing.VALUES) {
+            if (!hasUpgrade(facing))
                 continue;
             NBTTagCompound upgradeTag = new NBTTagCompound();
             ConveyorUpgrade upgrade = upgradeMap.get(facing);
             upgradeTag.setString("factory", upgrade.getFactory().getRegistryName().toString());
+            NBTTagCompound customNBT = upgrade.serializeNBT();
+            if (customNBT != null)
+                upgradeTag.setTag("customNBT", customNBT);
             upgrades.setTag(facing.getName(), upgradeTag);
         }
-        compound.setTag("Upgrades",upgrades);
+        compound.setTag("Upgrades", upgrades);
         return compound;
     }
 
@@ -165,7 +168,7 @@ public class TileEntityConveyor extends TileEntity implements IConveyorContainer
         this.facing = EnumFacing.valueOf((compound.getString("Facing").toUpperCase()));
         this.type = BlockConveyor.EnumType.valueOf(compound.getString("Type").toUpperCase());
         this.color = compound.getInteger("Color");
-        if(compound.hasKey("Upgrades", Constants.NBT.TAG_COMPOUND)) {
+        if (compound.hasKey("Upgrades", Constants.NBT.TAG_COMPOUND)) {
             NBTTagCompound upgradesTag = compound.getCompoundTag("Upgrades");
             upgradeMap.clear();
             for (EnumFacing facing : EnumFacing.VALUES) {
@@ -174,7 +177,11 @@ public class TileEntityConveyor extends TileEntity implements IConveyorContainer
                 NBTTagCompound upgradeTag = upgradesTag.getCompoundTag(facing.getName());
                 ConveyorUpgradeFactory factory = IFRegistries.CONVEYOR_UPGRADE_REGISTRY.getValue(new ResourceLocation(upgradeTag.getString("factory")));
                 if (factory != null) {
-                    upgradeMap.put(facing, factory.create(this, facing));
+                    ConveyorUpgrade upgrade = factory.create(this, facing);
+                    if (upgradeTag.hasKey("customNBT", Constants.NBT.TAG_COMPOUND)) {
+                        upgrade.deserializeNBT(upgradeTag.getCompoundTag("customNBT"));
+                    }
+                    upgradeMap.put(facing, upgrade);
                 }
             }
         }
