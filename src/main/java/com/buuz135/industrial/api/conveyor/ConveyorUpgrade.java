@@ -1,12 +1,20 @@
 package com.buuz135.industrial.api.conveyor;
 
+import com.buuz135.industrial.proxy.ItemRegistry;
 import com.buuz135.industrial.proxy.block.Cuboid;
+import com.buuz135.industrial.registry.IFRegistries;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumFacing;
+import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.INBTSerializable;
+
+import java.util.Collection;
+import java.util.Collections;
 
 public abstract class ConveyorUpgrade implements INBTSerializable<NBTTagCompound> {
     private IConveyorContainer container;
@@ -29,6 +37,14 @@ public abstract class ConveyorUpgrade implements INBTSerializable<NBTTagCompound
     @Override
     public void deserializeNBT(NBTTagCompound nbt) {
 
+    }
+
+    public boolean onUpgradeActivated(EntityPlayer player, EnumHand hand) {
+        return false;
+    }
+
+    public Collection<ItemStack> getDrops() {
+        return Collections.singleton(new ItemStack(ItemRegistry.conveyorUpgradeItem, 1, IFRegistries.CONVEYOR_UPGRADE_REGISTRY.getID(getFactory()) - 1))
     }
 
     public IConveyorContainer getContainer() {

@@ -275,7 +275,7 @@ public class BlockConveyor extends BlockBase {
         if (entity instanceof TileEntityConveyor) {
             drops.add(new ItemStack(this, 1, EnumDyeColor.byDyeDamage(((TileEntityConveyor) entity).getColor()).getMetadata()));
             for (ConveyorUpgrade upgrade : ((TileEntityConveyor) entity).getUpgradeMap().values()) {
-                drops.add(new ItemStack(ItemRegistry.conveyorUpgradeItem, 1, IFRegistries.CONVEYOR_UPGRADE_REGISTRY.getID(upgrade.getFactory()) - 1));
+                drops.addAll(upgrade.getDrops());
             }
             if (((TileEntityConveyor) entity).getType().isFast()) {
                 drops.add(new ItemStack(Items.GLOWSTONE_DUST, 1));
@@ -319,7 +319,7 @@ public class BlockConveyor extends BlockBase {
         TileEntity tileEntity = worldIn.getTileEntity(pos);
         ItemStack handStack = playerIn.getHeldItem(hand);
         if (tileEntity instanceof TileEntityConveyor) {
-            if(playerIn.isSneaking()) {
+            if (playerIn.isSneaking()) {
                 Cuboid hit = getCuboidHit(worldIn, pos, playerIn);
                 if (hit != null) {
                     EnumFacing upgradeFacing = EnumFacing.getFront(hit.identifier);
@@ -327,11 +327,24 @@ public class BlockConveyor extends BlockBase {
                     return true;
                 }
                 return false;
-            }
-            if (handStack.getItem().equals(Items.GLOWSTONE_DUST) && !((TileEntityConveyor) tileEntity).getType().isFast()) {
-                ((TileEntityConveyor) tileEntity).setType(((TileEntityConveyor) tileEntity).getType().getFast());
-                handStack.shrink(1);
-                return true;
+            } else {
+                Cuboid hit = getCuboidHit(worldIn, pos, playerIn);
+                if (hit != null) {
+                    if (hit.identifier == -1) {
+                        if (handStack.getItem().equals(Items.GLOWSTONE_DUST) && !((TileEntityConveyor) tileEntity).getType().isFast()) {
+                            ((TileEntityConveyor) tileEntity).setType(((TileEntityConveyor) tileEntity).getType().getFast());
+                            handStack.shrink(1);
+                            return true;
+                        }
+                    } else {
+                        EnumFacing upgradeFacing = EnumFacing.getFront(hit.identifier);
+                        if (((TileEntityConveyor) tileEntity).hasUpgrade(upgradeFacing)) {
+                            return ((TileEntityConveyor) tileEntity).getUpgradeMap().get(upgradeFacing).onUpgradeActivated(playerIn, hand);
+                        }
+                    }
+                    return false;
+                }
+                return false;
             }
         }
         return super.onBlockActivated(worldIn, pos, state, playerIn, hand, facing, hitX, hitY, hitZ);
