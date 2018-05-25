@@ -44,7 +44,7 @@ public abstract class ConveyorUpgrade implements INBTSerializable<NBTTagCompound
     }
 
     public Collection<ItemStack> getDrops() {
-        return Collections.singleton(new ItemStack(ItemRegistry.conveyorUpgradeItem, 1, IFRegistries.CONVEYOR_UPGRADE_REGISTRY.getID(getFactory()) - 1))
+        return Collections.singleton(new ItemStack(ItemRegistry.conveyorUpgradeItem, 1, IFRegistries.CONVEYOR_UPGRADE_REGISTRY.getID(getFactory()) - 1));
     }
 
     public IConveyorContainer getContainer() {
