@@ -211,11 +211,12 @@ public class TileEntityConveyor extends TileEntity implements IConveyorContainer
     }
 
     public void handleEntityMovement(Entity entity) {
-        for(ConveyorUpgrade upgrade : upgradeMap.values()) {
-            if(upgrade!=null)
+        for (ConveyorUpgrade upgrade : upgradeMap.values()) {
+            if (upgrade != null)
                 upgrade.handleEntity(entity);
         }
-        MovementUtils.handleConveyorMovement(entity, facing, this.pos, type);
+        if (!entity.isDead)
+            MovementUtils.handleConveyorMovement(entity, facing, this.pos, type);
     }
 
     @Override
