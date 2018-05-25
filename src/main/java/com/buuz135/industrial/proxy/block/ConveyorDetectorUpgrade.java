@@ -32,10 +32,10 @@ public class ConveyorDetectorUpgrade extends ConveyorUpgrade {
             return;
         boolean previous = hasEntity;
         hasEntity = false;
-        List<Entity> entities = getWorld().getEntitiesWithinAABB(Entity.class, getBoundingBox().aabb().offset(getPos()).grow(0.1));
+        List<Entity> entities = getWorld().getEntitiesWithinAABB(Entity.class, getBoundingBox().aabb().offset(getPos()).grow(0.01));
         hasEntity = !entities.isEmpty();
         if (previous != hasEntity)
-            getContainer().requestSync();
+            getWorld().notifyNeighborsOfStateChange(getPos(), getWorld().getBlockState(getPos()).getBlock(),true);
     }
 
     @Override

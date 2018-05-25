@@ -34,7 +34,7 @@ public class ConveyorInsertionUpgrade extends ConveyorUpgrade {
             TileEntity tile = getWorld().getTileEntity(getPos().offset(getSide()));
             if (tile != null && tile.hasCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, getSide().getOpposite())) {
                 IItemHandler handler = tile.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, getSide().getOpposite());
-                if (getBoundingBox().aabb().offset(getPos()).grow(0.1).intersects(entity.getEntityBoundingBox())) {
+                if (getBoundingBox().aabb().offset(getPos()).grow(0.01).intersects(entity.getEntityBoundingBox())) {
                     ItemStack stack = ((EntityItem) entity).getItem();
                     for (int i = 0; i < handler.getSlots(); i++) {
                         ItemStack remaining = handler.insertItem(i, stack, false);
