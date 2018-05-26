@@ -1,5 +1,6 @@
 package com.buuz135.industrial.api.conveyor;
 
+import com.buuz135.industrial.gui.component.IGuiComponent;
 import com.buuz135.industrial.proxy.ItemRegistry;
 import com.buuz135.industrial.proxy.block.Cuboid;
 import com.buuz135.industrial.registry.IFRegistries;
@@ -12,9 +13,12 @@ import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.INBTSerializable;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 import java.util.Collection;
 import java.util.Collections;
+import java.util.List;
 
 public abstract class ConveyorUpgrade implements INBTSerializable<NBTTagCompound> {
     private IConveyorContainer container;
@@ -81,5 +85,17 @@ public abstract class ConveyorUpgrade implements INBTSerializable<NBTTagCompound
 
     public Cuboid getBoundingBox() {
         return EMPTY_BB;
+    }
+
+    public boolean hasGui() {
+        return false;
+    }
+
+    public void handleButtonInteraction(int buttonId, NBTTagCompound compound) {
+
+    }
+
+    @SideOnly(Side.CLIENT)
+    public void addComponentsToGui(List<IGuiComponent> componentList) {
     }
 }

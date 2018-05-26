@@ -170,16 +170,17 @@ public class TileEntityConveyor extends TileEntity implements IConveyorContainer
         this.color = compound.getInteger("Color");
         if (compound.hasKey("Upgrades", Constants.NBT.TAG_COMPOUND)) {
             NBTTagCompound upgradesTag = compound.getCompoundTag("Upgrades");
-            upgradeMap.clear();
+            //upgradeMap.clear();
             for (EnumFacing facing : EnumFacing.VALUES) {
                 if (!upgradesTag.hasKey(facing.getName()))
                     continue;
                 NBTTagCompound upgradeTag = upgradesTag.getCompoundTag(facing.getName());
                 ConveyorUpgradeFactory factory = IFRegistries.CONVEYOR_UPGRADE_REGISTRY.getValue(new ResourceLocation(upgradeTag.getString("factory")));
                 if (factory != null) {
-                    ConveyorUpgrade upgrade = factory.create(this, facing);
+                    ConveyorUpgrade upgrade = upgradeMap.getOrDefault(facing, factory.create(this, facing));
                     if (upgradeTag.hasKey("customNBT", Constants.NBT.TAG_COMPOUND)) {
                         upgrade.deserializeNBT(upgradeTag.getCompoundTag("customNBT"));
+                        //upgradeMap.get(facing).deserializeNBT(upgradeTag.getCompoundTag("customNBT"));
                     }
                     upgradeMap.put(facing, upgrade);
                 }

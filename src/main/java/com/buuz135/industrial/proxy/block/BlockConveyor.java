@@ -340,7 +340,13 @@ public class BlockConveyor extends BlockBase {
                     } else {
                         EnumFacing upgradeFacing = EnumFacing.getFront(hit.identifier);
                         if (((TileEntityConveyor) tileEntity).hasUpgrade(upgradeFacing)) {
-                            return ((TileEntityConveyor) tileEntity).getUpgradeMap().get(upgradeFacing).onUpgradeActivated(playerIn, hand);
+                            ConveyorUpgrade upgrade = ((TileEntityConveyor) tileEntity).getUpgradeMap().get(upgradeFacing);
+                            if (upgrade.onUpgradeActivated(playerIn, hand)) {
+                                return true;
+                            } else if (upgrade.hasGui()) {
+                                playerIn.openGui(IndustrialForegoing.instance, 1, worldIn, pos.getX(), pos.getY(), pos.getZ());
+                                return true;
+                            }
                         }
                     }
                     return false;

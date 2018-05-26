@@ -3,6 +3,7 @@ package com.buuz135.industrial.proxy.block;
 import com.buuz135.industrial.api.conveyor.ConveyorUpgrade;
 import com.buuz135.industrial.api.conveyor.ConveyorUpgradeFactory;
 import com.buuz135.industrial.api.conveyor.IConveyorContainer;
+import com.buuz135.industrial.gui.component.IGuiComponent;
 import com.buuz135.industrial.proxy.ItemRegistry;
 import com.buuz135.industrial.registry.IFRegistries;
 import com.buuz135.industrial.utils.Reference;
@@ -22,6 +23,7 @@ import net.minecraftforge.items.IItemHandler;
 
 import javax.annotation.Nonnull;
 import java.util.Collection;
+import java.util.List;
 
 public class ConveyorExtractionUpgrade extends ConveyorUpgrade {
 
@@ -113,6 +115,15 @@ public class ConveyorExtractionUpgrade extends ConveyorUpgrade {
         }
     }
 
+    @Override
+    public boolean hasGui() {
+        return true;
+    }
+
+    @Override
+    public void addComponentsToGui(List<IGuiComponent> componentList) {
+        super.addComponentsToGui(componentList);
+    }
 
     public static class Factory extends ConveyorUpgradeFactory {
         public Factory() {
