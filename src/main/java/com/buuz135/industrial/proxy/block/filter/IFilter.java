@@ -25,7 +25,7 @@ public interface IFilter<T extends Entity> {
 
     void deserializeNBT(NBTTagCompound nbt);
 
-    @Optional.Interface(iface = "mezz.jei.api.gui.IGhostIngredientHandler$Target", modid = "JustEnoughItems", striprefs = true)
+    @Optional.Interface(iface = "mezz.jei.api.gui.IGhostIngredientHandler$Target", modid = "jei", striprefs = true)
     public static class GhostSlot implements IGhostIngredientHandler.Target<ItemStack> {
 
         private final int x;
