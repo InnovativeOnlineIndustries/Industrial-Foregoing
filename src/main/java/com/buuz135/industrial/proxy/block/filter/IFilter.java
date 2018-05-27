@@ -25,7 +25,7 @@ public interface IFilter<T extends Entity> {
 
     void deserializeNBT(NBTTagCompound nbt);
 
-    @Optional.Interface(iface = "mezz.jei.api.gui.IGhostIngredientHandler.Target", modid = "JustEnoughItems")
+    @Optional.Interface(iface = "mezz.jei.api.gui.IGhostIngredientHandler$Target", modid = "JustEnoughItems", striprefs = true)
     public static class GhostSlot implements IGhostIngredientHandler.Target<ItemStack> {
 
         private final int x;
@@ -54,7 +54,7 @@ public interface IFilter<T extends Entity> {
                 GuiConveyor gui = (GuiConveyor) Minecraft.getMinecraft().currentScreen;
                 return new Rectangle(x + gui.getX(), y + gui.getY(), 18, 18);
             }
-            return null;
+            return new Rectangle();
         }
 
         @Override
