@@ -15,7 +15,8 @@ public interface IConveyorContainer {
     boolean hasUpgrade(EnumFacing facing);
 
     void addUpgrade(EnumFacing facing, ConveyorUpgradeFactory factory);
-    void removeUpgrade(EnumFacing facing,boolean drop);
+
+    void removeUpgrade(EnumFacing facing, boolean drop);
 
 
     class Empty implements IConveyorContainer {

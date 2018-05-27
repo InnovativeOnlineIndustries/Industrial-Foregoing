@@ -31,7 +31,7 @@ import java.util.Map;
 
 import static com.buuz135.industrial.proxy.block.BlockConveyor.*;
 
-public class TileEntityConveyor extends TileEntity implements IConveyorContainer,ITickable {
+public class TileEntityConveyor extends TileEntity implements IConveyorContainer, ITickable {
 
     private EnumFacing facing;
     private BlockConveyor.EnumType type;
@@ -84,9 +84,9 @@ public class TileEntityConveyor extends TileEntity implements IConveyorContainer
     }
 
     @Override
-    public void removeUpgrade(EnumFacing facing,boolean drop) {
+    public void removeUpgrade(EnumFacing facing, boolean drop) {
         if (hasUpgrade(facing)) {
-            if (!world.isRemote&&drop) {
+            if (!world.isRemote && drop) {
                 ConveyorUpgrade upgrade = upgradeMap.get(facing);
                 EntityItem item = new EntityItem(world, pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5);
                 item.setItem(new ItemStack(ItemRegistry.conveyorUpgradeItem, 1, IFRegistries.CONVEYOR_UPGRADE_REGISTRY.getID(upgrade.getFactory()) - 1));
@@ -124,13 +124,13 @@ public class TileEntityConveyor extends TileEntity implements IConveyorContainer
         return color;
     }
 
-    public void setColor(int color) {
-        this.color = color;
+    public void setColor(EnumDyeColor color) {
+        this.color = color.getDyeDamage();
         markForUpdate();
     }
 
-    public void setColor(EnumDyeColor color) {
-        this.color = color.getDyeDamage();
+    public void setColor(int color) {
+        this.color = color;
         markForUpdate();
     }
 

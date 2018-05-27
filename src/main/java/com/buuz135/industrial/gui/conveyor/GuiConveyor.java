@@ -2,7 +2,9 @@ package com.buuz135.industrial.gui.conveyor;
 
 import com.buuz135.industrial.IndustrialForegoing;
 import com.buuz135.industrial.api.conveyor.ConveyorUpgrade;
+import com.buuz135.industrial.gui.component.FilterGuiComponent;
 import com.buuz135.industrial.gui.component.IGuiComponent;
+import com.buuz135.industrial.proxy.block.filter.IFilter;
 import com.buuz135.industrial.proxy.network.ConveyorButtonInteractMessage;
 import com.buuz135.industrial.utils.Reference;
 import net.minecraft.client.gui.inventory.GuiContainer;
@@ -14,6 +16,7 @@ import net.minecraft.util.text.TextComponentTranslation;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 public class GuiConveyor extends GuiContainer {
@@ -24,11 +27,13 @@ public class GuiConveyor extends GuiContainer {
     private List<IGuiComponent> componentList;
     private int x;
     private int y;
+    private List<IFilter.GhostSlot> ghostSlots;
 
     public GuiConveyor(Container inventorySlotsIn) {
         super(inventorySlotsIn);
         this.upgrade = getContainer().getConveyor().getUpgradeMap().get(getContainer().getFacing());
         this.componentList = new ArrayList<>();
+        this.ghostSlots = new ArrayList<>();
     }
 
     @Override
@@ -36,20 +41,16 @@ public class GuiConveyor extends GuiContainer {
         super.initGui();
         componentList.clear();
         upgrade.addComponentsToGui(componentList);
+        for (IGuiComponent iGuiComponent : componentList) {
+            if (iGuiComponent instanceof FilterGuiComponent) {
+                ghostSlots.addAll(Arrays.asList(((FilterGuiComponent) iGuiComponent).getFilter().getFilter()));
+            }
+        }
     }
 
     @Override
     public void updateScreen() {
         super.updateScreen();
-//        for (IGuiComponent iGuiComponent : componentList) {
-//            if (iGuiComponent instanceof FilterGuiComponent){
-//                for (ItemStack stack : ((FilterGuiComponent) iGuiComponent).getFilter().getFilter()) {
-//                    if (!stack.isEmpty()){
-//                        System.out.println(stack);
-//                    }
-//                }
-//            }
-//        }
     }
 
     @Override
@@ -103,5 +104,17 @@ public class GuiConveyor extends GuiContainer {
 
     public void sendMessage(int id, NBTTagCompound compound) {
         IndustrialForegoing.NETWORK.sendToServer(new ConveyorButtonInteractMessage(upgrade.getPos(), id, upgrade.getSide(), compound));
+    }
+
+    public List<IFilter.GhostSlot> getGhostSlots() {
+        return ghostSlots;
+    }
+
+    public int getX() {
+        return x;
+    }
+
+    public int getY() {
+        return y;
     }
 }

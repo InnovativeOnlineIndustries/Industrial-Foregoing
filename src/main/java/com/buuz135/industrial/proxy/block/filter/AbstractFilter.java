@@ -1,21 +1,28 @@
 package com.buuz135.industrial.proxy.block.filter;
 
 import net.minecraft.entity.Entity;
-import net.minecraft.item.ItemStack;
-
-import java.util.Arrays;
 
 public abstract class AbstractFilter<T extends Entity> implements IFilter<T> {
 
-    protected ItemStack[] filter;
+    private final int sizeX;
+    private final int sizeY;
+    private GhostSlot[] filter;
 
-    public AbstractFilter(int size) {
-        filter = new ItemStack[size];
-        Arrays.fill(filter, ItemStack.EMPTY);
+    protected AbstractFilter(int locX, int locY, int sizeX, int sizeY) {
+        this.sizeX = sizeX;
+        this.sizeY = sizeY;
+        this.filter = new GhostSlot[sizeX * sizeY];
+        int pos = 0;
+        for (int y = 0; y < sizeY; y++) {
+            for (int x = 0; x < sizeX; x++) {
+                this.filter[pos] = new GhostSlot(pos, locX + (x * 18), locY + y * 18);
+                ++pos;
+            }
+        }
     }
 
     @Override
-    public ItemStack[] getFilter() {
+    public GhostSlot[] getFilter() {
         return filter;
     }
 }

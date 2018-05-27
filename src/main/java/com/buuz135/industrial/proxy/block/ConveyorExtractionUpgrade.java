@@ -27,16 +27,16 @@ import java.util.List;
 
 public class ConveyorExtractionUpgrade extends ConveyorUpgrade {
 
-    public ConveyorExtractionUpgrade(IConveyorContainer container, ConveyorUpgradeFactory factory, EnumFacing side) {
-        super(container, factory, side);
-    }
-
-    private boolean fast = false;
-
     public static Cuboid NORTHBB = new Cuboid(0.0625 * 4, 0.0625 * 3, -0.0625 * 2, 0.0625 * 12, 0.0625 * 11, 0.0625 * 3, EnumFacing.NORTH.getIndex());
     public static Cuboid SOUTHBB = new Cuboid(0.0625 * 4, 0.0625 * 3, 0.0625 * 13, 0.0625 * 12, 0.0625 * 11, 0.0625 * 18, EnumFacing.SOUTH.getIndex());
     public static Cuboid EASTBB = new Cuboid(0.0625 * 13, 0.0625 * 3, 0.0625 * 4, 0.0625 * 18, 0.0625 * 11, 0.0625 * 12, EnumFacing.EAST.getIndex());
     public static Cuboid WESTBB = new Cuboid(-0.0625 * 2, 0.0625 * 3, 0.0625 * 4, 0.0625 * 3, 0.0625 * 11, 0.0625 * 12, EnumFacing.WEST.getIndex());
+
+    private boolean fast = false;
+
+    public ConveyorExtractionUpgrade(IConveyorContainer container, ConveyorUpgradeFactory factory, EnumFacing side) {
+        super(container, factory, side);
+    }
 
     @Override
     public Cuboid getBoundingBox() {
@@ -52,7 +52,6 @@ public class ConveyorExtractionUpgrade extends ConveyorUpgrade {
                 return WESTBB;
         }
     }
-
 
     @Override
     public NBTTagCompound serializeNBT() {

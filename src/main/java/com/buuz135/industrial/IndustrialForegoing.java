@@ -25,6 +25,7 @@ import java.util.HashMap;
 @Mod(modid = Reference.MOD_ID, name = Reference.MOD_ID, version = Reference.VERSION, dependencies = "required-after:forge@[14.23.1.2594,);required-after:teslacorelib@[1.0.12,);", guiFactory = Reference.GUI_FACTORY, updateJSON = "https://raw.githubusercontent.com/Buuz135/Industrial-Foregoing/master/update.json")
 public class IndustrialForegoing {
 
+    public static final SimpleNetworkWrapper NETWORK = NetworkRegistry.INSTANCE.newSimpleChannel(Reference.MOD_ID);
     public static CreativeTabs creativeTab = new CreativeTabs(Reference.MOD_ID) {
         @Override
         public ItemStack getTabIconItem() {
@@ -32,7 +33,6 @@ public class IndustrialForegoing {
         }
     };
     public static IndustrialForegoing instance;
-    public static final SimpleNetworkWrapper NETWORK = NetworkRegistry.INSTANCE.newSimpleChannel(Reference.MOD_ID);
     @SidedProxy(clientSide = Reference.PROXY_CLIENT, serverSide = Reference.PROXY_COMMON)
     private static CommonProxy proxy;
     private static HashMap<Integer, IFFakePlayer> worldFakePlayer = new HashMap<>();

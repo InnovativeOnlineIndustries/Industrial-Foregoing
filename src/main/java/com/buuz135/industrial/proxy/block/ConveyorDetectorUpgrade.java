@@ -18,13 +18,13 @@ import java.util.Set;
 
 public class ConveyorDetectorUpgrade extends ConveyorUpgrade {
 
+    public static Cuboid BB = new Cuboid(0.0625 * 3, 0.0625, 0.0625 * 3, 0.0625 * 13, 0.0625 * 1.2, 0.0625 * 13, EnumFacing.DOWN.getIndex(), false);
+
+    boolean hasEntity = false;
+
     public ConveyorDetectorUpgrade(IConveyorContainer container, ConveyorUpgradeFactory factory, EnumFacing side) {
         super(container, factory, side);
     }
-
-    public static Cuboid BB = new Cuboid(0.0625 * 3, 0.0625, 0.0625 * 3, 0.0625 * 13, 0.0625 * 1.2, 0.0625 * 13, EnumFacing.DOWN.getIndex(),false);
-
-    boolean hasEntity = false;
 
     @Override
     public void update() {
@@ -35,7 +35,7 @@ public class ConveyorDetectorUpgrade extends ConveyorUpgrade {
         List<Entity> entities = getWorld().getEntitiesWithinAABB(Entity.class, getBoundingBox().aabb().offset(getPos()).grow(0.01));
         hasEntity = !entities.isEmpty();
         if (previous != hasEntity)
-            getWorld().notifyNeighborsOfStateChange(getPos(), getWorld().getBlockState(getPos()).getBlock(),true);
+            getWorld().notifyNeighborsOfStateChange(getPos(), getWorld().getBlockState(getPos()).getBlock(), true);
     }
 
     @Override

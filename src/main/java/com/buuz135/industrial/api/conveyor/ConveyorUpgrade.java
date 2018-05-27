@@ -21,11 +21,10 @@ import java.util.Collections;
 import java.util.List;
 
 public abstract class ConveyorUpgrade implements INBTSerializable<NBTTagCompound> {
+    public static Cuboid EMPTY_BB = new Cuboid(0, 0, 0, 0, 0, 0);
     private IConveyorContainer container;
     private ConveyorUpgradeFactory factory;
     private EnumFacing side;
-
-    public static Cuboid EMPTY_BB = new Cuboid(0, 0, 0, 0, 0, 0);
 
     public ConveyorUpgrade(IConveyorContainer container, ConveyorUpgradeFactory factory, EnumFacing side) {
         this.container = container;

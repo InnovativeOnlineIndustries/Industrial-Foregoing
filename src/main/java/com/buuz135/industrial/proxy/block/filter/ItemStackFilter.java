@@ -6,8 +6,8 @@ import net.minecraft.nbt.NBTTagCompound;
 
 public class ItemStackFilter extends AbstractFilter<EntityItem> {
 
-    public ItemStackFilter(int size) {
-        super(size);
+    public ItemStackFilter(int locX, int locY, int sizeX, int sizeY) {
+        super(locX, locY, sizeX, sizeY);
     }
 
     @Override
@@ -18,36 +18,37 @@ public class ItemStackFilter extends AbstractFilter<EntityItem> {
     @Override
     public boolean matches(EntityItem entity) { //TODO more depth comparing
         boolean isEmpty = true;
-        for (ItemStack stack : this.filter) {
-            if (!stack.isEmpty()) isEmpty = false;
+        for (GhostSlot stack : this.getFilter()) {
+            if (!stack.getStack().isEmpty()) isEmpty = false;
         }
         if (isEmpty) return false;
-        for (ItemStack stack : this.filter) {
-            if (stack.isItemEqual(entity.getItem())) return true;
+        for (GhostSlot stack : this.getFilter()) {
+            if (stack.getStack().isItemEqual(entity.getItem())) return true;
         }
         return false;
     }
 
     @Override
     public void setFilter(int slot, ItemStack stack) {
-        if (slot >= 0 && slot < this.filter.length) this.filter[slot] = stack;
+        if (slot >= 0 && slot < this.getFilter().length) this.getFilter()[slot].setStack(stack);
     }
 
     @Override
     public NBTTagCompound serializeNBT() {
         NBTTagCompound compound = new NBTTagCompound();
-        for (int i = 0; i < this.filter.length; i++) {
-            if (!this.filter[i].isEmpty()) compound.setTag(String.valueOf(i), this.filter[i].serializeNBT());
+        for (int i = 0; i < this.getFilter().length; i++) {
+            if (!this.getFilter()[i].getStack().isEmpty())
+                compound.setTag(String.valueOf(i), this.getFilter()[i].getStack().serializeNBT());
         }
         return compound;
     }
 
     @Override
     public void deserializeNBT(NBTTagCompound nbt) {
-        for (int i = 0; i < this.filter.length; i++) {
+        for (int i = 0; i < this.getFilter().length; i++) {
             if (nbt.hasKey(String.valueOf(i))) {
-                this.filter[i] = new ItemStack(nbt.getCompoundTag(String.valueOf(i)));
-            } else this.filter[i] = ItemStack.EMPTY;
+                this.getFilter()[i].setStack(new ItemStack(nbt.getCompoundTag(String.valueOf(i))));
+            } else this.getFilter()[i].setStack(ItemStack.EMPTY);
         }
     }
 }

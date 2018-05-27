@@ -45,9 +45,9 @@ public abstract class FilterGuiComponent extends PositionedGuiComponent {
                 int posY = guiY + getXPos() + i * 18;
                 Minecraft.getMinecraft().getTextureManager().bindTexture(BG_TEXTURE);
                 Minecraft.getMinecraft().currentScreen.drawTexturedModalRect(posX, posY, 176, 0, 18, 18);
-                if (!getFilter().getFilter()[pos].isEmpty()) {
+                if (!getFilter().getFilter()[pos].getStack().isEmpty()) {
                     RenderHelper.enableGUIStandardItemLighting();
-                    Minecraft.getMinecraft().getRenderItem().renderItemIntoGUI(getFilter().getFilter()[pos], posX + 1, posY + 1);
+                    Minecraft.getMinecraft().getRenderItem().renderItemIntoGUI(getFilter().getFilter()[pos].getStack(), posX + 1, posY + 1);
                 }
                 ++pos;
             }
@@ -88,8 +88,8 @@ public abstract class FilterGuiComponent extends PositionedGuiComponent {
             for (int x = 0; x < getXSize(); x++) {
                 int posX = guiX + getXPos() + x * 18;
                 int posY = guiY + getXPos() + i * 18;
-                if (mouseX > posX + 1 && mouseX < posX + 1 + 16 && mouseY > posY + 1 && mouseY < posY + 1 + 16 && !getFilter().getFilter()[pos].isEmpty()) {
-                    return Minecraft.getMinecraft().currentScreen.getItemToolTip(getFilter().getFilter()[pos]);
+                if (mouseX > posX + 1 && mouseX < posX + 1 + 16 && mouseY > posY + 1 && mouseY < posY + 1 + 16 && !getFilter().getFilter()[pos].getStack().isEmpty()) {
+                    return Minecraft.getMinecraft().currentScreen.getItemToolTip(getFilter().getFilter()[pos].getStack());
                 }
                 ++pos;
             }

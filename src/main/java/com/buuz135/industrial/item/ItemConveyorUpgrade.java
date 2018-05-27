@@ -63,7 +63,7 @@ public class ItemConveyorUpgrade extends IFCustomItem {
     @Override
     public void getSubItems(CreativeTabs tab, NonNullList<ItemStack> items) {
         for (ConveyorUpgradeFactory factory : IFRegistries.CONVEYOR_UPGRADE_REGISTRY.getValuesCollection()) {
-            items.add(new ItemStack(this, 1, IFRegistries.CONVEYOR_UPGRADE_REGISTRY.getID(factory)-1));
+            items.add(new ItemStack(this, 1, IFRegistries.CONVEYOR_UPGRADE_REGISTRY.getID(factory) - 1));
         }
     }
 }

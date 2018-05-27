@@ -25,19 +25,19 @@ import java.util.List;
 
 public class ConveyorInsertionUpgrade extends ConveyorUpgrade {
 
+    public static Cuboid NORTHBB = new Cuboid(0.0625 * 2, 0, -0.0625 * 2, 0.0625 * 14, 0.0625 * 9, 0.0625 * 2, EnumFacing.NORTH.getIndex());
+    public static Cuboid SOUTHBB = new Cuboid(0.0625 * 2, 0, 0.0625 * 14, 0.0625 * 14, 0.0625 * 9, 0.0625 * 18, EnumFacing.SOUTH.getIndex());
+    public static Cuboid EASTBB = new Cuboid(0.0625 * 14, 0, 0.0625 * 2, 0.0625 * 18, 0.0625 * 9, 0.0625 * 14, EnumFacing.EAST.getIndex());
+    public static Cuboid WESTBB = new Cuboid(-0.0625 * 2, 0, 0.0625 * 2, 0.0625 * 2, 0.0625 * 9, 0.0625 * 14, EnumFacing.WEST.getIndex());
+
     private ItemStackFilter filter;
     private boolean whitelist;
 
     public ConveyorInsertionUpgrade(IConveyorContainer container, ConveyorUpgradeFactory factory, EnumFacing side) {
         super(container, factory, side);
-        this.filter = new ItemStackFilter(15);
+        this.filter = new ItemStackFilter(20, 20, 5, 3);
         this.whitelist = true;
     }
-
-    public static Cuboid NORTHBB = new Cuboid(0.0625 * 2, 0, -0.0625 * 2, 0.0625 * 14, 0.0625 * 9, 0.0625 * 2,EnumFacing.NORTH.getIndex());
-    public static Cuboid SOUTHBB = new Cuboid(0.0625 * 2, 0, 0.0625*14, 0.0625 * 14, 0.0625 * 9, 0.0625*18,EnumFacing.SOUTH.getIndex());
-    public static Cuboid EASTBB = new Cuboid(0.0625*14, 0, 0.0625 * 2, 0.0625*18, 0.0625 * 9, 0.0625 * 14,EnumFacing.EAST.getIndex());
-    public static Cuboid WESTBB = new Cuboid(-0.0625 * 2, 0, 0.0625 * 2, 0.0625 * 2, 0.0625 * 9, 0.0625 * 14,EnumFacing.WEST.getIndex());
 
     @Override
     public void handleEntity(Entity entity) {
@@ -115,7 +115,7 @@ public class ConveyorInsertionUpgrade extends ConveyorUpgrade {
     @Override
     public void addComponentsToGui(List<IGuiComponent> componentList) {
         super.addComponentsToGui(componentList);
-        componentList.add(new FilterGuiComponent(20, 20, 5, 3) {
+        componentList.add(new FilterGuiComponent(20, 20, 5, 3) { //TODO change this so it uses the object variables
             @Override
             public IFilter getFilter() {
                 return ConveyorInsertionUpgrade.this.filter;
@@ -151,7 +151,7 @@ public class ConveyorInsertionUpgrade extends ConveyorUpgrade {
         @Nonnull
         @Override
         public ResourceLocation getItemModel() {
-            return new ResourceLocation(Reference.MOD_ID,"conveyor_insertion_upgrade");
+            return new ResourceLocation(Reference.MOD_ID, "conveyor_insertion_upgrade");
         }
     }
 }

@@ -115,7 +115,7 @@ public class BlockConveyor extends BlockBase {
     public int getStrongPower(IBlockState blockState, IBlockAccess world, BlockPos pos, EnumFacing side) {
         TileEntity tileEntity = world.getTileEntity(pos);
         if (tileEntity instanceof TileEntityConveyor) {
-            return side==EnumFacing.UP?((TileEntityConveyor) tileEntity).getPower():0;
+            return side == EnumFacing.UP ? ((TileEntityConveyor) tileEntity).getPower() : 0;
         }
         return super.getStrongPower(blockState, world, pos, side);
     }
@@ -124,7 +124,7 @@ public class BlockConveyor extends BlockBase {
     public ItemStack getPickBlock(IBlockState state, RayTraceResult target, World world, BlockPos pos, EntityPlayer player) {
         TileEntity tileEntity = world.getTileEntity(pos);
         if (tileEntity instanceof TileEntityConveyor) {
-            if(target instanceof DistanceRayTraceResult) {
+            if (target instanceof DistanceRayTraceResult) {
                 ConveyorUpgrade upgrade = ((TileEntityConveyor) tileEntity).getUpgradeMap().get(EnumFacing.getFront(((Cuboid) target.hitInfo).identifier));
                 if (upgrade != null) {
                     return new ItemStack(ItemRegistry.conveyorUpgradeItem, 1, IFRegistries.CONVEYOR_UPGRADE_REGISTRY.getID(upgrade.getFactory()) - 1);
@@ -290,7 +290,7 @@ public class BlockConveyor extends BlockBase {
             EnumFacing direction = ((TileEntityConveyor) entity).getFacing();
             EnumFacing right = state.getValue(FACING).rotateY();
             EnumFacing left = state.getValue(FACING).rotateYCCW();
-            if(((TileEntityConveyor) entity).getUpgradeMap().isEmpty()) {
+            if (((TileEntityConveyor) entity).getUpgradeMap().isEmpty()) {
                 if (isConveyorAndFacing(pos.up().offset(direction), worldIn, null)) {//SELF UP
                     ((TileEntityConveyor) entity).setType(((TileEntityConveyor) entity).getType().getVertical(EnumFacing.UP));
                 } else if (isConveyorAndFacing(pos.up().offset(direction.getOpposite()), worldIn, null)) { //SELF DOWN

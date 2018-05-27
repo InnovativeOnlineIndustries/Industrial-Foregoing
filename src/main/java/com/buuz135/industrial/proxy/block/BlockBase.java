@@ -53,7 +53,7 @@ public class BlockBase extends Block {
     @Nullable
     @Override
     public RayTraceResult collisionRayTrace(IBlockState blockState, World worldIn, BlockPos pos, Vec3d start, Vec3d end) {
-        if(hasCustomBoxes())
+        if (hasCustomBoxes())
             return RayTraceUtils.rayTraceBoxesClosest(start, end, pos, getBoundingBoxes(blockState, worldIn, pos));
         return super.collisionRayTrace(blockState, worldIn, pos, start, end);
     }

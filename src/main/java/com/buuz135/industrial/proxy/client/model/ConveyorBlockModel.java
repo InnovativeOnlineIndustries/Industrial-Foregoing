@@ -31,6 +31,7 @@ import java.util.Map;
 
 public class ConveyorBlockModel implements IBakedModel {
 
+    public static Cache<Pair<Pair<String, EnumFacing>, EnumFacing>, List<BakedQuad>> CACHE = CacheBuilder.newBuilder().build();
     private IModelState state;
     private VertexFormat format;
     private IBakedModel previousConveyor;
@@ -41,8 +42,6 @@ public class ConveyorBlockModel implements IBakedModel {
         this.state = TRSRTransformation.identity();
         this.format = DefaultVertexFormats.BLOCK;
     }
-
-    public static Cache<Pair<Pair<String, EnumFacing>, EnumFacing>, List<BakedQuad>> CACHE = CacheBuilder.newBuilder().build();
 
     @Override
     public List<BakedQuad> getQuads(@Nullable IBlockState state, @Nullable EnumFacing side, long rand) {
@@ -61,7 +60,7 @@ public class ConveyorBlockModel implements IBakedModel {
             List<BakedQuad> upgradeQuads = CACHE.getIfPresent(Pair.of(Pair.of(upgrade.getFactory().getRegistryName().toString(), upgrade.getSide()), side));
             if (upgradeQuads == null) {
                 try {
-                    IModel model = ModelLoaderRegistry.getModel(upgrade.getFactory().getModel(upgrade.getSide(),state.getValue(BlockConveyor.FACING)));
+                    IModel model = ModelLoaderRegistry.getModel(upgrade.getFactory().getModel(upgrade.getSide(), state.getValue(BlockConveyor.FACING)));
                     upgradeQuads = model.bake(this.state, this.format, location -> Minecraft.getMinecraft().getTextureMapBlocks().getAtlasSprite(location.toString())).getQuads(state, side, rand);
                 } catch (Exception e) {
                     e.printStackTrace();
