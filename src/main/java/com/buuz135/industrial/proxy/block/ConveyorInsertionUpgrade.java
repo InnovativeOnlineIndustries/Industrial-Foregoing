@@ -30,13 +30,20 @@ public class ConveyorInsertionUpgrade extends ConveyorUpgrade {
     public static Cuboid EASTBB = new Cuboid(0.0625 * 14, 0, 0.0625 * 2, 0.0625 * 18, 0.0625 * 9, 0.0625 * 14, EnumFacing.EAST.getIndex());
     public static Cuboid WESTBB = new Cuboid(-0.0625 * 2, 0, 0.0625 * 2, 0.0625 * 2, 0.0625 * 9, 0.0625 * 14, EnumFacing.WEST.getIndex());
 
+    public static Cuboid NORTHBB_BIG = new Cuboid(0.0625 * 2, 0, -0.0625 * 2, 0.0625 * 14, 0.0625 * 9, 0.0625 * 14, EnumFacing.NORTH.getIndex());
+    public static Cuboid SOUTHBB_BIG = new Cuboid(0.0625 * 2, 0, 0.0625 * 2, 0.0625 * 14, 0.0625 * 9, 0.0625 * 18, EnumFacing.SOUTH.getIndex());
+    public static Cuboid EASTBB_BIG = new Cuboid(0.0625 * 2, 0, 0.0625 * 2, 0.0625 * 18, 0.0625 * 9, 0.0625 * 14, EnumFacing.EAST.getIndex());
+    public static Cuboid WESTBB_BIG = new Cuboid(-0.0625 * 2, 0, 0.0625 * 2, 0.0625 * 14, 0.0625 * 9, 0.0625 * 14, EnumFacing.WEST.getIndex());
+
     private ItemStackFilter filter;
     private boolean whitelist;
+    private boolean fullArea;
 
     public ConveyorInsertionUpgrade(IConveyorContainer container, ConveyorUpgradeFactory factory, EnumFacing side) {
         super(container, factory, side);
         this.filter = new ItemStackFilter(20, 20, 5, 3);
         this.whitelist = true;
+        this.fullArea = false;
     }
 
     @Override
@@ -47,7 +54,7 @@ public class ConveyorInsertionUpgrade extends ConveyorUpgrade {
             TileEntity tile = getWorld().getTileEntity(getPos().offset(getSide()));
             if (tile != null && tile.hasCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, getSide().getOpposite())) {
                 IItemHandler handler = tile.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, getSide().getOpposite());
-                if (getBoundingBox().aabb().offset(getPos()).grow(0.01).intersects(entity.getEntityBoundingBox())) {
+                if (getWorkingBox().aabb().offset(getPos()).grow(0.01).intersects(entity.getEntityBoundingBox())) {
                     if (whitelist != filter.matches((EntityItem) entity)) return;
                     ItemStack stack = ((EntityItem) entity).getItem();
                     for (int i = 0; i < handler.getSlots(); i++) {
@@ -69,6 +76,7 @@ public class ConveyorInsertionUpgrade extends ConveyorUpgrade {
         NBTTagCompound compound = super.serializeNBT() == null ? new NBTTagCompound() : super.serializeNBT();
         compound.setTag("Filter", filter.serializeNBT());
         compound.setBoolean("Whitelist", whitelist);
+        compound.setBoolean("FullArea", fullArea);
         return compound;
     }
 
@@ -77,6 +85,7 @@ public class ConveyorInsertionUpgrade extends ConveyorUpgrade {
         super.deserializeNBT(nbt);
         if (nbt.hasKey("Filter")) filter.deserializeNBT(nbt.getCompoundTag("Filter"));
         whitelist = nbt.getBoolean("Whitelist");
+        fullArea = nbt.getBoolean("FullArea");
     }
 
     @Override
@@ -94,6 +103,21 @@ public class ConveyorInsertionUpgrade extends ConveyorUpgrade {
         }
     }
 
+    private Cuboid getWorkingBox() {
+        if (!fullArea) return getBoundingBox();
+        switch (getSide()) {
+            default:
+            case NORTH:
+                return NORTHBB_BIG;
+            case SOUTH:
+                return SOUTHBB_BIG;
+            case EAST:
+                return EASTBB_BIG;
+            case WEST:
+                return WESTBB_BIG;
+        }
+    }
+
     @Override
     public boolean hasGui() {
         return true;
@@ -108,6 +132,10 @@ public class ConveyorInsertionUpgrade extends ConveyorUpgrade {
         }
         if (buttonId == 16) {
             whitelist = !whitelist;
+            this.getContainer().requestSync();
+        }
+        if (buttonId == 17) {
+            fullArea = !fullArea;
             this.getContainer().requestSync();
         }
     }
@@ -128,6 +156,14 @@ public class ConveyorInsertionUpgrade extends ConveyorUpgrade {
             @Override
             public int getState() {
                 return whitelist ? 0 : 1;
+            }
+        });
+        componentList.add(new TexturedStateButtonGuiComponent(17, 133, 20 + 35, 18, 18,
+                new StateButtonInfo(0, res, 39, 214, new String[]{"Inserting items touching the upgrade"}),
+                new StateButtonInfo(1, res, 58, 214, new String[]{"Inserting items in all the conveyor"})) {
+            @Override
+            public int getState() {
+                return fullArea ? 1 : 0;
             }
         });
     }
