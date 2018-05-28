@@ -151,16 +151,16 @@ public class ConveyorInsertionUpgrade extends ConveyorUpgrade {
         });
         ResourceLocation res = new ResourceLocation(Reference.MOD_ID, "textures/gui/machines.png");
         componentList.add(new TexturedStateButtonGuiComponent(16, 133, 20, 18, 18,
-                new StateButtonInfo(0, res, 1, 214, new String[]{"Whitelist"}), //TODO Localize
-                new StateButtonInfo(1, res, 20, 214, new String[]{"Blacklist"})) {
+                new StateButtonInfo(0, res, 1, 214, new String[]{"whitelist"}),
+                new StateButtonInfo(1, res, 20, 214, new String[]{"blacklist"})) {
             @Override
             public int getState() {
                 return whitelist ? 0 : 1;
             }
         });
         componentList.add(new TexturedStateButtonGuiComponent(17, 133, 20 + 35, 18, 18,
-                new StateButtonInfo(0, res, 39, 214, new String[]{"Inserting items touching the upgrade"}),
-                new StateButtonInfo(1, res, 58, 214, new String[]{"Inserting items in all the conveyor"})) {
+                new StateButtonInfo(0, res, 39, 214, new String[]{"insert_near"}),
+                new StateButtonInfo(1, res, 58, 214, new String[]{"insert_all"})) {
             @Override
             public int getState() {
                 return fullArea ? 1 : 0;
