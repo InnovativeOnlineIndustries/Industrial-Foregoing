@@ -13,10 +13,10 @@ public class MovementUtils {
         if (entity instanceof EntityPlayer && entity.isSneaking()) return;
         if (entity.posY - pos.getY() > 0.3 && !type.isVertical()) return;
 
-        if ((direction == EnumFacing.NORTH || direction == EnumFacing.SOUTH) && ((entity.posX - pos.getX() < 0.05) || (entity.posX - pos.getX() > 0.95)))
-            return;
-        if ((direction == EnumFacing.EAST || direction == EnumFacing.WEST) && ((entity.posZ - pos.getZ() < 0.05) || (entity.posZ - pos.getZ() > 0.95)))
-            return;
+//        if ((direction == EnumFacing.NORTH || direction == EnumFacing.SOUTH) && ((entity.posX - pos.getX() <= 0.0001) || (entity.posX - pos.getX() >= 0.99999999)))
+//            return;
+//        if ((direction == EnumFacing.EAST || direction == EnumFacing.WEST) && ((entity.posZ - pos.getZ() <= 0.0001) || (entity.posZ - pos.getZ() >= 0.99999999)))
+//            return;
 
         //DIRECTION MOVEMENT
         double speed = 0.2;
