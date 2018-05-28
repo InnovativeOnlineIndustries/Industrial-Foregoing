@@ -17,6 +17,8 @@ public interface IFilter<T extends Entity> {
 
     boolean matches(T entity);
 
+    boolean matches(ItemStack itemStack);
+
     void setFilter(int slot, ItemStack stack);
 
     GhostSlot[] getFilter();

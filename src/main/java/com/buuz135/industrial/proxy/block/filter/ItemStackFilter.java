@@ -38,6 +38,19 @@ public class ItemStackFilter extends AbstractFilter<Entity> {
     }
 
     @Override
+    public boolean matches(ItemStack itemStack) {
+        boolean isEmpty = true;
+        for (GhostSlot stack : this.getFilter()) {
+            if (!stack.getStack().isEmpty()) isEmpty = false;
+        }
+        if (isEmpty) return false;
+        for (GhostSlot stack : this.getFilter()) {
+            if (itemStack.isItemEqual(stack.getStack())) return true;
+        }
+        return false;
+    }
+
+    @Override
     public void setFilter(int slot, ItemStack stack) {
         if (slot >= 0 && slot < this.getFilter().length) this.getFilter()[slot].setStack(stack);
     }
