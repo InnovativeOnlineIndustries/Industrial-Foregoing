@@ -1,6 +1,7 @@
 package com.buuz135.industrial.gui.component;
 
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.text.TextComponentTranslation;
 
 public class StateButtonInfo {
 
@@ -15,7 +16,10 @@ public class StateButtonInfo {
         this.texture = texture;
         this.textureX = textureX;
         this.textureY = textureY;
-        this.tooltip = tooltip;
+        this.tooltip = new String[tooltip.length];
+        for (int i = 0; i < tooltip.length; i++) {
+            this.tooltip[i] = new TextComponentTranslation("conveyor.upgrade.industrialforegoing.tooltip." + tooltip[i]).getFormattedText();
+        }
     }
 
     public int getState() {
