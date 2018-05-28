@@ -1,10 +1,13 @@
 package com.buuz135.industrial.proxy.block.filter;
 
+import com.buuz135.industrial.proxy.ItemRegistry;
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 
-public class ItemStackFilter extends AbstractFilter<EntityItem> {
+public class ItemStackFilter extends AbstractFilter<Entity> {
 
     public ItemStackFilter(int locX, int locY, int sizeX, int sizeY) {
         super(locX, locY, sizeX, sizeY);
@@ -16,14 +19,18 @@ public class ItemStackFilter extends AbstractFilter<EntityItem> {
     }
 
     @Override
-    public boolean matches(EntityItem entity) { //TODO more depth comparing
+    public boolean matches(Entity entity) {
         boolean isEmpty = true;
         for (GhostSlot stack : this.getFilter()) {
             if (!stack.getStack().isEmpty()) isEmpty = false;
         }
         if (isEmpty) return false;
         for (GhostSlot stack : this.getFilter()) {
-            if (stack.getStack().isItemEqual(entity.getItem())) return true;
+            if (entity instanceof EntityItem && stack.getStack().isItemEqual(((EntityItem) entity).getItem()))
+                return true;
+            if (entity instanceof EntityLiving && stack.getStack().getItem().equals(ItemRegistry.mobImprisonmentToolItem) && ItemRegistry.mobImprisonmentToolItem.containsEntity(stack.getStack())
+                    && entity.getCachedUniqueIdString().equals(ItemRegistry.mobImprisonmentToolItem.getID(stack.getStack())))
+                return true;
         }
         return false;
     }
