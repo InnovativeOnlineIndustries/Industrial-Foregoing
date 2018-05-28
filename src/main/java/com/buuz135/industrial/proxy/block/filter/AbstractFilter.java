@@ -6,9 +6,13 @@ public abstract class AbstractFilter<T extends Entity> implements IFilter<T> {
 
     private final int sizeX;
     private final int sizeY;
+    private final int locX;
+    private final int locY;
     private GhostSlot[] filter;
 
     protected AbstractFilter(int locX, int locY, int sizeX, int sizeY) {
+        this.locX = locX;
+        this.locY = locY;
         this.sizeX = sizeX;
         this.sizeY = sizeY;
         this.filter = new GhostSlot[sizeX * sizeY];
@@ -24,5 +28,21 @@ public abstract class AbstractFilter<T extends Entity> implements IFilter<T> {
     @Override
     public GhostSlot[] getFilter() {
         return filter;
+    }
+
+    public int getSizeX() {
+        return sizeX;
+    }
+
+    public int getSizeY() {
+        return sizeY;
+    }
+
+    public int getLocX() {
+        return locX;
+    }
+
+    public int getLocY() {
+        return locY;
     }
 }

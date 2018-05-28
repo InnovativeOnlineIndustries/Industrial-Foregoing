@@ -143,7 +143,7 @@ public class ConveyorInsertionUpgrade extends ConveyorUpgrade {
     @Override
     public void addComponentsToGui(List<IGuiComponent> componentList) {
         super.addComponentsToGui(componentList);
-        componentList.add(new FilterGuiComponent(20, 20, 5, 3) { //TODO change this so it uses the object variables
+        componentList.add(new FilterGuiComponent(this.filter.getLocX(), this.filter.getLocY(), this.filter.getSizeX(), this.filter.getSizeY()) {
             @Override
             public IFilter getFilter() {
                 return ConveyorInsertionUpgrade.this.filter;
@@ -151,7 +151,7 @@ public class ConveyorInsertionUpgrade extends ConveyorUpgrade {
         });
         ResourceLocation res = new ResourceLocation(Reference.MOD_ID, "textures/gui/machines.png");
         componentList.add(new TexturedStateButtonGuiComponent(16, 133, 20, 18, 18,
-                new StateButtonInfo(0, res, 1, 214, new String[]{"Whitelist"}),
+                new StateButtonInfo(0, res, 1, 214, new String[]{"Whitelist"}), //TODO Localize
                 new StateButtonInfo(1, res, 20, 214, new String[]{"Blacklist"})) {
             @Override
             public int getState() {
