@@ -3,7 +3,6 @@ package com.buuz135.industrial.proxy.block;
 import com.buuz135.industrial.api.conveyor.ConveyorUpgrade;
 import com.buuz135.industrial.api.conveyor.ConveyorUpgradeFactory;
 import com.buuz135.industrial.api.conveyor.IConveyorContainer;
-import com.buuz135.industrial.proxy.ItemRegistry;
 import com.buuz135.industrial.registry.IFRegistries;
 import com.buuz135.industrial.utils.MovementUtils;
 import net.minecraft.block.state.IBlockState;
@@ -88,9 +87,11 @@ public class TileEntityConveyor extends TileEntity implements IConveyorContainer
         if (hasUpgrade(facing)) {
             if (!world.isRemote && drop) {
                 ConveyorUpgrade upgrade = upgradeMap.get(facing);
-                EntityItem item = new EntityItem(world, pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5);
-                item.setItem(new ItemStack(ItemRegistry.conveyorUpgradeItem, 1, IFRegistries.CONVEYOR_UPGRADE_REGISTRY.getID(upgrade.getFactory()) - 1));
-                world.spawnEntity(item);
+                for (ItemStack stack : upgrade.getDrops()) {
+                    EntityItem item = new EntityItem(world, pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5);
+                    item.setItem(stack);
+                    world.spawnEntity(item);
+                }
             }
             upgradeMap.remove(facing);
             requestSync();
