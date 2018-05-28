@@ -96,7 +96,7 @@ public class MobRelocatorTile extends WorkingAreaElectricMachine implements IAcc
                 public ITextComponent getDeathMessage(EntityLivingBase entityLivingBaseIn) {
                     return new TextComponentTranslation("text.industrialforegoing.chat.crusher_kill", entityLivingBaseIn.getDisplayName().getFormattedText(), TextFormatting.RESET);
                 }
-            }, Integer.MAX_VALUE);
+            }, BlockRegistry.mobRelocatorBlock.getDamage());
             hasWorked.set(true);
         });
         List<EntityItem> items = this.getWorld().getEntitiesWithinAABB(EntityItem.class, area);

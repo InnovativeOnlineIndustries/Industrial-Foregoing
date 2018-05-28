@@ -13,16 +13,17 @@ import net.minecraft.client.renderer.tileentity.TileEntityItemStackRenderer;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.init.Blocks;
-import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumFacing;
 import net.minecraftforge.common.ForgeModContainer;
+import net.minecraftforge.fluids.FluidActionResult;
 import net.minecraftforge.fluids.FluidUtil;
 import net.minecraftforge.fluids.IFluidTank;
 import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
-import net.minecraftforge.fluids.capability.IFluidHandlerItem;
+import net.minecraftforge.fluids.capability.IFluidHandler;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import net.minecraftforge.items.ItemHandlerHelper;
 import net.minecraftforge.items.ItemStackHandler;
 import net.minecraftforge.oredict.OreDictionary;
 import org.lwjgl.opengl.GL11;
@@ -122,7 +123,7 @@ public class ItemStackUtils {
         RenderHelper.enableStandardItemLighting();
         //GlStateManager.rotate(-135.0F, 0.0F, 1.0F, 0.0F);
         // GlStateManager.rotate(-((float)Math.atan((double)(mouseY / 40.0F))) * 20.0F, 1.0F, 0.0F, 0.0F);
-//       ent.renderYawOffset = (float)Math.atan((double)(mouseX / 40.0F)) * 20.0F;
+        //       ent.renderYawOffset = (float)Math.atan((double)(mouseX / 40.0F)) * 20.0F;
         ent.rotationYaw = (float) Math.atan((double) (mouseX / 40.0F)) * 40.0F;
         ent.rotationPitch = -((float) Math.atan((double) (mouseY / 40.0F))) * 20.0F;
         ent.rotationYawHead = ent.rotationYaw;
@@ -188,24 +189,23 @@ public class ItemStackUtils {
     }
 
     public static void processFluidItems(ItemStackHandler fluidItems, IFluidTank tank) {
-        ItemStack stack = fluidItems.getStackInSlot(0);
-        if (!stack.isEmpty() && fluidItems.getStackInSlot(1).isEmpty()) {
-            int filled = 0;
-            if (stack.getItem().equals(Items.BUCKET) && tank.getFluidAmount() >= 1000) {
-                filled = 1000;
-                ItemStack stack1 = FluidUtil.getFilledBucket(tank.getFluid());
-                stack1.setCount(1);
-                fluidItems.setStackInSlot(1, stack1);
-                stack.shrink(1);
-            } else if (!stack.getItem().equals(Items.BUCKET)) {
-                ItemStack stack1 = stack.copy();
-                stack1.setCount(1);
-                IFluidHandlerItem cap = stack1.getCapability(CapabilityFluidHandler.FLUID_HANDLER_ITEM_CAPABILITY, null);
-                filled = cap.fill(tank.getFluid(), true);
-                fluidItems.setStackInSlot(1, stack1);
-                stack.shrink(1);
+        if (tank.getFluid() == null)
+            return;
+        ItemStack stack = fluidItems.getStackInSlot(0).copy();
+        if (!stack.isEmpty()) {
+            if (stack.hasCapability(CapabilityFluidHandler.FLUID_HANDLER_ITEM_CAPABILITY, null)) {
+                FluidActionResult result = FluidUtil.tryFillContainer(stack, (IFluidHandler) tank, tank.getCapacity(), null, false);
+                if (result.isSuccess() && (fluidItems.getStackInSlot(1).isEmpty() ||
+                        (ItemHandlerHelper.canItemStacksStack(result.getResult(), fluidItems.getStackInSlot(1)) && result.getResult().getCount() + fluidItems.getStackInSlot(1).getCount() <= result.getResult().getMaxStackSize()))) {
+                    result = FluidUtil.tryFillContainer(stack, (IFluidHandler) tank, tank.getCapacity(), null, true);
+                    if (fluidItems.getStackInSlot(1).isEmpty()) {
+                        fluidItems.setStackInSlot(1, result.getResult());
+                    } else {
+                        fluidItems.getStackInSlot(1).grow(1);
+                    }
+                    fluidItems.getStackInSlot(0).shrink(1);
+                }
             }
-            tank.drain(filled, true);
         }
     }
 }

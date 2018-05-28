@@ -11,11 +11,15 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 import javax.annotation.Nullable;
+import java.util.Arrays;
+import java.util.List;
 
 @SideOnly(Side.CLIENT)
 public class RenderPinkSlime extends RenderLiving<EntityPinkSlime> {
 
     private static final ResourceLocation PINK_SLIME_TEXTURES = new ResourceLocation(Reference.MOD_ID, "textures/entity/pink_slime.png");
+    public static final List<String> NAMES = Arrays.asList("buuz135", "the_codedone");
+    private static final ResourceLocation PINK_SLIME_TEXTURES_RGB = new ResourceLocation(Reference.MOD_ID, "textures/entity/pink_slime_white.png");
 
     public RenderPinkSlime(RenderManager rendermanagerIn) {
         super(rendermanagerIn, new ModelSlime(16), 0.25f);
@@ -39,6 +43,6 @@ public class RenderPinkSlime extends RenderLiving<EntityPinkSlime> {
     @Nullable
     @Override
     protected ResourceLocation getEntityTexture(EntityPinkSlime entity) {
-        return PINK_SLIME_TEXTURES;
+        return entity.hasCustomName() && NAMES.contains(entity.getDisplayName().getUnformattedText().toLowerCase()) ? PINK_SLIME_TEXTURES_RGB : PINK_SLIME_TEXTURES;
     }
 }

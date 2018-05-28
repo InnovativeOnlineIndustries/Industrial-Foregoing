@@ -61,6 +61,8 @@ public class RecipeUtils {
 
 
     public static void addShapedRecipe(ItemStack result, String nameExtra, Map<String, Object> json, Object... components) {
+        setupDir();
+        if (!RECIPE_DIR.exists() || result.isEmpty()) return;
         List<String> pattern = new ArrayList<>();
         int i = 0;
         while (i < components.length && components[i] instanceof String) {

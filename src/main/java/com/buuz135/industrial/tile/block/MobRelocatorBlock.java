@@ -17,6 +17,7 @@ import java.util.List;
 public class MobRelocatorBlock extends CustomAreaOrientedBlock<MobRelocatorTile> {
 
     private float essenceMultiplier;
+    private int damage;
 
     public MobRelocatorBlock() {
         super("mob_relocator", MobRelocatorTile.class, Material.ROCK, 1000, 40, RangeType.FRONT, 5, 2, true);
@@ -27,10 +28,15 @@ public class MobRelocatorBlock extends CustomAreaOrientedBlock<MobRelocatorTile>
     public void getMachineConfig() {
         super.getMachineConfig();
         essenceMultiplier = CustomConfiguration.config.getFloat("essenceMultiplier", "machines" + Configuration.CATEGORY_SPLITTER + this.getRegistryName().getResourcePath().toString(), 1, 0, Integer.MAX_VALUE, "Mob essence multiplier based on the XP orb. Essence mb = xpOrbValue*20*essenceMultiplier");
+        damage = CustomConfiguration.config.getInt("damage", "machines" + Configuration.CATEGORY_SPLITTER + this.getRegistryName().getResourcePath().toString(), 300, 0, Integer.MAX_VALUE, "Amount of damage that the machine will do");
     }
 
     public float getEssenceMultiplier() {
         return essenceMultiplier;
+    }
+
+    public int getDamage() {
+        return damage;
     }
 
     public void createRecipe() {

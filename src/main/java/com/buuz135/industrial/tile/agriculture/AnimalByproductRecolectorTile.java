@@ -48,7 +48,10 @@ public class AnimalByproductRecolectorTile extends WorkingAreaElectricMachine {
             }
         }
 
-        return 1;
+        if (totalFluidAdded > 0)
+            return 1;
+        else
+            return 0;
     }
 
     @Override
