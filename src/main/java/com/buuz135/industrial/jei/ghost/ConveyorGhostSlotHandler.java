@@ -25,6 +25,6 @@ public class ConveyorGhostSlotHandler implements IGhostIngredientHandler<GuiConv
 
     @Override
     public boolean shouldHighlightTargets() {
-        return false;
+        return true;
     }
 }
