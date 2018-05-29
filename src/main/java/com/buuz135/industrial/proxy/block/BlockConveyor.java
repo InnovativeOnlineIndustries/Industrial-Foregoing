@@ -46,7 +46,6 @@ import org.apache.commons.lang3.text.WordUtils;
 
 import javax.annotation.Nullable;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 
@@ -92,14 +91,14 @@ public class BlockConveyor extends BlockBase {
         }
     }
 
-    @Override
-    public int getMetaFromState(IBlockState state) {
-        return Arrays.asList(EnumFacing.values()).indexOf(state.getValue(FACING));
+    public IBlockState getStateFromMeta(int meta) {
+        EnumFacing enumfacing = EnumFacing.getFront(meta);
+        if (enumfacing.getAxis() == EnumFacing.Axis.Y) enumfacing = EnumFacing.NORTH;
+        return this.getDefaultState().withProperty(FACING, enumfacing);
     }
 
-    @Override
-    public IBlockState getStateFromMeta(int meta) {
-        return this.getDefaultState().withProperty(FACING, EnumFacing.values()[meta]);
+    public int getMetaFromState(IBlockState state) {
+        return state.getValue(FACING).getIndex();
     }
 
     @Override
