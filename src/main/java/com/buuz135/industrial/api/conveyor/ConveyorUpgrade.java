@@ -1,6 +1,6 @@
 package com.buuz135.industrial.api.conveyor;
 
-import com.buuz135.industrial.gui.component.IGuiComponent;
+import com.buuz135.industrial.api.conveyor.gui.IGuiComponent;
 import com.buuz135.industrial.proxy.ItemRegistry;
 import com.buuz135.industrial.proxy.block.Cuboid;
 import com.buuz135.industrial.registry.IFRegistries;

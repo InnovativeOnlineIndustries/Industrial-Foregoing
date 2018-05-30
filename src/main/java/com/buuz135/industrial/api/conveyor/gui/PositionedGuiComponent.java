@@ -1,4 +1,4 @@
-package com.buuz135.industrial.gui.component;
+package com.buuz135.industrial.api.conveyor.gui;
 
 public abstract class PositionedGuiComponent implements IGuiComponent {
 

@@ -1,4 +1,4 @@
-package com.buuz135.industrial.gui.component;
+package com.buuz135.industrial.api.conveyor.gui;
 
 import com.buuz135.industrial.gui.conveyor.GuiConveyor;
 
