@@ -1,6 +1,7 @@
 package com.buuz135.industrial.proxy;
 
 import com.buuz135.industrial.api.conveyor.ConveyorUpgradeFactory;
+import com.buuz135.industrial.proxy.block.upgrade.ConveyorBouncingUpgrade;
 import com.buuz135.industrial.proxy.block.upgrade.ConveyorDetectorUpgrade;
 import com.buuz135.industrial.proxy.block.upgrade.ConveyorExtractionUpgrade;
 import com.buuz135.industrial.proxy.block.upgrade.ConveyorInsertionUpgrade;
@@ -17,5 +18,6 @@ public class ConveyorRegistry {
         registry.register(new ConveyorExtractionUpgrade.Factory());
         registry.register(new ConveyorInsertionUpgrade.Factory());
         registry.register(new ConveyorDetectorUpgrade.Factory());
+        registry.register(new ConveyorBouncingUpgrade.Factory());
     }
 }
