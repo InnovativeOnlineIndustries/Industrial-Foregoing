@@ -5,6 +5,9 @@ import com.buuz135.industrial.api.conveyor.gui.PositionedGuiComponent;
 import com.buuz135.industrial.gui.conveyor.GuiConveyor;
 import net.minecraft.client.Minecraft;
 
+import javax.annotation.Nullable;
+import java.util.List;
+
 public abstract class TextGuiComponent extends PositionedGuiComponent {
 
     public TextGuiComponent(int x, int y) {
@@ -24,6 +27,12 @@ public abstract class TextGuiComponent extends PositionedGuiComponent {
     @Override
     public void drawGuiForegroundLayer(int guiX, int guiY, int mouseX, int mouseY) {
 
+    }
+
+    @Nullable
+    @Override
+    public List<String> getTooltip(int guiX, int guiY, int mouseX, int mouseY) {
+        return null;
     }
 
     public abstract String getText();

@@ -303,6 +303,7 @@ conveyor.upgrade.error.name=Invalid Conveyor Upgrade
 conveyor.upgrade.industrialforegoing.insertion.name=Insertion Conveyor Upgrade
 conveyor.upgrade.industrialforegoing.extraction.name=Extraction Conveyor Upgrade
 conveyor.upgrade.industrialforegoing.detection.name=Detection Conveyor Upgrade
+conveyor.upgrade.industrialforegoing.bouncing.name=Bouncing Conveyor Upgrade
 
 conveyor.upgrade.industrialforegoing.tooltip.whitelist=Whitelist
 conveyor.upgrade.industrialforegoing.tooltip.blacklist=Blacklist
@@ -310,3 +311,5 @@ conveyor.upgrade.industrialforegoing.tooltip.insert_near=Inserting items touchin
 conveyor.upgrade.industrialforegoing.tooltip.insert_all=Inserting items in all the conveyor
 conveyor.upgrade.industrialforegoing.tooltip.redstone_normal=Redstone not inverted
 conveyor.upgrade.industrialforegoing.tooltip.redstone_inverted=Redstone inverted
+conveyor.upgrade.industrialforegoing.tooltip.increase=Increase
+conveyor.upgrade.industrialforegoing.tooltip.decrease=Decrease

@@ -34,6 +34,7 @@ public abstract class TexturedStateButtonGuiComponent extends PositionedGuiCompo
     public void drawGuiBackgroundLayer(int guiX, int guiY, int mouseX, int mouseY) {
         StateButtonInfo buttonInfo = getStateInfo();
         if (buttonInfo != null) {
+            GlStateManager.color(1, 1, 1, 1);
             Minecraft.getMinecraft().getTextureManager().bindTexture(buttonInfo.getTexture());
             Minecraft.getMinecraft().currentScreen.drawTexturedModalRect(guiX + getXPos(), guiY + getYPos(), buttonInfo.getTextureX(), buttonInfo.getTextureY(), getXSize(), getYSize());
         }
