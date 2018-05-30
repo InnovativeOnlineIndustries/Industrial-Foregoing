@@ -31,7 +31,7 @@ import java.util.Map;
 
 public class ConveyorBlockModel implements IBakedModel {
 
-    public static Cache<Pair<Pair<String, EnumFacing>, EnumFacing>, List<BakedQuad>> CACHE = CacheBuilder.newBuilder().build();
+    public static Cache<Pair<Pair<String, Pair<EnumFacing, EnumFacing>>, EnumFacing>, List<BakedQuad>> CACHE = CacheBuilder.newBuilder().build();
     private IModelState state;
     private VertexFormat format;
     private IBakedModel previousConveyor;
@@ -57,7 +57,7 @@ public class ConveyorBlockModel implements IBakedModel {
         for (ConveyorUpgrade upgrade : data.getUpgrades().values()) {
             if (upgrade == null)
                 continue;
-            List<BakedQuad> upgradeQuads = CACHE.getIfPresent(Pair.of(Pair.of(upgrade.getFactory().getRegistryName().toString(), upgrade.getSide()), side));
+            List<BakedQuad> upgradeQuads = CACHE.getIfPresent(Pair.of(Pair.of(upgrade.getFactory().getRegistryName().toString(), Pair.of(upgrade.getSide(), state.getValue(BlockConveyor.FACING))), side));
             if (upgradeQuads == null) {
                 try {
                     IModel model = ModelLoaderRegistry.getModel(upgrade.getFactory().getModel(upgrade.getSide(), state.getValue(BlockConveyor.FACING)));
@@ -66,7 +66,7 @@ public class ConveyorBlockModel implements IBakedModel {
                     e.printStackTrace();
                     continue;
                 }
-                CACHE.put(Pair.of(Pair.of(upgrade.getFactory().getRegistryName().toString(), upgrade.getSide()), side), upgradeQuads);
+                CACHE.put(Pair.of(Pair.of(upgrade.getFactory().getRegistryName().toString(), Pair.of(upgrade.getSide(), state.getValue(BlockConveyor.FACING))), side), upgradeQuads);
             }
             if (!upgradeQuads.isEmpty()) {
                 quads.addAll(upgradeQuads);
