@@ -313,3 +313,5 @@ conveyor.upgrade.industrialforegoing.tooltip.redstone_normal=Redstone not invert
 conveyor.upgrade.industrialforegoing.tooltip.redstone_inverted=Redstone inverted
 conveyor.upgrade.industrialforegoing.tooltip.increase=Increase
 conveyor.upgrade.industrialforegoing.tooltip.decrease=Decrease
+conveyor.upgrade.industrialforegoing.tooltip.bouncing_horizontal=Horizontal strength
+conveyor.upgrade.industrialforegoing.tooltip.bouncing_vertical=Vertical strength
