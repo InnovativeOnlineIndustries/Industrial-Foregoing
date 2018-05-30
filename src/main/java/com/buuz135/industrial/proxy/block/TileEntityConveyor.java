@@ -100,6 +100,9 @@ public class TileEntityConveyor extends TileEntity implements IConveyorContainer
 
     @Override
     public void update() {
+        if (type.isVertical() && !upgradeMap.isEmpty()) {
+            new ArrayList<>(upgradeMap.keySet()).forEach(facing1 -> this.removeUpgrade(facing1, true));
+        }
         upgradeMap.values().forEach(ConveyorUpgrade::update);
     }
 

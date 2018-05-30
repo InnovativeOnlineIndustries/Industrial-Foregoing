@@ -2,6 +2,7 @@ package com.buuz135.industrial.item;
 
 import com.buuz135.industrial.api.conveyor.ConveyorUpgradeFactory;
 import com.buuz135.industrial.api.conveyor.IConveyorContainer;
+import com.buuz135.industrial.proxy.block.TileEntityConveyor;
 import com.buuz135.industrial.registry.IFRegistries;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.creativetab.CreativeTabs;
@@ -31,6 +32,8 @@ public class ItemConveyorUpgrade extends IFCustomItem {
     public EnumActionResult onItemUse(EntityPlayer player, World worldIn, BlockPos pos, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
         if (!player.isSneaking()) {
             TileEntity tile = worldIn.getTileEntity(pos);
+            if (tile instanceof TileEntityConveyor && ((TileEntityConveyor) tile).getType().isVertical())
+                return EnumActionResult.PASS;
             if (tile instanceof IConveyorContainer) {
                 ConveyorUpgradeFactory factory = IFRegistries.CONVEYOR_UPGRADE_REGISTRY.getValue(player.getHeldItem(hand).getMetadata() + 1);
                 if (factory != null) {
