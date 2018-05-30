@@ -1,4 +1,4 @@
-package com.buuz135.industrial.proxy.block;
+package com.buuz135.industrial.proxy.block.upgrade;
 
 import com.buuz135.industrial.api.conveyor.ConveyorUpgrade;
 import com.buuz135.industrial.api.conveyor.ConveyorUpgradeFactory;
@@ -7,6 +7,7 @@ import com.buuz135.industrial.api.conveyor.gui.IGuiComponent;
 import com.buuz135.industrial.gui.component.FilterGuiComponent;
 import com.buuz135.industrial.gui.component.StateButtonInfo;
 import com.buuz135.industrial.gui.component.TexturedStateButtonGuiComponent;
+import com.buuz135.industrial.proxy.block.Cuboid;
 import com.buuz135.industrial.proxy.block.filter.IFilter;
 import com.buuz135.industrial.proxy.block.filter.ItemStackFilter;
 import com.buuz135.industrial.utils.Reference;
