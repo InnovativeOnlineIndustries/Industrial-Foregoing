@@ -28,6 +28,7 @@ import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.IItemHandler;
 
 import javax.annotation.Nonnull;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
@@ -41,11 +42,13 @@ public class ConveyorExtractionUpgrade extends ConveyorUpgrade {
     private boolean fast = false;
     private ItemStackFilter filter;
     private boolean whitelist;
+    private List<EntityItem> items;
 
     public ConveyorExtractionUpgrade(IConveyorContainer container, ConveyorUpgradeFactory factory, EnumFacing side) {
         super(container, factory, side);
         this.filter = new ItemStackFilter(20, 20, 5, 3);
         this.whitelist = false;
+        this.items = new ArrayList<>();
     }
 
     @Override
@@ -104,6 +107,8 @@ public class ConveyorExtractionUpgrade extends ConveyorUpgrade {
     public void update() {
         if (getWorld().isRemote)
             return;
+        items.removeIf(entityItem -> entityItem.getItem().isEmpty() || entityItem.isDead);
+        if (items.size() >= 20) return;
         if (getWorld().getTotalWorldTime() % (fast ? 10 : 20) == 0) {
             BlockPos offsetPos = getPos().offset(getSide());
             TileEntity tile = getWorld().getTileEntity(offsetPos);
@@ -121,6 +126,7 @@ public class ConveyorExtractionUpgrade extends ConveyorUpgrade {
                         item.setPickupDelay(40);
                         item.setItem(itemHandler.extractItem(i, 4, false));
                         getWorld().spawnEntity(item);
+                        items.add(item);
                         break;
                     }
                 }
