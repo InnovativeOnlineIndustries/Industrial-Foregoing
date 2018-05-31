@@ -43,7 +43,7 @@ public class ConveyorInsertionUpgrade extends ConveyorUpgrade {
     public ConveyorInsertionUpgrade(IConveyorContainer container, ConveyorUpgradeFactory factory, EnumFacing side) {
         super(container, factory, side);
         this.filter = new ItemStackFilter(20, 20, 5, 3);
-        this.whitelist = true;
+        this.whitelist = false;
         this.fullArea = false;
     }
 

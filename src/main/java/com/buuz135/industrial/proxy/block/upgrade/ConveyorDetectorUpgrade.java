@@ -37,7 +37,7 @@ public class ConveyorDetectorUpgrade extends ConveyorUpgrade {
     public ConveyorDetectorUpgrade(IConveyorContainer container, ConveyorUpgradeFactory factory, EnumFacing side) {
         super(container, factory, side);
         this.filter = new ItemStackFilter(20, 20, 5, 3);
-        this.whitelist = true;
+        this.whitelist = false;
         this.hasEntity = false;
         this.inverted = false;
     }

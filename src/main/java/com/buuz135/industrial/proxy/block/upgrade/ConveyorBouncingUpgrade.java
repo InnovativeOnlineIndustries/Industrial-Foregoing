@@ -40,7 +40,7 @@ public class ConveyorBouncingUpgrade extends ConveyorUpgrade {
     public ConveyorBouncingUpgrade(IConveyorContainer container, ConveyorUpgradeFactory factory, EnumFacing side) {
         super(container, factory, side);
         this.filter = new ItemStackFilter(20, 20, 3, 3);
-        this.whitelist = true;
+        this.whitelist = false;
         this.velocityVertical = 1;
         this.velocityHorizontal = 1;
     }
