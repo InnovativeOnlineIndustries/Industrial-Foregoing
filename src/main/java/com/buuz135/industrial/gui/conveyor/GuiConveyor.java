@@ -31,7 +31,6 @@ public class GuiConveyor extends GuiContainer {
 
     public GuiConveyor(Container inventorySlotsIn) {
         super(inventorySlotsIn);
-        System.out.println(getContainer().getFacing());
         this.upgrade = getContainer().getConveyor().getUpgradeMap().get(getContainer().getFacing());
         this.componentList = new ArrayList<>();
         this.ghostSlots = new ArrayList<>();
