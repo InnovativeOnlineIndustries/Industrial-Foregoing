@@ -11,11 +11,14 @@ import net.minecraft.util.EnumFacing;
 public class ContainerConveyor extends Container {
 
     private final TileEntityConveyor conveyor;
-    private final EnumFacing facing;
+    private EnumFacing facing;
 
     public ContainerConveyor(TileEntityConveyor conveyor, EnumFacing facing, InventoryPlayer player) {
         this.conveyor = conveyor;
         this.facing = facing;
+        if (!conveyor.hasUpgrade(facing) && conveyor.getUpgradeMap().size() > 0) {
+            this.facing = conveyor.getUpgradeMap().keySet().iterator().next();
+        }
         createPlayerInventory(player);
     }
 

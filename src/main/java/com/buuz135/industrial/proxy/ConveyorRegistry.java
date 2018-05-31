@@ -1,10 +1,7 @@
 package com.buuz135.industrial.proxy;
 
 import com.buuz135.industrial.api.conveyor.ConveyorUpgradeFactory;
-import com.buuz135.industrial.proxy.block.upgrade.ConveyorBouncingUpgrade;
-import com.buuz135.industrial.proxy.block.upgrade.ConveyorDetectorUpgrade;
-import com.buuz135.industrial.proxy.block.upgrade.ConveyorExtractionUpgrade;
-import com.buuz135.industrial.proxy.block.upgrade.ConveyorInsertionUpgrade;
+import com.buuz135.industrial.proxy.block.upgrade.*;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.registries.IForgeRegistry;
@@ -19,5 +16,6 @@ public class ConveyorRegistry {
         registry.register(new ConveyorInsertionUpgrade.Factory());
         registry.register(new ConveyorDetectorUpgrade.Factory());
         registry.register(new ConveyorBouncingUpgrade.Factory());
+        registry.register(new ConveyorDroppingUpgrade.Factory());
     }
 }

@@ -31,6 +31,7 @@ public class GuiConveyor extends GuiContainer {
 
     public GuiConveyor(Container inventorySlotsIn) {
         super(inventorySlotsIn);
+        System.out.println(getContainer().getFacing());
         this.upgrade = getContainer().getConveyor().getUpgradeMap().get(getContainer().getFacing());
         this.componentList = new ArrayList<>();
         this.ghostSlots = new ArrayList<>();
@@ -61,8 +62,10 @@ public class GuiConveyor extends GuiContainer {
         x = (width - xSize) / 2;
         y = (height - ySize) / 2;
         drawTexturedModalRect(x, y, 0, 0, xSize, ySize);
-        String localized = new TextComponentTranslation(String.format("conveyor.upgrade.%s.%s.name", upgrade.getFactory().getRegistryName().getResourceDomain(), upgrade.getFactory().getRegistryName().getResourcePath())).getFormattedText();
-        fontRenderer.drawString(localized, x + xSize / 2 - fontRenderer.getStringWidth(localized) / 2, y + 6, 0x404040);
+        if (upgrade != null) {
+            String localized = new TextComponentTranslation(String.format("conveyor.upgrade.%s.%s.name", upgrade.getFactory().getRegistryName().getResourceDomain(), upgrade.getFactory().getRegistryName().getResourcePath())).getFormattedText();
+            fontRenderer.drawString(localized, x + xSize / 2 - fontRenderer.getStringWidth(localized) / 2, y + 6, 0x404040);
+        }
         for (IGuiComponent iGuiComponent : componentList) {
             iGuiComponent.drawGuiBackgroundLayer(x, y, mouseX, mouseY);
         }

@@ -200,15 +200,15 @@ public class BlockConveyor extends BlockBase {
 
     @Override
     public boolean canPlaceBlockAt(World worldIn, BlockPos pos) {
-        return worldIn.getBlockState(pos.down()).getBlockFaceShape(worldIn, pos, EnumFacing.UP) == BlockFaceShape.SOLID;
+        return !worldIn.getBlockState(pos.down()).getBlock().equals(this);
     }
 
     @Override
     public void neighborChanged(IBlockState state, World worldIn, BlockPos pos, Block blockIn, BlockPos fromPos) {
         super.neighborChanged(state, worldIn, pos, blockIn, fromPos);
-        if (!worldIn.isRemote && !canPlaceBlockAt(worldIn, pos)) {
-            worldIn.destroyBlock(pos, false);
-        }
+//        if (!worldIn.isRemote && !canPlaceBlockAt(worldIn, pos)) {
+//            worldIn.destroyBlock(pos, false);
+//        }
     }
 
     @Override

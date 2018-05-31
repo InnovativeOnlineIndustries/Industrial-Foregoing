@@ -12,6 +12,8 @@ public class MovementUtils {
     public static void handleConveyorMovement(Entity entity, EnumFacing direction, BlockPos pos, BlockConveyor.EnumType type) {
         if (entity instanceof EntityPlayer && entity.isSneaking()) return;
         if (entity.posY - pos.getY() > 0.3 && !type.isVertical()) return;
+        if (!type.isVertical() && !entity.world.getBlockState(pos).getBlock().getCollisionBoundingBox(entity.world.getBlockState(pos), entity.world, pos).offset(pos).grow(0.01).intersects(entity.getEntityBoundingBox()))
+            return;
 
 //        if ((direction == EnumFacing.NORTH || direction == EnumFacing.SOUTH) && ((entity.posX - pos.getX() <= 0.0001) || (entity.posX - pos.getX() >= 0.99999999)))
 //            return;
