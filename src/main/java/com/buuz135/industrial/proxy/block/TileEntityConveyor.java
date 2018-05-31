@@ -231,7 +231,7 @@ public class TileEntityConveyor extends TileEntity implements IConveyorContainer
 
     @Override
     public boolean shouldRefresh(World world, BlockPos pos, IBlockState oldState, IBlockState newSate) {
-        return false;
+        return !oldState.getBlock().equals(newSate.getBlock());
     }
 
     @Override
