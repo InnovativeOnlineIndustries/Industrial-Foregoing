@@ -305,6 +305,7 @@ conveyor.upgrade.industrialforegoing.extraction.name=Extraction Conveyor Upgrade
 conveyor.upgrade.industrialforegoing.detection.name=Detection Conveyor Upgrade
 conveyor.upgrade.industrialforegoing.bouncing.name=Bouncing Conveyor Upgrade
 conveyor.upgrade.industrialforegoing.dropping.name=Dropping Conveyor Upgrade
+conveyor.upgrade.industrialforegoing.blinking.name=Blinking Conveyor Upgrade
 
 conveyor.upgrade.industrialforegoing.tooltip.whitelist=Whitelist
 conveyor.upgrade.industrialforegoing.tooltip.blacklist=Blacklist
@@ -316,3 +317,5 @@ conveyor.upgrade.industrialforegoing.tooltip.increase=Increase
 conveyor.upgrade.industrialforegoing.tooltip.decrease=Decrease
 conveyor.upgrade.industrialforegoing.tooltip.bouncing_horizontal=Horizontal strength
 conveyor.upgrade.industrialforegoing.tooltip.bouncing_vertical=Vertical strength
+conveyor.upgrade.industrialforegoing.tooltip.distance_horizontal=Horizontal distance
+conveyor.upgrade.industrialforegoing.tooltip.distance_vertical=Vertical distance

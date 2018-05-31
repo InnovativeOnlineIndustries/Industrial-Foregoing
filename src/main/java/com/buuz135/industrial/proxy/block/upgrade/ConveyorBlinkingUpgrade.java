@@ -10,9 +10,7 @@ import com.buuz135.industrial.proxy.block.Cuboid;
 import com.buuz135.industrial.proxy.block.filter.IFilter;
 import com.buuz135.industrial.proxy.block.filter.ItemStackFilter;
 import com.buuz135.industrial.utils.Reference;
-import com.google.common.collect.ImmutableSet;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.SoundEvents;
 import net.minecraft.item.ItemStack;
@@ -26,25 +24,25 @@ import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.World;
 
 import javax.annotation.Nonnull;
-import java.text.DecimalFormat;
+import java.util.Collections;
 import java.util.List;
 import java.util.Set;
 
-public class ConveyorBouncingUpgrade extends ConveyorUpgrade {
+public class ConveyorBlinkingUpgrade extends ConveyorUpgrade {
 
     public static Cuboid BB = new Cuboid(0.0625 * 3, 0.0625, 0.0625 * 3, 0.0625 * 13, 0.0625 * 1.2, 0.0625 * 13, EnumFacing.DOWN.getIndex(), false);
 
     private ItemStackFilter filter;
     private boolean whitelist;
-    private double velocityVertical;
-    private double velocityHorizontal;
+    private int verticalDisplacement;
+    private int horizontalDisplacement;
 
-    public ConveyorBouncingUpgrade(IConveyorContainer container, ConveyorUpgradeFactory factory, EnumFacing side) {
+    public ConveyorBlinkingUpgrade(IConveyorContainer container, ConveyorUpgradeFactory factory, EnumFacing side) {
         super(container, factory, side);
         this.filter = new ItemStackFilter(20, 20, 3, 3);
         this.whitelist = false;
-        this.velocityVertical = 1;
-        this.velocityHorizontal = 1;
+        this.verticalDisplacement = 0;
+        this.horizontalDisplacement = 1;
     }
 
     @Override
@@ -52,14 +50,10 @@ public class ConveyorBouncingUpgrade extends ConveyorUpgrade {
         super.handleEntity(entity);
         if (whitelist != filter.matches(entity)) return;
         EnumFacing direction = this.getContainer().getConveyorWorld().getBlockState(this.getContainer().getConveyorPosition()).getValue(BlockConveyor.FACING);
-        Vec3d vec3d = new Vec3d(velocityHorizontal * direction.getDirectionVec().getX(), velocityVertical, velocityHorizontal * direction.getDirectionVec().getZ());
-        entity.motionX = vec3d.x;
-        if (vec3d.y != 0) {
-            entity.motionY = vec3d.y;
-            if (entity instanceof EntityItem) entity.onGround = false;
-        }
-        entity.motionZ = vec3d.z;
-        this.getWorld().playSound(null, this.getPos(), SoundEvents.ENTITY_PARROT_FLY, SoundCategory.AMBIENT, 0.5f, 1f);
+        Vec3d vec3d = new Vec3d(horizontalDisplacement * direction.getDirectionVec().getX(), verticalDisplacement, horizontalDisplacement * direction.getDirectionVec().getZ());
+        BlockPos pos = this.getPos().add(vec3d.x, vec3d.y, vec3d.z);
+        entity.setPosition(pos.getX() + 0.5, pos.getY() + 0.25, pos.getZ() + 0.5);
+        this.getWorld().playSound(null, pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5, SoundEvents.ITEM_CHORUS_FRUIT_TELEPORT, SoundCategory.AMBIENT, 0.5f, 1f);
     }
 
     @Override
@@ -72,8 +66,8 @@ public class ConveyorBouncingUpgrade extends ConveyorUpgrade {
         NBTTagCompound compound = super.serializeNBT() == null ? new NBTTagCompound() : super.serializeNBT();
         compound.setTag("Filter", filter.serializeNBT());
         compound.setBoolean("Whitelist", whitelist);
-        compound.setDouble("VelocityVertical", velocityVertical);
-        compound.setDouble("VelocityHorizontal", velocityHorizontal);
+        compound.setDouble("VerticalDisplacement", verticalDisplacement);
+        compound.setDouble("HorizontalDisplacement", horizontalDisplacement);
         return compound;
     }
 
@@ -82,8 +76,8 @@ public class ConveyorBouncingUpgrade extends ConveyorUpgrade {
         super.deserializeNBT(nbt);
         if (nbt.hasKey("Filter")) filter.deserializeNBT(nbt.getCompoundTag("Filter"));
         whitelist = nbt.getBoolean("Whitelist");
-        velocityHorizontal = nbt.getDouble("VelocityHorizontal");
-        velocityVertical = nbt.getDouble("VelocityVertical");
+        horizontalDisplacement = nbt.getInteger("HorizontalDisplacement");
+        verticalDisplacement = nbt.getInteger("VerticalDisplacement");
     }
 
     @Override
@@ -102,20 +96,20 @@ public class ConveyorBouncingUpgrade extends ConveyorUpgrade {
             whitelist = !whitelist;
             this.getContainer().requestSync();
         }
-        if (buttonId == 11 && velocityHorizontal < 1) {
-            velocityHorizontal += 0.05;
+        if (buttonId == 11 && horizontalDisplacement < 8) {
+            horizontalDisplacement += 1;
             this.getContainer().requestSync();
         }
-        if (buttonId == 12 && velocityHorizontal > 0) {
-            velocityHorizontal -= 0.05;
+        if (buttonId == 12 && horizontalDisplacement > 1) {
+            horizontalDisplacement -= 1;
             this.getContainer().requestSync();
         }
-        if (buttonId == 13 && velocityVertical < 1) {
-            velocityVertical += 0.05;
+        if (buttonId == 13 && verticalDisplacement < 8) {
+            verticalDisplacement += 1;
             this.getContainer().requestSync();
         }
-        if (buttonId == 14 && velocityVertical > 0) {
-            velocityVertical -= 0.05;
+        if (buttonId == 14 && verticalDisplacement > -8) {
+            verticalDisplacement -= 1;
             this.getContainer().requestSync();
         }
     }
@@ -126,7 +120,7 @@ public class ConveyorBouncingUpgrade extends ConveyorUpgrade {
         componentList.add(new FilterGuiComponent(this.filter.getLocX(), this.filter.getLocY(), this.filter.getSizeX(), this.filter.getSizeY()) {
             @Override
             public IFilter getFilter() {
-                return ConveyorBouncingUpgrade.this.filter;
+                return ConveyorBlinkingUpgrade.this.filter;
             }
         });
         ResourceLocation res = new ResourceLocation(Reference.MOD_ID, "textures/gui/machines.png");
@@ -138,18 +132,18 @@ public class ConveyorBouncingUpgrade extends ConveyorUpgrade {
                 return whitelist ? 0 : 1;
             }
         });
-        componentList.add(new TextureGuiComponent(80, 40, 16, 16, res, 2, 234, "bouncing_horizontal"));
-        componentList.add(new TextureGuiComponent(80, 56, 16, 16, res, 21, 234, "bouncing_vertical"));
+        componentList.add(new TextureGuiComponent(80, 40, 16, 16, res, 2, 234, "distance_horizontal"));
+        componentList.add(new TextureGuiComponent(80, 56, 16, 16, res, 21, 234, "distance_vertical"));
         componentList.add(new TextGuiComponent(104, 44) {
             @Override
             public String getText() {
-                return TextFormatting.DARK_GRAY + new DecimalFormat("#0.00").format(velocityHorizontal > 0 ? velocityHorizontal : 0);
+                return TextFormatting.DARK_GRAY + " " + horizontalDisplacement;
             }
         });
         componentList.add(new TextGuiComponent(104, 61) {
             @Override
             public String getText() {
-                return TextFormatting.DARK_GRAY + new DecimalFormat("#0.00").format(velocityVertical > 0 ? velocityVertical : 0);
+                return TextFormatting.DARK_GRAY + (verticalDisplacement >= 0 ? " " : "") + verticalDisplacement;
             }
         });
         componentList.add(new TexturedStateButtonGuiComponent(11, 130, 40, 14, 14,
@@ -182,35 +176,21 @@ public class ConveyorBouncingUpgrade extends ConveyorUpgrade {
         });
     }
 
+
     public static class Factory extends ConveyorUpgradeFactory {
 
         public Factory() {
-            setRegistryName("bouncing");
+            setRegistryName("blinking");
         }
 
         @Override
         public ConveyorUpgrade create(IConveyorContainer container, EnumFacing face) {
-            return new ConveyorBouncingUpgrade(container, this, face);
+            return new ConveyorBlinkingUpgrade(container, this, face);
         }
 
         @Override
         public Set<ResourceLocation> getTextures() {
-            return ImmutableSet.of(new ResourceLocation(Reference.MOD_ID, "blocks/conveyor_bouncing_upgrade_north"),
-                    new ResourceLocation(Reference.MOD_ID, "blocks/conveyor_bouncing_upgrade_east"),
-                    new ResourceLocation(Reference.MOD_ID, "blocks/conveyor_bouncing_upgrade_west"),
-                    new ResourceLocation(Reference.MOD_ID, "blocks/conveyor_bouncing_upgrade_south"));
-        }
-
-        @Override
-        @Nonnull
-        public ResourceLocation getModel(EnumFacing upgradeSide, EnumFacing conveyorFacing) {
-            return new ResourceLocation(Reference.MOD_ID, "block/conveyor_upgrade_bouncing_" + conveyorFacing.getName().toLowerCase());
-        }
-
-        @Nonnull
-        @Override
-        public ResourceLocation getItemModel() {
-            return new ResourceLocation(Reference.MOD_ID, "conveyor_bouncing_upgrade");
+            return Collections.singleton(new ResourceLocation(Reference.MOD_ID, "blocks/conveyor_blinking_upgrade"));
         }
 
         @Nonnull
@@ -222,6 +202,18 @@ public class ConveyorBouncingUpgrade extends ConveyorUpgrade {
         @Override
         public EnumFacing getSideForPlacement(World world, BlockPos pos, EntityPlayer player) {
             return EnumFacing.DOWN;
+        }
+
+        @Override
+        @Nonnull
+        public ResourceLocation getModel(EnumFacing upgradeSide, EnumFacing conveyorFacing) {
+            return new ResourceLocation(Reference.MOD_ID, "block/conveyor_upgrade_blinking");
+        }
+
+        @Nonnull
+        @Override
+        public ResourceLocation getItemModel() {
+            return new ResourceLocation(Reference.MOD_ID, "conveyor_blinking_upgrade");
         }
     }
 }
