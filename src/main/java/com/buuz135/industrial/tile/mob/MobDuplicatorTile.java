@@ -9,6 +9,7 @@ import com.buuz135.industrial.tile.CustomColoredItemHandler;
 import com.buuz135.industrial.tile.WorkingAreaElectricMachine;
 import com.buuz135.industrial.utils.BlockUtils;
 import com.buuz135.industrial.utils.WorkUtils;
+
 import net.minecraft.entity.EntityList;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.EnumCreatureType;
@@ -89,14 +90,14 @@ public class MobDuplicatorTile extends WorkingAreaElectricMachine {
         int livingAround = world.getEntitiesWithinAABB(entity.getClass(), (new AxisAlignedBB((double) pos.getX(), (double) pos.getY(), (double) pos.getZ(), (double) (pos.getX() + 1), (double) (pos.getY() + 1), (double) (pos.getZ() + 1))).grow((double) 16)).size();
         if (livingAround > 32) return 0;
 
-        int canSpawn = (int) ((experienceTank.getFluid() == null ? 0 : experienceTank.getFluid().amount) / (entity.getHealth() * 4));
+        int essenceNeeded = (int) (entity.getHealth() * BlockRegistry.mobDuplicatorBlock.essenceNeeded);
+        int canSpawn = (int) ((experienceTank.getFluid() == null ? 0 : experienceTank.getFluid().amount) / essenceNeeded);
         if (canSpawn == 0) return 0;
 
         int spawnAmount = 1 + this.world.rand.nextInt(Math.min(canSpawn, 4));
         List<BlockPos> blocks = BlockUtils.getBlockPosInAABB(getWorkingArea());
-        int essenceNeeded = (int) (entity.getHealth() * BlockRegistry.mobDuplicatorBlock.essenceNeeded);
         while (spawnAmount > 0) {
-            if (experienceTank.getFluid() != null && experienceTank.getFluid().amount > essenceNeeded) {
+            if (experienceTank.getFluid() != null && experienceTank.getFluid().amount >= essenceNeeded) {
                 entity = (EntityLiving) ((MobImprisonmentToolItem) stack.getItem()).getEntityFromStack(stack, this.world, BlockRegistry.mobDuplicatorBlock.enableExactCopy && exactCopy);
                 int tries = 20;
                 Vec3d random = new Vec3d(blocks.get(this.world.rand.nextInt(blocks.size())));
@@ -198,7 +199,7 @@ public class MobDuplicatorTile extends WorkingAreaElectricMachine {
 
     private boolean canEntitySpawn(EntityLiving living) {
         return /*getWorkingArea().contains(new Vec3d(living.getEntityBoundingBox().minX, living.getEntityBoundingBox().minY, living.getEntityBoundingBox().minZ)) &&
-                getWorkingArea().contains(new Vec3d(living.getEntityBoundingBox().maxX, living.getEntityBoundingBox().maxY, living.getEntityBoundingBox().maxZ)
+                getWorkingArea().contains(new Vec3d(living.getEntityBoundingBox().maxX, living.getEntityBoundingBox().maxY, living.getEntityBoundingBox().maxZ))
                 &&*/ this.world.checkNoEntityCollision(living.getEntityBoundingBox()) && this.world.getCollisionBoxes(living, living.getEntityBoundingBox()).isEmpty() && (!this.world.containsAnyLiquid(living.getEntityBoundingBox()) || living.isCreatureType(EnumCreatureType.WATER_CREATURE, false));
     }
 }
