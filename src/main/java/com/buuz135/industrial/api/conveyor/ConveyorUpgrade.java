@@ -78,6 +78,10 @@ public abstract class ConveyorUpgrade implements INBTSerializable<NBTTagCompound
 
     }
 
+    public void onUpgradeRemoved() {
+
+    }
+
     public int getRedstoneOutput() {
         return 0;
     }

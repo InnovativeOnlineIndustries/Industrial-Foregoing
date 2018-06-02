@@ -4,6 +4,9 @@ import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public interface IConveyorContainer {
 
     World getConveyorWorld();
@@ -18,6 +21,7 @@ public interface IConveyorContainer {
 
     void removeUpgrade(EnumFacing facing, boolean drop);
 
+    List<Integer> getEntityFilter();
 
     class Empty implements IConveyorContainer {
         @Override
@@ -48,6 +52,11 @@ public interface IConveyorContainer {
         @Override
         public void removeUpgrade(EnumFacing facing, boolean drop) {
 
+        }
+
+        @Override
+        public List<Integer> getEntityFilter() {
+            return new ArrayList<>();
         }
     }
 }

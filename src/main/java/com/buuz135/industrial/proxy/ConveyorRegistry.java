@@ -18,5 +18,6 @@ public class ConveyorRegistry {
         registry.register(new ConveyorBouncingUpgrade.Factory());
         registry.register(new ConveyorDroppingUpgrade.Factory());
         registry.register(new ConveyorBlinkingUpgrade.Factory());
+        registry.register(new ConveyorSplittingUpgrade.Factory());
     }
 }

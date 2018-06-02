@@ -8,6 +8,8 @@ import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
 
+import java.util.List;
+
 public class MovementUtils {
 
     public static void handleConveyorMovement(Entity entity, EnumFacing direction, BlockPos pos, BlockConveyor.EnumType type) {
@@ -53,5 +55,10 @@ public class MovementUtils {
         entity.motionX = vec3d.x;
         if (vec3d.y != 0) entity.motionY = vec3d.y;
         entity.motionZ = vec3d.z;
+    }
+
+    public static void handleConveyorMovement(Entity entity, EnumFacing direction, BlockPos pos, BlockConveyor.EnumType type, List<Entity> filter) {
+        if (filter.contains(entity)) return;
+        handleConveyorMovement(entity, direction, pos, type);
     }
 }

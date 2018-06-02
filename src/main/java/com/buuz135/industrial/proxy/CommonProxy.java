@@ -6,6 +6,7 @@ import com.buuz135.industrial.entity.EntityPinkSlime;
 import com.buuz135.industrial.gui.GuiHandler;
 import com.buuz135.industrial.proxy.event.*;
 import com.buuz135.industrial.proxy.network.ConveyorButtonInteractMessage;
+import com.buuz135.industrial.proxy.network.ConveyorSplittingSyncEntityMessage;
 import com.buuz135.industrial.registry.IFRegistries;
 import com.buuz135.industrial.utils.CraftingUtils;
 import com.buuz135.industrial.utils.RecipeUtils;
@@ -60,6 +61,7 @@ public class CommonProxy {
         NetworkRegistry.INSTANCE.registerGuiHandler(IndustrialForegoing.instance, new GuiHandler());
         int id = 0;
         IndustrialForegoing.NETWORK.registerMessage(ConveyorButtonInteractMessage.Handler.class, ConveyorButtonInteractMessage.class, ++id, Side.SERVER);
+        IndustrialForegoing.NETWORK.registerMessage(ConveyorSplittingSyncEntityMessage.Handler.class, ConveyorSplittingSyncEntityMessage.class, ++id, Side.CLIENT);
 
         CustomConfiguration.config = new Configuration(event.getSuggestedConfigurationFile());
         CustomConfiguration.config.load();

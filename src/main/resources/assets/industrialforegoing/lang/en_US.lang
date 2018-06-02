@@ -306,6 +306,7 @@ conveyor.upgrade.industrialforegoing.detection.name=Detection Conveyor Upgrade
 conveyor.upgrade.industrialforegoing.bouncing.name=Bouncing Conveyor Upgrade
 conveyor.upgrade.industrialforegoing.dropping.name=Dropping Conveyor Upgrade
 conveyor.upgrade.industrialforegoing.blinking.name=Blinking Conveyor Upgrade
+conveyor.upgrade.industrialforegoing.splitting.name=Splitting Conveyor Upgrade
 
 conveyor.upgrade.industrialforegoing.tooltip.whitelist=Whitelist
 conveyor.upgrade.industrialforegoing.tooltip.blacklist=Blacklist
@@ -319,3 +320,4 @@ conveyor.upgrade.industrialforegoing.tooltip.bouncing_horizontal=Horizontal stre
 conveyor.upgrade.industrialforegoing.tooltip.bouncing_vertical=Vertical strength
 conveyor.upgrade.industrialforegoing.tooltip.distance_horizontal=Horizontal distance
 conveyor.upgrade.industrialforegoing.tooltip.distance_vertical=Vertical distance
+conveyor.upgrade.industrialforegoing.tooltip.splitting_ratio=Splitting ratio

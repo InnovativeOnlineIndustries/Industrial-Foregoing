@@ -36,11 +36,13 @@ public class TileEntityConveyor extends TileEntity implements IConveyorContainer
     private BlockConveyor.EnumType type;
     private int color;
     private Map<EnumFacing, ConveyorUpgrade> upgradeMap = new HashMap<>();
+    private List<Integer> filter;
 
     public TileEntityConveyor() {
         this.facing = EnumFacing.NORTH;
         this.type = BlockConveyor.EnumType.FLAT;
         this.color = 0;
+        this.filter = new ArrayList<>();
     }
 
     @Override
@@ -93,9 +95,15 @@ public class TileEntityConveyor extends TileEntity implements IConveyorContainer
                     world.spawnEntity(item);
                 }
             }
+            upgradeMap.get(facing).onUpgradeRemoved();
             upgradeMap.remove(facing);
             requestSync();
         }
+    }
+
+    @Override
+    public List<Integer> getEntityFilter() {
+        return filter;
     }
 
     @Override
@@ -217,10 +225,11 @@ public class TileEntityConveyor extends TileEntity implements IConveyorContainer
 
     public void handleEntityMovement(Entity entity) {
         for (ConveyorUpgrade upgrade : upgradeMap.values()) {
-            if (upgrade != null)
+            if (upgrade != null) {
                 upgrade.handleEntity(entity);
+            }
         }
-        if (!entity.isDead)
+        if (!entity.isDead && !this.getEntityFilter().contains(entity.getEntityId()))
             MovementUtils.handleConveyorMovement(entity, facing, this.pos, type);
     }
 
