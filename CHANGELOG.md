@@ -4,6 +4,7 @@
 + Improved hasAddon checks
 + Fixed Enchantment Extractor not splitting enchanted books
 + Allowed to use mekanism steel casing in machine recipes (Can be disabled in configs)
++ Tree fluid extractor no longer resets progress when the wood is broken
 
 # 1.9.2
 + Improved fluid handling
