@@ -21,7 +21,8 @@ public enum BookCategory implements IBookCategory {
     STORAGE("storage", new ItemStack(BlockRegistry.blackHoleUnitBlock)),
     MOB("mob_interaction", new ItemStack(BlockRegistry.mobDetectorBlock)),
     RESOURCE_PRODUCTION("resource_production", new ItemStack(BlockRegistry.laserDrillBlock)),
-    ITEM("items", new ItemStack(ItemRegistry.rangeAddonItem, 1, 11));
+    ITEM("items", new ItemStack(ItemRegistry.rangeAddonItem, 1, 11)),
+    CONVEYORS("conveyors", new ItemStack(BlockRegistry.blockConveyor.getItem()));
 
     private String name;
     private ItemStack display;

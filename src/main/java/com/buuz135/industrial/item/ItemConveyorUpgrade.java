@@ -40,6 +40,7 @@ public class ItemConveyorUpgrade extends IFCustomItem {
                     EnumFacing side = factory.getSideForPlacement(worldIn, pos, player);
                     if (!((IConveyorContainer) tile).hasUpgrade(side)) {
                         ((IConveyorContainer) tile).addUpgrade(side, factory);
+                        if (!player.isCreative()) player.getHeldItem(hand).shrink(1);
                         return EnumActionResult.SUCCESS;
                     }
                 }
