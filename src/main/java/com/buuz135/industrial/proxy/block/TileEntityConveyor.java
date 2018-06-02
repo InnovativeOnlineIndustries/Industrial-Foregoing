@@ -136,13 +136,13 @@ public class TileEntityConveyor extends TileEntity implements IConveyorContainer
         return color;
     }
 
-    public void setColor(EnumDyeColor color) {
-        this.color = color.getDyeDamage();
+    public void setColor(int color) {
+        this.color = color;
         markForUpdate();
     }
 
-    public void setColor(int color) {
-        this.color = color;
+    public void setColor(EnumDyeColor color) {
+        this.color = color.getDyeDamage();
         markForUpdate();
     }
 

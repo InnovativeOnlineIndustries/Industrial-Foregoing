@@ -2,6 +2,7 @@
 + Added 6 conveyor upgrades that can be added to the conveyor (Extraction, Insertion, Splitting, Bouncing, Dropping and Blinking) (Coded/Buuz135)
 + Mob duplicator and Animal Sewer shouldnt waste power anymore (jansamohyl)
 + Improved hasAddon checks
++ Fixed Enchantment Extractor not splitting enchanted books
 
 # 1.9.2
 + Improved fluid handling

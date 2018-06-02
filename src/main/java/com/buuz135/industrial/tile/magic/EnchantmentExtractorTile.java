@@ -135,13 +135,19 @@ public class EnchantmentExtractorTile extends CustomElectricMachine {
         ItemStack enchantedBook = new ItemStack(Items.ENCHANTED_BOOK);
         if (ItemHandlerHelper.insertItem(outEnchanted, enchantedBook, true).isEmpty() && ItemHandlerHelper.insertItem(outItem, enchantedItem, true).isEmpty()) {
             NBTTagCompound base = null;
-            if (enchantedItem.getItem().equals(Items.ENCHANTED_BOOK) && ItemEnchantedBook.getEnchantments(enchantedItem).tagCount() > 0 && ItemEnchantedBook.getEnchantments(enchantedBook).get(0) instanceof NBTTagCompound) {
-                base = (NBTTagCompound) ItemEnchantedBook.getEnchantments(enchantedItem).get(0);
-                NBTTagCompound tagCompound = enchantedItem.getTagCompound();
-                NBTTagList list = ItemEnchantedBook.getEnchantments(enchantedItem);
-                list.removeTag(0);
-                tagCompound.setTag("StoredEnchantments", list);
-                enchantedItem.setTagCompound(tagCompound);
+            if (enchantedItem.getItem().equals(Items.ENCHANTED_BOOK) && ItemEnchantedBook.getEnchantments(enchantedItem).tagCount() > 0) {
+                for (int i = 0; i < ItemEnchantedBook.getEnchantments(enchantedItem).tagCount(); i++) {
+                    if (ItemEnchantedBook.getEnchantments(enchantedItem).get(i) instanceof NBTTagCompound) {
+                        base = (NBTTagCompound) ItemEnchantedBook.getEnchantments(enchantedItem).get(i);
+                        NBTTagCompound tagCompound = enchantedItem.getTagCompound();
+                        NBTTagList list = ItemEnchantedBook.getEnchantments(enchantedItem);
+                        list.removeTag(i);
+                        tagCompound.setTag("StoredEnchantments", list);
+                        enchantedItem.setTagCompound(tagCompound);
+                        break;
+                    }
+                }
+
             } else if (enchantedItem.getEnchantmentTagList().tagCount() > 0 && enchantedItem.getEnchantmentTagList().get(0) instanceof NBTTagCompound) {
                 base = (NBTTagCompound) enchantedItem.getEnchantmentTagList().get(0);
                 enchantedItem.getEnchantmentTagList().removeTag(0);
