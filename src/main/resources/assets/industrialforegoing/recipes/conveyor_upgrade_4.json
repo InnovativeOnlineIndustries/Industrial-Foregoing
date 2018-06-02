@@ -1,0 +1,27 @@
+{
+  "result": {
+    "item": "industrialforegoing:conveyor_upgrade",
+    "data": 4
+  },
+  "pattern": [
+    "ipi",
+    "idi",
+    "ici"
+  ],
+  "type": "forge:ore_shaped",
+  "key": {
+    "p": {
+      "item": "minecraft:iron_bars"
+    },
+    "c": {
+      "item": "industrialforegoing:conveyor",
+      "data": 32767
+    },
+    "d": {
+      "item": "minecraft:dropper"
+    },
+    "i": {
+      "item": "#INGOTIRON"
+    }
+  }
+}

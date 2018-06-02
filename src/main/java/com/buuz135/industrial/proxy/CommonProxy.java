@@ -90,6 +90,7 @@ public class CommonProxy {
     public void postInit() {
         CraftingUtils.generateCrushedRecipes();
         BlockRegistry.createRecipes();
+        ItemRegistry.createRecipes();
         RecipeUtils.generateConstants();
         RecipeHandlers.executeCraftweakerActions();
     }
