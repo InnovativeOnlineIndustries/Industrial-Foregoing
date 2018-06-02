@@ -3,6 +3,7 @@
 + Mob duplicator and Animal Sewer shouldnt waste power anymore (jansamohyl)
 + Improved hasAddon checks
 + Fixed Enchantment Extractor not splitting enchanted books
++ Allowed to use mekanism steel casing in machine recipes (Can be disabled in configs)
 
 # 1.9.2
 + Improved fluid handling

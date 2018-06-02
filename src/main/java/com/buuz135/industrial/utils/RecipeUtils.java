@@ -36,6 +36,7 @@ public class RecipeUtils {
                 addShapedRecipe(result, "_enderio", generateOptionalJson("enderio", "useEnderIOFrames"), replaceFrameWith(new FakeItemStack("enderio:item_material", 0), components));
                 addShapedRecipe(result, "_thermal", generateOptionalJson("thermalexpansion", "useTEFrames"), replaceFrameWith(new FakeItemStack("thermalexpansion:frame", 0), components));
                 addShapedRecipe(result, "", generateOptionalJson("industrialforegoing", "useOriginalFrames"), components);
+                addShapedRecipe(result, "_mekanism", generateOptionalJson("mekanism", "useMekanismFrames"), replaceFrameWith(new FakeItemStack("mekanism:basicblock", 8), components));
                 break;
             }
         }

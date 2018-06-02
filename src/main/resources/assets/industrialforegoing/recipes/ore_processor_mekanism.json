@@ -1,0 +1,47 @@
+{
+  "result": {
+    "item": "industrialforegoing:ore_processor"
+  },
+  "pattern": [
+    "pip",
+    "ama",
+    "brb"
+  ],
+  "conditions": [
+    {
+      "type": "forge:and",
+      "values": [
+        {
+          "type": "forge:mod_loaded",
+          "modid": "mekanism"
+        },
+        {
+          "type": "industrialforegoing:configuration_value",
+          "value": "useMekanismFrames"
+        }
+      ]
+    }
+  ],
+  "type": "minecraft:crafting_shaped",
+  "key": {
+    "p": {
+      "item": "industrialforegoing:plastic"
+    },
+    "a": {
+      "item": "minecraft:iron_pickaxe"
+    },
+    "b": {
+      "item": "minecraft:book"
+    },
+    "r": {
+      "item": "minecraft:redstone"
+    },
+    "i": {
+      "item": "minecraft:piston"
+    },
+    "m": {
+      "item": "mekanism:basicblock",
+      "data": 8
+    }
+  }
+}

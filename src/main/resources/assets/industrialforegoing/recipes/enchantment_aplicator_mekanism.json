@@ -1,0 +1,42 @@
+{
+  "result": {
+    "item": "industrialforegoing:enchantment_aplicator"
+  },
+  "pattern": [
+    "ppp",
+    "ama",
+    "gag"
+  ],
+  "conditions": [
+    {
+      "type": "forge:and",
+      "values": [
+        {
+          "type": "forge:mod_loaded",
+          "modid": "mekanism"
+        },
+        {
+          "type": "industrialforegoing:configuration_value",
+          "value": "useMekanismFrames"
+        }
+      ]
+    }
+  ],
+  "type": "forge:ore_shaped",
+  "key": {
+    "p": {
+      "item": "industrialforegoing:plastic"
+    },
+    "a": {
+      "item": "minecraft:anvil",
+      "data": 0
+    },
+    "g": {
+      "item": "#GEARIRON"
+    },
+    "m": {
+      "item": "mekanism:basicblock",
+      "data": 8
+    }
+  }
+}

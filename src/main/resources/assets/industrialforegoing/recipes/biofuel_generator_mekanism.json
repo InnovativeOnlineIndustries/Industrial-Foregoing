@@ -1,0 +1,44 @@
+{
+  "result": {
+    "item": "industrialforegoing:biofuel_generator"
+  },
+  "pattern": [
+    "pfp",
+    "imi",
+    "rir"
+  ],
+  "conditions": [
+    {
+      "type": "forge:and",
+      "values": [
+        {
+          "type": "forge:mod_loaded",
+          "modid": "mekanism"
+        },
+        {
+          "type": "industrialforegoing:configuration_value",
+          "value": "useMekanismFrames"
+        }
+      ]
+    }
+  ],
+  "type": "minecraft:crafting_shaped",
+  "key": {
+    "p": {
+      "item": "industrialforegoing:plastic"
+    },
+    "r": {
+      "item": "minecraft:blaze_rod"
+    },
+    "f": {
+      "item": "minecraft:furnace"
+    },
+    "i": {
+      "item": "minecraft:piston"
+    },
+    "m": {
+      "item": "mekanism:basicblock",
+      "data": 8
+    }
+  }
+}

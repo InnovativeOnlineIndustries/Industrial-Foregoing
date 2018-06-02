@@ -147,7 +147,6 @@ public class EnchantmentExtractorTile extends CustomElectricMachine {
                         break;
                     }
                 }
-
             } else if (enchantedItem.getEnchantmentTagList().tagCount() > 0 && enchantedItem.getEnchantmentTagList().get(0) instanceof NBTTagCompound) {
                 base = (NBTTagCompound) enchantedItem.getEnchantmentTagList().get(0);
                 enchantedItem.getEnchantmentTagList().removeTag(0);
@@ -169,7 +168,6 @@ public class EnchantmentExtractorTile extends CustomElectricMachine {
             }
             return 1;
         }
-
         return 0;
     }
 

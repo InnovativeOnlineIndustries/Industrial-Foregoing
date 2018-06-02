@@ -1,0 +1,47 @@
+{
+  "result": {
+    "item": "industrialforegoing:mob_slaughter_factory"
+  },
+  "pattern": [
+    "pgp",
+    "sms",
+    "ara"
+  ],
+  "conditions": [
+    {
+      "type": "forge:and",
+      "values": [
+        {
+          "type": "forge:mod_loaded",
+          "modid": "mekanism"
+        },
+        {
+          "type": "industrialforegoing:configuration_value",
+          "value": "useMekanismFrames"
+        }
+      ]
+    }
+  ],
+  "type": "forge:ore_shaped",
+  "key": {
+    "p": {
+      "item": "industrialforegoing:plastic"
+    },
+    "a": {
+      "item": "minecraft:iron_axe"
+    },
+    "r": {
+      "item": "minecraft:redstone"
+    },
+    "s": {
+      "item": "minecraft:iron_sword"
+    },
+    "g": {
+      "item": "#GEARGOLD"
+    },
+    "m": {
+      "item": "mekanism:basicblock",
+      "data": 8
+    }
+  }
+}
