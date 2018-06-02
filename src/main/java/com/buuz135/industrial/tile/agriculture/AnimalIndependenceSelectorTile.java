@@ -25,9 +25,10 @@ public class AnimalIndependenceSelectorTile extends WorkingAreaElectricMachine i
         List<EntityAgeable> animals = this.world.getEntitiesWithinAABB(EntityAgeable.class, area);
         if (animals.size() == 0) return 0;
         EntityAgeable animal = animals.get(0);
-        while (animal.isChild() == this.hasAddon(AdultFilterAddonItem.class) && animals.indexOf(animal) + 1 < animals.size())
+        boolean hasAddon = this.hasAddon(AdultFilterAddonItem.class);
+        while (animal.isChild() == hasAddon && animals.indexOf(animal) + 1 < animals.size())
             animal = animals.get(animals.indexOf(animal) + 1);
-        if (animal.isChild() == this.hasAddon(AdultFilterAddonItem.class)) return 0;
+        if (animal.isChild() == hasAddon) return 0;
         BlockPos pos = this.getPos().offset(this.getFacing(), 1);
         animal.setPositionAndUpdate(pos.getX() + 0.5, pos.getY(), pos.getZ() + 0.5);
         return 1;
