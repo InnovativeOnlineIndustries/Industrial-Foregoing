@@ -9,6 +9,8 @@ import com.buuz135.industrial.item.addon.movility.FluidTransferAddon;
 import com.buuz135.industrial.item.addon.movility.ItemStackTransferAddon;
 import com.buuz135.industrial.item.addon.movility.TransferAddon;
 import com.buuz135.industrial.utils.RecipeUtils;
+import net.minecraft.init.Blocks;
+import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.fml.common.registry.GameRegistry;
@@ -30,6 +32,7 @@ public class ItemRegistry {
     public static BookManualItem bookManualItem;
 
     public static ItemStraw strawItem;
+    public static ItemConveyorUpgrade conveyorUpgradeItem;
     public static ItemArtificalDye artificalDye;
 
     public static AdultFilterAddonItem adultFilterAddomItem;
@@ -53,6 +56,7 @@ public class ItemRegistry {
         (laserLensItem = new LaserLensItem(false)).register(itemRegistry);
         (laserLensItem_inverted = new LaserLensItem(true)).register(itemRegistry);
         (strawItem = new ItemStraw()).register(itemRegistry);
+        (conveyorUpgradeItem = new ItemConveyorUpgrade()).register(itemRegistry);
         (artificalDye = new ItemArtificalDye()).register(itemRegistry);
         (pinkSlime = new IFCustomItem("pink_slime")).register(itemRegistry);
         (bookManualItem = new BookManualItem()).register(itemRegistry);
@@ -66,6 +70,20 @@ public class ItemRegistry {
         (fluidTransferAddonPull = new FluidTransferAddon(TransferAddon.ActionMode.PULL)).registerItem(itemRegistry);
         (fluidTransferAddonPush = new FluidTransferAddon(TransferAddon.ActionMode.PUSH)).registerItem(itemRegistry);
 
+        OreDictionary.registerOre("itemRubber", plastic);
+        OreDictionary.registerOre("slimeball", pinkSlime);
+        OreDictionary.registerOre("slimeballPink", pinkSlime);
+        OreDictionary.registerOre("dyeBrown", fertilizer);
+        OreDictionary.registerOre("fertilizer", fertilizer);
+        OreDictionary.registerOre("dye", new ItemStack(artificalDye, 1, OreDictionary.WILDCARD_VALUE));
+
+        String[] dyes = {"White", "Orange", "Magenta", "LightBlue", "Yellow", "Lime", "Pink", "Gray", "LightGray", "Cyan", "Purple", "Blue", "Brown", "Green", "Red", "Black"};
+        for (int i = 0; i < 16; i++) {
+            OreDictionary.registerOre("dye" + dyes[i], new ItemStack(artificalDye, 1, i));
+        }
+    }
+
+    public static void createRecipes() {
         meatFeederItem.createRecipe();
         mobImprisonmentToolItem.createRecipe();
         laserLensItem.createRecipe();
@@ -79,17 +97,39 @@ public class ItemRegistry {
         fluidTransferAddonPush.createRecipe();
         itemStackTransferAddonPull.createRecipe();
         itemStackTransferAddonPush.createRecipe();
-
-        OreDictionary.registerOre("itemRubber", plastic);
-        OreDictionary.registerOre("slimeball", pinkSlime);
-        OreDictionary.registerOre("slimeballPink", pinkSlime);
-        OreDictionary.registerOre("dyeBrown", fertilizer);
-        OreDictionary.registerOre("fertilizer", fertilizer);
-        OreDictionary.registerOre("dye", new ItemStack(artificalDye, 1, OreDictionary.WILDCARD_VALUE));
-
-        String[] dyes = {"White", "Orange", "Magenta", "LightBlue", "Yellow", "Lime", "Pink", "Gray", "LightGray", "Cyan", "Purple", "Blue", "Brown", "Green", "Red", "Black"};
-        for (int i = 0; i < 16; i++) {
-            OreDictionary.registerOre("dye" + dyes[i], new ItemStack(artificalDye, 1, i));
-        }
+        RecipeUtils.addShapedRecipe(new ItemStack(conveyorUpgradeItem, 1, 0), "ipi", "idi", "ici",
+                'i', "ingotIron",
+                'p', plastic,
+                'd', Blocks.DISPENSER,
+                'c', new ItemStack(BlockRegistry.blockConveyor, 1, OreDictionary.WILDCARD_VALUE));
+        RecipeUtils.addShapedRecipe(new ItemStack(conveyorUpgradeItem, 1, 1), "ipi", "idi", "ici",
+                'i', "ingotIron",
+                'p', plastic,
+                'd', Blocks.HOPPER,
+                'c', new ItemStack(BlockRegistry.blockConveyor, 1, OreDictionary.WILDCARD_VALUE));
+        RecipeUtils.addShapedRecipe(new ItemStack(conveyorUpgradeItem, 1, 2), "ipi", "idi", "ici",
+                'i', "ingotIron",
+                'p', Blocks.STONE_PRESSURE_PLATE,
+                'd', Items.COMPARATOR,
+                'c', new ItemStack(BlockRegistry.blockConveyor, 1, OreDictionary.WILDCARD_VALUE));
+        RecipeUtils.addShapedRecipe(new ItemStack(conveyorUpgradeItem, 1, 3), "ipi", "idi", "ici",
+                'i', "ingotIron",
+                'p', Blocks.SLIME_BLOCK,
+                'd', Blocks.PISTON,
+                'c', new ItemStack(BlockRegistry.blockConveyor, 1, OreDictionary.WILDCARD_VALUE));
+        RecipeUtils.addShapedRecipe(new ItemStack(conveyorUpgradeItem, 1, 4), "ipi", "idi", "ici",
+                'i', "ingotIron",
+                'p', Blocks.IRON_BARS,
+                'd', Blocks.DROPPER,
+                'c', new ItemStack(BlockRegistry.blockConveyor, 1, OreDictionary.WILDCARD_VALUE));
+        RecipeUtils.addShapedRecipe(new ItemStack(conveyorUpgradeItem, 1, 5), "ipi", "idi", "ici",
+                'i', "ingotIron",
+                'p', Items.CHORUS_FRUIT,
+                'd', Blocks.PISTON,
+                'c', new ItemStack(BlockRegistry.blockConveyor, 1, OreDictionary.WILDCARD_VALUE));
+        RecipeUtils.addShapedRecipe(new ItemStack(conveyorUpgradeItem, 1, 6), "ici", "idi", "ici",
+                'i', "ingotIron",
+                'd', Blocks.HOPPER,
+                'c', new ItemStack(BlockRegistry.blockConveyor, 1, OreDictionary.WILDCARD_VALUE));
     }
 }

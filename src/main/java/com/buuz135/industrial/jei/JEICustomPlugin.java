@@ -7,8 +7,10 @@ import com.buuz135.industrial.api.recipe.LaserDrillEntry;
 import com.buuz135.industrial.api.recipe.ProteinReactorEntry;
 import com.buuz135.industrial.book.BookCategory;
 import com.buuz135.industrial.config.CustomConfiguration;
+import com.buuz135.industrial.gui.conveyor.GuiConveyor;
 import com.buuz135.industrial.jei.fluiddictionary.FluidDictionaryCategory;
 import com.buuz135.industrial.jei.fluiddictionary.FluidDictionaryWrapper;
+import com.buuz135.industrial.jei.ghost.ConveyorGhostSlotHandler;
 import com.buuz135.industrial.jei.laser.LaserRecipeCategory;
 import com.buuz135.industrial.jei.laser.LaserRecipeWrapper;
 import com.buuz135.industrial.jei.machineproduce.MachineProduceCategory;
@@ -216,6 +218,8 @@ public class JEICustomPlugin implements IModPlugin {
             registry.addRecipeCatalyst(new ItemStack(BlockRegistry.fluidDictionaryConverterBlock), fluidDictionaryCategory.getUid());
             registry.addRecipes(FluidDictionaryEntry.FLUID_DICTIONARY_RECIPES.stream().map(FluidDictionaryWrapper::new).collect(Collectors.toList()), fluidDictionaryCategory.getUid());
         }
+
+        registry.addGhostIngredientHandler(GuiConveyor.class, new ConveyorGhostSlotHandler());
     }
 
     public ItemStack getStoneWorkOutputFrom(ItemStack stack, MaterialStoneWorkFactoryTile.Mode mode) {

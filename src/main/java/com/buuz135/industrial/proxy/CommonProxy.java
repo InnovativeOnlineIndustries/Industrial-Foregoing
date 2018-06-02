@@ -5,6 +5,8 @@ import com.buuz135.industrial.config.CustomConfiguration;
 import com.buuz135.industrial.entity.EntityPinkSlime;
 import com.buuz135.industrial.gui.GuiHandler;
 import com.buuz135.industrial.proxy.event.*;
+import com.buuz135.industrial.proxy.network.ConveyorButtonInteractMessage;
+import com.buuz135.industrial.proxy.network.ConveyorSplittingSyncEntityMessage;
 import com.buuz135.industrial.registry.IFRegistries;
 import com.buuz135.industrial.utils.CraftingUtils;
 import com.buuz135.industrial.utils.RecipeUtils;
@@ -23,6 +25,7 @@ import net.minecraftforge.fml.common.Loader;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 import net.minecraftforge.fml.common.network.NetworkRegistry;
 import net.minecraftforge.fml.common.registry.EntityRegistry;
+import net.minecraftforge.fml.relauncher.Side;
 
 import java.util.HashMap;
 import java.util.Random;
@@ -46,6 +49,7 @@ public class CommonProxy {
         MinecraftForge.EVENT_BUS.register(new BlockRegistry());
         MinecraftForge.EVENT_BUS.register(new ItemRegistry());
         MinecraftForge.EVENT_BUS.register(new StrawRegistry());
+        MinecraftForge.EVENT_BUS.register(new ConveyorRegistry());
         MinecraftForge.EVENT_BUS.register(new MeatFeederTickHandler());
         MinecraftForge.EVENT_BUS.register(new MobDeathHandler());
         MinecraftForge.EVENT_BUS.register(new WorldTickHandler());
@@ -55,6 +59,9 @@ public class CommonProxy {
         MinecraftForge.EVENT_BUS.register(new SkullHandler());
 
         NetworkRegistry.INSTANCE.registerGuiHandler(IndustrialForegoing.instance, new GuiHandler());
+        int id = 0;
+        IndustrialForegoing.NETWORK.registerMessage(ConveyorButtonInteractMessage.Handler.class, ConveyorButtonInteractMessage.class, ++id, Side.SERVER);
+        IndustrialForegoing.NETWORK.registerMessage(ConveyorSplittingSyncEntityMessage.Handler.class, ConveyorSplittingSyncEntityMessage.class, ++id, Side.CLIENT);
 
         CustomConfiguration.config = new Configuration(event.getSuggestedConfigurationFile());
         CustomConfiguration.config.load();
@@ -83,6 +90,7 @@ public class CommonProxy {
     public void postInit() {
         CraftingUtils.generateCrushedRecipes();
         BlockRegistry.createRecipes();
+        ItemRegistry.createRecipes();
         RecipeUtils.generateConstants();
         RecipeHandlers.executeCraftweakerActions();
     }

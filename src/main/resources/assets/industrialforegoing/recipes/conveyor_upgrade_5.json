@@ -1,0 +1,27 @@
+{
+  "result": {
+    "item": "industrialforegoing:conveyor_upgrade",
+    "data": 5
+  },
+  "pattern": [
+    "ipi",
+    "idi",
+    "ici"
+  ],
+  "type": "forge:ore_shaped",
+  "key": {
+    "p": {
+      "item": "minecraft:chorus_fruit"
+    },
+    "c": {
+      "item": "industrialforegoing:conveyor",
+      "data": 32767
+    },
+    "d": {
+      "item": "minecraft:piston"
+    },
+    "i": {
+      "item": "#INGOTIRON"
+    }
+  }
+}

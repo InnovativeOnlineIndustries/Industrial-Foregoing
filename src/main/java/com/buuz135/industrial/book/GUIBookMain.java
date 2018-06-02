@@ -85,7 +85,7 @@ public class GUIBookMain extends GUIBookBase {
             int i = 0;
             int renderScale = (this.getGuiXSize() - 40) / 3;
             for (BookCategory category : BookCategory.values()) {
-                ItemStackButton button = new ItemStackButton(-235 - i, 21 + this.getGuiLeft() + ((i % 3) * renderScale), 15 + this.getGuiTop() + ((i / 3) * (renderScale + 4)), renderScale, renderScale, category.getName(), getCategoryItemStack(category));
+                ItemStackButton button = new ItemStackButton(-235 - i, 21 + this.getGuiLeft() + ((i % 3) * renderScale), 13 + this.getGuiTop() + ((i / 3) * (renderScale + 4)), renderScale, renderScale, category.getName(), getCategoryItemStack(category));
                 this.buttonList.add(button);
                 categoriesButtons.put(button, category);
                 ++i;

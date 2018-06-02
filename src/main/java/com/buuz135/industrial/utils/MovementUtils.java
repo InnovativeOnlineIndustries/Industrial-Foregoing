@@ -4,8 +4,11 @@ import com.buuz135.industrial.proxy.block.BlockConveyor;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.EnumFacing;
+import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
+
+import java.util.List;
 
 public class MovementUtils {
 
@@ -13,10 +16,16 @@ public class MovementUtils {
         if (entity instanceof EntityPlayer && entity.isSneaking()) return;
         if (entity.posY - pos.getY() > 0.3 && !type.isVertical()) return;
 
-        if ((direction == EnumFacing.NORTH || direction == EnumFacing.SOUTH) && ((entity.posX - pos.getX() < 0.05) || (entity.posX - pos.getX() > 0.95)))
-            return;
-        if ((direction == EnumFacing.EAST || direction == EnumFacing.WEST) && ((entity.posZ - pos.getZ() < 0.05) || (entity.posZ - pos.getZ() > 0.95)))
-            return;
+        AxisAlignedBB collision = entity.world.getBlockState(pos).getBlock().getCollisionBoundingBox(entity.world.getBlockState(pos), entity.world, pos).offset(pos);
+//        if (direction == EnumFacing.NORTH || direction == EnumFacing.SOUTH){
+//            collision = collision.contract(-0.1,0,0);
+//            collision = collision.contract(0.1,0,0);
+//        }
+//        if (direction == EnumFacing.EAST || direction == EnumFacing.WEST) {
+//            collision = collision.contract(0,0,-0.1);
+//            collision = collision.contract(0,0,0.1);
+//        }
+        if (!type.isVertical() && !collision.grow(0.01).intersects(entity.getEntityBoundingBox())) return;
 
         //DIRECTION MOVEMENT
         double speed = 0.2;
@@ -30,21 +39,26 @@ public class MovementUtils {
         //CENTER
         if (direction == EnumFacing.NORTH || direction == EnumFacing.SOUTH) {
             if (entity.posX - pos.getX() < 0.45) {
-                vec3d = vec3d.addVector(0.04, 0, 0);
+                vec3d = vec3d.addVector(0.08, 0, 0);
             } else if (entity.posX - pos.getX() > 0.55) {
-                vec3d = vec3d.addVector(-0.04, 0, 0);
+                vec3d = vec3d.addVector(-0.08, 0, 0);
             }
         }
         if (direction == EnumFacing.EAST || direction == EnumFacing.WEST) {
             if (entity.posZ - pos.getZ() < 0.45) {
-                vec3d = vec3d.addVector(0, 0, 0.04);
+                vec3d = vec3d.addVector(0, 0, 0.08);
             } else if (entity.posZ - pos.getZ() > 0.55) {
-                vec3d = vec3d.addVector(0, 0, -0.04);
+                vec3d = vec3d.addVector(0, 0, -0.08);
             }
         }
 
         entity.motionX = vec3d.x;
         if (vec3d.y != 0) entity.motionY = vec3d.y;
         entity.motionZ = vec3d.z;
+    }
+
+    public static void handleConveyorMovement(Entity entity, EnumFacing direction, BlockPos pos, BlockConveyor.EnumType type, List<Entity> filter) {
+        if (filter.contains(entity)) return;
+        handleConveyorMovement(entity, direction, pos, type);
     }
 }

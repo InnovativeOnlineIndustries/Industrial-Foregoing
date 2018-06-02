@@ -1,0 +1,27 @@
+{
+  "result": {
+    "item": "industrialforegoing:conveyor_upgrade",
+    "data": 2
+  },
+  "pattern": [
+    "ipi",
+    "idi",
+    "ici"
+  ],
+  "type": "forge:ore_shaped",
+  "key": {
+    "p": {
+      "item": "minecraft:stone_pressure_plate"
+    },
+    "c": {
+      "item": "industrialforegoing:conveyor",
+      "data": 32767
+    },
+    "d": {
+      "item": "minecraft:comparator"
+    },
+    "i": {
+      "item": "#INGOTIRON"
+    }
+  }
+}

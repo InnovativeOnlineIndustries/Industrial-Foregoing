@@ -17,8 +17,8 @@ import java.util.List;
 @SideOnly(Side.CLIENT)
 public class RenderPinkSlime extends RenderLiving<EntityPinkSlime> {
 
-    private static final ResourceLocation PINK_SLIME_TEXTURES = new ResourceLocation(Reference.MOD_ID, "textures/entity/pink_slime.png");
     public static final List<String> NAMES = Arrays.asList("buuz135", "the_codedone");
+    private static final ResourceLocation PINK_SLIME_TEXTURES = new ResourceLocation(Reference.MOD_ID, "textures/entity/pink_slime.png");
     private static final ResourceLocation PINK_SLIME_TEXTURES_RGB = new ResourceLocation(Reference.MOD_ID, "textures/entity/pink_slime_white.png");
 
     public RenderPinkSlime(RenderManager rendermanagerIn) {
