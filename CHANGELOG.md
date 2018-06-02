@@ -1,3 +1,7 @@
+# 1.10.0
++ Added 6 conveyor upgrades that can be added to the conveyor (Extraction, Insertion, Splitting, Bouncing, Dropping and Blinking) (Coded/Buuz135)
++ Mob duplicator and Animal Sewer shouldnt waste power anymore (jansamohyl)
+
 # 1.9.2
 + Improved fluid handling
 + Improved tank color handling
