@@ -1,4 +1,7 @@
 # 1.10.0
++ If the black hole controller is lock the black hole units won't loose the filter
+
+# 1.10.0
 + Added 6 conveyor upgrades that can be added to the conveyor (Extraction, Insertion, Splitting, Bouncing, Dropping and Blinking) (Coded/Buuz135)
 + Mob duplicator and Animal Sewer shouldnt waste power anymore (jansamohyl)
 + Improved hasAddon checks
