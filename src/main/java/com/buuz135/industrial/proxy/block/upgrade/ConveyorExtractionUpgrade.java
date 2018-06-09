@@ -14,20 +14,25 @@ import com.buuz135.industrial.proxy.block.filter.ItemStackFilter;
 import com.buuz135.industrial.registry.IFRegistries;
 import com.buuz135.industrial.utils.Reference;
 import com.google.common.collect.Sets;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.EntitySelectors;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.IItemHandler;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -110,28 +115,38 @@ public class ConveyorExtractionUpgrade extends ConveyorUpgrade {
         items.removeIf(entityItem -> entityItem.getItem().isEmpty() || entityItem.isDead);
         if (items.size() >= 20) return;
         if (getWorld().getTotalWorldTime() % (fast ? 10 : 20) == 0) {
-            BlockPos offsetPos = getPos().offset(getSide());
-            TileEntity tile = getWorld().getTileEntity(offsetPos);
-            if (tile != null) {
-                IItemHandler itemHandler = tile.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, getSide().getOpposite());
-                if (itemHandler != null) {
-                    for (int i = 0; i < itemHandler.getSlots(); i++) {
-                        ItemStack stack = itemHandler.extractItem(i, 4, true);
-                        if (stack.isEmpty() || whitelist != filter.matches(stack))
-                            continue;
-                        EntityItem item = new EntityItem(getWorld(), getPos().getX() + 0.5, getPos().getY() + 0.5, getPos().getZ() + 0.5);
-                        item.motionX = 0;
-                        item.motionY = 0;
-                        item.motionZ = 0;
-                        item.setPickupDelay(40);
-                        item.setItem(itemHandler.extractItem(i, 4, false));
-                        getWorld().spawnEntity(item);
-                        items.add(item);
-                        break;
-                    }
+            IItemHandler itemHandler = getHandlerCapability();
+            if (itemHandler != null) {
+                for (int i = 0; i < itemHandler.getSlots(); i++) {
+                    ItemStack stack = itemHandler.extractItem(i, 4, true);
+                    if (stack.isEmpty() || whitelist != filter.matches(stack))
+                        continue;
+                    EntityItem item = new EntityItem(getWorld(), getPos().getX() + 0.5, getPos().getY() + 0.5, getPos().getZ() + 0.5);
+                    item.motionX = 0;
+                    item.motionY = 0;
+                    item.motionZ = 0;
+                    item.setPickupDelay(40);
+                    item.setItem(itemHandler.extractItem(i, 4, false));
+                    getWorld().spawnEntity(item);
+                    items.add(item);
+                    break;
                 }
             }
+
         }
+    }
+
+    @Nullable
+    private IItemHandler getHandlerCapability() {
+        BlockPos offsetPos = getPos().offset(getSide());
+        TileEntity tile = getWorld().getTileEntity(offsetPos);
+        if (tile != null && tile.hasCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, getSide().getOpposite()))
+            return tile.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, getSide().getOpposite());
+        for (Entity entity : getWorld().getEntitiesWithinAABB(Entity.class, new AxisAlignedBB(0, 0, 0, 1, 1, 1).offset(offsetPos), EntitySelectors.NOT_SPECTATING)) {
+            if (entity.hasCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, entity instanceof EntityPlayerMP ? null : getSide().getOpposite()))
+                return entity.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, entity instanceof EntityPlayerMP ? null : getSide().getOpposite());
+        }
+        return null;
     }
 
     @Override

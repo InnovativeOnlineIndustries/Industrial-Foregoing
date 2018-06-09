@@ -13,15 +13,20 @@ import com.buuz135.industrial.proxy.block.filter.ItemStackFilter;
 import com.buuz135.industrial.utils.Reference;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.item.EntityItem;
+import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.EntitySelectors;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.math.AxisAlignedBB;
+import net.minecraft.util.math.BlockPos;
 import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.IItemHandler;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import java.util.List;
 
 public class ConveyorInsertionUpgrade extends ConveyorUpgrade {
@@ -52,24 +57,34 @@ public class ConveyorInsertionUpgrade extends ConveyorUpgrade {
         if (getWorld().isRemote)
             return;
         if (entity instanceof EntityItem) {
-            TileEntity tile = getWorld().getTileEntity(getPos().offset(getSide()));
-            if (tile != null && tile.hasCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, getSide().getOpposite())) {
-                IItemHandler handler = tile.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, getSide().getOpposite());
-                if (getWorkingBox().aabb().offset(getPos()).grow(0.01).intersects(entity.getEntityBoundingBox())) {
-                    if (whitelist != filter.matches((EntityItem) entity)) return;
-                    ItemStack stack = ((EntityItem) entity).getItem();
-                    for (int i = 0; i < handler.getSlots(); i++) {
-                        ItemStack remaining = handler.insertItem(i, stack, false);
-                        if (remaining.isEmpty()) {
-                            entity.setDead();
-                            break;
-                        } else {
-                            ((EntityItem) entity).setItem(remaining);
-                        }
+            IItemHandler handler = getHandlerCapability();
+            if (handler != null && getWorkingBox().aabb().offset(getPos()).grow(0.01).intersects(entity.getEntityBoundingBox())) {
+                if (whitelist != filter.matches((EntityItem) entity)) return;
+                ItemStack stack = ((EntityItem) entity).getItem();
+                for (int i = 0; i < handler.getSlots(); i++) {
+                    ItemStack remaining = handler.insertItem(i, stack, false);
+                    if (remaining.isEmpty()) {
+                        entity.setDead();
+                        break;
+                    } else {
+                        ((EntityItem) entity).setItem(remaining);
                     }
                 }
             }
         }
+    }
+
+    @Nullable
+    private IItemHandler getHandlerCapability() {
+        BlockPos offsetPos = getPos().offset(getSide());
+        TileEntity tile = getWorld().getTileEntity(offsetPos);
+        if (tile != null && tile.hasCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, getSide().getOpposite()))
+            return tile.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, getSide().getOpposite());
+        for (Entity entity : getWorld().getEntitiesWithinAABB(Entity.class, new AxisAlignedBB(0, 0, 0, 1, 1, 1).offset(offsetPos), EntitySelectors.NOT_SPECTATING)) {
+            if (entity.hasCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, entity instanceof EntityPlayerMP ? null : getSide().getOpposite()))
+                return entity.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, entity instanceof EntityPlayerMP ? null : getSide().getOpposite());
+        }
+        return null;
     }
 
     @Override
