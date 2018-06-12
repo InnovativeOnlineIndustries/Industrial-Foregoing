@@ -2,6 +2,7 @@
 + If the black hole controller is lock the black hole units won't loose the filter
 + Insertion and extraction conveyor upgrades can now extract from entites
 + Right clicking conveyors with plastic will prevent items from being picked up
++ Changed how the book entries are displayed when hovered
 
 # 1.10.0
 + Added 6 conveyor upgrades that can be added to the conveyor (Extraction, Insertion, Splitting, Bouncing, Dropping and Blinking) (Coded/Buuz135)

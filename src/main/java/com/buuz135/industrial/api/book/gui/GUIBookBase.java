@@ -106,8 +106,8 @@ public class GUIBookBase extends GuiScreen {
     public void drawScreenFront(int mouseX, int mouseY, float partialTicks) {
         this.buttonList.stream().filter(GuiButton::isMouseOver).forEach(guiButton -> {
             if (guiButton instanceof CategoryEntryButton) {
-                if (((CategoryEntryButton) guiButton).isTextTooBig())
-                    drawHoveringText(guiButton.displayString, guiButton.x + 8, guiButton.y + GUIBookCategoryEntries.SPACE);
+                //if (((CategoryEntryButton) guiButton).isTextTooBig())
+                drawHoveringText(guiButton.displayString, guiButton.x + 8, guiButton.y + GUIBookCategoryEntries.SPACE - 1);
             } else {
                 drawHoveringText(guiButton.displayString, mouseX, mouseY);
             }
