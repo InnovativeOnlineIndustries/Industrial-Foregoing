@@ -4,6 +4,7 @@
 + Right clicking conveyors with plastic will prevent items from being picked up
 + Changed how the book entries are displayed when hovered
 + Fixed cells only being processed 1 by 1
++ Fixed BHU accepting items where they dont suppose to
 
 # 1.10.0
 + Added 6 conveyor upgrades that can be added to the conveyor (Extraction, Insertion, Splitting, Bouncing, Dropping and Blinking) (Coded/Buuz135)

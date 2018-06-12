@@ -56,8 +56,11 @@ public class BlackHoleControllerTile extends CustomSidedTileEntity {
         this.addInventory(new ColoredItemHandler(input, EnumDyeColor.BLUE, "Input items", new BoundingRectangle(15, 18, 9 * 18, 18)) {
             @Override
             public boolean canInsertItem(int slot, ItemStack stack) {
-                if (stack.getItem().equals(Item.getItemFromBlock(blackHoleUnitBlock))) return false;
-                if (storage.getStackInSlot(slot).isEmpty()) return false;
+                if (storage.getStackInSlot(slot).isEmpty() || stack.getItem().equals(Item.getItemFromBlock(blackHoleUnitBlock)))
+                    return false;
+                if (input.getLocked() && input.getFilterStack(slot).isItemEqual(stack)) return true;
+                if (!output.getStackInSlot(slot).isEmpty() && !output.getStackInSlot(slot).isItemEqual(stack))
+                    return false;
                 ItemStack contained = blackHoleUnitBlock.getItemStack(storage.getStackInSlot(slot));
                 if (stack.isItemEqual(contained)) return true;
                 if (!input.getLocked() && contained.isEmpty()) return true;
