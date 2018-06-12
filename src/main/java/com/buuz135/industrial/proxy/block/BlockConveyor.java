@@ -280,6 +280,9 @@ public class BlockConveyor extends BlockBase {
             if (((TileEntityConveyor) entity).getType().isFast()) {
                 drops.add(new ItemStack(Items.GLOWSTONE_DUST, 1));
             }
+            if (((TileEntityConveyor) entity).isSticky()) {
+                drops.add(new ItemStack(ItemRegistry.plastic, 1));
+            }
         }
     }
 
@@ -333,6 +336,11 @@ public class BlockConveyor extends BlockBase {
                     if (hit.identifier == -1) {
                         if (handStack.getItem().equals(Items.GLOWSTONE_DUST) && !((TileEntityConveyor) tileEntity).getType().isFast()) {
                             ((TileEntityConveyor) tileEntity).setType(((TileEntityConveyor) tileEntity).getType().getFast());
+                            handStack.shrink(1);
+                            return true;
+                        }
+                        if (handStack.getItem().equals(ItemRegistry.plastic) && !((TileEntityConveyor) tileEntity).isSticky()) {
+                            ((TileEntityConveyor) tileEntity).setSticky(true);
                             handStack.shrink(1);
                             return true;
                         }

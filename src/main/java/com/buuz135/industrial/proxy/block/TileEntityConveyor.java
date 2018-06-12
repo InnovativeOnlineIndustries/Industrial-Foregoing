@@ -37,12 +37,14 @@ public class TileEntityConveyor extends TileEntity implements IConveyorContainer
     private int color;
     private Map<EnumFacing, ConveyorUpgrade> upgradeMap = new HashMap<>();
     private List<Integer> filter;
+    private boolean sticky;
 
     public TileEntityConveyor() {
         this.facing = EnumFacing.NORTH;
         this.type = BlockConveyor.EnumType.FLAT;
         this.color = 0;
         this.filter = new ArrayList<>();
+        this.sticky = false;
     }
 
     @Override
@@ -146,12 +148,22 @@ public class TileEntityConveyor extends TileEntity implements IConveyorContainer
         markForUpdate();
     }
 
+    public boolean isSticky() {
+        return sticky;
+    }
+
+    public void setSticky(boolean sticky) {
+        this.sticky = sticky;
+        markForUpdate();
+    }
+
     @Override
     public NBTTagCompound writeToNBT(NBTTagCompound compound) {
         compound = super.writeToNBT(compound);
         compound.setString("Facing", facing.getName());
         compound.setString("Type", type.getName());
         compound.setInteger("Color", color);
+        compound.setBoolean("Sticky", sticky);
         NBTTagCompound upgrades = new NBTTagCompound();
         for (EnumFacing facing : EnumFacing.VALUES) {
             if (!hasUpgrade(facing))
@@ -180,6 +192,7 @@ public class TileEntityConveyor extends TileEntity implements IConveyorContainer
         this.facing = EnumFacing.valueOf((compound.getString("Facing").toUpperCase()));
         this.type = BlockConveyor.EnumType.valueOf(compound.getString("Type").toUpperCase());
         this.color = compound.getInteger("Color");
+        this.sticky = compound.getBoolean("Sticky");
         if (compound.hasKey("Upgrades", Constants.NBT.TAG_COMPOUND)) {
             NBTTagCompound upgradesTag = compound.getCompoundTag("Upgrades");
             //upgradeMap.clear();
@@ -229,8 +242,11 @@ public class TileEntityConveyor extends TileEntity implements IConveyorContainer
                 upgrade.handleEntity(entity);
             }
         }
-        if (!entity.isDead && !this.getEntityFilter().contains(entity.getEntityId()))
-            MovementUtils.handleConveyorMovement(entity, facing, this.pos, type);
+        if (!entity.isDead) {
+            if (!this.getEntityFilter().contains(entity.getEntityId()))
+                MovementUtils.handleConveyorMovement(entity, facing, this.pos, type);
+            if (entity instanceof EntityItem && sticky) ((EntityItem) entity).setPickupDelay(5);
+        }
     }
 
     @Override
