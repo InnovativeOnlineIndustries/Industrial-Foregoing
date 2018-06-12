@@ -141,7 +141,7 @@ public abstract class AbstractReactorTile extends CustomElectricMachine {
 
     @Override
     protected void processFluidItems(ItemStackHandler fluidItems) {
-        ItemStackUtils.processFluidItems(fluidItems, tank);
+        ItemStackUtils.fillItemFromTank(fluidItems, tank);
     }
 
     public abstract List<IReactorEntry> getReactorsEntries();

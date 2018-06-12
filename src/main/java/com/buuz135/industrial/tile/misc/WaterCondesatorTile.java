@@ -53,6 +53,6 @@ public class WaterCondesatorTile extends CustomSidedTileEntity {
 
     @Override
     protected void processFluidItems(ItemStackHandler fluidItems) {
-        ItemStackUtils.processFluidItems(fluidItems, fluidTank);
+        ItemStackUtils.fillItemFromTank(fluidItems, fluidTank);
     }
 }

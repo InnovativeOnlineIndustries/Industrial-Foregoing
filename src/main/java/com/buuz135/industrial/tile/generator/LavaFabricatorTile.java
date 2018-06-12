@@ -44,6 +44,6 @@ public class LavaFabricatorTile extends CustomElectricMachine {
 
     @Override
     protected void processFluidItems(ItemStackHandler fluidItems) {
-        ItemStackUtils.processFluidItems(fluidItems, tank);
+        ItemStackUtils.fillItemFromTank(fluidItems, tank);
     }
 }

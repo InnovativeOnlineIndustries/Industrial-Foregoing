@@ -121,7 +121,7 @@ public class MobRelocatorTile extends WorkingAreaElectricMachine implements IAcc
 
     @Override
     protected void processFluidItems(ItemStackHandler fluidItems) {
-        ItemStackUtils.processFluidItems(fluidItems, outExp);
+        ItemStackUtils.fillItemFromTank(fluidItems, outExp);
     }
 
     @Override

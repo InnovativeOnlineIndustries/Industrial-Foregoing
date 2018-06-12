@@ -68,7 +68,7 @@ public class TreeFluidExtractorTile extends CustomSidedTileEntity {
 
     @Override
     protected void processFluidItems(ItemStackHandler fluidItems) {
-        ItemStackUtils.processFluidItems(fluidItems, tank);
+        ItemStackUtils.fillItemFromTank(fluidItems, tank);
     }
 
     @Override

@@ -17,10 +17,12 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumFacing;
 import net.minecraftforge.common.ForgeModContainer;
 import net.minecraftforge.fluids.FluidActionResult;
+import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidUtil;
 import net.minecraftforge.fluids.IFluidTank;
 import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
 import net.minecraftforge.fluids.capability.IFluidHandler;
+import net.minecraftforge.fluids.capability.IFluidHandlerItem;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraftforge.items.ItemHandlerHelper;
@@ -188,7 +190,7 @@ public class ItemStackUtils {
         return stack.hasCapability(CapabilityFluidHandler.FLUID_HANDLER_ITEM_CAPABILITY, null) && !stack.getItem().equals(ForgeModContainer.getInstance().universalBucket);
     }
 
-    public static void processFluidItems(ItemStackHandler fluidItems, IFluidTank tank) {
+    public static void fillItemFromTank(ItemStackHandler fluidItems, IFluidTank tank) {
         if (tank.getFluid() == null)
             return;
         ItemStack stack = fluidItems.getStackInSlot(0).copy();
@@ -208,4 +210,27 @@ public class ItemStackUtils {
             }
         }
     }
+
+    public static void fillTankFromItem(ItemStackHandler fluidItems, IFluidTank tank) {
+        ItemStack stack = fluidItems.getStackInSlot(0).copy();
+        if (!stack.isEmpty()) {
+            if (stack.hasCapability(CapabilityFluidHandler.FLUID_HANDLER_ITEM_CAPABILITY, null)) {
+                IFluidHandlerItem cap = stack.getCapability(CapabilityFluidHandler.FLUID_HANDLER_ITEM_CAPABILITY, null);
+                FluidStack fluidStack = cap.drain(1000, false);
+                if (fluidStack != null && tank.fill(fluidStack, false) == 0) return;
+                FluidActionResult result = FluidUtil.tryEmptyContainer(stack, (IFluidHandler) tank, 1000, null, false);
+                if (result.isSuccess() && (fluidItems.getStackInSlot(1).isEmpty() ||
+                        (ItemHandlerHelper.canItemStacksStack(result.getResult(), fluidItems.getStackInSlot(1)) && result.getResult().getCount() + fluidItems.getStackInSlot(1).getCount() <= result.getResult().getMaxStackSize()))) {
+                    result = FluidUtil.tryEmptyContainer(stack, (IFluidHandler) tank, tank.getCapacity(), null, true);
+                    if (fluidItems.getStackInSlot(1).isEmpty()) {
+                        fluidItems.setStackInSlot(1, result.getResult());
+                    } else {
+                        fluidItems.getStackInSlot(1).grow(1);
+                    }
+                    fluidItems.getStackInSlot(0).shrink(1);
+                }
+            }
+        }
+    }
+
 }

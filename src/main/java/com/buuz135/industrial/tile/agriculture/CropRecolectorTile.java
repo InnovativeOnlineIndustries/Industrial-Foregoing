@@ -139,7 +139,7 @@ public class CropRecolectorTile extends WorkingAreaElectricMachine {
 
     @Override
     protected void processFluidItems(ItemStackHandler fluidItems) {
-        ItemStackUtils.processFluidItems(fluidItems, sludge);
+        ItemStackUtils.fillItemFromTank(fluidItems, sludge);
     }
 
     public boolean hasShearingAddon() {

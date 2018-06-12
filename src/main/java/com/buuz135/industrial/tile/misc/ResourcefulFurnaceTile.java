@@ -76,6 +76,6 @@ public class ResourcefulFurnaceTile extends CustomElectricMachine {
 
     @Override
     protected void processFluidItems(ItemStackHandler fluidItems) {
-        ItemStackUtils.processFluidItems(fluidItems, tank);
+        ItemStackUtils.fillItemFromTank(fluidItems, tank);
     }
 }

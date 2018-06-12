@@ -3,11 +3,14 @@ package com.buuz135.industrial.tile.world;
 import com.buuz135.industrial.proxy.FluidsRegistry;
 import com.buuz135.industrial.proxy.ItemRegistry;
 import com.buuz135.industrial.tile.CustomElectricMachine;
+import com.buuz135.industrial.utils.ItemStackUtils;
 import com.buuz135.industrial.utils.WorkUtils;
 import net.minecraft.inventory.Slot;
 import net.minecraft.item.EnumDyeColor;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.fluids.FluidRegistry;
+import net.minecraftforge.fluids.FluidStack;
+import net.minecraftforge.fluids.FluidUtil;
 import net.minecraftforge.fluids.IFluidTank;
 import net.minecraftforge.items.ItemHandlerHelper;
 import net.minecraftforge.items.ItemStackHandler;
@@ -86,5 +89,22 @@ public class LatexProcessingUnitTile extends CustomElectricMachine {
             return 1;
         }
         return 0;
+    }
+
+    @Override
+    protected boolean acceptsFluidItem(ItemStack stack) {
+        return super.acceptsFluidItem(stack);
+    }
+
+    @Override
+    protected void processFluidItems(ItemStackHandler fluidItems) {
+        ItemStack stack = fluidItems.getStackInSlot(0);
+        if (!stack.isEmpty()) {
+            FluidStack fluid = FluidUtil.getFluidContained(stack);
+            if (fluid != null) {
+                if (fluid.getFluid() == FluidRegistry.WATER) ItemStackUtils.fillTankFromItem(fluidItems, waterTank);
+                if (fluid.getFluid() == FluidsRegistry.LATEX) ItemStackUtils.fillTankFromItem(fluidItems, latexTank);
+            }
+        }
     }
 }

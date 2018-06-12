@@ -62,7 +62,7 @@ public class MobSlaughterFactoryTile extends WorkingAreaElectricMachine implemen
 
     @Override
     protected void processFluidItems(ItemStackHandler fluidItems) {
-        ItemStackUtils.processFluidItems(fluidItems, outMeat);
+        ItemStackUtils.fillItemFromTank(fluidItems, outMeat);
     }
 
     @Override

@@ -66,6 +66,6 @@ public class AnimalByproductRecolectorTile extends WorkingAreaElectricMachine {
 
     @Override
     protected void processFluidItems(ItemStackHandler fluidItems) {
-        ItemStackUtils.processFluidItems(fluidItems, tank);
+        ItemStackUtils.fillItemFromTank(fluidItems, tank);
     }
 }
