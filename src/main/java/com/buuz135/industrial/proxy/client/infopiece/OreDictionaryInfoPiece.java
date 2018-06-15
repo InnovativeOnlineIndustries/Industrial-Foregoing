@@ -14,7 +14,7 @@ public class OreDictionaryInfoPiece extends BasicRenderedGuiPiece {
     private OreDictionaryConverterTile tile;
 
     public OreDictionaryInfoPiece(OreDictionaryConverterTile tile, int left, int top) {
-        super(left, top, 145, 33, ClientProxy.GUI, 1, 187);
+        super(left, top, 131, 26, ClientProxy.GUI, 1, 187);
         this.tile = tile;
     }
 
