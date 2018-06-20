@@ -291,7 +291,7 @@ gui.industrialforegoing.side_config.ores_input=Приём руд
 gui.industrialforegoing.side_config.essence_tank=Резервуар эссенции
 gui.industrialforegoing.side_config.processed_ores_output=Выдача переработанной руды
 gui.industrialforegoing.side_config.black_hole_units=Юниты чёрной дыры
-gui.industrialforegoing.side_config.material_process=Процесс материализации
+gui.industrialforegoing.side_config.material_process=Обработка материалов
 gui.industrialforegoing.side_config.villager_mob_imprisonment_tool=Заключатель жителей
 gui.industrialforegoing.side_config.trade_input=Приём торгов
 gui.industrialforegoing.side_config.trade_output=Выдача торгов
@@ -308,7 +308,7 @@ gui.industrialforegoing.side_config.input=Приём
 
 text.industrialforegoing.button.none=Не выбрано
 
-conveyor.upgrade.error.name=Неверное 
+conveyor.upgrade.error.name=Неверное улучшение конвейера
 conveyor.upgrade.industrialforegoing.insertion.name=Улучшение конвейера: Вставка 
 conveyor.upgrade.industrialforegoing.extraction.name=Улучшение конвейера: Извлечение 
 conveyor.upgrade.industrialforegoing.detection.name=Улучшение конвейера: Обнаружение 
