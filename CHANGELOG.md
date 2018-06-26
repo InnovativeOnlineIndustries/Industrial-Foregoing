@@ -1,5 +1,6 @@
 # 1.10.2
 + Fluid interaction has potion effects now
++ You can no longer crush stone to cobblestone in the StoneWork Factory
 
 # 1.10.1
 + If the black hole controller is lock the black hole units won't loose the filter

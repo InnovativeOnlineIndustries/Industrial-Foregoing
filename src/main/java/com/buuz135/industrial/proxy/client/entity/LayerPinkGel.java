@@ -28,7 +28,7 @@ public class LayerPinkGel implements LayerRenderer<EntityPinkSlime> {
             GlStateManager.blendFunc(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA);
             this.slimeModel.setModelAttributes(this.slimeRenderer.getMainModel());
             if (entitylivingbaseIn.hasCustomName() && NAMES.contains(entitylivingbaseIn.getDisplayName().getUnformattedText().toLowerCase())) {
-                float speed = 300 * 0.2f;
+                float speed = 360 * 0.2f;
                 int hsb = (int) (entitylivingbaseIn.world.getTotalWorldTime() % speed);
                 Color color = Color.getHSBColor(hsb / speed, 0.75f, 0.75f);
                 GlStateManager.color(color.getRed() / 255f, color.getGreen() / 255f, color.getBlue() / 255f, 1.0f);

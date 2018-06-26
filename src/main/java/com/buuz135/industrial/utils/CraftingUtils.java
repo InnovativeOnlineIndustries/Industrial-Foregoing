@@ -89,7 +89,7 @@ public class CraftingUtils {
     }
 
     public static void generateCrushedRecipes() {
-        crushedRecipes.put(new ItemStack(Blocks.STONE), new ItemStack(Blocks.COBBLESTONE));
+        //crushedRecipes.put(new ItemStack(Blocks.STONE), new ItemStack(Blocks.COBBLESTONE));
         crushedRecipes.put(new ItemStack(Blocks.COBBLESTONE), new ItemStack(Blocks.GRAVEL));
         crushedRecipes.put(new ItemStack(Blocks.GRAVEL), new ItemStack(Blocks.SAND));
         ItemStack latest = new ItemStack(Blocks.SAND);
