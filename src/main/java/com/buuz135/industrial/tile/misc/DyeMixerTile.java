@@ -27,7 +27,8 @@ import java.util.List;
 
 public class DyeMixerTile extends CustomElectricMachine {
 
-    private static ColorUsage[] colorUsages = {new ColorUsage(1, 1, 1),//1
+    private static ColorUsage[] colorUsages = {new ColorUsage(1, 1, 1), //0
+            new ColorUsage(1, 1, 1),//1
             new ColorUsage(1, 0, 1),//2
             new ColorUsage(0, 0, 1),//3
             new ColorUsage(0, 1, 1),//4
@@ -107,7 +108,7 @@ public class DyeMixerTile extends CustomElectricMachine {
         this.addInventory(new CustomColoredItemHandler(lens, EnumDyeColor.YELLOW, "Lens items", 18 * 7 + 6, 25, 1, 1) {
             @Override
             public boolean canInsertItem(int slot, ItemStack stack) {
-                return stack.getItem().equals(ItemRegistry.laserLensItem) && stack.getMetadata() > 0;
+                return stack.getItem().equals(ItemRegistry.laserLensItem);
             }
 
             @Override
@@ -170,7 +171,7 @@ public class DyeMixerTile extends CustomElectricMachine {
 
         ItemStack stack = lens.getStackInSlot(0);
         if (!stack.isEmpty()) {
-            ColorUsage usage = colorUsages[stack.getMetadata() - 1];
+            ColorUsage usage = colorUsages[stack.getMetadata()];
             if (r >= usage.getR() && g >= usage.getG() && b >= usage.getB()) {
                 ItemStack out = new ItemStack(ItemRegistry.artificalDye, 1, stack.getMetadata());
                 if (ItemHandlerHelper.insertItem(output, out, true).isEmpty()) {
