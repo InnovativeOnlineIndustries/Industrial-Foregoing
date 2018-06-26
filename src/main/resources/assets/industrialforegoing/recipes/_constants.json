@@ -121,6 +121,13 @@
   {
     "ingredient": {
       "type": "forge:ore_dict",
+      "ore": "dyeLightGray"
+    },
+    "name": "DYELIGHTGRAY"
+  },
+  {
+    "ingredient": {
+      "type": "forge:ore_dict",
       "ore": "dyeLight_blue"
     },
     "name": "DYELIGHT_BLUE"

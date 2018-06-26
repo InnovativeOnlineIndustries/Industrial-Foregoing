@@ -13,9 +13,12 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraftforge.client.model.ModelLoader;
+import net.minecraftforge.oredict.OreDictionary;
 import net.minecraftforge.registries.IForgeRegistry;
 
 public class LaserLensItem extends IFCustomItem {
+
+    private static String[] dyes = {"Black", "Red", "Green", "Brown", "Blue", "Purple", "Cyan", "LightGray", "Gray", "Pink", "Lime", "Yellow", "LightBlue", "Magenta", "Orange", "White"};
 
     @Getter
     private boolean inverted;
@@ -39,9 +42,12 @@ public class LaserLensItem extends IFCustomItem {
     }
 
     public void createRecipe() {
-        for (int i = 0; i < 16; ++i)
+        for (int i = 0; i < 16; ++i) {
             RecipeUtils.addShapedRecipe(new ItemStack(this, 1, i), " i ", "ipi", " i ", 'i', inverted ? new ItemStack(Items.IRON_INGOT) : new ItemStack(ItemRegistry.pinkSlime),
                     'p', new ItemStack(Blocks.STAINED_GLASS_PANE, 1, i));
+            RecipeUtils.addShapelessRecipe("recolor", new ItemStack(this, 1, i), new ItemStack(this, 1, OreDictionary.WILDCARD_VALUE), "dye" + dyes[15 - i]);
+        }
+
     }
 
     @Override

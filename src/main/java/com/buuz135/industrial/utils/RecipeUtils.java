@@ -109,6 +109,10 @@ public class RecipeUtils {
     }
 
     public static void addShapelessRecipe(ItemStack result, Object... components) {
+        addShapelessRecipe("", result, components);
+    }
+
+    public static void addShapelessRecipe(String name, ItemStack result, Object... components) {
         setupDir();
         if (!RECIPE_DIR.exists() || result.isEmpty()) return;
         // addShapelessRecipe(result, components);
@@ -132,7 +136,7 @@ public class RecipeUtils {
         // repeatedly adds _alt if a file already exists
         // janky I know but it works
         String suffix = result.getItem().getHasSubtypes() ? "_" + result.getItemDamage() : "";
-        File f = new File(RECIPE_DIR, result.getItem().getRegistryName().getResourcePath() + suffix + ".json");
+        File f = new File(RECIPE_DIR, result.getItem().getRegistryName().getResourcePath() + suffix + (!name.isEmpty() ? "_" + name : "") + ".json");
 
 //        while (f.exists()) {
 //            suffix += "_alt";
