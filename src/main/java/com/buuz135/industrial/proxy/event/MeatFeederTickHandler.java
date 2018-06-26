@@ -9,6 +9,16 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
 public class MeatFeederTickHandler {
 
+    public static boolean meatTick(ItemStack stack, EntityPlayer player) {
+        int filledAmount = ((MeatFeederItem) stack.getItem()).getFilledAmount(stack);
+        if (filledAmount >= 400 && (player.getFoodStats().getSaturationLevel() < 20 || player.getFoodStats().getFoodLevel() < 20)) {
+            ((MeatFeederItem) stack.getItem()).drain(stack, 400);
+            player.getFoodStats().addStats(1, 1);
+            return true;
+        }
+        return false;
+    }
+
     @SubscribeEvent
     public void onTick(LivingEvent.LivingUpdateEvent event) {
         if (!event.getEntityLiving().getEntityWorld().isRemote && event.getEntityLiving() instanceof EntityPlayer) {
@@ -16,12 +26,7 @@ public class MeatFeederTickHandler {
             if (player.getFoodStats().needFood() || player.getFoodStats().getSaturationLevel() < 10) {
                 for (ItemStack stack : player.inventory.mainInventory) {
                     if (stack.getItem().equals(ItemRegistry.meatFeederItem)) {
-                        int filledAmount = ((MeatFeederItem) stack.getItem()).getFilledAmount(stack);
-                        if (filledAmount >= 400 && (player.getFoodStats().getSaturationLevel() < 20 || player.getFoodStats().getFoodLevel() < 20)) {
-                            ((MeatFeederItem) stack.getItem()).drain(stack, 400);
-                            player.getFoodStats().addStats(1, 1);
-                            return;
-                        }
+                        meatTick(stack, (EntityPlayer) event.getEntityLiving());
                     }
                 }
             }

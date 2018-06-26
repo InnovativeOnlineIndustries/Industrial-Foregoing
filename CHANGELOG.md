@@ -3,6 +3,7 @@
 + You can no longer crush stone to cobblestone in the StoneWork Factory
 + Fixed Dye Mixer not accepting white lenses
 + Lenses can now be recolored
++ The meat feeder can now be used as a bauble
 
 # 1.10.1
 + If the black hole controller is lock the black hole units won't loose the filter

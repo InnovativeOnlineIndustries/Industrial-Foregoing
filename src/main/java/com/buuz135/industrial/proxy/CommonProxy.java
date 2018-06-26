@@ -15,6 +15,7 @@ import com.buuz135.industrial.utils.apihandlers.CraftTweakerHelper;
 import com.buuz135.industrial.utils.apihandlers.PlantRecollectableRegistryHandler;
 import com.buuz135.industrial.utils.apihandlers.RecipeHandlers;
 import com.buuz135.industrial.utils.apihandlers.json.ConfigurationConditionFactory;
+import com.buuz135.industrial.utils.compat.baubles.MeatFeederBauble;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.storage.loot.LootTableList;
@@ -75,6 +76,7 @@ public class CommonProxy {
         if (CustomConfiguration.config.hasChanged()) CustomConfiguration.config.save();
 
         if (Loader.isModLoaded("crafttweaker")) CraftTweakerHelper.register();
+        if (Loader.isModLoaded("baubles")) MinecraftForge.EVENT_BUS.register(new MeatFeederBauble.Event());
 
         EntityRegistry.registerModEntity(new ResourceLocation(Reference.MOD_ID, "pink_slime"), EntityPinkSlime.class, "pink_slime", 135135, IndustrialForegoing.instance, 32, 1, false, 10485860, 16777215);
         PINK_SLIME_LOOT = LootTableList.register(new ResourceLocation(Reference.MOD_ID, "entities/pink_slime"));
