@@ -1,3 +1,6 @@
+# 1.10.3
++ Water Condensator now produces water if it has 2 water sources or more
+
 # 1.10.2
 + Fluid interaction has potion effects now
 + You can no longer crush stone to cobblestone in the StoneWork Factory

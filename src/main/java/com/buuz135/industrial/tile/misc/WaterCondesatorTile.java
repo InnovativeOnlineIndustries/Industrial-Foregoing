@@ -25,9 +25,9 @@ public class WaterCondesatorTile extends CustomSidedTileEntity {
     protected void innerUpdate() {
         if (WorkUtils.isDisabled(this.getBlockType())) return;
         if (this.getWorld().isRemote) return;
-        int fillValue = getWaterSources() * 100;
-        fluidTank.fill(new FluidStack(FluidRegistry.WATER, fillValue), true);
-
+        int sources = getWaterSources();
+        if (sources < 2) return;
+        fluidTank.fill(new FluidStack(FluidRegistry.WATER, sources * 100), true);
     }
 
     @Override
