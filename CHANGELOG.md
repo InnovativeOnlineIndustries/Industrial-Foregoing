@@ -2,6 +2,7 @@
 + Water Condensator now produces water if it has 2 water sources or more
 + Artificial dye is disabled if the dye mixer disabled
 + Fixed light blue conveyors not having a recipe
++ Mob Slaughter Factory only generates meat/pink slime if it damages entites
 
 # 1.10.2
 + Fluid interaction has potion effects now

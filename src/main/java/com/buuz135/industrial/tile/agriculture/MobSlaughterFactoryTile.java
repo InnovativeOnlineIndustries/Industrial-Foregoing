@@ -47,12 +47,16 @@ public class MobSlaughterFactoryTile extends WorkingAreaElectricMachine implemen
         if (hasAddon()) mobs.removeIf(entityLiving -> entityLiving instanceof EntityAgeable && entityLiving.isChild());
         if (mobs.size() == 0) return 0;
         EntityLiving mob = mobs.get(this.getWorld().rand.nextInt(mobs.size()));
-        this.outMeat.fill(new FluidStack(FluidsRegistry.MEAT, (int) (mob.getHealth() * BlockRegistry.mobSlaughterFactoryBlock.getMeatValue())), true);
-        this.outPink.fill(new FluidStack(FluidsRegistry.PINK_SLIME, (int) mob.getHealth()), true);
-        mob.setDropItemsWhenDead(false);
+        double health = mob.getHealth();
         mob.attackEntityFrom(CommonProxy.custom, BlockRegistry.mobSlaughterFactoryBlock.getDamage());
-
-        return 1;
+        health -= mob.getHealth();
+        if (health > 0) {
+            mob.setDropItemsWhenDead(false);
+            this.outMeat.fill(new FluidStack(FluidsRegistry.MEAT, (int) (health * BlockRegistry.mobSlaughterFactoryBlock.getMeatValue())), true);
+            this.outPink.fill(new FluidStack(FluidsRegistry.PINK_SLIME, (int) health), true);
+            return 1;
+        }
+        return 0;
     }
 
     @Override
