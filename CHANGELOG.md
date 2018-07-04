@@ -3,6 +3,7 @@
 + Artificial dye is disabled if the dye mixer disabled
 + Fixed light blue conveyors not having a recipe
 + Mob Slaughter Factory only generates meat/pink slime if it damages entites
++ Fixed Item Splitter checking the opposite side of the output configuration
 
 # 1.10.2
 + Fluid interaction has potion effects now

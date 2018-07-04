@@ -51,7 +51,6 @@ public class ItemSplitterTile extends CustomSidedTileEntity implements IHasDispl
         if (this.world.isRemote) return;
         if (++tick <= 4) return;
         for (EnumFacing facing : this.getSideConfig().getSidesForColor(EnumDyeColor.ORANGE)) {
-            facing = this.orientFacing(facing).getOpposite();
             BlockPos side = this.pos.offset(facing);
             if (this.world.getTileEntity(side) != null && this.world.getTileEntity(side).hasCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, facing.getOpposite())) {
                 TileEntity tileEntity = this.world.getTileEntity(side);
