@@ -87,7 +87,7 @@ public class BlockConveyor extends BlockBase {
         for (EnumDyeColor color : EnumDyeColor.values()) {
             RecipeUtils.addShapedRecipe(new ItemStack(this, 8, color.getMetadata()), "_" + color.toString().toLowerCase(), new HashMap<>(), "ccc", "cdc", "ccc",
                     'c', new ItemStack(this, 1, OreDictionary.WILDCARD_VALUE),
-                    'd', "dye" + WordUtils.capitalize(color.getDyeColorName()));
+                    'd', "dye" + WordUtils.capitalize(color.getUnlocalizedName()));
         }
     }
 
