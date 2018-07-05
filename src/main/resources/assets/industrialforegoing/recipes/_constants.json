@@ -170,13 +170,6 @@
   {
     "ingredient": {
       "type": "forge:ore_dict",
-      "ore": "dyeSilver"
-    },
-    "name": "DYESILVER"
-  },
-  {
-    "ingredient": {
-      "type": "forge:ore_dict",
       "ore": "dyeWhite"
     },
     "name": "DYEWHITE"

@@ -42,7 +42,6 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraftforge.oredict.OreDictionary;
 import net.minecraftforge.registries.IForgeRegistry;
-import org.apache.commons.lang3.text.WordUtils;
 
 import javax.annotation.Nullable;
 import java.util.ArrayList;
@@ -50,6 +49,8 @@ import java.util.HashMap;
 import java.util.List;
 
 public class BlockConveyor extends BlockBase {
+
+    private static String[] dyes = {"Black", "Red", "Green", "Brown", "Blue", "Purple", "Cyan", "LightGray", "Gray", "Pink", "Lime", "Yellow", "LightBlue", "Magenta", "Orange", "White"};
 
     public static final PropertyDirection FACING = BlockHorizontal.FACING;
     public static final PropertyEnum<EnumType> TYPE = PropertyEnum.create("type", EnumType.class);
@@ -84,10 +85,10 @@ public class BlockConveyor extends BlockBase {
                 'p', ItemRegistry.plastic,
                 'i', "ingotIron",
                 'r', Items.REDSTONE);
-        for (EnumDyeColor color : EnumDyeColor.values()) {
-            RecipeUtils.addShapedRecipe(new ItemStack(this, 8, color.getMetadata()), "_" + color.toString().toLowerCase(), new HashMap<>(), "ccc", "cdc", "ccc",
+        for (int i = 0; i < dyes.length; i++) {
+            RecipeUtils.addShapedRecipe(new ItemStack(this, 8, 15 - i), "_" + dyes[i].toLowerCase(), new HashMap<>(), "ccc", "cdc", "ccc",
                     'c', new ItemStack(this, 1, OreDictionary.WILDCARD_VALUE),
-                    'd', "dye" + WordUtils.capitalize(color.getUnlocalizedName()));
+                    'd', "dye" + dyes[i]);
         }
     }
 
