@@ -11,5 +11,6 @@ public class CraftTweakerHelper {
         CraftTweakerAPI.registerClass(CTSludgeRefiner.class);
         CraftTweakerAPI.registerClass(CTProteinReactor.class);
         CraftTweakerAPI.registerClass(CTFluidDictionary.class);
+        CraftTweakerAPI.registerClass(CTExtractor.class);
     }
 }

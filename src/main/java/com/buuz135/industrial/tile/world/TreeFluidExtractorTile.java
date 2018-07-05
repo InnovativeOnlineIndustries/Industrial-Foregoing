@@ -1,8 +1,8 @@
 package com.buuz135.industrial.tile.world;
 
+import com.buuz135.industrial.api.extractor.ExtractorEntry;
 import com.buuz135.industrial.proxy.FluidsRegistry;
 import com.buuz135.industrial.tile.CustomSidedTileEntity;
-import com.buuz135.industrial.utils.BlockUtils;
 import com.buuz135.industrial.utils.ItemStackUtils;
 import com.buuz135.industrial.utils.WorkUtils;
 import lombok.Data;
@@ -10,7 +10,6 @@ import net.minecraft.item.EnumDyeColor;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
-import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.IFluidTank;
 import net.minecraftforge.items.ItemStackHandler;
 import net.ndrei.teslacorelib.inventory.BoundingRectangle;
@@ -47,19 +46,21 @@ public class TreeFluidExtractorTile extends CustomSidedTileEntity {
 //        if (!BlockUtils.isLog(this.world, this.pos.offset(this.getFacing().getOpposite())))
 //            WoodLodProgress.remove(this.world, this.pos.offset(this.getFacing().getOpposite()));
         if (tank.getFluidAmount() == 8000) return;
-        if (tick % 5 == 0 && BlockUtils.isLog(this.world, this.pos.offset(this.getFacing().getOpposite()))) {
-            WoodLodProgress woodLog = WoodLodProgress.getWoodLogOrDefault(this.world, this.pos.offset(this.getFacing().getOpposite()));
-            tank.fill(new FluidStack(FluidsRegistry.LATEX, 1), true);
-            if (id == 0) id = this.world.rand.nextInt();
-            if (world.rand.nextDouble() <= 0.005) woodLog.setProgress(woodLog.getProgress() + 1);
-            if (woodLog.getProgress() > 7) {
-                woodLog.setProgress(0);
-                this.world.setBlockToAir(this.pos.offset(this.getFacing().getOpposite()));
+        if (tick % 5 == 0) {
+            ExtractorEntry extractorEntry = ExtractorEntry.getExtractorEntry(this.world, this.pos.offset(this.getFacing().getOpposite()));
+            if (extractorEntry != null) {
+                WoodLodProgress woodLog = WoodLodProgress.getWoodLogOrDefault(this.world, this.pos.offset(this.getFacing().getOpposite()));
+                tank.fill(extractorEntry.getFluidStack(), true);
+                if (id == 0) id = this.world.rand.nextInt();
+                if (world.rand.nextDouble() <= 0.005) woodLog.setProgress(woodLog.getProgress() + 1);
+                if (woodLog.getProgress() > 7) {
+                    woodLog.setProgress(0);
+                    this.world.setBlockToAir(this.pos.offset(this.getFacing().getOpposite()));
+                }
             }
         }
         ++tick;
     }
-
 
     @Override
     protected boolean acceptsFluidItem(ItemStack stack) {

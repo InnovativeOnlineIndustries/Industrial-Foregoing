@@ -4,6 +4,7 @@
 + Fixed light blue conveyors not having a recipe
 + Mob Slaughter Factory only generates meat/pink slime if it damages entites
 + Fixed Item Splitter checking the opposite side of the output configuration
++ Different logs produce different amounts of Latex in the Tree Fluid Extractor and can be modified using Crafttweaker (Any fluid can be added)
 
 # 1.10.2
 + Fluid interaction has potion effects now

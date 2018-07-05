@@ -1,21 +1,24 @@
 package com.buuz135.industrial.utils.apihandlers.crafttweaker;
 
-import com.buuz135.industrial.api.recipe.ProteinReactorEntry;
+import com.buuz135.industrial.api.extractor.ExtractorEntry;
+import com.buuz135.industrial.proxy.FluidsRegistry;
 import com.buuz135.industrial.utils.apihandlers.RecipeHandlers;
 import crafttweaker.CraftTweakerAPI;
 import crafttweaker.IAction;
 import crafttweaker.api.item.IItemStack;
+import crafttweaker.api.liquid.ILiquidStack;
 import net.minecraft.item.ItemStack;
+import net.minecraftforge.fluids.FluidStack;
 import stanhebben.zenscript.annotations.ZenClass;
 import stanhebben.zenscript.annotations.ZenMethod;
 
-@ZenClass("mods.industrialforegoing.ProteinReactor")
-public class CTProteinReactor {
+@ZenClass("mods.industrialforegoing.Extractor")
+public class CTExtractor {
 
     @ZenMethod
-    public static void add(IItemStack input) {
-        ProteinReactorEntry entry = new ProteinReactorEntry((ItemStack) input.getInternal());
-        CraftTweakerAPI.apply(new Add(entry));
+    public static void add(IItemStack input, ILiquidStack stack) {
+        ExtractorEntry extractorEntry = new ExtractorEntry((ItemStack) input.getInternal(), (FluidStack) stack.getInternal());
+        CraftTweakerAPI.apply(new Add(extractorEntry));
     }
 
     @ZenMethod
@@ -25,21 +28,20 @@ public class CTProteinReactor {
 
     private static class Add implements IAction {
 
-        private final ProteinReactorEntry entry;
+        private final ExtractorEntry entry;
 
-        private Add(ProteinReactorEntry entry) {
+        private Add(ExtractorEntry entry) {
             this.entry = entry;
         }
 
-
         @Override
         public void apply() {
-            RecipeHandlers.PROTEIN_REACTOR_ENTRIES.put(CTAction.ADD, entry);
+            RecipeHandlers.EXTRACTOR_ENTRIES.put(CTAction.ADD, entry);
         }
 
         @Override
         public String describe() {
-            return "Adding Protein Reactor Entry " + entry.getStack().getDisplayName();
+            return "Adding Extractor enties" + entry.getItemStack().getDisplayName();
         }
     }
 
@@ -53,12 +55,12 @@ public class CTProteinReactor {
 
         @Override
         public void apply() {
-            RecipeHandlers.PROTEIN_REACTOR_ENTRIES.put(CTAction.REMOVE, new ProteinReactorEntry(stack));
+            RecipeHandlers.EXTRACTOR_ENTRIES.put(CTAction.REMOVE, new ExtractorEntry(stack, new FluidStack(FluidsRegistry.LATEX, 1)));
         }
 
         @Override
         public String describe() {
-            return "Removing Protein Reactor Entry " + stack.getDisplayName();
+            return "Removing Extractor " + stack.getDisplayName();
         }
     }
 }

@@ -1,6 +1,7 @@
 package com.buuz135.industrial.api;
 
 
+import com.buuz135.industrial.api.extractor.ExtractorEntry;
 import com.buuz135.industrial.api.recipe.*;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.fluids.FluidRegistry;
@@ -32,11 +33,7 @@ public class IndustrialForegoingHelper {
      * @return true if it is removed, false if don't.
      */
     public static boolean removeBioReactorEntry(ItemStack stack) {
-        if (BioReactorEntry.BIO_REACTOR_ENTRIES.stream().anyMatch(entry -> entry.doesStackMatch(stack))) {
-            BioReactorEntry.BIO_REACTOR_ENTRIES.removeIf(entry -> entry.doesStackMatch(stack));
-            return true;
-        }
-        return false;
+        return BioReactorEntry.BIO_REACTOR_ENTRIES.removeIf(entry -> entry.doesStackMatch(stack));
     }
 
     /**
@@ -60,10 +57,7 @@ public class IndustrialForegoingHelper {
      * @return true if it is removed, false if don't.
      */
     public static boolean removeLaserDrillEntry(ItemStack stack) {
-        if (LaserDrillEntry.LASER_DRILL_ENTRIES.stream().anyMatch(entry -> stack.isItemEqual(entry.getStack()))) {
-            LaserDrillEntry.LASER_DRILL_ENTRIES.removeIf(entry -> entry.getStack().isItemEqual(stack));
-        }
-        return false;
+        return LaserDrillEntry.LASER_DRILL_ENTRIES.removeIf(entry -> entry.getStack().isItemEqual(stack));
     }
 
     /**
@@ -87,11 +81,7 @@ public class IndustrialForegoingHelper {
      * @return true if it is removed, false if don't.
      */
     public static boolean removeSludgeRefinerEntry(ItemStack stack) {
-        if (SludgeEntry.SLUDGE_RECIPES.stream().anyMatch(entry -> entry.getStack().isItemEqual(stack))) {
-            SludgeEntry.SLUDGE_RECIPES.removeIf(entry -> entry.getStack().isItemEqual(stack));
-            return true;
-        }
-        return false;
+        return SludgeEntry.SLUDGE_RECIPES.removeIf(entry -> entry.getStack().isItemEqual(stack));
     }
 
     /**
@@ -115,11 +105,7 @@ public class IndustrialForegoingHelper {
      * @return true if it is removed, false if don't.
      */
     public static boolean removeProteinReactorEntry(ItemStack stack) {
-        if (ProteinReactorEntry.PROTEIN_REACTOR_ENTRIES.stream().anyMatch(entry -> entry.doesStackMatch(stack))) {
-            ProteinReactorEntry.PROTEIN_REACTOR_ENTRIES.removeIf(entry -> entry.doesStackMatch(stack));
-            return true;
-        }
-        return false;
+        return ProteinReactorEntry.PROTEIN_REACTOR_ENTRIES.removeIf(entry -> entry.doesStackMatch(stack));
     }
 
     /**
@@ -143,10 +129,19 @@ public class IndustrialForegoingHelper {
      * @return true if it is removed, false if don't.
      */
     public static boolean removeFluidDictionaryEntry(FluidDictionaryEntry entry) {
-        if (FluidDictionaryEntry.FLUID_DICTIONARY_RECIPES.stream().anyMatch(entry1 -> entry1.getFluidOrigin().equals(entry.getFluidOrigin()) && entry1.getFluidResult().equals(entry.getFluidResult()))) {
-            FluidDictionaryEntry.FLUID_DICTIONARY_RECIPES.removeIf(entry1 -> entry1.getFluidOrigin().equals(entry.getFluidOrigin()) && entry1.getFluidResult().equals(entry.getFluidResult()));
+        return FluidDictionaryEntry.FLUID_DICTIONARY_RECIPES.removeIf(entry1 -> entry1.getFluidOrigin().equals(entry.getFluidOrigin()) && entry1.getFluidResult().equals(entry.getFluidResult()));
+    }
+
+    public static boolean addWoodToLatex(ExtractorEntry entry) {
+        if (ExtractorEntry.EXTRACTOR_ENTRIES.stream().noneMatch(extractorEntry -> extractorEntry.isEqual(entry.getItemStack()))) {
+            ExtractorEntry.EXTRACTOR_ENTRIES.add(entry);
             return true;
         }
         return false;
     }
+
+    public static boolean removeWoodToLatex(ItemStack stack) {
+        return ExtractorEntry.EXTRACTOR_ENTRIES.removeIf(extractorEntry -> extractorEntry.isEqual(stack));
+    }
+
 }

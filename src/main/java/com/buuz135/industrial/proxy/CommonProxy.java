@@ -88,6 +88,7 @@ public class CommonProxy {
         RecipeHandlers.loadSludgeRefinerEntries();
         RecipeHandlers.loadProteinReactorEntries();
         RecipeHandlers.loadFluidDictionaryEntries();
+        RecipeHandlers.loadWoodToLatexEntries();
     }
 
     public void postInit() {

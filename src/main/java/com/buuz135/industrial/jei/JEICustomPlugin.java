@@ -1,6 +1,7 @@
 package com.buuz135.industrial.jei;
 
 
+import com.buuz135.industrial.api.extractor.ExtractorEntry;
 import com.buuz135.industrial.api.recipe.BioReactorEntry;
 import com.buuz135.industrial.api.recipe.FluidDictionaryEntry;
 import com.buuz135.industrial.api.recipe.LaserDrillEntry;
@@ -8,6 +9,8 @@ import com.buuz135.industrial.api.recipe.ProteinReactorEntry;
 import com.buuz135.industrial.book.BookCategory;
 import com.buuz135.industrial.config.CustomConfiguration;
 import com.buuz135.industrial.gui.conveyor.GuiConveyor;
+import com.buuz135.industrial.jei.extractor.ExtractorRecipeCategory;
+import com.buuz135.industrial.jei.extractor.ExtractorRecipeWrapper;
 import com.buuz135.industrial.jei.fluiddictionary.FluidDictionaryCategory;
 import com.buuz135.industrial.jei.fluiddictionary.FluidDictionaryWrapper;
 import com.buuz135.industrial.jei.ghost.ConveyorGhostSlotHandler;
@@ -69,6 +72,7 @@ public class JEICustomPlugin implements IModPlugin {
     private ManualCategory manualCategory;
     private FluidDictionaryCategory fluidDictionaryCategory;
     private StoneWorkCategory stoneWorkCategory;
+    private ExtractorRecipeCategory extractorRecipeCategory;
 
     public static void showUses(ItemStack stack) {
         if (recipesGui != null && recipeRegistry != null)
@@ -108,10 +112,6 @@ public class JEICustomPlugin implements IModPlugin {
             petrifiedBurnTimeCategory = new PetrifiedBurnTimeCategory(registry.getJeiHelpers().getGuiHelper());
             registry.addRecipeCategories(petrifiedBurnTimeCategory);
         }
-        if (CustomConfiguration.enableBookEntriesInJEI) {
-            manualCategory = new ManualCategory(registry.getJeiHelpers().getGuiHelper());
-            registry.addRecipeCategories(manualCategory);
-        }
         if (BlockRegistry.fluidDictionaryConverterBlock.isEnabled() && !FluidDictionaryEntry.FLUID_DICTIONARY_RECIPES.isEmpty()) {
             fluidDictionaryCategory = new FluidDictionaryCategory(registry.getJeiHelpers().getGuiHelper());
             registry.addRecipeCategories(fluidDictionaryCategory);
@@ -119,6 +119,14 @@ public class JEICustomPlugin implements IModPlugin {
         if (BlockRegistry.materialStoneWorkFactoryBlock.isEnabled()) {
             stoneWorkCategory = new StoneWorkCategory(registry.getJeiHelpers().getGuiHelper());
             registry.addRecipeCategories(stoneWorkCategory);
+        }
+        if (BlockRegistry.treeFluidExtractorBlock.isEnabled()) {
+            extractorRecipeCategory = new ExtractorRecipeCategory(registry.getJeiHelpers().getGuiHelper());
+            registry.addRecipeCategories(extractorRecipeCategory);
+        }
+        if (CustomConfiguration.enableBookEntriesInJEI) {
+            manualCategory = new ManualCategory(registry.getJeiHelpers().getGuiHelper());
+            registry.addRecipeCategories(manualCategory);
         }
     }
 
@@ -171,7 +179,6 @@ public class JEICustomPlugin implements IModPlugin {
                 new MachineProduceWrapper(BlockRegistry.animalResourceHarvesterBlock, FluidUtil.getFilledBucket(new FluidStack(FluidsRegistry.MILK, 1000))),
                 new MachineProduceWrapper(BlockRegistry.mobSlaughterFactoryBlock, FluidUtil.getFilledBucket(new FluidStack(FluidsRegistry.MEAT, 1000))),
                 new MachineProduceWrapper(BlockRegistry.mobSlaughterFactoryBlock, FluidUtil.getFilledBucket(new FluidStack(FluidsRegistry.PINK_SLIME, 1000))),
-                new MachineProduceWrapper(BlockRegistry.treeFluidExtractorBlock, FluidUtil.getFilledBucket(new FluidStack(FluidsRegistry.LATEX, 1000))),
                 new MachineProduceWrapper(BlockRegistry.latexProcessingUnitBlock, new ItemStack(ItemRegistry.tinyDryRubber)),
                 new MachineProduceWrapper(BlockRegistry.animalByproductRecolectorBlock, FluidUtil.getFilledBucket(new FluidStack(FluidsRegistry.SEWAGE, 1000))),
                 new MachineProduceWrapper(BlockRegistry.lavaFabricatorBlock, FluidUtil.getFilledBucket(new FluidStack(FluidRegistry.LAVA, 1000))),
@@ -217,6 +224,10 @@ public class JEICustomPlugin implements IModPlugin {
         if (fluidDictionaryCategory != null) {
             registry.addRecipeCatalyst(new ItemStack(BlockRegistry.fluidDictionaryConverterBlock), fluidDictionaryCategory.getUid());
             registry.addRecipes(FluidDictionaryEntry.FLUID_DICTIONARY_RECIPES.stream().map(FluidDictionaryWrapper::new).collect(Collectors.toList()), fluidDictionaryCategory.getUid());
+        }
+        if (extractorRecipeCategory != null) {
+            registry.addRecipeCatalyst(new ItemStack(BlockRegistry.treeFluidExtractorBlock), extractorRecipeCategory.getUid());
+            registry.addRecipes(ExtractorEntry.EXTRACTOR_ENTRIES.stream().map(ExtractorRecipeWrapper::new).collect(Collectors.toList()), extractorRecipeCategory.getUid());
         }
 
         registry.addGhostIngredientHandler(GuiConveyor.class, new ConveyorGhostSlotHandler());

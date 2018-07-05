@@ -14,6 +14,7 @@ public class IFRegistries {
             .setName(new ResourceLocation(Reference.MOD_ID, "straw"))
             .setIDRange(1, Integer.MAX_VALUE - 1)
             .setType(StrawHandler.class)
+            .disableSaving()
             .create();
 
     public static final ForgeRegistry<ConveyorUpgradeFactory> CONVEYOR_UPGRADE_REGISTRY = (ForgeRegistry<ConveyorUpgradeFactory>) new RegistryBuilder<ConveyorUpgradeFactory>()
@@ -26,6 +27,7 @@ public class IFRegistries {
             .setName(new ResourceLocation(Reference.MOD_ID, "plant_recollectable"))
             .setIDRange(1, Integer.MAX_VALUE - 1)
             .setType(PlantRecollectable.class)
+            .disableSaving()
             .create();
 
     public static void poke() {

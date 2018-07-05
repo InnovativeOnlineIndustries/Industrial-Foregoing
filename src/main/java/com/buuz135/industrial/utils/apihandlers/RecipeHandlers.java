@@ -1,14 +1,20 @@
 package com.buuz135.industrial.utils.apihandlers;
 
 import com.buuz135.industrial.api.IndustrialForegoingHelper;
+import com.buuz135.industrial.api.extractor.ExtractorEntry;
 import com.buuz135.industrial.api.recipe.*;
+import com.buuz135.industrial.proxy.FluidsRegistry;
 import com.buuz135.industrial.utils.apihandlers.crafttweaker.CTAction;
 import com.google.common.collect.LinkedListMultimap;
+import net.minecraft.block.Block;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.NonNullList;
+import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.oredict.OreDictionary;
+
+import java.util.Comparator;
 
 public class RecipeHandlers {
 
@@ -17,6 +23,7 @@ public class RecipeHandlers {
     public static final LinkedListMultimap<CTAction, SludgeEntry> SLUDGE_ENTRIES = LinkedListMultimap.create();
     public static final LinkedListMultimap<CTAction, ProteinReactorEntry> PROTEIN_REACTOR_ENTRIES = LinkedListMultimap.create();
     public static final LinkedListMultimap<CTAction, FluidDictionaryEntry> FLUID_DICTIONARY_ENTRIES = LinkedListMultimap.create();
+    public static final LinkedListMultimap<CTAction, ExtractorEntry> EXTRACTOR_ENTRIES = LinkedListMultimap.create();
 
     public static void loadBioReactorEntries() {
         IndustrialForegoingHelper.addBioReactorEntry(new BioReactorEntry(new ItemStack(Items.WHEAT_SEEDS)));
@@ -54,6 +61,11 @@ public class RecipeHandlers {
             if (ctAction == CTAction.ADD) IndustrialForegoingHelper.addFluidDictionaryEntry(entry);
             else IndustrialForegoingHelper.removeFluidDictionaryEntry(entry);
         });
+        EXTRACTOR_ENTRIES.forEach((ctAction, extractorEntry) -> {
+            if (ctAction == CTAction.ADD) IndustrialForegoingHelper.addWoodToLatex(extractorEntry);
+            else IndustrialForegoingHelper.removeWoodToLatex(extractorEntry.getItemStack());
+        });
+        ExtractorEntry.EXTRACTOR_ENTRIES.sort(Comparator.comparingInt(o -> ((ExtractorEntry) o).getFluidStack().amount).reversed());
     }
 
     public static void loadLaserLensEntries() {
@@ -128,6 +140,14 @@ public class RecipeHandlers {
         addFluidEntryDoubleDirectional("xpjuice", "experience", 1);
     }
 
+    public static void loadWoodToLatexEntries() {
+        tryToAddWoodToLatex("ic2:rubber_wood", new FluidStack(FluidsRegistry.LATEX, 4));
+        tryToAddWoodToLatex("techreborn:rubber_log", new FluidStack(FluidsRegistry.LATEX, 4));
+        IndustrialForegoingHelper.addWoodToLatex(new ExtractorEntry(new ItemStack(Blocks.LOG2), new FluidStack(FluidsRegistry.LATEX, 3)));
+        IndustrialForegoingHelper.addWoodToLatex(new ExtractorEntry(new ItemStack(Blocks.LOG2, 1, 1), new FluidStack(FluidsRegistry.LATEX, 2)));
+        getRealOredictedItems("logWood").forEach(stack -> IndustrialForegoingHelper.addWoodToLatex(new ExtractorEntry(stack, new FluidStack(FluidsRegistry.LATEX, 1))));
+    }
+
     public static void addFluidEntryDoubleDirectional(String fluidInput, String fluidOutput, double ratio) {
         IndustrialForegoingHelper.addFluidDictionaryEntry(new FluidDictionaryEntry(fluidInput, fluidOutput, ratio));
         IndustrialForegoingHelper.addFluidDictionaryEntry(new FluidDictionaryEntry(fluidOutput, fluidInput, 1 / ratio));
@@ -156,6 +176,13 @@ public class RecipeHandlers {
         if (stack.getItem().getCreativeTab() != null)
             stack.getItem().getSubItems(stack.getItem().getCreativeTab(), list);
 
+    }
+
+    public static void tryToAddWoodToLatex(String string, FluidStack stack) {
+        Block block = Block.getBlockFromName(string);
+        if (block != null) {
+            IndustrialForegoingHelper.addWoodToLatex(new ExtractorEntry(new ItemStack(block), stack));
+        }
     }
 
 }
