@@ -1,7 +1,7 @@
 package com.buuz135.industrial.proxy.network;
 
 import com.buuz135.industrial.api.conveyor.ConveyorUpgrade;
-import com.buuz135.industrial.proxy.block.TileEntityConveyor;
+import com.buuz135.industrial.proxy.block.tile.TileEntityConveyor;
 import com.buuz135.industrial.proxy.block.upgrade.ConveyorSplittingUpgrade;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.client.Minecraft;

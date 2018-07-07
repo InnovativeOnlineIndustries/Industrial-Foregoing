@@ -1,3 +1,6 @@
+# 1.10.4
++ Added black hole labels
+
 # 1.10.3
 + Water Condensator now produces water if it has 2 water sources or more
 + Artificial dye is disabled if the dye mixer disabled

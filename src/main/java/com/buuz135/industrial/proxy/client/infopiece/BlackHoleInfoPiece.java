@@ -35,7 +35,7 @@ public class BlackHoleInfoPiece extends BasicRenderedGuiPiece {
                 }
                 String display = new TextComponentTranslation(tile.getDisplayNameUnlocalized()).getUnformattedText();
                 renderer.drawString(TextFormatting.DARK_GRAY + display.substring(0, Math.min(display.length(), 21)) + (display.length() > 21 ? "." : ""), 20, 4, 0xFFFFFF);
-                renderer.drawString(TextFormatting.DARK_GRAY + new TextComponentTranslation("text.industrialforegoing.display.amount").getUnformattedText() + " " + new DecimalFormat().format(tile.getAmount()), 4, (renderer.FONT_HEIGHT) * 3, 0xFFFFFF);
+                renderer.drawString(TextFormatting.DARK_GRAY + new TextComponentTranslation("text.industrialforegoing.display.amount").getUnformattedText() + " " + new DecimalFormat().format(tile.getDisplayAmount()), 4, (renderer.FONT_HEIGHT) * 3, 0xFFFFFF);
             } else {
                 renderer.drawString(TextFormatting.DARK_GRAY + new TextComponentTranslation("text.industrialforegoing.display.empty").getFormattedText(), 4, 4, 0xFFFFFF);
             }

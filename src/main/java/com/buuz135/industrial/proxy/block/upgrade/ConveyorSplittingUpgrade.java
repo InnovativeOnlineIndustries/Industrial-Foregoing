@@ -10,7 +10,7 @@ import com.buuz135.industrial.gui.component.TextGuiComponent;
 import com.buuz135.industrial.gui.component.TextureGuiComponent;
 import com.buuz135.industrial.gui.component.TexturedStateButtonGuiComponent;
 import com.buuz135.industrial.proxy.block.Cuboid;
-import com.buuz135.industrial.proxy.block.TileEntityConveyor;
+import com.buuz135.industrial.proxy.block.tile.TileEntityConveyor;
 import com.buuz135.industrial.proxy.network.ConveyorSplittingSyncEntityMessage;
 import com.buuz135.industrial.utils.MovementUtils;
 import com.buuz135.industrial.utils.Reference;

@@ -1,6 +1,6 @@
 package com.buuz135.industrial.proxy.network;
 
-import com.buuz135.industrial.proxy.block.TileEntityConveyor;
+import com.buuz135.industrial.proxy.block.tile.TileEntityConveyor;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.PacketBuffer;

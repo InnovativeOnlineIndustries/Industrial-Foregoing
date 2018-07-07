@@ -9,6 +9,8 @@ public interface IHasDisplayStack {
     public int getAmount();
 
     public String getDisplayNameUnlocalized();
+
+    public int getDisplayAmount();
 }
 
 

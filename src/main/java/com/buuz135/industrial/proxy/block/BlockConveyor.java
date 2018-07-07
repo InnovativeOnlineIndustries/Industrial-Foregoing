@@ -3,6 +3,7 @@ package com.buuz135.industrial.proxy.block;
 import com.buuz135.industrial.IndustrialForegoing;
 import com.buuz135.industrial.api.conveyor.ConveyorUpgrade;
 import com.buuz135.industrial.proxy.ItemRegistry;
+import com.buuz135.industrial.proxy.block.tile.TileEntityConveyor;
 import com.buuz135.industrial.proxy.client.model.ConveyorModelData;
 import com.buuz135.industrial.registry.IFRegistries;
 import com.buuz135.industrial.utils.RayTraceUtils;

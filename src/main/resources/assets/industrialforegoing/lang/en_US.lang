@@ -213,6 +213,7 @@ tile.industrialforegoing.fluid_crafter.name=Fluid Crafter
 tile.industrialforegoing.plant_interactor.name=Plant Interactor
 tile.industrialforegoing.fluiddictionary_converter.name=Fluid Dictionary Converter
 tile.industrialforegoing.conveyor.name=Conveyor Belt
+tile.industrialforegoing.black_hole_label.name=Black Hole Label
 
 tile.essence.name=Essence
 tile.milk.name=Milk

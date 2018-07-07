@@ -68,6 +68,11 @@ public class BlackHoleTankTile extends CustomSidedTileEntity implements IHasDisp
     }
 
     @Override
+    public int getDisplayAmount() {
+        return getAmount();
+    }
+
+    @Override
     public List<IGuiContainerPiece> getGuiContainerPieces(BasicTeslaGuiContainer container) {
         List<IGuiContainerPiece> list = super.getGuiContainerPieces(container);
         list.add(new BlackHoleInfoPiece(this, 18 * 2 + 8, 25));

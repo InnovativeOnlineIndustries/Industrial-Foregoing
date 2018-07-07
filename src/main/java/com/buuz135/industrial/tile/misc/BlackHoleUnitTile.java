@@ -45,18 +45,21 @@ public class BlackHoleUnitTile extends CustomSidedTileEntity implements IHasDisp
 
     public static final String NBT_ITEMSTACK = "itemstack";
     public static final String NBT_AMOUNT = "amount";
+    public static final String NBT_AMOUNT_LABEL = "label";
     public static final String NBT_META = "meta";
     public static final String NBT_ITEM_NBT = "stack_nbt";
     private LockableItemHandler inItems;
     private LockableItemHandler outItems;
     private ItemStack stack;
     private int amount;
+    private int labelAmount;
     private BlackHoleHandler itemHandler = new BlackHoleHandler(this);
 
     public BlackHoleUnitTile() {
         super(BlackHoleUnitTile.class.getName().hashCode());
         stack = ItemStack.EMPTY;
         amount = 0;
+        labelAmount = 0;
     }
 
     @Override
@@ -74,6 +77,7 @@ public class BlackHoleUnitTile extends CustomSidedTileEntity implements IHasDisp
             int increment = Math.min(amount, stack.getMaxStackSize() - stack.getCount());
             stack.setCount(stack.getCount() + increment);
             amount -= increment;
+            if (!world.isRemote) updateForLabel();
         }
         if (amount == 0 && outItems.getStackInSlot(0).isEmpty()) {
             stack = ItemStack.EMPTY;
@@ -87,14 +91,17 @@ public class BlackHoleUnitTile extends CustomSidedTileEntity implements IHasDisp
             @Override
             protected void onContentsChanged(int slot) {
                 ItemStack in = inItems.getStackInSlot(0);
-                if (in.isEmpty()) return;
+                if (in.isEmpty()) {
+                    return;
+                }
                 if (stack.isEmpty()) {
                     stack = in;
                     amount = 0;
+                    forceSync();
                 }
                 amount += in.getCount();
                 inItems.setStackInSlot(0, ItemStack.EMPTY);
-                BlackHoleUnitTile.this.partialSync(NBT_AMOUNT, true);
+                updateForLabel();
             }
         };
         this.addInventory(new ColoredItemHandler(inItems, EnumDyeColor.BLUE, "Input items", new BoundingRectangle(16, 25, 18, 18)) {
@@ -117,7 +124,10 @@ public class BlackHoleUnitTile extends CustomSidedTileEntity implements IHasDisp
         outItems = new LockableItemHandler(1) {
             @Override
             protected void onContentsChanged(int slot) {
-                BlackHoleUnitTile.this.partialSync(NBT_AMOUNT, true);
+                updateForLabel();
+                if (BlackHoleUnitTile.this.getItemStack().isEmpty()) {
+                    forceSync();
+                }
             }
         };
         this.addInventory(new ColoredItemHandler(outItems, EnumDyeColor.ORANGE, "Output items", new BoundingRectangle(16, 25 + 18 * 2, 18, 18)) {
@@ -138,7 +148,8 @@ public class BlackHoleUnitTile extends CustomSidedTileEntity implements IHasDisp
 
         });
         this.addInventoryToStorage(outItems, "black_hole_out");
-        this.registerSyncIntPart(NBT_AMOUNT, nbtTagInt -> amount = nbtTagInt.getInt(), () -> new NBTTagInt(amount), SyncProviderLevel.GUI);
+        this.registerSyncIntPart(NBT_AMOUNT, nbtTagInt -> amount = nbtTagInt.getInt(), () -> new NBTTagInt(amount), SyncProviderLevel.TICK_ONLY);
+        this.registerSyncIntPart(NBT_AMOUNT_LABEL, nbtTagInt -> labelAmount = nbtTagInt.getInt(), () -> new NBTTagInt(labelAmount), SyncProviderLevel.TICK);
     }
 
     @Override
@@ -222,7 +233,7 @@ public class BlackHoleUnitTile extends CustomSidedTileEntity implements IHasDisp
 
 
     public ItemStack getItemStack() {
-        return stack;
+        return outItems.getLocked() ? outItems.getFilterStack(0) : (stack.isEmpty() ? outItems.getStackInSlot(0) : stack);
     }
 
     public int getAmount() {
@@ -235,6 +246,20 @@ public class BlackHoleUnitTile extends CustomSidedTileEntity implements IHasDisp
 
     public String getDisplayNameUnlocalized() {
         return getItemStack().getUnlocalizedName().endsWith(".name") ? getItemStack().getUnlocalizedName() : getItemStack().getUnlocalizedName() + ".name";
+    }
+
+    @Override
+    public int getDisplayAmount() {
+        return labelAmount;
+    }
+
+    private void updateForLabel() {
+        this.labelAmount = getAmount();
+        this.partialSync(NBT_AMOUNT_LABEL, true);
+    }
+
+    private void updateItemStack() {
+        forceSync();
     }
 
     @NotNull
@@ -310,11 +335,14 @@ public class BlackHoleUnitTile extends CustomSidedTileEntity implements IHasDisp
                     tile.setAmount(0);
                     outItems.setStackInSlot(0, ItemStack.EMPTY);
                 }
+                updateForLabel();
+                updateItemStack();
                 return ItemHandlerHelper.copyStackWithSize(existing, newAmount);
             } else {
                 if (!simulate) {
                     tile.setAmount(tile.amount - amount);
                 }
+                updateForLabel();
                 return ItemHandlerHelper.copyStackWithSize(existing, amount);
             }
         }
