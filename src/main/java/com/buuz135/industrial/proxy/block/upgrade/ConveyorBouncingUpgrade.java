@@ -55,6 +55,7 @@ public class ConveyorBouncingUpgrade extends ConveyorUpgrade {
         Vec3d vec3d = new Vec3d(velocityHorizontal * direction.getDirectionVec().getX(), velocityVertical, velocityHorizontal * direction.getDirectionVec().getZ());
         entity.motionX = vec3d.x;
         if (vec3d.y != 0) {
+            entity.fallDistance = 3;
             entity.motionY = vec3d.y;
             if (entity instanceof EntityItem) entity.onGround = false;
         }

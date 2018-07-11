@@ -1,6 +1,7 @@
 # 1.10.4
 + Added black hole labels
 + Tree Fluid Extractor should work with all the logs rotations
++ Fall distance resets when bouncing the conveyors
 
 # 1.10.3
 + Water Condensator now produces water if it has 2 water sources or more
