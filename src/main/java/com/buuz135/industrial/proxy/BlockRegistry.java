@@ -143,6 +143,7 @@ public class BlockRegistry {
         ItemRenderRegistry.registerRender();
         FluidsRenderRegistry.registerRender();
         BlockRenderRegistry.registerRender();
+        blockConveyor.registerRender();
         BlockBase.BLOCKS.forEach(BlockBase::registerRender);
     }
 }

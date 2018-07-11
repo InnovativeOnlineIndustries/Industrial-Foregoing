@@ -11,7 +11,6 @@ import net.minecraft.entity.item.EntityItem;
 import net.minecraft.item.EnumDyeColor;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ITickable;
 import net.minecraft.util.ResourceLocation;
@@ -27,7 +26,7 @@ import java.util.Map;
 
 import static com.buuz135.industrial.proxy.block.BlockConveyor.*;
 
-public class TileEntityConveyor extends TileEntity implements IConveyorContainer, ITickable {
+public class TileEntityConveyor extends TileBase implements IConveyorContainer, ITickable {
 
     private EnumFacing facing;
     private EnumType type;
@@ -186,8 +185,8 @@ public class TileEntityConveyor extends TileEntity implements IConveyorContainer
     @Override
     public void readFromNBT(NBTTagCompound compound) {
         super.readFromNBT(compound);
-        this.facing = EnumFacing.valueOf((compound.getString("Facing").toUpperCase()));
-        this.type = BlockConveyor.EnumType.valueOf(compound.getString("Type").toUpperCase());
+        this.facing = EnumFacing.byName(compound.getString("Facing"));
+        this.type = BlockConveyor.EnumType.getFromName(compound.getString("Type"));
         this.color = compound.getInteger("Color");
         this.sticky = compound.getBoolean("Sticky");
         if (compound.hasKey("Upgrades", Constants.NBT.TAG_COMPOUND)) {

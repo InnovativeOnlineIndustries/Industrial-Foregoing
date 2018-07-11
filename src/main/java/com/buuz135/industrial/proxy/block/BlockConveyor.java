@@ -509,6 +509,15 @@ public class BlockConveyor extends BlockBase {
             return this.toString().toLowerCase();
         }
 
+        public static EnumType getFromName(String name) {
+            for (EnumType type : EnumType.values()) {
+                if (type.getName().equalsIgnoreCase(name)) {
+                    return type;
+                }
+            }
+            return FLAT;
+        }
+
     }
 
     public enum EnumSides implements IStringSerializable {
