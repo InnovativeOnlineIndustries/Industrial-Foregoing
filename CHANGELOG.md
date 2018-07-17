@@ -1,3 +1,6 @@
+# 1.10.5
++ Fixed an edge case where insertion/dropping conveyor upgrades weren't decreasing itemstacks
+
 # 1.10.4
 + Added black hole labels
 + Tree Fluid Extractor should work with all the logs rotations

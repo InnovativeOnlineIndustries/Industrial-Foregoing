@@ -62,12 +62,12 @@ public class ConveyorInsertionUpgrade extends ConveyorUpgrade {
                 if (whitelist != filter.matches((EntityItem) entity)) return;
                 ItemStack stack = ((EntityItem) entity).getItem();
                 for (int i = 0; i < handler.getSlots(); i++) {
-                    ItemStack remaining = handler.insertItem(i, stack, false);
-                    if (remaining.isEmpty()) {
+                    stack = handler.insertItem(i, stack, false);
+                    if (stack.isEmpty()) {
                         entity.setDead();
                         break;
                     } else {
-                        ((EntityItem) entity).setItem(remaining);
+                        ((EntityItem) entity).setItem(stack);
                     }
                 }
             }
