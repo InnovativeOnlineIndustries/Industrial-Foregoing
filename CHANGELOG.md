@@ -1,5 +1,6 @@
 # 1.10.5
 + Fixed an edge case where insertion/dropping conveyor upgrades weren't decreasing itemstacks
++ Added a safety check for the MIT to not capture dead things
 
 # 1.10.4
 + Added black hole labels

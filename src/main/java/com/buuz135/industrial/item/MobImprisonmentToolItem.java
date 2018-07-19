@@ -49,7 +49,7 @@ public class MobImprisonmentToolItem extends IFCustomItem {
     @Override
     public boolean itemInteractionForEntity(ItemStack stack, EntityPlayer playerIn, EntityLivingBase target, EnumHand hand) {
         if (target.getEntityWorld().isRemote) return false;
-        if (target instanceof EntityPlayer || !target.isNonBoss()) return false;
+        if (target instanceof EntityPlayer || !target.isNonBoss() || !target.isEntityAlive()) return false;
         if (containsEntity(stack)) return false;
         String entityID = EntityList.getKey(target).toString();
         if (isBlacklisted(entityID)) return false;
