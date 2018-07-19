@@ -34,7 +34,7 @@ public class TreeCache {
             if (s.getBlock() instanceof IShearable && shear) {
                 stacks.addAll(((IShearable) s.getBlock()).onSheared(new ItemStack(Items.SHEARS), world, p, 0));
             } else {
-                s.getBlock().getDrops(stacks, world, p, s, 0);
+                stacks.addAll(BlockUtils.getBlockDrops(world, p));
             }
             world.setBlockToAir(p);
         }

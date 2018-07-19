@@ -1,6 +1,7 @@
 package com.buuz135.industrial.utils.apihandlers.plant;
 
 import com.buuz135.industrial.api.plant.PlantRecollectable;
+import com.buuz135.industrial.utils.BlockUtils;
 import net.minecraft.block.BlockCactus;
 import net.minecraft.block.BlockReed;
 import net.minecraft.block.state.IBlockState;
@@ -39,7 +40,7 @@ public class DoubleTallPlantRecollectable extends PlantRecollectable {
 
     private void harvestBlock(NonNullList<ItemStack> stacks, World world, BlockPos pos) {
         if (canBeHarvested(world, pos, world.getBlockState(pos))) {
-            world.getBlockState(pos).getBlock().getDrops(stacks, world, pos, world.getBlockState(pos), 0);
+            stacks.addAll(BlockUtils.getBlockDrops(world, pos));
             world.setBlockToAir(pos);
         }
     }

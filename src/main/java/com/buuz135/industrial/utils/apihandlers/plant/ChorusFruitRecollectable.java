@@ -31,7 +31,6 @@ public class ChorusFruitRecollectable extends PlantRecollectable {
                 return true;
             }
         }
-
         return false;
     }
 

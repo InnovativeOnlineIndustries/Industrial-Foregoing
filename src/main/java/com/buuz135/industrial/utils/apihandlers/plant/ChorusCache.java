@@ -50,9 +50,11 @@ public class ChorusCache {
 
     public void chop(NonNullList<ItemStack> stacks, BlockPos p) {
         if (BlockUtils.isChorus(world, p)) {
-            if (world.getBlockState(p).getBlock().equals(Blocks.CHORUS_FLOWER))
+            if (world.getBlockState(p).getBlock().equals(Blocks.CHORUS_FLOWER)) {
                 stacks.add(new ItemStack(Blocks.CHORUS_FLOWER));
-            world.getBlockState(p).getBlock().getDrops(stacks, world, p, world.getBlockState(p), 0);
+            } else {
+                stacks.addAll(BlockUtils.getBlockDrops(world, p));
+            }
             world.setBlockToAir(p);
         }
     }

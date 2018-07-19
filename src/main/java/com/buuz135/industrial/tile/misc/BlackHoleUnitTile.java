@@ -54,12 +54,14 @@ public class BlackHoleUnitTile extends CustomSidedTileEntity implements IHasDisp
     private int amount;
     private int labelAmount;
     private BlackHoleHandler itemHandler = new BlackHoleHandler(this);
+    private boolean needsUpdate;
 
     public BlackHoleUnitTile() {
         super(BlackHoleUnitTile.class.getName().hashCode());
         stack = ItemStack.EMPTY;
         amount = 0;
         labelAmount = 0;
+        this.needsUpdate = false;
     }
 
     @Override
@@ -81,6 +83,11 @@ public class BlackHoleUnitTile extends CustomSidedTileEntity implements IHasDisp
         }
         if (amount == 0 && outItems.getStackInSlot(0).isEmpty()) {
             stack = ItemStack.EMPTY;
+        }
+        if (needsUpdate && this.world.getTotalWorldTime() % 5 == 0) {
+            this.labelAmount = getAmount();
+            this.partialSync(NBT_AMOUNT_LABEL, true);
+            this.needsUpdate = false;
         }
     }
 
@@ -254,8 +261,7 @@ public class BlackHoleUnitTile extends CustomSidedTileEntity implements IHasDisp
     }
 
     private void updateForLabel() {
-        this.labelAmount = getAmount();
-        this.partialSync(NBT_AMOUNT_LABEL, true);
+        this.needsUpdate = true;
     }
 
     private void updateItemStack() {

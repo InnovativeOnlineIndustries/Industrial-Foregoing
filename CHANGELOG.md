@@ -1,3 +1,6 @@
+# 1.10.6
++ Improved a bunch of code
+
 # 1.10.5
 + Fixed an edge case where insertion/dropping conveyor upgrades weren't decreasing itemstacks
 + Added a safety check for the MIT to not capture dead things

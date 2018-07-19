@@ -1,6 +1,7 @@
 package com.buuz135.industrial.utils.apihandlers.plant;
 
 import com.buuz135.industrial.api.plant.PlantRecollectable;
+import com.buuz135.industrial.utils.BlockUtils;
 import net.minecraft.block.BlockNetherWart;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.item.ItemStack;
@@ -25,7 +26,7 @@ public class BlockNetherWartRecollectable extends PlantRecollectable {
     @Override
     public List<ItemStack> doHarvestOperation(World world, BlockPos pos, IBlockState blockState) {
         NonNullList<ItemStack> stacks = NonNullList.create();
-        blockState.getBlock().getDrops(stacks, world, pos, blockState, 0);
+        stacks.addAll(BlockUtils.getBlockDrops(world, pos));
         world.setBlockToAir(pos);
         return stacks;
     }

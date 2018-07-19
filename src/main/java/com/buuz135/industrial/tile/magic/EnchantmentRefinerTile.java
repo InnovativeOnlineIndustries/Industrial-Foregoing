@@ -6,6 +6,7 @@ import com.buuz135.industrial.utils.WorkUtils;
 import net.minecraft.init.Items;
 import net.minecraft.item.EnumDyeColor;
 import net.minecraft.item.ItemStack;
+import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.ItemHandlerHelper;
 import net.minecraftforge.items.ItemStackHandler;
 
@@ -105,25 +106,18 @@ public class EnchantmentRefinerTile extends CustomElectricMachine {
     @Override
     protected float performWork() {
         if (WorkUtils.isDisabled(this.getBlockType())) return 0;
-
         ItemStack stack = getFirstItem();
         if (stack.isEmpty()) {
             return 0;
         }
         ItemStack out = stack.copy();
         out.setCount(1);
-        if (stack.isItemEnchanted() || stack.getItem().equals(Items.ENCHANTED_BOOK)) {
-            if (ItemHandlerHelper.insertItem(outputEnch, out, true).isEmpty()) {
-                ItemHandlerHelper.insertItem(outputEnch, out, false);
-                stack.setCount(stack.getCount() - 1);
-                return 500;
-            }
-        } else if (ItemHandlerHelper.insertItem(outputNoEnch, out, true).isEmpty()) {
-            ItemHandlerHelper.insertItem(outputNoEnch, out, false);
+        IItemHandler handler = (stack.isItemEnchanted() || stack.getItem().equals(Items.ENCHANTED_BOOK)) ? outputEnch : outputNoEnch;
+        if (ItemHandlerHelper.insertItem(handler, out, true).isEmpty()) {
+            ItemHandlerHelper.insertItem(handler, out, false);
             stack.setCount(stack.getCount() - 1);
             return 500;
         }
-
         return 0;
     }
 

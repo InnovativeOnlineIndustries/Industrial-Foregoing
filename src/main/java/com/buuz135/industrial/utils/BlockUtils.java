@@ -12,6 +12,7 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
+import net.minecraft.util.NonNullList;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
@@ -77,6 +78,14 @@ public class BlockUtils {
         return !event.isCanceled();
     }
 
+    public static List<ItemStack> getBlockDrops(World world, BlockPos pos) {
+        IBlockState state = world.getBlockState(pos);
+        NonNullList<ItemStack> stacks = NonNullList.create();
+        state.getBlock().getDrops(stacks, world, pos, state, 0);
+        BlockEvent.HarvestDropsEvent event = new BlockEvent.HarvestDropsEvent(world, pos, world.getBlockState(pos), 0, 1f, stacks, IndustrialForegoing.getFakePlayer(world), false);
+        MinecraftForge.EVENT_BUS.post(event);
+        return event.getDrops();
+    }
 
     public static void renderLaserBeam(TileEntity tile, double x, double y, double z, EnumFacing direction, float partialTicks, int length) {
         Tessellator tess = Tessellator.getInstance();

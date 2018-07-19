@@ -62,7 +62,7 @@ public class BlockDestroyerTile extends WorkingAreaElectricMachine {
                 Block block = this.world.getBlockState(pos).getBlock();
                 TileEntity tile = world.getTileEntity(pos);
                 if (block.getBlockHardness(this.world.getBlockState(pos), this.world, pos) < 0) continue;
-                List<ItemStack> drops = block.getDrops(this.world, pos, this.world.getBlockState(pos), 0);
+                List<ItemStack> drops = BlockUtils.getBlockDrops(world, pos);
                 boolean canInsert = true;
                 for (ItemStack stack : drops) {
                     if (tile instanceof IWorldNameable) {
