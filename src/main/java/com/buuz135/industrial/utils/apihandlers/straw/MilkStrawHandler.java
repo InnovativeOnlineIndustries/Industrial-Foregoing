@@ -1,4 +1,4 @@
-package com.buuz135.industrial.utils.strawhandlers;
+package com.buuz135.industrial.utils.apihandlers.straw;
 
 import com.buuz135.industrial.proxy.FluidsRegistry;
 import net.minecraft.entity.player.EntityPlayer;

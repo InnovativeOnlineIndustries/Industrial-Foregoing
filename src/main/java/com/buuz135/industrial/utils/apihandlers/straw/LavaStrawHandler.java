@@ -1,4 +1,4 @@
-package com.buuz135.industrial.utils.strawhandlers;
+package com.buuz135.industrial.utils.apihandlers.straw;
 
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;

@@ -1,7 +1,7 @@
 package com.buuz135.industrial.proxy;
 
 import com.buuz135.industrial.api.straw.StrawHandler;
-import com.buuz135.industrial.utils.strawhandlers.*;
+import com.buuz135.industrial.utils.apihandlers.straw.*;
 import net.minecraft.init.MobEffects;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
