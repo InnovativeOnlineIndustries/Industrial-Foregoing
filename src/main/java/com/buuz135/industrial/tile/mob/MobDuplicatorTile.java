@@ -86,8 +86,9 @@ public class MobDuplicatorTile extends WorkingAreaElectricMachine {
         if (BlockRegistry.mobDuplicatorBlock.blacklistedEntities.contains(EntityList.getKey(entity).toString()))
             return 0;
 
-        int livingAround = world.getEntitiesWithinAABB(entity.getClass(), (new AxisAlignedBB((double) pos.getX(), (double) pos.getY(), (double) pos.getZ(), (double) (pos.getX() + 1), (double) (pos.getY() + 1), (double) (pos.getZ() + 1))).grow((double) 16)).size();
-        if (livingAround > 32) return 0;
+        List<EntityLiving> entityAmount = world.getEntitiesWithinAABB(entity.getClass(), (new AxisAlignedBB((double) pos.getX(), (double) pos.getY(), (double) pos.getZ(), (double) (pos.getX() + 1), (double) (pos.getY() + 1), (double) (pos.getZ() + 1))).grow((double) 16));
+        entityAmount.removeIf(entityLiving -> entityLiving.isDead);
+        if (entityAmount.size() > 32) return 0;
 
         int essenceNeeded = (int) (entity.getHealth() * BlockRegistry.mobDuplicatorBlock.essenceNeeded);
         int canSpawn = (int) ((experienceTank.getFluid() == null ? 0 : experienceTank.getFluid().amount) / essenceNeeded);
