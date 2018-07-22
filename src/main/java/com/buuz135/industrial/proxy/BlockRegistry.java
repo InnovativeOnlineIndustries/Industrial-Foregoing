@@ -80,6 +80,7 @@ public class BlockRegistry {
     public static PlantInteractorBlock plantInteractorBlock = new PlantInteractorBlock();
     public static ItemSplitterBlock itemSplitterBlock = new ItemSplitterBlock();
     public static FluidDictionaryConverterBlock fluidDictionaryConverterBlock = new FluidDictionaryConverterBlock();
+    public static FrosterBlock frosterBlock = new FrosterBlock();
 
     public static IFCustomFluidBlock BLOCK_ESSENCE = new IFCustomFluidBlock(FluidsRegistry.ESSENCE, Material.WATER, entityLivingBase -> entityLivingBase.addPotionEffect(new PotionEffect(MobEffects.NIGHT_VISION, 20 * 15, 0)));
     public static IFCustomFluidBlock BLOCK_MILK = new IFCustomFluidBlock(FluidsRegistry.MILK, Material.WATER, EntityLivingBase::clearActivePotions);

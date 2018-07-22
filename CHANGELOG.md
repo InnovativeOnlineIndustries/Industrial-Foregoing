@@ -1,6 +1,7 @@
 # 1.10.6
 + Improved a bunch of code
 + Removed dead entities when checking for entity limit in the Mob Duplicator
++ Added Froster
 
 # 1.10.5
 + Fixed an edge case where insertion/dropping conveyor upgrades weren't decreasing itemstacks

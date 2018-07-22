@@ -26,6 +26,6 @@ public class FluidDictionaryConverterBlock extends CustomOrientedBlock<FluidDict
 
     @Override
     public BookCategory getCategory() {
-        return BookCategory.RESOURCE_PRODUCTION;
+        return BookCategory.MAGIC;
     }
 }
