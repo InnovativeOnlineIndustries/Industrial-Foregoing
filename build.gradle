@@ -44,7 +44,7 @@ compileJava {
 }
 
 minecraft {
-    version = "1.12.2-14.23.3.2694"
+    version = "1.12.2-14.23.4.2739"
     runDir = "run"
 
     // the mappings can be changed at any time, and must be in the following format.
@@ -193,7 +193,8 @@ uploadArchives {
 }
 
 changelog {
-    title = "CHANGELOG.md"
+    title = "Industrial Foregoing"
+    fileName = "CHANGELOG.md"
     outputDirectory = file("$projectDir")
     since = 'last_tag'
     commitFormat = '%s (%an)'
