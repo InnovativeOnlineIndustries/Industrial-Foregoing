@@ -43,6 +43,12 @@ public class CTExtractor {
     }
 
     @ZenMethod
+    public static void add(IItemStack input, ILiquidStack stack, float breakChance) {
+        ExtractorEntry extractorEntry = new ExtractorEntry((ItemStack) input.getInternal(), (FluidStack) stack.getInternal(), breakChance);
+        CraftTweakerAPI.apply(new Add(extractorEntry));
+    }
+
+    @ZenMethod
     public static void remove(IItemStack input) {
         CraftTweakerAPI.apply(new Remove((ItemStack) input.getInternal()));
     }

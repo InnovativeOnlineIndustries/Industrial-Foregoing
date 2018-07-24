@@ -36,10 +36,16 @@ public class ExtractorEntry {
 
     private final ItemStack itemStack;
     private final FluidStack fluidStack;
+    private final float breakChance;
 
     public ExtractorEntry(ItemStack itemStack, FluidStack fluidStack) {
+        this(itemStack, fluidStack, 0.005f);
+    }
+
+    public ExtractorEntry(ItemStack itemStack, FluidStack fluidStack, float breakChance) {
         this.itemStack = itemStack;
         this.fluidStack = fluidStack;
+        this.breakChance = breakChance;
     }
 
     public static ExtractorEntry getExtractorEntry(World world, BlockPos pos) {
@@ -62,5 +68,9 @@ public class ExtractorEntry {
 
     public boolean isEqual(ItemStack stack) {
         return stack.isItemEqual(this.getItemStack());
+    }
+
+    public float getBreakChance() {
+        return breakChance;
     }
 }

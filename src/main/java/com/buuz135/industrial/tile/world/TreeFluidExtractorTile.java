@@ -73,7 +73,8 @@ public class TreeFluidExtractorTile extends CustomSidedTileEntity {
                 WoodLodProgress woodLog = WoodLodProgress.getWoodLogOrDefault(this.world, this.pos.offset(this.getFacing().getOpposite()));
                 tank.fill(extractorEntry.getFluidStack(), true);
                 if (id == 0) id = this.world.rand.nextInt();
-                if (world.rand.nextDouble() <= 0.005) woodLog.setProgress(woodLog.getProgress() + 1);
+                if (world.rand.nextDouble() <= extractorEntry.getBreakChance())
+                    woodLog.setProgress(woodLog.getProgress() + 1);
                 if (woodLog.getProgress() > 7) {
                     woodLog.setProgress(0);
                     this.world.setBlockToAir(this.pos.offset(this.getFacing().getOpposite()));
