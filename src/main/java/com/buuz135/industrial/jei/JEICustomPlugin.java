@@ -74,9 +74,9 @@ import net.minecraftforge.fluids.FluidUtil;
 import net.minecraftforge.oredict.OreDictionary;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 
 @JEIPlugin
@@ -187,7 +187,7 @@ public class JEICustomPlugin implements IModPlugin {
         if (BlockRegistry.potionEnervatorBlock.isEnabled())
             registry.addRecipeCatalyst(new ItemStack(BlockRegistry.potionEnervatorBlock), VanillaRecipeCategoryUid.BREWING);
 
-        registry.addRecipes(Arrays.asList(
+        registry.addRecipes(Stream.of(
                 new MachineProduceWrapper(BlockRegistry.sporesRecreatorBlock, new ItemStack(Blocks.BROWN_MUSHROOM)),
                 new MachineProduceWrapper(BlockRegistry.sporesRecreatorBlock, new ItemStack(Blocks.RED_MUSHROOM)),
                 new MachineProduceWrapper(BlockRegistry.sewageCompostSolidiferBlock, new ItemStack(ItemRegistry.fertilizer)),
@@ -203,7 +203,11 @@ public class JEICustomPlugin implements IModPlugin {
                 new MachineProduceWrapper(BlockRegistry.latexProcessingUnitBlock, new ItemStack(ItemRegistry.tinyDryRubber)),
                 new MachineProduceWrapper(BlockRegistry.animalByproductRecolectorBlock, FluidUtil.getFilledBucket(new FluidStack(FluidsRegistry.SEWAGE, 1000))),
                 new MachineProduceWrapper(BlockRegistry.lavaFabricatorBlock, FluidUtil.getFilledBucket(new FluidStack(FluidRegistry.LAVA, 1000))),
-                new MachineProduceWrapper(BlockRegistry.proteinReactorBlock, FluidUtil.getFilledBucket(new FluidStack(FluidsRegistry.PROTEIN, 1000)))).stream().filter(machineProduceWrapper -> ((CustomOrientedBlock) machineProduceWrapper.getBlock()).isEnabled()).collect(Collectors.toList()),
+                new MachineProduceWrapper(BlockRegistry.proteinReactorBlock, FluidUtil.getFilledBucket(new FluidStack(FluidsRegistry.PROTEIN, 1000))),
+                new MachineProduceWrapper(BlockRegistry.frosterBlock, new ItemStack(Items.SNOWBALL)),
+                new MachineProduceWrapper(BlockRegistry.frosterBlock, new ItemStack(Blocks.ICE)),
+                new MachineProduceWrapper(BlockRegistry.frosterBlock, new ItemStack(Blocks.PACKED_ICE))
+                ).filter(machineProduceWrapper -> ((CustomOrientedBlock) machineProduceWrapper.getBlock()).isEnabled()).collect(Collectors.toList()),
                 machineProduceCategory.getUid());
 
         if (BlockRegistry.materialStoneWorkFactoryBlock.isEnabled()) {
