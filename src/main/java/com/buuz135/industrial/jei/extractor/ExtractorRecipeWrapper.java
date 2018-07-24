@@ -24,7 +24,9 @@ package com.buuz135.industrial.jei.extractor;
 import com.buuz135.industrial.api.extractor.ExtractorEntry;
 import mezz.jei.api.ingredients.IIngredients;
 import mezz.jei.api.recipe.IRecipeWrapper;
+import net.minecraft.client.Minecraft;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.text.TextFormatting;
 import net.minecraftforge.fluids.FluidStack;
 
 public class ExtractorRecipeWrapper implements IRecipeWrapper {
@@ -39,5 +41,14 @@ public class ExtractorRecipeWrapper implements IRecipeWrapper {
     public void getIngredients(IIngredients ingredients) {
         ingredients.setInput(ItemStack.class, extractorEntry.getItemStack());
         ingredients.setOutput(FluidStack.class, extractorEntry.getFluidStack());
+    }
+
+    @Override
+    public void drawInfo(Minecraft minecraft, int recipeWidth, int recipeHeight, int mouseX, int mouseY) {
+        minecraft.fontRenderer.drawString(TextFormatting.DARK_GRAY + "Production: ", 80, 6, 0xFFFFFF);
+        minecraft.fontRenderer.drawString(TextFormatting.DARK_GRAY + "" + extractorEntry.getFluidStack().amount + "mb/5ticks", 80, 6 + (minecraft.fontRenderer.FONT_HEIGHT + 2) * 1, 0xFFFFFF);
+        minecraft.fontRenderer.drawString(TextFormatting.DARK_GRAY + "" + "Average: ", 80, 6 + (minecraft.fontRenderer.FONT_HEIGHT + 2) * 2, 0xFFFFFF);
+        minecraft.fontRenderer.drawString(TextFormatting.DARK_GRAY + "" + ((int) (8 / extractorEntry.getBreakChance()) * extractorEntry.getFluidStack().amount) + "mb", 80, 6 + (minecraft.fontRenderer.FONT_HEIGHT + 2) * 3, 0xFFFFFF);
+
     }
 }

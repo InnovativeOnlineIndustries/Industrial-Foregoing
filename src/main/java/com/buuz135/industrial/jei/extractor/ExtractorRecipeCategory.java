@@ -29,6 +29,7 @@ import mezz.jei.api.gui.IGuiItemStackGroup;
 import mezz.jei.api.gui.IRecipeLayout;
 import mezz.jei.api.ingredients.IIngredients;
 import mezz.jei.api.recipe.IRecipeCategory;
+import net.minecraft.client.Minecraft;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fluids.FluidStack;
@@ -66,7 +67,7 @@ public class ExtractorRecipeCategory implements IRecipeCategory<ExtractorRecipeW
 
     @Override
     public IDrawable getBackground() {
-        return guiHelper.createDrawable(new ResourceLocation(Reference.MOD_ID, "textures/gui/jei.png"), 0, 27, 82, 50);
+        return guiHelper.createDrawable(new ResourceLocation(Reference.MOD_ID, "textures/gui/jei.png"), 0, 27, 76, 50, 0, 0, 0, 74);
     }
 
     @Override
@@ -84,6 +85,13 @@ public class ExtractorRecipeCategory implements IRecipeCategory<ExtractorRecipeW
     @Override
     public List<String> getTooltipStrings(int mouseX, int mouseY) {
         if (mouseX >= 18 && mouseX <= 58) return Arrays.asList("Production rate");
+        if (mouseX >= 78 && mouseX <= 120 && mouseY >= 25 && mouseY <= 45)
+            return Arrays.asList("Average numbers aren't real numbers");
         return new ArrayList<>();
+    }
+
+    @Override
+    public void drawExtras(Minecraft minecraft) {
+
     }
 }
