@@ -35,6 +35,11 @@ public class IFCustomFluid extends Fluid {
         this.setDensity(3000).setViscosity(6000).setTemperature(temperature);
     }
 
+    public IFCustomFluid(String fluidName, int temperature, ResourceLocation still, ResourceLocation flow) {
+        super(fluidName, still, flow);
+        this.setDensity(3000).setViscosity(6000).setTemperature(temperature);
+    }
+
     public IFCustomFluid(String fluidName, int temperature, Color color) {
         this(fluidName, temperature);
         this.setColor(color);

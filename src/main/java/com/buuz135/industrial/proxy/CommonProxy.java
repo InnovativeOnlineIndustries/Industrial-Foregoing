@@ -37,8 +37,12 @@ import com.buuz135.industrial.utils.apihandlers.PlantRecollectableRegistryHandle
 import com.buuz135.industrial.utils.apihandlers.RecipeHandlers;
 import com.buuz135.industrial.utils.apihandlers.json.ConfigurationConditionFactory;
 import com.buuz135.industrial.utils.compat.baubles.MeatFeederBauble;
+import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.TextComponentTranslation;
+import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.storage.loot.LootTableList;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.config.Configuration;
@@ -56,7 +60,13 @@ public class CommonProxy {
 
     public static Random random;
 
-    public static DamageSource custom = new DamageSource("if_custom");
+    public static DamageSource custom = new DamageSource("if_custom") {
+        @Override
+        public ITextComponent getDeathMessage(EntityLivingBase entityLivingBaseIn) {
+            return new TextComponentTranslation("text.industrialforegoing.chat.slaughter_kill", entityLivingBaseIn.getDisplayName().getFormattedText(), TextFormatting.RESET);
+
+        }
+    };
     public static ResourceLocation PINK_SLIME_LOOT;
 
     public void preInit(FMLPreInitializationEvent event) {
@@ -110,6 +120,7 @@ public class CommonProxy {
         RecipeHandlers.loadProteinReactorEntries();
         RecipeHandlers.loadFluidDictionaryEntries();
         RecipeHandlers.loadWoodToLatexEntries();
+        RecipeHandlers.loadOreEntries();
     }
 
     public void postInit() {

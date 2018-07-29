@@ -102,6 +102,9 @@ public class BlockRegistry {
     public static ItemSplitterBlock itemSplitterBlock = new ItemSplitterBlock();
     public static FluidDictionaryConverterBlock fluidDictionaryConverterBlock = new FluidDictionaryConverterBlock();
     public static FrosterBlock frosterBlock = new FrosterBlock();
+    public static OreWasherBlock oreWasherBlock = new OreWasherBlock();
+    public static OreFermenterBlock oreFermenterBlock = new OreFermenterBlock();
+    public static OreSieveBlock oreSieveBlock = new OreSieveBlock();
 
     public static IFCustomFluidBlock BLOCK_ESSENCE = new IFCustomFluidBlock(FluidsRegistry.ESSENCE, Material.WATER, entityLivingBase -> entityLivingBase.addPotionEffect(new PotionEffect(MobEffects.NIGHT_VISION, 20 * 15, 0)));
     public static IFCustomFluidBlock BLOCK_MILK = new IFCustomFluidBlock(FluidsRegistry.MILK, Material.WATER, EntityLivingBase::clearActivePotions);

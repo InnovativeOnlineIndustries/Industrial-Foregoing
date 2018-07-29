@@ -23,6 +23,9 @@ package com.buuz135.industrial.jei;
 
 
 import com.buuz135.industrial.api.extractor.ExtractorEntry;
+import com.buuz135.industrial.api.ore.OreFluidEntryFermenter;
+import com.buuz135.industrial.api.ore.OreFluidEntryRaw;
+import com.buuz135.industrial.api.ore.OreFluidEntrySieve;
 import com.buuz135.industrial.api.recipe.BioReactorEntry;
 import com.buuz135.industrial.api.recipe.FluidDictionaryEntry;
 import com.buuz135.industrial.api.recipe.LaserDrillEntry;
@@ -41,6 +44,7 @@ import com.buuz135.industrial.jei.machineproduce.MachineProduceCategory;
 import com.buuz135.industrial.jei.machineproduce.MachineProduceWrapper;
 import com.buuz135.industrial.jei.manual.ManualCategory;
 import com.buuz135.industrial.jei.manual.ManualWrapper;
+import com.buuz135.industrial.jei.ore.*;
 import com.buuz135.industrial.jei.petrifiedgen.PetrifiedBurnTimeCategory;
 import com.buuz135.industrial.jei.petrifiedgen.PetrifiedBurnTimeWrapper;
 import com.buuz135.industrial.jei.reactor.ReactorRecipeCategory;
@@ -94,6 +98,9 @@ public class JEICustomPlugin implements IModPlugin {
     private FluidDictionaryCategory fluidDictionaryCategory;
     private StoneWorkCategory stoneWorkCategory;
     private ExtractorRecipeCategory extractorRecipeCategory;
+    private OreWasherCategory oreWasherCategory;
+    private OreFermenterCategory oreFermenterCategory;
+    private OreSieveCategory oreSieveCategory;
 
     public static void showUses(ItemStack stack) {
         if (recipesGui != null && recipeRegistry != null)
@@ -148,6 +155,18 @@ public class JEICustomPlugin implements IModPlugin {
         if (CustomConfiguration.enableBookEntriesInJEI) {
             manualCategory = new ManualCategory(registry.getJeiHelpers().getGuiHelper());
             registry.addRecipeCategories(manualCategory);
+        }
+        if (BlockRegistry.oreWasherBlock.isEnabled()) {
+            oreWasherCategory = new OreWasherCategory(registry.getJeiHelpers().getGuiHelper());
+            registry.addRecipeCategories(oreWasherCategory);
+        }
+        if (BlockRegistry.oreFermenterBlock.isEnabled()) {
+            oreFermenterCategory = new OreFermenterCategory(registry.getJeiHelpers().getGuiHelper());
+            registry.addRecipeCategories(oreFermenterCategory);
+        }
+        if (BlockRegistry.oreSieveBlock.isEnabled()) {
+            oreSieveCategory = new OreSieveCategory(registry.getJeiHelpers().getGuiHelper());
+            registry.addRecipeCategories(oreSieveCategory);
         }
     }
 
@@ -254,7 +273,18 @@ public class JEICustomPlugin implements IModPlugin {
             registry.addRecipeCatalyst(new ItemStack(BlockRegistry.treeFluidExtractorBlock), extractorRecipeCategory.getUid());
             registry.addRecipes(ExtractorEntry.EXTRACTOR_ENTRIES.stream().map(ExtractorRecipeWrapper::new).collect(Collectors.toList()), extractorRecipeCategory.getUid());
         }
-
+        if (oreWasherCategory != null) {
+            registry.addRecipeCatalyst(new ItemStack(BlockRegistry.oreWasherBlock), oreWasherCategory.getUid());
+            registry.addRecipes(OreFluidEntryRaw.ORE_RAW_ENTRIES.stream().map(OreWasherWrapper::new).collect(Collectors.toList()), oreWasherCategory.getUid());
+        }
+        if (oreFermenterCategory != null) {
+            registry.addRecipeCatalyst(new ItemStack(BlockRegistry.oreFermenterBlock), oreFermenterCategory.getUid());
+            registry.addRecipes(OreFluidEntryFermenter.ORE_FLUID_FERMENTER.stream().map(OreFermenterWrapper::new).collect(Collectors.toList()), oreFermenterCategory.getUid());
+        }
+        if (oreSieveCategory != null) {
+            registry.addRecipeCatalyst(new ItemStack(BlockRegistry.oreSieveBlock), oreSieveCategory.getUid());
+            registry.addRecipes(OreFluidEntrySieve.ORE_FLUID_SIEVE.stream().map(OreSieveWrapper::new).collect(Collectors.toList()), oreSieveCategory.getUid());
+        }
         registry.addGhostIngredientHandler(GuiConveyor.class, new ConveyorGhostSlotHandler());
     }
 

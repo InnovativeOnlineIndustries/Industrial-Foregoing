@@ -22,6 +22,7 @@
 package com.buuz135.industrial.proxy;
 
 import com.buuz135.industrial.fluid.IFCustomFluid;
+import com.buuz135.industrial.fluid.IFOreFluid;
 
 import java.awt.*;
 
@@ -37,6 +38,8 @@ public class FluidsRegistry {
     public static IFCustomFluid BIOFUEL;
     public static IFCustomFluid PINK_SLIME;
     public static IFCustomFluid PROTEIN;
+    public static IFOreFluid ORE_FLUID_RAW;
+    public static IFOreFluid ORE_FLUID_FERMENTED;
 
     public static void registerFluids() {
         (ESSENCE = (IFCustomFluid) new IFCustomFluid("essence", 300, Color.decode("0x408000")).setLuminosity(15)).register();
@@ -48,6 +51,8 @@ public class FluidsRegistry {
         (BIOFUEL = new IFCustomFluid("biofuel", 600, Color.decode("0x993399"))).register();
         (PINK_SLIME = new IFCustomFluid("if.pink_slime", 300, Color.decode("0xff66cc"))).register();
         (PROTEIN = new IFCustomFluid("if.protein", 600, Color.decode("0xff5050"))).register();
+        (ORE_FLUID_RAW = new IFOreFluid("raw")).register();
+        (ORE_FLUID_FERMENTED = new IFOreFluid("fermented")).register();
     }
 
 

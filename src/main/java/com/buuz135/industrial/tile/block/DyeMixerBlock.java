@@ -47,7 +47,7 @@ public class DyeMixerBlock extends CustomOrientedBlock<DyeMixerTile> {
 
     @Override
     public BookCategory getCategory() {
-        return BookCategory.RESOURCE_PRODUCTION;
+        return BookCategory.STORAGE;
     }
 
 }

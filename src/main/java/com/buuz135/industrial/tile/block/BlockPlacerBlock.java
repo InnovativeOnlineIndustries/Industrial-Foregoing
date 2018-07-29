@@ -47,7 +47,7 @@ public class BlockPlacerBlock extends CustomAreaOrientedBlock<BlockPlacerTile> {
 
     @Override
     public BookCategory getCategory() {
-        return BookCategory.RESOURCE_PRODUCTION;
+        return BookCategory.STORAGE;
     }
 
 }

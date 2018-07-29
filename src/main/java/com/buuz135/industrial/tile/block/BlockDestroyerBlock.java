@@ -49,7 +49,7 @@ public class BlockDestroyerBlock extends CustomAreaOrientedBlock<BlockDestroyerT
 
     @Override
     public BookCategory getCategory() {
-        return BookCategory.RESOURCE_PRODUCTION;
+        return BookCategory.STORAGE;
     }
 
 }

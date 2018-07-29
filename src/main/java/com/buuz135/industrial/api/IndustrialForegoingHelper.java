@@ -23,9 +23,13 @@ package com.buuz135.industrial.api;
 
 
 import com.buuz135.industrial.api.extractor.ExtractorEntry;
+import com.buuz135.industrial.api.ore.OreFluidEntryFermenter;
+import com.buuz135.industrial.api.ore.OreFluidEntryRaw;
+import com.buuz135.industrial.api.ore.OreFluidEntrySieve;
 import com.buuz135.industrial.api.recipe.*;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.fluids.FluidRegistry;
+import net.minecraftforge.fluids.FluidStack;
 
 public class IndustrialForegoingHelper {
 
@@ -165,4 +169,39 @@ public class IndustrialForegoingHelper {
         return ExtractorEntry.EXTRACTOR_ENTRIES.removeIf(extractorEntry -> extractorEntry.isEqual(stack));
     }
 
+    public static boolean addOreFluidEntryRaw(OreFluidEntryRaw raw) {
+        if (OreFluidEntryRaw.ORE_RAW_ENTRIES.stream().noneMatch(raw1 -> raw1.getOre().equalsIgnoreCase(raw.getOre()))) {
+            OreFluidEntryRaw.ORE_RAW_ENTRIES.add(raw);
+            return true;
+        }
+        return false;
+    }
+
+    public static boolean removeOreFluidEntryRaw(String ore) {
+        return OreFluidEntryRaw.ORE_RAW_ENTRIES.removeIf(raw -> raw.getOre().equalsIgnoreCase(ore));
+    }
+
+    public static boolean addOreFluidEntryFermenter(OreFluidEntryFermenter entryFermenter) {
+        if (OreFluidEntryFermenter.ORE_FLUID_FERMENTER.stream().noneMatch(entryFermenter1 -> entryFermenter.getInput().isFluidEqual(entryFermenter1.getInput()))) {
+            OreFluidEntryFermenter.ORE_FLUID_FERMENTER.add(entryFermenter);
+            return true;
+        }
+        return false;
+    }
+
+    public static boolean removeOreFluidEntryFermenter(FluidStack input) {
+        return OreFluidEntryFermenter.ORE_FLUID_FERMENTER.removeIf(raw -> raw.getInput().isFluidEqual(input));
+    }
+
+    public static boolean addOreFluidEntrySieve(OreFluidEntrySieve entrySieve) {
+        if (OreFluidEntrySieve.ORE_FLUID_SIEVE.stream().noneMatch(entrySieve1 -> entrySieve1.getOutput().isItemEqual(entrySieve.getOutput()))) {
+            OreFluidEntrySieve.ORE_FLUID_SIEVE.add(entrySieve);
+            return true;
+        }
+        return false;
+    }
+
+    public static boolean removeOreFluidEntrySieve(ItemStack stack) {
+        return OreFluidEntrySieve.ORE_FLUID_SIEVE.removeIf(entrySieve -> entrySieve.getOutput().isItemEqual(stack));
+    }
 }

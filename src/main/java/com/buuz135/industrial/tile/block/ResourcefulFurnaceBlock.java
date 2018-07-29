@@ -62,7 +62,7 @@ public class ResourcefulFurnaceBlock extends CustomOrientedBlock<ResourcefulFurn
 
     @Override
     public BookCategory getCategory() {
-        return BookCategory.RESOURCE_PRODUCTION;
+        return BookCategory.STORAGE;
     }
 
 }

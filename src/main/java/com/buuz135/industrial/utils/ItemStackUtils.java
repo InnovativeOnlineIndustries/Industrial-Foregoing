@@ -51,6 +51,7 @@ import net.minecraftforge.items.ItemStackHandler;
 import net.minecraftforge.oredict.OreDictionary;
 import org.lwjgl.opengl.GL11;
 
+import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -203,12 +204,21 @@ public class ItemStackUtils {
         return dict;
     }
 
+    public static List<ItemStack> getOreItems(String ore) {
+        return OreDictionary.getOres(ore);
+    }
+
     public static boolean isChorusFlower(ItemStack stack) {
         return !Block.getBlockFromItem(stack.getItem()).equals(Blocks.AIR) && Block.getBlockFromItem(stack.getItem()).equals(Blocks.CHORUS_FLOWER);
     }
 
     public static boolean acceptsFluidItem(ItemStack stack) {
         return stack.hasCapability(CapabilityFluidHandler.FLUID_HANDLER_ITEM_CAPABILITY, null) && !stack.getItem().equals(ForgeModContainer.getInstance().universalBucket);
+    }
+
+    @SideOnly(Side.CLIENT)
+    public static int getColor(ItemStack stack) {
+        return ColorUtils.getColorFrom(Minecraft.getMinecraft().getRenderItem().getItemModelWithOverrides(stack, Minecraft.getMinecraft().world, Minecraft.getMinecraft().player).getParticleTexture(), Color.GRAY);
     }
 
     public static void fillItemFromTank(ItemStackHandler fluidItems, IFluidTank tank) {

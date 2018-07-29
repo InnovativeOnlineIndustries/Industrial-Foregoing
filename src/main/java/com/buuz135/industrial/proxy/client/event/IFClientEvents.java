@@ -22,6 +22,7 @@
 package com.buuz135.industrial.proxy.client.event;
 
 import com.buuz135.industrial.api.conveyor.ConveyorUpgradeFactory;
+import com.buuz135.industrial.proxy.FluidsRegistry;
 import com.buuz135.industrial.proxy.block.BlockConveyor;
 import com.buuz135.industrial.proxy.block.Cuboid;
 import com.buuz135.industrial.proxy.block.DistanceRayTraceResult;
@@ -51,6 +52,10 @@ public class IFClientEvents {
         for (ConveyorUpgradeFactory factory : IFRegistries.CONVEYOR_UPGRADE_REGISTRY.getValuesCollection()) {
             factory.getTextures().forEach(pre.getMap()::registerSprite);
         }
+        pre.getMap().registerSprite(FluidsRegistry.ORE_FLUID_RAW.getStill());
+        pre.getMap().registerSprite(FluidsRegistry.ORE_FLUID_RAW.getFlowing());
+        pre.getMap().registerSprite(FluidsRegistry.ORE_FLUID_FERMENTED.getStill());
+        pre.getMap().registerSprite(FluidsRegistry.ORE_FLUID_FERMENTED.getFlowing());
     }
 
     @SubscribeEvent
