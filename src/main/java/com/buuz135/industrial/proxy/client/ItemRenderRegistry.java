@@ -37,6 +37,7 @@ public class ItemRenderRegistry {
         laserLensItem.registerRender();
         laserLensItem_inverted.registerRender();
         pinkSlime.registerRender();
+        pinkSlimeIngot.registerRender();
         energyFieldAddon.registerRenderer();
         bookManualItem.registerRender();
         if (artificalDye != null) artificalDye.registerRender();
