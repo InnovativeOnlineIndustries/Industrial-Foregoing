@@ -21,6 +21,7 @@
  */
 package com.buuz135.industrial.proxy.client.render;
 
+import com.buuz135.industrial.proxy.BlockRegistry;
 import com.buuz135.industrial.proxy.block.BlockLabel;
 import com.buuz135.industrial.proxy.block.tile.TileEntityLabel;
 import com.buuz135.industrial.proxy.client.infopiece.IHasDisplayStack;
@@ -50,6 +51,7 @@ public class LabelTESR extends TileEntitySpecialRenderer<TileEntityLabel> {
     @Override
     public void render(TileEntityLabel te, double x, double y, double z, float partialTicks, int destroyStage, float alpha) {
         super.render(te, x, y, z, partialTicks, destroyStage, alpha);
+        if (!te.getWorld().getBlockState(te.getPos()).getBlock().equals(BlockRegistry.blockLabel)) return;
         TileEntity tileEntity = te.getWorld().getTileEntity(te.getPos().offset(te.getWorld().getBlockState(te.getPos()).getValue(BlockLabel.FACING)));
         if (tileEntity instanceof IHasDisplayStack) {
             ItemStack stack = ((IHasDisplayStack) tileEntity).getItemStack();
