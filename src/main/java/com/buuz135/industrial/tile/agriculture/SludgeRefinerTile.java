@@ -25,7 +25,6 @@ import com.buuz135.industrial.proxy.BlockRegistry;
 import com.buuz135.industrial.proxy.FluidsRegistry;
 import com.buuz135.industrial.tile.CustomColoredItemHandler;
 import com.buuz135.industrial.tile.CustomElectricMachine;
-import com.buuz135.industrial.tile.block.SludgeRefinerBlock;
 import com.buuz135.industrial.utils.ItemStackWeightedItem;
 import com.buuz135.industrial.utils.WorkUtils;
 import net.minecraft.item.EnumDyeColor;
@@ -75,7 +74,6 @@ public class SludgeRefinerTile extends CustomElectricMachine {
         if (WorkUtils.isDisabled(this.getBlockType())) return 0;
 
         if (tank.getFluid() != null && tank.getFluidAmount() >= 1000) {
-            SludgeRefinerBlock block = (SludgeRefinerBlock) this.getBlockType();
             ItemStackWeightedItem itemStack = getRandomItem();
             if (ItemHandlerHelper.insertItem(outItems, itemStack.getStack(), true).isEmpty()) {
                 tank.drain(1000, true);
