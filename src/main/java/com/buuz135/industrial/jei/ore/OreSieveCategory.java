@@ -1,5 +1,6 @@
 package com.buuz135.industrial.jei.ore;
 
+import com.buuz135.industrial.proxy.BlockRegistry;
 import com.buuz135.industrial.utils.Reference;
 import mezz.jei.api.IGuiHelper;
 import mezz.jei.api.gui.IDrawable;
@@ -27,7 +28,7 @@ public class OreSieveCategory implements IRecipeCategory<OreSieveWrapper> {
 
     @Override
     public String getTitle() {
-        return "Sieve";
+        return BlockRegistry.oreSieveBlock.getLocalizedName();
     }
 
     @Override

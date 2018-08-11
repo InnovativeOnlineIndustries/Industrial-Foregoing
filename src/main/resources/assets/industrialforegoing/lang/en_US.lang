@@ -274,6 +274,7 @@ item.industrialforegoing.leaf_shearing.name=Leaf Shearing Addon
 item.industrialforegoing_book_manual.name=Industrial Foregoing's Manual
 item.industrialforegoing.itemstack_transfer_addon.name=Itemstack Transfer Addon
 item.industrialforegoing.fluid_transfer_addon.name=Fluid Transfer Addon
+item.industrialforegoing_pink_slime_ingot.name=Pink Slime Ingot
 
 gui.industrialforegoing.side_config.fuel_input=Fuel Input
 gui.industrialforegoing.side_config.input_items=Input Items
