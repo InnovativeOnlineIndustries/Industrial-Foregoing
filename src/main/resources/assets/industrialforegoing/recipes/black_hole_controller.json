@@ -34,7 +34,7 @@
       "item": "minecraft:diamond_block"
     },
     "e": {
-      "item": "minecraft:ender_eye"
+      "item": "industrialforegoing:pink_slime_ingot"
     },
     "m": {
       "item": "teslacorelib:machine_case"

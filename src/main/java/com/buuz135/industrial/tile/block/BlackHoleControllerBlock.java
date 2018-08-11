@@ -28,7 +28,6 @@ import com.buuz135.industrial.utils.RecipeUtils;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
-import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.BlockPos;
@@ -45,7 +44,7 @@ public class BlackHoleControllerBlock extends CustomOrientedBlock<BlackHoleContr
         RecipeUtils.addShapedRecipe(new ItemStack(this), "pdp", "ece", "pmp",
                 'p', ItemRegistry.plastic,
                 'd', Blocks.DIAMOND_BLOCK,
-                'e', Items.ENDER_EYE,
+                'e', ItemRegistry.pinkSlimeIngot,
                 'c', Blocks.ENDER_CHEST,
                 'm', MachineCaseItem.INSTANCE);
     }

@@ -40,7 +40,7 @@ public class OreWasherBlock extends CustomOrientedBlock<OreWasherTile> {
     @Override
     public void createRecipe() {
         RecipeUtils.addShapedRecipe(new ItemStack(this), "pfp", "rmr", "cgc",
-                'p', ItemRegistry.pinkSlime,
+                'p', ItemRegistry.pinkSlimeIngot,
                 'f', ItemRegistry.meatFeederItem,
                 'r', ItemRegistry.plastic,
                 'm', MachineCaseItem.INSTANCE,

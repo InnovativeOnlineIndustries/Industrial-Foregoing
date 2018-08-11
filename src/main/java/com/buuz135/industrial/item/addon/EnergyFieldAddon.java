@@ -139,7 +139,7 @@ public class EnergyFieldAddon extends CustomAddon {
     public void createRecipe() {
         RecipeUtils.addShapedRecipe(new ItemStack(this), "rpr", "pup", "rpr",
                 'r', Items.REDSTONE,
-                'p', ItemRegistry.pinkSlime,
+                'p', ItemRegistry.pinkSlimeIngot,
                 'u', new ItemStack(ItemRegistry.rangeAddonItem, 1, 9));
     }
 
