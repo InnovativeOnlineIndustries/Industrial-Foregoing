@@ -23,11 +23,12 @@ package com.buuz135.industrial.utils.apihandlers;
 
 import com.buuz135.industrial.api.IndustrialForegoingHelper;
 import com.buuz135.industrial.api.extractor.ExtractorEntry;
-import com.buuz135.industrial.api.ore.OreFluidEntryFermenter;
-import com.buuz135.industrial.api.ore.OreFluidEntryRaw;
-import com.buuz135.industrial.api.ore.OreFluidEntrySieve;
 import com.buuz135.industrial.api.recipe.*;
+import com.buuz135.industrial.api.recipe.ore.OreFluidEntryFermenter;
+import com.buuz135.industrial.api.recipe.ore.OreFluidEntryRaw;
+import com.buuz135.industrial.api.recipe.ore.OreFluidEntrySieve;
 import com.buuz135.industrial.proxy.FluidsRegistry;
+import com.buuz135.industrial.proxy.ItemRegistry;
 import com.buuz135.industrial.utils.apihandlers.crafttweaker.CTAction;
 import com.google.common.collect.LinkedListMultimap;
 import net.minecraft.block.Block;
@@ -177,9 +178,10 @@ public class RecipeHandlers {
             if (s.startsWith("ore") && !OreDictionary.getOres(s).isEmpty() && OreDictionary.doesOreNameExist("dust" + s.replace("ore", "")) && !OreDictionary.getOres("dust" + s.replace("ore", "")).isEmpty()) {
                 IndustrialForegoingHelper.addOreFluidEntryRaw(new OreFluidEntryRaw(s, new FluidStack(FluidsRegistry.MEAT, 200), FluidsRegistry.ORE_FLUID_RAW.getWithOre(s, 150)));
                 IndustrialForegoingHelper.addOreFluidEntryFermenter(new OreFluidEntryFermenter(FluidsRegistry.ORE_FLUID_RAW.getWithOre(s, 1), FluidsRegistry.ORE_FLUID_FERMENTED.getWithOre(s, 2)));
-                IndustrialForegoingHelper.addOreFluidEntrySieve(new OreFluidEntrySieve(FluidsRegistry.ORE_FLUID_FERMENTED.getWithOre(s, 100), OreDictionary.getOres("dust" + s.replace("ore", "")).get(0).copy()));
+                IndustrialForegoingHelper.addOreFluidEntrySieve(new OreFluidEntrySieve(FluidsRegistry.ORE_FLUID_FERMENTED.getWithOre(s, 100), OreDictionary.getOres("dust" + s.replace("ore", "")).get(0).copy(), new ItemStack(Blocks.SAND)));
             }
         }
+        IndustrialForegoingHelper.addOreFluidEntrySieve(new OreFluidEntrySieve(new FluidStack(FluidsRegistry.PINK_SLIME, 2000), new ItemStack(ItemRegistry.pinkSlimeIngot), new ItemStack(Items.IRON_INGOT)));
     }
 
     public static void addFluidEntryDoubleDirectional(String fluidInput, String fluidOutput, double ratio) {

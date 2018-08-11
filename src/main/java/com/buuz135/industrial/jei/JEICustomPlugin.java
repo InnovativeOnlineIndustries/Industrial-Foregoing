@@ -23,13 +23,13 @@ package com.buuz135.industrial.jei;
 
 
 import com.buuz135.industrial.api.extractor.ExtractorEntry;
-import com.buuz135.industrial.api.ore.OreFluidEntryFermenter;
-import com.buuz135.industrial.api.ore.OreFluidEntryRaw;
-import com.buuz135.industrial.api.ore.OreFluidEntrySieve;
 import com.buuz135.industrial.api.recipe.BioReactorEntry;
 import com.buuz135.industrial.api.recipe.FluidDictionaryEntry;
 import com.buuz135.industrial.api.recipe.LaserDrillEntry;
 import com.buuz135.industrial.api.recipe.ProteinReactorEntry;
+import com.buuz135.industrial.api.recipe.ore.OreFluidEntryFermenter;
+import com.buuz135.industrial.api.recipe.ore.OreFluidEntryRaw;
+import com.buuz135.industrial.api.recipe.ore.OreFluidEntrySieve;
 import com.buuz135.industrial.book.BookCategory;
 import com.buuz135.industrial.config.CustomConfiguration;
 import com.buuz135.industrial.gui.conveyor.GuiConveyor;

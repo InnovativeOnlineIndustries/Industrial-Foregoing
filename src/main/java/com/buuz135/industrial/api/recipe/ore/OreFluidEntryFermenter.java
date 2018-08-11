@@ -19,27 +19,30 @@
  * FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE,
  * ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
-package com.buuz135.industrial.jei.ore;
+package com.buuz135.industrial.api.recipe.ore;
 
-import com.buuz135.industrial.api.recipe.ore.OreFluidEntryRaw;
-import com.buuz135.industrial.utils.ItemStackUtils;
-import mezz.jei.api.ingredients.IIngredients;
-import mezz.jei.api.recipe.IRecipeWrapper;
-import net.minecraft.item.ItemStack;
 import net.minecraftforge.fluids.FluidStack;
 
-public class OreWasherWrapper implements IRecipeWrapper {
+import java.util.ArrayList;
+import java.util.List;
 
-    private final OreFluidEntryRaw entryRaw;
+public class OreFluidEntryFermenter {
 
-    public OreWasherWrapper(OreFluidEntryRaw entryRaw) {
-        this.entryRaw = entryRaw;
+    public static List<OreFluidEntryFermenter> ORE_FLUID_FERMENTER = new ArrayList<>();
+
+    private final FluidStack input;
+    private final FluidStack output;
+
+    public OreFluidEntryFermenter(FluidStack input, FluidStack output) {
+        this.input = input;
+        this.output = output;
     }
 
-    @Override
-    public void getIngredients(IIngredients ingredients) {
-        ingredients.setInputs(ItemStack.class, ItemStackUtils.getOreItems(entryRaw.getOre()));
-        ingredients.setInput(FluidStack.class, entryRaw.getInput());
-        ingredients.setOutput(FluidStack.class, entryRaw.getOutput());
+    public FluidStack getInput() {
+        return input;
+    }
+
+    public FluidStack getOutput() {
+        return output;
     }
 }

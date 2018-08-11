@@ -23,10 +23,10 @@ package com.buuz135.industrial.api;
 
 
 import com.buuz135.industrial.api.extractor.ExtractorEntry;
-import com.buuz135.industrial.api.ore.OreFluidEntryFermenter;
-import com.buuz135.industrial.api.ore.OreFluidEntryRaw;
-import com.buuz135.industrial.api.ore.OreFluidEntrySieve;
 import com.buuz135.industrial.api.recipe.*;
+import com.buuz135.industrial.api.recipe.ore.OreFluidEntryFermenter;
+import com.buuz135.industrial.api.recipe.ore.OreFluidEntryRaw;
+import com.buuz135.industrial.api.recipe.ore.OreFluidEntrySieve;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fluids.FluidStack;

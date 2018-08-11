@@ -19,37 +19,37 @@
  * FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE,
  * ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
-package com.buuz135.industrial.tile.block;
+package com.buuz135.industrial.api.recipe.ore;
 
-import com.buuz135.industrial.book.BookCategory;
-import com.buuz135.industrial.proxy.BlockRegistry;
-import com.buuz135.industrial.proxy.ItemRegistry;
-import com.buuz135.industrial.tile.ore.OreWasherTile;
-import com.buuz135.industrial.utils.RecipeUtils;
-import net.minecraft.block.material.Material;
 import net.minecraft.item.ItemStack;
-import net.minecraftforge.oredict.OreDictionary;
-import net.ndrei.teslacorelib.items.MachineCaseItem;
+import net.minecraftforge.fluids.FluidStack;
 
-public class OreWasherBlock extends CustomOrientedBlock<OreWasherTile> {
+import java.util.ArrayList;
+import java.util.List;
 
-    public OreWasherBlock() {
-        super("ore_washer", OreWasherTile.class, Material.ROCK, 8000, 60);
+public class OreFluidEntrySieve {
+
+    public static List<OreFluidEntrySieve> ORE_FLUID_SIEVE = new ArrayList<>();
+
+    private final FluidStack input;
+    private final ItemStack output;
+    private final ItemStack sieveItem;
+
+    public OreFluidEntrySieve(FluidStack input, ItemStack output, ItemStack sieveItem) {
+        this.input = input;
+        this.output = output;
+        this.sieveItem = sieveItem;
     }
 
-    @Override
-    public void createRecipe() {
-        RecipeUtils.addShapedRecipe(new ItemStack(this), "pfp", "rmr", "cgc",
-                'p', ItemRegistry.pinkSlime,
-                'f', ItemRegistry.meatFeederItem,
-                'r', ItemRegistry.plastic,
-                'm', MachineCaseItem.INSTANCE,
-                'c', new ItemStack(BlockRegistry.blockConveyor, 1, OreDictionary.WILDCARD_VALUE),
-                'g', "gearDiamond");
+    public FluidStack getInput() {
+        return input;
     }
 
-    @Override
-    public BookCategory getCategory() {
-        return BookCategory.RESOURCE_PRODUCTION;
+    public ItemStack getOutput() {
+        return output;
+    }
+
+    public ItemStack getSieveItem() {
+        return sieveItem;
     }
 }
