@@ -22,29 +22,35 @@
 package com.buuz135.industrial.tile.agriculture;
 
 import com.buuz135.industrial.IndustrialForegoing;
+import com.buuz135.industrial.proxy.client.ClientProxy;
 import com.buuz135.industrial.tile.WorkingAreaElectricMachine;
 import com.buuz135.industrial.utils.BlockUtils;
 import com.buuz135.industrial.utils.ItemStackUtils;
 import com.buuz135.industrial.utils.WorkUtils;
 import net.minecraft.init.Blocks;
+import net.minecraft.init.Items;
 import net.minecraft.item.EnumDyeColor;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.NBTTagInt;
 import net.minecraft.util.EnumActionResult;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraftforge.common.IPlantable;
 import net.minecraftforge.common.util.FakePlayer;
-import net.ndrei.teslacorelib.gui.BasicTeslaGuiContainer;
-import net.ndrei.teslacorelib.gui.IGuiContainerPiece;
-import net.ndrei.teslacorelib.gui.LockedInventoryTogglePiece;
-import net.ndrei.teslacorelib.gui.TiledRenderedGuiPiece;
+import net.ndrei.teslacorelib.gui.*;
 import net.ndrei.teslacorelib.inventory.BoundingRectangle;
 import net.ndrei.teslacorelib.inventory.ColoredItemHandler;
 import net.ndrei.teslacorelib.inventory.LockableItemHandler;
+import net.ndrei.teslacorelib.inventory.SyncProviderLevel;
+import net.ndrei.teslacorelib.netsync.SimpleNBTMessage;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
+import java.util.Arrays;
 import java.util.List;
 
 public class CropSowerTile extends WorkingAreaElectricMachine {
@@ -55,9 +61,11 @@ public class CropSowerTile extends WorkingAreaElectricMachine {
 
     private LockableItemHandler inPlant;
     private int pointer;
+    private boolean hoeGround;
 
     public CropSowerTile() {
         super(CropSowerTile.class.getName().hashCode());
+        this.hoeGround = true;
     }
 
     @Override
@@ -99,7 +107,7 @@ public class CropSowerTile extends WorkingAreaElectricMachine {
             }
         });
         this.addInventoryToStorage(inPlant, "inPlant");
-
+        this.registerSyncIntPart("hoe", nbtTagInt -> hoeGround = nbtTagInt.getInt() == 1, () -> new NBTTagInt(hoeGround ? 1 : 0), SyncProviderLevel.GUI);
     }
 
     @Override
@@ -128,7 +136,7 @@ public class CropSowerTile extends WorkingAreaElectricMachine {
                     }
                 }
                 if (!stack.isEmpty()) {
-                    if (!ItemStackUtils.isChorusFlower(stack) && !ItemStackUtils.isStackOreDict(stack, "treeSapling") && (this.world.getBlockState(pos.offset(EnumFacing.DOWN)).getBlock().equals(Blocks.DIRT) || this.world.getBlockState(pos.offset(EnumFacing.DOWN)).getBlock().equals(Blocks.GRASS))) {
+                    if (hoeGround && !ItemStackUtils.isChorusFlower(stack) && !ItemStackUtils.isStackOreDict(stack, "treeSapling") && (this.world.getBlockState(pos.offset(EnumFacing.DOWN)).getBlock().equals(Blocks.DIRT) || this.world.getBlockState(pos.offset(EnumFacing.DOWN)).getBlock().equals(Blocks.GRASS))) {
                         this.world.setBlockState(pos.offset(EnumFacing.DOWN), Blocks.FARMLAND.getDefaultState());
                     }
                     player.setHeldItem(EnumHand.MAIN_HAND, stack);
@@ -165,7 +173,49 @@ public class CropSowerTile extends WorkingAreaElectricMachine {
     public List<IGuiContainerPiece> getGuiContainerPieces(BasicTeslaGuiContainer container) {
         List<IGuiContainerPiece> pieces = super.getGuiContainerPieces(container);
         pieces.add(1, new LockedInventoryTogglePiece(18 * 6 + 2, 27, this, EnumDyeColor.GREEN));
+        pieces.add(new ToggleButtonPiece(118, 84, 13, 13, 0) {
+
+            @Override
+            protected int getCurrentState() {
+                return hoeGround ? 1 : 0;
+            }
+
+            @Override
+            protected void renderState(BasicTeslaGuiContainer container, int state, BoundingRectangle box) {
+
+            }
+
+            @Override
+            public void drawBackgroundLayer(BasicTeslaGuiContainer container, int guiX, int guiY, float partialTicks, int mouseX, int mouseY) {
+                super.drawBackgroundLayer(container, guiX, guiY, partialTicks, mouseX, mouseY);
+                container.mc.getTextureManager().bindTexture(ClientProxy.GUI);
+                container.drawTexturedRect(this.getLeft() - 1, this.getTop() - 1, 49, 56, 16, 16);
+                ItemStackUtils.renderItemIntoGUI(hoeGround ? new ItemStack(Items.MELON_SEEDS, 1, 0) : new ItemStack(Blocks.RED_FLOWER, 1, 3), this.getLeft() + guiX - 2, this.getTop() + guiY - (hoeGround ? 1 : 5), 9);
+            }
+
+            @Override
+            protected void clicked() {
+                CropSowerTile.this.sendToServer(CropSowerTile.this.setupSpecialNBTMessage("HOE"));
+            }
+
+            @NotNull
+            @Override
+            protected List<String> getStateToolTip(int state) {
+                return Arrays.asList(new TextComponentTranslation("text.industrialforegoing.button.sower.hoe." + hoeGround).getFormattedText());
+            }
+        });
         return pieces;
+    }
+
+    @Nullable
+    @Override
+    protected SimpleNBTMessage processClientMessage(@Nullable String messageType, @NotNull NBTTagCompound compound) {
+        if (messageType != null && messageType.equalsIgnoreCase("HOE")) {
+            hoeGround = !hoeGround;
+            markDirty();
+            forceSync();
+        }
+        return super.processClientMessage(messageType, compound);
     }
 
     private int getFilteredSlot(BlockPos pos) {
