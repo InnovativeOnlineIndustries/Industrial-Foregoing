@@ -22,10 +22,7 @@
 package com.buuz135.industrial.proxy;
 
 import com.buuz135.industrial.item.*;
-import com.buuz135.industrial.item.addon.AdultFilterAddonItem;
-import com.buuz135.industrial.item.addon.EnergyFieldAddon;
-import com.buuz135.industrial.item.addon.LeafShearingAddonItem;
-import com.buuz135.industrial.item.addon.RangeAddonItem;
+import com.buuz135.industrial.item.addon.*;
 import com.buuz135.industrial.item.addon.movility.FluidTransferAddon;
 import com.buuz135.industrial.item.addon.movility.ItemStackTransferAddon;
 import com.buuz135.industrial.item.addon.movility.TransferAddon;
@@ -64,6 +61,7 @@ public class ItemRegistry {
     public static ItemStackTransferAddon itemStackTransferAddonPull;
     public static FluidTransferAddon fluidTransferAddonPush;
     public static FluidTransferAddon fluidTransferAddonPull;
+    public static FortuneAddonItem fortuneAddonItem;
 
     public static void registerItems(IForgeRegistry<Item> itemRegistry) {
         (tinyDryRubber = new IFCustomItem("tinydryrubber")).register(itemRegistry);
@@ -90,6 +88,7 @@ public class ItemRegistry {
         (itemStackTransferAddonPush = new ItemStackTransferAddon(TransferAddon.ActionMode.PUSH)).registerItem(itemRegistry);
         (fluidTransferAddonPull = new FluidTransferAddon(TransferAddon.ActionMode.PULL)).registerItem(itemRegistry);
         (fluidTransferAddonPush = new FluidTransferAddon(TransferAddon.ActionMode.PUSH)).registerItem(itemRegistry);
+        (fortuneAddonItem = new FortuneAddonItem()).registerItem(itemRegistry);
 
         OreDictionary.registerOre("itemRubber", plastic);
         OreDictionary.registerOre("slimeball", pinkSlime);
@@ -122,6 +121,7 @@ public class ItemRegistry {
         fluidTransferAddonPush.createRecipe();
         itemStackTransferAddonPull.createRecipe();
         itemStackTransferAddonPush.createRecipe();
+        fortuneAddonItem.createRecipe();
         RecipeUtils.addShapedRecipe(new ItemStack(conveyorUpgradeItem, 1, 0), "ipi", "idi", "ici",
                 'i', "ingotIron",
                 'p', plastic,

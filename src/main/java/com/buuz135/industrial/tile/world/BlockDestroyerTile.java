@@ -21,8 +21,10 @@
  */
 package com.buuz135.industrial.tile.world;
 
+import com.buuz135.industrial.item.addon.FortuneAddonItem;
 import com.buuz135.industrial.tile.CustomColoredItemHandler;
 import com.buuz135.industrial.tile.WorkingAreaElectricMachine;
+import com.buuz135.industrial.tile.api.IAcceptsFortuneAddon;
 import com.buuz135.industrial.utils.BlockUtils;
 import com.buuz135.industrial.utils.WorkUtils;
 import net.minecraft.block.Block;
@@ -39,8 +41,7 @@ import net.minecraftforge.items.ItemStackHandler;
 
 import java.util.List;
 
-public class BlockDestroyerTile extends WorkingAreaElectricMachine {
-
+public class BlockDestroyerTile extends WorkingAreaElectricMachine implements IAcceptsFortuneAddon {
 
     private ItemStackHandler outItems;
 
@@ -83,7 +84,7 @@ public class BlockDestroyerTile extends WorkingAreaElectricMachine {
                 Block block = this.world.getBlockState(pos).getBlock();
                 TileEntity tile = world.getTileEntity(pos);
                 if (block.getBlockHardness(this.world.getBlockState(pos), this.world, pos) < 0) continue;
-                List<ItemStack> drops = BlockUtils.getBlockDrops(world, pos);
+                List<ItemStack> drops = BlockUtils.getBlockDrops(world, pos, getFortuneLevel());
                 boolean canInsert = true;
                 for (ItemStack stack : drops) {
                     if (tile instanceof IWorldNameable) {
@@ -110,5 +111,10 @@ public class BlockDestroyerTile extends WorkingAreaElectricMachine {
             }
         }
         return 0;
+    }
+
+    @Override
+    public int getFortuneLevel() {
+        return hasAddon(FortuneAddonItem.class) ? getAddon(FortuneAddonItem.class).getLevel(getAddonStack(FortuneAddonItem.class)) : 0;
     }
 }

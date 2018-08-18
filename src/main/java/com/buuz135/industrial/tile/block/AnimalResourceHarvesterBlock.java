@@ -28,7 +28,10 @@ import com.buuz135.industrial.utils.RecipeUtils;
 import net.minecraft.block.material.Material;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.text.TextComponentTranslation;
 import net.ndrei.teslacorelib.items.MachineCaseItem;
+
+import java.util.List;
 
 public class AnimalResourceHarvesterBlock extends CustomAreaOrientedBlock<AnimalResourceHarvesterTile> {
 
@@ -48,6 +51,13 @@ public class AnimalResourceHarvesterBlock extends CustomAreaOrientedBlock<Animal
     @Override
     public BookCategory getCategory() {
         return BookCategory.ANIMAL_HUSBANDRY;
+    }
+
+    @Override
+    public List<String> getTooltip(ItemStack stack) {
+        List<String> t = super.getTooltip(stack);
+        t.add(new TextComponentTranslation("text.industrialforegoing.tooltip.fortune_addon").getFormattedText());
+        return t;
     }
 
 }

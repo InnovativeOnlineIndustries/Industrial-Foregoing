@@ -23,11 +23,13 @@ package com.buuz135.industrial.tile.mob;
 
 import com.buuz135.industrial.IndustrialForegoing;
 import com.buuz135.industrial.item.addon.AdultFilterAddonItem;
+import com.buuz135.industrial.item.addon.FortuneAddonItem;
 import com.buuz135.industrial.proxy.BlockRegistry;
 import com.buuz135.industrial.proxy.FluidsRegistry;
 import com.buuz135.industrial.tile.CustomColoredItemHandler;
 import com.buuz135.industrial.tile.WorkingAreaElectricMachine;
 import com.buuz135.industrial.tile.api.IAcceptsAdultFilter;
+import com.buuz135.industrial.tile.api.IAcceptsFortuneAddon;
 import com.buuz135.industrial.utils.ItemStackUtils;
 import com.buuz135.industrial.utils.WorkUtils;
 import net.minecraft.entity.EntityAgeable;
@@ -35,6 +37,8 @@ import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.item.EntityXPOrb;
+import net.minecraft.init.Enchantments;
+import net.minecraft.init.Items;
 import net.minecraft.item.EnumDyeColor;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EntityDamageSource;
@@ -52,7 +56,7 @@ import net.ndrei.teslacorelib.inventory.BoundingRectangle;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicBoolean;
 
-public class MobRelocatorTile extends WorkingAreaElectricMachine implements IAcceptsAdultFilter {
+public class MobRelocatorTile extends WorkingAreaElectricMachine implements IAcceptsAdultFilter, IAcceptsFortuneAddon {
 
     private IFluidTank outExp;
     private ItemStackHandler outItems;
@@ -110,6 +114,11 @@ public class MobRelocatorTile extends WorkingAreaElectricMachine implements IAcc
         mobs.removeIf(entityLiving -> entityLiving.isDead);
         if (mobs.size() == 0) return 0;
         FakePlayer player = IndustrialForegoing.getFakePlayer(world, pos);
+        if (getFortuneLevel() > 0) {
+            ItemStack stick = new ItemStack(Items.STICK);
+            stick.addEnchantment(Enchantments.LOOTING, getFortuneLevel());
+            player.setHeldItem(player.getActiveHand(), stick);
+        }
         AtomicBoolean hasWorked = new AtomicBoolean(false);
         mobs.stream().filter(entityLiving -> !hasAddon() || (!(entityLiving instanceof EntityAgeable) || !entityLiving.isChild())).forEach(entityLiving -> {
             entityLiving.attackEntityFrom(new EntityDamageSource("mob_crusher", player) {
@@ -131,6 +140,7 @@ public class MobRelocatorTile extends WorkingAreaElectricMachine implements IAcc
                 }
             }
         }
+        player.setHeldItem(player.getActiveHand(), ItemStack.EMPTY);
         return hasWorked.get() ? 1 : 0;
     }
 
@@ -148,5 +158,10 @@ public class MobRelocatorTile extends WorkingAreaElectricMachine implements IAcc
     @Override
     public boolean hasAddon() {
         return this.hasAddon(AdultFilterAddonItem.class);
+    }
+
+    @Override
+    public int getFortuneLevel() {
+        return hasAddon(FortuneAddonItem.class) ? getAddon(FortuneAddonItem.class).getLevel(getAddonStack(FortuneAddonItem.class)) : 0;
     }
 }

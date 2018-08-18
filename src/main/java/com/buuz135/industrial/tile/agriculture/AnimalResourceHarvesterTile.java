@@ -22,8 +22,10 @@
 package com.buuz135.industrial.tile.agriculture;
 
 import com.buuz135.industrial.IndustrialForegoing;
+import com.buuz135.industrial.item.addon.FortuneAddonItem;
 import com.buuz135.industrial.tile.CustomColoredItemHandler;
 import com.buuz135.industrial.tile.WorkingAreaElectricMachine;
+import com.buuz135.industrial.tile.api.IAcceptsFortuneAddon;
 import com.buuz135.industrial.utils.ItemStackUtils;
 import com.buuz135.industrial.utils.WorkUtils;
 import net.minecraft.entity.passive.EntityAnimal;
@@ -43,7 +45,7 @@ import net.ndrei.teslacorelib.inventory.FluidTankType;
 
 import java.util.List;
 
-public class AnimalResourceHarvesterTile extends WorkingAreaElectricMachine {
+public class AnimalResourceHarvesterTile extends WorkingAreaElectricMachine implements IAcceptsFortuneAddon {
 
     private ItemStackHandler outItems;
     private IFluidTank tank;
@@ -81,9 +83,10 @@ public class AnimalResourceHarvesterTile extends WorkingAreaElectricMachine {
         if (WorkUtils.isDisabled(this.getBlockType())) return 0;
         List<EntityAnimal> animals = this.world.getEntitiesWithinAABB(EntityAnimal.class, getWorkingArea());
         boolean hasWorked = false;
+        int fortune = getFortuneLevel();
         for (EntityAnimal living : animals) {
             if (!ItemStackUtils.isInventoryFull(outItems) && living instanceof IShearable && ((IShearable) living).isShearable(new ItemStack(Items.SHEARS), this.world, living.getPosition())) {
-                List<ItemStack> stacks = ((IShearable) living).onSheared(new ItemStack(Items.SHEARS), this.world, null, 0);
+                List<ItemStack> stacks = ((IShearable) living).onSheared(new ItemStack(Items.SHEARS), this.world, null, fortune);
                 for (ItemStack stack : stacks) {
                     ItemHandlerHelper.insertItem(outItems, stack, false);
                 }
@@ -120,5 +123,10 @@ public class AnimalResourceHarvesterTile extends WorkingAreaElectricMachine {
     @Override
     protected void processFluidItems(ItemStackHandler fluidItems) {
         ItemStackUtils.fillItemFromTank(fluidItems, tank);
+    }
+
+    @Override
+    public int getFortuneLevel() {
+        return hasAddon(FortuneAddonItem.class) ? getAddon(FortuneAddonItem.class).getLevel(getAddonStack(FortuneAddonItem.class)) : 0;
     }
 }

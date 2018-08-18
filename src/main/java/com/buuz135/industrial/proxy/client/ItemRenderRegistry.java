@@ -50,5 +50,6 @@ public class ItemRenderRegistry {
         itemStackTransferAddonPush.registerRenderer();
         fluidTransferAddonPull.registerRenderer();
         fluidTransferAddonPush.registerRenderer();
+        fortuneAddonItem.registerRenderer();
     }
 }
