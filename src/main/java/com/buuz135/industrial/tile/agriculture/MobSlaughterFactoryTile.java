@@ -31,6 +31,7 @@ import com.buuz135.industrial.utils.ItemStackUtils;
 import com.buuz135.industrial.utils.WorkUtils;
 import net.minecraft.entity.EntityAgeable;
 import net.minecraft.entity.EntityLiving;
+import net.minecraft.entity.passive.EntityAnimal;
 import net.minecraft.item.EnumDyeColor;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.AxisAlignedBB;
@@ -74,7 +75,7 @@ public class MobSlaughterFactoryTile extends WorkingAreaElectricMachine implemen
         if (health > 0) {
             mob.setDropItemsWhenDead(false);
             this.outMeat.fill(new FluidStack(FluidsRegistry.MEAT, (int) (health * BlockRegistry.mobSlaughterFactoryBlock.getMeatValue())), true);
-            this.outPink.fill(new FluidStack(FluidsRegistry.PINK_SLIME, (int) health), true);
+            this.outPink.fill(new FluidStack(FluidsRegistry.PINK_SLIME, (int) health * (mob instanceof EntityAnimal ? 8 : 1)), true);
             return 1;
         }
         return 0;
