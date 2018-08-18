@@ -64,7 +64,7 @@ public class OreFermenterTile extends CustomElectricMachine {
         if (hasColdSource() && hasHotSource()) {
             for (OreFluidEntryFermenter recipe : OreFluidEntryFermenter.ORE_FLUID_FERMENTER) {
                 boolean didWork = false;
-                int operations = 10;
+                int operations = 20;
                 while (operations > 0) {
                     if (recipe.getInput().isFluidEqual(input.getFluid()) && input.drain(recipe.getInput().amount, false) != null && input.drain(recipe.getInput().amount, false).amount == recipe.getInput().amount && output.fill(recipe.getOutput(), false) == recipe.getOutput().amount) {
                         input.drain(recipe.getInput().amount, true);
