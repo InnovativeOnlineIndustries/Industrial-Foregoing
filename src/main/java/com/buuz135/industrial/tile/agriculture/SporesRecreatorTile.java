@@ -62,7 +62,7 @@ public class SporesRecreatorTile extends CustomElectricMachine {
 
             @Override
             public boolean canExtractItem(int slot) {
-                return super.canExtractItem(slot);
+                return false;
             }
         });
         this.addInventoryToStorage(input, "input");
