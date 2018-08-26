@@ -63,6 +63,7 @@ public class OreSieveTile extends CustomElectricMachine {
             if (recipe.getInput().isFluidEqual(input.getFluid()) && input.drain(recipe.getInput().amount, false) != null &&
                     input.drain(recipe.getInput().amount, false).amount == recipe.getInput().amount && ItemHandlerHelper.insertItem(output, recipe.getOutput().copy(), true).isEmpty()
                     && recipe.getSieveItem().isItemEqual(itemInput.getStackInSlot(0))) {
+                itemInput.getStackInSlot(0).shrink(1);
                 input.drain(recipe.getInput().amount, true);
                 ItemHandlerHelper.insertItem(output, recipe.getOutput().copy(), false);
                 return 1;
