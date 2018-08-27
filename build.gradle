@@ -11,12 +11,12 @@ buildscript {
         classpath 'net.minecraftforge.gradle:ForgeGradle:2.3-SNAPSHOT'
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:1.2.31"
         classpath 'com.selesse:gradle-git-changelog:0.2.+'
-        classpath "gradle.plugin.com.matthewprenger:CurseGradle:1.0.10"
+        classpath "gradle.plugin.com.matthewprenger:CurseGradle:1.1.0"
     }
 }
 plugins {
     id "com.github.hierynomus.license" version "0.14.0"
-    id "com.matthewprenger.cursegradle" version "1.0.10"
+    id "com.matthewprenger.cursegradle" version "1.1.0"
 }
 apply plugin: 'net.minecraftforge.gradle.forge'
 apply plugin: 'maven'
@@ -44,7 +44,7 @@ compileJava {
 }
 
 minecraft {
-    version = "1.12.2-14.23.4.2743"
+    version = "1.12.2-14.23.4.2757"
     runDir = "run"
 
     // the mappings can be changed at any time, and must be in the following format.

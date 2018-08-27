@@ -271,7 +271,7 @@ public class BlackHoleControllerTile extends CustomSidedTileEntity {
         public ItemStack insertItem(int slot, @Nonnull ItemStack stack, boolean simulate) {
             for (int i = 0; i < 9; ++i) {
                 ItemStack contained = blackHoleUnitBlock.getItemStack(storage.getStackInSlot(i));
-                if (stack.isItemEqual(contained)) {
+                if (stack.isItemEqual(contained) || (!tile.getOutput().getStackInSlot(i).isEmpty() && tile.getOutput().getStackInSlot(i).isItemEqual(stack))) {
                     return tile.getInput().insertItem(i, stack, simulate);
                 }
             }
@@ -283,7 +283,8 @@ public class BlackHoleControllerTile extends CustomSidedTileEntity {
         public ItemStack extractItem(int slot, int amount, boolean simulate) {
             if (storage.getStackInSlot(slot).isEmpty() || amount == 0) return ItemStack.EMPTY;
             ItemStack existing = blackHoleUnitBlock.getItemStack(storage.getStackInSlot(slot)).copy();
-            if (existing.isEmpty()) return ItemStack.EMPTY;
+            if (existing.isEmpty() && output.getStackInSlot(slot).isEmpty()) return ItemStack.EMPTY;
+            if (existing.isEmpty()) existing = output.getStackInSlot(slot);
             int visualAmount = blackHoleUnitBlock.getAmount(storage.getStackInSlot(slot)) + output.getStackInSlot(slot).getCount();
             if (visualAmount <= amount) {
                 if (!simulate) {
