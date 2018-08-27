@@ -22,6 +22,7 @@
 package com.buuz135.industrial.tile.block;
 
 import com.buuz135.industrial.book.BookCategory;
+import com.buuz135.industrial.config.CustomConfiguration;
 import com.buuz135.industrial.proxy.BlockRegistry;
 import com.buuz135.industrial.proxy.ItemRegistry;
 import com.buuz135.industrial.tile.generator.ProteinGeneratorTile;
@@ -29,9 +30,11 @@ import com.buuz135.industrial.utils.RecipeUtils;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
+import net.minecraftforge.common.config.Configuration;
 
 public class ProteinGeneratorBlock extends CustomOrientedBlock<ProteinGeneratorTile> {
 
+    public int powerGeneration;
 
     public ProteinGeneratorBlock() {
         super("protein_generator", ProteinGeneratorTile.class);
@@ -40,6 +43,7 @@ public class ProteinGeneratorBlock extends CustomOrientedBlock<ProteinGeneratorT
     @Override
     public void getMachineConfig() {
         super.getMachineConfig();
+        powerGeneration = CustomConfiguration.config.getInt("powerGeneration", "machines" + Configuration.CATEGORY_SPLITTER + this.getRegistryName().getResourcePath().toString(), 320, 0, Integer.MAX_VALUE, "How much power the generator produces every tick");
     }
 
     @Override

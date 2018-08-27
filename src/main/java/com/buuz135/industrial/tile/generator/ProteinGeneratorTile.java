@@ -21,13 +21,14 @@
  */
 package com.buuz135.industrial.tile.generator;
 
+import com.buuz135.industrial.proxy.BlockRegistry;
 import com.buuz135.industrial.proxy.FluidsRegistry;
 import net.minecraftforge.fluids.Fluid;
 
 public class ProteinGeneratorTile extends AbstractReactorGeneratorTile {
 
     public ProteinGeneratorTile() {//1440000
-        super(ProteinReactorTile.class.getName().hashCode(), 320);
+        super(ProteinReactorTile.class.getName().hashCode(), BlockRegistry.proteinGeneratorBlock.powerGeneration);
     }
 
     @Override
