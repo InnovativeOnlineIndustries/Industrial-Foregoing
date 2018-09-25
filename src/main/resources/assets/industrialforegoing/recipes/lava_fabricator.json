@@ -25,13 +25,13 @@
   "type": "minecraft:crafting_shaped",
   "key": {
     "p": {
-      "item": "industrialforegoing:plastic"
+      "item": "#ITEMRUBBER"
     },
     "b": {
       "item": "minecraft:blaze_rod"
     },
     "r": {
-      "item": "minecraft:redstone_block"
+      "item": "#BLOCKREDSTONE"
     },
     "c": {
       "item": "minecraft:magma_cream"
@@ -40,7 +40,7 @@
       "item": "teslacorelib:machine_case"
     },
     "o": {
-      "item": "minecraft:obsidian"
+      "item": "#OBSIDIAN"
     }
   }
 }

@@ -25,19 +25,19 @@
   "type": "minecraft:crafting_shaped",
   "key": {
     "p": {
-      "item": "industrialforegoing:plastic"
+      "item": "#ITEMRUBBER"
     },
     "b": {
-      "item": "minecraft:brick"
+      "item": "#INGOTBRICk"
     },
     "s": {
-      "item": "minecraft:egg"
+      "item": "#EGG"
     },
     "c": {
       "item": "minecraft:rabbit_foot"
     },
     "e": {
-      "item": "minecraft:porkchop"
+      "item": "'LISTALLPORKCHOP"
     },
     "m": {
       "item": "teslacorelib:machine_case"
