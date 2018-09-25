@@ -25,7 +25,7 @@
   "type": "forge:ore_shaped",
   "key": {
     "p": {
-      "item": "industrialforegoing:plastic"
+      "item": "#ITEMRUBBER"
     },
     "a": {
       "item": "minecraft:iron_axe"

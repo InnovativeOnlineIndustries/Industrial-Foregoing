@@ -11,7 +11,7 @@
   "type": "minecraft:crafting_shaped",
   "key": {
     "p": {
-      "item": "industrialforegoing:plastic"
+      "item": "#ITEMRUBBER"
     },
     "r": {
       "item": "minecraft:redstone"

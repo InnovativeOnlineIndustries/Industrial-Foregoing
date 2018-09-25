@@ -11,7 +11,7 @@
   "type": "forge:ore_shaped",
   "key": {
     "p": {
-      "item": "minecraft:slime"
+      "item": "#BLOCKSLIME"
     },
     "c": {
       "item": "industrialforegoing:conveyor",
