@@ -1,5 +1,5 @@
 /*
- * This file is part of Hot or Not.
+ * This file is part of Industrial Foregoing.
  *
  * Copyright 2018, Buuz135
  *
