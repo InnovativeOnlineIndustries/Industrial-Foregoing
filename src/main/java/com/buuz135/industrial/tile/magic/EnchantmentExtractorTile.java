@@ -85,7 +85,7 @@ public class EnchantmentExtractorTile extends CustomElectricMachine {
         this.addInventory(new CustomColoredItemHandler(this.inEnchanted, EnumDyeColor.PURPLE, "Input enchanted items", 18 * 3, 25 + 18 * 2, 1, 1) {
             @Override
             public boolean canInsertItem(int slot, ItemStack stack) {
-                return stack.isItemEnchanted() && stack.getItem().isEnchantable(stack) || (stack.getItem().equals(Items.ENCHANTED_BOOK) && ItemEnchantedBook.getEnchantments(stack).tagCount() > 1);
+                return stack.isItemEnchanted() && stack.getItem().isEnchantable(stack) || stack.getItem().equals(Items.ENCHANTED_BOOK);
             }
 
             @Override
@@ -150,7 +150,11 @@ public class EnchantmentExtractorTile extends CustomElectricMachine {
     @Override
     protected float performWork() {
         if (WorkUtils.isDisabled(this.getBlockType())) return 0;
-
+        if (getItem().getItem().equals(Items.ENCHANTED_BOOK) && ItemEnchantedBook.getEnchantments(getItem()).tagCount() == 1 && ItemHandlerHelper.insertItem(outEnchanted, getItem().copy(), true).isEmpty()) {
+            ItemHandlerHelper.insertItem(outEnchanted, getItem().copy(), false);
+            getItem().setCount(0);
+            return 1;
+        }
         if (!hasBooks() || getItem().isEmpty()) return 0;
         ItemStack enchantedItem = getItem();
         ItemStack enchantedBook = new ItemStack(Items.ENCHANTED_BOOK);
