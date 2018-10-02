@@ -187,7 +187,13 @@ public class EnchantmentExtractorTile extends CustomElectricMachine {
                 ItemHandlerHelper.insertItem(outEnchanted, enchantedBook, false);
                 inBook.getStackInSlot(0).setCount(inBook.getStackInSlot(0).getCount() - 1);
                 if ((enchantedItem.getItem().equals(Items.ENCHANTED_BOOK) && ItemEnchantedBook.getEnchantments(enchantedItem).tagCount() == 1) || (!enchantedItem.getItem().equals(Items.ENCHANTED_BOOK) && !enchantedItem.isItemEnchanted())) {
-                    ItemHandlerHelper.insertItem(outItem, enchantedItem.copy(), false);
+                    ItemStack stack = enchantedItem.copy();
+                    stack.setRepairCost(stack.getRepairCost() - 1);
+                    if (stack.getTagCompound() != null && stack.getRepairCost() <= 0) {
+                        stack.getTagCompound().removeTag("RepairCost");
+                        if (stack.getTagCompound().hasNoTags()) stack.setTagCompound(null);
+                    }
+                    ItemHandlerHelper.insertItem(outItem, stack, false);
                     enchantedItem.setCount(enchantedItem.getCount() - 1);
                 }
             }
