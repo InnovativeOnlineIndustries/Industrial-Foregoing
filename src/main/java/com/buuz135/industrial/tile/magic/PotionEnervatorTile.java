@@ -124,6 +124,11 @@ public class PotionEnervatorTile extends CustomElectricMachine {
             protected void onContentsChanged(int slot) {
                 PotionEnervatorTile.this.markDirty();
             }
+
+            @Override
+            public int getSlotLimit(int slot) {
+                return 1;
+            }
         };
         this.addInventory(new CustomColoredItemHandler(outputPotions, EnumDyeColor.PURPLE, "Potions items", 18 * 6 + 10, 25 + 18 * 2, 3, 1) {
             @Override
