@@ -25,7 +25,7 @@
   "type": "forge:ore_shaped",
   "key": {
     "p": {
-      "item": "industrialforegoing:plastic"
+      "item": "#ITEMRUBBER"
     },
     "g": {
       "item": "#GEARIRON"
@@ -34,7 +34,7 @@
       "item": "teslacorelib:machine_case"
     },
     "o": {
-      "item": "minecraft:red_mushroom"
+      "item": "#FOODMUSHROOM"
     }
   }
 }

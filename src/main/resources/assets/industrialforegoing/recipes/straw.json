@@ -10,7 +10,7 @@
   "type": "minecraft:crafting_shaped",
   "key": {
     "x": {
-      "item": "industrialforegoing:plastic"
+      "item": "#ITEMRUBBER"
     }
   }
 }

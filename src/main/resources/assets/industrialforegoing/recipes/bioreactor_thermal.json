@@ -25,16 +25,16 @@
   "type": "minecraft:crafting_shaped",
   "key": {
     "p": {
-      "item": "industrialforegoing:plastic"
+      "item": "#ITEMRUBBER"
     },
     "b": {
       "item": "minecraft:brick"
     },
     "s": {
-      "item": "minecraft:slime_ball"
+      "item": "#slimeball"
     },
     "c": {
-      "item": "minecraft:sugar"
+      "item": "#LISTALLSUGAR"
     },
     "e": {
       "item": "minecraft:fermented_spider_eye"
