@@ -24,6 +24,7 @@ package com.buuz135.industrial.jei.ghost;
 import com.buuz135.industrial.gui.conveyor.GuiConveyor;
 import com.buuz135.industrial.proxy.block.filter.IFilter;
 import mezz.jei.api.gui.IGhostIngredientHandler;
+import net.minecraft.item.ItemStack;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -33,8 +34,10 @@ public class ConveyorGhostSlotHandler implements IGhostIngredientHandler<GuiConv
     @Override
     public <I> List<Target<I>> getTargets(GuiConveyor gui, I ingredient, boolean doStart) {
         List<Target<I>> list = new ArrayList<>();
-        for (IFilter.GhostSlot ghostSlot : gui.getGhostSlots()) {
-            list.add((Target<I>) ghostSlot);
+        if (ingredient instanceof ItemStack) {
+            for (IFilter.GhostSlot ghostSlot : gui.getGhostSlots()) {
+                list.add((Target<I>) ghostSlot);
+            }
         }
         return list;
     }
