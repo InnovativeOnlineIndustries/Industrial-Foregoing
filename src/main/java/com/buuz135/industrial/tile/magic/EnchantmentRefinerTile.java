@@ -132,12 +132,11 @@ public class EnchantmentRefinerTile extends CustomElectricMachine {
             return 0;
         }
         ItemStack out = stack.copy();
-        out.setCount(1);
         IItemHandler handler = (stack.isItemEnchanted() || stack.getItem().equals(Items.ENCHANTED_BOOK)) ? outputEnch : outputNoEnch;
         if (ItemHandlerHelper.insertItem(handler, out, true).isEmpty()) {
             ItemHandlerHelper.insertItem(handler, out, false);
-            stack.setCount(stack.getCount() - 1);
-            return 500;
+            stack.setCount(0);
+            return 1;
         }
         return 0;
     }
