@@ -95,6 +95,7 @@ public class BlockConveyor extends BlockBase {
         items.register(item);
     }
 
+    @SideOnly(Side.CLIENT)
     @Override
     public void registerRender() {
         for (int i = 0; i < EnumDyeColor.values().length; ++i) {
