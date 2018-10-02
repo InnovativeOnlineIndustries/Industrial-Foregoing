@@ -31,6 +31,7 @@ import com.buuz135.industrial.gui.component.TexturedStateButtonGuiComponent;
 import com.buuz135.industrial.proxy.block.Cuboid;
 import com.buuz135.industrial.proxy.block.filter.IFilter;
 import com.buuz135.industrial.proxy.block.filter.ItemStackFilter;
+import com.buuz135.industrial.proxy.block.tile.TileEntityConveyor;
 import com.buuz135.industrial.utils.Reference;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.item.EntityItem;
@@ -43,6 +44,11 @@ import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
+import net.minecraftforge.common.capabilities.Capability;
+import net.minecraftforge.fluids.FluidStack;
+import net.minecraftforge.fluids.IFluidTank;
+import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
+import net.minecraftforge.fluids.capability.IFluidHandler;
 import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.IItemHandler;
 
@@ -78,7 +84,7 @@ public class ConveyorInsertionUpgrade extends ConveyorUpgrade {
         if (getWorld().isRemote)
             return;
         if (entity instanceof EntityItem) {
-            IItemHandler handler = getHandlerCapability();
+            IItemHandler handler = getHandlerCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY);
             if (handler != null && getWorkingBox().aabb().offset(getPos()).grow(0.01).intersects(entity.getEntityBoundingBox())) {
                 if (whitelist != filter.matches((EntityItem) entity)) return;
                 ItemStack stack = ((EntityItem) entity).getItem();
@@ -95,15 +101,29 @@ public class ConveyorInsertionUpgrade extends ConveyorUpgrade {
         }
     }
 
+    @Override
+    public void update() {
+        if (getWorld().isRemote)
+            return;
+        if (getWorld().getTotalWorldTime() % 2 == 0 && getContainer() instanceof TileEntityConveyor) {
+            IFluidTank tank = ((TileEntityConveyor) getContainer()).getTank();
+            IFluidHandler fluidHandler = getHandlerCapability(CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY);
+            if (fluidHandler != null && tank.drain(50, false) != null && fluidHandler.fill(tank.drain(50, false), false) > 0) {
+                FluidStack drain = tank.drain(fluidHandler.fill(tank.drain(50, false), true), true);
+                if (drain != null && drain.amount > 0) getContainer().requestFluidSync();
+            }
+        }
+    }
+
     @Nullable
-    private IItemHandler getHandlerCapability() {
+    private <T> T getHandlerCapability(Capability<T> capability) {
         BlockPos offsetPos = getPos().offset(getSide());
         TileEntity tile = getWorld().getTileEntity(offsetPos);
-        if (tile != null && tile.hasCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, getSide().getOpposite()))
-            return tile.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, getSide().getOpposite());
+        if (tile != null && tile.hasCapability(capability, getSide().getOpposite()))
+            return tile.getCapability(capability, getSide().getOpposite());
         for (Entity entity : getWorld().getEntitiesWithinAABB(Entity.class, new AxisAlignedBB(0, 0, 0, 1, 1, 1).offset(offsetPos), EntitySelectors.NOT_SPECTATING)) {
-            if (entity.hasCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, entity instanceof EntityPlayerMP ? null : getSide().getOpposite()))
-                return entity.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, entity instanceof EntityPlayerMP ? null : getSide().getOpposite());
+            if (entity.hasCapability(capability, entity instanceof EntityPlayerMP ? null : getSide().getOpposite()))
+                return entity.getCapability(capability, entity instanceof EntityPlayerMP ? null : getSide().getOpposite());
         }
         return null;
     }

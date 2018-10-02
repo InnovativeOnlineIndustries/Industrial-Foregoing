@@ -36,6 +36,8 @@ public interface IConveyorContainer {
 
     void requestSync();
 
+    void requestFluidSync();
+
     boolean hasUpgrade(EnumFacing facing);
 
     void addUpgrade(EnumFacing facing, ConveyorUpgradeFactory factory);
@@ -57,6 +59,11 @@ public interface IConveyorContainer {
 
         @Override
         public void requestSync() {
+
+        }
+
+        @Override
+        public void requestFluidSync() {
 
         }
 

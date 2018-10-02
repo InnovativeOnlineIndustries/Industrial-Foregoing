@@ -27,6 +27,7 @@ import com.buuz135.industrial.api.conveyor.IConveyorContainer;
 import com.buuz135.industrial.proxy.block.BlockConveyor;
 import com.buuz135.industrial.registry.IFRegistries;
 import com.buuz135.industrial.utils.MovementUtils;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.item.EnumDyeColor;
@@ -39,6 +40,8 @@ import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.Constants;
+import net.minecraftforge.fluids.FluidStack;
+import net.minecraftforge.fluids.FluidTank;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -55,6 +58,8 @@ public class TileEntityConveyor extends TileBase implements IConveyorContainer, 
     private Map<EnumFacing, ConveyorUpgrade> upgradeMap = new HashMap<>();
     private List<Integer> filter;
     private boolean sticky;
+    private FluidTank tank;
+    private boolean needsFluidSync;
 
     public TileEntityConveyor() {
         this.facing = EnumFacing.NORTH;
@@ -62,6 +67,7 @@ public class TileEntityConveyor extends TileBase implements IConveyorContainer, 
         this.color = 0;
         this.filter = new ArrayList<>();
         this.sticky = false;
+        this.tank = new FluidTank(250);
     }
 
     @Override
@@ -77,6 +83,11 @@ public class TileEntityConveyor extends TileBase implements IConveyorContainer, 
     @Override
     public void requestSync() {
         markForUpdate();
+    }
+
+    @Override
+    public void requestFluidSync() {
+        this.needsFluidSync = true;
     }
 
     @Override
@@ -131,6 +142,22 @@ public class TileEntityConveyor extends TileBase implements IConveyorContainer, 
             new ArrayList<>(upgradeMap.keySet()).forEach(facing1 -> this.removeUpgrade(facing1, true));
         }
         upgradeMap.values().forEach(ConveyorUpgrade::update);
+        if (!world.isRemote && tank.getFluidAmount() > 0 && world.getTotalWorldTime() % 3 == 0 && world.getBlockState(this.pos.offset(facing)).getBlock() instanceof BlockConveyor && world.getTileEntity(this.pos.offset(facing)) instanceof TileEntityConveyor) {
+            IBlockState state = world.getBlockState(this.pos.offset(facing));
+            if (!state.getValue(BlockConveyor.TYPE).isVertical()) {
+                int amount = Math.max(tank.getFluidAmount() - 1, 1);
+                TileEntityConveyor tileEntityConveyor = (TileEntityConveyor) world.getTileEntity(this.pos.offset(facing));
+                FluidStack drained = tank.drain(tileEntityConveyor.getTank().fill(tank.drain(amount, false), true), true);
+                if (drained != null && drained.amount > 0) {
+                    this.requestFluidSync();
+                    tileEntityConveyor.requestFluidSync();
+                }
+            }
+        }
+        if (!world.isRemote && world.getTotalWorldTime() % 6 == 0 && needsFluidSync) {
+            markForUpdate();
+            this.needsFluidSync = false;
+        }
     }
 
     public EnumFacing getFacing() {
@@ -194,6 +221,7 @@ public class TileEntityConveyor extends TileBase implements IConveyorContainer, 
             upgrades.setTag(facing.getName(), upgradeTag);
         }
         compound.setTag("Upgrades", upgrades);
+        compound.setTag("Tank", tank.writeToNBT(new NBTTagCompound()));
         return compound;
     }
 
@@ -227,6 +255,9 @@ public class TileEntityConveyor extends TileBase implements IConveyorContainer, 
                     upgradeMap.put(facing, upgrade);
                 }
             }
+        }
+        if (compound.hasKey("Tank")) {
+            this.tank = this.tank.readFromNBT(compound.getCompoundTag("Tank"));
         }
     }
 
@@ -268,5 +299,9 @@ public class TileEntityConveyor extends TileBase implements IConveyorContainer, 
 
     public Map<EnumFacing, ConveyorUpgrade> getUpgradeMap() {
         return upgradeMap;
+    }
+
+    public FluidTank getTank() {
+        return tank;
     }
 }
