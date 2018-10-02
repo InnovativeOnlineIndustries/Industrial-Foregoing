@@ -28,6 +28,8 @@ import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraftforge.fluids.FluidStack;
+import net.minecraftforge.fluids.FluidUtil;
 
 public class ItemStackFilter extends AbstractFilter<Entity> {
 
@@ -67,6 +69,20 @@ public class ItemStackFilter extends AbstractFilter<Entity> {
         if (isEmpty) return false;
         for (GhostSlot stack : this.getFilter()) {
             if (itemStack.isItemEqual(stack.getStack())) return true;
+        }
+        return false;
+    }
+
+    @Override
+    public boolean matches(FluidStack fluidStack) {
+        boolean isEmpty = true;
+        for (GhostSlot stack : this.getFilter()) {
+            if (!stack.getStack().isEmpty()) isEmpty = false;
+        }
+        if (isEmpty) return false;
+        for (GhostSlot stack : this.getFilter()) {
+            FluidStack original = FluidUtil.getFluidContained(stack.getStack());
+            if (original != null && original.isFluidEqual(fluidStack)) return true;
         }
         return false;
     }

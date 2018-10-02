@@ -108,7 +108,7 @@ public class ConveyorInsertionUpgrade extends ConveyorUpgrade {
         if (getWorld().getTotalWorldTime() % 2 == 0 && getContainer() instanceof TileEntityConveyor) {
             IFluidTank tank = ((TileEntityConveyor) getContainer()).getTank();
             IFluidHandler fluidHandler = getHandlerCapability(CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY);
-            if (fluidHandler != null && tank.drain(50, false) != null && fluidHandler.fill(tank.drain(50, false), false) > 0) {
+            if (fluidHandler != null && tank.drain(50, false) != null && fluidHandler.fill(tank.drain(50, false), false) > 0 && whitelist == filter.matches(tank.drain(50, false))) {
                 FluidStack drain = tank.drain(fluidHandler.fill(tank.drain(50, false), true), true);
                 if (drain != null && drain.amount > 0) getContainer().requestFluidSync();
             }

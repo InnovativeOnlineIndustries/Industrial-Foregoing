@@ -27,6 +27,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.entity.Entity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fml.common.Optional;
 
 import java.awt.*;
@@ -39,6 +40,8 @@ public interface IFilter<T extends Entity> {
     boolean matches(T entity);
 
     boolean matches(ItemStack itemStack);
+
+    boolean matches(FluidStack fluidStack);
 
     void setFilter(int slot, ItemStack stack);
 
