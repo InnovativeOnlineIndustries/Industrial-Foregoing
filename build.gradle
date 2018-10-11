@@ -78,6 +78,10 @@ repositories {
         name 'jared maven'
         url "http://maven.blamejared.com/"
     }
+    maven {
+        name = "CurseForge"
+        url = "https://minecraft.curseforge.com/api/maven/"
+    }
 }
 
 dependencies {
@@ -91,6 +95,7 @@ dependencies {
     compile "cofh:RedstoneFlux:1.12-${project.redstoneflux_version}:universal"
     compileOnly "CraftTweaker2:CraftTweaker2-MC1120-Main:1.12-4.0.10.306"
     compile files("libs/Baubles-1.12-1.5.2.jar")
+    deobfCompile "moo-fluids:MooFluids:1.12.2:1.7.11.02a"
 }
 
 processResources {
