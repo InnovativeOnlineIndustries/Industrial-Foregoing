@@ -31,7 +31,6 @@ import com.buuz135.industrial.tile.block.EnergyFieldProviderBlock;
 import com.buuz135.industrial.tile.world.EnergyFieldProviderTile;
 import net.minecraft.item.EnumDyeColor;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
@@ -53,11 +52,8 @@ import java.util.List;
 
 public abstract class CustomElectricMachine extends ElectricMachine implements IAcceptsTransferAddons {
 
-    private int tick;
-
     protected CustomElectricMachine(int typeId) {
         super(typeId);
-        tick = 0;
     }
 
     @Override
@@ -118,7 +114,7 @@ public abstract class CustomElectricMachine extends ElectricMachine implements I
     public void protectedUpdate() {
         super.protectedUpdate();
         if (this.world.isRemote) return;
-        if (hasAddon(EnergyFieldAddon.class)) {
+        if (world.getTotalWorldTime() % 2 == 0 && hasAddon(EnergyFieldAddon.class)) {
             ItemStack addon = getAddonStack(EnergyFieldAddon.class);
             if (addon.hasCapability(CapabilityEnergy.ENERGY, null)) {
                 IEnergyStorage storage = addon.getCapability(CapabilityEnergy.ENERGY, null);
@@ -134,12 +130,8 @@ public abstract class CustomElectricMachine extends ElectricMachine implements I
                 this.forceSync();
             }
         }
-        if (tick % 10 == 0 && this.getAddonItems() != null) {
+        if (world.getTotalWorldTime() % 10 == 0 && this.getAddonItems() != null) {
             workTransferAddon(this, this.getAddonItems());
-        }
-        ++tick;
-        if (tick >= 20) {
-            tick = 0;
         }
     }
 
@@ -147,19 +139,6 @@ public abstract class CustomElectricMachine extends ElectricMachine implements I
         return !hasAddon(EnergyFieldAddon.class);
     }
 
-    @NotNull
-    @Override
-    public NBTTagCompound writeToNBT(@NotNull NBTTagCompound compound) {
-        compound = super.writeToNBT(compound);
-        compound.setInteger("Tick", tick);
-        return compound;
-    }
-
-    @Override
-    public void readFromNBT(@NotNull NBTTagCompound compound) {
-        super.readFromNBT(compound);
-        tick = compound.getInteger("Tick");
-    }
 
     @Override
     public boolean canAcceptAddon(TransferAddon addon) {
