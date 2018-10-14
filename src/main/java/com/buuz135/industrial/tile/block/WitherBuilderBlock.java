@@ -49,7 +49,7 @@ public class WitherBuilderBlock extends CustomAreaOrientedBlock<WitherBuilderTil
     @Override
     public void getMachineConfig() {
         super.getMachineConfig();
-        HCWither = CustomConfiguration.config.getBoolean("HCWither", "machines" + Configuration.CATEGORY_SPLITTER + this.getRegistryName().getResourcePath().toString(), false, "If enabled, only the wither builder will be able to place wither skulls. That means that players won't be able to place wither skulls. The recipe will change, but that will need a restart.");
+        HCWither = CustomConfiguration.config.getBoolean("HCWither", "machines" + Configuration.CATEGORY_SPLITTER + this.getRegistryName().getPath().toString(), false, "If enabled, only the wither builder will be able to place wither skulls. That means that players won't be able to place wither skulls. The recipe will change, but that will need a restart.");
         if (HCWither) {
             if (dispenser == null) dispenser = BlockDispenser.DISPENSE_BEHAVIOR_REGISTRY.getObject(Items.SKULL);
             BlockDispenser.DISPENSE_BEHAVIOR_REGISTRY.putObject(Items.SKULL, new BehaviorDefaultDispenseItem());

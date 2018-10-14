@@ -56,7 +56,7 @@ public class OreProcessorBlock extends CustomOrientedBlock<OreProcessorTile> {
     @Override
     public void getMachineConfig() {
         super.getMachineConfig();
-        essenceFortune = CustomConfiguration.config.getInt("essenceFortune", "machines" + Configuration.CATEGORY_SPLITTER + this.getRegistryName().getResourcePath().toString(), 200, 1, Integer.MAX_VALUE, "Amount of essence needed for each fortune level.");
+        essenceFortune = CustomConfiguration.config.getInt("essenceFortune", "machines" + Configuration.CATEGORY_SPLITTER + this.getRegistryName().getPath().toString(), 200, 1, Integer.MAX_VALUE, "Amount of essence needed for each fortune level.");
     }
 
     @Override

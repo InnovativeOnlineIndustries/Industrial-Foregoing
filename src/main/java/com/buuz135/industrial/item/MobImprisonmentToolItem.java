@@ -123,7 +123,7 @@ public class MobImprisonmentToolItem extends IFCustomItem {
     @Override
     public String getItemStackDisplayName(ItemStack stack) {
         if (!containsEntity(stack))
-            return new TextComponentTranslation(super.getUnlocalizedName(stack) + ".name").getUnformattedComponentText();
-        return new TextComponentTranslation(super.getUnlocalizedName(stack) + ".name").getUnformattedComponentText() + " (" + EntityList.getTranslationName(new ResourceLocation(getID(stack))) + ")";
+            return new TextComponentTranslation(super.getTranslationKey(stack) + ".name").getUnformattedComponentText();
+        return new TextComponentTranslation(super.getTranslationKey(stack) + ".name").getUnformattedComponentText() + " (" + EntityList.getTranslationName(new ResourceLocation(getID(stack))) + ")";
     }
 }

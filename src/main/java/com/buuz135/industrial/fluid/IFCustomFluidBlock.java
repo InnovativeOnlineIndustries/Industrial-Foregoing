@@ -43,7 +43,7 @@ public class IFCustomFluidBlock extends BlockFluidClassic {
     public IFCustomFluidBlock(IFCustomFluid fluid, Material material, Consumer<EntityLivingBase> consumer) {
         super(fluid, material);
         setRegistryName(new ResourceLocation(Reference.MOD_ID, fluid.getName()));
-        setUnlocalizedName(fluidName);
+        setTranslationKey(fluidName);
         setCreativeTab(IndustrialForegoing.creativeTab);
         this.consumer = consumer;
     }
@@ -57,13 +57,12 @@ public class IFCustomFluidBlock extends BlockFluidClassic {
     }
 
     @Override
-    public void onEntityCollidedWithBlock(World worldIn, BlockPos pos, IBlockState state, Entity entityIn) {
-        super.onEntityCollidedWithBlock(worldIn, pos, state, entityIn);
+    public void onEntityCollision(World worldIn, BlockPos pos, IBlockState state, Entity entityIn) {
+        super.onEntityCollision(worldIn, pos, state, entityIn);
         if (worldIn.isRemote) return;
         if (entityIn instanceof EntityLivingBase) {
             consumer.accept((EntityLivingBase) entityIn);
         }
     }
-
 
 }

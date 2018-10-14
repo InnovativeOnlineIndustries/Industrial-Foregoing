@@ -62,8 +62,8 @@ public class MaterialStoneWorkFactoryBlock extends CustomOrientedBlock<MaterialS
     @Override
     public void getMachineConfig() {
         super.getMachineConfig();
-        produceExNihiloDust = CustomConfiguration.config.getBoolean("produceExNihiloDust", "machines" + Configuration.CATEGORY_SPLITTER + this.getRegistryName().getResourcePath().toString(), true, "If true, it will produce exnihilo dust crushing sand.");
-        produceSilicon = CustomConfiguration.config.getBoolean("produceSilicon", "machines" + Configuration.CATEGORY_SPLITTER + this.getRegistryName().getResourcePath().toString(), true, "If true, it will produce AE/RS silicon crushing sand or dust if it exist and 'produceExNihiloDust' is enabled.");
+        produceExNihiloDust = CustomConfiguration.config.getBoolean("produceExNihiloDust", "machines" + Configuration.CATEGORY_SPLITTER + this.getRegistryName().getPath().toString(), true, "If true, it will produce exnihilo dust crushing sand.");
+        produceSilicon = CustomConfiguration.config.getBoolean("produceSilicon", "machines" + Configuration.CATEGORY_SPLITTER + this.getRegistryName().getPath().toString(), true, "If true, it will produce AE/RS silicon crushing sand or dust if it exist and 'produceExNihiloDust' is enabled.");
     }
 
     public boolean produceExNihiloDust() {

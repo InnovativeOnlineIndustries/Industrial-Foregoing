@@ -56,11 +56,11 @@ public class IFWorldRenderLastEvent {
         float f6 = f3 * f4;
         float f7 = f2 * f4;
         double d3 = 5.0D;
-        Vec3d vec3d1 = vec3d.addVector((double) f6 * d3, (double) f5 * d3, (double) f7 * d3);
+        Vec3d vec3d1 = vec3d.add((double) f6 * d3, (double) f5 * d3, (double) f7 * d3);
         RayTraceResult result = Minecraft.getMinecraft().world.rayTraceBlocks(vec3d, vec3d1, false, true, false);
         if (result != null && result.typeOfHit == RayTraceResult.Type.BLOCK) {
             BlockPos pos = result.getBlockPos();
-            if (Minecraft.getMinecraft().world.getBlockState(pos).getBlock().getRegistryName().getResourceDomain().equals(Reference.MOD_ID)) {
+            if (Minecraft.getMinecraft().world.getBlockState(pos).getBlock().getRegistryName().getNamespace().equals(Reference.MOD_ID)) {
                 Minecraft.getMinecraft().fontRenderer.drawString(TextFormatting.GOLD + "SNEAK" + TextFormatting.WHITE + "+" + TextFormatting.GOLD + "Right Click", event.getResolution().getScaledWidth() / 2 + 10, event.getResolution().getScaledHeight() / 2 - 5, 0xFFFFFF, true);
                 Minecraft.getMinecraft().fontRenderer.drawString(TextFormatting.YELLOW + "Open Block Description", event.getResolution().getScaledWidth() / 2 + 10, event.getResolution().getScaledHeight() / 2 - 5 + Minecraft.getMinecraft().fontRenderer.FONT_HEIGHT + 2, 0xFFFFFF, true);
 

@@ -48,8 +48,8 @@ public class MobRelocatorBlock extends CustomAreaOrientedBlock<MobRelocatorTile>
     @Override
     public void getMachineConfig() {
         super.getMachineConfig();
-        essenceMultiplier = CustomConfiguration.config.getFloat("essenceMultiplier", "machines" + Configuration.CATEGORY_SPLITTER + this.getRegistryName().getResourcePath().toString(), 1, 0, Integer.MAX_VALUE, "Mob essence multiplier based on the XP orb. Essence mb = xpOrbValue*20*essenceMultiplier");
-        damage = CustomConfiguration.config.getInt("damage", "machines" + Configuration.CATEGORY_SPLITTER + this.getRegistryName().getResourcePath().toString(), 300, 0, Integer.MAX_VALUE, "Amount of damage that the machine will do");
+        essenceMultiplier = CustomConfiguration.config.getFloat("essenceMultiplier", "machines" + Configuration.CATEGORY_SPLITTER + this.getRegistryName().getPath().toString(), 1, 0, Integer.MAX_VALUE, "Mob essence multiplier based on the XP orb. Essence mb = xpOrbValue*20*essenceMultiplier");
+        damage = CustomConfiguration.config.getInt("damage", "machines" + Configuration.CATEGORY_SPLITTER + this.getRegistryName().getPath().toString(), 300, 0, Integer.MAX_VALUE, "Amount of damage that the machine will do");
     }
 
     public float getEssenceMultiplier() {

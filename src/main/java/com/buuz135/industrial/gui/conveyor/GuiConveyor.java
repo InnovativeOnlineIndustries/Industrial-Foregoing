@@ -83,7 +83,7 @@ public class GuiConveyor extends GuiContainer {
         y = (height - ySize) / 2;
         drawTexturedModalRect(x, y, 0, 0, xSize, ySize);
         if (upgrade != null) {
-            String localized = new TextComponentTranslation(String.format("conveyor.upgrade.%s.%s.name", upgrade.getFactory().getRegistryName().getResourceDomain(), upgrade.getFactory().getRegistryName().getResourcePath())).getFormattedText();
+            String localized = new TextComponentTranslation(String.format("conveyor.upgrade.%s.%s.name", upgrade.getFactory().getRegistryName().getNamespace(), upgrade.getFactory().getRegistryName().getPath())).getFormattedText();
             fontRenderer.drawString(localized, x + xSize / 2 - fontRenderer.getStringWidth(localized) / 2, y + 6, 0x404040);
         }
         for (IGuiComponent iGuiComponent : componentList) {

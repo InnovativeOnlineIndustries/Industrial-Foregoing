@@ -53,7 +53,7 @@ public class GuiHandler implements IGuiHandler {
             if (block instanceof BlockBase && entity instanceof TileEntityConveyor) {
                 Cuboid hit = ((BlockBase) block).getCuboidHit(world, pos, player);
                 if (hit != null) {
-                    EnumFacing facing = EnumFacing.getFront(hit.identifier);
+                    EnumFacing facing = EnumFacing.byIndex(hit.identifier);
                     return new ContainerConveyor((TileEntityConveyor) entity, facing, player.inventory);
                 }
             }

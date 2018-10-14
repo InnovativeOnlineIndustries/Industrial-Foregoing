@@ -119,7 +119,7 @@ public class BlockConveyor extends BlockBase {
     }
 
     public IBlockState getStateFromMeta(int meta) {
-        EnumFacing enumfacing = EnumFacing.getFront(meta);
+        EnumFacing enumfacing = EnumFacing.byIndex(meta);
         if (enumfacing.getAxis() == EnumFacing.Axis.Y) enumfacing = EnumFacing.NORTH;
         return this.getDefaultState().withProperty(FACING, enumfacing);
     }
@@ -151,7 +151,7 @@ public class BlockConveyor extends BlockBase {
         TileEntity tileEntity = world.getTileEntity(pos);
         if (tileEntity instanceof TileEntityConveyor) {
             if (target instanceof DistanceRayTraceResult) {
-                ConveyorUpgrade upgrade = ((TileEntityConveyor) tileEntity).getUpgradeMap().get(EnumFacing.getFront(((Cuboid) target.hitInfo).identifier));
+                ConveyorUpgrade upgrade = ((TileEntityConveyor) tileEntity).getUpgradeMap().get(EnumFacing.byIndex(((Cuboid) target.hitInfo).identifier));
                 if (upgrade != null) {
                     return new ItemStack(ItemRegistry.conveyorUpgradeItem, 1, IFRegistries.CONVEYOR_UPGRADE_REGISTRY.getID(upgrade.getFactory()) - 1);
                 }
@@ -352,7 +352,7 @@ public class BlockConveyor extends BlockBase {
             if (playerIn.isSneaking()) {
                 Cuboid hit = getCuboidHit(worldIn, pos, playerIn);
                 if (hit != null) {
-                    EnumFacing upgradeFacing = EnumFacing.getFront(hit.identifier);
+                    EnumFacing upgradeFacing = EnumFacing.byIndex(hit.identifier);
                     ((TileEntityConveyor) tileEntity).removeUpgrade(upgradeFacing, true);
                     return true;
                 }
@@ -372,7 +372,7 @@ public class BlockConveyor extends BlockBase {
                             return true;
                         }
                     } else {
-                        EnumFacing upgradeFacing = EnumFacing.getFront(hit.identifier);
+                        EnumFacing upgradeFacing = EnumFacing.byIndex(hit.identifier);
                         if (((TileEntityConveyor) tileEntity).hasUpgrade(upgradeFacing)) {
                             ConveyorUpgrade upgrade = ((TileEntityConveyor) tileEntity).getUpgradeMap().get(upgradeFacing);
                             if (upgrade.onUpgradeActivated(playerIn, hand)) {
@@ -443,7 +443,8 @@ public class BlockConveyor extends BlockBase {
     }
 
     @Override
-    public void onEntityCollidedWithBlock(World worldIn, BlockPos pos, IBlockState state, Entity entityIn) {
+    public void onEntityCollision(World worldIn, BlockPos pos, IBlockState state, Entity entityIn) {
+        super.onEntityCollision(worldIn, pos, state, entityIn);
         TileEntity entity = worldIn.getTileEntity(pos);
         if (entity instanceof TileEntityConveyor) {
             ((TileEntityConveyor) entity).handleEntityMovement(entityIn);
@@ -574,7 +575,7 @@ public class BlockConveyor extends BlockBase {
 
         @Override
         public String getItemStackDisplayName(ItemStack stack) {
-            return new TextComponentTranslation("item.fireworksCharge." + EnumDyeColor.byMetadata(stack.getMetadata()).getUnlocalizedName().replaceAll("_", "")).getFormattedText() + " " + super.getItemStackDisplayName(stack);
+            return new TextComponentTranslation("item.fireworksCharge." + EnumDyeColor.byMetadata(stack.getMetadata()).getTranslationKey().replaceAll("_", "")).getFormattedText() + " " + super.getItemStackDisplayName(stack);
         }
     }
 

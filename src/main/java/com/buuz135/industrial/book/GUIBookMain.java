@@ -50,7 +50,7 @@ public class GUIBookMain extends GUIBookBase {
     public GUIBookMain(World world, int x, int y, int z) {
         super(null, null);
         BlockPos pos = new BlockPos(x, y, z);
-        if (world.getBlockState(pos).getBlock().getRegistryName().getResourceDomain().equals(IndustrialForegoingHelper.MOD_ID)) {
+        if (world.getBlockState(pos).getBlock().getRegistryName().getNamespace().equals(IndustrialForegoingHelper.MOD_ID)) {
             block = world.getBlockState(pos).getBlock();
         }
     }

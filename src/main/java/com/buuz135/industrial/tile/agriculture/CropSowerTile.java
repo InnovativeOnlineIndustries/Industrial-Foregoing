@@ -140,7 +140,7 @@ public class CropSowerTile extends WorkingAreaElectricMachine {
                         this.world.setBlockState(pos.offset(EnumFacing.DOWN), Blocks.FARMLAND.getDefaultState());
                     }
                     player.setHeldItem(EnumHand.MAIN_HAND, stack);
-                    if (stack.getItem().getRegistryName() != null && stack.getItem().getRegistryName().getResourceDomain().equals("forestry")) {
+                    if (stack.getItem().getRegistryName() != null && stack.getItem().getRegistryName().getNamespace().equals("forestry")) {
                         player.setPositionAndRotation(pos.getX(), pos.getY(), pos.getZ(), 90, 90);
                         stack.useItemRightClick(this.world, player, EnumHand.MAIN_HAND);
                         return 1;

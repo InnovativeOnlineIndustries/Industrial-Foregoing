@@ -83,7 +83,7 @@ public class BlockLabel extends BlockBase {
     }
 
     public IBlockState getStateFromMeta(int meta) {
-        EnumFacing enumfacing = EnumFacing.getFront(meta);
+        EnumFacing enumfacing = EnumFacing.byIndex(meta);
         if (enumfacing.getAxis() == EnumFacing.Axis.Y) enumfacing = EnumFacing.NORTH;
         return this.getDefaultState().withProperty(FACING, enumfacing);
     }
@@ -180,7 +180,7 @@ public class BlockLabel extends BlockBase {
     @Override
     public void registerBlock(IForgeRegistry<Block> blocks) {
         super.registerBlock(blocks);
-        GameRegistry.registerTileEntity(TileEntityLabel.class, new ResourceLocation(Reference.MOD_ID, this.getRegistryName().getResourcePath() + "_tile"));
+        GameRegistry.registerTileEntity(TileEntityLabel.class, new ResourceLocation(Reference.MOD_ID, this.getRegistryName().getPath() + "_tile"));
     }
 
     @SideOnly(Side.CLIENT)

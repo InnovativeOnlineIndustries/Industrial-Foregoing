@@ -58,9 +58,9 @@ public class MobDuplicatorBlock extends CustomAreaOrientedBlock<MobDuplicatorTil
     @Override
     public void getMachineConfig() {
         super.getMachineConfig();
-        essenceNeeded = CustomConfiguration.config.getInt("essenceNeeded", "machines" + Configuration.CATEGORY_SPLITTER + this.getRegistryName().getResourcePath().toString(), 12, 1, Integer.MAX_VALUE, "Essence needed based on mob's health (mobHealth*essenceNeeded)");
-        blacklistedEntities = Arrays.asList(CustomConfiguration.config.getStringList("blacklistedEntities", "machines" + Configuration.CATEGORY_SPLITTER + this.getRegistryName().getResourcePath().toString(), new String[]{}, "A list of blacklisted entities like minecraft:creeper"));
-        enableExactCopy = CustomConfiguration.config.getBoolean("enableExactCopy", "machines" + Configuration.CATEGORY_SPLITTER + this.getRegistryName().getResourcePath().toString(), false, "Set to true to enable exact copy in the Mob Duplicator.");
+        essenceNeeded = CustomConfiguration.config.getInt("essenceNeeded", "machines" + Configuration.CATEGORY_SPLITTER + this.getRegistryName().getPath().toString(), 12, 1, Integer.MAX_VALUE, "Essence needed based on mob's health (mobHealth*essenceNeeded)");
+        blacklistedEntities = Arrays.asList(CustomConfiguration.config.getStringList("blacklistedEntities", "machines" + Configuration.CATEGORY_SPLITTER + this.getRegistryName().getPath().toString(), new String[]{}, "A list of blacklisted entities like minecraft:creeper"));
+        enableExactCopy = CustomConfiguration.config.getBoolean("enableExactCopy", "machines" + Configuration.CATEGORY_SPLITTER + this.getRegistryName().getPath().toString(), false, "Set to true to enable exact copy in the Mob Duplicator.");
     }
 
     @Override

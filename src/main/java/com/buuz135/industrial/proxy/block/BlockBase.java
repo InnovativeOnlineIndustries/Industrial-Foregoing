@@ -51,7 +51,7 @@ public class BlockBase extends Block {
     public BlockBase(String name) {
         super(Material.ROCK);
         this.setRegistryName(new ResourceLocation(Reference.MOD_ID, name));
-        this.setUnlocalizedName(Reference.MOD_ID + "." + name);
+        this.setTranslationKey(Reference.MOD_ID + "." + name);
         BLOCKS.add(this);
     }
 

@@ -76,7 +76,7 @@ public class OreDictionaryConverterTile extends CustomSidedTileEntity {
                 if (!this.getStackInSlot(0).isEmpty()) {
                     List<String> dicts = ItemStackUtils.getOreDictionaryEntries(this.getStackInSlot(0));
                     if (dicts.size() > 0) {
-                        modid = this.getStackInSlot(0).getItem().getRegistryName().getResourceDomain();
+                        modid = this.getStackInSlot(0).getItem().getRegistryName().getNamespace();
                         oreDict = dicts.get(0);
                         OreDictionaryConverterTile.this.forceSync();
                     }

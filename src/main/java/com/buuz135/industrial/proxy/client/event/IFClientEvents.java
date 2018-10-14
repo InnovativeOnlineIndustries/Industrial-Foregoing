@@ -61,8 +61,8 @@ public class IFClientEvents {
     @SubscribeEvent
     public void modelBake(ModelBakeEvent event) {
         for (ModelResourceLocation resourceLocation : event.getModelRegistry().getKeys()) {
-            if (resourceLocation.getResourceDomain().equals(Reference.MOD_ID)) {
-                if (resourceLocation.getResourcePath().contains("conveyor") && !resourceLocation.getResourcePath().contains("upgrade"))
+            if (resourceLocation.getNamespace().equals(Reference.MOD_ID)) {
+                if (resourceLocation.getPath().contains("conveyor") && !resourceLocation.getPath().contains("upgrade"))
                     event.getModelRegistry().putObject(resourceLocation, new ConveyorBlockModel(event.getModelRegistry().getObject(resourceLocation)));
             }
         }

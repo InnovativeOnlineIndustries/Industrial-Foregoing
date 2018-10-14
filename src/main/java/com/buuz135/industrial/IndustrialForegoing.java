@@ -49,7 +49,7 @@ public class IndustrialForegoing {
     public static final SimpleNetworkWrapper NETWORK = NetworkRegistry.INSTANCE.newSimpleChannel(Reference.MOD_ID);
     public static CreativeTabs creativeTab = new CreativeTabs(Reference.MOD_ID) {
         @Override
-        public ItemStack getTabIconItem() {
+        public ItemStack createIcon() {
             return new ItemStack(BlockRegistry.blackHoleUnitBlock);
         }
     };

@@ -238,7 +238,7 @@ public class BlackHoleUnitTile extends CustomSidedTileEntity implements IHasDisp
             if (item != null) {
                 stack = new ItemStack(item, 1, compound.getInteger(NBT_META));
                 NBTTagCompound nbttag = compound.getCompoundTag(NBT_ITEM_NBT);
-                if (!nbttag.hasNoTags()) stack.setTagCompound(nbttag);
+                if (!nbttag.isEmpty()) stack.setTagCompound(nbttag);
             }
         }
         if (!compound.hasKey(NBT_AMOUNT)) amount = 0;
@@ -271,7 +271,7 @@ public class BlackHoleUnitTile extends CustomSidedTileEntity implements IHasDisp
     }
 
     public String getDisplayNameUnlocalized() {
-        return getItemStack().getUnlocalizedName().endsWith(".name") ? getItemStack().getUnlocalizedName() : getItemStack().getUnlocalizedName() + ".name";
+        return getItemStack().getTranslationKey().endsWith(".name") ? getItemStack().getTranslationKey() : getItemStack().getTranslationKey() + ".name";
     }
 
     @Override

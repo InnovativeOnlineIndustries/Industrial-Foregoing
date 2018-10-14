@@ -60,11 +60,11 @@ public abstract class CustomOrientedBlock<T extends SidedTileEntity> extends Ori
     }
 
     public void getMachineConfig() {
-        enabled = CustomConfiguration.config.getBoolean("enabled", "machines" + Configuration.CATEGORY_SPLITTER + this.getRegistryName().getResourcePath().toString(), true, "If disabled it will be removed from the game.");
-        workDisabled = CustomConfiguration.config.getBoolean("workDisabled", "machines" + Configuration.CATEGORY_SPLITTER + this.getRegistryName().getResourcePath().toString(), false, "Machine can perform a work action");
+        enabled = CustomConfiguration.config.getBoolean("enabled", "machines" + Configuration.CATEGORY_SPLITTER + this.getRegistryName().getPath().toString(), true, "If disabled it will be removed from the game.");
+        workDisabled = CustomConfiguration.config.getBoolean("workDisabled", "machines" + Configuration.CATEGORY_SPLITTER + this.getRegistryName().getPath().toString(), false, "Machine can perform a work action");
         if (energyForWork != 0 && energyRate != 0) {
-            energyForWork = CustomConfiguration.config.getInt("energyForWork", "machines" + Configuration.CATEGORY_SPLITTER + this.getRegistryName().getResourcePath().toString(), energyForWork, 1, Integer.MAX_VALUE, "How much energy needs a machine to work");
-            energyRate = CustomConfiguration.config.getInt("energyRate", "machines" + Configuration.CATEGORY_SPLITTER + this.getRegistryName().getResourcePath().toString(), energyRate, 1, Integer.MAX_VALUE, "Energy input rate of a machine");
+            energyForWork = CustomConfiguration.config.getInt("energyForWork", "machines" + Configuration.CATEGORY_SPLITTER + this.getRegistryName().getPath().toString(), energyForWork, 1, Integer.MAX_VALUE, "How much energy needs a machine to work");
+            energyRate = CustomConfiguration.config.getInt("energyRate", "machines" + Configuration.CATEGORY_SPLITTER + this.getRegistryName().getPath().toString(), energyRate, 1, Integer.MAX_VALUE, "Energy input rate of a machine");
         }
     }
 
@@ -89,7 +89,7 @@ public abstract class CustomOrientedBlock<T extends SidedTileEntity> extends Ori
     @Override
     public List<IPage> getBookDescriptionPages() {
         List<IPage> pages = new ArrayList<>();
-        pages.addAll(PageText.createTranslatedPages("text.industrialforegoing.book." + getRegistryName().getResourcePath()));
+        pages.addAll(PageText.createTranslatedPages("text.industrialforegoing.book." + getRegistryName().getPath()));
         if (ForgeRegistries.RECIPES.getValue(this.getRegistryName()) != null)
             pages.add(new PageRecipe(this.getRegistryName()));
         return pages;

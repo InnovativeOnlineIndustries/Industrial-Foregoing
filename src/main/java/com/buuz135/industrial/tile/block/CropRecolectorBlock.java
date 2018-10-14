@@ -51,10 +51,10 @@ public class CropRecolectorBlock extends CustomAreaOrientedBlock<CropRecolectorT
     @Override
     public void getMachineConfig() {
         super.getMachineConfig();
-        sludgeOperation = CustomConfiguration.config.getInt("sludgeOperation", "machines" + Configuration.CATEGORY_SPLITTER + this.getRegistryName().getResourcePath().toString(), 20, 1, 8000, "How much sludge is produced when the machine does an operation");
-        treeOperations = CustomConfiguration.config.getInt("treeOperations", "machines" + Configuration.CATEGORY_SPLITTER + this.getRegistryName().getResourcePath().toString(), 10, 1, 1024, "Amount of operations done when chopping a tree");
-        reducedChunkUpdates = CustomConfiguration.config.getBoolean("reducedChunkUpdates", "machines" + Configuration.CATEGORY_SPLITTER + this.getRegistryName().getResourcePath().toString(), false, "When enabled it will chop down the tree in one go but still consuming the same power");
-        maxDistanceTreeBlocksScan = CustomConfiguration.config.getInt("maxDistanceTreeBlocksScan", "machines" + Configuration.CATEGORY_SPLITTER + this.getRegistryName().getResourcePath().toString(), 100, 0, Integer.MAX_VALUE, "How far the trees will me scanned to be chopped from the ground. WARNING: Increasing this number with big trees may cause some lag when scanning for a tree.");
+        sludgeOperation = CustomConfiguration.config.getInt("sludgeOperation", "machines" + Configuration.CATEGORY_SPLITTER + this.getRegistryName().getPath().toString(), 20, 1, 8000, "How much sludge is produced when the machine does an operation");
+        treeOperations = CustomConfiguration.config.getInt("treeOperations", "machines" + Configuration.CATEGORY_SPLITTER + this.getRegistryName().getPath().toString(), 10, 1, 1024, "Amount of operations done when chopping a tree");
+        reducedChunkUpdates = CustomConfiguration.config.getBoolean("reducedChunkUpdates", "machines" + Configuration.CATEGORY_SPLITTER + this.getRegistryName().getPath().toString(), false, "When enabled it will chop down the tree in one go but still consuming the same power");
+        maxDistanceTreeBlocksScan = CustomConfiguration.config.getInt("maxDistanceTreeBlocksScan", "machines" + Configuration.CATEGORY_SPLITTER + this.getRegistryName().getPath().toString(), 100, 0, Integer.MAX_VALUE, "How far the trees will me scanned to be chopped from the ground. WARNING: Increasing this number with big trees may cause some lag when scanning for a tree.");
     }
 
     public int getSludgeOperation() {

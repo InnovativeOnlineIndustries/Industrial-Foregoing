@@ -32,7 +32,7 @@ public class IFCustomItem extends Item {
 
 
     public IFCustomItem(String name) {
-        setUnlocalizedName(Reference.MOD_ID + "_" + name);
+        setTranslationKey(Reference.MOD_ID + "_" + name);
         setCreativeTab(IndustrialForegoing.creativeTab);
         setRegistryName(Reference.MOD_ID, name);
     }

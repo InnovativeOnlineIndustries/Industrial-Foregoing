@@ -43,7 +43,7 @@ public class ProteinGeneratorBlock extends CustomOrientedBlock<ProteinGeneratorT
     @Override
     public void getMachineConfig() {
         super.getMachineConfig();
-        powerGeneration = CustomConfiguration.config.getInt("powerGeneration", "machines" + Configuration.CATEGORY_SPLITTER + this.getRegistryName().getResourcePath().toString(), 320, 0, Integer.MAX_VALUE, "How much power the generator produces every tick");
+        powerGeneration = CustomConfiguration.config.getInt("powerGeneration", "machines" + Configuration.CATEGORY_SPLITTER + this.getRegistryName().getPath().toString(), 320, 0, Integer.MAX_VALUE, "How much power the generator produces every tick");
     }
 
     @Override

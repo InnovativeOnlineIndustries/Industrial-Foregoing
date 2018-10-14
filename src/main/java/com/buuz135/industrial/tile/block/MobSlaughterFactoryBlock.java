@@ -48,8 +48,8 @@ MobSlaughterFactoryBlock extends CustomAreaOrientedBlock<MobSlaughterFactoryTile
     @Override
     public void getMachineConfig() {
         super.getMachineConfig();
-        meatValue = CustomConfiguration.config.getFloat("meatValue", "machines" + Configuration.CATEGORY_SPLITTER + this.getRegistryName().getResourcePath().toString(), 5, 1, Integer.MAX_VALUE, "Mob health multiplier, mobHealth * meatValue = meat mb produced");
-        damage = CustomConfiguration.config.getInt("damage", "machines" + Configuration.CATEGORY_SPLITTER + this.getRegistryName().getResourcePath().toString(), 300, 0, Integer.MAX_VALUE, "Amount of damage that the machine will do");
+        meatValue = CustomConfiguration.config.getFloat("meatValue", "machines" + Configuration.CATEGORY_SPLITTER + this.getRegistryName().getPath().toString(), 5, 1, Integer.MAX_VALUE, "Mob health multiplier, mobHealth * meatValue = meat mb produced");
+        damage = CustomConfiguration.config.getInt("damage", "machines" + Configuration.CATEGORY_SPLITTER + this.getRegistryName().getPath().toString(), 300, 0, Integer.MAX_VALUE, "Amount of damage that the machine will do");
     }
 
     public float getMeatValue() {

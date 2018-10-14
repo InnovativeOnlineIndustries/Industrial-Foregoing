@@ -56,8 +56,8 @@ public class PetrifiedFuelGeneratorBlock extends CustomOrientedBlock<PetrifiedFu
     @Override
     public void getMachineConfig() {
         super.getMachineConfig();
-        timeModifier = CustomConfiguration.config.getInt("timeModifier", "machines" + Configuration.CATEGORY_SPLITTER + this.getRegistryName().getResourcePath().toString(), 20, 1, Integer.MAX_VALUE, "This config changes the RF/t the fuel produces based in the fuel burning time also changing for how much it burns. (RF/t = FuelBurningTime/%value%)");
-        burnTimeMultiplier = CustomConfiguration.config.getFloat("burnTimeMultiplier", "machines" + Configuration.CATEGORY_SPLITTER + this.getRegistryName().getResourcePath().toString(), 0.75f, 0, Float.MAX_VALUE, "This config only changes for how much time a fuel burns. (FuelBurningTime = ItemBurningTime*%value%)");
+        timeModifier = CustomConfiguration.config.getInt("timeModifier", "machines" + Configuration.CATEGORY_SPLITTER + this.getRegistryName().getPath().toString(), 20, 1, Integer.MAX_VALUE, "This config changes the RF/t the fuel produces based in the fuel burning time also changing for how much it burns. (RF/t = FuelBurningTime/%value%)");
+        burnTimeMultiplier = CustomConfiguration.config.getFloat("burnTimeMultiplier", "machines" + Configuration.CATEGORY_SPLITTER + this.getRegistryName().getPath().toString(), 0.75f, 0, Float.MAX_VALUE, "This config only changes for how much time a fuel burns. (FuelBurningTime = ItemBurningTime*%value%)");
     }
 
     @Override

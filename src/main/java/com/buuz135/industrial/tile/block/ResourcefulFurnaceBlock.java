@@ -46,7 +46,7 @@ public class ResourcefulFurnaceBlock extends CustomOrientedBlock<ResourcefulFurn
     @Override
     public void getMachineConfig() {
         super.getMachineConfig();
-        experienceMultiplier = CustomConfiguration.config.getInt("experienceMultiplier", "machines" + Configuration.CATEGORY_SPLITTER + this.getRegistryName().getResourcePath().toString(), 50, 1, Integer.MAX_VALUE, "Essence multiplier for the furnace recipes.");
+        experienceMultiplier = CustomConfiguration.config.getInt("experienceMultiplier", "machines" + Configuration.CATEGORY_SPLITTER + this.getRegistryName().getPath().toString(), 50, 1, Integer.MAX_VALUE, "Essence multiplier for the furnace recipes.");
 
     }
 

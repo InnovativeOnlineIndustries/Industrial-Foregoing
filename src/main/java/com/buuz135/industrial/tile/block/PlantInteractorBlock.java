@@ -60,7 +60,7 @@ public class PlantInteractorBlock extends CustomAreaOrientedBlock<PlantInteracto
     @Override
     public void getMachineConfig() {
         super.getMachineConfig();
-        rightClickCocoBeansEnabled = CustomConfiguration.config.getBoolean("rightClickCocoBeansEnabled", "machines" + Configuration.CATEGORY_SPLITTER + this.getRegistryName().getResourcePath().toString(), true, "If true, you will be able to harvest cocoa beans by right clicking them.");
+        rightClickCocoBeansEnabled = CustomConfiguration.config.getBoolean("rightClickCocoBeansEnabled", "machines" + Configuration.CATEGORY_SPLITTER + this.getRegistryName().getPath().toString(), true, "If true, you will be able to harvest cocoa beans by right clicking them.");
 
     }
 }

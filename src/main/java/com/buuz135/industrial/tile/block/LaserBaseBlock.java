@@ -56,8 +56,8 @@ public class LaserBaseBlock extends CustomOrientedBlock<LaserBaseTile> {
     @Override
     public void getMachineConfig() {
         super.getMachineConfig();
-        workNeeded = CustomConfiguration.config.getInt("workNeeded", "machines" + Configuration.CATEGORY_SPLITTER + this.getRegistryName().getResourcePath().toString(), 100, 1, Integer.MAX_VALUE, "Amount of work needed to produce an ore");
-        lenseChanceIncrease = CustomConfiguration.config.getInt("lenseChanceIncrease", "machines" + Configuration.CATEGORY_SPLITTER + this.getRegistryName().getResourcePath().toString(), 5, 1, Integer.MAX_VALUE, "How much weight each lense increases to the ore");
+        workNeeded = CustomConfiguration.config.getInt("workNeeded", "machines" + Configuration.CATEGORY_SPLITTER + this.getRegistryName().getPath().toString(), 100, 1, Integer.MAX_VALUE, "Amount of work needed to produce an ore");
+        lenseChanceIncrease = CustomConfiguration.config.getInt("lenseChanceIncrease", "machines" + Configuration.CATEGORY_SPLITTER + this.getRegistryName().getPath().toString(), 5, 1, Integer.MAX_VALUE, "How much weight each lense increases to the ore");
     }
 
     public int getWorkNeeded() {

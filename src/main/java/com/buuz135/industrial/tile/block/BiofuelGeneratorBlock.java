@@ -53,7 +53,7 @@ public class BiofuelGeneratorBlock extends CustomOrientedBlock<BiofuelGeneratorT
     @Override
     public void getMachineConfig() {
         super.getMachineConfig();
-        powerGeneration = CustomConfiguration.config.getInt("powerGeneration", "machines" + Configuration.CATEGORY_SPLITTER + this.getRegistryName().getResourcePath().toString(), 160, 0, Integer.MAX_VALUE, "How much power the generator produces every tick");
+        powerGeneration = CustomConfiguration.config.getInt("powerGeneration", "machines" + Configuration.CATEGORY_SPLITTER + this.getRegistryName().getPath().toString(), 160, 0, Integer.MAX_VALUE, "How much power the generator produces every tick");
     }
 
     @Override

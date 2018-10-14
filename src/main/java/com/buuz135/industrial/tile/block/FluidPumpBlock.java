@@ -56,7 +56,7 @@ public class FluidPumpBlock extends CustomAreaOrientedBlock<FluidPumpTile> {
     @Override
     public void getMachineConfig() {
         super.getMachineConfig();
-        replaceFluidWithCobble = CustomConfiguration.config.getBoolean("replaceFluidWithCobble", "machines" + Configuration.CATEGORY_SPLITTER + this.getRegistryName().getResourcePath().toString(), true, "Fluid pump should replace the picked up fluid with cobblestone");
+        replaceFluidWithCobble = CustomConfiguration.config.getBoolean("replaceFluidWithCobble", "machines" + Configuration.CATEGORY_SPLITTER + this.getRegistryName().getPath().toString(), true, "Fluid pump should replace the picked up fluid with cobblestone");
     }
 
     @Override

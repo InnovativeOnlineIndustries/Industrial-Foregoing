@@ -178,9 +178,9 @@ public class EnchantmentExtractorTile extends CustomElectricMachine {
             }
             if (base != null && Enchantment.getEnchantmentByID(base.getShort("id")) != null) {
                 ItemEnchantedBook.addEnchantment(enchantedBook, new EnchantmentData(Enchantment.getEnchantmentByID(base.getShort("id")), base.getShort("lvl")));
-                if (enchantedItem.getEnchantmentTagList().hasNoTags() && enchantedItem.getTagCompound() != null && enchantedItem.getTagCompound().hasKey("ench")) {
+                if (enchantedItem.getEnchantmentTagList().isEmpty() && enchantedItem.getTagCompound() != null && enchantedItem.getTagCompound().hasKey("ench")) {
                     enchantedItem.getTagCompound().removeTag("ench");
-                    if (enchantedItem.getTagCompound().hasNoTags()) {
+                    if (enchantedItem.getTagCompound().isEmpty()) {
                         enchantedItem.setTagCompound(null);
                     }
                 }
@@ -191,7 +191,7 @@ public class EnchantmentExtractorTile extends CustomElectricMachine {
                     stack.setRepairCost((stack.getRepairCost() - 1) / 2);
                     if (stack.getTagCompound() != null && stack.getRepairCost() <= 0) {
                         stack.getTagCompound().removeTag("RepairCost");
-                        if (stack.getTagCompound().hasNoTags()) stack.setTagCompound(null);
+                        if (stack.getTagCompound().isEmpty()) stack.setTagCompound(null);
                     }
                     ItemHandlerHelper.insertItem(outItem, stack, false);
                     enchantedItem.setCount(enchantedItem.getCount() - 1);

@@ -60,7 +60,7 @@ public class IFManual {
         BookCategory.CONVEYORS.getEntries().put(new ResourceLocation(Reference.MOD_ID, "conveyors"), new CategoryEntry(new TextComponentTranslation("tile.industrialforegoing.conveyor.name").getFormattedText(), new ItemStack(BlockRegistry.blockConveyor), PageText.createTranslatedPages("text.industrialforegoing.book.conveyors")));
         int i = 0;
         for (ConveyorUpgradeFactory conveyorUpgradeFactory : IFRegistries.CONVEYOR_UPGRADE_REGISTRY.getValuesCollection()) {
-            addEntry(BookCategory.CONVEYORS, new ItemStack(ItemRegistry.conveyorUpgradeItem, 1, i), "text.industrialforegoing.book.conveyor_upgrade_" + conveyorUpgradeFactory.getRegistryName().getResourcePath());
+            addEntry(BookCategory.CONVEYORS, new ItemStack(ItemRegistry.conveyorUpgradeItem, 1, i), "text.industrialforegoing.book.conveyor_upgrade_" + conveyorUpgradeFactory.getRegistryName().getPath());
             ++i;
         }
     }

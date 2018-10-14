@@ -122,12 +122,12 @@ public class MobDuplicatorTile extends WorkingAreaElectricMachine {
                 entity = (EntityLiving) ((MobImprisonmentToolItem) stack.getItem()).getEntityFromStack(stack, this.world, BlockRegistry.mobDuplicatorBlock.enableExactCopy && exactCopy);
                 int tries = 20;
                 Vec3d random = new Vec3d(blocks.get(this.world.rand.nextInt(blocks.size())));
-                random = random.addVector(0.5, 0, 0.5);
+                random = random.add(0.5, 0, 0.5);
                 entity.setLocationAndAngles(random.x, random.y, random.z, world.rand.nextFloat() * 360F, 0);
                 entity.setUniqueId(UUID.randomUUID());
                 while (tries > 0 && !canEntitySpawn(entity)) {
                     random = new Vec3d(blocks.get(this.world.rand.nextInt(blocks.size())));
-                    random = random.addVector(0.5, 0, 0.5);
+                    random = random.add(0.5, 0, 0.5);
                     entity.setLocationAndAngles(random.x, random.y, random.z, world.rand.nextFloat() * 360F, 0);
                     --tries;
                 }

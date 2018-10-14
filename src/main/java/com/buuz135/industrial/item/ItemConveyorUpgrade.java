@@ -71,11 +71,11 @@ public class ItemConveyorUpgrade extends IFCustomItem {
     }
 
     @Override
-    public String getUnlocalizedName(ItemStack stack) {
+    public String getTranslationKey(ItemStack stack) {
         ConveyorUpgradeFactory factory = IFRegistries.CONVEYOR_UPGRADE_REGISTRY.getValue(stack.getMetadata() + 1);
         if (factory == null)
             return "conveyor.upgrade.error";
-        return String.format("conveyor.upgrade.%s.%s", factory.getRegistryName().getResourceDomain(), factory.getRegistryName().getResourcePath());
+        return String.format("conveyor.upgrade.%s.%s", factory.getRegistryName().getNamespace(), factory.getRegistryName().getPath());
     }
 
     @Override

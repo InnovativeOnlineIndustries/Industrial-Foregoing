@@ -79,6 +79,6 @@ public class LaserLensItem extends IFCustomItem {
 
     @Override
     public String getItemStackDisplayName(ItemStack stack) {
-        return new TextComponentTranslation("item.fireworksCharge." + EnumDyeColor.byMetadata(stack.getMetadata()).getUnlocalizedName().replaceAll("_", "")).getFormattedText() + " " + super.getItemStackDisplayName(stack);
+        return new TextComponentTranslation("item.fireworksCharge." + EnumDyeColor.byMetadata(stack.getMetadata()).getTranslationKey().replaceAll("_", "")).getFormattedText() + " " + super.getItemStackDisplayName(stack);
     }
 }

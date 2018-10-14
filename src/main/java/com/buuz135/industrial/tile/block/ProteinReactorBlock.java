@@ -51,7 +51,7 @@ public class ProteinReactorBlock extends CustomOrientedBlock<ProteinReactorTile>
     @Override
     public void getMachineConfig() {
         super.getMachineConfig();
-        baseAmount = CustomConfiguration.config.getInt("baseBiofuel", "machines" + Configuration.CATEGORY_SPLITTER + this.getRegistryName().getResourcePath().toString(), 80, 1, 4000, "Base protein amount in mb");
+        baseAmount = CustomConfiguration.config.getInt("baseBiofuel", "machines" + Configuration.CATEGORY_SPLITTER + this.getRegistryName().getPath().toString(), 80, 1, 4000, "Base protein amount in mb");
     }
 
     public int getBaseAmount() {

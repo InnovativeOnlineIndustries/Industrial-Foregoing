@@ -56,7 +56,7 @@ public abstract class TransferAddon extends CustomAddon implements ITransferActi
         this.mode = mode;
         setHasSubtypes(true);
         setMaxStackSize(1);
-        setUnlocalizedName(Reference.MOD_ID + "." + registryName);
+        setTranslationKey(Reference.MOD_ID + "." + registryName);
     }
 
     public EnumFacing getFacingFromMeta(ItemStack stack) {
@@ -120,7 +120,7 @@ public abstract class TransferAddon extends CustomAddon implements ITransferActi
 
     @Override
     public String getItemStackDisplayName(ItemStack stack) {
-        return new TextComponentTranslation(getUnlocalizedName() + ".name").getUnformattedText() + " (" + new TextComponentTranslation("text.industrialforegoing." + this.mode.name().toLowerCase()).getUnformattedText() + "/" + new TextComponentTranslation("text.industrialforegoing." + getFacingFromMeta(stack).name().toLowerCase()).getUnformattedText() + ")";
+        return new TextComponentTranslation(getTranslationKey() + ".name").getUnformattedText() + " (" + new TextComponentTranslation("text.industrialforegoing." + this.mode.name().toLowerCase()).getUnformattedText() + "/" + new TextComponentTranslation("text.industrialforegoing." + getFacingFromMeta(stack).name().toLowerCase()).getUnformattedText() + ")";
     }
 
     @Override
