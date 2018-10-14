@@ -90,25 +90,22 @@ public class BlackHoleUnitTile extends CustomSidedTileEntity implements IHasDisp
         if (WorkUtils.isDisabled(this.getBlockType())) return;
         inItems.setLocked(outItems.getLocked());
         inItems.setFilter(outItems.getFilter());
-        if (outItems.getStackInSlot(0).isEmpty()) {
-            ItemStack stack = this.stack.copy();
-            stack.setCount(Math.min(stack.getMaxStackSize(), amount));
-            amount -= stack.getCount();
-            ItemHandlerHelper.insertItem(outItems, stack, false);
-        } else if (outItems.getStackInSlot(0).getCount() <= outItems.getStackInSlot(0).getMaxStackSize()) {
+        if (getAmount() > 0) {
             ItemStack stack = outItems.getStackInSlot(0);
-            int increment = Math.min(amount, stack.getMaxStackSize() - stack.getCount());
-            stack.setCount(stack.getCount() + increment);
-            amount -= increment;
-            if (!world.isRemote) updateForLabel();
+            int amountMissing = Math.min(getItemStack().getMaxStackSize() - stack.getCount(), BlackHoleUnitTile.this.amount);
+            if (amountMissing != 0) {
+                BlackHoleUnitTile.this.amount -= amountMissing;
+                ItemStack output = BlackHoleUnitTile.this.getItemStack().copy();
+                output.setCount(stack.getCount() + amountMissing);
+                this.outItems.setStackInSlot(0, output);
+            }
+            if (!world.isRemote && amountMissing != 0) updateForLabel();
         }
-        if (amount == 0 && outItems.getStackInSlot(0).isEmpty()) {
-            stack = ItemStack.EMPTY;
-        }
-        if (needsUpdate && this.world.getTotalWorldTime() % 5 == 0) {
+        if (!world.isRemote && needsUpdate && this.world.getTotalWorldTime() % 5 == 0) {
             this.labelAmount = getAmount();
             this.partialSync(NBT_AMOUNT_LABEL, true);
             this.needsUpdate = false;
+            if (getAmount() == 0) updateItemStack();
         }
     }
 
@@ -362,15 +359,15 @@ public class BlackHoleUnitTile extends CustomSidedTileEntity implements IHasDisp
                 if (!simulate) {
                     tile.setAmount(0);
                     outItems.setStackInSlot(0, ItemStack.EMPTY);
+                    updateForLabel();
+                    updateItemStack();
                 }
-                updateForLabel();
-                updateItemStack();
                 return ItemHandlerHelper.copyStackWithSize(existing, newAmount);
             } else {
                 if (!simulate) {
                     tile.setAmount(tile.amount - amount);
+                    updateForLabel();
                 }
-                updateForLabel();
                 return ItemHandlerHelper.copyStackWithSize(existing, amount);
             }
         }
