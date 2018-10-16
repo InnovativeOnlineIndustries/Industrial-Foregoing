@@ -41,12 +41,10 @@ import java.util.List;
 public class TreeFluidExtractorTile extends CustomSidedTileEntity {
 
     private IFluidTank tank;
-    private int tick;
     private int id;
 
     public TreeFluidExtractorTile() {
         super(TreeFluidExtractorTile.class.getName().hashCode());
-        tick = 0;
     }
 
     @Override
@@ -64,10 +62,8 @@ public class TreeFluidExtractorTile extends CustomSidedTileEntity {
     protected void innerUpdate() {
         if (WorkUtils.isDisabled(this.getBlockType())) return;
         if (this.getWorld().isRemote) return;
-//        if (!BlockUtils.isLog(this.world, this.pos.offset(this.getFacing().getOpposite())))
-//            WoodLodProgress.remove(this.world, this.pos.offset(this.getFacing().getOpposite()));
         if (tank.getFluidAmount() == 8000) return;
-        if (tick % 5 == 0) {
+        if (world.getTotalWorldTime() % 5 == 0) {
             ExtractorEntry extractorEntry = ExtractorEntry.getExtractorEntry(this.world, this.pos.offset(this.getFacing().getOpposite()));
             if (extractorEntry != null) {
                 WoodLodProgress woodLog = WoodLodProgress.getWoodLogOrDefault(this.world, this.pos.offset(this.getFacing().getOpposite()));
@@ -81,7 +77,6 @@ public class TreeFluidExtractorTile extends CustomSidedTileEntity {
                 }
             }
         }
-        ++tick;
     }
 
     @Override
