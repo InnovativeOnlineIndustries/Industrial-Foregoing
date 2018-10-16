@@ -120,7 +120,8 @@ public class MobRelocatorTile extends WorkingAreaElectricMachine implements IAcc
             player.setHeldItem(player.getActiveHand(), stick);
         }
         AtomicBoolean hasWorked = new AtomicBoolean(false);
-        mobs.stream().filter(entityLiving -> !hasAddon() || (!(entityLiving instanceof EntityAgeable) || !entityLiving.isChild())).forEach(entityLiving -> {
+        boolean hasAddon = hasAddon();
+        mobs.stream().filter(entityLiving -> !hasAddon || (!(entityLiving instanceof EntityAgeable) || !entityLiving.isChild())).forEach(entityLiving -> {
             entityLiving.attackEntityFrom(new EntityDamageSource("mob_crusher", player) {
                 @Override
                 public ITextComponent getDeathMessage(EntityLivingBase entityLivingBaseIn) {
