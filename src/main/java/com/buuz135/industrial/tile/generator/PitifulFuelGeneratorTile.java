@@ -22,24 +22,30 @@
 package com.buuz135.industrial.tile.generator;
 
 import com.buuz135.industrial.proxy.BlockRegistry;
-import net.minecraft.init.Items;
+import com.buuz135.industrial.utils.ItemStackUtils;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntityFurnace;
-import net.minecraftforge.common.ForgeModContainer;
-import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
 
-public class PetrifiedFuelGeneratorTile extends AbstractFuelGenerator {
+public class PitifulFuelGeneratorTile extends AbstractFuelGenerator {
 
-    public PetrifiedFuelGeneratorTile() {
-        super(PetrifiedFuelGeneratorTile.class.getName().hashCode());
+    public PitifulFuelGeneratorTile() {
+        super(PitifulFuelGeneratorTile.class.getName().hashCode());
     }
 
     public static long getEnergy(int burnTime) {
-        return burnTime / BlockRegistry.petrifiedFuelGeneratorBlock.getTimeModifier();
+        return burnTime / BlockRegistry.pitifulFuelGeneratorBlock.getTimeModifier();
     }
 
     public static boolean acceptsInputStack(ItemStack stack) {
-        return !stack.isEmpty() && TileEntityFurnace.isItemFuel(stack) && !stack.getItem().equals(Items.LAVA_BUCKET) && !stack.getItem().equals(ForgeModContainer.getInstance().universalBucket) && getEnergy(TileEntityFurnace.getItemBurnTime(stack)) > 0 && !stack.hasCapability(CapabilityFluidHandler.FLUID_HANDLER_ITEM_CAPABILITY, null);
+        return !stack.isEmpty() && TileEntityFurnace.isItemFuel(stack) && isWoodRelated(stack);
+    }
+
+    public static boolean isWoodRelated(ItemStack stack) {
+        String[] woods = new String[]{"logWood", "plankWood", "slabWood", "stairWood", "fenceWood", "fenceGateWood", "doorWood", "stickWood"};
+        for (String wood : woods) {
+            if (ItemStackUtils.isStackOreDict(stack, wood)) return true;
+        }
+        return false;
     }
 
     @Override
@@ -54,6 +60,6 @@ public class PetrifiedFuelGeneratorTile extends AbstractFuelGenerator {
 
     @Override
     public float getMultiplier() {
-        return BlockRegistry.petrifiedFuelGeneratorBlock.getBurnTimeMultiplier();
+        return BlockRegistry.pitifulFuelGeneratorBlock.getBurnTimeMultiplier();
     }
 }

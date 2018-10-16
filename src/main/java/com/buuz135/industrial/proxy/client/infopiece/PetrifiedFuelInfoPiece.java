@@ -21,7 +21,7 @@
  */
 package com.buuz135.industrial.proxy.client.infopiece;
 
-import com.buuz135.industrial.tile.generator.PetrifiedFuelGeneratorTile;
+import com.buuz135.industrial.tile.generator.AbstractFuelGenerator;
 import com.buuz135.industrial.utils.Reference;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
@@ -36,9 +36,9 @@ import java.util.concurrent.TimeUnit;
 
 public class PetrifiedFuelInfoPiece extends BasicRenderedGuiPiece {
 
-    private PetrifiedFuelGeneratorTile tile;
+    private AbstractFuelGenerator tile;
 
-    public PetrifiedFuelInfoPiece(PetrifiedFuelGeneratorTile tile, int left, int top) {
+    public PetrifiedFuelInfoPiece(AbstractFuelGenerator tile, int left, int top) {
         super(left, top, 76, 55, new ResourceLocation(Reference.MOD_ID, "textures/gui/machines.png"), 1, 1);
         this.tile = tile;
     }

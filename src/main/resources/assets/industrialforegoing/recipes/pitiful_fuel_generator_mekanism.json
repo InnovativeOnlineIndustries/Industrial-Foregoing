@@ -1,0 +1,44 @@
+{
+  "result": {
+    "item": "industrialforegoing:pitiful_fuel_generator"
+  },
+  "pattern": [
+    "pdp",
+    "gmg",
+    "pfp"
+  ],
+  "conditions": [
+    {
+      "type": "forge:and",
+      "values": [
+        {
+          "type": "forge:mod_loaded",
+          "modid": "mekanism"
+        },
+        {
+          "type": "industrialforegoing:configuration_value",
+          "value": "useMekanismFrames"
+        }
+      ]
+    }
+  ],
+  "type": "forge:ore_shaped",
+  "key": {
+    "p": {
+      "item": "minecraft:cobblestone"
+    },
+    "d": {
+      "item": "#INGOTGOLD"
+    },
+    "f": {
+      "item": "minecraft:furnace"
+    },
+    "g": {
+      "item": "#GEARIRON"
+    },
+    "m": {
+      "item": "mekanism:basicblock",
+      "data": 8
+    }
+  }
+}
