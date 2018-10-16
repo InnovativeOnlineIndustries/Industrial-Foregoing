@@ -55,7 +55,7 @@ public class PetrifiedBurnTimeCategory implements IRecipeCategory<PetrifiedBurnT
 
     @Override
     public IDrawable getBackground() {
-        return guiHelper.createDrawable(new ResourceLocation("minecraft", "textures/gui/container/furnace.png"), 55, 38 + 14, 18, 18, 3, 3, 0, 80);
+        return guiHelper.createDrawable(new ResourceLocation("minecraft", "textures/gui/container/furnace.png"), 55, 38 + 14, 18, 18, 3, 3, 0, 120);
     }
 
     @Override

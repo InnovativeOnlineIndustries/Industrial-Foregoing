@@ -31,6 +31,7 @@ import net.minecraft.item.EnumDyeColor;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntityFurnace;
 import net.minecraftforge.common.ForgeModContainer;
+import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
 import net.minecraftforge.items.ItemStackHandler;
 import net.ndrei.teslacorelib.containers.BasicTeslaContainer;
 import net.ndrei.teslacorelib.containers.FilteredSlot;
@@ -100,8 +101,8 @@ public class PetrifiedFuelGeneratorTile extends CustomGeneratorMachine {
 
     }
 
-    private boolean acceptsInputStack(int slot, ItemStack stack) {
-        return !stack.isEmpty() && TileEntityFurnace.isItemFuel(stack) && !stack.getItem().equals(Items.LAVA_BUCKET) && !stack.getItem().equals(ForgeModContainer.getInstance().universalBucket) && getEnergyProduced(TileEntityFurnace.getItemBurnTime(stack)) > 0;
+    public static boolean acceptsInputStack(int slot, ItemStack stack) {
+        return !stack.isEmpty() && TileEntityFurnace.isItemFuel(stack) && !stack.getItem().equals(Items.LAVA_BUCKET) && !stack.getItem().equals(ForgeModContainer.getInstance().universalBucket) && getEnergyProduced(TileEntityFurnace.getItemBurnTime(stack)) > 0 && !stack.hasCapability(CapabilityFluidHandler.FLUID_HANDLER_ITEM_CAPABILITY, null);
     }
 
     public ItemStack getFirstFuel(boolean replace) {

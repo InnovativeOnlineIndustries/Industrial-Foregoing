@@ -57,6 +57,7 @@ import com.buuz135.industrial.proxy.BlockRegistry;
 import com.buuz135.industrial.proxy.FluidsRegistry;
 import com.buuz135.industrial.proxy.ItemRegistry;
 import com.buuz135.industrial.tile.block.CustomOrientedBlock;
+import com.buuz135.industrial.tile.generator.PetrifiedFuelGeneratorTile;
 import com.buuz135.industrial.tile.world.MaterialStoneWorkFactoryTile;
 import com.buuz135.industrial.utils.CraftingUtils;
 import com.buuz135.industrial.utils.ItemStackWeightedItem;
@@ -67,7 +68,6 @@ import mezz.jei.api.recipe.IRecipeCategoryRegistration;
 import mezz.jei.api.recipe.VanillaRecipeCategoryUid;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
-import net.minecraft.item.ItemBucket;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.FurnaceRecipes;
 import net.minecraft.tileentity.TileEntityFurnace;
@@ -255,7 +255,7 @@ public class JEICustomPlugin implements IModPlugin {
         }
         if (BlockRegistry.petrifiedFuelGeneratorBlock.isEnabled()) {
             List<PetrifiedBurnTimeWrapper> petrifiedBurnTimeWrappers = new ArrayList<>();
-            registry.getIngredientRegistry().getFuels().stream().filter(stack -> !(stack.getItem() instanceof ItemBucket)).forEach(stack -> petrifiedBurnTimeWrappers.add(new PetrifiedBurnTimeWrapper(stack, TileEntityFurnace.getItemBurnTime(stack))));
+            registry.getIngredientRegistry().getFuels().stream().filter(stack -> PetrifiedFuelGeneratorTile.acceptsInputStack(0, stack)).forEach(stack -> petrifiedBurnTimeWrappers.add(new PetrifiedBurnTimeWrapper(stack, TileEntityFurnace.getItemBurnTime(stack))));
             registry.addRecipes(petrifiedBurnTimeWrappers, petrifiedBurnTimeCategory.getUid());
             registry.addRecipeCatalyst(new ItemStack(BlockRegistry.petrifiedFuelGeneratorBlock), petrifiedBurnTimeCategory.getUid());
         }
