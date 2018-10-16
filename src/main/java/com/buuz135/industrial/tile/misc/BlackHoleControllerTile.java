@@ -151,6 +151,7 @@ public class BlackHoleControllerTile extends CustomSidedTileEntity {
         for (int i = 0; i < 9; ++i) {
             ItemStack stack = storage.getStackInSlot(i);
             if (!stack.isEmpty()) {
+                if (output.getStackInSlot(i).getCount() >= output.getStackInSlot(i).getMaxStackSize()) continue;
                 int amount = blackHoleUnitBlock.getAmount(stack);
                 ItemStack s = blackHoleUnitBlock.getItemStack(stack);
                 if (!s.isEmpty()) {
