@@ -49,7 +49,7 @@ public class LaserBaseBlock extends CustomOrientedBlock<LaserBaseTile> {
     private int lenseChanceIncrease;
 
     public LaserBaseBlock() {
-        super("laser_base", LaserBaseTile.class, Material.ROCK, 100000, 100);
+        super("laser_base", LaserBaseTile.class, Material.ROCK, 0, 0);
     }
 
 
