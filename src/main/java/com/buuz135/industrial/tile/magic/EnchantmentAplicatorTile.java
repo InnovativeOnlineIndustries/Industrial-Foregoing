@@ -30,6 +30,7 @@ import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.init.Items;
 import net.minecraft.item.EnumDyeColor;
+import net.minecraft.item.ItemElytra;
 import net.minecraft.item.ItemHoe;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.fluids.IFluidTank;
@@ -95,7 +96,7 @@ public class EnchantmentAplicatorTile extends CustomElectricMachine {
         this.addInventory(new CustomColoredItemHandler(this.inItem, EnumDyeColor.GREEN, "Input items", 18 * 7 + 10, 25, 1, 1) {
             @Override
             public boolean canInsertItem(int slot, ItemStack stack) {
-                return (stack.getItem().getItemEnchantability(stack) > 0 && (stack.isItemEnchanted() || stack.isItemEnchantable())) || stack.getItem().equals(Items.ENCHANTED_BOOK) || stack.getItem() instanceof ItemHoe;
+                return (stack.getItem().getItemEnchantability(stack) > 0 && (stack.isItemEnchanted() || stack.isItemEnchantable())) || stack.getItem().equals(Items.ENCHANTED_BOOK) || stack.getItem() instanceof ItemHoe || stack.getItem() instanceof ItemElytra;
             }
 
             @Override
