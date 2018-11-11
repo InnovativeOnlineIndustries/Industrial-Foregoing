@@ -79,11 +79,12 @@ public class BlackHoleControllerTile extends CustomSidedTileEntity {
             public boolean canInsertItem(int slot, ItemStack stack) {
                 if (storage.getStackInSlot(slot).isEmpty() || stack.getItem().equals(Item.getItemFromBlock(blackHoleUnitBlock)))
                     return false;
-                if (input.getLocked() && input.getFilterStack(slot).isItemEqual(stack)) return true;
+                if (input.getLocked())
+                    return input.getFilterStack(slot).isItemEqual(stack) && ItemStack.areItemStackTagsEqual(stack, input.getFilterStack(slot));
                 if (!output.getStackInSlot(slot).isEmpty() && !output.getStackInSlot(slot).isItemEqual(stack))
                     return false;
                 ItemStack contained = blackHoleUnitBlock.getItemStack(storage.getStackInSlot(slot));
-                if (stack.isItemEqual(contained)) return true;
+                if (stack.isItemEqual(contained) && ItemStack.areItemStackTagsEqual(stack, contained)) return true;
                 if (!input.getLocked() && contained.isEmpty()) return true;
                 return false;
             }
