@@ -28,6 +28,7 @@ import com.buuz135.industrial.utils.RecipeUtils;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.item.EntityItem;
 import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -49,11 +50,6 @@ public class BlackHoleUnitBlock extends CustomOrientedBlock<BlackHoleUnitTile> {
 
     @Override
     public void breakBlock(World world, BlockPos pos, IBlockState state) {
-        world.removeTileEntity(pos);
-    }
-
-    @Override
-    public void getDrops(NonNullList<ItemStack> drops, IBlockAccess world, BlockPos pos, IBlockState state, int fortune) {
         if (world.getTileEntity(pos) instanceof BlackHoleUnitTile) {
             BlackHoleUnitTile tile = (BlackHoleUnitTile) world.getTileEntity(pos);
             ItemStack stack = new ItemStack(Item.getItemFromBlock(this), 1);
@@ -65,8 +61,23 @@ public class BlackHoleUnitBlock extends CustomOrientedBlock<BlackHoleUnitTile> {
                 if (tile.getItemStack().hasTagCompound())
                     stack.getTagCompound().setTag(BlackHoleUnitTile.NBT_ITEM_NBT, tile.getItemStack().getTagCompound());
             }
-            drops.add(stack);
+            float f = 0.7F;
+            float d0 = world.rand.nextFloat() * f + (1.0F - f) * 0.5F;
+            float d1 = world.rand.nextFloat() * f + (1.0F - f) * 0.5F;
+            float d2 = world.rand.nextFloat() * f + (1.0F - f) * 0.5F;
+            EntityItem entityitem = new EntityItem(world, pos.getX() + d0, pos.getY() + d1, pos.getZ() + d2, stack);
+            entityitem.setDefaultPickupDelay();
+            if (stack.hasTagCompound()) {
+                entityitem.getItem().setTagCompound(stack.getTagCompound().copy());
+            }
+            world.spawnEntity(entityitem);
         }
+        world.removeTileEntity(pos);
+    }
+
+    @Override
+    public void getDrops(NonNullList<ItemStack> drops, IBlockAccess world, BlockPos pos, IBlockState state, int fortune) {
+
     }
 
     @Override
