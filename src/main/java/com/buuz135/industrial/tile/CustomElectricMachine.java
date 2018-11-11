@@ -75,6 +75,11 @@ public abstract class CustomElectricMachine extends ElectricMachine implements I
     }
 
     @Override
+    protected long getMaxEnergy() {
+        return this.getBlockType() instanceof CustomOrientedBlock ? ((CustomOrientedBlock) this.getBlockType()).getEnergyBuffer() : 50000;
+    }
+
+    @Override
     protected long getEnergyInputRate() {
         return 4000;
     }

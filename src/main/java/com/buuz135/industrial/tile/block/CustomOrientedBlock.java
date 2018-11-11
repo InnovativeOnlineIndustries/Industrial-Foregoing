@@ -46,6 +46,7 @@ public abstract class CustomOrientedBlock<T extends SidedTileEntity> extends Ori
     private boolean enabled;
     private int energyForWork;
     private int energyRate;
+    private long energyBuffer;
 
     protected CustomOrientedBlock(String registryName, Class<T> teClass) {
         super(Reference.MOD_ID, IndustrialForegoing.creativeTab, registryName, teClass);
@@ -65,6 +66,7 @@ public abstract class CustomOrientedBlock<T extends SidedTileEntity> extends Ori
         if (energyForWork != 0 && energyRate != 0) {
             energyForWork = CustomConfiguration.config.getInt("energyForWork", "machines" + Configuration.CATEGORY_SPLITTER + this.getRegistryName().getPath().toString(), energyForWork, 1, Integer.MAX_VALUE, "How much energy needs a machine to work");
             energyRate = CustomConfiguration.config.getInt("energyRate", "machines" + Configuration.CATEGORY_SPLITTER + this.getRegistryName().getPath().toString(), energyRate, 1, Integer.MAX_VALUE, "Energy input rate of a machine");
+            energyBuffer = CustomConfiguration.config.getInt("energyBuffer", "machines" + Configuration.CATEGORY_SPLITTER + this.getRegistryName().getPath().toString(), 50000, 1, Integer.MAX_VALUE, "Energy buffer of a machine");
         }
     }
 
@@ -78,6 +80,10 @@ public abstract class CustomOrientedBlock<T extends SidedTileEntity> extends Ori
 
     public int getEnergyRate() {
         return energyRate;
+    }
+
+    public long getEnergyBuffer() {
+        return energyBuffer;
     }
 
     public boolean isEnabled() {
