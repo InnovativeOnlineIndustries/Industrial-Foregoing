@@ -95,40 +95,40 @@ public class RecipeHandlers {
     }
 
     public static void loadLaserLensEntries() {
-        checkAndAddLaserDrill(4, "oreGold", 6);
-        checkAndAddLaserDrill(12, "oreIron", 10);
-        checkAndAddLaserDrill(15, "oreCoal", 12);
-        checkAndAddLaserDrill(11, "oreLapis", 8);
-        checkAndAddLaserDrill(3, "oreDiamond", 4);
-        checkAndAddLaserDrill(14, "oreRedstone", 6);
-        checkAndAddLaserDrill(0, "oreQuartz", 4);
-        checkAndAddLaserDrill(5, "oreEmerald", 2);
-        checkAndAddLaserDrill(13, "oreUranium", 3);
-        checkAndAddLaserDrill(4, "oreSulfur", 8);
-        checkAndAddLaserDrill(10, "oreGalena", 6);
-        checkAndAddLaserDrill(0, "oreIridium", 2);
-        checkAndAddLaserDrill(14, "oreRuby", 7);
-        checkAndAddLaserDrill(11, "oreSapphire", 7);
-        checkAndAddLaserDrill(12, "oreBauxite", 5);
-        checkAndAddLaserDrill(12, "orePyrite", 5);
-        checkAndAddLaserDrill(14, "oreCinnabar", 8);
-        checkAndAddLaserDrill(15, "oreTungsten", 3);
-        checkAndAddLaserDrill(0, "oreSheldonite", 1);
-        checkAndAddLaserDrill(3, "orePlatinum", 2);
-        checkAndAddLaserDrill(13, "orePeridot", 7);
-        checkAndAddLaserDrill(11, "oreSoladite", 4);
-        checkAndAddLaserDrill(14, "oreTetrahedrite", 4);
-        checkAndAddLaserDrill(8, "oreTin", 8);
-        checkAndAddLaserDrill(10, "oreLead", 5);
-        checkAndAddLaserDrill(7, "oreSilver", 5);
-        checkAndAddLaserDrill(1, "oreCopper", 10);
-        checkAndAddLaserDrill(12, "oreAluminum", 5);
-        checkAndAddLaserDrill(12, "oreNickel", 4);
-        checkAndAddLaserDrill(10, "oreDraconium", 2);
-        checkAndAddLaserDrill(4, "oreYellorium", 2);
-        checkAndAddLaserDrill(11, "oreCobalt", 2);
-        checkAndAddLaserDrill(3, "oreOsmium", 4);
-        checkAndAddLaserDrill(4, "oreArdite", 1);
+        checkAndAddLaserDrill(4, "Gold", 6);
+        checkAndAddLaserDrill(12, "Iron", 10);
+        checkAndAddLaserDrill(15, "Coal", 12);
+        checkAndAddLaserDrill(11, "Lapis", 8);
+        checkAndAddLaserDrill(3, "Diamond", 4);
+        checkAndAddLaserDrill(14, "Redstone", 6);
+        checkAndAddLaserDrill(0, "Quartz", 4);
+        checkAndAddLaserDrill(5, "Emerald", 2);
+        checkAndAddLaserDrill(13, "Uranium", 3);
+        checkAndAddLaserDrill(4, "Sulfur", 8);
+        checkAndAddLaserDrill(10, "Galena", 6);
+        checkAndAddLaserDrill(0, "Iridium", 2);
+        checkAndAddLaserDrill(14, "Ruby", 7);
+        checkAndAddLaserDrill(11, "Sapphire", 7);
+        checkAndAddLaserDrill(12, "Bauxite", 5);
+        checkAndAddLaserDrill(12, "Pyrite", 5);
+        checkAndAddLaserDrill(14, "Cinnabar", 8);
+        checkAndAddLaserDrill(15, "Tungsten", 3);
+        checkAndAddLaserDrill(0, "Sheldonite", 1);
+        checkAndAddLaserDrill(3, "Platinum", 2);
+        checkAndAddLaserDrill(13, "Peridot", 7);
+        checkAndAddLaserDrill(11, "Soladite", 4);
+        checkAndAddLaserDrill(14, "Tetrahedrite", 4);
+        checkAndAddLaserDrill(8, "Tin", 8);
+        checkAndAddLaserDrill(10, "Lead", 5);
+        checkAndAddLaserDrill(7, "Silver", 5);
+        checkAndAddLaserDrill(1, "Copper", 10);
+        checkAndAddLaserDrill(12, "Aluminum", 5);
+        checkAndAddLaserDrill(12, "Nickel", 4);
+        checkAndAddLaserDrill(10, "Draconium", 2);
+        checkAndAddLaserDrill(4, "Yellorium", 2);
+        checkAndAddLaserDrill(11, "Cobalt", 2);
+        checkAndAddLaserDrill(3, "Osmium", 4);
+        checkAndAddLaserDrill(4, "Ardite", 1);
         IndustrialForegoingHelper.addLaserDrillEntry(new LaserDrillEntry(4, new ItemStack(Blocks.GLOWSTONE), 2));
     }
 
@@ -192,7 +192,7 @@ public class RecipeHandlers {
     }
 
     public static void checkAndAddLaserDrill(int meta, String oreDict, int weight) {
-        NonNullList<ItemStack> stacks = getRealOredictedItems(oreDict);
+        NonNullList<ItemStack> stacks = getRealOredictedItems("ore" + oreDict);
         if (stacks.size() > 0)
             IndustrialForegoingHelper.addLaserDrillEntry(new LaserDrillEntry(meta, stacks.get(0), weight));
     }
