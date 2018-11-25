@@ -39,7 +39,9 @@ import net.minecraft.util.NonNullList;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.oredict.OreDictionary;
 
+import java.util.ArrayList;
 import java.util.Comparator;
+import java.util.List;
 
 public class RecipeHandlers {
 
@@ -191,10 +193,35 @@ public class RecipeHandlers {
         IndustrialForegoingHelper.addFluidDictionaryEntry(new FluidDictionaryEntry(fluidOutput, fluidInput, 1 / ratio));
     }
 
-    public static void checkAndAddLaserDrill(int meta, String oreDict, int weight) {
-        NonNullList<ItemStack> stacks = getRealOredictedItems("ore" + oreDict);
-        if (stacks.size() > 0)
-            IndustrialForegoingHelper.addLaserDrillEntry(new LaserDrillEntry(meta, stacks.get(0), weight));
+    private static final String[] ORE_PREFIXES = new String[] {"ore", "oreNether", "oreEnd"};
+
+    public static void checkAndAddLaserDrill(int meta, String oreDict, int totalWeight) {
+        List<ItemStack> allVariants = new ArrayList<>(ORE_PREFIXES.length);
+
+        for (String orePrefix : ORE_PREFIXES) {
+            NonNullList<ItemStack> stacks = getRealOredictedItems(orePrefix + oreDict);
+            if (stacks.size() > 0)
+                allVariants.add(stacks.get(0));
+        }
+
+        int size = allVariants.size();
+        if (size == 0)
+            return;
+
+        // If there's more than one ore we can produce, split the weight evenly among them all.
+        // If it doesn't divide exactly, give one extra to earlier ones.
+        // But no matter what, always give each one a weight of at least 1.
+        int baseWeight, extras;
+        if (totalWeight < size) {
+            baseWeight = 1;
+            extras = 0;
+        } else {
+            baseWeight = totalWeight / size;
+            extras = totalWeight % size;
+        }
+
+        for (ItemStack variant : allVariants)
+            IndustrialForegoingHelper.addLaserDrillEntry(new LaserDrillEntry(meta, variant, baseWeight + (--extras >= 0 ? 1 : 0)));
     }
 
     public static NonNullList<ItemStack> getRealOredictedItems(String oredit) {
