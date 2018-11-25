@@ -129,7 +129,7 @@ public class RecipeHandlers {
         checkAndAddLaserDrill(11, "oreCobalt", 2);
         checkAndAddLaserDrill(3, "oreOsmium", 4);
         checkAndAddLaserDrill(4, "oreArdite", 1);
-        checkAndAddLaserDrill(4, "glowstone", 2);
+        IndustrialForegoingHelper.addLaserDrillEntry(new LaserDrillEntry(4, new ItemStack(Blocks.GLOWSTONE), 2));
     }
 
     public static void loadSludgeRefinerEntries() {
