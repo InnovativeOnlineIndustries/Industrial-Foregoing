@@ -105,8 +105,7 @@ public class BlackHoleTankBlock extends CustomOrientedBlock<BlackHoleTankTile> {
         super.onBlockPlacedBy(world, pos, state, placer, stack);
         if (stack.hasTagCompound() && world.getTileEntity(pos) != null && world.getTileEntity(pos) instanceof BlackHoleTankTile && FluidRegistry.isFluidRegistered(stack.getTagCompound().getString("FluidName"))) {
             BlackHoleTankTile tile = (BlackHoleTankTile) world.getTileEntity(pos);
-            System.out.println(stack.getTagCompound());
-            tile.getTank().fill(new FluidStack(FluidRegistry.getFluid(stack.getTagCompound().getString("FluidName")), stack.getTagCompound().getInteger("Amount"), stack.getTagCompound().getCompoundTag("Tag")), true);
+            tile.getTank().fill(new FluidStack(FluidRegistry.getFluid(stack.getTagCompound().getString("FluidName")), stack.getTagCompound().getInteger("Amount"), stack.getTagCompound().hasKey("Tag") && !stack.getTagCompound().getTag("Tag").isEmpty() ? stack.getTagCompound().getCompoundTag("Tag") : null), true);
         }
     }
 
