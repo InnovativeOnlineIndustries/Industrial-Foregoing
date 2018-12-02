@@ -1,0 +1,29 @@
+{
+  "result": {
+    "item": "industrialforegoing:infinity_drill",
+    "data": 0
+  },
+  "pattern": [
+    " ID",
+    "PRI",
+    "PT "
+  ],
+  "type": "minecraft:crafting_shaped",
+  "key": {
+    "P": {
+      "item": "industrialforegoing:pink_slime_ingot"
+    },
+    "R": {
+      "item": "industrialforegoing:laser_drill"
+    },
+    "D": {
+      "item": "minecraft:diamond_block"
+    },
+    "T": {
+      "item": "industrialforegoing:black_hole_tank"
+    },
+    "I": {
+      "item": "minecraft:iron_block"
+    }
+  }
+}
