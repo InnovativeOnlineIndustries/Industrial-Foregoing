@@ -52,7 +52,7 @@ public class SludgeRefinerRecipeWrapper implements IRecipeWrapper {
     @Override
     public void drawInfo(Minecraft minecraft, int recipeWidth, int recipeHeight, int mouseX, int mouseY) {
         String chance = "Chance: " + new DecimalFormat("##.##").format((item.itemWeight / (double) maxWeight) * 100) + "%";
-        minecraft.fontRenderer.drawString(TextFormatting.DARK_GRAY + chance, recipeWidth / 2 - minecraft.fontRenderer.getStringWidth(chance) / 2, 54, 0xFFFFFF);
+        minecraft.fontRenderer.drawString(TextFormatting.DARK_GRAY + chance, recipeWidth / 2 - minecraft.fontRenderer.getStringWidth(chance) / 2, 55, 0xFFFFFF);
     }
 
     @Override
