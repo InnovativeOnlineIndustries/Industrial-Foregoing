@@ -27,10 +27,10 @@ import mezz.jei.api.ingredients.IIngredients;
 import mezz.jei.api.recipe.IRecipeWrapper;
 import net.minecraft.client.Minecraft;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.text.TextFormatting;
 import net.minecraftforge.fluids.FluidStack;
 
 import java.text.DecimalFormat;
-import java.util.Arrays;
 import java.util.List;
 
 public class SludgeRefinerRecipeWrapper implements IRecipeWrapper {
@@ -51,14 +51,13 @@ public class SludgeRefinerRecipeWrapper implements IRecipeWrapper {
 
     @Override
     public void drawInfo(Minecraft minecraft, int recipeWidth, int recipeHeight, int mouseX, int mouseY) {
-
+        String chance = "Chance: " + new DecimalFormat("##.##").format((item.itemWeight / (double) maxWeight) * 100) + "%";
+        minecraft.fontRenderer.drawString(TextFormatting.DARK_GRAY + chance, recipeWidth / 2 - minecraft.fontRenderer.getStringWidth(chance) / 2, 54, 0xFFFFFF);
     }
 
     @Override
     public List<String> getTooltipStrings(int mouseX, int mouseY) {
-        if (mouseX >= 18 && mouseX <= 58)
-            return Arrays.asList("Chance: " + new DecimalFormat("##.##").format((item.itemWeight / (double) maxWeight) * 100) + "%");
-        return Arrays.asList();
+        return null;
     }
 
     @Override

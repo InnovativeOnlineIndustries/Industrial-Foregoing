@@ -60,7 +60,7 @@ public class SludgeRefinerRecipeCategory implements IRecipeCategory<SludgeRefine
 
     @Override
     public IDrawable getBackground() {
-        return guiHelper.createDrawable(new ResourceLocation(Reference.MOD_ID, "textures/gui/jei.png"), 0, 78, 81, 50);
+        return guiHelper.createDrawable(new ResourceLocation(Reference.MOD_ID, "textures/gui/jei.png"), 0, 78, 81, 50, 0, 16, 0, 0);
     }
 
     @Nullable
