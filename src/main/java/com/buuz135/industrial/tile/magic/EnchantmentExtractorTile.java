@@ -81,6 +81,11 @@ public class EnchantmentExtractorTile extends CustomElectricMachine {
             protected void onContentsChanged(int slot) {
                 EnchantmentExtractorTile.this.markDirty();
             }
+
+            @Override
+            public int getSlotLimit(int slot) {
+                return 1;
+            }
         };
         this.addInventory(new CustomColoredItemHandler(this.inEnchanted, EnumDyeColor.PURPLE, "Input enchanted items", 18 * 3, 25 + 18 * 2, 1, 1) {
             @Override
