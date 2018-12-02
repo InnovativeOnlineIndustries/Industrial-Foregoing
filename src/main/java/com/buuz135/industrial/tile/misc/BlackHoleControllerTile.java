@@ -297,7 +297,7 @@ public class BlackHoleControllerTile extends CustomSidedTileEntity {
             } else {
                 if (!simulate) {
                     blackHoleUnitBlock.setAmount(storage.getStackInSlot(slot), Math.max(0, blackHoleUnitBlock.getAmount(storage.getStackInSlot(slot)) - amount));
-                    output.setStackInSlot(slot, ItemHandlerHelper.copyStackWithSize(existing, Math.min(64, visualAmount - amount)));
+                    output.setStackInSlot(slot, ItemHandlerHelper.copyStackWithSize(existing, Math.min(existing.getMaxStackSize(), visualAmount - amount)));
                 }
                 return ItemHandlerHelper.copyStackWithSize(existing, amount);
             }
