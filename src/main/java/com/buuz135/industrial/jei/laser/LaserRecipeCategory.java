@@ -56,7 +56,7 @@ public class LaserRecipeCategory implements IRecipeCategory<LaserRecipeWrapper> 
 
     @Override
     public IDrawable getBackground() {
-        return guiHelper.createDrawable(new ResourceLocation(Reference.MOD_ID, "textures/gui/jei.png"), 0, 0, 82, 26);
+        return guiHelper.createDrawable(new ResourceLocation(Reference.MOD_ID, "textures/gui/jei.png"), 0, 0, 82, 26, 0, 10, 20, 20);
     }
 
     @Nullable
@@ -73,8 +73,8 @@ public class LaserRecipeCategory implements IRecipeCategory<LaserRecipeWrapper> 
     @Override
     public void setRecipe(IRecipeLayout recipeLayout, LaserRecipeWrapper recipeWrapper, IIngredients ingredients) {
         IGuiItemStackGroup guiItemStackGroup = recipeLayout.getItemStacks();
-        guiItemStackGroup.init(0, true, 0, 4);
-        guiItemStackGroup.init(1, false, 60, 4);
+        guiItemStackGroup.init(0, true, 20, 4);
+        guiItemStackGroup.init(1, false, 60 + 20, 4);
         guiItemStackGroup.set(0, ingredients.getInputs(ItemStack.class).get(0));
         guiItemStackGroup.set(1, ingredients.getOutputs(ItemStack.class).get(0));
     }

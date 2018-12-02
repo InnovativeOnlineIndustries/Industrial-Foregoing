@@ -27,9 +27,9 @@ import mezz.jei.api.ingredients.IIngredients;
 import mezz.jei.api.recipe.IRecipeWrapper;
 import net.minecraft.client.Minecraft;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.text.TextFormatting;
 
 import java.text.DecimalFormat;
-import java.util.Arrays;
 import java.util.List;
 
 public class LaserRecipeWrapper implements IRecipeWrapper {
@@ -52,12 +52,13 @@ public class LaserRecipeWrapper implements IRecipeWrapper {
 
     @Override
     public void drawInfo(Minecraft minecraft, int recipeWidth, int recipeHeight, int mouseX, int mouseY) {
-
+        String chance = "Default Chance: " + new DecimalFormat("##.##").format((item.itemWeight / (double) maxWeight) * 100) + "%";
+        minecraft.fontRenderer.drawString(TextFormatting.DARK_GRAY + chance, recipeWidth / 2 - minecraft.fontRenderer.getStringWidth(chance) / 2, 28, 0xFFFFFF);
     }
 
     @Override
     public List<String> getTooltipStrings(int mouseX, int mouseY) {
-        return Arrays.asList("Chance: " + new DecimalFormat("##.##").format((item.itemWeight / (double) maxWeight) * 100) + "%");
+        return null;
     }
 
     @Override
