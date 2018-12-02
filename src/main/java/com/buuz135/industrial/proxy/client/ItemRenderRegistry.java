@@ -40,6 +40,7 @@ public class ItemRenderRegistry {
         pinkSlimeIngot.registerRender();
         energyFieldAddon.registerRenderer();
         bookManualItem.registerRender();
+        itemInfinityDrill.registerRender();
         if (artificalDye != null) artificalDye.registerRender();
 
         adultFilterAddomItem.registerRenderer();

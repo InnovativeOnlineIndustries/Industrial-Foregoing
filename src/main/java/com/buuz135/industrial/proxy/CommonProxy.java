@@ -28,6 +28,7 @@ import com.buuz135.industrial.gui.GuiHandler;
 import com.buuz135.industrial.proxy.event.*;
 import com.buuz135.industrial.proxy.network.ConveyorButtonInteractMessage;
 import com.buuz135.industrial.proxy.network.ConveyorSplittingSyncEntityMessage;
+import com.buuz135.industrial.proxy.network.SpecialParticleMessage;
 import com.buuz135.industrial.registry.IFRegistries;
 import com.buuz135.industrial.utils.CraftingUtils;
 import com.buuz135.industrial.utils.RecipeUtils;
@@ -37,6 +38,7 @@ import com.buuz135.industrial.utils.apihandlers.PlantRecollectableRegistryHandle
 import com.buuz135.industrial.utils.apihandlers.RecipeHandlers;
 import com.buuz135.industrial.utils.apihandlers.json.ConfigurationConditionFactory;
 import com.buuz135.industrial.utils.compat.baubles.MeatFeederBauble;
+import com.google.gson.GsonBuilder;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.ResourceLocation;
@@ -53,12 +55,17 @@ import net.minecraftforge.fml.common.network.NetworkRegistry;
 import net.minecraftforge.fml.common.registry.EntityRegistry;
 import net.minecraftforge.fml.relauncher.Side;
 
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.net.URL;
 import java.util.HashMap;
 import java.util.Random;
 
 public class CommonProxy {
 
     public static Random random;
+    public static final String CONTRIBUTORS_FILE = "https://raw.githubusercontent.com/Buuz135/Industrial-Foregoing/master/contributors.json";
+    public static String[] CONTRIBUTORS = new String[0];
 
     public static DamageSource custom = new DamageSource("if_custom") {
         @Override
@@ -68,6 +75,42 @@ public class CommonProxy {
         }
     };
     public static ResourceLocation PINK_SLIME_LOOT;
+
+    private static String readUrl(String urlString) throws Exception {
+        BufferedReader reader = null;
+        try {
+            URL url = new URL(urlString);
+            reader = new BufferedReader(new InputStreamReader(url.openStream()));
+            StringBuffer buffer = new StringBuffer();
+            int read;
+            char[] chars = new char[1024];
+            while ((read = reader.read(chars)) != -1)
+                buffer.append(chars, 0, read);
+
+            return buffer.toString();
+        } finally {
+            if (reader != null)
+                reader.close();
+        }
+    }
+
+    public void init() {
+        RecipeHandlers.loadBioReactorEntries();
+        RecipeHandlers.loadLaserLensEntries();
+        RecipeHandlers.loadSludgeRefinerEntries();
+        RecipeHandlers.loadProteinReactorEntries();
+        RecipeHandlers.loadFluidDictionaryEntries();
+        RecipeHandlers.loadWoodToLatexEntries();
+        RecipeHandlers.loadOreEntries();
+    }
+
+    public void postInit() {
+        CraftingUtils.generateCrushedRecipes();
+        BlockRegistry.createRecipes();
+        ItemRegistry.createRecipes();
+        RecipeUtils.generateConstants();
+        RecipeHandlers.executeCraftweakerActions();
+    }
 
     public void preInit(FMLPreInitializationEvent event) {
         IFRegistries.poke();
@@ -94,6 +137,7 @@ public class CommonProxy {
         int id = 0;
         IndustrialForegoing.NETWORK.registerMessage(ConveyorButtonInteractMessage.Handler.class, ConveyorButtonInteractMessage.class, ++id, Side.SERVER);
         IndustrialForegoing.NETWORK.registerMessage(ConveyorSplittingSyncEntityMessage.Handler.class, ConveyorSplittingSyncEntityMessage.class, ++id, Side.CLIENT);
+        IndustrialForegoing.NETWORK.registerMessage(SpecialParticleMessage.Handler.class, SpecialParticleMessage.class, ++id, Side.CLIENT);
 
         CustomConfiguration.config = new Configuration(event.getSuggestedConfigurationFile());
         CustomConfiguration.config.load();
@@ -111,23 +155,12 @@ public class CommonProxy {
 
         EntityRegistry.registerModEntity(new ResourceLocation(Reference.MOD_ID, "pink_slime"), EntityPinkSlime.class, "pink_slime", 135135, IndustrialForegoing.instance, 32, 1, false, 10485860, 16777215);
         PINK_SLIME_LOOT = LootTableList.register(new ResourceLocation(Reference.MOD_ID, "entities/pink_slime"));
+
+        try {
+            CONTRIBUTORS = new GsonBuilder().create().fromJson(readUrl(CONTRIBUTORS_FILE), String[].class);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
-    public void init() {
-        RecipeHandlers.loadBioReactorEntries();
-        RecipeHandlers.loadLaserLensEntries();
-        RecipeHandlers.loadSludgeRefinerEntries();
-        RecipeHandlers.loadProteinReactorEntries();
-        RecipeHandlers.loadFluidDictionaryEntries();
-        RecipeHandlers.loadWoodToLatexEntries();
-        RecipeHandlers.loadOreEntries();
-    }
-
-    public void postInit() {
-        CraftingUtils.generateCrushedRecipes();
-        BlockRegistry.createRecipes();
-        ItemRegistry.createRecipes();
-        RecipeUtils.generateConstants();
-        RecipeHandlers.executeCraftweakerActions();
-    }
 }

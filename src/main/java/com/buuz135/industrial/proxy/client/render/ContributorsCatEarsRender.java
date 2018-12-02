@@ -21,6 +21,7 @@
  */
 package com.buuz135.industrial.proxy.client.render;
 
+import com.buuz135.industrial.proxy.CommonProxy;
 import com.buuz135.industrial.proxy.client.ClientProxy;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.AbstractClientPlayer;
@@ -40,13 +41,11 @@ import java.util.Calendar;
 
 public class ContributorsCatEarsRender implements LayerRenderer<AbstractClientPlayer> {
 
-    public static Contributors contributors;
-
     @SideOnly(Side.CLIENT)
     @Override
     public void doRenderLayer(AbstractClientPlayer entitylivingbaseIn, float limbSwing, float limbSwingAmount, float partialTicks, float ageInTicks, float netHeadYaw, float headPitch, float scale) {
-        if (contributors == null) return;
-        if (!Arrays.asList(contributors.uuid).contains(entitylivingbaseIn.getUniqueID().toString())) return;
+        if (CommonProxy.CONTRIBUTORS == null) return;
+        if (!Arrays.asList(CommonProxy.CONTRIBUTORS).contains(entitylivingbaseIn.getUniqueID().toString())) return;
         if (!entitylivingbaseIn.isWearing(EnumPlayerModelParts.CAPE)) return;
         GlStateManager.pushMatrix();
         GlStateManager.enableBlend();
@@ -107,8 +106,4 @@ public class ContributorsCatEarsRender implements LayerRenderer<AbstractClientPl
         return false;
     }
 
-    public static class Contributors {
-
-        public String[] uuid = new String[0];
-    }
 }

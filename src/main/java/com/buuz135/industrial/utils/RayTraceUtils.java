@@ -24,12 +24,14 @@ package com.buuz135.industrial.utils;
 import com.buuz135.industrial.proxy.block.Cuboid;
 import com.buuz135.industrial.proxy.block.DistanceRayTraceResult;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.IBlockAccess;
+import net.minecraft.world.World;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -73,6 +75,13 @@ public class RayTraceUtils {
         Vec3d vec3d1 = player.getLook(0);
         Vec3d vec3d2 = vec3d.add(vec3d1.x * distance, vec3d1.y * distance, vec3d1.z * distance);
         return rayTraceBoxesClosest(vec3d, vec3d2, pos, boundingBoxes);
+    }
+
+    public static RayTraceResult rayTraceSimple(World world, EntityLivingBase living, double blockReachDistance, float partialTicks) {
+        Vec3d vec3d = living.getPositionEyes(partialTicks);
+        Vec3d vec3d1 = living.getLook(partialTicks);
+        Vec3d vec3d2 = vec3d.add(vec3d1.x * blockReachDistance, vec3d1.y * blockReachDistance, vec3d1.z * blockReachDistance);
+        return world.rayTraceBlocks(vec3d, vec3d2, false, false, true);
     }
 
 }

@@ -23,6 +23,7 @@ package com.buuz135.industrial.proxy.client;
 
 import com.buuz135.industrial.book.IFManual;
 import com.buuz135.industrial.entity.EntityPinkSlime;
+import com.buuz135.industrial.item.infinity.ItemInfinityDrill;
 import com.buuz135.industrial.proxy.BlockRegistry;
 import com.buuz135.industrial.proxy.CommonProxy;
 import com.buuz135.industrial.proxy.ItemRegistry;
@@ -35,7 +36,6 @@ import com.buuz135.industrial.proxy.client.render.ContributorsCatEarsRender;
 import com.buuz135.industrial.tile.misc.BlackHoleTankTile;
 import com.buuz135.industrial.utils.FluidUtils;
 import com.buuz135.industrial.utils.Reference;
-import com.google.gson.GsonBuilder;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.block.model.IBakedModel;
 import net.minecraft.client.renderer.entity.RenderManager;
@@ -57,36 +57,14 @@ import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 
-import java.io.BufferedReader;
-import java.io.InputStreamReader;
-import java.net.URL;
 import java.util.Map;
 
 public class ClientProxy extends CommonProxy {
 
     public static final ResourceLocation beacon = new ResourceLocation("textures/entity/beacon_beam.png");
-    public static final String CONTRIBUTORS_FILE = "https://raw.githubusercontent.com/Buuz135/Industrial-Foregoing/master/contributors.json";
     public static ResourceLocation GUI = new ResourceLocation(Reference.MOD_ID, "textures/gui/machines.png");
     public static IBakedModel ears_baked;
     public static IModel ears_model;
-
-    private static String readUrl(String urlString) throws Exception {
-        BufferedReader reader = null;
-        try {
-            URL url = new URL(urlString);
-            reader = new BufferedReader(new InputStreamReader(url.openStream()));
-            StringBuffer buffer = new StringBuffer();
-            int read;
-            char[] chars = new char[1024];
-            while ((read = reader.read(chars)) != -1)
-                buffer.append(chars, 0, read);
-
-            return buffer.toString();
-        } finally {
-            if (reader != null)
-                reader.close();
-        }
-    }
 
     @Override
     public void preInit(FMLPreInitializationEvent event) {
@@ -112,12 +90,6 @@ public class ClientProxy extends CommonProxy {
         Map<String, RenderPlayer> map = manager.getSkinMap();
         map.get("default").addLayer(new ContributorsCatEarsRender());
         map.get("slim").addLayer(new ContributorsCatEarsRender());
-
-        try {
-            ContributorsCatEarsRender.contributors = new GsonBuilder().create().fromJson(readUrl(CONTRIBUTORS_FILE), ContributorsCatEarsRender.Contributors.class);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
 
         manager.entityRenderMap.put(EntityPinkSlime.class, new RenderPinkSlime(manager));
 
@@ -170,6 +142,12 @@ public class ClientProxy extends CommonProxy {
             }
             return 0xFFFFFF;
         }, BlockRegistry.blackHoleTankBlock);
+        Minecraft.getMinecraft().getItemColors().registerItemColorHandler((stack, tintIndex) -> {
+            if (tintIndex == 0) {
+                return ItemInfinityDrill.DrillTier.getTierBraquet(ItemRegistry.itemInfinityDrill.getPowerFromStack(stack)).getLeft().getTextureColor();
+            }
+            return 0xFFFFFF;
+        }, ItemRegistry.itemInfinityDrill);
     }
 
     @Override

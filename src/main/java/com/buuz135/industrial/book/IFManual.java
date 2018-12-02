@@ -54,6 +54,7 @@ public class IFManual {
         addItemEntry(ItemRegistry.strawItem, PageText.createTranslatedPages("text.industrialforegoing.book.straw"));
         addItemEntry(ItemRegistry.pinkSlime, PageText.createTranslatedPages("text.industrialforegoing.book.pink_slime"));
         addItemEntry(ItemRegistry.fortuneAddonItem, PageText.createTranslatedPages("text.industrialforegoing.book.fortune_addon"));
+        addItemEntry(ItemRegistry.itemInfinityDrill, PageText.createTranslatedPages("text.industrialforegoing.book.infinity_drill"));
         BookCategory.ITEM.getEntries().put(new ResourceLocation(Reference.MOD_ID, "transfer_addons"), new CategoryEntry(new TextComponentTranslation("item.industrialforegoing.itemstack_transfer_addon.name").getUnformattedComponentText(), new ItemStack(ItemRegistry.itemStackTransferAddonPull), PageText.createTranslatedPages("text.industrialforegoing.book.transfer_addon")));
         BookCategory.ITEM.getEntries().put(new ResourceLocation(Reference.MOD_ID, "upgrades"), new CategoryEntry("Upgrades", new ItemStack(ItemRegistry.dryRubber), PageText.createTranslatedPages("text.industrialforegoing.book.upgrades")));
 

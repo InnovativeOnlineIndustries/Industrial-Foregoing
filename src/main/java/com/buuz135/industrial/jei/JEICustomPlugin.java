@@ -109,6 +109,7 @@ public class JEICustomPlugin implements IModPlugin {
 
     @Override
     public void registerItemSubtypes(ISubtypeRegistry subtypeRegistry) {
+        subtypeRegistry.useNbtForSubtypes(ItemRegistry.itemInfinityDrill);
     }
 
     @Override

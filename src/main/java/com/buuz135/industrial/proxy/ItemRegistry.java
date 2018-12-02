@@ -26,6 +26,7 @@ import com.buuz135.industrial.item.addon.*;
 import com.buuz135.industrial.item.addon.movility.FluidTransferAddon;
 import com.buuz135.industrial.item.addon.movility.ItemStackTransferAddon;
 import com.buuz135.industrial.item.addon.movility.TransferAddon;
+import com.buuz135.industrial.item.infinity.ItemInfinityDrill;
 import com.buuz135.industrial.utils.RecipeUtils;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
@@ -52,6 +53,7 @@ public class ItemRegistry {
     public static ItemStraw strawItem;
     public static ItemConveyorUpgrade conveyorUpgradeItem;
     public static ItemArtificalDye artificalDye;
+    public static ItemInfinityDrill itemInfinityDrill;
 
     public static AdultFilterAddonItem adultFilterAddomItem;
     public static RangeAddonItem rangeAddonItem;
@@ -79,6 +81,7 @@ public class ItemRegistry {
         (pinkSlime = new IFCustomItem("pink_slime")).register(itemRegistry);
         (bookManualItem = new BookManualItem()).register(itemRegistry);
         (pinkSlimeIngot = new IFCustomItem("pink_slime_ingot")).register(itemRegistry);
+        (itemInfinityDrill = new ItemInfinityDrill()).register(itemRegistry);
 
         (adultFilterAddomItem = new AdultFilterAddonItem()).registerItem(itemRegistry);
         (rangeAddonItem = new RangeAddonItem()).registerItem(itemRegistry);
@@ -122,6 +125,7 @@ public class ItemRegistry {
         itemStackTransferAddonPull.createRecipe();
         itemStackTransferAddonPush.createRecipe();
         fortuneAddonItem.createRecipe();
+        itemInfinityDrill.createRecipe();
         RecipeUtils.addShapedRecipe(new ItemStack(conveyorUpgradeItem, 1, 0), "ipi", "idi", "ici",
                 'i', "ingotIron",
                 'p', plastic,
