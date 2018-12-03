@@ -34,6 +34,7 @@ import net.minecraft.util.NonNullList;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.RayTraceResult;
+import net.minecraft.util.text.TextComponentString;
 import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.World;
@@ -301,7 +302,9 @@ public class ItemInfinityDrill extends IFCustomItem {
         if (player.isSneaking()) {
             player.playSound(SoundEvents.BLOCK_LEVER_CLICK, 0.5f, 0.5f);
             ItemStack stack = player.getHeldItem(handIn);
-            setSelectedDrillTier(stack, getSelectedDrillTier(stack).getNext(DrillTier.getTierBraquet(getPowerFromStack(stack)).getLeft()));
+            DrillTier next = getSelectedDrillTier(stack).getNext(DrillTier.getTierBraquet(getPowerFromStack(stack)).getLeft());
+            player.sendStatusMessage(new TextComponentString(new TextComponentTranslation("text.industrialforegoing.display.current_area").getUnformattedText() + " " + getFormattedArea(next, next.getRadius())), true);
+            setSelectedDrillTier(stack, next);
         }
         return super.onItemRightClick(worldIn, player, handIn);
     }
