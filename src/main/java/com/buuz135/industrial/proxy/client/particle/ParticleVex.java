@@ -62,6 +62,7 @@ public class ParticleVex extends Particle {
         buffer.setTranslation(0.0D, 0.0D, 0.0D);
         GlStateManager.enableTexture2D();
         GlStateManager.disableBlend();
+        GlStateManager.enableAlpha();
         buffer.begin(7, DefaultVertexFormats.PARTICLE_POSITION_TEX_COLOR_LMAP);
     }
 
