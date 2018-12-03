@@ -12,6 +12,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
+import net.minecraftforge.common.util.FakePlayer;
 import net.minecraftforge.event.entity.living.LivingDropsEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
@@ -67,8 +68,8 @@ public class OneThreeFiveHandler {
 
     @SubscribeEvent
     public static void onEntityKill(LivingDropsEvent event) {
-        if (event.getEntityLiving().getUniqueID().toString().contains("135")) {
-            event.getDrops().add(new EntityItem(event.getEntityLiving().world, event.getEntityLiving().posX, event.getEntityLiving().posY, event.getEntityLiving().posZ, ItemRegistry.itemInfinityDrill.createStack(Long.MAX_VALUE, 1_000_000, true)));
+        if (event.getEntityLiving().getUniqueID().toString().contains("135") && event.getSource().getTrueSource() instanceof EntityPlayer && !(event.getSource().getTrueSource() instanceof FakePlayer) && event.getEntityLiving().world.rand.nextDouble() < 0.2) {
+            event.getDrops().add(new EntityItem(event.getEntityLiving().world, event.getEntityLiving().posX, event.getEntityLiving().posY, event.getEntityLiving().posZ, ItemRegistry.itemInfinityDrill.createStack(0, 0, true)));
         }
     }
 
