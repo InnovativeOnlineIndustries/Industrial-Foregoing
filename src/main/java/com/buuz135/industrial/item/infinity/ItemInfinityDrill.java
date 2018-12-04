@@ -26,6 +26,7 @@ import net.minecraft.entity.item.EntityXPOrb;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.init.Blocks;
+import net.minecraft.init.Items;
 import net.minecraft.init.SoundEvents;
 import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.EnumAction;
@@ -125,7 +126,7 @@ public class ItemInfinityDrill extends IFCustomItem {
 
     @Override
     public boolean canHarvestBlock(IBlockState blockIn) {
-        return isValidMaterial(blockIn.getMaterial());
+        return Items.DIAMOND_PICKAXE.canHarvestBlock(blockIn) || Items.DIAMOND_SHOVEL.canHarvestBlock(blockIn);
     }
 
     @Override
