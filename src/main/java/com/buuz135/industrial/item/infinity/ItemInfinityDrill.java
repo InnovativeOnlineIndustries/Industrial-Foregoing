@@ -70,6 +70,8 @@ public class ItemInfinityDrill extends IFCustomItem {
         super("infinity_drill");
         setMaxStackSize(1);
         setHasSubtypes(true);
+        setHarvestLevel("pickaxe", 3);
+        setHarvestLevel("shovel", 3);
     }
 
     @Override
@@ -272,10 +274,10 @@ public class ItemInfinityDrill extends IFCustomItem {
             DrillTier currentTier = getSelectedDrillTier(stack);
             Pair<BlockPos, BlockPos> area = getArea(pos, facing, currentTier, true);
             BlockPos.getAllInBox(area.getLeft(), area.getRight()).forEach(blockPos -> {
-                if (enoughFuel(stack) && worldIn.getTileEntity(blockPos) == null && entityLiving instanceof EntityPlayerMP) {
+                if (enoughFuel(stack) && worldIn.getTileEntity(blockPos) == null && entityLiving instanceof EntityPlayerMP && !worldIn.isAirBlock(blockPos)) {
                     IBlockState tempState = worldIn.getBlockState(blockPos);
                     Block block = tempState.getBlock();
-                    if (block.getHarvestLevel(tempState) < 0) return;
+                    if (block.getBlockHardness(tempState, worldIn, blockPos) < 0) return;
                     int xp = ForgeHooks.onBlockBreakEvent(worldIn, ((EntityPlayerMP) entityLiving).interactionManager.getGameType(), (EntityPlayerMP) entityLiving, blockPos);
                     if (xp >= 0 && block.removedByPlayer(tempState, worldIn, blockPos, (EntityPlayer) entityLiving, true)) {
                         block.onPlayerDestroy(worldIn, blockPos, tempState);
