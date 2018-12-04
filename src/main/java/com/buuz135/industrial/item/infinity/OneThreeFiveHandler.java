@@ -7,13 +7,12 @@ import com.buuz135.industrial.proxy.network.SpecialParticleMessage;
 import com.buuz135.industrial.utils.Reference;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.EntityLiving;
-import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraftforge.common.util.FakePlayer;
-import net.minecraftforge.event.entity.living.LivingDropsEvent;
+import net.minecraftforge.event.entity.living.LivingDeathEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
@@ -67,9 +66,12 @@ public class OneThreeFiveHandler {
     }
 
     @SubscribeEvent
-    public static void onEntityKill(LivingDropsEvent event) {
-        if (event.getEntityLiving().getUniqueID().toString().contains("135") && event.getSource().getTrueSource() instanceof EntityPlayer && !(event.getSource().getTrueSource() instanceof FakePlayer) && event.getEntityLiving().world.rand.nextDouble() < 0.2) {
-            event.getDrops().add(new EntityItem(event.getEntityLiving().world, event.getEntityLiving().posX, event.getEntityLiving().posY, event.getEntityLiving().posZ, ItemRegistry.itemInfinityDrill.createStack(0, 0, true)));
+    public static void onEntityKill(LivingDeathEvent event) {
+        if (event.getEntityLiving().getUniqueID().toString().contains("135") && event.getSource().getTrueSource() instanceof EntityPlayer && !(event.getSource().getTrueSource() instanceof FakePlayer)) {
+            EntityPlayer player = (EntityPlayer) event.getSource().getTrueSource();
+            if (player.getHeldItemMainhand().getItem().equals(ItemRegistry.itemInfinityDrill)) {
+                player.getHeldItemMainhand().getTagCompound().setBoolean("Special", true);
+            }
         }
     }
 

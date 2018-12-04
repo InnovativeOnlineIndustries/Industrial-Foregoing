@@ -39,7 +39,7 @@ public class ParticleVex extends Particle {
 
     @Override
     public void renderParticle(BufferBuilder buffer, Entity entityIn, float partialTicks, float rotationX, float rotationZ, float rotationYZ, float rotationXY, float rotationXZ) {
-        if (entityIn instanceof EntityPlayer && Minecraft.getMinecraft().player.getUniqueID().equals(entity.getUniqueID()) && Minecraft.getMinecraft().gameSettings.thirdPersonView == 0 && this.entity.getPosition().distanceSq(posX, posY, posZ) < 3.5)
+        if (entityIn instanceof EntityPlayer && Minecraft.getMinecraft().player.getUniqueID().equals(entity.getUniqueID()) && Minecraft.getMinecraft().gameSettings.thirdPersonView == 0 && this.entity.getPosition().add(0, 1, 0).distanceSq(posX, posY, posZ) < 3)
             return;
         Tessellator.getInstance().draw();
         GlStateManager.disableAlpha();
