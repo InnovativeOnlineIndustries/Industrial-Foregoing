@@ -38,7 +38,7 @@ import com.buuz135.industrial.utils.apihandlers.PlantRecollectableRegistryHandle
 import com.buuz135.industrial.utils.apihandlers.RecipeHandlers;
 import com.buuz135.industrial.utils.apihandlers.json.ConfigurationConditionFactory;
 import com.buuz135.industrial.utils.compat.baubles.MeatFeederBauble;
-import com.google.gson.GsonBuilder;
+import com.google.gson.JsonParser;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.ResourceLocation;
@@ -58,14 +58,16 @@ import net.minecraftforge.fml.relauncher.Side;
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Random;
 
 public class CommonProxy {
 
     public static Random random;
     public static final String CONTRIBUTORS_FILE = "https://raw.githubusercontent.com/Buuz135/Industrial-Foregoing/master/contributors.json";
-    public static String[] CONTRIBUTORS = new String[0];
+    public static List<String> CONTRIBUTORS = new ArrayList<>();
 
     public static DamageSource custom = new DamageSource("if_custom") {
         @Override
@@ -157,7 +159,7 @@ public class CommonProxy {
         PINK_SLIME_LOOT = LootTableList.register(new ResourceLocation(Reference.MOD_ID, "entities/pink_slime"));
 
         try {
-            CONTRIBUTORS = new GsonBuilder().create().fromJson(readUrl(CONTRIBUTORS_FILE), String[].class);
+            new JsonParser().parse(readUrl(CONTRIBUTORS_FILE)).getAsJsonObject().get("uuid").getAsJsonArray().forEach(jsonElement -> CONTRIBUTORS.add(jsonElement.getAsString()));
         } catch (Exception e) {
             e.printStackTrace();
         }

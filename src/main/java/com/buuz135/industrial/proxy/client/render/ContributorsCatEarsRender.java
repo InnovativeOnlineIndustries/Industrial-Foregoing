@@ -36,7 +36,6 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import org.lwjgl.opengl.GL11;
 
-import java.util.Arrays;
 import java.util.Calendar;
 
 public class ContributorsCatEarsRender implements LayerRenderer<AbstractClientPlayer> {
@@ -45,7 +44,7 @@ public class ContributorsCatEarsRender implements LayerRenderer<AbstractClientPl
     @Override
     public void doRenderLayer(AbstractClientPlayer entitylivingbaseIn, float limbSwing, float limbSwingAmount, float partialTicks, float ageInTicks, float netHeadYaw, float headPitch, float scale) {
         if (CommonProxy.CONTRIBUTORS == null) return;
-        if (!Arrays.asList(CommonProxy.CONTRIBUTORS).contains(entitylivingbaseIn.getUniqueID().toString())) return;
+        if (!CommonProxy.CONTRIBUTORS.contains(entitylivingbaseIn.getUniqueID().toString())) return;
         if (!entitylivingbaseIn.isWearing(EnumPlayerModelParts.CAPE)) return;
         GlStateManager.pushMatrix();
         GlStateManager.enableBlend();
