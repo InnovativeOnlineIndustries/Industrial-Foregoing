@@ -46,6 +46,7 @@ import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeHooks;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.ICapabilityProvider;
+import net.minecraftforge.common.config.Configuration;
 import net.minecraftforge.energy.CapabilityEnergy;
 import net.minecraftforge.energy.IEnergyStorage;
 import net.minecraftforge.fluids.FluidStack;
@@ -56,7 +57,6 @@ import org.apache.commons.lang3.tuple.Pair;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.text.DecimalFormat;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Set;
 
@@ -88,7 +88,7 @@ public class ItemInfinityDrill extends IFCustomItem {
     @Override
     public void onCreated(ItemStack stack, World worldIn, EntityPlayer playerIn) {
         super.onCreated(stack, worldIn, playerIn);
-        addNbt(stack, 0, 0, Arrays.asList(CommonProxy.CONTRIBUTORS).contains(playerIn.getUniqueID().toString()));
+        addNbt(stack, 0, 0, CommonProxy.CONTRIBUTORS.contains(playerIn.getUniqueID().toString()));
     }
 
     @Override
@@ -341,72 +341,12 @@ public class ItemInfinityDrill extends IFCustomItem {
         return multimap;
     }
 
-    public enum DrillTier {
-        POOR("poor", 0, 0, TextFormatting.GRAY, 0x7c7c7a),//1x1
-        COMMON("common", 4_000_000, 1, TextFormatting.WHITE, 0xFFFFFF), //3x3
-        UNCOMMON("uncommon", 16_000_000, 2, TextFormatting.GREEN, 0x1ce819), //5x5
-        RARE("rare", 80_000_000, 3, TextFormatting.BLUE, 0x0087ff), //7x7
-        EPIC("epic", 480_000_000, 4, TextFormatting.DARK_PURPLE, 0xe100ff), //9x9
-        LEGENDARY("legendary", 3_360_000_000L, 5, TextFormatting.GOLD, 0xffaa00), //11x11
-        ARTIFACT("artifact", Long.MAX_VALUE, 6, TextFormatting.YELLOW, 0xfff887); //13x13
-
-        private final String name;
-        private final long powerNeeded;
-        private final int radius;
-        private final TextFormatting color;
-        private final int textureColor;
-
-        DrillTier(String name, long powerNeeded, int radius, TextFormatting color, int textureColor) {
-            this.name = name;
-            this.powerNeeded = powerNeeded;
-            this.radius = radius;
-            this.color = color;
-            this.textureColor = textureColor;
-        }
-
-        public static Pair<DrillTier, DrillTier> getTierBraquet(long power) {
-            DrillTier lastTier = POOR;
-            for (DrillTier drillTier : DrillTier.values()) {
-                if (power >= lastTier.getPowerNeeded() && power < drillTier.getPowerNeeded())
-                    return Pair.of(lastTier, drillTier);
-                lastTier = drillTier;
-            }
-            return Pair.of(ARTIFACT, ARTIFACT);
-        }
-
-        public String getLocalizedName() {
-            return new TextComponentTranslation("text.industrialforegoing.tooltip.infinitydrill." + name).getUnformattedText();
-        }
-
-        public String getName() {
-            return name;
-        }
-
-        public long getPowerNeeded() {
-            return powerNeeded;
-        }
-
-        public int getRadius() {
-            return radius;
-        }
-
-        public TextFormatting getColor() {
-            return color;
-        }
-
-        public int getTextureColor() {
-            return textureColor;
-        }
-
-        public DrillTier getNext(DrillTier maxTier) {
-            DrillTier lastTier = POOR;
-            for (DrillTier drillTier : DrillTier.values()) {
-                if (drillTier == POOR) continue;
-                if (lastTier == maxTier) return POOR;
-                if (this == lastTier) return drillTier;
-                lastTier = drillTier;
-            }
-            return DrillTier.POOR;
+    public void configuration(Configuration config) {
+        int i = 0;
+        for (DrillTier value : DrillTier.values()) {
+            value.setPowerNeeded(Long.parseLong(config.getString(i + "_" + value.name, Configuration.CATEGORY_GENERAL + Configuration.CATEGORY_SPLITTER + "infinity_drill" + Configuration.CATEGORY_SPLITTER + "power_values", value.powerNeeded + "", "")));
+            value.setRadius(config.getInt(i + "_" + value.name, Configuration.CATEGORY_GENERAL + Configuration.CATEGORY_SPLITTER + "infinity_drill" + Configuration.CATEGORY_SPLITTER + "radius", value.radius, 0, Integer.MAX_VALUE, ""));
+            ++i;
         }
     }
 
@@ -511,6 +451,83 @@ public class ItemInfinityDrill extends IFCustomItem {
 
         public long getLongEnergyStored() {
             return this.energy;
+        }
+    }
+
+    public enum DrillTier {
+        POOR("poor", 0, 0, TextFormatting.GRAY, 0x7c7c7a),//1x1
+        COMMON("common", 4_000_000, 1, TextFormatting.WHITE, 0xFFFFFF), //3x3
+        UNCOMMON("uncommon", 16_000_000, 2, TextFormatting.GREEN, 0x1ce819), //5x5
+        RARE("rare", 80_000_000, 3, TextFormatting.BLUE, 0x0087ff), //7x7
+        EPIC("epic", 480_000_000, 4, TextFormatting.DARK_PURPLE, 0xe100ff), //9x9
+        LEGENDARY("legendary", 3_360_000_000L, 5, TextFormatting.GOLD, 0xffaa00), //11x11
+        ARTIFACT("artifact", Long.MAX_VALUE, 6, TextFormatting.YELLOW, 0xfff887); //13x13
+
+        private final String name;
+        private long powerNeeded;
+        private int radius;
+        private final TextFormatting color;
+        private final int textureColor;
+
+        DrillTier(String name, long powerNeeded, int radius, TextFormatting color, int textureColor) {
+            this.name = name;
+            this.powerNeeded = powerNeeded;
+            this.radius = radius;
+            this.color = color;
+            this.textureColor = textureColor;
+        }
+
+        public static Pair<DrillTier, DrillTier> getTierBraquet(long power) {
+            DrillTier lastTier = POOR;
+            for (DrillTier drillTier : DrillTier.values()) {
+                if (power >= lastTier.getPowerNeeded() && power < drillTier.getPowerNeeded())
+                    return Pair.of(lastTier, drillTier);
+                lastTier = drillTier;
+            }
+            return Pair.of(ARTIFACT, ARTIFACT);
+        }
+
+        public String getLocalizedName() {
+            return new TextComponentTranslation("text.industrialforegoing.tooltip.infinitydrill." + name).getUnformattedText();
+        }
+
+        public String getName() {
+            return name;
+        }
+
+        public long getPowerNeeded() {
+            return powerNeeded;
+        }
+
+        public int getRadius() {
+            return radius;
+        }
+
+        public TextFormatting getColor() {
+            return color;
+        }
+
+        public int getTextureColor() {
+            return textureColor;
+        }
+
+        public void setPowerNeeded(long powerNeeded) {
+            this.powerNeeded = powerNeeded;
+        }
+
+        public void setRadius(int radius) {
+            this.radius = radius;
+        }
+
+        public DrillTier getNext(DrillTier maxTier) {
+            DrillTier lastTier = POOR;
+            for (DrillTier drillTier : DrillTier.values()) {
+                if (drillTier == POOR) continue;
+                if (lastTier == maxTier) return POOR;
+                if (this == lastTier) return drillTier;
+                lastTier = drillTier;
+            }
+            return DrillTier.POOR;
         }
     }
 }

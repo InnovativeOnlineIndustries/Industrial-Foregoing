@@ -112,6 +112,9 @@ public class CommonProxy {
         ItemRegistry.createRecipes();
         RecipeUtils.generateConstants();
         RecipeHandlers.executeCraftweakerActions();
+
+        ItemRegistry.itemInfinityDrill.configuration(CustomConfiguration.config);
+        if (CustomConfiguration.config.hasChanged()) CustomConfiguration.config.save();
     }
 
     public void preInit(FMLPreInitializationEvent event) {
@@ -150,7 +153,6 @@ public class CommonProxy {
         CustomConfiguration.configValues.put("useOriginalFrames", CustomConfiguration.config.getBoolean("useOriginalFrames", Configuration.CATEGORY_GENERAL, true, "Adds recipes using TeslaCoreLib frames"));
         CustomConfiguration.configValues.put("useMekanismFrames", CustomConfiguration.config.getBoolean("useMekanismFrames", Configuration.CATEGORY_GENERAL, true, "Adds recipes using Mekanism Steel Casing"));
         CustomConfiguration.configValues.put("machines.wither_builder.HCWither", CustomConfiguration.config.getBoolean("HCWither", "machines.wither_builder", false, "If enabled, only the wither builder will be able to place wither skulls. That means that players won't be able to place wither skulls. The recipe will change, but that will need a restart."));
-        if (CustomConfiguration.config.hasChanged()) CustomConfiguration.config.save();
 
         if (Loader.isModLoaded("crafttweaker")) CraftTweakerHelper.register();
         if (Loader.isModLoaded("baubles")) MinecraftForge.EVENT_BUS.register(new MeatFeederBauble.Event());
