@@ -170,11 +170,6 @@ public class ItemInfinityDrill extends IFCustomItem {
     }
 
     @Override
-    public boolean onBlockStartBreak(ItemStack itemstack, BlockPos pos, EntityPlayer player) {
-        return super.onBlockStartBreak(itemstack, pos, player);
-    }
-
-    @Override
     public boolean showDurabilityBar(ItemStack stack) {
         return true;
     }
@@ -371,7 +366,7 @@ public class ItemInfinityDrill extends IFCustomItem {
                 @Override
                 public long getLongEnergyStored() {
                     if (stack.hasTagCompound()) {
-                        return stack.getTagCompound().getLong("Energy");
+                        return Math.min(stack.getTagCompound().getLong("Energy"), DrillTier.ARTIFACT.getPowerNeeded());
                     } else {
                         return 0;
                     }
@@ -382,7 +377,7 @@ public class ItemInfinityDrill extends IFCustomItem {
                     if (!stack.hasTagCompound()) {
                         stack.setTagCompound(new NBTTagCompound());
                     }
-                    stack.getTagCompound().setLong("Energy", energy);
+                    stack.getTagCompound().setLong("Energy", Math.min(energy, DrillTier.ARTIFACT.getPowerNeeded()));
                 }
             };
         }
@@ -408,7 +403,7 @@ public class ItemInfinityDrill extends IFCustomItem {
 
         public InfinityDrillEnergyStorage() {
             this.energy = 0;
-            this.capacity = Long.MAX_VALUE;
+            this.capacity = DrillTier.ARTIFACT.getPowerNeeded();
         }
 
         @Override
