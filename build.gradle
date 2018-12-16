@@ -94,7 +94,7 @@ dependencies {
     runtime "mezz.jei:jei_1.12.2:${project.jei_version}"
     compile "cofh:RedstoneFlux:1.12-${project.redstoneflux_version}:universal"
     compileOnly "CraftTweaker2:CraftTweaker2-MC1120-Main:1.12-4.0.10.306"
-    compile files("libs/Baubles-1.12-1.5.2.jar")
+    deobfCompile "baubles:Baubles:1.12:1.5.2"
     deobfCompile "moo-fluids:MooFluids:1.12.2:1.7.11.02a"
 }
 
