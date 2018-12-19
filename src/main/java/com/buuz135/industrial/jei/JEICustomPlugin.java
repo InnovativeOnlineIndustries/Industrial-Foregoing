@@ -132,8 +132,9 @@ public class JEICustomPlugin implements IModPlugin {
             registry.addRecipeCategories(proteinReactorRecipeCategory);
         }
         if (BlockRegistry.laserBaseBlock.isEnabled() || BlockRegistry.laserDrillBlock.isEnabled()) {
-            laserRecipeCategory = new LaserRecipeCategory(registry.getJeiHelpers().getGuiHelper());
-            registry.addRecipeCategories(laserRecipeCategory);
+        	//TODO: Laser drill recipes temporarily disabled.
+            //laserRecipeCategory = new LaserRecipeCategory(registry.getJeiHelpers().getGuiHelper());
+            //registry.addRecipeCategories(laserRecipeCategory);
         }
         machineProduceCategory = new MachineProduceCategory(registry.getJeiHelpers().getGuiHelper());
         registry.addRecipeCategories(machineProduceCategory);
@@ -193,14 +194,15 @@ public class JEICustomPlugin implements IModPlugin {
             registry.addRecipeCatalyst(new ItemStack(BlockRegistry.proteinReactorBlock), proteinReactorRecipeCategory.getUid());
         }
         if (BlockRegistry.laserBaseBlock.isEnabled() || BlockRegistry.laserDrillBlock.isEnabled()) {
-            List<ItemStackWeightedItem> item = new ArrayList<>();
+            /*List<ItemStackWeightedItem> item = new ArrayList<>();
             LaserDrillEntry.LASER_DRILL_ENTRIES.forEach(entry -> item.add(new ItemStackWeightedItem(entry.getStack(), entry.getWeight())));
             final int laserMaxWeight = WeightedRandom.getTotalWeight(item);
             List<LaserRecipeWrapper> laserRecipeWrappers = new ArrayList<>();
             LaserDrillEntry.LASER_DRILL_ENTRIES.forEach(entry -> laserRecipeWrappers.add(new LaserRecipeWrapper(new ItemStackWeightedItem(entry.getStack(), entry.getWeight()), laserMaxWeight, entry.getLaserMeta())));
             registry.addRecipes(laserRecipeWrappers, laserRecipeCategory.getUid());
             registry.addRecipeCatalyst(new ItemStack(BlockRegistry.laserDrillBlock), laserRecipeCategory.getUid());
-            registry.addRecipeCatalyst(new ItemStack(BlockRegistry.laserBaseBlock), laserRecipeCategory.getUid());
+            registry.addRecipeCatalyst(new ItemStack(BlockRegistry.laserBaseBlock), laserRecipeCategory.getUid());*/
+        	//TODO: Laser drill recipers temporarily disabled.
         }
         if (BlockRegistry.resourcefulFurnaceBlock.isEnabled())
             registry.addRecipeCatalyst(new ItemStack(BlockRegistry.resourcefulFurnaceBlock), VanillaRecipeCategoryUid.SMELTING);

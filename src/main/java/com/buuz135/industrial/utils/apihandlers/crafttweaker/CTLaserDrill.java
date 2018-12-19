@@ -35,8 +35,9 @@ public class CTLaserDrill {
 
     @ZenMethod
     public static void add(int meta, IItemStack output, int weight) {
-        LaserDrillEntry entry = new LaserDrillEntry(meta, (ItemStack) output.getInternal(), weight);
-        CraftTweakerAPI.apply(new Add(entry));
+    	//TODO Laser drill entries through CraftTweaker temporarily(?) disabled.
+        //LaserDrillEntry entry = new LaserDrillEntry(meta, (ItemStack) output.getInternal(), weight);
+        //CraftTweakerAPI.apply(new Add(entry));
     }
 
     @ZenMethod
@@ -74,7 +75,8 @@ public class CTLaserDrill {
 
         @Override
         public void apply() {
-            RecipeHandlers.LASER_ENTRIES.put(CTAction.REMOVE, new LaserDrillEntry(0, stack, 0));
+        	//TODO CraftTweaker integration temporarily (?) removed.
+            //RecipeHandlers.LASER_ENTRIES.put(CTAction.REMOVE, new LaserDrillEntry(0, stack, 0));
         }
 
         @Override

@@ -22,6 +22,7 @@
 package com.buuz135.industrial.proxy;
 
 import com.buuz135.industrial.IndustrialForegoing;
+import com.buuz135.industrial.api.recipe.LaserDrillEntry;
 import com.buuz135.industrial.config.CustomConfiguration;
 import com.buuz135.industrial.entity.EntityPinkSlime;
 import com.buuz135.industrial.gui.GuiHandler;
@@ -50,18 +51,26 @@ import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.config.Configuration;
 import net.minecraftforge.common.crafting.CraftingHelper;
 import net.minecraftforge.fml.common.Loader;
+import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 import net.minecraftforge.fml.common.network.NetworkRegistry;
 import net.minecraftforge.fml.common.registry.EntityRegistry;
 import net.minecraftforge.fml.relauncher.Side;
+import net.ndrei.teslacorelib.TeslaCoreLib;
 
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.InputStreamReader;
 import java.net.URL;
+import java.nio.file.DirectoryStream;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Random;
+import java.util.stream.Stream;
 
 public class CommonProxy {
 
@@ -118,6 +127,9 @@ public class CommonProxy {
     }
 
     public void preInit(FMLPreInitializationEvent event) {
+    	
+    	LaserDrillEntry.addOreFile(new ResourceLocation(Reference.MOD_ID,"default_ores.json"));
+    	
         IFRegistries.poke();
 
         CraftingHelper.register(new ResourceLocation(Reference.MOD_ID, "configuration_value"), new ConfigurationConditionFactory());
@@ -125,7 +137,7 @@ public class CommonProxy {
 
         FluidsRegistry.registerFluids();
         BlockRegistry.poke();
-
+        
         MinecraftForge.EVENT_BUS.register(new BlockRegistry());
         MinecraftForge.EVENT_BUS.register(new ItemRegistry());
         MinecraftForge.EVENT_BUS.register(new StrawRegistry());
@@ -137,6 +149,8 @@ public class CommonProxy {
         MinecraftForge.EVENT_BUS.register(new FakePlayerRideEntityHandler());
         MinecraftForge.EVENT_BUS.register(new PlantInteractorHarvestDropsHandler());
         MinecraftForge.EVENT_BUS.register(new SkullHandler());
+        
+        LaserDrillEntry.loadLaserConfigs(event);
 
         NetworkRegistry.INSTANCE.registerGuiHandler(IndustrialForegoing.instance, new GuiHandler());
         int id = 0;

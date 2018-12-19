@@ -94,7 +94,8 @@ public class LaserBaseBlock extends CustomOrientedBlock<LaserBaseTile> {
     @Override
     public List<IPage> getBookDescriptionPages() {
         List<IPage> pages = super.getBookDescriptionPages();
-        pages.addAll(PageItemList.generatePagesFromItemStacks(LaserDrillEntry.LASER_DRILL_ENTRIES.stream().map(LaserDrillEntry::getStack).collect(Collectors.toList()), I18n.format("text.book.produced_items")));
+        //TODO Update recipes with new information.
+        //pages.addAll(PageItemList.generatePagesFromItemStacks(LaserDrillEntry.LASER_DRILL_ENTRIES.stream().map(LaserDrillEntry::getStack).collect(Collectors.toList()), I18n.format("text.book.produced_items")));
         return pages;
     }
 

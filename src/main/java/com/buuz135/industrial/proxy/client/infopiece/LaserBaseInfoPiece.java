@@ -23,6 +23,10 @@ package com.buuz135.industrial.proxy.client.infopiece;
 
 import com.buuz135.industrial.proxy.client.ClientProxy;
 import com.buuz135.industrial.tile.world.LaserBaseTile;
+
+import io.netty.util.ResourceLeakDetector.Level;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.util.text.TextComponentTranslation;
 import net.ndrei.teslacorelib.gui.BasicRenderedGuiPiece;
 import net.ndrei.teslacorelib.gui.BasicTeslaGuiContainer;
@@ -45,7 +49,6 @@ public class LaserBaseInfoPiece extends BasicRenderedGuiPiece {
         container.mc.getTextureManager().bindTexture(ClientProxy.GUI);
         double work = this.tile.getCurrentWork() / (double) this.tile.getMaxWork();
         container.drawTexturedRect(this.getLeft() + 3, (int) (this.getTop() + 3 + (50 - (50 * work))), 112, (int) (72 + (50 - (50 * work))), 12, (int) (work * 50));
-
     }
 
     @Override
