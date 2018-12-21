@@ -31,7 +31,6 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.biome.Biome;
-import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 import net.minecraftforge.fml.common.registry.ForgeRegistries;
 import net.minecraftforge.oredict.OreDictionary;
 
@@ -79,9 +78,8 @@ public class LaserDrillEntry {
     }
 
     //@SideOnly(Side.SERVER)
-    public static void loadLaserConfigs(FMLPreInitializationEvent event) {
+    public static void loadLaserConfigs(File configDir) {
         //Generate default files if absent.
-        File configDir = event.getModConfigurationDirectory();
         Path ores_path = configDir.toPath().resolve("laser_drill_ores");
         if (!Files.exists(ores_path)) {
             ores_path.toFile().mkdir();

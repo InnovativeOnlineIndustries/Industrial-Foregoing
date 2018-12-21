@@ -57,6 +57,7 @@ import net.minecraftforge.fml.common.registry.EntityRegistry;
 import net.minecraftforge.fml.relauncher.Side;
 
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.InputStreamReader;
 import java.net.URL;
 import java.util.ArrayList;
@@ -106,19 +107,22 @@ public class CommonProxy {
         RecipeHandlers.loadOreEntries();
     }
 
+    public static File configFolder;
+
     public void postInit() {
         CraftingUtils.generateCrushedRecipes();
         BlockRegistry.createRecipes();
         ItemRegistry.createRecipes();
         RecipeUtils.generateConstants();
         RecipeHandlers.executeCraftweakerActions();
+        LaserDrillEntry.loadLaserConfigs(configFolder);
 
         ItemRegistry.itemInfinityDrill.configuration(CustomConfiguration.config);
         if (CustomConfiguration.config.hasChanged()) CustomConfiguration.config.save();
     }
 
     public void preInit(FMLPreInitializationEvent event) {
-
+        configFolder = event.getModConfigurationDirectory();
         LaserDrillEntry.addOreFile(new ResourceLocation(Reference.MOD_ID, "default_ores.json"));
 
         IFRegistries.poke();
@@ -140,8 +144,6 @@ public class CommonProxy {
         MinecraftForge.EVENT_BUS.register(new FakePlayerRideEntityHandler());
         MinecraftForge.EVENT_BUS.register(new PlantInteractorHarvestDropsHandler());
         MinecraftForge.EVENT_BUS.register(new SkullHandler());
-
-        LaserDrillEntry.loadLaserConfigs(event);
 
         NetworkRegistry.INSTANCE.registerGuiHandler(IndustrialForegoing.instance, new GuiHandler());
         int id = 0;
