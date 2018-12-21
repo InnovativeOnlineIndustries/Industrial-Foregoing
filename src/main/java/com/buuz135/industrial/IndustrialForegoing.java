@@ -23,6 +23,7 @@ package com.buuz135.industrial;
 
 import com.buuz135.industrial.proxy.BlockRegistry;
 import com.buuz135.industrial.proxy.CommonProxy;
+import com.buuz135.industrial.proxy.ItemRegistry;
 import com.buuz135.industrial.utils.IFFakePlayer;
 import com.buuz135.industrial.utils.Reference;
 import net.minecraft.creativetab.CreativeTabs;
@@ -50,7 +51,7 @@ public class IndustrialForegoing {
     public static CreativeTabs creativeTab = new CreativeTabs(Reference.MOD_ID) {
         @Override
         public ItemStack createIcon() {
-            return new ItemStack(BlockRegistry.blackHoleUnitBlock);
+            return new ItemStack(BlockRegistry.blackHoleUnitBlock).isEmpty() ? new ItemStack(ItemRegistry.strawItem) : new ItemStack(BlockRegistry.blackHoleUnitBlock);
         }
     };
     public static IndustrialForegoing instance;
