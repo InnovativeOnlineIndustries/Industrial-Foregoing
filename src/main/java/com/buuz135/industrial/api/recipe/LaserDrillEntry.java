@@ -127,7 +127,7 @@ public class LaserDrillEntry {
 		}
 	
 		//Load configuration data.
-		LASER_DRILL_ENTRIES = new LinkedList[255];
+        LASER_DRILL_ENTRIES = new LinkedList[256];
 		for(int i = 0; i < LASER_DRILL_ENTRIES.length; i++){
 			LASER_DRILL_ENTRIES[i] = new LinkedList<LaserDrillEntry>();
 		}
@@ -153,8 +153,10 @@ public class LaserDrillEntry {
 
                 ItemStack itemStack;
                 String itemName = ore.getAsJsonPrimitive("item").getAsString();
-                if (itemName.startsWith("ore") && OreDictionary.doesOreNameExist(itemName)) {
-                    itemStack = OreDictionary.getOres(itemName).get(0).copy();
+                if (itemName.startsWith("ore")) {
+                    if (OreDictionary.doesOreNameExist(itemName))
+                        itemStack = OreDictionary.getOres(itemName).get(0).copy();
+                    else continue;
                 } else {
                     String[] item_strings = itemName.split(":");
                     ResourceLocation item_location = new ResourceLocation(item_strings[0], item_strings[1]);
