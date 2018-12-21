@@ -64,10 +64,10 @@ public class LaserRecipeWrapper implements IRecipeWrapper {
         Gui.drawModalRectWithCustomSizedTexture(recipeWidth / 10 * 7, 30 + (minecraft.fontRenderer.FONT_HEIGHT + 2) * 3, 216, 0, 20, 20, 256, 256);
         minecraft.getRenderItem().renderItemIntoGUI(new ItemStack(Blocks.BARRIER), recipeWidth / 10 * 7 + 1, 30 + (minecraft.fontRenderer.FONT_HEIGHT + 2) * 3 + 3);
 
-        String minY = "Min Y: " + entryExtended.getRarities().get(pointer).getMinY();
-        String maxY = "Max Y: " + entryExtended.getRarities().get(pointer).getMaxY();
-        String wight = "Weight: " + entryExtended.getRarities().get(pointer).getWeight();
-        String biomes = "Biomes";
+        String minY = new TextComponentTranslation("text.industrialforegoing.miny").getUnformattedComponentText() + " " + entryExtended.getRarities().get(pointer).getMinY();
+        String maxY = new TextComponentTranslation("text.industrialforegoing.maxy").getUnformattedComponentText() + " " + entryExtended.getRarities().get(pointer).getMaxY();
+        String wight = new TextComponentTranslation("text.industrialforegoing.weight").getUnformattedComponentText() + " " + entryExtended.getRarities().get(pointer).getWeight();
+        String biomes = new TextComponentTranslation("text.industrialforegoing.biomes").getUnformattedComponentText();
         minecraft.fontRenderer.drawString(TextFormatting.DARK_GRAY + minY, recipeWidth / 10, 30, 0);
         minecraft.fontRenderer.drawString(TextFormatting.DARK_GRAY + wight, recipeWidth / 10, 30 + (minecraft.fontRenderer.FONT_HEIGHT + 2), 0);
         minecraft.fontRenderer.drawString(TextFormatting.DARK_GRAY + maxY, recipeWidth / 10 * 6, 30, 0);
@@ -86,7 +86,7 @@ public class LaserRecipeWrapper implements IRecipeWrapper {
         }
         if (mouseX > 13 * 2 && mouseX < 13 * 2 + 20 && mouseY > 30 + (Minecraft.getMinecraft().fontRenderer.FONT_HEIGHT + 2) * 3 && mouseY < 30 + (Minecraft.getMinecraft().fontRenderer.FONT_HEIGHT + 2) * 3 + 20) { //Inside the whitelisted biomes
             List<String> biomes = new ArrayList<>();
-            biomes.add(TextFormatting.UNDERLINE + "Whitelisted Biomes");
+            biomes.add(TextFormatting.UNDERLINE + new TextComponentTranslation("text.industrialforegoing.tooltip.whitelisted_biomes").getUnformattedText());
             if (entryExtended.getRarities().get(pointer).getWhitelist().isEmpty()) biomes.add("- Any");
             else {
                 entryExtended.getRarities().get(pointer).getWhitelist().forEach(biome -> biomes.add("- " + biome.getBiomeName()));
@@ -95,7 +95,7 @@ public class LaserRecipeWrapper implements IRecipeWrapper {
         }
         if (mouseX > 13 * 8 && mouseX < 13 * 8 + 20 && mouseY > 30 + (Minecraft.getMinecraft().fontRenderer.FONT_HEIGHT + 2) * 3 && mouseY < 30 + (Minecraft.getMinecraft().fontRenderer.FONT_HEIGHT + 2) * 3 + 20) { //Inside the whitelisted biomes
             List<String> biomes = new ArrayList<>();
-            biomes.add(TextFormatting.UNDERLINE + "Blacklisted Biomes");
+            biomes.add(TextFormatting.UNDERLINE + new TextComponentTranslation("text.industrialforegoing.tooltip.blacklisted_biomes").getUnformattedText());
             if (entryExtended.getRarities().get(pointer).getBlacklist().isEmpty()) biomes.add("- None");
             else {
                 entryExtended.getRarities().get(pointer).getBlacklist().forEach(biome -> biomes.add("- " + biome.getBiomeName()));

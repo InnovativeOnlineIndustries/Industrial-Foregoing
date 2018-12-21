@@ -65,6 +65,8 @@ text.industrialforegoing.tooltip.found_heat=Heat Source available
 text.industrialforegoing.tooltip.missing_heat=Missing hot source
 text.industrialforegoing.tooltip.found_cold=Cold Source available
 text.industrialforegoing.tooltip.missing_cold=Missing cold source
+text.industrialforegoing.tooltip.whitelisted_biomes=Whitelisted Biomes
+text.industrialforegoing.tooltip.blacklisted_biomes=Blacklisted Biomes
 
 text.industrialforegoing.direction=Direction:
 text.industrialforegoing.up=Up
@@ -76,6 +78,10 @@ text.industrialforegoing.south=South
 text.industrialforegoing.action=Action:
 text.industrialforegoing.push=Push
 text.industrialforegoing.pull=Pull
+text.industrialforegoing.maxy=Max Y:
+text.industrialforegoing.miny=Min Y:
+text.industrialforegoing.weight=Weight:
+text.industrialforegoing.biomes=Biomes
 
 text.industrialforegoing.leaf_shearing_addon=* Accepts Leaf Shearing Addon
 text.industrialforegoing.can_harvest=* Can harvest:
