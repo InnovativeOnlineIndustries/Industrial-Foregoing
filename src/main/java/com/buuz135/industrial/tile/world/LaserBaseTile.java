@@ -30,9 +30,7 @@ import com.buuz135.industrial.proxy.client.infopiece.LaserBaseInfoPiece;
 import com.buuz135.industrial.proxy.client.infopiece.TextInfoPiece;
 import com.buuz135.industrial.tile.CustomColoredItemHandler;
 import com.buuz135.industrial.tile.CustomSidedTileEntity;
-import com.buuz135.industrial.tile.misc.ItemSplitterTile;
 import com.buuz135.industrial.utils.ItemStackWeightedItem;
-
 import net.minecraft.item.EnumDyeColor;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -46,13 +44,11 @@ import net.ndrei.teslacorelib.gui.BasicTeslaGuiContainer;
 import net.ndrei.teslacorelib.gui.IGuiContainerPiece;
 import net.ndrei.teslacorelib.inventory.SyncProviderLevel;
 import net.ndrei.teslacorelib.netsync.SimpleNBTMessage;
-
-import java.util.ArrayList;
-import java.util.LinkedList;
-import java.util.List;
-
 import org.jetbrains.annotations.Nullable;
 import org.lwjgl.input.Keyboard;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class LaserBaseTile extends CustomSidedTileEntity implements IHasDisplayString {
 
@@ -119,8 +115,6 @@ public class LaserBaseTile extends CustomSidedTileEntity implements IHasDisplayS
         List<IGuiContainerPiece> pieces = super.getGuiContainerPieces(container);
         pieces.add(new LaserBaseInfoPiece(this, 10, 25));
         
-        pieces.add(new TextInfoPiece(this, 1, 132, 87));
-        
         pieces.add(new ArrowInfoPiece(153, 85, 1, 104, "text.industrialforegoing.button.increase_depth") {
         	@Override
             protected void clicked() {
@@ -145,7 +139,7 @@ public class LaserBaseTile extends CustomSidedTileEntity implements IHasDisplayS
                 }
             }
         });
-        
+        pieces.add(new TextInfoPiece(this, 1, 132, 87));
         return pieces;
     }
     
