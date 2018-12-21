@@ -29,7 +29,6 @@ import com.buuz135.industrial.tile.api.IAcceptsFortuneAddon;
 import com.buuz135.industrial.utils.ItemStackUtils;
 import com.buuz135.industrial.utils.WorkUtils;
 import com.robrit.moofluids.common.entity.EntityFluidCow;
-
 import net.minecraft.entity.passive.EntityAnimal;
 import net.minecraft.entity.passive.EntitySquid;
 import net.minecraft.init.Items;
@@ -97,10 +96,10 @@ public class AnimalResourceHarvesterTile extends WorkingAreaElectricMachine impl
             }
             //Check if the animal is a Fluid Cow from moofluids. If the cow has a different
             //fluid than what is in the tank, skip it
-            if (tank.getFluidAmount() <= 7000 && 
-            		!(Loader.isModLoaded("moofluids") && tank.getFluidAmount() > 0 && 
-            		living instanceof EntityFluidCow &&
-            			((EntityFluidCow)living).getEntityFluid() != tank.getFluid().getFluid())) {
+            if (tank.getFluidAmount() <= 7000 &&
+                    !(Loader.isModLoaded("moofluids") && tank.getFluidAmount() > 0 &&
+                            living instanceof EntityFluidCow &&
+                            ((EntityFluidCow) living).getEntityFluid() != tank.getFluid().getFluid())) {
                 FakePlayer player = IndustrialForegoing.getFakePlayer(this.world);
                 player.setPosition(living.posX, living.posY, living.posZ);
                 player.setHeldItem(EnumHand.MAIN_HAND, new ItemStack(Items.BUCKET));

@@ -68,11 +68,7 @@ public class IndustrialForegoingHelper {
      * @return true if it is added, false if don't.
      */
     public static boolean addLaserDrillEntry(LaserDrillEntry entry) {
-        if (LaserDrillEntry.LASER_DRILL_ENTRIES.stream().noneMatch(entry1 -> entry1.getStack().isItemEqual(entry.getStack()))) {
-            LaserDrillEntry.LASER_DRILL_ENTRIES.add(entry);
-            return true;
-        }
-        return false;
+        throw new UnsupportedOperationException("Deprecated API Method since v1.12.0, use the new config for the Laser Drill located in config/laser_drill_ores");
     }
 
     /**
@@ -82,7 +78,7 @@ public class IndustrialForegoingHelper {
      * @return true if it is removed, false if don't.
      */
     public static boolean removeLaserDrillEntry(ItemStack stack) {
-        return LaserDrillEntry.LASER_DRILL_ENTRIES.removeIf(entry -> entry.getStack().isItemEqual(stack));
+        throw new UnsupportedOperationException("Deprecated API Method since v1.12.0, use the new config for the Laser Drill located in config/laser_drill_ores");
     }
 
     /**

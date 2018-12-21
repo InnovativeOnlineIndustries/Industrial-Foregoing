@@ -24,27 +24,37 @@ package com.buuz135.industrial.tile.world;
 import com.buuz135.industrial.api.recipe.LaserDrillEntry;
 import com.buuz135.industrial.item.LaserLensItem;
 import com.buuz135.industrial.proxy.BlockRegistry;
+import com.buuz135.industrial.proxy.client.infopiece.ArrowInfoPiece;
+import com.buuz135.industrial.proxy.client.infopiece.IHasDisplayString;
 import com.buuz135.industrial.proxy.client.infopiece.LaserBaseInfoPiece;
+import com.buuz135.industrial.proxy.client.infopiece.TextInfoPiece;
 import com.buuz135.industrial.tile.CustomColoredItemHandler;
 import com.buuz135.industrial.tile.CustomSidedTileEntity;
 import com.buuz135.industrial.utils.ItemStackWeightedItem;
+import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.item.EnumDyeColor;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagInt;
 import net.minecraft.util.WeightedRandom;
+import net.minecraft.util.text.TextFormatting;
 import net.minecraftforge.items.ItemHandlerHelper;
 import net.minecraftforge.items.ItemStackHandler;
+import net.ndrei.teslacorelib.TeslaCoreLib;
 import net.ndrei.teslacorelib.gui.BasicTeslaGuiContainer;
 import net.ndrei.teslacorelib.gui.IGuiContainerPiece;
 import net.ndrei.teslacorelib.inventory.SyncProviderLevel;
+import net.ndrei.teslacorelib.netsync.SimpleNBTMessage;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class LaserBaseTile extends CustomSidedTileEntity {
+public class LaserBaseTile extends CustomSidedTileEntity implements IHasDisplayString {
 
     private static String NBT_CURRENT = "currentWork";
+
+    private int depth;
 
     private int currentWork;
     private ItemStackHandler outItems;
@@ -53,6 +63,8 @@ public class LaserBaseTile extends CustomSidedTileEntity {
     public LaserBaseTile() {
         super(LaserBaseTile.class.getName().hashCode());
         currentWork = 0;
+        depth = 0;
+        registerSyncIntPart("Depth", nbtTagInt -> depth = nbtTagInt.getInt(), () -> new NBTTagInt(depth), SyncProviderLevel.GUI);
     }
 
     @Override
@@ -102,7 +114,56 @@ public class LaserBaseTile extends CustomSidedTileEntity {
     public List<IGuiContainerPiece> getGuiContainerPieces(BasicTeslaGuiContainer container) {
         List<IGuiContainerPiece> pieces = super.getGuiContainerPieces(container);
         pieces.add(new LaserBaseInfoPiece(this, 10, 25));
+
+        pieces.add(new ArrowInfoPiece(153, 85, 1, 104, "text.industrialforegoing.button.increase_depth") {
+            @Override
+            protected void clicked() {
+                if (TeslaCoreLib.INSTANCE.isClientSide()) {
+                    if (GuiScreen.isShiftKeyDown()) {
+                        LaserBaseTile.this.sendToServer(LaserBaseTile.this.setupSpecialNBTMessage("DEPTH_INCREASE_10"));
+                    } else {
+                        LaserBaseTile.this.sendToServer(LaserBaseTile.this.setupSpecialNBTMessage("DEPTH_INCREASE"));
+                    }
+                }
+            }
+        });
+        pieces.add(new ArrowInfoPiece(117, 85, 16, 104, "text.industrialforegoing.button.decrease_depth") {
+            @Override
+            protected void clicked() {
+                if (TeslaCoreLib.INSTANCE.isClientSide()) {
+                    if (GuiScreen.isShiftKeyDown()) {
+                        LaserBaseTile.this.sendToServer(LaserBaseTile.this.setupSpecialNBTMessage("DEPTH_DECREASE_10"));
+                    } else {
+                        LaserBaseTile.this.sendToServer(LaserBaseTile.this.setupSpecialNBTMessage("DEPTH_DECREASE"));
+                    }
+                }
+            }
+        });
+        pieces.add(new TextInfoPiece(this, 1, 132, 87));
         return pieces;
+    }
+
+    @Nullable
+    @Override
+    protected SimpleNBTMessage processClientMessage(String messageType, NBTTagCompound compound) {
+        super.processClientMessage(messageType, compound);
+        if (messageType.equals("DEPTH_INCREASE_10")) {
+            depth = Math.min(depth + 10, 255);
+            partialSync("Depth", true);
+        }
+        if (messageType.equals("DEPTH_INCREASE")) {
+            depth = Math.min(depth + 1, 255);
+            partialSync("Depth", true);
+        }
+        if (messageType.equals("DEPTH_DECREASE_10")) {
+            depth = Math.max(depth - 10, 0);
+            partialSync("Depth", true);
+        }
+        if (messageType.equals("DEPTH_DECREASE")) {
+            depth = Math.max(depth - 1, 0);
+            partialSync("Depth", true);
+        }
+        return null;
     }
 
     @Override
@@ -110,20 +171,38 @@ public class LaserBaseTile extends CustomSidedTileEntity {
         if (this.world.isRemote) return;
         if (currentWork >= getMaxWork()) {
             List<ItemStackWeightedItem> items = new ArrayList<>();
-            LaserDrillEntry.LASER_DRILL_ENTRIES.forEach(entry -> {
-                int increase = 0;
-                for (int i = 0; i < lensItems.getSlots(); ++i) {
-                    if (!lensItems.getStackInSlot(i).isEmpty() && lensItems.getStackInSlot(i).getMetadata() == entry.getLaserMeta() && lensItems.getStackInSlot(i).getItem() instanceof LaserLensItem) {
-                        if (((LaserLensItem) lensItems.getStackInSlot(i).getItem()).isInverted())
-                            increase -= BlockRegistry.laserBaseBlock.getLenseChanceIncrease();
-                        else increase += BlockRegistry.laserBaseBlock.getLenseChanceIncrease();
+            LaserDrillEntry.LASER_DRILL_ENTRIES[this.depth].forEach(entry -> {
+                if (
+                        entry.getWhitelist().isEmpty() ||
+                                entry.getWhitelist().contains(this.getWorld().getBiome(this.getPos()))
+                ) {
+                    if (!entry.getBlacklist().contains(this.getWorld().getBiome(this.getPos()))) {
+                        int increase = 0;
+                        for (int i = 0; i < lensItems.getSlots(); ++i) {
+                            if (
+                                    !lensItems.getStackInSlot(i).isEmpty()
+                                            &&
+                                            lensItems.getStackInSlot(i).getMetadata() == entry.getLaserMeta()
+                                            &&
+                                            lensItems.getStackInSlot(i).getItem() instanceof LaserLensItem
+                            ) {
+                                if (((LaserLensItem) lensItems.getStackInSlot(i).getItem()).isInverted()) {
+                                    increase -= BlockRegistry.laserBaseBlock.getLenseChanceIncrease();
+                                } else {
+                                    increase += BlockRegistry.laserBaseBlock.getLenseChanceIncrease();
+                                }
+                            }
+                            items.add(new ItemStackWeightedItem(entry.getStack(), entry.getWeight() + increase));
+                        }
                     }
                 }
-                items.add(new ItemStackWeightedItem(entry.getStack(), entry.getWeight() + increase));
             });
-            ItemStack stack = WeightedRandom.getRandomItem(this.world.rand, items).getStack().copy();
-            if (ItemHandlerHelper.insertItem(outItems, stack, true).isEmpty()) {
-                ItemHandlerHelper.insertItem(outItems, stack, false);
+
+            if (!items.isEmpty()) {
+                ItemStack stack = WeightedRandom.getRandomItem(this.world.rand, items).getStack().copy();
+                if (ItemHandlerHelper.insertItem(outItems, stack, true).isEmpty()) {
+                    ItemHandlerHelper.insertItem(outItems, stack, false);
+                }
             }
             currentWork = 0;
         }
@@ -133,17 +212,24 @@ public class LaserBaseTile extends CustomSidedTileEntity {
     public void readFromNBT(NBTTagCompound compound) {
         super.readFromNBT(compound);
         currentWork = 0;
+        depth = 0;
         if (compound.hasKey(NBT_CURRENT)) currentWork = compound.getInteger(NBT_CURRENT);
+        if (compound.hasKey("Depth")) depth = compound.getInteger("Depth");
     }
 
     @Override
     public NBTTagCompound writeToNBT(NBTTagCompound compound) {
         compound.setInteger(NBT_CURRENT, currentWork);
+        compound.setInteger("Depth", depth);
         return super.writeToNBT(compound);
     }
 
     public int getCurrentWork() {
         return currentWork;
+    }
+
+    public int getDepth() {
+        return depth;
     }
 
     public int getMaxWork() {
@@ -168,5 +254,10 @@ public class LaserBaseTile extends CustomSidedTileEntity {
     @Override
     protected boolean supportsAddons() {
         return false;
+    }
+
+    @Override
+    public String getString(int id) {
+        return "" + TextFormatting.DARK_GRAY + this.getDepth();
     }
 }

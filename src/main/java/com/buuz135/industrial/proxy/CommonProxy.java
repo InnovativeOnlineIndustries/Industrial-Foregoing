@@ -22,6 +22,7 @@
 package com.buuz135.industrial.proxy;
 
 import com.buuz135.industrial.IndustrialForegoing;
+import com.buuz135.industrial.api.recipe.LaserDrillEntry;
 import com.buuz135.industrial.config.CustomConfiguration;
 import com.buuz135.industrial.entity.EntityPinkSlime;
 import com.buuz135.industrial.gui.GuiHandler;
@@ -56,6 +57,7 @@ import net.minecraftforge.fml.common.registry.EntityRegistry;
 import net.minecraftforge.fml.relauncher.Side;
 
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.InputStreamReader;
 import java.net.URL;
 import java.util.ArrayList;
@@ -65,8 +67,8 @@ import java.util.Random;
 
 public class CommonProxy {
 
-    public static Random random;
     public static final String CONTRIBUTORS_FILE = "https://raw.githubusercontent.com/Buuz135/Industrial-Foregoing/master/contributors.json";
+    public static Random random;
     public static List<String> CONTRIBUTORS = new ArrayList<>();
 
     public static DamageSource custom = new DamageSource("if_custom") {
@@ -98,7 +100,6 @@ public class CommonProxy {
 
     public void init() {
         RecipeHandlers.loadBioReactorEntries();
-        RecipeHandlers.loadLaserLensEntries();
         RecipeHandlers.loadSludgeRefinerEntries();
         RecipeHandlers.loadProteinReactorEntries();
         RecipeHandlers.loadFluidDictionaryEntries();
@@ -106,18 +107,24 @@ public class CommonProxy {
         RecipeHandlers.loadOreEntries();
     }
 
+    public static File configFolder;
+
     public void postInit() {
         CraftingUtils.generateCrushedRecipes();
         BlockRegistry.createRecipes();
         ItemRegistry.createRecipes();
         RecipeUtils.generateConstants();
         RecipeHandlers.executeCraftweakerActions();
+        LaserDrillEntry.loadLaserConfigs(configFolder);
 
         ItemRegistry.itemInfinityDrill.configuration(CustomConfiguration.config);
         if (CustomConfiguration.config.hasChanged()) CustomConfiguration.config.save();
     }
 
     public void preInit(FMLPreInitializationEvent event) {
+        configFolder = event.getModConfigurationDirectory();
+        LaserDrillEntry.addOreFile(new ResourceLocation(Reference.MOD_ID, "default_ores.json"));
+
         IFRegistries.poke();
 
         CraftingHelper.register(new ResourceLocation(Reference.MOD_ID, "configuration_value"), new ConfigurationConditionFactory());

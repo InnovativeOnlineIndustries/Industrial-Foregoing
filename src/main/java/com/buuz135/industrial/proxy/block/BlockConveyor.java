@@ -74,12 +74,10 @@ import java.util.List;
 
 public class BlockConveyor extends BlockBase {
 
-    private static String[] dyes = {"Black", "Red", "Green", "Brown", "Blue", "Purple", "Cyan", "LightGray", "Gray", "Pink", "Lime", "Yellow", "LightBlue", "Magenta", "Orange", "White"};
-
     public static final PropertyDirection FACING = BlockHorizontal.FACING;
     public static final PropertyEnum<EnumType> TYPE = PropertyEnum.create("type", EnumType.class);
     public static final PropertyEnum<EnumSides> SIDES = PropertyEnum.create("sides", EnumSides.class);
-
+    private static String[] dyes = {"Black", "Red", "Green", "Brown", "Blue", "Purple", "Cyan", "LightGray", "Gray", "Pink", "Lime", "Yellow", "LightBlue", "Magenta", "Orange", "White"};
     private ConveyorItem item;
 
     public BlockConveyor() {
@@ -481,6 +479,15 @@ public class BlockConveyor extends BlockBase {
             this.fast = fast;
         }
 
+        public static EnumType getFromName(String name) {
+            for (EnumType type : EnumType.values()) {
+                if (type.getName().equalsIgnoreCase(name)) {
+                    return type;
+                }
+            }
+            return FLAT;
+        }
+
         public boolean isFast() {
             return fast;
         }
@@ -533,15 +540,6 @@ public class BlockConveyor extends BlockBase {
         @Override
         public String getName() {
             return this.toString().toLowerCase();
-        }
-
-        public static EnumType getFromName(String name) {
-            for (EnumType type : EnumType.values()) {
-                if (type.getName().equalsIgnoreCase(name)) {
-                    return type;
-                }
-            }
-            return FLAT;
         }
 
     }
