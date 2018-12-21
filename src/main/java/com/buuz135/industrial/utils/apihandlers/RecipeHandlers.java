@@ -51,6 +51,7 @@ public class RecipeHandlers {
     public static final LinkedListMultimap<CTAction, ProteinReactorEntry> PROTEIN_REACTOR_ENTRIES = LinkedListMultimap.create();
     public static final LinkedListMultimap<CTAction, FluidDictionaryEntry> FLUID_DICTIONARY_ENTRIES = LinkedListMultimap.create();
     public static final LinkedListMultimap<CTAction, ExtractorEntry> EXTRACTOR_ENTRIES = LinkedListMultimap.create();
+    private static final String[] ORE_PREFIXES = new String[]{"ore", "oreNether", "oreEnd"};
 
     public static void loadBioReactorEntries() {
         IndustrialForegoingHelper.addBioReactorEntry(new BioReactorEntry(new ItemStack(Items.WHEAT_SEEDS)));
@@ -192,8 +193,6 @@ public class RecipeHandlers {
         IndustrialForegoingHelper.addFluidDictionaryEntry(new FluidDictionaryEntry(fluidInput, fluidOutput, ratio));
         IndustrialForegoingHelper.addFluidDictionaryEntry(new FluidDictionaryEntry(fluidOutput, fluidInput, 1 / ratio));
     }
-
-    private static final String[] ORE_PREFIXES = new String[] {"ore", "oreNether", "oreEnd"};
 
     public static void checkAndAddLaserDrill(int meta, String oreDict, int totalWeight) {
         List<ItemStack> allVariants = new ArrayList<>(ORE_PREFIXES.length);

@@ -65,8 +65,8 @@ import java.util.Random;
 
 public class CommonProxy {
 
-    public static Random random;
     public static final String CONTRIBUTORS_FILE = "https://raw.githubusercontent.com/Buuz135/Industrial-Foregoing/master/contributors.json";
+    public static Random random;
     public static List<String> CONTRIBUTORS = new ArrayList<>();
 
     public static DamageSource custom = new DamageSource("if_custom") {

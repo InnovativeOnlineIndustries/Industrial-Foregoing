@@ -38,16 +38,15 @@
           "2": "industrialforegoing:blocks/conveyor_color_inverted"
         }
       },
-      "up_fast":{
+      "up_fast": {
         "model": "industrialforegoing:conveyor_ramp_inverted",
         "textures": {
           "2": "industrialforegoing:blocks/conveyor_color_inverted_fast"
         }
       }
     },
-    "sides":{
-      "none":{
-
+    "sides": {
+      "none": {
       },
       "left": {
         "model": "industrialforegoing:conveyornol"
@@ -55,7 +54,7 @@
       "right": {
         "model": "industrialforegoing:conveyornor"
       },
-      "both":{
+      "both": {
         "model": "industrialforegoing:conveyornos"
       }
     }
