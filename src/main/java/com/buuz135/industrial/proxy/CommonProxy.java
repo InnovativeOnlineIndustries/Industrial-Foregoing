@@ -66,8 +66,8 @@ import java.util.Random;
 
 public class CommonProxy {
 
-    public static Random random;
     public static final String CONTRIBUTORS_FILE = "https://raw.githubusercontent.com/Buuz135/Industrial-Foregoing/master/contributors.json";
+    public static Random random;
     public static List<String> CONTRIBUTORS = new ArrayList<>();
 
     public static DamageSource custom = new DamageSource("if_custom") {
@@ -118,9 +118,9 @@ public class CommonProxy {
     }
 
     public void preInit(FMLPreInitializationEvent event) {
-    	
-    	LaserDrillEntry.addOreFile(new ResourceLocation(Reference.MOD_ID,"default_ores.json"));
-    	
+
+        LaserDrillEntry.addOreFile(new ResourceLocation(Reference.MOD_ID, "default_ores.json"));
+
         IFRegistries.poke();
 
         CraftingHelper.register(new ResourceLocation(Reference.MOD_ID, "configuration_value"), new ConfigurationConditionFactory());
@@ -128,7 +128,7 @@ public class CommonProxy {
 
         FluidsRegistry.registerFluids();
         BlockRegistry.poke();
-        
+
         MinecraftForge.EVENT_BUS.register(new BlockRegistry());
         MinecraftForge.EVENT_BUS.register(new ItemRegistry());
         MinecraftForge.EVENT_BUS.register(new StrawRegistry());
@@ -140,7 +140,7 @@ public class CommonProxy {
         MinecraftForge.EVENT_BUS.register(new FakePlayerRideEntityHandler());
         MinecraftForge.EVENT_BUS.register(new PlantInteractorHarvestDropsHandler());
         MinecraftForge.EVENT_BUS.register(new SkullHandler());
-        
+
         LaserDrillEntry.loadLaserConfigs(event);
 
         NetworkRegistry.INSTANCE.registerGuiHandler(IndustrialForegoing.instance, new GuiHandler());

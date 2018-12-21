@@ -23,10 +23,6 @@ package com.buuz135.industrial.proxy.client.infopiece;
 
 import com.buuz135.industrial.proxy.client.ClientProxy;
 import com.buuz135.industrial.tile.world.LaserBaseTile;
-
-import io.netty.util.ResourceLeakDetector.Level;
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.util.text.TextComponentTranslation;
 import net.ndrei.teslacorelib.gui.BasicRenderedGuiPiece;
 import net.ndrei.teslacorelib.gui.BasicTeslaGuiContainer;

@@ -53,7 +53,7 @@ import java.util.List;
 public class LaserBaseTile extends CustomSidedTileEntity implements IHasDisplayString {
 
     private static String NBT_CURRENT = "currentWork";
-    
+
     private int depth;
 
     private int currentWork;
@@ -114,35 +114,35 @@ public class LaserBaseTile extends CustomSidedTileEntity implements IHasDisplayS
     public List<IGuiContainerPiece> getGuiContainerPieces(BasicTeslaGuiContainer container) {
         List<IGuiContainerPiece> pieces = super.getGuiContainerPieces(container);
         pieces.add(new LaserBaseInfoPiece(this, 10, 25));
-        
+
         pieces.add(new ArrowInfoPiece(153, 85, 1, 104, "text.industrialforegoing.button.increase_depth") {
-        	@Override
+            @Override
             protected void clicked() {
                 if (TeslaCoreLib.INSTANCE.isClientSide()) {
                     if (GuiScreen.isShiftKeyDown()) {
-                		LaserBaseTile.this.sendToServer(LaserBaseTile.this.setupSpecialNBTMessage("DEPTH_INCREASE_10"));
-                	} else{
-                		LaserBaseTile.this.sendToServer(LaserBaseTile.this.setupSpecialNBTMessage("DEPTH_INCREASE"));
-                	}
+                        LaserBaseTile.this.sendToServer(LaserBaseTile.this.setupSpecialNBTMessage("DEPTH_INCREASE_10"));
+                    } else {
+                        LaserBaseTile.this.sendToServer(LaserBaseTile.this.setupSpecialNBTMessage("DEPTH_INCREASE"));
+                    }
                 }
             }
         });
         pieces.add(new ArrowInfoPiece(117, 85, 16, 104, "text.industrialforegoing.button.decrease_depth") {
-        	@Override
+            @Override
             protected void clicked() {
                 if (TeslaCoreLib.INSTANCE.isClientSide()) {
                     if (GuiScreen.isShiftKeyDown()) {
-                		LaserBaseTile.this.sendToServer(LaserBaseTile.this.setupSpecialNBTMessage("DEPTH_DECREASE_10"));
-                	} else{
-                		LaserBaseTile.this.sendToServer(LaserBaseTile.this.setupSpecialNBTMessage("DEPTH_DECREASE"));
-                	}
+                        LaserBaseTile.this.sendToServer(LaserBaseTile.this.setupSpecialNBTMessage("DEPTH_DECREASE_10"));
+                    } else {
+                        LaserBaseTile.this.sendToServer(LaserBaseTile.this.setupSpecialNBTMessage("DEPTH_DECREASE"));
+                    }
                 }
             }
         });
         pieces.add(new TextInfoPiece(this, 1, 132, 87));
         return pieces;
     }
-    
+
     @Nullable
     @Override
     protected SimpleNBTMessage processClientMessage(String messageType, NBTTagCompound compound) {
@@ -170,40 +170,40 @@ public class LaserBaseTile extends CustomSidedTileEntity implements IHasDisplayS
     protected void innerUpdate() {
         if (this.world.isRemote) return;
         if (currentWork >= getMaxWork()) {
-        	List<ItemStackWeightedItem> items = new ArrayList<>();
-        	LaserDrillEntry.LASER_DRILL_ENTRIES[this.depth].forEach(entry -> {
-        		if(
-        			entry.getWhitelist().isEmpty() ||
-        			entry.getWhitelist().contains(this.getWorld().getBiome(this.getPos()))
-        		){
-        			if(!entry.getBlacklist().contains(this.getWorld().getBiome(this.getPos()))){
-        				int increase = 0;
-        	            for (int i = 0; i < lensItems.getSlots(); ++i) {
-        	            	if (
-        	            		!lensItems.getStackInSlot(i).isEmpty()
-        	            		&&
-        	            		lensItems.getStackInSlot(i).getMetadata() == entry.getLaserMeta()
-        	            		&&
-        	            		lensItems.getStackInSlot(i).getItem() instanceof LaserLensItem
-        	            	) {
-        	            		 if (((LaserLensItem) lensItems.getStackInSlot(i).getItem()).isInverted()){
-        	            			 increase -= BlockRegistry.laserBaseBlock.getLenseChanceIncrease();
-        	            		 }else{
-        	            			 increase += BlockRegistry.laserBaseBlock.getLenseChanceIncrease();
-        	            		 }
-        	                }
-        	                items.add(new ItemStackWeightedItem(entry.getStack(), entry.getWeight() + increase));
-        	             }
-        			}
-        		}
-        	});
-        	
-        	if(!items.isEmpty()){
-        		ItemStack stack = WeightedRandom.getRandomItem(this.world.rand, items).getStack().copy();
-        		if (ItemHandlerHelper.insertItem(outItems, stack, true).isEmpty()) {
+            List<ItemStackWeightedItem> items = new ArrayList<>();
+            LaserDrillEntry.LASER_DRILL_ENTRIES[this.depth].forEach(entry -> {
+                if (
+                        entry.getWhitelist().isEmpty() ||
+                                entry.getWhitelist().contains(this.getWorld().getBiome(this.getPos()))
+                ) {
+                    if (!entry.getBlacklist().contains(this.getWorld().getBiome(this.getPos()))) {
+                        int increase = 0;
+                        for (int i = 0; i < lensItems.getSlots(); ++i) {
+                            if (
+                                    !lensItems.getStackInSlot(i).isEmpty()
+                                            &&
+                                            lensItems.getStackInSlot(i).getMetadata() == entry.getLaserMeta()
+                                            &&
+                                            lensItems.getStackInSlot(i).getItem() instanceof LaserLensItem
+                            ) {
+                                if (((LaserLensItem) lensItems.getStackInSlot(i).getItem()).isInverted()) {
+                                    increase -= BlockRegistry.laserBaseBlock.getLenseChanceIncrease();
+                                } else {
+                                    increase += BlockRegistry.laserBaseBlock.getLenseChanceIncrease();
+                                }
+                            }
+                            items.add(new ItemStackWeightedItem(entry.getStack(), entry.getWeight() + increase));
+                        }
+                    }
+                }
+            });
+
+            if (!items.isEmpty()) {
+                ItemStack stack = WeightedRandom.getRandomItem(this.world.rand, items).getStack().copy();
+                if (ItemHandlerHelper.insertItem(outItems, stack, true).isEmpty()) {
                     ItemHandlerHelper.insertItem(outItems, stack, false);
                 }
-        	}
+            }
             currentWork = 0;
         }
     }
@@ -227,9 +227,9 @@ public class LaserBaseTile extends CustomSidedTileEntity implements IHasDisplayS
     public int getCurrentWork() {
         return currentWork;
     }
-    
-    public int getDepth(){
-    	return depth;
+
+    public int getDepth() {
+        return depth;
     }
 
     public int getMaxWork() {
@@ -256,8 +256,8 @@ public class LaserBaseTile extends CustomSidedTileEntity implements IHasDisplayS
         return false;
     }
 
-	@Override
-	public String getString(int id) {
-		return "" + TextFormatting.DARK_GRAY + this.getDepth();
-	}
+    @Override
+    public String getString(int id) {
+        return "" + TextFormatting.DARK_GRAY + this.getDepth();
+    }
 }
