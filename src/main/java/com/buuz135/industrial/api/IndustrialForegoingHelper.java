@@ -61,7 +61,6 @@ public class IndustrialForegoingHelper {
         return BioReactorEntry.BIO_REACTOR_ENTRIES.removeIf(entry -> entry.doesStackMatch(stack));
     }
 
-    //TODO This will be replaced with config modification.
     /**
      * Adds a new LaserEntry entry that wasn't already there.
      *
@@ -69,14 +68,9 @@ public class IndustrialForegoingHelper {
      * @return true if it is added, false if don't.
      */
     public static boolean addLaserDrillEntry(LaserDrillEntry entry) {
-        //if (LaserDrillEntry.LASER_DRILL_ENTRIES.stream().noneMatch(entry1 -> entry1.getStack().isItemEqual(entry.getStack()))) {
-        //    LaserDrillEntry.LASER_DRILL_ENTRIES.add(entry);
-        //    return true;
-        //}
-        return false;
+        throw new UnsupportedOperationException("Deprecated API Method since v1.12.0, use the new config for the Laser Drill located in config/laser_drill_ores");
     }
 
-    //TODO This will be replaced with config modification.
     /**
      * Removes a LaserDrill entry.
      *
@@ -84,8 +78,7 @@ public class IndustrialForegoingHelper {
      * @return true if it is removed, false if don't.
      */
     public static boolean removeLaserDrillEntry(ItemStack stack) {
-    	return false;
-        //return LaserDrillEntry.LASER_DRILL_ENTRIES.removeIf(entry -> entry.getStack().isItemEqual(stack));
+        throw new UnsupportedOperationException("Deprecated API Method since v1.12.0, use the new config for the Laser Drill located in config/laser_drill_ores");
     }
 
     /**

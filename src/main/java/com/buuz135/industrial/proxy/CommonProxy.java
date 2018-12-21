@@ -51,26 +51,18 @@ import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.config.Configuration;
 import net.minecraftforge.common.crafting.CraftingHelper;
 import net.minecraftforge.fml.common.Loader;
-import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 import net.minecraftforge.fml.common.network.NetworkRegistry;
 import net.minecraftforge.fml.common.registry.EntityRegistry;
 import net.minecraftforge.fml.relauncher.Side;
-import net.ndrei.teslacorelib.TeslaCoreLib;
 
 import java.io.BufferedReader;
-import java.io.File;
 import java.io.InputStreamReader;
 import java.net.URL;
-import java.nio.file.DirectoryStream;
-import java.nio.file.Files;
-import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Random;
-import java.util.stream.Stream;
 
 public class CommonProxy {
 
@@ -107,7 +99,6 @@ public class CommonProxy {
 
     public void init() {
         RecipeHandlers.loadBioReactorEntries();
-        RecipeHandlers.loadLaserLensEntries();
         RecipeHandlers.loadSludgeRefinerEntries();
         RecipeHandlers.loadProteinReactorEntries();
         RecipeHandlers.loadFluidDictionaryEntries();

@@ -23,7 +23,6 @@ package com.buuz135.industrial.utils.apihandlers.crafttweaker;
 
 import com.buuz135.industrial.api.recipe.LaserDrillEntry;
 import com.buuz135.industrial.utils.apihandlers.RecipeHandlers;
-import crafttweaker.CraftTweakerAPI;
 import crafttweaker.IAction;
 import crafttweaker.api.item.IItemStack;
 import net.minecraft.item.ItemStack;
@@ -35,14 +34,12 @@ public class CTLaserDrill {
 
     @ZenMethod
     public static void add(int meta, IItemStack output, int weight) {
-    	//TODO Laser drill entries through CraftTweaker temporarily(?) disabled.
-        //LaserDrillEntry entry = new LaserDrillEntry(meta, (ItemStack) output.getInternal(), weight);
-        //CraftTweakerAPI.apply(new Add(entry));
+        throw new UnsupportedOperationException("Deprecated API Method since v1.12.0, use the new config for the Laser Drill located in config/laser_drill_ores");
     }
 
     @ZenMethod
     public static void remove(IItemStack input) {
-        CraftTweakerAPI.apply(new Remove((ItemStack) input.getInternal()));
+        throw new UnsupportedOperationException("Deprecated API Method since v1.12.0, use the new config for the Laser Drill located in config/laser_drill_ores");
     }
 
     private static class Add implements IAction {
@@ -75,8 +72,7 @@ public class CTLaserDrill {
 
         @Override
         public void apply() {
-        	//TODO CraftTweaker integration temporarily (?) removed.
-            //RecipeHandlers.LASER_ENTRIES.put(CTAction.REMOVE, new LaserDrillEntry(0, stack, 0));
+
         }
 
         @Override

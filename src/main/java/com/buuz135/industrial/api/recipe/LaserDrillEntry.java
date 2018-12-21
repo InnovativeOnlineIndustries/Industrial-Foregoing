@@ -42,9 +42,6 @@ import java.util.LinkedList;
 import java.util.List;
 
 public class LaserDrillEntry {
-	
-	//TODO Get rid of this?
-	// Or use it to build the cache that I want.
 
 	public static List<ResourceLocation> default_files = null;
 	public static List<LaserDrillEntry> [] LASER_DRILL_ENTRIES;

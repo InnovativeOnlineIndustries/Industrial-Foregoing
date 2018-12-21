@@ -39,9 +39,7 @@ import net.minecraft.util.NonNullList;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.oredict.OreDictionary;
 
-import java.util.ArrayList;
 import java.util.Comparator;
-import java.util.List;
 
 public class RecipeHandlers {
 
@@ -94,10 +92,6 @@ public class RecipeHandlers {
             else IndustrialForegoingHelper.removeWoodToLatex(extractorEntry.getItemStack());
         });
         ExtractorEntry.EXTRACTOR_ENTRIES.sort(Comparator.comparingInt(o -> ((ExtractorEntry) o).getFluidStack().amount).reversed());
-    }
-
-    public static void loadLaserLensEntries() {
-    	//TODO Remove this?
     }
 
     public static void loadSludgeRefinerEntries() {
