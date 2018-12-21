@@ -93,7 +93,7 @@ public class ItemInfinityDrill extends IFCustomItem {
 
     @Override
     public boolean isEnchantable(ItemStack stack) {
-        return !stack.isItemEnchanted();
+        return true;
     }
 
     @Override
