@@ -39,9 +39,7 @@ import net.minecraft.util.NonNullList;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.oredict.OreDictionary;
 
-import java.util.ArrayList;
 import java.util.Comparator;
-import java.util.List;
 
 public class RecipeHandlers {
 
@@ -51,7 +49,6 @@ public class RecipeHandlers {
     public static final LinkedListMultimap<CTAction, ProteinReactorEntry> PROTEIN_REACTOR_ENTRIES = LinkedListMultimap.create();
     public static final LinkedListMultimap<CTAction, FluidDictionaryEntry> FLUID_DICTIONARY_ENTRIES = LinkedListMultimap.create();
     public static final LinkedListMultimap<CTAction, ExtractorEntry> EXTRACTOR_ENTRIES = LinkedListMultimap.create();
-    private static final String[] ORE_PREFIXES = new String[]{"ore", "oreNether", "oreEnd"};
 
     public static void loadBioReactorEntries() {
         IndustrialForegoingHelper.addBioReactorEntry(new BioReactorEntry(new ItemStack(Items.WHEAT_SEEDS)));
@@ -95,44 +92,6 @@ public class RecipeHandlers {
             else IndustrialForegoingHelper.removeWoodToLatex(extractorEntry.getItemStack());
         });
         ExtractorEntry.EXTRACTOR_ENTRIES.sort(Comparator.comparingInt(o -> ((ExtractorEntry) o).getFluidStack().amount).reversed());
-    }
-
-    public static void loadLaserLensEntries() {
-        checkAndAddLaserDrill(4, "Gold", 6);
-        checkAndAddLaserDrill(12, "Iron", 10);
-        checkAndAddLaserDrill(15, "Coal", 12);
-        checkAndAddLaserDrill(11, "Lapis", 8);
-        checkAndAddLaserDrill(3, "Diamond", 4);
-        checkAndAddLaserDrill(14, "Redstone", 6);
-        checkAndAddLaserDrill(0, "Quartz", 4);
-        checkAndAddLaserDrill(5, "Emerald", 2);
-        checkAndAddLaserDrill(13, "Uranium", 3);
-        checkAndAddLaserDrill(4, "Sulfur", 8);
-        checkAndAddLaserDrill(10, "Galena", 6);
-        checkAndAddLaserDrill(0, "Iridium", 2);
-        checkAndAddLaserDrill(14, "Ruby", 7);
-        checkAndAddLaserDrill(11, "Sapphire", 7);
-        checkAndAddLaserDrill(12, "Bauxite", 5);
-        checkAndAddLaserDrill(12, "Pyrite", 5);
-        checkAndAddLaserDrill(14, "Cinnabar", 8);
-        checkAndAddLaserDrill(15, "Tungsten", 3);
-        checkAndAddLaserDrill(0, "Sheldonite", 1);
-        checkAndAddLaserDrill(3, "Platinum", 2);
-        checkAndAddLaserDrill(13, "Peridot", 7);
-        checkAndAddLaserDrill(11, "Soladite", 4);
-        checkAndAddLaserDrill(14, "Tetrahedrite", 4);
-        checkAndAddLaserDrill(8, "Tin", 8);
-        checkAndAddLaserDrill(10, "Lead", 5);
-        checkAndAddLaserDrill(7, "Silver", 5);
-        checkAndAddLaserDrill(1, "Copper", 10);
-        checkAndAddLaserDrill(12, "Aluminum", 5);
-        checkAndAddLaserDrill(12, "Nickel", 4);
-        checkAndAddLaserDrill(10, "Draconium", 2);
-        checkAndAddLaserDrill(4, "Yellorium", 2);
-        checkAndAddLaserDrill(11, "Cobalt", 2);
-        checkAndAddLaserDrill(3, "Osmium", 4);
-        checkAndAddLaserDrill(4, "Ardite", 1);
-        IndustrialForegoingHelper.addLaserDrillEntry(new LaserDrillEntry(4, new ItemStack(Blocks.GLOWSTONE), 2));
     }
 
     public static void loadSludgeRefinerEntries() {
@@ -192,35 +151,6 @@ public class RecipeHandlers {
     public static void addFluidEntryDoubleDirectional(String fluidInput, String fluidOutput, double ratio) {
         IndustrialForegoingHelper.addFluidDictionaryEntry(new FluidDictionaryEntry(fluidInput, fluidOutput, ratio));
         IndustrialForegoingHelper.addFluidDictionaryEntry(new FluidDictionaryEntry(fluidOutput, fluidInput, 1 / ratio));
-    }
-
-    public static void checkAndAddLaserDrill(int meta, String oreDict, int totalWeight) {
-        List<ItemStack> allVariants = new ArrayList<>(ORE_PREFIXES.length);
-
-        for (String orePrefix : ORE_PREFIXES) {
-            NonNullList<ItemStack> stacks = getRealOredictedItems(orePrefix + oreDict);
-            if (stacks.size() > 0)
-                allVariants.add(stacks.get(0));
-        }
-
-        int size = allVariants.size();
-        if (size == 0)
-            return;
-
-        // If there's more than one ore we can produce, split the weight evenly among them all.
-        // If it doesn't divide exactly, give one extra to earlier ones.
-        // But no matter what, always give each one a weight of at least 1.
-        int baseWeight, extras;
-        if (totalWeight < size) {
-            baseWeight = 1;
-            extras = 0;
-        } else {
-            baseWeight = totalWeight / size;
-            extras = totalWeight % size;
-        }
-
-        for (ItemStack variant : allVariants)
-            IndustrialForegoingHelper.addLaserDrillEntry(new LaserDrillEntry(meta, variant, baseWeight + (--extras >= 0 ? 1 : 0)));
     }
 
     public static NonNullList<ItemStack> getRealOredictedItems(String oredit) {

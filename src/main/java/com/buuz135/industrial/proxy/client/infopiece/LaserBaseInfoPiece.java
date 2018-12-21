@@ -45,7 +45,6 @@ public class LaserBaseInfoPiece extends BasicRenderedGuiPiece {
         container.mc.getTextureManager().bindTexture(ClientProxy.GUI);
         double work = this.tile.getCurrentWork() / (double) this.tile.getMaxWork();
         container.drawTexturedRect(this.getLeft() + 3, (int) (this.getTop() + 3 + (50 - (50 * work))), 112, (int) (72 + (50 - (50 * work))), 12, (int) (work * 50));
-
     }
 
     @Override

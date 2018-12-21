@@ -60,7 +60,6 @@ import com.buuz135.industrial.tile.block.CustomOrientedBlock;
 import com.buuz135.industrial.tile.generator.PetrifiedFuelGeneratorTile;
 import com.buuz135.industrial.tile.world.MaterialStoneWorkFactoryTile;
 import com.buuz135.industrial.utils.CraftingUtils;
-import com.buuz135.industrial.utils.ItemStackWeightedItem;
 import mezz.jei.api.*;
 import mezz.jei.api.ingredients.IModIngredientRegistration;
 import mezz.jei.api.recipe.IFocus;
@@ -193,11 +192,8 @@ public class JEICustomPlugin implements IModPlugin {
             registry.addRecipeCatalyst(new ItemStack(BlockRegistry.proteinReactorBlock), proteinReactorRecipeCategory.getUid());
         }
         if (BlockRegistry.laserBaseBlock.isEnabled() || BlockRegistry.laserDrillBlock.isEnabled()) {
-            List<ItemStackWeightedItem> item = new ArrayList<>();
-            LaserDrillEntry.LASER_DRILL_ENTRIES.forEach(entry -> item.add(new ItemStackWeightedItem(entry.getStack(), entry.getWeight())));
-            final int laserMaxWeight = WeightedRandom.getTotalWeight(item);
             List<LaserRecipeWrapper> laserRecipeWrappers = new ArrayList<>();
-            LaserDrillEntry.LASER_DRILL_ENTRIES.forEach(entry -> laserRecipeWrappers.add(new LaserRecipeWrapper(new ItemStackWeightedItem(entry.getStack(), entry.getWeight()), laserMaxWeight, entry.getLaserMeta())));
+            LaserDrillEntry.LASER_DRILL_UNIQUE_VALUES.forEach(entry -> laserRecipeWrappers.add(new LaserRecipeWrapper(entry)));
             registry.addRecipes(laserRecipeWrappers, laserRecipeCategory.getUid());
             registry.addRecipeCatalyst(new ItemStack(BlockRegistry.laserDrillBlock), laserRecipeCategory.getUid());
             registry.addRecipeCatalyst(new ItemStack(BlockRegistry.laserBaseBlock), laserRecipeCategory.getUid());
