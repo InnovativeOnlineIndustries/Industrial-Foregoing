@@ -27,6 +27,7 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.google.gson.stream.JsonReader;
 import net.minecraft.client.Minecraft;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.biome.Biome;
@@ -150,22 +151,24 @@ public class LaserDrillEntry {
 			for(JsonElement o : head){
 				JsonObject ore = o.getAsJsonObject();
 
-				ItemStack item;
+                ItemStack itemStack;
                 String itemName = ore.getAsJsonPrimitive("item").getAsString();
                 if (itemName.startsWith("ore") && OreDictionary.doesOreNameExist(itemName)) {
-                    item = OreDictionary.getOres(itemName).get(0).copy();
+                    itemStack = OreDictionary.getOres(itemName).get(0).copy();
                 } else {
                     String[] item_strings = itemName.split(":");
                     ResourceLocation item_location = new ResourceLocation(item_strings[0], item_strings[1]);
+                    Item item = ForgeRegistries.ITEMS.getValue(item_location);
+                    if (item == null) continue;
                     if (item_strings.length > 2) {
-                        item = new ItemStack(ForgeRegistries.ITEMS.getValue(item_location), Integer.parseInt(item_strings[2]));
+                        itemStack = new ItemStack(item, 1, Integer.parseInt(item_strings[2]));
                     } else {
-                        item = new ItemStack(ForgeRegistries.ITEMS.getValue(item_location));
+                        itemStack = new ItemStack(item);
                     }
                 }
-				
+                if (itemStack.isEmpty()) continue;
+
 				int color = ore.getAsJsonPrimitive("color").getAsInt();
-				
 				JsonArray rarities = ore.getAsJsonArray("rarity");
 				for(JsonElement r : rarities){
 					JsonObject rarity_data = r.getAsJsonObject();
@@ -194,9 +197,9 @@ public class LaserDrillEntry {
 					int max_depth = rarity_data.get("depth_max").getAsInt();
 					
 					for(int d = min_depth; d <= max_depth; d++){
-						LASER_DRILL_ENTRIES[d].add(new LaserDrillEntry(color, item, amount, whitelist, blacklist));
+                        LASER_DRILL_ENTRIES[d].add(new LaserDrillEntry(color, itemStack, amount, whitelist, blacklist));
 					}
-                    findForOre(item, new LaserDrillEntryExtended(color, item)).getRarities().add(new OreRarity(amount, whitelist, blacklist, max_depth, min_depth));
+                    findForOre(itemStack, new LaserDrillEntryExtended(color, itemStack)).getRarities().add(new OreRarity(amount, whitelist, blacklist, max_depth, min_depth));
 				}
 			}
 			j.close();
