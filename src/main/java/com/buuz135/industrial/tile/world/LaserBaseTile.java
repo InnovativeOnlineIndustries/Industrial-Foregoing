@@ -31,6 +31,7 @@ import com.buuz135.industrial.proxy.client.infopiece.TextInfoPiece;
 import com.buuz135.industrial.tile.CustomColoredItemHandler;
 import com.buuz135.industrial.tile.CustomSidedTileEntity;
 import com.buuz135.industrial.utils.ItemStackWeightedItem;
+import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.item.EnumDyeColor;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -45,7 +46,6 @@ import net.ndrei.teslacorelib.gui.IGuiContainerPiece;
 import net.ndrei.teslacorelib.inventory.SyncProviderLevel;
 import net.ndrei.teslacorelib.netsync.SimpleNBTMessage;
 import org.jetbrains.annotations.Nullable;
-import org.lwjgl.input.Keyboard;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -119,7 +119,7 @@ public class LaserBaseTile extends CustomSidedTileEntity implements IHasDisplayS
         	@Override
             protected void clicked() {
                 if (TeslaCoreLib.INSTANCE.isClientSide()) {
-                	if (Keyboard.isKeyDown(Keyboard.KEY_LSHIFT) || Keyboard.isKeyDown(Keyboard.KEY_RSHIFT)) {
+                    if (GuiScreen.isShiftKeyDown()) {
                 		LaserBaseTile.this.sendToServer(LaserBaseTile.this.setupSpecialNBTMessage("DEPTH_INCREASE_10"));
                 	} else{
                 		LaserBaseTile.this.sendToServer(LaserBaseTile.this.setupSpecialNBTMessage("DEPTH_INCREASE"));
@@ -131,7 +131,7 @@ public class LaserBaseTile extends CustomSidedTileEntity implements IHasDisplayS
         	@Override
             protected void clicked() {
                 if (TeslaCoreLib.INSTANCE.isClientSide()) {
-                	if (Keyboard.isKeyDown(Keyboard.KEY_LSHIFT) || Keyboard.isKeyDown(Keyboard.KEY_RSHIFT)) {
+                    if (GuiScreen.isShiftKeyDown()) {
                 		LaserBaseTile.this.sendToServer(LaserBaseTile.this.setupSpecialNBTMessage("DEPTH_DECREASE_10"));
                 	} else{
                 		LaserBaseTile.this.sendToServer(LaserBaseTile.this.setupSpecialNBTMessage("DEPTH_DECREASE"));

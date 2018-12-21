@@ -21,6 +21,11 @@
  */
 package com.buuz135.industrial.api.recipe;
 
+import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
+import com.google.gson.stream.JsonReader;
 import net.minecraft.client.Minecraft;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
@@ -28,25 +33,13 @@ import net.minecraft.world.biome.Biome;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 import net.minecraftforge.fml.common.registry.ForgeRegistries;
 
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.FileReader;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
+import java.io.*;
 import java.nio.file.DirectoryStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
-
-import com.google.gson.JsonArray;
-import com.google.gson.JsonElement;
-import com.google.gson.JsonObject;
-import com.google.gson.JsonParser;
-import com.google.gson.stream.JsonReader;
 
 public class LaserDrillEntry {
 	
@@ -55,6 +48,7 @@ public class LaserDrillEntry {
 
 	public static List<ResourceLocation> default_files = null;
 	public static List<LaserDrillEntry> [] LASER_DRILL_ENTRIES;
+    public static List<LaserDrillEntryExtended> LASER_DRILL_UNIQUE_VALUES;
 
     private int laserMeta;
     private ItemStack stack;
@@ -138,7 +132,8 @@ public class LaserDrillEntry {
 		for(int i = 0; i < LASER_DRILL_ENTRIES.length; i++){
 			LASER_DRILL_ENTRIES[i] = new LinkedList<LaserDrillEntry>();
 		}
-		
+        LASER_DRILL_UNIQUE_VALUES = new ArrayList<>();
+
 		DirectoryStream<Path> ds;
         try{
         	ds = Files.newDirectoryStream(ores_path,"*.{json}");
@@ -177,13 +172,17 @@ public class LaserDrillEntry {
 					
 					String[] blacklist_strings = rarity_data.getAsJsonPrimitive("blacklist").getAsString().split(",");
 					for(int i = 0; i < blacklist_strings.length; i++){
-						blacklist.add(ForgeRegistries.BIOMES.getValue(new ResourceLocation(blacklist_strings[i].trim())));
+                        if (!blacklist_strings[i].isEmpty()) {
+                            Biome biome = ForgeRegistries.BIOMES.getValue(new ResourceLocation(blacklist_strings[i].trim()));
+                            if (biome != null) blacklist.add(biome);
+                        }
 					}
 					
 					String[] whitelist_strings = rarity_data.getAsJsonPrimitive("whitelist").getAsString().split(",");
 					for(int i = 0; i < whitelist_strings.length; i++){
 						if(!whitelist_strings[i].isEmpty()){
-							whitelist.add(ForgeRegistries.BIOMES.getValue(new ResourceLocation(whitelist_strings[i].trim())));
+                            Biome biome = ForgeRegistries.BIOMES.getValue(new ResourceLocation(whitelist_strings[i].trim()));
+                            if (biome != null) whitelist.add(biome);
 						}
 					}
 					
@@ -194,6 +193,7 @@ public class LaserDrillEntry {
 					for(int d = min_depth; d <= max_depth; d++){
 						LASER_DRILL_ENTRIES[d].add(new LaserDrillEntry(color, item, amount, whitelist, blacklist));
 					}
+                    findForOre(item, new LaserDrillEntryExtended(color, item)).getRarities().add(new OreRarity(amount, whitelist, blacklist, max_depth, min_depth));
 				}
 			}
 			j.close();
@@ -203,9 +203,78 @@ public class LaserDrillEntry {
 			e.printStackTrace();
 		}
 	}
-	
+
+    public static LaserDrillEntryExtended findForOre(ItemStack itemStack, LaserDrillEntryExtended defaultEntry) {
+        for (LaserDrillEntryExtended laserDrillUniqueValue : LASER_DRILL_UNIQUE_VALUES) {
+            if (itemStack.isItemEqual(laserDrillUniqueValue.getStack())) return laserDrillUniqueValue;
+        }
+        LASER_DRILL_UNIQUE_VALUES.add(defaultEntry);
+        return defaultEntry;
+    }
+
 	@Override
 	public String toString(){
 		return stack.getDisplayName();
 	}
+
+    public static class LaserDrillEntryExtended {
+        private int laserMeta;
+        private ItemStack stack;
+        private List<OreRarity> rarities;
+
+        public LaserDrillEntryExtended(int laserMeta, ItemStack stack) {
+            this.laserMeta = laserMeta;
+            this.stack = stack;
+            this.rarities = new ArrayList<>();
+        }
+
+        public int getLaserMeta() {
+            return laserMeta;
+        }
+
+        public ItemStack getStack() {
+            return stack;
+        }
+
+        public List<OreRarity> getRarities() {
+            return rarities;
+        }
+    }
+
+    public static class OreRarity {
+
+        private int weight;
+        private List<Biome> whitelist;
+        private List<Biome> blacklist;
+        private int maxY;
+        private int minY;
+
+        public OreRarity(int weight, List<Biome> whitelist, List<Biome> blacklist, int maxY, int minY) {
+            this.weight = weight;
+            this.whitelist = whitelist;
+            this.blacklist = blacklist;
+            this.maxY = maxY;
+            this.minY = minY;
+        }
+
+        public int getWeight() {
+            return weight;
+        }
+
+        public List<Biome> getWhitelist() {
+            return whitelist;
+        }
+
+        public List<Biome> getBlacklist() {
+            return blacklist;
+        }
+
+        public int getMaxY() {
+            return maxY;
+        }
+
+        public int getMinY() {
+            return minY;
+        }
+    }
 }

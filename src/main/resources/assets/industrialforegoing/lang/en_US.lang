@@ -44,6 +44,8 @@ text.industrialforegoing.button.blackhole.fill=Fill player inventory with items
 text.industrialforegoing.button.blackhole.empty=Empty player inventory
 text.industrialforegoing.button.sower.hoe.true=Crop hoeing enabled
 text.industrialforegoing.button.sower.hoe.false=Crop hoeing disabled
+text.industrialforegoing.button.jei.next_rarity=Next Rarity Information
+text.industrialforegoing.button.jei.prev_rarity=Previous Rarity Information
 
 text.industrialforegoing.tooltip.hold_shift=Hold §e§oShift §7for Details
 text.industrialforegoing.tooltip.accepts_range_addons=* Accepts Range Addon
