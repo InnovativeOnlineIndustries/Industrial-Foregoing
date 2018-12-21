@@ -32,6 +32,7 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.biome.Biome;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 import net.minecraftforge.fml.common.registry.ForgeRegistries;
+import net.minecraftforge.oredict.OreDictionary;
 
 import java.io.*;
 import java.nio.file.DirectoryStream;
@@ -148,15 +149,20 @@ public class LaserDrillEntry {
 			JsonArray head = new JsonParser().parse(j).getAsJsonArray();
 			for(JsonElement o : head){
 				JsonObject ore = o.getAsJsonObject();
-				
-				String[] item_strings = ore.getAsJsonPrimitive("item").getAsString().split(":");
-				ResourceLocation item_location = new ResourceLocation(item_strings[0], item_strings[1]);
+
 				ItemStack item;
-				if(item_strings.length > 2){
-					item = new ItemStack(ForgeRegistries.ITEMS.getValue(item_location), Integer.parseInt(item_strings[2]));
-				} else{
-					item = new ItemStack(ForgeRegistries.ITEMS.getValue(item_location));
-				}
+                String itemName = ore.getAsJsonPrimitive("item").getAsString();
+                if (itemName.startsWith("ore") && OreDictionary.doesOreNameExist(itemName)) {
+                    item = OreDictionary.getOres(itemName).get(0).copy();
+                } else {
+                    String[] item_strings = itemName.split(":");
+                    ResourceLocation item_location = new ResourceLocation(item_strings[0], item_strings[1]);
+                    if (item_strings.length > 2) {
+                        item = new ItemStack(ForgeRegistries.ITEMS.getValue(item_location), Integer.parseInt(item_strings[2]));
+                    } else {
+                        item = new ItemStack(ForgeRegistries.ITEMS.getValue(item_location));
+                    }
+                }
 				
 				int color = ore.getAsJsonPrimitive("color").getAsInt();
 				
