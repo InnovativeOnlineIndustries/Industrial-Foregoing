@@ -26,7 +26,6 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.google.gson.stream.JsonReader;
-import net.minecraft.client.Minecraft;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
@@ -90,7 +89,7 @@ public class LaserDrillEntry {
             if (!Files.exists(l_path)) {
                 InputStream in = null;
                 try {
-                    in = Minecraft.getMinecraft().getResourceManager().getResource(l).getInputStream();
+                    in = LaserDrillEntry.class.getClassLoader().getResourceAsStream("assets" + "/" + l.getNamespace() + "/" + l.getPath());
                     OutputStream out = new FileOutputStream(l_path.toFile());
                     int read;
                     byte[] buffer = new byte[4096];
