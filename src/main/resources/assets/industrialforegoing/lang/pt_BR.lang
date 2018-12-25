@@ -13,28 +13,60 @@ text.industrialforegoing.display.efficiency=Eficiência:
 text.industrialforegoing.display.dye_amount=Qtd. de Tinta:
 text.industrialforegoing.display.work=Trabalho:
 text.industrialforegoing.display.no_laser_base=Sem Redirecionador de Laser
+text.industrialforegoing.display.power=Energia:
+text.industrialforegoing.display.tier=Nível:
+text.industrialforegoing.display.max_area=Área Máx.:
+text.industrialforegoing.display.current_area=Área Atual:
+text.industrialforegoing.display.next_tier=para o próx nível
+text.industrialforegoing.display.special=Brilhante
 
 text.industrialforegoing.button.decrease_stack=Diminuir Stack
 text.industrialforegoing.button.increase_stack=Aumentar Stack
 text.industrialforegoing.button.decrease_trade=Troca Anterior
 text.industrialforegoing.button.increase_trade=Próxima Troca
+text.industrialforegoing.button.decrease_fluid=Fluido Anterior
+text.industrialforegoing.button.increase_fluid=Próximo Fluido
+text.industrialforegoing.button.decrease=Anterior
+text.industrialforegoing.button.increase=Próximo
+text.industrialforegoing.button.increase_depth=Profundidade +
+text.industrialforegoing.button.decrease_depth=Profundidade -
 text.industrialforegoing.button.stone.stopped=Parado
 text.industrialforegoing.button.stone.furnace=Modo Fornalha
 text.industrialforegoing.button.stone.two_craft=Fabricação 2x2
 text.industrialforegoing.button.stone.three_craft=Fabricação 3x3
 text.industrialforegoing.button.stone.grind=Modo Triturar
+text.industrialforegoing.button.show_area=Mostrar área de trabalho
+text.industrialforegoing.button.hide_area=Esconder área de trabalho
+text.industrialforegoing.button.gather.any=Fazendo nada
+text.industrialforegoing.button.gather.plant=Colhendo plantas
+text.industrialforegoing.button.gather.tree=Pegando árvores
+text.industrialforegoing.button.blackhole.fill=Encher inventário do player com itens
+text.industrialforegoing.button.blackhole.empty=Esvasiar inventário do player
+text.industrialforegoing.button.sower.hoe.true=Usar enchada ativado
+text.industrialforegoing.button.sower.hoe.false=Usar enchada desativado
+text.industrialforegoing.button.jei.next_rarity=Próxima informação de raridade
+text.industrialforegoing.button.jei.prev_rarity=Informação de raridade anterior
 
 text.industrialforegoing.tooltip.hold_shift=Segure §e§oShift §7para Detalhes
 text.industrialforegoing.tooltip.accepts_range_addons=* Aceita Addon de Alcance
 text.industrialforegoing.tooltip.range=* Área Base: {0}x{1} (Largura x Altura)
 text.industrialforegoing.tooltip.adult_filter=* Aceita Filtro de Adultos
+text.industrialforegoing.tooltip.fortune_addon=* Aceita Addon de Fortuna
 text.industrialforegoing.tooltip.energy_field_charge=Carga:
 text.industrialforegoing.tooltip.energy_field_linked=Posição conectada:
 text.industrialforegoing.tooltip.energy_field_right_click=Clique num Provedor de Campo de Energia para Conectar
 text.industrialforegoing.tooltip.items=itens
 text.industrialforegoing.tooltip.mb=mb
-text.industrialforegoing.tooltip.max_transfer_amount=Qtd. de Transf. Máx.:
+text.industrialforegoing.tooltip.max_transfer_amount=Qtd. Máx. de Transferência:
 text.industrialforegoing.tooltip.tick_time=10 ticks
+text.industrialforegoing.tooltip.no_wither_skull=Parece que eu não posso colocar isso. Talvez uma máquina consiga.
+text.industrialforegoing.tooltip.max_tier=Nível Máx:
+text.industrialforegoing.tooltip.found_heat=Fonte de calor disponível
+text.industrialforegoing.tooltip.missing_heat=Falta uma fonte de calor
+text.industrialforegoing.tooltip.found_cold=Fonte de frio disponível
+text.industrialforegoing.tooltip.missing_cold=Falta uma fonte de frio
+text.industrialforegoing.tooltip.whitelisted_biomes=Biomas Permitidos
+text.industrialforegoing.tooltip.blacklisted_biomes=Biomas Rejeitados
 
 text.industrialforegoing.direction=Direção:
 text.industrialforegoing.up=Cima
@@ -46,6 +78,10 @@ text.industrialforegoing.south=Sul
 text.industrialforegoing.action=Ação:
 text.industrialforegoing.push=Empurrar
 text.industrialforegoing.pull=Puxar
+text.industrialforegoing.maxy=Máx em Y:
+text.industrialforegoing.miny=Mín em Y:
+text.industrialforegoing.weight=Peso:
+text.industrialforegoing.biomes=Biomas
 
 text.industrialforegoing.tooltip.leaf_shearing_addon=* Aceita Addon de Colher Folhas
 text.industrialforegoing.tooltip.can_harvest=* Pode Colher:
@@ -66,17 +102,18 @@ text.industrialforegoing.tooltip.plant.slime_tree= - Árvores de Slime do Tinker
   "}" -> Fim da linha colorida em negrito -->
 
 text.industrialforegoing.book.title=Manual do Industrial Foregoing
- 
-text.industrialforegoing.book.category.getting_started=Por Onde Começar
+
+text.industrialforegoing.book.category.getting_started=Começando
 text.industrialforegoing.book.category.generators=Geradores
 text.industrialforegoing.book.category.agriculture=Agricultura
 text.industrialforegoing.book.category.animal_husbandry=Criação de Animais
 text.industrialforegoing.book.category.magic=Mágica
-text.industrialforegoing.book.category.storage=Armazenagem
+text.industrialforegoing.book.category.storage=Armazenamento
 text.industrialforegoing.book.category.mob_interaction=Interação com Mobs
 text.industrialforegoing.book.category.resource_production=Produção de Recursos
 text.industrialforegoing.book.category.items=Itens
-
+text.industrialforegoing.book.category.conveyors=Esteiras
+  
 text.industrialforegoing.book.animal_byproduct_recolector=Quando com energia, coleta {esgoto} dos animais acima.
 text.industrialforegoing.book.animal_growth_increaser=Quando com energia e com {comida de animais}, alimentará animais bebês para que {crescam} mais rápido.
 text.industrialforegoing.book.animal_independence_selector=Quando com energia, move animais {bebês} da parte de trás para a frente.@L@@L@Se {Filtro de Adultos} estiver instalado, moverá adultos, ao invés de bebês.
@@ -136,7 +173,26 @@ text.industrialforegoing.book.straw=O permite {beber} líquidos que estejam no c
 text.industrialforegoing.book.pink_slime=Obtido ao se matar um {Slime Rosa}, que são formados ao se colocar Slime Rosa no chão em formato {líquido}.
 text.industrialforegoing.book.upgrades=O Industrial Foregoing não tem melhorias de velocidade, mas você pode usar {Melhorias de Energia} e {Melhorias de Velocidade} do Tesla Core Lib para aumentar a velocidade de suas máquinas. É necessário instalar o nível anterior para que o seguinte seja instalado.
 text.industrialforegoing.book.plant_interactor=Quando com energia, esta máquina interage com plantas e frutas (Como um jogador apertando {clique direito} do mouse) para colhê-los e os armazena em seu inventário, ou os joga no chão, caso não possam ser armazenados. @L@@L@{*Também funciona com plantas e frutas do HarvestCraft da Pam por padrão.}
-text.industrialforegoing.book.transfer_addon=Os addons de transferência vêm em todas as formas e tamanhos, mas só podem transferir {itens} e {fluidos}. Eles podem puxar e podem empurrar. @L@@L@ Para alterar a direção da ação simplesmente {Clique direito do mouse} para alternar entre as direções ou {Shift + Clique direito} em um lado de um bloco para selecionar essa direção. Você pode encantar o addon com {Eficiência} para aumentar sua quantidade de transferência.
+text.industrialforegoing.book.transfer_addon=Addons de Transferência vêm em todas as formas, porém eles só podem transferir {itens} e {fluidos}, tanto empurrando, quanto puxando.@L@@L@Para mudar a direção da ação, apenas {clique direito} nele, ou {shift+clique direito} no lado de um bloco para escolher aquela direção. Você pode encantá-los com {Eficiência} para aumentar a quantidade de transferência.
+text.industrialforegoing.book.fluiddictionary_converter=Essa máquina transforma fluidos similares de mods diferentes. Você pode checar o {JEI} para ver as possíveis receitas. Você só precisa clicar nos botões para selecionar o fluido.
+text.industrialforegoing.book.conveyors=Esteiras {empurram} qualquer entidade na direção que elas apontam. Elas vêm em diferentes cores e verticalidades.@L@@L@Elas podem ser melhoradas com um clique direito segurando um {pó de pedra luminosa}, então entidades se moverão mais rápido. Dê outro clique direito nelas com um {plástico} e elas não mais pegarão itens dropados.@PAGE@Também existem diferentes {melhorias} que podem ser colocadas nas laterais ou no meio da esteira. Elas serão colocadas nos lados mais {distantes} da esteira. Melhorias podem ser removidas com shift+clique direito.
+text.industrialforegoing.book.conveyor_upgrade_extraction=A melhoria de extração tenta {extrair} itens de inventários que estejam tocando-a, para colocá-los na esteira. @L@@L@Ela tem um {filtro} com lista branca e negra, e pode ser melhorada com {pó de pedra luminosa} para acelerar a extração. (Ela para de extrair após ter extraído muitos itens que não foram pegos).
+text.industrialforegoing.book.conveyor_upgrade_insertion=A melhoria de inserção tenta {inserir} itens que a tocarem para o inventário tocando sua lateral. @L@@L@Ela tem um {filtro} com lista branca e negra na inserção. O {alcance} pode ser aumentado na GUI para que ela pegue todos os itens na esteira, ao invés de apenas os itens que a tocarem.
+text.industrialforegoing.book.conveyor_upgrade_detection=A melhoria de detecção é colocada na parte do meio da esteira e emite um {sinal de redstone} quando for ativada por uma entidade.@L@@L@Ela tem um {filtro} de lista branca e negra onde você pode filtrar um mob usando uma {Prisão de Mobs} contendo uma entidade nela. O {controle de redstone} também pode ser invertido na GUI.
+text.industrialforegoing.book.conveyor_upgrade_bouncing=A melhoria de lancamento é colocada na parte do meio da esteira e ela {lança} entidades para cima, na direção em que a esteira estiver virada.@L@@L@Ela tem um {filtro} de lista branca e negra onde você pode filtrar um mob usando uma {Prisão de Mobs} contendo uma entidade nela. A {velocidade} dos valores (horizontal e vertical) pode ser alterada na GUI.
+text.industrialforegoing.book.conveyor_upgrade_dropping=A melhoria de liberação é colocada na parte do meio da esteira e ela  {libera} entidades diretamente pra baixo da esteira, ou as insere em um inventário que estiver colocado.@L@@L@Ela tem um {filtro} de lista branca e negra onde você pode filtrar um mob usando uma {Prisão de Mobs} contendo uma entidade nela.
+text.industrialforegoing.book.conveyor_upgrade_blinking=A melhoria de teletransporte é colocada na parte do meio da esteira e ela  {teletransporta} entidades em uma pequena área na frente da esteira. @L@@L@Ela tem um {filtro} de lista branca e negra onde você pode filtrar um mob usando uma {Prisão de Mobs} contendo uma entidade nela. A {distância} de teletransporte pode ser configurada na GUI.
+text.industrialforegoing.book.conveyor_upgrade_splitting=A melhoria de distribuição {distribui} entidades de maneira igualitária, ou com quantidade configurada, para o lado em que ela é colocada.@L@@L@Quanto maior a {quantidade}, mais entidades vão naquela direção. A quantidade pode ser configurada na GUI.
+text.industrialforegoing.book.froster=O Congelador lhe permite criar substâncias geladas ao girar em altas velocidades a {água} que lhe é inserida e ao reduzir a temperatura usando {energia}.
+text.industrialforegoing.book.ore_washer=Quando provida com {Carne Líquida} e um {minério}, ela lava os pedaços do minério com carne, transformando-o em {Minério de Carne Crua}, para processamento futuro.
+text.industrialforegoing.book.ore_fermenter=Quando provido com {minério de carne crua}, este será processado em {minério de carne fermentada}, fazendo seu tamanho aumentar. É necessário uma {fonte de calor}(líquidos quenteas, fogo, bloco de magma) abaixo e um {fluido frio}(líquidos frios, gelo, ...) em qualquer outro lado.
+text.industrialforegoing.book.ore_sieve=Quando provido com {minério de carne fermentada} e um poquinho de {areia}, ele serpara o minério da carne e o transforma em {pó}.
+text.industrialforegoing.book.fortune_addon=Adiciona {fortuna/pilhagem} nas máquinas que aceitam esse addon. Ele precisa estar encantado com {Fortuna} e também usará o nível do encantamento para as ações da máquina.
+text.industrialforegoing.book.pitiful_fuel_generator=Funciona da mesma maneira que o Gerador de Combustível Petrificado, porém usa apenas coisas de {madeira}.
+text.industrialforegoing.book.infinity_drill=Uma broca poderosa que perdeu todo seu poder. Recarregá-la lhe permite destruir mundos em larga escala. Quanto mais energia tiver, maiores áreas poderá minerar. E, para preservar essa energia, pode ser usado {Biocombustível} de uma forma mais eficiente. Shift+Clique Direito nela lhe permite alterar a área de mineração. @L@@L@{Ela contém segredos que podem ser facilmente acessados por Patreons e alguns mobs raros no mundo.}
+
+text.industrialforegoing.chat.crusher_kill= %s%d foi moído(a) em pedacinhos.
+text.industrialforegoing.chat.slaughter_kill= %s%d foi picotado(a) em pedacinhos.
 
 tile.industrialforegoing.petrified_fuel_generator.name=Gerador de Combustível Petrificado
 tile.industrialforegoing.enchantment_refiner.name=Organizador de Encantamentos
@@ -188,6 +244,24 @@ tile.industrialforegoing.wither_builder.name=Montador de Whiters
 tile.industrialforegoing.fluid_pump.name=Bomba de Flúidos
 tile.industrialforegoing.fluid_crafter.name=Fabricador com Fluidos
 tile.industrialforegoing.plant_interactor.name=Catador de Plantas e Frutas
+tile.industrialforegoing.fluiddictionary_converter.name=Conversor de Dicionário de Fluido
+tile.industrialforegoing.conveyor.name=Esteira
+tile.industrialforegoing.black_hole_label.name=Rótulo de Buraco Negro
+tile.industrialforegoing.froster.name=Congelador
+tile.industrialforegoing.ore_washer.name=Fábrica de Lavagem
+tile.industrialforegoing.ore_fermenter.name=Estação de Fermentação
+tile.industrialforegoing.ore_sieve.name=Máquina de Filtragem de Fluidos
+tile.industrialforegoing.pitiful_fuel_generator.name=Gerador de Combustível Lamentável
+
+tile.essence.name=Essência
+tile.milk.name=Leite
+tile.meat.name=Carne Líquida
+tile.sewage.name=Esgoto
+tile.sludge.name=Lodo
+tile.biofuel.name=Biocombustível
+tile.latex.name=Látex
+tile.if.pink_slime.name=Slime Rosa
+tile.if.protein.name=Proteína
 
 entity.pink_slime.name=Slime Rosa
 
@@ -200,6 +274,8 @@ fluid.biofuel=Biocombustível
 fluid.latex=Látex
 fluid.if.pink_slime=Slime Rosa
 fluid.if.protein=Proteína
+fluid.if.ore_fluid_raw=Carne de Minério Crua
+fluid.if.ore_fluid_fermented=Carne de Minério Fermentada
 
 item.industrialforegoing_meat_feeder.name=Injetor de Comida Líquida
 item.industrialforegoing_mob_imprisonment_tool.name=Prisão de Mobs
@@ -214,12 +290,16 @@ item.industrialforegoing.adult_filter.name=Filtro de Adultos
 item.industrialforegoing_redstone_inverted.name=Controle de Redstone Invertido
 item.industrialforegoing_machinehull.name=Casco de Máquina
 item.industrialforegoing_straw.name=Canudo
+item.industrialforegoing_artificial_dye.name=Corante Artificial
 item.industrialforegoing_pink_slime.name=Slime Rosa
 item.industrialforegoing.energy_field_addon.name=Addon: Campo de Energia
 item.industrialforegoing.leaf_shearing.name=Addon: Colher Folhas
 item.industrialforegoing_book_manual.name=Manual do Industrial Foregoing
-item.industrialforegoing.itemstack_transfer_addon.name=Addon: Transferência de Stacks
-item.industrialforegoing.fluid_transfer_addon.name=Addon: Transferência de Fluido
+item.industrialforegoing.itemstack_transfer_addon.name=Addon de Transferência de Stacks de Itens
+item.industrialforegoing.fluid_transfer_addon.name=Addon de Transferência de Fluidos
+item.industrialforegoing_pink_slime_ingot.name=Lingote de Slime Rosa
+item.industrialforegoing.fortune_addon.name=Addon de Fortuna
+item.industrialforegoing_infinity_drill.name=Broca da Infinidade
 
 gui.industrialforegoing.side_config.fuel_input=Entrada de Combustível
 gui.industrialforegoing.side_config.input_items=Entrada de Itens
@@ -268,3 +348,38 @@ gui.industrialforegoing.side_config.wither_skulls=Crânios de Whiter
 gui.industrialforegoing.side_config.soulsand=Areia de Almas
 gui.industrialforegoing.side_config.crafting=Grade de Fabricação
 gui.industrialforegoing.side_config.output=Saída
+gui.industrialforegoing.side_config.input=Entrada
+gui.industrialforegoing.side_config.water=Entrada de Água
+
+text.industrialforegoing.button.none=Nada Selecionado
+
+conveyor.upgrade.error.name=Melhoria de Esteira Inválida
+conveyor.upgrade.industrialforegoing.insertion.name=Melhoria de Esteira: Inserção
+conveyor.upgrade.industrialforegoing.extraction.name=Melhoria de Esteira: Extração
+conveyor.upgrade.industrialforegoing.detection.name=Melhoria de Esteira: Detecção
+conveyor.upgrade.industrialforegoing.bouncing.name=Melhoria de Esteira: Lançador
+conveyor.upgrade.industrialforegoing.dropping.name=Melhoria de Esteira: Liberador
+conveyor.upgrade.industrialforegoing.blinking.name=Melhoria de Esteira: Teletransporte
+conveyor.upgrade.industrialforegoing.splitting.name=Melhoria de Esteira: Separador
+
+conveyor.upgrade.industrialforegoing.tooltip.whitelist=Lista Branca
+conveyor.upgrade.industrialforegoing.tooltip.blacklist=Lista Negra
+conveyor.upgrade.industrialforegoing.tooltip.insert_near=Inserindo itens ao tocar a melhoria
+conveyor.upgrade.industrialforegoing.tooltip.insert_all=Inserindo itens em toda a esteira
+conveyor.upgrade.industrialforegoing.tooltip.redstone_normal=Redstone não invertida
+conveyor.upgrade.industrialforegoing.tooltip.redstone_inverted=Redstone invertida
+conveyor.upgrade.industrialforegoing.tooltip.increase=Aumentar
+conveyor.upgrade.industrialforegoing.tooltip.decrease=Diminuir
+conveyor.upgrade.industrialforegoing.tooltip.bouncing_horizontal=Força Horizontal
+conveyor.upgrade.industrialforegoing.tooltip.bouncing_vertical=Força Vertical
+conveyor.upgrade.industrialforegoing.tooltip.distance_horizontal=Distância Horizontal
+conveyor.upgrade.industrialforegoing.tooltip.distance_vertical=Distância Vertical
+conveyor.upgrade.industrialforegoing.tooltip.splitting_ratio=Fator de Separação
+
+text.industrialforegoing.tooltip.infinitydrill.poor=Pobre
+text.industrialforegoing.tooltip.infinitydrill.common=Comum
+text.industrialforegoing.tooltip.infinitydrill.uncommon=Incomum
+text.industrialforegoing.tooltip.infinitydrill.rare=Rara
+text.industrialforegoing.tooltip.infinitydrill.epic=Épico
+text.industrialforegoing.tooltip.infinitydrill.legendary=Lendário
+text.industrialforegoing.tooltip.infinitydrill.artifact=Relíquia
