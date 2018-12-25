@@ -1,17 +1,45 @@
+/*
+ * This file is part of Industrial Foregoing.
+ *
+ * Copyright 2018, Buuz135
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy of
+ * this software and associated documentation files (the "Software"), to deal in the
+ * Software without restriction, including without limitation the rights to use, copy,
+ * modify, merge, publish, distribute, sublicense, and/or sell copies of the Software,
+ * and to permit persons to whom the Software is furnished to do so, subject to the
+ * following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in all copies
+ * or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED,
+ * INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR
+ * PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE
+ * FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE,
+ * ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+ */
 package com.buuz135.industrial.utils.apihandlers;
 
 import com.buuz135.industrial.api.IndustrialForegoingHelper;
-import com.buuz135.industrial.api.recipe.BioReactorEntry;
-import com.buuz135.industrial.api.recipe.LaserDrillEntry;
-import com.buuz135.industrial.api.recipe.ProteinReactorEntry;
-import com.buuz135.industrial.api.recipe.SludgeEntry;
+import com.buuz135.industrial.api.extractor.ExtractorEntry;
+import com.buuz135.industrial.api.recipe.*;
+import com.buuz135.industrial.api.recipe.ore.OreFluidEntryFermenter;
+import com.buuz135.industrial.api.recipe.ore.OreFluidEntryRaw;
+import com.buuz135.industrial.api.recipe.ore.OreFluidEntrySieve;
+import com.buuz135.industrial.proxy.FluidsRegistry;
+import com.buuz135.industrial.proxy.ItemRegistry;
 import com.buuz135.industrial.utils.apihandlers.crafttweaker.CTAction;
 import com.google.common.collect.LinkedListMultimap;
+import net.minecraft.block.Block;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.NonNullList;
+import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.oredict.OreDictionary;
+
+import java.util.Comparator;
 
 public class RecipeHandlers {
 
@@ -19,6 +47,8 @@ public class RecipeHandlers {
     public static final LinkedListMultimap<CTAction, LaserDrillEntry> LASER_ENTRIES = LinkedListMultimap.create();
     public static final LinkedListMultimap<CTAction, SludgeEntry> SLUDGE_ENTRIES = LinkedListMultimap.create();
     public static final LinkedListMultimap<CTAction, ProteinReactorEntry> PROTEIN_REACTOR_ENTRIES = LinkedListMultimap.create();
+    public static final LinkedListMultimap<CTAction, FluidDictionaryEntry> FLUID_DICTIONARY_ENTRIES = LinkedListMultimap.create();
+    public static final LinkedListMultimap<CTAction, ExtractorEntry> EXTRACTOR_ENTRIES = LinkedListMultimap.create();
 
     public static void loadBioReactorEntries() {
         IndustrialForegoingHelper.addBioReactorEntry(new BioReactorEntry(new ItemStack(Items.WHEAT_SEEDS)));
@@ -31,53 +61,37 @@ public class RecipeHandlers {
         IndustrialForegoingHelper.addBioReactorEntry(new BioReactorEntry(new ItemStack(Blocks.BROWN_MUSHROOM)));
         IndustrialForegoingHelper.addBioReactorEntry(new BioReactorEntry(new ItemStack(Blocks.RED_MUSHROOM)));
         IndustrialForegoingHelper.addBioReactorEntry(new BioReactorEntry(new ItemStack(Blocks.CHORUS_FLOWER)));
+        IndustrialForegoingHelper.addBioReactorEntry(new BioReactorEntry(new ItemStack(Blocks.REEDS)));
         getRealOredictedItems("dye").forEach(stack -> IndustrialForegoingHelper.addBioReactorEntry(new BioReactorEntry(stack)));
-        getRealOredictedItems("treeSapling").stream().filter(stack -> !stack.getItem().getRegistryName().getResourcePath().equals("forestry")).forEach(stack -> IndustrialForegoingHelper.addBioReactorEntry(new BioReactorEntry(stack)));
+        getRealOredictedItems("treeSapling").stream().filter(stack -> !stack.getItem().getRegistryName().getPath().equals("forestry")).forEach(stack -> IndustrialForegoingHelper.addBioReactorEntry(new BioReactorEntry(stack)));
+    }
+
+    public static void executeCraftweakerActions() {
         BIOREACTOR_ENTRIES.forEach((ctAction, entry) -> {
             if (ctAction == CTAction.ADD) IndustrialForegoingHelper.addBioReactorEntry(entry);
             else IndustrialForegoingHelper.removeBioReactorEntry(entry.getStack());
         });
-    }
-
-    public static void loadLaserLensEntries() {
-        checkAndAddLaserDrill(4, "oreGold", 6);
-        checkAndAddLaserDrill(12, "oreIron", 10);
-        checkAndAddLaserDrill(15, "oreCoal", 12);
-        checkAndAddLaserDrill(11, "oreLapis", 8);
-        checkAndAddLaserDrill(3, "oreDiamond", 4);
-        checkAndAddLaserDrill(14, "oreRedstone", 6);
-        checkAndAddLaserDrill(0, "oreQuartz", 4);
-        checkAndAddLaserDrill(5, "oreEmerald", 2);
-        checkAndAddLaserDrill(13, "oreUranium", 3);
-        checkAndAddLaserDrill(4, "oreSulfur", 8);
-        checkAndAddLaserDrill(10, "oreGalena", 6);
-        checkAndAddLaserDrill(0, "oreIridium", 2);
-        checkAndAddLaserDrill(14, "oreRuby", 7);
-        checkAndAddLaserDrill(11, "oreSapphire", 7);
-        checkAndAddLaserDrill(12, "oreBauxite", 5);
-        checkAndAddLaserDrill(12, "orePyrite", 5);
-        checkAndAddLaserDrill(14, "oreCinnabar", 8);
-        checkAndAddLaserDrill(15, "oreTungsten", 3);
-        checkAndAddLaserDrill(0, "oreSheldonite", 1);
-        checkAndAddLaserDrill(3, "orePlatinum", 2);
-        checkAndAddLaserDrill(13, "orePeridot", 7);
-        checkAndAddLaserDrill(11, "oreSoladite", 4);
-        checkAndAddLaserDrill(14, "oreTetrahedrite", 4);
-        checkAndAddLaserDrill(8, "oreTin", 8);
-        checkAndAddLaserDrill(10, "oreLead", 5);
-        checkAndAddLaserDrill(7, "oreSilver", 5);
-        checkAndAddLaserDrill(1, "oreCopper", 10);
-        checkAndAddLaserDrill(12, "oreAluminum", 5);
-        checkAndAddLaserDrill(12, "oreNickel", 4);
-        checkAndAddLaserDrill(10, "oreDraconium", 2);
-        checkAndAddLaserDrill(4, "oreYellorium", 2);
-        checkAndAddLaserDrill(11, "oreCobalt", 2);
-        checkAndAddLaserDrill(3, "oreOsmium", 4);
-        checkAndAddLaserDrill(4, "oreArdite", 1);
         LASER_ENTRIES.forEach((ctAction, entry) -> {
             if (ctAction == CTAction.ADD) IndustrialForegoingHelper.addLaserDrillEntry(entry);
             else IndustrialForegoingHelper.removeLaserDrillEntry(entry.getStack());
         });
+        SLUDGE_ENTRIES.forEach((ctAction, entry) -> {
+            if (ctAction == CTAction.ADD) IndustrialForegoingHelper.addSludgeRefinerEntry(entry);
+            else IndustrialForegoingHelper.removeSludgeRefinerEntry(entry.getStack());
+        });
+        PROTEIN_REACTOR_ENTRIES.forEach((ctAction, entry) -> {
+            if (ctAction == CTAction.ADD) IndustrialForegoingHelper.addProteinReactorEntry(entry);
+            else IndustrialForegoingHelper.removeProteinReactorEntry(entry.getStack());
+        });
+        FLUID_DICTIONARY_ENTRIES.forEach((ctAction, entry) -> {
+            if (ctAction == CTAction.ADD) IndustrialForegoingHelper.addFluidDictionaryEntry(entry);
+            else IndustrialForegoingHelper.removeFluidDictionaryEntry(entry);
+        });
+        EXTRACTOR_ENTRIES.forEach((ctAction, extractorEntry) -> {
+            if (ctAction == CTAction.ADD) IndustrialForegoingHelper.addWoodToLatex(extractorEntry);
+            else IndustrialForegoingHelper.removeWoodToLatex(extractorEntry.getItemStack());
+        });
+        ExtractorEntry.EXTRACTOR_ENTRIES.sort(Comparator.comparingInt(o -> ((ExtractorEntry) o).getFluidStack().amount).reversed());
     }
 
     public static void loadSludgeRefinerEntries() {
@@ -90,10 +104,6 @@ public class RecipeHandlers {
         IndustrialForegoingHelper.addSludgeRefinerEntry(new SludgeEntry(new ItemStack(Blocks.SAND), 4));
         IndustrialForegoingHelper.addSludgeRefinerEntry(new SludgeEntry(new ItemStack(Blocks.SAND, 1, 1), 4));
         IndustrialForegoingHelper.addSludgeRefinerEntry(new SludgeEntry(new ItemStack(Blocks.SOUL_SAND), 4));
-        SLUDGE_ENTRIES.forEach((ctAction, entry) -> {
-            if (ctAction == CTAction.ADD) IndustrialForegoingHelper.addSludgeRefinerEntry(entry);
-            else IndustrialForegoingHelper.removeSludgeRefinerEntry(entry.getStack());
-        });
     }
 
     public static void loadProteinReactorEntries() {
@@ -111,16 +121,36 @@ public class RecipeHandlers {
         getSubItems(stacks, new ItemStack(Items.FISH));
         getSubItems(stacks, new ItemStack(Items.SKULL));
         stacks.forEach(stack -> IndustrialForegoingHelper.addProteinReactorEntry(new ProteinReactorEntry(stack)));
-        PROTEIN_REACTOR_ENTRIES.forEach((ctAction, entry) -> {
-            if (ctAction == CTAction.ADD) IndustrialForegoingHelper.addProteinReactorEntry(entry);
-            else IndustrialForegoingHelper.removeProteinReactorEntry(entry.getStack());
-        });
     }
 
-    public static void checkAndAddLaserDrill(int meta, String oreDict, int weight) {
-        NonNullList<ItemStack> stacks = getRealOredictedItems(oreDict);
-        if (stacks.size() > 0)
-            IndustrialForegoingHelper.addLaserDrillEntry(new LaserDrillEntry(meta, stacks.get(0), weight));
+    public static void loadFluidDictionaryEntries() {
+        addFluidEntryDoubleDirectional("essence", "xpjuice", 1);
+        addFluidEntryDoubleDirectional("essence", "experience", 1);
+        addFluidEntryDoubleDirectional("xpjuice", "experience", 1);
+    }
+
+    public static void loadWoodToLatexEntries() {
+        tryToAddWoodToLatex("ic2:rubber_wood", new FluidStack(FluidsRegistry.LATEX, 4));
+        tryToAddWoodToLatex("techreborn:rubber_log", new FluidStack(FluidsRegistry.LATEX, 4));
+        IndustrialForegoingHelper.addWoodToLatex(new ExtractorEntry(new ItemStack(Blocks.LOG2), new FluidStack(FluidsRegistry.LATEX, 3)));
+        IndustrialForegoingHelper.addWoodToLatex(new ExtractorEntry(new ItemStack(Blocks.LOG2, 1, 1), new FluidStack(FluidsRegistry.LATEX, 2)));
+        getRealOredictedItems("logWood").forEach(stack -> IndustrialForegoingHelper.addWoodToLatex(new ExtractorEntry(stack, new FluidStack(FluidsRegistry.LATEX, 1))));
+    }
+
+    public static void loadOreEntries() {
+        for (String s : OreDictionary.getOreNames()) {
+            if (s.startsWith("ore") && !OreDictionary.getOres(s).isEmpty() && OreDictionary.doesOreNameExist("dust" + s.replace("ore", "")) && !OreDictionary.getOres("dust" + s.replace("ore", "")).isEmpty()) {
+                IndustrialForegoingHelper.addOreFluidEntryRaw(new OreFluidEntryRaw(s, new FluidStack(FluidsRegistry.MEAT, 200), FluidsRegistry.ORE_FLUID_RAW.getWithOre(s, 150)));
+                IndustrialForegoingHelper.addOreFluidEntryFermenter(new OreFluidEntryFermenter(FluidsRegistry.ORE_FLUID_RAW.getWithOre(s, 1), FluidsRegistry.ORE_FLUID_FERMENTED.getWithOre(s, 2)));
+                IndustrialForegoingHelper.addOreFluidEntrySieve(new OreFluidEntrySieve(FluidsRegistry.ORE_FLUID_FERMENTED.getWithOre(s, 100), OreDictionary.getOres("dust" + s.replace("ore", "")).get(0).copy(), new ItemStack(Blocks.SAND)));
+            }
+        }
+        IndustrialForegoingHelper.addOreFluidEntrySieve(new OreFluidEntrySieve(new FluidStack(FluidsRegistry.PINK_SLIME, 2000), new ItemStack(ItemRegistry.pinkSlimeIngot), new ItemStack(Items.IRON_INGOT)));
+    }
+
+    public static void addFluidEntryDoubleDirectional(String fluidInput, String fluidOutput, double ratio) {
+        IndustrialForegoingHelper.addFluidDictionaryEntry(new FluidDictionaryEntry(fluidInput, fluidOutput, ratio));
+        IndustrialForegoingHelper.addFluidDictionaryEntry(new FluidDictionaryEntry(fluidOutput, fluidInput, 1 / ratio));
     }
 
     public static NonNullList<ItemStack> getRealOredictedItems(String oredit) {
@@ -140,6 +170,13 @@ public class RecipeHandlers {
         if (stack.getItem().getCreativeTab() != null)
             stack.getItem().getSubItems(stack.getItem().getCreativeTab(), list);
 
+    }
+
+    public static void tryToAddWoodToLatex(String string, FluidStack stack) {
+        Block block = Block.getBlockFromName(string);
+        if (block != null) {
+            IndustrialForegoingHelper.addWoodToLatex(new ExtractorEntry(new ItemStack(block), stack));
+        }
     }
 
 }

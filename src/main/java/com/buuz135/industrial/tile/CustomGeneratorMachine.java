@@ -1,8 +1,32 @@
+/*
+ * This file is part of Industrial Foregoing.
+ *
+ * Copyright 2018, Buuz135
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy of
+ * this software and associated documentation files (the "Software"), to deal in the
+ * Software without restriction, including without limitation the rights to use, copy,
+ * modify, merge, publish, distribute, sublicense, and/or sell copies of the Software,
+ * and to permit persons to whom the Software is furnished to do so, subject to the
+ * following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in all copies
+ * or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED,
+ * INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR
+ * PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE
+ * FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE,
+ * ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+ */
 package com.buuz135.industrial.tile;
 
+import com.buuz135.industrial.item.addon.movility.TransferAddon;
 import com.buuz135.industrial.jei.JEIHelper;
+import com.buuz135.industrial.tile.api.IAcceptsTransferAddons;
 import net.minecraft.item.EnumDyeColor;
 import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumFacing;
 import net.ndrei.teslacorelib.compatibility.FontRendererUtil;
 import net.ndrei.teslacorelib.gui.BasicTeslaGuiContainer;
@@ -16,10 +40,13 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-public abstract class CustomGeneratorMachine extends ElectricGenerator {
+public abstract class CustomGeneratorMachine extends ElectricGenerator implements IAcceptsTransferAddons {
+
+    private int tick;
 
     protected CustomGeneratorMachine(int typeId) {
         super(typeId);
+        tick = 0;
     }
 
     @Override
@@ -53,5 +80,37 @@ public abstract class CustomGeneratorMachine extends ElectricGenerator {
             }
         });
         return pieces;
+    }
+
+    @NotNull
+    @Override
+    public NBTTagCompound writeToNBT(@NotNull NBTTagCompound compound) {
+        compound = super.writeToNBT(compound);
+        compound.setInteger("Tick", tick);
+        return compound;
+    }
+
+    @Override
+    public void readFromNBT(@NotNull NBTTagCompound compound) {
+        super.readFromNBT(compound);
+        tick = compound.getInteger("Tick");
+    }
+
+    @Override
+    public void protectedUpdate() {
+        super.protectedUpdate();
+        if (this.world.isRemote) return;
+        if (tick % 10 == 0 && this.getAddonItems() != null) {
+            workTransferAddon(this, this.getAddonItems());
+        }
+        ++tick;
+        if (tick >= 20) {
+            tick = 0;
+        }
+    }
+
+    @Override
+    public boolean canAcceptAddon(TransferAddon addon) {
+        return !this.hasAddon(addon.getClass()) || (this.getAddon(addon.getClass()) != null && this.getAddon(addon.getClass()).getMode() != addon.getMode());
     }
 }

@@ -1,3 +1,24 @@
+/*
+ * This file is part of Industrial Foregoing.
+ *
+ * Copyright 2018, Buuz135
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy of
+ * this software and associated documentation files (the "Software"), to deal in the
+ * Software without restriction, including without limitation the rights to use, copy,
+ * modify, merge, publish, distribute, sublicense, and/or sell copies of the Software,
+ * and to permit persons to whom the Software is furnished to do so, subject to the
+ * following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in all copies
+ * or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED,
+ * INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR
+ * PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE
+ * FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE,
+ * ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+ */
 package com.buuz135.industrial.tile.mob;
 
 import com.buuz135.industrial.item.MobImprisonmentToolItem;
@@ -17,6 +38,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.Vec3d;
 import net.minecraftforge.fluids.IFluidTank;
 import net.minecraftforge.items.ItemStackHandler;
 import net.ndrei.teslacorelib.TeslaCoreLib;
@@ -85,25 +107,28 @@ public class MobDuplicatorTile extends WorkingAreaElectricMachine {
         if (BlockRegistry.mobDuplicatorBlock.blacklistedEntities.contains(EntityList.getKey(entity).toString()))
             return 0;
 
-        int livingAround = world.getEntitiesWithinAABB(entity.getClass(), (new AxisAlignedBB((double) pos.getX(), (double) pos.getY(), (double) pos.getZ(), (double) (pos.getX() + 1), (double) (pos.getY() + 1), (double) (pos.getZ() + 1))).grow((double) 16)).size();
-        if (livingAround > 32) return 0;
+        List<EntityLiving> entityAmount = world.getEntitiesWithinAABB(entity.getClass(), (new AxisAlignedBB((double) pos.getX(), (double) pos.getY(), (double) pos.getZ(), (double) (pos.getX() + 1), (double) (pos.getY() + 1), (double) (pos.getZ() + 1))).grow((double) 16));
+        entityAmount.removeIf(entityLiving -> entityLiving.isDead);
+        if (entityAmount.size() > 32) return 0;
 
-        int canSpawn = (int) ((experienceTank.getFluid() == null ? 0 : experienceTank.getFluid().amount) / (entity.getHealth() * 4));
+        int essenceNeeded = (int) (entity.getHealth() * BlockRegistry.mobDuplicatorBlock.essenceNeeded);
+        int canSpawn = (int) ((experienceTank.getFluid() == null ? 0 : experienceTank.getFluid().amount) / essenceNeeded);
         if (canSpawn == 0) return 0;
 
         int spawnAmount = 1 + this.world.rand.nextInt(Math.min(canSpawn, 4));
         List<BlockPos> blocks = BlockUtils.getBlockPosInAABB(getWorkingArea());
-        int essenceNeeded = (int) (entity.getHealth() * BlockRegistry.mobDuplicatorBlock.essenceNeeded);
         while (spawnAmount > 0) {
-            if (experienceTank.getFluid() != null && experienceTank.getFluid().amount > essenceNeeded) {
+            if (experienceTank.getFluid() != null && experienceTank.getFluid().amount >= essenceNeeded) {
                 entity = (EntityLiving) ((MobImprisonmentToolItem) stack.getItem()).getEntityFromStack(stack, this.world, BlockRegistry.mobDuplicatorBlock.enableExactCopy && exactCopy);
                 int tries = 20;
-                BlockPos random = blocks.get(this.world.rand.nextInt(blocks.size())).add(0.5, 0, 0.5);
+                Vec3d random = new Vec3d(blocks.get(this.world.rand.nextInt(blocks.size())));
+                random = random.add(0.5, 0, 0.5);
+                entity.setLocationAndAngles(random.x, random.y, random.z, world.rand.nextFloat() * 360F, 0);
                 entity.setUniqueId(UUID.randomUUID());
-                entity.setLocationAndAngles(random.getX(), random.getY(), random.getZ(), world.rand.nextFloat() * 360F, 0);
                 while (tries > 0 && !canEntitySpawn(entity)) {
-                    random = blocks.get(this.world.rand.nextInt(blocks.size()));
-                    entity.setLocationAndAngles(random.getX(), random.getY(), random.getZ(), world.rand.nextFloat() * 360F, 0);
+                    random = new Vec3d(blocks.get(this.world.rand.nextInt(blocks.size())));
+                    random = random.add(0.5, 0, 0.5);
+                    entity.setLocationAndAngles(random.x, random.y, random.z, world.rand.nextFloat() * 360F, 0);
                     --tries;
                 }
 
@@ -115,12 +140,14 @@ public class MobDuplicatorTile extends WorkingAreaElectricMachine {
 
                 this.world.spawnEntity(entity);
 
-                if (entity != null) entity.spawnExplosionParticle();
+                if (entity != null) {
+                    entity.spawnExplosionParticle();
+                    entity.enablePersistence();
+                }
                 experienceTank.drain(essenceNeeded, true);
             }
             --spawnAmount;
         }
-
         return 1;
     }
 
@@ -193,7 +220,7 @@ public class MobDuplicatorTile extends WorkingAreaElectricMachine {
 
     private boolean canEntitySpawn(EntityLiving living) {
         return /*getWorkingArea().contains(new Vec3d(living.getEntityBoundingBox().minX, living.getEntityBoundingBox().minY, living.getEntityBoundingBox().minZ)) &&
-                getWorkingArea().contains(new Vec3d(living.getEntityBoundingBox().maxX, living.getEntityBoundingBox().maxY, living.getEntityBoundingBox().maxZ)
+                getWorkingArea().contains(new Vec3d(living.getEntityBoundingBox().maxX, living.getEntityBoundingBox().maxY, living.getEntityBoundingBox().maxZ))
                 &&*/ this.world.checkNoEntityCollision(living.getEntityBoundingBox()) && this.world.getCollisionBoxes(living, living.getEntityBoundingBox()).isEmpty() && (!this.world.containsAnyLiquid(living.getEntityBoundingBox()) || living.isCreatureType(EnumCreatureType.WATER_CREATURE, false));
     }
 }

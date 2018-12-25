@@ -1,0 +1,16 @@
+{
+  "result": {
+    "item": "industrialforegoing:laser_lens_inverted",
+    "data": 9
+  },
+  "ingredients": [
+    {
+      "item": "industrialforegoing:laser_lens_inverted",
+      "data": 32767
+    },
+    {
+      "item": "#DYECYAN"
+    }
+  ],
+  "type": "forge:ore_shapeless"
+}

@@ -1,0 +1,9 @@
+{
+  "parent": "industrialforegoing:block/base_block",
+  "textures": {
+    "north": "industrialforegoing:blocks/froster",
+    "south": "industrialforegoing:blocks/froster",
+    "west": "industrialforegoing:blocks/froster",
+    "east": "industrialforegoing:blocks/froster"
+  }
+}

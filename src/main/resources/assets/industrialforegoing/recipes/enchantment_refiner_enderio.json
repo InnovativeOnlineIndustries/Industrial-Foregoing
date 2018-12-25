@@ -1,0 +1,47 @@
+{
+  "result": {
+    "item": "industrialforegoing:enchantment_refiner"
+  },
+  "pattern": [
+    "pep",
+    "bmn",
+    "pgp"
+  ],
+  "conditions": [
+    {
+      "type": "forge:and",
+      "values": [
+        {
+          "type": "forge:mod_loaded",
+          "modid": "enderio"
+        },
+        {
+          "type": "industrialforegoing:configuration_value",
+          "value": "useEnderIOFrames"
+        }
+      ]
+    }
+  ],
+  "type": "forge:ore_shaped",
+  "key": {
+    "p": {
+      "item": "industrialforegoing:plastic"
+    },
+    "b": {
+      "item": "minecraft:book"
+    },
+    "e": {
+      "item": "minecraft:ender_pearl"
+    },
+    "g": {
+      "item": "#GEARDIAMOND"
+    },
+    "m": {
+      "item": "enderio:item_material",
+      "data": 0
+    },
+    "n": {
+      "item": "minecraft:enchanted_book"
+    }
+  }
+}

@@ -1,6 +1,27 @@
+/*
+ * This file is part of Industrial Foregoing.
+ *
+ * Copyright 2018, Buuz135
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy of
+ * this software and associated documentation files (the "Software"), to deal in the
+ * Software without restriction, including without limitation the rights to use, copy,
+ * modify, merge, publish, distribute, sublicense, and/or sell copies of the Software,
+ * and to permit persons to whom the Software is furnished to do so, subject to the
+ * following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in all copies
+ * or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED,
+ * INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR
+ * PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE
+ * FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE,
+ * ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+ */
 package com.buuz135.industrial.proxy.client.infopiece;
 
-import com.buuz135.industrial.tile.generator.PetrifiedFuelGeneratorTile;
+import com.buuz135.industrial.tile.generator.AbstractFuelGenerator;
 import com.buuz135.industrial.utils.Reference;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
@@ -15,9 +36,9 @@ import java.util.concurrent.TimeUnit;
 
 public class PetrifiedFuelInfoPiece extends BasicRenderedGuiPiece {
 
-    private PetrifiedFuelGeneratorTile tile;
+    private AbstractFuelGenerator tile;
 
-    public PetrifiedFuelInfoPiece(PetrifiedFuelGeneratorTile tile, int left, int top) {
+    public PetrifiedFuelInfoPiece(AbstractFuelGenerator tile, int left, int top) {
         super(left, top, 76, 55, new ResourceLocation(Reference.MOD_ID, "textures/gui/machines.png"), 1, 1);
         this.tile = tile;
     }

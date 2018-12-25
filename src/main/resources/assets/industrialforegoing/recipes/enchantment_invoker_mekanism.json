@@ -1,0 +1,44 @@
+{
+  "result": {
+    "item": "industrialforegoing:enchantment_invoker"
+  },
+  "pattern": [
+    "pbp",
+    "dmd",
+    "ooo"
+  ],
+  "conditions": [
+    {
+      "type": "forge:and",
+      "values": [
+        {
+          "type": "forge:mod_loaded",
+          "modid": "mekanism"
+        },
+        {
+          "type": "industrialforegoing:configuration_value",
+          "value": "useMekanismFrames"
+        }
+      ]
+    }
+  ],
+  "type": "forge:ore_shaped",
+  "key": {
+    "p": {
+      "item": "industrialforegoing:plastic"
+    },
+    "b": {
+      "item": "minecraft:book"
+    },
+    "d": {
+      "item": "#GEMDIAMOND"
+    },
+    "m": {
+      "item": "mekanism:basicblock",
+      "data": 8
+    },
+    "o": {
+      "item": "minecraft:obsidian"
+    }
+  }
+}

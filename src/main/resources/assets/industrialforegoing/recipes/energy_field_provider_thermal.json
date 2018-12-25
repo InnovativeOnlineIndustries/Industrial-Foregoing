@@ -1,0 +1,44 @@
+{
+  "result": {
+    "item": "industrialforegoing:energy_field_provider"
+  },
+  "pattern": [
+    "gug",
+    "gtg",
+    "rdr"
+  ],
+  "conditions": [
+    {
+      "type": "forge:and",
+      "values": [
+        {
+          "type": "forge:mod_loaded",
+          "modid": "thermalexpansion"
+        },
+        {
+          "type": "industrialforegoing:configuration_value",
+          "value": "useTEFrames"
+        }
+      ]
+    }
+  ],
+  "type": "forge:ore_shaped",
+  "key": {
+    "r": {
+      "item": "minecraft:repeater"
+    },
+    "t": {
+      "item": "thermalexpansion:frame",
+      "data": 0
+    },
+    "d": {
+      "item": "#GEARDIAMOND"
+    },
+    "u": {
+      "item": "industrialforegoing:energy_field_addon"
+    },
+    "g": {
+      "item": "#INGOTGOLD"
+    }
+  }
+}

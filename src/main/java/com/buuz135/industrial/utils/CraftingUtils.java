@@ -1,5 +1,27 @@
+/*
+ * This file is part of Industrial Foregoing.
+ *
+ * Copyright 2018, Buuz135
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy of
+ * this software and associated documentation files (the "Software"), to deal in the
+ * Software without restriction, including without limitation the rights to use, copy,
+ * modify, merge, publish, distribute, sublicense, and/or sell copies of the Software,
+ * and to permit persons to whom the Software is furnished to do so, subject to the
+ * following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in all copies
+ * or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED,
+ * INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR
+ * PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE
+ * FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE,
+ * ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+ */
 package com.buuz135.industrial.utils;
 
+import com.buuz135.industrial.proxy.BlockRegistry;
 import net.minecraft.block.Block;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
@@ -15,27 +37,36 @@ import net.minecraftforge.fml.common.Loader;
 import net.minecraftforge.oredict.OreDictionary;
 
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
 
 public class CraftingUtils {
 
+    public static Set<ItemStack[]> missingRecipes = new HashSet<>();
     private static HashMap<ItemStack, ItemStack> crushedRecipes = new HashMap<>();
+    private static HashMap<ItemStack, ItemStack> cachedRecipes = new HashMap<>();
 
     public static ItemStack findOutput(int size, ItemStack input, World world) {
+        ItemStack cachedStack = input.copy();
+        cachedStack.setCount(size * size);
+        for (Map.Entry<ItemStack, ItemStack> entry : cachedRecipes.entrySet()) {
+            if (entry.getKey().isItemEqual(cachedStack) && entry.getKey().getCount() == cachedStack.getCount()) {
+                return entry.getValue().copy();
+            }
+        }
         InventoryCrafting inventoryCrafting = new InventoryCrafting(new Container() {
             @Override
             public boolean canInteractWith(EntityPlayer playerIn) {
                 return false;
             }
         }, size, size);
-        for (int i = 0; i < size * size; ++i) {
+        for (int i = 0; i < size * size; i++) {
             inventoryCrafting.setInventorySlotContents(i, input.copy());
         }
-        return CraftingManager.findMatchingResult(inventoryCrafting, world);
-    }
-
-    public static ItemStack findOutput(World world, ItemStack... inputs) {
-        return CraftingManager.findMatchingResult(genCraftingInventory(world, inputs), world);
+        ItemStack output = CraftingManager.findMatchingResult(inventoryCrafting, world);
+        cachedRecipes.put(cachedStack, output.copy());
+        return output.copy();
     }
 
     public static InventoryCrafting genCraftingInventory(World world, ItemStack... inputs) {
@@ -52,7 +83,21 @@ public class CraftingUtils {
     }
 
     public static IRecipe findRecipe(World world, ItemStack... inputs) {
-        return CraftingManager.findMatchingRecipe(genCraftingInventory(world, inputs), world);
+        for (ItemStack[] missingRecipe : missingRecipes) {
+            if (doesStackArrayEquals(missingRecipe, inputs)) return null;
+        }
+        IRecipe recipe = CraftingManager.findMatchingRecipe(genCraftingInventory(world, inputs), world);
+        if (recipe == null) missingRecipes.add(inputs);
+        return recipe;
+    }
+
+    public static boolean doesStackArrayEquals(ItemStack[] original, ItemStack[] compare) {
+        if (original.length != compare.length) return false;
+        for (int i = 0; i < original.length; i++) {
+            if (original[i].isEmpty() && compare[i].isEmpty()) continue;
+            if (!original[i].isItemEqual(compare[i])) return false;
+        }
+        return true;
     }
 
     public static ItemStack getCrushOutput(ItemStack stack) {
@@ -65,15 +110,17 @@ public class CraftingUtils {
     }
 
     public static void generateCrushedRecipes() {
-        crushedRecipes.put(new ItemStack(Blocks.STONE), new ItemStack(Blocks.COBBLESTONE));
+        //crushedRecipes.put(new ItemStack(Blocks.STONE), new ItemStack(Blocks.COBBLESTONE));
         crushedRecipes.put(new ItemStack(Blocks.COBBLESTONE), new ItemStack(Blocks.GRAVEL));
         crushedRecipes.put(new ItemStack(Blocks.GRAVEL), new ItemStack(Blocks.SAND));
         ItemStack latest = new ItemStack(Blocks.SAND);
-        if (Loader.isModLoaded("exnihilocreatio")) {
+        if (BlockRegistry.materialStoneWorkFactoryBlock.produceExNihiloDust() && Loader.isModLoaded("exnihilocreatio")) {
             Block dust = Block.REGISTRY.getObject(new ResourceLocation("exnihilocreatio:block_dust"));
             crushedRecipes.put(new ItemStack(Blocks.SAND), latest = new ItemStack(dust));
         }
-        NonNullList<ItemStack> items = OreDictionary.getOres("itemSilicon");
-        if (items.size() > 0) crushedRecipes.put(latest, items.get(0));
+        if (BlockRegistry.materialStoneWorkFactoryBlock.produceSilicon()) {
+            NonNullList<ItemStack> items = OreDictionary.getOres("itemSilicon");
+            if (items.size() > 0) crushedRecipes.put(latest, items.get(0));
+        }
     }
 }

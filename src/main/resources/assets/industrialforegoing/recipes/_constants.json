@@ -2,9 +2,9 @@
   {
     "ingredient": {
       "type": "forge:ore_dict",
-      "ore": "IFCORE"
+      "ore": "IFWITHER"
     },
-    "name": "IFCORE"
+    "name": "IFWITHER"
   },
   {
     "ingredient": {
@@ -44,6 +44,13 @@
   {
     "ingredient": {
       "type": "forge:ore_dict",
+      "ore": "blockGlass"
+    },
+    "name": "BLOCKGLASS"
+  },
+  {
+    "ingredient": {
+      "type": "forge:ore_dict",
       "ore": "blockGlassColorless"
     },
     "name": "BLOCKGLASSCOLORLESS"
@@ -65,6 +72,13 @@
   {
     "ingredient": {
       "type": "forge:ore_dict",
+      "ore": "dyeBlack"
+    },
+    "name": "DYEBLACK"
+  },
+  {
+    "ingredient": {
+      "type": "forge:ore_dict",
       "ore": "dyeBlue"
     },
     "name": "DYEBLUE"
@@ -72,9 +86,72 @@
   {
     "ingredient": {
       "type": "forge:ore_dict",
+      "ore": "dyeBrown"
+    },
+    "name": "DYEBROWN"
+  },
+  {
+    "ingredient": {
+      "type": "forge:ore_dict",
+      "ore": "dyeCyan"
+    },
+    "name": "DYECYAN"
+  },
+  {
+    "ingredient": {
+      "type": "forge:ore_dict",
+      "ore": "dyeGray"
+    },
+    "name": "DYEGRAY"
+  },
+  {
+    "ingredient": {
+      "type": "forge:ore_dict",
       "ore": "dyeGreen"
     },
     "name": "DYEGREEN"
+  },
+  {
+    "ingredient": {
+      "type": "forge:ore_dict",
+      "ore": "dyeLightBlue"
+    },
+    "name": "DYELIGHTBLUE"
+  },
+  {
+    "ingredient": {
+      "type": "forge:ore_dict",
+      "ore": "dyeLightGray"
+    },
+    "name": "DYELIGHTGRAY"
+  },
+  {
+    "ingredient": {
+      "type": "forge:ore_dict",
+      "ore": "dyeLime"
+    },
+    "name": "DYELIME"
+  },
+  {
+    "ingredient": {
+      "type": "forge:ore_dict",
+      "ore": "dyeMagenta"
+    },
+    "name": "DYEMAGENTA"
+  },
+  {
+    "ingredient": {
+      "type": "forge:ore_dict",
+      "ore": "dyeOrange"
+    },
+    "name": "DYEORANGE"
+  },
+  {
+    "ingredient": {
+      "type": "forge:ore_dict",
+      "ore": "dyePink"
+    },
+    "name": "DYEPINK"
   },
   {
     "ingredient": {
@@ -89,6 +166,20 @@
       "ore": "dyeRed"
     },
     "name": "DYERED"
+  },
+  {
+    "ingredient": {
+      "type": "forge:ore_dict",
+      "ore": "dyeWhite"
+    },
+    "name": "DYEWHITE"
+  },
+  {
+    "ingredient": {
+      "type": "forge:ore_dict",
+      "ore": "dyeYellow"
+    },
+    "name": "DYEYELLOW"
   },
   {
     "ingredient": {
@@ -176,35 +267,21 @@
   },
   {
     "ingredient": {
-      "item": "teslacorelib:machine_case"
+      "item": "minecraft:nether_star",
+      "data": 0
     },
-    "name": "IFCORE",
-    "conditions": [
-      {
-        "type": "minecraft:item_exists",
-        "item": "teslacorelib:machine_case"
-      }
-    ]
+    "name": "IFWITHER"
   },
   {
     "ingredient": {
-      "item": "thermalexpansion:frame",
-      "data": 0
+      "item": "minecraft:skull",
+      "data": 1
     },
-    "name": "IFCORE",
+    "name": "IFWITHER",
     "conditions": [
       {
-        "type": "forge:and",
-        "values": [
-          {
-            "type": "forge:mod_loaded",
-            "modid": "thermalexpansion"
-          },
-          {
-            "type": "industrialforegoing:configuration_value",
-            "value": "useTEFrames"
-          }
-        ]
+        "type": "industrialforegoing:configuration_value",
+        "value": "machines.wither_builder.HCWither"
       }
     ]
   },

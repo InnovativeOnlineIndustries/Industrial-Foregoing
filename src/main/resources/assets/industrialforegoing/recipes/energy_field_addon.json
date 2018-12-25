@@ -10,7 +10,7 @@
   "type": "minecraft:crafting_shaped",
   "key": {
     "p": {
-      "item": "industrialforegoing:pink_slime"
+      "item": "industrialforegoing:pink_slime_ingot"
     },
     "r": {
       "item": "minecraft:redstone"

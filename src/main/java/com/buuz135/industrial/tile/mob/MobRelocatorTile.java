@@ -1,22 +1,51 @@
+/*
+ * This file is part of Industrial Foregoing.
+ *
+ * Copyright 2018, Buuz135
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy of
+ * this software and associated documentation files (the "Software"), to deal in the
+ * Software without restriction, including without limitation the rights to use, copy,
+ * modify, merge, publish, distribute, sublicense, and/or sell copies of the Software,
+ * and to permit persons to whom the Software is furnished to do so, subject to the
+ * following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in all copies
+ * or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED,
+ * INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR
+ * PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE
+ * FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE,
+ * ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+ */
 package com.buuz135.industrial.tile.mob;
 
 import com.buuz135.industrial.IndustrialForegoing;
 import com.buuz135.industrial.item.addon.AdultFilterAddonItem;
+import com.buuz135.industrial.item.addon.FortuneAddonItem;
+import com.buuz135.industrial.proxy.BlockRegistry;
 import com.buuz135.industrial.proxy.FluidsRegistry;
 import com.buuz135.industrial.tile.CustomColoredItemHandler;
-import com.buuz135.industrial.tile.IAcceptsAdultFilter;
 import com.buuz135.industrial.tile.WorkingAreaElectricMachine;
-import com.buuz135.industrial.tile.block.MobRelocatorBlock;
+import com.buuz135.industrial.tile.api.IAcceptsAdultFilter;
+import com.buuz135.industrial.tile.api.IAcceptsFortuneAddon;
 import com.buuz135.industrial.utils.ItemStackUtils;
 import com.buuz135.industrial.utils.WorkUtils;
 import net.minecraft.entity.EntityAgeable;
 import net.minecraft.entity.EntityLiving;
+import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.item.EntityXPOrb;
+import net.minecraft.init.Enchantments;
+import net.minecraft.init.Items;
 import net.minecraft.item.EnumDyeColor;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.DamageSource;
+import net.minecraft.util.EntityDamageSource;
 import net.minecraft.util.math.AxisAlignedBB;
+import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.TextComponentTranslation;
+import net.minecraft.util.text.TextFormatting;
 import net.minecraftforge.common.util.FakePlayer;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.IFluidTank;
@@ -27,7 +56,7 @@ import net.ndrei.teslacorelib.inventory.BoundingRectangle;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicBoolean;
 
-public class MobRelocatorTile extends WorkingAreaElectricMachine implements IAcceptsAdultFilter {
+public class MobRelocatorTile extends WorkingAreaElectricMachine implements IAcceptsAdultFilter, IAcceptsFortuneAddon {
 
     private IFluidTank outExp;
     private ItemStackHandler outItems;
@@ -64,11 +93,15 @@ public class MobRelocatorTile extends WorkingAreaElectricMachine implements IAcc
     @Override
     public void protectedUpdate() {
         super.protectedUpdate();
+        if (this.world.isRemote) return;
         this.getWorld().getEntitiesWithinAABB(EntityXPOrb.class, getWorkingArea().expand(2, 2, 2)).stream().filter(entityXPOrb -> !entityXPOrb.isDead).forEach(entityXPOrb -> {
-            if (this.outExp.fill(new FluidStack(FluidsRegistry.ESSENCE, (int) (entityXPOrb.getXpValue() * 20 * ((MobRelocatorBlock) this.getBlockType()).getEssenceMultiplier())), false) > 0) {
-                this.outExp.fill(new FluidStack(FluidsRegistry.ESSENCE, (int) (entityXPOrb.getXpValue() * 20 * ((MobRelocatorBlock) this.getBlockType()).getEssenceMultiplier())), true);
+            if (this.outExp.fill(new FluidStack(FluidsRegistry.ESSENCE, (int) (entityXPOrb.getXpValue() * 20 * BlockRegistry.mobRelocatorBlock.getEssenceMultiplier())), false) > 0) {
+                this.outExp.fill(new FluidStack(FluidsRegistry.ESSENCE, (int) (entityXPOrb.getXpValue() * 20 * BlockRegistry.mobRelocatorBlock.getEssenceMultiplier())), true);
+                entityXPOrb.setDead();
+                this.forceSync();
+            } else if (entityXPOrb.xpOrbAge < 4800) {
+                entityXPOrb.xpOrbAge = 4800;
             }
-            entityXPOrb.setDead();
         });
     }
 
@@ -78,20 +111,37 @@ public class MobRelocatorTile extends WorkingAreaElectricMachine implements IAcc
 
         AxisAlignedBB area = getWorkingArea();
         List<EntityLiving> mobs = this.getWorld().getEntitiesWithinAABB(EntityLiving.class, area);
+        mobs.removeIf(entityLiving -> entityLiving.isDead);
         if (mobs.size() == 0) return 0;
-        FakePlayer player = IndustrialForegoing.getFakePlayer(world);
+        FakePlayer player = IndustrialForegoing.getFakePlayer(world, pos);
+        if (getFortuneLevel() > 0) {
+            ItemStack stick = new ItemStack(Items.STICK);
+            stick.addEnchantment(Enchantments.LOOTING, getFortuneLevel());
+            player.setHeldItem(player.getActiveHand(), stick);
+        }
         AtomicBoolean hasWorked = new AtomicBoolean(false);
-        mobs.stream().filter(entityLiving -> !hasAddon() || (!(entityLiving instanceof EntityAgeable) || !entityLiving.isChild())).forEach(entityLiving -> {
-            entityLiving.attackEntityFrom(DamageSource.causePlayerDamage(player), Integer.MAX_VALUE);
+        boolean hasAddon = hasAddon();
+        mobs.stream().filter(entityLiving -> !hasAddon || (!(entityLiving instanceof EntityAgeable) || !entityLiving.isChild())).forEach(entityLiving -> {
+            entityLiving.attackEntityFrom(new EntityDamageSource("mob_crusher", player) {
+                @Override
+                public ITextComponent getDeathMessage(EntityLivingBase entityLivingBaseIn) {
+                    return new TextComponentTranslation("text.industrialforegoing.chat.crusher_kill", entityLivingBaseIn.getDisplayName().getFormattedText(), TextFormatting.RESET);
+                }
+            }, BlockRegistry.mobRelocatorBlock.getDamage());
             hasWorked.set(true);
         });
         List<EntityItem> items = this.getWorld().getEntitiesWithinAABB(EntityItem.class, area);
         for (EntityItem item : items) {
-            if (!item.getItem().isEmpty()) {
-                ItemHandlerHelper.insertItem(outItems, item.getItem(), false);
-                item.setDead();
+            if (!item.getItem().isEmpty() && !item.isDead) {
+                if (ItemHandlerHelper.insertItem(outItems, item.getItem(), true).isEmpty()) {
+                    ItemHandlerHelper.insertItem(outItems, item.getItem(), false);
+                    item.setDead();
+                } else {
+                    item.lifespan = 20 * 60;
+                }
             }
         }
+        player.setHeldItem(player.getActiveHand(), ItemStack.EMPTY);
         return hasWorked.get() ? 1 : 0;
     }
 
@@ -103,11 +153,16 @@ public class MobRelocatorTile extends WorkingAreaElectricMachine implements IAcc
 
     @Override
     protected void processFluidItems(ItemStackHandler fluidItems) {
-        ItemStackUtils.processFluidItems(fluidItems, outExp);
+        ItemStackUtils.fillItemFromTank(fluidItems, outExp);
     }
 
     @Override
     public boolean hasAddon() {
         return this.hasAddon(AdultFilterAddonItem.class);
+    }
+
+    @Override
+    public int getFortuneLevel() {
+        return hasAddon(FortuneAddonItem.class) ? getAddon(FortuneAddonItem.class).getLevel(getAddonStack(FortuneAddonItem.class)) : 0;
     }
 }

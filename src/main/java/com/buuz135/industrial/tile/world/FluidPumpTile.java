@@ -1,5 +1,27 @@
+/*
+ * This file is part of Industrial Foregoing.
+ *
+ * Copyright 2018, Buuz135
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy of
+ * this software and associated documentation files (the "Software"), to deal in the
+ * Software without restriction, including without limitation the rights to use, copy,
+ * modify, merge, publish, distribute, sublicense, and/or sell copies of the Software,
+ * and to permit persons to whom the Software is furnished to do so, subject to the
+ * following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in all copies
+ * or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED,
+ * INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR
+ * PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE
+ * FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE,
+ * ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+ */
 package com.buuz135.industrial.tile.world;
 
+import com.buuz135.industrial.proxy.BlockRegistry;
 import com.buuz135.industrial.tile.WorkingAreaElectricMachine;
 import com.buuz135.industrial.utils.BlockUtils;
 import com.buuz135.industrial.utils.ItemStackUtils;
@@ -16,10 +38,7 @@ import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraft.util.text.TextFormatting;
-import net.minecraftforge.fluids.FluidRegistry;
-import net.minecraftforge.fluids.FluidStack;
-import net.minecraftforge.fluids.FluidUtil;
-import net.minecraftforge.fluids.IFluidTank;
+import net.minecraftforge.fluids.*;
 import net.ndrei.teslacorelib.gui.BasicRenderedGuiPiece;
 import net.ndrei.teslacorelib.gui.BasicTeslaGuiContainer;
 import net.ndrei.teslacorelib.gui.IGuiContainerPiece;
@@ -35,8 +54,9 @@ public class FluidPumpTile extends WorkingAreaElectricMachine {
 
     private IFluidTank tank;
     private String fluid;
-    private Queue<BlockPos> blocks;
+    private Queue<BlockPos> allBlocks;
     private boolean isWorkFinished;
+    private int lowestY;
 
     public FluidPumpTile() {
         super(FluidPumpTile.class.getName().hashCode());
@@ -47,6 +67,7 @@ public class FluidPumpTile extends WorkingAreaElectricMachine {
         super.initializeInventories();
         tank = this.addSimpleFluidTank(32000, "output tank", EnumDyeColor.ORANGE, 50, 25, FluidTankType.OUTPUT, fluidStack -> false, fluidStack -> true);
         isWorkFinished = false;
+        lowestY = 256;
     }
 
     @Override
@@ -58,35 +79,58 @@ public class FluidPumpTile extends WorkingAreaElectricMachine {
 
     @Override
     public float work() {
-        if (WorkUtils.isDisabled(this.getBlockType()) || isWorkFinished) return 0;
+        if (WorkUtils.isDisabled(this.getBlockType()) || isWorkFinished || fluid == null) return 0;
         if (tank.getFluidAmount() + 1000 <= tank.getCapacity()) {
-            if (blocks == null) {
-                blocks = new PriorityQueue<>(Comparator.comparingDouble(value -> (this.pos).distanceSq(((BlockPos) value).getX(), this.pos.getY() - 1, ((BlockPos) value).getZ())));
-                BlockUtils.getBlockPosInAABB(getWorkingArea()).stream().filter(pos1 -> !this.world.isOutsideBuildHeight(pos1) && FluidRegistry.lookupFluidForBlock(this.world.getBlockState(pos1).getBlock()) != null && FluidRegistry.lookupFluidForBlock(this.world.getBlockState(pos1).getBlock()).getName().equals(fluid)).forEach(pos1 -> blocks.add(pos1));
-            }
-            if (blocks.isEmpty()) {
+            if (lowestY == this.pos.getY()) {
                 isWorkFinished = true;
-                blocks = null;
+                allBlocks = null;
                 return 0;
             }
-            BlockPos peeked = blocks.peek();
-            while (!blocks.isEmpty() && (this.world.isOutsideBuildHeight(peeked) || FluidRegistry.lookupFluidForBlock(this.world.getBlockState(peeked).getBlock()) == null || !FluidRegistry.lookupFluidForBlock(this.world.getBlockState(peeked).getBlock()).getName().equals(fluid) || this.world.getBlockState(peeked).getBlock().getMetaFromState(this.world.getBlockState(peeked)) != 0)) {
-                blocks.poll();
-                if (!blocks.isEmpty()) peeked = blocks.peek();
+            if (allBlocks == null || allBlocks.isEmpty()) {
+                fillCache();
             }
-            if (blocks.isEmpty()) {
-                blocks = null;
-                return 0;
+            BlockPos peeked = allBlocks.peek();
+            while (!allBlocks.isEmpty() && (this.world.isOutsideBuildHeight(peeked) || !isBlockSameFluid(peeked) || this.world.getBlockState(peeked).getBlock().getMetaFromState(this.world.getBlockState(peeked)) != 0)) {
+                allBlocks.poll();
+                if (!allBlocks.isEmpty()) peeked = allBlocks.peek();
             }
-            while (this.world.getBlockState(peeked).getBlock().equals(this.world.getBlockState(peeked.add(0, -1, 0)).getBlock())) {
-                peeked = peeked.add(0, -1, 0);
+            if (peeked == null) return 0;
+            Fluid fluid = FluidRegistry.lookupFluidForBlock(this.world.getBlockState(peeked).getBlock());
+            if (fluid != null) {
+                FluidStack stack = new FluidStack(fluid, 1000);
+                tank.fill(stack, true);
+                if (BlockRegistry.fluidPumpBlock.isReplaceFluidWithCobble())
+                    this.world.setBlockState(peeked, Blocks.COBBLESTONE.getDefaultState());
+                else world.setBlockToAir(peeked);
             }
-            FluidStack stack = new FluidStack(FluidRegistry.lookupFluidForBlock(this.world.getBlockState(peeked).getBlock()), 1000);
-            tank.fill(stack, true);
-            this.world.setBlockState(peeked, Blocks.COBBLESTONE.getDefaultState());
+            allBlocks.poll();
             return 1;
         }
         return 0;
+    }
+
+    private void fillCache() {
+        int lowerY = this.getPos().getY();
+        for (BlockPos blockPos : BlockUtils.getBlockPosInAABB(getWorkingArea())) {
+            BlockPos checking = blockPos;
+            while (isBlockSameFluid(checking)) {
+                checking = checking.down();
+            }
+            if (checking.getY() < lowerY) {
+                lowerY = checking.getY();
+            }
+        }
+        this.lowestY = lowerY + 1;
+        if (allBlocks == null) {
+            allBlocks = new PriorityQueue<>(Comparator.comparingDouble(value -> ((BlockPos) value).distanceSqToCenter(this.pos.getX(), lowestY, this.pos.getZ())).reversed());
+        }
+        allBlocks.addAll(BlockUtils.getBlockPosInAABB(getWorkingArea().offset(0, lowestY - this.getPos().getY() + 1, 0)));
+        allBlocks.removeIf(pos1 -> !isBlockSameFluid(pos1));
+    }
+
+    private boolean isBlockSameFluid(BlockPos pos) {
+        Fluid fluid = FluidRegistry.lookupFluidForBlock(this.world.getBlockState(pos).getBlock());
+        return fluid != null && fluid.getName().equals(this.fluid);
     }
 
     //TODO make it fill buckets

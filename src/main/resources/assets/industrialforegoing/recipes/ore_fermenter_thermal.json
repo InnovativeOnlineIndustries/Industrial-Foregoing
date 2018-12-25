@@ -1,0 +1,41 @@
+{
+  "result": {
+    "item": "industrialforegoing:ore_fermenter"
+  },
+  "pattern": [
+    "iwi",
+    "wgw",
+    "imi"
+  ],
+  "conditions": [
+    {
+      "type": "forge:and",
+      "values": [
+        {
+          "type": "forge:mod_loaded",
+          "modid": "thermalexpansion"
+        },
+        {
+          "type": "industrialforegoing:configuration_value",
+          "value": "useTEFrames"
+        }
+      ]
+    }
+  ],
+  "type": "forge:ore_shaped",
+  "key": {
+    "w": {
+      "item": "#LOGWOOD"
+    },
+    "g": {
+      "item": "#GEARIRON"
+    },
+    "i": {
+      "item": "minecraft:iron_bars"
+    },
+    "m": {
+      "item": "thermalexpansion:frame",
+      "data": 0
+    }
+  }
+}

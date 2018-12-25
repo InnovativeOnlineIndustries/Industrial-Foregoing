@@ -1,0 +1,47 @@
+{
+  "result": {
+    "item": "industrialforegoing:lava_fabricator"
+  },
+  "pattern": [
+    "pop",
+    "cmc",
+    "brb"
+  ],
+  "conditions": [
+    {
+      "type": "forge:and",
+      "values": [
+        {
+          "type": "forge:mod_loaded",
+          "modid": "mekanism"
+        },
+        {
+          "type": "industrialforegoing:configuration_value",
+          "value": "useMekanismFrames"
+        }
+      ]
+    }
+  ],
+  "type": "minecraft:crafting_shaped",
+  "key": {
+    "p": {
+      "item": "industrialforegoing:plastic"
+    },
+    "b": {
+      "item": "minecraft:blaze_rod"
+    },
+    "r": {
+      "item": "minecraft:redstone_block"
+    },
+    "c": {
+      "item": "minecraft:magma_cream"
+    },
+    "m": {
+      "item": "mekanism:basicblock",
+      "data": 8
+    },
+    "o": {
+      "item": "minecraft:obsidian"
+    }
+  }
+}

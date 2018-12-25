@@ -1,3 +1,24 @@
+/*
+ * This file is part of Industrial Foregoing.
+ *
+ * Copyright 2018, Buuz135
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy of
+ * this software and associated documentation files (the "Software"), to deal in the
+ * Software without restriction, including without limitation the rights to use, copy,
+ * modify, merge, publish, distribute, sublicense, and/or sell copies of the Software,
+ * and to permit persons to whom the Software is furnished to do so, subject to the
+ * following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in all copies
+ * or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED,
+ * INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR
+ * PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE
+ * FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE,
+ * ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+ */
 package com.buuz135.industrial.tile.block;
 
 import com.buuz135.industrial.tile.WorkingAreaElectricMachine;
@@ -8,27 +29,28 @@ import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.TextComponentTranslation;
+import net.minecraft.util.text.TextFormatting;
 
 import java.util.List;
 
 public abstract class CustomAreaOrientedBlock<T extends WorkingAreaElectricMachine> extends CustomOrientedBlock {
 
-    private int width;
+    private int maxWidth;
     private int height;
     private boolean acceptsRangeAddon;
     private RangeType type;
 
-    public CustomAreaOrientedBlock(String registryName, Class<T> teClass, Material material, int energyForWork, int energyRate, RangeType type, int width, int height, boolean acceptsRangeAddon) {
+    public CustomAreaOrientedBlock(String registryName, Class<T> teClass, Material material, int energyForWork, int energyRate, RangeType type, int maxWidth, int height, boolean acceptsRangeAddon) {
         super(registryName, teClass, material, energyForWork, energyRate);
-        this.width = width;
+        this.maxWidth = maxWidth;
         this.height = height;
         this.acceptsRangeAddon = acceptsRangeAddon;
         this.type = type;
     }
 
 
-    public int getWidth() {
-        return width;
+    public int getMaxWidth() {
+        return maxWidth;
     }
 
     public int getHeight() {
@@ -46,9 +68,10 @@ public abstract class CustomAreaOrientedBlock<T extends WorkingAreaElectricMachi
     @Override
     public List<String> getTooltip(ItemStack stack) {
         List<String> tooltips = super.getTooltip(stack);
-        tooltips.add(new TextComponentTranslation("text.industrialforegoing.tooltip.range").getFormattedText().replace("{0}", "" + (width * 2 + 1)).replace("{1}", (height + 1) + ""));
         if (acceptsRangeAddon)
-            tooltips.add(new TextComponentTranslation("text.industrialforegoing.tooltip.accepts_range_addons").getFormattedText());
+            tooltips.add(new TextComponentTranslation("text.industrialforegoing.tooltip.accepts_range_addons").getFormattedText() + TextFormatting.GRAY + " (" + new TextComponentTranslation("text.industrialforegoing.tooltip.max_tier").getFormattedText() + TextFormatting.GRAY + " " + getMaxWidth() + ")");
+        else
+            tooltips.add(new TextComponentTranslation("text.industrialforegoing.tooltip.range").getFormattedText().replace("{0}", "" + (maxWidth * 2 + 1)).replace("{1}", (height + 1) + ""));
         return tooltips;
     }
 

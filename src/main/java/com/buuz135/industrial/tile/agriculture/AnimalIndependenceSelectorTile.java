@@ -1,8 +1,29 @@
+/*
+ * This file is part of Industrial Foregoing.
+ *
+ * Copyright 2018, Buuz135
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy of
+ * this software and associated documentation files (the "Software"), to deal in the
+ * Software without restriction, including without limitation the rights to use, copy,
+ * modify, merge, publish, distribute, sublicense, and/or sell copies of the Software,
+ * and to permit persons to whom the Software is furnished to do so, subject to the
+ * following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in all copies
+ * or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED,
+ * INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR
+ * PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE
+ * FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE,
+ * ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+ */
 package com.buuz135.industrial.tile.agriculture;
 
 import com.buuz135.industrial.item.addon.AdultFilterAddonItem;
-import com.buuz135.industrial.tile.IAcceptsAdultFilter;
 import com.buuz135.industrial.tile.WorkingAreaElectricMachine;
+import com.buuz135.industrial.tile.api.IAcceptsAdultFilter;
 import com.buuz135.industrial.utils.WorkUtils;
 import net.minecraft.entity.EntityAgeable;
 import net.minecraft.util.math.AxisAlignedBB;
@@ -25,9 +46,10 @@ public class AnimalIndependenceSelectorTile extends WorkingAreaElectricMachine i
         List<EntityAgeable> animals = this.world.getEntitiesWithinAABB(EntityAgeable.class, area);
         if (animals.size() == 0) return 0;
         EntityAgeable animal = animals.get(0);
-        while (animal.isChild() == this.hasAddon(AdultFilterAddonItem.class) && animals.indexOf(animal) + 1 < animals.size())
+        boolean hasAddon = this.hasAddon(AdultFilterAddonItem.class);
+        while (animal.isChild() == hasAddon && animals.indexOf(animal) + 1 < animals.size())
             animal = animals.get(animals.indexOf(animal) + 1);
-        if (animal.isChild() == this.hasAddon(AdultFilterAddonItem.class)) return 0;
+        if (animal.isChild() == hasAddon) return 0;
         BlockPos pos = this.getPos().offset(this.getFacing(), 1);
         animal.setPositionAndUpdate(pos.getX() + 0.5, pos.getY(), pos.getZ() + 0.5);
         return 1;

@@ -1,8 +1,8 @@
 - Beacon
 - Item/Fluid extraction wireless
 - Plant simulator
-- Upgrade to move the  working area
 - Filter water for the pump
 - A force spawning method using liquid meat
 - Fluid reactor
 - Cake placer
+- Make the MIT change color based on the captured entity

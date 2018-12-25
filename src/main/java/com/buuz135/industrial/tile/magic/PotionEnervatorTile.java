@@ -1,3 +1,24 @@
+/*
+ * This file is part of Industrial Foregoing.
+ *
+ * Copyright 2018, Buuz135
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy of
+ * this software and associated documentation files (the "Software"), to deal in the
+ * Software without restriction, including without limitation the rights to use, copy,
+ * modify, merge, publish, distribute, sublicense, and/or sell copies of the Software,
+ * and to permit persons to whom the Software is furnished to do so, subject to the
+ * following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in all copies
+ * or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED,
+ * INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR
+ * PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE
+ * FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE,
+ * ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+ */
 package com.buuz135.industrial.tile.magic;
 
 import com.buuz135.industrial.tile.CustomColoredItemHandler;
@@ -81,13 +102,11 @@ public class PotionEnervatorTile extends CustomElectricMachine {
         this.addInventory(new ColoredItemHandler(inputIngredients, EnumDyeColor.GREEN, "Ingredients items", new BoundingRectangle(18 * 4 + 10, 25, 5 * 18, 18)) {
             @Override
             public boolean canInsertItem(int slot, ItemStack stack) {
+                if (inputIngredients.getLocked()) return super.canInsertItem(slot, stack);
                 if (stack.getItem().equals(Items.GLASS_BOTTLE)) return false;
                 if (slot == 0) {
                     return stack.getItem().equals(Items.NETHER_WART);
-                } else if (!stack.getItem().equals(Items.NETHER_WART)) {
-                    return true;
-                }
-                return false;
+                } else return !stack.getItem().equals(Items.NETHER_WART);
             }
 
             @Override
@@ -104,6 +123,11 @@ public class PotionEnervatorTile extends CustomElectricMachine {
             @Override
             protected void onContentsChanged(int slot) {
                 PotionEnervatorTile.this.markDirty();
+            }
+
+            @Override
+            public int getSlotLimit(int slot) {
+                return 1;
             }
         };
         this.addInventory(new CustomColoredItemHandler(outputPotions, EnumDyeColor.PURPLE, "Potions items", 18 * 6 + 10, 25 + 18 * 2, 3, 1) {

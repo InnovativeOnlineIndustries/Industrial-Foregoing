@@ -1,3 +1,24 @@
+/*
+ * This file is part of Industrial Foregoing.
+ *
+ * Copyright 2018, Buuz135
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy of
+ * this software and associated documentation files (the "Software"), to deal in the
+ * Software without restriction, including without limitation the rights to use, copy,
+ * modify, merge, publish, distribute, sublicense, and/or sell copies of the Software,
+ * and to permit persons to whom the Software is furnished to do so, subject to the
+ * following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in all copies
+ * or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED,
+ * INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR
+ * PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE
+ * FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE,
+ * ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+ */
 package com.buuz135.industrial.tile;
 
 import com.buuz135.industrial.item.addon.RangeAddonItem;
@@ -8,6 +29,7 @@ import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import net.ndrei.teslacorelib.gui.BasicTeslaGuiContainer;
@@ -17,8 +39,9 @@ import net.ndrei.teslacorelib.inventory.BoundingRectangle;
 import net.ndrei.teslacorelib.render.IWorkAreaProvider;
 import net.ndrei.teslacorelib.render.WorkingAreaRenderer;
 import net.ndrei.teslacorelib.utils.BlockCube;
+import org.jetbrains.annotations.NotNull;
 
-import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 public abstract class WorkingAreaElectricMachine extends CustomElectricMachine implements IWorkAreaProvider {
@@ -39,7 +62,7 @@ public abstract class WorkingAreaElectricMachine extends CustomElectricMachine i
     @Override
     public List<IGuiContainerPiece> getGuiContainerPieces(BasicTeslaGuiContainer container) {
         List<IGuiContainerPiece> list = super.getGuiContainerPieces(container);
-        list.add(new ToggleButtonPiece(135, 84, 13, 13, 0) {
+        list.add(new ToggleButtonPiece(136, 84, 13, 13, 0) {
             @Override
             protected int getCurrentState() {
                 return showArea ? 1 : 0;
@@ -68,12 +91,13 @@ public abstract class WorkingAreaElectricMachine extends CustomElectricMachine i
                 showArea = !showArea;
             }
 
+
+            @NotNull
             @Override
-            public void drawForegroundLayer(BasicTeslaGuiContainer container, int guiX, int guiY, int mouseX, int mouseY) {
-                super.drawForegroundLayer(container, guiX, guiY, mouseX, mouseY);
-                if (isInside(container, mouseX, mouseY))
-                    container.drawTooltip(Arrays.asList(getCurrentState() == 0 ? "Show working area" : "Hide working area"), mouseX - guiX, mouseY - guiY);
+            protected List<String> getStateToolTip(int state) {
+                return Collections.singletonList(state == 0 ? new TextComponentTranslation("text.industrialforegoing.button.show_area").getFormattedText() : new TextComponentTranslation("text.industrialforegoing.button.hide_area").getFormattedText());
             }
+
         });
 
         return list;
@@ -104,7 +128,7 @@ public abstract class WorkingAreaElectricMachine extends CustomElectricMachine i
     }
 
     public int getRadius() {
-        return WorkUtils.getMachineWidth(world, pos) + (this.hasAddon(RangeAddonItem.class) ? (this.getAddonStack(RangeAddonItem.class).getMetadata() <= 0 ? -1 : this.getAddonStack(RangeAddonItem.class).getMetadata()) : 0);
+        return Math.min(WorkUtils.getMachineWidth(world, pos) + 1, (this.hasAddon(RangeAddonItem.class) ? this.getAddonStack(RangeAddonItem.class).getMetadata() + 1 : 0));
     }
 
     public int getHeight() {

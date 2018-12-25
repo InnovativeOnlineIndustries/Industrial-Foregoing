@@ -1,3 +1,24 @@
+/*
+ * This file is part of Industrial Foregoing.
+ *
+ * Copyright 2018, Buuz135
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy of
+ * this software and associated documentation files (the "Software"), to deal in the
+ * Software without restriction, including without limitation the rights to use, copy,
+ * modify, merge, publish, distribute, sublicense, and/or sell copies of the Software,
+ * and to permit persons to whom the Software is furnished to do so, subject to the
+ * following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in all copies
+ * or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED,
+ * INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR
+ * PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE
+ * FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE,
+ * ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+ */
 package com.buuz135.industrial.tile.block;
 
 import com.buuz135.industrial.IndustrialForegoing;
@@ -25,6 +46,7 @@ public abstract class CustomOrientedBlock<T extends SidedTileEntity> extends Ori
     private boolean enabled;
     private int energyForWork;
     private int energyRate;
+    private long energyBuffer;
 
     protected CustomOrientedBlock(String registryName, Class<T> teClass) {
         super(Reference.MOD_ID, IndustrialForegoing.creativeTab, registryName, teClass);
@@ -39,11 +61,12 @@ public abstract class CustomOrientedBlock<T extends SidedTileEntity> extends Ori
     }
 
     public void getMachineConfig() {
-        enabled = CustomConfiguration.config.getBoolean("enabled", "machines" + Configuration.CATEGORY_SPLITTER + this.getRegistryName().getResourcePath().toString(), true, "If disabled it will be removed from the game.");
-        workDisabled = CustomConfiguration.config.getBoolean("workDisabled", "machines" + Configuration.CATEGORY_SPLITTER + this.getRegistryName().getResourcePath().toString(), false, "Machine can perform a work action");
+        enabled = CustomConfiguration.config.getBoolean("enabled", "machines" + Configuration.CATEGORY_SPLITTER + this.getRegistryName().getPath().toString(), true, "If disabled it will be removed from the game.");
+        workDisabled = CustomConfiguration.config.getBoolean("workDisabled", "machines" + Configuration.CATEGORY_SPLITTER + this.getRegistryName().getPath().toString(), false, "Machine can perform a work action");
         if (energyForWork != 0 && energyRate != 0) {
-            energyForWork = CustomConfiguration.config.getInt("energyForWork", "machines" + Configuration.CATEGORY_SPLITTER + this.getRegistryName().getResourcePath().toString(), energyForWork, 1, Integer.MAX_VALUE, "How much energy needs a machine to work");
-            energyRate = CustomConfiguration.config.getInt("energyRate", "machines" + Configuration.CATEGORY_SPLITTER + this.getRegistryName().getResourcePath().toString(), energyRate, 1, Integer.MAX_VALUE, "Energy input rate of a machine");
+            energyForWork = CustomConfiguration.config.getInt("energyForWork", "machines" + Configuration.CATEGORY_SPLITTER + this.getRegistryName().getPath().toString(), energyForWork, 1, Integer.MAX_VALUE, "How much energy needs a machine to work");
+            energyRate = CustomConfiguration.config.getInt("energyRate", "machines" + Configuration.CATEGORY_SPLITTER + this.getRegistryName().getPath().toString(), energyRate, 1, Integer.MAX_VALUE, "Energy input rate of a machine");
+            energyBuffer = CustomConfiguration.config.getInt("energyBuffer", "machines" + Configuration.CATEGORY_SPLITTER + this.getRegistryName().getPath().toString(), 50000, 1, Integer.MAX_VALUE, "Energy buffer of a machine");
         }
     }
 
@@ -59,6 +82,10 @@ public abstract class CustomOrientedBlock<T extends SidedTileEntity> extends Ori
         return energyRate;
     }
 
+    public long getEnergyBuffer() {
+        return energyBuffer;
+    }
+
     public boolean isEnabled() {
         return enabled;
     }
@@ -68,7 +95,7 @@ public abstract class CustomOrientedBlock<T extends SidedTileEntity> extends Ori
     @Override
     public List<IPage> getBookDescriptionPages() {
         List<IPage> pages = new ArrayList<>();
-        pages.addAll(PageText.createTranslatedPages("text.industrialforegoing.book." + getRegistryName().getResourcePath()));
+        pages.addAll(PageText.createTranslatedPages("text.industrialforegoing.book." + getRegistryName().getPath()));
         if (ForgeRegistries.RECIPES.getValue(this.getRegistryName()) != null)
             pages.add(new PageRecipe(this.getRegistryName()));
         return pages;

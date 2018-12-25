@@ -1,7 +1,29 @@
+/*
+ * This file is part of Industrial Foregoing.
+ *
+ * Copyright 2018, Buuz135
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy of
+ * this software and associated documentation files (the "Software"), to deal in the
+ * Software without restriction, including without limitation the rights to use, copy,
+ * modify, merge, publish, distribute, sublicense, and/or sell copies of the Software,
+ * and to permit persons to whom the Software is furnished to do so, subject to the
+ * following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in all copies
+ * or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED,
+ * INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR
+ * PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE
+ * FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE,
+ * ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+ */
 package com.buuz135.industrial.utils;
 
 import com.buuz135.industrial.IndustrialForegoing;
-import net.minecraft.block.BlockLeaves;
+import com.google.common.collect.HashMultimap;
+import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.renderer.*;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
@@ -11,6 +33,7 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
+import net.minecraft.util.NonNullList;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
@@ -24,11 +47,13 @@ import java.util.List;
 
 public class BlockUtils {
 
+    private static HashMultimap<String, Block> oreDictBlocks = HashMultimap.create();
+
     public static List<BlockPos> getBlockPosInAABB(AxisAlignedBB axisAlignedBB) {
         List<BlockPos> blocks = new ArrayList<BlockPos>();
-        for (double x = axisAlignedBB.minX; x < axisAlignedBB.maxX; ++x) {
-            for (double z = axisAlignedBB.minZ; z < axisAlignedBB.maxZ; ++z) {
-                for (double y = axisAlignedBB.minY; y < axisAlignedBB.maxY; ++y) {
+        for (double y = axisAlignedBB.minY; y < axisAlignedBB.maxY; ++y) {
+            for (double x = axisAlignedBB.minX; x < axisAlignedBB.maxX; ++x) {
+                for (double z = axisAlignedBB.minZ; z < axisAlignedBB.maxZ; ++z) {
                     blocks.add(new BlockPos(x, y, z));
                 }
             }
@@ -38,23 +63,30 @@ public class BlockUtils {
 
     public static boolean isBlockOreDict(World world, BlockPos pos, String ore) {
         IBlockState state = world.getBlockState(pos);
-        Item item = Item.getItemFromBlock(state.getBlock());
+        Block block = state.getBlock();
+        if (oreDictBlocks.containsEntry(ore, block)) {
+            return true;
+        }
+        Item item = Item.getItemFromBlock(block);
         if (!item.equals(Items.AIR)) {
             ItemStack stack = new ItemStack(item);
             int id = OreDictionary.getOreID(ore);
             for (int i : OreDictionary.getOreIDs(stack)) {
-                if (i == id) return true;
+                if (i == id) {
+                    oreDictBlocks.put(ore, block);
+                    return true;
+                }
             }
         }
         return false;
     }
 
     public static boolean isLog(World world, BlockPos pos) {
-        return world.getBlockState(pos).getBlock().isWood(world, pos) || isBlockOreDict(world, pos, "blockSlimeCongealed");
+        return (world.getBlockState(pos).getBlock().isWood(world, pos) || isBlockOreDict(world, pos, "blockSlimeCongealed"));
     }
 
     public static boolean isLeaves(World world, BlockPos pos) {
-        return world.getBlockState(pos).getBlock() instanceof BlockLeaves || isBlockOreDict(world, pos, "treeLeaves");
+        return world.getBlockState(pos).getBlock().isLeaves(world.getBlockState(pos), world, pos);
     }
 
     public static boolean isChorus(World world, BlockPos pos) {
@@ -67,6 +99,18 @@ public class BlockUtils {
         return !event.isCanceled();
     }
 
+    public static List<ItemStack> getBlockDrops(World world, BlockPos pos) {
+        return getBlockDrops(world, pos, 0);
+    }
+
+    public static List<ItemStack> getBlockDrops(World world, BlockPos pos, int fortune) {
+        IBlockState state = world.getBlockState(pos);
+        NonNullList<ItemStack> stacks = NonNullList.create();
+        state.getBlock().getDrops(stacks, world, pos, state, fortune);
+        BlockEvent.HarvestDropsEvent event = new BlockEvent.HarvestDropsEvent(world, pos, world.getBlockState(pos), 0, 1f, stacks, IndustrialForegoing.getFakePlayer(world), false);
+        MinecraftForge.EVENT_BUS.post(event);
+        return event.getDrops();
+    }
 
     public static void renderLaserBeam(TileEntity tile, double x, double y, double z, EnumFacing direction, float partialTicks, int length) {
         Tessellator tess = Tessellator.getInstance();

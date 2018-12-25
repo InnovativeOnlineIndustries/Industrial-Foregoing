@@ -1,3 +1,24 @@
+/*
+ * This file is part of Industrial Foregoing.
+ *
+ * Copyright 2018, Buuz135
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy of
+ * this software and associated documentation files (the "Software"), to deal in the
+ * Software without restriction, including without limitation the rights to use, copy,
+ * modify, merge, publish, distribute, sublicense, and/or sell copies of the Software,
+ * and to permit persons to whom the Software is furnished to do so, subject to the
+ * following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in all copies
+ * or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED,
+ * INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR
+ * PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE
+ * FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE,
+ * ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+ */
 package com.buuz135.industrial.utils;
 
 import com.google.common.collect.ImmutableMap;
@@ -29,12 +50,41 @@ public class RecipeUtils {
         setupDir();
         if (!RECIPE_DIR.exists() || result.isEmpty()) return;
         // GameRegistry.addShapedRecipe(result, components);
-        for (int i = 0; i < components.length; ++i) {
-            if (components[i].equals(MachineCaseItem.INSTANCE)) components[i] = "IFCORE";
+        boolean hasGeneratedFrameRecipe = false;
+        for (int i = 0; i < components.length; i++) {
+            if (components[i].equals(MachineCaseItem.INSTANCE)) {
+                hasGeneratedFrameRecipe = true;
+                addShapedRecipe(result, "_enderio", generateOptionalJson("enderio", "useEnderIOFrames"), replaceFrameWith(new FakeItemStack("enderio:item_material", 0), components));
+                addShapedRecipe(result, "_thermal", generateOptionalJson("thermalexpansion", "useTEFrames"), replaceFrameWith(new FakeItemStack("thermalexpansion:frame", 0), components));
+                addShapedRecipe(result, "", generateOptionalJson("industrialforegoing", "useOriginalFrames"), components);
+                addShapedRecipe(result, "_mekanism", generateOptionalJson("mekanism", "useMekanismFrames"), replaceFrameWith(new FakeItemStack("mekanism:basicblock", 8), components));
+                break;
+            }
         }
+        if (!hasGeneratedFrameRecipe) {
+            addShapedRecipe(result, "", new HashMap<>(), components);
+        }
+    }
 
-        Map<String, Object> json = new HashMap<>();
+    private static Map<String, Object> generateOptionalJson(String modID, String configValueName) {
+        Map<String, Object> objectMap = new HashMap<>();
+        objectMap.put("conditions", Arrays.asList(ImmutableMap.of("type", "forge:and", "values", Arrays.asList(ImmutableMap.of("type", "forge:mod_loaded", "modid", modID), ImmutableMap.of("type", "industrialforegoing:configuration_value",
+                "value", configValueName)))));
+        return objectMap;
+    }
 
+    private static Object[] replaceFrameWith(Object item, Object... components) {
+        Object[] objects = Arrays.copyOf(components, components.length);
+        for (int i = 0; i < objects.length; i++) {
+            if (objects[i].equals(MachineCaseItem.INSTANCE)) objects[i] = item;
+        }
+        return objects;
+    }
+
+
+    public static void addShapedRecipe(ItemStack result, String nameExtra, Map<String, Object> json, Object... components) {
+        setupDir();
+        if (!RECIPE_DIR.exists() || result.isEmpty()) return;
         List<String> pattern = new ArrayList<>();
         int i = 0;
         while (i < components.length && components[i] instanceof String) {
@@ -69,7 +119,7 @@ public class RecipeUtils {
         // repeatedly adds _alt if a file already exists
         // janky I know but it works
         String suffix = result.getItem().getHasSubtypes() ? "_" + result.getItemDamage() : "";
-        File f = new File(RECIPE_DIR, result.getItem().getRegistryName().getResourcePath() + suffix + ".json");
+        File f = new File(RECIPE_DIR, result.getItem().getRegistryName().getPath() + suffix + nameExtra + ".json");
 
 
         try (FileWriter w = new FileWriter(f)) {
@@ -80,6 +130,10 @@ public class RecipeUtils {
     }
 
     public static void addShapelessRecipe(ItemStack result, Object... components) {
+        addShapelessRecipe("", result, components);
+    }
+
+    public static void addShapelessRecipe(String name, ItemStack result, Object... components) {
         setupDir();
         if (!RECIPE_DIR.exists() || result.isEmpty()) return;
         // addShapelessRecipe(result, components);
@@ -103,11 +157,11 @@ public class RecipeUtils {
         // repeatedly adds _alt if a file already exists
         // janky I know but it works
         String suffix = result.getItem().getHasSubtypes() ? "_" + result.getItemDamage() : "";
-        File f = new File(RECIPE_DIR, result.getItem().getRegistryName().getResourcePath() + suffix + ".json");
+        File f = new File(RECIPE_DIR, result.getItem().getRegistryName().getPath() + suffix + (!name.isEmpty() ? "_" + name : "") + ".json");
 
 //        while (f.exists()) {
 //            suffix += "_alt";
-//            f = new File(RECIPE_DIR, result.getItem().getRegistryName().getResourcePath() + suffix + ".json");
+//            f = new File(RECIPE_DIR, result.getItem().getRegistryName().getPath() + suffix + ".json");
 //        }
 
 
@@ -119,6 +173,13 @@ public class RecipeUtils {
     }
 
     private static Map<String, Object> serializeItem(Object thing) {
+        if (thing instanceof FakeItemStack) {
+            FakeItemStack stack = (FakeItemStack) thing;
+            Map<String, Object> ret = new HashMap<>();
+            ret.put("item", stack.name);
+            ret.put("data", stack.meta);
+            return ret;
+        }
         if (thing instanceof Item) {
             return serializeItem(new ItemStack((Item) thing));
         }
@@ -162,14 +223,14 @@ public class RecipeUtils {
             json.add(entry);
         }
         Map<String, Object> entry = new HashMap<>();
-        entry.put("name", "IFCORE");
-        entry.put("conditions", Arrays.asList(ImmutableMap.of("type", "minecraft:item_exists", "item", "teslacorelib:machine_case")));
-        entry.put("ingredient", ImmutableMap.of("item", "teslacorelib:machine_case"));
+        entry.put("name", "IFWITHER");
+        //eentry.put("conditions", Arrays.asList(ImmutableMap.of("type", "industrialforegoing:configuration_value", "value", "machines.wither_builder.HCWither")));
+        entry.put("ingredient", ImmutableMap.of("item", "minecraft:nether_star", "data", 0));
         json.add(entry);
         entry = new HashMap<>();
-        entry.put("name", "IFCORE");
-        entry.put("conditions", Arrays.asList(ImmutableMap.of("type", "forge:and", "values", Arrays.asList(ImmutableMap.of("type", "forge:mod_loaded", "modid", "thermalexpansion"), ImmutableMap.of("type", "industrialforegoing:configuration_value", "value", "useTEFrames")))));
-        entry.put("ingredient", ImmutableMap.of("item", "thermalexpansion:frame", "data", 0));
+        entry.put("name", "IFWITHER");
+        entry.put("conditions", Arrays.asList(ImmutableMap.of("type", "industrialforegoing:configuration_value", "value", "machines.wither_builder.HCWither")));
+        entry.put("ingredient", ImmutableMap.of("item", "minecraft:skull", "data", 1));
         json.add(entry);
 
         json.addAll(createOreConditionItem("TIER3", "ingotTin", "minecraft:coal_block"));
@@ -194,5 +255,15 @@ public class RecipeUtils {
         ore.put("conditions", Arrays.asList(ImmutableMap.of("type", "teslacorelib:ore_dict", "ore", oreDict)));
         ore.put("ingredient", ImmutableMap.of("type", "forge:ore_dict", "ore", oreDict));
         return Arrays.asList(def, ore);
+    }
+
+    private static class FakeItemStack {
+        private String name;
+        private int meta;
+
+        public FakeItemStack(String name, int meta) {
+            this.name = name;
+            this.meta = meta;
+        }
     }
 }

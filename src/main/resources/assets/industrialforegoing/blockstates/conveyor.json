@@ -1,0 +1,62 @@
+{
+  "forge_marker": 1,
+  "defaults": {
+    "model": "industrialforegoing:conveyor"
+  },
+  "variants": {
+    "facing": {
+      "north": {},
+      "south": {
+        "y": 180
+      },
+      "west": {
+        "y": 270
+      },
+      "east": {
+        "y": 90
+      }
+    },
+    "type": {
+      "flat": {},
+      "flat_fast": {
+        "textures": {
+          "2": "industrialforegoing:blocks/conveyor_color_fast"
+        }
+      },
+      "down": {
+        "model": "industrialforegoing:conveyor_ramp"
+      },
+      "down_fast": {
+        "model": "industrialforegoing:conveyor_ramp",
+        "textures": {
+          "2": "industrialforegoing:blocks/conveyor_color_fast"
+        }
+      },
+      "up": {
+        "model": "industrialforegoing:conveyor_ramp_inverted",
+        "textures": {
+          "2": "industrialforegoing:blocks/conveyor_color_inverted"
+        }
+      },
+      "up_fast": {
+        "model": "industrialforegoing:conveyor_ramp_inverted",
+        "textures": {
+          "2": "industrialforegoing:blocks/conveyor_color_inverted_fast"
+        }
+      }
+    },
+    "sides": {
+      "none": {
+      },
+      "left": {
+        "model": "industrialforegoing:conveyornol"
+      },
+      "right": {
+        "model": "industrialforegoing:conveyornor"
+      },
+      "both": {
+        "model": "industrialforegoing:conveyornos"
+      }
+    }
+  }
+}

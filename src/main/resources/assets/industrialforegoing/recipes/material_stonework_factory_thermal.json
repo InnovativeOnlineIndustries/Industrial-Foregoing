@@ -1,0 +1,53 @@
+{
+  "result": {
+    "item": "industrialforegoing:material_stonework_factory"
+  },
+  "pattern": [
+    "pip",
+    "amf",
+    "lrw"
+  ],
+  "conditions": [
+    {
+      "type": "forge:and",
+      "values": [
+        {
+          "type": "forge:mod_loaded",
+          "modid": "thermalexpansion"
+        },
+        {
+          "type": "industrialforegoing:configuration_value",
+          "value": "useTEFrames"
+        }
+      ]
+    }
+  ],
+  "type": "minecraft:crafting_shaped",
+  "key": {
+    "p": {
+      "item": "industrialforegoing:plastic"
+    },
+    "a": {
+      "item": "minecraft:iron_pickaxe"
+    },
+    "r": {
+      "item": "industrialforegoing:pink_slime"
+    },
+    "f": {
+      "item": "minecraft:furnace"
+    },
+    "w": {
+      "item": "minecraft:water_bucket"
+    },
+    "i": {
+      "item": "minecraft:crafting_table"
+    },
+    "l": {
+      "item": "minecraft:lava_bucket"
+    },
+    "m": {
+      "item": "thermalexpansion:frame",
+      "data": 0
+    }
+  }
+}

@@ -1,3 +1,24 @@
+/*
+ * This file is part of Industrial Foregoing.
+ *
+ * Copyright 2018, Buuz135
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy of
+ * this software and associated documentation files (the "Software"), to deal in the
+ * Software without restriction, including without limitation the rights to use, copy,
+ * modify, merge, publish, distribute, sublicense, and/or sell copies of the Software,
+ * and to permit persons to whom the Software is furnished to do so, subject to the
+ * following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in all copies
+ * or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED,
+ * INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR
+ * PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE
+ * FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE,
+ * ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+ */
 package com.buuz135.industrial.tile.misc;
 
 import com.buuz135.industrial.proxy.ItemRegistry;
@@ -6,7 +27,6 @@ import com.buuz135.industrial.tile.CustomColoredItemHandler;
 import com.buuz135.industrial.tile.CustomElectricMachine;
 import com.buuz135.industrial.utils.ItemStackUtils;
 import com.buuz135.industrial.utils.WorkUtils;
-import net.minecraft.init.Items;
 import net.minecraft.inventory.Slot;
 import net.minecraft.item.EnumDyeColor;
 import net.minecraft.item.ItemStack;
@@ -28,7 +48,8 @@ import java.util.List;
 
 public class DyeMixerTile extends CustomElectricMachine {
 
-    private static ColorUsage[] colorUsages = {new ColorUsage(1, 1, 1),//1
+    private static ColorUsage[] colorUsages = {new ColorUsage(1, 1, 1), //0
+            new ColorUsage(1, 1, 1),//1
             new ColorUsage(1, 0, 1),//2
             new ColorUsage(0, 0, 1),//3
             new ColorUsage(0, 1, 1),//4
@@ -108,7 +129,7 @@ public class DyeMixerTile extends CustomElectricMachine {
         this.addInventory(new CustomColoredItemHandler(lens, EnumDyeColor.YELLOW, "Lens items", 18 * 7 + 6, 25, 1, 1) {
             @Override
             public boolean canInsertItem(int slot, ItemStack stack) {
-                return stack.getItem().equals(ItemRegistry.laserLensItem) && stack.getMetadata() > 0;
+                return stack.getItem().equals(ItemRegistry.laserLensItem);
             }
 
             @Override
@@ -171,9 +192,9 @@ public class DyeMixerTile extends CustomElectricMachine {
 
         ItemStack stack = lens.getStackInSlot(0);
         if (!stack.isEmpty()) {
-            ColorUsage usage = colorUsages[stack.getMetadata() - 1];
+            ColorUsage usage = colorUsages[stack.getMetadata()];
             if (r >= usage.getR() && g >= usage.getG() && b >= usage.getB()) {
-                ItemStack out = new ItemStack(Items.DYE, 1, 15 - stack.getMetadata());
+                ItemStack out = new ItemStack(ItemRegistry.artificalDye, 1, stack.getMetadata());
                 if (ItemHandlerHelper.insertItem(output, out, true).isEmpty()) {
                     r -= usage.getR();
                     g -= usage.getG();

@@ -1,3 +1,24 @@
+/*
+ * This file is part of Industrial Foregoing.
+ *
+ * Copyright 2018, Buuz135
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy of
+ * this software and associated documentation files (the "Software"), to deal in the
+ * Software without restriction, including without limitation the rights to use, copy,
+ * modify, merge, publish, distribute, sublicense, and/or sell copies of the Software,
+ * and to permit persons to whom the Software is furnished to do so, subject to the
+ * following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in all copies
+ * or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED,
+ * INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR
+ * PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE
+ * FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE,
+ * ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+ */
 package com.buuz135.industrial.tile.block;
 
 import com.buuz135.industrial.api.plant.PlantRecollectable;
@@ -21,23 +42,24 @@ public class CropRecolectorBlock extends CustomAreaOrientedBlock<CropRecolectorT
     private int sludgeOperation;
     private int treeOperations;
     private boolean reducedChunkUpdates;
+    private int maxDistanceTreeBlocksScan;
 
     public CropRecolectorBlock() {
-        super("crop_recolector", CropRecolectorTile.class, Material.ROCK, 400, 40, RangeType.FRONT, 1, 0, true);
+        super("crop_recolector", CropRecolectorTile.class, Material.ROCK, 400, 40, RangeType.FRONT, 11, 0, true);
     }
 
     @Override
     public void getMachineConfig() {
         super.getMachineConfig();
-        sludgeOperation = CustomConfiguration.config.getInt("sludgeOperation", "machines" + Configuration.CATEGORY_SPLITTER + this.getRegistryName().getResourcePath().toString(), 20, 1, 8000, "How much sludge is produced when the machine does an operation");
-        treeOperations = CustomConfiguration.config.getInt("treeOperations", "machines" + Configuration.CATEGORY_SPLITTER + this.getRegistryName().getResourcePath().toString(), 10, 1, 1024, "Amount of operations done when chopping a tree");
-        reducedChunkUpdates = CustomConfiguration.config.getBoolean("reducedChunkUpdates", "machines" + Configuration.CATEGORY_SPLITTER + this.getRegistryName().getResourcePath().toString(), false, "When enabled it will chop down the tree in one go but still consuming the same power");
+        sludgeOperation = CustomConfiguration.config.getInt("sludgeOperation", "machines" + Configuration.CATEGORY_SPLITTER + this.getRegistryName().getPath().toString(), 20, 1, 8000, "How much sludge is produced when the machine does an operation");
+        treeOperations = CustomConfiguration.config.getInt("treeOperations", "machines" + Configuration.CATEGORY_SPLITTER + this.getRegistryName().getPath().toString(), 10, 1, 1024, "Amount of operations done when chopping a tree");
+        reducedChunkUpdates = CustomConfiguration.config.getBoolean("reducedChunkUpdates", "machines" + Configuration.CATEGORY_SPLITTER + this.getRegistryName().getPath().toString(), false, "When enabled it will chop down the tree in one go but still consuming the same power");
+        maxDistanceTreeBlocksScan = CustomConfiguration.config.getInt("maxDistanceTreeBlocksScan", "machines" + Configuration.CATEGORY_SPLITTER + this.getRegistryName().getPath().toString(), 100, 0, Integer.MAX_VALUE, "How far the trees will me scanned to be chopped from the ground. WARNING: Increasing this number with big trees may cause some lag when scanning for a tree.");
     }
 
     public int getSludgeOperation() {
         return sludgeOperation;
     }
-
 
     public int getTreeOperations() {
         return treeOperations;
@@ -45,6 +67,10 @@ public class CropRecolectorBlock extends CustomAreaOrientedBlock<CropRecolectorT
 
     public boolean isReducedChunkUpdates() {
         return reducedChunkUpdates;
+    }
+
+    public int getMaxDistanceTreeBlocksScan() {
+        return maxDistanceTreeBlocksScan;
     }
 
     public void createRecipe() {

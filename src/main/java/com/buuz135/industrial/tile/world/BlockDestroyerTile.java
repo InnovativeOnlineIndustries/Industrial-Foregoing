@@ -1,7 +1,30 @@
+/*
+ * This file is part of Industrial Foregoing.
+ *
+ * Copyright 2018, Buuz135
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy of
+ * this software and associated documentation files (the "Software"), to deal in the
+ * Software without restriction, including without limitation the rights to use, copy,
+ * modify, merge, publish, distribute, sublicense, and/or sell copies of the Software,
+ * and to permit persons to whom the Software is furnished to do so, subject to the
+ * following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in all copies
+ * or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED,
+ * INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR
+ * PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE
+ * FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE,
+ * ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+ */
 package com.buuz135.industrial.tile.world;
 
+import com.buuz135.industrial.item.addon.FortuneAddonItem;
 import com.buuz135.industrial.tile.CustomColoredItemHandler;
 import com.buuz135.industrial.tile.WorkingAreaElectricMachine;
+import com.buuz135.industrial.tile.api.IAcceptsFortuneAddon;
 import com.buuz135.industrial.utils.BlockUtils;
 import com.buuz135.industrial.utils.WorkUtils;
 import net.minecraft.block.Block;
@@ -18,8 +41,7 @@ import net.minecraftforge.items.ItemStackHandler;
 
 import java.util.List;
 
-public class BlockDestroyerTile extends WorkingAreaElectricMachine {
-
+public class BlockDestroyerTile extends WorkingAreaElectricMachine implements IAcceptsFortuneAddon {
 
     private ItemStackHandler outItems;
 
@@ -62,7 +84,7 @@ public class BlockDestroyerTile extends WorkingAreaElectricMachine {
                 Block block = this.world.getBlockState(pos).getBlock();
                 TileEntity tile = world.getTileEntity(pos);
                 if (block.getBlockHardness(this.world.getBlockState(pos), this.world, pos) < 0) continue;
-                List<ItemStack> drops = block.getDrops(this.world, pos, this.world.getBlockState(pos), 0);
+                List<ItemStack> drops = BlockUtils.getBlockDrops(world, pos, getFortuneLevel());
                 boolean canInsert = true;
                 for (ItemStack stack : drops) {
                     if (tile instanceof IWorldNameable) {
@@ -76,7 +98,6 @@ public class BlockDestroyerTile extends WorkingAreaElectricMachine {
                     }
                 }
                 if (canInsert) {
-                    this.world.setBlockToAir(pos);
                     for (ItemStack stack : drops) {
                         ItemHandlerHelper.insertItem(outItems, stack, false);
                     }
@@ -84,10 +105,16 @@ public class BlockDestroyerTile extends WorkingAreaElectricMachine {
                         InventoryHelper.dropInventoryItems(this.world, pos, (IInventory) tile);
                         ((TileEntityShulkerBox) tile).clear();
                     }
+                    this.world.setBlockToAir(pos);
                     return 1;
                 }
             }
         }
         return 0;
+    }
+
+    @Override
+    public int getFortuneLevel() {
+        return hasAddon(FortuneAddonItem.class) ? getAddon(FortuneAddonItem.class).getLevel(getAddonStack(FortuneAddonItem.class)) : 0;
     }
 }

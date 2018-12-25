@@ -1,0 +1,48 @@
+{
+  "result": {
+    "item": "industrialforegoing:ore_washer"
+  },
+  "pattern": [
+    "pfp",
+    "rmr",
+    "cgc"
+  ],
+  "conditions": [
+    {
+      "type": "forge:and",
+      "values": [
+        {
+          "type": "forge:mod_loaded",
+          "modid": "thermalexpansion"
+        },
+        {
+          "type": "industrialforegoing:configuration_value",
+          "value": "useTEFrames"
+        }
+      ]
+    }
+  ],
+  "type": "forge:ore_shaped",
+  "key": {
+    "p": {
+      "item": "industrialforegoing:pink_slime_ingot"
+    },
+    "r": {
+      "item": "industrialforegoing:plastic"
+    },
+    "c": {
+      "item": "industrialforegoing:conveyor",
+      "data": 32767
+    },
+    "f": {
+      "item": "industrialforegoing:meat_feeder"
+    },
+    "g": {
+      "item": "#GEARDIAMOND"
+    },
+    "m": {
+      "item": "thermalexpansion:frame",
+      "data": 0
+    }
+  }
+}

@@ -1,8 +1,31 @@
+/*
+ * This file is part of Industrial Foregoing.
+ *
+ * Copyright 2018, Buuz135
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy of
+ * this software and associated documentation files (the "Software"), to deal in the
+ * Software without restriction, including without limitation the rights to use, copy,
+ * modify, merge, publish, distribute, sublicense, and/or sell copies of the Software,
+ * and to permit persons to whom the Software is furnished to do so, subject to the
+ * following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in all copies
+ * or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED,
+ * INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR
+ * PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE
+ * FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE,
+ * ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+ */
 package com.buuz135.industrial.tile;
 
 import com.buuz135.industrial.item.addon.EnergyFieldAddon;
+import com.buuz135.industrial.item.addon.movility.TransferAddon;
 import com.buuz135.industrial.jei.JEIHelper;
 import com.buuz135.industrial.proxy.ItemRegistry;
+import com.buuz135.industrial.tile.api.IAcceptsTransferAddons;
 import com.buuz135.industrial.tile.block.CustomOrientedBlock;
 import com.buuz135.industrial.tile.block.EnergyFieldProviderBlock;
 import com.buuz135.industrial.tile.world.EnergyFieldProviderTile;
@@ -27,7 +50,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-public abstract class CustomElectricMachine extends ElectricMachine {
+public abstract class CustomElectricMachine extends ElectricMachine implements IAcceptsTransferAddons {
 
     protected CustomElectricMachine(int typeId) {
         super(typeId);
@@ -49,6 +72,11 @@ public abstract class CustomElectricMachine extends ElectricMachine {
     @Override
     protected int getEnergyForWorkRate() {
         return this.getBlockType() instanceof CustomOrientedBlock ? ((CustomOrientedBlock) this.getBlockType()).getEnergyRate() : Integer.MAX_VALUE;
+    }
+
+    @Override
+    protected long getMaxEnergy() {
+        return this.getBlockType() instanceof CustomOrientedBlock ? ((CustomOrientedBlock) this.getBlockType()).getEnergyBuffer() : 50000;
     }
 
     @Override
@@ -90,7 +118,8 @@ public abstract class CustomElectricMachine extends ElectricMachine {
     @Override
     public void protectedUpdate() {
         super.protectedUpdate();
-        if (hasAddon(EnergyFieldAddon.class)) {
+        if (this.world.isRemote) return;
+        if (world.getTotalWorldTime() % 2 == 0 && hasAddon(EnergyFieldAddon.class)) {
             ItemStack addon = getAddonStack(EnergyFieldAddon.class);
             if (addon.hasCapability(CapabilityEnergy.ENERGY, null)) {
                 IEnergyStorage storage = addon.getCapability(CapabilityEnergy.ENERGY, null);
@@ -106,9 +135,18 @@ public abstract class CustomElectricMachine extends ElectricMachine {
                 this.forceSync();
             }
         }
+        if (world.getTotalWorldTime() % 10 == 0 && this.getAddonItems() != null) {
+            workTransferAddon(this, this.getAddonItems());
+        }
     }
 
     public boolean canAcceptEnergyFieldAddon() {
         return !hasAddon(EnergyFieldAddon.class);
+    }
+
+
+    @Override
+    public boolean canAcceptAddon(TransferAddon addon) {
+        return !this.hasAddon(addon.getClass()) || (this.getAddon(addon.getClass()) != null && this.getAddon(addon.getClass()).getMode() != addon.getMode());
     }
 }

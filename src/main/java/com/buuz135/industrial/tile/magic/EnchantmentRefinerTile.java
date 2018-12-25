@@ -1,3 +1,24 @@
+/*
+ * This file is part of Industrial Foregoing.
+ *
+ * Copyright 2018, Buuz135
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy of
+ * this software and associated documentation files (the "Software"), to deal in the
+ * Software without restriction, including without limitation the rights to use, copy,
+ * modify, merge, publish, distribute, sublicense, and/or sell copies of the Software,
+ * and to permit persons to whom the Software is furnished to do so, subject to the
+ * following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in all copies
+ * or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED,
+ * INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR
+ * PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE
+ * FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE,
+ * ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+ */
 package com.buuz135.industrial.tile.magic;
 
 import com.buuz135.industrial.tile.CustomColoredItemHandler;
@@ -6,6 +27,7 @@ import com.buuz135.industrial.utils.WorkUtils;
 import net.minecraft.init.Items;
 import net.minecraft.item.EnumDyeColor;
 import net.minecraft.item.ItemStack;
+import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.ItemHandlerHelper;
 import net.minecraftforge.items.ItemStackHandler;
 
@@ -105,25 +127,17 @@ public class EnchantmentRefinerTile extends CustomElectricMachine {
     @Override
     protected float performWork() {
         if (WorkUtils.isDisabled(this.getBlockType())) return 0;
-
         ItemStack stack = getFirstItem();
         if (stack.isEmpty()) {
             return 0;
         }
         ItemStack out = stack.copy();
-        out.setCount(1);
-        if (stack.isItemEnchanted() || stack.getItem().equals(Items.ENCHANTED_BOOK)) {
-            if (ItemHandlerHelper.insertItem(outputEnch, out, true).isEmpty()) {
-                ItemHandlerHelper.insertItem(outputEnch, out, false);
-                stack.setCount(stack.getCount() - 1);
-                return 500;
-            }
-        } else if (ItemHandlerHelper.insertItem(outputNoEnch, out, true).isEmpty()) {
-            ItemHandlerHelper.insertItem(outputNoEnch, out, false);
-            stack.setCount(stack.getCount() - 1);
-            return 500;
+        IItemHandler handler = (stack.isItemEnchanted() || stack.getItem().equals(Items.ENCHANTED_BOOK)) ? outputEnch : outputNoEnch;
+        if (ItemHandlerHelper.insertItem(handler, out, true).isEmpty()) {
+            ItemHandlerHelper.insertItem(handler, out, false);
+            stack.setCount(0);
+            return 1;
         }
-
         return 0;
     }
 
