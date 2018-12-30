@@ -131,7 +131,7 @@ public class LaserDrillEntry {
                 ItemStack itemStack;
                 String itemName = ore.getAsJsonPrimitive("item").getAsString();
                 if (itemName.startsWith("ore")) {
-                    if (OreDictionary.doesOreNameExist(itemName))
+                    if (OreDictionary.doesOreNameExist(itemName) && OreDictionary.getOres(itemName).size() > 0)
                         itemStack = OreDictionary.getOres(itemName).get(0).copy();
                     else continue;
                 } else {
