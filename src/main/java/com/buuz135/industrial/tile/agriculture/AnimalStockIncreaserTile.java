@@ -21,9 +21,11 @@
  */
 package com.buuz135.industrial.tile.agriculture;
 
+import com.buuz135.industrial.proxy.BlockRegistry;
 import com.buuz135.industrial.tile.CustomColoredItemHandler;
 import com.buuz135.industrial.tile.WorkingAreaElectricMachine;
 import com.buuz135.industrial.utils.WorkUtils;
+import net.minecraft.entity.EntityList;
 import net.minecraft.entity.passive.EntityAnimal;
 import net.minecraft.entity.passive.EntityHorse;
 import net.minecraft.entity.passive.EntityLlama;
@@ -78,7 +80,7 @@ public class AnimalStockIncreaserTile extends WorkingAreaElectricMachine {
         List<EntityAnimal> animals = this.world.getEntitiesWithinAABB(EntityAnimal.class, area);
         if (animals.size() == 0 || animals.size() > 35) return 0;
         //Removing from the list animals that can't breed
-        animals.removeIf(entityAnimal -> entityAnimal.isChild() || entityAnimal.getGrowingAge() != 0 || getFirstBreedingItem(entityAnimal).isEmpty() || entityAnimal.isInLove());
+        animals.removeIf(entityAnimal -> entityAnimal.isChild() || entityAnimal.getGrowingAge() != 0 || getFirstBreedingItem(entityAnimal).isEmpty() || entityAnimal.isInLove() || BlockRegistry.animalStockIncreaserBlock.entityBlacklist.contains(EntityList.getKey(entityAnimal).toString()));
         for (EntityAnimal firstParent : animals) {
             for (EntityAnimal secondParent : animals) {
                 if (!firstParent.equals(secondParent) && firstParent.getClass().equals(secondParent.getClass())) {

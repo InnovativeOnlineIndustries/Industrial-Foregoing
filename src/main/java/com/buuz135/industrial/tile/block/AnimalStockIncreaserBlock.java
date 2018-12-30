@@ -22,15 +22,22 @@
 package com.buuz135.industrial.tile.block;
 
 import com.buuz135.industrial.book.BookCategory;
+import com.buuz135.industrial.config.CustomConfiguration;
 import com.buuz135.industrial.proxy.ItemRegistry;
 import com.buuz135.industrial.tile.agriculture.AnimalStockIncreaserTile;
 import com.buuz135.industrial.utils.RecipeUtils;
 import net.minecraft.block.material.Material;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
+import net.minecraftforge.common.config.Configuration;
 import net.ndrei.teslacorelib.items.MachineCaseItem;
 
+import java.util.Arrays;
+import java.util.List;
+
 public class AnimalStockIncreaserBlock extends CustomAreaOrientedBlock<AnimalStockIncreaserTile> {
+
+    public List<String> entityBlacklist;
 
     public AnimalStockIncreaserBlock() {
         super("animal_stock_increaser", AnimalStockIncreaserTile.class, Material.ROCK, 400, 20, RangeType.FRONT, 5, 1, true);
@@ -51,4 +58,10 @@ public class AnimalStockIncreaserBlock extends CustomAreaOrientedBlock<AnimalSto
         return BookCategory.ANIMAL_HUSBANDRY;
     }
 
+    @Override
+    public void getMachineConfig() {
+        super.getMachineConfig();
+        entityBlacklist = Arrays.asList(CustomConfiguration.config.getStringList("entityBlacklist", "machines" + Configuration.CATEGORY_SPLITTER + this.getRegistryName().getPath().toString(),
+                new String[]{}, "A list of entities blacklist from being fed with the machine"));
+    }
 }
