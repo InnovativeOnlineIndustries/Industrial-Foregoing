@@ -21,12 +21,16 @@
  */
 package com.buuz135.industrial.tile.agriculture;
 
+import com.buuz135.industrial.proxy.BlockRegistry;
 import com.buuz135.industrial.tile.CustomColoredItemHandler;
 import com.buuz135.industrial.tile.WorkingAreaElectricMachine;
 import net.minecraft.entity.EntityAgeable;
+import net.minecraft.entity.EntityList;
 import net.minecraft.entity.passive.EntityAnimal;
 import net.minecraft.item.EnumDyeColor;
 import net.minecraftforge.items.ItemStackHandler;
+
+import java.util.concurrent.atomic.AtomicBoolean;
 
 public class AnimalGrowthIncreaserTile extends WorkingAreaElectricMachine {
 
@@ -51,16 +55,18 @@ public class AnimalGrowthIncreaserTile extends WorkingAreaElectricMachine {
 
     @Override
     public float work() {
-        world.getEntitiesWithinAABB(EntityAnimal.class, getWorkingArea()).stream().filter(EntityAgeable::isChild).forEach(entityAnimal -> {
+        AtomicBoolean hasWorked = new AtomicBoolean(false);
+        world.getEntitiesWithinAABB(EntityAnimal.class, getWorkingArea()).stream().filter(EntityAgeable::isChild).filter(entityAnimal -> !BlockRegistry.animalGrowthIncreaserBlock.entityBlacklist.contains(EntityList.getKey(entityAnimal).toString())).forEach(entityAnimal -> {
             for (int i = 0; i < items.getSlots(); ++i) {
                 if (entityAnimal.isBreedingItem(items.getStackInSlot(i))) {
                     entityAnimal.ageUp(30, true);
                     items.getStackInSlot(i).shrink(1);
+                    hasWorked.set(true);
                     break;
                 }
             }
         });
-        return 1;
+        return hasWorked.get() ? 1 : 0;
     }
 
 }

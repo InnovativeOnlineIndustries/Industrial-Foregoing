@@ -32,6 +32,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraftforge.common.config.Configuration;
 import net.ndrei.teslacorelib.items.MachineCaseItem;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -41,6 +42,7 @@ public class AnimalStockIncreaserBlock extends CustomAreaOrientedBlock<AnimalSto
 
     public AnimalStockIncreaserBlock() {
         super("animal_stock_increaser", AnimalStockIncreaserTile.class, Material.ROCK, 400, 20, RangeType.FRONT, 5, 1, true);
+        entityBlacklist = new ArrayList<>();
     }
 
     public void createRecipe() {
@@ -62,6 +64,6 @@ public class AnimalStockIncreaserBlock extends CustomAreaOrientedBlock<AnimalSto
     public void getMachineConfig() {
         super.getMachineConfig();
         entityBlacklist = Arrays.asList(CustomConfiguration.config.getStringList("entityBlacklist", "machines" + Configuration.CATEGORY_SPLITTER + this.getRegistryName().getPath().toString(),
-                new String[]{}, "A list of entities blacklist from being fed with the machine"));
+                new String[]{}, "A list of entities blacklist from being fed with the machine. Format: 'modid:entityid'"));
     }
 }
