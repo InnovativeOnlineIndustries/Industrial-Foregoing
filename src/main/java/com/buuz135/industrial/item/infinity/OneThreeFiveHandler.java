@@ -28,6 +28,8 @@ import java.util.UUID;
 @Mod.EventBusSubscriber(modid = Reference.MOD_ID)
 public class OneThreeFiveHandler {
 
+    public static final String SPECIAL = "135135";
+
     public static HashMap<UUID, Long> SPECIAL_ENTITIES = new HashMap<>();
 
     @SideOnly(Side.CLIENT)
@@ -36,7 +38,7 @@ public class OneThreeFiveHandler {
         if (Minecraft.getMinecraft().player != null && Minecraft.getMinecraft().player.world != null && !Minecraft.getMinecraft().isGamePaused() && Minecraft.getMinecraft().player.world.getTotalWorldTime() % 2 == 0) {
             BlockPos pos = new BlockPos(Minecraft.getMinecraft().player.posX, Minecraft.getMinecraft().player.posY, Minecraft.getMinecraft().player.posZ);
             Minecraft.getMinecraft().player.world.getEntitiesWithinAABB(EntityLiving.class, new AxisAlignedBB(pos.add(32, 32, 32), pos.add(-32, -32, -32)),
-                    input -> input.getUniqueID().toString().contains("135")).
+                    input -> input.getUniqueID().toString().contains(SPECIAL)).
                     forEach(living -> Minecraft.getMinecraft().effectRenderer.addEffect(new ParticleVex(living)));
             Minecraft.getMinecraft().player.world.getEntitiesWithinAABB(EntityPlayer.class, new AxisAlignedBB(pos.add(32, 32, 32), pos.add(-32, -32, -32)),
                     input -> SPECIAL_ENTITIES.containsKey(input.getUniqueID())).
@@ -67,7 +69,7 @@ public class OneThreeFiveHandler {
 
     @SubscribeEvent
     public static void onEntityKill(LivingDeathEvent event) {
-        if (event.getEntityLiving().getUniqueID().toString().contains("135") && event.getSource().getTrueSource() instanceof EntityPlayer && !(event.getSource().getTrueSource() instanceof FakePlayer)) {
+        if (event.getEntityLiving().getUniqueID().toString().contains(SPECIAL) && event.getSource().getTrueSource() instanceof EntityPlayer && !(event.getSource().getTrueSource() instanceof FakePlayer)) {
             EntityPlayer player = (EntityPlayer) event.getSource().getTrueSource();
             if (player.getHeldItemMainhand().getItem().equals(ItemRegistry.itemInfinityDrill)) {
                 player.getHeldItemMainhand().getTagCompound().setBoolean("Special", true);
