@@ -82,7 +82,7 @@ public class ConveyorBlockModel implements IBakedModel {
             if (upgradeQuads == null) {
                 try {
                     IModel model = ModelLoaderRegistry.getModel(upgrade.getFactory().getModel(upgrade.getSide(), state.getValue(BlockConveyor.FACING)));
-                    upgradeQuads = model.bake(this.state, this.format, location -> Minecraft.getMinecraft().getTextureMapBlocks().getAtlasSprite(location.toString())).getQuads(state, side, rand);
+                    upgradeQuads = model.bake(this.state, this.format, location -> Minecraft.getInstance().getTextureMap().getAtlasSprite(location.toString())).getQuads(state, side, rand);
                 } catch (Exception e) {
                     e.printStackTrace();
                     continue;

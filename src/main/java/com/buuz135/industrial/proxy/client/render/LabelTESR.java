@@ -67,8 +67,8 @@ public class LabelTESR extends TileEntitySpecialRenderer<TileEntityLabel> {
                 GlStateManager.enableBlend();
                 GlStateManager.tryBlendFuncSeparate(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA, GlStateManager.SourceFactor.ONE, GlStateManager.DestFactor.ZERO);
                 GlStateManager.depthMask(true);
-                Minecraft.getMinecraft().getTextureManager().bindTexture(TextureMap.LOCATION_BLOCKS_TEXTURE);
-                Minecraft.getMinecraft().getTextureManager().getTexture(TextureMap.LOCATION_BLOCKS_TEXTURE).setBlurMipmap(false, false);
+                Minecraft.getInstance().getTextureManager().bindTexture(TextureMap.LOCATION_BLOCKS_TEXTURE);
+                Minecraft.getInstance().getTextureManager().getTexture(TextureMap.LOCATION_BLOCKS_TEXTURE).setBlurMipmap(false, false);
                 GlStateManager.enableRescaleNormal();
                 GlStateManager.enableAlpha();
                 GlStateManager.alphaFunc(GL11.GL_GREATER, 0.1F);
@@ -81,15 +81,15 @@ public class LabelTESR extends TileEntitySpecialRenderer<TileEntityLabel> {
                     GlStateManager.scale(0.70, 0.70, 0.70);
                 }
 
-                IBakedModel bakedModel = Minecraft.getMinecraft().getRenderItem().getItemModelWithOverrides(stack, null, Minecraft.getMinecraft().player);
+                IBakedModel bakedModel = Minecraft.getInstance().getRenderItem().getItemModelWithOverrides(stack, null, Minecraft.getInstance().player);
                 bakedModel = ForgeHooksClient.handleCameraTransforms(bakedModel, ItemCameraTransforms.TransformType.GROUND, false);
-                Minecraft.getMinecraft().getRenderItem().renderItem(stack, bakedModel);
+                Minecraft.getInstance().getRenderItem().renderItem(stack, bakedModel);
 
                 GlStateManager.disableAlpha();
                 GlStateManager.disableRescaleNormal();
                 GlStateManager.disableLighting();
-                Minecraft.getMinecraft().getTextureManager().bindTexture(TextureMap.LOCATION_BLOCKS_TEXTURE);
-                Minecraft.getMinecraft().getTextureManager().getTexture(TextureMap.LOCATION_BLOCKS_TEXTURE).restoreLastBlurMipmap();
+                Minecraft.getInstance().getTextureManager().bindTexture(TextureMap.LOCATION_BLOCKS_TEXTURE);
+                Minecraft.getInstance().getTextureManager().getTexture(TextureMap.LOCATION_BLOCKS_TEXTURE).restoreLastBlurMipmap();
                 GlStateManager.disableBlend();
                 GlStateManager.color(1F, 1F, 1F, 1F);
                 GlStateManager.popMatrix();
@@ -105,7 +105,7 @@ public class LabelTESR extends TileEntitySpecialRenderer<TileEntityLabel> {
                 float factor = 2.0f;
                 GlStateManager.scale(size * factor, size * factor, size);
                 String string = getFormatedString(((IHasDisplayStack) tileEntity).getDisplayAmount(), stack.hasCapability(CapabilityFluidHandler.FLUID_HANDLER_ITEM_CAPABILITY, null) ? TileEntityLabel.FormatType.FLUID : te.getFormatType());
-                Minecraft.getMinecraft().fontRenderer.drawString(string, -Minecraft.getMinecraft().fontRenderer.getStringWidth(string) / 2, 0, 0xFFFFFF);
+                Minecraft.getInstance().fontRenderer.drawString(string, -Minecraft.getInstance().fontRenderer.getStringWidth(string) / 2, 0, 0xFFFFFF);
                 GlStateManager.popMatrix();
             }
         }

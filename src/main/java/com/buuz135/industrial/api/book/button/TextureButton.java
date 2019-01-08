@@ -47,17 +47,17 @@ public class TextureButton extends GuiButton {
     }
 
     @Override
-    public void drawButton(Minecraft mc, int mouseX, int mouseY, float partialTicks) {
-        if (this.visible) {
+    public void render(int mouseX, int mouseY, float partialTicks) {
+        if (visible) {
+            Minecraft mc = Minecraft.getInstance();
             mc.getTextureManager().bindTexture(gui);
-            GlStateManager.color(1f, 1f, 1f, 1f);
+            GlStateManager.color3f(1f, 1f, 1f);
             GlStateManager.enableBlend();
-            GlStateManager.tryBlendFuncSeparate(770, 771, 1, 0);
+            GlStateManager.blendFuncSeparate(770, 771, 1, 0);
             GlStateManager.blendFunc(770, 771);
             this.hovered = mouseX >= x && mouseX <= x + width && mouseY >= y && mouseY <= y + height;
             this.drawTexturedModalRect(this.x, this.y, this.textureX + 23 * (hovered ? 1 : 0), this.textureY, this.width, this.height);
         }
     }
-
 
 }

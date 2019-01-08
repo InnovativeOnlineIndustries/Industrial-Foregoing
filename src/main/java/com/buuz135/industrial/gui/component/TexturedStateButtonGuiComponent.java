@@ -48,7 +48,7 @@ public abstract class TexturedStateButtonGuiComponent extends PositionedGuiCompo
     @Override
     public void handleClick(GuiConveyor conveyor, int guiX, int guiY, int mouseX, int mouseY) {
         conveyor.sendMessage(id, new NBTTagCompound());
-        Minecraft.getMinecraft().getSoundHandler().playSound(PositionedSoundRecord.getMasterRecord(SoundEvents.UI_BUTTON_CLICK, 1.0F));
+        Minecraft.getInstance().getSoundHandler().playSound(PositionedSoundRecord.getMasterRecord(SoundEvents.UI_BUTTON_CLICK, 1.0F));
     }
 
     @Override
@@ -56,8 +56,8 @@ public abstract class TexturedStateButtonGuiComponent extends PositionedGuiCompo
         StateButtonInfo buttonInfo = getStateInfo();
         if (buttonInfo != null) {
             GlStateManager.color(1, 1, 1, 1);
-            Minecraft.getMinecraft().getTextureManager().bindTexture(buttonInfo.getTexture());
-            Minecraft.getMinecraft().currentScreen.drawTexturedModalRect(guiX + getXPos(), guiY + getYPos(), buttonInfo.getTextureX(), buttonInfo.getTextureY(), getXSize(), getYSize());
+            Minecraft.getInstance().getTextureManager().bindTexture(buttonInfo.getTexture());
+            Minecraft.getInstance().currentScreen.drawTexturedModalRect(guiX + getXPos(), guiY + getYPos(), buttonInfo.getTextureX(), buttonInfo.getTextureY(), getXSize(), getYSize());
         }
     }
 
@@ -67,7 +67,7 @@ public abstract class TexturedStateButtonGuiComponent extends PositionedGuiCompo
         if (buttonInfo != null && isInside(mouseX, mouseY)) {
             GlStateManager.disableLighting();
             GlStateManager.disableDepth();
-            Minecraft.getMinecraft().currentScreen.drawRect(getXPos() - guiX, getYPos() - guiY, getXPos() + getXSize() - guiX, getYPos() + getYSize() - guiY, -2130706433);
+            Minecraft.getInstance().currentScreen.drawRect(getXPos() - guiX, getYPos() - guiY, getXPos() + getXSize() - guiX, getYPos() + getYSize() - guiY, -2130706433);
             GlStateManager.enableLighting();
             GlStateManager.disableDepth();
         }

@@ -69,8 +69,8 @@ public class ConveyorSplittingSyncEntityMessage implements IMessage {
 
         @Override
         public IMessage onMessage(ConveyorSplittingSyncEntityMessage message, MessageContext ctx) {
-            Minecraft.getMinecraft().addScheduledTask(() -> {
-                TileEntity entity = Minecraft.getMinecraft().player.world.getTileEntity(message.pos);
+            Minecraft.getInstance().addScheduledTask(() -> {
+                TileEntity entity = Minecraft.getInstance().player.world.getTileEntity(message.pos);
                 if (entity instanceof TileEntityConveyor) {
                     if (((TileEntityConveyor) entity).hasUpgrade(message.facingCurrent)) {
                         ConveyorUpgrade upgrade = ((TileEntityConveyor) entity).getUpgradeMap().get(message.facingCurrent);

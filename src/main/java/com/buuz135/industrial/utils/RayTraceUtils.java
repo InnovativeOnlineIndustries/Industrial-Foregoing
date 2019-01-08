@@ -28,9 +28,10 @@ import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.RayTraceFluidMode;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.util.math.Vec3d;
-import net.minecraft.world.IBlockAccess;
+import net.minecraft.world.IBlockReader;
 import net.minecraft.world.World;
 
 import java.util.ArrayList;
@@ -70,18 +71,18 @@ public class RayTraceUtils {
         return null;
     }
 
-    public static RayTraceResult rayTrace(IBlockState state, IBlockAccess world, BlockPos pos, EntityPlayer player, double distance, List<Cuboid> boundingBoxes) {
-        Vec3d vec3d = player.getPositionEyes(0);
+    public static RayTraceResult rayTrace(IBlockState state, IBlockReader world, BlockPos pos, EntityPlayer player, double distance, List<Cuboid> boundingBoxes) {
+        Vec3d vec3d = player.getEyePosition(0);
         Vec3d vec3d1 = player.getLook(0);
         Vec3d vec3d2 = vec3d.add(vec3d1.x * distance, vec3d1.y * distance, vec3d1.z * distance);
         return rayTraceBoxesClosest(vec3d, vec3d2, pos, boundingBoxes);
     }
 
     public static RayTraceResult rayTraceSimple(World world, EntityLivingBase living, double blockReachDistance, float partialTicks) {
-        Vec3d vec3d = living.getPositionEyes(partialTicks);
+        Vec3d vec3d = living.getEyePosition(partialTicks);
         Vec3d vec3d1 = living.getLook(partialTicks);
         Vec3d vec3d2 = vec3d.add(vec3d1.x * blockReachDistance, vec3d1.y * blockReachDistance, vec3d1.z * blockReachDistance);
-        return world.rayTraceBlocks(vec3d, vec3d2, false, false, true);
+        return world.rayTraceBlocks(vec3d, vec3d2, RayTraceFluidMode.NEVER, false, true);
     }
 
 }

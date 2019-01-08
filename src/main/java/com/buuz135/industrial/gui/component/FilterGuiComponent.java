@@ -49,7 +49,7 @@ public abstract class FilterGuiComponent extends PositionedGuiComponent {
                 int posX = guiX + getXPos() + x * 18;
                 int posY = guiY + getXPos() + i * 18;
                 if (mouseX > posX + 1 && mouseX < posX + 1 + 16 && mouseY > posY + 1 && mouseY < posY + 1 + 16) {
-                    conveyor.sendMessage(pos, Minecraft.getMinecraft().player.inventory.getItemStack().serializeNBT());
+                    conveyor.sendMessage(pos, Minecraft.getInstance().player.inventory.getItemStack().serializeNBT());
                     return;
                 }
                 ++pos;
@@ -65,11 +65,11 @@ public abstract class FilterGuiComponent extends PositionedGuiComponent {
             for (int x = 0; x < getXSize(); x++) {
                 int posX = guiX + getXPos() + x * 18;
                 int posY = guiY + getXPos() + i * 18;
-                Minecraft.getMinecraft().getTextureManager().bindTexture(BG_TEXTURE);
-                Minecraft.getMinecraft().currentScreen.drawTexturedModalRect(posX, posY, 176, 0, 18, 18);
+                Minecraft.getInstance().getTextureManager().bindTexture(BG_TEXTURE);
+                Minecraft.getInstance().currentScreen.drawTexturedModalRect(posX, posY, 176, 0, 18, 18);
                 if (!getFilter().getFilter()[pos].getStack().isEmpty()) {
                     RenderHelper.enableGUIStandardItemLighting();
-                    Minecraft.getMinecraft().getRenderItem().renderItemIntoGUI(getFilter().getFilter()[pos].getStack(), posX + 1, posY + 1);
+                    Minecraft.getInstance().getRenderItem().renderItemIntoGUI(getFilter().getFilter()[pos].getStack(), posX + 1, posY + 1);
                 }
                 ++pos;
             }
@@ -86,7 +86,7 @@ public abstract class FilterGuiComponent extends PositionedGuiComponent {
                 if (mouseX > posX + 1 && mouseX < posX + 1 + 16 && mouseY > posY + 1 && mouseY < posY + 1 + 16) {
                     GlStateManager.disableLighting();
                     GlStateManager.disableDepth();
-                    Minecraft.getMinecraft().currentScreen.drawRect(posX + 1 - guiX, posY + 1 - guiY, posX + 17 - guiX, posY + 17 - guiY, -2130706433);
+                    Minecraft.getInstance().currentScreen.drawRect(posX + 1 - guiX, posY + 1 - guiY, posX + 17 - guiX, posY + 17 - guiY, -2130706433);
                     GlStateManager.enableLighting();
                     GlStateManager.disableDepth();
                     return;
@@ -111,7 +111,7 @@ public abstract class FilterGuiComponent extends PositionedGuiComponent {
                 int posX = guiX + getXPos() + x * 18;
                 int posY = guiY + getXPos() + i * 18;
                 if (mouseX > posX + 1 && mouseX < posX + 1 + 16 && mouseY > posY + 1 && mouseY < posY + 1 + 16 && !getFilter().getFilter()[pos].getStack().isEmpty()) {
-                    return Minecraft.getMinecraft().currentScreen.getItemToolTip(getFilter().getFilter()[pos].getStack());
+                    return Minecraft.getInstance().currentScreen.getItemToolTip(getFilter().getFilter()[pos].getStack());
                 }
                 ++pos;
             }

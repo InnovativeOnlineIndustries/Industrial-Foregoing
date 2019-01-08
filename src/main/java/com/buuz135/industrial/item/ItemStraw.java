@@ -28,6 +28,9 @@ import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.fluid.IFluidState;
+import net.minecraft.init.Blocks;
+import net.minecraft.init.Fluids;
 import net.minecraft.item.EnumAction;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
@@ -53,8 +56,7 @@ import java.util.Optional;
 
 public class ItemStraw extends IFCustomItem {
     public ItemStraw() {
-        super("straw");
-        setMaxStackSize(1);
+        super("straw", new Builder().maxStackSize(1));
     }
 
     @Override
@@ -63,15 +65,15 @@ public class ItemStraw extends IFCustomItem {
         if (!world.isRemote && entity instanceof EntityPlayer) {
             EntityPlayer player = (EntityPlayer) entity;
             RayTraceResult result = rayTrace(world, player, true);
-            if (result != null && result.typeOfHit == RayTraceResult.Type.BLOCK) {
+            if (result != null && result.type == RayTraceResult.Type.BLOCK) {
                 BlockPos pos = result.getBlockPos();
                 IBlockState state = world.getBlockState(pos);
                 Block block = state.getBlock();
-                Fluid fluid = FluidRegistry.lookupFluidForBlock(block);
-                if (fluid != null) {
-                    FluidStack stack = new FluidStack(fluid, Fluid.BUCKET_VOLUME);
+                IFluidState fluidState = state.getFluidState();
+                if (fluidState != Fluids.EMPTY.getDefaultState() && fluidState.isSource()) {
+                    FluidStack stack = new FluidStack(fluidState.getFluid(), Fluid.BUCKET_VOLUME);
                     StrawUtils.getStrawHandler(stack).ifPresent(handler -> handler.onDrink(world, pos, stack, player, false));
-                    world.setBlockToAir(pos);
+                    world.setBlockState(pos, Blocks.AIR.getDefaultState());
                     return heldStack;
                 } else if (block.hasTileEntity(state)) {
                     TileEntity tile = world.getTileEntity(pos);
@@ -82,7 +84,7 @@ public class ItemStraw extends IFCustomItem {
                             for (IFluidTankProperties properties : fluidTankProperties) {
                                 FluidStack stack = properties.getContents();
                                 if (stack != null) {
-                                    fluid = stack.getFluid();
+                                    Fluid fluid = stack.getFluid();
                                     if (fluid != null && stack.amount >= Fluid.BUCKET_VOLUME) {
                                         FluidStack copiedStack = stack.copy();
                                         copiedStack.amount = Fluid.BUCKET_VOLUME;
@@ -107,7 +109,7 @@ public class ItemStraw extends IFCustomItem {
     @Nonnull
     public ActionResult<ItemStack> onItemRightClick(World worldIn, EntityPlayer playerIn, @Nonnull EnumHand handIn) {
         RayTraceResult result = rayTrace(worldIn, playerIn, true);
-        if (result != null && result.typeOfHit == RayTraceResult.Type.BLOCK) {
+        if (result != null && result.type == RayTraceResult.Type.BLOCK) {
             BlockPos pos = result.getBlockPos();
             IBlockState state = worldIn.getBlockState(pos);
             Block block = state.getBlock();

@@ -44,7 +44,7 @@ public class TextInfoPiece extends BasicRenderedGuiPiece {
     @Override
     public void drawBackgroundLayer(BasicTeslaGuiContainer<?> container, int guiX, int guiY, float partialTicks, int mouseX, int mouseY) {
         super.drawBackgroundLayer(container, guiX, guiY, partialTicks, mouseX, mouseY);
-        FontRenderer renderer = Minecraft.getMinecraft().fontRenderer;
+        FontRenderer renderer = Minecraft.getInstance().fontRenderer;
         GlStateManager.pushMatrix();
         GlStateManager.scale(1, 1, 1);
         renderer.drawString(string.getString(id), this.getLeft() + guiX, this.getTop() + guiY, 0xFFFFFF);

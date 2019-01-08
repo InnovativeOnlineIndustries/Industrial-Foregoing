@@ -50,8 +50,8 @@ public class IFTooltipEvent {
                 event.getToolTip().addAll(((IHasAdvancedTooltip) block).getTooltip(event.getItemStack()));
             }
         }
-        if (Minecraft.getMinecraft().world != null && block.equals(BlockRegistry.frosterBlock)) {
-            event.getToolTip().add("or \"" + other[(int) ((Minecraft.getMinecraft().world.getTotalWorldTime() / 70) % other.length)] + "\"");
+        if (Minecraft.getInstance().world != null && block.equals(BlockRegistry.frosterBlock)) {
+            event.getToolTip().add("or \"" + other[(int) ((Minecraft.getInstance().world.getTotalWorldTime() / 70) % other.length)] + "\"");
         }
     }
 }

@@ -29,6 +29,7 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityList;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.EntityType;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
@@ -60,28 +61,27 @@ public class MobImprisonmentToolItem extends IFCustomItem {
         Entity entity = getEntityFromStack(stack, worldIn, true);
         BlockPos blockPos = pos.offset(facing);
         entity.setPositionAndRotation(blockPos.getX() + 0.5, blockPos.getY(), blockPos.getZ() + 0.5, 0, 0);
-        stack.setTagCompound(new NBTTagCompound());
+        stack.setTag(new NBTTagCompound());
         player.setHeldItem(hand, stack);
         worldIn.spawnEntity(entity);
-        if (entity instanceof EntityLiving) ((EntityLiving) entity).playLivingSound();
+        if (entity instanceof EntityLiving) ((EntityLiving) entity).playAmbientSound();
         return EnumActionResult.SUCCESS;
     }
 
     @Override
     public boolean itemInteractionForEntity(ItemStack stack, EntityPlayer playerIn, EntityLivingBase target, EnumHand hand) {
         if (target.getEntityWorld().isRemote) return false;
-        if (target instanceof EntityPlayer || !target.isNonBoss() || !target.isEntityAlive()) return false;
+        if (target instanceof EntityPlayer || !target.isNonBoss() || !target.isAlive()) return false;
         if (containsEntity(stack)) return false;
-        String entityID = EntityList.getKey(target).toString();
+        String entityID = EntityType.getId(target.getType()).toString();
         if (isBlacklisted(entityID)) return false;
         NBTTagCompound nbt = new NBTTagCompound();
         nbt.setString("entity", entityID);
-        nbt.setInteger("id", EntityList.getID(target.getClass()));
         target.writeToNBT(nbt);
-        stack.setTagCompound(nbt);
+        stack.setTag(nbt);
         playerIn.swingArm(hand);
         playerIn.setHeldItem(hand, stack);
-        target.setDead();
+        target.onKillCommand();
         return true;
     }
 
@@ -91,7 +91,7 @@ public class MobImprisonmentToolItem extends IFCustomItem {
     }
 
     public boolean containsEntity(ItemStack stack) {
-        return !stack.isEmpty() && stack.hasTagCompound() && stack.getTagCompound().hasKey("entity");
+        return !stack.isEmpty() && stack.hasTag() && stack.getTag().hasKey("entity");
     }
 
     @Override
@@ -106,13 +106,13 @@ public class MobImprisonmentToolItem extends IFCustomItem {
     }
 
     public Entity getEntityFromStack(ItemStack stack, World world, boolean withInfo) {
-        Entity entity = EntityList.createEntityByIDFromName(new ResourceLocation(stack.getTagCompound().getString("entity")), world);
-        if (withInfo) entity.readFromNBT(stack.getTagCompound());
+        Entity entity = EntityType.create(world, new ResourceLocation(new ResourceLocation(stack.getTag().getString("entity"));
+        if (withInfo) entity.readFromNBT(stack.getTag());
         return entity;
     }
 
     public String getID(ItemStack stack) {
-        return stack.getTagCompound().getString("entity");
+        return stack.getTag().getString("entity");
     }
 
     public void createRecipe() {

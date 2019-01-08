@@ -71,15 +71,15 @@ public class GUIBookBase extends GuiScreen {
         this.guiTop = (this.height - this.guiYSize) / 2;
         if (this.hasBackButton()) {
             back = new TextureButton(-135, this.guiLeft - 5, this.guiTop + 2, 18, 10, BOOK_EXTRAS, 1, 27, "Go back");
-            this.buttonList.add(back);
+            this.buttons.add(back);
         }
         if (this.hasPageLeft()) {
             left = new TextureButton(-136, this.guiLeft + 20, this.guiTop + guiYSize - 25, 18, 10, BOOK_EXTRAS, 1, 14, "Previous page");
-            this.buttonList.add(left);
+            this.buttons.add(left);
         }
         if (this.hasPageRight()) {
             right = new TextureButton(-137, this.guiLeft + guiXSize - 45, this.guiTop + guiYSize - 25, 18, 10, BOOK_EXTRAS, 1, 1, "Next page");
-            this.buttonList.add(right);
+            this.buttons.add(right);
         }
         if (hasSearchBar()) {
             search = new GuiTextField(-138, this.fontRenderer, this.guiLeft + 20, this.guiTop + 15, 128, 12);
@@ -105,15 +105,15 @@ public class GUIBookBase extends GuiScreen {
     }
 
     @Override
-    public void drawScreen(int mouseX, int mouseY, float partialTicks) {
-        this.drawScreenBack(mouseX, mouseY, partialTicks);
-        super.drawScreen(mouseX, mouseY, partialTicks);
-        this.drawScreenFront(mouseX, mouseY, partialTicks);
+    public void render(int p_73863_1_, int p_73863_2_, float p_73863_3_) {
+        this.drawScreenBack(p_73863_1_, p_73863_2_, p_73863_3_);
+        super.render(p_73863_1_, p_73863_2_, p_73863_3_);
+        this.drawScreenFront(p_73863_1_, p_73863_2_, p_73863_3_);
     }
 
     public void drawScreenBack(int mouseX, int mouseY, float partialTicks) {
-        this.drawCenteredString(Minecraft.getMinecraft().fontRenderer, TextFormatting.DARK_AQUA + new TextComponentTranslation("text.industrialforegoing.book.title").getFormattedText(), this.getGuiLeft() + 85, this.getGuiTop() - 10, 0xFFFFFF);
-        GlStateManager.color(1f, 1f, 1f);
+        this.drawCenteredString(Minecraft.getInstance().fontRenderer, TextFormatting.DARK_AQUA + new TextComponentTranslation("text.industrialforegoing.book.title").getFormattedText(), this.getGuiLeft() + 85, this.getGuiTop() - 10, 0xFFFFFF);
+        GlStateManager.color3f(1f, 1f, 1f);
         this.mc.getTextureManager().bindTexture(BOOK_BACK);
         drawModalRectWithCustomSizedTexture(this.guiLeft, this.guiTop, 0, 0, this.guiXSize, this.guiYSize, this.guiXSize, this.guiYSize);
         if (this.hasSearchBar()) {
@@ -125,7 +125,7 @@ public class GUIBookBase extends GuiScreen {
     }
 
     public void drawScreenFront(int mouseX, int mouseY, float partialTicks) {
-        this.buttonList.stream().filter(GuiButton::isMouseOver).forEach(guiButton -> {
+        this.buttons.stream().filter(GuiButton::isMouseOver).forEach(guiButton -> {
             if (guiButton instanceof CategoryEntryButton) {
                 //if (((CategoryEntryButton) guiButton).isTextTooBig())
                 drawHoveringText(guiButton.displayString, guiButton.x + 8, guiButton.y + GUIBookCategoryEntries.SPACE - 1);
@@ -184,7 +184,7 @@ public class GUIBookBase extends GuiScreen {
 
     public void updateGUIwithBar(String text) {
         if (!text.isEmpty()) {
-            this.buttonList.removeIf(guiButton -> guiButton instanceof CategoryEntryButton);
+            this.buttons.removeIf(guiButton -> guiButton instanceof CategoryEntryButton);
             int buttonsAdded = 0;
             for (BookCategory category : BookCategory.values()) {
                 for (ResourceLocation location : category.getEntries().keySet()) {
@@ -202,7 +202,7 @@ public class GUIBookBase extends GuiScreen {
                     CategoryEntry entry = category.getEntries().get(location);
                     for (IPage page : entry.getPages()) {
                         if (page instanceof PageText) {
-                            if (((PageText) page).getText().toLowerCase().contains(text.toLowerCase()) && buttonList.stream().filter(guiButton -> guiButton instanceof CategoryEntryButton).noneMatch(guiButton -> ((CategoryEntryButton) guiButton).getEntry().equals(entry))) {
+                            if (((PageText) page).getText().toLowerCase().contains(text.toLowerCase()) && buttons.stream().filter(guiButton -> guiButton instanceof CategoryEntryButton).noneMatch(guiButton -> ((CategoryEntryButton) guiButton).getEntry().equals(entry))) {
                                 this.addButton(new CategoryEntryButton(-315 - buttonsAdded, this.getGuiLeft() + 16, this.getGuiTop() + 32 + GUIBookCategoryEntries.SPACE * buttonsAdded, this.getGuiXSize() - 32, GUIBookCategoryEntries.SPACE, entry.getName(), entry));
                                 ++buttonsAdded;
                                 if (buttonsAdded >= 9) {

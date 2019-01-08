@@ -28,8 +28,10 @@ import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
+import net.minecraft.util.math.shapes.VoxelShape;
 
 import java.util.List;
+import java.util.function.Predicate;
 
 public class MovementUtils {
 
@@ -37,7 +39,7 @@ public class MovementUtils {
         if (entity instanceof EntityPlayer && entity.isSneaking()) return;
         if (entity.posY - pos.getY() > 0.3 && !type.isVertical()) return;
 
-        AxisAlignedBB collision = entity.world.getBlockState(pos).getBlock().getCollisionBoundingBox(entity.world.getBlockState(pos), entity.world, pos).offset(pos);
+        VoxelShape collision = entity.world.getBlockState(pos).getBlock().getCollisionShape(entity.world.getBlockState(pos), entity.world, pos).withOffset(pos.getX(),pos.getY(),pos.getZ());
 //        if (direction == EnumFacing.NORTH || direction == EnumFacing.SOUTH){
 //            collision = collision.contract(-0.1,0,0);
 //            collision = collision.contract(0.1,0,0);
@@ -46,7 +48,7 @@ public class MovementUtils {
 //            collision = collision.contract(0,0,-0.1);
 //            collision = collision.contract(0,0,0.1);
 //        }
-        if (!type.isVertical() && !collision.grow(0.01).intersects(entity.getEntityBoundingBox())) return;
+        if (!type.isVertical() && collision.toBoundingBoxList().stream().noneMatch(axisAlignedBB -> axisAlignedBB.intersects(entity.getBoundingBox()))) return;
 
         //DIRECTION MOVEMENT
         double speed = 0.2;

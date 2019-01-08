@@ -40,8 +40,8 @@ public class IFWorldRenderLastEvent {
     @SideOnly(Side.CLIENT)
     @SubscribeEvent
     public void onRender(RenderGameOverlayEvent.Post event) {
-        EntityPlayerSP playerIn = Minecraft.getMinecraft().player;
-        if (!playerIn.getHeldItemMainhand().getItem().equals(ItemRegistry.bookManualItem) || Minecraft.getMinecraft().currentScreen != null)
+        EntityPlayerSP playerIn = Minecraft.getInstance().player;
+        if (!playerIn.getHeldItemMainhand().getItem().equals(ItemRegistry.bookManualItem) || Minecraft.getInstance().currentScreen != null)
             return;
         float f = playerIn.rotationPitch;
         float f1 = playerIn.rotationYaw;
@@ -57,12 +57,12 @@ public class IFWorldRenderLastEvent {
         float f7 = f2 * f4;
         double d3 = 5.0D;
         Vec3d vec3d1 = vec3d.add((double) f6 * d3, (double) f5 * d3, (double) f7 * d3);
-        RayTraceResult result = Minecraft.getMinecraft().world.rayTraceBlocks(vec3d, vec3d1, false, true, false);
-        if (result != null && result.typeOfHit == RayTraceResult.Type.BLOCK) {
+        RayTraceResult result = Minecraft.getInstance().world.rayTraceBlocks(vec3d, vec3d1, false, true, false);
+        if (result != null && result.type == RayTraceResult.Type.BLOCK) {
             BlockPos pos = result.getBlockPos();
-            if (Minecraft.getMinecraft().world.getBlockState(pos).getBlock().getRegistryName().getNamespace().equals(Reference.MOD_ID)) {
-                Minecraft.getMinecraft().fontRenderer.drawString(TextFormatting.GOLD + "SNEAK" + TextFormatting.WHITE + "+" + TextFormatting.GOLD + "Right Click", event.getResolution().getScaledWidth() / 2 + 10, event.getResolution().getScaledHeight() / 2 - 5, 0xFFFFFF, true);
-                Minecraft.getMinecraft().fontRenderer.drawString(TextFormatting.YELLOW + "Open Block Description", event.getResolution().getScaledWidth() / 2 + 10, event.getResolution().getScaledHeight() / 2 - 5 + Minecraft.getMinecraft().fontRenderer.FONT_HEIGHT + 2, 0xFFFFFF, true);
+            if (Minecraft.getInstance().world.getBlockState(pos).getBlock().getRegistryName().getNamespace().equals(Reference.MOD_ID)) {
+                Minecraft.getInstance().fontRenderer.drawString(TextFormatting.GOLD + "SNEAK" + TextFormatting.WHITE + "+" + TextFormatting.GOLD + "Right Click", event.getResolution().getScaledWidth() / 2 + 10, event.getResolution().getScaledHeight() / 2 - 5, 0xFFFFFF, true);
+                Minecraft.getInstance().fontRenderer.drawString(TextFormatting.YELLOW + "Open Block Description", event.getResolution().getScaledWidth() / 2 + 10, event.getResolution().getScaledHeight() / 2 - 5 + Minecraft.getInstance().fontRenderer.FONT_HEIGHT + 2, 0xFFFFFF, true);
 
             }
         }

@@ -53,7 +53,7 @@ public class PetrifiedFuelInfoPiece extends BasicRenderedGuiPiece {
                 timeLeft = ((this.tile.getGeneratedPowerStored() / 2) / this.tile.getGeneratedPowerReleaseRate()) / 20;
                 generatingRate = this.tile.getGeneratedPowerReleaseRate();
             }
-            FontRenderer renderer = Minecraft.getMinecraft().fontRenderer;
+            FontRenderer renderer = Minecraft.getInstance().fontRenderer;
             GlStateManager.pushMatrix();
             GlStateManager.translate(this.getLeft() + 2, this.getTop() + 2, 0);
             GlStateManager.scale(1, 1, 1);

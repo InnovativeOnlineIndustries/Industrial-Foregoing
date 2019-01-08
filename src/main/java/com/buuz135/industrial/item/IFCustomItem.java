@@ -23,18 +23,15 @@ package com.buuz135.industrial.item;
 
 import com.buuz135.industrial.IndustrialForegoing;
 import com.buuz135.industrial.utils.Reference;
+import com.hrznstudio.titanium.item.ItemBase;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.item.Item;
 import net.minecraftforge.client.model.ModelLoader;
 import net.minecraftforge.registries.IForgeRegistry;
 
-public class IFCustomItem extends Item {
-
-
-    public IFCustomItem(String name) {
-        setTranslationKey(Reference.MOD_ID + "_" + name);
-        setCreativeTab(IndustrialForegoing.creativeTab);
-        setRegistryName(Reference.MOD_ID, name);
+public class IFCustomItem extends ItemBase {
+    public IFCustomItem(String name, Builder builder) {
+        super(name, builder.group(IndustrialForegoing.creativeTab));
     }
 
     public void register(IForgeRegistry<Item> items) {

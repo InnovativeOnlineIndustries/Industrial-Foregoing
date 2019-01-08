@@ -45,11 +45,11 @@ public class BookManualItem extends IFCustomItem {
         BlockPos pos = playerIn.getPosition();
         if (playerIn.isSneaking()) {
             RayTraceResult result = rayTrace(worldIn, playerIn, false);
-            if (result != null && result.typeOfHit == RayTraceResult.Type.BLOCK) {
+            if (result != null && result.type == RayTraceResult.Type.BLOCK) {
                 pos = result.getBlockPos();
             }
         }
-        playerIn.openGui(IndustrialForegoing.instance, GuiHandler.BOOK, worldIn, pos.getX(), pos.getY(), pos.getZ());
+        // playerIn.openGui(IndustrialForegoing.instance, GuiHandler.BOOK, worldIn, pos.getX(), pos.getY(), pos.getZ());
         return new ActionResult<>(EnumActionResult.SUCCESS, playerIn.getHeldItem(handIn));
     }
 

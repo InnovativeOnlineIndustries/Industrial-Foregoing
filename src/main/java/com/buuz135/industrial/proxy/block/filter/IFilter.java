@@ -76,8 +76,8 @@ public interface IFilter<T extends Entity> {
 
         @Override
         public Rectangle getArea() {
-            if (Minecraft.getMinecraft().currentScreen instanceof GuiConveyor) {
-                GuiConveyor gui = (GuiConveyor) Minecraft.getMinecraft().currentScreen;
+            if (Minecraft.getInstance().currentScreen instanceof GuiConveyor) {
+                GuiConveyor gui = (GuiConveyor) Minecraft.getInstance().currentScreen;
                 return new Rectangle(x + gui.getX(), y + gui.getY(), 18, 18);
             }
             return new Rectangle();
@@ -85,8 +85,8 @@ public interface IFilter<T extends Entity> {
 
         @Override
         public void accept(ItemStack ingredient) {
-            if (Minecraft.getMinecraft().currentScreen instanceof GuiConveyor) {
-                ((GuiConveyor) Minecraft.getMinecraft().currentScreen).sendMessage(id, ingredient.serializeNBT());
+            if (Minecraft.getInstance().currentScreen instanceof GuiConveyor) {
+                ((GuiConveyor) Minecraft.getInstance().currentScreen).sendMessage(id, ingredient.serializeNBT());
             }
         }
     }

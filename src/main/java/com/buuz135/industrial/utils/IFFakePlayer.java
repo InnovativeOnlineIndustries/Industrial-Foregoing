@@ -43,9 +43,4 @@ public class IFFakePlayer extends FakePlayer {
     protected void playEquipSound(ItemStack stack) {
 
     }
-
-    @Override
-    public void openEditSign(TileEntitySign signTile) {
-
-    }
 }

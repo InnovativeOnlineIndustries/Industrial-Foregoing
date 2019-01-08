@@ -46,7 +46,7 @@ public class BlackHoleInfoPiece extends BasicRenderedGuiPiece {
     public void drawForegroundLayer(BasicTeslaGuiContainer container, int guiX, int guiY, int mouseX, int mouseY) {
         super.drawForegroundLayer(container, guiX, guiY, mouseX, mouseY);
         if (this.tile != null) {
-            FontRenderer renderer = Minecraft.getMinecraft().fontRenderer;
+            FontRenderer renderer = Minecraft.getInstance().fontRenderer;
             GlStateManager.pushMatrix();
             GlStateManager.translate(this.getLeft() + 2, this.getTop() + 8, 0);
             GlStateManager.scale(1, 1, 1);

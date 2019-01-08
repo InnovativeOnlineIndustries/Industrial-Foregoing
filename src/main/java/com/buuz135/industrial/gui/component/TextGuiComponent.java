@@ -42,7 +42,7 @@ public abstract class TextGuiComponent extends PositionedGuiComponent {
 
     @Override
     public void drawGuiBackgroundLayer(int guiX, int guiY, int mouseX, int mouseY) {
-        Minecraft.getMinecraft().fontRenderer.drawString(getText(), guiX + getXPos(), guiY + getYPos(), 0xffffff);
+        Minecraft.getInstance().fontRenderer.drawString(getText(), guiX + getXPos(), guiY + getYPos(), 0xffffff);
     }
 
     @Override

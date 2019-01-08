@@ -58,8 +58,8 @@ public class TextureGuiComponent extends PositionedGuiComponent {
 
     @Override
     public void drawGuiBackgroundLayer(int guiX, int guiY, int mouseX, int mouseY) {
-        Minecraft.getMinecraft().getTextureManager().bindTexture(resourceLocation);
-        Minecraft.getMinecraft().currentScreen.drawTexturedModalRect(guiX + getXPos(), guiY + getYPos(), textureX, textureY, getXSize(), getYSize());
+        Minecraft.getInstance().getTextureManager().bindTexture(resourceLocation);
+        Minecraft.getInstance().currentScreen.drawTexturedModalRect(guiX + getXPos(), guiY + getYPos(), textureX, textureY, getXSize(), getYSize());
     }
 
     @Override

@@ -167,7 +167,7 @@ public class FluidPumpTile extends WorkingAreaElectricMachine {
                 GlStateManager.pushMatrix();
                 GlStateManager.translate(this.getLeft() + 2, this.getTop() + 8, 0);
                 GlStateManager.scale(1, 1, 1);
-                FontRenderer renderer = Minecraft.getMinecraft().fontRenderer;
+                FontRenderer renderer = Minecraft.getInstance().fontRenderer;
                 ItemStackUtils.renderItemIntoGUI(fluid == null ? new ItemStack(Items.BUCKET) : FluidUtil.getFilledBucket(new FluidStack(FluidRegistry.getFluid(fluid), 1000)), 34, -5, 7);
                 renderer.drawString(TextFormatting.DARK_GRAY + new TextComponentTranslation("text.industrialforegoing.display.filter").getUnformattedText(), 0, 0, 0xFFFFFF);
                 GlStateManager.popMatrix();

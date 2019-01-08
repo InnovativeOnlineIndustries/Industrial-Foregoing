@@ -77,6 +77,6 @@ public class OreSieveCategory implements IRecipeCategory<OreSieveWrapper> {
 
     @Override
     public void drawExtras(Minecraft minecraft) {
-        Minecraft.getMinecraft().currentScreen.drawTexturedModalRect(25, 33, 0, 4, 18, 18);
+        Minecraft.getInstance().currentScreen.drawTexturedModalRect(25, 33, 0, 4, 18, 18);
     }
 }

@@ -74,8 +74,8 @@ public class FluidConveyorTESR extends TileEntitySpecialRenderer<TileEntityConve
 
             buffer.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_TEX_COLOR);
             Fluid fluid = te.getTank().getFluid().getFluid();
-            TextureAtlasSprite flow = Minecraft.getMinecraft().getTextureMapBlocks().getAtlasSprite(fluid.getFlowing().toString());
-            TextureAtlasSprite still = Minecraft.getMinecraft().getTextureMapBlocks().getAtlasSprite(fluid.getStill().toString());
+            TextureAtlasSprite flow = Minecraft.getInstance().getTextureMap().getAtlasSprite(fluid.getFlowing().toString());
+            TextureAtlasSprite still = Minecraft.getInstance().getTextureMap().getAtlasSprite(fluid.getStill().toString());
             double posY = 2 / 16f - 1 / 32f;
             double right = 1 / 16f;
             double left = 15 / 16f;

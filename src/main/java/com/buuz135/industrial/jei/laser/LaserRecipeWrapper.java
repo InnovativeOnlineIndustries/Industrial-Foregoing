@@ -84,7 +84,7 @@ public class LaserRecipeWrapper implements IRecipeWrapper {
         if (mouseX > 137 && mouseX < (137 + 15) && mouseY > 70 && mouseY < 85 && pointer < entryExtended.getRarities().size() - 1) { //Inside the next button
             return Arrays.asList(new TextComponentTranslation("text.industrialforegoing.button.jei.next_rarity").getUnformattedComponentText());
         }
-        if (mouseX > 13 * 2 && mouseX < 13 * 2 + 20 && mouseY > 30 + (Minecraft.getMinecraft().fontRenderer.FONT_HEIGHT + 2) * 3 && mouseY < 30 + (Minecraft.getMinecraft().fontRenderer.FONT_HEIGHT + 2) * 3 + 20) { //Inside the whitelisted biomes
+        if (mouseX > 13 * 2 && mouseX < 13 * 2 + 20 && mouseY > 30 + (Minecraft.getInstance().fontRenderer.FONT_HEIGHT + 2) * 3 && mouseY < 30 + (Minecraft.getInstance().fontRenderer.FONT_HEIGHT + 2) * 3 + 20) { //Inside the whitelisted biomes
             List<String> biomes = new ArrayList<>();
             biomes.add(TextFormatting.UNDERLINE + new TextComponentTranslation("text.industrialforegoing.tooltip.whitelisted_biomes").getUnformattedText());
             if (entryExtended.getRarities().get(pointer).getWhitelist().isEmpty()) biomes.add("- Any");
@@ -93,7 +93,7 @@ public class LaserRecipeWrapper implements IRecipeWrapper {
             }
             return biomes;
         }
-        if (mouseX > 13 * 8 && mouseX < 13 * 8 + 20 && mouseY > 30 + (Minecraft.getMinecraft().fontRenderer.FONT_HEIGHT + 2) * 3 && mouseY < 30 + (Minecraft.getMinecraft().fontRenderer.FONT_HEIGHT + 2) * 3 + 20) { //Inside the whitelisted biomes
+        if (mouseX > 13 * 8 && mouseX < 13 * 8 + 20 && mouseY > 30 + (Minecraft.getInstance().fontRenderer.FONT_HEIGHT + 2) * 3 && mouseY < 30 + (Minecraft.getInstance().fontRenderer.FONT_HEIGHT + 2) * 3 + 20) { //Inside the whitelisted biomes
             List<String> biomes = new ArrayList<>();
             biomes.add(TextFormatting.UNDERLINE + new TextComponentTranslation("text.industrialforegoing.tooltip.blacklisted_biomes").getUnformattedText());
             if (entryExtended.getRarities().get(pointer).getBlacklist().isEmpty()) biomes.add("- None");

@@ -21,41 +21,40 @@
  */
 package com.buuz135.industrial;
 
-import com.buuz135.industrial.proxy.BlockRegistry;
 import com.buuz135.industrial.proxy.CommonProxy;
-import com.buuz135.industrial.proxy.ItemRegistry;
+import com.buuz135.industrial.proxy.client.ClientProxy;
 import com.buuz135.industrial.utils.IFFakePlayer;
 import com.buuz135.industrial.utils.Reference;
-import net.minecraft.creativetab.CreativeTabs;
-import net.minecraft.item.ItemStack;
+import com.hrznstudio.titanium.tab.AdvancedTitaniumTab;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldServer;
 import net.minecraftforge.common.util.FakePlayer;
 import net.minecraftforge.fluids.FluidRegistry;
+import net.minecraftforge.fml.DistExecutor;
 import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.fml.common.SidedProxy;
-import net.minecraftforge.fml.common.event.*;
-import net.minecraftforge.fml.common.network.NetworkRegistry;
-import net.minecraftforge.fml.common.network.simpleimpl.SimpleNetworkWrapper;
-import net.ndrei.teslacorelib.config.TeslaCoreLibConfig;
-import net.ndrei.teslacorelib.items.gears.CoreGearType;
+import net.minecraftforge.fml.common.event.FMLInitializationEvent;
+import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
+import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
+import net.minecraftforge.fml.common.event.FMLServerStartingEvent;
+import net.minecraftforge.fml.javafmlmod.FMLModLoadingContext;
+import net.minecraftforge.fml.network.NetworkRegistry;
+import net.minecraftforge.fml.network.simple.SimpleChannel;
 
-import java.util.Arrays;
 import java.util.HashMap;
 
-@Mod(modid = Reference.MOD_ID, name = Reference.MOD_ID, version = Reference.VERSION, dependencies = "required-after:forge@[14.23.1.2594,);required-after:teslacorelib@[1.0.15,);", guiFactory = Reference.GUI_FACTORY, updateJSON = "https://raw.githubusercontent.com/Buuz135/Industrial-Foregoing/master/update.json")
+//@Mod(modid = Reference.MOD_ID, name = Reference.MOD_ID, version = Reference.VERSION, dependencies = "required-after:forge@[14.23.1.2594,);required-after:teslacorelib@[1.0.15,);", guiFactory = Reference.GUI_FACTORY, updateJSON = "https://raw.githubusercontent.com/Buuz135/Industrial-Foregoing/master/update.json")
+@Mod(Reference.MOD_ID)
 public class IndustrialForegoing {
 
-    public static final SimpleNetworkWrapper NETWORK = NetworkRegistry.INSTANCE.newSimpleChannel(Reference.MOD_ID);
-    public static CreativeTabs creativeTab = new CreativeTabs(Reference.MOD_ID) {
-        @Override
-        public ItemStack createIcon() {
-            return new ItemStack(BlockRegistry.blackHoleUnitBlock).isEmpty() ? new ItemStack(ItemRegistry.strawItem) : new ItemStack(BlockRegistry.blackHoleUnitBlock);
-        }
-    };
+    public static final SimpleChannel NETWORK = NetworkRegistry.ChannelBuilder.named(new ResourceLocation(Reference.MOD_ID,"network"))
+            .clientAcceptedVersions("1.0"::equals)
+            .serverAcceptedVersions("1.0"::equals)
+            .networkProtocolVersion(()->"1.0")
+            .simpleChannel();
+    public static AdvancedTitaniumTab creativeTab = new AdvancedTitaniumTab(Reference.MOD_ID, true);
     public static IndustrialForegoing instance;
-    @SidedProxy(clientSide = Reference.PROXY_CLIENT, serverSide = Reference.PROXY_COMMON)
     private static CommonProxy proxy;
     private static HashMap<Integer, IFFakePlayer> worldFakePlayer = new HashMap<>();
 
@@ -63,12 +62,20 @@ public class IndustrialForegoing {
         if (!FluidRegistry.isUniversalBucketEnabled()) FluidRegistry.enableUniversalBucket();
     }
 
+    public IndustrialForegoing() {
+       proxy = DistExecutor.runForDist(()-> ClientProxy::new,()->CommonProxy::new);
+        FMLModLoadingContext.get().getModEventBus().addListener(this::preInit);
+        FMLModLoadingContext.get().getModEventBus().addListener(this::init);
+        FMLModLoadingContext.get().getModEventBus().addListener(this::postInit);
+        FMLModLoadingContext.get().getModEventBus().addListener(this::serverStart);
+    }
+
     public static FakePlayer getFakePlayer(World world) {
-        if (worldFakePlayer.containsKey(world.provider.getDimension()))
-            return worldFakePlayer.get(world.provider.getDimension());
+        if (worldFakePlayer.containsKey(world.dimension.getId()))
+            return worldFakePlayer.get(world.dimension.getId());
         if (world instanceof WorldServer) {
             IFFakePlayer fakePlayer = new IFFakePlayer((WorldServer) world);
-            worldFakePlayer.put(world.provider.getDimension(), fakePlayer);
+            worldFakePlayer.put(world.dimension.getId(), fakePlayer);
             return fakePlayer;
         }
         return null;
@@ -80,22 +87,21 @@ public class IndustrialForegoing {
         return player;
     }
 
-    @Mod.EventHandler
     public void preInit(FMLPreInitializationEvent event) {
         instance = this;
         proxy.preInit(event);
     }
 
-    @Mod.EventHandler
     public void init(FMLInitializationEvent event) {
+        instance = this;
+        proxy.init();
+    }
+    public void postInit(FMLPostInitializationEvent event) {
+        instance = this;
         proxy.init();
     }
 
-    @Mod.EventHandler
-    public void postInit(FMLPostInitializationEvent event) {
-        proxy.postInit();
-    }
-
+    /*
     @Mod.EventHandler
     public void construction(FMLConstructionEvent event) {
         Arrays.asList(TeslaCoreLibConfig.REGISTER_MACHINE_CASE, TeslaCoreLibConfig.REGISTER_GEARS,
@@ -106,9 +112,8 @@ public class IndustrialForegoing {
                 TeslaCoreLibConfig.REGISTER_SPEED_ADDONS,
                 TeslaCoreLibConfig.REGISTER_ENERGY_ADDONS).forEach(s -> TeslaCoreLibConfig.INSTANCE.setDefaultFlag(s, true));
         TeslaCoreLibConfig.INSTANCE.setDefaultFlag(TeslaCoreLibConfig.ALLOW_ENERGY_DISPLAY_CHANGE, false);
-    }
+    }*/
 
-    @Mod.EventHandler
     public void serverStart(FMLServerStartingEvent event) {
         worldFakePlayer.clear();
     }

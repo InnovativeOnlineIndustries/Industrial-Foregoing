@@ -86,25 +86,25 @@ public class ClientProxy extends CommonProxy {
         } catch (Exception e) {
             e.printStackTrace();
         }
-        RenderManager manager = Minecraft.getMinecraft().getRenderManager();
+        RenderManager manager = Minecraft.getInstance().getRenderManager();
         Map<String, RenderPlayer> map = manager.getSkinMap();
         map.get("default").addLayer(new ContributorsCatEarsRender());
         map.get("slim").addLayer(new ContributorsCatEarsRender());
 
         manager.entityRenderMap.put(EntityPinkSlime.class, new RenderPinkSlime(manager));
 
-        ((IReloadableResourceManager) Minecraft.getMinecraft().getResourceManager()).registerReloadListener(resourceManager -> FluidUtils.colorCache.clear());
-        ((IReloadableResourceManager) Minecraft.getMinecraft().getResourceManager()).registerReloadListener(resourceManager -> IFManual.buildManual());
+        ((IReloadableResourceManager) Minecraft.getInstance().getResourceManager()).registerReloadListener(resourceManager -> FluidUtils.colorCache.clear());
+        ((IReloadableResourceManager) Minecraft.getInstance().getResourceManager()).registerReloadListener(resourceManager -> IFManual.buildManual());
 
         if (ItemRegistry.artificalDye != null)
-            Minecraft.getMinecraft().getItemColors().registerItemColorHandler((stack, tintIndex) -> ItemDye.DYE_COLORS[EnumDyeColor.byMetadata(stack.getMetadata()).getDyeDamage()], ItemRegistry.artificalDye);
-        Minecraft.getMinecraft().getItemColors().registerItemColorHandler((stack, tintIndex) -> {
+            Minecraft.getInstance().getItemColors().registerItemColorHandler((stack, tintIndex) -> ItemDye.DYE_COLORS[EnumDyeColor.byMetadata(stack.getMetadata()).getDyeDamage()], ItemRegistry.artificalDye);
+        Minecraft.getInstance().getItemColors().registerItemColorHandler((stack, tintIndex) -> {
             if (tintIndex == 1) {
                 return ItemDye.DYE_COLORS[EnumDyeColor.byMetadata(stack.getMetadata()).getDyeDamage()];
             }
             return 0xFFFFFF;
         }, BlockRegistry.blockConveyor.getItem());
-        Minecraft.getMinecraft().getBlockColors().registerBlockColorHandler((state, worldIn, pos, tintIndex) -> {
+        Minecraft.getInstance().getBlockColors().registerBlockColorHandler((state, worldIn, pos, tintIndex) -> {
             if (tintIndex == 0) {
                 TileEntity entity = worldIn.getTileEntity(pos);
                 if (entity instanceof TileEntityConveyor) {
@@ -113,7 +113,7 @@ public class ClientProxy extends CommonProxy {
             }
             return 0xFFFFFFF;
         }, BlockRegistry.blockConveyor);
-        Minecraft.getMinecraft().getItemColors().registerItemColorHandler((stack, tintIndex) -> {
+        Minecraft.getInstance().getItemColors().registerItemColorHandler((stack, tintIndex) -> {
             if (tintIndex == 1 || tintIndex == 2 || tintIndex == 3) {
                 EntityList.EntityEggInfo info = null;
                 if (stack.hasTagCompound() && stack.getTagCompound().hasKey("entity", Constants.NBT.TAG_STRING)) {
@@ -124,7 +124,7 @@ public class ClientProxy extends CommonProxy {
             }
             return 0xFFFFFF;
         }, ItemRegistry.mobImprisonmentToolItem);
-        Minecraft.getMinecraft().getBlockColors().registerBlockColorHandler((state, worldIn, pos, tintIndex) -> {
+        Minecraft.getInstance().getBlockColors().registerBlockColorHandler((state, worldIn, pos, tintIndex) -> {
             if (tintIndex == 0 && worldIn.getTileEntity(pos) instanceof BlackHoleTankTile) {
                 BlackHoleTankTile tank = (BlackHoleTankTile) worldIn.getTileEntity(pos);
                 if (tank != null && tank.getTank().getFluidAmount() > 0) {
@@ -134,7 +134,7 @@ public class ClientProxy extends CommonProxy {
             }
             return 0xFFFFFF;
         }, BlockRegistry.blackHoleTankBlock);
-        Minecraft.getMinecraft().getItemColors().registerItemColorHandler((stack, tintIndex) -> {
+        Minecraft.getInstance().getItemColors().registerItemColorHandler((stack, tintIndex) -> {
             if (tintIndex == 0 && stack.hasTagCompound() && stack.getTagCompound().hasKey("FluidName") && FluidRegistry.isFluidRegistered(stack.getTagCompound().getString("FluidName"))) {
                 Fluid fluid = FluidRegistry.getFluid(stack.getTagCompound().getString("FluidName"));
                 int color = FluidUtils.getFluidColor(fluid);
@@ -142,7 +142,7 @@ public class ClientProxy extends CommonProxy {
             }
             return 0xFFFFFF;
         }, BlockRegistry.blackHoleTankBlock);
-        Minecraft.getMinecraft().getItemColors().registerItemColorHandler((stack, tintIndex) -> {
+        Minecraft.getInstance().getItemColors().registerItemColorHandler((stack, tintIndex) -> {
             if (tintIndex == 0) {
                 return ItemInfinityDrill.DrillTier.getTierBraquet(ItemRegistry.itemInfinityDrill.getPowerFromStack(stack)).getLeft().getTextureColor();
             }

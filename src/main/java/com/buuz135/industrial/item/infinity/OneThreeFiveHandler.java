@@ -35,14 +35,14 @@ public class OneThreeFiveHandler {
     @SideOnly(Side.CLIENT)
     @SubscribeEvent
     public static void onClientTick(TickEvent.ClientTickEvent event) {
-        if (Minecraft.getMinecraft().player != null && Minecraft.getMinecraft().player.world != null && !Minecraft.getMinecraft().isGamePaused() && Minecraft.getMinecraft().player.world.getTotalWorldTime() % 2 == 0) {
-            BlockPos pos = new BlockPos(Minecraft.getMinecraft().player.posX, Minecraft.getMinecraft().player.posY, Minecraft.getMinecraft().player.posZ);
-            Minecraft.getMinecraft().player.world.getEntitiesWithinAABB(EntityLiving.class, new AxisAlignedBB(pos.add(32, 32, 32), pos.add(-32, -32, -32)),
+        if (Minecraft.getInstance().player != null && Minecraft.getInstance().player.world != null && !Minecraft.getInstance().isGamePaused() && Minecraft.getInstance().player.world.getTotalWorldTime() % 2 == 0) {
+            BlockPos pos = new BlockPos(Minecraft.getInstance().player.posX, Minecraft.getInstance().player.posY, Minecraft.getInstance().player.posZ);
+            Minecraft.getInstance().player.world.getEntitiesWithinAABB(EntityLiving.class, new AxisAlignedBB(pos.add(32, 32, 32), pos.add(-32, -32, -32)),
                     input -> input.getUniqueID().toString().contains(SPECIAL)).
-                    forEach(living -> Minecraft.getMinecraft().effectRenderer.addEffect(new ParticleVex(living)));
-            Minecraft.getMinecraft().player.world.getEntitiesWithinAABB(EntityPlayer.class, new AxisAlignedBB(pos.add(32, 32, 32), pos.add(-32, -32, -32)),
+                    forEach(living -> Minecraft.getInstance().effectRenderer.addEffect(new ParticleVex(living)));
+            Minecraft.getInstance().player.world.getEntitiesWithinAABB(EntityPlayer.class, new AxisAlignedBB(pos.add(32, 32, 32), pos.add(-32, -32, -32)),
                     input -> SPECIAL_ENTITIES.containsKey(input.getUniqueID())).
-                    forEach(living -> Minecraft.getMinecraft().effectRenderer.addEffect(new ParticleVex(living)));
+                    forEach(living -> Minecraft.getInstance().effectRenderer.addEffect(new ParticleVex(living)));
         }
         List<UUID> toRemove = new ArrayList<>();
         for (UUID uuid : SPECIAL_ENTITIES.keySet()) {

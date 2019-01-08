@@ -63,14 +63,14 @@ public class ContributorsCatEarsRender implements LayerRenderer<AbstractClientPl
         GlStateManager.rotate(netHeadYaw, 0, -1, 0);
         GlStateManager.rotate(headPitch, 0, 0, -1);
 
-        Minecraft.getMinecraft().getTextureManager().bindTexture(TextureMap.LOCATION_BLOCKS_TEXTURE);
+        Minecraft.getInstance().getTextureManager().bindTexture(TextureMap.LOCATION_BLOCKS_TEXTURE);
         Calendar calendar = Calendar.getInstance();
         if (calendar.get(Calendar.MONTH) == Calendar.OCTOBER) {
             spookyScarySkeletons();
         } else if (calendar.get(Calendar.MONTH) == Calendar.DECEMBER) {
             itsSnowyHere();
         } else {
-            Minecraft.getMinecraft().getBlockRendererDispatcher().getBlockModelRenderer().renderModelBrightnessColor(ClientProxy.ears_baked, 0.5f, 255, 255, 255);
+            Minecraft.getInstance().getBlockRendererDispatcher().getBlockModelRenderer().renderModelBrightnessColor(ClientProxy.ears_baked, 0.5f, 255, 255, 255);
         }
         RenderHelper.enableStandardItemLighting();
         GlStateManager.depthMask(true);
@@ -79,25 +79,25 @@ public class ContributorsCatEarsRender implements LayerRenderer<AbstractClientPl
 
     @SideOnly(Side.CLIENT)
     public void spookyScarySkeletons() {
-        IBakedModel pumpkin = Minecraft.getMinecraft().getBlockRendererDispatcher().getModelForState(Minecraft.getMinecraft().world.getTotalWorldTime() % 200 < 100 ? Blocks.LIT_PUMPKIN.getDefaultState() : Blocks.PUMPKIN.getDefaultState());
+        IBakedModel pumpkin = Minecraft.getInstance().getBlockRendererDispatcher().getModelForState(Minecraft.getInstance().world.getTotalWorldTime() % 200 < 100 ? Blocks.LIT_PUMPKIN.getDefaultState() : Blocks.PUMPKIN.getDefaultState());
         GlStateManager.rotate(90, 0, -1, 0);
         GlStateManager.translate(0.08, 0.485, -0.1);
         GlStateManager.scale(2 / 16D, 3 / 16D, 2 / 16D);
 
-        Minecraft.getMinecraft().getBlockRendererDispatcher().getBlockModelRenderer().renderModelBrightnessColor(pumpkin, 0.5f, 255, 255, 255);
+        Minecraft.getInstance().getBlockRendererDispatcher().getBlockModelRenderer().renderModelBrightnessColor(pumpkin, 0.5f, 255, 255, 255);
         GlStateManager.translate(-0.08 * 28, 0, 0);
-        Minecraft.getMinecraft().getBlockRendererDispatcher().getBlockModelRenderer().renderModelBrightnessColor(pumpkin, 0.5f, 255, 255, 255);
+        Minecraft.getInstance().getBlockRendererDispatcher().getBlockModelRenderer().renderModelBrightnessColor(pumpkin, 0.5f, 255, 255, 255);
     }
 
     public void itsSnowyHere() {
-        IBakedModel pumpkin = Minecraft.getMinecraft().getBlockRendererDispatcher().getModelForState(Blocks.TALLGRASS.getStateFromMeta(2));
+        IBakedModel pumpkin = Minecraft.getInstance().getBlockRendererDispatcher().getModelForState(Blocks.TALLGRASS.getStateFromMeta(2));
         GlStateManager.rotate(90, 0, -1, 0);
         GlStateManager.translate(0.08, 0.485, -0.1);
         GlStateManager.scale(2 / 16D, 2 / 16D, 2 / 16D);
 
-        Minecraft.getMinecraft().getBlockRendererDispatcher().getBlockModelRenderer().renderModelBrightnessColor(pumpkin, 0.5f, 255, 255, 255);
+        Minecraft.getInstance().getBlockRendererDispatcher().getBlockModelRenderer().renderModelBrightnessColor(pumpkin, 0.5f, 255, 255, 255);
         GlStateManager.translate(-0.08 * 28, 0, 0);
-        Minecraft.getMinecraft().getBlockRendererDispatcher().getBlockModelRenderer().renderModelBrightnessColor(pumpkin, 0.5f, 255, 255, 255);
+        Minecraft.getInstance().getBlockRendererDispatcher().getBlockModelRenderer().renderModelBrightnessColor(pumpkin, 0.5f, 255, 255, 255);
     }
 
     @Override

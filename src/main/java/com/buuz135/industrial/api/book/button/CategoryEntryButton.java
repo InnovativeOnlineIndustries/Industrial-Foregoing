@@ -39,12 +39,13 @@ public class CategoryEntryButton extends GuiButton {
     }
 
     @Override
-    public void drawButton(Minecraft mc, int mouseX, int mouseY, float partialTicks) {
+    public void render(int mouseX, int mouseY, float partialTicks) {
         if (visible) {
+            Minecraft mc = Minecraft.getInstance();
             this.hovered = mouseX >= x && mouseX <= x + width && mouseY >= y && mouseY <= y + height;
             RenderHelper.enableGUIStandardItemLighting();
-            GlStateManager.color(1f, 1f, 1f);
-            mc.getRenderItem().renderItemIntoGUI(entry.getDisplay(), x, y);
+            GlStateManager.color3f(1f, 1f, 1f);
+            mc.getItemRenderer().renderItemIntoGUI(entry.getDisplay(), x, y);
             String displayString = TextFormatting.DARK_BLUE + entry.getName();
             int sw = mc.fontRenderer.getStringWidth(displayString);
             textTooBig = sw > width - 20;

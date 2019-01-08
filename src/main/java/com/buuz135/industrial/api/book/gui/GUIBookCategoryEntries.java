@@ -29,7 +29,7 @@ import net.minecraft.util.ResourceLocation;
 
 public class GUIBookCategoryEntries extends GUIBookBase {
 
-    public static final int SPACE = Minecraft.getMinecraft().fontRenderer.FONT_HEIGHT + 8;
+    public static final int SPACE = Minecraft.getInstance().fontRenderer.FONT_HEIGHT + 8;
 
     private IBookCategory category;
 

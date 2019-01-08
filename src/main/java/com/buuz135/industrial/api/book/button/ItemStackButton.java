@@ -42,14 +42,15 @@ public class ItemStackButton extends GuiButton {
     }
 
     @Override
-    public void drawButton(Minecraft mc, int mouseX, int mouseY, float partialTicks) {
-        if (this.visible) {
+    public void render(int mouseX, int mouseY, float partialTicks) {
+        if (visible) {
+            Minecraft mc = Minecraft.getInstance();
             this.hovered = mouseX >= x && mouseX <= x + width && mouseY >= y && mouseY <= y + height;
             RenderHelper.enableGUIStandardItemLighting();
-            GlStateManager.scale(width / 16f, width / 16f, width / 16f);
-            GlStateManager.color(1f, 1f, 1f);
-            mc.getRenderItem().renderItemIntoGUI(stack, (int) (x / (width / 16f)), (int) (y / (width / 16f)));
-            GlStateManager.scale(1 / (width / 16f), 1 / (width / 16f), 1 / (width / 16f));
+            GlStateManager.scalef(width / 16f, width / 16f, width / 16f);
+            GlStateManager.color3f(1f, 1f, 1f);
+            mc.getItemRenderer().renderItemIntoGUI(stack, (int) (x / (width / 16f)), (int) (y / (width / 16f)));
+            GlStateManager.scalef(1 / (width / 16f), 1 / (width / 16f), 1 / (width / 16f));
         }
     }
 }

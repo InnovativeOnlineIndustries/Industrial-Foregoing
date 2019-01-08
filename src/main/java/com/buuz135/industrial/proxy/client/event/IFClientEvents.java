@@ -92,7 +92,7 @@ public class IFClientEvents {
     @SubscribeEvent
     public void blockOverlayEvent(DrawBlockHighlightEvent event) {
         RayTraceResult hit = event.getTarget();
-        if (hit.typeOfHit == RayTraceResult.Type.BLOCK && hit instanceof DistanceRayTraceResult) {
+        if (hit.type == RayTraceResult.Type.BLOCK && hit instanceof DistanceRayTraceResult) {
             BlockPos pos = event.getTarget().getBlockPos();
             event.setCanceled(true);
             GlStateManager.enableBlend();
@@ -114,7 +114,7 @@ public class IFClientEvents {
             GlStateManager.enableTexture2D();
             GlStateManager.disableBlend();
         }
-        if (hit.typeOfHit == RayTraceResult.Type.BLOCK && event.getPlayer().getHeldItemMainhand().getItem().equals(ItemRegistry.itemInfinityDrill)) {
+        if (hit.type == RayTraceResult.Type.BLOCK && event.getPlayer().getHeldItemMainhand().getItem().equals(ItemRegistry.itemInfinityDrill)) {
             event.setCanceled(true);
             ItemStack hand = event.getPlayer().getHeldItemMainhand();
             ItemInfinityDrill.DrillTier tier = ItemRegistry.itemInfinityDrill.getSelectedDrillTier(hand);
@@ -144,7 +144,7 @@ public class IFClientEvents {
 
     @SubscribeEvent
     public void onRenderPre(RenderPlayerEvent.Pre event) {
-        if (event.getEntityPlayer().getUniqueID().equals(Minecraft.getMinecraft().player.getUniqueID()) && Minecraft.getMinecraft().gameSettings.thirdPersonView == 0)
+        if (event.getEntityPlayer().getUniqueID().equals(Minecraft.getInstance().player.getUniqueID()) && Minecraft.getInstance().gameSettings.thirdPersonView == 0)
             return;
         if (event.getEntityPlayer().getHeldItem(EnumHand.MAIN_HAND).getItem().equals(ItemRegistry.itemInfinityDrill))
             event.getEntityPlayer().setActiveHand(EnumHand.MAIN_HAND);

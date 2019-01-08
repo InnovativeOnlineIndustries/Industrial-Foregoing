@@ -43,7 +43,7 @@ public class OreDictionaryInfoPiece extends BasicRenderedGuiPiece {
     public void drawForegroundLayer(BasicTeslaGuiContainer<?> container, int guiX, int guiY, int mouseX, int mouseY) {
         super.drawForegroundLayer(container, guiX, guiY, mouseX, mouseY);
         if (!tile.getFilter().getStackInSlot(0).isEmpty()) {
-            FontRenderer renderer = Minecraft.getMinecraft().fontRenderer;
+            FontRenderer renderer = Minecraft.getInstance().fontRenderer;
             GlStateManager.pushMatrix();
             renderer.drawString(TextFormatting.DARK_GRAY + "MOD: " + tile.getModid(), 48, 26, 0xFFFFFF);
             renderer.drawString(TextFormatting.DARK_GRAY + "ORE: " + tile.getOreDict(), 48, 26 + renderer.FONT_HEIGHT, 0xFFFFFF);

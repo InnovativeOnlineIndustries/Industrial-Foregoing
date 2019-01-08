@@ -26,13 +26,14 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.fluids.FluidStack;
+import net.minecraftforge.registries.ForgeRegistryEntry;
 import net.minecraftforge.registries.IForgeRegistryEntry;
 
 import javax.annotation.ParametersAreNonnullByDefault;
 
 @ParametersAreNonnullByDefault
 @MethodsReturnNonnullByDefault
-public abstract class StrawHandler extends IForgeRegistryEntry.Impl<StrawHandler> {
+public abstract class StrawHandler extends ForgeRegistryEntry<StrawHandler> {
     public abstract boolean validFluid(FluidStack stack);
 
     public abstract void onDrink(World world, BlockPos pos, FluidStack stack, EntityPlayer player, boolean fromFluidContainer);

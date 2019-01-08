@@ -43,7 +43,7 @@ public class GUIBookPage extends GUIBookBase {
     public void drawScreenBack(int mouseX, int mouseY, float partialTicks) {
         super.drawScreenBack(mouseX, mouseY, partialTicks);
         drawCenteredString(this.fontRenderer, TextFormatting.GOLD + "" + entry.getName(), this.getGuiLeft() + this.getGuiXSize() / 2, this.getGuiTop() + 12, 0xFFFFFF);
-        GlStateManager.color(1f, 1f, 1f);
+        GlStateManager.color3f(1f, 1f, 1f);
         entry.getPages().get(page).drawScreenPre(entry, this, mouseX, mouseY, partialTicks, this.fontRenderer);
     }
 
@@ -86,7 +86,7 @@ public class GUIBookPage extends GUIBookBase {
     }
 
     public void recreateButtons() {
-        this.buttonList.removeIf(guiButton -> guiButton instanceof TextureButton);
+        this.buttons.removeIf(guiButton -> guiButton instanceof TextureButton);
         initGui();
     }
 }
