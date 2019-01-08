@@ -86,14 +86,14 @@ public abstract class CustomGeneratorMachine extends ElectricGenerator implement
     @Override
     public NBTTagCompound writeToNBT(@NotNull NBTTagCompound compound) {
         compound = super.writeToNBT(compound);
-        compound.setInteger("Tick", tick);
+        compound.setInt("Tick", tick);
         return compound;
     }
 
     @Override
     public void readFromNBT(@NotNull NBTTagCompound compound) {
         super.readFromNBT(compound);
-        tick = compound.getInteger("Tick");
+        tick = compound.getInt("Tick");
     }
 
     @Override

@@ -118,8 +118,8 @@ public class FluidDictionaryConverterTile extends CustomSidedTileEntity {
 
     @Override
     public void readFromNBT(@NotNull NBTTagCompound compound) {
-        inputPointer = compound.getInteger("PointerInput");
-        outputPointer = compound.getInteger("PointerOutput");
+        inputPointer = compound.getInt("PointerInput");
+        outputPointer = compound.getInt("PointerOutput");
         super.readFromNBT(compound);
     }
 
@@ -127,8 +127,8 @@ public class FluidDictionaryConverterTile extends CustomSidedTileEntity {
     @Override
     public NBTTagCompound writeToNBT(@NotNull NBTTagCompound compound) {
         compound = super.writeToNBT(compound);
-        compound.setInteger("PointerInput", inputPointer);
-        compound.setInteger("PointerOutput", outputPointer);
+        compound.setInt("PointerInput", inputPointer);
+        compound.setInt("PointerOutput", outputPointer);
         return compound;
     }
 

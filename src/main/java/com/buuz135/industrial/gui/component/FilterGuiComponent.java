@@ -59,7 +59,7 @@ public abstract class FilterGuiComponent extends PositionedGuiComponent {
 
     @Override
     public void drawGuiBackgroundLayer(int guiX, int guiY, int mouseX, int mouseY) {
-        GlStateManager.color(1, 1, 1, 1);
+        GlStateManager.color4f(1, 1, 1, 1);
         int pos = 0;
         for (int i = 0; i < getYSize(); i++) {
             for (int x = 0; x < getXSize(); x++) {
@@ -69,7 +69,7 @@ public abstract class FilterGuiComponent extends PositionedGuiComponent {
                 Minecraft.getInstance().currentScreen.drawTexturedModalRect(posX, posY, 176, 0, 18, 18);
                 if (!getFilter().getFilter()[pos].getStack().isEmpty()) {
                     RenderHelper.enableGUIStandardItemLighting();
-                    Minecraft.getInstance().getRenderItem().renderItemIntoGUI(getFilter().getFilter()[pos].getStack(), posX + 1, posY + 1);
+                    Minecraft.getInstance().getItemRenderer().renderItemIntoGUI(getFilter().getFilter()[pos].getStack(), posX + 1, posY + 1);
                 }
                 ++pos;
             }
@@ -78,17 +78,17 @@ public abstract class FilterGuiComponent extends PositionedGuiComponent {
 
     @Override
     public void drawGuiForegroundLayer(int guiX, int guiY, int mouseX, int mouseY) {
-        GlStateManager.color(1, 1, 1, 1);
+        GlStateManager.color4f(1, 1, 1, 1);
         for (int i = 0; i < getYSize(); i++) {
             for (int x = 0; x < getXSize(); x++) {
                 int posX = guiX + getXPos() + x * 18;
                 int posY = guiY + getXPos() + i * 18;
                 if (mouseX > posX + 1 && mouseX < posX + 1 + 16 && mouseY > posY + 1 && mouseY < posY + 1 + 16) {
                     GlStateManager.disableLighting();
-                    GlStateManager.disableDepth();
+                    GlStateManager.disableDepthTest();
                     Minecraft.getInstance().currentScreen.drawRect(posX + 1 - guiX, posY + 1 - guiY, posX + 17 - guiX, posY + 17 - guiY, -2130706433);
                     GlStateManager.enableLighting();
-                    GlStateManager.disableDepth();
+                    GlStateManager.enableDepthTest();
                     return;
                 }
             }

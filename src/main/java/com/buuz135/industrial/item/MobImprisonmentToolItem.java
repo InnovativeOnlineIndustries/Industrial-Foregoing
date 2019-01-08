@@ -26,19 +26,21 @@ import com.buuz135.industrial.proxy.ItemRegistry;
 import com.buuz135.industrial.utils.RecipeUtils;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityList;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.ItemUseContext;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumActionResult;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.TextComponentString;
 import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.World;
@@ -49,20 +51,22 @@ import java.util.List;
 public class MobImprisonmentToolItem extends IFCustomItem {
 
     public MobImprisonmentToolItem() {
-        super("mob_imprisonment_tool");
-        setMaxStackSize(1);
+        super("mob_imprisonment_tool", new Builder().maxStackSize(1));
     }
 
     @Override
-    public EnumActionResult onItemUse(EntityPlayer player, World worldIn, BlockPos pos, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
-        ItemStack stack = player.getHeldItem(hand);
+    public EnumActionResult onItemUse(ItemUseContext context) {
+        EntityPlayer player = context.getPlayer();
+        BlockPos pos = context.getPos();
+        EnumFacing facing = context.getFace();
+        World worldIn = context.getWorld();
+        ItemStack stack = context.getItem();
         if (player.getEntityWorld().isRemote) return EnumActionResult.FAIL;
         if (!containsEntity(stack)) return EnumActionResult.FAIL;
         Entity entity = getEntityFromStack(stack, worldIn, true);
         BlockPos blockPos = pos.offset(facing);
         entity.setPositionAndRotation(blockPos.getX() + 0.5, blockPos.getY(), blockPos.getZ() + 0.5, 0, 0);
         stack.setTag(new NBTTagCompound());
-        player.setHeldItem(hand, stack);
         worldIn.spawnEntity(entity);
         if (entity instanceof EntityLiving) ((EntityLiving) entity).playAmbientSound();
         return EnumActionResult.SUCCESS;
@@ -77,7 +81,7 @@ public class MobImprisonmentToolItem extends IFCustomItem {
         if (isBlacklisted(entityID)) return false;
         NBTTagCompound nbt = new NBTTagCompound();
         nbt.setString("entity", entityID);
-        target.writeToNBT(nbt);
+        target.writeWithoutTypeId(nbt);
         stack.setTag(nbt);
         playerIn.swingArm(hand);
         playerIn.setHeldItem(hand, stack);
@@ -95,19 +99,19 @@ public class MobImprisonmentToolItem extends IFCustomItem {
     }
 
     @Override
-    public void addInformation(ItemStack stack, @Nullable World worldIn, List<String> tooltip, ITooltipFlag flagIn) {
+    public void addInformation(ItemStack stack, @Nullable World worldIn, List<ITextComponent> tooltip, ITooltipFlag flagIn) {
         super.addInformation(stack, worldIn, tooltip, flagIn);
-        if (containsEntity(stack) && EntityList.getTranslationName(new ResourceLocation(getID(stack))) != null) {
-            tooltip.add("Mob: " + new TextComponentTranslation(EntityList.getTranslationName(new ResourceLocation(getID(stack)))).getUnformattedComponentText());
-            tooltip.add("Health: " + stack.getTagCompound().getDouble("Health"));
-            if (BlockRegistry.mobDuplicatorBlock.blacklistedEntities.contains(stack.getTagCompound().getString("entity")))
-                tooltip.add(TextFormatting.RED + "Entity blacklisted in the Mob Duplicator");
+        if (containsEntity(stack)) {
+            tooltip.add(new TextComponentString("Mob: " + getID(stack)));//new TextComponentTranslation(EntityList.getTranslationName(new ResourceLocation(getID(stack)))).getUnformattedComponentText());
+            tooltip.add(new TextComponentString("Health: " + stack.getTag().getDouble("Health")));
+            if (BlockRegistry.mobDuplicatorBlock.blacklistedEntities.contains(stack.getTag().getString("entity")))
+                tooltip.add(new TextComponentString(TextFormatting.RED + "Entity blacklisted in the Mob Duplicator"));
         }
     }
 
     public Entity getEntityFromStack(ItemStack stack, World world, boolean withInfo) {
-        Entity entity = EntityType.create(world, new ResourceLocation(new ResourceLocation(stack.getTag().getString("entity"));
-        if (withInfo) entity.readFromNBT(stack.getTag());
+        Entity entity = EntityType.create(world, new ResourceLocation(stack.getTag().getString("entity")));
+        if (withInfo) entity.read(stack.getTag());
         return entity;
     }
 
@@ -121,9 +125,10 @@ public class MobImprisonmentToolItem extends IFCustomItem {
     }
 
     @Override
-    public String getItemStackDisplayName(ItemStack stack) {
+    public ITextComponent getDisplayName(ItemStack stack) {
         if (!containsEntity(stack))
-            return new TextComponentTranslation(super.getTranslationKey(stack) + ".name").getUnformattedComponentText();
-        return new TextComponentTranslation(super.getTranslationKey(stack) + ".name").getUnformattedComponentText() + " (" + EntityList.getTranslationName(new ResourceLocation(getID(stack))) + ")";
+            return new TextComponentTranslation(super.getTranslationKey(stack) + ".name");
+        return new TextComponentTranslation(super.getTranslationKey(stack) + ".name").appendText(" (" + getID(stack) + ")");
     }
+
 }

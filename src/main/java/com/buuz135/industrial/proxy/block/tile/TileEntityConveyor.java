@@ -206,7 +206,7 @@ public class TileEntityConveyor extends TileBase implements IConveyorContainer, 
         compound = super.writeToNBT(compound);
         compound.setString("Facing", facing.getName());
         compound.setString("Type", type.getName());
-        compound.setInteger("Color", color);
+        compound.setInt("Color", color);
         compound.setBoolean("Sticky", sticky);
         NBTTagCompound upgrades = new NBTTagCompound();
         for (EnumFacing facing : EnumFacing.VALUES) {
@@ -236,28 +236,28 @@ public class TileEntityConveyor extends TileBase implements IConveyorContainer, 
         super.readFromNBT(compound);
         this.facing = EnumFacing.byName(compound.getString("Facing"));
         this.type = BlockConveyor.EnumType.getFromName(compound.getString("Type"));
-        this.color = compound.getInteger("Color");
+        this.color = compound.getInt("Color");
         this.sticky = compound.getBoolean("Sticky");
         if (compound.hasKey("Upgrades", Constants.NBT.TAG_COMPOUND)) {
-            NBTTagCompound upgradesTag = compound.getCompoundTag("Upgrades");
+            NBTTagCompound upgradesTag = compound.getCompound("Upgrades");
             //upgradeMap.clear();
             for (EnumFacing facing : EnumFacing.VALUES) {
                 if (!upgradesTag.hasKey(facing.getName()))
                     continue;
-                NBTTagCompound upgradeTag = upgradesTag.getCompoundTag(facing.getName());
+                NBTTagCompound upgradeTag = upgradesTag.getCompound(facing.getName());
                 ConveyorUpgradeFactory factory = IFRegistries.CONVEYOR_UPGRADE_REGISTRY.getValue(new ResourceLocation(upgradeTag.getString("factory")));
                 if (factory != null) {
                     ConveyorUpgrade upgrade = upgradeMap.getOrDefault(facing, factory.create(this, facing));
                     if (upgradeTag.hasKey("customNBT", Constants.NBT.TAG_COMPOUND)) {
-                        upgrade.deserializeNBT(upgradeTag.getCompoundTag("customNBT"));
-                        //upgradeMap.get(facing).deserializeNBT(upgradeTag.getCompoundTag("customNBT"));
+                        upgrade.deserializeNBT(upgradeTag.getCompound("customNBT"));
+                        //upgradeMap.get(facing).deserializeNBT(upgradeTag.getCompound("customNBT"));
                     }
                     upgradeMap.put(facing, upgrade);
                 }
             }
         }
         if (compound.hasKey("Tank")) {
-            this.tank = this.tank.readFromNBT(compound.getCompoundTag("Tank"));
+            this.tank = this.tank.readFromNBT(compound.getCompound("Tank"));
         }
     }
 

@@ -213,14 +213,14 @@ public class LaserBaseTile extends CustomSidedTileEntity implements IHasDisplayS
         super.readFromNBT(compound);
         currentWork = 0;
         depth = 0;
-        if (compound.hasKey(NBT_CURRENT)) currentWork = compound.getInteger(NBT_CURRENT);
-        if (compound.hasKey("Depth")) depth = compound.getInteger("Depth");
+        if (compound.hasKey(NBT_CURRENT)) currentWork = compound.getInt(NBT_CURRENT);
+        if (compound.hasKey("Depth")) depth = compound.getInt("Depth");
     }
 
     @Override
     public NBTTagCompound writeToNBT(NBTTagCompound compound) {
-        compound.setInteger(NBT_CURRENT, currentWork);
-        compound.setInteger("Depth", depth);
+        compound.setInt(NBT_CURRENT, currentWork);
+        compound.setInt("Depth", depth);
         return super.writeToNBT(compound);
     }
 

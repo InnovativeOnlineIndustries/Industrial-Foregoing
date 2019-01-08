@@ -46,7 +46,7 @@ public class TextInfoPiece extends BasicRenderedGuiPiece {
         super.drawBackgroundLayer(container, guiX, guiY, partialTicks, mouseX, mouseY);
         FontRenderer renderer = Minecraft.getInstance().fontRenderer;
         GlStateManager.pushMatrix();
-        GlStateManager.scale(1, 1, 1);
+        GlStateManager.scalef(1, 1, 1);
         renderer.drawString(string.getString(id), this.getLeft() + guiX, this.getTop() + guiY, 0xFFFFFF);
         GlStateManager.popMatrix();
     }

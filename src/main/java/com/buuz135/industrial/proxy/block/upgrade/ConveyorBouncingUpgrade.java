@@ -102,7 +102,7 @@ public class ConveyorBouncingUpgrade extends ConveyorUpgrade {
     @Override
     public void deserializeNBT(NBTTagCompound nbt) {
         super.deserializeNBT(nbt);
-        if (nbt.hasKey("Filter")) filter.deserializeNBT(nbt.getCompoundTag("Filter"));
+        if (nbt.hasKey("Filter")) filter.deserializeNBT(nbt.getCompound("Filter"));
         whitelist = nbt.getBoolean("Whitelist");
         velocityHorizontal = nbt.getDouble("VelocityHorizontal");
         velocityVertical = nbt.getDouble("VelocityVertical");

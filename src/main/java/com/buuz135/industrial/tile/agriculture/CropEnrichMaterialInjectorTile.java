@@ -109,7 +109,7 @@ public class CropEnrichMaterialInjectorTile extends WorkingAreaElectricMachine {
     @Override
     public NBTTagCompound writeToNBT(NBTTagCompound compound) {
         NBTTagCompound tagCompound = super.writeToNBT(compound);
-        tagCompound.setInteger(NBT_POINTER, pointer);
+        tagCompound.setInt(NBT_POINTER, pointer);
         return tagCompound;
     }
 
@@ -117,7 +117,7 @@ public class CropEnrichMaterialInjectorTile extends WorkingAreaElectricMachine {
     public void readFromNBT(NBTTagCompound compound) {
         super.readFromNBT(compound);
         if (!compound.hasKey(NBT_POINTER)) pointer = 0;
-        else pointer = compound.getInteger(NBT_POINTER);
+        else pointer = compound.getInt(NBT_POINTER);
     }
 
     public boolean isValidFertilizer(ItemStack stack) {

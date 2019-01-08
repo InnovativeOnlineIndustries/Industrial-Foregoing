@@ -24,7 +24,7 @@ package com.buuz135.industrial.tile.agriculture;
 import com.buuz135.industrial.proxy.BlockRegistry;
 import com.buuz135.industrial.proxy.FluidsRegistry;
 import com.buuz135.industrial.tile.WorkingAreaElectricMachine;
-import com.buuz135.industrial.tile.block.AnimalByproductRecolectorBlock;
+import com.buuz135.industrial.block.AnimalByproductRecolectorBlock;
 import com.buuz135.industrial.utils.ItemStackUtils;
 import com.buuz135.industrial.utils.WorkUtils;
 import net.minecraft.entity.EntityAgeable;

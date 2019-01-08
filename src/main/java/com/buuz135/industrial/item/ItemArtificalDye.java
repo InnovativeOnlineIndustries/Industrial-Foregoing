@@ -21,34 +21,29 @@
  */
 package com.buuz135.industrial.item;
 
-import net.minecraft.client.renderer.block.model.ModelResourceLocation;
-import net.minecraft.creativetab.CreativeTabs;
+import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.passive.EntitySheep;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.EnumDyeColor;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.NonNullList;
-import net.minecraft.util.text.TextComponentTranslation;
-import net.minecraftforge.client.model.ModelLoader;
+import net.minecraft.util.EnumHand;
 
 public class ItemArtificalDye extends IFCustomItem {
-    public ItemArtificalDye() {
-        super("artificial_dye");
-        setHasSubtypes(true);
+    private final EnumDyeColor dyeColor;
+
+    public ItemArtificalDye(EnumDyeColor dyeColor) {
+        super("artificial_dye_" + dyeColor.getTranslationKey(), new Builder());
+        this.dyeColor = dyeColor;
     }
 
     @Override
-    public void getSubItems(CreativeTabs tab, NonNullList<ItemStack> subItems) {
-        if (isInCreativeTab(tab))
-            for (int i = 0; i < 16; ++i) subItems.add(new ItemStack(this, 1, i));
-    }
-
-    @Override
-    public void registerRender() {
-        for (int i = 0; i < 16; ++i)
-            ModelLoader.setCustomModelResourceLocation(this, i, new ModelResourceLocation(this.getRegistryName().toString(), "inventory"));
-    }
-
-    @Override
-    public String getItemStackDisplayName(ItemStack stack) {
-        return new TextComponentTranslation("item.fireworksCharge." + EnumDyeColor.byMetadata(stack.getMetadata()).getTranslationKey().replaceAll("_", "")).getFormattedText() + " " + super.getItemStackDisplayName(stack);
+    public boolean itemInteractionForEntity(ItemStack stack, EntityPlayer player, EntityLivingBase target, EnumHand hand) {
+        if (target instanceof EntitySheep) {
+            if (!((EntitySheep) target).getSheared() && ((EntitySheep) target).getFleeceColor() != this.dyeColor) {
+                ((EntitySheep) target).setFleeceColor(this.dyeColor);
+                stack.shrink(1);
+            }
+        }
+        return false;
     }
 }

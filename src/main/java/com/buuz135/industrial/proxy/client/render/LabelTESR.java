@@ -62,7 +62,7 @@ public class LabelTESR extends TileEntitySpecialRenderer<TileEntityLabel> {
                 } else {
                     GlStateManager.shadeModel(GL11.GL_FLAT);
                 }
-                GlStateManager.translate(x + 0.5, y + 0.45, z);
+                GlStateManager.translatef(x + 0.5, y + 0.45, z);
                 GlStateManager.depthMask(false);
                 GlStateManager.enableBlend();
                 GlStateManager.tryBlendFuncSeparate(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA, GlStateManager.SourceFactor.ONE, GlStateManager.DestFactor.ZERO);
@@ -70,40 +70,40 @@ public class LabelTESR extends TileEntitySpecialRenderer<TileEntityLabel> {
                 Minecraft.getInstance().getTextureManager().bindTexture(TextureMap.LOCATION_BLOCKS_TEXTURE);
                 Minecraft.getInstance().getTextureManager().getTexture(TextureMap.LOCATION_BLOCKS_TEXTURE).setBlurMipmap(false, false);
                 GlStateManager.enableRescaleNormal();
-                GlStateManager.enableAlpha();
+                GlStateManager.enableAlphaTest();
                 GlStateManager.alphaFunc(GL11.GL_GREATER, 0.1F);
                 GlStateManager.enableBlend();
                 GlStateManager.blendFunc(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA);
-                GlStateManager.color(1F, 1F, 1F, 1F);
+                GlStateManager.color4f(1F, 1F, 1F, 1F);
                 rotate(te.getWorld().getBlockState(te.getPos()).getValue(BlockLabel.FACING));
                 if (!(stack.getItem() instanceof ItemBlock)) {
-                    GlStateManager.translate(0, 0.1, 0);
-                    GlStateManager.scale(0.70, 0.70, 0.70);
+                    GlStateManager.translatef(0, 0.1, 0);
+                    GlStateManager.scalef(0.70, 0.70, 0.70);
                 }
 
                 IBakedModel bakedModel = Minecraft.getInstance().getRenderItem().getItemModelWithOverrides(stack, null, Minecraft.getInstance().player);
                 bakedModel = ForgeHooksClient.handleCameraTransforms(bakedModel, ItemCameraTransforms.TransformType.GROUND, false);
                 Minecraft.getInstance().getRenderItem().renderItem(stack, bakedModel);
 
-                GlStateManager.disableAlpha();
+                GlStateManager.disableAlphaTest();
                 GlStateManager.disableRescaleNormal();
                 GlStateManager.disableLighting();
                 Minecraft.getInstance().getTextureManager().bindTexture(TextureMap.LOCATION_BLOCKS_TEXTURE);
                 Minecraft.getInstance().getTextureManager().getTexture(TextureMap.LOCATION_BLOCKS_TEXTURE).restoreLastBlurMipmap();
                 GlStateManager.disableBlend();
-                GlStateManager.color(1F, 1F, 1F, 1F);
+                GlStateManager.color4f(1F, 1F, 1F, 1F);
                 GlStateManager.popMatrix();
 
 
                 GlStateManager.pushMatrix();
-                GlStateManager.translate(x + 0.5, y + 0.35, z);
+                GlStateManager.translatef(x + 0.5, y + 0.35, z);
                 rotate(te.getWorld().getBlockState(te.getPos()).getValue(BlockLabel.FACING));
-                GlStateManager.rotate(180F, 0, 1, 0);
-                GlStateManager.rotate(180F, 0, 0, 1);
+                GlStateManager.rotatef(180F, 0, 1, 0);
+                GlStateManager.rotatef(180F, 0, 0, 1);
 
                 float size = 0.00450F;
                 float factor = 2.0f;
-                GlStateManager.scale(size * factor, size * factor, size);
+                GlStateManager.scalef(size * factor, size * factor, size);
                 String string = getFormatedString(((IHasDisplayStack) tileEntity).getDisplayAmount(), stack.hasCapability(CapabilityFluidHandler.FLUID_HANDLER_ITEM_CAPABILITY, null) ? TileEntityLabel.FormatType.FLUID : te.getFormatType());
                 Minecraft.getInstance().fontRenderer.drawString(string, -Minecraft.getInstance().fontRenderer.getStringWidth(string) / 2, 0, 0xFFFFFF);
                 GlStateManager.popMatrix();
@@ -113,19 +113,19 @@ public class LabelTESR extends TileEntitySpecialRenderer<TileEntityLabel> {
 
     private void rotate(EnumFacing facing) {
         if (facing == EnumFacing.NORTH) {
-            GlStateManager.translate(0, 0, 1.016 / 16D);
+            GlStateManager.translatef(0, 0, 1.016 / 16D);
         }
         if (facing == EnumFacing.EAST) {
-            GlStateManager.translate(7 / 16D, 0, 8 / 16D);
-            GlStateManager.rotate(90, 0, -1, 0);
+            GlStateManager.translatef(7 / 16D, 0, 8 / 16D);
+            GlStateManager.rotatef(90, 0, -1, 0);
         }
         if (facing == EnumFacing.SOUTH) {
-            GlStateManager.translate(0, 0, 15 / 16D);
-            GlStateManager.rotate(180, 0, -1, 0);
+            GlStateManager.translatef(0, 0, 15 / 16D);
+            GlStateManager.rotatef(180, 0, -1, 0);
         }
         if (facing == EnumFacing.WEST) {
-            GlStateManager.translate(-6.99 / 16D, 0, 8 / 16D);
-            GlStateManager.rotate(90, 0, 1, 0);
+            GlStateManager.translatef(-6.99 / 16D, 0, 8 / 16D);
+            GlStateManager.rotatef(90, 0, 1, 0);
         }
     }
 }

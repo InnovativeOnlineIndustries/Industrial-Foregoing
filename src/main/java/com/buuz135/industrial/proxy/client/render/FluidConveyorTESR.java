@@ -44,19 +44,19 @@ public class FluidConveyorTESR extends TileEntitySpecialRenderer<TileEntityConve
         super.render(te, x, y, z, partialTicks, destroyStage, alpha);
         if (te.getTank().getFluidAmount() > 0) {
             GlStateManager.pushMatrix();
-            GlStateManager.translate(x, y, z);
+            GlStateManager.translatef(x, y, z);
             EnumFacing facing = te.getFacing();
             if (facing == EnumFacing.NORTH) {
-                GlStateManager.translate(1, 0, 1);
-                GlStateManager.rotate(180, 0, 1, 0);
+                GlStateManager.translatef(1, 0, 1);
+                GlStateManager.rotatef(180, 0, 1, 0);
             }
             if (facing == EnumFacing.EAST) {
-                GlStateManager.translate(0, 0, 1);
-                GlStateManager.rotate(90, 0, 1, 0);
+                GlStateManager.translatef(0, 0, 1);
+                GlStateManager.rotatef(90, 0, 1, 0);
             }
             if (facing == EnumFacing.WEST) {
-                GlStateManager.translate(1, 0, 0);
-                GlStateManager.rotate(-90, 0, 1, 0);
+                GlStateManager.translatef(1, 0, 0);
+                GlStateManager.rotatef(-90, 0, 1, 0);
             }
             Tessellator tessellator = Tessellator.getInstance();
             BufferBuilder buffer = tessellator.getBuffer();

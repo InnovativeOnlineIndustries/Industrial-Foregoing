@@ -169,11 +169,11 @@ public class EnchantmentExtractorTile extends CustomElectricMachine {
                 for (int i = 0; i < ItemEnchantedBook.getEnchantments(enchantedItem).tagCount(); i++) {
                     if (ItemEnchantedBook.getEnchantments(enchantedItem).get(i) instanceof NBTTagCompound) {
                         base = (NBTTagCompound) ItemEnchantedBook.getEnchantments(enchantedItem).get(i);
-                        NBTTagCompound tagCompound = enchantedItem.getTagCompound();
+                        NBTTagCompound tagCompound = enchantedItem.getTag();
                         NBTTagList list = ItemEnchantedBook.getEnchantments(enchantedItem);
                         list.removeTag(i);
                         tagCompound.setTag("StoredEnchantments", list);
-                        enchantedItem.setTagCompound(tagCompound);
+                        enchantedItem.setTag(tagCompound);
                         break;
                     }
                 }
@@ -183,10 +183,10 @@ public class EnchantmentExtractorTile extends CustomElectricMachine {
             }
             if (base != null && Enchantment.getEnchantmentByID(base.getShort("id")) != null) {
                 ItemEnchantedBook.addEnchantment(enchantedBook, new EnchantmentData(Enchantment.getEnchantmentByID(base.getShort("id")), base.getShort("lvl")));
-                if (enchantedItem.getEnchantmentTagList().isEmpty() && enchantedItem.getTagCompound() != null && enchantedItem.getTagCompound().hasKey("ench")) {
-                    enchantedItem.getTagCompound().removeTag("ench");
-                    if (enchantedItem.getTagCompound().isEmpty()) {
-                        enchantedItem.setTagCompound(null);
+                if (enchantedItem.getEnchantmentTagList().isEmpty() && enchantedItem.getTag() != null && enchantedItem.getTag().hasKey("ench")) {
+                    enchantedItem.getTag().removeTag("ench");
+                    if (enchantedItem.getTag().isEmpty()) {
+                        enchantedItem.setTag(null);
                     }
                 }
                 ItemHandlerHelper.insertItem(outEnchanted, enchantedBook, false);
@@ -194,9 +194,9 @@ public class EnchantmentExtractorTile extends CustomElectricMachine {
                 if ((enchantedItem.getItem().equals(Items.ENCHANTED_BOOK) && ItemEnchantedBook.getEnchantments(enchantedItem).tagCount() == 1) || (!enchantedItem.getItem().equals(Items.ENCHANTED_BOOK) && !enchantedItem.isItemEnchanted())) {
                     ItemStack stack = enchantedItem.copy();
                     stack.setRepairCost((stack.getRepairCost() - 1) / 2);
-                    if (stack.getTagCompound() != null && stack.getRepairCost() <= 0) {
-                        stack.getTagCompound().removeTag("RepairCost");
-                        if (stack.getTagCompound().isEmpty()) stack.setTagCompound(null);
+                    if (stack.getTag() != null && stack.getRepairCost() <= 0) {
+                        stack.getTag().removeTag("RepairCost");
+                        if (stack.getTag().isEmpty()) stack.setTag(null);
                     }
                     ItemHandlerHelper.insertItem(outItem, stack, false);
                     enchantedItem.setCount(enchantedItem.getCount() - 1);

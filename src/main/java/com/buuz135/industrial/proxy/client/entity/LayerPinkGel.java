@@ -43,7 +43,7 @@ public class LayerPinkGel implements LayerRenderer<EntityPinkSlime> {
     @Override
     public void doRenderLayer(EntityPinkSlime entitylivingbaseIn, float limbSwing, float limbSwingAmount, float partialTicks, float ageInTicks, float netHeadYaw, float headPitch, float scale) {
         if (!entitylivingbaseIn.isInvisible()) {
-            GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
+            GlStateManager.color4f(1.0F, 1.0F, 1.0F, 1.0F);
             GlStateManager.enableNormalize();
             GlStateManager.enableBlend();
             GlStateManager.blendFunc(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA);
@@ -52,7 +52,7 @@ public class LayerPinkGel implements LayerRenderer<EntityPinkSlime> {
                 float speed = 360 * 0.2f;
                 int hsb = (int) (entitylivingbaseIn.world.getTotalWorldTime() % speed);
                 Color color = Color.getHSBColor(hsb / speed, 0.75f, 0.75f);
-                GlStateManager.color(color.getRed() / 255f, color.getGreen() / 255f, color.getBlue() / 255f, 1.0f);
+                GlStateManager.color4f(color.getRed() / 255f, color.getGreen() / 255f, color.getBlue() / 255f, 1.0f);
             }
             this.slimeModel.render(entitylivingbaseIn, limbSwing, limbSwingAmount, ageInTicks, netHeadYaw, headPitch, scale);
             GlStateManager.disableBlend();

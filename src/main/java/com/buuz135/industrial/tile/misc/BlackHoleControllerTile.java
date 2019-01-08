@@ -163,7 +163,7 @@ public class BlackHoleControllerTile extends CustomSidedTileEntity {
                         blackHoleUnitBlock.setAmount(stack, amount - out.getCount());
                         output.setStackInSlot(i, out);
                         if (blackHoleUnitBlock.getAmount(stack) <= 0 && !output.getLocked()) {
-                            stack.setTagCompound(null);
+                            stack.setTag(null);
                         }
                         continue;
                     }
@@ -172,7 +172,7 @@ public class BlackHoleControllerTile extends CustomSidedTileEntity {
                         out.setCount(out.getCount() + increase);
                         blackHoleUnitBlock.setAmount(stack, amount - increase);
                         if (blackHoleUnitBlock.getAmount(stack) <= 0 && !output.getLocked()) {
-                            stack.setTagCompound(null);
+                            stack.setTag(null);
                         }
                         continue;
                     }

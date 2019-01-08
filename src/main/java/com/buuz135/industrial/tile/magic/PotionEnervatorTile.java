@@ -226,7 +226,7 @@ public class PotionEnervatorTile extends CustomElectricMachine {
             ItemStack bottles = new ItemStack(Items.POTIONITEM, 3);
             NBTTagCompound c = new NBTTagCompound();
             c.setString("Potion", "minecraft:water");
-            bottles.setTagCompound(c);
+            bottles.setTag(c);
             ItemHandlerHelper.insertItem(outputPotions, bottles, false);
             fluidTank.drain(3000, true);
             inputGlassBottles.getStackInSlot(0).setCount(inputGlassBottles.getStackInSlot(0).getCount() - 3);
@@ -257,7 +257,7 @@ public class PotionEnervatorTile extends CustomElectricMachine {
     @Override
     public NBTTagCompound writeToNBT(NBTTagCompound compound) {
         NBTTagCompound tagCompound = super.writeToNBT(compound);
-        tagCompound.setInteger(NBT_ACTION, action);
+        tagCompound.setInt(NBT_ACTION, action);
         return tagCompound;
     }
 
@@ -265,7 +265,7 @@ public class PotionEnervatorTile extends CustomElectricMachine {
     public void readFromNBT(NBTTagCompound compound) {
         super.readFromNBT(compound);
         if (!compound.hasKey(NBT_ACTION)) action = 0;
-        else action = compound.getInteger(NBT_ACTION);
+        else action = compound.getInt(NBT_ACTION);
     }
 
     public IFluidTank getFluidTank() {

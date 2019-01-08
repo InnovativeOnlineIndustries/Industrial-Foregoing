@@ -21,7 +21,7 @@
  */
 package com.buuz135.industrial.proxy.client;
 
-import com.buuz135.industrial.tile.block.CustomOrientedBlock;
+import com.buuz135.industrial.block.CustomOrientedBlock;
 
 
 public class BlockRenderRegistry {

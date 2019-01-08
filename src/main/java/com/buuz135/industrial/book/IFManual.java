@@ -29,7 +29,7 @@ import com.buuz135.industrial.api.conveyor.ConveyorUpgradeFactory;
 import com.buuz135.industrial.proxy.BlockRegistry;
 import com.buuz135.industrial.proxy.ItemRegistry;
 import com.buuz135.industrial.registry.IFRegistries;
-import com.buuz135.industrial.tile.block.CustomOrientedBlock;
+import com.buuz135.industrial.block.CustomOrientedBlock;
 import com.buuz135.industrial.utils.Reference;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;

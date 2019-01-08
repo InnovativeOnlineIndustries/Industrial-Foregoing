@@ -57,12 +57,20 @@ repositories {
     maven {
         url 'https://hrznstudio.com/maven/snapshot'
     }
+    maven {
+        url = "http://dvs1.progwml6.com/files/maven"
+    }
 }
-
+afterEvaluate {
+    tasks.withType(JavaCompile) {
+        options.compilerArgs << "-Xmaxerrs" << "2000"
+    }
+}
 dependencies {
     minecraft 'net.minecraftforge.test:forge:1.13-24.0.59-1.13-pre'
     compile 'com.hrznstudio.titanium:Titanium:0.1.+'
     compileOnly 'org.projectlombok:lombok:1.16.16'
+    compile "mezz.jei:jei_1.12.2:4.14.3.246:api"
 }
 
 processResources {

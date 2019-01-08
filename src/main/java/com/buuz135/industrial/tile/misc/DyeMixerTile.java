@@ -215,18 +215,18 @@ public class DyeMixerTile extends CustomElectricMachine {
     @Override
     public NBTTagCompound writeToNBT(NBTTagCompound compound) {
         NBTTagCompound c = super.writeToNBT(compound);
-        c.setInteger("R", r);
-        c.setInteger("G", g);
-        c.setInteger("B", b);
+        c.setInt("R", r);
+        c.setInt("G", g);
+        c.setInt("B", b);
         return c;
     }
 
     @Override
     public void readFromNBT(NBTTagCompound compound) {
         super.readFromNBT(compound);
-        if (compound.hasKey("R")) r = compound.getInteger("R");
-        if (compound.hasKey("G")) g = compound.getInteger("G");
-        if (compound.hasKey("B")) b = compound.getInteger("B");
+        if (compound.hasKey("R")) r = compound.getInt("R");
+        if (compound.hasKey("G")) g = compound.getInt("G");
+        if (compound.hasKey("B")) b = compound.getInt("B");
     }
 
     public int getR() {

@@ -95,10 +95,10 @@ public class ConveyorBlinkingUpgrade extends ConveyorUpgrade {
     @Override
     public void deserializeNBT(NBTTagCompound nbt) {
         super.deserializeNBT(nbt);
-        if (nbt.hasKey("Filter")) filter.deserializeNBT(nbt.getCompoundTag("Filter"));
+        if (nbt.hasKey("Filter")) filter.deserializeNBT(nbt.getCompound("Filter"));
         whitelist = nbt.getBoolean("Whitelist");
-        horizontalDisplacement = nbt.getInteger("HorizontalDisplacement");
-        verticalDisplacement = nbt.getInteger("VerticalDisplacement");
+        horizontalDisplacement = nbt.getInt("HorizontalDisplacement");
+        verticalDisplacement = nbt.getInt("VerticalDisplacement");
     }
 
     @Override

@@ -63,7 +63,7 @@ public class ProteinReactorEntry implements IReactorEntry {
      * @return true if they match, false if they don't.
      */
     public boolean doesStackMatch(ItemStack stack) {
-        return this.stack.isItemEqual(stack) && (this.nbtCheck == null || !stack.hasTagCompound() || this.nbtCheck.test(stack.getTagCompound()));
+        return this.stack.isItemEqual(stack) && (this.nbtCheck == null || !stack.hasTag() || this.nbtCheck.test(stack.getTag()));
     }
 
     public ItemStack getStack() {

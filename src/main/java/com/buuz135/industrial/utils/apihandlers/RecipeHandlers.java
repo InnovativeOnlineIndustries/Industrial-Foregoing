@@ -36,6 +36,7 @@ import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.NonNullList;
+import net.minecraftforge.common.Tags;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.oredict.OreDictionary;
 
@@ -61,7 +62,7 @@ public class RecipeHandlers {
         IndustrialForegoingHelper.addBioReactorEntry(new BioReactorEntry(new ItemStack(Blocks.BROWN_MUSHROOM)));
         IndustrialForegoingHelper.addBioReactorEntry(new BioReactorEntry(new ItemStack(Blocks.RED_MUSHROOM)));
         IndustrialForegoingHelper.addBioReactorEntry(new BioReactorEntry(new ItemStack(Blocks.CHORUS_FLOWER)));
-        IndustrialForegoingHelper.addBioReactorEntry(new BioReactorEntry(new ItemStack(Blocks.REEDS)));
+        IndustrialForegoingHelper.addBioReactorEntry(new BioReactorEntry(new ItemStack(Blocks.SUGAR_CANE)));
         getRealOredictedItems("dye").forEach(stack -> IndustrialForegoingHelper.addBioReactorEntry(new BioReactorEntry(stack)));
         getRealOredictedItems("treeSapling").stream().filter(stack -> !stack.getItem().getRegistryName().getPath().equals("forestry")).forEach(stack -> IndustrialForegoingHelper.addBioReactorEntry(new BioReactorEntry(stack)));
     }
@@ -118,8 +119,15 @@ public class RecipeHandlers {
         IndustrialForegoingHelper.addProteinReactorEntry(new ProteinReactorEntry(new ItemStack(Items.SPIDER_EYE)));
         IndustrialForegoingHelper.addProteinReactorEntry(new ProteinReactorEntry(new ItemStack(Items.PORKCHOP)));
         NonNullList<ItemStack> stacks = NonNullList.create();
-        getSubItems(stacks, new ItemStack(Items.FISH));
-        getSubItems(stacks, new ItemStack(Items.SKULL));
+        stacks.add(new ItemStack(Items.TROPICAL_FISH));
+        stacks.add(new ItemStack(Items.PUFFERFISH));
+        stacks.add(new ItemStack(Items.SALMON));
+        stacks.add(new ItemStack(Items.COD));
+        stacks.add(new ItemStack(Items.SKELETON_SKULL));
+        stacks.add(new ItemStack(Items.CREEPER_HEAD));
+        stacks.add(new ItemStack(Items.DRAGON_HEAD));
+        stacks.add(new ItemStack(Items.PLAYER_HEAD));
+        stacks.add(new ItemStack(Items.ZOMBIE_HEAD));
         stacks.forEach(stack -> IndustrialForegoingHelper.addProteinReactorEntry(new ProteinReactorEntry(stack)));
     }
 
@@ -132,8 +140,8 @@ public class RecipeHandlers {
     public static void loadWoodToLatexEntries() {
         tryToAddWoodToLatex("ic2:rubber_wood", new FluidStack(FluidsRegistry.LATEX, 4));
         tryToAddWoodToLatex("techreborn:rubber_log", new FluidStack(FluidsRegistry.LATEX, 4));
-        IndustrialForegoingHelper.addWoodToLatex(new ExtractorEntry(new ItemStack(Blocks.LOG2), new FluidStack(FluidsRegistry.LATEX, 3)));
-        IndustrialForegoingHelper.addWoodToLatex(new ExtractorEntry(new ItemStack(Blocks.LOG2, 1, 1), new FluidStack(FluidsRegistry.LATEX, 2)));
+        IndustrialForegoingHelper.addWoodToLatex(new ExtractorEntry(new ItemStack(Blocks.DARK_OAK_LOG), new FluidStack(FluidsRegistry.LATEX, 3)));
+        IndustrialForegoingHelper.addWoodToLatex(new ExtractorEntry(new ItemStack(Blocks.ACACIA_LOG), new FluidStack(FluidsRegistry.LATEX, 2)));
         getRealOredictedItems("logWood").forEach(stack -> IndustrialForegoingHelper.addWoodToLatex(new ExtractorEntry(stack, new FluidStack(FluidsRegistry.LATEX, 1))));
     }
 

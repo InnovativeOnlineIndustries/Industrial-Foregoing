@@ -159,8 +159,8 @@ public class ItemSplitterTile extends CustomSidedTileEntity implements IHasDispl
 
     @Override
     public void readFromNBT(NBTTagCompound compound) {
-        tick = compound.getInteger("Tick");
-        size = compound.getInteger("Size");
+        tick = compound.getInt("Tick");
+        size = compound.getInt("Size");
         super.readFromNBT(compound);
     }
 
@@ -168,8 +168,8 @@ public class ItemSplitterTile extends CustomSidedTileEntity implements IHasDispl
     @Override
     public NBTTagCompound writeToNBT(NBTTagCompound compound) {
         NBTTagCompound tagCompound = super.writeToNBT(compound);
-        tagCompound.setInteger("Tick", tick);
-        tagCompound.setInteger("Stack", size);
+        tagCompound.setInt("Tick", tick);
+        tagCompound.setInt("Stack", size);
         return tagCompound;
     }
 

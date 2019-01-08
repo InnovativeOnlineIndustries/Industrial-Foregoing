@@ -23,7 +23,7 @@ package com.buuz135.industrial.item.addon;
 
 import com.buuz135.industrial.proxy.ItemRegistry;
 import com.buuz135.industrial.tile.CustomElectricMachine;
-import com.buuz135.industrial.tile.block.EnergyFieldProviderBlock;
+import com.buuz135.industrial.block.EnergyFieldProviderBlock;
 import com.buuz135.industrial.tile.world.EnergyFieldProviderTile;
 import com.buuz135.industrial.utils.RecipeUtils;
 import lombok.Getter;
@@ -115,15 +115,15 @@ public class EnergyFieldAddon extends CustomAddon {
     }
 
     public BlockPos getLinkedBlockPos(ItemStack stack) {
-        if (stack.hasTagCompound()) {
-            return BlockPos.fromLong(stack.getTagCompound().getLong("BlockPos"));
+        if (stack.hasTag()) {
+            return BlockPos.fromLong(stack.getTag().getLong("BlockPos"));
         }
         return null;
     }
 
     public void setLinkedPos(BlockPos pos, ItemStack stack) {
-        if (!stack.hasTagCompound()) stack.setTagCompound(new NBTTagCompound());
-        stack.getTagCompound().setLong("BlockPos", pos.toLong());
+        if (!stack.hasTag()) stack.setTag(new NBTTagCompound());
+        stack.getTag().setLong("BlockPos", pos.toLong());
     }
 
     @Override
@@ -151,8 +151,8 @@ public class EnergyFieldAddon extends CustomAddon {
             this.storage = new CustomEnergyStorage(addon.maxPower, addon.transfer, addon.transfer) {
                 @Override
                 public int getEnergyStored() {
-                    if (stack.hasTagCompound()) {
-                        return stack.getTagCompound().getInteger("Energy");
+                    if (stack.hasTag()) {
+                        return stack.getTag().getInt("Energy");
                     } else {
                         return 0;
                     }
@@ -160,11 +160,11 @@ public class EnergyFieldAddon extends CustomAddon {
 
                 @Override
                 public void setEnergyStored(int energy) {
-                    if (!stack.hasTagCompound()) {
-                        stack.setTagCompound(new NBTTagCompound());
+                    if (!stack.hasTag()) {
+                        stack.setTag(new NBTTagCompound());
                     }
 
-                    stack.getTagCompound().setInteger("Energy", energy);
+                    stack.getTag().setInt("Energy", energy);
                 }
 
 
@@ -242,11 +242,11 @@ public class EnergyFieldAddon extends CustomAddon {
         }
 
         public void readFromNBT(NBTTagCompound compound) {
-            this.setEnergyStored(compound.getInteger("Energy"));
+            this.setEnergyStored(compound.getInt("Energy"));
         }
 
         public void writeToNBT(NBTTagCompound compound) {
-            compound.setInteger("Energy", this.getEnergyStored());
+            compound.setInt("Energy", this.getEnergyStored());
         }
 
         public void setEnergyStored(int energy) {

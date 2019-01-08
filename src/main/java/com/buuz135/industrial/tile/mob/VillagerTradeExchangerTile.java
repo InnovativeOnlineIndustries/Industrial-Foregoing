@@ -74,8 +74,8 @@ public class VillagerTradeExchangerTile extends CustomElectricMachine {
             @Override
             protected void onContentsChanged(int slot) {
                 super.onContentsChanged(slot);
-                if (!villager.getStackInSlot(0).isEmpty() && villager.getStackInSlot(0).getTagCompound().hasKey("Offers")) {
-                    merchantRecipes = new MerchantRecipeList(villager.getStackInSlot(0).getTagCompound().getCompoundTag("Offers"));
+                if (!villager.getStackInSlot(0).isEmpty() && villager.getStackInSlot(0).getTag().hasKey("Offers")) {
+                    merchantRecipes = new MerchantRecipeList(villager.getStackInSlot(0).getTag().getCompound("Offers"));
                     merchantRecipes.removeIf(MerchantRecipe::hasSecondItemToBuy); // TODO this is a temporary fix until we add actual support for trades with 2 items (#77)
                 } else {
                     merchantRecipes = null;
@@ -127,14 +127,14 @@ public class VillagerTradeExchangerTile extends CustomElectricMachine {
     @Override
     public NBTTagCompound writeToNBT(NBTTagCompound compound) {
         NBTTagCompound compound1 = super.writeToNBT(compound);
-        compound1.setInteger(NBT_CURRENT, current);
+        compound1.setInt(NBT_CURRENT, current);
         return compound1;
     }
 
     @Override
     public void readFromNBT(NBTTagCompound compound) {
         super.readFromNBT(compound);
-        current = compound.getInteger(NBT_CURRENT);
+        current = compound.getInt(NBT_CURRENT);
     }
 
     @NotNull

@@ -21,8 +21,8 @@
  */
 package com.buuz135.industrial.utils;
 
-import com.buuz135.industrial.tile.block.CustomAreaOrientedBlock;
-import com.buuz135.industrial.tile.block.CustomOrientedBlock;
+import com.buuz135.industrial.block.CustomAreaOrientedBlock;
+import com.buuz135.industrial.block.CustomOrientedBlock;
 import net.minecraft.block.Block;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.AxisAlignedBB;

@@ -110,14 +110,14 @@ public class PlantInteractorTile extends WorkingAreaElectricMachine {
     @Override
     public NBTTagCompound writeToNBT(NBTTagCompound compound) {
         NBTTagCompound tagCompound = super.writeToNBT(compound);
-        tagCompound.setInteger(NBT_POINTER, pointer);
+        tagCompound.setInt(NBT_POINTER, pointer);
         return tagCompound;
     }
 
     @Override
     public void readFromNBT(NBTTagCompound compound) {
         super.readFromNBT(compound);
-        pointer = compound.getInteger(NBT_POINTER);
+        pointer = compound.getInt(NBT_POINTER);
     }
 
     public void harvestDrops(BlockEvent.HarvestDropsEvent event) {

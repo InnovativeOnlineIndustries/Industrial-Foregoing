@@ -55,8 +55,8 @@ public class PetrifiedFuelInfoPiece extends BasicRenderedGuiPiece {
             }
             FontRenderer renderer = Minecraft.getInstance().fontRenderer;
             GlStateManager.pushMatrix();
-            GlStateManager.translate(this.getLeft() + 2, this.getTop() + 2, 0);
-            GlStateManager.scale(1, 1, 1);
+            GlStateManager.translatef(this.getLeft() + 2, this.getTop() + 2, 0);
+            GlStateManager.scalef(1, 1, 1);
             renderer.drawString(TextFormatting.DARK_GRAY + new TextComponentTranslation("text.industrialforegoing.display.burning").getFormattedText(), 4, 4, 0xFFFFFF);
             renderer.drawString(TextFormatting.DARK_GRAY + getFormatedTime(timeLeft * 1000), 8, (renderer.FONT_HEIGHT) + 5, 0xFFFFFF);
             renderer.drawString(TextFormatting.DARK_GRAY + new TextComponentTranslation("text.industrialforegoing.display.producing").getFormattedText(), 4, 2 * (renderer.FONT_HEIGHT) + 9, 0xFFFFFF);

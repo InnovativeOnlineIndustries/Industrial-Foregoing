@@ -24,12 +24,12 @@ package com.buuz135.industrial.item;
 import com.buuz135.industrial.api.straw.StrawHandler;
 import com.buuz135.industrial.utils.StrawUtils;
 import net.minecraft.block.Block;
+import net.minecraft.block.IBucketPickupHandler;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.fluid.IFluidState;
-import net.minecraft.init.Blocks;
 import net.minecraft.init.Fluids;
 import net.minecraft.item.EnumAction;
 import net.minecraft.item.ItemStack;
@@ -39,15 +39,17 @@ import net.minecraft.util.EnumActionResult;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.RayTraceResult;
+import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.TextComponentString;
 import net.minecraft.world.World;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
+import net.minecraftforge.common.capabilities.OptionalCapabilityInstance;
 import net.minecraftforge.fluids.Fluid;
-import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
 import net.minecraftforge.fluids.capability.IFluidHandler;
 import net.minecraftforge.fluids.capability.IFluidTankProperties;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -70,16 +72,17 @@ public class ItemStraw extends IFCustomItem {
                 IBlockState state = world.getBlockState(pos);
                 Block block = state.getBlock();
                 IFluidState fluidState = state.getFluidState();
-                if (fluidState != Fluids.EMPTY.getDefaultState() && fluidState.isSource()) {
-                    FluidStack stack = new FluidStack(fluidState.getFluid(), Fluid.BUCKET_VOLUME);
-                    StrawUtils.getStrawHandler(stack).ifPresent(handler -> handler.onDrink(world, pos, stack, player, false));
-                    world.setBlockState(pos, Blocks.AIR.getDefaultState());
+                if (fluidState != Fluids.EMPTY.getDefaultState() && block instanceof IBucketPickupHandler && fluidState.isSource()) {
+                    StrawUtils.getStrawHandler(fluidState.getFluid()).ifPresent(handler -> {
+                        handler.onDrink(world, pos, ((IBucketPickupHandler) block).pickupFluid(world, pos, state), player, false);
+                    });
                     return heldStack;
-                } else if (block.hasTileEntity(state)) {
+                } /*else if (block.hasTileEntity(state)) {
                     TileEntity tile = world.getTileEntity(pos);
                     if (tile != null) {
-                        if (tile.hasCapability(CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY, null)) {
-                            IFluidHandler handler = tile.getCapability(CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY, null);
+                        OptionalCapabilityInstance<IFluidHandler> fluidhandlercap= tile.getCapability(CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY);
+                        if (fluidhandlercap.isPresent()) {
+                            IFluidHandler handler = fluidhandlercap.orElseThrow(RuntimeException::new);
                             IFluidTankProperties[] fluidTankProperties = handler.getTankProperties();
                             for (IFluidTankProperties properties : fluidTankProperties) {
                                 FluidStack stack = properties.getContents();
@@ -99,7 +102,7 @@ public class ItemStraw extends IFCustomItem {
                             }
                         }
                     }
-                }
+                }*/
             }
         }
         return super.onItemUseFinish(heldStack, world, entity);
@@ -113,17 +116,20 @@ public class ItemStraw extends IFCustomItem {
             BlockPos pos = result.getBlockPos();
             IBlockState state = worldIn.getBlockState(pos);
             Block block = state.getBlock();
-            Fluid fluid = FluidRegistry.lookupFluidForBlock(block);
+            IFluidState fluid = state.getFluidState();//FluidRegistry.lookupFluidForBlock(block);
             if (fluid != null) {
-                Optional<StrawHandler> handler = StrawUtils.getStrawHandler(new FluidStack(fluid, Fluid.BUCKET_VOLUME));
-                if (handler.isPresent())
+                Optional<StrawHandler> handler = StrawUtils.getStrawHandler(fluid.getFluid());
+                if (handler.isPresent()) {
                     playerIn.setActiveHand(handIn);
-                return ActionResult.newResult(EnumActionResult.SUCCESS, playerIn.getHeldItem(handIn));
-            } else if (block.hasTileEntity(state)) {
+                    return ActionResult.newResult(EnumActionResult.SUCCESS, playerIn.getHeldItem(handIn));
+                }
+            }/*
+            if (block.hasTileEntity(state)) {
                 TileEntity tile = worldIn.getTileEntity(pos);
                 if (tile != null) {
-                    if (tile.hasCapability(CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY, null)) {
-                        IFluidHandler handler = tile.getCapability(CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY, null);
+                    OptionalCapabilityInstance<IFluidHandler> fluidhandlercap = tile.getCapability(CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY);
+                    if (fluidhandlercap.isPresent()) {
+                        IFluidHandler handler = fluidhandlercap.orElseThrow(RuntimeException::new);
                         IFluidTankProperties[] fluidTankProperties = handler.getTankProperties();
                         for (IFluidTankProperties properties : fluidTankProperties) {
                             FluidStack stack = properties.getContents();
@@ -141,26 +147,25 @@ public class ItemStraw extends IFCustomItem {
                         }
                     }
                 }
-            }
+            }*/
         }
         return super.onItemRightClick(worldIn, playerIn, handIn);
     }
 
     @Override
-    public int getMaxItemUseDuration(ItemStack stack) {
+    public int getUseDuration(ItemStack p_77626_1_) {
         return 30;
     }
 
     @Override
-    @Nonnull
-    public EnumAction getItemUseAction(ItemStack stack) {
+    public EnumAction getUseAction(ItemStack p_77661_1_) {
         return EnumAction.DRINK;
     }
 
     @Override
-    @SideOnly(Side.CLIENT)
-    public void addInformation(ItemStack stack, @Nullable World worldIn, List<String> tooltip, ITooltipFlag flagIn) {
+    @OnlyIn(Dist.CLIENT)
+    public void addInformation(ItemStack stack, @Nullable World worldIn, List<ITextComponent> tooltip, ITooltipFlag flagIn) {
         super.addInformation(stack, worldIn, tooltip, flagIn);
-        tooltip.add("\"The One Who Codes\"");
+        tooltip.add(new TextComponentString("\"The One Who Codes\""));
     }
 }

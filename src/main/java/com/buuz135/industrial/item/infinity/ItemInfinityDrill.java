@@ -8,14 +8,12 @@ import com.buuz135.industrial.proxy.FluidsRegistry;
 import com.buuz135.industrial.proxy.ItemRegistry;
 import com.buuz135.industrial.utils.RayTraceUtils;
 import com.buuz135.industrial.utils.RecipeUtils;
-import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.Multimap;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.util.ITooltipFlag;
-import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.EnumEnchantmentType;
 import net.minecraft.entity.EntityLivingBase;
@@ -30,6 +28,7 @@ import net.minecraft.init.Items;
 import net.minecraft.init.SoundEvents;
 import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.EnumAction;
+import net.minecraft.item.ItemGroup;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.ActionResult;
@@ -39,18 +38,21 @@ import net.minecraft.util.NonNullList;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.RayTraceResult;
-import net.minecraft.util.text.TextComponentString;
+import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeHooks;
+import net.minecraftforge.common.ToolType;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.ICapabilityProvider;
+import net.minecraftforge.common.capabilities.OptionalCapabilityInstance;
 import net.minecraftforge.common.config.Configuration;
 import net.minecraftforge.energy.CapabilityEnergy;
 import net.minecraftforge.energy.IEnergyStorage;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
+import net.minecraftforge.fluids.capability.IFluidHandlerItem;
 import net.minecraftforge.fluids.capability.templates.FluidHandlerItemStack;
 import org.apache.commons.lang3.tuple.Pair;
 
@@ -58,7 +60,6 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.text.DecimalFormat;
 import java.util.List;
-import java.util.Set;
 
 public class ItemInfinityDrill extends IFCustomItem {
 
@@ -67,11 +68,7 @@ public class ItemInfinityDrill extends IFCustomItem {
     public static int FUEL_CONSUMPTION = 3;
 
     public ItemInfinityDrill() {
-        super("infinity_drill");
-        setMaxStackSize(1);
-        setHasSubtypes(true);
-        setHarvestLevel("pickaxe", 3);
-        setHarvestLevel("shovel", 3);
+        super("infinity_drill", new Builder().maxStackSize(1).addToolType(ToolType.PICKAXE, 3).addToolType(ToolType.SHOVEL, 3));
     }
 
     @Override
@@ -107,8 +104,8 @@ public class ItemInfinityDrill extends IFCustomItem {
     }
 
     @Override
-    public void getSubItems(CreativeTabs tab, NonNullList<ItemStack> items) {
-        if (isInCreativeTab(tab)) {
+    public void fillItemGroup(ItemGroup group, NonNullList<ItemStack> items) {
+        if(isInGroup(group)) {
             for (DrillTier value : DrillTier.values()) {
                 items.add(createStack(value.getPowerNeeded(), 0, false));
             }
@@ -117,13 +114,8 @@ public class ItemInfinityDrill extends IFCustomItem {
     }
 
     @Override
-    public EnumAction getItemUseAction(ItemStack stack) {
+    public EnumAction getUseAction(ItemStack p_77661_1_) {
         return EnumAction.BOW;
-    }
-
-    @Override
-    public Set<String> getToolClasses(ItemStack stack) {
-        return ImmutableSet.of("pickaxe", "shovel");
     }
 
     @Override
@@ -132,23 +124,14 @@ public class ItemInfinityDrill extends IFCustomItem {
     }
 
     @Override
-    public boolean isFull3D() {
+    public boolean onEntitySwing(ItemStack stack, EntityLivingBase entity) {
         return true;
     }
 
-    @Override
-    public boolean onEntitySwing(EntityLivingBase entityLiving, ItemStack stack) {
-        return true;
-    }
 
     @Override
     public boolean shouldCauseReequipAnimation(ItemStack oldStack, ItemStack newStack, boolean slotChanged) {
         return slotChanged && !oldStack.equals(newStack);
-    }
-
-    @Override
-    public int getMaxItemUseDuration(ItemStack stack) {
-        return 720000;
     }
 
     @Override
@@ -191,39 +174,39 @@ public class ItemInfinityDrill extends IFCustomItem {
     }
 
     @Override
-    public void addInformation(ItemStack stack, @Nullable World worldIn, List<String> tooltip, ITooltipFlag flagIn) {
+    public void addInformation(ItemStack stack, @Nullable World worldIn, List<ITextComponent> tooltip, ITooltipFlag flagIn) {
         super.addInformation(stack, worldIn, tooltip, flagIn);
         long power = getPowerFromStack(stack);
         Pair<DrillTier, DrillTier> braquet = DrillTier.getTierBraquet(power);
         DrillTier current = getSelectedDrillTier(stack);
-        tooltip.add(new TextComponentTranslation("text.industrialforegoing.display.current_area").getUnformattedText() + " " + getFormattedArea(current, current.getRadius()));
-        tooltip.add(new TextComponentTranslation("text.industrialforegoing.display.tier").getUnformattedText() + " " + braquet.getLeft().getColor() + braquet.getLeft().getLocalizedName());
-        tooltip.add(new TextComponentTranslation("text.industrialforegoing.display.power").getUnformattedText() + " " + new DecimalFormat().format(power) + "/" + new DecimalFormat().format(braquet.getRight().getPowerNeeded()) + "RF " + new TextComponentTranslation("text.industrialforegoing.display.next_tier").getUnformattedText());
+        tooltip.add(new TextComponentTranslation("text.industrialforegoing.display.current_area").appendText(" ").appendText(getFormattedArea(current, current.getRadius())));
+        tooltip.add(new TextComponentTranslation("text.industrialforegoing.display.tier").appendText(" ").appendText(braquet.getLeft().getColor() + braquet.getLeft().getLocalizedName()));
+        tooltip.add(new TextComponentTranslation("text.industrialforegoing.display.power").appendText(" ").appendText(new DecimalFormat().format(power)).appendText("/").appendText(new DecimalFormat().format(braquet.getRight().getPowerNeeded())).appendText("RF ").appendSibling(new TextComponentTranslation("text.industrialforegoing.display.next_tier")));
         int fuelAmount = getFuelFromStack(stack);
-        tooltip.add(new TextComponentTranslation("text.industrialforegoing.display.fluid").getUnformattedText() + " " + new DecimalFormat().format(fuelAmount) + "/" + new DecimalFormat().format(1000000) + " mb " + new TextComponentTranslation(FluidsRegistry.BIOFUEL.getUnlocalizedName()).getUnformattedComponentText());
-        tooltip.add(new TextComponentTranslation("text.industrialforegoing.display.max_area").getUnformattedText() + " " + getFormattedArea(braquet.getLeft(), braquet.getLeft().getRadius()));
+        tooltip.add(new TextComponentTranslation("text.industrialforegoing.display.fluid").appendText(" ").appendText(new DecimalFormat().format(fuelAmount)).appendText("/").appendText(new DecimalFormat().format(1000000)).appendText(" mb ").appendSibling(new TextComponentTranslation(FluidsRegistry.BIOFUEL.getUnlocalizedName())));
+        tooltip.add(new TextComponentTranslation("text.industrialforegoing.display.max_area").appendText(" ").appendText(getFormattedArea(braquet.getLeft(), braquet.getLeft().getRadius())));
         if (isSpecial(stack))
-            tooltip.add(new TextComponentTranslation("text.industrialforegoing.display.special").getFormattedText());
+            tooltip.add(new TextComponentTranslation("text.industrialforegoing.display.special"));
     }
 
     public long getPowerFromStack(ItemStack stack) {
         long power = 0;
-        if (stack.hasTagCompound() && stack.getTagCompound().hasKey("Energy")) {
-            power = stack.getTagCompound().getLong("Energy");
+        if (stack.hasTag() && stack.getTag().hasKey("Energy")) {
+            power = stack.getTag().getLong("Energy");
         }
         return power;
     }
 
     public int getFuelFromStack(ItemStack stack) {
         int fuelAmount = 0;
-        if (stack.hasTagCompound() && stack.getTagCompound().hasKey("Fluid") && stack.getTagCompound().getCompoundTag("Fluid").hasKey("Amount")) {
-            fuelAmount = stack.getTagCompound().getCompoundTag("Fluid").getInteger("Amount");
+        if (stack.hasTag() && stack.getTag().hasKey("Fluid") && stack.getTag().getCompound("Fluid").hasKey("Amount")) {
+            fuelAmount = stack.getTag().getCompound("Fluid").getInt("Amount");
         }
         return fuelAmount;
     }
 
     public boolean isSpecial(ItemStack stack) {
-        return stack.hasTagCompound() && stack.getTagCompound().hasKey("Special") && stack.getTagCompound().getBoolean("Special");
+        return stack.hasTag() && stack.getTag().hasKey("Special") && stack.getTag().getBoolean("Special");
     }
 
     public ItemStack createStack(long power, int fuel, boolean special) {
@@ -237,11 +220,11 @@ public class ItemInfinityDrill extends IFCustomItem {
         tagCompound.setLong("Energy", power);
         NBTTagCompound fluid = new NBTTagCompound();
         fluid.setString("FluidName", "biofuel");
-        fluid.setInteger("Amount", fuel);
+        fluid.setInt("Amount", fuel);
         tagCompound.setTag("Fluid", fluid);
         tagCompound.setBoolean("Special", special);
         tagCompound.setString("Selected", DrillTier.getTierBraquet(power).getLeft().name());
-        stack.setTagCompound(tagCompound);
+        stack.setTag(tagCompound);
     }
 
     private String getFormattedArea(DrillTier tier, int radius) {
@@ -255,9 +238,9 @@ public class ItemInfinityDrill extends IFCustomItem {
 
     private void consumeFuel(ItemStack stack) {
         if (getFuelFromStack(stack) >= FUEL_CONSUMPTION) {
-            stack.getCapability(CapabilityFluidHandler.FLUID_HANDLER_ITEM_CAPABILITY, null).drain(FUEL_CONSUMPTION, true);
+            stack.getCapability(CapabilityFluidHandler.FLUID_HANDLER_ITEM_CAPABILITY, null).orElseThrow(RuntimeException::new).drain(FUEL_CONSUMPTION, true);
         } else {
-            stack.getTagCompound().setLong("Energy", stack.getTagCompound().getLong("Energy") - POWER_CONSUMPTION);
+            stack.getTag().setLong("Energy", stack.getTag().getLong("Energy") - POWER_CONSUMPTION);
         }
     }
 
@@ -274,7 +257,7 @@ public class ItemInfinityDrill extends IFCustomItem {
                     Block block = tempState.getBlock();
                     if (block.getBlockHardness(tempState, worldIn, blockPos) < 0) return;
                     int xp = ForgeHooks.onBlockBreakEvent(worldIn, ((EntityPlayerMP) entityLiving).interactionManager.getGameType(), (EntityPlayerMP) entityLiving, blockPos);
-                    if (xp >= 0 && block.removedByPlayer(tempState, worldIn, blockPos, (EntityPlayer) entityLiving, true)) {
+                    if (xp >= 0 && block.removedByPlayer(tempState, worldIn, blockPos, (EntityPlayer) entityLiving, true, tempState.getFluidState())) {
                         block.onPlayerDestroy(worldIn, blockPos, tempState);
                         block.harvestBlock(worldIn, (EntityPlayer) entityLiving, blockPos, tempState, null, stack);
                         block.dropXpOnBlockBreak(worldIn, blockPos, xp);
@@ -292,11 +275,11 @@ public class ItemInfinityDrill extends IFCustomItem {
     }
 
     public DrillTier getSelectedDrillTier(ItemStack stack) {
-        return stack.hasTagCompound() && stack.getTagCompound().hasKey("Selected") ? DrillTier.valueOf(stack.getTagCompound().getString("Selected")) : DrillTier.getTierBraquet(getPowerFromStack(stack)).getLeft();
+        return stack.hasTag() && stack.getTag().hasKey("Selected") ? DrillTier.valueOf(stack.getTag().getString("Selected")) : DrillTier.getTierBraquet(getPowerFromStack(stack)).getLeft();
     }
 
     public void setSelectedDrillTier(ItemStack stack, DrillTier tier) {
-        stack.getTagCompound().setString("Selected", tier.name());
+        stack.getTag().setString("Selected", tier.name());
     }
 
     @Override
@@ -305,7 +288,7 @@ public class ItemInfinityDrill extends IFCustomItem {
             player.playSound(SoundEvents.BLOCK_LEVER_CLICK, 0.5f, 0.5f);
             ItemStack stack = player.getHeldItem(handIn);
             DrillTier next = getSelectedDrillTier(stack).getNext(DrillTier.getTierBraquet(getPowerFromStack(stack)).getLeft());
-            player.sendStatusMessage(new TextComponentString(new TextComponentTranslation("text.industrialforegoing.display.current_area").getUnformattedText() + " " + getFormattedArea(next, next.getRadius())), true);
+            player.sendStatusMessage(new TextComponentTranslation("text.industrialforegoing.display.current_area").appendText(" ").appendText(getFormattedArea(next, next.getRadius())), true);
             setSelectedDrillTier(stack, next);
         }
         return super.onItemRightClick(worldIn, player, handIn);
@@ -379,7 +362,7 @@ public class ItemInfinityDrill extends IFCustomItem {
         }
 
         public String getLocalizedName() {
-            return new TextComponentTranslation("text.industrialforegoing.tooltip.infinitydrill." + name).getUnformattedText();
+            return new TextComponentTranslation("text.industrialforegoing.tooltip.infinitydrill." + name).getUnformattedComponentText();
         }
 
         public String getName() {
@@ -426,6 +409,8 @@ public class ItemInfinityDrill extends IFCustomItem {
 
         private final FluidHandlerItemStack tank;
         private final InfinityDrillEnergyStorage energyStorage;
+        private final OptionalCapabilityInstance<IEnergyStorage> energyStorageCap;
+        private final OptionalCapabilityInstance<IFluidHandlerItem> tankCap;
 
         private InfinityDrillCapabilityProvider(ItemStack stack) {
             tank = new FluidHandlerItemStack(stack, 1_000_000) {
@@ -442,8 +427,8 @@ public class ItemInfinityDrill extends IFCustomItem {
             energyStorage = new InfinityDrillEnergyStorage() {
                 @Override
                 public long getLongEnergyStored() {
-                    if (stack.hasTagCompound()) {
-                        return Math.min(stack.getTagCompound().getLong("Energy"), DrillTier.ARTIFACT.getPowerNeeded());
+                    if (stack.hasTag()) {
+                        return Math.min(stack.getTag().getLong("Energy"), DrillTier.ARTIFACT.getPowerNeeded());
                     } else {
                         return 0;
                     }
@@ -451,25 +436,23 @@ public class ItemInfinityDrill extends IFCustomItem {
 
                 @Override
                 public void setEnergyStored(long energy) {
-                    if (!stack.hasTagCompound()) {
-                        stack.setTagCompound(new NBTTagCompound());
+                    if (!stack.hasTag()) {
+                        stack.setTag(new NBTTagCompound());
                     }
-                    stack.getTagCompound().setLong("Energy", Math.min(energy, DrillTier.ARTIFACT.getPowerNeeded()));
+                    stack.getTag().setLong("Energy", Math.min(energy, DrillTier.ARTIFACT.getPowerNeeded()));
                 }
             };
+            this.tankCap = OptionalCapabilityInstance.of(() -> tank);
+            this.energyStorageCap = OptionalCapabilityInstance.of(() -> energyStorage);
         }
 
-        @Override
-        public boolean hasCapability(@Nonnull Capability<?> capability, @Nullable EnumFacing facing) {
-            return capability == CapabilityFluidHandler.FLUID_HANDLER_ITEM_CAPABILITY || capability == CapabilityEnergy.ENERGY;
-        }
 
         @Nullable
         @Override
-        public <T> T getCapability(@Nonnull Capability<T> capability, @Nullable EnumFacing facing) {
-            if (capability == CapabilityFluidHandler.FLUID_HANDLER_ITEM_CAPABILITY) return (T) tank;
-            if (capability == CapabilityEnergy.ENERGY) return (T) energyStorage;
-            return null;
+        public <T> OptionalCapabilityInstance<T> getCapability(@Nonnull Capability<T> capability, @Nullable EnumFacing facing) {
+            if (capability == CapabilityFluidHandler.FLUID_HANDLER_ITEM_CAPABILITY) return tankCap.cast();
+            if (capability == CapabilityEnergy.ENERGY) return energyStorageCap.cast();
+            return OptionalCapabilityInstance.empty();
         }
     }
 

@@ -56,7 +56,7 @@ import com.buuz135.industrial.jei.stonework.StoneWorkWrapper;
 import com.buuz135.industrial.proxy.BlockRegistry;
 import com.buuz135.industrial.proxy.FluidsRegistry;
 import com.buuz135.industrial.proxy.ItemRegistry;
-import com.buuz135.industrial.tile.block.CustomOrientedBlock;
+import com.buuz135.industrial.block.CustomOrientedBlock;
 import com.buuz135.industrial.tile.generator.PetrifiedFuelGeneratorTile;
 import com.buuz135.industrial.tile.world.MaterialStoneWorkFactoryTile;
 import com.buuz135.industrial.utils.CraftingUtils;

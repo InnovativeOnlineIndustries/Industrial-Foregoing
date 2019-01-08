@@ -70,14 +70,9 @@ public class GuiConveyor extends GuiContainer {
     }
 
     @Override
-    public void updateScreen() {
-        super.updateScreen();
-    }
-
-    @Override
     protected void drawGuiContainerBackgroundLayer(float partialTicks, int mouseX, int mouseY) {
         this.drawDefaultBackground();
-        GlStateManager.color(1, 1, 1, 1);
+        GlStateManager.color4f(1, 1, 1, 1);
         mc.getTextureManager().bindTexture(BG_TEXTURE);
         x = (width - xSize) / 2;
         y = (height - ySize) / 2;
@@ -108,21 +103,21 @@ public class GuiConveyor extends GuiContainer {
         }
     }
 
-    @Override
-    public void drawScreen(int mouseX, int mouseY, float partialTicks) {
-        super.drawScreen(mouseX, mouseY, partialTicks);
-    }
-
     private ContainerConveyor getContainer() {
         return (ContainerConveyor) this.inventorySlots;
     }
 
+
     @Override
-    protected void mouseClicked(int mouseX, int mouseY, int mouseButton) throws IOException {
+    public boolean mouseClicked(double mouseX, double mouseY, int mouseButton) {
         super.mouseClicked(mouseX, mouseY, mouseButton);
         for (IGuiComponent iGuiComponent : componentList) {
-            if (iGuiComponent.isInside(mouseX - x, mouseY - y)) iGuiComponent.handleClick(this, x, y, mouseX, mouseY);
+            if (iGuiComponent.isInside(mouseX - x, mouseY - y)) {
+                if(iGuiComponent.handleClick(this, x, y, mouseX, mouseY))
+                    return true;
+            }
         }
+        return super.mouseClicked(mouseX, mouseY, mouseButton);
     }
 
     public void sendMessage(int id, NBTTagCompound compound) {

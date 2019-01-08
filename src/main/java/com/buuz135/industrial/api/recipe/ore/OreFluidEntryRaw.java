@@ -21,7 +21,9 @@
  */
 package com.buuz135.industrial.api.recipe.ore;
 
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.tags.Tag;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.oredict.OreDictionary;
 
@@ -32,19 +34,19 @@ public class OreFluidEntryRaw {
 
     public static List<OreFluidEntryRaw> ORE_RAW_ENTRIES = new ArrayList<>();
 
-    private String ore;
+    private Tag<Item> ore;
     private FluidStack input;
     private FluidStack output;
     private List<ItemStack> cachedOres;
 
-    public OreFluidEntryRaw(String ore, FluidStack input, FluidStack output) {
+    public OreFluidEntryRaw(Tag<Item> ore, FluidStack input, FluidStack output) {
         this.ore = ore;
         this.input = input;
         this.output = output;
         this.cachedOres = OreDictionary.getOres(ore);
     }
 
-    public String getOre() {
+    public Tag<Item> getOre() {
         return ore;
     }
 

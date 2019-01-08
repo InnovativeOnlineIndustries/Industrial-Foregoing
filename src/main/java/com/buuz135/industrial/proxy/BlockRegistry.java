@@ -29,7 +29,7 @@ import com.buuz135.industrial.proxy.block.BlockLabel;
 import com.buuz135.industrial.proxy.client.BlockRenderRegistry;
 import com.buuz135.industrial.proxy.client.FluidsRenderRegistry;
 import com.buuz135.industrial.proxy.client.ItemRenderRegistry;
-import com.buuz135.industrial.tile.block.*;
+import com.buuz135.industrial.block.*;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;

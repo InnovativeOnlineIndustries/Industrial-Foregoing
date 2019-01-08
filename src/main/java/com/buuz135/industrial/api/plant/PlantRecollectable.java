@@ -25,12 +25,12 @@ import net.minecraft.block.state.IBlockState;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
-import net.minecraftforge.registries.IForgeRegistryEntry;
+import net.minecraftforge.registries.ForgeRegistryEntry;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public abstract class PlantRecollectable extends IForgeRegistryEntry.Impl<PlantRecollectable> {
+public abstract class PlantRecollectable extends ForgeRegistryEntry<PlantRecollectable> {
 
     public PlantRecollectable(String name) {
         setRegistryName(name);

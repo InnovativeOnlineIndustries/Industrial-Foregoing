@@ -94,9 +94,9 @@ public class MaterialStoneWorkFactoryTile extends CustomElectricMachine {
     public void readFromNBT(NBTTagCompound compound) {
         super.readFromNBT(compound);
         if (compound.hasKey(NBT_MODE)) {
-            compound.getCompoundTag(NBT_MODE).getKeySet().forEach(s -> {
+            compound.getCompound(NBT_MODE).getKeySet().forEach(s -> {
                 Map.Entry<ItemStackHandler, Mode> it = Iterators.get(modeList.entrySet().iterator(), Integer.parseInt(s));
-                modeList.replace(it.getKey(), Mode.valueOf(compound.getCompoundTag(NBT_MODE).getString(s)));
+                modeList.replace(it.getKey(), Mode.valueOf(compound.getCompound(NBT_MODE).getString(s)));
             });
         }
     }
@@ -172,7 +172,7 @@ public class MaterialStoneWorkFactoryTile extends CustomElectricMachine {
         if (TeslaCoreLib.INSTANCE.isClientSide()) {
             NBTTagCompound compound = this.setupSpecialNBTMessage("CHANGE_MODE");
             Map.Entry<ItemStackHandler, Mode> mode = getEntry(id);
-            compound.setInteger("id", id);
+            compound.setInt("id", id);
             compound.setString("value", mode.getValue().toString());
             this.sendToServer(compound);
         }
@@ -182,7 +182,7 @@ public class MaterialStoneWorkFactoryTile extends CustomElectricMachine {
     protected SimpleNBTMessage processClientMessage(String messageType, NBTTagCompound compound) {
         super.processClientMessage(messageType, compound);
         if (messageType.equals("CHANGE_MODE")) {
-            Map.Entry<ItemStackHandler, Mode> entry = getEntry(compound.getInteger("id"));
+            Map.Entry<ItemStackHandler, Mode> entry = getEntry(compound.getInt("id"));
             modeList.replace(entry.getKey(), Mode.valueOf(compound.getString("value")));
         }
         return null;

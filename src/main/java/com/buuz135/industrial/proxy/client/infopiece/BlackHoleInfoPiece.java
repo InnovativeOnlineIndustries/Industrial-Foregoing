@@ -48,8 +48,8 @@ public class BlackHoleInfoPiece extends BasicRenderedGuiPiece {
         if (this.tile != null) {
             FontRenderer renderer = Minecraft.getInstance().fontRenderer;
             GlStateManager.pushMatrix();
-            GlStateManager.translate(this.getLeft() + 2, this.getTop() + 8, 0);
-            GlStateManager.scale(1, 1, 1);
+            GlStateManager.translatef(this.getLeft() + 2, this.getTop() + 8, 0);
+            GlStateManager.scalef(1, 1, 1);
             if (tile.getAmount() > 0) {
                 if (!tile.getItemStack().isEmpty()) {
                     ItemStackUtils.renderItemIntoGUI(tile.getItemStack(), 1, 0, 7);

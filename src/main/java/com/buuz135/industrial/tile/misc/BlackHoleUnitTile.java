@@ -223,9 +223,9 @@ public class BlackHoleUnitTile extends CustomSidedTileEntity implements IHasDisp
     public NBTTagCompound writeToNBT(NBTTagCompound compound) {
         NBTTagCompound tagCompound = super.writeToNBT(compound);
         tagCompound.setString(NBT_ITEMSTACK, stack.getItem().getRegistryName().toString());
-        tagCompound.setInteger(NBT_AMOUNT, amount);
-        tagCompound.setInteger(NBT_META, stack.getMetadata());
-        tagCompound.setTag(NBT_ITEM_NBT, stack.hasTagCompound() ? stack.getTagCompound() : new NBTTagCompound());
+        tagCompound.setInt(NBT_AMOUNT, amount);
+        tagCompound.setInt(NBT_META, stack.getMetadata());
+        tagCompound.setTag(NBT_ITEM_NBT, stack.hasTag() ? stack.getTag() : new NBTTagCompound());
         return tagCompound;
     }
 
@@ -236,21 +236,21 @@ public class BlackHoleUnitTile extends CustomSidedTileEntity implements IHasDisp
         else {
             Item item = Item.getByNameOrId(compound.getString(NBT_ITEMSTACK));
             if (item != null) {
-                stack = new ItemStack(item, 1, compound.getInteger(NBT_META));
-                NBTTagCompound nbttag = compound.getCompoundTag(NBT_ITEM_NBT);
-                if (!nbttag.isEmpty()) stack.setTagCompound(nbttag);
+                stack = new ItemStack(item, 1, compound.getInt(NBT_META));
+                NBTTagCompound nbttag = compound.getCompound(NBT_ITEM_NBT);
+                if (!nbttag.isEmpty()) stack.setTag(nbttag);
             }
         }
         if (!compound.hasKey(NBT_AMOUNT)) amount = 0;
         else {
-            amount = compound.getInteger(NBT_AMOUNT);
+            amount = compound.getInt(NBT_AMOUNT);
         }
     }
 
     public boolean canInsertItem(ItemStack stack) {
         if (Integer.MAX_VALUE < stack.getCount() + (long) getAmount()) return false;
         if (inItems.getLocked()) return inItems.canInsertItem(0, stack);
-        return (BlackHoleUnitTile.this.stack.isEmpty() || (stack.isItemEqual(this.stack) && (!(stack.hasTagCompound() && this.stack.hasTagCompound()) || stack.getTagCompound().equals(BlackHoleUnitTile.this.stack.getTagCompound()))));
+        return (BlackHoleUnitTile.this.stack.isEmpty() || (stack.isItemEqual(this.stack) && (!(stack.hasTag() && this.stack.hasTag()) || stack.getTag().equals(BlackHoleUnitTile.this.stack.getTag()))));
     }
 
     public void setStack(ItemStack stack) {

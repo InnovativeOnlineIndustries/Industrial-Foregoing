@@ -197,7 +197,7 @@ public class RecipeUtils {
                 ret.put("count", stack.getCount());
             }
 
-            if (stack.hasTagCompound()) {
+            if (stack.hasTag()) {
                 throw new IllegalArgumentException("nbt not implemented");
             }
 

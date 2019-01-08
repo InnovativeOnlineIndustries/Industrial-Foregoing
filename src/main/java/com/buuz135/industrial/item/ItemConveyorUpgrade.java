@@ -21,24 +21,11 @@
  */
 package com.buuz135.industrial.item;
 
-import com.buuz135.industrial.api.conveyor.ConveyorUpgradeFactory;
-import com.buuz135.industrial.api.conveyor.IConveyorContainer;
-import com.buuz135.industrial.proxy.block.tile.TileEntityConveyor;
-import com.buuz135.industrial.registry.IFRegistries;
-import net.minecraft.client.renderer.block.model.ModelResourceLocation;
-import net.minecraft.creativetab.CreativeTabs;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.ItemStack;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.EnumActionResult;
-import net.minecraft.util.EnumFacing;
-import net.minecraft.util.EnumHand;
-import net.minecraft.util.NonNullList;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
-import net.minecraftforge.client.model.ModelLoader;
-
 public class ItemConveyorUpgrade extends IFCustomItem {
+    public ItemConveyorUpgrade(String name, Builder builder) {
+        super(name, builder);
+    }
+/*
     public ItemConveyorUpgrade() {
         super("conveyor_upgrade");
         setHasSubtypes(true);
@@ -92,5 +79,5 @@ public class ItemConveyorUpgrade extends IFCustomItem {
                 items.add(new ItemStack(this, 1, IFRegistries.CONVEYOR_UPGRADE_REGISTRY.getID(factory) - 1));
             }
         }
-    }
+    }*/
 }

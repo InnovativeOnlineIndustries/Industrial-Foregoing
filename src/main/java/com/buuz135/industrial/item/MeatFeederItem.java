@@ -29,6 +29,7 @@ import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumFacing;
+import net.minecraft.util.text.ITextComponent;
 import net.minecraft.world.World;
 import net.minecraftforge.common.capabilities.ICapabilityProvider;
 import net.minecraftforge.fluids.FluidStack;
@@ -41,8 +42,7 @@ import java.util.List;
 public class MeatFeederItem extends IFCustomItem {
 
     public MeatFeederItem() {
-        super("meat_feeder");
-        setMaxStackSize(1);
+        super("meat_feeder", new Builder().maxStackSize(1));
     }
 
     @Nullable
@@ -60,19 +60,19 @@ public class MeatFeederItem extends IFCustomItem {
     }
 
     @Override
-    public void addInformation(ItemStack stack, @Nullable World worldIn, List<String> tooltip, ITooltipFlag flagIn) {
+    public void addInformation(ItemStack stack, @Nullable World worldIn, List<ITextComponent> tooltip, ITooltipFlag flagIn) {
         super.addInformation(stack, worldIn, tooltip, flagIn);
-        FluidHandlerItemStack handlerItemStack = (FluidHandlerItemStack) stack.getCapability(CapabilityFluidHandler.FLUID_HANDLER_ITEM_CAPABILITY, EnumFacing.DOWN);
-        tooltip.add(getFilledAmount(stack) + "/" + handlerItemStack.getTankProperties()[0].getCapacity() + "mb of Meat");
+        FluidHandlerItemStack handlerItemStack = (FluidHandlerItemStack) stack.getCapability(CapabilityFluidHandler.FLUID_HANDLER_ITEM_CAPABILITY).orElseThrow(RuntimeException::new);
+        //tooltip.add(getFilledAmount(stack) + "/" + handlerItemStack.getTankProperties()[0].getCapacity() + "mb of Meat");
     }
 
     public int getFilledAmount(ItemStack stack) {
-        FluidHandlerItemStack handlerItemStack = (FluidHandlerItemStack) stack.getCapability(CapabilityFluidHandler.FLUID_HANDLER_ITEM_CAPABILITY, EnumFacing.DOWN);
+        FluidHandlerItemStack handlerItemStack = (FluidHandlerItemStack) stack.getCapability(CapabilityFluidHandler.FLUID_HANDLER_ITEM_CAPABILITY).orElseThrow(RuntimeException::new);
         return (handlerItemStack.getFluid() == null ? 0 : handlerItemStack.getFluid().amount);
     }
 
     public void drain(ItemStack stack, int amount) {
-        FluidHandlerItemStack handlerItemStack = (FluidHandlerItemStack) stack.getCapability(CapabilityFluidHandler.FLUID_HANDLER_ITEM_CAPABILITY, EnumFacing.DOWN);
+        FluidHandlerItemStack handlerItemStack = (FluidHandlerItemStack) stack.getCapability(CapabilityFluidHandler.FLUID_HANDLER_ITEM_CAPABILITY).orElseThrow(RuntimeException::new);
         handlerItemStack.drain(new FluidStack(FluidsRegistry.MEAT, amount), true);
     }
 

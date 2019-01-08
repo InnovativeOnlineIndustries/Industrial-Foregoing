@@ -28,7 +28,7 @@ import com.buuz135.industrial.proxy.client.ClientProxy;
 import com.buuz135.industrial.registry.IFRegistries;
 import com.buuz135.industrial.tile.CustomColoredItemHandler;
 import com.buuz135.industrial.tile.WorkingAreaElectricMachine;
-import com.buuz135.industrial.tile.block.CropRecolectorBlock;
+import com.buuz135.industrial.block.CropRecolectorBlock;
 import com.buuz135.industrial.utils.BlockUtils;
 import com.buuz135.industrial.utils.ItemStackUtils;
 import com.buuz135.industrial.utils.WorkUtils;
@@ -130,8 +130,8 @@ public class CropRecolectorTile extends WorkingAreaElectricMachine {
     @Override
     public NBTTagCompound writeToNBT(NBTTagCompound compound) {
         NBTTagCompound tagCompound = super.writeToNBT(compound);
-        tagCompound.setInteger(NBT_POINTER, pointer);
-        tagCompound.setInteger(NBT_OPERATION, operationAmount);
+        tagCompound.setInt(NBT_POINTER, pointer);
+        tagCompound.setInt(NBT_OPERATION, operationAmount);
         tagCompound.setString(NBT_TYPE, type.name());
         return tagCompound;
     }
@@ -139,8 +139,8 @@ public class CropRecolectorTile extends WorkingAreaElectricMachine {
     @Override
     public void readFromNBT(NBTTagCompound compound) {
         super.readFromNBT(compound);
-        pointer = compound.getInteger(NBT_POINTER);
-        operationAmount = compound.getInteger(NBT_OPERATION);
+        pointer = compound.getInt(NBT_POINTER);
+        operationAmount = compound.getInt(NBT_OPERATION);
         type = PlantRecollectable.Type.ANY;
         if (compound.hasKey(NBT_TYPE)) type = PlantRecollectable.Type.valueOf(compound.getString(NBT_TYPE));
     }

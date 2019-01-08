@@ -22,7 +22,7 @@
 package com.buuz135.industrial.proxy.client.event;
 
 import com.buuz135.industrial.proxy.BlockRegistry;
-import com.buuz135.industrial.tile.block.IHasAdvancedTooltip;
+import com.buuz135.industrial.block.IHasAdvancedTooltip;
 import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiScreen;

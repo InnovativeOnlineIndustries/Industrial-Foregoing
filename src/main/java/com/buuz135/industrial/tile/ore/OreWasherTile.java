@@ -104,7 +104,7 @@ public class OreWasherTile extends CustomElectricMachine {
                 super.drawBackgroundLayer(container, guiX, guiY, partialTicks, mouseX, mouseY);
                 if (recipe != null) {
                     GlStateManager.pushMatrix();
-                    TextureAtlasSprite sprite = container.mc.getTextureMap().getTextureExtry(FluidsRegistry.MEAT.getFlowing().toString());
+                    TextureAtlasSprite sprite = container.mc.getTextureMapBlocks().getTextureExtry(FluidsRegistry.MEAT.getFlowing().toString());
                     if (sprite != null) {
                         container.mc.getTextureManager().bindTexture(TextureMap.LOCATION_BLOCKS_TEXTURE);
                         GlStateManager.enableBlend();
@@ -116,7 +116,7 @@ public class OreWasherTile extends CustomElectricMachine {
                     }
                     RenderHelper.enableGUIStandardItemLighting();
                     container.mc.getRenderItem().renderItemIntoGUI(getFirstStack(), guiX + this.getLeft() + 1, guiY + this.getTop() + 1);
-                    sprite = container.mc.getTextureMap().getTextureExtry(FluidsRegistry.ORE_FLUID_RAW.getFlowing().toString());
+                    sprite = container.mc.getTextureMapBlocks().getTextureExtry(FluidsRegistry.ORE_FLUID_RAW.getFlowing().toString());
                     if (sprite != null) {
                         GlStateManager.translate(0, 0, 120);
                         container.mc.getTextureManager().bindTexture(TextureMap.LOCATION_BLOCKS_TEXTURE);

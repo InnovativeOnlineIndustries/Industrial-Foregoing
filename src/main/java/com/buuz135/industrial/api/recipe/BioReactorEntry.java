@@ -64,7 +64,7 @@ public class BioReactorEntry implements IReactorEntry {
      * @return true if they match, false if they don't.
      */
     public boolean doesStackMatch(ItemStack stack) {
-        return this.stack.isItemEqual(stack) && (this.nbtCheck == null || !stack.hasTagCompound() || this.nbtCheck.apply(stack.getTagCompound()));
+        return this.stack.isItemEqual(stack) && (this.nbtCheck == null || !stack.hasTag() || this.nbtCheck.apply(stack.getTag()));
     }
 
     public ItemStack getStack() {

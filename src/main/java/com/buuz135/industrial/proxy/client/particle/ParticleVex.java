@@ -42,13 +42,13 @@ public class ParticleVex extends Particle {
         if (entityIn instanceof EntityPlayer && Minecraft.getInstance().player.getUniqueID().equals(entity.getUniqueID()) && Minecraft.getInstance().gameSettings.thirdPersonView == 0 && this.entity.getPosition().add(0, 1, 0).distanceSq(posX, posY, posZ) < 3)
             return;
         Tessellator.getInstance().draw();
-        GlStateManager.disableAlpha();
+        GlStateManager.disableAlphaTest();
         GlStateManager.enableBlend();
         GlStateManager.tryBlendFuncSeparate(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA,
                 GlStateManager.SourceFactor.ONE, GlStateManager.DestFactor.ZERO);
         GlStateManager.glLineWidth(2.0F);
         GlStateManager.disableTexture2D();
-        GlStateManager.color(1, 1, 1, 1);
+        GlStateManager.color4f(1, 1, 1, 1);
         OpenGlHelper.setLightmapTextureCoords(OpenGlHelper.lightmapTexUnit, 240.0F, 240.0F);
         buffer.begin(3, DefaultVertexFormats.POSITION_COLOR);
         double x = entityIn.lastTickPosX + (entityIn.posX - entityIn.lastTickPosX) * partialTicks;
@@ -62,7 +62,7 @@ public class ParticleVex extends Particle {
         buffer.setTranslation(0.0D, 0.0D, 0.0D);
         GlStateManager.enableTexture2D();
         GlStateManager.disableBlend();
-        GlStateManager.enableAlpha();
+        GlStateManager.enableAlphaTest();
         buffer.begin(7, DefaultVertexFormats.PARTICLE_POSITION_TEX_COLOR_LMAP);
     }
 

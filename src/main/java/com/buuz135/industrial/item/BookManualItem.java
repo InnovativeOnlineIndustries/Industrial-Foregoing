@@ -21,8 +21,6 @@
  */
 package com.buuz135.industrial.item;
 
-import com.buuz135.industrial.IndustrialForegoing;
-import com.buuz135.industrial.gui.GuiHandler;
 import com.buuz135.industrial.utils.RecipeUtils;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Items;
@@ -37,7 +35,7 @@ import net.minecraft.world.World;
 public class BookManualItem extends IFCustomItem {
 
     public BookManualItem() {
-        super("book_manual");
+        super("book_manual", new Builder().maxStackSize(1));
     }
 
     @Override

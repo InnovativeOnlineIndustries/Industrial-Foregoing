@@ -30,11 +30,13 @@ import com.buuz135.industrial.item.infinity.ItemInfinityDrill;
 import com.buuz135.industrial.utils.RecipeUtils;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
+import net.minecraft.item.EnumDyeColor;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.oredict.OreDictionary;
 import net.minecraftforge.registries.IForgeRegistry;
+import org.apache.commons.lang3.ArrayUtils;
 
 
 public class ItemRegistry {
@@ -45,14 +47,12 @@ public class ItemRegistry {
     public static IFCustomItem dryRubber;
     public static IFCustomItem plastic;
     public static FertilizerItem fertilizer;
-    public static LaserLensItem laserLensItem;
-    public static LaserLensItem laserLensItem_inverted;
     public static IFCustomItem pinkSlime;
     public static BookManualItem bookManualItem;
     public static IFCustomItem pinkSlimeIngot;
     public static ItemStraw strawItem;
     public static ItemConveyorUpgrade conveyorUpgradeItem;
-    public static ItemArtificalDye artificalDye;
+    public static ItemArtificalDye[] dyes;
     public static ItemInfinityDrill itemInfinityDrill;
 
     public static AdultFilterAddonItem adultFilterAddomItem;
@@ -74,8 +74,6 @@ public class ItemRegistry {
         (fertilizer = new FertilizerItem()).register(itemRegistry);
         (meatFeederItem = new MeatFeederItem()).register(itemRegistry);
         (mobImprisonmentToolItem = new MobImprisonmentToolItem()).register(itemRegistry);
-        (laserLensItem = new LaserLensItem(false)).register(itemRegistry);
-        (laserLensItem_inverted = new LaserLensItem(true)).register(itemRegistry);
         (strawItem = new ItemStraw()).register(itemRegistry);
         (conveyorUpgradeItem = new ItemConveyorUpgrade()).register(itemRegistry);
         (pinkSlime = new IFCustomItem("pink_slime")).register(itemRegistry);
@@ -100,8 +98,9 @@ public class ItemRegistry {
         OreDictionary.registerOre("fertilizer", fertilizer);
 
         if (BlockRegistry.dyeMixerBlock.isEnabled()) {
-            (artificalDye = new ItemArtificalDye()).register(itemRegistry);
-            OreDictionary.registerOre("dye", new ItemStack(artificalDye, 1, OreDictionary.WILDCARD_VALUE));
+            for(EnumDyeColor dyeColor : EnumDyeColor.values()) {
+                ArrayUtils.add(dyes, (new ItemArtificalDye(dyeColor)).register(itemRegistry));
+            }
 
             String[] dyes = {"White", "Orange", "Magenta", "LightBlue", "Yellow", "Lime", "Pink", "Gray", "LightGray", "Cyan", "Purple", "Blue", "Brown", "Green", "Red", "Black"};
             for (int i = 0; i < 16; i++) {
@@ -113,8 +112,6 @@ public class ItemRegistry {
     public static void createRecipes() {
         meatFeederItem.createRecipe();
         mobImprisonmentToolItem.createRecipe();
-        laserLensItem.createRecipe();
-        laserLensItem_inverted.createRecipe();
         adultFilterAddomItem.createRecipe();
         rangeAddonItem.createRecipe();
         energyFieldAddon.createRecipe();

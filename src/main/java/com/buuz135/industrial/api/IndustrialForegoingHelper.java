@@ -27,7 +27,9 @@ import com.buuz135.industrial.api.recipe.*;
 import com.buuz135.industrial.api.recipe.ore.OreFluidEntryFermenter;
 import com.buuz135.industrial.api.recipe.ore.OreFluidEntryRaw;
 import com.buuz135.industrial.api.recipe.ore.OreFluidEntrySieve;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.tags.Tag;
 import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fluids.FluidStack;
 
@@ -178,15 +180,15 @@ public class IndustrialForegoingHelper {
     }
 
     public static boolean addOreFluidEntryRaw(OreFluidEntryRaw raw) {
-        if (OreFluidEntryRaw.ORE_RAW_ENTRIES.stream().noneMatch(raw1 -> raw1.getOre().equalsIgnoreCase(raw.getOre()))) {
+        if (OreFluidEntryRaw.ORE_RAW_ENTRIES.stream().noneMatch(raw1 -> raw1.getOre().getId().equals(raw.getOre().getId()))) {
             OreFluidEntryRaw.ORE_RAW_ENTRIES.add(raw);
             return true;
         }
         return false;
     }
 
-    public static boolean removeOreFluidEntryRaw(String ore) {
-        return OreFluidEntryRaw.ORE_RAW_ENTRIES.removeIf(raw -> raw.getOre().equalsIgnoreCase(ore));
+    public static boolean removeOreFluidEntryRaw(Tag<Item> tag) {
+        return OreFluidEntryRaw.ORE_RAW_ENTRIES.removeIf(raw -> raw.getOre().getId().equals(tag.getId()));
     }
 
     public static boolean addOreFluidEntryFermenter(OreFluidEntryFermenter entryFermenter) {

@@ -151,8 +151,8 @@ public class ConveyorSplittingUpgrade extends ConveyorUpgrade {
     public NBTTagCompound serializeNBT() {
         NBTTagCompound compound = super.serializeNBT() == null ? new NBTTagCompound() : super.serializeNBT();
         compound.setString("NextFacing", nextFacing.getName());
-        compound.setInteger("Ratio", ratio);
-        compound.setInteger("CurrentRatio", currentRatio);
+        compound.setInt("Ratio", ratio);
+        compound.setInt("CurrentRatio", currentRatio);
         return compound;
     }
 
@@ -160,8 +160,8 @@ public class ConveyorSplittingUpgrade extends ConveyorUpgrade {
     public void deserializeNBT(NBTTagCompound nbt) {
         super.deserializeNBT(nbt);
         nextFacing = EnumFacing.byName(nbt.getString("NextFacing"));
-        ratio = nbt.getInteger("Ratio");
-        currentRatio = nbt.getInteger("CurrentRatio");
+        ratio = nbt.getInt("Ratio");
+        currentRatio = nbt.getInt("CurrentRatio");
     }
 
     public EnumFacing getNextFacing() {

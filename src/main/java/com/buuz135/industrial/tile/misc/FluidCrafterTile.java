@@ -98,7 +98,7 @@ public class FluidCrafterTile extends CustomSidedTileEntity {
 
     @Override
     public void readFromNBT(@NotNull NBTTagCompound compound) {
-        tick = compound.getInteger("Tick");
+        tick = compound.getInt("Tick");
         super.readFromNBT(compound);
     }
 
@@ -106,7 +106,7 @@ public class FluidCrafterTile extends CustomSidedTileEntity {
     @Override
     public NBTTagCompound writeToNBT(@NotNull NBTTagCompound compound) {
         NBTTagCompound compound1 = super.writeToNBT(compound);
-        compound1.setInteger("Tick", tick);
+        compound1.setInt("Tick", tick);
         return compound1;
     }
 

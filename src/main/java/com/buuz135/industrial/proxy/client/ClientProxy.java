@@ -116,8 +116,8 @@ public class ClientProxy extends CommonProxy {
         Minecraft.getInstance().getItemColors().registerItemColorHandler((stack, tintIndex) -> {
             if (tintIndex == 1 || tintIndex == 2 || tintIndex == 3) {
                 EntityList.EntityEggInfo info = null;
-                if (stack.hasTagCompound() && stack.getTagCompound().hasKey("entity", Constants.NBT.TAG_STRING)) {
-                    ResourceLocation id = new ResourceLocation(stack.getTagCompound().getString("entity"));
+                if (stack.hasTag() && stack.getTag().hasKey("entity", Constants.NBT.TAG_STRING)) {
+                    ResourceLocation id = new ResourceLocation(stack.getTag().getString("entity"));
                     info = EntityList.ENTITY_EGGS.get(id);
                 }
                 return info == null ? 0x636363 : tintIndex == 3 ? BlockRegistry.mobDuplicatorBlock.blacklistedEntities.contains(info.spawnedID.toString()) ? 0xDB201A : 0x636363 : tintIndex == 1 ? info.primaryColor : info.secondaryColor;
@@ -135,8 +135,8 @@ public class ClientProxy extends CommonProxy {
             return 0xFFFFFF;
         }, BlockRegistry.blackHoleTankBlock);
         Minecraft.getInstance().getItemColors().registerItemColorHandler((stack, tintIndex) -> {
-            if (tintIndex == 0 && stack.hasTagCompound() && stack.getTagCompound().hasKey("FluidName") && FluidRegistry.isFluidRegistered(stack.getTagCompound().getString("FluidName"))) {
-                Fluid fluid = FluidRegistry.getFluid(stack.getTagCompound().getString("FluidName"));
+            if (tintIndex == 0 && stack.hasTag() && stack.getTag().hasKey("FluidName") && FluidRegistry.isFluidRegistered(stack.getTag().getString("FluidName"))) {
+                Fluid fluid = FluidRegistry.getFluid(stack.getTag().getString("FluidName"));
                 int color = FluidUtils.getFluidColor(fluid);
                 if (color != -1) return color;
             }

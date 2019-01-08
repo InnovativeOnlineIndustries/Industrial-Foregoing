@@ -72,7 +72,7 @@ public class LaserDrillSpecialRender<L extends CustomElectricMachine> extends Ti
 //        GL11.glDisable(GL11.GL_TEXTURE_2D);
 //        GL11.glColorMask(true,true,true,true);
 //    Color c = new Color(Color.HSBtoRGB(52 / 360F, 0.6F, 1F));
-//        GlStateManager.color(c.getRed() / 255F, c.getGreen() / 255F, c.getBlue() / 255F, 64);
+//        GlStateManager.color4f(c.getRed() / 255F, c.getGreen() / 255F, c.getBlue() / 255F, 64);
 //        GL11.glLineWidth(2F);
 //    Tessellator tess = Tessellator.getInstance();
 //    VertexBuffer buffer = tess.getBuffer();
