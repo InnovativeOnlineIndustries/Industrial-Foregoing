@@ -26,6 +26,7 @@ import com.buuz135.industrial.fluid.IFCustomFluidBlock;
 import com.buuz135.industrial.proxy.block.BlockBase;
 import com.buuz135.industrial.proxy.block.BlockConveyor;
 import com.buuz135.industrial.proxy.block.BlockLabel;
+import com.buuz135.industrial.proxy.block.BlockOrangeLeaves;
 import com.buuz135.industrial.proxy.client.BlockRenderRegistry;
 import com.buuz135.industrial.proxy.client.FluidsRenderRegistry;
 import com.buuz135.industrial.proxy.client.ItemRenderRegistry;
@@ -106,6 +107,8 @@ public class BlockRegistry {
     public static OreFermenterBlock oreFermenterBlock = new OreFermenterBlock();
     public static OreSieveBlock oreSieveBlock = new OreSieveBlock();
     public static PitifulFuelGeneratorBlock pitifulFuelGeneratorBlock = new PitifulFuelGeneratorBlock();
+    public static JuicerBlock juicerBlock = new JuicerBlock();
+    public static BlockOrangeLeaves orangeLeaves = new BlockOrangeLeaves();
 
     public static IFCustomFluidBlock BLOCK_ESSENCE = new IFCustomFluidBlock(FluidsRegistry.ESSENCE, Material.WATER, entityLivingBase -> entityLivingBase.addPotionEffect(new PotionEffect(MobEffects.NIGHT_VISION, 20 * 15, 0)));
     public static IFCustomFluidBlock BLOCK_MILK = new IFCustomFluidBlock(FluidsRegistry.MILK, Material.WATER, EntityLivingBase::clearActivePotions);

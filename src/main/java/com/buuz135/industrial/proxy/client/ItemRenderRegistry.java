@@ -41,6 +41,7 @@ public class ItemRenderRegistry {
         energyFieldAddon.registerRenderer();
         bookManualItem.registerRender();
         itemInfinityDrill.registerRender();
+        orange.registerRender();
         if (artificalDye != null) artificalDye.registerRender();
 
         adultFilterAddomItem.registerRenderer();

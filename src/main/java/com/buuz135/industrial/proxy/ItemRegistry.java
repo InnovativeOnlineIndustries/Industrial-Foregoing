@@ -54,6 +54,7 @@ public class ItemRegistry {
     public static ItemConveyorUpgrade conveyorUpgradeItem;
     public static ItemArtificalDye artificalDye;
     public static ItemInfinityDrill itemInfinityDrill;
+    public static IFFoodItem orange;
 
     public static AdultFilterAddonItem adultFilterAddomItem;
     public static RangeAddonItem rangeAddonItem;
@@ -82,6 +83,7 @@ public class ItemRegistry {
         (bookManualItem = new BookManualItem()).register(itemRegistry);
         (pinkSlimeIngot = new IFCustomItem("pink_slime_ingot")).register(itemRegistry);
         (itemInfinityDrill = new ItemInfinityDrill()).register(itemRegistry);
+        (orange = new IFFoodItem("orange", 4, 0.4F)).register(itemRegistry);
 
         (adultFilterAddomItem = new AdultFilterAddonItem()).registerItem(itemRegistry);
         (rangeAddonItem = new RangeAddonItem()).registerItem(itemRegistry);
@@ -98,6 +100,8 @@ public class ItemRegistry {
         OreDictionary.registerOre("slimeballPink", pinkSlime);
         OreDictionary.registerOre("dyeBrown", fertilizer);
         OreDictionary.registerOre("fertilizer", fertilizer);
+        OreDictionary.registerOre("foodApple", Items.APPLE);
+        OreDictionary.registerOre("foodOrange", orange);
 
         if (BlockRegistry.dyeMixerBlock.isEnabled()) {
             (artificalDye = new ItemArtificalDye()).register(itemRegistry);

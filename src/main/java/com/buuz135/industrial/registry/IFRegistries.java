@@ -22,6 +22,7 @@
 package com.buuz135.industrial.registry;
 
 import com.buuz135.industrial.api.conveyor.ConveyorUpgradeFactory;
+import com.buuz135.industrial.api.juicer.JuicerRecipe;
 import com.buuz135.industrial.api.plant.PlantRecollectable;
 import com.buuz135.industrial.api.straw.StrawHandler;
 import com.buuz135.industrial.utils.Reference;
@@ -35,6 +36,13 @@ public class IFRegistries {
             .setName(new ResourceLocation(Reference.MOD_ID, "straw"))
             .setIDRange(1, Integer.MAX_VALUE - 1)
             .setType(StrawHandler.class)
+            .disableSaving()
+            .create();
+
+    public static final ForgeRegistry<JuicerRecipe> JUICER_RECIPE_REGISTRY = (ForgeRegistry<JuicerRecipe>) new RegistryBuilder<JuicerRecipe>()
+            .setName(new ResourceLocation(Reference.MOD_ID, "juicer"))
+            .setIDRange(1, Integer.MAX_VALUE - 1)
+            .setType(JuicerRecipe.class)
             .disableSaving()
             .create();
 

@@ -41,6 +41,10 @@ public class FluidsRegistry {
     public static IFOreFluid ORE_FLUID_RAW;
     public static IFOreFluid ORE_FLUID_FERMENTED;
 
+    //Coded's Fluids
+    public static IFCustomFluid APPLE;
+    public static IFCustomFluid ORANGE;
+
     public static void registerFluids() {
         (ESSENCE = (IFCustomFluid) new IFCustomFluid("essence", 300, Color.decode("0x408000")).setLuminosity(15)).register();
         (MILK = new IFCustomFluid("milk", 300, Color.WHITE)).register();
@@ -53,6 +57,9 @@ public class FluidsRegistry {
         (PROTEIN = new IFCustomFluid("if.protein", 600, Color.decode("0xff5050"))).register();
         (ORE_FLUID_RAW = new IFOreFluid("raw")).register();
         (ORE_FLUID_FERMENTED = new IFOreFluid("fermented")).register();
+
+        (APPLE = new IFCustomFluid("apple", 300, Color.decode("0xF1E9BA"))).register();
+        (ORANGE = new IFCustomFluid("orange", 300, Color.ORANGE)).register();
     }
 
 

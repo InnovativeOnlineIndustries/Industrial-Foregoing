@@ -95,11 +95,11 @@ text.industrialforegoing.plant.pumpkin= - Pumpkin §o(No need for replanting)
 text.industrialforegoing.plant.any_tree= - Any Minecraft style tree
 text.industrialforegoing.plant.slime_tree= - Tinker's construct slime trees
 
-<!-- PAGE FORMAT HELP
-  "@L@" -> Adds a new line
-  "@PAGE@" -> Will create a new page and the following text will be in a new page
-  "{" -> Will start a bold/colored string to be highlighted
-  "}" -> Will stop the highlight -->
+# <!-- PAGE FORMAT HELP
+#  "@L@" -> Adds a new line
+#  "@PAGE@" -> Will create a new page and the following text will be in a new page
+#  "{" -> Will start a bold/colored string to be highlighted
+#  "}" -> Will stop the highlight -->
 
 text.industrialforegoing.book.title=Industrial Foregoing's Manual
 
@@ -252,6 +252,9 @@ tile.industrialforegoing.ore_washer.name=Washing Factory
 tile.industrialforegoing.ore_fermenter.name=Fermentation Station
 tile.industrialforegoing.ore_sieve.name=Fluid Sieving Machine
 tile.industrialforegoing.pitiful_fuel_generator.name=Pitiful Fuel Generator
+tile.industrialforegoing.juicer.name=Juicer
+tile.industrialforegoing.orange_leaves.name=Orange Leaves
+tile.industrialforegoing.orange_sapling.name=Orange Sapling
 
 tile.essence.name=Essence
 tile.milk.name=Milk
@@ -276,6 +279,8 @@ fluid.if.pink_slime=Pink Slime
 fluid.if.protein=Protein
 fluid.if.ore_fluid_raw=Raw Ore Meat
 fluid.if.ore_fluid_fermented=Fermented Ore Meat
+fluid.apple=Apple Juice
+fluid.orange=Orange Juice
 
 item.industrialforegoing_meat_feeder.name=Meat Feeder
 item.industrialforegoing_mob_imprisonment_tool.name=Mob Imprisonment Tool
@@ -300,6 +305,7 @@ item.industrialforegoing.fluid_transfer_addon.name=Fluid Transfer Addon
 item.industrialforegoing_pink_slime_ingot.name=Pink Slime Ingot
 item.industrialforegoing.fortune_addon.name=Fortune Addon
 item.industrialforegoing_infinity_drill.name=Infinity Drill
+item.industrialforegoing_orange.name=Orange
 
 gui.industrialforegoing.side_config.fuel_input=Fuel Input
 gui.industrialforegoing.side_config.input_items=Input Items
