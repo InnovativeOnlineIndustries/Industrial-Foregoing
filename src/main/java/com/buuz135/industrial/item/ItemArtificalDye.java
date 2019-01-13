@@ -23,8 +23,12 @@ package com.buuz135.industrial.item;
 
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.creativetab.CreativeTabs;
+import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.passive.EntitySheep;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.EnumDyeColor;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.EnumHand;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraftforge.client.model.ModelLoader;
@@ -50,5 +54,20 @@ public class ItemArtificalDye extends IFCustomItem {
     @Override
     public String getItemStackDisplayName(ItemStack stack) {
         return new TextComponentTranslation("item.fireworksCharge." + EnumDyeColor.byMetadata(stack.getMetadata()).getTranslationKey().replaceAll("_", "")).getFormattedText() + " " + super.getItemStackDisplayName(stack);
+    }
+
+    @Override
+    public boolean itemInteractionForEntity(ItemStack stack, EntityPlayer playerIn, EntityLivingBase target, EnumHand hand) {
+        if (target instanceof EntitySheep) {
+            EntitySheep sheepboi = (EntitySheep) target;
+            EnumDyeColor dyeboi = EnumDyeColor.byMetadata(stack.getMetadata());
+            if (!sheepboi.getSheared() && sheepboi.getFleeceColor() != dyeboi) {
+                sheepboi.setFleeceColor(dyeboi);
+                stack.shrink(1);
+            }
+            return true;
+        } else {
+            return false;
+        }
     }
 }
