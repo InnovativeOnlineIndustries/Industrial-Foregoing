@@ -34,7 +34,6 @@ import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.common.config.Configuration;
-import net.ndrei.teslacorelib.items.MachineCaseItem;
 
 public class WitherBuilderBlock extends CustomAreaOrientedBlock<WitherBuilderTile> {
 
@@ -64,7 +63,7 @@ public class WitherBuilderBlock extends CustomAreaOrientedBlock<WitherBuilderTil
                 'p', ItemRegistry.plastic,
                 'n', "IFWITHER",
                 's', new ItemStack(Items.SKULL, 1, 1),
-                'm', MachineCaseItem.INSTANCE,
+                'm', "MACHINE_CASING",
                 'g', Blocks.SOUL_SAND);
     }
 

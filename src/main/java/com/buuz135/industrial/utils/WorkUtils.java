@@ -22,7 +22,6 @@
 package com.buuz135.industrial.utils;
 
 import com.buuz135.industrial.block.CustomAreaOrientedBlock;
-import com.buuz135.industrial.block.CustomOrientedBlock;
 import net.minecraft.block.Block;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.AxisAlignedBB;
@@ -32,11 +31,13 @@ import net.minecraft.world.World;
 public class WorkUtils {
 
     public static boolean isDisabled(Block block) {
-        return block instanceof CustomOrientedBlock && ((CustomOrientedBlock) block).isWorkDisabled();
+//        return block instanceof CustomOrientedBlock && ((CustomOrientedBlock) block).isWorkDisabled();
+        return false;
     }
 
     public static CustomAreaOrientedBlock getBlock(World world, BlockPos pos) {
-        return world.getBlockState(pos).getBlock() instanceof CustomAreaOrientedBlock ? (CustomAreaOrientedBlock) world.getBlockState(pos).getBlock() : null;
+//        return world.getBlockState(pos).getBlock() instanceof CustomAreaOrientedBlock ? (CustomAreaOrientedBlock) world.getBlockState(pos).getBlock() : null;
+        return null;
     }
 
     public static int getMachineWidth(World world, BlockPos pos) {

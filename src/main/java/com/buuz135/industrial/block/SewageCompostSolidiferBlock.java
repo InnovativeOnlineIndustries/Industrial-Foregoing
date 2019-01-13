@@ -29,7 +29,6 @@ import net.minecraft.block.material.Material;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
-import net.ndrei.teslacorelib.items.MachineCaseItem;
 
 public class SewageCompostSolidiferBlock extends CustomOrientedBlock<SewageCompostSolidifierTile> {
 
@@ -42,7 +41,7 @@ public class SewageCompostSolidiferBlock extends CustomOrientedBlock<SewageCompo
                 'p', ItemRegistry.plastic,
                 'f', Blocks.FURNACE,
                 'i', Blocks.PISTON,
-                'm', MachineCaseItem.INSTANCE,
+                'm', "MACHINE_CASING",
                 'b', Items.BRICK,
                 'r', Items.REDSTONE);
     }

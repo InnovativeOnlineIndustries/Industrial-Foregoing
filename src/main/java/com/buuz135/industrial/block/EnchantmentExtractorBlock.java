@@ -29,7 +29,6 @@ import net.minecraft.block.material.Material;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
-import net.ndrei.teslacorelib.items.MachineCaseItem;
 
 public class EnchantmentExtractorBlock extends CustomOrientedBlock<EnchantmentExtractorTile> {
 
@@ -42,7 +41,7 @@ public class EnchantmentExtractorBlock extends CustomOrientedBlock<EnchantmentEx
                 'p', ItemRegistry.plastic,
                 'n', Blocks.NETHER_BRICK,
                 'b', Items.BOOK,
-                'm', MachineCaseItem.INSTANCE,
+                'm', "MACHINE_CASING",
                 'd', "gemDiamond",
                 'g', "gearGold");
     }

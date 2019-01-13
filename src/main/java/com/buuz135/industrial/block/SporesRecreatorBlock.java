@@ -28,7 +28,6 @@ import com.buuz135.industrial.utils.RecipeUtils;
 import net.minecraft.block.material.Material;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
-import net.ndrei.teslacorelib.items.MachineCaseItem;
 
 public class SporesRecreatorBlock extends CustomOrientedBlock<SporesRecreatorTile> {
 
@@ -40,7 +39,7 @@ public class SporesRecreatorBlock extends CustomOrientedBlock<SporesRecreatorTil
         RecipeUtils.addShapedRecipe(new ItemStack(this), "ppp", "omo", "pgp",
                 'p', ItemRegistry.plastic,
                 'o', Blocks.RED_MUSHROOM,
-                'm', MachineCaseItem.INSTANCE,
+                'm', "MACHINE_CASING",
                 'g', "gearIron");
     }
 

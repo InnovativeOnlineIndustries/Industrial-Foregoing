@@ -35,7 +35,6 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.common.config.Configuration;
-import net.ndrei.teslacorelib.items.MachineCaseItem;
 
 import java.util.List;
 
@@ -70,7 +69,7 @@ public class LaserBaseBlock extends CustomOrientedBlock<LaserBaseTile> {
                 'w', Blocks.GLOWSTONE,
                 'g', "gearGold",
                 'd', "gearDiamond",
-                'm', MachineCaseItem.INSTANCE);
+                'm', "MACHINE_CASING");
     }
 
     @Override

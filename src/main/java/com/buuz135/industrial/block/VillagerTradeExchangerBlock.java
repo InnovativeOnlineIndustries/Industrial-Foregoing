@@ -28,7 +28,6 @@ import com.buuz135.industrial.utils.RecipeUtils;
 import net.minecraft.block.material.Material;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
-import net.ndrei.teslacorelib.items.MachineCaseItem;
 
 public class VillagerTradeExchangerBlock extends CustomOrientedBlock<VillagerTradeExchangerTile> {
 
@@ -42,7 +41,7 @@ public class VillagerTradeExchangerBlock extends CustomOrientedBlock<VillagerTra
                 'p', ItemRegistry.plastic,
                 'b', Items.GOLD_INGOT,
                 'r', Items.EMERALD,
-                'm', MachineCaseItem.INSTANCE,
+                'm', "MACHINE_CASING",
                 'g', "gearGold");
     }
 

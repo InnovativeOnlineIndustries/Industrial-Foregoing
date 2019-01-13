@@ -32,7 +32,6 @@ import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.common.config.Configuration;
-import net.ndrei.teslacorelib.items.MachineCaseItem;
 
 public class ResourcefulFurnaceBlock extends CustomOrientedBlock<ResourcefulFurnaceTile> {
 
@@ -56,7 +55,7 @@ public class ResourcefulFurnaceBlock extends CustomOrientedBlock<ResourcefulFurn
                 'p', ItemRegistry.plastic,
                 'b', Items.BUCKET,
                 'r', Blocks.FURNACE,
-                'm', MachineCaseItem.INSTANCE,
+                'm', "MACHINE_CASING",
                 'g', "gearGold");
     }
 

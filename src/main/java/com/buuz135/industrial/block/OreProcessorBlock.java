@@ -32,7 +32,6 @@ import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.common.config.Configuration;
-import net.ndrei.teslacorelib.items.MachineCaseItem;
 
 public class OreProcessorBlock extends CustomOrientedBlock<OreProcessorTile> {
 
@@ -48,7 +47,7 @@ public class OreProcessorBlock extends CustomOrientedBlock<OreProcessorTile> {
                 'p', ItemRegistry.plastic,
                 'i', Blocks.PISTON,
                 'a', Items.IRON_PICKAXE,
-                'm', MachineCaseItem.INSTANCE,
+                'm', "MACHINE_CASING",
                 'b', Items.BOOK,
                 'r', Items.REDSTONE);
     }

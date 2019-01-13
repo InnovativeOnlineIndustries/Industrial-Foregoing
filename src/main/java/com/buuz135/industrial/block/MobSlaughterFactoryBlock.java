@@ -31,7 +31,6 @@ import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraftforge.common.config.Configuration;
-import net.ndrei.teslacorelib.items.MachineCaseItem;
 
 import java.util.List;
 
@@ -65,7 +64,7 @@ MobSlaughterFactoryBlock extends CustomAreaOrientedBlock<MobSlaughterFactoryTile
                 'p', ItemRegistry.plastic,
                 'g', "gearGold",
                 's', Items.IRON_SWORD,
-                'm', MachineCaseItem.INSTANCE,
+                'm', "MACHINE_CASING",
                 'a', Items.IRON_AXE,
                 'r', Items.REDSTONE);
     }

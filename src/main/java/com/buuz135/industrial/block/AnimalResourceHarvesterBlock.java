@@ -29,7 +29,6 @@ import net.minecraft.block.material.Material;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.text.TextComponentTranslation;
-import net.ndrei.teslacorelib.items.MachineCaseItem;
 
 import java.util.List;
 
@@ -45,7 +44,7 @@ public class AnimalResourceHarvesterBlock extends CustomAreaOrientedBlock<Animal
                 's', Items.SHEARS,
                 'b', Items.BUCKET,
                 'g', "gearGold",
-                'm', MachineCaseItem.INSTANCE);
+                'm', "MACHINE_CASING");
     }
 
     @Override

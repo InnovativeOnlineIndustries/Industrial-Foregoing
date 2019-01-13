@@ -31,7 +31,6 @@ import net.minecraft.block.material.Material;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.common.config.Configuration;
-import net.ndrei.teslacorelib.items.MachineCaseItem;
 
 public class FluidPumpBlock extends CustomAreaOrientedBlock<FluidPumpTile> {
 
@@ -49,7 +48,7 @@ public class FluidPumpBlock extends CustomAreaOrientedBlock<FluidPumpTile> {
                 'b', Items.BUCKET,
                 'l', Items.LAVA_BUCKET,
                 'w', Items.WATER_BUCKET,
-                'm', MachineCaseItem.INSTANCE,
+                'm', "MACHINE_CASING",
                 'g', "gearGold");
     }
 

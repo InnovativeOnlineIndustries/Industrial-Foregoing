@@ -30,7 +30,6 @@ import net.minecraft.block.material.Material;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.common.config.Configuration;
-import net.ndrei.teslacorelib.items.MachineCaseItem;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -49,7 +48,7 @@ public class AnimalGrowthIncreaserBlock extends CustomAreaOrientedBlock<AnimalGr
         RecipeUtils.addShapedRecipe(new ItemStack(this), "pep", "eme", "dgd",
                 'p', ItemRegistry.plastic,
                 'e', Items.WHEAT,
-                'm', MachineCaseItem.INSTANCE,
+                'm', "MACHINE_CASING",
                 'd', "dyePurple",
                 'g', "gearGold");
     }

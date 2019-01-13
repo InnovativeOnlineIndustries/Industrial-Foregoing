@@ -41,8 +41,8 @@ public class FluidDictionaryWrapper implements IRecipeWrapper {
 
     @Override
     public void getIngredients(IIngredients ingredients) {
-        ingredients.setInput(FluidStack.class, new FluidStack(FluidRegistry.getFluid(entry.getFluidOrigin()), 100));
-        ingredients.setOutput(FluidStack.class, new FluidStack(FluidRegistry.getFluid(entry.getFluidResult()), (int) (100 * entry.getRatio())));
+        //ingredients.setInput(FluidStack.class, new FluidStack(FluidRegistry.getFluid(entry.getFluidOrigin()), 100));
+        //ingredients.setOutput(FluidStack.class, new FluidStack(FluidRegistry.getFluid(entry.getFluidResult()), (int) (100 * entry.getRatio())));
     }
 
     @Override

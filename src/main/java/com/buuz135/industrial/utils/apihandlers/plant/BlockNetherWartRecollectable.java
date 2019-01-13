@@ -25,6 +25,7 @@ import com.buuz135.industrial.api.plant.PlantRecollectable;
 import com.buuz135.industrial.utils.BlockUtils;
 import net.minecraft.block.BlockNetherWart;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.math.BlockPos;
@@ -41,14 +42,14 @@ public class BlockNetherWartRecollectable extends PlantRecollectable {
 
     @Override
     public boolean canBeHarvested(World world, BlockPos pos, IBlockState blockState) {
-        return blockState.getBlock() instanceof BlockNetherWart && blockState.getValue(BlockNetherWart.AGE) >= 3;
+        return blockState.getBlock() instanceof BlockNetherWart && blockState.get(BlockNetherWart.AGE) >= 3;
     }
 
     @Override
     public List<ItemStack> doHarvestOperation(World world, BlockPos pos, IBlockState blockState) {
         NonNullList<ItemStack> stacks = NonNullList.create();
         stacks.addAll(BlockUtils.getBlockDrops(world, pos));
-        world.setBlockToAir(pos);
+        world.setBlockState(pos, Blocks.AIR.getDefaultState());
         return stacks;
     }
 

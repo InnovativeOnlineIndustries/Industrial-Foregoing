@@ -31,7 +31,6 @@ import net.minecraft.block.material.Material;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.common.config.Configuration;
-import net.ndrei.teslacorelib.items.MachineCaseItem;
 
 public class PlantInteractorBlock extends CustomAreaOrientedBlock<PlantInteractorTile> {
 
@@ -47,7 +46,7 @@ public class PlantInteractorBlock extends CustomAreaOrientedBlock<PlantInteracto
         RecipeUtils.addShapedRecipe(new ItemStack(this), "php", "hmh", "grg",
                 'p', ItemRegistry.plastic,
                 'h', Items.IRON_HOE,
-                'm', MachineCaseItem.INSTANCE,
+                'm', "MACHINE_CASING",
                 'g', "gearGold",
                 'r', Items.REDSTONE);
     }

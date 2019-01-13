@@ -29,7 +29,6 @@ import net.minecraft.block.material.Material;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
-import net.ndrei.teslacorelib.items.MachineCaseItem;
 
 public class WaterCondensatorBlock extends CustomOrientedBlock<WaterCondesatorTile> {
 
@@ -42,7 +41,7 @@ public class WaterCondensatorBlock extends CustomOrientedBlock<WaterCondesatorTi
                 'p', ItemRegistry.plastic,
                 'w', Items.WATER_BUCKET,
                 'f', Blocks.PISTON,
-                'm', MachineCaseItem.INSTANCE,
+                'm', "MACHINE_CASING",
                 'g', "gearIron",
                 'r', Items.REDSTONE);
     }

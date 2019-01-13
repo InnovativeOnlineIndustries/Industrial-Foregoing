@@ -27,7 +27,6 @@ import com.google.gson.GsonBuilder;
 import net.minecraft.block.Block;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.ndrei.teslacorelib.items.MachineCaseItem;
 
 import java.io.File;
 import java.io.FileWriter;
@@ -52,12 +51,12 @@ public class RecipeUtils {
         // GameRegistry.addShapedRecipe(result, components);
         boolean hasGeneratedFrameRecipe = false;
         for (int i = 0; i < components.length; i++) {
-            if (components[i].equals(MachineCaseItem.INSTANCE)) {
+            if (components[i].equals("MACHINE_CASING")) {
                 hasGeneratedFrameRecipe = true;
-                addShapedRecipe(result, "_enderio", generateOptionalJson("enderio", "useEnderIOFrames"), replaceFrameWith(new FakeItemStack("enderio:item_material", 0), components));
-                addShapedRecipe(result, "_thermal", generateOptionalJson("thermalexpansion", "useTEFrames"), replaceFrameWith(new FakeItemStack("thermalexpansion:frame", 0), components));
-                addShapedRecipe(result, "", generateOptionalJson("industrialforegoing", "useOriginalFrames"), components);
-                addShapedRecipe(result, "_mekanism", generateOptionalJson("mekanism", "useMekanismFrames"), replaceFrameWith(new FakeItemStack("mekanism:basicblock", 8), components));
+                //addShapedRecipe(result, "_enderio", generateOptionalJson("enderio", "useEnderIOFrames"), replaceFrameWith("enderio:item_material", components));
+                //addShapedRecipe(result, "_thermal", generateOptionalJson("thermalexpansion", "useTEFrames"), replaceFrameWith("thermalexpansion:frame", components));
+                addShapedRecipe(result, "", generateOptionalJson("industrialforegoing", "useOriginalFrames"), replaceFrameWith("minecraft:iron_block", components));
+                //addShapedRecipe(result, "_mekanism", generateOptionalJson("mekanism", "useMekanismFrames"), replaceFrameWith("mekanism:basicblock", components));
                 break;
             }
         }
@@ -76,7 +75,7 @@ public class RecipeUtils {
     private static Object[] replaceFrameWith(Object item, Object... components) {
         Object[] objects = Arrays.copyOf(components, components.length);
         for (int i = 0; i < objects.length; i++) {
-            if (objects[i].equals(MachineCaseItem.INSTANCE)) objects[i] = item;
+            if (objects[i].equals("MACHINE_CASING")) objects[i] = item;
         }
         return objects;
     }
@@ -118,7 +117,7 @@ public class RecipeUtils {
         // names the json the same name as the output's registry name
         // repeatedly adds _alt if a file already exists
         // janky I know but it works
-        String suffix = result.getItem().getHasSubtypes() ? "_" + result.getItemDamage() : "";
+        String suffix = "";
         File f = new File(RECIPE_DIR, result.getItem().getRegistryName().getPath() + suffix + nameExtra + ".json");
 
 
@@ -138,7 +137,7 @@ public class RecipeUtils {
         if (!RECIPE_DIR.exists() || result.isEmpty()) return;
         // addShapelessRecipe(result, components);
         for (int i = 0; i < components.length; ++i) {
-            if (components[i].equals(MachineCaseItem.INSTANCE)) components[i] = "IFCORE";
+            if (components[i].equals("MACHINE_CASING")) components[i] = "IFCORE";
         }
         Map<String, Object> json = new HashMap<>();
 
@@ -156,7 +155,7 @@ public class RecipeUtils {
         // names the json the same name as the output's registry name
         // repeatedly adds _alt if a file already exists
         // janky I know but it works
-        String suffix = result.getItem().getHasSubtypes() ? "_" + result.getItemDamage() : "";
+        String suffix = "";
         File f = new File(RECIPE_DIR, result.getItem().getRegistryName().getPath() + suffix + (!name.isEmpty() ? "_" + name : "") + ".json");
 
 //        while (f.exists()) {
@@ -173,13 +172,6 @@ public class RecipeUtils {
     }
 
     private static Map<String, Object> serializeItem(Object thing) {
-        if (thing instanceof FakeItemStack) {
-            FakeItemStack stack = (FakeItemStack) thing;
-            Map<String, Object> ret = new HashMap<>();
-            ret.put("item", stack.name);
-            ret.put("data", stack.meta);
-            return ret;
-        }
         if (thing instanceof Item) {
             return serializeItem(new ItemStack((Item) thing));
         }
@@ -190,9 +182,6 @@ public class RecipeUtils {
             ItemStack stack = (ItemStack) thing;
             Map<String, Object> ret = new HashMap<>();
             ret.put("item", stack.getItem().getRegistryName().toString());
-            if (stack.getItem().getHasSubtypes() || stack.getItemDamage() != 0) {
-                ret.put("data", stack.getItemDamage());
-            }
             if (stack.getCount() > 1) {
                 ret.put("count", stack.getCount());
             }
@@ -255,15 +244,5 @@ public class RecipeUtils {
         ore.put("conditions", Arrays.asList(ImmutableMap.of("type", "teslacorelib:ore_dict", "ore", oreDict)));
         ore.put("ingredient", ImmutableMap.of("type", "forge:ore_dict", "ore", oreDict));
         return Arrays.asList(def, ore);
-    }
-
-    private static class FakeItemStack {
-        private String name;
-        private int meta;
-
-        public FakeItemStack(String name, int meta) {
-            this.name = name;
-            this.meta = meta;
-        }
     }
 }

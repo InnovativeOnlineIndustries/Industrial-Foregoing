@@ -27,7 +27,6 @@ import com.buuz135.industrial.tile.misc.ItemSplitterTile;
 import com.buuz135.industrial.utils.RecipeUtils;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
-import net.ndrei.teslacorelib.items.MachineCaseItem;
 
 public class ItemSplitterBlock extends CustomOrientedBlock<ItemSplitterTile> {
 
@@ -41,7 +40,7 @@ public class ItemSplitterBlock extends CustomOrientedBlock<ItemSplitterTile> {
                 'p', ItemRegistry.plastic,
                 'c', "chestWood",
                 'h', Blocks.HOPPER,
-                'm', MachineCaseItem.INSTANCE,
+                'm', "MACHINE_CASING",
                 'g', "gearIron");
     }
 

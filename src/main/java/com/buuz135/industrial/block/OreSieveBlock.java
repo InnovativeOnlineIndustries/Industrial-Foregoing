@@ -28,7 +28,6 @@ import com.buuz135.industrial.utils.RecipeUtils;
 import net.minecraft.block.material.Material;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
-import net.ndrei.teslacorelib.items.MachineCaseItem;
 
 public class OreSieveBlock extends CustomOrientedBlock<OreSieveTile> {
 
@@ -43,7 +42,7 @@ public class OreSieveBlock extends CustomOrientedBlock<OreSieveTile> {
                 's', ItemRegistry.pinkSlime,
                 'i', Blocks.IRON_BARS,
                 'g', "gearGold",
-                'm', MachineCaseItem.INSTANCE);
+                'm', "MACHINE_CASING");
     }
 
     @Override

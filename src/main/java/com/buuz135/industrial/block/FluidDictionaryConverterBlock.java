@@ -27,7 +27,6 @@ import com.buuz135.industrial.tile.misc.FluidDictionaryConverterTile;
 import com.buuz135.industrial.utils.RecipeUtils;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
-import net.ndrei.teslacorelib.items.MachineCaseItem;
 
 public class FluidDictionaryConverterBlock extends CustomOrientedBlock<FluidDictionaryConverterTile> {
 
@@ -39,7 +38,7 @@ public class FluidDictionaryConverterBlock extends CustomOrientedBlock<FluidDict
     public void createRecipe() {
         RecipeUtils.addShapedRecipe(new ItemStack(this), "ppp", "grg", "bib",
                 'p', ItemRegistry.plastic,
-                'r', MachineCaseItem.INSTANCE,
+                'r', "MACHINE_CASING",
                 'g', "blockGlass",
                 'b', Items.BUCKET,
                 'i', "gearIron");

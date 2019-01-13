@@ -28,7 +28,6 @@ import com.buuz135.industrial.utils.RecipeUtils;
 import net.minecraft.block.material.Material;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
-import net.ndrei.teslacorelib.items.MachineCaseItem;
 
 public class PotionEnervatorBlock extends CustomOrientedBlock<PotionEnervatorTile> {
 
@@ -41,7 +40,7 @@ public class PotionEnervatorBlock extends CustomOrientedBlock<PotionEnervatorTil
                 'p', ItemRegistry.plastic,
                 'b', Items.BREWING_STAND,
                 'g', "gearGold",
-                'm', MachineCaseItem.INSTANCE,
+                'm', "MACHINE_CASING",
                 'r', Items.REPEATER);
     }
 

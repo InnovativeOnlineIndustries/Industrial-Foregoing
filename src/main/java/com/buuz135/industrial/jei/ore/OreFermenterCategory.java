@@ -28,6 +28,7 @@ import mezz.jei.api.gui.IDrawable;
 import mezz.jei.api.gui.IRecipeLayout;
 import mezz.jei.api.ingredients.IIngredients;
 import mezz.jei.api.recipe.IRecipeCategory;
+import net.minecraft.client.resources.I18n;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fluids.FluidStack;
 
@@ -48,7 +49,7 @@ public class OreFermenterCategory implements IRecipeCategory<OreFermenterWrapper
 
     @Override
     public String getTitle() {
-        return BlockRegistry.oreFermenterBlock.getLocalizedName();
+        return I18n.format(BlockRegistry.oreFermenterBlock.getTranslationKey());
     }
 
     @Override

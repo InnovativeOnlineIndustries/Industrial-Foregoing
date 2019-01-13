@@ -28,7 +28,6 @@ import net.minecraft.block.material.Material;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
-import net.ndrei.teslacorelib.items.MachineCaseItem;
 
 public class LatexProcessingUnitBlock extends CustomOrientedBlock<LatexProcessingUnitTile> {
 
@@ -41,7 +40,7 @@ public class LatexProcessingUnitBlock extends CustomOrientedBlock<LatexProcessin
                 'p', "ingotIron",
                 'r', Items.REDSTONE,
                 'f', Blocks.FURNACE,
-                'm', MachineCaseItem.INSTANCE,
+                'm', "MACHINE_CASING",
                 'g', "gearIron");
     }
 

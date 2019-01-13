@@ -31,7 +31,6 @@ import net.minecraft.block.material.Material;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.common.config.Configuration;
-import net.ndrei.teslacorelib.items.MachineCaseItem;
 
 public class PetrifiedFuelGeneratorBlock extends CustomOrientedBlock<PetrifiedFuelGeneratorTile> {
 
@@ -49,7 +48,7 @@ public class PetrifiedFuelGeneratorBlock extends CustomOrientedBlock<PetrifiedFu
                 'p', ItemRegistry.plastic,
                 'd', "gemDiamond",
                 'g', "gearGold",
-                'm', MachineCaseItem.INSTANCE,
+                'm', "MACHINE_CASING",
                 'f', Blocks.FURNACE);
     }
 

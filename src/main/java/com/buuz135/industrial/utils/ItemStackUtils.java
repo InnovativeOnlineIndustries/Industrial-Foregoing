@@ -122,9 +122,9 @@ public class ItemStackUtils {
 
             if (flag && bakedquad.hasTintIndex()) {
                 k = Minecraft.getInstance().getItemColors().getColor(stack, bakedquad.getTintIndex());
-                if (EntityRenderer.anaglyphEnable) {
+                /*if (EntityRenderer.anaglyphEnable) {
                     k = TextureUtil.anaglyphColor(k);
-                }
+                }*/
 
                 k = k | -16777216;
             }
@@ -170,9 +170,9 @@ public class ItemStackUtils {
         GlStateManager.popMatrix();
         RenderHelper.disableStandardItemLighting();
         GlStateManager.disableRescaleNormal();
-        GlStateManager.activeTexture(OpenGlHelper.lightmapTexUnit);
+        //GlStateManager.activeTexture(OpenGlHelper.lightmapTexUnit);
         GlStateManager.disableTexture2D();
-        GlStateManager.activeTexture(OpenGlHelper.defaultTexUnit);
+        //GlStateManager.activeTexture(OpenGlHelper.defaultTexUnit);
     }
 
     public static boolean isOre(ItemStack stack) {

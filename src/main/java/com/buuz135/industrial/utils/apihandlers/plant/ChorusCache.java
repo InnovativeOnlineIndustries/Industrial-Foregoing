@@ -22,6 +22,7 @@
 package com.buuz135.industrial.utils.apihandlers.plant;
 
 import com.buuz135.industrial.utils.BlockUtils;
+import net.minecraft.block.BlockChorusFlower;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumFacing;
@@ -58,7 +59,7 @@ public class ChorusCache {
     }
 
     public boolean isFullyGrown() {
-        return chorus.stream().map(blockpos -> world.getBlockState(blockpos)).allMatch(blockState -> blockState.getBlock().equals(Blocks.CHORUS_PLANT) || (blockState.getBlock().equals(Blocks.CHORUS_FLOWER) && Blocks.CHORUS_FLOWER.getMetaFromState(blockState) == 5));
+        return chorus.stream().map(blockpos -> world.getBlockState(blockpos)).allMatch(blockState -> blockState.getBlock().equals(Blocks.CHORUS_PLANT) || (blockState.getBlock().equals(Blocks.CHORUS_FLOWER) && blockState.get(BlockChorusFlower.AGE) == 5));
     }
 
     public List<ItemStack> chop() {
@@ -76,7 +77,7 @@ public class ChorusCache {
             } else {
                 stacks.addAll(BlockUtils.getBlockDrops(world, p));
             }
-            world.setBlockToAir(p);
+            world.setBlockState(p, Blocks.AIR.getDefaultState());
         }
     }
 

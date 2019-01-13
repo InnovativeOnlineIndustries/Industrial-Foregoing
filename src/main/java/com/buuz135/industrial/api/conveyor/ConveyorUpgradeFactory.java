@@ -28,7 +28,6 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.registries.ForgeRegistryEntry;
-import net.minecraftforge.registries.IForgeRegistryEntry;
 
 import javax.annotation.Nonnull;
 import java.util.Collections;

@@ -28,7 +28,6 @@ import com.buuz135.industrial.utils.RecipeUtils;
 import net.minecraft.block.material.Material;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
-import net.ndrei.teslacorelib.items.MachineCaseItem;
 
 public class CropEnrichMaterialInjectorBlock extends CustomAreaOrientedBlock<CropEnrichMaterialInjectorTile> {
 
@@ -41,7 +40,7 @@ public class CropEnrichMaterialInjectorBlock extends CustomAreaOrientedBlock<Cro
                 'p', ItemRegistry.plastic,
                 'b', Items.GLASS_BOTTLE,
                 'l', Items.LEATHER,
-                'm', MachineCaseItem.INSTANCE,
+                'm', "MACHINE_CASING",
                 'g', "gearIron",
                 'r', Items.REDSTONE);
     }

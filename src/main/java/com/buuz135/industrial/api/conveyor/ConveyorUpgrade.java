@@ -24,7 +24,6 @@ package com.buuz135.industrial.api.conveyor;
 import com.buuz135.industrial.api.conveyor.gui.IGuiComponent;
 import com.buuz135.industrial.proxy.ItemRegistry;
 import com.buuz135.industrial.proxy.block.Cuboid;
-import com.buuz135.industrial.registry.IFRegistries;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
@@ -34,8 +33,6 @@ import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.INBTSerializable;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
 
 import java.util.Collection;
 import java.util.Collections;
@@ -68,7 +65,7 @@ public abstract class ConveyorUpgrade implements INBTSerializable<NBTTagCompound
     }
 
     public Collection<ItemStack> getDrops() {
-        return Collections.singleton(new ItemStack(ItemRegistry.conveyorUpgradeItem, 1, IFRegistries.CONVEYOR_UPGRADE_REGISTRY.getID(getFactory()) - 1));
+        return Collections.singleton(new ItemStack(ItemRegistry.conveyorUpgradeItem, 1));
     }
 
     public IConveyorContainer getContainer() {
@@ -119,7 +116,6 @@ public abstract class ConveyorUpgrade implements INBTSerializable<NBTTagCompound
 
     }
 
-    @SideOnly(Side.CLIENT)
     public void addComponentsToGui(List<IGuiComponent> componentList) {
     }
 }

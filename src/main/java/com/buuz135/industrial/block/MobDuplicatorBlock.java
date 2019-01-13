@@ -30,7 +30,6 @@ import net.minecraft.block.material.Material;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.common.config.Configuration;
-import net.ndrei.teslacorelib.items.MachineCaseItem;
 
 import java.util.Arrays;
 import java.util.List;
@@ -50,7 +49,7 @@ public class MobDuplicatorBlock extends CustomAreaOrientedBlock<MobDuplicatorTil
                 'p', ItemRegistry.plastic,
                 'w', Items.NETHER_WART,
                 'c', Items.MAGMA_CREAM,
-                'm', MachineCaseItem.INSTANCE,
+                'm', "MACHINE_CASING",
                 'e', "gemEmerald",
                 'r', Items.REDSTONE);
     }

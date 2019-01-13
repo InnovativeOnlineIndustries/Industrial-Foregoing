@@ -30,7 +30,6 @@ import net.minecraft.block.material.Material;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.common.config.Configuration;
-import net.ndrei.teslacorelib.items.MachineCaseItem;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -50,7 +49,7 @@ public class AnimalStockIncreaserBlock extends CustomAreaOrientedBlock<AnimalSto
                 'p', ItemRegistry.plastic,
                 'g', Items.GOLDEN_APPLE,
                 'c', Items.GOLDEN_CARROT,
-                'm', MachineCaseItem.INSTANCE,
+                'm', "MACHINE_CASING",
                 'd', "dyePurple",
                 'a', "gearIron");
     }

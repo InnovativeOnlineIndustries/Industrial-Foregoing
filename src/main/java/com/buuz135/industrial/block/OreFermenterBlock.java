@@ -27,7 +27,6 @@ import com.buuz135.industrial.utils.RecipeUtils;
 import net.minecraft.block.material.Material;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
-import net.ndrei.teslacorelib.items.MachineCaseItem;
 
 public class OreFermenterBlock extends CustomOrientedBlock<OreFermenterTile> {
 
@@ -41,7 +40,7 @@ public class OreFermenterBlock extends CustomOrientedBlock<OreFermenterTile> {
                 'i', Blocks.IRON_BARS,
                 'w', "logWood",
                 'g', "gearIron",
-                'm', MachineCaseItem.INSTANCE);
+                'm', "MACHINE_CASING");
     }
 
     @Override

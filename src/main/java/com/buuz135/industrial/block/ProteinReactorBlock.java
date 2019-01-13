@@ -35,7 +35,6 @@ import net.minecraft.client.resources.I18n;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.common.config.Configuration;
-import net.ndrei.teslacorelib.items.MachineCaseItem;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -63,7 +62,7 @@ public class ProteinReactorBlock extends CustomOrientedBlock<ProteinReactorTile>
                 'p', ItemRegistry.plastic,
                 'e', Items.PORKCHOP,
                 's', Items.EGG,
-                'm', MachineCaseItem.INSTANCE,
+                'm', "MACHINE_CASING",
                 'b', Items.BRICK,
                 'c', Items.RABBIT_FOOT);
     }

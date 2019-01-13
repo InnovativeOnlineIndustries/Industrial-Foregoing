@@ -28,7 +28,6 @@ import com.buuz135.industrial.utils.RecipeUtils;
 import net.minecraft.block.material.Material;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
-import net.ndrei.teslacorelib.items.MachineCaseItem;
 
 public class LaserDrillBlock extends CustomOrientedBlock<LaserDrillTile> {
 
@@ -43,7 +42,7 @@ public class LaserDrillBlock extends CustomOrientedBlock<LaserDrillTile> {
                 'g', "blockGlassColorless",
                 'w', Blocks.GLOWSTONE,
                 'o', "gearDiamond",
-                'm', MachineCaseItem.INSTANCE);
+                'm', "MACHINE_CASING");
     }
 
     @Override

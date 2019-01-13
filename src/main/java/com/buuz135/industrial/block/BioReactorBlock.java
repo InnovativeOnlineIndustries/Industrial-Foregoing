@@ -35,7 +35,6 @@ import net.minecraft.client.resources.I18n;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.common.config.Configuration;
-import net.ndrei.teslacorelib.items.MachineCaseItem;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -65,7 +64,7 @@ public class BioReactorBlock extends CustomOrientedBlock<BioReactorTile> {
                 'p', ItemRegistry.plastic,
                 'e', Items.FERMENTED_SPIDER_EYE,
                 's', Items.SLIME_BALL,
-                'm', MachineCaseItem.INSTANCE,
+                'm', "MACHINE_CASING",
                 'b', Items.BRICK,
                 'c', Items.SUGAR);
     }

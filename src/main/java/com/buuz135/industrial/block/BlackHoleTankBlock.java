@@ -49,7 +49,6 @@ import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
 import net.minecraftforge.fluids.capability.IFluidHandler;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-import net.ndrei.teslacorelib.items.MachineCaseItem;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -67,7 +66,7 @@ public class BlackHoleTankBlock extends CustomOrientedBlock<BlackHoleTankTile> {
                 'e', Items.ENDER_EYE,
                 'a', Items.ENDER_PEARL,
                 'c', Items.BUCKET,
-                'm', MachineCaseItem.INSTANCE);
+                'm', "MACHINE_CASING");
     }
 
     @Override

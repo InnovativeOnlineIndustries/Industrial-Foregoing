@@ -33,7 +33,6 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
-import net.ndrei.teslacorelib.items.MachineCaseItem;
 
 import javax.annotation.Nullable;
 
@@ -86,7 +85,7 @@ public class MobDetectorBlock extends CustomAreaOrientedBlock<MobDetectorTile> {
                 'r', Items.REPEATER,
                 'c', Items.COMPARATOR,
                 'i', Blocks.OBSERVER,
-                'm', MachineCaseItem.INSTANCE);
+                'm', "MACHINE_CASING");
     }
 
     @Override

@@ -28,7 +28,6 @@ import com.buuz135.industrial.utils.RecipeUtils;
 import net.minecraft.block.material.Material;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
-import net.ndrei.teslacorelib.items.MachineCaseItem;
 
 public class EnchantmentAplicatorBlock extends CustomOrientedBlock<EnchantmentAplicatorTile> {
 
@@ -40,7 +39,7 @@ public class EnchantmentAplicatorBlock extends CustomOrientedBlock<EnchantmentAp
         RecipeUtils.addShapedRecipe(new ItemStack(this), "ppp", "ama", "gag",
                 'p', ItemRegistry.plastic,
                 'a', Blocks.ANVIL,
-                'm', MachineCaseItem.INSTANCE,
+                'm', "MACHINE_CASING",
                 'g', "gearIron");
     }
 

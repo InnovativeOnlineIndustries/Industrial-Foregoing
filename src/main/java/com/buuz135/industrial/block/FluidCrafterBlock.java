@@ -28,7 +28,6 @@ import com.buuz135.industrial.utils.RecipeUtils;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
-import net.ndrei.teslacorelib.items.MachineCaseItem;
 
 public class FluidCrafterBlock extends CustomOrientedBlock<FluidCrafterTile> {
 
@@ -42,7 +41,7 @@ public class FluidCrafterBlock extends CustomOrientedBlock<FluidCrafterTile> {
                 'p', ItemRegistry.plastic,
                 'b', Items.BUCKET,
                 'c', Blocks.CRAFTING_TABLE,
-                'm', MachineCaseItem.INSTANCE,
+                'm', "MACHINE_CASING",
                 'g', "gearGold");
     }
 

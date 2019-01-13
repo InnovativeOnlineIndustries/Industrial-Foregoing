@@ -31,7 +31,6 @@ import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.common.config.Configuration;
-import net.ndrei.teslacorelib.items.MachineCaseItem;
 
 public class MaterialStoneWorkFactoryBlock extends CustomOrientedBlock<MaterialStoneWorkFactoryTile> {
 
@@ -48,7 +47,7 @@ public class MaterialStoneWorkFactoryBlock extends CustomOrientedBlock<MaterialS
                 'i', Blocks.CRAFTING_TABLE,
                 'a', Items.IRON_PICKAXE,
                 'f', Blocks.FURNACE,
-                'm', MachineCaseItem.INSTANCE,
+                'm', "MACHINE_CASING",
                 'l', Items.LAVA_BUCKET,
                 'w', Items.WATER_BUCKET,
                 'r', ItemRegistry.pinkSlime);

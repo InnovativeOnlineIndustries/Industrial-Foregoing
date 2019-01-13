@@ -24,6 +24,7 @@ package com.buuz135.industrial.utils.apihandlers.plant;
 import com.buuz135.industrial.proxy.BlockRegistry;
 import com.buuz135.industrial.utils.BlockUtils;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.NonNullList;
@@ -57,7 +58,7 @@ public class TreeCache {
             } else {
                 stacks.addAll(BlockUtils.getBlockDrops(world, p));
             }
-            world.setBlockToAir(p);
+            world.setBlockState(p, Blocks.AIR.getDefaultState());
         }
         cache.poll();
         return stacks;

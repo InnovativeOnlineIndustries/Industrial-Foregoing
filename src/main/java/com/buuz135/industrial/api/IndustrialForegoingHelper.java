@@ -150,10 +150,10 @@ public class IndustrialForegoingHelper {
      * @return true if it's added, false if don't.
      */
     public static boolean addFluidDictionaryEntry(FluidDictionaryEntry entry) {
-        if (FluidRegistry.isFluidRegistered(entry.getFluidOrigin()) && FluidRegistry.isFluidRegistered(entry.getFluidResult()) && FluidDictionaryEntry.FLUID_DICTIONARY_RECIPES.stream().noneMatch(entry1 -> entry1.getFluidOrigin().equals(entry.getFluidOrigin()) && entry1.getFluidResult().equals(entry.getFluidResult()))) {
+        /*if (FluidRegistry.isFluidRegistered(entry.getFluidOrigin()) && FluidRegistry.isFluidRegistered(entry.getFluidResult()) && FluidDictionaryEntry.FLUID_DICTIONARY_RECIPES.stream().noneMatch(entry1 -> entry1.getFluidOrigin().equals(entry.getFluidOrigin()) && entry1.getFluidResult().equals(entry.getFluidResult()))) {
             FluidDictionaryEntry.FLUID_DICTIONARY_RECIPES.add(entry);
             return true;
-        }
+        }*/
         return false;
     }
 

@@ -29,7 +29,6 @@ import net.minecraft.block.material.Material;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
-import net.ndrei.teslacorelib.items.MachineCaseItem;
 
 public class BlockPlacerBlock extends CustomAreaOrientedBlock<BlockPlacerTile> {
 
@@ -41,7 +40,7 @@ public class BlockPlacerBlock extends CustomAreaOrientedBlock<BlockPlacerTile> {
         RecipeUtils.addShapedRecipe(new ItemStack(this), "pdp", "dmd", "prp",
                 'p', ItemRegistry.plastic,
                 'd', Blocks.DROPPER,
-                'm', MachineCaseItem.INSTANCE,
+                'm', "MACHINE_CASING",
                 'r', Items.REDSTONE);
     }
 

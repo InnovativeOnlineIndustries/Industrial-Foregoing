@@ -30,7 +30,6 @@ import net.minecraft.block.material.Material;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.common.config.Configuration;
-import net.ndrei.teslacorelib.items.MachineCaseItem;
 
 
 public class AnimalByproductRecolectorBlock extends CustomAreaOrientedBlock<AnimalByproductRecolectorTile> {
@@ -68,7 +67,7 @@ public class AnimalByproductRecolectorBlock extends CustomAreaOrientedBlock<Anim
                 'p', ItemRegistry.plastic,
                 'e', Items.BUCKET,
                 'b', Items.BRICK,
-                'm', MachineCaseItem.INSTANCE,
+                'm', "MACHINE_CASING",
                 'r', Items.REDSTONE);
     }
 

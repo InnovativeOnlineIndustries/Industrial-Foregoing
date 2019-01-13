@@ -31,7 +31,6 @@ import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.common.config.Configuration;
-import net.ndrei.teslacorelib.items.MachineCaseItem;
 
 public class BiofuelGeneratorBlock extends CustomOrientedBlock<BiofuelGeneratorTile> {
 
@@ -46,7 +45,7 @@ public class BiofuelGeneratorBlock extends CustomOrientedBlock<BiofuelGeneratorT
                 'p', ItemRegistry.plastic,
                 'f', Blocks.FURNACE,
                 'i', Blocks.PISTON,
-                'm', MachineCaseItem.INSTANCE,
+                'm', "MACHINE_CASING",
                 'r', Items.BLAZE_ROD);
     }
 

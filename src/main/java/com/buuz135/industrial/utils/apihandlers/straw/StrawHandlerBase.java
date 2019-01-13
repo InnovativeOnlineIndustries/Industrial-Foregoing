@@ -22,20 +22,21 @@
 package com.buuz135.industrial.utils.apihandlers.straw;
 
 import com.buuz135.industrial.api.straw.StrawHandler;
+import net.minecraft.fluid.Fluid;
 import net.minecraftforge.fluids.FluidStack;
 
 import javax.annotation.ParametersAreNonnullByDefault;
 
 @ParametersAreNonnullByDefault
 public abstract class StrawHandlerBase extends StrawHandler {
-    private String fluidName;
+    private final Fluid fluid;
 
-    public StrawHandlerBase(String fluidName) {
-        this.fluidName = fluidName;
+    public StrawHandlerBase(Fluid fluid) {
+        this.fluid = fluid;
     }
 
     @Override
-    public boolean validFluid(FluidStack stack) {
-        return stack.getFluid().getName().equals(fluidName);
+    public boolean validFluid(Fluid fluid) {
+        return this.fluid == fluid;
     }
 }

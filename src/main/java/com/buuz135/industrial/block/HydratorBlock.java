@@ -37,7 +37,6 @@ import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-import net.ndrei.teslacorelib.items.MachineCaseItem;
 
 import java.util.Random;
 
@@ -53,7 +52,7 @@ public class HydratorBlock extends CustomAreaOrientedBlock<HydratorTile> {
                 'p', ItemRegistry.plastic,
                 'f', Items.WATER_BUCKET,
                 'r', "gearIron",
-                'm', MachineCaseItem.INSTANCE,
+                'm', "MACHINE_CASING",
                 'i', Blocks.PISTON,
                 'c', ItemRegistry.fertilizer);
     }

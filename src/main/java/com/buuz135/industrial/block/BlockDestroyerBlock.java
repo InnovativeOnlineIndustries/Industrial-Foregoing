@@ -29,7 +29,6 @@ import net.minecraft.block.material.Material;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.text.TextComponentTranslation;
-import net.ndrei.teslacorelib.items.MachineCaseItem;
 
 import java.util.List;
 
@@ -44,7 +43,7 @@ public class BlockDestroyerBlock extends CustomAreaOrientedBlock<BlockDestroyerT
                 'p', ItemRegistry.plastic,
                 'g', "gearGold",
                 'a', Items.IRON_PICKAXE,
-                'm', MachineCaseItem.INSTANCE,
+                'm', "MACHINE_CASING",
                 's', Items.IRON_SHOVEL,
                 'i', "gearIron",
                 'r', Items.REDSTONE);

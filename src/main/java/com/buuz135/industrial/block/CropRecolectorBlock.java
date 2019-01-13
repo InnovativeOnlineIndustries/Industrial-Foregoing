@@ -33,7 +33,6 @@ import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraftforge.common.config.Configuration;
-import net.ndrei.teslacorelib.items.MachineCaseItem;
 
 import java.util.List;
 
@@ -78,7 +77,7 @@ public class CropRecolectorBlock extends CustomAreaOrientedBlock<CropRecolectorT
                 'p', ItemRegistry.plastic,
                 'h', Items.IRON_HOE,
                 'a', Items.IRON_AXE,
-                'm', MachineCaseItem.INSTANCE,
+                'm', "MACHINE_CASING",
                 'g', "gearGold",
                 'r', Items.REDSTONE);
     }

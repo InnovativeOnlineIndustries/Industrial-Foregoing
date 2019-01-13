@@ -29,7 +29,7 @@ import net.minecraft.block.material.Material;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
-import net.ndrei.teslacorelib.items.MachineCaseItem;
+
 
 public class FrosterBlock extends CustomOrientedBlock<FrosterTile> {
 
@@ -42,7 +42,7 @@ public class FrosterBlock extends CustomOrientedBlock<FrosterTile> {
         RecipeUtils.addShapedRecipe(new ItemStack(this), "pip", "srs", "pgp",
                 'p', ItemRegistry.plastic,
                 'i', Blocks.ICE,
-                'r', MachineCaseItem.INSTANCE,
+                'r', "MACHINE_CASING",
                 's', Items.SNOWBALL,
                 'g', "gearGold");
     }

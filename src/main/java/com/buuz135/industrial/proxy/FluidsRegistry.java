@@ -23,25 +23,27 @@ package com.buuz135.industrial.proxy;
 
 import com.buuz135.industrial.fluid.IFCustomFluid;
 import com.buuz135.industrial.fluid.IFOreFluid;
+import net.minecraft.fluid.Fluid;
 
 import java.awt.*;
 
 
 public class FluidsRegistry {
 
-    public static IFCustomFluid ESSENCE;
-    public static IFCustomFluid MILK;
-    public static IFCustomFluid MEAT;
-    public static IFCustomFluid LATEX;
-    public static IFCustomFluid SEWAGE;
-    public static IFCustomFluid SLUDGE;
-    public static IFCustomFluid BIOFUEL;
-    public static IFCustomFluid PINK_SLIME;
-    public static IFCustomFluid PROTEIN;
-    public static IFOreFluid ORE_FLUID_RAW;
-    public static IFOreFluid ORE_FLUID_FERMENTED;
+    public static Fluid ESSENCE;
+    public static Fluid MILK;
+    public static Fluid MEAT;
+    public static Fluid LATEX;
+    public static Fluid SEWAGE;
+    public static Fluid SLUDGE;
+    public static Fluid BIOFUEL;
+    public static Fluid PINK_SLIME;
+    public static Fluid PROTEIN;
+    public static Fluid ORE_FLUID_RAW;
+    public static Fluid ORE_FLUID_FERMENTED;
 
     public static void registerFluids() {
+        /*
         (ESSENCE = (IFCustomFluid) new IFCustomFluid("essence", 300, Color.decode("0x408000")).setLuminosity(15)).register();
         (MILK = new IFCustomFluid("milk", 300, Color.WHITE)).register();
         (MEAT = new IFCustomFluid("meat", 375, Color.decode("0x996633"))).register();
@@ -52,7 +54,7 @@ public class FluidsRegistry {
         (PINK_SLIME = new IFCustomFluid("if.pink_slime", 300, Color.decode("0xff66cc"))).register();
         (PROTEIN = new IFCustomFluid("if.protein", 600, Color.decode("0xff5050"))).register();
         (ORE_FLUID_RAW = new IFOreFluid("raw")).register();
-        (ORE_FLUID_FERMENTED = new IFOreFluid("fermented")).register();
+        (ORE_FLUID_FERMENTED = new IFOreFluid("fermented")).register();*/
     }
 
 

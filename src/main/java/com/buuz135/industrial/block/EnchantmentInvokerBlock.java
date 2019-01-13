@@ -29,7 +29,6 @@ import net.minecraft.block.material.Material;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
-import net.ndrei.teslacorelib.items.MachineCaseItem;
 
 public class EnchantmentInvokerBlock extends CustomOrientedBlock<EnchantmentInvokerTile> {
 
@@ -42,7 +41,7 @@ public class EnchantmentInvokerBlock extends CustomOrientedBlock<EnchantmentInvo
                 'p', ItemRegistry.plastic,
                 'b', Items.BOOK,
                 'd', "gemDiamond",
-                'm', MachineCaseItem.INSTANCE,
+                'm', "MACHINE_CASING",
                 'o', Blocks.OBSIDIAN);
     }
 

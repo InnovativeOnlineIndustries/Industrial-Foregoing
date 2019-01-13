@@ -49,7 +49,7 @@ public class ExtractorEntry {
     }
 
     public static ExtractorEntry getExtractorEntry(World world, BlockPos pos) {
-        ItemStack stack = new ItemStack(Item.getItemFromBlock(world.getBlockState(pos).getBlock()), 1, world.getBlockState(pos).getBlock().damageDropped(world.getBlockState(pos)));
+        ItemStack stack = new ItemStack(Item.getItemFromBlock(world.getBlockState(pos).getBlock()), 1);
         if (!stack.isEmpty()) {
             for (ExtractorEntry extractorEntry : EXTRACTOR_ENTRIES) {
                 if (extractorEntry.isEqual(stack)) return extractorEntry;

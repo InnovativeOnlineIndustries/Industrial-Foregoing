@@ -32,7 +32,6 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
-import net.ndrei.teslacorelib.items.MachineCaseItem;
 
 public class BlackHoleControllerBlock extends CustomOrientedBlock<BlackHoleControllerTile> {
 
@@ -46,7 +45,7 @@ public class BlackHoleControllerBlock extends CustomOrientedBlock<BlackHoleContr
                 'd', Blocks.DIAMOND_BLOCK,
                 'e', ItemRegistry.pinkSlimeIngot,
                 'c', Blocks.ENDER_CHEST,
-                'm', MachineCaseItem.INSTANCE);
+                'm', "MACHINE_CASING");
     }
 
     @Override

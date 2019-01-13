@@ -38,7 +38,6 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
-import net.ndrei.teslacorelib.items.MachineCaseItem;
 
 import java.util.List;
 
@@ -115,7 +114,7 @@ public class BlackHoleUnitBlock extends CustomOrientedBlock<BlackHoleUnitTile> {
                 'e', Items.ENDER_EYE,
                 'a', Items.ENDER_PEARL,
                 'c', "chestWood",
-                'm', MachineCaseItem.INSTANCE);
+                'm', "MACHINE_CASING");
     }
 
     public ItemStack getItemStack(ItemStack blackHole) {

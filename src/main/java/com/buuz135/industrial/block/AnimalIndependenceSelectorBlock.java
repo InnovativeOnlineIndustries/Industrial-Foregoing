@@ -28,7 +28,6 @@ import com.buuz135.industrial.utils.RecipeUtils;
 import net.minecraft.block.material.Material;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.text.TextComponentTranslation;
-import net.ndrei.teslacorelib.items.MachineCaseItem;
 
 import java.util.List;
 
@@ -42,7 +41,7 @@ public class AnimalIndependenceSelectorBlock extends CustomAreaOrientedBlock<Ani
         RecipeUtils.addShapedRecipe(new ItemStack(this), "pep", "eme", "dgd",
                 'p', ItemRegistry.plastic,
                 'e', "gemEmerald",
-                'm', MachineCaseItem.INSTANCE,
+                'm', "MACHINE_CASING",
                 'd', "dyePurple",
                 'g', "gearGold");
     }

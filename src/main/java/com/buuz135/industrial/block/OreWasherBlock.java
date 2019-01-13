@@ -29,7 +29,6 @@ import com.buuz135.industrial.utils.RecipeUtils;
 import net.minecraft.block.material.Material;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.oredict.OreDictionary;
-import net.ndrei.teslacorelib.items.MachineCaseItem;
 
 public class OreWasherBlock extends CustomOrientedBlock<OreWasherTile> {
 
@@ -43,7 +42,7 @@ public class OreWasherBlock extends CustomOrientedBlock<OreWasherTile> {
                 'p', ItemRegistry.pinkSlimeIngot,
                 'f', ItemRegistry.meatFeederItem,
                 'r', ItemRegistry.plastic,
-                'm', MachineCaseItem.INSTANCE,
+                'm', "MACHINE_CASING",
                 'c', new ItemStack(BlockRegistry.blockConveyor, 1, OreDictionary.WILDCARD_VALUE),
                 'g', "gearDiamond");
     }

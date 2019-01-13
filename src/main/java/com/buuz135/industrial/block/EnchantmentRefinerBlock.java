@@ -28,7 +28,6 @@ import com.buuz135.industrial.utils.RecipeUtils;
 import net.minecraft.block.material.Material;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
-import net.ndrei.teslacorelib.items.MachineCaseItem;
 
 public class EnchantmentRefinerBlock extends CustomOrientedBlock<EnchantmentRefinerTile> {
 
@@ -41,7 +40,7 @@ public class EnchantmentRefinerBlock extends CustomOrientedBlock<EnchantmentRefi
                 'p', ItemRegistry.plastic,
                 'e', Items.ENDER_PEARL,
                 'b', Items.BOOK,
-                'm', MachineCaseItem.INSTANCE,
+                'm', "MACHINE_CASING",
                 'n', Items.ENCHANTED_BOOK,
                 'g', "gearDiamond");
     }

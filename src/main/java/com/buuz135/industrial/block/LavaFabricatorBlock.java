@@ -29,7 +29,6 @@ import net.minecraft.block.material.Material;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
-import net.ndrei.teslacorelib.items.MachineCaseItem;
 
 public class LavaFabricatorBlock extends CustomOrientedBlock<LavaFabricatorTile> {
     public LavaFabricatorBlock() {
@@ -41,7 +40,7 @@ public class LavaFabricatorBlock extends CustomOrientedBlock<LavaFabricatorTile>
                 'p', ItemRegistry.plastic,
                 'o', Blocks.OBSIDIAN,
                 'c', Items.MAGMA_CREAM,
-                'm', MachineCaseItem.INSTANCE,
+                'm', "MACHINE_CASING",
                 'b', Items.BLAZE_ROD,
                 'r', Blocks.REDSTONE_BLOCK);
     }

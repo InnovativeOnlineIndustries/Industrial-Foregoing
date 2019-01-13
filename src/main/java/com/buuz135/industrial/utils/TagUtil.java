@@ -40,4 +40,7 @@ public class TagUtil {
         }
         return list;
     }
+    public static <T> Collection<T> getAllEntries(Tag<T> tag) {
+        return tag.getAllElements();
+    }
 }

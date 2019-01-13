@@ -28,7 +28,6 @@ import com.buuz135.industrial.utils.RecipeUtils;
 import net.minecraft.block.material.Material;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
-import net.ndrei.teslacorelib.items.MachineCaseItem;
 
 public class WaterResourcesCollectorBlock extends CustomAreaOrientedBlock<WaterResourcesCollectorTile> {
 
@@ -41,7 +40,7 @@ public class WaterResourcesCollectorBlock extends CustomAreaOrientedBlock<WaterR
                 'p', ItemRegistry.plastic,
                 'f', Items.FISHING_ROD,
                 'b', Items.BUCKET,
-                'm', MachineCaseItem.INSTANCE,
+                'm', "MACHINE_CASING",
                 'g', "gearIron",
                 'r', Items.REDSTONE);
     }

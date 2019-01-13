@@ -31,7 +31,6 @@ import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraftforge.common.config.Configuration;
-import net.ndrei.teslacorelib.items.MachineCaseItem;
 
 import java.util.List;
 
@@ -65,7 +64,7 @@ public class MobRelocatorBlock extends CustomAreaOrientedBlock<MobRelocatorTile>
                 'p', ItemRegistry.plastic,
                 's', Items.IRON_SWORD,
                 'b', Items.BOOK,
-                'm', MachineCaseItem.INSTANCE,
+                'm', "MACHINE_CASING",
                 'g', "gearGold",
                 'r', Items.REDSTONE);
     }

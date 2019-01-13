@@ -26,6 +26,7 @@ import com.buuz135.industrial.utils.BlockUtils;
 import net.minecraft.block.BlockCactus;
 import net.minecraft.block.BlockReed;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.NonNullList;
@@ -62,7 +63,7 @@ public class DoubleTallPlantRecollectable extends PlantRecollectable {
     private void harvestBlock(NonNullList<ItemStack> stacks, World world, BlockPos pos) {
         if (canBeHarvested(world, pos, world.getBlockState(pos))) {
             stacks.addAll(BlockUtils.getBlockDrops(world, pos));
-            world.setBlockToAir(pos);
+            world.setBlockState(pos, Blocks.AIR.getDefaultState());
         }
     }
 

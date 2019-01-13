@@ -26,6 +26,7 @@ import com.buuz135.industrial.utils.BlockUtils;
 import net.minecraft.block.BlockMelon;
 import net.minecraft.block.BlockPumpkin;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.math.BlockPos;
@@ -49,7 +50,7 @@ public class PumpkinMelonPlantRecollectable extends PlantRecollectable {
     public List<ItemStack> doHarvestOperation(World world, BlockPos pos, IBlockState blockState) {
         NonNullList<ItemStack> stacks = NonNullList.create();
         stacks.addAll(BlockUtils.getBlockDrops(world, pos));
-        world.setBlockToAir(pos);
+        world.setBlockState(pos, Blocks.AIR.getDefaultState());
         return stacks;
     }
 

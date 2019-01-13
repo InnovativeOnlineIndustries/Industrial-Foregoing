@@ -29,7 +29,6 @@ import net.minecraft.block.material.Material;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
-import net.ndrei.teslacorelib.items.MachineCaseItem;
 
 public class CropSowerBlock extends CustomAreaOrientedBlock<CropSowerTile> {
 
@@ -42,7 +41,7 @@ public class CropSowerBlock extends CustomAreaOrientedBlock<CropSowerTile> {
                 'p', ItemRegistry.plastic,
                 'f', Items.FLOWER_POT,
                 'a', Blocks.PISTON,
-                'm', MachineCaseItem.INSTANCE,
+                'm', "MACHINE_CASING",
                 'g', "gearIron",
                 'r', Items.REDSTONE);
     }

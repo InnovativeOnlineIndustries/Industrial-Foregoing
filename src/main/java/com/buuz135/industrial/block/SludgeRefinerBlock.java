@@ -34,7 +34,6 @@ import net.minecraft.client.resources.I18n;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
-import net.ndrei.teslacorelib.items.MachineCaseItem;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -66,7 +65,7 @@ public class SludgeRefinerBlock extends CustomOrientedBlock<SludgeRefinerTile> {
                 'p', ItemRegistry.plastic,
                 'b', Items.BUCKET,
                 'f', Blocks.FURNACE,
-                'm', MachineCaseItem.INSTANCE,
+                'm', "MACHINE_CASING",
                 'i', "gearIron",
                 'g', "gearGold");
     }
