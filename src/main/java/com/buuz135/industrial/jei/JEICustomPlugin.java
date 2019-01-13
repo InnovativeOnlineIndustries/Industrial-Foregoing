@@ -38,6 +38,8 @@ import com.buuz135.industrial.jei.extractor.ExtractorRecipeWrapper;
 import com.buuz135.industrial.jei.fluiddictionary.FluidDictionaryCategory;
 import com.buuz135.industrial.jei.fluiddictionary.FluidDictionaryWrapper;
 import com.buuz135.industrial.jei.ghost.ConveyorGhostSlotHandler;
+import com.buuz135.industrial.jei.juicer.JuicerCategory;
+import com.buuz135.industrial.jei.juicer.JuicerWrapper;
 import com.buuz135.industrial.jei.laser.LaserRecipeCategory;
 import com.buuz135.industrial.jei.laser.LaserRecipeWrapper;
 import com.buuz135.industrial.jei.machineproduce.MachineProduceCategory;
@@ -56,6 +58,7 @@ import com.buuz135.industrial.jei.stonework.StoneWorkWrapper;
 import com.buuz135.industrial.proxy.BlockRegistry;
 import com.buuz135.industrial.proxy.FluidsRegistry;
 import com.buuz135.industrial.proxy.ItemRegistry;
+import com.buuz135.industrial.registry.IFRegistries;
 import com.buuz135.industrial.tile.block.CustomOrientedBlock;
 import com.buuz135.industrial.tile.generator.PetrifiedFuelGeneratorTile;
 import com.buuz135.industrial.tile.world.MaterialStoneWorkFactoryTile;
@@ -100,6 +103,7 @@ public class JEICustomPlugin implements IModPlugin {
     private OreWasherCategory oreWasherCategory;
     private OreFermenterCategory oreFermenterCategory;
     private OreSieveCategory oreSieveCategory;
+    private JuicerCategory juicerCategory;
 
     public static void showUses(ItemStack stack) {
         if (recipesGui != null && recipeRegistry != null)
@@ -167,6 +171,10 @@ public class JEICustomPlugin implements IModPlugin {
         if (BlockRegistry.oreSieveBlock.isEnabled()) {
             oreSieveCategory = new OreSieveCategory(registry.getJeiHelpers().getGuiHelper());
             registry.addRecipeCategories(oreSieveCategory);
+        }
+        if (BlockRegistry.juicerBlock.isEnabled()) {
+            juicerCategory = new JuicerCategory(registry.getJeiHelpers().getGuiHelper());
+            registry.addRecipeCategories(juicerCategory);
         }
     }
 
@@ -281,6 +289,10 @@ public class JEICustomPlugin implements IModPlugin {
         if (oreSieveCategory != null) {
             registry.addRecipeCatalyst(new ItemStack(BlockRegistry.oreSieveBlock), oreSieveCategory.getUid());
             registry.addRecipes(OreFluidEntrySieve.ORE_FLUID_SIEVE.stream().map(OreSieveWrapper::new).collect(Collectors.toList()), oreSieveCategory.getUid());
+        }
+        if (juicerCategory != null) {
+            registry.addRecipeCatalyst(new ItemStack(BlockRegistry.juicerBlock), juicerCategory.getUid());
+            registry.addRecipes(IFRegistries.JUICER_RECIPE_REGISTRY.getValuesCollection().stream().map(recipe -> new JuicerWrapper(registry.getJeiHelpers(), recipe)).collect(Collectors.toList()), juicerCategory.getUid());
         }
         registry.addGhostIngredientHandler(GuiConveyor.class, new ConveyorGhostSlotHandler());
     }
