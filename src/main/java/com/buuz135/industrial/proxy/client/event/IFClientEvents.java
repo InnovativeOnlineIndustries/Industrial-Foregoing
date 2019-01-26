@@ -29,6 +29,8 @@ import com.buuz135.industrial.proxy.block.BlockConveyor;
 import com.buuz135.industrial.proxy.block.Cuboid;
 import com.buuz135.industrial.proxy.block.DistanceRayTraceResult;
 import com.buuz135.industrial.proxy.client.model.ConveyorBlockModel;
+import com.buuz135.industrial.config.CustomConfiguration;
+import com.buuz135.industrial.utils.apihandlers.json.ConfigurationConditionFactory;
 import com.buuz135.industrial.registry.IFRegistries;
 import com.buuz135.industrial.utils.Reference;
 import net.minecraft.block.BlockLiquid;
@@ -92,7 +94,7 @@ public class IFClientEvents {
     @SubscribeEvent
     public void blockOverlayEvent(DrawBlockHighlightEvent event) {
         RayTraceResult hit = event.getTarget();
-        if (hit.typeOfHit == RayTraceResult.Type.BLOCK && hit instanceof DistanceRayTraceResult) {
+        if (CustomConfiguration.configValues.get("enableShinyMob") && hit.typeOfHit == RayTraceResult.Type.BLOCK && hit instanceof DistanceRayTraceResult) {
             BlockPos pos = event.getTarget().getBlockPos();
             event.setCanceled(true);
             GlStateManager.enableBlend();
@@ -114,7 +116,7 @@ public class IFClientEvents {
             GlStateManager.enableTexture2D();
             GlStateManager.disableBlend();
         }
-        if (hit.typeOfHit == RayTraceResult.Type.BLOCK && event.getPlayer().getHeldItemMainhand().getItem().equals(ItemRegistry.itemInfinityDrill)) {
+        if (CustomConfiguration.configValues.get("enableShinyMob") && hit.typeOfHit == RayTraceResult.Type.BLOCK && event.getPlayer().getHeldItemMainhand().getItem().equals(ItemRegistry.itemInfinityDrill)) {
             event.setCanceled(true);
             ItemStack hand = event.getPlayer().getHeldItemMainhand();
             ItemInfinityDrill.DrillTier tier = ItemRegistry.itemInfinityDrill.getSelectedDrillTier(hand);
