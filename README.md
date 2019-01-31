@@ -1,6 +1,6 @@
 # Industrial Foregoing 
-[![Curse Forge](http://cf.way2muchnoise.eu/full_industrial-foregoing_downloads.svg)](https://minecraft.curseforge.com/projects/industrial-foregoing) 
-[![Curse Forge](http://cf.way2muchnoise.eu/versions/industrial-foregoing.svg)](https://minecraft.curseforge.com/projects/industrial-foregoing)
+[![Curse Forge](http://cf.way2muchnoise.eu/full_industrial-foregoing_downloads.svg?badge_style=for_the_badge)](https://minecraft.curseforge.com/projects/industrial-foregoing) 
+[![Curse Forge](http://cf.way2muchnoise.eu/versions/industrial-foregoing.svg?badge_style=for_the_badge)](https://minecraft.curseforge.com/projects/industrial-foregoing)
 [![Discord](https://img.shields.io/discord/102860784329052160.svg?style=for-the-badge&logo=discord)](https://discord.gg/4tPfwjn)
 [![](https://img.shields.io/github/contributors/Buuz135/Industrial-Foregoing.svg?style=for-the-badge&logo=github)](https://github.com/Buuz135/Industrial-Foregoing/graphs/contributors)
 [![](https://img.shields.io/github/issues/Buuz135/Industrial-Foregoing.svg?style=for-the-badge&logo=github)](https://github.com/Buuz135/Industrial-Foregoing/issues)
