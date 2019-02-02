@@ -276,7 +276,9 @@ public class ItemInfinityDrill extends IFCustomItem {
 
     private void consumeFuel(ItemStack stack) {
         if (getFuelFromStack(stack) >= FUEL_CONSUMPTION) {
-            stack.getCapability(CapabilityFluidHandler.FLUID_HANDLER_ITEM_CAPABILITY, null).drain(FUEL_CONSUMPTION, true);
+            if (stack.hasTagCompound() && stack.getTagCompound().hasKey("Fluid") && stack.getTagCompound().getCompoundTag("Fluid").hasKey("Amount")) {
+                stack.getTagCompound().getCompoundTag("Fluid").setInteger("Amount", getFuelFromStack(stack) - FUEL_CONSUMPTION);
+            }
         } else {
             stack.getTagCompound().setLong("Energy", stack.getTagCompound().getLong("Energy") - POWER_CONSUMPTION);
         }
