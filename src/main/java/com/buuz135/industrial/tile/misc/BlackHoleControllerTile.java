@@ -81,7 +81,7 @@ public class BlackHoleControllerTile extends CustomSidedTileEntity {
                     return false;
                 if (input.getLocked())
                     return input.getFilterStack(slot).isItemEqual(stack) && ItemStack.areItemStackTagsEqual(stack, input.getFilterStack(slot));
-                if (!output.getStackInSlot(slot).isEmpty() && !output.getStackInSlot(slot).isItemEqual(stack))
+                if (!output.getStackInSlot(slot).isEmpty() && (!output.getStackInSlot(slot).isItemEqual(stack) || !ItemStack.areItemStackTagsEqual(stack, input.getFilterStack(slot))))
                     return false;
                 ItemStack contained = blackHoleUnitBlock.getItemStack(storage.getStackInSlot(slot));
                 if (stack.isItemEqual(contained) && ItemStack.areItemStackTagsEqual(stack, contained)) return true;
