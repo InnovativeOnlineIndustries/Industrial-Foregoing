@@ -81,7 +81,7 @@ public class BlackHoleControllerTile extends CustomSidedTileEntity {
                     return false;
                 if (input.getLocked())
                     return input.getFilterStack(slot).isItemEqual(stack) && ItemStack.areItemStackTagsEqual(stack, input.getFilterStack(slot));
-                if (!output.getStackInSlot(slot).isEmpty() && (!output.getStackInSlot(slot).isItemEqual(stack) || !ItemStack.areItemStackTagsEqual(stack, input.getFilterStack(slot))))
+                if (!output.getStackInSlot(slot).isEmpty() && (!output.getStackInSlot(slot).isItemEqual(stack) || !ItemStack.areItemStackTagsEqual(stack, output.getStackInSlot(slot))))
                     return false;
                 ItemStack contained = blackHoleUnitBlock.getItemStack(storage.getStackInSlot(slot));
                 if (stack.isItemEqual(contained) && ItemStack.areItemStackTagsEqual(stack, contained)) return true;
@@ -155,7 +155,7 @@ public class BlackHoleControllerTile extends CustomSidedTileEntity {
                 if (output.getStackInSlot(i).getCount() >= output.getStackInSlot(i).getMaxStackSize()) continue;
                 int amount = blackHoleUnitBlock.getAmount(stack);
                 ItemStack s = blackHoleUnitBlock.getItemStack(stack);
-                if (!s.isEmpty()) {
+                if (!s.isEmpty() && output.getStackInSlot(i).isItemEqual(s) && ItemStack.areItemStackTagsEqual(output.getStackInSlot(i), s)) {
                     ItemStack out = output.getStackInSlot(i);
                     if (out.isEmpty()) { // Slot is empty
                         out = s.copy();
