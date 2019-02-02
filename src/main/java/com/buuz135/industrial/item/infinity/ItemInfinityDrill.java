@@ -529,7 +529,7 @@ public class ItemInfinityDrill extends IFCustomItem {
 
         @Override
         public int getMaxEnergyStored() {
-            return (int) capacity;
+            return capacity > Integer.MAX_VALUE ? Integer.MAX_VALUE : (int) capacity;
         }
 
         @Override
