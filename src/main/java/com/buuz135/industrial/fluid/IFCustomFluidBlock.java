@@ -24,6 +24,7 @@ package com.buuz135.industrial.fluid;
 import com.buuz135.industrial.IndustrialForegoing;
 import com.buuz135.industrial.utils.Reference;
 import net.minecraft.block.Block;
+import net.minecraft.block.BlockFlowingFluid;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
@@ -36,7 +37,7 @@ import net.minecraftforge.registries.IForgeRegistry;
 
 import java.util.function.Consumer;
 
-public class IFCustomFluidBlock extends BlockFluidClassic {
+public class IFCustomFluidBlock extends BlockFlowingFluid {
 
     private Consumer<EntityLivingBase> consumer;
 

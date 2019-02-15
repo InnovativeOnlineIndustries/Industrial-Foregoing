@@ -33,20 +33,25 @@ sourceCompatibility = targetCompatibility = '1.8'
 compileJava {
     sourceCompatibility = targetCompatibility = '1.8'
 }
-def MC_VERSION = "1.13"
-def MCP_VERSION = "20180921-1.13"
-def FORGE_GROUP = "net.minecraftforge.test"
-def FORGE_VERSION = "24.0.59-1.13-pre"
 
 minecraft {
     mappings channel: 'snapshot', version: '20180921-1.13'
     runs {
         client = {
+            // recommended logging data for a userdev environment
+            properties 'forge.logging.markers': 'SCAN,REGISTRIES,REGISTRYDUMP'
+            // recommended logging level for the console
+            properties 'forge.logging.console.level': 'debug'
             workingDirectory project.file('run').canonicalPath
             source sourceSets.main
         }
         server = {
+            // recommended logging data for a userdev environment
+            properties 'forge.logging.markers': 'SCAN,REGISTRIES,REGISTRYDUMP'
+            // recommended logging level for the console
+            properties 'forge.logging.console.level': 'debug'
             workingDirectory project.file('run').canonicalPath
+            source sourceSets.main
         }
     }
 }
@@ -55,7 +60,7 @@ repositories {
     mavenCentral()
     jcenter()
     maven {
-        url 'https://hrznstudio.com/maven/snapshot'
+        url 'https://hrznstudio.com/maven/'
     }
     maven {
         url = "http://dvs1.progwml6.com/files/maven"
@@ -63,8 +68,8 @@ repositories {
 }
 
 dependencies {
-    minecraft 'net.minecraftforge.test:forge:1.13-24.0.59-1.13-pre'
-    compile deobf('com.hrznstudio.titanium:Titanium:0.1.0.12')
+    minecraft 'net.minecraftforge:forge:1.13.2-25.0.10'
+    compile 'com.hrznstudio:Titanium:2.0.0.17'
     compileOnly 'org.projectlombok:lombok:1.16.16'
     compile "mezz.jei:jei_1.12.2:4.14.3.246:api"
 }

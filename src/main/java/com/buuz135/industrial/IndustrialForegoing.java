@@ -21,11 +21,15 @@
  */
 package com.buuz135.industrial;
 
+import com.buuz135.industrial.proxy.BlockRegistry;
 import com.buuz135.industrial.proxy.CommonProxy;
+import com.buuz135.industrial.proxy.ItemRegistry;
 import com.buuz135.industrial.proxy.client.ClientProxy;
 import com.buuz135.industrial.utils.IFFakePlayer;
 import com.buuz135.industrial.utils.Reference;
+import com.hrznstudio.titanium.block.tile.TileBase;
 import com.hrznstudio.titanium.tab.AdvancedTitaniumTab;
+import com.hrznstudio.titanium.util.TitaniumMod;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
@@ -38,7 +42,6 @@ import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLServerStartingEvent;
-import net.minecraftforge.fml.javafmlmod.FMLModLoadingContext;
 import net.minecraftforge.fml.network.NetworkRegistry;
 import net.minecraftforge.fml.network.simple.SimpleChannel;
 
@@ -46,7 +49,7 @@ import java.util.HashMap;
 
 //@Mod(modid = Reference.MOD_ID, name = Reference.MOD_ID, version = Reference.VERSION, dependencies = "required-after:forge@[14.23.1.2594,);required-after:teslacorelib@[1.0.15,);", guiFactory = Reference.GUI_FACTORY, updateJSON = "https://raw.githubusercontent.com/Buuz135/Industrial-Foregoing/master/update.json")
 @Mod(Reference.MOD_ID)
-public class IndustrialForegoing {
+public class IndustrialForegoing extends TitaniumMod {
 
     public static final SimpleChannel NETWORK = NetworkRegistry.ChannelBuilder.named(new ResourceLocation(Reference.MOD_ID,"network"))
             .clientAcceptedVersions("1.0"::equals)
@@ -64,18 +67,16 @@ public class IndustrialForegoing {
 
     public IndustrialForegoing() {
        proxy = DistExecutor.runForDist(()-> ClientProxy::new,()->CommonProxy::new);
-        FMLModLoadingContext.get().getModEventBus().addListener(this::preInit);
-        FMLModLoadingContext.get().getModEventBus().addListener(this::init);
-        FMLModLoadingContext.get().getModEventBus().addListener(this::postInit);
-        FMLModLoadingContext.get().getModEventBus().addListener(this::serverStart);
+        BlockRegistry.registerBlocks(this);
+        ItemRegistry.registerItems(this);
     }
 
     public static FakePlayer getFakePlayer(World world) {
-        if (worldFakePlayer.containsKey(world.dimension.getId()))
-            return worldFakePlayer.get(world.dimension.getId());
+        if (worldFakePlayer.containsKey(world.dimension.getType().getId()))
+            return worldFakePlayer.get(world.dimension.getType().getId());
         if (world instanceof WorldServer) {
             IFFakePlayer fakePlayer = new IFFakePlayer((WorldServer) world);
-            worldFakePlayer.put(world.dimension.getId(), fakePlayer);
+            worldFakePlayer.put(world.dimension.getType().getId(), fakePlayer);
             return fakePlayer;
         }
         return null;

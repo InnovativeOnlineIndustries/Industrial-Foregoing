@@ -131,10 +131,7 @@ public class CommonProxy {
         random = new Random();
 
         FluidsRegistry.registerFluids();
-        BlockRegistry.poke();
 
-        MinecraftForge.EVENT_BUS.register(new BlockRegistry());
-        MinecraftForge.EVENT_BUS.register(new ItemRegistry());
         MinecraftForge.EVENT_BUS.register(new StrawRegistry());
         MinecraftForge.EVENT_BUS.register(new ConveyorRegistry());
         MinecraftForge.EVENT_BUS.register(new MeatFeederTickHandler());

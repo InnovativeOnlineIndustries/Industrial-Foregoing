@@ -24,27 +24,22 @@ package com.buuz135.industrial.proxy;
 import com.buuz135.industrial.block.*;
 import com.buuz135.industrial.entity.EntityPinkSlime;
 import com.buuz135.industrial.fluid.IFCustomFluidBlock;
-import com.buuz135.industrial.proxy.block.BlockBase;
 import com.buuz135.industrial.proxy.block.BlockConveyor;
 import com.buuz135.industrial.proxy.block.BlockLabel;
 import com.buuz135.industrial.proxy.client.BlockRenderRegistry;
 import com.buuz135.industrial.proxy.client.FluidsRenderRegistry;
 import com.buuz135.industrial.proxy.client.ItemRenderRegistry;
-import net.minecraft.block.Block;
+import com.hrznstudio.titanium.util.TitaniumMod;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.init.Blocks;
 import net.minecraft.init.MobEffects;
-import net.minecraft.item.Item;
 import net.minecraft.potion.PotionEffect;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.client.event.ModelRegistryEvent;
-import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fluids.BlockFluidClassic;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
 
 import java.util.Random;
 
@@ -116,9 +111,9 @@ public class BlockRegistry {
     public static IFCustomFluidBlock BLOCK_BIOFUEL = new IFCustomFluidBlock(FluidsRegistry.BIOFUEL, Material.WATER, entityLivingBase -> entityLivingBase.addPotionEffect(new PotionEffect(MobEffects.SPEED, 20, 1)));
     public static IFCustomFluidBlock BLOCK_PINK_SLIME = (IFCustomFluidBlock) new IFCustomFluidBlock(FluidsRegistry.PINK_SLIME, Material.WATER, entityLivingBase -> entityLivingBase.addPotionEffect(new PotionEffect(MobEffects.GLOWING, 20 * 10, 0))) {
         @Override
-        public void randomTick(World worldIn, BlockPos pos, IBlockState state, Random random) {
-            if (state.getBlock() instanceof BlockFluidClassic && ((BlockFluidClassic) state.getBlock()).isSourceBlock(worldIn, pos)) {
-                worldIn.setBlockToAir(pos);
+        public void randomTick(IBlockState state, World worldIn, BlockPos pos, Random random) {
+            if (state.getBlock().getFluidState(state).isSource()) {
+                worldIn.setBlockState(pos, Blocks.AIR.getDefaultState());
                 EntityPinkSlime pinkSlime = new EntityPinkSlime(worldIn);
                 pinkSlime.setPosition(pos.getX() + 0.5, pos.getY(), pos.getZ() + 0.5);
                 worldIn.spawnEntity(pinkSlime);
@@ -132,35 +127,81 @@ public class BlockRegistry {
 
     public static void createRecipes() {
         CustomOrientedBlock.blockList.forEach(CustomOrientedBlock::createRecipe);
-        BlockBase.BLOCKS.forEach(BlockBase::createRecipe);
+        //BlockBase.BLOCKS.forEach(BlockBase::createRecipe);
         //RecipeUtils.addShapelessRecipe(new ItemStack(blackHoleUnitBlock), blackHoleUnitBlock);
         //RecipeUtils.addShapelessRecipe(new ItemStack(blackHoleTankBlock), blackHoleTankBlock);
     }
 
-    public static void poke() {
-
-    }
-
-    @SubscribeEvent
-    public void registerBlocks(RegistryEvent.Register<Block> ev) {
-        CustomOrientedBlock.blockList.stream().filter(CustomOrientedBlock::isEnabled).forEach(customOrientedBlock -> customOrientedBlock.registerBlock(ev.getRegistry()));
-        BLOCK_ESSENCE.register(ev.getRegistry());
-        BLOCK_MILK.register(ev.getRegistry());
-        BLOCK_MEAT.register(ev.getRegistry());
-        BLOCK_LATEX.register(ev.getRegistry());
-        BLOCK_SEWAGE.register(ev.getRegistry());
-        BLOCK_SLUDGE.register(ev.getRegistry());
-        BLOCK_BIOFUEL.register(ev.getRegistry());
-        BLOCK_PINK_SLIME.register(ev.getRegistry());
-        BLOCK_PROTEIN.register(ev.getRegistry());
-        BlockBase.BLOCKS.forEach(blockBase -> blockBase.registerBlock(ev.getRegistry()));
-    }
-
-    @SubscribeEvent
-    public void registerItems(RegistryEvent.Register<Item> ev) {
-        CustomOrientedBlock.blockList.stream().filter(CustomOrientedBlock::isEnabled).forEach(customOrientedBlock -> customOrientedBlock.registerItem(ev.getRegistry()));
-        ItemRegistry.registerItems(ev.getRegistry());
-        BlockBase.BLOCKS.forEach(blockBase -> blockBase.registerItem(ev.getRegistry()));
+    public static void registerBlocks(TitaniumMod mod) {
+        mod.addBlocks(
+                BLOCK_ESSENCE,
+                BLOCK_MILK,
+                BLOCK_MEAT,
+                BLOCK_LATEX,
+                BLOCK_SEWAGE,
+                BLOCK_SLUDGE,
+                BLOCK_BIOFUEL,
+                BLOCK_PINK_SLIME,
+                BLOCK_PROTEIN
+        );
+        mod.addBlocks(
+                petrifiedFuelGeneratorBlock,
+                enchantmentRefinerBlock,
+                enchantmentExtractorBlock,
+                enchantmentAplicatorBlock,
+                mobRelocatorBlock,
+                potionEnervatorBlock,
+                animalIndependenceSelectorBlock,
+                animalStockIncreaserBlock,
+                cropSowerBlock,
+                cropEnrichMaterialInjectorBlock,
+                cropRecolectorBlock,
+                blackHoleUnitBlock,
+                waterCondensatorBlock,
+                waterResourcesCollectorBlock,
+                animalResourceHarvesterBlock,
+                mobSlaughterFactoryBlock,
+                mobDuplicatorBlock,
+                blockDestroyerBlock,
+                blockPlacerBlock,
+                treeFluidExtractorBlock,
+                latexProcessingUnitBlock,
+                sewageCompostSolidiferBlock,
+                animalByproductRecolectorBlock,
+                sludgeRefinerBlock,
+                mobDetectorBlock,
+                lavaFabricatorBlock,
+                bioReactorBlock,
+                biofuelGeneratorBlock,
+                laserBaseBlock,
+                laserDrillBlock,
+                oreProcessorBlock,
+                blackHoleControllerBlock,
+                dyeMixerBlock,
+                enchantmentInvokerBlock,
+                sporesRecreatorBlock,
+                animalGrowthIncreaserBlock,
+                materialStoneWorkFactoryBlock,
+                blackHoleTankBlock,
+                resourcefulFurnaceBlock,
+                villagerTradeExchangerBlock,
+                energyFieldProviderBlock,
+                oreDictionaryConverterBlock,
+                proteinReactorBlock,
+                proteinGeneratorBlock,
+                hydratorBlock,
+                witherBuilderBlock,
+                fluidPumpBlock,
+                fluidCrafterBlock,
+                plantInteractorBlock,
+                itemSplitterBlock,
+                fluidDictionaryConverterBlock,
+                frosterBlock,
+                oreWasherBlock,
+                oreFermenterBlock,
+                oreSieveBlock,
+                pitifulFuelGeneratorBlock
+        );
     }
 
     @SubscribeEvent
@@ -169,6 +210,61 @@ public class BlockRegistry {
         FluidsRenderRegistry.registerRender();
         BlockRenderRegistry.registerRender();
         blockConveyor.registerRender();
-        BlockBase.BLOCKS.forEach(BlockBase::registerRender);
+        petrifiedFuelGeneratorBlock.registerModels();
+        enchantmentRefinerBlock.registerModels();
+        enchantmentExtractorBlock.registerModels();
+        enchantmentAplicatorBlock.registerModels();
+        mobRelocatorBlock.registerModels();
+        potionEnervatorBlock.registerModels();
+        animalIndependenceSelectorBlock.registerModels();
+        animalStockIncreaserBlock.registerModels();
+        cropSowerBlock.registerModels();
+        cropEnrichMaterialInjectorBlock.registerModels();
+        cropRecolectorBlock.registerModels();
+        blackHoleUnitBlock.registerModels();
+        waterCondensatorBlock.registerModels();
+        waterResourcesCollectorBlock.registerModels();
+        animalResourceHarvesterBlock.registerModels();
+        mobSlaughterFactoryBlock.registerModels();
+        mobDuplicatorBlock.registerModels();
+        blockDestroyerBlock.registerModels();
+        blockPlacerBlock.registerModels();
+        treeFluidExtractorBlock.registerModels();
+        latexProcessingUnitBlock.registerModels();
+        sewageCompostSolidiferBlock.registerModels();
+        animalByproductRecolectorBlock.registerModels();
+        sludgeRefinerBlock.registerModels();
+        mobDetectorBlock.registerModels();
+        lavaFabricatorBlock.registerModels();
+        bioReactorBlock.registerModels();
+        biofuelGeneratorBlock.registerModels();
+        laserBaseBlock.registerModels();
+        laserDrillBlock.registerModels();
+        oreProcessorBlock.registerModels();
+        blackHoleControllerBlock.registerModels();
+        dyeMixerBlock.registerModels();
+        enchantmentInvokerBlock.registerModels();
+        sporesRecreatorBlock.registerModels();
+        animalGrowthIncreaserBlock.registerModels();
+        materialStoneWorkFactoryBlock.registerModels();
+        blackHoleTankBlock.registerModels();
+        resourcefulFurnaceBlock.registerModels();
+        villagerTradeExchangerBlock.registerModels();
+        energyFieldProviderBlock.registerModels();
+        oreDictionaryConverterBlock.registerModels();
+        proteinReactorBlock.registerModels();
+        proteinGeneratorBlock.registerModels();
+        hydratorBlock.registerModels();
+        witherBuilderBlock.registerModels();
+        fluidPumpBlock.registerModels();
+        fluidCrafterBlock.registerModels();
+        plantInteractorBlock.registerModels();
+        itemSplitterBlock.registerModels();
+        fluidDictionaryConverterBlock.registerModels();
+        frosterBlock.registerModels();
+        oreWasherBlock.registerModels();
+        oreFermenterBlock.registerModels();
+        oreSieveBlock.registerModels();
+        pitifulFuelGeneratorBlock.registerModels();
     }
 }

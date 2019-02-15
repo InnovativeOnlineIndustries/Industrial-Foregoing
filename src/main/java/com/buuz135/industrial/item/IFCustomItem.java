@@ -27,8 +27,11 @@ import net.minecraft.item.Item;
 import net.minecraftforge.registries.IForgeRegistry;
 
 public class IFCustomItem extends ItemBase {
-    public IFCustomItem(String name, Builder builder) {
+    public IFCustomItem(String name, Properties builder) {
         super(name, builder.group(IndustrialForegoing.creativeTab));
+    }
+    public IFCustomItem(String name) {
+        this(name, new Properties());
     }
 
     public Item register(IForgeRegistry<Item> items) {
