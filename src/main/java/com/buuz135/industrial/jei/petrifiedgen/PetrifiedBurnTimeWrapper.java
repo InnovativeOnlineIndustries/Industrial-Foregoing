@@ -21,7 +21,7 @@
  */
 package com.buuz135.industrial.jei.petrifiedgen;
 
-import com.buuz135.industrial.tile.generator.PetrifiedFuelGeneratorTile;
+
 import mezz.jei.api.ingredients.IIngredients;
 import mezz.jei.api.recipe.IRecipeWrapper;
 import net.minecraft.client.Minecraft;
@@ -48,7 +48,7 @@ public class PetrifiedBurnTimeWrapper implements IRecipeWrapper {
 
     @Override
     public void drawInfo(Minecraft minecraft, int recipeWidth, int recipeHeight, int mouseX, int mouseY) {
-        minecraft.fontRenderer.drawString("Power: " + PetrifiedFuelGeneratorTile.getEnergy(this.burnTime) + " RF/tick", 24, 8, Color.gray.getRGB());
+        minecraft.fontRenderer.drawString("Power: " + "TODO RF/tick", 24, 8, Color.gray.getRGB());
     }
 
     @Override

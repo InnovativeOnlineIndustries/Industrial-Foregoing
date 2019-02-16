@@ -38,19 +38,9 @@ public class ItemRenderRegistry {
         laserLensItem_inverted.registerRender();
         pinkSlime.registerRender();
         pinkSlimeIngot.registerRender();
-        energyFieldAddon.registerRenderer();
         bookManualItem.registerRender();
         itemInfinityDrill.registerRender();
         if (artificalDye != null) artificalDye.registerRender();
 
-        adultFilterAddomItem.registerRenderer();
-        rangeAddonItem.registerRenderer();
-        leafShearingAddonItem.registerRenderer();
-
-        itemStackTransferAddonPull.registerRenderer();
-        itemStackTransferAddonPush.registerRenderer();
-        fluidTransferAddonPull.registerRenderer();
-        fluidTransferAddonPush.registerRenderer();
-        fortuneAddonItem.registerRenderer();
     }
 }

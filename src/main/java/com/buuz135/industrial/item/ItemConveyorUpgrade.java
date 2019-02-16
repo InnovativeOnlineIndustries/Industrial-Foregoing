@@ -22,7 +22,7 @@
 package com.buuz135.industrial.item;
 
 public class ItemConveyorUpgrade extends IFCustomItem {
-    public ItemConveyorUpgrade(String name, Builder builder) {
+    public ItemConveyorUpgrade(String name, Properties builder) {
         super(name, builder);
     }
 /*

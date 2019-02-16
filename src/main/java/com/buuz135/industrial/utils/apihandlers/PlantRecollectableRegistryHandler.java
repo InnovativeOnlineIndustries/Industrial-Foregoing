@@ -25,7 +25,7 @@ package com.buuz135.industrial.utils.apihandlers;
 import com.buuz135.industrial.api.plant.PlantRecollectable;
 import com.buuz135.industrial.utils.apihandlers.plant.*;
 import net.minecraftforge.event.RegistryEvent;
-import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import net.minecraftforge.eventbus.api.SubscribeEvent;
 
 public class PlantRecollectableRegistryHandler {
 

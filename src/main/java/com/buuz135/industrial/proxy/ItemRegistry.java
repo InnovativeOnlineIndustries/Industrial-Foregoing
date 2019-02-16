@@ -22,21 +22,10 @@
 package com.buuz135.industrial.proxy;
 
 import com.buuz135.industrial.item.*;
-import com.buuz135.industrial.item.addon.*;
-import com.buuz135.industrial.item.addon.movility.FluidTransferAddon;
-import com.buuz135.industrial.item.addon.movility.ItemStackTransferAddon;
-import com.buuz135.industrial.item.addon.movility.TransferAddon;
 import com.buuz135.industrial.item.infinity.ItemInfinityDrill;
 import com.buuz135.industrial.utils.RecipeUtils;
 import com.hrznstudio.titanium.util.TitaniumMod;
-import net.minecraft.init.Blocks;
-import net.minecraft.init.Items;
-import net.minecraft.item.EnumDyeColor;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraftforge.fml.common.registry.GameRegistry;
-import net.minecraftforge.oredict.OreDictionary;
-import org.apache.commons.lang3.ArrayUtils;
 
 
 public class ItemRegistry {
@@ -55,16 +44,6 @@ public class ItemRegistry {
     public static ItemArtificalDye[] dyes;
     public static ItemInfinityDrill itemInfinityDrill;
 
-    public static AdultFilterAddonItem adultFilterAddomItem;
-    public static RangeAddonItem rangeAddonItem;
-    public static EnergyFieldAddon energyFieldAddon;
-    public static LeafShearingAddonItem leafShearingAddonItem;
-    public static ItemStackTransferAddon itemStackTransferAddonPush;
-    public static ItemStackTransferAddon itemStackTransferAddonPull;
-    public static FluidTransferAddon fluidTransferAddonPush;
-    public static FluidTransferAddon fluidTransferAddonPull;
-    public static FortuneAddonItem fortuneAddonItem;
-
     public static void registerItems(TitaniumMod mod) {
         mod.addItem(tinyDryRubber = new IFCustomItem("tinydryrubber"));
         mod.addItem(dryRubber = new IFCustomItem("dryrubber"));
@@ -75,7 +54,7 @@ public class ItemRegistry {
         mod.addItem(meatFeederItem = new MeatFeederItem());
         mod.addItem(mobImprisonmentToolItem = new MobImprisonmentToolItem());
         mod.addItem(strawItem = new ItemStraw());
-        mod.addItem(conveyorUpgradeItem = new ItemConveyorUpgrade());
+        //mod.addItem(conveyorUpgradeItem = new ItemConveyorUpgrade());
         mod.addItem(pinkSlime = new IFCustomItem("pink_slime"));
         mod.addItem(bookManualItem = new BookManualItem());
         mod.addItem(pinkSlimeIngot = new IFCustomItem("pink_slime_ingot"));
@@ -97,33 +76,24 @@ public class ItemRegistry {
 //        OreDictionary.registerOre("dyeBrown", fertilizer);
 //        OreDictionary.registerOre("fertilizer", fertilizer);
 
-        if (BlockRegistry.dyeMixerBlock.isEnabled()) {
-            for (EnumDyeColor dyeColor : EnumDyeColor.values()) {
-                Item dye = new ItemArtificalDye(dyeColor);
-                mod.addItem(dye);
-                ArrayUtils.add(dyes, dye);
-            }
-
-            String[] dyes = {"White", "Orange", "Magenta", "LightBlue", "Yellow", "Lime", "Pink", "Gray", "LightGray", "Cyan", "Purple", "Blue", "Brown", "Green", "Red", "Black"};
-            for (int i = 0; i < 16; i++) {
-//                OreDictionary.registerOre("dye" + dyes[i], new ItemStack(artificalDye, 1, i));
-            }
-        }
+//        if (BlockRegistry.dyeMixerBlock.isEnabled()) {
+//            for (EnumDyeColor dyeColor : EnumDyeColor.values()) {
+//                Item dye = new ItemArtificalDye(dyeColor);
+//                mod.addItem(dye);
+//                ArrayUtils.add(dyes, dye);
+//            }
+//
+//            String[] dyes = {"White", "Orange", "Magenta", "LightBlue", "Yellow", "Lime", "Pink", "Gray", "LightGray", "Cyan", "Purple", "Blue", "Brown", "Green", "Red", "Black"};
+//            for (int i = 0; i < 16; i++) {
+////                OreDictionary.registerOre("dye" + dyes[i], new ItemStack(artificalDye, 1, i));
+//            }
+//        }
     }
 
     public static void createRecipes() {
         meatFeederItem.createRecipe();
         mobImprisonmentToolItem.createRecipe();
-        adultFilterAddomItem.createRecipe();
-        rangeAddonItem.createRecipe();
-        energyFieldAddon.createRecipe();
         bookManualItem.createRecipe();
-        leafShearingAddonItem.createRecipe();
-        fluidTransferAddonPull.createRecipe();
-        fluidTransferAddonPush.createRecipe();
-        itemStackTransferAddonPull.createRecipe();
-        itemStackTransferAddonPush.createRecipe();
-        fortuneAddonItem.createRecipe();
         itemInfinityDrill.createRecipe();
 //        RecipeUtils.addShapedRecipe(new ItemStack(conveyorUpgradeItem, 1, 0), "ipi", "idi", "ici",
 //                'i', "ingotIron",

@@ -25,7 +25,7 @@ import com.buuz135.industrial.api.straw.StrawHandler;
 import com.buuz135.industrial.utils.apihandlers.straw.*;
 import net.minecraft.init.MobEffects;
 import net.minecraftforge.event.RegistryEvent;
-import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.registries.IForgeRegistry;
 
 
