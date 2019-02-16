@@ -23,7 +23,6 @@ package com.buuz135.industrial.proxy.block.filter;
 
 import com.buuz135.industrial.proxy.ItemRegistry;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityList;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.item.ItemStack;
@@ -53,7 +52,7 @@ public class ItemStackFilter extends AbstractFilter<Entity> {
             if (entity instanceof EntityItem && stack.getStack().isItemEqual(((EntityItem) entity).getItem()))
                 return true;
             if (entity instanceof EntityLiving && stack.getStack().getItem().equals(ItemRegistry.mobImprisonmentToolItem) && ItemRegistry.mobImprisonmentToolItem.containsEntity(stack.getStack())
-                    && EntityList.getKey(entity).toString().equalsIgnoreCase(ItemRegistry.mobImprisonmentToolItem.getID(stack.getStack()))) {
+                    && entity.getType().getRegistryName().toString().equalsIgnoreCase(ItemRegistry.mobImprisonmentToolItem.getID(stack.getStack()))) {
                 return true;
             }
         }
@@ -81,7 +80,7 @@ public class ItemStackFilter extends AbstractFilter<Entity> {
         }
         if (isEmpty) return false;
         for (GhostSlot stack : this.getFilter()) {
-            FluidStack original = FluidUtil.getFluidContained(stack.getStack());
+            FluidStack original = FluidUtil.getFluidContained(stack.getStack()).orElse(null);
             if (original != null && original.isFluidEqual(fluidStack)) return true;
         }
         return false;
@@ -106,7 +105,7 @@ public class ItemStackFilter extends AbstractFilter<Entity> {
     public void deserializeNBT(NBTTagCompound nbt) {
         for (int i = 0; i < this.getFilter().length; i++) {
             if (nbt.hasKey(String.valueOf(i))) {
-                this.getFilter()[i].setStack(new ItemStack(nbt.getCompound(String.valueOf(i))));
+                this.getFilter()[i].setStack(ItemStack.read(nbt.getCompound(String.valueOf(i))));
             } else this.getFilter()[i].setStack(ItemStack.EMPTY);
         }
     }

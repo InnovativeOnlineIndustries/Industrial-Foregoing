@@ -30,7 +30,7 @@ import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.client.renderer.texture.TextureMap;
-import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
+import net.minecraft.client.renderer.tileentity.TileEntityRenderer;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.util.EnumFacing;
 import net.minecraftforge.fluids.Fluid;
@@ -38,13 +38,13 @@ import org.lwjgl.opengl.GL11;
 
 import java.awt.*;
 
-public class FluidConveyorTESR extends TileEntitySpecialRenderer<TileEntityConveyor> {
+public class FluidConveyorTESR extends TileEntityRenderer<TileEntityConveyor> {
     @Override
-    public void render(TileEntityConveyor te, double x, double y, double z, float partialTicks, int destroyStage, float alpha) {
-        super.render(te, x, y, z, partialTicks, destroyStage, alpha);
+    public void render(TileEntityConveyor te, double x, double y, double z, float partialTicks, int destroyStage) {
+        super.render(te, x, y, z, partialTicks, destroyStage);
         if (te.getTank().getFluidAmount() > 0) {
             GlStateManager.pushMatrix();
-            GlStateManager.translatef(x, y, z);
+            GlStateManager.translatef((float) x, (float) y, (float) z);
             EnumFacing facing = te.getFacing();
             if (facing == EnumFacing.NORTH) {
                 GlStateManager.translatef(1, 0, 1);
@@ -79,7 +79,7 @@ public class FluidConveyorTESR extends TileEntitySpecialRenderer<TileEntityConve
             double posY = 2 / 16f - 1 / 32f;
             double right = 1 / 16f;
             double left = 15 / 16f;
-            BlockConveyor.EnumSides sides = te.getWorld().getBlockState(te.getPos()).getBlock().getActualState(te.getWorld().getBlockState(te.getPos()), te.getWorld(), te.getPos()).getValue(BlockConveyor.SIDES);
+            BlockConveyor.EnumSides sides = te.getWorld().getBlockState(te.getPos()).getBlock().getExtendedState(te.getWorld().getBlockState(te.getPos()), te.getWorld(), te.getPos()).get(BlockConveyor.SIDES);
             if (sides == BlockConveyor.EnumSides.BOTH || sides == BlockConveyor.EnumSides.RIGHT) right = 0;
             if (sides == BlockConveyor.EnumSides.BOTH || sides == BlockConveyor.EnumSides.LEFT) left = 1;
             Color color = new Color(fluid.getColor(te.getTank().getFluid()));

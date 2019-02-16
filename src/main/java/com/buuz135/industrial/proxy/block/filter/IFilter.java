@@ -28,7 +28,6 @@ import net.minecraft.entity.Entity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraftforge.fluids.FluidStack;
-import net.minecraftforge.fml.common.Optional;
 
 import java.awt.*;
 
@@ -51,7 +50,7 @@ public interface IFilter<T extends Entity> {
 
     void deserializeNBT(NBTTagCompound nbt);
 
-    @Optional.Interface(iface = "mezz.jei.api.gui.IGhostIngredientHandler$Target", modid = "jei", striprefs = true)
+    //@Optional.Interface(iface = "mezz.jei.api.gui.IGhostIngredientHandler$Target", modid = "jei", striprefs = true) TODO
     public static class GhostSlot implements IGhostIngredientHandler.Target<ItemStack> {
 
         private final int x;

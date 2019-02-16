@@ -2,12 +2,9 @@ package com.buuz135.industrial.item.infinity;
 
 
 import com.buuz135.industrial.item.IFCustomItem;
-import com.buuz135.industrial.proxy.BlockRegistry;
 import com.buuz135.industrial.proxy.CommonProxy;
 import com.buuz135.industrial.proxy.FluidsRegistry;
-import com.buuz135.industrial.proxy.ItemRegistry;
 import com.buuz135.industrial.utils.RayTraceUtils;
-import com.buuz135.industrial.utils.RecipeUtils;
 import com.google.common.collect.Multimap;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
@@ -23,7 +20,6 @@ import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.item.EntityXPOrb;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
-import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.init.SoundEvents;
 import net.minecraft.inventory.EntityEquipmentSlot;
@@ -46,8 +42,7 @@ import net.minecraftforge.common.ForgeHooks;
 import net.minecraftforge.common.ToolType;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.ICapabilityProvider;
-import net.minecraftforge.common.capabilities.OptionalCapabilityInstance;
-import net.minecraftforge.common.config.Configuration;
+import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.energy.CapabilityEnergy;
 import net.minecraftforge.energy.IEnergyStorage;
 import net.minecraftforge.fluids.FluidStack;
@@ -68,18 +63,18 @@ public class ItemInfinityDrill extends IFCustomItem {
     public static int FUEL_CONSUMPTION = 3;
 
     public ItemInfinityDrill() {
-        super("infinity_drill", new Builder().maxStackSize(1).addToolType(ToolType.PICKAXE, 3).addToolType(ToolType.SHOVEL, 3));
+        super("infinity_drill", new Properties().maxStackSize(1).addToolType(ToolType.PICKAXE, 3).addToolType(ToolType.SHOVEL, 3));
     }
 
     @Override
     public void createRecipe() {
-        RecipeUtils.addShapedRecipe(new ItemStack(this), " ID", "PRI", "PT ",
-                'I', Blocks.IRON_BLOCK,
-                'D', Blocks.DIAMOND_BLOCK,
-                'P', ItemRegistry.pinkSlimeIngot,
-                'R', BlockRegistry.laserDrillBlock,
-                'T', BlockRegistry.blackHoleTankBlock
-        );
+//        RecipeUtils.addShapedRecipe(new ItemStack(this), " ID", "PRI", "PT ",
+//                'I', Blocks.IRON_BLOCK,
+//                'D', Blocks.DIAMOND_BLOCK,
+//                'P', ItemRegistry.pinkSlimeIngot,
+//                'R', BlockRegistry.laserDrillBlock,
+//                'T', BlockRegistry.blackHoleTankBlock
+//        );
     }
 
     @Override
@@ -183,7 +178,7 @@ public class ItemInfinityDrill extends IFCustomItem {
         tooltip.add(new TextComponentTranslation("text.industrialforegoing.display.tier").appendText(" ").appendText(braquet.getLeft().getColor() + braquet.getLeft().getLocalizedName()));
         tooltip.add(new TextComponentTranslation("text.industrialforegoing.display.power").appendText(" ").appendText(new DecimalFormat().format(power)).appendText("/").appendText(new DecimalFormat().format(braquet.getRight().getPowerNeeded())).appendText("RF ").appendSibling(new TextComponentTranslation("text.industrialforegoing.display.next_tier")));
         int fuelAmount = getFuelFromStack(stack);
-        tooltip.add(new TextComponentTranslation("text.industrialforegoing.display.fluid").appendText(" ").appendText(new DecimalFormat().format(fuelAmount)).appendText("/").appendText(new DecimalFormat().format(1000000)).appendText(" mb ").appendSibling(new TextComponentTranslation(FluidsRegistry.BIOFUEL.getUnlocalizedName())));
+        tooltip.add(new TextComponentTranslation("text.industrialforegoing.display.fluid").appendText(" ").appendText(new DecimalFormat().format(fuelAmount)).appendText("/").appendText(new DecimalFormat().format(1000000)).appendText(" mb of Biofuel"));
         tooltip.add(new TextComponentTranslation("text.industrialforegoing.display.max_area").appendText(" ").appendText(getFormattedArea(braquet.getLeft(), braquet.getLeft().getRadius())));
         if (isSpecial(stack))
             tooltip.add(new TextComponentTranslation("text.industrialforegoing.display.special"));
@@ -319,14 +314,14 @@ public class ItemInfinityDrill extends IFCustomItem {
         return multimap;
     }
 
-    public void configuration(Configuration config) {
-        int i = 0;
-        for (DrillTier value : DrillTier.values()) {
-            value.setPowerNeeded(Long.parseLong(config.getString(i + "_" + value.name, Configuration.CATEGORY_GENERAL + Configuration.CATEGORY_SPLITTER + "infinity_drill" + Configuration.CATEGORY_SPLITTER + "power_values", value.powerNeeded + "", "")));
-            value.setRadius(config.getInt(i + "_" + value.name, Configuration.CATEGORY_GENERAL + Configuration.CATEGORY_SPLITTER + "infinity_drill" + Configuration.CATEGORY_SPLITTER + "radius", value.radius, 0, Integer.MAX_VALUE, ""));
-            ++i;
-        }
-    }
+//    public void configuration(Configuration config) {TODO
+//        int i = 0;
+//        for (DrillTier value : DrillTier.values()) {
+//            value.setPowerNeeded(Long.parseLong(config.getString(i + "_" + value.name, Configuration.CATEGORY_GENERAL + Configuration.CATEGORY_SPLITTER + "infinity_drill" + Configuration.CATEGORY_SPLITTER + "power_values", value.powerNeeded + "", "")));
+//            value.setRadius(config.getInt(i + "_" + value.name, Configuration.CATEGORY_GENERAL + Configuration.CATEGORY_SPLITTER + "infinity_drill" + Configuration.CATEGORY_SPLITTER + "radius", value.radius, 0, Integer.MAX_VALUE, ""));
+//            ++i;
+//        }
+//    }
 
     public enum DrillTier {
         POOR("poor", 0, 0, TextFormatting.GRAY, 0x7c7c7a),//1x1
@@ -409,8 +404,8 @@ public class ItemInfinityDrill extends IFCustomItem {
 
         private final FluidHandlerItemStack tank;
         private final InfinityDrillEnergyStorage energyStorage;
-        private final OptionalCapabilityInstance<IEnergyStorage> energyStorageCap;
-        private final OptionalCapabilityInstance<IFluidHandlerItem> tankCap;
+        private final LazyOptional<IEnergyStorage> energyStorageCap;
+        private final LazyOptional<IFluidHandlerItem> tankCap;
 
         private InfinityDrillCapabilityProvider(ItemStack stack) {
             tank = new FluidHandlerItemStack(stack, 1_000_000) {
@@ -442,17 +437,17 @@ public class ItemInfinityDrill extends IFCustomItem {
                     stack.getTag().setLong("Energy", Math.min(energy, DrillTier.ARTIFACT.getPowerNeeded()));
                 }
             };
-            this.tankCap = OptionalCapabilityInstance.of(() -> tank);
-            this.energyStorageCap = OptionalCapabilityInstance.of(() -> energyStorage);
+            this.tankCap = LazyOptional.of(() -> tank);
+            this.energyStorageCap = LazyOptional.of(() -> energyStorage);
         }
 
 
         @Nullable
         @Override
-        public <T> OptionalCapabilityInstance<T> getCapability(@Nonnull Capability<T> capability, @Nullable EnumFacing facing) {
+        public <T> LazyOptional<T> getCapability(@Nonnull Capability<T> capability, @Nullable EnumFacing facing) {
             if (capability == CapabilityFluidHandler.FLUID_HANDLER_ITEM_CAPABILITY) return tankCap.cast();
             if (capability == CapabilityEnergy.ENERGY) return energyStorageCap.cast();
-            return OptionalCapabilityInstance.empty();
+            return LazyOptional.empty();
         }
     }
 

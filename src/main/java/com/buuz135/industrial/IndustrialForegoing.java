@@ -27,7 +27,6 @@ import com.buuz135.industrial.proxy.ItemRegistry;
 import com.buuz135.industrial.proxy.client.ClientProxy;
 import com.buuz135.industrial.utils.IFFakePlayer;
 import com.buuz135.industrial.utils.Reference;
-import com.hrznstudio.titanium.block.tile.TileBase;
 import com.hrznstudio.titanium.tab.AdvancedTitaniumTab;
 import com.hrznstudio.titanium.util.TitaniumMod;
 import net.minecraft.util.ResourceLocation;
@@ -38,10 +37,9 @@ import net.minecraftforge.common.util.FakePlayer;
 import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fml.DistExecutor;
 import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.fml.common.event.FMLInitializationEvent;
-import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
-import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
-import net.minecraftforge.fml.common.event.FMLServerStartingEvent;
+import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
+import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
+import net.minecraftforge.fml.event.server.FMLServerStartingEvent;
 import net.minecraftforge.fml.network.NetworkRegistry;
 import net.minecraftforge.fml.network.simple.SimpleChannel;
 
@@ -88,32 +86,14 @@ public class IndustrialForegoing extends TitaniumMod {
         return player;
     }
 
-    public void preInit(FMLPreInitializationEvent event) {
-        instance = this;
-        proxy.preInit(event);
+    public void onCommon(FMLCommonSetupEvent event) {
+        proxy.run();
     }
 
-    public void init(FMLInitializationEvent event) {
-        instance = this;
-        proxy.init();
-    }
-    public void postInit(FMLPostInitializationEvent event) {
-        instance = this;
-        proxy.init();
+    public void onClient(FMLClientSetupEvent event) {
+        proxy.run();
     }
 
-    /*
-    @Mod.EventHandler
-    public void construction(FMLConstructionEvent event) {
-        Arrays.asList(TeslaCoreLibConfig.REGISTER_MACHINE_CASE, TeslaCoreLibConfig.REGISTER_GEARS,
-                TeslaCoreLibConfig.REGISTER_GEAR_TYPES + "#" + CoreGearType.IRON.getMaterial(),
-                TeslaCoreLibConfig.REGISTER_GEAR_TYPES + "#" + CoreGearType.GOLD.getMaterial(),
-                TeslaCoreLibConfig.REGISTER_GEAR_TYPES + "#" + CoreGearType.DIAMOND.getMaterial(),
-                TeslaCoreLibConfig.REGISTER_ADDONS,
-                TeslaCoreLibConfig.REGISTER_SPEED_ADDONS,
-                TeslaCoreLibConfig.REGISTER_ENERGY_ADDONS).forEach(s -> TeslaCoreLibConfig.INSTANCE.setDefaultFlag(s, true));
-        TeslaCoreLibConfig.INSTANCE.setDefaultFlag(TeslaCoreLibConfig.ALLOW_ENERGY_DISPLAY_CHANGE, false);
-    }*/
 
     public void serverStart(FMLServerStartingEvent event) {
         worldFakePlayer.clear();

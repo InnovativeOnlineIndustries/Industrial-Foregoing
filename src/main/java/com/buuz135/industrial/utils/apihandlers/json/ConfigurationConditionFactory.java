@@ -21,12 +21,19 @@
  */
 package com.buuz135.industrial.utils.apihandlers.json;
 
-public class ConfigurationConditionFactory { /*implements IConditionFactory {
+import com.buuz135.industrial.config.CustomConfiguration;
+import com.google.gson.JsonObject;
+import net.minecraftforge.common.crafting.IConditionSerializer;
+
+import java.util.function.BooleanSupplier;
+
+public class ConfigurationConditionFactory implements IConditionSerializer {
+
     @Override
-    public BooleanSupplier parse(JsonContext context, JsonObject json) {
+    public BooleanSupplier parse(JsonObject json) {
         if (json.has("value") && CustomConfiguration.configValues.containsKey(json.get("value").getAsString())) {
             return () -> CustomConfiguration.configValues.get(json.get("value").getAsString());
         }
         return () -> false;
-    }*/
+    }
 }

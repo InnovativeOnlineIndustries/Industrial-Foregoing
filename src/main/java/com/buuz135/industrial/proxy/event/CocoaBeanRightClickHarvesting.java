@@ -33,7 +33,6 @@ import net.minecraft.util.NonNullList;
 import net.minecraftforge.event.ForgeEventFactory;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.items.ItemHandlerHelper;
 
 @Mod.EventBusSubscriber(modid = Reference.MOD_ID)
