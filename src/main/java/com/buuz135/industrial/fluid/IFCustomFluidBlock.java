@@ -32,7 +32,6 @@ import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
-import net.minecraftforge.fluids.BlockFluidClassic;
 import net.minecraftforge.registries.IForgeRegistry;
 
 import java.util.function.Consumer;
@@ -42,9 +41,9 @@ public class IFCustomFluidBlock extends BlockFlowingFluid {
     private Consumer<EntityLivingBase> consumer;
 
     public IFCustomFluidBlock(IFCustomFluid fluid, Material material, Consumer<EntityLivingBase> consumer) {
-        super(fluid, material);
+        super(fluid, Block.Properties.create(material));
         setRegistryName(new ResourceLocation(Reference.MOD_ID, fluid.getName()));
-        setTranslationKey(fluidName);
+        setTranslationKey(fluid.getName());
         setCreativeTab(IndustrialForegoing.creativeTab);
         this.consumer = consumer;
     }
@@ -53,9 +52,6 @@ public class IFCustomFluidBlock extends BlockFlowingFluid {
         block.register(this);
     }
 
-    public String getName() {
-        return fluidName;
-    }
 
     @Override
     public void onEntityCollision(World worldIn, BlockPos pos, IBlockState state, Entity entityIn) {

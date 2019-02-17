@@ -24,10 +24,11 @@ package com.buuz135.industrial.gui.component;
 import com.buuz135.industrial.api.conveyor.gui.PositionedGuiComponent;
 import com.buuz135.industrial.gui.conveyor.GuiConveyor;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.audio.PositionedSoundRecord;
+import net.minecraft.client.audio.SimpleSound;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.init.SoundEvents;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.SoundCategory;
 
 import javax.annotation.Nullable;
 import java.util.Arrays;
@@ -46,13 +47,14 @@ public abstract class TexturedStateButtonGuiComponent extends PositionedGuiCompo
     }
 
     @Override
-    public void handleClick(GuiConveyor conveyor, int guiX, int guiY, int mouseX, int mouseY) {
+    public boolean handleClick(GuiConveyor conveyor, int guiX, int guiY, double mouseX, double mouseY) {
         conveyor.sendMessage(id, new NBTTagCompound());
-        Minecraft.getInstance().getSoundHandler().playSound(PositionedSoundRecord.getMasterRecord(SoundEvents.UI_BUTTON_CLICK, 1.0F));
+        Minecraft.getInstance().getSoundHandler().play(new SimpleSound(SoundEvents.UI_BUTTON_CLICK, SoundCategory.PLAYERS, 1.0F, 1.0F, Minecraft.getInstance().player.getPosition()));
+        return true;
     }
 
     @Override
-    public void drawGuiBackgroundLayer(int guiX, int guiY, int mouseX, int mouseY) {
+    public void drawGuiBackgroundLayer(int guiX, int guiY, double mouseX, double mouseY) {
         StateButtonInfo buttonInfo = getStateInfo();
         if (buttonInfo != null) {
             GlStateManager.color4f(1, 1, 1, 1);
@@ -62,20 +64,20 @@ public abstract class TexturedStateButtonGuiComponent extends PositionedGuiCompo
     }
 
     @Override
-    public void drawGuiForegroundLayer(int guiX, int guiY, int mouseX, int mouseY) {
+    public void drawGuiForegroundLayer(int guiX, int guiY, double mouseX, double mouseY) {
         StateButtonInfo buttonInfo = getStateInfo();
         if (buttonInfo != null && isInside(mouseX, mouseY)) {
             GlStateManager.disableLighting();
-            GlStateManager.disableDepth();
+            GlStateManager.enableDepthTest();
             Minecraft.getInstance().currentScreen.drawRect(getXPos() - guiX, getYPos() - guiY, getXPos() + getXSize() - guiX, getYPos() + getYSize() - guiY, -2130706433);
             GlStateManager.enableLighting();
-            GlStateManager.disableDepth();
+            GlStateManager.disableAlphaTest();
         }
     }
 
     @Nullable
     @Override
-    public List<String> getTooltip(int guiX, int guiY, int mouseX, int mouseY) {
+    public List<String> getTooltip(int guiX, int guiY, double mouseX, double mouseY) {
         StateButtonInfo buttonInfo = getStateInfo();
         if (buttonInfo != null) {
             return Arrays.asList(buttonInfo.getTooltip());

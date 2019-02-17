@@ -24,7 +24,7 @@ package com.buuz135.industrial.proxy;
 import com.buuz135.industrial.api.conveyor.ConveyorUpgradeFactory;
 import com.buuz135.industrial.proxy.block.upgrade.*;
 import net.minecraftforge.event.RegistryEvent;
-import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.registries.IForgeRegistry;
 
 

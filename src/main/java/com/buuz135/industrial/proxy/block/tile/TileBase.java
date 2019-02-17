@@ -35,7 +35,7 @@ public class TileBase extends TileEntity {
 
     @Override
     public NBTTagCompound getUpdateTag() {
-        return writeToNBT(new NBTTagCompound());
+        return write(new NBTTagCompound());
     }
 
     @Override
@@ -45,14 +45,14 @@ public class TileBase extends TileEntity {
 
     @Override
     public void onDataPacket(NetworkManager net, SPacketUpdateTileEntity pkt) {
-        readFromNBT(pkt.getNbtCompound());
+        read(pkt.getNbtCompound());
     }
 
     @Nullable
     @Override
     public SPacketUpdateTileEntity getUpdatePacket() {
         NBTTagCompound tag = new NBTTagCompound();
-        writeToNBT(tag);
+        write(tag);
         return new SPacketUpdateTileEntity(getPos(), 1, tag);
     }
 
