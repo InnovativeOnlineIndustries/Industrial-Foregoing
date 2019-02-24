@@ -155,7 +155,7 @@ public class BlackHoleControllerTile extends CustomSidedTileEntity {
                 if (output.getStackInSlot(i).getCount() >= output.getStackInSlot(i).getMaxStackSize()) continue;
                 int amount = blackHoleUnitBlock.getAmount(stack);
                 ItemStack s = blackHoleUnitBlock.getItemStack(stack);
-                if (!s.isEmpty() && output.getStackInSlot(i).isItemEqual(s) && ItemStack.areItemStackTagsEqual(output.getStackInSlot(i), s)) {
+                if (!s.isEmpty() && ((output.getStackInSlot(i).isItemEqual(s) && ItemStack.areItemStackTagsEqual(output.getStackInSlot(i), s)) || output.getStackInSlot(i).isEmpty())) {
                     ItemStack out = output.getStackInSlot(i);
                     if (out.isEmpty()) { // Slot is empty
                         out = s.copy();
