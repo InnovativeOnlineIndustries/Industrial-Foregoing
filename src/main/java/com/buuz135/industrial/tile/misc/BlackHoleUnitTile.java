@@ -100,6 +100,8 @@ public class BlackHoleUnitTile extends CustomSidedTileEntity implements IHasDisp
                 this.outItems.setStackInSlot(0, output);
             }
             if (!world.isRemote && amountMissing != 0) updateForLabel();
+        } else {
+            stack = ItemStack.EMPTY;
         }
         if (!world.isRemote && needsUpdate && this.world.getTotalWorldTime() % 5 == 0) {
             this.labelAmount = getAmount();
