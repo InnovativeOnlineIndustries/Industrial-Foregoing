@@ -190,7 +190,7 @@ public class FluidDictionaryConverterTile extends CustomSidedTileEntity {
             public void drawForegroundTopLayer(@NotNull BasicTeslaGuiContainer<?> container, int guiX, int guiY, int mouseX, int mouseY) {
                 super.drawForegroundTopLayer(container, guiX, guiY, mouseX, mouseY);
                 if (!isInside(container, mouseX, mouseY)) return;
-                if (inputPointer == 0) {
+                if (inputPointer <= 0) {
                     container.drawTooltip(Arrays.asList(new TextComponentTranslation("text.industrialforegoing.button.none").getUnformattedComponentText()), mouseX - guiX, mouseY - guiY);
                 } else {
                     if (inputPointer - 1 < INPUT_LIST.size()) {
@@ -209,17 +209,19 @@ public class FluidDictionaryConverterTile extends CustomSidedTileEntity {
             @Override
             public void drawBackgroundLayer(@NotNull BasicTeslaGuiContainer<?> container, int guiX, int guiY, float partialTicks, int mouseX, int mouseY) {
                 super.drawBackgroundLayer(container, guiX, guiY, partialTicks, mouseX, mouseY);
-                if (outputPointer == 0) {
+                if (outputPointer <= 0) {
                     container.mc.getTextureManager().bindTexture(new ResourceLocation("teslacorelib", "textures/gui/basic-machine.png"));
                     container.drawTexturedRect(this.getLeft() + 2, this.getTop() + 2, 146, 210, 14, 14);
                 } else {
-                    List<String> names = getOutputListFromFluid(INPUT_LIST.get(inputPointer - 1));
-                    if (outputPointer - 1 < names.size()) {
-                        String fluidName = names.get(outputPointer - 1);
-                        if (FluidRegistry.isFluidRegistered(fluidName)) {
-                            ItemStack stack = FluidUtil.getFilledBucket(FluidRegistry.getFluidStack(fluidName, 1000));
-                            if (!stack.isEmpty()) {
-                                container.mc.getRenderItem().renderItemIntoGUI(stack, guiX + this.getLeft() + 1, guiY + this.getTop() + 1);
+                    if (inputPointer > 0 && inputPointer - 1 < INPUT_LIST.size()) {
+                        List<String> names = getOutputListFromFluid(INPUT_LIST.get(inputPointer - 1));
+                        if (outputPointer - 1 < names.size()) {
+                            String fluidName = names.get(outputPointer - 1);
+                            if (FluidRegistry.isFluidRegistered(fluidName)) {
+                                ItemStack stack = FluidUtil.getFilledBucket(FluidRegistry.getFluidStack(fluidName, 1000));
+                                if (!stack.isEmpty()) {
+                                    container.mc.getRenderItem().renderItemIntoGUI(stack, guiX + this.getLeft() + 1, guiY + this.getTop() + 1);
+                                }
                             }
                         }
                     }

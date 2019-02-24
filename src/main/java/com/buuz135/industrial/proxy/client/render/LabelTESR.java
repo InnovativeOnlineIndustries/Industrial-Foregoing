@@ -116,7 +116,7 @@ public class LabelTESR extends TileEntitySpecialRenderer<TileEntityLabel> {
             GlStateManager.translate(0, 0, 1.016 / 16D);
         }
         if (facing == EnumFacing.EAST) {
-            GlStateManager.translate(7 / 16D, 0, 8 / 16D);
+            GlStateManager.translate(6.99 / 16D, 0, 8 / 16D);
             GlStateManager.rotate(90, 0, -1, 0);
         }
         if (facing == EnumFacing.SOUTH) {
