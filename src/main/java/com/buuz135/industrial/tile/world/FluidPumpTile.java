@@ -98,10 +98,13 @@ public class FluidPumpTile extends WorkingAreaElectricMachine {
             Fluid fluid = FluidRegistry.lookupFluidForBlock(this.world.getBlockState(peeked).getBlock());
             if (fluid != null) {
                 FluidStack stack = new FluidStack(fluid, 1000);
-                tank.fill(stack, true);
-                if (BlockRegistry.fluidPumpBlock.isReplaceFluidWithCobble())
-                    this.world.setBlockState(peeked, Blocks.COBBLESTONE.getDefaultState());
-                else world.setBlockToAir(peeked);
+                if (BlockRegistry.fluidPumpBlock.isReplaceFluidWithCobble()) {
+                    if (this.world.setBlockState(peeked, Blocks.COBBLESTONE.getDefaultState())) {
+                        tank.fill(stack, true);
+                    }
+                } else if (world.setBlockToAir(peeked)) {
+                    tank.fill(stack, true);
+                }
             }
             allBlocks.poll();
             return 1;
