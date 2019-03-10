@@ -32,12 +32,14 @@ public class CustomConfiguration {
     public static Configuration config;
     public static HashMap<String, Boolean> configValues;
     public static boolean enableBookEntriesInJEI;
+    public static boolean enableMultiblockEdition;
 
     public static void sync() {
         try {
             CustomOrientedBlock.blockList.forEach(CustomOrientedBlock::getMachineConfig);
             ItemRegistry.itemInfinityDrill.configuration(config);
             enableBookEntriesInJEI = config.getBoolean("enableBookEntriesInJEI", Configuration.CATEGORY_CLIENT, true, "Enable to show book entries in JEI");
+            enableMultiblockEdition = config.getBoolean("enableMultiblockEdition", Configuration.CATEGORY_CLIENT, true, "Enable to allow the multiblock edition to be used");
         } catch (Exception e) {
 
         } finally {

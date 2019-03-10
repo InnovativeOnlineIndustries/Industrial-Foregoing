@@ -22,6 +22,7 @@
 package com.buuz135.industrial.proxy.client.event;
 
 import com.buuz135.industrial.api.conveyor.ConveyorUpgradeFactory;
+import com.buuz135.industrial.config.CustomConfiguration;
 import com.buuz135.industrial.item.infinity.ItemInfinityDrill;
 import com.buuz135.industrial.proxy.FluidsRegistry;
 import com.buuz135.industrial.proxy.ItemRegistry;
@@ -36,6 +37,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.RenderGlobal;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
+import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumFacing;
@@ -48,11 +50,15 @@ import net.minecraftforge.client.event.DrawBlockHighlightEvent;
 import net.minecraftforge.client.event.ModelBakeEvent;
 import net.minecraftforge.client.event.RenderPlayerEvent;
 import net.minecraftforge.client.event.TextureStitchEvent;
+import net.minecraftforge.client.model.IModel;
+import net.minecraftforge.client.model.ModelLoader;
 import net.minecraftforge.client.model.ModelLoaderRegistry;
 import net.minecraftforge.fluids.IFluidBlock;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 import org.apache.commons.lang3.tuple.Pair;
+
+import java.util.Calendar;
 
 public class IFClientEvents {
 
@@ -70,10 +76,37 @@ public class IFClientEvents {
 
     @SubscribeEvent
     public void modelBake(ModelBakeEvent event) {
+        boolean isApril = Calendar.getInstance().get(Calendar.MONTH) == Calendar.APRIL && Calendar.getInstance().get(Calendar.DAY_OF_MONTH) == 1;
         for (ModelResourceLocation resourceLocation : event.getModelRegistry().getKeys()) {
             if (resourceLocation.getNamespace().equals(Reference.MOD_ID)) {
                 if (resourceLocation.getPath().contains("conveyor") && !resourceLocation.getPath().contains("upgrade"))
                     event.getModelRegistry().putObject(resourceLocation, new ConveyorBlockModel(event.getModelRegistry().getObject(resourceLocation)));
+                if (isApril && CustomConfiguration.enableMultiblockEdition) {
+                    try {
+                        IModel model = ModelLoaderRegistry.getModel(resourceLocation);
+                        model.getDependencies().forEach(dep -> {
+                            try {
+                                ModelLoaderRegistry.getModel(dep).asVanillaModel().ifPresent(modelBlock -> {
+                                    if (modelBlock.parent != null) {
+                                        if (modelBlock.parent.name.equals(new ResourceLocation(Reference.MOD_ID, "models/block/base_block").toString())) {
+                                            try {
+                                                ModelLoaderRegistry.getModel(new ResourceLocation(Reference.MOD_ID, "block/base_block_multiblock")).asVanillaModel().ifPresent(modelBlockParent -> modelBlock.parent = modelBlockParent);
+                                            } catch (Exception e) {
+                                                e.printStackTrace();
+                                            }
+                                        }
+                                        if (modelBlock.parent.name.equals(new ResourceLocation(Reference.MOD_ID, "models/block/base_block_multiblock").toString()))
+                                            event.getModelRegistry().putObject(resourceLocation, model.bake(model.getDefaultState(), DefaultVertexFormats.BLOCK, ModelLoader.defaultTextureGetter()));
+                                    }
+                                });
+                            } catch (Exception e) {
+                                e.printStackTrace();
+                            }
+                        });
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                }
             }
         }
         for (ConveyorUpgradeFactory conveyorUpgradeFactory : GameRegistry.findRegistry(ConveyorUpgradeFactory.class).getValuesCollection()) {
