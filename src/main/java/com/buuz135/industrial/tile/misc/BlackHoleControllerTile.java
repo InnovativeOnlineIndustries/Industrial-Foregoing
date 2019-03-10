@@ -69,7 +69,7 @@ public class BlackHoleControllerTile extends CustomSidedTileEntity {
                 if (!in.isEmpty() && in.getCount() + amount < Integer.MAX_VALUE) {
                     blackHoleUnitBlock.setItemStack(storage.getStackInSlot(slot), in);
                     blackHoleUnitBlock.setAmount(storage.getStackInSlot(slot), amount + in.getCount());
-                    in.setCount(0);
+                    input.setStackInSlot(0, ItemStack.EMPTY);
                 }
                 BlackHoleControllerTile.this.markDirty();
             }
@@ -91,7 +91,7 @@ public class BlackHoleControllerTile extends CustomSidedTileEntity {
 
             @Override
             public boolean canExtractItem(int slot) {
-                return super.canExtractItem(slot);
+                return false;
             }
         });
         this.addInventoryToStorage(input, "input");
@@ -272,8 +272,8 @@ public class BlackHoleControllerTile extends CustomSidedTileEntity {
         @Override
         public ItemStack insertItem(int slot, @Nonnull ItemStack stack, boolean simulate) {
             for (int i = 0; i < 9; ++i) {
-                ItemStack contained = blackHoleUnitBlock.getItemStack(storage.getStackInSlot(i));
-                if (stack.isItemEqual(contained) || (!tile.getOutput().getStackInSlot(i).isEmpty() && tile.getOutput().getStackInSlot(i).isItemEqual(stack))) {
+                if (storage.getStackInSlot(i).isEmpty()) continue;
+                if (input.canInsertItem(i, stack)) {
                     return tile.getInput().insertItem(i, stack, simulate);
                 }
             }
