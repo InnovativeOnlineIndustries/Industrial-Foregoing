@@ -114,7 +114,7 @@ public class CropRecolectorTile extends WorkingAreaElectricMachine {
                 PlantRecollectable plantRecollectable = recollectable.get();
                 ++operationAmount;
                 List<ItemStack> items = plantRecollectable.doHarvestOperation(this.world, pos, state, hasShearingAddon(), operationAmount);
-                if (items != null) insertItems(items, outItems);
+                if (items != null && !items.isEmpty()) insertItems(items, outItems);
                 if (!plantRecollectable.shouldCheckNextPlant(this.world, pos, state)) shouldPointerIncrease = false;
             }
             didWork = recollectable.isPresent();
@@ -149,7 +149,8 @@ public class CropRecolectorTile extends WorkingAreaElectricMachine {
         for (ItemStack stack : drops) {
             ItemHandlerHelper.insertItem(outItems, stack, false);
         }
-        sludge.fill(new FluidStack(FluidsRegistry.SLUDGE, ((CropRecolectorBlock) this.getBlockType()).getSludgeOperation() * drops.size()), true);
+        if (sludge.getFluidAmount() < sludge.getCapacity())
+            sludge.fill(new FluidStack(FluidsRegistry.SLUDGE, ((CropRecolectorBlock) this.getBlockType()).getSludgeOperation() * drops.size()), true);
     }
 
 
