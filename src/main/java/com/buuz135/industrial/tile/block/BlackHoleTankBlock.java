@@ -25,12 +25,14 @@ import com.buuz135.industrial.book.BookCategory;
 import com.buuz135.industrial.proxy.ItemRegistry;
 import com.buuz135.industrial.tile.misc.BlackHoleTankTile;
 import com.buuz135.industrial.utils.RecipeUtils;
+import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Items;
 import net.minecraft.item.Item;
+import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.BlockRenderLayer;
@@ -41,18 +43,23 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
+import net.minecraftforge.common.capabilities.Capability;
+import net.minecraftforge.common.capabilities.ICapabilityProvider;
 import net.minecraftforge.fluids.FluidActionResult;
 import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidUtil;
 import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
 import net.minecraftforge.fluids.capability.IFluidHandler;
+import net.minecraftforge.fluids.capability.templates.FluidHandlerItemStack;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import net.minecraftforge.registries.IForgeRegistry;
 import net.ndrei.teslacorelib.items.MachineCaseItem;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import javax.annotation.Nonnull;
 import java.util.List;
 
 public class BlackHoleTankBlock extends CustomOrientedBlock<BlackHoleTankTile> {
@@ -150,4 +157,68 @@ public class BlackHoleTankBlock extends CustomOrientedBlock<BlackHoleTankTile> {
         return BlockRenderLayer.CUTOUT;
     }
 
+    private static final String FLUID_NBT = "FluidName";
+
+    @Override
+    public void registerItem(@NotNull IForgeRegistry<Item> registry) {
+        registry.register(new BlockTankItem(this).setRegistryName(this.getRegistryName()));
+    }
+
+    public class BlockTankItem extends ItemBlock {
+
+        public BlockTankItem(Block block) {
+            super(block);
+        }
+
+        @javax.annotation.Nullable
+        @Override
+        public ICapabilityProvider initCapabilities(ItemStack stack, @javax.annotation.Nullable NBTTagCompound nbt) {
+            return new TankCapabilityProvider(stack);
+        }
+    }
+
+    public class TankCapabilityProvider implements ICapabilityProvider {
+
+        public final ItemStack itemStack;
+        public final FluidHandlerItemStack fluidHandlerItemStack;
+
+        public TankCapabilityProvider(ItemStack itemStack) {
+            this.itemStack = itemStack;
+            this.fluidHandlerItemStack = new FluidHandlerItemStack(this.itemStack, Integer.MAX_VALUE) {
+                @javax.annotation.Nullable
+                @Override
+                public FluidStack getFluid() {
+                    NBTTagCompound tagCompound = container.getTagCompound();
+                    if (tagCompound == null || !tagCompound.hasKey(FLUID_NBT) || FluidRegistry.isFluidRegistered(tagCompound.getString(FLUID_NBT))) {
+                        return null;
+                    }
+                    return new FluidStack(FluidRegistry.getFluid(tagCompound.getString(FLUID_NBT)), itemStack.getTagCompound().getInteger("Amount"), itemStack.getTagCompound().hasKey("Tag") && !itemStack.getTagCompound().getTag("Tag").isEmpty() ? itemStack.getTagCompound().getCompoundTag("Tag") : null);
+                }
+
+                @Override
+                protected void setFluid(FluidStack fluid) {
+                    if (!container.hasTagCompound()) {
+                        container.setTagCompound(new NBTTagCompound());
+                    }
+                    NBTTagCompound fluidTag = new NBTTagCompound();
+                    fluid.writeToNBT(fluidTag);
+                    container.setTagCompound(fluidTag);
+                }
+
+            };
+        }
+
+
+        @Override
+        public boolean hasCapability(@Nonnull Capability<?> capability, @javax.annotation.Nullable EnumFacing facing) {
+            return capability == CapabilityFluidHandler.FLUID_HANDLER_ITEM_CAPABILITY;
+        }
+
+        @javax.annotation.Nullable
+        @Override
+        public <T> T getCapability(@Nonnull Capability<T> capability, @javax.annotation.Nullable EnumFacing facing) {
+            if (capability == CapabilityFluidHandler.FLUID_HANDLER_ITEM_CAPABILITY) return (T) fluidHandlerItemStack;
+            return null;
+        }
+    }
 }
