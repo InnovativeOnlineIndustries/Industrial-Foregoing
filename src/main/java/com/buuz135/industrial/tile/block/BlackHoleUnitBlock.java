@@ -25,21 +25,33 @@ import com.buuz135.industrial.book.BookCategory;
 import com.buuz135.industrial.proxy.ItemRegistry;
 import com.buuz135.industrial.tile.misc.BlackHoleUnitTile;
 import com.buuz135.industrial.utils.RecipeUtils;
+import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.init.Items;
 import net.minecraft.item.Item;
+import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.EnumFacing;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
+import net.minecraftforge.common.capabilities.Capability;
+import net.minecraftforge.common.capabilities.ICapabilityProvider;
+import net.minecraftforge.items.CapabilityItemHandler;
+import net.minecraftforge.items.IItemHandler;
+import net.minecraftforge.items.ItemHandlerHelper;
+import net.minecraftforge.registries.IForgeRegistry;
 import net.ndrei.teslacorelib.items.MachineCaseItem;
+import org.jetbrains.annotations.NotNull;
 
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import java.util.List;
 
 public class BlackHoleUnitBlock extends CustomOrientedBlock<BlackHoleUnitTile> {
@@ -160,4 +172,90 @@ public class BlackHoleUnitBlock extends CustomOrientedBlock<BlackHoleUnitTile> {
         return BookCategory.STORAGE;
     }
 
+    @Override
+    public void registerItem(@NotNull IForgeRegistry<Item> registry) {
+        registry.register(new BlockStorageItem(this).setRegistryName(this.getRegistryName()));
+    }
+
+    public class BlockStorageItem extends ItemBlock {
+
+        public BlockStorageItem(Block block) {
+            super(block);
+        }
+
+        @javax.annotation.Nullable
+        @Override
+        public ICapabilityProvider initCapabilities(ItemStack stack, @javax.annotation.Nullable NBTTagCompound nbt) {
+            return new StorageItemHandler(stack);
+        }
+    }
+
+    public class StorageItemHandler implements ICapabilityProvider {
+
+        private final ItemStack itemStack;
+        private final IItemHandler itemHandler;
+
+        public StorageItemHandler(ItemStack itemStack) {
+            this.itemStack = itemStack;
+            this.itemHandler = new IItemHandler() {
+                @Override
+                public int getSlots() {
+                    return 1;
+                }
+
+                @Nonnull
+                @Override
+                public ItemStack getStackInSlot(int slot) {
+                    ItemStack inside = getItemStack(itemStack);
+                    inside.setCount(getAmount(itemStack));
+                    return inside;
+                }
+
+                @Nonnull
+                @Override
+                public ItemStack insertItem(int slot, @Nonnull ItemStack stack, boolean simulate) {
+                    if (stack.isEmpty()) return ItemStack.EMPTY;
+                    if (Integer.MAX_VALUE < stack.getCount() + (long) getAmount(itemStack)) return stack;
+                    if (!getItemStack(itemStack).isEmpty() && !ItemHandlerHelper.canItemStacksStack(stack, getItemStack(itemStack)))
+                        return stack;
+                    if (!simulate) {
+                        if (getItemStack(itemStack).isEmpty()) {
+                            setItemStack(itemStack, stack);
+                        }
+                        setAmount(itemStack, stack.getCount() + getAmount(itemStack));
+                    }
+                    return ItemStack.EMPTY;
+                }
+
+                @Nonnull
+                @Override
+                public ItemStack extractItem(int slot, int amount, boolean simulate) {
+                    int extracted = Math.min(getAmount(itemStack), amount);
+                    ItemStack extractedStack = getItemStack(itemStack).copy();
+                    extractedStack.setCount(extracted);
+                    if (!simulate) {
+                        setAmount(itemStack, Math.max(0, getAmount(itemStack) - extracted));
+                    }
+                    return extractedStack;
+                }
+
+                @Override
+                public int getSlotLimit(int slot) {
+                    return Integer.MAX_VALUE;
+                }
+            };
+        }
+
+        @Override
+        public boolean hasCapability(@Nonnull Capability<?> capability, @Nullable EnumFacing facing) {
+            return capability == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY;
+        }
+
+        @Nullable
+        @Override
+        public <T> T getCapability(@Nonnull Capability<T> capability, @Nullable EnumFacing facing) {
+            if (capability == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY) return (T) itemHandler;
+            return null;
+        }
+    }
 }
