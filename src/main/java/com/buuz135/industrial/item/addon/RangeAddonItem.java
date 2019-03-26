@@ -66,7 +66,7 @@ public class RangeAddonItem extends CustomAddon {
     @Override
     public void addInformation(ItemStack stack, @Nullable World worldIn, List<String> tooltip, ITooltipFlag flagIn) {
         super.addInformation(stack, worldIn, tooltip, flagIn);
-        tooltip.add("Tier: " + stack.getMetadata());
+        tooltip.add("Range: +" + (stack.getMetadata() + 1));
     }
 
     public void createRecipe() {
