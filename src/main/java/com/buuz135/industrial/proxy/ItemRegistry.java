@@ -106,6 +106,7 @@ public class ItemRegistry {
                 OreDictionary.registerOre("dye" + dyes[i], new ItemStack(artificalDye, 1, i));
             }
         }
+        GameRegistry.addSmelting(dryRubber, new ItemStack(plastic), 0);
     }
 
     public static void createRecipes() {
@@ -124,7 +125,6 @@ public class ItemRegistry {
         itemStackTransferAddonPush.createRecipe();
         fortuneAddonItem.createRecipe();
         itemInfinityDrill.createRecipe();
-        GameRegistry.addSmelting(dryRubber, new ItemStack(plastic), 0);
         RecipeUtils.addShapelessRecipe(new ItemStack(dryRubber), new ItemStack(tinyDryRubber), new ItemStack(tinyDryRubber), new ItemStack(tinyDryRubber), new ItemStack(tinyDryRubber), new ItemStack(tinyDryRubber), new ItemStack(tinyDryRubber), new ItemStack(tinyDryRubber), new ItemStack(tinyDryRubber), new ItemStack(tinyDryRubber));
         RecipeUtils.addShapedRecipe(new ItemStack(conveyorUpgradeItem, 1, 0), "ipi", "idi", "ici",
                 'i', "ingotIron",
