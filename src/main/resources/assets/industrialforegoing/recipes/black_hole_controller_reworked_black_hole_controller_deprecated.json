@@ -1,0 +1,11 @@
+{
+  "result": {
+    "item": "industrialforegoing:black_hole_controller_reworked"
+  },
+  "ingredients": [
+    {
+      "item": "industrialforegoing:black_hole_controller"
+    }
+  ],
+  "type": "minecraft:crafting_shapeless"
+}

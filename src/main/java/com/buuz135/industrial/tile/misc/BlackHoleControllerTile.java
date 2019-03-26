@@ -23,7 +23,6 @@ package com.buuz135.industrial.tile.misc;
 
 import com.buuz135.industrial.tile.CustomSidedTileEntity;
 import com.buuz135.industrial.utils.WorkUtils;
-import net.minecraft.entity.item.EntityItem;
 import net.minecraft.inventory.InventoryHelper;
 import net.minecraft.item.EnumDyeColor;
 import net.minecraft.item.Item;
@@ -147,46 +146,6 @@ public class BlackHoleControllerTile extends CustomSidedTileEntity {
     @Override
     protected void innerUpdate() {
         if (WorkUtils.isDisabled(this.getBlockType())) return;
-        input.setLocked(output.getLocked());
-        input.setFilter(output.getFilter());
-        for (int i = 0; i < 9; ++i) {
-            ItemStack stack = storage.getStackInSlot(i);
-            if (!stack.isEmpty()) {
-                if (output.getStackInSlot(i).getCount() >= output.getStackInSlot(i).getMaxStackSize()) continue;
-                int amount = blackHoleUnitBlock.getAmount(stack);
-                ItemStack s = blackHoleUnitBlock.getItemStack(stack);
-                if (!s.isEmpty() && ((output.getStackInSlot(i).isItemEqual(s) && ItemStack.areItemStackTagsEqual(output.getStackInSlot(i), s)) || output.getStackInSlot(i).isEmpty())) {
-                    ItemStack out = output.getStackInSlot(i);
-                    if (out.isEmpty()) { // Slot is empty
-                        out = s.copy();
-                        out.setCount(Math.min(amount, s.getMaxStackSize()));
-                        blackHoleUnitBlock.setAmount(stack, amount - out.getCount());
-                        output.setStackInSlot(i, out);
-                        if (blackHoleUnitBlock.getAmount(stack) <= 0 && !output.getLocked()) {
-                            stack.setTagCompound(null);
-                        }
-                        continue;
-                    }
-                    if (out.getCount() < out.getMaxStackSize()) {
-                        int increase = Math.min(amount, out.getMaxStackSize() - out.getCount());
-                        out.setCount(out.getCount() + increase);
-                        blackHoleUnitBlock.setAmount(stack, amount - increase);
-                        if (blackHoleUnitBlock.getAmount(stack) <= 0 && !output.getLocked()) {
-                            stack.setTagCompound(null);
-                        }
-                        continue;
-                    }
-                }
-            } else if (!output.getStackInSlot(i).isEmpty() && !this.world.isRemote) {
-                float f = 0.7F;
-                float d0 = world.rand.nextFloat() * f + (1.0F - f) * 0.5F;
-                float d1 = world.rand.nextFloat() * f + (1.0F - f) * 0.5F;
-                float d2 = world.rand.nextFloat() * f + (1.0F - f) * 0.5F;
-                EntityItem entityitem = new EntityItem(world, pos.getX() + d0, pos.getY() + d1, pos.getZ() + d2, output.getStackInSlot(i).copy());
-                output.setStackInSlot(i, ItemStack.EMPTY);
-                world.spawnEntity(entityitem);
-            }
-        }
     }
 
     public ItemStackHandler getInput() {

@@ -208,7 +208,9 @@ public class BlackHoleTankBlock extends CustomOrientedBlock<BlackHoleTankTile> {
 
                 @Override
                 protected void setContainerToEmpty() {
-                    container.setTagCompound(null);
+                    FluidStack fluid = getFluid();
+                    if (fluid == null) container.setTagCompound(null);
+                    else setFluid(new FluidStack(fluid.getFluid(), 0));
                 }
             };
         }
