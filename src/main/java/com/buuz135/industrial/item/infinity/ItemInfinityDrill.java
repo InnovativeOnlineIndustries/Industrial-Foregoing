@@ -177,11 +177,9 @@ public class ItemInfinityDrill extends IFCustomItem {
         return enoughFuel(stack) ? 10F : 0;
     }
 
-    private boolean isValidMaterial(Material material) {
-        for (Material mineableMaterial : mineableMaterials) {
-            if (mineableMaterial.equals(material)) return true;
-        }
-        return false;
+    @Override
+    public boolean shouldCauseBlockBreakReset(ItemStack oldStack, ItemStack newStack) {
+        return !oldStack.isItemEqual(newStack);
     }
 
     @Nullable
