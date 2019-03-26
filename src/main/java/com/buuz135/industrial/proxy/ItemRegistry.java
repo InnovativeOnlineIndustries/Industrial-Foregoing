@@ -39,59 +39,57 @@ import net.minecraftforge.registries.IForgeRegistry;
 
 public class ItemRegistry {
 
-    public static MeatFeederItem meatFeederItem;
-    public static MobImprisonmentToolItem mobImprisonmentToolItem;
-    public static IFCustomItem tinyDryRubber;
-    public static IFCustomItem dryRubber;
-    public static IFCustomItem plastic;
-    public static FertilizerItem fertilizer;
-    public static LaserLensItem laserLensItem;
-    public static LaserLensItem laserLensItem_inverted;
-    public static IFCustomItem pinkSlime;
-    public static BookManualItem bookManualItem;
-    public static IFCustomItem pinkSlimeIngot;
-    public static ItemStraw strawItem;
-    public static ItemConveyorUpgrade conveyorUpgradeItem;
+    public static MeatFeederItem meatFeederItem = new MeatFeederItem();
+    public static MobImprisonmentToolItem mobImprisonmentToolItem = new MobImprisonmentToolItem();
+    public static IFCustomItem tinyDryRubber = new IFCustomItem("tinydryrubber");
+    public static IFCustomItem dryRubber = new IFCustomItem("dryrubber");
+    public static IFCustomItem plastic = new IFCustomItem("plastic");
+    public static FertilizerItem fertilizer = new FertilizerItem();
+    public static LaserLensItem laserLensItem = new LaserLensItem(false);
+    public static LaserLensItem laserLensItem_inverted = new LaserLensItem(true);
+    public static IFCustomItem pinkSlime = new IFCustomItem("pink_slime");
+    public static BookManualItem bookManualItem = new BookManualItem();
+    public static IFCustomItem pinkSlimeIngot = new IFCustomItem("pink_slime_ingot");
+    public static ItemStraw strawItem = new ItemStraw();
+    public static ItemConveyorUpgrade conveyorUpgradeItem = new ItemConveyorUpgrade();
     public static ItemArtificalDye artificalDye;
-    public static ItemInfinityDrill itemInfinityDrill;
+    public static ItemInfinityDrill itemInfinityDrill = new ItemInfinityDrill();
 
-    public static AdultFilterAddonItem adultFilterAddomItem;
-    public static RangeAddonItem rangeAddonItem;
-    public static EnergyFieldAddon energyFieldAddon;
-    public static LeafShearingAddonItem leafShearingAddonItem;
-    public static ItemStackTransferAddon itemStackTransferAddonPush;
-    public static ItemStackTransferAddon itemStackTransferAddonPull;
-    public static FluidTransferAddon fluidTransferAddonPush;
-    public static FluidTransferAddon fluidTransferAddonPull;
-    public static FortuneAddonItem fortuneAddonItem;
+    public static AdultFilterAddonItem adultFilterAddomItem = new AdultFilterAddonItem();
+    public static RangeAddonItem rangeAddonItem = new RangeAddonItem();
+    public static EnergyFieldAddon energyFieldAddon = new EnergyFieldAddon();
+    public static LeafShearingAddonItem leafShearingAddonItem = new LeafShearingAddonItem();
+    public static ItemStackTransferAddon itemStackTransferAddonPush = new ItemStackTransferAddon(TransferAddon.ActionMode.PUSH);
+    public static ItemStackTransferAddon itemStackTransferAddonPull = new ItemStackTransferAddon(TransferAddon.ActionMode.PULL);
+    public static FluidTransferAddon fluidTransferAddonPush = new FluidTransferAddon(TransferAddon.ActionMode.PUSH);
+    public static FluidTransferAddon fluidTransferAddonPull = new FluidTransferAddon(TransferAddon.ActionMode.PULL);
+    public static FortuneAddonItem fortuneAddonItem = new FortuneAddonItem();
 
     public static void registerItems(IForgeRegistry<Item> itemRegistry) {
-        (tinyDryRubber = new IFCustomItem("tinydryrubber")).register(itemRegistry);
-        (dryRubber = new IFCustomItem("dryrubber")).register(itemRegistry);
-        RecipeUtils.addShapelessRecipe(new ItemStack(dryRubber), new ItemStack(tinyDryRubber), new ItemStack(tinyDryRubber), new ItemStack(tinyDryRubber), new ItemStack(tinyDryRubber), new ItemStack(tinyDryRubber), new ItemStack(tinyDryRubber), new ItemStack(tinyDryRubber), new ItemStack(tinyDryRubber), new ItemStack(tinyDryRubber));
-        (plastic = new IFCustomItem("plastic")).register(itemRegistry);
-        GameRegistry.addSmelting(dryRubber, new ItemStack(plastic), 0);
-        (fertilizer = new FertilizerItem()).register(itemRegistry);
-        (meatFeederItem = new MeatFeederItem()).register(itemRegistry);
-        (mobImprisonmentToolItem = new MobImprisonmentToolItem()).register(itemRegistry);
-        (laserLensItem = new LaserLensItem(false)).register(itemRegistry);
-        (laserLensItem_inverted = new LaserLensItem(true)).register(itemRegistry);
-        (strawItem = new ItemStraw()).register(itemRegistry);
-        (conveyorUpgradeItem = new ItemConveyorUpgrade()).register(itemRegistry);
-        (pinkSlime = new IFCustomItem("pink_slime")).register(itemRegistry);
-        (bookManualItem = new BookManualItem()).register(itemRegistry);
-        (pinkSlimeIngot = new IFCustomItem("pink_slime_ingot")).register(itemRegistry);
-        (itemInfinityDrill = new ItemInfinityDrill()).register(itemRegistry);
+        tinyDryRubber.register(itemRegistry);
+        dryRubber.register(itemRegistry);
+        plastic.register(itemRegistry);
+        fertilizer.register(itemRegistry);
+        meatFeederItem.register(itemRegistry);
+        mobImprisonmentToolItem.register(itemRegistry);
+        laserLensItem.register(itemRegistry);
+        laserLensItem_inverted.register(itemRegistry);
+        strawItem.register(itemRegistry);
+        conveyorUpgradeItem.register(itemRegistry);
+        pinkSlime.register(itemRegistry);
+        bookManualItem.register(itemRegistry);
+        pinkSlimeIngot.register(itemRegistry);
+        itemInfinityDrill.register(itemRegistry);
 
-        (adultFilterAddomItem = new AdultFilterAddonItem()).registerItem(itemRegistry);
-        (rangeAddonItem = new RangeAddonItem()).registerItem(itemRegistry);
-        (energyFieldAddon = new EnergyFieldAddon()).registerItem(itemRegistry);
-        (leafShearingAddonItem = new LeafShearingAddonItem()).registerItem(itemRegistry);
-        (itemStackTransferAddonPull = new ItemStackTransferAddon(TransferAddon.ActionMode.PULL)).registerItem(itemRegistry);
-        (itemStackTransferAddonPush = new ItemStackTransferAddon(TransferAddon.ActionMode.PUSH)).registerItem(itemRegistry);
-        (fluidTransferAddonPull = new FluidTransferAddon(TransferAddon.ActionMode.PULL)).registerItem(itemRegistry);
-        (fluidTransferAddonPush = new FluidTransferAddon(TransferAddon.ActionMode.PUSH)).registerItem(itemRegistry);
-        (fortuneAddonItem = new FortuneAddonItem()).registerItem(itemRegistry);
+        adultFilterAddomItem.registerItem(itemRegistry);
+        rangeAddonItem.registerItem(itemRegistry);
+        energyFieldAddon.registerItem(itemRegistry);
+        leafShearingAddonItem.registerItem(itemRegistry);
+        itemStackTransferAddonPull.registerItem(itemRegistry);
+        itemStackTransferAddonPush.registerItem(itemRegistry);
+        fluidTransferAddonPull.registerItem(itemRegistry);
+        fluidTransferAddonPush.registerItem(itemRegistry);
+        fortuneAddonItem.registerItem(itemRegistry);
 
         OreDictionary.registerOre("itemRubber", plastic);
         OreDictionary.registerOre("slimeball", pinkSlime);
@@ -126,6 +124,8 @@ public class ItemRegistry {
         itemStackTransferAddonPush.createRecipe();
         fortuneAddonItem.createRecipe();
         itemInfinityDrill.createRecipe();
+        GameRegistry.addSmelting(dryRubber, new ItemStack(plastic), 0);
+        RecipeUtils.addShapelessRecipe(new ItemStack(dryRubber), new ItemStack(tinyDryRubber), new ItemStack(tinyDryRubber), new ItemStack(tinyDryRubber), new ItemStack(tinyDryRubber), new ItemStack(tinyDryRubber), new ItemStack(tinyDryRubber), new ItemStack(tinyDryRubber), new ItemStack(tinyDryRubber), new ItemStack(tinyDryRubber));
         RecipeUtils.addShapedRecipe(new ItemStack(conveyorUpgradeItem, 1, 0), "ipi", "idi", "ici",
                 'i', "ingotIron",
                 'p', plastic,
@@ -160,5 +160,9 @@ public class ItemRegistry {
                 'i', "ingotIron",
                 'd', Blocks.HOPPER,
                 'c', new ItemStack(BlockRegistry.blockConveyor, 1, OreDictionary.WILDCARD_VALUE));
+    }
+
+    public static void poke() {
+
     }
 }

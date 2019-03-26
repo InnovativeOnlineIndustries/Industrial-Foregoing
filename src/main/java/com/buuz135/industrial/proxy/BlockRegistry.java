@@ -81,6 +81,7 @@ public class BlockRegistry {
     public static LaserBaseBlock laserBaseBlock = new LaserBaseBlock();
     public static LaserDrillBlock laserDrillBlock = new LaserDrillBlock();
     public static OreProcessorBlock oreProcessorBlock = new OreProcessorBlock();
+    public static BlackHoleControllerBlockDeprecated blackHoleControllerBlockDeprecated = new BlackHoleControllerBlockDeprecated();
     public static BlackHoleControllerBlock blackHoleControllerBlock = new BlackHoleControllerBlock();
     public static DyeMixerBlock dyeMixerBlock = new DyeMixerBlock();
     public static EnchantmentInvokerBlock enchantmentInvokerBlock = new EnchantmentInvokerBlock();

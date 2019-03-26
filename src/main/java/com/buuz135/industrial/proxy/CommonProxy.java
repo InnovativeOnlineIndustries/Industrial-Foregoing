@@ -132,6 +132,7 @@ public class CommonProxy {
 
         FluidsRegistry.registerFluids();
         BlockRegistry.poke();
+        ItemRegistry.poke();
 
         MinecraftForge.EVENT_BUS.register(new BlockRegistry());
         MinecraftForge.EVENT_BUS.register(new ItemRegistry());

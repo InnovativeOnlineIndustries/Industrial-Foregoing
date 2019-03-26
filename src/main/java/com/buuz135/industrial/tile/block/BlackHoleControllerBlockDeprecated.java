@@ -22,38 +22,31 @@
 package com.buuz135.industrial.tile.block;
 
 import com.buuz135.industrial.book.BookCategory;
-import com.buuz135.industrial.proxy.ItemRegistry;
-import com.buuz135.industrial.tile.misc.BlackHoleControllerTileReworked;
+import com.buuz135.industrial.proxy.BlockRegistry;
+import com.buuz135.industrial.tile.misc.BlackHoleControllerTile;
 import com.buuz135.industrial.utils.RecipeUtils;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
-import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
-import net.ndrei.teslacorelib.items.MachineCaseItem;
 
-public class BlackHoleControllerBlock extends CustomOrientedBlock<BlackHoleControllerTileReworked> {
+public class BlackHoleControllerBlockDeprecated extends CustomOrientedBlock<BlackHoleControllerTile> {
 
-    public BlackHoleControllerBlock() {
-        super("black_hole_controller_reworked", BlackHoleControllerTileReworked.class, Material.ROCK, 0, 0);
+    public BlackHoleControllerBlockDeprecated() {
+        super("black_hole_controller", BlackHoleControllerTile.class, Material.ROCK, 0, 0);
     }
 
     public void createRecipe() {
-        RecipeUtils.addShapedRecipe(new ItemStack(this), "pdp", "ece", "pmp",
-                'p', ItemRegistry.plastic,
-                'd', Blocks.DIAMOND_BLOCK,
-                'e', ItemRegistry.pinkSlimeIngot,
-                'c', Blocks.ENDER_CHEST,
-                'm', MachineCaseItem.INSTANCE);
+        RecipeUtils.addShapelessRecipe("black_hole_controller_deprecated", new ItemStack(BlockRegistry.blackHoleControllerBlock), new ItemStack(this));
     }
 
     @Override
     public void breakBlock(World worldIn, BlockPos pos, IBlockState state) {
         TileEntity t = worldIn.getTileEntity(pos);
-        if (t instanceof BlackHoleControllerTileReworked) {
-            ((BlackHoleControllerTileReworked) t).dropItems();
+        if (t instanceof BlackHoleControllerTile) {
+            ((BlackHoleControllerTile) t).dropItems();
         }
         super.breakBlock(worldIn, pos, state);
     }

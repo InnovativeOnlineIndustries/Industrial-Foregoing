@@ -181,6 +181,7 @@ public class BlackHoleUnitBlock extends CustomOrientedBlock<BlackHoleUnitTile> {
 
         public BlockStorageItem(Block block) {
             super(block);
+            setMaxStackSize(1);
         }
 
         @javax.annotation.Nullable

@@ -168,6 +168,7 @@ public class BlackHoleTankBlock extends CustomOrientedBlock<BlackHoleTankTile> {
 
         public BlockTankItem(Block block) {
             super(block);
+            setMaxStackSize(1);
         }
 
         @javax.annotation.Nullable
@@ -189,7 +190,7 @@ public class BlackHoleTankBlock extends CustomOrientedBlock<BlackHoleTankTile> {
                 @Override
                 public FluidStack getFluid() {
                     NBTTagCompound tagCompound = container.getTagCompound();
-                    if (tagCompound == null || !tagCompound.hasKey(FLUID_NBT) || FluidRegistry.isFluidRegistered(tagCompound.getString(FLUID_NBT))) {
+                    if (tagCompound == null || !tagCompound.hasKey(FLUID_NBT) || !FluidRegistry.isFluidRegistered(tagCompound.getString(FLUID_NBT))) {
                         return null;
                     }
                     return new FluidStack(FluidRegistry.getFluid(tagCompound.getString(FLUID_NBT)), itemStack.getTagCompound().getInteger("Amount"), itemStack.getTagCompound().hasKey("Tag") && !itemStack.getTagCompound().getTag("Tag").isEmpty() ? itemStack.getTagCompound().getCompoundTag("Tag") : null);
@@ -205,6 +206,10 @@ public class BlackHoleTankBlock extends CustomOrientedBlock<BlackHoleTankTile> {
                     container.setTagCompound(fluidTag);
                 }
 
+                @Override
+                protected void setContainerToEmpty() {
+                    container.setTagCompound(null);
+                }
             };
         }
 
