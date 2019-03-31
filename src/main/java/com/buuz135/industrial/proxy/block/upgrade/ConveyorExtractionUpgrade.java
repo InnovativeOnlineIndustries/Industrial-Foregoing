@@ -38,6 +38,7 @@ import com.buuz135.industrial.utils.Reference;
 import com.google.common.collect.Sets;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.item.EntityItem;
+import net.minecraft.entity.monster.EntityMob;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.init.Items;
@@ -179,6 +180,7 @@ public class ConveyorExtractionUpgrade extends ConveyorUpgrade {
         if (tile != null && tile.hasCapability(capability, getSide().getOpposite()))
             return tile.getCapability(capability, getSide().getOpposite());
         for (Entity entity : getWorld().getEntitiesWithinAABB(Entity.class, new AxisAlignedBB(0, 0, 0, 1, 1, 1).offset(offsetPos), EntitySelectors.NOT_SPECTATING)) {
+            if (entity instanceof EntityMob) continue;
             if (entity.hasCapability(capability, entity instanceof EntityPlayerMP ? null : getSide().getOpposite()))
                 return entity.getCapability(capability, entity instanceof EntityPlayerMP ? null : getSide().getOpposite());
         }
