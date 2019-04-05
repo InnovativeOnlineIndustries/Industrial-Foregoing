@@ -24,37 +24,27 @@ package com.buuz135.industrial.utils;
 import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.*;
-import net.minecraft.client.renderer.block.model.BakedQuad;
-import net.minecraft.client.renderer.block.model.IBakedModel;
-import net.minecraft.client.renderer.block.model.ItemCameraTransforms;
 import net.minecraft.client.renderer.entity.RenderManager;
+import net.minecraft.client.renderer.model.BakedQuad;
+import net.minecraft.client.renderer.model.IBakedModel;
+import net.minecraft.client.renderer.model.ItemCameraTransforms;
 import net.minecraft.client.renderer.texture.TextureMap;
-import net.minecraft.client.renderer.texture.TextureUtil;
 import net.minecraft.client.renderer.tileentity.TileEntityItemStackRenderer;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
-import net.minecraft.tags.Tag;
 import net.minecraft.util.EnumFacing;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.common.Tags;
-import net.minecraftforge.common.capabilities.OptionalCapabilityInstance;
-import net.minecraftforge.fluids.FluidActionResult;
-import net.minecraftforge.fluids.FluidStack;
-import net.minecraftforge.fluids.FluidUtil;
-import net.minecraftforge.fluids.IFluidTank;
 import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
-import net.minecraftforge.fluids.capability.IFluidHandler;
-import net.minecraftforge.fluids.capability.IFluidHandlerItem;
-import net.minecraftforge.items.ItemHandlerHelper;
 import net.minecraftforge.items.ItemStackHandler;
 import org.lwjgl.opengl.GL11;
 
 import java.awt.*;
-import java.util.*;
 import java.util.List;
+import java.util.Random;
 
 public class ItemStackUtils {
 
@@ -198,51 +188,6 @@ public class ItemStackUtils {
     @OnlyIn(Dist.CLIENT)
     public static int getColor(ItemStack stack) {
         return ColorUtils.getColorFrom(Minecraft.getInstance().getItemRenderer().getItemModelWithOverrides(stack, Minecraft.getInstance().world, Minecraft.getInstance().player).getParticleTexture(), Color.GRAY);
-    }
-
-    public static void fillItemFromTank(ItemStackHandler fluidItems, IFluidTank tank) {
-        if (tank.getFluid() == null)
-            return;
-        ItemStack stack = fluidItems.getStackInSlot(0).copy();
-        if (!stack.isEmpty()) {
-            OptionalCapabilityInstance<IFluidHandlerItem> optionalCapabilityInstance = stack.getCapability(CapabilityFluidHandler.FLUID_HANDLER_ITEM_CAPABILITY);
-            if (optionalCapabilityInstance.isPresent()) {
-                FluidActionResult result = FluidUtil.tryFillContainer(stack, (IFluidHandler) tank, tank.getCapacity(), null, false);
-                if (result.isSuccess() && (fluidItems.getStackInSlot(1).isEmpty() ||
-                        (ItemHandlerHelper.canItemStacksStack(result.getResult(), fluidItems.getStackInSlot(1)) && result.getResult().getCount() + fluidItems.getStackInSlot(1).getCount() <= result.getResult().getMaxStackSize()))) {
-                    result = FluidUtil.tryFillContainer(stack, (IFluidHandler) tank, tank.getCapacity(), null, true);
-                    if (fluidItems.getStackInSlot(1).isEmpty()) {
-                        fluidItems.setStackInSlot(1, result.getResult());
-                    } else {
-                        fluidItems.getStackInSlot(1).grow(1);
-                    }
-                    fluidItems.getStackInSlot(0).shrink(1);
-                }
-            }
-        }
-    }
-
-    public static void fillTankFromItem(ItemStackHandler fluidItems, IFluidTank tank) {
-        ItemStack stack = fluidItems.getStackInSlot(0).copy();
-        if (!stack.isEmpty()) {
-            OptionalCapabilityInstance<IFluidHandlerItem> optionalCapabilityInstance = stack.getCapability(CapabilityFluidHandler.FLUID_HANDLER_ITEM_CAPABILITY);
-            if (optionalCapabilityInstance.isPresent()) {
-                IFluidHandlerItem cap = optionalCapabilityInstance.orElseThrow(UnknownError::new);
-                FluidStack fluidStack = cap.drain(1000, false);
-                if (fluidStack != null && tank.fill(fluidStack, false) == 0) return;
-                FluidActionResult result = FluidUtil.tryEmptyContainer(stack, (IFluidHandler) tank, 1000, null, false);
-                if (result.isSuccess() && (fluidItems.getStackInSlot(1).isEmpty() ||
-                        (ItemHandlerHelper.canItemStacksStack(result.getResult(), fluidItems.getStackInSlot(1)) && result.getResult().getCount() + fluidItems.getStackInSlot(1).getCount() <= result.getResult().getMaxStackSize()))) {
-                    result = FluidUtil.tryEmptyContainer(stack, (IFluidHandler) tank, tank.getCapacity(), null, true);
-                    if (fluidItems.getStackInSlot(1).isEmpty()) {
-                        fluidItems.setStackInSlot(1, result.getResult());
-                    } else {
-                        fluidItems.getStackInSlot(1).grow(1);
-                    }
-                    fluidItems.getStackInSlot(0).shrink(1);
-                }
-            }
-        }
     }
 
 }

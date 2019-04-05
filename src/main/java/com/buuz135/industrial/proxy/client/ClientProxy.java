@@ -72,7 +72,7 @@ public class ClientProxy extends CommonProxy {
 
         try {
             ears_model = OBJLoader.INSTANCE.loadModel(new ResourceLocation(Reference.MOD_ID, "models/block/catears.obj"));
-            ears_baked = ears_model.bake(TRSRTransformation.identity(), DefaultVertexFormats.BLOCK, ModelLoader.defaultTextureGetter());
+            ears_baked = ears_model.bake(ModelLoader.defaultModelGetter(), ModelLoader.defaultTextureGetter(), TRSRTransformation.identity(), false, DefaultVertexFormats.BLOCK);
         } catch (Exception e) {
             e.printStackTrace();
         }

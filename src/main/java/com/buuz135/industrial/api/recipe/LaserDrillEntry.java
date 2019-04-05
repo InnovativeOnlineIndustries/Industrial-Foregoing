@@ -30,7 +30,6 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.biome.Biome;
-import net.minecraftforge.oredict.OreDictionary;
 import net.minecraftforge.registries.ForgeRegistries;
 
 import java.io.*;

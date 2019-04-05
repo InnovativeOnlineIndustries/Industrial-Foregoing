@@ -23,19 +23,19 @@ package com.buuz135.industrial.proxy.client.entity;
 
 import com.buuz135.industrial.entity.EntityPinkSlime;
 import com.buuz135.industrial.utils.Reference;
-import net.minecraft.client.model.ModelSlime;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.entity.RenderLiving;
 import net.minecraft.client.renderer.entity.RenderManager;
+import net.minecraft.client.renderer.entity.model.ModelSlime;
 import net.minecraft.util.ResourceLocation;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 
 import javax.annotation.Nullable;
 import java.util.Arrays;
 import java.util.List;
 
-@SideOnly(Side.CLIENT)
+@OnlyIn(Dist.CLIENT)
 public class RenderPinkSlime extends RenderLiving<EntityPinkSlime> {
 
     public static final List<String> NAMES = Arrays.asList("buuz135", "the_codedone");
@@ -64,6 +64,6 @@ public class RenderPinkSlime extends RenderLiving<EntityPinkSlime> {
     @Nullable
     @Override
     protected ResourceLocation getEntityTexture(EntityPinkSlime entity) {
-        return entity.hasCustomName() && NAMES.contains(entity.getDisplayName().getUnformattedText().toLowerCase()) ? PINK_SLIME_TEXTURES_RGB : PINK_SLIME_TEXTURES;
+        return entity.hasCustomName() && NAMES.contains(entity.getDisplayName().getUnformattedComponentText().toLowerCase()) ? PINK_SLIME_TEXTURES_RGB : PINK_SLIME_TEXTURES;
     }
 }

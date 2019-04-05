@@ -22,8 +22,6 @@
 package com.buuz135.industrial.config;
 
 import com.buuz135.industrial.proxy.ItemRegistry;
-import com.buuz135.industrial.block.CustomOrientedBlock;
-import net.minecraftforge.common.config.Configuration;
 
 import java.util.HashMap;
 

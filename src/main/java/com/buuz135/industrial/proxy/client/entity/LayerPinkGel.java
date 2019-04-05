@@ -22,10 +22,10 @@
 package com.buuz135.industrial.proxy.client.entity;
 
 import com.buuz135.industrial.entity.EntityPinkSlime;
-import net.minecraft.client.model.ModelBase;
-import net.minecraft.client.model.ModelSlime;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.entity.layers.LayerRenderer;
+import net.minecraft.client.renderer.entity.model.ModelBase;
+import net.minecraft.client.renderer.entity.model.ModelSlime;
 
 import java.awt.*;
 
@@ -41,20 +41,20 @@ public class LayerPinkGel implements LayerRenderer<EntityPinkSlime> {
     }
 
     @Override
-    public void doRenderLayer(EntityPinkSlime entitylivingbaseIn, float limbSwing, float limbSwingAmount, float partialTicks, float ageInTicks, float netHeadYaw, float headPitch, float scale) {
-        if (!entitylivingbaseIn.isInvisible()) {
+    public void render(EntityPinkSlime entityPinkSlime, float limbSwing, float limbSwingAmount, float partialTicks, float ageInTicks, float netHeadYaw, float headPitch, float scale) {
+        if (!entityPinkSlime.isInvisible()) {
             GlStateManager.color4f(1.0F, 1.0F, 1.0F, 1.0F);
             GlStateManager.enableNormalize();
             GlStateManager.enableBlend();
             GlStateManager.blendFunc(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA);
             this.slimeModel.setModelAttributes(this.slimeRenderer.getMainModel());
-            if (entitylivingbaseIn.hasCustomName() && NAMES.contains(entitylivingbaseIn.getDisplayName().getUnformattedText().toLowerCase())) {
+            if (entityPinkSlime.hasCustomName() && NAMES.contains(entityPinkSlime.getDisplayName().getUnformattedComponentText().toLowerCase())) {
                 float speed = 360 * 0.2f;
-                int hsb = (int) (entitylivingbaseIn.world.getTotalWorldTime() % speed);
+                int hsb = (int) (entityPinkSlime.world.getGameTime() % speed);
                 Color color = Color.getHSBColor(hsb / speed, 0.75f, 0.75f);
                 GlStateManager.color4f(color.getRed() / 255f, color.getGreen() / 255f, color.getBlue() / 255f, 1.0f);
             }
-            this.slimeModel.render(entitylivingbaseIn, limbSwing, limbSwingAmount, ageInTicks, netHeadYaw, headPitch, scale);
+            this.slimeModel.render(entityPinkSlime, limbSwing, limbSwingAmount, ageInTicks, netHeadYaw, headPitch, scale);
             GlStateManager.disableBlend();
             GlStateManager.disableNormalize();
         }

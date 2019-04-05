@@ -25,9 +25,9 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tags.Tag;
 import net.minecraftforge.fluids.FluidStack;
-import net.minecraftforge.oredict.OreDictionary;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 public class OreFluidEntryRaw {
@@ -37,13 +37,13 @@ public class OreFluidEntryRaw {
     private Tag<Item> ore;
     private FluidStack input;
     private FluidStack output;
-    private List<ItemStack> cachedOres;
+    private Collection<Item> cachedOres;
 
     public OreFluidEntryRaw(Tag<Item> ore, FluidStack input, FluidStack output) {
         this.ore = ore;
         this.input = input;
         this.output = output;
-        this.cachedOres = OreDictionary.getOres(ore);
+        this.cachedOres = ore.getAllElements();
     }
 
     public Tag<Item> getOre() {
@@ -59,8 +59,8 @@ public class OreFluidEntryRaw {
     }
 
     public boolean matches(ItemStack item, FluidStack fluid) {
-        for (ItemStack cachedOre : cachedOres) {
-            if (cachedOre.isItemEqual(item) && input.isFluidEqual(fluid)) return true;
+        for (Item cachedOre : cachedOres) {
+            if (cachedOre.equals(item.getItem()) && input.isFluidEqual(fluid)) return true;
         }
         return false;
     }

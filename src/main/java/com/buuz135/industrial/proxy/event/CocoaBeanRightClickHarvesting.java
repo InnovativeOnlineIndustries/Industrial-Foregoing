@@ -21,25 +21,17 @@
  */
 package com.buuz135.industrial.proxy.event;
 
-import com.buuz135.industrial.proxy.BlockRegistry;
 import com.buuz135.industrial.utils.Reference;
-import net.minecraft.block.BlockCocoa;
-import net.minecraft.block.state.IBlockState;
-import net.minecraft.enchantment.EnchantmentHelper;
-import net.minecraft.init.Enchantments;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.EnumHand;
-import net.minecraft.util.NonNullList;
-import net.minecraftforge.event.ForgeEventFactory;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
+import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.items.ItemHandlerHelper;
 
 @Mod.EventBusSubscriber(modid = Reference.MOD_ID)
 public class CocoaBeanRightClickHarvesting {
 
     @SubscribeEvent
     public static void onPlayerRightClick(PlayerInteractEvent.RightClickBlock event) {
+        /*
         if (!BlockRegistry.plantInteractorBlock.isRightClickCocoBeansEnabled()) return;
         if (event.getWorld().isRemote) return;
         if (event.getHand() != EnumHand.MAIN_HAND) return;
@@ -57,5 +49,7 @@ public class CocoaBeanRightClickHarvesting {
             event.getWorld().setBlockState(event.getPos(), state.withProperty(BlockCocoa.AGE, 0));
             for (ItemStack stack : drops) ItemHandlerHelper.giveItemToPlayer(event.getEntityPlayer(), stack);
         }
+
+         */
     }
 }
