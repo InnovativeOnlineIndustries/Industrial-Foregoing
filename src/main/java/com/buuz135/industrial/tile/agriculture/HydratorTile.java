@@ -27,18 +27,41 @@ import com.buuz135.industrial.utils.WorkUtils;
 import net.minecraft.block.IGrowable;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
+import net.minecraftforge.common.FarmlandWaterManager;
+import net.minecraftforge.common.ticket.AABBTicket;
 
 import java.util.List;
 
 public class HydratorTile extends WorkingAreaElectricMachine {
+
+    private AABBTicket farmlandTicket;
 
     public HydratorTile() {
         super(HydratorTile.class.getName().hashCode());
     }
 
     @Override
+    public void onLoad() {
+        if (!world.isRemote) {
+            farmlandTicket = FarmlandWaterManager.addAABBTicket(world, getWateringArea());
+            updateTicket();
+        }
+    }
+
+    public void updateTicket() {
+        if (!world.isRemote) {
+            farmlandTicket.validate();
+        }
+    }
+
+    @Override
     public float work() {
         if (WorkUtils.isDisabled(this.getBlockType())) return 0;
+        if (farmlandTicket == null || !farmlandTicket.axisAlignedBB.equals(getWateringArea())) {
+            if (farmlandTicket != null) farmlandTicket.invalidate();
+            farmlandTicket = FarmlandWaterManager.addAABBTicket(world, getWateringArea());
+            updateTicket();
+        }
         List<BlockPos> blockPosList = BlockUtils.getBlockPosInAABB(getWorkingArea());
         boolean hasWorked = false;
         for (BlockPos pos : blockPosList) {
@@ -53,5 +76,20 @@ public class HydratorTile extends WorkingAreaElectricMachine {
     @Override
     public AxisAlignedBB getWorkingArea() {
         return super.getWorkingArea().offset(0, -1, 0);
+    }
+
+    @Override
+    public void onChunkUnload() {
+        if (!world.isRemote) {
+            farmlandTicket.invalidate();
+        }
+    }
+
+    public AxisAlignedBB getWateringArea() {
+        return getWorkingArea().offset(0, -1, 0).grow(0, 1, 0);
+    }
+
+    public AABBTicket getFarmlandTicket() {
+        return farmlandTicket;
     }
 }

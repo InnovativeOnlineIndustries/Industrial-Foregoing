@@ -31,6 +31,7 @@ import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
+import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
@@ -38,6 +39,7 @@ import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import net.ndrei.teslacorelib.items.MachineCaseItem;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.Random;
 
@@ -77,5 +79,16 @@ public class HydratorBlock extends CustomAreaOrientedBlock<HydratorTile> {
     @Override
     public boolean isReplaceable(IBlockAccess worldIn, BlockPos pos) {
         return false;
+    }
+
+    @Override
+    public void breakBlock(@NotNull World worldIn, @NotNull BlockPos pos, @NotNull IBlockState state) {
+        if (!worldIn.isRemote) {
+            TileEntity entity = worldIn.getTileEntity(pos);
+            if (entity instanceof HydratorTile) {
+                ((HydratorTile) entity).getFarmlandTicket().invalidate();
+            }
+        }
+        super.breakBlock(worldIn, pos, state);
     }
 }
