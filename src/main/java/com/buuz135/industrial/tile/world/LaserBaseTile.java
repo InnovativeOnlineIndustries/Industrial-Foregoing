@@ -192,8 +192,8 @@ public class LaserBaseTile extends CustomSidedTileEntity implements IHasDisplayS
                                     increase += BlockRegistry.laserBaseBlock.getLenseChanceIncrease();
                                 }
                             }
-                            items.add(new ItemStackWeightedItem(entry.getStack(), entry.getWeight() + increase));
                         }
+                        items.add(new ItemStackWeightedItem(entry.getStack(), entry.getWeight() + increase));
                     }
                 }
             });
