@@ -79,7 +79,9 @@ public class FluidConveyorTESR extends TileEntitySpecialRenderer<TileEntityConve
             double posY = 2 / 16f - 1 / 32f;
             double right = 1 / 16f;
             double left = 15 / 16f;
-            BlockConveyor.EnumSides sides = te.getWorld().getBlockState(te.getPos()).getBlock().getActualState(te.getWorld().getBlockState(te.getPos()), te.getWorld(), te.getPos()).getValue(BlockConveyor.SIDES);
+            BlockConveyor.EnumSides sides = BlockConveyor.EnumSides.NONE;
+            if (te.getWorld().getBlockState(te.getPos()).getBlock() instanceof BlockConveyor)
+                sides = te.getWorld().getBlockState(te.getPos()).getBlock().getActualState(te.getWorld().getBlockState(te.getPos()), te.getWorld(), te.getPos()).getValue(BlockConveyor.SIDES);
             if (sides == BlockConveyor.EnumSides.BOTH || sides == BlockConveyor.EnumSides.RIGHT) right = 0;
             if (sides == BlockConveyor.EnumSides.BOTH || sides == BlockConveyor.EnumSides.LEFT) left = 1;
             Color color = new Color(fluid.getColor(te.getTank().getFluid()));
