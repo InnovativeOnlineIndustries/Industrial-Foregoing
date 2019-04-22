@@ -60,7 +60,7 @@ repositories {
     mavenCentral()
     jcenter()
     maven {
-        url 'https://hrznstudio.com/maven/'
+        url 'https://cdn.hrzn.studio/maven/'
     }
     maven {
         url = "http://dvs1.progwml6.com/files/maven"
@@ -69,7 +69,7 @@ repositories {
 
 dependencies {
     minecraft 'net.minecraftforge:forge:1.13.2-25.0.108'
-    compile 'com.hrznstudio:Titanium:2.0.0.24'
+    deobf 'com.hrznstudio:titanium:2.0.+'
     compileOnly 'org.projectlombok:lombok:1.16.16'
     compile "mezz.jei:jei_1.12.2:4.14.3.246:api"
 }
