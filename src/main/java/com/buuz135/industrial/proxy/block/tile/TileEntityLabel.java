@@ -22,6 +22,9 @@
 package com.buuz135.industrial.proxy.block.tile;
 
 
+import com.buuz135.industrial.proxy.BlockRegistry;
+import com.hrznstudio.titanium.block.BlockTileBase;
+import com.hrznstudio.titanium.block.tile.TileBase;
 import net.minecraft.nbt.NBTTagCompound;
 
 import java.text.DecimalFormat;
@@ -31,6 +34,10 @@ public class TileEntityLabel extends TileBase {
 
     private static DecimalFormat formatterWithUnits = new DecimalFormat("####0.#");
     private FormatType formatType = FormatType.STACKS;
+
+    public TileEntityLabel() {
+        super(BlockRegistry.blockLabel);
+    }
 
     public static String getFormatedBigNumber(int number) {
         if (number >= 1000000000) { //MILLION
@@ -59,14 +66,14 @@ public class TileEntityLabel extends TileBase {
     }
 
     @Override
-    public void readFromNBT(NBTTagCompound compound) {
+    public void read(NBTTagCompound compound) {
         this.formatType = FormatType.valueOf(compound.getString("Format"));
-        super.readFromNBT(compound);
+        super.read(compound);
     }
 
     @Override
-    public NBTTagCompound writeToNBT(NBTTagCompound compound) {
-        compound = super.writeToNBT(compound);
+    public NBTTagCompound write(NBTTagCompound compound) {
+        compound = super.write(compound);
         compound.setString("Format", formatType.name());
         return compound;
     }

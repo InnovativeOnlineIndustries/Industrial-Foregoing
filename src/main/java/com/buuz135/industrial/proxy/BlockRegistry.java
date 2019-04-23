@@ -26,7 +26,6 @@ import com.buuz135.industrial.entity.EntityPinkSlime;
 import com.buuz135.industrial.fluid.IFCustomFluidBlock;
 import com.buuz135.industrial.proxy.block.BlockConveyor;
 import com.buuz135.industrial.proxy.block.BlockLabel;
-import com.buuz135.industrial.proxy.client.BlockRenderRegistry;
 import com.buuz135.industrial.proxy.client.FluidsRenderRegistry;
 import com.buuz135.industrial.proxy.client.ItemRenderRegistry;
 import com.hrznstudio.titanium.util.TitaniumMod;

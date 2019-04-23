@@ -69,10 +69,10 @@ public class TreePlantRecollectable extends PlantRecollectable {
             if (cache.getWoodCache().isEmpty() && cache.getLeavesCache().isEmpty() && canBeHarvested(world, pos, blockState)) {
                 cache.scanForTreeBlockSection();
             }
-            int operations = BlockRegistry.cropRecolectorBlock.getTreeOperations();
-            if (BlockRegistry.cropRecolectorBlock.isReducedChunkUpdates()) {
+            int operations = /*BlockRegistry.cropRecolectorBlock.getTreeOperations()*/ 10;
+            if (/*BlockRegistry.cropRecolectorBlock.isReducedChunkUpdates()TODO*/ false) {
                 operations = 0;
-                if ((cache.getLeavesCache().size() + cache.getWoodCache().size()) <= ((int) extras[1]) * BlockRegistry.cropRecolectorBlock.getTreeOperations()) {
+                if ((cache.getLeavesCache().size() + cache.getWoodCache().size()) <= ((int) extras[1]) * /*BlockRegistry.cropRecolectorBlock.getTreeOperations()*/10) {
                     operations = cache.getLeavesCache().size() + cache.getWoodCache().size();
                 }
             }

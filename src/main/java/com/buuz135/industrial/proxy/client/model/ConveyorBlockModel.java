@@ -27,15 +27,16 @@ import com.google.common.cache.Cache;
 import com.google.common.cache.CacheBuilder;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.block.model.BakedQuad;
-import net.minecraft.client.renderer.block.model.IBakedModel;
-import net.minecraft.client.renderer.block.model.ItemCameraTransforms;
-import net.minecraft.client.renderer.block.model.ItemOverrideList;
+import net.minecraft.client.renderer.model.BakedQuad;
+import net.minecraft.client.renderer.model.IBakedModel;
+import net.minecraft.client.renderer.model.ItemCameraTransforms;
+import net.minecraft.client.renderer.model.ItemOverrideList;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.client.renderer.vertex.VertexFormat;
 import net.minecraft.util.EnumFacing;
 import net.minecraftforge.client.model.IModel;
+import net.minecraftforge.client.model.ModelLoader;
 import net.minecraftforge.client.model.ModelLoaderRegistry;
 import net.minecraftforge.common.model.IModelState;
 import net.minecraftforge.common.model.TRSRTransformation;
@@ -45,10 +46,7 @@ import org.apache.commons.lang3.tuple.Pair;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import javax.vecmath.Matrix4f;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class ConveyorBlockModel implements IBakedModel {
 
@@ -65,7 +63,7 @@ public class ConveyorBlockModel implements IBakedModel {
     }
 
     @Override
-    public List<BakedQuad> getQuads(@Nullable IBlockState state, @Nullable EnumFacing side, long rand) {
+    public List<BakedQuad> getQuads(@Nullable IBlockState state, @Nullable EnumFacing side, Random rand) {
         if (state == null || !(state instanceof IExtendedBlockState)) {
             if (!prevQuads.containsKey(side))
                 prevQuads.put(side, previousConveyor.getQuads(state, side, rand));
@@ -78,16 +76,16 @@ public class ConveyorBlockModel implements IBakedModel {
         for (ConveyorUpgrade upgrade : data.getUpgrades().values()) {
             if (upgrade == null)
                 continue;
-            List<BakedQuad> upgradeQuads = CACHE.getIfPresent(Pair.of(Pair.of(upgrade.getFactory().getRegistryName().toString(), Pair.of(upgrade.getSide(), state.getValue(BlockConveyor.FACING))), side));
+            List<BakedQuad> upgradeQuads = CACHE.getIfPresent(Pair.of(Pair.of(upgrade.getFactory().getRegistryName().toString(), Pair.of(upgrade.getSide(), state.get(BlockConveyor.FACING))), side));
             if (upgradeQuads == null) {
                 try {
-                    IModel model = ModelLoaderRegistry.getModel(upgrade.getFactory().getModel(upgrade.getSide(), state.getValue(BlockConveyor.FACING)));
-                    upgradeQuads = model.bake(this.state, this.format, location -> Minecraft.getInstance().getTextureMap().getAtlasSprite(location.toString())).getQuads(state, side, rand);
+                    IModel model = ModelLoaderRegistry.getModel(upgrade.getFactory().getModel(upgrade.getSide(), state.get(BlockConveyor.FACING)));
+                    upgradeQuads = model.bake( ModelLoader.defaultModelGetter(), ModelLoader.defaultTextureGetter(), this.state, true, this.format ).getQuads(state, side, rand);
                 } catch (Exception e) {
                     e.printStackTrace();
                     continue;
                 }
-                CACHE.put(Pair.of(Pair.of(upgrade.getFactory().getRegistryName().toString(), Pair.of(upgrade.getSide(), state.getValue(BlockConveyor.FACING))), side), upgradeQuads);
+                CACHE.put(Pair.of(Pair.of(upgrade.getFactory().getRegistryName().toString(), Pair.of(upgrade.getSide(), state.get(BlockConveyor.FACING))), side), upgradeQuads);
             }
             if (!upgradeQuads.isEmpty()) {
                 quads.addAll(upgradeQuads);

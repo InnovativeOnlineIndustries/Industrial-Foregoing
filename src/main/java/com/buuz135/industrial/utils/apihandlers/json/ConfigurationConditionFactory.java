@@ -21,7 +21,6 @@
  */
 package com.buuz135.industrial.utils.apihandlers.json;
 
-import com.buuz135.industrial.config.CustomConfiguration;
 import com.google.gson.JsonObject;
 import net.minecraftforge.common.crafting.IConditionSerializer;
 

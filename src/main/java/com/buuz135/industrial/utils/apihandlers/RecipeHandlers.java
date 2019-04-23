@@ -36,8 +36,10 @@ import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tags.ItemTags;
 import net.minecraft.util.NonNullList;
+import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.common.Tags;
 import net.minecraftforge.fluids.FluidStack;
+import net.minecraftforge.fml.common.registry.GameRegistry;
 
 import java.util.Comparator;
 
@@ -167,7 +169,7 @@ public class RecipeHandlers {
     }
 
     public static void tryToAddWoodToLatex(String string, FluidStack stack) {
-        Block block = Block.getBlockFromName(string);
+        Block block = GameRegistry.findRegistry(Block.class).getValue(new ResourceLocation(string));
         if (block != null) {
             IndustrialForegoingHelper.addWoodToLatex(new ExtractorEntry(new ItemStack(block), stack));
         }

@@ -37,7 +37,9 @@ import com.buuz135.industrial.utils.apihandlers.PlantRecollectableRegistryHandle
 import com.buuz135.industrial.utils.apihandlers.RecipeHandlers;
 import com.buuz135.industrial.utils.apihandlers.json.ConfigurationConditionFactory;
 import com.google.gson.JsonParser;
+import com.hrznstudio.titanium.network.NetworkHandler;
 import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.network.NetworkManager;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.ITextComponent;
@@ -88,7 +90,6 @@ public class CommonProxy {
     }
 
     public void run() {
-        configFolder = event.getModConfigurationDirectory();
         LaserDrillEntry.addOreFile(new ResourceLocation(Reference.MOD_ID, "default_ores.json"));
 
         IFRegistries.poke();
@@ -102,17 +103,13 @@ public class CommonProxy {
         MinecraftForge.EVENT_BUS.register(new ConveyorRegistry());
         MinecraftForge.EVENT_BUS.register(new MeatFeederTickHandler());
         MinecraftForge.EVENT_BUS.register(new MobDeathHandler());
-        MinecraftForge.EVENT_BUS.register(new WorldTickHandler());
         MinecraftForge.EVENT_BUS.register(new PlantRecollectableRegistryHandler());
         MinecraftForge.EVENT_BUS.register(new FakePlayerRideEntityHandler());
-        MinecraftForge.EVENT_BUS.register(new PlantInteractorHarvestDropsHandler());
         MinecraftForge.EVENT_BUS.register(new SkullHandler());
 
-        NetworkRegistry.INSTANCE.registerGuiHandler(IndustrialForegoing.instance, new GuiHandler());
-        int id = 0;
-        IndustrialForegoing.NETWORK.registerMessage(ConveyorButtonInteractMessage.Handler.class, ConveyorButtonInteractMessage.class, ++id, Side.SERVER);
-        IndustrialForegoing.NETWORK.registerMessage(ConveyorSplittingSyncEntityMessage.Handler.class, ConveyorSplittingSyncEntityMessage.class, ++id, Side.CLIENT);
-        IndustrialForegoing.NETWORK.registerMessage(SpecialParticleMessage.Handler.class, SpecialParticleMessage.class, ++id, Side.CLIENT);
+        NetworkHandler.registerMessage(ConveyorButtonInteractMessage.class);
+        NetworkHandler.registerMessage(ConveyorSplittingSyncEntityMessage.class);
+        NetworkHandler.registerMessage(SpecialParticleMessage.class);
 
 //        CustomConfiguration.config = new Configuration(event.getSuggestedConfigurationFile());
 //        CustomConfiguration.config.load();

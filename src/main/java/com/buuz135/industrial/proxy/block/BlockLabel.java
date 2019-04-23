@@ -40,6 +40,7 @@ import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockReader;
 import net.minecraft.world.World;
+import net.minecraft.world.chunk.BlockStateContainer;
 import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
 import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.IItemHandler;
@@ -61,22 +62,14 @@ public class BlockLabel extends BlockRotation<TileEntityLabel> {
         super("black_hole_label", Properties.create(Material.ROCK).hardnessAndResistance(1.5F, 10F), TileEntityLabel.class);
     }
 
-    @Override
-    public void createRecipe() {
-        RecipeUtils.addShapedRecipe(new ItemStack(this, 4, 0), "ppp", "iri", "ppp",
-                'p', ItemRegistry.plastic,
-                'i', Items.PAPER,
-                'r', Items.REDSTONE);
-    }
-
     public IBlockState getStateFromMeta(int meta) {
         EnumFacing enumfacing = EnumFacing.byIndex(meta);
         if (enumfacing.getAxis() == EnumFacing.Axis.Y) enumfacing = EnumFacing.NORTH;
-        return this.getDefaultState().withProperty(FACING, enumfacing);
+        return this.getDefaultState().with(FACING, enumfacing);
     }
 
     public int getMetaFromState(IBlockState state) {
-        return state.getValue(FACING).getIndex();
+        return state.get(FACING).getIndex();
     }
 
     protected BlockStateContainer createBlockState() {
@@ -85,12 +78,7 @@ public class BlockLabel extends BlockRotation<TileEntityLabel> {
 
     @Override
     public IBlockState getStateForPlacement(World worldIn, BlockPos pos, EnumFacing facing, float hitX, float hitY, float hitZ, int meta, EntityLivingBase placer) {
-        return this.getDefaultState().withProperty(FACING, placer.getHorizontalFacing());
-    }
-
-    @Override
-    public boolean isFullBlock(IBlockState state) {
-        return false;
+        return this.getDefaultState().with(FACING, placer.getHorizontalFacing());
     }
 
     @Override
@@ -99,13 +87,8 @@ public class BlockLabel extends BlockRotation<TileEntityLabel> {
     }
 
     @Override
-    public boolean isOpaqueCube(IBlockState state) {
-        return false;
-    }
-
-    @Override
     public AxisAlignedBB getBoundingBox(IBlockState state, IBlockAccess source, BlockPos pos) {
-        switch (state.getValue(FACING)) {
+        switch (state.get(FACING)) {
             case NORTH:
                 return NORTH_AABB;
             case SOUTH:
@@ -163,7 +146,7 @@ public class BlockLabel extends BlockRotation<TileEntityLabel> {
 
     @Override
     public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
-        TileEntity entity = worldIn.getTileEntity(pos.offset(state.getValue(FACING)));
+        TileEntity entity = worldIn.getTileEntity(pos.offset(state.get(FACING)));
         TileEntity self = worldIn.getTileEntity(pos);
         if (!worldIn.isRemote && self instanceof TileEntityLabel && entity instanceof IHasDisplayStack && !((IHasDisplayStack) entity).getItemStack().hasCapability(CapabilityFluidHandler.FLUID_HANDLER_ITEM_CAPABILITY, null)) {
             if (playerIn.isSneaking()) {

@@ -89,7 +89,7 @@ public class TreeCache {
             BlockPos checking = tree.pop();
             if (BlockUtils.isLeaves(world, checking) || BlockUtils.isLog(world, checking)) {
                 for (BlockPos blockPos : BlockPos.getAllInBox(checking.add(-1, 0, -1), checking.add(1, 1, 1))) {
-                    if (world.isAirBlock(blockPos) || checkedPositions.contains(blockPos) || blockPos.getDistance(current.getX(), current.getY(), current.getZ()) > BlockRegistry.cropRecolectorBlock.getMaxDistanceTreeBlocksScan())
+                    if (world.isAirBlock(blockPos) || checkedPositions.contains(blockPos) || blockPos.getDistance(current.getX(), current.getY(), current.getZ()) > /*BlockRegistry.cropRecolectorBlock.getMaxDistanceTreeBlocksScan()*/ 1000)
                         continue;
                     if (BlockUtils.isLeaves(world, blockPos)) {
                         tree.push(blockPos);

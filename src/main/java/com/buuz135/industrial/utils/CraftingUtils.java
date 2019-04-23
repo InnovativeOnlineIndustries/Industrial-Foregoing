@@ -113,13 +113,13 @@ public class CraftingUtils {
         crushedRecipes.put(new ItemStack(Blocks.GRAVEL), new ItemStack(Blocks.SAND));
         ItemStack latest = new ItemStack(Blocks.SAND);
 
-        if (BlockRegistry.materialStoneWorkFactoryBlock.produceExNihiloDust() && ModList.get().isLoaded("exnihilocreatio")) {
-            Block dust = Block.REGISTRY.get(new ResourceLocation("exnihilocreatio:block_dust"));
-            crushedRecipes.put(new ItemStack(Blocks.SAND), latest = new ItemStack(dust));
-        }
-        if (BlockRegistry.materialStoneWorkFactoryBlock.produceSilicon()) {
-            NonNullList<ItemStack> items = NonNullList.create(); //OreDictionary.getOres("itemSilicon");
-            if (items.size() > 0) crushedRecipes.put(latest, items.get(0));
-        }
+        //if (BlockRegistry.materialStoneWorkFactoryBlock.produceExNihiloDust() && ModList.get().isLoaded("exnihilocreatio")) {
+        //    Block dust = Block.REGISTRY.get(new ResourceLocation("exnihilocreatio:block_dust"));
+        //    crushedRecipes.put(new ItemStack(Blocks.SAND), latest = new ItemStack(dust));
+        //}
+        //if (BlockRegistry.materialStoneWorkFactoryBlock.produceSilicon()) {
+        //    NonNullList<ItemStack> items = NonNullList.create(); //OreDictionary.getOres("itemSilicon");
+        //    if (items.size() > 0) crushedRecipes.put(latest, items.get(0));
+        //}TODO
     }
 }

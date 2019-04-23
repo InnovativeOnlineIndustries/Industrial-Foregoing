@@ -22,12 +22,14 @@
 package com.buuz135.industrial.proxy.network;
 
 import com.buuz135.industrial.proxy.block.tile.TileEntityConveyor;
+import com.hrznstudio.titanium.network.Message;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.PacketBuffer;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
+import net.minecraftforge.fml.network.NetworkEvent;
 
 import java.io.IOException;
 
@@ -50,41 +52,16 @@ public class ConveyorButtonInteractMessage extends Message {
     }
 
     @Override
-    public void fromBytes(ByteBuf buf) {
-        PacketBuffer buffer = new PacketBuffer(buf);
-        pos = buffer.readBlockPos();
-        buttonId = buffer.readInt();
-        facing = buffer.readEnumValue(EnumFacing.class);
-        try {
-            compound = buffer.readCompoundTag();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
-    @Override
-    public void toBytes(ByteBuf buf) {
-        PacketBuffer buffer = new PacketBuffer(buf);
-        buffer.writeBlockPos(pos);
-        buffer.writeInt(buttonId);
-        buffer.writeEnumValue(facing);
-        buffer.writeCompoundTag(compound);
-    }
-
-    public static class Handler implements IMessageHandler<ConveyorButtonInteractMessage, IMessage> {
-
-        @Override
-        public IMessage onMessage(ConveyorButtonInteractMessage message, MessageContext ctx) {
-            ctx.getServerHandler().player.getServer().addScheduledTask(() -> {
-                BlockPos pos = message.pos;
-                TileEntity entity = ctx.getServerHandler().player.getServerWorld().getTileEntity(pos);
-                if (entity instanceof TileEntityConveyor) {
-                    if (((TileEntityConveyor) entity).hasUpgrade(message.facing)) {
-                        ((TileEntityConveyor) entity).getUpgradeMap().get(message.facing).handleButtonInteraction(message.buttonId, message.compound);
-                    }
+    protected void handleMessage(NetworkEvent.Context context) {
+        context.getSender().getServerWorld().addScheduledTask(() -> {
+            TileEntity entity = context.getSender().getServerWorld().getTileEntity(pos);
+            if (entity instanceof TileEntityConveyor) {
+                if (((TileEntityConveyor) entity).hasUpgrade(facing)) {
+                    ((TileEntityConveyor) entity).getUpgradeMap().get(facing).handleButtonInteraction(buttonId, compound);
                 }
-            });
-            return null;
-        }
+            }
+        });
     }
+
+
 }
