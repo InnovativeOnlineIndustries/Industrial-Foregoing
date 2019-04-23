@@ -176,7 +176,7 @@ public class BlockConveyor extends BlockTileBase<TileEntityConveyor> {
 //                if (upgrade.getBoundingBox().collidable)
 //                    addCollisionBoxToList(pos, entityBox, collidingBoxes, upgrade.getBoundingBox().aabb());
 //            });
-//            if (!((TileEntityConveyor) entity).getType().isVertical()) {
+//            if (!((TileEntityConveyor) entity).getConveyorType().isVertical()) {
 //                super.addCollisionBoxToList(state, worldIn, pos, entityBox, collidingBoxes, entityIn, isActualState);
 //                return;
 //            }
@@ -268,7 +268,7 @@ public class BlockConveyor extends BlockTileBase<TileEntityConveyor> {
     @Override
     public void onPlayerDestroy(IWorld world, BlockPos pos, IBlockState state) {
         NonNullList<ItemStack> list = NonNullList.create();
-        getDrops(list, world, pos, state, 0);
+        getDrops(state, list, world.getWorld(), pos, 0);
         for (ItemStack stack : list) {
             float f = 0.7F;
             float d0 = world.getRandom().nextFloat() * f + (1.0F - f) * 0.5F;
@@ -345,8 +345,8 @@ public class BlockConveyor extends BlockTileBase<TileEntityConveyor> {
                 Cuboid hit = getCuboidHit(worldIn, pos, playerIn);
                 if (hit != null) {
                     if (hit.identifier == -1) {
-                        if (handStack.getItem().equals(Items.GLOWSTONE_DUST) && !((TileEntityConveyor) tileEntity).getType().isFast()) {
-                            ((TileEntityConveyor) tileEntity).setType(((TileEntityConveyor) tileEntity).getType().getFast());
+                        if (handStack.getItem().equals(Items.GLOWSTONE_DUST) && !((TileEntityConveyor) tileEntity).getConveyorType().isFast()) {
+                            ((TileEntityConveyor) tileEntity).setType(((TileEntityConveyor) tileEntity).getConveyorType().getFast());
                             handStack.shrink(1);
                             return true;
                         }

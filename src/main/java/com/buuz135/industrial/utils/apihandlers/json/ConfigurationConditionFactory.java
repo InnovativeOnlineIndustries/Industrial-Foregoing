@@ -30,9 +30,9 @@ public class ConfigurationConditionFactory implements IConditionSerializer {
 
     @Override
     public BooleanSupplier parse(JsonObject json) {
-        if (json.has("value") && CustomConfiguration.configValues.containsKey(json.get("value").getAsString())) {
-            return () -> CustomConfiguration.configValues.get(json.get("value").getAsString());
-        }
+        //if (json.has("value") && CustomConfiguration.configValues.containsKey(json.get("value").getAsString())) {
+        //    return () -> CustomConfiguration.configValues.get(json.get("value").getAsString());
+        //}
         return () -> false;
     }
 }

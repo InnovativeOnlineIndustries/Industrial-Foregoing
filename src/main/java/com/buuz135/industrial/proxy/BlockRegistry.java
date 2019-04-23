@@ -22,50 +22,36 @@
 package com.buuz135.industrial.proxy;
 
 
-import com.buuz135.industrial.entity.EntityPinkSlime;
-import com.buuz135.industrial.fluid.IFCustomFluidBlock;
 import com.buuz135.industrial.proxy.block.BlockConveyor;
-import com.buuz135.industrial.proxy.block.BlockLabel;
 import com.buuz135.industrial.proxy.client.FluidsRenderRegistry;
 import com.buuz135.industrial.proxy.client.ItemRenderRegistry;
 import com.hrznstudio.titanium.util.TitaniumMod;
-import net.minecraft.block.material.Material;
-import net.minecraft.block.state.IBlockState;
-import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.init.Blocks;
-import net.minecraft.init.MobEffects;
-import net.minecraft.potion.PotionEffect;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
 import net.minecraftforge.client.event.ModelRegistryEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 
-import java.util.Random;
-
 public class BlockRegistry {
 
-    public static IFCustomFluidBlock BLOCK_ESSENCE = new IFCustomFluidBlock(FluidsRegistry.ESSENCE, Material.WATER, entityLivingBase -> entityLivingBase.addPotionEffect(new PotionEffect(MobEffects.NIGHT_VISION, 20 * 15, 0)));
-    public static IFCustomFluidBlock BLOCK_MILK = new IFCustomFluidBlock(FluidsRegistry.MILK, Material.WATER, EntityLivingBase::clearActivePotions);
-    public static IFCustomFluidBlock BLOCK_MEAT = new IFCustomFluidBlock(FluidsRegistry.MEAT, Material.WATER, entityLivingBase -> entityLivingBase.addPotionEffect(new PotionEffect(MobEffects.SATURATION, 1, 1)));
-    public static IFCustomFluidBlock BLOCK_LATEX = new IFCustomFluidBlock(FluidsRegistry.LATEX, Material.WATER, entityLivingBase -> entityLivingBase.addPotionEffect(new PotionEffect(MobEffects.SLOWNESS, 20 * 15, 5)));
-    public static IFCustomFluidBlock BLOCK_SEWAGE = new IFCustomFluidBlock(FluidsRegistry.SEWAGE, Material.WATER, entityLivingBase -> entityLivingBase.addPotionEffect(new PotionEffect(MobEffects.POISON, 20, 0)));
-    public static IFCustomFluidBlock BLOCK_SLUDGE = new IFCustomFluidBlock(FluidsRegistry.SLUDGE, Material.LAVA, entityLivingBase -> entityLivingBase.addPotionEffect(new PotionEffect(MobEffects.WITHER, 1, 0)));
-    public static IFCustomFluidBlock BLOCK_BIOFUEL = new IFCustomFluidBlock(FluidsRegistry.BIOFUEL, Material.WATER, entityLivingBase -> entityLivingBase.addPotionEffect(new PotionEffect(MobEffects.SPEED, 20, 1)));
-    public static IFCustomFluidBlock BLOCK_PINK_SLIME = (IFCustomFluidBlock) new IFCustomFluidBlock(FluidsRegistry.PINK_SLIME, Material.WATER, entityLivingBase -> entityLivingBase.addPotionEffect(new PotionEffect(MobEffects.GLOWING, 20 * 10, 0))) {
-        @Override
-        public void randomTick(IBlockState state, World worldIn, BlockPos pos, Random random) {
-            if (state.getBlock().getFluidState(state).isSource()) {
-                worldIn.setBlockState(pos, Blocks.AIR.getDefaultState());
-                EntityPinkSlime pinkSlime = new EntityPinkSlime(worldIn);
-                pinkSlime.setPosition(pos.getX() + 0.5, pos.getY(), pos.getZ() + 0.5);
-                worldIn.spawnEntity(pinkSlime);
-            }
-        }
-    }.setTickRandomly(true);
-    public static IFCustomFluidBlock BLOCK_PROTEIN = new IFCustomFluidBlock(FluidsRegistry.PROTEIN, Material.WATER, entityLivingBase -> entityLivingBase.addPotionEffect(new PotionEffect(MobEffects.HASTE, 20 * 3, 0)));
+    //public static IFCustomFluidBlock BLOCK_ESSENCE = new IFCustomFluidBlock(FluidsRegistry.ESSENCE, Material.WATER, entityLivingBase -> entityLivingBase.addPotionEffect(new PotionEffect(MobEffects.NIGHT_VISION, 20 * 15, 0)));
+    //public static IFCustomFluidBlock BLOCK_MILK = new IFCustomFluidBlock(FluidsRegistry.MILK, Material.WATER, EntityLivingBase::clearActivePotions);
+    //public static IFCustomFluidBlock BLOCK_MEAT = new IFCustomFluidBlock(FluidsRegistry.MEAT, Material.WATER, entityLivingBase -> entityLivingBase.addPotionEffect(new PotionEffect(MobEffects.SATURATION, 1, 1)));
+    //public static IFCustomFluidBlock BLOCK_LATEX = new IFCustomFluidBlock(FluidsRegistry.LATEX, Material.WATER, entityLivingBase -> entityLivingBase.addPotionEffect(new PotionEffect(MobEffects.SLOWNESS, 20 * 15, 5)));
+    //public static IFCustomFluidBlock BLOCK_SEWAGE = new IFCustomFluidBlock(FluidsRegistry.SEWAGE, Material.WATER, entityLivingBase -> entityLivingBase.addPotionEffect(new PotionEffect(MobEffects.POISON, 20, 0)));
+    //public static IFCustomFluidBlock BLOCK_SLUDGE = new IFCustomFluidBlock(FluidsRegistry.SLUDGE, Material.LAVA, entityLivingBase -> entityLivingBase.addPotionEffect(new PotionEffect(MobEffects.WITHER, 1, 0)));
+    //public static IFCustomFluidBlock BLOCK_BIOFUEL = new IFCustomFluidBlock(FluidsRegistry.BIOFUEL, Material.WATER, entityLivingBase -> entityLivingBase.addPotionEffect(new PotionEffect(MobEffects.SPEED, 20, 1)));
+    //public static IFCustomFluidBlock BLOCK_PINK_SLIME = (IFCustomFluidBlock) new IFCustomFluidBlock(FluidsRegistry.PINK_SLIME, Material.WATER, entityLivingBase -> entityLivingBase.addPotionEffect(new PotionEffect(MobEffects.GLOWING, 20 * 10, 0))) {
+    //    @Override
+    //    public void randomTick(IBlockState state, World worldIn, BlockPos pos, Random random) {
+    //        if (state.getBlock().getFluidState(state).isSource()) {
+    //            worldIn.setBlockState(pos, Blocks.AIR.getDefaultState());
+    //            EntityPinkSlime pinkSlime = new EntityPinkSlime(worldIn);
+    //            pinkSlime.setPosition(pos.getX() + 0.5, pos.getY(), pos.getZ() + 0.5);
+    //            worldIn.spawnEntity(pinkSlime);
+    //        }
+    //    }
+    //}.setTickRandomly(true);
+    //public static IFCustomFluidBlock BLOCK_PROTEIN = new IFCustomFluidBlock(FluidsRegistry.PROTEIN, Material.WATER, entityLivingBase -> entityLivingBase.addPotionEffect(new PotionEffect(MobEffects.HASTE, 20 * 3, 0)));
 
     public static BlockConveyor blockConveyor = new BlockConveyor();
-    public static BlockLabel blockLabel = new BlockLabel();
 
     public static void createRecipes() {
         //CustomOrientedBlock.blockList.forEach(CustomOrientedBlock::createRecipe);
@@ -75,17 +61,17 @@ public class BlockRegistry {
     }
 
     public static void registerBlocks(TitaniumMod mod) {
-        mod.addBlocks(
-                BLOCK_ESSENCE,
-                BLOCK_MILK,
-                BLOCK_MEAT,
-                BLOCK_LATEX,
-                BLOCK_SEWAGE,
-                BLOCK_SLUDGE,
-                BLOCK_BIOFUEL,
-                BLOCK_PINK_SLIME,
-                BLOCK_PROTEIN
-        );
+        //mod.addBlocks(
+        //        BLOCK_ESSENCE,
+        //        BLOCK_MILK,
+        //        BLOCK_MEAT,
+        //        BLOCK_LATEX,
+        //        BLOCK_SEWAGE,
+        //        BLOCK_SLUDGE,
+        //        BLOCK_BIOFUEL,
+        //        BLOCK_PINK_SLIME,
+        //        BLOCK_PROTEIN
+        //);
         mod.addBlocks(
                 blockConveyor
         );
@@ -95,8 +81,6 @@ public class BlockRegistry {
     public void modelRegistryEvent(ModelRegistryEvent event) {
         ItemRenderRegistry.registerRender();
         FluidsRenderRegistry.registerRender();
-        BlockRenderRegistry.registerRender();
         blockConveyor.registerModels();
-
     }
 }

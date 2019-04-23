@@ -23,7 +23,6 @@ package com.buuz135.industrial.proxy.client.event;
 
 import com.buuz135.industrial.api.conveyor.ConveyorUpgradeFactory;
 import com.buuz135.industrial.item.infinity.ItemInfinityDrill;
-import com.buuz135.industrial.proxy.FluidsRegistry;
 import com.buuz135.industrial.proxy.ItemRegistry;
 import com.buuz135.industrial.proxy.block.BlockConveyor;
 import com.buuz135.industrial.proxy.block.Cuboid;
@@ -31,11 +30,9 @@ import com.buuz135.industrial.proxy.block.DistanceRayTraceResult;
 import com.buuz135.industrial.proxy.client.model.ConveyorBlockModel;
 import com.buuz135.industrial.registry.IFRegistries;
 import com.buuz135.industrial.utils.Reference;
-import net.minecraft.block.BlockLiquid;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.GlStateManager;
-import net.minecraft.client.renderer.RenderGlobal;
-import net.minecraft.client.renderer.block.model.ModelResourceLocation;
+import net.minecraft.client.renderer.model.ModelResourceLocation;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumFacing;
@@ -59,24 +56,24 @@ public class IFClientEvents {
     @SubscribeEvent
     public void textureStich(TextureStitchEvent.Pre pre) {
         pre.getMap().registerSprite(new ResourceLocation(Reference.MOD_ID, "blocks/catears"));
-        for (ConveyorUpgradeFactory factory : IFRegistries.CONVEYOR_UPGRADE_REGISTRY.getValuesCollection()) {
+        for (ConveyorUpgradeFactory factory : IFRegistries.CONVEYOR_UPGRADE_REGISTRY.getValues()) {
             factory.getTextures().forEach(pre.getMap()::registerSprite);
         }
-        pre.getMap().registerSprite(FluidsRegistry.ORE_FLUID_RAW.getStill());
-        pre.getMap().registerSprite(FluidsRegistry.ORE_FLUID_RAW.getFlowing());
-        pre.getMap().registerSprite(FluidsRegistry.ORE_FLUID_FERMENTED.getStill());
-        pre.getMap().registerSprite(FluidsRegistry.ORE_FLUID_FERMENTED.getFlowing());
+        //pre.getMap().registerSprite(FluidsRegistry.ORE_FLUID_RAW.getStill());
+        //pre.getMap().registerSprite(FluidsRegistry.ORE_FLUID_RAW.getFlowing());
+        //pre.getMap().registerSprite(FluidsRegistry.ORE_FLUID_FERMENTED.getStill());
+        //pre.getMap().registerSprite(FluidsRegistry.ORE_FLUID_FERMENTED.getFlowing());
     }
 
     @SubscribeEvent
     public void modelBake(ModelBakeEvent event) {
-        for (ModelResourceLocation resourceLocation : event.getModelRegistry().getKeys()) {
+        for (ModelResourceLocation resourceLocation : event.getModelRegistry().keySet()) {
             if (resourceLocation.getNamespace().equals(Reference.MOD_ID)) {
                 if (resourceLocation.getPath().contains("conveyor") && !resourceLocation.getPath().contains("upgrade"))
-                    event.getModelRegistry().putObject(resourceLocation, new ConveyorBlockModel(event.getModelRegistry().getObject(resourceLocation)));
+                    event.getModelRegistry().put(resourceLocation, new ConveyorBlockModel(event.getModelRegistry().get(resourceLocation)));
             }
         }
-        for (ConveyorUpgradeFactory conveyorUpgradeFactory : GameRegistry.findRegistry(ConveyorUpgradeFactory.class).getValuesCollection()) {
+        for (ConveyorUpgradeFactory conveyorUpgradeFactory : GameRegistry.findRegistry(ConveyorUpgradeFactory.class).getValues()) {
             for (EnumFacing upgradeFacing : conveyorUpgradeFactory.getValidFacings()) {
                 for (EnumFacing conveyorFacing : BlockConveyor.FACING.getAllowedValues()) {
                     try {

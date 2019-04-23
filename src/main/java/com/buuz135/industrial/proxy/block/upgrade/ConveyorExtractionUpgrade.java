@@ -142,7 +142,7 @@ public class ConveyorExtractionUpgrade extends ConveyorUpgrade {
             return;
         items.removeIf(entityItem -> entityItem.getItem().isEmpty() || entityItem.isDead);
         if (items.size() >= 20) return;
-        if (getWorld().getTotalWorldTime() % (fast ? 10 : 20) == 0) {
+        if (getWorld().getGameTime() % (fast ? 10 : 20) == 0) {
             IItemHandler itemHandler = getHandlerCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY);
             if (itemHandler != null) {
                 for (int i = 0; i < itemHandler.getSlots(); i++) {

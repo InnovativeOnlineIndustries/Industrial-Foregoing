@@ -22,8 +22,6 @@
 package com.buuz135.industrial.proxy.block.tile;
 
 
-import com.buuz135.industrial.proxy.BlockRegistry;
-import com.hrznstudio.titanium.block.BlockTileBase;
 import com.hrznstudio.titanium.block.tile.TileBase;
 import net.minecraft.nbt.NBTTagCompound;
 
@@ -36,7 +34,7 @@ public class TileEntityLabel extends TileBase {
     private FormatType formatType = FormatType.STACKS;
 
     public TileEntityLabel() {
-        super(BlockRegistry.blockLabel);
+        super(null); //TODO
     }
 
     public static String getFormatedBigNumber(int number) {

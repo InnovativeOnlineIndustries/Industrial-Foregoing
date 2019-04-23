@@ -21,12 +21,10 @@
  */
 package com.buuz135.industrial.fluid;
 
-import com.buuz135.industrial.utils.ItemStackUtils;
 import com.buuz135.industrial.utils.Reference;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fluids.FluidStack;
-import net.minecraftforge.oredict.OreDictionary;
 
 import java.util.HashMap;
 
@@ -48,11 +46,11 @@ public class IFOreFluid extends IFCustomFluid {
         if (ore != null) {
             if (CACHED_COLORS.containsKey(ore)) return CACHED_COLORS.get(ore);
             String dust = "dust" + ore.replaceAll("ore", "");
-            if (OreDictionary.doesOreNameExist(dust)) {
-                int color = ItemStackUtils.getColor(OreDictionary.getOres(ore).get(0));
-                CACHED_COLORS.put(ore, color);
-                return color;
-            }
+            //if (OreDictionary.doesOreNameExist(dust)) {TODO
+            //    int color = ItemStackUtils.getColor(OreDictionary.getOres(ore).get(0));
+            //    CACHED_COLORS.put(ore, color);
+            //    return color;
+            //}
         }
         return super.getColor(stack);
     }
@@ -66,9 +64,9 @@ public class IFOreFluid extends IFCustomFluid {
     @Override
     public String getLocalizedName(FluidStack stack) {
         String ore = getOre(stack);
-        if (ore != null && OreDictionary.getOres(ore).size() > 0) {
-            return super.getLocalizedName(stack) + " (" + OreDictionary.getOres(ore).get(0).getDisplayName() + ")";
-        }
+        //if (ore != null && OreDictionary.getOres(ore).size() > 0) {
+        //    return super.getLocalizedName(stack) + " (" + OreDictionary.getOres(ore).get(0).getDisplayName() + ")";
+        //}TODO
         return super.getLocalizedName(stack);
     }
 }

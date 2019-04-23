@@ -42,7 +42,7 @@ public abstract class FilterGuiComponent extends PositionedGuiComponent {
     }
 
     @Override
-    public void handleClick(GuiConveyor conveyor, int guiX, int guiY, int mouseX, int mouseY) {
+    public boolean handleClick(GuiConveyor conveyor, int guiX, int guiY, double mouseX, double mouseY) {
         int pos = 0;
         for (int i = 0; i < getYSize(); i++) {
             for (int x = 0; x < getXSize(); x++) {
@@ -50,15 +50,16 @@ public abstract class FilterGuiComponent extends PositionedGuiComponent {
                 int posY = guiY + getXPos() + i * 18;
                 if (mouseX > posX + 1 && mouseX < posX + 1 + 16 && mouseY > posY + 1 && mouseY < posY + 1 + 16) {
                     conveyor.sendMessage(pos, Minecraft.getInstance().player.inventory.getItemStack().serializeNBT());
-                    return;
+                    return true;
                 }
                 ++pos;
             }
         }
+        return false;
     }
 
     @Override
-    public void drawGuiBackgroundLayer(int guiX, int guiY, int mouseX, int mouseY) {
+    public void drawGuiBackgroundLayer(int guiX, int guiY, double mouseX, double mouseY) {
         GlStateManager.color4f(1, 1, 1, 1);
         int pos = 0;
         for (int i = 0; i < getYSize(); i++) {
@@ -77,7 +78,7 @@ public abstract class FilterGuiComponent extends PositionedGuiComponent {
     }
 
     @Override
-    public void drawGuiForegroundLayer(int guiX, int guiY, int mouseX, int mouseY) {
+    public void drawGuiForegroundLayer(int guiX, int guiY, double mouseX, double mouseY) {
         GlStateManager.color4f(1, 1, 1, 1);
         for (int i = 0; i < getYSize(); i++) {
             for (int x = 0; x < getXSize(); x++) {
@@ -96,7 +97,7 @@ public abstract class FilterGuiComponent extends PositionedGuiComponent {
     }
 
     @Override
-    public boolean isInside(int mouseX, int mouseY) {
+    public boolean isInside(double mouseX, double mouseY) {
         return mouseX > getXPos() && mouseX < getXPos() + getXSize() * 18 && mouseY > getYPos() && mouseY < getYPos() + getYSize() * 18;
     }
 
@@ -104,7 +105,7 @@ public abstract class FilterGuiComponent extends PositionedGuiComponent {
 
     @Nullable
     @Override
-    public List<String> getTooltip(int guiX, int guiY, int mouseX, int mouseY) {
+    public List<String> getTooltip(int guiX, int guiY, double mouseX, double mouseY) {
         int pos = 0;
         for (int i = 0; i < getYSize(); i++) {
             for (int x = 0; x < getXSize(); x++) {

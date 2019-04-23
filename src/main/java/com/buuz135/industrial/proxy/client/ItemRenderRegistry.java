@@ -34,13 +34,13 @@ public class ItemRenderRegistry {
         strawItem.registerRender();
         conveyorUpgradeItem.registerRender();
         fertilizer.registerRender();
-        laserLensItem.registerRender();
-        laserLensItem_inverted.registerRender();
+        //laserLensItem.registerRender();
+        //laserLensItem_inverted.registerRender();
         pinkSlime.registerRender();
         pinkSlimeIngot.registerRender();
         bookManualItem.registerRender();
         itemInfinityDrill.registerRender();
-        if (artificalDye != null) artificalDye.registerRender();
+        //if (artificalDye != null) artificalDye.registerRender();
 
     }
 }

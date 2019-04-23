@@ -23,6 +23,7 @@ package com.buuz135.industrial.api.conveyor;
 
 import com.buuz135.industrial.api.conveyor.gui.IGuiComponent;
 import com.buuz135.industrial.proxy.ItemRegistry;
+import com.buuz135.industrial.proxy.block.Cuboid;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;

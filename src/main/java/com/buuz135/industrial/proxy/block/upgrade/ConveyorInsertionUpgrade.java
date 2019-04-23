@@ -105,7 +105,7 @@ public class ConveyorInsertionUpgrade extends ConveyorUpgrade {
     public void update() {
         if (getWorld().isRemote)
             return;
-        if (getWorld().getTotalWorldTime() % 2 == 0 && getContainer() instanceof TileEntityConveyor) {
+        if (getWorld().getGameTime() % 2 == 0 && getContainer() instanceof TileEntityConveyor) {
             IFluidTank tank = ((TileEntityConveyor) getContainer()).getTank();
             IFluidHandler fluidHandler = getHandlerCapability(CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY);
             if (fluidHandler != null && tank.drain(50, false) != null && fluidHandler.fill(tank.drain(50, false), false) > 0 && whitelist == filter.matches(tank.drain(50, false))) {
@@ -184,7 +184,7 @@ public class ConveyorInsertionUpgrade extends ConveyorUpgrade {
     public void handleButtonInteraction(int buttonId, NBTTagCompound compound) {
         super.handleButtonInteraction(buttonId, compound);
         if (buttonId >= 0 && buttonId < filter.getFilter().length) {
-            this.filter.setFilter(buttonId, new ItemStack(compound));
+            this.filter.setFilter(buttonId, ItemStack.read(compound));
             this.getContainer().requestSync();
         }
         if (buttonId == 16) {

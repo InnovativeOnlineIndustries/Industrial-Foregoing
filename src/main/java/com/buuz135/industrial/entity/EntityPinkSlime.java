@@ -38,7 +38,7 @@ public class EntityPinkSlime extends EntitySlime {
     }
 
     @Override
-    public boolean canSpawn(IWorld p_205020_1_) {
+    public boolean canSpawn(IWorld p_205020_1_, boolean bool) {
         return false;
     }
 
