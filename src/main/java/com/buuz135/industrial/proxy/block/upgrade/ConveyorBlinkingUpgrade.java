@@ -70,7 +70,7 @@ public class ConveyorBlinkingUpgrade extends ConveyorUpgrade {
     public void handleEntity(Entity entity) {
         super.handleEntity(entity);
         if (whitelist != filter.matches(entity)) return;
-        EnumFacing direction = this.getContainer().getConveyorWorld().getBlockState(this.getContainer().getConveyorPosition()).getValue(BlockConveyor.FACING);
+        EnumFacing direction = this.getContainer().getConveyorWorld().getBlockState(this.getContainer().getConveyorPosition()).get(BlockConveyor.FACING);
         Vec3d vec3d = new Vec3d(horizontalDisplacement * direction.getDirectionVec().getX(), verticalDisplacement, horizontalDisplacement * direction.getDirectionVec().getZ());
         BlockPos pos = this.getPos().add(vec3d.x, vec3d.y, vec3d.z);
         entity.setPosition(pos.getX() + 0.5, pos.getY() + 0.25, pos.getZ() + 0.5);
@@ -110,7 +110,7 @@ public class ConveyorBlinkingUpgrade extends ConveyorUpgrade {
     public void handleButtonInteraction(int buttonId, NBTTagCompound compound) {
         super.handleButtonInteraction(buttonId, compound);
         if (buttonId >= 0 && buttonId < filter.getFilter().length) {
-            this.filter.setFilter(buttonId, new ItemStack(compound));
+            this.filter.setFilter(buttonId, ItemStack.read(compound));
             this.getContainer().requestSync();
         }
         if (buttonId == 10) {

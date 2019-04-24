@@ -33,7 +33,6 @@ import com.buuz135.industrial.proxy.block.Cuboid;
 import com.buuz135.industrial.proxy.block.filter.IFilter;
 import com.buuz135.industrial.proxy.block.filter.ItemStackFilter;
 import com.buuz135.industrial.proxy.block.tile.TileEntityConveyor;
-import com.buuz135.industrial.registry.IFRegistries;
 import com.buuz135.industrial.utils.Reference;
 import com.google.common.collect.Sets;
 import net.minecraft.entity.Entity;
@@ -51,16 +50,14 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraftforge.common.capabilities.Capability;
+import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidTank;
 import net.minecraftforge.fluids.IFluidTank;
 import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
-import net.minecraftforge.fluids.capability.IFluidHandler;
 import net.minecraftforge.items.CapabilityItemHandler;
-import net.minecraftforge.items.IItemHandler;
 
 import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -131,7 +128,7 @@ public class ConveyorExtractionUpgrade extends ConveyorUpgrade {
         if (!fast)
             return super.getDrops();
         return Sets.newHashSet(
-                new ItemStack(ItemRegistry.conveyorUpgradeItem, 1, IFRegistries.CONVEYOR_UPGRADE_REGISTRY.getID(getFactory()) - 1),
+                new ItemStack(ItemRegistry.conveyorUpgradeItem, 1/*, IFRegistries.CONVEYOR_UPGRADE_REGISTRY.getID(getFactory()) - 1*/),
                 new ItemStack(Items.GLOWSTONE_DUST)
         );
     }
@@ -140,11 +137,10 @@ public class ConveyorExtractionUpgrade extends ConveyorUpgrade {
     public void update() {
         if (getWorld().isRemote)
             return;
-        items.removeIf(entityItem -> entityItem.getItem().isEmpty() || entityItem.isDead);
+        items.removeIf(entityItem -> entityItem.getItem().isEmpty() || !entityItem.isAlive());
         if (items.size() >= 20) return;
         if (getWorld().getGameTime() % (fast ? 10 : 20) == 0) {
-            IItemHandler itemHandler = getHandlerCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY);
-            if (itemHandler != null) {
+            getHandlerCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY).ifPresent(itemHandler -> {
                 for (int i = 0; i < itemHandler.getSlots(); i++) {
                     ItemStack stack = itemHandler.extractItem(i, 4, true);
                     if (stack.isEmpty() || whitelist != filter.matches(stack))
@@ -160,29 +156,30 @@ public class ConveyorExtractionUpgrade extends ConveyorUpgrade {
                     }
                     break;
                 }
-            }
+            });
         }
         if (getContainer() instanceof TileEntityConveyor) {
             IFluidTank tank = ((TileEntityConveyor) getContainer()).getTank();
-            IFluidHandler fluidHandler = getHandlerCapability(CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY);
-            if (fluidHandler != null && fluidHandler.drain(250, false) != null && ((FluidTank) tank).canFillFluidType(fluidHandler.drain(250, false)) && whitelist == filter.matches(fluidHandler.drain(250, false))) {
-                FluidStack drain = fluidHandler.drain(tank.fill(fluidHandler.drain(250, false), true), true);
-                if (drain != null && drain.amount > 0) getContainer().requestFluidSync();
-            }
+            getHandlerCapability(CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY).ifPresent(fluidHandler -> {
+                if (fluidHandler.drain(250, false) != null && ((FluidTank) tank).canFillFluidType(fluidHandler.drain(250, false)) && whitelist == filter.matches(fluidHandler.drain(250, false))) {
+                    FluidStack drain = fluidHandler.drain(tank.fill(fluidHandler.drain(250, false), true), true);
+                    if (drain != null && drain.amount > 0) getContainer().requestFluidSync();
+                }
+            });
+
         }
     }
 
-    @Nullable
-    private <T> T getHandlerCapability(Capability<T> capability) {
+    private <T> LazyOptional<T> getHandlerCapability(Capability<T> capability) {
         BlockPos offsetPos = getPos().offset(getSide());
         TileEntity tile = getWorld().getTileEntity(offsetPos);
-        if (tile != null && tile.hasCapability(capability, getSide().getOpposite()))
+        if (tile != null && tile.getCapability(capability, getSide().getOpposite()).isPresent())
             return tile.getCapability(capability, getSide().getOpposite());
         for (Entity entity : getWorld().getEntitiesWithinAABB(Entity.class, new AxisAlignedBB(0, 0, 0, 1, 1, 1).offset(offsetPos), EntitySelectors.NOT_SPECTATING)) {
-            if (entity.hasCapability(capability, entity instanceof EntityPlayerMP ? null : getSide().getOpposite()))
+            if (entity.getCapability(capability, entity instanceof EntityPlayerMP ? null : getSide().getOpposite()).isPresent())
                 return entity.getCapability(capability, entity instanceof EntityPlayerMP ? null : getSide().getOpposite());
         }
-        return null;
+        return LazyOptional.empty();
     }
 
     @Override
@@ -194,7 +191,7 @@ public class ConveyorExtractionUpgrade extends ConveyorUpgrade {
     public void handleButtonInteraction(int buttonId, NBTTagCompound compound) {
         super.handleButtonInteraction(buttonId, compound);
         if (buttonId >= 0 && buttonId < filter.getFilter().length) {
-            this.filter.setFilter(buttonId, new ItemStack(compound));
+            this.filter.setFilter(buttonId, ItemStack.read(compound));
             this.getContainer().requestSync();
         }
         if (buttonId == 16) {

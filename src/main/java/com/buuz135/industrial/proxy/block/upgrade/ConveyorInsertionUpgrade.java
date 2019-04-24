@@ -45,15 +45,13 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraftforge.common.capabilities.Capability;
+import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.IFluidTank;
 import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
-import net.minecraftforge.fluids.capability.IFluidHandler;
 import net.minecraftforge.items.CapabilityItemHandler;
-import net.minecraftforge.items.IItemHandler;
 
 import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
 import java.util.List;
 
 public class ConveyorInsertionUpgrade extends ConveyorUpgrade {
@@ -84,20 +82,22 @@ public class ConveyorInsertionUpgrade extends ConveyorUpgrade {
         if (getWorld().isRemote)
             return;
         if (entity instanceof EntityItem) {
-            IItemHandler handler = getHandlerCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY);
-            if (handler != null && getWorkingBox().aabb().offset(getPos()).grow(0.01).intersects(entity.getEntityBoundingBox())) {
-                if (whitelist != filter.matches((EntityItem) entity)) return;
-                ItemStack stack = ((EntityItem) entity).getItem();
-                for (int i = 0; i < handler.getSlots(); i++) {
-                    stack = handler.insertItem(i, stack, false);
-                    if (stack.isEmpty()) {
-                        entity.setDead();
-                        break;
-                    } else {
-                        ((EntityItem) entity).setItem(stack);
+            getHandlerCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY).ifPresent(handler -> {
+                if (getWorkingBox().aabb().offset(getPos()).grow(0.01).intersects(entity.getBoundingBox())) {
+                    if (whitelist != filter.matches((EntityItem) entity)) return;
+                    ItemStack stack = ((EntityItem) entity).getItem();
+                    for (int i = 0; i < handler.getSlots(); i++) {
+                        stack = handler.insertItem(i, stack, false);
+                        if (stack.isEmpty()) {
+                            entity.remove();
+                            break;
+                        } else {
+                            ((EntityItem) entity).setItem(stack);
+                        }
                     }
                 }
-            }
+            });
+
         }
     }
 
@@ -107,25 +107,25 @@ public class ConveyorInsertionUpgrade extends ConveyorUpgrade {
             return;
         if (getWorld().getGameTime() % 2 == 0 && getContainer() instanceof TileEntityConveyor) {
             IFluidTank tank = ((TileEntityConveyor) getContainer()).getTank();
-            IFluidHandler fluidHandler = getHandlerCapability(CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY);
-            if (fluidHandler != null && tank.drain(50, false) != null && fluidHandler.fill(tank.drain(50, false), false) > 0 && whitelist == filter.matches(tank.drain(50, false))) {
-                FluidStack drain = tank.drain(fluidHandler.fill(tank.drain(50, false), true), true);
-                if (drain != null && drain.amount > 0) getContainer().requestFluidSync();
-            }
+            getHandlerCapability(CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY).ifPresent(fluidHandler -> {
+                if (tank.drain(50, false) != null && fluidHandler.fill(tank.drain(50, false), false) > 0 && whitelist == filter.matches(tank.drain(50, false))) {
+                    FluidStack drain = tank.drain(fluidHandler.fill(tank.drain(50, false), true), true);
+                    if (drain != null && drain.amount > 0) getContainer().requestFluidSync();
+                }
+            });
         }
     }
 
-    @Nullable
-    private <T> T getHandlerCapability(Capability<T> capability) {
+    private <T> LazyOptional<T> getHandlerCapability(Capability<T> capability) {
         BlockPos offsetPos = getPos().offset(getSide());
         TileEntity tile = getWorld().getTileEntity(offsetPos);
-        if (tile != null && tile.hasCapability(capability, getSide().getOpposite()))
+        if (tile != null && tile.getCapability(capability, getSide().getOpposite()).isPresent())
             return tile.getCapability(capability, getSide().getOpposite());
         for (Entity entity : getWorld().getEntitiesWithinAABB(Entity.class, new AxisAlignedBB(0, 0, 0, 1, 1, 1).offset(offsetPos), EntitySelectors.NOT_SPECTATING)) {
-            if (entity.hasCapability(capability, entity instanceof EntityPlayerMP ? null : getSide().getOpposite()))
+            if (entity.getCapability(capability, entity instanceof EntityPlayerMP ? null : getSide().getOpposite()).isPresent())
                 return entity.getCapability(capability, entity instanceof EntityPlayerMP ? null : getSide().getOpposite());
         }
-        return null;
+        return LazyOptional.empty();
     }
 
     @Override

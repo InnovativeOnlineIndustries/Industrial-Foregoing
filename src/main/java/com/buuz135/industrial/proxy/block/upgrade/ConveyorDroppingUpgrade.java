@@ -43,7 +43,6 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.items.CapabilityItemHandler;
-import net.minecraftforge.items.IItemHandler;
 
 import javax.annotation.Nonnull;
 import java.util.Collections;
@@ -70,24 +69,25 @@ public class ConveyorDroppingUpgrade extends ConveyorUpgrade {
         if (whitelist != filter.matches(entity)) return;
         if (entity instanceof EntityItem) {
             TileEntity tile = getWorld().getTileEntity(getPos().offset(EnumFacing.DOWN));
-            if (tile != null && tile.hasCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, EnumFacing.UP)) {
-                IItemHandler handler = tile.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, EnumFacing.UP);
-                if (getBoundingBox().aabb().offset(getPos()).grow(0.01).intersects(entity.getEntityBoundingBox())) {
-                    ItemStack stack = ((EntityItem) entity).getItem();
-                    for (int i = 0; i < handler.getSlots(); i++) {
-                        stack = handler.insertItem(i, stack, false);
-                        if (stack.isEmpty()) {
-                            entity.setDead();
-                            break;
-                        } else {
-                            ((EntityItem) entity).setItem(stack);
+            if (tile != null) {
+                tile.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, EnumFacing.UP).ifPresent(handler -> {
+                    if (getBoundingBox().aabb().offset(getPos()).grow(0.01).intersects(entity.getBoundingBox())) {
+                        ItemStack stack = ((EntityItem) entity).getItem();
+                        for (int i = 0; i < handler.getSlots(); i++) {
+                            stack = handler.insertItem(i, stack, false);
+                            if (stack.isEmpty()) {
+                                entity.remove();
+                                break;
+                            } else {
+                                ((EntityItem) entity).setItem(stack);
+                            }
                         }
                     }
-                }
+                });
             }
         }
-        if (entity.isDead) return;
-        double entityHeight = entity.getEntityBoundingBox().maxY - entity.getEntityBoundingBox().minY;
+        if (!entity.isAlive()) return;
+        double entityHeight = entity.getBoundingBox().maxY - entity.getBoundingBox().minY;
         BlockPos pos = this.getPos().down((int) Math.ceil(entityHeight));
         boolean space = true;
         for (int y = pos.getY(); y < this.getPos().getY(); ++y) {
@@ -134,7 +134,7 @@ public class ConveyorDroppingUpgrade extends ConveyorUpgrade {
     public void handleButtonInteraction(int buttonId, NBTTagCompound compound) {
         super.handleButtonInteraction(buttonId, compound);
         if (buttonId >= 0 && buttonId < filter.getFilter().length) {
-            this.filter.setFilter(buttonId, new ItemStack(compound));
+            this.filter.setFilter(buttonId, ItemStack.read(compound));
             this.getContainer().requestSync();
         }
         if (buttonId == 16) {

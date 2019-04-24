@@ -44,6 +44,7 @@ import net.minecraft.init.Items;
 import net.minecraft.item.*;
 import net.minecraft.state.DirectionProperty;
 import net.minecraft.state.EnumProperty;
+import net.minecraft.state.StateContainer;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.*;
 import net.minecraft.util.math.AxisAlignedBB;
@@ -54,7 +55,6 @@ import net.minecraft.world.IBlockReader;
 import net.minecraft.world.IWorld;
 import net.minecraft.world.IWorldReaderBase;
 import net.minecraft.world.World;
-import net.minecraft.world.chunk.BlockStateContainer;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.common.property.IExtendedBlockState;
@@ -204,10 +204,10 @@ public class BlockConveyor extends BlockTileBase<TileEntityConveyor> {
         return state.get(TYPE).isVertical() ? BlockFaceShape.UNDEFINED : face == EnumFacing.DOWN ? BlockFaceShape.SOLID : BlockFaceShape.UNDEFINED;
     }
 
-    @Override
-    public boolean canPlaceBlockAt(World worldIn, BlockPos pos) {
-        return !worldIn.getBlockState(pos.down()).getBlock().equals(this);
-    }
+    //@Override
+    //public boolean canPlaceBlockAt(World worldIn, BlockPos pos) {
+    //    return !worldIn.getBlockState(pos.down()).getBlock().equals(this);
+    //}
 
     @Override
     public void neighborChanged(IBlockState state, World worldIn, BlockPos pos, Block blockIn, BlockPos fromPos) {
@@ -235,8 +235,11 @@ public class BlockConveyor extends BlockTileBase<TileEntityConveyor> {
         return RayTraceUtils.rayTraceBoxesClosest(start, end, pos, getBoundingBoxes(blockState, worldIn, pos));
     }
 
-    protected BlockStateContainer createBlockState() {
-        return new BlockStateContainer.Builder(this).add(FACING, SIDES, TYPE).add(ConveyorModelData.UPGRADE_PROPERTY).build();
+    @Override
+    protected void fillStateContainer(StateContainer.Builder<Block, IBlockState> builder) {
+        super.fillStateContainer(builder);
+        builder.add(FACING, SIDES, TYPE);
+        //ConveyorModelData.UPGRADE_PROPERTY
     }
 
     @Override
@@ -401,17 +404,7 @@ public class BlockConveyor extends BlockTileBase<TileEntityConveyor> {
     }
 
     @Override
-    public boolean isFullBlock(IBlockState state) {
-        return false;
-    }
-
-    @Override
     public boolean isFullCube(IBlockState state) {
-        return false;
-    }
-
-    @Override
-    public boolean isOpaqueCube(IBlockState state) {
         return false;
     }
 

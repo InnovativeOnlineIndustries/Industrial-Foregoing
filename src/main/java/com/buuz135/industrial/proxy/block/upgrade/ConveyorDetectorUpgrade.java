@@ -73,7 +73,7 @@ public class ConveyorDetectorUpgrade extends ConveyorUpgrade {
         hasEntity = !entities.isEmpty() && whitelist == someoneMatchesFilter(entities);
         if (inverted) hasEntity = !hasEntity;
         if (previous != hasEntity)
-            getWorld().notifyNeighborsOfStateChange(getPos(), getWorld().getBlockState(getPos()).getBlock(), true);
+            getWorld().notifyNeighborsOfStateChange(getPos(), getWorld().getBlockState(getPos()).getBlock());
     }
 
     private boolean someoneMatchesFilter(List<Entity> entities) {
@@ -121,7 +121,7 @@ public class ConveyorDetectorUpgrade extends ConveyorUpgrade {
     public void handleButtonInteraction(int buttonId, NBTTagCompound compound) {
         super.handleButtonInteraction(buttonId, compound);
         if (buttonId >= 0 && buttonId < filter.getFilter().length) {
-            this.filter.setFilter(buttonId, new ItemStack(compound));
+            this.filter.setFilter(buttonId, ItemStack.read(compound));
             this.getContainer().requestSync();
         }
         if (buttonId == 16) {

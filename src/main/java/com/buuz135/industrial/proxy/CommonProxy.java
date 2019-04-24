@@ -21,9 +21,7 @@
  */
 package com.buuz135.industrial.proxy;
 
-import com.buuz135.industrial.IndustrialForegoing;
 import com.buuz135.industrial.api.recipe.LaserDrillEntry;
-import com.buuz135.industrial.entity.EntityPinkSlime;
 import com.buuz135.industrial.proxy.event.FakePlayerRideEntityHandler;
 import com.buuz135.industrial.proxy.event.MeatFeederTickHandler;
 import com.buuz135.industrial.proxy.event.MobDeathHandler;
@@ -125,7 +123,7 @@ public class CommonProxy {
 //        if (Loader.isModLoaded("crafttweaker")) CraftTweakerHelper.register();
 //        if (Loader.isModLoaded("baubles")) MinecraftForge.EVENT_BUS.register(new MeatFeederBauble.Event());
 
-        EntityRegistry.registerModEntity(new ResourceLocation(Reference.MOD_ID, "pink_slime"), EntityPinkSlime.class, "pink_slime", 135135, IndustrialForegoing.instance, 32, 1, false, 10485860, 16777215);
+        //EntityRegistry.registerModEntity(new ResourceLocation(Reference.MOD_ID, "pink_slime"), EntityPinkSlime.class, "pink_slime", 135135, IndustrialForegoing.instance, 32, 1, false, 10485860, 16777215);
         PINK_SLIME_LOOT = LootTableList.register(new ResourceLocation(Reference.MOD_ID, "entities/pink_slime"));
 
         try {
@@ -146,7 +144,7 @@ public class CommonProxy {
         ItemRegistry.createRecipes();
         RecipeUtils.generateConstants();
         RecipeHandlers.executeCraftweakerActions();
-        LaserDrillEntry.loadLaserConfigs(configFolder);
+        //LaserDrillEntry.loadLaserConfigs(configFolder);
 
     }
 

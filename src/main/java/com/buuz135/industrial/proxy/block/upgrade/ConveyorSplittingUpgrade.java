@@ -79,7 +79,7 @@ public class ConveyorSplittingUpgrade extends ConveyorUpgrade {
             }
         }
         if (handlingEntities.contains(entity.getEntityId())) {
-            MovementUtils.handleConveyorMovement(entity, this.getSide(), this.getPos(), ((TileEntityConveyor) this.getContainer()).getType());
+            MovementUtils.handleConveyorMovement(entity, this.getSide(), this.getPos(), ((TileEntityConveyor) this.getContainer()).getConveyorType());
         }
     }
 
@@ -90,7 +90,7 @@ public class ConveyorSplittingUpgrade extends ConveyorUpgrade {
         AxisAlignedBB box = this.getWorld().getBlockState(this.getPos()).getCollisionBoundingBox(this.getWorld(), this.getPos()).offset(this.getPos()).grow(0.04);
         for (Integer integer : new ArrayList<>(handlingEntities)) {
             Entity entity = this.getWorld().getEntityByID(integer);
-            if (entity != null && !box.intersects(entity.getEntityBoundingBox())) {
+            if (entity != null && !box.intersects(entity.getBoundingBox())) {
                 handlingEntities.remove(integer);
                 this.getContainer().getEntityFilter().remove(integer);
             }
