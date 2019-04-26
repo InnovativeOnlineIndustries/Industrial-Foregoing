@@ -28,7 +28,6 @@ import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.EnumFacing;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.world.World;
 import net.minecraftforge.common.capabilities.ICapabilityProvider;
@@ -42,7 +41,7 @@ import java.util.List;
 public class MeatFeederItem extends IFCustomItem {
 
     public MeatFeederItem() {
-        super("meat_feeder", new Builder().maxStackSize(1));
+        super("meat_feeder", new Properties().maxStackSize(1));
     }
 
     @Nullable
@@ -55,7 +54,7 @@ public class MeatFeederItem extends IFCustomItem {
             }
 
         };
-        handlerItemStack.fill(new FluidStack(FluidsRegistry.MEAT, 0), true);
+        //handlerItemStack.fill(new FluidStack(FluidsRegistry.MEAT, 0), true);
         return handlerItemStack;
     }
 
@@ -73,7 +72,7 @@ public class MeatFeederItem extends IFCustomItem {
 
     public void drain(ItemStack stack, int amount) {
         FluidHandlerItemStack handlerItemStack = (FluidHandlerItemStack) stack.getCapability(CapabilityFluidHandler.FLUID_HANDLER_ITEM_CAPABILITY).orElseThrow(RuntimeException::new);
-        handlerItemStack.drain(new FluidStack(FluidsRegistry.MEAT, amount), true);
+        //handlerItemStack.drain(new FluidStack(FluidsRegistry.MEAT, amount), true);
     }
 
     public void createRecipe() {

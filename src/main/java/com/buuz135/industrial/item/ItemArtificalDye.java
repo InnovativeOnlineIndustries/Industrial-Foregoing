@@ -32,7 +32,7 @@ public class ItemArtificalDye extends IFCustomItem {
     private final EnumDyeColor dyeColor;
 
     public ItemArtificalDye(EnumDyeColor dyeColor) {
-        super("artificial_dye_" + dyeColor.getTranslationKey(), new Builder());
+        super("artificial_dye_" + dyeColor.getTranslationKey(), new Properties());
         this.dyeColor = dyeColor;
     }
 

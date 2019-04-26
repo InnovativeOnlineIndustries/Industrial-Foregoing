@@ -33,7 +33,7 @@ import net.minecraft.world.World;
 public class FertilizerItem extends IFCustomItem {
 
     public FertilizerItem() {
-        super("fertilizer", new Builder());
+        super("fertilizer", new Properties());
     }
 
     @Override

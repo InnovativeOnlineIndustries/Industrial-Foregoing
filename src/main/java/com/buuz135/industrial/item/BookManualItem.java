@@ -35,7 +35,7 @@ import net.minecraft.world.World;
 public class BookManualItem extends IFCustomItem {
 
     public BookManualItem() {
-        super("book_manual", new Builder().maxStackSize(1));
+        super("book_manual", new Properties().maxStackSize(1));
     }
 
     @Override

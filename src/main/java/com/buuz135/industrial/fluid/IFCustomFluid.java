@@ -24,7 +24,6 @@ package com.buuz135.industrial.fluid;
 import com.buuz135.industrial.utils.Reference;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fluids.Fluid;
-import net.minecraftforge.fluids.FluidRegistry;
 
 import java.awt.*;
 
@@ -42,11 +41,10 @@ public class IFCustomFluid extends Fluid {
 
     public IFCustomFluid(String fluidName, int temperature, Color color) {
         this(fluidName, temperature);
-        this.setColor(color);
+        this.setColor(color.getRGB());
     }
 
     public void register() {
-        FluidRegistry.registerFluid(this);
-        FluidRegistry.addBucketForFluid(this);
+
     }
 }

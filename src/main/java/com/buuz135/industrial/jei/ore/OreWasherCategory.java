@@ -21,7 +21,6 @@
  */
 package com.buuz135.industrial.jei.ore;
 
-import com.buuz135.industrial.proxy.BlockRegistry;
 import com.buuz135.industrial.utils.Reference;
 import mezz.jei.api.IGuiHelper;
 import mezz.jei.api.gui.IDrawable;
@@ -52,7 +51,7 @@ public class OreWasherCategory implements IRecipeCategory<OreWasherWrapper> {
 
     @Override
     public String getTitle() {
-        return BlockRegistry.oreWasherBlock.getLocalizedName();
+        return "TODO";//TODO BlockRegistry.oreWasherBlock.getLocalizedName();
     }
 
     @Override

@@ -40,7 +40,6 @@ import net.minecraft.client.renderer.entity.RenderPlayer;
 import net.minecraft.client.renderer.model.IBakedModel;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.item.EnumDyeColor;
-import net.minecraft.item.ItemDye;
 import net.minecraft.resources.IReloadableResourceManager;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ResourceLocation;
@@ -49,7 +48,6 @@ import net.minecraftforge.client.model.ModelLoader;
 import net.minecraftforge.client.model.obj.OBJLoader;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.model.TRSRTransformation;
-import net.minecraftforge.common.util.Constants;
 
 import java.util.Map;
 
@@ -85,34 +83,34 @@ public class ClientProxy extends CommonProxy {
 
         ((IReloadableResourceManager) Minecraft.getInstance().getResourceManager()).addReloadListener(resourceManager -> FluidUtils.colorCache.clear());
 
-        if (ItemRegistry.dyes != null)
-            Minecraft.getInstance().getItemColors().register((stack, tintIndex) -> ItemDye.DYE_COLORS[EnumDyeColor.byMetadata(stack.getMetadata()).getDyeDamage()], ItemRegistry.artificalDye);
-        Minecraft.getInstance().getItemColors().register((stack, tintIndex) -> {
-            if (tintIndex == 1) {
-                return ItemDye.DYE_COLORS[EnumDyeColor.byMetadata(stack.getMetadata()).getDyeDamage()];
-            }
-            return 0xFFFFFF;
-        }, BlockRegistry.blockConveyor.getItem());
+        //if (ItemRegistry.dyes != null)
+        //    Minecraft.getInstance().getItemColors().register((stack, tintIndex) -> ItemDye.DYE_COLORS[EnumDyeColor.byMetadata(stack.getMetadata()).getDyeDamage()], ItemRegistry.artificalDye);
+        //Minecraft.getInstance().getItemColors().register((stack, tintIndex) -> {
+        //    if (tintIndex == 1) {
+        //        return ItemDye.DYE_COLORS[EnumDyeColor.byMetadata(stack.getMetadata()).getDyeDamage()];
+        //    }
+        //    return 0xFFFFFF;
+        //}, BlockRegistry.blockConveyor.getItem());
         Minecraft.getInstance().getBlockColors().register((state, worldIn, pos, tintIndex) -> {
             if (tintIndex == 0) {
                 TileEntity entity = worldIn.getTileEntity(pos);
                 if (entity instanceof TileEntityConveyor) {
-                    return ItemDye.DYE_COLORS[((TileEntityConveyor) entity).getColor()];
+                    return EnumDyeColor.byId(((TileEntityConveyor) entity).getColor()).func_196060_f();
                 }
             }
             return 0xFFFFFFF;
         }, BlockRegistry.blockConveyor);
-        Minecraft.getInstance().getItemColors().register((stack, tintIndex) -> {
-            if (tintIndex == 1 || tintIndex == 2 || tintIndex == 3) {
-                EntityList.EntityEggInfo info = null;
-                if (stack.hasTag() && stack.getTag().hasKey("entity", Constants.NBT.TAG_STRING)) {
-                    ResourceLocation id = new ResourceLocation(stack.getTag().getString("entity"));
-                    info = EntityList.ENTITY_EGGS.get(id);
-                }
-                return info == null ? 0x636363 : tintIndex == 3 ? BlockRegistry.mobDuplicatorBlock.blacklistedEntities.contains(info.spawnedID.toString()) ? 0xDB201A : 0x636363 : tintIndex == 1 ? info.primaryColor : info.secondaryColor;
-            }
-            return 0xFFFFFF;
-        }, ItemRegistry.mobImprisonmentToolItem);
+        //Minecraft.getInstance().getItemColors().register((stack, tintIndex) -> {
+        //    if (tintIndex == 1 || tintIndex == 2 || tintIndex == 3) {
+        //        EntityList.EntityEggInfo info = null;
+        //        if (stack.hasTag() && stack.getTag().hasKey("entity", Constants.NBT.TAG_STRING)) {
+        //            ResourceLocation id = new ResourceLocation(stack.getTag().getString("entity"));
+        //            info = EntityList.ENTITY_EGGS.get(id);
+        //        }
+        //        return info == null ? 0x636363 : tintIndex == 3 ? BlockRegistry.mobDuplicatorBlock.blacklistedEntities.contains(info.spawnedID.toString()) ? 0xDB201A : 0x636363 : tintIndex == 1 ? info.primaryColor : info.secondaryColor;
+        //    }
+        //    return 0xFFFFFF;
+        //}, ItemRegistry.mobImprisonmentToolItem);
         Minecraft.getInstance().getItemColors().register((stack, tintIndex) -> {
             if (tintIndex == 0) {
                 return ItemInfinityDrill.DrillTier.getTierBraquet(ItemRegistry.itemInfinityDrill.getPowerFromStack(stack)).getLeft().getTextureColor();
