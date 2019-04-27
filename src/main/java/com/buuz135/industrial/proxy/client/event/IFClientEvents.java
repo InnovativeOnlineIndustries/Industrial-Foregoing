@@ -30,6 +30,7 @@ import com.buuz135.industrial.proxy.block.DistanceRayTraceResult;
 import com.buuz135.industrial.proxy.client.model.ConveyorBlockModel;
 import com.buuz135.industrial.registry.IFRegistries;
 import com.buuz135.industrial.utils.Reference;
+import net.minecraft.block.BlockFlowingFluid;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.model.ModelResourceLocation;
@@ -55,9 +56,9 @@ public class IFClientEvents {
 
     @SubscribeEvent
     public void textureStich(TextureStitchEvent.Pre pre) {
-        pre.getMap().registerSprite(new ResourceLocation(Reference.MOD_ID, "blocks/catears"));
+        pre.getMap().registerSprite(Minecraft.getInstance().getResourceManager(), new ResourceLocation(Reference.MOD_ID, "blocks/catears"));
         for (ConveyorUpgradeFactory factory : IFRegistries.CONVEYOR_UPGRADE_REGISTRY.getValues()) {
-            factory.getTextures().forEach(pre.getMap()::registerSprite);
+            factory.getTextures().forEach(resourceLocation -> pre.getMap().registerSprite(Minecraft.getInstance().getResourceManager(), resourceLocation));
         }
         //pre.getMap().registerSprite(FluidsRegistry.ORE_FLUID_RAW.getStill());
         //pre.getMap().registerSprite(FluidsRegistry.ORE_FLUID_RAW.getFlowing());
@@ -103,7 +104,8 @@ public class IFClientEvents {
             double x = player.lastTickPosX + (player.posX - player.lastTickPosX) * event.getPartialTicks();
             double y = player.lastTickPosY + (player.posY - player.lastTickPosY) * event.getPartialTicks();
             double z = player.lastTickPosZ + (player.posZ - player.lastTickPosZ) * event.getPartialTicks();
-            RenderGlobal.drawSelectionBoundingBox(((Cuboid) ((DistanceRayTraceResult) event.getTarget()).hitInfo).aabb().offset(-x, -y, -z).offset(pos).grow(0.002),
+
+            Minecraft.getInstance().renderGlobal.drawSelectionBoundingBox(((Cuboid) ((DistanceRayTraceResult) event.getTarget()).hitInfo).aabb().offset(-x, -y, -z).offset(pos).grow(0.002),
                     0.0F, 0.0F, 0.0F, 0.4F
             );
 
@@ -128,8 +130,8 @@ public class IFClientEvents {
             double y = player.lastTickPosY + (player.posY - player.lastTickPosY) * event.getPartialTicks();
             double z = player.lastTickPosZ + (player.posZ - player.lastTickPosZ) * event.getPartialTicks();
             BlockPos.getAllInBox(area.getLeft(), area.getRight()).forEach(blockPos -> {
-                if (!world.isAirBlock(blockPos) && world.getBlockState(blockPos).getBlockHardness(world, blockPos) >= 0 && !(world.getBlockState(blockPos).getBlock() instanceof IFluidBlock) && !(world.getBlockState(blockPos).getBlock() instanceof BlockLiquid)) {
-                    RenderGlobal.drawSelectionBoundingBox(world.getBlockState(blockPos).getBlock().getSelectedBoundingBox(world.getBlockState(blockPos), world, blockPos).offset(-x, -y, -z).
+                if (!world.isAirBlock(blockPos) && world.getBlockState(blockPos).getBlockHardness(world, blockPos) >= 0 && !(world.getBlockState(blockPos).getBlock() instanceof IFluidBlock) && !(world.getBlockState(blockPos).getBlock() instanceof BlockFlowingFluid)) {
+                    Minecraft.getInstance().renderGlobal.drawSelectionBoundingBox(world.getBlockState(blockPos).getBlock().getShape(world.getBlockState(blockPos), world, blockPos).toBoundingBoxList().get(0).offset(-x, -y, -z).
                             grow(0.001), 0.0F, 0.0F, 0.0F, 0.4F);
                 }
             });

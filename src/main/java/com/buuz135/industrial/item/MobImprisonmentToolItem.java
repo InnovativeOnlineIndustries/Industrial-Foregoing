@@ -21,7 +21,6 @@
  */
 package com.buuz135.industrial.item;
 
-import com.buuz135.industrial.proxy.BlockRegistry;
 import com.buuz135.industrial.proxy.ItemRegistry;
 import com.buuz135.industrial.utils.RecipeUtils;
 import net.minecraft.client.util.ITooltipFlag;
@@ -42,7 +41,6 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TextComponentString;
 import net.minecraft.util.text.TextComponentTranslation;
-import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.World;
 
 import javax.annotation.Nullable;
@@ -51,7 +49,7 @@ import java.util.List;
 public class MobImprisonmentToolItem extends IFCustomItem {
 
     public MobImprisonmentToolItem() {
-        super("mob_imprisonment_tool", new Builder().maxStackSize(1));
+        super("mob_imprisonment_tool", new Properties().maxStackSize(1));
     }
 
     @Override
@@ -104,8 +102,8 @@ public class MobImprisonmentToolItem extends IFCustomItem {
         if (containsEntity(stack)) {
             tooltip.add(new TextComponentString("Mob: " + getID(stack)));//new TextComponentTranslation(EntityList.getTranslationName(new ResourceLocation(getID(stack)))).getUnformattedComponentText());
             tooltip.add(new TextComponentString("Health: " + stack.getTag().getDouble("Health")));
-            if (BlockRegistry.mobDuplicatorBlock.blacklistedEntities.contains(stack.getTag().getString("entity")))
-                tooltip.add(new TextComponentString(TextFormatting.RED + "Entity blacklisted in the Mob Duplicator"));
+            //if (BlockRegistry.mobDuplicatorBlock.blacklistedEntities.contains(stack.getTag().getString("entity")))
+            //    tooltip.add(new TextComponentString(TextFormatting.RED + "Entity blacklisted in the Mob Duplicator"));
         }
     }
 

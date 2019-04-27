@@ -21,14 +21,12 @@
  */
 package com.buuz135.industrial.jei.sludge;
 
-import com.buuz135.industrial.proxy.FluidsRegistry;
 import com.buuz135.industrial.utils.ItemStackWeightedItem;
 import mezz.jei.api.ingredients.IIngredients;
 import mezz.jei.api.recipe.IRecipeWrapper;
 import net.minecraft.client.Minecraft;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.text.TextFormatting;
-import net.minecraftforge.fluids.FluidStack;
 
 import java.text.DecimalFormat;
 import java.util.List;
@@ -45,7 +43,7 @@ public class SludgeRefinerRecipeWrapper implements IRecipeWrapper {
 
     @Override
     public void getIngredients(IIngredients ingredients) {
-        ingredients.setInput(FluidStack.class, new FluidStack(FluidsRegistry.SLUDGE, 1000));
+        //ingredients.setInput(FluidStack.class, new FluidStack(FluidsRegistry.SLUDGE, 1000));
         ingredients.setOutput(ItemStack.class, item.getStack());
     }
 

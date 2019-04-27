@@ -21,7 +21,6 @@
  */
 package com.buuz135.industrial.proxy.block.upgrade;
 
-import com.buuz135.industrial.IndustrialForegoing;
 import com.buuz135.industrial.api.conveyor.ConveyorUpgrade;
 import com.buuz135.industrial.api.conveyor.ConveyorUpgradeFactory;
 import com.buuz135.industrial.api.conveyor.IConveyorContainer;
@@ -32,7 +31,6 @@ import com.buuz135.industrial.gui.component.TextureGuiComponent;
 import com.buuz135.industrial.gui.component.TexturedStateButtonGuiComponent;
 import com.buuz135.industrial.proxy.block.Cuboid;
 import com.buuz135.industrial.proxy.block.tile.TileEntityConveyor;
-import com.buuz135.industrial.proxy.network.ConveyorSplittingSyncEntityMessage;
 import com.buuz135.industrial.utils.MovementUtils;
 import com.buuz135.industrial.utils.Reference;
 import net.minecraft.entity.Entity;
@@ -74,7 +72,7 @@ public class ConveyorSplittingUpgrade extends ConveyorUpgrade {
             if (nextFacing == this.getSide()) {
                 this.handlingEntities.add(entity.getEntityId());
                 this.getContainer().getEntityFilter().add(entity.getEntityId());
-                IndustrialForegoing.NETWORK.sendToAllAround(new ConveyorSplittingSyncEntityMessage(this.getPos(), entity.getEntityId(), this.getSide()), new NetworkRegistry.TargetPoint(this.getWorld().provider.getDimension(), this.getPos().getX(), this.getPos().getY(), this.getPos().getZ(), 64));
+                //TODOIndustrialForegoing.NETWORK.sendToAllAround(new ConveyorSplittingSyncEntityMessage(this.getPos(), entity.getEntityId(), this.getSide()), new NetworkRegistry.TargetPoint(this.getWorld().provider.getDimension(), this.getPos().getX(), this.getPos().getY(), this.getPos().getZ(), 64));
                 findNextUpgradeAndUpdate();
             }
         }
@@ -87,7 +85,7 @@ public class ConveyorSplittingUpgrade extends ConveyorUpgrade {
     public void update() {
         super.update();
         if (handlingEntities.isEmpty()) return;
-        AxisAlignedBB box = this.getWorld().getBlockState(this.getPos()).getCollisionBoundingBox(this.getWorld(), this.getPos()).offset(this.getPos()).grow(0.04);
+        AxisAlignedBB box = this.getWorld().getBlockState(this.getPos()).getCollisionShape(this.getWorld(), this.getPos()).toBoundingBoxList().get(0).offset(this.getPos()).grow(0.04);
         for (Integer integer : new ArrayList<>(handlingEntities)) {
             Entity entity = this.getWorld().getEntityByID(integer);
             if (entity != null && !box.intersects(entity.getBoundingBox())) {
