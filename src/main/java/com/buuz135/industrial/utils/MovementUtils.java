@@ -25,13 +25,11 @@ import com.buuz135.industrial.proxy.block.BlockConveyor;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.EnumFacing;
-import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.util.math.shapes.VoxelShape;
 
 import java.util.List;
-import java.util.function.Predicate;
 
 public class MovementUtils {
 
@@ -48,8 +46,8 @@ public class MovementUtils {
 //            collision = collision.contract(0,0,-0.1);
 //            collision = collision.contract(0,0,0.1);
 //        }
-        if (!type.isVertical() && collision.toBoundingBoxList().stream().noneMatch(axisAlignedBB -> axisAlignedBB.intersects(entity.getBoundingBox()))) return;
-
+        if (!type.isVertical() && collision.toBoundingBoxList().stream().noneMatch(axisAlignedBB -> axisAlignedBB.grow(0.01).intersects(entity.getBoundingBox())))
+            return;
         //DIRECTION MOVEMENT
         double speed = 0.2;
         if (type.isFast()) speed *= 2;

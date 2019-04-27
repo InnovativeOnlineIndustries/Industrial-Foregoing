@@ -400,11 +400,11 @@ public class BlockConveyor extends BlockTileBase<TileEntityConveyor> {
         TileEntity entity = worldIn.getTileEntity(pos);
         if (entity instanceof TileEntityConveyor) {
             if (((TileEntityConveyor) entity).getConveyorType().isVertical()) {
-                return Block.makeCuboidShape(0, 0, 0, 1, 0.40, 1);
+                return Block.makeCuboidShape(0, 0, 0, 16, 0.40 * 16, 16);
             }
-            return Block.makeCuboidShape(0, 0, 0, 1, 1 / 16D, 1);
+            return Block.makeCuboidShape(0, 0, 0, 16, 1, 16);
         }
-        return Block.makeCuboidShape(0, 0, 0, 1, 1, 1);
+        return Block.makeCuboidShape(0, 0, 0, 16, 16, 16);
     }
 
     @Override
@@ -415,6 +415,18 @@ public class BlockConveyor extends BlockTileBase<TileEntityConveyor> {
     @OnlyIn(Dist.CLIENT)
     public BlockRenderLayer getBlockLayer() {
         return BlockRenderLayer.CUTOUT;
+    }
+
+    @Override
+    public VoxelShape getCollisionShape(IBlockState state, IBlockReader worldIn, BlockPos pos) {
+        TileEntity entity = worldIn.getTileEntity(pos);
+        if (entity instanceof TileEntityConveyor) {
+            if (((TileEntityConveyor) entity).getConveyorType().isVertical()) {
+                return Block.makeCuboidShape(0, 0, 0, 16, 0.40 * 16, 16);
+            }
+            return Block.makeCuboidShape(0, 0, 0, 16, 1, 16);
+        }
+        return Block.makeCuboidShape(0, 0, 0, 16, 16, 16);
     }
 
     @Override
