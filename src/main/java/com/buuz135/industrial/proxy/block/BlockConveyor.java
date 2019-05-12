@@ -263,12 +263,13 @@ public class BlockConveyor extends BlockTileBase<TileEntityConveyor> {
     @Override
     public void onBlockPlacedBy(World worldIn, BlockPos pos, IBlockState state, EntityLivingBase placer, ItemStack stack) {
         super.onBlockPlacedBy(worldIn, pos, state, placer, stack);
-        TileEntity tileEntity = this.createTileEntity(state, worldIn);
-        worldIn.setTileEntity(pos, tileEntity);
-        EnumFacing direction = placer.getHorizontalFacing();
-        ((TileEntityConveyor) tileEntity).setFacing(direction);
-        ((TileEntityConveyor) tileEntity).setColor(EnumDyeColor.values()[0]);//TODO
-        updateConveyorPlacing(worldIn, pos, state, true);
+        if (placer != null) {
+            TileEntity tileEntity = worldIn.getTileEntity(pos);
+            if (tileEntity instanceof TileEntityConveyor) {
+                ((TileEntityConveyor) tileEntity).setFacing(placer.getHorizontalFacing());
+            }
+            updateConveyorPlacing(worldIn, pos, state, true);
+        }
     }
 
     @Override

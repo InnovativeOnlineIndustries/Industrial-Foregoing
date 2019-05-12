@@ -235,9 +235,9 @@ public class TileEntityConveyor extends TileBase implements IConveyorContainer, 
     }
 
     public void markForUpdate() {
-        this.world.setBlockState(pos, this.world.getBlockState(pos).with(TYPE, type).with(FACING, facing));
-        this.world.notifyBlockUpdate(getPos(), getWorld().getBlockState(getPos()), getWorld().getBlockState(getPos()), 3);
-        markDirty();
+        super.markForUpdate();
+        this.world.setBlockState(pos, this.world.getBlockState(pos).with(FACING, facing).with(TYPE, type));
+        this.world.getTileEntity(pos).read(write(new NBTTagCompound()));
     }
 
     public List<AxisAlignedBB> getCollisionBoxes() {
@@ -301,5 +301,6 @@ public class TileEntityConveyor extends TileBase implements IConveyorContainer, 
             this.needsFluidSync = false;
         }
     }
+
 
 }
