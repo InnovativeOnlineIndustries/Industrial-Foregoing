@@ -21,8 +21,10 @@
  */
 package com.buuz135.industrial.proxy;
 
+import com.buuz135.industrial.api.conveyor.ConveyorUpgradeFactory;
 import com.buuz135.industrial.item.*;
 import com.buuz135.industrial.item.infinity.ItemInfinityDrill;
+import com.buuz135.industrial.proxy.block.upgrade.*;
 import com.buuz135.industrial.utils.RecipeUtils;
 import com.hrznstudio.titanium.util.TitaniumMod;
 import net.minecraft.item.ItemStack;
@@ -44,6 +46,14 @@ public class ItemRegistry {
     public static ItemArtificalDye[] dyes;
     public static ItemInfinityDrill itemInfinityDrill;
 
+    public static ConveyorUpgradeFactory upgrade_extraction = new ConveyorExtractionUpgrade.Factory();
+    public static ConveyorUpgradeFactory upgrade_insertion = new ConveyorInsertionUpgrade.Factory();
+    public static ConveyorUpgradeFactory upgrade_detector = new ConveyorDetectorUpgrade.Factory();
+    public static ConveyorUpgradeFactory upgrade_bouncing = new ConveyorBouncingUpgrade.Factory();
+    public static ConveyorUpgradeFactory upgrade_dropping = new ConveyorDroppingUpgrade.Factory();
+    public static ConveyorUpgradeFactory upgrade_blinking = new ConveyorBlinkingUpgrade.Factory();
+    public static ConveyorUpgradeFactory upgrade_splitting = new ConveyorSplittingUpgrade.Factory();
+
     public static void registerItems(TitaniumMod mod) {
         mod.addItem(tinyDryRubber = new IFCustomItem("tinydryrubber"));
         mod.addItem(dryRubber = new IFCustomItem("dryrubber"));
@@ -59,7 +69,7 @@ public class ItemRegistry {
         mod.addItem(bookManualItem = new BookManualItem());
         mod.addItem(pinkSlimeIngot = new IFCustomItem("pink_slime_ingot"));
         mod.addItem(itemInfinityDrill = new ItemInfinityDrill());
-
+        ConveyorUpgradeFactory.FACTORIES.forEach(conveyorUpgradeFactory -> mod.addItem(new ItemConveyorUpgrade(conveyorUpgradeFactory)));
 //        mod.addItem(adultFilterAddomItem = new AdultFilterAddonItem());
 //        mod.addItem(rangeAddonItem = new RangeAddonItem());
 //        mod.addItem(energyFieldAddon = new EnergyFieldAddon());

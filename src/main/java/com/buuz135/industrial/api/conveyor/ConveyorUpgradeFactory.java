@@ -30,12 +30,20 @@ import net.minecraft.world.World;
 import net.minecraftforge.registries.ForgeRegistryEntry;
 
 import javax.annotation.Nonnull;
+import java.util.ArrayList;
 import java.util.Collections;
+import java.util.List;
 import java.util.Set;
 
 public abstract class ConveyorUpgradeFactory extends ForgeRegistryEntry<ConveyorUpgradeFactory> {
+
     public static final ImmutableSet<EnumFacing> HORIZONTAL = ImmutableSet.copyOf(EnumFacing.Plane.HORIZONTAL.iterator());
     public static final ImmutableSet<EnumFacing> DOWN = ImmutableSet.of(EnumFacing.DOWN);
+    public static final List<ConveyorUpgradeFactory> FACTORIES = new ArrayList<>();
+
+    public ConveyorUpgradeFactory() {
+        FACTORIES.add(this);
+    }
 
     public abstract ConveyorUpgrade create(IConveyorContainer container, EnumFacing face);
 

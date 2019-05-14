@@ -99,7 +99,6 @@ public class CommonProxy {
         FluidsRegistry.registerFluids();
 
         MinecraftForge.EVENT_BUS.register(new StrawRegistry());
-        MinecraftForge.EVENT_BUS.register(new ConveyorRegistry());
         MinecraftForge.EVENT_BUS.register(new MeatFeederTickHandler());
         MinecraftForge.EVENT_BUS.register(new MobDeathHandler());
         MinecraftForge.EVENT_BUS.register(new PlantRecollectableRegistryHandler());

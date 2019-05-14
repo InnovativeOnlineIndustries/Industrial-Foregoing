@@ -26,7 +26,7 @@ import com.buuz135.industrial.api.conveyor.ConveyorUpgradeFactory;
 import com.buuz135.industrial.api.conveyor.IConveyorContainer;
 import com.buuz135.industrial.proxy.BlockRegistry;
 import com.buuz135.industrial.proxy.block.BlockConveyor;
-import com.buuz135.industrial.registry.IFRegistries;
+import com.buuz135.industrial.proxy.client.model.ConveyorModelData;
 import com.buuz135.industrial.utils.MovementUtils;
 import com.hrznstudio.titanium.block.tile.TileBase;
 import net.minecraft.block.state.IBlockState;
@@ -41,10 +41,13 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
+import net.minecraftforge.client.model.data.IModelData;
+import net.minecraftforge.client.model.data.ModelDataMap;
 import net.minecraftforge.common.util.Constants;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidTank;
 
+import javax.annotation.Nonnull;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -218,7 +221,13 @@ public class TileEntityConveyor extends TileBase implements IConveyorContainer, 
                 if (!upgradesTag.hasKey(facing.getName()))
                     continue;
                 NBTTagCompound upgradeTag = upgradesTag.getCompound(facing.getName());
-                ConveyorUpgradeFactory factory = IFRegistries.CONVEYOR_UPGRADE_REGISTRY.getValue(new ResourceLocation(upgradeTag.getString("factory")));
+                ConveyorUpgradeFactory factory = null;
+                for (ConveyorUpgradeFactory conveyorUpgradeFactory : ConveyorUpgradeFactory.FACTORIES) {
+                    if (conveyorUpgradeFactory.getRegistryName().equals(new ResourceLocation(upgradeTag.getString("factory")))) {
+                        factory = conveyorUpgradeFactory;
+                        break;
+                    }
+                }
                 if (factory != null) {
                     ConveyorUpgrade upgrade = upgradeMap.getOrDefault(facing, factory.create(this, facing));
                     if (upgradeTag.contains("customNBT", Constants.NBT.TAG_COMPOUND)) {
@@ -302,5 +311,9 @@ public class TileEntityConveyor extends TileBase implements IConveyorContainer, 
         }
     }
 
-
+    @Nonnull
+    @Override
+    public IModelData getModelData() {
+        return new ModelDataMap.Builder().withInitial(ConveyorModelData.UPGRADE_PROPERTY, new ConveyorModelData(upgradeMap)).build();
+    }
 }

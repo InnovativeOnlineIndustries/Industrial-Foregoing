@@ -25,7 +25,6 @@ import com.buuz135.industrial.IndustrialForegoing;
 import com.buuz135.industrial.api.conveyor.ConveyorUpgrade;
 import com.buuz135.industrial.proxy.ItemRegistry;
 import com.buuz135.industrial.proxy.block.tile.TileEntityConveyor;
-import com.buuz135.industrial.proxy.client.model.ConveyorModelData;
 import com.buuz135.industrial.proxy.client.render.FluidConveyorTESR;
 import com.hrznstudio.titanium.api.IFactory;
 import com.hrznstudio.titanium.api.raytrace.DistanceRayTraceResult;
@@ -56,7 +55,6 @@ import net.minecraft.world.IWorldReaderBase;
 import net.minecraft.world.World;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
-import net.minecraftforge.common.property.IExtendedBlockState;
 import net.minecraftforge.fml.client.registry.ClientRegistry;
 
 import javax.annotation.Nullable;
@@ -189,11 +187,11 @@ public class BlockConveyor extends BlockTileBase<TileEntityConveyor> {
 
     @Override
     public IBlockState getExtendedState(IBlockState state, IBlockReader world, BlockPos pos) {
-        if (state instanceof IExtendedBlockState) {
-            TileEntity tile = world.getTileEntity(pos);
-            if (tile instanceof TileEntityConveyor)
-                return ((IExtendedBlockState) state).withProperty(ConveyorModelData.UPGRADE_PROPERTY, new ConveyorModelData(((TileEntityConveyor) tile).getUpgradeMap()));
-        }
+        //if (state instanceof IExtendedBlockState) {
+        //    TileEntity tile = world.getTileEntity(pos);
+        //    if (tile instanceof TileEntityConveyor)
+        //        return ((IExtendedBlockState) state).withProperty(ConveyorModelData.UPGRADE_PROPERTY, new ConveyorModelData(((TileEntityConveyor) tile).getUpgradeMap()));
+        //}
         return super.getExtendedState(state, world, pos);
     }
 
@@ -395,6 +393,10 @@ public class BlockConveyor extends BlockTileBase<TileEntityConveyor> {
         return this.getDefaultState().with(FACING, context.getPlayer().getHorizontalFacing());
     }
 
+    @Override
+    public EnumBlockRenderType getRenderType(IBlockState p_149645_1_) {
+        return EnumBlockRenderType.MODEL;
+    }
 
     @Override
     public VoxelShape getShape(IBlockState state, IBlockReader worldIn, BlockPos pos) {

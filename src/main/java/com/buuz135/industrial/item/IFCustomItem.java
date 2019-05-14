@@ -39,10 +39,6 @@ public class IFCustomItem extends ItemBase {
         return this;
     }
 
-    public void registerRender() {
-        //ModelLoader.setCustomModelResourceLocation(this, 0, new ModelResourceLocation(this.getRegistryName(), "inventory"));
-    }
-
     public void createRecipe() {
 
     }

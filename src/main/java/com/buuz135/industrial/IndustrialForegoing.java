@@ -86,15 +86,17 @@ public class IndustrialForegoing extends TitaniumMod {
         return player;
     }
 
+    @EventReceiver
     public void onCommon(FMLCommonSetupEvent event) {
         proxy.run();
     }
 
+    @EventReceiver
     public void onClient(FMLClientSetupEvent event) {
         proxy.run();
     }
 
-
+    @EventReceiver
     public void serverStart(FMLServerStartingEvent event) {
         worldFakePlayer.clear();
     }

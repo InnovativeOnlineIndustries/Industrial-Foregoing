@@ -24,7 +24,6 @@ package com.buuz135.industrial.proxy;
 
 import com.buuz135.industrial.proxy.block.BlockConveyor;
 import com.buuz135.industrial.proxy.client.FluidsRenderRegistry;
-import com.buuz135.industrial.proxy.client.ItemRenderRegistry;
 import com.hrznstudio.titanium.util.TitaniumMod;
 import net.minecraftforge.client.event.ModelRegistryEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -79,7 +78,6 @@ public class BlockRegistry {
 
     @SubscribeEvent
     public void modelRegistryEvent(ModelRegistryEvent event) {
-        ItemRenderRegistry.registerRender();
         FluidsRenderRegistry.registerRender();
         blockConveyor.registerModels();
     }

@@ -28,12 +28,14 @@ import com.buuz135.industrial.proxy.block.BlockConveyor;
 import com.buuz135.industrial.proxy.block.Cuboid;
 import com.buuz135.industrial.proxy.block.DistanceRayTraceResult;
 import com.buuz135.industrial.proxy.client.model.ConveyorBlockModel;
-import com.buuz135.industrial.registry.IFRegistries;
 import com.buuz135.industrial.utils.Reference;
 import net.minecraft.block.BlockFlowingFluid;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.GlStateManager;
+import net.minecraft.client.renderer.model.IBakedModel;
+import net.minecraft.client.renderer.model.IUnbakedModel;
 import net.minecraft.client.renderer.model.ModelResourceLocation;
+import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumFacing;
@@ -46,20 +48,22 @@ import net.minecraftforge.client.event.DrawBlockHighlightEvent;
 import net.minecraftforge.client.event.ModelBakeEvent;
 import net.minecraftforge.client.event.RenderPlayerEvent;
 import net.minecraftforge.client.event.TextureStitchEvent;
-import net.minecraftforge.client.model.ModelLoaderRegistry;
+import net.minecraftforge.client.model.ModelLoader;
+import net.minecraftforge.common.model.TRSRTransformation;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fluids.IFluidBlock;
-import net.minecraftforge.fml.common.registry.GameRegistry;
 import org.apache.commons.lang3.tuple.Pair;
 
+import java.util.HashMap;
+
 public class IFClientEvents {
+
+    public static HashMap<ResourceLocation, IBakedModel> CONVEYOR_UPGRADES_CACHE = new HashMap<>();
 
     @SubscribeEvent
     public void textureStich(TextureStitchEvent.Pre pre) {
         pre.getMap().registerSprite(Minecraft.getInstance().getResourceManager(), new ResourceLocation(Reference.MOD_ID, "blocks/catears"));
-        for (ConveyorUpgradeFactory factory : IFRegistries.CONVEYOR_UPGRADE_REGISTRY.getValues()) {
-            factory.getTextures().forEach(resourceLocation -> pre.getMap().registerSprite(Minecraft.getInstance().getResourceManager(), resourceLocation));
-        }
+        ConveyorUpgradeFactory.FACTORIES.forEach(conveyorUpgradeFactory -> conveyorUpgradeFactory.getTextures().forEach(resourceLocation -> pre.getMap().registerSprite(Minecraft.getInstance().getResourceManager(), resourceLocation)));
         //pre.getMap().registerSprite(FluidsRegistry.ORE_FLUID_RAW.getStill());
         //pre.getMap().registerSprite(FluidsRegistry.ORE_FLUID_RAW.getFlowing());
         //pre.getMap().registerSprite(FluidsRegistry.ORE_FLUID_FERMENTED.getStill());
@@ -74,11 +78,13 @@ public class IFClientEvents {
                     event.getModelRegistry().put(resourceLocation, new ConveyorBlockModel(event.getModelRegistry().get(resourceLocation)));
             }
         }
-        for (ConveyorUpgradeFactory conveyorUpgradeFactory : GameRegistry.findRegistry(ConveyorUpgradeFactory.class).getValues()) {
+        for (ConveyorUpgradeFactory conveyorUpgradeFactory : ConveyorUpgradeFactory.FACTORIES) {
             for (EnumFacing upgradeFacing : conveyorUpgradeFactory.getValidFacings()) {
                 for (EnumFacing conveyorFacing : BlockConveyor.FACING.getAllowedValues()) {
                     try {
-                        ModelLoaderRegistry.getModel(conveyorUpgradeFactory.getModel(upgradeFacing, conveyorFacing));
+                        ResourceLocation resourceLocation = conveyorUpgradeFactory.getModel(upgradeFacing, conveyorFacing);
+                        IUnbakedModel unbakedModel = event.getModelLoader().getUnbakedModel(resourceLocation);
+                        CONVEYOR_UPGRADES_CACHE.put(resourceLocation, unbakedModel.bake(ModelLoader.defaultModelGetter(), ModelLoader.defaultTextureGetter(), TRSRTransformation.identity(), false, DefaultVertexFormats.BLOCK));
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
