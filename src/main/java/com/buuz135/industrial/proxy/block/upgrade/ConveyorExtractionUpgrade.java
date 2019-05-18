@@ -28,8 +28,6 @@ import com.buuz135.industrial.api.conveyor.gui.IGuiComponent;
 import com.buuz135.industrial.gui.component.FilterGuiComponent;
 import com.buuz135.industrial.gui.component.StateButtonInfo;
 import com.buuz135.industrial.gui.component.TexturedStateButtonGuiComponent;
-import com.buuz135.industrial.proxy.ItemRegistry;
-import com.buuz135.industrial.proxy.block.Cuboid;
 import com.buuz135.industrial.proxy.block.filter.IFilter;
 import com.buuz135.industrial.proxy.block.filter.ItemStackFilter;
 import com.buuz135.industrial.proxy.block.tile.TileEntityConveyor;
@@ -49,6 +47,8 @@ import net.minecraft.util.EnumHand;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.shapes.VoxelShape;
+import net.minecraft.util.math.shapes.VoxelShapes;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.fluids.FluidStack;
@@ -64,10 +64,10 @@ import java.util.List;
 
 public class ConveyorExtractionUpgrade extends ConveyorUpgrade {
 
-    public static Cuboid NORTHBB = new Cuboid(0.0625 * 4, 0.0625 * 3, -0.0625 * 2, 0.0625 * 12, 0.0625 * 11, 0.0625 * 3, EnumFacing.NORTH.getIndex());
-    public static Cuboid SOUTHBB = new Cuboid(0.0625 * 4, 0.0625 * 3, 0.0625 * 13, 0.0625 * 12, 0.0625 * 11, 0.0625 * 18, EnumFacing.SOUTH.getIndex());
-    public static Cuboid EASTBB = new Cuboid(0.0625 * 13, 0.0625 * 3, 0.0625 * 4, 0.0625 * 18, 0.0625 * 11, 0.0625 * 12, EnumFacing.EAST.getIndex());
-    public static Cuboid WESTBB = new Cuboid(-0.0625 * 2, 0.0625 * 3, 0.0625 * 4, 0.0625 * 3, 0.0625 * 11, 0.0625 * 12, EnumFacing.WEST.getIndex());
+    public static VoxelShape NORTHBB = VoxelShapes.create(0.0625 * 4, 0.0625 * 3, -0.0625 * 2, 0.0625 * 12, 0.0625 * 11, 0.0625 * 3);
+    public static VoxelShape SOUTHBB = VoxelShapes.create(0.0625 * 4, 0.0625 * 3, 0.0625 * 13, 0.0625 * 12, 0.0625 * 11, 0.0625 * 18);
+    public static VoxelShape EASTBB = VoxelShapes.create(0.0625 * 13, 0.0625 * 3, 0.0625 * 4, 0.0625 * 18, 0.0625 * 11, 0.0625 * 12);
+    public static VoxelShape WESTBB = VoxelShapes.create(-0.0625 * 2, 0.0625 * 3, 0.0625 * 4, 0.0625 * 3, 0.0625 * 11, 0.0625 * 12);
 
     private boolean fast = false;
     private ItemStackFilter filter;
@@ -82,7 +82,7 @@ public class ConveyorExtractionUpgrade extends ConveyorUpgrade {
     }
 
     @Override
-    public Cuboid getBoundingBox() {
+    public VoxelShape getBoundingBox() {
         switch (getSide()) {
             default:
             case NORTH:
@@ -128,7 +128,7 @@ public class ConveyorExtractionUpgrade extends ConveyorUpgrade {
         if (!fast)
             return super.getDrops();
         return Sets.newHashSet(
-                new ItemStack(ItemRegistry.conveyorUpgradeItem, 1/*, IFRegistries.CONVEYOR_UPGRADE_REGISTRY.getID(getFactory()) - 1*/),
+                new ItemStack(this.getFactory().getUpgradeItem(), 1),
                 new ItemStack(Items.GLOWSTONE_DUST)
         );
     }

@@ -25,6 +25,7 @@ package com.buuz135.industrial.proxy;
 import com.buuz135.industrial.proxy.block.BlockConveyor;
 import com.buuz135.industrial.proxy.client.FluidsRenderRegistry;
 import com.hrznstudio.titanium.util.TitaniumMod;
+import net.minecraft.block.Block;
 import net.minecraftforge.client.event.ModelRegistryEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 
@@ -71,9 +72,7 @@ public class BlockRegistry {
         //        BLOCK_PINK_SLIME,
         //        BLOCK_PROTEIN
         //);
-        mod.addBlocks(
-                blockConveyor
-        );
+        mod.addEntry(Block.class, blockConveyor);
     }
 
     @SubscribeEvent

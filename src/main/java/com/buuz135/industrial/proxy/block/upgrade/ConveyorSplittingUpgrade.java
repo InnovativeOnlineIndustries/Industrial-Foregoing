@@ -29,7 +29,6 @@ import com.buuz135.industrial.gui.component.StateButtonInfo;
 import com.buuz135.industrial.gui.component.TextGuiComponent;
 import com.buuz135.industrial.gui.component.TextureGuiComponent;
 import com.buuz135.industrial.gui.component.TexturedStateButtonGuiComponent;
-import com.buuz135.industrial.proxy.block.Cuboid;
 import com.buuz135.industrial.proxy.block.tile.TileEntityConveyor;
 import com.buuz135.industrial.utils.MovementUtils;
 import com.buuz135.industrial.utils.Reference;
@@ -38,6 +37,8 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.AxisAlignedBB;
+import net.minecraft.util.math.shapes.VoxelShape;
+import net.minecraft.util.math.shapes.VoxelShapes;
 import net.minecraft.util.text.TextFormatting;
 
 import javax.annotation.Nonnull;
@@ -46,10 +47,10 @@ import java.util.List;
 
 public class ConveyorSplittingUpgrade extends ConveyorUpgrade {
 
-    public static Cuboid NORTH = new Cuboid(-0.08 + 0.75 / 2D, 0.1, 0.3 - 0.38, 0.32 + 0.75 / 2D, 0.16, 0.7 - 0.38, EnumFacing.NORTH.getIndex(), false);
-    public static Cuboid SOUTH = new Cuboid(-0.08 + 0.75 / 2D, 0.1, 0.3 + 0.38, 0.32 + 0.75 / 2D, 0.16, 0.7 + 0.38, EnumFacing.SOUTH.getIndex(), false);
-    public static Cuboid WEST = new Cuboid(-0.08, 0.1, 0.3, 0.32, 0.16, 0.7, EnumFacing.WEST.getIndex(), false);
-    public static Cuboid EAST = new Cuboid(-0.08 + 0.75, 0.1, 0.3, 0.32 + 0.75, 0.16, 0.7, EnumFacing.EAST.getIndex(), false);
+    public static VoxelShape NORTH = VoxelShapes.create(-0.08 + 0.75 / 2D, 0.1, 0.3 - 0.38, 0.32 + 0.75 / 2D, 0.16, 0.7 - 0.38);
+    public static VoxelShape SOUTH = VoxelShapes.create(-0.08 + 0.75 / 2D, 0.1, 0.3 + 0.38, 0.32 + 0.75 / 2D, 0.16, 0.7 + 0.38);
+    public static VoxelShape WEST = VoxelShapes.create(-0.08, 0.1, 0.3, 0.32, 0.16, 0.7);
+    public static VoxelShape EAST = VoxelShapes.create(-0.08 + 0.75, 0.1, 0.3, 0.32 + 0.75, 0.16, 0.7);
 
 
     public List<Integer> handlingEntities;
@@ -72,7 +73,7 @@ public class ConveyorSplittingUpgrade extends ConveyorUpgrade {
             if (nextFacing == this.getSide()) {
                 this.handlingEntities.add(entity.getEntityId());
                 this.getContainer().getEntityFilter().add(entity.getEntityId());
-                //TODOIndustrialForegoing.NETWORK.sendToAllAround(new ConveyorSplittingSyncEntityMessage(this.getPos(), entity.getEntityId(), this.getSide()), new NetworkRegistry.TargetPoint(this.getWorld().provider.getDimension(), this.getPos().getX(), this.getPos().getY(), this.getPos().getZ(), 64));
+                //TODO IndustrialForegoing.NETWORK.sendToAllAround(new ConveyorSplittingSyncEntityMessage(this.getPos(), entity.getEntityId(), this.getSide()), new NetworkRegistry.TargetPoint(this.getWorld().provider.getDimension(), this.getPos().getX(), this.getPos().getY(), this.getPos().getZ(), 64));
                 findNextUpgradeAndUpdate();
             }
         }
@@ -130,7 +131,7 @@ public class ConveyorSplittingUpgrade extends ConveyorUpgrade {
     }
 
     @Override
-    public Cuboid getBoundingBox() {
+    public VoxelShape getBoundingBox() {
         switch (getSide()) {
             default:
             case NORTH:

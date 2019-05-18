@@ -28,7 +28,6 @@ import com.buuz135.industrial.api.conveyor.gui.IGuiComponent;
 import com.buuz135.industrial.gui.component.FilterGuiComponent;
 import com.buuz135.industrial.gui.component.StateButtonInfo;
 import com.buuz135.industrial.gui.component.TexturedStateButtonGuiComponent;
-import com.buuz135.industrial.proxy.block.Cuboid;
 import com.buuz135.industrial.proxy.block.filter.IFilter;
 import com.buuz135.industrial.proxy.block.filter.ItemStackFilter;
 import com.buuz135.industrial.proxy.block.tile.TileEntityConveyor;
@@ -44,6 +43,8 @@ import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.shapes.VoxelShape;
+import net.minecraft.util.math.shapes.VoxelShapes;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.fluids.FluidStack;
@@ -56,15 +57,15 @@ import java.util.List;
 
 public class ConveyorInsertionUpgrade extends ConveyorUpgrade {
 
-    public static Cuboid NORTHBB = new Cuboid(0.0625 * 2, 0, -0.0625 * 2, 0.0625 * 14, 0.0625 * 9, 0.0625 * 2, EnumFacing.NORTH.getIndex());
-    public static Cuboid SOUTHBB = new Cuboid(0.0625 * 2, 0, 0.0625 * 14, 0.0625 * 14, 0.0625 * 9, 0.0625 * 18, EnumFacing.SOUTH.getIndex());
-    public static Cuboid EASTBB = new Cuboid(0.0625 * 14, 0, 0.0625 * 2, 0.0625 * 18, 0.0625 * 9, 0.0625 * 14, EnumFacing.EAST.getIndex());
-    public static Cuboid WESTBB = new Cuboid(-0.0625 * 2, 0, 0.0625 * 2, 0.0625 * 2, 0.0625 * 9, 0.0625 * 14, EnumFacing.WEST.getIndex());
+    public static VoxelShape NORTHBB = VoxelShapes.create(0.0625 * 2, 0, -0.0625 * 2, 0.0625 * 14, 0.0625 * 9, 0.0625 * 2);
+    public static VoxelShape SOUTHBB = VoxelShapes.create(0.0625 * 2, 0, 0.0625 * 14, 0.0625 * 14, 0.0625 * 9, 0.0625 * 18);
+    public static VoxelShape EASTBB = VoxelShapes.create(0.0625 * 14, 0, 0.0625 * 2, 0.0625 * 18, 0.0625 * 9, 0.0625 * 14);
+    public static VoxelShape WESTBB = VoxelShapes.create(-0.0625 * 2, 0, 0.0625 * 2, 0.0625 * 2, 0.0625 * 9, 0.0625 * 14);
 
-    public static Cuboid NORTHBB_BIG = new Cuboid(0.0625 * 2, 0, -0.0625 * 2, 0.0625 * 14, 0.0625 * 9, 0.0625 * 14, EnumFacing.NORTH.getIndex());
-    public static Cuboid SOUTHBB_BIG = new Cuboid(0.0625 * 2, 0, 0.0625 * 2, 0.0625 * 14, 0.0625 * 9, 0.0625 * 18, EnumFacing.SOUTH.getIndex());
-    public static Cuboid EASTBB_BIG = new Cuboid(0.0625 * 2, 0, 0.0625 * 2, 0.0625 * 18, 0.0625 * 9, 0.0625 * 14, EnumFacing.EAST.getIndex());
-    public static Cuboid WESTBB_BIG = new Cuboid(-0.0625 * 2, 0, 0.0625 * 2, 0.0625 * 14, 0.0625 * 9, 0.0625 * 14, EnumFacing.WEST.getIndex());
+    public static VoxelShape NORTHBB_BIG = VoxelShapes.create(0.0625 * 2, 0, -0.0625 * 2, 0.0625 * 14, 0.0625 * 9, 0.0625 * 14);
+    public static VoxelShape SOUTHBB_BIG = VoxelShapes.create(0.0625 * 2, 0, 0.0625 * 2, 0.0625 * 14, 0.0625 * 9, 0.0625 * 18);
+    public static VoxelShape EASTBB_BIG = VoxelShapes.create(0.0625 * 2, 0, 0.0625 * 2, 0.0625 * 18, 0.0625 * 9, 0.0625 * 14);
+    public static VoxelShape WESTBB_BIG = VoxelShapes.create(-0.0625 * 2, 0, 0.0625 * 2, 0.0625 * 14, 0.0625 * 9, 0.0625 * 14);
 
     private ItemStackFilter filter;
     private boolean whitelist;
@@ -83,7 +84,7 @@ public class ConveyorInsertionUpgrade extends ConveyorUpgrade {
             return;
         if (entity instanceof EntityItem) {
             getHandlerCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY).ifPresent(handler -> {
-                if (getWorkingBox().aabb().offset(getPos()).grow(0.01).intersects(entity.getBoundingBox())) {
+                if (getWorkingBox().getBoundingBox().offset(getPos()).grow(0.01).intersects(entity.getBoundingBox())) {
                     if (whitelist != filter.matches((EntityItem) entity)) return;
                     ItemStack stack = ((EntityItem) entity).getItem();
                     for (int i = 0; i < handler.getSlots(); i++) {
@@ -146,7 +147,7 @@ public class ConveyorInsertionUpgrade extends ConveyorUpgrade {
     }
 
     @Override
-    public Cuboid getBoundingBox() {
+    public VoxelShape getBoundingBox() {
         switch (getSide()) {
             default:
             case NORTH:
@@ -160,7 +161,7 @@ public class ConveyorInsertionUpgrade extends ConveyorUpgrade {
         }
     }
 
-    private Cuboid getWorkingBox() {
+    private VoxelShape getWorkingBox() {
         if (!fullArea) return getBoundingBox();
         switch (getSide()) {
             default:

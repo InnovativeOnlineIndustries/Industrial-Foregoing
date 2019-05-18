@@ -29,7 +29,6 @@ import com.buuz135.industrial.utils.IFFakePlayer;
 import com.buuz135.industrial.utils.Reference;
 import com.hrznstudio.titanium.tab.AdvancedTitaniumTab;
 import com.hrznstudio.titanium.util.TitaniumMod;
-import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldServer;
@@ -40,8 +39,6 @@ import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.fml.event.server.FMLServerStartingEvent;
-import net.minecraftforge.fml.network.NetworkRegistry;
-import net.minecraftforge.fml.network.simple.SimpleChannel;
 
 import java.util.HashMap;
 
@@ -49,11 +46,6 @@ import java.util.HashMap;
 @Mod(Reference.MOD_ID)
 public class IndustrialForegoing extends TitaniumMod {
 
-    public static final SimpleChannel NETWORK = NetworkRegistry.ChannelBuilder.named(new ResourceLocation(Reference.MOD_ID,"network"))
-            .clientAcceptedVersions("1.0"::equals)
-            .serverAcceptedVersions("1.0"::equals)
-            .networkProtocolVersion(()->"1.0")
-            .simpleChannel();
     public static AdvancedTitaniumTab creativeTab = new AdvancedTitaniumTab(Reference.MOD_ID, true);
     public static IndustrialForegoing instance;
     private static CommonProxy proxy;

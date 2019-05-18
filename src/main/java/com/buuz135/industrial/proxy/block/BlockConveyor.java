@@ -39,7 +39,10 @@ import net.minecraft.entity.*;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Items;
-import net.minecraft.item.*;
+import net.minecraft.item.BlockItemUseContext;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemBlock;
+import net.minecraft.item.ItemStack;
 import net.minecraft.state.DirectionProperty;
 import net.minecraft.state.EnumProperty;
 import net.minecraft.state.StateContainer;
@@ -48,7 +51,9 @@ import net.minecraft.util.*;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.util.math.Vec3d;
+import net.minecraft.util.math.shapes.IBooleanFunction;
 import net.minecraft.util.math.shapes.VoxelShape;
+import net.minecraft.util.math.shapes.VoxelShapes;
 import net.minecraft.world.IBlockReader;
 import net.minecraft.world.IWorld;
 import net.minecraft.world.IWorldReaderBase;
@@ -58,6 +63,7 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.fml.client.registry.ClientRegistry;
 
 import javax.annotation.Nullable;
+import java.util.ArrayList;
 import java.util.List;
 
 public class BlockConveyor extends BlockTileBase<TileEntityConveyor> {
@@ -77,9 +83,6 @@ public class BlockConveyor extends BlockTileBase<TileEntityConveyor> {
     @OnlyIn(Dist.CLIENT)
     @Override
     public void registerModels() {
-        for (int i = 0; i < EnumDyeColor.values().length; ++i) {
-            //ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(this), i, new ModelResourceLocation(this.getRegistryName(), "inventory"));
-        }
         ClientRegistry.bindTileEntitySpecialRenderer(TileEntityConveyor.class, new FluidConveyorTESR());
     }
 
@@ -95,17 +98,6 @@ public class BlockConveyor extends BlockTileBase<TileEntityConveyor> {
 //                    'd', "dye" + dyes[i]);
 //        }
     }
-
-    public IBlockState getStateFromMeta(int meta) {
-        EnumFacing enumfacing = EnumFacing.byIndex(meta);
-        if (enumfacing.getAxis() == EnumFacing.Axis.Y) enumfacing = EnumFacing.NORTH;
-        return this.getDefaultState().with(FACING, enumfacing);
-    }
-
-    public int getMetaFromState(IBlockState state) {
-        return state.get(FACING).getIndex();
-    }
-
 
     @Override
     public int getWeakPower(IBlockState blockState, IBlockReader world, BlockPos pos, EnumFacing side) {
@@ -132,14 +124,13 @@ public class BlockConveyor extends BlockTileBase<TileEntityConveyor> {
             if (target instanceof DistanceRayTraceResult) {
                 ConveyorUpgrade upgrade = ((TileEntityConveyor) tileEntity).getUpgradeMap().get(EnumFacing.byIndex(((Cuboid) target.hitInfo).identifier));
                 if (upgrade != null) {
-                    return new ItemStack(ItemRegistry.conveyorUpgradeItem, 1); //TODO
+                    return new ItemStack(upgrade.getFactory().getUpgradeItem(), 1);
                 }
             }
             return new ItemStack(this, 1);//TODO Fix types
         }
         return super.getPickBlock(state, target, world, pos, player);
     }
-
 
     @Override
     public IBlockState getStateAtViewpoint(IBlockState state, IBlockReader world, BlockPos pos, Vec3d viewpoint) {
@@ -163,47 +154,14 @@ public class BlockConveyor extends BlockTileBase<TileEntityConveyor> {
         return state;
     }
 
-
-//    @Override
-//    public void addCollisionBoxToList(IBlockState state, World worldIn, BlockPos pos, AxisAlignedBB entityBox, List<AxisAlignedBB> collidingBoxes, @Nullable Entity entityIn, boolean isActualState) {
-//        TileEntity entity = worldIn.getTileEntity(pos);
-//        if (entity instanceof TileEntityConveyor) {
-//            ((TileEntityConveyor) entity).getUpgradeMap().values().forEach(upgrade -> {
-//                if (upgrade.getBoundingBox().collidable)
-//                    addCollisionBoxToList(pos, entityBox, collidingBoxes, upgrade.getBoundingBox().aabb());
-//            });
-//            if (!((TileEntityConveyor) entity).getConveyorType().isVertical()) {
-//                super.addCollisionBoxToList(state, worldIn, pos, entityBox, collidingBoxes, entityIn, isActualState);
-//                return;
-//            }
-//            ((TileEntityConveyor) entity).getCollisionBoxes().forEach(axisAlignedBB -> addCollisionBoxToList(pos, entityBox, collidingBoxes, axisAlignedBB));
-//        }
-//    }
-
     private boolean isConveyorAndFacing(BlockPos pos, IBlockReader world, EnumFacing toFace) {
         return world.getBlockState(pos).getBlock() instanceof BlockConveyor && (toFace == null || world.getBlockState(pos).get(FACING).equals(toFace));
-    }
-
-
-    @Override
-    public IBlockState getExtendedState(IBlockState state, IBlockReader world, BlockPos pos) {
-        //if (state instanceof IExtendedBlockState) {
-        //    TileEntity tile = world.getTileEntity(pos);
-        //    if (tile instanceof TileEntityConveyor)
-        //        return ((IExtendedBlockState) state).withProperty(ConveyorModelData.UPGRADE_PROPERTY, new ConveyorModelData(((TileEntityConveyor) tile).getUpgradeMap()));
-        //}
-        return super.getExtendedState(state, world, pos);
     }
 
     @Override
     public BlockFaceShape getBlockFaceShape(IBlockReader worldIn, IBlockState state, BlockPos pos, EnumFacing face) {
         return state.get(TYPE).isVertical() ? BlockFaceShape.UNDEFINED : face == EnumFacing.DOWN ? BlockFaceShape.SOLID : BlockFaceShape.UNDEFINED;
     }
-
-    //@Override
-    //public boolean canPlaceBlockAt(World worldIn, BlockPos pos) {
-    //    return !worldIn.getBlockState(pos.down()).getBlock().equals(this);
-    //}
 
     @Override
     public void neighborChanged(IBlockState state, World worldIn, BlockPos pos, Block blockIn, BlockPos fromPos) {
@@ -213,34 +171,32 @@ public class BlockConveyor extends BlockTileBase<TileEntityConveyor> {
 //        }
     }
 
-    //    @Override
-//    public List<Cuboid> getBoundingBoxes(IBlockState state, IBlockReader source, BlockPos pos) {
-//        List<Cuboid> cuboids = new ArrayList<>();
-//        cuboids.add(new Cuboid(getBoundingBox(state, source, pos)));
-//        TileEntity tile = source.getTileEntity(pos);
-//        if (tile instanceof TileEntityConveyor)
-//            for (ConveyorUpgrade upgrade : ((TileEntityConveyor) tile).getUpgradeMap().values())
-//                if (upgrade != null)
-//                    cuboids.add(upgrade.getBoundingBox());
-//        return cuboids;
-//    }
     @Override
     public List<VoxelShape> getBoundingBoxes(IBlockState state, IBlockReader source, BlockPos pos) {
-        return super.getBoundingBoxes(state, source, pos);
+        List<VoxelShape> boxes = new ArrayList<>();
+        if (state.get(TYPE).isVertical()) {
+            boxes.add(VoxelShapes.create(0, 0, 0, 1, 0.40, 1));
+        } else {
+            boxes.add(VoxelShapes.create(0, 0, 0, 1, 1 / 16D, 1));
+        }
+        TileEntity entity = source.getTileEntity(pos);
+        if (entity instanceof TileEntityConveyor) {
+            for (ConveyorUpgrade upgrade : ((TileEntityConveyor) entity).getUpgradeMap().values())
+                if (upgrade != null)
+                    boxes.add(VoxelShapes.create(upgrade.getBoundingBox().getBoundingBox()));
+        }
+        return boxes;
     }
 
-
-    //@Nullable
-    //@Override
-    //public RayTraceResult collisionRayTrace(IBlockState blockState, World worldIn, BlockPos pos, Vec3d start, Vec3d end) {
-    //     return RayTraceUtils.rayTraceBoxesClosest(start, end, pos, getBoundingBoxes(blockState, worldIn, pos));
-    //}
+    @Override
+    public boolean hasCustomBoxes(IBlockState state, IBlockReader source, BlockPos pos) {
+        return true;
+    }
 
     @Override
     protected void fillStateContainer(StateContainer.Builder<Block, IBlockState> builder) {
         super.fillStateContainer(builder);
         builder.add(FACING, SIDES, TYPE);
-        //ConveyorModelData.UPGRADE_PROPERTY
     }
 
     @Override
@@ -339,17 +295,15 @@ public class BlockConveyor extends BlockTileBase<TileEntityConveyor> {
         ItemStack handStack = player.getHeldItem(hand);
         if (tileEntity instanceof TileEntityConveyor) {
             if (player.isSneaking()) {
-                Cuboid hit = null;//getCuboidHit(worldIn, pos, playerIn);
-                if (hit != null) {
-                    EnumFacing upgradeFacing = EnumFacing.byIndex(hit.identifier);
-                    ((TileEntityConveyor) tileEntity).removeUpgrade(upgradeFacing, true);
+                EnumFacing facing = getFacingUpgradeHit(state, worldIn, pos, player);
+                if (facing != null) {
+                    ((TileEntityConveyor) tileEntity).removeUpgrade(facing, true);
                     return true;
                 }
                 return false;
             } else {
-                Cuboid hit = null;//getCuboidHit(worldIn, pos, playerIn);
-                if (hit != null) {
-                    if (hit.identifier == -1) {
+                EnumFacing facing = getFacingUpgradeHit(state, worldIn, pos, player);
+                if (facing == null) {
                         if (handStack.getItem().equals(Items.GLOWSTONE_DUST) && !((TileEntityConveyor) tileEntity).getConveyorType().isFast()) {
                             ((TileEntityConveyor) tileEntity).setType(((TileEntityConveyor) tileEntity).getConveyorType().getFast());
                             handStack.shrink(1);
@@ -361,23 +315,52 @@ public class BlockConveyor extends BlockTileBase<TileEntityConveyor> {
                             return true;
                         }
                     } else {
-                        EnumFacing upgradeFacing = EnumFacing.byIndex(hit.identifier);
-                        if (((TileEntityConveyor) tileEntity).hasUpgrade(upgradeFacing)) {
-                            ConveyorUpgrade upgrade = ((TileEntityConveyor) tileEntity).getUpgradeMap().get(upgradeFacing);
+                    if (((TileEntityConveyor) tileEntity).hasUpgrade(facing)) {
+                        ConveyorUpgrade upgrade = ((TileEntityConveyor) tileEntity).getUpgradeMap().get(facing);
                             if (upgrade.onUpgradeActivated(player, hand)) {
                                 return true;
                             } else if (upgrade.hasGui()) {
+                                ((TileEntityConveyor) tileEntity).openGui(player);
                                 //player.openGui(IndustrialForegoing.instance, 1, worldIn, pos.getX(), pos.getY(), pos.getZ());
                                 return true;
                             }
                         }
                     }
                     return false;
-                }
-                return false;
+
             }
         }
         return super.onBlockActivated(state, worldIn, pos, player, hand, side, hitX, hitY, hitZ);
+    }
+
+
+    @Override
+    public VoxelShape getShape(IBlockState state, IBlockReader worldIn, BlockPos pos) {
+        if (state.get(TYPE).isVertical()) {
+            return VoxelShapes.create(0, 0, 0, 1, 0.40, 1);
+        } else {
+            return VoxelShapes.create(0, 0, 0, 1, 1 / 16D, 1);
+        }
+    }
+
+    public RayTraceResult getSimpleRayTrace(IBlockState state, World worldIn, BlockPos pos, EntityPlayer player) {
+        Vec3d start = player.getEyePosition(0);
+        Vec3d vec3d1 = player.getLook(0);
+        Vec3d end = start.add(vec3d1.x * 32, vec3d1.y * 32, vec3d1.z * 32);
+        return getRayTraceResult(state, worldIn, pos, start, end, null);
+    }
+
+    public EnumFacing getFacingUpgradeHit(IBlockState state, World worldIn, BlockPos pos, EntityPlayer player) {
+        TileEntity tileEntity = worldIn.getTileEntity(pos);
+        RayTraceResult hit = getSimpleRayTrace(state, worldIn, pos, player);
+        if (tileEntity instanceof TileEntityConveyor && hit instanceof DistanceRayTraceResult) {
+            for (EnumFacing enumFacing : ((TileEntityConveyor) tileEntity).getUpgradeMap().keySet()) {
+                if (VoxelShapes.compare(((TileEntityConveyor) tileEntity).getUpgradeMap().get(enumFacing).getBoundingBox(), ((DistanceRayTraceResult) hit).getHitBox(), IBooleanFunction.AND)) {
+                    return enumFacing;
+                }
+            }
+        }
+        return null;
     }
 
     @Nullable
@@ -398,38 +381,9 @@ public class BlockConveyor extends BlockTileBase<TileEntityConveyor> {
         return EnumBlockRenderType.MODEL;
     }
 
-    @Override
-    public VoxelShape getShape(IBlockState state, IBlockReader worldIn, BlockPos pos) {
-        TileEntity entity = worldIn.getTileEntity(pos);
-        if (entity instanceof TileEntityConveyor) {
-            if (((TileEntityConveyor) entity).getConveyorType().isVertical()) {
-                return Block.makeCuboidShape(0, 0, 0, 16, 0.40 * 16, 16);
-            }
-            return Block.makeCuboidShape(0, 0, 0, 16, 1, 16);
-        }
-        return Block.makeCuboidShape(0, 0, 0, 16, 16, 16);
-    }
-
-    @Override
-    public boolean isFullCube(IBlockState state) {
-        return false;
-    }
-
     @OnlyIn(Dist.CLIENT)
     public BlockRenderLayer getBlockLayer() {
         return BlockRenderLayer.CUTOUT;
-    }
-
-    @Override
-    public VoxelShape getCollisionShape(IBlockState state, IBlockReader worldIn, BlockPos pos) {
-        TileEntity entity = worldIn.getTileEntity(pos);
-        if (entity instanceof TileEntityConveyor) {
-            if (((TileEntityConveyor) entity).getConveyorType().isVertical()) {
-                return Block.makeCuboidShape(0, 0, 0, 16, 0.40 * 16, 16);
-            }
-            return Block.makeCuboidShape(0, 0, 0, 16, 1, 16);
-        }
-        return Block.makeCuboidShape(0, 0, 0, 16, 16, 16);
     }
 
     @Override
@@ -460,12 +414,16 @@ public class BlockConveyor extends BlockTileBase<TileEntityConveyor> {
         return item;
     }
 
+    @Override
+    public boolean isFullCube(IBlockState state) {
+        return false;
+    }
+
     @Nullable
     @Override
     public TileEntity createNewTileEntity(IBlockReader worldIn) {
         return new TileEntityConveyor();
     }
-
 
     public enum EnumType implements IStringSerializable {
 

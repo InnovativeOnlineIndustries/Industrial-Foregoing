@@ -37,6 +37,7 @@ public class ItemConveyorUpgrade extends IFCustomItem {
     public ItemConveyorUpgrade(ConveyorUpgradeFactory upgradeFactory) {
         super("conveyor_" + upgradeFactory.getRegistryName().getPath() + "_upgrade");
         this.factory = upgradeFactory;
+        this.factory.setUpgradeItem(this);
     }
 
     @Override

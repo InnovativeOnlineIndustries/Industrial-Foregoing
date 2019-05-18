@@ -24,14 +24,20 @@ package com.buuz135.industrial.proxy.block.tile;
 import com.buuz135.industrial.api.conveyor.ConveyorUpgrade;
 import com.buuz135.industrial.api.conveyor.ConveyorUpgradeFactory;
 import com.buuz135.industrial.api.conveyor.IConveyorContainer;
+import com.buuz135.industrial.gui.conveyor.ContainerConveyor;
+import com.buuz135.industrial.gui.conveyor.GuiConveyor;
 import com.buuz135.industrial.proxy.BlockRegistry;
 import com.buuz135.industrial.proxy.block.BlockConveyor;
 import com.buuz135.industrial.proxy.client.model.ConveyorModelData;
 import com.buuz135.industrial.utils.MovementUtils;
-import com.hrznstudio.titanium.block.tile.TileBase;
+import com.hrznstudio.titanium.block.tile.TileActive;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.item.EntityItem;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.InventoryPlayer;
+import net.minecraft.inventory.Container;
 import net.minecraft.item.EnumDyeColor;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -41,6 +47,7 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
+import net.minecraftforge.client.model.ModelDataManager;
 import net.minecraftforge.client.model.data.IModelData;
 import net.minecraftforge.client.model.data.ModelDataMap;
 import net.minecraftforge.common.util.Constants;
@@ -55,7 +62,7 @@ import java.util.Map;
 
 import static com.buuz135.industrial.proxy.block.BlockConveyor.*;
 
-public class TileEntityConveyor extends TileBase implements IConveyorContainer, ITickable {
+public class TileEntityConveyor extends TileActive implements IConveyorContainer, ITickable {
 
     private EnumFacing facing;
     private EnumType type;
@@ -117,6 +124,7 @@ public class TileEntityConveyor extends TileBase implements IConveyorContainer, 
         if (!hasUpgrade(facing)) {
             upgradeMap.put(facing, upgrade.create(this, facing));
             requestSync();
+            if (world.isRemote) ModelDataManager.requestModelDataRefresh(this);
         }
     }
 
@@ -134,6 +142,7 @@ public class TileEntityConveyor extends TileBase implements IConveyorContainer, 
             upgradeMap.get(facing).onUpgradeRemoved();
             upgradeMap.remove(facing);
             requestSync();
+            if (world.isRemote) ModelDataManager.requestModelDataRefresh(this);
         }
     }
 
@@ -309,6 +318,19 @@ public class TileEntityConveyor extends TileBase implements IConveyorContainer, 
             markForUpdate();
             this.needsFluidSync = false;
         }
+        if (world.isRemote() && world.getGameTime() % 20 * 20 * 60 == 0) { //TODO Remove this when forge fix
+            ModelDataManager.requestModelDataRefresh(this);
+        }
+    }
+
+    @Override
+    public GuiScreen createGui(Container container) {
+        return new GuiConveyor(container);
+    }
+
+    @Override
+    public Container createContainer(InventoryPlayer inventoryPlayer, EntityPlayer entityPlayer) {
+        return new ContainerConveyor(this, BlockRegistry.blockConveyor.getFacingUpgradeHit(this.world.getBlockState(this.pos), this.world, this.pos, entityPlayer), inventoryPlayer);
     }
 
     @Nonnull
@@ -316,4 +338,5 @@ public class TileEntityConveyor extends TileBase implements IConveyorContainer, 
     public IModelData getModelData() {
         return new ModelDataMap.Builder().withInitial(ConveyorModelData.UPGRADE_PROPERTY, new ConveyorModelData(upgradeMap)).build();
     }
+
 }

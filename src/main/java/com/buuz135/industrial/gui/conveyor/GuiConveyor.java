@@ -21,13 +21,13 @@
  */
 package com.buuz135.industrial.gui.conveyor;
 
-import com.buuz135.industrial.IndustrialForegoing;
 import com.buuz135.industrial.api.conveyor.ConveyorUpgrade;
 import com.buuz135.industrial.api.conveyor.gui.IGuiComponent;
 import com.buuz135.industrial.gui.component.FilterGuiComponent;
 import com.buuz135.industrial.proxy.block.filter.IFilter;
 import com.buuz135.industrial.proxy.network.ConveyorButtonInteractMessage;
 import com.buuz135.industrial.utils.Reference;
+import com.hrznstudio.titanium.network.NetworkHandler;
 import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.inventory.Container;
@@ -35,7 +35,6 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.TextComponentTranslation;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -107,21 +106,20 @@ public class GuiConveyor extends GuiContainer {
         return (ContainerConveyor) this.inventorySlots;
     }
 
-
     @Override
     public boolean mouseClicked(double mouseX, double mouseY, int mouseButton) {
-        super.mouseClicked(mouseX, mouseY, mouseButton);
+        boolean click = super.mouseClicked(mouseX, mouseY, mouseButton);
         for (IGuiComponent iGuiComponent : componentList) {
             if (iGuiComponent.isInside(mouseX - x, mouseY - y)) {
                 if(iGuiComponent.handleClick(this, x, y, mouseX, mouseY))
                     return true;
             }
         }
-        return super.mouseClicked(mouseX, mouseY, mouseButton);
+        return click;
     }
 
     public void sendMessage(int id, NBTTagCompound compound) {
-        IndustrialForegoing.NETWORK.sendToServer(new ConveyorButtonInteractMessage(upgrade.getPos(), id, upgrade.getSide(), compound));
+        NetworkHandler.NETWORK.sendToServer(new ConveyorButtonInteractMessage(upgrade.getPos(), id, upgrade.getSide(), compound));
     }
 
     public List<IFilter.GhostSlot> getGhostSlots() {

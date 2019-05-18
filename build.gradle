@@ -14,7 +14,7 @@ buildscript {
         }
     }
     dependencies {
-        classpath group: 'net.minecraftforge.gradle', name: 'ForgeGradle', version: '3.0.115', changing: true
+        classpath group: 'net.minecraftforge.gradle', name: 'ForgeGradle', version: '3.+', changing: true
     }
 }
 plugins {
@@ -69,7 +69,7 @@ repositories {
 
 dependencies {
     minecraft 'net.minecraftforge:forge:1.13.2-25.0.193'
-    deobf 'com.hrznstudio:titanium:2.0.11'
+    compile fg.deobf('com.hrznstudio:titanium:2.1.6')
     compileOnly 'org.projectlombok:lombok:1.16.16'
     compile "mezz.jei:jei_1.12.2:4.14.3.246:api"
 }

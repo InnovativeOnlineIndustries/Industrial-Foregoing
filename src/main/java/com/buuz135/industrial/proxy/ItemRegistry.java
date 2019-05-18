@@ -27,6 +27,7 @@ import com.buuz135.industrial.item.infinity.ItemInfinityDrill;
 import com.buuz135.industrial.proxy.block.upgrade.*;
 import com.buuz135.industrial.utils.RecipeUtils;
 import com.hrznstudio.titanium.util.TitaniumMod;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 
 
@@ -42,7 +43,6 @@ public class ItemRegistry {
     public static BookManualItem bookManualItem;
     public static IFCustomItem pinkSlimeIngot;
     public static ItemStraw strawItem;
-    public static ItemConveyorUpgrade conveyorUpgradeItem;
     public static ItemArtificalDye[] dyes;
     public static ItemInfinityDrill itemInfinityDrill;
 
@@ -55,30 +55,30 @@ public class ItemRegistry {
     public static ConveyorUpgradeFactory upgrade_splitting = new ConveyorSplittingUpgrade.Factory();
 
     public static void registerItems(TitaniumMod mod) {
-        mod.addItem(tinyDryRubber = new IFCustomItem("tinydryrubber"));
-        mod.addItem(dryRubber = new IFCustomItem("dryrubber"));
+        mod.addEntry(Item.class, tinyDryRubber = new IFCustomItem("tinydryrubber"));
+        mod.addEntry(Item.class, dryRubber = new IFCustomItem("dryrubber"));
         RecipeUtils.addShapelessRecipe(new ItemStack(dryRubber), new ItemStack(tinyDryRubber), new ItemStack(tinyDryRubber), new ItemStack(tinyDryRubber), new ItemStack(tinyDryRubber), new ItemStack(tinyDryRubber), new ItemStack(tinyDryRubber), new ItemStack(tinyDryRubber), new ItemStack(tinyDryRubber), new ItemStack(tinyDryRubber));
-        mod.addItem(plastic = new IFCustomItem("plastic"));
+        mod.addEntry(Item.class, plastic = new IFCustomItem("plastic"));
 //        GameRegistry.addSmelting(dryRubber, new ItemStack(plastic), 0);
-        mod.addItem(fertilizer = new FertilizerItem());
-        mod.addItem(meatFeederItem = new MeatFeederItem());
-        mod.addItem(mobImprisonmentToolItem = new MobImprisonmentToolItem());
-        mod.addItem(strawItem = new ItemStraw());
-        //mod.addItem(conveyorUpgradeItem = new ItemConveyorUpgrade());
-        mod.addItem(pinkSlime = new IFCustomItem("pink_slime"));
-        mod.addItem(bookManualItem = new BookManualItem());
-        mod.addItem(pinkSlimeIngot = new IFCustomItem("pink_slime_ingot"));
-        mod.addItem(itemInfinityDrill = new ItemInfinityDrill());
-        ConveyorUpgradeFactory.FACTORIES.forEach(conveyorUpgradeFactory -> mod.addItem(new ItemConveyorUpgrade(conveyorUpgradeFactory)));
-//        mod.addItem(adultFilterAddomItem = new AdultFilterAddonItem());
-//        mod.addItem(rangeAddonItem = new RangeAddonItem());
-//        mod.addItem(energyFieldAddon = new EnergyFieldAddon());
-//        mod.addItem(leafShearingAddonItem = new LeafShearingAddonItem());
-//        mod.addItem(itemStackTransferAddonPull = new ItemStackTransferAddon(TransferAddon.ActionMode.PULL));
-//        mod.addItem(itemStackTransferAddonPush = new ItemStackTransferAddon(TransferAddon.ActionMode.PUSH));
-//        mod.addItem(fluidTransferAddonPull = new FluidTransferAddon(TransferAddon.ActionMode.PULL));
-//        mod.addItem(fluidTransferAddonPush = new FluidTransferAddon(TransferAddon.ActionMode.PUSH));
-//        mod.addItem(fortuneAddonItem = new FortuneAddonItem());
+        mod.addEntry(Item.class, fertilizer = new FertilizerItem());
+        mod.addEntry(Item.class, meatFeederItem = new MeatFeederItem());
+        mod.addEntry(Item.class, mobImprisonmentToolItem = new MobImprisonmentToolItem());
+        mod.addEntry(Item.class, strawItem = new ItemStraw());
+        //mod.addEntry(conveyorUpgradeItem = new ItemConveyorUpgrade());
+        mod.addEntry(Item.class, pinkSlime = new IFCustomItem("pink_slime"));
+        mod.addEntry(Item.class, bookManualItem = new BookManualItem());
+        mod.addEntry(Item.class, pinkSlimeIngot = new IFCustomItem("pink_slime_ingot"));
+        mod.addEntry(Item.class, itemInfinityDrill = new ItemInfinityDrill());
+        ConveyorUpgradeFactory.FACTORIES.forEach(conveyorUpgradeFactory -> mod.addEntry(Item.class, new ItemConveyorUpgrade(conveyorUpgradeFactory)));
+//        mod.addEntry(adultFilterAddomItem = new AdultFilterAddonItem());
+//        mod.addEntry(rangeAddonItem = new RangeAddonItem());
+//        mod.addEntry(energyFieldAddon = new EnergyFieldAddon());
+//        mod.addEntry(leafShearingAddonItem = new LeafShearingAddonItem());
+//        mod.addEntry(itemStackTransferAddonPull = new ItemStackTransferAddon(TransferAddon.ActionMode.PULL));
+//        mod.addEntry(itemStackTransferAddonPush = new ItemStackTransferAddon(TransferAddon.ActionMode.PUSH));
+//        mod.addEntry(fluidTransferAddonPull = new FluidTransferAddon(TransferAddon.ActionMode.PULL));
+//        mod.addEntry(fluidTransferAddonPush = new FluidTransferAddon(TransferAddon.ActionMode.PUSH));
+//        mod.addEntry(fortuneAddonItem = new FortuneAddonItem());
 
 //        OreDictionary.registerOre("itemRubber", plastic);
 //        OreDictionary.registerOre("slimeball", pinkSlime);
@@ -89,7 +89,7 @@ public class ItemRegistry {
 //        if (BlockRegistry.dyeMixerBlock.isEnabled()) {
 //            for (EnumDyeColor dyeColor : EnumDyeColor.values()) {
 //                Item dye = new ItemArtificalDye(dyeColor);
-//                mod.addItem(dye);
+//                mod.addEntry(dye);
 //                ArrayUtils.add(dyes, dye);
 //            }
 //

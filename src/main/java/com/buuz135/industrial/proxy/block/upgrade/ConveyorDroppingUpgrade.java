@@ -28,7 +28,6 @@ import com.buuz135.industrial.api.conveyor.gui.IGuiComponent;
 import com.buuz135.industrial.gui.component.FilterGuiComponent;
 import com.buuz135.industrial.gui.component.StateButtonInfo;
 import com.buuz135.industrial.gui.component.TexturedStateButtonGuiComponent;
-import com.buuz135.industrial.proxy.block.Cuboid;
 import com.buuz135.industrial.proxy.block.filter.IFilter;
 import com.buuz135.industrial.proxy.block.filter.ItemStackFilter;
 import com.buuz135.industrial.utils.Reference;
@@ -41,6 +40,8 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.shapes.VoxelShape;
+import net.minecraft.util.math.shapes.VoxelShapes;
 import net.minecraft.world.World;
 import net.minecraftforge.items.CapabilityItemHandler;
 
@@ -51,7 +52,7 @@ import java.util.Set;
 
 public class ConveyorDroppingUpgrade extends ConveyorUpgrade {
 
-    public static Cuboid BB = new Cuboid(0.0625 * 3, 0.0625, 0.0625 * 3, 0.0625 * 13, 0.0625 * 1.2, 0.0625 * 13, EnumFacing.DOWN.getIndex(), false);
+    public static VoxelShape BB = VoxelShapes.create(0.0625 * 3, 0.0625, 0.0625 * 3, 0.0625 * 13, 0.0625 * 1.2, 0.0625 * 13);
 
     private ItemStackFilter filter;
     private boolean whitelist;
@@ -71,7 +72,7 @@ public class ConveyorDroppingUpgrade extends ConveyorUpgrade {
             TileEntity tile = getWorld().getTileEntity(getPos().offset(EnumFacing.DOWN));
             if (tile != null) {
                 tile.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, EnumFacing.UP).ifPresent(handler -> {
-                    if (getBoundingBox().aabb().offset(getPos()).grow(0.01).intersects(entity.getBoundingBox())) {
+                    if (getBoundingBox().getBoundingBox().offset(getPos()).grow(0.01).intersects(entity.getBoundingBox())) {
                         ItemStack stack = ((EntityItem) entity).getItem();
                         for (int i = 0; i < handler.getSlots(); i++) {
                             stack = handler.insertItem(i, stack, false);
@@ -121,7 +122,7 @@ public class ConveyorDroppingUpgrade extends ConveyorUpgrade {
     }
 
     @Override
-    public Cuboid getBoundingBox() {
+    public VoxelShape getBoundingBox() {
         return BB;
     }
 

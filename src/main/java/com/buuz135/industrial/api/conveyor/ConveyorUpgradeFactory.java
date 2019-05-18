@@ -23,6 +23,7 @@ package com.buuz135.industrial.api.conveyor;
 
 import com.google.common.collect.ImmutableSet;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.Item;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
@@ -40,6 +41,8 @@ public abstract class ConveyorUpgradeFactory extends ForgeRegistryEntry<Conveyor
     public static final ImmutableSet<EnumFacing> HORIZONTAL = ImmutableSet.copyOf(EnumFacing.Plane.HORIZONTAL.iterator());
     public static final ImmutableSet<EnumFacing> DOWN = ImmutableSet.of(EnumFacing.DOWN);
     public static final List<ConveyorUpgradeFactory> FACTORIES = new ArrayList<>();
+
+    private Item upgradeItem;
 
     public ConveyorUpgradeFactory() {
         FACTORIES.add(this);
@@ -64,5 +67,13 @@ public abstract class ConveyorUpgradeFactory extends ForgeRegistryEntry<Conveyor
 
     public EnumFacing getSideForPlacement(World world, BlockPos pos, EntityPlayer player) {
         return player.getHorizontalFacing();
+    }
+
+    public Item getUpgradeItem() {
+        return upgradeItem;
+    }
+
+    public void setUpgradeItem(Item upgradeItem) {
+        this.upgradeItem = upgradeItem;
     }
 }

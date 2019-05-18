@@ -27,7 +27,6 @@ import com.buuz135.industrial.api.conveyor.IConveyorContainer;
 import com.buuz135.industrial.api.conveyor.gui.IGuiComponent;
 import com.buuz135.industrial.gui.component.*;
 import com.buuz135.industrial.proxy.block.BlockConveyor;
-import com.buuz135.industrial.proxy.block.Cuboid;
 import com.buuz135.industrial.proxy.block.filter.IFilter;
 import com.buuz135.industrial.proxy.block.filter.ItemStackFilter;
 import com.buuz135.industrial.utils.Reference;
@@ -41,6 +40,8 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
+import net.minecraft.util.math.shapes.VoxelShape;
+import net.minecraft.util.math.shapes.VoxelShapes;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.World;
 
@@ -51,7 +52,7 @@ import java.util.Set;
 
 public class ConveyorBlinkingUpgrade extends ConveyorUpgrade {
 
-    public static Cuboid BB = new Cuboid(0.0625 * 3, 0.0625, 0.0625 * 3, 0.0625 * 13, 0.0625 * 1.2, 0.0625 * 13, EnumFacing.DOWN.getIndex(), false);
+    public static VoxelShape BB = VoxelShapes.create(0.0625 * 3, 0.0625, 0.0625 * 3, 0.0625 * 13, 0.0625 * 1.2, 0.0625 * 13);
 
     private ItemStackFilter filter;
     private boolean whitelist;
@@ -78,7 +79,7 @@ public class ConveyorBlinkingUpgrade extends ConveyorUpgrade {
     }
 
     @Override
-    public Cuboid getBoundingBox() {
+    public VoxelShape getBoundingBox() {
         return BB;
     }
 

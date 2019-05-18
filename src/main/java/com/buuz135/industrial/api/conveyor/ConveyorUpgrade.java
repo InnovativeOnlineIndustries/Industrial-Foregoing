@@ -22,8 +22,6 @@
 package com.buuz135.industrial.api.conveyor;
 
 import com.buuz135.industrial.api.conveyor.gui.IGuiComponent;
-import com.buuz135.industrial.proxy.ItemRegistry;
-import com.buuz135.industrial.proxy.block.Cuboid;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
@@ -31,6 +29,8 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.shapes.VoxelShape;
+import net.minecraft.util.math.shapes.VoxelShapes;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.INBTSerializable;
 
@@ -39,7 +39,7 @@ import java.util.Collections;
 import java.util.List;
 
 public abstract class ConveyorUpgrade implements INBTSerializable<NBTTagCompound> {
-    public static Cuboid EMPTY_BB = new Cuboid(0, 0, 0, 0, 0, 0);
+
     private IConveyorContainer container;
     private ConveyorUpgradeFactory factory;
     private EnumFacing side;
@@ -65,7 +65,7 @@ public abstract class ConveyorUpgrade implements INBTSerializable<NBTTagCompound
     }
 
     public Collection<ItemStack> getDrops() {
-        return Collections.singleton(new ItemStack(ItemRegistry.conveyorUpgradeItem, 1));
+        return Collections.singleton(new ItemStack(this.getFactory().getUpgradeItem(), 1));
     }
 
     public IConveyorContainer getContainer() {
@@ -104,8 +104,8 @@ public abstract class ConveyorUpgrade implements INBTSerializable<NBTTagCompound
         return 0;
     }
 
-    public Cuboid getBoundingBox() {
-        return EMPTY_BB;
+    public VoxelShape getBoundingBox() {
+        return VoxelShapes.empty();
     }
 
     public boolean hasGui() {
@@ -118,4 +118,5 @@ public abstract class ConveyorUpgrade implements INBTSerializable<NBTTagCompound
 
     public void addComponentsToGui(List<IGuiComponent> componentList) {
     }
+
 }
