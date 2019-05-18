@@ -26,6 +26,7 @@ import com.buuz135.industrial.api.conveyor.ConveyorUpgrade;
 import com.buuz135.industrial.proxy.ItemRegistry;
 import com.buuz135.industrial.proxy.block.tile.TileEntityConveyor;
 import com.buuz135.industrial.proxy.client.render.FluidConveyorTESR;
+import com.buuz135.industrial.utils.RayTraceUtils;
 import com.hrznstudio.titanium.api.IFactory;
 import com.hrznstudio.titanium.api.raytrace.DistanceRayTraceResult;
 import com.hrznstudio.titanium.block.BlockTileBase;
@@ -122,7 +123,7 @@ public class BlockConveyor extends BlockTileBase<TileEntityConveyor> {
         TileEntity tileEntity = world.getTileEntity(pos);
         if (tileEntity instanceof TileEntityConveyor) {
             if (target instanceof DistanceRayTraceResult) {
-                ConveyorUpgrade upgrade = ((TileEntityConveyor) tileEntity).getUpgradeMap().get(EnumFacing.byIndex(((Cuboid) target.hitInfo).identifier));
+                ConveyorUpgrade upgrade = ((TileEntityConveyor) tileEntity).getUpgradeMap().get(getFacingUpgradeHit(state, player.world, pos, player));
                 if (upgrade != null) {
                     return new ItemStack(upgrade.getFactory().getUpgradeItem(), 1);
                 }
@@ -343,16 +344,9 @@ public class BlockConveyor extends BlockTileBase<TileEntityConveyor> {
         }
     }
 
-    public RayTraceResult getSimpleRayTrace(IBlockState state, World worldIn, BlockPos pos, EntityPlayer player) {
-        Vec3d start = player.getEyePosition(0);
-        Vec3d vec3d1 = player.getLook(0);
-        Vec3d end = start.add(vec3d1.x * 32, vec3d1.y * 32, vec3d1.z * 32);
-        return getRayTraceResult(state, worldIn, pos, start, end, null);
-    }
-
     public EnumFacing getFacingUpgradeHit(IBlockState state, World worldIn, BlockPos pos, EntityPlayer player) {
         TileEntity tileEntity = worldIn.getTileEntity(pos);
-        RayTraceResult hit = getSimpleRayTrace(state, worldIn, pos, player);
+        RayTraceResult hit = RayTraceUtils.rayTraceSimple(worldIn, player, 32, 0);
         if (tileEntity instanceof TileEntityConveyor && hit instanceof DistanceRayTraceResult) {
             for (EnumFacing enumFacing : ((TileEntityConveyor) tileEntity).getUpgradeMap().keySet()) {
                 if (VoxelShapes.compare(((TileEntityConveyor) tileEntity).getUpgradeMap().get(enumFacing).getBoundingBox(), ((DistanceRayTraceResult) hit).getHitBox(), IBooleanFunction.AND)) {

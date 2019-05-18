@@ -25,10 +25,9 @@ import com.buuz135.industrial.api.conveyor.ConveyorUpgradeFactory;
 import com.buuz135.industrial.item.infinity.ItemInfinityDrill;
 import com.buuz135.industrial.proxy.ItemRegistry;
 import com.buuz135.industrial.proxy.block.BlockConveyor;
-import com.buuz135.industrial.proxy.block.Cuboid;
-import com.buuz135.industrial.proxy.block.DistanceRayTraceResult;
 import com.buuz135.industrial.proxy.client.model.ConveyorBlockModel;
 import com.buuz135.industrial.utils.Reference;
+import com.hrznstudio.titanium.api.raytrace.DistanceRayTraceResult;
 import net.minecraft.block.BlockFlowingFluid;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.GlStateManager;
@@ -111,7 +110,7 @@ public class IFClientEvents {
             double y = player.lastTickPosY + (player.posY - player.lastTickPosY) * event.getPartialTicks();
             double z = player.lastTickPosZ + (player.posZ - player.lastTickPosZ) * event.getPartialTicks();
 
-            Minecraft.getInstance().renderGlobal.drawSelectionBoundingBox(((Cuboid) ((DistanceRayTraceResult) event.getTarget()).hitInfo).aabb().offset(-x, -y, -z).offset(pos).grow(0.002),
+            Minecraft.getInstance().renderGlobal.drawSelectionBoundingBox(((DistanceRayTraceResult) hit).getHitBox().getBoundingBox().offset(-x, -y, -z).offset(pos).grow(0.002),
                     0.0F, 0.0F, 0.0F, 0.4F
             );
 
@@ -137,7 +136,7 @@ public class IFClientEvents {
             double z = player.lastTickPosZ + (player.posZ - player.lastTickPosZ) * event.getPartialTicks();
             BlockPos.getAllInBox(area.getLeft(), area.getRight()).forEach(blockPos -> {
                 if (!world.isAirBlock(blockPos) && world.getBlockState(blockPos).getBlockHardness(world, blockPos) >= 0 && !(world.getBlockState(blockPos).getBlock() instanceof IFluidBlock) && !(world.getBlockState(blockPos).getBlock() instanceof BlockFlowingFluid)) {
-                    Minecraft.getInstance().renderGlobal.drawSelectionBoundingBox(world.getBlockState(blockPos).getBlock().getShape(world.getBlockState(blockPos), world, blockPos).toBoundingBoxList().get(0).offset(-x, -y, -z).
+                    Minecraft.getInstance().renderGlobal.drawSelectionBoundingBox(world.getBlockState(blockPos).getBlock().getShape(world.getBlockState(blockPos), world, blockPos).getBoundingBox().offset(-x, -y, -z).offset(blockPos).
                             grow(0.001), 0.0F, 0.0F, 0.0F, 0.4F);
                 }
             });
