@@ -35,6 +35,7 @@ import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.Style;
 import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.World;
@@ -174,14 +175,14 @@ public class ItemInfinityDrill extends IFCustomItem {
         long power = getPowerFromStack(stack);
         Pair<DrillTier, DrillTier> braquet = DrillTier.getTierBraquet(power);
         DrillTier current = getSelectedDrillTier(stack);
-        tooltip.add(new TextComponentTranslation("text.industrialforegoing.display.current_area").appendText(" ").appendText(getFormattedArea(current, current.getRadius())));
-        tooltip.add(new TextComponentTranslation("text.industrialforegoing.display.tier").appendText(" ").appendText(braquet.getLeft().getColor() + braquet.getLeft().getLocalizedName()));
-        tooltip.add(new TextComponentTranslation("text.industrialforegoing.display.power").appendText(" ").appendText(new DecimalFormat().format(power)).appendText("/").appendText(new DecimalFormat().format(braquet.getRight().getPowerNeeded())).appendText("RF ").appendSibling(new TextComponentTranslation("text.industrialforegoing.display.next_tier")));
+        tooltip.add(new TextComponentTranslation("text.industrialforegoing.display.current_area").appendText(" ").appendText(getFormattedArea(current, current.getRadius())).setStyle(new Style().setColor(TextFormatting.GRAY)));
+        tooltip.add(new TextComponentTranslation("text.industrialforegoing.display.tier").appendText(" ").appendText(braquet.getLeft().getColor() + braquet.getLeft().getLocalizedName()).setStyle(new Style().setColor(TextFormatting.GRAY)));
+        tooltip.add(new TextComponentTranslation("text.industrialforegoing.display.power").appendText(" ").appendText(new DecimalFormat().format(power)).appendText("/").appendText(new DecimalFormat().format(braquet.getRight().getPowerNeeded())).appendText("RF ").appendSibling(new TextComponentTranslation("text.industrialforegoing.display.next_tier")).setStyle(new Style().setColor(TextFormatting.GRAY)));
         int fuelAmount = getFuelFromStack(stack);
-        tooltip.add(new TextComponentTranslation("text.industrialforegoing.display.fluid").appendText(" ").appendText(new DecimalFormat().format(fuelAmount)).appendText("/").appendText(new DecimalFormat().format(1000000)).appendText(" mb of Biofuel"));
-        tooltip.add(new TextComponentTranslation("text.industrialforegoing.display.max_area").appendText(" ").appendText(getFormattedArea(braquet.getLeft(), braquet.getLeft().getRadius())));
+        tooltip.add(new TextComponentTranslation("text.industrialforegoing.display.fluid").appendText(" ").appendText(new DecimalFormat().format(fuelAmount)).appendText("/").appendText(new DecimalFormat().format(1000000)).appendText(" mb of Biofuel").setStyle(new Style().setColor(TextFormatting.GRAY)));
+        tooltip.add(new TextComponentTranslation("text.industrialforegoing.display.max_area").appendText(" ").appendText(getFormattedArea(braquet.getLeft(), braquet.getLeft().getRadius())).setStyle(new Style().setColor(TextFormatting.GRAY)));
         if (isSpecial(stack))
-            tooltip.add(new TextComponentTranslation("text.industrialforegoing.display.special"));
+            tooltip.add(new TextComponentTranslation("text.industrialforegoing.display.special").setStyle(new Style().setColor(TextFormatting.GRAY)));
     }
 
     public long getPowerFromStack(ItemStack stack) {

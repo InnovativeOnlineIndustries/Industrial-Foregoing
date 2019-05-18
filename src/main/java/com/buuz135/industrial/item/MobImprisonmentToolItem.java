@@ -125,8 +125,8 @@ public class MobImprisonmentToolItem extends IFCustomItem {
     @Override
     public ITextComponent getDisplayName(ItemStack stack) {
         if (!containsEntity(stack))
-            return new TextComponentTranslation(super.getTranslationKey(stack) + ".name");
-        return new TextComponentTranslation(super.getTranslationKey(stack) + ".name").appendText(" (" + getID(stack) + ")");
+            return new TextComponentTranslation(super.getTranslationKey(stack));
+        return new TextComponentTranslation(super.getTranslationKey(stack)).appendText(" (" + getID(stack) + ")");
     }
 
 }
