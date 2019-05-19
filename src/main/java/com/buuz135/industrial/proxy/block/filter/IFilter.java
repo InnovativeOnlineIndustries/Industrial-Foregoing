@@ -1,7 +1,7 @@
 /*
  * This file is part of Industrial Foregoing.
  *
- * Copyright 2018, Buuz135
+ * Copyright 2019, Buuz135
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy of
  * this software and associated documentation files (the "Software"), to deal in the
@@ -22,14 +22,13 @@
 package com.buuz135.industrial.proxy.block.filter;
 
 import com.buuz135.industrial.gui.conveyor.GuiConveyor;
-import mezz.jei.api.gui.IGhostIngredientHandler;
+import mezz.jei.api.gui.handlers.IGhostIngredientHandler;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.renderer.Rectangle2d;
 import net.minecraft.entity.Entity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraftforge.fluids.FluidStack;
-
-import java.awt.*;
 
 
 public interface IFilter<T extends Entity> {
@@ -74,12 +73,12 @@ public interface IFilter<T extends Entity> {
         }
 
         @Override
-        public Rectangle getArea() {
+        public Rectangle2d getArea() {
             if (Minecraft.getInstance().currentScreen instanceof GuiConveyor) {
                 GuiConveyor gui = (GuiConveyor) Minecraft.getInstance().currentScreen;
-                return new Rectangle(x + gui.getX(), y + gui.getY(), 18, 18);
+                return new Rectangle2d(x + gui.getX(), y + gui.getY(), 18, 18);
             }
-            return new Rectangle();
+            return new Rectangle2d(0, 0, 0, 0);
         }
 
         @Override

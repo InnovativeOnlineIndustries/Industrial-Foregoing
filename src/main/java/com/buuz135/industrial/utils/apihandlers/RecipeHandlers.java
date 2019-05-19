@@ -1,7 +1,7 @@
 /*
  * This file is part of Industrial Foregoing.
  *
- * Copyright 2018, Buuz135
+ * Copyright 2019, Buuz135
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy of
  * this software and associated documentation files (the "Software"), to deal in the
@@ -24,9 +24,6 @@ package com.buuz135.industrial.utils.apihandlers;
 import com.buuz135.industrial.api.IndustrialForegoingHelper;
 import com.buuz135.industrial.api.extractor.ExtractorEntry;
 import com.buuz135.industrial.api.recipe.*;
-import com.buuz135.industrial.api.recipe.ore.OreFluidEntrySieve;
-import com.buuz135.industrial.proxy.FluidsRegistry;
-import com.buuz135.industrial.proxy.ItemRegistry;
 import com.buuz135.industrial.utils.TagUtil;
 import com.buuz135.industrial.utils.apihandlers.crafttweaker.CTAction;
 import com.google.common.collect.LinkedListMultimap;

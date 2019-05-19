@@ -1,7 +1,7 @@
 /*
  * This file is part of Industrial Foregoing.
  *
- * Copyright 2018, Buuz135
+ * Copyright 2019, Buuz135
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy of
  * this software and associated documentation files (the "Software"), to deal in the
@@ -22,11 +22,8 @@
 package com.buuz135.industrial.jei.ore;
 
 import com.buuz135.industrial.api.recipe.ore.OreFluidEntryFermenter;
-import mezz.jei.api.ingredients.IIngredients;
-import mezz.jei.api.recipe.IRecipeWrapper;
-import net.minecraftforge.fluids.FluidStack;
 
-public class OreFermenterWrapper implements IRecipeWrapper {
+public class OreFermenterWrapper {
 
     private final OreFluidEntryFermenter recipe;
 
@@ -34,9 +31,9 @@ public class OreFermenterWrapper implements IRecipeWrapper {
         this.recipe = recipe;
     }
 
-    @Override
-    public void getIngredients(IIngredients ingredients) {
-        ingredients.setInput(FluidStack.class, recipe.getInput());
-        ingredients.setOutput(FluidStack.class, recipe.getOutput());
-    }
+    //@Override
+    //public void getIngredients(IIngredients ingredients) {
+    //    ingredients.setInput(FluidStack.class, recipe.getInput());
+    //    ingredients.setOutput(FluidStack.class, recipe.getOutput());
+    //}
 }

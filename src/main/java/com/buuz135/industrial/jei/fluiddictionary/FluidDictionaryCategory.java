@@ -1,7 +1,7 @@
 /*
  * This file is part of Industrial Foregoing.
  *
- * Copyright 2018, Buuz135
+ * Copyright 2019, Buuz135
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy of
  * this software and associated documentation files (the "Software"), to deal in the
@@ -22,14 +22,12 @@
 package com.buuz135.industrial.jei.fluiddictionary;
 
 import com.buuz135.industrial.utils.Reference;
-import mezz.jei.api.IGuiHelper;
-import mezz.jei.api.gui.IDrawable;
-import mezz.jei.api.gui.IGuiFluidStackGroup;
 import mezz.jei.api.gui.IRecipeLayout;
+import mezz.jei.api.gui.drawable.IDrawable;
+import mezz.jei.api.helpers.IGuiHelper;
 import mezz.jei.api.ingredients.IIngredients;
-import mezz.jei.api.recipe.IRecipeCategory;
+import mezz.jei.api.recipe.category.IRecipeCategory;
 import net.minecraft.util.ResourceLocation;
-import net.minecraftforge.fluids.FluidStack;
 
 public class FluidDictionaryCategory implements IRecipeCategory<FluidDictionaryWrapper> {
 
@@ -42,8 +40,13 @@ public class FluidDictionaryCategory implements IRecipeCategory<FluidDictionaryW
     }
 
     @Override
-    public String getUid() {
-        return "fluid_dictionary";
+    public ResourceLocation getUid() {
+        return null;
+    }
+
+    @Override
+    public Class<? extends FluidDictionaryWrapper> getRecipeClass() {
+        return null;
     }
 
     @Override
@@ -52,22 +55,27 @@ public class FluidDictionaryCategory implements IRecipeCategory<FluidDictionaryW
     }
 
     @Override
-    public String getModName() {
-        return Reference.MOD_ID;
-    }
-
-    @Override
     public IDrawable getBackground() {
         return guiHelper.createDrawable(new ResourceLocation(Reference.MOD_ID, "textures/gui/jei.png"), 0, 129, 70, 50);
     }
 
     @Override
-    public void setRecipe(IRecipeLayout recipeLayout, FluidDictionaryWrapper recipeWrapper, IIngredients ingredients) {
-        IGuiFluidStackGroup fluidStackGroup = recipeLayout.getFluidStacks();
-        fluidStackGroup.init(0, true, 5, 1, 12, 48, 1000, false, tankOverlay);
-        fluidStackGroup.init(1, false, 57, 1, 12, 48, 1000, false, tankOverlay);
+    public IDrawable getIcon() {
+        return null;
+    }
 
-        fluidStackGroup.set(0, ingredients.getInputs(FluidStack.class).get(0));
-        fluidStackGroup.set(1, ingredients.getOutputs(FluidStack.class).get(0));
+    @Override
+    public void setIngredients(FluidDictionaryWrapper fluidDictionaryWrapper, IIngredients iIngredients) {
+
+    }
+
+    @Override
+    public void setRecipe(IRecipeLayout recipeLayout, FluidDictionaryWrapper recipeWrapper, IIngredients ingredients) {
+        //IGuiFluidStackGroup fluidStackGroup = recipeLayout.getFluidStacks();
+        //fluidStackGroup.init(0, true, 5, 1, 12, 48, 1000, false, tankOverlay);
+        //fluidStackGroup.init(1, false, 57, 1, 12, 48, 1000, false, tankOverlay);
+//
+        //fluidStackGroup.set(0, ingredients.getInputs(FluidStack.class).get(0));
+        //fluidStackGroup.set(1, ingredients.getOutputs(FluidStack.class).get(0));
     }
 }

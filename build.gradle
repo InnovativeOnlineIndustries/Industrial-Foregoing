@@ -15,17 +15,19 @@ buildscript {
     }
     dependencies {
         classpath group: 'net.minecraftforge.gradle', name: 'ForgeGradle', version: '3.+', changing: true
+        classpath "gradle.plugin.com.matthewprenger:CurseGradle:1.1.0"
     }
 }
 plugins {
     id "com.github.hierynomus.license" version "0.14.0"
     id 'java'
+    id "com.matthewprenger.cursegradle" version "1.1.0"
 }
 apply plugin: 'net.minecraftforge.gradle'
 apply plugin: 'eclipse'
 
 def BUILD_NUMBER = System.getenv("BUILD_NUMBER") ?: "0"
-version = "0.1.0.$BUILD_NUMBER"
+version = "${mod_version}.$BUILD_NUMBER"
 group = "com.buuz135"
 archivesBaseName = "industrial-foregoing"
 
@@ -63,15 +65,20 @@ repositories {
         url 'https://cdn.hrzn.studio/maven/'
     }
     maven {
-        url = "http://dvs1.progwml6.com/files/maven"
+        // location of the maven that hosts JEI files
+        name = "Progwml6 maven"
+        url = "https://dvs1.progwml6.com/files/maven/"
     }
 }
 
 dependencies {
     minecraft 'net.minecraftforge:forge:1.13.2-25.0.193'
-    compile fg.deobf('com.hrznstudio:titanium:2.1.6')
+    compile fg.deobf('com.hrznstudio:titanium:2.1.10')
     compileOnly 'org.projectlombok:lombok:1.16.16'
-    compile "mezz.jei:jei_1.12.2:4.14.3.246:api"
+    // compile against the JEI API but do not include it at runtime
+    compileOnly fg.deobf("mezz.jei:jei-${minecraft_version}:${jei_version}:api")
+    // at runtime, use the full JEI jar
+    runtimeOnly fg.deobf("mezz.jei:jei-${minecraft_version}:${jei_version}")
 }
 
 afterEvaluate {
@@ -96,5 +103,59 @@ processResources {
     // copy everything else except the mcmod.info
     from(sourceSets.main.resources.srcDirs) {
         exclude 'META_INF/mods.toml'
+    }
+}
+
+task apiJar(type: Jar, dependsOn: 'classes') {
+    classifier = 'api'
+    from(sourceSets.main.output) {
+        include 'com/buuz135/industrial/api/**'
+    }
+}
+
+task devJar(type: Jar, dependsOn: 'classes') {
+    from(sourceSets.main.output) {
+        include '**'
+    }
+    extension = 'jar'
+    classifier = 'deobf'
+}
+
+artifacts {
+    archives devJar
+    archives apiJar
+}
+
+tasks.curseforge.enabled =  project.hasProperty('curse_api')
+
+curseforge {
+    if (project.hasProperty('curse_api')) {
+        apiKey = project.curse_api
+    }
+    project {
+        id = '266515'
+        changelog = file('CHANGELOG.md')
+        changelogType = 'markdown'
+        releaseType = 'alpha'
+
+        mainArtifact(jar){
+            relations {
+                requiredLibrary 'titanium'
+            }
+        }
+        
+        addArtifact apiJar
+        addArtifact devJar
+    }
+}
+
+license {
+    header rootProject.file('HEADER')
+    include "**/*.java"
+    ext.year = Calendar.getInstance().get(Calendar.YEAR)
+    ext.name = 'Buuz135'
+    ignoreFailures = true
+    mapping {
+        java='SLASHSTAR_STYLE'
     }
 }

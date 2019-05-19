@@ -1,7 +1,7 @@
 /*
  * This file is part of Industrial Foregoing.
  *
- * Copyright 2018, Buuz135
+ * Copyright 2019, Buuz135
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy of
  * this software and associated documentation files (the "Software"), to deal in the
@@ -21,13 +21,11 @@
  */
 package com.buuz135.industrial.jei.petrifiedgen;
 
-import com.buuz135.industrial.utils.Reference;
-import mezz.jei.api.IGuiHelper;
-import mezz.jei.api.gui.IDrawable;
-import mezz.jei.api.gui.IGuiItemStackGroup;
 import mezz.jei.api.gui.IRecipeLayout;
+import mezz.jei.api.gui.drawable.IDrawable;
+import mezz.jei.api.helpers.IGuiHelper;
 import mezz.jei.api.ingredients.IIngredients;
-import mezz.jei.api.recipe.IRecipeCategory;
+import mezz.jei.api.recipe.category.IRecipeCategory;
 import net.minecraft.util.ResourceLocation;
 
 public class PetrifiedBurnTimeCategory implements IRecipeCategory<PetrifiedBurnTimeWrapper> {
@@ -39,8 +37,13 @@ public class PetrifiedBurnTimeCategory implements IRecipeCategory<PetrifiedBurnT
     }
 
     @Override
-    public String getUid() {
-        return "petrified_burn_time";
+    public ResourceLocation getUid() {
+        return null;
+    }
+
+    @Override
+    public Class<? extends PetrifiedBurnTimeWrapper> getRecipeClass() {
+        return null;
     }
 
     @Override
@@ -49,21 +52,26 @@ public class PetrifiedBurnTimeCategory implements IRecipeCategory<PetrifiedBurnT
     }
 
     @Override
-    public String getModName() {
-        return Reference.NAME;
+    public IDrawable getBackground() {
+        return guiHelper.createDrawable(new ResourceLocation("minecraft", "textures/gui/container/furnace.png"), 55, 38 + 14, 18, 18/*, 3, 3, 0, 120*/);
     }
 
     @Override
-    public IDrawable getBackground() {
-        return guiHelper.createDrawable(new ResourceLocation("minecraft", "textures/gui/container/furnace.png"), 55, 38 + 14, 18, 18, 3, 3, 0, 120);
+    public IDrawable getIcon() {
+        return null;
+    }
+
+    @Override
+    public void setIngredients(PetrifiedBurnTimeWrapper petrifiedBurnTimeWrapper, IIngredients iIngredients) {
+
     }
 
     @Override
     public void setRecipe(IRecipeLayout recipeLayout, PetrifiedBurnTimeWrapper recipeWrapper, IIngredients ingredients) {
-        IGuiItemStackGroup guiItemStacks = recipeLayout.getItemStacks();
-
-        guiItemStacks.init(0, true, 0, 3);
-        guiItemStacks.set(ingredients);
+        //IGuiItemStackGroup guiItemStacks = recipeLayout.getItemStacks();
+//
+        //guiItemStacks.init(0, true, 0, 3);
+        //guiItemStacks.set(ingredients);
     }
 
 

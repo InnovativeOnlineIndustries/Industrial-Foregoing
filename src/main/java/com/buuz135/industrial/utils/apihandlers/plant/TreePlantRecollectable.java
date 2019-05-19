@@ -1,7 +1,7 @@
 /*
  * This file is part of Industrial Foregoing.
  *
- * Copyright 2018, Buuz135
+ * Copyright 2019, Buuz135
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy of
  * this software and associated documentation files (the "Software"), to deal in the
@@ -22,7 +22,6 @@
 package com.buuz135.industrial.utils.apihandlers.plant;
 
 import com.buuz135.industrial.api.plant.PlantRecollectable;
-import com.buuz135.industrial.proxy.BlockRegistry;
 import com.buuz135.industrial.utils.BlockUtils;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.item.ItemStack;

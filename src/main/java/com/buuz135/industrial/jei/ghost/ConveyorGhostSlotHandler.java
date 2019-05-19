@@ -1,7 +1,7 @@
 /*
  * This file is part of Industrial Foregoing.
  *
- * Copyright 2018, Buuz135
+ * Copyright 2019, Buuz135
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy of
  * this software and associated documentation files (the "Software"), to deal in the
@@ -23,7 +23,7 @@ package com.buuz135.industrial.jei.ghost;
 
 import com.buuz135.industrial.gui.conveyor.GuiConveyor;
 import com.buuz135.industrial.proxy.block.filter.IFilter;
-import mezz.jei.api.gui.IGhostIngredientHandler;
+import mezz.jei.api.gui.handlers.IGhostIngredientHandler;
 import net.minecraft.item.ItemStack;
 
 import java.util.ArrayList;

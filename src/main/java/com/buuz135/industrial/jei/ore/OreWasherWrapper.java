@@ -1,7 +1,7 @@
 /*
  * This file is part of Industrial Foregoing.
  *
- * Copyright 2018, Buuz135
+ * Copyright 2019, Buuz135
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy of
  * this software and associated documentation files (the "Software"), to deal in the
@@ -22,11 +22,8 @@
 package com.buuz135.industrial.jei.ore;
 
 import com.buuz135.industrial.api.recipe.ore.OreFluidEntryRaw;
-import mezz.jei.api.ingredients.IIngredients;
-import mezz.jei.api.recipe.IRecipeWrapper;
-import net.minecraftforge.fluids.FluidStack;
 
-public class OreWasherWrapper implements IRecipeWrapper {
+public class OreWasherWrapper {
 
     private final OreFluidEntryRaw entryRaw;
 
@@ -34,12 +31,12 @@ public class OreWasherWrapper implements IRecipeWrapper {
         this.entryRaw = entryRaw;
     }
 
-    @Override
-    public void getIngredients(IIngredients ingredients) {
-        //ingredients.setInputs(ItemStack.class, ItemStackUtils.getAllEntries(entryRaw.getOre()));
-        ingredients.setInput(FluidStack.class, entryRaw.getInput());
-        ingredients.setOutput(FluidStack.class, entryRaw.getOutput());
-
-        //List<ItemStack> allResources = ItemStackUtils.getAllEntries(Tags.Items.DUSTS, Tags.Items.ORES, Tags.Items.INGOTS).stream().map(ItemStack::new).collect(Collectors.toList());
-    }
+    //@Override
+    //public void getIngredients(IIngredients ingredients) {
+    //    //ingredients.setInputs(ItemStack.class, ItemStackUtils.getAllEntries(entryRaw.getOre()));
+    //    ingredients.setInput(FluidStack.class, entryRaw.getInput());
+    //    ingredients.setOutput(FluidStack.class, entryRaw.getOutput());
+//
+    //    //List<ItemStack> allResources = ItemStackUtils.getAllEntries(Tags.Items.DUSTS, Tags.Items.ORES, Tags.Items.INGOTS).stream().map(ItemStack::new).collect(Collectors.toList());
+    //}
 }

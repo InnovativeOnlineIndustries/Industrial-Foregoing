@@ -1,7 +1,7 @@
 /*
  * This file is part of Industrial Foregoing.
  *
- * Copyright 2018, Buuz135
+ * Copyright 2019, Buuz135
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy of
  * this software and associated documentation files (the "Software"), to deal in the
@@ -22,21 +22,14 @@
 package com.buuz135.industrial.jei.reactor;
 
 import com.buuz135.industrial.utils.Reference;
-import mezz.jei.api.IGuiHelper;
-import mezz.jei.api.gui.IDrawable;
-import mezz.jei.api.gui.IGuiFluidStackGroup;
-import mezz.jei.api.gui.IGuiItemStackGroup;
 import mezz.jei.api.gui.IRecipeLayout;
+import mezz.jei.api.gui.drawable.IDrawable;
+import mezz.jei.api.helpers.IGuiHelper;
 import mezz.jei.api.ingredients.IIngredients;
-import mezz.jei.api.recipe.IRecipeCategory;
-import net.minecraft.client.Minecraft;
-import net.minecraft.item.ItemStack;
+import mezz.jei.api.recipe.category.IRecipeCategory;
 import net.minecraft.util.ResourceLocation;
-import net.minecraftforge.fluids.FluidStack;
 
 import javax.annotation.Nullable;
-import java.util.ArrayList;
-import java.util.List;
 
 public class ReactorRecipeCategory implements IRecipeCategory<ReactorRecipeWrapper> {
 
@@ -51,8 +44,13 @@ public class ReactorRecipeCategory implements IRecipeCategory<ReactorRecipeWrapp
     }
 
     @Override
-    public String getUid() {
-        return title.toLowerCase().replaceAll(" ", "_");
+    public ResourceLocation getUid() {
+        return null;
+    }
+
+    @Override
+    public Class<? extends ReactorRecipeWrapper> getRecipeClass() {
+        return null;
     }
 
     @Override
@@ -60,10 +58,6 @@ public class ReactorRecipeCategory implements IRecipeCategory<ReactorRecipeWrapp
         return title;
     }
 
-    @Override
-    public String getModName() {
-        return Reference.NAME;
-    }
 
     @Override
     public IDrawable getBackground() {
@@ -77,24 +71,21 @@ public class ReactorRecipeCategory implements IRecipeCategory<ReactorRecipeWrapp
     }
 
     @Override
-    public void drawExtras(Minecraft minecraft) {
+    public void setIngredients(ReactorRecipeWrapper reactorRecipeWrapper, IIngredients iIngredients) {
 
     }
+
 
     @Override
     public void setRecipe(IRecipeLayout recipeLayout, ReactorRecipeWrapper recipeWrapper, IIngredients ingredients) {
-        IGuiItemStackGroup guiItemStackGroup = recipeLayout.getItemStacks();
-        guiItemStackGroup.init(0, true, 0, 16);
-
-        IGuiFluidStackGroup guiFluidStackGroup = recipeLayout.getFluidStacks();
-        guiFluidStackGroup.init(1, false, 57, 1, 12, 48, 200, false, tankOverlay);
-
-        guiItemStackGroup.set(0, ingredients.getInputs(ItemStack.class).get(0));
-        guiFluidStackGroup.set(1, ingredients.getOutputs(FluidStack.class).get(0));
+        //IGuiItemStackGroup guiItemStackGroup = recipeLayout.getItemStacks();
+        //guiItemStackGroup.init(0, true, 0, 16);
+//
+        //IGuiFluidStackGroup guiFluidStackGroup = recipeLayout.getFluidStacks();
+        //guiFluidStackGroup.init(1, false, 57, 1, 12, 48, 200, false, tankOverlay);
+//
+        //guiItemStackGroup.set(0, ingredients.getInputs(ItemStack.class).get(0));
+        //guiFluidStackGroup.set(1, ingredients.getOutputs(FluidStack.class).get(0));
     }
 
-    @Override
-    public List<String> getTooltipStrings(int mouseX, int mouseY) {
-        return new ArrayList<>();
-    }
 }

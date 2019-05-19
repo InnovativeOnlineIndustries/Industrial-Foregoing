@@ -1,7 +1,7 @@
 /*
  * This file is part of Industrial Foregoing.
  *
- * Copyright 2018, Buuz135
+ * Copyright 2019, Buuz135
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy of
  * this software and associated documentation files (the "Software"), to deal in the
@@ -21,11 +21,7 @@
  */
 package com.buuz135.industrial.proxy;
 
-import com.buuz135.industrial.fluid.IFCustomFluid;
-import com.buuz135.industrial.fluid.IFOreFluid;
 import net.minecraft.fluid.Fluid;
-
-import java.awt.*;
 
 
 public class FluidsRegistry {

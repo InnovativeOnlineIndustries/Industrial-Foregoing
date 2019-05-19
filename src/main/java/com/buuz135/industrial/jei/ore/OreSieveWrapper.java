@@ -1,7 +1,7 @@
 /*
  * This file is part of Industrial Foregoing.
  *
- * Copyright 2018, Buuz135
+ * Copyright 2019, Buuz135
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy of
  * this software and associated documentation files (the "Software"), to deal in the
@@ -22,12 +22,8 @@
 package com.buuz135.industrial.jei.ore;
 
 import com.buuz135.industrial.api.recipe.ore.OreFluidEntrySieve;
-import mezz.jei.api.ingredients.IIngredients;
-import mezz.jei.api.recipe.IRecipeWrapper;
-import net.minecraft.item.ItemStack;
-import net.minecraftforge.fluids.FluidStack;
 
-public class OreSieveWrapper implements IRecipeWrapper {
+public class OreSieveWrapper {
 
     private final OreFluidEntrySieve recipe;
 
@@ -35,10 +31,10 @@ public class OreSieveWrapper implements IRecipeWrapper {
         this.recipe = recipe;
     }
 
-    @Override
-    public void getIngredients(IIngredients ingredients) {
-        ingredients.setInput(FluidStack.class, recipe.getInput());
-        ingredients.setInput(ItemStack.class, recipe.getSieveItem());
-        ingredients.setOutput(ItemStack.class, recipe.getOutput());
-    }
+    //@Override
+    //public void getIngredients(IIngredients ingredients) {
+    //    ingredients.setInput(FluidStack.class, recipe.getInput());
+    //    ingredients.setInput(ItemStack.class, recipe.getSieveItem());
+    //    ingredients.setOutput(ItemStack.class, recipe.getOutput());
+    //}
 }

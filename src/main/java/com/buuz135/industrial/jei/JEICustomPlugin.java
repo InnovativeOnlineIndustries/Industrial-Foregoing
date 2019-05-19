@@ -1,7 +1,7 @@
 /*
  * This file is part of Industrial Foregoing.
  *
- * Copyright 2018, Buuz135
+ * Copyright 2019, Buuz135
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy of
  * this software and associated documentation files (the "Software"), to deal in the
@@ -33,18 +33,22 @@ import com.buuz135.industrial.jei.petrifiedgen.PetrifiedBurnTimeCategory;
 import com.buuz135.industrial.jei.reactor.ReactorRecipeCategory;
 import com.buuz135.industrial.jei.sludge.SludgeRefinerRecipeCategory;
 import com.buuz135.industrial.proxy.ItemRegistry;
-import mezz.jei.api.*;
-import mezz.jei.api.ingredients.IModIngredientRegistration;
-import mezz.jei.api.recipe.IFocus;
-import mezz.jei.api.recipe.IRecipeCategoryRegistration;
+import com.buuz135.industrial.utils.Reference;
+import mezz.jei.api.IModPlugin;
+import mezz.jei.api.JeiPlugin;
+import mezz.jei.api.registration.IModIngredientRegistration;
+import mezz.jei.api.registration.IRecipeCategoryRegistration;
+import mezz.jei.api.registration.ISubtypeRegistration;
+import mezz.jei.api.runtime.IJeiRuntime;
+import mezz.jei.api.runtime.IRecipesGui;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.ResourceLocation;
 
 
-@JEIPlugin
+@JeiPlugin
 public class JEICustomPlugin implements IModPlugin {
 
     private static IRecipesGui recipesGui;
-    private static IRecipeRegistry recipeRegistry;
     private SludgeRefinerRecipeCategory sludgeRefinerRecipeCategory;
     private ReactorRecipeCategory bioReactorRecipeCategory;
     private ReactorRecipeCategory proteinReactorRecipeCategory;
@@ -58,13 +62,13 @@ public class JEICustomPlugin implements IModPlugin {
     private OreSieveCategory oreSieveCategory;
 
     public static void showUses(ItemStack stack) {
-        if (recipesGui != null && recipeRegistry != null)
-            recipesGui.show(recipeRegistry.createFocus(IFocus.Mode.INPUT, stack));
+        //if (recipesGui != null && recipeRegistry != null)
+        //    recipesGui.show(recipeRegistry.createFocus(IFocus.Mode.INPUT, stack));
     }
 
     @Override
-    public void registerItemSubtypes(ISubtypeRegistry subtypeRegistry) {
-        subtypeRegistry.useNbtForSubtypes(ItemRegistry.itemInfinityDrill);
+    public void registerItemSubtypes(ISubtypeRegistration registration) {
+        registration.useNbtForSubtypes(ItemRegistry.itemInfinityDrill);
     }
 
     @Override
@@ -126,8 +130,8 @@ public class JEICustomPlugin implements IModPlugin {
 //        }
     }
 
-    @Override
-    public void register(IModRegistry registry) {
+    //@Override
+    //public void register(IModRegistry registry) {
 //        if (BlockRegistry.sludgeRefinerBlock.isEnabled()) {
 //            int maxWeight = WeightedRandom.getTotalWeight(BlockRegistry.sludgeRefinerBlock.getItems());
 //            List<SludgeRefinerRecipeWrapper> wrapperList = new ArrayList<>();
@@ -239,11 +243,16 @@ public class JEICustomPlugin implements IModPlugin {
 //            registry.addRecipes(OreFluidEntrySieve.ORE_FLUID_SIEVE.stream().map(OreSieveWrapper::new).collect(Collectors.toList()), oreSieveCategory.getUid());
 //        }
 //        registry.addGhostIngredientHandler(GuiConveyor.class, new ConveyorGhostSlotHandler());
-    }
+    //}
 
     @Override
     public void onRuntimeAvailable(IJeiRuntime jeiRuntime) {
-        recipesGui = jeiRuntime.getRecipesGui();
-        recipeRegistry = jeiRuntime.getRecipeRegistry();
+        //recipesGui = jeiRuntime.getRecipesGui();
+        //recipeRegistry = jeiRuntime.getRecipeRegistry();
+    }
+
+    @Override
+    public ResourceLocation getPluginUid() {
+        return new ResourceLocation(Reference.MOD_ID);
     }
 }
