@@ -26,7 +26,7 @@ import com.buuz135.industrial.api.conveyor.ConveyorUpgradeFactory;
 import com.buuz135.industrial.api.conveyor.IConveyorContainer;
 import com.buuz135.industrial.gui.conveyor.ContainerConveyor;
 import com.buuz135.industrial.gui.conveyor.GuiConveyor;
-import com.buuz135.industrial.proxy.BlockRegistry;
+import com.buuz135.industrial.module.ModuleTransport;
 import com.buuz135.industrial.proxy.block.BlockConveyor;
 import com.buuz135.industrial.proxy.client.model.ConveyorModelData;
 import com.buuz135.industrial.utils.MovementUtils;
@@ -74,7 +74,7 @@ public class TileEntityConveyor extends TileActive implements IConveyorContainer
     private boolean needsFluidSync;
 
     public TileEntityConveyor() {
-        super(BlockRegistry.blockConveyor);
+        super(ModuleTransport.CONVEYOR);
         this.facing = EnumFacing.NORTH;
         this.type = BlockConveyor.EnumType.FLAT;
         this.color = 0;
@@ -330,7 +330,7 @@ public class TileEntityConveyor extends TileActive implements IConveyorContainer
 
     @Override
     public Container createContainer(InventoryPlayer inventoryPlayer, EntityPlayer entityPlayer) {
-        return new ContainerConveyor(this, BlockRegistry.blockConveyor.getFacingUpgradeHit(this.world.getBlockState(this.pos), this.world, this.pos, entityPlayer), inventoryPlayer);
+        return new ContainerConveyor(this, ModuleTransport.CONVEYOR.getFacingUpgradeHit(this.world.getBlockState(this.pos), this.world, this.pos, entityPlayer), inventoryPlayer);
     }
 
     @Nonnull

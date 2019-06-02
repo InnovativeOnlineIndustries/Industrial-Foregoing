@@ -21,8 +21,8 @@
  */
 package com.buuz135.industrial.entity;
 
+import com.buuz135.industrial.module.ModuleCore;
 import com.buuz135.industrial.proxy.CommonProxy;
-import com.buuz135.industrial.proxy.ItemRegistry;
 import net.minecraft.entity.monster.EntitySlime;
 import net.minecraft.item.Item;
 import net.minecraft.util.ResourceLocation;
@@ -44,7 +44,7 @@ public class EntityPinkSlime extends EntitySlime {
 
     @Override
     protected Item getDropItem() {
-        return this.getSlimeSize() == 1 ? ItemRegistry.pinkSlime : null;
+        return this.getSlimeSize() == 1 ? ModuleCore.PINK_SLIME : null;
     }
 
     @Nullable

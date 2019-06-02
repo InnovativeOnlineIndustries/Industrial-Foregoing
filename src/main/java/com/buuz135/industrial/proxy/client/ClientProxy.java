@@ -23,9 +23,9 @@ package com.buuz135.industrial.proxy.client;
 
 import com.buuz135.industrial.entity.EntityPinkSlime;
 import com.buuz135.industrial.item.infinity.ItemInfinityDrill;
-import com.buuz135.industrial.proxy.BlockRegistry;
+import com.buuz135.industrial.module.ModuleTool;
+import com.buuz135.industrial.module.ModuleTransport;
 import com.buuz135.industrial.proxy.CommonProxy;
-import com.buuz135.industrial.proxy.ItemRegistry;
 import com.buuz135.industrial.proxy.block.tile.TileEntityConveyor;
 import com.buuz135.industrial.proxy.client.entity.RenderPinkSlime;
 import com.buuz135.industrial.proxy.client.event.IFClientEvents;
@@ -99,7 +99,7 @@ public class ClientProxy extends CommonProxy {
                 }
             }
             return 0xFFFFFFF;
-        }, BlockRegistry.blockConveyor);
+        }, ModuleTransport.CONVEYOR);
         //Minecraft.getInstance().getItemColors().register((stack, tintIndex) -> {
         //    if (tintIndex == 1 || tintIndex == 2 || tintIndex == 3) {
         //        EntityList.EntityEggInfo info = null;
@@ -110,13 +110,13 @@ public class ClientProxy extends CommonProxy {
         //        return info == null ? 0x636363 : tintIndex == 3 ? BlockRegistry.mobDuplicatorBlock.blacklistedEntities.contains(info.spawnedID.toString()) ? 0xDB201A : 0x636363 : tintIndex == 1 ? info.primaryColor : info.secondaryColor;
         //    }
         //    return 0xFFFFFF;
-        //}, ItemRegistry.mobImprisonmentToolItem);
+        //}, ItemRegistry.MOB_IMPRISONMENT_TOOL);
         Minecraft.getInstance().getItemColors().register((stack, tintIndex) -> {
             if (tintIndex == 0) {
-                return ItemInfinityDrill.DrillTier.getTierBraquet(ItemRegistry.itemInfinityDrill.getPowerFromStack(stack)).getLeft().getTextureColor();
+                return ItemInfinityDrill.DrillTier.getTierBraquet(ModuleTool.INFINITY_DRILL.getPowerFromStack(stack)).getLeft().getTextureColor();
             }
             return 0xFFFFFF;
-        }, ItemRegistry.itemInfinityDrill);
+        }, ModuleTool.INFINITY_DRILL);
     }
 
 }

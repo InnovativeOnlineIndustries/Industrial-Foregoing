@@ -22,13 +22,6 @@
 package com.buuz135.industrial.proxy;
 
 
-import com.buuz135.industrial.proxy.block.BlockConveyor;
-import com.buuz135.industrial.proxy.client.FluidsRenderRegistry;
-import com.hrznstudio.titanium.util.TitaniumMod;
-import net.minecraft.block.Block;
-import net.minecraftforge.client.event.ModelRegistryEvent;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
-
 public class BlockRegistry {
 
     //public static IFCustomFluidBlock BLOCK_ESSENCE = new IFCustomFluidBlock(FluidsRegistry.ESSENCE, Material.WATER, entityLivingBase -> entityLivingBase.addPotionEffect(new PotionEffect(MobEffects.NIGHT_VISION, 20 * 15, 0)));
@@ -51,7 +44,6 @@ public class BlockRegistry {
     //}.setTickRandomly(true);
     //public static IFCustomFluidBlock BLOCK_PROTEIN = new IFCustomFluidBlock(FluidsRegistry.PROTEIN, Material.WATER, entityLivingBase -> entityLivingBase.addPotionEffect(new PotionEffect(MobEffects.HASTE, 20 * 3, 0)));
 
-    public static BlockConveyor blockConveyor = new BlockConveyor();
 
     public static void createRecipes() {
         //CustomOrientedBlock.blockList.forEach(CustomOrientedBlock::createRecipe);
@@ -60,7 +52,7 @@ public class BlockRegistry {
         //RecipeUtils.addShapelessRecipe(new ItemStack(blackHoleTankBlock), blackHoleTankBlock);
     }
 
-    public static void registerBlocks(TitaniumMod mod) {
+    public static void registerBlocks() {
         //mod.addBlocks(
         //        BLOCK_ESSENCE,
         //        BLOCK_MILK,
@@ -72,12 +64,6 @@ public class BlockRegistry {
         //        BLOCK_PINK_SLIME,
         //        BLOCK_PROTEIN
         //);
-        mod.addEntry(Block.class, blockConveyor);
     }
 
-    @SubscribeEvent
-    public void modelRegistryEvent(ModelRegistryEvent event) {
-        FluidsRenderRegistry.registerRender();
-        blockConveyor.registerModels();
-    }
 }

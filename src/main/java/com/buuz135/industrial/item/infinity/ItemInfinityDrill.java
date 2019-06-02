@@ -31,7 +31,6 @@ import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.gui.GuiScreen;
-import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.EnumEnchantmentType;
 import net.minecraft.entity.EntityLivingBase;
@@ -191,8 +190,12 @@ public class ItemInfinityDrill extends IFCustomItem {
     }
 
     @Override
-    public void addInformation(ItemStack stack, @Nullable World worldIn, List<ITextComponent> tooltip, ITooltipFlag flagIn) {
-        super.addInformation(stack, worldIn, tooltip, flagIn);
+    public boolean hasTooltipDetails(@Nullable Key key) {
+        return true;
+    }
+
+    @Override
+    public void addTooltipDetails(@Nullable Key key, ItemStack stack, List<ITextComponent> tooltip, boolean advanced) {
         long power = getPowerFromStack(stack);
         Pair<DrillTier, DrillTier> braquet = DrillTier.getTierBraquet(power);
         DrillTier current = getSelectedDrillTier(stack);

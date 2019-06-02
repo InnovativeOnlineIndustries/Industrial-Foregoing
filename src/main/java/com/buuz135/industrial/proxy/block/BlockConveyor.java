@@ -23,9 +23,8 @@ package com.buuz135.industrial.proxy.block;
 
 import com.buuz135.industrial.IndustrialForegoing;
 import com.buuz135.industrial.api.conveyor.ConveyorUpgrade;
-import com.buuz135.industrial.proxy.ItemRegistry;
+import com.buuz135.industrial.module.ModuleCore;
 import com.buuz135.industrial.proxy.block.tile.TileEntityConveyor;
-import com.buuz135.industrial.proxy.client.render.FluidConveyorTESR;
 import com.buuz135.industrial.utils.RayTraceUtils;
 import com.hrznstudio.titanium.api.IFactory;
 import com.hrznstudio.titanium.api.raytrace.DistanceRayTraceResult;
@@ -61,7 +60,6 @@ import net.minecraft.world.IWorldReaderBase;
 import net.minecraft.world.World;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
-import net.minecraftforge.fml.client.registry.ClientRegistry;
 
 import javax.annotation.Nullable;
 import java.util.ArrayList;
@@ -79,12 +77,6 @@ public class BlockConveyor extends BlockTileBase<TileEntityConveyor> {
         super("conveyor", Properties.create(Material.ANVIL, MaterialColor.ADOBE).doesNotBlockMovement().hardnessAndResistance(2.0f), TileEntityConveyor.class);
         this.setDefaultState(this.getDefaultState().with(FACING, EnumFacing.NORTH).with(SIDES, EnumSides.NONE));
         this.item = new ConveyorItem(this);
-    }
-
-    @OnlyIn(Dist.CLIENT)
-    @Override
-    public void registerModels() {
-        ClientRegistry.bindTileEntitySpecialRenderer(TileEntityConveyor.class, new FluidConveyorTESR());
     }
 
     @OnlyIn(Dist.CLIENT)
@@ -254,7 +246,7 @@ public class BlockConveyor extends BlockTileBase<TileEntityConveyor> {
                 drops.add(new ItemStack(Items.GLOWSTONE_DUST, 1));
             }
             if (((TileEntityConveyor) entity).isSticky()) {
-                drops.add(new ItemStack(ItemRegistry.plastic, 1));
+                drops.add(new ItemStack(ModuleCore.PLASTIC, 1));
             }
         }
     }
@@ -310,7 +302,7 @@ public class BlockConveyor extends BlockTileBase<TileEntityConveyor> {
                             handStack.shrink(1);
                             return true;
                         }
-                        if (handStack.getItem().equals(ItemRegistry.plastic) && !((TileEntityConveyor) tileEntity).isSticky()) {
+                    if (handStack.getItem().equals(ModuleCore.PLASTIC) && !((TileEntityConveyor) tileEntity).isSticky()) {
                             ((TileEntityConveyor) tileEntity).setSticky(true);
                             handStack.shrink(1);
                             return true;

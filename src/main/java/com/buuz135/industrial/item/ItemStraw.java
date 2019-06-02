@@ -26,7 +26,6 @@ import com.buuz135.industrial.utils.StrawUtils;
 import net.minecraft.block.Block;
 import net.minecraft.block.IBucketPickupHandler;
 import net.minecraft.block.state.IBlockState;
-import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.fluid.IFluidState;
@@ -42,8 +41,6 @@ import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TextComponentString;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.World;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -157,9 +154,13 @@ public class ItemStraw extends IFCustomItem {
     }
 
     @Override
-    @OnlyIn(Dist.CLIENT)
-    public void addInformation(ItemStack stack, @Nullable World worldIn, List<ITextComponent> tooltip, ITooltipFlag flagIn) {
-        super.addInformation(stack, worldIn, tooltip, flagIn);
+    public boolean hasTooltipDetails(@Nullable Key key) {
+        return true;
+    }
+
+    @Override
+    public void addTooltipDetails(@Nullable Key key, ItemStack stack, List<ITextComponent> tooltip, boolean advanced) {
+        super.addTooltipDetails(key, stack, tooltip, advanced);
         tooltip.add(new TextComponentString(TextFormatting.GRAY + "\"The One Who Codes\""));
     }
 }

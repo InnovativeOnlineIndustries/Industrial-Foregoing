@@ -21,7 +21,7 @@
  */
 package com.buuz135.industrial.item.infinity;
 
-import com.buuz135.industrial.proxy.ItemRegistry;
+import com.buuz135.industrial.module.ModuleTool;
 import com.buuz135.industrial.proxy.client.particle.ParticleVex;
 import com.buuz135.industrial.utils.Reference;
 import net.minecraft.client.Minecraft;
@@ -73,7 +73,7 @@ public class OneThreeFiveHandler {
         if (event.phase == TickEvent.Phase.END) return;
         if (event.player.world.getGameTime() % 20 == 0) {
             for (ItemStack stack : event.player.inventory.mainInventory) {
-                if (stack.getItem().equals(ItemRegistry.itemInfinityDrill) && ItemRegistry.itemInfinityDrill.isSpecial(stack)) {
+                if (stack.getItem().equals(ModuleTool.INFINITY_DRILL) && ModuleTool.INFINITY_DRILL.isSpecial(stack)) {
                     /*IndustrialForegoing.NETWORK.sendToAllAround(new SpecialParticleMessage(event.player.getUniqueID()), new NetworkRegistry.TargetPoint(event.player.dimension,
                             event.player.posX, event.player.posY, event.player.posZ, 64));*/
                     return;
@@ -86,7 +86,7 @@ public class OneThreeFiveHandler {
     public static void onEntityKill(LivingDeathEvent event) {
         if (event.getEntityLiving().getUniqueID().toString().contains(SPECIAL) && event.getSource().getTrueSource() instanceof EntityPlayer && !(event.getSource().getTrueSource() instanceof FakePlayer)) {
             EntityPlayer player = (EntityPlayer) event.getSource().getTrueSource();
-            if (player.getHeldItemMainhand().getItem().equals(ItemRegistry.itemInfinityDrill)) {
+            if (player.getHeldItemMainhand().getItem().equals(ModuleTool.INFINITY_DRILL)) {
                 player.getHeldItemMainhand().getTag().setBoolean("Special", true);
             }
         }

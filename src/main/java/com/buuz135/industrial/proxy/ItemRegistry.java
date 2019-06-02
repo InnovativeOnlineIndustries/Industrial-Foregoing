@@ -21,55 +21,16 @@
  */
 package com.buuz135.industrial.proxy;
 
-import com.buuz135.industrial.api.conveyor.ConveyorUpgradeFactory;
-import com.buuz135.industrial.item.*;
-import com.buuz135.industrial.item.infinity.ItemInfinityDrill;
-import com.buuz135.industrial.proxy.block.upgrade.*;
-import com.buuz135.industrial.utils.RecipeUtils;
-import com.hrznstudio.titanium.util.TitaniumMod;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-
-
 public class ItemRegistry {
 
-    public static MeatFeederItem meatFeederItem;
-    public static MobImprisonmentToolItem mobImprisonmentToolItem;
-    public static IFCustomItem tinyDryRubber;
-    public static IFCustomItem dryRubber;
-    public static IFCustomItem plastic;
-    public static FertilizerItem fertilizer;
-    public static IFCustomItem pinkSlime;
-    public static BookManualItem bookManualItem;
-    public static IFCustomItem pinkSlimeIngot;
-    public static ItemStraw strawItem;
-    public static ItemArtificalDye[] dyes;
-    public static ItemInfinityDrill itemInfinityDrill;
 
-    public static ConveyorUpgradeFactory upgrade_extraction = new ConveyorExtractionUpgrade.Factory();
-    public static ConveyorUpgradeFactory upgrade_insertion = new ConveyorInsertionUpgrade.Factory();
-    public static ConveyorUpgradeFactory upgrade_detector = new ConveyorDetectorUpgrade.Factory();
-    public static ConveyorUpgradeFactory upgrade_bouncing = new ConveyorBouncingUpgrade.Factory();
-    public static ConveyorUpgradeFactory upgrade_dropping = new ConveyorDroppingUpgrade.Factory();
-    public static ConveyorUpgradeFactory upgrade_blinking = new ConveyorBlinkingUpgrade.Factory();
-    public static ConveyorUpgradeFactory upgrade_splitting = new ConveyorSplittingUpgrade.Factory();
+    public static void registerItems() {
 
-    public static void registerItems(TitaniumMod mod) {
-        mod.addEntry(Item.class, tinyDryRubber = new IFCustomItem("tinydryrubber"));
-        mod.addEntry(Item.class, dryRubber = new IFCustomItem("dryrubber"));
-        RecipeUtils.addShapelessRecipe(new ItemStack(dryRubber), new ItemStack(tinyDryRubber), new ItemStack(tinyDryRubber), new ItemStack(tinyDryRubber), new ItemStack(tinyDryRubber), new ItemStack(tinyDryRubber), new ItemStack(tinyDryRubber), new ItemStack(tinyDryRubber), new ItemStack(tinyDryRubber), new ItemStack(tinyDryRubber));
-        mod.addEntry(Item.class, plastic = new IFCustomItem("plastic"));
+        //RecipeUtils.addShapelessRecipe(new ItemStack(dryRubber), new ItemStack(tinyDryRubber), new ItemStack(tinyDryRubber), new ItemStack(tinyDryRubber), new ItemStack(tinyDryRubber), new ItemStack(tinyDryRubber), new ItemStack(tinyDryRubber), new ItemStack(tinyDryRubber), new ItemStack(tinyDryRubber), new ItemStack(tinyDryRubber));
+
 //        GameRegistry.addSmelting(dryRubber, new ItemStack(plastic), 0);
-        mod.addEntry(Item.class, fertilizer = new FertilizerItem());
-        mod.addEntry(Item.class, meatFeederItem = new MeatFeederItem());
-        mod.addEntry(Item.class, mobImprisonmentToolItem = new MobImprisonmentToolItem());
-        mod.addEntry(Item.class, strawItem = new ItemStraw());
-        //mod.addEntry(conveyorUpgradeItem = new ItemConveyorUpgrade());
-        mod.addEntry(Item.class, pinkSlime = new IFCustomItem("pink_slime"));
-        mod.addEntry(Item.class, bookManualItem = new BookManualItem());
-        mod.addEntry(Item.class, pinkSlimeIngot = new IFCustomItem("pink_slime_ingot"));
-        mod.addEntry(Item.class, itemInfinityDrill = new ItemInfinityDrill());
-        ConveyorUpgradeFactory.FACTORIES.forEach(conveyorUpgradeFactory -> mod.addEntry(Item.class, new ItemConveyorUpgrade(conveyorUpgradeFactory)));
+
+
 //        mod.addEntry(adultFilterAddomItem = new AdultFilterAddonItem());
 //        mod.addEntry(rangeAddonItem = new RangeAddonItem());
 //        mod.addEntry(energyFieldAddon = new EnergyFieldAddon());
@@ -101,10 +62,10 @@ public class ItemRegistry {
     }
 
     public static void createRecipes() {
-        meatFeederItem.createRecipe();
-        mobImprisonmentToolItem.createRecipe();
-        bookManualItem.createRecipe();
-        itemInfinityDrill.createRecipe();
+        //meatFeederItem.createRecipe();
+        //mobImprisonmentToolItem.createRecipe();
+        //bookManualItem.createRecipe();
+        //itemInfinityDrill.createRecipe();
 //        RecipeUtils.addShapedRecipe(new ItemStack(conveyorUpgradeItem, 1, 0), "ipi", "idi", "ici",
 //                'i', "ingotIron",
 //                'p', plastic,

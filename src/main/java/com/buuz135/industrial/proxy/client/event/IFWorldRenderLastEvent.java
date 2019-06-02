@@ -21,7 +21,7 @@
  */
 package com.buuz135.industrial.proxy.client.event;
 
-import com.buuz135.industrial.proxy.ItemRegistry;
+import com.buuz135.industrial.module.ModuleCore;
 import com.buuz135.industrial.utils.Reference;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.EntityPlayerSP;
@@ -37,7 +37,7 @@ public class IFWorldRenderLastEvent {
     @SubscribeEvent
     public void onRender(RenderGameOverlayEvent.Post event) {
         EntityPlayerSP playerIn = Minecraft.getInstance().player;
-        if (!playerIn.getHeldItemMainhand().getItem().equals(ItemRegistry.bookManualItem) || Minecraft.getInstance().currentScreen != null)
+        if (!playerIn.getHeldItemMainhand().getItem().equals(ModuleCore.BOOK_MANUAL) || Minecraft.getInstance().currentScreen != null)
             return;
         float f = playerIn.rotationPitch;
         float f1 = playerIn.rotationYaw;

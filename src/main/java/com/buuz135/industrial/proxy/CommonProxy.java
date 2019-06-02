@@ -22,6 +22,8 @@
 package com.buuz135.industrial.proxy;
 
 import com.buuz135.industrial.api.recipe.LaserDrillEntry;
+import com.buuz135.industrial.proxy.block.tile.TileEntityConveyor;
+import com.buuz135.industrial.proxy.client.render.FluidConveyorTESR;
 import com.buuz135.industrial.proxy.event.FakePlayerRideEntityHandler;
 import com.buuz135.industrial.proxy.event.MeatFeederTickHandler;
 import com.buuz135.industrial.proxy.event.MobDeathHandler;
@@ -47,6 +49,7 @@ import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.storage.loot.LootTableList;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.crafting.CraftingHelper;
+import net.minecraftforge.fml.client.registry.ClientRegistry;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
@@ -95,6 +98,7 @@ public class CommonProxy {
 
         CraftingHelper.register(new ResourceLocation(Reference.MOD_ID, "configuration_value"), new ConfigurationConditionFactory());
         random = new Random();
+        ClientRegistry.bindTileEntitySpecialRenderer(TileEntityConveyor.class, new FluidConveyorTESR());
 
         FluidsRegistry.registerFluids();
 

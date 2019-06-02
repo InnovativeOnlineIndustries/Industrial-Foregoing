@@ -21,14 +21,17 @@
  */
 package com.buuz135.industrial;
 
-import com.buuz135.industrial.proxy.BlockRegistry;
+import com.buuz135.industrial.module.ModuleCore;
+import com.buuz135.industrial.module.ModuleTool;
+import com.buuz135.industrial.module.ModuleTransport;
 import com.buuz135.industrial.proxy.CommonProxy;
-import com.buuz135.industrial.proxy.ItemRegistry;
 import com.buuz135.industrial.proxy.client.ClientProxy;
 import com.buuz135.industrial.utils.IFFakePlayer;
 import com.buuz135.industrial.utils.Reference;
+import com.hrznstudio.titanium.event.handler.EventManager;
+import com.hrznstudio.titanium.module.Module;
+import com.hrznstudio.titanium.module.ModuleController;
 import com.hrznstudio.titanium.tab.AdvancedTitaniumTab;
-import com.hrznstudio.titanium.util.TitaniumMod;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldServer;
@@ -44,7 +47,7 @@ import java.util.HashMap;
 
 //@Mod(modid = Reference.MOD_ID, name = Reference.MOD_ID, version = Reference.VERSION, dependencies = "required-after:forge@[14.23.1.2594,);required-after:teslacorelib@[1.0.15,);", guiFactory = Reference.GUI_FACTORY, updateJSON = "https://raw.githubusercontent.com/Buuz135/Industrial-Foregoing/master/update.json")
 @Mod(Reference.MOD_ID)
-public class IndustrialForegoing extends TitaniumMod {
+public class IndustrialForegoing extends ModuleController {
 
     public static AdvancedTitaniumTab creativeTab = new AdvancedTitaniumTab(Reference.MOD_ID, true);
     public static IndustrialForegoing instance;
@@ -57,8 +60,24 @@ public class IndustrialForegoing extends TitaniumMod {
 
     public IndustrialForegoing() {
        proxy = DistExecutor.runForDist(()-> ClientProxy::new,()->CommonProxy::new);
-        BlockRegistry.registerBlocks(this);
-        ItemRegistry.registerItems(this);
+        EventManager.create(FMLCommonSetupEvent.class, EventManager.Bus.FORGE).process(fmlCommonSetupEvent -> proxy.run()).subscribe();
+        EventManager.create(FMLClientSetupEvent.class, EventManager.Bus.FORGE).process(fmlCommonSetupEvent -> proxy.run()).subscribe();
+        EventManager.create(FMLServerStartingEvent.class, EventManager.Bus.FORGE).process(fmlServerStartingEvent -> worldFakePlayer.clear()).subscribe();
+    }
+
+    @Override
+    protected void initModules() {
+        Module.Builder core = Module.builder("core").description("Module for all the Industrial Foregoing basic features");
+        new ModuleCore().generateFeatures().forEach(core::feature);
+        addModule(core);
+
+        Module.Builder tool = Module.builder("tools").description("A collection of Industrial Foregoing tools");
+        new ModuleTool().generateFeatures().forEach(tool::feature);
+        addModule(tool);
+
+        Module.Builder transport = Module.builder("transport").description("All the Industrial Foregoing tools that allow of transport of things");
+        new ModuleTransport().generateFeatures().forEach(transport::feature);
+        addModule(transport);
     }
 
     public static FakePlayer getFakePlayer(World world) {
@@ -78,18 +97,4 @@ public class IndustrialForegoing extends TitaniumMod {
         return player;
     }
 
-    @EventReceiver
-    public void onCommon(FMLCommonSetupEvent event) {
-        proxy.run();
-    }
-
-    @EventReceiver
-    public void onClient(FMLClientSetupEvent event) {
-        proxy.run();
-    }
-
-    @EventReceiver
-    public void serverStart(FMLServerStartingEvent event) {
-        worldFakePlayer.clear();
-    }
 }

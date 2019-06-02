@@ -21,9 +21,8 @@
  */
 package com.buuz135.industrial.item;
 
-import com.buuz135.industrial.proxy.ItemRegistry;
+import com.buuz135.industrial.module.ModuleCore;
 import com.buuz135.industrial.utils.RecipeUtils;
-import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.EntityLivingBase;
@@ -97,8 +96,13 @@ public class MobImprisonmentToolItem extends IFCustomItem {
     }
 
     @Override
-    public void addInformation(ItemStack stack, @Nullable World worldIn, List<ITextComponent> tooltip, ITooltipFlag flagIn) {
-        super.addInformation(stack, worldIn, tooltip, flagIn);
+    public boolean hasTooltipDetails(@Nullable Key key) {
+        return true;
+    }
+
+    @Override
+    public void addTooltipDetails(@Nullable Key key, ItemStack stack, List<ITextComponent> tooltip, boolean advanced) {
+        super.addTooltipDetails(key, stack, tooltip, advanced);
         if (containsEntity(stack)) {
             tooltip.add(new TextComponentString("Mob: " + getID(stack)));//new TextComponentTranslation(EntityList.getTranslationName(new ResourceLocation(getID(stack)))).getUnformattedComponentText());
             tooltip.add(new TextComponentString("Health: " + stack.getTag().getDouble("Health")));
@@ -118,7 +122,7 @@ public class MobImprisonmentToolItem extends IFCustomItem {
     }
 
     public void createRecipe() {
-        RecipeUtils.addShapedRecipe(new ItemStack(this), " p ", "pgp", " p ", 'p', ItemRegistry.plastic, 'g',
+        RecipeUtils.addShapedRecipe(new ItemStack(this), " p ", "pgp", " p ", 'p', ModuleCore.PLASTIC, 'g',
                 new ItemStack(Items.GHAST_TEAR));
     }
 

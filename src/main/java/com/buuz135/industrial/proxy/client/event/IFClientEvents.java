@@ -23,7 +23,7 @@ package com.buuz135.industrial.proxy.client.event;
 
 import com.buuz135.industrial.api.conveyor.ConveyorUpgradeFactory;
 import com.buuz135.industrial.item.infinity.ItemInfinityDrill;
-import com.buuz135.industrial.proxy.ItemRegistry;
+import com.buuz135.industrial.module.ModuleTool;
 import com.buuz135.industrial.proxy.block.BlockConveyor;
 import com.buuz135.industrial.proxy.client.model.ConveyorBlockModel;
 import com.buuz135.industrial.utils.Reference;
@@ -118,12 +118,12 @@ public class IFClientEvents {
             GlStateManager.enableTexture2D();
             GlStateManager.disableBlend();
         }
-        if (hit.type == RayTraceResult.Type.BLOCK && event.getPlayer().getHeldItemMainhand().getItem().equals(ItemRegistry.itemInfinityDrill)) {
+        if (hit.type == RayTraceResult.Type.BLOCK && event.getPlayer().getHeldItemMainhand().getItem().equals(ModuleTool.INFINITY_DRILL)) {
             event.setCanceled(true);
             ItemStack hand = event.getPlayer().getHeldItemMainhand();
-            ItemInfinityDrill.DrillTier tier = ItemRegistry.itemInfinityDrill.getSelectedDrillTier(hand);
+            ItemInfinityDrill.DrillTier tier = ModuleTool.INFINITY_DRILL.getSelectedDrillTier(hand);
             World world = event.getPlayer().world;
-            Pair<BlockPos, BlockPos> area = ItemRegistry.itemInfinityDrill.getArea(event.getTarget().getBlockPos(), event.getTarget().sideHit, tier, false);
+            Pair<BlockPos, BlockPos> area = ModuleTool.INFINITY_DRILL.getArea(event.getTarget().getBlockPos(), event.getTarget().sideHit, tier, false);
             GlStateManager.enableBlend();
             GlStateManager.blendFuncSeparate(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA,
                     GlStateManager.SourceFactor.ONE, GlStateManager.DestFactor.ZERO);
@@ -150,9 +150,9 @@ public class IFClientEvents {
     public void onRenderPre(RenderPlayerEvent.Pre event) {
         if (event.getEntityPlayer().getUniqueID().equals(Minecraft.getInstance().player.getUniqueID()) && Minecraft.getInstance().gameSettings.thirdPersonView == 0)
             return;
-        if (event.getEntityPlayer().getHeldItem(EnumHand.MAIN_HAND).getItem().equals(ItemRegistry.itemInfinityDrill))
+        if (event.getEntityPlayer().getHeldItem(EnumHand.MAIN_HAND).getItem().equals(ModuleTool.INFINITY_DRILL))
             event.getEntityPlayer().setActiveHand(EnumHand.MAIN_HAND);
-        else if (event.getEntityPlayer().getHeldItem(EnumHand.OFF_HAND).getItem().equals(ItemRegistry.itemInfinityDrill))
+        else if (event.getEntityPlayer().getHeldItem(EnumHand.OFF_HAND).getItem().equals(ModuleTool.INFINITY_DRILL))
             event.getEntityPlayer().setActiveHand(EnumHand.OFF_HAND);
     }
 }

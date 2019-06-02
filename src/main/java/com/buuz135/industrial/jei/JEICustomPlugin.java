@@ -32,7 +32,7 @@ import com.buuz135.industrial.jei.ore.OreWasherCategory;
 import com.buuz135.industrial.jei.petrifiedgen.PetrifiedBurnTimeCategory;
 import com.buuz135.industrial.jei.reactor.ReactorRecipeCategory;
 import com.buuz135.industrial.jei.sludge.SludgeRefinerRecipeCategory;
-import com.buuz135.industrial.proxy.ItemRegistry;
+import com.buuz135.industrial.module.ModuleTool;
 import com.buuz135.industrial.utils.Reference;
 import mezz.jei.api.IModPlugin;
 import mezz.jei.api.JeiPlugin;
@@ -68,7 +68,7 @@ public class JEICustomPlugin implements IModPlugin {
 
     @Override
     public void registerItemSubtypes(ISubtypeRegistration registration) {
-        registration.useNbtForSubtypes(ItemRegistry.itemInfinityDrill);
+        registration.useNbtForSubtypes(ModuleTool.INFINITY_DRILL);
     }
 
     @Override

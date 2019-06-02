@@ -22,7 +22,7 @@
 package com.buuz135.industrial.proxy.event;
 
 import com.buuz135.industrial.item.MeatFeederItem;
-import com.buuz135.industrial.proxy.ItemRegistry;
+import com.buuz135.industrial.module.ModuleTool;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.event.entity.living.LivingEvent;
@@ -46,7 +46,7 @@ public class MeatFeederTickHandler {
             EntityPlayer player = (EntityPlayer) event.getEntityLiving();
             if (player.getFoodStats().needFood() || player.getFoodStats().getSaturationLevel() < 10) {
                 for (ItemStack stack : player.inventory.mainInventory) {
-                    if (stack.getItem().equals(ItemRegistry.meatFeederItem)) {
+                    if (stack.getItem().equals(ModuleTool.MEAT_FEEDER)) {
                         meatTick(stack, (EntityPlayer) event.getEntityLiving());
                     }
                 }

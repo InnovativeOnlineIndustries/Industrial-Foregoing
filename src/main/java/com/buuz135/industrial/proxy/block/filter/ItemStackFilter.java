@@ -21,7 +21,7 @@
  */
 package com.buuz135.industrial.proxy.block.filter;
 
-import com.buuz135.industrial.proxy.ItemRegistry;
+import com.buuz135.industrial.module.ModuleTool;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.item.EntityItem;
@@ -51,8 +51,8 @@ public class ItemStackFilter extends AbstractFilter<Entity> {
         for (GhostSlot stack : this.getFilter()) {
             if (entity instanceof EntityItem && stack.getStack().isItemEqual(((EntityItem) entity).getItem()))
                 return true;
-            if (entity instanceof EntityLiving && stack.getStack().getItem().equals(ItemRegistry.mobImprisonmentToolItem) && ItemRegistry.mobImprisonmentToolItem.containsEntity(stack.getStack())
-                    && entity.getType().getRegistryName().toString().equalsIgnoreCase(ItemRegistry.mobImprisonmentToolItem.getID(stack.getStack()))) {
+            if (entity instanceof EntityLiving && stack.getStack().getItem().equals(ModuleTool.MOB_IMPRISONMENT_TOOL) && ModuleTool.MOB_IMPRISONMENT_TOOL.containsEntity(stack.getStack())
+                    && entity.getType().getRegistryName().toString().equalsIgnoreCase(ModuleTool.MOB_IMPRISONMENT_TOOL.getID(stack.getStack()))) {
                 return true;
             }
         }
