@@ -75,7 +75,7 @@ repositories {
 
 dependencies {
     minecraft 'net.minecraftforge:forge:1.13.2-25.0.216'
-    compile fg.deobf('com.hrznstudio:titanium:2.1.25')
+    compile fg.deobf('com.hrznstudio:titanium:2.1.26')
     compileOnly 'org.projectlombok:lombok:1.16.16'
     // compile against the JEI API but do not include it at runtime
     compileOnly fg.deobf("mezz.jei:jei-${minecraft_version}:${jei_version}:api")

@@ -318,9 +318,6 @@ public class TileEntityConveyor extends TileActive implements IConveyorContainer
             markForUpdate();
             this.needsFluidSync = false;
         }
-        if (world.isRemote() && world.getGameTime() % 20 * 20 * 60 == 0) { //TODO Remove this when forge fix
-            ModelDataManager.requestModelDataRefresh(this);
-        }
     }
 
     @Override

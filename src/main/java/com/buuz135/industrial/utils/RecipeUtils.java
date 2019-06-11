@@ -203,6 +203,7 @@ public class RecipeUtils {
     }
 
     public static void generateConstants() {
+        setupDir();
         if (!RECIPE_DIR.exists()) return;
         List<Map<String, Object>> json = new ArrayList<>();
         for (String s : USED_OD_NAMES) {

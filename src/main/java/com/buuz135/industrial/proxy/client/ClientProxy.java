@@ -21,35 +21,22 @@
  */
 package com.buuz135.industrial.proxy.client;
 
-import com.buuz135.industrial.entity.EntityPinkSlime;
-import com.buuz135.industrial.item.infinity.ItemInfinityDrill;
-import com.buuz135.industrial.module.ModuleTool;
-import com.buuz135.industrial.module.ModuleTransport;
 import com.buuz135.industrial.proxy.CommonProxy;
-import com.buuz135.industrial.proxy.block.tile.TileEntityConveyor;
-import com.buuz135.industrial.proxy.client.entity.RenderPinkSlime;
 import com.buuz135.industrial.proxy.client.event.IFClientEvents;
 import com.buuz135.industrial.proxy.client.event.IFTooltipEvent;
 import com.buuz135.industrial.proxy.client.event.IFWorldRenderLastEvent;
-import com.buuz135.industrial.proxy.client.render.ContributorsCatEarsRender;
 import com.buuz135.industrial.utils.FluidUtils;
 import com.buuz135.industrial.utils.Reference;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.entity.RenderManager;
-import net.minecraft.client.renderer.entity.RenderPlayer;
 import net.minecraft.client.renderer.model.IBakedModel;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
-import net.minecraft.item.EnumDyeColor;
 import net.minecraft.resources.IReloadableResourceManager;
-import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.client.model.IModel;
 import net.minecraftforge.client.model.ModelLoader;
 import net.minecraftforge.client.model.obj.OBJLoader;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.model.TRSRTransformation;
-
-import java.util.Map;
 
 public class ClientProxy extends CommonProxy {
 
@@ -60,7 +47,6 @@ public class ClientProxy extends CommonProxy {
 
     @Override
     public void run() {
-        super.run();
 
         OBJLoader.INSTANCE.addDomain(Reference.MOD_ID);
 
@@ -74,12 +60,12 @@ public class ClientProxy extends CommonProxy {
         } catch (Exception e) {
             e.printStackTrace();
         }
-        RenderManager manager = Minecraft.getInstance().getRenderManager();
-        Map<String, RenderPlayer> map = manager.getSkinMap();
-        map.get("default").addLayer(new ContributorsCatEarsRender());
-        map.get("slim").addLayer(new ContributorsCatEarsRender());
+        //RenderManager manager = Minecraft.getInstance().getRenderManager();
+        //Map<String, RenderPlayer> map = manager.getSkinMap();
+        //map.get("default").addLayer(new ContributorsCatEarsRender());
+        //map.get("slim").addLayer(new ContributorsCatEarsRender());
 
-        manager.entityRenderMap.put(EntityPinkSlime.class, new RenderPinkSlime(manager));
+        //manager.entityRenderMap.put(EntityPinkSlime.class, new RenderPinkSlime(manager));
 
         ((IReloadableResourceManager) Minecraft.getInstance().getResourceManager()).addReloadListener(resourceManager -> FluidUtils.colorCache.clear());
 
@@ -91,15 +77,15 @@ public class ClientProxy extends CommonProxy {
         //    }
         //    return 0xFFFFFF;
         //}, BlockRegistry.blockConveyor.getItem());
-        Minecraft.getInstance().getBlockColors().register((state, worldIn, pos, tintIndex) -> {
-            if (tintIndex == 0) {
-                TileEntity entity = worldIn.getTileEntity(pos);
-                if (entity instanceof TileEntityConveyor) {
-                    return EnumDyeColor.byId(((TileEntityConveyor) entity).getColor()).func_196060_f();
-                }
-            }
-            return 0xFFFFFFF;
-        }, ModuleTransport.CONVEYOR);
+        //Minecraft.getInstance().getBlockColors().register((state, worldIn, pos, tintIndex) -> {
+        //    if (tintIndex == 0) {
+        //        TileEntity entity = worldIn.getTileEntity(pos);
+        //        if (entity instanceof TileEntityConveyor) {
+        //            return EnumDyeColor.byId(((TileEntityConveyor) entity).getColor()).func_196060_f();
+        //        }
+        //    }
+        //    return 0xFFFFFFF;
+        //}, ModuleTransport.CONVEYOR);
         //Minecraft.getInstance().getItemColors().register((stack, tintIndex) -> {
         //    if (tintIndex == 1 || tintIndex == 2 || tintIndex == 3) {
         //        EntityList.EntityEggInfo info = null;
@@ -111,12 +97,12 @@ public class ClientProxy extends CommonProxy {
         //    }
         //    return 0xFFFFFF;
         //}, ItemRegistry.MOB_IMPRISONMENT_TOOL);
-        Minecraft.getInstance().getItemColors().register((stack, tintIndex) -> {
-            if (tintIndex == 0) {
-                return ItemInfinityDrill.DrillTier.getTierBraquet(ModuleTool.INFINITY_DRILL.getPowerFromStack(stack)).getLeft().getTextureColor();
-            }
-            return 0xFFFFFF;
-        }, ModuleTool.INFINITY_DRILL);
+        //Minecraft.getInstance().getItemColors().register((stack, tintIndex) -> {
+        //    if (tintIndex == 0) {
+        //        return ItemInfinityDrill.DrillTier.getTierBraquet(ModuleTool.INFINITY_DRILL.getPowerFromStack(stack)).getLeft().getTextureColor();
+        //    }
+        //    return 0xFFFFFF;
+        //}, ModuleTool.INFINITY_DRILL);
     }
 
 }

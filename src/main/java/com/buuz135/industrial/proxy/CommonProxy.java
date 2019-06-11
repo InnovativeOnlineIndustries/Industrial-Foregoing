@@ -28,8 +28,6 @@ import com.buuz135.industrial.proxy.event.FakePlayerRideEntityHandler;
 import com.buuz135.industrial.proxy.event.MeatFeederTickHandler;
 import com.buuz135.industrial.proxy.event.MobDeathHandler;
 import com.buuz135.industrial.proxy.event.SkullHandler;
-import com.buuz135.industrial.proxy.network.ConveyorButtonInteractMessage;
-import com.buuz135.industrial.proxy.network.ConveyorSplittingSyncEntityMessage;
 import com.buuz135.industrial.proxy.network.SpecialParticleMessage;
 import com.buuz135.industrial.registry.IFRegistries;
 import com.buuz135.industrial.utils.CraftingUtils;
@@ -109,8 +107,6 @@ public class CommonProxy {
         MinecraftForge.EVENT_BUS.register(new FakePlayerRideEntityHandler());
         MinecraftForge.EVENT_BUS.register(new SkullHandler());
 
-        NetworkHandler.registerMessage(ConveyorButtonInteractMessage.class);
-        NetworkHandler.registerMessage(ConveyorSplittingSyncEntityMessage.class);
         NetworkHandler.registerMessage(SpecialParticleMessage.class);
 
 //        CustomConfiguration.config = new Configuration(event.getSuggestedConfigurationFile());

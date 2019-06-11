@@ -22,8 +22,8 @@
 package com.buuz135.industrial.proxy.client.model;
 
 import com.buuz135.industrial.api.conveyor.ConveyorUpgrade;
+import com.buuz135.industrial.module.ModuleTransport;
 import com.buuz135.industrial.proxy.block.BlockConveyor;
-import com.buuz135.industrial.proxy.client.event.IFClientEvents;
 import com.google.common.cache.Cache;
 import com.google.common.cache.CacheBuilder;
 import net.minecraft.block.state.IBlockState;
@@ -78,7 +78,7 @@ public class ConveyorBlockModel implements IDynamicBakedModel {
                 List<BakedQuad> upgradeQuads = CACHE.getIfPresent(Pair.of(Pair.of(upgrade.getFactory().getRegistryName().toString(), Pair.of(upgrade.getSide(), state.get(BlockConveyor.FACING))), side));
                 if (upgradeQuads == null) {
                     try {
-                        IBakedModel model = IFClientEvents.CONVEYOR_UPGRADES_CACHE.get(upgrade.getFactory().getModel(upgrade.getSide(), state.get(BlockConveyor.FACING)));
+                        IBakedModel model = ModuleTransport.CONVEYOR_UPGRADES_CACHE.get(upgrade.getFactory().getModel(upgrade.getSide(), state.get(BlockConveyor.FACING)));
                         upgradeQuads = model.getQuads(state, side, rand, extraData);
                     } catch (Exception e) {
                         e.printStackTrace();
