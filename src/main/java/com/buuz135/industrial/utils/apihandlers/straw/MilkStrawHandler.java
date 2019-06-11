@@ -22,10 +22,10 @@
 package com.buuz135.industrial.utils.apihandlers.straw;
 
 import com.buuz135.industrial.proxy.FluidsRegistry;
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.fluid.Fluid;
-import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.Items;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
@@ -39,7 +39,7 @@ public class MilkStrawHandler extends StrawHandlerBase {
     }
 
     @Override
-    public void onDrink(World world, BlockPos pos, Fluid stack, EntityPlayer player, boolean fromFluidContainer) {
+    public void onDrink(World world, BlockPos pos, Fluid stack, PlayerEntity player, boolean fromFluidContainer) {
         player.curePotionEffects(new ItemStack(Items.MILK_BUCKET));
     }
 }

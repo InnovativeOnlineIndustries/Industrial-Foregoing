@@ -39,7 +39,7 @@ compileJava {
 }
 
 minecraft {
-    mappings channel: 'snapshot', version: '20180921-1.13'
+    mappings channel: 'snapshot', version: '20190609-1.14.2'
     runs {
         client = {
             // recommended logging data for a userdev environment
@@ -74,13 +74,13 @@ repositories {
 }
 
 dependencies {
-    minecraft 'net.minecraftforge:forge:1.13.2-25.0.216'
-    compile fg.deobf('com.hrznstudio:titanium:2.1.26')
+    minecraft 'net.minecraftforge:forge:1.14.2-26.0.16'
+    compile fg.deobf('com.hrznstudio:titanium:2.1.31')
     compileOnly 'org.projectlombok:lombok:1.16.16'
     // compile against the JEI API but do not include it at runtime
     compileOnly fg.deobf("mezz.jei:jei-${minecraft_version}:${jei_version}:api")
     // at runtime, use the full JEI jar
-    runtimeOnly fg.deobf("mezz.jei:jei-${minecraft_version}:${jei_version}")
+    //runtimeOnly fg.deobf("mezz.jei:jei-${minecraft_version}:${jei_version}")
 }
 
 afterEvaluate {

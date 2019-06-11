@@ -26,7 +26,7 @@ import com.buuz135.industrial.module.ModuleTransport;
 import com.buuz135.industrial.proxy.block.BlockConveyor;
 import com.google.common.cache.Cache;
 import com.google.common.cache.CacheBuilder;
-import net.minecraft.block.state.IBlockState;
+import net.minecraft.block.BlockState;
 import net.minecraft.client.renderer.model.BakedQuad;
 import net.minecraft.client.renderer.model.IBakedModel;
 import net.minecraft.client.renderer.model.ItemCameraTransforms;
@@ -34,7 +34,7 @@ import net.minecraft.client.renderer.model.ItemOverrideList;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.client.renderer.vertex.VertexFormat;
-import net.minecraft.util.EnumFacing;
+import net.minecraft.util.Direction;
 import net.minecraftforge.client.model.data.IDynamicBakedModel;
 import net.minecraftforge.client.model.data.IModelData;
 import net.minecraftforge.common.model.IModelState;
@@ -48,11 +48,11 @@ import java.util.*;
 
 public class ConveyorBlockModel implements IDynamicBakedModel {
 
-    public static Cache<Pair<Pair<String, Pair<EnumFacing, EnumFacing>>, EnumFacing>, List<BakedQuad>> CACHE = CacheBuilder.newBuilder().build();
+    public static Cache<Pair<Pair<String, Pair<Direction, Direction>>, Direction>, List<BakedQuad>> CACHE = CacheBuilder.newBuilder().build();
     private IModelState state;
     private VertexFormat format;
     private IBakedModel previousConveyor;
-    private Map<EnumFacing, List<BakedQuad>> prevQuads = new HashMap<>();
+    private Map<Direction, List<BakedQuad>> prevQuads = new HashMap<>();
 
     public ConveyorBlockModel(IBakedModel previousConveyor) {
         this.previousConveyor = previousConveyor;
@@ -62,7 +62,7 @@ public class ConveyorBlockModel implements IDynamicBakedModel {
 
     @Nonnull
     @Override
-    public List<BakedQuad> getQuads(@Nullable IBlockState state, @Nullable EnumFacing side, @Nonnull Random rand, @Nonnull IModelData extraData) {
+    public List<BakedQuad> getQuads(@Nullable BlockState state, @Nullable Direction side, @Nonnull Random rand, @Nonnull IModelData extraData) {
         if (state == null) {
             if (!prevQuads.containsKey(side))
                 prevQuads.put(side, previousConveyor.getQuads(state, side, rand));

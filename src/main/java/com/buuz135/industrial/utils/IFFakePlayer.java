@@ -23,7 +23,7 @@ package com.buuz135.industrial.utils;
 
 import com.mojang.authlib.GameProfile;
 import net.minecraft.item.ItemStack;
-import net.minecraft.world.WorldServer;
+import net.minecraft.world.ServerWorld;
 import net.minecraftforge.common.util.FakePlayer;
 
 import java.util.UUID;
@@ -34,7 +34,7 @@ public class IFFakePlayer extends FakePlayer {
 
     private static GameProfile PROFILE = new GameProfile(uuid, "[IF]");
 
-    public IFFakePlayer(WorldServer worldIn) {
+    public IFFakePlayer(ServerWorld worldIn) {
         super(worldIn, PROFILE);
     }
 

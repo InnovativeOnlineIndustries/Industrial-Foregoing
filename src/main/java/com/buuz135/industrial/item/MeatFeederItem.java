@@ -24,9 +24,9 @@ package com.buuz135.industrial.item;
 import com.buuz135.industrial.module.ModuleCore;
 import com.buuz135.industrial.proxy.FluidsRegistry;
 import com.buuz135.industrial.utils.RecipeUtils;
-import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.item.Items;
+import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraftforge.common.capabilities.ICapabilityProvider;
 import net.minecraftforge.fluids.FluidStack;
@@ -44,7 +44,7 @@ public class MeatFeederItem extends IFCustomItem {
 
     @Nullable
     @Override
-    public ICapabilityProvider initCapabilities(ItemStack stack, @Nullable NBTTagCompound nbt) {
+    public ICapabilityProvider initCapabilities(ItemStack stack, @Nullable CompoundNBT nbt) {
         FluidHandlerItemStack handlerItemStack = new FluidHandlerItemStack(stack, 128000) {
             @Override
             public boolean canFillFluidType(FluidStack fluid) {

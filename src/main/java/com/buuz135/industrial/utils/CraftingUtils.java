@@ -21,12 +21,14 @@
  */
 package com.buuz135.industrial.utils;
 
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.init.Blocks;
-import net.minecraft.inventory.Container;
-import net.minecraft.inventory.InventoryCrafting;
+import net.minecraft.block.Blocks;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.inventory.CraftingInventory;
+import net.minecraft.inventory.container.Container;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.crafting.ICraftingRecipe;
 import net.minecraft.item.crafting.IRecipe;
+import net.minecraft.item.crafting.IRecipeType;
 import net.minecraft.world.World;
 
 import java.util.HashMap;
@@ -48,24 +50,28 @@ public class CraftingUtils {
                 return entry.getValue().copy();
             }
         }
-        InventoryCrafting inventoryCrafting = new InventoryCrafting(new Container() {
+        CraftingInventory inventoryCrafting = new CraftingInventory(new Container(null, 0) {
             @Override
-            public boolean canInteractWith(EntityPlayer playerIn) {
+            public boolean canInteractWith(PlayerEntity playerIn) {
                 return false;
             }
         }, size, size);
         for (int i = 0; i < size * size; i++) {
             inventoryCrafting.setInventorySlotContents(i, input.copy());
         }
-        ItemStack output = world.getRecipeManager().getResult(inventoryCrafting, world);
-        cachedRecipes.put(cachedStack, output.copy());
-        return output.copy();
+        ICraftingRecipe recipe = world.getRecipeManager().getRecipe(IRecipeType.CRAFTING, inventoryCrafting, world).orElseGet(null);
+        if (recipe != null) {
+            ItemStack output = recipe.getRecipeOutput();
+            cachedRecipes.put(cachedStack, output.copy());
+            return output.copy();
+        }
+        return ItemStack.EMPTY;
     }
 
-    public static InventoryCrafting genCraftingInventory(World world, ItemStack... inputs) {
-        InventoryCrafting inventoryCrafting = new InventoryCrafting(new Container() {
+    public static CraftingInventory genCraftingInventory(World world, ItemStack... inputs) {
+        CraftingInventory inventoryCrafting = new CraftingInventory(new Container(null, 0) {
             @Override
-            public boolean canInteractWith(EntityPlayer playerIn) {
+            public boolean canInteractWith(PlayerEntity playerIn) {
                 return false;
             }
         }, 3, 3);
@@ -79,7 +85,7 @@ public class CraftingUtils {
         for (ItemStack[] missingRecipe : missingRecipes) {
             if (doesStackArrayEquals(missingRecipe, inputs)) return null;
         }
-        IRecipe recipe = world.getRecipeManager().getRecipe(genCraftingInventory(world, inputs), world);
+        IRecipe recipe = world.getRecipeManager().getRecipe(IRecipeType.CRAFTING, genCraftingInventory(world, inputs), world).orElseGet(null);
         if (recipe == null) missingRecipes.add(inputs);
         return recipe;
     }

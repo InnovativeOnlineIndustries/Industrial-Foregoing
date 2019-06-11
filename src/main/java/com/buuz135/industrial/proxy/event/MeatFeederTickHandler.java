@@ -23,14 +23,14 @@ package com.buuz135.industrial.proxy.event;
 
 import com.buuz135.industrial.item.MeatFeederItem;
 import com.buuz135.industrial.module.ModuleTool;
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.event.entity.living.LivingEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 
 public class MeatFeederTickHandler {
 
-    public static boolean meatTick(ItemStack stack, EntityPlayer player) {
+    public static boolean meatTick(ItemStack stack, PlayerEntity player) {
         int filledAmount = ((MeatFeederItem) stack.getItem()).getFilledAmount(stack);
         if (filledAmount >= 400 && (player.getFoodStats().getSaturationLevel() < 20 || player.getFoodStats().getFoodLevel() < 20)) {
             ((MeatFeederItem) stack.getItem()).drain(stack, 400);
@@ -42,12 +42,12 @@ public class MeatFeederTickHandler {
 
     @SubscribeEvent
     public void onTick(LivingEvent.LivingUpdateEvent event) {
-        if (!event.getEntityLiving().getEntityWorld().isRemote && event.getEntityLiving() instanceof EntityPlayer) {
-            EntityPlayer player = (EntityPlayer) event.getEntityLiving();
+        if (!event.getEntityLiving().getEntityWorld().isRemote && event.getEntityLiving() instanceof PlayerEntity) {
+            PlayerEntity player = (PlayerEntity) event.getEntityLiving();
             if (player.getFoodStats().needFood() || player.getFoodStats().getSaturationLevel() < 10) {
                 for (ItemStack stack : player.inventory.mainInventory) {
                     if (stack.getItem().equals(ModuleTool.MEAT_FEEDER)) {
-                        meatTick(stack, (EntityPlayer) event.getEntityLiving());
+                        meatTick(stack, (PlayerEntity) event.getEntityLiving());
                     }
                 }
             }

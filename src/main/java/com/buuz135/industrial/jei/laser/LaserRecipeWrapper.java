@@ -49,10 +49,10 @@ public class LaserRecipeWrapper {
     //    Gui.drawModalRectWithCustomSizedTexture(recipeWidth / 10 * 7, 30 + (minecraft.fontRenderer.FONT_HEIGHT + 2) * 3, 216, 0, 20, 20, 256, 256);
     //    minecraft.getItemRenderer().renderItemIntoGUI(new ItemStack(Blocks.BARRIER), recipeWidth / 10 * 7 + 1, 30 + (minecraft.fontRenderer.FONT_HEIGHT + 2) * 3 + 3);
 //
-    //    String minY = new TextComponentTranslation("text.industrialforegoing.miny").getUnformattedComponentText() + " " + entryExtended.getRarities().get(pointer).getMinY();
-    //    String maxY = new TextComponentTranslation("text.industrialforegoing.maxy").getUnformattedComponentText() + " " + entryExtended.getRarities().get(pointer).getMaxY();
-    //    String wight = new TextComponentTranslation("text.industrialforegoing.weight").getUnformattedComponentText() + " " + entryExtended.getRarities().get(pointer).getWeight();
-    //    String biomes = new TextComponentTranslation("text.industrialforegoing.biomes").getUnformattedComponentText();
+    //    String minY = new TranslationTextComponent("text.industrialforegoing.miny").getUnformattedComponentText() + " " + entryExtended.getRarities().get(pointer).getMinY();
+    //    String maxY = new TranslationTextComponent("text.industrialforegoing.maxy").getUnformattedComponentText() + " " + entryExtended.getRarities().get(pointer).getMaxY();
+    //    String wight = new TranslationTextComponent("text.industrialforegoing.weight").getUnformattedComponentText() + " " + entryExtended.getRarities().get(pointer).getWeight();
+    //    String biomes = new TranslationTextComponent("text.industrialforegoing.biomes").getUnformattedComponentText();
     //    minecraft.fontRenderer.drawString(TextFormatting.DARK_GRAY + minY, recipeWidth / 10, 30, 0);
     //    minecraft.fontRenderer.drawString(TextFormatting.DARK_GRAY + wight, recipeWidth / 10, 30 + (minecraft.fontRenderer.FONT_HEIGHT + 2), 0);
     //    minecraft.fontRenderer.drawString(TextFormatting.DARK_GRAY + maxY, recipeWidth / 10 * 6, 30, 0);
@@ -64,14 +64,14 @@ public class LaserRecipeWrapper {
     //@Override
     //public List<String> getTooltipStrings(int mouseX, int mouseY) {
     //    if (mouseX > 0 && mouseX < 15 && mouseY > 70 && mouseY < 85 && pointer > 0) { // Inside the back button
-    //        return Arrays.asList(new TextComponentTranslation("text.industrialforegoing.button.jei.prev_rarity").getUnformattedComponentText());
+    //        return Arrays.asList(new TranslationTextComponent("text.industrialforegoing.button.jei.prev_rarity").getUnformattedComponentText());
     //    }
     //    if (mouseX > 137 && mouseX < (137 + 15) && mouseY > 70 && mouseY < 85 && pointer < entryExtended.getRarities().size() - 1) { //Inside the next button
-    //        return Arrays.asList(new TextComponentTranslation("text.industrialforegoing.button.jei.next_rarity").getUnformattedComponentText());
+    //        return Arrays.asList(new TranslationTextComponent("text.industrialforegoing.button.jei.next_rarity").getUnformattedComponentText());
     //    }
     //    if (mouseX > 13 * 2 && mouseX < 13 * 2 + 20 && mouseY > 30 + (Minecraft.getInstance().fontRenderer.FONT_HEIGHT + 2) * 3 && mouseY < 30 + (Minecraft.getInstance().fontRenderer.FONT_HEIGHT + 2) * 3 + 20) { //Inside the whitelisted biomes
     //        List<String> biomes = new ArrayList<>();
-    //        biomes.add(TextFormatting.UNDERLINE + new TextComponentTranslation("text.industrialforegoing.tooltip.whitelisted_biomes").getUnformattedComponentText());
+    //        biomes.add(TextFormatting.UNDERLINE + new TranslationTextComponent("text.industrialforegoing.tooltip.whitelisted_biomes").getUnformattedComponentText());
     //        if (entryExtended.getRarities().get(pointer).getWhitelist().isEmpty()) biomes.add("- Any");
     //        else {
     //            entryExtended.getRarities().get(pointer).getWhitelist().forEach(biome -> biomes.add("- " + biome.getDisplayName().getUnformattedComponentText()));
@@ -80,7 +80,7 @@ public class LaserRecipeWrapper {
     //    }
     //    if (mouseX > 13 * 8 && mouseX < 13 * 8 + 20 && mouseY > 30 + (Minecraft.getInstance().fontRenderer.FONT_HEIGHT + 2) * 3 && mouseY < 30 + (Minecraft.getInstance().fontRenderer.FONT_HEIGHT + 2) * 3 + 20) { //Inside the whitelisted biomes
     //        List<String> biomes = new ArrayList<>();
-    //        biomes.add(TextFormatting.UNDERLINE + new TextComponentTranslation("text.industrialforegoing.tooltip.blacklisted_biomes").getUnformattedComponentText());
+    //        biomes.add(TextFormatting.UNDERLINE + new TranslationTextComponent("text.industrialforegoing.tooltip.blacklisted_biomes").getUnformattedComponentText());
     //        if (entryExtended.getRarities().get(pointer).getBlacklist().isEmpty()) biomes.add("- None");
     //        else {
     //            entryExtended.getRarities().get(pointer).getBlacklist().forEach(biome -> biomes.add("- " + biome.getDisplayName().getUnformattedComponentText()));

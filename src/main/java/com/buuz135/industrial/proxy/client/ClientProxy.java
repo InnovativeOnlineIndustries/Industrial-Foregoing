@@ -25,18 +25,12 @@ import com.buuz135.industrial.proxy.CommonProxy;
 import com.buuz135.industrial.proxy.client.event.IFClientEvents;
 import com.buuz135.industrial.proxy.client.event.IFTooltipEvent;
 import com.buuz135.industrial.proxy.client.event.IFWorldRenderLastEvent;
-import com.buuz135.industrial.utils.FluidUtils;
 import com.buuz135.industrial.utils.Reference;
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.model.IBakedModel;
-import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
-import net.minecraft.resources.IReloadableResourceManager;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.client.model.IModel;
-import net.minecraftforge.client.model.ModelLoader;
 import net.minecraftforge.client.model.obj.OBJLoader;
 import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.common.model.TRSRTransformation;
 
 public class ClientProxy extends CommonProxy {
 
@@ -56,7 +50,7 @@ public class ClientProxy extends CommonProxy {
 
         try {
             ears_model = OBJLoader.INSTANCE.loadModel(new ResourceLocation(Reference.MOD_ID, "models/block/catears.obj"));
-            ears_baked = ears_model.bake(ModelLoader.defaultModelGetter(), ModelLoader.defaultTextureGetter(), TRSRTransformation.identity(), false, DefaultVertexFormats.BLOCK);
+            //ears_baked = ears_model.bake(ModelLoader.defaultModelGetter(), ModelLoader.defaultTextureGetter(), TRSRTransformation.identity(), false, DefaultVertexFormats.BLOCK);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -67,7 +61,7 @@ public class ClientProxy extends CommonProxy {
 
         //manager.entityRenderMap.put(EntityPinkSlime.class, new RenderPinkSlime(manager));
 
-        ((IReloadableResourceManager) Minecraft.getInstance().getResourceManager()).addReloadListener(resourceManager -> FluidUtils.colorCache.clear());
+        //((IReloadableResourceManager) Minecraft.getInstance().getResourceManager()).addReloadListener(resourceManager -> FluidUtils.colorCache.clear());
 
         //if (ItemRegistry.dyes != null)
         //    Minecraft.getInstance().getItemColors().register((stack, tintIndex) -> ItemDye.DYE_COLORS[EnumDyeColor.byMetadata(stack.getMetadata()).getDyeDamage()], ItemRegistry.artificalDye);

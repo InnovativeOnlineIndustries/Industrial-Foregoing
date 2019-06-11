@@ -1,6 +1,8 @@
 package com.buuz135.industrial.module;
 
 import com.buuz135.industrial.api.conveyor.ConveyorUpgradeFactory;
+import com.buuz135.industrial.gui.conveyor.ContainerConveyor;
+import com.buuz135.industrial.gui.conveyor.GuiConveyor;
 import com.buuz135.industrial.item.ItemConveyorUpgrade;
 import com.buuz135.industrial.proxy.block.BlockConveyor;
 import com.buuz135.industrial.proxy.block.upgrade.*;
@@ -12,20 +14,20 @@ import com.hrznstudio.titanium.event.handler.EventManager;
 import com.hrznstudio.titanium.module.Feature;
 import com.hrznstudio.titanium.network.NetworkHandler;
 import net.minecraft.block.Block;
-import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.ScreenManager;
 import net.minecraft.client.renderer.model.IBakedModel;
 import net.minecraft.client.renderer.model.IUnbakedModel;
 import net.minecraft.client.renderer.model.ModelResourceLocation;
-import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
+import net.minecraft.inventory.container.ContainerType;
 import net.minecraft.item.Item;
-import net.minecraft.util.EnumFacing;
+import net.minecraft.util.Direction;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.client.event.ModelBakeEvent;
 import net.minecraftforge.client.event.TextureStitchEvent;
-import net.minecraftforge.client.model.ModelLoader;
-import net.minecraftforge.common.model.TRSRTransformation;
+import net.minecraftforge.common.extensions.IForgeContainerType;
+import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 
 import java.util.ArrayList;
@@ -48,7 +50,10 @@ public class ModuleTransport implements IModule {
     @Override
     public List<Feature.Builder> generateFeatures() {
         List<Feature.Builder> features = new ArrayList<>();
-        features.add(Feature.builder("conveyor").content(Block.class, CONVEYOR = new BlockConveyor()));
+        features.add(Feature.builder("conveyor")
+                .content(Block.class, CONVEYOR = new BlockConveyor())
+                .content(ContainerType.class, (ContainerType) IForgeContainerType.create(ContainerConveyor::new).setRegistryName(new ResourceLocation(Reference.MOD_ID, "conveyor")))
+        );
         Feature.Builder builder = Feature.builder("conveyor_upgrades")
                 .event(EventManager.forge(ModelBakeEvent.class).process(this::conveyorBake))
                 .event(EventManager.forge(TextureStitchEvent.Pre.class).process(this::textureStitch))
@@ -70,12 +75,12 @@ public class ModuleTransport implements IModule {
             }
         }
         for (ConveyorUpgradeFactory conveyorUpgradeFactory : ConveyorUpgradeFactory.FACTORIES) {
-            for (EnumFacing upgradeFacing : conveyorUpgradeFactory.getValidFacings()) {
-                for (EnumFacing conveyorFacing : BlockConveyor.FACING.getAllowedValues()) {
+            for (Direction upgradeFacing : conveyorUpgradeFactory.getValidFacings()) {
+                for (Direction conveyorFacing : BlockConveyor.FACING.getAllowedValues()) {
                     try {
                         ResourceLocation resourceLocation = conveyorUpgradeFactory.getModel(upgradeFacing, conveyorFacing);
                         IUnbakedModel unbakedModel = event.getModelLoader().getUnbakedModel(resourceLocation);
-                        CONVEYOR_UPGRADES_CACHE.put(resourceLocation, unbakedModel.bake(ModelLoader.defaultModelGetter(), ModelLoader.defaultTextureGetter(), TRSRTransformation.identity(), false, DefaultVertexFormats.BLOCK));
+                        //TODO CONVEYOR_UPGRADES_CACHE.put(resourceLocation, unbakedModel.bake(event.getModelLoader(), ModelLoader.defaultTextureGetter(), AtlasTexture.LOCATION_BLOCKS_TEXTURE, DefaultVertexFormats.BLOCK));
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
@@ -86,6 +91,11 @@ public class ModuleTransport implements IModule {
 
     @OnlyIn(Dist.CLIENT)
     private void textureStitch(TextureStitchEvent.Pre pre) {
-        ConveyorUpgradeFactory.FACTORIES.forEach(conveyorUpgradeFactory -> conveyorUpgradeFactory.getTextures().forEach(resourceLocation -> pre.getMap().registerSprite(Minecraft.getInstance().getResourceManager(), resourceLocation)));
+        //ConveyorUpgradeFactory.FACTORIES.forEach(conveyorUpgradeFactory -> conveyorUpgradeFactory.getTextures().forEach(resourceLocation -> pre.getMap().registerSprite(Minecraft.getInstance().getResourceManager(), resourceLocation)));
+    }
+
+    @OnlyIn(Dist.CLIENT)
+    private void onClientSetup(FMLClientSetupEvent event) {
+        ScreenManager.registerFactory(ContainerConveyor.TYPE, GuiConveyor::new);
     }
 }

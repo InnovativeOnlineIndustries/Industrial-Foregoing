@@ -23,10 +23,10 @@ package com.buuz135.industrial.proxy.client.entity;
 
 import com.buuz135.industrial.entity.EntityPinkSlime;
 import com.buuz135.industrial.utils.Reference;
-import net.minecraft.client.renderer.GlStateManager;
-import net.minecraft.client.renderer.entity.RenderLiving;
-import net.minecraft.client.renderer.entity.RenderManager;
-import net.minecraft.client.renderer.entity.model.ModelSlime;
+import com.mojang.blaze3d.platform.GlStateManager;
+import net.minecraft.client.renderer.entity.EntityRendererManager;
+import net.minecraft.client.renderer.entity.LivingRenderer;
+import net.minecraft.client.renderer.entity.model.SlimeModel;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
@@ -36,14 +36,14 @@ import java.util.Arrays;
 import java.util.List;
 
 @OnlyIn(Dist.CLIENT)
-public class RenderPinkSlime extends RenderLiving<EntityPinkSlime> {
+public class RenderPinkSlime extends LivingRenderer<EntityPinkSlime, SlimeModel<EntityPinkSlime>> {
 
     public static final List<String> NAMES = Arrays.asList("buuz135", "the_codedone");
     private static final ResourceLocation PINK_SLIME_TEXTURES = new ResourceLocation(Reference.MOD_ID, "textures/entity/pink_slime.png");
     private static final ResourceLocation PINK_SLIME_TEXTURES_RGB = new ResourceLocation(Reference.MOD_ID, "textures/entity/pink_slime_white.png");
 
-    public RenderPinkSlime(RenderManager rendermanagerIn) {
-        super(rendermanagerIn, new ModelSlime(16), 0.25f);
+    public RenderPinkSlime(EntityRendererManager rendermanagerIn) {
+        super(rendermanagerIn, new SlimeModel<>(16), 0.25f);
         this.addLayer(new LayerPinkGel(this));
     }
 

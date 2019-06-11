@@ -33,8 +33,8 @@ import com.hrznstudio.titanium.module.Module;
 import com.hrznstudio.titanium.module.ModuleController;
 import com.hrznstudio.titanium.tab.AdvancedTitaniumTab;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.ServerWorld;
 import net.minecraft.world.World;
-import net.minecraft.world.WorldServer;
 import net.minecraftforge.common.util.FakePlayer;
 import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fml.DistExecutor;
@@ -83,8 +83,8 @@ public class IndustrialForegoing extends ModuleController {
     public static FakePlayer getFakePlayer(World world) {
         if (worldFakePlayer.containsKey(world.dimension.getType().getId()))
             return worldFakePlayer.get(world.dimension.getType().getId());
-        if (world instanceof WorldServer) {
-            IFFakePlayer fakePlayer = new IFFakePlayer((WorldServer) world);
+        if (world instanceof ServerWorld) {
+            IFFakePlayer fakePlayer = new IFFakePlayer((ServerWorld) world);
             worldFakePlayer.put(world.dimension.getType().getId(), fakePlayer);
             return fakePlayer;
         }

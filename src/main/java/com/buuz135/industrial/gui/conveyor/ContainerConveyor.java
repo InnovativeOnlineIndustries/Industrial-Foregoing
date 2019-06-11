@@ -22,19 +22,30 @@
 package com.buuz135.industrial.gui.conveyor;
 
 import com.buuz135.industrial.proxy.block.tile.TileEntityConveyor;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.entity.player.InventoryPlayer;
-import net.minecraft.inventory.Container;
-import net.minecraft.inventory.Slot;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.entity.player.PlayerInventory;
+import net.minecraft.inventory.container.Container;
+import net.minecraft.inventory.container.ContainerType;
+import net.minecraft.inventory.container.Slot;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.EnumFacing;
+import net.minecraft.network.PacketBuffer;
+import net.minecraft.util.Direction;
+import net.minecraftforge.registries.ObjectHolder;
 
 public class ContainerConveyor extends Container {
 
-    private final TileEntityConveyor conveyor;
-    private EnumFacing facing;
+    @ObjectHolder("industrialforegoing:conveyor")
+    public static ContainerType<ContainerConveyor> TYPE;
 
-    public ContainerConveyor(TileEntityConveyor conveyor, EnumFacing facing, InventoryPlayer player) {
+    private final TileEntityConveyor conveyor;
+    private Direction facing;
+
+    public ContainerConveyor(int id, PlayerInventory player, PacketBuffer buffer) {
+        this((TileEntityConveyor) player.player.getEntityWorld().getTileEntity(buffer.readBlockPos()), buffer.readEnumValue(Direction.class), player);
+    }
+
+    public ContainerConveyor(TileEntityConveyor conveyor, Direction facing, PlayerInventory player) {
+        super(TYPE, 0);
         this.conveyor = conveyor;
         this.facing = facing;
         if (!conveyor.hasUpgrade(facing) && conveyor.getUpgradeMap().size() > 0) {
@@ -43,7 +54,7 @@ public class ContainerConveyor extends Container {
         createPlayerInventory(player);
     }
 
-    private void createPlayerInventory(InventoryPlayer player) {
+    private void createPlayerInventory(PlayerInventory player) {
         for (int i = 0; i < 3; i++) {
             for (int j = 0; j < 9; j++) {
                 addSlot(new Slot(player, j + i * 9 + 9, 8 + j * 18, 84 + i * 18));
@@ -55,7 +66,7 @@ public class ContainerConveyor extends Container {
     }
 
     @Override
-    public boolean canInteractWith(EntityPlayer playerIn) {
+    public boolean canInteractWith(PlayerEntity playerIn) {
         return true;
     }
 
@@ -63,12 +74,12 @@ public class ContainerConveyor extends Container {
         return conveyor;
     }
 
-    public EnumFacing getFacing() {
+    public Direction getFacing() {
         return facing;
     }
 
     @Override
-    public ItemStack transferStackInSlot(EntityPlayer playerIn, int index) {
+    public ItemStack transferStackInSlot(PlayerEntity playerIn, int index) {
         return ItemStack.EMPTY;
     }
 }

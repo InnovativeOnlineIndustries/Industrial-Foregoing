@@ -23,26 +23,27 @@ package com.buuz135.industrial.utils;
 
 import com.buuz135.industrial.proxy.block.BlockConveyor;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.util.EnumFacing;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.util.Direction;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
+import net.minecraft.util.math.shapes.ISelectionContext;
 import net.minecraft.util.math.shapes.VoxelShape;
 
 import java.util.List;
 
 public class MovementUtils {
 
-    public static void handleConveyorMovement(Entity entity, EnumFacing direction, BlockPos pos, BlockConveyor.EnumType type) {
-        if (entity instanceof EntityPlayer && entity.isSneaking()) return;
+    public static void handleConveyorMovement(Entity entity, Direction direction, BlockPos pos, BlockConveyor.EnumType type) {
+        if (entity instanceof PlayerEntity && entity.isSneaking()) return;
         if (entity.posY - pos.getY() > 0.3 && !type.isVertical()) return;
 
-        VoxelShape collision = entity.world.getBlockState(pos).getBlock().getCollisionShape(entity.world.getBlockState(pos), entity.world, pos).withOffset(pos.getX(),pos.getY(),pos.getZ());
-//        if (direction == EnumFacing.NORTH || direction == EnumFacing.SOUTH){
+        VoxelShape collision = entity.world.getBlockState(pos).getBlock().getCollisionShape(entity.world.getBlockState(pos), entity.world, pos, ISelectionContext.dummy()).withOffset(pos.getX(), pos.getY(), pos.getZ());
+//        if (direction == Direction.NORTH || direction == Direction.SOUTH){
 //            collision = collision.contract(-0.1,0,0);
 //            collision = collision.contract(0.1,0,0);
 //        }
-//        if (direction == EnumFacing.EAST || direction == EnumFacing.WEST) {
+//        if (direction == Direction.EAST || direction == Direction.WEST) {
 //            collision = collision.contract(0,0,-0.1);
 //            collision = collision.contract(0,0,0.1);
 //        }
@@ -58,27 +59,24 @@ public class MovementUtils {
         }
 
         //CENTER
-        if (direction == EnumFacing.NORTH || direction == EnumFacing.SOUTH) {
+        if (direction == Direction.NORTH || direction == Direction.SOUTH) {
             if (entity.posX - pos.getX() < 0.45) {
                 vec3d = vec3d.add(0.08, 0, 0);
             } else if (entity.posX - pos.getX() > 0.55) {
                 vec3d = vec3d.add(-0.08, 0, 0);
             }
         }
-        if (direction == EnumFacing.EAST || direction == EnumFacing.WEST) {
+        if (direction == Direction.EAST || direction == Direction.WEST) {
             if (entity.posZ - pos.getZ() < 0.45) {
                 vec3d = vec3d.add(0, 0, 0.08);
             } else if (entity.posZ - pos.getZ() > 0.55) {
                 vec3d = vec3d.add(0, 0, -0.08);
             }
         }
-
-        entity.motionX = vec3d.x;
-        if (vec3d.y != 0) entity.motionY = vec3d.y;
-        entity.motionZ = vec3d.z;
+        entity.setMotion(vec3d.x, vec3d.y != 0 ? vec3d.y : entity.getMotion().y, vec3d.z);
     }
 
-    public static void handleConveyorMovement(Entity entity, EnumFacing direction, BlockPos pos, BlockConveyor.EnumType type, List<Entity> filter) {
+    public static void handleConveyorMovement(Entity entity, Direction direction, BlockPos pos, BlockConveyor.EnumType type, List<Entity> filter) {
         if (filter.contains(entity)) return;
         handleConveyorMovement(entity, direction, pos, type);
     }

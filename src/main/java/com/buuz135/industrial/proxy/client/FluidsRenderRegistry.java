@@ -51,7 +51,7 @@ public class FluidsRenderRegistry {
     //        location = new ModelResourceLocation(Reference.MOD_ID + ":fluids", name);
     //    }
 //
-    //    protected ModelResourceLocation getModelResourceLocation(IBlockState state) {
+    //    protected ModelResourceLocation getModelResourceLocation(BlockState state) {
     //        return location;
     //    }
 //

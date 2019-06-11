@@ -25,7 +25,7 @@ import com.buuz135.industrial.api.conveyor.gui.PositionedGuiComponent;
 import com.buuz135.industrial.gui.conveyor.GuiConveyor;
 import net.minecraft.client.Minecraft;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.text.TextComponentTranslation;
+import net.minecraft.util.text.TranslationTextComponent;
 
 import javax.annotation.Nullable;
 import java.util.ArrayList;
@@ -46,7 +46,7 @@ public class TextureGuiComponent extends PositionedGuiComponent {
         this.tooltip = new ArrayList<>();
         if (tooltip != null) {
             for (int i = 0; i < tooltip.length; i++) {
-                this.tooltip.add(new TextComponentTranslation("conveyor.upgrade.industrialforegoing.tooltip." + tooltip[i]).getFormattedText());
+                this.tooltip.add(new TranslationTextComponent("conveyor.upgrade.industrialforegoing.tooltip." + tooltip[i]).getFormattedText());
             }
         }
     }
@@ -59,7 +59,7 @@ public class TextureGuiComponent extends PositionedGuiComponent {
     @Override
     public void drawGuiBackgroundLayer(int guiX, int guiY, double mouseX, double mouseY) {
         Minecraft.getInstance().getTextureManager().bindTexture(resourceLocation);
-        Minecraft.getInstance().currentScreen.drawTexturedModalRect(guiX + getXPos(), guiY + getYPos(), textureX, textureY, getXSize(), getYSize());
+        Minecraft.getInstance().field_71462_r.blit(guiX + getXPos(), guiY + getYPos(), textureX, textureY, getXSize(), getYSize());
     }
 
     @Override

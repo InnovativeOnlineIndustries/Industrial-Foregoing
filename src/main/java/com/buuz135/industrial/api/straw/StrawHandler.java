@@ -22,7 +22,7 @@
 package com.buuz135.industrial.api.straw;
 
 import mcp.MethodsReturnNonnullByDefault;
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.fluid.Fluid;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
@@ -35,7 +35,7 @@ import javax.annotation.ParametersAreNonnullByDefault;
 public abstract class StrawHandler extends ForgeRegistryEntry<StrawHandler> {
     public abstract boolean validFluid(Fluid stack);
 
-    public abstract void onDrink(World world, BlockPos pos, Fluid stack, EntityPlayer player, boolean fromFluidContainer);
+    public abstract void onDrink(World world, BlockPos pos, Fluid stack, PlayerEntity player, boolean fromFluidContainer);
 
     public int getPriority() {
         return 0;

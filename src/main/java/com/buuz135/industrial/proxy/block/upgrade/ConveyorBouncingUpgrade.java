@@ -32,14 +32,14 @@ import com.buuz135.industrial.proxy.block.filter.ItemStackFilter;
 import com.buuz135.industrial.utils.Reference;
 import com.google.common.collect.ImmutableSet;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.item.EntityItem;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.init.SoundEvents;
+import net.minecraft.entity.item.ItemEntity;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.EnumFacing;
+import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.util.Direction;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundCategory;
+import net.minecraft.util.SoundEvents;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.util.math.shapes.VoxelShape;
@@ -61,7 +61,7 @@ public class ConveyorBouncingUpgrade extends ConveyorUpgrade {
     private double velocityVertical;
     private double velocityHorizontal;
 
-    public ConveyorBouncingUpgrade(IConveyorContainer container, ConveyorUpgradeFactory factory, EnumFacing side) {
+    public ConveyorBouncingUpgrade(IConveyorContainer container, ConveyorUpgradeFactory factory, Direction side) {
         super(container, factory, side);
         this.filter = new ItemStackFilter(20, 20, 3, 3);
         this.whitelist = false;
@@ -73,15 +73,18 @@ public class ConveyorBouncingUpgrade extends ConveyorUpgrade {
     public void handleEntity(Entity entity) {
         super.handleEntity(entity);
         if (whitelist != filter.matches(entity)) return;
-        EnumFacing direction = this.getContainer().getConveyorWorld().getBlockState(this.getContainer().getConveyorPosition()).get(BlockConveyor.FACING);
+        Direction direction = this.getContainer().getConveyorWorld().getBlockState(this.getContainer().getConveyorPosition()).get(BlockConveyor.FACING);
         Vec3d vec3d = new Vec3d(velocityHorizontal * direction.getDirectionVec().getX(), velocityVertical, velocityHorizontal * direction.getDirectionVec().getZ());
-        entity.motionX = vec3d.x;
+        double x = vec3d.x;
+        double y = vec3d.y;
+        double z = vec3d.z;
         if (vec3d.y != 0) {
             entity.fallDistance = 3;
-            entity.motionY = vec3d.y;
-            if (entity instanceof EntityItem) entity.onGround = false;
+            y = vec3d.y;
+            if (entity instanceof ItemEntity) entity.onGround = false;
         }
-        entity.motionZ = vec3d.z;
+        z = vec3d.z;
+        entity.setMotion(x, y, z);
         this.getWorld().playSound(null, this.getPos(), SoundEvents.ENTITY_PARROT_FLY, SoundCategory.AMBIENT, 0.5f, 1f);
     }
 
@@ -91,19 +94,19 @@ public class ConveyorBouncingUpgrade extends ConveyorUpgrade {
     }
 
     @Override
-    public NBTTagCompound serializeNBT() {
-        NBTTagCompound compound = super.serializeNBT() == null ? new NBTTagCompound() : super.serializeNBT();
-        compound.setTag("Filter", filter.serializeNBT());
-        compound.setBoolean("Whitelist", whitelist);
-        compound.setDouble("VelocityVertical", velocityVertical);
-        compound.setDouble("VelocityHorizontal", velocityHorizontal);
+    public CompoundNBT serializeNBT() {
+        CompoundNBT compound = super.serializeNBT() == null ? new CompoundNBT() : super.serializeNBT();
+        compound.put("Filter", filter.serializeNBT());
+        compound.putBoolean("Whitelist", whitelist);
+        compound.putDouble("VelocityVertical", velocityVertical);
+        compound.putDouble("VelocityHorizontal", velocityHorizontal);
         return compound;
     }
 
     @Override
-    public void deserializeNBT(NBTTagCompound nbt) {
+    public void deserializeNBT(CompoundNBT nbt) {
         super.deserializeNBT(nbt);
-        if (nbt.hasKey("Filter")) filter.deserializeNBT(nbt.getCompound("Filter"));
+        if (nbt.hasUniqueId("Filter")) filter.deserializeNBT(nbt.getCompound("Filter"));
         whitelist = nbt.getBoolean("Whitelist");
         velocityHorizontal = nbt.getDouble("VelocityHorizontal");
         velocityVertical = nbt.getDouble("VelocityVertical");
@@ -115,7 +118,7 @@ public class ConveyorBouncingUpgrade extends ConveyorUpgrade {
     }
 
     @Override
-    public void handleButtonInteraction(int buttonId, NBTTagCompound compound) {
+    public void handleButtonInteraction(int buttonId, CompoundNBT compound) {
         super.handleButtonInteraction(buttonId, compound);
         if (buttonId >= 0 && buttonId < filter.getFilter().length) {
             this.filter.setFilter(buttonId, ItemStack.read(compound));
@@ -212,7 +215,7 @@ public class ConveyorBouncingUpgrade extends ConveyorUpgrade {
         }
 
         @Override
-        public ConveyorUpgrade create(IConveyorContainer container, EnumFacing face) {
+        public ConveyorUpgrade create(IConveyorContainer container, Direction face) {
             return new ConveyorBouncingUpgrade(container, this, face);
         }
 
@@ -226,7 +229,7 @@ public class ConveyorBouncingUpgrade extends ConveyorUpgrade {
 
         @Override
         @Nonnull
-        public ResourceLocation getModel(EnumFacing upgradeSide, EnumFacing conveyorFacing) {
+        public ResourceLocation getModel(Direction upgradeSide, Direction conveyorFacing) {
             return new ResourceLocation(Reference.MOD_ID, "block/conveyor_upgrade_bouncing_" + conveyorFacing.getName().toLowerCase());
         }
 
@@ -238,13 +241,13 @@ public class ConveyorBouncingUpgrade extends ConveyorUpgrade {
 
         @Nonnull
         @Override
-        public Set<EnumFacing> getValidFacings() {
+        public Set<Direction> getValidFacings() {
             return DOWN;
         }
 
         @Override
-        public EnumFacing getSideForPlacement(World world, BlockPos pos, EntityPlayer player) {
-            return EnumFacing.DOWN;
+        public Direction getSideForPlacement(World world, BlockPos pos, PlayerEntity player) {
+            return Direction.DOWN;
         }
     }
 }

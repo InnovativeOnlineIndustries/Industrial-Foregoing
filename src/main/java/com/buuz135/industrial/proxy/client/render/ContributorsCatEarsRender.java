@@ -23,29 +23,34 @@ package com.buuz135.industrial.proxy.client.render;
 
 import com.buuz135.industrial.proxy.CommonProxy;
 import com.buuz135.industrial.proxy.client.ClientProxy;
+import com.mojang.blaze3d.platform.GlStateManager;
+import net.minecraft.block.Blocks;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.entity.AbstractClientPlayer;
-import net.minecraft.client.renderer.GlStateManager;
+import net.minecraft.client.entity.player.AbstractClientPlayerEntity;
 import net.minecraft.client.renderer.RenderHelper;
+import net.minecraft.client.renderer.entity.IEntityRenderer;
 import net.minecraft.client.renderer.entity.layers.LayerRenderer;
+import net.minecraft.client.renderer.entity.model.PlayerModel;
 import net.minecraft.client.renderer.model.IBakedModel;
-import net.minecraft.client.renderer.texture.TextureMap;
-import net.minecraft.entity.player.EnumPlayerModelParts;
-import net.minecraft.init.Blocks;
+import net.minecraft.client.renderer.texture.AtlasTexture;
+import net.minecraft.entity.player.PlayerModelPart;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import org.lwjgl.opengl.GL11;
 
 import java.util.Calendar;
 
-public class ContributorsCatEarsRender implements LayerRenderer<AbstractClientPlayer> {
+public class ContributorsCatEarsRender extends LayerRenderer<AbstractClientPlayerEntity, PlayerModel<AbstractClientPlayerEntity>> {
 
-    @OnlyIn(Dist.CLIENT)
+    public ContributorsCatEarsRender(IEntityRenderer<AbstractClientPlayerEntity, PlayerModel<AbstractClientPlayerEntity>> p_i50926_1_) {
+        super(p_i50926_1_);
+    }
+
     @Override
-    public void render(AbstractClientPlayer entitylivingbaseIn, float limbSwing, float limbSwingAmount, float partialTicks, float ageInTicks, float netHeadYaw, float headPitch, float scale) {
+    public void func_212842_a_(AbstractClientPlayerEntity entitylivingbaseIn, float limbSwing, float limbSwingAmount, float partialTicks, float ageInTicks, float netHeadYaw, float headPitch, float scale) {
         if (CommonProxy.CONTRIBUTORS == null) return;
         if (!CommonProxy.CONTRIBUTORS.contains(entitylivingbaseIn.getUniqueID().toString())) return;
-        if (!entitylivingbaseIn.isWearing(EnumPlayerModelParts.CAPE)) return;
+        if (!entitylivingbaseIn.isWearing(PlayerModelPart.CAPE)) return;
         GlStateManager.pushMatrix();
         GlStateManager.enableBlend();
         GlStateManager.disableCull();
@@ -63,7 +68,7 @@ public class ContributorsCatEarsRender implements LayerRenderer<AbstractClientPl
         GlStateManager.rotatef(netHeadYaw, 0, -1, 0);
         GlStateManager.rotatef(headPitch, 0, 0, -1);
 
-        Minecraft.getInstance().getTextureManager().bindTexture(TextureMap.LOCATION_BLOCKS_TEXTURE);
+        Minecraft.getInstance().getTextureManager().bindTexture(AtlasTexture.LOCATION_BLOCKS_TEXTURE);
         Calendar calendar = Calendar.getInstance();
         if (calendar.get(Calendar.MONTH) == Calendar.OCTOBER) {
             spookyScarySkeletons();

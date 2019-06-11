@@ -23,12 +23,12 @@ package com.buuz135.industrial.gui.component;
 
 import com.buuz135.industrial.api.conveyor.gui.PositionedGuiComponent;
 import com.buuz135.industrial.gui.conveyor.GuiConveyor;
+import com.mojang.blaze3d.platform.GlStateManager;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.audio.SimpleSound;
-import net.minecraft.client.renderer.GlStateManager;
-import net.minecraft.init.SoundEvents;
-import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.SoundCategory;
+import net.minecraft.util.SoundEvents;
 
 import javax.annotation.Nullable;
 import java.util.Arrays;
@@ -48,7 +48,7 @@ public abstract class TexturedStateButtonGuiComponent extends PositionedGuiCompo
 
     @Override
     public boolean handleClick(GuiConveyor conveyor, int guiX, int guiY, double mouseX, double mouseY) {
-        conveyor.sendMessage(id, new NBTTagCompound());
+        conveyor.sendMessage(id, new CompoundNBT());
         Minecraft.getInstance().getSoundHandler().play(new SimpleSound(SoundEvents.UI_BUTTON_CLICK, SoundCategory.PLAYERS, 1.0F, 1.0F, Minecraft.getInstance().player.getPosition()));
         return true;
     }
@@ -59,7 +59,7 @@ public abstract class TexturedStateButtonGuiComponent extends PositionedGuiCompo
         if (buttonInfo != null) {
             GlStateManager.color4f(1, 1, 1, 1);
             Minecraft.getInstance().getTextureManager().bindTexture(buttonInfo.getTexture());
-            Minecraft.getInstance().currentScreen.drawTexturedModalRect(guiX + getXPos(), guiY + getYPos(), buttonInfo.getTextureX(), buttonInfo.getTextureY(), getXSize(), getYSize());
+            Minecraft.getInstance().field_71462_r.blit(guiX + getXPos(), guiY + getYPos(), buttonInfo.getTextureX(), buttonInfo.getTextureY(), getXSize(), getYSize());
         }
     }
 
@@ -69,7 +69,7 @@ public abstract class TexturedStateButtonGuiComponent extends PositionedGuiCompo
         if (buttonInfo != null && isInside(mouseX, mouseY)) {
             GlStateManager.disableLighting();
             GlStateManager.enableDepthTest();
-            Minecraft.getInstance().currentScreen.drawRect(getXPos() - guiX, getYPos() - guiY, getXPos() + getXSize() - guiX, getYPos() + getYSize() - guiY, -2130706433);
+            Minecraft.getInstance().field_71462_r.fill(getXPos() - guiX, getYPos() - guiY, getXPos() + getXSize() - guiX, getYPos() + getYSize() - guiY, -2130706433);
             GlStateManager.enableLighting();
             GlStateManager.disableAlphaTest();
         }

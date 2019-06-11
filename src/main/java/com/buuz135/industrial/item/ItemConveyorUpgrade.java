@@ -27,8 +27,8 @@ import com.buuz135.industrial.proxy.block.tile.TileEntityConveyor;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.ItemUseContext;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.EnumActionResult;
-import net.minecraft.util.EnumFacing;
+import net.minecraft.util.ActionResultType;
+import net.minecraft.util.Direction;
 
 public class ItemConveyorUpgrade extends IFCustomItem {
 
@@ -41,21 +41,21 @@ public class ItemConveyorUpgrade extends IFCustomItem {
     }
 
     @Override
-    public EnumActionResult onItemUse(ItemUseContext context) {
+    public ActionResultType onItemUse(ItemUseContext context) {
         if (!context.getPlayer().isSneaking()) {
             TileEntity tile = context.getWorld().getTileEntity(context.getPos());
             if (tile instanceof TileEntityConveyor && ((TileEntityConveyor) tile).getConveyorType().isVertical())
-                return EnumActionResult.PASS;
+                return ActionResultType.PASS;
             if (tile instanceof IConveyorContainer) {
-                EnumFacing side = factory.getSideForPlacement(context.getWorld(), context.getPos(), context.getPlayer());
+                Direction side = factory.getSideForPlacement(context.getWorld(), context.getPos(), context.getPlayer());
                     if (!((IConveyorContainer) tile).hasUpgrade(side)) {
                         ((IConveyorContainer) tile).addUpgrade(side, factory);
                         if (!context.getPlayer().isCreative()) context.getItem().shrink(1);
-                        return EnumActionResult.SUCCESS;
+                        return ActionResultType.SUCCESS;
                     }
             }
         }
-        return EnumActionResult.PASS;
+        return ActionResultType.PASS;
     }
 
     @Override

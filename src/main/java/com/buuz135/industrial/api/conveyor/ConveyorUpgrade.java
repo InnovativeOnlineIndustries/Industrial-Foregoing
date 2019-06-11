@@ -23,11 +23,11 @@ package com.buuz135.industrial.api.conveyor;
 
 import com.buuz135.industrial.api.conveyor.gui.IGuiComponent;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.EnumFacing;
-import net.minecraft.util.EnumHand;
+import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.util.Direction;
+import net.minecraft.util.Hand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.shapes.VoxelShape;
 import net.minecraft.util.math.shapes.VoxelShapes;
@@ -38,29 +38,29 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 
-public abstract class ConveyorUpgrade implements INBTSerializable<NBTTagCompound> {
+public abstract class ConveyorUpgrade implements INBTSerializable<CompoundNBT> {
 
     private IConveyorContainer container;
     private ConveyorUpgradeFactory factory;
-    private EnumFacing side;
+    private Direction side;
 
-    public ConveyorUpgrade(IConveyorContainer container, ConveyorUpgradeFactory factory, EnumFacing side) {
+    public ConveyorUpgrade(IConveyorContainer container, ConveyorUpgradeFactory factory, Direction side) {
         this.container = container;
         this.factory = factory;
         this.side = side;
     }
 
     @Override
-    public NBTTagCompound serializeNBT() {
+    public CompoundNBT serializeNBT() {
         return null;
     }
 
     @Override
-    public void deserializeNBT(NBTTagCompound nbt) {
+    public void deserializeNBT(CompoundNBT nbt) {
 
     }
 
-    public boolean onUpgradeActivated(EntityPlayer player, EnumHand hand) {
+    public boolean onUpgradeActivated(PlayerEntity player, Hand hand) {
         return false;
     }
 
@@ -84,7 +84,7 @@ public abstract class ConveyorUpgrade implements INBTSerializable<NBTTagCompound
         return factory;
     }
 
-    public EnumFacing getSide() {
+    public Direction getSide() {
         return side;
     }
 
@@ -112,7 +112,7 @@ public abstract class ConveyorUpgrade implements INBTSerializable<NBTTagCompound
         return false;
     }
 
-    public void handleButtonInteraction(int buttonId, NBTTagCompound compound) {
+    public void handleButtonInteraction(int buttonId, CompoundNBT compound) {
 
     }
 

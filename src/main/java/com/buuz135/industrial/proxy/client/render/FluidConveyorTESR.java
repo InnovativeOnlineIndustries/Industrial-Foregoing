@@ -23,16 +23,16 @@ package com.buuz135.industrial.proxy.client.render;
 
 import com.buuz135.industrial.proxy.block.BlockConveyor;
 import com.buuz135.industrial.proxy.block.tile.TileEntityConveyor;
+import com.mojang.blaze3d.platform.GlStateManager;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.BufferBuilder;
-import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.client.renderer.Tessellator;
+import net.minecraft.client.renderer.texture.AtlasTexture;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
-import net.minecraft.client.renderer.texture.TextureMap;
 import net.minecraft.client.renderer.tileentity.TileEntityRenderer;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
-import net.minecraft.util.EnumFacing;
+import net.minecraft.util.Direction;
 import net.minecraftforge.fluids.Fluid;
 import org.lwjgl.opengl.GL11;
 
@@ -45,22 +45,22 @@ public class FluidConveyorTESR extends TileEntityRenderer<TileEntityConveyor> {
         if (te.getTank().getFluidAmount() > 0) {
             GlStateManager.pushMatrix();
             GlStateManager.translatef((float) x, (float) y, (float) z);
-            EnumFacing facing = te.getFacing();
-            if (facing == EnumFacing.NORTH) {
+            Direction facing = te.getFacing();
+            if (facing == Direction.NORTH) {
                 GlStateManager.translatef(1, 0, 1);
                 GlStateManager.rotatef(180, 0, 1, 0);
             }
-            if (facing == EnumFacing.EAST) {
+            if (facing == Direction.EAST) {
                 GlStateManager.translatef(0, 0, 1);
                 GlStateManager.rotatef(90, 0, 1, 0);
             }
-            if (facing == EnumFacing.WEST) {
+            if (facing == Direction.WEST) {
                 GlStateManager.translatef(1, 0, 0);
                 GlStateManager.rotatef(-90, 0, 1, 0);
             }
             Tessellator tessellator = Tessellator.getInstance();
             BufferBuilder buffer = tessellator.getBuffer();
-            this.bindTexture(TextureMap.LOCATION_BLOCKS_TEXTURE);
+            this.bindTexture(AtlasTexture.LOCATION_BLOCKS_TEXTURE);
             RenderHelper.disableStandardItemLighting();
             GlStateManager.blendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
             GlStateManager.enableBlend();

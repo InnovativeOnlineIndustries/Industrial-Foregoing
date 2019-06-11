@@ -32,10 +32,10 @@ import com.buuz135.industrial.proxy.block.filter.IFilter;
 import com.buuz135.industrial.proxy.block.filter.ItemStackFilter;
 import com.buuz135.industrial.utils.Reference;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.EnumFacing;
+import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.util.Direction;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.shapes.VoxelShape;
@@ -56,7 +56,7 @@ public class ConveyorDetectorUpgrade extends ConveyorUpgrade {
     private boolean whitelist;
     private boolean inverted;
 
-    public ConveyorDetectorUpgrade(IConveyorContainer container, ConveyorUpgradeFactory factory, EnumFacing side) {
+    public ConveyorDetectorUpgrade(IConveyorContainer container, ConveyorUpgradeFactory factory, Direction side) {
         super(container, factory, side);
         this.filter = new ItemStackFilter(20, 20, 5, 3);
         this.whitelist = false;
@@ -87,18 +87,18 @@ public class ConveyorDetectorUpgrade extends ConveyorUpgrade {
     }
 
     @Override
-    public NBTTagCompound serializeNBT() {
-        NBTTagCompound compound = super.serializeNBT() == null ? new NBTTagCompound() : super.serializeNBT();
-        compound.setTag("Filter", filter.serializeNBT());
-        compound.setBoolean("Whitelist", whitelist);
-        compound.setBoolean("Inverted", inverted);
+    public CompoundNBT serializeNBT() {
+        CompoundNBT compound = super.serializeNBT() == null ? new CompoundNBT() : super.serializeNBT();
+        compound.put("Filter", filter.serializeNBT());
+        compound.putBoolean("Whitelist", whitelist);
+        compound.putBoolean("Inverted", inverted);
         return compound;
     }
 
     @Override
-    public void deserializeNBT(NBTTagCompound nbt) {
+    public void deserializeNBT(CompoundNBT nbt) {
         super.deserializeNBT(nbt);
-        if (nbt.hasKey("Filter")) filter.deserializeNBT(nbt.getCompound("Filter"));
+        if (nbt.hasUniqueId("Filter")) filter.deserializeNBT(nbt.getCompound("Filter"));
         whitelist = nbt.getBoolean("Whitelist");
         inverted = nbt.getBoolean("Inverted");
     }
@@ -119,7 +119,7 @@ public class ConveyorDetectorUpgrade extends ConveyorUpgrade {
     }
 
     @Override
-    public void handleButtonInteraction(int buttonId, NBTTagCompound compound) {
+    public void handleButtonInteraction(int buttonId, CompoundNBT compound) {
         super.handleButtonInteraction(buttonId, compound);
         if (buttonId >= 0 && buttonId < filter.getFilter().length) {
             this.filter.setFilter(buttonId, ItemStack.read(compound));
@@ -169,7 +169,7 @@ public class ConveyorDetectorUpgrade extends ConveyorUpgrade {
         }
 
         @Override
-        public ConveyorUpgrade create(IConveyorContainer container, EnumFacing face) {
+        public ConveyorUpgrade create(IConveyorContainer container, Direction face) {
             return new ConveyorDetectorUpgrade(container, this, face);
         }
 
@@ -180,18 +180,18 @@ public class ConveyorDetectorUpgrade extends ConveyorUpgrade {
 
         @Nonnull
         @Override
-        public Set<EnumFacing> getValidFacings() {
+        public Set<Direction> getValidFacings() {
             return DOWN;
         }
 
         @Override
-        public EnumFacing getSideForPlacement(World world, BlockPos pos, EntityPlayer player) {
-            return EnumFacing.DOWN;
+        public Direction getSideForPlacement(World world, BlockPos pos, PlayerEntity player) {
+            return Direction.DOWN;
         }
 
         @Override
         @Nonnull
-        public ResourceLocation getModel(EnumFacing upgradeSide, EnumFacing conveyorFacing) {
+        public ResourceLocation getModel(Direction upgradeSide, Direction conveyorFacing) {
             return new ResourceLocation(Reference.MOD_ID, "block/conveyor_upgrade_detection");
         }
 

@@ -22,7 +22,7 @@
 package com.buuz135.industrial.proxy.client.model;
 
 import com.buuz135.industrial.api.conveyor.ConveyorUpgrade;
-import net.minecraft.util.EnumFacing;
+import net.minecraft.util.Direction;
 import net.minecraftforge.client.model.data.ModelProperty;
 
 import java.util.Map;
@@ -30,13 +30,13 @@ import java.util.Map;
 public class ConveyorModelData {
 
     public static final ModelProperty<ConveyorModelData> UPGRADE_PROPERTY = new ModelProperty<ConveyorModelData>();
-    private Map<EnumFacing, ConveyorUpgrade> upgrades;
+    private Map<Direction, ConveyorUpgrade> upgrades;
 
-    public ConveyorModelData(Map<EnumFacing, ConveyorUpgrade> upgrades) {
+    public ConveyorModelData(Map<Direction, ConveyorUpgrade> upgrades) {
         this.upgrades = upgrades;
     }
 
-    public Map<EnumFacing, ConveyorUpgrade> getUpgrades() {
+    public Map<Direction, ConveyorUpgrade> getUpgrades() {
         return upgrades;
     }
 }

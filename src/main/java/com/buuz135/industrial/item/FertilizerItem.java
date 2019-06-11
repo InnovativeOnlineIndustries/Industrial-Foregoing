@@ -21,12 +21,12 @@
  */
 package com.buuz135.industrial.item;
 
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.ItemBoneMeal;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.item.BoneMealItem;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.ItemUseContext;
-import net.minecraft.util.EnumActionResult;
-import net.minecraft.util.EnumFacing;
+import net.minecraft.util.ActionResultType;
+import net.minecraft.util.Direction;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
@@ -37,20 +37,20 @@ public class FertilizerItem extends IFCustomItem {
     }
 
     @Override
-    public EnumActionResult onItemUse(ItemUseContext context) {
-        EntityPlayer player = context.getPlayer();
+    public ActionResultType onItemUse(ItemUseContext context) {
+        PlayerEntity player = context.getPlayer();
         ItemStack itemstack = context.getItem();
-        EnumFacing facing = context.getFace();
+        Direction facing = context.getFace();
         BlockPos pos = context.getPos();
         World worldIn = context.getWorld();
-        if (!player.canPlayerEdit(pos.offset(facing), facing, itemstack)) return EnumActionResult.FAIL;
-        if (ItemBoneMeal.applyBonemeal(itemstack, worldIn, pos, player)) {
+        if (!player.canPlayerEdit(pos.offset(facing), facing, itemstack)) return ActionResultType.FAIL;
+        if (BoneMealItem.applyBonemeal(itemstack, worldIn, pos, player)) {
             if (!worldIn.isRemote) {
                 worldIn.playEvent(2005, pos, 0);
             }
-            return EnumActionResult.SUCCESS;
+            return ActionResultType.SUCCESS;
         }
-        return EnumActionResult.PASS;
+        return ActionResultType.PASS;
     }
 
 }

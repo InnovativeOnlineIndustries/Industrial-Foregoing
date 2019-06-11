@@ -27,7 +27,7 @@ import com.buuz135.industrial.proxy.block.upgrade.ConveyorSplittingUpgrade;
 import com.hrznstudio.titanium.network.Message;
 import net.minecraft.client.Minecraft;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.EnumFacing;
+import net.minecraft.util.Direction;
 import net.minecraft.util.math.BlockPos;
 import net.minecraftforge.fml.network.NetworkEvent;
 
@@ -35,9 +35,9 @@ public class ConveyorSplittingSyncEntityMessage extends Message {
 
     private BlockPos pos;
     private int entityID;
-    private EnumFacing facingCurrent;
+    private Direction facingCurrent;
 
-    public ConveyorSplittingSyncEntityMessage(BlockPos pos, int entityID, EnumFacing facingCurrent) {
+    public ConveyorSplittingSyncEntityMessage(BlockPos pos, int entityID, Direction facingCurrent) {
         this.pos = pos;
         this.entityID = entityID;
         this.facingCurrent = facingCurrent;
@@ -48,7 +48,7 @@ public class ConveyorSplittingSyncEntityMessage extends Message {
 
     @Override
     protected void handleMessage(NetworkEvent.Context context) {
-        Minecraft.getInstance().addScheduledTask(() -> {
+        context.enqueueWork(() -> {
             TileEntity entity = Minecraft.getInstance().player.world.getTileEntity(pos);
             if (entity instanceof TileEntityConveyor) {
                 if (((TileEntityConveyor) entity).hasUpgrade(facingCurrent)) {

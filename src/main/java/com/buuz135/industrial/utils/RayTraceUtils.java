@@ -21,19 +21,19 @@
  */
 package com.buuz135.industrial.utils;
 
-import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.util.math.RayTraceFluidMode;
+import net.minecraft.entity.LivingEntity;
+import net.minecraft.util.math.RayTraceContext;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 
 public class RayTraceUtils {
 
-    public static RayTraceResult rayTraceSimple(World world, EntityLivingBase living, double blockReachDistance, float partialTicks) {
+    public static RayTraceResult rayTraceSimple(World world, LivingEntity living, double blockReachDistance, float partialTicks) {
         Vec3d vec3d = living.getEyePosition(partialTicks);
         Vec3d vec3d1 = living.getLook(partialTicks);
         Vec3d vec3d2 = vec3d.add(vec3d1.x * blockReachDistance, vec3d1.y * blockReachDistance, vec3d1.z * blockReachDistance);
-        return world.rayTraceBlocks(vec3d, vec3d2, RayTraceFluidMode.NEVER, false, true);
+        return world.rayTraceBlocks(new RayTraceContext(vec3d, vec3d2, RayTraceContext.BlockMode.COLLIDER, RayTraceContext.FluidMode.NONE, living));
     }
 
 }

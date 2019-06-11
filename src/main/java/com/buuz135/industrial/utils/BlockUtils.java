@@ -23,18 +23,18 @@ package com.buuz135.industrial.utils;
 
 import com.buuz135.industrial.IndustrialForegoing;
 import com.google.common.collect.HashMultimap;
+import com.mojang.blaze3d.platform.GlStateManager;
 import net.minecraft.block.Block;
+import net.minecraft.block.BlockState;
+import net.minecraft.block.Blocks;
 import net.minecraft.block.material.Material;
-import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.renderer.BufferBuilder;
-import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
-import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.EnumFacing;
+import net.minecraft.util.Direction;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
@@ -64,7 +64,7 @@ public class BlockUtils {
 
     public static boolean isBlockOreDict(World world, BlockPos pos, String ore) {
         /* TODO: OreDict reimplementation
-        IBlockState state = world.getBlockState(pos);
+        BlockState state = world.getBlockState(pos);
         Block block = state.getBlock();
         if (oreDictBlocks.containsEntry(ore, block)) {
             return true;
@@ -106,15 +106,15 @@ public class BlockUtils {
     }
 
     public static List<ItemStack> getBlockDrops(World world, BlockPos pos, int fortune) {
-        IBlockState state = world.getBlockState(pos);
+        BlockState state = world.getBlockState(pos);
         NonNullList<ItemStack> stacks = NonNullList.create();
-        state.getBlock().getDrops(state, stacks, world, pos, fortune);
+        //state.getBlock().getDrops(state, stacks, world, pos, fortune); TODO
         BlockEvent.HarvestDropsEvent event = new BlockEvent.HarvestDropsEvent(world, pos, world.getBlockState(pos), 0, 1f, stacks, IndustrialForegoing.getFakePlayer(world), false);
         MinecraftForge.EVENT_BUS.post(event);
         return event.getDrops();
     }
 
-    public static void renderLaserBeam(TileEntity tile, double x, double y, double z, EnumFacing direction, float partialTicks, int length) {
+    public static void renderLaserBeam(TileEntity tile, double x, double y, double z, Direction direction, float partialTicks, int length) {
         Tessellator tess = Tessellator.getInstance();
         GlStateManager.pushMatrix();
         double tempX = x;

@@ -23,30 +23,26 @@ package com.buuz135.industrial.proxy.client.event;
 
 import com.buuz135.industrial.item.infinity.ItemInfinityDrill;
 import com.buuz135.industrial.module.ModuleTool;
-import com.buuz135.industrial.utils.Reference;
-import com.hrznstudio.titanium.api.raytrace.DistanceRayTraceResult;
-import net.minecraft.block.BlockFlowingFluid;
+import com.mojang.blaze3d.platform.GlStateManager;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.GlStateManager;
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.EnumHand;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.Hand;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.BlockRayTraceResult;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.world.World;
 import net.minecraftforge.client.event.DrawBlockHighlightEvent;
 import net.minecraftforge.client.event.RenderPlayerEvent;
 import net.minecraftforge.client.event.TextureStitchEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fluids.IFluidBlock;
 import org.apache.commons.lang3.tuple.Pair;
 
 public class IFClientEvents {
 
     @SubscribeEvent
     public void textureStich(TextureStitchEvent.Pre pre) {
-        pre.getMap().registerSprite(Minecraft.getInstance().getResourceManager(), new ResourceLocation(Reference.MOD_ID, "blocks/catears"));
+        //pre.getMap().registerSprite(Minecraft.getInstance().getResourceManager(), new ResourceLocation(Reference.MOD_ID, "blocks/catears")); TODO
         //pre.getMap().registerSprite(FluidsRegistry.ORE_FLUID_RAW.getStill());
         //pre.getMap().registerSprite(FluidsRegistry.ORE_FLUID_RAW.getFlowing());
         //pre.getMap().registerSprite(FluidsRegistry.ORE_FLUID_FERMENTED.getStill());
@@ -56,53 +52,55 @@ public class IFClientEvents {
     @SubscribeEvent
     public void blockOverlayEvent(DrawBlockHighlightEvent event) {
         RayTraceResult hit = event.getTarget();
-        if (hit.type == RayTraceResult.Type.BLOCK && hit instanceof DistanceRayTraceResult) {
-            BlockPos pos = event.getTarget().getBlockPos();
+        if (hit.getType() == RayTraceResult.Type.BLOCK) {
+            BlockRayTraceResult blockRayTraceResult = (BlockRayTraceResult) hit;
+            BlockPos pos = blockRayTraceResult.getPos();
             event.setCanceled(true);
             GlStateManager.enableBlend();
             GlStateManager.blendFuncSeparate(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA,
                     GlStateManager.SourceFactor.ONE, GlStateManager.DestFactor.ZERO);
             GlStateManager.lineWidth(2.0F);
-            GlStateManager.disableTexture2D();
+            GlStateManager.disableTexture();
             GlStateManager.depthMask(false);
 
-            EntityPlayer player = event.getPlayer();
+            PlayerEntity player = Minecraft.getInstance().player;
             double x = player.lastTickPosX + (player.posX - player.lastTickPosX) * event.getPartialTicks();
             double y = player.lastTickPosY + (player.posY - player.lastTickPosY) * event.getPartialTicks();
             double z = player.lastTickPosZ + (player.posZ - player.lastTickPosZ) * event.getPartialTicks();
 
-            Minecraft.getInstance().renderGlobal.drawSelectionBoundingBox(((DistanceRayTraceResult) hit).getHitBox().getBoundingBox().offset(-x, -y, -z).offset(pos).grow(0.002),
-                    0.0F, 0.0F, 0.0F, 0.4F
-            );
+            //Minecraft.getInstance().renderGlobal.drawSelectionBoundingBox(((DistanceRayTraceResult) hit).getHitBox().getBoundingBox().offset(-x, -y, -z).offset(pos).grow(0.002),
+            //        0.0F, 0.0F, 0.0F, 0.4F
+            //);
 
             GlStateManager.depthMask(true);
-            GlStateManager.enableTexture2D();
+            GlStateManager.enableTexture();
             GlStateManager.disableBlend();
         }
-        if (hit.type == RayTraceResult.Type.BLOCK && event.getPlayer().getHeldItemMainhand().getItem().equals(ModuleTool.INFINITY_DRILL)) {
+        if (hit.getType() == RayTraceResult.Type.BLOCK && Minecraft.getInstance().player.getHeldItemMainhand().getItem().equals(ModuleTool.INFINITY_DRILL)) {
+            BlockRayTraceResult blockRayTraceResult = (BlockRayTraceResult) hit;
             event.setCanceled(true);
-            ItemStack hand = event.getPlayer().getHeldItemMainhand();
+            ItemStack hand = Minecraft.getInstance().player.getHeldItemMainhand();
             ItemInfinityDrill.DrillTier tier = ModuleTool.INFINITY_DRILL.getSelectedDrillTier(hand);
-            World world = event.getPlayer().world;
-            Pair<BlockPos, BlockPos> area = ModuleTool.INFINITY_DRILL.getArea(event.getTarget().getBlockPos(), event.getTarget().sideHit, tier, false);
+            World world = Minecraft.getInstance().player.world;
+            Pair<BlockPos, BlockPos> area = ModuleTool.INFINITY_DRILL.getArea(blockRayTraceResult.getPos(), blockRayTraceResult.getFace(), tier, false);
             GlStateManager.enableBlend();
             GlStateManager.blendFuncSeparate(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA,
                     GlStateManager.SourceFactor.ONE, GlStateManager.DestFactor.ZERO);
             GlStateManager.lineWidth(2.0F);
-            GlStateManager.disableTexture2D();
+            GlStateManager.disableTexture();
             GlStateManager.depthMask(false);
-            EntityPlayer player = event.getPlayer();
+            PlayerEntity player = Minecraft.getInstance().player;
             double x = player.lastTickPosX + (player.posX - player.lastTickPosX) * event.getPartialTicks();
             double y = player.lastTickPosY + (player.posY - player.lastTickPosY) * event.getPartialTicks();
             double z = player.lastTickPosZ + (player.posZ - player.lastTickPosZ) * event.getPartialTicks();
-            BlockPos.getAllInBox(area.getLeft(), area.getRight()).forEach(blockPos -> {
-                if (!world.isAirBlock(blockPos) && world.getBlockState(blockPos).getBlockHardness(world, blockPos) >= 0 && !(world.getBlockState(blockPos).getBlock() instanceof IFluidBlock) && !(world.getBlockState(blockPos).getBlock() instanceof BlockFlowingFluid)) {
-                    Minecraft.getInstance().renderGlobal.drawSelectionBoundingBox(world.getBlockState(blockPos).getBlock().getShape(world.getBlockState(blockPos), world, blockPos).getBoundingBox().offset(-x, -y, -z).offset(blockPos).
-                            grow(0.001), 0.0F, 0.0F, 0.0F, 0.4F);
-                }
-            });
+            //BlockPos.getAllInBoxMutable(area.getLeft(), area.getRight()).forEach(blockPos -> {
+            //    if (!world.isAirBlock(blockPos) && world.getBlockState(blockPos).getBlockHardness(world, blockPos) >= 0 && !(world.getBlockState(blockPos).getBlock() instanceof IFluidBlock) && !(world.getBlockState(blockPos).getBlock() instanceof IFluidBlock)) {
+            //        Minecraft.getInstance().renderGlobal.drawSelectionBoundingBox(world.getBlockState(blockPos).getBlock().getShape(world.getBlockState(blockPos), world, blockPos).getBoundingBox().offset(-x, -y, -z).offset(blockPos).
+            //                grow(0.001), 0.0F, 0.0F, 0.0F, 0.4F);
+            //    }
+            //});
             GlStateManager.depthMask(true);
-            GlStateManager.enableTexture2D();
+            GlStateManager.enableTexture();
             GlStateManager.disableBlend();
         }
     }
@@ -111,9 +109,9 @@ public class IFClientEvents {
     public void onRenderPre(RenderPlayerEvent.Pre event) {
         if (event.getEntityPlayer().getUniqueID().equals(Minecraft.getInstance().player.getUniqueID()) && Minecraft.getInstance().gameSettings.thirdPersonView == 0)
             return;
-        if (event.getEntityPlayer().getHeldItem(EnumHand.MAIN_HAND).getItem().equals(ModuleTool.INFINITY_DRILL))
-            event.getEntityPlayer().setActiveHand(EnumHand.MAIN_HAND);
-        else if (event.getEntityPlayer().getHeldItem(EnumHand.OFF_HAND).getItem().equals(ModuleTool.INFINITY_DRILL))
-            event.getEntityPlayer().setActiveHand(EnumHand.OFF_HAND);
+        if (event.getEntityPlayer().getHeldItem(Hand.MAIN_HAND).getItem().equals(ModuleTool.INFINITY_DRILL))
+            event.getEntityPlayer().setActiveHand(Hand.MAIN_HAND);
+        else if (event.getEntityPlayer().getHeldItem(Hand.OFF_HAND).getItem().equals(ModuleTool.INFINITY_DRILL))
+            event.getEntityPlayer().setActiveHand(Hand.OFF_HAND);
     }
 }

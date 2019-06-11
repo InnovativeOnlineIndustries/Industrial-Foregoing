@@ -22,10 +22,10 @@
 package com.buuz135.industrial.utils.apihandlers.straw;
 
 import com.buuz135.industrial.utils.Triple;
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.fluid.Fluid;
-import net.minecraft.potion.Potion;
-import net.minecraft.potion.PotionEffect;
+import net.minecraft.potion.Effect;
+import net.minecraft.potion.EffectInstance;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
@@ -35,25 +35,25 @@ import java.util.List;
 
 @ParametersAreNonnullByDefault
 public class PotionStrawHandler extends StrawHandlerBase {
-    private List<Triple<Potion, Integer, Integer>> potions = new ArrayList<>();
+    private List<Triple<Effect, Integer, Integer>> potions = new ArrayList<>();
 
     public PotionStrawHandler(Fluid fluid) {
         super(fluid);
     }
 
-    public PotionStrawHandler addPotion(PotionEffect effect) {
+    public PotionStrawHandler addPotion(EffectInstance effect) {
         return addPotion(effect.getPotion(), effect.getDuration(), effect.getAmplifier());
     }
 
-    public PotionStrawHandler addPotion(Potion potion, Integer duration, Integer amplifier) {
+    public PotionStrawHandler addPotion(Effect potion, Integer duration, Integer amplifier) {
         potions.add(new Triple<>(potion, duration, amplifier));
         return this;
     }
 
     @Override
-    public void onDrink(World world, BlockPos pos, Fluid stack, EntityPlayer player, boolean fromFluidContainer) {
-        for (Triple<Potion, Integer, Integer> triple : potions) {
-            player.addPotionEffect(new PotionEffect(triple.getA(), triple.getB(), triple.getC()));
+    public void onDrink(World world, BlockPos pos, Fluid stack, PlayerEntity player, boolean fromFluidContainer) {
+        for (Triple<Effect, Integer, Integer> triple : potions) {
+            player.addPotionEffect(new EffectInstance(triple.getA(), triple.getB(), triple.getC()));
         }
     }
 }

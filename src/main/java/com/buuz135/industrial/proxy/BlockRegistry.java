@@ -33,7 +33,7 @@ public class BlockRegistry {
     //public static IFCustomFluidBlock BLOCK_BIOFUEL = new IFCustomFluidBlock(FluidsRegistry.BIOFUEL, Material.WATER, entityLivingBase -> entityLivingBase.addPotionEffect(new PotionEffect(MobEffects.SPEED, 20, 1)));
     //public static IFCustomFluidBlock BLOCK_PINK_SLIME = (IFCustomFluidBlock) new IFCustomFluidBlock(FluidsRegistry.PINK_SLIME, Material.WATER, entityLivingBase -> entityLivingBase.addPotionEffect(new PotionEffect(MobEffects.GLOWING, 20 * 10, 0))) {
     //    @Override
-    //    public void randomTick(IBlockState state, World worldIn, BlockPos pos, Random random) {
+    //    public void randomTick(BlockState state, World worldIn, BlockPos pos, Random random) {
     //        if (state.getBlock().getFluidState(state).isSource()) {
     //            worldIn.setBlockState(pos, Blocks.AIR.getDefaultState());
     //            EntityPinkSlime pinkSlime = new EntityPinkSlime(worldIn);

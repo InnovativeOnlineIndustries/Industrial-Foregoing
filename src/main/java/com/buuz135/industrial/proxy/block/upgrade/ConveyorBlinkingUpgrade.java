@@ -31,13 +31,13 @@ import com.buuz135.industrial.proxy.block.filter.IFilter;
 import com.buuz135.industrial.proxy.block.filter.ItemStackFilter;
 import com.buuz135.industrial.utils.Reference;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.init.SoundEvents;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.EnumFacing;
+import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.util.Direction;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundCategory;
+import net.minecraft.util.SoundEvents;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.util.math.shapes.VoxelShape;
@@ -59,7 +59,7 @@ public class ConveyorBlinkingUpgrade extends ConveyorUpgrade {
     private int verticalDisplacement;
     private int horizontalDisplacement;
 
-    public ConveyorBlinkingUpgrade(IConveyorContainer container, ConveyorUpgradeFactory factory, EnumFacing side) {
+    public ConveyorBlinkingUpgrade(IConveyorContainer container, ConveyorUpgradeFactory factory, Direction side) {
         super(container, factory, side);
         this.filter = new ItemStackFilter(20, 20, 3, 3);
         this.whitelist = false;
@@ -71,7 +71,7 @@ public class ConveyorBlinkingUpgrade extends ConveyorUpgrade {
     public void handleEntity(Entity entity) {
         super.handleEntity(entity);
         if (whitelist != filter.matches(entity)) return;
-        EnumFacing direction = this.getContainer().getConveyorWorld().getBlockState(this.getContainer().getConveyorPosition()).get(BlockConveyor.FACING);
+        Direction direction = this.getContainer().getConveyorWorld().getBlockState(this.getContainer().getConveyorPosition()).get(BlockConveyor.FACING);
         Vec3d vec3d = new Vec3d(horizontalDisplacement * direction.getDirectionVec().getX(), verticalDisplacement, horizontalDisplacement * direction.getDirectionVec().getZ());
         BlockPos pos = this.getPos().add(vec3d.x, vec3d.y, vec3d.z);
         entity.setPosition(pos.getX() + 0.5, pos.getY() + 0.25, pos.getZ() + 0.5);
@@ -84,19 +84,19 @@ public class ConveyorBlinkingUpgrade extends ConveyorUpgrade {
     }
 
     @Override
-    public NBTTagCompound serializeNBT() {
-        NBTTagCompound compound = super.serializeNBT() == null ? new NBTTagCompound() : super.serializeNBT();
-        compound.setTag("Filter", filter.serializeNBT());
-        compound.setBoolean("Whitelist", whitelist);
-        compound.setDouble("VerticalDisplacement", verticalDisplacement);
-        compound.setDouble("HorizontalDisplacement", horizontalDisplacement);
+    public CompoundNBT serializeNBT() {
+        CompoundNBT compound = super.serializeNBT() == null ? new CompoundNBT() : super.serializeNBT();
+        compound.put("Filter", filter.serializeNBT());
+        compound.putBoolean("Whitelist", whitelist);
+        compound.putDouble("VerticalDisplacement", verticalDisplacement);
+        compound.putDouble("HorizontalDisplacement", horizontalDisplacement);
         return compound;
     }
 
     @Override
-    public void deserializeNBT(NBTTagCompound nbt) {
+    public void deserializeNBT(CompoundNBT nbt) {
         super.deserializeNBT(nbt);
-        if (nbt.hasKey("Filter")) filter.deserializeNBT(nbt.getCompound("Filter"));
+        if (nbt.hasUniqueId("Filter")) filter.deserializeNBT(nbt.getCompound("Filter"));
         whitelist = nbt.getBoolean("Whitelist");
         horizontalDisplacement = nbt.getInt("HorizontalDisplacement");
         verticalDisplacement = nbt.getInt("VerticalDisplacement");
@@ -108,7 +108,7 @@ public class ConveyorBlinkingUpgrade extends ConveyorUpgrade {
     }
 
     @Override
-    public void handleButtonInteraction(int buttonId, NBTTagCompound compound) {
+    public void handleButtonInteraction(int buttonId, CompoundNBT compound) {
         super.handleButtonInteraction(buttonId, compound);
         if (buttonId >= 0 && buttonId < filter.getFilter().length) {
             this.filter.setFilter(buttonId, ItemStack.read(compound));
@@ -206,7 +206,7 @@ public class ConveyorBlinkingUpgrade extends ConveyorUpgrade {
         }
 
         @Override
-        public ConveyorUpgrade create(IConveyorContainer container, EnumFacing face) {
+        public ConveyorUpgrade create(IConveyorContainer container, Direction face) {
             return new ConveyorBlinkingUpgrade(container, this, face);
         }
 
@@ -217,18 +217,18 @@ public class ConveyorBlinkingUpgrade extends ConveyorUpgrade {
 
         @Nonnull
         @Override
-        public Set<EnumFacing> getValidFacings() {
+        public Set<Direction> getValidFacings() {
             return DOWN;
         }
 
         @Override
-        public EnumFacing getSideForPlacement(World world, BlockPos pos, EntityPlayer player) {
-            return EnumFacing.DOWN;
+        public Direction getSideForPlacement(World world, BlockPos pos, PlayerEntity player) {
+            return Direction.DOWN;
         }
 
         @Override
         @Nonnull
-        public ResourceLocation getModel(EnumFacing upgradeSide, EnumFacing conveyorFacing) {
+        public ResourceLocation getModel(Direction upgradeSide, Direction conveyorFacing) {
             return new ResourceLocation(Reference.MOD_ID, "block/conveyor_upgrade_blinking");
         }
 

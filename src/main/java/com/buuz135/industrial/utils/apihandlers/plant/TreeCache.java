@@ -22,12 +22,13 @@
 package com.buuz135.industrial.utils.apihandlers.plant;
 
 import com.buuz135.industrial.utils.BlockUtils;
-import net.minecraft.block.state.IBlockState;
-import net.minecraft.init.Blocks;
-import net.minecraft.init.Items;
+import net.minecraft.block.BlockState;
+import net.minecraft.block.Blocks;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.Items;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 import net.minecraftforge.common.IShearable;
 
@@ -41,8 +42,8 @@ public class TreeCache {
     private BlockPos current;
 
     public TreeCache(World world, BlockPos current) {
-        this.woodCache = new PriorityQueue<>(Comparator.comparingDouble(value -> ((BlockPos) value).distanceSq(((BlockPos) value).getX(), current.getY(), ((BlockPos) value).getZ())).reversed());
-        this.leavesCache = new PriorityQueue<>(Comparator.comparingDouble(value -> ((BlockPos) value).distanceSq(current.getX(), ((BlockPos) value).getY(), current.getZ())).reversed());
+        this.woodCache = new PriorityQueue<>(Comparator.comparingDouble(value -> ((BlockPos) value).distanceSq(((BlockPos) value).getX(), current.getY(), ((BlockPos) value).getZ(), true)).reversed());
+        this.leavesCache = new PriorityQueue<>(Comparator.comparingDouble(value -> ((BlockPos) value).distanceSq(current.getX(), ((BlockPos) value).getY(), current.getZ(), true)).reversed());
         this.world = world;
         this.current = current;
     }
@@ -51,7 +52,7 @@ public class TreeCache {
         BlockPos p = cache.peek();
         NonNullList<ItemStack> stacks = NonNullList.create();
         if (BlockUtils.isLeaves(world, p) || BlockUtils.isLog(world, p)) {
-            IBlockState s = world.getBlockState(p);
+            BlockState s = world.getBlockState(p);
             if (s.getBlock() instanceof IShearable && shear) {
                 stacks.addAll(((IShearable) s.getBlock()).onSheared(new ItemStack(Items.SHEARS), world, p, 0));
             } else {
@@ -73,7 +74,7 @@ public class TreeCache {
 
     public void scanForTreeBlockSection() {
         BlockPos yCheck = getHighestBlock(current);
-        for (BlockPos pos : BlockPos.getAllInBox(yCheck.add(1, 0, 0), yCheck.add(0, 0, 1))) {
+        for (BlockPos pos : BlockPos.getAllInBoxMutable(yCheck.add(1, 0, 0), yCheck.add(0, 0, 1))) {
             BlockPos tempHigh = getHighestBlock(pos);
             if (tempHigh.getY() > yCheck.getY()) yCheck = tempHigh;
         }
@@ -81,14 +82,14 @@ public class TreeCache {
         Set<BlockPos> checkedPositions = new HashSet<>();
         Stack<BlockPos> tree = new Stack<>();
         BlockPos test = new BlockPos(current.getX(), yCheck.getY(), current.getZ());
-        for (BlockPos pos : BlockPos.getAllInBox(test.add(1, 0, 0), test.add(0, 0, 1))) {
+        for (BlockPos pos : BlockPos.getAllInBoxMutable(test.add(1, 0, 0), test.add(0, 0, 1))) {
             tree.push(pos);
         }
         while (!tree.isEmpty()) {
             BlockPos checking = tree.pop();
             if (BlockUtils.isLeaves(world, checking) || BlockUtils.isLog(world, checking)) {
-                for (BlockPos blockPos : BlockPos.getAllInBox(checking.add(-1, 0, -1), checking.add(1, 1, 1))) {
-                    if (world.isAirBlock(blockPos) || checkedPositions.contains(blockPos) || blockPos.getDistance(current.getX(), current.getY(), current.getZ()) > /*BlockRegistry.cropRecolectorBlock.getMaxDistanceTreeBlocksScan()*/ 1000)
+                for (BlockPos blockPos : BlockPos.getAllInBoxMutable(checking.add(-1, 0, -1), checking.add(1, 1, 1))) {
+                    if (world.isAirBlock(blockPos) || checkedPositions.contains(blockPos) || blockPos.withinDistance(new Vec3d(current.getX(), current.getY(), current.getZ()), 1000) /*BlockRegistry.cropRecolectorBlock.getMaxDistanceTreeBlocksScan()*/)
                         continue;
                     if (BlockUtils.isLeaves(world, blockPos)) {
                         tree.push(blockPos);

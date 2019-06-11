@@ -38,13 +38,12 @@ import com.buuz135.industrial.utils.apihandlers.RecipeHandlers;
 import com.buuz135.industrial.utils.apihandlers.json.ConfigurationConditionFactory;
 import com.google.gson.JsonParser;
 import com.hrznstudio.titanium.network.NetworkHandler;
-import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraft.util.text.TextFormatting;
-import net.minecraft.world.storage.loot.LootTableList;
+import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.crafting.CraftingHelper;
 import net.minecraftforge.fml.client.registry.ClientRegistry;
@@ -64,8 +63,8 @@ public class CommonProxy {
 
     public static DamageSource custom = new DamageSource("if_custom") {
         @Override
-        public ITextComponent getDeathMessage(EntityLivingBase entityLivingBaseIn) {
-            return new TextComponentTranslation("text.industrialforegoing.chat.slaughter_kill", entityLivingBaseIn.getDisplayName().getFormattedText(), TextFormatting.RESET);
+        public ITextComponent getDeathMessage(LivingEntity entityLivingBaseIn) {
+            return new TranslationTextComponent("text.industrialforegoing.chat.slaughter_kill", entityLivingBaseIn.getDisplayName().getFormattedText(), TextFormatting.RESET);
         }
     };
     public static ResourceLocation PINK_SLIME_LOOT;
@@ -123,7 +122,7 @@ public class CommonProxy {
 //        if (Loader.isModLoaded("baubles")) MinecraftForge.EVENT_BUS.register(new MeatFeederBauble.Event());
 
         //EntityRegistry.registerModEntity(new ResourceLocation(Reference.MOD_ID, "pink_slime"), EntityPinkSlime.class, "pink_slime", 135135, IndustrialForegoing.instance, 32, 1, false, 10485860, 16777215);
-        PINK_SLIME_LOOT = LootTableList.register(new ResourceLocation(Reference.MOD_ID, "entities/pink_slime"));
+        //PINK_SLIME_LOOT = LootTables.register(new ResourceLocation(Reference.MOD_ID, "entities/pink_slime"));TODO REGISTER
 
         try {
             new JsonParser().parse(readUrl(CONTRIBUTORS_FILE)).getAsJsonObject().get("uuid").getAsJsonArray().forEach(jsonElement -> CONTRIBUTORS.add(jsonElement.getAsString()));

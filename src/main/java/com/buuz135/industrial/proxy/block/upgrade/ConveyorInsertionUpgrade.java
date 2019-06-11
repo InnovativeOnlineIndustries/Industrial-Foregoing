@@ -33,13 +33,12 @@ import com.buuz135.industrial.proxy.block.filter.ItemStackFilter;
 import com.buuz135.industrial.proxy.block.tile.TileEntityConveyor;
 import com.buuz135.industrial.utils.Reference;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.item.EntityItem;
-import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.entity.item.ItemEntity;
+import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.EntitySelectors;
-import net.minecraft.util.EnumFacing;
+import net.minecraft.util.Direction;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
@@ -71,7 +70,7 @@ public class ConveyorInsertionUpgrade extends ConveyorUpgrade {
     private boolean whitelist;
     private boolean fullArea;
 
-    public ConveyorInsertionUpgrade(IConveyorContainer container, ConveyorUpgradeFactory factory, EnumFacing side) {
+    public ConveyorInsertionUpgrade(IConveyorContainer container, ConveyorUpgradeFactory factory, Direction side) {
         super(container, factory, side);
         this.filter = new ItemStackFilter(20, 20, 5, 3);
         this.whitelist = false;
@@ -82,18 +81,18 @@ public class ConveyorInsertionUpgrade extends ConveyorUpgrade {
     public void handleEntity(Entity entity) {
         if (getWorld().isRemote)
             return;
-        if (entity instanceof EntityItem) {
+        if (entity instanceof ItemEntity) {
             getHandlerCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY).ifPresent(handler -> {
                 if (getWorkingBox().getBoundingBox().offset(getPos()).grow(0.01).intersects(entity.getBoundingBox())) {
-                    if (whitelist != filter.matches((EntityItem) entity)) return;
-                    ItemStack stack = ((EntityItem) entity).getItem();
+                    if (whitelist != filter.matches((ItemEntity) entity)) return;
+                    ItemStack stack = ((ItemEntity) entity).getItem();
                     for (int i = 0; i < handler.getSlots(); i++) {
                         stack = handler.insertItem(i, stack, false);
                         if (stack.isEmpty()) {
                             entity.remove();
                             break;
                         } else {
-                            ((EntityItem) entity).setItem(stack);
+                            ((ItemEntity) entity).setItem(stack);
                         }
                     }
                 }
@@ -122,26 +121,26 @@ public class ConveyorInsertionUpgrade extends ConveyorUpgrade {
         TileEntity tile = getWorld().getTileEntity(offsetPos);
         if (tile != null && tile.getCapability(capability, getSide().getOpposite()).isPresent())
             return tile.getCapability(capability, getSide().getOpposite());
-        for (Entity entity : getWorld().getEntitiesWithinAABB(Entity.class, new AxisAlignedBB(0, 0, 0, 1, 1, 1).offset(offsetPos), EntitySelectors.NOT_SPECTATING)) {
-            if (entity.getCapability(capability, entity instanceof EntityPlayerMP ? null : getSide().getOpposite()).isPresent())
-                return entity.getCapability(capability, entity instanceof EntityPlayerMP ? null : getSide().getOpposite());
+        for (Entity entity : getWorld().getEntitiesWithinAABB(Entity.class, new AxisAlignedBB(0, 0, 0, 1, 1, 1).offset(offsetPos)/*, EntitySelectors.NOT_SPECTATING TODO*/)) {
+            if (entity.getCapability(capability, entity instanceof ServerPlayerEntity ? null : getSide().getOpposite()).isPresent())
+                return entity.getCapability(capability, entity instanceof ServerPlayerEntity ? null : getSide().getOpposite());
         }
         return LazyOptional.empty();
     }
 
     @Override
-    public NBTTagCompound serializeNBT() {
-        NBTTagCompound compound = super.serializeNBT() == null ? new NBTTagCompound() : super.serializeNBT();
-        compound.setTag("Filter", filter.serializeNBT());
-        compound.setBoolean("Whitelist", whitelist);
-        compound.setBoolean("FullArea", fullArea);
+    public CompoundNBT serializeNBT() {
+        CompoundNBT compound = super.serializeNBT() == null ? new CompoundNBT() : super.serializeNBT();
+        compound.put("Filter", filter.serializeNBT());
+        compound.putBoolean("Whitelist", whitelist);
+        compound.putBoolean("FullArea", fullArea);
         return compound;
     }
 
     @Override
-    public void deserializeNBT(NBTTagCompound nbt) {
+    public void deserializeNBT(CompoundNBT nbt) {
         super.deserializeNBT(nbt);
-        if (nbt.hasKey("Filter")) filter.deserializeNBT(nbt.getCompound("Filter"));
+        if (nbt.hasUniqueId("Filter")) filter.deserializeNBT(nbt.getCompound("Filter"));
         whitelist = nbt.getBoolean("Whitelist");
         fullArea = nbt.getBoolean("FullArea");
     }
@@ -182,7 +181,7 @@ public class ConveyorInsertionUpgrade extends ConveyorUpgrade {
     }
 
     @Override
-    public void handleButtonInteraction(int buttonId, NBTTagCompound compound) {
+    public void handleButtonInteraction(int buttonId, CompoundNBT compound) {
         super.handleButtonInteraction(buttonId, compound);
         if (buttonId >= 0 && buttonId < filter.getFilter().length) {
             this.filter.setFilter(buttonId, ItemStack.read(compound));
@@ -232,13 +231,13 @@ public class ConveyorInsertionUpgrade extends ConveyorUpgrade {
         }
 
         @Override
-        public ConveyorUpgrade create(IConveyorContainer container, EnumFacing face) {
+        public ConveyorUpgrade create(IConveyorContainer container, Direction face) {
             return new ConveyorInsertionUpgrade(container, this, face);
         }
 
         @Override
         @Nonnull
-        public ResourceLocation getModel(EnumFacing upgradeSide, EnumFacing conveyorFacing) {
+        public ResourceLocation getModel(Direction upgradeSide, Direction conveyorFacing) {
             return new ResourceLocation(Reference.MOD_ID, "block/conveyor_upgrade_inserter_" + upgradeSide.getName().toLowerCase());
         }
 

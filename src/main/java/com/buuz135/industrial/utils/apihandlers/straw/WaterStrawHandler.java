@@ -21,9 +21,9 @@
  */
 package com.buuz135.industrial.utils.apihandlers.straw;
 
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.fluid.Fluid;
-import net.minecraft.init.Fluids;
+import net.minecraft.fluid.Fluids;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
@@ -38,9 +38,9 @@ public class WaterStrawHandler extends StrawHandlerBase {
     }
 
     @Override
-    public void onDrink(World world, BlockPos pos, Fluid stack, EntityPlayer player, boolean fromFluidContainer) {
+    public void onDrink(World world, BlockPos pos, Fluid stack, PlayerEntity player, boolean fromFluidContainer) {
         player.extinguish();
-        /*NBTTagCompound tag = player.getEntityData(); todo
+        /*CompoundNBT tag = player.getEntityData(); todo
         if (tag.hasKey("lavaDrink") && world.getTotalWorldTime() - tag.getLong("lavaDrink") < 120) { //6 Seconds to drink water after drinking lava to create obsidian
             player.entityDropItem(new ItemStack(Blocks.OBSIDIAN), player.getEyeHeight());
 

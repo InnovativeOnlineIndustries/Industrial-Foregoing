@@ -27,7 +27,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.Rectangle2d;
 import net.minecraft.entity.Entity;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.CompoundNBT;
 import net.minecraftforge.fluids.FluidStack;
 
 
@@ -45,9 +45,9 @@ public interface IFilter<T extends Entity> {
 
     GhostSlot[] getFilter();
 
-    NBTTagCompound serializeNBT();
+    CompoundNBT serializeNBT();
 
-    void deserializeNBT(NBTTagCompound nbt);
+    void deserializeNBT(CompoundNBT nbt);
 
     //@Optional.Interface(iface = "mezz.jei.api.gui.IGhostIngredientHandler$Target", modid = "jei", striprefs = true) TODO
     public static class GhostSlot implements IGhostIngredientHandler.Target<ItemStack> {
@@ -74,8 +74,8 @@ public interface IFilter<T extends Entity> {
 
         @Override
         public Rectangle2d getArea() {
-            if (Minecraft.getInstance().currentScreen instanceof GuiConveyor) {
-                GuiConveyor gui = (GuiConveyor) Minecraft.getInstance().currentScreen;
+            if (Minecraft.getInstance().field_71462_r instanceof GuiConveyor) {
+                GuiConveyor gui = (GuiConveyor) Minecraft.getInstance().field_71462_r;
                 return new Rectangle2d(x + gui.getX(), y + gui.getY(), 18, 18);
             }
             return new Rectangle2d(0, 0, 0, 0);
@@ -83,8 +83,8 @@ public interface IFilter<T extends Entity> {
 
         @Override
         public void accept(ItemStack ingredient) {
-            if (Minecraft.getInstance().currentScreen instanceof GuiConveyor) {
-                ((GuiConveyor) Minecraft.getInstance().currentScreen).sendMessage(id, ingredient.serializeNBT());
+            if (Minecraft.getInstance().field_71462_r instanceof GuiConveyor) {
+                ((GuiConveyor) Minecraft.getInstance().field_71462_r).sendMessage(id, ingredient.serializeNBT());
             }
         }
     }

@@ -22,8 +22,8 @@
 package com.buuz135.industrial.utils.apihandlers.straw;
 
 import com.buuz135.industrial.proxy.FluidsRegistry;
-import net.minecraft.entity.item.EntityXPOrb;
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.item.ExperienceOrbEntity;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.fluid.Fluid;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
@@ -38,7 +38,7 @@ public class EssenceStrawHandler extends StrawHandlerBase {
     }
 
     @Override
-    public void onDrink(World world, BlockPos pos, Fluid stack, EntityPlayer player, boolean fromFluidContainer) {
-        world.spawnEntity(new EntityXPOrb(world, player.posX, player.posY, player.posZ, world.rand.nextInt(10) + 8));
+    public void onDrink(World world, BlockPos pos, Fluid stack, PlayerEntity player, boolean fromFluidContainer) {
+        world.addEntity(new ExperienceOrbEntity(world, player.posX, player.posY, player.posZ, world.rand.nextInt(10) + 8));
     }
 }

@@ -33,8 +33,8 @@ import com.buuz135.industrial.proxy.block.tile.TileEntityConveyor;
 import com.buuz135.industrial.utils.MovementUtils;
 import com.buuz135.industrial.utils.Reference;
 import net.minecraft.entity.Entity;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.EnumFacing;
+import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.util.Direction;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.shapes.VoxelShape;
@@ -54,11 +54,11 @@ public class ConveyorSplittingUpgrade extends ConveyorUpgrade {
 
 
     public List<Integer> handlingEntities;
-    private EnumFacing nextFacing;
+    private Direction nextFacing;
     private int ratio;
     private int currentRatio;
 
-    public ConveyorSplittingUpgrade(IConveyorContainer container, ConveyorUpgradeFactory factory, EnumFacing side) {
+    public ConveyorSplittingUpgrade(IConveyorContainer container, ConveyorUpgradeFactory factory, Direction side) {
         super(container, factory, side);
         this.handlingEntities = new ArrayList<>();
         this.nextFacing = side;
@@ -111,7 +111,7 @@ public class ConveyorSplittingUpgrade extends ConveyorUpgrade {
             return;
         }
         currentRatio = ratio;
-        EnumFacing facing = nextFacing.rotateY();
+        Direction facing = nextFacing.rotateY();
         ConveyorUpgrade conveyorUpgrade = ((TileEntityConveyor) this.getContainer()).getUpgradeMap().get(facing);
         int y = 0;
         while (!(conveyorUpgrade instanceof ConveyorSplittingUpgrade) && y < 10) {
@@ -121,8 +121,8 @@ public class ConveyorSplittingUpgrade extends ConveyorUpgrade {
         }
         if (y >= 10) facing = this.getSide();
         TileEntityConveyor entityConveyor = (TileEntityConveyor) this.getContainer();
-        for (EnumFacing enumFacing : entityConveyor.getUpgradeMap().keySet()) {
-            ConveyorUpgrade upgrade = entityConveyor.getUpgradeMap().get(enumFacing);
+        for (Direction Direction : entityConveyor.getUpgradeMap().keySet()) {
+            ConveyorUpgrade upgrade = entityConveyor.getUpgradeMap().get(Direction);
             if (upgrade instanceof ConveyorSplittingUpgrade) {
                 ((ConveyorSplittingUpgrade) upgrade).setNextFacing(facing);
             }
@@ -146,27 +146,27 @@ public class ConveyorSplittingUpgrade extends ConveyorUpgrade {
     }
 
     @Override
-    public NBTTagCompound serializeNBT() {
-        NBTTagCompound compound = super.serializeNBT() == null ? new NBTTagCompound() : super.serializeNBT();
-        compound.setString("NextFacing", nextFacing.getName());
-        compound.setInt("Ratio", ratio);
-        compound.setInt("CurrentRatio", currentRatio);
+    public CompoundNBT serializeNBT() {
+        CompoundNBT compound = super.serializeNBT() == null ? new CompoundNBT() : super.serializeNBT();
+        compound.putString("NextFacing", nextFacing.getName());
+        compound.putInt("Ratio", ratio);
+        compound.putInt("CurrentRatio", currentRatio);
         return compound;
     }
 
     @Override
-    public void deserializeNBT(NBTTagCompound nbt) {
+    public void deserializeNBT(CompoundNBT nbt) {
         super.deserializeNBT(nbt);
-        nextFacing = EnumFacing.byName(nbt.getString("NextFacing"));
+        nextFacing = Direction.byName(nbt.getString("NextFacing"));
         ratio = nbt.getInt("Ratio");
         currentRatio = nbt.getInt("CurrentRatio");
     }
 
-    public EnumFacing getNextFacing() {
+    public Direction getNextFacing() {
         return nextFacing;
     }
 
-    public void setNextFacing(EnumFacing nextFacing) {
+    public void setNextFacing(Direction nextFacing) {
         this.nextFacing = nextFacing;
     }
 
@@ -203,7 +203,7 @@ public class ConveyorSplittingUpgrade extends ConveyorUpgrade {
     }
 
     @Override
-    public void handleButtonInteraction(int buttonId, NBTTagCompound compound) {
+    public void handleButtonInteraction(int buttonId, CompoundNBT compound) {
         super.handleButtonInteraction(buttonId, compound);
         if (buttonId == 0 && ratio <= 64) {
             ++ratio;
@@ -224,13 +224,13 @@ public class ConveyorSplittingUpgrade extends ConveyorUpgrade {
         }
 
         @Override
-        public ConveyorUpgrade create(IConveyorContainer container, EnumFacing face) {
+        public ConveyorUpgrade create(IConveyorContainer container, Direction face) {
             return new ConveyorSplittingUpgrade(container, this, face);
         }
 
         @Override
         @Nonnull
-        public ResourceLocation getModel(EnumFacing upgradeSide, EnumFacing conveyorFacing) {
+        public ResourceLocation getModel(Direction upgradeSide, Direction conveyorFacing) {
             return new ResourceLocation(Reference.MOD_ID, "block/conveyor_upgrade_splitting_" + upgradeSide.getName().toLowerCase());
         }
 

@@ -22,7 +22,7 @@
 package com.buuz135.industrial.fluid;
 
 import com.buuz135.industrial.utils.Reference;
-import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fluids.FluidStack;
 
@@ -37,7 +37,7 @@ public class IFOreFluid extends IFCustomFluid {
     }
 
     public static String getOre(FluidStack stack) {
-        return stack.tag != null && stack.tag.hasKey("Ore") ? stack.tag.getString("Ore") : null;
+        return stack.tag != null && stack.tag.hasUniqueId("Ore") ? stack.tag.getString("Ore") : null;
     }
 
     @Override
@@ -56,8 +56,8 @@ public class IFOreFluid extends IFCustomFluid {
     }
 
     public FluidStack getWithOre(String ore, int amount) {
-        NBTTagCompound compound = new NBTTagCompound();
-        compound.setString("Ore", ore);
+        CompoundNBT compound = new CompoundNBT();
+        compound.putString("Ore", ore);
         return new FluidStack(this, amount, compound);
     }
 

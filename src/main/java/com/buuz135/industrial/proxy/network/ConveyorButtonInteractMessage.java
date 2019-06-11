@@ -23,9 +23,9 @@ package com.buuz135.industrial.proxy.network;
 
 import com.buuz135.industrial.proxy.block.tile.TileEntityConveyor;
 import com.hrznstudio.titanium.network.Message;
-import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.EnumFacing;
+import net.minecraft.util.Direction;
 import net.minecraft.util.math.BlockPos;
 import net.minecraftforge.fml.network.NetworkEvent;
 
@@ -34,9 +34,9 @@ public class ConveyorButtonInteractMessage extends Message {
     private BlockPos pos;
     private int buttonId;
     private int facing;
-    private NBTTagCompound compound;
+    private CompoundNBT compound;
 
-    public ConveyorButtonInteractMessage(BlockPos pos, int buttonId, EnumFacing facing, NBTTagCompound compound) {
+    public ConveyorButtonInteractMessage(BlockPos pos, int buttonId, Direction facing, CompoundNBT compound) {
         this.pos = pos;
         this.buttonId = buttonId;
         this.facing = facing.getIndex();
@@ -49,9 +49,9 @@ public class ConveyorButtonInteractMessage extends Message {
 
     @Override
     protected void handleMessage(NetworkEvent.Context context) {
-        context.getSender().getServerWorld().addScheduledTask(() -> {
+        context.enqueueWork(() -> {
             TileEntity entity = context.getSender().getServerWorld().getTileEntity(pos);
-            EnumFacing facing = EnumFacing.byIndex(this.facing);
+            Direction facing = Direction.byIndex(this.facing);
             if (entity instanceof TileEntityConveyor) {
                 System.out.println(((TileEntityConveyor) entity).hasUpgrade(facing));
                 if (((TileEntityConveyor) entity).hasUpgrade(facing)) {

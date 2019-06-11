@@ -22,8 +22,8 @@
 package com.buuz135.industrial.utils;
 
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.renderer.texture.AtlasTexture;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
-import net.minecraft.client.renderer.texture.TextureMap;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
@@ -34,7 +34,7 @@ import java.awt.*;
 public class ColorUtils {
 
     public static int getColorFrom(ResourceLocation location) {
-        TextureMap textureMap = Minecraft.getInstance().getTextureMap();
+        AtlasTexture textureMap = Minecraft.getInstance().getTextureMap();
         TextureAtlasSprite sprite = textureMap.getAtlasSprite(location.toString());
         return getColorFrom(sprite);
     }

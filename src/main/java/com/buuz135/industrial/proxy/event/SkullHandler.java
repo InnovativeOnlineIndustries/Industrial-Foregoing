@@ -39,7 +39,7 @@ public class SkullHandler {
     public void onTooltip(ItemTooltipEvent event) {
         if (!BlockRegistry.witherBuilderBlock.isHCWither()) return;
         if (event.getItemStack().isItemEqual(new ItemStack(Items.SKULL, 1, 1))) {
-            event.getToolTip().add(TextFormatting.RED + new TextComponentTranslation("text.industrialforegoing.tooltip.no_wither_skull").getUnformattedText());
+            event.getToolTip().add(TextFormatting.RED + new TranslationTextComponent("text.industrialforegoing.tooltip.no_wither_skull").getUnformattedText());
         }
     }
 

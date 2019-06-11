@@ -21,35 +21,23 @@
  */
 package com.buuz135.industrial.entity;
 
-import com.buuz135.industrial.module.ModuleCore;
 import com.buuz135.industrial.proxy.CommonProxy;
-import net.minecraft.entity.monster.EntitySlime;
-import net.minecraft.item.Item;
+import net.minecraft.entity.monster.SlimeEntity;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.world.IWorld;
 import net.minecraft.world.World;
-import net.minecraft.world.storage.loot.LootTableList;
+import net.minecraft.world.storage.loot.LootTables;
 
 import javax.annotation.Nullable;
 
-public class EntityPinkSlime extends EntitySlime {
+public class EntityPinkSlime extends SlimeEntity {
+
     public EntityPinkSlime(World worldIn) {
-        super(worldIn);
-    }
-
-    @Override
-    public boolean canSpawn(IWorld p_205020_1_, boolean bool) {
-        return false;
-    }
-
-    @Override
-    protected Item getDropItem() {
-        return this.getSlimeSize() == 1 ? ModuleCore.PINK_SLIME : null;
+        super(null, worldIn); //TODO
     }
 
     @Nullable
     @Override
     protected ResourceLocation getLootTable() {
-        return this.getSlimeSize() == 1 ? CommonProxy.PINK_SLIME_LOOT : LootTableList.EMPTY;
+        return this.getSlimeSize() == 1 ? CommonProxy.PINK_SLIME_LOOT : LootTables.EMPTY;
     }
 }

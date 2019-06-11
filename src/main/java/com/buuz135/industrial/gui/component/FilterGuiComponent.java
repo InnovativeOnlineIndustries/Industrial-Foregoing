@@ -25,8 +25,8 @@ import com.buuz135.industrial.api.conveyor.gui.PositionedGuiComponent;
 import com.buuz135.industrial.gui.conveyor.GuiConveyor;
 import com.buuz135.industrial.proxy.block.filter.IFilter;
 import com.buuz135.industrial.utils.Reference;
+import com.mojang.blaze3d.platform.GlStateManager;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.util.ResourceLocation;
 
@@ -67,7 +67,7 @@ public abstract class FilterGuiComponent extends PositionedGuiComponent {
                 int posX = guiX + getXPos() + x * 18;
                 int posY = guiY + getXPos() + i * 18;
                 Minecraft.getInstance().getTextureManager().bindTexture(BG_TEXTURE);
-                Minecraft.getInstance().currentScreen.drawTexturedModalRect(posX, posY, 176, 0, 18, 18);
+                Minecraft.getInstance().field_71462_r.blit(posX, posY, 176, 0, 18, 18);
                 if (!getFilter().getFilter()[pos].getStack().isEmpty()) {
                     RenderHelper.enableGUIStandardItemLighting();
                     Minecraft.getInstance().getItemRenderer().renderItemIntoGUI(getFilter().getFilter()[pos].getStack(), posX + 1, posY + 1);
@@ -87,7 +87,7 @@ public abstract class FilterGuiComponent extends PositionedGuiComponent {
                 if (mouseX > posX + 1 && mouseX < posX + 1 + 16 && mouseY > posY + 1 && mouseY < posY + 1 + 16) {
                     GlStateManager.disableLighting();
                     GlStateManager.disableDepthTest();
-                    Minecraft.getInstance().currentScreen.drawRect(posX + 1 - guiX, posY + 1 - guiY, posX + 17 - guiX, posY + 17 - guiY, -2130706433);
+                    Minecraft.getInstance().field_71462_r.fill(posX + 1 - guiX, posY + 1 - guiY, posX + 17 - guiX, posY + 17 - guiY, -2130706433);
                     GlStateManager.enableLighting();
                     GlStateManager.enableDepthTest();
                     return;
@@ -112,7 +112,7 @@ public abstract class FilterGuiComponent extends PositionedGuiComponent {
                 int posX = guiX + getXPos() + x * 18;
                 int posY = guiY + getXPos() + i * 18;
                 if (mouseX > posX + 1 && mouseX < posX + 1 + 16 && mouseY > posY + 1 && mouseY < posY + 1 + 16 && !getFilter().getFilter()[pos].getStack().isEmpty()) {
-                    return Minecraft.getInstance().currentScreen.getItemToolTip(getFilter().getFilter()[pos].getStack());
+                    return Minecraft.getInstance().field_71462_r.getTooltipFromItem(getFilter().getFilter()[pos].getStack());
                 }
                 ++pos;
             }

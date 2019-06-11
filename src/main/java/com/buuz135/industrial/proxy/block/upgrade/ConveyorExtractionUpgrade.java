@@ -34,16 +34,15 @@ import com.buuz135.industrial.proxy.block.tile.TileEntityConveyor;
 import com.buuz135.industrial.utils.Reference;
 import com.google.common.collect.Sets;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.item.EntityItem;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.entity.player.EntityPlayerMP;
-import net.minecraft.init.Items;
+import net.minecraft.entity.item.ItemEntity;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.item.Items;
+import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.EntitySelectors;
-import net.minecraft.util.EnumFacing;
-import net.minecraft.util.EnumHand;
+import net.minecraft.util.Direction;
+import net.minecraft.util.Hand;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
@@ -72,9 +71,9 @@ public class ConveyorExtractionUpgrade extends ConveyorUpgrade {
     private boolean fast = false;
     private ItemStackFilter filter;
     private boolean whitelist;
-    private List<EntityItem> items;
+    private List<ItemEntity> items;
 
-    public ConveyorExtractionUpgrade(IConveyorContainer container, ConveyorUpgradeFactory factory, EnumFacing side) {
+    public ConveyorExtractionUpgrade(IConveyorContainer container, ConveyorUpgradeFactory factory, Direction side) {
         super(container, factory, side);
         this.filter = new ItemStackFilter(20, 20, 5, 3);
         this.whitelist = false;
@@ -97,23 +96,23 @@ public class ConveyorExtractionUpgrade extends ConveyorUpgrade {
     }
 
     @Override
-    public NBTTagCompound serializeNBT() {
-        NBTTagCompound compound = new NBTTagCompound();
-        compound.setBoolean("fast", fast);
-        compound.setTag("Filter", filter.serializeNBT());
-        compound.setBoolean("Whitelist", whitelist);
+    public CompoundNBT serializeNBT() {
+        CompoundNBT compound = new CompoundNBT();
+        compound.putBoolean("fast", fast);
+        compound.put("Filter", filter.serializeNBT());
+        compound.putBoolean("Whitelist", whitelist);
         return compound;
     }
 
     @Override
-    public void deserializeNBT(NBTTagCompound nbt) {
+    public void deserializeNBT(CompoundNBT nbt) {
         fast = nbt.getBoolean("fast");
-        if (nbt.hasKey("Filter")) filter.deserializeNBT(nbt.getCompound("Filter"));
+        if (nbt.hasUniqueId("Filter")) filter.deserializeNBT(nbt.getCompound("Filter"));
         whitelist = nbt.getBoolean("Whitelist");
     }
 
     @Override
-    public boolean onUpgradeActivated(EntityPlayer player, EnumHand hand) {
+    public boolean onUpgradeActivated(PlayerEntity player, Hand hand) {
         ItemStack held = player.getHeldItem(hand);
         if (held.getItem() == Items.GLOWSTONE_DUST && !fast) {
             fast = true;
@@ -137,7 +136,7 @@ public class ConveyorExtractionUpgrade extends ConveyorUpgrade {
     public void update() {
         if (getWorld().isRemote)
             return;
-        items.removeIf(entityItem -> entityItem.getItem().isEmpty() || !entityItem.isAlive());
+        items.removeIf(ItemEntity -> ItemEntity.getItem().isEmpty() || !ItemEntity.isAlive());
         if (items.size() >= 20) return;
         if (getWorld().getGameTime() % (fast ? 10 : 20) == 0) {
             getHandlerCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY).ifPresent(itemHandler -> {
@@ -145,13 +144,11 @@ public class ConveyorExtractionUpgrade extends ConveyorUpgrade {
                     ItemStack stack = itemHandler.extractItem(i, 4, true);
                     if (stack.isEmpty() || whitelist != filter.matches(stack))
                         continue;
-                    EntityItem item = new EntityItem(getWorld(), getPos().getX() + 0.5, getPos().getY() + 0.5, getPos().getZ() + 0.5);
-                    item.motionX = 0;
-                    item.motionY = 0;
-                    item.motionZ = 0;
+                    ItemEntity item = new ItemEntity(getWorld(), getPos().getX() + 0.5, getPos().getY() + 0.5, getPos().getZ() + 0.5);
+                    item.setMotion(0, 0, 0);
                     item.setPickupDelay(40);
                     item.setItem(itemHandler.extractItem(i, 4, false));
-                    if (getWorld().spawnEntity(item)) {
+                    if (getWorld().addEntity(item)) {
                         items.add(item);
                     }
                     break;
@@ -175,9 +172,9 @@ public class ConveyorExtractionUpgrade extends ConveyorUpgrade {
         TileEntity tile = getWorld().getTileEntity(offsetPos);
         if (tile != null && tile.getCapability(capability, getSide().getOpposite()).isPresent())
             return tile.getCapability(capability, getSide().getOpposite());
-        for (Entity entity : getWorld().getEntitiesWithinAABB(Entity.class, new AxisAlignedBB(0, 0, 0, 1, 1, 1).offset(offsetPos), EntitySelectors.NOT_SPECTATING)) {
-            if (entity.getCapability(capability, entity instanceof EntityPlayerMP ? null : getSide().getOpposite()).isPresent())
-                return entity.getCapability(capability, entity instanceof EntityPlayerMP ? null : getSide().getOpposite());
+        for (Entity entity : getWorld().getEntitiesWithinAABB(Entity.class, new AxisAlignedBB(0, 0, 0, 1, 1, 1).offset(offsetPos)/*, EntitySelectors.NOT_SPECTATING*/)) {
+            if (entity.getCapability(capability, entity instanceof ServerPlayerEntity ? null : getSide().getOpposite()).isPresent())
+                return entity.getCapability(capability, entity instanceof ServerPlayerEntity ? null : getSide().getOpposite());
         }
         return LazyOptional.empty();
     }
@@ -188,7 +185,7 @@ public class ConveyorExtractionUpgrade extends ConveyorUpgrade {
     }
 
     @Override
-    public void handleButtonInteraction(int buttonId, NBTTagCompound compound) {
+    public void handleButtonInteraction(int buttonId, CompoundNBT compound) {
         super.handleButtonInteraction(buttonId, compound);
         if (buttonId >= 0 && buttonId < filter.getFilter().length) {
             this.filter.setFilter(buttonId, ItemStack.read(compound));
@@ -226,13 +223,13 @@ public class ConveyorExtractionUpgrade extends ConveyorUpgrade {
         }
 
         @Override
-        public ConveyorUpgrade create(IConveyorContainer container, EnumFacing face) {
+        public ConveyorUpgrade create(IConveyorContainer container, Direction face) {
             return new ConveyorExtractionUpgrade(container, this, face);
         }
 
         @Override
         @Nonnull
-        public ResourceLocation getModel(EnumFacing upgradeSide, EnumFacing conveyorFacing) {
+        public ResourceLocation getModel(Direction upgradeSide, Direction conveyorFacing) {
             return new ResourceLocation(Reference.MOD_ID, "block/conveyor_upgrade_extractor_" + upgradeSide.getName().toLowerCase());
         }
 

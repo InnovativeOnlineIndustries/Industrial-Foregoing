@@ -21,20 +21,24 @@
  */
 package com.buuz135.industrial.utils;
 
+import com.mojang.blaze3d.platform.GlStateManager;
 import net.minecraft.block.Block;
+import net.minecraft.block.Blocks;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.*;
-import net.minecraft.client.renderer.entity.RenderManager;
+import net.minecraft.client.renderer.BufferBuilder;
+import net.minecraft.client.renderer.ItemRenderer;
+import net.minecraft.client.renderer.RenderHelper;
+import net.minecraft.client.renderer.Tessellator;
+import net.minecraft.client.renderer.entity.EntityRendererManager;
 import net.minecraft.client.renderer.model.BakedQuad;
 import net.minecraft.client.renderer.model.IBakedModel;
 import net.minecraft.client.renderer.model.ItemCameraTransforms;
-import net.minecraft.client.renderer.texture.TextureMap;
-import net.minecraft.client.renderer.tileentity.TileEntityItemStackRenderer;
+import net.minecraft.client.renderer.texture.AtlasTexture;
+import net.minecraft.client.renderer.tileentity.ItemStackTileEntityRenderer;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
-import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.init.Blocks;
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.EnumFacing;
+import net.minecraft.util.Direction;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.common.Tags;
@@ -55,8 +59,8 @@ public class ItemStackUtils {
         GlStateManager.pushMatrix();
         RenderHelper.enableGUIStandardItemLighting();
         ItemRenderer renderItem = Minecraft.getInstance().getItemRenderer();
-        Minecraft.getInstance().getTextureManager().bindTexture(TextureMap.LOCATION_BLOCKS_TEXTURE);
-        Minecraft.getInstance().getTextureManager().getTexture(TextureMap.LOCATION_BLOCKS_TEXTURE).setBlurMipmap(false, false);
+        Minecraft.getInstance().getTextureManager().bindTexture(AtlasTexture.LOCATION_BLOCKS_TEXTURE);
+        Minecraft.getInstance().getTextureManager().getTexture(AtlasTexture.LOCATION_BLOCKS_TEXTURE).setBlurMipmap(false, false);
         GlStateManager.enableRescaleNormal();
         GlStateManager.enableAlphaTest();
         GlStateManager.alphaFunc(516, 0.1F);
@@ -80,13 +84,13 @@ public class ItemStackUtils {
             if (bakedmodel.isBuiltInRenderer()) {
                 GlStateManager.color4f(1.0F, 1.0F, 1.0F, 1.0F);
                 GlStateManager.enableRescaleNormal();
-                TileEntityItemStackRenderer.instance.renderByItem(stack);
+                ItemStackTileEntityRenderer.instance.renderByItem(stack);
             } else {
                 Tessellator tessellator = Tessellator.getInstance();
                 BufferBuilder vertexbuffer = tessellator.getBuffer();
                 vertexbuffer.begin(gl, DefaultVertexFormats.ITEM);
-                for (EnumFacing enumfacing : EnumFacing.values()) {
-                    renderQuads(vertexbuffer, bakedmodel.getQuads(null, enumfacing, RANDOM), -1, stack);
+                for (Direction Direction : Direction.values()) {
+                    renderQuads(vertexbuffer, bakedmodel.getQuads(null, Direction, RANDOM), -1, stack);
                 }
                 renderQuads(vertexbuffer, bakedmodel.getQuads(null, null, RANDOM), -1, stack);
                 tessellator.draw();
@@ -97,8 +101,8 @@ public class ItemStackUtils {
         GlStateManager.disableRescaleNormal();
         GlStateManager.disableLighting();
         GlStateManager.popMatrix();
-        Minecraft.getInstance().getTextureManager().bindTexture(TextureMap.LOCATION_BLOCKS_TEXTURE);
-        Minecraft.getInstance().getTextureManager().getTexture(TextureMap.LOCATION_BLOCKS_TEXTURE).restoreLastBlurMipmap();
+        Minecraft.getInstance().getTextureManager().bindTexture(AtlasTexture.LOCATION_BLOCKS_TEXTURE);
+        Minecraft.getInstance().getTextureManager().getTexture(AtlasTexture.LOCATION_BLOCKS_TEXTURE).restoreLastBlurMipmap();
     }
 
 
@@ -123,7 +127,7 @@ public class ItemStackUtils {
         }
     }
 
-    public static void renderEntity(int posX, int posY, int scale, float mouseX, float mouseY, EntityLivingBase ent) {
+    public static void renderEntity(int posX, int posY, int scale, float mouseX, float mouseY, LivingEntity ent) {
 
         GlStateManager.enableColorMaterial();
         GlStateManager.pushMatrix();
@@ -146,7 +150,7 @@ public class ItemStackUtils {
         ent.rotationYawHead = ent.rotationYaw;
         ent.prevRotationYawHead = ent.rotationYaw;
         GlStateManager.translatef(0.0F, 0.0F, 0.0F);
-        RenderManager rendermanager = Minecraft.getInstance().getRenderManager();
+        EntityRendererManager rendermanager = Minecraft.getInstance().getRenderManager();
         rendermanager.setPlayerViewY(180.0F);
         rendermanager.setRenderShadow(false);
         rendermanager.renderEntity(ent, 0.0D, 0.0D, 0.0D, 0.0F, 0F, false);
@@ -161,7 +165,7 @@ public class ItemStackUtils {
         RenderHelper.disableStandardItemLighting();
         GlStateManager.disableRescaleNormal();
         //GlStateManager.activeTexture(OpenGlHelper.lightmapTexUnit);
-        GlStateManager.disableTexture2D();
+        GlStateManager.disableTexture();
         //GlStateManager.activeTexture(OpenGlHelper.defaultTexUnit);
     }
 

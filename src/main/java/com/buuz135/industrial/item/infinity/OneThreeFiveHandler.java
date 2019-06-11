@@ -25,8 +25,8 @@ import com.buuz135.industrial.module.ModuleTool;
 import com.buuz135.industrial.proxy.client.particle.ParticleVex;
 import com.buuz135.industrial.utils.Reference;
 import net.minecraft.client.Minecraft;
-import net.minecraft.entity.EntityLiving;
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
@@ -52,10 +52,10 @@ public class OneThreeFiveHandler {
     public static void onClientTick(TickEvent.ClientTickEvent event) {
         if (Minecraft.getInstance().player != null && Minecraft.getInstance().player.world != null && !Minecraft.getInstance().isGamePaused() && Minecraft.getInstance().player.world.getGameTime() % 2 == 0) {
             BlockPos pos = new BlockPos(Minecraft.getInstance().player.posX, Minecraft.getInstance().player.posY, Minecraft.getInstance().player.posZ);
-            Minecraft.getInstance().player.world.getEntitiesWithinAABB(EntityLiving.class, new AxisAlignedBB(pos.add(32, 32, 32), pos.add(-32, -32, -32)),
+            Minecraft.getInstance().player.world.getEntitiesWithinAABB(LivingEntity.class, new AxisAlignedBB(pos.add(32, 32, 32), pos.add(-32, -32, -32)),
                     input -> input.getUniqueID().toString().contains(SPECIAL)).
                     forEach(living -> Minecraft.getInstance().particles.addEffect(new ParticleVex(living)));
-            Minecraft.getInstance().player.world.getEntitiesWithinAABB(EntityPlayer.class, new AxisAlignedBB(pos.add(32, 32, 32), pos.add(-32, -32, -32)),
+            Minecraft.getInstance().player.world.getEntitiesWithinAABB(PlayerEntity.class, new AxisAlignedBB(pos.add(32, 32, 32), pos.add(-32, -32, -32)),
                     input -> SPECIAL_ENTITIES.containsKey(input.getUniqueID())).
                     forEach(living -> Minecraft.getInstance().particles.addEffect(new ParticleVex(living)));
         }
@@ -84,10 +84,10 @@ public class OneThreeFiveHandler {
 
     @SubscribeEvent
     public static void onEntityKill(LivingDeathEvent event) {
-        if (event.getEntityLiving().getUniqueID().toString().contains(SPECIAL) && event.getSource().getTrueSource() instanceof EntityPlayer && !(event.getSource().getTrueSource() instanceof FakePlayer)) {
-            EntityPlayer player = (EntityPlayer) event.getSource().getTrueSource();
+        if (event.getEntityLiving().getUniqueID().toString().contains(SPECIAL) && event.getSource().getTrueSource() instanceof PlayerEntity && !(event.getSource().getTrueSource() instanceof FakePlayer)) {
+            PlayerEntity player = (PlayerEntity) event.getSource().getTrueSource();
             if (player.getHeldItemMainhand().getItem().equals(ModuleTool.INFINITY_DRILL)) {
-                player.getHeldItemMainhand().getTag().setBoolean("Special", true);
+                player.getHeldItemMainhand().getTag().putBoolean("Special", true);
             }
         }
     }

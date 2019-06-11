@@ -22,7 +22,7 @@
 package com.buuz135.industrial.api.recipe;
 
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.CompoundNBT;
 
 import javax.annotation.Nullable;
 import java.util.ArrayList;
@@ -34,7 +34,7 @@ public class ProteinReactorEntry implements IReactorEntry {
     public static List<IReactorEntry> PROTEIN_REACTOR_ENTRIES = new ArrayList<>();
 
     private ItemStack stack;
-    private Predicate<NBTTagCompound> nbtCheck;
+    private Predicate<CompoundNBT> nbtCheck;
 
     /**
      * Defines an ItemStack that can be insterted into the Proteinreactor.
@@ -42,7 +42,7 @@ public class ProteinReactorEntry implements IReactorEntry {
      * @param stack    The stack that can be insterted into the Proteinreactor.
      * @param nbtCheck A check for others ItemStack special NBTTag
      */
-    public ProteinReactorEntry(ItemStack stack, @Nullable Predicate<NBTTagCompound> nbtCheck) {
+    public ProteinReactorEntry(ItemStack stack, @Nullable Predicate<CompoundNBT> nbtCheck) {
         this.stack = stack;
         this.nbtCheck = nbtCheck;
     }
@@ -70,7 +70,7 @@ public class ProteinReactorEntry implements IReactorEntry {
         return stack;
     }
 
-    public Predicate<NBTTagCompound> getNbtCheck() {
+    public Predicate<CompoundNBT> getNbtCheck() {
         return nbtCheck;
     }
 }

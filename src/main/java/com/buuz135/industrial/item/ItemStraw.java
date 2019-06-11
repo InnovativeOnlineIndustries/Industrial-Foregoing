@@ -24,21 +24,23 @@ package com.buuz135.industrial.item;
 import com.buuz135.industrial.api.straw.StrawHandler;
 import com.buuz135.industrial.utils.StrawUtils;
 import net.minecraft.block.Block;
+import net.minecraft.block.BlockState;
 import net.minecraft.block.IBucketPickupHandler;
-import net.minecraft.block.state.IBlockState;
-import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.fluid.Fluids;
 import net.minecraft.fluid.IFluidState;
-import net.minecraft.init.Fluids;
-import net.minecraft.item.EnumAction;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.UseAction;
 import net.minecraft.util.ActionResult;
-import net.minecraft.util.EnumActionResult;
-import net.minecraft.util.EnumHand;
+import net.minecraft.util.ActionResultType;
+import net.minecraft.util.Hand;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.BlockRayTraceResult;
+import net.minecraft.util.math.RayTraceContext;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.TextComponentString;
+import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.World;
 
@@ -47,6 +49,8 @@ import javax.annotation.Nullable;
 import java.util.List;
 import java.util.Optional;
 
+;
+
 public class ItemStraw extends IFCustomItem {
     public ItemStraw() {
         super("straw", new Properties().maxStackSize(1));
@@ -54,13 +58,14 @@ public class ItemStraw extends IFCustomItem {
 
     @Override
     @Nonnull
-    public ItemStack onItemUseFinish(@Nonnull ItemStack heldStack, World world, EntityLivingBase entity) {
-        if (!world.isRemote && entity instanceof EntityPlayer) {
-            EntityPlayer player = (EntityPlayer) entity;
-            RayTraceResult result = rayTrace(world, player, true);
-            if (result != null && result.type == RayTraceResult.Type.BLOCK) {
-                BlockPos pos = result.getBlockPos();
-                IBlockState state = world.getBlockState(pos);
+    public ItemStack onItemUseFinish(@Nonnull ItemStack heldStack, World world, LivingEntity entity) {
+        if (!world.isRemote && entity instanceof PlayerEntity) {
+            PlayerEntity player = (PlayerEntity) entity;
+            RayTraceResult result = rayTrace(world, player, RayTraceContext.FluidMode.SOURCE_ONLY);
+            if (result != null && result.getType() == RayTraceResult.Type.BLOCK) {
+                BlockRayTraceResult blockRayTraceResult = (BlockRayTraceResult) result;
+                BlockPos pos = blockRayTraceResult.getPos();
+                BlockState state = world.getBlockState(pos);
                 Block block = state.getBlock();
                 IFluidState fluidState = state.getFluidState();
                 if (fluidState != Fluids.EMPTY.getDefaultState() && block instanceof IBucketPickupHandler && fluidState.isSource()) {
@@ -101,18 +106,19 @@ public class ItemStraw extends IFCustomItem {
 
     @Override
     @Nonnull
-    public ActionResult<ItemStack> onItemRightClick(World worldIn, EntityPlayer playerIn, @Nonnull EnumHand handIn) {
-        RayTraceResult result = rayTrace(worldIn, playerIn, true);
-        if (result != null && result.type == RayTraceResult.Type.BLOCK) {
-            BlockPos pos = result.getBlockPos();
-            IBlockState state = worldIn.getBlockState(pos);
+    public ActionResult<ItemStack> onItemRightClick(World worldIn, PlayerEntity playerIn, @Nonnull Hand handIn) {
+        RayTraceResult result = rayTrace(worldIn, playerIn, RayTraceContext.FluidMode.SOURCE_ONLY);
+        if (result != null && result.getType() == RayTraceResult.Type.BLOCK) {
+            BlockRayTraceResult blockRayTraceResult = (BlockRayTraceResult) result;
+            BlockPos pos = blockRayTraceResult.getPos();
+            BlockState state = worldIn.getBlockState(pos);
             Block block = state.getBlock();
             IFluidState fluid = state.getFluidState();//FluidRegistry.lookupFluidForBlock(block);
             if (fluid != null) {
                 Optional<StrawHandler> handler = StrawUtils.getStrawHandler(fluid.getFluid());
                 if (handler.isPresent()) {
                     playerIn.setActiveHand(handIn);
-                    return ActionResult.newResult(EnumActionResult.SUCCESS, playerIn.getHeldItem(handIn));
+                    return ActionResult.newResult(ActionResultType.SUCCESS, playerIn.getHeldItem(handIn));
                 }
             }/*
             if (block.hasTileEntity(state)) {
@@ -131,7 +137,7 @@ public class ItemStraw extends IFCustomItem {
                                     FluidStack out = handler.drain(stack, false);
                                     if (out != null && out.amount >= 1000) {
                                         playerIn.setActiveHand(handIn);
-                                        return ActionResult.newResult(EnumActionResult.SUCCESS, playerIn.getHeldItem(handIn));
+                                        return ActionResult.newResult(ActionResultType.SUCCESS, playerIn.getHeldItem(handIn));
                                     }
                                 }
                             }
@@ -149,8 +155,8 @@ public class ItemStraw extends IFCustomItem {
     }
 
     @Override
-    public EnumAction getUseAction(ItemStack p_77661_1_) {
-        return EnumAction.DRINK;
+    public UseAction getUseAction(ItemStack p_77661_1_) {
+        return UseAction.DRINK;
     }
 
     @Override
@@ -161,6 +167,6 @@ public class ItemStraw extends IFCustomItem {
     @Override
     public void addTooltipDetails(@Nullable Key key, ItemStack stack, List<ITextComponent> tooltip, boolean advanced) {
         super.addTooltipDetails(key, stack, tooltip, advanced);
-        tooltip.add(new TextComponentString(TextFormatting.GRAY + "\"The One Who Codes\""));
+        tooltip.add(new StringTextComponent(TextFormatting.GRAY + "\"The One Who Codes\""));
     }
 }

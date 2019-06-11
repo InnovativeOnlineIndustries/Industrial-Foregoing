@@ -32,12 +32,12 @@ import com.buuz135.industrial.proxy.block.filter.IFilter;
 import com.buuz135.industrial.proxy.block.filter.ItemStackFilter;
 import com.buuz135.industrial.utils.Reference;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.item.EntityItem;
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.item.ItemEntity;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.EnumFacing;
+import net.minecraft.util.Direction;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.shapes.VoxelShape;
@@ -57,7 +57,7 @@ public class ConveyorDroppingUpgrade extends ConveyorUpgrade {
     private ItemStackFilter filter;
     private boolean whitelist;
 
-    public ConveyorDroppingUpgrade(IConveyorContainer container, ConveyorUpgradeFactory factory, EnumFacing side) {
+    public ConveyorDroppingUpgrade(IConveyorContainer container, ConveyorUpgradeFactory factory, Direction side) {
         super(container, factory, side);
         this.filter = new ItemStackFilter(20, 20, 5, 3);
         this.whitelist = false;
@@ -66,21 +66,21 @@ public class ConveyorDroppingUpgrade extends ConveyorUpgrade {
     @Override
     public void handleEntity(Entity entity) {
         super.handleEntity(entity);
-        if (entity instanceof EntityPlayer) return;
+        if (entity instanceof PlayerEntity) return;
         if (whitelist != filter.matches(entity)) return;
-        if (entity instanceof EntityItem) {
-            TileEntity tile = getWorld().getTileEntity(getPos().offset(EnumFacing.DOWN));
+        if (entity instanceof ItemEntity) {
+            TileEntity tile = getWorld().getTileEntity(getPos().offset(Direction.DOWN));
             if (tile != null) {
-                tile.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, EnumFacing.UP).ifPresent(handler -> {
+                tile.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, Direction.UP).ifPresent(handler -> {
                     if (getBoundingBox().getBoundingBox().offset(getPos()).grow(0.01).intersects(entity.getBoundingBox())) {
-                        ItemStack stack = ((EntityItem) entity).getItem();
+                        ItemStack stack = ((ItemEntity) entity).getItem();
                         for (int i = 0; i < handler.getSlots(); i++) {
                             stack = handler.insertItem(i, stack, false);
                             if (stack.isEmpty()) {
                                 entity.remove();
                                 break;
                             } else {
-                                ((EntityItem) entity).setItem(stack);
+                                ((ItemEntity) entity).setItem(stack);
                             }
                         }
                     }
@@ -98,26 +98,24 @@ public class ConveyorDroppingUpgrade extends ConveyorUpgrade {
             }
         }
         if (space) {
-            entity.motionX = 0;
-            entity.motionY = 0;
-            entity.motionZ = 0;
+            entity.setMotion(0, 0, 0);
             entity.setPosition(pos.getX() + 0.5, pos.getY() - 0.1, pos.getZ() + 0.5);
             entity.onGround = false;
         }
     }
 
     @Override
-    public NBTTagCompound serializeNBT() {
-        NBTTagCompound compound = super.serializeNBT() == null ? new NBTTagCompound() : super.serializeNBT();
-        compound.setTag("Filter", filter.serializeNBT());
-        compound.setBoolean("Whitelist", whitelist);
+    public CompoundNBT serializeNBT() {
+        CompoundNBT compound = super.serializeNBT() == null ? new CompoundNBT() : super.serializeNBT();
+        compound.put("Filter", filter.serializeNBT());
+        compound.putBoolean("Whitelist", whitelist);
         return compound;
     }
 
     @Override
-    public void deserializeNBT(NBTTagCompound nbt) {
+    public void deserializeNBT(CompoundNBT nbt) {
         super.deserializeNBT(nbt);
-        if (nbt.hasKey("Filter")) filter.deserializeNBT(nbt.getCompound("Filter"));
+        if (nbt.hasUniqueId("Filter")) filter.deserializeNBT(nbt.getCompound("Filter"));
         whitelist = nbt.getBoolean("Whitelist");
     }
 
@@ -132,7 +130,7 @@ public class ConveyorDroppingUpgrade extends ConveyorUpgrade {
     }
 
     @Override
-    public void handleButtonInteraction(int buttonId, NBTTagCompound compound) {
+    public void handleButtonInteraction(int buttonId, CompoundNBT compound) {
         super.handleButtonInteraction(buttonId, compound);
         if (buttonId >= 0 && buttonId < filter.getFilter().length) {
             this.filter.setFilter(buttonId, ItemStack.read(compound));
@@ -171,7 +169,7 @@ public class ConveyorDroppingUpgrade extends ConveyorUpgrade {
         }
 
         @Override
-        public ConveyorUpgrade create(IConveyorContainer container, EnumFacing face) {
+        public ConveyorUpgrade create(IConveyorContainer container, Direction face) {
             return new ConveyorDroppingUpgrade(container, this, face);
         }
 
@@ -182,18 +180,18 @@ public class ConveyorDroppingUpgrade extends ConveyorUpgrade {
 
         @Nonnull
         @Override
-        public Set<EnumFacing> getValidFacings() {
+        public Set<Direction> getValidFacings() {
             return DOWN;
         }
 
         @Override
-        public EnumFacing getSideForPlacement(World world, BlockPos pos, EntityPlayer player) {
-            return EnumFacing.DOWN;
+        public Direction getSideForPlacement(World world, BlockPos pos, PlayerEntity player) {
+            return Direction.DOWN;
         }
 
         @Override
         @Nonnull
-        public ResourceLocation getModel(EnumFacing upgradeSide, EnumFacing conveyorFacing) {
+        public ResourceLocation getModel(Direction upgradeSide, Direction conveyorFacing) {
             return new ResourceLocation(Reference.MOD_ID, "block/conveyor_upgrade_dropping");
         }
 

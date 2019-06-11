@@ -22,32 +22,32 @@
 package com.buuz135.industrial.proxy.client.entity;
 
 import com.buuz135.industrial.entity.EntityPinkSlime;
-import net.minecraft.client.renderer.GlStateManager;
+import com.mojang.blaze3d.platform.GlStateManager;
 import net.minecraft.client.renderer.entity.layers.LayerRenderer;
-import net.minecraft.client.renderer.entity.model.ModelBase;
-import net.minecraft.client.renderer.entity.model.ModelSlime;
+import net.minecraft.client.renderer.entity.model.SlimeModel;
 
 import java.awt.*;
 
 import static com.buuz135.industrial.proxy.client.entity.RenderPinkSlime.NAMES;
 
-public class LayerPinkGel implements LayerRenderer<EntityPinkSlime> {
+public class LayerPinkGel extends LayerRenderer<EntityPinkSlime, SlimeModel<EntityPinkSlime>> {
 
     private final RenderPinkSlime slimeRenderer;
-    private final ModelBase slimeModel = new ModelSlime(0);
+    private final SlimeModel<EntityPinkSlime> slimeModel = new SlimeModel<EntityPinkSlime>(0);
 
     public LayerPinkGel(RenderPinkSlime slimeRenderer) {
+        super(slimeRenderer);
         this.slimeRenderer = slimeRenderer;
     }
 
     @Override
-    public void render(EntityPinkSlime entityPinkSlime, float limbSwing, float limbSwingAmount, float partialTicks, float ageInTicks, float netHeadYaw, float headPitch, float scale) {
+    public void func_212842_a_(EntityPinkSlime entityPinkSlime, float limbSwing, float limbSwingAmount, float partialTicks, float ageInTicks, float netHeadYaw, float headPitch, float scale) {
         if (!entityPinkSlime.isInvisible()) {
             GlStateManager.color4f(1.0F, 1.0F, 1.0F, 1.0F);
             GlStateManager.enableNormalize();
             GlStateManager.enableBlend();
             GlStateManager.blendFunc(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA);
-            this.slimeModel.setModelAttributes(this.slimeRenderer.getMainModel());
+            //this.slimeModel.setModelAttributes(this.slimeRenderer.getMainModel()); TODO
             if (entityPinkSlime.hasCustomName() && NAMES.contains(entityPinkSlime.getDisplayName().getUnformattedComponentText().toLowerCase())) {
                 float speed = 360 * 0.2f;
                 int hsb = (int) (entityPinkSlime.world.getGameTime() % speed);

@@ -22,7 +22,7 @@
 package com.buuz135.industrial.proxy.client.event;
 
 import net.minecraft.block.Block;
-import net.minecraft.init.Blocks;
+import net.minecraft.block.Blocks;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.event.entity.player.ItemTooltipEvent;
@@ -40,7 +40,7 @@ public class IFTooltipEvent {
         //Block block = Block.getBlockFromItem(event.getItemStack().getItem());
         //if (block instanceof IHasAdvancedTooltip && !((IHasAdvancedTooltip) block).getTooltip(event.getItemStack()).isEmpty()) {
         //    if (!GuiScreen.isShiftKeyDown()) {
-        //        event.getToolTip().add(new TextComponentTranslation("text.industrialforegoing.tooltip.hold_shift").getFormattedText());
+        //        event.getToolTip().add(new TranslationTextComponent("text.industrialforegoing.tooltip.hold_shift").getFormattedText());
         //    } else {
         //        event.getToolTip().addAll(((IHasAdvancedTooltip) block).getTooltip(event.getItemStack()));
         //    }

@@ -23,7 +23,7 @@ package com.buuz135.industrial.proxy.block.tile;
 
 
 import com.hrznstudio.titanium.block.tile.TileBase;
-import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.CompoundNBT;
 
 import java.text.DecimalFormat;
 import java.util.function.Function;
@@ -64,15 +64,15 @@ public class TileEntityLabel extends TileBase {
     }
 
     @Override
-    public void read(NBTTagCompound compound) {
+    public void read(CompoundNBT compound) {
         this.formatType = FormatType.valueOf(compound.getString("Format"));
         super.read(compound);
     }
 
     @Override
-    public NBTTagCompound write(NBTTagCompound compound) {
+    public CompoundNBT write(CompoundNBT compound) {
         compound = super.write(compound);
-        compound.setString("Format", formatType.name());
+        compound.putString("Format", formatType.name());
         return compound;
     }
 

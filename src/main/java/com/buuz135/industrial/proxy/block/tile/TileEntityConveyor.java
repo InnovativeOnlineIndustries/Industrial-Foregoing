@@ -25,24 +25,22 @@ import com.buuz135.industrial.api.conveyor.ConveyorUpgrade;
 import com.buuz135.industrial.api.conveyor.ConveyorUpgradeFactory;
 import com.buuz135.industrial.api.conveyor.IConveyorContainer;
 import com.buuz135.industrial.gui.conveyor.ContainerConveyor;
-import com.buuz135.industrial.gui.conveyor.GuiConveyor;
 import com.buuz135.industrial.module.ModuleTransport;
 import com.buuz135.industrial.proxy.block.BlockConveyor;
 import com.buuz135.industrial.proxy.client.model.ConveyorModelData;
 import com.buuz135.industrial.utils.MovementUtils;
 import com.hrznstudio.titanium.block.tile.TileActive;
-import net.minecraft.block.state.IBlockState;
-import net.minecraft.client.gui.GuiScreen;
+import net.minecraft.block.BlockState;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.item.EntityItem;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.entity.player.InventoryPlayer;
-import net.minecraft.inventory.Container;
-import net.minecraft.item.EnumDyeColor;
+import net.minecraft.entity.item.ItemEntity;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.entity.player.PlayerInventory;
+import net.minecraft.inventory.container.Container;
+import net.minecraft.item.DyeColor;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.EnumFacing;
-import net.minecraft.util.ITickable;
+import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.tileentity.ITickableTileEntity;
+import net.minecraft.util.Direction;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
@@ -55,6 +53,7 @@ import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidTank;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -62,12 +61,12 @@ import java.util.Map;
 
 import static com.buuz135.industrial.proxy.block.BlockConveyor.*;
 
-public class TileEntityConveyor extends TileActive implements IConveyorContainer, ITickable {
+public class TileEntityConveyor extends TileActive implements IConveyorContainer, ITickableTileEntity {
 
-    private EnumFacing facing;
+    private Direction facing;
     private EnumType type;
     private int color;
-    private Map<EnumFacing, ConveyorUpgrade> upgradeMap = new HashMap<>();
+    private Map<Direction, ConveyorUpgrade> upgradeMap = new HashMap<>();
     private List<Integer> filter;
     private boolean sticky;
     private FluidTank tank;
@@ -75,7 +74,7 @@ public class TileEntityConveyor extends TileActive implements IConveyorContainer
 
     public TileEntityConveyor() {
         super(ModuleTransport.CONVEYOR);
-        this.facing = EnumFacing.NORTH;
+        this.facing = Direction.NORTH;
         this.type = BlockConveyor.EnumType.FLAT;
         this.color = 0;
         this.filter = new ArrayList<>();
@@ -104,7 +103,7 @@ public class TileEntityConveyor extends TileActive implements IConveyorContainer
     }
 
     @Override
-    public boolean hasUpgrade(EnumFacing facing) {
+    public boolean hasUpgrade(Direction facing) {
         return upgradeMap.containsKey(facing);
     }
 
@@ -120,7 +119,7 @@ public class TileEntityConveyor extends TileActive implements IConveyorContainer
         return highestPower;
     }
 
-    public void addUpgrade(EnumFacing facing, ConveyorUpgradeFactory upgrade) {
+    public void addUpgrade(Direction facing, ConveyorUpgradeFactory upgrade) {
         if (!hasUpgrade(facing)) {
             upgradeMap.put(facing, upgrade.create(this, facing));
             requestSync();
@@ -129,14 +128,14 @@ public class TileEntityConveyor extends TileActive implements IConveyorContainer
     }
 
     @Override
-    public void removeUpgrade(EnumFacing facing, boolean drop) {
+    public void removeUpgrade(Direction facing, boolean drop) {
         if (hasUpgrade(facing)) {
             if (!world.isRemote && drop) {
                 ConveyorUpgrade upgrade = upgradeMap.get(facing);
                 for (ItemStack stack : upgrade.getDrops()) {
-                    EntityItem item = new EntityItem(world, pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5);
+                    ItemEntity item = new ItemEntity(world, pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5);
                     item.setItem(stack);
-                    world.spawnEntity(item);
+                    world.addEntity(item);
                 }
             }
             upgradeMap.get(facing).onUpgradeRemoved();
@@ -151,11 +150,11 @@ public class TileEntityConveyor extends TileActive implements IConveyorContainer
         return filter;
     }
 
-    public EnumFacing getFacing() {
+    public Direction getFacing() {
         return facing;
     }
 
-    public void setFacing(EnumFacing facing) {
+    public void setFacing(Direction facing) {
         this.facing = facing;
         markForUpdate();
     }
@@ -178,7 +177,7 @@ public class TileEntityConveyor extends TileActive implements IConveyorContainer
         markForUpdate();
     }
 
-    public void setColor(EnumDyeColor color) {
+    public void setColor(DyeColor color) {
         this.color = 0;
         markForUpdate();
     }
@@ -193,43 +192,43 @@ public class TileEntityConveyor extends TileActive implements IConveyorContainer
     }
 
     @Override
-    public NBTTagCompound write(NBTTagCompound compound) {
+    public CompoundNBT write(CompoundNBT compound) {
         compound = super.write(compound);
-        compound.setString("Facing", facing.getName());
-        compound.setString("Type", type.getName());
-        compound.setInt("Color", color);
-        compound.setBoolean("Sticky", sticky);
-        NBTTagCompound upgrades = new NBTTagCompound();
-        for (EnumFacing facing : EnumFacing.values()) {
+        compound.putString("Facing", facing.getName());
+        compound.putString("Type", type.getName());
+        compound.putInt("Color", color);
+        compound.putBoolean("Sticky", sticky);
+        CompoundNBT upgrades = new CompoundNBT();
+        for (Direction facing : Direction.values()) {
             if (!hasUpgrade(facing))
                 continue;
-            NBTTagCompound upgradeTag = new NBTTagCompound();
+            CompoundNBT upgradeTag = new CompoundNBT();
             ConveyorUpgrade upgrade = upgradeMap.get(facing);
-            upgradeTag.setString("factory", upgrade.getFactory().getRegistryName().toString());
-            NBTTagCompound customNBT = upgrade.serializeNBT();
+            upgradeTag.putString("factory", upgrade.getFactory().getRegistryName().toString());
+            CompoundNBT customNBT = upgrade.serializeNBT();
             if (customNBT != null)
-                upgradeTag.setTag("customNBT", customNBT);
-            upgrades.setTag(facing.getName(), upgradeTag);
+                upgradeTag.put("customNBT", customNBT);
+            upgrades.put(facing.getName(), upgradeTag);
         }
-        compound.setTag("Upgrades", upgrades);
-        compound.setTag("Tank", tank.writeToNBT(new NBTTagCompound()));
+        compound.put("Upgrades", upgrades);
+        compound.put("Tank", tank.writeToNBT(new CompoundNBT()));
         return compound;
     }
 
     @Override
-    public void read(NBTTagCompound compound) {
+    public void read(CompoundNBT compound) {
         super.read(compound);
-        this.facing = EnumFacing.byName(compound.getString("Facing"));
+        this.facing = Direction.byName(compound.getString("Facing"));
         this.type = BlockConveyor.EnumType.getFromName(compound.getString("Type"));
         this.color = compound.getInt("Color");
         this.sticky = compound.getBoolean("Sticky");
         if (compound.contains("Upgrades", Constants.NBT.TAG_COMPOUND)) {
-            NBTTagCompound upgradesTag = compound.getCompound("Upgrades");
+            CompoundNBT upgradesTag = compound.getCompound("Upgrades");
             //upgradeMap.clear();
-            for (EnumFacing facing : EnumFacing.values()) {
-                if (!upgradesTag.hasKey(facing.getName()))
+            for (Direction facing : Direction.values()) {
+                if (!upgradesTag.hasUniqueId(facing.getName()))
                     continue;
-                NBTTagCompound upgradeTag = upgradesTag.getCompound(facing.getName());
+                CompoundNBT upgradeTag = upgradesTag.getCompound(facing.getName());
                 ConveyorUpgradeFactory factory = null;
                 for (ConveyorUpgradeFactory conveyorUpgradeFactory : ConveyorUpgradeFactory.FACTORIES) {
                     if (conveyorUpgradeFactory.getRegistryName().equals(new ResourceLocation(upgradeTag.getString("factory")))) {
@@ -247,7 +246,7 @@ public class TileEntityConveyor extends TileActive implements IConveyorContainer
                 }
             }
         }
-        if (compound.hasKey("Tank")) {
+        if (compound.hasUniqueId("Tank")) {
             this.tank = this.tank.readFromNBT(compound.getCompound("Tank"));
         }
     }
@@ -255,20 +254,20 @@ public class TileEntityConveyor extends TileActive implements IConveyorContainer
     public void markForUpdate() {
         super.markForUpdate();
         this.world.setBlockState(pos, this.world.getBlockState(pos).with(FACING, facing).with(TYPE, type));
-        this.world.getTileEntity(pos).read(write(new NBTTagCompound()));
+        this.world.getTileEntity(pos).read(write(new CompoundNBT()));
     }
 
     public List<AxisAlignedBB> getCollisionBoxes() {
         List<AxisAlignedBB> boxes = new ArrayList<>();
-        EnumFacing facing = this.facing;
+        Direction facing = this.facing;
         if (type.isDown()) facing = facing.getOpposite();
         double height = 1;
         while (height > 0) {
-            if (facing == EnumFacing.NORTH || facing == EnumFacing.SOUTH) {
-                boxes.add(new AxisAlignedBB(0, 0, facing == EnumFacing.NORTH ? 0 : 1D - height, 1, 1 - height, facing == EnumFacing.NORTH ? height : 1));
+            if (facing == Direction.NORTH || facing == Direction.SOUTH) {
+                boxes.add(new AxisAlignedBB(0, 0, facing == Direction.NORTH ? 0 : 1D - height, 1, 1 - height, facing == Direction.NORTH ? height : 1));
             }
-            if (facing == EnumFacing.WEST || facing == EnumFacing.EAST) {
-                boxes.add(new AxisAlignedBB(facing == EnumFacing.WEST ? 0 : 1D - height, 0, 0, facing == EnumFacing.WEST ? height : 1, 1 - height, 1));
+            if (facing == Direction.WEST || facing == Direction.EAST) {
+                boxes.add(new AxisAlignedBB(facing == Direction.WEST ? 0 : 1D - height, 0, 0, facing == Direction.WEST ? height : 1, 1 - height, 1));
             }
             height -= 0.1D;
         }
@@ -284,11 +283,11 @@ public class TileEntityConveyor extends TileActive implements IConveyorContainer
         if (entity.isAlive()) {
             if (!this.getEntityFilter().contains(entity.getEntityId()))
                 MovementUtils.handleConveyorMovement(entity, facing, this.pos, type);
-            if (entity instanceof EntityItem && sticky) ((EntityItem) entity).setPickupDelay(5);
+            if (entity instanceof ItemEntity && sticky) ((ItemEntity) entity).setPickupDelay(5);
         }
     }
 
-    public Map<EnumFacing, ConveyorUpgrade> getUpgradeMap() {
+    public Map<Direction, ConveyorUpgrade> getUpgradeMap() {
         return upgradeMap;
     }
 
@@ -303,7 +302,7 @@ public class TileEntityConveyor extends TileActive implements IConveyorContainer
         }
         upgradeMap.values().forEach(ConveyorUpgrade::update);
         if (!world.isRemote && tank.getFluidAmount() > 0 && world.getGameTime() % 3 == 0 && world.getBlockState(this.pos.offset(facing)).getBlock() instanceof BlockConveyor && world.getTileEntity(this.pos.offset(facing)) instanceof TileEntityConveyor) {
-            IBlockState state = world.getBlockState(this.pos.offset(facing));
+            BlockState state = world.getBlockState(this.pos.offset(facing));
             if (!state.get(BlockConveyor.TYPE).isVertical()) {
                 int amount = Math.max(tank.getFluidAmount() - 1, 1);
                 TileEntityConveyor tileEntityConveyor = (TileEntityConveyor) world.getTileEntity(this.pos.offset(facing));
@@ -320,13 +319,9 @@ public class TileEntityConveyor extends TileActive implements IConveyorContainer
         }
     }
 
+    @Nullable
     @Override
-    public GuiScreen createGui(Container container) {
-        return new GuiConveyor(container);
-    }
-
-    @Override
-    public Container createContainer(InventoryPlayer inventoryPlayer, EntityPlayer entityPlayer) {
+    public Container createMenu(int menu, PlayerInventory inventoryPlayer, PlayerEntity entityPlayer) {
         return new ContainerConveyor(this, ModuleTransport.CONVEYOR.getFacingUpgradeHit(this.world.getBlockState(this.pos), this.world, this.pos, entityPlayer), inventoryPlayer);
     }
 

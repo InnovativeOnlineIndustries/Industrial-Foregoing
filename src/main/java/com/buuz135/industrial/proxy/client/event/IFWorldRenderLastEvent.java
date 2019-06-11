@@ -24,7 +24,7 @@ package com.buuz135.industrial.proxy.client.event;
 import com.buuz135.industrial.module.ModuleCore;
 import com.buuz135.industrial.utils.Reference;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.entity.EntityPlayerSP;
+import net.minecraft.client.entity.player.ClientPlayerEntity;
 import net.minecraft.util.math.*;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
@@ -36,8 +36,8 @@ public class IFWorldRenderLastEvent {
     @OnlyIn(Dist.CLIENT)
     @SubscribeEvent
     public void onRender(RenderGameOverlayEvent.Post event) {
-        EntityPlayerSP playerIn = Minecraft.getInstance().player;
-        if (!playerIn.getHeldItemMainhand().getItem().equals(ModuleCore.BOOK_MANUAL) || Minecraft.getInstance().currentScreen != null)
+        ClientPlayerEntity playerIn = Minecraft.getInstance().player;
+        if (!playerIn.getHeldItemMainhand().getItem().equals(ModuleCore.BOOK_MANUAL) || Minecraft.getInstance().field_71462_r != null)
             return;
         float f = playerIn.rotationPitch;
         float f1 = playerIn.rotationYaw;
@@ -53,9 +53,9 @@ public class IFWorldRenderLastEvent {
         float f7 = f2 * f4;
         double d3 = 5.0D;
         Vec3d vec3d1 = vec3d.add((double) f6 * d3, (double) f5 * d3, (double) f7 * d3);
-        RayTraceResult result = Minecraft.getInstance().world.rayTraceBlocks(vec3d, vec3d1, RayTraceFluidMode.NEVER, true, false);
-        if (result != null && result.type == RayTraceResult.Type.BLOCK) {
-            BlockPos pos = result.getBlockPos();
+        RayTraceResult result = Minecraft.getInstance().world.rayTraceBlocks(new RayTraceContext(vec3d, vec3d1, RayTraceContext.BlockMode.COLLIDER, RayTraceContext.FluidMode.NONE, playerIn));
+        if (result != null && result.getType() == RayTraceResult.Type.BLOCK) {
+            BlockPos pos = ((BlockRayTraceResult) result).getPos();
             if (Minecraft.getInstance().world.getBlockState(pos).getBlock().getRegistryName().getNamespace().equals(Reference.MOD_ID)) {
                 //Minecraft.getInstance().fontRenderer.drawString(TextFormatting.GOLD + "SNEAK" + TextFormatting.WHITE + "+" + TextFormatting.GOLD + "Right Click", event.getResolution().getScaledWidth() / 2 + 10, event.getResolution().getScaledHeight() / 2 - 5, 0xFFFFFF, true);
                 //Minecraft.getInstance().fontRenderer.drawString(TextFormatting.YELLOW + "Open Block Description", event.getResolution().getScaledWidth() / 2 + 10, event.getResolution().getScaledHeight() / 2 - 5 + Minecraft.getInstance().fontRenderer.FONT_HEIGHT + 2, 0xFFFFFF, true);
