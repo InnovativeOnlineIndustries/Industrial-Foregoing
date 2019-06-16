@@ -23,19 +23,23 @@ package com.buuz135.industrial.proxy.client.event;
 
 import com.buuz135.industrial.item.infinity.ItemInfinityDrill;
 import com.buuz135.industrial.module.ModuleTool;
+import com.hrznstudio.titanium.api.raytrace.DistanceRayTraceResult;
 import com.mojang.blaze3d.platform.GlStateManager;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.renderer.WorldRenderer;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.Hand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.BlockRayTraceResult;
 import net.minecraft.util.math.RayTraceResult;
+import net.minecraft.util.math.shapes.ISelectionContext;
 import net.minecraft.world.World;
 import net.minecraftforge.client.event.DrawBlockHighlightEvent;
 import net.minecraftforge.client.event.RenderPlayerEvent;
 import net.minecraftforge.client.event.TextureStitchEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
+import net.minecraftforge.fluids.IFluidBlock;
 import org.apache.commons.lang3.tuple.Pair;
 
 public class IFClientEvents {
@@ -52,26 +56,19 @@ public class IFClientEvents {
     @SubscribeEvent
     public void blockOverlayEvent(DrawBlockHighlightEvent event) {
         RayTraceResult hit = event.getTarget();
-        if (hit.getType() == RayTraceResult.Type.BLOCK) {
-            BlockRayTraceResult blockRayTraceResult = (BlockRayTraceResult) hit;
-            BlockPos pos = blockRayTraceResult.getPos();
+        BlockPos pos = new BlockPos(event.getTarget().getHitVec().x, event.getTarget().getHitVec().y, event.getTarget().getHitVec().z);
+        if (hit.getType() == RayTraceResult.Type.BLOCK && hit instanceof DistanceRayTraceResult) {
             event.setCanceled(true);
             GlStateManager.enableBlend();
-            GlStateManager.blendFuncSeparate(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA,
-                    GlStateManager.SourceFactor.ONE, GlStateManager.DestFactor.ZERO);
+            GlStateManager.blendFuncSeparate(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA, GlStateManager.SourceFactor.ONE, GlStateManager.DestFactor.ZERO);
             GlStateManager.lineWidth(2.0F);
             GlStateManager.disableTexture();
             GlStateManager.depthMask(false);
-
             PlayerEntity player = Minecraft.getInstance().player;
-            double x = player.lastTickPosX + (player.posX - player.lastTickPosX) * event.getPartialTicks();
-            double y = player.lastTickPosY + (player.posY - player.lastTickPosY) * event.getPartialTicks();
-            double z = player.lastTickPosZ + (player.posZ - player.lastTickPosZ) * event.getPartialTicks();
-
-            //Minecraft.getInstance().renderGlobal.drawSelectionBoundingBox(((DistanceRayTraceResult) hit).getHitBox().getBoundingBox().offset(-x, -y, -z).offset(pos).grow(0.002),
-            //        0.0F, 0.0F, 0.0F, 0.4F
-            //);
-
+            double x = player.lastTickPosX + (player.posX - player.lastTickPosX) * (double) event.getPartialTicks();
+            double y = player.lastTickPosY + (player.posY - player.lastTickPosY) * (double) event.getPartialTicks();
+            double z = player.lastTickPosZ + (player.posZ - player.lastTickPosZ) * (double) event.getPartialTicks();
+            WorldRenderer.drawShape(((DistanceRayTraceResult) hit).getHitBox().withOffset((double) pos.getX(), (double) pos.getY(), (double) pos.getZ()), -x, -y, -z, 0.0F, 0.0F, 0.0F, 0.4F);
             GlStateManager.depthMask(true);
             GlStateManager.enableTexture();
             GlStateManager.disableBlend();
@@ -93,12 +90,12 @@ public class IFClientEvents {
             double x = player.lastTickPosX + (player.posX - player.lastTickPosX) * event.getPartialTicks();
             double y = player.lastTickPosY + (player.posY - player.lastTickPosY) * event.getPartialTicks();
             double z = player.lastTickPosZ + (player.posZ - player.lastTickPosZ) * event.getPartialTicks();
-            //BlockPos.getAllInBoxMutable(area.getLeft(), area.getRight()).forEach(blockPos -> {
-            //    if (!world.isAirBlock(blockPos) && world.getBlockState(blockPos).getBlockHardness(world, blockPos) >= 0 && !(world.getBlockState(blockPos).getBlock() instanceof IFluidBlock) && !(world.getBlockState(blockPos).getBlock() instanceof IFluidBlock)) {
-            //        Minecraft.getInstance().renderGlobal.drawSelectionBoundingBox(world.getBlockState(blockPos).getBlock().getShape(world.getBlockState(blockPos), world, blockPos).getBoundingBox().offset(-x, -y, -z).offset(blockPos).
-            //                grow(0.001), 0.0F, 0.0F, 0.0F, 0.4F);
-            //    }
-            //});
+            BlockPos.getAllInBoxMutable(area.getLeft(), area.getRight()).forEach(blockPos -> {
+                if (!world.isAirBlock(blockPos) && world.getBlockState(blockPos).getBlockHardness(world, blockPos) >= 0 && !(world.getBlockState(blockPos).getBlock() instanceof IFluidBlock) && !(world.getBlockState(blockPos).getBlock() instanceof IFluidBlock)) {
+                    Minecraft.getInstance().worldRenderer.drawSelectionBoundingBox(world.getBlockState(blockPos).getBlock().getShape(world.getBlockState(blockPos), world, blockPos, ISelectionContext.dummy()).getBoundingBox().offset(-x, -y, -z).offset(blockPos).
+                            grow(0.001), 0.0F, 0.0F, 0.0F, 0.4F);
+                }
+            });
             GlStateManager.depthMask(true);
             GlStateManager.enableTexture();
             GlStateManager.disableBlend();
