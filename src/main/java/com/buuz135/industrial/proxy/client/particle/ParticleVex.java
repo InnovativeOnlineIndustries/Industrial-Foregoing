@@ -103,7 +103,7 @@ public class ParticleVex extends Particle {
     }
 
     @Override
-    public IParticleRenderType func_217558_b() {
+    public IParticleRenderType getRenderType() {
         return null;
     }
 

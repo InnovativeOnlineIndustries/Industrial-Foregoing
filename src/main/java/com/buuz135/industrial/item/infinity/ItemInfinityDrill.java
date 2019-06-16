@@ -113,7 +113,7 @@ public class ItemInfinityDrill extends IFCustomItem {
 
     @Override
     public boolean canApplyAtEnchantingTable(ItemStack stack, Enchantment enchantment) {
-        return enchantment.field_77351_y == EnchantmentType.DIGGER;
+        return enchantment.type == EnchantmentType.DIGGER;
     }
 
     @Override

@@ -72,7 +72,7 @@ public class MobImprisonmentToolItem extends IFCustomItem {
         if (target.getEntityWorld().isRemote) return false;
         if (target instanceof PlayerEntity || !target.isNonBoss() || !target.isAlive()) return false;
         if (containsEntity(stack)) return false;
-        String entityID = EntityType.getId(target.getType()).toString();
+        String entityID = EntityType.getKey(target.getType()).toString();
         if (isBlacklisted(entityID)) return false;
         CompoundNBT nbt = new CompoundNBT();
         nbt.putString("entity", entityID);
@@ -110,7 +110,7 @@ public class MobImprisonmentToolItem extends IFCustomItem {
 
     @Nullable
     public Entity getEntityFromStack(ItemStack stack, World world, boolean withInfo) {
-        EntityType type = EntityType.func_220327_a(stack.getTag().getString("entity")).orElse(null);
+        EntityType type = EntityType.byKey(stack.getTag().getString("entity")).orElse(null);
         if (type != null) {
             Entity entity = type.create(world);
             if (withInfo) entity.read(stack.getTag());

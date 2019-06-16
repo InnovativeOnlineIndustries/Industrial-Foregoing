@@ -41,7 +41,7 @@ public class LayerPinkGel extends LayerRenderer<EntityPinkSlime, SlimeModel<Enti
     }
 
     @Override
-    public void func_212842_a_(EntityPinkSlime entityPinkSlime, float limbSwing, float limbSwingAmount, float partialTicks, float ageInTicks, float netHeadYaw, float headPitch, float scale) {
+    public void render(EntityPinkSlime entityPinkSlime, float limbSwing, float limbSwingAmount, float partialTicks, float ageInTicks, float netHeadYaw, float headPitch, float scale) {
         if (!entityPinkSlime.isInvisible()) {
             GlStateManager.color4f(1.0F, 1.0F, 1.0F, 1.0F);
             GlStateManager.enableNormalize();

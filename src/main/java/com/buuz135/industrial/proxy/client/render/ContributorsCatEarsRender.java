@@ -47,7 +47,7 @@ public class ContributorsCatEarsRender extends LayerRenderer<AbstractClientPlaye
     }
 
     @Override
-    public void func_212842_a_(AbstractClientPlayerEntity entitylivingbaseIn, float limbSwing, float limbSwingAmount, float partialTicks, float ageInTicks, float netHeadYaw, float headPitch, float scale) {
+    public void render(AbstractClientPlayerEntity entitylivingbaseIn, float limbSwing, float limbSwingAmount, float partialTicks, float ageInTicks, float netHeadYaw, float headPitch, float scale) {
         if (CommonProxy.CONTRIBUTORS == null) return;
         if (!CommonProxy.CONTRIBUTORS.contains(entitylivingbaseIn.getUniqueID().toString())) return;
         if (!entitylivingbaseIn.isWearing(PlayerModelPart.CAPE)) return;

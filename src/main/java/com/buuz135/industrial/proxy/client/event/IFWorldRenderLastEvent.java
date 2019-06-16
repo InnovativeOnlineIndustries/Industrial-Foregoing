@@ -37,7 +37,7 @@ public class IFWorldRenderLastEvent {
     @SubscribeEvent
     public void onRender(RenderGameOverlayEvent.Post event) {
         ClientPlayerEntity playerIn = Minecraft.getInstance().player;
-        if (!playerIn.getHeldItemMainhand().getItem().equals(ModuleCore.BOOK_MANUAL) || Minecraft.getInstance().field_71462_r != null)
+        if (!playerIn.getHeldItemMainhand().getItem().equals(ModuleCore.BOOK_MANUAL) || Minecraft.getInstance().currentScreen != null)
             return;
         float f = playerIn.rotationPitch;
         float f1 = playerIn.rotationYaw;

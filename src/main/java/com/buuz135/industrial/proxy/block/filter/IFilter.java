@@ -74,8 +74,8 @@ public interface IFilter<T extends Entity> {
 
         @Override
         public Rectangle2d getArea() {
-            if (Minecraft.getInstance().field_71462_r instanceof GuiConveyor) {
-                GuiConveyor gui = (GuiConveyor) Minecraft.getInstance().field_71462_r;
+            if (Minecraft.getInstance().currentScreen instanceof GuiConveyor) {
+                GuiConveyor gui = (GuiConveyor) Minecraft.getInstance().currentScreen;
                 return new Rectangle2d(x + gui.getX(), y + gui.getY(), 18, 18);
             }
             return new Rectangle2d(0, 0, 0, 0);
@@ -83,8 +83,8 @@ public interface IFilter<T extends Entity> {
 
         @Override
         public void accept(ItemStack ingredient) {
-            if (Minecraft.getInstance().field_71462_r instanceof GuiConveyor) {
-                ((GuiConveyor) Minecraft.getInstance().field_71462_r).sendMessage(id, ingredient.serializeNBT());
+            if (Minecraft.getInstance().currentScreen instanceof GuiConveyor) {
+                ((GuiConveyor) Minecraft.getInstance().currentScreen).sendMessage(id, ingredient.serializeNBT());
             }
         }
     }
