@@ -328,11 +328,18 @@ public class BlockConveyor extends BlockTileBase<TileEntityConveyor> {
     }
 
     @Override
-    public VoxelShape getShape(BlockState state, IBlockReader p_220053_2_, BlockPos p_220053_3_, ISelectionContext p_220053_4_) {
+    public VoxelShape getShape(BlockState state, IBlockReader world, BlockPos pos, ISelectionContext p_220053_4_) {
         if (state.get(TYPE).isVertical()) {
             return VoxelShapes.create(0, 0, 0, 1, 0.40, 1);
         } else {
-            return VoxelShapes.create(0, 0, 0, 1, 1 / 16D, 1);
+            VoxelShape shape = VoxelShapes.create(0, 0, 0, 1, 1 / 16D, 1);
+            TileEntity entity = world.getTileEntity(pos);
+            if (entity instanceof TileEntityConveyor) {
+                for (ConveyorUpgrade upgrade : ((TileEntityConveyor) entity).getUpgradeMap().values())
+                    if (upgrade != null)
+                        shape = VoxelShapes.or(shape, VoxelShapes.create(upgrade.getBoundingBox().getBoundingBox()));
+            }
+            return shape;
         }
     }
 
