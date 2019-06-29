@@ -18,7 +18,6 @@ import net.minecraft.block.Block;
 import net.minecraft.client.gui.ScreenManager;
 import net.minecraft.client.renderer.model.IBakedModel;
 import net.minecraft.client.renderer.model.IUnbakedModel;
-import net.minecraft.client.renderer.model.ModelResourceLocation;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.inventory.container.ContainerType;
 import net.minecraft.item.Item;
@@ -74,7 +73,7 @@ public class ModuleTransport implements IModule {
 
     @OnlyIn(Dist.CLIENT)
     private void conveyorBake(ModelBakeEvent event) {
-        for (ModelResourceLocation resourceLocation : event.getModelRegistry().keySet()) {
+        for (ResourceLocation resourceLocation : event.getModelRegistry().keySet()) {
             if (resourceLocation.getNamespace().equals(Reference.MOD_ID)) {
                 if (resourceLocation.getPath().contains("conveyor") && !resourceLocation.getPath().contains("upgrade"))
                     event.getModelRegistry().put(resourceLocation, new ConveyorBlockModel(event.getModelRegistry().get(resourceLocation)));
