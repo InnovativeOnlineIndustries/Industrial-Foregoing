@@ -60,8 +60,8 @@ public class ModuleTransport implements IModule {
                 .content(ContainerType.class, (ContainerType) IForgeContainerType.create(ContainerConveyor::new).setRegistryName(new ResourceLocation(Reference.MOD_ID, "conveyor")))
         );
         Feature.Builder builder = Feature.builder("conveyor_upgrades")
-                .event(EventManager.forge(ModelBakeEvent.class).process(this::conveyorBake))
-                .event(EventManager.forge(TextureStitchEvent.Pre.class).process(this::textureStitch))
+                .event(EventManager.mod(ModelBakeEvent.class).process(this::conveyorBake))
+                .event(EventManager.mod(TextureStitchEvent.Pre.class).process(this::textureStitch))
                 .event(EventManager.mod(FMLCommonSetupEvent.class).process(fmlCommonSetupEvent -> {
                     NetworkHandler.registerMessage(ConveyorButtonInteractMessage.class);
                     NetworkHandler.registerMessage(ConveyorSplittingSyncEntityMessage.class);
@@ -96,7 +96,7 @@ public class ModuleTransport implements IModule {
 
     @OnlyIn(Dist.CLIENT)
     private void textureStitch(TextureStitchEvent.Pre pre) {
-        //ConveyorUpgradeFactory.FACTORIES.forEach(conveyorUpgradeFactory -> conveyorUpgradeFactory.getTextures().forEach(resourceLocation -> pre.getMap().registerSprite(Minecraft.getInstance().getResourceManager(), resourceLocation)));
+        ConveyorUpgradeFactory.FACTORIES.forEach(conveyorUpgradeFactory -> conveyorUpgradeFactory.getTextures().forEach(pre::addSprite));
     }
 
     @OnlyIn(Dist.CLIENT)

@@ -74,7 +74,7 @@ repositories {
 }
 
 dependencies {
-    minecraft "net.minecraftforge:forge:1.14.3-27.0.16"
+    minecraft "net.minecraftforge:forge:1.14.3-27.0.43"
     if (project(':titanium') != null) {
         compile project(':titanium')
     } else {
