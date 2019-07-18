@@ -59,7 +59,7 @@ public class IndustrialForegoing extends ModuleController {
     }
 
     public IndustrialForegoing() {
-       proxy = DistExecutor.runForDist(()-> ClientProxy::new,()->CommonProxy::new);
+        proxy = DistExecutor.runForDist(() -> ClientProxy::new, () -> CommonProxy::new);
         EventManager.create(FMLCommonSetupEvent.class, EventManager.Bus.MOD).process(fmlCommonSetupEvent -> proxy.run()).subscribe();
         EventManager.create(FMLClientSetupEvent.class, EventManager.Bus.MOD).process(fmlClientSetupEvent -> proxy.run()).subscribe();
         EventManager.create(FMLServerStartingEvent.class, EventManager.Bus.MOD).process(fmlServerStartingEvent -> worldFakePlayer.clear()).subscribe();

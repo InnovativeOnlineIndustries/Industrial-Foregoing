@@ -22,15 +22,18 @@
 package com.buuz135.industrial.proxy.client;
 
 import com.buuz135.industrial.proxy.CommonProxy;
+import com.buuz135.industrial.proxy.block.tile.TileEntityConveyor;
 import com.buuz135.industrial.proxy.client.event.IFClientEvents;
 import com.buuz135.industrial.proxy.client.event.IFTooltipEvent;
 import com.buuz135.industrial.proxy.client.event.IFWorldRenderLastEvent;
+import com.buuz135.industrial.proxy.client.render.FluidConveyorTESR;
 import com.buuz135.industrial.utils.Reference;
 import net.minecraft.client.renderer.model.IBakedModel;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.client.model.IModel;
 import net.minecraftforge.client.model.obj.OBJLoader;
 import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.fml.client.registry.ClientRegistry;
 
 public class ClientProxy extends CommonProxy {
 
@@ -54,6 +57,8 @@ public class ClientProxy extends CommonProxy {
         } catch (Exception e) {
             e.printStackTrace();
         }
+
+        ClientRegistry.bindTileEntitySpecialRenderer(TileEntityConveyor.class, new FluidConveyorTESR());
         //RenderManager manager = Minecraft.getInstance().getRenderManager();
         //Map<String, RenderPlayer> map = manager.getSkinMap();
         //map.get("default").addLayer(new ContributorsCatEarsRender());

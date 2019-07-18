@@ -60,8 +60,8 @@ public class ModuleTransport implements IModule {
                 .content(ContainerType.class, (ContainerType) IForgeContainerType.create(ContainerConveyor::new).setRegistryName(new ResourceLocation(Reference.MOD_ID, "conveyor")))
         );
         Feature.Builder builder = Feature.builder("conveyor_upgrades")
-                .event(EventManager.mod(ModelBakeEvent.class).process(this::conveyorBake))
-                .event(EventManager.mod(TextureStitchEvent.Pre.class).process(this::textureStitch))
+                .eventClient(() -> () -> EventManager.mod(ModelBakeEvent.class).process(this::conveyorBake))
+                .eventClient(() -> () -> EventManager.mod(TextureStitchEvent.Pre.class).process(this::textureStitch))
                 .event(EventManager.mod(FMLCommonSetupEvent.class).process(fmlCommonSetupEvent -> {
                     NetworkHandler.registerMessage(ConveyorButtonInteractMessage.class);
                     NetworkHandler.registerMessage(ConveyorSplittingSyncEntityMessage.class);
