@@ -26,6 +26,7 @@ import com.buuz135.industrial.tile.CustomColoredItemHandler;
 import com.buuz135.industrial.tile.CustomSidedTileEntity;
 import com.buuz135.industrial.utils.ItemStackUtils;
 import lombok.Getter;
+import net.minecraft.entity.item.EntityItem;
 import net.minecraft.item.EnumDyeColor;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -72,14 +73,31 @@ public class OreDictionaryConverterTile extends CustomSidedTileEntity {
 
             @Override
             protected void onContentsChanged(int slot) {
-                OreDictionaryConverterTile.this.markDirty();
-                if (!this.getStackInSlot(0).isEmpty()) {
-                    List<String> dicts = ItemStackUtils.getOreDictionaryEntries(this.getStackInSlot(0));
-                    if (dicts.size() > 0) {
-                        modid = this.getStackInSlot(0).getItem().getRegistryName().getNamespace();
-                        oreDict = dicts.get(0);
-                        OreDictionaryConverterTile.this.forceSync();
+                if (!world.isRemote) {
+                    for (int i = 0; i < change.getSlots(); i++) {
+                        ItemStack stack = change.getStackInSlot(i).copy();
+                        if (!stack.isEmpty()) {
+                            float f = 0.7F;
+                            float d0 = world.rand.nextFloat() * f + (1.0F - f) * 0.5F;
+                            float d1 = world.rand.nextFloat() * f + (1.0F - f) * 0.5F;
+                            float d2 = world.rand.nextFloat() * f + (1.0F - f) * 0.5F;
+                            EntityItem entityitem = new EntityItem(world, pos.getX() + d0, pos.getY() + d1 + 1, pos.getZ() + d2, stack);
+                            entityitem.setDefaultPickupDelay();
+                            if (stack.hasTagCompound()) {
+                                entityitem.getItem().setTagCompound(stack.getTagCompound().copy());
+                            }
+                            world.spawnEntity(entityitem);
+                        }
+                        change.getStackInSlot(i).setCount(0);
                     }
+                    if (!this.getStackInSlot(0).isEmpty()) {
+                        List<String> dicts = ItemStackUtils.getOreDictionaryEntries(this.getStackInSlot(0));
+                        if (dicts.size() > 0) {
+                            modid = this.getStackInSlot(0).getItem().getRegistryName().getNamespace();
+                            oreDict = dicts.get(0);
+                        }
+                    }
+                    OreDictionaryConverterTile.this.forceSync();
                 }
             }
         };
@@ -105,6 +123,7 @@ public class OreDictionaryConverterTile extends CustomSidedTileEntity {
                     ItemStack stack = filter.getStackInSlot(0).copy();
                     stack.setCount(size);
                     ItemHandlerHelper.insertItem(change, stack, false);
+                    forceSync();
                 }
             }
         };
