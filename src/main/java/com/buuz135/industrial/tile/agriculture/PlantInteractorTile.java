@@ -80,10 +80,11 @@ public class PlantInteractorTile extends WorkingAreaElectricMachine {
         hasWorked = false;
         List<BlockPos> blockPos = BlockUtils.getBlockPosInAABB(getWorkingArea());
         if (pointer >= blockPos.size() / (BlockRegistry.plantInteractorBlock.getHeight() + 1)) pointer = 0;
-        if (pointer < blockPos.size() && BlockUtils.canBlockBeBroken(this.world, blockPos.get(pointer))) {
+        if (pointer < blockPos.size()) {
             BlockPos pointerPos = blockPos.get(pointer);
             for (int i = 0; i < BlockRegistry.plantInteractorBlock.getHeight() + 1; ++i) {
                 BlockPos tempPos = new BlockPos(pointerPos.getX(), pointerPos.getY() + i, pointerPos.getZ());
+                if (!BlockUtils.canBlockBeBroken(this.world, tempPos)) continue;
                 IBlockState tempState = this.world.getBlockState(tempPos);
                 if (tempState.getBlock() instanceof IPlantable || tempState.getBlock() instanceof IGrowable) {
                     FakePlayer player = IndustrialForegoing.getFakePlayer(this.world, tempPos.up());
