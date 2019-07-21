@@ -40,12 +40,20 @@ import com.buuz135.industrial.utils.apihandlers.RecipeHandlers;
 import com.buuz135.industrial.utils.apihandlers.json.ConfigurationConditionFactory;
 import com.buuz135.industrial.utils.compat.baubles.MeatFeederBauble;
 import com.google.gson.JsonParser;
+import net.minecraft.block.BlockDispenser;
+import net.minecraft.dispenser.IBlockSource;
 import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.init.Bootstrap;
+import net.minecraft.item.ItemDye;
+import net.minecraft.item.ItemStack;
 import net.minecraft.util.DamageSource;
+import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraft.util.text.TextFormatting;
+import net.minecraft.world.World;
 import net.minecraft.world.storage.loot.LootTableList;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.config.Configuration;
@@ -79,6 +87,7 @@ public class CommonProxy {
         }
     };
     public static ResourceLocation PINK_SLIME_LOOT;
+    public static File configFolder;
 
     private static String readUrl(String urlString) throws Exception {
         BufferedReader reader = null;
@@ -107,8 +116,6 @@ public class CommonProxy {
         RecipeHandlers.loadOreEntries();
     }
 
-    public static File configFolder;
-
     public void postInit() {
         CraftingUtils.generateCrushedRecipes();
         BlockRegistry.createRecipes();
@@ -119,6 +126,23 @@ public class CommonProxy {
 
         ItemRegistry.itemInfinityDrill.configuration(CustomConfiguration.config);
         if (CustomConfiguration.config.hasChanged()) CustomConfiguration.config.save();
+
+        BlockDispenser.DISPENSE_BEHAVIOR_REGISTRY.putObject(ItemRegistry.fertilizer, new Bootstrap.BehaviorDispenseOptional() {
+
+            protected ItemStack dispenseStack(IBlockSource source, ItemStack stack) {
+                this.successful = true;
+                World world = source.getWorld();
+                BlockPos blockpos = source.getBlockPos().offset((EnumFacing) source.getBlockState().getValue(BlockDispenser.FACING));
+                if (ItemDye.applyBonemeal(stack, world, blockpos)) {
+                    if (!world.isRemote) {
+                        world.playEvent(2005, blockpos, 0);
+                    }
+                } else {
+                    this.successful = false;
+                }
+                return stack;
+            }
+        });
     }
 
     public void preInit(FMLPreInitializationEvent event) {
