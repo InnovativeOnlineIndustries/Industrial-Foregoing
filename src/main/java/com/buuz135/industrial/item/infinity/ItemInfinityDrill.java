@@ -91,8 +91,8 @@ public class ItemInfinityDrill extends IFCustomItem {
         super("infinity_drill");
         setMaxStackSize(1);
         setHasSubtypes(true);
-        setHarvestLevel("pickaxe", 3);
-        setHarvestLevel("shovel", 3);
+        setHarvestLevel("pickaxe", Integer.MAX_VALUE);
+        setHarvestLevel("shovel", Integer.MAX_VALUE);
     }
 
     @Override
