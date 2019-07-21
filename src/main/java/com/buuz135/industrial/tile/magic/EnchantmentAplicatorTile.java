@@ -38,7 +38,6 @@ import net.minecraftforge.items.ItemHandlerHelper;
 import net.minecraftforge.items.ItemStackHandler;
 import net.ndrei.teslacorelib.inventory.BoundingRectangle;
 
-import javax.annotation.Nonnull;
 import java.util.Map;
 
 public class EnchantmentAplicatorTile extends CustomElectricMachine {
@@ -89,7 +88,7 @@ public class EnchantmentAplicatorTile extends CustomElectricMachine {
             }
 
             @Override
-            protected int getStackLimit(int slot, @Nonnull ItemStack stack) {
+            public int getSlotLimit(int slot) {
                 return 1;
             }
         };
