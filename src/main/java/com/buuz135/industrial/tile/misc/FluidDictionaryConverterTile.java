@@ -199,6 +199,8 @@ public class FluidDictionaryConverterTile extends CustomSidedTileEntity {
                             ItemStack stack = FluidUtil.getFilledBucket(FluidRegistry.getFluidStack(fluidName, 1000));
                             if (!stack.isEmpty()) {
                                 container.drawTooltip(container.getItemToolTip(stack), mouseX - guiX, mouseY - guiY);
+                            } else {
+                                container.drawTooltip(Arrays.asList(FluidRegistry.getFluidStack(fluidName, 1000).getLocalizedName()), mouseX - guiX, mouseY - guiY);
                             }
                         }
                     }
