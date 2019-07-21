@@ -39,6 +39,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraftforge.fluids.*;
+import net.minecraftforge.fluids.capability.IFluidHandler;
 import net.ndrei.teslacorelib.gui.BasicRenderedGuiPiece;
 import net.ndrei.teslacorelib.gui.BasicTeslaGuiContainer;
 import net.ndrei.teslacorelib.gui.IGuiContainerPiece;
@@ -95,16 +96,19 @@ public class FluidPumpTile extends WorkingAreaElectricMachine {
                 if (!allBlocks.isEmpty()) peeked = allBlocks.peek();
             }
             if (peeked == null) return 0;
-            Fluid fluid = FluidRegistry.lookupFluidForBlock(this.world.getBlockState(peeked).getBlock());
+            if (this.world.getTileEntity(peeked) != null) return 0;
+            IFluidHandler handler = FluidUtil.getFluidHandler(this.world, peeked, null);
+            FluidStack fluid = handler.drain(1000, true);
             if (fluid != null) {
-                FluidStack stack = new FluidStack(fluid, 1000);
                 if (BlockRegistry.fluidPumpBlock.isReplaceFluidWithCobble()) {
                     if (this.world.setBlockState(peeked, Blocks.COBBLESTONE.getDefaultState())) {
-                        tank.fill(stack, true);
+                        tank.fill(fluid, true);
                     }
                 } else if (world.setBlockToAir(peeked)) {
-                    tank.fill(stack, true);
+                    tank.fill(fluid, true);
                 }
+            } else {
+                return 0;
             }
             allBlocks.poll();
             return 1;
