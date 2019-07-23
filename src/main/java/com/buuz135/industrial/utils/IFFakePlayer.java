@@ -23,7 +23,7 @@ package com.buuz135.industrial.utils;
 
 import com.mojang.authlib.GameProfile;
 import net.minecraft.item.ItemStack;
-import net.minecraft.world.ServerWorld;
+import net.minecraft.world.server.ServerWorld;
 import net.minecraftforge.common.util.FakePlayer;
 
 import java.util.UUID;
