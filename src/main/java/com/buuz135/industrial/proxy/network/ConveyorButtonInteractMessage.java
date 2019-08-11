@@ -53,7 +53,6 @@ public class ConveyorButtonInteractMessage extends Message {
             TileEntity entity = context.getSender().getServerWorld().getTileEntity(pos);
             Direction facing = Direction.byIndex(this.facing);
             if (entity instanceof TileEntityConveyor) {
-                System.out.println(((TileEntityConveyor) entity).hasUpgrade(facing));
                 if (((TileEntityConveyor) entity).hasUpgrade(facing)) {
                     ((TileEntityConveyor) entity).getUpgradeMap().get(facing).handleButtonInteraction(buttonId, compound);
                 }

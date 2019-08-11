@@ -59,6 +59,7 @@ public class ClientProxy extends CommonProxy {
         }
 
         ClientRegistry.bindTileEntitySpecialRenderer(TileEntityConveyor.class, new FluidConveyorTESR());
+
         //RenderManager manager = Minecraft.getInstance().getRenderManager();
         //Map<String, RenderPlayer> map = manager.getSkinMap();
         //map.get("default").addLayer(new ContributorsCatEarsRender());
