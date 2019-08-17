@@ -104,7 +104,7 @@ public class ItemStackFilter extends AbstractFilter<Entity> {
     @Override
     public void deserializeNBT(CompoundNBT nbt) {
         for (int i = 0; i < this.getFilter().length; i++) {
-            if (nbt.hasUniqueId(String.valueOf(i))) {
+            if (nbt.contains(String.valueOf(i))) {
                 this.getFilter()[i].setStack(ItemStack.read(nbt.getCompound(String.valueOf(i))));
             } else this.getFilter()[i].setStack(ItemStack.EMPTY);
         }

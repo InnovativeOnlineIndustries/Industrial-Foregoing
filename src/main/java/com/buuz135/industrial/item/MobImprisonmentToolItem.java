@@ -89,7 +89,7 @@ public class MobImprisonmentToolItem extends IFCustomItem {
     }
 
     public boolean containsEntity(ItemStack stack) {
-        return !stack.isEmpty() && stack.hasTag() && stack.getTag().hasUniqueId("entity");
+        return !stack.isEmpty() && stack.hasTag() && stack.getTag().contains("entity");
     }
 
     @Override

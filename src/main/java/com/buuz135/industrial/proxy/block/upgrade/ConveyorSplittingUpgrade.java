@@ -231,7 +231,7 @@ public class ConveyorSplittingUpgrade extends ConveyorUpgrade {
         @Override
         @Nonnull
         public ResourceLocation getModel(Direction upgradeSide, Direction conveyorFacing) {
-            return new ResourceLocation(Reference.MOD_ID, "block/conveyor_upgrade_splitting_" + upgradeSide.getName().toLowerCase());
+            return new ResourceLocation(Reference.MOD_ID, "blocks/conveyor_upgrade_splitting_" + upgradeSide.getName().toLowerCase());
         }
 
         @Nonnull

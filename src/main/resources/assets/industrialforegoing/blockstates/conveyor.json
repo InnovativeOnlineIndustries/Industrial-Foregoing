@@ -1,7 +1,7 @@
 {
   "forge_marker": 1,
   "defaults": {
-    "model": "industrialforegoing:conveyor"
+    "model": "industrialforegoing:blocks/conveyor"
   },
   "variants": {
     "facing": {
@@ -24,22 +24,22 @@
         }
       },
       "down": {
-        "model": "industrialforegoing:conveyor_ramp"
+        "model": "industrialforegoing:blocks/conveyor_ramp"
       },
       "down_fast": {
-        "model": "industrialforegoing:conveyor_ramp",
+        "model": "industrialforegoing:blocks/conveyor_ramp",
         "textures": {
           "2": "industrialforegoing:blocks/conveyor_color_fast"
         }
       },
       "up": {
-        "model": "industrialforegoing:conveyor_ramp_inverted",
+        "model": "industrialforegoing:blocks/conveyor_ramp_inverted",
         "textures": {
           "2": "industrialforegoing:blocks/conveyor_color_inverted"
         }
       },
       "up_fast": {
-        "model": "industrialforegoing:conveyor_ramp_inverted",
+        "model": "industrialforegoing:blocks/conveyor_ramp_inverted",
         "textures": {
           "2": "industrialforegoing:blocks/conveyor_color_inverted_fast"
         }
@@ -49,13 +49,13 @@
       "none": {
       },
       "left": {
-        "model": "industrialforegoing:conveyornol"
+        "model": "industrialforegoing:blocks/conveyornol"
       },
       "right": {
-        "model": "industrialforegoing:conveyornor"
+        "model": "industrialforegoing:blocks/conveyornor"
       },
       "both": {
-        "model": "industrialforegoing:conveyornos"
+        "model": "industrialforegoing:blocks/conveyornos"
       }
     }
   }

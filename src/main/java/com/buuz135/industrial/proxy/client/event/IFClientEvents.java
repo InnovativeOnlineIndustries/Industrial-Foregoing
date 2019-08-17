@@ -23,10 +23,8 @@ package com.buuz135.industrial.proxy.client.event;
 
 import com.buuz135.industrial.item.infinity.ItemInfinityDrill;
 import com.buuz135.industrial.module.ModuleTool;
-import com.hrznstudio.titanium.api.raytrace.DistanceRayTraceResult;
 import com.mojang.blaze3d.platform.GlStateManager;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.WorldRenderer;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.Hand;
@@ -56,23 +54,6 @@ public class IFClientEvents {
     @SubscribeEvent
     public void blockOverlayEvent(DrawBlockHighlightEvent event) {
         RayTraceResult hit = event.getTarget();
-        BlockPos pos = new BlockPos(event.getTarget().getHitVec().x, event.getTarget().getHitVec().y, event.getTarget().getHitVec().z);
-        if (hit.getType() == RayTraceResult.Type.BLOCK && hit instanceof DistanceRayTraceResult) {
-            event.setCanceled(true);
-            GlStateManager.enableBlend();
-            GlStateManager.blendFuncSeparate(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA, GlStateManager.SourceFactor.ONE, GlStateManager.DestFactor.ZERO);
-            GlStateManager.lineWidth(2.0F);
-            GlStateManager.disableTexture();
-            GlStateManager.depthMask(false);
-            PlayerEntity player = Minecraft.getInstance().player;
-            double x = player.lastTickPosX + (player.posX - player.lastTickPosX) * (double) event.getPartialTicks();
-            double y = player.lastTickPosY + (player.posY - player.lastTickPosY) * (double) event.getPartialTicks();
-            double z = player.lastTickPosZ + (player.posZ - player.lastTickPosZ) * (double) event.getPartialTicks();
-            WorldRenderer.drawShape(((DistanceRayTraceResult) hit).getHitBox().withOffset((double) pos.getX(), (double) pos.getY(), (double) pos.getZ()), -x, -y, -z, 0.0F, 0.0F, 0.0F, 0.4F);
-            GlStateManager.depthMask(true);
-            GlStateManager.enableTexture();
-            GlStateManager.disableBlend();
-        }
         if (hit.getType() == RayTraceResult.Type.BLOCK && Minecraft.getInstance().player.getHeldItemMainhand().getItem().equals(ModuleTool.INFINITY_DRILL)) {
             BlockRayTraceResult blockRayTraceResult = (BlockRayTraceResult) hit;
             event.setCanceled(true);

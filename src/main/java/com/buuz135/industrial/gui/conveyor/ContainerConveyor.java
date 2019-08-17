@@ -41,11 +41,11 @@ public class ContainerConveyor extends Container {
     private Direction facing;
 
     public ContainerConveyor(int id, PlayerInventory player, PacketBuffer buffer) {
-        this((TileEntityConveyor) player.player.getEntityWorld().getTileEntity(buffer.readBlockPos()), buffer.readEnumValue(Direction.class), player);
+        this(id, (TileEntityConveyor) player.player.getEntityWorld().getTileEntity(buffer.readBlockPos()), buffer.readEnumValue(Direction.class), player);
     }
 
-    public ContainerConveyor(TileEntityConveyor conveyor, Direction facing, PlayerInventory player) {
-        super(TYPE, 0);
+    public ContainerConveyor(int id, TileEntityConveyor conveyor, Direction facing, PlayerInventory player) {
+        super(TYPE, id);
         this.conveyor = conveyor;
         this.facing = facing;
         if (!conveyor.hasUpgrade(facing) && conveyor.getUpgradeMap().size() > 0) {
@@ -55,13 +55,13 @@ public class ContainerConveyor extends Container {
     }
 
     private void createPlayerInventory(PlayerInventory player) {
+        for (int k = 0; k < 9; k++) {
+            addSlot(new Slot(player, k, 8 + k * 18, 142));
+        }
         for (int i = 0; i < 3; i++) {
             for (int j = 0; j < 9; j++) {
                 addSlot(new Slot(player, j + i * 9 + 9, 8 + j * 18, 84 + i * 18));
             }
-        }
-        for (int k = 0; k < 9; k++) {
-            addSlot(new Slot(player, k, 8 + k * 18, 142));
         }
     }
 

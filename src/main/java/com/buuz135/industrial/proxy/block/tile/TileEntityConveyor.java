@@ -35,6 +35,7 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.item.ItemEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
+import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.inventory.container.Container;
 import net.minecraft.item.DyeColor;
 import net.minecraft.item.ItemStack;
@@ -51,6 +52,7 @@ import net.minecraftforge.client.model.data.ModelDataMap;
 import net.minecraftforge.common.util.Constants;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidTank;
+import net.minecraftforge.fml.network.NetworkHooks;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -200,8 +202,9 @@ public class TileEntityConveyor extends TileActive implements IConveyorContainer
         compound.putBoolean("Sticky", sticky);
         CompoundNBT upgrades = new CompoundNBT();
         for (Direction facing : Direction.values()) {
-            if (!hasUpgrade(facing))
+            if (!hasUpgrade(facing)) {
                 continue;
+            }
             CompoundNBT upgradeTag = new CompoundNBT();
             ConveyorUpgrade upgrade = upgradeMap.get(facing);
             upgradeTag.putString("factory", upgrade.getFactory().getRegistryName().toString());
@@ -222,11 +225,11 @@ public class TileEntityConveyor extends TileActive implements IConveyorContainer
         this.type = BlockConveyor.EnumType.getFromName(compound.getString("Type"));
         this.color = compound.getInt("Color");
         this.sticky = compound.getBoolean("Sticky");
-        if (compound.contains("Upgrades", Constants.NBT.TAG_COMPOUND)) {
+        if (compound.contains("Upgrades")) {
             CompoundNBT upgradesTag = compound.getCompound("Upgrades");
             //upgradeMap.clear();
             for (Direction facing : Direction.values()) {
-                if (!upgradesTag.hasUniqueId(facing.getName()))
+                if (!upgradesTag.contains(facing.getName()))
                     continue;
                 CompoundNBT upgradeTag = upgradesTag.getCompound(facing.getName());
                 ConveyorUpgradeFactory factory = null;
@@ -246,7 +249,7 @@ public class TileEntityConveyor extends TileActive implements IConveyorContainer
                 }
             }
         }
-        if (compound.hasUniqueId("Tank")) {
+        if (compound.contains("Tank")) {
             this.tank = this.tank.readFromNBT(compound.getCompound("Tank"));
         }
     }
@@ -322,13 +325,22 @@ public class TileEntityConveyor extends TileActive implements IConveyorContainer
     @Nullable
     @Override
     public Container createMenu(int menu, PlayerInventory inventoryPlayer, PlayerEntity entityPlayer) {
-        return new ContainerConveyor(this, ModuleTransport.CONVEYOR.getFacingUpgradeHit(this.world.getBlockState(this.pos), this.world, this.pos, entityPlayer), inventoryPlayer);
+        return new ContainerConveyor(menu, this, ModuleTransport.CONVEYOR.getFacingUpgradeHit(this.world.getBlockState(this.pos), this.world, this.pos, entityPlayer), inventoryPlayer);
+    }
+
+    public void openGui(PlayerEntity player, Direction facing) {
+        if (player instanceof ServerPlayerEntity) {
+            NetworkHooks.openGui((ServerPlayerEntity) player, this, packetBuffer -> {
+                packetBuffer.writeBlockPos(pos);
+                packetBuffer.writeEnumValue(facing);
+            });
+        }
     }
 
     @Nonnull
     @Override
     public IModelData getModelData() {
-        return new ModelDataMap.Builder().withInitial(ConveyorModelData.UPGRADE_PROPERTY, new ConveyorModelData(upgradeMap)).build();
+        return new ModelDataMap.Builder().withInitial(ConveyorModelData.UPGRADE_PROPERTY, new ConveyorModelData(new HashMap<>(upgradeMap))).build();
     }
 
 }

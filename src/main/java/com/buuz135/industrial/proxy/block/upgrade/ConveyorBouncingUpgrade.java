@@ -106,7 +106,7 @@ public class ConveyorBouncingUpgrade extends ConveyorUpgrade {
     @Override
     public void deserializeNBT(CompoundNBT nbt) {
         super.deserializeNBT(nbt);
-        if (nbt.hasUniqueId("Filter")) filter.deserializeNBT(nbt.getCompound("Filter"));
+        if (nbt.contains("Filter")) filter.deserializeNBT(nbt.getCompound("Filter"));
         whitelist = nbt.getBoolean("Whitelist");
         velocityHorizontal = nbt.getDouble("VelocityHorizontal");
         velocityVertical = nbt.getDouble("VelocityVertical");
@@ -230,7 +230,7 @@ public class ConveyorBouncingUpgrade extends ConveyorUpgrade {
         @Override
         @Nonnull
         public ResourceLocation getModel(Direction upgradeSide, Direction conveyorFacing) {
-            return new ResourceLocation(Reference.MOD_ID, "block/conveyor_upgrade_bouncing_" + conveyorFacing.getName().toLowerCase());
+            return new ResourceLocation(Reference.MOD_ID, "blocks/conveyor_upgrade_bouncing_" + conveyorFacing.getName().toLowerCase());
         }
 
         @Nonnull

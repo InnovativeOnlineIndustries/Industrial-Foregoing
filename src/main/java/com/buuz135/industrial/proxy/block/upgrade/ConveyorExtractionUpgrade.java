@@ -107,7 +107,7 @@ public class ConveyorExtractionUpgrade extends ConveyorUpgrade {
     @Override
     public void deserializeNBT(CompoundNBT nbt) {
         fast = nbt.getBoolean("fast");
-        if (nbt.hasUniqueId("Filter")) filter.deserializeNBT(nbt.getCompound("Filter"));
+        if (nbt.contains("Filter")) filter.deserializeNBT(nbt.getCompound("Filter"));
         whitelist = nbt.getBoolean("Whitelist");
     }
 
@@ -230,7 +230,7 @@ public class ConveyorExtractionUpgrade extends ConveyorUpgrade {
         @Override
         @Nonnull
         public ResourceLocation getModel(Direction upgradeSide, Direction conveyorFacing) {
-            return new ResourceLocation(Reference.MOD_ID, "block/conveyor_upgrade_extractor_" + upgradeSide.getName().toLowerCase());
+            return new ResourceLocation(Reference.MOD_ID, "blocks/conveyor_upgrade_extractor_" + upgradeSide.getName().toLowerCase());
         }
 
         @Nonnull

@@ -25,8 +25,8 @@ package com.buuz135.industrial.item.infinity;
 import com.buuz135.industrial.item.IFCustomItem;
 import com.buuz135.industrial.proxy.CommonProxy;
 import com.buuz135.industrial.proxy.FluidsRegistry;
-import com.buuz135.industrial.utils.RayTraceUtils;
 import com.google.common.collect.Multimap;
+import com.hrznstudio.titanium.util.RayTraceUtils;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.material.Material;
@@ -208,7 +208,7 @@ public class ItemInfinityDrill extends IFCustomItem {
 
     public long getPowerFromStack(ItemStack stack) {
         long power = 0;
-        if (stack.hasTag() && stack.getTag().hasUniqueId("Energy")) {
+        if (stack.hasTag() && stack.getTag().contains("Energy")) {
             power = stack.getTag().getLong("Energy");
         }
         return power;
@@ -216,14 +216,14 @@ public class ItemInfinityDrill extends IFCustomItem {
 
     public int getFuelFromStack(ItemStack stack) {
         int fuelAmount = 0;
-        if (stack.hasTag() && stack.getTag().hasUniqueId("Fluid") && stack.getTag().getCompound("Fluid").hasUniqueId("Amount")) {
+        if (stack.hasTag() && stack.getTag().contains("Fluid") && stack.getTag().getCompound("Fluid").contains("Amount")) {
             fuelAmount = stack.getTag().getCompound("Fluid").getInt("Amount");
         }
         return fuelAmount;
     }
 
     public boolean isSpecial(ItemStack stack) {
-        return stack.hasTag() && stack.getTag().hasUniqueId("Special") && stack.getTag().getBoolean("Special");
+        return stack.hasTag() && stack.getTag().contains("Special") && stack.getTag().getBoolean("Special");
     }
 
     public ItemStack createStack(long power, int fuel, boolean special) {
@@ -295,7 +295,7 @@ public class ItemInfinityDrill extends IFCustomItem {
     }
 
     public DrillTier getSelectedDrillTier(ItemStack stack) {
-        return stack.hasTag() && stack.getTag().hasUniqueId("Selected") ? DrillTier.valueOf(stack.getTag().getString("Selected")) : DrillTier.getTierBraquet(getPowerFromStack(stack)).getLeft();
+        return stack.hasTag() && stack.getTag().contains("Selected") ? DrillTier.valueOf(stack.getTag().getString("Selected")) : DrillTier.getTierBraquet(getPowerFromStack(stack)).getLeft();
     }
 
     public void setSelectedDrillTier(ItemStack stack, DrillTier tier) {

@@ -96,7 +96,7 @@ public class ConveyorBlinkingUpgrade extends ConveyorUpgrade {
     @Override
     public void deserializeNBT(CompoundNBT nbt) {
         super.deserializeNBT(nbt);
-        if (nbt.hasUniqueId("Filter")) filter.deserializeNBT(nbt.getCompound("Filter"));
+        if (nbt.contains("Filter")) filter.deserializeNBT(nbt.getCompound("Filter"));
         whitelist = nbt.getBoolean("Whitelist");
         horizontalDisplacement = nbt.getInt("HorizontalDisplacement");
         verticalDisplacement = nbt.getInt("VerticalDisplacement");
@@ -229,7 +229,7 @@ public class ConveyorBlinkingUpgrade extends ConveyorUpgrade {
         @Override
         @Nonnull
         public ResourceLocation getModel(Direction upgradeSide, Direction conveyorFacing) {
-            return new ResourceLocation(Reference.MOD_ID, "block/conveyor_upgrade_blinking");
+            return new ResourceLocation(Reference.MOD_ID, "blocks/conveyor_upgrade_blinking");
         }
 
         @Nonnull

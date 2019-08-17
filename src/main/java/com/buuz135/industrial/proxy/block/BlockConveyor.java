@@ -25,10 +25,10 @@ import com.buuz135.industrial.IndustrialForegoing;
 import com.buuz135.industrial.api.conveyor.ConveyorUpgrade;
 import com.buuz135.industrial.module.ModuleCore;
 import com.buuz135.industrial.proxy.block.tile.TileEntityConveyor;
-import com.buuz135.industrial.utils.RayTraceUtils;
 import com.hrznstudio.titanium.api.IFactory;
 import com.hrznstudio.titanium.api.raytrace.DistanceRayTraceResult;
 import com.hrznstudio.titanium.block.BlockTileBase;
+import com.hrznstudio.titanium.util.RayTraceUtils;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockRenderType;
 import net.minecraft.block.BlockState;
@@ -314,8 +314,7 @@ public class BlockConveyor extends BlockTileBase<TileEntityConveyor> {
                         if (upgrade.onUpgradeActivated(player, hand)) {
                             return true;
                         } else if (upgrade.hasGui()) {
-                            ((TileEntityConveyor) tileEntity).openGui(player);
-                            //player.openGui(IndustrialForegoing.instance, 1, worldIn, pos.getX(), pos.getY(), pos.getZ());
+                            ((TileEntityConveyor) tileEntity).openGui(player, facing);
                             return true;
                         }
                     }
@@ -345,15 +344,23 @@ public class BlockConveyor extends BlockTileBase<TileEntityConveyor> {
 
     public Direction getFacingUpgradeHit(BlockState state, World worldIn, BlockPos pos, PlayerEntity player) {
         TileEntity tileEntity = worldIn.getTileEntity(pos);
-        RayTraceResult hit = RayTraceUtils.rayTraceSimple(worldIn, player, 32, 0);
-        if (tileEntity instanceof TileEntityConveyor && hit instanceof DistanceRayTraceResult) {
-            for (Direction Direction : ((TileEntityConveyor) tileEntity).getUpgradeMap().keySet()) {
-                if (VoxelShapes.compare(((TileEntityConveyor) tileEntity).getUpgradeMap().get(Direction).getBoundingBox(), ((DistanceRayTraceResult) hit).getHitBox(), IBooleanFunction.AND)) {
-                    return Direction;
+        RayTraceResult result = RayTraceUtils.rayTraceSimple(worldIn, player, 32, 0);
+        if (result instanceof BlockRayTraceResult) {
+            VoxelShape hit = RayTraceUtils.rayTraceVoxelShape((BlockRayTraceResult) result, worldIn, player, 32, 0);
+            if (hit != null && tileEntity instanceof TileEntityConveyor) {
+                for (Direction Direction : ((TileEntityConveyor) tileEntity).getUpgradeMap().keySet()) {
+                    if (VoxelShapes.compare(((TileEntityConveyor) tileEntity).getUpgradeMap().get(Direction).getBoundingBox(), hit, IBooleanFunction.AND)) {
+                        return Direction;
+                    }
                 }
             }
         }
         return null;
+    }
+
+    @Override
+    public boolean hasIndividualRenderVoxelShape() {
+        return true;
     }
 
     @Nullable

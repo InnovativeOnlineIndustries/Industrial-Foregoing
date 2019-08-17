@@ -58,6 +58,7 @@ public class ModuleTransport implements IModule {
         features.add(Feature.builder("conveyor")
                 .content(Block.class, CONVEYOR = new BlockConveyor())
                 .content(ContainerType.class, (ContainerType) IForgeContainerType.create(ContainerConveyor::new).setRegistryName(new ResourceLocation(Reference.MOD_ID, "conveyor")))
+                .eventClient(() -> () -> EventManager.mod(FMLClientSetupEvent.class).process(this::onClientSetup))
         );
         Feature.Builder builder = Feature.builder("conveyor_upgrades")
                 .eventClient(() -> () -> EventManager.mod(ModelBakeEvent.class).process(this::conveyorBake))

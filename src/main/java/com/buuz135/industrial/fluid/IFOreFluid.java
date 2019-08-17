@@ -37,7 +37,7 @@ public class IFOreFluid extends IFCustomFluid {
     }
 
     public static String getOre(FluidStack stack) {
-        return stack.tag != null && stack.tag.hasUniqueId("Ore") ? stack.tag.getString("Ore") : null;
+        return stack.tag != null && stack.tag.contains("Ore") ? stack.tag.getString("Ore") : null;
     }
 
     @Override
