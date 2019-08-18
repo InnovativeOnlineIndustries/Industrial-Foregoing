@@ -33,10 +33,7 @@ import com.hrznstudio.titanium.recipe.generator.CraftingJsonData;
 import com.hrznstudio.titanium.recipe.generator.IIngredient;
 import com.hrznstudio.titanium.util.RayTraceUtils;
 import com.hrznstudio.titanium.util.TileUtil;
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockRenderType;
-import net.minecraft.block.BlockState;
-import net.minecraft.block.HorizontalBlock;
+import net.minecraft.block.*;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.material.MaterialColor;
 import net.minecraft.entity.Entity;
@@ -45,10 +42,14 @@ import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.item.ItemEntity;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.fluid.Fluids;
+import net.minecraft.fluid.IFluidState;
 import net.minecraft.item.*;
+import net.minecraft.state.BooleanProperty;
 import net.minecraft.state.DirectionProperty;
 import net.minecraft.state.EnumProperty;
 import net.minecraft.state.StateContainer;
+import net.minecraft.state.properties.BlockStateProperties;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.*;
 import net.minecraft.util.math.BlockPos;
@@ -70,8 +71,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-public class BlockConveyor extends BlockTileBase<TileEntityConveyor> implements IItemProvider {
+public class BlockConveyor extends BlockTileBase<TileEntityConveyor> implements IWaterLoggable {
 
+    public static final BooleanProperty WATERLOGGED = BlockStateProperties.WATERLOGGED;
     public static final DirectionProperty FACING = HorizontalBlock.HORIZONTAL_FACING;
     public static final EnumProperty<EnumType> TYPE = EnumProperty.create("type", EnumType.class);
     public static final EnumProperty<EnumSides> SIDES = EnumProperty.create("sides", EnumSides.class);
@@ -80,7 +82,7 @@ public class BlockConveyor extends BlockTileBase<TileEntityConveyor> implements 
 
     public BlockConveyor(ItemGroup group) {
         super("conveyor", Properties.create(Material.ANVIL, MaterialColor.ADOBE).doesNotBlockMovement().hardnessAndResistance(2.0f), TileEntityConveyor.class);
-        this.setDefaultState(this.getDefaultState().with(FACING, Direction.NORTH).with(SIDES, EnumSides.NONE));
+        this.setDefaultState(this.getDefaultState().with(FACING, Direction.NORTH).with(SIDES, EnumSides.NONE).with(WATERLOGGED, false));
         this.item = new ConveyorItem(this, group);
         this.setItemGroup(group);
     }
@@ -217,7 +219,11 @@ public class BlockConveyor extends BlockTileBase<TileEntityConveyor> implements 
     @Override
     protected void fillStateContainer(StateContainer.Builder<Block, BlockState> builder) {
         super.fillStateContainer(builder);
-        builder.add(FACING, SIDES, TYPE);
+        builder.add(FACING, SIDES, TYPE, WATERLOGGED);
+    }
+
+    public IFluidState getFluidState(BlockState state) {
+        return state.get(WATERLOGGED) ? Fluids.WATER.getStillFluidState(false) : super.getFluidState(state);
     }
 
     @Override
@@ -405,7 +411,8 @@ public class BlockConveyor extends BlockTileBase<TileEntityConveyor> implements 
     @Nullable
     @Override
     public BlockState getStateForPlacement(BlockItemUseContext context) {
-        return this.getDefaultState().with(FACING, context.getPlayer().getHorizontalFacing());
+        IFluidState ifluidstate = context.getWorld().getFluidState(context.getPos());
+        return this.getDefaultState().with(FACING, context.getPlayer().getHorizontalFacing()).with(WATERLOGGED, Boolean.valueOf(ifluidstate.getFluid() == Fluids.WATER));
     }
 
     @Override

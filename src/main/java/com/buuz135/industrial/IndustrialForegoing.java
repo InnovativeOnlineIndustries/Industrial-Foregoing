@@ -45,7 +45,6 @@ import net.minecraftforge.fml.event.server.FMLServerStartingEvent;
 
 import java.util.HashMap;
 
-//@Mod(modid = Reference.MOD_ID, name = Reference.MOD_ID, version = Reference.VERSION, dependencies = "required-after:forge@[14.23.1.2594,);required-after:teslacorelib@[1.0.15,);", guiFactory = Reference.GUI_FACTORY, updateJSON = "https://raw.githubusercontent.com/Buuz135/Industrial-Foregoing/master/update.json")
 @Mod(Reference.MOD_ID)
 public class IndustrialForegoing extends ModuleController {
 
