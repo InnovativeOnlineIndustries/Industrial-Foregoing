@@ -21,6 +21,9 @@
  */
 package com.buuz135.industrial.proxy.client;
 
+import com.buuz135.industrial.item.infinity.ItemInfinityDrill;
+import com.buuz135.industrial.module.ModuleTool;
+import com.buuz135.industrial.module.ModuleTransport;
 import com.buuz135.industrial.proxy.CommonProxy;
 import com.buuz135.industrial.proxy.block.tile.TileEntityConveyor;
 import com.buuz135.industrial.proxy.client.event.IFClientEvents;
@@ -28,12 +31,17 @@ import com.buuz135.industrial.proxy.client.event.IFTooltipEvent;
 import com.buuz135.industrial.proxy.client.event.IFWorldRenderLastEvent;
 import com.buuz135.industrial.proxy.client.render.FluidConveyorTESR;
 import com.buuz135.industrial.utils.Reference;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.model.IBakedModel;
+import net.minecraft.item.SpawnEggItem;
+import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.client.model.IModel;
 import net.minecraftforge.client.model.obj.OBJLoader;
 import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.common.util.Constants;
 import net.minecraftforge.fml.client.registry.ClientRegistry;
+import net.minecraftforge.registries.ForgeRegistries;
 
 public class ClientProxy extends CommonProxy {
 
@@ -77,32 +85,32 @@ public class ClientProxy extends CommonProxy {
         //    }
         //    return 0xFFFFFF;
         //}, BlockRegistry.blockConveyor.getItem());
-        //Minecraft.getInstance().getBlockColors().register((state, worldIn, pos, tintIndex) -> {
-        //    if (tintIndex == 0) {
-        //        TileEntity entity = worldIn.getTileEntity(pos);
-        //        if (entity instanceof TileEntityConveyor) {
-        //            return EnumDyeColor.byId(((TileEntityConveyor) entity).getColor()).func_196060_f();
-        //        }
-        //    }
-        //    return 0xFFFFFFF;
-        //}, ModuleTransport.CONVEYOR);
-        //Minecraft.getInstance().getItemColors().register((stack, tintIndex) -> {
-        //    if (tintIndex == 1 || tintIndex == 2 || tintIndex == 3) {
-        //        EntityList.EntityEggInfo info = null;
-        //        if (stack.hasTag() && stack.getTag().hasKey("entity", Constants.NBT.TAG_STRING)) {
-        //            ResourceLocation id = new ResourceLocation(stack.getTag().getString("entity"));
-        //            info = EntityList.ENTITY_EGGS.get(id);
-        //        }
-        //        return info == null ? 0x636363 : tintIndex == 3 ? BlockRegistry.mobDuplicatorBlock.blacklistedEntities.contains(info.spawnedID.toString()) ? 0xDB201A : 0x636363 : tintIndex == 1 ? info.primaryColor : info.secondaryColor;
-        //    }
-        //    return 0xFFFFFF;
-        //}, ItemRegistry.MOB_IMPRISONMENT_TOOL);
-        //Minecraft.getInstance().getItemColors().register((stack, tintIndex) -> {
-        //    if (tintIndex == 0) {
-        //        return ItemInfinityDrill.DrillTier.getTierBraquet(ModuleTool.INFINITY_DRILL.getPowerFromStack(stack)).getLeft().getTextureColor();
-        //    }
-        //    return 0xFFFFFF;
-        //}, ModuleTool.INFINITY_DRILL);
+        Minecraft.getInstance().getBlockColors().register((state, worldIn, pos, tintIndex) -> {
+            if (tintIndex == 0) {
+                TileEntity entity = worldIn.getTileEntity(pos);
+                if (entity instanceof TileEntityConveyor) {
+                    return ((TileEntityConveyor) entity).getColor();
+                }
+            }
+            return 0xFFFFFFF;
+        }, ModuleTransport.CONVEYOR);
+        Minecraft.getInstance().getItemColors().register((stack, tintIndex) -> {
+            if (tintIndex == 1 || tintIndex == 2 || tintIndex == 3) {
+                SpawnEggItem info = null;
+                if (stack.hasTag() && stack.getTag().contains("entity", Constants.NBT.TAG_STRING)) {
+                    ResourceLocation id = new ResourceLocation(stack.getTag().getString("entity"));
+                    info = SpawnEggItem.getEgg(ForgeRegistries.ENTITIES.getValue(id));
+                }
+                return info == null ? 0x636363 : tintIndex == 3 ? /*BlockRegistry.mobDuplicatorBlock.blacklistedEntities.contains(info.spawnedID.toString())*/ false ? 0xDB201A : 0x636363 : info.getColor(tintIndex);
+            }
+            return 0xFFFFFF;
+        }, ModuleTool.MOB_IMPRISONMENT_TOOL);
+        Minecraft.getInstance().getItemColors().register((stack, tintIndex) -> {
+            if (tintIndex == 0) {
+                return ItemInfinityDrill.DrillTier.getTierBraquet(ModuleTool.INFINITY_DRILL.getPowerFromStack(stack)).getLeft().getTextureColor();
+            }
+            return 0xFFFFFF;
+        }, ModuleTool.INFINITY_DRILL);
     }
 
 }

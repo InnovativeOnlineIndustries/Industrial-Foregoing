@@ -310,6 +310,10 @@ public class BlockConveyor extends BlockTileBase<TileEntityConveyor> {
                         handStack.shrink(1);
                         return true;
                     }
+                    if (handStack.getItem() instanceof DyeItem) {
+                        ((TileEntityConveyor) tileEntity).setColor(((DyeItem) handStack.getItem()).getDyeColor());
+                        return true;
+                    }
                 } else {
                     if (((TileEntityConveyor) tileEntity).hasUpgrade(facing)) {
                         ConveyorUpgrade upgrade = ((TileEntityConveyor) tileEntity).getUpgradeMap().get(facing);

@@ -78,7 +78,7 @@ public class TileEntityConveyor extends TileActive implements IConveyorContainer
         super(ModuleTransport.CONVEYOR);
         this.facing = Direction.NORTH;
         this.type = BlockConveyor.EnumType.FLAT;
-        this.color = 0;
+        this.color = DyeColor.WHITE.func_196057_c();
         this.filter = new ArrayList<>();
         this.sticky = false;
         this.tank = new FluidTank(250);
@@ -180,7 +180,7 @@ public class TileEntityConveyor extends TileActive implements IConveyorContainer
     }
 
     public void setColor(DyeColor color) {
-        this.color = 0;
+        this.color = color.getMapColor().colorValue;
         markForUpdate();
     }
 
