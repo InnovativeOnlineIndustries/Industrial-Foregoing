@@ -1,11 +1,11 @@
 package com.buuz135.industrial.module;
 
 import com.buuz135.industrial.api.conveyor.ConveyorUpgradeFactory;
+import com.buuz135.industrial.block.BlockConveyor;
+import com.buuz135.industrial.block.conveyor.*;
 import com.buuz135.industrial.gui.conveyor.ContainerConveyor;
 import com.buuz135.industrial.gui.conveyor.GuiConveyor;
 import com.buuz135.industrial.item.ItemConveyorUpgrade;
-import com.buuz135.industrial.proxy.block.BlockConveyor;
-import com.buuz135.industrial.proxy.block.upgrade.*;
 import com.buuz135.industrial.proxy.client.model.ConveyorBlockModel;
 import com.buuz135.industrial.proxy.network.ConveyorButtonInteractMessage;
 import com.buuz135.industrial.proxy.network.ConveyorSplittingSyncEntityMessage;

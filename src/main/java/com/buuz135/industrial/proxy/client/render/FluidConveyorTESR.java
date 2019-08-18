@@ -21,8 +21,8 @@
  */
 package com.buuz135.industrial.proxy.client.render;
 
-import com.buuz135.industrial.proxy.block.BlockConveyor;
-import com.buuz135.industrial.proxy.block.tile.TileEntityConveyor;
+import com.buuz135.industrial.block.BlockConveyor;
+import com.buuz135.industrial.block.tile.TileEntityConveyor;
 import com.mojang.blaze3d.platform.GlStateManager;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.BufferBuilder;

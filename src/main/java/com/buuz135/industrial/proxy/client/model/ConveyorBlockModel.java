@@ -22,8 +22,8 @@
 package com.buuz135.industrial.proxy.client.model;
 
 import com.buuz135.industrial.api.conveyor.ConveyorUpgrade;
+import com.buuz135.industrial.block.BlockConveyor;
 import com.buuz135.industrial.module.ModuleTransport;
-import com.buuz135.industrial.proxy.block.BlockConveyor;
 import com.google.common.cache.Cache;
 import com.google.common.cache.CacheBuilder;
 import net.minecraft.block.BlockState;

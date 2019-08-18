@@ -23,7 +23,7 @@ package com.buuz135.industrial.item;
 
 import com.buuz135.industrial.api.conveyor.ConveyorUpgradeFactory;
 import com.buuz135.industrial.api.conveyor.IConveyorContainer;
-import com.buuz135.industrial.proxy.block.tile.TileEntityConveyor;
+import com.buuz135.industrial.block.tile.TileEntityConveyor;
 import net.minecraft.item.ItemGroup;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.ItemUseContext;

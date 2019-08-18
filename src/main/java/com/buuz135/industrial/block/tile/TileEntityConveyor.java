@@ -19,14 +19,14 @@
  * FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE,
  * ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
-package com.buuz135.industrial.proxy.block.tile;
+package com.buuz135.industrial.block.tile;
 
 import com.buuz135.industrial.api.conveyor.ConveyorUpgrade;
 import com.buuz135.industrial.api.conveyor.ConveyorUpgradeFactory;
 import com.buuz135.industrial.api.conveyor.IConveyorContainer;
+import com.buuz135.industrial.block.BlockConveyor;
 import com.buuz135.industrial.gui.conveyor.ContainerConveyor;
 import com.buuz135.industrial.module.ModuleTransport;
-import com.buuz135.industrial.proxy.block.BlockConveyor;
 import com.buuz135.industrial.proxy.client.model.ConveyorModelData;
 import com.buuz135.industrial.utils.MovementUtils;
 import com.hrznstudio.titanium.block.tile.TileActive;
@@ -61,7 +61,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import static com.buuz135.industrial.proxy.block.BlockConveyor.*;
+import static com.buuz135.industrial.block.BlockConveyor.*;
 
 public class TileEntityConveyor extends TileActive implements IConveyorContainer, ITickableTileEntity {
 

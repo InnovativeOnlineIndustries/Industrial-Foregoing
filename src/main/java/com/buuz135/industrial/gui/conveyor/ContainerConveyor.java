@@ -21,7 +21,7 @@
  */
 package com.buuz135.industrial.gui.conveyor;
 
-import com.buuz135.industrial.proxy.block.tile.TileEntityConveyor;
+import com.buuz135.industrial.block.tile.TileEntityConveyor;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.inventory.container.Container;

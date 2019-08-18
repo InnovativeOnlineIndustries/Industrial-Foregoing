@@ -19,12 +19,12 @@
  * FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE,
  * ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
-package com.buuz135.industrial.proxy.block;
+package com.buuz135.industrial.block;
 
 import com.buuz135.industrial.IndustrialForegoing;
 import com.buuz135.industrial.api.conveyor.ConveyorUpgrade;
+import com.buuz135.industrial.block.tile.TileEntityConveyor;
 import com.buuz135.industrial.module.ModuleCore;
-import com.buuz135.industrial.proxy.block.tile.TileEntityConveyor;
 import com.hrznstudio.titanium.api.IFactory;
 import com.hrznstudio.titanium.api.raytrace.DistanceRayTraceResult;
 import com.hrznstudio.titanium.block.BlockTileBase;
