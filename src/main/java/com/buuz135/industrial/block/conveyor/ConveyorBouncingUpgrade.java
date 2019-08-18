@@ -26,7 +26,7 @@ import com.buuz135.industrial.api.conveyor.ConveyorUpgrade;
 import com.buuz135.industrial.api.conveyor.ConveyorUpgradeFactory;
 import com.buuz135.industrial.api.conveyor.IConveyorContainer;
 import com.buuz135.industrial.api.conveyor.gui.IGuiComponent;
-import com.buuz135.industrial.block.BlockConveyor;
+import com.buuz135.industrial.block.ConveyorBlock;
 import com.buuz135.industrial.gui.component.*;
 import com.buuz135.industrial.module.ModuleTransport;
 import com.buuz135.industrial.proxy.block.filter.IFilter;
@@ -79,7 +79,7 @@ public class ConveyorBouncingUpgrade extends ConveyorUpgrade {
     public void handleEntity(Entity entity) {
         super.handleEntity(entity);
         if (whitelist != filter.matches(entity)) return;
-        Direction direction = this.getContainer().getConveyorWorld().getBlockState(this.getContainer().getConveyorPosition()).get(BlockConveyor.FACING);
+        Direction direction = this.getContainer().getConveyorWorld().getBlockState(this.getContainer().getConveyorPosition()).get(ConveyorBlock.FACING);
         Vec3d vec3d = new Vec3d(velocityHorizontal * direction.getDirectionVec().getX(), velocityVertical, velocityHorizontal * direction.getDirectionVec().getZ());
         double x = vec3d.x;
         double y = vec3d.y;
@@ -236,7 +236,7 @@ public class ConveyorBouncingUpgrade extends ConveyorUpgrade {
         @Override
         @Nonnull
         public ResourceLocation getModel(Direction upgradeSide, Direction conveyorFacing) {
-            return new ResourceLocation(Reference.MOD_ID, "blocks/conveyor_upgrade_bouncing_" + conveyorFacing.getName().toLowerCase());
+            return new ResourceLocation(Reference.MOD_ID, "block/conveyor_upgrade_bouncing_" + conveyorFacing.getName().toLowerCase());
         }
 
         @Nonnull

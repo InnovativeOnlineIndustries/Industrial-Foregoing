@@ -24,7 +24,7 @@ package com.buuz135.industrial.block.tile;
 import com.buuz135.industrial.api.conveyor.ConveyorUpgrade;
 import com.buuz135.industrial.api.conveyor.ConveyorUpgradeFactory;
 import com.buuz135.industrial.api.conveyor.IConveyorContainer;
-import com.buuz135.industrial.block.BlockConveyor;
+import com.buuz135.industrial.block.ConveyorBlock;
 import com.buuz135.industrial.gui.conveyor.ContainerConveyor;
 import com.buuz135.industrial.module.ModuleTransport;
 import com.buuz135.industrial.proxy.client.model.ConveyorModelData;
@@ -61,9 +61,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import static com.buuz135.industrial.block.BlockConveyor.*;
+import static com.buuz135.industrial.block.ConveyorBlock.*;
 
-public class TileEntityConveyor extends TileActive implements IConveyorContainer, ITickableTileEntity {
+public class ConveyorTile extends TileActive implements IConveyorContainer, ITickableTileEntity {
 
     private Direction facing;
     private EnumType type;
@@ -74,10 +74,10 @@ public class TileEntityConveyor extends TileActive implements IConveyorContainer
     private FluidTank tank;
     private boolean needsFluidSync;
 
-    public TileEntityConveyor() {
+    public ConveyorTile() {
         super(ModuleTransport.CONVEYOR);
         this.facing = Direction.NORTH;
-        this.type = BlockConveyor.EnumType.FLAT;
+        this.type = ConveyorBlock.EnumType.FLAT;
         this.color = DyeColor.WHITE.func_196057_c();
         this.filter = new ArrayList<>();
         this.sticky = false;
@@ -222,7 +222,7 @@ public class TileEntityConveyor extends TileActive implements IConveyorContainer
     public void read(CompoundNBT compound) {
         super.read(compound);
         this.facing = Direction.byName(compound.getString("Facing"));
-        this.type = BlockConveyor.EnumType.getFromName(compound.getString("Type"));
+        this.type = ConveyorBlock.EnumType.getFromName(compound.getString("Type"));
         this.color = compound.getInt("Color");
         this.sticky = compound.getBoolean("Sticky");
         if (compound.contains("Upgrades")) {
@@ -304,15 +304,15 @@ public class TileEntityConveyor extends TileActive implements IConveyorContainer
             new ArrayList<>(upgradeMap.keySet()).forEach(facing1 -> this.removeUpgrade(facing1, true));
         }
         upgradeMap.values().forEach(ConveyorUpgrade::update);
-        if (!world.isRemote && tank.getFluidAmount() > 0 && world.getGameTime() % 3 == 0 && world.getBlockState(this.pos.offset(facing)).getBlock() instanceof BlockConveyor && world.getTileEntity(this.pos.offset(facing)) instanceof TileEntityConveyor) {
+        if (!world.isRemote && tank.getFluidAmount() > 0 && world.getGameTime() % 3 == 0 && world.getBlockState(this.pos.offset(facing)).getBlock() instanceof ConveyorBlock && world.getTileEntity(this.pos.offset(facing)) instanceof ConveyorTile) {
             BlockState state = world.getBlockState(this.pos.offset(facing));
-            if (!state.get(BlockConveyor.TYPE).isVertical()) {
+            if (!state.get(ConveyorBlock.TYPE).isVertical()) {
                 int amount = Math.max(tank.getFluidAmount() - 1, 1);
-                TileEntityConveyor tileEntityConveyor = (TileEntityConveyor) world.getTileEntity(this.pos.offset(facing));
-                FluidStack drained = tank.drain(tileEntityConveyor.getTank().fill(tank.drain(amount, false), true), true);
+                ConveyorTile conveyorTile = (ConveyorTile) world.getTileEntity(this.pos.offset(facing));
+                FluidStack drained = tank.drain(conveyorTile.getTank().fill(tank.drain(amount, false), true), true);
                 if (drained != null && drained.amount > 0) {
                     this.requestFluidSync();
-                    tileEntityConveyor.requestFluidSync();
+                    conveyorTile.requestFluidSync();
                 }
             }
         }

@@ -23,7 +23,7 @@ package com.buuz135.industrial.proxy.network;
 
 import com.buuz135.industrial.api.conveyor.ConveyorUpgrade;
 import com.buuz135.industrial.block.conveyor.ConveyorSplittingUpgrade;
-import com.buuz135.industrial.block.tile.TileEntityConveyor;
+import com.buuz135.industrial.block.tile.ConveyorTile;
 import com.hrznstudio.titanium.network.Message;
 import net.minecraft.client.Minecraft;
 import net.minecraft.tileentity.TileEntity;
@@ -50,13 +50,13 @@ public class ConveyorSplittingSyncEntityMessage extends Message {
     protected void handleMessage(NetworkEvent.Context context) {
         context.enqueueWork(() -> {
             TileEntity entity = Minecraft.getInstance().player.world.getTileEntity(pos);
-            if (entity instanceof TileEntityConveyor) {
-                if (((TileEntityConveyor) entity).hasUpgrade(facingCurrent)) {
-                    ConveyorUpgrade upgrade = ((TileEntityConveyor) entity).getUpgradeMap().get(facingCurrent);
+            if (entity instanceof ConveyorTile) {
+                if (((ConveyorTile) entity).hasUpgrade(facingCurrent)) {
+                    ConveyorUpgrade upgrade = ((ConveyorTile) entity).getUpgradeMap().get(facingCurrent);
                     if (upgrade instanceof ConveyorSplittingUpgrade) {
                         ((ConveyorSplittingUpgrade) upgrade).handlingEntities.add(entityID);
                     }
-                    ((TileEntityConveyor) entity).getEntityFilter().add(entityID);
+                    ((ConveyorTile) entity).getEntityFilter().add(entityID);
                 }
             }
         });

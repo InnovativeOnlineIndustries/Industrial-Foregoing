@@ -21,7 +21,7 @@
  */
 package com.buuz135.industrial.proxy.client;
 
-import com.buuz135.industrial.block.tile.TileEntityConveyor;
+import com.buuz135.industrial.block.tile.ConveyorTile;
 import com.buuz135.industrial.item.infinity.ItemInfinityDrill;
 import com.buuz135.industrial.module.ModuleTool;
 import com.buuz135.industrial.module.ModuleTransport;
@@ -66,7 +66,7 @@ public class ClientProxy extends CommonProxy {
             e.printStackTrace();
         }
 
-        ClientRegistry.bindTileEntitySpecialRenderer(TileEntityConveyor.class, new FluidConveyorTESR());
+        ClientRegistry.bindTileEntitySpecialRenderer(ConveyorTile.class, new FluidConveyorTESR());
 
         //RenderManager manager = Minecraft.getInstance().getRenderManager();
         //Map<String, RenderPlayer> map = manager.getSkinMap();
@@ -88,8 +88,8 @@ public class ClientProxy extends CommonProxy {
         Minecraft.getInstance().getBlockColors().register((state, worldIn, pos, tintIndex) -> {
             if (tintIndex == 0 && worldIn != null && pos != null) {
                 TileEntity entity = worldIn.getTileEntity(pos);
-                if (entity instanceof TileEntityConveyor) {
-                    return ((TileEntityConveyor) entity).getColor();
+                if (entity instanceof ConveyorTile) {
+                    return ((ConveyorTile) entity).getColor();
                 }
             }
             return 0xFFFFFFF;

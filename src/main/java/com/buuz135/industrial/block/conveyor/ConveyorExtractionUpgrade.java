@@ -26,7 +26,7 @@ import com.buuz135.industrial.api.conveyor.ConveyorUpgrade;
 import com.buuz135.industrial.api.conveyor.ConveyorUpgradeFactory;
 import com.buuz135.industrial.api.conveyor.IConveyorContainer;
 import com.buuz135.industrial.api.conveyor.gui.IGuiComponent;
-import com.buuz135.industrial.block.tile.TileEntityConveyor;
+import com.buuz135.industrial.block.tile.ConveyorTile;
 import com.buuz135.industrial.gui.component.FilterGuiComponent;
 import com.buuz135.industrial.gui.component.StateButtonInfo;
 import com.buuz135.industrial.gui.component.TexturedStateButtonGuiComponent;
@@ -161,8 +161,8 @@ public class ConveyorExtractionUpgrade extends ConveyorUpgrade {
                 }
             });
         }
-        if (getContainer() instanceof TileEntityConveyor) {
-            IFluidTank tank = ((TileEntityConveyor) getContainer()).getTank();
+        if (getContainer() instanceof ConveyorTile) {
+            IFluidTank tank = ((ConveyorTile) getContainer()).getTank();
             getHandlerCapability(CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY).ifPresent(fluidHandler -> {
                 if (fluidHandler.drain(250, false) != null && ((FluidTank) tank).canFillFluidType(fluidHandler.drain(250, false)) && whitelist == filter.matches(fluidHandler.drain(250, false))) {
                     FluidStack drain = fluidHandler.drain(tank.fill(fluidHandler.drain(250, false), true), true);
@@ -236,7 +236,7 @@ public class ConveyorExtractionUpgrade extends ConveyorUpgrade {
         @Override
         @Nonnull
         public ResourceLocation getModel(Direction upgradeSide, Direction conveyorFacing) {
-            return new ResourceLocation(Reference.MOD_ID, "blocks/conveyor_upgrade_extractor_" + upgradeSide.getName().toLowerCase());
+            return new ResourceLocation(Reference.MOD_ID, "block/conveyor_upgrade_extractor_" + upgradeSide.getName().toLowerCase());
         }
 
         @Nonnull

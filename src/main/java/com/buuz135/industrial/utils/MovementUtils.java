@@ -21,7 +21,7 @@
  */
 package com.buuz135.industrial.utils;
 
-import com.buuz135.industrial.block.BlockConveyor;
+import com.buuz135.industrial.block.ConveyorBlock;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.util.Direction;
@@ -34,7 +34,7 @@ import java.util.List;
 
 public class MovementUtils {
 
-    public static void handleConveyorMovement(Entity entity, Direction direction, BlockPos pos, BlockConveyor.EnumType type) {
+    public static void handleConveyorMovement(Entity entity, Direction direction, BlockPos pos, ConveyorBlock.EnumType type) {
         if (entity instanceof PlayerEntity && entity.isSneaking()) return;
         if (entity.posY - pos.getY() > 0.3 && !type.isVertical()) return;
 
@@ -76,7 +76,7 @@ public class MovementUtils {
         entity.setMotion(vec3d.x, vec3d.y != 0 ? vec3d.y : entity.getMotion().y, vec3d.z);
     }
 
-    public static void handleConveyorMovement(Entity entity, Direction direction, BlockPos pos, BlockConveyor.EnumType type, List<Entity> filter) {
+    public static void handleConveyorMovement(Entity entity, Direction direction, BlockPos pos, ConveyorBlock.EnumType type, List<Entity> filter) {
         if (filter.contains(entity)) return;
         handleConveyorMovement(entity, direction, pos, type);
     }

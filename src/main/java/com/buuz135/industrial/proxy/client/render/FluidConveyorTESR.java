@@ -21,8 +21,8 @@
  */
 package com.buuz135.industrial.proxy.client.render;
 
-import com.buuz135.industrial.block.BlockConveyor;
-import com.buuz135.industrial.block.tile.TileEntityConveyor;
+import com.buuz135.industrial.block.ConveyorBlock;
+import com.buuz135.industrial.block.tile.ConveyorTile;
 import com.mojang.blaze3d.platform.GlStateManager;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.BufferBuilder;
@@ -38,9 +38,9 @@ import org.lwjgl.opengl.GL11;
 
 import java.awt.*;
 
-public class FluidConveyorTESR extends TileEntityRenderer<TileEntityConveyor> {
+public class FluidConveyorTESR extends TileEntityRenderer<ConveyorTile> {
     @Override
-    public void render(TileEntityConveyor te, double x, double y, double z, float partialTicks, int destroyStage) {
+    public void render(ConveyorTile te, double x, double y, double z, float partialTicks, int destroyStage) {
         super.render(te, x, y, z, partialTicks, destroyStage);
         if (te.getTank().getFluidAmount() > 0) {
             GlStateManager.pushMatrix();
@@ -79,9 +79,9 @@ public class FluidConveyorTESR extends TileEntityRenderer<TileEntityConveyor> {
             double posY = 2 / 16f - 1 / 32f;
             double right = 1 / 16f;
             double left = 15 / 16f;
-            BlockConveyor.EnumSides sides = te.getWorld().getBlockState(te.getPos()).getBlock().getExtendedState(te.getWorld().getBlockState(te.getPos()), te.getWorld(), te.getPos()).get(BlockConveyor.SIDES);
-            if (sides == BlockConveyor.EnumSides.BOTH || sides == BlockConveyor.EnumSides.RIGHT) right = 0;
-            if (sides == BlockConveyor.EnumSides.BOTH || sides == BlockConveyor.EnumSides.LEFT) left = 1;
+            ConveyorBlock.EnumSides sides = te.getWorld().getBlockState(te.getPos()).getBlock().getExtendedState(te.getWorld().getBlockState(te.getPos()), te.getWorld(), te.getPos()).get(ConveyorBlock.SIDES);
+            if (sides == ConveyorBlock.EnumSides.BOTH || sides == ConveyorBlock.EnumSides.RIGHT) right = 0;
+            if (sides == ConveyorBlock.EnumSides.BOTH || sides == ConveyorBlock.EnumSides.LEFT) left = 1;
             Color color = new Color(fluid.getColor(te.getTank().getFluid()));
 
             buffer.pos(right, posY, 0).tex(flow.getInterpolatedU(0), flow.getInterpolatedV(0)).color(color.getRed(), color.getGreen(), color.getBlue(), color.getAlpha()).endVertex();
@@ -89,14 +89,14 @@ public class FluidConveyorTESR extends TileEntityRenderer<TileEntityConveyor> {
             buffer.pos(left, posY, 1).tex(flow.getInterpolatedU(8), flow.getInterpolatedV(8)).color(color.getRed(), color.getGreen(), color.getBlue(), color.getAlpha()).endVertex();
             buffer.pos(right, posY, 1).tex(flow.getInterpolatedU(0), flow.getInterpolatedV(8)).color(color.getRed(), color.getGreen(), color.getBlue(), color.getAlpha()).endVertex();
 
-            boolean shouldRenderNext = !(te.getWorld().getTileEntity(te.getPos().offset(facing)) instanceof TileEntityConveyor) || ((TileEntityConveyor) te.getWorld().getTileEntity(te.getPos().offset(facing))).getTank().getFluidAmount() <= 0;
+            boolean shouldRenderNext = !(te.getWorld().getTileEntity(te.getPos().offset(facing)) instanceof ConveyorTile) || ((ConveyorTile) te.getWorld().getTileEntity(te.getPos().offset(facing))).getTank().getFluidAmount() <= 0;
             if (shouldRenderNext) {
                 buffer.pos(right, posY, 1).tex(still.getInterpolatedU(0), still.getInterpolatedV(0)).color(color.getRed(), color.getGreen(), color.getBlue(), color.getAlpha()).endVertex();
                 buffer.pos(left, posY, 1).tex(still.getInterpolatedU(8), still.getInterpolatedV(0)).color(color.getRed(), color.getGreen(), color.getBlue(), color.getAlpha()).endVertex();
                 buffer.pos(left, 1 / 16D, 1).tex(still.getInterpolatedU(8), still.getInterpolatedV(8)).color(color.getRed(), color.getGreen(), color.getBlue(), color.getAlpha()).endVertex();
                 buffer.pos(right, 1 / 16D, 1).tex(still.getInterpolatedU(0), still.getInterpolatedV(8)).color(color.getRed(), color.getGreen(), color.getBlue(), color.getAlpha()).endVertex();
             }
-            boolean shouldRenderPrev = !(te.getWorld().getTileEntity(te.getPos().offset(facing.getOpposite())) instanceof TileEntityConveyor) || ((TileEntityConveyor) te.getWorld().getTileEntity(te.getPos().offset(facing.getOpposite()))).getTank().getFluidAmount() <= 0;
+            boolean shouldRenderPrev = !(te.getWorld().getTileEntity(te.getPos().offset(facing.getOpposite())) instanceof ConveyorTile) || ((ConveyorTile) te.getWorld().getTileEntity(te.getPos().offset(facing.getOpposite()))).getTank().getFluidAmount() <= 0;
             if (shouldRenderPrev) {
                 buffer.pos(right, posY, 0).tex(still.getInterpolatedU(0), still.getInterpolatedV(0)).color(color.getRed(), color.getGreen(), color.getBlue(), color.getAlpha()).endVertex();
                 buffer.pos(left, posY, 0).tex(still.getInterpolatedU(8), still.getInterpolatedV(0)).color(color.getRed(), color.getGreen(), color.getBlue(), color.getAlpha()).endVertex();

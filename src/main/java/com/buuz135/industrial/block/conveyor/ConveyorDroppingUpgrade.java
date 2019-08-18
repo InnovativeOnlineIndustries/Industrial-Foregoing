@@ -198,7 +198,7 @@ public class ConveyorDroppingUpgrade extends ConveyorUpgrade {
         @Override
         @Nonnull
         public ResourceLocation getModel(Direction upgradeSide, Direction conveyorFacing) {
-            return new ResourceLocation(Reference.MOD_ID, "blocks/conveyor_upgrade_dropping");
+            return new ResourceLocation(Reference.MOD_ID, "block/conveyor_upgrade_dropping");
         }
 
         @Nonnull

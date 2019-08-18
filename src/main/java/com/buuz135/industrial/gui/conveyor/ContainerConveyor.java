@@ -21,7 +21,7 @@
  */
 package com.buuz135.industrial.gui.conveyor;
 
-import com.buuz135.industrial.block.tile.TileEntityConveyor;
+import com.buuz135.industrial.block.tile.ConveyorTile;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.inventory.container.Container;
@@ -37,14 +37,14 @@ public class ContainerConveyor extends Container {
     @ObjectHolder("industrialforegoing:conveyor")
     public static ContainerType<ContainerConveyor> TYPE;
 
-    private final TileEntityConveyor conveyor;
+    private final ConveyorTile conveyor;
     private Direction facing;
 
     public ContainerConveyor(int id, PlayerInventory player, PacketBuffer buffer) {
-        this(id, (TileEntityConveyor) player.player.getEntityWorld().getTileEntity(buffer.readBlockPos()), buffer.readEnumValue(Direction.class), player);
+        this(id, (ConveyorTile) player.player.getEntityWorld().getTileEntity(buffer.readBlockPos()), buffer.readEnumValue(Direction.class), player);
     }
 
-    public ContainerConveyor(int id, TileEntityConveyor conveyor, Direction facing, PlayerInventory player) {
+    public ContainerConveyor(int id, ConveyorTile conveyor, Direction facing, PlayerInventory player) {
         super(TYPE, id);
         this.conveyor = conveyor;
         this.facing = facing;
@@ -70,7 +70,7 @@ public class ContainerConveyor extends Container {
         return true;
     }
 
-    public TileEntityConveyor getConveyor() {
+    public ConveyorTile getConveyor() {
         return conveyor;
     }
 

@@ -1,7 +1,7 @@
 {
   "forge_marker": 1,
   "defaults": {
-    "model": "industrialforegoing:blocks/conveyor"
+    "model": "industrialforegoing:block/conveyor"
   },
   "variants": {
     "facing": {
@@ -20,28 +20,28 @@
       "flat": {},
       "flat_fast": {
         "textures": {
-          "2": "industrialforegoing:blocks/conveyor_color_fast"
+          "2": "industrialforegoing:block/conveyor_color_fast"
         }
       },
       "down": {
-        "model": "industrialforegoing:blocks/conveyor_ramp"
+        "model": "industrialforegoing:block/conveyor_ramp"
       },
       "down_fast": {
-        "model": "industrialforegoing:blocks/conveyor_ramp",
+        "model": "industrialforegoing:block/conveyor_ramp",
         "textures": {
-          "2": "industrialforegoing:blocks/conveyor_color_fast"
+          "2": "industrialforegoing:block/conveyor_color_fast"
         }
       },
       "up": {
-        "model": "industrialforegoing:blocks/conveyor_ramp_inverted",
+        "model": "industrialforegoing:block/conveyor_ramp_inverted",
         "textures": {
-          "2": "industrialforegoing:blocks/conveyor_color_inverted"
+          "2": "industrialforegoing:block/conveyor_color_inverted"
         }
       },
       "up_fast": {
-        "model": "industrialforegoing:blocks/conveyor_ramp_inverted",
+        "model": "industrialforegoing:block/conveyor_ramp_inverted",
         "textures": {
-          "2": "industrialforegoing:blocks/conveyor_color_inverted_fast"
+          "2": "industrialforegoing:block/conveyor_color_inverted_fast"
         }
       }
     },
@@ -49,13 +49,13 @@
       "none": {
       },
       "left": {
-        "model": "industrialforegoing:blocks/conveyornol"
+        "model": "industrialforegoing:block/conveyornol"
       },
       "right": {
-        "model": "industrialforegoing:blocks/conveyornor"
+        "model": "industrialforegoing:block/conveyornor"
       },
       "both": {
-        "model": "industrialforegoing:blocks/conveyornos"
+        "model": "industrialforegoing:block/conveyornos"
       }
     }
   }

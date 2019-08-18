@@ -26,7 +26,7 @@ import com.buuz135.industrial.api.conveyor.ConveyorUpgrade;
 import com.buuz135.industrial.api.conveyor.ConveyorUpgradeFactory;
 import com.buuz135.industrial.api.conveyor.IConveyorContainer;
 import com.buuz135.industrial.api.conveyor.gui.IGuiComponent;
-import com.buuz135.industrial.block.tile.TileEntityConveyor;
+import com.buuz135.industrial.block.tile.ConveyorTile;
 import com.buuz135.industrial.gui.component.StateButtonInfo;
 import com.buuz135.industrial.gui.component.TextGuiComponent;
 import com.buuz135.industrial.gui.component.TextureGuiComponent;
@@ -85,7 +85,7 @@ public class ConveyorSplittingUpgrade extends ConveyorUpgrade {
             }
         }
         if (handlingEntities.contains(entity.getEntityId())) {
-            MovementUtils.handleConveyorMovement(entity, this.getSide(), this.getPos(), ((TileEntityConveyor) this.getContainer()).getConveyorType());
+            MovementUtils.handleConveyorMovement(entity, this.getSide(), this.getPos(), ((ConveyorTile) this.getContainer()).getConveyorType());
         }
     }
 
@@ -119,15 +119,15 @@ public class ConveyorSplittingUpgrade extends ConveyorUpgrade {
         }
         currentRatio = ratio;
         Direction facing = nextFacing.rotateY();
-        ConveyorUpgrade conveyorUpgrade = ((TileEntityConveyor) this.getContainer()).getUpgradeMap().get(facing);
+        ConveyorUpgrade conveyorUpgrade = ((ConveyorTile) this.getContainer()).getUpgradeMap().get(facing);
         int y = 0;
         while (!(conveyorUpgrade instanceof ConveyorSplittingUpgrade) && y < 10) {
             facing = facing.rotateY();
-            conveyorUpgrade = ((TileEntityConveyor) this.getContainer()).getUpgradeMap().get(facing);
+            conveyorUpgrade = ((ConveyorTile) this.getContainer()).getUpgradeMap().get(facing);
             ++y;
         }
         if (y >= 10) facing = this.getSide();
-        TileEntityConveyor entityConveyor = (TileEntityConveyor) this.getContainer();
+        ConveyorTile entityConveyor = (ConveyorTile) this.getContainer();
         for (Direction Direction : entityConveyor.getUpgradeMap().keySet()) {
             ConveyorUpgrade upgrade = entityConveyor.getUpgradeMap().get(Direction);
             if (upgrade instanceof ConveyorSplittingUpgrade) {
@@ -238,7 +238,7 @@ public class ConveyorSplittingUpgrade extends ConveyorUpgrade {
         @Override
         @Nonnull
         public ResourceLocation getModel(Direction upgradeSide, Direction conveyorFacing) {
-            return new ResourceLocation(Reference.MOD_ID, "blocks/conveyor_upgrade_splitting_" + upgradeSide.getName().toLowerCase());
+            return new ResourceLocation(Reference.MOD_ID, "block/conveyor_upgrade_splitting_" + upgradeSide.getName().toLowerCase());
         }
 
         @Nonnull

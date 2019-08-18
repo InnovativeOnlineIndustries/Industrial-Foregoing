@@ -23,7 +23,7 @@ package com.buuz135.industrial.item;
 
 import com.buuz135.industrial.api.conveyor.ConveyorUpgradeFactory;
 import com.buuz135.industrial.api.conveyor.IConveyorContainer;
-import com.buuz135.industrial.block.tile.TileEntityConveyor;
+import com.buuz135.industrial.block.tile.ConveyorTile;
 import net.minecraft.item.ItemGroup;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.ItemUseContext;
@@ -45,7 +45,7 @@ public class ItemConveyorUpgrade extends IFCustomItem {
     public ActionResultType onItemUse(ItemUseContext context) {
         if (!context.getPlayer().isSneaking()) {
             TileEntity tile = context.getWorld().getTileEntity(context.getPos());
-            if (tile instanceof TileEntityConveyor && ((TileEntityConveyor) tile).getConveyorType().isVertical())
+            if (tile instanceof ConveyorTile && ((ConveyorTile) tile).getConveyorType().isVertical())
                 return ActionResultType.PASS;
             if (tile instanceof IConveyorContainer) {
                 Direction side = factory.getSideForPlacement(context.getWorld(), context.getPos(), context.getPlayer());

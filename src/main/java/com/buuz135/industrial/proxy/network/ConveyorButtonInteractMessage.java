@@ -21,7 +21,7 @@
  */
 package com.buuz135.industrial.proxy.network;
 
-import com.buuz135.industrial.block.tile.TileEntityConveyor;
+import com.buuz135.industrial.block.tile.ConveyorTile;
 import com.hrznstudio.titanium.network.Message;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.tileentity.TileEntity;
@@ -52,9 +52,9 @@ public class ConveyorButtonInteractMessage extends Message {
         context.enqueueWork(() -> {
             TileEntity entity = context.getSender().getServerWorld().getTileEntity(pos);
             Direction facing = Direction.byIndex(this.facing);
-            if (entity instanceof TileEntityConveyor) {
-                if (((TileEntityConveyor) entity).hasUpgrade(facing)) {
-                    ((TileEntityConveyor) entity).getUpgradeMap().get(facing).handleButtonInteraction(buttonId, compound);
+            if (entity instanceof ConveyorTile) {
+                if (((ConveyorTile) entity).hasUpgrade(facing)) {
+                    ((ConveyorTile) entity).getUpgradeMap().get(facing).handleButtonInteraction(buttonId, compound);
                 }
             }
         });

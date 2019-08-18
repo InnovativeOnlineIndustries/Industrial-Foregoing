@@ -22,7 +22,7 @@
 package com.buuz135.industrial.proxy.client.model;
 
 import com.buuz135.industrial.api.conveyor.ConveyorUpgrade;
-import com.buuz135.industrial.block.BlockConveyor;
+import com.buuz135.industrial.block.ConveyorBlock;
 import com.buuz135.industrial.module.ModuleTransport;
 import com.google.common.cache.Cache;
 import com.google.common.cache.CacheBuilder;
@@ -75,16 +75,16 @@ public class ConveyorBlockModel implements IDynamicBakedModel {
             for (ConveyorUpgrade upgrade : extraData.getData(ConveyorModelData.UPGRADE_PROPERTY).getUpgrades().values()) {
                 if (upgrade == null)
                     continue;
-                List<BakedQuad> upgradeQuads = CACHE.getIfPresent(Pair.of(Pair.of(upgrade.getFactory().getRegistryName().toString(), Pair.of(upgrade.getSide(), state.get(BlockConveyor.FACING))), side));
+                List<BakedQuad> upgradeQuads = CACHE.getIfPresent(Pair.of(Pair.of(upgrade.getFactory().getRegistryName().toString(), Pair.of(upgrade.getSide(), state.get(ConveyorBlock.FACING))), side));
                 if (upgradeQuads == null) {
                     try {
-                        IBakedModel model = ModuleTransport.CONVEYOR_UPGRADES_CACHE.get(upgrade.getFactory().getModel(upgrade.getSide(), state.get(BlockConveyor.FACING)));
+                        IBakedModel model = ModuleTransport.CONVEYOR_UPGRADES_CACHE.get(upgrade.getFactory().getModel(upgrade.getSide(), state.get(ConveyorBlock.FACING)));
                         upgradeQuads = model.getQuads(state, side, rand, extraData);
                     } catch (Exception e) {
                         e.printStackTrace();
                         continue;
                     }
-                    CACHE.put(Pair.of(Pair.of(upgrade.getFactory().getRegistryName().toString(), Pair.of(upgrade.getSide(), state.get(BlockConveyor.FACING))), side), upgradeQuads);
+                    CACHE.put(Pair.of(Pair.of(upgrade.getFactory().getRegistryName().toString(), Pair.of(upgrade.getSide(), state.get(ConveyorBlock.FACING))), side), upgradeQuads);
                 }
                 if (!upgradeQuads.isEmpty()) {
                     quads.addAll(upgradeQuads);

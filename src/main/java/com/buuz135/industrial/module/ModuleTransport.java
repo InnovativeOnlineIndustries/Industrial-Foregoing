@@ -1,7 +1,7 @@
 package com.buuz135.industrial.module;
 
 import com.buuz135.industrial.api.conveyor.ConveyorUpgradeFactory;
-import com.buuz135.industrial.block.BlockConveyor;
+import com.buuz135.industrial.block.ConveyorBlock;
 import com.buuz135.industrial.block.conveyor.*;
 import com.buuz135.industrial.gui.conveyor.ContainerConveyor;
 import com.buuz135.industrial.gui.conveyor.GuiConveyor;
@@ -53,7 +53,7 @@ public class ModuleTransport implements IModule {
     public static ConveyorUpgradeFactory upgrade_blinking = new ConveyorBlinkingUpgrade.Factory();
     public static ConveyorUpgradeFactory upgrade_splitting = new ConveyorSplittingUpgrade.Factory();
 
-    public static BlockConveyor CONVEYOR = new BlockConveyor(TAB_TRANSPORT);
+    public static ConveyorBlock CONVEYOR = new ConveyorBlock(TAB_TRANSPORT);
     public static HashMap<ResourceLocation, IBakedModel> CONVEYOR_UPGRADES_CACHE = new HashMap<>();
 
     @Override
@@ -87,7 +87,7 @@ public class ModuleTransport implements IModule {
         }
         for (ConveyorUpgradeFactory conveyorUpgradeFactory : ConveyorUpgradeFactory.FACTORIES) {
             for (Direction upgradeFacing : conveyorUpgradeFactory.getValidFacings()) {
-                for (Direction conveyorFacing : BlockConveyor.FACING.getAllowedValues()) {
+                for (Direction conveyorFacing : ConveyorBlock.FACING.getAllowedValues()) {
                     try {
                         ResourceLocation resourceLocation = conveyorUpgradeFactory.getModel(upgradeFacing, conveyorFacing);
                         IUnbakedModel unbakedModel = event.getModelLoader().getUnbakedModel(resourceLocation);
