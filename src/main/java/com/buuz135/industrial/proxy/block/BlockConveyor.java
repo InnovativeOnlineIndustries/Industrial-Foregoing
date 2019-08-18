@@ -212,6 +212,11 @@ public class BlockConveyor extends BlockTileBase<TileEntityConveyor> implements 
     }
 
     @Override
+    public VoxelShape getCollisionShape(BlockState state, IBlockReader worldIn, BlockPos pos, ISelectionContext selectionContext) {
+        return VoxelShapes.create(0, 0, 0, 1, 1 / 16D, 1);
+    }
+
+    @Override
     public boolean hasCustomBoxes(BlockState state, IBlockReader source, BlockPos pos) {
         return true;
     }
