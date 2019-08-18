@@ -78,7 +78,7 @@ public class GuiConveyor extends ContainerScreen<ContainerConveyor> {
         y = (height - ySize) / 2;
         blit(x, y, 0, 0, xSize, ySize);
         if (upgrade != null) {
-            String localized = new TranslationTextComponent(String.format("conveyor.upgrade.%s.%s.name", upgrade.getFactory().getRegistryName().getNamespace(), upgrade.getFactory().getRegistryName().getPath())).getFormattedText();
+            String localized = new TranslationTextComponent(String.format("conveyor.upgrade.%s.%s", upgrade.getFactory().getRegistryName().getNamespace(), upgrade.getFactory().getRegistryName().getPath())).getFormattedText();
             minecraft.fontRenderer.drawString(localized, x + xSize / 2 - minecraft.fontRenderer.getStringWidth(localized) / 2, y + 6, 0x404040);
         }
         for (IGuiComponent iGuiComponent : componentList) {
