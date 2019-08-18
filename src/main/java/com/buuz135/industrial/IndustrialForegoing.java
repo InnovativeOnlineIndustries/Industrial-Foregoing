@@ -31,6 +31,7 @@ import com.buuz135.industrial.utils.Reference;
 import com.hrznstudio.titanium.event.handler.EventManager;
 import com.hrznstudio.titanium.module.Module;
 import com.hrznstudio.titanium.module.ModuleController;
+import com.hrznstudio.titanium.recipe.generator.JsonDataGenerator;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraft.world.server.ServerWorld;
@@ -51,15 +52,17 @@ public class IndustrialForegoing extends ModuleController {
     private static CommonProxy proxy;
     private static HashMap<Integer, IFFakePlayer> worldFakePlayer = new HashMap<>();
 
+    public static JsonDataGenerator RECIPES = new JsonDataGenerator(JsonDataGenerator.DataTypes.RECIPE, Reference.MOD_ID);
+
     static {
         if (!FluidRegistry.isUniversalBucketEnabled()) FluidRegistry.enableUniversalBucket();
     }
 
     public IndustrialForegoing() {
         proxy = DistExecutor.runForDist(() -> ClientProxy::new, () -> CommonProxy::new);
-        EventManager.create(FMLCommonSetupEvent.class, EventManager.Bus.MOD).process(fmlCommonSetupEvent -> proxy.run()).subscribe();
-        EventManager.create(FMLClientSetupEvent.class, EventManager.Bus.MOD).process(fmlClientSetupEvent -> proxy.run()).subscribe();
-        EventManager.create(FMLServerStartingEvent.class, EventManager.Bus.MOD).process(fmlServerStartingEvent -> worldFakePlayer.clear()).subscribe();
+        EventManager.mod(FMLCommonSetupEvent.class).process(fmlCommonSetupEvent -> proxy.run()).subscribe();
+        EventManager.mod(FMLClientSetupEvent.class).process(fmlClientSetupEvent -> proxy.run()).subscribe();
+        EventManager.mod(FMLServerStartingEvent.class).process(fmlServerStartingEvent -> worldFakePlayer.clear()).subscribe();
     }
 
     @Override
@@ -75,6 +78,12 @@ public class IndustrialForegoing extends ModuleController {
         Module.Builder transport = Module.builder("transport").description("All the Industrial Foregoing tools that allow of transport of things");
         new ModuleTransport().generateFeatures().forEach(transport::feature);
         addModule(transport);
+    }
+
+    @Override
+    public void initJsonGenerators() {
+        super.initJsonGenerators();
+        addJsonDataGenerator(RECIPES);
     }
 
     public static FakePlayer getFakePlayer(World world) {

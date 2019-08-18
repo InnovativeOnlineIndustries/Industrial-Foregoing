@@ -1,0 +1,22 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    " AA",
+    " BA",
+    "B  "
+  ],
+  "key": {
+    "A": {
+      "item": "minecraft:diamond_block",
+      "count": 1
+    },
+    "B": {
+      "item": "minecraft:iron_block",
+      "count": 1
+    }
+  },
+  "result": {
+    "item": "industrialforegoing:infinity_drill",
+    "count": 1
+  }
+}

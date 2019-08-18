@@ -21,8 +21,12 @@
  */
 package com.buuz135.industrial.item;
 
+import com.buuz135.industrial.IndustrialForegoing;
 import com.buuz135.industrial.api.straw.StrawHandler;
+import com.buuz135.industrial.module.ModuleCore;
 import com.buuz135.industrial.utils.StrawUtils;
+import com.hrznstudio.titanium.recipe.generator.CraftingJsonData;
+import com.hrznstudio.titanium.recipe.generator.IIngredient;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.IBucketPickupHandler;
@@ -53,8 +57,13 @@ import java.util.Optional;
 ;
 
 public class ItemStraw extends IFCustomItem {
+
     public ItemStraw(ItemGroup group) {
-        super("straw", group, new Properties().maxStackSize(1));
+        super("straw", group, new Properties().maxStackSize(1),
+                registry -> IndustrialForegoing.RECIPES.addRecipe(CraftingJsonData.ofShaped(
+                        new ItemStack(ModuleCore.STRAW),
+                        new String[]{"PP ", " P ", " P "},
+                        'P', IIngredient.TagIngredient.of("forge:plastic"))));
     }
 
     @Override

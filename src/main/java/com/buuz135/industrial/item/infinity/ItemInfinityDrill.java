@@ -22,13 +22,18 @@
 package com.buuz135.industrial.item.infinity;
 
 
+import com.buuz135.industrial.IndustrialForegoing;
 import com.buuz135.industrial.item.IFCustomItem;
+import com.buuz135.industrial.module.ModuleTool;
 import com.buuz135.industrial.proxy.CommonProxy;
 import com.buuz135.industrial.proxy.FluidsRegistry;
 import com.google.common.collect.Multimap;
+import com.hrznstudio.titanium.recipe.generator.CraftingJsonData;
+import com.hrznstudio.titanium.recipe.generator.IIngredient;
 import com.hrznstudio.titanium.util.RayTraceUtils;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
+import net.minecraft.block.Blocks;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.enchantment.Enchantment;
@@ -81,18 +86,12 @@ public class ItemInfinityDrill extends IFCustomItem {
     public static int FUEL_CONSUMPTION = 3;
 
     public ItemInfinityDrill(ItemGroup group) {
-        super("infinity_drill", group, new Properties().maxStackSize(1).addToolType(ToolType.PICKAXE, 3).addToolType(ToolType.SHOVEL, 3));
-    }
-
-    @Override
-    public void createRecipe() {
-//        RecipeUtils.addShapedRecipe(new ItemStack(this), " ID", "PRI", "PT ",
-//                'I', Blocks.IRON_BLOCK,
-//                'D', Blocks.DIAMOND_BLOCK,
-//                'P', ItemRegistry.pinkSlimeIngot,
-//                'R', BlockRegistry.laserDrillBlock,
-//                'T', BlockRegistry.blackHoleTankBlock
-//        );
+        super("infinity_drill", group, new Properties().maxStackSize(1).addToolType(ToolType.PICKAXE, 3).addToolType(ToolType.SHOVEL, 3),
+                registry -> IndustrialForegoing.RECIPES.addRecipe(CraftingJsonData.ofShaped(
+                        new ItemStack(ModuleTool.INFINITY_DRILL),
+                        new String[]{" DD", " ID", "I  "},
+                        'D', IIngredient.ItemStackIngredient.of(new ItemStack(Blocks.DIAMOND_BLOCK)),
+                        'I', IIngredient.ItemStackIngredient.of(new ItemStack(Blocks.IRON_BLOCK)))));
     }
 
     @Override

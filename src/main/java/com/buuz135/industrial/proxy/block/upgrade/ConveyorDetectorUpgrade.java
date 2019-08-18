@@ -21,6 +21,7 @@
  */
 package com.buuz135.industrial.proxy.block.upgrade;
 
+import com.buuz135.industrial.IndustrialForegoing;
 import com.buuz135.industrial.api.conveyor.ConveyorUpgrade;
 import com.buuz135.industrial.api.conveyor.ConveyorUpgradeFactory;
 import com.buuz135.industrial.api.conveyor.IConveyorContainer;
@@ -28,9 +29,14 @@ import com.buuz135.industrial.api.conveyor.gui.IGuiComponent;
 import com.buuz135.industrial.gui.component.FilterGuiComponent;
 import com.buuz135.industrial.gui.component.StateButtonInfo;
 import com.buuz135.industrial.gui.component.TexturedStateButtonGuiComponent;
+import com.buuz135.industrial.module.ModuleTransport;
 import com.buuz135.industrial.proxy.block.filter.IFilter;
 import com.buuz135.industrial.proxy.block.filter.ItemStackFilter;
 import com.buuz135.industrial.utils.Reference;
+import com.hrznstudio.titanium.module.api.RegistryManager;
+import com.hrznstudio.titanium.recipe.generator.CraftingJsonData;
+import com.hrznstudio.titanium.recipe.generator.IIngredient;
+import net.minecraft.block.Blocks;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
@@ -199,6 +205,18 @@ public class ConveyorDetectorUpgrade extends ConveyorUpgrade {
         @Override
         public ResourceLocation getItemModel() {
             return new ResourceLocation(Reference.MOD_ID, "conveyor_detection_upgrade");
+        }
+
+        @Override
+        public void addAlternatives(RegistryManager registry) {
+            IndustrialForegoing.RECIPES.addRecipe(CraftingJsonData.ofShaped(
+                    new ItemStack(getUpgradeItem()),
+                    new String[]{"IPI", "IDI", "ICI"},
+                    'I', IIngredient.TagIngredient.of("forge:ingots/iron"),
+                    'P', IIngredient.ItemStackIngredient.of(new ItemStack(Blocks.STONE_PRESSURE_PLATE)),
+                    'D', IIngredient.ItemStackIngredient.of(new ItemStack(Blocks.COMPARATOR)),
+                    'C', IIngredient.ItemStackIngredient.of(new ItemStack(ModuleTransport.CONVEYOR))
+            ));
         }
     }
 }

@@ -21,12 +21,16 @@
  */
 package com.buuz135.industrial.proxy.block;
 
+import com.buuz135.industrial.IndustrialForegoing;
 import com.buuz135.industrial.api.conveyor.ConveyorUpgrade;
 import com.buuz135.industrial.module.ModuleCore;
 import com.buuz135.industrial.proxy.block.tile.TileEntityConveyor;
 import com.hrznstudio.titanium.api.IFactory;
 import com.hrznstudio.titanium.api.raytrace.DistanceRayTraceResult;
 import com.hrznstudio.titanium.block.BlockTileBase;
+import com.hrznstudio.titanium.module.api.RegistryManager;
+import com.hrznstudio.titanium.recipe.generator.CraftingJsonData;
+import com.hrznstudio.titanium.recipe.generator.IIngredient;
 import com.hrznstudio.titanium.util.RayTraceUtils;
 import com.hrznstudio.titanium.util.TileUtil;
 import net.minecraft.block.Block;
@@ -89,6 +93,18 @@ public class BlockConveyor extends BlockTileBase<TileEntityConveyor> implements 
     @Override
     public IFactory<BlockItem> getItemBlockFactory() {
         return this::getItem;
+    }
+
+    @Override
+    public void addAlternatives(RegistryManager registry) {
+        super.addAlternatives(registry);
+        IndustrialForegoing.RECIPES.addRecipe(
+                CraftingJsonData.ofShaped(new ItemStack(this, 6),
+                        new String[]{"ppp", "iri", "ppp"},
+                        'p', IIngredient.TagIngredient.of("forge:plastic"),
+                        'i', IIngredient.TagIngredient.of("forge:ingots/iron"),
+                        'r', IIngredient.ItemStackIngredient.of(new ItemStack(Items.REDSTONE)))
+        );
     }
 
     @OnlyIn(Dist.CLIENT)

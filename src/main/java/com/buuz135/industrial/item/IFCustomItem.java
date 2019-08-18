@@ -22,26 +22,25 @@
 package com.buuz135.industrial.item;
 
 import com.hrznstudio.titanium.item.ItemBase;
-import net.minecraft.item.Item;
+import com.hrznstudio.titanium.module.api.IAlternativeEntries;
+import com.hrznstudio.titanium.module.api.RegistryManager;
 import net.minecraft.item.ItemGroup;
-import net.minecraftforge.registries.IForgeRegistry;
 
-public class IFCustomItem extends ItemBase {
+public class IFCustomItem extends ItemBase implements IAlternativeEntries {
 
-    public IFCustomItem(String name, ItemGroup group, Properties builder) {
+    private IAlternativeEntries entries;
+
+    public IFCustomItem(String name, ItemGroup group, Properties builder, IAlternativeEntries entries) {
         super(name, builder.group(group));
+        this.entries = entries;
     }
 
-    public IFCustomItem(String name, ItemGroup group) {
-        this(name, group, new Properties());
+    public IFCustomItem(String name, ItemGroup group, IAlternativeEntries entries) {
+        this(name, group, new Properties(), entries);
     }
 
-    public Item register(IForgeRegistry<Item> items) {
-        items.register(this);
-        return this;
-    }
-
-    public void createRecipe() {
-
+    @Override
+    public void addAlternatives(RegistryManager registry) {
+        if (entries != null) this.entries.addAlternatives(registry);
     }
 }

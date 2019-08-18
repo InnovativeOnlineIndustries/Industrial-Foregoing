@@ -21,8 +21,12 @@
  */
 package com.buuz135.industrial.item;
 
+import com.buuz135.industrial.IndustrialForegoing;
 import com.buuz135.industrial.module.ModuleCore;
+import com.buuz135.industrial.module.ModuleTool;
 import com.buuz135.industrial.utils.RecipeUtils;
+import com.hrznstudio.titanium.recipe.generator.CraftingJsonData;
+import com.hrznstudio.titanium.recipe.generator.IIngredient;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
@@ -47,7 +51,13 @@ import java.util.List;
 public class MobImprisonmentToolItem extends IFCustomItem {
 
     public MobImprisonmentToolItem(ItemGroup group) {
-        super("mob_imprisonment_tool", group, new Properties().maxStackSize(1));
+        super("mob_imprisonment_tool", group, new Properties().maxStackSize(1), registry ->
+                IndustrialForegoing.RECIPES.addRecipe(CraftingJsonData.ofShaped(
+                        new ItemStack(ModuleTool.MOB_IMPRISONMENT_TOOL),
+                        new String[]{" P ", "PGP", " P "},
+                        'P', IIngredient.TagIngredient.of("forge:plastic"),
+                        'G', IIngredient.ItemStackIngredient.of(new ItemStack(Items.GHAST_TEAR))
+                )));
     }
 
     @Override
@@ -81,7 +91,7 @@ public class MobImprisonmentToolItem extends IFCustomItem {
         stack.setTag(nbt);
         playerIn.swingArm(hand);
         playerIn.setHeldItem(hand, stack);
-        target.onKillCommand();
+        target.remove(true);
         return true;
     }
 

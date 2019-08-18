@@ -1,14 +1,18 @@
 package com.buuz135.industrial.module;
 
+import com.buuz135.industrial.IndustrialForegoing;
 import com.buuz135.industrial.item.BookManualItem;
 import com.buuz135.industrial.item.FertilizerItem;
 import com.buuz135.industrial.item.IFCustomItem;
 import com.buuz135.industrial.item.ItemStraw;
 import com.buuz135.industrial.utils.Reference;
 import com.hrznstudio.titanium.module.Feature;
+import com.hrznstudio.titanium.recipe.generator.FurnaceJsonData;
+import com.hrznstudio.titanium.recipe.generator.IIngredient;
 import com.hrznstudio.titanium.tab.AdvancedTitaniumTab;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.Items;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -17,13 +21,17 @@ public class ModuleCore implements IModule {
 
     public static AdvancedTitaniumTab TAB_CORE = new AdvancedTitaniumTab(Reference.MOD_ID + "_core", true);
 
-    public static IFCustomItem TINY_DRY_RUBBER = new IFCustomItem("tinydryrubber", TAB_CORE);
-    public static IFCustomItem DRY_RUBBER = new IFCustomItem("dryrubber", TAB_CORE);
-    public static IFCustomItem PLASTIC = new IFCustomItem("plastic", TAB_CORE);
+    public static IFCustomItem TINY_DRY_RUBBER = new IFCustomItem("tinydryrubber", TAB_CORE, registry -> {
+    });
+    public static IFCustomItem DRY_RUBBER = new IFCustomItem("dryrubber", TAB_CORE, registry -> {
+    });
+    public static IFCustomItem PLASTIC = new IFCustomItem("plastic", TAB_CORE, registry -> IndustrialForegoing.RECIPES.addRecipe(FurnaceJsonData.of(IIngredient.ItemStackIngredient.of(new ItemStack(Items.GREEN_DYE)), new ItemStack(ModuleCore.PLASTIC), 0.35, 300)));
     public static FertilizerItem FERTILIZER = new FertilizerItem(TAB_CORE);
-    public static IFCustomItem PINK_SLIME = new IFCustomItem("pink_slime", TAB_CORE);
+    public static IFCustomItem PINK_SLIME = new IFCustomItem("pink_slime", TAB_CORE, registry -> {
+    });
     public static BookManualItem BOOK_MANUAL = new BookManualItem(TAB_CORE);
-    public static IFCustomItem PINK_SLIME_INGOT = new IFCustomItem("pink_slime_ingot", TAB_CORE);
+    public static IFCustomItem PINK_SLIME_INGOT = new IFCustomItem("pink_slime_ingot", TAB_CORE, registry -> {
+    });
     public static ItemStraw STRAW = new ItemStraw(TAB_CORE);
 
     @Override

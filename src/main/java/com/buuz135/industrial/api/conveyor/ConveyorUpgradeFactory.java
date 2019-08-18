@@ -22,6 +22,7 @@
 package com.buuz135.industrial.api.conveyor;
 
 import com.google.common.collect.ImmutableSet;
+import com.hrznstudio.titanium.module.api.IAlternativeEntries;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
 import net.minecraft.util.Direction;
@@ -36,7 +37,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Set;
 
-public abstract class ConveyorUpgradeFactory extends ForgeRegistryEntry<ConveyorUpgradeFactory> {
+public abstract class ConveyorUpgradeFactory extends ForgeRegistryEntry<ConveyorUpgradeFactory> implements IAlternativeEntries {
 
     public static final ImmutableSet<Direction> HORIZONTAL = ImmutableSet.copyOf(Direction.Plane.HORIZONTAL.iterator());
     public static final ImmutableSet<Direction> DOWN = ImmutableSet.of(Direction.DOWN);

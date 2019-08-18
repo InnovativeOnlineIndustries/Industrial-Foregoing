@@ -1,0 +1,28 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "ABA",
+    "ACA",
+    "ADA"
+  ],
+  "key": {
+    "A": {
+      "tag": "forge:ingots/iron"
+    },
+    "B": {
+      "tag": "forge:plastic"
+    },
+    "C": {
+      "item": "minecraft:dispenser",
+      "count": 1
+    },
+    "D": {
+      "item": "industrialforegoing:conveyor",
+      "count": 1
+    }
+  },
+  "result": {
+    "item": "industrialforegoing:conveyor_extraction_upgrade",
+    "count": 1
+  }
+}

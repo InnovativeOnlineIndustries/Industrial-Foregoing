@@ -21,11 +21,9 @@
  */
 package com.buuz135.industrial.item;
 
-import com.buuz135.industrial.utils.RecipeUtils;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemGroup;
 import net.minecraft.item.ItemStack;
-import net.minecraft.item.Items;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.ActionResultType;
 import net.minecraft.util.Hand;
@@ -38,7 +36,8 @@ import net.minecraft.world.World;
 public class BookManualItem extends IFCustomItem {
 
     public BookManualItem(ItemGroup group) {
-        super("book_manual", group, new Properties().maxStackSize(1));
+        super("book_manual", group, new Properties().maxStackSize(1), registry -> {
+        });
     }
 
     @Override
@@ -55,8 +54,8 @@ public class BookManualItem extends IFCustomItem {
     }
 
 
-    @Override
-    public void createRecipe() {
-        RecipeUtils.addShapelessRecipe(new ItemStack(this), Items.PAPER, "logWood");
-    }
+    //@Override
+    //public void createRecipe() {
+    //    RecipeUtils.addShapelessRecipe(new ItemStack(this), Items.PAPER, "logWood");
+    //}
 }

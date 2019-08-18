@@ -40,7 +40,8 @@ import java.util.List;
 public class MeatFeederItem extends IFCustomItem {
 
     public MeatFeederItem(ItemGroup group) {
-        super("meat_feeder", group, new Properties().maxStackSize(1));
+        super("meat_feeder", group, new Properties().maxStackSize(1), registry -> {
+        });
     }
 
     @Nullable

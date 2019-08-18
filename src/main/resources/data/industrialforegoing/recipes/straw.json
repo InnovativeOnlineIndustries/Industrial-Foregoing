@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "AA ",
+    " A ",
+    " A "
+  ],
+  "key": {
+    "A": {
+      "tag": "forge:plastic"
+    }
+  },
+  "result": {
+    "item": "industrialforegoing:straw",
+    "count": 1
+  }
+}

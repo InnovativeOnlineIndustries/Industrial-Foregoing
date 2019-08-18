@@ -1,0 +1,24 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "AAA",
+    "BCB",
+    "AAA"
+  ],
+  "key": {
+    "A": {
+      "tag": "forge:plastic"
+    },
+    "B": {
+      "tag": "forge:ingots/iron"
+    },
+    "C": {
+      "item": "minecraft:redstone",
+      "count": 1
+    }
+  },
+  "result": {
+    "item": "industrialforegoing:conveyor",
+    "count": 6
+  }
+}

@@ -34,7 +34,8 @@ import net.minecraft.world.World;
 public class FertilizerItem extends IFCustomItem {
 
     public FertilizerItem(ItemGroup group) {
-        super("fertilizer", group, new Properties());
+        super("fertilizer", group, new Properties(), registry -> {
+        });
     }
 
     @Override

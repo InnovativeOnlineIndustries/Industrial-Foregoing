@@ -86,7 +86,7 @@ public class ClientProxy extends CommonProxy {
         //    return 0xFFFFFF;
         //}, BlockRegistry.blockConveyor.getItem());
         Minecraft.getInstance().getBlockColors().register((state, worldIn, pos, tintIndex) -> {
-            if (tintIndex == 0) {
+            if (tintIndex == 0 && worldIn != null && pos != null) {
                 TileEntity entity = worldIn.getTileEntity(pos);
                 if (entity instanceof TileEntityConveyor) {
                     return ((TileEntityConveyor) entity).getColor();
