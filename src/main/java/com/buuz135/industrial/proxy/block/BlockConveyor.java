@@ -29,6 +29,7 @@ import com.hrznstudio.titanium.api.IFactory;
 import com.hrznstudio.titanium.api.raytrace.DistanceRayTraceResult;
 import com.hrznstudio.titanium.block.BlockTileBase;
 import com.hrznstudio.titanium.util.RayTraceUtils;
+import com.hrznstudio.titanium.util.TileUtil;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockRenderType;
 import net.minecraft.block.BlockState;
@@ -64,6 +65,7 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 public class BlockConveyor extends BlockTileBase<TileEntityConveyor> {
 
@@ -393,6 +395,23 @@ public class BlockConveyor extends BlockTileBase<TileEntityConveyor> {
         if (entity instanceof TileEntityConveyor) {
             ((TileEntityConveyor) entity).handleEntityMovement(entityIn);
         }
+    }
+
+    @Override
+    public NonNullList<ItemStack> getDynamicDrops(BlockState state, World worldIn, BlockPos pos, BlockState newState, boolean isMoving) {
+        NonNullList<ItemStack> drops = NonNullList.create();
+        Optional<TileEntityConveyor> entity = TileUtil.getTileEntity(worldIn, pos, TileEntityConveyor.class);
+        entity.ifPresent(tileEntityConveyor -> {
+            for (Direction value : Direction.values()) {
+                if (tileEntityConveyor.getUpgradeMap().containsKey(value)) {
+                    ConveyorUpgrade upgrade = tileEntityConveyor.getUpgradeMap().get(value);
+                    drops.addAll(upgrade.getDrops());
+                }
+            }
+            if (tileEntityConveyor.isSticky()) drops.add(new ItemStack(ModuleCore.PLASTIC));
+            if (tileEntityConveyor.getConveyorType().isFast()) drops.add(new ItemStack(Items.GLOWSTONE_DUST));
+        });
+        return drops;
     }
 
     @Override
