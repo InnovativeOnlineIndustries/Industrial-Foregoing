@@ -31,7 +31,6 @@ import com.buuz135.industrial.utils.Reference;
 import com.hrznstudio.titanium.event.handler.EventManager;
 import com.hrznstudio.titanium.module.Module;
 import com.hrznstudio.titanium.module.ModuleController;
-import com.hrznstudio.titanium.tab.AdvancedTitaniumTab;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraft.world.server.ServerWorld;
@@ -49,8 +48,6 @@ import java.util.HashMap;
 @Mod(Reference.MOD_ID)
 public class IndustrialForegoing extends ModuleController {
 
-    public static AdvancedTitaniumTab creativeTab = new AdvancedTitaniumTab(Reference.MOD_ID, true);
-    public static IndustrialForegoing instance;
     private static CommonProxy proxy;
     private static HashMap<Integer, IFFakePlayer> worldFakePlayer = new HashMap<>();
 

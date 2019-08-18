@@ -24,6 +24,7 @@ package com.buuz135.industrial.item;
 import com.buuz135.industrial.module.ModuleCore;
 import com.buuz135.industrial.proxy.FluidsRegistry;
 import com.buuz135.industrial.utils.RecipeUtils;
+import net.minecraft.item.ItemGroup;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.nbt.CompoundNBT;
@@ -38,8 +39,8 @@ import java.util.List;
 
 public class MeatFeederItem extends IFCustomItem {
 
-    public MeatFeederItem() {
-        super("meat_feeder", new Properties().maxStackSize(1));
+    public MeatFeederItem(ItemGroup group) {
+        super("meat_feeder", group, new Properties().maxStackSize(1));
     }
 
     @Nullable

@@ -1,5 +1,7 @@
 {
-  "itemGroup.industrialforegoing": "Industrial Foregoing",
+  "itemGroup.industrialforegoing_core": "Industrial Foregoing",
+  "itemGroup.industrialforegoing_tool": "Industrial Foregoing: Tools",
+  "itemGroup.industrialforegoing_transport": "Industrial Foregoing: Transport",
   "text.industrialforegoing.display.burning": "Burning time:",
   "text.industrialforegoing.display.producing": "Producing:",
   "text.industrialforegoing.display.amount": "Amount:",

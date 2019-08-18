@@ -80,8 +80,8 @@ public class ItemInfinityDrill extends IFCustomItem {
     public static int POWER_CONSUMPTION = 10000;
     public static int FUEL_CONSUMPTION = 3;
 
-    public ItemInfinityDrill() {
-        super("infinity_drill", new Properties().maxStackSize(1).addToolType(ToolType.PICKAXE, 3).addToolType(ToolType.SHOVEL, 3));
+    public ItemInfinityDrill(ItemGroup group) {
+        super("infinity_drill", group, new Properties().maxStackSize(1).addToolType(ToolType.PICKAXE, 3).addToolType(ToolType.SHOVEL, 3));
     }
 
     @Override

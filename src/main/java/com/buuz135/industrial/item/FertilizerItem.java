@@ -23,6 +23,7 @@ package com.buuz135.industrial.item;
 
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.BoneMealItem;
+import net.minecraft.item.ItemGroup;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.ItemUseContext;
 import net.minecraft.util.ActionResultType;
@@ -32,8 +33,8 @@ import net.minecraft.world.World;
 
 public class FertilizerItem extends IFCustomItem {
 
-    public FertilizerItem() {
-        super("fertilizer", new Properties());
+    public FertilizerItem(ItemGroup group) {
+        super("fertilizer", group, new Properties());
     }
 
     @Override

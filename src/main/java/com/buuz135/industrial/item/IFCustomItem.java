@@ -21,17 +21,19 @@
  */
 package com.buuz135.industrial.item;
 
-import com.buuz135.industrial.IndustrialForegoing;
 import com.hrznstudio.titanium.item.ItemBase;
 import net.minecraft.item.Item;
+import net.minecraft.item.ItemGroup;
 import net.minecraftforge.registries.IForgeRegistry;
 
 public class IFCustomItem extends ItemBase {
-    public IFCustomItem(String name, Properties builder) {
-        super(name, builder.group(IndustrialForegoing.creativeTab));
+
+    public IFCustomItem(String name, ItemGroup group, Properties builder) {
+        super(name, builder.group(group));
     }
-    public IFCustomItem(String name) {
-        this(name, new Properties());
+
+    public IFCustomItem(String name, ItemGroup group) {
+        this(name, group, new Properties());
     }
 
     public Item register(IForgeRegistry<Item> items) {

@@ -21,7 +21,6 @@
  */
 package com.buuz135.industrial.proxy.block;
 
-import com.buuz135.industrial.IndustrialForegoing;
 import com.buuz135.industrial.api.conveyor.ConveyorUpgrade;
 import com.buuz135.industrial.module.ModuleCore;
 import com.buuz135.industrial.proxy.block.tile.TileEntityConveyor;
@@ -67,7 +66,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-public class BlockConveyor extends BlockTileBase<TileEntityConveyor> {
+public class BlockConveyor extends BlockTileBase<TileEntityConveyor> implements IItemProvider {
 
     public static final DirectionProperty FACING = HorizontalBlock.HORIZONTAL_FACING;
     public static final EnumProperty<EnumType> TYPE = EnumProperty.create("type", EnumType.class);
@@ -75,10 +74,21 @@ public class BlockConveyor extends BlockTileBase<TileEntityConveyor> {
     private static String[] dyes = {"Black", "Red", "Green", "Brown", "Blue", "Purple", "Cyan", "LightGray", "Gray", "Pink", "Lime", "Yellow", "LightBlue", "Magenta", "Orange", "White"};
     private ConveyorItem item;
 
-    public BlockConveyor() {
+    public BlockConveyor(ItemGroup group) {
         super("conveyor", Properties.create(Material.ANVIL, MaterialColor.ADOBE).doesNotBlockMovement().hardnessAndResistance(2.0f), TileEntityConveyor.class);
         this.setDefaultState(this.getDefaultState().with(FACING, Direction.NORTH).with(SIDES, EnumSides.NONE));
-        this.item = new ConveyorItem(this);
+        this.item = new ConveyorItem(this, group);
+        this.setItemGroup(group);
+    }
+
+    @Override
+    public Item asItem() {
+        return item;
+    }
+
+    @Override
+    public IFactory<BlockItem> getItemBlockFactory() {
+        return this::getItem;
     }
 
     @OnlyIn(Dist.CLIENT)
@@ -530,10 +540,9 @@ public class BlockConveyor extends BlockTileBase<TileEntityConveyor> {
 
     private class ConveyorItem extends BlockItem {
 
-        public ConveyorItem(Block block) {
-            super(block, new Item.Properties().group(IndustrialForegoing.creativeTab));
+        public ConveyorItem(Block block, ItemGroup group) {
+            super(block, new Item.Properties().group(group));
             this.setRegistryName(block.getRegistryName());
-
         }
 
     }

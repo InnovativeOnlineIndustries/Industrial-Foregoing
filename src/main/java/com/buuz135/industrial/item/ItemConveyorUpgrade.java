@@ -24,6 +24,7 @@ package com.buuz135.industrial.item;
 import com.buuz135.industrial.api.conveyor.ConveyorUpgradeFactory;
 import com.buuz135.industrial.api.conveyor.IConveyorContainer;
 import com.buuz135.industrial.proxy.block.tile.TileEntityConveyor;
+import net.minecraft.item.ItemGroup;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.ItemUseContext;
 import net.minecraft.tileentity.TileEntity;
@@ -34,8 +35,8 @@ public class ItemConveyorUpgrade extends IFCustomItem {
 
     private final ConveyorUpgradeFactory factory;
 
-    public ItemConveyorUpgrade(ConveyorUpgradeFactory upgradeFactory) {
-        super("conveyor_" + upgradeFactory.getRegistryName().getPath() + "_upgrade");
+    public ItemConveyorUpgrade(ConveyorUpgradeFactory upgradeFactory, ItemGroup group) {
+        super("conveyor_" + upgradeFactory.getRegistryName().getPath() + "_upgrade", group);
         this.factory = upgradeFactory;
         this.factory.setUpgradeItem(this);
     }

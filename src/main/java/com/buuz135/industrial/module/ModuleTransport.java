@@ -14,6 +14,7 @@ import com.google.common.collect.ImmutableMap;
 import com.hrznstudio.titanium.event.handler.EventManager;
 import com.hrznstudio.titanium.module.Feature;
 import com.hrznstudio.titanium.network.NetworkHandler;
+import com.hrznstudio.titanium.tab.AdvancedTitaniumTab;
 import net.minecraft.block.Block;
 import net.minecraft.client.gui.ScreenManager;
 import net.minecraft.client.renderer.model.IBakedModel;
@@ -21,6 +22,7 @@ import net.minecraft.client.renderer.model.IUnbakedModel;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.inventory.container.ContainerType;
 import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
 import net.minecraft.util.Direction;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.api.distmarker.Dist;
@@ -41,6 +43,8 @@ import java.util.Optional;
 
 public class ModuleTransport implements IModule {
 
+    public static AdvancedTitaniumTab TAB_TRANSPORT = new AdvancedTitaniumTab(Reference.MOD_ID + "_transport", true);
+
     public static ConveyorUpgradeFactory upgrade_extraction = new ConveyorExtractionUpgrade.Factory();
     public static ConveyorUpgradeFactory upgrade_insertion = new ConveyorInsertionUpgrade.Factory();
     public static ConveyorUpgradeFactory upgrade_detector = new ConveyorDetectorUpgrade.Factory();
@@ -49,14 +53,15 @@ public class ModuleTransport implements IModule {
     public static ConveyorUpgradeFactory upgrade_blinking = new ConveyorBlinkingUpgrade.Factory();
     public static ConveyorUpgradeFactory upgrade_splitting = new ConveyorSplittingUpgrade.Factory();
 
-    public static BlockConveyor CONVEYOR;
+    public static BlockConveyor CONVEYOR = new BlockConveyor(TAB_TRANSPORT);
     public static HashMap<ResourceLocation, IBakedModel> CONVEYOR_UPGRADES_CACHE = new HashMap<>();
 
     @Override
     public List<Feature.Builder> generateFeatures() {
+        TAB_TRANSPORT.addIconStack(new ItemStack(CONVEYOR));
         List<Feature.Builder> features = new ArrayList<>();
         features.add(Feature.builder("conveyor")
-                .content(Block.class, CONVEYOR = new BlockConveyor())
+                .content(Block.class, CONVEYOR)
                 .content(ContainerType.class, (ContainerType) IForgeContainerType.create(ContainerConveyor::new).setRegistryName(new ResourceLocation(Reference.MOD_ID, "conveyor")))
                 .eventClient(() -> () -> EventManager.mod(FMLClientSetupEvent.class).process(this::onClientSetup))
         );
@@ -67,7 +72,7 @@ public class ModuleTransport implements IModule {
                     NetworkHandler.registerMessage(ConveyorButtonInteractMessage.class);
                     NetworkHandler.registerMessage(ConveyorSplittingSyncEntityMessage.class);
                 }));
-        ConveyorUpgradeFactory.FACTORIES.forEach(conveyorUpgradeFactory -> builder.content(Item.class, new ItemConveyorUpgrade(conveyorUpgradeFactory)));
+        ConveyorUpgradeFactory.FACTORIES.forEach(conveyorUpgradeFactory -> builder.content(Item.class, new ItemConveyorUpgrade(conveyorUpgradeFactory, TAB_TRANSPORT)));
         features.add(builder);
         return features;
     }

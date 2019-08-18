@@ -27,6 +27,7 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.item.ItemGroup;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.ItemUseContext;
 import net.minecraft.item.Items;
@@ -45,8 +46,8 @@ import java.util.List;
 
 public class MobImprisonmentToolItem extends IFCustomItem {
 
-    public MobImprisonmentToolItem() {
-        super("mob_imprisonment_tool", new Properties().maxStackSize(1));
+    public MobImprisonmentToolItem(ItemGroup group) {
+        super("mob_imprisonment_tool", group, new Properties().maxStackSize(1));
     }
 
     @Override

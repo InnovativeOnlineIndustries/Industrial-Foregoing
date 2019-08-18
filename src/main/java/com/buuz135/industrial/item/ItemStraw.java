@@ -30,6 +30,7 @@ import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.fluid.Fluids;
 import net.minecraft.fluid.IFluidState;
+import net.minecraft.item.ItemGroup;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.UseAction;
 import net.minecraft.util.ActionResult;
@@ -52,8 +53,8 @@ import java.util.Optional;
 ;
 
 public class ItemStraw extends IFCustomItem {
-    public ItemStraw() {
-        super("straw", new Properties().maxStackSize(1));
+    public ItemStraw(ItemGroup group) {
+        super("straw", group, new Properties().maxStackSize(1));
     }
 
     @Override
