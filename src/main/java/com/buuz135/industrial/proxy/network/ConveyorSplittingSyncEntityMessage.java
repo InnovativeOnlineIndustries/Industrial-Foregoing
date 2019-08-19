@@ -35,12 +35,12 @@ public class ConveyorSplittingSyncEntityMessage extends Message {
 
     private BlockPos pos;
     private int entityID;
-    private Direction facingCurrent;
+    private String facingCurrent;
 
     public ConveyorSplittingSyncEntityMessage(BlockPos pos, int entityID, Direction facingCurrent) {
         this.pos = pos;
         this.entityID = entityID;
-        this.facingCurrent = facingCurrent;
+        this.facingCurrent = facingCurrent.getName();
     }
 
     public ConveyorSplittingSyncEntityMessage() {
@@ -50,9 +50,10 @@ public class ConveyorSplittingSyncEntityMessage extends Message {
     protected void handleMessage(NetworkEvent.Context context) {
         context.enqueueWork(() -> {
             TileEntity entity = Minecraft.getInstance().player.world.getTileEntity(pos);
+            Direction facingDirection = Direction.byName(facingCurrent);
             if (entity instanceof ConveyorTile) {
-                if (((ConveyorTile) entity).hasUpgrade(facingCurrent)) {
-                    ConveyorUpgrade upgrade = ((ConveyorTile) entity).getUpgradeMap().get(facingCurrent);
+                if (((ConveyorTile) entity).hasUpgrade(facingDirection)) {
+                    ConveyorUpgrade upgrade = ((ConveyorTile) entity).getUpgradeMap().get(facingDirection);
                     if (upgrade instanceof ConveyorSplittingUpgrade) {
                         ((ConveyorSplittingUpgrade) upgrade).handlingEntities.add(entityID);
                     }

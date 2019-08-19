@@ -135,8 +135,6 @@ public class CommonProxy {
         RecipeHandlers.loadOreEntries();
 
         CraftingUtils.generateCrushedRecipes();
-        BlockRegistry.createRecipes();
-        ItemRegistry.createRecipes();
         RecipeUtils.generateConstants();
         RecipeHandlers.executeCraftweakerActions();
         //LaserDrillEntry.loadLaserConfigs(configFolder);
