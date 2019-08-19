@@ -56,10 +56,10 @@ import java.util.List;
 
 public class ConveyorSplittingUpgrade extends ConveyorUpgrade {
 
-    public static VoxelShape NORTH = VoxelShapes.create(-0.08 + 0.75 / 2D, 0.1, 0.3 - 0.38, 0.32 + 0.75 / 2D, 0.16, 0.7 - 0.38);
-    public static VoxelShape SOUTH = VoxelShapes.create(-0.08 + 0.75 / 2D, 0.1, 0.3 + 0.38, 0.32 + 0.75 / 2D, 0.16, 0.7 + 0.38);
-    public static VoxelShape WEST = VoxelShapes.create(-0.08, 0.1, 0.3, 0.32, 0.16, 0.7);
-    public static VoxelShape EAST = VoxelShapes.create(-0.08 + 0.75, 0.1, 0.3, 0.32 + 0.75, 0.16, 0.7);
+    public static VoxelShape NORTH = VoxelShapes.create(-0.08 + 0.75 / 2D, 0.1, 0.3 - 0.38, 0.32 + 0.75 / 2D, 0.16, 0.7 - 0.4);
+    public static VoxelShape SOUTH = VoxelShapes.create(-0.08 + 0.75 / 2D, 0.1, 0.3 + 0.40, 0.32 + 0.75 / 2D, 0.16, 0.7 + 0.38);
+    public static VoxelShape WEST = VoxelShapes.create(-0.08, 0.1, 0.3, 0.30, 0.16, 0.7);
+    public static VoxelShape EAST = VoxelShapes.create(-0.05 + 0.75, 0.1, 0.3, 0.32 + 0.75, 0.16, 0.7);
 
 
     public List<Integer> handlingEntities;

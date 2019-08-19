@@ -327,15 +327,14 @@ public class ConveyorBlock extends BlockTileBase<ConveyorTile> implements IWater
         TileEntity tileEntity = worldIn.getTileEntity(pos);
         ItemStack handStack = player.getHeldItem(hand);
         if (tileEntity instanceof ConveyorTile) {
+            Direction facing = getFacingUpgradeHit(state, worldIn, pos, player);
             if (player.isSneaking()) {
-                Direction facing = getFacingUpgradeHit(state, worldIn, pos, player);
                 if (facing != null) {
                     ((ConveyorTile) tileEntity).removeUpgrade(facing, true);
                     return true;
                 }
                 return false;
             } else {
-                Direction facing = getFacingUpgradeHit(state, worldIn, pos, player);
                 if (facing == null) {
                     if (handStack.getItem().equals(Items.GLOWSTONE_DUST) && !((ConveyorTile) tileEntity).getConveyorType().isFast()) {
                         ((ConveyorTile) tileEntity).setType(((ConveyorTile) tileEntity).getConveyorType().getFast());
@@ -391,9 +390,9 @@ public class ConveyorBlock extends BlockTileBase<ConveyorTile> implements IWater
         if (result instanceof BlockRayTraceResult) {
             VoxelShape hit = RayTraceUtils.rayTraceVoxelShape((BlockRayTraceResult) result, worldIn, player, 32, 0);
             if (hit != null && tileEntity instanceof ConveyorTile) {
-                for (Direction Direction : ((ConveyorTile) tileEntity).getUpgradeMap().keySet()) {
-                    if (VoxelShapes.compare(((ConveyorTile) tileEntity).getUpgradeMap().get(Direction).getBoundingBox(), hit, IBooleanFunction.AND)) {
-                        return Direction;
+                for (Direction direction : ((ConveyorTile) tileEntity).getUpgradeMap().keySet()) {
+                    if (VoxelShapes.compare(((ConveyorTile) tileEntity).getUpgradeMap().get(direction).getBoundingBox(), hit, IBooleanFunction.AND)) {
+                        return direction;
                     }
                 }
             }
