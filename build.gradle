@@ -75,7 +75,7 @@ repositories {
 
 dependencies {
     minecraft "net.minecraftforge:forge:1.14.4-28.0.45"
-    if (project(':titanium') != null) {
+    if (findProject(':titanium') != null) {
         compile project(':titanium')
     } else {
         compile fg.deobf (project.dependencies.create('com.hrznstudio:titanium:2.1.+') {
