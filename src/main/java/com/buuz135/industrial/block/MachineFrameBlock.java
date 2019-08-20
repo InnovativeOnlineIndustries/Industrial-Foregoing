@@ -5,8 +5,14 @@ import com.hrznstudio.titanium.block.BlockBase;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
 import net.minecraft.item.*;
+import net.minecraft.util.text.TextFormatting;
 
 public class MachineFrameBlock extends BlockBase {
+
+    public static Rarity PITY_RARITY = Rarity.create("pity", TextFormatting.GREEN);
+    public static Rarity SIMPLE_RARITY = Rarity.create("simple", TextFormatting.AQUA);
+    public static Rarity ADVANCED_RARITY = Rarity.create("advanced", TextFormatting.LIGHT_PURPLE);
+    public static Rarity SUPREME_RARITY = Rarity.create("supreme", TextFormatting.GOLD);
 
     private MachineFrameItem item;
     private Rarity rarity;

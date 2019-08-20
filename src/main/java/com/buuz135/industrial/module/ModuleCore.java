@@ -15,7 +15,6 @@ import net.minecraft.block.Block;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
-import net.minecraft.item.Rarity;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -32,10 +31,10 @@ public class ModuleCore implements IModule {
     public static BookManualItem BOOK_MANUAL = new BookManualItem(TAB_CORE);
     public static IFCustomItem PINK_SLIME_INGOT = new IFCustomItem("pink_slime_ingot", TAB_CORE, null);
     public static ItemStraw STRAW = new ItemStraw(TAB_CORE);
-    public static MachineFrameBlock SIMPLE = new MachineFrameBlock("simple", Rarity.UNCOMMON, TAB_CORE);
-    public static MachineFrameBlock ADVANCED = new MachineFrameBlock("advanced", Rarity.RARE, TAB_CORE);
-    public static MachineFrameBlock SUPREME = new MachineFrameBlock("supreme", Rarity.EPIC, TAB_CORE);
-    public static MachineFrameBlock PITY = new MachineFrameBlock("pity", Rarity.COMMON, TAB_CORE);
+    public static MachineFrameBlock PITY = new MachineFrameBlock("pity", MachineFrameBlock.PITY_RARITY, TAB_CORE);
+    public static MachineFrameBlock SIMPLE = new MachineFrameBlock("simple", MachineFrameBlock.SIMPLE_RARITY, TAB_CORE);
+    public static MachineFrameBlock ADVANCED = new MachineFrameBlock("advanced", MachineFrameBlock.ADVANCED_RARITY, TAB_CORE);
+    public static MachineFrameBlock SUPREME = new MachineFrameBlock("supreme", MachineFrameBlock.SUPREME_RARITY, TAB_CORE);
 
     @Override
     public List<Feature.Builder> generateFeatures() {
