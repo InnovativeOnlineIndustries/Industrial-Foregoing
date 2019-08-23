@@ -21,7 +21,7 @@
  */
 package com.buuz135.industrial.proxy.network;
 
-import com.buuz135.industrial.block.tile.ConveyorTile;
+import com.buuz135.industrial.block.transport.tile.ConveyorTile;
 import com.hrznstudio.titanium.network.Message;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.tileentity.TileEntity;

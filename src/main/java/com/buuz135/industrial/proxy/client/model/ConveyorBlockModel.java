@@ -22,7 +22,7 @@
 package com.buuz135.industrial.proxy.client.model;
 
 import com.buuz135.industrial.api.conveyor.ConveyorUpgrade;
-import com.buuz135.industrial.block.ConveyorBlock;
+import com.buuz135.industrial.block.transport.ConveyorBlock;
 import com.buuz135.industrial.module.ModuleTransport;
 import com.google.common.cache.Cache;
 import com.google.common.cache.CacheBuilder;

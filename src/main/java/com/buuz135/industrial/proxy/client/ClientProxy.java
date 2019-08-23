@@ -21,7 +21,7 @@
  */
 package com.buuz135.industrial.proxy.client;
 
-import com.buuz135.industrial.block.tile.ConveyorTile;
+import com.buuz135.industrial.block.transport.tile.ConveyorTile;
 import com.buuz135.industrial.item.infinity.ItemInfinityDrill;
 import com.buuz135.industrial.module.ModuleTool;
 import com.buuz135.industrial.module.ModuleTransport;

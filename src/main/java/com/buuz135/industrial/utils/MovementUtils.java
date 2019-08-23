@@ -21,7 +21,7 @@
  */
 package com.buuz135.industrial.utils;
 
-import com.buuz135.industrial.block.ConveyorBlock;
+import com.buuz135.industrial.block.transport.ConveyorBlock;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.util.Direction;

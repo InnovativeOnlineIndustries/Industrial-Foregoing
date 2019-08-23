@@ -19,11 +19,11 @@
  * FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE,
  * ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
-package com.buuz135.industrial.block;
+package com.buuz135.industrial.block.transport;
 
 import com.buuz135.industrial.IndustrialForegoing;
 import com.buuz135.industrial.api.conveyor.ConveyorUpgrade;
-import com.buuz135.industrial.block.tile.ConveyorTile;
+import com.buuz135.industrial.block.transport.tile.ConveyorTile;
 import com.buuz135.industrial.module.ModuleCore;
 import com.hrznstudio.titanium.api.IFactory;
 import com.hrznstudio.titanium.api.raytrace.DistanceRayTraceResult;
@@ -77,7 +77,6 @@ public class ConveyorBlock extends BlockTileBase<ConveyorTile> implements IWater
     public static final DirectionProperty FACING = HorizontalBlock.HORIZONTAL_FACING;
     public static final EnumProperty<EnumType> TYPE = EnumProperty.create("type", EnumType.class);
     public static final EnumProperty<EnumSides> SIDES = EnumProperty.create("sides", EnumSides.class);
-    private static String[] dyes = {"Black", "Red", "Green", "Brown", "Blue", "Purple", "Cyan", "LightGray", "Gray", "Pink", "Lime", "Yellow", "LightBlue", "Magenta", "Orange", "White"};
     private ConveyorItem item;
 
     public ConveyorBlock(ItemGroup group) {

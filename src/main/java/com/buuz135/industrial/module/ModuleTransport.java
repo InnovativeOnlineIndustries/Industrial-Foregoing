@@ -1,8 +1,8 @@
 package com.buuz135.industrial.module;
 
 import com.buuz135.industrial.api.conveyor.ConveyorUpgradeFactory;
-import com.buuz135.industrial.block.ConveyorBlock;
-import com.buuz135.industrial.block.conveyor.*;
+import com.buuz135.industrial.block.transport.ConveyorBlock;
+import com.buuz135.industrial.block.transport.conveyor.*;
 import com.buuz135.industrial.gui.conveyor.ContainerConveyor;
 import com.buuz135.industrial.gui.conveyor.GuiConveyor;
 import com.buuz135.industrial.item.ItemConveyorUpgrade;

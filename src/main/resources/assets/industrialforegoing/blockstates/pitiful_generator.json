@@ -1,19 +1,14 @@
 {
   "forge_marker": 1,
   "defaults": {
-    "model": "industrialforegoing:pitiful_fuel_generator"
+    "model": "industrialforegoing:block/pitiful_generator"
   },
   "variants": {
-    "normal": [
-      {}
-    ],
-    "inventory": [
-      {}
-    ],
     "facing": {
-      "north": {},
-      "south": {
+      "north": {
         "y": 180
+      },
+      "south": {
       },
       "west": {
         "y": 270

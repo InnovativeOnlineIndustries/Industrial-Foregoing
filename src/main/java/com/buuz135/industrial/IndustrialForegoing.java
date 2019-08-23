@@ -22,6 +22,7 @@
 package com.buuz135.industrial;
 
 import com.buuz135.industrial.module.ModuleCore;
+import com.buuz135.industrial.module.ModuleGenerator;
 import com.buuz135.industrial.module.ModuleTool;
 import com.buuz135.industrial.module.ModuleTransport;
 import com.buuz135.industrial.proxy.CommonProxy;
@@ -77,6 +78,10 @@ public class IndustrialForegoing extends ModuleController {
         Module.Builder transport = Module.builder("transport").description("All the Industrial Foregoing tools that allow of transport of things");
         new ModuleTransport().generateFeatures().forEach(transport::feature);
         addModule(transport);
+
+        Module.Builder generator = Module.builder("generator").description("All machines that generate power");
+        new ModuleGenerator().generateFeatures().forEach(generator::feature);
+        addModule(generator);
     }
 
     @Override
