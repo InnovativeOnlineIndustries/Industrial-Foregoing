@@ -1,8 +1,8 @@
 package com.buuz135.industrial.block.generator.tile;
 
+import com.buuz135.industrial.block.tile.IndustrialGeneratorTile;
 import com.buuz135.industrial.module.ModuleGenerator;
 import com.hrznstudio.titanium.annotation.Save;
-import com.hrznstudio.titanium.block.tile.TileGenerator;
 import com.hrznstudio.titanium.block.tile.inventory.SidedInvHandler;
 import com.hrznstudio.titanium.block.tile.progress.PosProgressBar;
 import net.minecraft.entity.player.PlayerEntity;
@@ -11,7 +11,7 @@ import net.minecraft.tileentity.FurnaceTileEntity;
 import net.minecraft.util.Direction;
 import net.minecraft.util.Hand;
 
-public class PitifulGeneratorTile extends TileGenerator {
+public class PitifulGeneratorTile extends IndustrialGeneratorTile {
 
     @Save
     private SidedInvHandler fuel;
