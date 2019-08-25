@@ -44,7 +44,8 @@ public class DoubleTallPlantRecollectable extends PlantRecollectable {
 
     @Override
     public boolean canBeHarvested(World world, BlockPos pos, BlockState blockState) {
-        return blockState.getBlock() instanceof CactusBlock || blockState.getBlock() instanceof SugarCaneBlock;
+        return (blockState.getBlock() instanceof CactusBlock && world.getBlockState(pos.up()).getBlock() instanceof CactusBlock)
+                || (blockState.getBlock() instanceof SugarCaneBlock && world.getBlockState(pos.up()).getBlock() instanceof SugarCaneBlock);
     }
 
     @Override
@@ -61,7 +62,8 @@ public class DoubleTallPlantRecollectable extends PlantRecollectable {
     }
 
     private void harvestBlock(NonNullList<ItemStack> stacks, World world, BlockPos pos) {
-        if (canBeHarvested(world, pos, world.getBlockState(pos))) {
+        BlockState blockState = world.getBlockState(pos);
+        if (blockState.getBlock() instanceof CactusBlock || blockState.getBlock() instanceof SugarCaneBlock) {
             stacks.addAll(BlockUtils.getBlockDrops(world, pos));
             world.setBlockState(pos, Blocks.AIR.getDefaultState());
         }

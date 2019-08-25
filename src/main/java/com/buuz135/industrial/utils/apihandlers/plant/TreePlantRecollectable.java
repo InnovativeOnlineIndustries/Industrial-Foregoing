@@ -56,7 +56,7 @@ public class TreePlantRecollectable extends PlantRecollectable {
 
     @Override
     public List<ItemStack> doHarvestOperation(World world, BlockPos pos, BlockState blockState) {
-        return new ArrayList<>();
+        return doHarvestOperation(world, pos, blockState, false);
     }
 
 

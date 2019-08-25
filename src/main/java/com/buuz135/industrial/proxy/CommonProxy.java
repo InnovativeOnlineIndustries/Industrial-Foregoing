@@ -27,7 +27,6 @@ import com.buuz135.industrial.proxy.event.MeatFeederTickHandler;
 import com.buuz135.industrial.proxy.event.MobDeathHandler;
 import com.buuz135.industrial.proxy.event.SkullHandler;
 import com.buuz135.industrial.proxy.network.SpecialParticleMessage;
-import com.buuz135.industrial.registry.IFRegistries;
 import com.buuz135.industrial.utils.CraftingUtils;
 import com.buuz135.industrial.utils.RecipeUtils;
 import com.buuz135.industrial.utils.Reference;
@@ -87,8 +86,6 @@ public class CommonProxy {
 
     public void run() {
         LaserDrillEntry.addOreFile(new ResourceLocation(Reference.MOD_ID, "default_ores.json"));
-
-        IFRegistries.poke();
 
         CraftingHelper.register(new ResourceLocation(Reference.MOD_ID, "configuration_value"), new ConfigurationConditionFactory());
         random = new Random();

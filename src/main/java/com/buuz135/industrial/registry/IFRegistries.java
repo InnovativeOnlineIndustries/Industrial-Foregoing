@@ -37,7 +37,7 @@ public class IFRegistries {
             .disableSaving()
             .create();
 
-    public static final ForgeRegistry<PlantRecollectable> PLANT_RECOLLECTABLES_REGISTRY = (ForgeRegistry<PlantRecollectable>) new RegistryBuilder<PlantRecollectable>()
+    public static ForgeRegistry<PlantRecollectable> PLANT_RECOLLECTABLES_REGISTRY = (ForgeRegistry<PlantRecollectable>) new RegistryBuilder<PlantRecollectable>()
             .setName(new ResourceLocation(Reference.MOD_ID, "plant_recollectable"))
             .setIDRange(1, Integer.MAX_VALUE - 1)
             .setType(PlantRecollectable.class)
@@ -45,6 +45,6 @@ public class IFRegistries {
             .create();
 
     public static void poke() {
-
+        System.out.println("poking");
     }
 }

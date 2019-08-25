@@ -21,12 +21,10 @@
  */
 package com.buuz135.industrial;
 
-import com.buuz135.industrial.module.ModuleCore;
-import com.buuz135.industrial.module.ModuleGenerator;
-import com.buuz135.industrial.module.ModuleTool;
-import com.buuz135.industrial.module.ModuleTransport;
+import com.buuz135.industrial.module.*;
 import com.buuz135.industrial.proxy.CommonProxy;
 import com.buuz135.industrial.proxy.client.ClientProxy;
+import com.buuz135.industrial.registry.IFRegistries;
 import com.buuz135.industrial.utils.IFFakePlayer;
 import com.buuz135.industrial.utils.Reference;
 import com.hrznstudio.titanium.event.handler.EventManager;
@@ -63,6 +61,7 @@ public class IndustrialForegoing extends ModuleController {
         EventManager.mod(FMLCommonSetupEvent.class).process(fmlCommonSetupEvent -> proxy.run()).subscribe();
         EventManager.mod(FMLClientSetupEvent.class).process(fmlClientSetupEvent -> proxy.run()).subscribe();
         EventManager.mod(FMLServerStartingEvent.class).process(fmlServerStartingEvent -> worldFakePlayer.clear()).subscribe();
+        IFRegistries.poke();
     }
 
     @Override
@@ -82,6 +81,10 @@ public class IndustrialForegoing extends ModuleController {
         Module.Builder generator = Module.builder("generator").description("All machines that generate power");
         new ModuleGenerator().generateFeatures().forEach(generator::feature);
         addModule(generator);
+
+        Module.Builder agriculture = Module.builder("agriculture").description("All of your farming options");
+        new ModuleAgriculture().generateFeatures().forEach(agriculture::feature);
+        addModule(agriculture);
     }
 
     @Override

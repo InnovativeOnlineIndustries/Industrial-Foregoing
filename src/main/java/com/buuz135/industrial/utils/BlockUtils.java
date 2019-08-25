@@ -39,6 +39,7 @@ import net.minecraft.util.NonNullList;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
+import net.minecraft.world.server.ServerWorld;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.world.BlockEvent;
 import org.lwjgl.opengl.GL11;
@@ -108,6 +109,8 @@ public class BlockUtils {
     public static List<ItemStack> getBlockDrops(World world, BlockPos pos, int fortune) {
         BlockState state = world.getBlockState(pos);
         NonNullList<ItemStack> stacks = NonNullList.create();
+        stacks.addAll(Block.getDrops(state, (ServerWorld) world, pos, world.getTileEntity(pos)));
+
         //state.getBlock().getDrops(state, stacks, world, pos, fortune); TODO
         BlockEvent.HarvestDropsEvent event = new BlockEvent.HarvestDropsEvent(world, pos, world.getBlockState(pos), 0, 1f, stacks, IndustrialForegoing.getFakePlayer(world), false);
         MinecraftForge.EVENT_BUS.post(event);

@@ -1,17 +1,9 @@
 {
   "forge_marker": 1,
   "defaults": {
-    "model": "industrialforegoing:crop_recolector"
+    "model": "industrialforegoing:block/plant_gatherer"
   },
   "variants": {
-    "normal": [
-      {}
-    ],
-    "inventory": [
-      {
-        "y": 180
-      }
-    ],
     "facing": {
       "north": {},
       "south": {

@@ -21,6 +21,7 @@
  */
 package com.buuz135.industrial.proxy.client;
 
+import com.buuz135.industrial.block.tile.IndustrialAreaWorkingTile;
 import com.buuz135.industrial.block.transport.tile.ConveyorTile;
 import com.buuz135.industrial.item.infinity.ItemInfinityDrill;
 import com.buuz135.industrial.module.ModuleTool;
@@ -30,6 +31,7 @@ import com.buuz135.industrial.proxy.client.event.IFClientEvents;
 import com.buuz135.industrial.proxy.client.event.IFTooltipEvent;
 import com.buuz135.industrial.proxy.client.event.IFWorldRenderLastEvent;
 import com.buuz135.industrial.proxy.client.render.FluidConveyorTESR;
+import com.buuz135.industrial.proxy.client.render.WorkingAreaTESR;
 import com.buuz135.industrial.utils.Reference;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.model.IBakedModel;
@@ -67,6 +69,7 @@ public class ClientProxy extends CommonProxy {
         }
 
         ClientRegistry.bindTileEntitySpecialRenderer(ConveyorTile.class, new FluidConveyorTESR());
+        ClientRegistry.bindTileEntitySpecialRenderer(IndustrialAreaWorkingTile.class, new WorkingAreaTESR());
 
         //RenderManager manager = Minecraft.getInstance().getRenderManager();
         //Map<String, RenderPlayer> map = manager.getSkinMap();
@@ -77,14 +80,6 @@ public class ClientProxy extends CommonProxy {
 
         //((IReloadableResourceManager) Minecraft.getInstance().getResourceManager()).addReloadListener(resourceManager -> FluidUtils.colorCache.clear());
 
-        //if (ItemRegistry.dyes != null)
-        //    Minecraft.getInstance().getItemColors().register((stack, tintIndex) -> ItemDye.DYE_COLORS[EnumDyeColor.byMetadata(stack.getMetadata()).getDyeDamage()], ItemRegistry.artificalDye);
-        //Minecraft.getInstance().getItemColors().register((stack, tintIndex) -> {
-        //    if (tintIndex == 1) {
-        //        return ItemDye.DYE_COLORS[EnumDyeColor.byMetadata(stack.getMetadata()).getDyeDamage()];
-        //    }
-        //    return 0xFFFFFF;
-        //}, BlockRegistry.blockConveyor.getItem());
         Minecraft.getInstance().getBlockColors().register((state, worldIn, pos, tintIndex) -> {
             if (tintIndex == 0 && worldIn != null && pos != null) {
                 TileEntity entity = worldIn.getTileEntity(pos);

@@ -28,7 +28,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.Vec3d;
+import net.minecraft.util.math.Vec3i;
 import net.minecraft.world.World;
 import net.minecraftforge.common.IShearable;
 
@@ -75,7 +75,7 @@ public class TreeCache {
     public void scanForTreeBlockSection() {
         BlockPos yCheck = getHighestBlock(current);
         for (BlockPos pos : BlockPos.getAllInBoxMutable(yCheck.add(1, 0, 0), yCheck.add(0, 0, 1))) {
-            BlockPos tempHigh = getHighestBlock(pos);
+            BlockPos tempHigh = getHighestBlock(pos.toImmutable());
             if (tempHigh.getY() > yCheck.getY()) yCheck = tempHigh;
         }
         yCheck = yCheck.add(0, -Math.min(20, yCheck.getY() - current.getY()), 0);
@@ -83,13 +83,14 @@ public class TreeCache {
         Stack<BlockPos> tree = new Stack<>();
         BlockPos test = new BlockPos(current.getX(), yCheck.getY(), current.getZ());
         for (BlockPos pos : BlockPos.getAllInBoxMutable(test.add(1, 0, 0), test.add(0, 0, 1))) {
-            tree.push(pos);
+            tree.push(pos.toImmutable());
         }
         while (!tree.isEmpty()) {
             BlockPos checking = tree.pop();
             if (BlockUtils.isLeaves(world, checking) || BlockUtils.isLog(world, checking)) {
-                for (BlockPos blockPos : BlockPos.getAllInBoxMutable(checking.add(-1, 0, -1), checking.add(1, 1, 1))) {
-                    if (world.isAirBlock(blockPos) || checkedPositions.contains(blockPos) || blockPos.withinDistance(new Vec3d(current.getX(), current.getY(), current.getZ()), 1000) /*BlockRegistry.cropRecolectorBlock.getMaxDistanceTreeBlocksScan()*/)
+                for (BlockPos pos : BlockPos.getAllInBoxMutable(checking.add(-1, 0, -1), checking.add(1, 1, 1))) {
+                    BlockPos blockPos = pos.toImmutable();
+                    if (world.isAirBlock(blockPos) || checkedPositions.contains(blockPos) || blockPos.manhattanDistance(new Vec3i(current.getX(), current.getY(), current.getZ())) > 1000 /*BlockRegistry.cropRecolectorBlock.getMaxDistanceTreeBlocksScan()*/)
                         continue;
                     if (BlockUtils.isLeaves(world, blockPos)) {
                         tree.push(blockPos);
