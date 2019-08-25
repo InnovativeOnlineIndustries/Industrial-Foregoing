@@ -27,7 +27,7 @@ public class PlantGathererTile extends IndustrialAreaWorkingTile {
 
     public PlantGathererTile() {
         super(ModuleAgriculture.PLANT_GATHERER, 100);
-        addInventory(output = (SidedInvHandler) new SidedInvHandler("output", 65, 22, 3 * 4, 0)
+        addInventory(output = (SidedInvHandler) new SidedInvHandler("output", 70, 22, 3 * 4, 0)
                 .setColor(DyeColor.ORANGE)
                 .setRange(4, 3)
                 .setTile(this));
