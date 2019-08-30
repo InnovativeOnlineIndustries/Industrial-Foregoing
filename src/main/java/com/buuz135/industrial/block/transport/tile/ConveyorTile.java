@@ -51,7 +51,8 @@ import net.minecraftforge.client.model.data.IModelData;
 import net.minecraftforge.client.model.data.ModelDataMap;
 import net.minecraftforge.common.util.Constants;
 import net.minecraftforge.fluids.FluidStack;
-import net.minecraftforge.fluids.FluidTank;
+import net.minecraftforge.fluids.capability.IFluidHandler;
+import net.minecraftforge.fluids.capability.templates.FluidTank;
 import net.minecraftforge.fml.network.NetworkHooks;
 
 import javax.annotation.Nonnull;
@@ -78,7 +79,7 @@ public class ConveyorTile extends TileActive implements IConveyorContainer, ITic
         super(ModuleTransport.CONVEYOR);
         this.facing = Direction.NORTH;
         this.type = ConveyorBlock.EnumType.FLAT;
-        this.color = DyeColor.WHITE.func_196057_c();
+        this.color = DyeColor.WHITE.getMapColor().colorValue;
         this.filter = new ArrayList<>();
         this.sticky = false;
         this.tank = new FluidTank(250);
@@ -309,8 +310,8 @@ public class ConveyorTile extends TileActive implements IConveyorContainer, ITic
             if (!state.get(ConveyorBlock.TYPE).isVertical()) {
                 int amount = Math.max(tank.getFluidAmount() - 1, 1);
                 ConveyorTile conveyorTile = (ConveyorTile) world.getTileEntity(this.pos.offset(facing));
-                FluidStack drained = tank.drain(conveyorTile.getTank().fill(tank.drain(amount, false), true), true);
-                if (drained != null && drained.amount > 0) {
+                FluidStack drained = tank.drain(conveyorTile.getTank().fill(tank.drain(amount, IFluidHandler.FluidAction.SIMULATE), IFluidHandler.FluidAction.EXECUTE), IFluidHandler.FluidAction.EXECUTE);
+                if (!drained.isEmpty() && drained.getAmount() > 0) {
                     this.requestFluidSync();
                     conveyorTile.requestFluidSync();
                 }

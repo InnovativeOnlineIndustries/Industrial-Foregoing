@@ -22,7 +22,6 @@
 package com.buuz135.industrial.proxy.block.filter;
 
 import com.buuz135.industrial.gui.conveyor.GuiConveyor;
-import mezz.jei.api.gui.handlers.IGhostIngredientHandler;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.Rectangle2d;
 import net.minecraft.entity.Entity;
