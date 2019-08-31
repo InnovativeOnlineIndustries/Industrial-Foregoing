@@ -33,7 +33,7 @@ import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.client.renderer.tileentity.TileEntityRenderer;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.util.Direction;
-import net.minecraftforge.fluids.Fluid;
+import net.minecraftforge.fluids.FluidStack;
 import org.lwjgl.opengl.GL11;
 
 import java.awt.*;
@@ -73,16 +73,16 @@ public class FluidConveyorTESR extends TileEntityRenderer<ConveyorTile> {
             }
 
             buffer.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_TEX_COLOR);
-            Fluid fluid = te.getTank().getFluid().getFluid();
-            TextureAtlasSprite flow = Minecraft.getInstance().getTextureMap().getAtlasSprite(fluid.getFlowing().toString());
-            TextureAtlasSprite still = Minecraft.getInstance().getTextureMap().getAtlasSprite(fluid.getStill().toString());
+            FluidStack fluid = te.getTank().getFluid();
+            TextureAtlasSprite flow = Minecraft.getInstance().getTextureMap().getAtlasSprite(fluid.getFluid().getAttributes().getFlowing(fluid).toString());
+            TextureAtlasSprite still = Minecraft.getInstance().getTextureMap().getAtlasSprite(fluid.getFluid().getAttributes().getStill(fluid).toString());
             double posY = 2 / 16f - 1 / 32f;
             double right = 1 / 16f;
             double left = 15 / 16f;
             ConveyorBlock.EnumSides sides = te.getWorld().getBlockState(te.getPos()).getBlock().getExtendedState(te.getWorld().getBlockState(te.getPos()), te.getWorld(), te.getPos()).get(ConveyorBlock.SIDES);
             if (sides == ConveyorBlock.EnumSides.BOTH || sides == ConveyorBlock.EnumSides.RIGHT) right = 0;
             if (sides == ConveyorBlock.EnumSides.BOTH || sides == ConveyorBlock.EnumSides.LEFT) left = 1;
-            Color color = new Color(fluid.getColor(te.getTank().getFluid()));
+            Color color = new Color(fluid.getFluid().getAttributes().getColor(te.getTank().getFluid()));
 
             buffer.pos(right, posY, 0).tex(flow.getInterpolatedU(0), flow.getInterpolatedV(0)).color(color.getRed(), color.getGreen(), color.getBlue(), color.getAlpha()).endVertex();
             buffer.pos(left, posY, 0).tex(flow.getInterpolatedU(8), flow.getInterpolatedV(0)).color(color.getRed(), color.getGreen(), color.getBlue(), color.getAlpha()).endVertex();

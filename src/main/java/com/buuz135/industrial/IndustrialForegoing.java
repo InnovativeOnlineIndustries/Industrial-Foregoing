@@ -35,7 +35,6 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraft.world.server.ServerWorld;
 import net.minecraftforge.common.util.FakePlayer;
-import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fml.DistExecutor;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
@@ -51,10 +50,6 @@ public class IndustrialForegoing extends ModuleController {
     private static HashMap<Integer, IFFakePlayer> worldFakePlayer = new HashMap<>();
 
     public static JsonDataGenerator RECIPES = new JsonDataGenerator(JsonDataGenerator.DataTypes.RECIPE, Reference.MOD_ID);
-
-    static {
-        if (!FluidRegistry.isUniversalBucketEnabled()) FluidRegistry.enableUniversalBucket();
-    }
 
     public IndustrialForegoing() {
         proxy = DistExecutor.runForDist(() -> ClientProxy::new, () -> CommonProxy::new);

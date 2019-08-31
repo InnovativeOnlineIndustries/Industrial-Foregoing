@@ -32,7 +32,6 @@ import com.buuz135.industrial.utils.RecipeUtils;
 import com.buuz135.industrial.utils.Reference;
 import com.buuz135.industrial.utils.apihandlers.PlantRecollectableRegistryHandler;
 import com.buuz135.industrial.utils.apihandlers.RecipeHandlers;
-import com.buuz135.industrial.utils.apihandlers.json.ConfigurationConditionFactory;
 import com.google.gson.JsonParser;
 import com.hrznstudio.titanium.network.NetworkHandler;
 import net.minecraft.entity.LivingEntity;
@@ -42,7 +41,6 @@ import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.common.crafting.CraftingHelper;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
@@ -87,7 +85,7 @@ public class CommonProxy {
     public void run() {
         LaserDrillEntry.addOreFile(new ResourceLocation(Reference.MOD_ID, "default_ores.json"));
 
-        CraftingHelper.register(new ResourceLocation(Reference.MOD_ID, "configuration_value"), new ConfigurationConditionFactory());
+        //CraftingHelper.register(new ResourceLocation(Reference.MOD_ID, "configuration_value"), new ConfigurationConditionFactory());
         random = new Random();
 
 

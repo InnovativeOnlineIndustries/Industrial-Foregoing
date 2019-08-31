@@ -48,7 +48,7 @@ public class FluidDictionaryEntry {
     }
 
     public boolean doesStackMatch(FluidStack fluidStack) {
-        return fluidStack.getFluid().getName().equals(fluidOrigin);
+        return fluidStack.getFluid().getRegistryName().toString().equals(fluidOrigin);
     }
 
     public String getFluidOrigin() {

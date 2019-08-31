@@ -55,6 +55,7 @@ import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.IFluidTank;
 import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
+import net.minecraftforge.fluids.capability.IFluidHandler;
 import net.minecraftforge.items.CapabilityItemHandler;
 
 import javax.annotation.Nonnull;
@@ -114,9 +115,9 @@ public class ConveyorInsertionUpgrade extends ConveyorUpgrade {
         if (getWorld().getGameTime() % 2 == 0 && getContainer() instanceof ConveyorTile) {
             IFluidTank tank = ((ConveyorTile) getContainer()).getTank();
             getHandlerCapability(CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY).ifPresent(fluidHandler -> {
-                if (tank.drain(50, false) != null && fluidHandler.fill(tank.drain(50, false), false) > 0 && whitelist == filter.matches(tank.drain(50, false))) {
-                    FluidStack drain = tank.drain(fluidHandler.fill(tank.drain(50, false), true), true);
-                    if (drain != null && drain.amount > 0) getContainer().requestFluidSync();
+                if (!tank.drain(50, IFluidHandler.FluidAction.SIMULATE).isEmpty() && fluidHandler.fill(tank.drain(50, IFluidHandler.FluidAction.SIMULATE), IFluidHandler.FluidAction.SIMULATE) > 0 && whitelist == filter.matches(tank.drain(50, IFluidHandler.FluidAction.SIMULATE))) {
+                    FluidStack drain = tank.drain(fluidHandler.fill(tank.drain(50, IFluidHandler.FluidAction.SIMULATE), IFluidHandler.FluidAction.EXECUTE), IFluidHandler.FluidAction.EXECUTE);
+                    if (!drain.isEmpty() && drain.getAmount() > 0) getContainer().requestFluidSync();
                 }
             });
         }

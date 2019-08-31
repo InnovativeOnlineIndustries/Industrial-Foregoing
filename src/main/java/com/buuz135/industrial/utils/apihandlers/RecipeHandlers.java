@@ -90,7 +90,7 @@ public class RecipeHandlers {
             if (ctAction == CTAction.ADD) IndustrialForegoingHelper.addWoodToLatex(extractorEntry);
             else IndustrialForegoingHelper.removeWoodToLatex(extractorEntry.getItemStack());
         });
-        ExtractorEntry.EXTRACTOR_ENTRIES.sort(Comparator.comparingInt(o -> ((ExtractorEntry) o).getFluidStack().amount).reversed());
+        ExtractorEntry.EXTRACTOR_ENTRIES.sort(Comparator.comparingInt(o -> ((ExtractorEntry) o).getFluidStack().getAmount()).reversed());
     }
 
     public static void loadSludgeRefinerEntries() {

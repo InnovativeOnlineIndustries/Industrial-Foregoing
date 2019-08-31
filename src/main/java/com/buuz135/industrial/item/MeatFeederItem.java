@@ -72,7 +72,7 @@ public class MeatFeederItem extends IFCustomItem {
 
     public int getFilledAmount(ItemStack stack) {
         FluidHandlerItemStack handlerItemStack = (FluidHandlerItemStack) stack.getCapability(CapabilityFluidHandler.FLUID_HANDLER_ITEM_CAPABILITY).orElseThrow(RuntimeException::new);
-        return (handlerItemStack.getFluid() == null ? 0 : handlerItemStack.getFluid().amount);
+        return (handlerItemStack.getFluid() == null ? 0 : handlerItemStack.getFluid().getAmount());
     }
 
     public void drain(ItemStack stack, int amount) {

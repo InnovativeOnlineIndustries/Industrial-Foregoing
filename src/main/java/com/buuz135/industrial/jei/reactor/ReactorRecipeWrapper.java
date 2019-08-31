@@ -21,8 +21,8 @@
  */
 package com.buuz135.industrial.jei.reactor;
 
+import net.minecraft.fluid.Fluid;
 import net.minecraft.item.ItemStack;
-import net.minecraftforge.fluids.Fluid;
 
 public class ReactorRecipeWrapper {
 

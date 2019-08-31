@@ -21,7 +21,7 @@
  */
 package com.buuz135.industrial.utils;
 
-import net.minecraftforge.fluids.Fluid;
+import net.minecraft.fluid.Fluid;
 import net.minecraftforge.fluids.FluidStack;
 
 import java.util.HashMap;
@@ -33,7 +33,7 @@ public class FluidUtils {
     public static int getFluidColor(FluidStack stack) {
         int color = -1;
         if (stack != null && stack.getFluid() != null) {
-            color = colorCache.getOrDefault(stack.getFluid().getStill(stack), stack.getFluid().getColor(stack) != 0xffffffff ? stack.getFluid().getColor(stack) : ColorUtils.getColorFrom(stack.getFluid().getStill(stack)));
+            color = colorCache.getOrDefault(stack.getFluid().getAttributes().getStill(stack), stack.getFluid().getAttributes().getColor(stack) != 0xffffffff ? stack.getFluid().getAttributes().getColor(stack) : ColorUtils.getColorFrom(stack.getFluid().getAttributes().getStill(stack)));
             if (!colorCache.containsKey(stack.getFluid())) colorCache.put(stack.getFluid(), color);
         }
         return color;
@@ -42,7 +42,7 @@ public class FluidUtils {
     public static int getFluidColor(Fluid fluid) {
         int color = -1;
         if (fluid != null) {
-            color = colorCache.getOrDefault(fluid.getStill(), fluid.getColor() != 0xffffffff ? fluid.getColor() : ColorUtils.getColorFrom(fluid.getStill()));
+            color = colorCache.getOrDefault(fluid, fluid.getAttributes().getColor() != 0xffffffff ? fluid.getAttributes().getColor() : ColorUtils.getColorFrom(fluid.getAttributes().getStillTexture()));
             if (!colorCache.containsKey(fluid)) colorCache.put(fluid, color);
         }
         return color;

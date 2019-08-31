@@ -70,6 +70,7 @@ import net.minecraftforge.energy.CapabilityEnergy;
 import net.minecraftforge.energy.IEnergyStorage;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
+import net.minecraftforge.fluids.capability.IFluidHandler;
 import net.minecraftforge.fluids.capability.IFluidHandlerItem;
 import net.minecraftforge.fluids.capability.templates.FluidHandlerItemStack;
 import org.apache.commons.lang3.tuple.Pair;
@@ -254,7 +255,7 @@ public class ItemInfinityDrill extends IFCustomItem {
 
     private void consumeFuel(ItemStack stack) {
         if (getFuelFromStack(stack) >= FUEL_CONSUMPTION) {
-            stack.getCapability(CapabilityFluidHandler.FLUID_HANDLER_ITEM_CAPABILITY, null).orElseThrow(RuntimeException::new).drain(FUEL_CONSUMPTION, true);
+            stack.getCapability(CapabilityFluidHandler.FLUID_HANDLER_ITEM_CAPABILITY, null).orElseThrow(RuntimeException::new).drain(FUEL_CONSUMPTION, IFluidHandler.FluidAction.EXECUTE);
         } else {
             stack.getTag().putLong("Energy", stack.getTag().getLong("Energy") - POWER_CONSUMPTION);
         }
