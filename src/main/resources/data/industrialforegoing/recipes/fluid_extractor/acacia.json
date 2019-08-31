@@ -1,0 +1,10 @@
+{
+  "input": {
+    "item": "minecraft:acacia_log"
+  },
+  "result": "minecraft:stripped_acacia_log",
+  "breakChance": 0.005,
+  "output": "{FluidName:\"industrialforegoing:latex\",Amount:3}",
+  "defaultRecipe": false,
+  "type": "industrialforegoing:fluid_extractor"
+}
