@@ -22,7 +22,7 @@
 package com.buuz135.industrial.jei;
 
 
-import com.buuz135.industrial.jei.extractor.ExtractorRecipeCategory;
+import com.buuz135.industrial.jei.extractor.FluidExtractorCategory;
 import com.buuz135.industrial.jei.fluiddictionary.FluidDictionaryCategory;
 import com.buuz135.industrial.jei.laser.LaserRecipeCategory;
 import com.buuz135.industrial.jei.machineproduce.MachineProduceCategory;
@@ -38,6 +38,7 @@ import mezz.jei.api.IModPlugin;
 import mezz.jei.api.JeiPlugin;
 import mezz.jei.api.registration.IModIngredientRegistration;
 import mezz.jei.api.registration.IRecipeCategoryRegistration;
+import mezz.jei.api.registration.IRecipeRegistration;
 import mezz.jei.api.registration.ISubtypeRegistration;
 import mezz.jei.api.runtime.IJeiRuntime;
 import mezz.jei.api.runtime.IRecipesGui;
@@ -56,7 +57,7 @@ public class JEICustomPlugin implements IModPlugin {
     private MachineProduceCategory machineProduceCategory;
     private PetrifiedBurnTimeCategory petrifiedBurnTimeCategory;
     private FluidDictionaryCategory fluidDictionaryCategory;
-    private ExtractorRecipeCategory extractorRecipeCategory;
+    private FluidExtractorCategory fluidExtractorCategory;
     private OreWasherCategory oreWasherCategory;
     private OreFermenterCategory oreFermenterCategory;
     private OreSieveCategory oreSieveCategory;
@@ -109,8 +110,8 @@ public class JEICustomPlugin implements IModPlugin {
 //            registry.addRecipeCategories(stoneWorkCategory);
 //        }
 //        if (BlockRegistry.treeFluidExtractorBlock.isEnabled()) {
-//            extractorRecipeCategory = new ExtractorRecipeCategory(registry.getJeiHelpers().getGuiHelper());
-//            registry.addRecipeCategories(extractorRecipeCategory);
+        fluidExtractorCategory = new FluidExtractorCategory(registry.getJeiHelpers().getGuiHelper());
+        registry.addRecipeCategories(fluidExtractorCategory);
 //        }
 //        if (CustomConfiguration.enableBookEntriesInJEI) {
 //            manualCategory = new ManualCategory(registry.getJeiHelpers().getGuiHelper());
@@ -128,6 +129,12 @@ public class JEICustomPlugin implements IModPlugin {
 //            oreSieveCategory = new OreSieveCategory(registry.getJeiHelpers().getGuiHelper());
 //            registry.addRecipeCategories(oreSieveCategory);
 //        }
+    }
+
+
+    @Override
+    public void registerRecipes(IRecipeRegistration registration) {
+        //registration.addRecipes(RecipeUtil.getRecipes(Minecraft.getInstance().world, FluidExtractorRecipe.SERIALIZER.getRecipeType()), fluidExtractorCategory.getUid());
     }
 
     //@Override

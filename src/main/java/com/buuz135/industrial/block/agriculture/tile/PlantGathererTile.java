@@ -31,7 +31,7 @@ public class PlantGathererTile extends IndustrialAreaWorkingTile {
                 .setColor(DyeColor.ORANGE)
                 .setRange(4, 3)
                 .setTile(this));
-        addTank(tank = (SidedFluidTank) new SidedFluidTank(1000, 43, 20, "sludge")
+        addTank(tank = (SidedFluidTank) new SidedFluidTank("sludge", 1000, 43, 20, 1)
                 .setColor(DyeColor.PINK)
                 .setTile(this));
     }

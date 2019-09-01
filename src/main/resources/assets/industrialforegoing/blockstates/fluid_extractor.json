@@ -1,17 +1,9 @@
 {
   "forge_marker": 1,
   "defaults": {
-    "model": "industrialforegoing:tree_fluid_extractor"
+    "model": "industrialforegoing:block/fluid_extractor"
   },
   "variants": {
-    "normal": [
-      {}
-    ],
-    "inventory": [
-      {
-        "y": 180
-      }
-    ],
     "facing": {
       "north": {},
       "south": {

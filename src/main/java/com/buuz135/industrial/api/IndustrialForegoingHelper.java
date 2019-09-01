@@ -22,7 +22,6 @@
 package com.buuz135.industrial.api;
 
 
-import com.buuz135.industrial.api.extractor.ExtractorEntry;
 import com.buuz135.industrial.api.recipe.*;
 import com.buuz135.industrial.api.recipe.ore.OreFluidEntryFermenter;
 import com.buuz135.industrial.api.recipe.ore.OreFluidEntryRaw;
@@ -164,18 +163,6 @@ public class IndustrialForegoingHelper {
      */
     public static boolean removeFluidDictionaryEntry(FluidDictionaryEntry entry) {
         return FluidDictionaryEntry.FLUID_DICTIONARY_RECIPES.removeIf(entry1 -> entry1.getFluidOrigin().equals(entry.getFluidOrigin()) && entry1.getFluidResult().equals(entry.getFluidResult()));
-    }
-
-    public static boolean addWoodToLatex(ExtractorEntry entry) {
-        if (ExtractorEntry.EXTRACTOR_ENTRIES.stream().noneMatch(extractorEntry -> extractorEntry.isEqual(entry.getItemStack()))) {
-            ExtractorEntry.EXTRACTOR_ENTRIES.add(entry);
-            return true;
-        }
-        return false;
-    }
-
-    public static boolean removeWoodToLatex(ItemStack stack) {
-        return ExtractorEntry.EXTRACTOR_ENTRIES.removeIf(extractorEntry -> extractorEntry.isEqual(stack));
     }
 
     public static boolean addOreFluidEntryRaw(OreFluidEntryRaw raw) {

@@ -209,7 +209,7 @@
   "block.industrialforegoing.mob_duplicator": "Mob Duplicator",
   "block.industrialforegoing.block_destroyer": "Block Breaker",
   "block.industrialforegoing.block_placer": "Block Placer",
-  "block.industrialforegoing.tree_fluid_extractor": "Tree Fluid Extractor",
+  "block.industrialforegoing.fluid_extractor": "Fluid Extractor",
   "block.industrialforegoing.latex_processing_unit": "Latex Processing Unit",
   "block.industrialforegoing.sewage_composter_solidifier": "Sewage Composter",
   "block.industrialforegoing.animal_byproduct_recolector": "Animal Sewer",

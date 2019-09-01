@@ -55,6 +55,10 @@ public abstract class IndustrialWorkingTile extends TilePowered {
 
     public abstract WorkAction work();
 
+    public boolean hasEnergy(int amount) {
+        return this.getEnergyStorage().getEnergyStored() >= amount;
+    }
+
     @Override
     public IAssetProvider getAssetProvider() {
         return IndustrialAssetProvider.INSTANCE;

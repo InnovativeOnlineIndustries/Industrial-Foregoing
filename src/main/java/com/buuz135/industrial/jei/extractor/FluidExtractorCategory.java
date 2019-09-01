@@ -21,34 +21,41 @@
  */
 package com.buuz135.industrial.jei.extractor;
 
+import com.buuz135.industrial.recipe.FluidExtractorRecipe;
 import com.buuz135.industrial.utils.Reference;
+import mezz.jei.api.constants.VanillaTypes;
 import mezz.jei.api.gui.IRecipeLayout;
 import mezz.jei.api.gui.drawable.IDrawable;
+import mezz.jei.api.gui.ingredient.IGuiFluidStackGroup;
+import mezz.jei.api.gui.ingredient.IGuiItemStackGroup;
 import mezz.jei.api.helpers.IGuiHelper;
 import mezz.jei.api.ingredients.IIngredients;
 import mezz.jei.api.recipe.category.IRecipeCategory;
+import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 
-public class ExtractorRecipeCategory implements IRecipeCategory<ExtractorRecipeWrapper> {
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
-    public static String UID = "EXTRACTOR_RECIPE";
+public class FluidExtractorCategory implements IRecipeCategory<FluidExtractorRecipe> {
 
     private IGuiHelper guiHelper;
     private IDrawable tankOverlay;
 
-    public ExtractorRecipeCategory(IGuiHelper guiHelper) {
+    public FluidExtractorCategory(IGuiHelper guiHelper) {
         this.guiHelper = guiHelper;
         this.tankOverlay = guiHelper.createDrawable(new ResourceLocation(Reference.MOD_ID, "textures/gui/jei.png"), 1, 207, 12, 48);
     }
 
     @Override
     public ResourceLocation getUid() {
-        return null;
+        return new ResourceLocation(Reference.MOD_ID, "fluid_extractor");
     }
 
     @Override
-    public Class<? extends ExtractorRecipeWrapper> getRecipeClass() {
-        return null;
+    public Class<? extends FluidExtractorRecipe> getRecipeClass() {
+        return FluidExtractorRecipe.class;
     }
 
     @Override
@@ -67,28 +74,29 @@ public class ExtractorRecipeCategory implements IRecipeCategory<ExtractorRecipeW
     }
 
     @Override
-    public void setIngredients(ExtractorRecipeWrapper extractorRecipeWrapper, IIngredients iIngredients) {
-
+    public void setIngredients(FluidExtractorRecipe fluidExtractorRecipe, IIngredients ingredients) {
+        ingredients.setInputs(VanillaTypes.ITEM, new ArrayList<>(fluidExtractorRecipe.input.getStacks()));
+        ingredients.setOutput(VanillaTypes.FLUID, fluidExtractorRecipe.output);
+        ingredients.setOutput(VanillaTypes.ITEM, new ItemStack(fluidExtractorRecipe.result));
     }
 
     @Override
-    public void setRecipe(IRecipeLayout recipeLayout, ExtractorRecipeWrapper recipeWrapper, IIngredients ingredients) {
-        //IGuiItemStackGroup guiItemStackGroup = recipeLayout.getItemStacks();
-        //guiItemStackGroup.init(0, true, 0, 16);
-//
-        //IGuiFluidStackGroup guiFluidStackGroup = recipeLayout.getFluidStacks();
-        //guiFluidStackGroup.init(1, false, 57, 1, 12, 48, Math.max(50, ingredients.getOutputs(FluidStack.class).get(0).get(0).amount), false, tankOverlay);
-//
-        //guiItemStackGroup.set(0, ingredients.getInputs(ItemStack.class).get(0));
-        //guiFluidStackGroup.set(1, ingredients.getOutputs(FluidStack.class).get(0));
+    public void setRecipe(IRecipeLayout recipeLayout, FluidExtractorRecipe fluidExtractorRecipe, IIngredients ingredients) {
+        IGuiItemStackGroup guiItemStackGroup = recipeLayout.getItemStacks();
+        guiItemStackGroup.init(0, true, 0, 16);
+
+        IGuiFluidStackGroup guiFluidStackGroup = recipeLayout.getFluidStacks();
+        guiFluidStackGroup.init(1, false, 57, 1, 12, 48, Math.max(50, ingredients.getOutputs(VanillaTypes.FLUID).get(0).get(0).getAmount()), false, tankOverlay);
+
+        guiItemStackGroup.set(0, ingredients.getInputs(VanillaTypes.ITEM).get(0));
+        guiFluidStackGroup.set(1, ingredients.getOutputs(VanillaTypes.FLUID).get(0));
     }
 
-    //@Override
-    //public List<String> getTooltipStrings(int mouseX, int mouseY) {
-    //    if (mouseX >= 18 && mouseX <= 58) return Arrays.asList("Production rate");
-    //    if (mouseX >= 78 && mouseX <= 120 && mouseY >= 25 && mouseY <= 45)
-    //        return Arrays.asList("Average numbers aren't real numbers");
-    //    return new ArrayList<>();
-    //}
-
+    @Override
+    public List<String> getTooltipStrings(FluidExtractorRecipe recipe, double mouseX, double mouseY) {
+        if (mouseX >= 18 && mouseX <= 58) return Arrays.asList("Production rate");
+        if (mouseX >= 78 && mouseX <= 120 && mouseY >= 25 && mouseY <= 45)
+            return Arrays.asList("Average numbers aren't real numbers");
+        return new ArrayList<>();
+    }
 }

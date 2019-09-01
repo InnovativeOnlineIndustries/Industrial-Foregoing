@@ -22,23 +22,16 @@
 package com.buuz135.industrial.utils.apihandlers;
 
 import com.buuz135.industrial.api.IndustrialForegoingHelper;
-import com.buuz135.industrial.api.extractor.ExtractorEntry;
 import com.buuz135.industrial.api.recipe.*;
 import com.buuz135.industrial.utils.TagUtil;
 import com.buuz135.industrial.utils.apihandlers.crafttweaker.CTAction;
 import com.google.common.collect.LinkedListMultimap;
-import net.minecraft.block.Block;
 import net.minecraft.block.Blocks;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.tags.ItemTags;
 import net.minecraft.util.NonNullList;
-import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.common.Tags;
-import net.minecraftforge.fluids.FluidStack;
-import net.minecraftforge.fml.common.registry.GameRegistry;
-
-import java.util.Comparator;
 
 public class RecipeHandlers {
 
@@ -47,7 +40,6 @@ public class RecipeHandlers {
     public static final LinkedListMultimap<CTAction, SludgeEntry> SLUDGE_ENTRIES = LinkedListMultimap.create();
     public static final LinkedListMultimap<CTAction, ProteinReactorEntry> PROTEIN_REACTOR_ENTRIES = LinkedListMultimap.create();
     public static final LinkedListMultimap<CTAction, FluidDictionaryEntry> FLUID_DICTIONARY_ENTRIES = LinkedListMultimap.create();
-    public static final LinkedListMultimap<CTAction, ExtractorEntry> EXTRACTOR_ENTRIES = LinkedListMultimap.create();
 
     public static void loadBioReactorEntries() {
         IndustrialForegoingHelper.addBioReactorEntry(new BioReactorEntry(new ItemStack(Items.WHEAT_SEEDS)));
@@ -86,11 +78,6 @@ public class RecipeHandlers {
             if (ctAction == CTAction.ADD) IndustrialForegoingHelper.addFluidDictionaryEntry(entry);
             else IndustrialForegoingHelper.removeFluidDictionaryEntry(entry);
         });
-        EXTRACTOR_ENTRIES.forEach((ctAction, extractorEntry) -> {
-            if (ctAction == CTAction.ADD) IndustrialForegoingHelper.addWoodToLatex(extractorEntry);
-            else IndustrialForegoingHelper.removeWoodToLatex(extractorEntry.getItemStack());
-        });
-        ExtractorEntry.EXTRACTOR_ENTRIES.sort(Comparator.comparingInt(o -> ((ExtractorEntry) o).getFluidStack().getAmount()).reversed());
     }
 
     public static void loadSludgeRefinerEntries() {
@@ -163,13 +150,6 @@ public class RecipeHandlers {
     public static void getSubItems(NonNullList<ItemStack> list, ItemStack stack) {
         if (stack.getItem().getGroup() != null)
             stack.getItem().fillItemGroup(stack.getItem().getGroup(), list);
-    }
-
-    public static void tryToAddWoodToLatex(String string, FluidStack stack) {
-        Block block = GameRegistry.findRegistry(Block.class).getValue(new ResourceLocation(string));
-        if (block != null) {
-            IndustrialForegoingHelper.addWoodToLatex(new ExtractorEntry(new ItemStack(block), stack));
-        }
     }
 
 }

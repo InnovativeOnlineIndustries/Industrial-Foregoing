@@ -2,6 +2,8 @@ package com.buuz135.industrial.module;
 
 import com.buuz135.industrial.IndustrialForegoing;
 import com.buuz135.industrial.block.MachineFrameBlock;
+import com.buuz135.industrial.block.core.FluidExtractorBlock;
+import com.buuz135.industrial.block.core.tile.FluidExtractorTile;
 import com.buuz135.industrial.item.BookManualItem;
 import com.buuz135.industrial.item.FertilizerItem;
 import com.buuz135.industrial.item.IFCustomItem;
@@ -21,6 +23,7 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.client.event.TextureStitchEvent;
+import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.fluids.FluidAttributes;
 
 import java.util.ArrayList;
@@ -43,6 +46,7 @@ public class ModuleCore implements IModule {
     public static MachineFrameBlock ADVANCED = new MachineFrameBlock("advanced", MachineFrameBlock.ADVANCED_RARITY, TAB_CORE);
     public static MachineFrameBlock SUPREME = new MachineFrameBlock("supreme", MachineFrameBlock.SUPREME_RARITY, TAB_CORE);
     public static TitaniumFluidInstance LATEX = new TitaniumFluidInstance(Reference.MOD_ID, "latex", FluidAttributes.builder("latex", new ResourceLocation(Reference.MOD_ID, "blocks/fluids/latex_still"), new ResourceLocation(Reference.MOD_ID, "blocks/fluids/latex_flow")).build(), true, TAB_CORE);
+    public static FluidExtractorBlock FLUID_EXTRACTOR = new FluidExtractorBlock();
 
     @Override
     public List<Feature.Builder> generateFeatures() {
@@ -53,6 +57,11 @@ public class ModuleCore implements IModule {
                 content(Item.class, PLASTIC).
                 content(TitaniumFluidInstance.class, LATEX).
                 eventClient(() -> () -> EventManager.mod(TextureStitchEvent.Pre.class).process(this::textureStitch)));
+        features.add(Feature.builder("plastic_generation").
+                content(Block.class, FLUID_EXTRACTOR).
+                event(EventManager.forge(TickEvent.WorldTickEvent.class).
+                        filter(worldTickEvent -> worldTickEvent.phase == TickEvent.Phase.END && worldTickEvent.type == TickEvent.Type.WORLD && worldTickEvent.world.getGameTime() % 40 == 0 && FluidExtractorTile.EXTRACTION.containsKey(worldTickEvent.world.dimension.getType())).
+                        process(worldTickEvent -> FluidExtractorTile.EXTRACTION.get(worldTickEvent.world.dimension.getType()).values().forEach(blockPosFluidExtractionProgressHashMap -> blockPosFluidExtractionProgressHashMap.keySet().forEach(pos -> worldTickEvent.world.sendBlockBreakProgress(blockPosFluidExtractionProgressHashMap.get(pos).getBreakID(), pos, blockPosFluidExtractionProgressHashMap.get(pos).getProgress()))))));
         features.add(Feature.builder("pink_slime").
                 content(Item.class, PINK_SLIME).
                 content(Item.class, PINK_SLIME_INGOT));
