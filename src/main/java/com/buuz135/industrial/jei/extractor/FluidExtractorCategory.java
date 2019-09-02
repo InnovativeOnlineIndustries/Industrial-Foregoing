@@ -31,8 +31,10 @@ import mezz.jei.api.gui.ingredient.IGuiItemStackGroup;
 import mezz.jei.api.helpers.IGuiHelper;
 import mezz.jei.api.ingredients.IIngredients;
 import mezz.jei.api.recipe.category.IRecipeCategory;
+import net.minecraft.client.Minecraft;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.text.TextFormatting;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -65,7 +67,7 @@ public class FluidExtractorCategory implements IRecipeCategory<FluidExtractorRec
 
     @Override
     public IDrawable getBackground() {
-        return guiHelper.createDrawable(new ResourceLocation(Reference.MOD_ID, "textures/gui/jei.png"), 0, 27, 76, 50/*, 0, 0, 0, 74*/);
+        return guiHelper.drawableBuilder(new ResourceLocation(Reference.MOD_ID, "textures/gui/jei.png"), 0, 27, 76, 50).addPadding(0, 0, 0, 74).build();
     }
 
     @Override
@@ -84,17 +86,28 @@ public class FluidExtractorCategory implements IRecipeCategory<FluidExtractorRec
     public void setRecipe(IRecipeLayout recipeLayout, FluidExtractorRecipe fluidExtractorRecipe, IIngredients ingredients) {
         IGuiItemStackGroup guiItemStackGroup = recipeLayout.getItemStacks();
         guiItemStackGroup.init(0, true, 0, 16);
+        guiItemStackGroup.init(1, false, 27, 34);
+        guiItemStackGroup.setBackground(1, guiHelper.getSlotDrawable());
 
         IGuiFluidStackGroup guiFluidStackGroup = recipeLayout.getFluidStacks();
         guiFluidStackGroup.init(1, false, 57, 1, 12, 48, Math.max(50, ingredients.getOutputs(VanillaTypes.FLUID).get(0).get(0).getAmount()), false, tankOverlay);
 
         guiItemStackGroup.set(0, ingredients.getInputs(VanillaTypes.ITEM).get(0));
+        guiItemStackGroup.set(1, ingredients.getOutputs(VanillaTypes.ITEM).get(0));
         guiFluidStackGroup.set(1, ingredients.getOutputs(VanillaTypes.FLUID).get(0));
     }
 
     @Override
+    public void draw(FluidExtractorRecipe recipe, double mouseX, double mouseY) {
+        Minecraft.getInstance().fontRenderer.drawString(TextFormatting.DARK_GRAY + "Production: ", 80, 6, 0xFFFFFF);
+        Minecraft.getInstance().fontRenderer.drawString(TextFormatting.DARK_GRAY + "" + recipe.output.getAmount() + "mb/12ticks", 80, 6 + (Minecraft.getInstance().fontRenderer.FONT_HEIGHT + 2) * 1, 0xFFFFFF);
+        Minecraft.getInstance().fontRenderer.drawString(TextFormatting.DARK_GRAY + "" + "Average: ", 80, 6 + (Minecraft.getInstance().fontRenderer.FONT_HEIGHT + 2) * 2, 0xFFFFFF);
+        Minecraft.getInstance().fontRenderer.drawString(TextFormatting.DARK_GRAY + "" + ((int) (8 / recipe.breakChance) * recipe.output.getAmount()) + "mb", 80, 6 + (Minecraft.getInstance().fontRenderer.FONT_HEIGHT + 2) * 3, 0xFFFFFF);
+    }
+
+    @Override
     public List<String> getTooltipStrings(FluidExtractorRecipe recipe, double mouseX, double mouseY) {
-        if (mouseX >= 18 && mouseX <= 58) return Arrays.asList("Production rate");
+        if (mouseX >= 78 && mouseX <= 140 && mouseY >= 5 && mouseY <= 25) return Arrays.asList("Production rate");
         if (mouseX >= 78 && mouseX <= 120 && mouseY >= 25 && mouseY <= 45)
             return Arrays.asList("Average numbers aren't real numbers");
         return new ArrayList<>();
