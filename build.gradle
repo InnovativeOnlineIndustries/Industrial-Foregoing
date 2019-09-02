@@ -84,9 +84,9 @@ dependencies {
         })
     }
     //if (findProject(':workspace') == null) {
-        compileOnly fg.deobf("mezz.jei:jei-1.14.4:6.0.0.10:api")
+        compileOnly fg.deobf("mezz.jei:jei-1.14.4:6.0.0.11:api")
         // at runtime, use the full JEI jar
-        runtimeOnly fg.deobf("mezz.jei:jei-1.14.4:6.0.0.10")
+        runtimeOnly fg.deobf("mezz.jei:jei-1.14.4:6.0.0.11")
     //}
     compileOnly 'org.projectlombok:lombok:1.16.16'
 }

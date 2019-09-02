@@ -33,7 +33,9 @@ import com.buuz135.industrial.jei.petrifiedgen.PetrifiedBurnTimeCategory;
 import com.buuz135.industrial.jei.reactor.ReactorRecipeCategory;
 import com.buuz135.industrial.jei.sludge.SludgeRefinerRecipeCategory;
 import com.buuz135.industrial.module.ModuleTool;
+import com.buuz135.industrial.recipe.FluidExtractorRecipe;
 import com.buuz135.industrial.utils.Reference;
+import com.hrznstudio.titanium.util.RecipeUtil;
 import mezz.jei.api.IModPlugin;
 import mezz.jei.api.JeiPlugin;
 import mezz.jei.api.registration.IModIngredientRegistration;
@@ -42,6 +44,7 @@ import mezz.jei.api.registration.IRecipeRegistration;
 import mezz.jei.api.registration.ISubtypeRegistration;
 import mezz.jei.api.runtime.IJeiRuntime;
 import mezz.jei.api.runtime.IRecipesGui;
+import net.minecraft.client.Minecraft;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 
@@ -134,7 +137,7 @@ public class JEICustomPlugin implements IModPlugin {
 
     @Override
     public void registerRecipes(IRecipeRegistration registration) {
-        //registration.addRecipes(RecipeUtil.getRecipes(Minecraft.getInstance().world, FluidExtractorRecipe.SERIALIZER.getRecipeType()), fluidExtractorCategory.getUid());
+        registration.addRecipes(RecipeUtil.getRecipes(Minecraft.getInstance().world, FluidExtractorRecipe.SERIALIZER.getRecipeType()), fluidExtractorCategory.getUid());
     }
 
     //@Override
