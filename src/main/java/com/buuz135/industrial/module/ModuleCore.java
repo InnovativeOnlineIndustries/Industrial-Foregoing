@@ -3,6 +3,7 @@ package com.buuz135.industrial.module;
 import com.buuz135.industrial.IndustrialForegoing;
 import com.buuz135.industrial.block.MachineFrameBlock;
 import com.buuz135.industrial.block.core.FluidExtractorBlock;
+import com.buuz135.industrial.block.core.LatexProcessingUnitBlock;
 import com.buuz135.industrial.block.core.tile.FluidExtractorTile;
 import com.buuz135.industrial.item.BookManualItem;
 import com.buuz135.industrial.item.FertilizerItem;
@@ -47,6 +48,7 @@ public class ModuleCore implements IModule {
     public static MachineFrameBlock SUPREME = new MachineFrameBlock("supreme", MachineFrameBlock.SUPREME_RARITY, TAB_CORE);
     public static TitaniumFluidInstance LATEX = new TitaniumFluidInstance(Reference.MOD_ID, "latex", FluidAttributes.builder("latex", new ResourceLocation(Reference.MOD_ID, "blocks/fluids/latex_still"), new ResourceLocation(Reference.MOD_ID, "blocks/fluids/latex_flow")).build(), true, TAB_CORE);
     public static FluidExtractorBlock FLUID_EXTRACTOR = new FluidExtractorBlock();
+    public static LatexProcessingUnitBlock LATEX_PROCESSING = new LatexProcessingUnitBlock();
 
     @Override
     public List<Feature.Builder> generateFeatures() {
@@ -59,6 +61,7 @@ public class ModuleCore implements IModule {
                 eventClient(() -> () -> EventManager.mod(TextureStitchEvent.Pre.class).process(this::textureStitch)));
         features.add(Feature.builder("plastic_generation").
                 content(Block.class, FLUID_EXTRACTOR).
+                content(Block.class, LATEX_PROCESSING).
                 event(EventManager.forge(TickEvent.WorldTickEvent.class).
                         filter(worldTickEvent -> worldTickEvent.phase == TickEvent.Phase.END && worldTickEvent.type == TickEvent.Type.WORLD && worldTickEvent.world.getGameTime() % 40 == 0 && FluidExtractorTile.EXTRACTION.containsKey(worldTickEvent.world.dimension.getType())).
                         process(worldTickEvent -> FluidExtractorTile.EXTRACTION.get(worldTickEvent.world.dimension.getType()).values().forEach(blockPosFluidExtractionProgressHashMap -> blockPosFluidExtractionProgressHashMap.keySet().forEach(pos -> worldTickEvent.world.sendBlockBreakProgress(blockPosFluidExtractionProgressHashMap.get(pos).getBreakID(), pos, blockPosFluidExtractionProgressHashMap.get(pos).getProgress()))))));
