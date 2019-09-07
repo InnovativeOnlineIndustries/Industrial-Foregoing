@@ -177,7 +177,7 @@ curseforge {
         }
         
         addArtifact apiJar
-        addArtifact devJar
+        addArtifact deobfJar
     }
 }
 
