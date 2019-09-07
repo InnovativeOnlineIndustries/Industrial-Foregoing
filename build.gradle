@@ -28,11 +28,10 @@ plugins {
 apply plugin: 'net.minecraftforge.gradle'
 apply plugin: 'eclipse'
 
-def BUILD_NUMBER = System.getenv("BUILD_NUMBER") ?: "0"
-version = "${mod_version}.$BUILD_NUMBER"
+def BUILD_NUMBER = System.getenv("COMMIT") ? "${project.api_version}-${System.getenv("COMMIT")}" : "${project.api_version}"
 group = "com.buuz135"
 archivesBaseName = "industrial-foregoing"
-version = "${minecraftVersion}-${mod_version}.$BUILD_NUMBER"
+version = "${minecraftVersion}-$BUILD_NUMBER"
 
 sourceCompatibility = targetCompatibility = '1.8'
 compileJava {
