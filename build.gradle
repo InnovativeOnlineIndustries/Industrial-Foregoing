@@ -122,18 +122,40 @@ task apiJar(type: Jar, dependsOn: 'classes') {
     }
 }
 
-task devJar(type: Jar, dependsOn: 'classes') {
-    from(sourceSets.main.output) {
-        include '**'
-    }
-    extension = 'jar'
-    classifier = 'deobf'
+task sourcesJar(type: Jar, dependsOn: classes) {
+    classifier = 'sources'
+    from sourceSets.main.allSource
+}
+
+task deobfJar(type:Jar) {
+    from sourceSets.main.output
+    classifier 'deobf'
 }
 
 artifacts {
-    archives devJar
+    archives sourcesJar
+    archives deobfJar
     archives apiJar
 }
+
+publishing {
+    publications {
+        mavenJava(MavenPublication) {
+            archives sourcesJar
+            archives deobfJar
+            archives apiJar
+        }
+    }
+    repositories {
+        maven {
+            url "s3://cdn.hrzn.studio/maven"
+            authentication {
+                awsIm(AwsImAuthentication)
+            }
+        }
+    }
+}
+
 
 tasks.curseforge.enabled =  project.hasProperty('curse_api')
 
