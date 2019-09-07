@@ -1,5 +1,6 @@
 package com.buuz135.industrial.block.core.tile;
 
+import com.buuz135.industrial.block.core.LatexProcessingUnitBlock;
 import com.buuz135.industrial.block.tile.IndustrialProcessingTile;
 import com.buuz135.industrial.module.ModuleCore;
 import com.hrznstudio.titanium.annotation.Save;
@@ -55,6 +56,6 @@ public class LatexProcessingUnitTile extends IndustrialProcessingTile {
 
     @Override
     protected int getTickPower() {
-        return 20;
+        return LatexProcessingUnitBlock.POWER_CONSUMED_EVERY_TICK;
     }
 }
