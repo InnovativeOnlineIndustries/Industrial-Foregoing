@@ -142,6 +142,7 @@ artifacts {
 publishing {
     publications {
         mavenJava(MavenPublication) {
+            artifact jar
             artifact sourcesJar
             artifact deobfJar
             artifact apiJar
