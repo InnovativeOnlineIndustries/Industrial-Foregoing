@@ -36,6 +36,10 @@ public abstract class IndustrialProcessingTile extends TilePowered {
                 .setSlotLimit(1));
     }
 
+    public PosProgressBar getProgressBar() {
+        return progressBar;
+    }
+
     @Override
     public boolean onActivated(PlayerEntity playerIn, Hand hand, Direction facing, double hitX, double hitY, double hitZ) {
         if (super.onActivated(playerIn, hand, facing, hitX, hitY, hitZ)) return true;

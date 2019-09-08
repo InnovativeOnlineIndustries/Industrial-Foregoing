@@ -2,6 +2,7 @@ package com.buuz135.industrial.module;
 
 import com.buuz135.industrial.IndustrialForegoing;
 import com.buuz135.industrial.block.MachineFrameBlock;
+import com.buuz135.industrial.block.core.DissolutionChamberBlock;
 import com.buuz135.industrial.block.core.FluidExtractorBlock;
 import com.buuz135.industrial.block.core.LatexProcessingUnitBlock;
 import com.buuz135.industrial.block.core.tile.FluidExtractorTile;
@@ -49,6 +50,7 @@ public class ModuleCore implements IModule {
     public static TitaniumFluidInstance LATEX = new TitaniumFluidInstance(Reference.MOD_ID, "latex", FluidAttributes.builder("latex", new ResourceLocation(Reference.MOD_ID, "blocks/fluids/latex_still"), new ResourceLocation(Reference.MOD_ID, "blocks/fluids/latex_flow")).build(), true, TAB_CORE);
     public static FluidExtractorBlock FLUID_EXTRACTOR = new FluidExtractorBlock();
     public static LatexProcessingUnitBlock LATEX_PROCESSING = new LatexProcessingUnitBlock();
+    public static DissolutionChamberBlock DISSOLUTION_CHAMBER = new DissolutionChamberBlock();
 
     @Override
     public List<Feature.Builder> generateFeatures() {
@@ -77,6 +79,8 @@ public class ModuleCore implements IModule {
                 content(Block.class, ADVANCED).
                 content(Block.class, SUPREME).
                 content(Block.class, PITY));
+        features.add(Feature.builder("tier_2_production").
+                content(Block.class, DISSOLUTION_CHAMBER));
         TAB_CORE.addIconStack(new ItemStack(PLASTIC));
         return features;
     }
