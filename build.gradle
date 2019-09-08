@@ -65,12 +65,12 @@ repositories {
     mavenCentral()
     jcenter()
     maven {
-        url 'https://cdn.hrzn.studio/maven/'
-    }
-    maven {
         // location of the maven that hosts JEI files
         name = "Progwml6 maven"
         url = "https://dvs1.progwml6.com/files/maven/"
+    }
+    maven {
+        url 'https://cdn.hrzn.studio/maven/'
     }
 }
 
