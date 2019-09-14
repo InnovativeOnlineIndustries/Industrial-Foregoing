@@ -45,6 +45,5 @@ public class IFRegistries {
             .create();
 
     public static void poke() {
-        System.out.println("poking");
     }
 }

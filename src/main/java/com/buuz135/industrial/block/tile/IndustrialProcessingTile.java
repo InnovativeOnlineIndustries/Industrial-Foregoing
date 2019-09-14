@@ -7,7 +7,6 @@ import com.hrznstudio.titanium.block.tile.inventory.SidedInvHandler;
 import com.hrznstudio.titanium.block.tile.progress.PosProgressBar;
 import com.hrznstudio.titanium.client.gui.addon.EnergyBarGuiAddon;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.DyeColor;
 import net.minecraft.util.Direction;
 import net.minecraft.util.Hand;
 
@@ -29,11 +28,11 @@ public abstract class IndustrialProcessingTile extends TilePowered {
                 setOnTickWork(() -> getEnergyStorage().extractEnergyForced(getTickPower())).
                 setOnFinishWork(() -> onFinish().run())
         );
-        this.addInventory(addons = (SidedInvHandler) new SidedInvHandler("addons", 176 - 24, 8, 4, 0)
-                .setColor(DyeColor.CYAN)
-                .setTile(this)
-                .setRange(1, 4)
-                .setSlotLimit(1));
+        //this.addInventory(addons = (SidedInvHandler) new SidedInvHandler("addons", 176 - 24, 8, 4, 0)
+        //        .setColor(DyeColor.CYAN)
+        //        .setTile(this)
+        //        .setRange(1, 4)
+        //        .setSlotLimit(1));
     }
 
     public PosProgressBar getProgressBar() {

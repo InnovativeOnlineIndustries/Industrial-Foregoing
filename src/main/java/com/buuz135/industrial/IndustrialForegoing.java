@@ -88,11 +88,11 @@ public class IndustrialForegoing extends ModuleController {
         addModule(agriculture);
     }
 
-    @Override
-    public void initJsonGenerators() {
-        super.initJsonGenerators();
-        addJsonDataGenerator(RECIPES);
-    }
+    //@Override
+    //public void initJsonGenerators() {TODO
+    //    super.initJsonGenerators();
+    //    addJsonDataGenerator(RECIPES);
+    //}
 
     public static FakePlayer getFakePlayer(World world) {
         if (worldFakePlayer.containsKey(world.dimension.getType().getId()))
