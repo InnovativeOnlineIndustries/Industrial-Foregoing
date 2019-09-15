@@ -21,7 +21,6 @@
  */
 package com.buuz135.industrial.block.transport.conveyor;
 
-import com.buuz135.industrial.IndustrialForegoing;
 import com.buuz135.industrial.api.conveyor.ConveyorUpgrade;
 import com.buuz135.industrial.api.conveyor.ConveyorUpgradeFactory;
 import com.buuz135.industrial.api.conveyor.IConveyorContainer;
@@ -32,10 +31,9 @@ import com.buuz135.industrial.module.ModuleTransport;
 import com.buuz135.industrial.proxy.block.filter.IFilter;
 import com.buuz135.industrial.proxy.block.filter.ItemStackFilter;
 import com.buuz135.industrial.utils.Reference;
-import com.hrznstudio.titanium.module.api.RegistryManager;
-import com.hrznstudio.titanium.recipe.generator.CraftingJsonData;
-import com.hrznstudio.titanium.recipe.generator.IIngredient;
+import com.hrznstudio.titanium.recipe.generator.TitaniumShapedRecipeBuilder;
 import net.minecraft.block.Blocks;
+import net.minecraft.data.IFinishedRecipe;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
@@ -51,11 +49,13 @@ import net.minecraft.util.math.shapes.VoxelShape;
 import net.minecraft.util.math.shapes.VoxelShapes;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.World;
+import net.minecraftforge.common.Tags;
 
 import javax.annotation.Nonnull;
 import java.util.Collections;
 import java.util.List;
 import java.util.Set;
+import java.util.function.Consumer;
 
 public class ConveyorBlinkingUpgrade extends ConveyorUpgrade {
 
@@ -246,15 +246,13 @@ public class ConveyorBlinkingUpgrade extends ConveyorUpgrade {
         }
 
         @Override
-        public void addAlternatives(RegistryManager registry) {
-            IndustrialForegoing.RECIPES.addRecipe(CraftingJsonData.ofShaped(
-                    new ItemStack(getUpgradeItem()),
-                    new String[]{"IPI", "IDI", "ICI"},
-                    'I', IIngredient.TagIngredient.of("forge:ingots/iron"),
-                    'P', IIngredient.ItemStackIngredient.of(new ItemStack(Items.CHORUS_FRUIT)),
-                    'D', IIngredient.ItemStackIngredient.of(new ItemStack(Blocks.PISTON)),
-                    'C', IIngredient.ItemStackIngredient.of(new ItemStack(ModuleTransport.CONVEYOR))
-            ));
+        public void registerRecipe(Consumer<IFinishedRecipe> consumer) {
+            TitaniumShapedRecipeBuilder.shapedRecipe(getUpgradeItem()).patternLine("IPI").patternLine("IDI").patternLine("ICI")
+                    .key('I', Tags.Items.INGOTS_IRON)
+                    .key('P', Items.CHORUS_FRUIT)
+                    .key('D', Blocks.PISTON)
+                    .key('C', ModuleTransport.CONVEYOR)
+                    .build(consumer);
         }
     }
 }

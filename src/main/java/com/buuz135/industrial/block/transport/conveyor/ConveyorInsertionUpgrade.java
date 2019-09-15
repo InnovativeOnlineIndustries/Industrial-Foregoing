@@ -21,7 +21,6 @@
  */
 package com.buuz135.industrial.block.transport.conveyor;
 
-import com.buuz135.industrial.IndustrialForegoing;
 import com.buuz135.industrial.api.conveyor.ConveyorUpgrade;
 import com.buuz135.industrial.api.conveyor.ConveyorUpgradeFactory;
 import com.buuz135.industrial.api.conveyor.IConveyorContainer;
@@ -31,13 +30,13 @@ import com.buuz135.industrial.gui.component.FilterGuiComponent;
 import com.buuz135.industrial.gui.component.StateButtonInfo;
 import com.buuz135.industrial.gui.component.TexturedStateButtonGuiComponent;
 import com.buuz135.industrial.module.ModuleTransport;
+import com.buuz135.industrial.proxy.IndustrialTags;
 import com.buuz135.industrial.proxy.block.filter.IFilter;
 import com.buuz135.industrial.proxy.block.filter.ItemStackFilter;
 import com.buuz135.industrial.utils.Reference;
-import com.hrznstudio.titanium.module.api.RegistryManager;
-import com.hrznstudio.titanium.recipe.generator.CraftingJsonData;
-import com.hrznstudio.titanium.recipe.generator.IIngredient;
+import com.hrznstudio.titanium.recipe.generator.TitaniumShapedRecipeBuilder;
 import net.minecraft.block.Blocks;
+import net.minecraft.data.IFinishedRecipe;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.item.ItemEntity;
 import net.minecraft.entity.player.ServerPlayerEntity;
@@ -50,6 +49,7 @@ import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.shapes.VoxelShape;
 import net.minecraft.util.math.shapes.VoxelShapes;
+import net.minecraftforge.common.Tags;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.fluids.FluidStack;
@@ -60,6 +60,7 @@ import net.minecraftforge.items.CapabilityItemHandler;
 
 import javax.annotation.Nonnull;
 import java.util.List;
+import java.util.function.Consumer;
 
 public class ConveyorInsertionUpgrade extends ConveyorUpgrade {
 
@@ -128,7 +129,7 @@ public class ConveyorInsertionUpgrade extends ConveyorUpgrade {
         TileEntity tile = getWorld().getTileEntity(offsetPos);
         if (tile != null && tile.getCapability(capability, getSide().getOpposite()).isPresent())
             return tile.getCapability(capability, getSide().getOpposite());
-        for (Entity entity : getWorld().getEntitiesWithinAABB(Entity.class, new AxisAlignedBB(0, 0, 0, 1, 1, 1).offset(offsetPos)/*, EntitySelectors.NOT_SPECTATING TODO*/)) {
+        for (Entity entity : getWorld().getEntitiesWithinAABB(Entity.class, new AxisAlignedBB(0, 0, 0, 1, 1, 1).offset(offsetPos))) {
             if (entity.getCapability(capability, entity instanceof ServerPlayerEntity ? null : getSide().getOpposite()).isPresent())
                 return entity.getCapability(capability, entity instanceof ServerPlayerEntity ? null : getSide().getOpposite());
         }
@@ -233,6 +234,7 @@ public class ConveyorInsertionUpgrade extends ConveyorUpgrade {
     }
 
     public static class Factory extends ConveyorUpgradeFactory {
+
         public Factory() {
             setRegistryName("insertion");
         }
@@ -255,15 +257,15 @@ public class ConveyorInsertionUpgrade extends ConveyorUpgrade {
         }
 
         @Override
-        public void addAlternatives(RegistryManager registry) {
-            IndustrialForegoing.RECIPES.addRecipe(CraftingJsonData.ofShaped(
-                    new ItemStack(getUpgradeItem()),
-                    new String[]{"IPI", "IDI", "ICI"},
-                    'I', IIngredient.TagIngredient.of("forge:ingots/iron"),
-                    'P', IIngredient.TagIngredient.of("forge:plastic"),
-                    'D', IIngredient.ItemStackIngredient.of(new ItemStack(Blocks.HOPPER)),
-                    'C', IIngredient.ItemStackIngredient.of(new ItemStack(ModuleTransport.CONVEYOR))
-            ));
+        public void registerRecipe(Consumer<IFinishedRecipe> consumer) {
+            TitaniumShapedRecipeBuilder.shapedRecipe(getUpgradeItem())
+                    .patternLine("IPI").patternLine("IDI").patternLine("ICI")
+                    .key('I', Tags.Items.INGOTS_IRON)
+                    .key('P', IndustrialTags.PLASTIC)
+                    .key('D', Blocks.HOPPER)
+                    .key('C', ModuleTransport.CONVEYOR)
+                    .build(consumer);
+
         }
     }
 }

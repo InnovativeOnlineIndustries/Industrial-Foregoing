@@ -21,26 +21,25 @@
  */
 package com.buuz135.industrial.block.transport;
 
-import com.buuz135.industrial.IndustrialForegoing;
 import com.buuz135.industrial.api.conveyor.ConveyorUpgrade;
 import com.buuz135.industrial.block.transport.tile.ConveyorTile;
 import com.buuz135.industrial.module.ModuleCore;
+import com.buuz135.industrial.proxy.IndustrialTags;
 import com.hrznstudio.titanium.api.IFactory;
+import com.hrznstudio.titanium.api.IRecipeProvider;
 import com.hrznstudio.titanium.api.raytrace.DistanceRayTraceResult;
 import com.hrznstudio.titanium.block.BlockTileBase;
-import com.hrznstudio.titanium.module.api.RegistryManager;
-import com.hrznstudio.titanium.recipe.generator.CraftingJsonData;
-import com.hrznstudio.titanium.recipe.generator.IIngredient;
+import com.hrznstudio.titanium.recipe.generator.TitaniumShapedRecipeBuilder;
 import com.hrznstudio.titanium.util.RayTraceUtils;
 import com.hrznstudio.titanium.util.TileUtil;
 import net.minecraft.block.*;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.material.MaterialColor;
+import net.minecraft.data.IFinishedRecipe;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntitySpawnPlacementRegistry;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.item.ItemEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.fluid.Fluids;
 import net.minecraft.fluid.IFluidState;
@@ -61,17 +60,18 @@ import net.minecraft.util.math.shapes.ISelectionContext;
 import net.minecraft.util.math.shapes.VoxelShape;
 import net.minecraft.util.math.shapes.VoxelShapes;
 import net.minecraft.world.IBlockReader;
-import net.minecraft.world.IWorld;
 import net.minecraft.world.World;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
+import net.minecraftforge.common.Tags;
 
 import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.function.Consumer;
 
-public class ConveyorBlock extends BlockTileBase<ConveyorTile> implements IWaterLoggable {
+public class ConveyorBlock extends BlockTileBase<ConveyorTile> implements IWaterLoggable, IRecipeProvider {
 
     public static final BooleanProperty WATERLOGGED = BlockStateProperties.WATERLOGGED;
     public static final DirectionProperty FACING = HorizontalBlock.HORIZONTAL_FACING;
@@ -94,31 +94,6 @@ public class ConveyorBlock extends BlockTileBase<ConveyorTile> implements IWater
     @Override
     public IFactory<BlockItem> getItemBlockFactory() {
         return this::getItem;
-    }
-
-    @Override
-    public void addAlternatives(RegistryManager registry) {
-        super.addAlternatives(registry);
-        IndustrialForegoing.RECIPES.addRecipe(
-                CraftingJsonData.ofShaped(new ItemStack(this, 6),
-                        new String[]{"ppp", "iri", "ppp"},
-                        'p', IIngredient.TagIngredient.of("forge:plastic"),
-                        'i', IIngredient.TagIngredient.of("forge:ingots/iron"),
-                        'r', IIngredient.ItemStackIngredient.of(new ItemStack(Items.REDSTONE)))
-        );
-    }
-
-    @OnlyIn(Dist.CLIENT)
-    public void createRecipe() {
-//        RecipeUtils.addShapedRecipe(new ItemStack(this, 4, 0), "ppp", "iri", "ppp",
-//                'p', ItemRegistry.plastic,
-//                'i', "ingotIron",
-//                'r', Items.REDSTONE);
-//        for (int i = 0; i < dyes.length; i++) {
-//            RecipeUtils.addShapedRecipe(new ItemStack(this, 8, 15 - i), "_" + dyes[i].toLowerCase(), new HashMap<>(), "ccc", "cdc", "ccc",
-//                    'c', new ItemStack(this, 1, OreDictionary.WILDCARD_VALUE),
-//                    'd', "dye" + dyes[i]);
-//        }
     }
 
     @Override
@@ -149,7 +124,7 @@ public class ConveyorBlock extends BlockTileBase<ConveyorTile> implements IWater
                     return new ItemStack(upgrade.getFactory().getUpgradeItem(), 1);
                 }
             }
-            return new ItemStack(this, 1);//TODO Fix types
+            return new ItemStack(this, 1);
         }
         return super.getPickBlock(state, target, world, pos, player);
     }
@@ -252,39 +227,6 @@ public class ConveyorBlock extends BlockTileBase<ConveyorTile> implements IWater
         }
     }
 
-    @Override
-    public void onPlayerDestroy(IWorld world, BlockPos pos, BlockState state) {
-        NonNullList<ItemStack> list = NonNullList.create();
-        //getDrops(state, list, world.getWorld(), pos, 0); TODO
-        for (ItemStack stack : list) {
-            float f = 0.7F;
-            float d0 = world.getRandom().nextFloat() * f + (1.0F - f) * 0.5F;
-            float d1 = world.getRandom().nextFloat() * f + (1.0F - f) * 0.5F;
-            float d2 = world.getRandom().nextFloat() * f + (1.0F - f) * 0.5F;
-            ItemEntity ItemEntity = new ItemEntity(world.getWorld(), pos.getX() + d0, pos.getY() + d1, pos.getZ() + d2, stack);
-            world.addEntity(ItemEntity);
-        }
-        super.onPlayerDestroy(world, pos, state);
-    }
-
-
-    //@Override
-    //public void getDrops(BlockState state, NonNullList<ItemStack> drops, World world, BlockPos pos, int fortune) {
-    //    TileEntity entity = world.getTileEntity(pos);
-    //    if (entity instanceof TileEntityConveyor) {
-    //        drops.add(new ItemStack(this, 1));
-    //        for (ConveyorUpgrade upgrade : ((TileEntityConveyor) entity).getUpgradeMap().values()) {
-    //            drops.addAll(upgrade.getDrops());
-    //        }
-    //        if (((TileEntityConveyor) entity).getConveyorType().isFast()) {
-    //            drops.add(new ItemStack(Items.GLOWSTONE_DUST, 1));
-    //        }
-    //        if (((TileEntityConveyor) entity).isSticky()) {
-    //            drops.add(new ItemStack(ModuleCore.PLASTIC, 1));
-    //        }
-    //    }
-    //}
-//
     private void updateConveyorPlacing(World worldIn, BlockPos pos, BlockState state, boolean first) {
         TileEntity entity = worldIn.getTileEntity(pos);
         if (entity instanceof ConveyorTile) {
@@ -472,6 +414,16 @@ public class ConveyorBlock extends BlockTileBase<ConveyorTile> implements IWater
     @Override
     public TileEntity createNewTileEntity(IBlockReader worldIn) {
         return new ConveyorTile();
+    }
+
+    @Override
+    public void registerRecipe(Consumer<IFinishedRecipe> consumer) {
+        TitaniumShapedRecipeBuilder.shapedRecipe(this, 6)
+                .patternLine("ppp").patternLine("iri").patternLine("ppp")
+                .key('p', IndustrialTags.PLASTIC)
+                .key('i', Tags.Items.INGOTS_IRON)
+                .key('r', Items.REDSTONE)
+                .build(consumer);
     }
 
     public enum EnumType implements IStringSerializable {

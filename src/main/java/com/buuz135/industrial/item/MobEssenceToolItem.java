@@ -1,5 +1,6 @@
 package com.buuz135.industrial.item;
 
+import net.minecraft.data.IFinishedRecipe;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemGroup;
@@ -9,10 +10,12 @@ import net.minecraft.util.Hand;
 import net.minecraft.util.NonNullList;
 import net.minecraft.world.World;
 
+import java.util.function.Consumer;
+
 public class MobEssenceToolItem extends IFCustomItem {
 
     public MobEssenceToolItem(ItemGroup group) {
-        super("mob_essence_tool", group, new Properties().maxStackSize(1), null);
+        super("mob_essence_tool", group, new Properties().maxStackSize(1));
     }
 
     @Override
@@ -49,5 +52,10 @@ public class MobEssenceToolItem extends IFCustomItem {
             return true;
         }
         return super.itemInteractionForEntity(stack, playerIn, target, hand);
+    }
+
+    @Override
+    public void registerRecipe(Consumer<IFinishedRecipe> consumer) {
+
     }
 }

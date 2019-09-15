@@ -21,15 +21,14 @@
  */
 package com.buuz135.industrial.item;
 
-import com.buuz135.industrial.IndustrialForegoing;
 import com.buuz135.industrial.api.straw.StrawHandler;
-import com.buuz135.industrial.module.ModuleCore;
+import com.buuz135.industrial.proxy.IndustrialTags;
 import com.buuz135.industrial.utils.StrawUtils;
-import com.hrznstudio.titanium.recipe.generator.CraftingJsonData;
-import com.hrznstudio.titanium.recipe.generator.IIngredient;
+import com.hrznstudio.titanium.recipe.generator.TitaniumShapedRecipeBuilder;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.IBucketPickupHandler;
+import net.minecraft.data.IFinishedRecipe;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.fluid.Fluids;
@@ -53,17 +52,14 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.List;
 import java.util.Optional;
+import java.util.function.Consumer;
 
 ;
 
 public class ItemStraw extends IFCustomItem {
 
     public ItemStraw(ItemGroup group) {
-        super("straw", group, new Properties().maxStackSize(1),
-                registry -> IndustrialForegoing.RECIPES.addRecipe(CraftingJsonData.ofShaped(
-                        new ItemStack(ModuleCore.STRAW),
-                        new String[]{"PP ", " P ", " P "},
-                        'P', IIngredient.TagIngredient.of("forge:plastic"))));
+        super("straw", group, new Properties().maxStackSize(1));
     }
 
     @Override
@@ -178,5 +174,13 @@ public class ItemStraw extends IFCustomItem {
     public void addTooltipDetails(@Nullable Key key, ItemStack stack, List<ITextComponent> tooltip, boolean advanced) {
         super.addTooltipDetails(key, stack, tooltip, advanced);
         tooltip.add(new StringTextComponent(TextFormatting.GRAY + "\"The One Who Codes\""));
+    }
+
+    @Override
+    public void registerRecipe(Consumer<IFinishedRecipe> consumer) {
+        TitaniumShapedRecipeBuilder.shapedRecipe(this)
+                .patternLine("PP ").patternLine(" P ").patternLine(" P ")
+                .key('P', IndustrialTags.PLASTIC)
+                .build(consumer);
     }
 }

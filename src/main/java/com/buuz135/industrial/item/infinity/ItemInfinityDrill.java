@@ -22,20 +22,18 @@
 package com.buuz135.industrial.item.infinity;
 
 
-import com.buuz135.industrial.IndustrialForegoing;
 import com.buuz135.industrial.item.IFCustomItem;
-import com.buuz135.industrial.module.ModuleTool;
 import com.buuz135.industrial.proxy.CommonProxy;
 import com.buuz135.industrial.proxy.FluidsRegistry;
 import com.google.common.collect.Multimap;
-import com.hrznstudio.titanium.recipe.generator.CraftingJsonData;
-import com.hrznstudio.titanium.recipe.generator.IIngredient;
+import com.hrznstudio.titanium.recipe.generator.TitaniumShapedRecipeBuilder;
 import com.hrznstudio.titanium.util.RayTraceUtils;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.gui.screen.Screen;
+import net.minecraft.data.IFinishedRecipe;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.EnchantmentType;
 import net.minecraft.entity.LivingEntity;
@@ -79,6 +77,7 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.text.DecimalFormat;
 import java.util.List;
+import java.util.function.Consumer;
 
 public class ItemInfinityDrill extends IFCustomItem {
 
@@ -87,12 +86,7 @@ public class ItemInfinityDrill extends IFCustomItem {
     public static int FUEL_CONSUMPTION = 3;
 
     public ItemInfinityDrill(ItemGroup group) {
-        super("infinity_drill", group, new Properties().maxStackSize(1).addToolType(ToolType.PICKAXE, 3).addToolType(ToolType.SHOVEL, 3),
-                registry -> IndustrialForegoing.RECIPES.addRecipe(CraftingJsonData.ofShaped(
-                        new ItemStack(ModuleTool.INFINITY_DRILL),
-                        new String[]{" DD", " ID", "I  "},
-                        'D', IIngredient.ItemStackIngredient.of(new ItemStack(Blocks.DIAMOND_BLOCK)),
-                        'I', IIngredient.ItemStackIngredient.of(new ItemStack(Blocks.IRON_BLOCK)))));
+        super("infinity_drill", group, new Properties().maxStackSize(1).addToolType(ToolType.PICKAXE, 3).addToolType(ToolType.SHOVEL, 3));
     }
 
     @Override
@@ -118,7 +112,7 @@ public class ItemInfinityDrill extends IFCustomItem {
 
     @Override
     public void fillItemGroup(ItemGroup group, NonNullList<ItemStack> items) {
-        if(isInGroup(group)) {
+        if (isInGroup(group)) {
             for (DrillTier value : DrillTier.values()) {
                 items.add(createStack(value.getPowerNeeded(), 0, false));
             }
@@ -338,6 +332,15 @@ public class ItemInfinityDrill extends IFCustomItem {
         }
         return multimap;
     }
+
+    @Override
+    public void registerRecipe(Consumer<IFinishedRecipe> consumer) {
+        TitaniumShapedRecipeBuilder.shapedRecipe(this)
+                .patternLine(" DD").patternLine(" ID").patternLine("I  ")
+                .key('D', Blocks.DIAMOND_BLOCK)
+                .key('I', Blocks.IRON_BLOCK);
+    }
+
 //    public void configuration(Configuration config) {TODO
 //        int i = 0;
 //        for (DrillTier value : DrillTier.values()) {

@@ -21,6 +21,7 @@
  */
 package com.buuz135.industrial.item;
 
+import net.minecraft.data.IFinishedRecipe;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemGroup;
 import net.minecraft.item.ItemStack;
@@ -33,11 +34,12 @@ import net.minecraft.util.math.RayTraceContext;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.world.World;
 
+import java.util.function.Consumer;
+
 public class BookManualItem extends IFCustomItem {
 
     public BookManualItem(ItemGroup group) {
-        super("book_manual", group, new Properties().maxStackSize(1), registry -> {
-        });
+        super("book_manual", group, new Properties().maxStackSize(1));
     }
 
     @Override
@@ -53,9 +55,9 @@ public class BookManualItem extends IFCustomItem {
         return new ActionResult<>(ActionResultType.SUCCESS, playerIn.getHeldItem(handIn));
     }
 
+    @Override
+    public void registerRecipe(Consumer<IFinishedRecipe> consumer) {
 
-    //@Override
-    //public void createRecipe() {
-    //    RecipeUtils.addShapelessRecipe(new ItemStack(this), Items.PAPER, "logWood");
-    //}
+    }
+
 }

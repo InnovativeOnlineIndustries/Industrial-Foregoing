@@ -28,7 +28,6 @@ import com.buuz135.industrial.proxy.event.MobDeathHandler;
 import com.buuz135.industrial.proxy.event.SkullHandler;
 import com.buuz135.industrial.proxy.network.SpecialParticleMessage;
 import com.buuz135.industrial.utils.CraftingUtils;
-import com.buuz135.industrial.utils.RecipeUtils;
 import com.buuz135.industrial.utils.Reference;
 import com.buuz135.industrial.utils.apihandlers.PlantRecollectableRegistryHandler;
 import com.buuz135.industrial.utils.apihandlers.RecipeHandlers;
@@ -130,7 +129,6 @@ public class CommonProxy {
         RecipeHandlers.loadOreEntries();
 
         CraftingUtils.generateCrushedRecipes();
-        RecipeUtils.generateConstants();
         RecipeHandlers.executeCraftweakerActions();
         //LaserDrillEntry.loadLaserConfigs(configFolder);
 

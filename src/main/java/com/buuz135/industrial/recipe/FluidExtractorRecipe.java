@@ -1,6 +1,5 @@
 package com.buuz135.industrial.recipe;
 
-import com.buuz135.industrial.IndustrialForegoing;
 import com.buuz135.industrial.module.ModuleCore;
 import com.buuz135.industrial.utils.Reference;
 import com.hrznstudio.titanium.recipe.serializer.GenericSerializer;
@@ -17,11 +16,14 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.fluids.FluidStack;
 
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 
 public class FluidExtractorRecipe extends SerializableRecipe {
 
     public static GenericSerializer<FluidExtractorRecipe> SERIALIZER = new GenericSerializer<>(new ResourceLocation(Reference.MOD_ID, "fluid_extractor"), FluidExtractorRecipe.class);
+    public static List<FluidExtractorRecipe> RECIPES = new ArrayList<>();
 
     static {
         new FluidExtractorRecipe(new ResourceLocation(Reference.MOD_ID, "acacia"), new Ingredient.SingleItemList(new ItemStack(Blocks.ACACIA_LOG)), Blocks.STRIPPED_ACACIA_LOG, 0.005f, new FluidStack(ModuleCore.LATEX.getSourceFluid(), 4), false);
@@ -50,7 +52,7 @@ public class FluidExtractorRecipe extends SerializableRecipe {
         this.breakChance = breakChance;
         this.output = output;
         this.defaultRecipe = defaultRecipe;
-        IndustrialForegoing.RECIPES.addRecipe(this);
+        RECIPES.add(this);
     }
 
     public boolean matches(World world, BlockPos pos) {

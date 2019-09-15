@@ -36,12 +36,12 @@ public class FluidsRenderRegistry {
     }
 
     //public static void register(IFCustomFluidBlock base) {
-        //Item fluid = Item.getItemFromBlock(base);
+    //Item fluid = Item.getItemFromBlock(base);
 //
-        //ModelBakery.registerItemVariants(fluid);
-        //FluidStateMapper mapper = new FluidStateMapper(base.getName());
-        //ModelLoader.setCustomMeshDefinition(fluid, mapper);
-        //ModelLoader.setCustomStateMapper(base, mapper);
+    //ModelBakery.registerItemVariants(fluid);
+    //FluidStateMapper mapper = new FluidStateMapper(base.getName());
+    //ModelLoader.setCustomMeshDefinition(fluid, mapper);
+    //ModelLoader.setCustomStateMapper(base, mapper);
     //}
 
     //public static class FluidStateMapper extends StateMapperBase implements ItemMeshDefinition {

@@ -21,6 +21,7 @@
  */
 package com.buuz135.industrial.item;
 
+import net.minecraft.data.IFinishedRecipe;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.BoneMealItem;
 import net.minecraft.item.ItemGroup;
@@ -31,11 +32,12 @@ import net.minecraft.util.Direction;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
+import java.util.function.Consumer;
+
 public class FertilizerItem extends IFCustomItem {
 
     public FertilizerItem(ItemGroup group) {
-        super("fertilizer", group, new Properties(), registry -> {
-        });
+        super("fertilizer", group, new Properties());
     }
 
     @Override
@@ -55,4 +57,8 @@ public class FertilizerItem extends IFCustomItem {
         return ActionResultType.PASS;
     }
 
+    @Override
+    public void registerRecipe(Consumer<IFinishedRecipe> consumer) {
+
+    }
 }

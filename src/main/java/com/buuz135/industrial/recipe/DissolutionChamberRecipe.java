@@ -1,6 +1,5 @@
 package com.buuz135.industrial.recipe;
 
-import com.buuz135.industrial.IndustrialForegoing;
 import com.buuz135.industrial.module.ModuleCore;
 import com.buuz135.industrial.utils.Reference;
 import com.hrznstudio.titanium.recipe.serializer.GenericSerializer;
@@ -17,9 +16,14 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
 import net.minecraftforge.fluids.FluidStack;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class DissolutionChamberRecipe extends SerializableRecipe {
 
     public static GenericSerializer<DissolutionChamberRecipe> SERIALIZER = new GenericSerializer<>(new ResourceLocation(Reference.MOD_ID, "dissolution_chamber"), DissolutionChamberRecipe.class);
+    public static List<DissolutionChamberRecipe> RECIPES = new ArrayList<>();
+
 
     static {
         new DissolutionChamberRecipe(new ResourceLocation(Reference.MOD_ID, "test"),
@@ -52,7 +56,7 @@ public class DissolutionChamberRecipe extends SerializableRecipe {
         this.processingTime = processingTime;
         this.output = output;
         this.outputFluid = outputFluid;
-        IndustrialForegoing.RECIPES.addRecipe(this);
+        RECIPES.add(this);
     }
 
     @Override
@@ -72,7 +76,7 @@ public class DissolutionChamberRecipe extends SerializableRecipe {
 
     @Override
     public ItemStack getRecipeOutput() {
-        return null;
+        return output;
     }
 
     @Override

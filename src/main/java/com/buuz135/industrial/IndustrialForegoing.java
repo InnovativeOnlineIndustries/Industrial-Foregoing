@@ -26,13 +26,14 @@ import com.buuz135.industrial.proxy.CommonProxy;
 import com.buuz135.industrial.proxy.client.ClientProxy;
 import com.buuz135.industrial.recipe.DissolutionChamberRecipe;
 import com.buuz135.industrial.recipe.FluidExtractorRecipe;
+import com.buuz135.industrial.recipe.provider.IndustrialRecipeProvider;
+import com.buuz135.industrial.recipe.provider.IndustrialSerializableProvider;
 import com.buuz135.industrial.registry.IFRegistries;
 import com.buuz135.industrial.utils.IFFakePlayer;
 import com.buuz135.industrial.utils.Reference;
 import com.hrznstudio.titanium.event.handler.EventManager;
 import com.hrznstudio.titanium.module.Module;
 import com.hrznstudio.titanium.module.ModuleController;
-import com.hrznstudio.titanium.recipe.generator.JsonDataGenerator;
 import net.minecraft.item.crafting.IRecipeSerializer;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
@@ -43,6 +44,7 @@ import net.minecraftforge.fml.DistExecutor;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
+import net.minecraftforge.fml.event.lifecycle.GatherDataEvent;
 import net.minecraftforge.fml.event.server.FMLServerStartingEvent;
 
 import java.util.HashMap;
@@ -53,8 +55,6 @@ public class IndustrialForegoing extends ModuleController {
     private static CommonProxy proxy;
     private static HashMap<Integer, IFFakePlayer> worldFakePlayer = new HashMap<>();
 
-    public static JsonDataGenerator RECIPES = new JsonDataGenerator(JsonDataGenerator.DataTypes.RECIPE, Reference.MOD_ID);
-
     public IndustrialForegoing() {
         proxy = DistExecutor.runForDist(() -> ClientProxy::new, () -> CommonProxy::new);
         EventManager.mod(FMLCommonSetupEvent.class).process(fmlCommonSetupEvent -> proxy.run()).subscribe();
@@ -63,6 +63,30 @@ public class IndustrialForegoing extends ModuleController {
         EventManager.mod(RegistryEvent.Register.class).filter(register -> register.getGenericType().equals(IRecipeSerializer.class))
                 .process(register -> register.getRegistry().registerAll(FluidExtractorRecipe.SERIALIZER, DissolutionChamberRecipe.SERIALIZER)).subscribe();
         IFRegistries.poke();
+    }
+
+    public static FakePlayer getFakePlayer(World world) {
+        if (worldFakePlayer.containsKey(world.dimension.getType().getId()))
+            return worldFakePlayer.get(world.dimension.getType().getId());
+        if (world instanceof ServerWorld) {
+            IFFakePlayer fakePlayer = new IFFakePlayer((ServerWorld) world);
+            worldFakePlayer.put(world.dimension.getType().getId(), fakePlayer);
+            return fakePlayer;
+        }
+        return null;
+    }
+
+    public static FakePlayer getFakePlayer(World world, BlockPos pos) {
+        FakePlayer player = getFakePlayer(world);
+        if (player != null) player.setPositionAndRotation(pos.getX(), pos.getY(), pos.getZ(), 90, 90);
+        return player;
+    }
+
+    @Override
+    public void addDataProvider(GatherDataEvent event) {
+        super.addDataProvider(event);
+        event.getGenerator().addProvider(new IndustrialRecipeProvider(event.getGenerator()));
+        event.getGenerator().addProvider(new IndustrialSerializableProvider(event.getGenerator(), Reference.MOD_ID));
     }
 
     @Override
@@ -86,29 +110,6 @@ public class IndustrialForegoing extends ModuleController {
         Module.Builder agriculture = Module.builder("agriculture").description("All of your farming options");
         new ModuleAgriculture().generateFeatures().forEach(agriculture::feature);
         addModule(agriculture);
-    }
-
-    //@Override
-    //public void initJsonGenerators() {TODO
-    //    super.initJsonGenerators();
-    //    addJsonDataGenerator(RECIPES);
-    //}
-
-    public static FakePlayer getFakePlayer(World world) {
-        if (worldFakePlayer.containsKey(world.dimension.getType().getId()))
-            return worldFakePlayer.get(world.dimension.getType().getId());
-        if (world instanceof ServerWorld) {
-            IFFakePlayer fakePlayer = new IFFakePlayer((ServerWorld) world);
-            worldFakePlayer.put(world.dimension.getType().getId(), fakePlayer);
-            return fakePlayer;
-        }
-        return null;
-    }
-
-    public static FakePlayer getFakePlayer(World world, BlockPos pos) {
-        FakePlayer player = getFakePlayer(world);
-        if (player != null) player.setPositionAndRotation(pos.getX(), pos.getY(), pos.getZ(), 90, 90);
-        return player;
     }
 
 }

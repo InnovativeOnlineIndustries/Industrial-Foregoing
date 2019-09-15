@@ -31,6 +31,6 @@
     "item": "minecraft:diamond",
     "count": 2
   },
-  "fluidOutput": "{FluidName:\"minecraft:water\",Amount:10}",
+  "outputFluid": "{FluidName:\"minecraft:water\",Amount:10}",
   "type": "industrialforegoing:dissolution_chamber"
 }

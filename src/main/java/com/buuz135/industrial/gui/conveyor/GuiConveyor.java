@@ -112,7 +112,7 @@ public class GuiConveyor extends ContainerScreen<ContainerConveyor> {
         boolean click = super.mouseClicked(mouseX, mouseY, mouseButton);
         for (IGuiComponent iGuiComponent : componentList) {
             if (iGuiComponent.isInside(mouseX - x, mouseY - y)) {
-                if(iGuiComponent.handleClick(this, x, y, mouseX, mouseY))
+                if (iGuiComponent.handleClick(this, x, y, mouseX, mouseY))
                     return true;
             }
         }

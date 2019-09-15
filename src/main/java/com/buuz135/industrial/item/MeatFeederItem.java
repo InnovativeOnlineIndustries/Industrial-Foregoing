@@ -23,12 +23,14 @@ package com.buuz135.industrial.item;
 
 import com.buuz135.industrial.module.ModuleCore;
 import com.buuz135.industrial.proxy.FluidsRegistry;
-import com.buuz135.industrial.utils.RecipeUtils;
+import com.hrznstudio.titanium.recipe.generator.TitaniumShapedRecipeBuilder;
+import net.minecraft.data.IFinishedRecipe;
 import net.minecraft.item.ItemGroup;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.text.ITextComponent;
+import net.minecraftforge.common.Tags;
 import net.minecraftforge.common.capabilities.ICapabilityProvider;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
@@ -36,12 +38,12 @@ import net.minecraftforge.fluids.capability.templates.FluidHandlerItemStack;
 
 import javax.annotation.Nullable;
 import java.util.List;
+import java.util.function.Consumer;
 
 public class MeatFeederItem extends IFCustomItem {
 
     public MeatFeederItem(ItemGroup group) {
-        super("meat_feeder", group, new Properties().maxStackSize(1), registry -> {
-        });
+        super("meat_feeder", group, new Properties().maxStackSize(1));
     }
 
     @Nullable
@@ -80,10 +82,13 @@ public class MeatFeederItem extends IFCustomItem {
         //handlerItemStack.drain(new FluidStack(FluidsRegistry.MEAT, amount), true);
     }
 
-    public void createRecipe() {
-        RecipeUtils.addShapedRecipe(new ItemStack(this), "pip", "gig", " i ",
-                'p', ModuleCore.PLASTIC,
-                'i', "ingotIron",
-                'g', Items.GLASS_BOTTLE);
+    @Override
+    public void registerRecipe(Consumer<IFinishedRecipe> consumer) {
+        TitaniumShapedRecipeBuilder.shapedRecipe(this)
+                .patternLine("pip").patternLine("gig").patternLine(" i ")
+                .key('p', ModuleCore.PLASTIC)
+                .key('i', Tags.Items.INGOTS_IRON)
+                .key('g', Items.GLASS_BOTTLE)
+                .build(consumer);
     }
 }

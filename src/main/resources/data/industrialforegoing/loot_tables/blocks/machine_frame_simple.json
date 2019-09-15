@@ -1,0 +1,15 @@
+{
+  "type": "minecraft:block",
+  "pools": [
+    {
+      "name": "machine_frame_simple",
+      "rolls": 1,
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "name": "industrialforegoing:machine_frame_simple"
+        }
+      ]
+    }
+  ]
+}

@@ -2,16 +2,12 @@
   "type": "minecraft:block",
   "pools": [
     {
+      "name": "machine_frame_pity",
       "rolls": 1,
       "entries": [
         {
           "type": "minecraft:item",
-          "name": "industrialforegoing:conveyor"
-        }
-      ],
-      "conditions": [
-        {
-          "condition": "minecraft:survives_explosion"
+          "name": "industrialforegoing:machine_frame_pity"
         }
       ]
     }

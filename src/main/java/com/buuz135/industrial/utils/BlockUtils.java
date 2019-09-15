@@ -85,11 +85,11 @@ public class BlockUtils {
     }
 
     public static boolean isLog(World world, BlockPos pos) {
-        return (world.getBlockState(pos).getMaterial()== Material.WOOD || isBlockOreDict(world, pos, "blockSlimeCongealed"));
+        return (world.getBlockState(pos).getMaterial() == Material.WOOD || isBlockOreDict(world, pos, "blockSlimeCongealed"));
     }
 
     public static boolean isLeaves(World world, BlockPos pos) {
-        return world.getBlockState(pos).getMaterial()== Material.LEAVES;
+        return world.getBlockState(pos).getMaterial() == Material.LEAVES;
     }
 
     public static boolean isChorus(World world, BlockPos pos) {

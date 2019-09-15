@@ -21,12 +21,9 @@
  */
 package com.buuz135.industrial.item;
 
-import com.buuz135.industrial.IndustrialForegoing;
-import com.buuz135.industrial.module.ModuleCore;
-import com.buuz135.industrial.module.ModuleTool;
-import com.buuz135.industrial.utils.RecipeUtils;
-import com.hrznstudio.titanium.recipe.generator.CraftingJsonData;
-import com.hrznstudio.titanium.recipe.generator.IIngredient;
+import com.buuz135.industrial.proxy.IndustrialTags;
+import com.hrznstudio.titanium.recipe.generator.TitaniumShapedRecipeBuilder;
+import net.minecraft.data.IFinishedRecipe;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
@@ -47,17 +44,12 @@ import net.minecraft.world.World;
 
 import javax.annotation.Nullable;
 import java.util.List;
+import java.util.function.Consumer;
 
 public class MobImprisonmentToolItem extends IFCustomItem {
 
     public MobImprisonmentToolItem(ItemGroup group) {
-        super("mob_imprisonment_tool", group, new Properties().maxStackSize(1), registry ->
-                IndustrialForegoing.RECIPES.addRecipe(CraftingJsonData.ofShaped(
-                        new ItemStack(ModuleTool.MOB_IMPRISONMENT_TOOL),
-                        new String[]{" P ", "PGP", " P "},
-                        'P', IIngredient.TagIngredient.of("forge:plastic"),
-                        'G', IIngredient.ItemStackIngredient.of(new ItemStack(Items.GHAST_TEAR))
-                )));
+        super("mob_imprisonment_tool", group, new Properties().maxStackSize(1));
     }
 
     @Override
@@ -134,11 +126,6 @@ public class MobImprisonmentToolItem extends IFCustomItem {
         return stack.getTag().getString("entity");
     }
 
-    public void createRecipe() {
-        RecipeUtils.addShapedRecipe(new ItemStack(this), " p ", "pgp", " p ", 'p', ModuleCore.PLASTIC, 'g',
-                new ItemStack(Items.GHAST_TEAR));
-    }
-
     @Override
     public ITextComponent getDisplayName(ItemStack stack) {
         if (!containsEntity(stack))
@@ -146,4 +133,13 @@ public class MobImprisonmentToolItem extends IFCustomItem {
         return new TranslationTextComponent(super.getTranslationKey(stack)).appendText(" (" + getID(stack) + ")");
     }
 
+    @Override
+    public void registerRecipe(Consumer<IFinishedRecipe> consumer) {
+        TitaniumShapedRecipeBuilder.shapedRecipe(this)
+                .patternLine(" P ").patternLine("PGP").patternLine(" P ")
+                .key('P', IndustrialTags.PLASTIC)
+                .key('G', Items.GHAST_TEAR)
+                .build(consumer);
+
+    }
 }

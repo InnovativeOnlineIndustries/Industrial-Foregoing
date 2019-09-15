@@ -24,6 +24,7 @@ package com.buuz135.industrial.item;
 import com.buuz135.industrial.api.conveyor.ConveyorUpgradeFactory;
 import com.buuz135.industrial.api.conveyor.IConveyorContainer;
 import com.buuz135.industrial.block.transport.tile.ConveyorTile;
+import net.minecraft.data.IFinishedRecipe;
 import net.minecraft.item.ItemGroup;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.ItemUseContext;
@@ -31,12 +32,14 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ActionResultType;
 import net.minecraft.util.Direction;
 
+import java.util.function.Consumer;
+
 public class ItemConveyorUpgrade extends IFCustomItem {
 
     private final ConveyorUpgradeFactory factory;
 
     public ItemConveyorUpgrade(ConveyorUpgradeFactory upgradeFactory, ItemGroup group) {
-        super("conveyor_" + upgradeFactory.getRegistryName().getPath() + "_upgrade", group, upgradeFactory);
+        super("conveyor_" + upgradeFactory.getRegistryName().getPath() + "_upgrade", group);
         this.factory = upgradeFactory;
         this.factory.setUpgradeItem(this);
     }
@@ -49,11 +52,11 @@ public class ItemConveyorUpgrade extends IFCustomItem {
                 return ActionResultType.PASS;
             if (tile instanceof IConveyorContainer) {
                 Direction side = factory.getSideForPlacement(context.getWorld(), context.getPos(), context.getPlayer());
-                    if (!((IConveyorContainer) tile).hasUpgrade(side)) {
-                        ((IConveyorContainer) tile).addUpgrade(side, factory);
-                        if (!context.getPlayer().isCreative()) context.getItem().shrink(1);
-                        return ActionResultType.SUCCESS;
-                    }
+                if (!((IConveyorContainer) tile).hasUpgrade(side)) {
+                    ((IConveyorContainer) tile).addUpgrade(side, factory);
+                    if (!context.getPlayer().isCreative()) context.getItem().shrink(1);
+                    return ActionResultType.SUCCESS;
+                }
             }
         }
         return ActionResultType.PASS;
@@ -67,4 +70,8 @@ public class ItemConveyorUpgrade extends IFCustomItem {
     }
 
 
+    @Override
+    public void registerRecipe(Consumer<IFinishedRecipe> consumer) {
+
+    }
 }
