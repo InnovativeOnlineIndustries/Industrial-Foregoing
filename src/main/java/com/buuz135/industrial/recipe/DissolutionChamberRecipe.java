@@ -2,6 +2,7 @@ package com.buuz135.industrial.recipe;
 
 import com.buuz135.industrial.module.ModuleCore;
 import com.buuz135.industrial.utils.Reference;
+import com.hrznstudio.titanium.block.tile.fluid.PosFluidTank;
 import com.hrznstudio.titanium.recipe.serializer.GenericSerializer;
 import com.hrznstudio.titanium.recipe.serializer.SerializableRecipe;
 import net.minecraft.block.Blocks;
@@ -15,6 +16,8 @@ import net.minecraft.tags.ItemTags;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
 import net.minecraftforge.fluids.FluidStack;
+import net.minecraftforge.fluids.capability.IFluidHandler;
+import net.minecraftforge.items.IItemHandler;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -23,7 +26,6 @@ public class DissolutionChamberRecipe extends SerializableRecipe {
 
     public static GenericSerializer<DissolutionChamberRecipe> SERIALIZER = new GenericSerializer<>(new ResourceLocation(Reference.MOD_ID, "dissolution_chamber"), DissolutionChamberRecipe.class);
     public static List<DissolutionChamberRecipe> RECIPES = new ArrayList<>();
-
 
     static {
         new DissolutionChamberRecipe(new ResourceLocation(Reference.MOD_ID, "test"),
@@ -64,9 +66,34 @@ public class DissolutionChamberRecipe extends SerializableRecipe {
         return false;
     }
 
+    public boolean matches(IItemHandler handler, PosFluidTank tank) {
+        List<ItemStack> handlerItems = new ArrayList<>();
+        for (int i = 0; i < handler.getSlots(); i++) {
+            handlerItems.add(handler.getStackInSlot(i).copy());
+        }
+        for (Ingredient.IItemList iItemList : input) {
+            boolean found = false;
+            for (ItemStack stack : iItemList.getStacks()) {
+                int i = 0;
+                for (; i < handlerItems.size(); i++) {
+                    if (handlerItems.get(i).isItemEqual(stack)) {
+                        found = true;
+                        break;
+                    }
+                }
+                if (found) {
+                    handlerItems.remove(i);
+                    break;
+                }
+            }
+            if (!found) return false;
+        }
+        return handlerItems.size() == 0 && tank.drainForced(inputFluid, IFluidHandler.FluidAction.SIMULATE).getAmount() == inputFluid.getAmount();
+    }
+
     @Override
     public ItemStack getCraftingResult(IInventory inv) {
-        return null;
+        return ItemStack.EMPTY;
     }
 
     @Override

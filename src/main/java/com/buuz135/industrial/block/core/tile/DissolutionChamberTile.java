@@ -2,11 +2,16 @@ package com.buuz135.industrial.block.core.tile;
 
 import com.buuz135.industrial.block.tile.IndustrialProcessingTile;
 import com.buuz135.industrial.module.ModuleCore;
+import com.buuz135.industrial.recipe.DissolutionChamberRecipe;
 import com.hrznstudio.titanium.annotation.Save;
 import com.hrznstudio.titanium.block.tile.fluid.PosFluidTank;
 import com.hrznstudio.titanium.block.tile.fluid.SidedFluidTank;
 import com.hrznstudio.titanium.block.tile.inventory.SidedInvHandler;
+import com.hrznstudio.titanium.util.RecipeUtil;
 import net.minecraft.item.DyeColor;
+import net.minecraft.world.World;
+import net.minecraftforge.fluids.capability.IFluidHandler;
+import net.minecraftforge.items.ItemHandlerHelper;
 import org.apache.commons.lang3.tuple.Pair;
 
 public class DissolutionChamberTile extends IndustrialProcessingTile {
@@ -19,6 +24,7 @@ public class DissolutionChamberTile extends IndustrialProcessingTile {
     private SidedInvHandler output;
     @Save
     private SidedFluidTank outputFluid;
+    private DissolutionChamberRecipe currentRecipe;
 
     public DissolutionChamberTile() {
         super(ModuleCore.DISSOLUTION_CHAMBER, 102, 41, 100);
@@ -47,12 +53,14 @@ public class DissolutionChamberTile extends IndustrialProcessingTile {
                     }
                 }).
                 setSlotLimit(1).
-                setTile(this));
+                setTile(this).
+                setOnSlotChanged((stack, integer) -> checkForRecipe()));
         this.addTank(this.inputFluid = (SidedFluidTank) new SidedFluidTank("input_fluid", 8000, 33 + slotSpacing, 18 + slotSpacing, 1).
                 setColor(DyeColor.LIME).
                 setTankType(PosFluidTank.Type.SMALL).
                 setTile(this).
-                setTankAction(PosFluidTank.Action.FILL)
+                setTankAction(PosFluidTank.Action.FILL).
+                setOnContentChange(() -> checkForRecipe())
         );
         this.addInventory(this.output = (SidedInvHandler) new SidedInvHandler("output", 129, 22, 3, 2).
                 setColor(DyeColor.ORANGE).
@@ -64,18 +72,38 @@ public class DissolutionChamberTile extends IndustrialProcessingTile {
                 setTankAction(PosFluidTank.Action.DRAIN));
     }
 
+    private void checkForRecipe() {
+        currentRecipe = RecipeUtil.getRecipes(this.world, DissolutionChamberRecipe.SERIALIZER.getRecipeType()).stream().filter(dissolutionChamberRecipe -> dissolutionChamberRecipe.matches(input, inputFluid)).findFirst().orElse(null);
+    }
+
+    @Override
+    public void setWorld(World worldIn) {
+        super.setWorld(worldIn);
+        checkForRecipe();
+    }
+
     @Override
     public boolean canIncrease() {
-        return false;
+        return currentRecipe != null && ItemHandlerHelper.insertItem(output, currentRecipe.output.copy(), true).isEmpty() && outputFluid.fillForced(currentRecipe.outputFluid.copy(), IFluidHandler.FluidAction.SIMULATE) == currentRecipe.outputFluid.getAmount();
     }
 
     @Override
     public Runnable onFinish() {
-        return null;
+        return () -> {
+            if (currentRecipe != null) {
+                inputFluid.drainForced(currentRecipe.inputFluid, IFluidHandler.FluidAction.EXECUTE);
+                for (int i = 0; i < input.getSlots(); i++) {
+                    input.getStackInSlot(i).shrink(1);
+                }
+                outputFluid.fillForced(currentRecipe.outputFluid.copy(), IFluidHandler.FluidAction.EXECUTE);
+                ItemHandlerHelper.insertItem(output, currentRecipe.output.copy(), false);
+                checkForRecipe();
+            }
+        };
     }
 
     @Override
     protected int getTickPower() {
-        return 0;
+        return 60;
     }
 }
