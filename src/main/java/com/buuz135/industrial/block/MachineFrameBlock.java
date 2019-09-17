@@ -2,6 +2,7 @@ package com.buuz135.industrial.block;
 
 import com.hrznstudio.titanium.api.IFactory;
 import com.hrznstudio.titanium.block.BlockBase;
+import com.hrznstudio.titanium.recipe.generator.TitaniumLootTableProvider;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
 import net.minecraft.item.*;
@@ -31,6 +32,11 @@ public class MachineFrameBlock extends BlockBase {
     @Override
     public IFactory<BlockItem> getItemBlockFactory() {
         return () -> item = new MachineFrameItem(this, rarity, this.getItemGroup());
+    }
+
+    @Override
+    public void createLootTable(TitaniumLootTableProvider provider) {
+        provider.createEmpty(this);
     }
 
     public class MachineFrameItem extends BlockItem {

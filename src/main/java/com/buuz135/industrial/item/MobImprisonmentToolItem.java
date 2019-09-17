@@ -21,7 +21,7 @@
  */
 package com.buuz135.industrial.item;
 
-import com.buuz135.industrial.proxy.IndustrialTags;
+import com.buuz135.industrial.utils.IndustrialTags;
 import com.hrznstudio.titanium.recipe.generator.TitaniumShapedRecipeBuilder;
 import net.minecraft.data.IFinishedRecipe;
 import net.minecraft.entity.Entity;
@@ -137,7 +137,7 @@ public class MobImprisonmentToolItem extends IFCustomItem {
     public void registerRecipe(Consumer<IFinishedRecipe> consumer) {
         TitaniumShapedRecipeBuilder.shapedRecipe(this)
                 .patternLine(" P ").patternLine("PGP").patternLine(" P ")
-                .key('P', IndustrialTags.PLASTIC)
+                .key('P', IndustrialTags.Items.PLASTIC)
                 .key('G', Items.GHAST_TEAR)
                 .build(consumer);
 

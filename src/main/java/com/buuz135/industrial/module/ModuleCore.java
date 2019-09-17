@@ -12,11 +12,8 @@ import com.hrznstudio.titanium.fluid.TitaniumFluidInstance;
 import com.hrznstudio.titanium.module.Feature;
 import com.hrznstudio.titanium.tab.AdvancedTitaniumTab;
 import net.minecraft.block.Block;
-import net.minecraft.data.CookingRecipeBuilder;
-import net.minecraft.data.IFinishedRecipe;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.item.crafting.Ingredient;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
@@ -26,7 +23,6 @@ import net.minecraftforge.fluids.FluidAttributes;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.function.Consumer;
 
 public class ModuleCore implements IModule {
 
@@ -34,12 +30,7 @@ public class ModuleCore implements IModule {
 
     public static IFCustomItem TINY_DRY_RUBBER = new RecipelessCustomItem("tinydryrubber", TAB_CORE);
     public static IFCustomItem DRY_RUBBER = new RecipelessCustomItem("dryrubber", TAB_CORE);
-    public static IFCustomItem PLASTIC = new IFCustomItem("plastic", TAB_CORE) {
-        @Override
-        public void registerRecipe(Consumer<IFinishedRecipe> consumer) {
-            CookingRecipeBuilder.smeltingRecipe(Ingredient.fromItems(DRY_RUBBER), PLASTIC, 0.3f, 200);
-        }
-    };
+    public static IFCustomItem PLASTIC = new RecipelessCustomItem("plastic", TAB_CORE);
     public static FertilizerItem FERTILIZER = new FertilizerItem(TAB_CORE);
     public static IFCustomItem PINK_SLIME = new RecipelessCustomItem("pink_slime", TAB_CORE);
     public static BookManualItem BOOK_MANUAL = new BookManualItem(TAB_CORE);
@@ -77,10 +68,10 @@ public class ModuleCore implements IModule {
         features.add(Feature.builder("straw").
                 content(Item.class, STRAW));
         features.add(Feature.builder("machine_frames").
+                content(Block.class, PITY).
                 content(Block.class, SIMPLE).
                 content(Block.class, ADVANCED).
-                content(Block.class, SUPREME).
-                content(Block.class, PITY));
+                content(Block.class, SUPREME));
         features.add(Feature.builder("tier_2_production").
                 content(Block.class, DISSOLUTION_CHAMBER));
         TAB_CORE.addIconStack(new ItemStack(PLASTIC));

@@ -24,7 +24,7 @@ package com.buuz135.industrial.block.transport;
 import com.buuz135.industrial.api.conveyor.ConveyorUpgrade;
 import com.buuz135.industrial.block.transport.tile.ConveyorTile;
 import com.buuz135.industrial.module.ModuleCore;
-import com.buuz135.industrial.proxy.IndustrialTags;
+import com.buuz135.industrial.utils.IndustrialTags;
 import com.hrznstudio.titanium.api.IFactory;
 import com.hrznstudio.titanium.api.IRecipeProvider;
 import com.hrznstudio.titanium.api.raytrace.DistanceRayTraceResult;
@@ -420,7 +420,7 @@ public class ConveyorBlock extends BlockTileBase<ConveyorTile> implements IWater
     public void registerRecipe(Consumer<IFinishedRecipe> consumer) {
         TitaniumShapedRecipeBuilder.shapedRecipe(this, 6)
                 .patternLine("ppp").patternLine("iri").patternLine("ppp")
-                .key('p', IndustrialTags.PLASTIC)
+                .key('p', IndustrialTags.Items.PLASTIC)
                 .key('i', Tags.Items.INGOTS_IRON)
                 .key('r', Items.REDSTONE)
                 .build(consumer);

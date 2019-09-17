@@ -1,0 +1,46 @@
+{
+  "type": "forge:conditional",
+  "recipes": [
+    {
+      "conditions": [
+        {
+          "values": [
+            {
+              "item": "industrialforegoing:pitiful_generator",
+              "type": "forge:item_exists"
+            }
+          ],
+          "type": "forge:and"
+        }
+      ],
+      "recipe": {
+        "type": "minecraft:crafting_shaped",
+        "pattern": [
+          "pdp",
+          "gmg",
+          "pfp"
+        ],
+        "key": {
+          "p": {
+            "item": "minecraft:cobblestone"
+          },
+          "d": {
+            "tag": "forge:ingots/gold"
+          },
+          "g": {
+            "item": "minecraft:iron_bars"
+          },
+          "m": {
+            "tag": "industrialforegoing:machine_frame/pity"
+          },
+          "f": {
+            "item": "minecraft:furnace"
+          }
+        },
+        "result": {
+          "item": "industrialforegoing:pitiful_generator"
+        }
+      }
+    }
+  ]
+}

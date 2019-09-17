@@ -2,12 +2,12 @@
   "type": "minecraft:block",
   "pools": [
     {
-      "name": "machine_frame_pity",
+      "name": "fluid_extractor",
       "rolls": 1,
       "entries": [
         {
           "type": "minecraft:item",
-          "name": "industrialforegoing:machine_frame_pity"
+          "name": "industrialforegoing:fluid_extractor"
         }
       ]
     }

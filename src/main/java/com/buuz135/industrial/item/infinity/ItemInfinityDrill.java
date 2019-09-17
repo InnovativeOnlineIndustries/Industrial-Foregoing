@@ -338,7 +338,8 @@ public class ItemInfinityDrill extends IFCustomItem {
         TitaniumShapedRecipeBuilder.shapedRecipe(this)
                 .patternLine(" DD").patternLine(" ID").patternLine("I  ")
                 .key('D', Blocks.DIAMOND_BLOCK)
-                .key('I', Blocks.IRON_BLOCK);
+                .key('I', Blocks.IRON_BLOCK)
+                .build(consumer);
     }
 
 //    public void configuration(Configuration config) {TODO

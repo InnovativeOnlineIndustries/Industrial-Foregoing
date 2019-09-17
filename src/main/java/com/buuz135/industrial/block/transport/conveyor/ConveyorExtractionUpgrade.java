@@ -30,9 +30,9 @@ import com.buuz135.industrial.gui.component.FilterGuiComponent;
 import com.buuz135.industrial.gui.component.StateButtonInfo;
 import com.buuz135.industrial.gui.component.TexturedStateButtonGuiComponent;
 import com.buuz135.industrial.module.ModuleTransport;
-import com.buuz135.industrial.proxy.IndustrialTags;
 import com.buuz135.industrial.proxy.block.filter.IFilter;
 import com.buuz135.industrial.proxy.block.filter.ItemStackFilter;
+import com.buuz135.industrial.utils.IndustrialTags;
 import com.buuz135.industrial.utils.Reference;
 import com.google.common.collect.Sets;
 import com.hrznstudio.titanium.recipe.generator.TitaniumShapedRecipeBuilder;
@@ -251,7 +251,7 @@ public class ConveyorExtractionUpgrade extends ConveyorUpgrade {
             TitaniumShapedRecipeBuilder.shapedRecipe(getUpgradeItem())
                     .patternLine("IPI").patternLine("IDI").patternLine("ICI")
                     .key('I', Tags.Items.INGOTS_IRON)
-                    .key('P', IndustrialTags.PLASTIC)
+                    .key('P', IndustrialTags.Items.PLASTIC)
                     .key('D', Blocks.DISPENSER)
                     .key('C', ModuleTransport.CONVEYOR)
                     .build(consumer);

@@ -28,12 +28,14 @@ import com.buuz135.industrial.recipe.DissolutionChamberRecipe;
 import com.buuz135.industrial.recipe.FluidExtractorRecipe;
 import com.buuz135.industrial.recipe.provider.IndustrialRecipeProvider;
 import com.buuz135.industrial.recipe.provider.IndustrialSerializableProvider;
+import com.buuz135.industrial.recipe.provider.IndustrialTagsProvider;
 import com.buuz135.industrial.registry.IFRegistries;
 import com.buuz135.industrial.utils.IFFakePlayer;
 import com.buuz135.industrial.utils.Reference;
 import com.hrznstudio.titanium.event.handler.EventManager;
 import com.hrznstudio.titanium.module.Module;
 import com.hrznstudio.titanium.module.ModuleController;
+import com.hrznstudio.titanium.recipe.generator.titanium.DefaultLootTableProvider;
 import net.minecraft.item.crafting.IRecipeSerializer;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
@@ -87,6 +89,9 @@ public class IndustrialForegoing extends ModuleController {
         super.addDataProvider(event);
         event.getGenerator().addProvider(new IndustrialRecipeProvider(event.getGenerator()));
         event.getGenerator().addProvider(new IndustrialSerializableProvider(event.getGenerator(), Reference.MOD_ID));
+        event.getGenerator().addProvider(new IndustrialTagsProvider.Blocks(event.getGenerator()));
+        event.getGenerator().addProvider(new IndustrialTagsProvider.Items(event.getGenerator()));
+        event.getGenerator().addProvider(new DefaultLootTableProvider(event.getGenerator(), Reference.MOD_ID));
     }
 
     @Override

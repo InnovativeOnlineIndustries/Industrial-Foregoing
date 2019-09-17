@@ -1,0 +1,32 @@
+{
+  "parent": "minecraft:recipes/root",
+  "rewards": {
+    "recipes": [
+      "industrialforegoing:plastic"
+    ]
+  },
+  "criteria": {
+    "has_plastic": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "item": "industrialforegoing:dryrubber"
+          }
+        ]
+      }
+    },
+    "has_the_recipe": {
+      "trigger": "minecraft:recipe_unlocked",
+      "conditions": {
+        "recipe": "industrialforegoing:plastic"
+      }
+    }
+  },
+  "requirements": [
+    [
+      "has_plastic",
+      "has_the_recipe"
+    ]
+  ]
+}
