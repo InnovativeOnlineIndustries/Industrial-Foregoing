@@ -165,7 +165,7 @@ public class ConveyorExtractionUpgrade extends ConveyorUpgrade {
         if (getContainer() instanceof ConveyorTile) {
             IFluidTank tank = ((ConveyorTile) getContainer()).getTank();
             getHandlerCapability(CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY).ifPresent(fluidHandler -> {
-                if (fluidHandler.drain(250, IFluidHandler.FluidAction.SIMULATE).isEmpty() && whitelist == filter.matches(fluidHandler.drain(250, IFluidHandler.FluidAction.SIMULATE))) {
+                if (!fluidHandler.drain(250, IFluidHandler.FluidAction.SIMULATE).isEmpty() && whitelist == filter.matches(fluidHandler.drain(250, IFluidHandler.FluidAction.SIMULATE))) {
                     FluidStack drain = fluidHandler.drain(tank.fill(fluidHandler.drain(250, IFluidHandler.FluidAction.SIMULATE), IFluidHandler.FluidAction.EXECUTE), IFluidHandler.FluidAction.EXECUTE);
                     if (drain.isEmpty() && drain.getAmount() > 0) getContainer().requestFluidSync();
                 }
