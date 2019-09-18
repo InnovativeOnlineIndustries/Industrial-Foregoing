@@ -41,9 +41,9 @@ public class ModuleCore implements IModule {
     public static MachineFrameBlock ADVANCED = new MachineFrameBlock("advanced", MachineFrameBlock.ADVANCED_RARITY, TAB_CORE);
     public static MachineFrameBlock SUPREME = new MachineFrameBlock("supreme", MachineFrameBlock.SUPREME_RARITY, TAB_CORE);
     public static TitaniumFluidInstance LATEX = new TitaniumFluidInstance(Reference.MOD_ID, "latex", FluidAttributes.builder(new ResourceLocation(Reference.MOD_ID, "blocks/fluids/latex_still"), new ResourceLocation(Reference.MOD_ID, "blocks/fluids/latex_flow")), true, TAB_CORE);
-    public static FluidExtractorBlock FLUID_EXTRACTOR = new FluidExtractorBlock();
-    public static LatexProcessingUnitBlock LATEX_PROCESSING = new LatexProcessingUnitBlock();
-    public static DissolutionChamberBlock DISSOLUTION_CHAMBER = new DissolutionChamberBlock();
+    public static FluidExtractorBlock FLUID_EXTRACTOR = new FluidExtractorBlock(TAB_CORE);
+    public static LatexProcessingUnitBlock LATEX_PROCESSING = new LatexProcessingUnitBlock(TAB_CORE);
+    public static DissolutionChamberBlock DISSOLUTION_CHAMBER = new DissolutionChamberBlock(TAB_CORE);
 
     @Override
     public List<Feature.Builder> generateFeatures() {

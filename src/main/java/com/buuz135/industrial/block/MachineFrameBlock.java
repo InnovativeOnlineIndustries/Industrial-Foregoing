@@ -7,6 +7,9 @@ import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
 import net.minecraft.item.*;
 import net.minecraft.util.text.TextFormatting;
+import net.minecraft.util.text.TranslationTextComponent;
+
+import javax.annotation.Nullable;
 
 public class MachineFrameBlock extends BlockBase {
 
@@ -50,5 +53,12 @@ public class MachineFrameBlock extends BlockBase {
         protected boolean canPlace(BlockItemUseContext p_195944_1_, BlockState p_195944_2_) {
             return false;
         }
+
+        @Nullable
+        @Override
+        public String getCreatorModId(ItemStack itemStack) {
+            return new TranslationTextComponent(this.group.getTranslationKey()).getFormattedText();
+        }
+
     }
 }

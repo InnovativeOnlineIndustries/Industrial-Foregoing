@@ -59,6 +59,7 @@ import net.minecraft.util.math.shapes.IBooleanFunction;
 import net.minecraft.util.math.shapes.ISelectionContext;
 import net.minecraft.util.math.shapes.VoxelShape;
 import net.minecraft.util.math.shapes.VoxelShapes;
+import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.IBlockReader;
 import net.minecraft.world.World;
 import net.minecraftforge.api.distmarker.Dist;
@@ -518,6 +519,11 @@ public class ConveyorBlock extends BlockTileBase<ConveyorTile> implements IWater
             this.setRegistryName(block.getRegistryName());
         }
 
+        @Nullable
+        @Override
+        public String getCreatorModId(ItemStack itemStack) {
+            return new TranslationTextComponent(this.group.getTranslationKey()).getFormattedText();
+        }
     }
 
 }

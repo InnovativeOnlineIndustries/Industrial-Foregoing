@@ -1,5 +1,6 @@
 package com.buuz135.industrial.block.core;
 
+import com.buuz135.industrial.block.IndustrialBlock;
 import com.buuz135.industrial.block.core.tile.LatexProcessingUnitTile;
 import com.buuz135.industrial.config.MachineCoreConfig;
 import com.buuz135.industrial.module.ModuleCore;
@@ -7,10 +8,11 @@ import com.buuz135.industrial.utils.IndustrialTags;
 import com.hrznstudio.titanium.annotation.config.ConfigFile;
 import com.hrznstudio.titanium.annotation.config.ConfigVal;
 import com.hrznstudio.titanium.api.IFactory;
-import com.hrznstudio.titanium.block.BlockRotation;
 import com.hrznstudio.titanium.recipe.generator.TitaniumShapedRecipeBuilder;
+import net.minecraft.block.Block;
 import net.minecraft.block.Blocks;
 import net.minecraft.data.IFinishedRecipe;
+import net.minecraft.item.ItemGroup;
 import net.minecraft.item.Items;
 import net.minecraftforge.common.Tags;
 
@@ -18,13 +20,14 @@ import javax.annotation.Nonnull;
 import java.util.function.Consumer;
 
 @ConfigFile.Child(MachineCoreConfig.class)
-public class LatexProcessingUnitBlock extends BlockRotation<LatexProcessingUnitTile> {
+public class LatexProcessingUnitBlock extends IndustrialBlock<LatexProcessingUnitTile> {
 
     @ConfigVal(comment = "Power consumed every tick when the machine is working")
     public static int POWER_CONSUMED_EVERY_TICK = 20;
 
-    public LatexProcessingUnitBlock() {
-        super("latex_processing_unit", Properties.from(Blocks.STONE), LatexProcessingUnitTile.class);
+    public LatexProcessingUnitBlock(ItemGroup group) {
+        super("latex_processing_unit", Block.Properties.from(Blocks.STONE), LatexProcessingUnitTile.class);
+        setItemGroup(group);
     }
 
     @Override
