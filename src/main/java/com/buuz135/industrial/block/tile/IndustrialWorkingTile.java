@@ -3,8 +3,7 @@ package com.buuz135.industrial.block.tile;
 import com.buuz135.industrial.proxy.client.IndustrialAssetProvider;
 import com.hrznstudio.titanium.annotation.Save;
 import com.hrznstudio.titanium.block.BlockTileBase;
-import com.hrznstudio.titanium.block.tile.TilePowered;
-import com.hrznstudio.titanium.block.tile.inventory.SidedInvHandler;
+import com.hrznstudio.titanium.block.tile.TileMachine;
 import com.hrznstudio.titanium.block.tile.progress.PosProgressBar;
 import com.hrznstudio.titanium.client.gui.addon.EnergyBarGuiAddon;
 import com.hrznstudio.titanium.client.gui.asset.IAssetProvider;
@@ -13,12 +12,10 @@ import net.minecraft.item.DyeColor;
 import net.minecraft.util.Direction;
 import net.minecraft.util.Hand;
 
-public abstract class IndustrialWorkingTile extends TilePowered {
+public abstract class IndustrialWorkingTile extends TileMachine {
 
     @Save
     private PosProgressBar workingBar;
-    @Save
-    private SidedInvHandler addons;
 
     public IndustrialWorkingTile(BlockTileBase blockTileBase, int maxProgress) {
         super(blockTileBase);
@@ -37,11 +34,6 @@ public abstract class IndustrialWorkingTile extends TilePowered {
                 .setCanReset(tileEntity -> true)
                 .setCanIncrease(tileEntity -> true)
                 .setColor(DyeColor.LIME));
-        this.addInventory(addons = (SidedInvHandler) new SidedInvHandler("addons", 176 - 24, 8, 4, 1)
-                .setColor(DyeColor.CYAN)
-                .setTile(this)
-                .setRange(1, 4)
-                .setSlotLimit(1));
     }
 
     @Override
