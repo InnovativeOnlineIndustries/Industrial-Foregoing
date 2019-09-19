@@ -8,6 +8,7 @@ import net.minecraft.item.ItemGroup;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.StringTextComponent;
+import net.minecraft.util.text.TextFormatting;
 import net.minecraft.util.text.TranslationTextComponent;
 
 import javax.annotation.Nullable;
@@ -33,7 +34,7 @@ public class RangeAddonItem extends IFCustomItem implements IAugment {
 
     @Override
     public void addTooltipDetails(@Nullable Key key, ItemStack stack, List<ITextComponent> tooltip, boolean advanced) {
-        tooltip.add(new StringTextComponent(new TranslationTextComponent("text.industrialforegoing.extra_range").getFormattedText() + "+" + (tier + 1)));
+        tooltip.add(new StringTextComponent(TextFormatting.GRAY + new TranslationTextComponent("text.industrialforegoing.extra_range").getFormattedText() + "+" + (tier + 1)));
     }
 
     @Override

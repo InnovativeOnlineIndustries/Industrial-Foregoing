@@ -11,6 +11,7 @@ import com.hrznstudio.titanium.block.BlockTileBase;
 import com.hrznstudio.titanium.block.tile.button.PosButton;
 import com.hrznstudio.titanium.client.gui.addon.StateButtonAddon;
 import com.hrznstudio.titanium.client.gui.addon.StateButtonInfo;
+import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.shapes.VoxelShape;
 
@@ -24,8 +25,9 @@ public abstract class IndustrialAreaWorkingTile extends IndustrialWorkingTile {
     @Save
     private boolean showingArea;
     private PosButton areaButton;
+    private RangeManager.RangeType type;
 
-    public IndustrialAreaWorkingTile(BlockTileBase blockTileBase, int maxProgress) {
+    public IndustrialAreaWorkingTile(BlockTileBase blockTileBase, int maxProgress, RangeManager.RangeType type) {
         super(blockTileBase, maxProgress);
         this.pointer = 0;
         this.showingArea = false;
@@ -42,9 +44,12 @@ public abstract class IndustrialAreaWorkingTile extends IndustrialWorkingTile {
                 return addons;
             }
         }.setPredicate((playerEntity, compoundNBT) -> this.showingArea = !this.showingArea));
+        this.type = type;
     }
 
-    public abstract VoxelShape getWorkingArea();
+    public VoxelShape getWorkingArea() {
+        return new RangeManager(this.pos, this.getFacingDirection(), this.type).get(hasAugmentInstalled(RangeAddonItem.RANGE) ? ((int) getInstalledAugments(RangeAddonItem.RANGE).get(0).getAugmentRatio() + 1) : 0);
+    }
 
     public BlockPos getPointedBlockPos() {
         List<BlockPos> blockPosList = BlockUtils.getBlockPosInAABB(getWorkingArea().getBoundingBox());
@@ -69,4 +74,8 @@ public abstract class IndustrialAreaWorkingTile extends IndustrialWorkingTile {
         return super.canAcceptAugment(augment) && augment.getAugmentType().equals(RangeAddonItem.RANGE);
     }
 
+    @Override
+    public AxisAlignedBB getRenderBoundingBox() {
+        return getWorkingArea().getBoundingBox();
+    }
 }

@@ -1,17 +1,15 @@
 package com.buuz135.industrial.block.core.tile;
 
 import com.buuz135.industrial.block.tile.IndustrialAreaWorkingTile;
+import com.buuz135.industrial.block.tile.RangeManager;
 import com.buuz135.industrial.module.ModuleCore;
 import com.buuz135.industrial.recipe.FluidExtractorRecipe;
 import com.hrznstudio.titanium.annotation.Save;
 import com.hrznstudio.titanium.block.tile.fluid.SidedFluidTank;
 import com.hrznstudio.titanium.util.RecipeUtil;
 import net.minecraft.item.DyeColor;
-import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.ChunkPos;
-import net.minecraft.util.math.shapes.VoxelShape;
-import net.minecraft.util.math.shapes.VoxelShapes;
 import net.minecraft.world.World;
 import net.minecraft.world.dimension.DimensionType;
 import net.minecraftforge.fluids.capability.IFluidHandler;
@@ -28,7 +26,7 @@ public class FluidExtractorTile extends IndustrialAreaWorkingTile {
     private SidedFluidTank tank;
 
     public FluidExtractorTile() {
-        super(ModuleCore.FLUID_EXTRACTOR, 30);
+        super(ModuleCore.FLUID_EXTRACTOR, 30, RangeManager.RangeType.BEHIND);
         addTank(tank = (SidedFluidTank) new SidedFluidTank("latex", 1000, 43, 20, 0).
                 setColor(DyeColor.LIGHT_GRAY).
                 setTile(this).
@@ -60,11 +58,6 @@ public class FluidExtractorTile extends IndustrialAreaWorkingTile {
     @Nullable
     public FluidExtractorRecipe findRecipe(World world, BlockPos pos) {
         return RecipeUtil.getRecipes(world, FluidExtractorRecipe.SERIALIZER.getRecipeType()).stream().filter(fluidExtractorRecipe -> fluidExtractorRecipe.matches(world, pos) && !fluidExtractorRecipe.defaultRecipe).findFirst().orElseGet(() -> RecipeUtil.getRecipes(world, FluidExtractorRecipe.SERIALIZER.getRecipeType()).stream().filter(fluidExtractorRecipe -> fluidExtractorRecipe.matches(world, pos)).findFirst().orElse(null));
-    }
-
-    @Override
-    public VoxelShape getWorkingArea() {
-        return VoxelShapes.create(new AxisAlignedBB(0, 0, 0, 1, 1, 1).offset(this.getPos().offset(getFacingDirection().getOpposite())));
     }
 
     public static class FluidExtractionProgress {

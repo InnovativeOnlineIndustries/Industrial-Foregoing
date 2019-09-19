@@ -3,6 +3,7 @@ package com.buuz135.industrial.block.agriculture.tile;
 import com.buuz135.industrial.api.plant.PlantRecollectable;
 import com.buuz135.industrial.block.tile.IndustrialAreaWorkingTile;
 import com.buuz135.industrial.block.tile.IndustrialWorkingTile;
+import com.buuz135.industrial.block.tile.RangeManager;
 import com.buuz135.industrial.module.ModuleAgriculture;
 import com.buuz135.industrial.registry.IFRegistries;
 import com.hrznstudio.titanium.annotation.Save;
@@ -10,9 +11,6 @@ import com.hrznstudio.titanium.block.tile.fluid.SidedFluidTank;
 import com.hrznstudio.titanium.block.tile.inventory.SidedInvHandler;
 import net.minecraft.item.DyeColor;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.math.AxisAlignedBB;
-import net.minecraft.util.math.shapes.VoxelShape;
-import net.minecraft.util.math.shapes.VoxelShapes;
 import net.minecraftforge.items.ItemHandlerHelper;
 
 import java.util.List;
@@ -26,7 +24,7 @@ public class PlantGathererTile extends IndustrialAreaWorkingTile {
     private SidedFluidTank tank;
 
     public PlantGathererTile() {
-        super(ModuleAgriculture.PLANT_GATHERER, 100);
+        super(ModuleAgriculture.PLANT_GATHERER, 100, RangeManager.RangeType.BEHIND);
         addInventory(output = (SidedInvHandler) new SidedInvHandler("output", 70, 22, 3 * 4, 0)
                 .setColor(DyeColor.ORANGE)
                 .setRange(4, 3)
@@ -34,11 +32,6 @@ public class PlantGathererTile extends IndustrialAreaWorkingTile {
         addTank(tank = (SidedFluidTank) new SidedFluidTank("sludge", 1000, 43, 20, 1)
                 .setColor(DyeColor.PINK)
                 .setTile(this));
-    }
-
-    @Override
-    public VoxelShape getWorkingArea() {
-        return VoxelShapes.create(new AxisAlignedBB(0, 0, 0, 1, 1, 1).offset(this.getPos().offset(getFacingDirection().getOpposite())));
     }
 
     @Override
@@ -52,6 +45,7 @@ public class PlantGathererTile extends IndustrialAreaWorkingTile {
             }
             return new WorkAction(0.1f, 0);
         }
-        return new WorkAction(.8f, 0);
+        increasePointer();
+        return new WorkAction(.3f, 0);
     }
 }
