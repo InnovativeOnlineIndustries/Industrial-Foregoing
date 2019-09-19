@@ -44,6 +44,7 @@ public class ModuleCore implements IModule {
     public static FluidExtractorBlock FLUID_EXTRACTOR = new FluidExtractorBlock(TAB_CORE);
     public static LatexProcessingUnitBlock LATEX_PROCESSING = new LatexProcessingUnitBlock(TAB_CORE);
     public static DissolutionChamberBlock DISSOLUTION_CHAMBER = new DissolutionChamberBlock(TAB_CORE);
+    public static RangeAddonItem[] RANGE_ADDONS = new RangeAddonItem[12];
 
     @Override
     public List<Feature.Builder> generateFeatures() {
@@ -74,6 +75,12 @@ public class ModuleCore implements IModule {
                 content(Block.class, SUPREME));
         features.add(Feature.builder("tier_2_production").
                 content(Block.class, DISSOLUTION_CHAMBER));
+        Feature.Builder builder = Feature.builder("range_addons");
+        for (int i = 0; i < RANGE_ADDONS.length; i++) {
+            RANGE_ADDONS[i] = new RangeAddonItem(i, TAB_CORE);
+            builder.content(Item.class, RANGE_ADDONS[i]);
+        }
+        features.add(builder);
         TAB_CORE.addIconStack(new ItemStack(PLASTIC));
         return features;
     }

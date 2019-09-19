@@ -68,6 +68,7 @@
   "text.industrialforegoing.tooltip.whitelisted_biomes": "Whitelisted Biomes",
   "text.industrialforegoing.tooltip.blacklisted_biomes": "Blacklisted Biomes",
   "text.industrialforegoing.direction": "Direction:",
+  "text.industrialforegoing.extra_range": "Extra Range: ",
   "text.industrialforegoing.up": "Up",
   "text.industrialforegoing.down": "Down",
   "text.industrialforegoing.east": "East",

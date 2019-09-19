@@ -33,7 +33,7 @@ public class WorkingAreaTESR extends TileEntityRenderer<IndustrialAreaWorkingTil
         GlStateManager.scalef(1.0F, 1.0F, 0.999F);
         ActiveRenderInfo info = Minecraft.getInstance().gameRenderer.getActiveRenderInfo();
         BlockPos blockpos = tileEntityIn.getPos();
-        Color color = new Color(blockpos.getX() % 256, blockpos.getY() % 256, blockpos.getZ() % 256);
+        Color color = new Color(Math.abs(blockpos.getX() % 255), Math.abs(blockpos.getY() % 255), Math.abs(blockpos.getZ() % 255));
         double d0 = info.getProjectedView().x;
         double d1 = info.getProjectedView().y;
         double d2 = info.getProjectedView().z;

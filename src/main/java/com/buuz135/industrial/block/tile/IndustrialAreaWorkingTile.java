@@ -1,9 +1,11 @@
 package com.buuz135.industrial.block.tile;
 
+import com.buuz135.industrial.item.RangeAddonItem;
 import com.buuz135.industrial.proxy.client.IndustrialAssetProvider;
 import com.buuz135.industrial.utils.BlockUtils;
 import com.hrznstudio.titanium.annotation.Save;
 import com.hrznstudio.titanium.api.IFactory;
+import com.hrznstudio.titanium.api.augment.IAugment;
 import com.hrznstudio.titanium.api.client.IGuiAddon;
 import com.hrznstudio.titanium.block.BlockTileBase;
 import com.hrznstudio.titanium.block.tile.button.PosButton;
@@ -61,4 +63,10 @@ public abstract class IndustrialAreaWorkingTile extends IndustrialWorkingTile {
     public boolean isShowingArea() {
         return showingArea;
     }
+
+    @Override
+    public boolean canAcceptAugment(IAugment augment) {
+        return super.canAcceptAugment(augment) && augment.getAugmentType().equals(RangeAddonItem.RANGE);
+    }
+
 }
