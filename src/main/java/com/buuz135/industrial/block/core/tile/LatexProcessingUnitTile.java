@@ -26,17 +26,17 @@ public class LatexProcessingUnitTile extends IndustrialProcessingTile {
 
     public LatexProcessingUnitTile() {
         super(ModuleCore.LATEX_PROCESSING, 48 + 25, 40);
-        this.addTank(latex = (SidedFluidTank) new SidedFluidTank("latex", 16000, 29, 20, 1).
+        this.addTank(latex = (SidedFluidTank) new SidedFluidTank("latex", 16000, 29, 20, 0).
                 setColor(DyeColor.GRAY).
                 setTile(this).
                 setValidator(fluidStack -> fluidStack.getFluid().isEquivalentTo(ModuleCore.LATEX.getSourceFluid())));
-        this.addTank(water = (SidedFluidTank) new SidedFluidTank("latex", 16000, 30 + 18, 20, 2).
+        this.addTank(water = (SidedFluidTank) new SidedFluidTank("latex", 16000, 30 + 18, 20, 1).
                 setColor(DyeColor.BLUE).
                 setTile(this).
                 setValidator(fluidStack -> fluidStack.getFluid().isEquivalentTo(Fluids.WATER)));
-        this.addInventory(output = (SidedInvHandler) new SidedInvHandler("output", 70 + 34, 22, 6, 3).
+        this.addInventory(output = (SidedInvHandler) new SidedInvHandler("output", 70 + 34, 22, 9, 2).
                 setColor(DyeColor.ORANGE).
-                setRange(2, 3).
+                setRange(3, 3).
                 setTile(this));
     }
 
