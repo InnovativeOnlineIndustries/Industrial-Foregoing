@@ -2,6 +2,7 @@ package com.buuz135.industrial.module;
 
 import com.buuz135.industrial.api.plant.PlantRecollectable;
 import com.buuz135.industrial.block.agriculturehusbandry.PlantGathererBlock;
+import com.buuz135.industrial.block.agriculturehusbandry.SewageComposterBlock;
 import com.buuz135.industrial.block.agriculturehusbandry.SewerBlock;
 import com.buuz135.industrial.registry.IFRegistries;
 import com.buuz135.industrial.utils.apihandlers.plant.*;
@@ -17,6 +18,7 @@ public class ModuleAgricultureHusbandry implements IModule {
 
     public static PlantGathererBlock PLANT_GATHERER = new PlantGathererBlock();
     public static SewerBlock SEWER = new SewerBlock();
+    public static SewageComposterBlock SEWAGE_COMPOSTER = new SewageComposterBlock();
 
     @Override
     public List<Feature.Builder> generateFeatures() {
@@ -32,7 +34,8 @@ public class ModuleAgricultureHusbandry implements IModule {
                 .content(PlantRecollectable.class, new ChorusFruitRecollectable())
         );
         builders.add(Feature.builder("sewage").
-                content(Block.class, SEWER));
+                content(Block.class, SEWER).
+                content(Block.class, SEWAGE_COMPOSTER));
         return builders;
     }
 }

@@ -1,0 +1,9 @@
+{
+  "parent": "industrialforegoing:block/base_block",
+  "textures": {
+    "south": "industrialforegoing:blocks/sewage_composter_side",
+    "west": "industrialforegoing:blocks/sewage_composter_side",
+    "east": "industrialforegoing:blocks/sewage_composter_side",
+    "north": "industrialforegoing:blocks/sewage_composter_side"
+  }
+}
