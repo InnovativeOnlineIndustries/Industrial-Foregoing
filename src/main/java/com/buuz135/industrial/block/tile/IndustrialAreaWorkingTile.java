@@ -27,8 +27,8 @@ public abstract class IndustrialAreaWorkingTile extends IndustrialWorkingTile {
     private PosButton areaButton;
     private RangeManager.RangeType type;
 
-    public IndustrialAreaWorkingTile(BlockTileBase blockTileBase, int maxProgress, RangeManager.RangeType type) {
-        super(blockTileBase, maxProgress);
+    public IndustrialAreaWorkingTile(BlockTileBase blockTileBase, RangeManager.RangeType type) {
+        super(blockTileBase);
         this.pointer = 0;
         this.showingArea = false;
         addButton(areaButton = new PosButton(176 - 22, 84, 14, 14) {

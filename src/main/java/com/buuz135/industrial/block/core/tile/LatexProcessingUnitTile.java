@@ -25,7 +25,7 @@ public class LatexProcessingUnitTile extends IndustrialProcessingTile {
     private SidedInvHandler output;
 
     public LatexProcessingUnitTile() {
-        super(ModuleCore.LATEX_PROCESSING, 48 + 25, 40, 100);
+        super(ModuleCore.LATEX_PROCESSING, 48 + 25, 40);
         this.addTank(latex = (SidedFluidTank) new SidedFluidTank("latex", 16000, 29, 20, 1).
                 setColor(DyeColor.GRAY).
                 setTile(this).

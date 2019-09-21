@@ -22,7 +22,7 @@ public class SewerTile extends IndustrialAreaWorkingTile {
     public PosFluidTank essence;
 
     public SewerTile() {
-        super(ModuleAgricultureHusbandry.SEWER, 100, RangeManager.RangeType.TOP);
+        super(ModuleAgricultureHusbandry.SEWER, RangeManager.RangeType.TOP);
         this.addTank(sewage = new SidedFluidTank("sewage", 8000, 45, 20, 0).
                 setColor(DyeColor.BROWN).
                 setTile(this));

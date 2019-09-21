@@ -26,7 +26,7 @@ public class FluidExtractorTile extends IndustrialAreaWorkingTile {
     private SidedFluidTank tank;
 
     public FluidExtractorTile() {
-        super(ModuleCore.FLUID_EXTRACTOR, 30, RangeManager.RangeType.BEHIND);
+        super(ModuleCore.FLUID_EXTRACTOR, RangeManager.RangeType.BEHIND);
         addTank(tank = (SidedFluidTank) new SidedFluidTank("latex", 1000, 43, 20, 0).
                 setColor(DyeColor.LIGHT_GRAY).
                 setTile(this).
@@ -53,6 +53,11 @@ public class FluidExtractorTile extends IndustrialAreaWorkingTile {
             return new WorkAction(1f, 0);
         }
         return new WorkAction(1, 0);
+    }
+
+    @Override
+    public int getMaxProgress() {
+        return 30;
     }
 
     @Nullable

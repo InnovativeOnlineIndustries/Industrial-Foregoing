@@ -24,7 +24,7 @@ public class PlantGathererTile extends IndustrialAreaWorkingTile {
     private SidedFluidTank tank;
 
     public PlantGathererTile() {
-        super(ModuleAgricultureHusbandry.PLANT_GATHERER, 100, RangeManager.RangeType.BEHIND);
+        super(ModuleAgricultureHusbandry.PLANT_GATHERER, RangeManager.RangeType.BEHIND);
         addInventory(output = (SidedInvHandler) new SidedInvHandler("output", 70, 22, 3 * 4, 0)
                 .setColor(DyeColor.ORANGE)
                 .setRange(4, 3)

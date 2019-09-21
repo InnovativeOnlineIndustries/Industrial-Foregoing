@@ -17,10 +17,10 @@ public abstract class IndustrialWorkingTile extends TileMachine {
     @Save
     private PosProgressBar workingBar;
 
-    public IndustrialWorkingTile(BlockTileBase blockTileBase, int maxProgress) {
+    public IndustrialWorkingTile(BlockTileBase blockTileBase) {
         super(blockTileBase);
         this.addGuiAddonFactory(() -> new EnergyBarGuiAddon(10, 20, getEnergyStorage()));
-        this.addProgressBar(workingBar = new PosProgressBar(30, 20, 0, maxProgress)
+        this.addProgressBar(workingBar = new PosProgressBar(30, 20, 0, 100)
                 .setTile(this)
                 .setBarDirection(PosProgressBar.BarDirection.VERTICAL_UP)
                 .setIncreaseType(false)
@@ -30,6 +30,9 @@ public abstract class IndustrialWorkingTile extends TileMachine {
                         workingBar.setProgress((int) (workingBar.getMaxProgress() * work.getWorkAmount()));
                         this.getEnergyStorage().extractEnergyForced(work.getEnergyConsumed());
                     }
+                })
+                .setOnStart(() -> {
+                    workingBar.setMaxProgress(getMaxProgress());
                 })
                 .setCanReset(tileEntity -> true)
                 .setCanIncrease(tileEntity -> true)
@@ -47,6 +50,10 @@ public abstract class IndustrialWorkingTile extends TileMachine {
 
     public boolean hasEnergy(int amount) {
         return this.getEnergyStorage().getEnergyStored() >= amount;
+    }
+
+    public int getMaxProgress() {
+        return 100;
     }
 
     @Override

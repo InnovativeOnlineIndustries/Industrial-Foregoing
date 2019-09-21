@@ -14,13 +14,14 @@ public abstract class IndustrialProcessingTile extends TileMachine {
     @Save
     private PosProgressBar progressBar;
 
-    public IndustrialProcessingTile(BlockTileBase blockTileBase, int x, int y, int maxProgress) {
+    public IndustrialProcessingTile(BlockTileBase blockTileBase, int x, int y) {
         super(blockTileBase);
         this.addGuiAddonFactory(() -> new EnergyBarGuiAddon(10, 20, getEnergyStorage()));
-        this.addProgressBar(progressBar = new PosProgressBar(x, y, maxProgress).
+        this.addProgressBar(progressBar = new PosProgressBar(x, y, 100).
                 setTile(this).
                 setBarDirection(PosProgressBar.BarDirection.HORIZONTAL_RIGHT).
                 setCanReset(tileEntity -> true).
+                setOnStart(() -> progressBar.setMaxProgress(getMaxProgress())).
                 setCanIncrease(tileEntity -> getEnergyStorage().getEnergyStored() > getTickPower() && canIncrease()).
                 setOnTickWork(() -> getEnergyStorage().extractEnergyForced(getTickPower())).
                 setOnFinishWork(() -> onFinish().run())
@@ -36,6 +37,10 @@ public abstract class IndustrialProcessingTile extends TileMachine {
         if (super.onActivated(playerIn, hand, facing, hitX, hitY, hitZ)) return true;
         openGui(playerIn);
         return true;
+    }
+
+    public int getMaxProgress() {
+        return 100;
     }
 
     public abstract boolean canIncrease();

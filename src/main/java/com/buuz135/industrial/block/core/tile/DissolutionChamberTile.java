@@ -27,7 +27,7 @@ public class DissolutionChamberTile extends IndustrialProcessingTile {
     private DissolutionChamberRecipe currentRecipe;
 
     public DissolutionChamberTile() {
-        super(ModuleCore.DISSOLUTION_CHAMBER, 102, 41, 100);
+        super(ModuleCore.DISSOLUTION_CHAMBER, 102, 41);
         int slotSpacing = 22;
         int offset = 2;
         this.addInventory(input = (SidedInvHandler) new SidedInvHandler("input", 34, 19, 8, 0).
@@ -105,5 +105,10 @@ public class DissolutionChamberTile extends IndustrialProcessingTile {
     @Override
     protected int getTickPower() {
         return 60;
+    }
+
+    @Override
+    public int getMaxProgress() {
+        return currentRecipe != null ? currentRecipe.processingTime : 100;
     }
 }
