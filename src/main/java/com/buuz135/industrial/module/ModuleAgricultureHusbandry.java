@@ -1,7 +1,8 @@
 package com.buuz135.industrial.module;
 
 import com.buuz135.industrial.api.plant.PlantRecollectable;
-import com.buuz135.industrial.block.agriculture.PlantGathererBlock;
+import com.buuz135.industrial.block.agriculturehusbandry.PlantGathererBlock;
+import com.buuz135.industrial.block.agriculturehusbandry.SewerBlock;
 import com.buuz135.industrial.registry.IFRegistries;
 import com.buuz135.industrial.utils.apihandlers.plant.*;
 import com.hrznstudio.titanium.event.handler.EventManager;
@@ -12,9 +13,10 @@ import net.minecraftforge.event.RegistryEvent;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ModuleAgriculture implements IModule {
+public class ModuleAgricultureHusbandry implements IModule {
 
     public static PlantGathererBlock PLANT_GATHERER = new PlantGathererBlock();
+    public static SewerBlock SEWER = new SewerBlock();
 
     @Override
     public List<Feature.Builder> generateFeatures() {
@@ -29,6 +31,8 @@ public class ModuleAgriculture implements IModule {
                 .content(PlantRecollectable.class, new TreePlantRecollectable())
                 .content(PlantRecollectable.class, new ChorusFruitRecollectable())
         );
+        builders.add(Feature.builder("sewage").
+                content(Block.class, SEWER));
         return builders;
     }
 }

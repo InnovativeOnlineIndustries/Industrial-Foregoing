@@ -1,10 +1,10 @@
-package com.buuz135.industrial.block.agriculture.tile;
+package com.buuz135.industrial.block.agriculturehusbandry.tile;
 
 import com.buuz135.industrial.api.plant.PlantRecollectable;
 import com.buuz135.industrial.block.tile.IndustrialAreaWorkingTile;
 import com.buuz135.industrial.block.tile.IndustrialWorkingTile;
 import com.buuz135.industrial.block.tile.RangeManager;
-import com.buuz135.industrial.module.ModuleAgriculture;
+import com.buuz135.industrial.module.ModuleAgricultureHusbandry;
 import com.buuz135.industrial.registry.IFRegistries;
 import com.hrznstudio.titanium.annotation.Save;
 import com.hrznstudio.titanium.block.tile.fluid.SidedFluidTank;
@@ -24,7 +24,7 @@ public class PlantGathererTile extends IndustrialAreaWorkingTile {
     private SidedFluidTank tank;
 
     public PlantGathererTile() {
-        super(ModuleAgriculture.PLANT_GATHERER, 100, RangeManager.RangeType.BEHIND);
+        super(ModuleAgricultureHusbandry.PLANT_GATHERER, 100, RangeManager.RangeType.BEHIND);
         addInventory(output = (SidedInvHandler) new SidedInvHandler("output", 70, 22, 3 * 4, 0)
                 .setColor(DyeColor.ORANGE)
                 .setRange(4, 3)

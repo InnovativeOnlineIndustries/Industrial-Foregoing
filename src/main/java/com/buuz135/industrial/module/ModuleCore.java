@@ -47,6 +47,7 @@ public class ModuleCore implements IModule {
 
     public static TitaniumFluidInstance LATEX = new TitaniumFluidInstance(Reference.MOD_ID, "latex", FluidAttributes.builder(new ResourceLocation(Reference.MOD_ID, "blocks/fluids/latex_still"), new ResourceLocation(Reference.MOD_ID, "blocks/fluids/latex_flow")), true, TAB_CORE);
     public static TitaniumFluidInstance MEAT = new TitaniumFluidInstance(Reference.MOD_ID, "meat", FluidAttributes.builder(new ResourceLocation(Reference.MOD_ID, "blocks/fluids/meat_still"), new ResourceLocation(Reference.MOD_ID, "blocks/fluids/meat_flow")), true, TAB_CORE);
+    public static TitaniumFluidInstance SEWAGE = new TitaniumFluidInstance(Reference.MOD_ID, "sewage", FluidAttributes.builder(new ResourceLocation(Reference.MOD_ID, "blocks/fluids/sewage_still"), new ResourceLocation(Reference.MOD_ID, "blocks/fluids/sewage_flow")), true, TAB_CORE);
 
     @Override
     public List<Feature.Builder> generateFeatures() {
@@ -85,6 +86,8 @@ public class ModuleCore implements IModule {
         features.add(builder);
         features.add(Feature.builder("meat").
                 content(TitaniumFluidInstance.class, MEAT));
+        features.add(Feature.builder("sewage").
+                content(TitaniumFluidInstance.class, SEWAGE));
         TAB_CORE.addIconStack(new ItemStack(PLASTIC));
         return features;
     }
