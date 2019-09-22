@@ -1,17 +1,9 @@
 {
   "forge_marker": 1,
   "defaults": {
-    "model": "industrialforegoing:crop_enrich_material_injector"
+    "model": "industrialforegoing:block/plant_fertilizer"
   },
   "variants": {
-    "normal": [
-      {}
-    ],
-    "inventory": [
-      {
-        "y": 180
-      }
-    ],
     "facing": {
       "north": {},
       "south": {

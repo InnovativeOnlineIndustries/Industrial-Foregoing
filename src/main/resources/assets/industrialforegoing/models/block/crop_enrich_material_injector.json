@@ -1,9 +1,0 @@
-{
-  "parent": "industrialforegoing:block/base_block",
-  "textures": {
-    "south": "industrialforegoing:blocks/crop_enrich_material_injector_back",
-    "west": "industrialforegoing:blocks/crop_enrich_material_injector_side",
-    "east": "industrialforegoing:blocks/crop_enrich_material_injector_side",
-    "north": "industrialforegoing:blocks/crop_enrich_material_injector_side"
-  }
-}
