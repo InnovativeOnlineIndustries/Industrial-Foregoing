@@ -1,10 +1,7 @@
 package com.buuz135.industrial.module;
 
 import com.buuz135.industrial.api.plant.PlantRecollectable;
-import com.buuz135.industrial.block.agriculturehusbandry.PlantFertilizerBlock;
-import com.buuz135.industrial.block.agriculturehusbandry.PlantGathererBlock;
-import com.buuz135.industrial.block.agriculturehusbandry.SewageComposterBlock;
-import com.buuz135.industrial.block.agriculturehusbandry.SewerBlock;
+import com.buuz135.industrial.block.agriculturehusbandry.*;
 import com.buuz135.industrial.registry.IFRegistries;
 import com.buuz135.industrial.utils.apihandlers.plant.*;
 import com.hrznstudio.titanium.event.handler.EventManager;
@@ -21,6 +18,7 @@ public class ModuleAgricultureHusbandry implements IModule {
     public static SewerBlock SEWER = new SewerBlock();
     public static SewageComposterBlock SEWAGE_COMPOSTER = new SewageComposterBlock();
     public static PlantFertilizerBlock PLANT_FERTILIZER = new PlantFertilizerBlock();
+    public static PlantSowerBlock PLANT_SOWER = new PlantSowerBlock();
 
     @Override
     public List<Feature.Builder> generateFeatures() {
@@ -34,6 +32,7 @@ public class ModuleAgricultureHusbandry implements IModule {
                 .content(PlantRecollectable.class, new PumpkinMelonPlantRecollectable())
                 .content(PlantRecollectable.class, new TreePlantRecollectable())
                 .content(PlantRecollectable.class, new ChorusFruitRecollectable())
+                .content(Block.class, PLANT_SOWER)
         );
         builders.add(Feature.builder("sewage").
                 content(Block.class, SEWER).

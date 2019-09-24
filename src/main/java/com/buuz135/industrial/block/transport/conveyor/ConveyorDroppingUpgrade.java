@@ -58,7 +58,7 @@ import java.util.function.Consumer;
 
 public class ConveyorDroppingUpgrade extends ConveyorUpgrade {
 
-    public static VoxelShape BB = VoxelShapes.create(0.0625 * 3, 0.0625, 0.0625 * 3, 0.0625 * 13, 0.0625 * 1.2, 0.0625 * 13);
+    public static VoxelShape BB = VoxelShapes.create(0.0625 * 3, 0.0625, 0.0625 * 3, 0.0625 * 13, 0.0625 * 1.01, 0.0625 * 13);
 
     private ItemStackFilter filter;
     private boolean whitelist;
