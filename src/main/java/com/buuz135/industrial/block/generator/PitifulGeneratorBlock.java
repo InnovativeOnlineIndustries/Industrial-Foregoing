@@ -2,12 +2,12 @@ package com.buuz135.industrial.block.generator;
 
 import com.buuz135.industrial.block.IndustrialBlock;
 import com.buuz135.industrial.block.generator.tile.PitifulGeneratorTile;
+import com.buuz135.industrial.module.ModuleGenerator;
 import com.buuz135.industrial.utils.IndustrialTags;
 import com.hrznstudio.titanium.api.IFactory;
 import com.hrznstudio.titanium.recipe.generator.TitaniumShapedRecipeBuilder;
 import net.minecraft.block.Blocks;
 import net.minecraft.data.IFinishedRecipe;
-import net.minecraft.item.ItemGroup;
 import net.minecraftforge.common.Tags;
 
 import javax.annotation.Nonnull;
@@ -15,9 +15,8 @@ import java.util.function.Consumer;
 
 public class PitifulGeneratorBlock extends IndustrialBlock<PitifulGeneratorTile> {
 
-    public PitifulGeneratorBlock(ItemGroup group) {
-        super("pitiful_generator", Properties.from(Blocks.COBBLESTONE), PitifulGeneratorTile.class);
-        this.setItemGroup(group);
+    public PitifulGeneratorBlock() {
+        super("pitiful_generator", Properties.from(Blocks.COBBLESTONE), PitifulGeneratorTile.class, ModuleGenerator.TAB_GENERATOR);
     }
 
     @Nonnull

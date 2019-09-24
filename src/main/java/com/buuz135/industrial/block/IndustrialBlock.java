@@ -13,8 +13,9 @@ import javax.annotation.Nullable;
 
 public abstract class IndustrialBlock<T extends TileBase> extends BlockRotation<T> {
 
-    public IndustrialBlock(String name, Properties properties, Class<T> tileClass) {
+    public IndustrialBlock(String name, Properties properties, Class<T> tileClass, ItemGroup group) {
         super(name, properties, tileClass);
+        setItemGroup(group);
     }
 
     @Override

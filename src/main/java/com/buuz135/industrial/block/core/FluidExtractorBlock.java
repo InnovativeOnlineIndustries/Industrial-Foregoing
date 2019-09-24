@@ -2,12 +2,12 @@ package com.buuz135.industrial.block.core;
 
 import com.buuz135.industrial.block.IndustrialBlock;
 import com.buuz135.industrial.block.core.tile.FluidExtractorTile;
+import com.buuz135.industrial.module.ModuleCore;
 import com.buuz135.industrial.utils.IndustrialTags;
 import com.hrznstudio.titanium.api.IFactory;
 import com.hrznstudio.titanium.recipe.generator.TitaniumShapedRecipeBuilder;
 import net.minecraft.block.Blocks;
 import net.minecraft.data.IFinishedRecipe;
-import net.minecraft.item.ItemGroup;
 import net.minecraft.item.Items;
 import net.minecraftforge.common.Tags;
 
@@ -16,9 +16,8 @@ import java.util.function.Consumer;
 
 public class FluidExtractorBlock extends IndustrialBlock<FluidExtractorTile> {
 
-    public FluidExtractorBlock(ItemGroup group) {
-        super("fluid_extractor", Properties.from(Blocks.STONE), FluidExtractorTile.class);
-        setItemGroup(group);
+    public FluidExtractorBlock() {
+        super("fluid_extractor", Properties.from(Blocks.STONE), FluidExtractorTile.class, ModuleCore.TAB_CORE);
     }
 
     @Override

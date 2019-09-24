@@ -1,16 +1,17 @@
 package com.buuz135.industrial.block.agriculturehusbandry;
 
+import com.buuz135.industrial.block.IndustrialBlock;
 import com.buuz135.industrial.block.agriculturehusbandry.tile.PlantFertilizerTile;
+import com.buuz135.industrial.module.ModuleAgricultureHusbandry;
 import com.hrznstudio.titanium.api.IFactory;
-import com.hrznstudio.titanium.block.BlockRotation;
 import net.minecraft.block.Blocks;
 
 import javax.annotation.Nonnull;
 
-public class PlantFertilizerBlock extends BlockRotation<PlantFertilizerTile> {
+public class PlantFertilizerBlock extends IndustrialBlock<PlantFertilizerTile> {
 
     public PlantFertilizerBlock() {
-        super("plant_fertilizer", Properties.from(Blocks.IRON_BLOCK), PlantFertilizerTile.class);
+        super("plant_fertilizer", Properties.from(Blocks.IRON_BLOCK), PlantFertilizerTile.class, ModuleAgricultureHusbandry.TAB_AG_HUS);
     }
 
     @Override

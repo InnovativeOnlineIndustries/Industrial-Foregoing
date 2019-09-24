@@ -40,14 +40,16 @@ public class ModuleCore implements IModule {
     public static MachineFrameBlock SIMPLE = new MachineFrameBlock("simple", MachineFrameBlock.SIMPLE_RARITY, TAB_CORE);
     public static MachineFrameBlock ADVANCED = new MachineFrameBlock("advanced", MachineFrameBlock.ADVANCED_RARITY, TAB_CORE);
     public static MachineFrameBlock SUPREME = new MachineFrameBlock("supreme", MachineFrameBlock.SUPREME_RARITY, TAB_CORE);
-    public static FluidExtractorBlock FLUID_EXTRACTOR = new FluidExtractorBlock(TAB_CORE);
-    public static LatexProcessingUnitBlock LATEX_PROCESSING = new LatexProcessingUnitBlock(TAB_CORE);
-    public static DissolutionChamberBlock DISSOLUTION_CHAMBER = new DissolutionChamberBlock(TAB_CORE);
+    public static FluidExtractorBlock FLUID_EXTRACTOR = new FluidExtractorBlock();
+    public static LatexProcessingUnitBlock LATEX_PROCESSING = new LatexProcessingUnitBlock();
+    public static DissolutionChamberBlock DISSOLUTION_CHAMBER = new DissolutionChamberBlock();
     public static RangeAddonItem[] RANGE_ADDONS = new RangeAddonItem[12];
 
     public static TitaniumFluidInstance LATEX = new TitaniumFluidInstance(Reference.MOD_ID, "latex", FluidAttributes.builder(new ResourceLocation(Reference.MOD_ID, "blocks/fluids/latex_still"), new ResourceLocation(Reference.MOD_ID, "blocks/fluids/latex_flow")), true, TAB_CORE);
     public static TitaniumFluidInstance MEAT = new TitaniumFluidInstance(Reference.MOD_ID, "meat", FluidAttributes.builder(new ResourceLocation(Reference.MOD_ID, "blocks/fluids/meat_still"), new ResourceLocation(Reference.MOD_ID, "blocks/fluids/meat_flow")), true, TAB_CORE);
     public static TitaniumFluidInstance SEWAGE = new TitaniumFluidInstance(Reference.MOD_ID, "sewage", FluidAttributes.builder(new ResourceLocation(Reference.MOD_ID, "blocks/fluids/sewage_still"), new ResourceLocation(Reference.MOD_ID, "blocks/fluids/sewage_flow")), true, TAB_CORE);
+    public static TitaniumFluidInstance ESSENCE = new TitaniumFluidInstance(Reference.MOD_ID, "essence", FluidAttributes.builder(new ResourceLocation(Reference.MOD_ID, "blocks/fluids/essence_still"), new ResourceLocation(Reference.MOD_ID, "blocks/fluids/essence_flow")), true, TAB_CORE);
+
 
     @Override
     public List<Feature.Builder> generateFeatures() {
@@ -88,6 +90,8 @@ public class ModuleCore implements IModule {
                 content(TitaniumFluidInstance.class, MEAT));
         features.add(Feature.builder("sewage").
                 content(TitaniumFluidInstance.class, SEWAGE));
+        features.add(Feature.builder("essence").
+                content(TitaniumFluidInstance.class, ESSENCE));
         TAB_CORE.addIconStack(new ItemStack(PLASTIC));
         return features;
     }

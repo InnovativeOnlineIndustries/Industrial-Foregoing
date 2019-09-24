@@ -12,7 +12,6 @@ import com.hrznstudio.titanium.recipe.generator.TitaniumShapedRecipeBuilder;
 import net.minecraft.block.Block;
 import net.minecraft.block.Blocks;
 import net.minecraft.data.IFinishedRecipe;
-import net.minecraft.item.ItemGroup;
 import net.minecraft.item.Items;
 import net.minecraftforge.common.Tags;
 
@@ -25,9 +24,8 @@ public class LatexProcessingUnitBlock extends IndustrialBlock<LatexProcessingUni
     @ConfigVal(comment = "Power consumed every tick when the machine is working")
     public static int POWER_CONSUMED_EVERY_TICK = 20;
 
-    public LatexProcessingUnitBlock(ItemGroup group) {
-        super("latex_processing_unit", Block.Properties.from(Blocks.STONE), LatexProcessingUnitTile.class);
-        setItemGroup(group);
+    public LatexProcessingUnitBlock() {
+        super("latex_processing_unit", Block.Properties.from(Blocks.STONE), LatexProcessingUnitTile.class, ModuleCore.TAB_CORE);
     }
 
     @Override

@@ -2,6 +2,8 @@
   "itemGroup.industrialforegoing_core": "Industrial Foregoing: Core",
   "itemGroup.industrialforegoing_tool": "Industrial Foregoing: Tools",
   "itemGroup.industrialforegoing_transport": "Industrial Foregoing: Transport",
+  "itemGroup.industrialforegoing_generator": "Industrial Foregoing: Generators",
+  "itemGroup.industrialforegoing_ag_hus": "Industrial Foregoing: Agriculture & Husbandry",
   "text.industrialforegoing.display.burning": "Burning time:",
   "text.industrialforegoing.display.producing": "Producing:",
   "text.industrialforegoing.display.amount": "Amount:",

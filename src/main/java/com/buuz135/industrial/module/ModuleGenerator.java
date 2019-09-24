@@ -14,7 +14,7 @@ public class ModuleGenerator implements IModule {
 
     public static AdvancedTitaniumTab TAB_GENERATOR = new AdvancedTitaniumTab(Reference.MOD_ID + "_generator", true);
 
-    public static PitifulGeneratorBlock PITIFUL_GENERATOR = new PitifulGeneratorBlock(TAB_GENERATOR);
+    public static PitifulGeneratorBlock PITIFUL_GENERATOR = new PitifulGeneratorBlock();
 
     @Override
     public List<Feature.Builder> generateFeatures() {
