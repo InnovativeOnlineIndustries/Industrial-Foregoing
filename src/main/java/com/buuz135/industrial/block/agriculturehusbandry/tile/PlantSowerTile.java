@@ -50,7 +50,7 @@ public class PlantSowerTile extends IndustrialAreaWorkingTile {
             int slot = getFilteredSlot(pos);
             ItemStack stack = ItemStack.EMPTY;
             for (int i = 0; i < input.getSlots(); i++) {
-                if (filter.getFilter()[slot].getFilter().isEmpty() || filter.getFilter()[slot].getFilter().isItemEqual(input.getStackInSlot(i))) {
+                if (filter.getFilterSlots()[slot].getFilter().isEmpty() || filter.getFilterSlots()[slot].getFilter().isItemEqual(input.getStackInSlot(i))) {
                     stack = input.getStackInSlot(i);
                     break;
                 }
