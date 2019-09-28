@@ -115,6 +115,10 @@ public class IndustrialForegoing extends ModuleController {
         Module.Builder agriculture = Module.builder("agriculture").description("All of your farming options");
         new ModuleAgricultureHusbandry().generateFeatures().forEach(agriculture::feature);
         addModule(agriculture);
+
+        Module.Builder resources = Module.builder("resource_production");
+        new ModuleResourceProduction().generateFeatures().forEach(resources::feature);
+        addModule(resources);
     }
 
 }
