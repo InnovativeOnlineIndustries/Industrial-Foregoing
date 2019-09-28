@@ -85,9 +85,7 @@ dependencies {
     if (findProject(':titanium') != null) {
         compile project(':titanium')
     } else {
-        compile fg.deobf (project.dependencies.create('com.hrznstudio:titanium:1.14.4-2.2.+') {
-            transitive = false
-        })
+        compile fg.deobf (project.dependencies.create('com.hrznstudio:titanium:1.14.4-2.2.1-SNAPSHOT'))
     }
     //if (findProject(':workspace') == null) {
         compileOnly fg.deobf("mezz.jei:jei-1.14.4:6.0.0.11:api")
