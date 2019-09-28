@@ -85,7 +85,7 @@ dependencies {
     if (findProject(':titanium') != null) {
         compile project(':titanium')
     } else {
-        compile fg.deobf (project.dependencies.create('com.hrznstudio:titanium:1.14.4-2.2.+') {
+        compile fg.deobf (project.dependencies.create('com.hrznstudio:titaniu-1.14.4:2.2.+') {
             transitive = false
         })
     }
