@@ -33,6 +33,8 @@ import com.buuz135.industrial.registry.IFRegistries;
 import com.buuz135.industrial.utils.IFFakePlayer;
 import com.buuz135.industrial.utils.Reference;
 import com.hrznstudio.titanium.event.handler.EventManager;
+import com.hrznstudio.titanium.material.ResourceRegistry;
+import com.hrznstudio.titanium.material.ResourceType;
 import com.hrznstudio.titanium.module.Module;
 import com.hrznstudio.titanium.module.ModuleController;
 import com.hrznstudio.titanium.recipe.generator.titanium.DefaultLootTableProvider;
@@ -82,6 +84,14 @@ public class IndustrialForegoing extends ModuleController {
         FakePlayer player = getFakePlayer(world);
         if (player != null) player.setPositionAndRotation(pos.getX(), pos.getY(), pos.getZ(), 90, 90);
         return player;
+    }
+
+    @Override
+    public void onPreInit() {
+        super.onPreInit();
+        ResourceRegistry.getOrCreate("iron").add(ResourceType.GEAR);
+        ResourceRegistry.getOrCreate("gold").add(ResourceType.GEAR);
+        ResourceRegistry.getOrCreate("diamond").add(ResourceType.GEAR);
     }
 
     @Override

@@ -381,5 +381,9 @@
   "text.industrialforegoing.tooltip.infinitydrill.rare": "Rare",
   "text.industrialforegoing.tooltip.infinitydrill.epic": "Epic",
   "text.industrialforegoing.tooltip.infinitydrill.legendary": "Legendary",
-  "text.industrialforegoing.tooltip.infinitydrill.artifact": "Artifact"
+  "text.industrialforegoing.tooltip.infinitydrill.artifact": "Artifact",
+  "resource.titanium.type.gear": "%s Gear",
+  "resource.titanium.material.iron": "Iron",
+  "resource.titanium.material.gold": "Gold",
+  "resource.titanium.material.diamond": "Diamond"
 }
