@@ -29,29 +29,9 @@ public class DissolutionChamberTile extends IndustrialProcessingTile {
     public DissolutionChamberTile() {
         super(ModuleCore.DISSOLUTION_CHAMBER, 102, 41);
         int slotSpacing = 22;
-        int offset = 2;
         this.addInventory(input = (SidedInvHandler) new SidedInvHandler("input", 34, 19, 8, 0).
                 setColor(DyeColor.LIGHT_BLUE).
-                setSlotPosition(integer -> {
-                    switch (integer) {
-                        case 1:
-                            return Pair.of(slotSpacing, -offset);
-                        case 2:
-                            return Pair.of(slotSpacing * 2, 0);
-                        case 3:
-                            return Pair.of(-offset, slotSpacing);
-                        case 4:
-                            return Pair.of(slotSpacing * 2 + offset, slotSpacing);
-                        case 5:
-                            return Pair.of(0, slotSpacing * 2);
-                        case 6:
-                            return Pair.of(slotSpacing, slotSpacing * 2 + offset);
-                        case 7:
-                            return Pair.of(slotSpacing * 2, slotSpacing * 2);
-                        default:
-                            return Pair.of(0, 0);
-                    }
-                }).
+                setSlotPosition(integer -> getSlotPos(integer)).
                 setSlotLimit(1).
                 setTile(this).
                 setOnSlotChanged((stack, integer) -> checkForRecipe()));
@@ -110,5 +90,28 @@ public class DissolutionChamberTile extends IndustrialProcessingTile {
     @Override
     public int getMaxProgress() {
         return currentRecipe != null ? currentRecipe.processingTime : 100;
+    }
+
+    public static Pair<Integer, Integer> getSlotPos(int slot) {
+        int slotSpacing = 22;
+        int offset = 2;
+        switch (slot) {
+            case 1:
+                return Pair.of(slotSpacing, -offset);
+            case 2:
+                return Pair.of(slotSpacing * 2, 0);
+            case 3:
+                return Pair.of(-offset, slotSpacing);
+            case 4:
+                return Pair.of(slotSpacing * 2 + offset, slotSpacing);
+            case 5:
+                return Pair.of(0, slotSpacing * 2);
+            case 6:
+                return Pair.of(slotSpacing, slotSpacing * 2 + offset);
+            case 7:
+                return Pair.of(slotSpacing * 2, slotSpacing * 2);
+            default:
+                return Pair.of(0, 0);
+        }
     }
 }

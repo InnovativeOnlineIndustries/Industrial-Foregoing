@@ -33,6 +33,7 @@ import com.buuz135.industrial.jei.petrifiedgen.PetrifiedBurnTimeCategory;
 import com.buuz135.industrial.jei.reactor.ReactorRecipeCategory;
 import com.buuz135.industrial.jei.sludge.SludgeRefinerRecipeCategory;
 import com.buuz135.industrial.module.ModuleTool;
+import com.buuz135.industrial.recipe.DissolutionChamberRecipe;
 import com.buuz135.industrial.recipe.FluidExtractorRecipe;
 import com.buuz135.industrial.utils.Reference;
 import com.hrznstudio.titanium.util.RecipeUtil;
@@ -64,6 +65,7 @@ public class JEICustomPlugin implements IModPlugin {
     private OreWasherCategory oreWasherCategory;
     private OreFermenterCategory oreFermenterCategory;
     private OreSieveCategory oreSieveCategory;
+    private DissolutionChamberJEICategory dissolutionChamberJEICategory;
 
     public static void showUses(ItemStack stack) {
         //if (recipesGui != null && recipeRegistry != null)
@@ -132,12 +134,15 @@ public class JEICustomPlugin implements IModPlugin {
 //            oreSieveCategory = new OreSieveCategory(registry.getJeiHelpers().getGuiHelper());
 //            registry.addRecipeCategories(oreSieveCategory);
 //        }
+        dissolutionChamberJEICategory = new DissolutionChamberJEICategory(registry.getJeiHelpers().getGuiHelper());
+        registry.addRecipeCategories(dissolutionChamberJEICategory);
     }
 
 
     @Override
     public void registerRecipes(IRecipeRegistration registration) {
         registration.addRecipes(RecipeUtil.getRecipes(Minecraft.getInstance().world, FluidExtractorRecipe.SERIALIZER.getRecipeType()), fluidExtractorCategory.getUid());
+        registration.addRecipes(RecipeUtil.getRecipes(Minecraft.getInstance().world, DissolutionChamberRecipe.SERIALIZER.getRecipeType()), dissolutionChamberJEICategory.getUid());
     }
 
     //@Override

@@ -1,6 +1,7 @@
 package com.buuz135.industrial.recipe.provider;
 
 import com.buuz135.industrial.api.conveyor.ConveyorUpgradeFactory;
+import com.buuz135.industrial.item.RangeAddonItem;
 import com.buuz135.industrial.module.ModuleCore;
 import com.buuz135.industrial.module.ModuleTool;
 import com.buuz135.industrial.utils.Reference;
@@ -44,6 +45,9 @@ public class IndustrialRecipeProvider extends TitaniumRecipeProvider {
         ModuleTool.MEAT_FEEDER.registerRecipe(consumer);
         //CORE
         ModuleCore.STRAW.registerRecipe(consumer);
+        for (RangeAddonItem rangeAddon : ModuleCore.RANGE_ADDONS) {
+            rangeAddon.registerRecipe(consumer);
+        }
         TitaniumShapelessRecipeBuilder.shapelessRecipe(ModuleCore.DRY_RUBBER).addIngredient(ModuleCore.TINY_DRY_RUBBER, 9).build(consumer);
         CookingRecipeBuilder.smeltingRecipe(Ingredient.fromItems(ModuleCore.DRY_RUBBER), ModuleCore.PLASTIC, 0.3f, 200).addCriterion("has_plastic", this.hasItem(ModuleCore.DRY_RUBBER)).build(consumer);
         TitaniumShapedRecipeBuilder.shapedRecipe(ModuleCore.PITY)

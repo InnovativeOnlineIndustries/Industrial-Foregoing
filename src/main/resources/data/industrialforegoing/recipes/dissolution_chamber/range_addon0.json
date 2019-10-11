@@ -1,0 +1,36 @@
+{
+  "input": [
+    {
+      "item": "minecraft:redstone"
+    },
+    {
+      "item": "minecraft:redstone"
+    },
+    {
+      "item": "minecraft:glass_pane"
+    },
+    {
+      "item": "minecraft:glass_pane"
+    },
+    {
+      "item": "minecraft:cobblestone"
+    },
+    {
+      "item": "minecraft:cobblestone"
+    },
+    {
+      "item": "minecraft:cobblestone"
+    },
+    {
+      "item": "minecraft:cobblestone"
+    }
+  ],
+  "inputFluid": "{FluidName:\"industrialforegoing:latex\",Amount:1000}",
+  "processingTime": 200,
+  "output": {
+    "item": "industrialforegoing:range_addon0",
+    "count": 1
+  },
+  "outputFluid": "{FluidName:\"minecraft:empty\",Amount:0}",
+  "type": "industrialforegoing:dissolution_chamber"
+}
