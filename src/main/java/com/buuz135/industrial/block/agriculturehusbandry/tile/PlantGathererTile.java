@@ -5,12 +5,15 @@ import com.buuz135.industrial.block.tile.IndustrialAreaWorkingTile;
 import com.buuz135.industrial.block.tile.IndustrialWorkingTile;
 import com.buuz135.industrial.block.tile.RangeManager;
 import com.buuz135.industrial.module.ModuleAgricultureHusbandry;
+import com.buuz135.industrial.module.ModuleCore;
 import com.buuz135.industrial.registry.IFRegistries;
 import com.hrznstudio.titanium.annotation.Save;
 import com.hrznstudio.titanium.block.tile.fluid.SidedFluidTank;
 import com.hrznstudio.titanium.block.tile.inventory.SidedInvHandler;
 import net.minecraft.item.DyeColor;
 import net.minecraft.item.ItemStack;
+import net.minecraftforge.fluids.FluidStack;
+import net.minecraftforge.fluids.capability.IFluidHandler;
 import net.minecraftforge.items.ItemHandlerHelper;
 
 import java.util.List;
@@ -29,7 +32,7 @@ public class PlantGathererTile extends IndustrialAreaWorkingTile {
                 .setColor(DyeColor.ORANGE)
                 .setRange(4, 3)
                 .setTile(this));
-        addTank(tank = (SidedFluidTank) new SidedFluidTank("sludge", 1000, 43, 20, 1)
+        addTank(tank = (SidedFluidTank) new SidedFluidTank("sludge", 8000, 43, 20, 1)
                 .setColor(DyeColor.PINK)
                 .setTile(this));
     }
@@ -40,6 +43,7 @@ public class PlantGathererTile extends IndustrialAreaWorkingTile {
             Optional<PlantRecollectable> optional = IFRegistries.PLANT_RECOLLECTABLES_REGISTRY.getValues().stream().filter(plantRecollectable -> plantRecollectable.canBeHarvested(this.world, getPointedBlockPos(), this.world.getBlockState(getPointedBlockPos()))).findFirst();
             if (optional.isPresent()) {
                 List<ItemStack> drops = optional.get().doHarvestOperation(this.world, getPointedBlockPos(), this.world.getBlockState(getPointedBlockPos()));
+                tank.fill(new FluidStack(ModuleCore.SLUDGE.getSourceFluid(), 10 * drops.size()), IFluidHandler.FluidAction.EXECUTE);
                 drops.forEach(stack -> ItemHandlerHelper.insertItem(output, stack, false));
                 if (optional.get().shouldCheckNextPlant(this.world, getPointedBlockPos(), this.world.getBlockState(getPointedBlockPos()))) {
                     increasePointer();

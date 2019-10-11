@@ -49,7 +49,7 @@ public class ModuleCore implements IModule {
     public static TitaniumFluidInstance MEAT = new TitaniumFluidInstance(Reference.MOD_ID, "meat", FluidAttributes.builder(new ResourceLocation(Reference.MOD_ID, "blocks/fluids/meat_still"), new ResourceLocation(Reference.MOD_ID, "blocks/fluids/meat_flow")), true, TAB_CORE);
     public static TitaniumFluidInstance SEWAGE = new TitaniumFluidInstance(Reference.MOD_ID, "sewage", FluidAttributes.builder(new ResourceLocation(Reference.MOD_ID, "blocks/fluids/sewage_still"), new ResourceLocation(Reference.MOD_ID, "blocks/fluids/sewage_flow")), true, TAB_CORE);
     public static TitaniumFluidInstance ESSENCE = new TitaniumFluidInstance(Reference.MOD_ID, "essence", FluidAttributes.builder(new ResourceLocation(Reference.MOD_ID, "blocks/fluids/essence_still"), new ResourceLocation(Reference.MOD_ID, "blocks/fluids/essence_flow")), true, TAB_CORE);
-
+    public static TitaniumFluidInstance SLUDGE = new TitaniumFluidInstance(Reference.MOD_ID, "sludge", FluidAttributes.builder(new ResourceLocation(Reference.MOD_ID, "blocks/fluids/sludge_still"), new ResourceLocation(Reference.MOD_ID, "blocks/fluids/sludge_flow")), true, TAB_CORE);
 
     @Override
     public List<Feature.Builder> generateFeatures() {
@@ -92,6 +92,8 @@ public class ModuleCore implements IModule {
                 content(TitaniumFluidInstance.class, SEWAGE));
         features.add(Feature.builder("essence").
                 content(TitaniumFluidInstance.class, ESSENCE));
+        features.add(Feature.builder("sludge").
+                content(TitaniumFluidInstance.class, SLUDGE));
         TAB_CORE.addIconStack(new ItemStack(PLASTIC));
         return features;
     }
