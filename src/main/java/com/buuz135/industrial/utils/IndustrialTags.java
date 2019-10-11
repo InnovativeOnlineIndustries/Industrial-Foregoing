@@ -16,6 +16,7 @@ public class IndustrialTags {
         public static final Tag<Item> MACHINE_FRAME_SIMPLE = new ItemTags.Wrapper(new ResourceLocation(Reference.MOD_ID, "machine_frame/simple"));
         public static final Tag<Item> MACHINE_FRAME_ADVANCED = new ItemTags.Wrapper(new ResourceLocation(Reference.MOD_ID, "machine_frame/advanced"));
         public static final Tag<Item> MACHINE_FRAME_SUPREME = new ItemTags.Wrapper(new ResourceLocation(Reference.MOD_ID, "machine_frame/supreme"));
+        public static final Tag<Item> SLUDGE_OUTPUT = new ItemTags.Wrapper(new ResourceLocation(Reference.MOD_ID, "sludge"));
 
     }
 

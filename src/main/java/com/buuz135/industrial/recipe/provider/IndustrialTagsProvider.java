@@ -37,6 +37,7 @@ public class IndustrialTagsProvider {
             this.copy(IndustrialTags.Blocks.MACHINE_FRAME_SUPREME, IndustrialTags.Items.MACHINE_FRAME_SUPREME);
 
             getBuilder(IndustrialTags.Items.PLASTIC).add(ModuleCore.PLASTIC);
+            getBuilder(IndustrialTags.Items.SLUDGE_OUTPUT).add(net.minecraft.item.Items.DIRT, net.minecraft.item.Items.CLAY, net.minecraft.item.Items.GRAVEL, net.minecraft.item.Items.SAND, net.minecraft.item.Items.RED_SAND, net.minecraft.item.Items.SOUL_SAND);
         }
     }
 
