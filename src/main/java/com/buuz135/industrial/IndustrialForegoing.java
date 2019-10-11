@@ -37,6 +37,7 @@ import com.hrznstudio.titanium.material.ResourceRegistry;
 import com.hrznstudio.titanium.material.ResourceType;
 import com.hrznstudio.titanium.module.Module;
 import com.hrznstudio.titanium.module.ModuleController;
+import com.hrznstudio.titanium.recipe.generator.BlockItemModelGeneratorProvider;
 import com.hrznstudio.titanium.recipe.generator.titanium.DefaultLootTableProvider;
 import net.minecraft.item.crafting.IRecipeSerializer;
 import net.minecraft.util.math.BlockPos;
@@ -102,6 +103,7 @@ public class IndustrialForegoing extends ModuleController {
         event.getGenerator().addProvider(new IndustrialTagsProvider.Blocks(event.getGenerator()));
         event.getGenerator().addProvider(new IndustrialTagsProvider.Items(event.getGenerator()));
         event.getGenerator().addProvider(new DefaultLootTableProvider(event.getGenerator(), Reference.MOD_ID));
+        event.getGenerator().addProvider(new BlockItemModelGeneratorProvider(event.getGenerator(), Reference.MOD_ID));
     }
 
     @Override

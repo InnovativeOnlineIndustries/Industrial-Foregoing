@@ -4,6 +4,7 @@ import com.buuz135.industrial.api.conveyor.ConveyorUpgradeFactory;
 import com.buuz135.industrial.module.ModuleCore;
 import com.buuz135.industrial.module.ModuleTool;
 import com.buuz135.industrial.utils.Reference;
+import com.hrznstudio.titanium.annotation.MaterialReference;
 import com.hrznstudio.titanium.block.BlockBase;
 import com.hrznstudio.titanium.recipe.generator.TitaniumRecipeProvider;
 import com.hrznstudio.titanium.recipe.generator.TitaniumShapedRecipeBuilder;
@@ -11,6 +12,8 @@ import com.hrznstudio.titanium.recipe.generator.TitaniumShapelessRecipeBuilder;
 import net.minecraft.data.CookingRecipeBuilder;
 import net.minecraft.data.DataGenerator;
 import net.minecraft.data.IFinishedRecipe;
+import net.minecraft.item.Item;
+import net.minecraft.item.Items;
 import net.minecraft.item.crafting.Ingredient;
 import net.minecraft.tags.ItemTags;
 import net.minecraftforge.common.Tags;
@@ -18,6 +21,13 @@ import net.minecraftforge.common.Tags;
 import java.util.function.Consumer;
 
 public class IndustrialRecipeProvider extends TitaniumRecipeProvider {
+
+    @MaterialReference(type = "gear", material = "iron")
+    public static Item IRON_GEAR;
+    @MaterialReference(type = "gear", material = "gold")
+    public static Item GOLD_GEAR;
+    @MaterialReference(type = "gear", material = "diamond")
+    public static Item DIAMOND_GEAR;
 
     public IndustrialRecipeProvider(DataGenerator generatorIn) {
         super(generatorIn);
@@ -41,6 +51,18 @@ public class IndustrialRecipeProvider extends TitaniumRecipeProvider {
                 .key('W', ItemTags.LOGS)
                 .key('I', Tags.Items.INGOTS_IRON)
                 .key('R', Tags.Items.STORAGE_BLOCKS_REDSTONE)
+                .build(consumer);
+        TitaniumShapedRecipeBuilder.shapedRecipe(IRON_GEAR)
+                .patternLine(" P ").patternLine("P P").patternLine(" P ")
+                .key('P', Items.IRON_INGOT)
+                .build(consumer);
+        TitaniumShapedRecipeBuilder.shapedRecipe(GOLD_GEAR)
+                .patternLine(" P ").patternLine("P P").patternLine(" P ")
+                .key('P', Items.GOLD_INGOT)
+                .build(consumer);
+        TitaniumShapedRecipeBuilder.shapedRecipe(DIAMOND_GEAR)
+                .patternLine(" P ").patternLine("P P").patternLine(" P ")
+                .key('P', Items.DIAMOND)
                 .build(consumer);
     }
 }
