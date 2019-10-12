@@ -24,6 +24,7 @@ public class ModuleAgricultureHusbandry implements IModule {
     public static SewageComposterBlock SEWAGE_COMPOSTER = new SewageComposterBlock();
     public static PlantFertilizerBlock PLANT_FERTILIZER = new PlantFertilizerBlock();
     public static PlantSowerBlock PLANT_SOWER = new PlantSowerBlock();
+    public static SlaughterFactoryBlock SLAUGHTER_FACTORY = new SlaughterFactoryBlock();
 
     @Override
     public List<Feature.Builder> generateFeatures() {
@@ -44,6 +45,8 @@ public class ModuleAgricultureHusbandry implements IModule {
                 content(Block.class, SEWAGE_COMPOSTER));
         builders.add(Feature.builder("plant_fertilizer").
                 content(Block.class, PLANT_FERTILIZER));
+        builders.add(Feature.builder("slaughter_factory").
+                content(Block.class, SLAUGHTER_FACTORY));
         TAB_AG_HUS.addIconStack(new ItemStack(PLANT_GATHERER));
         return builders;
     }

@@ -32,7 +32,7 @@ public class ModuleCore implements IModule {
     public static IFCustomItem DRY_RUBBER = new RecipelessCustomItem("dryrubber", TAB_CORE);
     public static IFCustomItem PLASTIC = new RecipelessCustomItem("plastic", TAB_CORE);
     public static FertilizerItem FERTILIZER = new FertilizerItem(TAB_CORE);
-    public static IFCustomItem PINK_SLIME = new RecipelessCustomItem("pink_slime", TAB_CORE);
+    public static IFCustomItem PINK_SLIME_ITEM = new RecipelessCustomItem("pink_slime", TAB_CORE);
     public static BookManualItem BOOK_MANUAL = new BookManualItem(TAB_CORE);
     public static IFCustomItem PINK_SLIME_INGOT = new RecipelessCustomItem("pink_slime_ingot", TAB_CORE);
     public static ItemStraw STRAW = new ItemStraw(TAB_CORE);
@@ -50,6 +50,7 @@ public class ModuleCore implements IModule {
     public static TitaniumFluidInstance SEWAGE = new TitaniumFluidInstance(Reference.MOD_ID, "sewage", FluidAttributes.builder(new ResourceLocation(Reference.MOD_ID, "blocks/fluids/sewage_still"), new ResourceLocation(Reference.MOD_ID, "blocks/fluids/sewage_flow")), true, TAB_CORE);
     public static TitaniumFluidInstance ESSENCE = new TitaniumFluidInstance(Reference.MOD_ID, "essence", FluidAttributes.builder(new ResourceLocation(Reference.MOD_ID, "blocks/fluids/essence_still"), new ResourceLocation(Reference.MOD_ID, "blocks/fluids/essence_flow")), true, TAB_CORE);
     public static TitaniumFluidInstance SLUDGE = new TitaniumFluidInstance(Reference.MOD_ID, "sludge", FluidAttributes.builder(new ResourceLocation(Reference.MOD_ID, "blocks/fluids/sludge_still"), new ResourceLocation(Reference.MOD_ID, "blocks/fluids/sludge_flow")), true, TAB_CORE);
+    public static TitaniumFluidInstance PINK_SLIME = new TitaniumFluidInstance(Reference.MOD_ID, "pink_slime", FluidAttributes.builder(new ResourceLocation(Reference.MOD_ID, "blocks/fluids/pink_slime_still"), new ResourceLocation(Reference.MOD_ID, "blocks/fluids/pink_slime_flow")), true, TAB_CORE);
 
     @Override
     public List<Feature.Builder> generateFeatures() {
@@ -67,8 +68,9 @@ public class ModuleCore implements IModule {
                         filter(worldTickEvent -> worldTickEvent.phase == TickEvent.Phase.END && worldTickEvent.type == TickEvent.Type.WORLD && worldTickEvent.world.getGameTime() % 40 == 0 && FluidExtractorTile.EXTRACTION.containsKey(worldTickEvent.world.dimension.getType())).
                         process(worldTickEvent -> FluidExtractorTile.EXTRACTION.get(worldTickEvent.world.dimension.getType()).values().forEach(blockPosFluidExtractionProgressHashMap -> blockPosFluidExtractionProgressHashMap.keySet().forEach(pos -> worldTickEvent.world.sendBlockBreakProgress(blockPosFluidExtractionProgressHashMap.get(pos).getBreakID(), pos, blockPosFluidExtractionProgressHashMap.get(pos).getProgress()))))));
         features.add(Feature.builder("pink_slime").
-                content(Item.class, PINK_SLIME).
-                content(Item.class, PINK_SLIME_INGOT));
+                content(Item.class, PINK_SLIME_ITEM).
+                content(Item.class, PINK_SLIME_INGOT).
+                content(TitaniumFluidInstance.class, PINK_SLIME));
         features.add(Feature.builder("fertilizer").
                 content(Item.class, FERTILIZER));
         features.add(Feature.builder("straw").
