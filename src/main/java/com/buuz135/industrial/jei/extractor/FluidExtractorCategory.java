@@ -62,7 +62,7 @@ public class FluidExtractorCategory implements IRecipeCategory<FluidExtractorRec
 
     @Override
     public String getTitle() {
-        return "Tree Fluid Extractor";
+        return "Fluid Extractor";
     }
 
     @Override
@@ -79,21 +79,24 @@ public class FluidExtractorCategory implements IRecipeCategory<FluidExtractorRec
     public void setIngredients(FluidExtractorRecipe fluidExtractorRecipe, IIngredients ingredients) {
         ingredients.setInputs(VanillaTypes.ITEM, new ArrayList<>(fluidExtractorRecipe.input.getStacks()));
         ingredients.setOutput(VanillaTypes.FLUID, fluidExtractorRecipe.output);
-        ingredients.setOutput(VanillaTypes.ITEM, new ItemStack(fluidExtractorRecipe.result));
+        if (!new ItemStack(fluidExtractorRecipe.result).isEmpty())
+            ingredients.setOutput(VanillaTypes.ITEM, new ItemStack(fluidExtractorRecipe.result));
     }
 
     @Override
     public void setRecipe(IRecipeLayout recipeLayout, FluidExtractorRecipe fluidExtractorRecipe, IIngredients ingredients) {
         IGuiItemStackGroup guiItemStackGroup = recipeLayout.getItemStacks();
         guiItemStackGroup.init(0, true, 0, 16);
-        guiItemStackGroup.init(1, false, 27, 34);
-        guiItemStackGroup.setBackground(1, guiHelper.getSlotDrawable());
+        if (ingredients.getOutputs(VanillaTypes.ITEM).size() > 0) {
+            guiItemStackGroup.init(1, false, 27, 34);
+            guiItemStackGroup.setBackground(1, guiHelper.getSlotDrawable());
+            guiItemStackGroup.set(1, ingredients.getOutputs(VanillaTypes.ITEM).get(0));
+        }
 
         IGuiFluidStackGroup guiFluidStackGroup = recipeLayout.getFluidStacks();
         guiFluidStackGroup.init(1, false, 57, 1, 12, 48, Math.max(50, ingredients.getOutputs(VanillaTypes.FLUID).get(0).get(0).getAmount()), false, tankOverlay);
 
         guiItemStackGroup.set(0, ingredients.getInputs(VanillaTypes.ITEM).get(0));
-        guiItemStackGroup.set(1, ingredients.getOutputs(VanillaTypes.ITEM).get(0));
         guiFluidStackGroup.set(1, ingredients.getOutputs(VanillaTypes.FLUID).get(0));
     }
 

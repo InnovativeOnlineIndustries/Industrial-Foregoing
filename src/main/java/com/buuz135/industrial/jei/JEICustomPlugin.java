@@ -32,6 +32,7 @@ import com.buuz135.industrial.jei.ore.OreWasherCategory;
 import com.buuz135.industrial.jei.petrifiedgen.PetrifiedBurnTimeCategory;
 import com.buuz135.industrial.jei.reactor.ReactorRecipeCategory;
 import com.buuz135.industrial.jei.sludge.SludgeRefinerRecipeCategory;
+import com.buuz135.industrial.module.ModuleCore;
 import com.buuz135.industrial.module.ModuleTool;
 import com.buuz135.industrial.recipe.DissolutionChamberRecipe;
 import com.buuz135.industrial.recipe.FluidExtractorRecipe;
@@ -39,10 +40,7 @@ import com.buuz135.industrial.utils.Reference;
 import com.hrznstudio.titanium.util.RecipeUtil;
 import mezz.jei.api.IModPlugin;
 import mezz.jei.api.JeiPlugin;
-import mezz.jei.api.registration.IModIngredientRegistration;
-import mezz.jei.api.registration.IRecipeCategoryRegistration;
-import mezz.jei.api.registration.IRecipeRegistration;
-import mezz.jei.api.registration.ISubtypeRegistration;
+import mezz.jei.api.registration.*;
 import mezz.jei.api.runtime.IJeiRuntime;
 import mezz.jei.api.runtime.IRecipesGui;
 import net.minecraft.client.Minecraft;
@@ -260,6 +258,13 @@ public class JEICustomPlugin implements IModPlugin {
 //        registry.addGhostIngredientHandler(GuiConveyor.class, new ConveyorGhostSlotHandler());
     //}
 
+
+    @Override
+    public void registerRecipeCatalysts(IRecipeCatalystRegistration registration) {
+        registration.addRecipeCatalyst(new ItemStack(ModuleCore.FLUID_EXTRACTOR), new ResourceLocation[]{fluidDictionaryCategory.getUid()});
+        registration.addRecipeCatalyst(new ItemStack(ModuleCore.DISSOLUTION_CHAMBER), new ResourceLocation[]{dissolutionChamberJEICategory.getUid()});
+    }
+
     @Override
     public void onRuntimeAvailable(IJeiRuntime jeiRuntime) {
         //recipesGui = jeiRuntime.getRecipesGui();
@@ -268,6 +273,6 @@ public class JEICustomPlugin implements IModPlugin {
 
     @Override
     public ResourceLocation getPluginUid() {
-        return new ResourceLocation(Reference.MOD_ID);
+        return new ResourceLocation(Reference.MOD_ID, "default");
     }
 }
