@@ -77,8 +77,10 @@ public class DissolutionChamberJEICategory implements IRecipeCategory<Dissolutio
     @Override
     public void setRecipe(IRecipeLayout iRecipeLayout, DissolutionChamberRecipe dissolutionChamberRecipe, IIngredients iIngredients) {
         for (int i = 0; i < 8; i++) {
-            iRecipeLayout.getItemStacks().init(i, true, 23 + DissolutionChamberTile.getSlotPos(i).getLeft(), 10 + DissolutionChamberTile.getSlotPos(i).getRight());
-            iRecipeLayout.getItemStacks().set(i, iIngredients.getInputs(VanillaTypes.ITEM).get(i));
+            if (i < iIngredients.getInputs(VanillaTypes.ITEM).size()) {
+                iRecipeLayout.getItemStacks().init(i, true, 23 + DissolutionChamberTile.getSlotPos(i).getLeft(), 10 + DissolutionChamberTile.getSlotPos(i).getRight());
+                iRecipeLayout.getItemStacks().set(i, iIngredients.getInputs(VanillaTypes.ITEM).get(i));
+            }
         }
         iRecipeLayout.getItemStacks().init(9, false, 118, 15);
         iRecipeLayout.getItemStacks().set(9, iIngredients.getOutputs(VanillaTypes.ITEM).get(0));
@@ -107,7 +109,6 @@ public class DissolutionChamberJEICategory implements IRecipeCategory<Dissolutio
     @Override
     public List<String> getTooltipStrings(DissolutionChamberRecipe recipe, double mouseX, double mouseY) {
         Rectangle rec = DefaultAssetProvider.DEFAULT_PROVIDER.getAsset(AssetTypes.ENERGY_BACKGROUND).getArea();
-        System.out.println(new Rectangle(0, 12, rec.width, rec.height));
         if (new Rectangle(0, 12, rec.width, rec.height).contains(mouseX, mouseY)) {
             int consumed = recipe.processingTime * 60;
             return EnergyBarGuiAddon.getTooltip(consumed, (int) Math.max(50000, Math.ceil(consumed)));

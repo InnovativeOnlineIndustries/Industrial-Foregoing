@@ -5,16 +5,15 @@ import com.buuz135.industrial.utils.Reference;
 import com.hrznstudio.titanium.block.tile.fluid.PosFluidTank;
 import com.hrznstudio.titanium.recipe.serializer.GenericSerializer;
 import com.hrznstudio.titanium.recipe.serializer.SerializableRecipe;
-import net.minecraft.block.Blocks;
 import net.minecraft.fluid.Fluids;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.item.crafting.IRecipeType;
 import net.minecraft.item.crafting.Ingredient;
-import net.minecraft.tags.ItemTags;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
+import net.minecraftforge.common.Tags;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.capability.IFluidHandler;
 import net.minecraftforge.items.IItemHandler;
@@ -28,17 +27,14 @@ public class DissolutionChamberRecipe extends SerializableRecipe {
     public static List<DissolutionChamberRecipe> RECIPES = new ArrayList<>();
 
     static {
-        new DissolutionChamberRecipe(new ResourceLocation(Reference.MOD_ID, "test"),
+        new DissolutionChamberRecipe(new ResourceLocation(Reference.MOD_ID, "pink_slime_ball"), new Ingredient.IItemList[]{new Ingredient.SingleItemList(new ItemStack(Items.GLASS_PANE))}, new FluidStack(ModuleCore.PINK_SLIME.getSourceFluid(), 300), 200, new ItemStack(ModuleCore.PINK_SLIME_ITEM), new FluidStack(Fluids.WATER, 150));
+        new DissolutionChamberRecipe(new ResourceLocation(Reference.MOD_ID, "pink_slime_ingot"),
                 new Ingredient.IItemList[]{
-                        new Ingredient.TagList(ItemTags.LOGS),
-                        new Ingredient.SingleItemList(new ItemStack(Blocks.DIRT)),
-                        new Ingredient.SingleItemList(new ItemStack(Blocks.DISPENSER)),
-                        new Ingredient.SingleItemList(new ItemStack(Blocks.IRON_BARS)),
-                        new Ingredient.SingleItemList(new ItemStack(Blocks.HOPPER)),
-                        new Ingredient.SingleItemList(new ItemStack(Blocks.SLIME_BLOCK)),
-                        new Ingredient.SingleItemList(new ItemStack(Blocks.PISTON)),
-                        new Ingredient.SingleItemList(new ItemStack(Blocks.DIRT))
-                }, new FluidStack(ModuleCore.LATEX.getSourceFluid(), 100), 500, new ItemStack(Items.DIAMOND, 2), new FluidStack(Fluids.WATER, 10));
+                        new Ingredient.TagList(Tags.Items.INGOTS_IRON),
+                        new Ingredient.TagList(Tags.Items.INGOTS_IRON),
+                        new Ingredient.TagList(Tags.Items.INGOTS_GOLD),
+                        new Ingredient.TagList(Tags.Items.INGOTS_GOLD),
+                }, new FluidStack(ModuleCore.PINK_SLIME.getSourceFluid(), 1000), 300, new ItemStack(ModuleCore.PINK_SLIME_INGOT), FluidStack.EMPTY);
     }
 
     public Ingredient.IItemList[] input;

@@ -5,6 +5,7 @@ import com.buuz135.industrial.utils.IndustrialTags;
 import net.minecraft.data.BlockTagsProvider;
 import net.minecraft.data.DataGenerator;
 import net.minecraft.data.ItemTagsProvider;
+import net.minecraftforge.common.Tags;
 
 public class IndustrialTagsProvider {
 
@@ -38,6 +39,7 @@ public class IndustrialTagsProvider {
 
             getBuilder(IndustrialTags.Items.PLASTIC).add(ModuleCore.PLASTIC);
             getBuilder(IndustrialTags.Items.SLUDGE_OUTPUT).add(net.minecraft.item.Items.DIRT, net.minecraft.item.Items.CLAY, net.minecraft.item.Items.GRAVEL, net.minecraft.item.Items.SAND, net.minecraft.item.Items.RED_SAND, net.minecraft.item.Items.SOUL_SAND);
+            getBuilder(Tags.Items.SLIMEBALLS).add(ModuleCore.PINK_SLIME_ITEM);
         }
     }
 
