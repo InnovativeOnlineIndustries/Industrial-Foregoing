@@ -1,0 +1,15 @@
+{
+  "type": "minecraft:block",
+  "pools": [
+    {
+      "name": "mob_slaughter_factory",
+      "rolls": 1,
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "name": "industrialforegoing:mob_slaughter_factory"
+        }
+      ]
+    }
+  ]
+}
