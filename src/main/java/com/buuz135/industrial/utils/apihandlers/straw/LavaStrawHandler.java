@@ -42,7 +42,7 @@ public class LavaStrawHandler extends StrawHandlerBase {
     public void onDrink(World world, BlockPos pos, Fluid stack, PlayerEntity player, boolean fromFluidContainer) {
         player.attackEntityFrom(DamageSource.LAVA, 7);
         player.setFire(30);
-        CompoundNBT tag = player.getPersistantData();
+        CompoundNBT tag = player.getPersistentData();
         tag.putLong("lavaDrink", world.getGameTime());
     }
 }

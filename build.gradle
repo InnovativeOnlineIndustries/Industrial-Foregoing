@@ -81,16 +81,16 @@ repositories {
 }
 
 dependencies {
-    minecraft "net.minecraftforge:forge:1.14.4-28.0.105"
+    minecraft "net.minecraftforge:forge:1.14.4-28.1.45"
     if (findProject(':titanium') != null) {
         compile project(':titanium')
     } else {
         compile fg.deobf (project.dependencies.create('com.hrznstudio:titanium:1.14.4-2.2.1-SNAPSHOT'))
     }
     //if (findProject(':workspace') == null) {
-        compileOnly fg.deobf("mezz.jei:jei-1.14.4:6.0.0.11:api")
+        compileOnly fg.deobf("mezz.jei:jei-1.14.4:6.0.0.18:api")
         // at runtime, use the full JEI jar
-        runtimeOnly fg.deobf("mezz.jei:jei-1.14.4:6.0.0.11")
+        runtimeOnly fg.deobf("mezz.jei:jei-1.14.4:6.0.0.18")
     //}
     compileOnly 'org.projectlombok:lombok:1.16.16'
 }

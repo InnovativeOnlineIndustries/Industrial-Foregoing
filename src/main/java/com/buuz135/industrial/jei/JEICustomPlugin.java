@@ -32,7 +32,6 @@ import com.buuz135.industrial.jei.ore.OreWasherCategory;
 import com.buuz135.industrial.jei.petrifiedgen.PetrifiedBurnTimeCategory;
 import com.buuz135.industrial.jei.reactor.ReactorRecipeCategory;
 import com.buuz135.industrial.jei.sludge.SludgeRefinerRecipeCategory;
-import com.buuz135.industrial.module.ModuleCore;
 import com.buuz135.industrial.module.ModuleTool;
 import com.buuz135.industrial.recipe.DissolutionChamberRecipe;
 import com.buuz135.industrial.recipe.FluidExtractorRecipe;
@@ -261,8 +260,8 @@ public class JEICustomPlugin implements IModPlugin {
 
     @Override
     public void registerRecipeCatalysts(IRecipeCatalystRegistration registration) {
-        registration.addRecipeCatalyst(new ItemStack(ModuleCore.FLUID_EXTRACTOR), new ResourceLocation[]{fluidDictionaryCategory.getUid()});
-        registration.addRecipeCatalyst(new ItemStack(ModuleCore.DISSOLUTION_CHAMBER), new ResourceLocation[]{dissolutionChamberJEICategory.getUid()});
+        //registration.addRecipeCatalyst(new ItemStack(ModuleCore.FLUID_EXTRACTOR), new ResourceLocation[]{fluidDictionaryCategory.getUid()});
+        //registration.addRecipeCatalyst(new ItemStack(ModuleCore.DISSOLUTION_CHAMBER), new ResourceLocation[]{dissolutionChamberJEICategory.getUid()});
     }
 
     @Override
