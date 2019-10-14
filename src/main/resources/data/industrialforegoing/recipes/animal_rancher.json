@@ -1,0 +1,46 @@
+{
+  "type": "forge:conditional",
+  "recipes": [
+    {
+      "conditions": [
+        {
+          "values": [
+            {
+              "item": "industrialforegoing:animal_rancher",
+              "type": "forge:item_exists"
+            }
+          ],
+          "type": "forge:and"
+        }
+      ],
+      "recipe": {
+        "type": "minecraft:crafting_shaped",
+        "pattern": [
+          "PPP",
+          "SBS",
+          "GMG"
+        ],
+        "key": {
+          "P": {
+            "tag": "forge:plastic"
+          },
+          "G": {
+            "tag": "forge:gear/gold"
+          },
+          "S": {
+            "item": "minecraft:shears"
+          },
+          "B": {
+            "item": "minecraft:bucket"
+          },
+          "M": {
+            "tag": "industrialforegoing:machine_frame/pity"
+          }
+        },
+        "result": {
+          "item": "industrialforegoing:animal_rancher"
+        }
+      }
+    }
+  ]
+}
