@@ -42,6 +42,8 @@ import java.util.List;
 
 public class FluidExtractorCategory implements IRecipeCategory<FluidExtractorRecipe> {
 
+    public static final ResourceLocation ID = new ResourceLocation(Reference.MOD_ID, "fluid_extractor");
+
     private IGuiHelper guiHelper;
     private IDrawable tankOverlay;
 
@@ -52,7 +54,7 @@ public class FluidExtractorCategory implements IRecipeCategory<FluidExtractorRec
 
     @Override
     public ResourceLocation getUid() {
-        return new ResourceLocation(Reference.MOD_ID, "fluid_extractor");
+        return ID;
     }
 
     @Override

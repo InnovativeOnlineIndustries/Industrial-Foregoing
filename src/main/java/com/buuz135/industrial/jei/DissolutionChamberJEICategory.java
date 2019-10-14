@@ -27,6 +27,8 @@ import java.util.List;
 
 public class DissolutionChamberJEICategory implements IRecipeCategory<DissolutionChamberRecipe> {
 
+    public static final ResourceLocation ID = new ResourceLocation(DissolutionChamberRecipe.SERIALIZER.getRecipeType().toString());
+
     private final IGuiHelper guiHelper;
     private final IDrawable smallTank;
     private final IDrawable bigTank;
@@ -39,7 +41,7 @@ public class DissolutionChamberJEICategory implements IRecipeCategory<Dissolutio
 
     @Override
     public ResourceLocation getUid() {
-        return new ResourceLocation(DissolutionChamberRecipe.SERIALIZER.getRecipeType().toString());
+        return ID;
     }
 
     @Override
