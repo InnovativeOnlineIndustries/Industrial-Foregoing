@@ -12,7 +12,9 @@ import com.hrznstudio.titanium.fluid.TitaniumFluidInstance;
 import com.hrznstudio.titanium.module.Feature;
 import com.hrznstudio.titanium.tab.AdvancedTitaniumTab;
 import net.minecraft.block.Block;
+import net.minecraft.item.BucketItem;
 import net.minecraft.item.Item;
+import net.minecraft.item.ItemGroup;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.api.distmarker.Dist;
@@ -51,6 +53,7 @@ public class ModuleCore implements IModule {
     public static TitaniumFluidInstance ESSENCE = new TitaniumFluidInstance(Reference.MOD_ID, "essence", FluidAttributes.builder(new ResourceLocation(Reference.MOD_ID, "blocks/fluids/essence_still"), new ResourceLocation(Reference.MOD_ID, "blocks/fluids/essence_flow")), true, TAB_CORE);
     public static TitaniumFluidInstance SLUDGE = new TitaniumFluidInstance(Reference.MOD_ID, "sludge", FluidAttributes.builder(new ResourceLocation(Reference.MOD_ID, "blocks/fluids/sludge_still"), new ResourceLocation(Reference.MOD_ID, "blocks/fluids/sludge_flow")), true, TAB_CORE);
     public static TitaniumFluidInstance PINK_SLIME = new TitaniumFluidInstance(Reference.MOD_ID, "pink_slime", FluidAttributes.builder(new ResourceLocation(Reference.MOD_ID, "blocks/fluids/pink_slime_still"), new ResourceLocation(Reference.MOD_ID, "blocks/fluids/pink_slime_flow")), true, TAB_CORE);
+    public static TitaniumFluidInstance MILK = new TitaniumFluidInstance(Reference.MOD_ID, "milk", FluidAttributes.builder(new ResourceLocation(Reference.MOD_ID, "blocks/fluids/milk_still"), new ResourceLocation(Reference.MOD_ID, "blocks/fluids/milk_flow")), false, TAB_CORE);
 
     @Override
     public List<Feature.Builder> generateFeatures() {
@@ -88,14 +91,14 @@ public class ModuleCore implements IModule {
             builder.content(Item.class, RANGE_ADDONS[i]);
         }
         features.add(builder);
-        features.add(Feature.builder("meat").
-                content(TitaniumFluidInstance.class, MEAT));
-        features.add(Feature.builder("sewage").
-                content(TitaniumFluidInstance.class, SEWAGE));
-        features.add(Feature.builder("essence").
-                content(TitaniumFluidInstance.class, ESSENCE));
-        features.add(Feature.builder("sludge").
-                content(TitaniumFluidInstance.class, SLUDGE));
+        features.add(Feature.builder("meat").content(TitaniumFluidInstance.class, MEAT));
+        features.add(Feature.builder("sewage").content(TitaniumFluidInstance.class, SEWAGE));
+        features.add(Feature.builder("essence").content(TitaniumFluidInstance.class, ESSENCE));
+        features.add(Feature.builder("sludge").content(TitaniumFluidInstance.class, SLUDGE));
+        features.add(Feature.builder("milk").content(TitaniumFluidInstance.class, MILK));
+        features.add(Feature.builder("milk_bucket_replacement")
+                .description("If enabled the minecraft bucket item will be replaced with bucket that contains IF milk")
+                .content(Item.class, new BucketItem(() -> ModuleCore.MILK.getSourceFluid(), new Item.Properties().maxStackSize(1).group(ItemGroup.MISC)).setRegistryName("minecraft", "milk_bucket")));
         TAB_CORE.addIconStack(new ItemStack(PLASTIC));
         return features;
     }
