@@ -1,17 +1,9 @@
 {
   "forge_marker": 1,
   "defaults": {
-    "model": "industrialforegoing:animal_stock_increaser"
+    "model": "industrialforegoing:block/animal_feeder"
   },
   "variants": {
-    "normal": [
-      {}
-    ],
-    "inventory": [
-      {
-        "y": 180
-      }
-    ],
     "facing": {
       "north": {},
       "south": {
