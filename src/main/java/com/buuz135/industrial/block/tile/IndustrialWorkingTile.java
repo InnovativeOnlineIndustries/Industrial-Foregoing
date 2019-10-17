@@ -20,7 +20,7 @@ public abstract class IndustrialWorkingTile extends TileMachine {
     public IndustrialWorkingTile(BlockTileBase blockTileBase) {
         super(blockTileBase);
         this.addGuiAddonFactory(() -> new EnergyBarGuiAddon(10, 20, getEnergyStorage()));
-        this.addProgressBar(workingBar = new PosProgressBar(30, 20, 0, 100)
+        this.addProgressBar(workingBar = new PosProgressBar(30, 20, 0, getMaxProgress())
                 .setTile(this)
                 .setBarDirection(PosProgressBar.BarDirection.VERTICAL_UP)
                 .setIncreaseType(false)
