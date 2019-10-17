@@ -54,6 +54,8 @@ public class ModuleCore implements IModule {
     public static TitaniumFluidInstance SLUDGE = new TitaniumFluidInstance(Reference.MOD_ID, "sludge", FluidAttributes.builder(new ResourceLocation(Reference.MOD_ID, "blocks/fluids/sludge_still"), new ResourceLocation(Reference.MOD_ID, "blocks/fluids/sludge_flow")), true, TAB_CORE);
     public static TitaniumFluidInstance PINK_SLIME = new TitaniumFluidInstance(Reference.MOD_ID, "pink_slime", FluidAttributes.builder(new ResourceLocation(Reference.MOD_ID, "blocks/fluids/pink_slime_still"), new ResourceLocation(Reference.MOD_ID, "blocks/fluids/pink_slime_flow")), true, TAB_CORE);
     public static TitaniumFluidInstance MILK = new TitaniumFluidInstance(Reference.MOD_ID, "milk", FluidAttributes.builder(new ResourceLocation(Reference.MOD_ID, "blocks/fluids/milk_still"), new ResourceLocation(Reference.MOD_ID, "blocks/fluids/milk_flow")), false, TAB_CORE);
+    public static TitaniumFluidInstance BIOFUEL = new TitaniumFluidInstance(Reference.MOD_ID, "biofuel", FluidAttributes.builder(new ResourceLocation(Reference.MOD_ID, "blocks/fluids/biofuel_still"), new ResourceLocation(Reference.MOD_ID, "blocks/fluids/biofuel_flow")), true, TAB_CORE);
+
 
     @Override
     public List<Feature.Builder> generateFeatures() {
@@ -95,6 +97,7 @@ public class ModuleCore implements IModule {
         features.add(Feature.builder("sewage").content(TitaniumFluidInstance.class, SEWAGE));
         features.add(Feature.builder("essence").content(TitaniumFluidInstance.class, ESSENCE));
         features.add(Feature.builder("sludge").content(TitaniumFluidInstance.class, SLUDGE));
+        features.add(Feature.builder("biofuel").content(TitaniumFluidInstance.class, BIOFUEL));
         features.add(Feature.builder("milk").content(TitaniumFluidInstance.class, MILK));
         features.add(Feature.builder("milk_bucket_replacement")
                 .description("If enabled the minecraft bucket item will be replaced with bucket that contains IF milk")
