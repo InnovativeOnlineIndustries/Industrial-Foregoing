@@ -22,7 +22,7 @@ public class WaterCondensatorTile extends IndustrialWorkingTile {
         this.addTank(water = (SidedFluidTank) new SidedFluidTank("water", 16000, 30 + 13, 20, 0).
                 setColor(DyeColor.BLUE).
                 setTile(this).
-                setTankAction(PosFluidTank.Action.FILL).
+                setTankAction(PosFluidTank.Action.DRAIN).
                 setValidator(fluidStack -> fluidStack.getFluid().isEquivalentTo(Fluids.WATER)));
     }
 

@@ -19,6 +19,8 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.tags.Tag;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraftforge.common.Tags;
+import net.minecraftforge.fluids.FluidStack;
+import net.minecraftforge.fluids.capability.IFluidHandler;
 
 import java.util.Arrays;
 import java.util.Collections;
@@ -44,7 +46,7 @@ public class BioReactorTile extends IndustrialWorkingTile {
                 setColor(DyeColor.CYAN).
                 setTile(this).
                 setTankAction(PosFluidTank.Action.FILL).
-                setValidator(fluidStack -> fluidStack.getFluid().isEquivalentTo(Fluids.WATER))
+                setValidator(fluidStack -> fluidStack.getFluid().equals(Fluids.WATER))
         );
         addInventory(input = (SidedInvHandler) new SidedInvHandler("input", 69, 22, 9, 1).
                 setColor(DyeColor.BLUE).
@@ -64,20 +66,34 @@ public class BioReactorTile extends IndustrialWorkingTile {
                         return Collections.singletonList(() -> new ProgressBarGuiAddon(bar.getPosX(), bar.getPosY(), this) {
                             @Override
                             public List<String> getTooltipLines() {
-                                return Arrays.asList(TextFormatting.GOLD + "Efficiency: " + TextFormatting.WHITE + getEfficiency() + TextFormatting.DARK_AQUA + "%");
+                                return Arrays.asList(TextFormatting.GOLD + "Efficiency: " + TextFormatting.WHITE + (int) ((getEfficiency() / 9D) * 100) + TextFormatting.DARK_AQUA + "%");
                             }
                         });
                     }
                 }.
                         setColor(DyeColor.YELLOW).
                         setCanIncrease(tileEntity -> true).
-                        setOnTickWork(() -> bar.setProgress(getEfficiency())).
+                        setOnTickWork(() -> bar.setProgress((int) ((getEfficiency() / 9D) * 100))).
+                        setCanReset(tileEntity -> false).
                         setTile(this)
         );
     }
 
     @Override
     public WorkAction work() {
+        if (hasEnergy(2000)) {
+            int efficiency = getEfficiency();
+            if (efficiency <= 0) return new WorkAction(1, 0);
+            int fluidAmount = ((efficiency - 1) * 10 + 80) * efficiency;
+            if (water.getFluidAmount() >= fluidAmount && biofuel.getCapacity() - biofuel.getFluidAmount() >= fluidAmount) {
+                water.drainForced(fluidAmount, IFluidHandler.FluidAction.EXECUTE);
+                biofuel.fillForced(new FluidStack(ModuleCore.BIOFUEL.getSourceFluid(), fluidAmount), IFluidHandler.FluidAction.EXECUTE);
+                for (int i = 0; i < input.getSlots(); i++) {
+                    input.getStackInSlot(i).shrink(1);
+                }
+                new WorkAction(1, 2000);
+            }
+        }
         return new WorkAction(1, 0);
     }
 
@@ -100,7 +116,11 @@ public class BioReactorTile extends IndustrialWorkingTile {
                 ++slots;
             }
         }
-        return (int) ((slots / 9D) * 100);
+        return slots;
     }
 
+    @Override
+    public int getMaxProgress() {
+        return 200;
+    }
 }
