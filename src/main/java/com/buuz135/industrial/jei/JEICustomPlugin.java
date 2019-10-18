@@ -22,7 +22,10 @@
 package com.buuz135.industrial.jei;
 
 
-import com.buuz135.industrial.jei.extractor.FluidExtractorCategory;
+import com.buuz135.industrial.block.generator.tile.BioReactorTile;
+import com.buuz135.industrial.jei.category.BioReactorRecipeCategory;
+import com.buuz135.industrial.jei.category.DissolutionChamberCategory;
+import com.buuz135.industrial.jei.category.FluidExtractorCategory;
 import com.buuz135.industrial.jei.fluiddictionary.FluidDictionaryCategory;
 import com.buuz135.industrial.jei.laser.LaserRecipeCategory;
 import com.buuz135.industrial.jei.machineproduce.MachineProduceCategory;
@@ -30,9 +33,9 @@ import com.buuz135.industrial.jei.ore.OreFermenterCategory;
 import com.buuz135.industrial.jei.ore.OreSieveCategory;
 import com.buuz135.industrial.jei.ore.OreWasherCategory;
 import com.buuz135.industrial.jei.petrifiedgen.PetrifiedBurnTimeCategory;
-import com.buuz135.industrial.jei.reactor.ReactorRecipeCategory;
 import com.buuz135.industrial.jei.sludge.SludgeRefinerRecipeCategory;
 import com.buuz135.industrial.module.ModuleCore;
+import com.buuz135.industrial.module.ModuleGenerator;
 import com.buuz135.industrial.module.ModuleTool;
 import com.buuz135.industrial.recipe.DissolutionChamberRecipe;
 import com.buuz135.industrial.recipe.FluidExtractorRecipe;
@@ -44,8 +47,14 @@ import mezz.jei.api.registration.*;
 import mezz.jei.api.runtime.IJeiRuntime;
 import mezz.jei.api.runtime.IRecipesGui;
 import net.minecraft.client.Minecraft;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.tags.Tag;
 import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.fluids.FluidStack;
+
+import java.util.ArrayList;
+import java.util.List;
 
 
 @JeiPlugin
@@ -53,8 +62,8 @@ public class JEICustomPlugin implements IModPlugin {
 
     private static IRecipesGui recipesGui;
     private SludgeRefinerRecipeCategory sludgeRefinerRecipeCategory;
-    private ReactorRecipeCategory bioReactorRecipeCategory;
-    private ReactorRecipeCategory proteinReactorRecipeCategory;
+    private BioReactorRecipeCategory bioReactorRecipeCategory;
+    private BioReactorRecipeCategory proteinReactorRecipeCategory;
     private LaserRecipeCategory laserRecipeCategory;
     private MachineProduceCategory machineProduceCategory;
     private PetrifiedBurnTimeCategory petrifiedBurnTimeCategory;
@@ -63,7 +72,7 @@ public class JEICustomPlugin implements IModPlugin {
     private OreWasherCategory oreWasherCategory;
     private OreFermenterCategory oreFermenterCategory;
     private OreSieveCategory oreSieveCategory;
-    private DissolutionChamberJEICategory dissolutionChamberJEICategory;
+    private DissolutionChamberCategory dissolutionChamberJEICategory;
 
     public static void showUses(ItemStack stack) {
         //if (recipesGui != null && recipeRegistry != null)
@@ -86,10 +95,8 @@ public class JEICustomPlugin implements IModPlugin {
 //            sludgeRefinerRecipeCategory = new SludgeRefinerRecipeCategory(registry.getJeiHelpers().getGuiHelper());
 //            registry.addRecipeCategories(sludgeRefinerRecipeCategory);
 //        }
-//        if (BlockRegistry.bioReactorBlock.isEnabled()) {
-//            bioReactorRecipeCategory = new ReactorRecipeCategory(registry.getJeiHelpers().getGuiHelper(), "Bioreactor accepted items");
-//            registry.addRecipeCategories(bioReactorRecipeCategory);
-//        }
+        bioReactorRecipeCategory = new BioReactorRecipeCategory(registry.getJeiHelpers().getGuiHelper(), "Bioreactor accepted items");
+        registry.addRecipeCategories(bioReactorRecipeCategory);
 //        if (BlockRegistry.proteinReactorBlock.isEnabled()) {
 //            proteinReactorRecipeCategory = new ReactorRecipeCategory(registry.getJeiHelpers().getGuiHelper(), "Protein reactor accepted items");
 //            registry.addRecipeCategories(proteinReactorRecipeCategory);
@@ -132,7 +139,7 @@ public class JEICustomPlugin implements IModPlugin {
 //            oreSieveCategory = new OreSieveCategory(registry.getJeiHelpers().getGuiHelper());
 //            registry.addRecipeCategories(oreSieveCategory);
 //        }
-        dissolutionChamberJEICategory = new DissolutionChamberJEICategory(registry.getJeiHelpers().getGuiHelper());
+        dissolutionChamberJEICategory = new DissolutionChamberCategory(registry.getJeiHelpers().getGuiHelper());
         registry.addRecipeCategories(dissolutionChamberJEICategory);
     }
 
@@ -141,6 +148,17 @@ public class JEICustomPlugin implements IModPlugin {
     public void registerRecipes(IRecipeRegistration registration) {
         registration.addRecipes(RecipeUtil.getRecipes(Minecraft.getInstance().world, FluidExtractorRecipe.SERIALIZER.getRecipeType()), fluidExtractorCategory.getUid());
         registration.addRecipes(RecipeUtil.getRecipes(Minecraft.getInstance().world, DissolutionChamberRecipe.SERIALIZER.getRecipeType()), dissolutionChamberJEICategory.getUid());
+        registration.addRecipes(generateBioreactorRecipes(), bioReactorRecipeCategory.getUid());
+    }
+
+    private List<BioReactorRecipeCategory.ReactorRecipeWrapper> generateBioreactorRecipes() {
+        List<BioReactorRecipeCategory.ReactorRecipeWrapper> recipes = new ArrayList<>();
+        for (Tag<Item> itemTag : BioReactorTile.VALID) {
+            for (Item item : itemTag.getAllElements()) {
+                recipes.add(new BioReactorRecipeCategory.ReactorRecipeWrapper(new ItemStack(item), new FluidStack(ModuleCore.BIOFUEL.getSourceFluid(), 80)));
+            }
+        }
+        return recipes;
     }
 
     //@Override
@@ -262,7 +280,8 @@ public class JEICustomPlugin implements IModPlugin {
     @Override
     public void registerRecipeCatalysts(IRecipeCatalystRegistration registration) {
         registration.addRecipeCatalyst(new ItemStack(ModuleCore.FLUID_EXTRACTOR), FluidExtractorCategory.ID);
-        registration.addRecipeCatalyst(new ItemStack(ModuleCore.DISSOLUTION_CHAMBER), DissolutionChamberJEICategory.ID);
+        registration.addRecipeCatalyst(new ItemStack(ModuleCore.DISSOLUTION_CHAMBER), DissolutionChamberCategory.ID);
+        registration.addRecipeCatalyst(new ItemStack(ModuleGenerator.BIOREACTOR), BioReactorRecipeCategory.ID);
     }
 
     @Override

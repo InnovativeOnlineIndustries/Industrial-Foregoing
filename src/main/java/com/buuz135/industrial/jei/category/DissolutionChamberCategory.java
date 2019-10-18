@@ -1,4 +1,4 @@
-package com.buuz135.industrial.jei;
+package com.buuz135.industrial.jei.category;
 
 import com.buuz135.industrial.block.core.tile.DissolutionChamberTile;
 import com.buuz135.industrial.recipe.DissolutionChamberRecipe;
@@ -25,7 +25,7 @@ import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
 
-public class DissolutionChamberJEICategory implements IRecipeCategory<DissolutionChamberRecipe> {
+public class DissolutionChamberCategory implements IRecipeCategory<DissolutionChamberRecipe> {
 
     public static final ResourceLocation ID = new ResourceLocation(DissolutionChamberRecipe.SERIALIZER.getRecipeType().toString());
 
@@ -33,7 +33,7 @@ public class DissolutionChamberJEICategory implements IRecipeCategory<Dissolutio
     private final IDrawable smallTank;
     private final IDrawable bigTank;
 
-    public DissolutionChamberJEICategory(IGuiHelper guiHelper) {
+    public DissolutionChamberCategory(IGuiHelper guiHelper) {
         this.guiHelper = guiHelper;
         this.smallTank = guiHelper.createDrawable(DefaultAssetProvider.DEFAULT_LOCATION, 235 + 3, 1 + 3, 12, 13);
         this.bigTank = guiHelper.createDrawable(DefaultAssetProvider.DEFAULT_LOCATION, 177 + 3, 1 + 3, 12, 50);

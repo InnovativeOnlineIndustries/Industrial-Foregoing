@@ -1,0 +1,49 @@
+{
+  "type": "forge:conditional",
+  "recipes": [
+    {
+      "conditions": [
+        {
+          "values": [
+            {
+              "item": "industrialforegoing:bioreactor",
+              "type": "forge:item_exists"
+            }
+          ],
+          "type": "forge:and"
+        }
+      ],
+      "recipe": {
+        "type": "minecraft:crafting_shaped",
+        "pattern": [
+          "PDP",
+          "SMS",
+          "ARA"
+        ],
+        "key": {
+          "P": {
+            "tag": "forge:plastic"
+          },
+          "D": {
+            "tag": "forge:gear/diamond"
+          },
+          "S": {
+            "tag": "forge:slimeballs"
+          },
+          "A": {
+            "item": "minecraft:brick"
+          },
+          "M": {
+            "tag": "industrialforegoing:machine_frame/pity"
+          },
+          "R": {
+            "item": "minecraft:sugar"
+          }
+        },
+        "result": {
+          "item": "industrialforegoing:bioreactor"
+        }
+      }
+    }
+  ]
+}

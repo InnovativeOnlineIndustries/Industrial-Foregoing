@@ -19,25 +19,32 @@
  * FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE,
  * ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
-package com.buuz135.industrial.jei.reactor;
+package com.buuz135.industrial.jei.category;
 
 import com.buuz135.industrial.utils.Reference;
+import mezz.jei.api.constants.VanillaTypes;
 import mezz.jei.api.gui.IRecipeLayout;
 import mezz.jei.api.gui.drawable.IDrawable;
+import mezz.jei.api.gui.ingredient.IGuiFluidStackGroup;
+import mezz.jei.api.gui.ingredient.IGuiItemStackGroup;
 import mezz.jei.api.helpers.IGuiHelper;
 import mezz.jei.api.ingredients.IIngredients;
 import mezz.jei.api.recipe.category.IRecipeCategory;
+import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.fluids.FluidStack;
 
 import javax.annotation.Nullable;
 
-public class ReactorRecipeCategory implements IRecipeCategory<ReactorRecipeWrapper> {
+public class BioReactorRecipeCategory implements IRecipeCategory<BioReactorRecipeCategory.ReactorRecipeWrapper> {
+
+    public static ResourceLocation ID = new ResourceLocation(Reference.MOD_ID, "bioreactor");
 
     private IGuiHelper guiHelper;
     private IDrawable tankOverlay;
     private String title;
 
-    public ReactorRecipeCategory(IGuiHelper guiHelper, String title) {
+    public BioReactorRecipeCategory(IGuiHelper guiHelper, String title) {
         this.guiHelper = guiHelper;
         tankOverlay = guiHelper.createDrawable(new ResourceLocation(Reference.MOD_ID, "textures/gui/jei.png"), 1, 207, 12, 48);
         this.title = title;
@@ -45,12 +52,12 @@ public class ReactorRecipeCategory implements IRecipeCategory<ReactorRecipeWrapp
 
     @Override
     public ResourceLocation getUid() {
-        return null;
+        return ID;
     }
 
     @Override
     public Class<? extends ReactorRecipeWrapper> getRecipeClass() {
-        return null;
+        return BioReactorRecipeCategory.ReactorRecipeWrapper.class;
     }
 
     @Override
@@ -72,20 +79,41 @@ public class ReactorRecipeCategory implements IRecipeCategory<ReactorRecipeWrapp
 
     @Override
     public void setIngredients(ReactorRecipeWrapper reactorRecipeWrapper, IIngredients iIngredients) {
-
+        iIngredients.setInput(VanillaTypes.ITEM, reactorRecipeWrapper.getStack());
+        iIngredients.setOutput(VanillaTypes.FLUID, reactorRecipeWrapper.getFluid());
     }
 
 
     @Override
     public void setRecipe(IRecipeLayout recipeLayout, ReactorRecipeWrapper recipeWrapper, IIngredients ingredients) {
-        //IGuiItemStackGroup guiItemStackGroup = recipeLayout.getItemStacks();
-        //guiItemStackGroup.init(0, true, 0, 16);
-//
-        //IGuiFluidStackGroup guiFluidStackGroup = recipeLayout.getFluidStacks();
-        //guiFluidStackGroup.init(1, false, 57, 1, 12, 48, 200, false, tankOverlay);
-//
-        //guiItemStackGroup.set(0, ingredients.getInputs(ItemStack.class).get(0));
-        //guiFluidStackGroup.set(1, ingredients.getOutputs(FluidStack.class).get(0));
+        IGuiItemStackGroup guiItemStackGroup = recipeLayout.getItemStacks();
+        guiItemStackGroup.init(0, true, 0, 16);
+
+        IGuiFluidStackGroup guiFluidStackGroup = recipeLayout.getFluidStacks();
+        guiFluidStackGroup.init(1, false, 57, 1, 12, 48, 200, false, tankOverlay);
+
+        guiItemStackGroup.set(0, ingredients.getInputs(VanillaTypes.ITEM).get(0));
+        guiFluidStackGroup.set(1, ingredients.getOutputs(VanillaTypes.FLUID).get(0));
+    }
+
+    public static class ReactorRecipeWrapper {
+
+        private ItemStack stack;
+        private FluidStack fluid;
+
+        public ReactorRecipeWrapper(ItemStack stack, FluidStack fluid) {
+            this.stack = stack;
+            this.fluid = fluid;
+        }
+
+
+        public ItemStack getStack() {
+            return stack;
+        }
+
+        public FluidStack getFluid() {
+            return fluid;
+        }
     }
 
 }
