@@ -5,11 +5,8 @@ import com.buuz135.industrial.module.ModuleGenerator;
 import com.hrznstudio.titanium.annotation.Save;
 import com.hrznstudio.titanium.block.tile.inventory.SidedInvHandler;
 import com.hrznstudio.titanium.block.tile.progress.PosProgressBar;
-import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.DyeColor;
 import net.minecraft.tileentity.FurnaceTileEntity;
-import net.minecraft.util.Direction;
-import net.minecraft.util.Hand;
 
 public class PitifulGeneratorTile extends IndustrialGeneratorTile {
 
@@ -24,15 +21,6 @@ public class PitifulGeneratorTile extends IndustrialGeneratorTile {
                 .setInputFilter((itemStack, integer) -> FurnaceTileEntity.isFuel(itemStack))
                 .setTile(this)
         );
-    }
-
-    @Override
-    public boolean onActivated(PlayerEntity playerIn, Hand hand, Direction facing, double hitX, double hitY, double hitZ) {
-        if (!super.onActivated(playerIn, hand, facing, hitX, hitY, hitZ)) {
-            openGui(playerIn);
-            return true;
-        }
-        return false;
     }
 
     @Override
@@ -67,7 +55,7 @@ public class PitifulGeneratorTile extends IndustrialGeneratorTile {
 
     @Override
     public int getExtractingEnergy() {
-        return 100000;
+        return 1000;
     }
 
     @Override
