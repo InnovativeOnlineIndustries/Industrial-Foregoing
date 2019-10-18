@@ -1,10 +1,13 @@
 package com.buuz135.industrial.recipe;
 
 import com.buuz135.industrial.module.ModuleCore;
+import com.buuz135.industrial.module.ModuleResourceProduction;
+import com.buuz135.industrial.utils.IndustrialTags;
 import com.buuz135.industrial.utils.Reference;
 import com.hrznstudio.titanium.block.tile.fluid.PosFluidTank;
 import com.hrznstudio.titanium.recipe.serializer.GenericSerializer;
 import com.hrznstudio.titanium.recipe.serializer.SerializableRecipe;
+import net.minecraft.block.Blocks;
 import net.minecraft.fluid.Fluids;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
@@ -35,6 +38,14 @@ public class DissolutionChamberRecipe extends SerializableRecipe {
                         new Ingredient.TagList(Tags.Items.INGOTS_GOLD),
                         new Ingredient.TagList(Tags.Items.INGOTS_GOLD),
                 }, new FluidStack(ModuleCore.PINK_SLIME.getSourceFluid(), 1000), 300, new ItemStack(ModuleCore.PINK_SLIME_INGOT), FluidStack.EMPTY);
+        new DissolutionChamberRecipe(new ResourceLocation(Reference.MOD_ID, "mechanical_dirt"),
+                new Ingredient.IItemList[]{
+                        new Ingredient.SingleItemList(new ItemStack(Blocks.DIRT)),
+                        new Ingredient.SingleItemList(new ItemStack(Blocks.DIRT)),
+                        new Ingredient.SingleItemList(new ItemStack(Items.ROTTEN_FLESH)),
+                        new Ingredient.SingleItemList(new ItemStack(Items.ROTTEN_FLESH)),
+                        new Ingredient.TagList(IndustrialTags.Items.MACHINE_FRAME_PITY),
+                }, new FluidStack(ModuleCore.MEAT.getSourceFluid(), 1000), 100, new ItemStack(ModuleResourceProduction.MECHANICAL_DIRT), FluidStack.EMPTY);
     }
 
     public Ingredient.IItemList[] input;
@@ -65,7 +76,7 @@ public class DissolutionChamberRecipe extends SerializableRecipe {
     public boolean matches(IItemHandler handler, PosFluidTank tank) {
         List<ItemStack> handlerItems = new ArrayList<>();
         for (int i = 0; i < handler.getSlots(); i++) {
-            handlerItems.add(handler.getStackInSlot(i).copy());
+            if (!handler.getStackInSlot(i).isEmpty()) handlerItems.add(handler.getStackInSlot(i).copy());
         }
         for (Ingredient.IItemList iItemList : input) {
             boolean found = false;

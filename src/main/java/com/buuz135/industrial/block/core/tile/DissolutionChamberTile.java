@@ -75,7 +75,8 @@ public class DissolutionChamberTile extends IndustrialProcessingTile {
                 for (int i = 0; i < input.getSlots(); i++) {
                     input.getStackInSlot(i).shrink(1);
                 }
-                outputFluid.fillForced(currentRecipe.outputFluid.copy(), IFluidHandler.FluidAction.EXECUTE);
+                if (currentRecipe.outputFluid != null && !currentRecipe.outputFluid.isEmpty())
+                    outputFluid.fillForced(currentRecipe.outputFluid.copy(), IFluidHandler.FluidAction.EXECUTE);
                 ItemHandlerHelper.insertItem(output, currentRecipe.output.copy(), false);
                 checkForRecipe();
             }
