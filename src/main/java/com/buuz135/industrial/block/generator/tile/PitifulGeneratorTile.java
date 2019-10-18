@@ -69,4 +69,9 @@ public class PitifulGeneratorTile extends IndustrialGeneratorTile {
     public int getExtractingEnergy() {
         return 100000;
     }
+
+    @Override
+    public boolean isSmart() {
+        return false;
+    }
 }
