@@ -6,13 +6,13 @@ import com.buuz135.industrial.block.core.FluidExtractorBlock;
 import com.buuz135.industrial.block.core.LatexProcessingUnitBlock;
 import com.buuz135.industrial.block.core.tile.FluidExtractorTile;
 import com.buuz135.industrial.item.*;
+import com.buuz135.industrial.item.bucket.MilkBucketItem;
 import com.buuz135.industrial.utils.Reference;
 import com.hrznstudio.titanium.event.handler.EventManager;
 import com.hrznstudio.titanium.fluid.TitaniumFluidInstance;
 import com.hrznstudio.titanium.module.Feature;
 import com.hrznstudio.titanium.tab.AdvancedTitaniumTab;
 import net.minecraft.block.Block;
-import net.minecraft.item.BucketItem;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemGroup;
 import net.minecraft.item.ItemStack;
@@ -101,7 +101,7 @@ public class ModuleCore implements IModule {
         features.add(Feature.builder("milk").content(TitaniumFluidInstance.class, MILK));
         features.add(Feature.builder("milk_bucket_replacement")
                 .description("If enabled the minecraft bucket item will be replaced with bucket that contains IF milk")
-                .content(Item.class, new BucketItem(() -> ModuleCore.MILK.getSourceFluid(), new Item.Properties().maxStackSize(1).group(ItemGroup.MISC)).setRegistryName("minecraft", "milk_bucket")));
+                .content(Item.class, new MilkBucketItem(() -> ModuleCore.MILK.getSourceFluid(), new Item.Properties().maxStackSize(1).group(ItemGroup.MISC)).setRegistryName("minecraft", "milk_bucket")));
         TAB_CORE.addIconStack(new ItemStack(PLASTIC));
         return features;
     }
