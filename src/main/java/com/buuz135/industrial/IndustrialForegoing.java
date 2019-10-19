@@ -24,6 +24,8 @@ package com.buuz135.industrial;
 import com.buuz135.industrial.module.*;
 import com.buuz135.industrial.proxy.CommonProxy;
 import com.buuz135.industrial.proxy.client.ClientProxy;
+import com.buuz135.industrial.proxy.network.ConveyorButtonInteractMessage;
+import com.buuz135.industrial.proxy.network.ConveyorSplittingSyncEntityMessage;
 import com.buuz135.industrial.recipe.DissolutionChamberRecipe;
 import com.buuz135.industrial.recipe.FluidExtractorRecipe;
 import com.buuz135.industrial.recipe.provider.IndustrialRecipeProvider;
@@ -37,6 +39,7 @@ import com.hrznstudio.titanium.material.ResourceRegistry;
 import com.hrznstudio.titanium.material.ResourceType;
 import com.hrznstudio.titanium.module.Module;
 import com.hrznstudio.titanium.module.ModuleController;
+import com.hrznstudio.titanium.network.NetworkHandler;
 import com.hrznstudio.titanium.recipe.generator.BlockItemModelGeneratorProvider;
 import com.hrznstudio.titanium.recipe.generator.titanium.DefaultLootTableProvider;
 import net.minecraft.item.crafting.IRecipeSerializer;
@@ -61,6 +64,8 @@ public class IndustrialForegoing extends ModuleController {
     private static HashMap<Integer, IFFakePlayer> worldFakePlayer = new HashMap<>();
 
     public IndustrialForegoing() {
+        NetworkHandler.registerMessage(ConveyorButtonInteractMessage.class);
+        NetworkHandler.registerMessage(ConveyorSplittingSyncEntityMessage.class);
         proxy = DistExecutor.runForDist(() -> ClientProxy::new, () -> CommonProxy::new);
         EventManager.mod(FMLCommonSetupEvent.class).process(fmlCommonSetupEvent -> proxy.run()).subscribe();
         EventManager.mod(FMLClientSetupEvent.class).process(fmlClientSetupEvent -> proxy.run()).subscribe();

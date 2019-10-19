@@ -7,13 +7,10 @@ import com.buuz135.industrial.gui.conveyor.ContainerConveyor;
 import com.buuz135.industrial.gui.conveyor.GuiConveyor;
 import com.buuz135.industrial.item.ItemConveyorUpgrade;
 import com.buuz135.industrial.proxy.client.model.ConveyorBlockModel;
-import com.buuz135.industrial.proxy.network.ConveyorButtonInteractMessage;
-import com.buuz135.industrial.proxy.network.ConveyorSplittingSyncEntityMessage;
 import com.buuz135.industrial.utils.Reference;
 import com.google.common.collect.ImmutableMap;
 import com.hrznstudio.titanium.event.handler.EventManager;
 import com.hrznstudio.titanium.module.Feature;
-import com.hrznstudio.titanium.network.NetworkHandler;
 import com.hrznstudio.titanium.tab.AdvancedTitaniumTab;
 import net.minecraft.block.Block;
 import net.minecraft.client.gui.ScreenManager;
@@ -34,7 +31,6 @@ import net.minecraftforge.client.model.SimpleModelState;
 import net.minecraftforge.common.extensions.IForgeContainerType;
 import net.minecraftforge.common.model.TRSRTransformation;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
-import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -67,11 +63,7 @@ public class ModuleTransport implements IModule {
         );
         Feature.Builder builder = Feature.builder("conveyor_upgrades")
                 .eventClient(() -> () -> EventManager.mod(ModelBakeEvent.class).process(this::conveyorBake))
-                .eventClient(() -> () -> EventManager.mod(TextureStitchEvent.Pre.class).process(this::textureStitch))
-                .event(EventManager.mod(FMLCommonSetupEvent.class).process(fmlCommonSetupEvent -> {
-                    NetworkHandler.registerMessage(ConveyorButtonInteractMessage.class);
-                    NetworkHandler.registerMessage(ConveyorSplittingSyncEntityMessage.class);
-                }));
+                .eventClient(() -> () -> EventManager.mod(TextureStitchEvent.Pre.class).process(this::textureStitch));
         ConveyorUpgradeFactory.FACTORIES.forEach(conveyorUpgradeFactory -> builder.content(Item.class, new ItemConveyorUpgrade(conveyorUpgradeFactory, TAB_TRANSPORT)));
         features.add(builder);
         return features;
