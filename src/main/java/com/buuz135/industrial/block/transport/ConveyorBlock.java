@@ -173,7 +173,7 @@ public class ConveyorBlock extends BlockTileBase<ConveyorTile> implements IWater
     public List<VoxelShape> getBoundingBoxes(BlockState state, IBlockReader source, BlockPos pos) {
         List<VoxelShape> boxes = new ArrayList<>();
         if (state.get(TYPE).isVertical()) {
-            boxes.add(VoxelShapes.create(0, 0, 0, 1, 0.40, 1));
+            boxes.add(VoxelShapes.create(0, 0, 0, 1, 1 / 16D, 1));
         } else {
             boxes.add(VoxelShapes.create(0, 0, 0, 1, 1 / 16D, 1));
         }
@@ -428,7 +428,6 @@ public class ConveyorBlock extends BlockTileBase<ConveyorTile> implements IWater
     }
 
     public enum EnumType implements IStringSerializable {
-
 
         FLAT(false), UP(false), DOWN(false), FLAT_FAST(true), UP_FAST(true), DOWN_FAST(true);
 
