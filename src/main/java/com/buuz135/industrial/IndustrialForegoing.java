@@ -64,6 +64,9 @@ public class IndustrialForegoing extends ModuleController {
     private static HashMap<Integer, IFFakePlayer> worldFakePlayer = new HashMap<>();
 
     public IndustrialForegoing() {
+        ResourceRegistry.getOrCreate("iron").add(ResourceType.GEAR);
+        ResourceRegistry.getOrCreate("gold").add(ResourceType.GEAR);
+        ResourceRegistry.getOrCreate("diamond").add(ResourceType.GEAR);
         NetworkHandler.registerMessage(ConveyorButtonInteractMessage.class);
         NetworkHandler.registerMessage(ConveyorSplittingSyncEntityMessage.class);
         proxy = DistExecutor.runForDist(() -> ClientProxy::new, () -> CommonProxy::new);
@@ -95,9 +98,6 @@ public class IndustrialForegoing extends ModuleController {
     @Override
     public void onPreInit() {
         super.onPreInit();
-        ResourceRegistry.getOrCreate("iron").add(ResourceType.GEAR);
-        ResourceRegistry.getOrCreate("gold").add(ResourceType.GEAR);
-        ResourceRegistry.getOrCreate("diamond").add(ResourceType.GEAR);
     }
 
     @Override
