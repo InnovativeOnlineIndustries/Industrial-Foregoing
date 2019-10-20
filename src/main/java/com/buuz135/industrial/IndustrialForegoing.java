@@ -63,10 +63,13 @@ public class IndustrialForegoing extends ModuleController {
     private static CommonProxy proxy;
     private static HashMap<Integer, IFFakePlayer> worldFakePlayer = new HashMap<>();
 
-    public IndustrialForegoing() {
+    static {
         ResourceRegistry.getOrCreate("iron").add(ResourceType.GEAR);
         ResourceRegistry.getOrCreate("gold").add(ResourceType.GEAR);
         ResourceRegistry.getOrCreate("diamond").add(ResourceType.GEAR);
+    }
+
+    public IndustrialForegoing() {
         NetworkHandler.registerMessage(ConveyorButtonInteractMessage.class);
         NetworkHandler.registerMessage(ConveyorSplittingSyncEntityMessage.class);
         proxy = DistExecutor.runForDist(() -> ClientProxy::new, () -> CommonProxy::new);
