@@ -26,7 +26,13 @@ public class PlantSowerTile extends IndustrialAreaWorkingTile {
 
     public PlantSowerTile() {
         super(ModuleAgricultureHusbandry.PLANT_SOWER, RangeManager.RangeType.TOP_UP);
-        addFilter(this.filter = new ItemstackFilter("filter", 9));
+        addFilter(this.filter = new ItemstackFilter("filter", 9) {
+            @Override
+            public void onContentChanged() {
+                super.onContentChanged();
+                markForUpdate();
+            }
+        });
         int pos = 0;
         for (int y = 0; y < 3; y++) {
             for (int x = 0; x < 3; x++) {
@@ -50,6 +56,7 @@ public class PlantSowerTile extends IndustrialAreaWorkingTile {
             int slot = getFilteredSlot(pos);
             ItemStack stack = ItemStack.EMPTY;
             for (int i = 0; i < input.getSlots(); i++) {
+                if (input.getStackInSlot(i).isEmpty()) continue;
                 if (filter.getFilterSlots()[slot].getFilter().isEmpty() || filter.getFilterSlots()[slot].getFilter().isItemEqual(input.getStackInSlot(i))) {
                     stack = input.getStackInSlot(i);
                     break;
@@ -82,5 +89,10 @@ public class PlantSowerTile extends IndustrialAreaWorkingTile {
         int x = Math.round(1.49F * (pos.getX() - this.pos.getX()) / radius);
         int z = Math.round(1.49F * (pos.getZ() - this.pos.getZ()) / radius);
         return 4 + x + 3 * z;
+    }
+
+    @Override
+    public int getMaxProgress() {
+        return 50;
     }
 }
