@@ -74,6 +74,7 @@ public class DissolutionChamberRecipe extends SerializableRecipe {
     }
 
     public boolean matches(IItemHandler handler, PosFluidTank tank) {
+        if (input == null || tank == null || inputFluid == null) return false;
         List<ItemStack> handlerItems = new ArrayList<>();
         for (int i = 0; i < handler.getSlots(); i++) {
             if (!handler.getStackInSlot(i).isEmpty()) handlerItems.add(handler.getStackInSlot(i).copy());

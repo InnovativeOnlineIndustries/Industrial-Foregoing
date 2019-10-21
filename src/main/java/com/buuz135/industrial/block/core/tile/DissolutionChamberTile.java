@@ -53,7 +53,8 @@ public class DissolutionChamberTile extends IndustrialProcessingTile {
     }
 
     private void checkForRecipe() {
-        currentRecipe = RecipeUtil.getRecipes(this.world, DissolutionChamberRecipe.SERIALIZER.getRecipeType()).stream().filter(dissolutionChamberRecipe -> dissolutionChamberRecipe.matches(input, inputFluid)).findFirst().orElse(null);
+        if (isServer())
+            currentRecipe = RecipeUtil.getRecipes(this.world, DissolutionChamberRecipe.SERIALIZER.getRecipeType()).stream().filter(dissolutionChamberRecipe -> dissolutionChamberRecipe.matches(input, inputFluid)).findFirst().orElse(null);
     }
 
     @Override
