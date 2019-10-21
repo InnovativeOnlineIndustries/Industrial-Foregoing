@@ -26,6 +26,7 @@ import com.buuz135.industrial.proxy.CommonProxy;
 import com.buuz135.industrial.proxy.client.ClientProxy;
 import com.buuz135.industrial.proxy.network.ConveyorButtonInteractMessage;
 import com.buuz135.industrial.proxy.network.ConveyorSplittingSyncEntityMessage;
+import com.buuz135.industrial.proxy.network.SpecialParticleMessage;
 import com.buuz135.industrial.recipe.DissolutionChamberRecipe;
 import com.buuz135.industrial.recipe.FluidExtractorRecipe;
 import com.buuz135.industrial.recipe.provider.IndustrialRecipeProvider;
@@ -62,16 +63,18 @@ public class IndustrialForegoing extends ModuleController {
 
     private static CommonProxy proxy;
     private static HashMap<Integer, IFFakePlayer> worldFakePlayer = new HashMap<>();
+    public static NetworkHandler NETWORK = new NetworkHandler(Reference.MOD_ID);
 
     static {
         ResourceRegistry.getOrCreate("iron").add(ResourceType.GEAR);
         ResourceRegistry.getOrCreate("gold").add(ResourceType.GEAR);
         ResourceRegistry.getOrCreate("diamond").add(ResourceType.GEAR);
+        NETWORK.registerMessage(ConveyorButtonInteractMessage.class);
+        NETWORK.registerMessage(ConveyorSplittingSyncEntityMessage.class);
+        NETWORK.registerMessage(SpecialParticleMessage.class);
     }
 
     public IndustrialForegoing() {
-        NetworkHandler.registerMessage(ConveyorButtonInteractMessage.class);
-        NetworkHandler.registerMessage(ConveyorSplittingSyncEntityMessage.class);
         proxy = DistExecutor.runForDist(() -> ClientProxy::new, () -> CommonProxy::new);
         EventManager.mod(FMLCommonSetupEvent.class).process(fmlCommonSetupEvent -> proxy.run()).subscribe();
         EventManager.mod(FMLClientSetupEvent.class).process(fmlClientSetupEvent -> proxy.run()).subscribe();

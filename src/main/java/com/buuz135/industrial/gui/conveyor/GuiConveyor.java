@@ -21,13 +21,13 @@
  */
 package com.buuz135.industrial.gui.conveyor;
 
+import com.buuz135.industrial.IndustrialForegoing;
 import com.buuz135.industrial.api.conveyor.ConveyorUpgrade;
 import com.buuz135.industrial.api.conveyor.gui.IGuiComponent;
 import com.buuz135.industrial.gui.component.FilterGuiComponent;
 import com.buuz135.industrial.proxy.block.filter.IFilter;
 import com.buuz135.industrial.proxy.network.ConveyorButtonInteractMessage;
 import com.buuz135.industrial.utils.Reference;
-import com.hrznstudio.titanium.network.NetworkHandler;
 import com.mojang.blaze3d.platform.GlStateManager;
 import net.minecraft.client.gui.screen.inventory.ContainerScreen;
 import net.minecraft.entity.player.PlayerInventory;
@@ -120,7 +120,7 @@ public class GuiConveyor extends ContainerScreen<ContainerConveyor> {
     }
 
     public void sendMessage(int id, CompoundNBT compound) {
-        NetworkHandler.NETWORK.sendToServer(new ConveyorButtonInteractMessage(upgrade.getPos(), id, upgrade.getSide(), compound));
+        IndustrialForegoing.NETWORK.get().sendToServer(new ConveyorButtonInteractMessage(upgrade.getPos(), id, upgrade.getSide(), compound));
     }
 
     public List<IFilter.GhostSlot> getGhostSlots() {

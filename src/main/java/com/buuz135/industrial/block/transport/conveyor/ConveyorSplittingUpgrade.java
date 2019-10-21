@@ -21,6 +21,7 @@
  */
 package com.buuz135.industrial.block.transport.conveyor;
 
+import com.buuz135.industrial.IndustrialForegoing;
 import com.buuz135.industrial.api.conveyor.ConveyorUpgrade;
 import com.buuz135.industrial.api.conveyor.ConveyorUpgradeFactory;
 import com.buuz135.industrial.api.conveyor.IConveyorContainer;
@@ -34,7 +35,6 @@ import com.buuz135.industrial.module.ModuleTransport;
 import com.buuz135.industrial.proxy.network.ConveyorSplittingSyncEntityMessage;
 import com.buuz135.industrial.utils.MovementUtils;
 import com.buuz135.industrial.utils.Reference;
-import com.hrznstudio.titanium.network.NetworkHandler;
 import com.hrznstudio.titanium.recipe.generator.TitaniumShapedRecipeBuilder;
 import net.minecraft.block.Blocks;
 import net.minecraft.data.IFinishedRecipe;
@@ -81,7 +81,7 @@ public class ConveyorSplittingUpgrade extends ConveyorUpgrade {
             if (nextFacing == this.getSide()) {
                 this.handlingEntities.add(entity.getEntityId());
                 this.getContainer().getEntityFilter().add(entity.getEntityId());
-                NetworkHandler.sendToNearby(getContainer().getConveyorWorld(), getPos(), 64, new ConveyorSplittingSyncEntityMessage(this.getPos(), entity.getEntityId(), this.getSide()));
+                IndustrialForegoing.NETWORK.sendToNearby(getContainer().getConveyorWorld(), getPos(), 64, new ConveyorSplittingSyncEntityMessage(this.getPos(), entity.getEntityId(), this.getSide()));
                 findNextUpgradeAndUpdate();
             }
         }

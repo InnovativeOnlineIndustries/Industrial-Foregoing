@@ -26,13 +26,11 @@ import com.buuz135.industrial.proxy.event.FakePlayerRideEntityHandler;
 import com.buuz135.industrial.proxy.event.MeatFeederTickHandler;
 import com.buuz135.industrial.proxy.event.MobDeathHandler;
 import com.buuz135.industrial.proxy.event.SkullHandler;
-import com.buuz135.industrial.proxy.network.SpecialParticleMessage;
 import com.buuz135.industrial.utils.CraftingUtils;
 import com.buuz135.industrial.utils.Reference;
 import com.buuz135.industrial.utils.apihandlers.PlantRecollectableRegistryHandler;
 import com.buuz135.industrial.utils.apihandlers.RecipeHandlers;
 import com.google.gson.JsonParser;
-import com.hrznstudio.titanium.network.NetworkHandler;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.ResourceLocation;
@@ -96,8 +94,6 @@ public class CommonProxy {
         MinecraftForge.EVENT_BUS.register(new PlantRecollectableRegistryHandler());
         MinecraftForge.EVENT_BUS.register(new FakePlayerRideEntityHandler());
         MinecraftForge.EVENT_BUS.register(new SkullHandler());
-
-        NetworkHandler.registerMessage(SpecialParticleMessage.class);
 
 //        CustomConfiguration.config = new Configuration(event.getSuggestedConfigurationFile());
 //        CustomConfiguration.config.load();
