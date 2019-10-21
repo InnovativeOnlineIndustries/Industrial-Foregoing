@@ -45,6 +45,7 @@ public class DissolutionChamberTile extends IndustrialProcessingTile {
         this.addInventory(this.output = (SidedInvHandler) new SidedInvHandler("output", 129, 22, 3, 2).
                 setColor(DyeColor.ORANGE).
                 setRange(1, 3).
+                setInputFilter((stack, integer) -> false).
                 setTile(this));
         this.addTank(this.outputFluid = (SidedFluidTank) new SidedFluidTank("output_fluid", 16000, 149, 20, 3).
                 setColor(DyeColor.MAGENTA).
@@ -53,8 +54,12 @@ public class DissolutionChamberTile extends IndustrialProcessingTile {
     }
 
     private void checkForRecipe() {
-        if (isServer())
+        if (isServer()) {
+            if (currentRecipe != null && currentRecipe.matches(input, inputFluid)) {
+                return;
+            }
             currentRecipe = RecipeUtil.getRecipes(this.world, DissolutionChamberRecipe.SERIALIZER.getRecipeType()).stream().filter(dissolutionChamberRecipe -> dissolutionChamberRecipe.matches(input, inputFluid)).findFirst().orElse(null);
+        }
     }
 
     @Override
@@ -72,14 +77,15 @@ public class DissolutionChamberTile extends IndustrialProcessingTile {
     public Runnable onFinish() {
         return () -> {
             if (currentRecipe != null) {
-                inputFluid.drainForced(currentRecipe.inputFluid, IFluidHandler.FluidAction.EXECUTE);
+                DissolutionChamberRecipe dissolutionChamberRecipe = currentRecipe;
+                inputFluid.drainForced(dissolutionChamberRecipe.inputFluid, IFluidHandler.FluidAction.EXECUTE);
                 for (int i = 0; i < input.getSlots(); i++) {
                     input.getStackInSlot(i).shrink(1);
                 }
-                if (currentRecipe.outputFluid != null && !currentRecipe.outputFluid.isEmpty())
-                    outputFluid.fillForced(currentRecipe.outputFluid.copy(), IFluidHandler.FluidAction.EXECUTE);
-                ItemHandlerHelper.insertItem(output, currentRecipe.output.copy(), false);
-                checkForRecipe();
+                if (dissolutionChamberRecipe.outputFluid != null && !dissolutionChamberRecipe.outputFluid.isEmpty())
+                    outputFluid.fillForced(dissolutionChamberRecipe.outputFluid.copy(), IFluidHandler.FluidAction.EXECUTE);
+                ItemHandlerHelper.insertItem(output, dissolutionChamberRecipe.output.copy(), false);
+                //checkForRecipe();
             }
         };
     }
