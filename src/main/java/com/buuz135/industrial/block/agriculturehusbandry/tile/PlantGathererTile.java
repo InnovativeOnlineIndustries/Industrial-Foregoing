@@ -7,6 +7,7 @@ import com.buuz135.industrial.block.tile.RangeManager;
 import com.buuz135.industrial.module.ModuleAgricultureHusbandry;
 import com.buuz135.industrial.module.ModuleCore;
 import com.buuz135.industrial.registry.IFRegistries;
+import com.buuz135.industrial.utils.BlockUtils;
 import com.hrznstudio.titanium.annotation.Save;
 import com.hrznstudio.titanium.block.tile.fluid.SidedFluidTank;
 import com.hrznstudio.titanium.block.tile.inventory.SidedInvHandler;
@@ -40,15 +41,19 @@ public class PlantGathererTile extends IndustrialAreaWorkingTile {
     @Override
     public IndustrialWorkingTile.WorkAction work() {
         if (hasEnergy(400)) {
-            Optional<PlantRecollectable> optional = IFRegistries.PLANT_RECOLLECTABLES_REGISTRY.getValues().stream().filter(plantRecollectable -> plantRecollectable.canBeHarvested(this.world, getPointedBlockPos(), this.world.getBlockState(getPointedBlockPos()))).findFirst();
-            if (optional.isPresent()) {
-                List<ItemStack> drops = optional.get().doHarvestOperation(this.world, getPointedBlockPos(), this.world.getBlockState(getPointedBlockPos()));
-                tank.fill(new FluidStack(ModuleCore.SLUDGE.getSourceFluid(), 10 * drops.size()), IFluidHandler.FluidAction.EXECUTE);
-                drops.forEach(stack -> ItemHandlerHelper.insertItem(output, stack, false));
-                if (optional.get().shouldCheckNextPlant(this.world, getPointedBlockPos(), this.world.getBlockState(getPointedBlockPos()))) {
-                    increasePointer();
+            int amount = BlockUtils.getBlockPosInAABB(getWorkingArea().getBoundingBox()).size() / 4;
+            for (int i = 0; i < amount; i++) {
+                Optional<PlantRecollectable> optional = IFRegistries.PLANT_RECOLLECTABLES_REGISTRY.getValues().stream().filter(plantRecollectable -> plantRecollectable.canBeHarvested(this.world, getPointedBlockPos(), this.world.getBlockState(getPointedBlockPos()))).findFirst();
+                if (optional.isPresent()) {
+                    List<ItemStack> drops = optional.get().doHarvestOperation(this.world, getPointedBlockPos(), this.world.getBlockState(getPointedBlockPos()));
+                    tank.fill(new FluidStack(ModuleCore.SLUDGE.getSourceFluid(), 10 * drops.size()), IFluidHandler.FluidAction.EXECUTE);
+                    drops.forEach(stack -> ItemHandlerHelper.insertItem(output, stack, false));
+                    if (optional.get().shouldCheckNextPlant(this.world, getPointedBlockPos(), this.world.getBlockState(getPointedBlockPos()))) {
+                        increasePointer();
+                    }
+                    return new WorkAction(0.1f, 400);
                 }
-                return new WorkAction(0.1f, 400);
+                increasePointer();
             }
         }
         increasePointer();

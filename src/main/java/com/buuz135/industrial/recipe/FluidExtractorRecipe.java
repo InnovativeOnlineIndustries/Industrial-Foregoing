@@ -76,7 +76,7 @@ public class FluidExtractorRecipe extends SerializableRecipe {
 
     @Override
     public ItemStack getRecipeOutput() {
-        return new ItemStack(result);
+        return input.getStacks().iterator().next();
     }
 
     @Override
