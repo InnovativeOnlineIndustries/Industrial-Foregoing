@@ -1,9 +1,6 @@
 package com.buuz135.industrial.module;
 
-import com.buuz135.industrial.block.resourceproduction.MechanicalDirtBlock;
-import com.buuz135.industrial.block.resourceproduction.ResourcefulFurnaceBlock;
-import com.buuz135.industrial.block.resourceproduction.SludgeRefinerBlock;
-import com.buuz135.industrial.block.resourceproduction.WaterCondensatorBlock;
+import com.buuz135.industrial.block.resourceproduction.*;
 import com.buuz135.industrial.utils.Reference;
 import com.hrznstudio.titanium.module.Feature;
 import com.hrznstudio.titanium.tab.AdvancedTitaniumTab;
@@ -19,6 +16,7 @@ public class ModuleResourceProduction implements IModule {
     public static SludgeRefinerBlock SLUDGE_REFINER = new SludgeRefinerBlock();
     public static WaterCondensatorBlock WATER_CONDENSATOR = new WaterCondensatorBlock();
     public static MechanicalDirtBlock MECHANICAL_DIRT = new MechanicalDirtBlock();
+    public static BlockPlacerBlock BLOCK_PLACER = new BlockPlacerBlock();
 
     @Override
     public List<Feature.Builder> generateFeatures() {
@@ -27,6 +25,7 @@ public class ModuleResourceProduction implements IModule {
         features.add(createFeature(SLUDGE_REFINER));
         features.add(createFeature(WATER_CONDENSATOR));
         features.add(createFeature(MECHANICAL_DIRT));
+        features.add(createFeature(BLOCK_PLACER));
         return features;
     }
 

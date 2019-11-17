@@ -23,7 +23,16 @@ package com.buuz135.industrial.utils;
 
 import com.mojang.authlib.GameProfile;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.ItemUseContext;
+import net.minecraft.util.ActionResultType;
+import net.minecraft.util.Direction;
+import net.minecraft.util.Hand;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.BlockRayTraceResult;
+import net.minecraft.util.math.Vec3d;
+import net.minecraft.world.World;
 import net.minecraft.world.server.ServerWorld;
+import net.minecraftforge.common.ForgeHooks;
 import net.minecraftforge.common.util.FakePlayer;
 
 import java.util.UUID;
@@ -41,5 +50,10 @@ public class IFFakePlayer extends FakePlayer {
     @Override
     protected void playEquipSound(ItemStack stack) {
 
+    }
+
+    public boolean placeBlock(World world, BlockPos pos, ItemStack stack) {
+        this.setHeldItem(Hand.MAIN_HAND, stack);
+        return ForgeHooks.onPlaceItemIntoWorld(new ItemUseContext(this, Hand.MAIN_HAND, new BlockRayTraceResult(new Vec3d(0, 0, 0), Direction.DOWN, pos, false))) == ActionResultType.SUCCESS;
     }
 }
