@@ -19,9 +19,9 @@ public class BlockPlacerTile extends IndustrialAreaWorkingTile {
 
     public BlockPlacerTile() {
         super(ModuleResourceProduction.BLOCK_PLACER, RangeManager.RangeType.BEHIND);
-        this.addInventory(this.input = (SidedInvHandler) new SidedInvHandler("input", 44, 22, 3 * 5, 0).
+        this.addInventory(this.input = (SidedInvHandler) new SidedInvHandler("input", 54, 22, 3 * 6, 0).
                 setColor(DyeColor.BLUE).
-                setRange(5, 3));
+                setRange(6, 3));
     }
 
     @Override
