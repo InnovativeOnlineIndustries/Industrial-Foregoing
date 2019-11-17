@@ -1,0 +1,53 @@
+package com.buuz135.industrial.block.resourceproduction.tile;
+
+import com.buuz135.industrial.IndustrialForegoing;
+import com.buuz135.industrial.block.tile.IndustrialAreaWorkingTile;
+import com.buuz135.industrial.block.tile.RangeManager;
+import com.buuz135.industrial.item.RangeAddonItem;
+import com.buuz135.industrial.module.ModuleResourceProduction;
+import com.buuz135.industrial.utils.IFFakePlayer;
+import com.hrznstudio.titanium.annotation.Save;
+import com.hrznstudio.titanium.api.augment.IAugment;
+import com.hrznstudio.titanium.block.tile.inventory.SidedInvHandler;
+import net.minecraft.item.BlockItem;
+import net.minecraft.item.DyeColor;
+
+public class BlockPlacerTile extends IndustrialAreaWorkingTile {
+
+    @Save
+    private SidedInvHandler input;
+
+    public BlockPlacerTile() {
+        super(ModuleResourceProduction.BLOCK_PLACER, RangeManager.RangeType.BEHIND);
+        this.addInventory(this.input = (SidedInvHandler) new SidedInvHandler("input", 44, 22, 3 * 5, 0).
+                setColor(DyeColor.BLUE).
+                setRange(5, 3));
+    }
+
+    @Override
+    public WorkAction work() {
+        if (hasEnergy(1000)) {
+            if (world.isAirBlock(getPointedBlockPos())) {
+                for (int i = 0; i < input.getSlots(); i++) {
+                    if (!input.getStackInSlot(i).isEmpty() && input.getStackInSlot(i).getItem() instanceof BlockItem) {
+                        IFFakePlayer fakePlayer = (IFFakePlayer) IndustrialForegoing.getFakePlayer(world, getPointedBlockPos());
+                        if (fakePlayer.placeBlock(this.world, getPointedBlockPos(), input.getStackInSlot(i))) {
+                            increasePointer();
+                            return new WorkAction(1f, 1000);
+                        }
+                    }
+                }
+            } else {
+                increasePointer();
+            }
+        }
+        return new WorkAction(1, 0);
+    }
+
+    @Override
+    public boolean canAcceptAugment(IAugment augment) {
+        if (augment.getAugmentType().equals(RangeAddonItem.RANGE)) return false;
+        return super.canAcceptAugment(augment);
+    }
+
+}
