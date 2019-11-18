@@ -32,6 +32,7 @@ import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
+import net.minecraft.entity.item.ItemEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.Direction;
@@ -115,6 +116,14 @@ public class BlockUtils {
         BlockEvent.HarvestDropsEvent event = new BlockEvent.HarvestDropsEvent(world, pos, world.getBlockState(pos), 0, 1f, stacks, IndustrialForegoing.getFakePlayer(world), false);
         MinecraftForge.EVENT_BUS.post(event);
         return event.getDrops();
+    }
+
+    public static boolean spawnItemStack(ItemStack stack, World world, BlockPos pos) {
+        ItemEntity item = new ItemEntity(world, pos.getX() + 0.5, pos.getY() + 0.2, pos.getZ() + 0.5);
+        item.setMotion(0, -1, 0);
+        item.setPickupDelay(40);
+        item.setItem(stack);
+        return world.addEntity(item);
     }
 
     public static void renderLaserBeam(TileEntity tile, double x, double y, double z, Direction direction, float partialTicks, int length) {

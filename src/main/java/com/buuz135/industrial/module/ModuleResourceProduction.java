@@ -17,6 +17,7 @@ public class ModuleResourceProduction implements IModule {
     public static WaterCondensatorBlock WATER_CONDENSATOR = new WaterCondensatorBlock();
     public static MechanicalDirtBlock MECHANICAL_DIRT = new MechanicalDirtBlock();
     public static BlockPlacerBlock BLOCK_PLACER = new BlockPlacerBlock();
+    public static BlockBreakerBlock BLOCK_BREAKER = new BlockBreakerBlock();
 
     @Override
     public List<Feature.Builder> generateFeatures() {
@@ -26,6 +27,7 @@ public class ModuleResourceProduction implements IModule {
         features.add(createFeature(WATER_CONDENSATOR));
         features.add(createFeature(MECHANICAL_DIRT));
         features.add(createFeature(BLOCK_PLACER));
+        features.add(createFeature(BLOCK_BREAKER));
         return features;
     }
 

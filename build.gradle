@@ -61,7 +61,7 @@ minecraft {
         data {
             workingDirectory project.file('run')
             property 'forge.logging.console.level', 'info'
-            args '--mod', 'industrialforegoing', '--all', '--output', file('src/main/resources'), '--input', file('src/main/resources')
+            args '--mod', 'industrialforegoing', '--all', '--output', file('src/main/resources'), '--existing', '--input', file('src/main/resources')
             source sourceSets.main
         }
     }
