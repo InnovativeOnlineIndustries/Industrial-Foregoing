@@ -18,6 +18,8 @@ public class ModuleResourceProduction implements IModule {
     public static MechanicalDirtBlock MECHANICAL_DIRT = new MechanicalDirtBlock();
     public static BlockPlacerBlock BLOCK_PLACER = new BlockPlacerBlock();
     public static BlockBreakerBlock BLOCK_BREAKER = new BlockBreakerBlock();
+    public static FluidCollectorBlock FLUID_COLLECTOR = new FluidCollectorBlock();
+    public static FluidPlacerBlock FLUID_PLACER = new FluidPlacerBlock();
 
     @Override
     public List<Feature.Builder> generateFeatures() {
@@ -28,6 +30,8 @@ public class ModuleResourceProduction implements IModule {
         features.add(createFeature(MECHANICAL_DIRT));
         features.add(createFeature(BLOCK_PLACER));
         features.add(createFeature(BLOCK_BREAKER));
+        features.add(createFeature(FLUID_COLLECTOR));
+        features.add(createFeature(FLUID_PLACER));
         return features;
     }
 

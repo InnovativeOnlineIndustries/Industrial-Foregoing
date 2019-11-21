@@ -253,6 +253,8 @@
   "block.industrialforegoing.ore_fermenter": "Fermentation Station",
   "block.industrialforegoing.ore_sieve": "Fluid Sieving Machine",
   "block.industrialforegoing.pitiful_generator": "Pitiful Generator",
+  "block.industrialforegoing.fluid_collector": "Fluid Collector",
+  "block.industrialforegoing.fluid_placer": "Fluid Placer",
   "block.essence": "Essence",
   "block.milk": "Milk",
   "block.meat": "Liquid Meat",
