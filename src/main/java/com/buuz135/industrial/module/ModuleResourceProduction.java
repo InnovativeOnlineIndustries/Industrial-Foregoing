@@ -20,6 +20,7 @@ public class ModuleResourceProduction implements IModule {
     public static BlockBreakerBlock BLOCK_BREAKER = new BlockBreakerBlock();
     public static FluidCollectorBlock FLUID_COLLECTOR = new FluidCollectorBlock();
     public static FluidPlacerBlock FLUID_PLACER = new FluidPlacerBlock();
+    public static DyeMixerBlock DYE_MIXER = new DyeMixerBlock();
 
     @Override
     public List<Feature.Builder> generateFeatures() {
@@ -32,6 +33,7 @@ public class ModuleResourceProduction implements IModule {
         features.add(createFeature(BLOCK_BREAKER));
         features.add(createFeature(FLUID_COLLECTOR));
         features.add(createFeature(FLUID_PLACER));
+        features.add(createFeature(DYE_MIXER));
         return features;
     }
 
