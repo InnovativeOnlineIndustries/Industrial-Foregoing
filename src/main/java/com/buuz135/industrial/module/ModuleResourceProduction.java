@@ -21,6 +21,7 @@ public class ModuleResourceProduction implements IModule {
     public static FluidCollectorBlock FLUID_COLLECTOR = new FluidCollectorBlock();
     public static FluidPlacerBlock FLUID_PLACER = new FluidPlacerBlock();
     public static DyeMixerBlock DYE_MIXER = new DyeMixerBlock();
+    public static SporesRecreatorBlock SPORES_RECREATOR = new SporesRecreatorBlock();
 
     @Override
     public List<Feature.Builder> generateFeatures() {
@@ -34,6 +35,7 @@ public class ModuleResourceProduction implements IModule {
         features.add(createFeature(FLUID_COLLECTOR));
         features.add(createFeature(FLUID_PLACER));
         features.add(createFeature(DYE_MIXER));
+        features.add(createFeature(SPORES_RECREATOR));
         return features;
     }
 

@@ -1,15 +1,9 @@
 {
   "forge_marker": 1,
   "defaults": {
-    "model": "industrialforegoing:spores_recreator"
+    "model": "industrialforegoing:block/spores_recreator"
   },
   "variants": {
-    "normal": [
-      {}
-    ],
-    "inventory": [
-      {}
-    ],
     "facing": {
       "north": {},
       "south": {
