@@ -10,12 +10,16 @@ import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.item.ItemStack;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public abstract class ItemGuiAddon extends BasicGuiAddon {
 
+    private boolean tooltip;
+
     protected ItemGuiAddon(int posX, int posY) {
         super(posX, posY);
+        this.tooltip = true;
     }
 
     @Override
@@ -42,9 +46,14 @@ public abstract class ItemGuiAddon extends BasicGuiAddon {
 
     }
 
+    public ItemGuiAddon withoutTooltip() {
+        this.tooltip = false;
+        return this;
+    }
+
     @Override
     public List<String> getTooltipLines() {
-        return Minecraft.getInstance().currentScreen.getTooltipFromItem(getItemStack());
+        return this.tooltip ? Minecraft.getInstance().currentScreen.getTooltipFromItem(getItemStack()) : new ArrayList<>();
     }
 
     public abstract ItemStack getItemStack();

@@ -1,15 +1,9 @@
 {
   "forge_marker": 1,
   "defaults": {
-    "model": "industrialforegoing:animal_independence_selector"
+    "model": "industrialforegoing:block/animal_baby_separator"
   },
   "variants": {
-    "normal": [
-      {}
-    ],
-    "inventory": [
-      {}
-    ],
     "facing": {
       "north": {},
       "south": {

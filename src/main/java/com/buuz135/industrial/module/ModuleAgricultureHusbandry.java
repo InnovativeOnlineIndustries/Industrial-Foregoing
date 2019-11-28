@@ -27,6 +27,7 @@ public class ModuleAgricultureHusbandry implements IModule {
     public static SlaughterFactoryBlock SLAUGHTER_FACTORY = new SlaughterFactoryBlock();
     public static AnimalRancherBlock ANIMAL_RANCHER = new AnimalRancherBlock();
     public static AnimalFeederBlock ANIMAL_FEEDER = new AnimalFeederBlock();
+    public static AnimalBabySeparatorBlock ANIMAL_BABY_SEPARATOR = new AnimalBabySeparatorBlock();
 
     @Override
     public List<Feature.Builder> generateFeatures() {
@@ -49,6 +50,7 @@ public class ModuleAgricultureHusbandry implements IModule {
         builders.add(createFeature(SLAUGHTER_FACTORY));
         builders.add(createFeature(ANIMAL_RANCHER));
         builders.add(createFeature(ANIMAL_FEEDER));
+        builders.add(createFeature(ANIMAL_BABY_SEPARATOR));
         TAB_AG_HUS.addIconStack(new ItemStack(PLANT_GATHERER));
         return builders;
     }
