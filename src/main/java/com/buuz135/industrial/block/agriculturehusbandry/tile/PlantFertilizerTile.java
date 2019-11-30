@@ -35,21 +35,23 @@ public class PlantFertilizerTile extends IndustrialAreaWorkingTile {
         ItemStack stack = ItemHandlerUtil.getFirstItem(fertilizer);
         if (!stack.isEmpty() && hasEnergy(1000)) {
             BlockPos pointer = getPointedBlockPos();
-            BlockState state = this.world.getBlockState(pointer);
-            Block block = state.getBlock();
-            if (block instanceof IGrowable) {
-                if (((IGrowable) block).canGrow(world, pointer, state, false) && ((IGrowable) block).canUseBonemeal(world, world.rand, pointer, state)) {
-                    stack.shrink(1);
-                    ((IGrowable) block).grow(world, world.rand, pointer, state);
-                    if (((IGrowable) block).canGrow(world, pointer, state, false)) {
-                        return new WorkAction(0.25f, 1000);
+            if (isLoaded(pointer)) {
+                BlockState state = this.world.getBlockState(pointer);
+                Block block = state.getBlock();
+                if (block instanceof IGrowable) {
+                    if (((IGrowable) block).canGrow(world, pointer, state, false) && ((IGrowable) block).canUseBonemeal(world, world.rand, pointer, state)) {
+                        stack.shrink(1);
+                        ((IGrowable) block).grow(world, world.rand, pointer, state);
+                        if (((IGrowable) block).canGrow(world, pointer, state, false)) {
+                            return new WorkAction(0.25f, 1000);
+                        } else {
+                            increasePointer();
+                            return new WorkAction(0.5f, 1000);
+                        }
                     } else {
                         increasePointer();
-                        return new WorkAction(0.5f, 1000);
+                        return new WorkAction(0.5f, 0);
                     }
-                } else {
-                    increasePointer();
-                    return new WorkAction(0.5f, 0);
                 }
             }
         }

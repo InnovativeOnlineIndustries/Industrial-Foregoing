@@ -27,7 +27,7 @@ public class BlockPlacerTile extends IndustrialAreaWorkingTile {
     @Override
     public WorkAction work() {
         if (hasEnergy(1000)) {
-            if (world.isAirBlock(getPointedBlockPos())) {
+            if (isLoaded(getPointedBlockPos()) && world.isAirBlock(getPointedBlockPos())) {
                 for (int i = 0; i < input.getSlots(); i++) {
                     if (!input.getStackInSlot(i).isEmpty() && input.getStackInSlot(i).getItem() instanceof BlockItem) {
                         IFFakePlayer fakePlayer = (IFFakePlayer) IndustrialForegoing.getFakePlayer(world, getPointedBlockPos());

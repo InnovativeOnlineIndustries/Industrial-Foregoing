@@ -52,7 +52,7 @@ public class PlantSowerTile extends IndustrialAreaWorkingTile {
     @Override
     public WorkAction work() {
         BlockPos pos = getPointedBlockPos();
-        if (this.world.isAirBlock(pos) && hasEnergy(1000)) {
+        if (isLoaded(pos) && this.world.isAirBlock(pos) && hasEnergy(1000)) {
             int slot = getFilteredSlot(pos);
             ItemStack stack = ItemStack.EMPTY;
             for (int i = 0; i < input.getSlots(); i++) {

@@ -49,6 +49,7 @@ public class WaterCondensatorTile extends IndustrialWorkingTile {
     private int getWaterSources() {
         int amount = 0;
         for (Direction value : Direction.values()) {
+            if (!world.isAreaLoaded(this.pos.offset(value), this.pos.offset(value))) continue;
             IFluidState fluidState = this.world.getFluidState(this.pos.offset(value));
             if (fluidState.getFluid().equals(Fluids.WATER) && fluidState.isSource()) {
                 ++amount;

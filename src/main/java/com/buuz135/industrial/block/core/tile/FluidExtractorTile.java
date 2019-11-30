@@ -37,20 +37,22 @@ public class FluidExtractorTile extends IndustrialAreaWorkingTile {
     @Override
     public WorkAction work() {
         BlockPos pos = getPointedBlockPos();
-        if (currentRecipe == null || !currentRecipe.matches(this.world, pos))
-            currentRecipe = findRecipe(this.world, pos);
-        if (currentRecipe != null) {
-            FluidExtractionProgress extractionProgress = EXTRACTION.computeIfAbsent(this.world.dimension.getType(), dimensionType -> new HashMap<>()).computeIfAbsent(this.world.getChunkAt(pos).getPos(), chunkPos -> new HashMap<>()).computeIfAbsent(pos, pos1 -> new FluidExtractionProgress(this.world));
-            tank.fill(currentRecipe.output.copy(), IFluidHandler.FluidAction.EXECUTE);
-            if (this.world.rand.nextDouble() <= currentRecipe.breakChance) {
-                extractionProgress.setProgress(extractionProgress.getProgress() + 1);
+        if (isLoaded(pos)) {
+            if (currentRecipe == null || !currentRecipe.matches(this.world, pos))
+                currentRecipe = findRecipe(this.world, pos);
+            if (currentRecipe != null) {
+                FluidExtractionProgress extractionProgress = EXTRACTION.computeIfAbsent(this.world.dimension.getType(), dimensionType -> new HashMap<>()).computeIfAbsent(this.world.getChunkAt(pos).getPos(), chunkPos -> new HashMap<>()).computeIfAbsent(pos, pos1 -> new FluidExtractionProgress(this.world));
+                tank.fill(currentRecipe.output.copy(), IFluidHandler.FluidAction.EXECUTE);
+                if (this.world.rand.nextDouble() <= currentRecipe.breakChance) {
+                    extractionProgress.setProgress(extractionProgress.getProgress() + 1);
+                }
+                if (extractionProgress.getProgress() > 7) {
+                    extractionProgress.setProgress(0);
+                    this.world.setBlockState(pos, currentRecipe.result.getDefaultState());
+                }
+                if (hasEnergy(500)) return new WorkAction(0.4f, 500);
+                return new WorkAction(1f, 0);
             }
-            if (extractionProgress.getProgress() > 7) {
-                extractionProgress.setProgress(0);
-                this.world.setBlockState(pos, currentRecipe.result.getDefaultState());
-            }
-            if (hasEnergy(500)) return new WorkAction(0.4f, 500);
-            return new WorkAction(1f, 0);
         }
         return new WorkAction(1, 0);
     }

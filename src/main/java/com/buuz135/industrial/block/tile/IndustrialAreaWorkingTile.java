@@ -69,6 +69,10 @@ public abstract class IndustrialAreaWorkingTile extends IndustrialWorkingTile {
         return showingArea;
     }
 
+    public boolean isLoaded(BlockPos pos) {
+        return world.isAreaLoaded(pos, pos);
+    }
+
     @Override
     public boolean canAcceptAugment(IAugment augment) {
         return super.canAcceptAugment(augment) && augment.getAugmentType().equals(RangeAddonItem.RANGE);

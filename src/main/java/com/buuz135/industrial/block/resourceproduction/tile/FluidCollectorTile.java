@@ -34,7 +34,7 @@ public class FluidCollectorTile extends IndustrialAreaWorkingTile {
     @Override
     public WorkAction work() {
         if (hasEnergy(1000)) {
-            if (!world.isAirBlock(getPointedBlockPos()) && BlockUtils.canBlockBeBroken(this.world, getPointedBlockPos()) && world.getFluidState(getPointedBlockPos()).isSource()) {
+            if (isLoaded(getPointedBlockPos()) && !world.isAirBlock(getPointedBlockPos()) && BlockUtils.canBlockBeBroken(this.world, getPointedBlockPos()) && world.getFluidState(getPointedBlockPos()).isSource()) {
                 Fluid fluid = world.getFluidState(getPointedBlockPos()).getFluid();
                 if (tank.isEmpty() || (tank.getFluid().getFluid().isEquivalentTo(fluid) && tank.getFluidAmount() + FluidAttributes.BUCKET_VOLUME <= tank.getCapacity())) {
                     if (world.getBlockState(getPointedBlockPos()).has(BlockStateProperties.WATERLOGGED)) {

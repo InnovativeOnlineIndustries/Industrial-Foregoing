@@ -43,15 +43,17 @@ public class PlantGathererTile extends IndustrialAreaWorkingTile {
         if (hasEnergy(400)) {
             int amount = Math.max(1, BlockUtils.getBlockPosInAABB(getWorkingArea().getBoundingBox()).size() / 4);
             for (int i = 0; i < amount; i++) {
-                Optional<PlantRecollectable> optional = IFRegistries.PLANT_RECOLLECTABLES_REGISTRY.getValues().stream().filter(plantRecollectable -> plantRecollectable.canBeHarvested(this.world, getPointedBlockPos(), this.world.getBlockState(getPointedBlockPos()))).findFirst();
-                if (optional.isPresent()) {
-                    List<ItemStack> drops = optional.get().doHarvestOperation(this.world, getPointedBlockPos(), this.world.getBlockState(getPointedBlockPos()));
-                    tank.fill(new FluidStack(ModuleCore.SLUDGE.getSourceFluid(), 10 * drops.size()), IFluidHandler.FluidAction.EXECUTE);
-                    drops.forEach(stack -> ItemHandlerHelper.insertItem(output, stack, false));
-                    if (optional.get().shouldCheckNextPlant(this.world, getPointedBlockPos(), this.world.getBlockState(getPointedBlockPos()))) {
-                        increasePointer();
+                if (isLoaded(getPointedBlockPos())) {
+                    Optional<PlantRecollectable> optional = IFRegistries.PLANT_RECOLLECTABLES_REGISTRY.getValues().stream().filter(plantRecollectable -> plantRecollectable.canBeHarvested(this.world, getPointedBlockPos(), this.world.getBlockState(getPointedBlockPos()))).findFirst();
+                    if (optional.isPresent()) {
+                        List<ItemStack> drops = optional.get().doHarvestOperation(this.world, getPointedBlockPos(), this.world.getBlockState(getPointedBlockPos()));
+                        tank.fill(new FluidStack(ModuleCore.SLUDGE.getSourceFluid(), 10 * drops.size()), IFluidHandler.FluidAction.EXECUTE);
+                        drops.forEach(stack -> ItemHandlerHelper.insertItem(output, stack, false));
+                        if (optional.get().shouldCheckNextPlant(this.world, getPointedBlockPos(), this.world.getBlockState(getPointedBlockPos()))) {
+                            increasePointer();
+                        }
+                        return new WorkAction(0.3f, 400);
                     }
-                    return new WorkAction(0.3f, 400);
                 }
                 increasePointer();
             }
