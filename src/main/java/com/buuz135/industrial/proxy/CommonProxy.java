@@ -28,9 +28,9 @@ import com.buuz135.industrial.proxy.event.MobDeathHandler;
 import com.buuz135.industrial.proxy.event.SkullHandler;
 import com.buuz135.industrial.utils.CraftingUtils;
 import com.buuz135.industrial.utils.Reference;
-import com.buuz135.industrial.utils.apihandlers.PlantRecollectableRegistryHandler;
 import com.buuz135.industrial.utils.apihandlers.RecipeHandlers;
 import com.google.gson.JsonParser;
+import com.hrznstudio.titanium.event.handler.EventManager;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.ResourceLocation;
@@ -38,6 +38,7 @@ import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.event.entity.living.LivingEvent;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
@@ -59,7 +60,6 @@ public class CommonProxy {
         }
     };
     public static ResourceLocation PINK_SLIME_LOOT;
-
 
     private static String readUrl(String urlString) throws Exception {
         BufferedReader reader = null;
@@ -85,15 +85,12 @@ public class CommonProxy {
         //CraftingHelper.register(new ResourceLocation(Reference.MOD_ID, "configuration_value"), new ConfigurationConditionFactory());
         random = new Random();
 
-
-        FluidsRegistry.registerFluids();
-
         MinecraftForge.EVENT_BUS.register(new StrawRegistry());
-        MinecraftForge.EVENT_BUS.register(new MeatFeederTickHandler());
         MinecraftForge.EVENT_BUS.register(new MobDeathHandler());
-        MinecraftForge.EVENT_BUS.register(new PlantRecollectableRegistryHandler());
         MinecraftForge.EVENT_BUS.register(new FakePlayerRideEntityHandler());
         MinecraftForge.EVENT_BUS.register(new SkullHandler());
+
+        EventManager.forge(LivingEvent.LivingUpdateEvent.class).process(MeatFeederTickHandler::onTick).subscribe();
 
 //        CustomConfiguration.config = new Configuration(event.getSuggestedConfigurationFile());
 //        CustomConfiguration.config.load();

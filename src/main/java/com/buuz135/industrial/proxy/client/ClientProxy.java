@@ -54,7 +54,6 @@ public class ClientProxy extends CommonProxy {
 
     @Override
     public void run() {
-
         OBJLoader.INSTANCE.addDomain(Reference.MOD_ID);
 
         MinecraftForge.EVENT_BUS.register(new IFClientEvents());

@@ -26,7 +26,6 @@ import com.buuz135.industrial.module.ModuleTool;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.event.entity.living.LivingEvent;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
 
 public class MeatFeederTickHandler {
 
@@ -40,8 +39,7 @@ public class MeatFeederTickHandler {
         return false;
     }
 
-    @SubscribeEvent
-    public void onTick(LivingEvent.LivingUpdateEvent event) {
+    public static void onTick(LivingEvent.LivingUpdateEvent event) {
         if (!event.getEntityLiving().getEntityWorld().isRemote && event.getEntityLiving() instanceof PlayerEntity) {
             PlayerEntity player = (PlayerEntity) event.getEntityLiving();
             if (player.getFoodStats().needFood() || player.getFoodStats().getSaturationLevel() < 10) {

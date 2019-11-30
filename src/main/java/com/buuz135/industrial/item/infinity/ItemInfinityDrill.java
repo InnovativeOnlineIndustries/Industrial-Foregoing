@@ -23,8 +23,8 @@ package com.buuz135.industrial.item.infinity;
 
 
 import com.buuz135.industrial.item.IFCustomItem;
+import com.buuz135.industrial.module.ModuleCore;
 import com.buuz135.industrial.proxy.CommonProxy;
-import com.buuz135.industrial.proxy.FluidsRegistry;
 import com.google.common.collect.Multimap;
 import com.hrznstudio.titanium.recipe.generator.TitaniumShapedRecipeBuilder;
 import com.hrznstudio.titanium.util.RayTraceUtils;
@@ -439,7 +439,7 @@ public class ItemInfinityDrill extends IFCustomItem {
             tank = new FluidHandlerItemStack(stack, 1_000_000) {
                 @Override
                 public boolean canFillFluidType(FluidStack fluid) {
-                    return fluid != null && fluid.getFluid() != null && fluid.getFluid().equals(FluidsRegistry.BIOFUEL);
+                    return fluid != null && fluid.getFluid() != null && fluid.getFluid().equals(ModuleCore.BIOFUEL.getSourceFluid());
                 }
 
                 @Override

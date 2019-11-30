@@ -21,7 +21,7 @@
  */
 package com.buuz135.industrial.utils.apihandlers.straw;
 
-import com.buuz135.industrial.proxy.FluidsRegistry;
+import com.buuz135.industrial.module.ModuleCore;
 import net.minecraft.entity.item.ExperienceOrbEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.fluid.Fluid;
@@ -33,7 +33,7 @@ import javax.annotation.ParametersAreNonnullByDefault;
 @ParametersAreNonnullByDefault
 public class EssenceStrawHandler extends StrawHandlerBase {
     public EssenceStrawHandler() {
-        super(FluidsRegistry.ESSENCE);
+        super(ModuleCore.ESSENCE.getSourceFluid());
         setRegistryName("essence");
     }
 
