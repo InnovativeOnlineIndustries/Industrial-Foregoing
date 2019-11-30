@@ -52,6 +52,7 @@ public class BioReactorTile extends IndustrialWorkingTile {
                 setColor(DyeColor.BLUE).
                 setRange(3, 3).
                 setInputFilter((stack, integer) -> canInsert(integer, stack)).
+                setOutputFilter((stack, integer) -> false).
                 setTile(this)
         );
         addTank(biofuel = (SidedFluidTank) new SidedFluidTank("biofuel", 16000, 74 + 18 * 3, 20, 2).

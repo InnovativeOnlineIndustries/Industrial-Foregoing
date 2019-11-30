@@ -25,7 +25,7 @@ public class SporesRecreatorTile extends IndustrialProcessingTile {
 
     public SporesRecreatorTile() {
         super(ModuleResourceProduction.SPORES_RECREATOR, 79, 40);
-        addTank(tank = (SidedFluidTank) new SidedFluidTank("latex", 1000, 31, 20, 0).
+        addTank(tank = (SidedFluidTank) new SidedFluidTank("water", 1000, 31, 20, 0).
                 setColor(DyeColor.CYAN).
                 setTankAction(PosFluidTank.Action.FILL).
                 setTile(this).

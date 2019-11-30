@@ -7,6 +7,7 @@ import com.buuz135.industrial.module.ModuleCore;
 import com.hrznstudio.titanium.annotation.Save;
 import com.hrznstudio.titanium.block.tile.fluid.PosFluidTank;
 import com.hrznstudio.titanium.block.tile.fluid.SidedFluidTank;
+import net.minecraft.entity.item.ExperienceOrbEntity;
 import net.minecraft.entity.passive.AnimalEntity;
 import net.minecraft.item.DyeColor;
 import net.minecraftforge.fluids.FluidStack;
@@ -25,9 +26,11 @@ public class SewerTile extends IndustrialAreaWorkingTile {
         super(ModuleAgricultureHusbandry.SEWER, RangeManager.RangeType.TOP);
         this.addTank(sewage = new SidedFluidTank("sewage", 8000, 45, 20, 0).
                 setColor(DyeColor.BROWN).
+                setTankAction(PosFluidTank.Action.DRAIN).
                 setTile(this));
         this.addTank(essence = new SidedFluidTank("essence", 8000, 66, 20, 1).
                 setColor(DyeColor.LIME).
+                setTankAction(PosFluidTank.Action.DRAIN).
                 setTile(this));
     }
 
@@ -41,6 +44,13 @@ public class SewerTile extends IndustrialAreaWorkingTile {
                 ++amount;
             } else {
                 break;
+            }
+        }
+        List<ExperienceOrbEntity> orb = this.world.getEntitiesWithinAABB(ExperienceOrbEntity.class, getWorkingArea().getBoundingBox());
+        for (ExperienceOrbEntity experienceOrbEntity : orb) {
+            if (experienceOrbEntity.isAlive() && essence.getFluidAmount() + experienceOrbEntity.xpValue * 20 <= essence.getCapacity()) {
+                essence.fillForced(new FluidStack(ModuleCore.ESSENCE.getSourceFluid(), experienceOrbEntity.xpValue * 20), IFluidHandler.FluidAction.EXECUTE);
+                experienceOrbEntity.remove();
             }
         }
         return new WorkAction(1, 10 * amount);

@@ -27,7 +27,7 @@ public class AnimalRancherTile extends IndustrialAreaWorkingTile {
 
     public AnimalRancherTile() {
         super(ModuleAgricultureHusbandry.ANIMAL_RANCHER, RangeManager.RangeType.BEHIND);
-        this.addTank(tank = (SidedFluidTank) new SidedFluidTank("fluid", 8000, 47, 20, 0).
+        this.addTank(tank = (SidedFluidTank) new SidedFluidTank("fluid_output", 8000, 47, 20, 0).
                 setColor(DyeColor.WHITE).
                 setTile(this)
         );

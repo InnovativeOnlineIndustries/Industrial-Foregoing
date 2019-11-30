@@ -21,6 +21,7 @@ public class AnimalFeederTile extends IndustrialAreaWorkingTile {
         super(ModuleAgricultureHusbandry.ANIMAL_FEEDER, RangeManager.RangeType.BEHIND);
         addInventory(input = (SidedInvHandler) new SidedInvHandler("food", 53, 22, 6 * 3, 0)
                 .setColor(DyeColor.BLUE)
+                .setOutputFilter((stack, integer) -> false)
                 .setRange(6, 3)
                 .setTile(this)
         );

@@ -15,9 +15,8 @@ public class PitifulGeneratorTile extends IndustrialGeneratorTile {
 
     public PitifulGeneratorTile() {
         super(ModuleGenerator.PITIFUL_GENERATOR);
-        this.addInventory(fuel = (SidedInvHandler) new SidedInvHandler("fuel", 46, 22, 1, 0)
+        this.addInventory(fuel = (SidedInvHandler) new SidedInvHandler("fuel_input", 46, 22, 1, 0)
                 .setColor(DyeColor.ORANGE)
-                .setColorGuiEnabled(false)
                 .setInputFilter((itemStack, integer) -> FurnaceTileEntity.isFuel(itemStack))
                 .setTile(this)
         );

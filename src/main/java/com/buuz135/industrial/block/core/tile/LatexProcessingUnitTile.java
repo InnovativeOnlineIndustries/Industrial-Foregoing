@@ -27,7 +27,7 @@ public class LatexProcessingUnitTile extends IndustrialProcessingTile {
     public LatexProcessingUnitTile() {
         super(ModuleCore.LATEX_PROCESSING, 48 + 25, 40);
         this.addTank(latex = (SidedFluidTank) new SidedFluidTank("latex", 16000, 29, 20, 0).
-                setColor(DyeColor.GRAY).
+                setColor(DyeColor.LIGHT_GRAY).
                 setTile(this).
                 setValidator(fluidStack -> fluidStack.getFluid().isEquivalentTo(ModuleCore.LATEX.getSourceFluid())));
         this.addTank(water = (SidedFluidTank) new SidedFluidTank("water", 16000, 30 + 18, 20, 1).

@@ -29,19 +29,19 @@ public class PlantGathererTile extends IndustrialAreaWorkingTile {
 
     public PlantGathererTile() {
         super(ModuleAgricultureHusbandry.PLANT_GATHERER, RangeManager.RangeType.BEHIND);
-        addInventory(output = (SidedInvHandler) new SidedInvHandler("output", 70, 22, 3 * 4, 0)
+        addInventory(output = (SidedInvHandler) new SidedInvHandler("output", 70, 22, 3 * 5, 0)
                 .setColor(DyeColor.ORANGE)
-                .setRange(4, 3)
+                .setRange(5, 3)
                 .setTile(this));
-        addTank(tank = (SidedFluidTank) new SidedFluidTank("sludge", 8000, 43, 20, 1)
-                .setColor(DyeColor.PINK)
+        addTank(tank = (SidedFluidTank) new SidedFluidTank("sludge", 8000, 45, 20, 1)
+                .setColor(DyeColor.MAGENTA)
                 .setTile(this));
     }
 
     @Override
     public IndustrialWorkingTile.WorkAction work() {
         if (hasEnergy(400)) {
-            int amount = BlockUtils.getBlockPosInAABB(getWorkingArea().getBoundingBox()).size() / 4;
+            int amount = Math.max(1, BlockUtils.getBlockPosInAABB(getWorkingArea().getBoundingBox()).size() / 4);
             for (int i = 0; i < amount; i++) {
                 Optional<PlantRecollectable> optional = IFRegistries.PLANT_RECOLLECTABLES_REGISTRY.getValues().stream().filter(plantRecollectable -> plantRecollectable.canBeHarvested(this.world, getPointedBlockPos(), this.world.getBlockState(getPointedBlockPos()))).findFirst();
                 if (optional.isPresent()) {
@@ -51,12 +51,17 @@ public class PlantGathererTile extends IndustrialAreaWorkingTile {
                     if (optional.get().shouldCheckNextPlant(this.world, getPointedBlockPos(), this.world.getBlockState(getPointedBlockPos()))) {
                         increasePointer();
                     }
-                    return new WorkAction(0.1f, 400);
+                    return new WorkAction(0.3f, 400);
                 }
                 increasePointer();
             }
         }
         increasePointer();
-        return new WorkAction(.3f, 0);
+        return new WorkAction(1f, 0);
+    }
+
+    @Override
+    public int getMaxProgress() {
+        return 40;
     }
 }

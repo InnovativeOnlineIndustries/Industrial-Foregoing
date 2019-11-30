@@ -26,8 +26,8 @@ public class MechanicalDirtTile extends IndustrialWorkingTile {
 
     public MechanicalDirtTile() {
         super(ModuleResourceProduction.MECHANICAL_DIRT);
-        addTank(meat = (SidedFluidTank) new SidedFluidTank("biofuel", 4000, 43, 20, 0).
-                setColor(DyeColor.PURPLE).
+        addTank(meat = (SidedFluidTank) new SidedFluidTank("meat", 4000, 43, 20, 0).
+                setColor(DyeColor.BROWN).
                 setTile(this).
                 setTankAction(PosFluidTank.Action.FILL).
                 setValidator(fluidStack -> fluidStack.getFluid().isEquivalentTo(ModuleCore.MEAT.getSourceFluid()))

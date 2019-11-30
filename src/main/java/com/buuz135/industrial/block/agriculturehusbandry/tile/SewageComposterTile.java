@@ -4,7 +4,6 @@ import com.buuz135.industrial.block.tile.IndustrialProcessingTile;
 import com.buuz135.industrial.module.ModuleAgricultureHusbandry;
 import com.buuz135.industrial.module.ModuleCore;
 import com.hrznstudio.titanium.annotation.Save;
-import com.hrznstudio.titanium.api.IItemStackQuery;
 import com.hrznstudio.titanium.block.tile.fluid.PosFluidTank;
 import com.hrznstudio.titanium.block.tile.fluid.SidedFluidTank;
 import com.hrznstudio.titanium.block.tile.inventory.PosInvHandler;
@@ -27,9 +26,9 @@ public class SewageComposterTile extends IndustrialProcessingTile {
                 setColor(DyeColor.BROWN).
                 setTankAction(PosFluidTank.Action.FILL).
                 setTile(this));
-        this.addInventory(fertilizerOutput = new SidedInvHandler("fertilizerOutput", 90, 22, 12, 1).
+        this.addInventory(fertilizerOutput = new SidedInvHandler("fertilizer", 90, 22, 12, 1).
                 setColor(DyeColor.ORANGE).
-                setInputFilter(IItemStackQuery.NOTHING.toSlotFilter()).
+                setInputFilter((stack, integer) -> false).
                 setRange(4, 3).
                 setTile(this));
     }

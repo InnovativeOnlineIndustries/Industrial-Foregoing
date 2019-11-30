@@ -23,7 +23,7 @@ public class SludgeRefinerTile extends IndustrialProcessingTile {
     public SludgeRefinerTile() {
         super(ModuleResourceProduction.SLUDGE_REFINER, 53, 40);
         addTank(sludge = (SidedFluidTank) new SidedFluidTank("sludge", 8000, 31, 20, 0)
-                .setColor(DyeColor.PINK)
+                .setColor(DyeColor.MAGENTA)
                 .setTile(this)
                 .setTankAction(PosFluidTank.Action.FILL)
         );

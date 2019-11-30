@@ -74,7 +74,7 @@ public class PlantSowerTile extends IndustrialAreaWorkingTile {
             }
         }
         increasePointer();
-        return new WorkAction(.35f, 0);
+        return new WorkAction(1f, 0);
     }
 
     private int getFilteredSlot(BlockPos pos) {
@@ -93,6 +93,6 @@ public class PlantSowerTile extends IndustrialAreaWorkingTile {
 
     @Override
     public int getMaxProgress() {
-        return 50;
+        return 40;
     }
 }

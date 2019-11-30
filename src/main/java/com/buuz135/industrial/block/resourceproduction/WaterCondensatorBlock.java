@@ -7,12 +7,21 @@ import com.buuz135.industrial.utils.IndustrialTags;
 import com.hrznstudio.titanium.api.IFactory;
 import com.hrznstudio.titanium.recipe.generator.TitaniumShapedRecipeBuilder;
 import net.minecraft.block.Blocks;
+import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.data.IFinishedRecipe;
+import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.tags.ItemTags;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.Style;
+import net.minecraft.util.text.TextFormatting;
+import net.minecraft.util.text.TranslationTextComponent;
+import net.minecraft.world.IBlockReader;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+import java.util.List;
 import java.util.function.Consumer;
 
 public class WaterCondensatorBlock extends IndustrialBlock<WaterCondensatorTile> {
@@ -44,5 +53,10 @@ public class WaterCondensatorBlock extends IndustrialBlock<WaterCondensatorTile>
                 .key('R', Items.REDSTONE)
                 .key('G', new ItemTags.Wrapper(new ResourceLocation("forge:gear/iron")))
                 .build(consumer);
+    }
+
+    @Override
+    public void addInformation(ItemStack stack, @Nullable IBlockReader worldIn, List<ITextComponent> tooltip, ITooltipFlag flagIn) {
+        tooltip.add(new TranslationTextComponent("text.industrialforegoing.tooltip.power_optional").setStyle(new Style().setColor(TextFormatting.GOLD)));
     }
 }

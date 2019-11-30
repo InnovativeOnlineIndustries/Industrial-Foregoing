@@ -4,6 +4,7 @@ import com.buuz135.industrial.block.tile.IndustrialProcessingTile;
 import com.buuz135.industrial.module.ModuleCore;
 import com.buuz135.industrial.module.ModuleResourceProduction;
 import com.hrznstudio.titanium.annotation.Save;
+import com.hrznstudio.titanium.block.tile.fluid.PosFluidTank;
 import com.hrznstudio.titanium.block.tile.fluid.SidedFluidTank;
 import com.hrznstudio.titanium.block.tile.inventory.SidedInvHandler;
 import com.hrznstudio.titanium.util.RecipeUtil;
@@ -42,7 +43,8 @@ public class ResourcefulFurnaceTile extends IndustrialProcessingTile {
                 setInputFilter((itemStack, integer) -> false).
                 setRange(1, 3));
         addTank(this.tank = (SidedFluidTank) new SidedFluidTank("essence", 8000, 132, 20, 2).
-                setColor(DyeColor.LIME));
+                setColor(DyeColor.LIME).
+                setTankAction(PosFluidTank.Action.DRAIN));
         this.recipes = new FurnaceRecipe[3];
     }
 

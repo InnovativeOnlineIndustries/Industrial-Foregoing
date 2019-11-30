@@ -4,16 +4,25 @@ import com.buuz135.industrial.block.tile.IndustrialProcessingTile;
 import com.buuz135.industrial.gui.component.ItemGuiAddon;
 import com.buuz135.industrial.module.ModuleResourceProduction;
 import com.hrznstudio.titanium.annotation.Save;
+import com.hrznstudio.titanium.api.IFactory;
+import com.hrznstudio.titanium.api.client.IGuiAddon;
 import com.hrznstudio.titanium.block.tile.button.ArrowButton;
 import com.hrznstudio.titanium.block.tile.inventory.PosInvHandler;
 import com.hrznstudio.titanium.block.tile.inventory.SidedInvHandler;
 import com.hrznstudio.titanium.block.tile.progress.PosProgressBar;
+import com.hrznstudio.titanium.client.gui.addon.ProgressBarGuiAddon;
 import com.hrznstudio.titanium.util.FacingUtil;
 import net.minecraft.item.DyeColor;
 import net.minecraft.item.DyeItem;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.text.TextFormatting;
 import net.minecraftforge.common.Tags;
 import net.minecraftforge.items.ItemHandlerHelper;
+
+import java.text.DecimalFormat;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
 
 public class DyeMixerTile extends IndustrialProcessingTile {
 
@@ -67,15 +76,45 @@ public class DyeMixerTile extends IndustrialProcessingTile {
                 .setInputFilter((stack, integer) -> stack.getItem().isIn(Tags.Items.DYES_BLUE))
                 .setTile(this)
         );
-        addProgressBar(this.red = new PosProgressBar(33 + 20, 20, 300)
+        addProgressBar(this.red = new PosProgressBar(33 + 20, 20, 300) {
+            @Override
+            public List<IFactory<? extends IGuiAddon>> getGuiAddons() {
+                return Collections.singletonList(() -> new ProgressBarGuiAddon(red.getPosX(), red.getPosY(), this) {
+                    @Override
+                    public List<String> getTooltipLines() {
+                        return Arrays.asList(TextFormatting.GOLD + "Amount: " + TextFormatting.WHITE + new DecimalFormat().format(red.getProgress()) + TextFormatting.GOLD + "/" + TextFormatting.WHITE + new DecimalFormat().format(red.getMaxProgress()));
+                    }
+                });
+            }
+        }
                 .setCanIncrease(tileEntity -> false)
                 .setCanReset(tileEntity -> false)
                 .setColor(DyeColor.RED));
-        addProgressBar(this.blue = new PosProgressBar(33 + 20 + 13, 20, 300)
+        addProgressBar(this.blue = new PosProgressBar(33 + 20 + 13, 20, 300) {
+            @Override
+            public List<IFactory<? extends IGuiAddon>> getGuiAddons() {
+                return Collections.singletonList(() -> new ProgressBarGuiAddon(blue.getPosX(), blue.getPosY(), this) {
+                    @Override
+                    public List<String> getTooltipLines() {
+                        return Arrays.asList(TextFormatting.GOLD + "Amount: " + TextFormatting.WHITE + new DecimalFormat().format(blue.getProgress()) + TextFormatting.GOLD + "/" + TextFormatting.WHITE + new DecimalFormat().format(blue.getMaxProgress()));
+                    }
+                });
+            }
+        }
                 .setCanIncrease(tileEntity -> false)
                 .setCanReset(tileEntity -> false)
                 .setColor(DyeColor.BLUE));
-        addProgressBar(this.green = new PosProgressBar(33 + 20 + 13 * 2, 20, 300)
+        addProgressBar(this.green = new PosProgressBar(33 + 20 + 13 * 2, 20, 300) {
+            @Override
+            public List<IFactory<? extends IGuiAddon>> getGuiAddons() {
+                return Collections.singletonList(() -> new ProgressBarGuiAddon(green.getPosX(), green.getPosY(), this) {
+                    @Override
+                    public List<String> getTooltipLines() {
+                        return Arrays.asList(TextFormatting.GOLD + "Amount: " + TextFormatting.WHITE + new DecimalFormat().format(green.getProgress()) + TextFormatting.GOLD + "/" + TextFormatting.WHITE + new DecimalFormat().format(green.getMaxProgress()));
+                    }
+                });
+            }
+        }
                 .setCanIncrease(tileEntity -> false)
                 .setCanReset(tileEntity -> false)
                 .setColor(DyeColor.GREEN));

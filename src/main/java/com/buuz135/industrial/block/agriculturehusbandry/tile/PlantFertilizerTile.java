@@ -5,7 +5,6 @@ import com.buuz135.industrial.block.tile.RangeManager;
 import com.buuz135.industrial.module.ModuleAgricultureHusbandry;
 import com.buuz135.industrial.module.ModuleCore;
 import com.hrznstudio.titanium.annotation.Save;
-import com.hrznstudio.titanium.api.IItemStackQuery;
 import com.hrznstudio.titanium.block.tile.inventory.SidedInvHandler;
 import com.hrznstudio.titanium.util.ItemHandlerUtil;
 import net.minecraft.block.Block;
@@ -24,8 +23,8 @@ public class PlantFertilizerTile extends IndustrialAreaWorkingTile {
         super(ModuleAgricultureHusbandry.PLANT_FERTILIZER, RangeManager.RangeType.BEHIND);
         addInventory(fertilizer = (SidedInvHandler) new SidedInvHandler("fertilizer", 50, 22, 3 * 6, 0).
                 setColor(DyeColor.BROWN).
-                setInputFilter(IItemStackQuery.of(ModuleCore.FERTILIZER).toSlotFilter()).
-                setOutputFilter(IItemStackQuery.NOTHING.toSlotFilter()).
+                setInputFilter((stack, integer) -> stack.getItem().equals(ModuleCore.FERTILIZER)).
+                setOutputFilter((stack, integer) -> false).
                 setRange(6, 3).
                 setTile(this)
         );
@@ -56,5 +55,10 @@ public class PlantFertilizerTile extends IndustrialAreaWorkingTile {
         }
         increasePointer();
         return new WorkAction(1, 0);
+    }
+
+    @Override
+    public int getMaxProgress() {
+        return 50;
     }
 }

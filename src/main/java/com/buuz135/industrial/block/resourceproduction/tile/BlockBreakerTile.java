@@ -24,7 +24,7 @@ public class BlockBreakerTile extends IndustrialAreaWorkingTile {
 
     public BlockBreakerTile() {
         super(ModuleResourceProduction.BLOCK_BREAKER, RangeManager.RangeType.BEHIND);
-        this.addInventory(this.output = (SidedInvHandler) new SidedInvHandler("input", 54, 22, 3 * 6, 0).
+        this.addInventory(this.output = (SidedInvHandler) new SidedInvHandler("output", 54, 22, 3 * 6, 0).
                 setColor(DyeColor.ORANGE).
                 setRange(6, 3));
     }
