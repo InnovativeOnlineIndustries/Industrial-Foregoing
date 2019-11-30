@@ -58,7 +58,7 @@ public class MeatFeederItem extends IFCustomItem {
                 return fluid.getFluid().isEquivalentTo(ModuleCore.MEAT.getSourceFluid());
             }
         };
-        handlerItemStack.fill(new FluidStack(ModuleCore.MEAT.getSourceFluid(), 1000), IFluidHandler.FluidAction.EXECUTE);
+        handlerItemStack.fill(new FluidStack(ModuleCore.MEAT.getSourceFluid(), 0), IFluidHandler.FluidAction.EXECUTE);
         return handlerItemStack;
     }
 

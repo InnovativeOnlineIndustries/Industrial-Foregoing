@@ -4,6 +4,7 @@ import com.buuz135.industrial.block.resourceproduction.*;
 import com.buuz135.industrial.utils.Reference;
 import com.hrznstudio.titanium.module.Feature;
 import com.hrznstudio.titanium.tab.AdvancedTitaniumTab;
+import net.minecraft.item.ItemStack;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -36,6 +37,7 @@ public class ModuleResourceProduction implements IModule {
         features.add(createFeature(FLUID_PLACER));
         features.add(createFeature(DYE_MIXER));
         features.add(createFeature(SPORES_RECREATOR));
+        TAB_RESOURCE.addIconStack(new ItemStack(WATER_CONDENSATOR));
         return features;
     }
 

@@ -51,7 +51,7 @@ public class ModuleAgricultureHusbandry implements IModule {
         builders.add(createFeature(ANIMAL_RANCHER));
         builders.add(createFeature(ANIMAL_FEEDER));
         builders.add(createFeature(ANIMAL_BABY_SEPARATOR));
-        TAB_AG_HUS.addIconStack(new ItemStack(PLANT_GATHERER));
+        TAB_AG_HUS.addIconStack(new ItemStack(PLANT_SOWER));
         return builders;
     }
 }
