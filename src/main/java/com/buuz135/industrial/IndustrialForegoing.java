@@ -24,6 +24,7 @@ package com.buuz135.industrial;
 import com.buuz135.industrial.module.*;
 import com.buuz135.industrial.proxy.CommonProxy;
 import com.buuz135.industrial.proxy.client.ClientProxy;
+import com.buuz135.industrial.proxy.client.render.ContributorsCatEarsRender;
 import com.buuz135.industrial.proxy.network.ConveyorButtonInteractMessage;
 import com.buuz135.industrial.proxy.network.ConveyorSplittingSyncEntityMessage;
 import com.buuz135.industrial.proxy.network.SpecialParticleMessage;
@@ -35,6 +36,7 @@ import com.buuz135.industrial.recipe.provider.IndustrialTagsProvider;
 import com.buuz135.industrial.registry.IFRegistries;
 import com.buuz135.industrial.utils.IFFakePlayer;
 import com.buuz135.industrial.utils.Reference;
+import com.hrznstudio.titanium.TitaniumClient;
 import com.hrznstudio.titanium.event.handler.EventManager;
 import com.hrznstudio.titanium.material.ResourceRegistry;
 import com.hrznstudio.titanium.material.ResourceType;
@@ -43,11 +45,18 @@ import com.hrznstudio.titanium.module.ModuleController;
 import com.hrznstudio.titanium.network.NetworkHandler;
 import com.hrznstudio.titanium.recipe.generator.BlockItemModelGeneratorProvider;
 import com.hrznstudio.titanium.recipe.generator.titanium.DefaultLootTableProvider;
+import com.hrznstudio.titanium.reward.Reward;
+import com.hrznstudio.titanium.reward.RewardGiver;
+import com.hrznstudio.titanium.reward.RewardManager;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.renderer.entity.EntityRendererManager;
 import net.minecraft.item.crafting.IRecipeSerializer;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraft.world.server.ServerWorld;
 import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.common.util.FakePlayer;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.fml.DistExecutor;
@@ -57,7 +66,10 @@ import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.fml.event.lifecycle.GatherDataEvent;
 import net.minecraftforge.fml.event.server.FMLServerStartingEvent;
 
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.HashMap;
+import java.util.UUID;
 
 @Mod(Reference.MOD_ID)
 public class IndustrialForegoing extends ModuleController {
@@ -83,6 +95,16 @@ public class IndustrialForegoing extends ModuleController {
         EventManager.mod(RegistryEvent.Register.class).filter(register -> register.getGenericType().equals(IRecipeSerializer.class))
                 .process(register -> register.getRegistry().registerAll(FluidExtractorRecipe.SERIALIZER, DissolutionChamberRecipe.SERIALIZER)).subscribe();
         IFRegistries.poke();
+        RewardGiver giver = RewardManager.get().getGiver(UUID.fromString("d28b7061-fb92-4064-90fb-7e02b95a72a6"), "Buuz135");
+        try {
+            giver.addReward(new Reward(new ResourceLocation(Reference.MOD_ID, "cat_ears"), new URL("https://raw.githubusercontent.com/Buuz135/Industrial-Foregoing/master/contributors.json"), () -> dist -> {
+                if (dist == Dist.CLIENT) {
+                    registerReward();
+                }
+            }, new String[]{"normal"}));
+        } catch (MalformedURLException e) {
+            e.printStackTrace();
+        }
     }
 
     public static FakePlayer getFakePlayer(World world) {
@@ -143,6 +165,14 @@ public class IndustrialForegoing extends ModuleController {
         Module.Builder resources = Module.builder("resource_production");
         new ModuleResourceProduction().generateFeatures().forEach(resources::feature);
         addModule(resources);
+    }
+
+    @OnlyIn(Dist.CLIENT)
+    private void registerReward() {
+        Minecraft instance = Minecraft.getInstance();
+        EntityRendererManager manager = instance.getRenderManager();
+        manager.getSkinMap().get("default").addLayer(new ContributorsCatEarsRender(TitaniumClient.getPlayerRenderer(Minecraft.getInstance())));
+        manager.getSkinMap().get("slim").addLayer(new ContributorsCatEarsRender(TitaniumClient.getPlayerRenderer(Minecraft.getInstance())));
     }
 
 }

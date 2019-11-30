@@ -33,17 +33,27 @@ import com.buuz135.industrial.proxy.client.event.IFWorldRenderLastEvent;
 import com.buuz135.industrial.proxy.client.render.FluidConveyorTESR;
 import com.buuz135.industrial.proxy.client.render.WorkingAreaTESR;
 import com.buuz135.industrial.utils.Reference;
+import com.google.common.collect.ImmutableMap;
+import com.hrznstudio.titanium.event.handler.EventManager;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.model.IBakedModel;
+import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.item.SpawnEggItem;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.client.event.ModelBakeEvent;
+import net.minecraftforge.client.event.TextureStitchEvent;
 import net.minecraftforge.client.model.IModel;
+import net.minecraftforge.client.model.ModelLoader;
+import net.minecraftforge.client.model.SimpleModelState;
 import net.minecraftforge.client.model.obj.OBJLoader;
 import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.common.model.TRSRTransformation;
 import net.minecraftforge.common.util.Constants;
 import net.minecraftforge.fml.client.registry.ClientRegistry;
 import net.minecraftforge.registries.ForgeRegistries;
+
+import java.util.Optional;
 
 public class ClientProxy extends CommonProxy {
 
@@ -60,20 +70,21 @@ public class ClientProxy extends CommonProxy {
         MinecraftForge.EVENT_BUS.register(new IFWorldRenderLastEvent());
         MinecraftForge.EVENT_BUS.register(new IFTooltipEvent());
 
-        try {
-            ears_model = OBJLoader.INSTANCE.loadModel(new ResourceLocation(Reference.MOD_ID, "models/block/catears.obj"));
-            //ears_baked = ears_model.bake(ModelLoader.defaultModelGetter(), ModelLoader.defaultTextureGetter(), TRSRTransformation.identity(), false, DefaultVertexFormats.BLOCK);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        EventManager.mod(ModelBakeEvent.class).process(event -> {
+            try {
+                ears_model = OBJLoader.INSTANCE.loadModel(new ResourceLocation(Reference.MOD_ID, "models/block/catears.obj"));
+                ears_baked = ears_model.bake(event.getModelLoader(), ModelLoader.defaultTextureGetter(), new SimpleModelState(ImmutableMap.of(), Optional.of(TRSRTransformation.identity())), DefaultVertexFormats.BLOCK);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }).subscribe();
+        EventManager.mod(TextureStitchEvent.Pre.class).process(pre -> {
+            pre.addSprite(new ResourceLocation(Reference.MOD_ID, "blocks/catears"));
+        }).subscribe();
+
 
         ClientRegistry.bindTileEntitySpecialRenderer(ConveyorTile.class, new FluidConveyorTESR());
         ClientRegistry.bindTileEntitySpecialRenderer(IndustrialAreaWorkingTile.class, new WorkingAreaTESR());
-
-        //RenderManager manager = Minecraft.getInstance().getRenderManager();
-        //Map<String, RenderPlayer> map = manager.getSkinMap();
-        //map.get("default").addLayer(new ContributorsCatEarsRender());
-        //map.get("slim").addLayer(new ContributorsCatEarsRender());
 
         //manager.entityRenderMap.put(EntityPinkSlime.class, new RenderPinkSlime(manager));
 
