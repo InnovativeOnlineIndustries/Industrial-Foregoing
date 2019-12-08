@@ -37,8 +37,8 @@ import com.buuz135.industrial.registry.IFRegistries;
 import com.buuz135.industrial.utils.IFFakePlayer;
 import com.buuz135.industrial.utils.Reference;
 import com.hrznstudio.titanium.TitaniumClient;
+import com.hrznstudio.titanium.event.custom.ResourceRegistrationEvent;
 import com.hrznstudio.titanium.event.handler.EventManager;
-import com.hrznstudio.titanium.material.ResourceRegistry;
 import com.hrznstudio.titanium.material.ResourceType;
 import com.hrznstudio.titanium.module.Module;
 import com.hrznstudio.titanium.module.ModuleController;
@@ -79,9 +79,6 @@ public class IndustrialForegoing extends ModuleController {
     public static NetworkHandler NETWORK = new NetworkHandler(Reference.MOD_ID);
 
     static {
-        ResourceRegistry.getOrCreate("iron").add(ResourceType.GEAR);
-        ResourceRegistry.getOrCreate("gold").add(ResourceType.GEAR);
-        ResourceRegistry.getOrCreate("diamond").add(ResourceType.GEAR);
         NETWORK.registerMessage(ConveyorButtonInteractMessage.class);
         NETWORK.registerMessage(ConveyorSplittingSyncEntityMessage.class);
         NETWORK.registerMessage(SpecialParticleMessage.class);
@@ -127,6 +124,11 @@ public class IndustrialForegoing extends ModuleController {
     @Override
     public void onPreInit() {
         super.onPreInit();
+        EventManager.mod(ResourceRegistrationEvent.class).process(event -> {
+            event.get("iron").add(ResourceType.GEAR);
+            event.get("gold").add(ResourceType.GEAR);
+            event.get("diamond").add(ResourceType.GEAR);
+        }).subscribe();
     }
 
     @Override
