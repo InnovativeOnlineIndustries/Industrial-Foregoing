@@ -40,7 +40,7 @@ public class SewerTile extends IndustrialAreaWorkingTile {
         int amount = 0;
         for (AnimalEntity animalEntity : animals) {
             if (hasEnergy(10 * (amount + 1))) {
-                sewage.fill(new FluidStack(ModuleCore.SEWAGE.getSourceFluid(), 50), IFluidHandler.FluidAction.EXECUTE);
+                sewage.fillForced(new FluidStack(ModuleCore.SEWAGE.getSourceFluid(), 50), IFluidHandler.FluidAction.EXECUTE);
                 ++amount;
             } else {
                 break;
