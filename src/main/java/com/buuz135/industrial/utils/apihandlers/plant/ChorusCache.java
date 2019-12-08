@@ -22,9 +22,10 @@
 package com.buuz135.industrial.utils.apihandlers.plant;
 
 import com.buuz135.industrial.utils.BlockUtils;
-import net.minecraft.init.Blocks;
+import net.minecraft.block.Blocks;
+import net.minecraft.block.ChorusFlowerBlock;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.EnumFacing;
+import net.minecraft.util.Direction;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
@@ -46,9 +47,9 @@ public class ChorusCache {
         while (!chorus.isEmpty()) {
             BlockPos checking = chorus.pop();
             if (BlockUtils.isChorus(world, checking)) {
-                Iterable<BlockPos> area = BlockPos.getAllInBox(checking.offset(EnumFacing.DOWN).offset(EnumFacing.SOUTH).offset(EnumFacing.WEST), checking.offset(EnumFacing.UP).offset(EnumFacing.NORTH).offset(EnumFacing.EAST));
+                Iterable<BlockPos> area = BlockPos.getAllInBoxMutable(checking.offset(Direction.DOWN).offset(Direction.SOUTH).offset(Direction.WEST), checking.offset(Direction.UP).offset(Direction.NORTH).offset(Direction.EAST));
                 for (BlockPos blockPos : area) {
-                    if (BlockUtils.isChorus(world, blockPos) && !this.chorus.contains(blockPos) && blockPos.distanceSq(current.getX(), current.getY(), current.getZ()) <= 1000) {
+                    if (BlockUtils.isChorus(world, blockPos) && !this.chorus.contains(blockPos) && blockPos.distanceSq(current.getX(), current.getY(), current.getZ(), true) <= 1000) {
                         chorus.push(blockPos);
                         this.chorus.add(blockPos);
                     }
@@ -58,7 +59,7 @@ public class ChorusCache {
     }
 
     public boolean isFullyGrown() {
-        return chorus.stream().map(blockpos -> world.getBlockState(blockpos)).allMatch(blockState -> blockState.getBlock().equals(Blocks.CHORUS_PLANT) || (blockState.getBlock().equals(Blocks.CHORUS_FLOWER) && Blocks.CHORUS_FLOWER.getMetaFromState(blockState) == 5));
+        return chorus.stream().map(blockpos -> world.getBlockState(blockpos)).allMatch(blockState -> blockState.getBlock().equals(Blocks.CHORUS_PLANT) || (blockState.getBlock().equals(Blocks.CHORUS_FLOWER) && blockState.get(ChorusFlowerBlock.AGE) == 5));
     }
 
     public List<ItemStack> chop() {
@@ -76,7 +77,7 @@ public class ChorusCache {
             } else {
                 stacks.addAll(BlockUtils.getBlockDrops(world, p));
             }
-            world.setBlockToAir(p);
+            world.setBlockState(p, Blocks.AIR.getDefaultState());
         }
     }
 

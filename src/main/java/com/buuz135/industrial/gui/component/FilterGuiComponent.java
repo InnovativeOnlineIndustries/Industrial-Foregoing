@@ -25,8 +25,8 @@ import com.buuz135.industrial.api.conveyor.gui.PositionedGuiComponent;
 import com.buuz135.industrial.gui.conveyor.GuiConveyor;
 import com.buuz135.industrial.proxy.block.filter.IFilter;
 import com.buuz135.industrial.utils.Reference;
+import com.mojang.blaze3d.platform.GlStateManager;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.util.ResourceLocation;
 
@@ -42,34 +42,35 @@ public abstract class FilterGuiComponent extends PositionedGuiComponent {
     }
 
     @Override
-    public void handleClick(GuiConveyor conveyor, int guiX, int guiY, int mouseX, int mouseY) {
+    public boolean handleClick(GuiConveyor conveyor, int guiX, int guiY, double mouseX, double mouseY) {
         int pos = 0;
         for (int i = 0; i < getYSize(); i++) {
             for (int x = 0; x < getXSize(); x++) {
                 int posX = guiX + getXPos() + x * 18;
                 int posY = guiY + getXPos() + i * 18;
                 if (mouseX > posX + 1 && mouseX < posX + 1 + 16 && mouseY > posY + 1 && mouseY < posY + 1 + 16) {
-                    conveyor.sendMessage(pos, Minecraft.getMinecraft().player.inventory.getItemStack().serializeNBT());
-                    return;
+                    conveyor.sendMessage(pos, Minecraft.getInstance().player.inventory.getItemStack().serializeNBT());
+                    return true;
                 }
                 ++pos;
             }
         }
+        return false;
     }
 
     @Override
-    public void drawGuiBackgroundLayer(int guiX, int guiY, int mouseX, int mouseY) {
-        GlStateManager.color(1, 1, 1, 1);
+    public void drawGuiBackgroundLayer(int guiX, int guiY, double mouseX, double mouseY) {
+        GlStateManager.color4f(1, 1, 1, 1);
         int pos = 0;
         for (int i = 0; i < getYSize(); i++) {
             for (int x = 0; x < getXSize(); x++) {
                 int posX = guiX + getXPos() + x * 18;
                 int posY = guiY + getXPos() + i * 18;
-                Minecraft.getMinecraft().getTextureManager().bindTexture(BG_TEXTURE);
-                Minecraft.getMinecraft().currentScreen.drawTexturedModalRect(posX, posY, 176, 0, 18, 18);
+                Minecraft.getInstance().getTextureManager().bindTexture(BG_TEXTURE);
+                Minecraft.getInstance().currentScreen.blit(posX, posY, 176, 0, 18, 18);
                 if (!getFilter().getFilter()[pos].getStack().isEmpty()) {
                     RenderHelper.enableGUIStandardItemLighting();
-                    Minecraft.getMinecraft().getRenderItem().renderItemIntoGUI(getFilter().getFilter()[pos].getStack(), posX + 1, posY + 1);
+                    Minecraft.getInstance().getItemRenderer().renderItemIntoGUI(getFilter().getFilter()[pos].getStack(), posX + 1, posY + 1);
                 }
                 ++pos;
             }
@@ -77,18 +78,18 @@ public abstract class FilterGuiComponent extends PositionedGuiComponent {
     }
 
     @Override
-    public void drawGuiForegroundLayer(int guiX, int guiY, int mouseX, int mouseY) {
-        GlStateManager.color(1, 1, 1, 1);
+    public void drawGuiForegroundLayer(int guiX, int guiY, double mouseX, double mouseY) {
+        GlStateManager.color4f(1, 1, 1, 1);
         for (int i = 0; i < getYSize(); i++) {
             for (int x = 0; x < getXSize(); x++) {
                 int posX = guiX + getXPos() + x * 18;
                 int posY = guiY + getXPos() + i * 18;
                 if (mouseX > posX + 1 && mouseX < posX + 1 + 16 && mouseY > posY + 1 && mouseY < posY + 1 + 16) {
                     GlStateManager.disableLighting();
-                    GlStateManager.disableDepth();
-                    Minecraft.getMinecraft().currentScreen.drawRect(posX + 1 - guiX, posY + 1 - guiY, posX + 17 - guiX, posY + 17 - guiY, -2130706433);
+                    GlStateManager.disableDepthTest();
+                    Minecraft.getInstance().currentScreen.fill(posX + 1 - guiX, posY + 1 - guiY, posX + 17 - guiX, posY + 17 - guiY, -2130706433);
                     GlStateManager.enableLighting();
-                    GlStateManager.disableDepth();
+                    GlStateManager.enableDepthTest();
                     return;
                 }
             }
@@ -96,7 +97,7 @@ public abstract class FilterGuiComponent extends PositionedGuiComponent {
     }
 
     @Override
-    public boolean isInside(int mouseX, int mouseY) {
+    public boolean isInside(double mouseX, double mouseY) {
         return mouseX > getXPos() && mouseX < getXPos() + getXSize() * 18 && mouseY > getYPos() && mouseY < getYPos() + getYSize() * 18;
     }
 
@@ -104,14 +105,14 @@ public abstract class FilterGuiComponent extends PositionedGuiComponent {
 
     @Nullable
     @Override
-    public List<String> getTooltip(int guiX, int guiY, int mouseX, int mouseY) {
+    public List<String> getTooltip(int guiX, int guiY, double mouseX, double mouseY) {
         int pos = 0;
         for (int i = 0; i < getYSize(); i++) {
             for (int x = 0; x < getXSize(); x++) {
                 int posX = guiX + getXPos() + x * 18;
                 int posY = guiY + getXPos() + i * 18;
                 if (mouseX > posX + 1 && mouseX < posX + 1 + 16 && mouseY > posY + 1 && mouseY < posY + 1 + 16 && !getFilter().getFilter()[pos].getStack().isEmpty()) {
-                    return Minecraft.getMinecraft().currentScreen.getItemToolTip(getFilter().getFilter()[pos].getStack());
+                    return Minecraft.getInstance().currentScreen.getTooltipFromItem(getFilter().getFilter()[pos].getStack());
                 }
                 ++pos;
             }

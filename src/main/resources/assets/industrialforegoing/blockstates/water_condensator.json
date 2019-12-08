@@ -1,15 +1,9 @@
 {
   "forge_marker": 1,
   "defaults": {
-    "model": "industrialforegoing:water_condensator"
+    "model": "industrialforegoing:block/water_condensator"
   },
   "variants": {
-    "normal": [
-      {}
-    ],
-    "inventory": [
-      {}
-    ],
     "facing": {
       "north": {},
       "south": {

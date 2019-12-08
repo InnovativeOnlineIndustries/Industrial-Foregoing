@@ -21,41 +21,43 @@
  */
 package com.buuz135.industrial.item;
 
-import com.buuz135.industrial.IndustrialForegoing;
-import com.buuz135.industrial.gui.GuiHandler;
-import com.buuz135.industrial.utils.RecipeUtils;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.init.Items;
+import net.minecraft.data.IFinishedRecipe;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.item.ItemGroup;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ActionResult;
-import net.minecraft.util.EnumActionResult;
-import net.minecraft.util.EnumHand;
+import net.minecraft.util.ActionResultType;
+import net.minecraft.util.Hand;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.BlockRayTraceResult;
+import net.minecraft.util.math.RayTraceContext;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.world.World;
 
+import java.util.function.Consumer;
+
 public class BookManualItem extends IFCustomItem {
 
-    public BookManualItem() {
-        super("book_manual");
+    public BookManualItem(ItemGroup group) {
+        super("book_manual", group, new Properties().maxStackSize(1));
     }
 
     @Override
-    public ActionResult<ItemStack> onItemRightClick(World worldIn, EntityPlayer playerIn, EnumHand handIn) {
+    public ActionResult<ItemStack> onItemRightClick(World worldIn, PlayerEntity playerIn, Hand handIn) {
         BlockPos pos = playerIn.getPosition();
         if (playerIn.isSneaking()) {
-            RayTraceResult result = rayTrace(worldIn, playerIn, false);
-            if (result != null && result.typeOfHit == RayTraceResult.Type.BLOCK) {
-                pos = result.getBlockPos();
+            RayTraceResult result = rayTrace(worldIn, playerIn, RayTraceContext.FluidMode.NONE);
+            if (result != null && result.getType() == RayTraceResult.Type.BLOCK) {
+                pos = ((BlockRayTraceResult) result).getPos();
             }
         }
-        playerIn.openGui(IndustrialForegoing.instance, GuiHandler.BOOK, worldIn, pos.getX(), pos.getY(), pos.getZ());
-        return new ActionResult<>(EnumActionResult.SUCCESS, playerIn.getHeldItem(handIn));
+        // playerIn.openGui(IndustrialForegoing.instance, GuiHandler.BOOK, worldIn, pos.getX(), pos.getY(), pos.getZ());
+        return new ActionResult<>(ActionResultType.SUCCESS, playerIn.getHeldItem(handIn));
     }
-
 
     @Override
-    public void createRecipe() {
-        RecipeUtils.addShapelessRecipe(new ItemStack(this), Items.PAPER, "logWood");
+    public void registerRecipe(Consumer<IFinishedRecipe> consumer) {
+
     }
+
 }

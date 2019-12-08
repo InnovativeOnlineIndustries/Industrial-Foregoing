@@ -21,13 +21,12 @@
  */
 package com.buuz135.industrial.proxy.block.filter;
 
-import com.buuz135.industrial.proxy.ItemRegistry;
+import com.buuz135.industrial.module.ModuleTool;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityList;
-import net.minecraft.entity.EntityLiving;
-import net.minecraft.entity.item.EntityItem;
+import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.item.ItemEntity;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.CompoundNBT;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidUtil;
 
@@ -50,10 +49,10 @@ public class ItemStackFilter extends AbstractFilter<Entity> {
         }
         if (isEmpty) return false;
         for (GhostSlot stack : this.getFilter()) {
-            if (entity instanceof EntityItem && stack.getStack().isItemEqual(((EntityItem) entity).getItem()))
+            if (entity instanceof ItemEntity && stack.getStack().isItemEqual(((ItemEntity) entity).getItem()))
                 return true;
-            if (entity instanceof EntityLiving && stack.getStack().getItem().equals(ItemRegistry.mobImprisonmentToolItem) && ItemRegistry.mobImprisonmentToolItem.containsEntity(stack.getStack())
-                    && EntityList.getKey(entity).toString().equalsIgnoreCase(ItemRegistry.mobImprisonmentToolItem.getID(stack.getStack()))) {
+            if (entity instanceof LivingEntity && stack.getStack().getItem().equals(ModuleTool.MOB_IMPRISONMENT_TOOL) && ModuleTool.MOB_IMPRISONMENT_TOOL.containsEntity(stack.getStack())
+                    && entity.getType().getRegistryName().toString().equalsIgnoreCase(ModuleTool.MOB_IMPRISONMENT_TOOL.getID(stack.getStack()))) {
                 return true;
             }
         }
@@ -81,7 +80,7 @@ public class ItemStackFilter extends AbstractFilter<Entity> {
         }
         if (isEmpty) return false;
         for (GhostSlot stack : this.getFilter()) {
-            FluidStack original = FluidUtil.getFluidContained(stack.getStack());
+            FluidStack original = FluidUtil.getFluidContained(stack.getStack()).orElse(null);
             if (original != null && original.isFluidEqual(fluidStack)) return true;
         }
         return false;
@@ -93,20 +92,20 @@ public class ItemStackFilter extends AbstractFilter<Entity> {
     }
 
     @Override
-    public NBTTagCompound serializeNBT() {
-        NBTTagCompound compound = new NBTTagCompound();
+    public CompoundNBT serializeNBT() {
+        CompoundNBT compound = new CompoundNBT();
         for (int i = 0; i < this.getFilter().length; i++) {
             if (!this.getFilter()[i].getStack().isEmpty())
-                compound.setTag(String.valueOf(i), this.getFilter()[i].getStack().serializeNBT());
+                compound.put(String.valueOf(i), this.getFilter()[i].getStack().serializeNBT());
         }
         return compound;
     }
 
     @Override
-    public void deserializeNBT(NBTTagCompound nbt) {
+    public void deserializeNBT(CompoundNBT nbt) {
         for (int i = 0; i < this.getFilter().length; i++) {
-            if (nbt.hasKey(String.valueOf(i))) {
-                this.getFilter()[i].setStack(new ItemStack(nbt.getCompoundTag(String.valueOf(i))));
+            if (nbt.contains(String.valueOf(i))) {
+                this.getFilter()[i].setStack(ItemStack.read(nbt.getCompound(String.valueOf(i))));
             } else this.getFilter()[i].setStack(ItemStack.EMPTY);
         }
     }

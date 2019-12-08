@@ -30,8 +30,7 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.biome.Biome;
-import net.minecraftforge.fml.common.registry.ForgeRegistries;
-import net.minecraftforge.oredict.OreDictionary;
+import net.minecraftforge.registries.ForgeRegistries;
 
 import java.io.*;
 import java.nio.file.DirectoryStream;
@@ -128,19 +127,19 @@ public class LaserDrillEntry {
             for (JsonElement o : head) {
                 JsonObject ore = o.getAsJsonObject();
 
-                ItemStack itemStack;
+                ItemStack itemStack = ItemStack.EMPTY;
                 String itemName = ore.getAsJsonPrimitive("item").getAsString();
                 if (itemName.startsWith("ore")) {
-                    if (OreDictionary.doesOreNameExist(itemName) && OreDictionary.getOres(itemName).size() > 0)
+                    /*if (OreDictionary.doesOreNameExist(itemName) && OreDictionary.getOres(itemName).size() > 0)
                         itemStack = OreDictionary.getOres(itemName).get(0).copy();
-                    else continue;
+                    else continue;*/
                 } else {
                     String[] item_strings = itemName.split(":");
                     ResourceLocation item_location = new ResourceLocation(item_strings[0], item_strings[1]);
                     Item item = ForgeRegistries.ITEMS.getValue(item_location);
                     if (item == null) continue;
                     if (item_strings.length > 2) {
-                        itemStack = new ItemStack(item, 1, Integer.parseInt(item_strings[2]));
+                        itemStack = new ItemStack(item, 1);
                     } else {
                         itemStack = new ItemStack(item);
                     }
@@ -219,7 +218,7 @@ public class LaserDrillEntry {
 
     @Override
     public String toString() {
-        return stack.getDisplayName();
+        return stack.getDisplayName().getUnformattedComponentText();
     }
 
     public static class LaserDrillEntryExtended {

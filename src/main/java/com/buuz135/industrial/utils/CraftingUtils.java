@@ -21,20 +21,15 @@
  */
 package com.buuz135.industrial.utils;
 
-import com.buuz135.industrial.proxy.BlockRegistry;
-import net.minecraft.block.Block;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.init.Blocks;
-import net.minecraft.inventory.Container;
-import net.minecraft.inventory.InventoryCrafting;
+import net.minecraft.block.Blocks;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.inventory.CraftingInventory;
+import net.minecraft.inventory.container.Container;
 import net.minecraft.item.ItemStack;
-import net.minecraft.item.crafting.CraftingManager;
+import net.minecraft.item.crafting.ICraftingRecipe;
 import net.minecraft.item.crafting.IRecipe;
-import net.minecraft.util.NonNullList;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.item.crafting.IRecipeType;
 import net.minecraft.world.World;
-import net.minecraftforge.fml.common.Loader;
-import net.minecraftforge.oredict.OreDictionary;
 
 import java.util.HashMap;
 import java.util.HashSet;
@@ -55,24 +50,28 @@ public class CraftingUtils {
                 return entry.getValue().copy();
             }
         }
-        InventoryCrafting inventoryCrafting = new InventoryCrafting(new Container() {
+        CraftingInventory inventoryCrafting = new CraftingInventory(new Container(null, 0) {
             @Override
-            public boolean canInteractWith(EntityPlayer playerIn) {
+            public boolean canInteractWith(PlayerEntity playerIn) {
                 return false;
             }
         }, size, size);
         for (int i = 0; i < size * size; i++) {
             inventoryCrafting.setInventorySlotContents(i, input.copy());
         }
-        ItemStack output = CraftingManager.findMatchingResult(inventoryCrafting, world);
-        cachedRecipes.put(cachedStack, output.copy());
-        return output.copy();
+        ICraftingRecipe recipe = world.getRecipeManager().getRecipe(IRecipeType.CRAFTING, inventoryCrafting, world).orElseGet(null);
+        if (recipe != null) {
+            ItemStack output = recipe.getRecipeOutput();
+            cachedRecipes.put(cachedStack, output.copy());
+            return output.copy();
+        }
+        return ItemStack.EMPTY;
     }
 
-    public static InventoryCrafting genCraftingInventory(World world, ItemStack... inputs) {
-        InventoryCrafting inventoryCrafting = new InventoryCrafting(new Container() {
+    public static CraftingInventory genCraftingInventory(World world, ItemStack... inputs) {
+        CraftingInventory inventoryCrafting = new CraftingInventory(new Container(null, 0) {
             @Override
-            public boolean canInteractWith(EntityPlayer playerIn) {
+            public boolean canInteractWith(PlayerEntity playerIn) {
                 return false;
             }
         }, 3, 3);
@@ -86,7 +85,7 @@ public class CraftingUtils {
         for (ItemStack[] missingRecipe : missingRecipes) {
             if (doesStackArrayEquals(missingRecipe, inputs)) return null;
         }
-        IRecipe recipe = CraftingManager.findMatchingRecipe(genCraftingInventory(world, inputs), world);
+        IRecipe recipe = world.getRecipeManager().getRecipe(IRecipeType.CRAFTING, genCraftingInventory(world, inputs), world).orElseGet(null);
         if (recipe == null) missingRecipes.add(inputs);
         return recipe;
     }
@@ -114,13 +113,14 @@ public class CraftingUtils {
         crushedRecipes.put(new ItemStack(Blocks.COBBLESTONE), new ItemStack(Blocks.GRAVEL));
         crushedRecipes.put(new ItemStack(Blocks.GRAVEL), new ItemStack(Blocks.SAND));
         ItemStack latest = new ItemStack(Blocks.SAND);
-        if (BlockRegistry.materialStoneWorkFactoryBlock.produceExNihiloDust() && Loader.isModLoaded("exnihilocreatio")) {
-            Block dust = Block.REGISTRY.getObject(new ResourceLocation("exnihilocreatio:block_dust"));
-            crushedRecipes.put(new ItemStack(Blocks.SAND), latest = new ItemStack(dust));
-        }
-        if (BlockRegistry.materialStoneWorkFactoryBlock.produceSilicon()) {
-            NonNullList<ItemStack> items = OreDictionary.getOres("itemSilicon");
-            if (items.size() > 0) crushedRecipes.put(latest, items.get(0));
-        }
+
+        //if (BlockRegistry.materialStoneWorkFactoryBlock.produceExNihiloDust() && ModList.get().isLoaded("exnihilocreatio")) {
+        //    Block dust = Block.REGISTRY.get(new ResourceLocation("exnihilocreatio:block_dust"));
+        //    crushedRecipes.put(new ItemStack(Blocks.SAND), latest = new ItemStack(dust));
+        //}
+        //if (BlockRegistry.materialStoneWorkFactoryBlock.produceSilicon()) {
+        //    NonNullList<ItemStack> items = NonNullList.create(); //OreDictionary.getOres("itemSilicon");
+        //    if (items.size() > 0) crushedRecipes.put(latest, items.get(0));
+        //}TODO
     }
 }

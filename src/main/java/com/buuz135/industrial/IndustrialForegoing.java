@@ -21,54 +21,95 @@
  */
 package com.buuz135.industrial;
 
-import com.buuz135.industrial.proxy.BlockRegistry;
+import com.buuz135.industrial.module.*;
 import com.buuz135.industrial.proxy.CommonProxy;
-import com.buuz135.industrial.proxy.ItemRegistry;
+import com.buuz135.industrial.proxy.client.ClientProxy;
+import com.buuz135.industrial.proxy.client.render.ContributorsCatEarsRender;
+import com.buuz135.industrial.proxy.network.ConveyorButtonInteractMessage;
+import com.buuz135.industrial.proxy.network.ConveyorSplittingSyncEntityMessage;
+import com.buuz135.industrial.proxy.network.SpecialParticleMessage;
+import com.buuz135.industrial.recipe.DissolutionChamberRecipe;
+import com.buuz135.industrial.recipe.FluidExtractorRecipe;
+import com.buuz135.industrial.recipe.provider.IndustrialRecipeProvider;
+import com.buuz135.industrial.recipe.provider.IndustrialSerializableProvider;
+import com.buuz135.industrial.recipe.provider.IndustrialTagsProvider;
+import com.buuz135.industrial.registry.IFRegistries;
 import com.buuz135.industrial.utils.IFFakePlayer;
 import com.buuz135.industrial.utils.Reference;
-import net.minecraft.creativetab.CreativeTabs;
-import net.minecraft.item.ItemStack;
+import com.hrznstudio.titanium.TitaniumClient;
+import com.hrznstudio.titanium.event.custom.ResourceRegistrationEvent;
+import com.hrznstudio.titanium.event.handler.EventManager;
+import com.hrznstudio.titanium.material.ResourceType;
+import com.hrznstudio.titanium.module.Module;
+import com.hrznstudio.titanium.module.ModuleController;
+import com.hrznstudio.titanium.network.NetworkHandler;
+import com.hrznstudio.titanium.recipe.generator.BlockItemModelGeneratorProvider;
+import com.hrznstudio.titanium.recipe.generator.titanium.DefaultLootTableProvider;
+import com.hrznstudio.titanium.reward.Reward;
+import com.hrznstudio.titanium.reward.RewardGiver;
+import com.hrznstudio.titanium.reward.RewardManager;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.renderer.entity.EntityRendererManager;
+import net.minecraft.item.crafting.IRecipeSerializer;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
-import net.minecraft.world.WorldServer;
+import net.minecraft.world.server.ServerWorld;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.common.util.FakePlayer;
-import net.minecraftforge.fluids.FluidRegistry;
+import net.minecraftforge.event.RegistryEvent;
+import net.minecraftforge.fml.DistExecutor;
 import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.fml.common.SidedProxy;
-import net.minecraftforge.fml.common.event.*;
-import net.minecraftforge.fml.common.network.NetworkRegistry;
-import net.minecraftforge.fml.common.network.simpleimpl.SimpleNetworkWrapper;
-import net.ndrei.teslacorelib.config.TeslaCoreLibConfig;
-import net.ndrei.teslacorelib.items.gears.CoreGearType;
+import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
+import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
+import net.minecraftforge.fml.event.lifecycle.GatherDataEvent;
+import net.minecraftforge.fml.event.server.FMLServerStartingEvent;
 
-import java.util.Arrays;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.HashMap;
+import java.util.UUID;
 
-@Mod(modid = Reference.MOD_ID, name = Reference.MOD_ID, version = Reference.VERSION, dependencies = "required-after:forge@[14.23.5.2806,);required-after:teslacorelib@[1.0.15,);", guiFactory = Reference.GUI_FACTORY, updateJSON = "https://raw.githubusercontent.com/Buuz135/Industrial-Foregoing/master/update.json")
-public class IndustrialForegoing {
+@Mod(Reference.MOD_ID)
+public class IndustrialForegoing extends ModuleController {
 
-    public static final SimpleNetworkWrapper NETWORK = NetworkRegistry.INSTANCE.newSimpleChannel(Reference.MOD_ID);
-    public static CreativeTabs creativeTab = new CreativeTabs(Reference.MOD_ID) {
-        @Override
-        public ItemStack createIcon() {
-            return new ItemStack(BlockRegistry.blackHoleUnitBlock).isEmpty() ? new ItemStack(ItemRegistry.strawItem) : new ItemStack(BlockRegistry.blackHoleUnitBlock);
-        }
-    };
-    public static IndustrialForegoing instance;
-    @SidedProxy(clientSide = Reference.PROXY_CLIENT, serverSide = Reference.PROXY_COMMON)
     private static CommonProxy proxy;
     private static HashMap<Integer, IFFakePlayer> worldFakePlayer = new HashMap<>();
+    public static NetworkHandler NETWORK = new NetworkHandler(Reference.MOD_ID);
 
     static {
-        if (!FluidRegistry.isUniversalBucketEnabled()) FluidRegistry.enableUniversalBucket();
+        NETWORK.registerMessage(ConveyorButtonInteractMessage.class);
+        NETWORK.registerMessage(ConveyorSplittingSyncEntityMessage.class);
+        NETWORK.registerMessage(SpecialParticleMessage.class);
+    }
+
+    public IndustrialForegoing() {
+        proxy = new CommonProxy();
+        DistExecutor.runWhenOn(Dist.CLIENT, () -> () -> EventManager.mod(FMLClientSetupEvent.class).process(fmlClientSetupEvent -> new ClientProxy().run()).subscribe());
+        EventManager.mod(FMLCommonSetupEvent.class).process(fmlCommonSetupEvent -> proxy.run()).subscribe();
+        EventManager.mod(FMLServerStartingEvent.class).process(fmlServerStartingEvent -> worldFakePlayer.clear()).subscribe();
+        EventManager.mod(RegistryEvent.Register.class).filter(register -> register.getGenericType().equals(IRecipeSerializer.class))
+                .process(register -> register.getRegistry().registerAll(FluidExtractorRecipe.SERIALIZER, DissolutionChamberRecipe.SERIALIZER)).subscribe();
+        IFRegistries.poke();
+        RewardGiver giver = RewardManager.get().getGiver(UUID.fromString("d28b7061-fb92-4064-90fb-7e02b95a72a6"), "Buuz135");
+        try {
+            giver.addReward(new Reward(new ResourceLocation(Reference.MOD_ID, "cat_ears"), new URL("https://raw.githubusercontent.com/Buuz135/Industrial-Foregoing/master/contributors.json"), () -> dist -> {
+                if (dist == Dist.CLIENT) {
+                    registerReward();
+                }
+            }, new String[]{"normal"}));
+        } catch (MalformedURLException e) {
+            e.printStackTrace();
+        }
     }
 
     public static FakePlayer getFakePlayer(World world) {
-        if (worldFakePlayer.containsKey(world.provider.getDimension()))
-            return worldFakePlayer.get(world.provider.getDimension());
-        if (world instanceof WorldServer) {
-            IFFakePlayer fakePlayer = new IFFakePlayer((WorldServer) world);
-            worldFakePlayer.put(world.provider.getDimension(), fakePlayer);
+        if (worldFakePlayer.containsKey(world.dimension.getType().getId()))
+            return worldFakePlayer.get(world.dimension.getType().getId());
+        if (world instanceof ServerWorld) {
+            IFFakePlayer fakePlayer = new IFFakePlayer((ServerWorld) world);
+            worldFakePlayer.put(world.dimension.getType().getId(), fakePlayer);
             return fakePlayer;
         }
         return null;
@@ -80,36 +121,60 @@ public class IndustrialForegoing {
         return player;
     }
 
-    @Mod.EventHandler
-    public void preInit(FMLPreInitializationEvent event) {
-        instance = this;
-        proxy.preInit(event);
+    @Override
+    public void onPreInit() {
+        super.onPreInit();
+        EventManager.mod(ResourceRegistrationEvent.class).process(event -> {
+            event.get("iron").add(ResourceType.GEAR);
+            event.get("gold").add(ResourceType.GEAR);
+            event.get("diamond").add(ResourceType.GEAR);
+        }).subscribe();
     }
 
-    @Mod.EventHandler
-    public void init(FMLInitializationEvent event) {
-        proxy.init();
+    @Override
+    public void addDataProvider(GatherDataEvent event) {
+        super.addDataProvider(event);
+        event.getGenerator().addProvider(new IndustrialRecipeProvider(event.getGenerator()));
+        event.getGenerator().addProvider(new IndustrialSerializableProvider(event.getGenerator(), Reference.MOD_ID));
+        event.getGenerator().addProvider(new IndustrialTagsProvider.Blocks(event.getGenerator()));
+        event.getGenerator().addProvider(new IndustrialTagsProvider.Items(event.getGenerator()));
+        event.getGenerator().addProvider(new DefaultLootTableProvider(event.getGenerator(), Reference.MOD_ID));
+        event.getGenerator().addProvider(new BlockItemModelGeneratorProvider(event.getGenerator(), Reference.MOD_ID));
     }
 
-    @Mod.EventHandler
-    public void postInit(FMLPostInitializationEvent event) {
-        proxy.postInit();
+    @Override
+    protected void initModules() {
+        Module.Builder core = Module.builder("core").description("Module for all the Industrial Foregoing basic features");
+        new ModuleCore().generateFeatures().forEach(core::feature);
+        addModule(core);
+
+        Module.Builder tool = Module.builder("tools").description("A collection of Industrial Foregoing tools");
+        new ModuleTool().generateFeatures().forEach(tool::feature);
+        addModule(tool);
+
+        Module.Builder transport = Module.builder("transport").description("All the Industrial Foregoing tools that allow of transport of things");
+        new ModuleTransport().generateFeatures().forEach(transport::feature);
+        addModule(transport);
+
+        Module.Builder generator = Module.builder("generator").description("All machines that generate power");
+        new ModuleGenerator().generateFeatures().forEach(generator::feature);
+        addModule(generator);
+
+        Module.Builder agriculture = Module.builder("agriculture").description("All of your farming options");
+        new ModuleAgricultureHusbandry().generateFeatures().forEach(agriculture::feature);
+        addModule(agriculture);
+
+        Module.Builder resources = Module.builder("resource_production");
+        new ModuleResourceProduction().generateFeatures().forEach(resources::feature);
+        addModule(resources);
     }
 
-    @Mod.EventHandler
-    public void construction(FMLConstructionEvent event) {
-        Arrays.asList(TeslaCoreLibConfig.REGISTER_MACHINE_CASE, TeslaCoreLibConfig.REGISTER_GEARS,
-                TeslaCoreLibConfig.REGISTER_GEAR_TYPES + "#" + CoreGearType.IRON.getMaterial(),
-                TeslaCoreLibConfig.REGISTER_GEAR_TYPES + "#" + CoreGearType.GOLD.getMaterial(),
-                TeslaCoreLibConfig.REGISTER_GEAR_TYPES + "#" + CoreGearType.DIAMOND.getMaterial(),
-                TeslaCoreLibConfig.REGISTER_ADDONS,
-                TeslaCoreLibConfig.REGISTER_SPEED_ADDONS,
-                TeslaCoreLibConfig.REGISTER_ENERGY_ADDONS).forEach(s -> TeslaCoreLibConfig.INSTANCE.setDefaultFlag(s, true));
-        TeslaCoreLibConfig.INSTANCE.setDefaultFlag(TeslaCoreLibConfig.ALLOW_ENERGY_DISPLAY_CHANGE, false);
+    @OnlyIn(Dist.CLIENT)
+    private void registerReward() {
+        Minecraft instance = Minecraft.getInstance();
+        EntityRendererManager manager = instance.getRenderManager();
+        manager.getSkinMap().get("default").addLayer(new ContributorsCatEarsRender(TitaniumClient.getPlayerRenderer(Minecraft.getInstance())));
+        manager.getSkinMap().get("slim").addLayer(new ContributorsCatEarsRender(TitaniumClient.getPlayerRenderer(Minecraft.getInstance())));
     }
 
-    @Mod.EventHandler
-    public void serverStart(FMLServerStartingEvent event) {
-        worldFakePlayer.clear();
-    }
 }

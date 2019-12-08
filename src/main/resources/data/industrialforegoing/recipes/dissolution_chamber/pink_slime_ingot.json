@@ -1,0 +1,24 @@
+{
+  "input": [
+    {
+      "tag": "forge:ingots/iron"
+    },
+    {
+      "tag": "forge:ingots/iron"
+    },
+    {
+      "tag": "forge:ingots/gold"
+    },
+    {
+      "tag": "forge:ingots/gold"
+    }
+  ],
+  "inputFluid": "{FluidName:\"industrialforegoing:pink_slime\",Amount:1000}",
+  "processingTime": 300,
+  "output": {
+    "item": "industrialforegoing:pink_slime_ingot",
+    "count": 1
+  },
+  "outputFluid": "{FluidName:\"minecraft:empty\",Amount:0}",
+  "type": "industrialforegoing:dissolution_chamber"
+}

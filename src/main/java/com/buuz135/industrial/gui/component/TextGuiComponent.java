@@ -36,23 +36,23 @@ public abstract class TextGuiComponent extends PositionedGuiComponent {
     }
 
     @Override
-    public void handleClick(GuiConveyor conveyor, int guiX, int guiY, int mouseX, int mouseY) {
-
+    public boolean handleClick(GuiConveyor conveyor, int guiX, int guiY, double mouseX, double mouseY) {
+        return false;
     }
 
     @Override
-    public void drawGuiBackgroundLayer(int guiX, int guiY, int mouseX, int mouseY) {
-        Minecraft.getMinecraft().fontRenderer.drawString(getText(), guiX + getXPos(), guiY + getYPos(), 0xffffff);
+    public void drawGuiBackgroundLayer(int guiX, int guiY, double mouseX, double mouseY) {
+        Minecraft.getInstance().fontRenderer.drawString(getText(), guiX + getXPos(), guiY + getYPos(), 0xffffff);
     }
 
     @Override
-    public void drawGuiForegroundLayer(int guiX, int guiY, int mouseX, int mouseY) {
+    public void drawGuiForegroundLayer(int guiX, int guiY, double mouseX, double mouseY) {
 
     }
 
     @Nullable
     @Override
-    public List<String> getTooltip(int guiX, int guiY, int mouseX, int mouseY) {
+    public List<String> getTooltip(int guiX, int guiY, double mouseX, double mouseY) {
         return null;
     }
 

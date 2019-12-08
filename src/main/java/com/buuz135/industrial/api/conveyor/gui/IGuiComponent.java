@@ -36,16 +36,16 @@ public interface IGuiComponent {
 
     int getYSize();
 
-    void handleClick(GuiConveyor conveyor, int guiX, int guiY, int mouseX, int mouseY);
+    boolean handleClick(GuiConveyor conveyor, int guiX, int guiY, double mouseX, double mouseY);
 
-    void drawGuiBackgroundLayer(int guiX, int guiY, int mouseX, int mouseY);
+    void drawGuiBackgroundLayer(int guiX, int guiY, double mouseX, double mouseY);
 
-    void drawGuiForegroundLayer(int guiX, int guiY, int mouseX, int mouseY);
+    void drawGuiForegroundLayer(int guiX, int guiY, double mouseX, double mouseY);
 
-    default boolean isInside(int mouseX, int mouseY) {
+    default boolean isInside(double mouseX, double mouseY) {
         return mouseX > getXPos() && mouseX < getXPos() + getXSize() && mouseY > getYPos() && mouseY < getYPos() + getYSize();
     }
 
     @Nullable
-    List<String> getTooltip(int guiX, int guiY, int mouseX, int mouseY);
+    List<String> getTooltip(int guiX, int guiY, double mouseX, double mouseY);
 }

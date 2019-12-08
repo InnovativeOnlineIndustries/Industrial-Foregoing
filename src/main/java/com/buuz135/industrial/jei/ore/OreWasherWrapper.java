@@ -22,13 +22,8 @@
 package com.buuz135.industrial.jei.ore;
 
 import com.buuz135.industrial.api.recipe.ore.OreFluidEntryRaw;
-import com.buuz135.industrial.utils.ItemStackUtils;
-import mezz.jei.api.ingredients.IIngredients;
-import mezz.jei.api.recipe.IRecipeWrapper;
-import net.minecraft.item.ItemStack;
-import net.minecraftforge.fluids.FluidStack;
 
-public class OreWasherWrapper implements IRecipeWrapper {
+public class OreWasherWrapper {
 
     private final OreFluidEntryRaw entryRaw;
 
@@ -36,10 +31,12 @@ public class OreWasherWrapper implements IRecipeWrapper {
         this.entryRaw = entryRaw;
     }
 
-    @Override
-    public void getIngredients(IIngredients ingredients) {
-        ingredients.setInputs(ItemStack.class, ItemStackUtils.getOreItems(entryRaw.getOre()));
-        ingredients.setInput(FluidStack.class, entryRaw.getInput());
-        ingredients.setOutput(FluidStack.class, entryRaw.getOutput());
-    }
+    //@Override
+    //public void getIngredients(IIngredients ingredients) {
+    //    //ingredients.setInputs(ItemStack.class, ItemStackUtils.getAllEntries(entryRaw.getOre()));
+    //    ingredients.setInput(FluidStack.class, entryRaw.getInput());
+    //    ingredients.setOutput(FluidStack.class, entryRaw.getOutput());
+//
+    //    //List<ItemStack> allResources = ItemStackUtils.getAllEntries(Tags.Items.DUSTS, Tags.Items.ORES, Tags.Items.INGOTS).stream().map(ItemStack::new).collect(Collectors.toList());
+    //}
 }

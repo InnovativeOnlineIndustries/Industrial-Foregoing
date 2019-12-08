@@ -28,19 +28,19 @@ import com.buuz135.industrial.gui.component.FilterGuiComponent;
 import com.buuz135.industrial.proxy.block.filter.IFilter;
 import com.buuz135.industrial.proxy.network.ConveyorButtonInteractMessage;
 import com.buuz135.industrial.utils.Reference;
-import net.minecraft.client.gui.inventory.GuiContainer;
-import net.minecraft.client.renderer.GlStateManager;
-import net.minecraft.inventory.Container;
-import net.minecraft.nbt.NBTTagCompound;
+import com.mojang.blaze3d.platform.GlStateManager;
+import net.minecraft.client.gui.screen.inventory.ContainerScreen;
+import net.minecraft.entity.player.PlayerInventory;
+import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.text.TextComponentTranslation;
+import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.TranslationTextComponent;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-public class GuiConveyor extends GuiContainer {
+public class GuiConveyor extends ContainerScreen<ContainerConveyor> {
 
     public static final ResourceLocation BG_TEXTURE = new ResourceLocation(Reference.MOD_ID, "textures/gui/conveyor.png");
 
@@ -50,16 +50,16 @@ public class GuiConveyor extends GuiContainer {
     private int y;
     private List<IFilter.GhostSlot> ghostSlots;
 
-    public GuiConveyor(Container inventorySlotsIn) {
-        super(inventorySlotsIn);
+    public GuiConveyor(ContainerConveyor inventorySlotsIn, PlayerInventory inventory, ITextComponent component) {
+        super(inventorySlotsIn, inventory, component);
         this.upgrade = getContainer().getConveyor().getUpgradeMap().get(getContainer().getFacing());
         this.componentList = new ArrayList<>();
         this.ghostSlots = new ArrayList<>();
     }
 
     @Override
-    public void initGui() {
-        super.initGui();
+    protected void init() {
+        super.init();
         componentList.clear();
         upgrade.addComponentsToGui(componentList);
         for (IGuiComponent iGuiComponent : componentList) {
@@ -70,21 +70,16 @@ public class GuiConveyor extends GuiContainer {
     }
 
     @Override
-    public void updateScreen() {
-        super.updateScreen();
-    }
-
-    @Override
     protected void drawGuiContainerBackgroundLayer(float partialTicks, int mouseX, int mouseY) {
-        this.drawDefaultBackground();
-        GlStateManager.color(1, 1, 1, 1);
-        mc.getTextureManager().bindTexture(BG_TEXTURE);
+        this.renderBackground();
+        GlStateManager.color4f(1, 1, 1, 1);
+        minecraft.getTextureManager().bindTexture(BG_TEXTURE);
         x = (width - xSize) / 2;
         y = (height - ySize) / 2;
-        drawTexturedModalRect(x, y, 0, 0, xSize, ySize);
+        blit(x, y, 0, 0, xSize, ySize);
         if (upgrade != null) {
-            String localized = new TextComponentTranslation(String.format("conveyor.upgrade.%s.%s.name", upgrade.getFactory().getRegistryName().getNamespace(), upgrade.getFactory().getRegistryName().getPath())).getFormattedText();
-            fontRenderer.drawString(localized, x + xSize / 2 - fontRenderer.getStringWidth(localized) / 2, y + 6, 0x404040);
+            String localized = new TranslationTextComponent(String.format("conveyor.upgrade.%s.%s", upgrade.getFactory().getRegistryName().getNamespace(), upgrade.getFactory().getRegistryName().getPath())).getFormattedText();
+            minecraft.fontRenderer.drawString(localized, x + xSize / 2 - minecraft.fontRenderer.getStringWidth(localized) / 2, y + 6, 0x404040);
         }
         for (IGuiComponent iGuiComponent : componentList) {
             iGuiComponent.drawGuiBackgroundLayer(x, y, mouseX, mouseY);
@@ -103,30 +98,29 @@ public class GuiConveyor extends GuiContainer {
         for (IGuiComponent iGuiComponent : componentList) {
             if (iGuiComponent.isInside(mouseX - x, mouseY - y)) {
                 List<String> tooltips = iGuiComponent.getTooltip(x, y, mouseX, mouseY);
-                if (tooltips != null) drawHoveringText(tooltips, mouseX - x, mouseY - y);
+                if (tooltips != null) renderTooltip(tooltips, mouseX - x, mouseY - y);
             }
         }
     }
 
-    @Override
-    public void drawScreen(int mouseX, int mouseY, float partialTicks) {
-        super.drawScreen(mouseX, mouseY, partialTicks);
-    }
-
-    private ContainerConveyor getContainer() {
-        return (ContainerConveyor) this.inventorySlots;
+    public ContainerConveyor getContainer() {
+        return (ContainerConveyor) super.getContainer();
     }
 
     @Override
-    protected void mouseClicked(int mouseX, int mouseY, int mouseButton) throws IOException {
-        super.mouseClicked(mouseX, mouseY, mouseButton);
+    public boolean mouseClicked(double mouseX, double mouseY, int mouseButton) {
+        boolean click = super.mouseClicked(mouseX, mouseY, mouseButton);
         for (IGuiComponent iGuiComponent : componentList) {
-            if (iGuiComponent.isInside(mouseX - x, mouseY - y)) iGuiComponent.handleClick(this, x, y, mouseX, mouseY);
+            if (iGuiComponent.isInside(mouseX - x, mouseY - y)) {
+                if (iGuiComponent.handleClick(this, x, y, mouseX, mouseY))
+                    return true;
+            }
         }
+        return click;
     }
 
-    public void sendMessage(int id, NBTTagCompound compound) {
-        IndustrialForegoing.NETWORK.sendToServer(new ConveyorButtonInteractMessage(upgrade.getPos(), id, upgrade.getSide(), compound));
+    public void sendMessage(int id, CompoundNBT compound) {
+        IndustrialForegoing.NETWORK.get().sendToServer(new ConveyorButtonInteractMessage(upgrade.getPos(), id, upgrade.getSide(), compound));
     }
 
     public List<IFilter.GhostSlot> getGhostSlots() {

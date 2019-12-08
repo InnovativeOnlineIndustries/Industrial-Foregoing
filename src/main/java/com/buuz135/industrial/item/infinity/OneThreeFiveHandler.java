@@ -21,25 +21,22 @@
  */
 package com.buuz135.industrial.item.infinity;
 
-import com.buuz135.industrial.IndustrialForegoing;
-import com.buuz135.industrial.proxy.ItemRegistry;
+import com.buuz135.industrial.module.ModuleTool;
 import com.buuz135.industrial.proxy.client.particle.ParticleVex;
-import com.buuz135.industrial.proxy.network.SpecialParticleMessage;
 import com.buuz135.industrial.utils.Reference;
 import net.minecraft.client.Minecraft;
-import net.minecraft.entity.EntityLiving;
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.common.util.FakePlayer;
+import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.event.entity.living.LivingDeathEvent;
+import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
-import net.minecraftforge.fml.common.gameevent.TickEvent;
-import net.minecraftforge.fml.common.network.NetworkRegistry;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -49,21 +46,21 @@ import java.util.UUID;
 @Mod.EventBusSubscriber(modid = Reference.MOD_ID)
 public class OneThreeFiveHandler {
 
-    public static final String SPECIAL = "135135";
+    private static final String SPECIAL = "135135";
 
     public static HashMap<UUID, Long> SPECIAL_ENTITIES = new HashMap<>();
 
-    @SideOnly(Side.CLIENT)
+    @OnlyIn(Dist.CLIENT)
     @SubscribeEvent
     public static void onClientTick(TickEvent.ClientTickEvent event) {
-        if (Minecraft.getMinecraft().player != null && Minecraft.getMinecraft().player.world != null && !Minecraft.getMinecraft().isGamePaused() && Minecraft.getMinecraft().player.world.getTotalWorldTime() % 2 == 0) {
-            BlockPos pos = new BlockPos(Minecraft.getMinecraft().player.posX, Minecraft.getMinecraft().player.posY, Minecraft.getMinecraft().player.posZ);
-            Minecraft.getMinecraft().player.world.getEntitiesWithinAABB(EntityLiving.class, new AxisAlignedBB(pos.add(32, 32, 32), pos.add(-32, -32, -32)),
+        if (Minecraft.getInstance().player != null && Minecraft.getInstance().player.world != null && !Minecraft.getInstance().isGamePaused() && Minecraft.getInstance().player.world.getGameTime() % 2 == 0) {
+            BlockPos pos = new BlockPos(Minecraft.getInstance().player.posX, Minecraft.getInstance().player.posY, Minecraft.getInstance().player.posZ);
+            Minecraft.getInstance().player.world.getEntitiesWithinAABB(LivingEntity.class, new AxisAlignedBB(pos.add(32, 32, 32), pos.add(-32, -32, -32)),
                     input -> input.getUniqueID().toString().contains(SPECIAL)).
-                    forEach(living -> Minecraft.getMinecraft().effectRenderer.addEffect(new ParticleVex(living)));
-            Minecraft.getMinecraft().player.world.getEntitiesWithinAABB(EntityPlayer.class, new AxisAlignedBB(pos.add(32, 32, 32), pos.add(-32, -32, -32)),
+                    forEach(living -> Minecraft.getInstance().particles.addEffect(new ParticleVex(living)));
+            Minecraft.getInstance().player.world.getEntitiesWithinAABB(PlayerEntity.class, new AxisAlignedBB(pos.add(32, 32, 32), pos.add(-32, -32, -32)),
                     input -> SPECIAL_ENTITIES.containsKey(input.getUniqueID())).
-                    forEach(living -> Minecraft.getMinecraft().effectRenderer.addEffect(new ParticleVex(living)));
+                    forEach(living -> Minecraft.getInstance().particles.addEffect(new ParticleVex(living)));
         }
         List<UUID> toRemove = new ArrayList<>();
         for (UUID uuid : SPECIAL_ENTITIES.keySet()) {
@@ -77,11 +74,11 @@ public class OneThreeFiveHandler {
     @SubscribeEvent
     public static void onPlayerTick(TickEvent.PlayerTickEvent event) {
         if (event.phase == TickEvent.Phase.END) return;
-        if (event.player.world.getTotalWorldTime() % 20 == 0) {
+        if (event.player.world.getGameTime() % 20 == 0) {
             for (ItemStack stack : event.player.inventory.mainInventory) {
-                if (stack.getItem().equals(ItemRegistry.itemInfinityDrill) && ItemRegistry.itemInfinityDrill.isSpecial(stack)) {
-                    IndustrialForegoing.NETWORK.sendToAllAround(new SpecialParticleMessage(event.player.getUniqueID()), new NetworkRegistry.TargetPoint(event.player.dimension,
-                            event.player.posX, event.player.posY, event.player.posZ, 64));
+                if (stack.getItem().equals(ModuleTool.INFINITY_DRILL) && ModuleTool.INFINITY_DRILL.isSpecial(stack)) {
+                    /*IndustrialForegoing.NETWORK.sendToAllAround(new SpecialParticleMessage(event.player.getUniqueID()), new NetworkRegistry.TargetPoint(event.player.dimension,
+                            event.player.posX, event.player.posY, event.player.posZ, 64));*/
                     return;
                 }
             }
@@ -90,10 +87,10 @@ public class OneThreeFiveHandler {
 
     @SubscribeEvent
     public static void onEntityKill(LivingDeathEvent event) {
-        if (event.getEntityLiving().getUniqueID().toString().contains(SPECIAL) && event.getSource().getTrueSource() instanceof EntityPlayer && !(event.getSource().getTrueSource() instanceof FakePlayer)) {
-            EntityPlayer player = (EntityPlayer) event.getSource().getTrueSource();
-            if (player.getHeldItemMainhand().getItem().equals(ItemRegistry.itemInfinityDrill)) {
-                player.getHeldItemMainhand().getTagCompound().setBoolean("Special", true);
+        if (event.getEntityLiving().getUniqueID().toString().contains(SPECIAL) && event.getSource().getTrueSource() instanceof PlayerEntity && !(event.getSource().getTrueSource() instanceof FakePlayer)) {
+            PlayerEntity player = (PlayerEntity) event.getSource().getTrueSource();
+            if (player.getHeldItemMainhand().getItem().equals(ModuleTool.INFINITY_DRILL)) {
+                player.getHeldItemMainhand().getTag().putBoolean("Special", true);
             }
         }
     }

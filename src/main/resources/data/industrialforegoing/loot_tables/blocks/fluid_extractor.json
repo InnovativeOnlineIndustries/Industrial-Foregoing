@@ -1,0 +1,15 @@
+{
+  "type": "minecraft:block",
+  "pools": [
+    {
+      "name": "fluid_extractor",
+      "rolls": 1,
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "name": "industrialforegoing:fluid_extractor"
+        }
+      ]
+    }
+  ]
+}

@@ -1,15 +1,9 @@
 {
   "forge_marker": 1,
   "defaults": {
-    "model": "industrialforegoing:latex_processing_unit"
+    "model": "industrialforegoing:block/latex_processing_unit"
   },
   "variants": {
-    "normal": [
-      {}
-    ],
-    "inventory": [
-      {}
-    ],
     "facing": {
       "north": {},
       "south": {

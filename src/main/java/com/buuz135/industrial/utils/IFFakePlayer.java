@@ -23,8 +23,16 @@ package com.buuz135.industrial.utils;
 
 import com.mojang.authlib.GameProfile;
 import net.minecraft.item.ItemStack;
-import net.minecraft.tileentity.TileEntitySign;
-import net.minecraft.world.WorldServer;
+import net.minecraft.item.ItemUseContext;
+import net.minecraft.util.ActionResultType;
+import net.minecraft.util.Direction;
+import net.minecraft.util.Hand;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.BlockRayTraceResult;
+import net.minecraft.util.math.Vec3d;
+import net.minecraft.world.World;
+import net.minecraft.world.server.ServerWorld;
+import net.minecraftforge.common.ForgeHooks;
 import net.minecraftforge.common.util.FakePlayer;
 
 import java.util.UUID;
@@ -35,7 +43,7 @@ public class IFFakePlayer extends FakePlayer {
 
     private static GameProfile PROFILE = new GameProfile(uuid, "[IF]");
 
-    public IFFakePlayer(WorldServer worldIn) {
+    public IFFakePlayer(ServerWorld worldIn) {
         super(worldIn, PROFILE);
     }
 
@@ -44,8 +52,8 @@ public class IFFakePlayer extends FakePlayer {
 
     }
 
-    @Override
-    public void openEditSign(TileEntitySign signTile) {
-
+    public boolean placeBlock(World world, BlockPos pos, ItemStack stack) {
+        this.setHeldItem(Hand.MAIN_HAND, stack);
+        return ForgeHooks.onPlaceItemIntoWorld(new ItemUseContext(this, Hand.MAIN_HAND, new BlockRayTraceResult(new Vec3d(0, 0, 0), Direction.DOWN, pos, false))) == ActionResultType.SUCCESS;
     }
 }

@@ -22,21 +22,14 @@
 package com.buuz135.industrial.jei.sludge;
 
 import com.buuz135.industrial.utils.Reference;
-import mezz.jei.api.IGuiHelper;
-import mezz.jei.api.gui.IDrawable;
-import mezz.jei.api.gui.IGuiFluidStackGroup;
-import mezz.jei.api.gui.IGuiItemStackGroup;
 import mezz.jei.api.gui.IRecipeLayout;
+import mezz.jei.api.gui.drawable.IDrawable;
+import mezz.jei.api.helpers.IGuiHelper;
 import mezz.jei.api.ingredients.IIngredients;
-import mezz.jei.api.recipe.IRecipeCategory;
-import net.minecraft.client.Minecraft;
-import net.minecraft.item.ItemStack;
+import mezz.jei.api.recipe.category.IRecipeCategory;
 import net.minecraft.util.ResourceLocation;
-import net.minecraftforge.fluids.FluidStack;
 
 import javax.annotation.Nullable;
-import java.util.ArrayList;
-import java.util.List;
 
 public class SludgeRefinerRecipeCategory implements IRecipeCategory<SludgeRefinerRecipeWrapper> {
 
@@ -49,8 +42,13 @@ public class SludgeRefinerRecipeCategory implements IRecipeCategory<SludgeRefine
     }
 
     @Override
-    public String getUid() {
-        return "sludge_refiner_category";
+    public ResourceLocation getUid() {
+        return null;
+    }
+
+    @Override
+    public Class<? extends SludgeRefinerRecipeWrapper> getRecipeClass() {
+        return null;
     }
 
     @Override
@@ -60,7 +58,7 @@ public class SludgeRefinerRecipeCategory implements IRecipeCategory<SludgeRefine
 
     @Override
     public IDrawable getBackground() {
-        return guiHelper.createDrawable(new ResourceLocation(Reference.MOD_ID, "textures/gui/jei.png"), 0, 78, 81, 50, 0, 16, 0, 0);
+        return guiHelper.createDrawable(new ResourceLocation(Reference.MOD_ID, "textures/gui/jei.png"), 0, 78, 81, 50/*, 0, 16, 0, 0*/);
     }
 
     @Nullable
@@ -70,30 +68,22 @@ public class SludgeRefinerRecipeCategory implements IRecipeCategory<SludgeRefine
     }
 
     @Override
-    public void drawExtras(Minecraft minecraft) {
+    public void setIngredients(SludgeRefinerRecipeWrapper sludgeRefinerRecipeWrapper, IIngredients iIngredients) {
 
     }
+
 
     @Override
     public void setRecipe(IRecipeLayout recipeLayout, SludgeRefinerRecipeWrapper recipeWrapper, IIngredients ingredients) {
-        IGuiFluidStackGroup guiFluidStackGroup = recipeLayout.getFluidStacks();
-
-        guiFluidStackGroup.init(0, true, 5, 1, 12, 48, 8000, false, tankOverlay);
-
-        IGuiItemStackGroup guiItemStackGroup = recipeLayout.getItemStacks();
-
-        guiItemStackGroup.init(1, false, 59, 17);
-        guiFluidStackGroup.set(0, ingredients.getInputs(FluidStack.class).get(0));
-        guiItemStackGroup.set(1, ingredients.getOutputs(ItemStack.class).get(0));
+        //IGuiFluidStackGroup guiFluidStackGroup = recipeLayout.getFluidStacks();
+//
+        //guiFluidStackGroup.init(0, true, 5, 1, 12, 48, 8000, false, tankOverlay);
+//
+        //IGuiItemStackGroup guiItemStackGroup = recipeLayout.getItemStacks();
+//
+        //guiItemStackGroup.init(1, false, 59, 17);
+        //guiFluidStackGroup.set(0, ingredients.getInputs(FluidStack.class).get(0));
+        //guiItemStackGroup.set(1, ingredients.getOutputs(ItemStack.class).get(0));
     }
 
-    @Override
-    public List<String> getTooltipStrings(int mouseX, int mouseY) {
-        return new ArrayList<>();
-    }
-
-    @Override
-    public String getModName() {
-        return Reference.NAME;
-    }
 }

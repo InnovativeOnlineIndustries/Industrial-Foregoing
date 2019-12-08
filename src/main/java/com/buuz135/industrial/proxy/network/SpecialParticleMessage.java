@@ -22,15 +22,12 @@
 package com.buuz135.industrial.proxy.network;
 
 import com.buuz135.industrial.item.infinity.OneThreeFiveHandler;
-import io.netty.buffer.ByteBuf;
-import net.minecraft.network.PacketBuffer;
-import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
-import net.minecraftforge.fml.common.network.simpleimpl.IMessageHandler;
-import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
+import com.hrznstudio.titanium.network.Message;
+import net.minecraftforge.fml.network.NetworkEvent;
 
 import java.util.UUID;
 
-public class SpecialParticleMessage implements IMessage {
+public class SpecialParticleMessage extends Message {
 
     public UUID uuid;
 
@@ -42,23 +39,9 @@ public class SpecialParticleMessage implements IMessage {
     }
 
     @Override
-    public void fromBytes(ByteBuf buf) {
-        PacketBuffer buffer = new PacketBuffer(buf);
-        uuid = buffer.readUniqueId();
+    protected void handleMessage(NetworkEvent.Context context) {
+        OneThreeFiveHandler.SPECIAL_ENTITIES.put(uuid, System.currentTimeMillis());
     }
 
-    @Override
-    public void toBytes(ByteBuf buf) {
-        PacketBuffer buffer = new PacketBuffer(buf);
-        buffer.writeUniqueId(uuid);
-    }
 
-    public static class Handler implements IMessageHandler<SpecialParticleMessage, IMessage> {
-
-        @Override
-        public IMessage onMessage(SpecialParticleMessage message, MessageContext ctx) {
-            OneThreeFiveHandler.SPECIAL_ENTITIES.put(message.uuid, System.currentTimeMillis());
-            return null;
-        }
-    }
 }

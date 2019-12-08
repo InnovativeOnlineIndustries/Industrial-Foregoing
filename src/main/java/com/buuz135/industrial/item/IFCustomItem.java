@@ -21,31 +21,27 @@
  */
 package com.buuz135.industrial.item;
 
-import com.buuz135.industrial.IndustrialForegoing;
-import com.buuz135.industrial.utils.Reference;
-import net.minecraft.client.renderer.block.model.ModelResourceLocation;
-import net.minecraft.item.Item;
-import net.minecraftforge.client.model.ModelLoader;
-import net.minecraftforge.registries.IForgeRegistry;
+import com.hrznstudio.titanium.api.IRecipeProvider;
+import com.hrznstudio.titanium.item.ItemBase;
+import net.minecraft.item.ItemGroup;
+import net.minecraft.item.ItemStack;
+import net.minecraft.util.text.TranslationTextComponent;
 
-public class IFCustomItem extends Item {
+import javax.annotation.Nullable;
 
+public abstract class IFCustomItem extends ItemBase implements IRecipeProvider {
 
-    public IFCustomItem(String name) {
-        setTranslationKey(Reference.MOD_ID + "_" + name);
-        setCreativeTab(IndustrialForegoing.creativeTab);
-        setRegistryName(Reference.MOD_ID, name);
+    public IFCustomItem(String name, ItemGroup group, Properties builder) {
+        super(name, builder.group(group));
     }
 
-    public void register(IForgeRegistry<Item> items) {
-        items.register(this);
+    public IFCustomItem(String name, ItemGroup group) {
+        this(name, group, new Properties());
     }
 
-    public void registerRender() {
-        ModelLoader.setCustomModelResourceLocation(this, 0, new ModelResourceLocation(this.getRegistryName(), "inventory"));
-    }
-
-    public void createRecipe() {
-
+    @Nullable
+    @Override
+    public String getCreatorModId(ItemStack itemStack) {
+        return new TranslationTextComponent(this.group.getTranslationKey()).getFormattedText();
     }
 }

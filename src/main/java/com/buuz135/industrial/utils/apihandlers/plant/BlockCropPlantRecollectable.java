@@ -23,8 +23,9 @@ package com.buuz135.industrial.utils.apihandlers.plant;
 
 import com.buuz135.industrial.api.plant.PlantRecollectable;
 import com.buuz135.industrial.utils.BlockUtils;
-import net.minecraft.block.BlockCrops;
-import net.minecraft.block.state.IBlockState;
+import net.minecraft.block.BlockState;
+import net.minecraft.block.Blocks;
+import net.minecraft.block.CropsBlock;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.math.BlockPos;
@@ -40,20 +41,20 @@ public class BlockCropPlantRecollectable extends PlantRecollectable {
     }
 
     @Override
-    public boolean canBeHarvested(World world, BlockPos pos, IBlockState blockState) {
-        return blockState.getBlock() instanceof BlockCrops && ((BlockCrops) blockState.getBlock()).isMaxAge(blockState);
+    public boolean canBeHarvested(World world, BlockPos pos, BlockState blockState) {
+        return blockState.getBlock() instanceof CropsBlock && ((CropsBlock) blockState.getBlock()).isMaxAge(blockState);
     }
 
     @Override
-    public List<ItemStack> doHarvestOperation(World world, BlockPos pos, IBlockState blockState) {
+    public List<ItemStack> doHarvestOperation(World world, BlockPos pos, BlockState blockState) {
         NonNullList<ItemStack> stacks = NonNullList.create();
         stacks.addAll(BlockUtils.getBlockDrops(world, pos));
-        world.setBlockToAir(pos);
+        world.setBlockState(pos, Blocks.AIR.getDefaultState());
         return stacks;
     }
 
     @Override
-    public boolean shouldCheckNextPlant(World world, BlockPos pos, IBlockState blockState) {
+    public boolean shouldCheckNextPlant(World world, BlockPos pos, BlockState blockState) {
         return true;
     }
 

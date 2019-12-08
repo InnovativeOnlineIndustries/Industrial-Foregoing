@@ -22,27 +22,27 @@
 package com.buuz135.industrial.utils;
 
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.renderer.texture.AtlasTexture;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
-import net.minecraft.client.renderer.texture.TextureMap;
 import net.minecraft.util.ResourceLocation;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 
 import java.awt.*;
 
-@SideOnly(Side.CLIENT)
+@OnlyIn(Dist.CLIENT)
 public class ColorUtils {
 
     public static int getColorFrom(ResourceLocation location) {
-        TextureMap textureMap = Minecraft.getMinecraft().getTextureMapBlocks();
-        TextureAtlasSprite sprite = textureMap.getTextureExtry(location.toString());
+        AtlasTexture textureMap = Minecraft.getInstance().getTextureMap();
+        TextureAtlasSprite sprite = textureMap.getAtlasSprite(location.toString());
         return getColorFrom(sprite);
     }
 
     public static int getColorFrom(TextureAtlasSprite sprite) {
         if (sprite == null) return -1;
         if (sprite.getFrameCount() == 0) return -1;
-        int[][] pixelMatrix = sprite.getFrameTextureData(0);
+        int[][] pixelMatrix = new int[][]{{0}}; //sprite.getFrameTextureData(0);
         int total = 0, red = 0, blue = 0, green = 0;
         for (int pixel : pixelMatrix[pixelMatrix.length - 1]) {
             Color color = new Color(pixel);
@@ -59,7 +59,7 @@ public class ColorUtils {
     public static int getColorFrom(TextureAtlasSprite sprite, Color filter) {
         if (sprite == null) return -1;
         if (sprite.getFrameCount() == 0) return -1;
-        int[][] pixelMatrix = sprite.getFrameTextureData(0);
+        int[][] pixelMatrix = new int[][]{{0}};//sprite.getFrameTextureData(0);
         int total = 0, red = 0, blue = 0, green = 0;
         for (int pixel : pixelMatrix[pixelMatrix.length - 1]) {
             Color color = new Color(pixel);

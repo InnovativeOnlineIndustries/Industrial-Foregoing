@@ -22,30 +22,42 @@
 package com.buuz135.industrial.api.conveyor;
 
 import com.google.common.collect.ImmutableSet;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.util.EnumFacing;
+import com.hrznstudio.titanium.api.IRecipeProvider;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.item.Item;
+import net.minecraft.util.Direction;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
-import net.minecraftforge.registries.IForgeRegistryEntry;
+import net.minecraftforge.registries.ForgeRegistryEntry;
 
 import javax.annotation.Nonnull;
+import java.util.ArrayList;
 import java.util.Collections;
+import java.util.List;
 import java.util.Set;
 
-public abstract class ConveyorUpgradeFactory extends IForgeRegistryEntry.Impl<ConveyorUpgradeFactory> {
-    public static final ImmutableSet<EnumFacing> HORIZONTAL = ImmutableSet.copyOf(EnumFacing.Plane.HORIZONTAL.facings());
-    public static final ImmutableSet<EnumFacing> DOWN = ImmutableSet.of(EnumFacing.DOWN);
+public abstract class ConveyorUpgradeFactory extends ForgeRegistryEntry<ConveyorUpgradeFactory> implements IRecipeProvider {
 
-    public abstract ConveyorUpgrade create(IConveyorContainer container, EnumFacing face);
+    public static final ImmutableSet<Direction> HORIZONTAL = ImmutableSet.copyOf(Direction.Plane.HORIZONTAL.iterator());
+    public static final ImmutableSet<Direction> DOWN = ImmutableSet.of(Direction.DOWN);
+    public static final List<ConveyorUpgradeFactory> FACTORIES = new ArrayList<>();
+
+    private Item upgradeItem;
+
+    public ConveyorUpgradeFactory() {
+        FACTORIES.add(this);
+    }
+
+    public abstract ConveyorUpgrade create(IConveyorContainer container, Direction face);
 
     @Nonnull
-    public Set<EnumFacing> getValidFacings() {
+    public Set<Direction> getValidFacings() {
         return HORIZONTAL;
     }
 
     @Nonnull
-    public abstract ResourceLocation getModel(EnumFacing upgradeSide, EnumFacing conveyorFacing);
+    public abstract ResourceLocation getModel(Direction upgradeSide, Direction conveyorFacing);
 
     @Nonnull
     public abstract ResourceLocation getItemModel();
@@ -54,7 +66,15 @@ public abstract class ConveyorUpgradeFactory extends IForgeRegistryEntry.Impl<Co
         return Collections.emptySet();
     }
 
-    public EnumFacing getSideForPlacement(World world, BlockPos pos, EntityPlayer player) {
+    public Direction getSideForPlacement(World world, BlockPos pos, PlayerEntity player) {
         return player.getHorizontalFacing();
+    }
+
+    public Item getUpgradeItem() {
+        return upgradeItem;
+    }
+
+    public void setUpgradeItem(Item upgradeItem) {
+        this.upgradeItem = upgradeItem;
     }
 }

@@ -22,15 +22,13 @@
 package com.buuz135.industrial.proxy.block.filter;
 
 import com.buuz135.industrial.gui.conveyor.GuiConveyor;
-import mezz.jei.api.gui.IGhostIngredientHandler;
+import mezz.jei.api.gui.handlers.IGhostIngredientHandler;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.renderer.Rectangle2d;
 import net.minecraft.entity.Entity;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.CompoundNBT;
 import net.minecraftforge.fluids.FluidStack;
-import net.minecraftforge.fml.common.Optional;
-
-import java.awt.*;
 
 
 public interface IFilter<T extends Entity> {
@@ -47,11 +45,11 @@ public interface IFilter<T extends Entity> {
 
     GhostSlot[] getFilter();
 
-    NBTTagCompound serializeNBT();
+    CompoundNBT serializeNBT();
 
-    void deserializeNBT(NBTTagCompound nbt);
+    void deserializeNBT(CompoundNBT nbt);
 
-    @Optional.Interface(iface = "mezz.jei.api.gui.IGhostIngredientHandler$Target", modid = "jei", striprefs = true)
+    //@Optional.Interface(iface = "mezz.jei.api.gui.IGhostIngredientHandler$Target", modid = "jei", striprefs = true) TODO
     public static class GhostSlot implements IGhostIngredientHandler.Target<ItemStack> {
 
         private final int x;
@@ -75,18 +73,18 @@ public interface IFilter<T extends Entity> {
         }
 
         @Override
-        public Rectangle getArea() {
-            if (Minecraft.getMinecraft().currentScreen instanceof GuiConveyor) {
-                GuiConveyor gui = (GuiConveyor) Minecraft.getMinecraft().currentScreen;
-                return new Rectangle(x + gui.getX(), y + gui.getY(), 18, 18);
+        public Rectangle2d getArea() {
+            if (Minecraft.getInstance().currentScreen instanceof GuiConveyor) {
+                GuiConveyor gui = (GuiConveyor) Minecraft.getInstance().currentScreen;
+                return new Rectangle2d(x + gui.getX(), y + gui.getY(), 18, 18);
             }
-            return new Rectangle();
+            return new Rectangle2d(0, 0, 0, 0);
         }
 
         @Override
         public void accept(ItemStack ingredient) {
-            if (Minecraft.getMinecraft().currentScreen instanceof GuiConveyor) {
-                ((GuiConveyor) Minecraft.getMinecraft().currentScreen).sendMessage(id, ingredient.serializeNBT());
+            if (Minecraft.getInstance().currentScreen instanceof GuiConveyor) {
+                ((GuiConveyor) Minecraft.getInstance().currentScreen).sendMessage(id, ingredient.serializeNBT());
             }
         }
     }

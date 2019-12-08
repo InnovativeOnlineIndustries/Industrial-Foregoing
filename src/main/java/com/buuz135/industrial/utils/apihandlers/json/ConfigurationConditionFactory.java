@@ -21,19 +21,33 @@
  */
 package com.buuz135.industrial.utils.apihandlers.json;
 
-import com.buuz135.industrial.config.CustomConfiguration;
 import com.google.gson.JsonObject;
-import net.minecraftforge.common.crafting.IConditionFactory;
-import net.minecraftforge.common.crafting.JsonContext;
+import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.common.crafting.conditions.ICondition;
+import net.minecraftforge.common.crafting.conditions.IConditionSerializer;
 
-import java.util.function.BooleanSupplier;
+public class ConfigurationConditionFactory implements IConditionSerializer {
 
-public class ConfigurationConditionFactory implements IConditionFactory {
+    //@Override
+    //public BooleanSupplier parse(JsonObject json) {
+    //    //if (json.has("value") && CustomConfiguration.configValues.containsKey(json.get("value").getAsString())) {
+    //    //    return () -> CustomConfiguration.configValues.get(json.get("value").getAsString());
+    //    //}
+    //    return () -> false;
+    //}
+
     @Override
-    public BooleanSupplier parse(JsonContext context, JsonObject json) {
-        if (json.has("value") && CustomConfiguration.configValues.containsKey(json.get("value").getAsString())) {
-            return () -> CustomConfiguration.configValues.get(json.get("value").getAsString());
-        }
-        return () -> false;
+    public void write(JsonObject json, ICondition value) {
+
+    }
+
+    @Override
+    public ICondition read(JsonObject json) {
+        return null;
+    }
+
+    @Override
+    public ResourceLocation getID() {
+        return null;
     }
 }

@@ -24,7 +24,7 @@ package com.buuz135.industrial.api.recipe;
 
 import com.google.common.base.Predicate;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.CompoundNBT;
 
 import javax.annotation.Nullable;
 import java.util.ArrayList;
@@ -35,7 +35,7 @@ public class BioReactorEntry implements IReactorEntry {
     public static List<IReactorEntry> BIO_REACTOR_ENTRIES = new ArrayList<>();
 
     private ItemStack stack;
-    private Predicate<NBTTagCompound> nbtCheck;
+    private Predicate<CompoundNBT> nbtCheck;
 
     /**
      * Defines an ItemStack that can be insterted into the Bioreactor.
@@ -43,7 +43,7 @@ public class BioReactorEntry implements IReactorEntry {
      * @param stack    The stack that can be insterted into the Bioreactor
      * @param nbtCheck A check for others ItemStack special NBTTag (Like Forestry Species)
      */
-    public BioReactorEntry(ItemStack stack, @Nullable Predicate<NBTTagCompound> nbtCheck) {
+    public BioReactorEntry(ItemStack stack, @Nullable Predicate<CompoundNBT> nbtCheck) {
         this.stack = stack;
         this.nbtCheck = nbtCheck;
     }
@@ -64,14 +64,14 @@ public class BioReactorEntry implements IReactorEntry {
      * @return true if they match, false if they don't.
      */
     public boolean doesStackMatch(ItemStack stack) {
-        return this.stack.isItemEqual(stack) && (this.nbtCheck == null || !stack.hasTagCompound() || this.nbtCheck.apply(stack.getTagCompound()));
+        return this.stack.isItemEqual(stack) && (this.nbtCheck == null || !stack.hasTag() || this.nbtCheck.apply(stack.getTag()));
     }
 
     public ItemStack getStack() {
         return stack;
     }
 
-    public Predicate<NBTTagCompound> getNbtCheck() {
+    public Predicate<CompoundNBT> getNbtCheck() {
         return nbtCheck;
     }
 }

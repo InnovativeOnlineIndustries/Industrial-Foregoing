@@ -22,53 +22,50 @@
 package com.buuz135.industrial.api.conveyor;
 
 import com.buuz135.industrial.api.conveyor.gui.IGuiComponent;
-import com.buuz135.industrial.proxy.ItemRegistry;
-import com.buuz135.industrial.proxy.block.Cuboid;
-import com.buuz135.industrial.registry.IFRegistries;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.EnumFacing;
-import net.minecraft.util.EnumHand;
+import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.util.Direction;
+import net.minecraft.util.Hand;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.shapes.VoxelShape;
+import net.minecraft.util.math.shapes.VoxelShapes;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.INBTSerializable;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
 
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 
-public abstract class ConveyorUpgrade implements INBTSerializable<NBTTagCompound> {
-    public static Cuboid EMPTY_BB = new Cuboid(0, 0, 0, 0, 0, 0);
+public abstract class ConveyorUpgrade implements INBTSerializable<CompoundNBT> {
+
     private IConveyorContainer container;
     private ConveyorUpgradeFactory factory;
-    private EnumFacing side;
+    private Direction side;
 
-    public ConveyorUpgrade(IConveyorContainer container, ConveyorUpgradeFactory factory, EnumFacing side) {
+    public ConveyorUpgrade(IConveyorContainer container, ConveyorUpgradeFactory factory, Direction side) {
         this.container = container;
         this.factory = factory;
         this.side = side;
     }
 
     @Override
-    public NBTTagCompound serializeNBT() {
+    public CompoundNBT serializeNBT() {
         return null;
     }
 
     @Override
-    public void deserializeNBT(NBTTagCompound nbt) {
+    public void deserializeNBT(CompoundNBT nbt) {
 
     }
 
-    public boolean onUpgradeActivated(EntityPlayer player, EnumHand hand) {
+    public boolean onUpgradeActivated(PlayerEntity player, Hand hand) {
         return false;
     }
 
     public Collection<ItemStack> getDrops() {
-        return Collections.singleton(new ItemStack(ItemRegistry.conveyorUpgradeItem, 1, IFRegistries.CONVEYOR_UPGRADE_REGISTRY.getID(getFactory()) - 1));
+        return Collections.singleton(new ItemStack(this.getFactory().getUpgradeItem(), 1));
     }
 
     public IConveyorContainer getContainer() {
@@ -87,7 +84,7 @@ public abstract class ConveyorUpgrade implements INBTSerializable<NBTTagCompound
         return factory;
     }
 
-    public EnumFacing getSide() {
+    public Direction getSide() {
         return side;
     }
 
@@ -107,19 +104,19 @@ public abstract class ConveyorUpgrade implements INBTSerializable<NBTTagCompound
         return 0;
     }
 
-    public Cuboid getBoundingBox() {
-        return EMPTY_BB;
+    public VoxelShape getBoundingBox() {
+        return VoxelShapes.empty();
     }
 
     public boolean hasGui() {
         return false;
     }
 
-    public void handleButtonInteraction(int buttonId, NBTTagCompound compound) {
+    public void handleButtonInteraction(int buttonId, CompoundNBT compound) {
 
     }
 
-    @SideOnly(Side.CLIENT)
     public void addComponentsToGui(List<IGuiComponent> componentList) {
     }
+
 }

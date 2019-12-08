@@ -22,9 +22,8 @@
 package com.buuz135.industrial.utils.apihandlers.plant;
 
 import com.buuz135.industrial.api.plant.PlantRecollectable;
-import com.buuz135.industrial.proxy.BlockRegistry;
 import com.buuz135.industrial.utils.BlockUtils;
-import net.minecraft.block.state.IBlockState;
+import net.minecraft.block.BlockState;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
@@ -44,7 +43,7 @@ public class TreePlantRecollectable extends PlantRecollectable {
     }
 
     @Override
-    public boolean canBeHarvested(World world, BlockPos pos, IBlockState blockState) {
+    public boolean canBeHarvested(World world, BlockPos pos, BlockState blockState) {
         if (treeCache.containsKey(pos)) return true;
         if (BlockUtils.isLog(world, pos)) {
             TreeCache cache = new TreeCache(world, pos);
@@ -56,23 +55,23 @@ public class TreePlantRecollectable extends PlantRecollectable {
     }
 
     @Override
-    public List<ItemStack> doHarvestOperation(World world, BlockPos pos, IBlockState blockState) {
-        return new ArrayList<>();
+    public List<ItemStack> doHarvestOperation(World world, BlockPos pos, BlockState blockState) {
+        return doHarvestOperation(world, pos, blockState, false);
     }
 
 
     @Override
-    public List<ItemStack> doHarvestOperation(World world, BlockPos pos, IBlockState blockState, Object... extras) {
+    public List<ItemStack> doHarvestOperation(World world, BlockPos pos, BlockState blockState, Object... extras) {
         List<ItemStack> itemStacks = new ArrayList<>();
         if (treeCache.containsKey(pos)) {
             TreeCache cache = treeCache.get(pos);
             if (cache.getWoodCache().isEmpty() && cache.getLeavesCache().isEmpty() && canBeHarvested(world, pos, blockState)) {
                 cache.scanForTreeBlockSection();
             }
-            int operations = BlockRegistry.cropRecolectorBlock.getTreeOperations();
-            if (BlockRegistry.cropRecolectorBlock.isReducedChunkUpdates()) {
+            int operations = /*BlockRegistry.cropRecolectorBlock.getTreeOperations()*/ 10;
+            if (/*BlockRegistry.cropRecolectorBlock.isReducedChunkUpdates()TODO*/ false) {
                 operations = 0;
-                if ((cache.getLeavesCache().size() + cache.getWoodCache().size()) <= ((int) extras[1]) * BlockRegistry.cropRecolectorBlock.getTreeOperations()) {
+                if ((cache.getLeavesCache().size() + cache.getWoodCache().size()) <= ((int) extras[1]) * /*BlockRegistry.cropRecolectorBlock.getTreeOperations()*/10) {
                     operations = cache.getLeavesCache().size() + cache.getWoodCache().size();
                 }
             }
@@ -88,7 +87,7 @@ public class TreePlantRecollectable extends PlantRecollectable {
     }
 
     @Override
-    public boolean shouldCheckNextPlant(World world, BlockPos pos, IBlockState blockState) {
+    public boolean shouldCheckNextPlant(World world, BlockPos pos, BlockState blockState) {
         return !canBeHarvested(world, pos, blockState);
     }
 

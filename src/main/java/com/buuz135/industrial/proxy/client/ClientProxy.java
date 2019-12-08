@@ -21,43 +21,39 @@
  */
 package com.buuz135.industrial.proxy.client;
 
-import com.buuz135.industrial.book.IFManual;
-import com.buuz135.industrial.entity.EntityPinkSlime;
+import com.buuz135.industrial.block.tile.IndustrialAreaWorkingTile;
+import com.buuz135.industrial.block.transport.tile.ConveyorTile;
 import com.buuz135.industrial.item.infinity.ItemInfinityDrill;
-import com.buuz135.industrial.proxy.BlockRegistry;
+import com.buuz135.industrial.module.ModuleTool;
+import com.buuz135.industrial.module.ModuleTransport;
 import com.buuz135.industrial.proxy.CommonProxy;
-import com.buuz135.industrial.proxy.ItemRegistry;
-import com.buuz135.industrial.proxy.block.tile.TileEntityConveyor;
-import com.buuz135.industrial.proxy.client.entity.RenderPinkSlime;
 import com.buuz135.industrial.proxy.client.event.IFClientEvents;
 import com.buuz135.industrial.proxy.client.event.IFTooltipEvent;
 import com.buuz135.industrial.proxy.client.event.IFWorldRenderLastEvent;
-import com.buuz135.industrial.proxy.client.render.ContributorsCatEarsRender;
-import com.buuz135.industrial.tile.misc.BlackHoleTankTile;
-import com.buuz135.industrial.utils.FluidUtils;
+import com.buuz135.industrial.proxy.client.render.FluidConveyorTESR;
+import com.buuz135.industrial.proxy.client.render.WorkingAreaTESR;
 import com.buuz135.industrial.utils.Reference;
+import com.google.common.collect.ImmutableMap;
+import com.hrznstudio.titanium.event.handler.EventManager;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.block.model.IBakedModel;
-import net.minecraft.client.renderer.entity.RenderManager;
-import net.minecraft.client.renderer.entity.RenderPlayer;
+import net.minecraft.client.renderer.model.IBakedModel;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
-import net.minecraft.client.resources.IReloadableResourceManager;
-import net.minecraft.entity.EntityList;
-import net.minecraft.item.EnumDyeColor;
-import net.minecraft.item.ItemDye;
+import net.minecraft.item.SpawnEggItem;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.client.event.ModelBakeEvent;
+import net.minecraftforge.client.event.TextureStitchEvent;
 import net.minecraftforge.client.model.IModel;
 import net.minecraftforge.client.model.ModelLoader;
+import net.minecraftforge.client.model.SimpleModelState;
 import net.minecraftforge.client.model.obj.OBJLoader;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.model.TRSRTransformation;
 import net.minecraftforge.common.util.Constants;
-import net.minecraftforge.fluids.Fluid;
-import net.minecraftforge.fluids.FluidRegistry;
-import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
+import net.minecraftforge.fml.client.registry.ClientRegistry;
+import net.minecraftforge.registries.ForgeRegistries;
 
-import java.util.Map;
+import java.util.Optional;
 
 public class ClientProxy extends CommonProxy {
 
@@ -67,93 +63,59 @@ public class ClientProxy extends CommonProxy {
     public static IModel ears_model;
 
     @Override
-    public void preInit(FMLPreInitializationEvent event) {
-        super.preInit(event);
+    public void run() {
         OBJLoader.INSTANCE.addDomain(Reference.MOD_ID);
 
         MinecraftForge.EVENT_BUS.register(new IFClientEvents());
         MinecraftForge.EVENT_BUS.register(new IFWorldRenderLastEvent());
         MinecraftForge.EVENT_BUS.register(new IFTooltipEvent());
-    }
 
-
-    @Override
-    public void init() {
-        super.init();
-        try {
-            ears_model = OBJLoader.INSTANCE.loadModel(new ResourceLocation(Reference.MOD_ID, "models/block/catears.obj"));
-            ears_baked = ears_model.bake(TRSRTransformation.identity(), DefaultVertexFormats.BLOCK, ModelLoader.defaultTextureGetter());
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        RenderManager manager = Minecraft.getMinecraft().getRenderManager();
-        Map<String, RenderPlayer> map = manager.getSkinMap();
-        map.get("default").addLayer(new ContributorsCatEarsRender());
-        map.get("slim").addLayer(new ContributorsCatEarsRender());
-
-        manager.entityRenderMap.put(EntityPinkSlime.class, new RenderPinkSlime(manager));
-
-        ((IReloadableResourceManager) Minecraft.getMinecraft().getResourceManager()).registerReloadListener(resourceManager -> FluidUtils.colorCache.clear());
-        ((IReloadableResourceManager) Minecraft.getMinecraft().getResourceManager()).registerReloadListener(resourceManager -> IFManual.buildManual());
-
-        if (ItemRegistry.artificalDye != null)
-            Minecraft.getMinecraft().getItemColors().registerItemColorHandler((stack, tintIndex) -> ItemDye.DYE_COLORS[EnumDyeColor.byMetadata(stack.getMetadata()).getDyeDamage()], ItemRegistry.artificalDye);
-        Minecraft.getMinecraft().getItemColors().registerItemColorHandler((stack, tintIndex) -> {
-            if (tintIndex == 1) {
-                return ItemDye.DYE_COLORS[EnumDyeColor.byMetadata(stack.getMetadata()).getDyeDamage()];
+        EventManager.mod(ModelBakeEvent.class).process(event -> {
+            try {
+                ears_model = OBJLoader.INSTANCE.loadModel(new ResourceLocation(Reference.MOD_ID, "models/block/catears.obj"));
+                ears_baked = ears_model.bake(event.getModelLoader(), ModelLoader.defaultTextureGetter(), new SimpleModelState(ImmutableMap.of(), Optional.of(TRSRTransformation.identity())), DefaultVertexFormats.BLOCK);
+            } catch (Exception e) {
+                e.printStackTrace();
             }
-            return 0xFFFFFF;
-        }, BlockRegistry.blockConveyor.getItem());
-        Minecraft.getMinecraft().getBlockColors().registerBlockColorHandler((state, worldIn, pos, tintIndex) -> {
-            if (tintIndex == 0) {
+        }).subscribe();
+        EventManager.mod(TextureStitchEvent.Pre.class).process(pre -> {
+            pre.addSprite(new ResourceLocation(Reference.MOD_ID, "blocks/catears"));
+        }).subscribe();
+
+
+        ClientRegistry.bindTileEntitySpecialRenderer(ConveyorTile.class, new FluidConveyorTESR());
+        ClientRegistry.bindTileEntitySpecialRenderer(IndustrialAreaWorkingTile.class, new WorkingAreaTESR());
+
+        //manager.entityRenderMap.put(EntityPinkSlime.class, new RenderPinkSlime(manager));
+
+        //((IReloadableResourceManager) Minecraft.getInstance().getResourceManager()).addReloadListener(resourceManager -> FluidUtils.colorCache.clear());
+
+        Minecraft.getInstance().getBlockColors().register((state, worldIn, pos, tintIndex) -> {
+            if (tintIndex == 0 && worldIn != null && pos != null) {
                 TileEntity entity = worldIn.getTileEntity(pos);
-                if (entity instanceof TileEntityConveyor) {
-                    return ItemDye.DYE_COLORS[((TileEntityConveyor) entity).getColor()];
+                if (entity instanceof ConveyorTile) {
+                    return ((ConveyorTile) entity).getColor();
                 }
             }
             return 0xFFFFFFF;
-        }, BlockRegistry.blockConveyor);
-        Minecraft.getMinecraft().getItemColors().registerItemColorHandler((stack, tintIndex) -> {
+        }, ModuleTransport.CONVEYOR);
+        Minecraft.getInstance().getItemColors().register((stack, tintIndex) -> {
             if (tintIndex == 1 || tintIndex == 2 || tintIndex == 3) {
-                EntityList.EntityEggInfo info = null;
-                if (stack.hasTagCompound() && stack.getTagCompound().hasKey("entity", Constants.NBT.TAG_STRING)) {
-                    ResourceLocation id = new ResourceLocation(stack.getTagCompound().getString("entity"));
-                    info = EntityList.ENTITY_EGGS.get(id);
+                SpawnEggItem info = null;
+                if (stack.hasTag() && stack.getTag().contains("entity", Constants.NBT.TAG_STRING)) {
+                    ResourceLocation id = new ResourceLocation(stack.getTag().getString("entity"));
+                    info = SpawnEggItem.getEgg(ForgeRegistries.ENTITIES.getValue(id));
                 }
-                return info == null ? 0x636363 : tintIndex == 3 ? BlockRegistry.mobDuplicatorBlock.blacklistedEntities.contains(info.spawnedID.toString()) ? 0xDB201A : 0x636363 : tintIndex == 1 ? info.primaryColor : info.secondaryColor;
+                return info == null ? 0x636363 : tintIndex == 3 ? /*BlockRegistry.mobDuplicatorBlock.blacklistedEntities.contains(info.spawnedID.toString())*/ false ? 0xDB201A : 0x636363 : info.getColor(tintIndex);
             }
             return 0xFFFFFF;
-        }, ItemRegistry.mobImprisonmentToolItem);
-        Minecraft.getMinecraft().getBlockColors().registerBlockColorHandler((state, worldIn, pos, tintIndex) -> {
-            if (tintIndex == 0 && worldIn.getTileEntity(pos) instanceof BlackHoleTankTile) {
-                BlackHoleTankTile tank = (BlackHoleTankTile) worldIn.getTileEntity(pos);
-                if (tank != null && tank.getTank().getFluidAmount() > 0) {
-                    int color = FluidUtils.getFluidColor(tank.getTank().getFluid());
-                    if (color != -1) return color;
-                }
-            }
-            return 0xFFFFFF;
-        }, BlockRegistry.blackHoleTankBlock);
-        Minecraft.getMinecraft().getItemColors().registerItemColorHandler((stack, tintIndex) -> {
-            if (tintIndex == 0 && stack.hasTagCompound() && stack.getTagCompound().hasKey("FluidName") && FluidRegistry.isFluidRegistered(stack.getTagCompound().getString("FluidName"))) {
-                Fluid fluid = FluidRegistry.getFluid(stack.getTagCompound().getString("FluidName"));
-                int color = FluidUtils.getFluidColor(fluid);
-                if (color != -1) return color;
-            }
-            return 0xFFFFFF;
-        }, BlockRegistry.blackHoleTankBlock);
-        Minecraft.getMinecraft().getItemColors().registerItemColorHandler((stack, tintIndex) -> {
+        }, ModuleTool.MOB_IMPRISONMENT_TOOL);
+        Minecraft.getInstance().getItemColors().register((stack, tintIndex) -> {
             if (tintIndex == 0) {
-                return ItemInfinityDrill.DrillTier.getTierBraquet(ItemRegistry.itemInfinityDrill.getPowerFromStack(stack)).getLeft().getTextureColor();
+                return ItemInfinityDrill.DrillTier.getTierBraquet(ModuleTool.INFINITY_DRILL.getPowerFromStack(stack)).getLeft().getTextureColor();
             }
             return 0xFFFFFF;
-        }, ItemRegistry.itemInfinityDrill);
-    }
-
-    @Override
-    public void postInit() {
-        super.postInit();
-        IFManual.buildManual();
+        }, ModuleTool.INFINITY_DRILL);
     }
 
 }

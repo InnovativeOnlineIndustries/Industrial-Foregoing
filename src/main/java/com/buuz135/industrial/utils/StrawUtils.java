@@ -24,7 +24,7 @@ package com.buuz135.industrial.utils;
 import com.buuz135.industrial.api.straw.StrawHandler;
 import com.buuz135.industrial.registry.IFRegistries;
 import com.google.common.collect.Lists;
-import net.minecraftforge.fluids.FluidStack;
+import net.minecraft.fluid.Fluid;
 
 import javax.annotation.Nonnull;
 import java.util.Comparator;
@@ -34,8 +34,7 @@ import java.util.Optional;
 public class StrawUtils {
 
     @Nonnull
-    public static Optional<StrawHandler> getStrawHandler(@Nonnull FluidStack stack) {
-
+    public static Optional<StrawHandler> getStrawHandler(@Nonnull Fluid stack) {
         List<StrawHandler> current = Lists.newArrayList(IFRegistries.STRAW_HANDLER_REGISTRY);
         current.sort(Comparator.comparingInt(StrawHandler::getPriority));
         for (StrawHandler handler : current) {

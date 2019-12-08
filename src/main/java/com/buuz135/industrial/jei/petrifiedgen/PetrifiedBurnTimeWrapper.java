@@ -21,16 +21,10 @@
  */
 package com.buuz135.industrial.jei.petrifiedgen;
 
-import com.buuz135.industrial.tile.generator.PetrifiedFuelGeneratorTile;
-import mezz.jei.api.ingredients.IIngredients;
-import mezz.jei.api.recipe.IRecipeWrapper;
-import net.minecraft.client.Minecraft;
+
 import net.minecraft.item.ItemStack;
 
-import java.awt.*;
-import java.util.List;
-
-public class PetrifiedBurnTimeWrapper implements IRecipeWrapper {
+public class PetrifiedBurnTimeWrapper {
 
     private ItemStack stack;
     private int burnTime;
@@ -40,32 +34,32 @@ public class PetrifiedBurnTimeWrapper implements IRecipeWrapper {
         this.burnTime = burnTime;
     }
 
-    @Override
-    public void getIngredients(IIngredients ingredients) {
-        ingredients.setInput(ItemStack.class, stack);
-    }
-
-
-    @Override
-    public void drawInfo(Minecraft minecraft, int recipeWidth, int recipeHeight, int mouseX, int mouseY) {
-        minecraft.fontRenderer.drawString("Power: " + PetrifiedFuelGeneratorTile.getEnergy(this.burnTime) + " RF/tick", 24, 8, Color.gray.getRGB());
-    }
-
-    @Override
-    public List<String> getTooltipStrings(int mouseX, int mouseY) {
-        return null;
-    }
-
-    @Override
-    public boolean handleClick(Minecraft minecraft, int mouseX, int mouseY, int mouseButton) {
-        return false;
-    }
-
-    public ItemStack getStack() {
-        return stack;
-    }
-
-    public int getBurnTime() {
-        return burnTime;
-    }
+    //@Override
+    //public void getIngredients(IIngredients ingredients) {
+    //    ingredients.setInput(ItemStack.class, stack);
+    //}
+//
+//
+    //@Override
+    //public void drawInfo(Minecraft minecraft, int recipeWidth, int recipeHeight, int mouseX, int mouseY) {
+    //    minecraft.fontRenderer.drawString("Power: " + "TODO RF/tick", 24, 8, Color.gray.getRGB());
+    //}
+//
+    //@Override
+    //public List<String> getTooltipStrings(int mouseX, int mouseY) {
+    //    return null;
+    //}
+//
+    //@Override
+    //public boolean handleClick(Minecraft minecraft, int mouseX, int mouseY, int mouseButton) {
+    //    return false;
+    //}
+//
+    //public ItemStack getStack() {
+    //    return stack;
+    //}
+//
+    //public int getBurnTime() {
+    //    return burnTime;
+    //}
 }

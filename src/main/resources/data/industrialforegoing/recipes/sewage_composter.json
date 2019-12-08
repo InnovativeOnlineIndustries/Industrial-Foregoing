@@ -1,0 +1,49 @@
+{
+  "type": "forge:conditional",
+  "recipes": [
+    {
+      "conditions": [
+        {
+          "values": [
+            {
+              "item": "industrialforegoing:sewage_composter",
+              "type": "forge:item_exists"
+            }
+          ],
+          "type": "forge:and"
+        }
+      ],
+      "recipe": {
+        "type": "minecraft:crafting_shaped",
+        "pattern": [
+          "PFP",
+          "DMD",
+          "BGB"
+        ],
+        "key": {
+          "P": {
+            "tag": "forge:plastic"
+          },
+          "F": {
+            "item": "minecraft:furnace"
+          },
+          "D": {
+            "item": "minecraft:piston"
+          },
+          "B": {
+            "item": "minecraft:brick"
+          },
+          "M": {
+            "tag": "industrialforegoing:machine_frame/pity"
+          },
+          "G": {
+            "tag": "forge:gear/iron"
+          }
+        },
+        "result": {
+          "item": "industrialforegoing:sewage_composter"
+        }
+      }
+    }
+  ]
+}

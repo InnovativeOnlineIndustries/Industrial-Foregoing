@@ -21,65 +21,81 @@
  */
 package com.buuz135.industrial.item;
 
-import com.buuz135.industrial.proxy.FluidsRegistry;
-import com.buuz135.industrial.proxy.ItemRegistry;
-import com.buuz135.industrial.utils.RecipeUtils;
-import net.minecraft.client.util.ITooltipFlag;
-import net.minecraft.init.Items;
+import com.buuz135.industrial.module.ModuleCore;
+import com.hrznstudio.titanium.recipe.generator.TitaniumShapedRecipeBuilder;
+import net.minecraft.data.IFinishedRecipe;
+import net.minecraft.item.ItemGroup;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.EnumFacing;
-import net.minecraft.world.World;
+import net.minecraft.item.Items;
+import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.StringTextComponent;
+import net.minecraft.util.text.TextFormatting;
+import net.minecraftforge.common.Tags;
 import net.minecraftforge.common.capabilities.ICapabilityProvider;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
+import net.minecraftforge.fluids.capability.IFluidHandler;
 import net.minecraftforge.fluids.capability.templates.FluidHandlerItemStack;
 
 import javax.annotation.Nullable;
+import java.text.DecimalFormat;
 import java.util.List;
+import java.util.function.Consumer;
 
 public class MeatFeederItem extends IFCustomItem {
 
-    public MeatFeederItem() {
-        super("meat_feeder");
-        setMaxStackSize(1);
+    public MeatFeederItem(ItemGroup group) {
+        super("meat_feeder", group, new Properties().maxStackSize(1));
     }
 
     @Nullable
     @Override
-    public ICapabilityProvider initCapabilities(ItemStack stack, @Nullable NBTTagCompound nbt) {
+    public ICapabilityProvider initCapabilities(ItemStack stack, @Nullable CompoundNBT nbt) {
         FluidHandlerItemStack handlerItemStack = new FluidHandlerItemStack(stack, 128000) {
             @Override
             public boolean canFillFluidType(FluidStack fluid) {
-                return fluid.getFluid().equals(FluidsRegistry.MEAT);
+                return fluid.getFluid().isEquivalentTo(ModuleCore.MEAT.getSourceFluid());
             }
-
         };
-        handlerItemStack.fill(new FluidStack(FluidsRegistry.MEAT, 0), true);
+        handlerItemStack.fill(new FluidStack(ModuleCore.MEAT.getSourceFluid(), 0), IFluidHandler.FluidAction.EXECUTE);
         return handlerItemStack;
     }
 
     @Override
-    public void addInformation(ItemStack stack, @Nullable World worldIn, List<String> tooltip, ITooltipFlag flagIn) {
-        super.addInformation(stack, worldIn, tooltip, flagIn);
-        FluidHandlerItemStack handlerItemStack = (FluidHandlerItemStack) stack.getCapability(CapabilityFluidHandler.FLUID_HANDLER_ITEM_CAPABILITY, EnumFacing.DOWN);
-        tooltip.add(getFilledAmount(stack) + "/" + handlerItemStack.getTankProperties()[0].getCapacity() + "mb of Meat");
+    public boolean hasTooltipDetails(@Nullable Key key) {
+        return key == null;
+    }
+
+    @Override
+    public void addTooltipDetails(@Nullable Key key, ItemStack stack, List<ITextComponent> tooltip, boolean advanced) {
+        super.addTooltipDetails(key, stack, tooltip, advanced);
+        //stack.getCapability(CapabilityFluidHandler.FLUID_HANDLER_ITEM_CAPABILITY).ifPresent(iFluidHandlerItem -> {
+        //    tooltip.add(new StringTextComponent(iFluidHandlerItem.getFluidInTank(0).getAmount() + "/" + iFluidHandlerItem.getTankCapacity(0) + "mb of Meat"));
+        //})
+        //;
+        if (stack.getTag() != null && key == null) {
+            tooltip.add(new StringTextComponent(new DecimalFormat().format(stack.getTag().getCompound("Fluid").getInt("Amount")) + TextFormatting.GOLD + "/" + TextFormatting.WHITE + new DecimalFormat().format(128000) + TextFormatting.GOLD + "mb of Meat"));
+        }
     }
 
     public int getFilledAmount(ItemStack stack) {
-        FluidHandlerItemStack handlerItemStack = (FluidHandlerItemStack) stack.getCapability(CapabilityFluidHandler.FLUID_HANDLER_ITEM_CAPABILITY, EnumFacing.DOWN);
-        return (handlerItemStack.getFluid() == null ? 0 : handlerItemStack.getFluid().amount);
+        FluidHandlerItemStack handlerItemStack = (FluidHandlerItemStack) stack.getCapability(CapabilityFluidHandler.FLUID_HANDLER_ITEM_CAPABILITY).orElseThrow(RuntimeException::new);
+        return (handlerItemStack.getFluid() == null ? 0 : handlerItemStack.getFluid().getAmount());
     }
 
     public void drain(ItemStack stack, int amount) {
-        FluidHandlerItemStack handlerItemStack = (FluidHandlerItemStack) stack.getCapability(CapabilityFluidHandler.FLUID_HANDLER_ITEM_CAPABILITY, EnumFacing.DOWN);
-        handlerItemStack.drain(new FluidStack(FluidsRegistry.MEAT, amount), true);
+        FluidHandlerItemStack handlerItemStack = (FluidHandlerItemStack) stack.getCapability(CapabilityFluidHandler.FLUID_HANDLER_ITEM_CAPABILITY).orElseThrow(RuntimeException::new);
+        handlerItemStack.drain(new FluidStack(ModuleCore.MEAT.getSourceFluid(), amount), IFluidHandler.FluidAction.EXECUTE);
     }
 
-    public void createRecipe() {
-        RecipeUtils.addShapedRecipe(new ItemStack(this), "pip", "gig", " i ",
-                'p', ItemRegistry.plastic,
-                'i', "ingotIron",
-                'g', Items.GLASS_BOTTLE);
+    @Override
+    public void registerRecipe(Consumer<IFinishedRecipe> consumer) {
+        TitaniumShapedRecipeBuilder.shapedRecipe(this)
+                .patternLine("pip").patternLine("gig").patternLine(" i ")
+                .key('p', ModuleCore.PLASTIC)
+                .key('i', Tags.Items.INGOTS_IRON)
+                .key('g', Items.GLASS_BOTTLE)
+                .build(consumer);
     }
 }

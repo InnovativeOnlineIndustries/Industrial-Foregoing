@@ -21,32 +21,44 @@
  */
 package com.buuz135.industrial.item;
 
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.ItemDye;
+import net.minecraft.data.IFinishedRecipe;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.item.BoneMealItem;
+import net.minecraft.item.ItemGroup;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.EnumActionResult;
-import net.minecraft.util.EnumFacing;
-import net.minecraft.util.EnumHand;
+import net.minecraft.item.ItemUseContext;
+import net.minecraft.util.ActionResultType;
+import net.minecraft.util.Direction;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
+import java.util.function.Consumer;
+
 public class FertilizerItem extends IFCustomItem {
 
-    public FertilizerItem() {
-        super("fertilizer");
+    public FertilizerItem(ItemGroup group) {
+        super("fertilizer", group, new Properties());
     }
 
     @Override
-    public EnumActionResult onItemUse(EntityPlayer player, World worldIn, BlockPos pos, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
-        ItemStack itemstack = player.getHeldItem(hand);
-        if (!player.canPlayerEdit(pos.offset(facing), facing, itemstack)) return EnumActionResult.FAIL;
-        if (ItemDye.applyBonemeal(itemstack, worldIn, pos, player, hand)) {
+    public ActionResultType onItemUse(ItemUseContext context) {
+        PlayerEntity player = context.getPlayer();
+        ItemStack itemstack = context.getItem();
+        Direction facing = context.getFace();
+        BlockPos pos = context.getPos();
+        World worldIn = context.getWorld();
+        if (!player.canPlayerEdit(pos.offset(facing), facing, itemstack)) return ActionResultType.FAIL;
+        if (BoneMealItem.applyBonemeal(itemstack, worldIn, pos, player)) {
             if (!worldIn.isRemote) {
                 worldIn.playEvent(2005, pos, 0);
             }
-            return EnumActionResult.SUCCESS;
+            return ActionResultType.SUCCESS;
         }
-        return EnumActionResult.PASS;
+        return ActionResultType.PASS;
     }
 
+    @Override
+    public void registerRecipe(Consumer<IFinishedRecipe> consumer) {
+
+    }
 }

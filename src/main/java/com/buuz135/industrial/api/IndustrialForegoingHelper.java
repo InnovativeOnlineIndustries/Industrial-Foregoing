@@ -22,13 +22,13 @@
 package com.buuz135.industrial.api;
 
 
-import com.buuz135.industrial.api.extractor.ExtractorEntry;
 import com.buuz135.industrial.api.recipe.*;
 import com.buuz135.industrial.api.recipe.ore.OreFluidEntryFermenter;
 import com.buuz135.industrial.api.recipe.ore.OreFluidEntryRaw;
 import com.buuz135.industrial.api.recipe.ore.OreFluidEntrySieve;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraftforge.fluids.FluidRegistry;
+import net.minecraft.tags.Tag;
 import net.minecraftforge.fluids.FluidStack;
 
 public class IndustrialForegoingHelper {
@@ -148,10 +148,10 @@ public class IndustrialForegoingHelper {
      * @return true if it's added, false if don't.
      */
     public static boolean addFluidDictionaryEntry(FluidDictionaryEntry entry) {
-        if (FluidRegistry.isFluidRegistered(entry.getFluidOrigin()) && FluidRegistry.isFluidRegistered(entry.getFluidResult()) && FluidDictionaryEntry.FLUID_DICTIONARY_RECIPES.stream().noneMatch(entry1 -> entry1.getFluidOrigin().equals(entry.getFluidOrigin()) && entry1.getFluidResult().equals(entry.getFluidResult()))) {
+        /*if (FluidRegistry.isFluidRegistered(entry.getFluidOrigin()) && FluidRegistry.isFluidRegistered(entry.getFluidResult()) && FluidDictionaryEntry.FLUID_DICTIONARY_RECIPES.stream().noneMatch(entry1 -> entry1.getFluidOrigin().equals(entry.getFluidOrigin()) && entry1.getFluidResult().equals(entry.getFluidResult()))) {
             FluidDictionaryEntry.FLUID_DICTIONARY_RECIPES.add(entry);
             return true;
-        }
+        }*/
         return false;
     }
 
@@ -165,28 +165,16 @@ public class IndustrialForegoingHelper {
         return FluidDictionaryEntry.FLUID_DICTIONARY_RECIPES.removeIf(entry1 -> entry1.getFluidOrigin().equals(entry.getFluidOrigin()) && entry1.getFluidResult().equals(entry.getFluidResult()));
     }
 
-    public static boolean addWoodToLatex(ExtractorEntry entry) {
-        if (ExtractorEntry.EXTRACTOR_ENTRIES.stream().noneMatch(extractorEntry -> extractorEntry.isEqual(entry.getItemStack()))) {
-            ExtractorEntry.EXTRACTOR_ENTRIES.add(entry);
-            return true;
-        }
-        return false;
-    }
-
-    public static boolean removeWoodToLatex(ItemStack stack) {
-        return ExtractorEntry.EXTRACTOR_ENTRIES.removeIf(extractorEntry -> extractorEntry.isEqual(stack));
-    }
-
     public static boolean addOreFluidEntryRaw(OreFluidEntryRaw raw) {
-        if (OreFluidEntryRaw.ORE_RAW_ENTRIES.stream().noneMatch(raw1 -> raw1.getOre().equalsIgnoreCase(raw.getOre()))) {
+        if (OreFluidEntryRaw.ORE_RAW_ENTRIES.stream().noneMatch(raw1 -> raw1.getOre().getId().equals(raw.getOre().getId()))) {
             OreFluidEntryRaw.ORE_RAW_ENTRIES.add(raw);
             return true;
         }
         return false;
     }
 
-    public static boolean removeOreFluidEntryRaw(String ore) {
-        return OreFluidEntryRaw.ORE_RAW_ENTRIES.removeIf(raw -> raw.getOre().equalsIgnoreCase(ore));
+    public static boolean removeOreFluidEntryRaw(Tag<Item> tag) {
+        return OreFluidEntryRaw.ORE_RAW_ENTRIES.removeIf(raw -> raw.getOre().getId().equals(tag.getId()));
     }
 
     public static boolean addOreFluidEntryFermenter(OreFluidEntryFermenter entryFermenter) {

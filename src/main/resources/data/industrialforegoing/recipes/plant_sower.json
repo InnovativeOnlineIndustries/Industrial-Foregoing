@@ -1,0 +1,49 @@
+{
+  "type": "forge:conditional",
+  "recipes": [
+    {
+      "conditions": [
+        {
+          "values": [
+            {
+              "item": "industrialforegoing:plant_sower",
+              "type": "forge:item_exists"
+            }
+          ],
+          "type": "forge:and"
+        }
+      ],
+      "recipe": {
+        "type": "minecraft:crafting_shaped",
+        "pattern": [
+          "PBP",
+          "LML",
+          "GRG"
+        ],
+        "key": {
+          "P": {
+            "tag": "forge:plastic"
+          },
+          "B": {
+            "item": "minecraft:flower_pot"
+          },
+          "L": {
+            "item": "minecraft:piston"
+          },
+          "M": {
+            "tag": "industrialforegoing:machine_frame/pity"
+          },
+          "R": {
+            "item": "minecraft:redstone"
+          },
+          "G": {
+            "tag": "forge:gear/iron"
+          }
+        },
+        "result": {
+          "item": "industrialforegoing:plant_sower"
+        }
+      }
+    }
+  ]
+}

@@ -22,41 +22,37 @@
 package com.buuz135.industrial.proxy.client.model;
 
 import com.buuz135.industrial.api.conveyor.ConveyorUpgrade;
-import com.buuz135.industrial.proxy.block.BlockConveyor;
+import com.buuz135.industrial.block.transport.ConveyorBlock;
+import com.buuz135.industrial.module.ModuleTransport;
 import com.google.common.cache.Cache;
 import com.google.common.cache.CacheBuilder;
-import net.minecraft.block.state.IBlockState;
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.block.model.BakedQuad;
-import net.minecraft.client.renderer.block.model.IBakedModel;
-import net.minecraft.client.renderer.block.model.ItemCameraTransforms;
-import net.minecraft.client.renderer.block.model.ItemOverrideList;
+import net.minecraft.block.BlockState;
+import net.minecraft.client.renderer.model.BakedQuad;
+import net.minecraft.client.renderer.model.IBakedModel;
+import net.minecraft.client.renderer.model.ItemCameraTransforms;
+import net.minecraft.client.renderer.model.ItemOverrideList;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.client.renderer.vertex.VertexFormat;
-import net.minecraft.util.EnumFacing;
-import net.minecraftforge.client.model.IModel;
-import net.minecraftforge.client.model.ModelLoaderRegistry;
+import net.minecraft.util.Direction;
+import net.minecraftforge.client.model.data.IDynamicBakedModel;
+import net.minecraftforge.client.model.data.IModelData;
 import net.minecraftforge.common.model.IModelState;
 import net.minecraftforge.common.model.TRSRTransformation;
-import net.minecraftforge.common.property.IExtendedBlockState;
 import org.apache.commons.lang3.tuple.Pair;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import javax.vecmath.Matrix4f;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
-public class ConveyorBlockModel implements IBakedModel {
+public class ConveyorBlockModel implements IDynamicBakedModel {
 
-    public static Cache<Pair<Pair<String, Pair<EnumFacing, EnumFacing>>, EnumFacing>, List<BakedQuad>> CACHE = CacheBuilder.newBuilder().build();
+    public static Cache<Pair<Pair<String, Pair<Direction, Direction>>, Direction>, List<BakedQuad>> CACHE = CacheBuilder.newBuilder().build();
     private IModelState state;
     private VertexFormat format;
     private IBakedModel previousConveyor;
-    private Map<EnumFacing, List<BakedQuad>> prevQuads = new HashMap<>();
+    private Map<Direction, List<BakedQuad>> prevQuads = new HashMap<>();
 
     public ConveyorBlockModel(IBakedModel previousConveyor) {
         this.previousConveyor = previousConveyor;
@@ -64,33 +60,35 @@ public class ConveyorBlockModel implements IBakedModel {
         this.format = DefaultVertexFormats.BLOCK;
     }
 
+    @Nonnull
     @Override
-    public List<BakedQuad> getQuads(@Nullable IBlockState state, @Nullable EnumFacing side, long rand) {
-        if (state == null || !(state instanceof IExtendedBlockState)) {
+    public List<BakedQuad> getQuads(@Nullable BlockState state, @Nullable Direction side, @Nonnull Random rand, @Nonnull IModelData extraData) {
+        if (state == null) {
             if (!prevQuads.containsKey(side))
                 prevQuads.put(side, previousConveyor.getQuads(state, side, rand));
             return prevQuads.get(side);
         }
         if (!prevQuads.containsKey(side))
             prevQuads.put(side, previousConveyor.getQuads(state, side, rand));
-        ConveyorModelData data = ((IExtendedBlockState) state).getValue(ConveyorModelData.UPGRADE_PROPERTY);
         List<BakedQuad> quads = new ArrayList<>(prevQuads.get(side));
-        for (ConveyorUpgrade upgrade : data.getUpgrades().values()) {
-            if (upgrade == null)
-                continue;
-            List<BakedQuad> upgradeQuads = CACHE.getIfPresent(Pair.of(Pair.of(upgrade.getFactory().getRegistryName().toString(), Pair.of(upgrade.getSide(), state.getValue(BlockConveyor.FACING))), side));
-            if (upgradeQuads == null) {
-                try {
-                    IModel model = ModelLoaderRegistry.getModel(upgrade.getFactory().getModel(upgrade.getSide(), state.getValue(BlockConveyor.FACING)));
-                    upgradeQuads = model.bake(this.state, this.format, location -> Minecraft.getMinecraft().getTextureMapBlocks().getAtlasSprite(location.toString())).getQuads(state, side, rand);
-                } catch (Exception e) {
-                    e.printStackTrace();
+        if (extraData.hasProperty(ConveyorModelData.UPGRADE_PROPERTY)) {
+            for (ConveyorUpgrade upgrade : extraData.getData(ConveyorModelData.UPGRADE_PROPERTY).getUpgrades().values()) {
+                if (upgrade == null)
                     continue;
+                List<BakedQuad> upgradeQuads = CACHE.getIfPresent(Pair.of(Pair.of(upgrade.getFactory().getRegistryName().toString(), Pair.of(upgrade.getSide(), state.get(ConveyorBlock.FACING))), side));
+                if (upgradeQuads == null) {
+                    try {
+                        IBakedModel model = ModuleTransport.CONVEYOR_UPGRADES_CACHE.get(upgrade.getFactory().getModel(upgrade.getSide(), state.get(ConveyorBlock.FACING)));
+                        upgradeQuads = model.getQuads(state, side, rand, extraData);
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                        continue;
+                    }
+                    CACHE.put(Pair.of(Pair.of(upgrade.getFactory().getRegistryName().toString(), Pair.of(upgrade.getSide(), state.get(ConveyorBlock.FACING))), side), upgradeQuads);
                 }
-                CACHE.put(Pair.of(Pair.of(upgrade.getFactory().getRegistryName().toString(), Pair.of(upgrade.getSide(), state.getValue(BlockConveyor.FACING))), side), upgradeQuads);
-            }
-            if (!upgradeQuads.isEmpty()) {
-                quads.addAll(upgradeQuads);
+                if (!upgradeQuads.isEmpty()) {
+                    quads.addAll(upgradeQuads);
+                }
             }
         }
         return quads;

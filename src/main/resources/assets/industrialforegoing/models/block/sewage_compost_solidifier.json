@@ -1,9 +1,0 @@
-{
-  "parent": "industrialforegoing:block/base_block",
-  "textures": {
-    "south": "industrialforegoing:blocks/sewage_compost_solidifier_side",
-    "west": "industrialforegoing:blocks/sewage_compost_solidifier_side",
-    "east": "industrialforegoing:blocks/sewage_compost_solidifier_side",
-    "north": "industrialforegoing:blocks/sewage_compost_solidifier_side"
-  }
-}

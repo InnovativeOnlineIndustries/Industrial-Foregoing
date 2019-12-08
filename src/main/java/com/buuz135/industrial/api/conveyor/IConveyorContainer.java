@@ -21,7 +21,7 @@
  */
 package com.buuz135.industrial.api.conveyor;
 
-import net.minecraft.util.EnumFacing;
+import net.minecraft.util.Direction;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
@@ -38,11 +38,11 @@ public interface IConveyorContainer {
 
     void requestFluidSync();
 
-    boolean hasUpgrade(EnumFacing facing);
+    boolean hasUpgrade(Direction facing);
 
-    void addUpgrade(EnumFacing facing, ConveyorUpgradeFactory factory);
+    void addUpgrade(Direction facing, ConveyorUpgradeFactory factory);
 
-    void removeUpgrade(EnumFacing facing, boolean drop);
+    void removeUpgrade(Direction facing, boolean drop);
 
     List<Integer> getEntityFilter();
 
@@ -68,17 +68,17 @@ public interface IConveyorContainer {
         }
 
         @Override
-        public boolean hasUpgrade(EnumFacing facing) {
+        public boolean hasUpgrade(Direction facing) {
             return false;
         }
 
         @Override
-        public void addUpgrade(EnumFacing facing, ConveyorUpgradeFactory factory) {
+        public void addUpgrade(Direction facing, ConveyorUpgradeFactory factory) {
 
         }
 
         @Override
-        public void removeUpgrade(EnumFacing facing, boolean drop) {
+        public void removeUpgrade(Direction facing, boolean drop) {
 
         }
 

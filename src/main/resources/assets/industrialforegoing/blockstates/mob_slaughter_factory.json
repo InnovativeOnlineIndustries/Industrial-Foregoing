@@ -1,17 +1,9 @@
 {
   "forge_marker": 1,
   "defaults": {
-    "model": "industrialforegoing:mob_slaughter_factory"
+    "model": "industrialforegoing:block/mob_slaughter_factory"
   },
   "variants": {
-    "normal": [
-      {}
-    ],
-    "inventory": [
-      {
-        "y": 180
-      }
-    ],
     "facing": {
       "north": {},
       "south": {

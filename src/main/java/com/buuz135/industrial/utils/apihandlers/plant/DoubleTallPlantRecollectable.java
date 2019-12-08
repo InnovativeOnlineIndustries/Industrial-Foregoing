@@ -23,11 +23,12 @@ package com.buuz135.industrial.utils.apihandlers.plant;
 
 import com.buuz135.industrial.api.plant.PlantRecollectable;
 import com.buuz135.industrial.utils.BlockUtils;
-import net.minecraft.block.BlockCactus;
-import net.minecraft.block.BlockReed;
-import net.minecraft.block.state.IBlockState;
+import net.minecraft.block.BlockState;
+import net.minecraft.block.Blocks;
+import net.minecraft.block.CactusBlock;
+import net.minecraft.block.SugarCaneBlock;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.EnumFacing;
+import net.minecraft.util.Direction;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
@@ -42,27 +43,29 @@ public class DoubleTallPlantRecollectable extends PlantRecollectable {
     }
 
     @Override
-    public boolean canBeHarvested(World world, BlockPos pos, IBlockState blockState) {
-        return blockState.getBlock() instanceof BlockCactus || blockState.getBlock() instanceof BlockReed;
+    public boolean canBeHarvested(World world, BlockPos pos, BlockState blockState) {
+        return (blockState.getBlock() instanceof CactusBlock && world.getBlockState(pos.up()).getBlock() instanceof CactusBlock)
+                || (blockState.getBlock() instanceof SugarCaneBlock && world.getBlockState(pos.up()).getBlock() instanceof SugarCaneBlock);
     }
 
     @Override
-    public List<ItemStack> doHarvestOperation(World world, BlockPos pos, IBlockState blockState) {
+    public List<ItemStack> doHarvestOperation(World world, BlockPos pos, BlockState blockState) {
         NonNullList<ItemStack> stacks = NonNullList.create();
-        harvestBlock(stacks, world, pos.offset(EnumFacing.UP, 2));
-        harvestBlock(stacks, world, pos.offset(EnumFacing.UP, 1));
+        harvestBlock(stacks, world, pos.offset(Direction.UP, 2));
+        harvestBlock(stacks, world, pos.offset(Direction.UP, 1));
         return stacks;
     }
 
     @Override
-    public boolean shouldCheckNextPlant(World world, BlockPos pos, IBlockState blockState) {
+    public boolean shouldCheckNextPlant(World world, BlockPos pos, BlockState blockState) {
         return true;
     }
 
     private void harvestBlock(NonNullList<ItemStack> stacks, World world, BlockPos pos) {
-        if (canBeHarvested(world, pos, world.getBlockState(pos))) {
+        BlockState blockState = world.getBlockState(pos);
+        if (blockState.getBlock() instanceof CactusBlock || blockState.getBlock() instanceof SugarCaneBlock) {
             stacks.addAll(BlockUtils.getBlockDrops(world, pos));
-            world.setBlockToAir(pos);
+            world.setBlockState(pos, Blocks.AIR.getDefaultState());
         }
     }
 
