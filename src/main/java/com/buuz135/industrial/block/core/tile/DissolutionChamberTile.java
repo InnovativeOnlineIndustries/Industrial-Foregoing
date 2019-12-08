@@ -33,6 +33,7 @@ public class DissolutionChamberTile extends IndustrialProcessingTile {
                 setColor(DyeColor.LIGHT_BLUE).
                 setSlotPosition(integer -> getSlotPos(integer)).
                 setSlotLimit(1).
+                setOutputFilter((stack, integer) -> false).
                 setTile(this).
                 setOnSlotChanged((stack, integer) -> checkForRecipe()));
         this.addTank(this.inputFluid = (SidedFluidTank) new SidedFluidTank("input_fluid", 8000, 33 + slotSpacing, 18 + slotSpacing, 1).
