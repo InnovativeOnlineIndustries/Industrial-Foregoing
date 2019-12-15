@@ -24,7 +24,9 @@ package com.buuz135.industrial.proxy.client.event;
 import com.buuz135.industrial.item.infinity.ItemInfinityDrill;
 import com.buuz135.industrial.module.ModuleTool;
 import com.mojang.blaze3d.platform.GlStateManager;
+import net.minecraft.block.FlowingFluidBlock;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.renderer.WorldRenderer;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.Hand;
@@ -69,11 +71,11 @@ public class IFClientEvents {
             GlStateManager.depthMask(false);
             PlayerEntity player = Minecraft.getInstance().player;
             double x = player.lastTickPosX + (player.posX - player.lastTickPosX) * event.getPartialTicks();
-            double y = player.lastTickPosY + (player.posY - player.lastTickPosY) * event.getPartialTicks();
+            double y = player.lastTickPosY + (player.posY - player.lastTickPosY) * event.getPartialTicks() + (double)player.getEyeHeight();
             double z = player.lastTickPosZ + (player.posZ - player.lastTickPosZ) * event.getPartialTicks();
             BlockPos.getAllInBoxMutable(area.getLeft(), area.getRight()).forEach(blockPos -> {
-                if (!world.isAirBlock(blockPos) && world.getBlockState(blockPos).getBlockHardness(world, blockPos) >= 0 && !(world.getBlockState(blockPos).getBlock() instanceof IFluidBlock) && !(world.getBlockState(blockPos).getBlock() instanceof IFluidBlock)) {
-                    Minecraft.getInstance().worldRenderer.drawSelectionBoundingBox(world.getBlockState(blockPos).getBlock().getShape(world.getBlockState(blockPos), world, blockPos, ISelectionContext.dummy()).getBoundingBox().offset(-x, -y, -z).offset(blockPos).
+                if (!world.isAirBlock(blockPos) && world.getBlockState(blockPos).getBlockHardness(world, blockPos) >= 0 && !(world.getBlockState(blockPos).getBlock() instanceof IFluidBlock) && !(world.getBlockState(blockPos).getBlock() instanceof FlowingFluidBlock)) {
+                    WorldRenderer.drawSelectionBoundingBox(world.getBlockState(blockPos).getShape(world, blockPos).getBoundingBox().offset(-x, -y, -z).offset(blockPos).
                             grow(0.001), 0.0F, 0.0F, 0.0F, 0.4F);
                 }
             });
@@ -85,11 +87,11 @@ public class IFClientEvents {
 
     @SubscribeEvent
     public void onRenderPre(RenderPlayerEvent.Pre event) {
-        if (event.getEntityPlayer().getUniqueID().equals(Minecraft.getInstance().player.getUniqueID()) && Minecraft.getInstance().gameSettings.thirdPersonView == 0)
+        if (event.getPlayer().getUniqueID().equals(Minecraft.getInstance().player.getUniqueID()) && Minecraft.getInstance().gameSettings.thirdPersonView == 0)
             return;
-        if (event.getEntityPlayer().getHeldItem(Hand.MAIN_HAND).getItem().equals(ModuleTool.INFINITY_DRILL))
-            event.getEntityPlayer().setActiveHand(Hand.MAIN_HAND);
-        else if (event.getEntityPlayer().getHeldItem(Hand.OFF_HAND).getItem().equals(ModuleTool.INFINITY_DRILL))
-            event.getEntityPlayer().setActiveHand(Hand.OFF_HAND);
+        if (event.getPlayer().getHeldItem(Hand.MAIN_HAND).getItem().equals(ModuleTool.INFINITY_DRILL))
+            event.getPlayer().setActiveHand(Hand.MAIN_HAND);
+        else if (event.getPlayer().getHeldItem(Hand.OFF_HAND).getItem().equals(ModuleTool.INFINITY_DRILL))
+            event.getPlayer().setActiveHand(Hand.OFF_HAND);
     }
 }
