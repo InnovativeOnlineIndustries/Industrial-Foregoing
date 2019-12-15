@@ -21,8 +21,10 @@
  */
 package com.buuz135.industrial.item.infinity;
 
+import com.buuz135.industrial.IndustrialForegoing;
 import com.buuz135.industrial.module.ModuleTool;
 import com.buuz135.industrial.proxy.client.particle.ParticleVex;
+import com.buuz135.industrial.proxy.network.SpecialParticleMessage;
 import com.buuz135.industrial.utils.Reference;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.LivingEntity;
@@ -77,8 +79,7 @@ public class OneThreeFiveHandler {
         if (event.player.world.getGameTime() % 20 == 0) {
             for (ItemStack stack : event.player.inventory.mainInventory) {
                 if (stack.getItem().equals(ModuleTool.INFINITY_DRILL) && ModuleTool.INFINITY_DRILL.isSpecial(stack)) {
-                    /*IndustrialForegoing.NETWORK.sendToAllAround(new SpecialParticleMessage(event.player.getUniqueID()), new NetworkRegistry.TargetPoint(event.player.dimension,
-                            event.player.posX, event.player.posY, event.player.posZ, 64));*/
+                    IndustrialForegoing.NETWORK.sendToNearby(event.player.world, new BlockPos(event.player.posX, event.player.posY, event.player.posZ), 64, new SpecialParticleMessage(event.player.getUniqueID()));
                     return;
                 }
             }
