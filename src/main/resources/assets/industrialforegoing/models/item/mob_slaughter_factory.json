@@ -1,3 +1,22 @@
 {
-  "parent": "industrialforegoing:block/mob_slaughter_factory"
+  "parent": "industrialforegoing:block/mob_slaughter_factory",
+  "display": {
+    "gui": {
+      "rotation": [
+        30,
+        45,
+        0
+      ],
+      "translation": [
+        0,
+        0,
+        0
+      ],
+      "scale": [
+        0.625,
+        0.625,
+        0.625
+      ]
+    }
+  }
 }
