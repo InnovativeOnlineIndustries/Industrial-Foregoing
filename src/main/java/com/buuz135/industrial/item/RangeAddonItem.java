@@ -1,5 +1,6 @@
 package com.buuz135.industrial.item;
 
+import com.buuz135.industrial.block.tile.IndustrialAreaWorkingTile;
 import com.buuz135.industrial.module.ModuleCore;
 import com.buuz135.industrial.recipe.DissolutionChamberRecipe;
 import com.hrznstudio.titanium.api.IMachine;
@@ -75,6 +76,6 @@ public class RangeAddonItem extends IFCustomItem implements IAugment {
 
     @Override
     public boolean canWorkIn(IMachine machine) {
-        return !machine.hasAugmentInstalled(RANGE);
+        return !machine.hasAugmentInstalled(RANGE) && machine instanceof IndustrialAreaWorkingTile;
     }
 }
