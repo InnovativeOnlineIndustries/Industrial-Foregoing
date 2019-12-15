@@ -182,7 +182,7 @@ public class ItemInfinityDrill extends IFCustomItem {
 
     @Override
     public boolean hasTooltipDetails(@Nullable Key key) {
-        return true;
+        return key == null;
     }
 
     @Override
