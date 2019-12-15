@@ -27,7 +27,7 @@ IF: You need to automate all the things
 '''
 [[dependencies.industrialforegoing]] #optional
     modId="titanium" #mandatory
-    mandatory=false #mandatory
-    versionRange="[2.1.8,)" #mandatory
+    mandatory=true #mandatory
+    versionRange="[2.2.9,)" #mandatory
     ordering="NONE"
 side="BOTH"
