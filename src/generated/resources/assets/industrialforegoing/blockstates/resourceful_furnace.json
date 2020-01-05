@@ -1,0 +1,29 @@
+{
+  "variants": {
+    "facing=down": {
+      "model": "industrialforegoing:block/resourceful_furnace",
+      "x": -90,
+      "y": 270
+    },
+    "facing=up": {
+      "model": "industrialforegoing:block/resourceful_furnace",
+      "x": 90,
+      "y": 270
+    },
+    "facing=north": {
+      "model": "industrialforegoing:block/resourceful_furnace"
+    },
+    "facing=south": {
+      "model": "industrialforegoing:block/resourceful_furnace",
+      "y": 180
+    },
+    "facing=west": {
+      "model": "industrialforegoing:block/resourceful_furnace",
+      "y": 270
+    },
+    "facing=east": {
+      "model": "industrialforegoing:block/resourceful_furnace",
+      "y": 90
+    }
+  }
+}

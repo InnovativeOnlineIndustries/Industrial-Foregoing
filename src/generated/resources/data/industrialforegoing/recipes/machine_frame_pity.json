@@ -1,0 +1,40 @@
+{
+  "type": "forge:conditional",
+  "recipes": [
+    {
+      "conditions": [
+        {
+          "values": [
+            {
+              "item": "industrialforegoing:machine_frame_pity",
+              "type": "forge:item_exists"
+            }
+          ],
+          "type": "forge:and"
+        }
+      ],
+      "recipe": {
+        "type": "minecraft:crafting_shaped",
+        "pattern": [
+          "WIW",
+          "IRI",
+          "WIW"
+        ],
+        "key": {
+          "W": {
+            "tag": "minecraft:logs"
+          },
+          "I": {
+            "tag": "forge:ingots/iron"
+          },
+          "R": {
+            "tag": "forge:storage_blocks/redstone"
+          }
+        },
+        "result": {
+          "item": "industrialforegoing:machine_frame_pity"
+        }
+      }
+    }
+  ]
+}

@@ -1,0 +1,29 @@
+{
+  "variants": {
+    "facing=down": {
+      "model": "industrialforegoing:block/plant_gatherer",
+      "x": -90,
+      "y": 270
+    },
+    "facing=up": {
+      "model": "industrialforegoing:block/plant_gatherer",
+      "x": 90,
+      "y": 270
+    },
+    "facing=north": {
+      "model": "industrialforegoing:block/plant_gatherer"
+    },
+    "facing=south": {
+      "model": "industrialforegoing:block/plant_gatherer",
+      "y": 180
+    },
+    "facing=west": {
+      "model": "industrialforegoing:block/plant_gatherer",
+      "y": 270
+    },
+    "facing=east": {
+      "model": "industrialforegoing:block/plant_gatherer",
+      "y": 90
+    }
+  }
+}

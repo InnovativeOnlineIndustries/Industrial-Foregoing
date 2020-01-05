@@ -1,0 +1,46 @@
+{
+  "type": "forge:conditional",
+  "recipes": [
+    {
+      "conditions": [
+        {
+          "values": [
+            {
+              "item": "industrialforegoing:fluid_placer",
+              "type": "forge:item_exists"
+            }
+          ],
+          "type": "forge:and"
+        }
+      ],
+      "recipe": {
+        "type": "minecraft:crafting_shaped",
+        "pattern": [
+          "PBP",
+          "BMB",
+          "SRS"
+        ],
+        "key": {
+          "P": {
+            "tag": "forge:plastic"
+          },
+          "B": {
+            "item": "minecraft:water_bucket"
+          },
+          "M": {
+            "tag": "industrialforegoing:machine_frame/pity"
+          },
+          "R": {
+            "item": "minecraft:redstone"
+          },
+          "S": {
+            "tag": "forge:gear/iron"
+          }
+        },
+        "result": {
+          "item": "industrialforegoing:fluid_placer"
+        }
+      }
+    }
+  ]
+}

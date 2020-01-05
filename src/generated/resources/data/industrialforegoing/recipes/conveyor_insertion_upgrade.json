@@ -1,0 +1,43 @@
+{
+  "type": "forge:conditional",
+  "recipes": [
+    {
+      "conditions": [
+        {
+          "values": [
+            {
+              "item": "industrialforegoing:conveyor_insertion_upgrade",
+              "type": "forge:item_exists"
+            }
+          ],
+          "type": "forge:and"
+        }
+      ],
+      "recipe": {
+        "type": "minecraft:crafting_shaped",
+        "pattern": [
+          "IPI",
+          "IDI",
+          "ICI"
+        ],
+        "key": {
+          "I": {
+            "tag": "forge:ingots/iron"
+          },
+          "P": {
+            "tag": "forge:plastic"
+          },
+          "D": {
+            "item": "minecraft:hopper"
+          },
+          "C": {
+            "item": "industrialforegoing:conveyor"
+          }
+        },
+        "result": {
+          "item": "industrialforegoing:conveyor_insertion_upgrade"
+        }
+      }
+    }
+  ]
+}

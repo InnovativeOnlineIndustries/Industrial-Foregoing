@@ -1,0 +1,29 @@
+{
+  "variants": {
+    "facing=down": {
+      "model": "industrialforegoing:block/spores_recreator",
+      "x": -90,
+      "y": 270
+    },
+    "facing=up": {
+      "model": "industrialforegoing:block/spores_recreator",
+      "x": 90,
+      "y": 270
+    },
+    "facing=north": {
+      "model": "industrialforegoing:block/spores_recreator"
+    },
+    "facing=south": {
+      "model": "industrialforegoing:block/spores_recreator",
+      "y": 180
+    },
+    "facing=west": {
+      "model": "industrialforegoing:block/spores_recreator",
+      "y": 270
+    },
+    "facing=east": {
+      "model": "industrialforegoing:block/spores_recreator",
+      "y": 90
+    }
+  }
+}

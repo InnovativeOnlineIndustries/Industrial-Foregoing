@@ -1,0 +1,29 @@
+{
+  "variants": {
+    "facing=down": {
+      "model": "industrialforegoing:block/pitiful_generator",
+      "x": -90,
+      "y": 270
+    },
+    "facing=up": {
+      "model": "industrialforegoing:block/pitiful_generator",
+      "x": 90,
+      "y": 270
+    },
+    "facing=north": {
+      "model": "industrialforegoing:block/pitiful_generator"
+    },
+    "facing=south": {
+      "model": "industrialforegoing:block/pitiful_generator",
+      "y": 180
+    },
+    "facing=west": {
+      "model": "industrialforegoing:block/pitiful_generator",
+      "y": 270
+    },
+    "facing=east": {
+      "model": "industrialforegoing:block/pitiful_generator",
+      "y": 90
+    }
+  }
+}

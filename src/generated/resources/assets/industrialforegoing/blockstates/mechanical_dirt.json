@@ -1,0 +1,29 @@
+{
+  "variants": {
+    "facing=down": {
+      "model": "industrialforegoing:block/mechanical_dirt",
+      "x": -90,
+      "y": 270
+    },
+    "facing=up": {
+      "model": "industrialforegoing:block/mechanical_dirt",
+      "x": 90,
+      "y": 270
+    },
+    "facing=north": {
+      "model": "industrialforegoing:block/mechanical_dirt"
+    },
+    "facing=south": {
+      "model": "industrialforegoing:block/mechanical_dirt",
+      "y": 180
+    },
+    "facing=west": {
+      "model": "industrialforegoing:block/mechanical_dirt",
+      "y": 270
+    },
+    "facing=east": {
+      "model": "industrialforegoing:block/mechanical_dirt",
+      "y": 90
+    }
+  }
+}

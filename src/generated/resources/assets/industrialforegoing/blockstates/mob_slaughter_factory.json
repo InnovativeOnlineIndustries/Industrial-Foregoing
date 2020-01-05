@@ -1,0 +1,29 @@
+{
+  "variants": {
+    "facing=down": {
+      "model": "industrialforegoing:block/mob_slaughter_factory",
+      "x": -90,
+      "y": 270
+    },
+    "facing=up": {
+      "model": "industrialforegoing:block/mob_slaughter_factory",
+      "x": 90,
+      "y": 270
+    },
+    "facing=north": {
+      "model": "industrialforegoing:block/mob_slaughter_factory"
+    },
+    "facing=south": {
+      "model": "industrialforegoing:block/mob_slaughter_factory",
+      "y": 180
+    },
+    "facing=west": {
+      "model": "industrialforegoing:block/mob_slaughter_factory",
+      "y": 270
+    },
+    "facing=east": {
+      "model": "industrialforegoing:block/mob_slaughter_factory",
+      "y": 90
+    }
+  }
+}

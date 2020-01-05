@@ -1,0 +1,29 @@
+{
+  "variants": {
+    "facing=down": {
+      "model": "industrialforegoing:block/animal_feeder",
+      "x": -90,
+      "y": 270
+    },
+    "facing=up": {
+      "model": "industrialforegoing:block/animal_feeder",
+      "x": 90,
+      "y": 270
+    },
+    "facing=north": {
+      "model": "industrialforegoing:block/animal_feeder"
+    },
+    "facing=south": {
+      "model": "industrialforegoing:block/animal_feeder",
+      "y": 180
+    },
+    "facing=west": {
+      "model": "industrialforegoing:block/animal_feeder",
+      "y": 270
+    },
+    "facing=east": {
+      "model": "industrialforegoing:block/animal_feeder",
+      "y": 90
+    }
+  }
+}

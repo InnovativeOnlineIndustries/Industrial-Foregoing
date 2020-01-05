@@ -1,0 +1,46 @@
+{
+  "type": "forge:conditional",
+  "recipes": [
+    {
+      "conditions": [
+        {
+          "values": [
+            {
+              "item": "industrialforegoing:fluid_extractor",
+              "type": "forge:item_exists"
+            }
+          ],
+          "type": "forge:and"
+        }
+      ],
+      "recipe": {
+        "type": "minecraft:crafting_shaped",
+        "pattern": [
+          "IGI",
+          "CMC",
+          "IPI"
+        ],
+        "key": {
+          "I": {
+            "tag": "forge:ingots/iron"
+          },
+          "G": {
+            "item": "minecraft:light_weighted_pressure_plate"
+          },
+          "C": {
+            "tag": "forge:cobblestone"
+          },
+          "M": {
+            "tag": "industrialforegoing:machine_frame/pity"
+          },
+          "P": {
+            "item": "minecraft:piston"
+          }
+        },
+        "result": {
+          "item": "industrialforegoing:fluid_extractor"
+        }
+      }
+    }
+  ]
+}

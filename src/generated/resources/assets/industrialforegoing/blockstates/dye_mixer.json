@@ -1,0 +1,29 @@
+{
+  "variants": {
+    "facing=down": {
+      "model": "industrialforegoing:block/dye_mixer",
+      "x": -90,
+      "y": 270
+    },
+    "facing=up": {
+      "model": "industrialforegoing:block/dye_mixer",
+      "x": 90,
+      "y": 270
+    },
+    "facing=north": {
+      "model": "industrialforegoing:block/dye_mixer"
+    },
+    "facing=south": {
+      "model": "industrialforegoing:block/dye_mixer",
+      "y": 180
+    },
+    "facing=west": {
+      "model": "industrialforegoing:block/dye_mixer",
+      "y": 270
+    },
+    "facing=east": {
+      "model": "industrialforegoing:block/dye_mixer",
+      "y": 90
+    }
+  }
+}

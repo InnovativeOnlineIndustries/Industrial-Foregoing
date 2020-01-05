@@ -1,0 +1,29 @@
+{
+  "variants": {
+    "facing=down": {
+      "model": "industrialforegoing:block/sewage_composter",
+      "x": -90,
+      "y": 270
+    },
+    "facing=up": {
+      "model": "industrialforegoing:block/sewage_composter",
+      "x": 90,
+      "y": 270
+    },
+    "facing=north": {
+      "model": "industrialforegoing:block/sewage_composter"
+    },
+    "facing=south": {
+      "model": "industrialforegoing:block/sewage_composter",
+      "y": 180
+    },
+    "facing=west": {
+      "model": "industrialforegoing:block/sewage_composter",
+      "y": 270
+    },
+    "facing=east": {
+      "model": "industrialforegoing:block/sewage_composter",
+      "y": 90
+    }
+  }
+}

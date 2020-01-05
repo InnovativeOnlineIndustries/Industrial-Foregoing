@@ -1,0 +1,15 @@
+{
+  "input": [
+    {
+      "item": "minecraft:glass_pane"
+    }
+  ],
+  "inputFluid": "{FluidName:\"industrialforegoing:pink_slime\",Amount:300}",
+  "processingTime": 200,
+  "output": {
+    "item": "industrialforegoing:pink_slime",
+    "count": 1
+  },
+  "outputFluid": "{FluidName:\"minecraft:water\",Amount:150}",
+  "type": "industrialforegoing:dissolution_chamber"
+}

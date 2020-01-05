@@ -1,0 +1,52 @@
+{
+  "type": "forge:conditional",
+  "recipes": [
+    {
+      "conditions": [
+        {
+          "values": [
+            {
+              "item": "industrialforegoing:block_breaker",
+              "type": "forge:item_exists"
+            }
+          ],
+          "type": "forge:and"
+        }
+      ],
+      "recipe": {
+        "type": "minecraft:crafting_shaped",
+        "pattern": [
+          "PGP",
+          "IMD",
+          "SRS"
+        ],
+        "key": {
+          "P": {
+            "tag": "forge:plastic"
+          },
+          "I": {
+            "item": "minecraft:iron_pickaxe"
+          },
+          "D": {
+            "item": "minecraft:iron_shovel"
+          },
+          "M": {
+            "tag": "industrialforegoing:machine_frame/pity"
+          },
+          "R": {
+            "item": "minecraft:redstone"
+          },
+          "G": {
+            "tag": "forge:gear/gold"
+          },
+          "S": {
+            "tag": "forge:gear/iron"
+          }
+        },
+        "result": {
+          "item": "industrialforegoing:block_breaker"
+        }
+      }
+    }
+  ]
+}

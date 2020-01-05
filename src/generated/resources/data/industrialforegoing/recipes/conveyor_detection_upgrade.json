@@ -1,0 +1,43 @@
+{
+  "type": "forge:conditional",
+  "recipes": [
+    {
+      "conditions": [
+        {
+          "values": [
+            {
+              "item": "industrialforegoing:conveyor_detection_upgrade",
+              "type": "forge:item_exists"
+            }
+          ],
+          "type": "forge:and"
+        }
+      ],
+      "recipe": {
+        "type": "minecraft:crafting_shaped",
+        "pattern": [
+          "IPI",
+          "IDI",
+          "ICI"
+        ],
+        "key": {
+          "I": {
+            "tag": "forge:ingots/iron"
+          },
+          "P": {
+            "item": "minecraft:stone_pressure_plate"
+          },
+          "D": {
+            "item": "minecraft:comparator"
+          },
+          "C": {
+            "item": "industrialforegoing:conveyor"
+          }
+        },
+        "result": {
+          "item": "industrialforegoing:conveyor_detection_upgrade"
+        }
+      }
+    }
+  ]
+}

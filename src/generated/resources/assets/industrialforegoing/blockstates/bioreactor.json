@@ -1,0 +1,29 @@
+{
+  "variants": {
+    "facing=down": {
+      "model": "industrialforegoing:block/bioreactor",
+      "x": -90,
+      "y": 270
+    },
+    "facing=up": {
+      "model": "industrialforegoing:block/bioreactor",
+      "x": 90,
+      "y": 270
+    },
+    "facing=north": {
+      "model": "industrialforegoing:block/bioreactor"
+    },
+    "facing=south": {
+      "model": "industrialforegoing:block/bioreactor",
+      "y": 180
+    },
+    "facing=west": {
+      "model": "industrialforegoing:block/bioreactor",
+      "y": 270
+    },
+    "facing=east": {
+      "model": "industrialforegoing:block/bioreactor",
+      "y": 90
+    }
+  }
+}

@@ -1,0 +1,29 @@
+{
+  "variants": {
+    "facing=down": {
+      "model": "industrialforegoing:block/latex_processing_unit",
+      "x": -90,
+      "y": 270
+    },
+    "facing=up": {
+      "model": "industrialforegoing:block/latex_processing_unit",
+      "x": 90,
+      "y": 270
+    },
+    "facing=north": {
+      "model": "industrialforegoing:block/latex_processing_unit"
+    },
+    "facing=south": {
+      "model": "industrialforegoing:block/latex_processing_unit",
+      "y": 180
+    },
+    "facing=west": {
+      "model": "industrialforegoing:block/latex_processing_unit",
+      "y": 270
+    },
+    "facing=east": {
+      "model": "industrialforegoing:block/latex_processing_unit",
+      "y": 90
+    }
+  }
+}

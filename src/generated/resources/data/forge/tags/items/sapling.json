@@ -1,0 +1,11 @@
+{
+  "replace": false,
+  "values": [
+    "minecraft:acacia_sapling",
+    "minecraft:spruce_sapling",
+    "minecraft:birch_sapling",
+    "minecraft:dark_oak_sapling",
+    "minecraft:jungle_sapling",
+    "minecraft:oak_sapling"
+  ]
+}

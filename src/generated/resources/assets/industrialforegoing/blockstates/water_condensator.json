@@ -1,0 +1,29 @@
+{
+  "variants": {
+    "facing=down": {
+      "model": "industrialforegoing:block/water_condensator",
+      "x": -90,
+      "y": 270
+    },
+    "facing=up": {
+      "model": "industrialforegoing:block/water_condensator",
+      "x": 90,
+      "y": 270
+    },
+    "facing=north": {
+      "model": "industrialforegoing:block/water_condensator"
+    },
+    "facing=south": {
+      "model": "industrialforegoing:block/water_condensator",
+      "y": 180
+    },
+    "facing=west": {
+      "model": "industrialforegoing:block/water_condensator",
+      "y": 270
+    },
+    "facing=east": {
+      "model": "industrialforegoing:block/water_condensator",
+      "y": 90
+    }
+  }
+}

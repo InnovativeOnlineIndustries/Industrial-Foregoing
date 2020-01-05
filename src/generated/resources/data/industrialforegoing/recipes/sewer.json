@@ -1,0 +1,46 @@
+{
+  "type": "forge:conditional",
+  "recipes": [
+    {
+      "conditions": [
+        {
+          "values": [
+            {
+              "item": "industrialforegoing:sewer",
+              "type": "forge:item_exists"
+            }
+          ],
+          "type": "forge:and"
+        }
+      ],
+      "recipe": {
+        "type": "minecraft:crafting_shaped",
+        "pattern": [
+          "PEP",
+          "BMB",
+          "BGB"
+        ],
+        "key": {
+          "P": {
+            "tag": "forge:plastic"
+          },
+          "E": {
+            "item": "minecraft:bucket"
+          },
+          "B": {
+            "item": "minecraft:brick"
+          },
+          "M": {
+            "tag": "industrialforegoing:machine_frame/pity"
+          },
+          "G": {
+            "tag": "forge:gear/iron"
+          }
+        },
+        "result": {
+          "item": "industrialforegoing:sewer"
+        }
+      }
+    }
+  ]
+}

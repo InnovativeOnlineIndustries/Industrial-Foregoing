@@ -1,0 +1,29 @@
+{
+  "variants": {
+    "facing=down": {
+      "model": "industrialforegoing:block/sludge_refiner",
+      "x": -90,
+      "y": 270
+    },
+    "facing=up": {
+      "model": "industrialforegoing:block/sludge_refiner",
+      "x": 90,
+      "y": 270
+    },
+    "facing=north": {
+      "model": "industrialforegoing:block/sludge_refiner"
+    },
+    "facing=south": {
+      "model": "industrialforegoing:block/sludge_refiner",
+      "y": 180
+    },
+    "facing=west": {
+      "model": "industrialforegoing:block/sludge_refiner",
+      "y": 270
+    },
+    "facing=east": {
+      "model": "industrialforegoing:block/sludge_refiner",
+      "y": 90
+    }
+  }
+}
