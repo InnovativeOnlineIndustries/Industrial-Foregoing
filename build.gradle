@@ -61,7 +61,7 @@ minecraft {
         data {
             workingDirectory project.file('run')
             property 'forge.logging.console.level', 'info'
-            args '--mod', 'industrialforegoing', '--all', '--output', file('src/main/resources'), '--existing', '--input', file('src/main/resources')
+            args '--mod', 'industrialforegoing', '--all', '--output', '"' + rootProject.file('src/generated/resources/') + '"', '--existing', '"' + sourceSets.main.resources.srcDirs[0] + '"'
             source sourceSets.main
         }
     }
@@ -90,14 +90,13 @@ dependencies {
     if (findProject(':titanium') != null) {
         compile project(':titanium')
     } else {
-        compile fg.deobf (project.dependencies.create('com.hrznstudio:titanium:1.14.4-2.2.+'))
+        compile fg.deobf (project.dependencies.create('com.hrznstudio:titanium:1.15.1-2.3.+'))
     }
     //if (findProject(':workspace') == null) {
         compileOnly fg.deobf("mezz.jei:jei-1.14.4:6.0.0.18:api")
         // at runtime, use the full JEI jar
         //runtimeOnly fg.deobf("mezz.jei:jei-1.14.4:6.0.0.18")
     //}
-    compileOnly 'org.projectlombok:lombok:1.16.16'
 }
 
 afterEvaluate {
