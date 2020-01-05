@@ -62,8 +62,6 @@ import net.minecraft.util.math.shapes.VoxelShapes;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.IBlockReader;
 import net.minecraft.world.World;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.common.Tags;
 
 import javax.annotation.Nullable;
@@ -260,49 +258,48 @@ public class ConveyorBlock extends BlockTileBase<ConveyorTile> implements IWater
     }
 
     @Override
-    public boolean onBlockActivated(BlockState state, World worldIn, BlockPos pos, PlayerEntity player, Hand hand, BlockRayTraceResult ray) {
+    public ActionResultType func_225533_a_(BlockState state, World worldIn, BlockPos pos, PlayerEntity player, Hand hand, BlockRayTraceResult ray) {
         TileEntity tileEntity = worldIn.getTileEntity(pos);
         ItemStack handStack = player.getHeldItem(hand);
         if (tileEntity instanceof ConveyorTile) {
             Direction facing = getFacingUpgradeHit(state, worldIn, pos, player);
-            if (player.isSneaking()) {
+            if (player.isCrouching()) {
                 if (facing != null) {
                     ((ConveyorTile) tileEntity).removeUpgrade(facing, true);
-                    return true;
+                    return ActionResultType.SUCCESS;
                 }
-                return false;
+                return ActionResultType.PASS;
             } else {
                 if (facing == null) {
                     if (handStack.getItem().equals(Items.GLOWSTONE_DUST) && !((ConveyorTile) tileEntity).getConveyorType().isFast()) {
                         ((ConveyorTile) tileEntity).setType(((ConveyorTile) tileEntity).getConveyorType().getFast());
                         handStack.shrink(1);
-                        return true;
+                        return ActionResultType.SUCCESS;
                     }
                     if (handStack.getItem().equals(ModuleCore.PLASTIC) && !((ConveyorTile) tileEntity).isSticky()) {
                         ((ConveyorTile) tileEntity).setSticky(true);
                         handStack.shrink(1);
-                        return true;
+                        return ActionResultType.SUCCESS;
                     }
                     if (handStack.getItem() instanceof DyeItem) {
                         ((ConveyorTile) tileEntity).setColor(((DyeItem) handStack.getItem()).getDyeColor());
-                        return true;
+                        return ActionResultType.SUCCESS;
                     }
                 } else {
                     if (((ConveyorTile) tileEntity).hasUpgrade(facing)) {
                         ConveyorUpgrade upgrade = ((ConveyorTile) tileEntity).getUpgradeMap().get(facing);
                         if (upgrade.onUpgradeActivated(player, hand)) {
-                            return true;
+                            return ActionResultType.SUCCESS;
                         } else if (upgrade.hasGui()) {
                             ((ConveyorTile) tileEntity).openGui(player, facing);
-                            return true;
+                            return ActionResultType.SUCCESS;
                         }
                     }
                 }
-                return false;
-
+                return ActionResultType.PASS;
             }
         }
-        return super.onBlockActivated(state, worldIn, pos, player, hand, ray);
+        return super.func_225533_a_(state, worldIn, pos, player, hand, ray);
     }
 
     @Override
@@ -359,11 +356,6 @@ public class ConveyorBlock extends BlockTileBase<ConveyorTile> implements IWater
     @Override
     public BlockRenderType getRenderType(BlockState p_149645_1_) {
         return BlockRenderType.MODEL;
-    }
-
-    @OnlyIn(Dist.CLIENT)
-    public BlockRenderLayer getRenderLayer() {
-        return BlockRenderLayer.CUTOUT;
     }
 
     @Override

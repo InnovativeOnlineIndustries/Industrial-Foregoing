@@ -40,7 +40,7 @@ compileJava {
 }
 
 minecraft {
-    mappings channel: 'snapshot', version: '20190911-1.14.3'
+    mappings channel: 'snapshot', version: '20191230-1.14.3'
     runs {
         client = {
             // recommended logging data for a userdev environment
@@ -70,10 +70,15 @@ minecraft {
 repositories {
     mavenCentral()
     jcenter()
+    //maven {
+    //    // location of the maven that hosts JEI files
+    //    name = "Progwml6 maven"
+    //    url = "https://dvs1.progwml6.com/files/maven/"
+    //}
     maven {
-        // location of the maven that hosts JEI files
-        name = "Progwml6 maven"
-        url = "https://dvs1.progwml6.com/files/maven/"
+        // location of a maven mirror for JEI files, as a fallback
+        name = "ModMaven"
+        url = "https://modmaven.k-4u.nl"
     }
     maven {
         url 'https://cdn.hrzn.studio/maven/'
@@ -81,7 +86,7 @@ repositories {
 }
 
 dependencies {
-    minecraft "net.minecraftforge:forge:1.14.4-28.1.70"
+    minecraft 'net.minecraftforge:forge:1.15.1-30.0.11'
     if (findProject(':titanium') != null) {
         compile project(':titanium')
     } else {
@@ -90,7 +95,7 @@ dependencies {
     //if (findProject(':workspace') == null) {
         compileOnly fg.deobf("mezz.jei:jei-1.14.4:6.0.0.18:api")
         // at runtime, use the full JEI jar
-        runtimeOnly fg.deobf("mezz.jei:jei-1.14.4:6.0.0.18")
+        //runtimeOnly fg.deobf("mezz.jei:jei-1.14.4:6.0.0.18")
     //}
     compileOnly 'org.projectlombok:lombok:1.16.16'
 }

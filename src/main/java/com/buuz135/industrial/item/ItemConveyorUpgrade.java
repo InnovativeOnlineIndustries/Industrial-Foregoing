@@ -46,7 +46,7 @@ public class ItemConveyorUpgrade extends IFCustomItem {
 
     @Override
     public ActionResultType onItemUse(ItemUseContext context) {
-        if (!context.getPlayer().isSneaking()) {
+        if (!context.getPlayer().isCrouching()) {
             TileEntity tile = context.getWorld().getTileEntity(context.getPos());
             if (tile instanceof ConveyorTile && ((ConveyorTile) tile).getConveyorType().isVertical())
                 return ActionResultType.PASS;

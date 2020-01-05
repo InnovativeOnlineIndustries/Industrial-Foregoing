@@ -45,7 +45,7 @@ public class WaterStrawHandler extends StrawHandlerBase {
             player.entityDropItem(new ItemStack(Blocks.OBSIDIAN), player.getEyeHeight());
 
             tag.setLong("lavaDrink", 0);
-            world.playSound(null, player.posX, player.posY, player.posZ, SoundEvents.ENTITY_PLAYER_BURP, SoundCategory.PLAYERS, 1.5F, world.rand.nextFloat() * 0.1F + 0.9F);
+            world.playSound(null, player.getPosition().getX(), player.getPosition().getY(), player.getPosition().getZ(), SoundEvents.ENTITY_PLAYER_BURP, SoundCategory.PLAYERS, 1.5F, world.rand.nextFloat() * 0.1F + 0.9F);
         }*/
     }
 

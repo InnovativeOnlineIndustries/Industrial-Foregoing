@@ -37,7 +37,6 @@ import net.minecraft.item.ItemGroup;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.UseAction;
 import net.minecraft.util.ActionResult;
-import net.minecraft.util.ActionResultType;
 import net.minecraft.util.Hand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.BlockRayTraceResult;
@@ -124,7 +123,7 @@ public class ItemStraw extends IFCustomItem {
                 Optional<StrawHandler> handler = StrawUtils.getStrawHandler(fluid.getFluid());
                 if (handler.isPresent()) {
                     playerIn.setActiveHand(handIn);
-                    return ActionResult.newResult(ActionResultType.SUCCESS, playerIn.getHeldItem(handIn));
+                    return ActionResult.func_226248_a_(playerIn.getHeldItem(handIn));
                 }
             }/*
             if (block.hasTileEntity(state)) {

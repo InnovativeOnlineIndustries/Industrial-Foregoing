@@ -28,7 +28,7 @@ import com.buuz135.industrial.gui.component.FilterGuiComponent;
 import com.buuz135.industrial.proxy.block.filter.IFilter;
 import com.buuz135.industrial.proxy.network.ConveyorButtonInteractMessage;
 import com.buuz135.industrial.utils.Reference;
-import com.mojang.blaze3d.platform.GlStateManager;
+import com.mojang.blaze3d.systems.RenderSystem;
 import net.minecraft.client.gui.screen.inventory.ContainerScreen;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.nbt.CompoundNBT;
@@ -72,7 +72,7 @@ public class GuiConveyor extends ContainerScreen<ContainerConveyor> {
     @Override
     protected void drawGuiContainerBackgroundLayer(float partialTicks, int mouseX, int mouseY) {
         this.renderBackground();
-        GlStateManager.color4f(1, 1, 1, 1);
+        RenderSystem.color4f(1, 1, 1, 1);
         minecraft.getTextureManager().bindTexture(BG_TEXTURE);
         x = (width - xSize) / 2;
         y = (height - ySize) / 2;

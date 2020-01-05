@@ -13,6 +13,7 @@ import net.minecraft.block.IGrowable;
 import net.minecraft.item.DyeColor;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.server.ServerWorld;
 
 public class PlantFertilizerTile extends IndustrialAreaWorkingTile {
 
@@ -41,7 +42,7 @@ public class PlantFertilizerTile extends IndustrialAreaWorkingTile {
                 if (block instanceof IGrowable) {
                     if (((IGrowable) block).canGrow(world, pointer, state, false) && ((IGrowable) block).canUseBonemeal(world, world.rand, pointer, state)) {
                         stack.shrink(1);
-                        ((IGrowable) block).grow(world, world.rand, pointer, state);
+                        ((IGrowable) block).func_225535_a_((ServerWorld) world, world.rand, pointer, state);
                         if (((IGrowable) block).canGrow(world, pointer, state, false)) {
                             return new WorkAction(0.25f, 1000);
                         } else {

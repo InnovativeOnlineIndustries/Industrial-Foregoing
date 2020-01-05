@@ -23,7 +23,7 @@ package com.buuz135.industrial.utils;
 
 import com.buuz135.industrial.IndustrialForegoing;
 import com.google.common.collect.HashMultimap;
-import com.mojang.blaze3d.platform.GlStateManager;
+import com.mojang.blaze3d.systems.RenderSystem;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
@@ -129,28 +129,28 @@ public class BlockUtils {
 
     public static void renderLaserBeam(TileEntity tile, double x, double y, double z, Direction direction, float partialTicks, int length) {
         Tessellator tess = Tessellator.getInstance();
-        GlStateManager.pushMatrix();
+        RenderSystem.pushMatrix();
         double tempX = x;
         double tempY = y;
         double tempZ = z;
         switch (direction) {
             case NORTH:
-                GlStateManager.rotatef(270, 1, 0, 0);
+                RenderSystem.rotatef(270, 1, 0, 0);
                 tempY = -z;
                 tempZ = y;
                 break;
             case SOUTH:
-                GlStateManager.rotatef(90, 1, 0, 0);
+                RenderSystem.rotatef(90, 1, 0, 0);
                 tempY = z + 1;
                 tempZ = -y - 1;
                 break;
             case EAST:
-                GlStateManager.rotatef(270, 0, 0, 1);
+                RenderSystem.rotatef(270, 0, 0, 1);
                 tempY = x + 1;
                 tempX = -y - 1;
                 break;
             case WEST:
-                GlStateManager.rotatef(90, 0, 0, 1);
+                RenderSystem.rotatef(90, 0, 0, 1);
                 tempY = -x;
                 tempX = y;
                 break;
@@ -165,38 +165,38 @@ public class BlockUtils {
         GL11.glDepthMask(true);
         BufferBuilder buffer = tess.getBuffer();
         buffer.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_TEX);
-        double d1 = -(tile.getWorld().getGameTime() % 15) / 15D;
-        double d2 = (tile.getWorld().getGameTime() % 40) / 2D;
+        float d1 = -(tile.getWorld().getGameTime() % 15) / 15f;
+        float d2 = (tile.getWorld().getGameTime() % 40) / 2f;
         double pointA = 0.45 - d2 / 200D;
         if (d2 >= 10) {
             pointA = 0.35 + d2 / 200D;
         }
         double pointB = 1 - pointA;
-        double uStart = 0.0D;
-        double uEnd = 1.0D;
-        double vStart = -1.0F + d1;
-        double vEnd = (length * 2) + vStart;
-        buffer.pos(tempX + pointA, tempY + length, tempZ + pointA).tex(uEnd, vEnd).endVertex();
-        buffer.pos(tempX + pointA, tempY, tempZ + pointA).tex(uEnd, vStart).endVertex();
-        buffer.pos(tempX + pointB, tempY, tempZ + pointA).tex(uStart, vStart).endVertex();
-        buffer.pos(tempX + pointB, tempY + length, tempZ + pointA).tex(uStart, vEnd).endVertex();
-        buffer.pos(tempX + pointB, tempY + length, tempZ + pointB).tex(uEnd, vEnd).endVertex();
-        buffer.pos(tempX + pointB, tempY, tempZ + pointB).tex(uEnd, vStart).endVertex();
-        buffer.pos(tempX + pointA, tempY, tempZ + pointB).tex(uStart, vStart).endVertex();
-        buffer.pos(tempX + pointA, tempY + length, tempZ + pointB).tex(uStart, vEnd).endVertex();
-        buffer.pos(tempX + pointB, tempY + length, tempZ + pointA).tex(uEnd, vEnd).endVertex();
-        buffer.pos(tempX + pointB, tempY, tempZ + pointA).tex(uEnd, vStart).endVertex();
-        buffer.pos(tempX + pointB, tempY, tempZ + pointB).tex(uStart, vStart).endVertex();
-        buffer.pos(tempX + pointB, tempY + length, tempZ + pointB).tex(uStart, vEnd).endVertex();
-        buffer.pos(tempX + pointA, tempY + length, tempZ + pointB).tex(uEnd, vEnd).endVertex();
-        buffer.pos(tempX + pointA, tempY, tempZ + pointB).tex(uEnd, vStart).endVertex();
-        buffer.pos(tempX + pointA, tempY, tempZ + pointA).tex(uStart, vStart).endVertex();
-        buffer.pos(tempX + pointA, tempY + length, tempZ + pointA).tex(uStart, vEnd).endVertex();
+        float uStart = 0.0f;
+        float uEnd = 1.0f;
+        float vStart = -1.0F + d1;
+        float vEnd = (length * 2) + vStart;
+        buffer.func_225582_a_(tempX + pointA, tempY + length, tempZ + pointA).func_225583_a_(uEnd, vEnd).endVertex();
+        buffer.func_225582_a_(tempX + pointA, tempY, tempZ + pointA).func_225583_a_(uEnd, vStart).endVertex();
+        buffer.func_225582_a_(tempX + pointB, tempY, tempZ + pointA).func_225583_a_(uStart, vStart).endVertex();
+        buffer.func_225582_a_(tempX + pointB, tempY + length, tempZ + pointA).func_225583_a_(uStart, vEnd).endVertex();
+        buffer.func_225582_a_(tempX + pointB, tempY + length, tempZ + pointB).func_225583_a_(uEnd, vEnd).endVertex();
+        buffer.func_225582_a_(tempX + pointB, tempY, tempZ + pointB).func_225583_a_(uEnd, vStart).endVertex();
+        buffer.func_225582_a_(tempX + pointA, tempY, tempZ + pointB).func_225583_a_(uStart, vStart).endVertex();
+        buffer.func_225582_a_(tempX + pointA, tempY + length, tempZ + pointB).func_225583_a_(uStart, vEnd).endVertex();
+        buffer.func_225582_a_(tempX + pointB, tempY + length, tempZ + pointA).func_225583_a_(uEnd, vEnd).endVertex();
+        buffer.func_225582_a_(tempX + pointB, tempY, tempZ + pointA).func_225583_a_(uEnd, vStart).endVertex();
+        buffer.func_225582_a_(tempX + pointB, tempY, tempZ + pointB).func_225583_a_(uStart, vStart).endVertex();
+        buffer.func_225582_a_(tempX + pointB, tempY + length, tempZ + pointB).func_225583_a_(uStart, vEnd).endVertex();
+        buffer.func_225582_a_(tempX + pointA, tempY + length, tempZ + pointB).func_225583_a_(uEnd, vEnd).endVertex();
+        buffer.func_225582_a_(tempX + pointA, tempY, tempZ + pointB).func_225583_a_(uEnd, vStart).endVertex();
+        buffer.func_225582_a_(tempX + pointA, tempY, tempZ + pointA).func_225583_a_(uStart, vStart).endVertex();
+        buffer.func_225582_a_(tempX + pointA, tempY + length, tempZ + pointA).func_225583_a_(uStart, vEnd).endVertex();
         tess.draw();
-        RenderHelper.enableStandardItemLighting();
+        RenderSystem.setupGui3DDiffuseLighting();
         GL11.glEnable(GL11.GL_CULL_FACE);
         //GL11.glEnable(GL11.GL_BLEND);
 
-        GlStateManager.popMatrix();
+        RenderSystem.popMatrix();
     }
 }

@@ -33,38 +33,35 @@ import com.buuz135.industrial.proxy.client.event.IFWorldRenderLastEvent;
 import com.buuz135.industrial.proxy.client.render.FluidConveyorTESR;
 import com.buuz135.industrial.proxy.client.render.WorkingAreaTESR;
 import com.buuz135.industrial.utils.Reference;
-import com.google.common.collect.ImmutableMap;
+import com.hrznstudio.titanium.block.BlockBase;
+import com.hrznstudio.titanium.block.BlockTileBase;
 import com.hrznstudio.titanium.event.handler.EventManager;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.renderer.RenderType;
+import net.minecraft.client.renderer.RenderTypeLookup;
 import net.minecraft.client.renderer.model.IBakedModel;
-import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.item.SpawnEggItem;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.client.event.ModelBakeEvent;
 import net.minecraftforge.client.event.TextureStitchEvent;
-import net.minecraftforge.client.model.IModel;
-import net.minecraftforge.client.model.ModelLoader;
-import net.minecraftforge.client.model.SimpleModelState;
 import net.minecraftforge.client.model.obj.OBJLoader;
+import net.minecraftforge.client.model.obj.OBJModel;
 import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.common.model.TRSRTransformation;
 import net.minecraftforge.common.util.Constants;
 import net.minecraftforge.fml.client.registry.ClientRegistry;
 import net.minecraftforge.registries.ForgeRegistries;
-
-import java.util.Optional;
 
 public class ClientProxy extends CommonProxy {
 
     public static final ResourceLocation beacon = new ResourceLocation("textures/entity/beacon_beam.png");
     public static ResourceLocation GUI = new ResourceLocation(Reference.MOD_ID, "textures/gui/machines.png");
     public static IBakedModel ears_baked;
-    public static IModel ears_model;
+    public static OBJModel ears_model;
 
     @Override
     public void run() {
-        OBJLoader.INSTANCE.addDomain(Reference.MOD_ID);
+        //OBJLoader.INSTANCE.addDomain(Reference.MOD_ID);
 
         MinecraftForge.EVENT_BUS.register(new IFClientEvents());
         MinecraftForge.EVENT_BUS.register(new IFWorldRenderLastEvent());
@@ -72,8 +69,8 @@ public class ClientProxy extends CommonProxy {
 
         EventManager.mod(ModelBakeEvent.class).process(event -> {
             try {
-                ears_model = OBJLoader.INSTANCE.loadModel(new ResourceLocation(Reference.MOD_ID, "models/block/catears.obj"));
-                ears_baked = ears_model.bake(event.getModelLoader(), ModelLoader.defaultTextureGetter(), new SimpleModelState(ImmutableMap.of(), Optional.of(TRSRTransformation.identity())), DefaultVertexFormats.BLOCK);
+                ears_model = OBJLoader.INSTANCE.loadModel(new ResourceLocation(Reference.MOD_ID, "models/block/catears.obj"), false, false, false, false);
+                //ears_baked = ears_model.bake(event.getModelLoader(), ModelLoader.defaultTextureGetter(), new SimpleModelState(ImmutableMap.of(), TransformationMatrix.func_227983_a_()), DefaultVertexFormats.BLOCK, ItemOverrideList.EMPTY, new ResourceLocation(Reference.MOD_ID, "models/block/catears.obj"));
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -83,12 +80,14 @@ public class ClientProxy extends CommonProxy {
         }).subscribe();
 
 
-        ClientRegistry.bindTileEntitySpecialRenderer(ConveyorTile.class, new FluidConveyorTESR());
-        ClientRegistry.bindTileEntitySpecialRenderer(IndustrialAreaWorkingTile.class, new WorkingAreaTESR());
-
+        ClientRegistry.bindTileEntityRenderer(ModuleTransport.CONVEYOR.getTileEntityType(), new FluidConveyorTESR());
+        BlockBase.BLOCKS.stream().filter(blockBase -> blockBase instanceof BlockTileBase && ((BlockTileBase) blockBase).getTileClass().isAssignableFrom(IndustrialAreaWorkingTile.class)).forEach(blockBase -> ClientRegistry.bindTileEntityRenderer(((BlockTileBase) blockBase).getTileEntityType(), new WorkingAreaTESR()));
+        //ClientRegistry.bindTileEntityRenderer(IndustrialAreaWorkingTile.class, new WorkingAreaTESR());
         //manager.entityRenderMap.put(EntityPinkSlime.class, new RenderPinkSlime(manager));
 
         //((IReloadableResourceManager) Minecraft.getInstance().getResourceManager()).addReloadListener(resourceManager -> FluidUtils.colorCache.clear());
+
+        RenderTypeLookup.setRenderLayer(ModuleTransport.CONVEYOR, RenderType.func_228643_e_());
 
         Minecraft.getInstance().getBlockColors().register((state, worldIn, pos, tintIndex) -> {
             if (tintIndex == 0 && worldIn != null && pos != null) {

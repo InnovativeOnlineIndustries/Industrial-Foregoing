@@ -26,6 +26,7 @@ import com.buuz135.industrial.block.transport.ConveyorBlock;
 import com.buuz135.industrial.module.ModuleTransport;
 import com.google.common.cache.Cache;
 import com.google.common.cache.CacheBuilder;
+import com.mojang.blaze3d.matrix.MatrixStack;
 import net.minecraft.block.BlockState;
 import net.minecraft.client.renderer.model.BakedQuad;
 import net.minecraft.client.renderer.model.IBakedModel;
@@ -37,26 +38,21 @@ import net.minecraft.client.renderer.vertex.VertexFormat;
 import net.minecraft.util.Direction;
 import net.minecraftforge.client.model.data.IDynamicBakedModel;
 import net.minecraftforge.client.model.data.IModelData;
-import net.minecraftforge.common.model.IModelState;
-import net.minecraftforge.common.model.TRSRTransformation;
 import org.apache.commons.lang3.tuple.Pair;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-import javax.vecmath.Matrix4f;
 import java.util.*;
 
 public class ConveyorBlockModel implements IDynamicBakedModel {
 
     public static Cache<Pair<Pair<String, Pair<Direction, Direction>>, Direction>, List<BakedQuad>> CACHE = CacheBuilder.newBuilder().build();
-    private IModelState state;
     private VertexFormat format;
     private IBakedModel previousConveyor;
     private Map<Direction, List<BakedQuad>> prevQuads = new HashMap<>();
 
     public ConveyorBlockModel(IBakedModel previousConveyor) {
         this.previousConveyor = previousConveyor;
-        this.state = TRSRTransformation.identity();
         this.format = DefaultVertexFormats.BLOCK;
     }
 
@@ -122,8 +118,8 @@ public class ConveyorBlockModel implements IDynamicBakedModel {
     }
 
     @Override
-    public Pair<? extends IBakedModel, Matrix4f> handlePerspective(ItemCameraTransforms.TransformType cameraTransformType) {
-        return previousConveyor.handlePerspective(cameraTransformType);
+    public IBakedModel handlePerspective(ItemCameraTransforms.TransformType cameraTransformType, MatrixStack mat) {
+        return previousConveyor.handlePerspective(cameraTransformType, mat);
     }
 
     @Override

@@ -23,7 +23,7 @@ package com.buuz135.industrial.gui.component;
 
 import com.buuz135.industrial.api.conveyor.gui.PositionedGuiComponent;
 import com.buuz135.industrial.gui.conveyor.GuiConveyor;
-import com.mojang.blaze3d.platform.GlStateManager;
+import com.mojang.blaze3d.systems.RenderSystem;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.audio.SimpleSound;
 import net.minecraft.nbt.CompoundNBT;
@@ -57,7 +57,7 @@ public abstract class TexturedStateButtonGuiComponent extends PositionedGuiCompo
     public void drawGuiBackgroundLayer(int guiX, int guiY, double mouseX, double mouseY) {
         StateButtonInfo buttonInfo = getStateInfo();
         if (buttonInfo != null) {
-            GlStateManager.color4f(1, 1, 1, 1);
+            RenderSystem.color4f(1, 1, 1, 1);
             Minecraft.getInstance().getTextureManager().bindTexture(buttonInfo.getTexture());
             Minecraft.getInstance().currentScreen.blit(guiX + getXPos(), guiY + getYPos(), buttonInfo.getTextureX(), buttonInfo.getTextureY(), getXSize(), getYSize());
         }
@@ -67,11 +67,11 @@ public abstract class TexturedStateButtonGuiComponent extends PositionedGuiCompo
     public void drawGuiForegroundLayer(int guiX, int guiY, double mouseX, double mouseY) {
         StateButtonInfo buttonInfo = getStateInfo();
         if (buttonInfo != null && isInside(mouseX, mouseY)) {
-            GlStateManager.disableLighting();
-            GlStateManager.enableDepthTest();
+            RenderSystem.disableLighting();
+            RenderSystem.enableDepthTest();
             Minecraft.getInstance().currentScreen.fill(getXPos() - guiX, getYPos() - guiY, getXPos() + getXSize() - guiX, getYPos() + getYSize() - guiY, -2130706433);
-            GlStateManager.enableLighting();
-            GlStateManager.disableAlphaTest();
+            RenderSystem.enableLighting();
+            RenderSystem.disableAlphaTest();
         }
     }
 

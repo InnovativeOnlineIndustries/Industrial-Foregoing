@@ -14,9 +14,9 @@ import com.hrznstudio.titanium.module.Feature;
 import com.hrznstudio.titanium.tab.AdvancedTitaniumTab;
 import net.minecraft.block.Block;
 import net.minecraft.client.gui.ScreenManager;
+import net.minecraft.client.renderer.TransformationMatrix;
 import net.minecraft.client.renderer.model.IBakedModel;
 import net.minecraft.client.renderer.model.IUnbakedModel;
-import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.inventory.container.ContainerType;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -29,13 +29,11 @@ import net.minecraftforge.client.event.TextureStitchEvent;
 import net.minecraftforge.client.model.ModelLoader;
 import net.minecraftforge.client.model.SimpleModelState;
 import net.minecraftforge.common.extensions.IForgeContainerType;
-import net.minecraftforge.common.model.TRSRTransformation;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Optional;
 
 public class ModuleTransport implements IModule {
 
@@ -83,7 +81,7 @@ public class ModuleTransport implements IModule {
                     try {
                         ResourceLocation resourceLocation = conveyorUpgradeFactory.getModel(upgradeFacing, conveyorFacing);
                         IUnbakedModel unbakedModel = event.getModelLoader().getUnbakedModel(resourceLocation);
-                        CONVEYOR_UPGRADES_CACHE.put(resourceLocation, unbakedModel.bake(event.getModelLoader(), ModelLoader.defaultTextureGetter(), new SimpleModelState(ImmutableMap.of(), Optional.of(TRSRTransformation.identity())), DefaultVertexFormats.BLOCK));
+                        CONVEYOR_UPGRADES_CACHE.put(resourceLocation, unbakedModel.func_225613_a_(event.getModelLoader(), ModelLoader.defaultTextureGetter(), new SimpleModelState(ImmutableMap.of(), TransformationMatrix.func_227983_a_()), resourceLocation));
                     } catch (Exception e) {
                         e.printStackTrace();
                     }

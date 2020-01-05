@@ -279,10 +279,10 @@ public class ItemInfinityDrill extends IFCustomItem {
                     }
                 });
                 worldIn.getEntitiesWithinAABB(ItemEntity.class, new AxisAlignedBB(area.getLeft(), area.getRight()).grow(1)).forEach(ItemEntity -> {
-                    ItemEntity.setPositionAndUpdate(entityLiving.posX, entityLiving.posY, entityLiving.posZ);
+                    ItemEntity.setPositionAndUpdate(entityLiving.getPosition().getX(), entityLiving.getPosition().getY(), entityLiving.getPosition().getZ());
                     ItemEntity.setPickupDelay(0);
                 });
-                worldIn.getEntitiesWithinAABB(ExperienceOrbEntity.class, new AxisAlignedBB(area.getLeft(), area.getRight()).grow(1)).forEach(entityXPOrb -> entityXPOrb.setPositionAndUpdate(entityLiving.posX, entityLiving.posY, entityLiving.posZ));
+                worldIn.getEntitiesWithinAABB(ExperienceOrbEntity.class, new AxisAlignedBB(area.getLeft(), area.getRight()).grow(1)).forEach(entityXPOrb -> entityXPOrb.setPositionAndUpdate(entityLiving.getPosition().getX(), entityLiving.getPosition().getY(), entityLiving.getPosition().getZ()));
             }
         }
         return super.onBlockDestroyed(stack, worldIn, state, pos, entityLiving);
@@ -298,7 +298,7 @@ public class ItemInfinityDrill extends IFCustomItem {
 
     @Override
     public ActionResult<ItemStack> onItemRightClick(World worldIn, PlayerEntity player, Hand handIn) {
-        if (player.isSneaking()) {
+        if (player.isCrouching()) {
             player.playSound(SoundEvents.BLOCK_LEVER_CLICK, 0.5f, 0.5f);
             ItemStack stack = player.getHeldItem(handIn);
             DrillTier next = getSelectedDrillTier(stack).getNext(DrillTier.getTierBraquet(getPowerFromStack(stack)).getLeft());

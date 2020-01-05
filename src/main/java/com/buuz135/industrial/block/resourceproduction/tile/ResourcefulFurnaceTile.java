@@ -11,6 +11,7 @@ import com.hrznstudio.titanium.util.RecipeUtil;
 import net.minecraft.item.DyeColor;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.FurnaceRecipe;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.capability.IFluidHandler;
@@ -49,8 +50,8 @@ public class ResourcefulFurnaceTile extends IndustrialProcessingTile {
     }
 
     @Override
-    public void setWorld(World worldIn) {
-        super.setWorld(worldIn);
+    public void func_226984_a_(World p_226984_1_, BlockPos p_226984_2_) {
+        super.func_226984_a_(p_226984_1_, p_226984_2_);
         checkForRecipe(0);
         checkForRecipe(1);
         checkForRecipe(2);

@@ -39,6 +39,6 @@ public class EssenceStrawHandler extends StrawHandlerBase {
 
     @Override
     public void onDrink(World world, BlockPos pos, Fluid stack, PlayerEntity player, boolean fromFluidContainer) {
-        world.addEntity(new ExperienceOrbEntity(world, player.posX, player.posY, player.posZ, world.rand.nextInt(10) + 8));
+        world.addEntity(new ExperienceOrbEntity(world, player.getPosition().getX(), player.getPosition().getY(), player.getPosition().getZ(), world.rand.nextInt(10) + 8));
     }
 }

@@ -1,13 +1,13 @@
 package com.buuz135.industrial.proxy.client.render;
 
 import com.buuz135.industrial.block.tile.IndustrialAreaWorkingTile;
+import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.platform.GlStateManager;
+import com.mojang.blaze3d.systems.RenderSystem;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.ActiveRenderInfo;
-import net.minecraft.client.renderer.BufferBuilder;
-import net.minecraft.client.renderer.RenderHelper;
-import net.minecraft.client.renderer.Tessellator;
+import net.minecraft.client.renderer.*;
 import net.minecraft.client.renderer.tileentity.TileEntityRenderer;
+import net.minecraft.client.renderer.tileentity.TileEntityRendererDispatcher;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
@@ -18,19 +18,22 @@ import java.awt.*;
 
 public class WorkingAreaTESR extends TileEntityRenderer<IndustrialAreaWorkingTile> {
 
+    public WorkingAreaTESR() {
+        super(TileEntityRendererDispatcher.instance);
+    }
+
     @Override
-    public void render(IndustrialAreaWorkingTile tileEntityIn, double x, double y, double z, float partialTicks, int destroyStage) {
-        super.render(tileEntityIn, x, y, z, partialTicks, destroyStage);
+    public void func_225616_a_(IndustrialAreaWorkingTile tileEntityIn, float p_225616_2_, MatrixStack p_225616_3_, IRenderTypeBuffer p_225616_4_, int p_225616_5_, int p_225616_6_) {
         if (tileEntityIn == null || !tileEntityIn.isShowingArea()) return;
         VoxelShape shape = tileEntityIn.getWorkingArea();
 
-        GlStateManager.enableBlend();
-        GlStateManager.blendFuncSeparate(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA, GlStateManager.SourceFactor.ONE, GlStateManager.DestFactor.ZERO);
-        GlStateManager.lineWidth(Math.max(2.5F, (float) Minecraft.getInstance().mainWindow.getFramebufferWidth() / 1920.0F * 2.5F));
-        GlStateManager.matrixMode(5889);
-        GlStateManager.disableTexture();
-        GlStateManager.pushMatrix();
-        GlStateManager.scalef(1.0F, 1.0F, 0.999F);
+        RenderSystem.enableBlend();
+        RenderSystem.blendFuncSeparate(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA, GlStateManager.SourceFactor.ONE, GlStateManager.DestFactor.ZERO);
+        RenderSystem.lineWidth(Math.max(2.5F, (float) Minecraft.getInstance().func_228018_at_().getFramebufferWidth() / 1920.0F * 2.5F));
+        RenderSystem.matrixMode(5889);
+        RenderSystem.disableTexture();
+        RenderSystem.pushMatrix();
+        RenderSystem.scalef(1.0F, 1.0F, 0.999F);
         ActiveRenderInfo info = Minecraft.getInstance().gameRenderer.getActiveRenderInfo();
         BlockPos blockpos = tileEntityIn.getPos();
         Color color = new Color(Math.abs(blockpos.getX() % 255), Math.abs(blockpos.getY() % 255), Math.abs(blockpos.getZ() % 255));
@@ -38,18 +41,18 @@ public class WorkingAreaTESR extends TileEntityRenderer<IndustrialAreaWorkingTil
         double d1 = info.getProjectedView().y;
         double d2 = info.getProjectedView().z;
         RenderHelper.disableStandardItemLighting();
-        this.setLightmapDisabled(true);
+        //this.setLightmapDisabled(true);
 
-        GlStateManager.enableDepthTest();
-        GlStateManager.depthFunc(515);
-        GlStateManager.depthMask(true);
-        Minecraft.getInstance().worldRenderer.drawShape(shape, -d0, -d1, -d2, (float) color.getRed() / 255f, (float) color.getGreen() / 255f, (float) color.getBlue() / 255f, 0.5F);
+        RenderSystem.enableDepthTest();
+        RenderSystem.depthFunc(515);
+        RenderSystem.depthMask(true);
+        //TODO Minecraft.getInstance().worldRenderer.drawShape(shape, -d0, -d1, -d2, (float) color.getRed() / 255f, (float) color.getGreen() / 255f, (float) color.getBlue() / 255f, 0.5F);
         renderFaces(shape.getBoundingBox(), -d0, -d1, -d2, (float) color.getRed() / 255f, (float) color.getGreen() / 255f, (float) color.getBlue() / 255f, 0.3F);
-        this.setLightmapDisabled(false);
-        GlStateManager.popMatrix();
-        GlStateManager.matrixMode(5888);
-        GlStateManager.enableTexture();
-        GlStateManager.disableBlend();
+        //this.setLightmapDisabled(false);
+        RenderSystem.popMatrix();
+        RenderSystem.matrixMode(5888);
+        RenderSystem.enableTexture();
+        RenderSystem.disableBlend();
     }
 
     @Override
@@ -68,37 +71,37 @@ public class WorkingAreaTESR extends TileEntityRenderer<IndustrialAreaWorkingTil
         double z2 = pos.maxZ + z;
         buffer.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_COLOR);
 
-        buffer.pos(x1, y1, z1).color(red, green, blue, alpha).endVertex();
-        buffer.pos(x1, y2, z1).color(red, green, blue, alpha).endVertex();
-        buffer.pos(x2, y2, z1).color(red, green, blue, alpha).endVertex();
-        buffer.pos(x2, y1, z1).color(red, green, blue, alpha).endVertex();
+        buffer.func_225582_a_(x1, y1, z1).func_227885_a_(red, green, blue, alpha).endVertex();
+        buffer.func_225582_a_(x1, y2, z1).func_227885_a_(red, green, blue, alpha).endVertex();
+        buffer.func_225582_a_(x2, y2, z1).func_227885_a_(red, green, blue, alpha).endVertex();
+        buffer.func_225582_a_(x2, y1, z1).func_227885_a_(red, green, blue, alpha).endVertex();
 
-        buffer.pos(x1, y1, z2).color(red, green, blue, alpha).endVertex();
-        buffer.pos(x2, y1, z2).color(red, green, blue, alpha).endVertex();
-        buffer.pos(x2, y2, z2).color(red, green, blue, alpha).endVertex();
-        buffer.pos(x1, y2, z2).color(red, green, blue, alpha).endVertex();
-
-
-        buffer.pos(x1, y1, z1).color(red, green, blue, alpha).endVertex();
-        buffer.pos(x2, y1, z1).color(red, green, blue, alpha).endVertex();
-        buffer.pos(x2, y1, z2).color(red, green, blue, alpha).endVertex();
-        buffer.pos(x1, y1, z2).color(red, green, blue, alpha).endVertex();
-
-        buffer.pos(x1, y2, z1).color(red, green, blue, alpha).endVertex();
-        buffer.pos(x1, y2, z2).color(red, green, blue, alpha).endVertex();
-        buffer.pos(x2, y2, z2).color(red, green, blue, alpha).endVertex();
-        buffer.pos(x2, y2, z1).color(red, green, blue, alpha).endVertex();
+        buffer.func_225582_a_(x1, y1, z2).func_227885_a_(red, green, blue, alpha).endVertex();
+        buffer.func_225582_a_(x2, y1, z2).func_227885_a_(red, green, blue, alpha).endVertex();
+        buffer.func_225582_a_(x2, y2, z2).func_227885_a_(red, green, blue, alpha).endVertex();
+        buffer.func_225582_a_(x1, y2, z2).func_227885_a_(red, green, blue, alpha).endVertex();
 
 
-        buffer.pos(x1, y1, z1).color(red, green, blue, alpha).endVertex();
-        buffer.pos(x1, y1, z2).color(red, green, blue, alpha).endVertex();
-        buffer.pos(x1, y2, z2).color(red, green, blue, alpha).endVertex();
-        buffer.pos(x1, y2, z1).color(red, green, blue, alpha).endVertex();
+        buffer.func_225582_a_(x1, y1, z1).func_227885_a_(red, green, blue, alpha).endVertex();
+        buffer.func_225582_a_(x2, y1, z1).func_227885_a_(red, green, blue, alpha).endVertex();
+        buffer.func_225582_a_(x2, y1, z2).func_227885_a_(red, green, blue, alpha).endVertex();
+        buffer.func_225582_a_(x1, y1, z2).func_227885_a_(red, green, blue, alpha).endVertex();
 
-        buffer.pos(x2, y1, z1).color(red, green, blue, alpha).endVertex();
-        buffer.pos(x2, y2, z1).color(red, green, blue, alpha).endVertex();
-        buffer.pos(x2, y2, z2).color(red, green, blue, alpha).endVertex();
-        buffer.pos(x2, y1, z2).color(red, green, blue, alpha).endVertex();
+        buffer.func_225582_a_(x1, y2, z1).func_227885_a_(red, green, blue, alpha).endVertex();
+        buffer.func_225582_a_(x1, y2, z2).func_227885_a_(red, green, blue, alpha).endVertex();
+        buffer.func_225582_a_(x2, y2, z2).func_227885_a_(red, green, blue, alpha).endVertex();
+        buffer.func_225582_a_(x2, y2, z1).func_227885_a_(red, green, blue, alpha).endVertex();
+
+
+        buffer.func_225582_a_(x1, y1, z1).func_227885_a_(red, green, blue, alpha).endVertex();
+        buffer.func_225582_a_(x1, y1, z2).func_227885_a_(red, green, blue, alpha).endVertex();
+        buffer.func_225582_a_(x1, y2, z2).func_227885_a_(red, green, blue, alpha).endVertex();
+        buffer.func_225582_a_(x1, y2, z1).func_227885_a_(red, green, blue, alpha).endVertex();
+
+        buffer.func_225582_a_(x2, y1, z1).func_227885_a_(red, green, blue, alpha).endVertex();
+        buffer.func_225582_a_(x2, y2, z1).func_227885_a_(red, green, blue, alpha).endVertex();
+        buffer.func_225582_a_(x2, y2, z2).func_227885_a_(red, green, blue, alpha).endVertex();
+        buffer.func_225582_a_(x2, y1, z2).func_227885_a_(red, green, blue, alpha).endVertex();
 
         Tessellator.getInstance().draw();
     }

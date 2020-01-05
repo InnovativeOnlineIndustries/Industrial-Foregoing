@@ -21,15 +21,12 @@
  */
 package com.buuz135.industrial.proxy.client.particle;
 
-import com.mojang.blaze3d.platform.GlStateManager;
+import com.mojang.blaze3d.vertex.IVertexBuilder;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.player.ClientPlayerEntity;
 import net.minecraft.client.particle.IParticleRenderType;
 import net.minecraft.client.particle.Particle;
 import net.minecraft.client.renderer.ActiveRenderInfo;
-import net.minecraft.client.renderer.BufferBuilder;
-import net.minecraft.client.renderer.Tessellator;
-import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.entity.Entity;
 import net.minecraft.util.Direction;
 import net.minecraft.util.math.Vec3d;
@@ -49,7 +46,7 @@ public class ParticleVex extends Particle {
     private boolean isDying = false;
 
     public ParticleVex(Entity entity) {
-        super(entity.world, entity.posX + entity.world.rand.nextDouble() - 0.5, entity.posY + 1 + entity.world.rand.nextDouble() - 0.5, entity.posZ + entity.world.rand.nextDouble() - 0.5);
+        super(entity.world, entity.getPosition().getX() + entity.world.rand.nextDouble() - 0.5, entity.getPosition().getY() + 1 + entity.world.rand.nextDouble() - 0.5, entity.getPosition().getZ() + entity.world.rand.nextDouble() - 0.5);
         this.entity = entity;
         directions = new ArrayList<>();
         Direction prev = Direction.NORTH;
@@ -82,32 +79,33 @@ public class ParticleVex extends Particle {
     }
 
     @Override
-    public void renderParticle(BufferBuilder buffer, ActiveRenderInfo entityIn, float partialTicks, float rotationX, float rotationZ, float rotationYZ, float rotationXY, float rotationXZ) {
+    public void func_225606_a_(IVertexBuilder buffer, ActiveRenderInfo entityIn, float p_225606_3_) {
         if (entityIn.getRenderViewEntity() instanceof ClientPlayerEntity && Minecraft.getInstance().player.getUniqueID().equals(entity.getUniqueID()) && !entityIn.isThirdPerson() && this.entity.getPosition().add(0, 1, 0).distanceSq(posX, posY, posZ, false) < 3)
             return;
-        GlStateManager.disableAlphaTest();
-        GlStateManager.enableBlend();
-        GlStateManager.blendFuncSeparate(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA,
-                GlStateManager.SourceFactor.ONE, GlStateManager.DestFactor.ZERO);
-        GlStateManager.lineWidth(2.0F);
-        GlStateManager.disableTexture();
-        GlStateManager.color4f(1, 1, 1, 1);
-        //OpenGlHelper.setLightmapTextureCoords(OpenGlHelper.lightmapTexUnit, 240.0F, 240.0F); TODO
-        buffer.begin(3, DefaultVertexFormats.POSITION_COLOR);
-        Entity playerEntity = entityIn.getRenderViewEntity();
-        double x = playerEntity.lastTickPosX + (entityIn.getProjectedView().x - playerEntity.lastTickPosX);
-        double y = playerEntity.lastTickPosY + (entityIn.getProjectedView().y - playerEntity.lastTickPosY);
-        double z = playerEntity.lastTickPosZ + (entityIn.getProjectedView().z - playerEntity.lastTickPosZ);
-        buffer.setTranslation(-x, -y, -z);
-        for (Vec3d line : lines) {
-            buffer.pos(line.x, line.y, line.z).color(1f, 1f, 1f, 1f).endVertex();
-        }
-        Tessellator.getInstance().draw();
-        buffer.setTranslation(0.0D, 0.0D, 0.0D);
-        GlStateManager.enableTexture();
-        GlStateManager.disableBlend();
-        GlStateManager.enableAlphaTest();
+        //RenderSystem.disableAlphaTest(); TODO
+        //RenderSystem.enableBlend();
+        //RenderSystem.blendFuncSeparate(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA,
+        //        GlStateManager.SourceFactor.ONE, GlStateManager.DestFactor.ZERO);
+        //RenderSystem.lineWidth(2.0F);
+        //RenderSystem.disableTexture();
+        //RenderSystem.color4f(1, 1, 1, 1);
+        ////OpenGlHelper.setLightmapTextureCoords(OpenGlHelper.lightmapTexUnit, 240.0F, 240.0F); TODO
+        //buffer.begin(3, DefaultVertexFormats.POSITION_COLOR);
+        //Entity playerEntity = entityIn.getRenderViewEntity();
+        //double x = playerEntity.lastTickPosX + (entityIn.getProjectedView().x - playerEntity.lastTickPosX);
+        //double y = playerEntity.lastTickPosY + (entityIn.getProjectedView().y - playerEntity.lastTickPosY);
+        //double z = playerEntity.lastTickPosZ + (entityIn.getProjectedView().z - playerEntity.lastTickPosZ);
+        //buffer.setTranslation(-x, -y, -z);
+        //for (Vec3d line : lines) {
+        //    buffer.pos(line.x, line.y, line.z).color(1f, 1f, 1f, 1f).endVertex();
+        //}
+        //Tessellator.getInstance().draw();
+        //buffer.setTranslation(0.0D, 0.0D, 0.0D);
+        //RenderSystem.enableTexture();
+        //RenderSystem.disableBlend();
+        //RenderSystem.enableAlphaTest();
     }
+
 
     @Override
     public IParticleRenderType getRenderType() {

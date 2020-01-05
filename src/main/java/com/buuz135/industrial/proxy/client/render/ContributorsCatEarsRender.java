@@ -21,13 +21,14 @@
  */
 package com.buuz135.industrial.proxy.client.render;
 
-import com.buuz135.industrial.proxy.client.ClientProxy;
 import com.buuz135.industrial.utils.Reference;
 import com.hrznstudio.titanium.reward.storage.ClientRewardStorage;
-import com.mojang.blaze3d.platform.GlStateManager;
+import com.mojang.blaze3d.matrix.MatrixStack;
+import com.mojang.blaze3d.systems.RenderSystem;
 import net.minecraft.block.Blocks;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.player.AbstractClientPlayerEntity;
+import net.minecraft.client.renderer.IRenderTypeBuffer;
 import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.client.renderer.entity.IEntityRenderer;
 import net.minecraft.client.renderer.entity.layers.LayerRenderer;
@@ -48,26 +49,26 @@ public class ContributorsCatEarsRender extends LayerRenderer<AbstractClientPlaye
     }
 
     @Override
-    public void render(AbstractClientPlayerEntity entitylivingbaseIn, float limbSwing, float limbSwingAmount, float partialTicks, float ageInTicks, float netHeadYaw, float headPitch, float scale) {
+    public void func_225628_a_(MatrixStack p_225628_1_, IRenderTypeBuffer p_225628_2_, int p_225628_3_, AbstractClientPlayerEntity entitylivingbaseIn, float limbSwing, float limbSwingAmount, float partialTicks, float ageInTicks, float netHeadYaw, float headPitch) {
         if (!ClientRewardStorage.REWARD_STORAGE.getRewards().containsKey(entitylivingbaseIn.getUniqueID())) return;
         if (!ClientRewardStorage.REWARD_STORAGE.getRewards().get(entitylivingbaseIn.getUniqueID()).getEnabled().containsKey(new ResourceLocation(Reference.MOD_ID, "cat_ears")))
             return;
-        GlStateManager.pushMatrix();
-        GlStateManager.enableBlend();
-        GlStateManager.disableCull();
+        RenderSystem.pushMatrix();
+        RenderSystem.enableBlend();
+        RenderSystem.disableCull();
         RenderHelper.disableStandardItemLighting();
         if (Minecraft.isAmbientOcclusionEnabled()) {
-            GlStateManager.shadeModel(GL11.GL_SMOOTH);
+            RenderSystem.shadeModel(GL11.GL_SMOOTH);
         } else {
-            GlStateManager.shadeModel(GL11.GL_FLAT);
+            RenderSystem.shadeModel(GL11.GL_FLAT);
         }
-        GlStateManager.translatef(0, -0.015f, 0);
-        if (!entitylivingbaseIn.inventory.armorInventory.get(3).isEmpty()) GlStateManager.translatef(0, -0.02f, 0);
-        if (entitylivingbaseIn.isSneaking()) GlStateManager.translatef(0, 0.27f, 0);
-        GlStateManager.rotatef(90, 0, 1, 0);
-        GlStateManager.rotatef(180, 1, 0, 0);
-        GlStateManager.rotatef(netHeadYaw, 0, -1, 0);
-        GlStateManager.rotatef(headPitch, 0, 0, -1);
+        RenderSystem.translatef(0, -0.015f, 0);
+        if (!entitylivingbaseIn.inventory.armorInventory.get(3).isEmpty()) RenderSystem.translatef(0, -0.02f, 0);
+        if (entitylivingbaseIn.isCrouching()) RenderSystem.translatef(0, 0.27f, 0);
+        RenderSystem.rotatef(90, 0, 1, 0);
+        RenderSystem.rotatef(180, 1, 0, 0);
+        RenderSystem.rotatef(netHeadYaw, 0, -1, 0);
+        RenderSystem.rotatef(headPitch, 0, 0, -1);
 
         Minecraft.getInstance().getTextureManager().bindTexture(AtlasTexture.LOCATION_BLOCKS_TEXTURE);
         Calendar calendar = Calendar.getInstance();
@@ -76,40 +77,35 @@ public class ContributorsCatEarsRender extends LayerRenderer<AbstractClientPlaye
         } else if (calendar.get(Calendar.MONTH) == Calendar.DECEMBER) {
             itsSnowyHere();
         } else {
-            Minecraft.getInstance().getBlockRendererDispatcher().getBlockModelRenderer().renderModelBrightnessColor(ClientProxy.ears_baked, 0.5f, 255, 255, 255);
+            //Minecraft.getInstance().getBlockRendererDispatcher().getBlockModelRenderer().renderModelBrightnessColor(ClientProxy.ears_baked, 0.5f, 255, 255, 255); TODO
         }
-        RenderHelper.enableStandardItemLighting();
-        GlStateManager.depthMask(true);
-        GlStateManager.popMatrix();
+        RenderSystem.setupGui3DDiffuseLighting();
+        RenderSystem.depthMask(true);
+        RenderSystem.popMatrix();
     }
 
     @OnlyIn(Dist.CLIENT)
     public void spookyScarySkeletons() {
         IBakedModel pumpkin = Minecraft.getInstance().getBlockRendererDispatcher().getModelForState(Minecraft.getInstance().world.getGameTime() % 200 < 100 ? Blocks.CARVED_PUMPKIN.getDefaultState() : Blocks.PUMPKIN.getDefaultState());
-        GlStateManager.rotatef(90, 0, -1, 0);
-        GlStateManager.translatef(0.08f, 0.485f, -0.1f);
-        GlStateManager.scalef(2 / 16f, 3 / 16f, 2 / 16f);
+        RenderSystem.rotatef(90, 0, -1, 0);
+        RenderSystem.translatef(0.08f, 0.485f, -0.1f);
+        RenderSystem.scalef(2 / 16f, 3 / 16f, 2 / 16f);
 
-        Minecraft.getInstance().getBlockRendererDispatcher().getBlockModelRenderer().renderModelBrightnessColor(pumpkin, 0.5f, 255, 255, 255);
-        GlStateManager.translatef(-0.08f * 28f, 0f, 0f);
-        Minecraft.getInstance().getBlockRendererDispatcher().getBlockModelRenderer().renderModelBrightnessColor(pumpkin, 0.5f, 255, 255, 255);
+        //Minecraft.getInstance().getBlockRendererDispatcher().getBlockModelRenderer().renderModelBrightnessColor(pumpkin, 0.5f, 255, 255, 255);
+        RenderSystem.translatef(-0.08f * 28f, 0f, 0f);
+        //Minecraft.getInstance().getBlockRendererDispatcher().getBlockModelRenderer().renderModelBrightnessColor(pumpkin, 0.5f, 255, 255, 255);
     }
 
     @OnlyIn(Dist.CLIENT)
     public void itsSnowyHere() {
         IBakedModel pumpkin = Minecraft.getInstance().getBlockRendererDispatcher().getModelForState(Blocks.TALL_GRASS.getDefaultState());
-        GlStateManager.rotatef(90, 0, -1, 0);
-        GlStateManager.translatef(0.08f, 0.485f, -0.1f);
-        GlStateManager.scalef(2 / 16f, 2 / 16f, 2 / 16f);
+        RenderSystem.rotatef(90, 0, -1, 0);
+        RenderSystem.translatef(0.08f, 0.485f, -0.1f);
+        RenderSystem.scalef(2 / 16f, 2 / 16f, 2 / 16f);
 
-        Minecraft.getInstance().getBlockRendererDispatcher().getBlockModelRenderer().renderModelBrightnessColor(pumpkin, 0.5f, 255, 255, 255);
-        GlStateManager.translatef(-0.08f * 28, 0, 0);
-        Minecraft.getInstance().getBlockRendererDispatcher().getBlockModelRenderer().renderModelBrightnessColor(pumpkin, 0.5f, 255, 255, 255);
-    }
-
-    @Override
-    public boolean shouldCombineTextures() {
-        return false;
+        //Minecraft.getInstance().getBlockRendererDispatcher().getBlockModelRenderer().renderModelBrightnessColor(pumpkin, 0.5f, 255, 255, 255);
+        RenderSystem.translatef(-0.08f * 28, 0, 0);
+        //Minecraft.getInstance().getBlockRendererDispatcher().getBlockModelRenderer().renderModelBrightnessColor(pumpkin, 0.5f, 255, 255, 255);
     }
 
 }

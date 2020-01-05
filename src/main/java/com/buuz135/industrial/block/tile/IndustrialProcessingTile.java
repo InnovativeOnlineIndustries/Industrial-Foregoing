@@ -6,6 +6,7 @@ import com.hrznstudio.titanium.block.tile.TileMachine;
 import com.hrznstudio.titanium.block.tile.progress.PosProgressBar;
 import com.hrznstudio.titanium.client.gui.addon.EnergyBarGuiAddon;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.util.ActionResultType;
 import net.minecraft.util.Direction;
 import net.minecraft.util.Hand;
 
@@ -33,10 +34,11 @@ public abstract class IndustrialProcessingTile extends TileMachine {
     }
 
     @Override
-    public boolean onActivated(PlayerEntity playerIn, Hand hand, Direction facing, double hitX, double hitY, double hitZ) {
-        if (super.onActivated(playerIn, hand, facing, hitX, hitY, hitZ)) return true;
+    public ActionResultType onActivated(PlayerEntity playerIn, Hand hand, Direction facing, double hitX, double hitY, double hitZ) {
+        if (super.onActivated(playerIn, hand, facing, hitX, hitY, hitZ) == ActionResultType.SUCCESS)
+            return ActionResultType.SUCCESS;
         openGui(playerIn);
-        return true;
+        return ActionResultType.PASS;
     }
 
     public int getMaxProgress() {

@@ -33,7 +33,7 @@ public class FluidUtils {
     public static int getFluidColor(FluidStack stack) {
         int color = -1;
         if (stack != null && stack.getFluid() != null) {
-            color = colorCache.getOrDefault(stack.getFluid().getAttributes().getStill(stack), stack.getFluid().getAttributes().getColor(stack) != 0xffffffff ? stack.getFluid().getAttributes().getColor(stack) : ColorUtils.getColorFrom(stack.getFluid().getAttributes().getStill(stack)));
+            color = colorCache.getOrDefault(stack.getFluid().getAttributes().getStillTexture(stack), stack.getFluid().getAttributes().getColor(stack) != 0xffffffff ? stack.getFluid().getAttributes().getColor(stack) : ColorUtils.getColorFrom(stack.getFluid().getAttributes().getStillTexture(stack)));
             if (!colorCache.containsKey(stack.getFluid())) colorCache.put(stack.getFluid(), color);
         }
         return color;
