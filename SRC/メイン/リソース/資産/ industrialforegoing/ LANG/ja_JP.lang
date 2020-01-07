@@ -207,7 +207,7 @@ tile.industrialforegoing.crop_sower.name=植物植え付け機
 tile.industrialforegoing.crop_recolector.name=植物採集機
 tile.industrialforegoing.crop_enrich_material_injector.name=植物肥料散布機
 tile.industrialforegoing.black_hole_unit.name=ブラックホールユニット
-tile.industrialforegoing.water_condensator.name=水分凝結機
+tile.industrialforegoing.water_condensator.name=水収集機
 tile.industrialforegoing.water_resources_collector.name=水産魚釣り機
 tile.industrialforegoing.animal_resource_harvester.name=動物収穫機
 tile.industrialforegoing.mob_slaughter_factory.name=モブ食肉処理装置
@@ -253,7 +253,7 @@ tile.industrialforegoing.froster.name=製氷機
 tile.industrialforegoing.ore_washer.name=鉱石洗浄装置
 tile.industrialforegoing.ore_fermenter.name=発酵装置
 tile.industrialforegoing.ore_sieve.name=流体ふるい分け機
-tile.industrialforegoing.pitiful_fuel_generator.name=しょぼい燃料発電機
+tile.industrialforegoing.pitiful_fuel_generator.name=貧弱な燃料発電機
 
 tile.essence.name=エッセンス
 tile.milk.name=牛乳
