@@ -3,9 +3,9 @@ package com.buuz135.industrial.block.resourceproduction.tile;
 import com.buuz135.industrial.block.tile.IndustrialProcessingTile;
 import com.buuz135.industrial.module.ModuleResourceProduction;
 import com.hrznstudio.titanium.annotation.Save;
-import com.hrznstudio.titanium.block.tile.fluid.PosFluidTank;
-import com.hrznstudio.titanium.block.tile.fluid.SidedFluidTank;
-import com.hrznstudio.titanium.block.tile.inventory.SidedInvHandler;
+import com.hrznstudio.titanium.component.fluid.FluidTankComponent;
+import com.hrznstudio.titanium.component.fluid.SidedFluidTankComponent;
+import com.hrznstudio.titanium.component.inventory.SidedInventoryComponent;
 import com.hrznstudio.titanium.util.ItemHandlerUtil;
 import net.minecraft.fluid.Fluids;
 import net.minecraft.item.DyeColor;
@@ -14,34 +14,36 @@ import net.minecraftforge.common.Tags;
 import net.minecraftforge.fluids.capability.IFluidHandler;
 import net.minecraftforge.items.ItemHandlerHelper;
 
-public class SporesRecreatorTile extends IndustrialProcessingTile {
+import javax.annotation.Nonnull;
+
+public class SporesRecreatorTile extends IndustrialProcessingTile<SporesRecreatorTile> {
 
     @Save
-    private SidedFluidTank tank;
+    private SidedFluidTankComponent<SporesRecreatorTile> tank;
     @Save
-    private SidedInvHandler input;
+    private SidedInventoryComponent<SporesRecreatorTile> input;
     @Save
-    private SidedInvHandler output;
+    private SidedInventoryComponent<SporesRecreatorTile> output;
 
     public SporesRecreatorTile() {
         super(ModuleResourceProduction.SPORES_RECREATOR, 79, 40);
-        addTank(tank = (SidedFluidTank) new SidedFluidTank("water", 1000, 31, 20, 0).
+        addTank(tank = (SidedFluidTankComponent<SporesRecreatorTile>) new SidedFluidTankComponent<SporesRecreatorTile>("water", 1000, 31, 20, 0).
                 setColor(DyeColor.CYAN).
-                setTankAction(PosFluidTank.Action.FILL).
-                setTile(this).
+                setTankAction(FluidTankComponent.Action.FILL).
+                setComponentHarness(this).
                 setValidator(fluidStack -> fluidStack.getFluid().isEquivalentTo(Fluids.WATER))
         );
-        addInventory(input = (SidedInvHandler) new SidedInvHandler("input", 53, 22, 3, 1)
+        addInventory(input = (SidedInventoryComponent<SporesRecreatorTile>) new SidedInventoryComponent<SporesRecreatorTile>("input", 53, 22, 3, 1)
                 .setColor(DyeColor.BLUE)
                 .setRange(1, 3)
-                .setTile(this)
+                .setComponentHarness(this)
                 .setInputFilter((stack, integer) -> stack.getItem().isIn(Tags.Items.MUSHROOMS))
                 .setOutputFilter((stack, integer) -> false)
         );
-        addInventory(output = (SidedInvHandler) new SidedInvHandler("output", 110, 22, 9, 2)
+        addInventory(output = (SidedInventoryComponent<SporesRecreatorTile>) new SidedInventoryComponent<SporesRecreatorTile>("output", 110, 22, 9, 2)
                 .setColor(DyeColor.ORANGE)
                 .setRange(3, 3)
-                .setTile(this)
+                .setComponentHarness(this)
                 .setInputFilter((stack, integer) -> false)
         );
     }
@@ -64,5 +66,11 @@ public class SporesRecreatorTile extends IndustrialProcessingTile {
     @Override
     protected int getTickPower() {
         return 40;
+    }
+
+    @Nonnull
+    @Override
+    public SporesRecreatorTile getSelf() {
+        return this;
     }
 }

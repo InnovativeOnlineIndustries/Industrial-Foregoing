@@ -1,11 +1,12 @@
 package com.buuz135.industrial.block.tile;
 
-import com.hrznstudio.titanium.block.BlockTileBase;
-import com.hrznstudio.titanium.block.tile.TileMachine;
+import com.hrznstudio.titanium.block.BasicTileBlock;
+import com.hrznstudio.titanium.block.tile.MachineTile;
 
-public class IndustrialMachineTile extends TileMachine {
+public abstract class IndustrialMachineTile<T extends IndustrialMachineTile<T>> extends MachineTile<T> {
 
-    public IndustrialMachineTile(BlockTileBase blockTileBase) {
-        super(blockTileBase);
+    public IndustrialMachineTile(BasicTileBlock<T> basicTileBlock) {
+        super(basicTileBlock);
     }
+
 }

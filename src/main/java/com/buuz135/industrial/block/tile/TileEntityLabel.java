@@ -22,13 +22,14 @@
 package com.buuz135.industrial.block.tile;
 
 
-import com.hrznstudio.titanium.block.tile.TileBase;
+import com.hrznstudio.titanium.block.tile.ActiveTile;
 import net.minecraft.nbt.CompoundNBT;
 
+import javax.annotation.Nonnull;
 import java.text.DecimalFormat;
 import java.util.function.Function;
 
-public class TileEntityLabel extends TileBase {
+public class TileEntityLabel extends ActiveTile<TileEntityLabel> {
 
     private static DecimalFormat formatterWithUnits = new DecimalFormat("####0.#");
     private FormatType formatType = FormatType.STACKS;
@@ -74,6 +75,12 @@ public class TileEntityLabel extends TileBase {
         compound = super.write(compound);
         compound.putString("Format", formatType.name());
         return compound;
+    }
+
+    @Nonnull
+    @Override
+    public TileEntityLabel getSelf() {
+        return null;
     }
 
     public enum FormatType {

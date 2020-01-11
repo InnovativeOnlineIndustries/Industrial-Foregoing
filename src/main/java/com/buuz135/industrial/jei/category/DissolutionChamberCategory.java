@@ -3,10 +3,10 @@ package com.buuz135.industrial.jei.category;
 import com.buuz135.industrial.block.core.tile.DissolutionChamberTile;
 import com.buuz135.industrial.recipe.DissolutionChamberRecipe;
 import com.hrznstudio.titanium.api.client.AssetTypes;
-import com.hrznstudio.titanium.client.gui.addon.EnergyBarGuiAddon;
-import com.hrznstudio.titanium.client.gui.addon.SlotsGuiAddon;
-import com.hrznstudio.titanium.client.gui.asset.DefaultAssetProvider;
-import com.hrznstudio.titanium.client.gui.asset.IAssetProvider;
+import com.hrznstudio.titanium.client.screen.addon.EnergyBarScreenAddon;
+import com.hrznstudio.titanium.client.screen.addon.SlotsScreenAddon;
+import com.hrznstudio.titanium.client.screen.asset.DefaultAssetProvider;
+import com.hrznstudio.titanium.client.screen.asset.IAssetProvider;
 import com.hrznstudio.titanium.util.AssetUtil;
 import mezz.jei.api.constants.VanillaTypes;
 import mezz.jei.api.gui.IRecipeLayout;
@@ -95,16 +95,16 @@ public class DissolutionChamberCategory implements IRecipeCategory<DissolutionCh
 
     @Override
     public void draw(DissolutionChamberRecipe recipe, double mouseX, double mouseY) {
-        EnergyBarGuiAddon.drawBackground(Minecraft.getInstance().currentScreen, DefaultAssetProvider.DEFAULT_PROVIDER, 0, 12, 0, 0);
-        SlotsGuiAddon.drawAsset(Minecraft.getInstance().currentScreen, DefaultAssetProvider.DEFAULT_PROVIDER, 24, 11, 0, 0, 8, integer -> DissolutionChamberTile.getSlotPos(integer), true, DyeColor.LIGHT_BLUE.getFireworkColor());
-        SlotsGuiAddon.drawAsset(Minecraft.getInstance().currentScreen, DefaultAssetProvider.DEFAULT_PROVIDER, 119, 16, 0, 0, 3, integer -> Pair.of(18 * (integer % 1), 18 * (integer / 1)), true, DyeColor.ORANGE.getFireworkColor());
+        EnergyBarScreenAddon.drawBackground(Minecraft.getInstance().currentScreen, DefaultAssetProvider.DEFAULT_PROVIDER, 0, 12, 0, 0);
+        SlotsScreenAddon.drawAsset(Minecraft.getInstance().currentScreen, DefaultAssetProvider.DEFAULT_PROVIDER, 24, 11, 0, 0, 8, integer -> DissolutionChamberTile.getSlotPos(integer), true, DyeColor.LIGHT_BLUE.getFireworkColor());
+        SlotsScreenAddon.drawAsset(Minecraft.getInstance().currentScreen, DefaultAssetProvider.DEFAULT_PROVIDER, 119, 16, 0, 0, 3, integer -> Pair.of(18 * (integer % 1), 18 * (integer / 1)), true, DyeColor.ORANGE.getFireworkColor());
         AssetUtil.drawAsset(Minecraft.getInstance().currentScreen, DefaultAssetProvider.DEFAULT_PROVIDER.getAsset(AssetTypes.TANK_SMALL), 33 + 12, 32);
         AssetUtil.drawAsset(Minecraft.getInstance().currentScreen, DefaultAssetProvider.DEFAULT_PROVIDER.getAsset(AssetTypes.TANK_NORMAL), 139, 14);
 
         AssetUtil.drawAsset(Minecraft.getInstance().currentScreen, IAssetProvider.getAsset(DefaultAssetProvider.DEFAULT_PROVIDER, AssetTypes.PROGRESS_BAR_BACKGROUND_HORIZONTAL), 92, 41 - 8);
 
         int consumed = recipe.processingTime * 60;
-        EnergyBarGuiAddon.drawForeground(Minecraft.getInstance().currentScreen, DefaultAssetProvider.DEFAULT_PROVIDER, 0, 12, 0, 0, consumed, (int) Math.max(50000, Math.ceil(consumed)));
+        EnergyBarScreenAddon.drawForeground(Minecraft.getInstance().currentScreen, DefaultAssetProvider.DEFAULT_PROVIDER, 0, 12, 0, 0, consumed, (int) Math.max(50000, Math.ceil(consumed)));
 
     }
 
@@ -113,7 +113,7 @@ public class DissolutionChamberCategory implements IRecipeCategory<DissolutionCh
         Rectangle rec = DefaultAssetProvider.DEFAULT_PROVIDER.getAsset(AssetTypes.ENERGY_BACKGROUND).getArea();
         if (new Rectangle(0, 12, rec.width, rec.height).contains(mouseX, mouseY)) {
             int consumed = recipe.processingTime * 60;
-            return EnergyBarGuiAddon.getTooltip(consumed, (int) Math.max(50000, Math.ceil(consumed)));
+            return EnergyBarScreenAddon.getTooltip(consumed, (int) Math.max(50000, Math.ceil(consumed)));
         }
         return new ArrayList<>();
     }

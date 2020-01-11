@@ -2,28 +2,28 @@ package com.buuz135.industrial.block.tile;
 
 import com.buuz135.industrial.proxy.client.IndustrialAssetProvider;
 import com.hrznstudio.titanium.annotation.Save;
-import com.hrznstudio.titanium.block.BlockTileBase;
-import com.hrznstudio.titanium.block.tile.TileMachine;
-import com.hrznstudio.titanium.block.tile.progress.PosProgressBar;
-import com.hrznstudio.titanium.client.gui.addon.EnergyBarGuiAddon;
-import com.hrznstudio.titanium.client.gui.asset.IAssetProvider;
+import com.hrznstudio.titanium.block.BasicTileBlock;
+import com.hrznstudio.titanium.block.tile.MachineTile;
+import com.hrznstudio.titanium.client.screen.addon.EnergyBarScreenAddon;
+import com.hrznstudio.titanium.client.screen.asset.IAssetProvider;
+import com.hrznstudio.titanium.component.progress.ProgressBarComponent;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.DyeColor;
 import net.minecraft.util.ActionResultType;
 import net.minecraft.util.Direction;
 import net.minecraft.util.Hand;
 
-public abstract class IndustrialWorkingTile extends TileMachine {
+public abstract class IndustrialWorkingTile<T extends IndustrialWorkingTile<T>> extends MachineTile<T> {
 
     @Save
-    private PosProgressBar workingBar;
+    private ProgressBarComponent<T> workingBar;
 
-    public IndustrialWorkingTile(BlockTileBase blockTileBase) {
-        super(blockTileBase);
-        this.addGuiAddonFactory(() -> new EnergyBarGuiAddon(10, 20, getEnergyStorage()));
-        this.addProgressBar(workingBar = new PosProgressBar(30, 20, 0, getMaxProgress())
-                .setTile(this)
-                .setBarDirection(PosProgressBar.BarDirection.VERTICAL_UP)
+    public IndustrialWorkingTile(BasicTileBlock<T> basicTileBlock) {
+        super(basicTileBlock);
+        this.addGuiAddonFactory(() -> new EnergyBarScreenAddon(10, 20, getEnergyStorage()));
+        this.addProgressBar(workingBar = new ProgressBarComponent<T>(30, 20, 0, getMaxProgress())
+                .setComponentHarness(this.getSelf())
+                .setBarDirection(ProgressBarComponent.BarDirection.VERTICAL_UP)
                 .setIncreaseType(false)
                 .setOnFinishWork(() -> {
                     if (isServer()) {

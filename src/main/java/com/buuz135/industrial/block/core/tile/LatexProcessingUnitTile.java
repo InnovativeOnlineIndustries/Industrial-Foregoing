@@ -4,40 +4,42 @@ import com.buuz135.industrial.block.core.LatexProcessingUnitBlock;
 import com.buuz135.industrial.block.tile.IndustrialProcessingTile;
 import com.buuz135.industrial.module.ModuleCore;
 import com.hrznstudio.titanium.annotation.Save;
-import com.hrznstudio.titanium.block.tile.fluid.SidedFluidTank;
-import com.hrznstudio.titanium.block.tile.inventory.SidedInvHandler;
+import com.hrznstudio.titanium.component.fluid.SidedFluidTankComponent;
+import com.hrznstudio.titanium.component.inventory.SidedInventoryComponent;
 import net.minecraft.fluid.Fluids;
 import net.minecraft.item.DyeColor;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.fluids.capability.IFluidHandler;
 import net.minecraftforge.items.ItemHandlerHelper;
 
-public class LatexProcessingUnitTile extends IndustrialProcessingTile {
+import javax.annotation.Nonnull;
+
+public class LatexProcessingUnitTile extends IndustrialProcessingTile<LatexProcessingUnitTile> {
 
     private static int AMOUNT_LATEX = 100;
     private static int AMOUNT_WATER = 500;
 
     @Save
-    private SidedFluidTank latex;
+    private SidedFluidTankComponent<LatexProcessingUnitTile> latex;
     @Save
-    private SidedFluidTank water;
+    private SidedFluidTankComponent<LatexProcessingUnitTile> water;
     @Save
-    private SidedInvHandler output;
+    private SidedInventoryComponent<LatexProcessingUnitTile> output;
 
     public LatexProcessingUnitTile() {
         super(ModuleCore.LATEX_PROCESSING, 48 + 25, 40);
-        this.addTank(latex = (SidedFluidTank) new SidedFluidTank("latex", 16000, 29, 20, 0).
+        this.addTank(latex = (SidedFluidTankComponent<LatexProcessingUnitTile>) new SidedFluidTankComponent<LatexProcessingUnitTile>("latex", 16000, 29, 20, 0).
                 setColor(DyeColor.LIGHT_GRAY).
-                setTile(this).
+                setComponentHarness(this).
                 setValidator(fluidStack -> fluidStack.getFluid().isEquivalentTo(ModuleCore.LATEX.getSourceFluid())));
-        this.addTank(water = (SidedFluidTank) new SidedFluidTank("water", 16000, 30 + 18, 20, 1).
+        this.addTank(water = (SidedFluidTankComponent<LatexProcessingUnitTile>) new SidedFluidTankComponent<LatexProcessingUnitTile>("water", 16000, 30 + 18, 20, 1).
                 setColor(DyeColor.BLUE).
-                setTile(this).
+                setComponentHarness(this).
                 setValidator(fluidStack -> fluidStack.getFluid().isEquivalentTo(Fluids.WATER)));
-        this.addInventory(output = (SidedInvHandler) new SidedInvHandler("output", 70 + 34, 22, 9, 2).
+        this.addInventory(output = (SidedInventoryComponent<LatexProcessingUnitTile>) new SidedInventoryComponent<LatexProcessingUnitTile>("output", 70 + 34, 22, 9, 2).
                 setColor(DyeColor.ORANGE).
                 setRange(3, 3).
-                setTile(this));
+                setComponentHarness(this));
     }
 
     @Override
@@ -57,5 +59,11 @@ public class LatexProcessingUnitTile extends IndustrialProcessingTile {
     @Override
     protected int getTickPower() {
         return LatexProcessingUnitBlock.POWER_CONSUMED_EVERY_TICK;
+    }
+
+    @Nonnull
+    @Override
+    public LatexProcessingUnitTile getSelf() {
+        return this;
     }
 }

@@ -1,8 +1,8 @@
 package com.buuz135.industrial.block;
 
 import com.hrznstudio.titanium.api.IFactory;
-import com.hrznstudio.titanium.block.BlockRotation;
-import com.hrznstudio.titanium.block.tile.TileBase;
+import com.hrznstudio.titanium.block.RotatableBlock;
+import com.hrznstudio.titanium.block.tile.BasicTile;
 import net.minecraft.block.Block;
 import net.minecraft.item.BlockItem;
 import net.minecraft.item.ItemGroup;
@@ -11,7 +11,7 @@ import net.minecraft.util.text.TranslationTextComponent;
 
 import javax.annotation.Nullable;
 
-public abstract class IndustrialBlock<T extends TileBase> extends BlockRotation<T> {
+public abstract class IndustrialBlock<T extends BasicTile<T>> extends RotatableBlock<T> {
 
     public IndustrialBlock(String name, Properties properties, Class<T> tileClass, ItemGroup group) {
         super(name, properties, tileClass);

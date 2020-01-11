@@ -4,9 +4,9 @@ import com.buuz135.industrial.block.tile.IndustrialProcessingTile;
 import com.buuz135.industrial.module.ModuleCore;
 import com.buuz135.industrial.module.ModuleResourceProduction;
 import com.hrznstudio.titanium.annotation.Save;
-import com.hrznstudio.titanium.block.tile.fluid.PosFluidTank;
-import com.hrznstudio.titanium.block.tile.fluid.SidedFluidTank;
-import com.hrznstudio.titanium.block.tile.inventory.SidedInvHandler;
+import com.hrznstudio.titanium.component.fluid.FluidTankComponent;
+import com.hrznstudio.titanium.component.fluid.SidedFluidTankComponent;
+import com.hrznstudio.titanium.component.inventory.SidedInventoryComponent;
 import com.hrznstudio.titanium.util.RecipeUtil;
 import net.minecraft.item.DyeColor;
 import net.minecraft.item.ItemStack;
@@ -17,35 +17,36 @@ import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.capability.IFluidHandler;
 import net.minecraftforge.items.ItemHandlerHelper;
 
+import javax.annotation.Nonnull;
 import java.util.Collection;
 
-public class ResourcefulFurnaceTile extends IndustrialProcessingTile {
+public class ResourcefulFurnaceTile extends IndustrialProcessingTile<ResourcefulFurnaceTile> {
 
     @Save
-    private SidedInvHandler input;
+    private SidedInventoryComponent<ResourcefulFurnaceTile> input;
     @Save
-    private SidedInvHandler output;
+    private SidedInventoryComponent<ResourcefulFurnaceTile> output;
     @Save
-    private SidedFluidTank tank;
+    private SidedFluidTankComponent<ResourcefulFurnaceTile> tank;
 
     private FurnaceRecipe[] recipes;
 
     public ResourcefulFurnaceTile() {
         super(ModuleResourceProduction.RESOURCEFUL_FURNACE, 74, 22 + 18);
-        addInventory(this.input = (SidedInvHandler) new SidedInvHandler("input", 44, 22, 3, 0).
+        addInventory(this.input = (SidedInventoryComponent<ResourcefulFurnaceTile>) new SidedInventoryComponent<ResourcefulFurnaceTile>("input", 44, 22, 3, 0).
                 setColor(DyeColor.BLUE).
                 setSlotLimit(1).
                 setRange(1, 3).
                 setOnSlotChanged((itemStack, integer) -> {
                     checkForRecipe(integer);
                 }));
-        addInventory(this.output = (SidedInvHandler) new SidedInvHandler("output", 110, 22, 3, 1).
+        addInventory(this.output = (SidedInventoryComponent<ResourcefulFurnaceTile>) new SidedInventoryComponent<ResourcefulFurnaceTile>("output", 110, 22, 3, 1).
                 setColor(DyeColor.ORANGE).
                 setInputFilter((itemStack, integer) -> false).
                 setRange(1, 3));
-        addTank(this.tank = (SidedFluidTank) new SidedFluidTank("essence", 8000, 132, 20, 2).
+        addTank(this.tank = (SidedFluidTankComponent<ResourcefulFurnaceTile>) new SidedFluidTankComponent<ResourcefulFurnaceTile>("essence", 8000, 132, 20, 2).
                 setColor(DyeColor.LIME).
-                setTankAction(PosFluidTank.Action.DRAIN));
+                setTankAction(FluidTankComponent.Action.DRAIN));
         this.recipes = new FurnaceRecipe[3];
     }
 
@@ -93,4 +94,9 @@ public class ResourcefulFurnaceTile extends IndustrialProcessingTile {
     }
 
 
+    @Nonnull
+    @Override
+    public ResourcefulFurnaceTile getSelf() {
+        return this;
+    }
 }

@@ -5,28 +5,32 @@ import com.buuz135.industrial.block.tile.RangeManager;
 import com.buuz135.industrial.item.RangeAddonItem;
 import com.buuz135.industrial.module.ModuleAgricultureHusbandry;
 import com.hrznstudio.titanium.annotation.Save;
+import com.hrznstudio.titanium.api.augment.IAugment;
 import com.hrznstudio.titanium.api.filter.FilterSlot;
-import com.hrznstudio.titanium.block.tile.inventory.SidedInvHandler;
-import com.hrznstudio.titanium.filter.ItemstackFilter;
+import com.hrznstudio.titanium.component.inventory.SidedInventoryComponent;
+import com.hrznstudio.titanium.filter.ItemStackFilter;
 import net.minecraft.block.BushBlock;
 import net.minecraft.item.BlockItem;
 import net.minecraft.item.DyeColor;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.Direction;
 import net.minecraft.util.math.BlockPos;
 import net.minecraftforge.common.IPlantable;
 
-public class PlantSowerTile extends IndustrialAreaWorkingTile {
+import javax.annotation.Nonnull;
+
+public class PlantSowerTile extends IndustrialAreaWorkingTile<PlantSowerTile> {
 
     public static DyeColor[] COLORS = new DyeColor[]{DyeColor.RED, DyeColor.YELLOW, DyeColor.LIME, DyeColor.CYAN, DyeColor.WHITE, DyeColor.BLUE, DyeColor.PURPLE, DyeColor.MAGENTA, DyeColor.BLACK};
 
     @Save
-    private ItemstackFilter filter;
+    private ItemStackFilter filter;
     @Save
-    private SidedInvHandler input;
+    private SidedInventoryComponent<PlantSowerTile> input;
 
     public PlantSowerTile() {
         super(ModuleAgricultureHusbandry.PLANT_SOWER, RangeManager.RangeType.TOP_UP);
-        addFilter(this.filter = new ItemstackFilter("filter", 9) {
+        addFilter(this.filter = new ItemStackFilter("filter", 9) {
             @Override
             public void onContentChanged() {
                 super.onContentChanged();
@@ -42,11 +46,11 @@ public class PlantSowerTile extends IndustrialAreaWorkingTile {
                 ++pos;
             }
         }
-        addInventory(this.input = (SidedInvHandler) new SidedInvHandler("input", 54 + 18 * 3, 22, 9, 0).
+        addInventory(this.input = (SidedInventoryComponent<PlantSowerTile>) new SidedInventoryComponent<PlantSowerTile>("input", 54 + 18 * 3, 22, 9, 0).
                 setColor(DyeColor.CYAN).
                 setInputFilter((itemStack, integer) -> itemStack.getItem() instanceof BlockItem && ((BlockItem) itemStack.getItem()).getBlock() instanceof IPlantable).
                 setRange(3, 3).
-                setTile(this));
+                setComponentHarness(this));
     }
 
     @Override
@@ -62,9 +66,9 @@ public class PlantSowerTile extends IndustrialAreaWorkingTile {
                     break;
                 }
             }
-            if (!stack.isEmpty() && stack.getItem() instanceof BlockItem && ((BlockItem) stack.getItem()).getBlock() instanceof BushBlock) {
+            if (!stack.isEmpty() && stack.getItem() instanceof BlockItem && ((BlockItem) stack.getItem()).getBlock() instanceof BushBlock && stack.getItem() instanceof IPlantable) {
                 BushBlock block = (BushBlock) ((BlockItem) stack.getItem()).getBlock();
-                if (block.isValidPosition(this.world.getBlockState(pos), world, pos)) {
+                if (block.canSustainPlant(this.world.getBlockState(pos), world, pos, Direction.UP, (IPlantable) stack.getItem())) {
                     if (this.world.setBlockState(pos, block.getPlant(world, pos))) {
                         stack.shrink(1);
                         increasePointer();
@@ -78,7 +82,7 @@ public class PlantSowerTile extends IndustrialAreaWorkingTile {
     }
 
     private int getFilteredSlot(BlockPos pos) {
-        int radius = hasAugmentInstalled(RangeAddonItem.RANGE) ? (int) getInstalledAugments(RangeAddonItem.RANGE).get(0).getAugmentRatio() + 1 : 0;
+        int radius = hasAugmentInstalled(RangeAddonItem.RANGE) ? (int) ((IAugment) getInstalledAugments(RangeAddonItem.RANGE).get(0)).getAugmentRatio() + 1 : 0;
         if (radius == 0) {
             for (int i = 0; i < input.getSlots(); ++i) {
                 if (!input.getStackInSlot(i).isEmpty()) {
@@ -94,5 +98,11 @@ public class PlantSowerTile extends IndustrialAreaWorkingTile {
     @Override
     public int getMaxProgress() {
         return 40;
+    }
+
+    @Nonnull
+    @Override
+    public PlantSowerTile getSelf() {
+        return this;
     }
 }

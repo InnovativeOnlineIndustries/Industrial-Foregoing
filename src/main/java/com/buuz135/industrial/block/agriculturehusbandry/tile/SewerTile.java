@@ -5,33 +5,34 @@ import com.buuz135.industrial.block.tile.RangeManager;
 import com.buuz135.industrial.module.ModuleAgricultureHusbandry;
 import com.buuz135.industrial.module.ModuleCore;
 import com.hrznstudio.titanium.annotation.Save;
-import com.hrznstudio.titanium.block.tile.fluid.PosFluidTank;
-import com.hrznstudio.titanium.block.tile.fluid.SidedFluidTank;
+import com.hrznstudio.titanium.component.fluid.FluidTankComponent;
+import com.hrznstudio.titanium.component.fluid.SidedFluidTankComponent;
 import net.minecraft.entity.item.ExperienceOrbEntity;
 import net.minecraft.entity.passive.AnimalEntity;
 import net.minecraft.item.DyeColor;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.capability.IFluidHandler;
 
+import javax.annotation.Nonnull;
 import java.util.List;
 
-public class SewerTile extends IndustrialAreaWorkingTile {
+public class SewerTile extends IndustrialAreaWorkingTile<SewerTile> {
 
     @Save
-    public PosFluidTank sewage;
+    public SidedFluidTankComponent<SewerTile> sewage;
     @Save
-    public PosFluidTank essence;
+    public SidedFluidTankComponent<SewerTile> essence;
 
     public SewerTile() {
         super(ModuleAgricultureHusbandry.SEWER, RangeManager.RangeType.TOP);
-        this.addTank(sewage = new SidedFluidTank("sewage", 8000, 45, 20, 0).
+        this.addTank(sewage = (SidedFluidTankComponent<SewerTile>) new SidedFluidTankComponent<SewerTile>("sewage", 8000, 45, 20, 0).
                 setColor(DyeColor.BROWN).
-                setTankAction(PosFluidTank.Action.DRAIN).
-                setTile(this));
-        this.addTank(essence = new SidedFluidTank("essence", 8000, 66, 20, 1).
+                setTankAction(FluidTankComponent.Action.DRAIN).
+                setComponentHarness(this));
+        this.addTank(essence = (SidedFluidTankComponent<SewerTile>) new SidedFluidTankComponent<SewerTile>("essence", 8000, 66, 20, 1).
                 setColor(DyeColor.LIME).
-                setTankAction(PosFluidTank.Action.DRAIN).
-                setTile(this));
+                setTankAction(FluidTankComponent.Action.DRAIN).
+                setComponentHarness(this));
     }
 
     @Override
@@ -54,5 +55,11 @@ public class SewerTile extends IndustrialAreaWorkingTile {
             }
         }
         return new WorkAction(1, 10 * amount);
+    }
+
+    @Nonnull
+    @Override
+    public SewerTile getSelf() {
+        return this;
     }
 }

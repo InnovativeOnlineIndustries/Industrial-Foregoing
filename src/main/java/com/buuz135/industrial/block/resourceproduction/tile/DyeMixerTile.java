@@ -5,12 +5,11 @@ import com.buuz135.industrial.gui.component.ItemGuiAddon;
 import com.buuz135.industrial.module.ModuleResourceProduction;
 import com.hrznstudio.titanium.annotation.Save;
 import com.hrznstudio.titanium.api.IFactory;
-import com.hrznstudio.titanium.api.client.IGuiAddon;
-import com.hrznstudio.titanium.block.tile.button.ArrowButton;
-import com.hrznstudio.titanium.block.tile.inventory.PosInvHandler;
-import com.hrznstudio.titanium.block.tile.inventory.SidedInvHandler;
-import com.hrznstudio.titanium.block.tile.progress.PosProgressBar;
-import com.hrznstudio.titanium.client.gui.addon.ProgressBarGuiAddon;
+import com.hrznstudio.titanium.api.client.IScreenAddon;
+import com.hrznstudio.titanium.client.screen.addon.ProgressBarScreenAddon;
+import com.hrznstudio.titanium.component.button.ArrowButtonComponent;
+import com.hrznstudio.titanium.component.inventory.SidedInventoryComponent;
+import com.hrznstudio.titanium.component.progress.ProgressBarComponent;
 import com.hrznstudio.titanium.util.FacingUtil;
 import net.minecraft.item.DyeColor;
 import net.minecraft.item.DyeItem;
@@ -19,12 +18,13 @@ import net.minecraft.util.text.TextFormatting;
 import net.minecraftforge.common.Tags;
 import net.minecraftforge.items.ItemHandlerHelper;
 
+import javax.annotation.Nonnull;
 import java.text.DecimalFormat;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
-public class DyeMixerTile extends IndustrialProcessingTile {
+public class DyeMixerTile extends IndustrialProcessingTile<DyeMixerTile> {
 
     private static ColorUsage[] colorUsages = {new ColorUsage(1, 1, 1), //0
             new ColorUsage(1, 1, 1),//1
@@ -43,43 +43,43 @@ public class DyeMixerTile extends IndustrialProcessingTile {
             new ColorUsage(3, 0, 0),//14
             new ColorUsage(1, 1, 1)};//15
     @Save
-    private SidedInvHandler inputRed;
+    private SidedInventoryComponent<DyeMixerTile> inputRed;
     @Save
-    private SidedInvHandler inputGreen;
+    private SidedInventoryComponent<DyeMixerTile> inputGreen;
     @Save
-    private SidedInvHandler inputBlue;
+    private SidedInventoryComponent<DyeMixerTile> inputBlue;
     @Save
-    private PosProgressBar red;
+    private ProgressBarComponent<DyeMixerTile> red;
     @Save
-    private PosProgressBar green;
+    private ProgressBarComponent<DyeMixerTile> green;
     @Save
-    private PosProgressBar blue;
+    private ProgressBarComponent<DyeMixerTile> blue;
     @Save
-    private PosInvHandler output;
+    private SidedInventoryComponent<DyeMixerTile> output;
     @Save
     private int dye;
 
     public DyeMixerTile() {
         super(ModuleResourceProduction.DYE_MIXER, 96, 40);
-        addInventory(this.inputRed = (SidedInvHandler) new SidedInvHandler("input_red", 33, 21, 1, 0)
+        addInventory(this.inputRed = (SidedInventoryComponent<DyeMixerTile>) new SidedInventoryComponent<DyeMixerTile>("input_red", 33, 21, 1, 0)
                 .setColor(DyeColor.RED)
                 .setInputFilter((stack, integer) -> stack.getItem().isIn(Tags.Items.DYES_RED))
-                .setTile(this)
+                .setComponentHarness(this)
         );
-        addInventory(this.inputGreen = (SidedInvHandler) new SidedInvHandler("input_green", 33, 22 + 18, 1, 1)
+        addInventory(this.inputGreen = (SidedInventoryComponent<DyeMixerTile>) new SidedInventoryComponent<DyeMixerTile>("input_green", 33, 22 + 18, 1, 1)
                 .setColor(DyeColor.GREEN)
                 .setInputFilter((stack, integer) -> stack.getItem().isIn(Tags.Items.DYES_GREEN))
-                .setTile(this)
+                .setComponentHarness(this)
         );
-        addInventory(this.inputBlue = (SidedInvHandler) new SidedInvHandler("input_blue", 33, 23 + 18 * 2, 1, 2)
+        addInventory(this.inputBlue = (SidedInventoryComponent<DyeMixerTile>) new SidedInventoryComponent<DyeMixerTile>("input_blue", 33, 23 + 18 * 2, 1, 2)
                 .setColor(DyeColor.BLUE)
                 .setInputFilter((stack, integer) -> stack.getItem().isIn(Tags.Items.DYES_BLUE))
-                .setTile(this)
+                .setComponentHarness(this)
         );
-        addProgressBar(this.red = new PosProgressBar(33 + 20, 20, 300) {
+        addProgressBar(this.red = new ProgressBarComponent<DyeMixerTile>(33 + 20, 20, 300) {
             @Override
-            public List<IFactory<? extends IGuiAddon>> getGuiAddons() {
-                return Collections.singletonList(() -> new ProgressBarGuiAddon(red.getPosX(), red.getPosY(), this) {
+            public List<IFactory<? extends IScreenAddon>> getScreenAddons() {
+                return Collections.singletonList(() -> new ProgressBarScreenAddon<DyeMixerTile>(red.getPosX(), red.getPosY(), this) {
                     @Override
                     public List<String> getTooltipLines() {
                         return Arrays.asList(TextFormatting.GOLD + "Amount: " + TextFormatting.WHITE + new DecimalFormat().format(red.getProgress()) + TextFormatting.GOLD + "/" + TextFormatting.WHITE + new DecimalFormat().format(red.getMaxProgress()));
@@ -90,10 +90,10 @@ public class DyeMixerTile extends IndustrialProcessingTile {
                 .setCanIncrease(tileEntity -> false)
                 .setCanReset(tileEntity -> false)
                 .setColor(DyeColor.RED));
-        addProgressBar(this.blue = new PosProgressBar(33 + 20 + 13, 20, 300) {
+        addProgressBar(this.blue = new ProgressBarComponent<DyeMixerTile>(33 + 20 + 13, 20, 300) {
             @Override
-            public List<IFactory<? extends IGuiAddon>> getGuiAddons() {
-                return Collections.singletonList(() -> new ProgressBarGuiAddon(blue.getPosX(), blue.getPosY(), this) {
+            public List<IFactory<? extends IScreenAddon>> getScreenAddons() {
+                return Collections.singletonList(() -> new ProgressBarScreenAddon<DyeMixerTile>(blue.getPosX(), blue.getPosY(), this) {
                     @Override
                     public List<String> getTooltipLines() {
                         return Arrays.asList(TextFormatting.GOLD + "Amount: " + TextFormatting.WHITE + new DecimalFormat().format(blue.getProgress()) + TextFormatting.GOLD + "/" + TextFormatting.WHITE + new DecimalFormat().format(blue.getMaxProgress()));
@@ -104,10 +104,10 @@ public class DyeMixerTile extends IndustrialProcessingTile {
                 .setCanIncrease(tileEntity -> false)
                 .setCanReset(tileEntity -> false)
                 .setColor(DyeColor.BLUE));
-        addProgressBar(this.green = new PosProgressBar(33 + 20 + 13 * 2, 20, 300) {
+        addProgressBar(this.green = new ProgressBarComponent<DyeMixerTile>(33 + 20 + 13 * 2, 20, 300) {
             @Override
-            public List<IFactory<? extends IGuiAddon>> getGuiAddons() {
-                return Collections.singletonList(() -> new ProgressBarGuiAddon(green.getPosX(), green.getPosY(), this) {
+            public List<IFactory<? extends IScreenAddon>> getScreenAddons() {
+                return Collections.singletonList(() -> new ProgressBarScreenAddon<DyeMixerTile>(green.getPosX(), green.getPosY(), this) {
                     @Override
                     public List<String> getTooltipLines() {
                         return Arrays.asList(TextFormatting.GOLD + "Amount: " + TextFormatting.WHITE + new DecimalFormat().format(green.getProgress()) + TextFormatting.GOLD + "/" + TextFormatting.WHITE + new DecimalFormat().format(green.getMaxProgress()));
@@ -118,18 +118,18 @@ public class DyeMixerTile extends IndustrialProcessingTile {
                 .setCanIncrease(tileEntity -> false)
                 .setCanReset(tileEntity -> false)
                 .setColor(DyeColor.GREEN));
-        addInventory(this.output = new SidedInvHandler("output", 134, 20 + 38, 1, 3)
+        addInventory(this.output = (SidedInventoryComponent<DyeMixerTile>) new SidedInventoryComponent<DyeMixerTile>("output", 134, 20 + 38, 1, 3)
                 .setColor(DyeColor.ORANGE)
                 .setInputFilter((stack, integer) -> false)
-                .setTile(this)
+                .setComponentHarness(this)
         );
-        addButton(new ArrowButton(116, 22, 14, 14, FacingUtil.Sideness.LEFT).setId(1)
+        addButton(new ArrowButtonComponent(116, 22, 14, 14, FacingUtil.Sideness.LEFT).setId(1)
                 .setPredicate((playerEntity, compoundNBT) -> {
                     --dye;
                     if (dye < 0) dye = 15;
                     markForUpdate();
                 }));
-        addButton(new ArrowButton(154, 22, 14, 14, FacingUtil.Sideness.RIGHT).setId(2)
+        addButton(new ArrowButtonComponent(154, 22, 14, 14, FacingUtil.Sideness.RIGHT).setId(2)
                 .setPredicate((playerEntity, compoundNBT) -> {
                     ++dye;
                     if (dye > 15) dye = 0;
@@ -154,7 +154,7 @@ public class DyeMixerTile extends IndustrialProcessingTile {
         return red.getProgress() >= color.r && green.getProgress() >= color.g && blue.getProgress() >= color.b && ItemHandlerHelper.insertItem(output, dye, true).isEmpty();
     }
 
-    private void increaseBar(ItemStack stack, PosProgressBar bar) {
+    private void increaseBar(ItemStack stack, ProgressBarComponent bar) {
         if (bar.getProgress() + 3 <= bar.getMaxProgress() && !stack.isEmpty()) {
             stack.shrink(1);
             bar.setProgress(bar.getProgress() + 3);
@@ -180,6 +180,12 @@ public class DyeMixerTile extends IndustrialProcessingTile {
     @Override
     protected int getTickPower() {
         return 30;
+    }
+
+    @Nonnull
+    @Override
+    public DyeMixerTile getSelf() {
+        return this;
     }
 
     private static class ColorUsage {

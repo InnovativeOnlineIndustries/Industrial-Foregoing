@@ -4,9 +4,9 @@ import com.buuz135.industrial.block.tile.IndustrialProcessingTile;
 import com.buuz135.industrial.module.ModuleCore;
 import com.buuz135.industrial.recipe.DissolutionChamberRecipe;
 import com.hrznstudio.titanium.annotation.Save;
-import com.hrznstudio.titanium.block.tile.fluid.PosFluidTank;
-import com.hrznstudio.titanium.block.tile.fluid.SidedFluidTank;
-import com.hrznstudio.titanium.block.tile.inventory.SidedInvHandler;
+import com.hrznstudio.titanium.component.fluid.FluidTankComponent;
+import com.hrznstudio.titanium.component.fluid.SidedFluidTankComponent;
+import com.hrznstudio.titanium.component.inventory.SidedInventoryComponent;
 import com.hrznstudio.titanium.util.RecipeUtil;
 import net.minecraft.item.DyeColor;
 import net.minecraft.util.math.BlockPos;
@@ -15,44 +15,46 @@ import net.minecraftforge.fluids.capability.IFluidHandler;
 import net.minecraftforge.items.ItemHandlerHelper;
 import org.apache.commons.lang3.tuple.Pair;
 
-public class DissolutionChamberTile extends IndustrialProcessingTile {
+import javax.annotation.Nonnull;
+
+public class DissolutionChamberTile extends IndustrialProcessingTile<DissolutionChamberTile> {
 
     @Save
-    private SidedInvHandler input;
+    private SidedInventoryComponent<DissolutionChamberTile> input;
     @Save
-    private SidedFluidTank inputFluid;
+    private SidedFluidTankComponent<DissolutionChamberTile> inputFluid;
     @Save
-    private SidedInvHandler output;
+    private SidedInventoryComponent<DissolutionChamberTile> output;
     @Save
-    private SidedFluidTank outputFluid;
+    private SidedFluidTankComponent<DissolutionChamberTile> outputFluid;
     private DissolutionChamberRecipe currentRecipe;
 
     public DissolutionChamberTile() {
         super(ModuleCore.DISSOLUTION_CHAMBER, 102, 41);
         int slotSpacing = 22;
-        this.addInventory(input = (SidedInvHandler) new SidedInvHandler("input", 34, 19, 8, 0).
+        this.addInventory(input = (SidedInventoryComponent<DissolutionChamberTile>) new SidedInventoryComponent<DissolutionChamberTile>("input", 34, 19, 8, 0).
                 setColor(DyeColor.LIGHT_BLUE).
                 setSlotPosition(integer -> getSlotPos(integer)).
                 setSlotLimit(1).
                 setOutputFilter((stack, integer) -> false).
-                setTile(this).
+                setComponentHarness(this).
                 setOnSlotChanged((stack, integer) -> checkForRecipe()));
-        this.addTank(this.inputFluid = (SidedFluidTank) new SidedFluidTank("input_fluid", 8000, 33 + slotSpacing, 18 + slotSpacing, 1).
+        this.addTank(this.inputFluid = (SidedFluidTankComponent<DissolutionChamberTile>) new SidedFluidTankComponent<DissolutionChamberTile>("input_fluid", 8000, 33 + slotSpacing, 18 + slotSpacing, 1).
                 setColor(DyeColor.LIME).
-                setTankType(PosFluidTank.Type.SMALL).
-                setTile(this).
-                setTankAction(PosFluidTank.Action.FILL).
+                setTankType(FluidTankComponent.Type.SMALL).
+                setComponentHarness(this).
+                setTankAction(FluidTankComponent.Action.FILL).
                 setOnContentChange(() -> checkForRecipe())
         );
-        this.addInventory(this.output = (SidedInvHandler) new SidedInvHandler("output", 129, 22, 3, 2).
+        this.addInventory(this.output = (SidedInventoryComponent<DissolutionChamberTile>) new SidedInventoryComponent<DissolutionChamberTile>("output", 129, 22, 3, 2).
                 setColor(DyeColor.ORANGE).
                 setRange(1, 3).
                 setInputFilter((stack, integer) -> false).
-                setTile(this));
-        this.addTank(this.outputFluid = (SidedFluidTank) new SidedFluidTank("output_fluid", 16000, 149, 20, 3).
+                setComponentHarness(this));
+        this.addTank(this.outputFluid = (SidedFluidTankComponent<DissolutionChamberTile>) new SidedFluidTankComponent<DissolutionChamberTile>("output_fluid", 16000, 149, 20, 3).
                 setColor(DyeColor.MAGENTA).
-                setTile(this).
-                setTankAction(PosFluidTank.Action.DRAIN));
+                setComponentHarness(this).
+                setTankAction(FluidTankComponent.Action.DRAIN));
     }
 
     private void checkForRecipe() {
@@ -123,5 +125,11 @@ public class DissolutionChamberTile extends IndustrialProcessingTile {
             default:
                 return Pair.of(0, 0);
         }
+    }
+
+    @Nonnull
+    @Override
+    public DissolutionChamberTile getSelf() {
+        return this;
     }
 }

@@ -3,8 +3,8 @@ package com.buuz135.industrial.block.resourceproduction.tile;
 import com.buuz135.industrial.block.tile.IndustrialWorkingTile;
 import com.buuz135.industrial.module.ModuleResourceProduction;
 import com.hrznstudio.titanium.annotation.Save;
-import com.hrznstudio.titanium.block.tile.fluid.PosFluidTank;
-import com.hrznstudio.titanium.block.tile.fluid.SidedFluidTank;
+import com.hrznstudio.titanium.component.fluid.FluidTankComponent;
+import com.hrznstudio.titanium.component.fluid.SidedFluidTankComponent;
 import net.minecraft.fluid.Fluids;
 import net.minecraft.fluid.IFluidState;
 import net.minecraft.item.DyeColor;
@@ -12,17 +12,19 @@ import net.minecraft.util.Direction;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.capability.IFluidHandler;
 
-public class WaterCondensatorTile extends IndustrialWorkingTile {
+import javax.annotation.Nonnull;
+
+public class WaterCondensatorTile extends IndustrialWorkingTile<WaterCondensatorTile> {
 
     @Save
-    private SidedFluidTank water;
+    private SidedFluidTankComponent<WaterCondensatorTile> water;
 
     public WaterCondensatorTile() {
         super(ModuleResourceProduction.WATER_CONDENSATOR);
-        this.addTank(water = (SidedFluidTank) new SidedFluidTank("water", 16000, 30 + 13, 20, 0).
+        this.addTank(water = (SidedFluidTankComponent<WaterCondensatorTile>) new SidedFluidTankComponent<WaterCondensatorTile>("water", 16000, 30 + 13, 20, 0).
                 setColor(DyeColor.BLUE).
-                setTile(this).
-                setTankAction(PosFluidTank.Action.DRAIN).
+                setComponentHarness(this).
+                setTankAction(FluidTankComponent.Action.DRAIN).
                 setValidator(fluidStack -> fluidStack.getFluid().isEquivalentTo(Fluids.WATER)));
     }
 
@@ -56,5 +58,11 @@ public class WaterCondensatorTile extends IndustrialWorkingTile {
             }
         }
         return amount;
+    }
+
+    @Nonnull
+    @Override
+    public WaterCondensatorTile getSelf() {
+        return null;
     }
 }

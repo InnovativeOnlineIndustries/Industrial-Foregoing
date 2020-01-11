@@ -4,7 +4,7 @@ import com.buuz135.industrial.module.ModuleCore;
 import com.buuz135.industrial.module.ModuleResourceProduction;
 import com.buuz135.industrial.utils.IndustrialTags;
 import com.buuz135.industrial.utils.Reference;
-import com.hrznstudio.titanium.block.tile.fluid.PosFluidTank;
+import com.hrznstudio.titanium.component.fluid.FluidTankComponent;
 import com.hrznstudio.titanium.recipe.serializer.GenericSerializer;
 import com.hrznstudio.titanium.recipe.serializer.SerializableRecipe;
 import net.minecraft.block.Blocks;
@@ -73,7 +73,7 @@ public class DissolutionChamberRecipe extends SerializableRecipe {
         return false;
     }
 
-    public boolean matches(IItemHandler handler, PosFluidTank tank) {
+    public boolean matches(IItemHandler handler, FluidTankComponent tank) {
         if (input == null || tank == null || inputFluid == null) return false;
         List<ItemStack> handlerItems = new ArrayList<>();
         for (int i = 0; i < handler.getSlots(); i++) {

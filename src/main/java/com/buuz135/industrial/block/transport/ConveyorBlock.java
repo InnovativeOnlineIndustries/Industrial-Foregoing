@@ -28,7 +28,7 @@ import com.buuz135.industrial.utils.IndustrialTags;
 import com.hrznstudio.titanium.api.IFactory;
 import com.hrznstudio.titanium.api.IRecipeProvider;
 import com.hrznstudio.titanium.api.raytrace.DistanceRayTraceResult;
-import com.hrznstudio.titanium.block.BlockTileBase;
+import com.hrznstudio.titanium.block.BasicTileBlock;
 import com.hrznstudio.titanium.recipe.generator.TitaniumShapedRecipeBuilder;
 import com.hrznstudio.titanium.util.RayTraceUtils;
 import com.hrznstudio.titanium.util.TileUtil;
@@ -70,7 +70,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.function.Consumer;
 
-public class ConveyorBlock extends BlockTileBase<ConveyorTile> implements IWaterLoggable, IRecipeProvider {
+public class ConveyorBlock extends BasicTileBlock<ConveyorTile> implements IWaterLoggable, IRecipeProvider {
 
     public static final BooleanProperty WATERLOGGED = BlockStateProperties.WATERLOGGED;
     public static final DirectionProperty FACING = HorizontalBlock.HORIZONTAL_FACING;

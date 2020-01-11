@@ -3,22 +3,24 @@ package com.buuz135.industrial.block.generator.tile;
 import com.buuz135.industrial.block.tile.IndustrialGeneratorTile;
 import com.buuz135.industrial.module.ModuleGenerator;
 import com.hrznstudio.titanium.annotation.Save;
-import com.hrznstudio.titanium.block.tile.inventory.SidedInvHandler;
-import com.hrznstudio.titanium.block.tile.progress.PosProgressBar;
+import com.hrznstudio.titanium.component.inventory.SidedInventoryComponent;
+import com.hrznstudio.titanium.component.progress.ProgressBarComponent;
 import net.minecraft.item.DyeColor;
 import net.minecraft.tileentity.FurnaceTileEntity;
 
-public class PitifulGeneratorTile extends IndustrialGeneratorTile {
+import javax.annotation.Nonnull;
+
+public class PitifulGeneratorTile extends IndustrialGeneratorTile<PitifulGeneratorTile> {
 
     @Save
-    private SidedInvHandler fuel;
+    private SidedInventoryComponent<PitifulGeneratorTile> fuel;
 
     public PitifulGeneratorTile() {
         super(ModuleGenerator.PITIFUL_GENERATOR);
-        this.addInventory(fuel = (SidedInvHandler) new SidedInvHandler("fuel_input", 46, 22, 1, 0)
+        this.addInventory(fuel = (SidedInventoryComponent<PitifulGeneratorTile>) new SidedInventoryComponent<PitifulGeneratorTile>("fuel_input", 46, 22, 1, 0)
                 .setColor(DyeColor.ORANGE)
                 .setInputFilter((itemStack, integer) -> FurnaceTileEntity.isFuel(itemStack))
-                .setTile(this)
+                .setComponentHarness(this)
         );
     }
 
@@ -40,10 +42,10 @@ public class PitifulGeneratorTile extends IndustrialGeneratorTile {
     }
 
     @Override
-    public PosProgressBar getProgressBar() {
-        return new PosProgressBar(30, 20, 0, 100)
-                .setTile(this)
-                .setBarDirection(PosProgressBar.BarDirection.VERTICAL_UP)
+    public ProgressBarComponent<PitifulGeneratorTile> getProgressBar() {
+        return new ProgressBarComponent<PitifulGeneratorTile>(30, 20, 0, 100)
+                .setComponentHarness(this)
+                .setBarDirection(ProgressBarComponent.BarDirection.VERTICAL_UP)
                 .setColor(DyeColor.CYAN);
     }
 
@@ -60,5 +62,11 @@ public class PitifulGeneratorTile extends IndustrialGeneratorTile {
     @Override
     public boolean isSmart() {
         return false;
+    }
+
+    @Nonnull
+    @Override
+    public PitifulGeneratorTile getSelf() {
+        return null;
     }
 }

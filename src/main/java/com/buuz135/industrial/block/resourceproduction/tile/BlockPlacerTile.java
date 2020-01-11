@@ -8,18 +8,20 @@ import com.buuz135.industrial.module.ModuleResourceProduction;
 import com.buuz135.industrial.utils.IFFakePlayer;
 import com.hrznstudio.titanium.annotation.Save;
 import com.hrznstudio.titanium.api.augment.IAugment;
-import com.hrznstudio.titanium.block.tile.inventory.SidedInvHandler;
+import com.hrznstudio.titanium.component.inventory.SidedInventoryComponent;
 import net.minecraft.item.BlockItem;
 import net.minecraft.item.DyeColor;
 
-public class BlockPlacerTile extends IndustrialAreaWorkingTile {
+import javax.annotation.Nonnull;
+
+public class BlockPlacerTile extends IndustrialAreaWorkingTile<BlockPlacerTile> {
 
     @Save
-    private SidedInvHandler input;
+    private SidedInventoryComponent<BlockPlacerTile> input;
 
     public BlockPlacerTile() {
         super(ModuleResourceProduction.BLOCK_PLACER, RangeManager.RangeType.BEHIND);
-        this.addInventory(this.input = (SidedInvHandler) new SidedInvHandler("input", 54, 22, 3 * 6, 0).
+        this.addInventory(this.input = (SidedInventoryComponent<BlockPlacerTile>) new SidedInventoryComponent<BlockPlacerTile>("input", 54, 22, 3 * 6, 0).
                 setColor(DyeColor.BLUE).
                 setRange(6, 3));
     }
@@ -50,4 +52,9 @@ public class BlockPlacerTile extends IndustrialAreaWorkingTile {
         return super.canAcceptAugment(augment);
     }
 
+    @Nonnull
+    @Override
+    public BlockPlacerTile getSelf() {
+        return this;
+    }
 }

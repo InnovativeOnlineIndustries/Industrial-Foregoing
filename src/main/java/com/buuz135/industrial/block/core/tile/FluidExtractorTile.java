@@ -5,7 +5,7 @@ import com.buuz135.industrial.block.tile.RangeManager;
 import com.buuz135.industrial.module.ModuleCore;
 import com.buuz135.industrial.recipe.FluidExtractorRecipe;
 import com.hrznstudio.titanium.annotation.Save;
-import com.hrznstudio.titanium.block.tile.fluid.SidedFluidTank;
+import com.hrznstudio.titanium.component.fluid.SidedFluidTankComponent;
 import com.hrznstudio.titanium.util.RecipeUtil;
 import net.minecraft.item.DyeColor;
 import net.minecraft.util.math.BlockPos;
@@ -14,22 +14,23 @@ import net.minecraft.world.World;
 import net.minecraft.world.dimension.DimensionType;
 import net.minecraftforge.fluids.capability.IFluidHandler;
 
+import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.HashMap;
 
-public class FluidExtractorTile extends IndustrialAreaWorkingTile {
+public class FluidExtractorTile extends IndustrialAreaWorkingTile<FluidExtractorTile> {
 
     public static HashMap<DimensionType, HashMap<ChunkPos, HashMap<BlockPos, FluidExtractionProgress>>> EXTRACTION = new HashMap<>();
 
     private FluidExtractorRecipe currentRecipe;
     @Save
-    private SidedFluidTank tank;
+    private SidedFluidTankComponent<FluidExtractorTile> tank;
 
     public FluidExtractorTile() {
         super(ModuleCore.FLUID_EXTRACTOR, RangeManager.RangeType.BEHIND);
-        addTank(tank = (SidedFluidTank) new SidedFluidTank("latex", 1000, 43, 20, 0).
+        addTank(tank = (SidedFluidTankComponent<FluidExtractorTile>) new SidedFluidTankComponent<FluidExtractorTile>("latex", 1000, 43, 20, 0).
                 setColor(DyeColor.LIGHT_GRAY).
-                setTile(this).
+                setComponentHarness(this).
                 setValidator(fluidStack -> fluidStack.getFluid().isEquivalentTo(ModuleCore.LATEX.getSourceFluid()))
         );
     }
@@ -65,6 +66,12 @@ public class FluidExtractorTile extends IndustrialAreaWorkingTile {
     @Nullable
     public FluidExtractorRecipe findRecipe(World world, BlockPos pos) {
         return RecipeUtil.getRecipes(world, FluidExtractorRecipe.SERIALIZER.getRecipeType()).stream().filter(fluidExtractorRecipe -> fluidExtractorRecipe.matches(world, pos) && !fluidExtractorRecipe.defaultRecipe).findFirst().orElseGet(() -> RecipeUtil.getRecipes(world, FluidExtractorRecipe.SERIALIZER.getRecipeType()).stream().filter(fluidExtractorRecipe -> fluidExtractorRecipe.matches(world, pos)).findFirst().orElse(null));
+    }
+
+    @Nonnull
+    @Override
+    public FluidExtractorTile getSelf() {
+        return this;
     }
 
     public static class FluidExtractionProgress {
