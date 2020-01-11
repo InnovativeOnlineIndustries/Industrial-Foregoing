@@ -8,7 +8,7 @@ import com.buuz135.industrial.module.ModuleResourceProduction;
 import com.buuz135.industrial.utils.BlockUtils;
 import com.hrznstudio.titanium.annotation.Save;
 import com.hrznstudio.titanium.api.augment.IAugment;
-import com.hrznstudio.titanium.block.tile.inventory.SidedInvHandler;
+import com.hrznstudio.titanium.component.inventory.SidedInventoryComponent;
 import net.minecraft.block.Blocks;
 import net.minecraft.item.DyeColor;
 import net.minecraft.item.ItemStack;
@@ -17,14 +17,16 @@ import net.minecraft.util.Hand;
 import net.minecraftforge.common.util.FakePlayer;
 import net.minecraftforge.items.ItemHandlerHelper;
 
-public class BlockBreakerTile extends IndustrialAreaWorkingTile {
+import javax.annotation.Nonnull;
+
+public class BlockBreakerTile extends IndustrialAreaWorkingTile<BlockBreakerTile> {
 
     @Save
-    private SidedInvHandler output;
+    private SidedInventoryComponent<BlockBreakerTile> output;
 
     public BlockBreakerTile() {
         super(ModuleResourceProduction.BLOCK_BREAKER, RangeManager.RangeType.BEHIND);
-        this.addInventory(this.output = (SidedInvHandler) new SidedInvHandler("output", 54, 22, 3 * 6, 0).
+        this.addInventory(this.output = (SidedInventoryComponent<BlockBreakerTile>) new SidedInventoryComponent<BlockBreakerTile>("output", 54, 22, 3 * 6, 0).
                 setColor(DyeColor.ORANGE).
                 setRange(6, 3));
     }
@@ -59,4 +61,9 @@ public class BlockBreakerTile extends IndustrialAreaWorkingTile {
         return super.canAcceptAugment(augment);
     }
 
+    @Nonnull
+    @Override
+    public BlockBreakerTile getSelf() {
+        return this;
+    }
 }

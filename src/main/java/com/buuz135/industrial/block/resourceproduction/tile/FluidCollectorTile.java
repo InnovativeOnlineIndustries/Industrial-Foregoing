@@ -7,8 +7,8 @@ import com.buuz135.industrial.module.ModuleResourceProduction;
 import com.buuz135.industrial.utils.BlockUtils;
 import com.hrznstudio.titanium.annotation.Save;
 import com.hrznstudio.titanium.api.augment.IAugment;
-import com.hrznstudio.titanium.block.tile.fluid.PosFluidTank;
-import com.hrznstudio.titanium.block.tile.fluid.SidedFluidTank;
+import com.hrznstudio.titanium.component.fluid.FluidTankComponent;
+import com.hrznstudio.titanium.component.fluid.SidedFluidTankComponent;
 import net.minecraft.block.Blocks;
 import net.minecraft.fluid.Fluid;
 import net.minecraft.item.DyeColor;
@@ -17,17 +17,19 @@ import net.minecraftforge.fluids.FluidAttributes;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.capability.IFluidHandler;
 
-public class FluidCollectorTile extends IndustrialAreaWorkingTile {
+import javax.annotation.Nonnull;
+
+public class FluidCollectorTile extends IndustrialAreaWorkingTile<FluidCollectorTile> {
 
     @Save
-    private SidedFluidTank tank;
+    private SidedFluidTankComponent<FluidCollectorTile> tank;
 
     public FluidCollectorTile() {
         super(ModuleResourceProduction.FLUID_COLLECTOR, RangeManager.RangeType.BEHIND);
-        this.addTank(this.tank = (SidedFluidTank) new SidedFluidTank("output", 16000, 43, 20, 0)
+        this.addTank(this.tank = (SidedFluidTankComponent<FluidCollectorTile>) new SidedFluidTankComponent<FluidCollectorTile>("output", 16000, 43, 20, 0)
                 .setColor(DyeColor.ORANGE)
-                .setTankAction(PosFluidTank.Action.DRAIN)
-                .setTile(this)
+                .setTankAction(FluidTankComponent.Action.DRAIN)
+                .setComponentHarness(this)
         );
     }
 
@@ -58,4 +60,9 @@ public class FluidCollectorTile extends IndustrialAreaWorkingTile {
         return super.canAcceptAugment(augment);
     }
 
+    @Nonnull
+    @Override
+    public FluidCollectorTile getSelf() {
+        return this;
+    }
 }

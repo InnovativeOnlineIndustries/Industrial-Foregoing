@@ -4,8 +4,8 @@ import com.buuz135.industrial.block.tile.IndustrialWorkingTile;
 import com.buuz135.industrial.module.ModuleCore;
 import com.buuz135.industrial.module.ModuleResourceProduction;
 import com.hrznstudio.titanium.annotation.Save;
-import com.hrznstudio.titanium.block.tile.fluid.PosFluidTank;
-import com.hrznstudio.titanium.block.tile.fluid.SidedFluidTank;
+import com.hrznstudio.titanium.component.fluid.FluidTankComponent;
+import com.hrznstudio.titanium.component.fluid.SidedFluidTankComponent;
 import net.minecraft.entity.*;
 import net.minecraft.item.DyeColor;
 import net.minecraft.tileentity.TileEntity;
@@ -17,19 +17,20 @@ import net.minecraft.world.server.ServerChunkProvider;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.capability.IFluidHandler;
 
+import javax.annotation.Nonnull;
 import java.util.List;
 
-public class MechanicalDirtTile extends IndustrialWorkingTile {
+public class MechanicalDirtTile extends IndustrialWorkingTile<MechanicalDirtTile> {
 
     @Save
-    private SidedFluidTank meat;
+    private SidedFluidTankComponent<MechanicalDirtTile> meat;
 
     public MechanicalDirtTile() {
         super(ModuleResourceProduction.MECHANICAL_DIRT);
-        addTank(meat = (SidedFluidTank) new SidedFluidTank("meat", 4000, 43, 20, 0).
+        addTank(meat = (SidedFluidTankComponent<MechanicalDirtTile>) new SidedFluidTankComponent<MechanicalDirtTile>("meat", 4000, 43, 20, 0).
                 setColor(DyeColor.BROWN).
-                setTile(this).
-                setTankAction(PosFluidTank.Action.FILL).
+                setComponentHarness(this).
+                setTankAction(FluidTankComponent.Action.FILL).
                 setValidator(fluidStack -> fluidStack.getFluid().isEquivalentTo(ModuleCore.MEAT.getSourceFluid()))
         );
     }
@@ -71,7 +72,7 @@ public class MechanicalDirtTile extends IndustrialWorkingTile {
         return null;
     }
 
-    public SidedFluidTank getMeat() {
+    public SidedFluidTankComponent<MechanicalDirtTile> getMeat() {
         return meat;
     }
 
@@ -101,5 +102,11 @@ public class MechanicalDirtTile extends IndustrialWorkingTile {
                 }
             }
         }
+    }
+
+    @Nonnull
+    @Override
+    public MechanicalDirtTile getSelf() {
+        return this;
     }
 }

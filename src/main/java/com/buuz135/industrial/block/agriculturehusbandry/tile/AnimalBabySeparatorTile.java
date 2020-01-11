@@ -7,19 +7,20 @@ import com.buuz135.industrial.module.ModuleAgricultureHusbandry;
 import com.hrznstudio.titanium.annotation.Save;
 import com.hrznstudio.titanium.api.IFactory;
 import com.hrznstudio.titanium.api.client.AssetTypes;
-import com.hrznstudio.titanium.api.client.IGuiAddon;
-import com.hrznstudio.titanium.block.tile.button.PosButton;
-import com.hrznstudio.titanium.client.gui.addon.StateButtonAddon;
-import com.hrznstudio.titanium.client.gui.addon.StateButtonInfo;
+import com.hrznstudio.titanium.api.client.IScreenAddon;
+import com.hrznstudio.titanium.client.screen.addon.StateButtonAddon;
+import com.hrznstudio.titanium.client.screen.addon.StateButtonInfo;
+import com.hrznstudio.titanium.component.button.ButtonComponent;
 import net.minecraft.entity.passive.AnimalEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.util.math.BlockPos;
 
+import javax.annotation.Nonnull;
 import java.util.Collections;
 import java.util.List;
 
-public class AnimalBabySeparatorTile extends IndustrialAreaWorkingTile {
+public class AnimalBabySeparatorTile extends IndustrialAreaWorkingTile<AnimalBabySeparatorTile> {
 
     @Save
     private boolean movingAdults;
@@ -27,9 +28,9 @@ public class AnimalBabySeparatorTile extends IndustrialAreaWorkingTile {
     public AnimalBabySeparatorTile() {
         super(ModuleAgricultureHusbandry.ANIMAL_BABY_SEPARATOR, RangeManager.RangeType.BEHIND);
         this.movingAdults = false;
-        addButton(new PosButton(42, 20, 18, 18) {
+        addButton(new ButtonComponent(42, 20, 18, 18) {
             @Override
-            public List<IFactory<? extends IGuiAddon>> getGuiAddons() {
+            public List<IFactory<? extends IScreenAddon>> getScreenAddons() {
                 return Collections.singletonList(() -> new StateButtonAddon(this, new StateButtonInfo(0, AssetTypes.ITEM_BACKGROUND, "Moving babies"), new StateButtonInfo(1, AssetTypes.ITEM_BACKGROUND, "Moving adults")) {
                     @Override
                     public int getState() {
@@ -58,4 +59,11 @@ public class AnimalBabySeparatorTile extends IndustrialAreaWorkingTile {
         }
         return new WorkAction(1, 0);
     }
+
+    @Nonnull
+    @Override
+    public AnimalBabySeparatorTile getSelf() {
+        return this;
+    }
+
 }

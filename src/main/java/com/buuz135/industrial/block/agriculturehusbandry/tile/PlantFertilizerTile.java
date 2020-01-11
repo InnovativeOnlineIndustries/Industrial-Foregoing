@@ -5,7 +5,7 @@ import com.buuz135.industrial.block.tile.RangeManager;
 import com.buuz135.industrial.module.ModuleAgricultureHusbandry;
 import com.buuz135.industrial.module.ModuleCore;
 import com.hrznstudio.titanium.annotation.Save;
-import com.hrznstudio.titanium.block.tile.inventory.SidedInvHandler;
+import com.hrznstudio.titanium.component.inventory.SidedInventoryComponent;
 import com.hrznstudio.titanium.util.ItemHandlerUtil;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
@@ -15,19 +15,21 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.server.ServerWorld;
 
-public class PlantFertilizerTile extends IndustrialAreaWorkingTile {
+import javax.annotation.Nonnull;
+
+public class PlantFertilizerTile extends IndustrialAreaWorkingTile<PlantFertilizerTile> {
 
     @Save
-    public SidedInvHandler fertilizer;
+    public SidedInventoryComponent<PlantFertilizerTile> fertilizer;
 
     public PlantFertilizerTile() {
         super(ModuleAgricultureHusbandry.PLANT_FERTILIZER, RangeManager.RangeType.BEHIND);
-        addInventory(fertilizer = (SidedInvHandler) new SidedInvHandler("fertilizer", 50, 22, 3 * 6, 0).
+        addInventory(fertilizer = (SidedInventoryComponent<PlantFertilizerTile>) new SidedInventoryComponent<PlantFertilizerTile>("fertilizer", 50, 22, 3 * 6, 0).
                 setColor(DyeColor.BROWN).
                 setInputFilter((stack, integer) -> stack.getItem().equals(ModuleCore.FERTILIZER)).
                 setOutputFilter((stack, integer) -> false).
                 setRange(6, 3).
-                setTile(this)
+                setComponentHarness(this)
         );
     }
 
@@ -63,5 +65,11 @@ public class PlantFertilizerTile extends IndustrialAreaWorkingTile {
     @Override
     public int getMaxProgress() {
         return 50;
+    }
+
+    @Nonnull
+    @Override
+    public PlantFertilizerTile getSelf() {
+        return this;
     }
 }

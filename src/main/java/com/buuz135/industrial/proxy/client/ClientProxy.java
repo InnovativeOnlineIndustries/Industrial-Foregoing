@@ -33,8 +33,8 @@ import com.buuz135.industrial.proxy.client.event.IFWorldRenderLastEvent;
 import com.buuz135.industrial.proxy.client.render.FluidConveyorTESR;
 import com.buuz135.industrial.proxy.client.render.WorkingAreaTESR;
 import com.buuz135.industrial.utils.Reference;
-import com.hrznstudio.titanium.block.BlockBase;
-import com.hrznstudio.titanium.block.BlockTileBase;
+import com.hrznstudio.titanium.block.BasicBlock;
+import com.hrznstudio.titanium.block.BasicTileBlock;
 import com.hrznstudio.titanium.event.handler.EventManager;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.RenderType;
@@ -81,7 +81,7 @@ public class ClientProxy extends CommonProxy {
 
 
         ClientRegistry.bindTileEntityRenderer(ModuleTransport.CONVEYOR.getTileEntityType(), new FluidConveyorTESR());
-        BlockBase.BLOCKS.stream().filter(blockBase -> blockBase instanceof BlockTileBase && ((BlockTileBase) blockBase).getTileClass().isAssignableFrom(IndustrialAreaWorkingTile.class)).forEach(blockBase -> ClientRegistry.bindTileEntityRenderer(((BlockTileBase) blockBase).getTileEntityType(), new WorkingAreaTESR()));
+        BasicBlock.BLOCKS.stream().filter(blockBase -> blockBase instanceof BasicTileBlock && ((BasicTileBlock) blockBase).getTileClass().isAssignableFrom(IndustrialAreaWorkingTile.class)).forEach(blockBase -> ClientRegistry.bindTileEntityRenderer(((BasicTileBlock) blockBase).getTileEntityType(), new WorkingAreaTESR()));
         //ClientRegistry.bindTileEntityRenderer(IndustrialAreaWorkingTile.class, new WorkingAreaTESR());
         //manager.entityRenderMap.put(EntityPinkSlime.class, new RenderPinkSlime(manager));
 

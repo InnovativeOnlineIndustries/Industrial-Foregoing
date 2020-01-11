@@ -4,7 +4,7 @@ import com.buuz135.industrial.utils.Reference;
 import com.hrznstudio.titanium.api.client.GenericAssetType;
 import com.hrznstudio.titanium.api.client.IAsset;
 import com.hrznstudio.titanium.api.client.IAssetType;
-import com.hrznstudio.titanium.client.gui.asset.IAssetProvider;
+import com.hrznstudio.titanium.client.screen.asset.IAssetProvider;
 import net.minecraft.util.ResourceLocation;
 
 import javax.annotation.Nullable;

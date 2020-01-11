@@ -6,7 +6,7 @@ import com.buuz135.industrial.module.ModuleCore;
 import com.buuz135.industrial.module.ModuleTool;
 import com.buuz135.industrial.utils.Reference;
 import com.hrznstudio.titanium.annotation.MaterialReference;
-import com.hrznstudio.titanium.block.BlockBase;
+import com.hrznstudio.titanium.block.BasicBlock;
 import com.hrznstudio.titanium.recipe.generator.TitaniumRecipeProvider;
 import com.hrznstudio.titanium.recipe.generator.TitaniumShapedRecipeBuilder;
 import com.hrznstudio.titanium.recipe.generator.TitaniumShapelessRecipeBuilder;
@@ -36,7 +36,7 @@ public class IndustrialRecipeProvider extends TitaniumRecipeProvider {
 
     @Override
     public void register(Consumer<IFinishedRecipe> consumer) {
-        BlockBase.BLOCKS.stream().filter(blockBase -> blockBase.getRegistryName().getNamespace().equals(Reference.MOD_ID)).forEach(blockBase -> blockBase.registerRecipe(consumer));
+        BasicBlock.BLOCKS.stream().filter(blockBase -> blockBase.getRegistryName().getNamespace().equals(Reference.MOD_ID)).forEach(blockBase -> blockBase.registerRecipe(consumer));
         //TRANSPORT
         ConveyorUpgradeFactory.FACTORIES.forEach(conveyorUpgradeFactory -> conveyorUpgradeFactory.registerRecipe(consumer));
         //TOOL

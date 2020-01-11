@@ -29,7 +29,7 @@ import com.buuz135.industrial.gui.conveyor.ContainerConveyor;
 import com.buuz135.industrial.module.ModuleTransport;
 import com.buuz135.industrial.proxy.client.model.ConveyorModelData;
 import com.buuz135.industrial.utils.MovementUtils;
-import com.hrznstudio.titanium.block.tile.TileActive;
+import com.hrznstudio.titanium.block.tile.ActiveTile;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.item.ItemEntity;
@@ -64,7 +64,7 @@ import java.util.Map;
 
 import static com.buuz135.industrial.block.transport.ConveyorBlock.*;
 
-public class ConveyorTile extends TileActive implements IConveyorContainer, ITickableTileEntity {
+public class ConveyorTile extends ActiveTile<ConveyorTile> implements IConveyorContainer, ITickableTileEntity {
 
     private Direction facing;
     private EnumType type;
@@ -321,6 +321,12 @@ public class ConveyorTile extends TileActive implements IConveyorContainer, ITic
             markForUpdate();
             this.needsFluidSync = false;
         }
+    }
+
+    @Nonnull
+    @Override
+    public ConveyorTile getSelf() {
+        return this;
     }
 
     @Nullable

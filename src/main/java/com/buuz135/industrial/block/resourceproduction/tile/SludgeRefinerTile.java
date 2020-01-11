@@ -4,34 +4,36 @@ import com.buuz135.industrial.block.tile.IndustrialProcessingTile;
 import com.buuz135.industrial.module.ModuleResourceProduction;
 import com.buuz135.industrial.utils.IndustrialTags;
 import com.hrznstudio.titanium.annotation.Save;
-import com.hrznstudio.titanium.block.tile.fluid.PosFluidTank;
-import com.hrznstudio.titanium.block.tile.fluid.SidedFluidTank;
-import com.hrznstudio.titanium.block.tile.inventory.SidedInvHandler;
+import com.hrznstudio.titanium.component.fluid.FluidTankComponent;
+import com.hrznstudio.titanium.component.fluid.SidedFluidTankComponent;
+import com.hrznstudio.titanium.component.inventory.SidedInventoryComponent;
 import net.minecraft.item.DyeColor;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.fluids.capability.IFluidHandler;
 import net.minecraftforge.items.ItemHandlerHelper;
 
-public class SludgeRefinerTile extends IndustrialProcessingTile {
+import javax.annotation.Nonnull;
+
+public class SludgeRefinerTile extends IndustrialProcessingTile<SludgeRefinerTile> {
 
     @Save
-    private SidedFluidTank sludge;
+    private SidedFluidTankComponent<SludgeRefinerTile> sludge;
     @Save
-    private SidedInvHandler output;
+    private SidedInventoryComponent<SludgeRefinerTile> output;
 
     public SludgeRefinerTile() {
         super(ModuleResourceProduction.SLUDGE_REFINER, 53, 40);
-        addTank(sludge = (SidedFluidTank) new SidedFluidTank("sludge", 8000, 31, 20, 0)
+        addTank(sludge = (SidedFluidTankComponent<SludgeRefinerTile>) new SidedFluidTankComponent<SludgeRefinerTile>("sludge", 8000, 31, 20, 0)
                 .setColor(DyeColor.MAGENTA)
-                .setTile(this)
-                .setTankAction(PosFluidTank.Action.FILL)
+                .setComponentHarness(this)
+                .setTankAction(FluidTankComponent.Action.FILL)
         );
-        addInventory(output = (SidedInvHandler) new SidedInvHandler("output", 80, 22, 5 * 3, 1)
+        addInventory(output = (SidedInventoryComponent<SludgeRefinerTile>) new SidedInventoryComponent<SludgeRefinerTile>("output", 80, 22, 5 * 3, 1)
                 .setColor(DyeColor.ORANGE)
                 .setRange(5, 3)
                 .setInputFilter((stack, integer) -> false)
-                .setTile(this)
+                .setComponentHarness(this)
         );
     }
 
@@ -54,5 +56,11 @@ public class SludgeRefinerTile extends IndustrialProcessingTile {
     @Override
     protected int getTickPower() {
         return 20;
+    }
+
+    @Nonnull
+    @Override
+    public SludgeRefinerTile getSelf() {
+        return this;
     }
 }

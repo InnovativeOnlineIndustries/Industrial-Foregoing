@@ -6,11 +6,11 @@ import com.buuz135.industrial.utils.BlockUtils;
 import com.hrznstudio.titanium.annotation.Save;
 import com.hrznstudio.titanium.api.IFactory;
 import com.hrznstudio.titanium.api.augment.IAugment;
-import com.hrznstudio.titanium.api.client.IGuiAddon;
-import com.hrznstudio.titanium.block.BlockTileBase;
-import com.hrznstudio.titanium.block.tile.button.PosButton;
-import com.hrznstudio.titanium.client.gui.addon.StateButtonAddon;
-import com.hrznstudio.titanium.client.gui.addon.StateButtonInfo;
+import com.hrznstudio.titanium.api.client.IScreenAddon;
+import com.hrznstudio.titanium.block.BasicTileBlock;
+import com.hrznstudio.titanium.client.screen.addon.StateButtonAddon;
+import com.hrznstudio.titanium.client.screen.addon.StateButtonInfo;
+import com.hrznstudio.titanium.component.button.ButtonComponent;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.shapes.VoxelShape;
@@ -18,23 +18,23 @@ import net.minecraft.util.math.shapes.VoxelShape;
 import java.util.ArrayList;
 import java.util.List;
 
-public abstract class IndustrialAreaWorkingTile extends IndustrialWorkingTile {
+public abstract class IndustrialAreaWorkingTile<T extends IndustrialAreaWorkingTile<T>> extends IndustrialWorkingTile<T> {
 
     @Save
     private int pointer;
     @Save
     private boolean showingArea;
-    private PosButton areaButton;
+    private ButtonComponent areaButton;
     private RangeManager.RangeType type;
 
-    public IndustrialAreaWorkingTile(BlockTileBase blockTileBase, RangeManager.RangeType type) {
-        super(blockTileBase);
+    public IndustrialAreaWorkingTile(BasicTileBlock<T> basicTileBlock, RangeManager.RangeType type) {
+        super(basicTileBlock);
         this.pointer = 0;
         this.showingArea = false;
-        addButton(areaButton = new PosButton(176 - 22, 84, 14, 14) {
+        addButton(areaButton = new ButtonComponent(176 - 22, 84, 14, 14) {
             @Override
-            public List<IFactory<? extends IGuiAddon>> getGuiAddons() {
-                List<IFactory<? extends IGuiAddon>> addons = new ArrayList<>();
+            public List<IFactory<? extends IScreenAddon>> getScreenAddons() {
+                List<IFactory<? extends IScreenAddon>> addons = new ArrayList<>();
                 addons.add(() -> new StateButtonAddon(areaButton, new StateButtonInfo(0, IndustrialAssetProvider.BUTTON_SHOW_AREA, "text.industrialforegoing.button.show_area"), new StateButtonInfo(1, IndustrialAssetProvider.BUTTON_HIDE_AREA, "text.industrialforegoing.button.hide_area")) {
                     @Override
                     public int getState() {
@@ -48,7 +48,7 @@ public abstract class IndustrialAreaWorkingTile extends IndustrialWorkingTile {
     }
 
     public VoxelShape getWorkingArea() {
-        return new RangeManager(this.pos, this.getFacingDirection(), this.type).get(hasAugmentInstalled(RangeAddonItem.RANGE) ? ((int) getInstalledAugments(RangeAddonItem.RANGE).get(0).getAugmentRatio() + 1) : 0);
+        return new RangeManager(this.pos, this.getFacingDirection(), this.type).get(hasAugmentInstalled(RangeAddonItem.RANGE) ? ((int) ((IAugment) getInstalledAugments(RangeAddonItem.RANGE).get(0)).getAugmentRatio() + 1) : 0);
     }
 
     public BlockPos getPointedBlockPos() {

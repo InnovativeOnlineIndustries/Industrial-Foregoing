@@ -6,12 +6,12 @@ import com.buuz135.industrial.module.ModuleGenerator;
 import com.buuz135.industrial.utils.IndustrialTags;
 import com.hrznstudio.titanium.annotation.Save;
 import com.hrznstudio.titanium.api.IFactory;
-import com.hrznstudio.titanium.api.client.IGuiAddon;
-import com.hrznstudio.titanium.block.tile.fluid.PosFluidTank;
-import com.hrznstudio.titanium.block.tile.fluid.SidedFluidTank;
-import com.hrznstudio.titanium.block.tile.inventory.SidedInvHandler;
-import com.hrznstudio.titanium.block.tile.progress.PosProgressBar;
-import com.hrznstudio.titanium.client.gui.addon.ProgressBarGuiAddon;
+import com.hrznstudio.titanium.api.client.IScreenAddon;
+import com.hrznstudio.titanium.client.screen.addon.ProgressBarScreenAddon;
+import com.hrznstudio.titanium.component.fluid.FluidTankComponent;
+import com.hrznstudio.titanium.component.fluid.SidedFluidTankComponent;
+import com.hrznstudio.titanium.component.inventory.SidedInventoryComponent;
+import com.hrznstudio.titanium.component.progress.ProgressBarComponent;
 import net.minecraft.fluid.Fluids;
 import net.minecraft.item.DyeColor;
 import net.minecraft.item.Item;
@@ -22,49 +22,50 @@ import net.minecraftforge.common.Tags;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.capability.IFluidHandler;
 
+import javax.annotation.Nonnull;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
-public class BioReactorTile extends IndustrialWorkingTile {
+public class BioReactorTile extends IndustrialWorkingTile<BioReactorTile> {
 
     public static Tag<Item>[] VALID = new Tag[]{IndustrialTags.Items.BIOREACTOR_INPUT, Tags.Items.CROPS_CARROT, Tags.Items.CROPS_POTATO, Tags.Items.CROPS_NETHER_WART, Tags.Items.DYES,
             Tags.Items.HEADS, Tags.Items.MUSHROOMS, Tags.Items.SEEDS, IndustrialTags.Items.SAPLING};
 
     @Save
-    private SidedFluidTank biofuel;
+    private SidedFluidTankComponent<BioReactorTile> biofuel;
     @Save
-    private SidedFluidTank water;
+    private SidedFluidTankComponent<BioReactorTile> water;
     @Save
-    private SidedInvHandler input;
+    private SidedInventoryComponent<BioReactorTile> input;
     @Save
-    private PosProgressBar bar;
+    private ProgressBarComponent<BioReactorTile> bar;
 
     public BioReactorTile() {
         super(ModuleGenerator.BIOREACTOR);
-        addTank(water = (SidedFluidTank) new SidedFluidTank("water", 16000, 45, 20, 0).
+        addTank(water = (SidedFluidTankComponent<BioReactorTile>) new SidedFluidTankComponent<BioReactorTile>("water", 16000, 45, 20, 0).
                 setColor(DyeColor.CYAN).
-                setTile(this).
-                setTankAction(PosFluidTank.Action.FILL).
+                setComponentHarness(this).
+                setTankAction(FluidTankComponent.Action.FILL).
                 setValidator(fluidStack -> fluidStack.getFluid().equals(Fluids.WATER))
         );
-        addInventory(input = (SidedInvHandler) new SidedInvHandler("input", 69, 22, 9, 1).
+        addInventory(input = (SidedInventoryComponent<BioReactorTile>) new SidedInventoryComponent<BioReactorTile>("input", 69, 22, 9, 1).
                 setColor(DyeColor.BLUE).
                 setRange(3, 3).
                 setInputFilter((stack, integer) -> canInsert(integer, stack)).
                 setOutputFilter((stack, integer) -> false).
-                setTile(this)
+                setComponentHarness(this)
         );
-        addTank(biofuel = (SidedFluidTank) new SidedFluidTank("biofuel", 16000, 74 + 18 * 3, 20, 2).
+        addTank(biofuel = (SidedFluidTankComponent<BioReactorTile>) new SidedFluidTankComponent<BioReactorTile>("biofuel", 16000, 74 + 18 * 3, 20, 2).
                 setColor(DyeColor.PURPLE).
-                setTile(this).
-                setTankAction(PosFluidTank.Action.DRAIN).
+                setComponentHarness(this).
+                setTankAction(FluidTankComponent.Action.DRAIN).
                 setValidator(fluidStack -> fluidStack.getFluid().isEquivalentTo(ModuleCore.BIOFUEL.getSourceFluid()))
         );
-        addProgressBar(bar = new PosProgressBar(96 + 18 * 3, 20, 100) {
+        addProgressBar(bar = new ProgressBarComponent<BioReactorTile>(96 + 18 * 3, 20, 100) {
                     @Override
-                    public List<IFactory<? extends IGuiAddon>> getGuiAddons() {
-                        return Collections.singletonList(() -> new ProgressBarGuiAddon(bar.getPosX(), bar.getPosY(), this) {
+                    public List<IFactory<? extends IScreenAddon>> getScreenAddons() {
+                        return Collections.singletonList(() -> new ProgressBarScreenAddon<BioReactorTile>(bar.getPosX(), bar.getPosY(), this) {
                             @Override
                             public List<String> getTooltipLines() {
                                 return Arrays.asList(TextFormatting.GOLD + "Efficiency: " + TextFormatting.WHITE + (int) ((getEfficiency() / 9D) * 100) + TextFormatting.DARK_AQUA + "%");
@@ -76,7 +77,7 @@ public class BioReactorTile extends IndustrialWorkingTile {
                         setCanIncrease(tileEntity -> true).
                         setOnTickWork(() -> bar.setProgress((int) ((getEfficiency() / 9D) * 100))).
                         setCanReset(tileEntity -> false).
-                        setTile(this)
+                        setComponentHarness(this)
         );
     }
 
@@ -123,5 +124,11 @@ public class BioReactorTile extends IndustrialWorkingTile {
     @Override
     public int getMaxProgress() {
         return 200;
+    }
+
+    @Nonnull
+    @Override
+    public BioReactorTile getSelf() {
+        return this;
     }
 }

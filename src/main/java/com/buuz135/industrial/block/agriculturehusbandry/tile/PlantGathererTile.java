@@ -9,33 +9,34 @@ import com.buuz135.industrial.module.ModuleCore;
 import com.buuz135.industrial.registry.IFRegistries;
 import com.buuz135.industrial.utils.BlockUtils;
 import com.hrznstudio.titanium.annotation.Save;
-import com.hrznstudio.titanium.block.tile.fluid.SidedFluidTank;
-import com.hrznstudio.titanium.block.tile.inventory.SidedInvHandler;
+import com.hrznstudio.titanium.component.fluid.SidedFluidTankComponent;
+import com.hrznstudio.titanium.component.inventory.SidedInventoryComponent;
 import net.minecraft.item.DyeColor;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.capability.IFluidHandler;
 import net.minecraftforge.items.ItemHandlerHelper;
 
+import javax.annotation.Nonnull;
 import java.util.List;
 import java.util.Optional;
 
-public class PlantGathererTile extends IndustrialAreaWorkingTile {
+public class PlantGathererTile extends IndustrialAreaWorkingTile<PlantGathererTile> {
 
     @Save
-    private SidedInvHandler output;
+    private SidedInventoryComponent<PlantGathererTile> output;
     @Save
-    private SidedFluidTank tank;
+    private SidedFluidTankComponent<PlantGathererTile> tank;
 
     public PlantGathererTile() {
         super(ModuleAgricultureHusbandry.PLANT_GATHERER, RangeManager.RangeType.BEHIND);
-        addInventory(output = (SidedInvHandler) new SidedInvHandler("output", 70, 22, 3 * 5, 0)
+        addInventory(output = (SidedInventoryComponent<PlantGathererTile>) new SidedInventoryComponent<PlantGathererTile>("output", 70, 22, 3 * 5, 0)
                 .setColor(DyeColor.ORANGE)
                 .setRange(5, 3)
-                .setTile(this));
-        addTank(tank = (SidedFluidTank) new SidedFluidTank("sludge", 8000, 45, 20, 1)
+                .setComponentHarness(this));
+        addTank(tank = (SidedFluidTankComponent<PlantGathererTile>) new SidedFluidTankComponent<PlantGathererTile>("sludge", 8000, 45, 20, 1)
                 .setColor(DyeColor.MAGENTA)
-                .setTile(this));
+                .setComponentHarness(this));
     }
 
     @Override
@@ -65,5 +66,11 @@ public class PlantGathererTile extends IndustrialAreaWorkingTile {
     @Override
     public int getMaxProgress() {
         return 40;
+    }
+
+    @Nonnull
+    @Override
+    public PlantGathererTile getSelf() {
+        return this;
     }
 }

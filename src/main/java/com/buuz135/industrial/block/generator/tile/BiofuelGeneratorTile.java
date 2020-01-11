@@ -4,23 +4,25 @@ import com.buuz135.industrial.block.tile.IndustrialGeneratorTile;
 import com.buuz135.industrial.module.ModuleCore;
 import com.buuz135.industrial.module.ModuleGenerator;
 import com.hrznstudio.titanium.annotation.Save;
-import com.hrznstudio.titanium.block.tile.fluid.PosFluidTank;
-import com.hrznstudio.titanium.block.tile.fluid.SidedFluidTank;
-import com.hrznstudio.titanium.block.tile.progress.PosProgressBar;
+import com.hrznstudio.titanium.component.fluid.FluidTankComponent;
+import com.hrznstudio.titanium.component.fluid.SidedFluidTankComponent;
+import com.hrznstudio.titanium.component.progress.ProgressBarComponent;
 import net.minecraft.item.DyeColor;
 import net.minecraftforge.fluids.capability.IFluidHandler;
 
-public class BiofuelGeneratorTile extends IndustrialGeneratorTile {
+import javax.annotation.Nonnull;
+
+public class BiofuelGeneratorTile extends IndustrialGeneratorTile<BiofuelGeneratorTile> {
 
     @Save
-    private SidedFluidTank biofuel;
+    private SidedFluidTankComponent<BiofuelGeneratorTile> biofuel;
 
     public BiofuelGeneratorTile() {
         super(ModuleGenerator.BIOFUEL_GENERATOR);
-        addTank(biofuel = (SidedFluidTank) new SidedFluidTank("biofuel", 4000, 43, 20, 0).
+        addTank(biofuel = (SidedFluidTankComponent<BiofuelGeneratorTile>) new SidedFluidTankComponent<BiofuelGeneratorTile>("biofuel", 4000, 43, 20, 0).
                 setColor(DyeColor.PURPLE).
-                setTile(this).
-                setTankAction(PosFluidTank.Action.FILL).
+                setComponentHarness(this).
+                setTankAction(FluidTankComponent.Action.FILL).
                 setValidator(fluidStack -> fluidStack.getFluid().isEquivalentTo(ModuleCore.BIOFUEL.getSourceFluid()))
         );
     }
@@ -45,10 +47,10 @@ public class BiofuelGeneratorTile extends IndustrialGeneratorTile {
     }
 
     @Override
-    public PosProgressBar getProgressBar() {
-        return new PosProgressBar(30, 20, 0, 100)
-                .setTile(this)
-                .setBarDirection(PosProgressBar.BarDirection.VERTICAL_UP)
+    public ProgressBarComponent getProgressBar() {
+        return new ProgressBarComponent(30, 20, 0, 100)
+                .setComponentHarness(this)
+                .setBarDirection(ProgressBarComponent.BarDirection.VERTICAL_UP)
                 .setColor(DyeColor.CYAN);
     }
 
@@ -60,5 +62,11 @@ public class BiofuelGeneratorTile extends IndustrialGeneratorTile {
     @Override
     public int getExtractingEnergy() {
         return 500;
+    }
+
+    @Nonnull
+    @Override
+    public BiofuelGeneratorTile getSelf() {
+        return this;
     }
 }

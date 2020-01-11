@@ -4,26 +4,27 @@ import com.buuz135.industrial.block.tile.IndustrialAreaWorkingTile;
 import com.buuz135.industrial.block.tile.RangeManager;
 import com.buuz135.industrial.module.ModuleAgricultureHusbandry;
 import com.hrznstudio.titanium.annotation.Save;
-import com.hrznstudio.titanium.block.tile.inventory.SidedInvHandler;
+import com.hrznstudio.titanium.component.inventory.SidedInventoryComponent;
 import net.minecraft.entity.passive.AnimalEntity;
 import net.minecraft.item.DyeColor;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.items.ItemHandlerHelper;
 
+import javax.annotation.Nonnull;
 import java.util.List;
 
-public class AnimalFeederTile extends IndustrialAreaWorkingTile {
+public class AnimalFeederTile extends IndustrialAreaWorkingTile<AnimalFeederTile> {
 
     @Save
-    private SidedInvHandler input;
+    private SidedInventoryComponent<AnimalFeederTile> input;
 
     public AnimalFeederTile() {
         super(ModuleAgricultureHusbandry.ANIMAL_FEEDER, RangeManager.RangeType.BEHIND);
-        addInventory(input = (SidedInvHandler) new SidedInvHandler("food", 53, 22, 6 * 3, 0)
+        addInventory(input = (SidedInventoryComponent<AnimalFeederTile>) new SidedInventoryComponent<AnimalFeederTile>("food", 53, 22, 6 * 3, 0)
                 .setColor(DyeColor.BLUE)
                 .setOutputFilter((stack, integer) -> false)
                 .setRange(6, 3)
-                .setTile(this)
+                .setComponentHarness(this)
         );
     }
 
@@ -64,4 +65,9 @@ public class AnimalFeederTile extends IndustrialAreaWorkingTile {
     }
 
 
+    @Nonnull
+    @Override
+    public AnimalFeederTile getSelf() {
+        return this;
+    }
 }

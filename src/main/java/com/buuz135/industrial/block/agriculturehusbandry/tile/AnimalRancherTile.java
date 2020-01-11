@@ -5,8 +5,8 @@ import com.buuz135.industrial.block.tile.IndustrialAreaWorkingTile;
 import com.buuz135.industrial.block.tile.RangeManager;
 import com.buuz135.industrial.module.ModuleAgricultureHusbandry;
 import com.hrznstudio.titanium.annotation.Save;
-import com.hrznstudio.titanium.block.tile.fluid.SidedFluidTank;
-import com.hrznstudio.titanium.block.tile.inventory.SidedInvHandler;
+import com.hrznstudio.titanium.component.fluid.SidedFluidTankComponent;
+import com.hrznstudio.titanium.component.inventory.SidedInventoryComponent;
 import net.minecraft.entity.passive.AnimalEntity;
 import net.minecraft.item.DyeColor;
 import net.minecraft.item.ItemStack;
@@ -16,25 +16,26 @@ import net.minecraftforge.common.IShearable;
 import net.minecraftforge.common.util.FakePlayer;
 import net.minecraftforge.items.ItemHandlerHelper;
 
+import javax.annotation.Nonnull;
 import java.util.List;
 
-public class AnimalRancherTile extends IndustrialAreaWorkingTile {
+public class AnimalRancherTile extends IndustrialAreaWorkingTile<AnimalRancherTile> {
 
     @Save
-    private SidedFluidTank tank;
+    private SidedFluidTankComponent<AnimalRancherTile> tank;
     @Save
-    private SidedInvHandler output;
+    private SidedInventoryComponent<AnimalRancherTile> output;
 
     public AnimalRancherTile() {
         super(ModuleAgricultureHusbandry.ANIMAL_RANCHER, RangeManager.RangeType.BEHIND);
-        this.addTank(tank = (SidedFluidTank) new SidedFluidTank("fluid_output", 8000, 47, 20, 0).
+        this.addTank(tank = (SidedFluidTankComponent<AnimalRancherTile>) new SidedFluidTankComponent<AnimalRancherTile>("fluid_output", 8000, 47, 20, 0).
                 setColor(DyeColor.WHITE).
-                setTile(this)
+                setComponentHarness(this)
         );
-        this.addInventory(output = (SidedInvHandler) new SidedInvHandler("output", 74, 22, 5 * 3, 1).
+        this.addInventory(output = (SidedInventoryComponent<AnimalRancherTile>) new SidedInventoryComponent<AnimalRancherTile>("output", 74, 22, 5 * 3, 1).
                 setColor(DyeColor.ORANGE).
                 setRange(5, 3).
-                setTile(this)
+                setComponentHarness(this)
         );
     }
 
@@ -65,4 +66,11 @@ public class AnimalRancherTile extends IndustrialAreaWorkingTile {
         }
         return new WorkAction(1, 0);
     }
+
+    @Nonnull
+    @Override
+    public AnimalRancherTile getSelf() {
+        return this;
+    }
+
 }

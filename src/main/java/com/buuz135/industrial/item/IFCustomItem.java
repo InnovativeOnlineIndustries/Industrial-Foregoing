@@ -22,14 +22,14 @@
 package com.buuz135.industrial.item;
 
 import com.hrznstudio.titanium.api.IRecipeProvider;
-import com.hrznstudio.titanium.item.ItemBase;
+import com.hrznstudio.titanium.item.BasicItem;
 import net.minecraft.item.ItemGroup;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.text.TranslationTextComponent;
 
 import javax.annotation.Nullable;
 
-public abstract class IFCustomItem extends ItemBase implements IRecipeProvider {
+public abstract class IFCustomItem extends BasicItem implements IRecipeProvider {
 
     public IFCustomItem(String name, ItemGroup group, Properties builder) {
         super(name, builder.group(group));

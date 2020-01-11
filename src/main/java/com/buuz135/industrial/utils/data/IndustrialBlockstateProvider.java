@@ -2,7 +2,7 @@ package com.buuz135.industrial.utils.data;
 
 import com.buuz135.industrial.block.IndustrialBlock;
 import com.buuz135.industrial.utils.Reference;
-import com.hrznstudio.titanium.block.BlockBase;
+import com.hrznstudio.titanium.block.BasicBlock;
 import net.minecraft.block.Block;
 import net.minecraft.data.DataGenerator;
 import net.minecraft.state.DirectionProperty;
@@ -22,7 +22,7 @@ public class IndustrialBlockstateProvider extends BlockStateProvider {
 
     @Override
     protected void registerStatesAndModels() {
-        BlockBase.BLOCKS.stream().filter(blockBase -> blockBase.getRegistryName().getNamespace().equals(Reference.MOD_ID) && blockBase instanceof IndustrialBlock)
+        BasicBlock.BLOCKS.stream().filter(blockBase -> blockBase.getRegistryName().getNamespace().equals(Reference.MOD_ID) && blockBase instanceof IndustrialBlock)
                 .map(blockBase -> (IndustrialBlock) blockBase)
                 .forEach(industrialBlock -> {
                     VariantBlockStateBuilder builder = getVariantBuilder(industrialBlock);

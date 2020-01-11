@@ -1,7 +1,7 @@
 package com.buuz135.industrial.block;
 
 import com.hrznstudio.titanium.api.IFactory;
-import com.hrznstudio.titanium.block.BlockBase;
+import com.hrznstudio.titanium.block.BasicBlock;
 import com.hrznstudio.titanium.recipe.generator.TitaniumLootTableProvider;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
@@ -11,7 +11,7 @@ import net.minecraft.util.text.TranslationTextComponent;
 
 import javax.annotation.Nullable;
 
-public class MachineFrameBlock extends BlockBase {
+public class MachineFrameBlock extends BasicBlock {
 
     public static Rarity PITY_RARITY = Rarity.create("pity", TextFormatting.GREEN);
     public static Rarity SIMPLE_RARITY = Rarity.create("simple", TextFormatting.AQUA);
@@ -44,7 +44,7 @@ public class MachineFrameBlock extends BlockBase {
 
     public class MachineFrameItem extends BlockItem {
 
-        public MachineFrameItem(BlockBase blockIn, Rarity rarity, ItemGroup group) {
+        public MachineFrameItem(BasicBlock blockIn, Rarity rarity, ItemGroup group) {
             super(blockIn, new Item.Properties().group(group).rarity(rarity));
             this.setRegistryName(blockIn.getRegistryName());
         }
