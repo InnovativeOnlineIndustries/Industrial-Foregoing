@@ -44,7 +44,7 @@ public class PlantFertilizerTile extends IndustrialAreaWorkingTile<PlantFertiliz
                 if (block instanceof IGrowable) {
                     if (((IGrowable) block).canGrow(world, pointer, state, false) && ((IGrowable) block).canUseBonemeal(world, world.rand, pointer, state)) {
                         stack.shrink(1);
-                        ((IGrowable) block).func_225535_a_((ServerWorld) world, world.rand, pointer, state);
+                        ((IGrowable) block).grow((ServerWorld) world, world.rand, pointer, state);
                         if (((IGrowable) block).canGrow(world, pointer, state, false)) {
                             return new WorkAction(0.25f, 1000);
                         } else {

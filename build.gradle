@@ -40,7 +40,7 @@ compileJava {
 }
 
 minecraft {
-    mappings channel: 'snapshot', version: '20191230-1.14.3'
+    mappings channel: 'snapshot', version: '20200111-mixed-1.15.1'
     runs {
         client = {
             // recommended logging data for a userdev environment
@@ -80,6 +80,9 @@ repositories {
     //    url = "https://dvs1.progwml6.com/files/maven/"
     //}
     maven {
+        url "https://maven.tterrag.com/"
+    }
+    maven {
         // location of a maven mirror for JEI files, as a fallback
         name = "ModMaven"
         url = "https://modmaven.k-4u.nl"
@@ -90,7 +93,7 @@ repositories {
 }
 
 dependencies {
-    minecraft 'net.minecraftforge:forge:1.15.1-30.0.11'
+    minecraft 'net.minecraftforge:forge:1.15.1-30.0.36'
     if (findProject(':titanium') != null) {
         compile project(':titanium')
     } else {

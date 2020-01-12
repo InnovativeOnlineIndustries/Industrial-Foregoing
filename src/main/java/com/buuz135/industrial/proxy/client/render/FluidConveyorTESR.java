@@ -44,12 +44,12 @@ import java.awt.*;
 
 public class FluidConveyorTESR extends TileEntityRenderer<ConveyorTile> {
 
-    public FluidConveyorTESR() {
-        super(TileEntityRendererDispatcher.instance);
+    public FluidConveyorTESR(TileEntityRendererDispatcher dispatcher) {
+        super(dispatcher);
     }
 
     @Override
-    public void func_225616_a_(ConveyorTile te, float p_225616_2_, MatrixStack p_225616_3_, IRenderTypeBuffer p_225616_4_, int p_225616_5_, int p_225616_6_) {
+    public void render(ConveyorTile te, float p_225616_2_, MatrixStack p_225616_3_, IRenderTypeBuffer p_225616_4_, int p_225616_5_, int p_225616_6_) {
         if (te.getTank().getFluidAmount() > 0) {
             int x = te.getPos().getX();
             int y = te.getPos().getY();
@@ -82,7 +82,7 @@ public class FluidConveyorTESR extends TileEntityRenderer<ConveyorTile> {
             } else {
                 RenderSystem.shadeModel(GL11.GL_FLAT);
             }
-            Texture texture = Minecraft.getInstance().getTextureManager().func_229267_b_(AtlasTexture.LOCATION_BLOCKS_TEXTURE);
+            Texture texture = Minecraft.getInstance().getTextureManager().getTexture(AtlasTexture.LOCATION_BLOCKS_TEXTURE);
             if (texture instanceof AtlasTexture) {
                 buffer.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_TEX_COLOR);
                 FluidStack fluid = te.getTank().getFluid();
@@ -96,24 +96,24 @@ public class FluidConveyorTESR extends TileEntityRenderer<ConveyorTile> {
                 if (sides == ConveyorBlock.EnumSides.BOTH || sides == ConveyorBlock.EnumSides.LEFT) left = 1;
                 Color color = new Color(fluid.getFluid().getAttributes().getColor(te.getTank().getFluid()));
 
-                buffer.func_225582_a_(right, posY, 0).func_225583_a_(flow.getInterpolatedU(0), flow.getInterpolatedV(0)).func_225586_a_(color.getRed(), color.getGreen(), color.getBlue(), color.getAlpha()).endVertex();
-                buffer.func_225582_a_(left, posY, 0).func_225583_a_(flow.getInterpolatedU(8), flow.getInterpolatedV(0)).func_225586_a_(color.getRed(), color.getGreen(), color.getBlue(), color.getAlpha()).endVertex();
-                buffer.func_225582_a_(left, posY, 1).func_225583_a_(flow.getInterpolatedU(8), flow.getInterpolatedV(8)).func_225586_a_(color.getRed(), color.getGreen(), color.getBlue(), color.getAlpha()).endVertex();
-                buffer.func_225582_a_(right, posY, 1).func_225583_a_(flow.getInterpolatedU(0), flow.getInterpolatedV(8)).func_225586_a_(color.getRed(), color.getGreen(), color.getBlue(), color.getAlpha()).endVertex();
+                buffer.vertex(right, posY, 0).texture(flow.getInterpolatedU(0), flow.getInterpolatedV(0)).color(color.getRed(), color.getGreen(), color.getBlue(), color.getAlpha()).endVertex();
+                buffer.vertex(left, posY, 0).texture(flow.getInterpolatedU(8), flow.getInterpolatedV(0)).color(color.getRed(), color.getGreen(), color.getBlue(), color.getAlpha()).endVertex();
+                buffer.vertex(left, posY, 1).texture(flow.getInterpolatedU(8), flow.getInterpolatedV(8)).color(color.getRed(), color.getGreen(), color.getBlue(), color.getAlpha()).endVertex();
+                buffer.vertex(right, posY, 1).texture(flow.getInterpolatedU(0), flow.getInterpolatedV(8)).color(color.getRed(), color.getGreen(), color.getBlue(), color.getAlpha()).endVertex();
 
                 boolean shouldRenderNext = !(te.getWorld().getTileEntity(te.getPos().offset(facing)) instanceof ConveyorTile) || ((ConveyorTile) te.getWorld().getTileEntity(te.getPos().offset(facing))).getTank().getFluidAmount() <= 0;
                 if (shouldRenderNext) {
-                    buffer.func_225582_a_(right, posY, 1).func_225583_a_(still.getInterpolatedU(0), still.getInterpolatedV(0)).func_225586_a_(color.getRed(), color.getGreen(), color.getBlue(), color.getAlpha()).endVertex();
-                    buffer.func_225582_a_(left, posY, 1).func_225583_a_(still.getInterpolatedU(8), still.getInterpolatedV(0)).func_225586_a_(color.getRed(), color.getGreen(), color.getBlue(), color.getAlpha()).endVertex();
-                    buffer.func_225582_a_(left, 1 / 16D, 1).func_225583_a_(still.getInterpolatedU(8), still.getInterpolatedV(8)).func_225586_a_(color.getRed(), color.getGreen(), color.getBlue(), color.getAlpha()).endVertex();
-                    buffer.func_225582_a_(right, 1 / 16D, 1).func_225583_a_(still.getInterpolatedU(0), still.getInterpolatedV(8)).func_225586_a_(color.getRed(), color.getGreen(), color.getBlue(), color.getAlpha()).endVertex();
+                    buffer.vertex(right, posY, 1).texture(still.getInterpolatedU(0), still.getInterpolatedV(0)).color(color.getRed(), color.getGreen(), color.getBlue(), color.getAlpha()).endVertex();
+                    buffer.vertex(left, posY, 1).texture(still.getInterpolatedU(8), still.getInterpolatedV(0)).color(color.getRed(), color.getGreen(), color.getBlue(), color.getAlpha()).endVertex();
+                    buffer.vertex(left, 1 / 16D, 1).texture(still.getInterpolatedU(8), still.getInterpolatedV(8)).color(color.getRed(), color.getGreen(), color.getBlue(), color.getAlpha()).endVertex();
+                    buffer.vertex(right, 1 / 16D, 1).texture(still.getInterpolatedU(0), still.getInterpolatedV(8)).color(color.getRed(), color.getGreen(), color.getBlue(), color.getAlpha()).endVertex();
                 }
                 boolean shouldRenderPrev = !(te.getWorld().getTileEntity(te.getPos().offset(facing.getOpposite())) instanceof ConveyorTile) || ((ConveyorTile) te.getWorld().getTileEntity(te.getPos().offset(facing.getOpposite()))).getTank().getFluidAmount() <= 0;
                 if (shouldRenderPrev) {
-                    buffer.func_225582_a_(right, posY, 0).func_225583_a_(still.getInterpolatedU(0), still.getInterpolatedV(0)).func_225586_a_(color.getRed(), color.getGreen(), color.getBlue(), color.getAlpha()).endVertex();
-                    buffer.func_225582_a_(left, posY, 0).func_225583_a_(still.getInterpolatedU(8), still.getInterpolatedV(0)).func_225586_a_(color.getRed(), color.getGreen(), color.getBlue(), color.getAlpha()).endVertex();
-                    buffer.func_225582_a_(left, 1 / 16D, 0).func_225583_a_(still.getInterpolatedU(8), still.getInterpolatedV(8)).func_225586_a_(color.getRed(), color.getGreen(), color.getBlue(), color.getAlpha()).endVertex();
-                    buffer.func_225582_a_(right, 1 / 16D, 0).func_225583_a_(still.getInterpolatedU(0), still.getInterpolatedV(8)).func_225586_a_(color.getRed(), color.getGreen(), color.getBlue(), color.getAlpha()).endVertex();
+                    buffer.vertex(right, posY, 0).texture(still.getInterpolatedU(0), still.getInterpolatedV(0)).color(color.getRed(), color.getGreen(), color.getBlue(), color.getAlpha()).endVertex();
+                    buffer.vertex(left, posY, 0).texture(still.getInterpolatedU(8), still.getInterpolatedV(0)).color(color.getRed(), color.getGreen(), color.getBlue(), color.getAlpha()).endVertex();
+                    buffer.vertex(left, 1 / 16D, 0).texture(still.getInterpolatedU(8), still.getInterpolatedV(8)).color(color.getRed(), color.getGreen(), color.getBlue(), color.getAlpha()).endVertex();
+                    buffer.vertex(right, 1 / 16D, 0).texture(still.getInterpolatedU(0), still.getInterpolatedV(8)).color(color.getRed(), color.getGreen(), color.getBlue(), color.getAlpha()).endVertex();
                 }
 
                 tessellator.draw();

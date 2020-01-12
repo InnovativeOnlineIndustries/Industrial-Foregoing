@@ -67,8 +67,8 @@ public class DissolutionChamberTile extends IndustrialProcessingTile<Dissolution
     }
 
     @Override
-    public void func_226984_a_(World p_226984_1_, BlockPos p_226984_2_) {
-        super.func_226984_a_(p_226984_1_, p_226984_2_);
+    public void setWorld(World p_226984_1_, BlockPos p_226984_2_) {
+        super.setWorld(p_226984_1_, p_226984_2_);
         checkForRecipe();
     }
 

@@ -123,7 +123,7 @@ public class ItemStraw extends IFCustomItem {
                 Optional<StrawHandler> handler = StrawUtils.getStrawHandler(fluid.getFluid());
                 if (handler.isPresent()) {
                     playerIn.setActiveHand(handIn);
-                    return ActionResult.func_226248_a_(playerIn.getHeldItem(handIn));
+                    return ActionResult.success(playerIn.getHeldItem(handIn));
                 }
             }/*
             if (block.hasTileEntity(state)) {

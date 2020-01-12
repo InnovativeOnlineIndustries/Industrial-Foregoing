@@ -258,7 +258,7 @@ public class ConveyorBlock extends BasicTileBlock<ConveyorTile> implements IWate
     }
 
     @Override
-    public ActionResultType func_225533_a_(BlockState state, World worldIn, BlockPos pos, PlayerEntity player, Hand hand, BlockRayTraceResult ray) {
+    public ActionResultType onUse(BlockState state, World worldIn, BlockPos pos, PlayerEntity player, Hand hand, BlockRayTraceResult ray) {
         TileEntity tileEntity = worldIn.getTileEntity(pos);
         ItemStack handStack = player.getHeldItem(hand);
         if (tileEntity instanceof ConveyorTile) {
@@ -299,7 +299,7 @@ public class ConveyorBlock extends BasicTileBlock<ConveyorTile> implements IWate
                 return ActionResultType.PASS;
             }
         }
-        return super.func_225533_a_(state, worldIn, pos, player, hand, ray);
+        return super.onUse(state, worldIn, pos, player, hand, ray);
     }
 
     @Override

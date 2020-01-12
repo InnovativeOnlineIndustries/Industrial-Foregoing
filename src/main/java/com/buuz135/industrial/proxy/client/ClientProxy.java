@@ -45,7 +45,6 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.client.event.ModelBakeEvent;
 import net.minecraftforge.client.event.TextureStitchEvent;
-import net.minecraftforge.client.model.obj.OBJLoader;
 import net.minecraftforge.client.model.obj.OBJModel;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.util.Constants;
@@ -69,7 +68,7 @@ public class ClientProxy extends CommonProxy {
 
         EventManager.mod(ModelBakeEvent.class).process(event -> {
             try {
-                ears_model = OBJLoader.INSTANCE.loadModel(new ResourceLocation(Reference.MOD_ID, "models/block/catears.obj"), false, false, false, false);
+                //ears_model = OBJLoader.INSTANCE.loadModel(new ResourceLocation(Reference.MOD_ID, "models/block/catears.obj"), false, false, false, false);
                 //ears_baked = ears_model.bake(event.getModelLoader(), ModelLoader.defaultTextureGetter(), new SimpleModelState(ImmutableMap.of(), TransformationMatrix.func_227983_a_()), DefaultVertexFormats.BLOCK, ItemOverrideList.EMPTY, new ResourceLocation(Reference.MOD_ID, "models/block/catears.obj"));
             } catch (Exception e) {
                 e.printStackTrace();
@@ -80,14 +79,14 @@ public class ClientProxy extends CommonProxy {
         }).subscribe();
 
 
-        ClientRegistry.bindTileEntityRenderer(ModuleTransport.CONVEYOR.getTileEntityType(), new FluidConveyorTESR());
-        BasicBlock.BLOCKS.stream().filter(blockBase -> blockBase instanceof BasicTileBlock && ((BasicTileBlock) blockBase).getTileClass().isAssignableFrom(IndustrialAreaWorkingTile.class)).forEach(blockBase -> ClientRegistry.bindTileEntityRenderer(((BasicTileBlock) blockBase).getTileEntityType(), new WorkingAreaTESR()));
+        ClientRegistry.bindTileEntityRenderer(ModuleTransport.CONVEYOR.getTileEntityType(), FluidConveyorTESR::new);
+        BasicBlock.BLOCKS.stream().filter(blockBase -> blockBase instanceof BasicTileBlock && ((BasicTileBlock) blockBase).getTileClass().isAssignableFrom(IndustrialAreaWorkingTile.class)).forEach(blockBase -> ClientRegistry.bindTileEntityRenderer(((BasicTileBlock) blockBase).getTileEntityType(), WorkingAreaTESR::new));
         //ClientRegistry.bindTileEntityRenderer(IndustrialAreaWorkingTile.class, new WorkingAreaTESR());
         //manager.entityRenderMap.put(EntityPinkSlime.class, new RenderPinkSlime(manager));
 
         //((IReloadableResourceManager) Minecraft.getInstance().getResourceManager()).addReloadListener(resourceManager -> FluidUtils.colorCache.clear());
 
-        RenderTypeLookup.setRenderLayer(ModuleTransport.CONVEYOR, RenderType.func_228643_e_());
+        RenderTypeLookup.setRenderLayer(ModuleTransport.CONVEYOR, RenderType.getCutout());
 
         Minecraft.getInstance().getBlockColors().register((state, worldIn, pos, tintIndex) -> {
             if (tintIndex == 0 && worldIn != null && pos != null) {

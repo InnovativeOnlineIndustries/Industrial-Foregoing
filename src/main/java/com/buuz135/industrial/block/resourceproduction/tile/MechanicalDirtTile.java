@@ -39,7 +39,7 @@ public class MechanicalDirtTile extends IndustrialWorkingTile<MechanicalDirtTile
     public WorkAction work() {
         if (world.rand.nextDouble() > 0.1
                 || world.getDifficulty() == Difficulty.PEACEFUL
-                || (world.isDaytime() && world.getBrightness(pos.up()) > 0.5f && world.func_226660_f_(pos.up()))
+                || (world.isDaytime() && world.getBrightness(pos.up()) > 0.5f && world.canBlockSeeSky(pos.up()))
                 || world.getEntitiesWithinAABB(MobEntity.class, new AxisAlignedBB(0, 0, 0, 1, 1, 1).offset(pos).grow(3)).size() > 10) {
             if (hasEnergy(100)) return new WorkAction(0.5f, 100);
             return new WorkAction(1, 0);
@@ -65,7 +65,7 @@ public class MechanicalDirtTile extends IndustrialWorkingTile<MechanicalDirtTile
         if (entity instanceof MobEntity) {
             ((MobEntity) entity).onInitialSpawn(world, world.getDifficultyForLocation(pos), SpawnReason.NATURAL, null, null);
             entity.setPosition(pos.getX() + 0.5, pos.getY() + 1.0626, pos.getZ() + 0.5);
-            if (world.func_226669_j_(entity) && world.checkNoEntityCollision(entity, world.getBlockState(pos.up()).getShape(world, pos.up()))) {
+            if (world.doesNotCollide(entity) && world.checkNoEntityCollision(entity, world.getBlockState(pos.up()).getShape(world, pos.up()))) {
                 return (MobEntity) entity;
             }
         }

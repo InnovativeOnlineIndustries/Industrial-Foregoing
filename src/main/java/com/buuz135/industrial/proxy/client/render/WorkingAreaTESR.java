@@ -18,18 +18,18 @@ import java.awt.*;
 
 public class WorkingAreaTESR extends TileEntityRenderer<IndustrialAreaWorkingTile> {
 
-    public WorkingAreaTESR() {
-        super(TileEntityRendererDispatcher.instance);
+    public WorkingAreaTESR(TileEntityRendererDispatcher dispatcher) {
+        super(dispatcher);
     }
 
     @Override
-    public void func_225616_a_(IndustrialAreaWorkingTile tileEntityIn, float p_225616_2_, MatrixStack p_225616_3_, IRenderTypeBuffer p_225616_4_, int p_225616_5_, int p_225616_6_) {
+    public void render(IndustrialAreaWorkingTile tileEntityIn, float p_225616_2_, MatrixStack p_225616_3_, IRenderTypeBuffer p_225616_4_, int p_225616_5_, int p_225616_6_) {
         if (tileEntityIn == null || !tileEntityIn.isShowingArea()) return;
         VoxelShape shape = tileEntityIn.getWorkingArea();
 
         RenderSystem.enableBlend();
         RenderSystem.blendFuncSeparate(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA, GlStateManager.SourceFactor.ONE, GlStateManager.DestFactor.ZERO);
-        RenderSystem.lineWidth(Math.max(2.5F, (float) Minecraft.getInstance().func_228018_at_().getFramebufferWidth() / 1920.0F * 2.5F));
+        RenderSystem.lineWidth(Math.max(2.5F, (float) Minecraft.getInstance().getWindow().getFramebufferWidth() / 1920.0F * 2.5F));
         RenderSystem.matrixMode(5889);
         RenderSystem.disableTexture();
         RenderSystem.pushMatrix();
@@ -71,37 +71,37 @@ public class WorkingAreaTESR extends TileEntityRenderer<IndustrialAreaWorkingTil
         double z2 = pos.maxZ + z;
         buffer.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_COLOR);
 
-        buffer.func_225582_a_(x1, y1, z1).func_227885_a_(red, green, blue, alpha).endVertex();
-        buffer.func_225582_a_(x1, y2, z1).func_227885_a_(red, green, blue, alpha).endVertex();
-        buffer.func_225582_a_(x2, y2, z1).func_227885_a_(red, green, blue, alpha).endVertex();
-        buffer.func_225582_a_(x2, y1, z1).func_227885_a_(red, green, blue, alpha).endVertex();
+        buffer.vertex(x1, y1, z1).color(red, green, blue, alpha).endVertex();
+        buffer.vertex(x1, y2, z1).color(red, green, blue, alpha).endVertex();
+        buffer.vertex(x2, y2, z1).color(red, green, blue, alpha).endVertex();
+        buffer.vertex(x2, y1, z1).color(red, green, blue, alpha).endVertex();
 
-        buffer.func_225582_a_(x1, y1, z2).func_227885_a_(red, green, blue, alpha).endVertex();
-        buffer.func_225582_a_(x2, y1, z2).func_227885_a_(red, green, blue, alpha).endVertex();
-        buffer.func_225582_a_(x2, y2, z2).func_227885_a_(red, green, blue, alpha).endVertex();
-        buffer.func_225582_a_(x1, y2, z2).func_227885_a_(red, green, blue, alpha).endVertex();
-
-
-        buffer.func_225582_a_(x1, y1, z1).func_227885_a_(red, green, blue, alpha).endVertex();
-        buffer.func_225582_a_(x2, y1, z1).func_227885_a_(red, green, blue, alpha).endVertex();
-        buffer.func_225582_a_(x2, y1, z2).func_227885_a_(red, green, blue, alpha).endVertex();
-        buffer.func_225582_a_(x1, y1, z2).func_227885_a_(red, green, blue, alpha).endVertex();
-
-        buffer.func_225582_a_(x1, y2, z1).func_227885_a_(red, green, blue, alpha).endVertex();
-        buffer.func_225582_a_(x1, y2, z2).func_227885_a_(red, green, blue, alpha).endVertex();
-        buffer.func_225582_a_(x2, y2, z2).func_227885_a_(red, green, blue, alpha).endVertex();
-        buffer.func_225582_a_(x2, y2, z1).func_227885_a_(red, green, blue, alpha).endVertex();
+        buffer.vertex(x1, y1, z2).color(red, green, blue, alpha).endVertex();
+        buffer.vertex(x2, y1, z2).color(red, green, blue, alpha).endVertex();
+        buffer.vertex(x2, y2, z2).color(red, green, blue, alpha).endVertex();
+        buffer.vertex(x1, y2, z2).color(red, green, blue, alpha).endVertex();
 
 
-        buffer.func_225582_a_(x1, y1, z1).func_227885_a_(red, green, blue, alpha).endVertex();
-        buffer.func_225582_a_(x1, y1, z2).func_227885_a_(red, green, blue, alpha).endVertex();
-        buffer.func_225582_a_(x1, y2, z2).func_227885_a_(red, green, blue, alpha).endVertex();
-        buffer.func_225582_a_(x1, y2, z1).func_227885_a_(red, green, blue, alpha).endVertex();
+        buffer.vertex(x1, y1, z1).color(red, green, blue, alpha).endVertex();
+        buffer.vertex(x2, y1, z1).color(red, green, blue, alpha).endVertex();
+        buffer.vertex(x2, y1, z2).color(red, green, blue, alpha).endVertex();
+        buffer.vertex(x1, y1, z2).color(red, green, blue, alpha).endVertex();
 
-        buffer.func_225582_a_(x2, y1, z1).func_227885_a_(red, green, blue, alpha).endVertex();
-        buffer.func_225582_a_(x2, y2, z1).func_227885_a_(red, green, blue, alpha).endVertex();
-        buffer.func_225582_a_(x2, y2, z2).func_227885_a_(red, green, blue, alpha).endVertex();
-        buffer.func_225582_a_(x2, y1, z2).func_227885_a_(red, green, blue, alpha).endVertex();
+        buffer.vertex(x1, y2, z1).color(red, green, blue, alpha).endVertex();
+        buffer.vertex(x1, y2, z2).color(red, green, blue, alpha).endVertex();
+        buffer.vertex(x2, y2, z2).color(red, green, blue, alpha).endVertex();
+        buffer.vertex(x2, y2, z1).color(red, green, blue, alpha).endVertex();
+
+
+        buffer.vertex(x1, y1, z1).color(red, green, blue, alpha).endVertex();
+        buffer.vertex(x1, y1, z2).color(red, green, blue, alpha).endVertex();
+        buffer.vertex(x1, y2, z2).color(red, green, blue, alpha).endVertex();
+        buffer.vertex(x1, y2, z1).color(red, green, blue, alpha).endVertex();
+
+        buffer.vertex(x2, y1, z1).color(red, green, blue, alpha).endVertex();
+        buffer.vertex(x2, y2, z1).color(red, green, blue, alpha).endVertex();
+        buffer.vertex(x2, y2, z2).color(red, green, blue, alpha).endVertex();
+        buffer.vertex(x2, y1, z2).color(red, green, blue, alpha).endVertex();
 
         Tessellator.getInstance().draw();
     }

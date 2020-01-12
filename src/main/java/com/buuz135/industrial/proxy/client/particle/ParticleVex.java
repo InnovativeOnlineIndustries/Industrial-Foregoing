@@ -79,7 +79,7 @@ public class ParticleVex extends Particle {
     }
 
     @Override
-    public void func_225606_a_(IVertexBuilder buffer, ActiveRenderInfo entityIn, float p_225606_3_) {
+    public void buildGeometry(IVertexBuilder buffer, ActiveRenderInfo entityIn, float p_225606_3_) {
         if (entityIn.getRenderViewEntity() instanceof ClientPlayerEntity && Minecraft.getInstance().player.getUniqueID().equals(entity.getUniqueID()) && !entityIn.isThirdPerson() && this.entity.getPosition().add(0, 1, 0).distanceSq(posX, posY, posZ, false) < 3)
             return;
         //RenderSystem.disableAlphaTest(); TODO

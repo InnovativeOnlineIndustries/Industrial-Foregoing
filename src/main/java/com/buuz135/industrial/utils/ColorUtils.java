@@ -35,7 +35,7 @@ import java.awt.*;
 public class ColorUtils {
 
     public static int getColorFrom(ResourceLocation location) {
-        Texture texture = Minecraft.getInstance().getTextureManager().func_229267_b_(AtlasTexture.LOCATION_BLOCKS_TEXTURE);
+        Texture texture = Minecraft.getInstance().getTextureManager().getTexture(AtlasTexture.LOCATION_BLOCKS_TEXTURE);
         if (texture instanceof AtlasTexture) {
             return getColorFrom(((AtlasTexture) texture).getSprite(location));
         }
