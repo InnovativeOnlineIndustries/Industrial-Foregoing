@@ -1,0 +1,6 @@
+{
+  "parent": "industrialforegoing:block/conveyor",
+  "textures": {
+    "2": "industrialforegoing:blocks/conveyor_color"
+  }
+}

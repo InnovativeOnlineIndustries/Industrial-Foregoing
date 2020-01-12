@@ -37,6 +37,7 @@ import com.buuz135.industrial.registry.IFRegistries;
 import com.buuz135.industrial.utils.IFFakePlayer;
 import com.buuz135.industrial.utils.Reference;
 import com.buuz135.industrial.utils.data.IndustrialBlockstateProvider;
+import com.buuz135.industrial.utils.data.IndustrialModelProvider;
 import com.hrznstudio.titanium.TitaniumClient;
 import com.hrznstudio.titanium.event.handler.EventManager;
 import com.hrznstudio.titanium.material.ResourceRegistry;
@@ -140,6 +141,7 @@ public class IndustrialForegoing extends ModuleController {
         event.getGenerator().addProvider(new DefaultLootTableProvider(event.getGenerator(), Reference.MOD_ID));
         event.getGenerator().addProvider(new BlockItemModelGeneratorProvider(event.getGenerator(), Reference.MOD_ID));
         event.getGenerator().addProvider(new IndustrialBlockstateProvider(event.getGenerator(), event.getExistingFileHelper()));
+        event.getGenerator().addProvider(new IndustrialModelProvider(event.getGenerator(), event.getExistingFileHelper()));
     }
 
     @Override

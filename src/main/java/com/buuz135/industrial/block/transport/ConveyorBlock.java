@@ -75,12 +75,12 @@ public class ConveyorBlock extends BasicTileBlock<ConveyorTile> implements IWate
     public static final BooleanProperty WATERLOGGED = BlockStateProperties.WATERLOGGED;
     public static final DirectionProperty FACING = HorizontalBlock.HORIZONTAL_FACING;
     public static final EnumProperty<EnumType> TYPE = EnumProperty.create("type", EnumType.class);
-    public static final EnumProperty<EnumSides> SIDES = EnumProperty.create("sides", EnumSides.class);
+    //public static final EnumProperty<EnumSides> SIDES = EnumProperty.create("sides", EnumSides.class);
     private ConveyorItem item;
 
     public ConveyorBlock(ItemGroup group) {
         super("conveyor", Properties.create(Material.ANVIL, MaterialColor.ADOBE).doesNotBlockMovement().hardnessAndResistance(2.0f), ConveyorTile.class);
-        this.setDefaultState(this.getDefaultState().with(FACING, Direction.NORTH).with(SIDES, EnumSides.NONE).with(WATERLOGGED, false));
+        this.setDefaultState(this.getDefaultState().with(FACING, Direction.NORTH).with(WATERLOGGED, false));
         this.item = new ConveyorItem(this, group);
         this.setItemGroup(group);
     }
@@ -138,13 +138,13 @@ public class ConveyorBlock extends BasicTileBlock<ConveyorTile> implements IWate
             Direction right = state.get(FACING).rotateY();
             Direction left = state.get(FACING).rotateYCCW();
             if (isConveyorAndFacing(pos.offset(right), world, left) && isConveyorAndFacing(pos.offset(left), world, right) || (isConveyorAndFacing(pos.offset(right).down(), world, left) && isConveyorAndFacing(pos.offset(left).down(), world, right))) {
-                state = state.with(SIDES, EnumSides.BOTH);
+                //state = state.with(SIDES, EnumSides.BOTH);
             } else if (isConveyorAndFacing(pos.offset(right), world, left) || isConveyorAndFacing(pos.offset(right).down(), world, left)) {
-                state = state.with(SIDES, EnumSides.RIGHT);
+                //state = state.with(SIDES, EnumSides.RIGHT);
             } else if (isConveyorAndFacing(pos.offset(left), world, right) || isConveyorAndFacing(pos.offset(left).down(), world, right)) {
-                state = state.with(SIDES, EnumSides.LEFT);
+                //state = state.with(SIDES, EnumSides.LEFT);
             } else {
-                state = state.with(SIDES, EnumSides.NONE);
+                //state = state.with(SIDES, EnumSides.NONE);
             }
         }
         return state;
@@ -192,7 +192,7 @@ public class ConveyorBlock extends BasicTileBlock<ConveyorTile> implements IWate
     @Override
     protected void fillStateContainer(StateContainer.Builder<Block, BlockState> builder) {
         super.fillStateContainer(builder);
-        builder.add(FACING, SIDES, TYPE, WATERLOGGED);
+        builder.add(FACING, TYPE, WATERLOGGED);
     }
 
     public IFluidState getFluidState(BlockState state) {
@@ -421,12 +421,25 @@ public class ConveyorBlock extends BasicTileBlock<ConveyorTile> implements IWate
 
     public enum EnumType implements IStringSerializable {
 
-        FLAT(false), UP(false), DOWN(false), FLAT_FAST(true), UP_FAST(true), DOWN_FAST(true);
+        FLAT(false, "industrialforegoing:block/conveyor"),
+        UP(false, "industrialforegoing:block/conveyor_ramp_inverted", "industrialforegoing:blocks/conveyor_color_inverted"),
+        DOWN(false, "industrialforegoing:block/conveyor_ramp"),
+        FLAT_FAST(true, "industrialforegoing:block/conveyor", "industrialforegoing:blocks/conveyor_color_fast"),
+        UP_FAST(true, "industrialforegoing:block/conveyor_ramp_inverted", "industrialforegoing:blocks/conveyor_color_inverted_fast"),
+        DOWN_FAST(true, "industrialforegoing:block/conveyor_ramp", "industrialforegoing:blocks/conveyor_color_fast");
 
         private boolean fast;
+        private String model;
+        private String texture;
 
-        EnumType(boolean fast) {
+        EnumType(boolean fast, String model) {
+            this(false, model, "industrialforegoing:blocks/conveyor_color");
+        }
+
+        EnumType(boolean fast, String model, String texture) {
             this.fast = fast;
+            this.model = model;
+            this.texture = texture;
         }
 
         public static EnumType getFromName(String name) {
@@ -492,6 +505,18 @@ public class ConveyorBlock extends BasicTileBlock<ConveyorTile> implements IWate
             return this.toString().toLowerCase();
         }
 
+        public String getModel() {
+            return model;
+        }
+
+        public String getTexture() {
+            return texture;
+        }
+
+        @Override
+        public String toString() {
+            return super.toString().toLowerCase();
+        }
     }
 
     public enum EnumSides implements IStringSerializable {
