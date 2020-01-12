@@ -1,27 +1,17 @@
 {
   "variants": {
-    "facing=down": {
-      "model": "industrialforegoing:block/fluid_extractor",
-      "x": -90,
-      "y": 270
-    },
-    "facing=up": {
-      "model": "industrialforegoing:block/fluid_extractor",
-      "x": 90,
-      "y": 270
-    },
-    "facing=north": {
+    "subfacing=north": {
       "model": "industrialforegoing:block/fluid_extractor"
     },
-    "facing=south": {
+    "subfacing=south": {
       "model": "industrialforegoing:block/fluid_extractor",
       "y": 180
     },
-    "facing=west": {
+    "subfacing=west": {
       "model": "industrialforegoing:block/fluid_extractor",
       "y": 270
     },
-    "facing=east": {
+    "subfacing=east": {
       "model": "industrialforegoing:block/fluid_extractor",
       "y": 90
     }

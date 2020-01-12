@@ -1,27 +1,17 @@
 {
   "variants": {
-    "facing=down": {
-      "model": "industrialforegoing:block/plant_fertilizer",
-      "x": -90,
-      "y": 270
-    },
-    "facing=up": {
-      "model": "industrialforegoing:block/plant_fertilizer",
-      "x": 90,
-      "y": 270
-    },
-    "facing=north": {
+    "subfacing=north": {
       "model": "industrialforegoing:block/plant_fertilizer"
     },
-    "facing=south": {
+    "subfacing=south": {
       "model": "industrialforegoing:block/plant_fertilizer",
       "y": 180
     },
-    "facing=west": {
+    "subfacing=west": {
       "model": "industrialforegoing:block/plant_fertilizer",
       "y": 270
     },
-    "facing=east": {
+    "subfacing=east": {
       "model": "industrialforegoing:block/plant_fertilizer",
       "y": 90
     }

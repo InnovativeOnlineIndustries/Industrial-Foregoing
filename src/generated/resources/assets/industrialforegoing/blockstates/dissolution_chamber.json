@@ -1,27 +1,17 @@
 {
   "variants": {
-    "facing=down": {
-      "model": "industrialforegoing:block/dissolution_chamber",
-      "x": -90,
-      "y": 270
-    },
-    "facing=up": {
-      "model": "industrialforegoing:block/dissolution_chamber",
-      "x": 90,
-      "y": 270
-    },
-    "facing=north": {
+    "subfacing=north": {
       "model": "industrialforegoing:block/dissolution_chamber"
     },
-    "facing=south": {
+    "subfacing=south": {
       "model": "industrialforegoing:block/dissolution_chamber",
       "y": 180
     },
-    "facing=west": {
+    "subfacing=west": {
       "model": "industrialforegoing:block/dissolution_chamber",
       "y": 270
     },
-    "facing=east": {
+    "subfacing=east": {
       "model": "industrialforegoing:block/dissolution_chamber",
       "y": 90
     }

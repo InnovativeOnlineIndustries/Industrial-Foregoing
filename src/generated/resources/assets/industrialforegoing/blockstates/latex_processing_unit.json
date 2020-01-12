@@ -1,27 +1,17 @@
 {
   "variants": {
-    "facing=down": {
-      "model": "industrialforegoing:block/latex_processing_unit",
-      "x": -90,
-      "y": 270
-    },
-    "facing=up": {
-      "model": "industrialforegoing:block/latex_processing_unit",
-      "x": 90,
-      "y": 270
-    },
-    "facing=north": {
+    "subfacing=north": {
       "model": "industrialforegoing:block/latex_processing_unit"
     },
-    "facing=south": {
+    "subfacing=south": {
       "model": "industrialforegoing:block/latex_processing_unit",
       "y": 180
     },
-    "facing=west": {
+    "subfacing=west": {
       "model": "industrialforegoing:block/latex_processing_unit",
       "y": 270
     },
-    "facing=east": {
+    "subfacing=east": {
       "model": "industrialforegoing:block/latex_processing_unit",
       "y": 90
     }

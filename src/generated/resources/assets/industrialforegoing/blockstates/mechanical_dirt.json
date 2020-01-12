@@ -1,27 +1,17 @@
 {
   "variants": {
-    "facing=down": {
-      "model": "industrialforegoing:block/mechanical_dirt",
-      "x": -90,
-      "y": 270
-    },
-    "facing=up": {
-      "model": "industrialforegoing:block/mechanical_dirt",
-      "x": 90,
-      "y": 270
-    },
-    "facing=north": {
+    "subfacing=north": {
       "model": "industrialforegoing:block/mechanical_dirt"
     },
-    "facing=south": {
+    "subfacing=south": {
       "model": "industrialforegoing:block/mechanical_dirt",
       "y": 180
     },
-    "facing=west": {
+    "subfacing=west": {
       "model": "industrialforegoing:block/mechanical_dirt",
       "y": 270
     },
-    "facing=east": {
+    "subfacing=east": {
       "model": "industrialforegoing:block/mechanical_dirt",
       "y": 90
     }
