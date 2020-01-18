@@ -2,12 +2,12 @@
   "variants": {
     "facing=down": {
       "model": "industrialforegoing:block/block_breaker",
-      "x": -90,
+      "x": 90,
       "y": 270
     },
     "facing=up": {
       "model": "industrialforegoing:block/block_breaker",
-      "x": 90,
+      "x": -90,
       "y": 270
     },
     "facing=north": {

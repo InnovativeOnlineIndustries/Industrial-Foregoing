@@ -2,12 +2,12 @@
   "variants": {
     "facing=down": {
       "model": "industrialforegoing:block/fluid_placer",
-      "x": -90,
+      "x": 90,
       "y": 270
     },
     "facing=up": {
       "model": "industrialforegoing:block/fluid_placer",
-      "x": 90,
+      "x": -90,
       "y": 270
     },
     "facing=north": {

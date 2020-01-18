@@ -1,5 +1,5 @@
 {
-  "parent": "industrialforegoing:block/block_destroyer",
+  "parent": "industrialforegoing:block/block_breaker",
   "display": {
     "gui": {
       "rotation": [
