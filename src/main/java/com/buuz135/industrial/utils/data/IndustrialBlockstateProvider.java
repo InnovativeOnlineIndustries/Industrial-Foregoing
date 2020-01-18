@@ -34,7 +34,7 @@ public class IndustrialBlockstateProvider extends BlockStateProvider {
                     for (DirectionProperty property : industrialBlock.getRotationType().getProperties()) {
                         for (Direction allowedValue : property.getAllowedValues()) {
                             builder.partialState().with(property, allowedValue)
-                                    .addModels(new ConfiguredModel(new ModelFile.UncheckedModelFile(getModel(industrialBlock)), allowedValue.getHorizontalIndex() == -1 ? allowedValue.getAxisDirection().getOffset() * 90 : 0, (int) allowedValue.getOpposite().getHorizontalAngle(), false));
+                                    .addModels(new ConfiguredModel(new ModelFile.UncheckedModelFile(getModel(industrialBlock)), allowedValue.getHorizontalIndex() == -1 ? allowedValue.getOpposite().getAxisDirection().getOffset() * 90 : 0, (int) allowedValue.getOpposite().getHorizontalAngle(), false));
                         }
                     }
                 });
