@@ -98,7 +98,7 @@ public class BlockUtils {
     }
 
     public static boolean canBlockBeBroken(World world, BlockPos pos) {
-        if (world.isAirBlock(pos)) return false;
+        //if (world.isAirBlock(pos)) return false;
         BlockEvent.BreakEvent event = new BlockEvent.BreakEvent(world, pos, world.getBlockState(pos), IndustrialForegoing.getFakePlayer(world));
         MinecraftForge.EVENT_BUS.post(event);
         return !event.isCanceled();
