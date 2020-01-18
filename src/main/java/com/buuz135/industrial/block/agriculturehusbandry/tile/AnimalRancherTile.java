@@ -8,12 +8,16 @@ import com.hrznstudio.titanium.annotation.Save;
 import com.hrznstudio.titanium.component.fluid.SidedFluidTankComponent;
 import com.hrznstudio.titanium.component.inventory.SidedInventoryComponent;
 import net.minecraft.entity.passive.AnimalEntity;
+import net.minecraft.item.BucketItem;
 import net.minecraft.item.DyeColor;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.util.Hand;
 import net.minecraftforge.common.IShearable;
 import net.minecraftforge.common.util.FakePlayer;
+import net.minecraftforge.fluids.FluidAttributes;
+import net.minecraftforge.fluids.FluidStack;
+import net.minecraftforge.fluids.capability.IFluidHandler;
 import net.minecraftforge.items.ItemHandlerHelper;
 
 import javax.annotation.Nonnull;
@@ -49,8 +53,13 @@ public class AnimalRancherTile extends IndustrialAreaWorkingTile<AnimalRancherTi
                     FakePlayer player = IndustrialForegoing.getFakePlayer(world, mob.getPosition());
                     player.setHeldItem(Hand.MAIN_HAND, new ItemStack(Items.BUCKET));
                     if (mob.processInteract(player, Hand.MAIN_HAND)) {
+                        ItemStack stack = player.getHeldItem(Hand.MAIN_HAND);
+                        if (stack.getItem() instanceof BucketItem) {
+                            tank.fillForced(new FluidStack(((BucketItem) stack.getItem()).getFluid(), FluidAttributes.BUCKET_VOLUME), IFluidHandler.FluidAction.EXECUTE);
+                            player.setHeldItem(Hand.MAIN_HAND, ItemStack.EMPTY);
+                            return new WorkAction(0.35f, 400);
+                        }
                         player.setHeldItem(Hand.MAIN_HAND, ItemStack.EMPTY);
-                        return new WorkAction(0.35f, 400);
                     }
                     //SHEAR INTERACTION
                     ItemStack shears = new ItemStack(Items.SHEARS);
