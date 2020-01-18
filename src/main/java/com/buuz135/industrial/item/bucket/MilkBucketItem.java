@@ -32,6 +32,10 @@ public class MilkBucketItem extends BucketItem {
     }
 
     public ActionResult<ItemStack> onItemRightClick(World worldIn, PlayerEntity playerIn, Hand handIn) {
+        ActionResult<ItemStack> result = super.onItemRightClick(worldIn, playerIn, handIn);
+        if (result.getType().isAccepted()) {
+            return result;
+        }
         return realBucket.onItemRightClick(worldIn, playerIn, handIn);
     }
 
