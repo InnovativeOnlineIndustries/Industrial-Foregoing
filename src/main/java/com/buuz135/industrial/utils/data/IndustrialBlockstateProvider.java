@@ -2,6 +2,7 @@ package com.buuz135.industrial.utils.data;
 
 import com.buuz135.industrial.block.IndustrialBlock;
 import com.buuz135.industrial.block.transport.ConveyorBlock;
+import com.buuz135.industrial.module.ModuleAgricultureHusbandry;
 import com.buuz135.industrial.module.ModuleTransport;
 import com.buuz135.industrial.utils.Reference;
 import com.hrznstudio.titanium.block.BasicBlock;
@@ -29,6 +30,7 @@ public class IndustrialBlockstateProvider extends BlockStateProvider {
     protected void registerStatesAndModels() {
         BasicBlock.BLOCKS.stream().filter(blockBase -> blockBase.getRegistryName().getNamespace().equals(Reference.MOD_ID) && blockBase instanceof IndustrialBlock)
                 .map(blockBase -> (IndustrialBlock) blockBase)
+                .filter(industrialBlock -> !(industrialBlock.equals(ModuleAgricultureHusbandry.PLANT_SOWER)))
                 .forEach(industrialBlock -> {
                     VariantBlockStateBuilder builder = getVariantBuilder(industrialBlock);
                     for (DirectionProperty property : industrialBlock.getRotationType().getProperties()) {

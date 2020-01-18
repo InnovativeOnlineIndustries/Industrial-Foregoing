@@ -9,7 +9,7 @@ import com.hrznstudio.titanium.api.augment.IAugment;
 import com.hrznstudio.titanium.api.filter.FilterSlot;
 import com.hrznstudio.titanium.component.inventory.SidedInventoryComponent;
 import com.hrznstudio.titanium.filter.ItemStackFilter;
-import net.minecraft.block.BushBlock;
+import net.minecraft.block.Block;
 import net.minecraft.item.BlockItem;
 import net.minecraft.item.DyeColor;
 import net.minecraft.item.ItemStack;
@@ -66,10 +66,10 @@ public class PlantSowerTile extends IndustrialAreaWorkingTile<PlantSowerTile> {
                     break;
                 }
             }
-            if (!stack.isEmpty() && stack.getItem() instanceof BlockItem && ((BlockItem) stack.getItem()).getBlock() instanceof BushBlock && stack.getItem() instanceof IPlantable) {
-                BushBlock block = (BushBlock) ((BlockItem) stack.getItem()).getBlock();
-                if (block.canSustainPlant(this.world.getBlockState(pos), world, pos, Direction.UP, (IPlantable) stack.getItem())) {
-                    if (this.world.setBlockState(pos, block.getPlant(world, pos))) {
+            if (!stack.isEmpty() && stack.getItem() instanceof BlockItem && ((BlockItem) stack.getItem()).getBlock() instanceof IPlantable) {
+                Block block = ((BlockItem) stack.getItem()).getBlock();
+                if (block.canSustainPlant(this.world.getBlockState(pos.down()), world, pos, Direction.UP, (IPlantable) block)) {
+                    if (this.world.setBlockState(pos, ((IPlantable) block).getPlant(world, pos))) {
                         stack.shrink(1);
                         increasePointer();
                         return new WorkAction(0.2f, 1000);
