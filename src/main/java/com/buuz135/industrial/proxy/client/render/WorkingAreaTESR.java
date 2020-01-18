@@ -44,20 +44,12 @@ public class WorkingAreaTESR extends TileEntityRenderer<IndustrialAreaWorkingTil
         RenderSystem.lineWidth(Math.max(2.5F, (float) Minecraft.getInstance().getWindow().getFramebufferWidth() / 1920.0F * 2.5F));
         RenderSystem.disableTexture();
         RenderSystem.pushMatrix();
-        ActiveRenderInfo info = Minecraft.getInstance().gameRenderer.getActiveRenderInfo();
         BlockPos blockpos = tileEntityIn.getPos();
         Color color = new Color(Math.abs(blockpos.getX() % 255), Math.abs(blockpos.getY() % 255), Math.abs(blockpos.getZ() % 255));
-        double d0 = info.getProjectedView().x;
-        double d1 = info.getProjectedView().y;
-        double d2 = info.getProjectedView().z;
         RenderHelper.disableStandardItemLighting();
-        //this.setLightmapDisabled(true);
-
         RenderSystem.enableDepthTest();
         RenderSystem.depthFunc(515);
         RenderSystem.depthMask(true);
-        OutlineLayerBuffer outlineLayerBuffer = Minecraft.getInstance().getBufferBuilders().getOutlineVertexConsumers();
-        outlineLayerBuffer.setColor(color.getRed(), color.getGreen(), color.getBlue(), 150);
         IVertexBuilder builder = renderTypeBuffer.getBuffer(RenderType.getLines());
         WorldRenderer.drawBox(stack, builder, shape.getBoundingBox().offset((double) -blockpos.getX(), (double) -blockpos.getY(), (double) -blockpos.getZ()), (float) color.getRed() / 255f, (float) color.getGreen() / 255f, (float) color.getBlue() / 255f, 0.5F);
         renderFaces(stack, renderTypeBuffer, shape.getBoundingBox(), (double) -blockpos.getX(), (double) -blockpos.getY(), (double) -blockpos.getZ(), (float) color.getRed() / 255f, (float) color.getGreen() / 255f, (float) color.getBlue() / 255f, 0.3F);
