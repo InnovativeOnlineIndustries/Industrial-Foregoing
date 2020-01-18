@@ -5,6 +5,7 @@ import com.buuz135.industrial.block.tile.RangeManager;
 import com.buuz135.industrial.module.ModuleCore;
 import com.buuz135.industrial.recipe.FluidExtractorRecipe;
 import com.hrznstudio.titanium.annotation.Save;
+import com.hrznstudio.titanium.component.fluid.FluidTankComponent;
 import com.hrznstudio.titanium.component.fluid.SidedFluidTankComponent;
 import com.hrznstudio.titanium.util.RecipeUtil;
 import net.minecraft.item.DyeColor;
@@ -30,6 +31,7 @@ public class FluidExtractorTile extends IndustrialAreaWorkingTile<FluidExtractor
         super(ModuleCore.FLUID_EXTRACTOR, RangeManager.RangeType.BEHIND);
         addTank(tank = (SidedFluidTankComponent<FluidExtractorTile>) new SidedFluidTankComponent<FluidExtractorTile>("latex", 1000, 43, 20, 0).
                 setColor(DyeColor.LIGHT_GRAY).
+                setTankAction(FluidTankComponent.Action.DRAIN).
                 setComponentHarness(this).
                 setValidator(fluidStack -> fluidStack.getFluid().isEquivalentTo(ModuleCore.LATEX.getSourceFluid()))
         );
@@ -43,7 +45,7 @@ public class FluidExtractorTile extends IndustrialAreaWorkingTile<FluidExtractor
                 currentRecipe = findRecipe(this.world, pos);
             if (currentRecipe != null) {
                 FluidExtractionProgress extractionProgress = EXTRACTION.computeIfAbsent(this.world.dimension.getType(), dimensionType -> new HashMap<>()).computeIfAbsent(this.world.getChunkAt(pos).getPos(), chunkPos -> new HashMap<>()).computeIfAbsent(pos, pos1 -> new FluidExtractionProgress(this.world));
-                tank.fill(currentRecipe.output.copy(), IFluidHandler.FluidAction.EXECUTE);
+                tank.fillForced(currentRecipe.output.copy(), IFluidHandler.FluidAction.EXECUTE);
                 if (this.world.rand.nextDouble() <= currentRecipe.breakChance) {
                     extractionProgress.setProgress(extractionProgress.getProgress() + 1);
                 }
