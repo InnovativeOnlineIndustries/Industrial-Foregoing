@@ -23,11 +23,14 @@ package com.buuz135.industrial.proxy.client.event;
 
 import com.buuz135.industrial.item.infinity.ItemInfinityDrill;
 import com.buuz135.industrial.module.ModuleTool;
-import com.mojang.blaze3d.platform.GlStateManager;
-import com.mojang.blaze3d.systems.RenderSystem;
+import com.mojang.blaze3d.matrix.MatrixStack;
+import com.mojang.blaze3d.vertex.IVertexBuilder;
 import net.minecraft.block.FlowingFluidBlock;
 import net.minecraft.client.Minecraft;
-import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.client.renderer.ActiveRenderInfo;
+import net.minecraft.client.renderer.RenderType;
+import net.minecraft.client.renderer.Vector3f;
+import net.minecraft.client.renderer.WorldRenderer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.Hand;
 import net.minecraft.util.math.BlockPos;
@@ -62,24 +65,21 @@ public class IFClientEvents {
             ItemInfinityDrill.DrillTier tier = ModuleTool.INFINITY_DRILL.getSelectedDrillTier(hand);
             World world = Minecraft.getInstance().player.world;
             Pair<BlockPos, BlockPos> area = ModuleTool.INFINITY_DRILL.getArea(blockRayTraceResult.getPos(), blockRayTraceResult.getFace(), tier, false);
-            RenderSystem.enableBlend();
-            RenderSystem.blendFuncSeparate(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA,
-                    GlStateManager.SourceFactor.ONE, GlStateManager.DestFactor.ZERO);
-            RenderSystem.lineWidth(2.0F);
-            RenderSystem.disableTexture();
-            RenderSystem.depthMask(false);
-            PlayerEntity player = Minecraft.getInstance().player;
-            double x = player.lastTickPosX + (player.getPosition().getX() - player.lastTickPosX) * event.getPartialTicks();
-            double y = player.lastTickPosY + (player.getPosition().getY() - player.lastTickPosY) * event.getPartialTicks() + (double) player.getEyeHeight();
-            double z = player.lastTickPosZ + (player.getPosition().getZ() - player.lastTickPosZ) * event.getPartialTicks();
+            MatrixStack stack = new MatrixStack();
+            stack.push();
+            ActiveRenderInfo info = event.getInfo();
+            stack.multiply(Vector3f.POSITIVE_X.getDegreesQuaternion(info.getPitch()));
+            stack.multiply(Vector3f.POSITIVE_Y.getDegreesQuaternion(info.getYaw() + 180));
+            double d0 = info.getProjectedView().getX();
+            double d1 = info.getProjectedView().getY();
+            double d2 = info.getProjectedView().getZ();
+            IVertexBuilder builder = Minecraft.getInstance().getBufferBuilders().getOutlineVertexConsumers().getBuffer(RenderType.getLines());
             BlockPos.getAllInBoxMutable(area.getLeft(), area.getRight()).forEach(blockPos -> {
                 if (!world.isAirBlock(blockPos) && world.getBlockState(blockPos).getBlockHardness(world, blockPos) >= 0 && !(world.getBlockState(blockPos).getBlock() instanceof IFluidBlock) && !(world.getBlockState(blockPos).getBlock() instanceof FlowingFluidBlock)) {
-                    //TODO WorldRenderer.drawSelectionBoundingBox(world.getBlockState(blockPos).getShape(world, blockPos).getBoundingBox().offset(-x, -y, -z).offset(blockPos).grow(0.001), 0.0F, 0.0F, 0.0F, 0.4F);
+                    WorldRenderer.drawBox(stack, builder, world.getBlockState(blockPos).getShape(world, blockPos).getBoundingBox().offset(blockPos.getX() - d0, blockPos.getY() - d1, blockPos.getZ() - d2), 0, 0, 0, 0.35F);
                 }
             });
-            RenderSystem.depthMask(true);
-            RenderSystem.enableTexture();
-            RenderSystem.disableBlend();
+            stack.pop();
         }
     }
 
