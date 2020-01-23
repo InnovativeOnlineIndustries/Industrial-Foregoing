@@ -68,8 +68,7 @@ public class PlantSowerTile extends IndustrialAreaWorkingTile<PlantSowerTile> {
             }
             if (!stack.isEmpty() && stack.getItem() instanceof BlockItem && ((BlockItem) stack.getItem()).getBlock() instanceof IPlantable) {
                 Block block = ((BlockItem) stack.getItem()).getBlock();
-                Block soil = this.world.getBlockState(pos.down()).getBlock();
-                if (soil.canSustainPlant(this.world.getBlockState(pos.down()), world, pos, Direction.UP, (IPlantable) block)) {
+                if (this.world.getBlockState(pos.down()).canSustainPlant(world, pos.down(), Direction.UP, (IPlantable) block)) {
                     if (this.world.setBlockState(pos, ((IPlantable) block).getPlant(world, pos))) {
                         stack.shrink(1);
                         increasePointer();
