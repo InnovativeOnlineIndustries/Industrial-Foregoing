@@ -198,10 +198,11 @@ public class LaserBaseTile extends CustomSidedTileEntity implements IHasDisplayS
                 }
             });
 
-            if (!items.isEmpty()) {
+            if (!items.isEmpty() && WeightedRandom.getTotalWeight(items) > 0) {
                 ItemStack stack = WeightedRandom.getRandomItem(this.world.rand, items).getStack().copy();
                 if (ItemHandlerHelper.insertItem(outItems, stack, true).isEmpty()) {
                     ItemHandlerHelper.insertItem(outItems, stack, false);
+                    
                 }
             }
             currentWork = 0;
