@@ -101,6 +101,11 @@ public class ConveyorBlockModel implements IDynamicBakedModel {
     }
 
     @Override
+    public boolean func_230044_c_() {
+        return previousConveyor.func_230044_c_();
+    }
+
+    @Override
     public boolean isBuiltInRenderer() {
         return previousConveyor.isBuiltInRenderer();
     }

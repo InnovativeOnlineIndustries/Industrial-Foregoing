@@ -27,7 +27,7 @@ public class WorkingAreaTESR extends TileEntityRenderer<IndustrialAreaWorkingTil
             RenderSystem.disableBlend();
             RenderSystem.disableAlphaTest();
         })).build(true);
-        return RenderType.of("working_area_render", DefaultVertexFormats.POSITION_COLOR, 7, 256, false, true, state);
+        return RenderType.get("working_area_render", DefaultVertexFormats.POSITION_COLOR, 7, 256, false, true, state);
     }
 
     public WorkingAreaTESR(TileEntityRendererDispatcher dispatcher) {
@@ -41,7 +41,7 @@ public class WorkingAreaTESR extends TileEntityRenderer<IndustrialAreaWorkingTil
 
         RenderSystem.enableBlend();
         RenderSystem.blendFuncSeparate(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA, GlStateManager.SourceFactor.ONE, GlStateManager.DestFactor.ZERO);
-        RenderSystem.lineWidth(Math.max(2.5F, (float) Minecraft.getInstance().getWindow().getFramebufferWidth() / 1920.0F * 2.5F));
+        RenderSystem.lineWidth(Math.max(2.5F, (float) Minecraft.getInstance().getMainWindow().getFramebufferWidth() / 1920.0F * 2.5F));
         RenderSystem.disableTexture();
         RenderSystem.pushMatrix();
         BlockPos blockpos = tileEntityIn.getPos();
@@ -50,8 +50,8 @@ public class WorkingAreaTESR extends TileEntityRenderer<IndustrialAreaWorkingTil
         RenderSystem.enableDepthTest();
         RenderSystem.depthFunc(515);
         RenderSystem.depthMask(true);
-        IVertexBuilder builder = renderTypeBuffer.getBuffer(RenderType.getLines());
-        WorldRenderer.drawBox(stack, builder, shape.getBoundingBox().offset((double) -blockpos.getX(), (double) -blockpos.getY(), (double) -blockpos.getZ()), (float) color.getRed() / 255f, (float) color.getGreen() / 255f, (float) color.getBlue() / 255f, 0.5F);
+        IVertexBuilder builder = renderTypeBuffer.getBuffer(RenderType.lines());
+        WorldRenderer.drawBoundingBox(stack, builder, shape.getBoundingBox().offset((double) -blockpos.getX(), (double) -blockpos.getY(), (double) -blockpos.getZ()), (float) color.getRed() / 255f, (float) color.getGreen() / 255f, (float) color.getBlue() / 255f, 0.5F);
         renderFaces(stack, renderTypeBuffer, shape.getBoundingBox(), (double) -blockpos.getX(), (double) -blockpos.getY(), (double) -blockpos.getZ(), (float) color.getRed() / 255f, (float) color.getGreen() / 255f, (float) color.getBlue() / 255f, 0.3F);
         RenderSystem.popMatrix();
         RenderSystem.enableTexture();
@@ -72,40 +72,40 @@ public class WorkingAreaTESR extends TileEntityRenderer<IndustrialAreaWorkingTil
         float z1 = (float) (pos.minZ + z);
         float z2 = (float) (pos.maxZ + z);
 
-        Matrix4f matrix = stack.peek().getModel();
+        Matrix4f matrix = stack.getLast().getPositionMatrix();
         IVertexBuilder buffer = renderTypeBuffer.getBuffer(createRenderType());
 
-        buffer.vertex(matrix, x1, y1, z1).color(red, green, blue, alpha).endVertex();
-        buffer.vertex(matrix, x1, y2, z1).color(red, green, blue, alpha).endVertex();
-        buffer.vertex(matrix, x2, y2, z1).color(red, green, blue, alpha).endVertex();
-        buffer.vertex(matrix, x2, y1, z1).color(red, green, blue, alpha).endVertex();
+        buffer.pos(matrix, x1, y1, z1).color(red, green, blue, alpha).endVertex();
+        buffer.pos(matrix, x1, y2, z1).color(red, green, blue, alpha).endVertex();
+        buffer.pos(matrix, x2, y2, z1).color(red, green, blue, alpha).endVertex();
+        buffer.pos(matrix, x2, y1, z1).color(red, green, blue, alpha).endVertex();
 
-        buffer.vertex(matrix, x1, y1, z2).color(red, green, blue, alpha).endVertex();
-        buffer.vertex(matrix, x2, y1, z2).color(red, green, blue, alpha).endVertex();
-        buffer.vertex(matrix, x2, y2, z2).color(red, green, blue, alpha).endVertex();
-        buffer.vertex(matrix, x1, y2, z2).color(red, green, blue, alpha).endVertex();
-
-
-        buffer.vertex(matrix, x1, y1, z1).color(red, green, blue, alpha).endVertex();
-        buffer.vertex(matrix, x2, y1, z1).color(red, green, blue, alpha).endVertex();
-        buffer.vertex(matrix, x2, y1, z2).color(red, green, blue, alpha).endVertex();
-        buffer.vertex(matrix, x1, y1, z2).color(red, green, blue, alpha).endVertex();
-
-        buffer.vertex(matrix, x1, y2, z1).color(red, green, blue, alpha).endVertex();
-        buffer.vertex(matrix, x1, y2, z2).color(red, green, blue, alpha).endVertex();
-        buffer.vertex(matrix, x2, y2, z2).color(red, green, blue, alpha).endVertex();
-        buffer.vertex(matrix, x2, y2, z1).color(red, green, blue, alpha).endVertex();
+        buffer.pos(matrix, x1, y1, z2).color(red, green, blue, alpha).endVertex();
+        buffer.pos(matrix, x2, y1, z2).color(red, green, blue, alpha).endVertex();
+        buffer.pos(matrix, x2, y2, z2).color(red, green, blue, alpha).endVertex();
+        buffer.pos(matrix, x1, y2, z2).color(red, green, blue, alpha).endVertex();
 
 
-        buffer.vertex(matrix, x1, y1, z1).color(red, green, blue, alpha).endVertex();
-        buffer.vertex(matrix, x1, y1, z2).color(red, green, blue, alpha).endVertex();
-        buffer.vertex(matrix, x1, y2, z2).color(red, green, blue, alpha).endVertex();
-        buffer.vertex(matrix, x1, y2, z1).color(red, green, blue, alpha).endVertex();
+        buffer.pos(matrix, x1, y1, z1).color(red, green, blue, alpha).endVertex();
+        buffer.pos(matrix, x2, y1, z1).color(red, green, blue, alpha).endVertex();
+        buffer.pos(matrix, x2, y1, z2).color(red, green, blue, alpha).endVertex();
+        buffer.pos(matrix, x1, y1, z2).color(red, green, blue, alpha).endVertex();
 
-        buffer.vertex(matrix, x2, y1, z1).color(red, green, blue, alpha).endVertex();
-        buffer.vertex(matrix, x2, y2, z1).color(red, green, blue, alpha).endVertex();
-        buffer.vertex(matrix, x2, y2, z2).color(red, green, blue, alpha).endVertex();
-        buffer.vertex(matrix, x2, y1, z2).color(red, green, blue, alpha).endVertex();
+        buffer.pos(matrix, x1, y2, z1).color(red, green, blue, alpha).endVertex();
+        buffer.pos(matrix, x1, y2, z2).color(red, green, blue, alpha).endVertex();
+        buffer.pos(matrix, x2, y2, z2).color(red, green, blue, alpha).endVertex();
+        buffer.pos(matrix, x2, y2, z1).color(red, green, blue, alpha).endVertex();
+
+
+        buffer.pos(matrix, x1, y1, z1).color(red, green, blue, alpha).endVertex();
+        buffer.pos(matrix, x1, y1, z2).color(red, green, blue, alpha).endVertex();
+        buffer.pos(matrix, x1, y2, z2).color(red, green, blue, alpha).endVertex();
+        buffer.pos(matrix, x1, y2, z1).color(red, green, blue, alpha).endVertex();
+
+        buffer.pos(matrix, x2, y1, z1).color(red, green, blue, alpha).endVertex();
+        buffer.pos(matrix, x2, y2, z1).color(red, green, blue, alpha).endVertex();
+        buffer.pos(matrix, x2, y2, z2).color(red, green, blue, alpha).endVertex();
+        buffer.pos(matrix, x2, y1, z2).color(red, green, blue, alpha).endVertex();
 
     }
 }

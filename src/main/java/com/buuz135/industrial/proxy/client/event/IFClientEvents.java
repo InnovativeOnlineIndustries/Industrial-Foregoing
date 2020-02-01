@@ -68,15 +68,15 @@ public class IFClientEvents {
             MatrixStack stack = new MatrixStack();
             stack.push();
             ActiveRenderInfo info = event.getInfo();
-            stack.multiply(Vector3f.POSITIVE_X.getDegreesQuaternion(info.getPitch()));
-            stack.multiply(Vector3f.POSITIVE_Y.getDegreesQuaternion(info.getYaw() + 180));
+            stack.rotate(Vector3f.XP.rotationDegrees(info.getPitch()));
+            stack.rotate(Vector3f.YP.rotationDegrees(info.getYaw() + 180));
             double d0 = info.getProjectedView().getX();
             double d1 = info.getProjectedView().getY();
             double d2 = info.getProjectedView().getZ();
-            IVertexBuilder builder = Minecraft.getInstance().getBufferBuilders().getOutlineVertexConsumers().getBuffer(RenderType.getLines());
+            IVertexBuilder builder = Minecraft.getInstance().getRenderTypeBuffers().getOutlineBufferSource().getBuffer(RenderType.lines());
             BlockPos.getAllInBoxMutable(area.getLeft(), area.getRight()).forEach(blockPos -> {
                 if (!world.isAirBlock(blockPos) && world.getBlockState(blockPos).getBlockHardness(world, blockPos) >= 0 && !(world.getBlockState(blockPos).getBlock() instanceof IFluidBlock) && !(world.getBlockState(blockPos).getBlock() instanceof FlowingFluidBlock)) {
-                    WorldRenderer.drawBox(stack, builder, world.getBlockState(blockPos).getShape(world, blockPos).getBoundingBox().offset(blockPos.getX() - d0, blockPos.getY() - d1, blockPos.getZ() - d2), 0, 0, 0, 0.35F);
+                    WorldRenderer.drawBoundingBox(stack, builder, world.getBlockState(blockPos).getShape(world, blockPos).getBoundingBox().offset(blockPos.getX() - d0, blockPos.getY() - d1, blockPos.getZ() - d2), 0, 0, 0, 0.35F);
                 }
             });
             stack.pop();

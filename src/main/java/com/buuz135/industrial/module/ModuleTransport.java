@@ -80,7 +80,7 @@ public class ModuleTransport implements IModule {
                     try {
                         ResourceLocation resourceLocation = conveyorUpgradeFactory.getModel(upgradeFacing, conveyorFacing);
                         IUnbakedModel unbakedModel = event.getModelLoader().getUnbakedModel(resourceLocation);
-                        CONVEYOR_UPGRADES_CACHE.put(resourceLocation, unbakedModel.bake(event.getModelLoader(), ModelLoader.defaultTextureGetter(), new SimpleModelTransform(ImmutableMap.of()), resourceLocation));
+                        CONVEYOR_UPGRADES_CACHE.put(resourceLocation, unbakedModel.bakeModel(event.getModelLoader(), ModelLoader.defaultTextureGetter(), new SimpleModelTransform(ImmutableMap.of()), resourceLocation));
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
