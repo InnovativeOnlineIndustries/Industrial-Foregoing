@@ -16,10 +16,11 @@ public abstract class IndustrialGeneratorTile<T extends IndustrialGeneratorTile<
 
     @Override
     public ActionResultType onActivated(PlayerEntity playerIn, Hand hand, Direction facing, double hitX, double hitY, double hitZ) {
-        if (super.onActivated(playerIn, hand, facing, hitX, hitY, hitZ) == ActionResultType.SUCCESS)
+        if (super.onActivated(playerIn, hand, facing, hitX, hitY, hitZ) == ActionResultType.SUCCESS) {
             return ActionResultType.SUCCESS;
+        }
         openGui(playerIn);
-        return ActionResultType.PASS;
+        return ActionResultType.SUCCESS;
     }
 
 }
