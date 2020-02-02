@@ -67,6 +67,6 @@ public class PitifulGeneratorTile extends IndustrialGeneratorTile<PitifulGenerat
     @Nonnull
     @Override
     public PitifulGeneratorTile getSelf() {
-        return null;
+        return this;
     }
 }
