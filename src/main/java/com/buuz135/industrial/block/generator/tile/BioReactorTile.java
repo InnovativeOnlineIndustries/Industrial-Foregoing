@@ -103,6 +103,8 @@ public class BioReactorTile extends IndustrialWorkingTile<BioReactorTile> {
         for (int i = 0; i < input.getSlots(); i++) {
             if (i != slot && input.getStackInSlot(i).isItemEqual(stack)) {
                 return false;
+            } else if (i == slot && input.getStackInSlot(i).isItemEqual(stack) && input.getStackInSlot(i).getCount() + stack.getCount() <= input.getStackInSlot(i).getMaxStackSize()) {
+                return true;
             }
         }
         for (Tag<Item> itemTag : VALID) {
