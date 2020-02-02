@@ -1,5 +1,6 @@
 package com.buuz135.industrial.module;
 
+import com.buuz135.industrial.api.straw.StrawHandler;
 import com.buuz135.industrial.block.MachineFrameBlock;
 import com.buuz135.industrial.block.core.DissolutionChamberBlock;
 import com.buuz135.industrial.block.core.FluidExtractorBlock;
@@ -7,6 +8,7 @@ import com.buuz135.industrial.block.core.LatexProcessingUnitBlock;
 import com.buuz135.industrial.block.core.tile.FluidExtractorTile;
 import com.buuz135.industrial.item.*;
 import com.buuz135.industrial.item.bucket.MilkBucketItem;
+import com.buuz135.industrial.proxy.StrawRegistry;
 import com.buuz135.industrial.utils.Reference;
 import com.hrznstudio.titanium.event.handler.EventManager;
 import com.hrznstudio.titanium.fluid.TitaniumFluidInstance;
@@ -21,6 +23,7 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.client.event.TextureStitchEvent;
+import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.fluids.FluidAttributes;
 
@@ -82,6 +85,7 @@ public class ModuleCore implements IModule {
         features.add(Feature.builder("fertilizer").
                 content(Item.class, FERTILIZER));
         features.add(Feature.builder("straw").
+                event(EventManager.mod(RegistryEvent.Register.class).filter(register -> register.getGenericType().equals(StrawHandler.class)).process(StrawRegistry::register)).
                 content(Item.class, STRAW));
         features.add(Feature.builder("machine_frames").
                 content(Block.class, PITY).

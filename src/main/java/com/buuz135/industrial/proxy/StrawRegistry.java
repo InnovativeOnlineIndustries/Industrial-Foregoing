@@ -26,14 +26,12 @@ import com.buuz135.industrial.module.ModuleCore;
 import com.buuz135.industrial.utils.apihandlers.straw.*;
 import net.minecraft.potion.Effects;
 import net.minecraftforge.event.RegistryEvent;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.registries.IForgeRegistry;
 
 
 public class StrawRegistry {
 
-    @SubscribeEvent
-    public void register(RegistryEvent.Register<StrawHandler> event) {
+    public static void register(RegistryEvent.Register<StrawHandler> event) {
         IForgeRegistry<StrawHandler> registry = event.getRegistry();
         registry.registerAll(new WaterStrawHandler(), new LavaStrawHandler(), new MilkStrawHandler(), new EssenceStrawHandler());
         registry.register(new PotionStrawHandler(ModuleCore.BIOFUEL.getSourceFluid())

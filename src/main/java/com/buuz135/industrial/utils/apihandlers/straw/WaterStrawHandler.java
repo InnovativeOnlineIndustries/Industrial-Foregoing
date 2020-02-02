@@ -21,9 +21,14 @@
  */
 package com.buuz135.industrial.utils.apihandlers.straw;
 
+import net.minecraft.block.Blocks;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.fluid.Fluid;
 import net.minecraft.fluid.Fluids;
+import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.util.SoundCategory;
+import net.minecraft.util.SoundEvents;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
@@ -40,13 +45,12 @@ public class WaterStrawHandler extends StrawHandlerBase {
     @Override
     public void onDrink(World world, BlockPos pos, Fluid stack, PlayerEntity player, boolean fromFluidContainer) {
         player.extinguish();
-        /*CompoundNBT tag = player.getEntityData(); todo
-        if (tag.hasKey("lavaDrink") && world.getTotalWorldTime() - tag.getLong("lavaDrink") < 120) { //6 Seconds to drink water after drinking lava to create obsidian
+        CompoundNBT tag = player.getPersistentData();
+        if (tag.contains("lavaDrink") && world.getGameTime() - tag.getLong("lavaDrink") < 120) { //6 Seconds to drink water after drinking lava to create obsidian
             player.entityDropItem(new ItemStack(Blocks.OBSIDIAN), player.getEyeHeight());
-
-            tag.setLong("lavaDrink", 0);
+            tag.putLong("lavaDrink", 0);
             world.playSound(null, player.getPosition().getX(), player.getPosition().getY(), player.getPosition().getZ(), SoundEvents.ENTITY_PLAYER_BURP, SoundCategory.PLAYERS, 1.5F, world.rand.nextFloat() * 0.1F + 0.9F);
-        }*/
+        }
     }
 
 }
