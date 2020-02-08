@@ -46,6 +46,18 @@ public class DissolutionChamberRecipe extends SerializableRecipe {
                         new Ingredient.SingleItemList(new ItemStack(Items.ROTTEN_FLESH)),
                         new Ingredient.TagList(IndustrialTags.Items.MACHINE_FRAME_PITY),
                 }, new FluidStack(ModuleCore.MEAT.getSourceFluid(), 1000), 100, new ItemStack(ModuleResourceProduction.MECHANICAL_DIRT), FluidStack.EMPTY);
+        new DissolutionChamberRecipe(new ResourceLocation(Reference.MOD_ID, "simple_machine_frame"),
+                new Ingredient.IItemList[]{
+                        new Ingredient.TagList(IndustrialTags.Items.MACHINE_FRAME_PITY),
+                        new Ingredient.TagList(IndustrialTags.Items.GEAR_GOLD),
+                        new Ingredient.TagList(IndustrialTags.Items.GEAR_GOLD),
+                        new Ingredient.SingleItemList(new ItemStack(Items.IRON_BARS)),
+                        new Ingredient.SingleItemList(new ItemStack(Items.IRON_BARS)),
+                        new Ingredient.SingleItemList(new ItemStack(Items.REDSTONE)),
+                        new Ingredient.SingleItemList(new ItemStack(Items.REDSTONE)),
+                        new Ingredient.SingleItemList(new ItemStack(Items.DIAMOND))
+                },
+                new FluidStack(ModuleCore.LATEX.getSourceFluid(), 750), 300, new ItemStack(ModuleCore.SIMPLE), FluidStack.EMPTY);
     }
 
     public Ingredient.IItemList[] input;

@@ -1,0 +1,36 @@
+{
+  "input": [
+    {
+      "tag": "industrialforegoing:machine_frame/pity"
+    },
+    {
+      "tag": "forge:gear/gold"
+    },
+    {
+      "tag": "forge:gear/gold"
+    },
+    {
+      "item": "minecraft:iron_bars"
+    },
+    {
+      "item": "minecraft:iron_bars"
+    },
+    {
+      "item": "minecraft:redstone"
+    },
+    {
+      "item": "minecraft:redstone"
+    },
+    {
+      "item": "minecraft:diamond"
+    }
+  ],
+  "inputFluid": "{FluidName:\"industrialforegoing:latex\",Amount:750}",
+  "processingTime": 300,
+  "output": {
+    "item": "industrialforegoing:machine_frame_simple",
+    "count": 1
+  },
+  "outputFluid": "{FluidName:\"minecraft:empty\",Amount:0}",
+  "type": "industrialforegoing:dissolution_chamber"
+}
