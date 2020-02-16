@@ -1,0 +1,19 @@
+{
+  "variants": {
+    "subfacing=north": {
+      "model": "industrialforegoing:block/stasis_chamber"
+    },
+    "subfacing=south": {
+      "model": "industrialforegoing:block/stasis_chamber",
+      "y": 180
+    },
+    "subfacing=west": {
+      "model": "industrialforegoing:block/stasis_chamber",
+      "y": 270
+    },
+    "subfacing=east": {
+      "model": "industrialforegoing:block/stasis_chamber",
+      "y": 90
+    }
+  }
+}

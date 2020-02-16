@@ -169,6 +169,10 @@ public class IndustrialForegoing extends ModuleController {
         Module.Builder resources = Module.builder("resource_production");
         new ModuleResourceProduction().generateFeatures().forEach(resources::feature);
         addModule(resources);
+
+        Module.Builder misc = Module.builder("misc").description("Random things that don't fit");
+        new ModuleMisc().generateFeatures().forEach(misc::feature);
+        addModule(misc);
     }
 
     @OnlyIn(Dist.CLIENT)
