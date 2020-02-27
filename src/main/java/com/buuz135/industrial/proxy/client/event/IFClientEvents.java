@@ -73,9 +73,10 @@ public class IFClientEvents {
             double z = player.lastTickPosZ + (player.posZ - player.lastTickPosZ) * event.getPartialTicks();
             BlockPos.getAllInBoxMutable(area.getLeft(), area.getRight()).forEach(blockPos -> {
                 if (!world.isAirBlock(blockPos) && world.getBlockState(blockPos).getBlockHardness(world, blockPos) >= 0 && !(world.getBlockState(blockPos).getBlock() instanceof IFluidBlock) && !(world.getBlockState(blockPos).getBlock() instanceof IFluidBlock)) {
-                    Minecraft.getInstance().worldRenderer.drawSelectionBoundingBox(world.getBlockState(blockPos).getBlock().getShape(world.getBlockState(blockPos), world, blockPos, ISelectionContext.dummy()).getBoundingBox().offset(-x, -y, -z).offset(blockPos).
-                            grow(0.001), 0.0F, 0.0F, 0.0F, 0.4F);
-                }
+                    VoxelShape shape = world.getBlockState(blockPos).getBlock().getShape(world.getBlockState(blockPos), world, blockPos, ISelectionContext.dummy());
+                  if(!(shape.isEmpty() || shape == null)) {
+                        Minecraft.getInstance().worldRenderer.drawSelectionBoundingBox(shape.getBoundingBox().offset(-x, -y, -z).offset(blockPos).grow(0.001), 0.0F, 0.0F, 0.0F, 0.4F);
+                }}
             });
             GlStateManager.depthMask(true);
             GlStateManager.enableTexture();
