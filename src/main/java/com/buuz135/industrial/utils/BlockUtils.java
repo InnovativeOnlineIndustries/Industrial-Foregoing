@@ -33,12 +33,12 @@ import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.entity.item.ItemEntity;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.tags.BlockTags;
+import net.minecraft.tags.Tag;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.Direction;
 import net.minecraft.util.NonNullList;
-import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
@@ -52,7 +52,6 @@ import java.util.List;
 
 public class BlockUtils {
 
-    public static final ResourceLocation LOGS_TAG = new ResourceLocation("minecraft", "logs");
     private static HashMultimap<String, Block> oreDictBlocks = HashMultimap.create();
 
     public static List<BlockPos> getBlockPosInAABB(AxisAlignedBB axisAlignedBB) {
@@ -67,12 +66,8 @@ public class BlockUtils {
         return blocks;
     }
 
-    public static boolean isBlockTag(World world, BlockPos pos, ResourceLocation resource) {
-        Item item = world.getBlockState(pos).getBlock().asItem();
-        if (item == null) {
-            return false;
-        }
-        return item.getTags().contains(resource);
+    public static boolean isBlockTag(World world, BlockPos pos, Tag<Block> tag) {
+        return world.getBlockState(pos).isIn(tag);
     }
 
     public static boolean isBlockOreDict(World world, BlockPos pos, String ore) {
@@ -97,7 +92,7 @@ public class BlockUtils {
     }
 
     public static boolean isLog(World world, BlockPos pos) {
-        return isBlockTag(world, pos, LOGS_TAG);
+        return isBlockTag(world, pos, BlockTags.LOGS);
     }
 
     public static boolean isLeaves(World world, BlockPos pos) {
