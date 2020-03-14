@@ -20,7 +20,7 @@ public class PitifulGeneratorTile extends IndustrialGeneratorTile<PitifulGenerat
         super(ModuleGenerator.PITIFUL_GENERATOR);
         this.addInventory(fuel = (SidedInventoryComponent<PitifulGeneratorTile>) new SidedInventoryComponent<PitifulGeneratorTile>("fuel_input", 46, 22, 1, 0)
                 .setColor(DyeColor.ORANGE)
-                .setInputFilter((itemStack, integer) -> FurnaceTileEntity.isFuel(itemStack))
+                .setInputFilter((itemStack, integer) -> ForgeHooks.getBurnTime(itemStack) != 0)
                 .setComponentHarness(this)
         );
     }
@@ -34,8 +34,8 @@ public class PitifulGeneratorTile extends IndustrialGeneratorTile<PitifulGenerat
 
     @Override
     public boolean canStart() {
-        return !fuel.getStackInSlot(0).isEmpty() && FurnaceTileEntity.getBurnTimes().get(fuel.getStackInSlot(0).getItem()) != null;
-    }
+        return !fuel.getStackInSlot(0).isEmpty() && ForgeHooks.getBurnTime(fuel.getStackInSlot(0)) != 0;
+}
 
     @Override
     public int getEnergyProducedEveryTick() {
