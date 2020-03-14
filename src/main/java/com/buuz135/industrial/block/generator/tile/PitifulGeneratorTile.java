@@ -7,6 +7,7 @@ import com.hrznstudio.titanium.component.inventory.SidedInventoryComponent;
 import com.hrznstudio.titanium.component.progress.ProgressBarComponent;
 import net.minecraft.item.DyeColor;
 import net.minecraft.tileentity.FurnaceTileEntity;
+import net.minecraftforge.common.ForgeHooks;
 
 import javax.annotation.Nonnull;
 
@@ -26,7 +27,7 @@ public class PitifulGeneratorTile extends IndustrialGeneratorTile<PitifulGenerat
 
     @Override
     public int consumeFuel() {
-        int time = FurnaceTileEntity.getBurnTimes().getOrDefault(fuel.getStackInSlot(0).getItem(), 100);
+        int time = ForgeHooks.getBurnTime(fuel.getStackInSlot(0));
         fuel.getStackInSlot(0).shrink(1);
         return time;
     }

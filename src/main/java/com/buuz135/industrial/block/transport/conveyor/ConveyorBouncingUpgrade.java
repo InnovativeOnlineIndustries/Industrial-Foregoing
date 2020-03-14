@@ -54,7 +54,9 @@ import net.minecraftforge.common.Tags;
 
 import javax.annotation.Nonnull;
 import java.text.DecimalFormat;
+import java.text.NumberFormat;
 import java.util.List;
+import java.util.Locale;
 import java.util.Set;
 import java.util.function.Consumer;
 
@@ -175,13 +177,13 @@ public class ConveyorBouncingUpgrade extends ConveyorUpgrade {
         componentList.add(new TextGuiComponent(104, 44) {
             @Override
             public String getText() {
-                return TextFormatting.DARK_GRAY + new DecimalFormat("#0.00").format(velocityHorizontal > 0 ? velocityHorizontal : 0);
+                return TextFormatting.DARK_GRAY + NumberFormat.getNumberInstance(Locale.ROOT).format(velocityHorizontal > 0 ? velocityHorizontal : 0);
             }
         });
         componentList.add(new TextGuiComponent(104, 61) {
             @Override
             public String getText() {
-                return TextFormatting.DARK_GRAY + new DecimalFormat("#0.00").format(velocityVertical > 0 ? velocityVertical : 0);
+                return TextFormatting.DARK_GRAY + NumberFormat.getNumberInstance(Locale.ROOT).format(velocityVertical > 0 ? velocityVertical : 0);
             }
         });
         componentList.add(new TexturedStateButtonGuiComponent(11, 130, 40, 14, 14,

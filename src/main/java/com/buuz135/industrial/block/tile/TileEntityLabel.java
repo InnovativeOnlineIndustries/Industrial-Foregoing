@@ -27,11 +27,13 @@ import net.minecraft.nbt.CompoundNBT;
 
 import javax.annotation.Nonnull;
 import java.text.DecimalFormat;
+import java.text.NumberFormat;
+import java.util.Locale;
 import java.util.function.Function;
 
 public class TileEntityLabel extends ActiveTile<TileEntityLabel> {
 
-    private static DecimalFormat formatterWithUnits = new DecimalFormat("####0.#");
+    private static NumberFormat formatterWithUnits = NumberFormat.getNumberInstance(Locale.ROOT);
     private FormatType formatType = FormatType.STACKS;
 
     public TileEntityLabel() {

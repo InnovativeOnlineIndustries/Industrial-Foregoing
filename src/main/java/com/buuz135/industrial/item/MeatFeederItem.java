@@ -40,7 +40,9 @@ import net.minecraftforge.fluids.capability.templates.FluidHandlerItemStack;
 
 import javax.annotation.Nullable;
 import java.text.DecimalFormat;
+import java.text.NumberFormat;
 import java.util.List;
+import java.util.Locale;
 import java.util.function.Consumer;
 
 public class MeatFeederItem extends IFCustomItem {
@@ -75,7 +77,7 @@ public class MeatFeederItem extends IFCustomItem {
         //})
         //;
         if (stack.getTag() != null && key == null) {
-            tooltip.add(new StringTextComponent(new DecimalFormat().format(stack.getTag().getCompound("Fluid").getInt("Amount")) + TextFormatting.GOLD + "/" + TextFormatting.WHITE + new DecimalFormat().format(128000) + TextFormatting.GOLD + "mb of Meat"));
+            tooltip.add(new StringTextComponent(NumberFormat.getNumberInstance(Locale.ROOT).format(stack.getTag().getCompound("Fluid").getInt("Amount")) + TextFormatting.GOLD + "/" + TextFormatting.WHITE + NumberFormat.getNumberInstance(Locale.ROOT).format(128000) + TextFormatting.GOLD + "mb of Meat"));
         }
     }
 

@@ -75,7 +75,9 @@ import org.apache.commons.lang3.tuple.Pair;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.text.DecimalFormat;
+import java.text.NumberFormat;
 import java.util.List;
+import java.util.Locale;
 import java.util.function.Consumer;
 
 public class ItemInfinityDrill extends IFCustomItem {
@@ -191,9 +193,9 @@ public class ItemInfinityDrill extends IFCustomItem {
         DrillTier current = getSelectedDrillTier(stack);
         tooltip.add(new TranslationTextComponent("text.industrialforegoing.display.current_area").appendText(" ").appendText(getFormattedArea(current, current.getRadius())).setStyle(new Style().setColor(TextFormatting.GRAY)));
         tooltip.add(new TranslationTextComponent("text.industrialforegoing.display.tier").appendText(" ").appendText(braquet.getLeft().getColor() + braquet.getLeft().getLocalizedName()).setStyle(new Style().setColor(TextFormatting.GRAY)));
-        tooltip.add(new TranslationTextComponent("text.industrialforegoing.display.power").appendText(" ").appendText(new DecimalFormat().format(power)).appendText("/").appendText(new DecimalFormat().format(braquet.getRight().getPowerNeeded())).appendText("RF ").appendSibling(new TranslationTextComponent("text.industrialforegoing.display.next_tier")).setStyle(new Style().setColor(TextFormatting.GRAY)));
+        tooltip.add(new TranslationTextComponent("text.industrialforegoing.display.power").appendText(" ").appendText(NumberFormat.getNumberInstance(Locale.ROOT).format(power)).appendText("/").appendText(NumberFormat.getNumberInstance(Locale.ROOT).format(braquet.getRight().getPowerNeeded())).appendText("RF ").appendSibling(new TranslationTextComponent("text.industrialforegoing.display.next_tier")).setStyle(new Style().setColor(TextFormatting.GRAY)));
         int fuelAmount = getFuelFromStack(stack);
-        tooltip.add(new TranslationTextComponent("text.industrialforegoing.display.fluid").appendText(" ").appendText(new DecimalFormat().format(fuelAmount)).appendText("/").appendText(new DecimalFormat().format(1000000)).appendText(" mb of Biofuel").setStyle(new Style().setColor(TextFormatting.GRAY)));
+        tooltip.add(new TranslationTextComponent("text.industrialforegoing.display.fluid").appendText(" ").appendText(NumberFormat.getNumberInstance(Locale.ROOT).format(fuelAmount)).appendText("/").appendText(NumberFormat.getNumberInstance(Locale.ROOT).format(1000000)).appendText(" mb of Biofuel").setStyle(new Style().setColor(TextFormatting.GRAY)));
         tooltip.add(new TranslationTextComponent("text.industrialforegoing.display.max_area").appendText(" ").appendText(getFormattedArea(braquet.getLeft(), braquet.getLeft().getRadius())).setStyle(new Style().setColor(TextFormatting.GRAY)));
         if (isSpecial(stack))
             tooltip.add(new TranslationTextComponent("text.industrialforegoing.display.special").setStyle(new Style().setColor(TextFormatting.GRAY)));
