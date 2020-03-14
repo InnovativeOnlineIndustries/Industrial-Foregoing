@@ -26,7 +26,6 @@ import com.hrznstudio.titanium.block.tile.ActiveTile;
 import net.minecraft.nbt.CompoundNBT;
 
 import javax.annotation.Nonnull;
-import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.util.Locale;
 import java.util.function.Function;

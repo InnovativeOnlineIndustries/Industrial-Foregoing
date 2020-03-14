@@ -53,7 +53,6 @@ import net.minecraft.world.World;
 import net.minecraftforge.common.Tags;
 
 import javax.annotation.Nonnull;
-import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.util.List;
 import java.util.Locale;

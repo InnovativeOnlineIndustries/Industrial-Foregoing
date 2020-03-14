@@ -6,7 +6,6 @@ import com.hrznstudio.titanium.annotation.Save;
 import com.hrznstudio.titanium.component.inventory.SidedInventoryComponent;
 import com.hrznstudio.titanium.component.progress.ProgressBarComponent;
 import net.minecraft.item.DyeColor;
-import net.minecraft.tileentity.FurnaceTileEntity;
 import net.minecraftforge.common.ForgeHooks;
 
 import javax.annotation.Nonnull;
