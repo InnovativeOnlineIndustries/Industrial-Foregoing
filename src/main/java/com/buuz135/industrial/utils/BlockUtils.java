@@ -34,6 +34,8 @@ import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.entity.item.ItemEntity;
 import net.minecraft.item.ItemStack;
+import net.minecraft.tags.BlockTags;
+import net.minecraft.tags.Tag;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.Direction;
 import net.minecraft.util.NonNullList;
@@ -64,6 +66,10 @@ public class BlockUtils {
         return blocks;
     }
 
+    public static boolean isBlockTag(World world, BlockPos pos, Tag<Block> tag) {
+        return world.getBlockState(pos).isIn(tag);
+    }
+
     public static boolean isBlockOreDict(World world, BlockPos pos, String ore) {
         /* TODO: OreDict reimplementation
         BlockState state = world.getBlockState(pos);
@@ -86,7 +92,7 @@ public class BlockUtils {
     }
 
     public static boolean isLog(World world, BlockPos pos) {
-        return (world.getBlockState(pos).getMaterial() == Material.WOOD || isBlockOreDict(world, pos, "blockSlimeCongealed"));
+        return isBlockTag(world, pos, BlockTags.LOGS);
     }
 
     public static boolean isLeaves(World world, BlockPos pos) {
