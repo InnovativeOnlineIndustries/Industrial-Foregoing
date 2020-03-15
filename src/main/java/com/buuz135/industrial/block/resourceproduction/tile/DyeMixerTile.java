@@ -19,10 +19,11 @@ import net.minecraftforge.common.Tags;
 import net.minecraftforge.items.ItemHandlerHelper;
 
 import javax.annotation.Nonnull;
-import java.text.DecimalFormat;
+import java.text.NumberFormat;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
+import java.util.Locale;
 
 public class DyeMixerTile extends IndustrialProcessingTile<DyeMixerTile> {
 
@@ -82,7 +83,7 @@ public class DyeMixerTile extends IndustrialProcessingTile<DyeMixerTile> {
                 return Collections.singletonList(() -> new ProgressBarScreenAddon<DyeMixerTile>(red.getPosX(), red.getPosY(), this) {
                     @Override
                     public List<String> getTooltipLines() {
-                        return Arrays.asList(TextFormatting.GOLD + "Amount: " + TextFormatting.WHITE + new DecimalFormat().format(red.getProgress()) + TextFormatting.GOLD + "/" + TextFormatting.WHITE + new DecimalFormat().format(red.getMaxProgress()));
+                        return Arrays.asList(TextFormatting.GOLD + "Amount: " + TextFormatting.WHITE + NumberFormat.getNumberInstance(Locale.ROOT).format(red.getProgress()) + TextFormatting.GOLD + "/" + TextFormatting.WHITE + NumberFormat.getNumberInstance(Locale.ROOT).format(red.getMaxProgress()));
                     }
                 });
             }
@@ -96,7 +97,7 @@ public class DyeMixerTile extends IndustrialProcessingTile<DyeMixerTile> {
                 return Collections.singletonList(() -> new ProgressBarScreenAddon<DyeMixerTile>(blue.getPosX(), blue.getPosY(), this) {
                     @Override
                     public List<String> getTooltipLines() {
-                        return Arrays.asList(TextFormatting.GOLD + "Amount: " + TextFormatting.WHITE + new DecimalFormat().format(blue.getProgress()) + TextFormatting.GOLD + "/" + TextFormatting.WHITE + new DecimalFormat().format(blue.getMaxProgress()));
+                        return Arrays.asList(TextFormatting.GOLD + "Amount: " + TextFormatting.WHITE + NumberFormat.getNumberInstance(Locale.ROOT).format(blue.getProgress()) + TextFormatting.GOLD + "/" + TextFormatting.WHITE + NumberFormat.getNumberInstance(Locale.ROOT).format(blue.getMaxProgress()));
                     }
                 });
             }
@@ -110,7 +111,7 @@ public class DyeMixerTile extends IndustrialProcessingTile<DyeMixerTile> {
                 return Collections.singletonList(() -> new ProgressBarScreenAddon<DyeMixerTile>(green.getPosX(), green.getPosY(), this) {
                     @Override
                     public List<String> getTooltipLines() {
-                        return Arrays.asList(TextFormatting.GOLD + "Amount: " + TextFormatting.WHITE + new DecimalFormat().format(green.getProgress()) + TextFormatting.GOLD + "/" + TextFormatting.WHITE + new DecimalFormat().format(green.getMaxProgress()));
+                        return Arrays.asList(TextFormatting.GOLD + "Amount: " + TextFormatting.WHITE + NumberFormat.getNumberInstance(Locale.ROOT).format(green.getProgress()) + TextFormatting.GOLD + "/" + TextFormatting.WHITE + NumberFormat.getNumberInstance(Locale.ROOT).format(green.getMaxProgress()));
                     }
                 });
             }

@@ -6,7 +6,7 @@ import com.hrznstudio.titanium.annotation.Save;
 import com.hrznstudio.titanium.component.inventory.SidedInventoryComponent;
 import com.hrznstudio.titanium.component.progress.ProgressBarComponent;
 import net.minecraft.item.DyeColor;
-import net.minecraft.tileentity.FurnaceTileEntity;
+import net.minecraftforge.common.ForgeHooks;
 
 import javax.annotation.Nonnull;
 
@@ -19,22 +19,22 @@ public class PitifulGeneratorTile extends IndustrialGeneratorTile<PitifulGenerat
         super(ModuleGenerator.PITIFUL_GENERATOR);
         this.addInventory(fuel = (SidedInventoryComponent<PitifulGeneratorTile>) new SidedInventoryComponent<PitifulGeneratorTile>("fuel_input", 46, 22, 1, 0)
                 .setColor(DyeColor.ORANGE)
-                .setInputFilter((itemStack, integer) -> FurnaceTileEntity.isFuel(itemStack))
+                .setInputFilter((itemStack, integer) -> ForgeHooks.getBurnTime(itemStack) != 0)
                 .setComponentHarness(this)
         );
     }
 
     @Override
     public int consumeFuel() {
-        int time = FurnaceTileEntity.getBurnTimes().getOrDefault(fuel.getStackInSlot(0).getItem(), 100);
+        int time = ForgeHooks.getBurnTime(fuel.getStackInSlot(0));
         fuel.getStackInSlot(0).shrink(1);
         return time;
     }
 
     @Override
     public boolean canStart() {
-        return !fuel.getStackInSlot(0).isEmpty() && FurnaceTileEntity.getBurnTimes().get(fuel.getStackInSlot(0).getItem()) != null;
-    }
+        return !fuel.getStackInSlot(0).isEmpty() && ForgeHooks.getBurnTime(fuel.getStackInSlot(0)) != 0;
+}
 
     @Override
     public int getEnergyProducedEveryTick() {
