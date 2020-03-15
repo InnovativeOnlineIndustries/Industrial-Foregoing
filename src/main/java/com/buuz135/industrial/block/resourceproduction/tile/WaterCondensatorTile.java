@@ -63,6 +63,6 @@ public class WaterCondensatorTile extends IndustrialWorkingTile<WaterCondensator
     @Nonnull
     @Override
     public WaterCondensatorTile getSelf() {
-        return null;
+        return this;
     }
 }
