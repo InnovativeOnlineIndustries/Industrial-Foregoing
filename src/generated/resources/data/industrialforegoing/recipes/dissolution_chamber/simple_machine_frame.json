@@ -1,0 +1,36 @@
+{
+  "input": [
+    {
+      "tag": "forge:plastic"
+    },
+    {
+      "tag": "industrialforegoing:machine_frame/pity"
+    },
+    {
+      "tag": "forge:plastic"
+    },
+    {
+      "item": "minecraft:nether_brick"
+    },
+    {
+      "item": "minecraft:nether_brick"
+    },
+    {
+      "tag": "forge:ingots/iron"
+    },
+    {
+      "tag": "forge:gear/gold"
+    },
+    {
+      "tag": "forge:ingots/iron"
+    }
+  ],
+  "inputFluid": "{FluidName:\"industrialforegoing:pink_slime\",Amount:250}",
+  "processingTime": 300,
+  "output": {
+    "item": "industrialforegoing:machine_frame_simple",
+    "count": 1
+  },
+  "outputFluid": "{FluidName:\"minecraft:empty\",Amount:0}",
+  "type": "industrialforegoing:dissolution_chamber"
+}

@@ -48,16 +48,16 @@ public class DissolutionChamberRecipe extends SerializableRecipe {
                 }, new FluidStack(ModuleCore.MEAT.getSourceFluid(), 1000), 100, new ItemStack(ModuleResourceProduction.MECHANICAL_DIRT), FluidStack.EMPTY);
         new DissolutionChamberRecipe(new ResourceLocation(Reference.MOD_ID, "simple_machine_frame"),
                 new Ingredient.IItemList[]{
+                        new Ingredient.TagList(IndustrialTags.Items.PLASTIC),
                         new Ingredient.TagList(IndustrialTags.Items.MACHINE_FRAME_PITY),
+                        new Ingredient.TagList(IndustrialTags.Items.PLASTIC),
+                        new Ingredient.SingleItemList(new ItemStack(Items.NETHER_BRICK)),
+                        new Ingredient.SingleItemList(new ItemStack(Items.NETHER_BRICK)),
+                        new Ingredient.TagList(Tags.Items.INGOTS_IRON),
                         new Ingredient.TagList(IndustrialTags.Items.GEAR_GOLD),
-                        new Ingredient.TagList(IndustrialTags.Items.GEAR_GOLD),
-                        new Ingredient.SingleItemList(new ItemStack(Items.IRON_BARS)),
-                        new Ingredient.SingleItemList(new ItemStack(Items.IRON_BARS)),
-                        new Ingredient.SingleItemList(new ItemStack(Items.REDSTONE)),
-                        new Ingredient.SingleItemList(new ItemStack(Items.REDSTONE)),
-                        new Ingredient.SingleItemList(new ItemStack(Items.DIAMOND))
+                        new Ingredient.TagList(Tags.Items.INGOTS_IRON)
                 },
-                new FluidStack(ModuleCore.LATEX.getSourceFluid(), 750), 300, new ItemStack(ModuleCore.SIMPLE), FluidStack.EMPTY);
+                new FluidStack(ModuleCore.PINK_SLIME.getSourceFluid(), 250), 300, new ItemStack(ModuleCore.SIMPLE), FluidStack.EMPTY);
     }
 
     public Ingredient.IItemList[] input;

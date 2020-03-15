@@ -1,9 +1,7 @@
 package com.buuz135.industrial.utils.data;
 
 import com.buuz135.industrial.block.IndustrialBlock;
-import com.buuz135.industrial.block.transport.ConveyorBlock;
 import com.buuz135.industrial.module.ModuleAgricultureHusbandry;
-import com.buuz135.industrial.module.ModuleTransport;
 import com.buuz135.industrial.utils.Reference;
 import com.hrznstudio.titanium.block.BasicBlock;
 import net.minecraft.block.Block;
@@ -40,12 +38,12 @@ public class IndustrialBlockstateProvider extends BlockStateProvider {
                         }
                     }
                 });
-        VariantBlockStateBuilder conveyor = getVariantBuilder(ModuleTransport.CONVEYOR);
-        for (ConveyorBlock.EnumType type : ConveyorBlock.TYPE.getAllowedValues()) {
-            for (Direction direction : ConveyorBlock.FACING.getAllowedValues()) {
-                conveyor.partialState().with(ConveyorBlock.TYPE, type).with(ConveyorBlock.FACING, direction)
-                        .addModels(new ConfiguredModel(new BlockModelBuilder(new ResourceLocation(Reference.MOD_ID, "block/conveyor_" + type.getName().toLowerCase() + "_" + direction.getName().toLowerCase()), helper).parent(new ModelFile.UncheckedModelFile(type.getModel())).texture("2", type.getTexture()), 0, (int) direction.getOpposite().getHorizontalAngle(), false));
-            }
-        }
+        //VariantBlockStateBuilder conveyor = getVariantBuilder(ModuleTransport.CONVEYOR);
+        //for (ConveyorBlock.EnumType type : ConveyorBlock.TYPE.getAllowedValues()) {
+        //    for (Direction direction : ConveyorBlock.FACING.getAllowedValues()) {
+        //        conveyor.partialState().with(ConveyorBlock.TYPE, type).with(ConveyorBlock.FACING, direction)
+        //                .addModels(new ConfiguredModel(new BlockModelBuilder(new ResourceLocation(Reference.MOD_ID, "block/conveyor_" + type.getName().toLowerCase() + "_" + direction.getName().toLowerCase()), helper).parent(new ModelFile.UncheckedModelFile(type.getModel())).texture("2", type.getTexture()), 0, (int) direction.getOpposite().getHorizontalAngle(), false));
+        //    }
+        //}
     }
 }
