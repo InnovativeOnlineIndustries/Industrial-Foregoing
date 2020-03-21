@@ -40,7 +40,6 @@ import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.ai.attributes.AttributeModifier;
 import net.minecraft.entity.item.ExperienceOrbEntity;
-import net.minecraft.entity.item.ItemEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.inventory.EquipmentSlotType;
@@ -59,6 +58,7 @@ import net.minecraft.util.text.Style;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.World;
+import net.minecraft.world.server.ServerWorld;
 import net.minecraftforge.common.ForgeHooks;
 import net.minecraftforge.common.ToolType;
 import net.minecraftforge.common.capabilities.Capability;
@@ -70,11 +70,13 @@ import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
 import net.minecraftforge.fluids.capability.IFluidHandlerItem;
 import net.minecraftforge.fluids.capability.templates.FluidHandlerItemStack;
+import net.minecraftforge.items.ItemHandlerHelper;
 import org.apache.commons.lang3.tuple.Pair;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.text.NumberFormat;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 import java.util.function.Consumer;
@@ -257,6 +259,7 @@ public class ItemInfinityDrill extends IFCustomItem {
 
     @Override
     public boolean onBlockDestroyed(ItemStack stack, World worldIn, BlockState state, BlockPos pos, LivingEntity entityLiving) {
+
         if (entityLiving instanceof PlayerEntity) {
             RayTraceResult rayTraceResult = RayTraceUtils.rayTraceSimple(worldIn, entityLiving, 16, 0);
             if (rayTraceResult.getType() == RayTraceResult.Type.BLOCK) {
@@ -264,27 +267,41 @@ public class ItemInfinityDrill extends IFCustomItem {
                 Direction facing = blockResult.getFace();
                 DrillTier currentTier = getSelectedDrillTier(stack);
                 Pair<BlockPos, BlockPos> area = getArea(pos, facing, currentTier, true);
+                List<ItemStack> totalDrops = new ArrayList<>();
                 BlockPos.getAllInBoxMutable(area.getLeft(), area.getRight()).forEach(blockPos -> {
-                    if (enoughFuel(stack) && worldIn.getTileEntity(blockPos) == null && entityLiving instanceof ServerPlayerEntity && !worldIn.isAirBlock(blockPos)) {
+                    if (enoughFuel(stack) && worldIn.getTileEntity(blockPos) == null && worldIn instanceof ServerWorld && entityLiving instanceof ServerPlayerEntity && !worldIn.isAirBlock(blockPos)) {
                         BlockState tempState = worldIn.getBlockState(blockPos);
                         Block block = tempState.getBlock();
                         if (block.getBlockHardness(tempState, worldIn, blockPos) < 0) return;
                         int xp = ForgeHooks.onBlockBreakEvent(worldIn, ((ServerPlayerEntity) entityLiving).interactionManager.getGameType(), (ServerPlayerEntity) entityLiving, blockPos);
                         if (xp >= 0 && block.removedByPlayer(tempState, worldIn, blockPos, (PlayerEntity) entityLiving, true, tempState.getFluidState())) {
                             block.onPlayerDestroy(worldIn, blockPos, tempState);
-                            block.harvestBlock(worldIn, (PlayerEntity) entityLiving, blockPos, tempState, null, stack);
+                            //block.harvestBlock(worldIn, (PlayerEntity) entityLiving, blockPos, tempState, null, stack);
+                            Block.getDrops(tempState, (ServerWorld) worldIn, blockPos, null, (PlayerEntity) entityLiving, stack).forEach(itemStack -> {
+                                boolean combined = false;
+                                for (ItemStack drop : totalDrops) {
+                                    if (ItemHandlerHelper.canItemStacksStack(drop, itemStack)) {
+                                        drop.setCount(drop.getCount() + itemStack.getCount());
+                                        combined = true;
+                                        break;
+                                    }
+                                }
+                                if (!combined) {
+                                    totalDrops.add(itemStack);
+                                }
+                            });
                             block.dropXpOnBlockBreak(worldIn, blockPos, xp);
                             consumeFuel(stack);
                         }
                     }
                 });
-                worldIn.getEntitiesWithinAABB(ItemEntity.class, new AxisAlignedBB(area.getLeft(), area.getRight()).grow(1)).forEach(ItemEntity -> {
-                    ItemEntity.setPositionAndUpdate(entityLiving.getPosition().getX(), entityLiving.getPosition().getY(), entityLiving.getPosition().getZ());
-                    ItemEntity.setPickupDelay(0);
+                totalDrops.forEach(itemStack -> {
+                    Block.spawnAsEntity(worldIn, entityLiving.getPosition(), itemStack);
                 });
                 worldIn.getEntitiesWithinAABB(ExperienceOrbEntity.class, new AxisAlignedBB(area.getLeft(), area.getRight()).grow(1)).forEach(entityXPOrb -> entityXPOrb.setPositionAndUpdate(entityLiving.getPosition().getX(), entityLiving.getPosition().getY(), entityLiving.getPosition().getZ()));
             }
         }
+
         return super.onBlockDestroyed(stack, worldIn, state, pos, entityLiving);
     }
 
