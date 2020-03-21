@@ -104,7 +104,7 @@ public class ItemInfinityDrill extends IFCustomItem {
 
     @Override
     public int getItemEnchantability() {
-        return 2;
+        return 50;
     }
 
     @Override
