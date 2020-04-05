@@ -1,6 +1,7 @@
 package com.buuz135.industrial.block.generator.tile;
 
 import com.buuz135.industrial.block.tile.IndustrialGeneratorTile;
+import com.buuz135.industrial.config.machine.generator.BiofuelGeneratorConfig;
 import com.buuz135.industrial.module.ModuleCore;
 import com.buuz135.industrial.module.ModuleGenerator;
 import com.hrznstudio.titanium.annotation.Save;
@@ -14,17 +15,24 @@ import javax.annotation.Nonnull;
 
 public class BiofuelGeneratorTile extends IndustrialGeneratorTile<BiofuelGeneratorTile> {
 
+    private int getMaxStoredPower;
+    private int getPowerPerTick;
+    private int getExtractionRate;
+
     @Save
     private SidedFluidTankComponent<BiofuelGeneratorTile> biofuel;
 
     public BiofuelGeneratorTile() {
         super(ModuleGenerator.BIOFUEL_GENERATOR);
-        addTank(biofuel = (SidedFluidTankComponent<BiofuelGeneratorTile>) new SidedFluidTankComponent<BiofuelGeneratorTile>("biofuel", 4000, 43, 20, 0).
+        addTank(biofuel = (SidedFluidTankComponent<BiofuelGeneratorTile>) new SidedFluidTankComponent<BiofuelGeneratorTile>("biofuel", BiofuelGeneratorConfig.getMaxBiofuelTankSize, 43, 20, 0).
                 setColor(DyeColor.PURPLE).
                 setComponentHarness(this).
                 setTankAction(FluidTankComponent.Action.FILL).
                 setValidator(fluidStack -> fluidStack.getFluid().isEquivalentTo(ModuleCore.BIOFUEL.getSourceFluid()))
         );
+        this.getMaxStoredPower = BiofuelGeneratorConfig.getMaxStoredPower;
+        this.getPowerPerTick = BiofuelGeneratorConfig.getPowerPerTick;
+        this.getExtractionRate = BiofuelGeneratorConfig.getExtractionRate;
     }
 
     @Override
@@ -43,12 +51,12 @@ public class BiofuelGeneratorTile extends IndustrialGeneratorTile<BiofuelGenerat
 
     @Override
     public int getEnergyProducedEveryTick() {
-        return 160;
+        return getPowerPerTick;
     }
 
     @Override
     public ProgressBarComponent getProgressBar() {
-        return new ProgressBarComponent(30, 20, 0, 100)
+        return new ProgressBarComponent(30, 20, 0, BiofuelGeneratorConfig.getMaxProgress)
                 .setComponentHarness(this)
                 .setBarDirection(ProgressBarComponent.BarDirection.VERTICAL_UP)
                 .setColor(DyeColor.CYAN);
@@ -56,12 +64,12 @@ public class BiofuelGeneratorTile extends IndustrialGeneratorTile<BiofuelGenerat
 
     @Override
     public int getEnergyCapacity() {
-        return 1_000_000;
+        return getMaxStoredPower;
     }
 
     @Override
     public int getExtractingEnergy() {
-        return 500;
+        return getExtractionRate;
     }
 
     @Nonnull

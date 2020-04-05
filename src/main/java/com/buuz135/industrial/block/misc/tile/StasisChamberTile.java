@@ -2,7 +2,10 @@ package com.buuz135.industrial.block.misc.tile;
 
 import com.buuz135.industrial.block.tile.IndustrialAreaWorkingTile;
 import com.buuz135.industrial.block.tile.RangeManager;
+import com.buuz135.industrial.config.machine.misc.StasisChamberConfig;
 import com.buuz135.industrial.module.ModuleMisc;
+import com.hrznstudio.titanium.api.IFactory;
+import com.hrznstudio.titanium.energy.NBTEnergyHandler;
 import net.minecraft.entity.MobEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.potion.EffectInstance;
@@ -15,13 +18,18 @@ import java.util.List;
 
 public class StasisChamberTile extends IndustrialAreaWorkingTile<StasisChamberTile> {
 
+    private int getMaxProgress;
+    private int getPowerPerOperation;
+
     public StasisChamberTile() {
         super(ModuleMisc.STASIS_CHAMBER, RangeManager.RangeType.TOP);
+        this.getMaxProgress = StasisChamberConfig.getMaxProgress;
+        this.getPowerPerOperation = StasisChamberConfig.getPowerPerOperation;
     }
 
     @Override
     public WorkAction work() {
-        if (hasEnergy(1000)) {
+        if (hasEnergy(getPowerPerOperation)) {
             List<MobEntity> entities = this.world.getEntitiesWithinAABB(MobEntity.class, getWorkingArea().getBoundingBox());
             for (MobEntity entity : entities) {
                 entity.setNoAI(true);
@@ -33,6 +41,7 @@ public class StasisChamberTile extends IndustrialAreaWorkingTile<StasisChamberTi
                 playerEntity.addPotionEffect(new EffectInstance(Effects.SLOWNESS, 25, 135));
                 if (world.rand.nextBoolean()) playerEntity.heal(1f);
             });
+            return new WorkAction(0.5f, getPowerPerOperation);
         }
         return new WorkAction(1, 0);
     }
@@ -49,7 +58,12 @@ public class StasisChamberTile extends IndustrialAreaWorkingTile<StasisChamberTi
     }
 
     @Override
+    protected IFactory<NBTEnergyHandler> getEnergyHandlerFactory() {
+        return () -> new NBTEnergyHandler(this, StasisChamberConfig.getMaxStoredPower);
+    }
+
+    @Override
     public int getMaxProgress() {
-        return 20;
+        return getMaxProgress;
     }
 }

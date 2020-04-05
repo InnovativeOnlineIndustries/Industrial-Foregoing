@@ -1,12 +1,15 @@
 package com.buuz135.industrial.block.agriculturehusbandry.tile;
 
 import com.buuz135.industrial.block.tile.IndustrialProcessingTile;
+import com.buuz135.industrial.config.machine.agriculturehusbandry.SewageComposterConfig;
 import com.buuz135.industrial.module.ModuleAgricultureHusbandry;
 import com.buuz135.industrial.module.ModuleCore;
 import com.hrznstudio.titanium.annotation.Save;
+import com.hrznstudio.titanium.api.IFactory;
 import com.hrznstudio.titanium.component.fluid.FluidTankComponent;
 import com.hrznstudio.titanium.component.fluid.SidedFluidTankComponent;
 import com.hrznstudio.titanium.component.inventory.SidedInventoryComponent;
+import com.hrznstudio.titanium.energy.NBTEnergyHandler;
 import net.minecraft.item.DyeColor;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.fluids.capability.IFluidHandler;
@@ -16,6 +19,9 @@ import javax.annotation.Nonnull;
 
 public class SewageComposterTile extends IndustrialProcessingTile<SewageComposterTile> {
 
+    private int maxProgress;
+    private int powerPerTick;
+
     @Save
     public SidedFluidTankComponent<SewageComposterTile> sewage;
     @Save
@@ -23,7 +29,7 @@ public class SewageComposterTile extends IndustrialProcessingTile<SewageComposte
 
     public SewageComposterTile() {
         super(ModuleAgricultureHusbandry.SEWAGE_COMPOSTER, 57, 40);
-        this.addTank(sewage = (SidedFluidTankComponent<SewageComposterTile>) new SidedFluidTankComponent<SewageComposterTile>("sewage", 8000, 30, 20, 0).
+        this.addTank(sewage = (SidedFluidTankComponent<SewageComposterTile>) new SidedFluidTankComponent<SewageComposterTile>("sewage", SewageComposterConfig.getMaxTankSize, 30, 20, 0).
                 setColor(DyeColor.BROWN).
                 setTankAction(FluidTankComponent.Action.FILL).
                 setComponentHarness(this));
@@ -32,6 +38,8 @@ public class SewageComposterTile extends IndustrialProcessingTile<SewageComposte
                 setInputFilter((stack, integer) -> false).
                 setRange(4, 3).
                 setComponentHarness(this));
+        this.maxProgress = SewageComposterConfig.getMaxProgress;
+        this.powerPerTick = SewageComposterConfig.getPowerPerTick;
     }
 
     @Override
@@ -48,8 +56,18 @@ public class SewageComposterTile extends IndustrialProcessingTile<SewageComposte
     }
 
     @Override
+    protected IFactory<NBTEnergyHandler> getEnergyHandlerFactory() {
+        return () -> new NBTEnergyHandler(this, SewageComposterConfig.getMaxStoredPower);
+    }
+
+    @Override
+    public int getMaxProgress() {
+        return maxProgress;
+    }
+
+    @Override
     protected int getTickPower() {
-        return 30;
+        return powerPerTick;
     }
 
     @Nonnull

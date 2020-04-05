@@ -3,5 +3,5 @@ package com.buuz135.industrial.config;
 import com.hrznstudio.titanium.annotation.config.ConfigFile;
 import net.minecraftforge.fml.config.ModConfig;
 
-@ConfigFile(value = "machine-core", type = ModConfig.Type.COMMON)
-public class MachineCoreConfig {}
+@ConfigFile(value = "machine-resource-production", type = ModConfig.Type.COMMON)
+public class MachineResourceProductionConfig {}

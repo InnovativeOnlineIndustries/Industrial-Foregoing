@@ -2,11 +2,14 @@ package com.buuz135.industrial.block.agriculturehusbandry.tile;
 
 import com.buuz135.industrial.block.tile.IndustrialAreaWorkingTile;
 import com.buuz135.industrial.block.tile.RangeManager;
+import com.buuz135.industrial.config.machine.agriculturehusbandry.SlaughterFactoryConfig;
 import com.buuz135.industrial.module.ModuleAgricultureHusbandry;
 import com.buuz135.industrial.module.ModuleCore;
 import com.hrznstudio.titanium.annotation.Save;
+import com.hrznstudio.titanium.api.IFactory;
 import com.hrznstudio.titanium.component.fluid.FluidTankComponent;
 import com.hrznstudio.titanium.component.fluid.SidedFluidTankComponent;
+import com.hrznstudio.titanium.energy.NBTEnergyHandler;
 import net.minecraft.entity.MobEntity;
 import net.minecraft.entity.passive.AnimalEntity;
 import net.minecraft.item.DyeColor;
@@ -18,6 +21,9 @@ import java.util.List;
 
 public class SlaughterFactoryTile extends IndustrialAreaWorkingTile<SlaughterFactoryTile> {
 
+    private int maxProgress;
+    private int powerPerOperation;
+
     @Save
     private SidedFluidTankComponent<SlaughterFactoryTile> meat;
     @Save
@@ -25,22 +31,24 @@ public class SlaughterFactoryTile extends IndustrialAreaWorkingTile<SlaughterFac
 
     public SlaughterFactoryTile() {
         super(ModuleAgricultureHusbandry.SLAUGHTER_FACTORY, RangeManager.RangeType.BEHIND);
-        addTank(meat = (SidedFluidTankComponent<SlaughterFactoryTile>) new SidedFluidTankComponent<SlaughterFactoryTile>("meat", 8000, 43, 20, 0).
+        addTank(meat = (SidedFluidTankComponent<SlaughterFactoryTile>) new SidedFluidTankComponent<SlaughterFactoryTile>("meat", SlaughterFactoryConfig.getMaxMeatTankSize, 43, 20, 0).
                 setColor(DyeColor.BROWN).
                 setTankAction(FluidTankComponent.Action.DRAIN).
                 setComponentHarness(this).
                 setValidator(fluidStack -> fluidStack.getFluid().isEquivalentTo(ModuleCore.MEAT.getSourceFluid()))
         );
-        addTank(pinkSlime = (SidedFluidTankComponent<SlaughterFactoryTile>) new SidedFluidTankComponent<SlaughterFactoryTile>("pink_slime", 8000, 63, 20, 1).
+        addTank(pinkSlime = (SidedFluidTankComponent<SlaughterFactoryTile>) new SidedFluidTankComponent<SlaughterFactoryTile>("pink_slime", SlaughterFactoryConfig.getMaxPinkSlimeTankSize, 63, 20, 1).
                 setColor(DyeColor.PINK).
                 setTankAction(FluidTankComponent.Action.DRAIN).
                 setComponentHarness(this).
                 setValidator(fluidStack -> fluidStack.getFluid().isEquivalentTo(ModuleCore.PINK_SLIME.getSourceFluid())));
+        this.maxProgress = SlaughterFactoryConfig.getMaxProgress;
+        this.powerPerOperation = SlaughterFactoryConfig.getPowerPerOperation;
     }
 
     @Override
     public WorkAction work() {
-        if (hasEnergy(400)) {
+        if (hasEnergy(powerPerOperation)) {
             List<MobEntity> mobs = this.world.getEntitiesWithinAABB(MobEntity.class, getWorkingArea().getBoundingBox());
             if (mobs.size() > 0) {
                 MobEntity entity = mobs.get(0);
@@ -49,11 +57,21 @@ public class SlaughterFactoryTile extends IndustrialAreaWorkingTile<SlaughterFac
                 if (!entity.isAlive()) {
                     meat.fillForced(new FluidStack(ModuleCore.MEAT.getSourceFluid(), entity instanceof AnimalEntity ? (int) (currentHealth) : (int) currentHealth * 20), IFluidHandler.FluidAction.EXECUTE);
                     pinkSlime.fillForced(new FluidStack(ModuleCore.PINK_SLIME.getSourceFluid(), entity instanceof AnimalEntity ? (int) (currentHealth * 20) : (int) currentHealth), IFluidHandler.FluidAction.EXECUTE);
-                    return new WorkAction(0.2f, 400);
+                    return new WorkAction(0.2f, powerPerOperation);
                 }
             }
         }
         return new WorkAction(1, 0);
+    }
+
+    @Override
+    protected IFactory<NBTEnergyHandler> getEnergyHandlerFactory() {
+        return () -> new NBTEnergyHandler(this, SlaughterFactoryConfig.getMaxStoredPower);
+    }
+
+    @Override
+    public int getMaxProgress() {
+        return maxProgress;
     }
 
     @Nonnull

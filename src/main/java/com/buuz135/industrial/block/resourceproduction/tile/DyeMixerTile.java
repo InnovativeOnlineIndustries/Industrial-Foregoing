@@ -1,6 +1,7 @@
 package com.buuz135.industrial.block.resourceproduction.tile;
 
 import com.buuz135.industrial.block.tile.IndustrialProcessingTile;
+import com.buuz135.industrial.config.machine.resourceproduction.DyeMixerConfig;
 import com.buuz135.industrial.gui.component.ItemGuiAddon;
 import com.buuz135.industrial.module.ModuleResourceProduction;
 import com.hrznstudio.titanium.annotation.Save;
@@ -10,6 +11,7 @@ import com.hrznstudio.titanium.client.screen.addon.ProgressBarScreenAddon;
 import com.hrznstudio.titanium.component.button.ArrowButtonComponent;
 import com.hrznstudio.titanium.component.inventory.SidedInventoryComponent;
 import com.hrznstudio.titanium.component.progress.ProgressBarComponent;
+import com.hrznstudio.titanium.energy.NBTEnergyHandler;
 import com.hrznstudio.titanium.util.FacingUtil;
 import net.minecraft.item.DyeColor;
 import net.minecraft.item.DyeItem;
@@ -43,6 +45,9 @@ public class DyeMixerTile extends IndustrialProcessingTile<DyeMixerTile> {
             new ColorUsage(0, 3, 0),//13
             new ColorUsage(3, 0, 0),//14
             new ColorUsage(1, 1, 1)};//15
+
+    private int getPowerPerTick;
+
     @Save
     private SidedInventoryComponent<DyeMixerTile> inputRed;
     @Save
@@ -143,6 +148,7 @@ public class DyeMixerTile extends IndustrialProcessingTile<DyeMixerTile> {
                 return new ItemStack(DyeItem.getItem(DyeColor.byId(dye)));
             }
         });
+        this.getPowerPerTick = DyeMixerConfig.getPowerPerTick;
     }
 
     @Override
@@ -176,6 +182,11 @@ public class DyeMixerTile extends IndustrialProcessingTile<DyeMixerTile> {
                 markForUpdate();
             }
         };
+    }
+
+    @Override
+    protected IFactory<NBTEnergyHandler> getEnergyHandlerFactory() {
+        return () -> new NBTEnergyHandler(this, DyeMixerConfig.getMaxStoredPower);
     }
 
     @Override

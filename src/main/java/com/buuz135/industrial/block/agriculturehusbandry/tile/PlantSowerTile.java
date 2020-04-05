@@ -2,12 +2,14 @@ package com.buuz135.industrial.block.agriculturehusbandry.tile;
 
 import com.buuz135.industrial.block.tile.IndustrialAreaWorkingTile;
 import com.buuz135.industrial.block.tile.RangeManager;
+import com.buuz135.industrial.config.machine.agriculturehusbandry.PlantSowerConfig;
 import com.buuz135.industrial.item.RangeAddonItem;
 import com.buuz135.industrial.module.ModuleAgricultureHusbandry;
 import com.hrznstudio.titanium.annotation.Save;
-import com.hrznstudio.titanium.api.augment.IAugment;
+import com.hrznstudio.titanium.api.IFactory;
 import com.hrznstudio.titanium.api.filter.FilterSlot;
 import com.hrznstudio.titanium.component.inventory.SidedInventoryComponent;
+import com.hrznstudio.titanium.energy.NBTEnergyHandler;
 import com.hrznstudio.titanium.filter.ItemStackFilter;
 import net.minecraft.block.Block;
 import net.minecraft.item.BlockItem;
@@ -22,6 +24,9 @@ import javax.annotation.Nonnull;
 public class PlantSowerTile extends IndustrialAreaWorkingTile<PlantSowerTile> {
 
     public static DyeColor[] COLORS = new DyeColor[]{DyeColor.RED, DyeColor.YELLOW, DyeColor.LIME, DyeColor.CYAN, DyeColor.WHITE, DyeColor.BLUE, DyeColor.PURPLE, DyeColor.MAGENTA, DyeColor.BLACK};
+
+    private int maxProgress;
+    private int powerPerOperation;
 
     @Save
     private ItemStackFilter filter;
@@ -51,12 +56,14 @@ public class PlantSowerTile extends IndustrialAreaWorkingTile<PlantSowerTile> {
                 setInputFilter((itemStack, integer) -> itemStack.getItem() instanceof BlockItem && ((BlockItem) itemStack.getItem()).getBlock() instanceof IPlantable).
                 setRange(3, 3).
                 setComponentHarness(this));
+        this.maxProgress = PlantSowerConfig.getMaxProgress;
+        this.powerPerOperation = PlantSowerConfig.getPowerPerOperation;
     }
 
     @Override
     public WorkAction work() {
         BlockPos pos = getPointedBlockPos();
-        if (isLoaded(pos) && this.world.isAirBlock(pos) && hasEnergy(1000)) {
+        if (isLoaded(pos) && this.world.isAirBlock(pos) && hasEnergy(powerPerOperation)) {
             int slot = getFilteredSlot(pos);
             ItemStack stack = ItemStack.EMPTY;
             for (int i = 0; i < input.getSlots(); i++) {
@@ -72,7 +79,7 @@ public class PlantSowerTile extends IndustrialAreaWorkingTile<PlantSowerTile> {
                     if (this.world.setBlockState(pos, ((IPlantable) block).getPlant(world, pos))) {
                         stack.shrink(1);
                         increasePointer();
-                        return new WorkAction(0.2f, 1000);
+                        return new WorkAction(0.2f, powerPerOperation);
                     }
                 }
             }
@@ -82,7 +89,7 @@ public class PlantSowerTile extends IndustrialAreaWorkingTile<PlantSowerTile> {
     }
 
     private int getFilteredSlot(BlockPos pos) {
-        int radius = hasAugmentInstalled(RangeAddonItem.RANGE) ? (int) ((IAugment) getInstalledAugments(RangeAddonItem.RANGE).get(0)).getAugmentRatio() + 1 : 0;
+        int radius = hasAugmentInstalled(RangeAddonItem.RANGE) ? (int) getInstalledAugments(RangeAddonItem.RANGE).get(0).getAugmentRatio() + 1 : 0;
         if (radius == 0) {
             for (int i = 0; i < input.getSlots(); ++i) {
                 if (!input.getStackInSlot(i).isEmpty()) {
@@ -96,8 +103,13 @@ public class PlantSowerTile extends IndustrialAreaWorkingTile<PlantSowerTile> {
     }
 
     @Override
+    protected IFactory<NBTEnergyHandler> getEnergyHandlerFactory() {
+        return () -> new NBTEnergyHandler(this, PlantSowerConfig.getMaxStoredPower);
+    }
+
+    @Override
     public int getMaxProgress() {
-        return 40;
+        return maxProgress;
     }
 
     @Nonnull

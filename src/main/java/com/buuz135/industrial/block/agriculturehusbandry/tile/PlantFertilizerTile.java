@@ -2,10 +2,13 @@ package com.buuz135.industrial.block.agriculturehusbandry.tile;
 
 import com.buuz135.industrial.block.tile.IndustrialAreaWorkingTile;
 import com.buuz135.industrial.block.tile.RangeManager;
+import com.buuz135.industrial.config.machine.agriculturehusbandry.PlantFertilizerConfig;
 import com.buuz135.industrial.module.ModuleAgricultureHusbandry;
 import com.buuz135.industrial.module.ModuleCore;
 import com.hrznstudio.titanium.annotation.Save;
+import com.hrznstudio.titanium.api.IFactory;
 import com.hrznstudio.titanium.component.inventory.SidedInventoryComponent;
+import com.hrznstudio.titanium.energy.NBTEnergyHandler;
 import com.hrznstudio.titanium.util.ItemHandlerUtil;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
@@ -19,6 +22,9 @@ import javax.annotation.Nonnull;
 
 public class PlantFertilizerTile extends IndustrialAreaWorkingTile<PlantFertilizerTile> {
 
+    private int maxProgress;
+    private int powerPerOperation;
+
     @Save
     public SidedInventoryComponent<PlantFertilizerTile> fertilizer;
 
@@ -31,12 +37,14 @@ public class PlantFertilizerTile extends IndustrialAreaWorkingTile<PlantFertiliz
                 setRange(6, 3).
                 setComponentHarness(this)
         );
+        this.maxProgress = PlantFertilizerConfig.getMaxProgress;
+        this.powerPerOperation = PlantFertilizerConfig.getPowerPerOperation;
     }
 
     @Override
     public WorkAction work() {
         ItemStack stack = ItemHandlerUtil.getFirstItem(fertilizer);
-        if (!stack.isEmpty() && hasEnergy(1000)) {
+        if (!stack.isEmpty() && hasEnergy(powerPerOperation)) {
             BlockPos pointer = getPointedBlockPos();
             if (isLoaded(pointer)) {
                 BlockState state = this.world.getBlockState(pointer);
@@ -46,10 +54,10 @@ public class PlantFertilizerTile extends IndustrialAreaWorkingTile<PlantFertiliz
                         stack.shrink(1);
                         ((IGrowable) block).grow((ServerWorld) world, world.rand, pointer, state);
                         if (((IGrowable) block).canGrow(world, pointer, state, false)) {
-                            return new WorkAction(0.25f, 1000);
+                            return new WorkAction(0.25f, powerPerOperation);
                         } else {
                             increasePointer();
-                            return new WorkAction(0.5f, 1000);
+                            return new WorkAction(0.5f, powerPerOperation);
                         }
                     } else {
                         increasePointer();
@@ -63,8 +71,13 @@ public class PlantFertilizerTile extends IndustrialAreaWorkingTile<PlantFertiliz
     }
 
     @Override
+    protected IFactory<NBTEnergyHandler> getEnergyHandlerFactory() {
+        return () -> new NBTEnergyHandler(this, PlantFertilizerConfig.getMaxStoredPower);
+    }
+
+    @Override
     public int getMaxProgress() {
-        return 50;
+        return maxProgress;
     }
 
     @Nonnull

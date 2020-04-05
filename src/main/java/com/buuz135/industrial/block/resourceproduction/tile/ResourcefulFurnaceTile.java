@@ -1,12 +1,15 @@
 package com.buuz135.industrial.block.resourceproduction.tile;
 
 import com.buuz135.industrial.block.tile.IndustrialProcessingTile;
+import com.buuz135.industrial.config.machine.resourceproduction.ResourcefulFurnaceConfig;
 import com.buuz135.industrial.module.ModuleCore;
 import com.buuz135.industrial.module.ModuleResourceProduction;
 import com.hrznstudio.titanium.annotation.Save;
+import com.hrznstudio.titanium.api.IFactory;
 import com.hrznstudio.titanium.component.fluid.FluidTankComponent;
 import com.hrznstudio.titanium.component.fluid.SidedFluidTankComponent;
 import com.hrznstudio.titanium.component.inventory.SidedInventoryComponent;
+import com.hrznstudio.titanium.energy.NBTEnergyHandler;
 import com.hrznstudio.titanium.util.RecipeUtil;
 import net.minecraft.item.DyeColor;
 import net.minecraft.item.ItemStack;
@@ -21,6 +24,8 @@ import javax.annotation.Nonnull;
 import java.util.Collection;
 
 public class ResourcefulFurnaceTile extends IndustrialProcessingTile<ResourcefulFurnaceTile> {
+
+    private int getPowerPerTick;
 
     @Save
     private SidedInventoryComponent<ResourcefulFurnaceTile> input;
@@ -44,10 +49,11 @@ public class ResourcefulFurnaceTile extends IndustrialProcessingTile<Resourceful
                 setColor(DyeColor.ORANGE).
                 setInputFilter((itemStack, integer) -> false).
                 setRange(1, 3));
-        addTank(this.tank = (SidedFluidTankComponent<ResourcefulFurnaceTile>) new SidedFluidTankComponent<ResourcefulFurnaceTile>("essence", 8000, 132, 20, 2).
+        addTank(this.tank = (SidedFluidTankComponent<ResourcefulFurnaceTile>) new SidedFluidTankComponent<ResourcefulFurnaceTile>("essence", ResourcefulFurnaceConfig.getMaxEssenceTankSize, 132, 20, 2).
                 setColor(DyeColor.LIME).
                 setTankAction(FluidTankComponent.Action.DRAIN));
         this.recipes = new FurnaceRecipe[3];
+        this.getPowerPerTick = ResourcefulFurnaceConfig.getPowerPerTick;
     }
 
     @Override
@@ -89,8 +95,13 @@ public class ResourcefulFurnaceTile extends IndustrialProcessingTile<Resourceful
     }
 
     @Override
+    protected IFactory<NBTEnergyHandler> getEnergyHandlerFactory() {
+        return () -> new NBTEnergyHandler(this, ResourcefulFurnaceConfig.getMaxStoredPower);
+    }
+
+    @Override
     protected int getTickPower() {
-        return 40;
+        return getPowerPerTick;
     }
 
 

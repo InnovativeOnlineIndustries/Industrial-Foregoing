@@ -1,12 +1,15 @@
 package com.buuz135.industrial.block.core.tile;
 
 import com.buuz135.industrial.block.tile.IndustrialProcessingTile;
+import com.buuz135.industrial.config.machine.core.DissolutionChamberConfig;
 import com.buuz135.industrial.module.ModuleCore;
 import com.buuz135.industrial.recipe.DissolutionChamberRecipe;
 import com.hrznstudio.titanium.annotation.Save;
+import com.hrznstudio.titanium.api.IFactory;
 import com.hrznstudio.titanium.component.fluid.FluidTankComponent;
 import com.hrznstudio.titanium.component.fluid.SidedFluidTankComponent;
 import com.hrznstudio.titanium.component.inventory.SidedInventoryComponent;
+import com.hrznstudio.titanium.energy.NBTEnergyHandler;
 import com.hrznstudio.titanium.util.RecipeUtil;
 import net.minecraft.item.DyeColor;
 import net.minecraft.util.math.BlockPos;
@@ -18,6 +21,9 @@ import org.apache.commons.lang3.tuple.Pair;
 import javax.annotation.Nonnull;
 
 public class DissolutionChamberTile extends IndustrialProcessingTile<DissolutionChamberTile> {
+
+    private int maxProgress;
+    private int powerPerTick;
 
     @Save
     private SidedInventoryComponent<DissolutionChamberTile> input;
@@ -39,7 +45,7 @@ public class DissolutionChamberTile extends IndustrialProcessingTile<Dissolution
                 setOutputFilter((stack, integer) -> false).
                 setComponentHarness(this).
                 setOnSlotChanged((stack, integer) -> checkForRecipe()));
-        this.addTank(this.inputFluid = (SidedFluidTankComponent<DissolutionChamberTile>) new SidedFluidTankComponent<DissolutionChamberTile>("input_fluid", 8000, 33 + slotSpacing, 18 + slotSpacing, 1).
+        this.addTank(this.inputFluid = (SidedFluidTankComponent<DissolutionChamberTile>) new SidedFluidTankComponent<DissolutionChamberTile>("input_fluid", DissolutionChamberConfig.getMaxInputTankSize, 33 + slotSpacing, 18 + slotSpacing, 1).
                 setColor(DyeColor.LIME).
                 setTankType(FluidTankComponent.Type.SMALL).
                 setComponentHarness(this).
@@ -51,10 +57,12 @@ public class DissolutionChamberTile extends IndustrialProcessingTile<Dissolution
                 setRange(1, 3).
                 setInputFilter((stack, integer) -> false).
                 setComponentHarness(this));
-        this.addTank(this.outputFluid = (SidedFluidTankComponent<DissolutionChamberTile>) new SidedFluidTankComponent<DissolutionChamberTile>("output_fluid", 16000, 149, 20, 3).
+        this.addTank(this.outputFluid = (SidedFluidTankComponent<DissolutionChamberTile>) new SidedFluidTankComponent<DissolutionChamberTile>("output_fluid", DissolutionChamberConfig.getMaxOutputTankSize, 149, 20, 3).
                 setColor(DyeColor.MAGENTA).
                 setComponentHarness(this).
                 setTankAction(FluidTankComponent.Action.DRAIN));
+        this.maxProgress = DissolutionChamberConfig.getMaxProgress;
+        this.powerPerTick = DissolutionChamberConfig.getPowerPerTick;
     }
 
     private void checkForRecipe() {
@@ -67,8 +75,8 @@ public class DissolutionChamberTile extends IndustrialProcessingTile<Dissolution
     }
 
     @Override
-    public void setWorldAndPos(World p_226984_1_, BlockPos p_226984_2_) {
-        super.setWorldAndPos(p_226984_1_, p_226984_2_);
+    public void setWorldAndPos(World world, BlockPos pos) {
+        super.setWorldAndPos(world, pos);
         checkForRecipe();
     }
 
@@ -95,13 +103,18 @@ public class DissolutionChamberTile extends IndustrialProcessingTile<Dissolution
     }
 
     @Override
+    protected IFactory<NBTEnergyHandler> getEnergyHandlerFactory() {
+        return () -> new NBTEnergyHandler(this, DissolutionChamberConfig.getMaxStoredPower);
+    }
+
+    @Override
     protected int getTickPower() {
-        return 60;
+        return powerPerTick;
     }
 
     @Override
     public int getMaxProgress() {
-        return currentRecipe != null ? currentRecipe.processingTime : 100;
+        return currentRecipe != null ? currentRecipe.processingTime : maxProgress;
     }
 
     public static Pair<Integer, Integer> getSlotPos(int slot) {

@@ -2,13 +2,16 @@ package com.buuz135.industrial.block.resourceproduction.tile;
 
 import com.buuz135.industrial.block.tile.IndustrialAreaWorkingTile;
 import com.buuz135.industrial.block.tile.RangeManager;
+import com.buuz135.industrial.config.machine.resourceproduction.FluidCollectorConfig;
 import com.buuz135.industrial.item.RangeAddonItem;
 import com.buuz135.industrial.module.ModuleResourceProduction;
 import com.buuz135.industrial.utils.BlockUtils;
 import com.hrznstudio.titanium.annotation.Save;
+import com.hrznstudio.titanium.api.IFactory;
 import com.hrznstudio.titanium.api.augment.IAugment;
 import com.hrznstudio.titanium.component.fluid.FluidTankComponent;
 import com.hrznstudio.titanium.component.fluid.SidedFluidTankComponent;
+import com.hrznstudio.titanium.energy.NBTEnergyHandler;
 import net.minecraft.block.Blocks;
 import net.minecraft.fluid.Fluid;
 import net.minecraft.item.DyeColor;
@@ -21,21 +24,26 @@ import javax.annotation.Nonnull;
 
 public class FluidCollectorTile extends IndustrialAreaWorkingTile<FluidCollectorTile> {
 
+    private int getMaxProgress;
+    private int getPowerPerOperation;
+
     @Save
     private SidedFluidTankComponent<FluidCollectorTile> tank;
 
     public FluidCollectorTile() {
         super(ModuleResourceProduction.FLUID_COLLECTOR, RangeManager.RangeType.BEHIND);
-        this.addTank(this.tank = (SidedFluidTankComponent<FluidCollectorTile>) new SidedFluidTankComponent<FluidCollectorTile>("output", 16000, 43, 20, 0)
+        this.addTank(this.tank = (SidedFluidTankComponent<FluidCollectorTile>) new SidedFluidTankComponent<FluidCollectorTile>("output", FluidCollectorConfig.getMaxOutputTankSize, 43, 20, 0)
                 .setColor(DyeColor.ORANGE)
                 .setTankAction(FluidTankComponent.Action.DRAIN)
                 .setComponentHarness(this)
         );
+        this.getMaxProgress = FluidCollectorConfig.getMaxProgress;
+        this.getPowerPerOperation = FluidCollectorConfig.getMaxOutputTankSize;
     }
 
     @Override
     public WorkAction work() {
-        if (hasEnergy(1000)) {
+        if (hasEnergy(getPowerPerOperation)) {
             if (isLoaded(getPointedBlockPos()) && !world.isAirBlock(getPointedBlockPos()) && BlockUtils.canBlockBeBroken(this.world, getPointedBlockPos()) && world.getFluidState(getPointedBlockPos()).isSource()) {
                 Fluid fluid = world.getFluidState(getPointedBlockPos()).getFluid();
                 if (tank.isEmpty() || (tank.getFluid().getFluid().isEquivalentTo(fluid) && tank.getFluidAmount() + FluidAttributes.BUCKET_VOLUME <= tank.getCapacity())) {
@@ -46,12 +54,22 @@ public class FluidCollectorTile extends IndustrialAreaWorkingTile<FluidCollector
                     }
                     tank.fillForced(new FluidStack(fluid, FluidAttributes.BUCKET_VOLUME), IFluidHandler.FluidAction.EXECUTE);
                     increasePointer();
-                    return new WorkAction(1, 1000);
+                    return new WorkAction(1, getPowerPerOperation);
                 }
             }
         }
         increasePointer();
         return new WorkAction(1, 0);
+    }
+
+    @Override
+    protected IFactory<NBTEnergyHandler> getEnergyHandlerFactory() {
+        return () -> new NBTEnergyHandler(this, FluidCollectorConfig.getMaxStoredPower);
+    }
+
+    @Override
+    public int getMaxProgress() {
+        return getMaxProgress;
     }
 
     @Override

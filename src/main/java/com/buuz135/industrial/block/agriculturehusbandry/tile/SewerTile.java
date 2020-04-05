@@ -2,11 +2,15 @@ package com.buuz135.industrial.block.agriculturehusbandry.tile;
 
 import com.buuz135.industrial.block.tile.IndustrialAreaWorkingTile;
 import com.buuz135.industrial.block.tile.RangeManager;
+import com.buuz135.industrial.config.machine.agriculturehusbandry.SewerConfig;
 import com.buuz135.industrial.module.ModuleAgricultureHusbandry;
 import com.buuz135.industrial.module.ModuleCore;
 import com.hrznstudio.titanium.annotation.Save;
+import com.hrznstudio.titanium.api.IFactory;
 import com.hrznstudio.titanium.component.fluid.FluidTankComponent;
 import com.hrznstudio.titanium.component.fluid.SidedFluidTankComponent;
+import com.hrznstudio.titanium.energy.NBTEnergyHandler;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.item.ExperienceOrbEntity;
 import net.minecraft.entity.passive.AnimalEntity;
 import net.minecraft.item.DyeColor;
@@ -18,6 +22,9 @@ import java.util.List;
 
 public class SewerTile extends IndustrialAreaWorkingTile<SewerTile> {
 
+    private int maxProgress;
+    private int powerPerOperation;
+
     @Save
     public SidedFluidTankComponent<SewerTile> sewage;
     @Save
@@ -25,36 +32,49 @@ public class SewerTile extends IndustrialAreaWorkingTile<SewerTile> {
 
     public SewerTile() {
         super(ModuleAgricultureHusbandry.SEWER, RangeManager.RangeType.TOP);
-        this.addTank(sewage = (SidedFluidTankComponent<SewerTile>) new SidedFluidTankComponent<SewerTile>("sewage", 8000, 45, 20, 0).
+        this.addTank(sewage = (SidedFluidTankComponent<SewerTile>) new SidedFluidTankComponent<SewerTile>("sewage", SewerConfig.getMaxSewageTankSize, 45, 20, 0).
                 setColor(DyeColor.BROWN).
                 setTankAction(FluidTankComponent.Action.DRAIN).
                 setComponentHarness(this));
-        this.addTank(essence = (SidedFluidTankComponent<SewerTile>) new SidedFluidTankComponent<SewerTile>("essence", 8000, 66, 20, 1).
+        this.addTank(essence = (SidedFluidTankComponent<SewerTile>) new SidedFluidTankComponent<SewerTile>("essence", SewerConfig.getMaxEssenceTankSize, 66, 20, 1).
                 setColor(DyeColor.LIME).
                 setTankAction(FluidTankComponent.Action.DRAIN).
                 setComponentHarness(this));
+        this.maxProgress = SewerConfig.getMaxProgress;
+        this.powerPerOperation = SewerConfig.getPowerPerOperation;
     }
 
     @Override
     public WorkAction work() {
-        List<AnimalEntity> animals = this.world.getEntitiesWithinAABB(AnimalEntity.class, getWorkingArea().getBoundingBox());
+        List<Entity> entities = this.world.getEntitiesWithinAABB(AnimalEntity.class, getWorkingArea().getBoundingBox(), entity -> entity instanceof AnimalEntity || entity instanceof ExperienceOrbEntity);
         int amount = 0;
-        for (AnimalEntity animalEntity : animals) {
-            if (hasEnergy(10 * (amount + 1))) {
-                sewage.fillForced(new FluidStack(ModuleCore.SEWAGE.getSourceFluid(), 50), IFluidHandler.FluidAction.EXECUTE);
-                ++amount;
-            } else {
-                break;
+        for (Entity entity : entities) {
+            if (entity instanceof AnimalEntity) {
+                if (hasEnergy(powerPerOperation * (amount + 1))) {
+                    sewage.fillForced(new FluidStack(ModuleCore.SEWAGE.getSourceFluid(), 50), IFluidHandler.FluidAction.EXECUTE);
+                    ++amount;
+                } else {
+                    break;
+                }
+            } else if (entity instanceof ExperienceOrbEntity) {
+                ExperienceOrbEntity experienceOrbEntity = (ExperienceOrbEntity) entity;
+                if (experienceOrbEntity.isAlive() && essence.getFluidAmount() + experienceOrbEntity.xpValue * 20 <= essence.getCapacity()) {
+                    essence.fillForced(new FluidStack(ModuleCore.ESSENCE.getSourceFluid(), experienceOrbEntity.xpValue * 20), IFluidHandler.FluidAction.EXECUTE);
+                    experienceOrbEntity.remove();
+                }
             }
         }
-        List<ExperienceOrbEntity> orb = this.world.getEntitiesWithinAABB(ExperienceOrbEntity.class, getWorkingArea().getBoundingBox());
-        for (ExperienceOrbEntity experienceOrbEntity : orb) {
-            if (experienceOrbEntity.isAlive() && essence.getFluidAmount() + experienceOrbEntity.xpValue * 20 <= essence.getCapacity()) {
-                essence.fillForced(new FluidStack(ModuleCore.ESSENCE.getSourceFluid(), experienceOrbEntity.xpValue * 20), IFluidHandler.FluidAction.EXECUTE);
-                experienceOrbEntity.remove();
-            }
-        }
-        return new WorkAction(1, 10 * amount);
+        return new WorkAction(1, powerPerOperation * amount);
+    }
+
+    @Override
+    protected IFactory<NBTEnergyHandler> getEnergyHandlerFactory() {
+        return () -> new NBTEnergyHandler(this, SewerConfig.getMaxStoredPower);
+    }
+
+    @Override
+    public int getMaxProgress() {
+        return maxProgress;
     }
 
     @Nonnull

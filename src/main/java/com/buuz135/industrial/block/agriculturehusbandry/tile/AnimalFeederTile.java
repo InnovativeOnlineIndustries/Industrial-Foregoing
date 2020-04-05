@@ -2,9 +2,12 @@ package com.buuz135.industrial.block.agriculturehusbandry.tile;
 
 import com.buuz135.industrial.block.tile.IndustrialAreaWorkingTile;
 import com.buuz135.industrial.block.tile.RangeManager;
+import com.buuz135.industrial.config.machine.agriculturehusbandry.AnimalFeederConfig;
 import com.buuz135.industrial.module.ModuleAgricultureHusbandry;
 import com.hrznstudio.titanium.annotation.Save;
+import com.hrznstudio.titanium.api.IFactory;
 import com.hrznstudio.titanium.component.inventory.SidedInventoryComponent;
+import com.hrznstudio.titanium.energy.NBTEnergyHandler;
 import net.minecraft.entity.passive.AnimalEntity;
 import net.minecraft.item.DyeColor;
 import net.minecraft.item.ItemStack;
@@ -14,6 +17,9 @@ import javax.annotation.Nonnull;
 import java.util.List;
 
 public class AnimalFeederTile extends IndustrialAreaWorkingTile<AnimalFeederTile> {
+
+    private int maxProgress;
+    private int powerPerOperation;
 
     @Save
     private SidedInventoryComponent<AnimalFeederTile> input;
@@ -26,11 +32,13 @@ public class AnimalFeederTile extends IndustrialAreaWorkingTile<AnimalFeederTile
                 .setRange(6, 3)
                 .setComponentHarness(this)
         );
+        this.maxProgress = AnimalFeederConfig.getMaxProgress;
+        this.powerPerOperation = AnimalFeederConfig.getPowerPerOperation;
     }
 
     @Override
     public WorkAction work() {
-        if (hasEnergy(400)) {
+        if (hasEnergy(powerPerOperation)) {
             List<AnimalEntity> mobs = this.world.getEntitiesWithinAABB(AnimalEntity.class, getWorkingArea().getBoundingBox());
             if (mobs.size() == 0 || mobs.size() > 35) return new WorkAction(1, 0);
             mobs.removeIf(animalEntity -> animalEntity.isChild() || animalEntity.getGrowingAge() != 0 || !animalEntity.canBreed() || animalEntity.isInLove() || getFeedingItem(animalEntity).isEmpty());
@@ -50,7 +58,7 @@ public class AnimalFeederTile extends IndustrialAreaWorkingTile<AnimalFeederTile
                     stack.shrink(1);
                     firstParent.setInLove(null);
                     secondParent.setInLove(null);
-                    return new WorkAction(0.5f, 400);
+                    return new WorkAction(0.5f, powerPerOperation);
                 }
             }
         }
@@ -62,6 +70,16 @@ public class AnimalFeederTile extends IndustrialAreaWorkingTile<AnimalFeederTile
             if (entity.isBreedingItem(input.getStackInSlot(i))) return input.getStackInSlot(i);
         }
         return ItemStack.EMPTY;
+    }
+
+    @Override
+    protected IFactory<NBTEnergyHandler> getEnergyHandlerFactory() {
+        return () -> new NBTEnergyHandler(this, AnimalFeederConfig.getMaxStoredPower);
+    }
+
+    @Override
+    public int getMaxProgress() {
+        return maxProgress;
     }
 
 

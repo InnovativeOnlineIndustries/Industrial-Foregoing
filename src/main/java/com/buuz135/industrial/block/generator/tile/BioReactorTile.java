@@ -1,6 +1,7 @@
 package com.buuz135.industrial.block.generator.tile;
 
 import com.buuz135.industrial.block.tile.IndustrialWorkingTile;
+import com.buuz135.industrial.config.machine.generator.BioReactorConfig;
 import com.buuz135.industrial.module.ModuleCore;
 import com.buuz135.industrial.module.ModuleGenerator;
 import com.buuz135.industrial.utils.IndustrialTags;
@@ -12,6 +13,7 @@ import com.hrznstudio.titanium.component.fluid.FluidTankComponent;
 import com.hrznstudio.titanium.component.fluid.SidedFluidTankComponent;
 import com.hrznstudio.titanium.component.inventory.SidedInventoryComponent;
 import com.hrznstudio.titanium.component.progress.ProgressBarComponent;
+import com.hrznstudio.titanium.energy.NBTEnergyHandler;
 import net.minecraft.fluid.Fluids;
 import net.minecraft.item.DyeColor;
 import net.minecraft.item.Item;
@@ -32,6 +34,9 @@ public class BioReactorTile extends IndustrialWorkingTile<BioReactorTile> {
     public static Tag<Item>[] VALID = new Tag[]{IndustrialTags.Items.BIOREACTOR_INPUT, Tags.Items.CROPS_CARROT, Tags.Items.CROPS_POTATO, Tags.Items.CROPS_NETHER_WART, Tags.Items.DYES,
             Tags.Items.HEADS, Tags.Items.MUSHROOMS, Tags.Items.SEEDS, IndustrialTags.Items.SAPLING};
 
+    private int getMaxProgress;
+    private int getPowerPerOperation;
+
     @Save
     private SidedFluidTankComponent<BioReactorTile> biofuel;
     @Save
@@ -43,7 +48,7 @@ public class BioReactorTile extends IndustrialWorkingTile<BioReactorTile> {
 
     public BioReactorTile() {
         super(ModuleGenerator.BIOREACTOR);
-        addTank(water = (SidedFluidTankComponent<BioReactorTile>) new SidedFluidTankComponent<BioReactorTile>("water", 16000, 45, 20, 0).
+        addTank(water = (SidedFluidTankComponent<BioReactorTile>) new SidedFluidTankComponent<BioReactorTile>("water", BioReactorConfig.getMaxWaterTankStorage, 45, 20, 0).
                 setColor(DyeColor.CYAN).
                 setComponentHarness(this).
                 setTankAction(FluidTankComponent.Action.FILL).
@@ -56,13 +61,13 @@ public class BioReactorTile extends IndustrialWorkingTile<BioReactorTile> {
                 setOutputFilter((stack, integer) -> false).
                 setComponentHarness(this)
         );
-        addTank(biofuel = (SidedFluidTankComponent<BioReactorTile>) new SidedFluidTankComponent<BioReactorTile>("biofuel", 16000, 74 + 18 * 3, 20, 2).
+        addTank(biofuel = (SidedFluidTankComponent<BioReactorTile>) new SidedFluidTankComponent<BioReactorTile>("biofuel", BioReactorConfig.getMaxBioFuelTankStorage, 74 + 18 * 3, 20, 2).
                 setColor(DyeColor.PURPLE).
                 setComponentHarness(this).
                 setTankAction(FluidTankComponent.Action.DRAIN).
                 setValidator(fluidStack -> fluidStack.getFluid().isEquivalentTo(ModuleCore.BIOFUEL.getSourceFluid()))
         );
-        addProgressBar(bar = new ProgressBarComponent<BioReactorTile>(96 + 18 * 3, 20, 100) {
+        addProgressBar(bar = new ProgressBarComponent<BioReactorTile>(96 + 18 * 3, 20, BioReactorConfig.getMaxProgress) {
                     @Override
                     public List<IFactory<? extends IScreenAddon>> getScreenAddons() {
                         return Collections.singletonList(() -> new ProgressBarScreenAddon<BioReactorTile>(bar.getPosX(), bar.getPosY(), this) {
@@ -79,11 +84,13 @@ public class BioReactorTile extends IndustrialWorkingTile<BioReactorTile> {
                         setCanReset(tileEntity -> false).
                         setComponentHarness(this)
         );
+        this.getMaxProgress = BioReactorConfig.getMaxProgress;
+        this.getPowerPerOperation = BioReactorConfig.getPowerPerOperation;
     }
 
     @Override
     public WorkAction work() {
-        if (hasEnergy(2000)) {
+        if (hasEnergy(getPowerPerOperation)) {
             int efficiency = getEfficiency();
             if (efficiency <= 0) return new WorkAction(1, 0);
             int fluidAmount = ((efficiency - 1) * 10 + 80) * efficiency;
@@ -93,7 +100,7 @@ public class BioReactorTile extends IndustrialWorkingTile<BioReactorTile> {
                 for (int i = 0; i < input.getSlots(); i++) {
                     input.getStackInSlot(i).shrink(1);
                 }
-                new WorkAction(1, 2000);
+                new WorkAction(1, getPowerPerOperation);
             }
         }
         return new WorkAction(1, 0);
@@ -124,8 +131,13 @@ public class BioReactorTile extends IndustrialWorkingTile<BioReactorTile> {
     }
 
     @Override
+    protected IFactory<NBTEnergyHandler> getEnergyHandlerFactory() {
+        return () -> new NBTEnergyHandler(this, BioReactorConfig.getMaxProgress);
+    }
+
+    @Override
     public int getMaxProgress() {
-        return 200;
+        return getMaxProgress;
     }
 
     @Nonnull

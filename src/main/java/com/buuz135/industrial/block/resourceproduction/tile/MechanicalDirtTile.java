@@ -1,11 +1,14 @@
 package com.buuz135.industrial.block.resourceproduction.tile;
 
 import com.buuz135.industrial.block.tile.IndustrialWorkingTile;
+import com.buuz135.industrial.config.machine.resourceproduction.MechanicalDirtConfig;
 import com.buuz135.industrial.module.ModuleCore;
 import com.buuz135.industrial.module.ModuleResourceProduction;
 import com.hrznstudio.titanium.annotation.Save;
+import com.hrznstudio.titanium.api.IFactory;
 import com.hrznstudio.titanium.component.fluid.FluidTankComponent;
 import com.hrznstudio.titanium.component.fluid.SidedFluidTankComponent;
+import com.hrznstudio.titanium.energy.NBTEnergyHandler;
 import net.minecraft.entity.*;
 import net.minecraft.item.DyeColor;
 import net.minecraft.tileentity.TileEntity;
@@ -22,17 +25,20 @@ import java.util.List;
 
 public class MechanicalDirtTile extends IndustrialWorkingTile<MechanicalDirtTile> {
 
+    private int getPowerPerOperation;
+
     @Save
     private SidedFluidTankComponent<MechanicalDirtTile> meat;
 
     public MechanicalDirtTile() {
         super(ModuleResourceProduction.MECHANICAL_DIRT);
-        addTank(meat = (SidedFluidTankComponent<MechanicalDirtTile>) new SidedFluidTankComponent<MechanicalDirtTile>("meat", 4000, 43, 20, 0).
+        addTank(meat = (SidedFluidTankComponent<MechanicalDirtTile>) new SidedFluidTankComponent<MechanicalDirtTile>("meat", MechanicalDirtConfig.getMaxMeatTankSize, 43, 20, 0).
                 setColor(DyeColor.BROWN).
                 setComponentHarness(this).
                 setTankAction(FluidTankComponent.Action.FILL).
                 setValidator(fluidStack -> fluidStack.getFluid().isEquivalentTo(ModuleCore.MEAT.getSourceFluid()))
         );
+        this.getPowerPerOperation = MechanicalDirtConfig.getPowerPerOperation;
     }
 
     @Override
@@ -41,7 +47,7 @@ public class MechanicalDirtTile extends IndustrialWorkingTile<MechanicalDirtTile
                 || world.getDifficulty() == Difficulty.PEACEFUL
                 || (world.isDaytime() && world.getBrightness(pos.up()) > 0.5f && world.canBlockSeeSky(pos.up()))
                 || world.getEntitiesWithinAABB(MobEntity.class, new AxisAlignedBB(0, 0, 0, 1, 1, 1).offset(pos).grow(3)).size() > 10) {
-            if (hasEnergy(100)) return new WorkAction(0.5f, 100);
+            if (hasEnergy(getPowerPerOperation / 10)) return new WorkAction(0.5f, getPowerPerOperation / 10);
             return new WorkAction(1, 0);
         }
         if (meat.getFluidAmount() > 100) {
@@ -49,7 +55,7 @@ public class MechanicalDirtTile extends IndustrialWorkingTile<MechanicalDirtTile
             if (entity != null) {
                 world.addEntity(entity);
                 meat.drainForced(100, IFluidHandler.FluidAction.EXECUTE);
-                if (hasEnergy(1000)) return new WorkAction(0.5f, 1000);
+                if (hasEnergy(getPowerPerOperation)) return new WorkAction(0.5f, getPowerPerOperation);
             }
         }
         return new WorkAction(1, 0);
@@ -102,6 +108,11 @@ public class MechanicalDirtTile extends IndustrialWorkingTile<MechanicalDirtTile
                 }
             }
         }
+    }
+
+    @Override
+    protected IFactory<NBTEnergyHandler> getEnergyHandlerFactory() {
+        return super.getEnergyHandlerFactory();
     }
 
     @Nonnull
