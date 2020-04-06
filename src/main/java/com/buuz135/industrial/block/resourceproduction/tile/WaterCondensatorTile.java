@@ -27,13 +27,13 @@ public class WaterCondensatorTile extends IndustrialWorkingTile<WaterCondensator
 
     public WaterCondensatorTile() {
         super(ModuleResourceProduction.WATER_CONDENSATOR);
-        this.addTank(water = (SidedFluidTankComponent<WaterCondensatorTile>) new SidedFluidTankComponent<WaterCondensatorTile>("water", WaterCondensatorConfig.getMaxWaterTankSize, 30 + 13, 20, 0).
+        this.addTank(water = (SidedFluidTankComponent<WaterCondensatorTile>) new SidedFluidTankComponent<WaterCondensatorTile>("water", WaterCondensatorConfig.maxWaterTankSize, 30 + 13, 20, 0).
                 setColor(DyeColor.BLUE).
                 setComponentHarness(this).
                 setTankAction(FluidTankComponent.Action.DRAIN).
                 setValidator(fluidStack -> fluidStack.getFluid().isEquivalentTo(Fluids.WATER)));
-        this.getMaxProgress = WaterCondensatorConfig.getMaxProgress;
-        this.getPowerPerOperation = WaterCondensatorConfig.getPowerPerOperation;
+        this.getMaxProgress = WaterCondensatorConfig.maxProgress;
+        this.getPowerPerOperation = WaterCondensatorConfig.powerPerOperation;
     }
 
     @Override
@@ -53,7 +53,7 @@ public class WaterCondensatorTile extends IndustrialWorkingTile<WaterCondensator
 
     @Override
     protected IFactory<NBTEnergyHandler> getEnergyHandlerFactory() {
-        return () -> new NBTEnergyHandler(this, WaterCondensatorConfig.getMaxStoredPower);
+        return () -> new NBTEnergyHandler(this, WaterCondensatorConfig.maxStoredPower);
     }
 
     @Override

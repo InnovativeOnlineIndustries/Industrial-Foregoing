@@ -49,11 +49,11 @@ public class ResourcefulFurnaceTile extends IndustrialProcessingTile<Resourceful
                 setColor(DyeColor.ORANGE).
                 setInputFilter((itemStack, integer) -> false).
                 setRange(1, 3));
-        addTank(this.tank = (SidedFluidTankComponent<ResourcefulFurnaceTile>) new SidedFluidTankComponent<ResourcefulFurnaceTile>("essence", ResourcefulFurnaceConfig.getMaxEssenceTankSize, 132, 20, 2).
+        addTank(this.tank = (SidedFluidTankComponent<ResourcefulFurnaceTile>) new SidedFluidTankComponent<ResourcefulFurnaceTile>("essence", ResourcefulFurnaceConfig.maxEssenceTankSize, 132, 20, 2).
                 setColor(DyeColor.LIME).
                 setTankAction(FluidTankComponent.Action.DRAIN));
         this.recipes = new FurnaceRecipe[3];
-        this.getPowerPerTick = ResourcefulFurnaceConfig.getPowerPerTick;
+        this.getPowerPerTick = ResourcefulFurnaceConfig.powerPerTick;
     }
 
     @Override
@@ -96,7 +96,7 @@ public class ResourcefulFurnaceTile extends IndustrialProcessingTile<Resourceful
 
     @Override
     protected IFactory<NBTEnergyHandler> getEnergyHandlerFactory() {
-        return () -> new NBTEnergyHandler(this, ResourcefulFurnaceConfig.getMaxStoredPower);
+        return () -> new NBTEnergyHandler(this, ResourcefulFurnaceConfig.maxStoredPower);
     }
 
     @Override

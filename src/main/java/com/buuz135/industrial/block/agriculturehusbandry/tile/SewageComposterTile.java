@@ -29,7 +29,7 @@ public class SewageComposterTile extends IndustrialProcessingTile<SewageComposte
 
     public SewageComposterTile() {
         super(ModuleAgricultureHusbandry.SEWAGE_COMPOSTER, 57, 40);
-        this.addTank(sewage = (SidedFluidTankComponent<SewageComposterTile>) new SidedFluidTankComponent<SewageComposterTile>("sewage", SewageComposterConfig.getMaxTankSize, 30, 20, 0).
+        this.addTank(sewage = (SidedFluidTankComponent<SewageComposterTile>) new SidedFluidTankComponent<SewageComposterTile>("sewage", SewageComposterConfig.maxTankSize, 30, 20, 0).
                 setColor(DyeColor.BROWN).
                 setTankAction(FluidTankComponent.Action.FILL).
                 setComponentHarness(this));
@@ -38,8 +38,8 @@ public class SewageComposterTile extends IndustrialProcessingTile<SewageComposte
                 setInputFilter((stack, integer) -> false).
                 setRange(4, 3).
                 setComponentHarness(this));
-        this.maxProgress = SewageComposterConfig.getMaxProgress;
-        this.powerPerTick = SewageComposterConfig.getPowerPerTick;
+        this.maxProgress = SewageComposterConfig.maxProgress;
+        this.powerPerTick = SewageComposterConfig.powerPerTick;
     }
 
     @Override
@@ -57,7 +57,7 @@ public class SewageComposterTile extends IndustrialProcessingTile<SewageComposte
 
     @Override
     protected IFactory<NBTEnergyHandler> getEnergyHandlerFactory() {
-        return () -> new NBTEnergyHandler(this, SewageComposterConfig.getMaxStoredPower);
+        return () -> new NBTEnergyHandler(this, SewageComposterConfig.maxStoredPower);
     }
 
     @Override

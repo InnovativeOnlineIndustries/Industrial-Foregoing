@@ -32,8 +32,8 @@ public class AnimalFeederTile extends IndustrialAreaWorkingTile<AnimalFeederTile
                 .setRange(6, 3)
                 .setComponentHarness(this)
         );
-        this.maxProgress = AnimalFeederConfig.getMaxProgress;
-        this.powerPerOperation = AnimalFeederConfig.getPowerPerOperation;
+        this.maxProgress = AnimalFeederConfig.maxProgress;
+        this.powerPerOperation = AnimalFeederConfig.powerPerOperation;
     }
 
     @Override
@@ -74,7 +74,7 @@ public class AnimalFeederTile extends IndustrialAreaWorkingTile<AnimalFeederTile
 
     @Override
     protected IFactory<NBTEnergyHandler> getEnergyHandlerFactory() {
-        return () -> new NBTEnergyHandler(this, AnimalFeederConfig.getMaxStoredPower);
+        return () -> new NBTEnergyHandler(this, AnimalFeederConfig.maxStoredPower);
     }
 
     @Override

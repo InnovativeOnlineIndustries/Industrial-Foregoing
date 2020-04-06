@@ -31,19 +31,19 @@ public class SlaughterFactoryTile extends IndustrialAreaWorkingTile<SlaughterFac
 
     public SlaughterFactoryTile() {
         super(ModuleAgricultureHusbandry.SLAUGHTER_FACTORY, RangeManager.RangeType.BEHIND);
-        addTank(meat = (SidedFluidTankComponent<SlaughterFactoryTile>) new SidedFluidTankComponent<SlaughterFactoryTile>("meat", SlaughterFactoryConfig.getMaxMeatTankSize, 43, 20, 0).
+        addTank(meat = (SidedFluidTankComponent<SlaughterFactoryTile>) new SidedFluidTankComponent<SlaughterFactoryTile>("meat", SlaughterFactoryConfig.maxMeatTankSize, 43, 20, 0).
                 setColor(DyeColor.BROWN).
                 setTankAction(FluidTankComponent.Action.DRAIN).
                 setComponentHarness(this).
                 setValidator(fluidStack -> fluidStack.getFluid().isEquivalentTo(ModuleCore.MEAT.getSourceFluid()))
         );
-        addTank(pinkSlime = (SidedFluidTankComponent<SlaughterFactoryTile>) new SidedFluidTankComponent<SlaughterFactoryTile>("pink_slime", SlaughterFactoryConfig.getMaxPinkSlimeTankSize, 63, 20, 1).
+        addTank(pinkSlime = (SidedFluidTankComponent<SlaughterFactoryTile>) new SidedFluidTankComponent<SlaughterFactoryTile>("pink_slime", SlaughterFactoryConfig.maxPinkSlimeTankSize, 63, 20, 1).
                 setColor(DyeColor.PINK).
                 setTankAction(FluidTankComponent.Action.DRAIN).
                 setComponentHarness(this).
                 setValidator(fluidStack -> fluidStack.getFluid().isEquivalentTo(ModuleCore.PINK_SLIME.getSourceFluid())));
-        this.maxProgress = SlaughterFactoryConfig.getMaxProgress;
-        this.powerPerOperation = SlaughterFactoryConfig.getPowerPerOperation;
+        this.maxProgress = SlaughterFactoryConfig.maxProgress;
+        this.powerPerOperation = SlaughterFactoryConfig.powerPerOperation;
     }
 
     @Override
@@ -66,7 +66,7 @@ public class SlaughterFactoryTile extends IndustrialAreaWorkingTile<SlaughterFac
 
     @Override
     protected IFactory<NBTEnergyHandler> getEnergyHandlerFactory() {
-        return () -> new NBTEnergyHandler(this, SlaughterFactoryConfig.getMaxStoredPower);
+        return () -> new NBTEnergyHandler(this, SlaughterFactoryConfig.maxStoredPower);
     }
 
     @Override

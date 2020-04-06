@@ -25,7 +25,7 @@ public class PitifulGeneratorTile extends IndustrialGeneratorTile<PitifulGenerat
                 .setInputFilter((itemStack, integer) -> ForgeHooks.getBurnTime(itemStack) != 0)
                 .setComponentHarness(this)
         );
-        this.getPowerPerTick = PitifulGeneratorConfig.getPowerPerTick;
+        this.getPowerPerTick = PitifulGeneratorConfig.powerPerTick;
     }
 
     @Override
@@ -55,12 +55,12 @@ public class PitifulGeneratorTile extends IndustrialGeneratorTile<PitifulGenerat
 
     @Override
     public int getEnergyCapacity() {
-        return PitifulGeneratorConfig.getMaxStoredPower;
+        return PitifulGeneratorConfig.maxStoredPower;
     }
 
     @Override
     public int getExtractingEnergy() {
-        return PitifulGeneratorConfig.getExtractionRate;
+        return PitifulGeneratorConfig.extractionRate;
     }
 
     @Override

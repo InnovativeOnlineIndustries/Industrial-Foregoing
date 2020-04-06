@@ -32,13 +32,13 @@ public class MechanicalDirtTile extends IndustrialWorkingTile<MechanicalDirtTile
 
     public MechanicalDirtTile() {
         super(ModuleResourceProduction.MECHANICAL_DIRT);
-        addTank(meat = (SidedFluidTankComponent<MechanicalDirtTile>) new SidedFluidTankComponent<MechanicalDirtTile>("meat", MechanicalDirtConfig.getMaxMeatTankSize, 43, 20, 0).
+        addTank(meat = (SidedFluidTankComponent<MechanicalDirtTile>) new SidedFluidTankComponent<MechanicalDirtTile>("meat", MechanicalDirtConfig.maxMeatTankSize, 43, 20, 0).
                 setColor(DyeColor.BROWN).
                 setComponentHarness(this).
                 setTankAction(FluidTankComponent.Action.FILL).
                 setValidator(fluidStack -> fluidStack.getFluid().isEquivalentTo(ModuleCore.MEAT.getSourceFluid()))
         );
-        this.getPowerPerOperation = MechanicalDirtConfig.getPowerPerOperation;
+        this.getPowerPerOperation = MechanicalDirtConfig.powerPerOperation;
     }
 
     @Override
@@ -112,7 +112,7 @@ public class MechanicalDirtTile extends IndustrialWorkingTile<MechanicalDirtTile
 
     @Override
     protected IFactory<NBTEnergyHandler> getEnergyHandlerFactory() {
-        return super.getEnergyHandlerFactory();
+        return () -> new NBTEnergyHandler(this, MechanicalDirtConfig.maxStoredPower);
     }
 
     @Nonnull

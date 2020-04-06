@@ -37,8 +37,8 @@ public class PlantFertilizerTile extends IndustrialAreaWorkingTile<PlantFertiliz
                 setRange(6, 3).
                 setComponentHarness(this)
         );
-        this.maxProgress = PlantFertilizerConfig.getMaxProgress;
-        this.powerPerOperation = PlantFertilizerConfig.getPowerPerOperation;
+        this.maxProgress = PlantFertilizerConfig.maxProgress;
+        this.powerPerOperation = PlantFertilizerConfig.powerPerOperation;
     }
 
     @Override
@@ -72,7 +72,7 @@ public class PlantFertilizerTile extends IndustrialAreaWorkingTile<PlantFertiliz
 
     @Override
     protected IFactory<NBTEnergyHandler> getEnergyHandlerFactory() {
-        return () -> new NBTEnergyHandler(this, PlantFertilizerConfig.getMaxStoredPower);
+        return () -> new NBTEnergyHandler(this, PlantFertilizerConfig.maxStoredPower);
     }
 
     @Override

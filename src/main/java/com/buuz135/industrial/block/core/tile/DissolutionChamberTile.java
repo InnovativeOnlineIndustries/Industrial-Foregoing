@@ -45,7 +45,7 @@ public class DissolutionChamberTile extends IndustrialProcessingTile<Dissolution
                 setOutputFilter((stack, integer) -> false).
                 setComponentHarness(this).
                 setOnSlotChanged((stack, integer) -> checkForRecipe()));
-        this.addTank(this.inputFluid = (SidedFluidTankComponent<DissolutionChamberTile>) new SidedFluidTankComponent<DissolutionChamberTile>("input_fluid", DissolutionChamberConfig.getMaxInputTankSize, 33 + slotSpacing, 18 + slotSpacing, 1).
+        this.addTank(this.inputFluid = (SidedFluidTankComponent<DissolutionChamberTile>) new SidedFluidTankComponent<DissolutionChamberTile>("input_fluid", DissolutionChamberConfig.maxInputTankSize, 33 + slotSpacing, 18 + slotSpacing, 1).
                 setColor(DyeColor.LIME).
                 setTankType(FluidTankComponent.Type.SMALL).
                 setComponentHarness(this).
@@ -57,12 +57,12 @@ public class DissolutionChamberTile extends IndustrialProcessingTile<Dissolution
                 setRange(1, 3).
                 setInputFilter((stack, integer) -> false).
                 setComponentHarness(this));
-        this.addTank(this.outputFluid = (SidedFluidTankComponent<DissolutionChamberTile>) new SidedFluidTankComponent<DissolutionChamberTile>("output_fluid", DissolutionChamberConfig.getMaxOutputTankSize, 149, 20, 3).
+        this.addTank(this.outputFluid = (SidedFluidTankComponent<DissolutionChamberTile>) new SidedFluidTankComponent<DissolutionChamberTile>("output_fluid", DissolutionChamberConfig.maxOutputTankSize, 149, 20, 3).
                 setColor(DyeColor.MAGENTA).
                 setComponentHarness(this).
                 setTankAction(FluidTankComponent.Action.DRAIN));
-        this.maxProgress = DissolutionChamberConfig.getMaxProgress;
-        this.powerPerTick = DissolutionChamberConfig.getPowerPerTick;
+        this.maxProgress = DissolutionChamberConfig.maxProgress;
+        this.powerPerTick = DissolutionChamberConfig.powerPerTick;
     }
 
     private void checkForRecipe() {
@@ -104,7 +104,7 @@ public class DissolutionChamberTile extends IndustrialProcessingTile<Dissolution
 
     @Override
     protected IFactory<NBTEnergyHandler> getEnergyHandlerFactory() {
-        return () -> new NBTEnergyHandler(this, DissolutionChamberConfig.getMaxStoredPower);
+        return () -> new NBTEnergyHandler(this, DissolutionChamberConfig.maxStoredPower);
     }
 
     @Override

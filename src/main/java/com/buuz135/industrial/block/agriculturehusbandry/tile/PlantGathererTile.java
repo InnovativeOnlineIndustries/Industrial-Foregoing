@@ -40,11 +40,11 @@ public class PlantGathererTile extends IndustrialAreaWorkingTile<PlantGathererTi
                 .setColor(DyeColor.ORANGE)
                 .setRange(5, 3)
                 .setComponentHarness(this));
-        addTank(tank = (SidedFluidTankComponent<PlantGathererTile>) new SidedFluidTankComponent<PlantGathererTile>("sludge", PlantGathererConfig.getMaxSludgeTankSize, 45, 20, 1)
+        addTank(tank = (SidedFluidTankComponent<PlantGathererTile>) new SidedFluidTankComponent<PlantGathererTile>("sludge", PlantGathererConfig.maxSludgeTankSize, 45, 20, 1)
                 .setColor(DyeColor.MAGENTA)
                 .setComponentHarness(this));
-        this.maxProgress = PlantGathererConfig.getMaxProgress;
-        this.powerPerOperation = PlantGathererConfig.getPowerPerOperation;
+        this.maxProgress = PlantGathererConfig.maxProgress;
+        this.powerPerOperation = PlantGathererConfig.powerPerOperation;
     }
 
     @Override
@@ -73,7 +73,7 @@ public class PlantGathererTile extends IndustrialAreaWorkingTile<PlantGathererTi
 
     @Override
     protected IFactory<NBTEnergyHandler> getEnergyHandlerFactory() {
-        return () -> new NBTEnergyHandler(this, PlantGathererConfig.getMaxStoredPower);
+        return () -> new NBTEnergyHandler(this, PlantGathererConfig.maxStoredPower);
     }
 
     @Override

@@ -30,8 +30,8 @@ public class BlockPlacerTile extends IndustrialAreaWorkingTile<BlockPlacerTile> 
         this.addInventory(this.input = (SidedInventoryComponent<BlockPlacerTile>) new SidedInventoryComponent<BlockPlacerTile>("input", 54, 22, 3 * 6, 0).
                 setColor(DyeColor.BLUE).
                 setRange(6, 3));
-        this.getMaxProgress = BlockPlacerConfig.getMaxProgress;
-        this.getPowerPerOperation = BlockPlacerConfig.getPowerPerOperation;
+        this.getMaxProgress = BlockPlacerConfig.maxProgress;
+        this.getPowerPerOperation = BlockPlacerConfig.powerPerOperation;
     }
 
     @Override
@@ -56,7 +56,7 @@ public class BlockPlacerTile extends IndustrialAreaWorkingTile<BlockPlacerTile> 
 
     @Override
     protected IFactory<NBTEnergyHandler> getEnergyHandlerFactory() {
-        return () -> new NBTEnergyHandler(this, BlockPlacerConfig.getMaxStoredPower);
+        return () -> new NBTEnergyHandler(this, BlockPlacerConfig.maxStoredPower);
     }
 
     @Override

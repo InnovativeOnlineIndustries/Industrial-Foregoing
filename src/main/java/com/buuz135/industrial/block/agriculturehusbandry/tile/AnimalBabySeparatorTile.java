@@ -50,8 +50,8 @@ public class AnimalBabySeparatorTile extends IndustrialAreaWorkingTile<AnimalBab
                 return new ItemStack(movingAdults ? Items.WHEAT : Items.WHEAT_SEEDS);
             }
         }.withoutTooltip());
-        this.maxProgress = AnimalBabySeparatorConfig.getMaxProgress;
-        this.powerPerOperation = AnimalBabySeparatorConfig.getPowerPerOperation;
+        this.maxProgress = AnimalBabySeparatorConfig.maxProgress;
+        this.powerPerOperation = AnimalBabySeparatorConfig.powerPerOperation;
     }
 
     @Override
@@ -69,7 +69,7 @@ public class AnimalBabySeparatorTile extends IndustrialAreaWorkingTile<AnimalBab
 
     @Override
     protected IFactory<NBTEnergyHandler> getEnergyHandlerFactory() {
-        return () -> new NBTEnergyHandler(this, AnimalBabySeparatorConfig.getMaxStoredPower);
+        return () -> new NBTEnergyHandler(this, AnimalBabySeparatorConfig.maxStoredPower);
     }
 
     @Override

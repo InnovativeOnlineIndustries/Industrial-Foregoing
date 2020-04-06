@@ -23,8 +23,8 @@ public class StasisChamberTile extends IndustrialAreaWorkingTile<StasisChamberTi
 
     public StasisChamberTile() {
         super(ModuleMisc.STASIS_CHAMBER, RangeManager.RangeType.TOP);
-        this.getMaxProgress = StasisChamberConfig.getMaxProgress;
-        this.getPowerPerOperation = StasisChamberConfig.getPowerPerOperation;
+        this.getMaxProgress = StasisChamberConfig.maxProgress;
+        this.getPowerPerOperation = StasisChamberConfig.powerPerOperation;
     }
 
     @Override
@@ -59,7 +59,7 @@ public class StasisChamberTile extends IndustrialAreaWorkingTile<StasisChamberTi
 
     @Override
     protected IFactory<NBTEnergyHandler> getEnergyHandlerFactory() {
-        return () -> new NBTEnergyHandler(this, StasisChamberConfig.getMaxStoredPower);
+        return () -> new NBTEnergyHandler(this, StasisChamberConfig.maxStoredPower);
     }
 
     @Override

@@ -28,13 +28,13 @@ public class FluidPlacerTile extends IndustrialAreaWorkingTile<FluidPlacerTile> 
 
     public FluidPlacerTile() {
         super(ModuleResourceProduction.FLUID_PLACER, RangeManager.RangeType.BEHIND);
-        this.addTank(this.tank = (SidedFluidTankComponent<FluidPlacerTile>) new SidedFluidTankComponent<FluidPlacerTile>("input", FluidPlacerConfig.getMaxInputTankSize, 43, 20, 0)
+        this.addTank(this.tank = (SidedFluidTankComponent<FluidPlacerTile>) new SidedFluidTankComponent<FluidPlacerTile>("input", FluidPlacerConfig.maxInputTankSize, 43, 20, 0)
                 .setColor(DyeColor.BLUE)
                 .setTankAction(FluidTankComponent.Action.FILL)
                 .setComponentHarness(this)
         );
-        this.getMaxProgress = FluidPlacerConfig.getMaxProgress;
-        this.getPowerPerOperation = FluidPlacerConfig.getPowerPerOperation;
+        this.getMaxProgress = FluidPlacerConfig.maxProgress;
+        this.getPowerPerOperation = FluidPlacerConfig.powerPerOperation;
     }
 
     @Override
@@ -60,7 +60,7 @@ public class FluidPlacerTile extends IndustrialAreaWorkingTile<FluidPlacerTile> 
 
     @Override
     protected IFactory<NBTEnergyHandler> getEnergyHandlerFactory() {
-        return () -> new NBTEnergyHandler(this, FluidPlacerConfig.getMaxStoredPower);
+        return () -> new NBTEnergyHandler(this, FluidPlacerConfig.maxStoredPower);
     }
 
     @Override

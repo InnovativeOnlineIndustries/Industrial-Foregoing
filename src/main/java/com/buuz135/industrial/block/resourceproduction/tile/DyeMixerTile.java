@@ -148,7 +148,7 @@ public class DyeMixerTile extends IndustrialProcessingTile<DyeMixerTile> {
                 return new ItemStack(DyeItem.getItem(DyeColor.byId(dye)));
             }
         });
-        this.getPowerPerTick = DyeMixerConfig.getPowerPerTick;
+        this.getPowerPerTick = DyeMixerConfig.powerPerTick;
     }
 
     @Override
@@ -186,7 +186,7 @@ public class DyeMixerTile extends IndustrialProcessingTile<DyeMixerTile> {
 
     @Override
     protected IFactory<NBTEnergyHandler> getEnergyHandlerFactory() {
-        return () -> new NBTEnergyHandler(this, DyeMixerConfig.getMaxStoredPower);
+        return () -> new NBTEnergyHandler(this, DyeMixerConfig.maxStoredPower);
     }
 
     @Override

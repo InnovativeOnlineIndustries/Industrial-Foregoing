@@ -8,12 +8,12 @@ import com.hrznstudio.titanium.annotation.config.ConfigVal;
 public class MechanicalDirtConfig {
 
     @ConfigVal(comment = "Amount of Power Consumed per Tick - Default: [400FE]")
-    public static int getPowerPerOperation = 1000;
+    public static int powerPerOperation = 1000;
 
     @ConfigVal(comment = "Max Stored Power [FE] - Default: [10000 FE]")
-    public static int getMaxStoredPower = 10000;
+    public static int maxStoredPower = 10000;
 
     @ConfigVal(comment = "Max Amount of Stored Fluid [Meat] - Default: [8000mB]")
-    public static int getMaxMeatTankSize = 4000;
+    public static int maxMeatTankSize = 4000;
 
 }

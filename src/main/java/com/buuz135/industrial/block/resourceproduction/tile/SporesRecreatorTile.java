@@ -32,7 +32,7 @@ public class SporesRecreatorTile extends IndustrialProcessingTile<SporesRecreato
 
     public SporesRecreatorTile() {
         super(ModuleResourceProduction.SPORES_RECREATOR, 79, 40);
-        addTank(tank = (SidedFluidTankComponent<SporesRecreatorTile>) new SidedFluidTankComponent<SporesRecreatorTile>("water", SporeRecreatorConfig.getMaxWaterTankSize, 31, 20, 0).
+        addTank(tank = (SidedFluidTankComponent<SporesRecreatorTile>) new SidedFluidTankComponent<SporesRecreatorTile>("water", SporeRecreatorConfig.maxWaterTankSize, 31, 20, 0).
                 setColor(DyeColor.CYAN).
                 setTankAction(FluidTankComponent.Action.FILL).
                 setComponentHarness(this).
@@ -51,7 +51,7 @@ public class SporesRecreatorTile extends IndustrialProcessingTile<SporesRecreato
                 .setComponentHarness(this)
                 .setInputFilter((stack, integer) -> false)
         );
-        this.getPowerPerTick = SporeRecreatorConfig.getPowerPerTick;
+        this.getPowerPerTick = SporeRecreatorConfig.powerPerTick;
     }
 
     @Override
@@ -71,7 +71,7 @@ public class SporesRecreatorTile extends IndustrialProcessingTile<SporesRecreato
 
     @Override
     protected IFactory<NBTEnergyHandler> getEnergyHandlerFactory() {
-        return () -> new NBTEnergyHandler(this, SporeRecreatorConfig.getMaxStoredPower);
+        return () -> new NBTEnergyHandler(this, SporeRecreatorConfig.maxStoredPower);
     }
 
     @Override

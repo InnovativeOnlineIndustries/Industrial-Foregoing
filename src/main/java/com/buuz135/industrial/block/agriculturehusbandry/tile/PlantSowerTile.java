@@ -56,8 +56,8 @@ public class PlantSowerTile extends IndustrialAreaWorkingTile<PlantSowerTile> {
                 setInputFilter((itemStack, integer) -> itemStack.getItem() instanceof BlockItem && ((BlockItem) itemStack.getItem()).getBlock() instanceof IPlantable).
                 setRange(3, 3).
                 setComponentHarness(this));
-        this.maxProgress = PlantSowerConfig.getMaxProgress;
-        this.powerPerOperation = PlantSowerConfig.getPowerPerOperation;
+        this.maxProgress = PlantSowerConfig.maxProgress;
+        this.powerPerOperation = PlantSowerConfig.powerPerOperation;
     }
 
     @Override
@@ -104,7 +104,7 @@ public class PlantSowerTile extends IndustrialAreaWorkingTile<PlantSowerTile> {
 
     @Override
     protected IFactory<NBTEnergyHandler> getEnergyHandlerFactory() {
-        return () -> new NBTEnergyHandler(this, PlantSowerConfig.getMaxStoredPower);
+        return () -> new NBTEnergyHandler(this, PlantSowerConfig.maxStoredPower);
     }
 
     @Override

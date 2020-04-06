@@ -35,8 +35,8 @@ public class BlockBreakerTile extends IndustrialAreaWorkingTile<BlockBreakerTile
         this.addInventory(this.output = (SidedInventoryComponent<BlockBreakerTile>) new SidedInventoryComponent<BlockBreakerTile>("output", 54, 22, 3 * 6, 0).
                 setColor(DyeColor.ORANGE).
                 setRange(6, 3));
-        this.getMaxProgress = BlockBreakerConfig.getMaxProgress;
-        this.getPowerPerOperation = BlockBreakerConfig.getPowerPerOperation;
+        this.getMaxProgress = BlockBreakerConfig.maxProgress;
+        this.getPowerPerOperation = BlockBreakerConfig.powerPerOperation;
     }
 
     @Override
@@ -65,7 +65,7 @@ public class BlockBreakerTile extends IndustrialAreaWorkingTile<BlockBreakerTile
 
     @Override
     protected IFactory<NBTEnergyHandler> getEnergyHandlerFactory() {
-        return () -> new NBTEnergyHandler(this, BlockBreakerConfig.getMaxStoredPower);
+        return () -> new NBTEnergyHandler(this, BlockBreakerConfig.maxStoredPower);
     }
 
     @Override

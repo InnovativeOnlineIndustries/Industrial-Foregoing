@@ -32,13 +32,13 @@ public class FluidCollectorTile extends IndustrialAreaWorkingTile<FluidCollector
 
     public FluidCollectorTile() {
         super(ModuleResourceProduction.FLUID_COLLECTOR, RangeManager.RangeType.BEHIND);
-        this.addTank(this.tank = (SidedFluidTankComponent<FluidCollectorTile>) new SidedFluidTankComponent<FluidCollectorTile>("output", FluidCollectorConfig.getMaxOutputTankSize, 43, 20, 0)
+        this.addTank(this.tank = (SidedFluidTankComponent<FluidCollectorTile>) new SidedFluidTankComponent<FluidCollectorTile>("output", FluidCollectorConfig.maxOutputTankSize, 43, 20, 0)
                 .setColor(DyeColor.ORANGE)
                 .setTankAction(FluidTankComponent.Action.DRAIN)
                 .setComponentHarness(this)
         );
-        this.getMaxProgress = FluidCollectorConfig.getMaxProgress;
-        this.getPowerPerOperation = FluidCollectorConfig.getMaxOutputTankSize;
+        this.getMaxProgress = FluidCollectorConfig.maxProgress;
+        this.getPowerPerOperation = FluidCollectorConfig.maxOutputTankSize;
     }
 
     @Override
@@ -64,7 +64,7 @@ public class FluidCollectorTile extends IndustrialAreaWorkingTile<FluidCollector
 
     @Override
     protected IFactory<NBTEnergyHandler> getEnergyHandlerFactory() {
-        return () -> new NBTEnergyHandler(this, FluidCollectorConfig.getMaxStoredPower);
+        return () -> new NBTEnergyHandler(this, FluidCollectorConfig.maxStoredPower);
     }
 
     @Override

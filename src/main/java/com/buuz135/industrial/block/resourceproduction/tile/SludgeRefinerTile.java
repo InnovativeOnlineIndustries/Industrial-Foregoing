@@ -29,7 +29,7 @@ public class SludgeRefinerTile extends IndustrialProcessingTile<SludgeRefinerTil
 
     public SludgeRefinerTile() {
         super(ModuleResourceProduction.SLUDGE_REFINER, 53, 40);
-        addTank(sludge = (SidedFluidTankComponent<SludgeRefinerTile>) new SidedFluidTankComponent<SludgeRefinerTile>("sludge", SludgeRefinerConfig.getMaxSludgeTankSize, 31, 20, 0)
+        addTank(sludge = (SidedFluidTankComponent<SludgeRefinerTile>) new SidedFluidTankComponent<SludgeRefinerTile>("sludge", SludgeRefinerConfig.maxSludgeTankSize, 31, 20, 0)
                 .setColor(DyeColor.MAGENTA)
                 .setComponentHarness(this)
                 .setTankAction(FluidTankComponent.Action.FILL)
@@ -40,7 +40,7 @@ public class SludgeRefinerTile extends IndustrialProcessingTile<SludgeRefinerTil
                 .setInputFilter((stack, integer) -> false)
                 .setComponentHarness(this)
         );
-        this.getPowerPerTick = SludgeRefinerConfig.getPowerPerTick;
+        this.getPowerPerTick = SludgeRefinerConfig.powerPerTick;
     }
 
     @Override
@@ -61,7 +61,7 @@ public class SludgeRefinerTile extends IndustrialProcessingTile<SludgeRefinerTil
 
     @Override
     protected IFactory<NBTEnergyHandler> getEnergyHandlerFactory() {
-        return () -> new NBTEnergyHandler(this, SludgeRefinerConfig.getMaxStoredPower);
+        return () -> new NBTEnergyHandler(this, SludgeRefinerConfig.maxStoredPower);
     }
 
     @Override

@@ -38,7 +38,7 @@ public class AnimalRancherTile extends IndustrialAreaWorkingTile<AnimalRancherTi
 
     public AnimalRancherTile() {
         super(ModuleAgricultureHusbandry.ANIMAL_RANCHER, RangeManager.RangeType.BEHIND);
-        this.addTank(tank = (SidedFluidTankComponent<AnimalRancherTile>) new SidedFluidTankComponent<AnimalRancherTile>("fluid_output", AnimalRancherConfig.getMaxTankSize, 47, 20, 0).
+        this.addTank(tank = (SidedFluidTankComponent<AnimalRancherTile>) new SidedFluidTankComponent<AnimalRancherTile>("fluid_output", AnimalRancherConfig.maxTankSize, 47, 20, 0).
                 setColor(DyeColor.WHITE).
                 setComponentHarness(this)
         );
@@ -47,8 +47,8 @@ public class AnimalRancherTile extends IndustrialAreaWorkingTile<AnimalRancherTi
                 setRange(5, 3).
                 setComponentHarness(this)
         );
-        this.maxProgress = AnimalRancherConfig.getMaxProgress;
-        this.powerPerOperation = AnimalRancherConfig.getPowerPerOperation;
+        this.maxProgress = AnimalRancherConfig.maxProgress;
+        this.powerPerOperation = AnimalRancherConfig.powerPerOperation;
     }
 
     @Override
@@ -86,7 +86,7 @@ public class AnimalRancherTile extends IndustrialAreaWorkingTile<AnimalRancherTi
 
     @Override
     protected IFactory<NBTEnergyHandler> getEnergyHandlerFactory() {
-        return () -> new NBTEnergyHandler(this, AnimalRancherConfig.getMaxStoredPower);
+        return () -> new NBTEnergyHandler(this, AnimalRancherConfig.maxStoredPower);
     }
 
     @Override

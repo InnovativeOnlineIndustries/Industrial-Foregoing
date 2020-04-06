@@ -48,7 +48,7 @@ public class BioReactorTile extends IndustrialWorkingTile<BioReactorTile> {
 
     public BioReactorTile() {
         super(ModuleGenerator.BIOREACTOR);
-        addTank(water = (SidedFluidTankComponent<BioReactorTile>) new SidedFluidTankComponent<BioReactorTile>("water", BioReactorConfig.getMaxWaterTankStorage, 45, 20, 0).
+        addTank(water = (SidedFluidTankComponent<BioReactorTile>) new SidedFluidTankComponent<BioReactorTile>("water", BioReactorConfig.maxWaterTankStorage, 45, 20, 0).
                 setColor(DyeColor.CYAN).
                 setComponentHarness(this).
                 setTankAction(FluidTankComponent.Action.FILL).
@@ -61,13 +61,13 @@ public class BioReactorTile extends IndustrialWorkingTile<BioReactorTile> {
                 setOutputFilter((stack, integer) -> false).
                 setComponentHarness(this)
         );
-        addTank(biofuel = (SidedFluidTankComponent<BioReactorTile>) new SidedFluidTankComponent<BioReactorTile>("biofuel", BioReactorConfig.getMaxBioFuelTankStorage, 74 + 18 * 3, 20, 2).
+        addTank(biofuel = (SidedFluidTankComponent<BioReactorTile>) new SidedFluidTankComponent<BioReactorTile>("biofuel", BioReactorConfig.maxBioFuelTankStorage, 74 + 18 * 3, 20, 2).
                 setColor(DyeColor.PURPLE).
                 setComponentHarness(this).
                 setTankAction(FluidTankComponent.Action.DRAIN).
                 setValidator(fluidStack -> fluidStack.getFluid().isEquivalentTo(ModuleCore.BIOFUEL.getSourceFluid()))
         );
-        addProgressBar(bar = new ProgressBarComponent<BioReactorTile>(96 + 18 * 3, 20, BioReactorConfig.getMaxProgress) {
+        addProgressBar(bar = new ProgressBarComponent<BioReactorTile>(96 + 18 * 3, 20, BioReactorConfig.maxProgress) {
                     @Override
                     public List<IFactory<? extends IScreenAddon>> getScreenAddons() {
                         return Collections.singletonList(() -> new ProgressBarScreenAddon<BioReactorTile>(bar.getPosX(), bar.getPosY(), this) {
@@ -84,8 +84,8 @@ public class BioReactorTile extends IndustrialWorkingTile<BioReactorTile> {
                         setCanReset(tileEntity -> false).
                         setComponentHarness(this)
         );
-        this.getMaxProgress = BioReactorConfig.getMaxProgress;
-        this.getPowerPerOperation = BioReactorConfig.getPowerPerOperation;
+        this.getMaxProgress = BioReactorConfig.maxProgress;
+        this.getPowerPerOperation = BioReactorConfig.powerPerOperation;
     }
 
     @Override
@@ -132,7 +132,7 @@ public class BioReactorTile extends IndustrialWorkingTile<BioReactorTile> {
 
     @Override
     protected IFactory<NBTEnergyHandler> getEnergyHandlerFactory() {
-        return () -> new NBTEnergyHandler(this, BioReactorConfig.getMaxProgress);
+        return () -> new NBTEnergyHandler(this, BioReactorConfig.maxProgress);
     }
 
     @Override

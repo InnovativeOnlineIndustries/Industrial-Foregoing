@@ -24,15 +24,15 @@ public class BiofuelGeneratorTile extends IndustrialGeneratorTile<BiofuelGenerat
 
     public BiofuelGeneratorTile() {
         super(ModuleGenerator.BIOFUEL_GENERATOR);
-        addTank(biofuel = (SidedFluidTankComponent<BiofuelGeneratorTile>) new SidedFluidTankComponent<BiofuelGeneratorTile>("biofuel", BiofuelGeneratorConfig.getMaxBiofuelTankSize, 43, 20, 0).
+        addTank(biofuel = (SidedFluidTankComponent<BiofuelGeneratorTile>) new SidedFluidTankComponent<BiofuelGeneratorTile>("biofuel", BiofuelGeneratorConfig.maxBiofuelTankSize, 43, 20, 0).
                 setColor(DyeColor.PURPLE).
                 setComponentHarness(this).
                 setTankAction(FluidTankComponent.Action.FILL).
                 setValidator(fluidStack -> fluidStack.getFluid().isEquivalentTo(ModuleCore.BIOFUEL.getSourceFluid()))
         );
-        this.getMaxStoredPower = BiofuelGeneratorConfig.getMaxStoredPower;
-        this.getPowerPerTick = BiofuelGeneratorConfig.getPowerPerTick;
-        this.getExtractionRate = BiofuelGeneratorConfig.getExtractionRate;
+        this.getMaxStoredPower = BiofuelGeneratorConfig.maxStoredPower;
+        this.getPowerPerTick = BiofuelGeneratorConfig.powerPerTick;
+        this.getExtractionRate = BiofuelGeneratorConfig.extractionRate;
     }
 
     @Override
@@ -56,7 +56,7 @@ public class BiofuelGeneratorTile extends IndustrialGeneratorTile<BiofuelGenerat
 
     @Override
     public ProgressBarComponent getProgressBar() {
-        return new ProgressBarComponent(30, 20, 0, BiofuelGeneratorConfig.getMaxProgress)
+        return new ProgressBarComponent(30, 20, 0, BiofuelGeneratorConfig.maxProgress)
                 .setComponentHarness(this)
                 .setBarDirection(ProgressBarComponent.BarDirection.VERTICAL_UP)
                 .setColor(DyeColor.CYAN);

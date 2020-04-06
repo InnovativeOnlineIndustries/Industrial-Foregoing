@@ -2,7 +2,6 @@ package com.buuz135.industrial.block.core.tile;
 
 import com.buuz135.industrial.block.tile.IndustrialAreaWorkingTile;
 import com.buuz135.industrial.block.tile.RangeManager;
-import com.buuz135.industrial.config.machine.core.DissolutionChamberConfig;
 import com.buuz135.industrial.config.machine.core.FluidExtractorConfig;
 import com.buuz135.industrial.module.ModuleCore;
 import com.buuz135.industrial.recipe.FluidExtractorRecipe;
@@ -35,14 +34,14 @@ public class FluidExtractorTile extends IndustrialAreaWorkingTile<FluidExtractor
 
     public FluidExtractorTile() {
         super(ModuleCore.FLUID_EXTRACTOR, RangeManager.RangeType.BEHIND);
-        addTank(tank = (SidedFluidTankComponent<FluidExtractorTile>) new SidedFluidTankComponent<FluidExtractorTile>("latex", FluidExtractorConfig.getMaxLatexTankSize, 43, 20, 0).
+        addTank(tank = (SidedFluidTankComponent<FluidExtractorTile>) new SidedFluidTankComponent<FluidExtractorTile>("latex", FluidExtractorConfig.maxLatexTankSize, 43, 20, 0).
                 setColor(DyeColor.LIGHT_GRAY).
                 setTankAction(FluidTankComponent.Action.DRAIN).
                 setComponentHarness(this).
                 setValidator(fluidStack -> fluidStack.getFluid().isEquivalentTo(ModuleCore.LATEX.getSourceFluid()))
         );
-        this.maxProgress = FluidExtractorConfig.getMaxProgress;
-        this.powerPerOperation = FluidExtractorConfig.getPowerPerOperation;
+        this.maxProgress = FluidExtractorConfig.maxProgress;
+        this.powerPerOperation = FluidExtractorConfig.powerPerOperation;
     }
 
     @Override
@@ -70,7 +69,7 @@ public class FluidExtractorTile extends IndustrialAreaWorkingTile<FluidExtractor
 
     @Override
     protected IFactory<NBTEnergyHandler> getEnergyHandlerFactory() {
-        return () -> new NBTEnergyHandler(this, FluidExtractorConfig.getMaxStoredPower);
+        return () -> new NBTEnergyHandler(this, FluidExtractorConfig.maxStoredPower);
     }
 
     @Override

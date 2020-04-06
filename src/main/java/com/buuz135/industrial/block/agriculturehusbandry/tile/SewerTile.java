@@ -32,16 +32,16 @@ public class SewerTile extends IndustrialAreaWorkingTile<SewerTile> {
 
     public SewerTile() {
         super(ModuleAgricultureHusbandry.SEWER, RangeManager.RangeType.TOP);
-        this.addTank(sewage = (SidedFluidTankComponent<SewerTile>) new SidedFluidTankComponent<SewerTile>("sewage", SewerConfig.getMaxSewageTankSize, 45, 20, 0).
+        this.addTank(sewage = (SidedFluidTankComponent<SewerTile>) new SidedFluidTankComponent<SewerTile>("sewage", SewerConfig.maxSewageTankSize, 45, 20, 0).
                 setColor(DyeColor.BROWN).
                 setTankAction(FluidTankComponent.Action.DRAIN).
                 setComponentHarness(this));
-        this.addTank(essence = (SidedFluidTankComponent<SewerTile>) new SidedFluidTankComponent<SewerTile>("essence", SewerConfig.getMaxEssenceTankSize, 66, 20, 1).
+        this.addTank(essence = (SidedFluidTankComponent<SewerTile>) new SidedFluidTankComponent<SewerTile>("essence", SewerConfig.maxEssenceTankSize, 66, 20, 1).
                 setColor(DyeColor.LIME).
                 setTankAction(FluidTankComponent.Action.DRAIN).
                 setComponentHarness(this));
-        this.maxProgress = SewerConfig.getMaxProgress;
-        this.powerPerOperation = SewerConfig.getPowerPerOperation;
+        this.maxProgress = SewerConfig.maxProgress;
+        this.powerPerOperation = SewerConfig.powerPerOperation;
     }
 
     @Override
@@ -69,7 +69,7 @@ public class SewerTile extends IndustrialAreaWorkingTile<SewerTile> {
 
     @Override
     protected IFactory<NBTEnergyHandler> getEnergyHandlerFactory() {
-        return () -> new NBTEnergyHandler(this, SewerConfig.getMaxStoredPower);
+        return () -> new NBTEnergyHandler(this, SewerConfig.maxStoredPower);
     }
 
     @Override
