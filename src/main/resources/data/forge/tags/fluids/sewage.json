@@ -1,0 +1,7 @@
+{
+  "replace": false,
+  "values": [
+    "industrialforegoing:sewage",
+    "industrialforegoing:sewage_fluid"
+  ]
+}
