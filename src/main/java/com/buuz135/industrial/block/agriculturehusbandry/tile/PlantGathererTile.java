@@ -4,13 +4,16 @@ import com.buuz135.industrial.api.plant.PlantRecollectable;
 import com.buuz135.industrial.block.tile.IndustrialAreaWorkingTile;
 import com.buuz135.industrial.block.tile.IndustrialWorkingTile;
 import com.buuz135.industrial.block.tile.RangeManager;
+import com.buuz135.industrial.config.machine.agriculturehusbandry.PlantGathererConfig;
 import com.buuz135.industrial.module.ModuleAgricultureHusbandry;
 import com.buuz135.industrial.module.ModuleCore;
 import com.buuz135.industrial.registry.IFRegistries;
 import com.buuz135.industrial.utils.BlockUtils;
 import com.hrznstudio.titanium.annotation.Save;
+import com.hrznstudio.titanium.api.IFactory;
 import com.hrznstudio.titanium.component.fluid.SidedFluidTankComponent;
 import com.hrznstudio.titanium.component.inventory.SidedInventoryComponent;
+import com.hrznstudio.titanium.energy.NBTEnergyHandler;
 import net.minecraft.item.DyeColor;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.fluids.FluidStack;
@@ -23,6 +26,9 @@ import java.util.Optional;
 
 public class PlantGathererTile extends IndustrialAreaWorkingTile<PlantGathererTile> {
 
+    private int maxProgress;
+    private int powerPerOperation;
+
     @Save
     private SidedInventoryComponent<PlantGathererTile> output;
     @Save
@@ -34,14 +40,16 @@ public class PlantGathererTile extends IndustrialAreaWorkingTile<PlantGathererTi
                 .setColor(DyeColor.ORANGE)
                 .setRange(5, 3)
                 .setComponentHarness(this));
-        addTank(tank = (SidedFluidTankComponent<PlantGathererTile>) new SidedFluidTankComponent<PlantGathererTile>("sludge", 8000, 45, 20, 1)
+        addTank(tank = (SidedFluidTankComponent<PlantGathererTile>) new SidedFluidTankComponent<PlantGathererTile>("sludge", PlantGathererConfig.maxSludgeTankSize, 45, 20, 1)
                 .setColor(DyeColor.MAGENTA)
                 .setComponentHarness(this));
+        this.maxProgress = PlantGathererConfig.maxProgress;
+        this.powerPerOperation = PlantGathererConfig.powerPerOperation;
     }
 
     @Override
     public IndustrialWorkingTile.WorkAction work() {
-        if (hasEnergy(400)) {
+        if (hasEnergy(powerPerOperation)) {
             int amount = Math.max(1, BlockUtils.getBlockPosInAABB(getWorkingArea().getBoundingBox()).size() / 4);
             for (int i = 0; i < amount; i++) {
                 if (isLoaded(getPointedBlockPos())) {
@@ -53,7 +61,7 @@ public class PlantGathererTile extends IndustrialAreaWorkingTile<PlantGathererTi
                         if (optional.get().shouldCheckNextPlant(this.world, getPointedBlockPos(), this.world.getBlockState(getPointedBlockPos()))) {
                             increasePointer();
                         }
-                        return new WorkAction(0.3f, 400);
+                        return new WorkAction(0.3f, powerPerOperation);
                     }
                 }
                 increasePointer();
@@ -64,8 +72,13 @@ public class PlantGathererTile extends IndustrialAreaWorkingTile<PlantGathererTi
     }
 
     @Override
+    protected IFactory<NBTEnergyHandler> getEnergyHandlerFactory() {
+        return () -> new NBTEnergyHandler(this, PlantGathererConfig.maxStoredPower);
+    }
+
+    @Override
     public int getMaxProgress() {
-        return 40;
+        return maxProgress;
     }
 
     @Nonnull

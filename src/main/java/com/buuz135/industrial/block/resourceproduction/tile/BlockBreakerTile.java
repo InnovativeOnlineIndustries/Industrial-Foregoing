@@ -3,12 +3,15 @@ package com.buuz135.industrial.block.resourceproduction.tile;
 import com.buuz135.industrial.IndustrialForegoing;
 import com.buuz135.industrial.block.tile.IndustrialAreaWorkingTile;
 import com.buuz135.industrial.block.tile.RangeManager;
+import com.buuz135.industrial.config.machine.resourceproduction.BlockBreakerConfig;
 import com.buuz135.industrial.item.RangeAddonItem;
 import com.buuz135.industrial.module.ModuleResourceProduction;
 import com.buuz135.industrial.utils.BlockUtils;
 import com.hrznstudio.titanium.annotation.Save;
+import com.hrznstudio.titanium.api.IFactory;
 import com.hrznstudio.titanium.api.augment.IAugment;
 import com.hrznstudio.titanium.component.inventory.SidedInventoryComponent;
+import com.hrznstudio.titanium.energy.NBTEnergyHandler;
 import net.minecraft.block.Blocks;
 import net.minecraft.item.DyeColor;
 import net.minecraft.item.ItemStack;
@@ -21,6 +24,9 @@ import javax.annotation.Nonnull;
 
 public class BlockBreakerTile extends IndustrialAreaWorkingTile<BlockBreakerTile> {
 
+    private int getMaxProgress;
+    private int getPowerPerOperation;
+
     @Save
     private SidedInventoryComponent<BlockBreakerTile> output;
 
@@ -29,11 +35,13 @@ public class BlockBreakerTile extends IndustrialAreaWorkingTile<BlockBreakerTile
         this.addInventory(this.output = (SidedInventoryComponent<BlockBreakerTile>) new SidedInventoryComponent<BlockBreakerTile>("output", 54, 22, 3 * 6, 0).
                 setColor(DyeColor.ORANGE).
                 setRange(6, 3));
+        this.getMaxProgress = BlockBreakerConfig.maxProgress;
+        this.getPowerPerOperation = BlockBreakerConfig.powerPerOperation;
     }
 
     @Override
     public WorkAction work() {
-        if (hasEnergy(1000)) {
+        if (hasEnergy(getPowerPerOperation)) {
             if (isLoaded(getPointedBlockPos()) && !world.isAirBlock(getPointedBlockPos()) && BlockUtils.canBlockBeBroken(this.world, getPointedBlockPos())) {
                 FakePlayer fakePlayer = IndustrialForegoing.getFakePlayer(this.world, getPointedBlockPos());
                 fakePlayer.setHeldItem(Hand.MAIN_HAND, new ItemStack(Items.DIAMOND_PICKAXE));
@@ -46,13 +54,23 @@ public class BlockBreakerTile extends IndustrialAreaWorkingTile<BlockBreakerTile
                     }
                     this.world.setBlockState(getPointedBlockPos(), Blocks.AIR.getDefaultState());
                     increasePointer();
-                    return new WorkAction(1, 1000);
+                    return new WorkAction(1, getPowerPerOperation);
                 }
             } else {
                 increasePointer();
             }
         }
         return new WorkAction(1, 0);
+    }
+
+    @Override
+    protected IFactory<NBTEnergyHandler> getEnergyHandlerFactory() {
+        return () -> new NBTEnergyHandler(this, BlockBreakerConfig.maxStoredPower);
+    }
+
+    @Override
+    public int getMaxProgress() {
+        return getMaxProgress;
     }
 
     @Override

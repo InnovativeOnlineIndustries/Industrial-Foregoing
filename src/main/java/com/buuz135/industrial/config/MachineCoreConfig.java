@@ -4,7 +4,4 @@ import com.hrznstudio.titanium.annotation.config.ConfigFile;
 import net.minecraftforge.fml.config.ModConfig;
 
 @ConfigFile(value = "machine-core", type = ModConfig.Type.COMMON)
-public class MachineCoreConfig {
-
-
-}
+public class MachineCoreConfig {}

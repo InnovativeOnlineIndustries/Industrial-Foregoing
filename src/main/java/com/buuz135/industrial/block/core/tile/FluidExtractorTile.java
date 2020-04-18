@@ -2,11 +2,14 @@ package com.buuz135.industrial.block.core.tile;
 
 import com.buuz135.industrial.block.tile.IndustrialAreaWorkingTile;
 import com.buuz135.industrial.block.tile.RangeManager;
+import com.buuz135.industrial.config.machine.core.FluidExtractorConfig;
 import com.buuz135.industrial.module.ModuleCore;
 import com.buuz135.industrial.recipe.FluidExtractorRecipe;
 import com.hrznstudio.titanium.annotation.Save;
+import com.hrznstudio.titanium.api.IFactory;
 import com.hrznstudio.titanium.component.fluid.FluidTankComponent;
 import com.hrznstudio.titanium.component.fluid.SidedFluidTankComponent;
+import com.hrznstudio.titanium.energy.NBTEnergyHandler;
 import com.hrznstudio.titanium.util.RecipeUtil;
 import net.minecraft.item.DyeColor;
 import net.minecraft.util.math.BlockPos;
@@ -23,18 +26,22 @@ public class FluidExtractorTile extends IndustrialAreaWorkingTile<FluidExtractor
 
     public static HashMap<DimensionType, HashMap<ChunkPos, HashMap<BlockPos, FluidExtractionProgress>>> EXTRACTION = new HashMap<>();
 
+    private int maxProgress;
+    private int powerPerOperation;
     private FluidExtractorRecipe currentRecipe;
     @Save
     private SidedFluidTankComponent<FluidExtractorTile> tank;
 
     public FluidExtractorTile() {
         super(ModuleCore.FLUID_EXTRACTOR, RangeManager.RangeType.BEHIND);
-        addTank(tank = (SidedFluidTankComponent<FluidExtractorTile>) new SidedFluidTankComponent<FluidExtractorTile>("latex", 1000, 43, 20, 0).
+        addTank(tank = (SidedFluidTankComponent<FluidExtractorTile>) new SidedFluidTankComponent<FluidExtractorTile>("latex", FluidExtractorConfig.maxLatexTankSize, 43, 20, 0).
                 setColor(DyeColor.LIGHT_GRAY).
                 setTankAction(FluidTankComponent.Action.DRAIN).
                 setComponentHarness(this).
                 setValidator(fluidStack -> fluidStack.getFluid().isEquivalentTo(ModuleCore.LATEX.getSourceFluid()))
         );
+        this.maxProgress = FluidExtractorConfig.maxProgress;
+        this.powerPerOperation = FluidExtractorConfig.powerPerOperation;
     }
 
     @Override
@@ -53,7 +60,7 @@ public class FluidExtractorTile extends IndustrialAreaWorkingTile<FluidExtractor
                     extractionProgress.setProgress(0);
                     this.world.setBlockState(pos, currentRecipe.result.getDefaultState());
                 }
-                if (hasEnergy(500)) return new WorkAction(0.4f, 500);
+                if (hasEnergy(powerPerOperation)) return new WorkAction(0.4f, powerPerOperation);
                 return new WorkAction(1f, 0);
             }
         }
@@ -61,8 +68,13 @@ public class FluidExtractorTile extends IndustrialAreaWorkingTile<FluidExtractor
     }
 
     @Override
+    protected IFactory<NBTEnergyHandler> getEnergyHandlerFactory() {
+        return () -> new NBTEnergyHandler(this, FluidExtractorConfig.maxStoredPower);
+    }
+
+    @Override
     public int getMaxProgress() {
-        return 30;
+        return maxProgress;
     }
 
     @Nullable
