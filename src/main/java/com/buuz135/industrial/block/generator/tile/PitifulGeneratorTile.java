@@ -1,6 +1,7 @@
 package com.buuz135.industrial.block.generator.tile;
 
 import com.buuz135.industrial.block.tile.IndustrialGeneratorTile;
+import com.buuz135.industrial.config.machine.generator.PitifulGeneratorConfig;
 import com.buuz135.industrial.module.ModuleGenerator;
 import com.hrznstudio.titanium.annotation.Save;
 import com.hrznstudio.titanium.component.inventory.SidedInventoryComponent;
@@ -12,6 +13,8 @@ import javax.annotation.Nonnull;
 
 public class PitifulGeneratorTile extends IndustrialGeneratorTile<PitifulGeneratorTile> {
 
+    private int getPowerPerTick;
+
     @Save
     private SidedInventoryComponent<PitifulGeneratorTile> fuel;
 
@@ -22,6 +25,7 @@ public class PitifulGeneratorTile extends IndustrialGeneratorTile<PitifulGenerat
                 .setInputFilter((itemStack, integer) -> ForgeHooks.getBurnTime(itemStack) != 0)
                 .setComponentHarness(this)
         );
+        this.getPowerPerTick = PitifulGeneratorConfig.powerPerTick;
     }
 
     @Override
@@ -38,7 +42,7 @@ public class PitifulGeneratorTile extends IndustrialGeneratorTile<PitifulGenerat
 
     @Override
     public int getEnergyProducedEveryTick() {
-        return 30;
+        return getPowerPerTick;
     }
 
     @Override
@@ -51,12 +55,12 @@ public class PitifulGeneratorTile extends IndustrialGeneratorTile<PitifulGenerat
 
     @Override
     public int getEnergyCapacity() {
-        return 100000;
+        return PitifulGeneratorConfig.maxStoredPower;
     }
 
     @Override
     public int getExtractingEnergy() {
-        return 1000;
+        return PitifulGeneratorConfig.extractionRate;
     }
 
     @Override

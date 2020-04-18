@@ -1,10 +1,13 @@
 package com.buuz135.industrial.block.resourceproduction.tile;
 
 import com.buuz135.industrial.block.tile.IndustrialWorkingTile;
+import com.buuz135.industrial.config.machine.resourceproduction.WaterCondensatorConfig;
 import com.buuz135.industrial.module.ModuleResourceProduction;
 import com.hrznstudio.titanium.annotation.Save;
+import com.hrznstudio.titanium.api.IFactory;
 import com.hrznstudio.titanium.component.fluid.FluidTankComponent;
 import com.hrznstudio.titanium.component.fluid.SidedFluidTankComponent;
+import com.hrznstudio.titanium.energy.NBTEnergyHandler;
 import net.minecraft.fluid.Fluids;
 import net.minecraft.fluid.IFluidState;
 import net.minecraft.item.DyeColor;
@@ -16,25 +19,30 @@ import javax.annotation.Nonnull;
 
 public class WaterCondensatorTile extends IndustrialWorkingTile<WaterCondensatorTile> {
 
+    private int getMaxProgress;
+    private int getPowerPerOperation;
+
     @Save
     private SidedFluidTankComponent<WaterCondensatorTile> water;
 
     public WaterCondensatorTile() {
         super(ModuleResourceProduction.WATER_CONDENSATOR);
-        this.addTank(water = (SidedFluidTankComponent<WaterCondensatorTile>) new SidedFluidTankComponent<WaterCondensatorTile>("water", 16000, 30 + 13, 20, 0).
+        this.addTank(water = (SidedFluidTankComponent<WaterCondensatorTile>) new SidedFluidTankComponent<WaterCondensatorTile>("water", WaterCondensatorConfig.maxWaterTankSize, 30 + 13, 20, 0).
                 setColor(DyeColor.BLUE).
                 setComponentHarness(this).
                 setTankAction(FluidTankComponent.Action.DRAIN).
                 setValidator(fluidStack -> fluidStack.getFluid().isEquivalentTo(Fluids.WATER)));
+        this.getMaxProgress = WaterCondensatorConfig.maxProgress;
+        this.getPowerPerOperation = WaterCondensatorConfig.powerPerOperation;
     }
 
     @Override
     public WorkAction work() {
         int water = getWaterSources();
         if (water >= 2) {
-            if (hasEnergy(50)) {
+            if (hasEnergy(getPowerPerOperation)) {
                 this.water.fillForced(new FluidStack(Fluids.WATER, water * 10), IFluidHandler.FluidAction.EXECUTE);
-                return new WorkAction(0.1f, 50);
+                return new WorkAction(0.1f, getPowerPerOperation);
             } else {
                 this.water.fillForced(new FluidStack(Fluids.WATER, water * 5), IFluidHandler.FluidAction.EXECUTE);
                 return new WorkAction(0.5f, 0);
@@ -44,8 +52,13 @@ public class WaterCondensatorTile extends IndustrialWorkingTile<WaterCondensator
     }
 
     @Override
+    protected IFactory<NBTEnergyHandler> getEnergyHandlerFactory() {
+        return () -> new NBTEnergyHandler(this, WaterCondensatorConfig.maxStoredPower);
+    }
+
+    @Override
     public int getMaxProgress() {
-        return 10;
+        return getMaxProgress;
     }
 
     private int getWaterSources() {

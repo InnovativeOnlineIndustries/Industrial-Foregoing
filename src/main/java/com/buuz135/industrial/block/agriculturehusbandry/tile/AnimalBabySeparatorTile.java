@@ -2,6 +2,7 @@ package com.buuz135.industrial.block.agriculturehusbandry.tile;
 
 import com.buuz135.industrial.block.tile.IndustrialAreaWorkingTile;
 import com.buuz135.industrial.block.tile.RangeManager;
+import com.buuz135.industrial.config.machine.agriculturehusbandry.AnimalBabySeparatorConfig;
 import com.buuz135.industrial.gui.component.ItemGuiAddon;
 import com.buuz135.industrial.module.ModuleAgricultureHusbandry;
 import com.hrznstudio.titanium.annotation.Save;
@@ -11,6 +12,7 @@ import com.hrznstudio.titanium.api.client.IScreenAddon;
 import com.hrznstudio.titanium.client.screen.addon.StateButtonAddon;
 import com.hrznstudio.titanium.client.screen.addon.StateButtonInfo;
 import com.hrznstudio.titanium.component.button.ButtonComponent;
+import com.hrznstudio.titanium.energy.NBTEnergyHandler;
 import net.minecraft.entity.passive.AnimalEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
@@ -21,6 +23,9 @@ import java.util.Collections;
 import java.util.List;
 
 public class AnimalBabySeparatorTile extends IndustrialAreaWorkingTile<AnimalBabySeparatorTile> {
+
+    private int maxProgress;
+    private int powerPerOperation;
 
     @Save
     private boolean movingAdults;
@@ -45,19 +50,31 @@ public class AnimalBabySeparatorTile extends IndustrialAreaWorkingTile<AnimalBab
                 return new ItemStack(movingAdults ? Items.WHEAT : Items.WHEAT_SEEDS);
             }
         }.withoutTooltip());
+        this.maxProgress = AnimalBabySeparatorConfig.maxProgress;
+        this.powerPerOperation = AnimalBabySeparatorConfig.powerPerOperation;
     }
 
     @Override
     public WorkAction work() {
-        if (hasEnergy(400)) {
+        if (this.world != null && hasEnergy(powerPerOperation)) {
             List<AnimalEntity> mobs = this.world.getEntitiesWithinAABB(AnimalEntity.class, getWorkingArea().getBoundingBox());
             mobs.removeIf(animalEntity -> !animalEntity.isChild() == !movingAdults);
             if (mobs.size() == 0) return new WorkAction(1, 0);
             BlockPos pos = this.getPos().offset(this.getFacingDirection());
             mobs.get(0).setPosition(pos.getX() + 0.5, pos.getY(), pos.getZ() + 0.5);
-
+            return new WorkAction(0.25f, powerPerOperation);
         }
         return new WorkAction(1, 0);
+    }
+
+    @Override
+    protected IFactory<NBTEnergyHandler> getEnergyHandlerFactory() {
+        return () -> new NBTEnergyHandler(this, AnimalBabySeparatorConfig.maxStoredPower);
+    }
+
+    @Override
+    public int getMaxProgress() {
+        return maxProgress;
     }
 
     @Nonnull

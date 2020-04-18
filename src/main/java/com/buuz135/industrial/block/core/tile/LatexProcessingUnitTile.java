@@ -1,11 +1,14 @@
 package com.buuz135.industrial.block.core.tile;
 
-import com.buuz135.industrial.block.core.LatexProcessingUnitBlock;
 import com.buuz135.industrial.block.tile.IndustrialProcessingTile;
+import com.buuz135.industrial.config.machine.core.DissolutionChamberConfig;
+import com.buuz135.industrial.config.machine.core.LatexProcessingUnitConfig;
 import com.buuz135.industrial.module.ModuleCore;
 import com.hrznstudio.titanium.annotation.Save;
+import com.hrznstudio.titanium.api.IFactory;
 import com.hrznstudio.titanium.component.fluid.SidedFluidTankComponent;
 import com.hrznstudio.titanium.component.inventory.SidedInventoryComponent;
+import com.hrznstudio.titanium.energy.NBTEnergyHandler;
 import net.minecraft.fluid.Fluids;
 import net.minecraft.item.DyeColor;
 import net.minecraft.item.ItemStack;
@@ -28,11 +31,11 @@ public class LatexProcessingUnitTile extends IndustrialProcessingTile<LatexProce
 
     public LatexProcessingUnitTile() {
         super(ModuleCore.LATEX_PROCESSING, 48 + 25, 40);
-        this.addTank(latex = (SidedFluidTankComponent<LatexProcessingUnitTile>) new SidedFluidTankComponent<LatexProcessingUnitTile>("latex", 16000, 29, 20, 0).
+        this.addTank(latex = (SidedFluidTankComponent<LatexProcessingUnitTile>) new SidedFluidTankComponent<LatexProcessingUnitTile>("latex", LatexProcessingUnitConfig.maxLatexTankSize, 29, 20, 0).
                 setColor(DyeColor.LIGHT_GRAY).
                 setComponentHarness(this).
                 setValidator(fluidStack -> fluidStack.getFluid().isEquivalentTo(ModuleCore.LATEX.getSourceFluid())));
-        this.addTank(water = (SidedFluidTankComponent<LatexProcessingUnitTile>) new SidedFluidTankComponent<LatexProcessingUnitTile>("water", 16000, 30 + 18, 20, 1).
+        this.addTank(water = (SidedFluidTankComponent<LatexProcessingUnitTile>) new SidedFluidTankComponent<LatexProcessingUnitTile>("water", LatexProcessingUnitConfig.maxWaterTankSize, 30 + 18, 20, 1).
                 setColor(DyeColor.BLUE).
                 setComponentHarness(this).
                 setValidator(fluidStack -> fluidStack.getFluid().isEquivalentTo(Fluids.WATER)));
@@ -57,8 +60,13 @@ public class LatexProcessingUnitTile extends IndustrialProcessingTile<LatexProce
     }
 
     @Override
+    protected IFactory<NBTEnergyHandler> getEnergyHandlerFactory() {
+        return () -> new NBTEnergyHandler(this, DissolutionChamberConfig.maxStoredPower);
+    }
+
+    @Override
     protected int getTickPower() {
-        return LatexProcessingUnitBlock.POWER_CONSUMED_EVERY_TICK;
+        return LatexProcessingUnitConfig.powerPerTick;
     }
 
     @Nonnull

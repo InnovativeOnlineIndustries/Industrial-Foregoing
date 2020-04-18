@@ -3,10 +3,13 @@ package com.buuz135.industrial.block.agriculturehusbandry.tile;
 import com.buuz135.industrial.IndustrialForegoing;
 import com.buuz135.industrial.block.tile.IndustrialAreaWorkingTile;
 import com.buuz135.industrial.block.tile.RangeManager;
+import com.buuz135.industrial.config.machine.agriculturehusbandry.AnimalRancherConfig;
 import com.buuz135.industrial.module.ModuleAgricultureHusbandry;
 import com.hrznstudio.titanium.annotation.Save;
+import com.hrznstudio.titanium.api.IFactory;
 import com.hrznstudio.titanium.component.fluid.SidedFluidTankComponent;
 import com.hrznstudio.titanium.component.inventory.SidedInventoryComponent;
+import com.hrznstudio.titanium.energy.NBTEnergyHandler;
 import net.minecraft.entity.passive.AnimalEntity;
 import net.minecraft.item.BucketItem;
 import net.minecraft.item.DyeColor;
@@ -25,6 +28,9 @@ import java.util.List;
 
 public class AnimalRancherTile extends IndustrialAreaWorkingTile<AnimalRancherTile> {
 
+    private int maxProgress;
+    private int powerPerOperation;
+
     @Save
     private SidedFluidTankComponent<AnimalRancherTile> tank;
     @Save
@@ -32,7 +38,7 @@ public class AnimalRancherTile extends IndustrialAreaWorkingTile<AnimalRancherTi
 
     public AnimalRancherTile() {
         super(ModuleAgricultureHusbandry.ANIMAL_RANCHER, RangeManager.RangeType.BEHIND);
-        this.addTank(tank = (SidedFluidTankComponent<AnimalRancherTile>) new SidedFluidTankComponent<AnimalRancherTile>("fluid_output", 8000, 47, 20, 0).
+        this.addTank(tank = (SidedFluidTankComponent<AnimalRancherTile>) new SidedFluidTankComponent<AnimalRancherTile>("fluid_output", AnimalRancherConfig.maxTankSize, 47, 20, 0).
                 setColor(DyeColor.WHITE).
                 setComponentHarness(this)
         );
@@ -41,11 +47,13 @@ public class AnimalRancherTile extends IndustrialAreaWorkingTile<AnimalRancherTi
                 setRange(5, 3).
                 setComponentHarness(this)
         );
+        this.maxProgress = AnimalRancherConfig.maxProgress;
+        this.powerPerOperation = AnimalRancherConfig.powerPerOperation;
     }
 
     @Override
     public WorkAction work() {
-        if (hasEnergy(400)) {
+        if (hasEnergy(powerPerOperation)) {
             List<AnimalEntity> mobs = this.world.getEntitiesWithinAABB(AnimalEntity.class, getWorkingArea().getBoundingBox());
             if (mobs.size() > 0) {
                 for (AnimalEntity mob : mobs) {
@@ -57,7 +65,7 @@ public class AnimalRancherTile extends IndustrialAreaWorkingTile<AnimalRancherTi
                         if (stack.getItem() instanceof BucketItem) {
                             tank.fillForced(new FluidStack(((BucketItem) stack.getItem()).getFluid(), FluidAttributes.BUCKET_VOLUME), IFluidHandler.FluidAction.EXECUTE);
                             player.setHeldItem(Hand.MAIN_HAND, ItemStack.EMPTY);
-                            return new WorkAction(0.35f, 400);
+                            return new WorkAction(0.35f, powerPerOperation);
                         }
                         player.setHeldItem(Hand.MAIN_HAND, ItemStack.EMPTY);
                     }
@@ -67,13 +75,23 @@ public class AnimalRancherTile extends IndustrialAreaWorkingTile<AnimalRancherTi
                         List<ItemStack> items = ((IShearable) mob).onSheared(shears, this.world, mob.getPosition(), 0);
                         items.forEach(stack -> ItemHandlerHelper.insertItem(output, stack, false));
                         if (items.size() > 0) {
-                            return new WorkAction(0.35f, 400);
+                            return new WorkAction(0.35f, powerPerOperation);
                         }
                     }
                 }
             }
         }
         return new WorkAction(1, 0);
+    }
+
+    @Override
+    protected IFactory<NBTEnergyHandler> getEnergyHandlerFactory() {
+        return () -> new NBTEnergyHandler(this, AnimalRancherConfig.maxStoredPower);
+    }
+
+    @Override
+    public int getMaxProgress() {
+        return maxProgress;
     }
 
     @Nonnull

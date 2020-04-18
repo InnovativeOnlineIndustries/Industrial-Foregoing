@@ -1,11 +1,14 @@
 package com.buuz135.industrial.block.resourceproduction.tile;
 
 import com.buuz135.industrial.block.tile.IndustrialProcessingTile;
+import com.buuz135.industrial.config.machine.resourceproduction.SporeRecreatorConfig;
 import com.buuz135.industrial.module.ModuleResourceProduction;
 import com.hrznstudio.titanium.annotation.Save;
+import com.hrznstudio.titanium.api.IFactory;
 import com.hrznstudio.titanium.component.fluid.FluidTankComponent;
 import com.hrznstudio.titanium.component.fluid.SidedFluidTankComponent;
 import com.hrznstudio.titanium.component.inventory.SidedInventoryComponent;
+import com.hrznstudio.titanium.energy.NBTEnergyHandler;
 import com.hrznstudio.titanium.util.ItemHandlerUtil;
 import net.minecraft.fluid.Fluids;
 import net.minecraft.item.DyeColor;
@@ -18,6 +21,8 @@ import javax.annotation.Nonnull;
 
 public class SporesRecreatorTile extends IndustrialProcessingTile<SporesRecreatorTile> {
 
+    private int getPowerPerTick;
+
     @Save
     private SidedFluidTankComponent<SporesRecreatorTile> tank;
     @Save
@@ -27,7 +32,7 @@ public class SporesRecreatorTile extends IndustrialProcessingTile<SporesRecreato
 
     public SporesRecreatorTile() {
         super(ModuleResourceProduction.SPORES_RECREATOR, 79, 40);
-        addTank(tank = (SidedFluidTankComponent<SporesRecreatorTile>) new SidedFluidTankComponent<SporesRecreatorTile>("water", 1000, 31, 20, 0).
+        addTank(tank = (SidedFluidTankComponent<SporesRecreatorTile>) new SidedFluidTankComponent<SporesRecreatorTile>("water", SporeRecreatorConfig.maxWaterTankSize, 31, 20, 0).
                 setColor(DyeColor.CYAN).
                 setTankAction(FluidTankComponent.Action.FILL).
                 setComponentHarness(this).
@@ -46,6 +51,7 @@ public class SporesRecreatorTile extends IndustrialProcessingTile<SporesRecreato
                 .setComponentHarness(this)
                 .setInputFilter((stack, integer) -> false)
         );
+        this.getPowerPerTick = SporeRecreatorConfig.powerPerTick;
     }
 
     @Override
@@ -64,8 +70,13 @@ public class SporesRecreatorTile extends IndustrialProcessingTile<SporesRecreato
     }
 
     @Override
+    protected IFactory<NBTEnergyHandler> getEnergyHandlerFactory() {
+        return () -> new NBTEnergyHandler(this, SporeRecreatorConfig.maxStoredPower);
+    }
+
+    @Override
     protected int getTickPower() {
-        return 40;
+        return getPowerPerTick;
     }
 
     @Nonnull
