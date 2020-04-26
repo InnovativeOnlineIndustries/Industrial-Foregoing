@@ -1,6 +1,6 @@
-package com.buuz135.industrial.block.mob.tile;
+package com.buuz135.industrial.block.misc.tile;
 
-import com.buuz135.industrial.block.mob.MobDetectorBlock;
+import com.buuz135.industrial.block.misc.MobDetectorBlock;
 import com.buuz135.industrial.block.tile.IndustrialAreaWorkingTile;
 import com.buuz135.industrial.block.tile.RangeManager;
 import com.buuz135.industrial.module.ModuleMob;
@@ -11,16 +11,18 @@ import java.util.List;
 
 public class MobDetectorTile extends IndustrialAreaWorkingTile<MobDetectorTile> {
 
+    private int redstoneSignal;
+
     public MobDetectorTile() {
-        super(ModuleMob.MOB_DETECTOR, RangeManager.RangeType.FRONT);
+        super(ModuleMob.MOB_DETECTOR, RangeManager.RangeType.BEHIND);
+        this.redstoneSignal = 0;
     }
 
     @Override
     public WorkAction work() {
         if (this.world != null && this.world.getBlockState(pos).getBlock() instanceof MobDetectorBlock) {
-            MobDetectorBlock detector = (MobDetectorBlock) this.world.getBlockState(pos).getBlock();
             List<LivingEntity> living = this.world.getEntitiesWithinAABB(LivingEntity.class, getWorkingArea().getBoundingBox());
-            detector.setRedstoneSignal(Math.min(living.size(), 15));
+            redstoneSignal = Math.min(living.size(), 15);
             this.world.notifyNeighborsOfStateChange(this.pos, this.getBasicTileBlock());
         }
         return new WorkAction(1, 0);
@@ -37,4 +39,7 @@ public class MobDetectorTile extends IndustrialAreaWorkingTile<MobDetectorTile> 
         return this;
     }
 
+    public int getRedstoneSignal() {
+        return redstoneSignal;
+    }
 }

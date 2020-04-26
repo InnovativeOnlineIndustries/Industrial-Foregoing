@@ -1,0 +1,46 @@
+{
+  "type": "forge:conditional",
+  "recipes": [
+    {
+      "conditions": [
+        {
+          "values": [
+            {
+              "item": "industrialforegoing:stasis_chamber",
+              "type": "forge:item_exists"
+            }
+          ],
+          "type": "forge:and"
+        }
+      ],
+      "recipe": {
+        "type": "minecraft:crafting_shaped",
+        "pattern": [
+          "sss",
+          "gmg",
+          "ipi"
+        ],
+        "key": {
+          "s": {
+            "item": "minecraft:soul_sand"
+          },
+          "g": {
+            "item": "minecraft:ghast_tear"
+          },
+          "m": {
+            "tag": "industrialforegoing:machine_frame/simple"
+          },
+          "i": {
+            "tag": "forge:gear/gold"
+          },
+          "p": {
+            "item": "minecraft:piston"
+          }
+        },
+        "result": {
+          "item": "industrialforegoing:stasis_chamber"
+        }
+      }
+    }
+  ]
+}

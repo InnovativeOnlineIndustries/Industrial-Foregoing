@@ -1,7 +1,7 @@
-package com.buuz135.industrial.block.mob;
+package com.buuz135.industrial.block.misc;
 
 import com.buuz135.industrial.block.IndustrialBlock;
-import com.buuz135.industrial.block.mob.tile.MobDetectorTile;
+import com.buuz135.industrial.block.misc.tile.MobDetectorTile;
 import com.buuz135.industrial.module.ModuleMob;
 import com.buuz135.industrial.utils.IndustrialTags;
 import com.hrznstudio.titanium.api.IFactory;
@@ -21,8 +21,6 @@ import java.util.function.Consumer;
 
 public class MobDetectorBlock extends IndustrialBlock<MobDetectorTile> {
 
-    private int redstoneSignal = 0;
-
     public MobDetectorBlock() {
         super("mob_detector", Properties.from(Blocks.IRON_BLOCK), MobDetectorTile.class, ModuleMob.TAB_MOB);
     }
@@ -38,10 +36,10 @@ public class MobDetectorBlock extends IndustrialBlock<MobDetectorTile> {
     }
 
     @Override
-    public int getWeakPower(BlockState blockState, IBlockReader blockAccess, BlockPos pos, Direction side) {
+    public int getWeakPower(BlockState blockState, IBlockReader world, BlockPos pos, Direction side) {
         Direction facing = blockState.get(RotatableBlock.FACING_HORIZONTAL);
-        if (side != facing.getOpposite()) {
-            return redstoneSignal;
+        if (side != facing && world.getTileEntity(pos) instanceof MobDetectorTile) {
+            return ((MobDetectorTile) world.getTileEntity(pos)).getRedstoneSignal();
         }
         return 0;
     }
@@ -69,7 +67,4 @@ public class MobDetectorBlock extends IndustrialBlock<MobDetectorTile> {
             .build(consumer);
     }
 
-    public void setRedstoneSignal(int redstoneSignal) {
-        this.redstoneSignal = redstoneSignal;
-    }
 }

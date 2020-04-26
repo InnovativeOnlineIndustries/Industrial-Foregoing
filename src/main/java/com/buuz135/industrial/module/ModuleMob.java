@@ -1,6 +1,6 @@
 package com.buuz135.industrial.module;
 
-import com.buuz135.industrial.block.mob.MobDetectorBlock;
+import com.buuz135.industrial.block.misc.MobDetectorBlock;
 import com.buuz135.industrial.utils.Reference;
 import com.hrznstudio.titanium.module.Feature;
 import com.hrznstudio.titanium.tab.AdvancedTitaniumTab;
