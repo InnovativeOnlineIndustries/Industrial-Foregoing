@@ -32,8 +32,13 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.BlockRayTraceResult;
 import net.minecraft.util.math.RayTraceContext;
 import net.minecraft.util.math.RayTraceResult;
+import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.StringTextComponent;
+import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.World;
 
+import javax.annotation.Nullable;
+import java.util.List;
 import java.util.function.Consumer;
 
 public class BookManualItem extends IFCustomItem {
@@ -60,4 +65,16 @@ public class BookManualItem extends IFCustomItem {
 
     }
 
+    @Override
+    public boolean hasTooltipDetails(@Nullable Key key) {
+        return key == null;
+    }
+
+    @Override
+    public void addTooltipDetails(@Nullable Key key, ItemStack stack, List<ITextComponent> tooltip, boolean advanced) {
+        if (key == null) {
+            tooltip.add(new StringTextComponent("Not implemented yet! Coming soon!").applyTextStyle(TextFormatting.RED));
+        }
+        super.addTooltipDetails(key, stack, tooltip, advanced);
+    }
 }

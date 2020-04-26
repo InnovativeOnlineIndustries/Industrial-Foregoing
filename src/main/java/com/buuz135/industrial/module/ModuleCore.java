@@ -111,6 +111,7 @@ public class ModuleCore implements IModule {
                 .content(Item.class, MILK_BUCKET));
         MILK.setBucketFluid(MILK_BUCKET);
         TAB_CORE.addIconStack(new ItemStack(PLASTIC));
+        features.add(Feature.builder("manual").content(Item.class, BOOK_MANUAL));
         return features;
     }
 
