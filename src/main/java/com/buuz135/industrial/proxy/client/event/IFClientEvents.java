@@ -36,6 +36,7 @@ import net.minecraft.util.Hand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.BlockRayTraceResult;
 import net.minecraft.util.math.RayTraceResult;
+import net.minecraft.util.math.shapes.VoxelShape;
 import net.minecraft.world.World;
 import net.minecraftforge.client.event.DrawHighlightEvent;
 import net.minecraftforge.client.event.RenderPlayerEvent;
@@ -75,8 +76,9 @@ public class IFClientEvents {
             double d2 = info.getProjectedView().getZ();
             IVertexBuilder builder = Minecraft.getInstance().getRenderTypeBuffers().getOutlineBufferSource().getBuffer(RenderType.lines());
             BlockPos.getAllInBoxMutable(area.getLeft(), area.getRight()).forEach(blockPos -> {
-                if (!world.isAirBlock(blockPos) && world.getBlockState(blockPos).getBlockHardness(world, blockPos) >= 0 && !(world.getBlockState(blockPos).getBlock() instanceof IFluidBlock) && !(world.getBlockState(blockPos).getBlock() instanceof FlowingFluidBlock)) {
-                    WorldRenderer.drawBoundingBox(stack, builder, world.getBlockState(blockPos).getShape(world, blockPos).getBoundingBox().offset(blockPos.getX() - d0, blockPos.getY() - d1, blockPos.getZ() - d2), 0, 0, 0, 0.35F);
+                VoxelShape shape = world.getBlockState(blockPos).getShape(world, blockPos);
+                if (shape != null && !shape.isEmpty() && !world.isAirBlock(blockPos) && world.getBlockState(blockPos).getBlockHardness(world, blockPos) >= 0 && !(world.getBlockState(blockPos).getBlock() instanceof IFluidBlock) && !(world.getBlockState(blockPos).getBlock() instanceof FlowingFluidBlock)) {
+                    WorldRenderer.drawBoundingBox(stack, builder, shape.getBoundingBox().offset(blockPos.getX() - d0, blockPos.getY() - d1, blockPos.getZ() - d2), 0, 0, 0, 0.35F);
                 }
             });
             stack.pop();
