@@ -40,8 +40,6 @@ import com.buuz135.industrial.utils.data.IndustrialBlockstateProvider;
 import com.buuz135.industrial.utils.data.IndustrialModelProvider;
 import com.hrznstudio.titanium.TitaniumClient;
 import com.hrznstudio.titanium.event.handler.EventManager;
-import com.hrznstudio.titanium.material.ResourceRegistry;
-import com.hrznstudio.titanium.material.ResourceType;
 import com.hrznstudio.titanium.module.Module;
 import com.hrznstudio.titanium.module.ModuleController;
 import com.hrznstudio.titanium.network.NetworkHandler;
@@ -84,9 +82,6 @@ public class IndustrialForegoing extends ModuleController {
         NETWORK.registerMessage(ConveyorButtonInteractMessage.class);
         NETWORK.registerMessage(ConveyorSplittingSyncEntityMessage.class);
         NETWORK.registerMessage(SpecialParticleMessage.class);
-        ResourceRegistry.getOrCreate("iron").add(ResourceType.GEAR);
-        ResourceRegistry.getOrCreate("gold").add(ResourceType.GEAR);
-        ResourceRegistry.getOrCreate("diamond").add(ResourceType.GEAR);
     }
 
     public IndustrialForegoing() {
