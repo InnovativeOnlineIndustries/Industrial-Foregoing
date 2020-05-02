@@ -3,7 +3,7 @@ package com.buuz135.industrial.block.misc.tile;
 import com.buuz135.industrial.block.misc.MobDetectorBlock;
 import com.buuz135.industrial.block.tile.IndustrialAreaWorkingTile;
 import com.buuz135.industrial.block.tile.RangeManager;
-import com.buuz135.industrial.module.ModuleMob;
+import com.buuz135.industrial.module.ModuleMisc;
 import net.minecraft.entity.LivingEntity;
 
 import javax.annotation.Nonnull;
@@ -14,7 +14,7 @@ public class MobDetectorTile extends IndustrialAreaWorkingTile<MobDetectorTile> 
     private int redstoneSignal;
 
     public MobDetectorTile() {
-        super(ModuleMob.MOB_DETECTOR, RangeManager.RangeType.BEHIND);
+        super(ModuleMisc.MOB_DETECTOR, RangeManager.RangeType.BEHIND);
         this.redstoneSignal = 0;
     }
 

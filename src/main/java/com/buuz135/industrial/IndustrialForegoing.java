@@ -169,9 +169,6 @@ public class IndustrialForegoing extends ModuleController {
         new ModuleMisc().generateFeatures().forEach(misc::feature);
         addModule(misc);
 
-        Module.Builder mob = Module.builder("mob").description("Content-Related to Monsters and Entities");
-        new ModuleMob().generateFeatures().forEach(mob::feature);
-        addModule(mob);
     }
 
     @OnlyIn(Dist.CLIENT)

@@ -2,7 +2,7 @@ package com.buuz135.industrial.block.misc;
 
 import com.buuz135.industrial.block.IndustrialBlock;
 import com.buuz135.industrial.block.misc.tile.MobDetectorTile;
-import com.buuz135.industrial.module.ModuleMob;
+import com.buuz135.industrial.module.ModuleMisc;
 import com.buuz135.industrial.utils.IndustrialTags;
 import com.hrznstudio.titanium.api.IFactory;
 import com.hrznstudio.titanium.block.RotatableBlock;
@@ -22,7 +22,7 @@ import java.util.function.Consumer;
 public class MobDetectorBlock extends IndustrialBlock<MobDetectorTile> {
 
     public MobDetectorBlock() {
-        super("mob_detector", Properties.from(Blocks.IRON_BLOCK), MobDetectorTile.class, ModuleMob.TAB_MOB);
+        super("mob_detector", Properties.from(Blocks.IRON_BLOCK), MobDetectorTile.class, ModuleMisc.TAB_MISC);
     }
 
     @Override

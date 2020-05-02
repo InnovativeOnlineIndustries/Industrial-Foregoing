@@ -1,5 +1,6 @@
 package com.buuz135.industrial.module;
 
+import com.buuz135.industrial.block.misc.MobDetectorBlock;
 import com.buuz135.industrial.block.misc.StasisChamberBlock;
 import com.buuz135.industrial.utils.Reference;
 import com.hrznstudio.titanium.event.handler.EventManager;
@@ -16,6 +17,7 @@ public class ModuleMisc implements IModule {
 
     public static AdvancedTitaniumTab TAB_MISC = new AdvancedTitaniumTab(Reference.MOD_ID + "_misc", true);
     public static StasisChamberBlock STASIS_CHAMBER = new StasisChamberBlock();
+    public static MobDetectorBlock MOB_DETECTOR = new MobDetectorBlock();
 
     @Override
     public List<Feature.Builder> generateFeatures() {
@@ -29,6 +31,7 @@ public class ModuleMisc implements IModule {
                     }
                 }))
         );
+        features.add(createFeature(MOB_DETECTOR));
         return features;
     }
 }

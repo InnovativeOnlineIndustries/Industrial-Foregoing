@@ -5,6 +5,7 @@
   "itemGroup.industrialforegoing_generator": "Industrial Foregoing: Generators",
   "itemGroup.industrialforegoing_ag_hus": "Industrial Foregoing: Agriculture & Husbandry",
   "itemGroup.industrialforegoing_resource_production": "Industrial Foregoing: Resource Production",
+  "itemGroup.industrialforegoing_misc": "Industrial Foregoing: Misc",
   "text.industrialforegoing.display.burning": "Burning time:",
   "text.industrialforegoing.display.producing": "Producing:",
   "text.industrialforegoing.display.amount": "Amount:",
