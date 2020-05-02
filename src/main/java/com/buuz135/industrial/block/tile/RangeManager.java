@@ -50,7 +50,8 @@ public class RangeManager {
                 (rangeManager, integer) -> rangeManager.getBox().offset(rangeManager.getDirection().getOpposite().getDirectionVec().getX() * integer, rangeManager.getDirection().getOpposite().getDirectionVec().getY() * integer, rangeManager.getDirection().getOpposite().getDirectionVec().getZ() * integer).
                         grow(integer, 0, integer)),
         TOP((direction, axisAlignedBB) -> axisAlignedBB.offset(0, 1, 0), (rangeManager, integer) -> rangeManager.getBox().grow(integer, 0, integer)),
-        TOP_UP((direction, axisAlignedBB) -> axisAlignedBB.offset(0, 2, 0), (rangeManager, integer) -> rangeManager.getBox().grow(integer, 0, integer));
+        TOP_UP((direction, axisAlignedBB) -> axisAlignedBB.offset(0, 2, 0), (rangeManager, integer) -> rangeManager.getBox().grow(integer, 0, integer)),
+        BOTTOM((direction, axisAlignedBB) -> axisAlignedBB.offset(0, -1, 0), (rangeManager, integer) -> rangeManager.getBox().grow(integer, 0, integer));
 
 
         private final BiFunction<Direction, AxisAlignedBB, AxisAlignedBB> offsetCreation;

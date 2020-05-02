@@ -31,11 +31,15 @@ public class IndustrialBlockstateProvider extends BlockStateProvider {
                 .filter(industrialBlock -> !(industrialBlock.equals(ModuleAgricultureHusbandry.PLANT_SOWER)))
                 .forEach(industrialBlock -> {
                     VariantBlockStateBuilder builder = getVariantBuilder(industrialBlock);
-                    for (DirectionProperty property : industrialBlock.getRotationType().getProperties()) {
-                        for (Direction allowedValue : property.getAllowedValues()) {
-                            builder.partialState().with(property, allowedValue)
-                                    .addModels(new ConfiguredModel(new ModelFile.UncheckedModelFile(getModel(industrialBlock)), allowedValue.getHorizontalIndex() == -1 ? allowedValue.getOpposite().getAxisDirection().getOffset() * 90 : 0, (int) allowedValue.getOpposite().getHorizontalAngle(), false));
+                    if (industrialBlock.getRotationType().getProperties().length > 0) {
+                        for (DirectionProperty property : industrialBlock.getRotationType().getProperties()) {
+                            for (Direction allowedValue : property.getAllowedValues()) {
+                                builder.partialState().with(property, allowedValue)
+                                        .addModels(new ConfiguredModel(new ModelFile.UncheckedModelFile(getModel(industrialBlock)), allowedValue.getHorizontalIndex() == -1 ? allowedValue.getOpposite().getAxisDirection().getOffset() * 90 : 0, (int) allowedValue.getOpposite().getHorizontalAngle(), false));
+                            }
                         }
+                    } else {
+                        builder.partialState().addModels(new ConfiguredModel(new ModelFile.UncheckedModelFile(getModel(industrialBlock))));
                     }
                 });
         //VariantBlockStateBuilder conveyor = getVariantBuilder(ModuleTransport.CONVEYOR);

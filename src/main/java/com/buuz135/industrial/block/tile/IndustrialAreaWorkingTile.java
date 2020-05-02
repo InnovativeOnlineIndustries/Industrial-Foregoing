@@ -43,7 +43,10 @@ public abstract class IndustrialAreaWorkingTile<T extends IndustrialAreaWorkingT
                 });
                 return addons;
             }
-        }.setPredicate((playerEntity, compoundNBT) -> this.showingArea = !this.showingArea));
+        }.setPredicate((playerEntity, compoundNBT) -> {
+            this.showingArea = !this.showingArea;
+            this.markForUpdate();
+        }));
         this.type = type;
     }
 

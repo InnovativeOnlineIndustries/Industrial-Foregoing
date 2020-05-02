@@ -24,6 +24,7 @@ public class ModuleResourceProduction implements IModule {
     public static DyeMixerBlock DYE_MIXER = new DyeMixerBlock();
     public static SporesRecreatorBlock SPORES_RECREATOR = new SporesRecreatorBlock();
     public static MaterialStoneWorkFactoryBlock MATERIAL_STONEWORK_FACTORY = new MaterialStoneWorkFactoryBlock();
+    public static MarineFisherBlock MARINE_FISHER = new MarineFisherBlock();
 
     @Override
     public List<Feature.Builder> generateFeatures() {
@@ -39,6 +40,7 @@ public class ModuleResourceProduction implements IModule {
         features.add(createFeature(DYE_MIXER));
         features.add(createFeature(SPORES_RECREATOR));
         features.add(createFeature(MATERIAL_STONEWORK_FACTORY));
+        features.add(createFeature(MARINE_FISHER));
         TAB_RESOURCE.addIconStack(new ItemStack(WATER_CONDENSATOR));
         return features;
     }
