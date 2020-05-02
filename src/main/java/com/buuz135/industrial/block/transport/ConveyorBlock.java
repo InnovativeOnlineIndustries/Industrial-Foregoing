@@ -538,7 +538,7 @@ public class ConveyorBlock extends BasicTileBlock<ConveyorTile> implements IWate
         @Nullable
         @Override
         public String getCreatorModId(ItemStack itemStack) {
-            return new TranslationTextComponent(this.group.getTranslationKey()).getFormattedText();
+            return new TranslationTextComponent("itemGroup." + this.group.getPath()).getFormattedText();
         }
     }
 
