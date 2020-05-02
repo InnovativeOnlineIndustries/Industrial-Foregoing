@@ -174,7 +174,7 @@ publishing {
 }
 
 
-tasks.curseforge.enabled =  project.hasProperty('curse_api')
+tasks.curseforge.enabled = project.hasProperty('curse_api')
 
 curseforge {
     if (project.hasProperty('curse_api')) {

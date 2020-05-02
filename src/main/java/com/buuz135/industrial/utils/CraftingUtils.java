@@ -43,6 +43,7 @@ public class CraftingUtils {
     private static HashMap<ItemStack, ItemStack> cachedRecipes = new HashMap<>();
 
     public static ItemStack findOutput(int size, ItemStack input, World world) {
+        if (input.getCount() < size * size) return ItemStack.EMPTY;
         ItemStack cachedStack = input.copy();
         cachedStack.setCount(size * size);
         for (Map.Entry<ItemStack, ItemStack> entry : cachedRecipes.entrySet()) {
@@ -59,7 +60,7 @@ public class CraftingUtils {
         for (int i = 0; i < size * size; i++) {
             inventoryCrafting.setInventorySlotContents(i, input.copy());
         }
-        ICraftingRecipe recipe = world.getRecipeManager().getRecipe(IRecipeType.CRAFTING, inventoryCrafting, world).orElseGet(null);
+        ICraftingRecipe recipe = world.getRecipeManager().getRecipe(IRecipeType.CRAFTING, inventoryCrafting, world).orElse(null);
         if (recipe != null) {
             ItemStack output = recipe.getRecipeOutput();
             cachedRecipes.put(cachedStack, output.copy());

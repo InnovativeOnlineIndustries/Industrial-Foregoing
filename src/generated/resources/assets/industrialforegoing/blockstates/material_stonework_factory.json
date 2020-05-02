@@ -1,0 +1,19 @@
+{
+  "variants": {
+    "subfacing=north": {
+      "model": "industrialforegoing:block/material_stonework_factory"
+    },
+    "subfacing=south": {
+      "model": "industrialforegoing:block/material_stonework_factory",
+      "y": 180
+    },
+    "subfacing=west": {
+      "model": "industrialforegoing:block/material_stonework_factory",
+      "y": 270
+    },
+    "subfacing=east": {
+      "model": "industrialforegoing:block/material_stonework_factory",
+      "y": 90
+    }
+  }
+}
