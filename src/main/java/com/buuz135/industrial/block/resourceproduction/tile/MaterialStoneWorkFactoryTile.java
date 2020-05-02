@@ -1,6 +1,7 @@
 package com.buuz135.industrial.block.resourceproduction.tile;
 
 import com.buuz135.industrial.block.tile.IndustrialProcessingTile;
+import com.buuz135.industrial.config.machine.resourceproduction.MaterialStoneWorkFactoryConfig;
 import com.buuz135.industrial.module.ModuleResourceProduction;
 import com.buuz135.industrial.utils.CraftingUtils;
 import com.hrznstudio.titanium.annotation.Save;
@@ -13,6 +14,7 @@ import com.hrznstudio.titanium.component.button.ButtonComponent;
 import com.hrznstudio.titanium.component.fluid.FluidTankComponent;
 import com.hrznstudio.titanium.component.fluid.SidedFluidTankComponent;
 import com.hrznstudio.titanium.component.inventory.SidedInventoryComponent;
+import com.hrznstudio.titanium.energy.NBTEnergyHandler;
 import com.hrznstudio.titanium.util.AssetUtil;
 import com.hrznstudio.titanium.util.LangUtil;
 import com.hrznstudio.titanium.util.RecipeUtil;
@@ -42,6 +44,9 @@ import java.util.function.BiFunction;
 import java.util.function.BiPredicate;
 
 public class MaterialStoneWorkFactoryTile extends IndustrialProcessingTile<MaterialStoneWorkFactoryTile> {
+
+    private int maxProgress;
+    private int powerPerOperation;
 
     private static GeneratorRecipe[] GENERATOR_RECIPES = new GeneratorRecipe[]{
             new GeneratorRecipe(new ItemStack(Blocks.COBBLESTONE), 1000, 1000, 0, 0),
@@ -88,13 +93,13 @@ public class MaterialStoneWorkFactoryTile extends IndustrialProcessingTile<Mater
 
     public MaterialStoneWorkFactoryTile() {
         super(ModuleResourceProduction.MATERIAL_STONEWORK_FACTORY, 52, 40);
-        addTank(water = (SidedFluidTankComponent<MaterialStoneWorkFactoryTile>) new SidedFluidTankComponent<MaterialStoneWorkFactoryTile>("water", 2000, 30, 23, 0)
+        addTank(water = (SidedFluidTankComponent<MaterialStoneWorkFactoryTile>) new SidedFluidTankComponent<MaterialStoneWorkFactoryTile>("water", MaterialStoneWorkFactoryConfig.maxWaterTankSize, 30, 23, 0)
                 .setColor(DyeColor.BLUE)
                 .setTankType(FluidTankComponent.Type.SMALL)
                 .setTankAction(FluidTankComponent.Action.FILL)
                 .setComponentHarness(this)
                 .setValidator(fluidStack -> fluidStack.getFluid().isEquivalentTo(Fluids.WATER)));
-        addTank(lava = (SidedFluidTankComponent<MaterialStoneWorkFactoryTile>) new SidedFluidTankComponent<MaterialStoneWorkFactoryTile>("lava", 2000, 30, 55, 1)
+        addTank(lava = (SidedFluidTankComponent<MaterialStoneWorkFactoryTile>) new SidedFluidTankComponent<MaterialStoneWorkFactoryTile>("lava", MaterialStoneWorkFactoryConfig.maxLavaTankSize, 30, 55, 1)
                 .setColor(DyeColor.ORANGE)
                 .setTankType(FluidTankComponent.Type.SMALL)
                 .setTankAction(FluidTankComponent.Action.FILL)
@@ -227,8 +232,14 @@ public class MaterialStoneWorkFactoryTile extends IndustrialProcessingTile<Mater
             this.thirdRecipeId = (this.thirdRecipeId + 1) % ACTION_RECIPES.length;
             markForUpdate();
         }));
+        this.maxProgress = MaterialStoneWorkFactoryConfig.maxProgress;
+        this.powerPerOperation = MaterialStoneWorkFactoryConfig.powerPerTick;
     }
 
+    @Override
+    protected IFactory<NBTEnergyHandler> getEnergyHandlerFactory() {
+        return () -> new NBTEnergyHandler(this, MaterialStoneWorkFactoryConfig.maxStoredPower);
+    }
 
     @Override
     public boolean canIncrease() {
@@ -250,7 +261,7 @@ public class MaterialStoneWorkFactoryTile extends IndustrialProcessingTile<Mater
 
     @Override
     protected int getTickPower() {
-        return 60;
+        return powerPerOperation;
     }
 
     private boolean process(SidedInventoryComponent input, SidedInventoryComponent output, StoneWorkAction action) {
@@ -276,8 +287,9 @@ public class MaterialStoneWorkFactoryTile extends IndustrialProcessingTile<Mater
 
     @Override
     public int getMaxProgress() {
-        return 60;
+        return maxProgress;
     }
+
 
     private static class GeneratorRecipe {
 
