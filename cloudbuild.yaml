@@ -16,5 +16,5 @@ steps:
 secrets:
   - kmsKeyName: projects/hrznfactory/locations/global/keyRings/keyring/cryptoKeys/key
     secretEnv:
-      AWS_ACCESS_KEY_ID: 'CiQA/t63gSSl0mtB5Y+0nMuHVczXyk5MdBA9QXWuNbd3VXQAWuMSPQA2yBtTJ7pijKvgXJgsrOb2Ql7EQIj9ZSa70qjiPsUIjc/7l96+iB4UMJJaZoaP0sZkKYDYld5DFsrCC/w='
-      AWS_SECRET_ACCESS_KEY: 'CiQA/t63gWcywVEFNm9Knu0s01VMYtPpaj+KQG47dPZxH1IA25oSUQA2yBtTAtbmnGWqa0LiunyKjngdDnExvf0zzn1VrlkWSksGUTVbg4k6mhJNOu3HTbCLLmTDD6m1kpqx4wuNM4GQsmZLV//H2xnVm/6bGTrqag=='
+      AWS_ACCESS_KEY_ID: 'CiQA/t63gSsggo5nhDQZ72YFMY7sCwaN5dcdFN1G0xTyysDDsJISPQA2yBtTgGlgzgzZF3KqheWqQwzo5V6QVIcQd251vqR6yqA8DSHs/ynfG5wzLi3lmMAKaJ/2o7JJ0Bje68I='
+      AWS_SECRET_ACCESS_KEY: 'CiQA/t63gdp6hjeEUm1CSZ/UJnHmx06Rq22D11nNZ0/O/QD+37sSUQA2yBtTzFyhuPUt/Ak0PrE3vzoDyEoMQQ04qNIldUNWUdLRVRpw39bG8SRa6opsZFs7pv2S/6hCoAZQ8CW5T1jueGrT0cdt3gtR35U9Uf8Rsg=='
