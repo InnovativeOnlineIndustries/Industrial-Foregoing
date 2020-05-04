@@ -97,7 +97,7 @@ public class DissolutionChamberTile extends IndustrialProcessingTile<Dissolution
                 if (dissolutionChamberRecipe.outputFluid != null && !dissolutionChamberRecipe.outputFluid.isEmpty())
                     outputFluid.fillForced(dissolutionChamberRecipe.outputFluid.copy(), IFluidHandler.FluidAction.EXECUTE);
                 ItemHandlerHelper.insertItem(output, dissolutionChamberRecipe.output.copy(), false);
-                //checkForRecipe();
+                checkForRecipe();
             }
         };
     }
