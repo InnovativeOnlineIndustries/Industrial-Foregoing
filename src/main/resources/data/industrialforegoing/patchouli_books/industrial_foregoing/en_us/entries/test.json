@@ -1,0 +1,11 @@
+{
+  "name": "test",
+  "icon": "minecraft:stone",
+  "category": "basics",
+  "pages": [
+    {
+      "type": "text",
+      "text": "Cook the porkchop to receive bacons!"
+    }
+  ]
+}
