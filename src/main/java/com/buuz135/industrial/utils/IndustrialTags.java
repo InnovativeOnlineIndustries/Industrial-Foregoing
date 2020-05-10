@@ -24,6 +24,8 @@ public class IndustrialTags {
         public static final Tag<Item> GEAR_GOLD = new ItemTags.Wrapper(new ResourceLocation("forge", "gear/gold"));
         public static final Tag<Item> GEAR_DIAMOND = new ItemTags.Wrapper(new ResourceLocation("forge", "gear/diamond"));
         public static final Tag<Item> GEAR_IRON = new ItemTags.Wrapper(new ResourceLocation("forge", "gear/iron"));
+
+        public static final Tag<Item> FERTILIZER = new ItemTags.Wrapper(new ResourceLocation("forge", "fertilizer"));
     }
 
     public static class Blocks {
