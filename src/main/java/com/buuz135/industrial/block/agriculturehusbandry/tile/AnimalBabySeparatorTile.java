@@ -43,7 +43,10 @@ public class AnimalBabySeparatorTile extends IndustrialAreaWorkingTile<AnimalBab
                     }
                 });
             }
-        }.setPredicate((playerEntity, compoundNBT) -> movingAdults = !movingAdults));
+        }.setPredicate((playerEntity, compoundNBT) -> {
+            movingAdults = !movingAdults;
+            markForUpdate();
+        }));
         addGuiAddonFactory(() -> new ItemGuiAddon(42, 20) {
             @Override
             public ItemStack getItemStack() {
