@@ -46,22 +46,17 @@ public class SewerTile extends IndustrialAreaWorkingTile<SewerTile> {
 
     @Override
     public WorkAction work() {
-        List<Entity> entities = this.world.getEntitiesWithinAABB(AnimalEntity.class, getWorkingArea().getBoundingBox(), entity -> entity instanceof AnimalEntity || entity instanceof ExperienceOrbEntity);
-        int amount = 0;
-        for (Entity entity : entities) {
-            if (entity instanceof AnimalEntity) {
-                if (hasEnergy(powerPerOperation * (amount + 1))) {
-                    sewage.fillForced(new FluidStack(ModuleCore.SEWAGE.getSourceFluid(), 50), IFluidHandler.FluidAction.EXECUTE);
-                    ++amount;
-                } else {
-                    break;
-                }
-            } else if (entity instanceof ExperienceOrbEntity) {
-                ExperienceOrbEntity experienceOrbEntity = (ExperienceOrbEntity) entity;
-                if (experienceOrbEntity.isAlive() && essence.getFluidAmount() + experienceOrbEntity.xpValue * 20 <= essence.getCapacity()) {
-                    essence.fillForced(new FluidStack(ModuleCore.ESSENCE.getSourceFluid(), experienceOrbEntity.xpValue * 20), IFluidHandler.FluidAction.EXECUTE);
-                    experienceOrbEntity.remove();
-                }
+        List<Entity> entities = this.world.getEntitiesWithinAABB(AnimalEntity.class, getWorkingArea().getBoundingBox());
+        int amount = entities.size();
+        if (hasEnergy(powerPerOperation * amount)) {
+            sewage.fillForced(new FluidStack(ModuleCore.SEWAGE.getSourceFluid(), 50), IFluidHandler.FluidAction.EXECUTE);
+            ++amount;
+        }
+        List<ExperienceOrbEntity> orb = this.world.getEntitiesWithinAABB(ExperienceOrbEntity.class, getWorkingArea().getBoundingBox());
+        for (ExperienceOrbEntity experienceOrbEntity : orb) {
+            if (experienceOrbEntity.isAlive() && essence.getFluidAmount() + experienceOrbEntity.xpValue * 20 <= essence.getCapacity()) {
+                essence.fillForced(new FluidStack(ModuleCore.ESSENCE.getSourceFluid(), experienceOrbEntity.xpValue * 20), IFluidHandler.FluidAction.EXECUTE);
+                experienceOrbEntity.remove();
             }
         }
         return new WorkAction(1, powerPerOperation * amount);
