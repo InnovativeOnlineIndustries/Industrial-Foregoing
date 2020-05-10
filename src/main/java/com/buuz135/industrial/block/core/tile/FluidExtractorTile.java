@@ -37,8 +37,7 @@ public class FluidExtractorTile extends IndustrialAreaWorkingTile<FluidExtractor
         addTank(tank = (SidedFluidTankComponent<FluidExtractorTile>) new SidedFluidTankComponent<FluidExtractorTile>("latex", FluidExtractorConfig.maxLatexTankSize, 43, 20, 0).
                 setColor(DyeColor.LIGHT_GRAY).
                 setTankAction(FluidTankComponent.Action.DRAIN).
-                setComponentHarness(this).
-                setValidator(fluidStack -> fluidStack.getFluid().isEquivalentTo(ModuleCore.LATEX.getSourceFluid()))
+                setComponentHarness(this)
         );
         this.maxProgress = FluidExtractorConfig.maxProgress;
         this.powerPerOperation = FluidExtractorConfig.powerPerOperation;
