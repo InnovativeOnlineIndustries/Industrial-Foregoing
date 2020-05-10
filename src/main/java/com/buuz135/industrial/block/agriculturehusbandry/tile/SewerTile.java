@@ -48,8 +48,8 @@ public class SewerTile extends IndustrialAreaWorkingTile<SewerTile> {
     public WorkAction work() {
         List<Entity> entities = this.world.getEntitiesWithinAABB(AnimalEntity.class, getWorkingArea().getBoundingBox());
         int amount = entities.size();
-        if (hasEnergy(powerPerOperation * amount)) {
-            sewage.fillForced(new FluidStack(ModuleCore.SEWAGE.getSourceFluid(), 50), IFluidHandler.FluidAction.EXECUTE);
+        if (amount > 0 && hasEnergy(powerPerOperation * amount)) {
+            sewage.fillForced(new FluidStack(ModuleCore.SEWAGE.getSourceFluid(), 50 * amount), IFluidHandler.FluidAction.EXECUTE);
             ++amount;
         }
         List<ExperienceOrbEntity> orb = this.world.getEntitiesWithinAABB(ExperienceOrbEntity.class, getWorkingArea().getBoundingBox());
