@@ -178,6 +178,7 @@ public class LaserBaseTile extends CustomSidedTileEntity implements IHasDisplayS
                 ) {
                     if (!entry.getBlacklist().contains(this.getWorld().getBiome(this.getPos()))) {
                         int increase = 0;
+                        int divisor = 0;
                         for (int i = 0; i < lensItems.getSlots(); ++i) {
                             if (
                                     !lensItems.getStackInSlot(i).isEmpty()
@@ -187,13 +188,18 @@ public class LaserBaseTile extends CustomSidedTileEntity implements IHasDisplayS
                                             lensItems.getStackInSlot(i).getItem() instanceof LaserLensItem
                             ) {
                                 if (((LaserLensItem) lensItems.getStackInSlot(i).getItem()).isInverted()) {
-                                    increase -= BlockRegistry.laserBaseBlock.getLenseChanceIncrease();
+                                    divisor += 2;
                                 } else {
                                     increase += BlockRegistry.laserBaseBlock.getLenseChanceIncrease();
                                 }
                             }
                         }
-                        items.add(new ItemStackWeightedItem(entry.getStack(), entry.getWeight() + increase));
+                        if (divisor == 0) {
+                            items.add(new ItemStackWeightedItem(entry.getStack(), entry.getWeight() + increase));
+                        }
+                        else {
+                            items.add(new ItemStackWeightedItem(entry.getStack(), entry.getWeight() / divisor));
+                        }
                     }
                 }
             });
