@@ -41,10 +41,10 @@ public class WaterCondensatorTile extends IndustrialWorkingTile<WaterCondensator
         int water = getWaterSources();
         if (water >= 2) {
             if (hasEnergy(getPowerPerOperation)) {
-                this.water.fillForced(new FluidStack(Fluids.WATER, water * 10), IFluidHandler.FluidAction.EXECUTE);
+                this.water.fillForced(new FluidStack(Fluids.WATER, water * 100), IFluidHandler.FluidAction.EXECUTE);
                 return new WorkAction(0.1f, getPowerPerOperation);
             } else {
-                this.water.fillForced(new FluidStack(Fluids.WATER, water * 5), IFluidHandler.FluidAction.EXECUTE);
+                this.water.fillForced(new FluidStack(Fluids.WATER, water * 50), IFluidHandler.FluidAction.EXECUTE);
                 return new WorkAction(0.5f, 0);
             }
         }

@@ -75,7 +75,7 @@ public class ClientProxy extends CommonProxy {
             }
         }).subscribe();
         EventManager.mod(TextureStitchEvent.Pre.class).process(pre -> {
-            pre.addSprite(new ResourceLocation(Reference.MOD_ID, "blocks/catears"));
+            //pre.addSprite(new ResourceLocation(Reference.MOD_ID, "blocks/catears"));
         }).subscribe();
 
 
