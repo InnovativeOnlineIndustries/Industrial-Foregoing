@@ -10,7 +10,7 @@ public class PlantSowerConfig {
     @ConfigVal(comment = "Cooldown Time in Ticks [20 Ticks per Second] - Default: [100 (5s)]")
     public static int maxProgress = 40;
 
-    @ConfigVal(comment = "Amount of Power Consumer per Operation - Default: [400FE]")
+    @ConfigVal(comment = "Amount of Power Consumer per Operation - Default: [1000FE]")
     public static int powerPerOperation = 1000;
 
     @ConfigVal(comment = "Max Stored Power [FE] - Default: [10000 FE]")

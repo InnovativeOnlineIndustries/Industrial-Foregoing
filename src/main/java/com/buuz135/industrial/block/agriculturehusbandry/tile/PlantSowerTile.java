@@ -85,6 +85,7 @@ public class PlantSowerTile extends IndustrialAreaWorkingTile<PlantSowerTile> {
             }
         }
         increasePointer();
+        if (hasEnergy(powerPerOperation)) return new WorkAction(0.4f, powerPerOperation / 50);
         return new WorkAction(1f, 0);
     }
 
