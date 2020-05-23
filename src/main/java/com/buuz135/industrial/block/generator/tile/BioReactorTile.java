@@ -132,7 +132,7 @@ public class BioReactorTile extends IndustrialWorkingTile<BioReactorTile> {
 
     @Override
     protected IFactory<NBTEnergyHandler> getEnergyHandlerFactory() {
-        return () -> new NBTEnergyHandler(this, BioReactorConfig.maxProgress);
+        return () -> new NBTEnergyHandler(this, BioReactorConfig.maxStoredPower);
     }
 
     @Override
