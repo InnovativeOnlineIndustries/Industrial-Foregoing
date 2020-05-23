@@ -1,3 +1,5 @@
+import se.bjurr.gitchangelog.plugin.gradle.GitChangelogTask
+
 buildscript {
     repositories {
         jcenter()
@@ -15,19 +17,23 @@ buildscript {
     }
     dependencies {
         classpath group: 'net.minecraftforge.gradle', name: 'ForgeGradle', version: '3.+', changing: true
-        classpath "gradle.plugin.com.matthewprenger:CurseGradle:1.1.0"
-        //classpath 'com.selesse:gradle-git-changelog:0.2.+'
+        classpath "gradle.plugin.com.matthewprenger:CurseGradle:1.4.0"
     }
 }
+
 plugins {
     id "com.github.hierynomus.license" version "0.14.0"
     id 'java'
     id 'maven-publish'
-    id "com.matthewprenger.cursegradle" version "1.1.0"
+    id "com.matthewprenger.cursegradle" version "1.4.0"
+    id "se.bjurr.gitchangelog.git-changelog-gradle-plugin" version "1.64"
 }
 //apply plugin: 'com.selesse.git.changelog'
 apply plugin: 'net.minecraftforge.gradle'
 apply plugin: 'eclipse'
+
+def isReleaseBranch = System.getenv("BRANCH") == "release-1.15";
+
 
 def BUILD_NUMBER = System.getenv("COMMIT") ? "${project.api_version}-${System.getenv("COMMIT")}" : "${project.api_version}"
 group = "com.buuz135"
@@ -173,31 +179,6 @@ publishing {
     }
 }
 
-
-tasks.curseforge.enabled = project.hasProperty('curse_api')
-
-curseforge {
-    if (project.hasProperty('curse_api')) {
-        apiKey = project.curse_api
-    }
-    project {
-        id = '266515'
-        changelog = file('CHANGELOG.md')
-        changelogType = 'markdown'
-        releaseType = 'alpha'
-
-        mainArtifact(jar){
-            relations {
-                requiredLibrary 'titanium'
-            }
-        }
-        
-        addArtifact sourcesJar
-        addArtifact deobfJar
-        addArtifact apiJar
-    }
-}
-
 license {
     header rootProject.file('HEADER')
     include "**/*.java"
@@ -222,23 +203,36 @@ jar {
         ])
     }
 }
-//changelog {
-//    title = "Industrial Foregoing"
-//    fileName = "CHANGELOG.md"
-//    outputDirectory = file("$projectDir")
-//    
-//    commitFormat = '%s (%an)'
-//    markdown {
-//        commitFormat = '* %s (%an)'
-//    }
-//    includeLines = {
-//        !it.contains("Merge")
-//    }
-//    processLines = {
-//        String input = it as String
-//        if (input.contains('[ci skip] ')) {
-//            input = input.minus('[ci skip] ')
-//        }
-//        input
-//    }
-//}
+
+tasks.curseforge.enabled = System.getenv("CURSE_API") != null && isReleaseBranch
+
+curseforge {
+    if (System.getenv("CURSE_API") != null) {
+        apiKey = System.getenv("CURSE_API")
+    }
+    project {
+        id = '266515'
+        changelog = "https://github.com/InnovativeOnlineIndustries/IndustrialForegoing/blob/changelog/CHANGELOG.md"
+        changelogType = 'markdown'
+        releaseType = 'beta'
+        addGameVersion '1.15.2'
+
+        mainArtifact(jar){
+            relations {
+                requiredLibrary 'titanium'
+            }
+        }
+
+        addArtifact sourcesJar
+        addArtifact deobfJar
+    }
+}
+
+task makeChangelog(type: GitChangelogTask) {
+    file = new File("CHANGELOG.md")
+    untaggedName = "Version ${project.version}"
+    //fromCommit = "6a5a3df3665643ea181873312e3801db7c662686"
+    fromRef = "refs/tags/2.3.0"
+    toRef = "release-1.15"
+    templateContent = file("changelog.mustache").getText("UTF-8")
+}
