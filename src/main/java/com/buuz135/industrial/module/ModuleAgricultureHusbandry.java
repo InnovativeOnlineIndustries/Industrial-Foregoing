@@ -41,6 +41,9 @@ public class ModuleAgricultureHusbandry implements IModule {
                 .content(PlantRecollectable.class, new PumpkinMelonPlantRecollectable())
                 .content(PlantRecollectable.class, new TreePlantRecollectable())
                 .content(PlantRecollectable.class, new ChorusFruitRecollectable())
+                .content(PlantRecollectable.class, new BambooPlantRecollectable())
+                .content(PlantRecollectable.class, new KelpPlantRecollectable())
+                .content(PlantRecollectable.class, new SweetBerriesPlantRecollectable())
                 .content(Block.class, PLANT_SOWER)
         );
         builders.add(Feature.builder("sewage").
