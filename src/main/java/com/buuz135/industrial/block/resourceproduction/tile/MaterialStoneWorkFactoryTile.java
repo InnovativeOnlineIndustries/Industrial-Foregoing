@@ -129,7 +129,7 @@ public class MaterialStoneWorkFactoryTile extends IndustrialProcessingTile<Mater
                         lines.add(TextFormatting.YELLOW + " - " + TextFormatting.WHITE + recipe.needsLava + TextFormatting.DARK_AQUA + LangUtil.get("tooltip.industrialforegoing.mb_of", LangUtil.get("block.minecraft.lava")));
                         lines.add(TextFormatting.GOLD + LangUtil.get("tooltip.industrialforegoing.consumes"));
                         lines.add(TextFormatting.YELLOW + " - " + TextFormatting.WHITE + recipe.consumeWater + TextFormatting.DARK_AQUA + LangUtil.get("tooltip.industrialforegoing.mb_of", LangUtil.get("block.minecraft.water")));
-                        lines.add(TextFormatting.YELLOW + " - " + TextFormatting.WHITE + recipe.consumeWater + TextFormatting.DARK_AQUA + LangUtil.get("tooltip.industrialforegoing.mb_of", LangUtil.get("block.minecraft.lava")));
+                        lines.add(TextFormatting.YELLOW + " - " + TextFormatting.WHITE + recipe.consumeLava + TextFormatting.DARK_AQUA + LangUtil.get("tooltip.industrialforegoing.mb_of", LangUtil.get("block.minecraft.lava")));
                         return lines;
                     }
                 });
