@@ -44,7 +44,7 @@ import java.awt.*;
 public class FluidConveyorTESR extends TileEntityRenderer<ConveyorTile> {
 
     public static RenderType createRenderType(ResourceLocation texture) {
-        RenderType.State state = RenderType.State.builder().texture(new RenderState.TextureState(texture, false, false)).transparency(new RenderState.TransparencyState("translucent_transparency", () -> {
+        RenderType.State state = RenderType.State.getBuilder().texture(new RenderState.TextureState(texture, false, false)).transparency(new RenderState.TransparencyState("translucent_transparency", () -> {
             RenderSystem.enableBlend();
             RenderSystem.blendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
             RenderSystem.enableAlphaTest();
@@ -59,7 +59,7 @@ public class FluidConveyorTESR extends TileEntityRenderer<ConveyorTile> {
             RenderSystem.disableBlend();
             RenderSystem.disableAlphaTest();
         })).build(true);
-        return RenderType.get("conveyor_fluid", DefaultVertexFormats.POSITION_TEX_COLOR, 7, 32, false, true, state);
+        return RenderType.makeType("conveyor_fluid", DefaultVertexFormats.POSITION_TEX_COLOR, 7, 32, false, true, state);
     }
 
     public FluidConveyorTESR(TileEntityRendererDispatcher dispatcher) {
@@ -104,7 +104,7 @@ public class FluidConveyorTESR extends TileEntityRenderer<ConveyorTile> {
                 if (sides == ConveyorBlock.EnumSides.BOTH || sides == ConveyorBlock.EnumSides.LEFT) left = 1;
                 Color color = new Color(fluid.getFluid().getAttributes().getColor(te.getTank().getFluid()));
                 matrixStack.push();
-                Matrix4f matrix = matrixStack.getLast().getPositionMatrix();
+                Matrix4f matrix = matrixStack.getLast().getMatrix();
                 float animation = 16 * flow.getUvShrinkRatio() * (te.getWorld().getGameTime() % flow.getFrameCount());
                 buffer.pos(matrix, left, posY, 0).tex(0, 0 + animation).color(color.getRed(), color.getGreen(), color.getBlue(), color.getAlpha()).endVertex();
                 buffer.pos(matrix, right, posY, 0).tex(0.5f, 0 + animation).color(color.getRed(), color.getGreen(), color.getBlue(), color.getAlpha()).endVertex();

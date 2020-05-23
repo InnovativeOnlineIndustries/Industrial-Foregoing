@@ -86,7 +86,7 @@ public class ClientProxy extends CommonProxy {
 
         //((IReloadableResourceManager) Minecraft.getInstance().getResourceManager()).addReloadListener(resourceManager -> FluidUtils.colorCache.clear());
 
-        RenderTypeLookup.setRenderLayer(ModuleTransport.CONVEYOR, RenderType.cutout());
+        RenderTypeLookup.setRenderLayer(ModuleTransport.CONVEYOR, RenderType.getCutout());
 
         Minecraft.getInstance().getBlockColors().register((state, worldIn, pos, tintIndex) -> {
             if (tintIndex == 0 && worldIn != null && pos != null) {

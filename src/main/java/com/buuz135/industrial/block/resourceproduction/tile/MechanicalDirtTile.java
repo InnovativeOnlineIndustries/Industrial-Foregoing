@@ -71,7 +71,7 @@ public class MechanicalDirtTile extends IndustrialWorkingTile<MechanicalDirtTile
         if (entity instanceof MobEntity) {
             ((MobEntity) entity).onInitialSpawn(world, world.getDifficultyForLocation(pos), SpawnReason.NATURAL, null, null);
             entity.setPosition(pos.getX() + 0.5, pos.getY() + 1.0626, pos.getZ() + 0.5);
-            if (world.func_226669_j_(entity) && world.checkNoEntityCollision(entity, world.getBlockState(pos.up()).getShape(world, pos.up()))) { //doesNotCollide
+            if (world.hasNoCollisions(entity) && world.checkNoEntityCollision(entity, world.getBlockState(pos.up()).getShape(world, pos.up()))) { //doesNotCollide
                 return (MobEntity) entity;
             }
         }

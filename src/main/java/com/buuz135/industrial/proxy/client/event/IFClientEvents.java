@@ -74,7 +74,7 @@ public class IFClientEvents {
             double d0 = info.getProjectedView().getX();
             double d1 = info.getProjectedView().getY();
             double d2 = info.getProjectedView().getZ();
-            IVertexBuilder builder = Minecraft.getInstance().getRenderTypeBuffers().getOutlineBufferSource().getBuffer(RenderType.lines());
+            IVertexBuilder builder = Minecraft.getInstance().getRenderTypeBuffers().getOutlineBufferSource().getBuffer(RenderType.getLines());
             BlockPos.getAllInBoxMutable(area.getLeft(), area.getRight()).forEach(blockPos -> {
                 VoxelShape shape = world.getBlockState(blockPos).getShape(world, blockPos);
                 if (shape != null && !shape.isEmpty() && !world.isAirBlock(blockPos) && world.getBlockState(blockPos).getBlockHardness(world, blockPos) >= 0 && !(world.getBlockState(blockPos).getBlock() instanceof IFluidBlock) && !(world.getBlockState(blockPos).getBlock() instanceof FlowingFluidBlock)) {

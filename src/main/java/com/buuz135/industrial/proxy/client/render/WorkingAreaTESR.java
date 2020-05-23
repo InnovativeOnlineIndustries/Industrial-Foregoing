@@ -19,7 +19,7 @@ import java.awt.*;
 public class WorkingAreaTESR extends TileEntityRenderer<IndustrialAreaWorkingTile> {
 
     public static RenderType createRenderType() {
-        RenderType.State state = RenderType.State.builder().transparency(new RenderState.TransparencyState("translucent_transparency", () -> {
+        RenderType.State state = RenderType.State.getBuilder().transparency(new RenderState.TransparencyState("translucent_transparency", () -> {
             RenderSystem.enableBlend();
             RenderSystem.blendFunc(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA);
             RenderSystem.enableAlphaTest();
@@ -27,7 +27,7 @@ public class WorkingAreaTESR extends TileEntityRenderer<IndustrialAreaWorkingTil
             RenderSystem.disableBlend();
             RenderSystem.disableAlphaTest();
         })).build(true);
-        return RenderType.get("working_area_render", DefaultVertexFormats.POSITION_COLOR, 7, 256, false, true, state);
+        return RenderType.makeType("working_area_render", DefaultVertexFormats.POSITION_COLOR, 7, 256, false, true, state);
     }
 
     public WorkingAreaTESR(TileEntityRendererDispatcher dispatcher) {
@@ -50,7 +50,7 @@ public class WorkingAreaTESR extends TileEntityRenderer<IndustrialAreaWorkingTil
         RenderSystem.enableDepthTest();
         RenderSystem.depthFunc(515);
         RenderSystem.depthMask(true);
-        IVertexBuilder builder = renderTypeBuffer.getBuffer(RenderType.lines());
+        IVertexBuilder builder = renderTypeBuffer.getBuffer(RenderType.getLines());
         WorldRenderer.drawBoundingBox(stack, builder, shape.getBoundingBox().offset((double) -blockpos.getX(), (double) -blockpos.getY(), (double) -blockpos.getZ()), (float) color.getRed() / 255f, (float) color.getGreen() / 255f, (float) color.getBlue() / 255f, 0.5F);
         renderFaces(stack, renderTypeBuffer, shape.getBoundingBox(), (double) -blockpos.getX(), (double) -blockpos.getY(), (double) -blockpos.getZ(), (float) color.getRed() / 255f, (float) color.getGreen() / 255f, (float) color.getBlue() / 255f, 0.3F);
         RenderSystem.popMatrix();
@@ -72,7 +72,7 @@ public class WorkingAreaTESR extends TileEntityRenderer<IndustrialAreaWorkingTil
         float z1 = (float) (pos.minZ + z);
         float z2 = (float) (pos.maxZ + z);
 
-        Matrix4f matrix = stack.getLast().getPositionMatrix();
+        Matrix4f matrix = stack.getLast().getMatrix();
         IVertexBuilder buffer = renderTypeBuffer.getBuffer(createRenderType());
 
         buffer.pos(matrix, x1, y1, z1).color(red, green, blue, alpha).endVertex();
