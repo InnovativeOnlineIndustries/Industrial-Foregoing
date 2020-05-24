@@ -22,7 +22,7 @@ public class StasisChamberTile extends IndustrialAreaWorkingTile<StasisChamberTi
     private int getPowerPerOperation;
 
     public StasisChamberTile() {
-        super(ModuleMisc.STASIS_CHAMBER, RangeManager.RangeType.TOP);
+        super(ModuleMisc.STASIS_CHAMBER, RangeManager.RangeType.TOP, false);
         this.getMaxProgress = StasisChamberConfig.maxProgress;
         this.getPowerPerOperation = StasisChamberConfig.powerPerOperation;
     }

@@ -3,12 +3,10 @@ package com.buuz135.industrial.block.resourceproduction.tile;
 import com.buuz135.industrial.block.tile.IndustrialAreaWorkingTile;
 import com.buuz135.industrial.block.tile.RangeManager;
 import com.buuz135.industrial.config.machine.resourceproduction.MarineFisherConfig;
-import com.buuz135.industrial.item.RangeAddonItem;
 import com.buuz135.industrial.module.ModuleResourceProduction;
 import com.buuz135.industrial.utils.BlockUtils;
 import com.hrznstudio.titanium.annotation.Save;
 import com.hrznstudio.titanium.api.IFactory;
-import com.hrznstudio.titanium.api.augment.IAugment;
 import com.hrznstudio.titanium.component.inventory.SidedInventoryComponent;
 import com.hrznstudio.titanium.energy.NBTEnergyHandler;
 import net.minecraft.fluid.Fluids;
@@ -33,7 +31,7 @@ public class MarineFisherTile extends IndustrialAreaWorkingTile<MarineFisherTile
     private SidedInventoryComponent<MarineFisherTile> output;
 
     public MarineFisherTile() {
-        super(ModuleResourceProduction.MARINE_FISHER, RangeManager.RangeType.BOTTOM);
+        super(ModuleResourceProduction.MARINE_FISHER, RangeManager.RangeType.BOTTOM, false);
         addInventory(output = (SidedInventoryComponent<MarineFisherTile>) new SidedInventoryComponent<MarineFisherTile>("output", 50, 22, 3 * 6, 0)
                 .setColor(DyeColor.ORANGE)
                 .setRange(6, 3)
@@ -68,12 +66,6 @@ public class MarineFisherTile extends IndustrialAreaWorkingTile<MarineFisherTile
     @Override
     public MarineFisherTile getSelf() {
         return this;
-    }
-
-    @Override
-    public boolean canAcceptAugment(IAugment augment) {
-        if (augment.getAugmentType().equals(RangeAddonItem.RANGE)) return false;
-        return super.canAcceptAugment(augment);
     }
 
     public VoxelShape getWorkingArea() {

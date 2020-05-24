@@ -26,8 +26,9 @@ public abstract class IndustrialAreaWorkingTile<T extends IndustrialAreaWorkingT
     private boolean showingArea;
     private ButtonComponent areaButton;
     private RangeManager.RangeType type;
+    private boolean acceptsRangeUpgrades;
 
-    public IndustrialAreaWorkingTile(BasicTileBlock<T> basicTileBlock, RangeManager.RangeType type) {
+    public IndustrialAreaWorkingTile(BasicTileBlock<T> basicTileBlock, RangeManager.RangeType type, boolean acceptsRangeUpgrades) {
         super(basicTileBlock);
         this.pointer = 0;
         this.showingArea = false;
@@ -48,6 +49,7 @@ public abstract class IndustrialAreaWorkingTile<T extends IndustrialAreaWorkingT
             this.markForUpdate();
         }));
         this.type = type;
+        this.acceptsRangeUpgrades = acceptsRangeUpgrades;
     }
 
     public VoxelShape getWorkingArea() {
@@ -78,7 +80,7 @@ public abstract class IndustrialAreaWorkingTile<T extends IndustrialAreaWorkingT
 
     @Override
     public boolean canAcceptAugment(IAugment augment) {
-        return super.canAcceptAugment(augment) && augment.getAugmentType().equals(RangeAddonItem.RANGE);
+        return super.canAcceptAugment(augment) && (augment.getAugmentType().equals(RangeAddonItem.RANGE) && acceptsRangeUpgrades);
     }
 
     @Override

@@ -31,7 +31,7 @@ public class SewerTile extends IndustrialAreaWorkingTile<SewerTile> {
     public SidedFluidTankComponent<SewerTile> essence;
 
     public SewerTile() {
-        super(ModuleAgricultureHusbandry.SEWER, RangeManager.RangeType.TOP);
+        super(ModuleAgricultureHusbandry.SEWER, RangeManager.RangeType.TOP, true);
         this.addTank(sewage = (SidedFluidTankComponent<SewerTile>) new SidedFluidTankComponent<SewerTile>("sewage", SewerConfig.maxSewageTankSize, 45, 20, 0).
                 setColor(DyeColor.BROWN).
                 setTankAction(FluidTankComponent.Action.DRAIN).
