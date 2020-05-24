@@ -44,6 +44,7 @@ public class DissolutionChamberTile extends IndustrialProcessingTile<Dissolution
                 setSlotLimit(1).
                 setOutputFilter((stack, integer) -> false).
                 setComponentHarness(this).
+                setInputFilter(((stack, integer) -> !canIncrease())).
                 setOnSlotChanged((stack, integer) -> checkForRecipe()));
         this.addTank(this.inputFluid = (SidedFluidTankComponent<DissolutionChamberTile>) new SidedFluidTankComponent<DissolutionChamberTile>("input_fluid", DissolutionChamberConfig.maxInputTankSize, 33 + slotSpacing, 18 + slotSpacing, 1).
                 setColor(DyeColor.LIME).
