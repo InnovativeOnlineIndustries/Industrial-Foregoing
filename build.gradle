@@ -212,7 +212,7 @@ curseforge {
     }
     project {
         id = '266515'
-        changelog = "https://github.com/InnovativeOnlineIndustries/IndustrialForegoing/blob/changelog/CHANGELOG.md"
+        changelog = "https://github.com/InnovativeOnlineIndustries/Industrial-Foregoing/blob/changelog/CHANGELOG.md"
         changelogType = 'markdown'
         releaseType = 'beta'
         addGameVersion '1.15.2'
