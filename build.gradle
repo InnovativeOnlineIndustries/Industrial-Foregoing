@@ -28,7 +28,6 @@ plugins {
     id "com.matthewprenger.cursegradle" version "1.4.0"
     id "se.bjurr.gitchangelog.git-changelog-gradle-plugin" version "1.64"
 }
-//apply plugin: 'com.selesse.git.changelog'
 apply plugin: 'net.minecraftforge.gradle'
 apply plugin: 'eclipse'
 
