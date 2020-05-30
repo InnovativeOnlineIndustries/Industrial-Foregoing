@@ -7,6 +7,9 @@ import com.buuz135.industrial.block.core.FluidExtractorBlock;
 import com.buuz135.industrial.block.core.LatexProcessingUnitBlock;
 import com.buuz135.industrial.block.core.tile.FluidExtractorTile;
 import com.buuz135.industrial.item.*;
+import com.buuz135.industrial.item.addon.EfficiencyAddonItem;
+import com.buuz135.industrial.item.addon.RangeAddonItem;
+import com.buuz135.industrial.item.addon.SpeedAddonItem;
 import com.buuz135.industrial.item.bucket.MilkBucketItem;
 import com.buuz135.industrial.proxy.StrawRegistry;
 import com.buuz135.industrial.utils.Reference;
@@ -50,6 +53,10 @@ public class ModuleCore implements IModule {
     public static LatexProcessingUnitBlock LATEX_PROCESSING = new LatexProcessingUnitBlock();
     public static DissolutionChamberBlock DISSOLUTION_CHAMBER = new DissolutionChamberBlock();
     public static RangeAddonItem[] RANGE_ADDONS = new RangeAddonItem[12];
+    public static SpeedAddonItem SPEED_ADDON_1 = new SpeedAddonItem(1, TAB_CORE);
+    public static SpeedAddonItem SPEED_ADDON_2 = new SpeedAddonItem(2, TAB_CORE);
+    public static EfficiencyAddonItem EFFICIENCY_ADDON_1 = new EfficiencyAddonItem(1, TAB_CORE);
+    public static EfficiencyAddonItem EFFICIENCY_ADDON_2 = new EfficiencyAddonItem(2, TAB_CORE);
 
     public static TitaniumFluidInstance LATEX = new TitaniumFluidInstance(Reference.MOD_ID, "latex", FluidAttributes.builder(new ResourceLocation(Reference.MOD_ID, "blocks/fluids/latex_still"), new ResourceLocation(Reference.MOD_ID, "blocks/fluids/latex_flow")), true, TAB_CORE);
     public static TitaniumFluidInstance MEAT = new TitaniumFluidInstance(Reference.MOD_ID, "meat", FluidAttributes.builder(new ResourceLocation(Reference.MOD_ID, "blocks/fluids/meat_still"), new ResourceLocation(Reference.MOD_ID, "blocks/fluids/meat_flow")), true, TAB_CORE);
@@ -100,6 +107,8 @@ public class ModuleCore implements IModule {
             builder.content(Item.class, RANGE_ADDONS[i]);
         }
         features.add(builder);
+        features.add(Feature.builder("speed_addons").content(Item.class, SPEED_ADDON_1).content(Item.class, SPEED_ADDON_2));
+        features.add(Feature.builder("efficiency_addons").content(Item.class, EFFICIENCY_ADDON_1).content(Item.class, EFFICIENCY_ADDON_2));
         features.add(Feature.builder("meat").content(TitaniumFluidInstance.class, MEAT));
         features.add(Feature.builder("sewage").content(TitaniumFluidInstance.class, SEWAGE));
         features.add(Feature.builder("essence").content(TitaniumFluidInstance.class, ESSENCE));

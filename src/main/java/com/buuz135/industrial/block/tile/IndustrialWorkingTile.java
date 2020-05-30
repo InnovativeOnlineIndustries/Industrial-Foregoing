@@ -1,5 +1,7 @@
 package com.buuz135.industrial.block.tile;
 
+import com.buuz135.industrial.item.addon.EfficiencyAddonItem;
+import com.buuz135.industrial.item.addon.SpeedAddonItem;
 import com.buuz135.industrial.proxy.client.IndustrialAssetProvider;
 import com.hrznstudio.titanium.annotation.Save;
 import com.hrznstudio.titanium.block.BasicTileBlock;
@@ -28,12 +30,14 @@ public abstract class IndustrialWorkingTile<T extends IndustrialWorkingTile<T>> 
                 .setOnFinishWork(() -> {
                     if (isServer()) {
                         WorkAction work = work();
-                        workingBar.setProgress((int) (workingBar.getMaxProgress() * work.getWorkAmount()));
+                        int maxProgress = (int) Math.floor(getMaxProgress() * (this.hasAugmentInstalled(EfficiencyAddonItem.EFFICIENCY) ? (0.1 * this.getInstalledAugments(EfficiencyAddonItem.EFFICIENCY).get(0).getAugmentRatio()) : 1));
+                        workingBar.setMaxProgress(maxProgress);
+                        workingBar.setProgress((int) (maxProgress * work.getWorkAmount()));
                         this.getEnergyStorage().extractEnergyForced(work.getEnergyConsumed());
                     }
                 })
-                .setOnStart(() -> {
-                    workingBar.setMaxProgress(getMaxProgress());
+                .setOnTickWork(() -> {
+                    workingBar.setProgressIncrease(this.hasAugmentInstalled(SpeedAddonItem.SPEED) ? (int) this.getInstalledAugments(SpeedAddonItem.SPEED).get(0).getAugmentRatio() + 1 : 1);
                 })
                 .setCanReset(tileEntity -> true)
                 .setCanIncrease(tileEntity -> true)
