@@ -67,6 +67,7 @@ minecraft {
         data {
             workingDirectory project.file('run')
             property 'forge.logging.console.level', 'info'
+            property 'fml.earlyprogresswindow', 'false'
             args '--mod', 'industrialforegoing', '--all', '--output', '"' + rootProject.file('src/generated/resources/') + '"', '--existing', '"' + sourceSets.main.resources.srcDirs[0] + '"'
             source sourceSets.main
         }

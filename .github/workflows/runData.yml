@@ -30,7 +30,7 @@ jobs:
       - name: Grant execute permission for gradlew
         run: chmod +x gradlew
       - name: Build with Gradle
-        run: ./gradlew runData
+        run: ./gradlew runData -Dfml.earlyprogresswindow=false
       - name: Commit changes
         uses: EndBug/add-and-commit@v4
         with:
