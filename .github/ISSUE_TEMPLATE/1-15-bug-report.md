@@ -7,8 +7,8 @@ assignees: ''
 
 ---
 
-**Industrial Foregoing Version: **
+**Industrial Foregoing Version:**
 
-**Titanium Version: **
+**Titanium Version:**
 
-**Crashlog If Applicable (Upload to pastebin/gist): **
+**Crashlog If Applicable (Upload to pastebin/gist):**

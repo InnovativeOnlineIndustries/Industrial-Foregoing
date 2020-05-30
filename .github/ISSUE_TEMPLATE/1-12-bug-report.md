@@ -7,8 +7,8 @@ assignees: ''
 
 ---
 
-**Industrial Foregoing Version: **
+**Industrial Foregoing Version:**
 
-**TeslaCoreLib Version: **
+**TeslaCoreLib Version:**
 
-**Crashlog If Applicable (Upload to pastebin/gist): **
+**Crashlog If Applicable (Upload to pastebin/gist):**
