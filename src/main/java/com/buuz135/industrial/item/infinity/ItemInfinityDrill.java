@@ -22,16 +22,36 @@
 package com.buuz135.industrial.item.infinity;
 
 
+import com.buuz135.industrial.gui.component.InfinityDrillEnergyScreenAddon;
 import com.buuz135.industrial.item.IFCustomItem;
 import com.buuz135.industrial.module.ModuleCore;
 import com.buuz135.industrial.proxy.CommonProxy;
 import com.google.common.collect.Multimap;
+import com.hrznstudio.titanium.api.IFactory;
+import com.hrznstudio.titanium.api.capability.IStackHolder;
+import com.hrznstudio.titanium.api.client.AssetTypes;
+import com.hrznstudio.titanium.api.client.IScreenAddon;
+import com.hrznstudio.titanium.api.client.IScreenAddonProvider;
+import com.hrznstudio.titanium.capability.CapabilityItemStackHolder;
+import com.hrznstudio.titanium.capability.FluidHandlerScreenProviderItemStack;
+import com.hrznstudio.titanium.capability.ItemStackHolderCapability;
+import com.hrznstudio.titanium.client.screen.addon.*;
+import com.hrznstudio.titanium.component.button.ArrowButtonComponent;
+import com.hrznstudio.titanium.component.button.ButtonComponent;
+import com.hrznstudio.titanium.component.fluid.FluidTankComponent;
+import com.hrznstudio.titanium.container.BasicAddonContainer;
+import com.hrznstudio.titanium.itemstack.ItemStackHarnessRegistry;
+import com.hrznstudio.titanium.network.IButtonHandler;
+import com.hrznstudio.titanium.network.locator.LocatorFactory;
+import com.hrznstudio.titanium.network.locator.instance.HeldStackLocatorInstance;
 import com.hrznstudio.titanium.recipe.generator.TitaniumShapedRecipeBuilder;
+import com.hrznstudio.titanium.util.FacingUtil;
 import com.hrznstudio.titanium.util.RayTraceUtils;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
 import net.minecraft.block.material.Material;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.data.IFinishedRecipe;
 import net.minecraft.enchantment.Enchantment;
@@ -41,8 +61,11 @@ import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.ai.attributes.AttributeModifier;
 import net.minecraft.entity.item.ExperienceOrbEntity;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.inventory.EquipmentSlotType;
+import net.minecraft.inventory.container.Container;
+import net.minecraft.inventory.container.INamedContainerProvider;
 import net.minecraft.item.ItemGroup;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
@@ -69,19 +92,18 @@ import net.minecraftforge.energy.IEnergyStorage;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
 import net.minecraftforge.fluids.capability.IFluidHandlerItem;
-import net.minecraftforge.fluids.capability.templates.FluidHandlerItemStack;
+import net.minecraftforge.fml.network.NetworkHooks;
 import net.minecraftforge.items.ItemHandlerHelper;
 import org.apache.commons.lang3.tuple.Pair;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.text.NumberFormat;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Locale;
+import java.util.*;
+import java.util.function.BiFunction;
 import java.util.function.Consumer;
 
-public class ItemInfinityDrill extends IFCustomItem {
+public class ItemInfinityDrill extends IFCustomItem implements IButtonHandler, INamedContainerProvider {
 
     public static Material[] mineableMaterials = {Material.ANVIL, Material.CLAY, Material.GLASS, Material.ICE, Material.IRON, Material.PACKED_ICE, Material.PISTON, Material.ROCK, Material.SAND, Material.SNOW};
     public static int POWER_CONSUMPTION = 10000;
@@ -198,8 +220,13 @@ public class ItemInfinityDrill extends IFCustomItem {
         int fuelAmount = getFuelFromStack(stack);
         tooltip.add(new TranslationTextComponent("text.industrialforegoing.display.fluid").appendText(" ").appendText(NumberFormat.getNumberInstance(Locale.ROOT).format(fuelAmount)).appendText("/").appendText(NumberFormat.getNumberInstance(Locale.ROOT).format(1000000)).appendText(" mb of Biofuel").setStyle(new Style().setColor(TextFormatting.GRAY)));
         tooltip.add(new TranslationTextComponent("text.industrialforegoing.display.max_area").appendText(" ").appendText(getFormattedArea(braquet.getLeft(), braquet.getLeft().getRadius())).setStyle(new Style().setColor(TextFormatting.GRAY)));
+        if (canCharge(stack)) {
+            tooltip.add(new TranslationTextComponent("text.industrialforegoing.display.charging").setStyle(new Style().setColor(TextFormatting.GRAY)).appendSibling(new TranslationTextComponent("text.industrialforegoing.display.enabled").setStyle(new Style().setColor(TextFormatting.GREEN))));
+        } else {
+            tooltip.add(new TranslationTextComponent("text.industrialforegoing.display.charging").setStyle(new Style().setColor(TextFormatting.GRAY)).appendSibling(new TranslationTextComponent("text.industrialforegoing.display.disabled").setStyle(new Style().setColor(TextFormatting.RED))));
+        }
         if (isSpecial(stack))
-            tooltip.add(new TranslationTextComponent("text.industrialforegoing.display.special").setStyle(new Style().setColor(TextFormatting.GRAY)));
+            tooltip.add(new TranslationTextComponent("text.industrialforegoing.display.special").setStyle(new Style().setColor(TextFormatting.GOLD)));
     }
 
     public long getPowerFromStack(ItemStack stack) {
@@ -237,6 +264,7 @@ public class ItemInfinityDrill extends IFCustomItem {
         tagCompound.put("Fluid", fluid);
         tagCompound.putBoolean("Special", special);
         tagCompound.putString("Selected", DrillTier.getTierBraquet(power).getLeft().name());
+        tagCompound.putBoolean("CanCharge", true);
         stack.setTag(tagCompound);
     }
 
@@ -259,7 +287,6 @@ public class ItemInfinityDrill extends IFCustomItem {
 
     @Override
     public boolean onBlockDestroyed(ItemStack stack, World worldIn, BlockState state, BlockPos pos, LivingEntity entityLiving) {
-
         if (entityLiving instanceof PlayerEntity) {
             RayTraceResult rayTraceResult = RayTraceUtils.rayTraceSimple(worldIn, entityLiving, 16, 0);
             if (rayTraceResult.getType() == RayTraceResult.Type.BLOCK) {
@@ -301,12 +328,20 @@ public class ItemInfinityDrill extends IFCustomItem {
                 worldIn.getEntitiesWithinAABB(ExperienceOrbEntity.class, new AxisAlignedBB(area.getLeft(), area.getRight()).grow(1)).forEach(entityXPOrb -> entityXPOrb.setPositionAndUpdate(entityLiving.getPosition().getX(), entityLiving.getPosition().getY(), entityLiving.getPosition().getZ()));
             }
         }
-
         return super.onBlockDestroyed(stack, worldIn, state, pos, entityLiving);
     }
 
     public DrillTier getSelectedDrillTier(ItemStack stack) {
         return stack.hasTag() && stack.getTag().contains("Selected") ? DrillTier.valueOf(stack.getTag().getString("Selected")) : DrillTier.getTierBraquet(getPowerFromStack(stack)).getLeft();
+    }
+
+    public boolean canCharge(ItemStack stack) {
+        if (stack.hasTag() && stack.getTag().contains("CanCharge")) return stack.getTag().getBoolean("CanCharge");
+        return true;
+    }
+
+    public void setCanCharge(ItemStack stack, boolean canCharge) {
+        stack.getTag().putBoolean("CanCharge", canCharge);
     }
 
     public void setSelectedDrillTier(ItemStack stack, DrillTier tier) {
@@ -316,11 +351,11 @@ public class ItemInfinityDrill extends IFCustomItem {
     @Override
     public ActionResult<ItemStack> onItemRightClick(World worldIn, PlayerEntity player, Hand handIn) {
         if (player.isCrouching()) {
-            player.playSound(SoundEvents.BLOCK_LEVER_CLICK, 0.5f, 0.5f);
-            ItemStack stack = player.getHeldItem(handIn);
-            DrillTier next = getSelectedDrillTier(stack).getNext(DrillTier.getTierBraquet(getPowerFromStack(stack)).getLeft());
-            player.sendStatusMessage(new TranslationTextComponent("text.industrialforegoing.display.current_area").appendText(" ").appendText(getFormattedArea(next, next.getRadius())), true);
-            setSelectedDrillTier(stack, next);
+            if (player instanceof ServerPlayerEntity) {
+                NetworkHooks.openGui((ServerPlayerEntity) player, this, buffer ->
+                        LocatorFactory.writePacketBuffer(buffer, new HeldStackLocatorInstance(handIn == Hand.MAIN_HAND)));
+            }
+            return ActionResult.resultSuccess(player.getHeldItem(handIn));
         }
         return super.onItemRightClick(worldIn, player, handIn);
     }
@@ -357,6 +392,46 @@ public class ItemInfinityDrill extends IFCustomItem {
                 .key('D', Blocks.DIAMOND_BLOCK)
                 .key('I', Blocks.IRON_BLOCK)
                 .build(consumer);
+    }
+
+    @Override
+    public void handleButtonMessage(int id, PlayerEntity playerEntity, CompoundNBT compound) {
+        ItemStack stack = playerEntity.getHeldItem(Hand.MAIN_HAND);
+        if (!(stack.getItem() instanceof ItemInfinityDrill)) stack = playerEntity.getHeldItem(Hand.OFF_HAND);
+        if (stack.getItem() instanceof ItemInfinityDrill) {
+            if (id == 1) {
+                DrillTier prev = getSelectedDrillTier(stack).getPrev(DrillTier.getTierBraquet(getPowerFromStack(stack)).getLeft());
+                setSelectedDrillTier(stack, prev);
+            }
+            if (id == 2) {
+                DrillTier next = getSelectedDrillTier(stack).getNext(DrillTier.getTierBraquet(getPowerFromStack(stack)).getLeft());
+                setSelectedDrillTier(stack, next);
+            }
+            if (id == 3) {
+                setCanCharge(stack, !canCharge(stack));
+            }
+        }
+    }
+
+    @Override
+    public boolean shouldSyncTag() {
+        return true;
+    }
+
+    @Override
+    public ITextComponent getDisplayName() {
+        return new TranslationTextComponent(this.getTranslationKey()).setStyle(new Style().setColor(TextFormatting.DARK_GRAY));
+    }
+
+    @Nullable
+    @Override
+    public Container createMenu(int menu, PlayerInventory p_createMenu_2_, PlayerEntity playerEntity) {
+        return new BasicAddonContainer(ItemStackHarnessRegistry.getHarnessCreators().get(this).apply(playerEntity.getHeldItemMainhand()), new HeldStackLocatorInstance(true), new IWorldPosCallable() {
+            @Override
+            public <T> Optional<T> apply(BiFunction<World, BlockPos, T> p_221484_1_) {
+                return Optional.empty();
+            }
+        }, playerEntity.inventory, menu);
     }
 
 //    public void configuration(Configuration config) {TODO
@@ -443,17 +518,32 @@ public class ItemInfinityDrill extends IFCustomItem {
             }
             return DrillTier.POOR;
         }
+
+        public DrillTier getPrev(DrillTier maxTier) {
+            DrillTier lastTier = POOR;
+            if (this == POOR) return maxTier;
+            for (DrillTier drillTier : DrillTier.values()) {
+                if (drillTier == POOR) continue;
+                if (lastTier == maxTier) return POOR;
+                if (this == drillTier) return lastTier;
+                lastTier = drillTier;
+            }
+            return maxTier;
+        }
     }
 
     private class InfinityDrillCapabilityProvider implements ICapabilityProvider {
 
-        private final FluidHandlerItemStack tank;
+        private final FluidHandlerScreenProviderItemStack tank;
         private final InfinityDrillEnergyStorage energyStorage;
+        private final ItemStackHolderCapability itemStackHolder;
         private final LazyOptional<IEnergyStorage> energyStorageCap;
         private final LazyOptional<IFluidHandlerItem> tankCap;
+        private final LazyOptional<IStackHolder> stackCap;
+
 
         private InfinityDrillCapabilityProvider(ItemStack stack) {
-            tank = new FluidHandlerItemStack(stack, 1_000_000) {
+            tank = new FluidHandlerScreenProviderItemStack(stack, 1_000_000) {
                 @Override
                 public boolean canFillFluidType(FluidStack fluid) {
                     return fluid != null && fluid.getFluid() != null && fluid.getFluid().equals(ModuleCore.BIOFUEL.getSourceFluid());
@@ -462,6 +552,12 @@ public class ItemInfinityDrill extends IFCustomItem {
                 @Override
                 public boolean canDrainFluidType(FluidStack fluid) {
                     return false;
+                }
+
+                @Nonnull
+                @Override
+                public List<IFactory<? extends IScreenAddon>> getScreenAddons() {
+                    return Collections.singletonList(() -> new TankScreenAddon(30, 20, tank, FluidTankComponent.Type.NORMAL));
                 }
             };
             energyStorage = new InfinityDrillEnergyStorage() {
@@ -481,9 +577,16 @@ public class ItemInfinityDrill extends IFCustomItem {
                     }
                     stack.getTag().putLong("Energy", Math.min(energy, DrillTier.ARTIFACT.getPowerNeeded()));
                 }
+
+                @Override
+                public boolean canReceive() {
+                    return ItemInfinityDrill.this.canCharge(stack);
+                }
             };
+            this.itemStackHolder = new InfinityDrillStackHolder();
             this.tankCap = LazyOptional.of(() -> tank);
             this.energyStorageCap = LazyOptional.of(() -> energyStorage);
+            this.stackCap = LazyOptional.of(() -> itemStackHolder);
         }
 
 
@@ -492,11 +595,12 @@ public class ItemInfinityDrill extends IFCustomItem {
         public <T> LazyOptional<T> getCapability(@Nonnull Capability<T> capability, @Nullable Direction facing) {
             if (capability == CapabilityFluidHandler.FLUID_HANDLER_ITEM_CAPABILITY) return tankCap.cast();
             if (capability == CapabilityEnergy.ENERGY) return energyStorageCap.cast();
+            if (capability == CapabilityItemStackHolder.ITEMSTACK_HOLDER_CAPABILITY) return stackCap.cast();
             return LazyOptional.empty();
         }
     }
 
-    private class InfinityDrillEnergyStorage implements IEnergyStorage {
+    public class InfinityDrillEnergyStorage implements IEnergyStorage, IScreenAddonProvider {
 
         private final long capacity;
         private long energy;
@@ -546,6 +650,55 @@ public class ItemInfinityDrill extends IFCustomItem {
 
         public long getLongEnergyStored() {
             return this.energy;
+        }
+
+        @Nonnull
+        @Override
+        public List<IFactory<? extends IScreenAddon>> getScreenAddons() {
+            return Collections.singletonList(() -> new InfinityDrillEnergyScreenAddon(10, 20, this));
+        }
+    }
+
+    public class InfinityDrillStackHolder extends ItemStackHolderCapability implements IScreenAddonProvider {
+
+        public InfinityDrillStackHolder() {
+            super(() -> {
+                ItemStack stack = Minecraft.getInstance().player.getHeldItem(Hand.MAIN_HAND);
+                if (!(stack.getItem() instanceof ItemInfinityDrill))
+                    stack = Minecraft.getInstance().player.getHeldItem(Hand.OFF_HAND);
+                return stack;
+            });
+        }
+
+        @Override
+        public List<IFactory<? extends IScreenAddon>> getScreenAddons() {
+            List<IFactory<? extends IScreenAddon>> factory = new ArrayList<>();
+            factory.add(() -> new ArrowButtonScreenAddon((ArrowButtonComponent) new ArrowButtonComponent(154, 20, 14, 14, FacingUtil.Sideness.RIGHT).setId(2)));
+            factory.add(() -> new ArrowButtonScreenAddon((ArrowButtonComponent) new ArrowButtonComponent(54, 20, 14, 14, FacingUtil.Sideness.LEFT).setId(1)));
+            factory.add(() -> new TextSceenAddon("", 54 + 14 + 4, 24, false) {
+                @Override
+                public String getText() {
+                    DrillTier current = getSelectedDrillTier(getHolder());
+                    return TextFormatting.DARK_GRAY + "Area: " + getFormattedArea(current, current.getRadius());
+                }
+            });
+            factory.add(() -> new StateButtonAddon(new ButtonComponent(54, 38, 14, 15).setId(3), new StateButtonInfo(0, AssetTypes.BUTTON_SIDENESS_ENABLED), new StateButtonInfo(1, AssetTypes.BUTTON_SIDENESS_DISABLED)) {
+                @Override
+                public int getState() {
+                    return canCharge(getHolder()) ? 0 : 1;
+                }
+            });
+            factory.add(() -> new TextSceenAddon("", 54 + 14 + 4, 42, false) {
+                @Override
+                public String getText() {
+                    if (canCharge(getHolder())) {
+                        return new TranslationTextComponent("text.industrialforegoing.display.charging").setStyle(new Style().setColor(TextFormatting.DARK_GRAY)).appendSibling(new TranslationTextComponent("text.industrialforegoing.display.enabled").setStyle(new Style().setColor(TextFormatting.GREEN))).getFormattedText();
+                    } else {
+                        return new TranslationTextComponent("text.industrialforegoing.display.charging").setStyle(new Style().setColor(TextFormatting.DARK_GRAY)).appendSibling(new TranslationTextComponent("text.industrialforegoing.display.disabled").setStyle(new Style().setColor(TextFormatting.RED))).getFormattedText();
+                    }
+                }
+            });
+            return factory;
         }
     }
 }
