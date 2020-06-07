@@ -675,7 +675,7 @@ public class ItemInfinityDrill extends IFCustomItem implements IButtonHandler, I
             List<IFactory<? extends IScreenAddon>> factory = new ArrayList<>();
             factory.add(() -> new ArrowButtonScreenAddon((ArrowButtonComponent) new ArrowButtonComponent(154, 20, 14, 14, FacingUtil.Sideness.RIGHT).setId(2)));
             factory.add(() -> new ArrowButtonScreenAddon((ArrowButtonComponent) new ArrowButtonComponent(54, 20, 14, 14, FacingUtil.Sideness.LEFT).setId(1)));
-            factory.add(() -> new TextSceenAddon("", 54 + 14 + 4, 24, false) {
+            factory.add(() -> new TextScreenAddon("", 54 + 14 + 4, 24, false) {
                 @Override
                 public String getText() {
                     DrillTier current = getSelectedDrillTier(getHolder());
@@ -688,7 +688,7 @@ public class ItemInfinityDrill extends IFCustomItem implements IButtonHandler, I
                     return canCharge(getHolder()) ? 0 : 1;
                 }
             });
-            factory.add(() -> new TextSceenAddon("", 54 + 14 + 4, 42, false) {
+            factory.add(() -> new TextScreenAddon("", 54 + 14 + 4, 42, false) {
                 @Override
                 public String getText() {
                     if (canCharge(getHolder())) {
