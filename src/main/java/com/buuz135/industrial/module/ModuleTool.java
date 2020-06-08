@@ -3,7 +3,7 @@ package com.buuz135.industrial.module;
 import com.buuz135.industrial.item.MeatFeederItem;
 import com.buuz135.industrial.item.MobEssenceToolItem;
 import com.buuz135.industrial.item.MobImprisonmentToolItem;
-import com.buuz135.industrial.item.infinity.ItemInfinityDrill;
+import com.buuz135.industrial.item.infinity.item.ItemInfinityDrill;
 import com.buuz135.industrial.utils.Reference;
 import com.hrznstudio.titanium.capability.CapabilityItemStackHolder;
 import com.hrznstudio.titanium.itemstack.ItemStackHarness;

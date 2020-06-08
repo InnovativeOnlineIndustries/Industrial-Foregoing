@@ -23,7 +23,7 @@ package com.buuz135.industrial.proxy.client;
 
 import com.buuz135.industrial.block.tile.IndustrialAreaWorkingTile;
 import com.buuz135.industrial.block.transport.tile.ConveyorTile;
-import com.buuz135.industrial.item.infinity.ItemInfinityDrill;
+import com.buuz135.industrial.item.infinity.InfinityTier;
 import com.buuz135.industrial.module.ModuleTool;
 import com.buuz135.industrial.module.ModuleTransport;
 import com.buuz135.industrial.proxy.CommonProxy;
@@ -110,7 +110,7 @@ public class ClientProxy extends CommonProxy {
         }, ModuleTool.MOB_IMPRISONMENT_TOOL);
         Minecraft.getInstance().getItemColors().register((stack, tintIndex) -> {
             if (tintIndex == 0) {
-                return ItemInfinityDrill.DrillTier.getTierBraquet(ModuleTool.INFINITY_DRILL.getPowerFromStack(stack)).getLeft().getTextureColor();
+                return InfinityTier.getTierBraquet(ModuleTool.INFINITY_DRILL.getPowerFromStack(stack)).getLeft().getTextureColor();
             }
             return 0xFFFFFF;
         }, ModuleTool.INFINITY_DRILL);

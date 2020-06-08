@@ -1,6 +1,7 @@
 package com.buuz135.industrial.gui.component;
 
-import com.buuz135.industrial.item.infinity.ItemInfinityDrill;
+import com.buuz135.industrial.item.infinity.InfinityEnergyStorage;
+import com.buuz135.industrial.item.infinity.InfinityTier;
 import com.hrznstudio.titanium.api.client.AssetTypes;
 import com.hrznstudio.titanium.api.client.IAsset;
 import com.hrznstudio.titanium.client.screen.addon.BasicScreenAddon;
@@ -15,16 +16,16 @@ import java.text.DecimalFormat;
 import java.util.Arrays;
 import java.util.List;
 
-public class InfinityDrillEnergyScreenAddon extends BasicScreenAddon {
+public class InfinityEnergyScreenAddon extends BasicScreenAddon {
 
-    private final ItemInfinityDrill.InfinityDrillEnergyStorage handler;
-    private final Pair<ItemInfinityDrill.DrillTier, ItemInfinityDrill.DrillTier> tier;
+    private final InfinityEnergyStorage handler;
+    private final Pair<InfinityTier, InfinityTier> tier;
     private IAsset background;
 
-    public InfinityDrillEnergyScreenAddon(int posX, int posY, ItemInfinityDrill.InfinityDrillEnergyStorage handler) {
+    public InfinityEnergyScreenAddon(int posX, int posY, InfinityEnergyStorage handler) {
         super(posX, posY);
         this.handler = handler;
-        this.tier = ItemInfinityDrill.DrillTier.getTierBraquet(handler.getLongEnergyStored());
+        this.tier = InfinityTier.getTierBraquet(handler.getLongEnergyStored());
     }
 
     public static IAsset drawBackground(Screen screen, IAssetProvider provider, int handlerPosX, int handlerPosY, int guiX, int guiY) {
