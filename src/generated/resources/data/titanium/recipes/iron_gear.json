@@ -6,7 +6,7 @@
         {
           "values": [
             {
-              "item": "industrialforegoing:infinity_drill",
+              "item": "titanium:iron_gear",
               "type": "forge:item_exists"
             }
           ],
@@ -16,20 +16,17 @@
       "recipe": {
         "type": "minecraft:crafting_shaped",
         "pattern": [
-          " DD",
-          " ID",
-          "I  "
+          " P ",
+          "P P",
+          " P "
         ],
         "key": {
-          "D": {
-            "item": "minecraft:diamond_block"
-          },
-          "I": {
-            "item": "minecraft:iron_block"
+          "P": {
+            "item": "minecraft:iron_ingot"
           }
         },
         "result": {
-          "item": "industrialforegoing:infinity_drill"
+          "item": "titanium:iron_gear"
         }
       }
     }

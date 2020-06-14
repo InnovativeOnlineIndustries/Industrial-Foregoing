@@ -24,6 +24,9 @@
   "text.industrialforegoing.display.max_area": "Max Area:",
   "text.industrialforegoing.display.current_area": "Current Area:",
   "text.industrialforegoing.display.next_tier": "for next tier",
+  "text.industrialforegoing.display.charging": "Charging: ",
+  "text.industrialforegoing.display.disabled": "Disabled",
+  "text.industrialforegoing.display.enabled": "Enabled",
   "text.industrialforegoing.display.special": "Shiny",
   "text.industrialforegoing.button.decrease_stack": "Decrease Stack Size",
   "text.industrialforegoing.button.increase_stack": "Increase Stack Size",
@@ -297,7 +300,7 @@
   "item.industrialforegoing.fertilizer": "Fertilizer",
   "item.industrialforegoing.laser_lens": "Laser Lens",
   "item.industrialforegoing.laser_lens_inverted": "Laser Lens (Inverted)",
-  "item.industrialforegoing.range_addon": "Range Addon",
+  "item.industrialforegoing.range_addon": "Range ",
   "item.industrialforegoing.adult_filter": "Adult Filter",
   "item.industrialforegoing.redstone_inverted": "Inverted Redstone Control",
   "item.industrialforegoing.machinehull": "Machine Hull",
@@ -312,6 +315,7 @@
   "item.industrialforegoing.pink_slime_ingot": "Pink Slime Ingot",
   "item.industrialforegoing.fortune_addon": "Fortune Addon",
   "item.industrialforegoing.infinity_drill": "Infinity Drill",
+  "item.industrialforegoing.infinity_saw": "Infinity Saw",
   "tooltip.titanium.facing_handler.fuel_input": "Fuel Input",
   "tooltip.titanium.facing_handler.input_fluid": "Fluid Input",
   "tooltip.titanium.facing_handler.output_fluid": "Fluid Output",
@@ -422,5 +426,8 @@
   "resource.titanium.type.gear": "%s Gear",
   "resource.titanium.material.iron": "Iron",
   "resource.titanium.material.gold": "Gold",
-  "resource.titanium.material.diamond": "Diamond"
+  "resource.titanium.material.diamond": "Diamond",
+  "item.industrialforegoing.addon": "Addon: ",
+  "item.industrialforegoing.efficiency": "Efficiency ",
+  "item.industrialforegoing.speed": "Speed "
 }

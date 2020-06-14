@@ -1,6 +1,7 @@
-package com.buuz135.industrial.item;
+package com.buuz135.industrial.item.addon;
 
-import com.buuz135.industrial.block.tile.IndustrialAreaWorkingTile;
+import com.buuz135.industrial.block.tile.IndustrialWorkingTile;
+import com.buuz135.industrial.item.IFCustomItem;
 import com.buuz135.industrial.module.ModuleCore;
 import com.buuz135.industrial.recipe.DissolutionChamberRecipe;
 import com.hrznstudio.titanium.api.IMachine;
@@ -37,7 +38,7 @@ public class RangeAddonItem extends IFCustomItem implements IAugment {
 
     @Override
     public String getTranslationKey() {
-        return "Tier " + (tier + 1) + " " + new TranslationTextComponent("item.industrialforegoing.range_addon").getFormattedText();
+        return new TranslationTextComponent("item.industrialforegoing.addon").getFormattedText() + new TranslationTextComponent("item.industrialforegoing.range_addon").getFormattedText() + "Tier " + (tier + 1) + " ";
     }
 
     @Override
@@ -76,6 +77,6 @@ public class RangeAddonItem extends IFCustomItem implements IAugment {
 
     @Override
     public boolean canWorkIn(IMachine machine) {
-        return !machine.hasAugmentInstalled(RANGE) && machine instanceof IndustrialAreaWorkingTile;
+        return !machine.hasAugmentInstalled(RANGE) && machine instanceof IndustrialWorkingTile;
     }
 }

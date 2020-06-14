@@ -3,7 +3,7 @@ package com.buuz135.industrial.block.agriculturehusbandry.tile;
 import com.buuz135.industrial.block.tile.IndustrialAreaWorkingTile;
 import com.buuz135.industrial.block.tile.RangeManager;
 import com.buuz135.industrial.config.machine.agriculturehusbandry.PlantSowerConfig;
-import com.buuz135.industrial.item.RangeAddonItem;
+import com.buuz135.industrial.item.addon.RangeAddonItem;
 import com.buuz135.industrial.module.ModuleAgricultureHusbandry;
 import com.hrznstudio.titanium.annotation.Save;
 import com.hrznstudio.titanium.api.IFactory;

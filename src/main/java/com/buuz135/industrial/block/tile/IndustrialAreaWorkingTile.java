@@ -1,6 +1,6 @@
 package com.buuz135.industrial.block.tile;
 
-import com.buuz135.industrial.item.RangeAddonItem;
+import com.buuz135.industrial.item.addon.RangeAddonItem;
 import com.buuz135.industrial.proxy.client.IndustrialAssetProvider;
 import com.buuz135.industrial.utils.BlockUtils;
 import com.hrznstudio.titanium.annotation.Save;
@@ -80,7 +80,9 @@ public abstract class IndustrialAreaWorkingTile<T extends IndustrialAreaWorkingT
 
     @Override
     public boolean canAcceptAugment(IAugment augment) {
-        return super.canAcceptAugment(augment) && (augment.getAugmentType().equals(RangeAddonItem.RANGE) && acceptsRangeUpgrades);
+        if (augment.getAugmentType().equals(RangeAddonItem.RANGE))
+            return super.canAcceptAugment(augment) && acceptsRangeUpgrades;
+        return super.canAcceptAugment(augment);
     }
 
     @Override

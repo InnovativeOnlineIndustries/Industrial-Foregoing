@@ -66,8 +66,20 @@ public class BlockUtils {
         return blocks;
     }
 
+    public static boolean isBlockstateInMaterial(BlockState state, Material[] materials) {
+        for (Material material : materials) {
+            if (state.getMaterial() == material) return true;
+        }
+
+        return false;
+    }
+
     public static boolean isBlockTag(World world, BlockPos pos, Tag<Block> tag) {
-        return world.getBlockState(pos).isIn(tag);
+        return isBlockStateTag(world.getBlockState(pos), tag);
+    }
+
+    public static boolean isBlockStateTag(BlockState state, Tag<Block> tag) {
+        return state.isIn(tag);
     }
 
     public static boolean isBlockOreDict(World world, BlockPos pos, String ore) {

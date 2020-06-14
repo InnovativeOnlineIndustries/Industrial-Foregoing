@@ -1,0 +1,36 @@
+{
+  "input": [
+    {
+      "item": "minecraft:redstone"
+    },
+    {
+      "item": "minecraft:redstone"
+    },
+    {
+      "item": "minecraft:glass_pane"
+    },
+    {
+      "item": "minecraft:glass_pane"
+    },
+    {
+      "tag": "forge:gear/diamond"
+    },
+    {
+      "tag": "forge:gear/diamond"
+    },
+    {
+      "item": "minecraft:blaze_rod"
+    },
+    {
+      "item": "minecraft:blaze_rod"
+    }
+  ],
+  "inputFluid": "{FluidName:\"industrialforegoing:latex\",Amount:1000}",
+  "processingTime": 200,
+  "output": {
+    "item": "industrialforegoing:efficiency_addon_2",
+    "count": 1
+  },
+  "outputFluid": "{FluidName:\"minecraft:empty\",Amount:0}",
+  "type": "industrialforegoing:dissolution_chamber"
+}

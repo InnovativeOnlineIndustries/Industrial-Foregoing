@@ -21,7 +21,7 @@
  */
 package com.buuz135.industrial.proxy.client.event;
 
-import com.buuz135.industrial.item.infinity.ItemInfinityDrill;
+import com.buuz135.industrial.item.infinity.InfinityTier;
 import com.buuz135.industrial.module.ModuleTool;
 import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.vertex.IVertexBuilder;
@@ -63,7 +63,7 @@ public class IFClientEvents {
             BlockRayTraceResult blockRayTraceResult = (BlockRayTraceResult) hit;
             event.setCanceled(true);
             ItemStack hand = Minecraft.getInstance().player.getHeldItemMainhand();
-            ItemInfinityDrill.DrillTier tier = ModuleTool.INFINITY_DRILL.getSelectedDrillTier(hand);
+            InfinityTier tier = ModuleTool.INFINITY_DRILL.getSelectedTier(hand);
             World world = Minecraft.getInstance().player.world;
             Pair<BlockPos, BlockPos> area = ModuleTool.INFINITY_DRILL.getArea(blockRayTraceResult.getPos(), blockRayTraceResult.getFace(), tier, false);
             MatrixStack stack = new MatrixStack();
