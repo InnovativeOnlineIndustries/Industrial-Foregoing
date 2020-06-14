@@ -24,11 +24,13 @@ package com.buuz135.industrial.item.infinity.item;
 
 import com.buuz135.industrial.item.infinity.InfinityTier;
 import com.buuz135.industrial.item.infinity.ItemInfinity;
-import com.hrznstudio.titanium.recipe.generator.TitaniumShapedRecipeBuilder;
+import com.buuz135.industrial.module.ModuleCore;
+import com.buuz135.industrial.recipe.DissolutionChamberRecipe;
+import com.buuz135.industrial.utils.BlockUtils;
+import com.buuz135.industrial.utils.IndustrialTags;
 import com.hrznstudio.titanium.util.RayTraceUtils;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
-import net.minecraft.block.Blocks;
 import net.minecraft.block.material.Material;
 import net.minecraft.data.IFinishedRecipe;
 import net.minecraft.enchantment.Enchantment;
@@ -40,6 +42,7 @@ import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.item.ItemGroup;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
+import net.minecraft.item.crafting.Ingredient;
 import net.minecraft.util.Direction;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
@@ -49,6 +52,7 @@ import net.minecraft.world.World;
 import net.minecraft.world.server.ServerWorld;
 import net.minecraftforge.common.ForgeHooks;
 import net.minecraftforge.common.ToolType;
+import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.items.ItemHandlerHelper;
 import org.apache.commons.lang3.tuple.Pair;
 
@@ -90,6 +94,7 @@ public class ItemInfinityDrill extends ItemInfinity {
                     if (enoughFuel(stack) && worldIn.getTileEntity(blockPos) == null && worldIn instanceof ServerWorld && entityLiving instanceof ServerPlayerEntity && !worldIn.isAirBlock(blockPos)) {
                         BlockState tempState = worldIn.getBlockState(blockPos);
                         Block block = tempState.getBlock();
+                        if (!BlockUtils.isBlockstateInMaterial(tempState, mineableMaterials)) return;
                         if (block.getBlockHardness(tempState, worldIn, blockPos) < 0) return;
                         int xp = ForgeHooks.onBlockBreakEvent(worldIn, ((ServerPlayerEntity) entityLiving).interactionManager.getGameType(), (ServerPlayerEntity) entityLiving, blockPos);
                         if (xp >= 0 && block.removedByPlayer(tempState, worldIn, blockPos, (PlayerEntity) entityLiving, true, tempState.getFluidState())) {
@@ -124,11 +129,18 @@ public class ItemInfinityDrill extends ItemInfinity {
 
     @Override
     public void registerRecipe(Consumer<IFinishedRecipe> consumer) {
-        TitaniumShapedRecipeBuilder.shapedRecipe(this)
-                .patternLine(" DD").patternLine(" ID").patternLine("I  ")
-                .key('D', Blocks.DIAMOND_BLOCK)
-                .key('I', Blocks.IRON_BLOCK)
-                .build(consumer);
+        new DissolutionChamberRecipe(this.getRegistryName(),
+                new Ingredient.IItemList[]{
+                        new Ingredient.SingleItemList(new ItemStack(Items.DIAMOND_BLOCK)),
+                        new Ingredient.SingleItemList(new ItemStack(Items.DIAMOND_SHOVEL)),
+                        new Ingredient.SingleItemList(new ItemStack(Items.DIAMOND_BLOCK)),
+                        new Ingredient.SingleItemList(new ItemStack(Items.DIAMOND_BLOCK)),
+                        new Ingredient.SingleItemList(new ItemStack(ModuleCore.RANGE_ADDONS[11])),
+                        new Ingredient.TagList(IndustrialTags.Items.GEAR_GOLD),
+                        new Ingredient.TagList(IndustrialTags.Items.GEAR_GOLD),
+                        new Ingredient.TagList(IndustrialTags.Items.GEAR_GOLD),
+                },
+                new FluidStack(ModuleCore.PINK_SLIME.getSourceFluid(), 2000), 400, new ItemStack(this), FluidStack.EMPTY);
     }
 
 //    public void configuration(Configuration config) {TODO

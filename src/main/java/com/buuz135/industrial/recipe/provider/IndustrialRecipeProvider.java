@@ -40,9 +40,10 @@ public class IndustrialRecipeProvider extends TitaniumRecipeProvider {
         //TRANSPORT
         ConveyorUpgradeFactory.FACTORIES.forEach(conveyorUpgradeFactory -> conveyorUpgradeFactory.registerRecipe(consumer));
         //TOOL
-        ModuleTool.INFINITY_DRILL.registerRecipe(consumer);
         ModuleTool.MOB_IMPRISONMENT_TOOL.registerRecipe(consumer);
         ModuleTool.MEAT_FEEDER.registerRecipe(consumer);
+        ModuleTool.INFINITY_DRILL.registerRecipe(consumer);
+        ModuleTool.INFINITY_SAW.registerRecipe(consumer);
         //CORE
         ModuleCore.STRAW.registerRecipe(consumer);
         for (RangeAddonItem rangeAddon : ModuleCore.RANGE_ADDONS) {

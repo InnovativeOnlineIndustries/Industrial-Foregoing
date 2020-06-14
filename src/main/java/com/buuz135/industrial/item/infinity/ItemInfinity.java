@@ -1,7 +1,6 @@
 package com.buuz135.industrial.item.infinity;
 
 import com.buuz135.industrial.item.IFCustomItem;
-import com.buuz135.industrial.item.infinity.item.ItemInfinityDrill;
 import com.buuz135.industrial.proxy.CommonProxy;
 import com.google.common.collect.Multimap;
 import com.hrznstudio.titanium.api.IFactory;
@@ -299,8 +298,8 @@ public class ItemInfinity extends IFCustomItem implements INamedContainerProvide
     @Override
     public void handleButtonMessage(int id, PlayerEntity playerEntity, CompoundNBT compound) {
         ItemStack stack = playerEntity.getHeldItem(Hand.MAIN_HAND);
-        if (!(stack.getItem() instanceof ItemInfinityDrill)) stack = playerEntity.getHeldItem(Hand.OFF_HAND);
-        if (stack.getItem() instanceof ItemInfinityDrill) {
+        if (!(stack.getItem() instanceof ItemInfinity)) stack = playerEntity.getHeldItem(Hand.OFF_HAND);
+        if (stack.getItem() instanceof ItemInfinity) {
             if (id == 1) {
                 InfinityTier prev = getSelectedTier(stack).getPrev(InfinityTier.getTierBraquet(getPowerFromStack(stack)).getLeft());
                 setSelectedDrillTier(stack, prev);

@@ -1,0 +1,36 @@
+{
+  "input": [
+    {
+      "item": "minecraft:diamond_block"
+    },
+    {
+      "item": "minecraft:diamond_axe"
+    },
+    {
+      "item": "minecraft:diamond_axe"
+    },
+    {
+      "item": "minecraft:diamond_block"
+    },
+    {
+      "item": "industrialforegoing:range_addon11"
+    },
+    {
+      "tag": "forge:gear/gold"
+    },
+    {
+      "tag": "forge:gear/gold"
+    },
+    {
+      "tag": "forge:gear/gold"
+    }
+  ],
+  "inputFluid": "{FluidName:\"industrialforegoing:pink_slime\",Amount:2000}",
+  "processingTime": 400,
+  "output": {
+    "item": "industrialforegoing:infinity_saw",
+    "count": 1
+  },
+  "outputFluid": "{FluidName:\"minecraft:empty\",Amount:0}",
+  "type": "industrialforegoing:dissolution_chamber"
+}
