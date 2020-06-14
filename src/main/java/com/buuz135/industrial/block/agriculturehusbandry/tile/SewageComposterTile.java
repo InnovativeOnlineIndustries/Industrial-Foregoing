@@ -32,7 +32,8 @@ public class SewageComposterTile extends IndustrialProcessingTile<SewageComposte
         this.addTank(sewage = (SidedFluidTankComponent<SewageComposterTile>) new SidedFluidTankComponent<SewageComposterTile>("sewage", SewageComposterConfig.maxTankSize, 30, 20, 0).
                 setColor(DyeColor.BROWN).
                 setTankAction(FluidTankComponent.Action.FILL).
-                setComponentHarness(this));
+                setComponentHarness(this).
+                setValidator(fluidStack -> fluidStack.getFluid().isEquivalentTo(ModuleCore.SEWAGE.getSourceFluid())));
         this.addInventory(fertilizerOutput = (SidedInventoryComponent<SewageComposterTile>) new SidedInventoryComponent<SewageComposterTile>("fertilizer", 90, 22, 12, 1).
                 setColor(DyeColor.ORANGE).
                 setInputFilter((stack, integer) -> false).
