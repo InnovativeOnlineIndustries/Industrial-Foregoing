@@ -23,6 +23,7 @@ package com.buuz135.industrial.jei;
 
 
 import com.buuz135.industrial.block.generator.tile.BioReactorTile;
+import com.buuz135.industrial.gui.conveyor.GuiConveyor;
 import com.buuz135.industrial.jei.category.BioReactorRecipeCategory;
 import com.buuz135.industrial.jei.category.DissolutionChamberCategory;
 import com.buuz135.industrial.jei.category.FluidExtractorCategory;
@@ -43,10 +44,12 @@ import com.buuz135.industrial.utils.Reference;
 import com.hrznstudio.titanium.util.RecipeUtil;
 import mezz.jei.api.IModPlugin;
 import mezz.jei.api.JeiPlugin;
+import mezz.jei.api.gui.handlers.IGhostIngredientHandler;
 import mezz.jei.api.registration.*;
 import mezz.jei.api.runtime.IJeiRuntime;
 import mezz.jei.api.runtime.IRecipesGui;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.renderer.Rectangle2d;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tags.Tag;
@@ -54,7 +57,9 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fluids.FluidStack;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
+import java.util.stream.Collectors;
 
 
 @JeiPlugin
@@ -87,6 +92,35 @@ public class JEICustomPlugin implements IModPlugin {
     @Override
     public void registerIngredients(IModIngredientRegistration registry) {
 
+    }
+
+    @Override
+    public void registerGuiHandlers(IGuiHandlerRegistration registration) {
+        registration.addGhostIngredientHandler(GuiConveyor.class, new IGhostIngredientHandler<GuiConveyor>() {
+            @Override
+            public <I> List<Target<I>> getTargets(GuiConveyor guiConveyor, I i, boolean b) {
+                if (i instanceof ItemStack) {
+                    return guiConveyor.getGhostSlots().stream().map(ghostSlot -> new Target<I>() {
+
+                        @Override
+                        public Rectangle2d getArea() {
+                            return ghostSlot.getArea();
+                        }
+
+                        @Override
+                        public void accept(I stack) {
+                            ghostSlot.accept((ItemStack) stack);
+                        }
+                    }).collect(Collectors.toList());
+                }
+                return Collections.emptyList();
+            }
+
+            @Override
+            public void onComplete() {
+
+            }
+        });
     }
 
     @Override
@@ -273,7 +307,7 @@ public class JEICustomPlugin implements IModPlugin {
 //            registry.addRecipeCatalyst(new ItemStack(BlockRegistry.oreSieveBlock), oreSieveCategory.getUid());
 //            registry.addRecipes(OreFluidEntrySieve.ORE_FLUID_SIEVE.stream().map(OreSieveWrapper::new).collect(Collectors.toList()), oreSieveCategory.getUid());
 //        }
-//        registry.addGhostIngredientHandler(GuiConveyor.class, new ConveyorGhostSlotHandler());
+
     //}
 
 

@@ -22,7 +22,6 @@
 package com.buuz135.industrial.proxy.block.filter;
 
 import com.buuz135.industrial.gui.conveyor.GuiConveyor;
-import mezz.jei.api.gui.handlers.IGhostIngredientHandler;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.Rectangle2d;
 import net.minecraft.entity.Entity;
@@ -49,8 +48,7 @@ public interface IFilter<T extends Entity> {
 
     void deserializeNBT(CompoundNBT nbt);
 
-    //@Optional.Interface(iface = "mezz.jei.api.gui.IGhostIngredientHandler$Target", modid = "jei", striprefs = true) TODO
-    public static class GhostSlot implements IGhostIngredientHandler.Target<ItemStack> {
+    public static class GhostSlot {
 
         private final int x;
         private final int y;
@@ -72,7 +70,7 @@ public interface IFilter<T extends Entity> {
             this.stack = stack;
         }
 
-        @Override
+
         public Rectangle2d getArea() {
             if (Minecraft.getInstance().currentScreen instanceof GuiConveyor) {
                 GuiConveyor gui = (GuiConveyor) Minecraft.getInstance().currentScreen;
@@ -81,7 +79,7 @@ public interface IFilter<T extends Entity> {
             return new Rectangle2d(0, 0, 0, 0);
         }
 
-        @Override
+
         public void accept(ItemStack ingredient) {
             if (Minecraft.getInstance().currentScreen instanceof GuiConveyor) {
                 ((GuiConveyor) Minecraft.getInstance().currentScreen).sendMessage(id, ingredient.serializeNBT());
