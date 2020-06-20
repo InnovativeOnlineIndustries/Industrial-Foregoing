@@ -51,7 +51,7 @@ public class ResourcefulFurnaceTile extends IndustrialProcessingTile<Resourceful
                 setRange(1, 3));
         addTank(this.tank = (SidedFluidTankComponent<ResourcefulFurnaceTile>) new SidedFluidTankComponent<ResourcefulFurnaceTile>("essence", ResourcefulFurnaceConfig.maxEssenceTankSize, 132, 20, 2).
                 setColor(DyeColor.LIME).
-                setTankAction(FluidTankComponent.Action.DRAIN));
+                setComponentHarness(this));
         this.recipes = new FurnaceRecipe[3];
         this.getPowerPerTick = ResourcefulFurnaceConfig.powerPerTick;
     }
