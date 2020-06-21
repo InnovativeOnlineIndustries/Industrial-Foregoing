@@ -1,5 +1,7 @@
 package com.buuz135.industrial.block.tile;
 
+import com.buuz135.industrial.item.addon.EfficiencyAddonItem;
+import com.buuz135.industrial.item.addon.SpeedAddonItem;
 import com.hrznstudio.titanium.annotation.Save;
 import com.hrznstudio.titanium.block.BasicTileBlock;
 import com.hrznstudio.titanium.block.tile.MachineTile;
@@ -22,9 +24,15 @@ public abstract class IndustrialProcessingTile<T extends IndustrialProcessingTil
                 setComponentHarness(this.getSelf()).
                 setBarDirection(ProgressBarComponent.BarDirection.HORIZONTAL_RIGHT).
                 setCanReset(tileEntity -> true).
-                setOnStart(() -> progressBar.setMaxProgress(getMaxProgress())).
+                setOnStart(() -> {
+                    int maxProgress = (int) Math.floor(getMaxProgress() * (this.hasAugmentInstalled(EfficiencyAddonItem.EFFICIENCY) ? (1 - (0.1 * this.getInstalledAugments(EfficiencyAddonItem.EFFICIENCY).get(0).getAugmentRatio())) : 1));
+                    progressBar.setMaxProgress(maxProgress);
+                }).
                 setCanIncrease(tileEntity -> getEnergyStorage().getEnergyStored() > getTickPower() && canIncrease()).
-                setOnTickWork(() -> getEnergyStorage().extractEnergyForced(getTickPower())).
+                setOnTickWork(() -> {
+                    getEnergyStorage().extractEnergyForced(getTickPower());
+                    progressBar.setProgressIncrease(this.hasAugmentInstalled(SpeedAddonItem.SPEED) ? (int) this.getInstalledAugments(SpeedAddonItem.SPEED).get(0).getAugmentRatio() + 1 : 1);
+                }).
                 setOnFinishWork(() -> onFinish().run())
         );
     }

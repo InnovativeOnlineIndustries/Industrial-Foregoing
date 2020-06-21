@@ -1,5 +1,6 @@
 package com.buuz135.industrial.item.addon;
 
+import com.buuz135.industrial.block.tile.IndustrialProcessingTile;
 import com.buuz135.industrial.block.tile.IndustrialWorkingTile;
 import com.buuz135.industrial.item.IFCustomItem;
 import com.buuz135.industrial.module.ModuleCore;
@@ -58,7 +59,7 @@ public class EfficiencyAddonItem extends IFCustomItem implements IAugment {
 
     @Override
     public boolean canWorkIn(IMachine machine) {
-        return !machine.hasAugmentInstalled(EFFICIENCY) && machine instanceof IndustrialWorkingTile;
+        return !machine.hasAugmentInstalled(EFFICIENCY) && (machine instanceof IndustrialWorkingTile || machine instanceof IndustrialProcessingTile);
     }
 
     @Override
