@@ -49,7 +49,7 @@ public class BookManualItem extends IFCustomItem {
 
     @Override
     public ActionResult<ItemStack> onItemRightClick(World worldIn, PlayerEntity playerIn, Hand handIn) {
-        BlockPos pos = playerIn.getPosition();
+        BlockPos pos = playerIn.func_233580_cy_();
         if (playerIn.isCrouching()) {
             RayTraceResult result = rayTrace(worldIn, playerIn, RayTraceContext.FluidMode.NONE);
             if (result != null && result.getType() == RayTraceResult.Type.BLOCK) {
@@ -73,7 +73,7 @@ public class BookManualItem extends IFCustomItem {
     @Override
     public void addTooltipDetails(@Nullable Key key, ItemStack stack, List<ITextComponent> tooltip, boolean advanced) {
         if (key == null) {
-            tooltip.add(new StringTextComponent("Not implemented yet! Coming soon!").applyTextStyle(TextFormatting.RED));
+            tooltip.add(new StringTextComponent("Not implemented yet! Coming soon!").func_240699_a_(TextFormatting.RED));
         }
         super.addTooltipDetails(key, stack, tooltip, advanced);
     }

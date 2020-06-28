@@ -22,6 +22,8 @@
 package com.buuz135.industrial.api.conveyor.gui;
 
 import com.buuz135.industrial.gui.conveyor.GuiConveyor;
+import com.mojang.blaze3d.matrix.MatrixStack;
+import net.minecraft.util.text.ITextProperties;
 
 import javax.annotation.Nullable;
 import java.util.List;
@@ -38,14 +40,14 @@ public interface IGuiComponent {
 
     boolean handleClick(GuiConveyor conveyor, int guiX, int guiY, double mouseX, double mouseY);
 
-    void drawGuiBackgroundLayer(int guiX, int guiY, double mouseX, double mouseY);
+    void drawGuiBackgroundLayer(MatrixStack stack, int guiX, int guiY, double mouseX, double mouseY);
 
-    void drawGuiForegroundLayer(int guiX, int guiY, double mouseX, double mouseY);
+    void drawGuiForegroundLayer(MatrixStack stack, int guiX, int guiY, double mouseX, double mouseY);
 
     default boolean isInside(double mouseX, double mouseY) {
         return mouseX > getXPos() && mouseX < getXPos() + getXSize() && mouseY > getYPos() && mouseY < getYPos() + getYSize();
     }
 
     @Nullable
-    List<String> getTooltip(int guiX, int guiY, double mouseX, double mouseY);
+    List<? extends ITextProperties> getTooltip(int guiX, int guiY, double mouseX, double mouseY);
 }

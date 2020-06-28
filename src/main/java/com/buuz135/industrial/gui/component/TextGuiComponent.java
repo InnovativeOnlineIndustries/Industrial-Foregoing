@@ -24,7 +24,9 @@ package com.buuz135.industrial.gui.component;
 
 import com.buuz135.industrial.api.conveyor.gui.PositionedGuiComponent;
 import com.buuz135.industrial.gui.conveyor.GuiConveyor;
+import com.mojang.blaze3d.matrix.MatrixStack;
 import net.minecraft.client.Minecraft;
+import net.minecraft.util.text.ITextProperties;
 
 import javax.annotation.Nullable;
 import java.util.List;
@@ -41,18 +43,18 @@ public abstract class TextGuiComponent extends PositionedGuiComponent {
     }
 
     @Override
-    public void drawGuiBackgroundLayer(int guiX, int guiY, double mouseX, double mouseY) {
-        Minecraft.getInstance().fontRenderer.drawString(getText(), guiX + getXPos(), guiY + getYPos(), 0xffffff);
+    public void drawGuiBackgroundLayer(MatrixStack stack, int guiX, int guiY, double mouseX, double mouseY) {
+        Minecraft.getInstance().fontRenderer.func_238405_a_(stack, getText(), guiX + getXPos(), guiY + getYPos(), 0xffffff);
     }
 
     @Override
-    public void drawGuiForegroundLayer(int guiX, int guiY, double mouseX, double mouseY) {
+    public void drawGuiForegroundLayer(MatrixStack stack, int guiX, int guiY, double mouseX, double mouseY) {
 
     }
 
     @Nullable
     @Override
-    public List<String> getTooltip(int guiX, int guiY, double mouseX, double mouseY) {
+    public List<ITextProperties> getTooltip(int guiX, int guiY, double mouseX, double mouseY) {
         return null;
     }
 

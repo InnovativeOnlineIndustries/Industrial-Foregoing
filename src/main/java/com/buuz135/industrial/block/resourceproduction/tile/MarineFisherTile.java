@@ -9,15 +9,15 @@ import com.hrznstudio.titanium.annotation.Save;
 import com.hrznstudio.titanium.api.IFactory;
 import com.hrznstudio.titanium.component.inventory.SidedInventoryComponent;
 import com.hrznstudio.titanium.energy.NBTEnergyHandler;
+import net.minecraft.fluid.FluidState;
 import net.minecraft.fluid.Fluids;
-import net.minecraft.fluid.IFluidState;
 import net.minecraft.item.DyeColor;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
+import net.minecraft.loot.*;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.shapes.VoxelShape;
 import net.minecraft.world.server.ServerWorld;
-import net.minecraft.world.storage.loot.*;
 import net.minecraftforge.items.ItemHandlerHelper;
 
 import javax.annotation.Nonnull;
@@ -76,7 +76,7 @@ public class MarineFisherTile extends IndustrialAreaWorkingTile<MarineFisherTile
         int amount = 0;
         for (BlockPos pos : BlockUtils.getBlockPosInAABB(getWorkingArea().getBoundingBox())) {
             if (!world.isAreaLoaded(pos, pos)) continue;
-            IFluidState fluidState = this.world.getFluidState(pos);
+            FluidState fluidState = this.world.getFluidState(pos);
             if (fluidState.getFluid().equals(Fluids.WATER) && fluidState.isSource()) {
                 ++amount;
             }

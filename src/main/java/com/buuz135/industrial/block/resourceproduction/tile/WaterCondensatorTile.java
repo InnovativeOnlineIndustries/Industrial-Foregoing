@@ -8,8 +8,8 @@ import com.hrznstudio.titanium.api.IFactory;
 import com.hrznstudio.titanium.component.fluid.FluidTankComponent;
 import com.hrznstudio.titanium.component.fluid.SidedFluidTankComponent;
 import com.hrznstudio.titanium.energy.NBTEnergyHandler;
+import net.minecraft.fluid.FluidState;
 import net.minecraft.fluid.Fluids;
-import net.minecraft.fluid.IFluidState;
 import net.minecraft.item.DyeColor;
 import net.minecraft.util.Direction;
 import net.minecraftforge.fluids.FluidStack;
@@ -65,7 +65,7 @@ public class WaterCondensatorTile extends IndustrialWorkingTile<WaterCondensator
         int amount = 0;
         for (Direction value : Direction.values()) {
             if (!world.isAreaLoaded(this.pos.offset(value), this.pos.offset(value))) continue;
-            IFluidState fluidState = this.world.getFluidState(this.pos.offset(value));
+            FluidState fluidState = this.world.getFluidState(this.pos.offset(value));
             if (fluidState.getFluid().equals(Fluids.WATER) && fluidState.isSource()) {
                 ++amount;
             }

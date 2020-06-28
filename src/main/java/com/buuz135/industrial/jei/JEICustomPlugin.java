@@ -52,7 +52,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.Rectangle2d;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.tags.Tag;
+import net.minecraft.tags.ITag;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fluids.FluidStack;
 
@@ -187,8 +187,8 @@ public class JEICustomPlugin implements IModPlugin {
 
     private List<BioReactorRecipeCategory.ReactorRecipeWrapper> generateBioreactorRecipes() {
         List<BioReactorRecipeCategory.ReactorRecipeWrapper> recipes = new ArrayList<>();
-        for (Tag<Item> itemTag : BioReactorTile.VALID) {
-            for (Item item : itemTag.getAllElements()) {
+        for (ITag.INamedTag<Item> itemTag : BioReactorTile.VALID) {
+            for (Item item : itemTag.func_230236_b_()) {
                 recipes.add(new BioReactorRecipeCategory.ReactorRecipeWrapper(new ItemStack(item), new FluidStack(ModuleCore.BIOFUEL.getSourceFluid(), 80)));
             }
         }

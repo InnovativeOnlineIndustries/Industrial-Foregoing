@@ -106,7 +106,7 @@ public class ConveyorDroppingUpgrade extends ConveyorUpgrade {
         if (space) {
             entity.setMotion(0, 0, 0);
             entity.setPosition(pos.getX() + 0.5, pos.getY() - 0.1, pos.getZ() + 0.5);
-            entity.onGround = false;
+            //entity.onGround = false;
         }
     }
 

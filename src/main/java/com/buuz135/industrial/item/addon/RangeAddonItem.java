@@ -38,12 +38,12 @@ public class RangeAddonItem extends IFCustomItem implements IAugment {
 
     @Override
     public String getTranslationKey() {
-        return new TranslationTextComponent("item.industrialforegoing.addon").getFormattedText() + new TranslationTextComponent("item.industrialforegoing.range_addon").getFormattedText() + "Tier " + (tier + 1) + " ";
+        return new TranslationTextComponent("item.industrialforegoing.addon").getString() + new TranslationTextComponent("item.industrialforegoing.range_addon").getString() + "Tier " + (tier + 1) + " ";
     }
 
     @Override
     public void addTooltipDetails(@Nullable Key key, ItemStack stack, List<ITextComponent> tooltip, boolean advanced) {
-        tooltip.add(new StringTextComponent(TextFormatting.GRAY + new TranslationTextComponent("text.industrialforegoing.extra_range").getFormattedText() + "+" + (tier + 1)));
+        tooltip.add(new StringTextComponent(TextFormatting.GRAY + new TranslationTextComponent("text.industrialforegoing.extra_range").getString() + "+" + (tier + 1)));
     }
 
     @Override

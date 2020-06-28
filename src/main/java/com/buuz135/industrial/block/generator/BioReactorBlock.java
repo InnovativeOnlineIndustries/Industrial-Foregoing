@@ -10,7 +10,6 @@ import net.minecraft.block.Blocks;
 import net.minecraft.data.IFinishedRecipe;
 import net.minecraft.item.Items;
 import net.minecraft.tags.ItemTags;
-import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.common.Tags;
 
 import javax.annotation.Nonnull;
@@ -38,7 +37,7 @@ public class BioReactorBlock extends IndustrialBlock<BioReactorTile> {
         TitaniumShapedRecipeBuilder.shapedRecipe(this)
                 .patternLine("PDP").patternLine("SMS").patternLine("ARA")
                 .key('P', IndustrialTags.Items.PLASTIC)
-                .key('D', new ItemTags.Wrapper(new ResourceLocation("forge:gear/diamond")))
+                .key('D', ItemTags.makeWrapperTag("forge:gear/diamond"))
                 .key('S', Tags.Items.SLIMEBALLS)
                 .key('A', Items.BRICK)
                 .key('M', IndustrialTags.Items.MACHINE_FRAME_PITY)

@@ -71,12 +71,15 @@ public class MobImprisonmentToolItem extends IFCustomItem {
     }
 
     @Override
-    public boolean itemInteractionForEntity(ItemStack stack, PlayerEntity playerIn, LivingEntity target, Hand hand) {
-        if (target.getEntityWorld().isRemote) return false;
-        if (target instanceof PlayerEntity || !target.isNonBoss() || !target.isAlive()) return false;
-        if (containsEntity(stack)) return false;
+    public ActionResultType itemInteractionForEntity(ItemStack stack, PlayerEntity playerIn, LivingEntity target, Hand hand) {
+        if (target.getEntityWorld().isRemote) return ActionResultType.FAIL;
+        if (target instanceof PlayerEntity || !target.isNonBoss() || !target.isAlive()) return ActionResultType.FAIL;
+        ;
+        if (containsEntity(stack)) return ActionResultType.FAIL;
+        ;
         String entityID = EntityType.getKey(target.getType()).toString();
-        if (isBlacklisted(entityID)) return false;
+        if (isBlacklisted(entityID)) return ActionResultType.FAIL;
+        ;
         CompoundNBT nbt = new CompoundNBT();
         nbt.putString("entity", entityID);
         target.writeWithoutTypeId(nbt);
@@ -84,7 +87,7 @@ public class MobImprisonmentToolItem extends IFCustomItem {
         playerIn.swingArm(hand);
         playerIn.setHeldItem(hand, stack);
         target.remove(true);
-        return true;
+        return ActionResultType.SUCCESS;
     }
 
     public boolean isBlacklisted(String entity) {
@@ -130,7 +133,7 @@ public class MobImprisonmentToolItem extends IFCustomItem {
     public ITextComponent getDisplayName(ItemStack stack) {
         if (!containsEntity(stack))
             return new TranslationTextComponent(super.getTranslationKey(stack));
-        return new TranslationTextComponent(super.getTranslationKey(stack)).appendText(" (" + getID(stack) + ")");
+        return new TranslationTextComponent(super.getTranslationKey(stack)).func_240702_b_(" (" + getID(stack) + ")");
     }
 
     @Override

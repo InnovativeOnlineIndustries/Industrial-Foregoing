@@ -9,7 +9,6 @@ import com.hrznstudio.titanium.recipe.generator.TitaniumShapedRecipeBuilder;
 import net.minecraft.block.Blocks;
 import net.minecraft.data.IFinishedRecipe;
 import net.minecraft.tags.ItemTags;
-import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.common.Tags;
 
 import javax.annotation.Nonnull;
@@ -39,7 +38,7 @@ public class DyeMixerBlock extends IndustrialBlock<DyeMixerTile> {
                 .key('P', IndustrialTags.Items.PLASTIC)
                 .key('D', Tags.Items.DYES)
                 .key('M', IndustrialTags.Items.MACHINE_FRAME_PITY)
-                .key('R', new ItemTags.Wrapper(new ResourceLocation("forge:gear/gold")))
+                .key('R', ItemTags.makeWrapperTag("forge:gear/gold"))
                 .build(consumer);
     }
 }

@@ -29,7 +29,7 @@ import net.minecraft.util.Direction;
 import net.minecraft.util.Hand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.BlockRayTraceResult;
-import net.minecraft.util.math.Vec3d;
+import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.world.World;
 import net.minecraft.world.server.ServerWorld;
 import net.minecraftforge.common.ForgeHooks;
@@ -54,6 +54,6 @@ public class IFFakePlayer extends FakePlayer {
 
     public boolean placeBlock(World world, BlockPos pos, ItemStack stack) {
         this.setHeldItem(Hand.MAIN_HAND, stack);
-        return ForgeHooks.onPlaceItemIntoWorld(new ItemUseContext(this, Hand.MAIN_HAND, new BlockRayTraceResult(new Vec3d(0, 0, 0), Direction.DOWN, pos, false))) == ActionResultType.SUCCESS;
+        return ForgeHooks.onPlaceItemIntoWorld(new ItemUseContext(this, Hand.MAIN_HAND, new BlockRayTraceResult(new Vector3d(0, 0, 0), Direction.DOWN, pos, false))) == ActionResultType.SUCCESS;
     }
 }

@@ -49,7 +49,7 @@ public class WaterStrawHandler extends StrawHandlerBase {
         if (tag.contains("lavaDrink") && world.getGameTime() - tag.getLong("lavaDrink") < 120) { //6 Seconds to drink water after drinking lava to create obsidian
             player.entityDropItem(new ItemStack(Blocks.OBSIDIAN), player.getEyeHeight());
             tag.putLong("lavaDrink", 0);
-            world.playSound(null, player.getPosition().getX(), player.getPosition().getY(), player.getPosition().getZ(), SoundEvents.ENTITY_PLAYER_BURP, SoundCategory.PLAYERS, 1.5F, world.rand.nextFloat() * 0.1F + 0.9F);
+            world.playSound(null, player.func_233580_cy_().getX(), player.func_233580_cy_().getY(), player.func_233580_cy_().getZ(), SoundEvents.ENTITY_PLAYER_BURP, SoundCategory.PLAYERS, 1.5F, world.rand.nextFloat() * 0.1F + 0.9F);
         }
     }
 

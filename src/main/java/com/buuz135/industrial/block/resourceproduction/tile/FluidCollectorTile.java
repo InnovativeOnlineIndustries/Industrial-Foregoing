@@ -45,7 +45,7 @@ public class FluidCollectorTile extends IndustrialAreaWorkingTile<FluidCollector
             if (isLoaded(getPointedBlockPos()) && !world.isAirBlock(getPointedBlockPos()) && BlockUtils.canBlockBeBroken(this.world, getPointedBlockPos()) && world.getFluidState(getPointedBlockPos()).isSource()) {
                 Fluid fluid = world.getFluidState(getPointedBlockPos()).getFluid();
                 if (tank.isEmpty() || (tank.getFluid().getFluid().isEquivalentTo(fluid) && tank.getFluidAmount() + FluidAttributes.BUCKET_VOLUME <= tank.getCapacity())) {
-                    if (world.getBlockState(getPointedBlockPos()).has(BlockStateProperties.WATERLOGGED)) {
+                    if (world.getBlockState(getPointedBlockPos()).func_235901_b_(BlockStateProperties.WATERLOGGED)) { //has
                         world.setBlockState(getPointedBlockPos(), world.getBlockState(getPointedBlockPos()).with(BlockStateProperties.WATERLOGGED, false));
                     } else {
                         world.setBlockState(getPointedBlockPos(), Blocks.AIR.getDefaultState());

@@ -25,9 +25,12 @@ import com.buuz135.industrial.api.conveyor.gui.PositionedGuiComponent;
 import com.buuz135.industrial.gui.conveyor.GuiConveyor;
 import com.buuz135.industrial.proxy.block.filter.IFilter;
 import com.buuz135.industrial.utils.Reference;
+import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.systems.RenderSystem;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.AbstractGui;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.text.ITextComponent;
 
 import javax.annotation.Nullable;
 import java.util.List;
@@ -58,7 +61,7 @@ public abstract class FilterGuiComponent extends PositionedGuiComponent {
     }
 
     @Override
-    public void drawGuiBackgroundLayer(int guiX, int guiY, double mouseX, double mouseY) {
+    public void drawGuiBackgroundLayer(MatrixStack stack, int guiX, int guiY, double mouseX, double mouseY) {
         RenderSystem.color4f(1, 1, 1, 1);
         int pos = 0;
         for (int i = 0; i < getYSize(); i++) {
@@ -66,9 +69,9 @@ public abstract class FilterGuiComponent extends PositionedGuiComponent {
                 int posX = guiX + getXPos() + x * 18;
                 int posY = guiY + getXPos() + i * 18;
                 Minecraft.getInstance().getTextureManager().bindTexture(BG_TEXTURE);
-                Minecraft.getInstance().currentScreen.blit(posX, posY, 176, 0, 18, 18);
+                Minecraft.getInstance().currentScreen.func_238474_b_(stack, posX, posY, 176, 0, 18, 18); //blit
                 if (!getFilter().getFilter()[pos].getStack().isEmpty()) {
-                    RenderSystem.setupGui3DDiffuseLighting();
+                    //RenderSystem.setupGui3DDiffuseLighting();
                     Minecraft.getInstance().getItemRenderer().renderItemIntoGUI(getFilter().getFilter()[pos].getStack(), posX + 1, posY + 1);
                 }
                 ++pos;
@@ -77,7 +80,7 @@ public abstract class FilterGuiComponent extends PositionedGuiComponent {
     }
 
     @Override
-    public void drawGuiForegroundLayer(int guiX, int guiY, double mouseX, double mouseY) {
+    public void drawGuiForegroundLayer(MatrixStack stack, int guiX, int guiY, double mouseX, double mouseY) {
         RenderSystem.color4f(1, 1, 1, 1);
         for (int i = 0; i < getYSize(); i++) {
             for (int x = 0; x < getXSize(); x++) {
@@ -86,7 +89,7 @@ public abstract class FilterGuiComponent extends PositionedGuiComponent {
                 if (mouseX > posX + 1 && mouseX < posX + 1 + 16 && mouseY > posY + 1 && mouseY < posY + 1 + 16) {
                     RenderSystem.disableLighting();
                     RenderSystem.disableDepthTest();
-                    Minecraft.getInstance().currentScreen.fill(posX + 1 - guiX, posY + 1 - guiY, posX + 17 - guiX, posY + 17 - guiY, -2130706433);
+                    AbstractGui.func_238467_a_(stack, posX + 1 - guiX, posY + 1 - guiY, posX + 17 - guiX, posY + 17 - guiY, -2130706433); //fill
                     RenderSystem.enableLighting();
                     RenderSystem.enableDepthTest();
                     return;
@@ -104,14 +107,14 @@ public abstract class FilterGuiComponent extends PositionedGuiComponent {
 
     @Nullable
     @Override
-    public List<String> getTooltip(int guiX, int guiY, double mouseX, double mouseY) {
+    public List<ITextComponent> getTooltip(int guiX, int guiY, double mouseX, double mouseY) {
         int pos = 0;
         for (int i = 0; i < getYSize(); i++) {
             for (int x = 0; x < getXSize(); x++) {
                 int posX = guiX + getXPos() + x * 18;
                 int posY = guiY + getXPos() + i * 18;
                 if (mouseX > posX + 1 && mouseX < posX + 1 + 16 && mouseY > posY + 1 && mouseY < posY + 1 + 16 && !getFilter().getFilter()[pos].getStack().isEmpty()) {
-                    return Minecraft.getInstance().currentScreen.getTooltipFromItem(getFilter().getFilter()[pos].getStack());
+                    return Minecraft.getInstance().currentScreen.func_231151_a_(getFilter().getFilter()[pos].getStack());
                 }
                 ++pos;
             }

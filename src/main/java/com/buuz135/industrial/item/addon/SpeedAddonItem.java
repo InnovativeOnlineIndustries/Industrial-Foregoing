@@ -15,7 +15,7 @@ import net.minecraft.item.ItemGroup;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.item.crafting.Ingredient;
-import net.minecraft.tags.Tag;
+import net.minecraft.tags.ITag;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraftforge.fluids.FluidStack;
 
@@ -34,7 +34,7 @@ public class SpeedAddonItem extends IFCustomItem implements IAugment {
 
     @Override
     public void registerRecipe(Consumer<IFinishedRecipe> consumer) {
-        Tag<Item> tierMaterial = tier == 1 ? IndustrialTags.Items.GEAR_GOLD : IndustrialTags.Items.GEAR_DIAMOND;
+        ITag.INamedTag<Item> tierMaterial = tier == 1 ? IndustrialTags.Items.GEAR_GOLD : IndustrialTags.Items.GEAR_DIAMOND;
         new DissolutionChamberRecipe(getRegistryName(), new Ingredient.IItemList[]{
                 new Ingredient.SingleItemList(new ItemStack(Items.REDSTONE)),
                 new Ingredient.SingleItemList(new ItemStack(Items.REDSTONE)),
@@ -64,6 +64,6 @@ public class SpeedAddonItem extends IFCustomItem implements IAugment {
 
     @Override
     public String getTranslationKey() {
-        return new TranslationTextComponent("item.industrialforegoing.addon").getFormattedText() + new TranslationTextComponent("item.industrialforegoing.speed").getFormattedText() + "Tier " + tier + " ";
+        return new TranslationTextComponent("item.industrialforegoing.addon").getString() + new TranslationTextComponent("item.industrialforegoing.speed").getString() + "Tier " + tier + " ";
     }
 }

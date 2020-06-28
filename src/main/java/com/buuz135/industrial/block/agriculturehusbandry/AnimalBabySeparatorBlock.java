@@ -10,7 +10,6 @@ import net.minecraft.block.Blocks;
 import net.minecraft.data.IFinishedRecipe;
 import net.minecraft.item.Items;
 import net.minecraft.tags.ItemTags;
-import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.common.Tags;
 
 import javax.annotation.Nonnull;
@@ -40,7 +39,7 @@ public class AnimalBabySeparatorBlock extends IndustrialBlock<AnimalBabySeparato
                 .key('P', IndustrialTags.Items.PLASTIC)
                 .key('A', Items.GOLDEN_CARROT)
                 .key('C', Items.WHEAT)
-                .key('G', new ItemTags.Wrapper(new ResourceLocation("forge:gear/gold")))
+                .key('G', ItemTags.makeWrapperTag("forge:gear/gold"))
                 .key('D', Tags.Items.DYES_PURPLE)
                 .key('M', IndustrialTags.Items.MACHINE_FRAME_PITY)
                 .build(consumer);

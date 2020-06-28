@@ -53,6 +53,7 @@ import net.minecraft.client.renderer.entity.EntityRendererManager;
 import net.minecraft.item.crafting.IRecipeSerializer;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.DimensionType;
 import net.minecraft.world.World;
 import net.minecraft.world.server.ServerWorld;
 import net.minecraftforge.api.distmarker.Dist;
@@ -75,7 +76,7 @@ import java.util.UUID;
 public class IndustrialForegoing extends ModuleController {
 
     private static CommonProxy proxy;
-    private static HashMap<Integer, IFFakePlayer> worldFakePlayer = new HashMap<>();
+    private static HashMap<DimensionType, IFFakePlayer> worldFakePlayer = new HashMap<>();
     public static NetworkHandler NETWORK = new NetworkHandler(Reference.MOD_ID);
 
     static {
@@ -105,11 +106,11 @@ public class IndustrialForegoing extends ModuleController {
     }
 
     public static FakePlayer getFakePlayer(World world) {
-        if (worldFakePlayer.containsKey(world.dimension.getType().getId()))
-            return worldFakePlayer.get(world.dimension.getType().getId());
+        if (worldFakePlayer.containsKey(world.func_230315_m_()))
+            return worldFakePlayer.get(world.func_230315_m_());
         if (world instanceof ServerWorld) {
             IFFakePlayer fakePlayer = new IFFakePlayer((ServerWorld) world);
-            worldFakePlayer.put(world.dimension.getType().getId(), fakePlayer);
+            worldFakePlayer.put(world.func_230315_m_(), fakePlayer);
             return fakePlayer;
         }
         return null;

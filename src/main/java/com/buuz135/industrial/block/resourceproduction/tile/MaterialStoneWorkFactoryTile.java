@@ -18,6 +18,7 @@ import com.hrznstudio.titanium.energy.NBTEnergyHandler;
 import com.hrznstudio.titanium.util.AssetUtil;
 import com.hrznstudio.titanium.util.LangUtil;
 import com.hrznstudio.titanium.util.RecipeUtil;
+import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.systems.RenderSystem;
 import net.minecraft.block.Blocks;
 import net.minecraft.client.Minecraft;
@@ -28,6 +29,8 @@ import net.minecraft.item.DyeColor;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.item.crafting.FurnaceRecipe;
+import net.minecraft.util.text.ITextProperties;
+import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.World;
 import net.minecraftforge.fluids.capability.IFluidHandler;
@@ -111,25 +114,25 @@ public class MaterialStoneWorkFactoryTile extends IndustrialProcessingTile<Mater
             public List<IFactory<? extends IScreenAddon>> getScreenAddons() {
                 return Collections.singletonList(() -> new BasicButtonAddon(this) {
                     @Override
-                    public void drawBackgroundLayer(Screen screen, IAssetProvider provider, int guiX, int guiY, int mouseX, int mouseY, float partialTicks) {
-                        AssetUtil.drawAsset(screen, provider.getAsset(AssetTypes.ITEM_BACKGROUND), guiX + getPosX(), guiY + getPosY());
-                        RenderSystem.setupGui3DDiffuseLighting();
+                    public void drawBackgroundLayer(MatrixStack stack, Screen screen, IAssetProvider provider, int guiX, int guiY, int mouseX, int mouseY, float partialTicks) {
+                        AssetUtil.drawAsset(stack, screen, provider.getAsset(AssetTypes.ITEM_BACKGROUND), guiX + getPosX(), guiY + getPosY());
+                        //RenderSystem.setupGui3DDiffuseLighting();
                         Minecraft.getInstance().getItemRenderer().renderItemIntoGUI(GENERATOR_RECIPES[generatorRecipeId].output, guiX + getPosX() + 1, guiY + getPosY() + 1);
                         RenderHelper.disableStandardItemLighting();
                         RenderSystem.enableAlphaTest();
                     }
 
                     @Override
-                    public List<String> getTooltipLines() {
+                    public List<ITextProperties> getTooltipLines() {
                         GeneratorRecipe recipe = GENERATOR_RECIPES[generatorRecipeId];
-                        List<String> lines = new ArrayList<>();
-                        lines.add(TextFormatting.GOLD + LangUtil.get("tooltip.industrialforegoing.generating") + TextFormatting.WHITE + recipe.output.getDisplayName().getFormattedText());
-                        lines.add(TextFormatting.GOLD + LangUtil.get("tooltip.industrialforegoing.needs"));
-                        lines.add(TextFormatting.YELLOW + " - " + TextFormatting.WHITE + recipe.needsWater + TextFormatting.DARK_AQUA + LangUtil.get("tooltip.industrialforegoing.mb_of", LangUtil.get("block.minecraft.water")));
-                        lines.add(TextFormatting.YELLOW + " - " + TextFormatting.WHITE + recipe.needsLava + TextFormatting.DARK_AQUA + LangUtil.get("tooltip.industrialforegoing.mb_of", LangUtil.get("block.minecraft.lava")));
-                        lines.add(TextFormatting.GOLD + LangUtil.get("tooltip.industrialforegoing.consumes"));
-                        lines.add(TextFormatting.YELLOW + " - " + TextFormatting.WHITE + recipe.consumeWater + TextFormatting.DARK_AQUA + LangUtil.get("tooltip.industrialforegoing.mb_of", LangUtil.get("block.minecraft.water")));
-                        lines.add(TextFormatting.YELLOW + " - " + TextFormatting.WHITE + recipe.consumeLava + TextFormatting.DARK_AQUA + LangUtil.get("tooltip.industrialforegoing.mb_of", LangUtil.get("block.minecraft.lava")));
+                        List<ITextProperties> lines = new ArrayList<>();
+                        lines.add(new StringTextComponent(TextFormatting.GOLD + LangUtil.getString("tooltip.industrialforegoing.generating") + TextFormatting.WHITE + recipe.output.getDisplayName()));
+                        lines.add(new StringTextComponent(TextFormatting.GOLD + LangUtil.getString("tooltip.industrialforegoing.needs")));
+                        lines.add(new StringTextComponent(TextFormatting.YELLOW + " - " + TextFormatting.WHITE + recipe.needsWater + TextFormatting.DARK_AQUA + LangUtil.get("tooltip.industrialforegoing.mb_of", LangUtil.get("block.minecraft.water"))));
+                        lines.add(new StringTextComponent(TextFormatting.YELLOW + " - " + TextFormatting.WHITE + recipe.needsLava + TextFormatting.DARK_AQUA + LangUtil.get("tooltip.industrialforegoing.mb_of", LangUtil.get("block.minecraft.lava"))));
+                        lines.add(new StringTextComponent(TextFormatting.GOLD + LangUtil.getString("tooltip.industrialforegoing.consumes")));
+                        lines.add(new StringTextComponent(TextFormatting.YELLOW + " - " + TextFormatting.WHITE + recipe.consumeWater + TextFormatting.DARK_AQUA + LangUtil.get("tooltip.industrialforegoing.mb_of", LangUtil.get("block.minecraft.water"))));
+                        lines.add(new StringTextComponent(TextFormatting.YELLOW + " - " + TextFormatting.WHITE + recipe.consumeLava + TextFormatting.DARK_AQUA + LangUtil.get("tooltip.industrialforegoing.mb_of", LangUtil.get("block.minecraft.lava"))));
                         return lines;
                     }
                 });
@@ -162,18 +165,18 @@ public class MaterialStoneWorkFactoryTile extends IndustrialProcessingTile<Mater
             public List<IFactory<? extends IScreenAddon>> getScreenAddons() {
                 return Collections.singletonList(() -> new BasicButtonAddon(this) {
                     @Override
-                    public void drawBackgroundLayer(Screen screen, IAssetProvider provider, int guiX, int guiY, int mouseX, int mouseY, float partialTicks) {
-                        AssetUtil.drawAsset(screen, provider.getAsset(AssetTypes.ITEM_BACKGROUND), guiX + getPosX(), guiY + getPosY());
-                        RenderSystem.setupGui3DDiffuseLighting();
+                    public void drawBackgroundLayer(MatrixStack stack, Screen screen, IAssetProvider provider, int guiX, int guiY, int mouseX, int mouseY, float partialTicks) {
+                        AssetUtil.drawAsset(stack, screen, provider.getAsset(AssetTypes.ITEM_BACKGROUND), guiX + getPosX(), guiY + getPosY());
+                        //RenderSystem.setupGui3DDiffuseLighting();
                         Minecraft.getInstance().getItemRenderer().renderItemIntoGUI(ACTION_RECIPES[firstRecipeId].icon, guiX + getPosX() + 1, guiY + getPosY() + 1);
                         RenderHelper.disableStandardItemLighting();
                         RenderSystem.enableAlphaTest();
                     }
 
                     @Override
-                    public List<String> getTooltipLines() {
-                        List<String> lines = new ArrayList<>();
-                        lines.add(TextFormatting.GOLD + LangUtil.get("tooltip.industrialforegoing.action") + TextFormatting.WHITE + LangUtil.get("tooltip.industrialforegoing.stonework." + ACTION_RECIPES[firstRecipeId].getAction()));
+                    public List<ITextProperties> getTooltipLines() {
+                        List<ITextProperties> lines = new ArrayList<>();
+                        lines.add(new StringTextComponent(TextFormatting.GOLD + LangUtil.getString("tooltip.industrialforegoing.action") + TextFormatting.WHITE + LangUtil.getString("tooltip.industrialforegoing.stonework." + ACTION_RECIPES[firstRecipeId].getAction())));
                         return lines;
                     }
                 });
@@ -187,18 +190,18 @@ public class MaterialStoneWorkFactoryTile extends IndustrialProcessingTile<Mater
             public List<IFactory<? extends IScreenAddon>> getScreenAddons() {
                 return Collections.singletonList(() -> new BasicButtonAddon(this) {
                     @Override
-                    public void drawBackgroundLayer(Screen screen, IAssetProvider provider, int guiX, int guiY, int mouseX, int mouseY, float partialTicks) {
-                        AssetUtil.drawAsset(screen, provider.getAsset(AssetTypes.ITEM_BACKGROUND), guiX + getPosX(), guiY + getPosY());
-                        RenderSystem.setupGui3DDiffuseLighting();
+                    public void drawBackgroundLayer(MatrixStack stack, Screen screen, IAssetProvider provider, int guiX, int guiY, int mouseX, int mouseY, float partialTicks) {
+                        AssetUtil.drawAsset(stack, screen, provider.getAsset(AssetTypes.ITEM_BACKGROUND), guiX + getPosX(), guiY + getPosY());
+                        //RenderSystem.setupGui3DDiffuseLighting();
                         Minecraft.getInstance().getItemRenderer().renderItemIntoGUI(ACTION_RECIPES[secondRecipeId].icon, guiX + getPosX() + 1, guiY + getPosY() + 1);
                         RenderHelper.disableStandardItemLighting();
                         RenderSystem.enableAlphaTest();
                     }
 
                     @Override
-                    public List<String> getTooltipLines() {
-                        List<String> lines = new ArrayList<>();
-                        lines.add(TextFormatting.GOLD + LangUtil.get("tooltip.industrialforegoing.action") + TextFormatting.WHITE + LangUtil.get("tooltip.industrialforegoing.stonework." + ACTION_RECIPES[secondRecipeId].getAction()));
+                    public List<ITextProperties> getTooltipLines() {
+                        List<ITextProperties> lines = new ArrayList<>();
+                        lines.add(new StringTextComponent(TextFormatting.GOLD + LangUtil.getString("tooltip.industrialforegoing.action") + TextFormatting.WHITE + LangUtil.getString("tooltip.industrialforegoing.stonework." + ACTION_RECIPES[secondRecipeId].getAction())));
                         return lines;
                     }
                 });
@@ -212,18 +215,18 @@ public class MaterialStoneWorkFactoryTile extends IndustrialProcessingTile<Mater
             public List<IFactory<? extends IScreenAddon>> getScreenAddons() {
                 return Collections.singletonList(() -> new BasicButtonAddon(this) {
                     @Override
-                    public void drawBackgroundLayer(Screen screen, IAssetProvider provider, int guiX, int guiY, int mouseX, int mouseY, float partialTicks) {
-                        AssetUtil.drawAsset(screen, provider.getAsset(AssetTypes.ITEM_BACKGROUND), guiX + getPosX(), guiY + getPosY());
-                        RenderSystem.setupGui3DDiffuseLighting();
+                    public void drawBackgroundLayer(MatrixStack stack, Screen screen, IAssetProvider provider, int guiX, int guiY, int mouseX, int mouseY, float partialTicks) {
+                        AssetUtil.drawAsset(stack, screen, provider.getAsset(AssetTypes.ITEM_BACKGROUND), guiX + getPosX(), guiY + getPosY());
+                        //RenderSystem.setupGui3DDiffuseLighting();
                         Minecraft.getInstance().getItemRenderer().renderItemIntoGUI(ACTION_RECIPES[thirdRecipeId].icon, guiX + getPosX() + 1, guiY + getPosY() + 1);
                         RenderHelper.disableStandardItemLighting();
                         RenderSystem.enableAlphaTest();
                     }
 
                     @Override
-                    public List<String> getTooltipLines() {
-                        List<String> lines = new ArrayList<>();
-                        lines.add(TextFormatting.GOLD + LangUtil.get("tooltip.industrialforegoing.action") + TextFormatting.WHITE + LangUtil.get("tooltip.industrialforegoing.stonework." + ACTION_RECIPES[thirdRecipeId].getAction()));
+                    public List<ITextProperties> getTooltipLines() {
+                        List<ITextProperties> lines = new ArrayList<>();
+                        lines.add(new StringTextComponent(TextFormatting.GOLD + LangUtil.getString("tooltip.industrialforegoing.action") + TextFormatting.WHITE + LangUtil.getString("tooltip.industrialforegoing.stonework." + ACTION_RECIPES[thirdRecipeId].getAction())));
                         return lines;
                     }
                 });

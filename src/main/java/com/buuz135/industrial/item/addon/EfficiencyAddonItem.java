@@ -34,7 +34,7 @@ public class EfficiencyAddonItem extends IFCustomItem implements IAugment {
 
     @Override
     public void registerRecipe(Consumer<IFinishedRecipe> consumer) {
-        Tag<Item> tierMaterial = tier == 1 ? IndustrialTags.Items.GEAR_GOLD : IndustrialTags.Items.GEAR_DIAMOND;
+        Tag.INamedTag<Item> tierMaterial = tier == 1 ? IndustrialTags.Items.GEAR_GOLD : IndustrialTags.Items.GEAR_DIAMOND;
         new DissolutionChamberRecipe(getRegistryName(), new Ingredient.IItemList[]{
                 new Ingredient.SingleItemList(new ItemStack(Items.REDSTONE)),
                 new Ingredient.SingleItemList(new ItemStack(Items.REDSTONE)),
@@ -64,6 +64,6 @@ public class EfficiencyAddonItem extends IFCustomItem implements IAugment {
 
     @Override
     public String getTranslationKey() {
-        return new TranslationTextComponent("item.industrialforegoing.addon").getFormattedText() + new TranslationTextComponent("item.industrialforegoing.efficiency").getFormattedText() + "Tier " + tier + " ";
+        return new TranslationTextComponent("item.industrialforegoing.addon").getString() + new TranslationTextComponent("item.industrialforegoing.efficiency").getString() + "Tier " + tier + " ";
     }
 }

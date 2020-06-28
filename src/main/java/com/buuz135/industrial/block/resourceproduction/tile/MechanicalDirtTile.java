@@ -62,7 +62,7 @@ public class MechanicalDirtTile extends IndustrialWorkingTile<MechanicalDirtTile
     }
 
     private MobEntity getMobToSpawn() {
-        List<Biome.SpawnListEntry> spawnListEntries = ((ServerChunkProvider) world.getChunkProvider()).getChunkGenerator().getPossibleCreatures(EntityClassification.MONSTER, pos);
+        List<Biome.SpawnListEntry> spawnListEntries = ((ServerChunkProvider) world.getChunkProvider()).getChunkGenerator().func_230353_a_(this.world.getBiome(this.pos), null, EntityClassification.MONSTER, pos);
         if (spawnListEntries.size() == 0) return null;
         Biome.SpawnListEntry spawnListEntry = spawnListEntries.get(world.rand.nextInt(spawnListEntries.size()));
         if (!EntitySpawnPlacementRegistry.func_223515_a(spawnListEntry.entityType, this.world, SpawnReason.NATURAL, pos, world.rand))

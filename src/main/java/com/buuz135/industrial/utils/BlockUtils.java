@@ -35,6 +35,7 @@ import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.entity.item.ItemEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tags.BlockTags;
+import net.minecraft.tags.ITag;
 import net.minecraft.tags.Tag;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.Direction;
@@ -74,12 +75,12 @@ public class BlockUtils {
         return false;
     }
 
-    public static boolean isBlockTag(World world, BlockPos pos, Tag<Block> tag) {
+    public static boolean isBlockTag(World world, BlockPos pos, ITag.INamedTag<Block> tag) {
         return isBlockStateTag(world.getBlockState(pos), tag);
     }
 
-    public static boolean isBlockStateTag(BlockState state, Tag<Block> tag) {
-        return state.isIn(tag);
+    public static boolean isBlockStateTag(BlockState state, Tag.INamedTag<Block> tag) {
+        return state.getBlock().isIn(tag);
     }
 
     public static boolean isBlockOreDict(World world, BlockPos pos, String ore) {
@@ -211,7 +212,7 @@ public class BlockUtils {
         buffer.pos(tempX + pointA, tempY, tempZ + pointA).tex(uStart, vStart).endVertex();
         buffer.pos(tempX + pointA, tempY + length, tempZ + pointA).tex(uStart, vEnd).endVertex();
         tess.draw();
-        RenderSystem.setupGui3DDiffuseLighting();
+        //RenderSystem.setupGui3DDiffuseLighting();
         GL11.glEnable(GL11.GL_CULL_FACE);
         //GL11.glEnable(GL11.GL_BLEND);
 

@@ -25,9 +25,10 @@ import com.mojang.blaze3d.vertex.IVertexBuilder;
 import net.minecraft.client.particle.IParticleRenderType;
 import net.minecraft.client.particle.Particle;
 import net.minecraft.client.renderer.ActiveRenderInfo;
+import net.minecraft.client.world.ClientWorld;
 import net.minecraft.entity.Entity;
 import net.minecraft.util.Direction;
-import net.minecraft.util.math.Vec3d;
+import net.minecraft.util.math.vector.Vector3d;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
@@ -40,11 +41,11 @@ public class ParticleVex extends Particle {
 
     private final Entity entity;
     private List<Direction> directions;
-    private List<Vec3d> lines;
+    private List<Vector3d> lines;
     private boolean isDying = false;
 
-    public ParticleVex(Entity entity) {
-        super(entity.world, entity.getPosition().getX() + entity.world.rand.nextDouble() - 0.5, entity.getPosition().getY() + 1 + entity.world.rand.nextDouble() - 0.5, entity.getPosition().getZ() + entity.world.rand.nextDouble() - 0.5);
+    public ParticleVex(Entity entity) { //getPosition
+        super((ClientWorld) entity.world, entity.func_233580_cy_().getX() + entity.world.rand.nextDouble() - 0.5, entity.func_233580_cy_().getY() + 1 + entity.world.rand.nextDouble() - 0.5, entity.func_233580_cy_().getZ() + entity.world.rand.nextDouble() - 0.5);
         this.entity = entity;
         directions = new ArrayList<>();
         Direction prev = Direction.NORTH;
@@ -60,13 +61,13 @@ public class ParticleVex extends Particle {
     @Override
     public void tick() {
         super.tick();
-        if (this.entity.getPosition().distanceSq(posX, posY, posZ, true) > 2) {
+        if (this.entity.func_233580_cy_().distanceSq(posX, posY, posZ, true) > 2) {
             isDying = true;
         }
         if (!isDying) {
             directions.add(0, world.rand.nextDouble() < 0.05 ? getRandomFacing(world.rand, directions.get(0)) : directions.get(0));
             directions.remove(50);
-            Vec3d directionVector = new Vec3d(directions.get(0).getDirectionVec().getX(), directions.get(0).getDirectionVec().getY(), directions.get(0).getDirectionVec().getZ()).scale(0.01);
+            Vector3d directionVector = new Vector3d(directions.get(0).getDirectionVec().getX(), directions.get(0).getDirectionVec().getY(), directions.get(0).getDirectionVec().getZ()).scale(0.01);
             this.setPosition(posX - directionVector.x, posY - directionVector.y, posZ - directionVector.z);
             calculateLines();
         } else {
@@ -99,7 +100,7 @@ public class ParticleVex extends Particle {
     //    //double y = playerEntity.lastTickPosY + (entityIn.getProjectedView().y - playerEntity.lastTickPosY);
     //    //double z = playerEntity.lastTickPosZ + (entityIn.getProjectedView().z - playerEntity.lastTickPosZ);
     //    //buffer.setTranslation(-x, -y, -z);
-    //    //for (Vec3d line : lines) {
+    //    //for (Vector3d line : lines) {
     //    //    buffer.pos(line.x, line.y, line.z).color(1f, 1f, 1f, 1f).endVertex();
     //    //}
     //    //Tessellator.getInstance().draw();
@@ -116,8 +117,8 @@ public class ParticleVex extends Particle {
     }
 
     private Direction getRandomFacing(Random random, Direction opposite) {
-        Direction facing = Direction.random(random);
-        while (facing.getOpposite().equals(opposite)) facing = Direction.random(random);
+        Direction facing = Direction.func_239631_a_(random); //random
+        while (facing.getOpposite().equals(opposite)) facing = Direction.func_239631_a_(random);
         return facing;
     }
 
@@ -126,12 +127,12 @@ public class ParticleVex extends Particle {
         if (directions.size() == 0) return;
         Direction prev = directions.get(0);
         int currentPosition = 0;
-        Vec3d prevBlockPos = new Vec3d(posX, posY, posZ);
+        Vector3d prevBlockPos = new Vector3d(posX, posY, posZ);
         lines.add(prevBlockPos);
         for (int i = 1; i < directions.size(); i++) {
             if (!directions.get(i).equals(prev) || i == directions.size() - 1) {
-                Vec3d directionVector = new Vec3d(prev.getDirectionVec().getX(), prev.getDirectionVec().getY(), prev.getDirectionVec().getZ()).scale(0.01);
-                Vec3d endBlockPos = new Vec3d(prevBlockPos.x + directionVector.x * (i - currentPosition), prevBlockPos.y + directionVector.y * (i - currentPosition), prevBlockPos.z + directionVector.z * (i - currentPosition));
+                Vector3d directionVector = new Vector3d(prev.getDirectionVec().getX(), prev.getDirectionVec().getY(), prev.getDirectionVec().getZ()).scale(0.01);
+                Vector3d endBlockPos = new Vector3d(prevBlockPos.x + directionVector.x * (i - currentPosition), prevBlockPos.y + directionVector.y * (i - currentPosition), prevBlockPos.z + directionVector.z * (i - currentPosition));
                 lines.add(endBlockPos);
                 prev = directions.get(i);
                 currentPosition = i;

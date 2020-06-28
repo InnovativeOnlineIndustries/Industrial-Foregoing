@@ -1,5 +1,6 @@
 package com.buuz135.industrial.module;
 
+import com.buuz135.industrial.block.misc.EnchantmentSorterBlock;
 import com.buuz135.industrial.block.misc.MobDetectorBlock;
 import com.buuz135.industrial.block.misc.StasisChamberBlock;
 import com.buuz135.industrial.utils.Reference;
@@ -18,6 +19,7 @@ public class ModuleMisc implements IModule {
     public static AdvancedTitaniumTab TAB_MISC = new AdvancedTitaniumTab(Reference.MOD_ID + "_misc", true);
     public static StasisChamberBlock STASIS_CHAMBER = new StasisChamberBlock();
     public static MobDetectorBlock MOB_DETECTOR = new MobDetectorBlock();
+    public static EnchantmentSorterBlock ENCHANTMENT_SORTER = new EnchantmentSorterBlock();
 
     @Override
     public List<Feature.Builder> generateFeatures() {
@@ -32,6 +34,7 @@ public class ModuleMisc implements IModule {
                 }))
         );
         features.add(createFeature(MOB_DETECTOR));
+        features.add(createFeature(ENCHANTMENT_SORTER));
         return features;
     }
 }

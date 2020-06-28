@@ -79,7 +79,7 @@ public class ContributorsCatEarsRender extends LayerRenderer<AbstractClientPlaye
         } else {
             //Minecraft.getInstance().getBlockRendererDispatcher().getBlockModelRenderer().renderModelBrightnessColor(ClientProxy.ears_baked, 0.5f, 255, 255, 255); TODO
         }
-        RenderSystem.setupGui3DDiffuseLighting();
+        //RenderSystem.setupGui3DDiffuseLighting();
         RenderSystem.depthMask(true);
         RenderSystem.popMatrix();
     }

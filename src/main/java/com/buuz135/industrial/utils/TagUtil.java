@@ -24,6 +24,7 @@ package com.buuz135.industrial.utils;
 import net.minecraft.block.Block;
 import net.minecraft.fluid.Fluid;
 import net.minecraft.item.Item;
+import net.minecraft.tags.ITag;
 import net.minecraft.tags.Tag;
 import net.minecraft.tags.TagCollection;
 import net.minecraft.world.World;
@@ -34,8 +35,9 @@ import java.util.Collections;
 import java.util.List;
 
 public class TagUtil {
-    public static <T> boolean hasTag(T type, Tag<T> tag) {
-        return tag.contains(type);
+
+    public static <T> boolean hasTag(T type, ITag.INamedTag<T> tag) {
+        return tag.func_230235_a_(type); //contains
     }
 
     public static TagCollection<Block> getAllBlockTags(World world) {
@@ -50,19 +52,19 @@ public class TagUtil {
         return world.getTags().getFluids();
     }
 
-    public static <T> Collection<T> getAllEntries(Tag<T>... tags) {
+    public static <T> Collection<T> getAllEntries(ITag.INamedTag<T>... tags) {
         if (tags.length == 0)
             return Collections.emptyList();
         if (tags.length == 1)
-            return tags[0].getAllElements();
+            return tags[0].func_230236_b_(); //getAllElements
         List<T> list = new ArrayList<>();
-        for (Tag<T> tag : tags) {
-            list.addAll(tag.getAllElements());
+        for (Tag.INamedTag<T> tag : tags) {
+            list.addAll(tag.func_230236_b_());
         }
         return list;
     }
 
     public static <T> Collection<T> getAllEntries(Tag<T> tag) {
-        return tag.getAllElements();
+        return tag.func_230236_b_();
     }
 }

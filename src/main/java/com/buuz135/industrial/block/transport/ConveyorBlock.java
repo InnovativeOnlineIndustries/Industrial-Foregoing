@@ -41,8 +41,8 @@ import net.minecraft.entity.EntitySpawnPlacementRegistry;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.fluid.FluidState;
 import net.minecraft.fluid.Fluids;
-import net.minecraft.fluid.IFluidState;
 import net.minecraft.item.*;
 import net.minecraft.state.BooleanProperty;
 import net.minecraft.state.DirectionProperty;
@@ -54,11 +54,11 @@ import net.minecraft.util.*;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.BlockRayTraceResult;
 import net.minecraft.util.math.RayTraceResult;
-import net.minecraft.util.math.Vec3d;
 import net.minecraft.util.math.shapes.IBooleanFunction;
 import net.minecraft.util.math.shapes.ISelectionContext;
 import net.minecraft.util.math.shapes.VoxelShape;
 import net.minecraft.util.math.shapes.VoxelShapes;
+import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.IBlockReader;
 import net.minecraft.world.World;
@@ -129,7 +129,7 @@ public class ConveyorBlock extends BasicTileBlock<ConveyorTile> implements IWate
     }
 
     @Override
-    public BlockState getStateAtViewpoint(BlockState state, IBlockReader world, BlockPos pos, Vec3d viewpoint) {
+    public BlockState getStateAtViewpoint(BlockState state, IBlockReader world, BlockPos pos, Vector3d viewpoint) {
         TileEntity tileEntity = world.getTileEntity(pos);
         if (tileEntity instanceof ConveyorTile) {
             state = state.with(FACING, ((ConveyorTile) tileEntity).getFacing()).with(TYPE, ((ConveyorTile) tileEntity).getConveyorType());
@@ -195,13 +195,8 @@ public class ConveyorBlock extends BasicTileBlock<ConveyorTile> implements IWate
         builder.add(FACING, TYPE, WATERLOGGED);
     }
 
-    public IFluidState getFluidState(BlockState state) {
+    public FluidState getFluidState(BlockState state) {
         return state.get(WATERLOGGED) ? Fluids.WATER.getStillFluidState(false) : super.getFluidState(state);
-    }
-
-    @Override
-    public boolean hasTileEntity() {
-        return true;
     }
 
     @Override
@@ -349,7 +344,7 @@ public class ConveyorBlock extends BasicTileBlock<ConveyorTile> implements IWate
     @Nullable
     @Override
     public BlockState getStateForPlacement(BlockItemUseContext context) {
-        IFluidState ifluidstate = context.getWorld().getFluidState(context.getPos());
+        FluidState ifluidstate = context.getWorld().getFluidState(context.getPos());
         return this.getDefaultState().with(FACING, context.getPlayer().getHorizontalFacing()).with(WATERLOGGED, Boolean.valueOf(ifluidstate.getFluid() == Fluids.WATER));
     }
 
@@ -389,10 +384,10 @@ public class ConveyorBlock extends BasicTileBlock<ConveyorTile> implements IWate
         return true;
     }
 
-    @Override
-    public boolean canEntitySpawn(BlockState state, IBlockReader worldIn, BlockPos pos, EntityType<?> type) {
-        return true;
-    }
+    //@Override
+    //public boolean canEntitySpawn(BlockState state, IBlockReader worldIn, BlockPos pos, EntityType<?> type) { TODO Fix this
+    //    return true;
+    //}
 
     @Override
     public boolean canSpawnInBlock() {
@@ -500,9 +495,8 @@ public class ConveyorBlock extends BasicTileBlock<ConveyorTile> implements IWate
             return this.equals(DOWN) || this.equals(DOWN_FAST);
         }
 
-        @Override
         public String getName() {
-            return this.toString().toLowerCase();
+            return func_176610_l();
         }
 
         public String getModel() {
@@ -517,13 +511,22 @@ public class ConveyorBlock extends BasicTileBlock<ConveyorTile> implements IWate
         public String toString() {
             return super.toString().toLowerCase();
         }
+
+        @Override
+        public String func_176610_l() { //getName
+            return this.toString().toLowerCase();
+        }
     }
 
     public enum EnumSides implements IStringSerializable {
         NONE, LEFT, RIGHT, BOTH;
 
-        @Override
         public String getName() {
+            return func_176610_l();
+        }
+
+        @Override
+        public String func_176610_l() { //getName
             return this.toString().toLowerCase();
         }
     }
@@ -538,7 +541,7 @@ public class ConveyorBlock extends BasicTileBlock<ConveyorTile> implements IWate
         @Nullable
         @Override
         public String getCreatorModId(ItemStack itemStack) {
-            return new TranslationTextComponent("itemGroup." + this.group.getPath()).getFormattedText();
+            return new TranslationTextComponent("itemGroup." + this.group.getPath()).getUnformattedComponentText();
         }
     }
 

@@ -33,7 +33,7 @@ public abstract class IndustrialBlock<T extends BasicTile<T>> extends RotatableB
         @Nullable
         @Override
         public String getCreatorModId(ItemStack itemStack) {
-            return new TranslationTextComponent("itemGroup." + this.group.getPath()).getFormattedText();
+            return new TranslationTextComponent("itemGroup." + this.group.getPath()).getString();
         }
 
     }

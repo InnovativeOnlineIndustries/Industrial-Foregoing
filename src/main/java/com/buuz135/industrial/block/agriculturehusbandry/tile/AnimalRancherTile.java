@@ -16,7 +16,7 @@ import net.minecraft.item.DyeColor;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.util.Hand;
-import net.minecraftforge.common.IShearable;
+import net.minecraftforge.common.IForgeShearable;
 import net.minecraftforge.common.util.FakePlayer;
 import net.minecraftforge.fluids.FluidAttributes;
 import net.minecraftforge.fluids.FluidStack;
@@ -58,9 +58,9 @@ public class AnimalRancherTile extends IndustrialAreaWorkingTile<AnimalRancherTi
             if (mobs.size() > 0) {
                 for (AnimalEntity mob : mobs) {
                     //BUCKET INTERACTION
-                    FakePlayer player = IndustrialForegoing.getFakePlayer(world, mob.getPosition());
+                    FakePlayer player = IndustrialForegoing.getFakePlayer(world, mob.func_233580_cy_()); //getPosition
                     player.setHeldItem(Hand.MAIN_HAND, new ItemStack(Items.BUCKET));
-                    if (mob.processInteract(player, Hand.MAIN_HAND)) {
+                    if (mob.func_230254_b_(player, Hand.MAIN_HAND).isSuccess()) { //ProcessInteract
                         ItemStack stack = player.getHeldItem(Hand.MAIN_HAND);
                         if (stack.getItem() instanceof BucketItem) {
                             tank.fillForced(new FluidStack(((BucketItem) stack.getItem()).getFluid(), FluidAttributes.BUCKET_VOLUME), IFluidHandler.FluidAction.EXECUTE);
@@ -71,8 +71,8 @@ public class AnimalRancherTile extends IndustrialAreaWorkingTile<AnimalRancherTi
                     }
                     //SHEAR INTERACTION
                     ItemStack shears = new ItemStack(Items.SHEARS);
-                    if (mob instanceof IShearable && ((IShearable) mob).isShearable(shears, this.world, mob.getPosition())) {
-                        List<ItemStack> items = ((IShearable) mob).onSheared(shears, this.world, mob.getPosition(), 0);
+                    if (mob instanceof IForgeShearable && ((IForgeShearable) mob).isShearable(shears, this.world, mob.func_233580_cy_())) { //getPosition
+                        List<ItemStack> items = ((IForgeShearable) mob).onSheared(player, shears, this.world, mob.func_233580_cy_(), 0); //getPosition
                         items.forEach(stack -> ItemHandlerHelper.insertItem(output, stack, false));
                         if (items.size() > 0) {
                             return new WorkAction(0.35f, powerPerOperation);

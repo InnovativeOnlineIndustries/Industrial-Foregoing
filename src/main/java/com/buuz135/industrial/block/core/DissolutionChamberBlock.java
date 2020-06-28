@@ -10,7 +10,6 @@ import net.minecraft.block.Blocks;
 import net.minecraft.data.IFinishedRecipe;
 import net.minecraft.item.Items;
 import net.minecraft.tags.ItemTags;
-import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.common.Tags;
 
 import javax.annotation.Nonnull;
@@ -42,7 +41,7 @@ public class DissolutionChamberBlock extends IndustrialBlock<DissolutionChamberT
                 .key('B', Items.BUCKET)
                 .key('M', IndustrialTags.Items.MACHINE_FRAME_PITY)
                 .key('G', Tags.Items.INGOTS_GOLD)
-                .key('D', new ItemTags.Wrapper(new ResourceLocation("forge:gear/diamond")))
+                .key('D', ItemTags.makeWrapperTag("forge:gear/diamond"))
                 .build(consumer);
     }
 }

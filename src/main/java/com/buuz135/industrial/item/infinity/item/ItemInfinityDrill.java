@@ -95,7 +95,7 @@ public class ItemInfinityDrill extends ItemInfinity {
                         BlockState tempState = worldIn.getBlockState(blockPos);
                         Block block = tempState.getBlock();
                         if (!BlockUtils.isBlockstateInMaterial(tempState, mineableMaterials)) return;
-                        if (block.getBlockHardness(tempState, worldIn, blockPos) < 0) return;
+                        if (tempState.getBlockHardness(worldIn, blockPos) < 0) return;
                         int xp = ForgeHooks.onBlockBreakEvent(worldIn, ((ServerPlayerEntity) entityLiving).interactionManager.getGameType(), (ServerPlayerEntity) entityLiving, blockPos);
                         if (xp >= 0 && block.removedByPlayer(tempState, worldIn, blockPos, (PlayerEntity) entityLiving, true, tempState.getFluidState())) {
                             block.onPlayerDestroy(worldIn, blockPos, tempState);
@@ -119,9 +119,9 @@ public class ItemInfinityDrill extends ItemInfinity {
                     }
                 });
                 totalDrops.forEach(itemStack -> {
-                    Block.spawnAsEntity(worldIn, entityLiving.getPosition(), itemStack);
+                    Block.spawnAsEntity(worldIn, entityLiving.func_233580_cy_(), itemStack);
                 });
-                worldIn.getEntitiesWithinAABB(ExperienceOrbEntity.class, new AxisAlignedBB(area.getLeft(), area.getRight()).grow(1)).forEach(entityXPOrb -> entityXPOrb.setPositionAndUpdate(entityLiving.getPosition().getX(), entityLiving.getPosition().getY(), entityLiving.getPosition().getZ()));
+                worldIn.getEntitiesWithinAABB(ExperienceOrbEntity.class, new AxisAlignedBB(area.getLeft(), area.getRight()).grow(1)).forEach(entityXPOrb -> entityXPOrb.setPositionAndUpdate(entityLiving.func_233580_cy_().getX(), entityLiving.func_233580_cy_().getY(), entityLiving.func_233580_cy_().getZ()));
             }
         }
         return super.onBlockDestroyed(stack, worldIn, state, pos, entityLiving);

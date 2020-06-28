@@ -94,8 +94,8 @@ public class ModuleCore implements IModule {
                 content(Block.class, FLUID_EXTRACTOR).
                 content(Block.class, LATEX_PROCESSING).
                 event(EventManager.forge(TickEvent.WorldTickEvent.class).
-                        filter(worldTickEvent -> worldTickEvent.phase == TickEvent.Phase.END && worldTickEvent.type == TickEvent.Type.WORLD && worldTickEvent.world.getGameTime() % 40 == 0 && FluidExtractorTile.EXTRACTION.containsKey(worldTickEvent.world.dimension.getType())).
-                        process(worldTickEvent -> FluidExtractorTile.EXTRACTION.get(worldTickEvent.world.dimension.getType()).values().forEach(blockPosFluidExtractionProgressHashMap -> blockPosFluidExtractionProgressHashMap.keySet().forEach(pos -> worldTickEvent.world.sendBlockBreakProgress(blockPosFluidExtractionProgressHashMap.get(pos).getBreakID(), pos, blockPosFluidExtractionProgressHashMap.get(pos).getProgress()))))));
+                        filter(worldTickEvent -> worldTickEvent.phase == TickEvent.Phase.END && worldTickEvent.type == TickEvent.Type.WORLD && worldTickEvent.world.getGameTime() % 40 == 0 && FluidExtractorTile.EXTRACTION.containsKey(worldTickEvent.world.func_230315_m_())).
+                        process(worldTickEvent -> FluidExtractorTile.EXTRACTION.get(worldTickEvent.world.func_230315_m_()).values().forEach(blockPosFluidExtractionProgressHashMap -> blockPosFluidExtractionProgressHashMap.keySet().forEach(pos -> worldTickEvent.world.sendBlockBreakProgress(blockPosFluidExtractionProgressHashMap.get(pos).getBreakID(), pos, blockPosFluidExtractionProgressHashMap.get(pos).getProgress()))))));
         features.add(Feature.builder("pink_slime").
                 content(Item.class, PINK_SLIME_ITEM).
                 content(Item.class, PINK_SLIME_INGOT).
