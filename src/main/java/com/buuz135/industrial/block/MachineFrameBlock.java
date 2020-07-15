@@ -2,10 +2,11 @@ package com.buuz135.industrial.block;
 
 import com.hrznstudio.titanium.api.IFactory;
 import com.hrznstudio.titanium.block.BasicBlock;
-import com.hrznstudio.titanium.recipe.generator.TitaniumLootTableProvider;
+import com.hrznstudio.titanium.datagenerator.loot.block.BasicBlockLootTables;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
 import net.minecraft.item.*;
+import net.minecraft.loot.LootTable;
 import net.minecraft.util.text.TranslationTextComponent;
 
 import javax.annotation.Nullable;
@@ -15,8 +16,8 @@ public class MachineFrameBlock extends BasicBlock {
     private MachineFrameItem item;
     private Rarity rarity;
 
-    public MachineFrameBlock(String name, Rarity rarity, ItemGroup group) {
-        super("machine_frame_" + name, Properties.from(Blocks.IRON_BLOCK));
+    public MachineFrameBlock(Rarity rarity, ItemGroup group) {
+        super(Properties.from(Blocks.IRON_BLOCK));
         this.setItemGroup(group);
         this.rarity = rarity;
     }
@@ -32,8 +33,8 @@ public class MachineFrameBlock extends BasicBlock {
     }
 
     @Override
-    public void createLootTable(TitaniumLootTableProvider provider) {
-        provider.createEmpty(this);
+    public LootTable.Builder getLootTable(BasicBlockLootTables blockLootTables) {
+        return blockLootTables.droppingNothing();
     }
 
     public class MachineFrameItem extends BlockItem {

@@ -10,10 +10,9 @@ import com.buuz135.industrial.module.ModuleCore;
 import com.buuz135.industrial.registry.IFRegistries;
 import com.buuz135.industrial.utils.BlockUtils;
 import com.hrznstudio.titanium.annotation.Save;
-import com.hrznstudio.titanium.api.IFactory;
+import com.hrznstudio.titanium.component.energy.EnergyStorageComponent;
 import com.hrznstudio.titanium.component.fluid.SidedFluidTankComponent;
 import com.hrznstudio.titanium.component.inventory.SidedInventoryComponent;
-import com.hrznstudio.titanium.energy.NBTEnergyHandler;
 import net.minecraft.item.DyeColor;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.fluids.FluidStack;
@@ -72,8 +71,8 @@ public class PlantGathererTile extends IndustrialAreaWorkingTile<PlantGathererTi
     }
 
     @Override
-    protected IFactory<NBTEnergyHandler> getEnergyHandlerFactory() {
-        return () -> new NBTEnergyHandler(this, PlantGathererConfig.maxStoredPower);
+    protected EnergyStorageComponent<PlantGathererTile> createEnergyStorage() {
+        return new EnergyStorageComponent<>(PlantGathererConfig.maxStoredPower, 10, 20);
     }
 
     @Override

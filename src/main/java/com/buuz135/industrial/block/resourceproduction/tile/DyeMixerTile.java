@@ -9,9 +9,9 @@ import com.hrznstudio.titanium.api.IFactory;
 import com.hrznstudio.titanium.api.client.IScreenAddon;
 import com.hrznstudio.titanium.client.screen.addon.ProgressBarScreenAddon;
 import com.hrznstudio.titanium.component.button.ArrowButtonComponent;
+import com.hrznstudio.titanium.component.energy.EnergyStorageComponent;
 import com.hrznstudio.titanium.component.inventory.SidedInventoryComponent;
 import com.hrznstudio.titanium.component.progress.ProgressBarComponent;
-import com.hrznstudio.titanium.energy.NBTEnergyHandler;
 import com.hrznstudio.titanium.util.FacingUtil;
 import net.minecraft.item.DyeColor;
 import net.minecraft.item.DyeItem;
@@ -187,8 +187,8 @@ public class DyeMixerTile extends IndustrialProcessingTile<DyeMixerTile> {
     }
 
     @Override
-    protected IFactory<NBTEnergyHandler> getEnergyHandlerFactory() {
-        return () -> new NBTEnergyHandler(this, DyeMixerConfig.maxStoredPower);
+    protected EnergyStorageComponent<DyeMixerTile> createEnergyStorage() {
+        return new EnergyStorageComponent<>(DyeMixerConfig.maxStoredPower, 10, 20);
     }
 
     @Override

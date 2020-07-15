@@ -12,7 +12,7 @@ import com.hrznstudio.titanium.api.client.IScreenAddon;
 import com.hrznstudio.titanium.client.screen.addon.StateButtonAddon;
 import com.hrznstudio.titanium.client.screen.addon.StateButtonInfo;
 import com.hrznstudio.titanium.component.button.ButtonComponent;
-import com.hrznstudio.titanium.energy.NBTEnergyHandler;
+import com.hrznstudio.titanium.component.energy.EnergyStorageComponent;
 import net.minecraft.entity.passive.AnimalEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
@@ -71,8 +71,8 @@ public class AnimalBabySeparatorTile extends IndustrialAreaWorkingTile<AnimalBab
     }
 
     @Override
-    protected IFactory<NBTEnergyHandler> getEnergyHandlerFactory() {
-        return () -> new NBTEnergyHandler(this, AnimalBabySeparatorConfig.maxStoredPower);
+    protected EnergyStorageComponent<AnimalBabySeparatorTile> createEnergyStorage() {
+        return new EnergyStorageComponent<>(AnimalBabySeparatorConfig.maxStoredPower, 10, 20);
     }
 
     @Override

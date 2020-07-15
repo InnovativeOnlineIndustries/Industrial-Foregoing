@@ -79,10 +79,10 @@ public class ModuleCore implements IModule {
         SIMPLE_RARITY = Rarity.create("simple", TextFormatting.AQUA);
         ADVANCED_RARITY = Rarity.create("advanced", TextFormatting.LIGHT_PURPLE);
         SUPREME_RARITY = Rarity.create("supreme", TextFormatting.GOLD);
-        PITY = new MachineFrameBlock("pity", PITY_RARITY, TAB_CORE);
-        SIMPLE = new MachineFrameBlock("simple", SIMPLE_RARITY, TAB_CORE);
-        ADVANCED = new MachineFrameBlock("advanced", ADVANCED_RARITY, TAB_CORE);
-        SUPREME = new MachineFrameBlock("supreme", SUPREME_RARITY, TAB_CORE);
+        PITY = (MachineFrameBlock) new MachineFrameBlock(PITY_RARITY, TAB_CORE).setRegistryName("machine_frame_pity");
+        SIMPLE = (MachineFrameBlock) new MachineFrameBlock(SIMPLE_RARITY, TAB_CORE).setRegistryName("machine_frame_simple");
+        ADVANCED = (MachineFrameBlock) new MachineFrameBlock(ADVANCED_RARITY, TAB_CORE).setRegistryName("machine_frame_advanced");
+        SUPREME = (MachineFrameBlock) new MachineFrameBlock(SUPREME_RARITY, TAB_CORE).setRegistryName("machine_frame_supreme");
         List<Feature.Builder> features = new ArrayList<>();
         features.add(Feature.builder("plastic").
                 content(Item.class, TINY_DRY_RUBBER).

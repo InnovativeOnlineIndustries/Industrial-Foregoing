@@ -6,10 +6,9 @@ import com.buuz135.industrial.config.machine.core.FluidExtractorConfig;
 import com.buuz135.industrial.module.ModuleCore;
 import com.buuz135.industrial.recipe.FluidExtractorRecipe;
 import com.hrznstudio.titanium.annotation.Save;
-import com.hrznstudio.titanium.api.IFactory;
+import com.hrznstudio.titanium.component.energy.EnergyStorageComponent;
 import com.hrznstudio.titanium.component.fluid.FluidTankComponent;
 import com.hrznstudio.titanium.component.fluid.SidedFluidTankComponent;
-import com.hrznstudio.titanium.energy.NBTEnergyHandler;
 import com.hrznstudio.titanium.util.RecipeUtil;
 import net.minecraft.item.DyeColor;
 import net.minecraft.util.math.BlockPos;
@@ -67,8 +66,8 @@ public class FluidExtractorTile extends IndustrialAreaWorkingTile<FluidExtractor
     }
 
     @Override
-    protected IFactory<NBTEnergyHandler> getEnergyHandlerFactory() {
-        return () -> new NBTEnergyHandler(this, FluidExtractorConfig.maxStoredPower);
+    protected EnergyStorageComponent<FluidExtractorTile> createEnergyStorage() {
+        return new EnergyStorageComponent<>(FluidExtractorConfig.maxStoredPower, 10, 20);
     }
 
     @Override

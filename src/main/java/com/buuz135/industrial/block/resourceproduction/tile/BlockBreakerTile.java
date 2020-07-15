@@ -4,14 +4,11 @@ import com.buuz135.industrial.IndustrialForegoing;
 import com.buuz135.industrial.block.tile.IndustrialAreaWorkingTile;
 import com.buuz135.industrial.block.tile.RangeManager;
 import com.buuz135.industrial.config.machine.resourceproduction.BlockBreakerConfig;
-import com.buuz135.industrial.item.addon.RangeAddonItem;
 import com.buuz135.industrial.module.ModuleResourceProduction;
 import com.buuz135.industrial.utils.BlockUtils;
 import com.hrznstudio.titanium.annotation.Save;
-import com.hrznstudio.titanium.api.IFactory;
-import com.hrznstudio.titanium.api.augment.IAugment;
+import com.hrznstudio.titanium.component.energy.EnergyStorageComponent;
 import com.hrznstudio.titanium.component.inventory.SidedInventoryComponent;
-import com.hrznstudio.titanium.energy.NBTEnergyHandler;
 import net.minecraft.block.Blocks;
 import net.minecraft.item.DyeColor;
 import net.minecraft.item.ItemStack;
@@ -64,19 +61,13 @@ public class BlockBreakerTile extends IndustrialAreaWorkingTile<BlockBreakerTile
     }
 
     @Override
-    protected IFactory<NBTEnergyHandler> getEnergyHandlerFactory() {
-        return () -> new NBTEnergyHandler(this, BlockBreakerConfig.maxStoredPower);
+    protected EnergyStorageComponent<BlockBreakerTile> createEnergyStorage() {
+        return new EnergyStorageComponent<>(BlockBreakerConfig.maxStoredPower, 10, 20);
     }
 
     @Override
     public int getMaxProgress() {
         return getMaxProgress;
-    }
-
-    @Override
-    public boolean canAcceptAugment(IAugment augment) {
-        if (augment.getAugmentType().equals(RangeAddonItem.RANGE)) return false;
-        return super.canAcceptAugment(augment);
     }
 
     @Nonnull

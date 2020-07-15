@@ -6,11 +6,11 @@ import com.buuz135.industrial.config.machine.agriculturehusbandry.PlantSowerConf
 import com.buuz135.industrial.item.addon.RangeAddonItem;
 import com.buuz135.industrial.module.ModuleAgricultureHusbandry;
 import com.hrznstudio.titanium.annotation.Save;
-import com.hrznstudio.titanium.api.IFactory;
 import com.hrznstudio.titanium.api.filter.FilterSlot;
+import com.hrznstudio.titanium.component.energy.EnergyStorageComponent;
 import com.hrznstudio.titanium.component.inventory.SidedInventoryComponent;
-import com.hrznstudio.titanium.energy.NBTEnergyHandler;
 import com.hrznstudio.titanium.filter.ItemStackFilter;
+import com.hrznstudio.titanium.item.AugmentWrapper;
 import net.minecraft.block.Block;
 import net.minecraft.item.BlockItem;
 import net.minecraft.item.DyeColor;
@@ -90,7 +90,7 @@ public class PlantSowerTile extends IndustrialAreaWorkingTile<PlantSowerTile> {
     }
 
     private int getFilteredSlot(BlockPos pos) {
-        int radius = hasAugmentInstalled(RangeAddonItem.RANGE) ? (int) getInstalledAugments(RangeAddonItem.RANGE).get(0).getAugmentRatio() + 1 : 0;
+        int radius = hasAugmentInstalled(RangeAddonItem.RANGE) ? (int) AugmentWrapper.getType(getInstalledAugments(RangeAddonItem.RANGE).get(0), RangeAddonItem.RANGE) + 1 : 0;
         if (radius == 0) {
             for (int i = 0; i < input.getSlots(); ++i) {
                 if (!input.getStackInSlot(i).isEmpty()) {
@@ -104,8 +104,8 @@ public class PlantSowerTile extends IndustrialAreaWorkingTile<PlantSowerTile> {
     }
 
     @Override
-    protected IFactory<NBTEnergyHandler> getEnergyHandlerFactory() {
-        return () -> new NBTEnergyHandler(this, PlantSowerConfig.maxStoredPower);
+    protected EnergyStorageComponent<PlantSowerTile> createEnergyStorage() {
+        return new EnergyStorageComponent<>(PlantSowerConfig.maxStoredPower, 10, 20);
     }
 
     @Override

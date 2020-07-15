@@ -6,9 +6,8 @@ import com.buuz135.industrial.config.machine.agriculturehusbandry.PlantFertilize
 import com.buuz135.industrial.module.ModuleAgricultureHusbandry;
 import com.buuz135.industrial.utils.IndustrialTags;
 import com.hrznstudio.titanium.annotation.Save;
-import com.hrznstudio.titanium.api.IFactory;
+import com.hrznstudio.titanium.component.energy.EnergyStorageComponent;
 import com.hrznstudio.titanium.component.inventory.SidedInventoryComponent;
-import com.hrznstudio.titanium.energy.NBTEnergyHandler;
 import com.hrznstudio.titanium.util.ItemHandlerUtil;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
@@ -71,8 +70,8 @@ public class PlantFertilizerTile extends IndustrialAreaWorkingTile<PlantFertiliz
     }
 
     @Override
-    protected IFactory<NBTEnergyHandler> getEnergyHandlerFactory() {
-        return () -> new NBTEnergyHandler(this, PlantFertilizerConfig.maxStoredPower);
+    protected EnergyStorageComponent<PlantFertilizerTile> createEnergyStorage() {
+        return new EnergyStorageComponent<>(PlantFertilizerConfig.maxStoredPower, 10, 20);
     }
 
     @Override

@@ -11,10 +11,10 @@ import com.hrznstudio.titanium.api.client.IScreenAddon;
 import com.hrznstudio.titanium.client.screen.addon.BasicButtonAddon;
 import com.hrznstudio.titanium.client.screen.asset.IAssetProvider;
 import com.hrznstudio.titanium.component.button.ButtonComponent;
+import com.hrznstudio.titanium.component.energy.EnergyStorageComponent;
 import com.hrznstudio.titanium.component.fluid.FluidTankComponent;
 import com.hrznstudio.titanium.component.fluid.SidedFluidTankComponent;
 import com.hrznstudio.titanium.component.inventory.SidedInventoryComponent;
-import com.hrznstudio.titanium.energy.NBTEnergyHandler;
 import com.hrznstudio.titanium.util.AssetUtil;
 import com.hrznstudio.titanium.util.LangUtil;
 import com.hrznstudio.titanium.util.RecipeUtil;
@@ -126,13 +126,13 @@ public class MaterialStoneWorkFactoryTile extends IndustrialProcessingTile<Mater
                     public List<ITextProperties> getTooltipLines() {
                         GeneratorRecipe recipe = GENERATOR_RECIPES[generatorRecipeId];
                         List<ITextProperties> lines = new ArrayList<>();
-                        lines.add(new StringTextComponent(TextFormatting.GOLD + LangUtil.getString("tooltip.industrialforegoing.generating") + TextFormatting.WHITE + recipe.output.getDisplayName()));
+                        lines.add(new StringTextComponent(TextFormatting.GOLD + LangUtil.getString("tooltip.industrialforegoing.generating") + TextFormatting.WHITE + recipe.output.getDisplayName().getString()));
                         lines.add(new StringTextComponent(TextFormatting.GOLD + LangUtil.getString("tooltip.industrialforegoing.needs")));
-                        lines.add(new StringTextComponent(TextFormatting.YELLOW + " - " + TextFormatting.WHITE + recipe.needsWater + TextFormatting.DARK_AQUA + LangUtil.get("tooltip.industrialforegoing.mb_of", LangUtil.get("block.minecraft.water"))));
-                        lines.add(new StringTextComponent(TextFormatting.YELLOW + " - " + TextFormatting.WHITE + recipe.needsLava + TextFormatting.DARK_AQUA + LangUtil.get("tooltip.industrialforegoing.mb_of", LangUtil.get("block.minecraft.lava"))));
+                        lines.add(new StringTextComponent(TextFormatting.YELLOW + " - " + TextFormatting.WHITE + recipe.needsWater + TextFormatting.DARK_AQUA + LangUtil.getString("tooltip.industrialforegoing.mb_of", LangUtil.getString("block.minecraft.water"))));
+                        lines.add(new StringTextComponent(TextFormatting.YELLOW + " - " + TextFormatting.WHITE + recipe.needsLava + TextFormatting.DARK_AQUA + LangUtil.getString("tooltip.industrialforegoing.mb_of", LangUtil.getString("block.minecraft.lava"))));
                         lines.add(new StringTextComponent(TextFormatting.GOLD + LangUtil.getString("tooltip.industrialforegoing.consumes")));
-                        lines.add(new StringTextComponent(TextFormatting.YELLOW + " - " + TextFormatting.WHITE + recipe.consumeWater + TextFormatting.DARK_AQUA + LangUtil.get("tooltip.industrialforegoing.mb_of", LangUtil.get("block.minecraft.water"))));
-                        lines.add(new StringTextComponent(TextFormatting.YELLOW + " - " + TextFormatting.WHITE + recipe.consumeLava + TextFormatting.DARK_AQUA + LangUtil.get("tooltip.industrialforegoing.mb_of", LangUtil.get("block.minecraft.lava"))));
+                        lines.add(new StringTextComponent(TextFormatting.YELLOW + " - " + TextFormatting.WHITE + recipe.consumeWater + TextFormatting.DARK_AQUA + LangUtil.getString("tooltip.industrialforegoing.mb_of", LangUtil.getString("block.minecraft.water"))));
+                        lines.add(new StringTextComponent(TextFormatting.YELLOW + " - " + TextFormatting.WHITE + recipe.consumeLava + TextFormatting.DARK_AQUA + LangUtil.getString("tooltip.industrialforegoing.mb_of", LangUtil.getString("block.minecraft.lava"))));
                         return lines;
                     }
                 });
@@ -240,8 +240,8 @@ public class MaterialStoneWorkFactoryTile extends IndustrialProcessingTile<Mater
     }
 
     @Override
-    protected IFactory<NBTEnergyHandler> getEnergyHandlerFactory() {
-        return () -> new NBTEnergyHandler(this, MaterialStoneWorkFactoryConfig.maxStoredPower);
+    protected EnergyStorageComponent<MaterialStoneWorkFactoryTile> createEnergyStorage() {
+        return new EnergyStorageComponent<>(MaterialStoneWorkFactoryConfig.maxStoredPower, 10, 20);
     }
 
     @Override

@@ -6,9 +6,8 @@ import com.buuz135.industrial.config.machine.resourceproduction.MarineFisherConf
 import com.buuz135.industrial.module.ModuleResourceProduction;
 import com.buuz135.industrial.utils.BlockUtils;
 import com.hrznstudio.titanium.annotation.Save;
-import com.hrznstudio.titanium.api.IFactory;
+import com.hrznstudio.titanium.component.energy.EnergyStorageComponent;
 import com.hrznstudio.titanium.component.inventory.SidedInventoryComponent;
-import com.hrznstudio.titanium.energy.NBTEnergyHandler;
 import net.minecraft.fluid.FluidState;
 import net.minecraft.fluid.Fluids;
 import net.minecraft.item.DyeColor;
@@ -53,8 +52,8 @@ public class MarineFisherTile extends IndustrialAreaWorkingTile<MarineFisherTile
     }
 
     @Override
-    protected IFactory<NBTEnergyHandler> getEnergyHandlerFactory() {
-        return () -> new NBTEnergyHandler(this, MarineFisherConfig.maxStoredPower);
+    protected EnergyStorageComponent<MarineFisherTile> createEnergyStorage() {
+        return new EnergyStorageComponent<>(MarineFisherConfig.maxStoredPower, 10, 20);
     }
 
     @Override

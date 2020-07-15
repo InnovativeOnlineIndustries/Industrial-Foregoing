@@ -7,9 +7,8 @@ import com.buuz135.industrial.config.machine.resourceproduction.BlockPlacerConfi
 import com.buuz135.industrial.module.ModuleResourceProduction;
 import com.buuz135.industrial.utils.IFFakePlayer;
 import com.hrznstudio.titanium.annotation.Save;
-import com.hrznstudio.titanium.api.IFactory;
+import com.hrznstudio.titanium.component.energy.EnergyStorageComponent;
 import com.hrznstudio.titanium.component.inventory.SidedInventoryComponent;
-import com.hrznstudio.titanium.energy.NBTEnergyHandler;
 import net.minecraft.item.BlockItem;
 import net.minecraft.item.DyeColor;
 
@@ -53,8 +52,8 @@ public class BlockPlacerTile extends IndustrialAreaWorkingTile<BlockPlacerTile> 
     }
 
     @Override
-    protected IFactory<NBTEnergyHandler> getEnergyHandlerFactory() {
-        return () -> new NBTEnergyHandler(this, BlockPlacerConfig.maxStoredPower);
+    protected EnergyStorageComponent<BlockPlacerTile> createEnergyStorage() {
+        return new EnergyStorageComponent<>(BlockPlacerConfig.maxStoredPower, 10, 20);
     }
 
     @Override

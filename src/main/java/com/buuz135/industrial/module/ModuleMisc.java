@@ -28,7 +28,7 @@ public class ModuleMisc implements IModule {
                 .content(Block.class, STASIS_CHAMBER)
                 .event(EventManager.forge(LivingEvent.LivingUpdateEvent.class).filter(livingUpdateEvent -> livingUpdateEvent.getEntityLiving() instanceof MobEntity && livingUpdateEvent.getEntityLiving().getPersistentData().contains("StasisChamberTime")).process(livingUpdateEvent -> {
                     long time = livingUpdateEvent.getEntityLiving().getPersistentData().getLong("StasisChamberTime");
-                    if (time + 40 <= livingUpdateEvent.getEntityLiving().world.getGameTime()) {
+                    if (time + 50 <= livingUpdateEvent.getEntityLiving().world.getGameTime()) {
                         ((MobEntity) livingUpdateEvent.getEntityLiving()).setNoAI(false);
                     }
                 }))

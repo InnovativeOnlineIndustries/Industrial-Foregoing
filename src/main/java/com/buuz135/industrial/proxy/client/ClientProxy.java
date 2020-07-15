@@ -34,9 +34,9 @@ import com.buuz135.industrial.proxy.client.event.IFWorldRenderLastEvent;
 import com.buuz135.industrial.proxy.client.render.FluidConveyorTESR;
 import com.buuz135.industrial.proxy.client.render.WorkingAreaTESR;
 import com.buuz135.industrial.utils.Reference;
-import com.hrznstudio.titanium.block.BasicBlock;
 import com.hrznstudio.titanium.block.BasicTileBlock;
 import com.hrznstudio.titanium.event.handler.EventManager;
+import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.RenderTypeLookup;
@@ -49,8 +49,13 @@ import net.minecraftforge.client.event.TextureStitchEvent;
 import net.minecraftforge.client.model.obj.OBJModel;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.util.Constants;
+import net.minecraftforge.common.util.NonNullLazy;
 import net.minecraftforge.fml.client.registry.ClientRegistry;
 import net.minecraftforge.registries.ForgeRegistries;
+
+import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
 
 public class ClientProxy extends CommonProxy {
 
@@ -81,7 +86,16 @@ public class ClientProxy extends CommonProxy {
 
 
         ClientRegistry.bindTileEntityRenderer(ModuleTransport.CONVEYOR.getTileEntityType(), FluidConveyorTESR::new);
-        BasicBlock.BLOCKS.stream().filter(blockBase -> blockBase instanceof BasicTileBlock && IndustrialAreaWorkingTile.class.isAssignableFrom(((BasicTileBlock) blockBase).getTileClass())).forEach(blockBase -> ClientRegistry.bindTileEntityRenderer(((BasicTileBlock) blockBase).getTileEntityType(), WorkingAreaTESR::new));
+        NonNullLazy<List<Block>> blocksToProcess = NonNullLazy.of(() ->
+                ForgeRegistries.BLOCKS.getValues()
+                        .stream()
+                        .filter(basicBlock -> Optional.ofNullable(basicBlock.getRegistryName())
+                                .map(ResourceLocation::getNamespace)
+                                .filter(Reference.MOD_ID::equalsIgnoreCase)
+                                .isPresent())
+                        .collect(Collectors.toList())
+        );
+        blocksToProcess.get().stream().filter(blockBase -> blockBase instanceof BasicTileBlock && IndustrialAreaWorkingTile.class.isAssignableFrom(((BasicTileBlock) blockBase).getTileClass())).forEach(blockBase -> ClientRegistry.bindTileEntityRenderer(((BasicTileBlock) blockBase).getTileEntityType(), WorkingAreaTESR::new));
         //ClientRegistry.bindTileEntityRenderer(IndustrialAreaWorkingTile.class, new WorkingAreaTESR());
         //manager.entityRenderMap.put(EntityPinkSlime.class, new RenderPinkSlime(manager));
 

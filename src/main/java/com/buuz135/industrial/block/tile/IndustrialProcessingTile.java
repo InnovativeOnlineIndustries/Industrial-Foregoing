@@ -1,18 +1,17 @@
 package com.buuz135.industrial.block.tile;
 
-import com.buuz135.industrial.item.addon.EfficiencyAddonItem;
-import com.buuz135.industrial.item.addon.SpeedAddonItem;
 import com.hrznstudio.titanium.annotation.Save;
+import com.hrznstudio.titanium.api.augment.AugmentTypes;
 import com.hrznstudio.titanium.block.BasicTileBlock;
-import com.hrznstudio.titanium.block.tile.MachineTile;
 import com.hrznstudio.titanium.client.screen.addon.EnergyBarScreenAddon;
 import com.hrznstudio.titanium.component.progress.ProgressBarComponent;
+import com.hrznstudio.titanium.item.AugmentWrapper;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.util.ActionResultType;
 import net.minecraft.util.Direction;
 import net.minecraft.util.Hand;
 
-public abstract class IndustrialProcessingTile<T extends IndustrialProcessingTile<T>> extends MachineTile<T> {
+public abstract class IndustrialProcessingTile<T extends IndustrialProcessingTile<T>> extends IndustrialMachineTile<T> {
 
     @Save
     private ProgressBarComponent<T> progressBar;
@@ -22,16 +21,16 @@ public abstract class IndustrialProcessingTile<T extends IndustrialProcessingTil
         this.addGuiAddonFactory(() -> new EnergyBarScreenAddon(10, 20, getEnergyStorage()));
         this.addProgressBar(progressBar = new ProgressBarComponent<T>(x, y, 100).
                 setComponentHarness(this.getSelf()).
-                setBarDirection(ProgressBarComponent.BarDirection.HORIZONTAL_RIGHT).
+                setBarDirection(ProgressBarComponent.BarDirection.ARROW_RIGHT).
                 setCanReset(tileEntity -> true).
                 setOnStart(() -> {
-                    int maxProgress = (int) Math.floor(getMaxProgress() * (this.hasAugmentInstalled(EfficiencyAddonItem.EFFICIENCY) ? (1 - (0.1 * this.getInstalledAugments(EfficiencyAddonItem.EFFICIENCY).get(0).getAugmentRatio())) : 1));
+                    int maxProgress = (int) Math.floor(getMaxProgress() * (this.hasAugmentInstalled(AugmentTypes.EFFICIENCY) ? AugmentWrapper.getType(this.getInstalledAugments(AugmentTypes.EFFICIENCY).get(0), AugmentTypes.EFFICIENCY) : 1));
                     progressBar.setMaxProgress(maxProgress);
                 }).
                 setCanIncrease(tileEntity -> getEnergyStorage().getEnergyStored() > getTickPower() && canIncrease()).
                 setOnTickWork(() -> {
-                    getEnergyStorage().extractEnergyForced(getTickPower());
-                    progressBar.setProgressIncrease(this.hasAugmentInstalled(SpeedAddonItem.SPEED) ? (int) this.getInstalledAugments(SpeedAddonItem.SPEED).get(0).getAugmentRatio() + 1 : 1);
+                    getEnergyStorage().extractEnergy(getTickPower(), false);
+                    progressBar.setProgressIncrease(this.hasAugmentInstalled(AugmentTypes.SPEED) ? (int) AugmentWrapper.getType(this.getInstalledAugments(AugmentTypes.SPEED).get(0), AugmentTypes.SPEED) : 1);
                 }).
                 setOnFinishWork(() -> onFinish().run())
         );

@@ -6,10 +6,9 @@ import com.buuz135.industrial.config.machine.resourceproduction.FluidPlacerConfi
 import com.buuz135.industrial.module.ModuleResourceProduction;
 import com.buuz135.industrial.utils.BlockUtils;
 import com.hrznstudio.titanium.annotation.Save;
-import com.hrznstudio.titanium.api.IFactory;
+import com.hrznstudio.titanium.component.energy.EnergyStorageComponent;
 import com.hrznstudio.titanium.component.fluid.FluidTankComponent;
 import com.hrznstudio.titanium.component.fluid.SidedFluidTankComponent;
-import com.hrznstudio.titanium.energy.NBTEnergyHandler;
 import net.minecraft.fluid.Fluids;
 import net.minecraft.item.DyeColor;
 import net.minecraft.state.properties.BlockStateProperties;
@@ -59,8 +58,8 @@ public class FluidPlacerTile extends IndustrialAreaWorkingTile<FluidPlacerTile> 
     }
 
     @Override
-    protected IFactory<NBTEnergyHandler> getEnergyHandlerFactory() {
-        return () -> new NBTEnergyHandler(this, FluidPlacerConfig.maxStoredPower);
+    protected EnergyStorageComponent<FluidPlacerTile> createEnergyStorage() {
+        return new EnergyStorageComponent<>(FluidPlacerConfig.maxStoredPower, 10, 20);
     }
 
     @Override

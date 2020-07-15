@@ -1,35 +1,39 @@
 package com.buuz135.industrial.item.addon;
 
-import com.buuz135.industrial.block.tile.IndustrialProcessingTile;
-import com.buuz135.industrial.block.tile.IndustrialWorkingTile;
 import com.buuz135.industrial.item.IFCustomItem;
 import com.buuz135.industrial.module.ModuleCore;
 import com.buuz135.industrial.recipe.DissolutionChamberRecipe;
 import com.buuz135.industrial.utils.IndustrialTags;
-import com.hrznstudio.titanium.api.IMachine;
-import com.hrznstudio.titanium.api.augment.IAugment;
-import com.hrznstudio.titanium.api.augment.IAugmentType;
+import com.hrznstudio.titanium.api.augment.AugmentTypes;
+import com.hrznstudio.titanium.item.AugmentWrapper;
 import net.minecraft.data.IFinishedRecipe;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemGroup;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.item.crafting.Ingredient;
 import net.minecraft.tags.Tag;
+import net.minecraft.util.NonNullList;
 import net.minecraft.util.text.TranslationTextComponent;
+import net.minecraft.world.World;
 import net.minecraftforge.fluids.FluidStack;
 
 import java.util.function.Consumer;
 
-public class EfficiencyAddonItem extends IFCustomItem implements IAugment {
-
-    public static final IAugmentType EFFICIENCY = () -> "efficiency";
+public class EfficiencyAddonItem extends IFCustomItem {
 
     private int tier;
 
     public EfficiencyAddonItem(int tier, ItemGroup group) {
         super("efficiency_addon_" + tier, group, new Properties().maxStackSize(1));
         this.tier = tier;
+    }
+
+    @Override
+    public void onCreated(ItemStack stack, World worldIn, PlayerEntity playerIn) {
+        super.onCreated(stack, worldIn, playerIn);
+        AugmentWrapper.setType(stack, AugmentTypes.EFFICIENCY, 1 - this.tier * 0.1f);
     }
 
     @Override
@@ -48,22 +52,16 @@ public class EfficiencyAddonItem extends IFCustomItem implements IAugment {
     }
 
     @Override
-    public IAugmentType getAugmentType() {
-        return EFFICIENCY;
-    }
-
-    @Override
-    public float getAugmentRatio() {
-        return tier;
-    }
-
-    @Override
-    public boolean canWorkIn(IMachine machine) {
-        return !machine.hasAugmentInstalled(EFFICIENCY) && (machine instanceof IndustrialWorkingTile || machine instanceof IndustrialProcessingTile);
-    }
-
-    @Override
     public String getTranslationKey() {
         return new TranslationTextComponent("item.industrialforegoing.addon").getString() + new TranslationTextComponent("item.industrialforegoing.efficiency").getString() + "Tier " + tier + " ";
+    }
+
+    @Override
+    public void fillItemGroup(ItemGroup group, NonNullList<ItemStack> items) {
+        if (isInGroup(group)) {
+            ItemStack stack = new ItemStack(this);
+            AugmentWrapper.setType(stack, AugmentTypes.EFFICIENCY, 1 - this.tier * 0.1f);
+            items.add(stack);
+        }
     }
 }

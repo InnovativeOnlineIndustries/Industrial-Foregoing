@@ -4,8 +4,7 @@ import com.buuz135.industrial.block.tile.IndustrialAreaWorkingTile;
 import com.buuz135.industrial.block.tile.RangeManager;
 import com.buuz135.industrial.config.machine.misc.StasisChamberConfig;
 import com.buuz135.industrial.module.ModuleMisc;
-import com.hrznstudio.titanium.api.IFactory;
-import com.hrznstudio.titanium.energy.NBTEnergyHandler;
+import com.hrznstudio.titanium.component.energy.EnergyStorageComponent;
 import net.minecraft.entity.MobEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.potion.EffectInstance;
@@ -58,8 +57,8 @@ public class StasisChamberTile extends IndustrialAreaWorkingTile<StasisChamberTi
     }
 
     @Override
-    protected IFactory<NBTEnergyHandler> getEnergyHandlerFactory() {
-        return () -> new NBTEnergyHandler(this, StasisChamberConfig.maxStoredPower);
+    protected EnergyStorageComponent<StasisChamberTile> createEnergyStorage() {
+        return new EnergyStorageComponent<>(StasisChamberConfig.maxStoredPower, 10, 20);
     }
 
     @Override

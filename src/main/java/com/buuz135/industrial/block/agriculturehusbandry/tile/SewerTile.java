@@ -6,10 +6,9 @@ import com.buuz135.industrial.config.machine.agriculturehusbandry.SewerConfig;
 import com.buuz135.industrial.module.ModuleAgricultureHusbandry;
 import com.buuz135.industrial.module.ModuleCore;
 import com.hrznstudio.titanium.annotation.Save;
-import com.hrznstudio.titanium.api.IFactory;
+import com.hrznstudio.titanium.component.energy.EnergyStorageComponent;
 import com.hrznstudio.titanium.component.fluid.FluidTankComponent;
 import com.hrznstudio.titanium.component.fluid.SidedFluidTankComponent;
-import com.hrznstudio.titanium.energy.NBTEnergyHandler;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.item.ExperienceOrbEntity;
 import net.minecraft.entity.passive.AnimalEntity;
@@ -63,8 +62,8 @@ public class SewerTile extends IndustrialAreaWorkingTile<SewerTile> {
     }
 
     @Override
-    protected IFactory<NBTEnergyHandler> getEnergyHandlerFactory() {
-        return () -> new NBTEnergyHandler(this, SewerConfig.maxStoredPower);
+    protected EnergyStorageComponent<SewerTile> createEnergyStorage() {
+        return new EnergyStorageComponent<>(SewerConfig.maxStoredPower, 10, 20);
     }
 
     @Override

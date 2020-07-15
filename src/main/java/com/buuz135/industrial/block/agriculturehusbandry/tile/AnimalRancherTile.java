@@ -6,10 +6,9 @@ import com.buuz135.industrial.block.tile.RangeManager;
 import com.buuz135.industrial.config.machine.agriculturehusbandry.AnimalRancherConfig;
 import com.buuz135.industrial.module.ModuleAgricultureHusbandry;
 import com.hrznstudio.titanium.annotation.Save;
-import com.hrznstudio.titanium.api.IFactory;
+import com.hrznstudio.titanium.component.energy.EnergyStorageComponent;
 import com.hrznstudio.titanium.component.fluid.SidedFluidTankComponent;
 import com.hrznstudio.titanium.component.inventory.SidedInventoryComponent;
-import com.hrznstudio.titanium.energy.NBTEnergyHandler;
 import net.minecraft.entity.passive.AnimalEntity;
 import net.minecraft.item.BucketItem;
 import net.minecraft.item.DyeColor;
@@ -60,7 +59,7 @@ public class AnimalRancherTile extends IndustrialAreaWorkingTile<AnimalRancherTi
                     //BUCKET INTERACTION
                     FakePlayer player = IndustrialForegoing.getFakePlayer(world, mob.func_233580_cy_()); //getPosition
                     player.setHeldItem(Hand.MAIN_HAND, new ItemStack(Items.BUCKET));
-                    if (mob.func_230254_b_(player, Hand.MAIN_HAND).isSuccess()) { //ProcessInteract
+                    if (mob.func_230254_b_(player, Hand.MAIN_HAND).isSuccessOrConsume()) { //ProcessInteract
                         ItemStack stack = player.getHeldItem(Hand.MAIN_HAND);
                         if (stack.getItem() instanceof BucketItem) {
                             tank.fillForced(new FluidStack(((BucketItem) stack.getItem()).getFluid(), FluidAttributes.BUCKET_VOLUME), IFluidHandler.FluidAction.EXECUTE);
@@ -85,8 +84,8 @@ public class AnimalRancherTile extends IndustrialAreaWorkingTile<AnimalRancherTi
     }
 
     @Override
-    protected IFactory<NBTEnergyHandler> getEnergyHandlerFactory() {
-        return () -> new NBTEnergyHandler(this, AnimalRancherConfig.maxStoredPower);
+    protected EnergyStorageComponent<AnimalRancherTile> createEnergyStorage() {
+        return new EnergyStorageComponent<>(AnimalRancherConfig.maxStoredPower, 10, 20);
     }
 
     @Override

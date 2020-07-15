@@ -4,11 +4,10 @@ import com.buuz135.industrial.block.tile.IndustrialProcessingTile;
 import com.buuz135.industrial.config.machine.resourceproduction.SporeRecreatorConfig;
 import com.buuz135.industrial.module.ModuleResourceProduction;
 import com.hrznstudio.titanium.annotation.Save;
-import com.hrznstudio.titanium.api.IFactory;
+import com.hrznstudio.titanium.component.energy.EnergyStorageComponent;
 import com.hrznstudio.titanium.component.fluid.FluidTankComponent;
 import com.hrznstudio.titanium.component.fluid.SidedFluidTankComponent;
 import com.hrznstudio.titanium.component.inventory.SidedInventoryComponent;
-import com.hrznstudio.titanium.energy.NBTEnergyHandler;
 import com.hrznstudio.titanium.util.ItemHandlerUtil;
 import net.minecraft.fluid.Fluids;
 import net.minecraft.item.DyeColor;
@@ -70,8 +69,8 @@ public class SporesRecreatorTile extends IndustrialProcessingTile<SporesRecreato
     }
 
     @Override
-    protected IFactory<NBTEnergyHandler> getEnergyHandlerFactory() {
-        return () -> new NBTEnergyHandler(this, SporeRecreatorConfig.maxStoredPower);
+    protected EnergyStorageComponent<SporesRecreatorTile> createEnergyStorage() {
+        return new EnergyStorageComponent<>(SporeRecreatorConfig.maxStoredPower, 10, 20);
     }
 
     @Override

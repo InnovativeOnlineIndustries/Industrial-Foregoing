@@ -25,6 +25,7 @@ import com.buuz135.industrial.api.conveyor.ConveyorUpgrade;
 import com.buuz135.industrial.block.transport.tile.ConveyorTile;
 import com.buuz135.industrial.module.ModuleCore;
 import com.buuz135.industrial.utils.IndustrialTags;
+import com.buuz135.industrial.utils.Reference;
 import com.hrznstudio.titanium.api.IFactory;
 import com.hrznstudio.titanium.api.IRecipeProvider;
 import com.hrznstudio.titanium.api.raytrace.DistanceRayTraceResult;
@@ -79,7 +80,8 @@ public class ConveyorBlock extends BasicTileBlock<ConveyorTile> implements IWate
     private ConveyorItem item;
 
     public ConveyorBlock(ItemGroup group) {
-        super("conveyor", Properties.create(Material.ANVIL, MaterialColor.ADOBE).doesNotBlockMovement().hardnessAndResistance(2.0f), ConveyorTile.class);
+        super(Properties.create(Material.ANVIL, MaterialColor.ADOBE).doesNotBlockMovement().hardnessAndResistance(2.0f), ConveyorTile.class);
+        this.setRegistryName(Reference.MOD_ID, "conveyor");
         this.setDefaultState(this.getDefaultState().with(FACING, Direction.NORTH).with(WATERLOGGED, false));
         this.item = new ConveyorItem(this, group);
         this.setItemGroup(group);

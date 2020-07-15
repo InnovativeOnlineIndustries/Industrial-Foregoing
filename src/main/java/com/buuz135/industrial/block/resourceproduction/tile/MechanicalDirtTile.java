@@ -5,10 +5,9 @@ import com.buuz135.industrial.config.machine.resourceproduction.MechanicalDirtCo
 import com.buuz135.industrial.module.ModuleCore;
 import com.buuz135.industrial.module.ModuleResourceProduction;
 import com.hrznstudio.titanium.annotation.Save;
-import com.hrznstudio.titanium.api.IFactory;
+import com.hrznstudio.titanium.component.energy.EnergyStorageComponent;
 import com.hrznstudio.titanium.component.fluid.FluidTankComponent;
 import com.hrznstudio.titanium.component.fluid.SidedFluidTankComponent;
-import com.hrznstudio.titanium.energy.NBTEnergyHandler;
 import net.minecraft.entity.*;
 import net.minecraft.item.DyeColor;
 import net.minecraft.tileentity.TileEntity;
@@ -46,15 +45,16 @@ public class MechanicalDirtTile extends IndustrialWorkingTile<MechanicalDirtTile
         if (world.rand.nextDouble() > 0.1
                 || world.getDifficulty() == Difficulty.PEACEFUL
                 || (world.isDaytime() && world.getBrightness(pos.up()) > 0.5f && world.canBlockSeeSky(pos.up()))
-                || world.getEntitiesWithinAABB(MobEntity.class, new AxisAlignedBB(0, 0, 0, 1, 1, 1).offset(pos).grow(3)).size() > 10) {
+                || world.getEntitiesWithinAABB(MobEntity.class, new AxisAlignedBB(0, 0, 0, 1, 1, 1).offset(pos).grow(3)).size() > 10
+                || world.getLight(pos.up()) > 7) {
             if (hasEnergy(getPowerPerOperation / 10)) return new WorkAction(0.5f, getPowerPerOperation / 10);
             return new WorkAction(1, 0);
         }
-        if (meat.getFluidAmount() > 100) {
+        if (meat.getFluidAmount() > 20) {
             MobEntity entity = getMobToSpawn();
             if (entity != null) {
                 world.addEntity(entity);
-                meat.drainForced(100, IFluidHandler.FluidAction.EXECUTE);
+                meat.drainForced(20, IFluidHandler.FluidAction.EXECUTE);
                 if (hasEnergy(getPowerPerOperation)) return new WorkAction(0.5f, getPowerPerOperation);
             }
         }
@@ -102,7 +102,7 @@ public class MechanicalDirtTile extends IndustrialWorkingTile<MechanicalDirtTile
                         if (difference <= 1000 && difference > 1) difference = difference / 2;
                         if (difference > 1000) difference = 1000;
                         if (getEnergyStorage().getEnergyStored() >= difference) {
-                            getEnergyStorage().extractEnergyForced(((MechanicalDirtTile) tile).getEnergyStorage().receiveEnergy(difference, false));
+                            getEnergyStorage().extractEnergy(((MechanicalDirtTile) tile).getEnergyStorage().receiveEnergy(difference, false), false);
                         }
                     }
                 }
@@ -111,8 +111,8 @@ public class MechanicalDirtTile extends IndustrialWorkingTile<MechanicalDirtTile
     }
 
     @Override
-    protected IFactory<NBTEnergyHandler> getEnergyHandlerFactory() {
-        return () -> new NBTEnergyHandler(this, MechanicalDirtConfig.maxStoredPower);
+    protected EnergyStorageComponent<MechanicalDirtTile> createEnergyStorage() {
+        return new EnergyStorageComponent<>(MechanicalDirtConfig.maxStoredPower, 10, 20);
     }
 
     @Nonnull

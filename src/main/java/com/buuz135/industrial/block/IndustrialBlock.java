@@ -1,5 +1,6 @@
 package com.buuz135.industrial.block;
 
+import com.buuz135.industrial.utils.Reference;
 import com.hrznstudio.titanium.api.IFactory;
 import com.hrznstudio.titanium.block.RotatableBlock;
 import com.hrznstudio.titanium.block.tile.BasicTile;
@@ -14,8 +15,9 @@ import javax.annotation.Nullable;
 public abstract class IndustrialBlock<T extends BasicTile<T>> extends RotatableBlock<T> {
 
     public IndustrialBlock(String name, Properties properties, Class<T> tileClass, ItemGroup group) {
-        super(name, properties, tileClass);
+        super(properties, tileClass);
         setItemGroup(group);
+        setRegistryName(Reference.MOD_ID, name);
     }
 
     @Override

@@ -9,11 +9,11 @@ import com.hrznstudio.titanium.annotation.Save;
 import com.hrznstudio.titanium.api.IFactory;
 import com.hrznstudio.titanium.api.client.IScreenAddon;
 import com.hrznstudio.titanium.client.screen.addon.ProgressBarScreenAddon;
+import com.hrznstudio.titanium.component.energy.EnergyStorageComponent;
 import com.hrznstudio.titanium.component.fluid.FluidTankComponent;
 import com.hrznstudio.titanium.component.fluid.SidedFluidTankComponent;
 import com.hrznstudio.titanium.component.inventory.SidedInventoryComponent;
 import com.hrznstudio.titanium.component.progress.ProgressBarComponent;
-import com.hrznstudio.titanium.energy.NBTEnergyHandler;
 import net.minecraft.fluid.Fluids;
 import net.minecraft.item.DyeColor;
 import net.minecraft.item.Item;
@@ -133,8 +133,8 @@ public class BioReactorTile extends IndustrialWorkingTile<BioReactorTile> {
     }
 
     @Override
-    protected IFactory<NBTEnergyHandler> getEnergyHandlerFactory() {
-        return () -> new NBTEnergyHandler(this, BioReactorConfig.maxStoredPower);
+    protected EnergyStorageComponent<BioReactorTile> createEnergyStorage() {
+        return new EnergyStorageComponent<>(BioReactorConfig.maxStoredPower, 10, 20);
     }
 
     @Override

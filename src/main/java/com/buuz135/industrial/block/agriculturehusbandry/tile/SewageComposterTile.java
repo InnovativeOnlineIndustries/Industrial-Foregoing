@@ -5,11 +5,10 @@ import com.buuz135.industrial.config.machine.agriculturehusbandry.SewageComposte
 import com.buuz135.industrial.module.ModuleAgricultureHusbandry;
 import com.buuz135.industrial.module.ModuleCore;
 import com.hrznstudio.titanium.annotation.Save;
-import com.hrznstudio.titanium.api.IFactory;
+import com.hrznstudio.titanium.component.energy.EnergyStorageComponent;
 import com.hrznstudio.titanium.component.fluid.FluidTankComponent;
 import com.hrznstudio.titanium.component.fluid.SidedFluidTankComponent;
 import com.hrznstudio.titanium.component.inventory.SidedInventoryComponent;
-import com.hrznstudio.titanium.energy.NBTEnergyHandler;
 import net.minecraft.item.DyeColor;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.fluids.capability.IFluidHandler;
@@ -57,8 +56,8 @@ public class SewageComposterTile extends IndustrialProcessingTile<SewageComposte
     }
 
     @Override
-    protected IFactory<NBTEnergyHandler> getEnergyHandlerFactory() {
-        return () -> new NBTEnergyHandler(this, SewageComposterConfig.maxStoredPower);
+    protected EnergyStorageComponent<SewageComposterTile> createEnergyStorage() {
+        return new EnergyStorageComponent<>(SewageComposterConfig.maxStoredPower, 10, 20);
     }
 
     @Override
