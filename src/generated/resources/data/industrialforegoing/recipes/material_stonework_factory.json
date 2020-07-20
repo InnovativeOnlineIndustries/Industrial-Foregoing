@@ -31,7 +31,7 @@
             "item": "minecraft:diamond_pickaxe"
           },
           "m": {
-            "tag": "industrialforegoing:machine_frame/simple"
+            "tag": "industrialforegoing:machine_frame/advanced"
           },
           "f": {
             "item": "minecraft:furnace"

@@ -31,7 +31,7 @@
             "item": "minecraft:leather"
           },
           "M": {
-            "tag": "industrialforegoing:machine_frame/pity"
+            "tag": "industrialforegoing:machine_frame/simple"
           },
           "R": {
             "item": "minecraft:redstone"

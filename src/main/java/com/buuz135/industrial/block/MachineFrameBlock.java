@@ -52,7 +52,7 @@ public class MachineFrameBlock extends BasicBlock {
         @Nullable
         @Override
         public String getCreatorModId(ItemStack itemStack) {
-            return new TranslationTextComponent("itemGroup." + this.group.getPath()).getUnformattedComponentText();
+            return new TranslationTextComponent("itemGroup." + this.group.getPath()).getString();
         }
 
     }
