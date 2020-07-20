@@ -39,8 +39,8 @@ public class SludgeRefinerBlock extends IndustrialBlock<SludgeRefinerTile> {
                 .key('B', Items.BUCKET)
                 .key('L', Items.FURNACE)
                 .key('M', IndustrialTags.Items.MACHINE_FRAME_PITY)
-                .key('R', ItemTags.makeWrapperTag("forge:gear/gold"))
-                .key('G', ItemTags.makeWrapperTag("forge:gear/iron"))
+                .key('R', ItemTags.makeWrapperTag("forge:gears/gold"))
+                .key('G', ItemTags.makeWrapperTag("forge:gears/iron"))
                 .build(consumer);
     }
 }

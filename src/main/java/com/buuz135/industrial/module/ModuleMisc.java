@@ -1,8 +1,6 @@
 package com.buuz135.industrial.module;
 
-import com.buuz135.industrial.block.misc.EnchantmentSorterBlock;
-import com.buuz135.industrial.block.misc.MobDetectorBlock;
-import com.buuz135.industrial.block.misc.StasisChamberBlock;
+import com.buuz135.industrial.block.misc.*;
 import com.buuz135.industrial.utils.Reference;
 import com.hrznstudio.titanium.event.handler.EventManager;
 import com.hrznstudio.titanium.module.Feature;
@@ -20,6 +18,9 @@ public class ModuleMisc implements IModule {
     public static StasisChamberBlock STASIS_CHAMBER = new StasisChamberBlock();
     public static MobDetectorBlock MOB_DETECTOR = new MobDetectorBlock();
     public static EnchantmentSorterBlock ENCHANTMENT_SORTER = new EnchantmentSorterBlock();
+    public static EnchantmentApplicatorBlock ENCHANTMENT_APPLICATOR = new EnchantmentApplicatorBlock();
+    public static EnchantmentExtractorBlock ENCHANTMENT_EXTRACTOR = new EnchantmentExtractorBlock();
+    public static EnchantmentFactoryBlock ENCHANTMENT_FACTORY = new EnchantmentFactoryBlock();
 
     @Override
     public List<Feature.Builder> generateFeatures() {
@@ -35,6 +36,9 @@ public class ModuleMisc implements IModule {
         );
         features.add(createFeature(MOB_DETECTOR));
         features.add(createFeature(ENCHANTMENT_SORTER));
+        features.add(createFeature(ENCHANTMENT_APPLICATOR));
+        features.add(createFeature(ENCHANTMENT_EXTRACTOR));
+        features.add(createFeature(ENCHANTMENT_FACTORY));
         return features;
     }
 }

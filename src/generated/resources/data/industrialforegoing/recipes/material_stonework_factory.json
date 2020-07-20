@@ -37,7 +37,7 @@
             "item": "minecraft:furnace"
           },
           "a": {
-            "tag": "forge:gear/gold"
+            "tag": "forge:gears/gold"
           },
           "b": {
             "item": "industrialforegoing:pink_slime"

@@ -34,10 +34,10 @@
             "tag": "industrialforegoing:machine_frame/pity"
           },
           "R": {
-            "tag": "forge:gear/gold"
+            "tag": "forge:gears/gold"
           },
           "G": {
-            "tag": "forge:gear/iron"
+            "tag": "forge:gears/iron"
           }
         },
         "result": {

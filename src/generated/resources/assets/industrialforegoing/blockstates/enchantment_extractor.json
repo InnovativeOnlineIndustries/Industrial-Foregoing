@@ -1,0 +1,19 @@
+{
+  "variants": {
+    "subfacing=north": {
+      "model": "industrialforegoing:block/enchantment_extractor"
+    },
+    "subfacing=south": {
+      "model": "industrialforegoing:block/enchantment_extractor",
+      "y": 180
+    },
+    "subfacing=west": {
+      "model": "industrialforegoing:block/enchantment_extractor",
+      "y": 270
+    },
+    "subfacing=east": {
+      "model": "industrialforegoing:block/enchantment_extractor",
+      "y": 90
+    }
+  }
+}

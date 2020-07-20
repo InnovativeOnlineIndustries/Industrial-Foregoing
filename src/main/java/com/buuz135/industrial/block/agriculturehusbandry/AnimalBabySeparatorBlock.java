@@ -39,7 +39,7 @@ public class AnimalBabySeparatorBlock extends IndustrialBlock<AnimalBabySeparato
                 .key('P', IndustrialTags.Items.PLASTIC)
                 .key('A', Items.GOLDEN_CARROT)
                 .key('C', Items.WHEAT)
-                .key('G', ItemTags.makeWrapperTag("forge:gear/gold"))
+                .key('G', ItemTags.makeWrapperTag("forge:gears/gold"))
                 .key('D', Tags.Items.DYES_PURPLE)
                 .key('M', IndustrialTags.Items.MACHINE_FRAME_PITY)
                 .build(consumer);

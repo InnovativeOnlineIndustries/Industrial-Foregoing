@@ -31,7 +31,7 @@
             "item": "minecraft:golden_carrot"
           },
           "G": {
-            "tag": "forge:gear/iron"
+            "tag": "forge:gears/iron"
           },
           "D": {
             "tag": "forge:dyes/purple"

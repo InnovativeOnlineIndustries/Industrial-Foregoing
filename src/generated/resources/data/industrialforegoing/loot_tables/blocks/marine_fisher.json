@@ -2,12 +2,16 @@
   "type": "minecraft:block",
   "pools": [
     {
-      "name": "marine_fisher",
       "rolls": 1,
       "entries": [
         {
           "type": "minecraft:item",
           "name": "industrialforegoing:marine_fisher"
+        }
+      ],
+      "conditions": [
+        {
+          "condition": "minecraft:survives_explosion"
         }
       ]
     }

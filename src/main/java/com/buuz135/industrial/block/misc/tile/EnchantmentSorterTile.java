@@ -1,8 +1,10 @@
 package com.buuz135.industrial.block.misc.tile;
 
 import com.buuz135.industrial.block.tile.IndustrialProcessingTile;
+import com.buuz135.industrial.config.machine.misc.EnchantmentSorterConfig;
 import com.buuz135.industrial.module.ModuleMisc;
 import com.hrznstudio.titanium.annotation.Save;
+import com.hrznstudio.titanium.component.energy.EnergyStorageComponent;
 import com.hrznstudio.titanium.component.inventory.SidedInventoryComponent;
 import net.minecraft.item.DyeColor;
 import net.minecraft.item.EnchantedBookItem;
@@ -57,13 +59,18 @@ public class EnchantmentSorterTile extends IndustrialProcessingTile<EnchantmentS
     }
 
     @Override
+    protected EnergyStorageComponent<EnchantmentSorterTile> createEnergyStorage() {
+        return new EnergyStorageComponent<>(EnchantmentSorterConfig.maxStoredPower, 10, 20);
+    }
+
+    @Override
     protected int getTickPower() {
-        return 40;
+        return EnchantmentSorterConfig.powerPerTick;
     }
 
     @Override
     public int getMaxProgress() {
-        return 50;
+        return EnchantmentSorterConfig.maxProgress;
     }
 
     private boolean isEnchanted(ItemStack stack) {

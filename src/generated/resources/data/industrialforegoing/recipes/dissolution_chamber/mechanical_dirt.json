@@ -22,6 +22,5 @@
     "item": "industrialforegoing:mechanical_dirt",
     "count": 1
   },
-  "outputFluid": "{FluidName:\"minecraft:empty\",Amount:0}",
   "type": "industrialforegoing:dissolution_chamber"
 }

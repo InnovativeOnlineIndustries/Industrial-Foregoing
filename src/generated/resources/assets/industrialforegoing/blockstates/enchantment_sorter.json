@@ -1,18 +1,18 @@
 {
   "variants": {
     "subfacing=north": {
-      "model": "industrialforegoing:block/enchantment_refiner"
+      "model": "industrialforegoing:block/enchantment_sorter"
     },
     "subfacing=south": {
-      "model": "industrialforegoing:block/enchantment_refiner",
+      "model": "industrialforegoing:block/enchantment_sorter",
       "y": 180
     },
     "subfacing=west": {
-      "model": "industrialforegoing:block/enchantment_refiner",
+      "model": "industrialforegoing:block/enchantment_sorter",
       "y": 270
     },
     "subfacing=east": {
-      "model": "industrialforegoing:block/enchantment_refiner",
+      "model": "industrialforegoing:block/enchantment_sorter",
       "y": 90
     }
   }

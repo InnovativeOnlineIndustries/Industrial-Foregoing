@@ -39,7 +39,7 @@ public class FluidCollectorBlock extends IndustrialBlock<FluidCollectorTile> {
                 .key('B', Items.BUCKET)
                 .key('M', IndustrialTags.Items.MACHINE_FRAME_PITY)
                 .key('R', Items.REDSTONE)
-                .key('S', ItemTags.makeWrapperTag("forge:gear/iron"))
+                .key('S', ItemTags.makeWrapperTag("forge:gears/iron"))
                 .build(consumer);
     }
 }

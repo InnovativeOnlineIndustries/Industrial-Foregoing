@@ -1,7 +1,7 @@
 {
   "variants": {
     "": {
-      "model": "industrialforegoing:block/water_resources_collector"
+      "model": "industrialforegoing:block/marine_fisher"
     }
   }
 }

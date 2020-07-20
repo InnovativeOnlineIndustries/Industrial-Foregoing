@@ -39,7 +39,7 @@ public class PlantGathererBlock extends IndustrialBlock<PlantGathererTile> {
                 .key('H', Items.IRON_HOE)
                 .key('A', Items.IRON_AXE)
                 .key('M', IndustrialTags.Items.MACHINE_FRAME_PITY)
-                .key('G', ItemTags.makeWrapperTag("forge:gear/gold"))
+                .key('G', ItemTags.makeWrapperTag("forge:gears/gold"))
                 .key('R', Items.REDSTONE)
                 .build(consumer);
 

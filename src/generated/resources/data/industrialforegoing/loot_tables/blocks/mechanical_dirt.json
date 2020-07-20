@@ -2,12 +2,16 @@
   "type": "minecraft:block",
   "pools": [
     {
-      "name": "mechanical_dirt",
       "rolls": 1,
       "entries": [
         {
           "type": "minecraft:item",
           "name": "industrialforegoing:mechanical_dirt"
+        }
+      ],
+      "conditions": [
+        {
+          "condition": "minecraft:survives_explosion"
         }
       ]
     }

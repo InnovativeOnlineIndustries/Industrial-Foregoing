@@ -13,10 +13,10 @@
       "item": "minecraft:glass_pane"
     },
     {
-      "tag": "forge:gear/diamond"
+      "tag": "forge:gears/diamond"
     },
     {
-      "tag": "forge:gear/diamond"
+      "tag": "forge:gears/diamond"
     },
     {
       "item": "minecraft:sugar"
@@ -31,6 +31,5 @@
     "item": "industrialforegoing:speed_addon_2",
     "count": 1
   },
-  "outputFluid": "{FluidName:\"minecraft:empty\",Amount:0}",
   "type": "industrialforegoing:dissolution_chamber"
 }

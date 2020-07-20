@@ -41,7 +41,7 @@ public class DissolutionChamberBlock extends IndustrialBlock<DissolutionChamberT
                 .key('B', Items.BUCKET)
                 .key('M', IndustrialTags.Items.MACHINE_FRAME_PITY)
                 .key('G', Tags.Items.INGOTS_GOLD)
-                .key('D', ItemTags.makeWrapperTag("forge:gear/diamond"))
+                .key('D', ItemTags.makeWrapperTag("forge:gears/diamond"))
                 .build(consumer);
     }
 }

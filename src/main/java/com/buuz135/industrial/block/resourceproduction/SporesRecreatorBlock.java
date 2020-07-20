@@ -38,7 +38,7 @@ public class SporesRecreatorBlock extends IndustrialBlock<SporesRecreatorTile> {
                 .key('P', IndustrialTags.Items.PLASTIC)
                 .key('I', Tags.Items.MUSHROOMS)
                 .key('M', IndustrialTags.Items.MACHINE_FRAME_PITY)
-                .key('S', ItemTags.makeWrapperTag("forge:gear/iron"))
+                .key('S', ItemTags.makeWrapperTag("forge:gears/iron"))
                 .build(consumer);
     }
 }

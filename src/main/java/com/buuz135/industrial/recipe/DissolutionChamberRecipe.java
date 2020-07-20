@@ -57,7 +57,7 @@ public class DissolutionChamberRecipe extends SerializableRecipe {
                         new Ingredient.TagList(IndustrialTags.Items.GEAR_GOLD),
                         new Ingredient.TagList(Tags.Items.INGOTS_IRON)
                 },
-                new FluidStack(ModuleCore.PINK_SLIME.getSourceFluid(), 250), 300, new ItemStack(ModuleCore.SIMPLE), FluidStack.EMPTY);
+                new FluidStack(ModuleCore.LATEX.getSourceFluid(), 250), 300, new ItemStack(ModuleCore.SIMPLE), FluidStack.EMPTY);
     }
 
     public Ingredient.IItemList[] input;

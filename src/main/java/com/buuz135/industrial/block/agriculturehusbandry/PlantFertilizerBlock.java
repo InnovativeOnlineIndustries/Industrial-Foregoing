@@ -40,7 +40,7 @@ public class PlantFertilizerBlock extends IndustrialBlock<PlantFertilizerTile> {
                 .key('L', Items.LEATHER)
                 .key('M', IndustrialTags.Items.MACHINE_FRAME_PITY)
                 .key('R', Items.REDSTONE)
-                .key('G', ItemTags.makeWrapperTag("forge:gear/iron"))
+                .key('G', ItemTags.makeWrapperTag("forge:gears/iron"))
                 .build(consumer);
     }
 }

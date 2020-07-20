@@ -38,7 +38,7 @@ public class DyeMixerBlock extends IndustrialBlock<DyeMixerTile> {
                 .key('P', IndustrialTags.Items.PLASTIC)
                 .key('D', Tags.Items.DYES)
                 .key('M', IndustrialTags.Items.MACHINE_FRAME_PITY)
-                .key('R', ItemTags.makeWrapperTag("forge:gear/gold"))
+                .key('R', ItemTags.makeWrapperTag("forge:gears/gold"))
                 .build(consumer);
     }
 }

@@ -40,7 +40,7 @@ public class SewageComposterBlock extends IndustrialBlock<SewageComposterTile> {
                 .key('D', Items.PISTON)
                 .key('B', Items.BRICK)
                 .key('M', IndustrialTags.Items.MACHINE_FRAME_PITY)
-                .key('G', ItemTags.makeWrapperTag("forge:gear/iron"))
+                .key('G', ItemTags.makeWrapperTag("forge:gears/iron"))
                 .build(consumer);
     }
 }

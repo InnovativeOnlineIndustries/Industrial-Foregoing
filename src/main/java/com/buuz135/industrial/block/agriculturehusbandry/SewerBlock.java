@@ -39,7 +39,7 @@ public class SewerBlock extends IndustrialBlock<SewerTile> {
                 .key('E', Items.BUCKET)
                 .key('B', Items.BRICK)
                 .key('M', IndustrialTags.Items.MACHINE_FRAME_PITY)
-                .key('G', ItemTags.makeWrapperTag("forge:gear/iron"))
+                .key('G', ItemTags.makeWrapperTag("forge:gears/iron"))
                 .build(consumer);
     }
 }

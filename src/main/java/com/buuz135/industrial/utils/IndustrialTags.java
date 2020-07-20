@@ -20,9 +20,9 @@ public class IndustrialTags {
         public static final ITag.INamedTag<Item> SLUDGE_OUTPUT = ItemTags.makeWrapperTag(Reference.MOD_ID + ":" + "sludge");
         public static final ITag.INamedTag<Item> BIOREACTOR_INPUT = ItemTags.makeWrapperTag(Reference.MOD_ID + ":" + "bioreactor");
 
-        public static final ITag.INamedTag<Item> GEAR_GOLD = ItemTags.makeWrapperTag("forge:" + "gear/gold");
-        public static final ITag.INamedTag<Item> GEAR_DIAMOND = ItemTags.makeWrapperTag("forge:" + "gear/diamond");
-        public static final ITag.INamedTag<Item> GEAR_IRON = ItemTags.makeWrapperTag("forge:" + "gear/iron");
+        public static final ITag.INamedTag<Item> GEAR_GOLD = ItemTags.makeWrapperTag("forge:" + "gears/gold");
+        public static final ITag.INamedTag<Item> GEAR_DIAMOND = ItemTags.makeWrapperTag("forge:" + "gears/diamond");
+        public static final ITag.INamedTag<Item> GEAR_IRON = ItemTags.makeWrapperTag("forge:" + "gears/iron");
 
         public static final ITag.INamedTag<Item> FERTILIZER = ItemTags.makeWrapperTag("forge:" + "fertilizer");
     }

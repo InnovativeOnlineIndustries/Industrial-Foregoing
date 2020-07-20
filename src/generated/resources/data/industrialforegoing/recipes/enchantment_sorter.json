@@ -1,0 +1,49 @@
+{
+  "type": "forge:conditional",
+  "recipes": [
+    {
+      "conditions": [
+        {
+          "values": [
+            {
+              "item": "industrialforegoing:enchantment_sorter",
+              "type": "forge:item_exists"
+            }
+          ],
+          "type": "forge:and"
+        }
+      ],
+      "recipe": {
+        "type": "minecraft:crafting_shaped",
+        "pattern": [
+          "PSP",
+          "BME",
+          "PGP"
+        ],
+        "key": {
+          "P": {
+            "tag": "forge:plastic"
+          },
+          "S": {
+            "item": "minecraft:ender_pearl"
+          },
+          "B": {
+            "item": "minecraft:book"
+          },
+          "E": {
+            "item": "minecraft:enchanted_book"
+          },
+          "M": {
+            "tag": "industrialforegoing:machine_frame/advanced"
+          },
+          "G": {
+            "tag": "forge:gears/diamond"
+          }
+        },
+        "result": {
+          "item": "industrialforegoing:enchantment_sorter"
+        }
+      }
+    }
+  ]
+}

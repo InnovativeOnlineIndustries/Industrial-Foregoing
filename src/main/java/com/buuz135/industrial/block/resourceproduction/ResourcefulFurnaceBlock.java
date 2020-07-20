@@ -39,7 +39,7 @@ public class ResourcefulFurnaceBlock extends IndustrialBlock<ResourcefulFurnaceT
                 .key('B', Items.BUCKET)
                 .key('L', Items.FURNACE)
                 .key('M', IndustrialTags.Items.MACHINE_FRAME_PITY)
-                .key('R', ItemTags.makeWrapperTag("forge:gear/gold"))
+                .key('R', ItemTags.makeWrapperTag("forge:gears/gold"))
                 .build(consumer);
     }
 }

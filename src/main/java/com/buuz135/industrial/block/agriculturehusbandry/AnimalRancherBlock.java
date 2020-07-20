@@ -36,7 +36,7 @@ public class AnimalRancherBlock extends IndustrialBlock<AnimalRancherTile> {
         TitaniumShapedRecipeBuilder.shapedRecipe(this)
                 .patternLine("PPP").patternLine("SBS").patternLine("GMG")
                 .key('P', IndustrialTags.Items.PLASTIC)
-                .key('G', ItemTags.makeWrapperTag("forge:gear/gold"))
+                .key('G', ItemTags.makeWrapperTag("forge:gears/gold"))
                 .key('S', Items.SHEARS)
                 .key('B', Items.BUCKET)
                 .key('M', IndustrialTags.Items.MACHINE_FRAME_PITY)

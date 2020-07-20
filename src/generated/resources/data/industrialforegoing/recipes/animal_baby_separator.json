@@ -31,7 +31,7 @@
             "item": "minecraft:wheat"
           },
           "G": {
-            "tag": "forge:gear/gold"
+            "tag": "forge:gears/gold"
           },
           "D": {
             "tag": "forge:dyes/purple"

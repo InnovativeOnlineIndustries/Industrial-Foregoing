@@ -49,7 +49,7 @@ public class WaterCondensatorBlock extends IndustrialBlock<WaterCondensatorTile>
                 .key('L', Items.PISTON)
                 .key('M', IndustrialTags.Items.MACHINE_FRAME_PITY)
                 .key('R', Items.REDSTONE)
-                .key('G', ItemTags.makeWrapperTag("forge:gear/iron"))
+                .key('G', ItemTags.makeWrapperTag("forge:gears/iron"))
                 .build(consumer);
     }
 

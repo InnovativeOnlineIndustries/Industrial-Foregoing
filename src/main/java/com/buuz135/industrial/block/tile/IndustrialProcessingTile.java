@@ -3,7 +3,6 @@ package com.buuz135.industrial.block.tile;
 import com.hrznstudio.titanium.annotation.Save;
 import com.hrznstudio.titanium.api.augment.AugmentTypes;
 import com.hrznstudio.titanium.block.BasicTileBlock;
-import com.hrznstudio.titanium.client.screen.addon.EnergyBarScreenAddon;
 import com.hrznstudio.titanium.component.progress.ProgressBarComponent;
 import com.hrznstudio.titanium.item.AugmentWrapper;
 import net.minecraft.entity.player.PlayerEntity;
@@ -18,7 +17,7 @@ public abstract class IndustrialProcessingTile<T extends IndustrialProcessingTil
 
     public IndustrialProcessingTile(BasicTileBlock<T> basicTileBlock, int x, int y) {
         super(basicTileBlock);
-        this.addGuiAddonFactory(() -> new EnergyBarScreenAddon(10, 20, getEnergyStorage()));
+        //this.addGuiAddonFactory(() -> new EnergyBarScreenAddon(10, 20, getEnergyStorage()));
         this.addProgressBar(progressBar = new ProgressBarComponent<T>(x, y, 100).
                 setComponentHarness(this.getSelf()).
                 setBarDirection(ProgressBarComponent.BarDirection.ARROW_RIGHT).

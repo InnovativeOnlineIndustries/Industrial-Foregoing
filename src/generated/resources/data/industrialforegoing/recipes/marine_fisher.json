@@ -34,7 +34,7 @@
             "tag": "industrialforegoing:machine_frame/simple"
           },
           "g": {
-            "tag": "forge:gear/iron"
+            "tag": "forge:gears/iron"
           },
           "r": {
             "item": "minecraft:redstone"

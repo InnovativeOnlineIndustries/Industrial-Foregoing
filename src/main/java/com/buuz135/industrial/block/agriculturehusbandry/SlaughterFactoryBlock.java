@@ -36,7 +36,7 @@ public class SlaughterFactoryBlock extends IndustrialBlock<SlaughterFactoryTile>
         TitaniumShapedRecipeBuilder.shapedRecipe(this)
                 .patternLine("PDP").patternLine("SMS").patternLine("ARA")
                 .key('P', IndustrialTags.Items.PLASTIC)
-                .key('D', ItemTags.makeWrapperTag("forge:gear/gold"))
+                .key('D', ItemTags.makeWrapperTag("forge:gears/gold"))
                 .key('S', Items.IRON_SWORD)
                 .key('A', Items.IRON_AXE)
                 .key('M', IndustrialTags.Items.MACHINE_FRAME_PITY)

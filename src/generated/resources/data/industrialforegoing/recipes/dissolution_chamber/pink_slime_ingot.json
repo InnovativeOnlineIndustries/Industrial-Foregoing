@@ -19,6 +19,5 @@
     "item": "industrialforegoing:pink_slime_ingot",
     "count": 1
   },
-  "outputFluid": "{FluidName:\"minecraft:empty\",Amount:0}",
   "type": "industrialforegoing:dissolution_chamber"
 }

@@ -40,8 +40,8 @@ public class BlockBreakerBlock extends IndustrialBlock<BlockBreakerTile> {
                 .key('D', Items.IRON_SHOVEL)
                 .key('M', IndustrialTags.Items.MACHINE_FRAME_PITY)
                 .key('R', Items.REDSTONE)
-                .key('G', ItemTags.makeWrapperTag("forge:gear/gold"))
-                .key('S', ItemTags.makeWrapperTag("forge:gear/iron"))
+                .key('G', ItemTags.makeWrapperTag("forge:gears/gold"))
+                .key('S', ItemTags.makeWrapperTag("forge:gears/iron"))
                 .build(consumer);
     }
 }

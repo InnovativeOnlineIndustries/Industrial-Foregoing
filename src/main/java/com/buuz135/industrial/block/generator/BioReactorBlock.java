@@ -37,7 +37,7 @@ public class BioReactorBlock extends IndustrialBlock<BioReactorTile> {
         TitaniumShapedRecipeBuilder.shapedRecipe(this)
                 .patternLine("PDP").patternLine("SMS").patternLine("ARA")
                 .key('P', IndustrialTags.Items.PLASTIC)
-                .key('D', ItemTags.makeWrapperTag("forge:gear/diamond"))
+                .key('D', ItemTags.makeWrapperTag("forge:gears/diamond"))
                 .key('S', Tags.Items.SLIMEBALLS)
                 .key('A', Items.BRICK)
                 .key('M', IndustrialTags.Items.MACHINE_FRAME_PITY)

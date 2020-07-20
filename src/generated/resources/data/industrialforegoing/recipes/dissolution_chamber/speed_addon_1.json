@@ -13,10 +13,10 @@
       "item": "minecraft:glass_pane"
     },
     {
-      "tag": "forge:gear/gold"
+      "tag": "forge:gears/gold"
     },
     {
-      "tag": "forge:gear/gold"
+      "tag": "forge:gears/gold"
     },
     {
       "item": "minecraft:sugar"
@@ -31,6 +31,5 @@
     "item": "industrialforegoing:speed_addon_1",
     "count": 1
   },
-  "outputFluid": "{FluidName:\"minecraft:empty\",Amount:0}",
   "type": "industrialforegoing:dissolution_chamber"
 }

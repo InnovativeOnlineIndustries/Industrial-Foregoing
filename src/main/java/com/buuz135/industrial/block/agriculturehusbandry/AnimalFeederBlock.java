@@ -39,7 +39,7 @@ public class AnimalFeederBlock extends IndustrialBlock<AnimalFeederTile> {
                 .key('P', IndustrialTags.Items.PLASTIC)
                 .key('A', Items.GOLDEN_APPLE)
                 .key('C', Items.GOLDEN_CARROT)
-                .key('G', ItemTags.makeWrapperTag("forge:gear/iron"))
+                .key('G', ItemTags.makeWrapperTag("forge:gears/iron"))
                 .key('D', Tags.Items.DYES_PURPLE)
                 .key('M', IndustrialTags.Items.MACHINE_FRAME_PITY)
                 .build(consumer);
