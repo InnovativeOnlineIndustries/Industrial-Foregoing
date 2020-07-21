@@ -33,7 +33,7 @@ public abstract class IndustrialAreaWorkingTile<T extends IndustrialAreaWorkingT
         super(basicTileBlock);
         this.pointer = 0;
         this.showingArea = false;
-        addButton(areaButton = new ButtonComponent(176 - 22, 84, 14, 14) {
+        addButton(areaButton = new ButtonComponent(154 - 18, 84, 14, 14) {
             @Override
             public List<IFactory<? extends IScreenAddon>> getScreenAddons() {
                 List<IFactory<? extends IScreenAddon>> addons = new ArrayList<>();

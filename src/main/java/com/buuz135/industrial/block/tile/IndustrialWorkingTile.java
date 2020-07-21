@@ -33,13 +33,14 @@ public abstract class IndustrialWorkingTile<T extends IndustrialWorkingTile<T>> 
                         workingBar.setMaxProgress(maxProgress);
                         workingBar.setProgress((int) (maxProgress * work.getWorkAmount()));
                         this.getEnergyStorage().extractEnergy(work.getEnergyConsumed(), false);
+                        this.getRedstoneManager().finish();
                     }
                 })
                 .setOnTickWork(() -> {
                     workingBar.setProgressIncrease(this.hasAugmentInstalled(AugmentTypes.SPEED) ? (int) AugmentWrapper.getType(this.getInstalledAugments(AugmentTypes.SPEED).get(0), AugmentTypes.SPEED) : 1);
                 })
                 .setCanReset(tileEntity -> true)
-                .setCanIncrease(tileEntity -> true)
+                .setCanIncrease(tileEntity -> this.getRedstoneManager().getAction().canRun(tileEntity.getEnvironmentValue(false, null)) && this.getRedstoneManager().shouldWork())
                 .setColor(DyeColor.LIME));
     }
 

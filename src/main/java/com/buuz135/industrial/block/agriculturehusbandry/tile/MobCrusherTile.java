@@ -79,7 +79,7 @@ public class MobCrusherTile extends IndustrialAreaWorkingTile<MobCrusherTile> {
                 setInputFilter((stack, integer) -> false).
                 setComponentHarness(this)
         );
-        this.addButton(buttonComponent = new ButtonComponent(136, 84, 14, 14) {
+        this.addButton(buttonComponent = new ButtonComponent(154 - 18 * 2, 84, 14, 14) {
             @Override
             public List<IFactory<? extends IScreenAddon>> getScreenAddons() {
                 return Collections.singletonList(() -> new StateButtonAddon(this,
