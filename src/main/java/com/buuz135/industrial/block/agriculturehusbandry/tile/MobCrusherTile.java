@@ -51,8 +51,8 @@ import java.util.List;
 
 public class MobCrusherTile extends IndustrialAreaWorkingTile<MobCrusherTile> {
 
-    private final Method GET_EXPERIENCE_POINTS = ObfuscationReflectionHelper.findMethod(LivingEntity.class, "getExperiencePoints", PlayerEntity.class);
-    private final Method GET_DROP_CHANCE = ObfuscationReflectionHelper.findMethod(MobEntity.class, "getDropChance", EquipmentSlotType.class);
+    private final Method GET_EXPERIENCE_POINTS = ObfuscationReflectionHelper.findMethod(LivingEntity.class, "func_70693_a", PlayerEntity.class);
+    private final Method GET_DROP_CHANCE = ObfuscationReflectionHelper.findMethod(MobEntity.class, "func_205712_c", EquipmentSlotType.class);
 
     @Save
     private SidedInventoryComponent<MobCrusherTile> output;
