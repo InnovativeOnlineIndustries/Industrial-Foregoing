@@ -31,7 +31,7 @@ plugins {
 apply plugin: 'net.minecraftforge.gradle'
 apply plugin: 'eclipse'
 
-def isReleaseBranch = System.getenv("BRANCH") == "release-1.15";
+def isReleaseBranch = System.getenv("BRANCH") == "release-1.15" || System.getenv("BRANCH") == "release-1.16";
 
 
 def BUILD_NUMBER = System.getenv("COMMIT") ? "${project.api_version}-${System.getenv("COMMIT")}" : "${project.api_version}"
@@ -215,7 +215,7 @@ curseforge {
         changelog = "https://github.com/InnovativeOnlineIndustries/Industrial-Foregoing/blob/changelog/CHANGELOG.md"
         changelogType = 'markdown'
         releaseType = 'beta'
-        addGameVersion '1.15.2'
+        addGameVersion '1.16.1'
 
         mainArtifact(jar){
             relations {
@@ -233,6 +233,6 @@ task makeChangelog(type: GitChangelogTask) {
     untaggedName = "Version ${project.version}"
     //fromCommit = "6a5a3df3665643ea181873312e3801db7c662686"
     fromRef = "refs/tags/2.3.0"
-    toRef = "release-1.15"
+    toRef = "release-1.16"
     templateContent = file("changelog.mustache").getText("UTF-8")
 }
