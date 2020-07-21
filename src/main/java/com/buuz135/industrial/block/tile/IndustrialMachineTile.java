@@ -5,6 +5,7 @@ import com.hrznstudio.titanium.api.augment.AugmentTypes;
 import com.hrznstudio.titanium.block.BasicTileBlock;
 import com.hrznstudio.titanium.block.tile.MachineTile;
 import com.hrznstudio.titanium.component.bundle.TankInteractionBundle;
+import com.hrznstudio.titanium.component.fluid.FluidTankComponent;
 import com.hrznstudio.titanium.item.AugmentWrapper;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
@@ -13,10 +14,20 @@ public abstract class IndustrialMachineTile<T extends IndustrialMachineTile<T>> 
 
     @Save
     private TankInteractionBundle<IndustrialMachineTile> tankBundle;
+    private boolean tankBundleAdded;
 
     public IndustrialMachineTile(BasicTileBlock<T> basicTileBlock) {
         super(basicTileBlock);
-        this.addBundle(tankBundle = new TankInteractionBundle<>(() -> this.getCapability(CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY), 175, 94, this, 10));
+        tankBundleAdded = false;
+    }
+
+    @Override
+    public void addTank(FluidTankComponent<T> tank) {
+        super.addTank(tank);
+        if (!tankBundleAdded) {
+            this.addBundle(tankBundle = new TankInteractionBundle<>(() -> this.getCapability(CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY), 175, 94, this, 10));
+            tankBundleAdded = true;
+        }
     }
 
     @Override
