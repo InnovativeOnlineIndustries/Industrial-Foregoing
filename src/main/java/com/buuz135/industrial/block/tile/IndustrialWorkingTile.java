@@ -4,7 +4,6 @@ import com.buuz135.industrial.proxy.client.IndustrialAssetProvider;
 import com.hrznstudio.titanium.annotation.Save;
 import com.hrznstudio.titanium.api.augment.AugmentTypes;
 import com.hrznstudio.titanium.block.BasicTileBlock;
-import com.hrznstudio.titanium.client.screen.addon.EnergyBarScreenAddon;
 import com.hrznstudio.titanium.client.screen.asset.IAssetProvider;
 import com.hrznstudio.titanium.component.progress.ProgressBarComponent;
 import com.hrznstudio.titanium.item.AugmentWrapper;
@@ -21,7 +20,7 @@ public abstract class IndustrialWorkingTile<T extends IndustrialWorkingTile<T>> 
 
     public IndustrialWorkingTile(BasicTileBlock<T> basicTileBlock) {
         super(basicTileBlock);
-        this.addGuiAddonFactory(() -> new EnergyBarScreenAddon(10, 20, getEnergyStorage()));
+        //this.addGuiAddonFactory(() -> new EnergyBarScreenAddon(10, 20, getEnergyStorage()));
         this.addProgressBar(workingBar = new ProgressBarComponent<T>(30, 20, 0, getMaxProgress())
                 .setComponentHarness(this.getSelf())
                 .setBarDirection(ProgressBarComponent.BarDirection.VERTICAL_UP)

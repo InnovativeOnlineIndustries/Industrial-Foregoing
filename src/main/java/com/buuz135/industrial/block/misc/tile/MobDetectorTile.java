@@ -4,6 +4,7 @@ import com.buuz135.industrial.block.misc.MobDetectorBlock;
 import com.buuz135.industrial.block.tile.IndustrialAreaWorkingTile;
 import com.buuz135.industrial.block.tile.RangeManager;
 import com.buuz135.industrial.module.ModuleMisc;
+import com.hrznstudio.titanium.component.energy.EnergyStorageComponent;
 import net.minecraft.entity.LivingEntity;
 
 import javax.annotation.Nonnull;
@@ -30,7 +31,7 @@ public class MobDetectorTile extends IndustrialAreaWorkingTile<MobDetectorTile> 
 
     @Override
     public int getMaxProgress() {
-        return 20;
+        return 10;
     }
 
     @Nonnull
@@ -42,4 +43,10 @@ public class MobDetectorTile extends IndustrialAreaWorkingTile<MobDetectorTile> 
     public int getRedstoneSignal() {
         return redstoneSignal;
     }
+
+    @Override
+    protected EnergyStorageComponent<MobDetectorTile> createEnergyStorage() {
+        return new EnergyStorageComponent<>(1, 10, 20);
+    }
+
 }
