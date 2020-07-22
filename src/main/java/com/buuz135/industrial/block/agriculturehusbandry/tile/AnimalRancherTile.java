@@ -56,17 +56,19 @@ public class AnimalRancherTile extends IndustrialAreaWorkingTile<AnimalRancherTi
             List<AnimalEntity> mobs = this.world.getEntitiesWithinAABB(AnimalEntity.class, getWorkingArea().getBoundingBox());
             if (mobs.size() > 0) {
                 for (AnimalEntity mob : mobs) {
-                    //BUCKET INTERACTION
                     FakePlayer player = IndustrialForegoing.getFakePlayer(world, mob.func_233580_cy_()); //getPosition
-                    player.setHeldItem(Hand.MAIN_HAND, new ItemStack(Items.BUCKET));
-                    if (mob.func_230254_b_(player, Hand.MAIN_HAND).isSuccessOrConsume()) { //ProcessInteract
-                        ItemStack stack = player.getHeldItem(Hand.MAIN_HAND);
-                        if (stack.getItem() instanceof BucketItem) {
-                            tank.fillForced(new FluidStack(((BucketItem) stack.getItem()).getFluid(), FluidAttributes.BUCKET_VOLUME), IFluidHandler.FluidAction.EXECUTE);
+                    //BUCKET INTERACTION
+                    if (tank.getFluidAmount() + 1000 <= tank.getCapacity()) {
+                        player.setHeldItem(Hand.MAIN_HAND, new ItemStack(Items.BUCKET));
+                        if (mob.func_230254_b_(player, Hand.MAIN_HAND).isSuccessOrConsume()) { //ProcessInteract
+                            ItemStack stack = player.getHeldItem(Hand.MAIN_HAND);
+                            if (stack.getItem() instanceof BucketItem) {
+                                tank.fillForced(new FluidStack(((BucketItem) stack.getItem()).getFluid(), FluidAttributes.BUCKET_VOLUME), IFluidHandler.FluidAction.EXECUTE);
+                                player.setHeldItem(Hand.MAIN_HAND, ItemStack.EMPTY);
+                                return new WorkAction(0.35f, powerPerOperation);
+                            }
                             player.setHeldItem(Hand.MAIN_HAND, ItemStack.EMPTY);
-                            return new WorkAction(0.35f, powerPerOperation);
                         }
-                        player.setHeldItem(Hand.MAIN_HAND, ItemStack.EMPTY);
                     }
                     //SHEAR INTERACTION
                     ItemStack shears = new ItemStack(Items.SHEARS);
