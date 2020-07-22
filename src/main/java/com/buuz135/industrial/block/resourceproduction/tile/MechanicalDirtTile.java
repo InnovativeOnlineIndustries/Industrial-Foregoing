@@ -16,6 +16,7 @@ import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.world.Difficulty;
 import net.minecraft.world.biome.Biome;
 import net.minecraft.world.server.ServerChunkProvider;
+import net.minecraft.world.server.ServerWorld;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.capability.IFluidHandler;
 
@@ -62,7 +63,7 @@ public class MechanicalDirtTile extends IndustrialWorkingTile<MechanicalDirtTile
     }
 
     private MobEntity getMobToSpawn() {
-        List<Biome.SpawnListEntry> spawnListEntries = ((ServerChunkProvider) world.getChunkProvider()).getChunkGenerator().func_230353_a_(this.world.getBiome(this.pos), null, EntityClassification.MONSTER, pos);
+        List<Biome.SpawnListEntry> spawnListEntries = ((ServerChunkProvider) world.getChunkProvider()).getChunkGenerator().func_230353_a_(this.world.getBiome(this.pos), ((ServerWorld) world).func_241112_a_(), EntityClassification.MONSTER, pos);
         if (spawnListEntries.size() == 0) return null;
         Biome.SpawnListEntry spawnListEntry = spawnListEntries.get(world.rand.nextInt(spawnListEntries.size()));
         if (!EntitySpawnPlacementRegistry.func_223515_a(spawnListEntry.entityType, this.world, SpawnReason.NATURAL, pos, world.rand))

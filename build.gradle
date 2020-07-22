@@ -96,6 +96,10 @@ repositories {
     maven {
         url 'https://cdn.hrzn.studio/maven/'
     }
+    maven {
+        name 'jared maven'
+        url "https://maven.blamejared.com/"
+    }
 }
 
 dependencies {
@@ -110,6 +114,7 @@ dependencies {
         // at runtime, use the full JEI jar
         runtimeOnly fg.deobf("mezz.jei:jei-1.16.1:7.0.0.2")
     //}
+    compile fg.deobf("blusunrize.immersiveengineering:ImmersiveEngineering:0.16-+")
 }
 
 afterEvaluate {
