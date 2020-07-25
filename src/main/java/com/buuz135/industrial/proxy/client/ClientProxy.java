@@ -135,6 +135,12 @@ public class ClientProxy extends CommonProxy {
             }
             return 0xFFFFFF;
         }, ModuleTool.INFINITY_SAW);
+        Minecraft.getInstance().getItemColors().register((stack, tintIndex) -> {
+            if (tintIndex == 0) {
+                return InfinityTier.getTierBraquet(ItemInfinity.getPowerFromStack(stack)).getLeft().getTextureColor();
+            }
+            return 0xFFFFFF;
+        }, ModuleTool.INFINITY_HAMMER);
     }
 
 }

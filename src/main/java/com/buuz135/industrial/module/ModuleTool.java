@@ -4,6 +4,7 @@ import com.buuz135.industrial.item.MeatFeederItem;
 import com.buuz135.industrial.item.MobEssenceToolItem;
 import com.buuz135.industrial.item.MobImprisonmentToolItem;
 import com.buuz135.industrial.item.infinity.item.ItemInfinityDrill;
+import com.buuz135.industrial.item.infinity.item.ItemInfinityHammer;
 import com.buuz135.industrial.item.infinity.item.ItemInfinitySaw;
 import com.buuz135.industrial.utils.BlockUtils;
 import com.buuz135.industrial.utils.Reference;
@@ -33,6 +34,7 @@ public class ModuleTool implements IModule {
     public static ItemInfinityDrill INFINITY_DRILL;
     public static MobEssenceToolItem MOB_ESSENCE_TOOL;
     public static ItemInfinitySaw INFINITY_SAW;
+    public static ItemInfinityHammer INFINITY_HAMMER;
 
     @Override
     public List<Feature.Builder> generateFeatures() {
@@ -45,9 +47,11 @@ public class ModuleTool implements IModule {
             breakEvent.setCanceled(true);
             breakEvent.getPlayer().getHeldItemMainhand().onBlockDestroyed((World) breakEvent.getWorld(), breakEvent.getState(), breakEvent.getPos(), breakEvent.getPlayer());
         })));
+        features.add(createFeature(INFINITY_HAMMER = new ItemInfinityHammer(TAB_TOOL)));
         TAB_TOOL.addIconStack(new ItemStack(INFINITY_DRILL));
         ItemStackHarnessRegistry.register(INFINITY_SAW, stack -> new ItemStackHarness(stack, null, (IButtonHandler) stack.getItem(), CapabilityEnergy.ENERGY, CapabilityFluidHandler.FLUID_HANDLER_ITEM_CAPABILITY, CapabilityItemStackHolder.ITEMSTACK_HOLDER_CAPABILITY));
         ItemStackHarnessRegistry.register(INFINITY_DRILL, stack -> new ItemStackHarness(stack, null, (IButtonHandler) stack.getItem(), CapabilityEnergy.ENERGY, CapabilityFluidHandler.FLUID_HANDLER_ITEM_CAPABILITY, CapabilityItemStackHolder.ITEMSTACK_HOLDER_CAPABILITY));
+        ItemStackHarnessRegistry.register(INFINITY_HAMMER, stack -> new ItemStackHarness(stack, null, (IButtonHandler) stack.getItem(), CapabilityEnergy.ENERGY, CapabilityFluidHandler.FLUID_HANDLER_ITEM_CAPABILITY, CapabilityItemStackHolder.ITEMSTACK_HOLDER_CAPABILITY));
         return features;
     }
 }

@@ -49,6 +49,7 @@ public class IndustrialRecipeProvider extends TitaniumRecipeProvider {
         ModuleTool.MEAT_FEEDER.registerRecipe(consumer);
         ModuleTool.INFINITY_DRILL.registerRecipe(consumer);
         ModuleTool.INFINITY_SAW.registerRecipe(consumer);
+        ModuleTool.INFINITY_HAMMER.registerRecipe(consumer);
         //CORE
         ModuleCore.STRAW.registerRecipe(consumer);
         for (RangeAddonItem rangeAddon : ModuleCore.RANGE_ADDONS) {

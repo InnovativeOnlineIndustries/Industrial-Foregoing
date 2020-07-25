@@ -48,7 +48,7 @@ public class ItemInfinitySaw extends ItemInfinity {
     public static int FUEL_CONSUMPTION = 3;
 
     public ItemInfinitySaw(ItemGroup group) {
-        super("infinity_saw", group, new Properties().maxStackSize(1).addToolType(ToolType.AXE, 3), POWER_CONSUMPTION, FUEL_CONSUMPTION);
+        super("infinity_saw", group, new Properties().maxStackSize(1).addToolType(ToolType.AXE, 3), POWER_CONSUMPTION, FUEL_CONSUMPTION, false);
     }
 
     @Override

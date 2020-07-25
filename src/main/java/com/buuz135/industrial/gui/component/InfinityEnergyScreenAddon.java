@@ -2,11 +2,9 @@ package com.buuz135.industrial.gui.component;
 
 import com.buuz135.industrial.item.infinity.InfinityEnergyStorage;
 import com.buuz135.industrial.item.infinity.InfinityTier;
-import com.hrznstudio.titanium.api.client.AssetTypes;
 import com.hrznstudio.titanium.api.client.IAsset;
 import com.hrznstudio.titanium.client.screen.addon.BasicScreenAddon;
 import com.hrznstudio.titanium.client.screen.asset.IAssetProvider;
-import com.hrznstudio.titanium.util.AssetUtil;
 import com.mojang.blaze3d.matrix.MatrixStack;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.util.text.ITextProperties;
@@ -14,10 +12,12 @@ import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.util.text.TextFormatting;
 import org.apache.commons.lang3.tuple.Pair;
 
-import java.awt.*;
 import java.text.DecimalFormat;
 import java.util.Arrays;
 import java.util.List;
+
+import static com.hrznstudio.titanium.client.screen.addon.EnergyBarScreenAddon.drawBackground;
+import static com.hrznstudio.titanium.client.screen.addon.EnergyBarScreenAddon.drawForeground;
 
 public class InfinityEnergyScreenAddon extends BasicScreenAddon {
 
@@ -29,23 +29,6 @@ public class InfinityEnergyScreenAddon extends BasicScreenAddon {
         super(posX, posY);
         this.handler = handler;
         this.tier = InfinityTier.getTierBraquet(handler.getLongEnergyStored());
-    }
-
-    public static IAsset drawBackground(MatrixStack stack, Screen screen, IAssetProvider provider, int handlerPosX, int handlerPosY, int guiX, int guiY) {
-        IAsset background = IAssetProvider.getAsset(provider, AssetTypes.ENERGY_BACKGROUND);
-        Point offset = background.getOffset();
-        Rectangle area = background.getArea();
-        AssetUtil.drawAsset(stack, screen, background, guiX + handlerPosX + offset.x, guiY + handlerPosY + offset.y);
-        return background;
-    }
-
-    public static void drawForeground(MatrixStack stack, Screen screen, IAssetProvider provider, int handlerPosX, int handlerPosY, int guiX, int guiY, long stored, long capacity) {
-        IAsset asset = IAssetProvider.getAsset(provider, AssetTypes.ENERGY_BAR);
-        Point offset = asset.getOffset();
-        Rectangle area = asset.getArea();
-        screen.getMinecraft().getTextureManager().bindTexture(asset.getResourceLocation());
-        int powerOffset = (int) (stored * area.height / Math.max(capacity, 1));
-        screen.func_238474_b_(stack, handlerPosX + offset.x, handlerPosY + offset.y + area.height - powerOffset, area.x, area.y + (area.height - powerOffset), area.width, powerOffset);
     }
 
     public static java.util.List<ITextProperties> getTooltip(long stored, long capacity) {
