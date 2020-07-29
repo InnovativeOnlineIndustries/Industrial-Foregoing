@@ -20,7 +20,7 @@ public abstract class IndustrialProcessingTile<T extends IndustrialProcessingTil
         //this.addGuiAddonFactory(() -> new EnergyBarScreenAddon(10, 20, getEnergyStorage()));
         this.addProgressBar(progressBar = new ProgressBarComponent<T>(x, y, 100).
                 setComponentHarness(this.getSelf()).
-                setBarDirection(ProgressBarComponent.BarDirection.ARROW_RIGHT).
+                setBarDirection(getBarDirection()).
                 setCanReset(tileEntity -> true).
                 setOnStart(() -> {
                     int maxProgress = (int) Math.floor(getMaxProgress() * (this.hasAugmentInstalled(AugmentTypes.EFFICIENCY) ? AugmentWrapper.getType(this.getInstalledAugments(AugmentTypes.EFFICIENCY).get(0), AugmentTypes.EFFICIENCY) : 1));
@@ -59,4 +59,8 @@ public abstract class IndustrialProcessingTile<T extends IndustrialProcessingTil
     public abstract Runnable onFinish();
 
     protected abstract int getTickPower();
+
+    public ProgressBarComponent.BarDirection getBarDirection() {
+        return ProgressBarComponent.BarDirection.ARROW_RIGHT;
+    }
 }
