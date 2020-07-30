@@ -74,7 +74,6 @@ public class ClientProxy extends CommonProxy {
         ModelLoader.addSpecialModel(new ResourceLocation(Reference.MOD_ID, "block/catears"));
 
         EventManager.mod(ModelBakeEvent.class).process(event -> {
-            System.out.println("Baked Model: ");
             ears_baked = event.getModelRegistry().get(new ResourceLocation(Reference.MOD_ID, "block/catears"));
         }).subscribe();
 
