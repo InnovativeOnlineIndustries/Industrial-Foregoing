@@ -105,7 +105,7 @@ public class ModuleCore implements IModule {
         features.add(Feature.builder("fertilizer").
                 content(Item.class, FERTILIZER));
         features.add(Feature.builder("straw").
-                event(EventManager.mod(RegistryEvent.Register.class).filter(register -> register.getGenericType().equals(StrawHandler.class)).process(StrawRegistry::register)).
+                event(EventManager.modGeneric(RegistryEvent.Register.class, StrawHandler.class).process(register -> StrawRegistry.register((RegistryEvent.Register<StrawHandler>) register))).
                 content(Item.class, STRAW));
         features.add(Feature.builder("machine_frames").
                 content(Block.class, PITY).

@@ -24,8 +24,8 @@ public class ImmersiveEngineeringPlugin implements FeaturePluginInstance {
     @Override
     public void execute(PluginPhase phase) {
         if (phase == PluginPhase.CONSTRUCTION) {
-            EventManager.mod(RegistryEvent.Register.class).filter(register -> register.getGenericType().equals(PlantRecollectable.class)).process(register -> {
-                register.getRegistry().register(new HempPlantRecollectable());
+            EventManager.modGeneric(RegistryEvent.Register.class, PlantRecollectable.class).process(register -> {
+                ((RegistryEvent.Register) register).getRegistry().register(new HempPlantRecollectable());
             }).subscribe();
         }
     }

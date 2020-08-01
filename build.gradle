@@ -103,7 +103,7 @@ repositories {
 }
 
 dependencies {
-    minecraft 'net.minecraftforge:forge:1.16.1-32.0.70'
+    minecraft 'net.minecraftforge:forge:1.16.1-32.0.98'
     if (findProject(':titanium') != null) {
         compile project(':titanium')
     } else {
@@ -114,7 +114,7 @@ dependencies {
         // at runtime, use the full JEI jar
         runtimeOnly fg.deobf("mezz.jei:jei-1.16.1:7.0.0.2")
     //}
-    compile fg.deobf("blusunrize.immersiveengineering:ImmersiveEngineering:0.16-+")
+    compileOnly fg.deobf("blusunrize.immersiveengineering:ImmersiveEngineering:0.16-+")
 }
 
 afterEvaluate {
