@@ -86,7 +86,7 @@ public class ResourcefulFurnaceTile extends IndustrialProcessingTile<Resourceful
                     if (ItemHandlerHelper.insertItem(output, recipe.getRecipeOutput().copy(), true).isEmpty()) {
                         input.setStackInSlot(i, ItemStack.EMPTY);
                         ItemHandlerHelper.insertItem(output, recipe.getRecipeOutput().copy(), false);
-                        tank.fill(new FluidStack(ModuleCore.ESSENCE.getSourceFluid(), (int) (recipe.getExperience() * 20)), IFluidHandler.FluidAction.EXECUTE);
+                        tank.fillForced(new FluidStack(ModuleCore.ESSENCE.getSourceFluid(), (int) (recipe.getExperience() * 20)), IFluidHandler.FluidAction.EXECUTE);
                     }
                 }
             }
