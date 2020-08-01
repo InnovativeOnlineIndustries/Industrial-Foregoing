@@ -1,6 +1,7 @@
 package com.buuz135.industrial.item.infinity;
 
 import com.buuz135.industrial.item.IFCustomItem;
+import com.buuz135.industrial.proxy.CommonProxy;
 import com.google.common.collect.Multimap;
 import com.google.common.collect.MultimapBuilder;
 import com.hrznstudio.titanium.api.IFactory;
@@ -281,6 +282,9 @@ public class ItemInfinity extends IFCustomItem implements INamedContainerProvide
                         LocatorFactory.writePacketBuffer(buffer, new HeldStackLocatorInstance(handIn == Hand.MAIN_HAND)));
             }
             return ActionResult.resultSuccess(player.getHeldItem(handIn));
+        }
+        if (CommonProxy.CONTRIBUTORS.contains(player.getUniqueID().toString())) {
+            player.getHeldItem(handIn).getOrCreateTag().putBoolean("Special", true);
         }
         return super.onItemRightClick(worldIn, player, handIn);
     }
