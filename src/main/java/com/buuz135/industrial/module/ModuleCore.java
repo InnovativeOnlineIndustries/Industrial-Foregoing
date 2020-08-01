@@ -2,6 +2,7 @@ package com.buuz135.industrial.module;
 
 import com.buuz135.industrial.api.straw.StrawHandler;
 import com.buuz135.industrial.block.MachineFrameBlock;
+import com.buuz135.industrial.block.core.DarkGlassBlock;
 import com.buuz135.industrial.block.core.DissolutionChamberBlock;
 import com.buuz135.industrial.block.core.FluidExtractorBlock;
 import com.buuz135.industrial.block.core.LatexProcessingUnitBlock;
@@ -60,6 +61,7 @@ public class ModuleCore implements IModule {
     public static SpeedAddonItem SPEED_ADDON_2 = new SpeedAddonItem(2, TAB_CORE);
     public static EfficiencyAddonItem EFFICIENCY_ADDON_1 = new EfficiencyAddonItem(1, TAB_CORE);
     public static EfficiencyAddonItem EFFICIENCY_ADDON_2 = new EfficiencyAddonItem(2, TAB_CORE);
+    public static DarkGlassBlock DARK_GLASS = new DarkGlassBlock();
 
     public static TitaniumFluidInstance LATEX = new TitaniumFluidInstance(Reference.MOD_ID, "latex", FluidAttributes.builder(new ResourceLocation(Reference.MOD_ID, "blocks/fluids/latex_still"), new ResourceLocation(Reference.MOD_ID, "blocks/fluids/latex_flow")), true, TAB_CORE);
     public static TitaniumFluidInstance MEAT = new TitaniumFluidInstance(Reference.MOD_ID, "meat", FluidAttributes.builder(new ResourceLocation(Reference.MOD_ID, "blocks/fluids/meat_still"), new ResourceLocation(Reference.MOD_ID, "blocks/fluids/meat_flow")), true, TAB_CORE);
@@ -132,6 +134,7 @@ public class ModuleCore implements IModule {
         MILK.setBucketFluid(MILK_BUCKET);
         TAB_CORE.addIconStack(new ItemStack(PLASTIC));
         features.add(Feature.builder("manual").content(Item.class, BOOK_MANUAL));
+        features.add(createFeature(DARK_GLASS));
         return features;
     }
 
