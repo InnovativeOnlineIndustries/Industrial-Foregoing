@@ -32,11 +32,8 @@ import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
 import net.minecraftforge.items.ItemStackHandler;
 
 import java.awt.*;
-import java.util.Random;
 
 public class ItemStackUtils {
-
-    public static final Random RANDOM = new Random();
 
     public static boolean isOre(ItemStack stack) {
         if (stack.isEmpty()) return false;

@@ -70,6 +70,18 @@ public class DissolutionChamberRecipe extends SerializableRecipe {
                         new Ingredient.TagList(Tags.Items.INGOTS_GOLD)
                 },
                 new FluidStack(ModuleCore.PINK_SLIME.getSourceFluid(), 500), 300, new ItemStack(ModuleCore.ADVANCED), FluidStack.EMPTY);
+        new DissolutionChamberRecipe(new ResourceLocation(Reference.MOD_ID, "dark_glass"),
+                new Ingredient.IItemList[]{
+                        new Ingredient.SingleItemList(new ItemStack(Blocks.SOUL_SAND)),
+                        new Ingredient.SingleItemList(new ItemStack(Blocks.SOUL_SAND)),
+                        new Ingredient.SingleItemList(new ItemStack(Blocks.SOUL_SAND)),
+                        new Ingredient.SingleItemList(new ItemStack(Blocks.SOUL_SAND)),
+                        new Ingredient.SingleItemList(new ItemStack(Blocks.SOUL_SAND)),
+                        new Ingredient.SingleItemList(new ItemStack(Blocks.SOUL_SAND)),
+                        new Ingredient.SingleItemList(new ItemStack(Blocks.SOUL_SAND)),
+                        new Ingredient.SingleItemList(new ItemStack(Blocks.SOUL_SAND)),
+                },
+                new FluidStack(ModuleCore.LATEX.getSourceFluid(), 100), 100, new ItemStack(ModuleCore.DARK_GLASS, 8), FluidStack.EMPTY);
     }
 
     public Ingredient.IItemList[] input;

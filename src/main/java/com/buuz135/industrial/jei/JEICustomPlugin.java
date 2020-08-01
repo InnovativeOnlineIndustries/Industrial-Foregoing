@@ -86,7 +86,7 @@ public class JEICustomPlugin implements IModPlugin {
 
     @Override
     public void registerItemSubtypes(ISubtypeRegistration registration) {
-        registration.useNbtForSubtypes(ModuleTool.INFINITY_DRILL, ModuleTool.INFINITY_SAW, ModuleCore.EFFICIENCY_ADDON_1, ModuleCore.EFFICIENCY_ADDON_2, ModuleCore.SPEED_ADDON_1, ModuleCore.SPEED_ADDON_2);
+        registration.useNbtForSubtypes(ModuleTool.INFINITY_DRILL, ModuleTool.INFINITY_SAW, ModuleTool.INFINITY_HAMMER, ModuleCore.EFFICIENCY_ADDON_1, ModuleCore.EFFICIENCY_ADDON_2, ModuleCore.SPEED_ADDON_1, ModuleCore.SPEED_ADDON_2);
         registration.useNbtForSubtypes(ModuleCore.RANGE_ADDONS);
     }
 

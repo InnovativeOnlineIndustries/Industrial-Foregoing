@@ -25,6 +25,7 @@ import com.buuz135.industrial.block.tile.IndustrialAreaWorkingTile;
 import com.buuz135.industrial.block.transport.tile.ConveyorTile;
 import com.buuz135.industrial.item.infinity.InfinityTier;
 import com.buuz135.industrial.item.infinity.ItemInfinity;
+import com.buuz135.industrial.module.ModuleCore;
 import com.buuz135.industrial.module.ModuleTool;
 import com.buuz135.industrial.module.ModuleTransport;
 import com.buuz135.industrial.proxy.CommonProxy;
@@ -45,7 +46,7 @@ import net.minecraft.item.SpawnEggItem;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.client.event.ModelBakeEvent;
-import net.minecraftforge.client.event.TextureStitchEvent;
+import net.minecraftforge.client.model.ModelLoader;
 import net.minecraftforge.client.model.obj.OBJModel;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.util.Constants;
@@ -71,19 +72,11 @@ public class ClientProxy extends CommonProxy {
         MinecraftForge.EVENT_BUS.register(new IFClientEvents());
         MinecraftForge.EVENT_BUS.register(new IFWorldRenderLastEvent());
         MinecraftForge.EVENT_BUS.register(new IFTooltipEvent());
+        ModelLoader.addSpecialModel(new ResourceLocation(Reference.MOD_ID, "block/catears"));
 
         EventManager.mod(ModelBakeEvent.class).process(event -> {
-            try {
-                //ears_model = OBJLoader.INSTANCE.loadModel(new ResourceLocation(Reference.MOD_ID, "models/block/catears.obj"), false, false, false, false);
-                //ears_baked = ears_model.bake(event.getModelLoader(), ModelLoader.defaultTextureGetter(), new SimpleModelState(ImmutableMap.of(), TransformationMatrix.func_227983_a_()), DefaultVertexFormats.BLOCK, ItemOverrideList.EMPTY, new ResourceLocation(Reference.MOD_ID, "models/block/catears.obj"));
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
+            ears_baked = event.getModelRegistry().get(new ResourceLocation(Reference.MOD_ID, "block/catears"));
         }).subscribe();
-        EventManager.mod(TextureStitchEvent.Pre.class).process(pre -> {
-            //pre.addSprite(new ResourceLocation(Reference.MOD_ID, "blocks/catears"));
-        }).subscribe();
-
 
         ClientRegistry.bindTileEntityRenderer(ModuleTransport.CONVEYOR.getTileEntityType(), FluidConveyorTESR::new);
         NonNullLazy<List<Block>> blocksToProcess = NonNullLazy.of(() ->
@@ -102,6 +95,7 @@ public class ClientProxy extends CommonProxy {
         //((IReloadableResourceManager) Minecraft.getInstance().getResourceManager()).addReloadListener(resourceManager -> FluidUtils.colorCache.clear());
 
         RenderTypeLookup.setRenderLayer(ModuleTransport.CONVEYOR, RenderType.getCutout());
+        RenderTypeLookup.setRenderLayer(ModuleCore.DARK_GLASS, RenderType.getTranslucent());
 
         Minecraft.getInstance().getBlockColors().register((state, worldIn, pos, tintIndex) -> {
             if (tintIndex == 0 && worldIn != null && pos != null) {
@@ -135,6 +129,12 @@ public class ClientProxy extends CommonProxy {
             }
             return 0xFFFFFF;
         }, ModuleTool.INFINITY_SAW);
+        Minecraft.getInstance().getItemColors().register((stack, tintIndex) -> {
+            if (tintIndex == 0) {
+                return InfinityTier.getTierBraquet(ItemInfinity.getPowerFromStack(stack)).getLeft().getTextureColor();
+            }
+            return 0xFFFFFF;
+        }, ModuleTool.INFINITY_HAMMER);
     }
 
 }

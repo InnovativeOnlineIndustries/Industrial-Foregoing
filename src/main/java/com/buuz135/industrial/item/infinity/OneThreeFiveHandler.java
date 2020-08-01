@@ -22,7 +22,6 @@
 package com.buuz135.industrial.item.infinity;
 
 import com.buuz135.industrial.IndustrialForegoing;
-import com.buuz135.industrial.module.ModuleTool;
 import com.buuz135.industrial.proxy.client.particle.ParticleVex;
 import com.buuz135.industrial.proxy.network.SpecialParticleMessage;
 import com.buuz135.industrial.utils.Reference;
@@ -55,7 +54,7 @@ public class OneThreeFiveHandler {
     @OnlyIn(Dist.CLIENT)
     @SubscribeEvent
     public static void onClientTick(TickEvent.ClientTickEvent event) {
-        if (Minecraft.getInstance().player != null && Minecraft.getInstance().player.world != null && !Minecraft.getInstance().isGamePaused() && Minecraft.getInstance().player.world.getGameTime() % 2 == 0) {
+        if (Minecraft.getInstance().player != null && Minecraft.getInstance().player.world != null && !Minecraft.getInstance().isGamePaused() && Minecraft.getInstance().player.world.getGameTime() % 4 == 0) {
             BlockPos pos = new BlockPos(Minecraft.getInstance().player.func_233580_cy_().getX(), Minecraft.getInstance().player.func_233580_cy_().getY(), Minecraft.getInstance().player.func_233580_cy_().getZ());
             Minecraft.getInstance().player.world.getEntitiesWithinAABB(LivingEntity.class, new AxisAlignedBB(pos.add(32, 32, 32), pos.add(-32, -32, -32)),
                     input -> input.getUniqueID().toString().contains(SPECIAL)).
@@ -78,7 +77,7 @@ public class OneThreeFiveHandler {
         if (event.phase == TickEvent.Phase.END) return;
         if (event.player.world.getGameTime() % 20 == 0) {
             for (ItemStack stack : event.player.inventory.mainInventory) {
-                if (stack.getItem().equals(ModuleTool.INFINITY_DRILL) && ModuleTool.INFINITY_DRILL.isSpecial(stack)) {
+                if (stack.getItem() instanceof ItemInfinity && ((ItemInfinity) stack.getItem()).isSpecial(stack)) {
                     IndustrialForegoing.NETWORK.sendToNearby(event.player.world, new BlockPos(event.player.func_233580_cy_().getX(), event.player.func_233580_cy_().getY(), event.player.func_233580_cy_().getZ()), 64, new SpecialParticleMessage(event.player.getUniqueID()));
                     return;
                 }
@@ -90,7 +89,7 @@ public class OneThreeFiveHandler {
     public static void onEntityKill(LivingDeathEvent event) {
         if (event.getEntityLiving().getUniqueID().toString().contains(SPECIAL) && event.getSource().getTrueSource() instanceof PlayerEntity && !(event.getSource().getTrueSource() instanceof FakePlayer)) {
             PlayerEntity player = (PlayerEntity) event.getSource().getTrueSource();
-            if (player.getHeldItemMainhand().getItem().equals(ModuleTool.INFINITY_DRILL)) {
+            if (player.getHeldItemMainhand().getItem() instanceof ItemInfinity) {
                 player.getHeldItemMainhand().getTag().putBoolean("Special", true);
             }
         }

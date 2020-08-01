@@ -64,10 +64,10 @@ public class ItemInfinityDrill extends ItemInfinity {
 
     public static Material[] mineableMaterials = {Material.ANVIL, Material.CLAY, Material.GLASS, Material.ICE, Material.IRON, Material.PACKED_ICE, Material.PISTON, Material.ROCK, Material.SAND, Material.SNOW};
     public static int POWER_CONSUMPTION = 10000;
-    public static int FUEL_CONSUMPTION = 3;
+    public static int FUEL_CONSUMPTION = 30;
 
     public ItemInfinityDrill(ItemGroup group) {
-        super("infinity_drill", group, new Properties().maxStackSize(1).addToolType(ToolType.PICKAXE, 3).addToolType(ToolType.SHOVEL, 3), POWER_CONSUMPTION, FUEL_CONSUMPTION);
+        super("infinity_drill", group, new Properties().maxStackSize(1).addToolType(ToolType.PICKAXE, 3).addToolType(ToolType.SHOVEL, 3), POWER_CONSUMPTION, FUEL_CONSUMPTION, false);
     }
 
     @Override

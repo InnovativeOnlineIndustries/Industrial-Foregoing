@@ -60,11 +60,13 @@ public class ItemInfinity extends IFCustomItem implements INamedContainerProvide
 
     private final int powerConsumption;
     private final int biofuelConsumption;
+    private final boolean usesDepth;
 
-    public ItemInfinity(String name, ItemGroup group, Properties builder, int powerConsumption, int biofuelConsumption) {
+    public ItemInfinity(String name, ItemGroup group, Properties builder, int powerConsumption, int biofuelConsumption, boolean usesDepth) {
         super(name, group, builder);
         this.powerConsumption = powerConsumption;
         this.biofuelConsumption = biofuelConsumption;
+        this.usesDepth = usesDepth;
     }
 
     public static long getPowerFromStack(ItemStack stack) {
@@ -75,9 +77,9 @@ public class ItemInfinity extends IFCustomItem implements INamedContainerProvide
         return power;
     }
 
-    public static String getFormattedArea(InfinityTier tier, int radius) {
+    public static String getFormattedArea(InfinityTier tier, int radius, boolean usesDepth) {
         int diameter = radius * 2 + 1;
-        return diameter + "x" + diameter + "x" + (tier == InfinityTier.ARTIFACT ? diameter : 1);
+        return diameter + "x" + diameter + "x" + (tier == InfinityTier.ARTIFACT || usesDepth ? diameter : 1);
     }
 
     public static InfinityTier getSelectedTier(ItemStack stack) {
@@ -92,7 +94,7 @@ public class ItemInfinity extends IFCustomItem implements INamedContainerProvide
     @Override
     public void onCreated(ItemStack stack, World worldIn, PlayerEntity playerIn) {
         super.onCreated(stack, worldIn, playerIn);
-        addNbt(stack, 0, 0, CommonProxy.CONTRIBUTORS.contains(playerIn.getUniqueID().toString()));
+        addNbt(stack, 0, 0, false);
     }
 
     public void addNbt(ItemStack stack, long power, int fuel, boolean special) {
@@ -217,12 +219,12 @@ public class ItemInfinity extends IFCustomItem implements INamedContainerProvide
         long power = getPowerFromStack(stack);
         Pair<InfinityTier, InfinityTier> braquet = InfinityTier.getTierBraquet(power);
         InfinityTier current = getSelectedTier(stack);
-        tooltip.add(new TranslationTextComponent("text.industrialforegoing.display.current_area").func_240702_b_(" ").func_240702_b_(getFormattedArea(current, current.getRadius())).func_240699_a_(TextFormatting.GRAY));
-        tooltip.add(new TranslationTextComponent("text.industrialforegoing.display.tier").func_240702_b_(" ").func_240702_b_(braquet.getLeft().getColor() + braquet.getLeft().getLocalizedName()).func_240699_a_(TextFormatting.GRAY));
+        tooltip.add(new TranslationTextComponent("text.industrialforegoing.display.current_area").func_240702_b_(" ").func_240702_b_(getFormattedArea(current, current.getRadius(), this.usesDepth)).func_240699_a_(TextFormatting.GRAY));
+        tooltip.add(new TranslationTextComponent("text.industrialforegoing.display.tier").func_240702_b_(" " + braquet.getLeft().getColor() + braquet.getLeft().getLocalizedName()).func_240699_a_(TextFormatting.GRAY));
         tooltip.add(new TranslationTextComponent("text.industrialforegoing.display.power").func_240702_b_(" ").func_240702_b_(NumberFormat.getNumberInstance(Locale.ROOT).format(power)).func_240702_b_("/").func_240702_b_(NumberFormat.getNumberInstance(Locale.ROOT).format(braquet.getRight().getPowerNeeded())).func_240702_b_("RF ").func_230529_a_(new TranslationTextComponent("text.industrialforegoing.display.next_tier")).func_240699_a_(TextFormatting.GRAY));
         int fuelAmount = getFuelFromStack(stack);
         tooltip.add(new TranslationTextComponent("text.industrialforegoing.display.fluid").func_240702_b_(" ").func_240702_b_(NumberFormat.getNumberInstance(Locale.ROOT).format(fuelAmount)).func_240702_b_("/").func_240702_b_(NumberFormat.getNumberInstance(Locale.ROOT).format(1000000)).func_240702_b_(" mb of Biofuel").func_240699_a_(TextFormatting.GRAY));
-        tooltip.add(new TranslationTextComponent("text.industrialforegoing.display.max_area").func_240702_b_(" ").func_240702_b_(getFormattedArea(braquet.getLeft(), braquet.getLeft().getRadius())).func_240699_a_(TextFormatting.GRAY));
+        tooltip.add(new TranslationTextComponent("text.industrialforegoing.display.max_area").func_240702_b_(" ").func_240702_b_(getFormattedArea(braquet.getLeft(), braquet.getLeft().getRadius(), this.usesDepth)).func_240699_a_(TextFormatting.GRAY));
         if (canCharge(stack)) {
             tooltip.add(new TranslationTextComponent("text.industrialforegoing.display.charging").func_240699_a_(TextFormatting.GRAY).func_230529_a_(new TranslationTextComponent("text.industrialforegoing.display.enabled").func_240699_a_(TextFormatting.GREEN)));
         } else {
@@ -250,8 +252,7 @@ public class ItemInfinity extends IFCustomItem implements INamedContainerProvide
     public Multimap<Attribute, AttributeModifier> getAttributeModifiers(EquipmentSlotType slot, ItemStack stack) {
         Multimap<Attribute, AttributeModifier> multimap = MultimapBuilder.hashKeys().arrayListValues().build();
         if (slot == EquipmentSlotType.MAINHAND) {
-            InfinityTier infinityTier = InfinityTier.getTierBraquet(getPowerFromStack(stack)).getLeft();
-            multimap.put(Attributes.field_233823_f_, new AttributeModifier(ATTACK_DAMAGE_MODIFIER, "Tool modifier", 2 + infinityTier.getRadius(), AttributeModifier.Operation.ADDITION)); //AttackDamage
+            multimap.put(Attributes.field_233823_f_, new AttributeModifier(ATTACK_DAMAGE_MODIFIER, "Tool modifier", 3, AttributeModifier.Operation.ADDITION)); //AttackDamage
             multimap.put(Attributes.field_233825_h_, new AttributeModifier(ATTACK_SPEED_MODIFIER, "Tool modifier", -2.5D, AttributeModifier.Operation.ADDITION)); //AttackSpeed
         }
         return multimap;
@@ -281,6 +282,9 @@ public class ItemInfinity extends IFCustomItem implements INamedContainerProvide
                         LocatorFactory.writePacketBuffer(buffer, new HeldStackLocatorInstance(handIn == Hand.MAIN_HAND)));
             }
             return ActionResult.resultSuccess(player.getHeldItem(handIn));
+        }
+        if (CommonProxy.CONTRIBUTORS.contains(player.getUniqueID().toString())) {
+            player.getHeldItem(handIn).getOrCreateTag().putBoolean("Special", true);
         }
         return super.onItemRightClick(worldIn, player, handIn);
     }
@@ -329,7 +333,7 @@ public class ItemInfinity extends IFCustomItem implements INamedContainerProvide
             @Override
             public String getText() {
                 InfinityTier current = ItemInfinity.getSelectedTier(stack.get());
-                return TextFormatting.DARK_GRAY + "Area: " + ItemInfinity.getFormattedArea(current, current.getRadius());
+                return TextFormatting.DARK_GRAY + "Area: " + ItemInfinity.getFormattedArea(current, current.getRadius(), usesDepth);
             }
         });
         factory.add(() -> new StateButtonAddon(new ButtonComponent(54, 38, 14, 15).setId(3), new StateButtonInfo(0, AssetTypes.BUTTON_SIDENESS_ENABLED), new StateButtonInfo(1, AssetTypes.BUTTON_SIDENESS_DISABLED)) {
@@ -342,9 +346,9 @@ public class ItemInfinity extends IFCustomItem implements INamedContainerProvide
             @Override
             public String getText() {
                 if (ItemInfinity.canCharge(stack.get())) {//setStyle
-                    return new TranslationTextComponent("text.industrialforegoing.display.charging").func_240701_a_(TextFormatting.DARK_GRAY).func_230529_a_(new TranslationTextComponent("text.industrialforegoing.display.enabled").func_240701_a_(TextFormatting.GREEN)).getString();
+                    return TextFormatting.DARK_GRAY + new TranslationTextComponent("text.industrialforegoing.display.charging").getString() + TextFormatting.GREEN + new TranslationTextComponent("text.industrialforegoing.display.enabled").getString();
                 } else {
-                    return new TranslationTextComponent("text.industrialforegoing.display.charging").func_240701_a_(TextFormatting.DARK_GRAY).func_230529_a_(new TranslationTextComponent("text.industrialforegoing.display.disabled").func_240701_a_(TextFormatting.RED)).getString();
+                    return TextFormatting.DARK_GRAY + new TranslationTextComponent("text.industrialforegoing.display.charging").getString() + TextFormatting.RED + new TranslationTextComponent("text.industrialforegoing.display.disabled").getString();
                 }
             }
         });

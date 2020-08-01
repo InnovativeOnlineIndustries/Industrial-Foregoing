@@ -38,7 +38,7 @@ public enum InfinityTier {
     }
 
     public String getLocalizedName() {
-        return new TranslationTextComponent("text.industrialforegoing.tooltip.infinitydrill." + name).getUnformattedComponentText();
+        return new TranslationTextComponent("text.industrialforegoing.tooltip.infinitydrill." + name).getString();
     }
 
     public String getName() {
