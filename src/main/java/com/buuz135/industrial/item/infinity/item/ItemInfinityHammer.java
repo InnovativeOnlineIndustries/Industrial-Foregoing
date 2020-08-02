@@ -114,7 +114,7 @@ public class ItemInfinityHammer extends ItemInfinity {
             return 15.0F;
         } else {
             Material material = state.getMaterial();
-            return material != Material.PLANTS && material != Material.TALL_PLANTS && material != Material.CORAL && !state.func_235714_a_(BlockTags.LEAVES) && material != Material.GOURD ? 1.0F : 1.5F;
+            return material != Material.PLANTS && material != Material.TALL_PLANTS && material != Material.CORAL && !state.isIn(BlockTags.LEAVES) && material != Material.GOURD ? 1.0F : 1.5F;
         }
     }
 
@@ -165,8 +165,8 @@ public class ItemInfinityHammer extends ItemInfinity {
         Multimap<Attribute, AttributeModifier> multimap = MultimapBuilder.hashKeys().arrayListValues().build();
         if (slot == EquipmentSlotType.MAINHAND) {
             InfinityTier infinityTier = InfinityTier.getTierBraquet(getPowerFromStack(stack)).getLeft();
-            multimap.put(Attributes.field_233823_f_, new AttributeModifier(ATTACK_DAMAGE_MODIFIER, "Weapon modifier", DAMAGE + Math.pow(2, infinityTier.getRadius()), AttributeModifier.Operation.ADDITION)); //AttackDamage
-            multimap.put(Attributes.field_233825_h_, new AttributeModifier(ATTACK_SPEED_MODIFIER, "Weapon modifier", ATTACK_SPEED, AttributeModifier.Operation.ADDITION)); //AttackSpeed
+            multimap.put(Attributes.ATTACK_DAMAGE, new AttributeModifier(ATTACK_DAMAGE_MODIFIER, "Weapon modifier", DAMAGE + Math.pow(2, infinityTier.getRadius()), AttributeModifier.Operation.ADDITION)); //AttackDamage
+            multimap.put(Attributes.ATTACK_SPEED, new AttributeModifier(ATTACK_SPEED_MODIFIER, "Weapon modifier", ATTACK_SPEED, AttributeModifier.Operation.ADDITION)); //AttackSpeed
         }
         return multimap;
     }
@@ -199,7 +199,7 @@ public class ItemInfinityHammer extends ItemInfinity {
                 level = "III";
                 break;
         }
-        tooltip.add(new TranslationTextComponent("text.industrialforegoing.display.beheading").func_240702_b_(" " + level).func_240699_a_(TextFormatting.GRAY));
+        tooltip.add(new TranslationTextComponent("text.industrialforegoing.display.beheading").appendString(" " + level).mergeStyle(TextFormatting.GRAY));
     }
 
     @Override
@@ -210,7 +210,7 @@ public class ItemInfinityHammer extends ItemInfinity {
         factory.add(() -> new TextScreenAddon("", 54 + 14 + 4, 24 + 18 * 2, false) {
             @Override
             public String getText() {
-                return TextFormatting.DARK_GRAY + new TranslationTextComponent("text.industrialforegoing.display.beheading").func_240702_b_(": ").func_240702_b_(getCurrentBeheading(stack.get()) + "/" + getMaxBeheading(stack.get())).getString();
+                return TextFormatting.DARK_GRAY + new TranslationTextComponent("text.industrialforegoing.display.beheading").appendString(": ").appendString(getCurrentBeheading(stack.get()) + "/" + getMaxBeheading(stack.get())).getString();
             }
         });
         return factory;

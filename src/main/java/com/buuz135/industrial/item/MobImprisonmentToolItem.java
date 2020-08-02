@@ -133,7 +133,7 @@ public class MobImprisonmentToolItem extends IFCustomItem {
     public ITextComponent getDisplayName(ItemStack stack) {
         if (!containsEntity(stack))
             return new TranslationTextComponent(super.getTranslationKey(stack));
-        return new TranslationTextComponent(super.getTranslationKey(stack)).func_240702_b_(" (" + getID(stack) + ")");
+        return new TranslationTextComponent(super.getTranslationKey(stack)).appendString(" (" + getID(stack) + ")");
     }
 
     @Override
