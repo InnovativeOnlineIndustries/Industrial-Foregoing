@@ -119,9 +119,9 @@ public class ItemInfinityDrill extends ItemInfinity {
                     }
                 });
                 totalDrops.forEach(itemStack -> {
-                    Block.spawnAsEntity(worldIn, entityLiving.func_233580_cy_(), itemStack);
+                    Block.spawnAsEntity(worldIn, entityLiving.getPosition(), itemStack);
                 });
-                worldIn.getEntitiesWithinAABB(ExperienceOrbEntity.class, new AxisAlignedBB(area.getLeft(), area.getRight()).grow(1)).forEach(entityXPOrb -> entityXPOrb.setPositionAndUpdate(entityLiving.func_233580_cy_().getX(), entityLiving.func_233580_cy_().getY(), entityLiving.func_233580_cy_().getZ()));
+                worldIn.getEntitiesWithinAABB(ExperienceOrbEntity.class, new AxisAlignedBB(area.getLeft(), area.getRight()).grow(1)).forEach(entityXPOrb -> entityXPOrb.setPositionAndUpdate(entityLiving.getPosition().getX(), entityLiving.getPosition().getY(), entityLiving.getPosition().getZ()));
             }
         }
         return super.onBlockDestroyed(stack, worldIn, state, pos, entityLiving);

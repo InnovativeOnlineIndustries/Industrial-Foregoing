@@ -55,7 +55,7 @@ public class OneThreeFiveHandler {
     @SubscribeEvent
     public static void onClientTick(TickEvent.ClientTickEvent event) {
         if (Minecraft.getInstance().player != null && Minecraft.getInstance().player.world != null && !Minecraft.getInstance().isGamePaused() && Minecraft.getInstance().player.world.getGameTime() % 4 == 0) {
-            BlockPos pos = new BlockPos(Minecraft.getInstance().player.func_233580_cy_().getX(), Minecraft.getInstance().player.func_233580_cy_().getY(), Minecraft.getInstance().player.func_233580_cy_().getZ());
+            BlockPos pos = new BlockPos(Minecraft.getInstance().player.getPosition().getX(), Minecraft.getInstance().player.getPosition().getY(), Minecraft.getInstance().player.getPosition().getZ());
             Minecraft.getInstance().player.world.getEntitiesWithinAABB(LivingEntity.class, new AxisAlignedBB(pos.add(32, 32, 32), pos.add(-32, -32, -32)),
                     input -> input.getUniqueID().toString().contains(SPECIAL)).
                     forEach(living -> Minecraft.getInstance().particles.addEffect(new ParticleVex(living)));
@@ -78,7 +78,7 @@ public class OneThreeFiveHandler {
         if (event.player.world.getGameTime() % 20 == 0) {
             for (ItemStack stack : event.player.inventory.mainInventory) {
                 if (stack.getItem() instanceof ItemInfinity && ((ItemInfinity) stack.getItem()).isSpecial(stack)) {
-                    IndustrialForegoing.NETWORK.sendToNearby(event.player.world, new BlockPos(event.player.func_233580_cy_().getX(), event.player.func_233580_cy_().getY(), event.player.func_233580_cy_().getZ()), 64, new SpecialParticleMessage(event.player.getUniqueID()));
+                    IndustrialForegoing.NETWORK.sendToNearby(event.player.world, new BlockPos(event.player.getPosition().getX(), event.player.getPosition().getY(), event.player.getPosition().getZ()), 64, new SpecialParticleMessage(event.player.getUniqueID()));
                     return;
                 }
             }

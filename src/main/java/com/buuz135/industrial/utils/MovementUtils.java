@@ -36,7 +36,7 @@ public class MovementUtils {
 
     public static void handleConveyorMovement(Entity entity, Direction direction, BlockPos pos, ConveyorBlock.EnumType type) {
         if (entity instanceof PlayerEntity && entity.isCrouching()) return;
-        if (entity.func_233580_cy_().getY() - pos.getY() > 0.3 && !type.isVertical()) return;
+        if (entity.getPosition().getY() - pos.getY() > 0.3 && !type.isVertical()) return;
 
         VoxelShape collision = entity.world.getBlockState(pos).getBlock().getCollisionShape(entity.world.getBlockState(pos), entity.world, pos, ISelectionContext.dummy()).withOffset(pos.getX(), pos.getY(), pos.getZ());
 //        if (direction == Direction.NORTH || direction == Direction.SOUTH){
@@ -60,16 +60,16 @@ public class MovementUtils {
 
         //CENTER
         if (direction == Direction.NORTH || direction == Direction.SOUTH) {
-            if (entity.func_233580_cy_().getX() - pos.getX() < 0.45) {
+            if (entity.getPosition().getX() - pos.getX() < 0.45) {
                 vec3d = vec3d.add(0.08, 0, 0);
-            } else if (entity.func_233580_cy_().getX() - pos.getX() > 0.55) {
+            } else if (entity.getPosition().getX() - pos.getX() > 0.55) {
                 vec3d = vec3d.add(-0.08, 0, 0);
             }
         }
         if (direction == Direction.EAST || direction == Direction.WEST) {
-            if (entity.func_233580_cy_().getZ() - pos.getZ() < 0.45) {
+            if (entity.getPosition().getZ() - pos.getZ() < 0.45) {
                 vec3d = vec3d.add(0, 0, 0.08);
-            } else if (entity.func_233580_cy_().getZ() - pos.getZ() > 0.55) {
+            } else if (entity.getPosition().getZ() - pos.getZ() > 0.55) {
                 vec3d = vec3d.add(0, 0, -0.08);
             }
         }

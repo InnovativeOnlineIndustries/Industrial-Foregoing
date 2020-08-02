@@ -40,7 +40,7 @@ public class ConveyorSplittingSyncEntityMessage extends Message {
     public ConveyorSplittingSyncEntityMessage(BlockPos pos, int entityID, Direction facingCurrent) {
         this.pos = pos;
         this.entityID = entityID;
-        this.facingCurrent = facingCurrent.func_176610_l();
+        this.facingCurrent = facingCurrent.getString();
     }
 
     public ConveyorSplittingSyncEntityMessage() {

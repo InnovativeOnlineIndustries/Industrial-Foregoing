@@ -78,7 +78,7 @@ public class GuiConveyor extends ContainerScreen<ContainerConveyor> {
         getMinecraft().getTextureManager().bindTexture(BG_TEXTURE);
         x = (field_230708_k_ - xSize) / 2;
         y = (field_230709_l_ - ySize) / 2;
-        func_238474_b_(stack, x, y, 0, 0, xSize, ySize);
+        blit(stack, x, y, 0, 0, xSize, ySize);
         if (upgrade != null) {
             String localized = new TranslationTextComponent(String.format("conveyor.upgrade.%s.%s", upgrade.getFactory().getRegistryName().getNamespace(), upgrade.getFactory().getRegistryName().getPath())).getString();
             getMinecraft().fontRenderer.func_238421_b_(stack, localized, x + xSize / 2 - getMinecraft().fontRenderer.getStringWidth(localized) / 2, y + 6, 0x404040);
@@ -99,7 +99,7 @@ public class GuiConveyor extends ContainerScreen<ContainerConveyor> {
         for (IGuiComponent iGuiComponent : componentList) {
             if (iGuiComponent.isInside(mouseX - x, mouseY - y)) {
                 List<? extends ITextProperties> tooltips = iGuiComponent.getTooltip(x, y, mouseX, mouseY);
-                if (tooltips != null) func_238654_b_(stack, tooltips, mouseX - x, mouseY - y);
+                if (tooltips != null) renderTooltip(stack, tooltips, mouseX - x, mouseY - y);
             }
         }
     }

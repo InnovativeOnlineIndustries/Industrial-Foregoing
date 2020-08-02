@@ -247,7 +247,7 @@ public class ConveyorInsertionUpgrade extends ConveyorUpgrade {
         @Override
         @Nonnull
         public ResourceLocation getModel(Direction upgradeSide, Direction conveyorFacing) {
-            return new ResourceLocation(Reference.MOD_ID, "block/conveyor_upgrade_inserter_" + upgradeSide.func_176610_l().toLowerCase());
+            return new ResourceLocation(Reference.MOD_ID, "block/conveyor_upgrade_inserter_" + upgradeSide.getString().toLowerCase());
         }
 
         @Nonnull

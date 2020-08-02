@@ -56,7 +56,7 @@ public class AnimalRancherTile extends IndustrialAreaWorkingTile<AnimalRancherTi
             List<AnimalEntity> mobs = this.world.getEntitiesWithinAABB(AnimalEntity.class, getWorkingArea().getBoundingBox());
             if (mobs.size() > 0) {
                 for (AnimalEntity mob : mobs) {
-                    FakePlayer player = IndustrialForegoing.getFakePlayer(world, mob.func_233580_cy_()); //getPosition
+                    FakePlayer player = IndustrialForegoing.getFakePlayer(world, mob.getPosition()); //getPosition
                     //BUCKET INTERACTION
                     if (tank.getFluidAmount() + 1000 <= tank.getCapacity()) {
                         player.setHeldItem(Hand.MAIN_HAND, new ItemStack(Items.BUCKET));
@@ -72,8 +72,8 @@ public class AnimalRancherTile extends IndustrialAreaWorkingTile<AnimalRancherTi
                     }
                     //SHEAR INTERACTION
                     ItemStack shears = new ItemStack(Items.SHEARS);
-                    if (mob instanceof IForgeShearable && ((IForgeShearable) mob).isShearable(shears, this.world, mob.func_233580_cy_())) { //getPosition
-                        List<ItemStack> items = ((IForgeShearable) mob).onSheared(player, shears, this.world, mob.func_233580_cy_(), 0); //getPosition
+                    if (mob instanceof IForgeShearable && ((IForgeShearable) mob).isShearable(shears, this.world, mob.getPosition())) { //getPosition
+                        List<ItemStack> items = ((IForgeShearable) mob).onSheared(player, shears, this.world, mob.getPosition(), 0); //getPosition
                         items.forEach(stack -> ItemHandlerHelper.insertItem(output, stack, false));
                         if (items.size() > 0) {
                             return new WorkAction(0.35f, powerPerOperation);

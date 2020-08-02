@@ -49,7 +49,7 @@ public class BookManualItem extends IFCustomItem {
 
     @Override
     public ActionResult<ItemStack> onItemRightClick(World worldIn, PlayerEntity playerIn, Hand handIn) {
-        BlockPos pos = playerIn.func_233580_cy_();
+        BlockPos pos = playerIn.getPosition();
         if (playerIn.isCrouching()) {
             RayTraceResult result = rayTrace(worldIn, playerIn, RayTraceContext.FluidMode.NONE);
             if (result != null && result.getType() == RayTraceResult.Type.BLOCK) {

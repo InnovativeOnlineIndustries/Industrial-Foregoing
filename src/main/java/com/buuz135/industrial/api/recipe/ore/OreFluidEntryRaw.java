@@ -43,7 +43,7 @@ public class OreFluidEntryRaw {
         this.ore = ore;
         this.input = input;
         this.output = output;
-        this.cachedOres = ore.func_230236_b_(); //getAllElements
+        this.cachedOres = ore.getAllElements(); //getAllElements
     }
 
     public Tag<Item> getOre() {

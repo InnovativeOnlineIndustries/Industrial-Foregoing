@@ -131,18 +131,18 @@ public class ItemInfinityHammer extends ItemInfinity {
                     consumeFuel(stack);
                     if (mobEntity.getHealth() <= 0 && attacker.getEntityWorld().rand.nextDouble() <= getCurrentBeheading(stack) * 0.15) {
                         ItemStack head = HEADS.getOrDefault(mobEntity.getClass(), (entity) -> ItemStack.EMPTY).apply(mobEntity);
-                        Block.spawnAsEntity(attacker.world, attacker.func_233580_cy_(), head);
+                        Block.spawnAsEntity(attacker.world, attacker.getPosition(), head);
                     }
                 }
             });
             attacker.getEntityWorld().getEntitiesWithinAABB(ItemEntity.class, area.grow(1)).forEach(itemEntity -> {
                 itemEntity.setNoPickupDelay();
-                itemEntity.setPositionAndUpdate(attacker.func_233580_cy_().getX(), attacker.func_233580_cy_().getY() + 1, attacker.func_233580_cy_().getZ());
+                itemEntity.setPositionAndUpdate(attacker.getPosition().getX(), attacker.getPosition().getY() + 1, attacker.getPosition().getZ());
             });
-            attacker.getEntityWorld().getEntitiesWithinAABB(ExperienceOrbEntity.class, area.grow(1)).forEach(entityXPOrb -> entityXPOrb.setPositionAndUpdate(attacker.func_233580_cy_().getX(), attacker.func_233580_cy_().getY(), attacker.func_233580_cy_().getZ()));
+            attacker.getEntityWorld().getEntitiesWithinAABB(ExperienceOrbEntity.class, area.grow(1)).forEach(entityXPOrb -> entityXPOrb.setPositionAndUpdate(attacker.getPosition().getX(), attacker.getPosition().getY(), attacker.getPosition().getZ()));
         }
         if (target.getHealth() <= 0 && target instanceof PlayerEntity) {
-            Block.spawnAsEntity(attacker.world, attacker.func_233580_cy_(), createHead(target.getDisplayName().getString()));
+            Block.spawnAsEntity(attacker.world, attacker.getPosition(), createHead(target.getDisplayName().getString()));
         }
         return true;
     }
