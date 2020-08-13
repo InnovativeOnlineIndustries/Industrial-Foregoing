@@ -109,7 +109,7 @@ public class BlockUtils {
     }
 
     public static boolean isLeaves(World world, BlockPos pos) {
-        return world.getBlockState(pos).getMaterial() == Material.LEAVES;
+        return world.getBlockState(pos).getMaterial() == Material.LEAVES || world.getBlockState(pos).isIn(BlockTags.WART_BLOCKS) || world.getBlockState(pos).isIn(BlockTags.LEAVES) || world.getBlockState(pos).getBlock().equals(Blocks.SHROOMLIGHT);
     }
 
     public static boolean isChorus(World world, BlockPos pos) {
