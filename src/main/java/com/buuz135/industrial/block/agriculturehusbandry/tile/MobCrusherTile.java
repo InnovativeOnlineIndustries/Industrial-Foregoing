@@ -154,6 +154,7 @@ public class MobCrusherTile extends IndustrialAreaWorkingTile<MobCrusherTile> {
                 }
                 if (dropXP)
                     this.tank.fillForced(new FluidStack(ModuleCore.ESSENCE.getSourceFluid(), experience * 20), IFluidHandler.FluidAction.EXECUTE);
+                entity.setHealth(0);
                 entity.remove(false);
                 player.setHeldItem(Hand.MAIN_HAND, ItemStack.EMPTY);
                 return new WorkAction(0.1f, MobCrusherConfig.powerPerOperation);
