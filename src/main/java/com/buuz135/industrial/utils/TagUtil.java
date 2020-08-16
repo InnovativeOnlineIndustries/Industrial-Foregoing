@@ -37,7 +37,7 @@ import java.util.List;
 public class TagUtil {
 
     public static <T> boolean hasTag(T type, ITag.INamedTag<T> tag) {
-        return tag.func_230235_a_(type); //contains
+        return tag.contains(type); //contains
     }
 
     public static TagCollection<Block> getAllBlockTags(World world) {
@@ -56,15 +56,15 @@ public class TagUtil {
         if (tags.length == 0)
             return Collections.emptyList();
         if (tags.length == 1)
-            return tags[0].func_230236_b_(); //getAllElements
+            return tags[0].getAllElements(); //getAllElements
         List<T> list = new ArrayList<>();
         for (Tag.INamedTag<T> tag : tags) {
-            list.addAll(tag.func_230236_b_());
+            list.addAll(tag.getAllElements());
         }
         return list;
     }
 
     public static <T> Collection<T> getAllEntries(Tag<T> tag) {
-        return tag.func_230236_b_();
+        return tag.getAllElements();
     }
 }

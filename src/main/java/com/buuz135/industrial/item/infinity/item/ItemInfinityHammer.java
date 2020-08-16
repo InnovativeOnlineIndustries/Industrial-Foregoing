@@ -114,7 +114,7 @@ public class ItemInfinityHammer extends ItemInfinity {
             return 15.0F;
         } else {
             Material material = state.getMaterial();
-            return material != Material.PLANTS && material != Material.TALL_PLANTS && material != Material.CORAL && !state.func_235714_a_(BlockTags.LEAVES) && material != Material.GOURD ? 1.0F : 1.5F;
+            return material != Material.PLANTS && material != Material.TALL_PLANTS && material != Material.CORAL && !state.isIn(BlockTags.LEAVES) && material != Material.GOURD ? 1.0F : 1.5F;
         }
     }
 
@@ -131,18 +131,18 @@ public class ItemInfinityHammer extends ItemInfinity {
                     consumeFuel(stack);
                     if (mobEntity.getHealth() <= 0 && attacker.getEntityWorld().rand.nextDouble() <= getCurrentBeheading(stack) * 0.15) {
                         ItemStack head = HEADS.getOrDefault(mobEntity.getClass(), (entity) -> ItemStack.EMPTY).apply(mobEntity);
-                        Block.spawnAsEntity(attacker.world, attacker.func_233580_cy_(), head);
+                        Block.spawnAsEntity(attacker.world, attacker.getPosition(), head);
                     }
                 }
             });
             attacker.getEntityWorld().getEntitiesWithinAABB(ItemEntity.class, area.grow(1)).forEach(itemEntity -> {
                 itemEntity.setNoPickupDelay();
-                itemEntity.setPositionAndUpdate(attacker.func_233580_cy_().getX(), attacker.func_233580_cy_().getY() + 1, attacker.func_233580_cy_().getZ());
+                itemEntity.setPositionAndUpdate(attacker.getPosition().getX(), attacker.getPosition().getY() + 1, attacker.getPosition().getZ());
             });
-            attacker.getEntityWorld().getEntitiesWithinAABB(ExperienceOrbEntity.class, area.grow(1)).forEach(entityXPOrb -> entityXPOrb.setPositionAndUpdate(attacker.func_233580_cy_().getX(), attacker.func_233580_cy_().getY(), attacker.func_233580_cy_().getZ()));
+            attacker.getEntityWorld().getEntitiesWithinAABB(ExperienceOrbEntity.class, area.grow(1)).forEach(entityXPOrb -> entityXPOrb.setPositionAndUpdate(attacker.getPosition().getX(), attacker.getPosition().getY(), attacker.getPosition().getZ()));
         }
         if (target.getHealth() <= 0 && target instanceof PlayerEntity) {
-            Block.spawnAsEntity(attacker.world, attacker.func_233580_cy_(), createHead(target.getDisplayName().getString()));
+            Block.spawnAsEntity(attacker.world, attacker.getPosition(), createHead(target.getDisplayName().getString()));
         }
         return true;
     }
@@ -165,8 +165,8 @@ public class ItemInfinityHammer extends ItemInfinity {
         Multimap<Attribute, AttributeModifier> multimap = MultimapBuilder.hashKeys().arrayListValues().build();
         if (slot == EquipmentSlotType.MAINHAND) {
             InfinityTier infinityTier = InfinityTier.getTierBraquet(getPowerFromStack(stack)).getLeft();
-            multimap.put(Attributes.field_233823_f_, new AttributeModifier(ATTACK_DAMAGE_MODIFIER, "Weapon modifier", DAMAGE + Math.pow(2, infinityTier.getRadius()), AttributeModifier.Operation.ADDITION)); //AttackDamage
-            multimap.put(Attributes.field_233825_h_, new AttributeModifier(ATTACK_SPEED_MODIFIER, "Weapon modifier", ATTACK_SPEED, AttributeModifier.Operation.ADDITION)); //AttackSpeed
+            multimap.put(Attributes.ATTACK_DAMAGE, new AttributeModifier(ATTACK_DAMAGE_MODIFIER, "Weapon modifier", DAMAGE + Math.pow(2, infinityTier.getRadius()), AttributeModifier.Operation.ADDITION)); //AttackDamage
+            multimap.put(Attributes.ATTACK_SPEED, new AttributeModifier(ATTACK_SPEED_MODIFIER, "Weapon modifier", ATTACK_SPEED, AttributeModifier.Operation.ADDITION)); //AttackSpeed
         }
         return multimap;
     }
@@ -199,7 +199,7 @@ public class ItemInfinityHammer extends ItemInfinity {
                 level = "III";
                 break;
         }
-        tooltip.add(new TranslationTextComponent("text.industrialforegoing.display.beheading").func_240702_b_(" " + level).func_240699_a_(TextFormatting.GRAY));
+        tooltip.add(new TranslationTextComponent("text.industrialforegoing.display.beheading").appendString(" " + level).mergeStyle(TextFormatting.GRAY));
     }
 
     @Override
@@ -210,7 +210,7 @@ public class ItemInfinityHammer extends ItemInfinity {
         factory.add(() -> new TextScreenAddon("", 54 + 14 + 4, 24 + 18 * 2, false) {
             @Override
             public String getText() {
-                return TextFormatting.DARK_GRAY + new TranslationTextComponent("text.industrialforegoing.display.beheading").func_240702_b_(": ").func_240702_b_(getCurrentBeheading(stack.get()) + "/" + getMaxBeheading(stack.get())).getString();
+                return TextFormatting.DARK_GRAY + new TranslationTextComponent("text.industrialforegoing.display.beheading").appendString(": ").appendString(getCurrentBeheading(stack.get()) + "/" + getMaxBeheading(stack.get())).getString();
             }
         });
         return factory;

@@ -45,7 +45,7 @@ compileJava {
 }
 
 minecraft {
-    mappings channel: 'snapshot', version: '20200514-1.16'
+    mappings channel: 'snapshot', version: '20200723-1.16.1'
     runs {
         client = {
             // recommended logging data for a userdev environment

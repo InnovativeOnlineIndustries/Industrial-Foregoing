@@ -20,7 +20,7 @@ public class SweetBerriesPlantRecollectable extends PlantRecollectable {
 
     @Override
     public boolean canBeHarvested(World world, BlockPos pos, BlockState blockState) {
-        return blockState.func_235901_b_(SweetBerryBushBlock.AGE) && blockState.get(SweetBerryBushBlock.AGE) == 3;
+        return blockState.hasProperty(SweetBerryBushBlock.AGE) && blockState.get(SweetBerryBushBlock.AGE) == 3;
     }
 
     @Override

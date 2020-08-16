@@ -117,7 +117,7 @@ public class BioReactorTile extends IndustrialWorkingTile<BioReactorTile> {
             }
         }
         for (ITag.INamedTag<Item> itemTag : VALID) {
-            if (itemTag.func_230235_a_(stack.getItem())) return true; //contains
+            if (itemTag.contains(stack.getItem())) return true; //contains
         }
         return false;
     }

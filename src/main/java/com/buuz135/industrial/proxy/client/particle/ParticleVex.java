@@ -69,7 +69,7 @@ public class ParticleVex extends Particle {
     @Override
     public void tick() {
         super.tick();
-        if (this.entity.func_233580_cy_().distanceSq(posX, posY, posZ, true) > 2) {
+        if (this.entity.getPosition().distanceSq(posX, posY, posZ, true) > 2) {
             isDying = true;
         }
         if (!isDying && !this.isExpired) {
@@ -87,7 +87,7 @@ public class ParticleVex extends Particle {
 
     @Override
     public void renderParticle(IVertexBuilder buffer, ActiveRenderInfo activeRenderInfo, float v) {
-        if (entity instanceof ClientPlayerEntity && Minecraft.getInstance().player.getUniqueID().equals(entity.getUniqueID()) && Minecraft.getInstance().gameSettings.thirdPersonView == 0 && this.entity.func_233580_cy_().add(0, 1, 0).distanceSq(posX, posY, posZ, false) < 3)
+        if (entity instanceof ClientPlayerEntity && Minecraft.getInstance().player.getUniqueID().equals(entity.getUniqueID()) && Minecraft.getInstance().gameSettings.thirdPersonView == 0 && this.entity.getPosition().add(0, 1, 0).distanceSq(posX, posY, posZ, false) < 3)
             return;
         Vector3d vector3d = activeRenderInfo.getProjectedView();
         double x = entity.lastTickPosX + (vector3d.x - entity.lastTickPosX);

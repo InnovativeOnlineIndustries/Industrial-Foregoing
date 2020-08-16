@@ -63,8 +63,8 @@ public class DissolutionChamberRecipe extends SerializableRecipe {
                         new Ingredient.TagList(IndustrialTags.Items.PLASTIC),
                         new Ingredient.TagList(IndustrialTags.Items.MACHINE_FRAME_SIMPLE),
                         new Ingredient.TagList(IndustrialTags.Items.PLASTIC),
-                        new Ingredient.SingleItemList(new ItemStack(Items.field_234760_kn_)),
-                        new Ingredient.SingleItemList(new ItemStack(Items.field_234760_kn_)),
+                        new Ingredient.SingleItemList(new ItemStack(Items.NETHERITE_SCRAP)),
+                        new Ingredient.SingleItemList(new ItemStack(Items.NETHERITE_SCRAP)),
                         new Ingredient.TagList(Tags.Items.INGOTS_GOLD),
                         new Ingredient.TagList(IndustrialTags.Items.GEAR_DIAMOND),
                         new Ingredient.TagList(Tags.Items.INGOTS_GOLD)

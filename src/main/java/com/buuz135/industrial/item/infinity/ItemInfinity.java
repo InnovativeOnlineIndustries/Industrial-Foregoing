@@ -163,7 +163,7 @@ public class ItemInfinity extends IFCustomItem implements INamedContainerProvide
 
     @Override
     public double getDurabilityForDisplay(ItemStack stack) {
-        if (Screen.func_231172_r_()) { //hasShiftDown
+        if (Screen.hasShiftDown()) { //hasShiftDown
             int fuel = getFuelFromStack(stack);
             return 1 - fuel / 1_000_000D;
         } else {
@@ -174,7 +174,7 @@ public class ItemInfinity extends IFCustomItem implements INamedContainerProvide
 
     @Override
     public int getRGBDurabilityForDisplay(ItemStack stack) {
-        return Screen.func_231172_r_() ? 0xcb00ff /*Purple*/ : 0x00d0ff /*Cyan*/;
+        return Screen.hasShiftDown() ? 0xcb00ff /*Purple*/ : 0x00d0ff /*Cyan*/;
     }
 
     @Override
@@ -192,6 +192,14 @@ public class ItemInfinity extends IFCustomItem implements INamedContainerProvide
 
     public boolean isSpecial(ItemStack stack) {
         return stack.hasTag() && stack.getTag().contains("Special") && stack.getTag().getBoolean("Special");
+    }
+
+    public boolean isSpecialEnabled(ItemStack stack) {
+        return isSpecial(stack) && stack.getTag().contains("SpecialEnabled") && stack.getTag().getBoolean("SpecialEnabled");
+    }
+
+    public void setSpecialEnabled(ItemStack stack, boolean special) {
+        if (isSpecial(stack)) stack.getTag().putBoolean("SpecialEnabled", special);
     }
 
     public boolean enoughFuel(ItemStack stack) {
@@ -219,19 +227,19 @@ public class ItemInfinity extends IFCustomItem implements INamedContainerProvide
         long power = getPowerFromStack(stack);
         Pair<InfinityTier, InfinityTier> braquet = InfinityTier.getTierBraquet(power);
         InfinityTier current = getSelectedTier(stack);
-        tooltip.add(new TranslationTextComponent("text.industrialforegoing.display.current_area").func_240702_b_(" ").func_240702_b_(getFormattedArea(current, current.getRadius(), this.usesDepth)).func_240699_a_(TextFormatting.GRAY));
-        tooltip.add(new TranslationTextComponent("text.industrialforegoing.display.tier").func_240702_b_(" " + braquet.getLeft().getColor() + braquet.getLeft().getLocalizedName()).func_240699_a_(TextFormatting.GRAY));
-        tooltip.add(new TranslationTextComponent("text.industrialforegoing.display.power").func_240702_b_(" ").func_240702_b_(NumberFormat.getNumberInstance(Locale.ROOT).format(power)).func_240702_b_("/").func_240702_b_(NumberFormat.getNumberInstance(Locale.ROOT).format(braquet.getRight().getPowerNeeded())).func_240702_b_("RF ").func_230529_a_(new TranslationTextComponent("text.industrialforegoing.display.next_tier")).func_240699_a_(TextFormatting.GRAY));
+        tooltip.add(new TranslationTextComponent("text.industrialforegoing.display.current_area").appendString(" ").appendString(getFormattedArea(current, current.getRadius(), this.usesDepth)).mergeStyle(TextFormatting.GRAY));
+        tooltip.add(new TranslationTextComponent("text.industrialforegoing.display.tier").appendString(" " + braquet.getLeft().getColor() + braquet.getLeft().getLocalizedName()).mergeStyle(TextFormatting.GRAY));
+        tooltip.add(new TranslationTextComponent("text.industrialforegoing.display.power").appendString(" ").appendString(NumberFormat.getNumberInstance(Locale.ROOT).format(power)).appendString("/").appendString(NumberFormat.getNumberInstance(Locale.ROOT).format(braquet.getRight().getPowerNeeded())).appendString("RF ").append(new TranslationTextComponent("text.industrialforegoing.display.next_tier")).mergeStyle(TextFormatting.GRAY));
         int fuelAmount = getFuelFromStack(stack);
-        tooltip.add(new TranslationTextComponent("text.industrialforegoing.display.fluid").func_240702_b_(" ").func_240702_b_(NumberFormat.getNumberInstance(Locale.ROOT).format(fuelAmount)).func_240702_b_("/").func_240702_b_(NumberFormat.getNumberInstance(Locale.ROOT).format(1000000)).func_240702_b_(" mb of Biofuel").func_240699_a_(TextFormatting.GRAY));
-        tooltip.add(new TranslationTextComponent("text.industrialforegoing.display.max_area").func_240702_b_(" ").func_240702_b_(getFormattedArea(braquet.getLeft(), braquet.getLeft().getRadius(), this.usesDepth)).func_240699_a_(TextFormatting.GRAY));
+        tooltip.add(new TranslationTextComponent("text.industrialforegoing.display.fluid").appendString(" ").appendString(NumberFormat.getNumberInstance(Locale.ROOT).format(fuelAmount)).appendString("/").appendString(NumberFormat.getNumberInstance(Locale.ROOT).format(1000000)).appendString(" mb of Biofuel").mergeStyle(TextFormatting.GRAY));
+        tooltip.add(new TranslationTextComponent("text.industrialforegoing.display.max_area").appendString(" ").appendString(getFormattedArea(braquet.getLeft(), braquet.getLeft().getRadius(), this.usesDepth)).mergeStyle(TextFormatting.GRAY));
         if (canCharge(stack)) {
-            tooltip.add(new TranslationTextComponent("text.industrialforegoing.display.charging").func_240699_a_(TextFormatting.GRAY).func_230529_a_(new TranslationTextComponent("text.industrialforegoing.display.enabled").func_240699_a_(TextFormatting.GREEN)));
+            tooltip.add(new TranslationTextComponent("text.industrialforegoing.display.charging").mergeStyle(TextFormatting.GRAY).append(new TranslationTextComponent("text.industrialforegoing.display.enabled").mergeStyle(TextFormatting.GREEN)));
         } else {
-            tooltip.add(new TranslationTextComponent("text.industrialforegoing.display.charging").func_240699_a_(TextFormatting.GRAY).func_230529_a_(new TranslationTextComponent("text.industrialforegoing.display.disabled").func_240699_a_(TextFormatting.RED)));
+            tooltip.add(new TranslationTextComponent("text.industrialforegoing.display.charging").mergeStyle(TextFormatting.GRAY).append(new TranslationTextComponent("text.industrialforegoing.display.disabled").mergeStyle(TextFormatting.RED)));
         }
         if (isSpecial(stack))
-            tooltip.add(new TranslationTextComponent("text.industrialforegoing.display.special").func_240699_a_(TextFormatting.GOLD));
+            tooltip.add(new TranslationTextComponent("text.industrialforegoing.display.special").mergeStyle(TextFormatting.GOLD));
     }
 
     public Pair<BlockPos, BlockPos> getArea(BlockPos pos, Direction facing, InfinityTier currentTier, boolean withDepth) {
@@ -252,15 +260,15 @@ public class ItemInfinity extends IFCustomItem implements INamedContainerProvide
     public Multimap<Attribute, AttributeModifier> getAttributeModifiers(EquipmentSlotType slot, ItemStack stack) {
         Multimap<Attribute, AttributeModifier> multimap = MultimapBuilder.hashKeys().arrayListValues().build();
         if (slot == EquipmentSlotType.MAINHAND) {
-            multimap.put(Attributes.field_233823_f_, new AttributeModifier(ATTACK_DAMAGE_MODIFIER, "Tool modifier", 3, AttributeModifier.Operation.ADDITION)); //AttackDamage
-            multimap.put(Attributes.field_233825_h_, new AttributeModifier(ATTACK_SPEED_MODIFIER, "Tool modifier", -2.5D, AttributeModifier.Operation.ADDITION)); //AttackSpeed
+            multimap.put(Attributes.ATTACK_DAMAGE, new AttributeModifier(ATTACK_DAMAGE_MODIFIER, "Tool modifier", 3, AttributeModifier.Operation.ADDITION)); //AttackDamage
+            multimap.put(Attributes.ATTACK_SPEED, new AttributeModifier(ATTACK_SPEED_MODIFIER, "Tool modifier", -2.5D, AttributeModifier.Operation.ADDITION)); //AttackSpeed
         }
         return multimap;
     }
 
     @Override
     public ITextComponent getDisplayName() {
-        return new TranslationTextComponent(this.getTranslationKey()).func_240699_a_(TextFormatting.DARK_GRAY);
+        return new TranslationTextComponent(this.getTranslationKey()).mergeStyle(TextFormatting.DARK_GRAY);
     }
 
     @Nullable
@@ -316,6 +324,9 @@ public class ItemInfinity extends IFCustomItem implements INamedContainerProvide
             if (id == 3) {
                 setCanCharge(stack, !canCharge(stack));
             }
+            if (id == -10) {
+                setSpecialEnabled(stack, !isSpecialEnabled(stack));
+            }
         }
     }
 
@@ -352,6 +363,15 @@ public class ItemInfinity extends IFCustomItem implements INamedContainerProvide
                 }
             }
         });
+        if (isSpecial(stack.get())) {
+            factory.add(() -> new StateButtonAddon(new ButtonComponent(12, 80, 14, 15).setId(-10), new StateButtonInfo(0, AssetTypes.BUTTON_SIDENESS_ENABLED), new StateButtonInfo(1, AssetTypes.BUTTON_SIDENESS_DISABLED)) {
+                @Override
+                public int getState() {
+                    return ItemInfinity.this.isSpecialEnabled(stack.get()) ? 0 : 1;
+                }
+            });
+            factory.add(() -> new TextScreenAddon(TextFormatting.GOLD + new TranslationTextComponent("text.industrialforegoing.display.special").getString(), 12 + 14 + 4, 84, false));
+        }
         return factory;
     }
 }
