@@ -43,7 +43,6 @@ public class MechanicalDirtTile extends IndustrialWorkingTile<MechanicalDirtTile
 
     @Override
     public WorkAction work() {
-
         if (world.rand.nextDouble() > 0.1
                 || world.getDifficulty() == Difficulty.PEACEFUL
                 || (world.isDaytime() && world.getBrightness(pos.up()) > 0.5f && world.canBlockSeeSky(pos.up()))

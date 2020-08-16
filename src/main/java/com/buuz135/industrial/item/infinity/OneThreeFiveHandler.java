@@ -77,7 +77,7 @@ public class OneThreeFiveHandler {
         if (event.phase == TickEvent.Phase.END) return;
         if (event.player.world.getGameTime() % 20 == 0) {
             for (ItemStack stack : event.player.inventory.mainInventory) {
-                if (stack.getItem() instanceof ItemInfinity && ((ItemInfinity) stack.getItem()).isSpecial(stack)) {
+                if (stack.getItem() instanceof ItemInfinity && ((ItemInfinity) stack.getItem()).isSpecial(stack) && ((ItemInfinity) stack.getItem()).isSpecialEnabled(stack)) {
                     IndustrialForegoing.NETWORK.sendToNearby(event.player.world, new BlockPos(event.player.getPosition().getX(), event.player.getPosition().getY(), event.player.getPosition().getZ()), 64, new SpecialParticleMessage(event.player.getUniqueID()));
                     return;
                 }

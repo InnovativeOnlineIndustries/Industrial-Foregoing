@@ -194,6 +194,14 @@ public class ItemInfinity extends IFCustomItem implements INamedContainerProvide
         return stack.hasTag() && stack.getTag().contains("Special") && stack.getTag().getBoolean("Special");
     }
 
+    public boolean isSpecialEnabled(ItemStack stack) {
+        return isSpecial(stack) && stack.getTag().contains("SpecialEnabled") && stack.getTag().getBoolean("SpecialEnabled");
+    }
+
+    public void setSpecialEnabled(ItemStack stack, boolean special) {
+        if (isSpecial(stack)) stack.getTag().putBoolean("SpecialEnabled", special);
+    }
+
     public boolean enoughFuel(ItemStack stack) {
         return getFuelFromStack(stack) >= biofuelConsumption || getPowerFromStack(stack) >= powerConsumption;
     }
@@ -316,6 +324,9 @@ public class ItemInfinity extends IFCustomItem implements INamedContainerProvide
             if (id == 3) {
                 setCanCharge(stack, !canCharge(stack));
             }
+            if (id == -10) {
+                setSpecialEnabled(stack, !isSpecialEnabled(stack));
+            }
         }
     }
 
@@ -352,6 +363,15 @@ public class ItemInfinity extends IFCustomItem implements INamedContainerProvide
                 }
             }
         });
+        if (isSpecial(stack.get())) {
+            factory.add(() -> new StateButtonAddon(new ButtonComponent(12, 80, 14, 15).setId(-10), new StateButtonInfo(0, AssetTypes.BUTTON_SIDENESS_ENABLED), new StateButtonInfo(1, AssetTypes.BUTTON_SIDENESS_DISABLED)) {
+                @Override
+                public int getState() {
+                    return ItemInfinity.this.isSpecialEnabled(stack.get()) ? 0 : 1;
+                }
+            });
+            factory.add(() -> new TextScreenAddon(TextFormatting.GOLD + new TranslationTextComponent("text.industrialforegoing.display.special").getString(), 12 + 14 + 4, 84, false));
+        }
         return factory;
     }
 }
