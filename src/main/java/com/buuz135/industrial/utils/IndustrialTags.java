@@ -1,8 +1,10 @@
 package com.buuz135.industrial.utils;
 
 import net.minecraft.block.Block;
+import net.minecraft.entity.EntityType;
 import net.minecraft.item.Item;
 import net.minecraft.tags.BlockTags;
+import net.minecraft.tags.EntityTypeTags;
 import net.minecraft.tags.ITag;
 import net.minecraft.tags.ItemTags;
 
@@ -35,6 +37,11 @@ public class IndustrialTags {
         public static final ITag.INamedTag<Block> MACHINE_FRAME_SIMPLE = BlockTags.makeWrapperTag(Reference.MOD_ID + ":" + "machine_frame/simple");
         public static final ITag.INamedTag<Block> MACHINE_FRAME_ADVANCED = BlockTags.makeWrapperTag(Reference.MOD_ID + ":" + "machine_frame/advanced");
         public static final ITag.INamedTag<Block> MACHINE_FRAME_SUPREME = BlockTags.makeWrapperTag(Reference.MOD_ID + ":" + "machine_frame/supreme");
+    }
+
+    public static class EntityTypes {
+
+        public static final ITag.INamedTag<EntityType<?>> MOB_IMPRISONMENT_TOOL_BLACKLIST = EntityTypeTags.func_232896_a_(Reference.MOD_ID + ":" + "mob_imprisonment_tool_blacklist");
     }
 
 }
