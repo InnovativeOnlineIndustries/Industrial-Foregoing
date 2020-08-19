@@ -34,6 +34,7 @@ import net.minecraft.loot.LootParameters;
 import net.minecraft.loot.LootTable;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.Hand;
+import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.server.ServerWorld;
 import net.minecraftforge.common.ForgeHooks;
@@ -125,7 +126,7 @@ public class MobCrusherTile extends IndustrialAreaWorkingTile<MobCrusherTile> {
                         .withRandom(this.world.rand)
                         .withParameter(LootParameters.THIS_ENTITY, entity)
                         .withParameter(LootParameters.DAMAGE_SOURCE, source)
-                        .withParameter(LootParameters.POSITION, this.pos)
+                        .withParameter(LootParameters.field_237457_g_, new Vector3d(this.pos.getX(), this.pos.getY(), this.pos.getZ()))
                         .withParameter(LootParameters.KILLER_ENTITY, player)
                         .withParameter(LootParameters.LAST_DAMAGE_PLAYER, player)
                         .withNullableParameter(LootParameters.DIRECT_KILLER_ENTITY, player);

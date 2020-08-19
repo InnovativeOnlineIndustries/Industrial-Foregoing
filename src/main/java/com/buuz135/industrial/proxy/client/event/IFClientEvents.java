@@ -30,6 +30,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.ActiveRenderInfo;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.WorldRenderer;
+import net.minecraft.client.settings.PointOfView;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.Hand;
 import net.minecraft.util.math.BlockPos;
@@ -87,7 +88,7 @@ public class IFClientEvents {
 
     @SubscribeEvent
     public void onRenderPre(RenderPlayerEvent.Pre event) {
-        if (event.getPlayer().getUniqueID().equals(Minecraft.getInstance().player.getUniqueID()) && Minecraft.getInstance().gameSettings.thirdPersonView == 0)
+        if (event.getPlayer().getUniqueID().equals(Minecraft.getInstance().player.getUniqueID()) && Minecraft.getInstance().gameSettings.func_243230_g() == PointOfView.FIRST_PERSON)
             return;
         if (event.getPlayer().getHeldItem(Hand.MAIN_HAND).getItem().equals(ModuleTool.INFINITY_DRILL))
             event.getPlayer().setActiveHand(Hand.MAIN_HAND);

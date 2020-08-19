@@ -31,7 +31,7 @@ import net.minecraft.client.gui.AbstractGui;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.SoundEvents;
-import net.minecraft.util.text.ITextProperties;
+import net.minecraft.util.text.ITextComponent;
 
 import javax.annotation.Nullable;
 import java.util.Arrays;
@@ -80,7 +80,7 @@ public abstract class TexturedStateButtonGuiComponent extends PositionedGuiCompo
 
     @Nullable
     @Override
-    public List<ITextProperties> getTooltip(int guiX, int guiY, double mouseX, double mouseY) {
+    public List<ITextComponent> getTooltip(int guiX, int guiY, double mouseX, double mouseY) {
         StateButtonInfo buttonInfo = getStateInfo();
         if (buttonInfo != null) {
             return Arrays.asList(buttonInfo.getTooltip());

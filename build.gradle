@@ -45,7 +45,7 @@ compileJava {
 }
 
 minecraft {
-    mappings channel: 'snapshot', version: '20200723-1.16.1'
+    mappings channel: 'snapshot', version: '20200813-1.16.1'
     runs {
         client = {
             // recommended logging data for a userdev environment
@@ -100,19 +100,22 @@ repositories {
         name 'jared maven'
         url "https://maven.blamejared.com/"
     }
+    maven {
+        url 'https://www.dogforce-games.com/maven/'
+    }
 }
 
 dependencies {
-    minecraft 'net.minecraftforge:forge:1.16.1-32.0.98'
+    minecraft 'net.minecraftforge:forge:1.16.2-33.0.5'
     if (findProject(':titanium') != null) {
         compile project(':titanium')
     } else {
         compile fg.deobf (project.dependencies.create('com.hrznstudio:titanium:1.16.1-3.0.3'))
     }
     //if (findProject(':workspace') == null) {
-        compileOnly fg.deobf("mezz.jei:jei-1.16.1:7.0.0.2:api")
-        // at runtime, use the full JEI jar
-        runtimeOnly fg.deobf("mezz.jei:jei-1.16.1:7.0.0.2")
+    compileOnly fg.deobf("mezz.jei:jei-1.16.2:7.1.0.11:api")
+    // at runtime, use the full JEI jar
+    runtimeOnly fg.deobf("mezz.jei:jei-1.16.2:7.1.0.11")
     //}
     compileOnly fg.deobf("blusunrize.immersiveengineering:ImmersiveEngineering:0.16-+")
 }

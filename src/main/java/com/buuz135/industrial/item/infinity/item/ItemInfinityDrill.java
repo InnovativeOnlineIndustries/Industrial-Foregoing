@@ -113,7 +113,7 @@ public class ItemInfinityDrill extends ItemInfinity {
                                     totalDrops.add(itemStack);
                                 }
                             });
-                            block.dropXpOnBlockBreak(worldIn, blockPos, xp);
+                            block.dropXpOnBlockBreak((ServerWorld) worldIn, blockPos, xp);
                             consumeFuel(stack);
                         }
                     }

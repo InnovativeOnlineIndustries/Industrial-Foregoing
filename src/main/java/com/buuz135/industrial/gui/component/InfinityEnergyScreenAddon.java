@@ -7,7 +7,7 @@ import com.hrznstudio.titanium.client.screen.addon.BasicScreenAddon;
 import com.hrznstudio.titanium.client.screen.asset.IAssetProvider;
 import com.mojang.blaze3d.matrix.MatrixStack;
 import net.minecraft.client.gui.screen.Screen;
-import net.minecraft.util.text.ITextProperties;
+import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.util.text.TextFormatting;
 import org.apache.commons.lang3.tuple.Pair;
@@ -31,7 +31,7 @@ public class InfinityEnergyScreenAddon extends BasicScreenAddon {
         this.tier = InfinityTier.getTierBraquet(handler.getLongEnergyStored());
     }
 
-    public static java.util.List<ITextProperties> getTooltip(long stored, long capacity) {
+    public static java.util.List<ITextComponent> getTooltip(long stored, long capacity) {
         return Arrays.asList(new StringTextComponent(TextFormatting.GOLD + "Power:"), new StringTextComponent(new DecimalFormat().format(stored) + TextFormatting.GOLD + "/" + TextFormatting.WHITE + new DecimalFormat().format(capacity) + TextFormatting.DARK_AQUA + " FE"));
     }
 
@@ -56,7 +56,7 @@ public class InfinityEnergyScreenAddon extends BasicScreenAddon {
     }
 
     @Override
-    public List<ITextProperties> getTooltipLines() {
+    public List<ITextComponent> getTooltipLines() {
         return getTooltip(handler.getLongEnergyStored(), tier.getRight().getPowerNeeded());
     }
 }

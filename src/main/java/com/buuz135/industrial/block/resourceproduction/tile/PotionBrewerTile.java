@@ -22,7 +22,7 @@ import net.minecraft.potion.PotionBrewing;
 import net.minecraft.potion.PotionUtils;
 import net.minecraft.potion.Potions;
 import net.minecraft.util.NonNullList;
-import net.minecraft.util.text.ITextProperties;
+import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraftforge.common.brewing.BrewingRecipeRegistry;
@@ -65,8 +65,8 @@ public class PotionBrewerTile extends IndustrialProcessingTile<PotionBrewerTile>
                     public List<IFactory<? extends IScreenAddon>> getScreenAddons() {
                         return Collections.singletonList(() -> new ProgressBarScreenAddon<PotionBrewerTile>(30, 20, this) {
                             @Override
-                            public List<ITextProperties> getTooltipLines() {
-                                List<ITextProperties> tooltip = new ArrayList<>();
+                            public List<ITextComponent> getTooltipLines() {
+                                List<ITextComponent> tooltip = new ArrayList<>();
                                 tooltip.add(new StringTextComponent(TextFormatting.GOLD + "Blaze Fuel: " + TextFormatting.WHITE + new DecimalFormat().format(blaze.getProgress()) + TextFormatting.GOLD + "/" + TextFormatting.WHITE + new DecimalFormat().format(blaze.getMaxProgress())));
                                 return tooltip;
                             }
