@@ -19,7 +19,7 @@ import net.minecraft.item.DyeColor;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tags.ITag;
-import net.minecraft.util.text.ITextProperties;
+import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraftforge.common.Tags;
@@ -74,7 +74,7 @@ public class BioReactorTile extends IndustrialWorkingTile<BioReactorTile> {
                     public List<IFactory<? extends IScreenAddon>> getScreenAddons() {
                         return Collections.singletonList(() -> new ProgressBarScreenAddon<BioReactorTile>(bar.getPosX(), bar.getPosY(), this) {
                             @Override
-                            public List<ITextProperties> getTooltipLines() {
+                            public List<ITextComponent> getTooltipLines() {
                                 return Arrays.asList(new StringTextComponent(TextFormatting.GOLD + "Efficiency: " + TextFormatting.WHITE + (int) ((getEfficiency() / 9D) * 100) + TextFormatting.DARK_AQUA + "%"));
                             }
                         });

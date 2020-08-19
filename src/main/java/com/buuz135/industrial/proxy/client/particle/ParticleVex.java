@@ -33,6 +33,7 @@ import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.texture.TextureManager;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
+import net.minecraft.client.settings.PointOfView;
 import net.minecraft.client.world.ClientWorld;
 import net.minecraft.entity.Entity;
 import net.minecraft.util.Direction;
@@ -87,7 +88,7 @@ public class ParticleVex extends Particle {
 
     @Override
     public void renderParticle(IVertexBuilder buffer, ActiveRenderInfo activeRenderInfo, float v) {
-        if (entity instanceof ClientPlayerEntity && Minecraft.getInstance().player.getUniqueID().equals(entity.getUniqueID()) && Minecraft.getInstance().gameSettings.thirdPersonView == 0 && this.entity.getPosition().add(0, 1, 0).distanceSq(posX, posY, posZ, false) < 3)
+        if (entity instanceof ClientPlayerEntity && Minecraft.getInstance().player.getUniqueID().equals(entity.getUniqueID()) && Minecraft.getInstance().gameSettings.func_243230_g() == PointOfView.FIRST_PERSON && this.entity.getPosition().add(0, 1, 0).distanceSq(posX, posY, posZ, false) < 3)
             return;
         Vector3d vector3d = activeRenderInfo.getProjectedView();
         double x = entity.lastTickPosX + (vector3d.x - entity.lastTickPosX);
@@ -120,8 +121,8 @@ public class ParticleVex extends Particle {
     }
 
     private Direction getRandomFacing(Random random, Direction opposite) {
-        Direction facing = Direction.func_239631_a_(random); //random
-        while (facing.getOpposite().equals(opposite)) facing = Direction.func_239631_a_(random);
+        Direction facing = Direction.getRandomDirection(random); //random
+        while (facing.getOpposite().equals(opposite)) facing = Direction.getRandomDirection(random);
         return facing;
     }
 

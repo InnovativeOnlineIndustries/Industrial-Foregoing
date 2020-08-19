@@ -16,6 +16,7 @@ import net.minecraft.item.Items;
 import net.minecraft.loot.*;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.shapes.VoxelShape;
+import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.world.server.ServerWorld;
 import net.minecraftforge.items.ItemHandlerHelper;
 
@@ -47,7 +48,7 @@ public class MarineFisherTile extends IndustrialAreaWorkingTile<MarineFisherTile
             if (this.world.rand.nextDouble() <= 0.05) {
                 fishingTable = this.world.getServer().getLootTableManager().getLootTableFromLocation(LootTables.GAMEPLAY_FISHING_TREASURE);
             }
-            LootContext.Builder context = new LootContext.Builder((ServerWorld) this.world).withParameter(LootParameters.POSITION, this.pos).withParameter(LootParameters.TOOL, new ItemStack(Items.FISHING_ROD));
+            LootContext.Builder context = new LootContext.Builder((ServerWorld) this.world).withParameter(LootParameters.field_237457_g_, new Vector3d(this.pos.getX(), this.pos.getY(), this.pos.getZ())).withParameter(LootParameters.TOOL, new ItemStack(Items.FISHING_ROD));
             fishingTable.generate(context.build(LootParameterSets.FISHING)).forEach(stack -> ItemHandlerHelper.insertItem(output, stack, false));
             return new WorkAction(1f, powerPerOperation);
         }

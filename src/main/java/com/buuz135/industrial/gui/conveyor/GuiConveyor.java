@@ -35,7 +35,6 @@ import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.ITextProperties;
 import net.minecraft.util.text.TranslationTextComponent;
 
 import java.util.ArrayList;
@@ -95,11 +94,11 @@ public class GuiConveyor extends ContainerScreen<ContainerConveyor> {
         for (IGuiComponent iGuiComponent : componentList) {
             iGuiComponent.drawGuiForegroundLayer(stack, x, y, mouseX, mouseY);
         }
-        func_230459_a_(stack, mouseX - x, mouseY - y);
+        renderHoveredTooltip(stack, mouseX - x, mouseY - y);
         for (IGuiComponent iGuiComponent : componentList) {
             if (iGuiComponent.isInside(mouseX - x, mouseY - y)) {
-                List<? extends ITextProperties> tooltips = iGuiComponent.getTooltip(x, y, mouseX, mouseY);
-                if (tooltips != null) renderTooltip(stack, tooltips, mouseX - x, mouseY - y);
+                List<ITextComponent> tooltips = iGuiComponent.getTooltip(x, y, mouseX, mouseY);
+                if (tooltips != null) func_243308_b(stack, tooltips, mouseX - x, mouseY - y);
             }
         }
     }
