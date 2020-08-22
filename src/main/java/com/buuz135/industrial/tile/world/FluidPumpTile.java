@@ -98,6 +98,7 @@ public class FluidPumpTile extends WorkingAreaElectricMachine {
             if (peeked == null) return 0;
             if (this.world.getTileEntity(peeked) != null) return 0;
             IFluidHandler handler = FluidUtil.getFluidHandler(this.world, peeked, null);
+            if (handler == null) return 0;
             FluidStack fluid = handler.drain(1000, true);
             if (fluid != null) {
                 if (BlockRegistry.fluidPumpBlock.isReplaceFluidWithCobble()) {
