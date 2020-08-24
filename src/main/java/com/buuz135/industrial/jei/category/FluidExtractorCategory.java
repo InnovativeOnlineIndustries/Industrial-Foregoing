@@ -107,10 +107,10 @@ public class FluidExtractorCategory implements IRecipeCategory<FluidExtractorRec
 
     @Override
     public void draw(FluidExtractorRecipe recipe, MatrixStack matrixStack, double mouseX, double mouseY) {
-        Minecraft.getInstance().fontRenderer.func_238421_b_(matrixStack, TextFormatting.DARK_GRAY + "Production: ", 80, 6, 0xFFFFFF);
-        Minecraft.getInstance().fontRenderer.func_238421_b_(matrixStack, TextFormatting.DARK_GRAY + "" + recipe.output.getAmount() + "mb/12ticks", 80, 6 + (Minecraft.getInstance().fontRenderer.FONT_HEIGHT + 2) * 1, 0xFFFFFF);
-        Minecraft.getInstance().fontRenderer.func_238421_b_(matrixStack, TextFormatting.DARK_GRAY + "" + "Average: ", 80, 6 + (Minecraft.getInstance().fontRenderer.FONT_HEIGHT + 2) * 2, 0xFFFFFF);
-        Minecraft.getInstance().fontRenderer.func_238421_b_(matrixStack, TextFormatting.DARK_GRAY + "" + ((int) (8 / recipe.breakChance) * recipe.output.getAmount()) + "mb", 80, 6 + (Minecraft.getInstance().fontRenderer.FONT_HEIGHT + 2) * 3, 0xFFFFFF);
+        Minecraft.getInstance().fontRenderer.drawString(matrixStack, TextFormatting.DARK_GRAY + "Production: ", 80, 6, 0xFFFFFF);
+        Minecraft.getInstance().fontRenderer.drawString(matrixStack, TextFormatting.DARK_GRAY + "" + recipe.output.getAmount() + "mb/12ticks", 80, 6 + (Minecraft.getInstance().fontRenderer.FONT_HEIGHT + 2) * 1, 0xFFFFFF);
+        Minecraft.getInstance().fontRenderer.drawString(matrixStack, TextFormatting.DARK_GRAY + "" + "Average: ", 80, 6 + (Minecraft.getInstance().fontRenderer.FONT_HEIGHT + 2) * 2, 0xFFFFFF);
+        Minecraft.getInstance().fontRenderer.drawString(matrixStack, TextFormatting.DARK_GRAY + "" + ((int) (8 / recipe.breakChance) * recipe.output.getAmount()) + "mb", 80, 6 + (Minecraft.getInstance().fontRenderer.FONT_HEIGHT + 2) * 3, 0xFFFFFF);
     }
 
     @Override

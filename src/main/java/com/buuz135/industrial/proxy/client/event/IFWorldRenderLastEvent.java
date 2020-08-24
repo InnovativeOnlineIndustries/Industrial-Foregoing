@@ -42,9 +42,9 @@ public class IFWorldRenderLastEvent {
             return;
         float f = playerIn.rotationPitch;
         float f1 = playerIn.rotationYaw;
-        double d0 = playerIn.func_233580_cy_().getX();
-        double d1 = playerIn.func_233580_cy_().getY() + (double) playerIn.getEyeHeight();
-        double d2 = playerIn.func_233580_cy_().getZ();
+        double d0 = playerIn.getPosition().getX();
+        double d1 = playerIn.getPosition().getY() + (double) playerIn.getEyeHeight();
+        double d2 = playerIn.getPosition().getZ();
         Vector3d vec3d = new Vector3d(d0, d1, d2);
         float f2 = MathHelper.cos(-f1 * 0.017453292F - (float) Math.PI);
         float f3 = MathHelper.sin(-f1 * 0.017453292F - (float) Math.PI);

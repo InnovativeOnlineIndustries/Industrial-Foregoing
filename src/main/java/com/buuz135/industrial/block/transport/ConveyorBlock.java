@@ -498,7 +498,7 @@ public class ConveyorBlock extends BasicTileBlock<ConveyorTile> implements IWate
         }
 
         public String getName() {
-            return func_176610_l();
+            return getString();
         }
 
         public String getModel() {
@@ -515,7 +515,7 @@ public class ConveyorBlock extends BasicTileBlock<ConveyorTile> implements IWate
         }
 
         @Override
-        public String func_176610_l() { //getName
+        public String getString() { //getName
             return this.toString().toLowerCase();
         }
     }
@@ -524,11 +524,11 @@ public class ConveyorBlock extends BasicTileBlock<ConveyorTile> implements IWate
         NONE, LEFT, RIGHT, BOTH;
 
         public String getName() {
-            return func_176610_l();
+            return getString();
         }
 
         @Override
-        public String func_176610_l() { //getName
+        public String getString() { //getName
             return this.toString().toLowerCase();
         }
     }

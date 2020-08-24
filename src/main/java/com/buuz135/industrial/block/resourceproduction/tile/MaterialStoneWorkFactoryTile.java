@@ -29,7 +29,7 @@ import net.minecraft.item.DyeColor;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.item.crafting.FurnaceRecipe;
-import net.minecraft.util.text.ITextProperties;
+import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.World;
@@ -123,9 +123,9 @@ public class MaterialStoneWorkFactoryTile extends IndustrialProcessingTile<Mater
                     }
 
                     @Override
-                    public List<ITextProperties> getTooltipLines() {
+                    public List<ITextComponent> getTooltipLines() {
                         GeneratorRecipe recipe = GENERATOR_RECIPES[generatorRecipeId];
-                        List<ITextProperties> lines = new ArrayList<>();
+                        List<ITextComponent> lines = new ArrayList<>();
                         lines.add(new StringTextComponent(TextFormatting.GOLD + LangUtil.getString("tooltip.industrialforegoing.generating") + TextFormatting.WHITE + recipe.output.getDisplayName().getString()));
                         lines.add(new StringTextComponent(TextFormatting.GOLD + LangUtil.getString("tooltip.industrialforegoing.needs")));
                         lines.add(new StringTextComponent(TextFormatting.YELLOW + " - " + TextFormatting.WHITE + recipe.needsWater + TextFormatting.DARK_AQUA + LangUtil.getString("tooltip.industrialforegoing.mb_of", LangUtil.getString("block.minecraft.water"))));
@@ -174,8 +174,8 @@ public class MaterialStoneWorkFactoryTile extends IndustrialProcessingTile<Mater
                     }
 
                     @Override
-                    public List<ITextProperties> getTooltipLines() {
-                        List<ITextProperties> lines = new ArrayList<>();
+                    public List<ITextComponent> getTooltipLines() {
+                        List<ITextComponent> lines = new ArrayList<>();
                         lines.add(new StringTextComponent(TextFormatting.GOLD + LangUtil.getString("tooltip.industrialforegoing.action") + TextFormatting.WHITE + LangUtil.getString("tooltip.industrialforegoing.stonework." + ACTION_RECIPES[firstRecipeId].getAction())));
                         return lines;
                     }
@@ -199,8 +199,8 @@ public class MaterialStoneWorkFactoryTile extends IndustrialProcessingTile<Mater
                     }
 
                     @Override
-                    public List<ITextProperties> getTooltipLines() {
-                        List<ITextProperties> lines = new ArrayList<>();
+                    public List<ITextComponent> getTooltipLines() {
+                        List<ITextComponent> lines = new ArrayList<>();
                         lines.add(new StringTextComponent(TextFormatting.GOLD + LangUtil.getString("tooltip.industrialforegoing.action") + TextFormatting.WHITE + LangUtil.getString("tooltip.industrialforegoing.stonework." + ACTION_RECIPES[secondRecipeId].getAction())));
                         return lines;
                     }
@@ -224,8 +224,8 @@ public class MaterialStoneWorkFactoryTile extends IndustrialProcessingTile<Mater
                     }
 
                     @Override
-                    public List<ITextProperties> getTooltipLines() {
-                        List<ITextProperties> lines = new ArrayList<>();
+                    public List<ITextComponent> getTooltipLines() {
+                        List<ITextComponent> lines = new ArrayList<>();
                         lines.add(new StringTextComponent(TextFormatting.GOLD + LangUtil.getString("tooltip.industrialforegoing.action") + TextFormatting.WHITE + LangUtil.getString("tooltip.industrialforegoing.stonework." + ACTION_RECIPES[thirdRecipeId].getAction())));
                         return lines;
                     }

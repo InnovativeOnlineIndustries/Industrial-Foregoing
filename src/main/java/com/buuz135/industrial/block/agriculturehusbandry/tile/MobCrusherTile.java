@@ -22,9 +22,9 @@ import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.enchantment.Enchantments;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.MobEntity;
+import net.minecraft.entity.boss.WitherEntity;
 import net.minecraft.entity.item.ItemEntity;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.inventory.EquipmentSlotType;
 import net.minecraft.item.DyeColor;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
@@ -34,6 +34,7 @@ import net.minecraft.loot.LootParameters;
 import net.minecraft.loot.LootTable;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.Hand;
+import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.server.ServerWorld;
 import net.minecraftforge.common.ForgeHooks;
@@ -48,11 +49,12 @@ import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class MobCrusherTile extends IndustrialAreaWorkingTile<MobCrusherTile> {
 
     private final Method GET_EXPERIENCE_POINTS = ObfuscationReflectionHelper.findMethod(LivingEntity.class, "func_70693_a", PlayerEntity.class);
-    private final Method GET_DROP_CHANCE = ObfuscationReflectionHelper.findMethod(MobEntity.class, "func_205712_c", EquipmentSlotType.class);
+    private final Method DROP_SPECIAL_ITEMS = ObfuscationReflectionHelper.findMethod(MobEntity.class, "func_213333_a", DamageSource.class, int.class, boolean.class);
 
     @Save
     private SidedInventoryComponent<MobCrusherTile> output;
@@ -65,7 +67,7 @@ public class MobCrusherTile extends IndustrialAreaWorkingTile<MobCrusherTile> {
     public MobCrusherTile() {
         super(ModuleAgricultureHusbandry.MOB_CRUSHER, RangeManager.RangeType.BEHIND, true);
         if (!GET_EXPERIENCE_POINTS.isAccessible()) GET_EXPERIENCE_POINTS.setAccessible(true);
-        if (!GET_DROP_CHANCE.isAccessible()) GET_DROP_CHANCE.setAccessible(true);
+        if (!DROP_SPECIAL_ITEMS.isAccessible()) DROP_SPECIAL_ITEMS.setAccessible(true);
         this.dropXP = true;
         this.addTank(tank = (SidedFluidTankComponent<MobCrusherTile>) new SidedFluidTankComponent<MobCrusherTile>("essence", MobCrusherConfig.tankSize, 43, 20, 0).
                 setColor(DyeColor.LIME).
@@ -100,7 +102,7 @@ public class MobCrusherTile extends IndustrialAreaWorkingTile<MobCrusherTile> {
     @Override
     public WorkAction work() {
         if (hasEnergy(MobCrusherConfig.powerPerOperation)) {
-            List<MobEntity> mobs = this.world.getEntitiesWithinAABB(MobEntity.class, getWorkingArea().getBoundingBox());
+            List<MobEntity> mobs = this.world.getEntitiesWithinAABB(MobEntity.class, getWorkingArea().getBoundingBox()).stream().filter(mobEntity -> !mobEntity.isInvulnerable() && !(mobEntity instanceof WitherEntity && ((WitherEntity) mobEntity).getInvulTime() > 0)).collect(Collectors.toList());
             if (mobs.size() > 0) {
                 MobEntity entity = mobs.get(0);
                 FakePlayer player = IndustrialForegoing.getFakePlayer(this.world);
@@ -124,7 +126,7 @@ public class MobCrusherTile extends IndustrialAreaWorkingTile<MobCrusherTile> {
                         .withRandom(this.world.rand)
                         .withParameter(LootParameters.THIS_ENTITY, entity)
                         .withParameter(LootParameters.DAMAGE_SOURCE, source)
-                        .withParameter(LootParameters.POSITION, this.pos)
+                        .withParameter(LootParameters.field_237457_g_, new Vector3d(this.pos.getX(), this.pos.getY(), this.pos.getZ()))
                         .withParameter(LootParameters.KILLER_ENTITY, player)
                         .withParameter(LootParameters.LAST_DAMAGE_PLAYER, player)
                         .withNullableParameter(LootParameters.DIRECT_KILLER_ENTITY, player);
@@ -136,24 +138,22 @@ public class MobCrusherTile extends IndustrialAreaWorkingTile<MobCrusherTile> {
                     ItemHandlerHelper.insertItem(this.output, itemEntity.getItem(), false);
                     itemEntity.remove(false);
                 });
-                //Drop equipment
-                for (EquipmentSlotType equipmentslottype : EquipmentSlotType.values()) {
-                    ItemStack itemstack = entity.getItemStackFromSlot(equipmentslottype);
-                    float dropChance = 0;
-                    try {
-                        dropChance = (float) GET_DROP_CHANCE.invoke(entity, equipmentslottype);
-                    } catch (IllegalAccessException | InvocationTargetException e) {
-                        e.printStackTrace();
+                //Drop special items
+                try {
+                    if (entity.captureDrops() == null) entity.captureDrops(new ArrayList<>());
+                    DROP_SPECIAL_ITEMS.invoke(entity, source, looting, true);
+                    if (entity.captureDrops() != null) {
+                        entity.captureDrops().forEach(itemEntity -> {
+                            ItemHandlerHelper.insertItem(this.output, itemEntity.getItem(), false);
+                            itemEntity.remove(false);
+                        });
                     }
-                    if (!itemstack.isEmpty() && !EnchantmentHelper.hasVanishingCurse(itemstack) && Math.max(this.world.rand.nextFloat() - (float) looting * 0.01F, 0.0F) < dropChance) {
-                        if (itemstack.isDamageable()) {
-                            itemstack.setDamage(itemstack.getMaxDamage() - this.world.rand.nextInt(1 + this.world.rand.nextInt(Math.max(itemstack.getMaxDamage() - 3, 1))));
-                        }
-                        ItemHandlerHelper.insertItem(this.output, itemstack, false);
-                    }
+                } catch (IllegalAccessException | InvocationTargetException e) {
+                    e.printStackTrace();
                 }
                 if (dropXP)
                     this.tank.fillForced(new FluidStack(ModuleCore.ESSENCE.getSourceFluid(), experience * 20), IFluidHandler.FluidAction.EXECUTE);
+                entity.setHealth(0);
                 entity.remove(false);
                 player.setHeldItem(Hand.MAIN_HAND, ItemStack.EMPTY);
                 return new WorkAction(0.1f, MobCrusherConfig.powerPerOperation);

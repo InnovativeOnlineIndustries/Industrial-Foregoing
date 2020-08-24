@@ -55,6 +55,6 @@ public class WaterCondensatorBlock extends IndustrialBlock<WaterCondensatorTile>
 
     @Override
     public void addInformation(ItemStack stack, @Nullable IBlockReader worldIn, List<ITextComponent> tooltip, ITooltipFlag flagIn) {
-        tooltip.add(new TranslationTextComponent("text.industrialforegoing.tooltip.power_optional").func_240699_a_(TextFormatting.GOLD));
+        tooltip.add(new TranslationTextComponent("text.industrialforegoing.tooltip.power_optional").mergeStyle(TextFormatting.GOLD));
     }
 }

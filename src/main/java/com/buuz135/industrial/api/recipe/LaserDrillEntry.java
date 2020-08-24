@@ -157,16 +157,16 @@ public class LaserDrillEntry {
                     String[] blacklist_strings = rarity_data.getAsJsonPrimitive("blacklist").getAsString().split(",");
                     for (int i = 0; i < blacklist_strings.length; i++) {
                         if (!blacklist_strings[i].isEmpty()) {
-                            Biome biome = ForgeRegistries.BIOMES.getValue(new ResourceLocation(blacklist_strings[i].trim()));
-                            if (biome != null) blacklist.add(biome);
+                            //Biome biome = ForgeRegistries.BIOMES.getValue(new ResourceLocation(blacklist_strings[i].trim()));
+                            //if (biome != null) blacklist.add(biome);
                         }
                     }
 
                     String[] whitelist_strings = rarity_data.getAsJsonPrimitive("whitelist").getAsString().split(",");
                     for (int i = 0; i < whitelist_strings.length; i++) {
                         if (!whitelist_strings[i].isEmpty()) {
-                            Biome biome = ForgeRegistries.BIOMES.getValue(new ResourceLocation(whitelist_strings[i].trim()));
-                            if (biome != null) whitelist.add(biome);
+                            //Biome biome = ForgeRegistries.BIOMES.getValue(new ResourceLocation(whitelist_strings[i].trim()));
+                            //if (biome != null) whitelist.add(biome);
                         }
                     }
 

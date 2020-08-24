@@ -21,10 +21,19 @@
  */
 package com.buuz135.industrial.proxy.client.particle;
 
+import com.mojang.blaze3d.platform.GlStateManager;
+import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.IVertexBuilder;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.entity.player.ClientPlayerEntity;
 import net.minecraft.client.particle.IParticleRenderType;
 import net.minecraft.client.particle.Particle;
 import net.minecraft.client.renderer.ActiveRenderInfo;
+import net.minecraft.client.renderer.BufferBuilder;
+import net.minecraft.client.renderer.Tessellator;
+import net.minecraft.client.renderer.texture.TextureManager;
+import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
+import net.minecraft.client.settings.PointOfView;
 import net.minecraft.client.world.ClientWorld;
 import net.minecraft.entity.Entity;
 import net.minecraft.util.Direction;
@@ -45,7 +54,7 @@ public class ParticleVex extends Particle {
     private boolean isDying = false;
 
     public ParticleVex(Entity entity) { //getPosition
-        super((ClientWorld) entity.world, entity.func_233580_cy_().getX() + entity.world.rand.nextDouble() - 0.5, entity.func_233580_cy_().getY() + 1 + entity.world.rand.nextDouble() - 0.5, entity.func_233580_cy_().getZ() + entity.world.rand.nextDouble() - 0.5);
+        super((ClientWorld) entity.world, entity.getPosX() + entity.world.rand.nextDouble() - 0.5, entity.getPosY() + 1 + entity.world.rand.nextDouble() - 0.5, entity.getPosZ() + entity.world.rand.nextDouble() - 0.5);
         this.entity = entity;
         directions = new ArrayList<>();
         Direction prev = Direction.NORTH;
@@ -61,10 +70,10 @@ public class ParticleVex extends Particle {
     @Override
     public void tick() {
         super.tick();
-        if (this.entity.func_233580_cy_().distanceSq(posX, posY, posZ, true) > 2) {
+        if (this.entity.getPosition().distanceSq(posX, posY, posZ, true) > 2) {
             isDying = true;
         }
-        if (!isDying) {
+        if (!isDying && !this.isExpired) {
             directions.add(0, world.rand.nextDouble() < 0.05 ? getRandomFacing(world.rand, directions.get(0)) : directions.get(0));
             directions.remove(50);
             Vector3d directionVector = new Vector3d(directions.get(0).getDirectionVec().getX(), directions.get(0).getDirectionVec().getY(), directions.get(0).getDirectionVec().getZ()).scale(0.01);
@@ -78,47 +87,42 @@ public class ParticleVex extends Particle {
     }
 
     @Override
-    public void renderParticle(IVertexBuilder iVertexBuilder, ActiveRenderInfo activeRenderInfo, float v) {
-
+    public void renderParticle(IVertexBuilder buffer, ActiveRenderInfo activeRenderInfo, float v) {
+        if (entity instanceof ClientPlayerEntity && Minecraft.getInstance().player.getUniqueID().equals(entity.getUniqueID()) && Minecraft.getInstance().gameSettings.func_243230_g() == PointOfView.FIRST_PERSON && this.entity.getPosition().add(0, 1, 0).distanceSq(posX, posY, posZ, false) < 3)
+            return;
+        Vector3d vector3d = activeRenderInfo.getProjectedView();
+        double x = entity.lastTickPosX + (vector3d.x - entity.lastTickPosX);
+        double y = entity.lastTickPosY + (vector3d.y - entity.lastTickPosY);
+        double z = entity.lastTickPosZ + (vector3d.z - entity.lastTickPosZ);
+        for (Vector3d line : lines) {
+            buffer.pos(line.x - x, line.y - y, line.z - z).color(1f, 1f, 1f, 1f).lightmap(240, 240).endVertex();
+        }
     }
-
-    //@Override
-    //public void buildGeometry(IVertexBuilder buffer, ActiveRenderInfo entityIn, float p_225606_3_) {
-    //    if (entityIn.getRenderViewEntity() instanceof ClientPlayerEntity && Minecraft.getInstance().player.getUniqueID().equals(entity.getUniqueID()) && !entityIn.isThirdPerson() && this.entity.getPosition().add(0, 1, 0).distanceSq(posX, posY, posZ, false) < 3)
-    //        return;
-    //    //RenderSystem.disableAlphaTest(); TODO
-    //    //RenderSystem.enableBlend();
-    //    //RenderSystem.blendFuncSeparate(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA,
-    //    //        GlStateManager.SourceFactor.ONE, GlStateManager.DestFactor.ZERO);
-    //    //RenderSystem.lineWidth(2.0F);
-    //    //RenderSystem.disableTexture();
-    //    //RenderSystem.color4f(1, 1, 1, 1);
-    //    ////OpenGlHelper.setLightmapTextureCoords(OpenGlHelper.lightmapTexUnit, 240.0F, 240.0F); TODO
-    //    //buffer.begin(3, DefaultVertexFormats.POSITION_COLOR);
-    //    //Entity playerEntity = entityIn.getRenderViewEntity();
-    //    //double x = playerEntity.lastTickPosX + (entityIn.getProjectedView().x - playerEntity.lastTickPosX);
-    //    //double y = playerEntity.lastTickPosY + (entityIn.getProjectedView().y - playerEntity.lastTickPosY);
-    //    //double z = playerEntity.lastTickPosZ + (entityIn.getProjectedView().z - playerEntity.lastTickPosZ);
-    //    //buffer.setTranslation(-x, -y, -z);
-    //    //for (Vector3d line : lines) {
-    //    //    buffer.pos(line.x, line.y, line.z).color(1f, 1f, 1f, 1f).endVertex();
-    //    //}
-    //    //Tessellator.getInstance().draw();
-    //    //buffer.setTranslation(0.0D, 0.0D, 0.0D);
-    //    //RenderSystem.enableTexture();
-    //    //RenderSystem.disableBlend();
-    //    //RenderSystem.enableAlphaTest();
-    //}
-
 
     @Override
     public IParticleRenderType getRenderType() {
-        return IParticleRenderType.CUSTOM;
+        return new IParticleRenderType() {
+            @Override
+            public void beginRender(BufferBuilder builder, TextureManager manager) {
+                RenderSystem.enableBlend();
+                RenderSystem.blendFuncSeparate(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA, GlStateManager.SourceFactor.ONE, GlStateManager.DestFactor.ZERO);
+                RenderSystem.lineWidth(2.0F);
+                RenderSystem.disableTexture();
+                builder.begin(3, DefaultVertexFormats.POSITION_COLOR_LIGHTMAP);
+            }
+
+            @Override
+            public void finishRender(Tessellator tessellator) {
+                tessellator.draw();
+                RenderSystem.disableBlend();
+                RenderSystem.enableTexture();
+            }
+        };
     }
 
     private Direction getRandomFacing(Random random, Direction opposite) {
-        Direction facing = Direction.func_239631_a_(random); //random
-        while (facing.getOpposite().equals(opposite)) facing = Direction.func_239631_a_(random);
+        Direction facing = Direction.getRandomDirection(random); //random
+        while (facing.getOpposite().equals(opposite)) facing = Direction.getRandomDirection(random);
         return facing;
     }
 

@@ -35,7 +35,6 @@ import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.ITextProperties;
 import net.minecraft.util.text.TranslationTextComponent;
 
 import java.util.ArrayList;
@@ -60,8 +59,8 @@ public class GuiConveyor extends ContainerScreen<ContainerConveyor> {
     }
 
     @Override
-    protected void func_231160_c_() {
-        super.func_231160_c_();
+    protected void init() {
+        super.init();
         componentList.clear();
         upgrade.addComponentsToGui(componentList);
         for (IGuiComponent iGuiComponent : componentList) {
@@ -72,16 +71,16 @@ public class GuiConveyor extends ContainerScreen<ContainerConveyor> {
     }
 
     @Override
-    protected void func_230450_a_(MatrixStack stack, float partialTicks, int mouseX, int mouseY) { //background
-        this.func_238651_a_(stack, 0);
+    protected void drawGuiContainerBackgroundLayer(MatrixStack stack, float partialTicks, int mouseX, int mouseY) { //background
+        this.renderBackground(stack);
         RenderSystem.color4f(1, 1, 1, 1);
         getMinecraft().getTextureManager().bindTexture(BG_TEXTURE);
-        x = (field_230708_k_ - xSize) / 2;
-        y = (field_230709_l_ - ySize) / 2;
-        func_238474_b_(stack, x, y, 0, 0, xSize, ySize);
+        x = (width - xSize) / 2;
+        y = (height - ySize) / 2;
+        blit(stack, x, y, 0, 0, xSize, ySize);
         if (upgrade != null) {
             String localized = new TranslationTextComponent(String.format("conveyor.upgrade.%s.%s", upgrade.getFactory().getRegistryName().getNamespace(), upgrade.getFactory().getRegistryName().getPath())).getString();
-            getMinecraft().fontRenderer.func_238421_b_(stack, localized, x + xSize / 2 - getMinecraft().fontRenderer.getStringWidth(localized) / 2, y + 6, 0x404040);
+            getMinecraft().fontRenderer.drawString(stack, localized, x + xSize / 2 - getMinecraft().fontRenderer.getStringWidth(localized) / 2, y + 6, 0x404040);
         }
         for (IGuiComponent iGuiComponent : componentList) {
             iGuiComponent.drawGuiBackgroundLayer(stack, x, y, mouseX, mouseY);
@@ -89,17 +88,17 @@ public class GuiConveyor extends ContainerScreen<ContainerConveyor> {
     }
 
     @Override
-    protected void func_230451_b_(MatrixStack stack, int mouseX, int mouseY) { //foreground
-        x = (field_230708_k_ - xSize) / 2;
-        y = (field_230709_l_ - ySize) / 2;
+    protected void drawGuiContainerForegroundLayer(MatrixStack stack, int mouseX, int mouseY) { //foreground
+        x = (width - xSize) / 2;
+        y = (height - ySize) / 2;
         for (IGuiComponent iGuiComponent : componentList) {
             iGuiComponent.drawGuiForegroundLayer(stack, x, y, mouseX, mouseY);
         }
-        func_230459_a_(stack, mouseX - x, mouseY - y);
+        renderHoveredTooltip(stack, mouseX - x, mouseY - y);
         for (IGuiComponent iGuiComponent : componentList) {
             if (iGuiComponent.isInside(mouseX - x, mouseY - y)) {
-                List<? extends ITextProperties> tooltips = iGuiComponent.getTooltip(x, y, mouseX, mouseY);
-                if (tooltips != null) func_238654_b_(stack, tooltips, mouseX - x, mouseY - y);
+                List<ITextComponent> tooltips = iGuiComponent.getTooltip(x, y, mouseX, mouseY);
+                if (tooltips != null) func_243308_b(stack, tooltips, mouseX - x, mouseY - y);
             }
         }
     }
@@ -109,8 +108,8 @@ public class GuiConveyor extends ContainerScreen<ContainerConveyor> {
     }
 
     @Override
-    public boolean func_231048_c_(double mouseX, double mouseY, int mouseButton) { //mouseClicked
-        boolean click = super.func_231048_c_(mouseX, mouseY, mouseButton);
+    public boolean mouseClicked(double mouseX, double mouseY, int mouseButton) { //mouseClicked
+        boolean click = super.mouseClicked(mouseX, mouseY, mouseButton);
         for (IGuiComponent iGuiComponent : componentList) {
             if (iGuiComponent.isInside(mouseX - x, mouseY - y)) {
                 if (iGuiComponent.handleClick(this, x, y, mouseX, mouseY))

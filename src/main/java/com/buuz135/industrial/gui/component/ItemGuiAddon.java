@@ -56,7 +56,7 @@ public abstract class ItemGuiAddon extends BasicScreenAddon {
 
     @Override
     public List<ITextComponent> getTooltipLines() {
-        return this.tooltip ? Minecraft.getInstance().currentScreen.func_231151_a_(getItemStack()) : new ArrayList<>();
+        return this.tooltip ? Minecraft.getInstance().currentScreen.getTooltipFromItem(getItemStack()) : new ArrayList<>();
     }
 
     public abstract ItemStack getItemStack();

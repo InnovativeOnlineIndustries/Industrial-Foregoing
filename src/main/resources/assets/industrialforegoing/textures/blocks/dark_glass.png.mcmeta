@@ -1,0 +1,14 @@
+{
+   "ctm": {
+     "ctm_version": 1,
+     "type": "ctm",
+     "layer": "TRANSLUCENT",
+     "textures": [
+         "industrialforegoing:blocks/dark_glass_ctm"
+     ],
+     "extra": {
+       "light": 0,
+       "connect_inside": true
+     }
+   }
+ }

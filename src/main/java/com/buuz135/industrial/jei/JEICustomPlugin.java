@@ -189,7 +189,7 @@ public class JEICustomPlugin implements IModPlugin {
     private List<BioReactorRecipeCategory.ReactorRecipeWrapper> generateBioreactorRecipes() {
         List<BioReactorRecipeCategory.ReactorRecipeWrapper> recipes = new ArrayList<>();
         for (ITag.INamedTag<Item> itemTag : BioReactorTile.VALID) {
-            for (Item item : itemTag.func_230236_b_()) {
+            for (Item item : itemTag.getAllElements()) {
                 recipes.add(new BioReactorRecipeCategory.ReactorRecipeWrapper(new ItemStack(item), new FluidStack(ModuleCore.BIOFUEL.getSourceFluid(), 80)));
             }
         }

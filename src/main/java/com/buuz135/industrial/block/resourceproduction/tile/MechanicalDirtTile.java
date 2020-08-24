@@ -14,9 +14,8 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.Direction;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.world.Difficulty;
-import net.minecraft.world.biome.Biome;
-import net.minecraft.world.server.ServerChunkProvider;
-import net.minecraft.world.server.ServerWorld;
+import net.minecraft.world.IServerWorld;
+import net.minecraft.world.biome.MobSpawnInfo;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.capability.IFluidHandler;
 
@@ -63,14 +62,14 @@ public class MechanicalDirtTile extends IndustrialWorkingTile<MechanicalDirtTile
     }
 
     private MobEntity getMobToSpawn() {
-        List<Biome.SpawnListEntry> spawnListEntries = ((ServerChunkProvider) world.getChunkProvider()).getChunkGenerator().func_230353_a_(this.world.getBiome(this.pos), ((ServerWorld) world).func_241112_a_(), EntityClassification.MONSTER, pos);
+        List<MobSpawnInfo.Spawners> spawnListEntries = this.world.getBiome(this.pos.up()).func_242433_b().func_242559_a(EntityClassification.MONSTER);
         if (spawnListEntries.size() == 0) return null;
-        Biome.SpawnListEntry spawnListEntry = spawnListEntries.get(world.rand.nextInt(spawnListEntries.size()));
-        if (!EntitySpawnPlacementRegistry.func_223515_a(spawnListEntry.entityType, this.world, SpawnReason.NATURAL, pos, world.rand))
+        MobSpawnInfo.Spawners spawnListEntry = spawnListEntries.get(world.rand.nextInt(spawnListEntries.size()));
+        if (!EntitySpawnPlacementRegistry.canSpawnEntity(spawnListEntry.field_242588_c, (IServerWorld) this.world, SpawnReason.NATURAL, pos.up(), world.rand))
             return null;
-        Entity entity = spawnListEntry.entityType.create(world);
+        Entity entity = spawnListEntry.field_242588_c.create(world);
         if (entity instanceof MobEntity) {
-            ((MobEntity) entity).onInitialSpawn(world, world.getDifficultyForLocation(pos), SpawnReason.NATURAL, null, null);
+            ((MobEntity) entity).onInitialSpawn((IServerWorld) world, world.getDifficultyForLocation(pos), SpawnReason.NATURAL, null, null);
             entity.setPosition(pos.getX() + 0.5, pos.getY() + 1.001, pos.getZ() + 0.5);
             if (world.hasNoCollisions(entity) && world.checkNoEntityCollision(entity, world.getBlockState(pos.up()).getShape(world, pos.up()))) { //doesNotCollide
                 return (MobEntity) entity;
