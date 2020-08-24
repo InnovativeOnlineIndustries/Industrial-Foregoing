@@ -8,9 +8,9 @@ import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.item.crafting.IRecipeType;
+import net.minecraft.util.RegistryKey;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
-import net.minecraft.world.biome.Biome;
 import net.minecraft.world.biome.Biomes;
 import net.minecraftforge.fluids.FluidStack;
 
@@ -23,7 +23,7 @@ public class LaserDrillFluidRecipe extends SerializableRecipe {
     public static List<LaserDrillFluidRecipe> RECIPES = new ArrayList<>();
 
     static {
-        new LaserDrillFluidRecipe(new FluidStack(Fluids.LAVA, 10), 0, new LaserDrillRarity(new Biome[]{Biomes.field_235250_aA_, Biomes.field_235251_aB_, Biomes.field_235252_ay_, Biomes.field_235252_ay_, Biomes.field_235253_az_, Biomes.field_235254_j_}, new Biome[0], 5, 20, 8));
+        new LaserDrillFluidRecipe(new FluidStack(Fluids.LAVA, 10), 0, new LaserDrillRarity(new RegistryKey[]{Biomes.NETHER_WASTES, Biomes.BASALT_DELTAS, Biomes.WARPED_FOREST, Biomes.CRIMSON_FOREST, Biomes.SOUL_SAND_VALLEY}, new RegistryKey[0], 5, 20, 8));
     }
 
     public FluidStack output;
