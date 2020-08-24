@@ -38,7 +38,7 @@ public class SpeedAddonItem extends IFCustomItem {
 
     @Override
     public void registerRecipe(Consumer<IFinishedRecipe> consumer) {
-        ITag.INamedTag<Item> tierMaterial = tier == 1 ? IndustrialTags.Items.GEAR_GOLD : IndustrialTags.Items.GEAR_DIAMOND;
+        ITag<Item> tierMaterial = tier == 1 ? IndustrialTags.Items.GEAR_GOLD : IndustrialTags.Items.GEAR_DIAMOND;
         new DissolutionChamberRecipe(getRegistryName(), new Ingredient.IItemList[]{
                 new Ingredient.SingleItemList(new ItemStack(Items.REDSTONE)),
                 new Ingredient.SingleItemList(new ItemStack(Items.REDSTONE)),
