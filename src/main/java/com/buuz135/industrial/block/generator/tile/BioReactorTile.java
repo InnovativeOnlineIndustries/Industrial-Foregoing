@@ -33,7 +33,7 @@ import java.util.List;
 
 public class BioReactorTile extends IndustrialWorkingTile<BioReactorTile> {
 
-    public static ITag.INamedTag<Item>[] VALID = new ITag.INamedTag[]{IndustrialTags.Items.BIOREACTOR_INPUT, Tags.Items.CROPS_CARROT, Tags.Items.CROPS_POTATO, Tags.Items.CROPS_NETHER_WART, Tags.Items.DYES,
+    public static ITag<Item>[] VALID = new ITag[]{IndustrialTags.Items.BIOREACTOR_INPUT, Tags.Items.CROPS_CARROT, Tags.Items.CROPS_POTATO, Tags.Items.CROPS_NETHER_WART, Tags.Items.DYES,
             Tags.Items.HEADS, Tags.Items.MUSHROOMS, Tags.Items.SEEDS, IndustrialTags.Items.SAPLING};
 
     private int getMaxProgress;
@@ -116,7 +116,7 @@ public class BioReactorTile extends IndustrialWorkingTile<BioReactorTile> {
                 return true;
             }
         }
-        for (ITag.INamedTag<Item> itemTag : VALID) {
+        for (ITag<Item> itemTag : VALID) {
             if (itemTag.contains(stack.getItem())) return true; //contains
         }
         return false;
