@@ -13,7 +13,7 @@ import net.minecraft.item.ItemGroup;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.item.crafting.Ingredient;
-import net.minecraft.tags.Tag;
+import net.minecraft.tags.ITag;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.World;
@@ -38,7 +38,7 @@ public class EfficiencyAddonItem extends IFCustomItem {
 
     @Override
     public void registerRecipe(Consumer<IFinishedRecipe> consumer) {
-        Tag.INamedTag<Item> tierMaterial = tier == 1 ? IndustrialTags.Items.GEAR_GOLD : IndustrialTags.Items.GEAR_DIAMOND;
+        ITag<Item> tierMaterial = tier == 1 ? IndustrialTags.Items.GEAR_GOLD : IndustrialTags.Items.GEAR_DIAMOND;
         new DissolutionChamberRecipe(getRegistryName(), new Ingredient.IItemList[]{
                 new Ingredient.SingleItemList(new ItemStack(Items.REDSTONE)),
                 new Ingredient.SingleItemList(new ItemStack(Items.REDSTONE)),

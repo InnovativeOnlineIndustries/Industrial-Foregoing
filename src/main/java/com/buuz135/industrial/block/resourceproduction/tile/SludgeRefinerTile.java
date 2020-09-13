@@ -50,7 +50,7 @@ public class SludgeRefinerTile extends IndustrialProcessingTile<SludgeRefinerTil
     @Override
     public Runnable onFinish() {
         return () -> {
-            Item item = this.world.getTags().getItems().get(IndustrialTags.Items.SLUDGE_OUTPUT.getName()).getRandomElement(this.world.rand);
+            Item item = IndustrialTags.Items.SLUDGE_OUTPUT.getRandomElement(this.world.rand);
             if (item != null && ItemHandlerHelper.insertItem(output, new ItemStack(item), true).isEmpty()) {
                 sludge.drainForced(500, IFluidHandler.FluidAction.EXECUTE);
                 ItemHandlerHelper.insertItem(output, new ItemStack(item), false);

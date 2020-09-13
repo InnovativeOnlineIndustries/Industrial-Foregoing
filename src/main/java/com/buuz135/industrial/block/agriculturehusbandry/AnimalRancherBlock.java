@@ -9,7 +9,6 @@ import com.hrznstudio.titanium.recipe.generator.TitaniumShapedRecipeBuilder;
 import net.minecraft.block.Blocks;
 import net.minecraft.data.IFinishedRecipe;
 import net.minecraft.item.Items;
-import net.minecraft.tags.ItemTags;
 
 import javax.annotation.Nonnull;
 import java.util.function.Consumer;
@@ -36,7 +35,7 @@ public class AnimalRancherBlock extends IndustrialBlock<AnimalRancherTile> {
         TitaniumShapedRecipeBuilder.shapedRecipe(this)
                 .patternLine("PPP").patternLine("SBS").patternLine("GMG")
                 .key('P', IndustrialTags.Items.PLASTIC)
-                .key('G', ItemTags.makeWrapperTag("forge:gears/gold"))
+                .key('G', IndustrialTags.Items.GEAR_GOLD)
                 .key('S', Items.SHEARS)
                 .key('B', Items.BUCKET)
                 .key('M', IndustrialTags.Items.MACHINE_FRAME_PITY)

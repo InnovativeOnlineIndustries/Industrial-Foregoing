@@ -26,7 +26,7 @@ import com.buuz135.industrial.gui.conveyor.GuiConveyor;
 import com.mojang.blaze3d.matrix.MatrixStack;
 import net.minecraft.client.Minecraft;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.text.ITextProperties;
+import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
 
 import javax.annotation.Nullable;
@@ -38,7 +38,7 @@ public class TextureGuiComponent extends PositionedGuiComponent {
     private final ResourceLocation resourceLocation;
     private final int textureX;
     private final int textureY;
-    private final List<ITextProperties> tooltip;
+    private final List<ITextComponent> tooltip;
 
     public TextureGuiComponent(int x, int y, int xSize, int ySize, ResourceLocation resourceLocation, int textureX, int textureY, String... tooltip) {
         super(x, y, xSize, ySize);
@@ -71,7 +71,7 @@ public class TextureGuiComponent extends PositionedGuiComponent {
 
     @Nullable
     @Override
-    public List<ITextProperties> getTooltip(int guiX, int guiY, double mouseX, double mouseY) {
+    public List<ITextComponent> getTooltip(int guiX, int guiY, double mouseX, double mouseY) {
         return tooltip;
     }
 }

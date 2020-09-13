@@ -22,7 +22,7 @@
 package com.buuz135.industrial.gui.component;
 
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.text.ITextProperties;
+import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
 
 public class StateButtonInfo {
@@ -31,14 +31,14 @@ public class StateButtonInfo {
     private final ResourceLocation texture;
     private final int textureX;
     private final int textureY;
-    private final ITextProperties[] tooltip;
+    private final ITextComponent[] tooltip;
 
     public StateButtonInfo(int state, ResourceLocation texture, int textureX, int textureY, String[] tooltip) {
         this.state = state;
         this.texture = texture;
         this.textureX = textureX;
         this.textureY = textureY;
-        this.tooltip = new ITextProperties[tooltip.length];
+        this.tooltip = new ITextComponent[tooltip.length];
         for (int i = 0; i < tooltip.length; i++) {
             this.tooltip[i] = new TranslationTextComponent("conveyor.upgrade.industrialforegoing.tooltip." + tooltip[i]);
         }
@@ -60,7 +60,7 @@ public class StateButtonInfo {
         return textureY;
     }
 
-    public ITextProperties[] getTooltip() {
+    public ITextComponent[] getTooltip() {
         return tooltip;
     }
 }

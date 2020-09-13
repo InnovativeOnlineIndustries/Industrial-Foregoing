@@ -37,7 +37,7 @@ public class ItemStackUtils {
 
     public static boolean isOre(ItemStack stack) {
         if (stack.isEmpty()) return false;
-        return TagUtil.hasTag(stack.getItem(), Tags.Items.ORES);
+        return stack.getItem().isIn(Tags.Items.ORES);
     }
 
     public static boolean isInventoryFull(ItemStackHandler handler) {
