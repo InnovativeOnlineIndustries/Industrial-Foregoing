@@ -96,9 +96,6 @@ repositories {
     maven {
         url 'https://cdn.hrzn.studio/maven/'
     }
-<<<<<<< HEAD
-    maven { url 'https://maven.blamejared.com' }
-=======
     maven {
         name 'jared maven'
         url "https://maven.blamejared.com/"
@@ -106,7 +103,6 @@ repositories {
     maven {
         url 'https://www.dogforce-games.com/maven/'
     }
->>>>>>> 1.16
 }
 
 dependencies {
