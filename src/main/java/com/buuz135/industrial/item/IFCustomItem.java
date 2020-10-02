@@ -42,6 +42,6 @@ public abstract class IFCustomItem extends BasicItem implements IRecipeProvider 
     @Nullable
     @Override
     public String getCreatorModId(ItemStack itemStack) {
-        return new TranslationTextComponent("itemGroup." + this.group.getPath()).getFormattedText();
+        return new TranslationTextComponent("itemGroup." + this.group.getPath()).getString();
     }
 }

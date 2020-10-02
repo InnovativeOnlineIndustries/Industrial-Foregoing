@@ -5,9 +5,8 @@ import com.buuz135.industrial.block.tile.RangeManager;
 import com.buuz135.industrial.config.machine.agriculturehusbandry.AnimalFeederConfig;
 import com.buuz135.industrial.module.ModuleAgricultureHusbandry;
 import com.hrznstudio.titanium.annotation.Save;
-import com.hrznstudio.titanium.api.IFactory;
+import com.hrznstudio.titanium.component.energy.EnergyStorageComponent;
 import com.hrznstudio.titanium.component.inventory.SidedInventoryComponent;
-import com.hrznstudio.titanium.energy.NBTEnergyHandler;
 import net.minecraft.entity.passive.AnimalEntity;
 import net.minecraft.item.DyeColor;
 import net.minecraft.item.ItemStack;
@@ -25,7 +24,7 @@ public class AnimalFeederTile extends IndustrialAreaWorkingTile<AnimalFeederTile
     private SidedInventoryComponent<AnimalFeederTile> input;
 
     public AnimalFeederTile() {
-        super(ModuleAgricultureHusbandry.ANIMAL_FEEDER, RangeManager.RangeType.BEHIND);
+        super(ModuleAgricultureHusbandry.ANIMAL_FEEDER, RangeManager.RangeType.BEHIND, true);
         addInventory(input = (SidedInventoryComponent<AnimalFeederTile>) new SidedInventoryComponent<AnimalFeederTile>("food", 53, 22, 6 * 3, 0)
                 .setColor(DyeColor.BLUE)
                 .setOutputFilter((stack, integer) -> false)
@@ -73,8 +72,8 @@ public class AnimalFeederTile extends IndustrialAreaWorkingTile<AnimalFeederTile
     }
 
     @Override
-    protected IFactory<NBTEnergyHandler> getEnergyHandlerFactory() {
-        return () -> new NBTEnergyHandler(this, AnimalFeederConfig.maxStoredPower);
+    protected EnergyStorageComponent<AnimalFeederTile> createEnergyStorage() {
+        return new EnergyStorageComponent<>(AnimalFeederConfig.maxStoredPower, 10, 20);
     }
 
     @Override

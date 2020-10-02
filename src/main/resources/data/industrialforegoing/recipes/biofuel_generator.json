@@ -31,7 +31,7 @@
             "item": "minecraft:piston"
           },
           "A": {
-            "tag": "forge:gear/gold"
+            "tag": "forge:gears/gold"
           },
           "M": {
             "tag": "industrialforegoing:machine_frame/pity"

@@ -1,0 +1,35 @@
+{
+  "input": [
+    {
+      "item": "minecraft:diamond_block"
+    },
+    {
+      "item": "minecraft:diamond_shovel"
+    },
+    {
+      "item": "minecraft:diamond_block"
+    },
+    {
+      "item": "minecraft:diamond_block"
+    },
+    {
+      "item": "industrialforegoing:range_addon11"
+    },
+    {
+      "tag": "forge:gears/gold"
+    },
+    {
+      "tag": "forge:gears/gold"
+    },
+    {
+      "tag": "forge:gears/gold"
+    }
+  ],
+  "inputFluid": "{FluidName:\"industrialforegoing:pink_slime\",Amount:2000}",
+  "processingTime": 400,
+  "output": {
+    "item": "industrialforegoing:infinity_drill",
+    "count": 1
+  },
+  "type": "industrialforegoing:dissolution_chamber"
+}

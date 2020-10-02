@@ -12,7 +12,7 @@ import com.hrznstudio.titanium.api.client.IScreenAddon;
 import com.hrznstudio.titanium.client.screen.addon.StateButtonAddon;
 import com.hrznstudio.titanium.client.screen.addon.StateButtonInfo;
 import com.hrznstudio.titanium.component.button.ButtonComponent;
-import com.hrznstudio.titanium.energy.NBTEnergyHandler;
+import com.hrznstudio.titanium.component.energy.EnergyStorageComponent;
 import net.minecraft.entity.passive.AnimalEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
@@ -31,7 +31,7 @@ public class AnimalBabySeparatorTile extends IndustrialAreaWorkingTile<AnimalBab
     private boolean movingAdults;
 
     public AnimalBabySeparatorTile() {
-        super(ModuleAgricultureHusbandry.ANIMAL_BABY_SEPARATOR, RangeManager.RangeType.BEHIND);
+        super(ModuleAgricultureHusbandry.ANIMAL_BABY_SEPARATOR, RangeManager.RangeType.BEHIND, true);
         this.movingAdults = false;
         addButton(new ButtonComponent(42, 20, 18, 18) {
             @Override
@@ -43,7 +43,10 @@ public class AnimalBabySeparatorTile extends IndustrialAreaWorkingTile<AnimalBab
                     }
                 });
             }
-        }.setPredicate((playerEntity, compoundNBT) -> movingAdults = !movingAdults));
+        }.setPredicate((playerEntity, compoundNBT) -> {
+            movingAdults = !movingAdults;
+            markForUpdate();
+        }));
         addGuiAddonFactory(() -> new ItemGuiAddon(42, 20) {
             @Override
             public ItemStack getItemStack() {
@@ -68,8 +71,8 @@ public class AnimalBabySeparatorTile extends IndustrialAreaWorkingTile<AnimalBab
     }
 
     @Override
-    protected IFactory<NBTEnergyHandler> getEnergyHandlerFactory() {
-        return () -> new NBTEnergyHandler(this, AnimalBabySeparatorConfig.maxStoredPower);
+    protected EnergyStorageComponent<AnimalBabySeparatorTile> createEnergyStorage() {
+        return new EnergyStorageComponent<>(AnimalBabySeparatorConfig.maxStoredPower, 10, 20);
     }
 
     @Override

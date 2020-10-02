@@ -23,15 +23,12 @@ package com.buuz135.industrial.utils.apihandlers;
 
 import com.buuz135.industrial.api.IndustrialForegoingHelper;
 import com.buuz135.industrial.api.recipe.*;
-import com.buuz135.industrial.utils.TagUtil;
 import com.buuz135.industrial.utils.apihandlers.crafttweaker.CTAction;
 import com.google.common.collect.LinkedListMultimap;
 import net.minecraft.block.Blocks;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
-import net.minecraft.tags.ItemTags;
 import net.minecraft.util.NonNullList;
-import net.minecraftforge.common.Tags;
 
 public class RecipeHandlers {
 
@@ -53,8 +50,8 @@ public class RecipeHandlers {
         IndustrialForegoingHelper.addBioReactorEntry(new BioReactorEntry(new ItemStack(Blocks.RED_MUSHROOM)));
         IndustrialForegoingHelper.addBioReactorEntry(new BioReactorEntry(new ItemStack(Blocks.CHORUS_FLOWER)));
         IndustrialForegoingHelper.addBioReactorEntry(new BioReactorEntry(new ItemStack(Blocks.SUGAR_CANE)));
-        TagUtil.getAllEntries(Tags.Items.DYES).forEach(item -> IndustrialForegoingHelper.addBioReactorEntry(new BioReactorEntry(new ItemStack(item))));
-        TagUtil.getAllEntries(ItemTags.SAPLINGS).stream().filter(item -> !item.getRegistryName().getNamespace().equals("forestry")).map(ItemStack::new).forEach(stack -> IndustrialForegoingHelper.addBioReactorEntry(new BioReactorEntry(stack)));
+        //TagUtil.getAllEntries(Tags.Items.DYES).forEach(item -> IndustrialForegoingHelper.addBioReactorEntry(new BioReactorEntry(new ItemStack(item)))); TODO
+        //TagUtil.getAllEntries(ItemTags.SAPLINGS).stream().filter(item -> !item.getRegistryName().getNamespace().equals("forestry")).map(ItemStack::new).forEach(stack -> IndustrialForegoingHelper.addBioReactorEntry(new BioReactorEntry(stack)));
     }
 
     public static void executeCraftweakerActions() {

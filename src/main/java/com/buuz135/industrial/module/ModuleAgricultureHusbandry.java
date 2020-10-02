@@ -28,6 +28,7 @@ public class ModuleAgricultureHusbandry implements IModule {
     public static AnimalRancherBlock ANIMAL_RANCHER = new AnimalRancherBlock();
     public static AnimalFeederBlock ANIMAL_FEEDER = new AnimalFeederBlock();
     public static AnimalBabySeparatorBlock ANIMAL_BABY_SEPARATOR = new AnimalBabySeparatorBlock();
+    public static MobCrusherBlock MOB_CRUSHER = new MobCrusherBlock();
 
     @Override
     public List<Feature.Builder> generateFeatures() {
@@ -41,6 +42,9 @@ public class ModuleAgricultureHusbandry implements IModule {
                 .content(PlantRecollectable.class, new PumpkinMelonPlantRecollectable())
                 .content(PlantRecollectable.class, new TreePlantRecollectable())
                 .content(PlantRecollectable.class, new ChorusFruitRecollectable())
+                .content(PlantRecollectable.class, new BambooPlantRecollectable())
+                .content(PlantRecollectable.class, new KelpPlantRecollectable())
+                .content(PlantRecollectable.class, new SweetBerriesPlantRecollectable())
                 .content(Block.class, PLANT_SOWER)
         );
         builders.add(Feature.builder("sewage").
@@ -51,6 +55,7 @@ public class ModuleAgricultureHusbandry implements IModule {
         builders.add(createFeature(ANIMAL_RANCHER));
         builders.add(createFeature(ANIMAL_FEEDER));
         builders.add(createFeature(ANIMAL_BABY_SEPARATOR));
+        builders.add(createFeature(MOB_CRUSHER));
         TAB_AG_HUS.addIconStack(new ItemStack(PLANT_SOWER));
         return builders;
     }

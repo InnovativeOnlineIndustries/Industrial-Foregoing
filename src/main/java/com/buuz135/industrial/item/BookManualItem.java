@@ -73,7 +73,7 @@ public class BookManualItem extends IFCustomItem {
     @Override
     public void addTooltipDetails(@Nullable Key key, ItemStack stack, List<ITextComponent> tooltip, boolean advanced) {
         if (key == null) {
-            tooltip.add(new StringTextComponent("Not implemented yet! Coming soon!").applyTextStyle(TextFormatting.RED));
+            tooltip.add(new StringTextComponent("Not implemented yet! Coming soon!").mergeStyle(TextFormatting.RED));
         }
         super.addTooltipDetails(key, stack, tooltip, advanced);
     }

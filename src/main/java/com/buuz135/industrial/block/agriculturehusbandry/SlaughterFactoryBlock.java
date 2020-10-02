@@ -10,7 +10,6 @@ import net.minecraft.block.Blocks;
 import net.minecraft.data.IFinishedRecipe;
 import net.minecraft.item.Items;
 import net.minecraft.tags.ItemTags;
-import net.minecraft.util.ResourceLocation;
 
 import javax.annotation.Nonnull;
 import java.util.function.Consumer;
@@ -37,7 +36,7 @@ public class SlaughterFactoryBlock extends IndustrialBlock<SlaughterFactoryTile>
         TitaniumShapedRecipeBuilder.shapedRecipe(this)
                 .patternLine("PDP").patternLine("SMS").patternLine("ARA")
                 .key('P', IndustrialTags.Items.PLASTIC)
-                .key('D', new ItemTags.Wrapper(new ResourceLocation("forge:gear/gold")))
+                .key('D', ItemTags.makeWrapperTag("forge:gears/gold"))
                 .key('S', Items.IRON_SWORD)
                 .key('A', Items.IRON_AXE)
                 .key('M', IndustrialTags.Items.MACHINE_FRAME_PITY)

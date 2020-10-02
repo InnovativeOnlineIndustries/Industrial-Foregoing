@@ -31,6 +31,5 @@
     "item": "industrialforegoing:range_addon2",
     "count": 1
   },
-  "outputFluid": "{FluidName:\"minecraft:empty\",Amount:0}",
   "type": "industrialforegoing:dissolution_chamber"
 }

@@ -34,7 +34,7 @@
             "tag": "industrialforegoing:machine_frame/pity"
           },
           "G": {
-            "tag": "forge:gear/iron"
+            "tag": "forge:gears/iron"
           }
         },
         "result": {

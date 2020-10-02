@@ -39,25 +39,28 @@ import com.buuz135.industrial.utils.Reference;
 import com.buuz135.industrial.utils.data.IndustrialBlockstateProvider;
 import com.buuz135.industrial.utils.data.IndustrialModelProvider;
 import com.hrznstudio.titanium.TitaniumClient;
+import com.hrznstudio.titanium.datagenerator.loot.TitaniumLootTableProvider;
+import com.hrznstudio.titanium.datagenerator.model.BlockItemModelGeneratorProvider;
 import com.hrznstudio.titanium.event.handler.EventManager;
 import com.hrznstudio.titanium.module.Module;
 import com.hrznstudio.titanium.module.ModuleController;
 import com.hrznstudio.titanium.network.NetworkHandler;
-import com.hrznstudio.titanium.recipe.generator.BlockItemModelGeneratorProvider;
-import com.hrznstudio.titanium.recipe.generator.titanium.DefaultLootTableProvider;
 import com.hrznstudio.titanium.reward.Reward;
 import com.hrznstudio.titanium.reward.RewardGiver;
 import com.hrznstudio.titanium.reward.RewardManager;
+import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.entity.EntityRendererManager;
 import net.minecraft.item.crafting.IRecipeSerializer;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.DimensionType;
 import net.minecraft.world.World;
 import net.minecraft.world.server.ServerWorld;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.common.util.FakePlayer;
+import net.minecraftforge.common.util.NonNullLazy;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.fml.DistExecutor;
 import net.minecraftforge.fml.common.Mod;
@@ -65,17 +68,21 @@ import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.fml.event.lifecycle.GatherDataEvent;
 import net.minecraftforge.fml.event.server.FMLServerStartingEvent;
+import net.minecraftforge.registries.ForgeRegistries;
 
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.HashMap;
+import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @Mod(Reference.MOD_ID)
 public class IndustrialForegoing extends ModuleController {
 
     private static CommonProxy proxy;
-    private static HashMap<Integer, IFFakePlayer> worldFakePlayer = new HashMap<>();
+    private static HashMap<DimensionType, IFFakePlayer> worldFakePlayer = new HashMap<>();
     public static NetworkHandler NETWORK = new NetworkHandler(Reference.MOD_ID);
 
     static {
@@ -88,9 +95,9 @@ public class IndustrialForegoing extends ModuleController {
         proxy = new CommonProxy();
         DistExecutor.runWhenOn(Dist.CLIENT, () -> () -> EventManager.mod(FMLClientSetupEvent.class).process(fmlClientSetupEvent -> new ClientProxy().run()).subscribe());
         EventManager.mod(FMLCommonSetupEvent.class).process(fmlCommonSetupEvent -> proxy.run()).subscribe();
-        EventManager.mod(FMLServerStartingEvent.class).process(fmlServerStartingEvent -> worldFakePlayer.clear()).subscribe();
-        EventManager.mod(RegistryEvent.Register.class).filter(register -> register.getGenericType().equals(IRecipeSerializer.class))
-                .process(register -> register.getRegistry().registerAll(FluidExtractorRecipe.SERIALIZER, DissolutionChamberRecipe.SERIALIZER)).subscribe();
+        EventManager.forge(FMLServerStartingEvent.class).process(fmlServerStartingEvent -> worldFakePlayer.clear()).subscribe();
+        EventManager.modGeneric(RegistryEvent.Register.class, IRecipeSerializer.class)
+                .process(register -> ((RegistryEvent.Register) register).getRegistry().registerAll(FluidExtractorRecipe.SERIALIZER, DissolutionChamberRecipe.SERIALIZER)).subscribe();
         IFRegistries.poke();
         RewardGiver giver = RewardManager.get().getGiver(UUID.fromString("d28b7061-fb92-4064-90fb-7e02b95a72a6"), "Buuz135");
         try {
@@ -105,11 +112,11 @@ public class IndustrialForegoing extends ModuleController {
     }
 
     public static FakePlayer getFakePlayer(World world) {
-        if (worldFakePlayer.containsKey(world.dimension.getType().getId()))
-            return worldFakePlayer.get(world.dimension.getType().getId());
+        if (worldFakePlayer.containsKey(world.func_230315_m_()))
+            return worldFakePlayer.get(world.func_230315_m_());
         if (world instanceof ServerWorld) {
             IFFakePlayer fakePlayer = new IFFakePlayer((ServerWorld) world);
-            worldFakePlayer.put(world.dimension.getType().getId(), fakePlayer);
+            worldFakePlayer.put(world.func_230315_m_(), fakePlayer);
             return fakePlayer;
         }
         return null;
@@ -129,13 +136,22 @@ public class IndustrialForegoing extends ModuleController {
     @Override
     public void addDataProvider(GatherDataEvent event) {
         super.addDataProvider(event);
-        event.getGenerator().addProvider(new IndustrialRecipeProvider(event.getGenerator()));
-        event.getGenerator().addProvider(new IndustrialSerializableProvider(event.getGenerator(), Reference.MOD_ID));
+        NonNullLazy<List<Block>> blocksToProcess = NonNullLazy.of(() ->
+                ForgeRegistries.BLOCKS.getValues()
+                        .stream()
+                        .filter(basicBlock -> Optional.ofNullable(basicBlock.getRegistryName())
+                                .map(ResourceLocation::getNamespace)
+                                .filter(Reference.MOD_ID::equalsIgnoreCase)
+                                .isPresent())
+                        .collect(Collectors.toList())
+        );
         event.getGenerator().addProvider(new IndustrialTagsProvider.Blocks(event.getGenerator()));
         event.getGenerator().addProvider(new IndustrialTagsProvider.Items(event.getGenerator()));
-        event.getGenerator().addProvider(new DefaultLootTableProvider(event.getGenerator(), Reference.MOD_ID));
-        event.getGenerator().addProvider(new BlockItemModelGeneratorProvider(event.getGenerator(), Reference.MOD_ID));
-        event.getGenerator().addProvider(new IndustrialBlockstateProvider(event.getGenerator(), event.getExistingFileHelper()));
+        event.getGenerator().addProvider(new IndustrialRecipeProvider(event.getGenerator(), blocksToProcess));
+        event.getGenerator().addProvider(new IndustrialSerializableProvider(event.getGenerator(), Reference.MOD_ID));
+        event.getGenerator().addProvider(new TitaniumLootTableProvider(event.getGenerator(), blocksToProcess));
+        event.getGenerator().addProvider(new BlockItemModelGeneratorProvider(event.getGenerator(), Reference.MOD_ID, blocksToProcess));
+        event.getGenerator().addProvider(new IndustrialBlockstateProvider(event.getGenerator(), event.getExistingFileHelper(), blocksToProcess));
         event.getGenerator().addProvider(new IndustrialModelProvider(event.getGenerator(), event.getExistingFileHelper()));
     }
 

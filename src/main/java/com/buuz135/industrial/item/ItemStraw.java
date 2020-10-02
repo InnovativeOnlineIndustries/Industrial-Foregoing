@@ -31,8 +31,8 @@ import net.minecraft.block.IBucketPickupHandler;
 import net.minecraft.data.IFinishedRecipe;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.fluid.FluidState;
 import net.minecraft.fluid.Fluids;
-import net.minecraft.fluid.IFluidState;
 import net.minecraft.item.ItemGroup;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.UseAction;
@@ -72,7 +72,7 @@ public class ItemStraw extends IFCustomItem {
                 BlockPos pos = blockRayTraceResult.getPos();
                 BlockState state = world.getBlockState(pos);
                 Block block = state.getBlock();
-                IFluidState fluidState = state.getFluidState();
+                FluidState fluidState = state.getFluidState();
                 if (fluidState != Fluids.EMPTY.getDefaultState() && block instanceof IBucketPickupHandler && fluidState.isSource()) {
                     StrawUtils.getStrawHandler(fluidState.getFluid()).ifPresent(handler -> {
                         handler.onDrink(world, pos, ((IBucketPickupHandler) block).pickupFluid(world, pos, state), player, false);
@@ -118,12 +118,12 @@ public class ItemStraw extends IFCustomItem {
             BlockPos pos = blockRayTraceResult.getPos();
             BlockState state = worldIn.getBlockState(pos);
             Block block = state.getBlock();
-            IFluidState fluid = state.getFluidState();//FluidRegistry.lookupFluidForBlock(block);
+            FluidState fluid = state.getFluidState();//FluidRegistry.lookupFluidForBlock(block);
             if (fluid != null) {
                 Optional<StrawHandler> handler = StrawUtils.getStrawHandler(fluid.getFluid());
                 if (handler.isPresent()) {
                     playerIn.setActiveHand(handIn);
-                    return ActionResult.func_226248_a_(playerIn.getHeldItem(handIn)); //success accepted
+                    return ActionResult.resultSuccess(playerIn.getHeldItem(handIn)); //success accepted
                 }
             }/*
             if (block.hasTileEntity(state)) {

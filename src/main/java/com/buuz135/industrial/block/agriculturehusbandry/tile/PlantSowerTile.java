@@ -3,14 +3,14 @@ package com.buuz135.industrial.block.agriculturehusbandry.tile;
 import com.buuz135.industrial.block.tile.IndustrialAreaWorkingTile;
 import com.buuz135.industrial.block.tile.RangeManager;
 import com.buuz135.industrial.config.machine.agriculturehusbandry.PlantSowerConfig;
-import com.buuz135.industrial.item.RangeAddonItem;
+import com.buuz135.industrial.item.addon.RangeAddonItem;
 import com.buuz135.industrial.module.ModuleAgricultureHusbandry;
 import com.hrznstudio.titanium.annotation.Save;
-import com.hrznstudio.titanium.api.IFactory;
 import com.hrznstudio.titanium.api.filter.FilterSlot;
+import com.hrznstudio.titanium.component.energy.EnergyStorageComponent;
 import com.hrznstudio.titanium.component.inventory.SidedInventoryComponent;
-import com.hrznstudio.titanium.energy.NBTEnergyHandler;
 import com.hrznstudio.titanium.filter.ItemStackFilter;
+import com.hrznstudio.titanium.item.AugmentWrapper;
 import net.minecraft.block.Block;
 import net.minecraft.item.BlockItem;
 import net.minecraft.item.DyeColor;
@@ -34,7 +34,7 @@ public class PlantSowerTile extends IndustrialAreaWorkingTile<PlantSowerTile> {
     private SidedInventoryComponent<PlantSowerTile> input;
 
     public PlantSowerTile() {
-        super(ModuleAgricultureHusbandry.PLANT_SOWER, RangeManager.RangeType.TOP_UP);
+        super(ModuleAgricultureHusbandry.PLANT_SOWER, RangeManager.RangeType.TOP_UP, true);
         addFilter(this.filter = new ItemStackFilter("filter", 9) {
             @Override
             public void onContentChanged() {
@@ -85,11 +85,12 @@ public class PlantSowerTile extends IndustrialAreaWorkingTile<PlantSowerTile> {
             }
         }
         increasePointer();
+        if (hasEnergy(powerPerOperation)) return new WorkAction(0.4f, powerPerOperation / 50);
         return new WorkAction(1f, 0);
     }
 
     private int getFilteredSlot(BlockPos pos) {
-        int radius = hasAugmentInstalled(RangeAddonItem.RANGE) ? (int) getInstalledAugments(RangeAddonItem.RANGE).get(0).getAugmentRatio() + 1 : 0;
+        int radius = hasAugmentInstalled(RangeAddonItem.RANGE) ? (int) AugmentWrapper.getType(getInstalledAugments(RangeAddonItem.RANGE).get(0), RangeAddonItem.RANGE) + 1 : 0;
         if (radius == 0) {
             for (int i = 0; i < input.getSlots(); ++i) {
                 if (!input.getStackInSlot(i).isEmpty()) {
@@ -103,8 +104,8 @@ public class PlantSowerTile extends IndustrialAreaWorkingTile<PlantSowerTile> {
     }
 
     @Override
-    protected IFactory<NBTEnergyHandler> getEnergyHandlerFactory() {
-        return () -> new NBTEnergyHandler(this, PlantSowerConfig.maxStoredPower);
+    protected EnergyStorageComponent<PlantSowerTile> createEnergyStorage() {
+        return new EnergyStorageComponent<>(PlantSowerConfig.maxStoredPower, 10, 20);
     }
 
     @Override

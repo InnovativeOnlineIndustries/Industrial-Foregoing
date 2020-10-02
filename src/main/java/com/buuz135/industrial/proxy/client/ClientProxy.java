@@ -23,7 +23,9 @@ package com.buuz135.industrial.proxy.client;
 
 import com.buuz135.industrial.block.tile.IndustrialAreaWorkingTile;
 import com.buuz135.industrial.block.transport.tile.ConveyorTile;
-import com.buuz135.industrial.item.infinity.ItemInfinityDrill;
+import com.buuz135.industrial.item.infinity.InfinityTier;
+import com.buuz135.industrial.item.infinity.ItemInfinity;
+import com.buuz135.industrial.module.ModuleCore;
 import com.buuz135.industrial.module.ModuleTool;
 import com.buuz135.industrial.module.ModuleTransport;
 import com.buuz135.industrial.proxy.CommonProxy;
@@ -33,9 +35,9 @@ import com.buuz135.industrial.proxy.client.event.IFWorldRenderLastEvent;
 import com.buuz135.industrial.proxy.client.render.FluidConveyorTESR;
 import com.buuz135.industrial.proxy.client.render.WorkingAreaTESR;
 import com.buuz135.industrial.utils.Reference;
-import com.hrznstudio.titanium.block.BasicBlock;
 import com.hrznstudio.titanium.block.BasicTileBlock;
 import com.hrznstudio.titanium.event.handler.EventManager;
+import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.RenderTypeLookup;
@@ -44,12 +46,17 @@ import net.minecraft.item.SpawnEggItem;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.client.event.ModelBakeEvent;
-import net.minecraftforge.client.event.TextureStitchEvent;
+import net.minecraftforge.client.model.ModelLoader;
 import net.minecraftforge.client.model.obj.OBJModel;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.util.Constants;
+import net.minecraftforge.common.util.NonNullLazy;
 import net.minecraftforge.fml.client.registry.ClientRegistry;
 import net.minecraftforge.registries.ForgeRegistries;
+
+import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
 
 public class ClientProxy extends CommonProxy {
 
@@ -65,28 +72,30 @@ public class ClientProxy extends CommonProxy {
         MinecraftForge.EVENT_BUS.register(new IFClientEvents());
         MinecraftForge.EVENT_BUS.register(new IFWorldRenderLastEvent());
         MinecraftForge.EVENT_BUS.register(new IFTooltipEvent());
+        ModelLoader.addSpecialModel(new ResourceLocation(Reference.MOD_ID, "block/catears"));
 
         EventManager.mod(ModelBakeEvent.class).process(event -> {
-            try {
-                //ears_model = OBJLoader.INSTANCE.loadModel(new ResourceLocation(Reference.MOD_ID, "models/block/catears.obj"), false, false, false, false);
-                //ears_baked = ears_model.bake(event.getModelLoader(), ModelLoader.defaultTextureGetter(), new SimpleModelState(ImmutableMap.of(), TransformationMatrix.func_227983_a_()), DefaultVertexFormats.BLOCK, ItemOverrideList.EMPTY, new ResourceLocation(Reference.MOD_ID, "models/block/catears.obj"));
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
+            ears_baked = event.getModelRegistry().get(new ResourceLocation(Reference.MOD_ID, "block/catears"));
         }).subscribe();
-        EventManager.mod(TextureStitchEvent.Pre.class).process(pre -> {
-            pre.addSprite(new ResourceLocation(Reference.MOD_ID, "blocks/catears"));
-        }).subscribe();
-
 
         ClientRegistry.bindTileEntityRenderer(ModuleTransport.CONVEYOR.getTileEntityType(), FluidConveyorTESR::new);
-        BasicBlock.BLOCKS.stream().filter(blockBase -> blockBase instanceof BasicTileBlock && IndustrialAreaWorkingTile.class.isAssignableFrom(((BasicTileBlock) blockBase).getTileClass())).forEach(blockBase -> ClientRegistry.bindTileEntityRenderer(((BasicTileBlock) blockBase).getTileEntityType(), WorkingAreaTESR::new));
+        NonNullLazy<List<Block>> blocksToProcess = NonNullLazy.of(() ->
+                ForgeRegistries.BLOCKS.getValues()
+                        .stream()
+                        .filter(basicBlock -> Optional.ofNullable(basicBlock.getRegistryName())
+                                .map(ResourceLocation::getNamespace)
+                                .filter(Reference.MOD_ID::equalsIgnoreCase)
+                                .isPresent())
+                        .collect(Collectors.toList())
+        );
+        blocksToProcess.get().stream().filter(blockBase -> blockBase instanceof BasicTileBlock && IndustrialAreaWorkingTile.class.isAssignableFrom(((BasicTileBlock) blockBase).getTileClass())).forEach(blockBase -> ClientRegistry.bindTileEntityRenderer(((BasicTileBlock) blockBase).getTileEntityType(), WorkingAreaTESR::new));
         //ClientRegistry.bindTileEntityRenderer(IndustrialAreaWorkingTile.class, new WorkingAreaTESR());
         //manager.entityRenderMap.put(EntityPinkSlime.class, new RenderPinkSlime(manager));
 
         //((IReloadableResourceManager) Minecraft.getInstance().getResourceManager()).addReloadListener(resourceManager -> FluidUtils.colorCache.clear());
 
-        RenderTypeLookup.setRenderLayer(ModuleTransport.CONVEYOR, RenderType.cutout());
+        RenderTypeLookup.setRenderLayer(ModuleTransport.CONVEYOR, RenderType.getCutout());
+        RenderTypeLookup.setRenderLayer(ModuleCore.DARK_GLASS, RenderType.getTranslucent());
 
         Minecraft.getInstance().getBlockColors().register((state, worldIn, pos, tintIndex) -> {
             if (tintIndex == 0 && worldIn != null && pos != null) {
@@ -110,10 +119,22 @@ public class ClientProxy extends CommonProxy {
         }, ModuleTool.MOB_IMPRISONMENT_TOOL);
         Minecraft.getInstance().getItemColors().register((stack, tintIndex) -> {
             if (tintIndex == 0) {
-                return ItemInfinityDrill.DrillTier.getTierBraquet(ModuleTool.INFINITY_DRILL.getPowerFromStack(stack)).getLeft().getTextureColor();
+                return InfinityTier.getTierBraquet(ItemInfinity.getPowerFromStack(stack)).getLeft().getTextureColor();
             }
             return 0xFFFFFF;
         }, ModuleTool.INFINITY_DRILL);
+        Minecraft.getInstance().getItemColors().register((stack, tintIndex) -> {
+            if (tintIndex == 0) {
+                return InfinityTier.getTierBraquet(ItemInfinity.getPowerFromStack(stack)).getLeft().getTextureColor();
+            }
+            return 0xFFFFFF;
+        }, ModuleTool.INFINITY_SAW);
+        Minecraft.getInstance().getItemColors().register((stack, tintIndex) -> {
+            if (tintIndex == 0) {
+                return InfinityTier.getTierBraquet(ItemInfinity.getPowerFromStack(stack)).getLeft().getTextureColor();
+            }
+            return 0xFFFFFF;
+        }, ModuleTool.INFINITY_HAMMER);
     }
 
 }

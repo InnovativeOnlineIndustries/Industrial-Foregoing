@@ -28,10 +28,10 @@
             "item": "minecraft:ghast_tear"
           },
           "m": {
-            "tag": "industrialforegoing:machine_frame/simple"
+            "tag": "industrialforegoing:machine_frame/advanced"
           },
           "i": {
-            "tag": "forge:gear/gold"
+            "tag": "forge:gears/gold"
           },
           "p": {
             "item": "minecraft:piston"

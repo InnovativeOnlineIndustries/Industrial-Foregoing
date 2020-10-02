@@ -5,11 +5,10 @@ import com.buuz135.industrial.config.machine.resourceproduction.SludgeRefinerCon
 import com.buuz135.industrial.module.ModuleResourceProduction;
 import com.buuz135.industrial.utils.IndustrialTags;
 import com.hrznstudio.titanium.annotation.Save;
-import com.hrznstudio.titanium.api.IFactory;
+import com.hrznstudio.titanium.component.energy.EnergyStorageComponent;
 import com.hrznstudio.titanium.component.fluid.FluidTankComponent;
 import com.hrznstudio.titanium.component.fluid.SidedFluidTankComponent;
 import com.hrznstudio.titanium.component.inventory.SidedInventoryComponent;
-import com.hrznstudio.titanium.energy.NBTEnergyHandler;
 import net.minecraft.item.DyeColor;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -51,7 +50,7 @@ public class SludgeRefinerTile extends IndustrialProcessingTile<SludgeRefinerTil
     @Override
     public Runnable onFinish() {
         return () -> {
-            Item item = this.world.getTags().getItems().get(IndustrialTags.Items.SLUDGE_OUTPUT.getId()).getRandomElement(this.world.rand);
+            Item item = IndustrialTags.Items.SLUDGE_OUTPUT.getRandomElement(this.world.rand);
             if (item != null && ItemHandlerHelper.insertItem(output, new ItemStack(item), true).isEmpty()) {
                 sludge.drainForced(500, IFluidHandler.FluidAction.EXECUTE);
                 ItemHandlerHelper.insertItem(output, new ItemStack(item), false);
@@ -60,8 +59,8 @@ public class SludgeRefinerTile extends IndustrialProcessingTile<SludgeRefinerTil
     }
 
     @Override
-    protected IFactory<NBTEnergyHandler> getEnergyHandlerFactory() {
-        return () -> new NBTEnergyHandler(this, SludgeRefinerConfig.maxStoredPower);
+    protected EnergyStorageComponent<SludgeRefinerTile> createEnergyStorage() {
+        return new EnergyStorageComponent<>(SludgeRefinerConfig.maxStoredPower, 10, 20);
     }
 
     @Override

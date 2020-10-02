@@ -2,12 +2,16 @@
   "type": "minecraft:block",
   "pools": [
     {
-      "name": "water_condensator",
       "rolls": 1,
       "entries": [
         {
           "type": "minecraft:item",
           "name": "industrialforegoing:water_condensator"
+        }
+      ],
+      "conditions": [
+        {
+          "condition": "minecraft:survives_explosion"
         }
       ]
     }

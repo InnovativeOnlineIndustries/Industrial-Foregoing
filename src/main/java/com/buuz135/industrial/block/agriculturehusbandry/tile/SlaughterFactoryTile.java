@@ -6,10 +6,9 @@ import com.buuz135.industrial.config.machine.agriculturehusbandry.SlaughterFacto
 import com.buuz135.industrial.module.ModuleAgricultureHusbandry;
 import com.buuz135.industrial.module.ModuleCore;
 import com.hrznstudio.titanium.annotation.Save;
-import com.hrznstudio.titanium.api.IFactory;
+import com.hrznstudio.titanium.component.energy.EnergyStorageComponent;
 import com.hrznstudio.titanium.component.fluid.FluidTankComponent;
 import com.hrznstudio.titanium.component.fluid.SidedFluidTankComponent;
-import com.hrznstudio.titanium.energy.NBTEnergyHandler;
 import net.minecraft.entity.MobEntity;
 import net.minecraft.entity.passive.AnimalEntity;
 import net.minecraft.item.DyeColor;
@@ -30,7 +29,7 @@ public class SlaughterFactoryTile extends IndustrialAreaWorkingTile<SlaughterFac
     private SidedFluidTankComponent<SlaughterFactoryTile> pinkSlime;
 
     public SlaughterFactoryTile() {
-        super(ModuleAgricultureHusbandry.SLAUGHTER_FACTORY, RangeManager.RangeType.BEHIND);
+        super(ModuleAgricultureHusbandry.SLAUGHTER_FACTORY, RangeManager.RangeType.BEHIND, true);
         addTank(meat = (SidedFluidTankComponent<SlaughterFactoryTile>) new SidedFluidTankComponent<SlaughterFactoryTile>("meat", SlaughterFactoryConfig.maxMeatTankSize, 43, 20, 0).
                 setColor(DyeColor.BROWN).
                 setTankAction(FluidTankComponent.Action.DRAIN).
@@ -65,8 +64,8 @@ public class SlaughterFactoryTile extends IndustrialAreaWorkingTile<SlaughterFac
     }
 
     @Override
-    protected IFactory<NBTEnergyHandler> getEnergyHandlerFactory() {
-        return () -> new NBTEnergyHandler(this, SlaughterFactoryConfig.maxStoredPower);
+    protected EnergyStorageComponent<SlaughterFactoryTile> createEnergyStorage() {
+        return new EnergyStorageComponent<>(SlaughterFactoryConfig.maxStoredPower, 10, 20);
     }
 
     @Override

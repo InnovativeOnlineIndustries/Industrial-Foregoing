@@ -9,7 +9,6 @@ import com.hrznstudio.titanium.recipe.generator.TitaniumShapedRecipeBuilder;
 import net.minecraft.block.Blocks;
 import net.minecraft.data.IFinishedRecipe;
 import net.minecraft.tags.ItemTags;
-import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.common.Tags;
 
 import javax.annotation.Nonnull;
@@ -39,7 +38,7 @@ public class SporesRecreatorBlock extends IndustrialBlock<SporesRecreatorTile> {
                 .key('P', IndustrialTags.Items.PLASTIC)
                 .key('I', Tags.Items.MUSHROOMS)
                 .key('M', IndustrialTags.Items.MACHINE_FRAME_PITY)
-                .key('S', new ItemTags.Wrapper(new ResourceLocation("forge:gear/iron")))
+                .key('S', ItemTags.makeWrapperTag("forge:gears/iron"))
                 .build(consumer);
     }
 }

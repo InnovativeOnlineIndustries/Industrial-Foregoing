@@ -1,3 +1,5 @@
+import se.bjurr.gitchangelog.plugin.gradle.GitChangelogTask
+
 buildscript {
     repositories {
         jcenter()
@@ -15,19 +17,22 @@ buildscript {
     }
     dependencies {
         classpath group: 'net.minecraftforge.gradle', name: 'ForgeGradle', version: '3.+', changing: true
-        classpath "gradle.plugin.com.matthewprenger:CurseGradle:1.1.0"
-        //classpath 'com.selesse:gradle-git-changelog:0.2.+'
+        classpath "gradle.plugin.com.matthewprenger:CurseGradle:1.4.0"
     }
 }
+
 plugins {
     id "com.github.hierynomus.license" version "0.14.0"
     id 'java'
     id 'maven-publish'
-    id "com.matthewprenger.cursegradle" version "1.1.0"
+    id "com.matthewprenger.cursegradle" version "1.4.0"
+    id "se.bjurr.gitchangelog.git-changelog-gradle-plugin" version "1.64"
 }
-//apply plugin: 'com.selesse.git.changelog'
 apply plugin: 'net.minecraftforge.gradle'
 apply plugin: 'eclipse'
+
+def isReleaseBranch = System.getenv("BRANCH") == "release-1.15" || System.getenv("BRANCH") == "release-1.16";
+
 
 def BUILD_NUMBER = System.getenv("COMMIT") ? "${project.api_version}-${System.getenv("COMMIT")}" : "${project.api_version}"
 group = "com.buuz135"
@@ -40,7 +45,7 @@ compileJava {
 }
 
 minecraft {
-    mappings channel: 'snapshot', version: '20200129-1.15.1'
+    mappings channel: 'snapshot', version: '20200813-1.16.1'
     runs {
         client = {
             // recommended logging data for a userdev environment
@@ -61,6 +66,7 @@ minecraft {
         data {
             workingDirectory project.file('run')
             property 'forge.logging.console.level', 'info'
+            property 'fml.earlyprogresswindow', 'false'
             args '--mod', 'industrialforegoing', '--all', '--output', '"' + rootProject.file('src/generated/resources/') + '"', '--existing', '"' + sourceSets.main.resources.srcDirs[0] + '"'
             source sourceSets.main
         }
@@ -90,23 +96,37 @@ repositories {
     maven {
         url 'https://cdn.hrzn.studio/maven/'
     }
+<<<<<<< HEAD
     maven { url 'https://maven.blamejared.com' }
+=======
+    maven {
+        name 'jared maven'
+        url "https://maven.blamejared.com/"
+    }
+    maven {
+        url 'https://www.dogforce-games.com/maven/'
+    }
+>>>>>>> 1.16
 }
 
 dependencies {
-    minecraft 'net.minecraftforge:forge:1.15.2-31.1.43'
+    minecraft 'net.minecraftforge:forge:1.16.3-34.0.1'
     if (findProject(':titanium') != null) {
         compile project(':titanium')
     } else {
-        compile fg.deobf (project.dependencies.create('com.hrznstudio:titanium:1.15.2-2.4.+'))
+        compile fg.deobf (project.dependencies.create('com.hrznstudio:titanium:1.16.3-3.1.0'))
     }
     //if (findProject(':workspace') == null) {
-        compileOnly fg.deobf("mezz.jei:jei-1.15.2:6.0.0.2:api")
-        // at runtime, use the full JEI jar
-        runtimeOnly fg.deobf("mezz.jei:jei-1.15.2:6.0.0.2")
+    compileOnly fg.deobf("mezz.jei:jei-1.16.2:7.3.2.25:api")
+    // at runtime, use the full JEI jar
+    runtimeOnly fg.deobf("mezz.jei:jei-1.16.2:7.3.2.25")
     //}
+<<<<<<< HEAD
     compileOnly fg.deobf("vazkii.patchouli:Patchouli:1.15.2+:api")
     runtimeOnly fg.deobf("vazkii.patchouli:Patchouli:1.15.2+")
+=======
+    compileOnly fg.deobf("blusunrize.immersiveengineering:ImmersiveEngineering:0.16-+")
+>>>>>>> 1.16
 }
 
 afterEvaluate {
@@ -176,31 +196,6 @@ publishing {
     }
 }
 
-
-tasks.curseforge.enabled = project.hasProperty('curse_api')
-
-curseforge {
-    if (project.hasProperty('curse_api')) {
-        apiKey = project.curse_api
-    }
-    project {
-        id = '266515'
-        changelog = file('CHANGELOG.md')
-        changelogType = 'markdown'
-        releaseType = 'alpha'
-
-        mainArtifact(jar){
-            relations {
-                requiredLibrary 'titanium'
-            }
-        }
-        
-        addArtifact sourcesJar
-        addArtifact deobfJar
-        addArtifact apiJar
-    }
-}
-
 license {
     header rootProject.file('HEADER')
     include "**/*.java"
@@ -225,23 +220,36 @@ jar {
         ])
     }
 }
-//changelog {
-//    title = "Industrial Foregoing"
-//    fileName = "CHANGELOG.md"
-//    outputDirectory = file("$projectDir")
-//    
-//    commitFormat = '%s (%an)'
-//    markdown {
-//        commitFormat = '* %s (%an)'
-//    }
-//    includeLines = {
-//        !it.contains("Merge")
-//    }
-//    processLines = {
-//        String input = it as String
-//        if (input.contains('[ci skip] ')) {
-//            input = input.minus('[ci skip] ')
-//        }
-//        input
-//    }
-//}
+
+tasks.curseforge.enabled = System.getenv("CURSE_API") != null && isReleaseBranch
+
+curseforge {
+    if (System.getenv("CURSE_API") != null) {
+        apiKey = System.getenv("CURSE_API")
+    }
+    project {
+        id = '266515'
+        changelog = "https://github.com/InnovativeOnlineIndustries/Industrial-Foregoing/blob/changelog/CHANGELOG.md"
+        changelogType = 'markdown'
+        releaseType = 'beta'
+        addGameVersion '1.16.1'
+
+        mainArtifact(jar){
+            relations {
+                requiredLibrary 'titanium'
+            }
+        }
+
+        addArtifact sourcesJar
+        addArtifact deobfJar
+    }
+}
+
+task makeChangelog(type: GitChangelogTask) {
+    file = new File("CHANGELOG.md")
+    untaggedName = "Version ${project.version}"
+    //fromCommit = "6a5a3df3665643ea181873312e3801db7c662686"
+    fromRef = "refs/tags/2.3.0"
+    toRef = "release-1.16"
+    templateContent = file("changelog.mustache").getText("UTF-8")
+}

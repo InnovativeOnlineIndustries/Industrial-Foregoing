@@ -4,10 +4,14 @@ import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.fluid.Fluid;
 import net.minecraft.item.*;
+import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.Hand;
 import net.minecraft.world.World;
+import net.minecraftforge.common.capabilities.ICapabilityProvider;
+import net.minecraftforge.fluids.capability.wrappers.FluidBucketWrapper;
 
+import javax.annotation.Nullable;
 import java.util.function.Supplier;
 
 public class MilkBucketItem extends BucketItem {
@@ -37,6 +41,11 @@ public class MilkBucketItem extends BucketItem {
             return result;
         }
         return realBucket.onItemRightClick(worldIn, playerIn, handIn);
+    }
+
+    @Override
+    public ICapabilityProvider initCapabilities(ItemStack stack, @Nullable CompoundNBT nbt) {
+        return new FluidBucketWrapper(stack);
     }
 
 }

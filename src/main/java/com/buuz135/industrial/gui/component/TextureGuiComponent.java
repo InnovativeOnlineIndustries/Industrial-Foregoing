@@ -23,8 +23,10 @@ package com.buuz135.industrial.gui.component;
 
 import com.buuz135.industrial.api.conveyor.gui.PositionedGuiComponent;
 import com.buuz135.industrial.gui.conveyor.GuiConveyor;
+import com.mojang.blaze3d.matrix.MatrixStack;
 import net.minecraft.client.Minecraft;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
 
 import javax.annotation.Nullable;
@@ -36,7 +38,7 @@ public class TextureGuiComponent extends PositionedGuiComponent {
     private final ResourceLocation resourceLocation;
     private final int textureX;
     private final int textureY;
-    private final List<String> tooltip;
+    private final List<ITextComponent> tooltip;
 
     public TextureGuiComponent(int x, int y, int xSize, int ySize, ResourceLocation resourceLocation, int textureX, int textureY, String... tooltip) {
         super(x, y, xSize, ySize);
@@ -46,7 +48,7 @@ public class TextureGuiComponent extends PositionedGuiComponent {
         this.tooltip = new ArrayList<>();
         if (tooltip != null) {
             for (int i = 0; i < tooltip.length; i++) {
-                this.tooltip.add(new TranslationTextComponent("conveyor.upgrade.industrialforegoing.tooltip." + tooltip[i]).getFormattedText());
+                this.tooltip.add(new TranslationTextComponent("conveyor.upgrade.industrialforegoing.tooltip." + tooltip[i]));
             }
         }
     }
@@ -57,19 +59,19 @@ public class TextureGuiComponent extends PositionedGuiComponent {
     }
 
     @Override
-    public void drawGuiBackgroundLayer(int guiX, int guiY, double mouseX, double mouseY) {
+    public void drawGuiBackgroundLayer(MatrixStack stack, int guiX, int guiY, double mouseX, double mouseY) {
         Minecraft.getInstance().getTextureManager().bindTexture(resourceLocation);
-        Minecraft.getInstance().currentScreen.blit(guiX + getXPos(), guiY + getYPos(), textureX, textureY, getXSize(), getYSize());
+        Minecraft.getInstance().currentScreen.blit(stack, guiX + getXPos(), guiY + getYPos(), textureX, textureY, getXSize(), getYSize());
     }
 
     @Override
-    public void drawGuiForegroundLayer(int guiX, int guiY, double mouseX, double mouseY) {
+    public void drawGuiForegroundLayer(MatrixStack stack, int guiX, int guiY, double mouseX, double mouseY) {
 
     }
 
     @Nullable
     @Override
-    public List<String> getTooltip(int guiX, int guiY, double mouseX, double mouseY) {
+    public List<ITextComponent> getTooltip(int guiX, int guiY, double mouseX, double mouseY) {
         return tooltip;
     }
 }

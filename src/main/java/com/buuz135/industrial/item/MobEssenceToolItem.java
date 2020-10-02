@@ -6,6 +6,7 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemGroup;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.util.ActionResultType;
 import net.minecraft.util.Hand;
 import net.minecraft.util.NonNullList;
 import net.minecraft.world.World;
@@ -40,8 +41,7 @@ public class MobEssenceToolItem extends IFCustomItem {
     }
 
     @Override
-    public boolean itemInteractionForEntity(ItemStack stack, PlayerEntity playerIn, LivingEntity target, Hand hand) {
-
+    public ActionResultType itemInteractionForEntity(ItemStack stack, PlayerEntity playerIn, LivingEntity target, Hand hand) {
         if (stack.hasTag() && stack.getTag().getInt("Kills") == 0) {
             CompoundNBT compoundNBT = new CompoundNBT();
             compoundNBT.putString("Entity", target.getType().getRegistryName().toString());
@@ -49,7 +49,7 @@ public class MobEssenceToolItem extends IFCustomItem {
             stack.setTag(compoundNBT);
             playerIn.setHeldItem(hand, stack);
             target.remove(true);
-            return true;
+            return ActionResultType.SUCCESS;
         }
         return super.itemInteractionForEntity(stack, playerIn, target, hand);
     }

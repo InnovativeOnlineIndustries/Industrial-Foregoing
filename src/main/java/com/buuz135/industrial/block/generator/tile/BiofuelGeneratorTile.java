@@ -15,7 +15,6 @@ import javax.annotation.Nonnull;
 
 public class BiofuelGeneratorTile extends IndustrialGeneratorTile<BiofuelGeneratorTile> {
 
-    private int getMaxStoredPower;
     private int getPowerPerTick;
     private int getExtractionRate;
 
@@ -30,7 +29,6 @@ public class BiofuelGeneratorTile extends IndustrialGeneratorTile<BiofuelGenerat
                 setTankAction(FluidTankComponent.Action.FILL).
                 setValidator(fluidStack -> fluidStack.getFluid().isEquivalentTo(ModuleCore.BIOFUEL.getSourceFluid()))
         );
-        this.getMaxStoredPower = BiofuelGeneratorConfig.maxStoredPower;
         this.getPowerPerTick = BiofuelGeneratorConfig.powerPerTick;
         this.getExtractionRate = BiofuelGeneratorConfig.extractionRate;
     }
@@ -64,7 +62,7 @@ public class BiofuelGeneratorTile extends IndustrialGeneratorTile<BiofuelGenerat
 
     @Override
     public int getEnergyCapacity() {
-        return getMaxStoredPower;
+        return BiofuelGeneratorConfig.maxStoredPower;
     }
 
     @Override

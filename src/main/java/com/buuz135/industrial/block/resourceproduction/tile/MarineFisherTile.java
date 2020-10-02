@@ -3,23 +3,21 @@ package com.buuz135.industrial.block.resourceproduction.tile;
 import com.buuz135.industrial.block.tile.IndustrialAreaWorkingTile;
 import com.buuz135.industrial.block.tile.RangeManager;
 import com.buuz135.industrial.config.machine.resourceproduction.MarineFisherConfig;
-import com.buuz135.industrial.item.RangeAddonItem;
 import com.buuz135.industrial.module.ModuleResourceProduction;
 import com.buuz135.industrial.utils.BlockUtils;
 import com.hrznstudio.titanium.annotation.Save;
-import com.hrznstudio.titanium.api.IFactory;
-import com.hrznstudio.titanium.api.augment.IAugment;
+import com.hrznstudio.titanium.component.energy.EnergyStorageComponent;
 import com.hrznstudio.titanium.component.inventory.SidedInventoryComponent;
-import com.hrznstudio.titanium.energy.NBTEnergyHandler;
+import net.minecraft.fluid.FluidState;
 import net.minecraft.fluid.Fluids;
-import net.minecraft.fluid.IFluidState;
 import net.minecraft.item.DyeColor;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
+import net.minecraft.loot.*;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.shapes.VoxelShape;
+import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.world.server.ServerWorld;
-import net.minecraft.world.storage.loot.*;
 import net.minecraftforge.items.ItemHandlerHelper;
 
 import javax.annotation.Nonnull;
@@ -33,7 +31,7 @@ public class MarineFisherTile extends IndustrialAreaWorkingTile<MarineFisherTile
     private SidedInventoryComponent<MarineFisherTile> output;
 
     public MarineFisherTile() {
-        super(ModuleResourceProduction.MARINE_FISHER, RangeManager.RangeType.BOTTOM);
+        super(ModuleResourceProduction.MARINE_FISHER, RangeManager.RangeType.BOTTOM, false);
         addInventory(output = (SidedInventoryComponent<MarineFisherTile>) new SidedInventoryComponent<MarineFisherTile>("output", 50, 22, 3 * 6, 0)
                 .setColor(DyeColor.ORANGE)
                 .setRange(6, 3)
@@ -47,7 +45,10 @@ public class MarineFisherTile extends IndustrialAreaWorkingTile<MarineFisherTile
         if (hasEnergy(powerPerOperation)) {
             if (getWaterSources() < 9) return new WorkAction(1, 0);
             LootTable fishingTable = this.world.getServer().getLootTableManager().getLootTableFromLocation(LootTables.GAMEPLAY_FISHING);
-            LootContext.Builder context = new LootContext.Builder((ServerWorld) this.world).withParameter(LootParameters.POSITION, this.pos).withParameter(LootParameters.TOOL, new ItemStack(Items.FISHING_ROD));
+            if (this.world.rand.nextDouble() <= 0.05) {
+                fishingTable = this.world.getServer().getLootTableManager().getLootTableFromLocation(LootTables.GAMEPLAY_FISHING_TREASURE);
+            }
+            LootContext.Builder context = new LootContext.Builder((ServerWorld) this.world).withParameter(LootParameters.field_237457_g_, new Vector3d(this.pos.getX(), this.pos.getY(), this.pos.getZ())).withParameter(LootParameters.TOOL, new ItemStack(Items.FISHING_ROD));
             fishingTable.generate(context.build(LootParameterSets.FISHING)).forEach(stack -> ItemHandlerHelper.insertItem(output, stack, false));
             return new WorkAction(1f, powerPerOperation);
         }
@@ -55,8 +56,8 @@ public class MarineFisherTile extends IndustrialAreaWorkingTile<MarineFisherTile
     }
 
     @Override
-    protected IFactory<NBTEnergyHandler> getEnergyHandlerFactory() {
-        return () -> new NBTEnergyHandler(this, MarineFisherConfig.maxStoredPower);
+    protected EnergyStorageComponent<MarineFisherTile> createEnergyStorage() {
+        return new EnergyStorageComponent<>(MarineFisherConfig.maxStoredPower, 10, 20);
     }
 
     @Override
@@ -70,12 +71,6 @@ public class MarineFisherTile extends IndustrialAreaWorkingTile<MarineFisherTile
         return this;
     }
 
-    @Override
-    public boolean canAcceptAugment(IAugment augment) {
-        if (augment.getAugmentType().equals(RangeAddonItem.RANGE)) return false;
-        return super.canAcceptAugment(augment);
-    }
-
     public VoxelShape getWorkingArea() {
         return new RangeManager(this.pos, this.getFacingDirection(), RangeManager.RangeType.BOTTOM).get(1);
     }
@@ -84,7 +79,7 @@ public class MarineFisherTile extends IndustrialAreaWorkingTile<MarineFisherTile
         int amount = 0;
         for (BlockPos pos : BlockUtils.getBlockPosInAABB(getWorkingArea().getBoundingBox())) {
             if (!world.isAreaLoaded(pos, pos)) continue;
-            IFluidState fluidState = this.world.getFluidState(pos);
+            FluidState fluidState = this.world.getFluidState(pos);
             if (fluidState.getFluid().equals(Fluids.WATER) && fluidState.isSource()) {
                 ++amount;
             }

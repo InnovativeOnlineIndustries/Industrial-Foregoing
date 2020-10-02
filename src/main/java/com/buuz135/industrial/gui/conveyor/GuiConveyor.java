@@ -28,6 +28,7 @@ import com.buuz135.industrial.gui.component.FilterGuiComponent;
 import com.buuz135.industrial.proxy.block.filter.IFilter;
 import com.buuz135.industrial.proxy.network.ConveyorButtonInteractMessage;
 import com.buuz135.industrial.utils.Reference;
+import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.systems.RenderSystem;
 import net.minecraft.client.gui.screen.inventory.ContainerScreen;
 import net.minecraft.entity.player.PlayerInventory;
@@ -70,35 +71,34 @@ public class GuiConveyor extends ContainerScreen<ContainerConveyor> {
     }
 
     @Override
-    protected void drawGuiContainerBackgroundLayer(float partialTicks, int mouseX, int mouseY) {
-        this.renderBackground();
+    protected void drawGuiContainerBackgroundLayer(MatrixStack stack, float partialTicks, int mouseX, int mouseY) { //background
+        this.renderBackground(stack);
         RenderSystem.color4f(1, 1, 1, 1);
-        minecraft.getTextureManager().bindTexture(BG_TEXTURE);
+        getMinecraft().getTextureManager().bindTexture(BG_TEXTURE);
         x = (width - xSize) / 2;
         y = (height - ySize) / 2;
-        blit(x, y, 0, 0, xSize, ySize);
+        blit(stack, x, y, 0, 0, xSize, ySize);
         if (upgrade != null) {
-            String localized = new TranslationTextComponent(String.format("conveyor.upgrade.%s.%s", upgrade.getFactory().getRegistryName().getNamespace(), upgrade.getFactory().getRegistryName().getPath())).getFormattedText();
-            minecraft.fontRenderer.drawString(localized, x + xSize / 2 - minecraft.fontRenderer.getStringWidth(localized) / 2, y + 6, 0x404040);
+            String localized = new TranslationTextComponent(String.format("conveyor.upgrade.%s.%s", upgrade.getFactory().getRegistryName().getNamespace(), upgrade.getFactory().getRegistryName().getPath())).getString();
+            getMinecraft().fontRenderer.drawString(stack, localized, x + xSize / 2 - getMinecraft().fontRenderer.getStringWidth(localized) / 2, y + 6, 0x404040);
         }
         for (IGuiComponent iGuiComponent : componentList) {
-            iGuiComponent.drawGuiBackgroundLayer(x, y, mouseX, mouseY);
+            iGuiComponent.drawGuiBackgroundLayer(stack, x, y, mouseX, mouseY);
         }
     }
 
     @Override
-    protected void drawGuiContainerForegroundLayer(int mouseX, int mouseY) {
-        super.drawGuiContainerForegroundLayer(mouseX, mouseY);
+    protected void drawGuiContainerForegroundLayer(MatrixStack stack, int mouseX, int mouseY) { //foreground
         x = (width - xSize) / 2;
         y = (height - ySize) / 2;
         for (IGuiComponent iGuiComponent : componentList) {
-            iGuiComponent.drawGuiForegroundLayer(x, y, mouseX, mouseY);
+            iGuiComponent.drawGuiForegroundLayer(stack, x, y, mouseX, mouseY);
         }
-        renderHoveredToolTip(mouseX - x, mouseY - y);
+        renderHoveredTooltip(stack, mouseX - x, mouseY - y);
         for (IGuiComponent iGuiComponent : componentList) {
             if (iGuiComponent.isInside(mouseX - x, mouseY - y)) {
-                List<String> tooltips = iGuiComponent.getTooltip(x, y, mouseX, mouseY);
-                if (tooltips != null) renderTooltip(tooltips, mouseX - x, mouseY - y);
+                List<ITextComponent> tooltips = iGuiComponent.getTooltip(x, y, mouseX, mouseY);
+                if (tooltips != null) func_243308_b(stack, tooltips, mouseX - x, mouseY - y);
             }
         }
     }
@@ -108,7 +108,7 @@ public class GuiConveyor extends ContainerScreen<ContainerConveyor> {
     }
 
     @Override
-    public boolean mouseClicked(double mouseX, double mouseY, int mouseButton) {
+    public boolean mouseClicked(double mouseX, double mouseY, int mouseButton) { //mouseClicked
         boolean click = super.mouseClicked(mouseX, mouseY, mouseButton);
         for (IGuiComponent iGuiComponent : componentList) {
             if (iGuiComponent.isInside(mouseX - x, mouseY - y)) {

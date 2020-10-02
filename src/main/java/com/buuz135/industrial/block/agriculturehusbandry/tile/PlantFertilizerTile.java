@@ -4,11 +4,10 @@ import com.buuz135.industrial.block.tile.IndustrialAreaWorkingTile;
 import com.buuz135.industrial.block.tile.RangeManager;
 import com.buuz135.industrial.config.machine.agriculturehusbandry.PlantFertilizerConfig;
 import com.buuz135.industrial.module.ModuleAgricultureHusbandry;
-import com.buuz135.industrial.module.ModuleCore;
+import com.buuz135.industrial.utils.IndustrialTags;
 import com.hrznstudio.titanium.annotation.Save;
-import com.hrznstudio.titanium.api.IFactory;
+import com.hrznstudio.titanium.component.energy.EnergyStorageComponent;
 import com.hrznstudio.titanium.component.inventory.SidedInventoryComponent;
-import com.hrznstudio.titanium.energy.NBTEnergyHandler;
 import com.hrznstudio.titanium.util.ItemHandlerUtil;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
@@ -29,10 +28,10 @@ public class PlantFertilizerTile extends IndustrialAreaWorkingTile<PlantFertiliz
     public SidedInventoryComponent<PlantFertilizerTile> fertilizer;
 
     public PlantFertilizerTile() {
-        super(ModuleAgricultureHusbandry.PLANT_FERTILIZER, RangeManager.RangeType.BEHIND);
+        super(ModuleAgricultureHusbandry.PLANT_FERTILIZER, RangeManager.RangeType.BEHIND, true);
         addInventory(fertilizer = (SidedInventoryComponent<PlantFertilizerTile>) new SidedInventoryComponent<PlantFertilizerTile>("fertilizer", 50, 22, 3 * 6, 0).
                 setColor(DyeColor.BROWN).
-                setInputFilter((stack, integer) -> stack.getItem().equals(ModuleCore.FERTILIZER)).
+                setInputFilter((stack, integer) -> stack.getItem().isIn(IndustrialTags.Items.FERTILIZER)).
                 setOutputFilter((stack, integer) -> false).
                 setRange(6, 3).
                 setComponentHarness(this)
@@ -71,8 +70,8 @@ public class PlantFertilizerTile extends IndustrialAreaWorkingTile<PlantFertiliz
     }
 
     @Override
-    protected IFactory<NBTEnergyHandler> getEnergyHandlerFactory() {
-        return () -> new NBTEnergyHandler(this, PlantFertilizerConfig.maxStoredPower);
+    protected EnergyStorageComponent<PlantFertilizerTile> createEnergyStorage() {
+        return new EnergyStorageComponent<>(PlantFertilizerConfig.maxStoredPower, 10, 20);
     }
 
     @Override

@@ -26,9 +26,9 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.util.Direction;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.Vec3d;
 import net.minecraft.util.math.shapes.ISelectionContext;
 import net.minecraft.util.math.shapes.VoxelShape;
+import net.minecraft.util.math.vector.Vector3d;
 
 import java.util.List;
 
@@ -52,10 +52,10 @@ public class MovementUtils {
         //DIRECTION MOVEMENT
         double speed = 0.2;
         if (type.isFast()) speed *= 2;
-        Vec3d vec3d = new Vec3d(speed * direction.getDirectionVec().getX(), speed * direction.getDirectionVec().getY(), speed * direction.getDirectionVec().getZ());
+        Vector3d vec3d = new Vector3d(speed * direction.getDirectionVec().getX(), speed * direction.getDirectionVec().getY(), speed * direction.getDirectionVec().getZ());
         if (type.isVertical()) {
             vec3d = vec3d.add(0, type.isUp() ? 0.258 : -0.05, 0);
-            entity.onGround = false;
+            //entity.onGround = false;
         }
 
         //CENTER

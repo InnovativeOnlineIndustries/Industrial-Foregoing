@@ -197,7 +197,7 @@ public class ConveyorTile extends ActiveTile<ConveyorTile> implements IConveyorC
     @Override
     public CompoundNBT write(CompoundNBT compound) {
         compound = super.write(compound);
-        compound.putString("Facing", facing.getName());
+        compound.putString("Facing", facing.getString()); //getName
         compound.putString("Type", type.getName());
         compound.putInt("Color", color);
         compound.putBoolean("Sticky", sticky);
@@ -212,16 +212,16 @@ public class ConveyorTile extends ActiveTile<ConveyorTile> implements IConveyorC
             CompoundNBT customNBT = upgrade.serializeNBT();
             if (customNBT != null)
                 upgradeTag.put("customNBT", customNBT);
-            upgrades.put(facing.getName(), upgradeTag);
+            upgrades.put(facing.getString(), upgradeTag);
         }
         compound.put("Upgrades", upgrades);
         compound.put("Tank", tank.writeToNBT(new CompoundNBT()));
         return compound;
     }
 
-    @Override
-    public void read(CompoundNBT compound) {
-        super.read(compound);
+    @Override //read
+    public void read(BlockState state, CompoundNBT compound) {
+        super.read(state, compound);
         this.facing = Direction.byName(compound.getString("Facing"));
         this.type = ConveyorBlock.EnumType.getFromName(compound.getString("Type"));
         this.color = compound.getInt("Color");
@@ -230,9 +230,9 @@ public class ConveyorTile extends ActiveTile<ConveyorTile> implements IConveyorC
             CompoundNBT upgradesTag = compound.getCompound("Upgrades");
             //upgradeMap.clear();
             for (Direction facing : Direction.values()) {
-                if (!upgradesTag.contains(facing.getName()))
+                if (!upgradesTag.contains(facing.getString()))
                     continue;
-                CompoundNBT upgradeTag = upgradesTag.getCompound(facing.getName());
+                CompoundNBT upgradeTag = upgradesTag.getCompound(facing.getString());
                 ConveyorUpgradeFactory factory = null;
                 for (ConveyorUpgradeFactory conveyorUpgradeFactory : ConveyorUpgradeFactory.FACTORIES) {
                     if (conveyorUpgradeFactory.getRegistryName().equals(new ResourceLocation(upgradeTag.getString("factory")))) {
@@ -258,7 +258,7 @@ public class ConveyorTile extends ActiveTile<ConveyorTile> implements IConveyorC
     public void markForUpdate() {
         super.markForUpdate();
         this.world.setBlockState(pos, this.world.getBlockState(pos).with(FACING, facing).with(TYPE, type));
-        this.world.getTileEntity(pos).read(write(new CompoundNBT()));
+        this.world.getTileEntity(pos).read(this.world.getBlockState(pos), write(new CompoundNBT())); //read
     }
 
     public List<AxisAlignedBB> getCollisionBoxes() {

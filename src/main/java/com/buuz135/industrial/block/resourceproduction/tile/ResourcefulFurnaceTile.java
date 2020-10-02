@@ -5,11 +5,10 @@ import com.buuz135.industrial.config.machine.resourceproduction.ResourcefulFurna
 import com.buuz135.industrial.module.ModuleCore;
 import com.buuz135.industrial.module.ModuleResourceProduction;
 import com.hrznstudio.titanium.annotation.Save;
-import com.hrznstudio.titanium.api.IFactory;
+import com.hrznstudio.titanium.component.energy.EnergyStorageComponent;
 import com.hrznstudio.titanium.component.fluid.FluidTankComponent;
 import com.hrznstudio.titanium.component.fluid.SidedFluidTankComponent;
 import com.hrznstudio.titanium.component.inventory.SidedInventoryComponent;
-import com.hrznstudio.titanium.energy.NBTEnergyHandler;
 import com.hrznstudio.titanium.util.RecipeUtil;
 import net.minecraft.item.DyeColor;
 import net.minecraft.item.ItemStack;
@@ -87,7 +86,7 @@ public class ResourcefulFurnaceTile extends IndustrialProcessingTile<Resourceful
                     if (ItemHandlerHelper.insertItem(output, recipe.getRecipeOutput().copy(), true).isEmpty()) {
                         input.setStackInSlot(i, ItemStack.EMPTY);
                         ItemHandlerHelper.insertItem(output, recipe.getRecipeOutput().copy(), false);
-                        tank.fill(new FluidStack(ModuleCore.ESSENCE.getSourceFluid(), (int) (recipe.getExperience() * 20)), IFluidHandler.FluidAction.EXECUTE);
+                        tank.fillForced(new FluidStack(ModuleCore.ESSENCE.getSourceFluid(), (int) (recipe.getExperience() * 20)), IFluidHandler.FluidAction.EXECUTE);
                     }
                 }
             }
@@ -95,8 +94,8 @@ public class ResourcefulFurnaceTile extends IndustrialProcessingTile<Resourceful
     }
 
     @Override
-    protected IFactory<NBTEnergyHandler> getEnergyHandlerFactory() {
-        return () -> new NBTEnergyHandler(this, ResourcefulFurnaceConfig.maxStoredPower);
+    protected EnergyStorageComponent<ResourcefulFurnaceTile> createEnergyStorage() {
+        return new EnergyStorageComponent<>(ResourcefulFurnaceConfig.maxStoredPower, 10, 20);
     }
 
     @Override

@@ -4,14 +4,11 @@ import com.buuz135.industrial.IndustrialForegoing;
 import com.buuz135.industrial.block.tile.IndustrialAreaWorkingTile;
 import com.buuz135.industrial.block.tile.RangeManager;
 import com.buuz135.industrial.config.machine.resourceproduction.BlockPlacerConfig;
-import com.buuz135.industrial.item.RangeAddonItem;
 import com.buuz135.industrial.module.ModuleResourceProduction;
 import com.buuz135.industrial.utils.IFFakePlayer;
 import com.hrznstudio.titanium.annotation.Save;
-import com.hrznstudio.titanium.api.IFactory;
-import com.hrznstudio.titanium.api.augment.IAugment;
+import com.hrznstudio.titanium.component.energy.EnergyStorageComponent;
 import com.hrznstudio.titanium.component.inventory.SidedInventoryComponent;
-import com.hrznstudio.titanium.energy.NBTEnergyHandler;
 import net.minecraft.item.BlockItem;
 import net.minecraft.item.DyeColor;
 
@@ -26,7 +23,7 @@ public class BlockPlacerTile extends IndustrialAreaWorkingTile<BlockPlacerTile> 
     private SidedInventoryComponent<BlockPlacerTile> input;
 
     public BlockPlacerTile() {
-        super(ModuleResourceProduction.BLOCK_PLACER, RangeManager.RangeType.BEHIND);
+        super(ModuleResourceProduction.BLOCK_PLACER, RangeManager.RangeType.BEHIND, false);
         this.addInventory(this.input = (SidedInventoryComponent<BlockPlacerTile>) new SidedInventoryComponent<BlockPlacerTile>("input", 54, 22, 3 * 6, 0).
                 setColor(DyeColor.BLUE).
                 setRange(6, 3));
@@ -55,19 +52,13 @@ public class BlockPlacerTile extends IndustrialAreaWorkingTile<BlockPlacerTile> 
     }
 
     @Override
-    protected IFactory<NBTEnergyHandler> getEnergyHandlerFactory() {
-        return () -> new NBTEnergyHandler(this, BlockPlacerConfig.maxStoredPower);
+    protected EnergyStorageComponent<BlockPlacerTile> createEnergyStorage() {
+        return new EnergyStorageComponent<>(BlockPlacerConfig.maxStoredPower, 10, 20);
     }
 
     @Override
     public int getMaxProgress() {
         return getMaxProgress;
-    }
-
-    @Override
-    public boolean canAcceptAugment(IAugment augment) {
-        if (augment.getAugmentType().equals(RangeAddonItem.RANGE)) return false;
-        return super.canAcceptAugment(augment);
     }
 
     @Nonnull

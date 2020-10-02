@@ -1,16 +1,17 @@
 package com.buuz135.industrial.block.tile;
 
-import com.buuz135.industrial.item.RangeAddonItem;
+import com.buuz135.industrial.item.addon.RangeAddonItem;
 import com.buuz135.industrial.proxy.client.IndustrialAssetProvider;
 import com.buuz135.industrial.utils.BlockUtils;
 import com.hrznstudio.titanium.annotation.Save;
 import com.hrznstudio.titanium.api.IFactory;
-import com.hrznstudio.titanium.api.augment.IAugment;
 import com.hrznstudio.titanium.api.client.IScreenAddon;
 import com.hrznstudio.titanium.block.BasicTileBlock;
 import com.hrznstudio.titanium.client.screen.addon.StateButtonAddon;
 import com.hrznstudio.titanium.client.screen.addon.StateButtonInfo;
 import com.hrznstudio.titanium.component.button.ButtonComponent;
+import com.hrznstudio.titanium.item.AugmentWrapper;
+import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.shapes.VoxelShape;
@@ -26,12 +27,13 @@ public abstract class IndustrialAreaWorkingTile<T extends IndustrialAreaWorkingT
     private boolean showingArea;
     private ButtonComponent areaButton;
     private RangeManager.RangeType type;
+    private boolean acceptsRangeUpgrades;
 
-    public IndustrialAreaWorkingTile(BasicTileBlock<T> basicTileBlock, RangeManager.RangeType type) {
+    public IndustrialAreaWorkingTile(BasicTileBlock<T> basicTileBlock, RangeManager.RangeType type, boolean acceptsRangeUpgrades) {
         super(basicTileBlock);
         this.pointer = 0;
         this.showingArea = false;
-        addButton(areaButton = new ButtonComponent(176 - 22, 84, 14, 14) {
+        addButton(areaButton = new ButtonComponent(154 - 18, 84, 14, 14) {
             @Override
             public List<IFactory<? extends IScreenAddon>> getScreenAddons() {
                 List<IFactory<? extends IScreenAddon>> addons = new ArrayList<>();
@@ -48,10 +50,11 @@ public abstract class IndustrialAreaWorkingTile<T extends IndustrialAreaWorkingT
             this.markForUpdate();
         }));
         this.type = type;
+        this.acceptsRangeUpgrades = acceptsRangeUpgrades;
     }
 
     public VoxelShape getWorkingArea() {
-        return new RangeManager(this.pos, this.getFacingDirection(), this.type).get(hasAugmentInstalled(RangeAddonItem.RANGE) ? ((int) ((IAugment) getInstalledAugments(RangeAddonItem.RANGE).get(0)).getAugmentRatio() + 1) : 0);
+        return new RangeManager(this.pos, this.getFacingDirection(), this.type).get(hasAugmentInstalled(RangeAddonItem.RANGE) ? ((int) AugmentWrapper.getType(getInstalledAugments(RangeAddonItem.RANGE).get(0), RangeAddonItem.RANGE) + 1) : 0);
     }
 
     public BlockPos getPointedBlockPos() {
@@ -77,8 +80,10 @@ public abstract class IndustrialAreaWorkingTile<T extends IndustrialAreaWorkingT
     }
 
     @Override
-    public boolean canAcceptAugment(IAugment augment) {
-        return super.canAcceptAugment(augment) && augment.getAugmentType().equals(RangeAddonItem.RANGE);
+    public boolean canAcceptAugment(ItemStack augment) {
+        if (AugmentWrapper.hasType(augment, RangeAddonItem.RANGE))
+            return super.canAcceptAugment(augment) && acceptsRangeUpgrades;
+        return super.canAcceptAugment(augment);
     }
 
     @Override

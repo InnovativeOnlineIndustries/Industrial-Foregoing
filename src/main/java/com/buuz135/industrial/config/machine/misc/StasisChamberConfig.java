@@ -7,8 +7,8 @@ import com.hrznstudio.titanium.annotation.config.ConfigVal;
 @ConfigFile.Child(MachineMiscConfig.class)
 public class StasisChamberConfig {
 
-    @ConfigVal(comment = "Cooldown Time in Ticks [20 Ticks per Second] - Default: [100 (5s)]")
-    public static int maxProgress = 100;
+    @ConfigVal(comment = "Cooldown Time in Ticks [20 Ticks per Second] - Default: [50 (5s)]")
+    public static int maxProgress = 50;
 
     @ConfigVal(comment = "Amount of Power Consumed per Tick - Default: [400FE]")
     public static int powerPerOperation = 1000;

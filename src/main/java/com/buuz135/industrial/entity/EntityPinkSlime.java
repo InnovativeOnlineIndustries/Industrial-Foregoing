@@ -23,9 +23,9 @@ package com.buuz135.industrial.entity;
 
 import com.buuz135.industrial.proxy.CommonProxy;
 import net.minecraft.entity.monster.SlimeEntity;
+import net.minecraft.loot.LootTables;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
-import net.minecraft.world.storage.loot.LootTables;
 
 import javax.annotation.Nullable;
 

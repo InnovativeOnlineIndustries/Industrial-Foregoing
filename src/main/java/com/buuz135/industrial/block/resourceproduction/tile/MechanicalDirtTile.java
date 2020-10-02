@@ -5,18 +5,17 @@ import com.buuz135.industrial.config.machine.resourceproduction.MechanicalDirtCo
 import com.buuz135.industrial.module.ModuleCore;
 import com.buuz135.industrial.module.ModuleResourceProduction;
 import com.hrznstudio.titanium.annotation.Save;
-import com.hrznstudio.titanium.api.IFactory;
+import com.hrznstudio.titanium.component.energy.EnergyStorageComponent;
 import com.hrznstudio.titanium.component.fluid.FluidTankComponent;
 import com.hrznstudio.titanium.component.fluid.SidedFluidTankComponent;
-import com.hrznstudio.titanium.energy.NBTEnergyHandler;
 import net.minecraft.entity.*;
 import net.minecraft.item.DyeColor;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.Direction;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.world.Difficulty;
-import net.minecraft.world.biome.Biome;
-import net.minecraft.world.server.ServerChunkProvider;
+import net.minecraft.world.IServerWorld;
+import net.minecraft.world.biome.MobSpawnInfo;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.capability.IFluidHandler;
 
@@ -46,15 +45,16 @@ public class MechanicalDirtTile extends IndustrialWorkingTile<MechanicalDirtTile
         if (world.rand.nextDouble() > 0.1
                 || world.getDifficulty() == Difficulty.PEACEFUL
                 || (world.isDaytime() && world.getBrightness(pos.up()) > 0.5f && world.canBlockSeeSky(pos.up()))
-                || world.getEntitiesWithinAABB(MobEntity.class, new AxisAlignedBB(0, 0, 0, 1, 1, 1).offset(pos).grow(3)).size() > 10) {
+                || world.getEntitiesWithinAABB(MobEntity.class, new AxisAlignedBB(0, 0, 0, 1, 1, 1).offset(pos).grow(3)).size() > 10
+                || world.getLight(pos.up()) > 7) {
             if (hasEnergy(getPowerPerOperation / 10)) return new WorkAction(0.5f, getPowerPerOperation / 10);
             return new WorkAction(1, 0);
         }
-        if (meat.getFluidAmount() > 100) {
+        if (meat.getFluidAmount() > 20) {
             MobEntity entity = getMobToSpawn();
             if (entity != null) {
                 world.addEntity(entity);
-                meat.drainForced(100, IFluidHandler.FluidAction.EXECUTE);
+                meat.drainForced(20, IFluidHandler.FluidAction.EXECUTE);
                 if (hasEnergy(getPowerPerOperation)) return new WorkAction(0.5f, getPowerPerOperation);
             }
         }
@@ -62,16 +62,16 @@ public class MechanicalDirtTile extends IndustrialWorkingTile<MechanicalDirtTile
     }
 
     private MobEntity getMobToSpawn() {
-        List<Biome.SpawnListEntry> spawnListEntries = ((ServerChunkProvider) world.getChunkProvider()).getChunkGenerator().getPossibleCreatures(EntityClassification.MONSTER, pos);
+        List<MobSpawnInfo.Spawners> spawnListEntries = this.world.getBiome(this.pos.up()).func_242433_b().func_242559_a(EntityClassification.MONSTER);
         if (spawnListEntries.size() == 0) return null;
-        Biome.SpawnListEntry spawnListEntry = spawnListEntries.get(world.rand.nextInt(spawnListEntries.size()));
-        if (!EntitySpawnPlacementRegistry.func_223515_a(spawnListEntry.entityType, this.world, SpawnReason.NATURAL, pos, world.rand))
+        MobSpawnInfo.Spawners spawnListEntry = spawnListEntries.get(world.rand.nextInt(spawnListEntries.size()));
+        if (!EntitySpawnPlacementRegistry.canSpawnEntity(spawnListEntry.field_242588_c, (IServerWorld) this.world, SpawnReason.NATURAL, pos.up(), world.rand))
             return null;
-        Entity entity = spawnListEntry.entityType.create(world);
+        Entity entity = spawnListEntry.field_242588_c.create(world);
         if (entity instanceof MobEntity) {
-            ((MobEntity) entity).onInitialSpawn(world, world.getDifficultyForLocation(pos), SpawnReason.NATURAL, null, null);
-            entity.setPosition(pos.getX() + 0.5, pos.getY() + 1.0626, pos.getZ() + 0.5);
-            if (world.func_226669_j_(entity) && world.checkNoEntityCollision(entity, world.getBlockState(pos.up()).getShape(world, pos.up()))) { //doesNotCollide
+            ((MobEntity) entity).onInitialSpawn((IServerWorld) world, world.getDifficultyForLocation(pos), SpawnReason.NATURAL, null, null);
+            entity.setPosition(pos.getX() + 0.5, pos.getY() + 1.001, pos.getZ() + 0.5);
+            if (world.hasNoCollisions(entity) && world.checkNoEntityCollision(entity, world.getBlockState(pos.up()).getShape(world, pos.up()))) { //doesNotCollide
                 return (MobEntity) entity;
             }
         }
@@ -102,7 +102,7 @@ public class MechanicalDirtTile extends IndustrialWorkingTile<MechanicalDirtTile
                         if (difference <= 1000 && difference > 1) difference = difference / 2;
                         if (difference > 1000) difference = 1000;
                         if (getEnergyStorage().getEnergyStored() >= difference) {
-                            getEnergyStorage().extractEnergyForced(((MechanicalDirtTile) tile).getEnergyStorage().receiveEnergy(difference, false));
+                            getEnergyStorage().extractEnergy(((MechanicalDirtTile) tile).getEnergyStorage().receiveEnergy(difference, false), false);
                         }
                     }
                 }
@@ -111,8 +111,8 @@ public class MechanicalDirtTile extends IndustrialWorkingTile<MechanicalDirtTile
     }
 
     @Override
-    protected IFactory<NBTEnergyHandler> getEnergyHandlerFactory() {
-        return () -> new NBTEnergyHandler(this, MechanicalDirtConfig.maxStoredPower);
+    protected EnergyStorageComponent<MechanicalDirtTile> createEnergyStorage() {
+        return new EnergyStorageComponent<>(MechanicalDirtConfig.maxStoredPower, 10, 20);
     }
 
     @Nonnull

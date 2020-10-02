@@ -2,12 +2,16 @@
   "type": "minecraft:block",
   "pools": [
     {
-      "name": "animal_baby_separator",
       "rolls": 1,
       "entries": [
         {
           "type": "minecraft:item",
           "name": "industrialforegoing:animal_baby_separator"
+        }
+      ],
+      "conditions": [
+        {
+          "condition": "minecraft:survives_explosion"
         }
       ]
     }

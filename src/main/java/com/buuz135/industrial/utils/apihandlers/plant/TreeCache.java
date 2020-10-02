@@ -28,9 +28,9 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.Vec3i;
+import net.minecraft.util.math.vector.Vector3i;
 import net.minecraft.world.World;
-import net.minecraftforge.common.IShearable;
+import net.minecraftforge.common.IForgeShearable;
 
 import java.util.*;
 
@@ -53,8 +53,8 @@ public class TreeCache {
         NonNullList<ItemStack> stacks = NonNullList.create();
         if (BlockUtils.isLeaves(world, p) || BlockUtils.isLog(world, p)) {
             BlockState s = world.getBlockState(p);
-            if (s.getBlock() instanceof IShearable && shear) {
-                stacks.addAll(((IShearable) s.getBlock()).onSheared(new ItemStack(Items.SHEARS), world, p, 0));
+            if (s.getBlock() instanceof IForgeShearable && shear) {
+                stacks.addAll(((IForgeShearable) s.getBlock()).onSheared(null, new ItemStack(Items.SHEARS), world, p, 0));
             } else {
                 stacks.addAll(BlockUtils.getBlockDrops(world, p));
             }
@@ -90,7 +90,7 @@ public class TreeCache {
             if (BlockUtils.isLeaves(world, checking) || BlockUtils.isLog(world, checking)) {
                 for (BlockPos pos : BlockPos.getAllInBoxMutable(checking.add(-1, 0, -1), checking.add(1, 1, 1))) {
                     BlockPos blockPos = pos.toImmutable();
-                    if (world.isAirBlock(blockPos) || checkedPositions.contains(blockPos) || blockPos.manhattanDistance(new Vec3i(current.getX(), current.getY(), current.getZ())) > 1000 /*BlockRegistry.cropRecolectorBlock.getMaxDistanceTreeBlocksScan()*/)
+                    if (world.isAirBlock(blockPos) || checkedPositions.contains(blockPos) || blockPos.manhattanDistance(new Vector3i(current.getX(), current.getY(), current.getZ())) > 1000 /*BlockRegistry.cropRecolectorBlock.getMaxDistanceTreeBlocksScan()*/)
                         continue;
                     if (BlockUtils.isLeaves(world, blockPos)) {
                         tree.push(blockPos);

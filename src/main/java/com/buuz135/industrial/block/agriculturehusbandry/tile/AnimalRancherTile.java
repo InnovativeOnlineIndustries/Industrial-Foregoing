@@ -6,17 +6,16 @@ import com.buuz135.industrial.block.tile.RangeManager;
 import com.buuz135.industrial.config.machine.agriculturehusbandry.AnimalRancherConfig;
 import com.buuz135.industrial.module.ModuleAgricultureHusbandry;
 import com.hrznstudio.titanium.annotation.Save;
-import com.hrznstudio.titanium.api.IFactory;
+import com.hrznstudio.titanium.component.energy.EnergyStorageComponent;
 import com.hrznstudio.titanium.component.fluid.SidedFluidTankComponent;
 import com.hrznstudio.titanium.component.inventory.SidedInventoryComponent;
-import com.hrznstudio.titanium.energy.NBTEnergyHandler;
 import net.minecraft.entity.passive.AnimalEntity;
 import net.minecraft.item.BucketItem;
 import net.minecraft.item.DyeColor;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.util.Hand;
-import net.minecraftforge.common.IShearable;
+import net.minecraftforge.common.IForgeShearable;
 import net.minecraftforge.common.util.FakePlayer;
 import net.minecraftforge.fluids.FluidAttributes;
 import net.minecraftforge.fluids.FluidStack;
@@ -37,7 +36,7 @@ public class AnimalRancherTile extends IndustrialAreaWorkingTile<AnimalRancherTi
     private SidedInventoryComponent<AnimalRancherTile> output;
 
     public AnimalRancherTile() {
-        super(ModuleAgricultureHusbandry.ANIMAL_RANCHER, RangeManager.RangeType.BEHIND);
+        super(ModuleAgricultureHusbandry.ANIMAL_RANCHER, RangeManager.RangeType.BEHIND, true);
         this.addTank(tank = (SidedFluidTankComponent<AnimalRancherTile>) new SidedFluidTankComponent<AnimalRancherTile>("fluid_output", AnimalRancherConfig.maxTankSize, 47, 20, 0).
                 setColor(DyeColor.WHITE).
                 setComponentHarness(this)
@@ -57,22 +56,24 @@ public class AnimalRancherTile extends IndustrialAreaWorkingTile<AnimalRancherTi
             List<AnimalEntity> mobs = this.world.getEntitiesWithinAABB(AnimalEntity.class, getWorkingArea().getBoundingBox());
             if (mobs.size() > 0) {
                 for (AnimalEntity mob : mobs) {
+                    FakePlayer player = IndustrialForegoing.getFakePlayer(world, mob.getPosition()); //getPosition
                     //BUCKET INTERACTION
-                    FakePlayer player = IndustrialForegoing.getFakePlayer(world, mob.getPosition());
-                    player.setHeldItem(Hand.MAIN_HAND, new ItemStack(Items.BUCKET));
-                    if (mob.processInteract(player, Hand.MAIN_HAND)) {
-                        ItemStack stack = player.getHeldItem(Hand.MAIN_HAND);
-                        if (stack.getItem() instanceof BucketItem) {
-                            tank.fillForced(new FluidStack(((BucketItem) stack.getItem()).getFluid(), FluidAttributes.BUCKET_VOLUME), IFluidHandler.FluidAction.EXECUTE);
+                    if (tank.getFluidAmount() + 1000 <= tank.getCapacity()) {
+                        player.setHeldItem(Hand.MAIN_HAND, new ItemStack(Items.BUCKET));
+                        if (mob.func_230254_b_(player, Hand.MAIN_HAND).isSuccessOrConsume()) { //ProcessInteract
+                            ItemStack stack = player.getHeldItem(Hand.MAIN_HAND);
+                            if (stack.getItem() instanceof BucketItem) {
+                                tank.fillForced(new FluidStack(((BucketItem) stack.getItem()).getFluid(), FluidAttributes.BUCKET_VOLUME), IFluidHandler.FluidAction.EXECUTE);
+                                player.setHeldItem(Hand.MAIN_HAND, ItemStack.EMPTY);
+                                return new WorkAction(0.35f, powerPerOperation);
+                            }
                             player.setHeldItem(Hand.MAIN_HAND, ItemStack.EMPTY);
-                            return new WorkAction(0.35f, powerPerOperation);
                         }
-                        player.setHeldItem(Hand.MAIN_HAND, ItemStack.EMPTY);
                     }
                     //SHEAR INTERACTION
                     ItemStack shears = new ItemStack(Items.SHEARS);
-                    if (mob instanceof IShearable && ((IShearable) mob).isShearable(shears, this.world, mob.getPosition())) {
-                        List<ItemStack> items = ((IShearable) mob).onSheared(shears, this.world, mob.getPosition(), 0);
+                    if (mob instanceof IForgeShearable && ((IForgeShearable) mob).isShearable(shears, this.world, mob.getPosition())) { //getPosition
+                        List<ItemStack> items = ((IForgeShearable) mob).onSheared(player, shears, this.world, mob.getPosition(), 0); //getPosition
                         items.forEach(stack -> ItemHandlerHelper.insertItem(output, stack, false));
                         if (items.size() > 0) {
                             return new WorkAction(0.35f, powerPerOperation);
@@ -85,8 +86,8 @@ public class AnimalRancherTile extends IndustrialAreaWorkingTile<AnimalRancherTi
     }
 
     @Override
-    protected IFactory<NBTEnergyHandler> getEnergyHandlerFactory() {
-        return () -> new NBTEnergyHandler(this, AnimalRancherConfig.maxStoredPower);
+    protected EnergyStorageComponent<AnimalRancherTile> createEnergyStorage() {
+        return new EnergyStorageComponent<>(AnimalRancherConfig.maxStoredPower, 10, 20);
     }
 
     @Override

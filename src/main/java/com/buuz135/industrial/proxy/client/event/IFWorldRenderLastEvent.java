@@ -26,6 +26,7 @@ import com.buuz135.industrial.utils.Reference;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.player.ClientPlayerEntity;
 import net.minecraft.util.math.*;
+import net.minecraft.util.math.vector.Vector3d;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.client.event.RenderGameOverlayEvent;
@@ -44,7 +45,7 @@ public class IFWorldRenderLastEvent {
         double d0 = playerIn.getPosition().getX();
         double d1 = playerIn.getPosition().getY() + (double) playerIn.getEyeHeight();
         double d2 = playerIn.getPosition().getZ();
-        Vec3d vec3d = new Vec3d(d0, d1, d2);
+        Vector3d vec3d = new Vector3d(d0, d1, d2);
         float f2 = MathHelper.cos(-f1 * 0.017453292F - (float) Math.PI);
         float f3 = MathHelper.sin(-f1 * 0.017453292F - (float) Math.PI);
         float f4 = -MathHelper.cos(-f * 0.017453292F);
@@ -52,7 +53,7 @@ public class IFWorldRenderLastEvent {
         float f6 = f3 * f4;
         float f7 = f2 * f4;
         double d3 = 5.0D;
-        Vec3d vec3d1 = vec3d.add((double) f6 * d3, (double) f5 * d3, (double) f7 * d3);
+        Vector3d vec3d1 = vec3d.add((double) f6 * d3, (double) f5 * d3, (double) f7 * d3);
         RayTraceResult result = Minecraft.getInstance().world.rayTraceBlocks(new RayTraceContext(vec3d, vec3d1, RayTraceContext.BlockMode.COLLIDER, RayTraceContext.FluidMode.NONE, playerIn));
         if (result != null && result.getType() == RayTraceResult.Type.BLOCK) {
             BlockPos pos = ((BlockRayTraceResult) result).getPos();

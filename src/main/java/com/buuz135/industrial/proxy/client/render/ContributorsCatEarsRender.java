@@ -21,6 +21,7 @@
  */
 package com.buuz135.industrial.proxy.client.render;
 
+import com.buuz135.industrial.proxy.client.ClientProxy;
 import com.buuz135.industrial.utils.Reference;
 import com.hrznstudio.titanium.reward.storage.ClientRewardStorage;
 import com.mojang.blaze3d.matrix.MatrixStack;
@@ -29,16 +30,17 @@ import net.minecraft.block.Blocks;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.player.AbstractClientPlayerEntity;
 import net.minecraft.client.renderer.IRenderTypeBuffer;
-import net.minecraft.client.renderer.RenderHelper;
+import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.entity.IEntityRenderer;
 import net.minecraft.client.renderer.entity.layers.LayerRenderer;
 import net.minecraft.client.renderer.entity.model.PlayerModel;
 import net.minecraft.client.renderer.model.IBakedModel;
 import net.minecraft.client.renderer.texture.AtlasTexture;
+import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.math.vector.Vector3f;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
-import org.lwjgl.opengl.GL11;
 
 import java.util.Calendar;
 
@@ -49,27 +51,18 @@ public class ContributorsCatEarsRender extends LayerRenderer<AbstractClientPlaye
     }
 
     @Override
-    public void render(MatrixStack p_225628_1_, IRenderTypeBuffer p_225628_2_, int p_225628_3_, AbstractClientPlayerEntity entitylivingbaseIn, float limbSwing, float limbSwingAmount, float partialTicks, float ageInTicks, float netHeadYaw, float headPitch) {
+    public void render(MatrixStack stack, IRenderTypeBuffer buffer, int p_225628_3_, AbstractClientPlayerEntity entitylivingbaseIn, float limbSwing, float limbSwingAmount, float partialTicks, float ageInTicks, float netHeadYaw, float headPitch) {
         if (!ClientRewardStorage.REWARD_STORAGE.getRewards().containsKey(entitylivingbaseIn.getUniqueID())) return;
         if (!ClientRewardStorage.REWARD_STORAGE.getRewards().get(entitylivingbaseIn.getUniqueID()).getEnabled().containsKey(new ResourceLocation(Reference.MOD_ID, "cat_ears")))
             return;
-        RenderSystem.pushMatrix();
-        RenderSystem.enableBlend();
-        RenderSystem.disableCull();
-        RenderHelper.disableStandardItemLighting();
-        if (Minecraft.isAmbientOcclusionEnabled()) {
-            RenderSystem.shadeModel(GL11.GL_SMOOTH);
-        } else {
-            RenderSystem.shadeModel(GL11.GL_FLAT);
-        }
-        RenderSystem.translatef(0, -0.015f, 0);
-        if (!entitylivingbaseIn.inventory.armorInventory.get(3).isEmpty()) RenderSystem.translatef(0, -0.02f, 0);
-        if (entitylivingbaseIn.isCrouching()) RenderSystem.translatef(0, 0.27f, 0);
-        RenderSystem.rotatef(90, 0, 1, 0);
-        RenderSystem.rotatef(180, 1, 0, 0);
-        RenderSystem.rotatef(netHeadYaw, 0, -1, 0);
-        RenderSystem.rotatef(headPitch, 0, 0, -1);
-
+        stack.push();
+        stack.translate(0, -0.015f, 0);
+        if (!entitylivingbaseIn.inventory.armorInventory.get(3).isEmpty()) stack.translate(0, -0.02f, 0);
+        if (entitylivingbaseIn.isCrouching()) stack.translate(0, 0.27f, 0);
+        stack.rotate(Vector3f.YP.rotationDegrees(90));
+        stack.rotate(Vector3f.XP.rotationDegrees(180));
+        stack.rotate(Vector3f.YN.rotationDegrees(netHeadYaw));
+        stack.rotate(Vector3f.ZN.rotationDegrees(headPitch));
         Minecraft.getInstance().getTextureManager().bindTexture(AtlasTexture.LOCATION_BLOCKS_TEXTURE);
         Calendar calendar = Calendar.getInstance();
         if (calendar.get(Calendar.MONTH) == Calendar.OCTOBER) {
@@ -77,11 +70,9 @@ public class ContributorsCatEarsRender extends LayerRenderer<AbstractClientPlaye
         } else if (calendar.get(Calendar.MONTH) == Calendar.DECEMBER) {
             itsSnowyHere();
         } else {
-            //Minecraft.getInstance().getBlockRendererDispatcher().getBlockModelRenderer().renderModelBrightnessColor(ClientProxy.ears_baked, 0.5f, 255, 255, 255); TODO
+            Minecraft.getInstance().getBlockRendererDispatcher().getBlockModelRenderer().renderModelBrightnessColor(stack.getLast(), buffer.getBuffer(RenderType.getCutout()), null, ClientProxy.ears_baked, 1f, 1f, 1f, p_225628_3_, OverlayTexture.NO_OVERLAY);
         }
-        RenderSystem.setupGui3DDiffuseLighting();
-        RenderSystem.depthMask(true);
-        RenderSystem.popMatrix();
+        stack.pop();
     }
 
     @OnlyIn(Dist.CLIENT)

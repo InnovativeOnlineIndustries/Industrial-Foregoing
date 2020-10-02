@@ -56,7 +56,7 @@ public class CommonProxy {
     public static DamageSource custom = new DamageSource("if_custom") {
         @Override
         public ITextComponent getDeathMessage(LivingEntity entityLivingBaseIn) {
-            return new TranslationTextComponent("text.industrialforegoing.chat.slaughter_kill", entityLivingBaseIn.getDisplayName().getFormattedText(), TextFormatting.RESET);
+            return new TranslationTextComponent("text.industrialforegoing.chat.slaughter_kill", entityLivingBaseIn.getDisplayName(), TextFormatting.RESET);
         }
     };
     public static ResourceLocation PINK_SLIME_LOOT;

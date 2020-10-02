@@ -4,12 +4,11 @@ import com.buuz135.industrial.block.tile.IndustrialWorkingTile;
 import com.buuz135.industrial.config.machine.resourceproduction.WaterCondensatorConfig;
 import com.buuz135.industrial.module.ModuleResourceProduction;
 import com.hrznstudio.titanium.annotation.Save;
-import com.hrznstudio.titanium.api.IFactory;
+import com.hrznstudio.titanium.component.energy.EnergyStorageComponent;
 import com.hrznstudio.titanium.component.fluid.FluidTankComponent;
 import com.hrznstudio.titanium.component.fluid.SidedFluidTankComponent;
-import com.hrznstudio.titanium.energy.NBTEnergyHandler;
+import net.minecraft.fluid.FluidState;
 import net.minecraft.fluid.Fluids;
-import net.minecraft.fluid.IFluidState;
 import net.minecraft.item.DyeColor;
 import net.minecraft.util.Direction;
 import net.minecraftforge.fluids.FluidStack;
@@ -41,10 +40,10 @@ public class WaterCondensatorTile extends IndustrialWorkingTile<WaterCondensator
         int water = getWaterSources();
         if (water >= 2) {
             if (hasEnergy(getPowerPerOperation)) {
-                this.water.fillForced(new FluidStack(Fluids.WATER, water * 10), IFluidHandler.FluidAction.EXECUTE);
+                this.water.fillForced(new FluidStack(Fluids.WATER, water * 100), IFluidHandler.FluidAction.EXECUTE);
                 return new WorkAction(0.1f, getPowerPerOperation);
             } else {
-                this.water.fillForced(new FluidStack(Fluids.WATER, water * 5), IFluidHandler.FluidAction.EXECUTE);
+                this.water.fillForced(new FluidStack(Fluids.WATER, water * 50), IFluidHandler.FluidAction.EXECUTE);
                 return new WorkAction(0.5f, 0);
             }
         }
@@ -52,8 +51,8 @@ public class WaterCondensatorTile extends IndustrialWorkingTile<WaterCondensator
     }
 
     @Override
-    protected IFactory<NBTEnergyHandler> getEnergyHandlerFactory() {
-        return () -> new NBTEnergyHandler(this, WaterCondensatorConfig.maxStoredPower);
+    protected EnergyStorageComponent<WaterCondensatorTile> createEnergyStorage() {
+        return new EnergyStorageComponent<>(WaterCondensatorConfig.maxStoredPower, 10, 20);
     }
 
     @Override
@@ -65,7 +64,7 @@ public class WaterCondensatorTile extends IndustrialWorkingTile<WaterCondensator
         int amount = 0;
         for (Direction value : Direction.values()) {
             if (!world.isAreaLoaded(this.pos.offset(value), this.pos.offset(value))) continue;
-            IFluidState fluidState = this.world.getFluidState(this.pos.offset(value));
+            FluidState fluidState = this.world.getFluidState(this.pos.offset(value));
             if (fluidState.getFluid().equals(Fluids.WATER) && fluidState.isSource()) {
                 ++amount;
             }

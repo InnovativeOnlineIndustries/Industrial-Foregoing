@@ -71,24 +71,26 @@ public class MobImprisonmentToolItem extends IFCustomItem {
     }
 
     @Override
-    public boolean itemInteractionForEntity(ItemStack stack, PlayerEntity playerIn, LivingEntity target, Hand hand) {
-        if (target.getEntityWorld().isRemote) return false;
-        if (target instanceof PlayerEntity || !target.isNonBoss() || !target.isAlive()) return false;
-        if (containsEntity(stack)) return false;
-        String entityID = EntityType.getKey(target.getType()).toString();
-        if (isBlacklisted(entityID)) return false;
+    public ActionResultType itemInteractionForEntity(ItemStack stack, PlayerEntity playerIn, LivingEntity target, Hand hand) {
+        if (target.getEntityWorld().isRemote) return ActionResultType.FAIL;
+        if (target instanceof PlayerEntity || !target.isNonBoss() || !target.isAlive()) return ActionResultType.FAIL;
+        ;
+        if (containsEntity(stack)) return ActionResultType.FAIL;
+        ;
+        if (isBlacklisted(target.getType())) return ActionResultType.FAIL;
+        ;
         CompoundNBT nbt = new CompoundNBT();
-        nbt.putString("entity", entityID);
+        nbt.putString("entity", EntityType.getKey(target.getType()).toString());
         target.writeWithoutTypeId(nbt);
         stack.setTag(nbt);
         playerIn.swingArm(hand);
         playerIn.setHeldItem(hand, stack);
         target.remove(true);
-        return true;
+        return ActionResultType.SUCCESS;
     }
 
-    public boolean isBlacklisted(String entity) {
-        return false;
+    public boolean isBlacklisted(EntityType<?> entity) {
+        return IndustrialTags.EntityTypes.MOB_IMPRISONMENT_TOOL_BLACKLIST.contains(entity);
     }
 
     public boolean containsEntity(ItemStack stack) {
@@ -130,7 +132,7 @@ public class MobImprisonmentToolItem extends IFCustomItem {
     public ITextComponent getDisplayName(ItemStack stack) {
         if (!containsEntity(stack))
             return new TranslationTextComponent(super.getTranslationKey(stack));
-        return new TranslationTextComponent(super.getTranslationKey(stack)).appendText(" (" + getID(stack) + ")");
+        return new TranslationTextComponent(super.getTranslationKey(stack)).appendString(" (" + getID(stack) + ")");
     }
 
     @Override

@@ -4,6 +4,7 @@ steps:
       - './gradlew'
       - 'build'
       - 'publish'
+      - 'curseforge'
     env:
       - 'BUILD=$BUILD_ID'
       - 'PROJECT=$PROJECT_ID'
@@ -13,8 +14,10 @@ steps:
     secretEnv:
       - 'AWS_ACCESS_KEY_ID'
       - 'AWS_SECRET_ACCESS_KEY'
+      - 'CURSE_API'
 secrets:
   - kmsKeyName: projects/hrznfactory/locations/global/keyRings/keyring/cryptoKeys/key
     secretEnv:
       AWS_ACCESS_KEY_ID: 'CiQA/t63gSsggo5nhDQZ72YFMY7sCwaN5dcdFN1G0xTyysDDsJISPQA2yBtTgGlgzgzZF3KqheWqQwzo5V6QVIcQd251vqR6yqA8DSHs/ynfG5wzLi3lmMAKaJ/2o7JJ0Bje68I='
       AWS_SECRET_ACCESS_KEY: 'CiQA/t63gdp6hjeEUm1CSZ/UJnHmx06Rq22D11nNZ0/O/QD+37sSUQA2yBtTzFyhuPUt/Ak0PrE3vzoDyEoMQQ04qNIldUNWUdLRVRpw39bG8SRa6opsZFs7pv2S/6hCoAZQ8CW5T1jueGrT0cdt3gtR35U9Uf8Rsg=='
+      CURSE_API: 'CiQA/t63gduFLN0AHWZEpVHXNOCHQhIgwNRgQXWalGhF/VuolC4STQA2yBtTo8ZHSi5RKV1a2pmPWH6PzflTInzJndPNA6olmU4/srs/LkH4En6pfjDtBnQ0o6NrCRxA4aGU4ZJmxVMj4RZSxOzqgMcu0c9x'

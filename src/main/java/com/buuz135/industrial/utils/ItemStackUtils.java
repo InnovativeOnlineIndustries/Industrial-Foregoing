@@ -32,15 +32,12 @@ import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
 import net.minecraftforge.items.ItemStackHandler;
 
 import java.awt.*;
-import java.util.Random;
 
 public class ItemStackUtils {
 
-    public static final Random RANDOM = new Random();
-
     public static boolean isOre(ItemStack stack) {
         if (stack.isEmpty()) return false;
-        return TagUtil.hasTag(stack.getItem(), Tags.Items.ORES);
+        return stack.getItem().isIn(Tags.Items.ORES);
     }
 
     public static boolean isInventoryFull(ItemStackHandler handler) {

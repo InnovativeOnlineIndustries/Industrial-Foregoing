@@ -35,6 +35,7 @@ import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.entity.item.ItemEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tags.BlockTags;
+import net.minecraft.tags.ITag;
 import net.minecraft.tags.Tag;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.Direction;
@@ -66,8 +67,20 @@ public class BlockUtils {
         return blocks;
     }
 
-    public static boolean isBlockTag(World world, BlockPos pos, Tag<Block> tag) {
-        return world.getBlockState(pos).isIn(tag);
+    public static boolean isBlockstateInMaterial(BlockState state, Material[] materials) {
+        for (Material material : materials) {
+            if (state.getMaterial() == material) return true;
+        }
+
+        return false;
+    }
+
+    public static boolean isBlockTag(World world, BlockPos pos, ITag.INamedTag<Block> tag) {
+        return isBlockStateTag(world.getBlockState(pos), tag);
+    }
+
+    public static boolean isBlockStateTag(BlockState state, Tag.INamedTag<Block> tag) {
+        return state.getBlock().isIn(tag);
     }
 
     public static boolean isBlockOreDict(World world, BlockPos pos, String ore) {
@@ -96,7 +109,7 @@ public class BlockUtils {
     }
 
     public static boolean isLeaves(World world, BlockPos pos) {
-        return world.getBlockState(pos).getMaterial() == Material.LEAVES;
+        return world.getBlockState(pos).getMaterial() == Material.LEAVES || world.getBlockState(pos).isIn(BlockTags.WART_BLOCKS) || world.getBlockState(pos).isIn(BlockTags.LEAVES) || world.getBlockState(pos).getBlock().equals(Blocks.SHROOMLIGHT);
     }
 
     public static boolean isChorus(World world, BlockPos pos) {
@@ -120,9 +133,10 @@ public class BlockUtils {
         stacks.addAll(Block.getDrops(state, (ServerWorld) world, pos, world.getTileEntity(pos)));
 
         //state.getBlock().getDrops(state, stacks, world, pos, fortune); TODO
-        BlockEvent.HarvestDropsEvent event = new BlockEvent.HarvestDropsEvent(world, pos, world.getBlockState(pos), 0, 1f, stacks, IndustrialForegoing.getFakePlayer(world), false);
-        MinecraftForge.EVENT_BUS.post(event);
-        return event.getDrops();
+        //BlockEvent.HarvestDropsEvent event = new BlockEvent.HarvestDropsEvent(world, pos, world.getBlockState(pos), 0, 1f, stacks, IndustrialForegoing.getFakePlayer(world), false);
+        //MinecraftForge.EVENT_BUS.post(event);
+        //return event.getDrops();
+        return stacks;
     }
 
     public static boolean spawnItemStack(ItemStack stack, World world, BlockPos pos) {
@@ -199,7 +213,7 @@ public class BlockUtils {
         buffer.pos(tempX + pointA, tempY, tempZ + pointA).tex(uStart, vStart).endVertex();
         buffer.pos(tempX + pointA, tempY + length, tempZ + pointA).tex(uStart, vEnd).endVertex();
         tess.draw();
-        RenderSystem.setupGui3DDiffuseLighting();
+        //RenderSystem.setupGui3DDiffuseLighting();
         GL11.glEnable(GL11.GL_CULL_FACE);
         //GL11.glEnable(GL11.GL_BLEND);
 

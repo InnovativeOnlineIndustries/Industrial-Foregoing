@@ -1,14 +1,12 @@
 package com.buuz135.industrial.block.core.tile;
 
 import com.buuz135.industrial.block.tile.IndustrialProcessingTile;
-import com.buuz135.industrial.config.machine.core.DissolutionChamberConfig;
 import com.buuz135.industrial.config.machine.core.LatexProcessingUnitConfig;
 import com.buuz135.industrial.module.ModuleCore;
 import com.hrznstudio.titanium.annotation.Save;
-import com.hrznstudio.titanium.api.IFactory;
+import com.hrznstudio.titanium.component.energy.EnergyStorageComponent;
 import com.hrznstudio.titanium.component.fluid.SidedFluidTankComponent;
 import com.hrznstudio.titanium.component.inventory.SidedInventoryComponent;
-import com.hrznstudio.titanium.energy.NBTEnergyHandler;
 import net.minecraft.fluid.Fluids;
 import net.minecraft.item.DyeColor;
 import net.minecraft.item.ItemStack;
@@ -60,8 +58,8 @@ public class LatexProcessingUnitTile extends IndustrialProcessingTile<LatexProce
     }
 
     @Override
-    protected IFactory<NBTEnergyHandler> getEnergyHandlerFactory() {
-        return () -> new NBTEnergyHandler(this, DissolutionChamberConfig.maxStoredPower);
+    protected EnergyStorageComponent<LatexProcessingUnitTile> createEnergyStorage() {
+        return new EnergyStorageComponent<>(LatexProcessingUnitConfig.maxStoredPower, 10, 20);
     }
 
     @Override

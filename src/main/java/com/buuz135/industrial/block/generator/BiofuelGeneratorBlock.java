@@ -9,7 +9,6 @@ import com.hrznstudio.titanium.recipe.generator.TitaniumShapedRecipeBuilder;
 import net.minecraft.block.Blocks;
 import net.minecraft.data.IFinishedRecipe;
 import net.minecraft.tags.ItemTags;
-import net.minecraft.util.ResourceLocation;
 
 import javax.annotation.Nonnull;
 import java.util.function.Consumer;
@@ -38,7 +37,7 @@ public class BiofuelGeneratorBlock extends IndustrialBlock<BiofuelGeneratorTile>
                 .key('P', IndustrialTags.Items.PLASTIC)
                 .key('D', Blocks.FURNACE)
                 .key('S', Blocks.PISTON)
-                .key('A', new ItemTags.Wrapper(new ResourceLocation("forge:gear/gold")))
+                .key('A', ItemTags.makeWrapperTag("forge:gears/gold"))
                 .key('M', IndustrialTags.Items.MACHINE_FRAME_PITY)
                 .build(consumer);
     }

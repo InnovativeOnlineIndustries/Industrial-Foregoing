@@ -12,7 +12,6 @@ import net.minecraft.data.IFinishedRecipe;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.Style;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.IBlockReader;
@@ -54,6 +53,6 @@ public class FluidExtractorBlock extends IndustrialBlock<FluidExtractorTile> {
 
     @Override
     public void addInformation(ItemStack stack, @Nullable IBlockReader worldIn, List<ITextComponent> tooltip, ITooltipFlag flagIn) {
-        tooltip.add(new TranslationTextComponent("text.industrialforegoing.tooltip.power_optional").setStyle(new Style().setColor(TextFormatting.GOLD)));
+        tooltip.add(new TranslationTextComponent("text.industrialforegoing.tooltip.power_optional").mergeStyle(TextFormatting.GOLD));
     }
 }

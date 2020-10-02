@@ -36,7 +36,6 @@ import com.hrznstudio.titanium.recipe.generator.TitaniumShapedRecipeBuilder;
 import net.minecraft.block.Blocks;
 import net.minecraft.data.IFinishedRecipe;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.item.ItemEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
@@ -45,9 +44,9 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.SoundEvents;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.Vec3d;
 import net.minecraft.util.math.shapes.VoxelShape;
 import net.minecraft.util.math.shapes.VoxelShapes;
+import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.World;
 import net.minecraftforge.common.Tags;
@@ -81,14 +80,14 @@ public class ConveyorBouncingUpgrade extends ConveyorUpgrade {
         super.handleEntity(entity);
         if (whitelist != filter.matches(entity)) return;
         Direction direction = this.getContainer().getConveyorWorld().getBlockState(this.getContainer().getConveyorPosition()).get(ConveyorBlock.FACING);
-        Vec3d vec3d = new Vec3d(velocityHorizontal * direction.getDirectionVec().getX(), velocityVertical, velocityHorizontal * direction.getDirectionVec().getZ());
+        Vector3d vec3d = new Vector3d(velocityHorizontal * direction.getDirectionVec().getX(), velocityVertical, velocityHorizontal * direction.getDirectionVec().getZ());
         double x = vec3d.x;
         double y = vec3d.y;
         double z = vec3d.z;
         if (vec3d.y != 0) {
             entity.fallDistance = 3;
             y = vec3d.y;
-            if (entity instanceof ItemEntity) entity.onGround = false;
+            //if (entity instanceof ItemEntity) entity.onGround = false;
         }
         z = vec3d.z;
         entity.setMotion(x, y, z);
@@ -237,7 +236,7 @@ public class ConveyorBouncingUpgrade extends ConveyorUpgrade {
         @Override
         @Nonnull
         public ResourceLocation getModel(Direction upgradeSide, Direction conveyorFacing) {
-            return new ResourceLocation(Reference.MOD_ID, "block/conveyor_upgrade_bouncing_" + conveyorFacing.getName().toLowerCase());
+            return new ResourceLocation(Reference.MOD_ID, "block/conveyor_upgrade_bouncing_" + conveyorFacing.getString().toLowerCase());
         }
 
         @Nonnull

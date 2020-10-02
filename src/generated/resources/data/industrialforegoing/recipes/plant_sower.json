@@ -37,7 +37,7 @@
             "item": "minecraft:redstone"
           },
           "G": {
-            "tag": "forge:gear/iron"
+            "tag": "forge:gears/iron"
           }
         },
         "result": {

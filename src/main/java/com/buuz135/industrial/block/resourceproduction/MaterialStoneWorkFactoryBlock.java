@@ -37,7 +37,7 @@ public class MaterialStoneWorkFactoryBlock extends IndustrialBlock<MaterialStone
                 .key('p', IndustrialTags.Items.PLASTIC)
                 .key('c', Blocks.CRAFTING_TABLE)
                 .key('g', Items.DIAMOND_PICKAXE)
-                .key('m', IndustrialTags.Items.MACHINE_FRAME_SIMPLE)
+                .key('m', IndustrialTags.Items.MACHINE_FRAME_ADVANCED)
                 .key('f', Blocks.FURNACE)
                 .key('a', IndustrialTags.Items.GEAR_GOLD)
                 .key('b', ModuleCore.PINK_SLIME_ITEM)

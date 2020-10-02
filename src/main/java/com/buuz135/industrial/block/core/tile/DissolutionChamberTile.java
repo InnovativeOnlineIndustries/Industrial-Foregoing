@@ -5,13 +5,13 @@ import com.buuz135.industrial.config.machine.core.DissolutionChamberConfig;
 import com.buuz135.industrial.module.ModuleCore;
 import com.buuz135.industrial.recipe.DissolutionChamberRecipe;
 import com.hrznstudio.titanium.annotation.Save;
-import com.hrznstudio.titanium.api.IFactory;
+import com.hrznstudio.titanium.component.energy.EnergyStorageComponent;
 import com.hrznstudio.titanium.component.fluid.FluidTankComponent;
 import com.hrznstudio.titanium.component.fluid.SidedFluidTankComponent;
 import com.hrznstudio.titanium.component.inventory.SidedInventoryComponent;
-import com.hrznstudio.titanium.energy.NBTEnergyHandler;
 import com.hrznstudio.titanium.util.RecipeUtil;
 import net.minecraft.item.DyeColor;
+import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.fluids.capability.IFluidHandler;
@@ -44,6 +44,7 @@ public class DissolutionChamberTile extends IndustrialProcessingTile<Dissolution
                 setSlotLimit(1).
                 setOutputFilter((stack, integer) -> false).
                 setComponentHarness(this).
+                setInputFilter(((stack, integer) -> !canIncrease())).
                 setOnSlotChanged((stack, integer) -> checkForRecipe()));
         this.addTank(this.inputFluid = (SidedFluidTankComponent<DissolutionChamberTile>) new SidedFluidTankComponent<DissolutionChamberTile>("input_fluid", DissolutionChamberConfig.maxInputTankSize, 33 + slotSpacing, 18 + slotSpacing, 1).
                 setColor(DyeColor.LIME).
@@ -82,7 +83,7 @@ public class DissolutionChamberTile extends IndustrialProcessingTile<Dissolution
 
     @Override
     public boolean canIncrease() {
-        return currentRecipe != null && ItemHandlerHelper.insertItem(output, currentRecipe.output.copy(), true).isEmpty() && outputFluid.fillForced(currentRecipe.outputFluid.copy(), IFluidHandler.FluidAction.SIMULATE) == currentRecipe.outputFluid.getAmount();
+        return currentRecipe != null && ItemHandlerHelper.insertItem(output, currentRecipe.output.copy(), true).isEmpty() && (currentRecipe.outputFluid == null || outputFluid.fillForced(currentRecipe.outputFluid.copy(), IFluidHandler.FluidAction.SIMULATE) == currentRecipe.outputFluid.getAmount());
     }
 
     @Override
@@ -96,15 +97,17 @@ public class DissolutionChamberTile extends IndustrialProcessingTile<Dissolution
                 }
                 if (dissolutionChamberRecipe.outputFluid != null && !dissolutionChamberRecipe.outputFluid.isEmpty())
                     outputFluid.fillForced(dissolutionChamberRecipe.outputFluid.copy(), IFluidHandler.FluidAction.EXECUTE);
-                ItemHandlerHelper.insertItem(output, dissolutionChamberRecipe.output.copy(), false);
+                ItemStack outputStack = dissolutionChamberRecipe.output.copy();
+                outputStack.getItem().onCreated(outputStack, this.world, null);
+                ItemHandlerHelper.insertItem(output, outputStack, false);
                 checkForRecipe();
             }
         };
     }
 
     @Override
-    protected IFactory<NBTEnergyHandler> getEnergyHandlerFactory() {
-        return () -> new NBTEnergyHandler(this, DissolutionChamberConfig.maxStoredPower);
+    protected EnergyStorageComponent<DissolutionChamberTile> createEnergyStorage() {
+        return new EnergyStorageComponent<>(DissolutionChamberConfig.maxStoredPower, 10, 20);
     }
 
     @Override

@@ -2,11 +2,15 @@ package com.buuz135.industrial.module;
 
 import com.buuz135.industrial.api.straw.StrawHandler;
 import com.buuz135.industrial.block.MachineFrameBlock;
+import com.buuz135.industrial.block.core.DarkGlassBlock;
 import com.buuz135.industrial.block.core.DissolutionChamberBlock;
 import com.buuz135.industrial.block.core.FluidExtractorBlock;
 import com.buuz135.industrial.block.core.LatexProcessingUnitBlock;
 import com.buuz135.industrial.block.core.tile.FluidExtractorTile;
 import com.buuz135.industrial.item.*;
+import com.buuz135.industrial.item.addon.EfficiencyAddonItem;
+import com.buuz135.industrial.item.addon.RangeAddonItem;
+import com.buuz135.industrial.item.addon.SpeedAddonItem;
 import com.buuz135.industrial.item.bucket.MilkBucketItem;
 import com.buuz135.industrial.proxy.StrawRegistry;
 import com.buuz135.industrial.utils.Reference;
@@ -15,11 +19,9 @@ import com.hrznstudio.titanium.fluid.TitaniumFluidInstance;
 import com.hrznstudio.titanium.module.Feature;
 import com.hrznstudio.titanium.tab.AdvancedTitaniumTab;
 import net.minecraft.block.Block;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemGroup;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.Items;
+import net.minecraft.item.*;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.text.TextFormatting;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.client.event.TextureStitchEvent;
@@ -32,6 +34,11 @@ import java.util.List;
 
 public class ModuleCore implements IModule {
 
+    public static Rarity PITY_RARITY;
+    public static Rarity SIMPLE_RARITY;
+    public static Rarity ADVANCED_RARITY;
+    public static Rarity SUPREME_RARITY;
+
     public static AdvancedTitaniumTab TAB_CORE = new AdvancedTitaniumTab(Reference.MOD_ID + "_core", true);
 
     public static IFCustomItem TINY_DRY_RUBBER = new RecipelessCustomItem("tinydryrubber", TAB_CORE);
@@ -42,14 +49,19 @@ public class ModuleCore implements IModule {
     public static BookManualItem BOOK_MANUAL = new BookManualItem(TAB_CORE);
     public static IFCustomItem PINK_SLIME_INGOT = new RecipelessCustomItem("pink_slime_ingot", TAB_CORE);
     public static ItemStraw STRAW = new ItemStraw(TAB_CORE);
-    public static MachineFrameBlock PITY = new MachineFrameBlock("pity", MachineFrameBlock.PITY_RARITY, TAB_CORE);
-    public static MachineFrameBlock SIMPLE = new MachineFrameBlock("simple", MachineFrameBlock.SIMPLE_RARITY, TAB_CORE);
-    public static MachineFrameBlock ADVANCED = new MachineFrameBlock("advanced", MachineFrameBlock.ADVANCED_RARITY, TAB_CORE);
-    public static MachineFrameBlock SUPREME = new MachineFrameBlock("supreme", MachineFrameBlock.SUPREME_RARITY, TAB_CORE);
+    public static MachineFrameBlock PITY;
+    public static MachineFrameBlock SIMPLE;
+    public static MachineFrameBlock ADVANCED;
+    public static MachineFrameBlock SUPREME;
     public static FluidExtractorBlock FLUID_EXTRACTOR = new FluidExtractorBlock();
     public static LatexProcessingUnitBlock LATEX_PROCESSING = new LatexProcessingUnitBlock();
     public static DissolutionChamberBlock DISSOLUTION_CHAMBER = new DissolutionChamberBlock();
     public static RangeAddonItem[] RANGE_ADDONS = new RangeAddonItem[12];
+    public static SpeedAddonItem SPEED_ADDON_1 = new SpeedAddonItem(1, TAB_CORE);
+    public static SpeedAddonItem SPEED_ADDON_2 = new SpeedAddonItem(2, TAB_CORE);
+    public static EfficiencyAddonItem EFFICIENCY_ADDON_1 = new EfficiencyAddonItem(1, TAB_CORE);
+    public static EfficiencyAddonItem EFFICIENCY_ADDON_2 = new EfficiencyAddonItem(2, TAB_CORE);
+    public static DarkGlassBlock DARK_GLASS = new DarkGlassBlock();
 
     public static TitaniumFluidInstance LATEX = new TitaniumFluidInstance(Reference.MOD_ID, "latex", FluidAttributes.builder(new ResourceLocation(Reference.MOD_ID, "blocks/fluids/latex_still"), new ResourceLocation(Reference.MOD_ID, "blocks/fluids/latex_flow")), true, TAB_CORE);
     public static TitaniumFluidInstance MEAT = new TitaniumFluidInstance(Reference.MOD_ID, "meat", FluidAttributes.builder(new ResourceLocation(Reference.MOD_ID, "blocks/fluids/meat_still"), new ResourceLocation(Reference.MOD_ID, "blocks/fluids/meat_flow")), true, TAB_CORE);
@@ -65,6 +77,14 @@ public class ModuleCore implements IModule {
 
     @Override
     public List<Feature.Builder> generateFeatures() {
+        PITY_RARITY = Rarity.create("pity", TextFormatting.GREEN);
+        SIMPLE_RARITY = Rarity.create("simple", TextFormatting.AQUA);
+        ADVANCED_RARITY = Rarity.create("advanced", TextFormatting.LIGHT_PURPLE);
+        SUPREME_RARITY = Rarity.create("supreme", TextFormatting.GOLD);
+        PITY = (MachineFrameBlock) new MachineFrameBlock(PITY_RARITY, TAB_CORE).setRegistryName("machine_frame_pity");
+        SIMPLE = (MachineFrameBlock) new MachineFrameBlock(SIMPLE_RARITY, TAB_CORE).setRegistryName("machine_frame_simple");
+        ADVANCED = (MachineFrameBlock) new MachineFrameBlock(ADVANCED_RARITY, TAB_CORE).setRegistryName("machine_frame_advanced");
+        SUPREME = (MachineFrameBlock) new MachineFrameBlock(SUPREME_RARITY, TAB_CORE).setRegistryName("machine_frame_supreme");
         List<Feature.Builder> features = new ArrayList<>();
         features.add(Feature.builder("plastic").
                 content(Item.class, TINY_DRY_RUBBER).
@@ -76,8 +96,8 @@ public class ModuleCore implements IModule {
                 content(Block.class, FLUID_EXTRACTOR).
                 content(Block.class, LATEX_PROCESSING).
                 event(EventManager.forge(TickEvent.WorldTickEvent.class).
-                        filter(worldTickEvent -> worldTickEvent.phase == TickEvent.Phase.END && worldTickEvent.type == TickEvent.Type.WORLD && worldTickEvent.world.getGameTime() % 40 == 0 && FluidExtractorTile.EXTRACTION.containsKey(worldTickEvent.world.dimension.getType())).
-                        process(worldTickEvent -> FluidExtractorTile.EXTRACTION.get(worldTickEvent.world.dimension.getType()).values().forEach(blockPosFluidExtractionProgressHashMap -> blockPosFluidExtractionProgressHashMap.keySet().forEach(pos -> worldTickEvent.world.sendBlockBreakProgress(blockPosFluidExtractionProgressHashMap.get(pos).getBreakID(), pos, blockPosFluidExtractionProgressHashMap.get(pos).getProgress()))))));
+                        filter(worldTickEvent -> worldTickEvent.phase == TickEvent.Phase.END && worldTickEvent.type == TickEvent.Type.WORLD && worldTickEvent.world.getGameTime() % 40 == 0 && FluidExtractorTile.EXTRACTION.containsKey(worldTickEvent.world.func_230315_m_())).
+                        process(worldTickEvent -> FluidExtractorTile.EXTRACTION.get(worldTickEvent.world.func_230315_m_()).values().forEach(blockPosFluidExtractionProgressHashMap -> blockPosFluidExtractionProgressHashMap.keySet().forEach(pos -> worldTickEvent.world.sendBlockBreakProgress(blockPosFluidExtractionProgressHashMap.get(pos).getBreakID(), pos, blockPosFluidExtractionProgressHashMap.get(pos).getProgress()))))));
         features.add(Feature.builder("pink_slime").
                 content(Item.class, PINK_SLIME_ITEM).
                 content(Item.class, PINK_SLIME_INGOT).
@@ -85,7 +105,7 @@ public class ModuleCore implements IModule {
         features.add(Feature.builder("fertilizer").
                 content(Item.class, FERTILIZER));
         features.add(Feature.builder("straw").
-                event(EventManager.mod(RegistryEvent.Register.class).filter(register -> register.getGenericType().equals(StrawHandler.class)).process(StrawRegistry::register)).
+                event(EventManager.modGeneric(RegistryEvent.Register.class, StrawHandler.class).process(register -> StrawRegistry.register((RegistryEvent.Register<StrawHandler>) register))).
                 content(Item.class, STRAW));
         features.add(Feature.builder("machine_frames").
                 content(Block.class, PITY).
@@ -100,6 +120,8 @@ public class ModuleCore implements IModule {
             builder.content(Item.class, RANGE_ADDONS[i]);
         }
         features.add(builder);
+        features.add(Feature.builder("speed_addons").content(Item.class, SPEED_ADDON_1).content(Item.class, SPEED_ADDON_2));
+        features.add(Feature.builder("efficiency_addons").content(Item.class, EFFICIENCY_ADDON_1).content(Item.class, EFFICIENCY_ADDON_2));
         features.add(Feature.builder("meat").content(TitaniumFluidInstance.class, MEAT));
         features.add(Feature.builder("sewage").content(TitaniumFluidInstance.class, SEWAGE));
         features.add(Feature.builder("essence").content(TitaniumFluidInstance.class, ESSENCE));
@@ -112,6 +134,7 @@ public class ModuleCore implements IModule {
         MILK.setBucketFluid(MILK_BUCKET);
         TAB_CORE.addIconStack(new ItemStack(PLASTIC));
         features.add(Feature.builder("manual").content(Item.class, BOOK_MANUAL));
+        features.add(createFeature(DARK_GLASS));
         return features;
     }
 

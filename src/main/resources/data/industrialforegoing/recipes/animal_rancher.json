@@ -25,7 +25,7 @@
             "tag": "forge:plastic"
           },
           "G": {
-            "tag": "forge:gear/gold"
+            "tag": "forge:gears/gold"
           },
           "S": {
             "item": "minecraft:shears"

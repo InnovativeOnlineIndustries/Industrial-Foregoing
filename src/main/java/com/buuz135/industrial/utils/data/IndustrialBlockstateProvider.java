@@ -2,22 +2,29 @@ package com.buuz135.industrial.utils.data;
 
 import com.buuz135.industrial.block.IndustrialBlock;
 import com.buuz135.industrial.module.ModuleAgricultureHusbandry;
-import com.buuz135.industrial.utils.Reference;
-import com.hrznstudio.titanium.block.BasicBlock;
 import net.minecraft.block.Block;
 import net.minecraft.data.DataGenerator;
 import net.minecraft.state.DirectionProperty;
 import net.minecraft.util.Direction;
 import net.minecraft.util.ResourceLocation;
-import net.minecraftforge.client.model.generators.*;
+import net.minecraftforge.client.model.generators.BlockStateProvider;
+import net.minecraftforge.client.model.generators.ConfiguredModel;
+import net.minecraftforge.client.model.generators.ModelFile;
+import net.minecraftforge.client.model.generators.VariantBlockStateBuilder;
+import net.minecraftforge.common.data.ExistingFileHelper;
+import net.minecraftforge.common.util.NonNullLazy;
+
+import java.util.List;
 
 public class IndustrialBlockstateProvider extends BlockStateProvider {
 
     private ExistingFileHelper helper;
+    private final NonNullLazy<List<Block>> blocks;
 
-    public IndustrialBlockstateProvider(DataGenerator gen, ExistingFileHelper exFileHelper) {
+    public IndustrialBlockstateProvider(DataGenerator gen, ExistingFileHelper exFileHelper, NonNullLazy<List<Block>> blocks) {
         super(gen, "industrialforegoing", exFileHelper);
         this.helper = exFileHelper;
+        this.blocks = blocks;
     }
 
     public static ResourceLocation getModel(Block block) {
@@ -26,7 +33,7 @@ public class IndustrialBlockstateProvider extends BlockStateProvider {
 
     @Override
     protected void registerStatesAndModels() {
-        BasicBlock.BLOCKS.stream().filter(blockBase -> blockBase.getRegistryName().getNamespace().equals(Reference.MOD_ID) && blockBase instanceof IndustrialBlock)
+        blocks.get().stream().filter(blockBase -> blockBase instanceof IndustrialBlock)
                 .map(blockBase -> (IndustrialBlock) blockBase)
                 .filter(industrialBlock -> !(industrialBlock.equals(ModuleAgricultureHusbandry.PLANT_SOWER)))
                 .forEach(industrialBlock -> {

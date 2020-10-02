@@ -23,6 +23,7 @@ package com.buuz135.industrial.jei.category;
 
 import com.buuz135.industrial.recipe.FluidExtractorRecipe;
 import com.buuz135.industrial.utils.Reference;
+import com.mojang.blaze3d.matrix.MatrixStack;
 import mezz.jei.api.constants.VanillaTypes;
 import mezz.jei.api.gui.IRecipeLayout;
 import mezz.jei.api.gui.drawable.IDrawable;
@@ -34,6 +35,8 @@ import mezz.jei.api.recipe.category.IRecipeCategory;
 import net.minecraft.client.Minecraft;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.util.text.TextFormatting;
 
 import java.util.ArrayList;
@@ -103,18 +106,19 @@ public class FluidExtractorCategory implements IRecipeCategory<FluidExtractorRec
     }
 
     @Override
-    public void draw(FluidExtractorRecipe recipe, double mouseX, double mouseY) {
-        Minecraft.getInstance().fontRenderer.drawString(TextFormatting.DARK_GRAY + "Production: ", 80, 6, 0xFFFFFF);
-        Minecraft.getInstance().fontRenderer.drawString(TextFormatting.DARK_GRAY + "" + recipe.output.getAmount() + "mb/12ticks", 80, 6 + (Minecraft.getInstance().fontRenderer.FONT_HEIGHT + 2) * 1, 0xFFFFFF);
-        Minecraft.getInstance().fontRenderer.drawString(TextFormatting.DARK_GRAY + "" + "Average: ", 80, 6 + (Minecraft.getInstance().fontRenderer.FONT_HEIGHT + 2) * 2, 0xFFFFFF);
-        Minecraft.getInstance().fontRenderer.drawString(TextFormatting.DARK_GRAY + "" + ((int) (8 / recipe.breakChance) * recipe.output.getAmount()) + "mb", 80, 6 + (Minecraft.getInstance().fontRenderer.FONT_HEIGHT + 2) * 3, 0xFFFFFF);
+    public void draw(FluidExtractorRecipe recipe, MatrixStack matrixStack, double mouseX, double mouseY) {
+        Minecraft.getInstance().fontRenderer.drawString(matrixStack, TextFormatting.DARK_GRAY + "Production: ", 80, 6, 0xFFFFFF);
+        Minecraft.getInstance().fontRenderer.drawString(matrixStack, TextFormatting.DARK_GRAY + "" + recipe.output.getAmount() + "mb/12ticks", 80, 6 + (Minecraft.getInstance().fontRenderer.FONT_HEIGHT + 2) * 1, 0xFFFFFF);
+        Minecraft.getInstance().fontRenderer.drawString(matrixStack, TextFormatting.DARK_GRAY + "" + "Average: ", 80, 6 + (Minecraft.getInstance().fontRenderer.FONT_HEIGHT + 2) * 2, 0xFFFFFF);
+        Minecraft.getInstance().fontRenderer.drawString(matrixStack, TextFormatting.DARK_GRAY + "" + ((int) (8 / recipe.breakChance) * recipe.output.getAmount()) + "mb", 80, 6 + (Minecraft.getInstance().fontRenderer.FONT_HEIGHT + 2) * 3, 0xFFFFFF);
     }
 
     @Override
-    public List<String> getTooltipStrings(FluidExtractorRecipe recipe, double mouseX, double mouseY) {
-        if (mouseX >= 78 && mouseX <= 140 && mouseY >= 5 && mouseY <= 25) return Arrays.asList("Production rate");
+    public List<ITextComponent> getTooltipStrings(FluidExtractorRecipe recipe, double mouseX, double mouseY) {
+        if (mouseX >= 78 && mouseX <= 140 && mouseY >= 5 && mouseY <= 25)
+            return Arrays.asList(new StringTextComponent("Production rate"));
         if (mouseX >= 78 && mouseX <= 120 && mouseY >= 25 && mouseY <= 45)
-            return Arrays.asList("Average numbers aren't real numbers");
+            return Arrays.asList(new StringTextComponent("Average numbers aren't real numbers"));
         return new ArrayList<>();
     }
 }

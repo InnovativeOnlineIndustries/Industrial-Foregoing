@@ -25,7 +25,7 @@
             "tag": "forge:plastic"
           },
           "D": {
-            "tag": "forge:gear/gold"
+            "tag": "forge:gears/gold"
           },
           "S": {
             "item": "minecraft:iron_sword"

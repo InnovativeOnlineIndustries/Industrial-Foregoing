@@ -166,7 +166,7 @@ public class IndustrialForegoingHelper {
     }
 
     public static boolean addOreFluidEntryRaw(OreFluidEntryRaw raw) {
-        if (OreFluidEntryRaw.ORE_RAW_ENTRIES.stream().noneMatch(raw1 -> raw1.getOre().getId().equals(raw.getOre().getId()))) {
+        if (OreFluidEntryRaw.ORE_RAW_ENTRIES.stream().noneMatch(raw1 -> raw1.getOre().equals(raw.getOre()))) {
             OreFluidEntryRaw.ORE_RAW_ENTRIES.add(raw);
             return true;
         }
@@ -174,7 +174,7 @@ public class IndustrialForegoingHelper {
     }
 
     public static boolean removeOreFluidEntryRaw(Tag<Item> tag) {
-        return OreFluidEntryRaw.ORE_RAW_ENTRIES.removeIf(raw -> raw.getOre().getId().equals(tag.getId()));
+        return OreFluidEntryRaw.ORE_RAW_ENTRIES.removeIf(raw -> raw.getOre().equals(tag));
     }
 
     public static boolean addOreFluidEntryFermenter(OreFluidEntryFermenter entryFermenter) {

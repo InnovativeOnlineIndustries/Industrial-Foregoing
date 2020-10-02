@@ -156,7 +156,7 @@ public class ConveyorSplittingUpgrade extends ConveyorUpgrade {
     @Override
     public CompoundNBT serializeNBT() {
         CompoundNBT compound = super.serializeNBT() == null ? new CompoundNBT() : super.serializeNBT();
-        compound.putString("NextFacing", nextFacing.getName());
+        compound.putString("NextFacing", nextFacing.getString());
         compound.putInt("Ratio", ratio);
         compound.putInt("CurrentRatio", currentRatio);
         return compound;
@@ -239,7 +239,7 @@ public class ConveyorSplittingUpgrade extends ConveyorUpgrade {
         @Override
         @Nonnull
         public ResourceLocation getModel(Direction upgradeSide, Direction conveyorFacing) {
-            return new ResourceLocation(Reference.MOD_ID, "block/conveyor_upgrade_splitting_" + upgradeSide.getName().toLowerCase());
+            return new ResourceLocation(Reference.MOD_ID, "block/conveyor_upgrade_splitting_" + upgradeSide.getString().toLowerCase());
         }
 
         @Nonnull

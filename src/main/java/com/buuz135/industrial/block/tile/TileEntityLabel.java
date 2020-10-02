@@ -23,6 +23,7 @@ package com.buuz135.industrial.block.tile;
 
 
 import com.hrznstudio.titanium.block.tile.ActiveTile;
+import net.minecraft.block.BlockState;
 import net.minecraft.nbt.CompoundNBT;
 
 import javax.annotation.Nonnull;
@@ -65,10 +66,10 @@ public class TileEntityLabel extends ActiveTile<TileEntityLabel> {
         markDirty();
     }
 
-    @Override
-    public void read(CompoundNBT compound) {
+    @Override //read
+    public void read(BlockState state, CompoundNBT compound) {
         this.formatType = FormatType.valueOf(compound.getString("Format"));
-        super.read(compound);
+        super.read(state, compound);
     }
 
     @Override

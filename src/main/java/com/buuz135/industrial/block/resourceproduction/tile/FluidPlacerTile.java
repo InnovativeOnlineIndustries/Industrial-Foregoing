@@ -6,10 +6,9 @@ import com.buuz135.industrial.config.machine.resourceproduction.FluidPlacerConfi
 import com.buuz135.industrial.module.ModuleResourceProduction;
 import com.buuz135.industrial.utils.BlockUtils;
 import com.hrznstudio.titanium.annotation.Save;
-import com.hrznstudio.titanium.api.IFactory;
+import com.hrznstudio.titanium.component.energy.EnergyStorageComponent;
 import com.hrznstudio.titanium.component.fluid.FluidTankComponent;
 import com.hrznstudio.titanium.component.fluid.SidedFluidTankComponent;
-import com.hrznstudio.titanium.energy.NBTEnergyHandler;
 import net.minecraft.fluid.Fluids;
 import net.minecraft.item.DyeColor;
 import net.minecraft.state.properties.BlockStateProperties;
@@ -27,7 +26,7 @@ public class FluidPlacerTile extends IndustrialAreaWorkingTile<FluidPlacerTile> 
     private SidedFluidTankComponent<FluidPlacerTile> tank;
 
     public FluidPlacerTile() {
-        super(ModuleResourceProduction.FLUID_PLACER, RangeManager.RangeType.BEHIND);
+        super(ModuleResourceProduction.FLUID_PLACER, RangeManager.RangeType.BEHIND, false);
         this.addTank(this.tank = (SidedFluidTankComponent<FluidPlacerTile>) new SidedFluidTankComponent<FluidPlacerTile>("input", FluidPlacerConfig.maxInputTankSize, 43, 20, 0)
                 .setColor(DyeColor.BLUE)
                 .setTankAction(FluidTankComponent.Action.FILL)
@@ -41,7 +40,7 @@ public class FluidPlacerTile extends IndustrialAreaWorkingTile<FluidPlacerTile> 
     public WorkAction work() {
         if (hasEnergy(getPowerPerOperation)) {
             if (isLoaded(getPointedBlockPos()) && BlockUtils.canBlockBeBroken(this.world, getPointedBlockPos()) && !world.getFluidState(getPointedBlockPos()).isSource() && tank.getFluidAmount() >= FluidAttributes.BUCKET_VOLUME) {
-                if (tank.getFluid().getFluid().isEquivalentTo(Fluids.WATER) && world.getBlockState(getPointedBlockPos()).has(BlockStateProperties.WATERLOGGED) && !world.getBlockState(getPointedBlockPos()).get(BlockStateProperties.WATERLOGGED)) {
+                if (tank.getFluid().getFluid().isEquivalentTo(Fluids.WATER) && world.getBlockState(getPointedBlockPos()).hasProperty(BlockStateProperties.WATERLOGGED) && !world.getBlockState(getPointedBlockPos()).get(BlockStateProperties.WATERLOGGED)) {
                     world.setBlockState(getPointedBlockPos(), world.getBlockState(getPointedBlockPos()).with(BlockStateProperties.WATERLOGGED, true));
                     tank.drainForced(FluidAttributes.BUCKET_VOLUME, IFluidHandler.FluidAction.EXECUTE);
                     increasePointer();
@@ -59,8 +58,8 @@ public class FluidPlacerTile extends IndustrialAreaWorkingTile<FluidPlacerTile> 
     }
 
     @Override
-    protected IFactory<NBTEnergyHandler> getEnergyHandlerFactory() {
-        return () -> new NBTEnergyHandler(this, FluidPlacerConfig.maxStoredPower);
+    protected EnergyStorageComponent<FluidPlacerTile> createEnergyStorage() {
+        return new EnergyStorageComponent<>(FluidPlacerConfig.maxStoredPower, 10, 20);
     }
 
     @Override

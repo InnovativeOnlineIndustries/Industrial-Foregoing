@@ -35,7 +35,7 @@ public class StasisChamberBlock extends IndustrialBlock<StasisChamberTile> {
         TitaniumShapedRecipeBuilder.shapedRecipe(this).patternLine("sss").patternLine("gmg").patternLine("ipi")
                 .key('s', Blocks.SOUL_SAND)
                 .key('g', Items.GHAST_TEAR)
-                .key('m', IndustrialTags.Items.MACHINE_FRAME_SIMPLE)
+                .key('m', IndustrialTags.Items.MACHINE_FRAME_ADVANCED)
                 .key('i', IndustrialTags.Items.GEAR_GOLD)
                 .key('p', Blocks.PISTON)
                 .build(consumer);
