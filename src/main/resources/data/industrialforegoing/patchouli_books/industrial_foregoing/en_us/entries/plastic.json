@@ -3,6 +3,7 @@
   "icon": "industrialforegoing:plastic",
   "category": "basics",
   "sortnum": 4,
+  "read_by_default": true,
   "pages": [
     {
       "type": "crafting",

@@ -3,6 +3,7 @@
   "icon": "industrialforegoing:latex_bucket",
   "category": "basics",
   "sortnum": 3,
+  "read_by_default": true,
   "pages": [
     {
       "type": "text",

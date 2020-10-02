@@ -3,6 +3,7 @@
   "icon": "industrialforegoing:fluid_extractor",
   "category": "basics",
   "sortnum": 0,
+  "read_by_default": true,
   "pages": [
     {
       "type": "text",

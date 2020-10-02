@@ -3,6 +3,7 @@
   "icon": "industrialforegoing:range_addon11",
   "category": "basics",
   "sortnum": 5,
+  "read_by_default": true,
   "pages": [
     {
       "type": "spotlight",

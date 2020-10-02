@@ -3,6 +3,7 @@
   "icon": "industrialforegoing:dissolution_chamber",
   "category": "basics",
   "sortnum": 6,
+  "read_by_default": true,
   "pages": [
     {
       "type": "text",
