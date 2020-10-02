@@ -1,0 +1,17 @@
+{
+  "name": "Plastic",
+  "icon": "industrialforegoing:plastic",
+  "category": "basics",
+  "sortnum": 4,
+  "pages": [
+    {
+      "type": "crafting",
+      "recipe": "industrialforegoing:dryrubber",
+      "text": "A simple crafting material made from $(l:latex)Latex$()."
+    },
+    {
+      "type": "smelting",
+      "recipe": "industrialforegoing:plastic"
+    }
+  ]
+}
