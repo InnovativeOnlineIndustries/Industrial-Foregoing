@@ -7,7 +7,7 @@
   "pages": [
     {
       "type": "text",
-      "text": "The fluid extractor will extract $(l:latex)latex$() from wood that are placed in front of the machine. Multiple extractors can be used to extract from the same log at the same time. $(br2)The machine will start consuming the log and once consumed it will remove the bark from it and replace it with the stripped variant, once that gets consumed it will disappear. "
+      "text": "The fluid extractor will extract $(l:basics/latex)latex$() from wood that are placed in front of the machine. Multiple extractors can be used to extract from the same log at the same time. $(br2)The machine will start consuming the log and once consumed it will remove the bark from it and replace it with the stripped variant, once that gets consumed it will disappear. "
     },
     {
       "type": "crafting",

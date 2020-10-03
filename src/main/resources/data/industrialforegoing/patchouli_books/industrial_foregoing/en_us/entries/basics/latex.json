@@ -7,7 +7,7 @@
   "pages": [
     {
       "type": "text",
-      "text": "This fluid is used in a $(l:latex_processing_unit)Latex Procressing Unit$() to make Tiny Dry Rubber"
+      "text": "This fluid is used in a $(l:basics/latex_processing_unit)Latex Procressing Unit$() to make Tiny Dry Rubber"
     }
   ]
 }
