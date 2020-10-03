@@ -8,6 +8,10 @@
     {
       "type": "text",
       "text": "When in your inventory the Meat Feeder will feed you with the liquid meat stored inside of the tool."
+    },
+    {
+      "type": "crafting",
+      "recipe": "industrialforegoing:meat_feeder"
     }
   ]
 }
