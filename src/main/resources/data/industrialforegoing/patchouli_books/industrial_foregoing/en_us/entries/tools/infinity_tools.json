@@ -11,7 +11,7 @@
     },
     {
       "type": "text",
-      "text": "There are 7 tiers: $(br) $(li)Poor$(li)Common$(li)Uncommon$(li)Rare$(li)Epic$(li)Legendary$(li)Artifact"
+      "text": "There are 7 tiers: $(li)Poor$(li)Common$(li)Uncommon$(li)Rare$(li)Epic$(li)Legendary$(li)Artifact $(br2) All tools will teleport the drops to the player. $(br2) You can get special $(6)Shiny$() version of the tool by becoming a patreon. It will give you visual rewards!"
     }
   ]
 }
