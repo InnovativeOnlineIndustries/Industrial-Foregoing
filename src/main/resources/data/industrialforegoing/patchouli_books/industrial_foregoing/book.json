@@ -1,6 +1,6 @@
 {
   "name": "text.industrialforegoing.book.title",
-  "landing_text": "If you need to automate all the things! $(br2)$(br2) You can become my patreon $(l:https://www.patreon.com/buuz135)here$()",
+  "landing_text": "If you need to automate all the things! $(br2)You can become my patreon $(l:https://www.patreon.com/buuz135)here$().$(br2)If a machine is missing, the machine hasn't been implemented yet.",
   "book_texture": "patchouli:textures/gui/book_cyan.png",
   "version": "GRADLE:VERSION",
   "text_color": "5A5766",
