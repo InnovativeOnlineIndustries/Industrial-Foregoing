@@ -7,7 +7,10 @@ import com.buuz135.industrial.block.core.DissolutionChamberBlock;
 import com.buuz135.industrial.block.core.FluidExtractorBlock;
 import com.buuz135.industrial.block.core.LatexProcessingUnitBlock;
 import com.buuz135.industrial.block.core.tile.FluidExtractorTile;
-import com.buuz135.industrial.item.*;
+import com.buuz135.industrial.item.FertilizerItem;
+import com.buuz135.industrial.item.IFCustomItem;
+import com.buuz135.industrial.item.ItemStraw;
+import com.buuz135.industrial.item.RecipelessCustomItem;
 import com.buuz135.industrial.item.addon.EfficiencyAddonItem;
 import com.buuz135.industrial.item.addon.RangeAddonItem;
 import com.buuz135.industrial.item.addon.SpeedAddonItem;
@@ -46,7 +49,6 @@ public class ModuleCore implements IModule {
     public static IFCustomItem PLASTIC = new RecipelessCustomItem("plastic", TAB_CORE);
     public static FertilizerItem FERTILIZER = new FertilizerItem(TAB_CORE);
     public static IFCustomItem PINK_SLIME_ITEM = new RecipelessCustomItem("pink_slime", TAB_CORE);
-    public static BookManualItem BOOK_MANUAL = new BookManualItem(TAB_CORE);
     public static IFCustomItem PINK_SLIME_INGOT = new RecipelessCustomItem("pink_slime_ingot", TAB_CORE);
     public static ItemStraw STRAW = new ItemStraw(TAB_CORE);
     public static MachineFrameBlock PITY;
@@ -133,7 +135,6 @@ public class ModuleCore implements IModule {
                 .content(Item.class, MILK_BUCKET));
         MILK.setBucketFluid(MILK_BUCKET);
         TAB_CORE.addIconStack(new ItemStack(PLASTIC));
-        features.add(Feature.builder("manual").content(Item.class, BOOK_MANUAL));
         features.add(createFeature(DARK_GLASS));
         return features;
     }
