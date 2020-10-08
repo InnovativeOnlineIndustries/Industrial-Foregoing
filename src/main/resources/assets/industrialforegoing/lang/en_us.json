@@ -108,6 +108,7 @@
   "__comment3": "{\" -> Will start a bold/colored string to be highlighted",
   "__comment4": "}\" -> Will stop the highlight -->",
   "text.industrialforegoing.book.title": "Industrial Foregoing's Manual",
+  "text.industrialforegoing.book.landing": "IF you need to automate all the things!",
   "text.industrialforegoing.book.category.getting_started": "Getting Started",
   "text.industrialforegoing.book.category.generators": "Generators",
   "text.industrialforegoing.book.category.agriculture": "Agriculture",

@@ -170,9 +170,9 @@ public class EnchantmentApplicatorTile extends IndustrialProcessingTile<Enchantm
                                 flag3 = true;
                             } else {
                                 flag2 = true;
-                                if (j2 > enchantment1.getMaxLevel()) {
-                                    j2 = enchantment1.getMaxLevel();
-                                }
+//                                if (j2 > enchantment1.getMaxLevel()) {
+//                                    j2 = enchantment1.getMaxLevel();
+//                                }
                                 map.put(enchantment1, j2);
                                 int enchantmentRarity = 0;
                                 switch (enchantment1.getRarity()) {
