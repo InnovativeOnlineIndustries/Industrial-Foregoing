@@ -118,6 +118,8 @@ dependencies {
     runtimeOnly fg.deobf("mezz.jei:jei-1.16.2:7.3.2.25")
     //}
     compileOnly fg.deobf("blusunrize.immersiveengineering:ImmersiveEngineering:0.16-+")
+    compileOnly fg.deobf("vazkii.patchouli:Patchouli:1.16.2+:api")
+    runtimeOnly fg.deobf("vazkii.patchouli:Patchouli:1.16.2+")
 }
 
 afterEvaluate {
