@@ -5,11 +5,14 @@ import com.buuz135.industrial.block.tile.IndustrialAreaWorkingTile;
 import com.buuz135.industrial.block.tile.RangeManager;
 import com.buuz135.industrial.config.machine.agriculturehusbandry.AnimalRancherConfig;
 import com.buuz135.industrial.module.ModuleAgricultureHusbandry;
+import com.buuz135.industrial.utils.ItemStackUtils;
 import com.hrznstudio.titanium.annotation.Save;
 import com.hrznstudio.titanium.component.energy.EnergyStorageComponent;
 import com.hrznstudio.titanium.component.fluid.SidedFluidTankComponent;
 import com.hrznstudio.titanium.component.inventory.SidedInventoryComponent;
+import net.minecraft.entity.CreatureEntity;
 import net.minecraft.entity.passive.AnimalEntity;
+import net.minecraft.entity.passive.SquidEntity;
 import net.minecraft.item.BucketItem;
 import net.minecraft.item.DyeColor;
 import net.minecraft.item.ItemStack;
@@ -53,14 +56,14 @@ public class AnimalRancherTile extends IndustrialAreaWorkingTile<AnimalRancherTi
     @Override
     public WorkAction work() {
         if (hasEnergy(powerPerOperation)) {
-            List<AnimalEntity> mobs = this.world.getEntitiesWithinAABB(AnimalEntity.class, getWorkingArea().getBoundingBox());
+            List<CreatureEntity> mobs = this.world.getEntitiesWithinAABB(CreatureEntity.class, getWorkingArea().getBoundingBox());
             if (mobs.size() > 0) {
-                for (AnimalEntity mob : mobs) {
+                for (CreatureEntity mob : mobs) {
                     FakePlayer player = IndustrialForegoing.getFakePlayer(world, mob.getPosition()); //getPosition
                     //BUCKET INTERACTION
-                    if (tank.getFluidAmount() + 1000 <= tank.getCapacity()) {
+                    if (mob instanceof AnimalEntity && tank.getFluidAmount() + 1000 <= tank.getCapacity()) {
                         player.setHeldItem(Hand.MAIN_HAND, new ItemStack(Items.BUCKET));
-                        if (mob.func_230254_b_(player, Hand.MAIN_HAND).isSuccessOrConsume()) { //ProcessInteract
+                        if (((AnimalEntity) mob).func_230254_b_(player, Hand.MAIN_HAND).isSuccessOrConsume()) { //ProcessInteract
                             ItemStack stack = player.getHeldItem(Hand.MAIN_HAND);
                             if (stack.getItem() instanceof BucketItem) {
                                 tank.fillForced(new FluidStack(((BucketItem) stack.getItem()).getFluid(), FluidAttributes.BUCKET_VOLUME), IFluidHandler.FluidAction.EXECUTE);
@@ -78,6 +81,10 @@ public class AnimalRancherTile extends IndustrialAreaWorkingTile<AnimalRancherTi
                         if (items.size() > 0) {
                             return new WorkAction(0.35f, powerPerOperation);
                         }
+                    }
+                    if (mob instanceof SquidEntity && !ItemStackUtils.isInventoryFull(output) && world.rand.nextBoolean() && world.rand.nextBoolean() && world.rand.nextBoolean() && world.rand.nextBoolean()) {
+                        ItemHandlerHelper.insertItem(output, new ItemStack(Items.BLACK_DYE), false);
+                        return new WorkAction(0.35f, powerPerOperation);
                     }
                 }
             }

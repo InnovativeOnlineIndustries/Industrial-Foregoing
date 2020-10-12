@@ -162,8 +162,10 @@ public class PotionBrewerTile extends IndustrialProcessingTile<PotionBrewerTile>
         ItemStack ingredient = this.brewingItems.getStackInSlot(slot);
         NonNullList<ItemStack> input = NonNullList.create();
         input.addAll(InventoryUtil.getStacks(this.output));
+        int[] indices = new int[input.size()];
+        for (int i = 0; i < indices.length; i++) indices[i] = i;
         if (!ingredient.isEmpty())
-            return BrewingRecipeRegistry.canBrew(input, ingredient, new int[]{0, 1, 2}); // divert to VanillaBrewingRegistry
+            return BrewingRecipeRegistry.canBrew(input, ingredient, indices); // divert to VanillaBrewingRegistry
         if (ingredient.isEmpty()) {
             return false;
         } else if (!PotionBrewing.isReagent(ingredient)) {
@@ -183,13 +185,15 @@ public class PotionBrewerTile extends IndustrialProcessingTile<PotionBrewerTile>
     private void brewPotions(int slot) {
         NonNullList<ItemStack> input = NonNullList.create();
         input.addAll(InventoryUtil.getStacks(this.output));
+        int[] indices = new int[input.size()];
+        for (int i = 0; i < indices.length; i++) indices[i] = i;
         ItemStack ingredient = this.brewingItems.getStackInSlot(slot);
         input.add(ingredient);
         if (ForgeEventFactory.onPotionAttemptBrew(input)) return;
-        BrewingRecipeRegistry.brewPotions(input, ingredient, new int[]{0, 1, 2});
+        BrewingRecipeRegistry.brewPotions(input, ingredient, indices);
         ingredient.shrink(1);
         ForgeEventFactory.onPotionBrewed(input);
-        for (int i = 0; i < 3; i++) {
+        for (int i : indices) {
             this.output.setStackInSlot(i, input.get(i));
         }
     }

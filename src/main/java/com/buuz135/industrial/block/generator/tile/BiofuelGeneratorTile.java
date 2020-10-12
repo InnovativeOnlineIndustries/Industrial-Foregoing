@@ -44,7 +44,7 @@ public class BiofuelGeneratorTile extends IndustrialGeneratorTile<BiofuelGenerat
 
     @Override
     public boolean canStart() {
-        return biofuel.getFluidAmount() > 0;
+        return biofuel.getFluidAmount() > 0 && this.getEnergyStorage().getEnergyStored() < this.getEnergyStorage().getMaxEnergyStored();
     }
 
     @Override

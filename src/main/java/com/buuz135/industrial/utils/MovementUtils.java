@@ -60,16 +60,16 @@ public class MovementUtils {
 
         //CENTER
         if (direction == Direction.NORTH || direction == Direction.SOUTH) {
-            if (entity.getPosition().getX() - pos.getX() < 0.45) {
+            if (entity.getPosX() - pos.getX() < 0.45) {
                 vec3d = vec3d.add(0.08, 0, 0);
-            } else if (entity.getPosition().getX() - pos.getX() > 0.55) {
+            } else if (entity.getPosX() - pos.getX() > 0.55) {
                 vec3d = vec3d.add(-0.08, 0, 0);
             }
         }
         if (direction == Direction.EAST || direction == Direction.WEST) {
-            if (entity.getPosition().getZ() - pos.getZ() < 0.45) {
+            if (entity.getPosZ() - pos.getZ() < 0.45) {
                 vec3d = vec3d.add(0, 0, 0.08);
-            } else if (entity.getPosition().getZ() - pos.getZ() > 0.55) {
+            } else if (entity.getPosZ() - pos.getZ() > 0.55) {
                 vec3d = vec3d.add(0, 0, -0.08);
             }
         }

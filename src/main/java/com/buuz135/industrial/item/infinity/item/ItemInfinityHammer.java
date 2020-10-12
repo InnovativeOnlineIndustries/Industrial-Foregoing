@@ -35,17 +35,24 @@ import net.minecraft.entity.monster.SkeletonEntity;
 import net.minecraft.entity.monster.WitherSkeletonEntity;
 import net.minecraft.entity.monster.ZombieEntity;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.entity.projectile.EvokerFangsEntity;
 import net.minecraft.inventory.EquipmentSlotType;
 import net.minecraft.item.ItemGroup;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.ItemUseContext;
 import net.minecraft.item.Items;
 import net.minecraft.item.crafting.Ingredient;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.tags.BlockTags;
+import net.minecraft.util.ActionResultType;
 import net.minecraft.util.DamageSource;
+import net.minecraft.util.Direction;
 import net.minecraft.util.Hand;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.MathHelper;
+import net.minecraft.util.math.shapes.VoxelShape;
+import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.util.text.TranslationTextComponent;
@@ -121,7 +128,6 @@ public class ItemInfinityHammer extends ItemInfinity {
     @Override
     public boolean hitEntity(ItemStack stack, LivingEntity target, LivingEntity attacker) {
         InfinityTier infinityTier = getSelectedTier(stack);
-        InfinityTier maxTier = InfinityTier.getTierBraquet(getPowerFromStack(stack)).getLeft();
         if (infinityTier.getRadius() > 1 && attacker instanceof PlayerEntity) {
             AxisAlignedBB area = new AxisAlignedBB(target.getPosX(), target.getPosY(), target.getPosZ(), target.getPosX(), target.getPosY(), target.getPosZ()).grow(infinityTier.getRadius());
             List<MobEntity> mobs = attacker.getEntityWorld().getEntitiesWithinAABB(MobEntity.class, new AxisAlignedBB(target.getPosX(), target.getPosY(), target.getPosZ(), target.getPosX(), target.getPosY(), target.getPosZ()).grow(infinityTier.getRadius()));
@@ -145,6 +151,54 @@ public class ItemInfinityHammer extends ItemInfinity {
             Block.spawnAsEntity(attacker.world, attacker.getPosition(), createHead(target.getDisplayName().getString()));
         }
         return true;
+    }
+
+    @Override
+    public ActionResultType onItemUse(ItemUseContext context) {
+        ItemStack stack = context.getItem();
+        InfinityTier infinityTier = getSelectedTier(stack);
+        PlayerEntity player = context.getPlayer();
+        if (infinityTier.getRadius() > 1) {
+            Vector3d looking = player.getLookVec();
+            Vector3d[] all = new Vector3d[]{looking, looking.rotateYaw(0.22f), looking.rotateYaw(-0.22f)};
+            for (Vector3d vector3d : all) {
+                float f = (float) MathHelper.atan2(vector3d.z, vector3d.x);
+                for (int i = 0; i < infinityTier.getRadius() * 1.5 + 1; i++) {
+                    double d2 = 1.25D * (double) (i + 1);
+                    int j = 1;
+                    this.spawnFangs(player, player.getPosX() + (double) MathHelper.cos(f) * d2, player.getPosZ() + (double) MathHelper.sin(f) * d2, player.getPosY() - 1, player.getPosY() + 1, f, j);
+                    consumeFuel(stack);
+                }
+            }
+            player.getCooldownTracker().setCooldown(this, 12);
+            return ActionResultType.SUCCESS;
+        }
+        return super.onItemUse(context);
+    }
+
+    private void spawnFangs(LivingEntity caster, double x, double z, double minY, double maxY, float rotation, int delay) {
+        BlockPos blockpos = new BlockPos(x, maxY, z);
+        boolean flag = false;
+        double d0 = 0.0D;
+        do {
+            BlockPos blockpos1 = blockpos.down();
+            BlockState blockstate = caster.world.getBlockState(blockpos1);
+            if (blockstate.isSolidSide(caster.world, blockpos1, Direction.UP)) {
+                if (!caster.world.isAirBlock(blockpos)) {
+                    BlockState blockstate1 = caster.world.getBlockState(blockpos);
+                    VoxelShape voxelshape = blockstate1.getCollisionShape(caster.world, blockpos);
+                    if (!voxelshape.isEmpty()) {
+                        d0 = voxelshape.getEnd(Direction.Axis.Y);
+                    }
+                }
+                flag = true;
+                break;
+            }
+            blockpos = blockpos.down();
+        } while (blockpos.getY() >= MathHelper.floor(minY) - 1);
+        if (flag) {
+            caster.world.addEntity(new EvokerFangsEntity(caster.world, x, (double) blockpos.getY() + d0, z, rotation, delay, caster));
+        }
     }
 
     @Override
