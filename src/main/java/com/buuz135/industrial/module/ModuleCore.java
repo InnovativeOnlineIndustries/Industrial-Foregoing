@@ -7,10 +7,7 @@ import com.buuz135.industrial.block.core.DissolutionChamberBlock;
 import com.buuz135.industrial.block.core.FluidExtractorBlock;
 import com.buuz135.industrial.block.core.LatexProcessingUnitBlock;
 import com.buuz135.industrial.block.core.tile.FluidExtractorTile;
-import com.buuz135.industrial.item.FertilizerItem;
-import com.buuz135.industrial.item.IFCustomItem;
-import com.buuz135.industrial.item.ItemStraw;
-import com.buuz135.industrial.item.RecipelessCustomItem;
+import com.buuz135.industrial.item.*;
 import com.buuz135.industrial.item.addon.EfficiencyAddonItem;
 import com.buuz135.industrial.item.addon.RangeAddonItem;
 import com.buuz135.industrial.item.addon.SpeedAddonItem;
@@ -59,6 +56,8 @@ public class ModuleCore implements IModule {
     public static LatexProcessingUnitBlock LATEX_PROCESSING = new LatexProcessingUnitBlock();
     public static DissolutionChamberBlock DISSOLUTION_CHAMBER = new DissolutionChamberBlock();
     public static RangeAddonItem[] RANGE_ADDONS = new RangeAddonItem[12];
+    public static LaserLensItem[] LASER_LENS = new LaserLensItem[DyeColor.values().length];
+    public static LaserLensItem[] LASER_LENS_INVERTED = new LaserLensItem[DyeColor.values().length];
     public static SpeedAddonItem SPEED_ADDON_1 = new SpeedAddonItem(1, TAB_CORE);
     public static SpeedAddonItem SPEED_ADDON_2 = new SpeedAddonItem(2, TAB_CORE);
     public static EfficiencyAddonItem EFFICIENCY_ADDON_1 = new EfficiencyAddonItem(1, TAB_CORE);
@@ -136,6 +135,12 @@ public class ModuleCore implements IModule {
         MILK.setBucketFluid(MILK_BUCKET);
         TAB_CORE.addIconStack(new ItemStack(PLASTIC));
         features.add(createFeature(DARK_GLASS));
+        builder = Feature.builder("laser_lens");
+        for (DyeColor value : DyeColor.values()) {
+            builder.content(Item.class, LASER_LENS[value.getId()] = new LaserLensItem(value.getId(), false));
+            builder.content(Item.class, LASER_LENS_INVERTED[value.getId()] = new LaserLensItem(value.getId(), true));
+        }
+        features.add(builder);
         return features;
     }
 

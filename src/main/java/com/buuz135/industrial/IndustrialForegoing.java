@@ -30,6 +30,8 @@ import com.buuz135.industrial.proxy.network.ConveyorSplittingSyncEntityMessage;
 import com.buuz135.industrial.proxy.network.SpecialParticleMessage;
 import com.buuz135.industrial.recipe.DissolutionChamberRecipe;
 import com.buuz135.industrial.recipe.FluidExtractorRecipe;
+import com.buuz135.industrial.recipe.LaserDrillFluidRecipe;
+import com.buuz135.industrial.recipe.LaserDrillOreRecipe;
 import com.buuz135.industrial.recipe.provider.IndustrialRecipeProvider;
 import com.buuz135.industrial.recipe.provider.IndustrialSerializableProvider;
 import com.buuz135.industrial.recipe.provider.IndustrialTagsProvider;
@@ -97,7 +99,7 @@ public class IndustrialForegoing extends ModuleController {
         EventManager.mod(FMLCommonSetupEvent.class).process(fmlCommonSetupEvent -> proxy.run()).subscribe();
         EventManager.forge(FMLServerStartingEvent.class).process(fmlServerStartingEvent -> worldFakePlayer.clear()).subscribe();
         EventManager.modGeneric(RegistryEvent.Register.class, IRecipeSerializer.class)
-                .process(register -> ((RegistryEvent.Register) register).getRegistry().registerAll(FluidExtractorRecipe.SERIALIZER, DissolutionChamberRecipe.SERIALIZER)).subscribe();
+                .process(register -> ((RegistryEvent.Register) register).getRegistry().registerAll(FluidExtractorRecipe.SERIALIZER, DissolutionChamberRecipe.SERIALIZER, LaserDrillOreRecipe.SERIALIZER, LaserDrillFluidRecipe.SERIALIZER)).subscribe();
         //EventManager.forge(ItemTooltipEvent.class).filter(itemTooltipEvent -> itemTooltipEvent.getItemStack().hasTag()).process(itemTooltipEvent -> itemTooltipEvent.getToolTip().add(itemTooltipEvent.getItemStack().getTag().toFormattedComponent())).subscribe();
         IFRegistries.poke();
         RewardGiver giver = RewardManager.get().getGiver(UUID.fromString("d28b7061-fb92-4064-90fb-7e02b95a72a6"), "Buuz135");

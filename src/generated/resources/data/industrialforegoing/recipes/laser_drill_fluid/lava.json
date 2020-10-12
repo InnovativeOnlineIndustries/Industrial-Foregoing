@@ -1,0 +1,26 @@
+{
+  "output": "{FluidName:\"minecraft:lava\",Amount:10}",
+  "rarity": [
+    {
+      "whitelist": {
+        "type": "minecraft:worldgen/biome",
+        "values": [
+          "minecraft:nether_wastes",
+          "minecraft:basalt_deltas",
+          "minecraft:warped_forest",
+          "minecraft:crimson_forest",
+          "minecraft:soul_sand_valley"
+        ]
+      },
+      "blacklist": {},
+      "depth_min": 5,
+      "depth_max": 20,
+      "weight": 8
+    }
+  ],
+  "catalyst": {
+    "item": "minecraft:magma_cream",
+    "count": 1
+  },
+  "type": "industrialforegoing:laser_drill_fluid"
+}

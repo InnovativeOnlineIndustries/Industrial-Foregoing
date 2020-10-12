@@ -9,7 +9,12 @@ import com.hrznstudio.titanium.recipe.serializer.JSONSerializableDataHandler;
 import net.minecraft.util.RegistryKey;
 import net.minecraft.world.biome.Biome;
 
+import static net.minecraft.world.biome.Biomes.*;
+
 public class LaserDrillRarity {
+
+    public static RegistryKey<Biome>[] END = new RegistryKey[]{THE_END, THE_VOID, SMALL_END_ISLANDS, END_BARRENS, END_HIGHLANDS, END_MIDLANDS};
+    public static RegistryKey<Biome>[] NETHER = new RegistryKey[]{NETHER_WASTES, BASALT_DELTAS, WARPED_FOREST, CRIMSON_FOREST, SOUL_SAND_VALLEY};
 
     static {
         JSONSerializableDataHandler.map(LaserDrillRarity[].class, values -> {
