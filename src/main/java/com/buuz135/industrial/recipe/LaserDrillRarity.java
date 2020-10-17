@@ -26,7 +26,7 @@ public class LaserDrillRarity {
                 object.addProperty("depth_min", type.depth_min);
                 object.addProperty("depth_max", type.depth_max);
                 object.addProperty("weight", type.weight);
-                return object;
+                array.add(object);
             }
             return array;
         }, element -> Streams.stream(element.getAsJsonArray()).map(JsonElement::getAsJsonObject).map(jsonObject -> new LaserDrillRarity(
