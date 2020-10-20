@@ -136,7 +136,7 @@ repositories {
 }
 
 dependencies {
-    minecraft 'net.minecraftforge:forge:1.16.3-34.1.0'
+    minecraft 'net.minecraftforge:forge:1.16.3-34.1.25'
     if (findProject(':titanium') != null) {
         compile project(':titanium')
     } else {
