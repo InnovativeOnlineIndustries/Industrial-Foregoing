@@ -16,7 +16,7 @@ public class LaserDrillRarity {
     public static RegistryKey<Biome>[] END = new RegistryKey[]{THE_END, THE_VOID, SMALL_END_ISLANDS, END_BARRENS, END_HIGHLANDS, END_MIDLANDS};
     public static RegistryKey<Biome>[] NETHER = new RegistryKey[]{NETHER_WASTES, BASALT_DELTAS, WARPED_FOREST, CRIMSON_FOREST, SOUL_SAND_VALLEY};
 
-    static {
+     public static void init(){
         JSONSerializableDataHandler.map(LaserDrillRarity[].class, values -> {
             JsonArray array = new JsonArray();
             for (LaserDrillRarity type : values) {
@@ -29,13 +29,15 @@ public class LaserDrillRarity {
                 array.add(object);
             }
             return array;
-        }, element -> Streams.stream(element.getAsJsonArray()).map(JsonElement::getAsJsonObject).map(jsonObject -> new LaserDrillRarity(
-                JSONSerializableDataHandler.read(RegistryKey[].class, jsonObject.getAsJsonObject("whitelist")),
-                JSONSerializableDataHandler.read(RegistryKey[].class, jsonObject.getAsJsonObject("blacklist")),
-                jsonObject.get("depth_min").getAsInt(),
-                jsonObject.get("depth_max").getAsInt(),
-                jsonObject.get("weight").getAsInt()
-        )).toArray(LaserDrillRarity[]::new));
+        }, element -> {
+            return Streams.stream(element.getAsJsonArray()).map(JsonElement::getAsJsonObject).map(jsonObject -> new LaserDrillRarity(
+                    JSONSerializableDataHandler.read(RegistryKey[].class, jsonObject.getAsJsonObject("whitelist")),
+                    JSONSerializableDataHandler.read(RegistryKey[].class, jsonObject.getAsJsonObject("blacklist")),
+                    jsonObject.get("depth_min").getAsInt(),
+                    jsonObject.get("depth_max").getAsInt(),
+                    jsonObject.get("weight").getAsInt()
+            )).toArray(LaserDrillRarity[]::new);
+        });
         CompoundSerializableDataHandler.map(LaserDrillRarity[].class, buf -> {
             LaserDrillRarity[] rarity = new LaserDrillRarity[buf.readInt()];
             for (int i = 0; i < rarity.length; i++) {

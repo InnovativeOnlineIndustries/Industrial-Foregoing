@@ -21,7 +21,9 @@ import net.minecraftforge.common.crafting.conditions.NotCondition;
 import net.minecraftforge.common.crafting.conditions.TagEmptyCondition;
 import org.apache.commons.lang3.tuple.Pair;
 
+import javax.annotation.Nullable;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 public class LaserDrillOreRecipe extends SerializableRecipe {
@@ -38,7 +40,7 @@ public class LaserDrillOreRecipe extends SerializableRecipe {
                 new LaserDrillRarity(new RegistryKey[0], LaserDrillRarity.END, 5, 32, 6),
                 new LaserDrillRarity(new RegistryKey[0], LaserDrillRarity.END, 0, 255, 1));
         createWithDefault("lapis", Blocks.LAPIS_ORE, 11, 13, 34, 14, 2);
-        new LaserDrillOreRecipe("emerald", Ingredient.fromItems(Blocks.GOLD_ORE), 5, null,
+        new LaserDrillOreRecipe("emerald", Ingredient.fromItems(Blocks.EMERALD_ORE), 5, null,
                 new LaserDrillRarity(new RegistryKey[]{Biomes.MOUNTAINS, Biomes.MOUNTAIN_EDGE, Biomes.GRAVELLY_MOUNTAINS, Biomes.MODIFIED_GRAVELLY_MOUNTAINS, Biomes.SNOWY_MOUNTAINS, Biomes.SNOWY_TAIGA_MOUNTAINS}, new RegistryKey[0], 5, 29, 8),
                 new LaserDrillRarity(new RegistryKey[0], LaserDrillRarity.END, 0, 255, 1));
         createWithDefault("diamond", Blocks.DIAMOND_ORE, 3, 5, 16, 4, 1);
@@ -171,6 +173,16 @@ public class LaserDrillOreRecipe extends SerializableRecipe {
     public Pair<ICondition, IConditionSerializer> getOutputCondition() {
         if (isTag != null){
             return Pair.of(new NotCondition(new TagEmptyCondition(isTag)), NotCondition.Serializer.INSTANCE);
+        }
+        return null;
+    }
+
+    @Nullable
+    public LaserDrillRarity getValidRarity(ResourceLocation biome, int height){
+        for (LaserDrillRarity laserDrillRarity : rarity) {
+            if (laserDrillRarity.depth_max >= height && laserDrillRarity.depth_min <= height){
+                if (laserDrillRarity.whitelist.length == 0 ? Arrays.stream(laserDrillRarity.blacklist).noneMatch(registryKey -> registryKey.func_240901_a_().equals(biome)) : Arrays.stream(laserDrillRarity.whitelist).anyMatch(registryKey -> registryKey.func_240901_a_().equals(biome))) return laserDrillRarity;
+            }
         }
         return null;
     }

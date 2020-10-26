@@ -34,6 +34,7 @@ import com.buuz135.industrial.jei.petrifiedgen.PetrifiedBurnTimeCategory;
 import com.buuz135.industrial.jei.sludge.SludgeRefinerRecipeCategory;
 import com.buuz135.industrial.module.ModuleCore;
 import com.buuz135.industrial.module.ModuleGenerator;
+import com.buuz135.industrial.module.ModuleResourceProduction;
 import com.buuz135.industrial.module.ModuleTool;
 import com.buuz135.industrial.recipe.DissolutionChamberRecipe;
 import com.buuz135.industrial.recipe.FluidExtractorRecipe;
@@ -144,7 +145,6 @@ public class JEICustomPlugin implements IModPlugin {
         registration.addRecipes(RecipeUtil.getRecipes(Minecraft.getInstance().world, FluidExtractorRecipe.SERIALIZER.getRecipeType()), fluidExtractorCategory.getUid());
         registration.addRecipes(RecipeUtil.getRecipes(Minecraft.getInstance().world, DissolutionChamberRecipe.SERIALIZER.getRecipeType()), dissolutionChamberJEICategory.getUid());
         registration.addRecipes(generateBioreactorRecipes(), bioReactorRecipeCategory.getUid());
-        System.out.println(RecipeUtil.getRecipes(Minecraft.getInstance().world, LaserDrillOreRecipe.SERIALIZER.getRecipeType()));
         registration.addRecipes(RecipeUtil.getRecipes(Minecraft.getInstance().world, LaserDrillOreRecipe.SERIALIZER.getRecipeType()).stream().filter(laserDrillOreRecipe -> !laserDrillOreRecipe.output.hasNoMatchingItems()).collect(Collectors.toList()), laserRecipeOreCategory.getUid());
         registration.addRecipes(RecipeUtil.getRecipes(Minecraft.getInstance().world, LaserDrillFluidRecipe.SERIALIZER.getRecipeType()), laserDrillFluidCategory.getUid());
     }
@@ -280,6 +280,8 @@ public class JEICustomPlugin implements IModPlugin {
         registration.addRecipeCatalyst(new ItemStack(ModuleCore.FLUID_EXTRACTOR), FluidExtractorCategory.ID);
         registration.addRecipeCatalyst(new ItemStack(ModuleCore.DISSOLUTION_CHAMBER), DissolutionChamberCategory.ID);
         registration.addRecipeCatalyst(new ItemStack(ModuleGenerator.BIOREACTOR), BioReactorRecipeCategory.ID);
+        registration.addRecipeCatalyst(new ItemStack(ModuleResourceProduction.ORE_LASER_BASE), LaserDrillOreCategory.ID);
+        registration.addRecipeCatalyst(new ItemStack(ModuleResourceProduction.LASER_DRILL), LaserDrillOreCategory.ID);
     }
 
     @Override
