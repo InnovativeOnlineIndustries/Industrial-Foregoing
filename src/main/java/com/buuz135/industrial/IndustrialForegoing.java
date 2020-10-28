@@ -28,8 +28,7 @@ import com.buuz135.industrial.proxy.client.render.ContributorsCatEarsRender;
 import com.buuz135.industrial.proxy.network.ConveyorButtonInteractMessage;
 import com.buuz135.industrial.proxy.network.ConveyorSplittingSyncEntityMessage;
 import com.buuz135.industrial.proxy.network.SpecialParticleMessage;
-import com.buuz135.industrial.recipe.DissolutionChamberRecipe;
-import com.buuz135.industrial.recipe.FluidExtractorRecipe;
+import com.buuz135.industrial.recipe.*;
 import com.buuz135.industrial.recipe.provider.IndustrialRecipeProvider;
 import com.buuz135.industrial.recipe.provider.IndustrialSerializableProvider;
 import com.buuz135.industrial.recipe.provider.IndustrialTagsProvider;
@@ -69,6 +68,8 @@ import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.fml.event.lifecycle.GatherDataEvent;
 import net.minecraftforge.fml.event.server.FMLServerStartingEvent;
 import net.minecraftforge.registries.ForgeRegistries;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -84,6 +85,7 @@ public class IndustrialForegoing extends ModuleController {
     private static CommonProxy proxy;
     private static HashMap<DimensionType, IFFakePlayer> worldFakePlayer = new HashMap<>();
     public static NetworkHandler NETWORK = new NetworkHandler(Reference.MOD_ID);
+    public static Logger LOGGER = LogManager.getLogger(Reference.MOD_ID);
 
     static {
         NETWORK.registerMessage(ConveyorButtonInteractMessage.class);
@@ -97,7 +99,7 @@ public class IndustrialForegoing extends ModuleController {
         EventManager.mod(FMLCommonSetupEvent.class).process(fmlCommonSetupEvent -> proxy.run()).subscribe();
         EventManager.forge(FMLServerStartingEvent.class).process(fmlServerStartingEvent -> worldFakePlayer.clear()).subscribe();
         EventManager.modGeneric(RegistryEvent.Register.class, IRecipeSerializer.class)
-                .process(register -> ((RegistryEvent.Register) register).getRegistry().registerAll(FluidExtractorRecipe.SERIALIZER, DissolutionChamberRecipe.SERIALIZER)).subscribe();
+                .process(register -> ((RegistryEvent.Register) register).getRegistry().registerAll(FluidExtractorRecipe.SERIALIZER, DissolutionChamberRecipe.SERIALIZER, LaserDrillOreRecipe.SERIALIZER, LaserDrillFluidRecipe.SERIALIZER)).subscribe();
         //EventManager.forge(ItemTooltipEvent.class).filter(itemTooltipEvent -> itemTooltipEvent.getItemStack().hasTag()).process(itemTooltipEvent -> itemTooltipEvent.getToolTip().add(itemTooltipEvent.getItemStack().getTag().toFormattedComponent())).subscribe();
         IFRegistries.poke();
         RewardGiver giver = RewardManager.get().getGiver(UUID.fromString("d28b7061-fb92-4064-90fb-7e02b95a72a6"), "Buuz135");
@@ -108,8 +110,9 @@ public class IndustrialForegoing extends ModuleController {
                 }
             }, new String[]{"normal"}));
         } catch (MalformedURLException e) {
-            e.printStackTrace();
+            LOGGER.catching(e);
         }
+        LaserDrillRarity.init();
     }
 
     public static FakePlayer getFakePlayer(World world) {

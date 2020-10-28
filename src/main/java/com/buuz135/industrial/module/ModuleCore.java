@@ -7,10 +7,7 @@ import com.buuz135.industrial.block.core.DissolutionChamberBlock;
 import com.buuz135.industrial.block.core.FluidExtractorBlock;
 import com.buuz135.industrial.block.core.LatexProcessingUnitBlock;
 import com.buuz135.industrial.block.core.tile.FluidExtractorTile;
-import com.buuz135.industrial.item.FertilizerItem;
-import com.buuz135.industrial.item.IFCustomItem;
-import com.buuz135.industrial.item.ItemStraw;
-import com.buuz135.industrial.item.RecipelessCustomItem;
+import com.buuz135.industrial.item.*;
 import com.buuz135.industrial.item.addon.EfficiencyAddonItem;
 import com.buuz135.industrial.item.addon.RangeAddonItem;
 import com.buuz135.industrial.item.addon.SpeedAddonItem;
@@ -59,6 +56,8 @@ public class ModuleCore implements IModule {
     public static LatexProcessingUnitBlock LATEX_PROCESSING = new LatexProcessingUnitBlock();
     public static DissolutionChamberBlock DISSOLUTION_CHAMBER = new DissolutionChamberBlock();
     public static RangeAddonItem[] RANGE_ADDONS = new RangeAddonItem[12];
+    public static LaserLensItem[] LASER_LENS = new LaserLensItem[DyeColor.values().length];
+    public static LaserLensItem[] LASER_LENS_INVERTED = new LaserLensItem[DyeColor.values().length];
     public static SpeedAddonItem SPEED_ADDON_1 = new SpeedAddonItem(1, TAB_CORE);
     public static SpeedAddonItem SPEED_ADDON_2 = new SpeedAddonItem(2, TAB_CORE);
     public static EfficiencyAddonItem EFFICIENCY_ADDON_1 = new EfficiencyAddonItem(1, TAB_CORE);
@@ -73,6 +72,7 @@ public class ModuleCore implements IModule {
     public static TitaniumFluidInstance PINK_SLIME = new TitaniumFluidInstance(Reference.MOD_ID, "pink_slime", FluidAttributes.builder(new ResourceLocation(Reference.MOD_ID, "blocks/fluids/pink_slime_still"), new ResourceLocation(Reference.MOD_ID, "blocks/fluids/pink_slime_flow")), true, TAB_CORE);
     public static TitaniumFluidInstance MILK = new TitaniumFluidInstance(Reference.MOD_ID, "milk", FluidAttributes.builder(new ResourceLocation(Reference.MOD_ID, "blocks/fluids/milk_still"), new ResourceLocation(Reference.MOD_ID, "blocks/fluids/milk_flow")), false, TAB_CORE);
     public static TitaniumFluidInstance BIOFUEL = new TitaniumFluidInstance(Reference.MOD_ID, "biofuel", FluidAttributes.builder(new ResourceLocation(Reference.MOD_ID, "blocks/fluids/biofuel_still"), new ResourceLocation(Reference.MOD_ID, "blocks/fluids/biofuel_flow")), true, TAB_CORE);
+    public static TitaniumFluidInstance ETHER = new TitaniumFluidInstance(Reference.MOD_ID, "ether", FluidAttributes.builder(new ResourceLocation(Reference.MOD_ID, "blocks/fluids/biofuel_still"), new ResourceLocation(Reference.MOD_ID, "blocks/fluids/biofuel_flow")), true, TAB_CORE);
 
     public static Item MILK_BUCKET = new MilkBucketItem(() -> ModuleCore.MILK.getSourceFluid(), new Item.Properties().maxStackSize(1).containerItem(Items.BUCKET).group(ItemGroup.MISC)).setRegistryName("minecraft", "milk_bucket");
 
@@ -129,6 +129,7 @@ public class ModuleCore implements IModule {
         features.add(Feature.builder("essence").content(TitaniumFluidInstance.class, ESSENCE));
         features.add(Feature.builder("sludge").content(TitaniumFluidInstance.class, SLUDGE));
         features.add(Feature.builder("biofuel").content(TitaniumFluidInstance.class, BIOFUEL));
+        features.add(Feature.builder("ether").content(TitaniumFluidInstance.class, ETHER));
         features.add(Feature.builder("milk").content(TitaniumFluidInstance.class, MILK));
         features.add(Feature.builder("milk_bucket_replacement")
                 .description("If enabled the minecraft bucket item will be replaced with bucket that contains IF milk")
@@ -136,6 +137,12 @@ public class ModuleCore implements IModule {
         MILK.setBucketFluid(MILK_BUCKET);
         TAB_CORE.addIconStack(new ItemStack(PLASTIC));
         features.add(createFeature(DARK_GLASS));
+        builder = Feature.builder("laser_lens");
+        for (DyeColor value : DyeColor.values()) {
+            builder.content(Item.class, LASER_LENS[value.getId()] = new LaserLensItem(value.getId(), false));
+            builder.content(Item.class, LASER_LENS_INVERTED[value.getId()] = new LaserLensItem(value.getId(), true));
+        }
+        features.add(builder);
         return features;
     }
 

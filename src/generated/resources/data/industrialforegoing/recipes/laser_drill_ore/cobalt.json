@@ -1,0 +1,44 @@
+{
+  "type": "forge:conditional",
+  "recipes": [
+    {
+      "conditions": [
+        {
+          "value": {
+            "tag": "forge:ores/cobalt",
+            "type": "forge:tag_empty"
+          },
+          "type": "forge:not"
+        }
+      ],
+      "recipe": {
+        "output": {
+          "tag": "forge:ores/cobalt"
+        },
+        "rarity": [
+          {
+            "whitelist": {
+              "type": "minecraft:worldgen/biome",
+              "values": [
+                "minecraft:nether_wastes",
+                "minecraft:basalt_deltas",
+                "minecraft:warped_forest",
+                "minecraft:crimson_forest",
+                "minecraft:soul_sand_valley"
+              ]
+            },
+            "blacklist": {},
+            "depth_min": 34,
+            "depth_max": 96,
+            "weight": 8
+          }
+        ],
+        "pointer": 0,
+        "catalyst": {
+          "item": "industrialforegoing:laser_lens11"
+        },
+        "type": "industrialforegoing:laser_drill_ore"
+      }
+    }
+  ]
+}

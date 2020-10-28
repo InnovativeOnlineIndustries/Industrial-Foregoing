@@ -1,0 +1,29 @@
+{
+  "variants": {
+    "facing=down": {
+      "model": "industrialforegoing:block/laser_drill",
+      "x": 90,
+      "y": 270
+    },
+    "facing=up": {
+      "model": "industrialforegoing:block/laser_drill",
+      "x": -90,
+      "y": 270
+    },
+    "facing=north": {
+      "model": "industrialforegoing:block/laser_drill"
+    },
+    "facing=south": {
+      "model": "industrialforegoing:block/laser_drill",
+      "y": 180
+    },
+    "facing=west": {
+      "model": "industrialforegoing:block/laser_drill",
+      "y": 270
+    },
+    "facing=east": {
+      "model": "industrialforegoing:block/laser_drill",
+      "y": 90
+    }
+  }
+}

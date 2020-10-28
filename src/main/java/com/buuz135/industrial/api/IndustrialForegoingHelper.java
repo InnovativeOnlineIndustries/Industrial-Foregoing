@@ -22,7 +22,10 @@
 package com.buuz135.industrial.api;
 
 
-import com.buuz135.industrial.api.recipe.*;
+import com.buuz135.industrial.api.recipe.BioReactorEntry;
+import com.buuz135.industrial.api.recipe.FluidDictionaryEntry;
+import com.buuz135.industrial.api.recipe.ProteinReactorEntry;
+import com.buuz135.industrial.api.recipe.SludgeEntry;
 import com.buuz135.industrial.api.recipe.ore.OreFluidEntryFermenter;
 import com.buuz135.industrial.api.recipe.ore.OreFluidEntryRaw;
 import com.buuz135.industrial.api.recipe.ore.OreFluidEntrySieve;
@@ -59,38 +62,6 @@ public class IndustrialForegoingHelper {
      */
     public static boolean removeBioReactorEntry(ItemStack stack) {
         return BioReactorEntry.BIO_REACTOR_ENTRIES.removeIf(entry -> entry.doesStackMatch(stack));
-    }
-
-    /**
-     * Adds a new LaserEntry entry that wasn't already there.
-     *
-     * @param entry The LaserEntry entry to add.
-     * @return true if it is added, false if don't.
-     */
-    @Deprecated
-    public static boolean addLaserDrillEntry(LaserDrillEntry entry) {
-        try {
-            throw new UnsupportedOperationException("Deprecated API Method since v1.12.0, use the new config for the Laser Drill located in config/laser_drill_ores");
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return false;
-    }
-
-    /**
-     * Removes a LaserDrill entry.
-     *
-     * @param stack The ItemStack of a LaserDrill entry to remove.
-     * @return true if it is removed, false if don't.
-     */
-    @Deprecated
-    public static boolean removeLaserDrillEntry(ItemStack stack) {
-        try {
-            throw new UnsupportedOperationException("Deprecated API Method since v1.12.0, use the new config for the Laser Drill located in config/laser_drill_ores");
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return false;
     }
 
     /**

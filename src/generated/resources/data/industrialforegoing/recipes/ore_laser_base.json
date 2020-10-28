@@ -1,0 +1,49 @@
+{
+  "type": "forge:conditional",
+  "recipes": [
+    {
+      "conditions": [
+        {
+          "values": [
+            {
+              "item": "industrialforegoing:ore_laser_base",
+              "type": "forge:item_exists"
+            }
+          ],
+          "type": "forge:and"
+        }
+      ],
+      "recipe": {
+        "type": "minecraft:crafting_shaped",
+        "pattern": [
+          "pfp",
+          "bmb",
+          "grg"
+        ],
+        "key": {
+          "p": {
+            "tag": "forge:plastic"
+          },
+          "f": {
+            "item": "minecraft:diamond_pickaxe"
+          },
+          "b": {
+            "item": "minecraft:iron_ore"
+          },
+          "m": {
+            "tag": "industrialforegoing:machine_frame/advanced"
+          },
+          "g": {
+            "tag": "forge:gears/diamond"
+          },
+          "r": {
+            "item": "minecraft:redstone"
+          }
+        },
+        "result": {
+          "item": "industrialforegoing:ore_laser_base"
+        }
+      }
+    }
+  ]
+}
