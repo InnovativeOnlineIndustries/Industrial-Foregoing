@@ -21,6 +21,7 @@ public class IndustrialSerializableProvider extends TitaniumSerializableProvider
     public void add(Map<IJsonFile, IJSONGenerator> serializables) {
         DissolutionChamberRecipe.RECIPES.forEach(dissolutionChamberRecipe -> serializables.put(dissolutionChamberRecipe, dissolutionChamberRecipe));
         FluidExtractorRecipe.RECIPES.forEach(fluidExtractorRecipe -> serializables.put(fluidExtractorRecipe, fluidExtractorRecipe));
+        LaserDrillFluidRecipe.init();
         LaserDrillFluidRecipe.RECIPES.forEach(laserDrillFluidRecipe -> serializables.put(laserDrillFluidRecipe, laserDrillFluidRecipe));
         LaserDrillOreRecipe.init();
         LaserDrillOreRecipe.RECIPES.forEach(laserDrillOreRecipe -> serializables.put(laserDrillOreRecipe, laserDrillOreRecipe));

@@ -1,5 +1,5 @@
 {
-  "output": "{FluidName:\"minecraft:lava\",Amount:10}",
+  "output": "{FluidName:\"minecraft:lava\",Amount:100}",
   "rarity": [
     {
       "whitelist": {
@@ -18,9 +18,10 @@
       "weight": 8
     }
   ],
+  "pointer": 0,
   "catalyst": {
-    "item": "minecraft:magma_cream",
-    "count": 1
+    "item": "industrialforegoing:laser_lens1"
   },
+  "entity": "minecraft:empty",
   "type": "industrialforegoing:laser_drill_fluid"
 }

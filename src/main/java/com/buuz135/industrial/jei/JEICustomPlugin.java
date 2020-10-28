@@ -25,7 +25,6 @@ package com.buuz135.industrial.jei;
 import com.buuz135.industrial.block.generator.tile.BioReactorTile;
 import com.buuz135.industrial.gui.conveyor.GuiConveyor;
 import com.buuz135.industrial.jei.category.*;
-import com.buuz135.industrial.jei.fluiddictionary.FluidDictionaryCategory;
 import com.buuz135.industrial.jei.machineproduce.MachineProduceCategory;
 import com.buuz135.industrial.jei.ore.OreFermenterCategory;
 import com.buuz135.industrial.jei.ore.OreSieveCategory;
@@ -73,7 +72,6 @@ public class JEICustomPlugin implements IModPlugin {
     private LaserDrillFluidCategory laserDrillFluidCategory;
     private MachineProduceCategory machineProduceCategory;
     private PetrifiedBurnTimeCategory petrifiedBurnTimeCategory;
-    private FluidDictionaryCategory fluidDictionaryCategory;
     private FluidExtractorCategory fluidExtractorCategory;
     private OreWasherCategory oreWasherCategory;
     private OreFermenterCategory oreFermenterCategory;
@@ -282,6 +280,8 @@ public class JEICustomPlugin implements IModPlugin {
         registration.addRecipeCatalyst(new ItemStack(ModuleGenerator.BIOREACTOR), BioReactorRecipeCategory.ID);
         registration.addRecipeCatalyst(new ItemStack(ModuleResourceProduction.ORE_LASER_BASE), LaserDrillOreCategory.ID);
         registration.addRecipeCatalyst(new ItemStack(ModuleResourceProduction.LASER_DRILL), LaserDrillOreCategory.ID);
+        registration.addRecipeCatalyst(new ItemStack(ModuleResourceProduction.FLUID_LASER_BASE), LaserDrillFluidCategory.ID);
+        registration.addRecipeCatalyst(new ItemStack(ModuleResourceProduction.LASER_DRILL), LaserDrillFluidCategory.ID);
     }
 
     @Override

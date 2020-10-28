@@ -25,6 +25,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.util.text.TextFormatting;
+import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.World;
 import net.minecraftforge.items.ItemHandlerHelper;
 
@@ -56,7 +57,7 @@ public class OreLaserBaseTile extends IndustrialMachineTile<OreLaserBaseTile> im
                             @Override
                             public List<ITextComponent> getTooltipLines() {
                                 List<ITextComponent> tooltip = new ArrayList<>();
-                                tooltip.add(new StringTextComponent(TextFormatting.GOLD + "Progress: " + TextFormatting.WHITE + new DecimalFormat().format(work.getProgress()) + TextFormatting.GOLD + "/" + TextFormatting.WHITE + new DecimalFormat().format(work.getMaxProgress())));
+                                tooltip.add(new StringTextComponent(TextFormatting.GOLD + new TranslationTextComponent("tooltip.titanium.progressbar.progress").getString()+ TextFormatting.WHITE + new DecimalFormat().format(work.getProgress()) + TextFormatting.GOLD + "/" + TextFormatting.WHITE + new DecimalFormat().format(work.getMaxProgress())));
                                 return tooltip;
                             }
                         });
@@ -92,7 +93,7 @@ public class OreLaserBaseTile extends IndustrialMachineTile<OreLaserBaseTile> im
         this.addGuiAddonFactory(() -> new TextScreenAddon("" ,70, y + 3, false){
             @Override
             public String getText() {
-                return TextFormatting.DARK_GRAY + "Depth: " + miningDepth;
+                return TextFormatting.DARK_GRAY + new TranslationTextComponent("text.industrialforegoing.depth").getString() + miningDepth;
             }
         });
     }

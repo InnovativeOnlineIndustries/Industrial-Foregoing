@@ -13,6 +13,7 @@ import net.minecraft.util.math.shapes.VoxelShape;
 import net.minecraft.util.math.shapes.VoxelShapes;
 import net.minecraft.util.math.vector.Vector3i;
 import net.minecraft.util.text.TextFormatting;
+import net.minecraft.util.text.TranslationTextComponent;
 
 public class LaserDrillTile extends IndustrialAreaWorkingTile<LaserDrillTile> {
 
@@ -22,11 +23,11 @@ public class LaserDrillTile extends IndustrialAreaWorkingTile<LaserDrillTile> {
     public LaserDrillTile() {
         super(ModuleResourceProduction.LASER_DRILL, RangeManager.RangeType.BEHIND, false);
         this.target = BlockPos.ZERO;
-        addGuiAddonFactory(() -> new TextScreenAddon(TextFormatting.DARK_GRAY + "Target: ", 44 ,26, false));
+        addGuiAddonFactory(() -> new TextScreenAddon(TextFormatting.DARK_GRAY + new TranslationTextComponent("text.industrialforegoing.target").getString(), 44 ,26, false));
         addGuiAddonFactory(() -> new TextScreenAddon("Target: ", 44 ,36, false){
                     @Override
                     public String getText() {
-                        if (target.equals(BlockPos.ZERO) || target == null) return TextFormatting.DARK_GRAY +  "404 Not Found";
+                        if (target.equals(BlockPos.ZERO) || target == null) return TextFormatting.DARK_GRAY + new TranslationTextComponent("text.industrialforegoing.target_not_found").getString();
                         return  TextFormatting.DARK_GRAY + "X: " + target.getX() + " Y: " + target.getY() + " Z: " + target.getZ();
                     }
                 }

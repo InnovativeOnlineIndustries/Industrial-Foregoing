@@ -111,10 +111,12 @@ public class LaserDrillFluidCategory implements IRecipeCategory<LaserDrillFluidR
 
         String minY = new TranslationTextComponent("text.industrialforegoing.miny").getString() + " " + recipe.rarity[recipe.pointer].depth_min;
         String maxY = new TranslationTextComponent("text.industrialforegoing.maxy").getString() + " " + recipe.rarity[recipe.pointer].depth_max;
-        String wight = new TranslationTextComponent("text.industrialforegoing.weight").getString() + " " + recipe.rarity[recipe.pointer].weight;
         String biomes = new TranslationTextComponent("text.industrialforegoing.biomes").getString();
         Minecraft.getInstance().fontRenderer.drawString(matrixStack, TextFormatting.DARK_GRAY + minY, recipeWidth / 10, 30, 0);
-        Minecraft.getInstance().fontRenderer.drawString(matrixStack, TextFormatting.DARK_GRAY + wight, recipeWidth / 10, 30 + (Minecraft.getInstance().fontRenderer.FONT_HEIGHT + 2), 0);
+        if (!LaserDrillFluidRecipe.EMPTY.equals(recipe.entity)){
+            String wight = "Over: " + new TranslationTextComponent("entity." + recipe.entity.toString().replace(":", ".")).getString();
+            Minecraft.getInstance().fontRenderer.drawString(matrixStack, TextFormatting.DARK_GRAY + wight, recipeWidth / 10, 30 + (Minecraft.getInstance().fontRenderer.FONT_HEIGHT + 2), 0);
+        }
         Minecraft.getInstance().fontRenderer.drawString(matrixStack, TextFormatting.DARK_GRAY + maxY, recipeWidth / 10 * 6, 30, 0);
         Minecraft.getInstance().fontRenderer.drawString(matrixStack, TextFormatting.DARK_GRAY + "" + TextFormatting.UNDERLINE + biomes, recipeWidth / 2 - Minecraft.getInstance().fontRenderer.getStringWidth(biomes) / 2, 30 + (Minecraft.getInstance().fontRenderer.FONT_HEIGHT + 2) * 2, 0);
     }
