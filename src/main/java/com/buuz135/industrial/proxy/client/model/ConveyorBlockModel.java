@@ -101,8 +101,8 @@ public class ConveyorBlockModel implements IDynamicBakedModel {
     }
 
     @Override
-    public boolean func_230044_c_() {
-        return previousConveyor.func_230044_c_();
+    public boolean isSideLit() {
+        return previousConveyor.isSideLit();
     }
 
     @Override

@@ -88,7 +88,7 @@ public class ParticleVex extends Particle {
 
     @Override
     public void renderParticle(IVertexBuilder buffer, ActiveRenderInfo activeRenderInfo, float v) {
-        if (entity instanceof ClientPlayerEntity && Minecraft.getInstance().player.getUniqueID().equals(entity.getUniqueID()) && Minecraft.getInstance().gameSettings.func_243230_g() == PointOfView.FIRST_PERSON && this.entity.getPosition().add(0, 1, 0).distanceSq(posX, posY, posZ, false) < 3)
+        if (entity instanceof ClientPlayerEntity && Minecraft.getInstance().player.getUniqueID().equals(entity.getUniqueID()) && Minecraft.getInstance().gameSettings.getPointOfView() == PointOfView.FIRST_PERSON && this.entity.getPosition().add(0, 1, 0).distanceSq(posX, posY, posZ, false) < 3)
             return;
         Vector3d vector3d = activeRenderInfo.getProjectedView();
         double x = entity.lastTickPosX + (vector3d.x - entity.lastTickPosX);

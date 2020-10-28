@@ -116,11 +116,11 @@ public class IndustrialForegoing extends ModuleController {
     }
 
     public static FakePlayer getFakePlayer(World world) {
-        if (worldFakePlayer.containsKey(world.func_230315_m_()))
-            return worldFakePlayer.get(world.func_230315_m_());
+        if (worldFakePlayer.containsKey(world.getDimensionType()))
+            return worldFakePlayer.get(world.getDimensionType());
         if (world instanceof ServerWorld) {
             IFFakePlayer fakePlayer = new IFFakePlayer((ServerWorld) world);
-            worldFakePlayer.put(world.func_230315_m_(), fakePlayer);
+            worldFakePlayer.put(world.getDimensionType(), fakePlayer);
             return fakePlayer;
         }
         return null;

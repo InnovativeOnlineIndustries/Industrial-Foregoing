@@ -88,7 +88,7 @@ public class IFClientEvents {
 
     @SubscribeEvent
     public void onRenderPre(RenderPlayerEvent.Pre event) {
-        if (event.getPlayer().getUniqueID().equals(Minecraft.getInstance().player.getUniqueID()) && Minecraft.getInstance().gameSettings.func_243230_g() == PointOfView.FIRST_PERSON)
+        if (event.getPlayer().getUniqueID().equals(Minecraft.getInstance().player.getUniqueID()) && Minecraft.getInstance().gameSettings.getPointOfView() == PointOfView.FIRST_PERSON)
             return;
         if (event.getPlayer().getHeldItem(Hand.MAIN_HAND).getItem().equals(ModuleTool.INFINITY_DRILL))
             event.getPlayer().setActiveHand(Hand.MAIN_HAND);
