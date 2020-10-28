@@ -410,6 +410,7 @@
   "tooltip.industrialforegoing.stonework.crush": "Crushing",
   "tooltip.industrialforegoing.stonework.small_craft": "2x2 Craft",
   "tooltip.industrialforegoing.stonework.big_craft": "3x3 Craft",
+  "tooltip.industrialforegoing.stonework.none": "Nothing",
   "tooltip.industrialforegoing.enchantment_extractor.extract": "Extract Enchantments",
   "tooltip.industrialforegoing.enchantment_extractor.extract_extra": "Enchantments from items will be transfered to books",
   "tooltip.industrialforegoing.enchantment_extractor.consume": "Transforms Enchatments into Essence",
