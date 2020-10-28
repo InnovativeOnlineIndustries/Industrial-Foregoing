@@ -57,7 +57,6 @@ public class ModuleCore implements IModule {
     public static DissolutionChamberBlock DISSOLUTION_CHAMBER = new DissolutionChamberBlock();
     public static RangeAddonItem[] RANGE_ADDONS = new RangeAddonItem[12];
     public static LaserLensItem[] LASER_LENS = new LaserLensItem[DyeColor.values().length];
-    public static LaserLensItem[] LASER_LENS_INVERTED = new LaserLensItem[DyeColor.values().length];
     public static SpeedAddonItem SPEED_ADDON_1 = new SpeedAddonItem(1, TAB_CORE);
     public static SpeedAddonItem SPEED_ADDON_2 = new SpeedAddonItem(2, TAB_CORE);
     public static EfficiencyAddonItem EFFICIENCY_ADDON_1 = new EfficiencyAddonItem(1, TAB_CORE);
@@ -139,8 +138,7 @@ public class ModuleCore implements IModule {
         features.add(createFeature(DARK_GLASS));
         builder = Feature.builder("laser_lens");
         for (DyeColor value : DyeColor.values()) {
-            builder.content(Item.class, LASER_LENS[value.getId()] = new LaserLensItem(value.getId(), false));
-            builder.content(Item.class, LASER_LENS_INVERTED[value.getId()] = new LaserLensItem(value.getId(), true));
+            builder.content(Item.class, LASER_LENS[value.getId()] = new LaserLensItem(value.getId()));
         }
         features.add(builder);
         return features;
