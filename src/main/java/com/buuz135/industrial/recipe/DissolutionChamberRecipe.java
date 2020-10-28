@@ -100,6 +100,7 @@ public class DissolutionChamberRecipe extends SerializableRecipe {
         this.inputFluid = inputFluid;
         this.processingTime = processingTime;
         this.output = output;
+        this.output.getItem().onCreated(this.output, null, null);
         this.outputFluid = outputFluid;
         RECIPES.add(this);
     }

@@ -29,7 +29,8 @@
   "processingTime": 200,
   "output": {
     "item": "industrialforegoing:speed_addon_2",
-    "count": 1
+    "count": 1,
+    "nbt": "{TitaniumAugment:{Speed:3.0f}}"
   },
   "type": "industrialforegoing:dissolution_chamber"
 }

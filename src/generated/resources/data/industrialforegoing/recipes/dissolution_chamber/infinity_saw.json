@@ -29,7 +29,8 @@
   "processingTime": 400,
   "output": {
     "item": "industrialforegoing:infinity_saw",
-    "count": 1
+    "count": 1,
+    "nbt": "{CanCharge:1b,Energy:0L,Fluid:{FluidName:\"biofuel\",Amount:0},Special:0b,Selected:\"POOR\"}"
   },
   "type": "industrialforegoing:dissolution_chamber"
 }
