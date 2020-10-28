@@ -2,6 +2,8 @@ package com.buuz135.industrial.recipe.provider;
 
 import com.buuz135.industrial.recipe.DissolutionChamberRecipe;
 import com.buuz135.industrial.recipe.FluidExtractorRecipe;
+import com.buuz135.industrial.recipe.LaserDrillFluidRecipe;
+import com.buuz135.industrial.recipe.LaserDrillOreRecipe;
 import com.hrznstudio.titanium.recipe.generator.IJSONGenerator;
 import com.hrznstudio.titanium.recipe.generator.IJsonFile;
 import com.hrznstudio.titanium.recipe.generator.TitaniumSerializableProvider;
@@ -19,5 +21,9 @@ public class IndustrialSerializableProvider extends TitaniumSerializableProvider
     public void add(Map<IJsonFile, IJSONGenerator> serializables) {
         DissolutionChamberRecipe.RECIPES.forEach(dissolutionChamberRecipe -> serializables.put(dissolutionChamberRecipe, dissolutionChamberRecipe));
         FluidExtractorRecipe.RECIPES.forEach(fluidExtractorRecipe -> serializables.put(fluidExtractorRecipe, fluidExtractorRecipe));
+        LaserDrillFluidRecipe.init();
+        LaserDrillFluidRecipe.RECIPES.forEach(laserDrillFluidRecipe -> serializables.put(laserDrillFluidRecipe, laserDrillFluidRecipe));
+        LaserDrillOreRecipe.init();
+        LaserDrillOreRecipe.RECIPES.forEach(laserDrillOreRecipe -> serializables.put(laserDrillOreRecipe, laserDrillOreRecipe));
     }
 }

@@ -24,11 +24,7 @@ package com.buuz135.industrial.jei;
 
 import com.buuz135.industrial.block.generator.tile.BioReactorTile;
 import com.buuz135.industrial.gui.conveyor.GuiConveyor;
-import com.buuz135.industrial.jei.category.BioReactorRecipeCategory;
-import com.buuz135.industrial.jei.category.DissolutionChamberCategory;
-import com.buuz135.industrial.jei.category.FluidExtractorCategory;
-import com.buuz135.industrial.jei.fluiddictionary.FluidDictionaryCategory;
-import com.buuz135.industrial.jei.laser.LaserRecipeCategory;
+import com.buuz135.industrial.jei.category.*;
 import com.buuz135.industrial.jei.machineproduce.MachineProduceCategory;
 import com.buuz135.industrial.jei.ore.OreFermenterCategory;
 import com.buuz135.industrial.jei.ore.OreSieveCategory;
@@ -37,9 +33,12 @@ import com.buuz135.industrial.jei.petrifiedgen.PetrifiedBurnTimeCategory;
 import com.buuz135.industrial.jei.sludge.SludgeRefinerRecipeCategory;
 import com.buuz135.industrial.module.ModuleCore;
 import com.buuz135.industrial.module.ModuleGenerator;
+import com.buuz135.industrial.module.ModuleResourceProduction;
 import com.buuz135.industrial.module.ModuleTool;
 import com.buuz135.industrial.recipe.DissolutionChamberRecipe;
 import com.buuz135.industrial.recipe.FluidExtractorRecipe;
+import com.buuz135.industrial.recipe.LaserDrillFluidRecipe;
+import com.buuz135.industrial.recipe.LaserDrillOreRecipe;
 import com.buuz135.industrial.utils.Reference;
 import com.hrznstudio.titanium.util.RecipeUtil;
 import mezz.jei.api.IModPlugin;
@@ -69,10 +68,10 @@ public class JEICustomPlugin implements IModPlugin {
     private SludgeRefinerRecipeCategory sludgeRefinerRecipeCategory;
     private BioReactorRecipeCategory bioReactorRecipeCategory;
     private BioReactorRecipeCategory proteinReactorRecipeCategory;
-    private LaserRecipeCategory laserRecipeCategory;
+    private LaserDrillOreCategory laserRecipeOreCategory;
+    private LaserDrillFluidCategory laserDrillFluidCategory;
     private MachineProduceCategory machineProduceCategory;
     private PetrifiedBurnTimeCategory petrifiedBurnTimeCategory;
-    private FluidDictionaryCategory fluidDictionaryCategory;
     private FluidExtractorCategory fluidExtractorCategory;
     private OreWasherCategory oreWasherCategory;
     private OreFermenterCategory oreFermenterCategory;
@@ -126,56 +125,16 @@ public class JEICustomPlugin implements IModPlugin {
 
     @Override
     public void registerCategories(IRecipeCategoryRegistration registry) {
-//        if (BlockRegistry.sludgeRefinerBlock.isEnabled()) {
-//            sludgeRefinerRecipeCategory = new SludgeRefinerRecipeCategory(registry.getJeiHelpers().getGuiHelper());
-//            registry.addRecipeCategories(sludgeRefinerRecipeCategory);
-//        }
         bioReactorRecipeCategory = new BioReactorRecipeCategory(registry.getJeiHelpers().getGuiHelper(), "Bioreactor accepted items");
         registry.addRecipeCategories(bioReactorRecipeCategory);
-//        if (BlockRegistry.proteinReactorBlock.isEnabled()) {
-//            proteinReactorRecipeCategory = new ReactorRecipeCategory(registry.getJeiHelpers().getGuiHelper(), "Protein reactor accepted items");
-//            registry.addRecipeCategories(proteinReactorRecipeCategory);
-//        }
-//        if (BlockRegistry.laserBaseBlock.isEnabled() || BlockRegistry.laserDrillBlock.isEnabled()) {
-//            laserRecipeCategory = new LaserRecipeCategory(registry.getJeiHelpers().getGuiHelper());
-//            registry.addRecipeCategories(laserRecipeCategory);
-//        }
-//        machineProduceCategory = new MachineProduceCategory(registry.getJeiHelpers().getGuiHelper());
-//        registry.addRecipeCategories(machineProduceCategory);
-//        if (BlockRegistry.petrifiedFuelGeneratorBlock.isEnabled()) {
-//            petrifiedBurnTimeCategory = new PetrifiedBurnTimeCategory(registry.getJeiHelpers().getGuiHelper());
-//            registry.addRecipeCategories(petrifiedBurnTimeCategory);
-//        }
-//        if (BlockRegistry.fluidDictionaryConverterBlock.isEnabled() && !FluidDictionaryEntry.FLUID_DICTIONARY_RECIPES.isEmpty()) {
-//            fluidDictionaryCategory = new FluidDictionaryCategory(registry.getJeiHelpers().getGuiHelper());
-//            registry.addRecipeCategories(fluidDictionaryCategory);
-//        }
-//        if (BlockRegistry.materialStoneWorkFactoryBlock.isEnabled()) {
-//            stoneWorkCategory = new StoneWorkCategory(registry.getJeiHelpers().getGuiHelper());
-//            registry.addRecipeCategories(stoneWorkCategory);
-//        }
-//        if (BlockRegistry.treeFluidExtractorBlock.isEnabled()) {
         fluidExtractorCategory = new FluidExtractorCategory(registry.getJeiHelpers().getGuiHelper());
         registry.addRecipeCategories(fluidExtractorCategory);
-//        }
-//        if (CustomConfiguration.enableBookEntriesInJEI) {
-//            manualCategory = new ManualCategory(registry.getJeiHelpers().getGuiHelper());
-//            registry.addRecipeCategories(manualCategory);
-//        }
-//        if (BlockRegistry.oreWasherBlock.isEnabled()) {
-//            oreWasherCategory = new OreWasherCategory(registry.getJeiHelpers().getGuiHelper());
-//            registry.addRecipeCategories(oreWasherCategory);
-//        }
-//        if (BlockRegistry.oreFermenterBlock.isEnabled()) {
-//            oreFermenterCategory = new OreFermenterCategory(registry.getJeiHelpers().getGuiHelper());
-//            registry.addRecipeCategories(oreFermenterCategory);
-//        }
-//        if (BlockRegistry.oreSieveBlock.isEnabled()) {
-//            oreSieveCategory = new OreSieveCategory(registry.getJeiHelpers().getGuiHelper());
-//            registry.addRecipeCategories(oreSieveCategory);
-//        }
         dissolutionChamberJEICategory = new DissolutionChamberCategory(registry.getJeiHelpers().getGuiHelper());
         registry.addRecipeCategories(dissolutionChamberJEICategory);
+        laserRecipeOreCategory = new LaserDrillOreCategory(registry.getJeiHelpers().getGuiHelper());
+        registry.addRecipeCategories(laserRecipeOreCategory);
+        laserDrillFluidCategory = new LaserDrillFluidCategory(registry.getJeiHelpers().getGuiHelper());
+        registry.addRecipeCategories(laserDrillFluidCategory);
     }
 
 
@@ -184,6 +143,8 @@ public class JEICustomPlugin implements IModPlugin {
         registration.addRecipes(RecipeUtil.getRecipes(Minecraft.getInstance().world, FluidExtractorRecipe.SERIALIZER.getRecipeType()), fluidExtractorCategory.getUid());
         registration.addRecipes(RecipeUtil.getRecipes(Minecraft.getInstance().world, DissolutionChamberRecipe.SERIALIZER.getRecipeType()), dissolutionChamberJEICategory.getUid());
         registration.addRecipes(generateBioreactorRecipes(), bioReactorRecipeCategory.getUid());
+        registration.addRecipes(RecipeUtil.getRecipes(Minecraft.getInstance().world, LaserDrillOreRecipe.SERIALIZER.getRecipeType()).stream().filter(laserDrillOreRecipe -> !laserDrillOreRecipe.output.hasNoMatchingItems()).collect(Collectors.toList()), laserRecipeOreCategory.getUid());
+        registration.addRecipes(RecipeUtil.getRecipes(Minecraft.getInstance().world, LaserDrillFluidRecipe.SERIALIZER.getRecipeType()), laserDrillFluidCategory.getUid());
     }
 
     private List<BioReactorRecipeCategory.ReactorRecipeWrapper> generateBioreactorRecipes() {
@@ -317,6 +278,10 @@ public class JEICustomPlugin implements IModPlugin {
         registration.addRecipeCatalyst(new ItemStack(ModuleCore.FLUID_EXTRACTOR), FluidExtractorCategory.ID);
         registration.addRecipeCatalyst(new ItemStack(ModuleCore.DISSOLUTION_CHAMBER), DissolutionChamberCategory.ID);
         registration.addRecipeCatalyst(new ItemStack(ModuleGenerator.BIOREACTOR), BioReactorRecipeCategory.ID);
+        registration.addRecipeCatalyst(new ItemStack(ModuleResourceProduction.ORE_LASER_BASE), LaserDrillOreCategory.ID);
+        registration.addRecipeCatalyst(new ItemStack(ModuleResourceProduction.LASER_DRILL), LaserDrillOreCategory.ID);
+        registration.addRecipeCatalyst(new ItemStack(ModuleResourceProduction.FLUID_LASER_BASE), LaserDrillFluidCategory.ID);
+        registration.addRecipeCatalyst(new ItemStack(ModuleResourceProduction.LASER_DRILL), LaserDrillFluidCategory.ID);
     }
 
     @Override

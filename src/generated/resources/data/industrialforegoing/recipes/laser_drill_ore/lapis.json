@@ -1,0 +1,46 @@
+{
+  "output": {
+    "item": "minecraft:lapis_ore"
+  },
+  "rarity": [
+    {
+      "whitelist": {},
+      "blacklist": {
+        "type": "minecraft:worldgen/biome",
+        "values": [
+          "minecraft:the_end",
+          "minecraft:the_void",
+          "minecraft:small_end_islands",
+          "minecraft:end_barrens",
+          "minecraft:end_highlands",
+          "minecraft:end_midlands"
+        ]
+      },
+      "depth_min": 13,
+      "depth_max": 34,
+      "weight": 14
+    },
+    {
+      "whitelist": {},
+      "blacklist": {
+        "type": "minecraft:worldgen/biome",
+        "values": [
+          "minecraft:the_end",
+          "minecraft:the_void",
+          "minecraft:small_end_islands",
+          "minecraft:end_barrens",
+          "minecraft:end_highlands",
+          "minecraft:end_midlands"
+        ]
+      },
+      "depth_min": 0,
+      "depth_max": 255,
+      "weight": 2
+    }
+  ],
+  "pointer": 0,
+  "catalyst": {
+    "item": "industrialforegoing:laser_lens11"
+  },
+  "type": "industrialforegoing:laser_drill_ore"
+}

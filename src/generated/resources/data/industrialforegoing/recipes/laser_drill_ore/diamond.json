@@ -1,0 +1,46 @@
+{
+  "output": {
+    "item": "minecraft:diamond_ore"
+  },
+  "rarity": [
+    {
+      "whitelist": {},
+      "blacklist": {
+        "type": "minecraft:worldgen/biome",
+        "values": [
+          "minecraft:the_end",
+          "minecraft:the_void",
+          "minecraft:small_end_islands",
+          "minecraft:end_barrens",
+          "minecraft:end_highlands",
+          "minecraft:end_midlands"
+        ]
+      },
+      "depth_min": 5,
+      "depth_max": 16,
+      "weight": 4
+    },
+    {
+      "whitelist": {},
+      "blacklist": {
+        "type": "minecraft:worldgen/biome",
+        "values": [
+          "minecraft:the_end",
+          "minecraft:the_void",
+          "minecraft:small_end_islands",
+          "minecraft:end_barrens",
+          "minecraft:end_highlands",
+          "minecraft:end_midlands"
+        ]
+      },
+      "depth_min": 0,
+      "depth_max": 255,
+      "weight": 1
+    }
+  ],
+  "pointer": 0,
+  "catalyst": {
+    "item": "industrialforegoing:laser_lens3"
+  },
+  "type": "industrialforegoing:laser_drill_ore"
+}
