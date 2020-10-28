@@ -71,7 +71,7 @@ public class ModuleCore implements IModule {
     public static TitaniumFluidInstance PINK_SLIME = new TitaniumFluidInstance(Reference.MOD_ID, "pink_slime", FluidAttributes.builder(new ResourceLocation(Reference.MOD_ID, "blocks/fluids/pink_slime_still"), new ResourceLocation(Reference.MOD_ID, "blocks/fluids/pink_slime_flow")), true, TAB_CORE);
     public static TitaniumFluidInstance MILK = new TitaniumFluidInstance(Reference.MOD_ID, "milk", FluidAttributes.builder(new ResourceLocation(Reference.MOD_ID, "blocks/fluids/milk_still"), new ResourceLocation(Reference.MOD_ID, "blocks/fluids/milk_flow")), false, TAB_CORE);
     public static TitaniumFluidInstance BIOFUEL = new TitaniumFluidInstance(Reference.MOD_ID, "biofuel", FluidAttributes.builder(new ResourceLocation(Reference.MOD_ID, "blocks/fluids/biofuel_still"), new ResourceLocation(Reference.MOD_ID, "blocks/fluids/biofuel_flow")), true, TAB_CORE);
-    public static TitaniumFluidInstance ETHER = new TitaniumFluidInstance(Reference.MOD_ID, "ether", FluidAttributes.builder(new ResourceLocation(Reference.MOD_ID, "blocks/fluids/biofuel_still"), new ResourceLocation(Reference.MOD_ID, "blocks/fluids/biofuel_flow")), true, TAB_CORE);
+    public static TitaniumFluidInstance ETHER = new TitaniumFluidInstance(Reference.MOD_ID, "ether_gas", FluidAttributes.builder(new ResourceLocation(Reference.MOD_ID, "blocks/fluids/ether_gas_still"), new ResourceLocation(Reference.MOD_ID, "blocks/fluids/ether_gas_flow")).gaseous(), true, TAB_CORE);
 
     public static Item MILK_BUCKET = new MilkBucketItem(() -> ModuleCore.MILK.getSourceFluid(), new Item.Properties().maxStackSize(1).containerItem(Items.BUCKET).group(ItemGroup.MISC)).setRegistryName("minecraft", "milk_bucket");
 

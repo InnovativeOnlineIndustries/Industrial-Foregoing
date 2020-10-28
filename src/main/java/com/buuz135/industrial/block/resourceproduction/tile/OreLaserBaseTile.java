@@ -8,6 +8,7 @@ import com.buuz135.industrial.utils.ItemStackUtils;
 import com.buuz135.industrial.utils.ItemStackWeightedItem;
 import com.hrznstudio.titanium.annotation.Save;
 import com.hrznstudio.titanium.api.IFactory;
+import com.hrznstudio.titanium.api.augment.AugmentTypes;
 import com.hrznstudio.titanium.api.client.IScreenAddon;
 import com.hrznstudio.titanium.client.screen.addon.ProgressBarScreenAddon;
 import com.hrznstudio.titanium.client.screen.addon.TextScreenAddon;
@@ -16,6 +17,7 @@ import com.hrznstudio.titanium.component.energy.EnergyStorageComponent;
 import com.hrznstudio.titanium.component.inventory.SidedInventoryComponent;
 import com.hrznstudio.titanium.component.progress.ProgressBarComponent;
 import com.hrznstudio.titanium.component.sideness.IFacingComponent;
+import com.hrznstudio.titanium.item.AugmentWrapper;
 import com.hrznstudio.titanium.util.FacingUtil;
 import com.hrznstudio.titanium.util.RecipeUtil;
 import net.minecraft.item.DyeColor;
@@ -67,6 +69,10 @@ public class OreLaserBaseTile extends IndustrialMachineTile<OreLaserBaseTile> im
                 .setCanIncrease(oreLaserBaseTile -> true)
                 .setProgressIncrease(0)
                 .setCanReset(oreLaserBaseTile -> true)
+                .setOnStart(() -> {
+                    int maxProgress = (int) Math.floor(OreLaserBaseConfig.maxProgress * (this.hasAugmentInstalled(AugmentTypes.EFFICIENCY) ? AugmentWrapper.getType(this.getInstalledAugments(AugmentTypes.EFFICIENCY).get(0), AugmentTypes.EFFICIENCY) : 1));
+                    work.setMaxProgress(maxProgress);
+                })
                 .setOnFinishWork(this::onWork)
         );
         this.addInventory(lens = (SidedInventoryComponent<OreLaserBaseTile>) new SidedInventoryComponent<OreLaserBaseTile>("lens" , 30, 24, 6, 0)
@@ -136,4 +142,13 @@ public class OreLaserBaseTile extends IndustrialMachineTile<OreLaserBaseTile> im
     public ProgressBarComponent<OreLaserBaseTile> getBar() {
         return work;
     }
+
+    @Override
+    public boolean canAcceptAugment(ItemStack augment) {
+        if (AugmentWrapper.hasType(augment, AugmentTypes.SPEED)) {
+            return false;
+        }
+        return super.canAcceptAugment(augment);
+    }
+
 }

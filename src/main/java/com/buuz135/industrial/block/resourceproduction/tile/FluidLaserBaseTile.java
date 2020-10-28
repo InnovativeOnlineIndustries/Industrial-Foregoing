@@ -1,23 +1,28 @@
 package com.buuz135.industrial.block.resourceproduction.tile;
 
 import com.buuz135.industrial.block.tile.IndustrialMachineTile;
+import com.buuz135.industrial.config.machine.resourceproduction.FluidLaserBaseConfig;
 import com.buuz135.industrial.module.ModuleResourceProduction;
 import com.buuz135.industrial.recipe.LaserDrillFluidRecipe;
 import com.hrznstudio.titanium.annotation.Save;
 import com.hrznstudio.titanium.api.IFactory;
+import com.hrznstudio.titanium.api.augment.AugmentTypes;
 import com.hrznstudio.titanium.api.client.IScreenAddon;
 import com.hrznstudio.titanium.client.screen.addon.ProgressBarScreenAddon;
 import com.hrznstudio.titanium.client.screen.addon.TextScreenAddon;
 import com.hrznstudio.titanium.component.button.ArrowButtonComponent;
 import com.hrznstudio.titanium.component.energy.EnergyStorageComponent;
+import com.hrznstudio.titanium.component.fluid.FluidTankComponent;
 import com.hrznstudio.titanium.component.fluid.SidedFluidTankComponent;
 import com.hrznstudio.titanium.component.inventory.SidedInventoryComponent;
 import com.hrznstudio.titanium.component.progress.ProgressBarComponent;
 import com.hrznstudio.titanium.component.sideness.IFacingComponent;
+import com.hrznstudio.titanium.item.AugmentWrapper;
 import com.hrznstudio.titanium.util.FacingUtil;
 import com.hrznstudio.titanium.util.RecipeUtil;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.item.DyeColor;
+import net.minecraft.item.ItemStack;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.shapes.VoxelShape;
@@ -49,7 +54,7 @@ public class FluidLaserBaseTile extends IndustrialMachineTile<FluidLaserBaseTile
         super(ModuleResourceProduction.FLUID_LASER_BASE);
         setShowEnergy(false);
         this.miningDepth = this.getPos().getY();
-        this.addProgressBar(work = new ProgressBarComponent<FluidLaserBaseTile>(74, 24 + 18, 0, 20){
+        this.addProgressBar(work = new ProgressBarComponent<FluidLaserBaseTile>(74, 24 + 18, 0, FluidLaserBaseConfig.maxProgress){
                     @Override
                     public List<IFactory<? extends IScreenAddon>> getScreenAddons() {
                         return Collections.singletonList(() -> new ProgressBarScreenAddon<FluidLaserBaseTile>(work.getPosX(), work.getPosY(), this){
@@ -66,6 +71,10 @@ public class FluidLaserBaseTile extends IndustrialMachineTile<FluidLaserBaseTile
                 .setCanIncrease(oreLaserBaseTile -> true)
                 .setProgressIncrease(0)
                 .setCanReset(oreLaserBaseTile -> true)
+                .setOnStart(() -> {
+                    int maxProgress = (int) Math.floor(FluidLaserBaseConfig.maxProgress * (this.hasAugmentInstalled(AugmentTypes.EFFICIENCY) ? AugmentWrapper.getType(this.getInstalledAugments(AugmentTypes.EFFICIENCY).get(0), AugmentTypes.EFFICIENCY) : 1));
+                    work.setMaxProgress(maxProgress);
+                })
                 .setOnFinishWork(this::onWork)
         );
         this.addInventory(catalyst = (SidedInventoryComponent<FluidLaserBaseTile>) new SidedInventoryComponent<FluidLaserBaseTile>("lens" , 50, 24 + 18, 1, 0)
@@ -75,8 +84,9 @@ public class FluidLaserBaseTile extends IndustrialMachineTile<FluidLaserBaseTile
                 //.setInputFilter((stack, integer) -> stack.getItem() instanceof LaserLensItem)
         );
         catalyst.getFacingModes().keySet().forEach(sideness -> catalyst.getFacingModes().put(sideness, IFacingComponent.FaceMode.NONE));
-        this.addTank(output = new SidedFluidTankComponent<FluidLaserBaseTile>("output", 32000, 102, 20, 1)
+        this.addTank(output = (SidedFluidTankComponent<FluidLaserBaseTile>) new SidedFluidTankComponent<FluidLaserBaseTile>("output", 32000, 102, 20, 1)
             .setColor(DyeColor.ORANGE)
+                .setTankAction(FluidTankComponent.Action.DRAIN)
         );
         int y = 84;
         this.addButton(new ArrowButtonComponent(53, y, 14, 14, FacingUtil.Sideness.LEFT).setPredicate((playerEntity, compoundNBT) -> {
@@ -137,4 +147,13 @@ public class FluidLaserBaseTile extends IndustrialMachineTile<FluidLaserBaseTile
     public ProgressBarComponent<FluidLaserBaseTile> getBar() {
         return work;
     }
+
+    @Override
+    public boolean canAcceptAugment(ItemStack augment) {
+        if (AugmentWrapper.hasType(augment, AugmentTypes.SPEED)) {
+            return false;
+        }
+        return super.canAcceptAugment(augment);
+    }
+
 }

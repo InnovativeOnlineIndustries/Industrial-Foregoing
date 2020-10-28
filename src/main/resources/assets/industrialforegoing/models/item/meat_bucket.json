@@ -1,6 +1,5 @@
 {
-  "parent": "industrialforegoing:item/item",
-  "textures": {
-    "layer0": "industrialforegoing:items/meat_bucket"
-  }
+  "parent": "forge:item/bucket",
+  "loader": "forge:bucket",
+  "fluid": "industrialforegoing:meat"
 }

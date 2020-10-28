@@ -1,5 +1,5 @@
 {
-  "output": "{FluidName:\"industrialforegoing:ether\",Amount:10}",
+  "output": "{FluidName:\"industrialforegoing:ether_gas\",Amount:10}",
   "rarity": [
     {
       "whitelist": {},
