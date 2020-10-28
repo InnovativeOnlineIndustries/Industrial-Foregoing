@@ -79,6 +79,7 @@ public class LaserDrillOreRecipe extends SerializableRecipe {
         createWithDefault("yellorium", 4, 16, 68, 3, 1);
         createNether("cobalt", 11, 34, 96, 8);
         createNether("ardite", 4, 89, 116, 8);
+        new LaserDrillOreRecipe("ancient_debris", Ingredient.fromItems(Blocks.ANCIENT_DEBRIS),  12, null, new LaserDrillRarity(LaserDrillRarity.NETHER,new RegistryKey[0], 1, 20, 1));
     }
 
     public static LaserDrillOreRecipe createWithDefault(String name, IItemProvider output, int color, int min, int max, int weight, int defaultWeight){
