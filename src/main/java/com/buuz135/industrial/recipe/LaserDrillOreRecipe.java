@@ -181,7 +181,7 @@ public class LaserDrillOreRecipe extends SerializableRecipe {
     public LaserDrillRarity getValidRarity(ResourceLocation biome, int height){
         for (LaserDrillRarity laserDrillRarity : rarity) {
             if (laserDrillRarity.depth_max >= height && laserDrillRarity.depth_min <= height){
-                if (laserDrillRarity.whitelist.length == 0 ? Arrays.stream(laserDrillRarity.blacklist).noneMatch(registryKey -> registryKey.func_240901_a_().equals(biome)) : Arrays.stream(laserDrillRarity.whitelist).anyMatch(registryKey -> registryKey.func_240901_a_().equals(biome))) return laserDrillRarity;
+                if (laserDrillRarity.whitelist.length == 0 ? Arrays.stream(laserDrillRarity.blacklist).noneMatch(registryKey -> registryKey.getLocation().equals(biome)) : Arrays.stream(laserDrillRarity.whitelist).anyMatch(registryKey -> registryKey.getLocation().equals(biome))) return laserDrillRarity;
             }
         }
         return null;

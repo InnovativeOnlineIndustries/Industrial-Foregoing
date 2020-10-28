@@ -135,7 +135,7 @@ public class LaserDrillFluidCategory implements IRecipeCategory<LaserDrillFluidR
             if (recipe.rarity[recipe.pointer].whitelist.length == 0) biomes.add(new StringTextComponent("- Any"));
             else {
                 for (RegistryKey<Biome> registryKey : recipe.rarity[recipe.pointer].whitelist) {
-                    biomes.add(new StringTextComponent("- ").append(new TranslationTextComponent("biome." + registryKey.func_240901_a_().getNamespace() + "." + registryKey.func_240901_a_().getPath())));
+                    biomes.add(new StringTextComponent("- ").append(new TranslationTextComponent("biome." + registryKey.getLocation().getNamespace() + "." + registryKey.getLocation().getPath())));
                 }
             }
             return biomes;
@@ -146,7 +146,7 @@ public class LaserDrillFluidCategory implements IRecipeCategory<LaserDrillFluidR
             if (recipe.rarity[recipe.pointer].blacklist.length == 0) biomes.add(new StringTextComponent("- None"));
             else {
                 for (RegistryKey<Biome> registryKey : recipe.rarity[recipe.pointer].blacklist) {
-                    biomes.add(new StringTextComponent("- ").append(new TranslationTextComponent("biome." + registryKey.func_240901_a_().getNamespace() + "." + registryKey.func_240901_a_().getPath())));
+                    biomes.add(new StringTextComponent("- ").append(new TranslationTextComponent("biome." + registryKey.getLocation().getNamespace() + "." + registryKey.getLocation().getPath())));
                 }
             }
             return biomes;
