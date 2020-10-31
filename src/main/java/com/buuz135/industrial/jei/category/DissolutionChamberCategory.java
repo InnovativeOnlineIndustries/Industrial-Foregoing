@@ -1,6 +1,7 @@
 package com.buuz135.industrial.jei.category;
 
 import com.buuz135.industrial.block.core.tile.DissolutionChamberTile;
+import com.buuz135.industrial.config.machine.core.DissolutionChamberConfig;
 import com.buuz135.industrial.recipe.DissolutionChamberRecipe;
 import com.hrznstudio.titanium.api.client.AssetTypes;
 import com.hrznstudio.titanium.client.screen.addon.EnergyBarScreenAddon;
@@ -105,7 +106,7 @@ public class DissolutionChamberCategory implements IRecipeCategory<DissolutionCh
 
         AssetUtil.drawAsset(matrixStack, Minecraft.getInstance().currentScreen, IAssetProvider.getAsset(DefaultAssetProvider.DEFAULT_PROVIDER, AssetTypes.PROGRESS_BAR_BACKGROUND_ARROW_HORIZONTAL), 92, 41 - 8);
 
-        int consumed = recipe.processingTime * 60;
+        int consumed = recipe.processingTime * DissolutionChamberConfig.powerPerTick;
         EnergyBarScreenAddon.drawForeground(matrixStack, Minecraft.getInstance().currentScreen, DefaultAssetProvider.DEFAULT_PROVIDER, 0, 12, 0, 0, consumed, (int) Math.max(50000, Math.ceil(consumed)));
 
     }
