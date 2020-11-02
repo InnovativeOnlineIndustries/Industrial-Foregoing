@@ -29,8 +29,7 @@
   "processingTime": 400,
   "output": {
     "item": "industrialforegoing:infinity_drill",
-    "count": 1,
-    "nbt": "{CanCharge:1b,Energy:0L,Fluid:{FluidName:\"biofuel\",Amount:0},Special:0b,Selected:\"POOR\"}"
+    "count": 1
   },
   "type": "industrialforegoing:dissolution_chamber"
 }

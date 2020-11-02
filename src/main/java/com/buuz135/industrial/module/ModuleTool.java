@@ -1,11 +1,13 @@
 package com.buuz135.industrial.module;
 
+import com.buuz135.industrial.entity.InfinityTridentEntity;
 import com.buuz135.industrial.item.MeatFeederItem;
 import com.buuz135.industrial.item.MobEssenceToolItem;
 import com.buuz135.industrial.item.MobImprisonmentToolItem;
 import com.buuz135.industrial.item.infinity.item.ItemInfinityDrill;
 import com.buuz135.industrial.item.infinity.item.ItemInfinityHammer;
 import com.buuz135.industrial.item.infinity.item.ItemInfinitySaw;
+import com.buuz135.industrial.item.infinity.item.ItemInfinityTrident;
 import com.buuz135.industrial.utils.BlockUtils;
 import com.buuz135.industrial.utils.Reference;
 import com.hrznstudio.titanium.capability.CapabilityItemStackHolder;
@@ -15,6 +17,8 @@ import com.hrznstudio.titanium.itemstack.ItemStackHarnessRegistry;
 import com.hrznstudio.titanium.module.Feature;
 import com.hrznstudio.titanium.network.IButtonHandler;
 import com.hrznstudio.titanium.tab.AdvancedTitaniumTab;
+import net.minecraft.entity.EntityClassification;
+import net.minecraft.entity.EntityType;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
@@ -35,6 +39,16 @@ public class ModuleTool implements IModule {
     public static MobEssenceToolItem MOB_ESSENCE_TOOL;
     public static ItemInfinitySaw INFINITY_SAW;
     public static ItemInfinityHammer INFINITY_HAMMER;
+    public static ItemInfinityTrident INFINITY_TRIDENT;
+
+    public static EntityType<InfinityTridentEntity> TRIDENT_ENTITY_TYPE;
+
+    static {
+        TRIDENT_ENTITY_TYPE = (EntityType<InfinityTridentEntity>) EntityType.Builder.<InfinityTridentEntity>create(InfinityTridentEntity::new, EntityClassification.MISC).size(0.5F, 0.5F)
+                .setShouldReceiveVelocityUpdates(true)
+                .setCustomClientFactory((spawnEntity, world) -> new InfinityTridentEntity(TRIDENT_ENTITY_TYPE,world)).trackingRange(4).func_233608_b_(20).build("trident_entity").setRegistryName(Reference.MOD_ID, "trident_entity");
+    }
+
 
     @Override
     public List<Feature.Builder> generateFeatures() {
@@ -48,10 +62,14 @@ public class ModuleTool implements IModule {
             breakEvent.getPlayer().getHeldItemMainhand().onBlockDestroyed((World) breakEvent.getWorld(), breakEvent.getState(), breakEvent.getPos(), breakEvent.getPlayer());
         })));
         features.add(createFeature(INFINITY_HAMMER = new ItemInfinityHammer(TAB_TOOL)));
+        features.add(Feature.builder("infinity_trident")
+                .content(Item.class, INFINITY_TRIDENT = new ItemInfinityTrident(TAB_TOOL))
+                .content(EntityType.class, (EntityType) TRIDENT_ENTITY_TYPE ));
         TAB_TOOL.addIconStack(new ItemStack(INFINITY_DRILL));
         ItemStackHarnessRegistry.register(INFINITY_SAW, stack -> new ItemStackHarness(stack, null, (IButtonHandler) stack.getItem(), CapabilityEnergy.ENERGY, CapabilityFluidHandler.FLUID_HANDLER_ITEM_CAPABILITY, CapabilityItemStackHolder.ITEMSTACK_HOLDER_CAPABILITY));
         ItemStackHarnessRegistry.register(INFINITY_DRILL, stack -> new ItemStackHarness(stack, null, (IButtonHandler) stack.getItem(), CapabilityEnergy.ENERGY, CapabilityFluidHandler.FLUID_HANDLER_ITEM_CAPABILITY, CapabilityItemStackHolder.ITEMSTACK_HOLDER_CAPABILITY));
         ItemStackHarnessRegistry.register(INFINITY_HAMMER, stack -> new ItemStackHarness(stack, null, (IButtonHandler) stack.getItem(), CapabilityEnergy.ENERGY, CapabilityFluidHandler.FLUID_HANDLER_ITEM_CAPABILITY, CapabilityItemStackHolder.ITEMSTACK_HOLDER_CAPABILITY));
+        ItemStackHarnessRegistry.register(INFINITY_TRIDENT, stack -> new ItemStackHarness(stack, null, (IButtonHandler) stack.getItem(), CapabilityEnergy.ENERGY, CapabilityFluidHandler.FLUID_HANDLER_ITEM_CAPABILITY, CapabilityItemStackHolder.ITEMSTACK_HOLDER_CAPABILITY));
         return features;
     }
 }
