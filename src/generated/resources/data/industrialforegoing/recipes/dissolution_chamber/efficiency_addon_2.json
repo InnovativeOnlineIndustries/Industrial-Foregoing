@@ -29,7 +29,8 @@
   "processingTime": 200,
   "output": {
     "item": "industrialforegoing:efficiency_addon_2",
-    "count": 1
+    "count": 1,
+    "nbt": "{TitaniumAugment:{Efficiency:0.8f}}"
   },
   "type": "industrialforegoing:dissolution_chamber"
 }

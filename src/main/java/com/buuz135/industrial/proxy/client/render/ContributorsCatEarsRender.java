@@ -25,7 +25,6 @@ import com.buuz135.industrial.proxy.client.ClientProxy;
 import com.buuz135.industrial.utils.Reference;
 import com.hrznstudio.titanium.reward.storage.ClientRewardStorage;
 import com.mojang.blaze3d.matrix.MatrixStack;
-import com.mojang.blaze3d.systems.RenderSystem;
 import net.minecraft.block.Blocks;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.player.AbstractClientPlayerEntity;
@@ -66,9 +65,9 @@ public class ContributorsCatEarsRender extends LayerRenderer<AbstractClientPlaye
         Minecraft.getInstance().getTextureManager().bindTexture(AtlasTexture.LOCATION_BLOCKS_TEXTURE);
         Calendar calendar = Calendar.getInstance();
         if (calendar.get(Calendar.MONTH) == Calendar.OCTOBER) {
-            spookyScarySkeletons();
+            spookyScarySkeletons(stack, buffer);
         } else if (calendar.get(Calendar.MONTH) == Calendar.DECEMBER) {
-            itsSnowyHere();
+            itsSnowyHere(stack, buffer);
         } else {
             Minecraft.getInstance().getBlockRendererDispatcher().getBlockModelRenderer().renderModelBrightnessColor(stack.getLast(), buffer.getBuffer(RenderType.getCutout()), null, ClientProxy.ears_baked, 1f, 1f, 1f, p_225628_3_, OverlayTexture.NO_OVERLAY);
         }
@@ -76,27 +75,27 @@ public class ContributorsCatEarsRender extends LayerRenderer<AbstractClientPlaye
     }
 
     @OnlyIn(Dist.CLIENT)
-    public void spookyScarySkeletons() {
-        IBakedModel pumpkin = Minecraft.getInstance().getBlockRendererDispatcher().getModelForState(Minecraft.getInstance().world.getGameTime() % 200 < 100 ? Blocks.CARVED_PUMPKIN.getDefaultState() : Blocks.PUMPKIN.getDefaultState());
-        RenderSystem.rotatef(90, 0, -1, 0);
-        RenderSystem.translatef(0.08f, 0.485f, -0.1f);
-        RenderSystem.scalef(2 / 16f, 3 / 16f, 2 / 16f);
+    public void spookyScarySkeletons(MatrixStack stack, IRenderTypeBuffer buffer) {
+        IBakedModel pumpkin = Minecraft.getInstance().getBlockRendererDispatcher().getModelForState(Minecraft.getInstance().world.getGameTime() % 200 < 100 ? Blocks.CARVED_PUMPKIN.getDefaultState() : Blocks.JACK_O_LANTERN.getDefaultState());
+        stack.rotate(Vector3f.YN.rotationDegrees(90f));
+        stack.translate(0.08f, 0.485f, -0.1f);
+        stack.scale(2 / 16f, 2 / 16f, 2 / 16f);
 
-        //Minecraft.getInstance().getBlockRendererDispatcher().getBlockModelRenderer().renderModelBrightnessColor(pumpkin, 0.5f, 255, 255, 255);
-        RenderSystem.translatef(-0.08f * 28f, 0f, 0f);
-        //Minecraft.getInstance().getBlockRendererDispatcher().getBlockModelRenderer().renderModelBrightnessColor(pumpkin, 0.5f, 255, 255, 255);
+        Minecraft.getInstance().getBlockRendererDispatcher().getBlockModelRenderer().renderModelBrightnessColor(stack.getLast(), buffer.getBuffer(RenderType.getSolid()), null, pumpkin, 0.5f, 255, 255, 255, 255);
+        stack.translate(-0.08f * 28f, 0f, 0f);
+        Minecraft.getInstance().getBlockRendererDispatcher().getBlockModelRenderer().renderModelBrightnessColor(stack.getLast(), buffer.getBuffer(RenderType.getSolid()), null, pumpkin, 0.5f, 255, 255, 255, 255);
     }
 
     @OnlyIn(Dist.CLIENT)
-    public void itsSnowyHere() {
-        IBakedModel pumpkin = Minecraft.getInstance().getBlockRendererDispatcher().getModelForState(Blocks.TALL_GRASS.getDefaultState());
-        RenderSystem.rotatef(90, 0, -1, 0);
-        RenderSystem.translatef(0.08f, 0.485f, -0.1f);
-        RenderSystem.scalef(2 / 16f, 2 / 16f, 2 / 16f);
+    public void itsSnowyHere(MatrixStack stack, IRenderTypeBuffer buffer) {
+        IBakedModel pumpkin = Minecraft.getInstance().getBlockRendererDispatcher().getModelForState(Blocks.CAKE.getDefaultState());
+        stack.rotate(Vector3f.YN.rotationDegrees(90f));
+        stack.translate(0.08f, 0.485f, -0.1f);
+        stack.scale(2 / 16f, 2 / 16f, 2 / 16f);
 
-        //Minecraft.getInstance().getBlockRendererDispatcher().getBlockModelRenderer().renderModelBrightnessColor(pumpkin, 0.5f, 255, 255, 255);
-        RenderSystem.translatef(-0.08f * 28, 0, 0);
-        //Minecraft.getInstance().getBlockRendererDispatcher().getBlockModelRenderer().renderModelBrightnessColor(pumpkin, 0.5f, 255, 255, 255);
+        Minecraft.getInstance().getBlockRendererDispatcher().getBlockModelRenderer().renderModelBrightnessColor(stack.getLast(), buffer.getBuffer(RenderType.getSolid()), null, pumpkin, 255, 255, 255, 255, 255);
+        stack.translate(-0.08f * 28f, 0f, 0f);
+        Minecraft.getInstance().getBlockRendererDispatcher().getBlockModelRenderer().renderModelBrightnessColor(stack.getLast(), buffer.getBuffer(RenderType.getSolid()), null, pumpkin, 255, 255, 255, 255, 255);
     }
 
 }

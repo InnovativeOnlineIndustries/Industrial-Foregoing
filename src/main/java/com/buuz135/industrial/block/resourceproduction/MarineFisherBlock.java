@@ -33,6 +33,5 @@ public class MarineFisherBlock extends IndustrialBlock<MarineFisherTile> {
                 .key('g', IndustrialTags.Items.GEAR_IRON)
                 .key('r', Items.REDSTONE)
                 .build(consumer);
-        ;
     }
 }

@@ -82,6 +82,18 @@ public class DissolutionChamberRecipe extends SerializableRecipe {
                         new Ingredient.SingleItemList(new ItemStack(Blocks.SOUL_SAND)),
                 },
                 new FluidStack(ModuleCore.LATEX.getSourceFluid(), 100), 100, new ItemStack(ModuleCore.DARK_GLASS, 8), FluidStack.EMPTY);
+        new DissolutionChamberRecipe(new ResourceLocation(Reference.MOD_ID, "supreme_machine_frame"),
+                new Ingredient.IItemList[]{
+                        new Ingredient.TagList(IndustrialTags.Items.PLASTIC),
+                        new Ingredient.TagList(IndustrialTags.Items.MACHINE_FRAME_ADVANCED),
+                        new Ingredient.TagList(IndustrialTags.Items.PLASTIC),
+                        new Ingredient.SingleItemList(new ItemStack(Items.NETHERITE_INGOT)),
+                        new Ingredient.SingleItemList(new ItemStack(Items.NETHERITE_INGOT)),
+                        new Ingredient.TagList(Tags.Items.GEMS_DIAMOND),
+                        new Ingredient.TagList(IndustrialTags.Items.GEAR_DIAMOND),
+                        new Ingredient.TagList(Tags.Items.GEMS_DIAMOND)
+                },
+                new FluidStack(ModuleCore.ETHER.getSourceFluid(), 135), 300, new ItemStack(ModuleCore.SUPREME), FluidStack.EMPTY);
     }
 
     public Ingredient.IItemList[] input;
@@ -100,6 +112,7 @@ public class DissolutionChamberRecipe extends SerializableRecipe {
         this.inputFluid = inputFluid;
         this.processingTime = processingTime;
         this.output = output;
+        this.output.getItem().onCreated(this.output, null, null);
         this.outputFluid = outputFluid;
         RECIPES.add(this);
     }

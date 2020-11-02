@@ -29,7 +29,8 @@
   "processingTime": 200,
   "output": {
     "item": "industrialforegoing:range_addon4",
-    "count": 1
+    "count": 1,
+    "nbt": "{TitaniumAugment:{Range:4.0f}}"
   },
   "type": "industrialforegoing:dissolution_chamber"
 }

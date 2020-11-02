@@ -21,13 +21,11 @@
  */
 package com.buuz135.industrial.proxy;
 
-import com.buuz135.industrial.api.recipe.LaserDrillEntry;
 import com.buuz135.industrial.proxy.event.FakePlayerRideEntityHandler;
 import com.buuz135.industrial.proxy.event.MeatFeederTickHandler;
 import com.buuz135.industrial.proxy.event.MobDeathHandler;
 import com.buuz135.industrial.proxy.event.SkullHandler;
 import com.buuz135.industrial.utils.CraftingUtils;
-import com.buuz135.industrial.utils.Reference;
 import com.buuz135.industrial.utils.apihandlers.RecipeHandlers;
 import com.google.gson.JsonParser;
 import com.hrznstudio.titanium.event.handler.EventManager;
@@ -80,8 +78,6 @@ public class CommonProxy {
     }
 
     public void run() {
-        LaserDrillEntry.addOreFile(new ResourceLocation(Reference.MOD_ID, "default_ores.json"));
-
         //CraftingHelper.register(new ResourceLocation(Reference.MOD_ID, "configuration_value"), new ConfigurationConditionFactory());
         random = new Random();
 

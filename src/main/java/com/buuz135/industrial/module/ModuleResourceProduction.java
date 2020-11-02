@@ -26,6 +26,9 @@ public class ModuleResourceProduction implements IModule {
     public static MaterialStoneWorkFactoryBlock MATERIAL_STONEWORK_FACTORY = new MaterialStoneWorkFactoryBlock();
     public static MarineFisherBlock MARINE_FISHER = new MarineFisherBlock();
     public static PotionBrewerBlock POTION_BREWER = new PotionBrewerBlock();
+    public static OreLaserBaseBlock ORE_LASER_BASE = new OreLaserBaseBlock();
+    public static LaserDrillBlock LASER_DRILL = new LaserDrillBlock();
+    public static FluidLaserBaseBlock FLUID_LASER_BASE = new FluidLaserBaseBlock();
 
     @Override
     public List<Feature.Builder> generateFeatures() {
@@ -43,6 +46,9 @@ public class ModuleResourceProduction implements IModule {
         features.add(createFeature(MATERIAL_STONEWORK_FACTORY));
         features.add(createFeature(MARINE_FISHER));
         features.add(createFeature(POTION_BREWER));
+        features.add(createFeature(ORE_LASER_BASE));
+        features.add(createFeature(LASER_DRILL));
+        features.add(createFeature(FLUID_LASER_BASE));
         TAB_RESOURCE.addIconStack(new ItemStack(WATER_CONDENSATOR));
         return features;
     }

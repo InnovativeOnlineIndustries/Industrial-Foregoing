@@ -22,7 +22,10 @@
 package com.buuz135.industrial.utils.apihandlers;
 
 import com.buuz135.industrial.api.IndustrialForegoingHelper;
-import com.buuz135.industrial.api.recipe.*;
+import com.buuz135.industrial.api.recipe.BioReactorEntry;
+import com.buuz135.industrial.api.recipe.FluidDictionaryEntry;
+import com.buuz135.industrial.api.recipe.ProteinReactorEntry;
+import com.buuz135.industrial.api.recipe.SludgeEntry;
 import com.buuz135.industrial.utils.apihandlers.crafttweaker.CTAction;
 import com.google.common.collect.LinkedListMultimap;
 import net.minecraft.block.Blocks;
@@ -33,7 +36,6 @@ import net.minecraft.util.NonNullList;
 public class RecipeHandlers {
 
     public static final LinkedListMultimap<CTAction, BioReactorEntry> BIOREACTOR_ENTRIES = LinkedListMultimap.create();
-    public static final LinkedListMultimap<CTAction, LaserDrillEntry> LASER_ENTRIES = LinkedListMultimap.create();
     public static final LinkedListMultimap<CTAction, SludgeEntry> SLUDGE_ENTRIES = LinkedListMultimap.create();
     public static final LinkedListMultimap<CTAction, ProteinReactorEntry> PROTEIN_REACTOR_ENTRIES = LinkedListMultimap.create();
     public static final LinkedListMultimap<CTAction, FluidDictionaryEntry> FLUID_DICTIONARY_ENTRIES = LinkedListMultimap.create();
@@ -58,10 +60,6 @@ public class RecipeHandlers {
         BIOREACTOR_ENTRIES.forEach((ctAction, entry) -> {
             if (ctAction == CTAction.ADD) IndustrialForegoingHelper.addBioReactorEntry(entry);
             else IndustrialForegoingHelper.removeBioReactorEntry(entry.getStack());
-        });
-        LASER_ENTRIES.forEach((ctAction, entry) -> {
-            if (ctAction == CTAction.ADD) IndustrialForegoingHelper.addLaserDrillEntry(entry);
-            else IndustrialForegoingHelper.removeLaserDrillEntry(entry.getStack());
         });
         SLUDGE_ENTRIES.forEach((ctAction, entry) -> {
             if (ctAction == CTAction.ADD) IndustrialForegoingHelper.addSludgeRefinerEntry(entry);

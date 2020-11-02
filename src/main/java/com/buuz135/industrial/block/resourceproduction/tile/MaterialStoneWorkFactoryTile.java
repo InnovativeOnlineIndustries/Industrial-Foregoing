@@ -68,9 +68,10 @@ public class MaterialStoneWorkFactoryTile extends IndustrialProcessingTile<Mater
                 }
                 return ItemStack.EMPTY;
             }, 1, "smelt"),
-            new StoneWorkAction(new ItemStack(Items.DIAMOND_PICKAXE), (world1, stack) -> CraftingUtils.getCrushOutput(stack), 1, "crush"), //TODO Make Recipe
+            new StoneWorkAction(new ItemStack(Items.DIAMOND_PICKAXE), (world1, stack) -> CraftingUtils.getCrushOutput(stack), 1, "crush"),
             new StoneWorkAction(new ItemStack(Blocks.OAK_PLANKS), (world1, stack) -> CraftingUtils.findOutput(2, stack, world1), 4, "small_craft"),
-            new StoneWorkAction(new ItemStack(Blocks.CRAFTING_TABLE), (world1, stack) -> CraftingUtils.findOutput(3, stack, world1), 9, "big_craft")
+            new StoneWorkAction(new ItemStack(Blocks.CRAFTING_TABLE), (world1, stack) -> CraftingUtils.findOutput(3, stack, world1), 9, "big_craft"),
+            new StoneWorkAction(new ItemStack(Blocks.BARRIER), (world1, stack) -> ItemStack.EMPTY, 0, "none")
     };
 
     @Save

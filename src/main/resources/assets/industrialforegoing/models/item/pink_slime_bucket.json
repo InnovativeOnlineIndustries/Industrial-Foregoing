@@ -1,6 +1,5 @@
 {
-  "parent": "industrialforegoing:item/item",
-  "textures": {
-    "layer0": "industrialforegoing:items/pink_slime_bucket"
-  }
+  "parent": "forge:item/bucket",
+  "loader": "forge:bucket",
+  "fluid": "industrialforegoing:pink_slime"
 }

@@ -1,0 +1,35 @@
+{
+  "input": [
+    {
+      "tag": "forge:plastic"
+    },
+    {
+      "tag": "industrialforegoing:machine_frame/advanced"
+    },
+    {
+      "tag": "forge:plastic"
+    },
+    {
+      "item": "minecraft:netherite_ingot"
+    },
+    {
+      "item": "minecraft:netherite_ingot"
+    },
+    {
+      "tag": "forge:gems/diamond"
+    },
+    {
+      "tag": "forge:gears/diamond"
+    },
+    {
+      "tag": "forge:gems/diamond"
+    }
+  ],
+  "inputFluid": "{FluidName:\"industrialforegoing:ether_gas\",Amount:135}",
+  "processingTime": 300,
+  "output": {
+    "item": "industrialforegoing:machine_frame_supreme",
+    "count": 1
+  },
+  "type": "industrialforegoing:dissolution_chamber"
+}
