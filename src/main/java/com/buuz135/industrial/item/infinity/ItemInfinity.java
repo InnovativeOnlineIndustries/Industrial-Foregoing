@@ -347,13 +347,13 @@ public class ItemInfinity extends IFCustomItem implements INamedContainerProvide
                 return TextFormatting.DARK_GRAY + "Area: " + ItemInfinity.getFormattedArea(current, current.getRadius(), usesDepth);
             }
         });
-        factory.add(() -> new StateButtonAddon(new ButtonComponent(54, 38, 14, 15).setId(3), new StateButtonInfo(0, AssetTypes.BUTTON_SIDENESS_ENABLED), new StateButtonInfo(1, AssetTypes.BUTTON_SIDENESS_DISABLED)) {
+        factory.add(() -> new StateButtonAddon(new ButtonComponent(54, 36, 14, 14).setId(3), new StateButtonInfo(0, AssetTypes.BUTTON_SIDENESS_ENABLED), new StateButtonInfo(1, AssetTypes.BUTTON_SIDENESS_DISABLED)) {
             @Override
             public int getState() {
                 return ItemInfinity.canCharge(stack.get()) ? 0 : 1;
             }
         });
-        factory.add(() -> new TextScreenAddon("", 54 + 14 + 4, 42, false) {
+        factory.add(() -> new TextScreenAddon("", 54 + 14 + 4, 40, false) {
             @Override
             public String getText() {
                 if (ItemInfinity.canCharge(stack.get())) {//setStyle

@@ -4,13 +4,13 @@
       "item": "minecraft:diamond_block"
     },
     {
-      "item": "minecraft:diamond_pickaxe"
+      "item": "minecraft:trident"
     },
     {
-      "item": "minecraft:diamond_axe"
+      "item": "minecraft:diamond_block"
     },
     {
-      "item": "minecraft:diamond_axe"
+      "item": "minecraft:diamond_hoe"
     },
     {
       "item": "industrialforegoing:range_addon11"
@@ -28,7 +28,7 @@
   "inputFluid": "{FluidName:\"industrialforegoing:pink_slime\",Amount:2000}",
   "processingTime": 400,
   "output": {
-    "item": "industrialforegoing:infinity_saw",
+    "item": "industrialforegoing:infinity_trident",
     "count": 1
   },
   "type": "industrialforegoing:dissolution_chamber"

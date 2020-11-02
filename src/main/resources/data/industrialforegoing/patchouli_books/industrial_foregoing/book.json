@@ -6,5 +6,6 @@
   "text_color": "5A5766",
   "header_color": "48435C",
   "nameplate_color": "61E786",
-  "progress_bar_color": "EDFFEC"
+  "progress_bar_color": "EDFFEC",
+  "model": "patchouli:book_cyan"
 }

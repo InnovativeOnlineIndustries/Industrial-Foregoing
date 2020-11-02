@@ -5,7 +5,10 @@
       "item": "minecraft:book"
     },
     {
-      "item": "minecraft:oak_sapling"
+      "item": "minecraft:redstone"
+    },
+    {
+      "item": "minecraft:dirt"
     }
   ],
   "result": {
