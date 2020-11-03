@@ -68,7 +68,7 @@ public class ContributorsCatEarsRender extends LayerRenderer<AbstractClientPlaye
             spookyScarySkeletons(stack, buffer);
         } else if (calendar.get(Calendar.MONTH) == Calendar.DECEMBER) {
             itsSnowyHere(stack, buffer);
-        } else {
+        } else if (ClientProxy.ears_baked != null){
             Minecraft.getInstance().getBlockRendererDispatcher().getBlockModelRenderer().renderModelBrightnessColor(stack.getLast(), buffer.getBuffer(RenderType.getCutout()), null, ClientProxy.ears_baked, 1f, 1f, 1f, p_225628_3_, OverlayTexture.NO_OVERLAY);
         }
         stack.pop();
