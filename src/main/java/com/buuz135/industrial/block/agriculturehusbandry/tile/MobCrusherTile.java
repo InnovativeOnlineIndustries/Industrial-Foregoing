@@ -102,7 +102,7 @@ public class MobCrusherTile extends IndustrialAreaWorkingTile<MobCrusherTile> {
     @Override
     public WorkAction work() {
         if (hasEnergy(MobCrusherConfig.powerPerOperation)) {
-            List<MobEntity> mobs = this.world.getEntitiesWithinAABB(MobEntity.class, getWorkingArea().getBoundingBox()).stream().filter(mobEntity -> !mobEntity.isInvulnerable() && !(mobEntity instanceof WitherEntity && ((WitherEntity) mobEntity).getInvulTime() > 0)).collect(Collectors.toList());
+            List<MobEntity> mobs = this.world.getEntitiesWithinAABB(MobEntity.class, getWorkingArea().getBoundingBox()).stream().filter(mobEntity -> !mobEntity.isChild() && !mobEntity.isInvulnerable() && !(mobEntity instanceof WitherEntity && ((WitherEntity) mobEntity).getInvulTime() > 0)).collect(Collectors.toList());
             if (mobs.size() > 0) {
                 MobEntity entity = mobs.get(0);
                 FakePlayer player = IndustrialForegoing.getFakePlayer(this.world);
