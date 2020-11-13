@@ -55,7 +55,7 @@ public class InfinityCapabilityProvider implements ICapabilityProvider {
                 return Collections.singletonList(() -> new TankScreenAddon(30, 20, tank, FluidTankComponent.Type.NORMAL));
             }
         };
-        energyStorage = new InfinityEnergyStorage() {
+        energyStorage = new InfinityEnergyStorage(InfinityTier.ARTIFACT.getPowerNeeded(), 10, 20) {
             @Override
             public long getLongEnergyStored() {
                 if (stack.hasTag()) {

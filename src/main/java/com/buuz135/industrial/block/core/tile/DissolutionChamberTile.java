@@ -50,7 +50,6 @@ public class DissolutionChamberTile extends IndustrialProcessingTile<Dissolution
                 setColor(DyeColor.LIME).
                 setTankType(FluidTankComponent.Type.SMALL).
                 setComponentHarness(this).
-                setTankAction(FluidTankComponent.Action.FILL).
                 setOnContentChange(() -> checkForRecipe())
         );
         this.addInventory(this.output = (SidedInventoryComponent<DissolutionChamberTile>) new SidedInventoryComponent<DissolutionChamberTile>("output", 129, 22, 3, 2).

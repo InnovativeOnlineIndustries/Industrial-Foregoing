@@ -1,7 +1,6 @@
 package com.buuz135.industrial.gui.component;
 
 import com.buuz135.industrial.item.infinity.InfinityEnergyStorage;
-import com.buuz135.industrial.item.infinity.InfinityTier;
 import com.hrznstudio.titanium.api.client.IAsset;
 import com.hrznstudio.titanium.client.screen.addon.BasicScreenAddon;
 import com.hrznstudio.titanium.client.screen.asset.IAssetProvider;
@@ -10,7 +9,6 @@ import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.util.text.TextFormatting;
-import org.apache.commons.lang3.tuple.Pair;
 
 import java.text.DecimalFormat;
 import java.util.Arrays;
@@ -22,13 +20,13 @@ import static com.hrznstudio.titanium.client.screen.addon.EnergyBarScreenAddon.d
 public class InfinityEnergyScreenAddon extends BasicScreenAddon {
 
     private final InfinityEnergyStorage handler;
-    private final Pair<InfinityTier, InfinityTier> tier;
+    private final long tier;
     private IAsset background;
 
     public InfinityEnergyScreenAddon(int posX, int posY, InfinityEnergyStorage handler) {
         super(posX, posY);
         this.handler = handler;
-        this.tier = InfinityTier.getTierBraquet(handler.getLongEnergyStored());
+        this.tier = handler.getLongCapacity();
     }
 
     public static java.util.List<ITextComponent> getTooltip(long stored, long capacity) {
@@ -52,11 +50,11 @@ public class InfinityEnergyScreenAddon extends BasicScreenAddon {
 
     @Override
     public void drawForegroundLayer(MatrixStack stack, Screen screen, IAssetProvider provider, int guiX, int guiY, int mouseX, int mouseY) {
-        drawForeground(stack, screen, provider, getPosX(), getPosY(), guiX, guiY, handler.getLongEnergyStored(), tier.getRight().getPowerNeeded());
+        drawForeground(stack, screen, provider, getPosX(), getPosY(), guiX, guiY, handler.getLongEnergyStored(), tier);
     }
 
     @Override
     public List<ITextComponent> getTooltipLines() {
-        return getTooltip(handler.getLongEnergyStored(), tier.getRight().getPowerNeeded());
+        return getTooltip(handler.getLongEnergyStored(), tier);
     }
 }
