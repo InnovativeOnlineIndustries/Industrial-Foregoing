@@ -2,6 +2,7 @@ package com.buuz135.industrial.block.resourceproduction.tile;
 
 import com.buuz135.industrial.block.tile.IndustrialProcessingTile;
 import com.buuz135.industrial.config.machine.resourceproduction.SludgeRefinerConfig;
+import com.buuz135.industrial.module.ModuleCore;
 import com.buuz135.industrial.module.ModuleResourceProduction;
 import com.buuz135.industrial.utils.IndustrialTags;
 import com.hrznstudio.titanium.annotation.Save;
@@ -32,6 +33,7 @@ public class SludgeRefinerTile extends IndustrialProcessingTile<SludgeRefinerTil
                 .setColor(DyeColor.MAGENTA)
                 .setComponentHarness(this)
                 .setTankAction(FluidTankComponent.Action.FILL)
+                .setValidator(fluidStack -> fluidStack.getFluid().isEquivalentTo(ModuleCore.SLUDGE.getSourceFluid()))
         );
         addInventory(output = (SidedInventoryComponent<SludgeRefinerTile>) new SidedInventoryComponent<SludgeRefinerTile>("output", 80, 22, 5 * 3, 1)
                 .setColor(DyeColor.ORANGE)
