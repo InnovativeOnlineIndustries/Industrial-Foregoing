@@ -28,7 +28,7 @@ public class LaserLensItem extends IFCustomItem {
 
     @Override
     public ITextComponent getDisplayName(ItemStack stack) {
-        return new StringTextComponent(new TranslationTextComponent("color.minecraft." + DyeColor.byId(color).getTranslationKey().replaceAll("_", "")).getString() +
+        return new StringTextComponent(new TranslationTextComponent("color.minecraft." + DyeColor.byId(color).getTranslationKey()).getString() +
                 " " + new TranslationTextComponent("item.industrialforegoing.laser_lens").getString());
     }
 }
