@@ -145,7 +145,7 @@ public class PotionBrewerTile extends IndustrialProcessingTile<PotionBrewerTile>
 
     @Override
     protected int getTickPower() {
-        return 0;
+        return 80;
     }
 
     @Override

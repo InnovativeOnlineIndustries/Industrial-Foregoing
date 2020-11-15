@@ -407,6 +407,7 @@
   "tooltip.titanium.facing_handler.brewinginput": "Brewing Input",
   "tooltip.titanium.facing_handler.charging": "Charging",
   "tooltip.industrialforegoing.generating": "Generating: ",
+  "tooltip.industrialforegoing.usage": "Usage: ",
   "tooltip.industrialforegoing.needs": "Needs: ",
   "tooltip.industrialforegoing.consumes": "Consumes: ",
   "tooltip.industrialforegoing.mb_of": "mb of %s",

@@ -15,7 +15,7 @@ public class MobDetectorTile extends IndustrialAreaWorkingTile<MobDetectorTile> 
     private int redstoneSignal;
 
     public MobDetectorTile() {
-        super(ModuleMisc.MOB_DETECTOR, RangeManager.RangeType.BEHIND, true);
+        super(ModuleMisc.MOB_DETECTOR, RangeManager.RangeType.BEHIND, true, 0);
         this.redstoneSignal = 0;
     }
 

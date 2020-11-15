@@ -21,7 +21,7 @@ public class LaserDrillTile extends IndustrialAreaWorkingTile<LaserDrillTile> {
     private BlockPos target;
 
     public LaserDrillTile() {
-        super(ModuleResourceProduction.LASER_DRILL, RangeManager.RangeType.BEHIND, false);
+        super(ModuleResourceProduction.LASER_DRILL, RangeManager.RangeType.BEHIND, false, LaserDrillConfig.powerPerOperation);
         this.target = BlockPos.ZERO;
         addGuiAddonFactory(() -> new TextScreenAddon(TextFormatting.DARK_GRAY + new TranslationTextComponent("text.industrialforegoing.target").getString(), 44 ,26, false));
         addGuiAddonFactory(() -> new TextScreenAddon("Target: ", 44 ,36, false){

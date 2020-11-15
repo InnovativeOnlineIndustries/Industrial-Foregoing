@@ -2,8 +2,11 @@ package com.buuz135.industrial.block.tile;
 
 import com.buuz135.industrial.proxy.client.IndustrialAssetProvider;
 import com.hrznstudio.titanium.annotation.Save;
+import com.hrznstudio.titanium.api.IFactory;
 import com.hrznstudio.titanium.api.augment.AugmentTypes;
+import com.hrznstudio.titanium.api.client.IScreenAddon;
 import com.hrznstudio.titanium.block.BasicTileBlock;
+import com.hrznstudio.titanium.client.screen.addon.ProgressBarScreenAddon;
 import com.hrznstudio.titanium.client.screen.asset.IAssetProvider;
 import com.hrznstudio.titanium.component.progress.ProgressBarComponent;
 import com.hrznstudio.titanium.item.AugmentWrapper;
@@ -12,16 +15,41 @@ import net.minecraft.item.DyeColor;
 import net.minecraft.util.ActionResultType;
 import net.minecraft.util.Direction;
 import net.minecraft.util.Hand;
+import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.StringTextComponent;
+import net.minecraft.util.text.TextFormatting;
+import net.minecraft.util.text.TranslationTextComponent;
+
+import java.text.DecimalFormat;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
 public abstract class IndustrialWorkingTile<T extends IndustrialWorkingTile<T>> extends IndustrialMachineTile<T> {
 
     @Save
     private ProgressBarComponent<T> workingBar;
 
-    public IndustrialWorkingTile(BasicTileBlock<T> basicTileBlock) {
+    public IndustrialWorkingTile(BasicTileBlock<T> basicTileBlock, int estimatedPower) {
         super(basicTileBlock);
         //this.addGuiAddonFactory(() -> new EnergyBarScreenAddon(10, 20, getEnergyStorage()));
-        this.addProgressBar(workingBar = new ProgressBarComponent<T>(30, 20, 0, getMaxProgress())
+        this.addProgressBar(workingBar = new ProgressBarComponent<T>(30, 20, 0, getMaxProgress()) {
+            @Override
+            public List<IFactory<? extends IScreenAddon>> getScreenAddons() {
+                return Collections.singletonList(() -> new ProgressBarScreenAddon(30, 20, workingBar) {
+                    @Override
+                    public List<ITextComponent> getTooltipLines() {
+                        List<ITextComponent> tooltip = new ArrayList<>();
+                        tooltip.add(new StringTextComponent(TextFormatting.GOLD + new TranslationTextComponent("tooltip.titanium.progressbar.progress").getString() + TextFormatting.WHITE + new DecimalFormat().format(workingBar.getProgress()) + TextFormatting.GOLD + "/" + TextFormatting.WHITE + new DecimalFormat().format(workingBar.getMaxProgress())));
+                        int progress = (workingBar.getMaxProgress() - workingBar.getProgress());
+                        if (!workingBar.getIncreaseType()) progress = workingBar.getMaxProgress() - progress;
+                        tooltip.add(new StringTextComponent(TextFormatting.GOLD + "ETA: " + TextFormatting.WHITE + new DecimalFormat().format(Math.ceil(progress * workingBar.getTickingTime() / 20D / workingBar.getProgressIncrease())) + TextFormatting.DARK_AQUA + "s"));
+                        if (estimatedPower > 0) tooltip.add(new StringTextComponent(TextFormatting.GOLD + new TranslationTextComponent("tooltip.industrialforegoing.usage").getString() + TextFormatting.WHITE + estimatedPower + TextFormatting.DARK_AQUA + " FE"));
+                        return tooltip;
+                    }
+                });
+            }
+        }
                 .setComponentHarness(this.getSelf())
                 .setBarDirection(ProgressBarComponent.BarDirection.VERTICAL_UP)
                 .setIncreaseType(false)

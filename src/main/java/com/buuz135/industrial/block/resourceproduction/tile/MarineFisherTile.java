@@ -31,7 +31,7 @@ public class MarineFisherTile extends IndustrialAreaWorkingTile<MarineFisherTile
     private SidedInventoryComponent<MarineFisherTile> output;
 
     public MarineFisherTile() {
-        super(ModuleResourceProduction.MARINE_FISHER, RangeManager.RangeType.BOTTOM, false);
+        super(ModuleResourceProduction.MARINE_FISHER, RangeManager.RangeType.BOTTOM, false, MarineFisherConfig.powerPerOperation);
         addInventory(output = (SidedInventoryComponent<MarineFisherTile>) new SidedInventoryComponent<MarineFisherTile>("output", 50, 22, 3 * 6, 0)
                 .setColor(DyeColor.ORANGE)
                 .setRange(6, 3)
