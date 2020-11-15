@@ -32,6 +32,7 @@ import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.World;
+import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.capability.IFluidHandler;
 
 import java.text.DecimalFormat;
@@ -123,11 +124,11 @@ public class FluidLaserBaseTile extends IndustrialMachineTile<FluidLaserBaseTile
                                 LivingEntity first = entities.get(0);
                                 if (first.getHealth() > 5){
                                     first.attackEntityFrom(DamageSource.GENERIC, 5);
-                                    output.fillForced(laserDrillFluidRecipe.output.copy(), IFluidHandler.FluidAction.EXECUTE);
+                                    output.fillForced(FluidStack.loadFluidStackFromNBT(laserDrillFluidRecipe.output), IFluidHandler.FluidAction.EXECUTE);
                                 }
                             }
                         } else {
-                            output.fillForced(laserDrillFluidRecipe.output.copy(), IFluidHandler.FluidAction.EXECUTE);
+                            output.fillForced(FluidStack.loadFluidStackFromNBT(laserDrillFluidRecipe.output), IFluidHandler.FluidAction.EXECUTE);
                         }
                     });
         }
