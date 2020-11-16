@@ -49,7 +49,7 @@ public class BioReactorTile extends IndustrialWorkingTile<BioReactorTile> {
     private ProgressBarComponent<BioReactorTile> bar;
 
     public BioReactorTile() {
-        super(ModuleGenerator.BIOREACTOR);
+        super(ModuleGenerator.BIOREACTOR, BioReactorConfig.powerPerOperation);
         addTank(water = (SidedFluidTankComponent<BioReactorTile>) new SidedFluidTankComponent<BioReactorTile>("water", BioReactorConfig.maxWaterTankStorage, 45, 20, 0).
                 setColor(DyeColor.CYAN).
                 setComponentHarness(this).

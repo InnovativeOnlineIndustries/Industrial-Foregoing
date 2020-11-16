@@ -133,6 +133,9 @@ repositories {
     maven {
         url 'https://www.dogforce-games.com/maven/'
     }
+    maven {
+        url = "https://www.cursemaven.com"
+    }
 }
 
 dependencies {
@@ -150,6 +153,8 @@ dependencies {
     compileOnly fg.deobf("blusunrize.immersiveengineering:ImmersiveEngineering:1.16.3-4.1.0-+")
     compileOnly fg.deobf("vazkii.patchouli:Patchouli:1.16.2+:api")
     runtimeOnly fg.deobf("vazkii.patchouli:Patchouli:1.16.2+")
+    runtimeOnly fg.deobf("curse.maven:zycraft:3099577")
+    compile fg.deobf("curse.maven:farmers-delight:3091999")
 }
 
 afterEvaluate {

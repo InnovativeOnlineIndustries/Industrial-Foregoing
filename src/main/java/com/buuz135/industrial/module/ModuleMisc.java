@@ -21,6 +21,7 @@ public class ModuleMisc implements IModule {
     public static EnchantmentApplicatorBlock ENCHANTMENT_APPLICATOR = new EnchantmentApplicatorBlock();
     public static EnchantmentExtractorBlock ENCHANTMENT_EXTRACTOR = new EnchantmentExtractorBlock();
     public static EnchantmentFactoryBlock ENCHANTMENT_FACTORY = new EnchantmentFactoryBlock();
+    public static InfinityChargerBlock INFINITY_CHARGER = new InfinityChargerBlock();
 
     @Override
     public List<Feature.Builder> generateFeatures() {
@@ -39,6 +40,7 @@ public class ModuleMisc implements IModule {
         features.add(createFeature(ENCHANTMENT_APPLICATOR));
         features.add(createFeature(ENCHANTMENT_EXTRACTOR));
         features.add(createFeature(ENCHANTMENT_FACTORY));
+        features.add(createFeature(INFINITY_CHARGER));
         return features;
     }
 }

@@ -1,0 +1,19 @@
+{
+  "variants": {
+    "subfacing=north": {
+      "model": "industrialforegoing:block/infinity_charger"
+    },
+    "subfacing=south": {
+      "model": "industrialforegoing:block/infinity_charger",
+      "y": 180
+    },
+    "subfacing=west": {
+      "model": "industrialforegoing:block/infinity_charger",
+      "y": 270
+    },
+    "subfacing=east": {
+      "model": "industrialforegoing:block/infinity_charger",
+      "y": 90
+    }
+  }
+}

@@ -39,7 +39,7 @@ public class AnimalRancherTile extends IndustrialAreaWorkingTile<AnimalRancherTi
     private SidedInventoryComponent<AnimalRancherTile> output;
 
     public AnimalRancherTile() {
-        super(ModuleAgricultureHusbandry.ANIMAL_RANCHER, RangeManager.RangeType.BEHIND, true);
+        super(ModuleAgricultureHusbandry.ANIMAL_RANCHER, RangeManager.RangeType.BEHIND, true, AnimalRancherConfig.powerPerOperation);
         this.addTank(tank = (SidedFluidTankComponent<AnimalRancherTile>) new SidedFluidTankComponent<AnimalRancherTile>("fluid_output", AnimalRancherConfig.maxTankSize, 47, 20, 0).
                 setColor(DyeColor.WHITE).
                 setComponentHarness(this)

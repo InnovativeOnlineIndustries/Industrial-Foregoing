@@ -29,8 +29,8 @@ public abstract class IndustrialAreaWorkingTile<T extends IndustrialAreaWorkingT
     private RangeManager.RangeType type;
     private boolean acceptsRangeUpgrades;
 
-    public IndustrialAreaWorkingTile(BasicTileBlock<T> basicTileBlock, RangeManager.RangeType type, boolean acceptsRangeUpgrades) {
-        super(basicTileBlock);
+    public IndustrialAreaWorkingTile(BasicTileBlock<T> basicTileBlock, RangeManager.RangeType type, boolean acceptsRangeUpgrades, int estimatedPower) {
+        super(basicTileBlock, estimatedPower);
         this.pointer = 0;
         this.showingArea = false;
         addButton(areaButton = new ButtonComponent(154 - 18, 84, 14, 14) {

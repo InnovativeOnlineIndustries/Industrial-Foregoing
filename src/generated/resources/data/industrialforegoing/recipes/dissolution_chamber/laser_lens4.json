@@ -1,0 +1,26 @@
+{
+  "input": [
+    {
+      "tag": "forge:glass_panes"
+    },
+    {
+      "tag": "forge:glass_panes"
+    },
+    {
+      "tag": "forge:glass_panes"
+    },
+    {
+      "tag": "forge:glass_panes"
+    },
+    {
+      "tag": "forge:dyes/yellow"
+    }
+  ],
+  "inputFluid": "{FluidName:\"industrialforegoing:latex\",Amount:250}",
+  "processingTime": 100,
+  "output": {
+    "item": "industrialforegoing:laser_lens4",
+    "count": 1
+  },
+  "type": "industrialforegoing:dissolution_chamber"
+}

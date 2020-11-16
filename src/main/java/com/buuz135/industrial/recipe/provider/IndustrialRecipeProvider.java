@@ -1,9 +1,11 @@
 package com.buuz135.industrial.recipe.provider;
 
 import com.buuz135.industrial.api.conveyor.ConveyorUpgradeFactory;
+import com.buuz135.industrial.item.LaserLensItem;
 import com.buuz135.industrial.item.addon.RangeAddonItem;
 import com.buuz135.industrial.module.ModuleCore;
 import com.buuz135.industrial.module.ModuleTool;
+import com.buuz135.industrial.utils.Reference;
 import com.hrznstudio.titanium.annotation.MaterialReference;
 import com.hrznstudio.titanium.block.BasicBlock;
 import com.hrznstudio.titanium.recipe.generator.TitaniumRecipeProvider;
@@ -13,10 +15,12 @@ import net.minecraft.block.Block;
 import net.minecraft.data.CookingRecipeBuilder;
 import net.minecraft.data.DataGenerator;
 import net.minecraft.data.IFinishedRecipe;
+import net.minecraft.item.DyeColor;
 import net.minecraft.item.Item;
 import net.minecraft.item.Items;
 import net.minecraft.item.crafting.Ingredient;
 import net.minecraft.tags.ItemTags;
+import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.common.Tags;
 import net.minecraftforge.common.util.NonNullLazy;
 
@@ -80,5 +84,14 @@ public class IndustrialRecipeProvider extends TitaniumRecipeProvider {
                 .patternLine(" P ").patternLine("P P").patternLine(" P ")
                 .key('P', Items.DIAMOND)
                 .build(consumer);
+        for (LaserLensItem laserLen : ModuleCore.LASER_LENS) {
+            laserLen.registerRecipe(consumer);
+        }
+        for (DyeColor value : DyeColor.values()) {
+            TitaniumShapelessRecipeBuilder.shapelessRecipe(ModuleCore.LASER_LENS[value.getId()])
+                    .addIngredient(Ingredient.fromItems(ModuleCore.LASER_LENS))
+                    .addIngredient(value.getTag())
+                    .build(consumer, new ResourceLocation(Reference.MOD_ID, "laser_lens_"+value.getString()+ "_recolor"));
+        }
     }
 }

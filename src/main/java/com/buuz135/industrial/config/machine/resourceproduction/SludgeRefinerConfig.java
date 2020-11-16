@@ -7,8 +7,8 @@ import com.hrznstudio.titanium.annotation.config.ConfigVal;
 @ConfigFile.Child(MachineResourceProductionConfig.class)
 public class SludgeRefinerConfig {
 
-    @ConfigVal(comment = "Amount of Power Consumed per Tick - Default: [400FE]")
-    public static int powerPerTick = 1000;
+    @ConfigVal(comment = "Amount of Power Consumed per Tick - Default: [40FE]")
+    public static int powerPerTick = 40;
 
     @ConfigVal(comment = "Max Stored Power [FE] - Default: [10000 FE]")
     public static int maxStoredPower = 10000;

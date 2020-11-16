@@ -15,6 +15,7 @@ public class LaserDrillRarity {
 
     public static RegistryKey<Biome>[] END = new RegistryKey[]{THE_END, THE_VOID, SMALL_END_ISLANDS, END_BARRENS, END_HIGHLANDS, END_MIDLANDS};
     public static RegistryKey<Biome>[] NETHER = new RegistryKey[]{NETHER_WASTES, BASALT_DELTAS, WARPED_FOREST, CRIMSON_FOREST, SOUL_SAND_VALLEY};
+    public static RegistryKey<Biome>[] OIL = new RegistryKey[]{DESERT, DESERT_HILLS, DESERT_LAKES, OCEAN, COLD_OCEAN, DEEP_COLD_OCEAN, DEEP_FROZEN_OCEAN, DEEP_LUKEWARM_OCEAN, DEEP_WARM_OCEAN, WARM_OCEAN};
 
      public static void init(){
         JSONSerializableDataHandler.map(LaserDrillRarity[].class, values -> {

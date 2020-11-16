@@ -3,21 +3,24 @@ package com.buuz135.industrial.item.infinity;
 import com.buuz135.industrial.gui.component.InfinityEnergyScreenAddon;
 import com.hrznstudio.titanium.api.IFactory;
 import com.hrznstudio.titanium.api.client.IScreenAddon;
-import com.hrznstudio.titanium.api.client.IScreenAddonProvider;
-import net.minecraftforge.energy.IEnergyStorage;
+import com.hrznstudio.titanium.component.IComponentHarness;
+import com.hrznstudio.titanium.component.energy.EnergyStorageComponent;
+import com.hrznstudio.titanium.container.addon.IContainerAddon;
+import net.minecraft.nbt.CompoundNBT;
 
 import javax.annotation.Nonnull;
 import java.util.Collections;
 import java.util.List;
 
-public class InfinityEnergyStorage implements IEnergyStorage, IScreenAddonProvider {
+public class InfinityEnergyStorage<T extends IComponentHarness> extends EnergyStorageComponent<T> {
 
     private final long capacity;
     private long energy;
 
-    public InfinityEnergyStorage() {
+    public InfinityEnergyStorage(long capacity, int xPos, int yPos) {
+        super(Integer.MAX_VALUE, xPos, yPos);
         this.energy = 0;
-        this.capacity = InfinityTier.ARTIFACT.getPowerNeeded();
+        this.capacity = capacity;
     }
 
     @Override
@@ -41,6 +44,9 @@ public class InfinityEnergyStorage implements IEnergyStorage, IScreenAddonProvid
 
     public void setEnergyStored(long power) {
         this.energy = power;
+        if (this.componentHarness != null) {
+            this.componentHarness.markComponentForUpdate(false);
+        }
     }
 
     @Override
@@ -62,9 +68,32 @@ public class InfinityEnergyStorage implements IEnergyStorage, IScreenAddonProvid
         return this.energy;
     }
 
+    public long getLongCapacity() {
+        return capacity;
+    }
+
+    @Override
+    @Nonnull
+    public List<IFactory<? extends IContainerAddon>> getContainerAddons() {
+        return Collections.emptyList();
+    }
+
+    @Override
+    public CompoundNBT serializeNBT() {
+        CompoundNBT nbt = new CompoundNBT();
+        nbt.putLong("energy", this.energy);
+        return nbt;
+    }
+
+    @Override
+    public void deserializeNBT(CompoundNBT nbt) {
+        this.energy = nbt.getLong("energy");
+    }
+
+
     @Nonnull
     @Override
     public List<IFactory<? extends IScreenAddon>> getScreenAddons() {
-        return Collections.singletonList(() -> new InfinityEnergyScreenAddon(10, 20, this));
+        return Collections.singletonList(() -> new InfinityEnergyScreenAddon(getX(), getY(), this));
     }
 }

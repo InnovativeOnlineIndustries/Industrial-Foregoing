@@ -24,6 +24,7 @@ import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.biome.Biome;
+import net.minecraftforge.fluids.FluidStack;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -68,7 +69,7 @@ public class LaserDrillFluidCategory implements IRecipeCategory<LaserDrillFluidR
     @Override
     public void setIngredients(LaserDrillFluidRecipe laserDrillOreRecipe, IIngredients iIngredients) {
         iIngredients.setInputs(VanillaTypes.ITEM, Arrays.asList(laserDrillOreRecipe.catalyst.getMatchingStacks()));
-        iIngredients.setOutput(VanillaTypes.FLUID, laserDrillOreRecipe.output);
+        iIngredients.setOutput(VanillaTypes.FLUID, FluidStack.loadFluidStackFromNBT(laserDrillOreRecipe.output));
     }
 
     @Override

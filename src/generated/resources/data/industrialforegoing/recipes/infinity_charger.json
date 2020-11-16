@@ -1,0 +1,46 @@
+{
+  "type": "forge:conditional",
+  "recipes": [
+    {
+      "conditions": [
+        {
+          "values": [
+            {
+              "item": "industrialforegoing:infinity_charger",
+              "type": "forge:item_exists"
+            }
+          ],
+          "type": "forge:and"
+        }
+      ],
+      "recipe": {
+        "type": "minecraft:crafting_shaped",
+        "pattern": [
+          "ppp",
+          "rcr",
+          "omo"
+        ],
+        "key": {
+          "p": {
+            "tag": "forge:plastic"
+          },
+          "r": {
+            "item": "minecraft:repeater"
+          },
+          "c": {
+            "tag": "forge:gears/diamond"
+          },
+          "o": {
+            "item": "minecraft:redstone_block"
+          },
+          "m": {
+            "tag": "industrialforegoing:machine_frame/advanced"
+          }
+        },
+        "result": {
+          "item": "industrialforegoing:infinity_charger"
+        }
+      }
+    }
+  ]
+}
