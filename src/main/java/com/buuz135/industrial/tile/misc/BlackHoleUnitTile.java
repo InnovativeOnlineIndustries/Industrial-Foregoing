@@ -122,7 +122,7 @@ public class BlackHoleUnitTile extends CustomSidedTileEntity implements IHasDisp
                     return;
                 }
                 if (stack.isEmpty()) {
-                    stack = in;
+                    setStack(in.copy());
                     amount = 0;
                     forceSync();
                 }
@@ -151,6 +151,12 @@ public class BlackHoleUnitTile extends CustomSidedTileEntity implements IHasDisp
         outItems = new LockableItemHandler(1) {
             @Override
             protected void onContentsChanged(int slot) {
+                //lock changed
+                if (slot == -1) {
+                    setStack(getFilterStack(0).copy());
+                    return;
+                }
+
                 updateForLabel();
                 if (BlackHoleUnitTile.this.getItemStack().isEmpty()) {
                     forceSync();
@@ -256,12 +262,14 @@ public class BlackHoleUnitTile extends CustomSidedTileEntity implements IHasDisp
     }
 
     public void setStack(ItemStack stack) {
-        this.stack = stack;
+        this.stack = stack.copy();
     }
 
-
     public ItemStack getItemStack() {
-        return outItems.getLocked() ? outItems.getFilterStack(0) : (stack.isEmpty() ? outItems.getStackInSlot(0) : stack);
+        if (stack.isEmpty()) {
+            setStack(outItems.getStackInSlot(0));
+        }
+        return stack;
     }
 
     public int getAmount() {
@@ -336,7 +344,7 @@ public class BlackHoleUnitTile extends CustomSidedTileEntity implements IHasDisp
         @Nonnull
         @Override
         public ItemStack getStackInSlot(int slot) {
-            ItemStack stack = tile.getItemStack().copy();
+            ItemStack stack = tile.getItemStack();
             stack.setCount(tile.getAmount());
             return stack;
         }
@@ -354,7 +362,7 @@ public class BlackHoleUnitTile extends CustomSidedTileEntity implements IHasDisp
         @Override
         public ItemStack extractItem(int slot, int amount, boolean simulate) {
             if (amount == 0) return ItemStack.EMPTY;
-            ItemStack existing = tile.getItemStack().copy();
+            ItemStack existing = tile.getItemStack();
             if (existing.isEmpty()) return ItemStack.EMPTY;
             if (tile.getAmount() <= amount) {
                 int newAmount = tile.getAmount();
