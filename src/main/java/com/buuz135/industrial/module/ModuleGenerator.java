@@ -1,11 +1,10 @@
 package com.buuz135.industrial.module;
 
-import com.buuz135.industrial.block.generator.BioReactorBlock;
-import com.buuz135.industrial.block.generator.BiofuelGeneratorBlock;
-import com.buuz135.industrial.block.generator.PitifulGeneratorBlock;
+import com.buuz135.industrial.block.generator.*;
 import com.buuz135.industrial.utils.Reference;
 import com.hrznstudio.titanium.module.Feature;
 import com.hrznstudio.titanium.tab.AdvancedTitaniumTab;
+import net.minecraft.block.Block;
 import net.minecraft.item.ItemStack;
 
 import java.util.ArrayList;
@@ -25,6 +24,11 @@ public class ModuleGenerator implements IModule {
         features.add(createFeature(PITIFUL_GENERATOR));
         features.add(createFeature(BIOREACTOR));
         features.add(createFeature(BIOFUEL_GENERATOR));
+        Feature.Builder mycelial = Feature.builder("mycelial_generators");
+        for (MycelialGeneratorType value : MycelialGeneratorType.values()) {
+            mycelial.content(Block.class, new MycelialGeneratorBlock(value));
+        }
+        features.add(mycelial);
         TAB_GENERATOR.addIconStack(new ItemStack(PITIFUL_GENERATOR));
         return features;
     }
