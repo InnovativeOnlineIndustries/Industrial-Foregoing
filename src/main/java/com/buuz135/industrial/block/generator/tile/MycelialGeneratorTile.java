@@ -2,6 +2,7 @@ package com.buuz135.industrial.block.generator.tile;
 
 import com.buuz135.industrial.block.generator.mycelial.IMycelialGeneratorType;
 import com.buuz135.industrial.block.tile.IndustrialGeneratorTile;
+import com.buuz135.industrial.gui.component.GeneratorBackgroundScreenAddon;
 import com.hrznstudio.titanium.annotation.Save;
 import com.hrznstudio.titanium.api.IFactory;
 import com.hrznstudio.titanium.api.client.IScreenAddon;
@@ -43,6 +44,7 @@ public class MycelialGeneratorTile extends IndustrialGeneratorTile<MycelialGener
         this.type = type;
         this.powerGeneration = 10;
         this.inputs = new INBTSerializable[this.type.getInputs().length];
+        addGuiAddonFactory(() -> new GeneratorBackgroundScreenAddon(128, 39, type));
         for (int i = 0; i < this.type.getInputs().length; i++) {
             if (this.type.getInputs()[i] == IMycelialGeneratorType.Input.SLOT){
                 SidedInventoryComponent<MycelialGeneratorTile> slot = (SidedInventoryComponent<MycelialGeneratorTile>) new SidedInventoryComponent<MycelialGeneratorTile>(this.type.getName() +".input_" + i, 44 + i * 21, 22, 1, i)

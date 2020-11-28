@@ -1,9 +1,7 @@
 package com.buuz135.industrial.block.generator.mycelial;
 
 import com.hrznstudio.titanium.component.inventory.SidedInventoryComponent;
-import net.minecraft.item.DyeColor;
-import net.minecraft.item.Food;
-import net.minecraft.item.ItemStack;
+import net.minecraft.item.*;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraftforge.common.util.INBTSerializable;
 import net.minecraftforge.fluids.FluidStack;
@@ -56,5 +54,10 @@ public class CulinaryGeneratorType implements IMycelialGeneratorType{
     @Override
     public DyeColor[] getInputColors() {
         return new DyeColor[]{DyeColor.BROWN};
+    }
+
+    @Override
+    public Item getDisplay() {
+        return Items.COOKED_BEEF;
     }
 }

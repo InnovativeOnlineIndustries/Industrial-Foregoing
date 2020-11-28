@@ -4,7 +4,9 @@ import com.buuz135.industrial.module.ModuleCore;
 import com.hrznstudio.titanium.component.fluid.SidedFluidTankComponent;
 import com.hrznstudio.titanium.component.inventory.SidedInventoryComponent;
 import net.minecraft.item.DyeColor;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.Items;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraftforge.common.Tags;
 import net.minecraftforge.common.util.INBTSerializable;
@@ -59,5 +61,10 @@ public class SlimeyGeneratorType implements IMycelialGeneratorType{
     @Override
     public DyeColor[] getInputColors() {
         return new DyeColor[]{DyeColor.WHITE, DyeColor.LIME};
+    }
+
+    @Override
+    public Item getDisplay() {
+        return Items.SLIME_BALL;
     }
 }

@@ -1,6 +1,7 @@
 package com.buuz135.industrial.block.generator.mycelial;
 
 import net.minecraft.item.DyeColor;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraftforge.common.util.INBTSerializable;
@@ -29,6 +30,8 @@ public interface IMycelialGeneratorType {
     Pair<Integer, Integer> getTimeAndPowerGeneration(INBTSerializable<CompoundNBT>[] inputs);
 
     DyeColor[] getInputColors();
+
+    Item getDisplay();
 
     public enum Input {
         SLOT,
