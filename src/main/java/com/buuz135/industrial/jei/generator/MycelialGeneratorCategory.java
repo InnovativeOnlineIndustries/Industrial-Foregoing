@@ -64,6 +64,10 @@ public class MycelialGeneratorCategory implements IRecipeCategory<MycelialGenera
         return null;
     }
 
+    public IMycelialGeneratorType getType() {
+        return type;
+    }
+
     @Override
     public void setIngredients(MycelialGeneratorRecipe recipe, IIngredients iIngredients) {
         for (int i = 0; i < type.getInputs().length; i++) {

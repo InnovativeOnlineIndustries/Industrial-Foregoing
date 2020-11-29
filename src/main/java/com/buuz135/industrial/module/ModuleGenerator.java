@@ -21,6 +21,7 @@ public class ModuleGenerator implements IModule {
     public static PitifulGeneratorBlock PITIFUL_GENERATOR = new PitifulGeneratorBlock();
     public static BioReactorBlock BIOREACTOR = new BioReactorBlock();
     public static BiofuelGeneratorBlock BIOFUEL_GENERATOR = new BiofuelGeneratorBlock();
+    public static List<MycelialGeneratorBlock> MYCELIAL_GENERATORS = new ArrayList<>();
 
     @Override
     public List<Feature.Builder> generateFeatures() {
@@ -30,7 +31,9 @@ public class ModuleGenerator implements IModule {
         features.add(createFeature(BIOFUEL_GENERATOR));
         Feature.Builder mycelial = Feature.builder("mycelial_generators");
         for (IMycelialGeneratorType type : IMycelialGeneratorType.TYPES) {
-            mycelial.content(Block.class, new MycelialGeneratorBlock(type));
+            MycelialGeneratorBlock block = new MycelialGeneratorBlock(type);
+            MYCELIAL_GENERATORS.add(block);
+            mycelial.content(Block.class, block);
         }
         features.add(mycelial);
         TAB_GENERATOR.addIconStack(new ItemStack(PITIFUL_GENERATOR));

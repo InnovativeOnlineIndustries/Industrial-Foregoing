@@ -22,6 +22,7 @@
 package com.buuz135.industrial.jei;
 
 
+import com.buuz135.industrial.block.generator.MycelialGeneratorBlock;
 import com.buuz135.industrial.block.generator.mycelial.IMycelialGeneratorType;
 import com.buuz135.industrial.block.generator.tile.BioReactorTile;
 import com.buuz135.industrial.gui.conveyor.GuiConveyor;
@@ -296,6 +297,13 @@ public class JEICustomPlugin implements IModPlugin {
         registration.addRecipeCatalyst(new ItemStack(ModuleResourceProduction.LASER_DRILL), LaserDrillOreCategory.ID);
         registration.addRecipeCatalyst(new ItemStack(ModuleResourceProduction.FLUID_LASER_BASE), LaserDrillFluidCategory.ID);
         registration.addRecipeCatalyst(new ItemStack(ModuleResourceProduction.LASER_DRILL), LaserDrillFluidCategory.ID);
+        for (MycelialGeneratorBlock mycelialGenerator : ModuleGenerator.MYCELIAL_GENERATORS) {
+            for (MycelialGeneratorCategory mycelialGeneratorCategory : mycelialGeneratorCategories) {
+                if (mycelialGenerator.getType().equals(mycelialGeneratorCategory.getType())){
+                    registration.addRecipeCatalyst(new ItemStack(mycelialGenerator), mycelialGeneratorCategory.getUid());
+                }
+            }
+        }
     }
 
     @Override

@@ -41,4 +41,13 @@ public class MycelialGeneratorBlock extends IndustrialBlock<MycelialGeneratorTil
     public IFactory<MycelialGeneratorTile> getTileEntityFactory() {
         return () -> new MycelialGeneratorTile(this, type, tileEntityType);
     }
+
+    @Override
+    public RotationType getRotationType() {
+        return RotationType.FOUR_WAY;
+    }
+
+    public IMycelialGeneratorType getType() {
+        return type;
+    }
 }
