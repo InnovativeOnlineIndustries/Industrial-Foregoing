@@ -16,7 +16,7 @@ import java.util.function.Predicate;
 
 public interface IMycelialGeneratorType {
 
-    public static List<IMycelialGeneratorType> TYPES = Arrays.asList(new FurnaceGeneratorType(), new SlimeyGeneratorType(), new CulinaryGeneratorType(), new PotionGeneratorType(), new DisenchantmentGeneratorType());
+    public static List<IMycelialGeneratorType> TYPES = Arrays.asList(new FurnaceGeneratorType(), new SlimeyGeneratorType(), new CulinaryGeneratorType(), new PotionGeneratorType(), new DisenchantmentGeneratorType(), new EnderGeneratorType());
 
     String getName();
 
