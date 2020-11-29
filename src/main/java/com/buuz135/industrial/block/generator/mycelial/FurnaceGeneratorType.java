@@ -71,4 +71,9 @@ public class FurnaceGeneratorType implements IMycelialGeneratorType {
     public Item getDisplay() {
         return Items.FURNACE;
     }
+
+    @Override
+    public int getSlotSize() {
+        return 64;
+    }
 }

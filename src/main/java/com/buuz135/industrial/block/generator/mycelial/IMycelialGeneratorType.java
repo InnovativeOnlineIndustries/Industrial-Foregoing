@@ -33,6 +33,8 @@ public interface IMycelialGeneratorType {
 
     Item getDisplay();
 
+    int getSlotSize();
+
     public enum Input {
         SLOT,
         TANK;

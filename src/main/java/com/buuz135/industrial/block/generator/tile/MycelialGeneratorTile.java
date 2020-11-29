@@ -49,7 +49,8 @@ public class MycelialGeneratorTile extends IndustrialGeneratorTile<MycelialGener
             if (this.type.getInputs()[i] == IMycelialGeneratorType.Input.SLOT){
                 SidedInventoryComponent<MycelialGeneratorTile> slot = (SidedInventoryComponent<MycelialGeneratorTile>) new SidedInventoryComponent<MycelialGeneratorTile>(this.type.getName() +".input_" + i, 44 + i * 21, 22, 1, i)
                         .setColor(this.type.getInputColors()[i])
-                        .setInputFilter(this.type.getSlotInputPredicates().get(i));
+                        .setInputFilter(this.type.getSlotInputPredicates().get(i))
+                        .setSlotLimit(type.getSlotSize());
                 this.addInventory(slot);
                 this.inputs[i] = slot;
             } else if (this.type.getInputs()[i] == IMycelialGeneratorType.Input.TANK){

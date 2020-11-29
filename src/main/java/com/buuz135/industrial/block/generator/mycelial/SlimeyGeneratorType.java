@@ -67,4 +67,9 @@ public class SlimeyGeneratorType implements IMycelialGeneratorType{
     public Item getDisplay() {
         return Items.SLIME_BALL;
     }
+
+    @Override
+    public int getSlotSize() {
+        return 64;
+    }
 }

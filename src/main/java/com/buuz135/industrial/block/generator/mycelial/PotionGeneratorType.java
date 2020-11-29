@@ -73,4 +73,9 @@ public class PotionGeneratorType implements IMycelialGeneratorType{
     public Item getDisplay() {
         return Items.POTION;
     }
+
+    @Override
+    public int getSlotSize() {
+        return 1;
+    }
 }

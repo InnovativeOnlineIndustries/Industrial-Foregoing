@@ -60,4 +60,9 @@ public class CulinaryGeneratorType implements IMycelialGeneratorType{
     public Item getDisplay() {
         return Items.COOKED_BEEF;
     }
+
+    @Override
+    public int getSlotSize() {
+        return 64;
+    }
 }

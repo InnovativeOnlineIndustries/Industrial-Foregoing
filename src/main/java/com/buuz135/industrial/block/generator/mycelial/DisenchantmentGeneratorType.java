@@ -73,4 +73,9 @@ public class DisenchantmentGeneratorType implements IMycelialGeneratorType{
     public Item getDisplay() {
         return Items.ENCHANTED_BOOK;
     }
+
+    @Override
+    public int getSlotSize() {
+        return 1;
+    }
 }
