@@ -1,5 +1,6 @@
 package com.buuz135.industrial.block.generator.mycelial;
 
+import com.buuz135.industrial.jei.generator.MycelialGeneratorRecipe;
 import com.hrznstudio.titanium.component.inventory.SidedInventoryComponent;
 import net.minecraft.item.DyeColor;
 import net.minecraft.item.Item;
@@ -9,13 +10,16 @@ import net.minecraft.nbt.CompoundNBT;
 import net.minecraftforge.common.ForgeHooks;
 import net.minecraftforge.common.util.INBTSerializable;
 import net.minecraftforge.fluids.FluidStack;
+import net.minecraftforge.registries.ForgeRegistries;
 import org.apache.commons.lang3.tuple.Pair;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.function.BiPredicate;
 import java.util.function.Predicate;
+import java.util.stream.Collectors;
 
 public class FurnaceGeneratorType implements IMycelialGeneratorType {
 
@@ -75,5 +79,10 @@ public class FurnaceGeneratorType implements IMycelialGeneratorType {
     @Override
     public int getSlotSize() {
         return 64;
+    }
+
+    @Override
+    public List<MycelialGeneratorRecipe> getRecipes() {
+        return ForgeRegistries.ITEMS.getValues().stream().map(ItemStack::new).filter(stack -> ForgeHooks.getBurnTime(stack) > 0).map(item -> new MycelialGeneratorRecipe(Arrays.asList(Arrays.asList(item)), new ArrayList<>(), ForgeHooks.getBurnTime(item), 80)).collect(Collectors.toList());
     }
 }

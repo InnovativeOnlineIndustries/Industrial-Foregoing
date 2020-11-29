@@ -1,5 +1,6 @@
 package com.buuz135.industrial.block.generator.mycelial;
 
+import com.buuz135.industrial.jei.generator.MycelialGeneratorRecipe;
 import com.buuz135.industrial.module.ModuleCore;
 import com.hrznstudio.titanium.component.fluid.SidedFluidTankComponent;
 import com.hrznstudio.titanium.component.inventory.SidedInventoryComponent;
@@ -7,6 +8,7 @@ import net.minecraft.item.DyeColor;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
+import net.minecraft.item.crafting.Ingredient;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraftforge.common.Tags;
 import net.minecraftforge.common.util.INBTSerializable;
@@ -14,7 +16,9 @@ import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.capability.IFluidHandler;
 import org.apache.commons.lang3.tuple.Pair;
 
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import java.util.function.BiPredicate;
 import java.util.function.Predicate;
@@ -71,5 +75,10 @@ public class SlimeyGeneratorType implements IMycelialGeneratorType{
     @Override
     public int getSlotSize() {
         return 64;
+    }
+
+    @Override
+    public List<MycelialGeneratorRecipe> getRecipes() {
+        return Collections.singletonList(new MycelialGeneratorRecipe(Arrays.asList(new ArrayList<>(), Arrays.asList(Ingredient.fromTag(Tags.Items.SLIMEBALLS).getMatchingStacks())), Arrays.asList(Arrays.asList(new FluidStack(ModuleCore.MILK.getSourceFluid(), 250)), Arrays.asList()), 20*20, 200));
     }
 }

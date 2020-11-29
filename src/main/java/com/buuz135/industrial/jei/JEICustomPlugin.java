@@ -22,9 +22,12 @@
 package com.buuz135.industrial.jei;
 
 
+import com.buuz135.industrial.block.generator.mycelial.IMycelialGeneratorType;
 import com.buuz135.industrial.block.generator.tile.BioReactorTile;
 import com.buuz135.industrial.gui.conveyor.GuiConveyor;
 import com.buuz135.industrial.jei.category.*;
+import com.buuz135.industrial.jei.generator.MycelialGeneratorCategory;
+import com.buuz135.industrial.jei.generator.MycelialGeneratorRecipe;
 import com.buuz135.industrial.jei.machineproduce.MachineProduceCategory;
 import com.buuz135.industrial.jei.ore.OreFermenterCategory;
 import com.buuz135.industrial.jei.ore.OreSieveCategory;
@@ -57,6 +60,7 @@ import net.minecraftforge.fluids.FluidStack;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -77,6 +81,7 @@ public class JEICustomPlugin implements IModPlugin {
     private OreFermenterCategory oreFermenterCategory;
     private OreSieveCategory oreSieveCategory;
     private DissolutionChamberCategory dissolutionChamberJEICategory;
+    private List<MycelialGeneratorCategory> mycelialGeneratorCategories;
 
     public static void showUses(ItemStack stack) {
         //if (recipesGui != null && recipeRegistry != null)
@@ -135,6 +140,12 @@ public class JEICustomPlugin implements IModPlugin {
         registry.addRecipeCategories(laserRecipeOreCategory);
         laserDrillFluidCategory = new LaserDrillFluidCategory(registry.getJeiHelpers().getGuiHelper());
         registry.addRecipeCategories(laserDrillFluidCategory);
+        mycelialGeneratorCategories = new ArrayList<>();
+        for (IMycelialGeneratorType type : IMycelialGeneratorType.TYPES) {
+            MycelialGeneratorCategory category = new MycelialGeneratorCategory(type, registry.getJeiHelpers().getGuiHelper());
+            mycelialGeneratorCategories.add(category);
+            registry.addRecipeCategories(category);
+        }
     }
 
 
@@ -145,6 +156,9 @@ public class JEICustomPlugin implements IModPlugin {
         registration.addRecipes(generateBioreactorRecipes(), bioReactorRecipeCategory.getUid());
         registration.addRecipes(RecipeUtil.getRecipes(Minecraft.getInstance().world, LaserDrillOreRecipe.SERIALIZER.getRecipeType()).stream().filter(laserDrillOreRecipe -> !laserDrillOreRecipe.output.hasNoMatchingItems()).collect(Collectors.toList()), laserRecipeOreCategory.getUid());
         registration.addRecipes(RecipeUtil.getRecipes(Minecraft.getInstance().world, LaserDrillFluidRecipe.SERIALIZER.getRecipeType()), laserDrillFluidCategory.getUid());
+        for (int i = 0; i < IMycelialGeneratorType.TYPES.size(); i++) {
+            registration.addRecipes(IMycelialGeneratorType.TYPES.get(i).getRecipes().stream().sorted(Comparator.comparingInt(value -> ((MycelialGeneratorRecipe)value).getTicks() * ((MycelialGeneratorRecipe)value).getPowerTick()).reversed()).collect(Collectors.toList()), mycelialGeneratorCategories.get(i).getUid());
+        }
     }
 
     private List<BioReactorRecipeCategory.ReactorRecipeWrapper> generateBioreactorRecipes() {

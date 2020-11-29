@@ -1,5 +1,6 @@
 package com.buuz135.industrial.block.generator.mycelial;
 
+import com.buuz135.industrial.jei.generator.MycelialGeneratorRecipe;
 import net.minecraft.item.DyeColor;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -34,6 +35,8 @@ public interface IMycelialGeneratorType {
     Item getDisplay();
 
     int getSlotSize();
+
+    List<MycelialGeneratorRecipe> getRecipes();
 
     public enum Input {
         SLOT,
