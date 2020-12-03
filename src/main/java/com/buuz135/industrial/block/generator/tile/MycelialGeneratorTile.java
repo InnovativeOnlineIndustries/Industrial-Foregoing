@@ -1,6 +1,7 @@
 package com.buuz135.industrial.block.generator.tile;
 
 import com.buuz135.industrial.block.generator.mycelial.IMycelialGeneratorType;
+import com.buuz135.industrial.block.generator.mycelial.MycelialDataManager;
 import com.buuz135.industrial.block.tile.IndustrialGeneratorTile;
 import com.buuz135.industrial.gui.component.GeneratorBackgroundScreenAddon;
 import com.hrznstudio.titanium.annotation.Save;
@@ -37,6 +38,8 @@ public class MycelialGeneratorTile extends IndustrialGeneratorTile<MycelialGener
     private INBTSerializable<CompoundNBT>[] inputs;
     private TileEntityType tileEntityType;
     private ProgressBarComponent<MycelialGeneratorTile> bar;
+    @Save
+    private String owner;
 
     public MycelialGeneratorTile(BasicTileBlock<MycelialGeneratorTile> basicTileBlock, IMycelialGeneratorType type, TileEntityType tileEntityType) {
         super(basicTileBlock);
@@ -107,6 +110,14 @@ public class MycelialGeneratorTile extends IndustrialGeneratorTile<MycelialGener
     }
 
     @Override
+    public void tick() {
+        if (isServer() && bar.getCanIncrease().test(this) && (bar.getProgress() != 0 || canStart()) && this.world.getGameTime() % 5 == 0){
+            MycelialDataManager.setGeneratorInfo(owner, this.world, this.pos, this.type);
+        }
+        super.tick();
+    }
+
+    @Override
     public CompoundNBT write(CompoundNBT compound) {
         for (int i = 0; i < this.inputs.length; i++) {
             compound.put("input_" + i, this.inputs[i].serializeNBT());
@@ -146,5 +157,13 @@ public class MycelialGeneratorTile extends IndustrialGeneratorTile<MycelialGener
     @Override
     public TileEntityType<?> getType() {
         return tileEntityType;
+    }
+
+    public String getOwner() {
+        return owner;
+    }
+
+    public void setOwner(String owner) {
+        this.owner = owner;
     }
 }

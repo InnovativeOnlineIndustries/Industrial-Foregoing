@@ -20,6 +20,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TextFormatting;
+import net.minecraft.util.text.TranslationTextComponent;
 import org.apache.commons.lang3.tuple.Pair;
 
 import java.awt.*;
@@ -51,7 +52,7 @@ public class MycelialGeneratorCategory implements IRecipeCategory<MycelialGenera
 
     @Override
     public String getTitle() {
-        return "industrialforegoing.jei.category." + type.getName();
+        return new TranslationTextComponent("industrialforegoing.jei.category." + type.getName()).getString();
     }
 
     @Override

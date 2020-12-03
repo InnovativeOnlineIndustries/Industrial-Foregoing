@@ -45,7 +45,7 @@ public class PotionGeneratorType implements IMycelialGeneratorType{
 
     @Override
     public boolean canStart(INBTSerializable<CompoundNBT>[] inputs) {
-        return inputs.length > 0 && inputs[0] instanceof SidedInventoryComponent && ((SidedInventoryComponent<?>) inputs[0]).getStackInSlot(0).getCount() > 0;
+        return inputs.length > 0 && inputs[0] instanceof SidedInventoryComponent && ((SidedInventoryComponent<?>) inputs[0]).getStackInSlot(0).getCount() > 0 && getSlotInputPredicates().get(0).test(((SidedInventoryComponent<?>) inputs[0]).getStackInSlot(0), 0);
     }
 
     @Override

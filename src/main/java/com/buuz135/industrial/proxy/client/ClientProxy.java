@@ -27,12 +27,14 @@ import com.buuz135.industrial.entity.client.InfinityTridentRenderer;
 import com.buuz135.industrial.item.infinity.InfinityTier;
 import com.buuz135.industrial.item.infinity.ItemInfinity;
 import com.buuz135.industrial.module.ModuleCore;
+import com.buuz135.industrial.module.ModuleGenerator;
 import com.buuz135.industrial.module.ModuleTool;
 import com.buuz135.industrial.module.ModuleTransport;
 import com.buuz135.industrial.proxy.CommonProxy;
 import com.buuz135.industrial.proxy.client.event.IFClientEvents;
 import com.buuz135.industrial.proxy.client.event.IFTooltipEvent;
 import com.buuz135.industrial.proxy.client.render.FluidConveyorTESR;
+import com.buuz135.industrial.proxy.client.render.MycelialReactorTESR;
 import com.buuz135.industrial.proxy.client.render.WorkingAreaTESR;
 import com.buuz135.industrial.utils.Reference;
 import com.hrznstudio.titanium.block.BasicTileBlock;
@@ -93,7 +95,7 @@ public class ClientProxy extends CommonProxy {
         //manager.entityRenderMap.put(EntityPinkSlime.class, new RenderPinkSlime(manager));
 
         //((IReloadableResourceManager) Minecraft.getInstance().getResourceManager()).addReloadListener(resourceManager -> FluidUtils.colorCache.clear());
-
+        ClientRegistry.bindTileEntityRenderer(ModuleGenerator.MYCELIAL_REACTOR.getTileEntityType(), MycelialReactorTESR::new);
         RenderTypeLookup.setRenderLayer(ModuleTransport.CONVEYOR, RenderType.getCutout());
         RenderTypeLookup.setRenderLayer(ModuleCore.DARK_GLASS, RenderType.getTranslucent());
 
