@@ -1,0 +1,43 @@
+{
+  "type": "forge:conditional",
+  "recipes": [
+    {
+      "conditions": [
+        {
+          "values": [
+            {
+              "item": "industrialforegoing:mycelial_meatallurgic",
+              "type": "forge:item_exists"
+            }
+          ],
+          "type": "forge:and"
+        }
+      ],
+      "recipe": {
+        "type": "minecraft:crafting_shaped",
+        "pattern": [
+          "BBB",
+          "BCB",
+          "RMR"
+        ],
+        "key": {
+          "R": {
+            "item": "minecraft:redstone"
+          },
+          "B": {
+            "tag": "forge:ingots"
+          },
+          "C": {
+            "item": "industrialforegoing:meat_bucket"
+          },
+          "M": {
+            "tag": "industrialforegoing:machine_frame/supreme"
+          }
+        },
+        "result": {
+          "item": "industrialforegoing:mycelial_meatallurgic"
+        }
+      }
+    }
+  ]
+}

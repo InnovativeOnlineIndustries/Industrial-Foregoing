@@ -1,0 +1,19 @@
+{
+  "variants": {
+    "subfacing=north": {
+      "model": "industrialforegoing:block/mycelial_explosive"
+    },
+    "subfacing=south": {
+      "model": "industrialforegoing:block/mycelial_explosive",
+      "y": 180
+    },
+    "subfacing=west": {
+      "model": "industrialforegoing:block/mycelial_explosive",
+      "y": 270
+    },
+    "subfacing=east": {
+      "model": "industrialforegoing:block/mycelial_explosive",
+      "y": 90
+    }
+  }
+}

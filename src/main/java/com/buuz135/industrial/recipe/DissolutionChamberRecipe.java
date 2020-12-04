@@ -1,6 +1,7 @@
 package com.buuz135.industrial.recipe;
 
 import com.buuz135.industrial.module.ModuleCore;
+import com.buuz135.industrial.module.ModuleGenerator;
 import com.buuz135.industrial.module.ModuleResourceProduction;
 import com.buuz135.industrial.utils.IndustrialTags;
 import com.buuz135.industrial.utils.Reference;
@@ -94,6 +95,18 @@ public class DissolutionChamberRecipe extends SerializableRecipe {
                         new Ingredient.TagList(Tags.Items.GEMS_DIAMOND)
                 },
                 new FluidStack(ModuleCore.ETHER.getSourceFluid(), 135), 300, new ItemStack(ModuleCore.SUPREME), FluidStack.EMPTY);
+        new DissolutionChamberRecipe(new ResourceLocation(Reference.MOD_ID, "mycelial_reactor"),
+                new Ingredient.IItemList[]{
+                        new Ingredient.TagList(IndustrialTags.Items.PLASTIC),
+                        new Ingredient.TagList(IndustrialTags.Items.MACHINE_FRAME_SUPREME),
+                        new Ingredient.TagList(IndustrialTags.Items.PLASTIC),
+                        new Ingredient.SingleItemList(new ItemStack(Items.NETHERITE_INGOT)),
+                        new Ingredient.SingleItemList(new ItemStack(Items.NETHERITE_INGOT)),
+                        new Ingredient.TagList(IndustrialTags.Items.GEAR_DIAMOND),
+                        new Ingredient.SingleItemList(new ItemStack(Items.NETHER_STAR)),
+                        new Ingredient.TagList(IndustrialTags.Items.GEAR_DIAMOND)
+                },
+                new FluidStack(ModuleCore.ETHER.getSourceFluid(), 500), 600, new ItemStack(ModuleGenerator.MYCELIAL_REACTOR), FluidStack.EMPTY);
     }
 
     public Ingredient.IItemList[] input;

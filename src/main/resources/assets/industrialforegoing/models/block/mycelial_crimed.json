@@ -1,0 +1,9 @@
+{
+  "parent": "industrialforegoing:block/mycelial_generator",
+  "textures": {
+    "north": "industrialforegoing:blocks/generators/generator_front_crimed",
+    "south": "industrialforegoing:blocks/generators/generator_side_crimed",
+    "east": "industrialforegoing:blocks/generators/generator_side_crimed",
+    "west": "industrialforegoing:blocks/generators/generator_side_crimed"
+  }
+}

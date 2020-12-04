@@ -1,0 +1,35 @@
+{
+  "input": [
+    {
+      "tag": "forge:plastic"
+    },
+    {
+      "tag": "industrialforegoing:machine_frame/supreme"
+    },
+    {
+      "tag": "forge:plastic"
+    },
+    {
+      "item": "minecraft:netherite_ingot"
+    },
+    {
+      "item": "minecraft:netherite_ingot"
+    },
+    {
+      "tag": "forge:gears/diamond"
+    },
+    {
+      "item": "minecraft:nether_star"
+    },
+    {
+      "tag": "forge:gears/diamond"
+    }
+  ],
+  "inputFluid": "{FluidName:\"industrialforegoing:ether_gas\",Amount:500}",
+  "processingTime": 600,
+  "output": {
+    "item": "industrialforegoing:mycelial_reactor",
+    "count": 1
+  },
+  "type": "industrialforegoing:dissolution_chamber"
+}

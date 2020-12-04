@@ -1,0 +1,19 @@
+{
+  "variants": {
+    "subfacing=north": {
+      "model": "industrialforegoing:block/mycelial_frosty"
+    },
+    "subfacing=south": {
+      "model": "industrialforegoing:block/mycelial_frosty",
+      "y": 180
+    },
+    "subfacing=west": {
+      "model": "industrialforegoing:block/mycelial_frosty",
+      "y": 270
+    },
+    "subfacing=east": {
+      "model": "industrialforegoing:block/mycelial_frosty",
+      "y": 90
+    }
+  }
+}
