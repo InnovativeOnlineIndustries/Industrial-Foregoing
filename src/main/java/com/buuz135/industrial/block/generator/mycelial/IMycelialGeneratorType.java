@@ -17,7 +17,8 @@ import java.util.function.Predicate;
 public interface IMycelialGeneratorType {
 
     public static List<IMycelialGeneratorType> TYPES = Arrays.asList(new FurnaceGeneratorType(), new SlimeyGeneratorType(), new CulinaryGeneratorType(), new PotionGeneratorType(), new DisenchantmentGeneratorType(),
-            new EnderGeneratorType(), new ExplosiveGeneratorType(), new FrostyGeneratorType(), new HalitosisGeneratorType(), new MagmaGeneratorType(), new PinkGeneratorType(), new NetherStarGeneratorType(), new DeathGeneratorType());
+            new EnderGeneratorType(), new ExplosiveGeneratorType(), new FrostyGeneratorType(), new HalitosisGeneratorType(), new MagmaGeneratorType(), new PinkGeneratorType(), new NetherStarGeneratorType(), new DeathGeneratorType(),
+            new FireworkGeneratorType(), new CrimedGeneratorType(), new MeatallurgicGeneratorType());
 
     //Meatallurgic
     //Warped /Crimed
