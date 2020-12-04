@@ -5,11 +5,17 @@ import com.buuz135.industrial.utils.IndustrialTags;
 import com.hrznstudio.titanium.component.inventory.SidedInventoryComponent;
 import net.minecraft.block.Blocks;
 import net.minecraft.data.ShapedRecipeBuilder;
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.item.DyeColor;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.potion.EffectInstance;
+import net.minecraft.potion.Effects;
+import net.minecraft.util.math.AxisAlignedBB;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.World;
 import net.minecraftforge.common.util.INBTSerializable;
 import net.minecraftforge.fluids.FluidStack;
 import org.apache.commons.lang3.tuple.Pair;
@@ -98,6 +104,14 @@ public class FrostyGeneratorType implements IMycelialGeneratorType{
                 .key('C', Blocks.ICE)
                 .key('M', IndustrialTags.Items.MACHINE_FRAME_SIMPLE);
         return recipeBuilder;
+    }
+
+    @Override
+    public void onTick(World world, BlockPos pos) {
+        AxisAlignedBB area = new AxisAlignedBB(pos.getX() - 3, pos.getY() - 3, pos.getZ() - 3, pos.getX() + 3, pos.getY() + 3, pos.getZ() + 3);
+        for (LivingEntity livingEntity : world.getEntitiesWithinAABB(LivingEntity.class, area)) {
+            livingEntity.addPotionEffect(new EffectInstance(Effects.SLOWNESS, 10, 4));
+        }
     }
 
 }

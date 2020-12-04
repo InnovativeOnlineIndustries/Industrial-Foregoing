@@ -113,6 +113,7 @@ public class MycelialGeneratorTile extends IndustrialGeneratorTile<MycelialGener
     public void tick() {
         if (isServer() && bar.getCanIncrease().test(this) && (bar.getProgress() != 0 || canStart()) && this.world.getGameTime() % 5 == 0){
             MycelialDataManager.setGeneratorInfo(owner, this.world, this.pos, this.type);
+            type.onTick(this.world, this.pos);
         }
         super.tick();
     }

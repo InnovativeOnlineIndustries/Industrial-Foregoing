@@ -6,6 +6,8 @@ import net.minecraft.item.DyeColor;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.World;
 import net.minecraftforge.common.util.INBTSerializable;
 import net.minecraftforge.fluids.FluidStack;
 import org.apache.commons.lang3.tuple.Pair;
@@ -46,6 +48,10 @@ public interface IMycelialGeneratorType {
     List<MycelialGeneratorRecipe> getRecipes();
 
     ShapedRecipeBuilder addIngredients(ShapedRecipeBuilder recipeBuilder);
+
+    default void onTick(World world, BlockPos pos){
+
+    }
 
     public enum Input {
         SLOT,

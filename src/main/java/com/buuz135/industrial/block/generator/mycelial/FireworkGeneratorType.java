@@ -4,9 +4,15 @@ import com.buuz135.industrial.jei.generator.MycelialGeneratorRecipe;
 import com.buuz135.industrial.utils.IndustrialTags;
 import com.hrznstudio.titanium.component.inventory.SidedInventoryComponent;
 import net.minecraft.data.ShapedRecipeBuilder;
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.item.*;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.nbt.ListNBT;
+import net.minecraft.potion.EffectInstance;
+import net.minecraft.potion.Effects;
+import net.minecraft.util.math.AxisAlignedBB;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.World;
 import net.minecraftforge.common.util.INBTSerializable;
 import net.minecraftforge.fluids.FluidStack;
 import org.apache.commons.lang3.tuple.Pair;
@@ -48,7 +54,7 @@ public class FireworkGeneratorType implements IMycelialGeneratorType{
     @Override
     public Pair<Integer, Integer> getTimeAndPowerGeneration(INBTSerializable<CompoundNBT>[] inputs) {
         if (inputs.length > 0 && inputs[0] instanceof SidedInventoryComponent && ((SidedInventoryComponent<?>) inputs[0]).getStackInSlot(0).getCount() > 0){
-            ItemStack stack = ((SidedInventoryComponent<?>) inputs[0]).getStackInSlot(0).copy();
+            ItemStack stack = ((SidedInventoryComponent<?>) inputs[0]).getStackInSlot(0);
             stack.shrink(1);
             return calculate(stack);
         }
@@ -116,6 +122,14 @@ public class FireworkGeneratorType implements IMycelialGeneratorType{
                 .key('C', Items.PAPER)
                 .key('M', IndustrialTags.Items.MACHINE_FRAME_ADVANCED);
         return recipeBuilder;
+    }
+
+    @Override
+    public void onTick(World world, BlockPos pos) {
+        AxisAlignedBB area = new AxisAlignedBB(pos.getX() - 3, pos.getY() - 3, pos.getZ() - 3, pos.getX() + 3, pos.getY() + 3, pos.getZ() + 3);
+        for (LivingEntity livingEntity : world.getEntitiesWithinAABB(LivingEntity.class, area)) {
+            livingEntity.addPotionEffect(new EffectInstance(Effects.LEVITATION, 10, 2));
+        }
     }
 }
 

@@ -3,6 +3,7 @@ package com.buuz135.industrial.block.generator.mycelial;
 import com.buuz135.industrial.jei.generator.MycelialGeneratorRecipe;
 import com.buuz135.industrial.utils.IndustrialTags;
 import com.hrznstudio.titanium.component.inventory.SidedInventoryComponent;
+import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
 import net.minecraft.data.ShapedRecipeBuilder;
 import net.minecraft.item.DyeColor;
@@ -10,6 +11,12 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.util.DamageSource;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.Explosion;
+import net.minecraft.world.ExplosionContext;
+import net.minecraft.world.IBlockReader;
+import net.minecraft.world.World;
 import net.minecraftforge.common.util.INBTSerializable;
 import net.minecraftforge.fluids.FluidStack;
 import org.apache.commons.lang3.tuple.Pair;
@@ -93,6 +100,18 @@ public class ExplosiveGeneratorType implements IMycelialGeneratorType{
                 .key('C', Items.REDSTONE_TORCH)
                 .key('M', IndustrialTags.Items.MACHINE_FRAME_ADVANCED);
         return recipeBuilder;
+    }
+
+    @Override
+    public void onTick(World world, BlockPos pos) {
+        if (world.rand.nextBoolean()){
+            world.createExplosion(null, DamageSource.GENERIC , new ExplosionContext(){
+                @Override
+                public boolean canExplosionDestroyBlock(Explosion explosion, IBlockReader reader, BlockPos pos, BlockState state, float power) {
+                    return false;
+                }
+            }, pos.getX(), pos.getY(), pos.getZ(), 3, false, Explosion.Mode.NONE);
+        }
     }
 
 }
