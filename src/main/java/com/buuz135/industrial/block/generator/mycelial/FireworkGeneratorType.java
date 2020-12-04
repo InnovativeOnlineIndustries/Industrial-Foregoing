@@ -1,7 +1,9 @@
 package com.buuz135.industrial.block.generator.mycelial;
 
 import com.buuz135.industrial.jei.generator.MycelialGeneratorRecipe;
+import com.buuz135.industrial.utils.IndustrialTags;
 import com.hrznstudio.titanium.component.inventory.SidedInventoryComponent;
+import net.minecraft.data.ShapedRecipeBuilder;
 import net.minecraft.item.*;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.nbt.ListNBT;
@@ -106,6 +108,14 @@ public class FireworkGeneratorType implements IMycelialGeneratorType{
             case LARGE_BALL: return 1.1;
             default: return 1.01;
         }
+    }
+
+    @Override
+    public ShapedRecipeBuilder addIngredients(ShapedRecipeBuilder recipeBuilder) {
+        recipeBuilder = recipeBuilder.key('B', Items.GUNPOWDER)
+                .key('C', Items.PAPER)
+                .key('M', IndustrialTags.Items.MACHINE_FRAME_ADVANCED);
+        return recipeBuilder;
     }
 }
 

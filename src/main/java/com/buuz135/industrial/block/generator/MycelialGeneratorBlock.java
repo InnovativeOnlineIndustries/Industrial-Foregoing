@@ -9,14 +9,18 @@ import com.buuz135.industrial.utils.Reference;
 import com.hrznstudio.titanium.api.IFactory;
 import com.hrznstudio.titanium.module.api.RegistryManager;
 import com.hrznstudio.titanium.nbthandler.NBTManager;
+import com.hrznstudio.titanium.recipe.generator.TitaniumShapedRecipeBuilder;
 import com.mojang.datafixers.types.Type;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
+import net.minecraft.data.IFinishedRecipe;
+import net.minecraft.data.ShapedRecipeBuilder;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.item.BlockItem;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.Items;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.tileentity.TileEntityType;
 import net.minecraft.util.ResourceLocation;
@@ -24,6 +28,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
 import javax.annotation.Nullable;
+import java.util.function.Consumer;
 
 public class MycelialGeneratorBlock extends IndustrialBlock<MycelialGeneratorTile> {
 
@@ -78,4 +83,10 @@ public class MycelialGeneratorBlock extends IndustrialBlock<MycelialGeneratorTil
         super.onReplaced(state, worldIn, pos, newState, isMoving);
     }
 
+    @Override
+    public void registerRecipe(Consumer<IFinishedRecipe> consumer) {
+        ShapedRecipeBuilder recipe = TitaniumShapedRecipeBuilder.shapedRecipe(this).patternLine("BBB").patternLine("BCB").patternLine("RMR")
+                .key('R', Items.REDSTONE);
+        type.addIngredients(recipe).build(consumer);
+    }
 }

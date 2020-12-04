@@ -1,7 +1,9 @@
 package com.buuz135.industrial.block.generator.mycelial;
 
 import com.buuz135.industrial.jei.generator.MycelialGeneratorRecipe;
+import com.buuz135.industrial.utils.IndustrialTags;
 import com.hrznstudio.titanium.component.inventory.SidedInventoryComponent;
+import net.minecraft.data.ShapedRecipeBuilder;
 import net.minecraft.item.DyeColor;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -83,4 +85,13 @@ public class EnderGeneratorType implements IMycelialGeneratorType{
         if (stack.getItem() == Items.ENDER_EYE) return Pair.of(160*20, 80);
         return Pair.of(80*20, 40);
     }
+
+    @Override
+    public ShapedRecipeBuilder addIngredients(ShapedRecipeBuilder recipeBuilder) {
+        recipeBuilder = recipeBuilder.key('B', Items.ENDER_PEARL)
+                .key('C', Items.ENDER_EYE)
+                .key('M', IndustrialTags.Items.MACHINE_FRAME_ADVANCED);
+        return recipeBuilder;
+    }
+
 }

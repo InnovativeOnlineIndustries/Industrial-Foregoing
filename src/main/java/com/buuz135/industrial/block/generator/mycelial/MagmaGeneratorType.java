@@ -1,8 +1,10 @@
 package com.buuz135.industrial.block.generator.mycelial;
 
 import com.buuz135.industrial.jei.generator.MycelialGeneratorRecipe;
+import com.buuz135.industrial.utils.IndustrialTags;
 import com.hrznstudio.titanium.component.fluid.SidedFluidTankComponent;
 import com.hrznstudio.titanium.component.inventory.SidedInventoryComponent;
+import net.minecraft.data.ShapedRecipeBuilder;
 import net.minecraft.fluid.Fluids;
 import net.minecraft.item.DyeColor;
 import net.minecraft.item.Item;
@@ -86,5 +88,13 @@ public class MagmaGeneratorType implements IMycelialGeneratorType{
         recipes.add(new MycelialGeneratorRecipe(Arrays.asList(new ArrayList<>(), new ArrayList<>()), Arrays.asList(Arrays.asList(new FluidStack(Fluids.LAVA, 250)), Arrays.asList()), 2 * 250, 50));
         recipes.add(new MycelialGeneratorRecipe(Arrays.asList(new ArrayList<>(), Arrays.asList(Ingredient.fromTag(Tags.Items.DUSTS_REDSTONE).getMatchingStacks())), Arrays.asList(Arrays.asList(new FluidStack(Fluids.LAVA, 250)), Arrays.asList()), 2 * 250, 100));
         return recipes;
+    }
+
+    @Override
+    public ShapedRecipeBuilder addIngredients(ShapedRecipeBuilder recipeBuilder) {
+        recipeBuilder = recipeBuilder.key('B', Tags.Items.STORAGE_BLOCKS_REDSTONE)
+                .key('C', Items.LAVA_BUCKET)
+                .key('M', IndustrialTags.Items.MACHINE_FRAME_ADVANCED);
+        return recipeBuilder;
     }
 }

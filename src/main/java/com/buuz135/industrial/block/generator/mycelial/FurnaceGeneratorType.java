@@ -1,13 +1,17 @@
 package com.buuz135.industrial.block.generator.mycelial;
 
 import com.buuz135.industrial.jei.generator.MycelialGeneratorRecipe;
+import com.buuz135.industrial.utils.IndustrialTags;
 import com.hrznstudio.titanium.component.inventory.SidedInventoryComponent;
+import net.minecraft.block.Blocks;
+import net.minecraft.data.ShapedRecipeBuilder;
 import net.minecraft.item.DyeColor;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraftforge.common.ForgeHooks;
+import net.minecraftforge.common.Tags;
 import net.minecraftforge.common.util.INBTSerializable;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.registries.ForgeRegistries;
@@ -84,5 +88,13 @@ public class FurnaceGeneratorType implements IMycelialGeneratorType {
     @Override
     public List<MycelialGeneratorRecipe> getRecipes() {
         return ForgeRegistries.ITEMS.getValues().stream().map(ItemStack::new).filter(stack -> ForgeHooks.getBurnTime(stack) > 0).map(item -> new MycelialGeneratorRecipe(Arrays.asList(Arrays.asList(item)), new ArrayList<>(), ForgeHooks.getBurnTime(item), 80)).collect(Collectors.toList());
+    }
+
+    @Override
+    public ShapedRecipeBuilder addIngredients(ShapedRecipeBuilder recipeBuilder) {
+        recipeBuilder = recipeBuilder.key('B', Tags.Items.STORAGE_BLOCKS_COAL)
+                .key('C', Blocks.FURNACE)
+                .key('M', IndustrialTags.Items.MACHINE_FRAME_SIMPLE);
+        return recipeBuilder;
     }
 }

@@ -2,8 +2,11 @@ package com.buuz135.industrial.block.generator.mycelial;
 
 import com.buuz135.industrial.jei.generator.MycelialGeneratorRecipe;
 import com.buuz135.industrial.module.ModuleCore;
+import com.buuz135.industrial.utils.IndustrialTags;
 import com.hrznstudio.titanium.component.fluid.SidedFluidTankComponent;
 import com.hrznstudio.titanium.component.inventory.SidedInventoryComponent;
+import net.minecraft.block.Blocks;
+import net.minecraft.data.ShapedRecipeBuilder;
 import net.minecraft.item.DyeColor;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -80,5 +83,13 @@ public class SlimeyGeneratorType implements IMycelialGeneratorType{
     @Override
     public List<MycelialGeneratorRecipe> getRecipes() {
         return Collections.singletonList(new MycelialGeneratorRecipe(Arrays.asList(new ArrayList<>(), Arrays.asList(Ingredient.fromTag(Tags.Items.SLIMEBALLS).getMatchingStacks())), Arrays.asList(Arrays.asList(new FluidStack(ModuleCore.MILK.getSourceFluid(), 250)), Arrays.asList()), 20*20, 200));
+    }
+
+    @Override
+    public ShapedRecipeBuilder addIngredients(ShapedRecipeBuilder recipeBuilder) {
+        recipeBuilder = recipeBuilder.key('B', Blocks.SLIME_BLOCK)
+                .key('C', Items.MILK_BUCKET)
+                .key('M', IndustrialTags.Items.MACHINE_FRAME_ADVANCED);
+        return recipeBuilder;
     }
 }

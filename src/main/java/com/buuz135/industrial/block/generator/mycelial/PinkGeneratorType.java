@@ -1,12 +1,16 @@
 package com.buuz135.industrial.block.generator.mycelial;
 
 import com.buuz135.industrial.jei.generator.MycelialGeneratorRecipe;
+import com.buuz135.industrial.utils.IndustrialTags;
 import com.hrznstudio.titanium.component.inventory.SidedInventoryComponent;
+import net.minecraft.block.Blocks;
+import net.minecraft.data.ShapedRecipeBuilder;
 import net.minecraft.item.DyeColor;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.nbt.CompoundNBT;
+import net.minecraftforge.common.Tags;
 import net.minecraftforge.common.util.INBTSerializable;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.registries.ForgeRegistries;
@@ -77,6 +81,14 @@ public class PinkGeneratorType implements IMycelialGeneratorType{
 
     private Pair<Integer, Integer> calculate(ItemStack stack){
         return Pair.of(10, 40);
+    }
+
+    @Override
+    public ShapedRecipeBuilder addIngredients(ShapedRecipeBuilder recipeBuilder) {
+        recipeBuilder = recipeBuilder.key('B', Tags.Items.DYES_PINK)
+                .key('C', Blocks.PINK_WOOL)
+                .key('M', IndustrialTags.Items.MACHINE_FRAME_SIMPLE);
+        return recipeBuilder;
     }
 
 }

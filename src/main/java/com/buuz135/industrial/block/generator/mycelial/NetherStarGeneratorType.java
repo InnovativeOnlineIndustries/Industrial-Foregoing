@@ -1,7 +1,10 @@
 package com.buuz135.industrial.block.generator.mycelial;
 
 import com.buuz135.industrial.jei.generator.MycelialGeneratorRecipe;
+import com.buuz135.industrial.utils.IndustrialTags;
 import com.hrznstudio.titanium.component.inventory.SidedInventoryComponent;
+import net.minecraft.block.Blocks;
+import net.minecraft.data.ShapedRecipeBuilder;
 import net.minecraft.item.DyeColor;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -81,6 +84,14 @@ public class NetherStarGeneratorType implements IMycelialGeneratorType{
 
     private Pair<Integer, Integer> calculate(ItemStack stack){
         return Pair.of(2*60*20, 4000);
+    }
+
+    @Override
+    public ShapedRecipeBuilder addIngredients(ShapedRecipeBuilder recipeBuilder) {
+        recipeBuilder = recipeBuilder.key('B', Blocks.WITHER_SKELETON_SKULL)
+                .key('C', Items.NETHER_STAR)
+                .key('M', IndustrialTags.Items.MACHINE_FRAME_SUPREME);
+        return recipeBuilder;
     }
 
 }

@@ -2,8 +2,10 @@ package com.buuz135.industrial.block.generator.mycelial;
 
 import com.buuz135.industrial.jei.generator.MycelialGeneratorRecipe;
 import com.buuz135.industrial.module.ModuleCore;
+import com.buuz135.industrial.utils.IndustrialTags;
 import com.hrznstudio.titanium.component.fluid.SidedFluidTankComponent;
 import com.hrznstudio.titanium.component.inventory.SidedInventoryComponent;
+import net.minecraft.data.ShapedRecipeBuilder;
 import net.minecraft.item.DyeColor;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -56,7 +58,7 @@ public class MeatallurgicGeneratorType implements IMycelialGeneratorType{
             if (((SidedFluidTankComponent<?>) inputs[0]).getFluidAmount() >= 250 && ((SidedInventoryComponent<?>) inputs[1]).getStackInSlot(0).getCount() > 0){
                 ((SidedFluidTankComponent<?>) inputs[0]).drainForced(250, IFluidHandler.FluidAction.EXECUTE);
                 ((SidedInventoryComponent<?>) inputs[1]).getStackInSlot(0).shrink(1);
-                return Pair.of(20*20, 100);
+                return Pair.of(20*20, 200);
             }
         }
         return Pair.of(0,80);
@@ -80,5 +82,13 @@ public class MeatallurgicGeneratorType implements IMycelialGeneratorType{
     @Override
     public List<MycelialGeneratorRecipe> getRecipes() {
         return Collections.singletonList(new MycelialGeneratorRecipe(Arrays.asList(new ArrayList<>(), Arrays.asList(Ingredient.fromTag(Tags.Items.INGOTS).getMatchingStacks())), Arrays.asList(Arrays.asList(new FluidStack(ModuleCore.MEAT.getSourceFluid(), 250)), Arrays.asList()), 20*20, 100));
+    }
+
+    @Override
+    public ShapedRecipeBuilder addIngredients(ShapedRecipeBuilder recipeBuilder) {
+        recipeBuilder = recipeBuilder.key('B', Tags.Items.INGOTS)
+                .key('C', ModuleCore.MEAT.getBucketFluid())
+                .key('M', IndustrialTags.Items.MACHINE_FRAME_SUPREME);
+        return recipeBuilder;
     }
 }

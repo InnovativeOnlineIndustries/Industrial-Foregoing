@@ -1,7 +1,10 @@
 package com.buuz135.industrial.block.generator.mycelial;
 
 import com.buuz135.industrial.jei.generator.MycelialGeneratorRecipe;
+import com.buuz135.industrial.utils.IndustrialTags;
 import com.hrznstudio.titanium.component.inventory.SidedInventoryComponent;
+import net.minecraft.block.Blocks;
+import net.minecraft.data.ShapedRecipeBuilder;
 import net.minecraft.item.DyeColor;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -87,6 +90,14 @@ public class FrostyGeneratorType implements IMycelialGeneratorType{
         if (stack.getItem() == Items.SNOW_BLOCK) return Pair.of(20*20, 20);
         if (stack.getItem() == Items.SNOW) return Pair.of(25*20, 2);
         return Pair.of(0, 160);
+    }
+
+    @Override
+    public ShapedRecipeBuilder addIngredients(ShapedRecipeBuilder recipeBuilder) {
+        recipeBuilder = recipeBuilder.key('B', Items.SNOWBALL)
+                .key('C', Blocks.ICE)
+                .key('M', IndustrialTags.Items.MACHINE_FRAME_SIMPLE);
+        return recipeBuilder;
     }
 
 }

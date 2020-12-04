@@ -1,9 +1,12 @@
 package com.buuz135.industrial.block.generator.mycelial;
 
 import com.buuz135.industrial.jei.generator.MycelialGeneratorRecipe;
+import com.buuz135.industrial.utils.IndustrialTags;
 import com.hrznstudio.titanium.component.inventory.SidedInventoryComponent;
+import net.minecraft.data.ShapedRecipeBuilder;
 import net.minecraft.item.*;
 import net.minecraft.nbt.CompoundNBT;
+import net.minecraftforge.common.Tags;
 import net.minecraftforge.common.util.INBTSerializable;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.registries.ForgeRegistries;
@@ -77,5 +80,13 @@ public class CulinaryGeneratorType implements IMycelialGeneratorType{
     private Pair<Integer,Integer> calculate(ItemStack stack){
         Food food = stack.getItem().getFood();
         return Pair.of(food.getHealing() * 160,  (int) (food.getSaturation() * 80));
+    }
+
+    @Override
+    public ShapedRecipeBuilder addIngredients(ShapedRecipeBuilder recipeBuilder) {
+        recipeBuilder = recipeBuilder.key('B', Tags.Items.CROPS)
+                .key('C', Items.COOKED_BEEF)
+                .key('M', IndustrialTags.Items.MACHINE_FRAME_SIMPLE);
+        return recipeBuilder;
     }
 }

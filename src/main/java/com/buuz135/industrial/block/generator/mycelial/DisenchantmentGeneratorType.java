@@ -1,7 +1,10 @@
 package com.buuz135.industrial.block.generator.mycelial;
 
 import com.buuz135.industrial.jei.generator.MycelialGeneratorRecipe;
+import com.buuz135.industrial.utils.IndustrialTags;
 import com.hrznstudio.titanium.component.inventory.SidedInventoryComponent;
+import net.minecraft.block.Blocks;
+import net.minecraft.data.ShapedRecipeBuilder;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.item.*;
@@ -96,5 +99,13 @@ public class DisenchantmentGeneratorType implements IMycelialGeneratorType{
             level += (enchEntry.getValue() / (double) enchEntry.getKey().getMaxLevel());
         }
         return Pair.of(rarity * 80, (int) (160 * level));
+    }
+
+    @Override
+    public ShapedRecipeBuilder addIngredients(ShapedRecipeBuilder recipeBuilder) {
+        recipeBuilder = recipeBuilder.key('B', Items.BOOK)
+                .key('C', Blocks.GRINDSTONE)
+                .key('M', IndustrialTags.Items.MACHINE_FRAME_ADVANCED);
+        return recipeBuilder;
     }
 }

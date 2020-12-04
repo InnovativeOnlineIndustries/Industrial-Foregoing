@@ -1,7 +1,10 @@
 package com.buuz135.industrial.block.generator.mycelial;
 
 import com.buuz135.industrial.jei.generator.MycelialGeneratorRecipe;
+import com.buuz135.industrial.utils.IndustrialTags;
 import com.hrznstudio.titanium.component.inventory.SidedInventoryComponent;
+import net.minecraft.block.Blocks;
+import net.minecraft.data.ShapedRecipeBuilder;
 import net.minecraft.item.*;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.potion.EffectInstance;
@@ -101,5 +104,13 @@ public class PotionGeneratorType implements IMycelialGeneratorType{
         if (stack.getItem() instanceof ThrowablePotionItem) powValue = 2.5;
         if (stack.getItem() instanceof LingeringPotionItem) powValue = 3;
         return Pair.of(duration,  (int) (Math.pow(amplifier, powValue) * 10));
+    }
+
+    @Override
+    public ShapedRecipeBuilder addIngredients(ShapedRecipeBuilder recipeBuilder) {
+        recipeBuilder = recipeBuilder.key('B', Items.NETHER_WART)
+                .key('C', Blocks.BREWING_STAND)
+                .key('M', IndustrialTags.Items.MACHINE_FRAME_ADVANCED);
+        return recipeBuilder;
     }
 }
