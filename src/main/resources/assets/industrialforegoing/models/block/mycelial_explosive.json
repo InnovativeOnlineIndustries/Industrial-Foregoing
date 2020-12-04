@@ -1,0 +1,9 @@
+{
+  "parent": "industrialforegoing:block/mycelial_generator",
+  "textures": {
+    "north": "industrialforegoing:blocks/generators/generator_front_explosive",
+    "south": "industrialforegoing:blocks/generators/generator_side_explosive",
+    "east": "industrialforegoing:blocks/generators/generator_side_explosive",
+    "west": "industrialforegoing:blocks/generators/generator_side_explosive"
+  }
+}

@@ -1,0 +1,10 @@
+{
+  "parent": "industrialforegoing:block/base_block",
+  "textures": {
+    "south": "industrialforegoing:blocks/reactor_side_mycelial",
+    "west": "industrialforegoing:blocks/reactor_side_mycelial",
+    "east": "industrialforegoing:blocks/reactor_side_mycelial",
+    "north": "industrialforegoing:blocks/reactor_front_mycelial",
+    "up": "industrialforegoing:blocks/reactor_top_mycelial"
+  }
+}

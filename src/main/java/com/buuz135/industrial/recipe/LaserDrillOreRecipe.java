@@ -84,6 +84,7 @@ public class LaserDrillOreRecipe extends SerializableRecipe {
         createWithDefault("arcane", 2, 45, 60, 3, 1);
         createWithDefault("bitumen", 15, 50, 60, 2, 1);
         createWithDefault("fluorite", 8, 15, 30, 6, 1);
+        createWithDefault("osmium", 8, 5, 36, 8, 1);
         createWithDefault("yellorite", 4, 15, 50, 3, 1);
     }
 

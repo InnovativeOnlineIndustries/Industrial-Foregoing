@@ -1,0 +1,9 @@
+{
+  "parent": "industrialforegoing:block/mycelial_generator",
+  "textures": {
+    "north": "industrialforegoing:blocks/generators/generator_front_potion",
+    "south": "industrialforegoing:blocks/generators/generator_side_potion",
+    "east": "industrialforegoing:blocks/generators/generator_side_potion",
+    "west": "industrialforegoing:blocks/generators/generator_side_potion"
+  }
+}

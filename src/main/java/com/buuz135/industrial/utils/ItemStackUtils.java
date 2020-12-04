@@ -21,10 +21,21 @@
  */
 package com.buuz135.industrial.utils;
 
+import com.mojang.blaze3d.matrix.MatrixStack;
+import com.mojang.blaze3d.platform.GlStateManager;
+import com.mojang.blaze3d.systems.RenderSystem;
 import net.minecraft.block.Block;
 import net.minecraft.block.Blocks;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.renderer.IRenderTypeBuffer;
+import net.minecraft.client.renderer.RenderHelper;
+import net.minecraft.client.renderer.model.IBakedModel;
+import net.minecraft.client.renderer.model.ItemCameraTransforms;
+import net.minecraft.client.renderer.texture.AtlasTexture;
+import net.minecraft.client.renderer.texture.OverlayTexture;
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.item.ItemStack;
+import net.minecraft.world.World;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.common.Tags;
@@ -58,6 +69,42 @@ public class ItemStackUtils {
     @OnlyIn(Dist.CLIENT)
     public static int getColor(ItemStack stack) {
         return ColorUtils.getColorFrom(Minecraft.getInstance().getItemRenderer().getItemModelWithOverrides(stack, Minecraft.getInstance().world, Minecraft.getInstance().player).getParticleTexture(), Color.GRAY);
+    }
+
+    public static void renderItemIntoGUI(MatrixStack matrixStack, ItemStack stack, int x, int y) {
+        renderItemModelIntoGUI(matrixStack, stack, x, y, Minecraft.getInstance().getItemRenderer().getItemModelWithOverrides(stack, (World)null, (LivingEntity)null));
+    }
+
+    public static void renderItemModelIntoGUI(MatrixStack matrixstack, ItemStack stack, int x, int y, IBakedModel bakedmodel) {
+        RenderSystem.pushMatrix();
+        Minecraft.getInstance().getTextureManager().bindTexture(AtlasTexture.LOCATION_BLOCKS_TEXTURE);
+        Minecraft.getInstance().getTextureManager().getTexture(AtlasTexture.LOCATION_BLOCKS_TEXTURE).setBlurMipmapDirect(false, false);
+        RenderSystem.enableRescaleNormal();
+        RenderSystem.enableAlphaTest();
+        RenderSystem.defaultAlphaFunc();
+        RenderSystem.enableBlend();
+        RenderSystem.blendFunc(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA);
+        RenderSystem.color4f(1.0F, 1.0F, 1.0F, 1.0F);
+        RenderSystem.translatef((float)x, (float)y, 100.0F + Minecraft.getInstance().getItemRenderer().zLevel);
+        RenderSystem.translatef(8.0F, 8.0F, 0.0F);
+        RenderSystem.scalef(1.0F, -1.0F, 1.0F);
+        RenderSystem.scalef(16.0F, 16.0F, 16.0F);
+        IRenderTypeBuffer.Impl irendertypebuffer$impl = Minecraft.getInstance().getRenderTypeBuffers().getBufferSource();
+        boolean flag = !bakedmodel.isSideLit();
+        if (flag) {
+            RenderHelper.setupGuiFlatDiffuseLighting();
+        }
+
+        Minecraft.getInstance().getItemRenderer().renderItem(stack, ItemCameraTransforms.TransformType.GUI, false, matrixstack, irendertypebuffer$impl, 15728880, OverlayTexture.NO_OVERLAY, bakedmodel);
+        irendertypebuffer$impl.finish();
+        RenderSystem.enableDepthTest();
+        if (flag) {
+            RenderHelper.setupGui3DDiffuseLighting();
+        }
+
+        RenderSystem.disableAlphaTest();
+        RenderSystem.disableRescaleNormal();
+        RenderSystem.popMatrix();
     }
 
 }
