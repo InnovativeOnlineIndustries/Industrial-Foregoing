@@ -154,7 +154,7 @@ dependencies {
     compileOnly fg.deobf("vazkii.patchouli:Patchouli:1.16.2+:api")
     runtimeOnly fg.deobf("vazkii.patchouli:Patchouli:1.16.2+")
     //runtimeOnly fg.deobf("curse.maven:zycraft:3099577")
-    compileOnly fg.deobf("curse.maven:farmers-delight:3091999")
+    compileOnly fg.deobf("curse.maven:farmers-delight-398521:3091999")
 }
 
 afterEvaluate {
