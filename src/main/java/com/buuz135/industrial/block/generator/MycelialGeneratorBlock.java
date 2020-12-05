@@ -89,4 +89,9 @@ public class MycelialGeneratorBlock extends IndustrialBlock<MycelialGeneratorTil
                 .key('R', Items.REDSTONE);
         type.addIngredients(recipe).build(consumer);
     }
+
+    @Override
+    public TileEntityType getTileEntityType() {
+        return tileEntityType;
+    }
 }

@@ -75,6 +75,7 @@ public class ItemStackUtils {
         renderItemModelIntoGUI(matrixStack, stack, x, y, Minecraft.getInstance().getItemRenderer().getItemModelWithOverrides(stack, (World)null, (LivingEntity)null));
     }
 
+    @OnlyIn(Dist.CLIENT)
     public static void renderItemModelIntoGUI(MatrixStack matrixstack, ItemStack stack, int x, int y, IBakedModel bakedmodel) {
         RenderSystem.pushMatrix();
         Minecraft.getInstance().getTextureManager().bindTexture(AtlasTexture.LOCATION_BLOCKS_TEXTURE);
