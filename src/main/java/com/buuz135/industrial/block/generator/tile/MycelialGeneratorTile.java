@@ -16,7 +16,6 @@ import com.hrznstudio.titanium.component.progress.ProgressBarComponent;
 import net.minecraft.block.BlockState;
 import net.minecraft.item.DyeColor;
 import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.tileentity.TileEntityType;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.util.text.TextFormatting;
@@ -36,14 +35,12 @@ public class MycelialGeneratorTile extends IndustrialGeneratorTile<MycelialGener
     private int powerGeneration;
     private IMycelialGeneratorType type;
     private INBTSerializable<CompoundNBT>[] inputs;
-    private TileEntityType tileEntityType;
     private ProgressBarComponent<MycelialGeneratorTile> bar;
     @Save
     private String owner;
 
-    public MycelialGeneratorTile(BasicTileBlock<MycelialGeneratorTile> basicTileBlock, IMycelialGeneratorType type, TileEntityType tileEntityType) {
+    public MycelialGeneratorTile(BasicTileBlock<MycelialGeneratorTile> basicTileBlock, IMycelialGeneratorType type) {
         super(basicTileBlock);
-        this.tileEntityType = tileEntityType;
         this.type = type;
         this.powerGeneration = 10;
         this.inputs = new INBTSerializable[this.type.getInputs().length];
@@ -153,11 +150,6 @@ public class MycelialGeneratorTile extends IndustrialGeneratorTile<MycelialGener
     @Override
     public boolean isSmart() {
         return true;
-    }
-
-    @Override
-    public TileEntityType<?> getType() {
-        return tileEntityType;
     }
 
     public String getOwner() {

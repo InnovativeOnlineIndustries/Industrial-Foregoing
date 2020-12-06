@@ -53,7 +53,7 @@ public class MycelialGeneratorBlock extends IndustrialBlock<MycelialGeneratorTil
 
     @Override
     public IFactory<MycelialGeneratorTile> getTileEntityFactory() {
-        return () -> new MycelialGeneratorTile(this, type, tileEntityType);
+        return () -> new MycelialGeneratorTile(this, type);
     }
 
     @Override
