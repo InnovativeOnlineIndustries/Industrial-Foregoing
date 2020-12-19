@@ -81,7 +81,7 @@ public class MeatallurgicGeneratorType implements IMycelialGeneratorType{
 
     @Override
     public List<MycelialGeneratorRecipe> getRecipes() {
-        return Collections.singletonList(new MycelialGeneratorRecipe(Arrays.asList(new ArrayList<>(), Arrays.asList(Ingredient.fromTag(Tags.Items.INGOTS).getMatchingStacks())), Arrays.asList(Arrays.asList(new FluidStack(ModuleCore.MEAT.getSourceFluid(), 250)), Arrays.asList()), 20*20, 100));
+        return Collections.singletonList(new MycelialGeneratorRecipe(Arrays.asList(new ArrayList<>(), Collections.singletonList(Ingredient.fromTag(Tags.Items.INGOTS))), Arrays.asList(Collections.singletonList(new FluidStack(ModuleCore.MEAT.getSourceFluid(), 250)), Collections.emptyList()), 20*20, 100));
     }
 
     @Override

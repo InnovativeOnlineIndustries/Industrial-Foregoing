@@ -67,7 +67,7 @@ public class BiofuelGeneratorTile extends IndustrialGeneratorTile<BiofuelGenerat
 
     @Override
     public int getExtractingEnergy() {
-        return getExtractionRate;
+        return BiofuelGeneratorConfig.extractionRate;
     }
 
     @Nonnull

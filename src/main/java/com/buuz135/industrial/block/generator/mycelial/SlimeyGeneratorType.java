@@ -82,7 +82,7 @@ public class SlimeyGeneratorType implements IMycelialGeneratorType{
 
     @Override
     public List<MycelialGeneratorRecipe> getRecipes() {
-        return Collections.singletonList(new MycelialGeneratorRecipe(Arrays.asList(new ArrayList<>(), Arrays.asList(Ingredient.fromTag(Tags.Items.SLIMEBALLS).getMatchingStacks())), Arrays.asList(Arrays.asList(new FluidStack(ModuleCore.MILK.getSourceFluid(), 250)), Arrays.asList()), 20*20, 200));
+        return Collections.singletonList(new MycelialGeneratorRecipe(Arrays.asList(new ArrayList<>(), Collections.singletonList(Ingredient.fromTag(Tags.Items.SLIMEBALLS))), Arrays.asList(Arrays.asList(new FluidStack(ModuleCore.MILK.getSourceFluid(), 250)), Arrays.asList()), 20*20, 200));
     }
 
     @Override

@@ -4,6 +4,7 @@ import com.buuz135.industrial.block.tile.IndustrialProcessingTile;
 import com.buuz135.industrial.config.machine.misc.EnchantmentExtractorConfig;
 import com.buuz135.industrial.module.ModuleCore;
 import com.buuz135.industrial.module.ModuleMisc;
+import com.buuz135.industrial.utils.IndustrialTags;
 import com.buuz135.industrial.utils.ItemStackUtils;
 import com.hrznstudio.titanium.annotation.Save;
 import com.hrznstudio.titanium.api.IFactory;
@@ -55,7 +56,7 @@ public class EnchantmentExtractorTile extends IndustrialProcessingTile<Enchantme
         this.addInventory(inputEnchantedItem = (SidedInventoryComponent<EnchantmentExtractorTile>) new SidedInventoryComponent<EnchantmentExtractorTile>("inputEnchantedItem", 40, 22, 1, 0).
                 setColor(DyeColor.BLUE).
                 setSlotLimit(1).
-                setInputFilter((stack, integer) -> stack.isEnchanted()).
+                setInputFilter((stack, integer) -> (stack.isEnchanted() || stack.getItem() == Items.ENCHANTED_BOOK) && !stack.getItem().isIn(IndustrialTags.Items.ENCHANTMENT_EXTRACTOR_BLACKLIST)).
                 setOutputFilter((stack, integer) -> false).
                 setComponentHarness(this)
         );
@@ -86,8 +87,8 @@ public class EnchantmentExtractorTile extends IndustrialProcessingTile<Enchantme
             @Override
             public List<IFactory<? extends IScreenAddon>> getScreenAddons() {
                 return Collections.singletonList(() -> new StateButtonAddon(this,
-                        new StateButtonInfo(0, AssetTypes.BUTTON_SIDENESS_ENABLED, TextFormatting.GOLD + LangUtil.getString("tooltip.industrialforegoing.echantment_extractor.extract"), "tooltip.industrialforegoing.echantment_extractor.extract_extra"),
-                        new StateButtonInfo(1, AssetTypes.BUTTON_SIDENESS_DISABLED, TextFormatting.GOLD + LangUtil.getString("tooltip.industrialforegoing.echantment_extractor.consume"), "tooltip.industrialforegoing.echantment_extractor.consume_extra")) {
+                        new StateButtonInfo(0, AssetTypes.BUTTON_SIDENESS_ENABLED, TextFormatting.GOLD + LangUtil.getString("tooltip.industrialforegoing.enchantment_extractor.extract"), "tooltip.industrialforegoing.enchantment_extractor.extract_extra"),
+                        new StateButtonInfo(1, AssetTypes.BUTTON_SIDENESS_DISABLED, TextFormatting.GOLD + LangUtil.getString("tooltip.industrialforegoing.enchantment_extractor.consume"), "tooltip.industrialforegoing.enchantment_extractor.consume_extra")) {
                     @Override
                     public int getState() {
                         return extractEnchants ? 0 : 1;
@@ -110,21 +111,31 @@ public class EnchantmentExtractorTile extends IndustrialProcessingTile<Enchantme
         return () -> {
             ItemStack input = this.inputEnchantedItem.getStackInSlot(0);
             if (extractEnchants) {
-                Map<Enchantment, Integer> map = EnchantmentHelper.getEnchantments(input).entrySet().stream().filter((enchantmentPair) -> !enchantmentPair.getKey().isCurse()).collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
+                Map<Enchantment, Integer> map = EnchantmentHelper.getEnchantments(input).entrySet().stream().collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
                 if (map.size() > 0) {
                     Enchantment selected = map.keySet().iterator().next();
                     ItemStack book = new ItemStack(Items.ENCHANTED_BOOK);
                     EnchantmentHelper.setEnchantments(Collections.singletonMap(selected, map.get(selected)), book);
-                    if (map.size() == 1) {
+                    if (map.keySet().stream().allMatch(Enchantment::isCurse)){
+                        ItemStack output = input.copy();
+                        input.shrink(1);
+                        ItemHandlerHelper.insertItem(this.outputNoEnchantedItem, output, false);
+                    } else if (map.size() == 1) {
                         ItemStack output = removeEnchantments(input, input.getDamage(), input.getCount());
                         input.shrink(1);
                         ItemHandlerHelper.insertItem(this.outputNoEnchantedItem, output, false);
+                        ItemHandlerHelper.insertItem(this.outputEnchantedBook, book, false);
+                        this.inputBook.getStackInSlot(0).shrink(1);
                     } else {
                         Map<Enchantment, Integer> cleanMap = EnchantmentHelper.getEnchantments(input).entrySet().stream().filter((enchantmentPair) -> !enchantmentPair.getKey().equals(selected)).collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
+                        if (input.getItem() == Items.ENCHANTED_BOOK) {
+                            input.removeChildTag("Enchantments");
+                            input.removeChildTag("StoredEnchantments");
+                        }
                         EnchantmentHelper.setEnchantments(cleanMap, input);
+                        ItemHandlerHelper.insertItem(this.outputEnchantedBook, book, false);
+                        this.inputBook.getStackInSlot(0).shrink(1);
                     }
-                    ItemHandlerHelper.insertItem(this.outputEnchantedBook, book, false);
-                    this.inputBook.getStackInSlot(0).shrink(1);
                 }
             } else {
                 int essence = getEnchantmentXp(input) * 20;
