@@ -8,6 +8,7 @@ import net.minecraft.data.ShapedRecipeBuilder;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.item.*;
+import net.minecraft.item.crafting.Ingredient;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraftforge.common.util.INBTSerializable;
 import net.minecraftforge.fluids.FluidStack;
@@ -84,7 +85,7 @@ public class DisenchantmentGeneratorType implements IMycelialGeneratorType{
                 ItemStack book = new ItemStack(Items.ENCHANTED_BOOK);
                 EnchantmentHelper.setEnchantments(map, book);
                 Pair<Integer, Integer> power = calculate(book);
-                recipes.add(new MycelialGeneratorRecipe(Collections.singletonList(Collections.singletonList(book)), new ArrayList<>(), power.getLeft(), power.getRight()));
+                recipes.add(new MycelialGeneratorRecipe(Collections.singletonList(Collections.singletonList(Ingredient.fromStacks(book))), new ArrayList<>(), power.getLeft(), power.getRight()));
             }
         }
         return recipes;

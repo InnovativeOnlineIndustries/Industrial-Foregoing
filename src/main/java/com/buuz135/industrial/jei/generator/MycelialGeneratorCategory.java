@@ -25,8 +25,11 @@ import org.apache.commons.lang3.tuple.Pair;
 
 import java.awt.*;
 import java.text.DecimalFormat;
+import java.util.Arrays;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class MycelialGeneratorCategory implements IRecipeCategory<MycelialGeneratorRecipe> {
 
@@ -73,7 +76,7 @@ public class MycelialGeneratorCategory implements IRecipeCategory<MycelialGenera
     public void setIngredients(MycelialGeneratorRecipe recipe, IIngredients iIngredients) {
         for (int i = 0; i < type.getInputs().length; i++) {
             if (type.getInputs()[i] == IMycelialGeneratorType.Input.SLOT){
-                iIngredients.setInputLists(VanillaTypes.ITEM, recipe.getInputItems());
+                iIngredients.setInputLists(VanillaTypes.ITEM, recipe.getInputItems().stream().map(ingredients -> ingredients.stream().map(ingredient -> Arrays.asList(ingredient.getMatchingStacks())).flatMap(Collection::stream).collect(Collectors.toList())).collect(Collectors.toList()));
             } else if (type.getInputs()[i] == IMycelialGeneratorType.Input.TANK){
                 iIngredients.setInputLists(VanillaTypes.FLUID, recipe.getFluidItems());
             }
@@ -87,7 +90,7 @@ public class MycelialGeneratorCategory implements IRecipeCategory<MycelialGenera
         for (int i = 0; i < type.getInputs().length; i++) {
             if (type.getInputs()[i] == IMycelialGeneratorType.Input.SLOT){
                 guiItemStackGroup.init(i, true, 20*i , Minecraft.getInstance().fontRenderer.FONT_HEIGHT / 2);
-                guiItemStackGroup.set(i, recipe.getInputItems().get(i));
+                guiItemStackGroup.set(i, recipe.getInputItems().get(i).stream().map(ingredient ->Arrays.asList(ingredient.getMatchingStacks())).flatMap(Collection::stream).collect(Collectors.toList()));
             } else if (type.getInputs()[i] == IMycelialGeneratorType.Input.TANK){
                 guiFluidStackGroup.init(i, true, 20*i +3, 3 + Minecraft.getInstance().fontRenderer.FONT_HEIGHT / 2, 12, 13, 1000, false,smallTank);
                 guiFluidStackGroup.set(i, recipe.getFluidItems().get(i));

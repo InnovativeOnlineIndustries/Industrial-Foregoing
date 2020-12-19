@@ -86,7 +86,7 @@ public class MagmaGeneratorType implements IMycelialGeneratorType{
     public List<MycelialGeneratorRecipe> getRecipes() {
         List<MycelialGeneratorRecipe> recipes = new ArrayList<>();
         recipes.add(new MycelialGeneratorRecipe(Arrays.asList(new ArrayList<>(), new ArrayList<>()), Arrays.asList(Arrays.asList(new FluidStack(Fluids.LAVA, 250)), Arrays.asList()), 2 * 250, 50));
-        recipes.add(new MycelialGeneratorRecipe(Arrays.asList(new ArrayList<>(), Arrays.asList(Ingredient.fromTag(Tags.Items.DUSTS_REDSTONE).getMatchingStacks())), Arrays.asList(Arrays.asList(new FluidStack(Fluids.LAVA, 250)), Arrays.asList()), 2 * 250, 100));
+        recipes.add(new MycelialGeneratorRecipe(Arrays.asList(new ArrayList<>(), Arrays.asList(Ingredient.fromTag(Tags.Items.DUSTS_REDSTONE))), Arrays.asList(Arrays.asList(new FluidStack(Fluids.LAVA, 250)), Arrays.asList()), 2 * 250, 100));
         return recipes;
     }
 

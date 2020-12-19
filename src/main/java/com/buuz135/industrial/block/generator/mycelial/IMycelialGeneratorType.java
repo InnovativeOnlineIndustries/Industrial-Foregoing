@@ -23,10 +23,6 @@ public interface IMycelialGeneratorType {
             new EnderGeneratorType(), new ExplosiveGeneratorType(), new FrostyGeneratorType(), new HalitosisGeneratorType(), new MagmaGeneratorType(), new PinkGeneratorType(), new NetherStarGeneratorType(), new DeathGeneratorType(),
             new FireworkGeneratorType(), new CrimedGeneratorType(), new MeatallurgicGeneratorType());
 
-    //Meatallurgic
-    //Warped /Crimed
-    //Rocket
-
     String getName();
 
     Input[] getInputs();

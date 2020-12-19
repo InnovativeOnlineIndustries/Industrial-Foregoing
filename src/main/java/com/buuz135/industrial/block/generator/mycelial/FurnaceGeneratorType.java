@@ -9,6 +9,7 @@ import net.minecraft.item.DyeColor;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
+import net.minecraft.item.crafting.Ingredient;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraftforge.common.ForgeHooks;
 import net.minecraftforge.common.Tags;
@@ -18,7 +19,6 @@ import net.minecraftforge.registries.ForgeRegistries;
 import org.apache.commons.lang3.tuple.Pair;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.function.BiPredicate;
@@ -87,7 +87,7 @@ public class FurnaceGeneratorType implements IMycelialGeneratorType {
 
     @Override
     public List<MycelialGeneratorRecipe> getRecipes() {
-        return ForgeRegistries.ITEMS.getValues().stream().map(ItemStack::new).filter(stack -> ForgeHooks.getBurnTime(stack) > 0).map(item -> new MycelialGeneratorRecipe(Arrays.asList(Arrays.asList(item)), new ArrayList<>(), ForgeHooks.getBurnTime(item), 80)).collect(Collectors.toList());
+        return ForgeRegistries.ITEMS.getValues().stream().map(ItemStack::new).filter(stack -> ForgeHooks.getBurnTime(stack) > 0).map(item -> new MycelialGeneratorRecipe(Collections.singletonList(Collections.singletonList(Ingredient.fromStacks(item))), new ArrayList<>(), ForgeHooks.getBurnTime(item), 80)).collect(Collectors.toList());
     }
 
     @Override
