@@ -4,6 +4,7 @@ import com.buuz135.industrial.block.tile.IndustrialProcessingTile;
 import com.buuz135.industrial.config.machine.misc.EnchantmentExtractorConfig;
 import com.buuz135.industrial.module.ModuleCore;
 import com.buuz135.industrial.module.ModuleMisc;
+import com.buuz135.industrial.utils.IndustrialTags;
 import com.buuz135.industrial.utils.ItemStackUtils;
 import com.hrznstudio.titanium.annotation.Save;
 import com.hrznstudio.titanium.api.IFactory;
@@ -55,7 +56,7 @@ public class EnchantmentExtractorTile extends IndustrialProcessingTile<Enchantme
         this.addInventory(inputEnchantedItem = (SidedInventoryComponent<EnchantmentExtractorTile>) new SidedInventoryComponent<EnchantmentExtractorTile>("inputEnchantedItem", 40, 22, 1, 0).
                 setColor(DyeColor.BLUE).
                 setSlotLimit(1).
-                setInputFilter((stack, integer) -> stack.isEnchanted() || stack.getItem() == Items.ENCHANTED_BOOK).
+                setInputFilter((stack, integer) -> (stack.isEnchanted() || stack.getItem() == Items.ENCHANTED_BOOK) && !stack.getItem().isIn(IndustrialTags.Items.ENCHANTMENT_EXTRACTOR_BLACKLIST)).
                 setOutputFilter((stack, integer) -> false).
                 setComponentHarness(this)
         );

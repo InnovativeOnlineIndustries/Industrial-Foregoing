@@ -20,6 +20,7 @@ public class IndustrialTags {
         public static final ITag<Item> MACHINE_FRAME_SUPREME = TagUtil.getItemTag(new ResourceLocation(Reference.MOD_ID + ":" + "machine_frame/supreme"));
         public static final ITag<Item> SLUDGE_OUTPUT = TagUtil.getItemTag(new ResourceLocation(Reference.MOD_ID + ":" + "sludge"));
         public static final ITag<Item> BIOREACTOR_INPUT = TagUtil.getItemTag(new ResourceLocation(Reference.MOD_ID + ":" + "bioreactor"));
+        public static final ITag<Item> ENCHANTMENT_EXTRACTOR_BLACKLIST = TagUtil.getItemTag(new ResourceLocation(Reference.MOD_ID + ":" + "enchantment_extractor_blacklist"));
 
         public static final ITag<Item> GEAR_GOLD = TagUtil.getItemTag(new ResourceLocation("forge:" + "gears/gold"));
         public static final ITag<Item> GEAR_DIAMOND = TagUtil.getItemTag(new ResourceLocation("forge:" + "gears/diamond"));
