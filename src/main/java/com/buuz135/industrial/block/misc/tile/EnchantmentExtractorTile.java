@@ -55,7 +55,7 @@ public class EnchantmentExtractorTile extends IndustrialProcessingTile<Enchantme
         this.addInventory(inputEnchantedItem = (SidedInventoryComponent<EnchantmentExtractorTile>) new SidedInventoryComponent<EnchantmentExtractorTile>("inputEnchantedItem", 40, 22, 1, 0).
                 setColor(DyeColor.BLUE).
                 setSlotLimit(1).
-                setInputFilter((stack, integer) -> stack.isEnchanted()).
+                setInputFilter((stack, integer) -> stack.isEnchanted() || stack.getItem() == Items.ENCHANTED_BOOK).
                 setOutputFilter((stack, integer) -> false).
                 setComponentHarness(this)
         );
@@ -121,6 +121,10 @@ public class EnchantmentExtractorTile extends IndustrialProcessingTile<Enchantme
                         ItemHandlerHelper.insertItem(this.outputNoEnchantedItem, output, false);
                     } else {
                         Map<Enchantment, Integer> cleanMap = EnchantmentHelper.getEnchantments(input).entrySet().stream().filter((enchantmentPair) -> !enchantmentPair.getKey().equals(selected)).collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
+                        if (input.getItem() == Items.ENCHANTED_BOOK) {
+                            input.removeChildTag("Enchantments");
+                            input.removeChildTag("StoredEnchantments");
+                        }
                         EnchantmentHelper.setEnchantments(cleanMap, input);
                     }
                     ItemHandlerHelper.insertItem(this.outputEnchantedBook, book, false);
