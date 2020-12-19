@@ -110,15 +110,21 @@ public class EnchantmentExtractorTile extends IndustrialProcessingTile<Enchantme
         return () -> {
             ItemStack input = this.inputEnchantedItem.getStackInSlot(0);
             if (extractEnchants) {
-                Map<Enchantment, Integer> map = EnchantmentHelper.getEnchantments(input).entrySet().stream().filter((enchantmentPair) -> !enchantmentPair.getKey().isCurse()).collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
+                Map<Enchantment, Integer> map = EnchantmentHelper.getEnchantments(input).entrySet().stream().collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
                 if (map.size() > 0) {
                     Enchantment selected = map.keySet().iterator().next();
                     ItemStack book = new ItemStack(Items.ENCHANTED_BOOK);
                     EnchantmentHelper.setEnchantments(Collections.singletonMap(selected, map.get(selected)), book);
-                    if (map.size() == 1) {
+                    if (map.keySet().stream().allMatch(Enchantment::isCurse)){
+                        ItemStack output = input.copy();
+                        input.shrink(1);
+                        ItemHandlerHelper.insertItem(this.outputNoEnchantedItem, output, false);
+                    } else if (map.size() == 1) {
                         ItemStack output = removeEnchantments(input, input.getDamage(), input.getCount());
                         input.shrink(1);
                         ItemHandlerHelper.insertItem(this.outputNoEnchantedItem, output, false);
+                        ItemHandlerHelper.insertItem(this.outputEnchantedBook, book, false);
+                        this.inputBook.getStackInSlot(0).shrink(1);
                     } else {
                         Map<Enchantment, Integer> cleanMap = EnchantmentHelper.getEnchantments(input).entrySet().stream().filter((enchantmentPair) -> !enchantmentPair.getKey().equals(selected)).collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
                         if (input.getItem() == Items.ENCHANTED_BOOK) {
@@ -126,9 +132,9 @@ public class EnchantmentExtractorTile extends IndustrialProcessingTile<Enchantme
                             input.removeChildTag("StoredEnchantments");
                         }
                         EnchantmentHelper.setEnchantments(cleanMap, input);
+                        ItemHandlerHelper.insertItem(this.outputEnchantedBook, book, false);
+                        this.inputBook.getStackInSlot(0).shrink(1);
                     }
-                    ItemHandlerHelper.insertItem(this.outputEnchantedBook, book, false);
-                    this.inputBook.getStackInSlot(0).shrink(1);
                 }
             } else {
                 int essence = getEnchantmentXp(input) * 20;
