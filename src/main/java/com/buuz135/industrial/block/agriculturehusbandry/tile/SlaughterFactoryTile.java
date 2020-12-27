@@ -9,6 +9,7 @@ import com.hrznstudio.titanium.annotation.Save;
 import com.hrznstudio.titanium.component.energy.EnergyStorageComponent;
 import com.hrznstudio.titanium.component.fluid.FluidTankComponent;
 import com.hrznstudio.titanium.component.fluid.SidedFluidTankComponent;
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.MobEntity;
 import net.minecraft.entity.passive.AnimalEntity;
 import net.minecraft.item.DyeColor;
@@ -17,6 +18,7 @@ import net.minecraftforge.fluids.capability.IFluidHandler;
 
 import javax.annotation.Nonnull;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class SlaughterFactoryTile extends IndustrialAreaWorkingTile<SlaughterFactoryTile> {
 
@@ -48,7 +50,7 @@ public class SlaughterFactoryTile extends IndustrialAreaWorkingTile<SlaughterFac
     @Override
     public WorkAction work() {
         if (hasEnergy(powerPerOperation)) {
-            List<MobEntity> mobs = this.world.getEntitiesWithinAABB(MobEntity.class, getWorkingArea().getBoundingBox());
+            List<MobEntity> mobs = this.world.getEntitiesWithinAABB(MobEntity.class, getWorkingArea().getBoundingBox()).stream().filter(LivingEntity::isAlive).collect(Collectors.toList());
             if (mobs.size() > 0) {
                 MobEntity entity = mobs.get(0);
                 float currentHealth = entity.getHealth();

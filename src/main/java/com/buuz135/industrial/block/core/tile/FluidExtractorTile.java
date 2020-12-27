@@ -45,10 +45,10 @@ public class FluidExtractorTile extends IndustrialAreaWorkingTile<FluidExtractor
     @Override
     public WorkAction work() {
         BlockPos pos = getPointedBlockPos();
-        if (isLoaded(pos)) {
+        if (isLoaded(pos) && !this.world.isAirBlock(pos) && this.tank.getFluidAmount() < this.tank.getCapacity()) {
             if (currentRecipe == null || !currentRecipe.matches(this.world, pos))
                 currentRecipe = findRecipe(this.world, pos);
-            if (currentRecipe != null && this.tank.getFluidAmount() < this.tank.getCapacity()) {//GetDimensionType
+            if (currentRecipe != null) {//GetDimensionType
                 FluidExtractionProgress extractionProgress = EXTRACTION.computeIfAbsent(this.world.getDimensionType(), dimensionType -> new HashMap<>()).computeIfAbsent(this.world.getChunkAt(pos).getPos(), chunkPos -> new HashMap<>()).computeIfAbsent(pos, pos1 -> new FluidExtractionProgress(this.world));
                 tank.fillForced(currentRecipe.output.copy(), IFluidHandler.FluidAction.EXECUTE);
                 if (this.world.rand.nextDouble() <= currentRecipe.breakChance) {
