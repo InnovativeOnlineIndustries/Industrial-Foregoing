@@ -107,6 +107,9 @@ public class DissolutionChamberRecipe extends SerializableRecipe {
                         new Ingredient.TagList(IndustrialTags.Items.GEAR_DIAMOND)
                 },
                 new FluidStack(ModuleCore.ETHER.getSourceFluid(), 500), 600, new ItemStack(ModuleGenerator.MYCELIAL_REACTOR), FluidStack.EMPTY);
+        new DissolutionChamberRecipe(new ResourceLocation(Reference.MOD_ID, "xp_bottles"),
+                new Ingredient.IItemList[]{},
+                new FluidStack(ModuleCore.ESSENCE.getSourceFluid(), 250), 5, new ItemStack(Items.EXPERIENCE_BOTTLE), FluidStack.EMPTY);
     }
 
     public Ingredient.IItemList[] input;
