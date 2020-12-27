@@ -1,6 +1,9 @@
 {
   "replace": false,
   "values": [
-    "titanium:iron_gear"
+    {
+      "id": "titanium:iron_gear",
+      "required": false
+    }
   ]
 }
