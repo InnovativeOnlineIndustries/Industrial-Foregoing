@@ -21,8 +21,8 @@
  */
 package com.buuz135.industrial.proxy.client.render;
 
-import com.buuz135.industrial.block.transport.ConveyorBlock;
-import com.buuz135.industrial.block.transport.tile.ConveyorTile;
+import com.buuz135.industrial.block.transportstorage.ConveyorBlock;
+import com.buuz135.industrial.block.transportstorage.tile.ConveyorTile;
 import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.IVertexBuilder;

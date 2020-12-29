@@ -22,7 +22,7 @@
 package com.buuz135.industrial.proxy.client;
 
 import com.buuz135.industrial.block.tile.IndustrialAreaWorkingTile;
-import com.buuz135.industrial.block.transport.tile.ConveyorTile;
+import com.buuz135.industrial.block.transportstorage.tile.ConveyorTile;
 import com.buuz135.industrial.entity.client.InfinityTridentRenderer;
 import com.buuz135.industrial.item.infinity.InfinityTier;
 import com.buuz135.industrial.item.infinity.ItemInfinity;

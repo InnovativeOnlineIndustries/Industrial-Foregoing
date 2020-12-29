@@ -22,8 +22,8 @@
 package com.buuz135.industrial.proxy.network;
 
 import com.buuz135.industrial.api.conveyor.ConveyorUpgrade;
-import com.buuz135.industrial.block.transport.conveyor.ConveyorSplittingUpgrade;
-import com.buuz135.industrial.block.transport.tile.ConveyorTile;
+import com.buuz135.industrial.block.transportstorage.conveyor.ConveyorSplittingUpgrade;
+import com.buuz135.industrial.block.transportstorage.tile.ConveyorTile;
 import com.hrznstudio.titanium.network.Message;
 import net.minecraft.client.Minecraft;
 import net.minecraft.tileentity.TileEntity;

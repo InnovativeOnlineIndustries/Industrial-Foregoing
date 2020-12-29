@@ -19,13 +19,13 @@
  * FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE,
  * ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
-package com.buuz135.industrial.block.transport.conveyor;
+package com.buuz135.industrial.block.transportstorage.conveyor;
 
 import com.buuz135.industrial.api.conveyor.ConveyorUpgrade;
 import com.buuz135.industrial.api.conveyor.ConveyorUpgradeFactory;
 import com.buuz135.industrial.api.conveyor.IConveyorContainer;
 import com.buuz135.industrial.api.conveyor.gui.IGuiComponent;
-import com.buuz135.industrial.block.transport.tile.ConveyorTile;
+import com.buuz135.industrial.block.transportstorage.tile.ConveyorTile;
 import com.buuz135.industrial.gui.component.FilterGuiComponent;
 import com.buuz135.industrial.gui.component.StateButtonInfo;
 import com.buuz135.industrial.gui.component.TexturedStateButtonGuiComponent;
