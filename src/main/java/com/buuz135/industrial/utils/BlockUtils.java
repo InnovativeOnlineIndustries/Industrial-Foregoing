@@ -109,11 +109,6 @@ public class BlockUtils {
         BlockState state = world.getBlockState(pos);
         NonNullList<ItemStack> stacks = NonNullList.create();
         stacks.addAll(Block.getDrops(state, (ServerWorld) world, pos, world.getTileEntity(pos)));
-
-        //state.getBlock().getDrops(state, stacks, world, pos, fortune); TODO
-        //BlockEvent.HarvestDropsEvent event = new BlockEvent.HarvestDropsEvent(world, pos, world.getBlockState(pos), 0, 1f, stacks, IndustrialForegoing.getFakePlayer(world), false);
-        //MinecraftForge.EVENT_BUS.post(event);
-        //return event.getDrops();
         return stacks;
     }
 

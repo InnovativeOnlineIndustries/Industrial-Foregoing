@@ -33,7 +33,6 @@ import com.buuz135.industrial.module.ModuleTool;
 import com.buuz135.industrial.module.ModuleTransportStorage;
 import com.buuz135.industrial.proxy.CommonProxy;
 import com.buuz135.industrial.proxy.client.event.IFClientEvents;
-import com.buuz135.industrial.proxy.client.event.IFTooltipEvent;
 import com.buuz135.industrial.proxy.client.render.BlackHoleUnitTESR;
 import com.buuz135.industrial.proxy.client.render.FluidConveyorTESR;
 import com.buuz135.industrial.proxy.client.render.MycelialReactorTESR;
@@ -78,7 +77,6 @@ public class ClientProxy extends CommonProxy {
         //OBJLoader.INSTANCE.addDomain(Reference.MOD_ID);
 
         MinecraftForge.EVENT_BUS.register(new IFClientEvents());
-        MinecraftForge.EVENT_BUS.register(new IFTooltipEvent());
         ModelLoader.addSpecialModel(new ResourceLocation(Reference.MOD_ID, "block/catears"));
 
         EventManager.mod(ModelBakeEvent.class).process(event -> {

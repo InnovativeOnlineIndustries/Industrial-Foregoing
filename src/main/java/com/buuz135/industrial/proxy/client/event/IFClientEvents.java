@@ -41,21 +41,11 @@ import net.minecraft.util.math.vector.Vector3f;
 import net.minecraft.world.World;
 import net.minecraftforge.client.event.DrawHighlightEvent;
 import net.minecraftforge.client.event.RenderPlayerEvent;
-import net.minecraftforge.client.event.TextureStitchEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fluids.IFluidBlock;
 import org.apache.commons.lang3.tuple.Pair;
 
 public class IFClientEvents {
-
-    @SubscribeEvent
-    public void textureStich(TextureStitchEvent.Pre pre) {
-        //pre.getMap().registerSprite(Minecraft.getInstance().getResourceManager(), new ResourceLocation(Reference.MOD_ID, "blocks/catears")); TODO
-        //pre.getMap().registerSprite(FluidsRegistry.ORE_FLUID_RAW.getStill());
-        //pre.getMap().registerSprite(FluidsRegistry.ORE_FLUID_RAW.getFlowing());
-        //pre.getMap().registerSprite(FluidsRegistry.ORE_FLUID_FERMENTED.getStill());
-        //pre.getMap().registerSprite(FluidsRegistry.ORE_FLUID_FERMENTED.getFlowing());
-    }
 
     @SubscribeEvent
     public void blockOverlayEvent(DrawHighlightEvent event) {

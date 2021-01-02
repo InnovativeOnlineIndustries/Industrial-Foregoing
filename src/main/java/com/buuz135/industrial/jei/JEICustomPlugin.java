@@ -33,7 +33,6 @@ import com.buuz135.industrial.jei.machineproduce.MachineProduceCategory;
 import com.buuz135.industrial.jei.ore.OreFermenterCategory;
 import com.buuz135.industrial.jei.ore.OreSieveCategory;
 import com.buuz135.industrial.jei.ore.OreWasherCategory;
-import com.buuz135.industrial.jei.petrifiedgen.PetrifiedBurnTimeCategory;
 import com.buuz135.industrial.jei.sludge.SludgeRefinerRecipeCategory;
 import com.buuz135.industrial.module.ModuleCore;
 import com.buuz135.industrial.module.ModuleGenerator;
@@ -76,7 +75,6 @@ public class JEICustomPlugin implements IModPlugin {
     private LaserDrillOreCategory laserRecipeOreCategory;
     private LaserDrillFluidCategory laserDrillFluidCategory;
     private MachineProduceCategory machineProduceCategory;
-    private PetrifiedBurnTimeCategory petrifiedBurnTimeCategory;
     private FluidExtractorCategory fluidExtractorCategory;
     private OreWasherCategory oreWasherCategory;
     private OreFermenterCategory oreFermenterCategory;

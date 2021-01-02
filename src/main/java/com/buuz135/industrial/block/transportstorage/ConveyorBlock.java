@@ -386,11 +386,6 @@ public class ConveyorBlock extends BasicTileBlock<ConveyorTile> implements IWate
         return true;
     }
 
-    //@Override
-    //public boolean canEntitySpawn(BlockState state, IBlockReader worldIn, BlockPos pos, EntityType<?> type) { TODO Fix this
-    //    return true;
-    //}
-
     @Override
     public boolean canSpawnInBlock() {
         return true;

@@ -138,7 +138,7 @@ public class LaserDrillOreRecipe extends SerializableRecipe {
         RECIPES.add(this);
     }
 
-    public LaserDrillOreRecipe(String name,Ingredient output, int color, ResourceLocation isTag, LaserDrillRarity... rarity) { //TODO Add lenses
+    public LaserDrillOreRecipe(String name,Ingredient output, int color, ResourceLocation isTag, LaserDrillRarity... rarity) {
         this(name, output, Ingredient.fromItems(ModuleCore.LASER_LENS[color]),isTag, rarity);
     }
 
