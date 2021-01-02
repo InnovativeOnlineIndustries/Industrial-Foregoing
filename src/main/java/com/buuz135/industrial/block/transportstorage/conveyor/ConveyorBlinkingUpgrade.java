@@ -27,7 +27,7 @@ import com.buuz135.industrial.api.conveyor.IConveyorContainer;
 import com.buuz135.industrial.api.conveyor.gui.IGuiComponent;
 import com.buuz135.industrial.block.transportstorage.ConveyorBlock;
 import com.buuz135.industrial.gui.component.*;
-import com.buuz135.industrial.module.ModuleTransport;
+import com.buuz135.industrial.module.ModuleTransportStorage;
 import com.buuz135.industrial.proxy.block.filter.IFilter;
 import com.buuz135.industrial.proxy.block.filter.ItemStackFilter;
 import com.buuz135.industrial.utils.Reference;
@@ -251,7 +251,7 @@ public class ConveyorBlinkingUpgrade extends ConveyorUpgrade {
                     .key('I', Tags.Items.INGOTS_IRON)
                     .key('P', Items.CHORUS_FRUIT)
                     .key('D', Blocks.PISTON)
-                    .key('C', ModuleTransport.CONVEYOR)
+                    .key('C', ModuleTransportStorage.CONVEYOR)
                     .build(consumer);
         }
     }

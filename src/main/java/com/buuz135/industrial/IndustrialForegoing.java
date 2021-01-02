@@ -170,7 +170,7 @@ public class IndustrialForegoing extends ModuleController {
         addModule(tool);
 
         Module.Builder transport = Module.builder("transport").description("All the Industrial Foregoing tools that allow of transport of things");
-        new ModuleTransport().generateFeatures().forEach(transport::feature);
+        new ModuleTransportStorage().generateFeatures().forEach(transport::feature);
         addModule(transport);
 
         Module.Builder generator = Module.builder("generator").description("All machines that generate power");

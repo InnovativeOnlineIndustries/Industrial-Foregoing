@@ -1,10 +1,10 @@
 {
   "parent": "industrialforegoing:block/base_block",
   "textures": {
-    "south": "industrialforegoing:blocks/black_hole_tank_side",
-    "west": "industrialforegoing:blocks/black_hole_tank_side",
-    "east": "industrialforegoing:blocks/black_hole_tank_side",
-    "north": "industrialforegoing:blocks/black_hole_tank_side",
+    "south": "industrialforegoing:blocks/simple_black_hole_tank_front",
+    "west": "industrialforegoing:blocks/simple_black_hole_tank_front",
+    "east": "industrialforegoing:blocks/simple_black_hole_tank_front",
+    "north": "industrialforegoing:blocks/simple_black_hole_tank_front",
     "up": "industrialforegoing:blocks/black_hole_unit_top",
     "over": "industrialforegoing:blocks/black_hole_tank_side_overlay"
   },

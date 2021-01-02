@@ -31,7 +31,7 @@ import com.buuz135.industrial.gui.component.StateButtonInfo;
 import com.buuz135.industrial.gui.component.TextGuiComponent;
 import com.buuz135.industrial.gui.component.TextureGuiComponent;
 import com.buuz135.industrial.gui.component.TexturedStateButtonGuiComponent;
-import com.buuz135.industrial.module.ModuleTransport;
+import com.buuz135.industrial.module.ModuleTransportStorage;
 import com.buuz135.industrial.proxy.network.ConveyorSplittingSyncEntityMessage;
 import com.buuz135.industrial.utils.MovementUtils;
 import com.buuz135.industrial.utils.Reference;
@@ -253,9 +253,9 @@ public class ConveyorSplittingUpgrade extends ConveyorUpgrade {
             TitaniumShapedRecipeBuilder.shapedRecipe(getUpgradeItem())
                     .patternLine("IPI").patternLine("IDI").patternLine("ICI")
                     .key('I', Tags.Items.INGOTS_IRON)
-                    .key('P', ModuleTransport.CONVEYOR)
+                    .key('P', ModuleTransportStorage.CONVEYOR)
                     .key('D', Blocks.HOPPER)
-                    .key('C', ModuleTransport.CONVEYOR)
+                    .key('C', ModuleTransportStorage.CONVEYOR)
                     .build(consumer);
         }
     }

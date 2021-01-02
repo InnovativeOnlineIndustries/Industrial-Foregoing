@@ -1,6 +1,9 @@
 package com.buuz135.industrial.module;
 
 import com.buuz135.industrial.api.conveyor.ConveyorUpgradeFactory;
+import com.buuz135.industrial.block.transportstorage.BlackHoleControllerBlock;
+import com.buuz135.industrial.block.transportstorage.BlackHoleTankBlock;
+import com.buuz135.industrial.block.transportstorage.BlackHoleUnitBlock;
 import com.buuz135.industrial.block.transportstorage.ConveyorBlock;
 import com.buuz135.industrial.block.transportstorage.conveyor.*;
 import com.buuz135.industrial.gui.conveyor.ContainerConveyor;
@@ -35,7 +38,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-public class ModuleTransport implements IModule {
+public class ModuleTransportStorage implements IModule {
 
     public static AdvancedTitaniumTab TAB_TRANSPORT = new AdvancedTitaniumTab(Reference.MOD_ID + "_transport", true);
 
@@ -49,6 +52,18 @@ public class ModuleTransport implements IModule {
 
     public static ConveyorBlock CONVEYOR = new ConveyorBlock(TAB_TRANSPORT);
     public static HashMap<ResourceLocation, IBakedModel> CONVEYOR_UPGRADES_CACHE = new HashMap<>();
+
+    public static BlackHoleUnitBlock BLACK_HOLE_UNIT_PITY = new BlackHoleUnitBlock(ModuleCore.PITY_RARITY);
+    public static BlackHoleUnitBlock BLACK_HOLE_UNIT_SIMPLE = new BlackHoleUnitBlock(ModuleCore.SIMPLE_RARITY);
+    public static BlackHoleUnitBlock BLACK_HOLE_UNIT_ADVANCED = new BlackHoleUnitBlock(ModuleCore.ADVANCED_RARITY);
+    public static BlackHoleUnitBlock BLACK_HOLE_UNIT_SUPREME = new BlackHoleUnitBlock(ModuleCore.SUPREME_RARITY);
+
+    public static BlackHoleTankBlock BLACK_HOLE_TANK_PITY = new BlackHoleTankBlock(ModuleCore.PITY_RARITY);
+    public static BlackHoleTankBlock BLACK_HOLE_TANK_SIMPLE = new BlackHoleTankBlock(ModuleCore.SIMPLE_RARITY);
+    public static BlackHoleTankBlock BLACK_HOLE_TANK_ADVANCED = new BlackHoleTankBlock(ModuleCore.ADVANCED_RARITY);
+    public static BlackHoleTankBlock BLACK_HOLE_TANK_SUPREME = new BlackHoleTankBlock(ModuleCore.SUPREME_RARITY);
+
+    public static BlackHoleControllerBlock BLACK_HOLE_CONTROLLER = new BlackHoleControllerBlock();
 
     @Override
     public List<Feature.Builder> generateFeatures() {
@@ -64,6 +79,15 @@ public class ModuleTransport implements IModule {
                 .eventClient(() -> () -> EventManager.mod(TextureStitchEvent.Pre.class).process(this::textureStitch));
         ConveyorUpgradeFactory.FACTORIES.forEach(conveyorUpgradeFactory -> builder.content(Item.class, new ItemConveyorUpgrade(conveyorUpgradeFactory, TAB_TRANSPORT)));
         features.add(builder);
+        features.add(createFeature(BLACK_HOLE_UNIT_PITY));
+        features.add(createFeature(BLACK_HOLE_UNIT_SIMPLE));
+        features.add(createFeature(BLACK_HOLE_UNIT_ADVANCED));
+        features.add(createFeature(BLACK_HOLE_UNIT_SUPREME));
+        features.add(createFeature(BLACK_HOLE_TANK_PITY));
+        features.add(createFeature(BLACK_HOLE_TANK_SIMPLE));
+        features.add(createFeature(BLACK_HOLE_TANK_ADVANCED));
+        features.add(createFeature(BLACK_HOLE_TANK_SUPREME));
+        features.add(createFeature(BLACK_HOLE_CONTROLLER));
         return features;
     }
 

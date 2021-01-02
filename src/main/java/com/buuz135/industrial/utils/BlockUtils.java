@@ -22,7 +22,7 @@
 package com.buuz135.industrial.utils;
 
 import com.buuz135.industrial.IndustrialForegoing;
-import com.google.common.collect.HashMultimap;
+import com.buuz135.industrial.module.ModuleCore;
 import com.mojang.blaze3d.systems.RenderSystem;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
@@ -34,6 +34,7 @@ import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.entity.item.ItemEntity;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.Rarity;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.tags.ITag;
 import net.minecraft.tags.Tag;
@@ -52,8 +53,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class BlockUtils {
-
-    private static HashMultimap<String, Block> oreDictBlocks = HashMultimap.create();
 
     public static List<BlockPos> getBlockPosInAABB(AxisAlignedBB axisAlignedBB) {
         List<BlockPos> blocks = new ArrayList<BlockPos>();
@@ -81,27 +80,6 @@ public class BlockUtils {
 
     public static boolean isBlockStateTag(BlockState state, Tag.INamedTag<Block> tag) {
         return state.getBlock().isIn(tag);
-    }
-
-    public static boolean isBlockOreDict(World world, BlockPos pos, String ore) {
-        /* TODO: OreDict reimplementation
-        BlockState state = world.getBlockState(pos);
-        Block block = state.getBlock();
-        if (oreDictBlocks.containsEntry(ore, block)) {
-            return true;
-        }
-        Item item = Item.getItemFromBlock(block);
-        if (!item.equals(Items.AIR)) {
-            ItemStack stack = new ItemStack(item);
-            int id = OreDictionary.getOreID(ore);
-            for (int i : OreDictionary.getOreIDs(stack)) {
-                if (i == id) {
-                    oreDictBlocks.put(ore, block);
-                    return true;
-                }
-            }
-        }*/
-        return false;
     }
 
     public static boolean isLog(World world, BlockPos pos) {
@@ -145,6 +123,20 @@ public class BlockUtils {
         item.setPickupDelay(40);
         item.setItem(stack);
         return world.addEntity(item);
+    }
+
+    public static int getStackAmountByRarity(Rarity rarity){
+        if (rarity.equals(ModuleCore.PITY_RARITY)) return 64*32*8;
+        if (rarity.equals(ModuleCore.SIMPLE_RARITY)) return 64*32*32;
+        if (rarity.equals(ModuleCore.ADVANCED_RARITY)) return 64*32*64;
+        return Integer.MAX_VALUE;
+    }
+
+    public static int getFluidAmountByRarity(Rarity rarity){
+        if (rarity.equals(ModuleCore.PITY_RARITY)) return 64*1000;
+        if (rarity.equals(ModuleCore.SIMPLE_RARITY)) return 64*1000*4;
+        if (rarity.equals(ModuleCore.ADVANCED_RARITY)) return 64*1000*16;
+        return Integer.MAX_VALUE;
     }
 
     public static void renderLaserBeam(TileEntity tile, double x, double y, double z, Direction direction, float partialTicks, int length) {

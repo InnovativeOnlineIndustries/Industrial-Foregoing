@@ -26,7 +26,7 @@ import com.buuz135.industrial.api.conveyor.ConveyorUpgradeFactory;
 import com.buuz135.industrial.api.conveyor.IConveyorContainer;
 import com.buuz135.industrial.block.transportstorage.ConveyorBlock;
 import com.buuz135.industrial.gui.conveyor.ContainerConveyor;
-import com.buuz135.industrial.module.ModuleTransport;
+import com.buuz135.industrial.module.ModuleTransportStorage;
 import com.buuz135.industrial.proxy.client.model.ConveyorModelData;
 import com.buuz135.industrial.utils.MovementUtils;
 import com.hrznstudio.titanium.block.tile.ActiveTile;
@@ -76,7 +76,7 @@ public class ConveyorTile extends ActiveTile<ConveyorTile> implements IConveyorC
     private boolean needsFluidSync;
 
     public ConveyorTile() {
-        super(ModuleTransport.CONVEYOR);
+        super(ModuleTransportStorage.CONVEYOR);
         this.facing = Direction.NORTH;
         this.type = ConveyorBlock.EnumType.FLAT;
         this.color = DyeColor.WHITE.getMapColor().colorValue;
@@ -332,7 +332,7 @@ public class ConveyorTile extends ActiveTile<ConveyorTile> implements IConveyorC
     @Nullable
     @Override
     public Container createMenu(int menu, PlayerInventory inventoryPlayer, PlayerEntity entityPlayer) {
-        return new ContainerConveyor(menu, this, ModuleTransport.CONVEYOR.getFacingUpgradeHit(this.world.getBlockState(this.pos), this.world, this.pos, entityPlayer), inventoryPlayer);
+        return new ContainerConveyor(menu, this, ModuleTransportStorage.CONVEYOR.getFacingUpgradeHit(this.world.getBlockState(this.pos), this.world, this.pos, entityPlayer), inventoryPlayer);
     }
 
     public void openGui(PlayerEntity player, Direction facing) {

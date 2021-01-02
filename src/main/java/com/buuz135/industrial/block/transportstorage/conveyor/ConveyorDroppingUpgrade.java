@@ -28,7 +28,7 @@ import com.buuz135.industrial.api.conveyor.gui.IGuiComponent;
 import com.buuz135.industrial.gui.component.FilterGuiComponent;
 import com.buuz135.industrial.gui.component.StateButtonInfo;
 import com.buuz135.industrial.gui.component.TexturedStateButtonGuiComponent;
-import com.buuz135.industrial.module.ModuleTransport;
+import com.buuz135.industrial.module.ModuleTransportStorage;
 import com.buuz135.industrial.proxy.block.filter.IFilter;
 import com.buuz135.industrial.proxy.block.filter.ItemStackFilter;
 import com.buuz135.industrial.utils.Reference;
@@ -214,7 +214,7 @@ public class ConveyorDroppingUpgrade extends ConveyorUpgrade {
                     .key('I', Tags.Items.INGOTS_IRON)
                     .key('P', Blocks.IRON_BARS)
                     .key('D', Blocks.DROPPER)
-                    .key('C', ModuleTransport.CONVEYOR)
+                    .key('C', ModuleTransportStorage.CONVEYOR)
                     .build(consumer);
 
         }

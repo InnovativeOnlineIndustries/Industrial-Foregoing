@@ -23,7 +23,7 @@ package com.buuz135.industrial.proxy.client.model;
 
 import com.buuz135.industrial.api.conveyor.ConveyorUpgrade;
 import com.buuz135.industrial.block.transportstorage.ConveyorBlock;
-import com.buuz135.industrial.module.ModuleTransport;
+import com.buuz135.industrial.module.ModuleTransportStorage;
 import com.google.common.cache.Cache;
 import com.google.common.cache.CacheBuilder;
 import com.mojang.blaze3d.matrix.MatrixStack;
@@ -74,7 +74,7 @@ public class ConveyorBlockModel implements IDynamicBakedModel {
                 List<BakedQuad> upgradeQuads = CACHE.getIfPresent(Pair.of(Pair.of(upgrade.getFactory().getRegistryName().toString(), Pair.of(upgrade.getSide(), state.get(ConveyorBlock.FACING))), side));
                 if (upgradeQuads == null) {
                     try {
-                        IBakedModel model = ModuleTransport.CONVEYOR_UPGRADES_CACHE.get(upgrade.getFactory().getModel(upgrade.getSide(), state.get(ConveyorBlock.FACING)));
+                        IBakedModel model = ModuleTransportStorage.CONVEYOR_UPGRADES_CACHE.get(upgrade.getFactory().getModel(upgrade.getSide(), state.get(ConveyorBlock.FACING)));
                         upgradeQuads = model.getQuads(state, side, rand, extraData);
                     } catch (Exception e) {
                         e.printStackTrace();

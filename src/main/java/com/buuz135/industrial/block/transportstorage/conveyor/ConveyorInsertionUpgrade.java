@@ -29,7 +29,7 @@ import com.buuz135.industrial.block.transportstorage.tile.ConveyorTile;
 import com.buuz135.industrial.gui.component.FilterGuiComponent;
 import com.buuz135.industrial.gui.component.StateButtonInfo;
 import com.buuz135.industrial.gui.component.TexturedStateButtonGuiComponent;
-import com.buuz135.industrial.module.ModuleTransport;
+import com.buuz135.industrial.module.ModuleTransportStorage;
 import com.buuz135.industrial.proxy.block.filter.IFilter;
 import com.buuz135.industrial.proxy.block.filter.ItemStackFilter;
 import com.buuz135.industrial.utils.IndustrialTags;
@@ -263,7 +263,7 @@ public class ConveyorInsertionUpgrade extends ConveyorUpgrade {
                     .key('I', Tags.Items.INGOTS_IRON)
                     .key('P', IndustrialTags.Items.PLASTIC)
                     .key('D', Blocks.HOPPER)
-                    .key('C', ModuleTransport.CONVEYOR)
+                    .key('C', ModuleTransportStorage.CONVEYOR)
                     .build(consumer);
 
         }
