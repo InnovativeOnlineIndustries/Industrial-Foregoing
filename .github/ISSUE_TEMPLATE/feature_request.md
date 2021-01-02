@@ -1,17 +1,10 @@
 ---
 name: Feature request
-about: Suggest an idea for this project
-title: ''
-labels: 'type: feature'
+about: PLEASE USE THE DISCUSSION TAB FOR FEATURE REQUESTS
+title: 'PLEASE USE THE DISCUSSION TAB FOR FEATURE REQUESTS'
+labels: 'type: feature, version: 1.16'
 assignees: ''
 
 ---
 
-**Is your feature request related to a problem? Please describe.**
-A clear and concise description of what the problem is. Ex. I'm always frustrated when [...]
-
-**Describe the solution you'd like**
-A clear and concise description of what you want to happen.
-
-**Additional context**
-Add any other context or screenshots about the feature request here.
+**PLEASE USE THE DISCUSSION TAB FOR FEATURE REQUESTS.**
