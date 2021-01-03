@@ -121,16 +121,18 @@ public class BlockUtils {
     }
 
     public static int getStackAmountByRarity(Rarity rarity){
+        if (rarity.equals(Rarity.COMMON)) return 64*32;
         if (rarity.equals(ModuleCore.PITY_RARITY)) return 64*32*8;
-        if (rarity.equals(ModuleCore.SIMPLE_RARITY)) return 64*32*32;
-        if (rarity.equals(ModuleCore.ADVANCED_RARITY)) return 64*32*64;
+        if (rarity.equals(ModuleCore.SIMPLE_RARITY)) return 64*32*16*16;
+        if (rarity.equals(ModuleCore.ADVANCED_RARITY)) return 64*32*32*32*32;
         return Integer.MAX_VALUE;
     }
 
     public static int getFluidAmountByRarity(Rarity rarity){
-        if (rarity.equals(ModuleCore.PITY_RARITY)) return 64*1000;
-        if (rarity.equals(ModuleCore.SIMPLE_RARITY)) return 64*1000*4;
-        if (rarity.equals(ModuleCore.ADVANCED_RARITY)) return 64*1000*16;
+        if (rarity.equals(Rarity.COMMON)) return 16*1000;
+        if (rarity.equals(ModuleCore.PITY_RARITY)) return 16*1000*4;
+        if (rarity.equals(ModuleCore.SIMPLE_RARITY)) return 16*1000*8*8;
+        if (rarity.equals(ModuleCore.ADVANCED_RARITY)) return 16*1000*16*16*16;
         return Integer.MAX_VALUE;
     }
 

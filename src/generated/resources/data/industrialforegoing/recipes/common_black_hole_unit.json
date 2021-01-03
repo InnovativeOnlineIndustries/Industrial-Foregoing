@@ -1,0 +1,43 @@
+{
+  "type": "forge:conditional",
+  "recipes": [
+    {
+      "conditions": [
+        {
+          "values": [
+            {
+              "item": "industrialforegoing:common_black_hole_unit",
+              "type": "forge:item_exists"
+            }
+          ],
+          "type": "forge:and"
+        }
+      ],
+      "recipe": {
+        "type": "minecraft:crafting_shaped",
+        "pattern": [
+          "PPP",
+          "CEC",
+          "CMC"
+        ],
+        "key": {
+          "P": {
+            "tag": "forge:plastic"
+          },
+          "E": {
+            "tag": "forge:gears/iron"
+          },
+          "C": {
+            "tag": "forge:chests/wooden"
+          },
+          "M": {
+            "tag": "industrialforegoing:machine_frame/pity"
+          }
+        },
+        "result": {
+          "item": "industrialforegoing:common_black_hole_unit"
+        }
+      }
+    }
+  ]
+}
