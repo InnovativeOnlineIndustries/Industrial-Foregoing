@@ -12,7 +12,6 @@ public class IndustrialTags {
     public static class Items {
 
         public static final ITag<Item> PLASTIC = TagUtil.getItemTag(new ResourceLocation("forge:" + "plastic"));
-        public static final ITag<Item> SAPLING = TagUtil.getItemTag(new ResourceLocation("forge:" + "sapling"));
 
         public static final ITag<Item> MACHINE_FRAME_PITY = TagUtil.getItemTag(new ResourceLocation(Reference.MOD_ID + ":" + "machine_frame/pity"));
         public static final ITag<Item> MACHINE_FRAME_SIMPLE = TagUtil.getItemTag(new ResourceLocation(Reference.MOD_ID + ":" + "machine_frame/simple"));
@@ -30,8 +29,6 @@ public class IndustrialTags {
     }
 
     public static class Blocks {
-
-        public static final ITag<Block> SAPLING = TagUtil.getBlockTag(new ResourceLocation("forge:" + "sapling"));
 
         public static final ITag<Block> MACHINE_FRAME_PITY = TagUtil.getBlockTag(new ResourceLocation(Reference.MOD_ID + ":" + "machine_frame/pity"));
         public static final ITag<Block> MACHINE_FRAME_SIMPLE = TagUtil.getBlockTag(new ResourceLocation(Reference.MOD_ID + ":" + "machine_frame/simple"));
