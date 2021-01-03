@@ -24,8 +24,6 @@ public class IndustrialTagsProvider {
             getOrCreateBuilder((ITag.INamedTag<Block>) IndustrialTags.Blocks.MACHINE_FRAME_SIMPLE).add(ModuleCore.SIMPLE);
             getOrCreateBuilder((ITag.INamedTag<Block>) IndustrialTags.Blocks.MACHINE_FRAME_ADVANCED).add(ModuleCore.ADVANCED);
             getOrCreateBuilder((ITag.INamedTag<Block>) IndustrialTags.Blocks.MACHINE_FRAME_SUPREME).add(ModuleCore.SUPREME);
-            getOrCreateBuilder((ITag.INamedTag<Block>) IndustrialTags.Blocks.SAPLING).add(net.minecraft.block.Blocks.ACACIA_SAPLING, net.minecraft.block.Blocks.SPRUCE_SAPLING, net.minecraft.block.Blocks.BIRCH_SAPLING,
-                    net.minecraft.block.Blocks.DARK_OAK_SAPLING, net.minecraft.block.Blocks.JUNGLE_SAPLING, net.minecraft.block.Blocks.OAK_SAPLING);
         }
     }
 
@@ -41,7 +39,6 @@ public class IndustrialTagsProvider {
             this.copy((ITag.INamedTag<Block>) IndustrialTags.Blocks.MACHINE_FRAME_SIMPLE, (ITag.INamedTag<Item>) IndustrialTags.Items.MACHINE_FRAME_SIMPLE);
             this.copy((ITag.INamedTag<Block>) IndustrialTags.Blocks.MACHINE_FRAME_ADVANCED, (ITag.INamedTag<Item>) IndustrialTags.Items.MACHINE_FRAME_ADVANCED);
             this.copy((ITag.INamedTag<Block>) IndustrialTags.Blocks.MACHINE_FRAME_SUPREME, (ITag.INamedTag<Item>) IndustrialTags.Items.MACHINE_FRAME_SUPREME);
-            this.copy((ITag.INamedTag<Block>) IndustrialTags.Blocks.SAPLING, (ITag.INamedTag<Item>) IndustrialTags.Items.SAPLING);
 
             getOrCreateBuilder((ITag.INamedTag<Item>) IndustrialTags.Items.PLASTIC).add(ModuleCore.PLASTIC);
             getOrCreateBuilder((ITag.INamedTag<Item>) IndustrialTags.Items.SLUDGE_OUTPUT).add(net.minecraft.item.Items.DIRT, net.minecraft.item.Items.CLAY, net.minecraft.item.Items.GRAVEL, net.minecraft.item.Items.SAND, net.minecraft.item.Items.RED_SAND, net.minecraft.item.Items.SOUL_SAND);
