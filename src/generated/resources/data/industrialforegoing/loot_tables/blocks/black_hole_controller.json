@@ -3,7 +3,7 @@
   "pools": [
     {
       "rolls": 1,
-      "entries": [mo
+      "entries": [
         {
           "type": "minecraft:item",
           "name": "industrialforegoing:black_hole_controller"
