@@ -2,9 +2,9 @@ package com.buuz135.industrial.block.generator;
 
 import com.buuz135.industrial.block.IndustrialBlock;
 import com.buuz135.industrial.block.generator.mycelial.IMycelialGeneratorType;
-import com.buuz135.industrial.block.generator.mycelial.MycelialDataManager;
 import com.buuz135.industrial.block.generator.tile.MycelialReactorTile;
 import com.buuz135.industrial.module.ModuleGenerator;
+import com.buuz135.industrial.worlddata.MycelialDataManager;
 import com.hrznstudio.titanium.api.IFactory;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;

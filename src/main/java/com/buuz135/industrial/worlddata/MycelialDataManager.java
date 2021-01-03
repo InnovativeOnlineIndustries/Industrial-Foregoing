@@ -1,5 +1,6 @@
-package com.buuz135.industrial.block.generator.mycelial;
+package com.buuz135.industrial.worlddata;
 
+import com.buuz135.industrial.block.generator.mycelial.IMycelialGeneratorType;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.RegistryKey;
 import net.minecraft.util.ResourceLocation;

@@ -1,9 +1,9 @@
 package com.buuz135.industrial.block.generator.tile;
 
 import com.buuz135.industrial.block.generator.mycelial.IMycelialGeneratorType;
-import com.buuz135.industrial.block.generator.mycelial.MycelialDataManager;
 import com.buuz135.industrial.block.tile.IndustrialGeneratorTile;
 import com.buuz135.industrial.gui.component.GeneratorBackgroundScreenAddon;
+import com.buuz135.industrial.worlddata.MycelialDataManager;
 import com.hrznstudio.titanium.annotation.Save;
 import com.hrznstudio.titanium.api.IFactory;
 import com.hrznstudio.titanium.api.client.IScreenAddon;
