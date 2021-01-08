@@ -100,16 +100,19 @@ public class ClientProxy extends CommonProxy {
 
         ClientRegistry.bindTileEntityRenderer(ModuleGenerator.MYCELIAL_REACTOR.getTileEntityType(), MycelialReactorTESR::new);
         ClientRegistry.bindTileEntityRenderer(ModuleTransportStorage.CONVEYOR.getTileEntityType(), FluidConveyorTESR::new);
+        ClientRegistry.bindTileEntityRenderer(ModuleTransportStorage.BLACK_HOLE_UNIT_COMMON.getTileEntityType(), BlackHoleUnitTESR::new);
         ClientRegistry.bindTileEntityRenderer(ModuleTransportStorage.BLACK_HOLE_UNIT_PITY.getTileEntityType(), BlackHoleUnitTESR::new);
         ClientRegistry.bindTileEntityRenderer(ModuleTransportStorage.BLACK_HOLE_UNIT_SIMPLE.getTileEntityType(), BlackHoleUnitTESR::new);
         ClientRegistry.bindTileEntityRenderer(ModuleTransportStorage.BLACK_HOLE_UNIT_ADVANCED.getTileEntityType(), BlackHoleUnitTESR::new);
         ClientRegistry.bindTileEntityRenderer(ModuleTransportStorage.BLACK_HOLE_UNIT_SUPREME.getTileEntityType(), BlackHoleUnitTESR::new);
+        ClientRegistry.bindTileEntityRenderer(ModuleTransportStorage.BLACK_HOLE_TANK_COMMON.getTileEntityType(), BlackHoleUnitTESR::new);
         ClientRegistry.bindTileEntityRenderer(ModuleTransportStorage.BLACK_HOLE_TANK_PITY.getTileEntityType(), BlackHoleUnitTESR::new);
         ClientRegistry.bindTileEntityRenderer(ModuleTransportStorage.BLACK_HOLE_TANK_SIMPLE.getTileEntityType(), BlackHoleUnitTESR::new);
         ClientRegistry.bindTileEntityRenderer(ModuleTransportStorage.BLACK_HOLE_TANK_ADVANCED.getTileEntityType(), BlackHoleUnitTESR::new);
         ClientRegistry.bindTileEntityRenderer(ModuleTransportStorage.BLACK_HOLE_TANK_SUPREME.getTileEntityType(), BlackHoleUnitTESR::new);
 
         RenderTypeLookup.setRenderLayer(ModuleTransportStorage.CONVEYOR, RenderType.getCutout());
+        RenderTypeLookup.setRenderLayer(ModuleTransportStorage.BLACK_HOLE_TANK_COMMON, RenderType.getCutout());
         RenderTypeLookup.setRenderLayer(ModuleTransportStorage.BLACK_HOLE_TANK_PITY, RenderType.getCutout());
         RenderTypeLookup.setRenderLayer(ModuleTransportStorage.BLACK_HOLE_TANK_SIMPLE, RenderType.getCutout());
         RenderTypeLookup.setRenderLayer(ModuleTransportStorage.BLACK_HOLE_TANK_ADVANCED, RenderType.getCutout());
@@ -169,7 +172,7 @@ public class ClientProxy extends CommonProxy {
                 }
             }
             return 0xFFFFFF;
-        }, ModuleTransportStorage.BLACK_HOLE_TANK_PITY, ModuleTransportStorage.BLACK_HOLE_TANK_SIMPLE, ModuleTransportStorage.BLACK_HOLE_TANK_ADVANCED, ModuleTransportStorage.BLACK_HOLE_TANK_SUPREME);
+        }, ModuleTransportStorage.BLACK_HOLE_TANK_COMMON, ModuleTransportStorage.BLACK_HOLE_TANK_PITY, ModuleTransportStorage.BLACK_HOLE_TANK_SIMPLE, ModuleTransportStorage.BLACK_HOLE_TANK_ADVANCED, ModuleTransportStorage.BLACK_HOLE_TANK_SUPREME);
         Minecraft.getInstance().getItemColors().register((stack, tintIndex) -> {
             if (tintIndex == 0 && stack.getCapability(CapabilityFluidHandler.FLUID_HANDLER_ITEM_CAPABILITY).isPresent()) {
                 IFluidHandlerItem fluidHandlerItem = stack.getCapability(CapabilityFluidHandler.FLUID_HANDLER_ITEM_CAPABILITY).orElseGet(null);
@@ -179,7 +182,7 @@ public class ClientProxy extends CommonProxy {
                 }
             }
             return 0xFFFFFF;
-        }, ModuleTransportStorage.BLACK_HOLE_TANK_PITY, ModuleTransportStorage.BLACK_HOLE_TANK_SIMPLE, ModuleTransportStorage.BLACK_HOLE_TANK_ADVANCED, ModuleTransportStorage.BLACK_HOLE_TANK_SUPREME);
+        },ModuleTransportStorage.BLACK_HOLE_TANK_COMMON, ModuleTransportStorage.BLACK_HOLE_TANK_PITY, ModuleTransportStorage.BLACK_HOLE_TANK_SIMPLE, ModuleTransportStorage.BLACK_HOLE_TANK_ADVANCED, ModuleTransportStorage.BLACK_HOLE_TANK_SUPREME);
 
         RenderingRegistry.registerEntityRenderingHandler(ModuleTool.TRIDENT_ENTITY_TYPE, InfinityTridentRenderer::new);
     }

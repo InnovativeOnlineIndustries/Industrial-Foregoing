@@ -54,7 +54,7 @@ public class BlackHoleTankBlock extends IndustrialBlock<BlackHoleTankTile> {
     private TileEntityType tileEntityType;
 
     public BlackHoleTankBlock(Rarity rarity) {
-        super(rarity.name() + "_black_hole_tank",  Properties.from(Blocks.IRON_BLOCK), BlackHoleTankTile.class, ModuleTransportStorage.TAB_TRANSPORT);
+        super(rarity.name().toLowerCase() + "_black_hole_tank",  Properties.from(Blocks.IRON_BLOCK), BlackHoleTankTile.class, ModuleTransportStorage.TAB_TRANSPORT);
         this.rarity = rarity;
     }
 
@@ -70,7 +70,7 @@ public class BlackHoleTankBlock extends IndustrialBlock<BlackHoleTankTile> {
         registry.content(Item.class, item);
         NBTManager.getInstance().scanTileClassForAnnotations(BlackHoleTankTile.class);
         tileEntityType = TileEntityType.Builder.create(this.getTileEntityFactory()::create, new Block[]{this}).build((Type) null);
-        tileEntityType.setRegistryName(new ResourceLocation(Reference.MOD_ID, rarity.name() + "_black_hole_tank"));
+        tileEntityType.setRegistryName(new ResourceLocation(Reference.MOD_ID, rarity.name().toLowerCase() + "_black_hole_tank"));
         registry.content(TileEntityType.class, tileEntityType);
     }
 
@@ -120,18 +120,28 @@ public class BlackHoleTankBlock extends IndustrialBlock<BlackHoleTankTile> {
 
     @Override
     public void registerRecipe(Consumer<IFinishedRecipe> consumer) {
-        ITag tag = IndustrialTags.Items.MACHINE_FRAME_PITY;
-        if (rarity == ModuleCore.SIMPLE_RARITY) tag = IndustrialTags.Items.MACHINE_FRAME_SIMPLE;
-        if (rarity == ModuleCore.ADVANCED_RARITY) tag = IndustrialTags.Items.MACHINE_FRAME_ADVANCED;
-        if (rarity == ModuleCore.SUPREME_RARITY) tag = IndustrialTags.Items.MACHINE_FRAME_SUPREME;
-        TitaniumShapedRecipeBuilder.shapedRecipe(this)
-                .patternLine("PPP").patternLine("NEN").patternLine("CMC")
-                .key('P', IndustrialTags.Items.PLASTIC)
-                .key('N', Items.ENDER_EYE)
-                .key('E', Items.ENDER_PEARL)
-                .key('C', Items.BUCKET)
-                .key('M', tag)
-                .build(consumer);
+        if (rarity == Rarity.COMMON){
+            TitaniumShapedRecipeBuilder.shapedRecipe(this)
+                    .patternLine("PPP").patternLine("CEC").patternLine("CMC")
+                    .key('P', IndustrialTags.Items.PLASTIC)
+                    .key('E', IndustrialTags.Items.GEAR_IRON)
+                    .key('C', Items.BUCKET)
+                    .key('M', IndustrialTags.Items.MACHINE_FRAME_PITY)
+                    .build(consumer);
+        } else {
+            ITag tag = IndustrialTags.Items.MACHINE_FRAME_PITY;
+            if (rarity == ModuleCore.SIMPLE_RARITY) tag = IndustrialTags.Items.MACHINE_FRAME_SIMPLE;
+            if (rarity == ModuleCore.ADVANCED_RARITY) tag = IndustrialTags.Items.MACHINE_FRAME_ADVANCED;
+            if (rarity == ModuleCore.SUPREME_RARITY) tag = IndustrialTags.Items.MACHINE_FRAME_SUPREME;
+            TitaniumShapedRecipeBuilder.shapedRecipe(this)
+                    .patternLine("PPP").patternLine("NEN").patternLine("CMC")
+                    .key('P', IndustrialTags.Items.PLASTIC)
+                    .key('N', Items.ENDER_EYE)
+                    .key('E', Items.ENDER_PEARL)
+                    .key('C', Items.BUCKET)
+                    .key('M', tag)
+                    .build(consumer);
+        }
     }
 
     public class BlackHoleTankItem extends BlockItem{
