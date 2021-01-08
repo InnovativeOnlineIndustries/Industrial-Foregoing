@@ -1,5 +1,5 @@
 {
-	"credit": "Made by WBgroup with Blockbench",
+	"credit": "Made with Blockbench",
 	"textures": {
 		"0": "industrialforegoing:items/infinity_backpack",
 		"particle": "industrialforegoing:items/infinity_backpack"
@@ -147,6 +147,20 @@
 				"west": {"uv": [7.5, 11.75, 8.25, 13], "texture": "#0"},
 				"up": {"uv": [5.75, 13.25, 7.25, 14], "texture": "#0"},
 				"down": {"uv": [5.75, 13.25, 7.25, 14], "texture": "#0"}
+			}
+		},
+		{
+			"name": "tinted",
+			"from": [6.5, 18.25, 1.5],
+			"to": [9.5, 19.25, 2.5],
+			"rotation": {"angle": 0, "axis": "y", "origin": [14, 27, 9]},
+			"faces": {
+				"north": {"uv": [13.75, 0.5, 15.5, 0.75], "texture": "#0","tintindex": 0},
+				"east": {"uv": [6.25, 4, 7.25, 5], "texture": "#0","tintindex": 0},
+				"south": {"uv": [0.5, 3.75, 2.25, 4.25], "texture": "#0","tintindex": 0},
+				"west": {"uv": [6.25, 4.25, 7.25, 5.25], "texture": "#0","tintindex": 0},
+				"up": {"uv": [0.5, 3.75, 2.25, 4.25], "texture": "#0","tintindex": 0},
+				"down": {"uv": [0, 0, 3, 1], "texture": "#missing","tintindex": 0}
 			}
 		}
 	],

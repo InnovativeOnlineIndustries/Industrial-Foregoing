@@ -176,6 +176,12 @@ public class ClientProxy extends CommonProxy {
             }
             return 0xFFFFFF;
         }, ModuleTool.INFINITY_TRIDENT);
+        Minecraft.getInstance().getItemColors().register((stack, tintIndex) -> {
+            if (tintIndex == 0) {
+                return InfinityTier.getTierBraquet(ItemInfinity.getPowerFromStack(stack)).getLeft().getTextureColor();
+            }
+            return 0xFFFFFF;
+        }, ModuleTool.INFINITY_BACKPACK);
         Minecraft.getInstance().getBlockColors().register((state, worldIn, pos, tintIndex) -> {
             if (tintIndex == 0 && worldIn.getTileEntity(pos) instanceof BlackHoleTankTile) {
                 BlackHoleTankTile tank = (BlackHoleTankTile) worldIn.getTileEntity(pos);
