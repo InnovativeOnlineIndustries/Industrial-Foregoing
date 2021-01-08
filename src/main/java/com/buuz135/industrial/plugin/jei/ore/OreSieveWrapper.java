@@ -19,17 +19,22 @@
  * FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE,
  * ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
-package com.buuz135.industrial.jei;
+package com.buuz135.industrial.plugin.jei.ore;
 
-import net.minecraft.item.ItemStack;
+import com.buuz135.industrial.api.recipe.ore.OreFluidEntrySieve;
 
-public class JEIHelper {
+public class OreSieveWrapper {
 
-    public static boolean isInstalled() {
-        return false;
+    private final OreFluidEntrySieve recipe;
+
+    public OreSieveWrapper(OreFluidEntrySieve recipe) {
+        this.recipe = recipe;
     }
 
-    public static void openBlockUses(ItemStack stack) {
-        if (isInstalled()) JEICustomPlugin.showUses(stack);
-    }
+    //@Override
+    //public void getIngredients(IIngredients ingredients) {
+    //    ingredients.setInput(FluidStack.class, recipe.getInput());
+    //    ingredients.setInput(ItemStack.class, recipe.getSieveItem());
+    //    ingredients.setOutput(ItemStack.class, recipe.getOutput());
+    //}
 }

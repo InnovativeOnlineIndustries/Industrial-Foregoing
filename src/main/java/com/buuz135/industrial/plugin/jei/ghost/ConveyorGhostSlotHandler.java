@@ -19,22 +19,28 @@
  * FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE,
  * ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
-package com.buuz135.industrial.jei.ore;
+package com.buuz135.industrial.plugin.jei.ghost;
 
-import com.buuz135.industrial.api.recipe.ore.OreFluidEntrySieve;
-
-public class OreSieveWrapper {
-
-    private final OreFluidEntrySieve recipe;
-
-    public OreSieveWrapper(OreFluidEntrySieve recipe) {
-        this.recipe = recipe;
-    }
-
-    //@Override
-    //public void getIngredients(IIngredients ingredients) {
-    //    ingredients.setInput(FluidStack.class, recipe.getInput());
-    //    ingredients.setInput(ItemStack.class, recipe.getSieveItem());
-    //    ingredients.setOutput(ItemStack.class, recipe.getOutput());
-    //}
-}
+//public class ConveyorGhostSlotHandler implements IGhostIngredientHandler<GuiConveyor> {
+//
+//    @Override
+//    public <I> List<Target<I>> getTargets(GuiConveyor gui, I ingredient, boolean doStart) {
+//        List<Target<I>> list = new ArrayList<>();
+//        if (ingredient instanceof ItemStack) {
+//            for (IFilter.GhostSlot ghostSlot : gui.getGhostSlots()) {
+//                list.add((Target<I>) ghostSlot);
+//            }
+//        }
+//        return list;
+//    }
+//
+//    @Override
+//    public void onComplete() {
+//
+//    }
+//
+//    @Override
+//    public boolean shouldHighlightTargets() {
+//        return true;
+//    }
+//}

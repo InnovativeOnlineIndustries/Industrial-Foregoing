@@ -19,25 +19,25 @@
  * FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE,
  * ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
-package com.buuz135.industrial.jei;
+package com.buuz135.industrial.plugin.jei;
 
 
 import com.buuz135.industrial.block.generator.MycelialGeneratorBlock;
 import com.buuz135.industrial.block.generator.mycelial.IMycelialGeneratorType;
 import com.buuz135.industrial.block.generator.tile.BioReactorTile;
 import com.buuz135.industrial.gui.conveyor.GuiConveyor;
-import com.buuz135.industrial.jei.category.*;
-import com.buuz135.industrial.jei.generator.MycelialGeneratorCategory;
-import com.buuz135.industrial.jei.generator.MycelialGeneratorRecipe;
-import com.buuz135.industrial.jei.machineproduce.MachineProduceCategory;
-import com.buuz135.industrial.jei.ore.OreFermenterCategory;
-import com.buuz135.industrial.jei.ore.OreSieveCategory;
-import com.buuz135.industrial.jei.ore.OreWasherCategory;
-import com.buuz135.industrial.jei.sludge.SludgeRefinerRecipeCategory;
 import com.buuz135.industrial.module.ModuleCore;
 import com.buuz135.industrial.module.ModuleGenerator;
 import com.buuz135.industrial.module.ModuleResourceProduction;
 import com.buuz135.industrial.module.ModuleTool;
+import com.buuz135.industrial.plugin.jei.category.*;
+import com.buuz135.industrial.plugin.jei.generator.MycelialGeneratorCategory;
+import com.buuz135.industrial.plugin.jei.generator.MycelialGeneratorRecipe;
+import com.buuz135.industrial.plugin.jei.machineproduce.MachineProduceCategory;
+import com.buuz135.industrial.plugin.jei.ore.OreFermenterCategory;
+import com.buuz135.industrial.plugin.jei.ore.OreSieveCategory;
+import com.buuz135.industrial.plugin.jei.ore.OreWasherCategory;
+import com.buuz135.industrial.plugin.jei.sludge.SludgeRefinerRecipeCategory;
 import com.buuz135.industrial.recipe.DissolutionChamberRecipe;
 import com.buuz135.industrial.recipe.FluidExtractorRecipe;
 import com.buuz135.industrial.recipe.LaserDrillFluidRecipe;

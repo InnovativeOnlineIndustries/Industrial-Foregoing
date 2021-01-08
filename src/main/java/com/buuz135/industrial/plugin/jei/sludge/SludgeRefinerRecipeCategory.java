@@ -19,7 +19,7 @@
  * FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE,
  * ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
-package com.buuz135.industrial.jei.ore;
+package com.buuz135.industrial.plugin.jei.sludge;
 
 import com.buuz135.industrial.utils.Reference;
 import mezz.jei.api.gui.IRecipeLayout;
@@ -29,16 +29,16 @@ import mezz.jei.api.ingredients.IIngredients;
 import mezz.jei.api.recipe.category.IRecipeCategory;
 import net.minecraft.util.ResourceLocation;
 
-public class OreWasherCategory implements IRecipeCategory<OreWasherWrapper> {
+import javax.annotation.Nullable;
 
-    public static String ID = "ORE_WASHER";
+public class SludgeRefinerRecipeCategory implements IRecipeCategory<SludgeRefinerRecipeWrapper> {
 
-    private final IGuiHelper helper;
+    private IGuiHelper guiHelper;
     private IDrawable tankOverlay;
 
-    public OreWasherCategory(IGuiHelper helper) {
-        this.helper = helper;
-        tankOverlay = helper.createDrawable(new ResourceLocation(Reference.MOD_ID, "textures/gui/jei.png"), 1, 207, 12, 48);
+    public SludgeRefinerRecipeCategory(IGuiHelper guiHelper) {
+        this.guiHelper = guiHelper;
+        tankOverlay = guiHelper.createDrawable(new ResourceLocation(Reference.MOD_ID, "textures/gui/jei.png"), 1, 207, 12, 48);
     }
 
     @Override
@@ -47,39 +47,43 @@ public class OreWasherCategory implements IRecipeCategory<OreWasherWrapper> {
     }
 
     @Override
-    public Class<? extends OreWasherWrapper> getRecipeClass() {
+    public Class<? extends SludgeRefinerRecipeWrapper> getRecipeClass() {
         return null;
     }
 
     @Override
     public String getTitle() {
-        return "TODO";//TODO BlockRegistry.oreWasherBlock.getLocalizedName();
+        return "Sludge Refiner";
     }
 
     @Override
     public IDrawable getBackground() {
-        return helper.createDrawable(new ResourceLocation(Reference.MOD_ID, "textures/gui/jei.png"), 142, 29, 112, 50);
+        return guiHelper.createDrawable(new ResourceLocation(Reference.MOD_ID, "textures/gui/jei.png"), 0, 78, 81, 50/*, 0, 16, 0, 0*/);
     }
 
+    @Nullable
     @Override
     public IDrawable getIcon() {
         return null;
     }
 
     @Override
-    public void setIngredients(OreWasherWrapper oreWasherWrapper, IIngredients iIngredients) {
+    public void setIngredients(SludgeRefinerRecipeWrapper sludgeRefinerRecipeWrapper, IIngredients iIngredients) {
 
     }
 
+
     @Override
-    public void setRecipe(IRecipeLayout recipeLayout, OreWasherWrapper recipeWrapper, IIngredients ingredients) {
-        //recipeLayout.getItemStacks().init(0, true, 0, 15);
-        //recipeLayout.getItemStacks().set(0, ingredients.getInputs(ItemStack.class).get(0));
+    public void setRecipe(IRecipeLayout recipeLayout, SludgeRefinerRecipeWrapper recipeWrapper, IIngredients ingredients) {
+        //IGuiFluidStackGroup guiFluidStackGroup = recipeLayout.getFluidStacks();
 //
-        //recipeLayout.getFluidStacks().init(0, true, 47, 1, 12, 48, 1000, true, tankOverlay);
-        //recipeLayout.getFluidStacks().set(0, ingredients.getInputs(FluidStack.class).get(0));
-        //recipeLayout.getFluidStacks().init(1, false, 99, 1, 12, 48, 1000, true, tankOverlay);
-        //recipeLayout.getFluidStacks().set(1, ingredients.getOutputs(FluidStack.class).get(0));
-    }//
+        //guiFluidStackGroup.init(0, true, 5, 1, 12, 48, 8000, false, tankOverlay);
+//
+        //IGuiItemStackGroup guiItemStackGroup = recipeLayout.getItemStacks();
+//
+        //guiItemStackGroup.init(1, false, 59, 17);
+        //guiFluidStackGroup.set(0, ingredients.getInputs(FluidStack.class).get(0));
+        //guiItemStackGroup.set(1, ingredients.getOutputs(ItemStack.class).get(0));
+    }
 
 }

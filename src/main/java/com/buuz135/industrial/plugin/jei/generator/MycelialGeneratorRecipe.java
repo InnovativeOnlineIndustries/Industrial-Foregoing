@@ -1,4 +1,4 @@
-package com.buuz135.industrial.jei.generator;
+package com.buuz135.industrial.plugin.jei.generator;
 
 import net.minecraft.item.crafting.Ingredient;
 import net.minecraftforge.fluids.FluidStack;

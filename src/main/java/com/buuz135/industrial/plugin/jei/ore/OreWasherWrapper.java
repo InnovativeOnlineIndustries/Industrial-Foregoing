@@ -19,39 +19,24 @@
  * FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE,
  * ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
-package com.buuz135.industrial.jei.sludge;
+package com.buuz135.industrial.plugin.jei.ore;
 
-import com.buuz135.industrial.utils.ItemStackWeightedItem;
+import com.buuz135.industrial.api.recipe.ore.OreFluidEntryRaw;
 
-public class SludgeRefinerRecipeWrapper {
+public class OreWasherWrapper {
 
-    private ItemStackWeightedItem item;
-    private int maxWeight;
+    private final OreFluidEntryRaw entryRaw;
 
-    public SludgeRefinerRecipeWrapper(ItemStackWeightedItem item, int maxWeight) {
-        this.item = item;
-        this.maxWeight = maxWeight;
+    public OreWasherWrapper(OreFluidEntryRaw entryRaw) {
+        this.entryRaw = entryRaw;
     }
 
     //@Override
     //public void getIngredients(IIngredients ingredients) {
-    //    //ingredients.setInput(FluidStack.class, new FluidStack(FluidsRegistry.SLUDGE, 1000));
-    //    ingredients.setOutput(ItemStack.class, item.getStack());
-    //}
+    //    //ingredients.setInputs(ItemStack.class, ItemStackUtils.getAllEntries(entryRaw.getOre()));
+    //    ingredients.setInput(FluidStack.class, entryRaw.getInput());
+    //    ingredients.setOutput(FluidStack.class, entryRaw.getOutput());
 //
-    //@Override
-    //public void drawInfo(Minecraft minecraft, int recipeWidth, int recipeHeight, int mouseX, int mouseY) {
-    //    String chance = "Chance: " + new DecimalFormat("##.##").format((item.itemWeight / (double) maxWeight) * 100) + "%";
-    //    minecraft.fontRenderer.drawString(TextFormatting.DARK_GRAY + chance, recipeWidth / 2 - minecraft.fontRenderer.getStringWidth(chance) / 2, 55, 0xFFFFFF);
-    //}
-//
-    //@Override
-    //public List<String> getTooltipStrings(int mouseX, int mouseY) {
-    //    return null;
-    //}
-//
-    //@Override
-    //public boolean handleClick(Minecraft minecraft, int mouseX, int mouseY, int mouseButton) {
-    //    return false;
+    //    //List<ItemStack> allResources = ItemStackUtils.getAllEntries(Tags.Items.DUSTS, Tags.Items.ORES, Tags.Items.INGOTS).stream().map(ItemStack::new).collect(Collectors.toList());
     //}
 }

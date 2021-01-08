@@ -19,28 +19,47 @@
  * FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE,
  * ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
-package com.buuz135.industrial.jei.ghost;
+package com.buuz135.industrial.plugin.jei.machineproduce;
 
-//public class ConveyorGhostSlotHandler implements IGhostIngredientHandler<GuiConveyor> {
+import net.minecraft.block.Block;
+import net.minecraft.item.ItemStack;
+
+public class MachineProduceWrapper {
+
+    private Block block;
+    private ItemStack output;
+
+    public MachineProduceWrapper(Block block, ItemStack output) {
+        this.block = block;
+        this.output = output;
+    }
+
+    //@Override
+    //public void getIngredients(IIngredients ingredients) {
+    //    ingredients.setInput(ItemStack.class, new ItemStack(block));
+    //    ingredients.setOutput(ItemStack.class, output);
+    //}
 //
-//    @Override
-//    public <I> List<Target<I>> getTargets(GuiConveyor gui, I ingredient, boolean doStart) {
-//        List<Target<I>> list = new ArrayList<>();
-//        if (ingredient instanceof ItemStack) {
-//            for (IFilter.GhostSlot ghostSlot : gui.getGhostSlots()) {
-//                list.add((Target<I>) ghostSlot);
-//            }
-//        }
-//        return list;
-//    }
+    //@Override
+    //public void drawInfo(Minecraft minecraft, int recipeWidth, int recipeHeight, int mouseX, int mouseY) {
 //
-//    @Override
-//    public void onComplete() {
+    //}
 //
-//    }
+    //@Override
+    //public List<String> getTooltipStrings(int mouseX, int mouseY) {
+    //    return null;
+    //}
 //
-//    @Override
-//    public boolean shouldHighlightTargets() {
-//        return true;
-//    }
-//}
+    //@Override
+    //public boolean handleClick(Minecraft minecraft, int mouseX, int mouseY, int mouseButton) {
+    //    return false;
+    //}
+//
+    //public Block getBlock() {
+    //    return block;
+    //}
+//
+    //public ItemStack getOutput() {
+    //    return output;
+    //}
+}

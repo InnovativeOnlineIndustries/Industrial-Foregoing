@@ -19,47 +19,17 @@
  * FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE,
  * ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
-package com.buuz135.industrial.jei.machineproduce;
+package com.buuz135.industrial.plugin.jei;
 
-import net.minecraft.block.Block;
 import net.minecraft.item.ItemStack;
 
-public class MachineProduceWrapper {
+public class JEIHelper {
 
-    private Block block;
-    private ItemStack output;
-
-    public MachineProduceWrapper(Block block, ItemStack output) {
-        this.block = block;
-        this.output = output;
+    public static boolean isInstalled() {
+        return false;
     }
 
-    //@Override
-    //public void getIngredients(IIngredients ingredients) {
-    //    ingredients.setInput(ItemStack.class, new ItemStack(block));
-    //    ingredients.setOutput(ItemStack.class, output);
-    //}
-//
-    //@Override
-    //public void drawInfo(Minecraft minecraft, int recipeWidth, int recipeHeight, int mouseX, int mouseY) {
-//
-    //}
-//
-    //@Override
-    //public List<String> getTooltipStrings(int mouseX, int mouseY) {
-    //    return null;
-    //}
-//
-    //@Override
-    //public boolean handleClick(Minecraft minecraft, int mouseX, int mouseY, int mouseButton) {
-    //    return false;
-    //}
-//
-    //public Block getBlock() {
-    //    return block;
-    //}
-//
-    //public ItemStack getOutput() {
-    //    return output;
-    //}
+    public static void openBlockUses(ItemStack stack) {
+        if (isInstalled()) JEICustomPlugin.showUses(stack);
+    }
 }

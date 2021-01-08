@@ -19,7 +19,7 @@
  * FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE,
  * ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
-package com.buuz135.industrial.jei.ore;
+package com.buuz135.industrial.plugin.jei.machineproduce;
 
 import com.buuz135.industrial.utils.Reference;
 import mezz.jei.api.gui.IRecipeLayout;
@@ -29,14 +29,11 @@ import mezz.jei.api.ingredients.IIngredients;
 import mezz.jei.api.recipe.category.IRecipeCategory;
 import net.minecraft.util.ResourceLocation;
 
-public class OreSieveCategory implements IRecipeCategory<OreSieveWrapper> {
+public class MachineProduceCategory implements IRecipeCategory<MachineProduceWrapper> {
+    private IGuiHelper guiHelper;
 
-    public final IGuiHelper helper;
-    private IDrawable tankOverlay;
-
-    public OreSieveCategory(IGuiHelper helper) {
-        this.helper = helper;
-        tankOverlay = helper.createDrawable(new ResourceLocation(Reference.MOD_ID, "textures/gui/jei.png"), 1, 207, 12, 48);
+    public MachineProduceCategory(IGuiHelper guiHelper) {
+        this.guiHelper = guiHelper;
     }
 
     @Override
@@ -45,18 +42,18 @@ public class OreSieveCategory implements IRecipeCategory<OreSieveWrapper> {
     }
 
     @Override
-    public Class<? extends OreSieveWrapper> getRecipeClass() {
+    public Class<? extends MachineProduceWrapper> getRecipeClass() {
         return null;
     }
 
     @Override
     public String getTitle() {
-        return /*BlockRegistry.oreSieveBlock.getLocalizedName()TODO*/ "Sieve";
+        return "Machine Outputs";
     }
 
     @Override
     public IDrawable getBackground() {
-        return helper.createDrawable(new ResourceLocation(Reference.MOD_ID, "textures/gui/jei.png"), 4, 78, 77, 50);
+        return guiHelper.createDrawable(new ResourceLocation(Reference.MOD_ID, "textures/gui/jei.png"), 0, 0, 82, 26);
     }
 
     @Override
@@ -65,29 +62,18 @@ public class OreSieveCategory implements IRecipeCategory<OreSieveWrapper> {
     }
 
     @Override
-    public void setIngredients(OreSieveWrapper oreSieveWrapper, IIngredients iIngredients) {
+    public void setIngredients(MachineProduceWrapper machineProduceWrapper, IIngredients iIngredients) {
 
     }
+
 
     @Override
-    public void setRecipe(IRecipeLayout iRecipeLayout, OreSieveWrapper oreSieveWrapper, IIngredients iIngredients) {
-
+    public void setRecipe(IRecipeLayout recipeLayout, MachineProduceWrapper recipeWrapper, IIngredients ingredients) {
+        // IGuiItemStackGroup guiItemStackGroup = recipeLayout.getItemStacks();
+        // guiItemStackGroup.init(0, true, 0, 4);
+        // guiItemStackGroup.init(1, false, 60, 4);
+        // guiItemStackGroup.set(0, ingredients.getInputs(ItemStack.class).get(0));
+        // guiItemStackGroup.set(1, ingredients.getOutputs(ItemStack.class).get(0));
     }
 
-    //@Override
-    //public void setRecipe(IRecipeLayout recipeLayout, OreSieveWrapper recipeWrapper, IIngredients ingredients) {
-    //    recipeLayout.getFluidStacks().init(0, true, 1, 1, 12, 48, 300, true, tankOverlay);
-    //    recipeLayout.getFluidStacks().set(0, ingredients.getInputs(FluidStack.class).get(0));
-//
-    //    recipeLayout.getItemStacks().init(1, false, 55, 17);
-    //    recipeLayout.getItemStacks().set(1, ingredients.getOutputs(ItemStack.class).get(0));
-//
-    //    recipeLayout.getItemStacks().init(2, true, 25, 33);
-    //    recipeLayout.getItemStacks().set(2, ingredients.getInputs(ItemStack.class).get(0));
-    //}
-//
-    //@Override
-    //public void drawExtras(Minecraft minecraft) {
-    //    Minecraft.getInstance().currentScreen.drawTexturedModalRect(25, 33, 0, 4, 18, 18);
-    //}
 }

@@ -19,24 +19,39 @@
  * FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE,
  * ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
-package com.buuz135.industrial.jei.ore;
+package com.buuz135.industrial.plugin.jei.sludge;
 
-import com.buuz135.industrial.api.recipe.ore.OreFluidEntryRaw;
+import com.buuz135.industrial.utils.ItemStackWeightedItem;
 
-public class OreWasherWrapper {
+public class SludgeRefinerRecipeWrapper {
 
-    private final OreFluidEntryRaw entryRaw;
+    private ItemStackWeightedItem item;
+    private int maxWeight;
 
-    public OreWasherWrapper(OreFluidEntryRaw entryRaw) {
-        this.entryRaw = entryRaw;
+    public SludgeRefinerRecipeWrapper(ItemStackWeightedItem item, int maxWeight) {
+        this.item = item;
+        this.maxWeight = maxWeight;
     }
 
     //@Override
     //public void getIngredients(IIngredients ingredients) {
-    //    //ingredients.setInputs(ItemStack.class, ItemStackUtils.getAllEntries(entryRaw.getOre()));
-    //    ingredients.setInput(FluidStack.class, entryRaw.getInput());
-    //    ingredients.setOutput(FluidStack.class, entryRaw.getOutput());
+    //    //ingredients.setInput(FluidStack.class, new FluidStack(FluidsRegistry.SLUDGE, 1000));
+    //    ingredients.setOutput(ItemStack.class, item.getStack());
+    //}
 //
-    //    //List<ItemStack> allResources = ItemStackUtils.getAllEntries(Tags.Items.DUSTS, Tags.Items.ORES, Tags.Items.INGOTS).stream().map(ItemStack::new).collect(Collectors.toList());
+    //@Override
+    //public void drawInfo(Minecraft minecraft, int recipeWidth, int recipeHeight, int mouseX, int mouseY) {
+    //    String chance = "Chance: " + new DecimalFormat("##.##").format((item.itemWeight / (double) maxWeight) * 100) + "%";
+    //    minecraft.fontRenderer.drawString(TextFormatting.DARK_GRAY + chance, recipeWidth / 2 - minecraft.fontRenderer.getStringWidth(chance) / 2, 55, 0xFFFFFF);
+    //}
+//
+    //@Override
+    //public List<String> getTooltipStrings(int mouseX, int mouseY) {
+    //    return null;
+    //}
+//
+    //@Override
+    //public boolean handleClick(Minecraft minecraft, int mouseX, int mouseY, int mouseButton) {
+    //    return false;
     //}
 }

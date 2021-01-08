@@ -1,4 +1,4 @@
-package com.buuz135.industrial.jei.category;
+package com.buuz135.industrial.plugin.jei.category;
 
 import com.buuz135.industrial.block.core.tile.DissolutionChamberTile;
 import com.buuz135.industrial.config.machine.core.DissolutionChamberConfig;

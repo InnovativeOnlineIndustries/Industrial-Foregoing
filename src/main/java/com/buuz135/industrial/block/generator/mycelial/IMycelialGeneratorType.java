@@ -1,6 +1,6 @@
 package com.buuz135.industrial.block.generator.mycelial;
 
-import com.buuz135.industrial.jei.generator.MycelialGeneratorRecipe;
+import com.buuz135.industrial.plugin.jei.generator.MycelialGeneratorRecipe;
 import net.minecraft.data.ShapedRecipeBuilder;
 import net.minecraft.item.DyeColor;
 import net.minecraft.item.Item;

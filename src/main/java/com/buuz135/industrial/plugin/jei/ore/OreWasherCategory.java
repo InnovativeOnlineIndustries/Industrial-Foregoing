@@ -19,7 +19,7 @@
  * FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE,
  * ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
-package com.buuz135.industrial.jei.machineproduce;
+package com.buuz135.industrial.plugin.jei.ore;
 
 import com.buuz135.industrial.utils.Reference;
 import mezz.jei.api.gui.IRecipeLayout;
@@ -29,11 +29,16 @@ import mezz.jei.api.ingredients.IIngredients;
 import mezz.jei.api.recipe.category.IRecipeCategory;
 import net.minecraft.util.ResourceLocation;
 
-public class MachineProduceCategory implements IRecipeCategory<MachineProduceWrapper> {
-    private IGuiHelper guiHelper;
+public class OreWasherCategory implements IRecipeCategory<OreWasherWrapper> {
 
-    public MachineProduceCategory(IGuiHelper guiHelper) {
-        this.guiHelper = guiHelper;
+    public static String ID = "ORE_WASHER";
+
+    private final IGuiHelper helper;
+    private IDrawable tankOverlay;
+
+    public OreWasherCategory(IGuiHelper helper) {
+        this.helper = helper;
+        tankOverlay = helper.createDrawable(new ResourceLocation(Reference.MOD_ID, "textures/gui/jei.png"), 1, 207, 12, 48);
     }
 
     @Override
@@ -42,18 +47,18 @@ public class MachineProduceCategory implements IRecipeCategory<MachineProduceWra
     }
 
     @Override
-    public Class<? extends MachineProduceWrapper> getRecipeClass() {
+    public Class<? extends OreWasherWrapper> getRecipeClass() {
         return null;
     }
 
     @Override
     public String getTitle() {
-        return "Machine Outputs";
+        return "TODO";//TODO BlockRegistry.oreWasherBlock.getLocalizedName();
     }
 
     @Override
     public IDrawable getBackground() {
-        return guiHelper.createDrawable(new ResourceLocation(Reference.MOD_ID, "textures/gui/jei.png"), 0, 0, 82, 26);
+        return helper.createDrawable(new ResourceLocation(Reference.MOD_ID, "textures/gui/jei.png"), 142, 29, 112, 50);
     }
 
     @Override
@@ -62,18 +67,19 @@ public class MachineProduceCategory implements IRecipeCategory<MachineProduceWra
     }
 
     @Override
-    public void setIngredients(MachineProduceWrapper machineProduceWrapper, IIngredients iIngredients) {
+    public void setIngredients(OreWasherWrapper oreWasherWrapper, IIngredients iIngredients) {
 
     }
-
 
     @Override
-    public void setRecipe(IRecipeLayout recipeLayout, MachineProduceWrapper recipeWrapper, IIngredients ingredients) {
-        // IGuiItemStackGroup guiItemStackGroup = recipeLayout.getItemStacks();
-        // guiItemStackGroup.init(0, true, 0, 4);
-        // guiItemStackGroup.init(1, false, 60, 4);
-        // guiItemStackGroup.set(0, ingredients.getInputs(ItemStack.class).get(0));
-        // guiItemStackGroup.set(1, ingredients.getOutputs(ItemStack.class).get(0));
-    }
+    public void setRecipe(IRecipeLayout recipeLayout, OreWasherWrapper recipeWrapper, IIngredients ingredients) {
+        //recipeLayout.getItemStacks().init(0, true, 0, 15);
+        //recipeLayout.getItemStacks().set(0, ingredients.getInputs(ItemStack.class).get(0));
+//
+        //recipeLayout.getFluidStacks().init(0, true, 47, 1, 12, 48, 1000, true, tankOverlay);
+        //recipeLayout.getFluidStacks().set(0, ingredients.getInputs(FluidStack.class).get(0));
+        //recipeLayout.getFluidStacks().init(1, false, 99, 1, 12, 48, 1000, true, tankOverlay);
+        //recipeLayout.getFluidStacks().set(1, ingredients.getOutputs(FluidStack.class).get(0));
+    }//
 
 }

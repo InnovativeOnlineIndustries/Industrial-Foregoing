@@ -1,4 +1,4 @@
-package com.buuz135.industrial.jei.generator;
+package com.buuz135.industrial.plugin.jei.generator;
 
 import com.buuz135.industrial.block.generator.mycelial.IMycelialGeneratorType;
 import com.buuz135.industrial.utils.Reference;
