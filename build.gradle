@@ -136,6 +136,7 @@ repositories {
     maven {
         url = "https://www.cursemaven.com"
     }
+    maven { url "https://maven.theillusivec4.top/" }
 }
 
 dependencies {
@@ -155,6 +156,8 @@ dependencies {
     runtimeOnly fg.deobf("vazkii.patchouli:Patchouli:1.16.2+")
     //runtimeOnly fg.deobf("curse.maven:zycraft:3099577")
     compileOnly fg.deobf("curse.maven:farmers-delight-398521:3091999")
+    compileOnly fg.deobf("top.theillusivec4.curios:curios-forge:1.16.4-4.0.3.0:api")
+    runtimeOnly fg.deobf("top.theillusivec4.curios:curios-forge:1.16.4-4.0.3.0")
 }
 
 afterEvaluate {

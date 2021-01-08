@@ -22,8 +22,11 @@
 package com.buuz135.industrial.item;
 
 import com.buuz135.industrial.module.ModuleCore;
+import com.buuz135.industrial.module.ModuleTool;
 import com.hrznstudio.titanium.recipe.generator.TitaniumShapedRecipeBuilder;
 import net.minecraft.data.IFinishedRecipe;
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemGroup;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
@@ -31,6 +34,7 @@ import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.util.text.TextFormatting;
+import net.minecraft.world.World;
 import net.minecraftforge.common.Tags;
 import net.minecraftforge.common.capabilities.ICapabilityProvider;
 import net.minecraftforge.fluids.FluidStack;
@@ -71,10 +75,6 @@ public class MeatFeederItem extends IFCustomItem {
     @Override
     public void addTooltipDetails(@Nullable Key key, ItemStack stack, List<ITextComponent> tooltip, boolean advanced) {
         super.addTooltipDetails(key, stack, tooltip, advanced);
-        //stack.getCapability(CapabilityFluidHandler.FLUID_HANDLER_ITEM_CAPABILITY).ifPresent(iFluidHandlerItem -> {
-        //    tooltip.add(new StringTextComponent(iFluidHandlerItem.getFluidInTank(0).getAmount() + "/" + iFluidHandlerItem.getTankCapacity(0) + "mb of Meat"));
-        //})
-        //;
         if (stack.getTag() != null && key == null) {
             tooltip.add(new StringTextComponent(NumberFormat.getNumberInstance(Locale.ROOT).format(stack.getTag().getCompound("Fluid").getInt("Amount")) + TextFormatting.GOLD + "/" + TextFormatting.WHITE + NumberFormat.getNumberInstance(Locale.ROOT).format(128000) + TextFormatting.GOLD + "mb of Meat"));
         }
@@ -88,6 +88,29 @@ public class MeatFeederItem extends IFCustomItem {
     public void drain(ItemStack stack, int amount) {
         FluidHandlerItemStack handlerItemStack = (FluidHandlerItemStack) stack.getCapability(CapabilityFluidHandler.FLUID_HANDLER_ITEM_CAPABILITY).orElseThrow(RuntimeException::new);
         handlerItemStack.drain(new FluidStack(ModuleCore.MEAT.getSourceFluid(), amount), IFluidHandler.FluidAction.EXECUTE);
+    }
+
+    @Override
+    public void inventoryTick(ItemStack stack, World worldIn, Entity entityIn, int itemSlot, boolean isSelected) {
+        super.inventoryTick(stack, worldIn, entityIn, itemSlot, isSelected);
+        if (!worldIn.isRemote && entityIn instanceof PlayerEntity) {
+            PlayerEntity player = (PlayerEntity) entityIn;
+            if (player.getFoodStats().needFood() || player.getFoodStats().getSaturationLevel() < 10) {
+                if (stack.getItem().equals(ModuleTool.MEAT_FEEDER)) {
+                        meatTick(stack, player);
+                }
+            }
+        }
+    }
+
+    public static boolean meatTick(ItemStack stack, PlayerEntity player) {
+        int filledAmount = ((MeatFeederItem) stack.getItem()).getFilledAmount(stack);
+        if (filledAmount >= 400 && (player.getFoodStats().getSaturationLevel() < 20 || player.getFoodStats().getFoodLevel() < 20)) {
+            ((MeatFeederItem) stack.getItem()).drain(stack, 400);
+            player.getFoodStats().addStats(1, 1);
+            return true;
+        }
+        return false;
     }
 
     @Override
