@@ -25,9 +25,7 @@ import com.buuz135.industrial.module.*;
 import com.buuz135.industrial.proxy.CommonProxy;
 import com.buuz135.industrial.proxy.client.ClientProxy;
 import com.buuz135.industrial.proxy.client.render.ContributorsCatEarsRender;
-import com.buuz135.industrial.proxy.network.ConveyorButtonInteractMessage;
-import com.buuz135.industrial.proxy.network.ConveyorSplittingSyncEntityMessage;
-import com.buuz135.industrial.proxy.network.SpecialParticleMessage;
+import com.buuz135.industrial.proxy.network.*;
 import com.buuz135.industrial.recipe.*;
 import com.buuz135.industrial.recipe.provider.IndustrialRecipeProvider;
 import com.buuz135.industrial.recipe.provider.IndustrialSerializableProvider;
@@ -91,6 +89,9 @@ public class IndustrialForegoing extends ModuleController {
         NETWORK.registerMessage(ConveyorButtonInteractMessage.class);
         NETWORK.registerMessage(ConveyorSplittingSyncEntityMessage.class);
         NETWORK.registerMessage(SpecialParticleMessage.class);
+        NETWORK.registerMessage(BackpackSyncMessage.class);
+        NETWORK.registerMessage(BackpackOpenMessage.class);
+        NETWORK.registerMessage(BackpackOpenedMessage.class);
     }
 
     public IndustrialForegoing() {

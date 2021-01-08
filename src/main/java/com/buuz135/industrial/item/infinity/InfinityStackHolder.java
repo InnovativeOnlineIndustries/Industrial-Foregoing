@@ -5,21 +5,16 @@ import com.hrznstudio.titanium.api.client.IScreenAddon;
 import com.hrznstudio.titanium.api.client.IScreenAddonProvider;
 import com.hrznstudio.titanium.capability.ItemStackHolderCapability;
 import net.minecraft.client.Minecraft;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.Hand;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class InfinityStackHolder extends ItemStackHolderCapability implements IScreenAddonProvider {
 
+    public static int SLOT = 0;
+
     public InfinityStackHolder() {
-        super(() -> {
-            ItemStack stack = Minecraft.getInstance().player.getHeldItem(Hand.MAIN_HAND);
-            if (!(stack.getItem() instanceof IInfinityDrillScreenAddons))
-                stack = Minecraft.getInstance().player.getHeldItem(Hand.OFF_HAND);
-            return stack;
-        });
+        super(() -> Minecraft.getInstance().player.inventory.getStackInSlot(SLOT));
     }
 
     @Override
@@ -30,4 +25,5 @@ public class InfinityStackHolder extends ItemStackHolderCapability implements IS
         }
         return factory;
     }
+
 }

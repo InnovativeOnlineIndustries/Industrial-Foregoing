@@ -1,18 +1,20 @@
 package com.buuz135.industrial.item.infinity;
 
+import com.buuz135.industrial.IndustrialForegoing;
 import com.buuz135.industrial.item.IFCustomItem;
+import com.buuz135.industrial.module.ModuleCore;
 import com.buuz135.industrial.proxy.CommonProxy;
+import com.buuz135.industrial.proxy.network.BackpackOpenedMessage;
 import com.google.common.collect.Multimap;
 import com.google.common.collect.MultimapBuilder;
 import com.hrznstudio.titanium.api.IFactory;
 import com.hrznstudio.titanium.api.client.AssetTypes;
 import com.hrznstudio.titanium.api.client.IScreenAddon;
-import com.hrznstudio.titanium.client.screen.addon.ArrowButtonScreenAddon;
-import com.hrznstudio.titanium.client.screen.addon.StateButtonAddon;
-import com.hrznstudio.titanium.client.screen.addon.StateButtonInfo;
-import com.hrznstudio.titanium.client.screen.addon.TextScreenAddon;
+import com.hrznstudio.titanium.capability.FluidHandlerScreenProviderItemStack;
+import com.hrznstudio.titanium.client.screen.addon.*;
 import com.hrznstudio.titanium.component.button.ArrowButtonComponent;
 import com.hrznstudio.titanium.component.button.ButtonComponent;
+import com.hrznstudio.titanium.component.fluid.FluidTankComponent;
 import com.hrznstudio.titanium.container.BasicAddonContainer;
 import com.hrznstudio.titanium.itemstack.ItemStackHarnessRegistry;
 import com.hrznstudio.titanium.network.IButtonHandler;
@@ -43,15 +45,15 @@ import net.minecraft.util.text.TextFormatting;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.World;
 import net.minecraftforge.common.capabilities.ICapabilityProvider;
+import net.minecraftforge.fluids.FluidStack;
+import net.minecraftforge.fml.network.NetworkDirection;
 import net.minecraftforge.fml.network.NetworkHooks;
 import org.apache.commons.lang3.tuple.Pair;
 
+import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.text.NumberFormat;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Locale;
-import java.util.Optional;
+import java.util.*;
 import java.util.function.BiFunction;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
@@ -61,12 +63,14 @@ public class ItemInfinity extends IFCustomItem implements INamedContainerProvide
     private final int powerConsumption;
     private final int biofuelConsumption;
     private final boolean usesDepth;
+    private boolean usesArea;
 
     public ItemInfinity(String name, ItemGroup group, Properties builder, int powerConsumption, int biofuelConsumption, boolean usesDepth) {
         super(name, group, builder);
         this.powerConsumption = powerConsumption;
         this.biofuelConsumption = biofuelConsumption;
         this.usesDepth = usesDepth;
+        this.usesArea = true;
     }
 
     public static long getPowerFromStack(ItemStack stack) {
@@ -75,6 +79,10 @@ public class ItemInfinity extends IFCustomItem implements INamedContainerProvide
             power = stack.getTag().getLong("Energy");
         }
         return power;
+    }
+
+    public void disableArea(){
+        this.usesArea = false;
     }
 
     public static String getFormattedArea(InfinityTier tier, int radius, boolean usesDepth) {
@@ -227,12 +235,12 @@ public class ItemInfinity extends IFCustomItem implements INamedContainerProvide
         long power = getPowerFromStack(stack);
         Pair<InfinityTier, InfinityTier> braquet = InfinityTier.getTierBraquet(power);
         InfinityTier current = getSelectedTier(stack);
-        tooltip.add(new TranslationTextComponent("text.industrialforegoing.display.current_area").appendString(" ").appendString(getFormattedArea(current, current.getRadius(), this.usesDepth)).mergeStyle(TextFormatting.GRAY));
+        if (usesArea) tooltip.add(new TranslationTextComponent("text.industrialforegoing.display.current_area").appendString(" ").appendString(getFormattedArea(current, current.getRadius(), this.usesDepth)).mergeStyle(TextFormatting.GRAY));
         tooltip.add(new TranslationTextComponent("text.industrialforegoing.display.tier").appendString(" " + braquet.getLeft().getColor() + braquet.getLeft().getLocalizedName()).mergeStyle(TextFormatting.GRAY));
-        tooltip.add(new TranslationTextComponent("text.industrialforegoing.display.power").appendString(" ").appendString(NumberFormat.getNumberInstance(Locale.ROOT).format(power)).appendString("/").appendString(NumberFormat.getNumberInstance(Locale.ROOT).format(braquet.getRight().getPowerNeeded())).appendString("RF ").append(new TranslationTextComponent("text.industrialforegoing.display.next_tier")).mergeStyle(TextFormatting.GRAY));
+        tooltip.add(new TranslationTextComponent("text.industrialforegoing.display.power").appendString(" ").appendString(TextFormatting.RED + NumberFormat.getNumberInstance(Locale.ROOT).format(power) + TextFormatting.GREEN).appendString("/").appendString(NumberFormat.getNumberInstance(Locale.ROOT).format(braquet.getRight().getPowerNeeded())).appendString("RF ").append(new TranslationTextComponent("text.industrialforegoing.display.next_tier")).mergeStyle(TextFormatting.GRAY));
         int fuelAmount = getFuelFromStack(stack);
-        tooltip.add(new TranslationTextComponent("text.industrialforegoing.display.fluid").appendString(" ").appendString(NumberFormat.getNumberInstance(Locale.ROOT).format(fuelAmount)).appendString("/").appendString(NumberFormat.getNumberInstance(Locale.ROOT).format(1000000)).appendString(" mb of Biofuel").mergeStyle(TextFormatting.GRAY));
-        tooltip.add(new TranslationTextComponent("text.industrialforegoing.display.max_area").appendString(" ").appendString(getFormattedArea(braquet.getLeft(), braquet.getLeft().getRadius(), this.usesDepth)).mergeStyle(TextFormatting.GRAY));
+        tooltip.add(new TranslationTextComponent("text.industrialforegoing.display.fluid").appendString(" ").appendString(TextFormatting.LIGHT_PURPLE + NumberFormat.getNumberInstance(Locale.ROOT).format(fuelAmount) + TextFormatting.GRAY).appendString("/").appendString(NumberFormat.getNumberInstance(Locale.ROOT).format(1000000)).appendString(" mb of Biofuel").mergeStyle(TextFormatting.GRAY));
+        if (usesArea) tooltip.add(new TranslationTextComponent("text.industrialforegoing.display.max_area").appendString(" ").appendString(getFormattedArea(braquet.getLeft(), braquet.getLeft().getRadius(), this.usesDepth)).mergeStyle(TextFormatting.GRAY));
         if (canCharge(stack)) {
             tooltip.add(new TranslationTextComponent("text.industrialforegoing.display.charging").mergeStyle(TextFormatting.GRAY).append(new TranslationTextComponent("text.industrialforegoing.display.enabled").mergeStyle(TextFormatting.GREEN)));
         } else {
@@ -286,6 +294,7 @@ public class ItemInfinity extends IFCustomItem implements INamedContainerProvide
     public ActionResult<ItemStack> onItemRightClick(World worldIn, PlayerEntity player, Hand handIn) {
         if (player.isCrouching()) {
             if (player instanceof ServerPlayerEntity) {
+                IndustrialForegoing.NETWORK.get().sendTo(new BackpackOpenedMessage(player.inventory.currentItem), ((ServerPlayerEntity) player).connection.getNetworkManager(), NetworkDirection.PLAY_TO_CLIENT);
                 NetworkHooks.openGui((ServerPlayerEntity) player, this, buffer ->
                         LocatorFactory.writePacketBuffer(buffer, new HeldStackLocatorInstance(handIn == Hand.MAIN_HAND)));
             }
@@ -305,7 +314,7 @@ public class ItemInfinity extends IFCustomItem implements INamedContainerProvide
     @Nullable
     @Override
     public ICapabilityProvider initCapabilities(ItemStack stack, @Nullable CompoundNBT nbt) {
-        return new InfinityCapabilityProvider(stack);
+        return new InfinityCapabilityProvider(stack, getTankConstructor(stack), getEnergyConstructor(stack));
     }
 
     @Override
@@ -373,5 +382,51 @@ public class ItemInfinity extends IFCustomItem implements INamedContainerProvide
             factory.add(() -> new TextScreenAddon(TextFormatting.GOLD + new TranslationTextComponent("text.industrialforegoing.display.special").getString(), 12 + 14 + 4, 84, false));
         }
         return factory;
+    }
+
+    public IFactory<? extends FluidHandlerScreenProviderItemStack> getTankConstructor(ItemStack stack){
+        return () -> new FluidHandlerScreenProviderItemStack(stack, 1_000_000) {
+            @Override
+            public boolean canFillFluidType(FluidStack fluid) {
+                return fluid != null && fluid.getFluid() != null && fluid.getFluid().equals(ModuleCore.BIOFUEL.getSourceFluid());
+            }
+
+            @Override
+            public boolean canDrainFluidType(FluidStack fluid) {
+                return false;
+            }
+
+            @Nonnull
+            @Override
+            public List<IFactory<? extends IScreenAddon>> getScreenAddons() {
+                return Collections.singletonList(() -> new TankScreenAddon(30, 20, this, FluidTankComponent.Type.NORMAL));
+            }
+        };
+    }
+
+    public IFactory<InfinityEnergyStorage> getEnergyConstructor(ItemStack stack){
+        return () ->  new InfinityEnergyStorage(InfinityTier.ARTIFACT.getPowerNeeded(), 10, 20) {
+            @Override
+            public long getLongEnergyStored() {
+                if (stack.hasTag()) {
+                    return Math.min(stack.getTag().getLong("Energy"), InfinityTier.ARTIFACT.getPowerNeeded());
+                } else {
+                    return 0;
+                }
+            }
+
+            @Override
+            public void setEnergyStored(long energy) {
+                if (!stack.hasTag()) {
+                    stack.setTag(new CompoundNBT());
+                }
+                stack.getTag().putLong("Energy", Math.min(energy, InfinityTier.ARTIFACT.getPowerNeeded()));
+            }
+
+            @Override
+            public boolean canReceive() {
+                return ItemInfinity.canCharge(stack);
+            }
+        };
     }
 }

@@ -1,0 +1,35 @@
+{
+  "input": [
+    {
+      "item": "industrialforegoing:common_black_hole_unit"
+    },
+    {
+      "tag": "forge:gears/diamond"
+    },
+    {
+      "item": "industrialforegoing:common_black_hole_unit"
+    },
+    {
+      "item": "industrialforegoing:common_black_hole_tank"
+    },
+    {
+      "item": "industrialforegoing:common_black_hole_tank"
+    },
+    {
+      "tag": "forge:gears/gold"
+    },
+    {
+      "tag": "forge:gears/gold"
+    },
+    {
+      "tag": "forge:gears/gold"
+    }
+  ],
+  "inputFluid": "{FluidName:\"industrialforegoing:pink_slime\",Amount:2000}",
+  "processingTime": 400,
+  "output": {
+    "item": "industrialforegoing:infinity_backpack",
+    "count": 1
+  },
+  "type": "industrialforegoing:dissolution_chamber"
+}

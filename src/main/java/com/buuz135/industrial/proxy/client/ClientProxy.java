@@ -21,6 +21,7 @@
  */
 package com.buuz135.industrial.proxy.client;
 
+import com.buuz135.industrial.IndustrialForegoing;
 import com.buuz135.industrial.block.tile.IndustrialAreaWorkingTile;
 import com.buuz135.industrial.block.transportstorage.tile.BlackHoleTankTile;
 import com.buuz135.industrial.block.transportstorage.tile.ConveyorTile;
@@ -37,6 +38,7 @@ import com.buuz135.industrial.proxy.client.render.BlackHoleUnitTESR;
 import com.buuz135.industrial.proxy.client.render.FluidConveyorTESR;
 import com.buuz135.industrial.proxy.client.render.MycelialReactorTESR;
 import com.buuz135.industrial.proxy.client.render.WorkingAreaTESR;
+import com.buuz135.industrial.proxy.network.BackpackOpenMessage;
 import com.buuz135.industrial.utils.FluidUtils;
 import com.buuz135.industrial.utils.Reference;
 import com.hrznstudio.titanium.block.BasicTileBlock;
@@ -46,6 +48,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.RenderTypeLookup;
 import net.minecraft.client.renderer.model.IBakedModel;
+import net.minecraft.client.settings.KeyBinding;
 import net.minecraft.item.SpawnEggItem;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ResourceLocation;
@@ -55,6 +58,7 @@ import net.minecraftforge.client.model.obj.OBJModel;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.util.Constants;
 import net.minecraftforge.common.util.NonNullLazy;
+import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
 import net.minecraftforge.fluids.capability.IFluidHandlerItem;
 import net.minecraftforge.fml.client.registry.ClientRegistry;
@@ -72,9 +76,18 @@ public class ClientProxy extends CommonProxy {
     public static IBakedModel ears_baked;
     public static OBJModel ears_model;
 
+    public KeyBinding OPEN_BACKPACK;
+
     @Override
     public void run() {
-        //OBJLoader.INSTANCE.addDomain(Reference.MOD_ID);
+        OPEN_BACKPACK = new KeyBinding("key.industrialforegoing.backpack.desc", -1, "key.industrialforegoing.category");
+        ClientRegistry.registerKeyBinding(OPEN_BACKPACK);
+        EventManager.forge(TickEvent.ClientTickEvent.class).process(event -> {
+            if (OPEN_BACKPACK.isPressed()){
+                IndustrialForegoing.NETWORK.get().sendToServer(new BackpackOpenMessage());
+            }
+        }).subscribe();
+
 
         MinecraftForge.EVENT_BUS.register(new IFClientEvents());
         ModelLoader.addSpecialModel(new ResourceLocation(Reference.MOD_ID, "block/catears"));
