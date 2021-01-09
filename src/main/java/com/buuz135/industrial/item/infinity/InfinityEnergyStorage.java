@@ -25,6 +25,7 @@ public class InfinityEnergyStorage<T extends IComponentHarness> extends EnergySt
 
     @Override
     public int receiveEnergy(int maxReceive, boolean simulate) {
+        if (!canReceive()) return 0;
         long stored = getLongEnergyStored();
         int energyReceived = (int) Math.min(capacity - stored, Math.min(Long.MAX_VALUE, maxReceive));
         if (!simulate)
