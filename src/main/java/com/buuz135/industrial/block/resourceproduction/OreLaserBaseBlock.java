@@ -9,6 +9,7 @@ import com.hrznstudio.titanium.recipe.generator.TitaniumShapedRecipeBuilder;
 import net.minecraft.block.Blocks;
 import net.minecraft.data.IFinishedRecipe;
 import net.minecraft.item.Items;
+import net.minecraftforge.common.Tags;
 
 import java.util.function.Consumer;
 
@@ -28,10 +29,10 @@ public class OreLaserBaseBlock extends IndustrialBlock<OreLaserBaseTile> {
         TitaniumShapedRecipeBuilder.shapedRecipe(this).patternLine("pfp").patternLine("bmb").patternLine("grg")
                 .key('p', IndustrialTags.Items.PLASTIC)
                 .key('f', Items.DIAMOND_PICKAXE)
-                .key('b', Items.IRON_ORE)
+                .key('b', Tags.Items.ORES_IRON)
                 .key('m', IndustrialTags.Items.MACHINE_FRAME_ADVANCED)
                 .key('g', IndustrialTags.Items.GEAR_DIAMOND)
-                .key('r', Items.REDSTONE)
+                .key('r', Tags.Items.DUSTS_REDSTONE)
                 .build(consumer);
     }
 }
