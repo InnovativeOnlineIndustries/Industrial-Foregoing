@@ -112,49 +112,51 @@ public class ItemInfinityBackpack extends ItemInfinity {
         super("infinity_backpack", ModuleTool.TAB_TOOL, new Properties().maxStackSize(1), POWER_CONSUMPTION, FUEL_CONSUMPTION, false);
         this.disableArea();
         EventManager.forge(EntityItemPickupEvent.class).filter(entityItemPickupEvent -> !entityItemPickupEvent.getItem().getItem().isEmpty()).process(entityItemPickupEvent -> {
-            PlayerInventoryFinder.Target target = findFirstBackpack(entityItemPickupEvent.getPlayer());
-            ItemStack stack = target.getFinder().getStackGetter().apply(entityItemPickupEvent.getPlayer(), target.getSlot());
-            if (!stack.isEmpty()){
-                if (stack.getItem() instanceof ItemInfinityBackpack && isPickUpEnabled(stack)) {
-                    BackpackDataManager manager = BackpackDataManager.getData(entityItemPickupEvent.getItem().world);
-                    if (manager != null && stack.getOrCreateTag().contains("Id")){
-                        BackpackDataManager.BackpackItemHandler handler = manager.getBackpack(stack.getOrCreateTag().getString("Id"));
-                        if (handler != null){
-                            ItemStack picked = entityItemPickupEvent.getItem().getItem();
-                            for (int pos = 0; pos < handler.getSlots(); pos++) {
-                                ItemStack slotStack = handler.getSlotDefinition(pos).getStack().copy();
-                                slotStack.setCount(1);
-                                if (!slotStack.isEmpty() && slotStack.getStack().isItemEqual(picked) && ItemStack.areItemStackTagsEqual(slotStack, picked)){
-                                    ItemStack returned = handler.insertItem(pos, picked.copy(), false);
-                                    picked.setCount(returned.getCount());
-                                    entityItemPickupEvent.setResult(Event.Result.ALLOW);
-                                    if (entityItemPickupEvent.getPlayer() instanceof ServerPlayerEntity){
-                                        sync(entityItemPickupEvent.getPlayer().world, stack.getOrCreateTag().getString("Id"), (ServerPlayerEntity) entityItemPickupEvent.getPlayer());
+            findFirstBackpack(entityItemPickupEvent.getPlayer()).ifPresent(target -> {
+                ItemStack stack = target.getFinder().getStackGetter().apply(entityItemPickupEvent.getPlayer(), target.getSlot());
+                if (!stack.isEmpty()){
+                    if (stack.getItem() instanceof ItemInfinityBackpack && isPickUpEnabled(stack)) {
+                        BackpackDataManager manager = BackpackDataManager.getData(entityItemPickupEvent.getItem().world);
+                        if (manager != null && stack.getOrCreateTag().contains("Id")){
+                            BackpackDataManager.BackpackItemHandler handler = manager.getBackpack(stack.getOrCreateTag().getString("Id"));
+                            if (handler != null){
+                                ItemStack picked = entityItemPickupEvent.getItem().getItem();
+                                for (int pos = 0; pos < handler.getSlots(); pos++) {
+                                    ItemStack slotStack = handler.getSlotDefinition(pos).getStack().copy();
+                                    slotStack.setCount(1);
+                                    if (!slotStack.isEmpty() && slotStack.getStack().isItemEqual(picked) && ItemStack.areItemStackTagsEqual(slotStack, picked)){
+                                        ItemStack returned = handler.insertItem(pos, picked.copy(), false);
+                                        picked.setCount(returned.getCount());
+                                        entityItemPickupEvent.setResult(Event.Result.ALLOW);
+                                        if (entityItemPickupEvent.getPlayer() instanceof ServerPlayerEntity){
+                                            sync(entityItemPickupEvent.getPlayer().world, stack.getOrCreateTag().getString("Id"), (ServerPlayerEntity) entityItemPickupEvent.getPlayer());
+                                        }
+                                        return;
                                     }
-                                    return;
                                 }
                             }
                         }
                     }
                 }
-            }
+            });
         }).subscribe();
         EventManager.forge(PlayerXpEvent.PickupXp.class).filter(pickupXp -> pickupXp.getOrb().isAlive()).process(pickupXp -> {
-            PlayerInventoryFinder.Target target = findFirstBackpack(pickupXp.getPlayer());
-            ItemStack stack = target.getFinder().getStackGetter().apply(pickupXp.getPlayer(), target.getSlot());
-            if (!stack.isEmpty()){
-                if (stack.getItem() instanceof ItemInfinityBackpack && isPickUpEnabled(stack)) {
-                    if (stack.getCapability(CapabilityFluidHandler.FLUID_HANDLER_ITEM_CAPABILITY).isPresent()){
-                        ExperienceOrbEntity entity = pickupXp.getOrb();
-                        IFluidHandlerItem handlerItem = stack.getCapability(CapabilityFluidHandler.FLUID_HANDLER_ITEM_CAPABILITY).orElse(null);
-                        if (handlerItem != null){
-                            handlerItem.fill(new FluidStack(ModuleCore.ESSENCE.getSourceFluid(), entity.getXpValue() * 20), IFluidHandler.FluidAction.EXECUTE);
-                            entity.remove();
-                            pickupXp.setCanceled(true);
+            findFirstBackpack(pickupXp.getPlayer()).ifPresent(target -> {
+                ItemStack stack = target.getFinder().getStackGetter().apply(pickupXp.getPlayer(), target.getSlot());
+                if (!stack.isEmpty()){
+                    if (stack.getItem() instanceof ItemInfinityBackpack && isPickUpEnabled(stack)) {
+                        if (stack.getCapability(CapabilityFluidHandler.FLUID_HANDLER_ITEM_CAPABILITY).isPresent()){
+                            ExperienceOrbEntity entity = pickupXp.getOrb();
+                            IFluidHandlerItem handlerItem = stack.getCapability(CapabilityFluidHandler.FLUID_HANDLER_ITEM_CAPABILITY).orElse(null);
+                            if (handlerItem != null){
+                                handlerItem.fill(new FluidStack(ModuleCore.ESSENCE.getSourceFluid(), entity.getXpValue() * 20), IFluidHandler.FluidAction.EXECUTE);
+                                entity.remove();
+                                pickupXp.setCanceled(true);
+                            }
                         }
                     }
                 }
-            }
+            });
         }).subscribe();
     }
 
@@ -289,84 +291,85 @@ public class ItemInfinityBackpack extends ItemInfinity {
 
     @Override
     public void handleButtonMessage(int id, PlayerEntity playerEntity, CompoundNBT compound) {
-        PlayerInventoryFinder.Target target = findFirstBackpack(playerEntity);
-        ItemStack stack = target.getFinder().getStackGetter().apply(playerEntity, target.getSlot());
-        if (!stack.isEmpty()){
-            if (id == 4 && playerEntity instanceof ServerPlayerEntity){
-                String backpackId = compound.getString("Id");
-                ItemStack cursor = playerEntity.inventory.getItemStack();
-                boolean shift = compound.getBoolean("Shift");
-                boolean ctrl = compound.getBoolean("Ctrl");
-                int button = compound.getInt("Button");
-                int slot = compound.getInt("Slot");
-                BackpackDataManager dataManager = BackpackDataManager.getData(playerEntity.world);
-                BackpackDataManager.BackpackItemHandler handler = dataManager.getBackpack(backpackId);
-                ItemStack result = ItemStack.EMPTY;
-                boolean hasCursorChanged = false;
-                if (button == 2) {//MIDDLE
-                    ItemStack simulated = handler.extractItem(slot, 1, true);
-                    if (cursor.isEmpty() || ItemHandlerHelper.canItemStacksStack(simulated, cursor)){
-                        result = handler.extractItem(slot, 1, false);
-                        result.setCount(cursor.getCount() + 1);
-                        hasCursorChanged = true;
-                    }
-                } else if (cursor.isEmpty()){
-                    int maxStack = handler.getStackInSlot(slot).getMaxStackSize();
-                    if (button == 0){ //LEFT
-                        if (ctrl){
-                            BackpackDataManager.SlotDefinition definition = handler.getSlotDefinition(slot);
-                            definition.setVoidItems(!definition.isVoidItems());
-                        } else {
-                            if (shift){
-                                if (handler.getSlotDefinition(slot).getAmount() == 0){
-                                    handler.getSlotDefinition(slot).setStack(ItemStack.EMPTY);
-                                    handler.getSlotDefinition(slot).setAmount(0);
-                                }else {
-                                    ItemHandlerHelper.giveItemToPlayer(playerEntity, handler.extractItem(slot, maxStack, false));
-                                }
+        findFirstBackpack(playerEntity).ifPresent(target -> {
+            ItemStack stack = target.getFinder().getStackGetter().apply(playerEntity, target.getSlot());
+            if (!stack.isEmpty()){
+                if (id == 4 && playerEntity instanceof ServerPlayerEntity){
+                    String backpackId = compound.getString("Id");
+                    ItemStack cursor = playerEntity.inventory.getItemStack();
+                    boolean shift = compound.getBoolean("Shift");
+                    boolean ctrl = compound.getBoolean("Ctrl");
+                    int button = compound.getInt("Button");
+                    int slot = compound.getInt("Slot");
+                    BackpackDataManager dataManager = BackpackDataManager.getData(playerEntity.world);
+                    BackpackDataManager.BackpackItemHandler handler = dataManager.getBackpack(backpackId);
+                    ItemStack result = ItemStack.EMPTY;
+                    boolean hasCursorChanged = false;
+                    if (button == 2) {//MIDDLE
+                        ItemStack simulated = handler.extractItem(slot, 1, true);
+                        if (cursor.isEmpty() || ItemHandlerHelper.canItemStacksStack(simulated, cursor)){
+                            result = handler.extractItem(slot, 1, false);
+                            result.setCount(cursor.getCount() + 1);
+                            hasCursorChanged = true;
+                        }
+                    } else if (cursor.isEmpty()){
+                        int maxStack = handler.getStackInSlot(slot).getMaxStackSize();
+                        if (button == 0){ //LEFT
+                            if (ctrl){
+                                BackpackDataManager.SlotDefinition definition = handler.getSlotDefinition(slot);
+                                definition.setVoidItems(!definition.isVoidItems());
                             } else {
-                                result = handler.extractItem(slot, maxStack, false);
+                                if (shift){
+                                    if (handler.getSlotDefinition(slot).getAmount() == 0){
+                                        handler.getSlotDefinition(slot).setStack(ItemStack.EMPTY);
+                                        handler.getSlotDefinition(slot).setAmount(0);
+                                    }else {
+                                        ItemHandlerHelper.giveItemToPlayer(playerEntity, handler.extractItem(slot, maxStack, false));
+                                    }
+                                } else {
+                                    result = handler.extractItem(slot, maxStack, false);
+                                    hasCursorChanged = true;
+                                }
+                            }
+                        } else if (button == 1){ //RIGHT
+                            if (ctrl){
+                                BackpackDataManager.SlotDefinition definition = handler.getSlotDefinition(slot);
+                                definition.setRefillItems(!definition.isRefillItems());
+                            } else {
+                                result = handler.extractItem(slot, maxStack / 2, false);
                                 hasCursorChanged = true;
                             }
                         }
-                    } else if (button == 1){ //RIGHT
-                        if (ctrl){
-                            BackpackDataManager.SlotDefinition definition = handler.getSlotDefinition(slot);
-                            definition.setRefillItems(!definition.isRefillItems());
-                        } else {
-                            result = handler.extractItem(slot, maxStack / 2, false);
+                    } else {
+                        if (button == 0){
+                            result = handler.insertItem(slot, cursor, false);
+                            hasCursorChanged = true;
+                        } else if (button == 1 && handler.insertItem(slot, ItemHandlerHelper.copyStackWithSize(cursor, 1), false).isEmpty()){
+                            cursor.shrink(1);
+                            result = cursor;
                             hasCursorChanged = true;
                         }
                     }
-                } else {
-                    if (button == 0){
-                        result = handler.insertItem(slot, cursor, false);
-                        hasCursorChanged = true;
-                    } else if (button == 1 && handler.insertItem(slot, ItemHandlerHelper.copyStackWithSize(cursor, 1), false).isEmpty()){
-                        cursor.shrink(1);
-                        result = cursor;
-                        hasCursorChanged = true;
+                    if (hasCursorChanged){
+                        playerEntity.inventory.setItemStack(result);
+                        ((ServerPlayerEntity) playerEntity).updateHeldItem();
                     }
+                    sync(playerEntity.world, backpackId, (ServerPlayerEntity) playerEntity);
                 }
-                if (hasCursorChanged){
-                    playerEntity.inventory.setItemStack(result);
-                    ((ServerPlayerEntity) playerEntity).updateHeldItem();
+                if (id == 10){
+                    setMagnet(stack, !isMagnetEnabled(stack));
                 }
-                sync(playerEntity.world, backpackId, (ServerPlayerEntity) playerEntity);
+                if (id == 11){
+                    setPickUp(stack, !isPickUpEnabled(stack));
+                }
+                if (id == 3) {
+                    setCanCharge(stack, !canCharge(stack));
+                }
+                if (id == -10) {
+                    setSpecialEnabled(stack, !isSpecialEnabled(stack));
+                }
             }
-            if (id == 10){
-                setMagnet(stack, !isMagnetEnabled(stack));
-            }
-            if (id == 11){
-                setPickUp(stack, !isPickUpEnabled(stack));
-            }
-            if (id == 3) {
-                setCanCharge(stack, !canCharge(stack));
-            }
-            if (id == -10) {
-                setSpecialEnabled(stack, !isSpecialEnabled(stack));
-            }
-        }
+        });
     }
 
     public void addNbt(ItemStack stack, long power, int fuel, boolean special) {
@@ -445,27 +448,26 @@ public class ItemInfinityBackpack extends ItemInfinity {
     @Nullable
     @Override
     public Container createMenu(int menu, PlayerInventory p_createMenu_2_, PlayerEntity playerEntity) {
-                PlayerInventoryFinder.Target target = findFirstBackpack(playerEntity);
-                ItemStack stack = target.getFinder().getStackGetter().apply(playerEntity, target.getSlot());
-                if (!stack.isEmpty()) {
-                    if (!stack.hasTag() || !stack.getTag().contains("Id")){
-                        UUID id = UUID.randomUUID();
-                        CompoundNBT nbt = stack.getOrCreateTag();
-                        nbt.putString("Id", id.toString());
-                        BackpackDataManager.getData(playerEntity.world).createBackPack(id);
-                        stack.setTag(nbt);
+        return findFirstBackpack(playerEntity).map(target -> {
+            ItemStack stack = target.getFinder().getStackGetter().apply(playerEntity, target.getSlot());
+            if (!stack.isEmpty()) {
+                if (!stack.hasTag() || !stack.getTag().contains("Id")) {
+                    UUID id = UUID.randomUUID();
+                    CompoundNBT nbt = stack.getOrCreateTag();
+                    nbt.putString("Id", id.toString());
+                    BackpackDataManager.getData(playerEntity.world).createBackPack(id);
+                    stack.setTag(nbt);
+                }
+                String id = stack.getTag().getString("Id");
+                return new BackpackContainer(ItemStackHarnessRegistry.getHarnessCreators().get(this).apply(stack), new InventoryStackLocatorInstance(target.getName(), target.getSlot()), new IWorldPosCallable() {
+                    @Override
+                    public <T> Optional<T> apply(BiFunction<World, BlockPos, T> p_221484_1_) {
+                        return Optional.empty();
                     }
-                    String id = stack.getTag().getString("Id");
-                    return new BackpackContainer(ItemStackHarnessRegistry.getHarnessCreators().get(this).apply(stack), new InventoryStackLocatorInstance(target.getName(), target.getSlot()), new IWorldPosCallable() {
-                        @Override
-                        public <T> Optional<T> apply(BiFunction<World, BlockPos, T> p_221484_1_) {
-                            return Optional.empty();
-                        }
-                    }, playerEntity.inventory, menu, id);
-
-
-        }
-        return null;
+                }, playerEntity.inventory, menu, id);
+            }
+            return null;
+        }).orElse(null);
     }
 
     @Override
@@ -531,17 +533,16 @@ public class ItemInfinityBackpack extends ItemInfinity {
                 new FluidStack(ModuleCore.PINK_SLIME.getSourceFluid(), 2000), 400, new ItemStack(this), FluidStack.EMPTY);
     }
 
-    @Nullable
-    public static PlayerInventoryFinder.Target findFirstBackpack(PlayerEntity entity){
+    public static Optional<PlayerInventoryFinder.Target> findFirstBackpack(PlayerEntity entity){
         for (String name : PlayerInventoryFinder.FINDERS.keySet()) {
             PlayerInventoryFinder finder = PlayerInventoryFinder.FINDERS.get(name);
             for (int i = 0; i < finder.getSlotAmountGetter().apply(entity); i++) {
                 if (finder.getStackGetter().apply(entity, i).getItem() instanceof ItemInfinityBackpack){
-                    return new PlayerInventoryFinder.Target(name, finder, i);
+                    return Optional.of(new PlayerInventoryFinder.Target(name, finder, i));
                 }
             }
         }
-        return null;
+        return Optional.empty();
     }
 
 }
