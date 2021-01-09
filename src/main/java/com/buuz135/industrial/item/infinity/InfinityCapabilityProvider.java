@@ -1,30 +1,43 @@
+/*
+ * This file is part of Industrial Foregoing.
+ *
+ * Copyright 2021, Buuz135
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy of
+ * this software and associated documentation files (the "Software"), to deal in the
+ * Software without restriction, including without limitation the rights to use, copy,
+ * modify, merge, publish, distribute, sublicense, and/or sell copies of the Software,
+ * and to permit persons to whom the Software is furnished to do so, subject to the
+ * following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in all copies
+ * or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED,
+ * INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR
+ * PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE
+ * FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE,
+ * ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+ */
 package com.buuz135.industrial.item.infinity;
 
-import com.buuz135.industrial.module.ModuleCore;
 import com.hrznstudio.titanium.api.IFactory;
 import com.hrznstudio.titanium.api.capability.IStackHolder;
-import com.hrznstudio.titanium.api.client.IScreenAddon;
 import com.hrznstudio.titanium.capability.CapabilityItemStackHolder;
 import com.hrznstudio.titanium.capability.FluidHandlerScreenProviderItemStack;
 import com.hrznstudio.titanium.capability.ItemStackHolderCapability;
-import com.hrznstudio.titanium.client.screen.addon.TankScreenAddon;
-import com.hrznstudio.titanium.component.fluid.FluidTankComponent;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.Direction;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.ICapabilityProvider;
 import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.energy.CapabilityEnergy;
 import net.minecraftforge.energy.IEnergyStorage;
-import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
 import net.minecraftforge.fluids.capability.IFluidHandlerItem;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-import java.util.Collections;
-import java.util.List;
 
 
 public class InfinityCapabilityProvider implements ICapabilityProvider {
@@ -35,53 +48,16 @@ public class InfinityCapabilityProvider implements ICapabilityProvider {
     private final LazyOptional<IEnergyStorage> energyStorageCap;
     private final LazyOptional<IFluidHandlerItem> tankCap;
     private final LazyOptional<IStackHolder> stackCap;
+    private final ItemStack stack;
 
-
-    public InfinityCapabilityProvider(ItemStack stack) {
-        tank = new FluidHandlerScreenProviderItemStack(stack, 1_000_000) {
-            @Override
-            public boolean canFillFluidType(FluidStack fluid) {
-                return fluid != null && fluid.getFluid() != null && fluid.getFluid().equals(ModuleCore.BIOFUEL.getSourceFluid());
-            }
-
-            @Override
-            public boolean canDrainFluidType(FluidStack fluid) {
-                return false;
-            }
-
-            @Nonnull
-            @Override
-            public List<IFactory<? extends IScreenAddon>> getScreenAddons() {
-                return Collections.singletonList(() -> new TankScreenAddon(30, 20, tank, FluidTankComponent.Type.NORMAL));
-            }
-        };
-        energyStorage = new InfinityEnergyStorage(InfinityTier.ARTIFACT.getPowerNeeded(), 10, 20) {
-            @Override
-            public long getLongEnergyStored() {
-                if (stack.hasTag()) {
-                    return Math.min(stack.getTag().getLong("Energy"), InfinityTier.ARTIFACT.getPowerNeeded());
-                } else {
-                    return 0;
-                }
-            }
-
-            @Override
-            public void setEnergyStored(long energy) {
-                if (!stack.hasTag()) {
-                    stack.setTag(new CompoundNBT());
-                }
-                stack.getTag().putLong("Energy", Math.min(energy, InfinityTier.ARTIFACT.getPowerNeeded()));
-            }
-
-            @Override
-            public boolean canReceive() {
-                return ItemInfinity.canCharge(stack);
-            }
-        };
+    public InfinityCapabilityProvider(ItemStack stack, IFactory<? extends FluidHandlerScreenProviderItemStack> tankFactory, IFactory<InfinityEnergyStorage> energyFactory) {
+        this.tank = tankFactory.create();
+        this.energyStorage = energyFactory.create();
         this.itemStackHolder = new InfinityStackHolder();
         this.tankCap = LazyOptional.of(() -> tank);
         this.energyStorageCap = LazyOptional.of(() -> energyStorage);
         this.stackCap = LazyOptional.of(() -> itemStackHolder);
+        this.stack = stack;
     }
 
     @Nullable
@@ -93,4 +69,7 @@ public class InfinityCapabilityProvider implements ICapabilityProvider {
         return LazyOptional.empty();
     }
 
+    public ItemStack getStack() {
+        return stack;
+    }
 }

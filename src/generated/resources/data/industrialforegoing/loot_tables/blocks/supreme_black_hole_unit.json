@@ -1,0 +1,42 @@
+{
+  "type": "minecraft:block",
+  "pools": [
+    {
+      "rolls": 1,
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "functions": [
+            {
+              "function": "minecraft:copy_nbt",
+              "source": "block_entity",
+              "ops": [
+                {
+                  "source": "stored",
+                  "target": "BlockEntityTag.stored",
+                  "op": "replace"
+                },
+                {
+                  "source": "blStack",
+                  "target": "BlockEntityTag.blStack",
+                  "op": "replace"
+                },
+                {
+                  "source": "voidItems",
+                  "target": "BlockEntityTag.voidItems",
+                  "op": "replace"
+                }
+              ]
+            }
+          ],
+          "name": "industrialforegoing:supreme_black_hole_unit"
+        }
+      ],
+      "conditions": [
+        {
+          "condition": "minecraft:survives_explosion"
+        }
+      ]
+    }
+  ]
+}

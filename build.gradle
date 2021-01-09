@@ -136,6 +136,7 @@ repositories {
     maven {
         url = "https://www.cursemaven.com"
     }
+    maven { url "https://maven.theillusivec4.top/" }
 }
 
 dependencies {
@@ -143,7 +144,7 @@ dependencies {
     if (findProject(':titanium') != null) {
         compile project(':titanium')
     } else {
-        compile fg.deobf (project.dependencies.create('com.hrznstudio:titanium:1.16.4-3.2.4'))
+        compile fg.deobf (project.dependencies.create('com.hrznstudio:titanium:1.16.4-3.2.5'))
     }
     //if (findProject(':workspace') == null) {
     compileOnly fg.deobf("mezz.jei:jei-1.16.4:7.6.0.58:api")
@@ -155,6 +156,8 @@ dependencies {
     runtimeOnly fg.deobf("vazkii.patchouli:Patchouli:1.16.2+")
     //runtimeOnly fg.deobf("curse.maven:zycraft:3099577")
     compileOnly fg.deobf("curse.maven:farmers-delight-398521:3091999")
+    compileOnly fg.deobf("top.theillusivec4.curios:curios-forge:1.16.4-4.0.3.0:api")
+    runtimeOnly fg.deobf("top.theillusivec4.curios:curios-forge:1.16.4-4.0.3.0")
 }
 
 afterEvaluate {
@@ -265,8 +268,10 @@ curseforge {
 
         mainArtifact(jar){
             relations {
-                requiredLibrary 'titanium'
-                requiredLibrary 'patchouli'
+                requiredDependency 'titanium'
+                requiredDependency 'patchouli'
+                optionalDependency 'curios'
+                optionalDependency 'jei'
             }
         }
 

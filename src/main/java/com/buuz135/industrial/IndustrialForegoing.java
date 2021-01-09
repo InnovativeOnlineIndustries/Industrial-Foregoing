@@ -1,7 +1,7 @@
 /*
  * This file is part of Industrial Foregoing.
  *
- * Copyright 2019, Buuz135
+ * Copyright 2021, Buuz135
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy of
  * this software and associated documentation files (the "Software"), to deal in the
@@ -25,9 +25,7 @@ import com.buuz135.industrial.module.*;
 import com.buuz135.industrial.proxy.CommonProxy;
 import com.buuz135.industrial.proxy.client.ClientProxy;
 import com.buuz135.industrial.proxy.client.render.ContributorsCatEarsRender;
-import com.buuz135.industrial.proxy.network.ConveyorButtonInteractMessage;
-import com.buuz135.industrial.proxy.network.ConveyorSplittingSyncEntityMessage;
-import com.buuz135.industrial.proxy.network.SpecialParticleMessage;
+import com.buuz135.industrial.proxy.network.*;
 import com.buuz135.industrial.recipe.*;
 import com.buuz135.industrial.recipe.provider.IndustrialRecipeProvider;
 import com.buuz135.industrial.recipe.provider.IndustrialSerializableProvider;
@@ -44,6 +42,7 @@ import com.hrznstudio.titanium.event.handler.EventManager;
 import com.hrznstudio.titanium.module.Module;
 import com.hrznstudio.titanium.module.ModuleController;
 import com.hrznstudio.titanium.network.NetworkHandler;
+import com.hrznstudio.titanium.network.locator.PlayerInventoryFinder;
 import com.hrznstudio.titanium.reward.Reward;
 import com.hrznstudio.titanium.reward.RewardGiver;
 import com.hrznstudio.titanium.reward.RewardManager;
@@ -91,6 +90,9 @@ public class IndustrialForegoing extends ModuleController {
         NETWORK.registerMessage(ConveyorButtonInteractMessage.class);
         NETWORK.registerMessage(ConveyorSplittingSyncEntityMessage.class);
         NETWORK.registerMessage(SpecialParticleMessage.class);
+        NETWORK.registerMessage(BackpackSyncMessage.class);
+        NETWORK.registerMessage(BackpackOpenMessage.class);
+        NETWORK.registerMessage(BackpackOpenedMessage.class);
     }
 
     public IndustrialForegoing() {
@@ -113,6 +115,7 @@ public class IndustrialForegoing extends ModuleController {
             LOGGER.catching(e);
         }
         LaserDrillRarity.init();
+        PlayerInventoryFinder.init();
     }
 
     public static FakePlayer getFakePlayer(World world) {
@@ -170,7 +173,7 @@ public class IndustrialForegoing extends ModuleController {
         addModule(tool);
 
         Module.Builder transport = Module.builder("transport").description("All the Industrial Foregoing tools that allow of transport of things");
-        new ModuleTransport().generateFeatures().forEach(transport::feature);
+        new ModuleTransportStorage().generateFeatures().forEach(transport::feature);
         addModule(transport);
 
         Module.Builder generator = Module.builder("generator").description("All machines that generate power");

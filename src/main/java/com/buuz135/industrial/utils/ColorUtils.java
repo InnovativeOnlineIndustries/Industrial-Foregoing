@@ -1,7 +1,7 @@
 /*
  * This file is part of Industrial Foregoing.
  *
- * Copyright 2019, Buuz135
+ * Copyright 2021, Buuz135
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy of
  * this software and associated documentation files (the "Software"), to deal in the
@@ -45,17 +45,23 @@ public class ColorUtils {
     public static int getColorFrom(TextureAtlasSprite sprite) {
         if (sprite == null) return -1;
         if (sprite.getFrameCount() == 0) return -1;
-        int[][] pixelMatrix = new int[][]{{0}}; //sprite.getFrameTextureData(0);
-        int total = 0, red = 0, blue = 0, green = 0;
-        for (int pixel : pixelMatrix[pixelMatrix.length - 1]) {
-            Color color = new Color(pixel);
-            if (color.getAlpha() < 255) continue;
-            ++total;
-            red += color.getRed();
-            green += color.getGreen();
-            blue += color.getBlue();
-        }
-        if (total > 0) return new Color(red / total, green / total, blue / total, 255).getRGB();
+        float total = 0, red = 0, blue = 0, green = 0;
+            for (int y = 0; y < sprite.getHeight(); y++) {
+                for (int x = 0; x < sprite.getWidth(); x++) {
+                    int color = sprite.getPixelRGBA(0, x, y);
+                    //Color color = new Color(sprite.getPixelRGBA(frame, x, y), true);
+                    //System.out.println(color);
+                    //System.out.println(sprite);
+                    //System.out.println(color);
+                    if ((color >> 24 & 0xFF) != 255) continue;
+                    ++total;
+                    red +=  (color >> 0) & 0xFF;
+                    green += (color >>  8) & 0xFF;
+                    blue += (color >> 16) & 0xFF;
+                }
+            }
+
+        if (total > 0) return new Color( (int)(red / total), (int) (green / total), (int) (blue / total), 255).getRGB();
         return -1;
     }
 

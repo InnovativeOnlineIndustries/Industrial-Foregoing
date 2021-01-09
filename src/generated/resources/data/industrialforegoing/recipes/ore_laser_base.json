@@ -28,7 +28,7 @@
             "item": "minecraft:diamond_pickaxe"
           },
           "b": {
-            "item": "minecraft:iron_ore"
+            "tag": "forge:ores/iron"
           },
           "m": {
             "tag": "industrialforegoing:machine_frame/advanced"
@@ -37,7 +37,7 @@
             "tag": "forge:gears/diamond"
           },
           "r": {
-            "item": "minecraft:redstone"
+            "tag": "forge:dusts/redstone"
           }
         },
         "result": {
