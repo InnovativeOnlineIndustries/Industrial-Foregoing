@@ -42,6 +42,7 @@ import com.hrznstudio.titanium.event.handler.EventManager;
 import com.hrznstudio.titanium.module.Module;
 import com.hrznstudio.titanium.module.ModuleController;
 import com.hrznstudio.titanium.network.NetworkHandler;
+import com.hrznstudio.titanium.network.locator.PlayerInventoryFinder;
 import com.hrznstudio.titanium.reward.Reward;
 import com.hrznstudio.titanium.reward.RewardGiver;
 import com.hrznstudio.titanium.reward.RewardManager;
@@ -114,6 +115,7 @@ public class IndustrialForegoing extends ModuleController {
             LOGGER.catching(e);
         }
         LaserDrillRarity.init();
+        PlayerInventoryFinder.init();
     }
 
     public static FakePlayer getFakePlayer(World world) {

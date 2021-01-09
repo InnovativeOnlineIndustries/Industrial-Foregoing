@@ -31,6 +31,7 @@ import com.hrznstudio.titanium.component.fluid.FluidTankComponent;
 import com.hrznstudio.titanium.event.handler.EventManager;
 import com.hrznstudio.titanium.itemstack.ItemStackHarnessRegistry;
 import com.hrznstudio.titanium.network.locator.LocatorFactory;
+import com.hrznstudio.titanium.network.locator.PlayerInventoryFinder;
 import com.hrznstudio.titanium.network.locator.instance.HeldStackLocatorInstance;
 import com.hrznstudio.titanium.network.locator.instance.InventoryStackLocatorInstance;
 import net.minecraft.block.BlockState;
@@ -70,7 +71,6 @@ import net.minecraftforge.fluids.capability.IFluidHandlerItem;
 import net.minecraftforge.fml.network.NetworkDirection;
 import net.minecraftforge.fml.network.NetworkHooks;
 import net.minecraftforge.items.ItemHandlerHelper;
-import org.apache.commons.lang3.tuple.Pair;
 
 import javax.annotation.Nullable;
 import java.text.NumberFormat;
@@ -87,15 +87,13 @@ public class ItemInfinityBackpack extends ItemInfinity {
     private static String NBT_MAGNET = "Magnet";
     private static String NBT_PICKUP = "AutoPickUp";
 
-    //Add Curios integration
-
     public ItemInfinityBackpack() {
         super("infinity_backpack", ModuleTool.TAB_TOOL, new Properties().maxStackSize(1), POWER_CONSUMPTION, FUEL_CONSUMPTION, false);
         this.disableArea();
         EventManager.forge(EntityItemPickupEvent.class).filter(entityItemPickupEvent -> !entityItemPickupEvent.getItem().getItem().isEmpty()).process(entityItemPickupEvent -> {
-            PlayerInventory inventory = entityItemPickupEvent.getPlayer().inventory;
-            for (int i = 0; i <= 35; i++) {
-                ItemStack stack = inventory.getStackInSlot(i);
+            PlayerInventoryFinder.Target target = findFirstBackpack(entityItemPickupEvent.getPlayer());
+            ItemStack stack = target.getFinder().getStackGetter().apply(entityItemPickupEvent.getPlayer(), target.getSlot());
+            if (!stack.isEmpty()){
                 if (stack.getItem() instanceof ItemInfinityBackpack && isPickUpEnabled(stack)) {
                     BackpackDataManager manager = BackpackDataManager.getData(entityItemPickupEvent.getItem().world);
                     if (manager != null && stack.getOrCreateTag().contains("Id")){
@@ -121,9 +119,9 @@ public class ItemInfinityBackpack extends ItemInfinity {
             }
         }).subscribe();
         EventManager.forge(PlayerXpEvent.PickupXp.class).filter(pickupXp -> pickupXp.getOrb().isAlive()).process(pickupXp -> {
-            PlayerInventory inventory = pickupXp.getPlayer().inventory;
-            for (int i = 0; i <= 35; i++) {
-                ItemStack stack = inventory.getStackInSlot(i);
+            PlayerInventoryFinder.Target target = findFirstBackpack(pickupXp.getPlayer());
+            ItemStack stack = target.getFinder().getStackGetter().apply(pickupXp.getPlayer(), target.getSlot());
+            if (!stack.isEmpty()){
                 if (stack.getItem() instanceof ItemInfinityBackpack && isPickUpEnabled(stack)) {
                     if (stack.getCapability(CapabilityFluidHandler.FLUID_HANDLER_ITEM_CAPABILITY).isPresent()){
                         ExperienceOrbEntity entity = pickupXp.getOrb();
@@ -162,7 +160,7 @@ public class ItemInfinityBackpack extends ItemInfinity {
                 stack.setTag(nbt);
             }
             String id = stack.getTag().getString("Id");
-            IndustrialForegoing.NETWORK.get().sendTo(new BackpackOpenedMessage(player.inventory.currentItem), ((ServerPlayerEntity) player).connection.getNetworkManager(), NetworkDirection.PLAY_TO_CLIENT);
+            IndustrialForegoing.NETWORK.get().sendTo(new BackpackOpenedMessage(player.inventory.currentItem, PlayerInventoryFinder.MAIN), ((ServerPlayerEntity) player).connection.getNetworkManager(), NetworkDirection.PLAY_TO_CLIENT);
             sync(worldIn, id, (ServerPlayerEntity) player);
             NetworkHooks.openGui((ServerPlayerEntity) player, this, buffer ->
                         LocatorFactory.writePacketBuffer(buffer, new HeldStackLocatorInstance(handIn == Hand.MAIN_HAND)));
@@ -270,7 +268,8 @@ public class ItemInfinityBackpack extends ItemInfinity {
 
     @Override
     public void handleButtonMessage(int id, PlayerEntity playerEntity, CompoundNBT compound) {
-        ItemStack stack = playerEntity.getHeldItemMainhand().getItem() instanceof ItemInfinityBackpack ? playerEntity.getHeldItemMainhand() : findFirstBackpack(playerEntity).getRight();
+        PlayerInventoryFinder.Target target = findFirstBackpack(playerEntity);
+        ItemStack stack = target.getFinder().getStackGetter().apply(playerEntity, target.getSlot());
         if (!stack.isEmpty()){
             if (id == 4 && playerEntity instanceof ServerPlayerEntity){
                 String backpackId = compound.getString("Id");
@@ -425,16 +424,8 @@ public class ItemInfinityBackpack extends ItemInfinity {
     @Nullable
     @Override
     public Container createMenu(int menu, PlayerInventory p_createMenu_2_, PlayerEntity playerEntity) {
-        if (playerEntity.getHeldItemMainhand().getItem() instanceof ItemInfinityBackpack){
-            return new BackpackContainer(ItemStackHarnessRegistry.getHarnessCreators().get(this).apply(playerEntity.getHeldItemMainhand()), new HeldStackLocatorInstance(true), new IWorldPosCallable() {
-                @Override
-                public <T> Optional<T> apply(BiFunction<World, BlockPos, T> p_221484_1_) {
-                    return Optional.empty();
-                }
-            }, playerEntity.inventory, menu, playerEntity.getHeldItemMainhand().getTag().getString("Id"));
-        } else {
-                Pair<Integer, ItemStack> pair = findFirstBackpack(playerEntity);
-                ItemStack stack = pair.getRight();
+                PlayerInventoryFinder.Target target = findFirstBackpack(playerEntity);
+                ItemStack stack = target.getFinder().getStackGetter().apply(playerEntity, target.getSlot());
                 if (!stack.isEmpty()) {
                     if (!stack.hasTag() || !stack.getTag().contains("Id")){
                         UUID id = UUID.randomUUID();
@@ -444,14 +435,13 @@ public class ItemInfinityBackpack extends ItemInfinity {
                         stack.setTag(nbt);
                     }
                     String id = stack.getTag().getString("Id");
-                    int finalI = pair.getLeft();
-                    return new BackpackContainer(ItemStackHarnessRegistry.getHarnessCreators().get(this).apply(stack), new InventoryStackLocatorInstance(finalI), new IWorldPosCallable() {
+                    return new BackpackContainer(ItemStackHarnessRegistry.getHarnessCreators().get(this).apply(stack), new InventoryStackLocatorInstance(target.getName(), target.getSlot()), new IWorldPosCallable() {
                         @Override
                         public <T> Optional<T> apply(BiFunction<World, BlockPos, T> p_221484_1_) {
                             return Optional.empty();
                         }
                     }, playerEntity.inventory, menu, id);
-                }
+
 
         }
         return null;
@@ -520,13 +510,17 @@ public class ItemInfinityBackpack extends ItemInfinity {
                 new FluidStack(ModuleCore.PINK_SLIME.getSourceFluid(), 2000), 400, new ItemStack(this), FluidStack.EMPTY);
     }
 
-    public static Pair<Integer, ItemStack> findFirstBackpack(PlayerEntity entity){
-        for (int i = 0; i <= 35; i++) {
-            ItemStack stack = entity.inventory.getStackInSlot(i);
-            if (stack.getItem() instanceof ItemInfinityBackpack) {
-                return Pair.of(i, stack);
+    @Nullable
+    public static PlayerInventoryFinder.Target findFirstBackpack(PlayerEntity entity){
+        for (String name : PlayerInventoryFinder.FINDERS.keySet()) {
+            PlayerInventoryFinder finder = PlayerInventoryFinder.FINDERS.get(name);
+            for (int i = 0; i < finder.getSlotAmountGetter().apply(entity); i++) {
+                if (finder.getStackGetter().apply(entity, i).getItem() instanceof ItemInfinityBackpack){
+                    return new PlayerInventoryFinder.Target(name, finder, i);
+                }
             }
         }
-        return Pair.of(-1, ItemStack.EMPTY);
+        return null;
     }
+
 }

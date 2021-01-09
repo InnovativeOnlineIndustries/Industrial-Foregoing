@@ -4,17 +4,22 @@ import com.hrznstudio.titanium.api.IFactory;
 import com.hrznstudio.titanium.api.client.IScreenAddon;
 import com.hrznstudio.titanium.api.client.IScreenAddonProvider;
 import com.hrznstudio.titanium.capability.ItemStackHolderCapability;
+import com.hrznstudio.titanium.network.locator.PlayerInventoryFinder;
 import net.minecraft.client.Minecraft;
+import net.minecraft.item.ItemStack;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class InfinityStackHolder extends ItemStackHolderCapability implements IScreenAddonProvider {
 
-    public static int SLOT = 0;
+    public static PlayerInventoryFinder.Target TARGET = null;
 
     public InfinityStackHolder() {
-        super(() -> Minecraft.getInstance().player.inventory.getStackInSlot(SLOT));
+        super(() -> {
+            if (TARGET == null) return ItemStack.EMPTY;
+            return TARGET.getFinder().getStackGetter().apply(Minecraft.getInstance().player, TARGET.getSlot());
+        });
     }
 
     @Override
