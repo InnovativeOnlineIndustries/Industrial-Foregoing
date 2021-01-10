@@ -42,6 +42,7 @@ import net.minecraft.block.material.Material;
 import net.minecraft.data.IFinishedRecipe;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.EnchantmentType;
+import net.minecraft.enchantment.Enchantments;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.MobEntity;
@@ -78,6 +79,7 @@ import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.World;
+import net.minecraftforge.common.ToolType;
 import net.minecraftforge.fluids.FluidStack;
 
 import java.util.HashMap;
@@ -104,7 +106,7 @@ public class ItemInfinityHammer extends ItemInfinity {
     }
 
     public ItemInfinityHammer(ItemGroup group) {
-        super("infinity_hammer", group, new Properties().maxStackSize(1), POWER_CONSUMPTION, FUEL_CONSUMPTION, true);
+        super("infinity_hammer", group, new Properties().addToolType(ToolType.get("sword"), 1).maxStackSize(1), POWER_CONSUMPTION, FUEL_CONSUMPTION, true);
     }
 
     public static ItemStack createHead(String name) {
@@ -123,7 +125,7 @@ public class ItemInfinityHammer extends ItemInfinity {
 
     @Override
     public boolean canApplyAtEnchantingTable(ItemStack stack, Enchantment enchantment) {
-        return enchantment.type == EnchantmentType.WEAPON;
+        return enchantment.type == EnchantmentType.WEAPON || enchantment == Enchantments.FORTUNE;
     }
 
     @Override
