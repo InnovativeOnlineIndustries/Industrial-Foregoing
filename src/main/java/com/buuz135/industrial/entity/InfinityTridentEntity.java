@@ -238,6 +238,11 @@ public class InfinityTridentEntity extends AbstractArrowEntity {
 
     }
 
+    @Override
+    protected float getWaterDrag() {
+        return 0.99f;
+    }
+
     public void readAdditional(CompoundNBT compound) {
         super.readAdditional(compound);
         if (compound.contains("Trident", 10)) {
