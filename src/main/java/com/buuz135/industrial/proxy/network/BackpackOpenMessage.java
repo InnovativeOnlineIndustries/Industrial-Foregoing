@@ -28,7 +28,6 @@ import com.buuz135.industrial.worlddata.BackpackDataManager;
 import com.hrznstudio.titanium.network.Message;
 import com.hrznstudio.titanium.network.locator.LocatorFactory;
 import com.hrznstudio.titanium.network.locator.instance.InventoryStackLocatorInstance;
-import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
@@ -44,7 +43,7 @@ public class BackpackOpenMessage extends Message {
     protected void handleMessage(NetworkEvent.Context context) {
         context.enqueueWork(() -> {
             ServerPlayerEntity entity = context.getSender();
-                ItemInfinityBackpack.findFirstBackpack(Minecraft.getInstance().player).ifPresent(target -> {
+                ItemInfinityBackpack.findFirstBackpack(entity).ifPresent(target -> {
                     ItemStack stack = target.getFinder().getStackGetter().apply(entity, target.getSlot());
                     if (stack.getItem() instanceof ItemInfinityBackpack) {
                         if (!stack.hasTag() || !stack.getTag().contains("Id")){

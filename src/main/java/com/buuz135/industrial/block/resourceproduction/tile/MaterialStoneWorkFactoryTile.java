@@ -72,7 +72,7 @@ public class MaterialStoneWorkFactoryTile extends IndustrialProcessingTile<Mater
     private int maxProgress;
     private int powerPerOperation;
 
-    private static GeneratorRecipe[] GENERATOR_RECIPES = new GeneratorRecipe[]{
+    public static GeneratorRecipe[] GENERATOR_RECIPES = new GeneratorRecipe[]{
             new GeneratorRecipe(new ItemStack(Blocks.COBBLESTONE), 1000, 1000, 0, 0),
             new GeneratorRecipe(new ItemStack(Blocks.NETHERRACK), 250, 400, 250, 200),
             new GeneratorRecipe(new ItemStack(Blocks.OBSIDIAN), 1000, 1000, 0, 1000),
@@ -81,7 +81,7 @@ public class MaterialStoneWorkFactoryTile extends IndustrialProcessingTile<Mater
             new GeneratorRecipe(new ItemStack(Blocks.ANDESITE), 300, 300, 300, 300)
     };
 
-    private static StoneWorkAction[] ACTION_RECIPES = new StoneWorkAction[]{
+    public static StoneWorkAction[] ACTION_RECIPES = new StoneWorkAction[]{
             new StoneWorkAction(new ItemStack(Blocks.FURNACE), (world1, itemStack) -> {
                 FurnaceRecipe recipe = RecipeUtil.getSmelingRecipeFor(world1, itemStack);
                 if (recipe != null) {
@@ -89,7 +89,7 @@ public class MaterialStoneWorkFactoryTile extends IndustrialProcessingTile<Mater
                 }
                 return ItemStack.EMPTY;
             }, 1, "smelt"),
-            new StoneWorkAction(new ItemStack(Items.DIAMOND_PICKAXE), (world1, stack) -> CraftingUtils.getCrushOutput(stack), 1, "crush"),
+            new StoneWorkAction(new ItemStack(Items.DIAMOND_PICKAXE), CraftingUtils::getCrushOutput, 1, "crush"),
             new StoneWorkAction(new ItemStack(Blocks.OAK_PLANKS), (world1, stack) -> CraftingUtils.findOutput(2, stack, world1), 4, "small_craft"),
             new StoneWorkAction(new ItemStack(Blocks.CRAFTING_TABLE), (world1, stack) -> CraftingUtils.findOutput(3, stack, world1), 9, "big_craft"),
             new StoneWorkAction(new ItemStack(Blocks.BARRIER), (world1, stack) -> ItemStack.EMPTY, 0, "none")
@@ -316,7 +316,7 @@ public class MaterialStoneWorkFactoryTile extends IndustrialProcessingTile<Mater
     }
 
 
-    private static class GeneratorRecipe {
+    public static class GeneratorRecipe {
 
         private ItemStack output;
         private BiPredicate<FluidTank, FluidTank> canIncrease;
@@ -338,9 +338,13 @@ public class MaterialStoneWorkFactoryTile extends IndustrialProcessingTile<Mater
                 fluidTank2.drainForced(consumeLava, IFluidHandler.FluidAction.EXECUTE);
             };
         }
+
+        public ItemStack getOutput() {
+            return output;
+        }
     }
 
-    private static class StoneWorkAction {
+    public static class StoneWorkAction {
 
         private final ItemStack icon;
         private final BiFunction<World, ItemStack, ItemStack> work;

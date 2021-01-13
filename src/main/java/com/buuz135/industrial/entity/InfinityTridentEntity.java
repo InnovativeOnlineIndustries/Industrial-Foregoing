@@ -97,7 +97,7 @@ public class InfinityTridentEntity extends AbstractArrowEntity {
 
     @Override
     public void tick() {
-        if (this.timeInGround > 4) {
+        if (this.timeInGround > 4 || this.getPosY() < 0) {
             this.dealtDamage = true;
         }
 
@@ -236,6 +236,11 @@ public class InfinityTridentEntity extends AbstractArrowEntity {
     @Override
     protected void func_225516_i_() {
 
+    }
+
+    @Override
+    protected float getWaterDrag() {
+        return 0.99f;
     }
 
     public void readAdditional(CompoundNBT compound) {

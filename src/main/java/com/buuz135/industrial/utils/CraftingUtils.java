@@ -21,15 +21,19 @@
  */
 package com.buuz135.industrial.utils;
 
+import net.minecraft.block.Block;
 import net.minecraft.block.Blocks;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.CraftingInventory;
 import net.minecraft.inventory.container.Container;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.ICraftingRecipe;
 import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.item.crafting.IRecipeType;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
+import net.minecraftforge.registries.ForgeRegistries;
 
 import java.util.HashMap;
 import java.util.HashSet;
@@ -41,6 +45,8 @@ public class CraftingUtils {
     public static Set<ItemStack[]> missingRecipes = new HashSet<>();
     private static HashMap<ItemStack, ItemStack> crushedRecipes = new HashMap<>();
     private static HashMap<ItemStack, ItemStack> cachedRecipes = new HashMap<>();
+    private static ItemStack LAST_CRUSHED = ItemStack.EMPTY;
+    private static ResourceLocation SILICON = new ResourceLocation("forge:silicon");
 
     public static ItemStack findOutput(int size, ItemStack input, World world) {
         if (input.getCount() < size * size) return ItemStack.EMPTY;
@@ -100,11 +106,14 @@ public class CraftingUtils {
         return true;
     }
 
-    public static ItemStack getCrushOutput(ItemStack stack) {
+    public static ItemStack getCrushOutput(World world, ItemStack stack) {
         for (Map.Entry<ItemStack, ItemStack> entry : crushedRecipes.entrySet()) {
             if (entry.getKey().isItemEqual(stack)) {
                 return entry.getValue();
             }
+        }
+        if (stack.isItemEqual(LAST_CRUSHED) && world.getTags().getItemTags().getTagByID(SILICON).getAllElements().size() > 0){
+            return new ItemStack(world.getTags().getItemTags().getTagByID(SILICON).getAllElements().get(0));
         }
         return ItemStack.EMPTY;
     }
@@ -113,15 +122,18 @@ public class CraftingUtils {
         //crushedRecipes.put(new ItemStack(Blocks.STONE), new ItemStack(Blocks.COBBLESTONE));
         crushedRecipes.put(new ItemStack(Blocks.COBBLESTONE), new ItemStack(Blocks.GRAVEL));
         crushedRecipes.put(new ItemStack(Blocks.GRAVEL), new ItemStack(Blocks.SAND));
-        ItemStack latest = new ItemStack(Blocks.SAND);
+        LAST_CRUSHED = new ItemStack(Blocks.SAND);
 
-        //if (BlockRegistry.materialStoneWorkFactoryBlock.produceExNihiloDust() && ModList.get().isLoaded("exnihilocreatio")) {
-        //    Block dust = Block.REGISTRY.get(new ResourceLocation("exnihilocreatio:block_dust"));
-        //    crushedRecipes.put(new ItemStack(Blocks.SAND), latest = new ItemStack(dust));
-        //}
-        //if (BlockRegistry.materialStoneWorkFactoryBlock.produceSilicon()) {
-        //    NonNullList<ItemStack> items = NonNullList.create(); //OreDictionary.getOres("itemSilicon");
-        //    if (items.size() > 0) crushedRecipes.put(latest, items.get(0));
-        //}TODO
+        if (ForgeRegistries.BLOCKS.containsKey(new ResourceLocation("exnihilosequentia:dust"))) {
+            Block dust = ForgeRegistries.BLOCKS.getValue(new ResourceLocation("exnihilosequentia:dust"));
+            crushedRecipes.put(new ItemStack(Blocks.SAND), LAST_CRUSHED = new ItemStack(dust));
+        }
+        if (ForgeRegistries.ITEMS.containsKey(new ResourceLocation("refinedstorage:silicon"))) {
+            Item silicon = ForgeRegistries.ITEMS.getValue(new ResourceLocation("refinedstorage:silicon"));
+            crushedRecipes.put(LAST_CRUSHED, LAST_CRUSHED = new ItemStack(silicon));
+        } else if (ForgeRegistries.ITEMS.containsKey(new ResourceLocation("appliedenergistics:silicon"))) {
+            Item silicon = ForgeRegistries.ITEMS.getValue(new ResourceLocation("appliedenergistics:silicon"));
+            crushedRecipes.put(LAST_CRUSHED, LAST_CRUSHED = new ItemStack(silicon));
+        }
     }
 }
