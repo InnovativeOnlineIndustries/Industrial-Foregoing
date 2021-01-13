@@ -97,7 +97,7 @@ public class InfinityTridentEntity extends AbstractArrowEntity {
 
     @Override
     public void tick() {
-        if (this.timeInGround > 4) {
+        if (this.timeInGround > 4 || this.getPosY() < 0) {
             this.dealtDamage = true;
         }
 
