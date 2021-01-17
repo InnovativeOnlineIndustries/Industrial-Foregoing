@@ -124,7 +124,7 @@ public class FireworkGeneratorType implements IMycelialGeneratorType{
                 }
             }
         }
-        return Pair.of((int)(80 * power),  60 * flight );
+        return Pair.of((int)(80 * power),  60 * flight);
     }
 
     private double getShapeModifier(FireworkRocketItem.Shape shape){

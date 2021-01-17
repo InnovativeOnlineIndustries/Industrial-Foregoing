@@ -30,11 +30,15 @@ import mezz.jei.api.gui.ingredient.IGuiItemStackGroup;
 import mezz.jei.api.helpers.IGuiHelper;
 import mezz.jei.api.ingredients.IIngredients;
 import mezz.jei.api.recipe.category.IRecipeCategory;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.tags.ITag;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fluids.FluidStack;
 
 import javax.annotation.Nullable;
+import java.util.Collections;
+import java.util.stream.Collectors;
 
 public class BioReactorRecipeCategory implements IRecipeCategory<BioReactorRecipeCategory.ReactorRecipeWrapper> {
 
@@ -79,7 +83,7 @@ public class BioReactorRecipeCategory implements IRecipeCategory<BioReactorRecip
 
     @Override
     public void setIngredients(ReactorRecipeWrapper reactorRecipeWrapper, IIngredients iIngredients) {
-        iIngredients.setInput(VanillaTypes.ITEM, reactorRecipeWrapper.getStack());
+        iIngredients.setInputLists(VanillaTypes.ITEM, Collections.singletonList(reactorRecipeWrapper.getStack().getAllElements().stream().map(ItemStack::new).collect(Collectors.toList())));
         iIngredients.setOutput(VanillaTypes.FLUID, reactorRecipeWrapper.getFluid());
     }
 
@@ -98,16 +102,16 @@ public class BioReactorRecipeCategory implements IRecipeCategory<BioReactorRecip
 
     public static class ReactorRecipeWrapper {
 
-        private ItemStack stack;
+        private ITag<Item> stack;
         private FluidStack fluid;
 
-        public ReactorRecipeWrapper(ItemStack stack, FluidStack fluid) {
+        public ReactorRecipeWrapper(ITag<Item> stack, FluidStack fluid) {
             this.stack = stack;
             this.fluid = fluid;
         }
 
 
-        public ItemStack getStack() {
+        public ITag<Item> getStack() {
             return stack;
         }
 

@@ -22,44 +22,45 @@
 package com.buuz135.industrial.plugin.jei.machineproduce;
 
 import net.minecraft.block.Block;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.crafting.Ingredient;
+import net.minecraft.tags.ITag;
+import net.minecraftforge.fluids.FluidStack;
 
 public class MachineProduceWrapper {
 
     private Block block;
-    private ItemStack output;
+    private Ingredient outputItem;
+    private FluidStack outputFluid;
 
     public MachineProduceWrapper(Block block, ItemStack output) {
         this.block = block;
-        this.output = output;
+        this.outputItem = Ingredient.fromStacks(output);
+        this.outputFluid = FluidStack.EMPTY;
     }
 
-    //@Override
-    //public void getIngredients(IIngredients ingredients) {
-    //    ingredients.setInput(ItemStack.class, new ItemStack(block));
-    //    ingredients.setOutput(ItemStack.class, output);
-    //}
-//
-    //@Override
-    //public void drawInfo(Minecraft minecraft, int recipeWidth, int recipeHeight, int mouseX, int mouseY) {
-//
-    //}
-//
-    //@Override
-    //public List<String> getTooltipStrings(int mouseX, int mouseY) {
-    //    return null;
-    //}
-//
-    //@Override
-    //public boolean handleClick(Minecraft minecraft, int mouseX, int mouseY, int mouseButton) {
-    //    return false;
-    //}
-//
-    //public Block getBlock() {
-    //    return block;
-    //}
-//
-    //public ItemStack getOutput() {
-    //    return output;
-    //}
+    public MachineProduceWrapper(Block block, ITag<Item> output) {
+        this.block = block;
+        this.outputItem = Ingredient.fromTag(output);
+        this.outputFluid = FluidStack.EMPTY;
+    }
+
+    public MachineProduceWrapper(Block block, FluidStack output) {
+        this.block = block;
+        this.outputItem = null;
+        this.outputFluid = output;
+    }
+
+    public Block getBlock() {
+        return block;
+    }
+
+    public Ingredient getOutputItem() {
+        return outputItem;
+    }
+
+    public FluidStack getOutputFluid() {
+        return outputFluid;
+    }
 }
