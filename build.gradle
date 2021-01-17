@@ -140,7 +140,7 @@ repositories {
 }
 
 dependencies {
-    minecraft 'net.minecraftforge:forge:1.16.4-35.0.0'
+    minecraft 'net.minecraftforge:forge:1.16.5-36.0.1'
     if (findProject(':titanium') != null) {
         compile project(':titanium')
     } else {
@@ -265,10 +265,11 @@ curseforge {
         releaseType = 'beta'
         addGameVersion '1.16.3'
         addGameVersion '1.16.4'
+        addGameVersion '1.16.5'
 
         mainArtifact(jar){
             relations {
-                requiredDependency 'titanium'
+                requiredDependency 'tita<<nium'
                 requiredDependency 'patchouli'
                 optionalDependency 'curios'
                 optionalDependency 'jei'

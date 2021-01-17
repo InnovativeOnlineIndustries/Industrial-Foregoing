@@ -25,17 +25,18 @@ import com.buuz135.industrial.api.straw.StrawHandler;
 import net.minecraft.fluid.Fluid;
 
 import javax.annotation.ParametersAreNonnullByDefault;
+import java.util.function.Supplier;
 
 @ParametersAreNonnullByDefault
 public abstract class StrawHandlerBase extends StrawHandler {
-    private final Fluid fluid;
+    private final Supplier<Fluid> fluid;
 
-    public StrawHandlerBase(Fluid fluid) {
+    public StrawHandlerBase(Supplier<Fluid> fluid) {
         this.fluid = fluid;
     }
 
     @Override
     public boolean validFluid(Fluid fluid) {
-        return this.fluid == fluid;
+        return this.fluid.get() == fluid;
     }
 }

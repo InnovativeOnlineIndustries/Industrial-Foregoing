@@ -21,20 +21,20 @@
  */
 package com.buuz135.industrial.utils.apihandlers.straw;
 
-import com.buuz135.industrial.module.ModuleCore;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.fluid.Fluid;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
+import net.minecraftforge.common.ForgeMod;
 
 import javax.annotation.ParametersAreNonnullByDefault;
 
 @ParametersAreNonnullByDefault
 public class MilkStrawHandler extends StrawHandlerBase {
     public MilkStrawHandler() {
-        super(ModuleCore.MILK.getSourceFluid());
+        super(ForgeMod.MILK);
         setRegistryName("milk");
     }
 

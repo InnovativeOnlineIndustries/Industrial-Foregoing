@@ -22,12 +22,16 @@
 package com.buuz135.industrial.block.tile;
 
 
+import com.buuz135.industrial.capability.tile.BigEnergyHandler;
 import com.hrznstudio.titanium.block.BasicTileBlock;
 import com.hrznstudio.titanium.block.tile.GeneratorTile;
+import com.hrznstudio.titanium.component.energy.EnergyStorageComponent;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.util.ActionResultType;
 import net.minecraft.util.Direction;
 import net.minecraft.util.Hand;
+
+import javax.annotation.Nonnull;
 
 public abstract class IndustrialGeneratorTile<T extends IndustrialGeneratorTile<T>> extends GeneratorTile<T> {
 
@@ -42,6 +46,17 @@ public abstract class IndustrialGeneratorTile<T extends IndustrialGeneratorTile<
         }
         openGui(playerIn);
         return ActionResultType.SUCCESS;
+    }
+
+    @Nonnull
+    @Override
+    protected EnergyStorageComponent<T> createEnergyStorage() {
+        return new BigEnergyHandler<T>(getEnergyCapacity(), 0, getExtractingEnergy(), 10, 20) {
+            @Override
+            public void sync() {
+                IndustrialGeneratorTile.this.syncObject(getEnergyStorage());
+            }
+        };
     }
 
 }

@@ -38,7 +38,7 @@ public class PotionStrawHandler extends StrawHandlerBase {
     private List<Triple<Effect, Integer, Integer>> potions = new ArrayList<>();
 
     public PotionStrawHandler(Fluid fluid) {
-        super(fluid);
+        super(() -> fluid);
     }
 
     public PotionStrawHandler addPotion(EffectInstance effect) {

@@ -33,7 +33,7 @@ import javax.annotation.ParametersAreNonnullByDefault;
 @ParametersAreNonnullByDefault
 public class EssenceStrawHandler extends StrawHandlerBase {
     public EssenceStrawHandler() {
-        super(ModuleCore.ESSENCE.getSourceFluid());
+        super(() -> ModuleCore.ESSENCE.getSourceFluid());
         setRegistryName("essence");
     }
 

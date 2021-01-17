@@ -34,7 +34,7 @@ import javax.annotation.ParametersAreNonnullByDefault;
 @ParametersAreNonnullByDefault
 public class LavaStrawHandler extends StrawHandlerBase {
     public LavaStrawHandler() {
-        super(Fluids.LAVA);
+        super(() -> Fluids.LAVA);
         setRegistryName("lava");
     }
 

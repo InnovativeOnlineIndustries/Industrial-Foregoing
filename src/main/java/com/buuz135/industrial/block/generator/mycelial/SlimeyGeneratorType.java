@@ -21,7 +21,6 @@
  */
 package com.buuz135.industrial.block.generator.mycelial;
 
-import com.buuz135.industrial.module.ModuleCore;
 import com.buuz135.industrial.plugin.jei.generator.MycelialGeneratorRecipe;
 import com.buuz135.industrial.utils.IndustrialTags;
 import com.hrznstudio.titanium.component.fluid.SidedFluidTankComponent;
@@ -34,6 +33,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.item.crafting.Ingredient;
 import net.minecraft.nbt.CompoundNBT;
+import net.minecraftforge.common.ForgeMod;
 import net.minecraftforge.common.Tags;
 import net.minecraftforge.common.util.INBTSerializable;
 import net.minecraftforge.fluids.FluidStack;
@@ -66,7 +66,7 @@ public class SlimeyGeneratorType implements IMycelialGeneratorType{
 
     @Override
     public List<Predicate<FluidStack>> getTankInputPredicates() {
-        return Arrays.asList(fluidStack -> fluidStack.getFluid().isEquivalentTo(ModuleCore.MILK.getSourceFluid()), null);
+        return Arrays.asList(fluidStack -> fluidStack.getFluid().isEquivalentTo(ForgeMod.MILK.get()), null);
     }
 
     @Override
@@ -103,7 +103,7 @@ public class SlimeyGeneratorType implements IMycelialGeneratorType{
 
     @Override
     public List<MycelialGeneratorRecipe> getRecipes() {
-        return Collections.singletonList(new MycelialGeneratorRecipe(Arrays.asList(new ArrayList<>(), Collections.singletonList(Ingredient.fromTag(Tags.Items.SLIMEBALLS))), Arrays.asList(Arrays.asList(new FluidStack(ModuleCore.MILK.getSourceFluid(), 250)), Arrays.asList()), 20*20, 200));
+        return Collections.singletonList(new MycelialGeneratorRecipe(Arrays.asList(new ArrayList<>(), Collections.singletonList(Ingredient.fromTag(Tags.Items.SLIMEBALLS))), Arrays.asList(Arrays.asList(new FluidStack(ForgeMod.MILK.get(), 250)), Arrays.asList()), 20*20, 200));
     }
 
     @Override

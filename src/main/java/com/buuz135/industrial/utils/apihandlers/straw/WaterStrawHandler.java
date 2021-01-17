@@ -38,7 +38,7 @@ import javax.annotation.ParametersAreNonnullByDefault;
 public class WaterStrawHandler extends StrawHandlerBase {
 
     public WaterStrawHandler() {
-        super(Fluids.WATER);
+        super(() -> Fluids.WATER);
         setRegistryName("water");
     }
 

@@ -268,7 +268,7 @@ public class MaterialStoneWorkFactoryTile extends IndustrialProcessingTile<Mater
 
     @Override
     public boolean canIncrease() {
-        return GENERATOR_RECIPES[generatorRecipeId].canIncrease.test(water, lava);
+        return GENERATOR_RECIPES[generatorRecipeId].canIncrease.test(water, lava) && ItemHandlerHelper.insertItem(inventoryGenerator, GENERATOR_RECIPES[generatorRecipeId].output.copy(), true).isEmpty();
     }
 
     @Override

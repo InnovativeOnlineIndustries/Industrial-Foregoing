@@ -22,28 +22,49 @@
 package com.buuz135.industrial.plugin.jei.machineproduce;
 
 import com.buuz135.industrial.utils.Reference;
+import com.hrznstudio.titanium.api.client.AssetTypes;
+import com.hrznstudio.titanium.client.screen.addon.SlotsScreenAddon;
+import com.hrznstudio.titanium.client.screen.asset.DefaultAssetProvider;
+import com.hrznstudio.titanium.util.AssetUtil;
+import com.mojang.blaze3d.matrix.MatrixStack;
+import mezz.jei.api.constants.VanillaTypes;
 import mezz.jei.api.gui.IRecipeLayout;
 import mezz.jei.api.gui.drawable.IDrawable;
+import mezz.jei.api.gui.ingredient.IGuiFluidStackGroup;
+import mezz.jei.api.gui.ingredient.IGuiItemStackGroup;
 import mezz.jei.api.helpers.IGuiHelper;
 import mezz.jei.api.ingredients.IIngredients;
 import mezz.jei.api.recipe.category.IRecipeCategory;
+import net.minecraft.client.Minecraft;
+import net.minecraft.item.DyeColor;
+import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
+import org.apache.commons.lang3.tuple.Pair;
+
+import java.awt.*;
+import java.util.Arrays;
+import java.util.Collections;
 
 public class MachineProduceCategory implements IRecipeCategory<MachineProduceWrapper> {
+
+    public static ResourceLocation MACHINE_PRODUCE = new ResourceLocation(Reference.MOD_ID, "machine_produce");
+
     private IGuiHelper guiHelper;
+    private final IDrawable smallTank;
 
     public MachineProduceCategory(IGuiHelper guiHelper) {
         this.guiHelper = guiHelper;
+        this.smallTank = guiHelper.createDrawable(DefaultAssetProvider.DEFAULT_LOCATION, 235 + 3, 1 + 3, 12, 13);
     }
 
     @Override
     public ResourceLocation getUid() {
-        return null;
+        return MACHINE_PRODUCE;
     }
 
     @Override
     public Class<? extends MachineProduceWrapper> getRecipeClass() {
-        return null;
+        return MachineProduceWrapper.class;
     }
 
     @Override
@@ -53,7 +74,7 @@ public class MachineProduceCategory implements IRecipeCategory<MachineProduceWra
 
     @Override
     public IDrawable getBackground() {
-        return guiHelper.createDrawable(new ResourceLocation(Reference.MOD_ID, "textures/gui/jei.png"), 0, 0, 82, 26);
+        return guiHelper.drawableBuilder(new ResourceLocation(Reference.MOD_ID, "textures/gui/jei.png"), 0, 0, 54, 26).addPadding(   0,0,0,26).build();
     }
 
     @Override
@@ -63,17 +84,38 @@ public class MachineProduceCategory implements IRecipeCategory<MachineProduceWra
 
     @Override
     public void setIngredients(MachineProduceWrapper machineProduceWrapper, IIngredients iIngredients) {
-
+        iIngredients.setInput(VanillaTypes.ITEM, new ItemStack(machineProduceWrapper.getBlock()));
+        if (machineProduceWrapper.getOutputItem() == null){
+            iIngredients.setOutput(VanillaTypes.FLUID, machineProduceWrapper.getOutputFluid());
+        } else {
+            iIngredients.setOutputLists(VanillaTypes.ITEM, Collections.singletonList(Arrays.asList(machineProduceWrapper.getOutputItem().getMatchingStacks().clone())));
+        }
     }
 
 
     @Override
     public void setRecipe(IRecipeLayout recipeLayout, MachineProduceWrapper recipeWrapper, IIngredients ingredients) {
-        // IGuiItemStackGroup guiItemStackGroup = recipeLayout.getItemStacks();
-        // guiItemStackGroup.init(0, true, 0, 4);
-        // guiItemStackGroup.init(1, false, 60, 4);
-        // guiItemStackGroup.set(0, ingredients.getInputs(ItemStack.class).get(0));
-        // guiItemStackGroup.set(1, ingredients.getOutputs(ItemStack.class).get(0));
+        IGuiItemStackGroup guiItemStackGroup = recipeLayout.getItemStacks();
+        guiItemStackGroup.init(0, true, 0, 4);
+        guiItemStackGroup.set(0, ingredients.getInputs(VanillaTypes.ITEM).get(0));
+        if (recipeWrapper.getOutputItem() == null){
+            IGuiFluidStackGroup guiFluidStackGroup = recipeLayout.getFluidStacks();
+            guiFluidStackGroup.init(1, true,56 + 3, 4 + 3, 12, 13, 1000, false, smallTank);
+            guiFluidStackGroup.set(1, ingredients.getOutputs(VanillaTypes.FLUID).get(0));
+        } else {
+            guiItemStackGroup.init(1, false, 56, 4);
+            guiItemStackGroup.set(1, ingredients.getOutputs(VanillaTypes.ITEM).get(0));
+        }
+    }
+
+    @Override
+    public void draw(MachineProduceWrapper recipe, MatrixStack matrixStack, double mouseX, double mouseY) {
+        if (recipe.getOutputItem() == null){
+            AssetUtil.drawAsset(matrixStack, Minecraft.getInstance().currentScreen, DefaultAssetProvider.DEFAULT_PROVIDER.getAsset(AssetTypes.TANK_SMALL), 56 , Minecraft.getInstance().fontRenderer.FONT_HEIGHT / 2);
+        } else {
+            SlotsScreenAddon.drawAsset(matrixStack, Minecraft.getInstance().currentScreen, DefaultAssetProvider.DEFAULT_PROVIDER, 56 , Minecraft.getInstance().fontRenderer.FONT_HEIGHT / 2, 0, 0, 1, integer -> Pair.of(1,1), integer -> ItemStack.EMPTY, true, integer -> new Color(DyeColor.ORANGE.getFireworkColor()), integer -> true);
+
+        }
     }
 
 }
