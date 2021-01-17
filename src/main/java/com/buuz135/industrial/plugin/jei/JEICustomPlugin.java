@@ -54,6 +54,7 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tags.ITag;
 import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.common.ForgeMod;
 import net.minecraftforge.common.Tags;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.items.ItemHandlerHelper;
@@ -190,7 +191,7 @@ public class JEICustomPlugin implements IModPlugin {
                 new MachineProduceWrapper(ModuleAgricultureHusbandry.MOB_CRUSHER, new FluidStack(ModuleCore.ESSENCE.getSourceFluid(),  1000)),
                 new MachineProduceWrapper(ModuleAgricultureHusbandry.SLAUGHTER_FACTORY, new FluidStack(ModuleCore.MEAT.getSourceFluid(),  1000)),
                 new MachineProduceWrapper(ModuleAgricultureHusbandry.SLAUGHTER_FACTORY, new FluidStack(ModuleCore.PINK_SLIME.getSourceFluid(),  1000)),
-                new MachineProduceWrapper(ModuleAgricultureHusbandry.ANIMAL_RANCHER, new FluidStack(ModuleCore.MILK.getSourceFluid(),  1000)),
+                new MachineProduceWrapper(ModuleAgricultureHusbandry.ANIMAL_RANCHER, new FluidStack(ForgeMod.MILK.get(),  1000)),
                 new MachineProduceWrapper(ModuleAgricultureHusbandry.SEWER, new FluidStack(ModuleCore.SEWAGE.getSourceFluid(),  1000)),
                 new MachineProduceWrapper(ModuleAgricultureHusbandry.PLANT_GATHERER, new FluidStack(ModuleCore.SLUDGE.getSourceFluid(),  1000)),
                 new MachineProduceWrapper(ModuleResourceProduction.WATER_CONDENSATOR, new FluidStack(Fluids.WATER,  1000))

@@ -57,6 +57,7 @@ import net.minecraft.world.World;
 import net.minecraft.world.server.ServerWorld;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
+import net.minecraftforge.common.ForgeMod;
 import net.minecraftforge.common.util.FakePlayer;
 import net.minecraftforge.common.util.NonNullLazy;
 import net.minecraftforge.event.RegistryEvent;
@@ -116,6 +117,7 @@ public class IndustrialForegoing extends ModuleController {
         }
         LaserDrillRarity.init();
         PlayerInventoryFinder.init();
+        ForgeMod.enableMilkFluid();
     }
 
     public static FakePlayer getFakePlayer(World world) {
