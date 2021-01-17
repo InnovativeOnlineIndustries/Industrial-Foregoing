@@ -93,16 +93,19 @@ public class DyeMixerTile extends IndustrialProcessingTile<DyeMixerTile> {
         addInventory(this.inputRed = (SidedInventoryComponent<DyeMixerTile>) new SidedInventoryComponent<DyeMixerTile>("input_red", 33, 21, 1, 0)
                 .setColor(DyeColor.RED)
                 .setInputFilter((stack, integer) -> stack.getItem().isIn(Tags.Items.DYES_RED))
+                .setOutputFilter((stack, integer) -> false)
                 .setComponentHarness(this)
         );
         addInventory(this.inputGreen = (SidedInventoryComponent<DyeMixerTile>) new SidedInventoryComponent<DyeMixerTile>("input_green", 33, 22 + 18, 1, 1)
                 .setColor(DyeColor.GREEN)
                 .setInputFilter((stack, integer) -> stack.getItem().isIn(Tags.Items.DYES_GREEN))
+                .setOutputFilter((stack, integer) -> false)
                 .setComponentHarness(this)
         );
         addInventory(this.inputBlue = (SidedInventoryComponent<DyeMixerTile>) new SidedInventoryComponent<DyeMixerTile>("input_blue", 33, 23 + 18 * 2, 1, 2)
                 .setColor(DyeColor.BLUE)
                 .setInputFilter((stack, integer) -> stack.getItem().isIn(Tags.Items.DYES_BLUE))
+                .setOutputFilter((stack, integer) -> false)
                 .setComponentHarness(this)
         );
         addProgressBar(this.red = new ProgressBarComponent<DyeMixerTile>(33 + 20, 20, 300) {
