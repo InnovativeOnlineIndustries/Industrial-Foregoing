@@ -269,7 +269,7 @@ curseforge {
 
         mainArtifact(jar){
             relations {
-                requiredDependency 'tita<<nium'
+                requiredDependency 'titanium'
                 requiredDependency 'patchouli'
                 optionalDependency 'curios'
                 optionalDependency 'jei'
