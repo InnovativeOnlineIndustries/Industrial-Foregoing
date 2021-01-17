@@ -345,7 +345,7 @@ public class ItemInfinityBackpack extends ItemInfinity {
                     boolean hasCursorChanged = false;
                     if (button == 2) {//MIDDLE
                         ItemStack simulated = handler.extractItem(slot, 1, true);
-                        if (cursor.isEmpty() || ItemHandlerHelper.canItemStacksStack(simulated, cursor)) {
+                        if (!simulated.isEmpty() && (cursor.isEmpty() || ItemHandlerHelper.canItemStacksStack(simulated, cursor))) {
                             result = handler.extractItem(slot, 1, false);
                             result.setCount(cursor.getCount() + 1);
                             hasCursorChanged = true;
