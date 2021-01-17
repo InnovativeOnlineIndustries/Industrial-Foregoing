@@ -21,6 +21,7 @@
  */
 package com.buuz135.industrial.block.transportstorage.tile;
 
+import com.buuz135.industrial.capability.tile.BigSidedFluidTankComponent;
 import com.buuz135.industrial.utils.BlockUtils;
 import com.buuz135.industrial.utils.NumberUtils;
 import com.hrznstudio.titanium.annotation.Save;
@@ -45,18 +46,20 @@ import javax.annotation.Nonnull;
 public class BlackHoleTankTile extends BHTile<BlackHoleTankTile> {
 
     @Save
-    public SidedFluidTankComponent<BlackHoleTankTile> tank;
+    public BigSidedFluidTankComponent<BlackHoleTankTile> tank;
     @Save
     private ItemStackFilter filter;
     private boolean isEmpty;
 
     public BlackHoleTankTile(BasicTileBlock<BlackHoleTankTile> base, Rarity rarity) {
         super(base);
-        this.addTank(this.tank = (SidedFluidTankComponent<BlackHoleTankTile>) new SidedFluidTankComponent<>("tank", BlockUtils.getFluidAmountByRarity(rarity), 20, 20, 0)
+        this.addTank(this.tank = (BigSidedFluidTankComponent<BlackHoleTankTile>) new BigSidedFluidTankComponent<BlackHoleTankTile>("tank", BlockUtils.getFluidAmountByRarity(rarity), 20, 20, 0) {
+            @Override
+            public void sync() {
+                syncObject(tank);
+            }
+        }
                 .setColor(DyeColor.BLUE)
-                .setOnContentChange(() -> {
-                    syncObject(tank);
-                })
                 .setValidator(fluidStack -> {
             if (!filter.getFilterSlots()[0].getFilter().isEmpty()){
                 ItemStack stack = filter.getFilterSlots()[0].getFilter();
