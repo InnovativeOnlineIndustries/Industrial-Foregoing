@@ -1,6 +1,9 @@
 {
   "replace": false,
   "values": [
-    "industrialforegoing:meat_feeder"
+    {
+      "id": "industrialforegoing:meat_feeder",
+      "required": false
+    }
   ]
 }
