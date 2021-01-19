@@ -1,6 +1,9 @@
 {
   "replace": false,
   "values": [
-    "industrialforegoing:infinity_backpack"
+    {
+      "id": "industrialforegoing:infinity_backpack",
+      "required": false
+    }
   ]
 }
