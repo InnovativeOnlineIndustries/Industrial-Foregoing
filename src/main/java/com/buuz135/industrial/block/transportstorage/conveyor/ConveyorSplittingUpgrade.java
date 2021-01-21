@@ -139,6 +139,11 @@ public class ConveyorSplittingUpgrade extends ConveyorUpgrade {
     }
 
     @Override
+    public boolean ignoresCollision() {
+        return true;
+    }
+
+    @Override
     public VoxelShape getBoundingBox() {
         switch (getSide()) {
             default:

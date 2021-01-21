@@ -65,11 +65,13 @@ import net.minecraft.world.IBlockReader;
 import net.minecraft.world.World;
 import net.minecraftforge.common.Tags;
 
+import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.function.Consumer;
+import java.util.function.Predicate;
 
 public class ConveyorBlock extends BasicTileBlock<ConveyorTile> implements IWaterLoggable, IRecipeProvider {
 
@@ -171,6 +173,10 @@ public class ConveyorBlock extends BasicTileBlock<ConveyorTile> implements IWate
 
     @Override
     public List<VoxelShape> getBoundingBoxes(BlockState state, IBlockReader source, BlockPos pos) {
+        return getShapes(state, source, pos, conveyorUpgrade -> true);
+    }
+
+    private static List<VoxelShape> getShapes(BlockState state, IBlockReader source, BlockPos pos, Predicate<ConveyorUpgrade> filter){
         List<VoxelShape> boxes = new ArrayList<>();
         if (state.get(TYPE).isVertical()) {
             boxes.add(VoxelShapes.create(0, 0, 0, 1, 1 / 16D, 1));
@@ -180,10 +186,20 @@ public class ConveyorBlock extends BasicTileBlock<ConveyorTile> implements IWate
         TileEntity entity = source.getTileEntity(pos);
         if (entity instanceof ConveyorTile) {
             for (ConveyorUpgrade upgrade : ((ConveyorTile) entity).getUpgradeMap().values())
-                if (upgrade != null)
+                if (upgrade != null && filter.test(upgrade))
                     boxes.add(VoxelShapes.create(upgrade.getBoundingBox().getBoundingBox()));
         }
         return boxes;
+    }
+
+    @Nonnull
+    @Override
+    public VoxelShape getCollisionShape(BlockState state, IBlockReader world, BlockPos pos, ISelectionContext selectionContext) {
+        VoxelShape shape = VoxelShapes.empty();
+        for (VoxelShape shape1 : getShapes(state, world, pos, conveyorUpgrade -> !conveyorUpgrade.ignoresCollision())) {
+            shape = VoxelShapes.combineAndSimplify(shape, shape1, IBooleanFunction.OR);
+        }
+        return shape;
     }
 
     @Override

@@ -125,6 +125,11 @@ public class ConveyorDetectorUpgrade extends ConveyorUpgrade {
     }
 
     @Override
+    public boolean ignoresCollision() {
+        return true;
+    }
+
+    @Override
     public void handleButtonInteraction(int buttonId, CompoundNBT compound) {
         super.handleButtonInteraction(buttonId, compound);
         if (buttonId >= 0 && buttonId < filter.getFilter().length) {
