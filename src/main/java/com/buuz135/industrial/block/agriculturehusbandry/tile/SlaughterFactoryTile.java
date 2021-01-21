@@ -24,16 +24,20 @@ package com.buuz135.industrial.block.agriculturehusbandry.tile;
 import com.buuz135.industrial.block.tile.IndustrialAreaWorkingTile;
 import com.buuz135.industrial.block.tile.RangeManager;
 import com.buuz135.industrial.config.machine.agriculturehusbandry.SlaughterFactoryConfig;
+import com.buuz135.industrial.item.addon.RangeAddonItem;
 import com.buuz135.industrial.module.ModuleAgricultureHusbandry;
 import com.buuz135.industrial.module.ModuleCore;
 import com.hrznstudio.titanium.annotation.Save;
 import com.hrznstudio.titanium.component.energy.EnergyStorageComponent;
 import com.hrznstudio.titanium.component.fluid.FluidTankComponent;
 import com.hrznstudio.titanium.component.fluid.SidedFluidTankComponent;
+import com.hrznstudio.titanium.item.AugmentWrapper;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.MobEntity;
 import net.minecraft.entity.passive.AnimalEntity;
 import net.minecraft.item.DyeColor;
+import net.minecraft.util.math.AxisAlignedBB;
+import net.minecraft.util.math.shapes.VoxelShape;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.capability.IFluidHandler;
 
@@ -89,6 +93,15 @@ public class SlaughterFactoryTile extends IndustrialAreaWorkingTile<SlaughterFac
     @Override
     protected EnergyStorageComponent<SlaughterFactoryTile> createEnergyStorage() {
         return new EnergyStorageComponent<>(SlaughterFactoryConfig.maxStoredPower, 10, 20);
+    }
+
+    public VoxelShape getWorkingArea() {
+        return new RangeManager(this.pos, this.getFacingDirection(), RangeManager.RangeType.BEHIND){
+            @Override
+            public AxisAlignedBB getBox() {
+                return super.getBox().expand(0,2, 0);
+            }
+        }.get(hasAugmentInstalled(RangeAddonItem.RANGE) ? ((int) AugmentWrapper.getType(getInstalledAugments(RangeAddonItem.RANGE).get(0), RangeAddonItem.RANGE) + 1) : 0);
     }
 
     @Override
