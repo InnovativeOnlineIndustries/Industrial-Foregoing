@@ -39,7 +39,6 @@ import net.minecraft.util.Direction;
 import net.minecraft.util.Hand;
 import net.minecraftforge.fluids.FluidUtil;
 import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
-import net.minecraftforge.fluids.capability.IFluidHandlerItem;
 
 import javax.annotation.Nonnull;
 
@@ -60,14 +59,8 @@ public class BlackHoleTankTile extends BHTile<BlackHoleTankTile> {
             }
         }
                 .setColor(DyeColor.BLUE)
-                .setValidator(fluidStack -> {
-            if (!filter.getFilterSlots()[0].getFilter().isEmpty()){
-                ItemStack stack = filter.getFilterSlots()[0].getFilter();
-                IFluidHandlerItem iFluidHandlerItem = stack.getCapability(CapabilityFluidHandler.FLUID_HANDLER_ITEM_CAPABILITY).orElseGet(null);
-                return iFluidHandlerItem != null && (iFluidHandlerItem.getFluidInTank(0).isFluidEqual(fluidStack));
-            }
-            return true;
-        }));
+                .setValidator(fluidStack ->  filter.getFilterSlots()[0].getFilter().isEmpty() ? true : filter.getFilterSlots()[0].getFilter().getCapability(CapabilityFluidHandler.FLUID_HANDLER_ITEM_CAPABILITY).map(iFluidHandlerItem -> iFluidHandlerItem.getFluidInTank(0).isFluidEqual(fluidStack)).orElse(false)
+        ));
         this.addFilter(filter = new ItemStackFilter("filter" , 1));
         FilterSlot slot = new FilterSlot<>(79, 60 , 0, ItemStack.EMPTY);
         slot.setColor(DyeColor.CYAN);
