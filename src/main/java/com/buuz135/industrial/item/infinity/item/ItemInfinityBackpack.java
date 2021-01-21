@@ -516,10 +516,22 @@ public class ItemInfinityBackpack extends ItemInfinity {
             }
         });
         factory.add(() -> new StateButtonAddon(new ButtonComponent(x, 16 + y * 1, 14, 14).setId(11),
-                new StateButtonInfo(0, AssetTypes.BUTTON_SIDENESS_ENABLED, TextFormatting.GREEN + new TranslationTextComponent("tooltip.industrialforegoing.backpack.pickup_all").getString()),
-                new StateButtonInfo(1, AssetTypes.BUTTON_SIDENESS_PULL, TextFormatting.GREEN + new TranslationTextComponent("tooltip.industrialforegoing.backpack.item_pickup_enabled").getString()),
-                new StateButtonInfo(2, AssetTypes.BUTTON_SIDENESS_PUSH, TextFormatting.GREEN + new TranslationTextComponent("tooltip.industrialforegoing.backpack.xp_pickup_enabled").getString()),
-                new StateButtonInfo(3, AssetTypes.BUTTON_SIDENESS_DISABLED, TextFormatting.RED + new TranslationTextComponent("tooltip.industrialforegoing.backpack.pickup_disabled").getString())) {
+                new StateButtonInfo(0, AssetTypes.BUTTON_SIDENESS_ENABLED,
+                        TextFormatting.GREEN + new TranslationTextComponent("tooltip.industrialforegoing.backpack.pickup_all").getString(),
+                        TextFormatting.GRAY + new TranslationTextComponent("tooltip.industrialforegoing.backpack.pickup_extra").getString(),
+                        TextFormatting.GRAY + new TranslationTextComponent("tooltip.industrialforegoing.backpack.pickup_extra_1").getString()),
+                new StateButtonInfo(1, AssetTypes.BUTTON_SIDENESS_PULL,
+                        TextFormatting.GREEN + new TranslationTextComponent("tooltip.industrialforegoing.backpack.item_pickup_enabled").getString(),
+                        TextFormatting.GRAY + new TranslationTextComponent("tooltip.industrialforegoing.backpack.pickup_extra").getString(),
+                        TextFormatting.GRAY + new TranslationTextComponent("tooltip.industrialforegoing.backpack.pickup_extra_1").getString()),
+                new StateButtonInfo(2, AssetTypes.BUTTON_SIDENESS_PUSH,
+                        TextFormatting.GREEN + new TranslationTextComponent("tooltip.industrialforegoing.backpack.xp_pickup_enabled").getString(),
+                        TextFormatting.GRAY + new TranslationTextComponent("tooltip.industrialforegoing.backpack.pickup_extra").getString(),
+                        TextFormatting.GRAY + new TranslationTextComponent("tooltip.industrialforegoing.backpack.pickup_extra_1").getString()),
+                new StateButtonInfo(3, AssetTypes.BUTTON_SIDENESS_DISABLED,
+                        TextFormatting.RED + new TranslationTextComponent("tooltip.industrialforegoing.backpack.pickup_disabled").getString(),
+                        TextFormatting.GRAY + new TranslationTextComponent("tooltip.industrialforegoing.backpack.pickup_extra").getString(),
+                        TextFormatting.GRAY + new TranslationTextComponent("tooltip.industrialforegoing.backpack.pickup_extra_1").getString())) {
             @Override
             public int getState() {
                 return getPickUpMode(stack.get());

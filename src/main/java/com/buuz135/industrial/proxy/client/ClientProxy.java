@@ -45,6 +45,7 @@ import com.hrznstudio.titanium.block.BasicTileBlock;
 import com.hrznstudio.titanium.event.handler.EventManager;
 import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.RenderTypeLookup;
 import net.minecraft.client.renderer.model.IBakedModel;
@@ -84,7 +85,7 @@ public class ClientProxy extends CommonProxy {
         ClientRegistry.registerKeyBinding(OPEN_BACKPACK);
         EventManager.forge(TickEvent.ClientTickEvent.class).process(event -> {
             if (OPEN_BACKPACK.isPressed()){
-                IndustrialForegoing.NETWORK.get().sendToServer(new BackpackOpenMessage());
+                IndustrialForegoing.NETWORK.get().sendToServer(new BackpackOpenMessage(Screen.hasControlDown()));
             }
         }).subscribe();
 

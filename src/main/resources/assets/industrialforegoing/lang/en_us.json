@@ -488,6 +488,8 @@
   "tooltip.industrialforegoing.backpack.item_pickup_enabled": "Item Auto-Pickup Enabled",
   "tooltip.industrialforegoing.backpack.xp_pickup_enabled": "XP Auto-Pickup Enabled",
   "tooltip.industrialforegoing.backpack.pickup_disabled": "Auto-Pickup Disabled",
+  "tooltip.industrialforegoing.backpack.pickup_extra": "Sneak + Open Backpack Key to swap modes",
+  "tooltip.industrialforegoing.backpack.pickup_extra_1": "Ctrl + Open Backpack Key to disable",
   "text.industrialforegoing.button.none": "None Selected",
   "text.industrialforegoing.depth": "Depth: ",
   "text.industrialforegoing.target": "Target: ",
