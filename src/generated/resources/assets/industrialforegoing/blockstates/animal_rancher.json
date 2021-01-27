@@ -1,0 +1,19 @@
+{
+  "variants": {
+    "subfacing=north": {
+      "model": "industrialforegoing:block/animal_rancher"
+    },
+    "subfacing=south": {
+      "model": "industrialforegoing:block/animal_rancher",
+      "y": 180
+    },
+    "subfacing=west": {
+      "model": "industrialforegoing:block/animal_rancher",
+      "y": 270
+    },
+    "subfacing=east": {
+      "model": "industrialforegoing:block/animal_rancher",
+      "y": 90
+    }
+  }
+}

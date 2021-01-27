@@ -1,0 +1,29 @@
+{
+  "variants": {
+    "facing=down": {
+      "model": "industrialforegoing:block/block_breaker",
+      "x": 90,
+      "y": 270
+    },
+    "facing=up": {
+      "model": "industrialforegoing:block/block_breaker",
+      "x": -90,
+      "y": 270
+    },
+    "facing=north": {
+      "model": "industrialforegoing:block/block_breaker"
+    },
+    "facing=south": {
+      "model": "industrialforegoing:block/block_breaker",
+      "y": 180
+    },
+    "facing=west": {
+      "model": "industrialforegoing:block/block_breaker",
+      "y": 270
+    },
+    "facing=east": {
+      "model": "industrialforegoing:block/block_breaker",
+      "y": 90
+    }
+  }
+}
