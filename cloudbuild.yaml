@@ -1,10 +1,6 @@
 steps:
   - name: 'gradle:4.9-jdk8'
-    args:
-      - './gradlew'
-      - 'build'
-      - 'publish'
-      - 'curseforge'
+    args: ['build', 'publish', 'curseforge']
     env:
       - 'BUILD=$BUILD_ID'
       - 'PROJECT=$PROJECT_ID'
