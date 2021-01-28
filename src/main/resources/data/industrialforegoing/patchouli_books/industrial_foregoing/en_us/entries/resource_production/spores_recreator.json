@@ -7,7 +7,7 @@
   "pages": [
     {
       "type": "text",
-      "text": "Duplicates $(6)fungi$().$(br2)Requires $(6)40$()RF/t and $(6)water$() ($(6)500$()mb per operation)"
+      "text": "Duplicates $(6)fungi$().$(br2)Requires $(6)40$()RF/t and $(6)water$() ($(6)100$()mb per operation). $(br2)For nether fungi it needs $(6)lava$()."
     },
     {
       "type": "crafting",
