@@ -30,13 +30,14 @@ import net.minecraft.data.ItemTagsProvider;
 import net.minecraft.item.Item;
 import net.minecraft.tags.ITag;
 import net.minecraftforge.common.Tags;
+import net.minecraftforge.common.data.ExistingFileHelper;
 
 public class IndustrialTagsProvider {
 
     public static class Blocks extends BlockTagsProvider {
 
-        public Blocks(DataGenerator generatorIn) {
-            super(generatorIn);
+        public Blocks(DataGenerator generatorIn, String modid, ExistingFileHelper helper) {
+            super(generatorIn, modid, helper);
         }
 
         @Override
@@ -50,8 +51,8 @@ public class IndustrialTagsProvider {
 
     public static class Items extends ItemTagsProvider {
 
-        public Items(DataGenerator generatorIn) {
-            super(generatorIn, new Blocks(generatorIn));
+        public Items(DataGenerator generatorIn, String modid, ExistingFileHelper helper) {
+            super(generatorIn, new Blocks(generatorIn, modid, helper), modid, helper);
         }
 
         @Override

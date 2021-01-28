@@ -154,8 +154,8 @@ public class IndustrialForegoing extends ModuleController {
                                 .isPresent())
                         .collect(Collectors.toList())
         );
-        event.getGenerator().addProvider(new IndustrialTagsProvider.Blocks(event.getGenerator()));
-        event.getGenerator().addProvider(new IndustrialTagsProvider.Items(event.getGenerator()));
+        event.getGenerator().addProvider(new IndustrialTagsProvider.Blocks(event.getGenerator(), Reference.MOD_ID, event.getExistingFileHelper()));
+        event.getGenerator().addProvider(new IndustrialTagsProvider.Items(event.getGenerator(), Reference.MOD_ID, event.getExistingFileHelper()));
         event.getGenerator().addProvider(new IndustrialRecipeProvider(event.getGenerator(), blocksToProcess));
         event.getGenerator().addProvider(new IndustrialSerializableProvider(event.getGenerator(), Reference.MOD_ID));
         event.getGenerator().addProvider(new TitaniumLootTableProvider(event.getGenerator(), blocksToProcess));
