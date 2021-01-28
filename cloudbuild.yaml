@@ -1,5 +1,5 @@
 steps:
-  - name: 'adoptopenjdk/openjdk8'
+  - name: 'gradle:5.6.2-jdk8'
     args:
       - './gradlew'
       - 'build'
