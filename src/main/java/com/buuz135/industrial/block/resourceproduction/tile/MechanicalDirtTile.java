@@ -37,6 +37,7 @@ import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.world.Difficulty;
 import net.minecraft.world.IServerWorld;
 import net.minecraft.world.biome.MobSpawnInfo;
+import net.minecraft.world.server.ServerWorld;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.capability.IFluidHandler;
 
@@ -71,7 +72,7 @@ public class MechanicalDirtTile extends IndustrialWorkingTile<MechanicalDirtTile
             if (hasEnergy(getPowerPerOperation / 10)) return new WorkAction(0.5f, getPowerPerOperation / 10);
             return new WorkAction(1, 0);
         }
-        if (meat.getFluidAmount() > 20) {
+        if (meat.getFluidAmount() >= 20 && isServer()) {
             MobEntity entity = getMobToSpawn();
             if (entity != null) {
                 world.addEntity(entity);
@@ -83,7 +84,7 @@ public class MechanicalDirtTile extends IndustrialWorkingTile<MechanicalDirtTile
     }
 
     private MobEntity getMobToSpawn() {
-        List<MobSpawnInfo.Spawners> spawnListEntries = this.world.getBiome(this.pos.up()).getMobSpawnInfo().getSpawners(EntityClassification.MONSTER);
+        List<MobSpawnInfo.Spawners> spawnListEntries = ((ServerWorld)this.world).getChunkProvider().getChunkGenerator().func_230353_a_(this.world.getBiome(this.pos.up()), ((ServerWorld)this.world).func_241112_a_() ,EntityClassification.MONSTER, this.pos);
         if (spawnListEntries.size() == 0) return null;
         MobSpawnInfo.Spawners spawnListEntry = spawnListEntries.get(world.rand.nextInt(spawnListEntries.size()));
         if (!EntitySpawnPlacementRegistry.canSpawnEntity(spawnListEntry.type, (IServerWorld) this.world, SpawnReason.NATURAL, pos.up(), world.rand))

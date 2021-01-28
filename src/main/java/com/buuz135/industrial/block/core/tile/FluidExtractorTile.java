@@ -40,6 +40,7 @@ import net.minecraftforge.fluids.capability.IFluidHandler;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import java.util.Collection;
 import java.util.HashMap;
 
 public class FluidExtractorTile extends IndustrialAreaWorkingTile<FluidExtractorTile> {
@@ -67,7 +68,7 @@ public class FluidExtractorTile extends IndustrialAreaWorkingTile<FluidExtractor
     public WorkAction work() {
         BlockPos pos = getPointedBlockPos();
         if (isLoaded(pos) && !this.world.isAirBlock(pos) && this.tank.getFluidAmount() < this.tank.getCapacity()) {
-            if (currentRecipe == null || !currentRecipe.matches(this.world, pos))
+            if (currentRecipe == null || !currentRecipe.matches(this.world, pos) || currentRecipe.defaultRecipe)
                 currentRecipe = findRecipe(this.world, pos);
             if (currentRecipe != null) {//GetDimensionType
                 FluidExtractionProgress extractionProgress = EXTRACTION.computeIfAbsent(this.world.getDimensionType(), dimensionType -> new HashMap<>()).computeIfAbsent(this.world.getChunkAt(pos).getPos(), chunkPos -> new HashMap<>()).computeIfAbsent(pos, pos1 -> new FluidExtractionProgress(this.world));
@@ -98,7 +99,14 @@ public class FluidExtractorTile extends IndustrialAreaWorkingTile<FluidExtractor
 
     @Nullable
     public FluidExtractorRecipe findRecipe(World world, BlockPos pos) {
-        return RecipeUtil.getRecipes(world, FluidExtractorRecipe.SERIALIZER.getRecipeType()).stream().filter(fluidExtractorRecipe -> fluidExtractorRecipe.matches(world, pos) && !fluidExtractorRecipe.defaultRecipe).findFirst().orElseGet(() -> RecipeUtil.getRecipes(world, FluidExtractorRecipe.SERIALIZER.getRecipeType()).stream().filter(fluidExtractorRecipe -> fluidExtractorRecipe.matches(world, pos)).findFirst().orElse(null));
+        Collection<FluidExtractorRecipe> recipeList = RecipeUtil.getRecipes(world, FluidExtractorRecipe.SERIALIZER.getRecipeType());
+        for (FluidExtractorRecipe recipe : recipeList) {
+            if (!recipe.defaultRecipe && recipe.matches(world, pos)) return recipe;
+        }
+        for (FluidExtractorRecipe recipe : recipeList) {
+            if (recipe.defaultRecipe && recipe.matches(world, pos)) return recipe;
+        }
+        return null;
     }
 
     @Nonnull

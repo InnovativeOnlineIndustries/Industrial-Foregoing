@@ -7,7 +7,7 @@
   "pages": [
     {
       "type": "text",
-      "text": "A machine used to $(6)feed$() animal so they can produce babies when the machine is supplied with the animal feeding item."
+      "text": "A machine used to $(6)feed$() animals so they can produce babies when the machine is supplied with the animal feeding item."
     },
     {
       "type": "crafting",

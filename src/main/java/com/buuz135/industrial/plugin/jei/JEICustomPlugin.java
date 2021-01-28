@@ -52,6 +52,7 @@ import net.minecraft.client.renderer.Rectangle2d;
 import net.minecraft.fluid.Fluids;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.Items;
 import net.minecraft.tags.ITag;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.common.ForgeMod;
@@ -188,6 +189,7 @@ public class JEICustomPlugin implements IModPlugin {
                 new MachineProduceWrapper(ModuleAgricultureHusbandry.SEWAGE_COMPOSTER, new ItemStack(ModuleCore.FERTILIZER)),
                 new MachineProduceWrapper(ModuleResourceProduction.DYE_MIXER, Tags.Items.DYES),
                 new MachineProduceWrapper(ModuleResourceProduction.SPORES_RECREATOR, Tags.Items.MUSHROOMS),
+                new MachineProduceWrapper(ModuleResourceProduction.SPORES_RECREATOR, new ItemStack(Items.CRIMSON_FUNGUS), new ItemStack(Items.WARPED_FUNGUS)),
                 new MachineProduceWrapper(ModuleAgricultureHusbandry.MOB_CRUSHER, new FluidStack(ModuleCore.ESSENCE.getSourceFluid(),  1000)),
                 new MachineProduceWrapper(ModuleAgricultureHusbandry.SLAUGHTER_FACTORY, new FluidStack(ModuleCore.MEAT.getSourceFluid(),  1000)),
                 new MachineProduceWrapper(ModuleAgricultureHusbandry.SLAUGHTER_FACTORY, new FluidStack(ModuleCore.PINK_SLIME.getSourceFluid(),  1000)),

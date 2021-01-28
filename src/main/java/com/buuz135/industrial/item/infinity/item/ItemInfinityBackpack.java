@@ -106,7 +106,7 @@ public class ItemInfinityBackpack extends ItemInfinity {
     public static int FUEL_CONSUMPTION = 1;
 
     private static String NBT_MAGNET = "Magnet";
-    private static String NBT_PICKUP = "AutoPickUp";
+    private static String NBT_PICKUP = "AutoPickUpMode";
 
     public ItemInfinityBackpack() {
         super("infinity_backpack", ModuleTool.TAB_TOOL, new Properties().maxStackSize(1), POWER_CONSUMPTION, FUEL_CONSUMPTION, false);
@@ -115,7 +115,7 @@ public class ItemInfinityBackpack extends ItemInfinity {
             findFirstBackpack(entityItemPickupEvent.getPlayer()).ifPresent(target -> {
                 ItemStack stack = target.getFinder().getStackGetter().apply(entityItemPickupEvent.getPlayer(), target.getSlot());
                 if (!stack.isEmpty()) {
-                    if (stack.getItem() instanceof ItemInfinityBackpack && isPickUpEnabled(stack)) {
+                    if (stack.getItem() instanceof ItemInfinityBackpack && (getPickUpMode(stack) == 1 || getPickUpMode(stack) == 0)) {
                         BackpackDataManager manager = BackpackDataManager.getData(entityItemPickupEvent.getItem().world);
                         if (manager != null && stack.getOrCreateTag().contains("Id")) {
                             BackpackDataManager.BackpackItemHandler handler = manager.getBackpack(stack.getOrCreateTag().getString("Id"));
@@ -144,14 +144,17 @@ public class ItemInfinityBackpack extends ItemInfinity {
             findFirstBackpack(pickupXp.getPlayer()).ifPresent(target -> {
                 ItemStack stack = target.getFinder().getStackGetter().apply(pickupXp.getPlayer(), target.getSlot());
                 if (!stack.isEmpty()) {
-                    if (stack.getItem() instanceof ItemInfinityBackpack && isPickUpEnabled(stack)) {
+                    if (stack.getItem() instanceof ItemInfinityBackpack && (getPickUpMode(stack) == 2 || getPickUpMode(stack) == 0)) {
                         if (stack.getCapability(CapabilityFluidHandler.FLUID_HANDLER_ITEM_CAPABILITY).isPresent()) {
                             ExperienceOrbEntity entity = pickupXp.getOrb();
                             IFluidHandlerItem handlerItem = stack.getCapability(CapabilityFluidHandler.FLUID_HANDLER_ITEM_CAPABILITY).orElse(null);
                             if (handlerItem != null) {
-                                handlerItem.fill(new FluidStack(ModuleCore.ESSENCE.getSourceFluid(), entity.getXpValue() * 20), IFluidHandler.FluidAction.EXECUTE);
-                                entity.remove();
-                                pickupXp.setCanceled(true);
+                                if (handlerItem.fill(new FluidStack(ModuleCore.ESSENCE.getSourceFluid(), entity.getXpValue() * 20), IFluidHandler.FluidAction.SIMULATE) > 0){
+                                    handlerItem.fill(new FluidStack(ModuleCore.ESSENCE.getSourceFluid(), entity.getXpValue() * 20), IFluidHandler.FluidAction.EXECUTE);
+                                    entity.remove();
+                                    pickupXp.setCanceled(true);
+                                }
+
                             }
                         }
                     }
@@ -177,12 +180,12 @@ public class ItemInfinityBackpack extends ItemInfinity {
         stack.getOrCreateTag().putBoolean(NBT_MAGNET, enabled);
     }
 
-    public static boolean isPickUpEnabled(ItemStack stack) {
-        return stack.getOrCreateTag().getBoolean(NBT_PICKUP);
+    public static int getPickUpMode(ItemStack stack) {
+        return stack.getOrCreateTag().getInt(NBT_PICKUP);
     }
 
-    public static void setPickUp(ItemStack stack, boolean enabled) {
-        stack.getOrCreateTag().putBoolean(NBT_PICKUP, enabled);
+    public static void setPickUpMode(ItemStack stack, int mode) {
+        stack.getOrCreateTag().putInt(NBT_PICKUP, mode);
     }
 
     public static Optional<PlayerInventoryFinder.Target> findFirstBackpack(PlayerEntity entity) {
@@ -398,7 +401,7 @@ public class ItemInfinityBackpack extends ItemInfinity {
                     setMagnet(stack, !isMagnetEnabled(stack));
                 }
                 if (id == 11) {
-                    setPickUp(stack, !isPickUpEnabled(stack));
+                    setPickUpMode(stack, (getPickUpMode(stack) + 1) % 4);
                 }
                 if (id == 3) {
                     setCanCharge(stack, !canCharge(stack));
@@ -512,10 +515,26 @@ public class ItemInfinityBackpack extends ItemInfinity {
                 return isMagnetEnabled(stack.get()) ? 0 : 1;
             }
         });
-        factory.add(() -> new StateButtonAddon(new ButtonComponent(x, 16 + y * 1, 14, 14).setId(11), new StateButtonInfo(0, AssetTypes.BUTTON_SIDENESS_ENABLED, TextFormatting.GREEN + new TranslationTextComponent("tooltip.industrialforegoing.backpack.pickup_enabled").getString()), new StateButtonInfo(1, AssetTypes.BUTTON_SIDENESS_DISABLED, TextFormatting.RED + new TranslationTextComponent("tooltip.industrialforegoing.backpack.pickup_disabled").getString())) {
+        factory.add(() -> new StateButtonAddon(new ButtonComponent(x, 16 + y * 1, 14, 14).setId(11),
+                new StateButtonInfo(0, AssetTypes.BUTTON_SIDENESS_ENABLED,
+                        TextFormatting.GREEN + new TranslationTextComponent("tooltip.industrialforegoing.backpack.pickup_all").getString(),
+                        TextFormatting.GRAY + new TranslationTextComponent("tooltip.industrialforegoing.backpack.pickup_extra").getString(),
+                        TextFormatting.GRAY + new TranslationTextComponent("tooltip.industrialforegoing.backpack.pickup_extra_1").getString()),
+                new StateButtonInfo(1, AssetTypes.BUTTON_SIDENESS_PULL,
+                        TextFormatting.GREEN + new TranslationTextComponent("tooltip.industrialforegoing.backpack.item_pickup_enabled").getString(),
+                        TextFormatting.GRAY + new TranslationTextComponent("tooltip.industrialforegoing.backpack.pickup_extra").getString(),
+                        TextFormatting.GRAY + new TranslationTextComponent("tooltip.industrialforegoing.backpack.pickup_extra_1").getString()),
+                new StateButtonInfo(2, AssetTypes.BUTTON_SIDENESS_PUSH,
+                        TextFormatting.GREEN + new TranslationTextComponent("tooltip.industrialforegoing.backpack.xp_pickup_enabled").getString(),
+                        TextFormatting.GRAY + new TranslationTextComponent("tooltip.industrialforegoing.backpack.pickup_extra").getString(),
+                        TextFormatting.GRAY + new TranslationTextComponent("tooltip.industrialforegoing.backpack.pickup_extra_1").getString()),
+                new StateButtonInfo(3, AssetTypes.BUTTON_SIDENESS_DISABLED,
+                        TextFormatting.RED + new TranslationTextComponent("tooltip.industrialforegoing.backpack.pickup_disabled").getString(),
+                        TextFormatting.GRAY + new TranslationTextComponent("tooltip.industrialforegoing.backpack.pickup_extra").getString(),
+                        TextFormatting.GRAY + new TranslationTextComponent("tooltip.industrialforegoing.backpack.pickup_extra_1").getString())) {
             @Override
             public int getState() {
-                return isPickUpEnabled(stack.get()) ? 0 : 1;
+                return getPickUpMode(stack.get());
             }
         });
         factory.add(() -> new StateButtonAddon(new ButtonComponent(x, 16 + y * 2, 14, 14).setId(3), new StateButtonInfo(0, AssetTypes.BUTTON_SIDENESS_ENABLED, TextFormatting.GREEN + new TranslationTextComponent("text.industrialforegoing.display.charging").getString() + new TranslationTextComponent("text.industrialforegoing.display.enabled").getString()), new StateButtonInfo(1, AssetTypes.BUTTON_SIDENESS_DISABLED, TextFormatting.RED + new TranslationTextComponent("text.industrialforegoing.display.charging").getString() + new TranslationTextComponent("text.industrialforegoing.display.disabled").getString())) {

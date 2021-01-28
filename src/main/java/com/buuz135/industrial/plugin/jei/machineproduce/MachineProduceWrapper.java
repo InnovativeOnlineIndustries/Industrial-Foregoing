@@ -34,7 +34,7 @@ public class MachineProduceWrapper {
     private Ingredient outputItem;
     private FluidStack outputFluid;
 
-    public MachineProduceWrapper(Block block, ItemStack output) {
+    public MachineProduceWrapper(Block block, ItemStack... output) {
         this.block = block;
         this.outputItem = Ingredient.fromStacks(output);
         this.outputFluid = FluidStack.EMPTY;

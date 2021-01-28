@@ -1,0 +1,49 @@
+{
+  "type": "forge:conditional",
+  "recipes": [
+    {
+      "conditions": [
+        {
+          "values": [
+            {
+              "item": "industrialforegoing:hydroponic_bed",
+              "type": "forge:item_exists"
+            }
+          ],
+          "type": "forge:and"
+        }
+      ],
+      "recipe": {
+        "type": "minecraft:crafting_shaped",
+        "pattern": [
+          "PDP",
+          "SBS",
+          "GMG"
+        ],
+        "key": {
+          "P": {
+            "tag": "forge:plastic"
+          },
+          "D": {
+            "item": "minecraft:dirt"
+          },
+          "G": {
+            "tag": "forge:gears/gold"
+          },
+          "S": {
+            "item": "minecraft:iron_hoe"
+          },
+          "B": {
+            "item": "industrialforegoing:fertilizer"
+          },
+          "M": {
+            "tag": "industrialforegoing:machine_frame/simple"
+          }
+        },
+        "result": {
+          "item": "industrialforegoing:hydroponic_bed"
+        }
+      }
+    }
+  ]
+}

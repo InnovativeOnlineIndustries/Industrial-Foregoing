@@ -50,6 +50,7 @@ public class ModuleAgricultureHusbandry implements IModule {
     public static AnimalFeederBlock ANIMAL_FEEDER = new AnimalFeederBlock();
     public static AnimalBabySeparatorBlock ANIMAL_BABY_SEPARATOR = new AnimalBabySeparatorBlock();
     public static MobCrusherBlock MOB_CRUSHER = new MobCrusherBlock();
+    public static HydroponicBedBlock HYDROPONIC_BED = new HydroponicBedBlock();
 
     @Override
     public List<Feature.Builder> generateFeatures() {
@@ -77,6 +78,7 @@ public class ModuleAgricultureHusbandry implements IModule {
         builders.add(createFeature(ANIMAL_FEEDER));
         builders.add(createFeature(ANIMAL_BABY_SEPARATOR));
         builders.add(createFeature(MOB_CRUSHER));
+        builders.add(createFeature(HYDROPONIC_BED));
         TAB_AG_HUS.addIconStack(new ItemStack(PLANT_SOWER));
         return builders;
     }

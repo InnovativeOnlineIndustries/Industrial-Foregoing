@@ -119,4 +119,7 @@ public abstract class ConveyorUpgrade implements INBTSerializable<CompoundNBT> {
     public void addComponentsToGui(List<IGuiComponent> componentList) {
     }
 
+    public boolean ignoresCollision(){
+        return false;
+    }
 }
