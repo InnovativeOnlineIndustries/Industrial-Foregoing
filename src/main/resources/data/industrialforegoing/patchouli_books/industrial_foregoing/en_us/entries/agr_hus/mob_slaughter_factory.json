@@ -7,7 +7,7 @@
   "pages": [
     {
       "type": "text",
-      "text": "A machine used used to process mobs and animals into $(l:agr_hus/meat)Liquid Meat$() and $(l:agr_hus/pink_slime)Pink Slime$(). The animals killed by this machine will not produce drops or experience. $(br2)Passive mobs produce more pink slime than non passive ones"
+      "text": "A machine used used to process mobs and animals into $(l:agr_hus/meat)Liquid Meat$() and $(l:agr_hus/pink_slime)Pink Slime$(). The mobs killed by this machine will not produce drops or experience. $(br2)Passive mobs produce more pink slime than non passive ones"
     },
     {
       "type": "crafting",
