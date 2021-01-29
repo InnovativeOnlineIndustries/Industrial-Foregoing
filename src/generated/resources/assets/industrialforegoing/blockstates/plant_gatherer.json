@@ -1,0 +1,19 @@
+{
+  "variants": {
+    "subfacing=north": {
+      "model": "industrialforegoing:block/plant_gatherer"
+    },
+    "subfacing=south": {
+      "model": "industrialforegoing:block/plant_gatherer",
+      "y": 180
+    },
+    "subfacing=west": {
+      "model": "industrialforegoing:block/plant_gatherer",
+      "y": 270
+    },
+    "subfacing=east": {
+      "model": "industrialforegoing:block/plant_gatherer",
+      "y": 90
+    }
+  }
+}

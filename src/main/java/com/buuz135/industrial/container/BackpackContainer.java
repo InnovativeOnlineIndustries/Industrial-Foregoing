@@ -57,6 +57,7 @@ public class BackpackContainer extends BasicAddonContainer {
                     slot.putStack(result);
                     if (player instanceof ServerPlayerEntity) ItemInfinityBackpack.sync(player.world, id , (ServerPlayerEntity) player);
                     detectAndSendChanges();
+                    break;
                     //return itemstack;
                 }
             }

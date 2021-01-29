@@ -74,11 +74,8 @@ public class MobImprisonmentToolItem extends IFCustomItem {
     public ActionResultType itemInteractionForEntity(ItemStack stack, PlayerEntity playerIn, LivingEntity target, Hand hand) {
         if (target.getEntityWorld().isRemote) return ActionResultType.FAIL;
         if (target instanceof PlayerEntity || !target.isNonBoss() || !target.isAlive()) return ActionResultType.FAIL;
-        ;
         if (containsEntity(stack)) return ActionResultType.FAIL;
-        ;
         if (isBlacklisted(target.getType())) return ActionResultType.FAIL;
-        ;
         CompoundNBT nbt = new CompoundNBT();
         nbt.putString("entity", EntityType.getKey(target.getType()).toString());
         target.writeWithoutTypeId(nbt);
