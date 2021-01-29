@@ -51,6 +51,7 @@ import net.minecraft.client.renderer.RenderTypeLookup;
 import net.minecraft.client.renderer.model.IBakedModel;
 import net.minecraft.client.settings.KeyBinding;
 import net.minecraft.item.SpawnEggItem;
+import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.StringTextComponent;
@@ -153,7 +154,7 @@ public class ClientProxy extends CommonProxy {
                     ResourceLocation id = new ResourceLocation(stack.getTag().getString("entity"));
                     info = SpawnEggItem.getEgg(ForgeRegistries.ENTITIES.getValue(id));
                 }
-                return info == null ? 0x636363 : tintIndex == 3 ? /*BlockRegistry.mobDuplicatorBlock.blacklistedEntities.contains(info.spawnedID.toString())*/ false ? 0xDB201A : 0x636363 : info.getColor(tintIndex);
+                return info == null ? 0x636363 : tintIndex == 3 ? ModuleTool.MOB_IMPRISONMENT_TOOL.isBlacklisted(info.getType(new CompoundNBT())) ? 0xDB201A : 0x636363 : info.getColor(tintIndex - 1);
             }
             return 0xFFFFFF;
         }, ModuleTool.MOB_IMPRISONMENT_TOOL);
