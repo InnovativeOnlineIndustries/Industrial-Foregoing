@@ -34,16 +34,15 @@ import com.hrznstudio.titanium.component.inventory.SidedInventoryComponent;
 import net.minecraft.entity.CreatureEntity;
 import net.minecraft.entity.passive.AnimalEntity;
 import net.minecraft.entity.passive.SquidEntity;
-import net.minecraft.item.BucketItem;
 import net.minecraft.item.DyeColor;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.util.Hand;
 import net.minecraftforge.common.IForgeShearable;
 import net.minecraftforge.common.util.FakePlayer;
-import net.minecraftforge.fluids.FluidAttributes;
-import net.minecraftforge.fluids.FluidStack;
+import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
 import net.minecraftforge.fluids.capability.IFluidHandler;
+import net.minecraftforge.fluids.capability.IFluidHandlerItem;
 import net.minecraftforge.items.ItemHandlerHelper;
 
 import javax.annotation.Nonnull;
@@ -86,8 +85,9 @@ public class AnimalRancherTile extends IndustrialAreaWorkingTile<AnimalRancherTi
                         player.setHeldItem(Hand.MAIN_HAND, new ItemStack(Items.BUCKET));
                         if (((AnimalEntity) mob).func_230254_b_(player, Hand.MAIN_HAND).isSuccessOrConsume()) { //ProcessInteract
                             ItemStack stack = player.getHeldItem(Hand.MAIN_HAND);
-                            if (stack.getItem() instanceof BucketItem) {
-                                tank.fillForced(new FluidStack(((BucketItem) stack.getItem()).getFluid(), FluidAttributes.BUCKET_VOLUME), IFluidHandler.FluidAction.EXECUTE);
+                            IFluidHandlerItem fluidHandlerItem = stack.getCapability(CapabilityFluidHandler.FLUID_HANDLER_ITEM_CAPABILITY).orElse(null);
+                            if (fluidHandlerItem != null) {
+                                tank.fillForced(fluidHandlerItem.drain(Integer.MAX_VALUE, IFluidHandler.FluidAction.EXECUTE), IFluidHandler.FluidAction.EXECUTE);
                                 player.setHeldItem(Hand.MAIN_HAND, ItemStack.EMPTY);
                                 return new WorkAction(0.35f, powerPerOperation);
                             }
