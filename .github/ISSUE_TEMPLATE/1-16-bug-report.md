@@ -6,6 +6,7 @@ labels: 'type: bug, version: 1.16'
 assignees: ''
 
 ---
+**DO NOT REPORT AN ISSUE IF YOU HAVEN'T TESTED THE ISSUE WITH THE LATEST VERSION IN CURSEFORGE**
 
 **Industrial Foregoing Version:**
 
