@@ -125,7 +125,7 @@ public class ItemInfinityHammer extends ItemInfinity {
 
     @Override
     public boolean canApplyAtEnchantingTable(ItemStack stack, Enchantment enchantment) {
-        return enchantment.type == EnchantmentType.WEAPON || enchantment == Enchantments.FORTUNE;
+        return enchantment.type == EnchantmentType.WEAPON || enchantment == Enchantments.LOOTING;
     }
 
     @Override
