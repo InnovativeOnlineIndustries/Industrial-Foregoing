@@ -48,6 +48,22 @@ import java.util.Random;
 @OnlyIn(Dist.CLIENT)
 public class ParticleVex extends Particle {
 
+    public static IParticleRenderType RENDER = new IParticleRenderType() {
+        @Override
+        public void beginRender(BufferBuilder builder, TextureManager manager) {
+            RenderSystem.enableBlend();
+            RenderSystem.blendFuncSeparate(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA, GlStateManager.SourceFactor.ONE, GlStateManager.DestFactor.ZERO);
+            RenderSystem.lineWidth(1.5F);
+            RenderSystem.disableTexture();
+        }
+
+        @Override
+        public void finishRender(Tessellator tessellator) {
+            RenderSystem.disableBlend();
+            RenderSystem.enableTexture();
+        }
+    };
+
     private final Entity entity;
     private List<Direction> directions;
     private List<Vector3d> lines;
@@ -87,37 +103,25 @@ public class ParticleVex extends Particle {
     }
 
     @Override
-    public void renderParticle(IVertexBuilder buffer, ActiveRenderInfo activeRenderInfo, float v) {
-        if (entity instanceof ClientPlayerEntity && Minecraft.getInstance().player.getUniqueID().equals(entity.getUniqueID()) && Minecraft.getInstance().gameSettings.getPointOfView() == PointOfView.FIRST_PERSON && this.entity.getPosition().add(0, 1, 0).distanceSq(posX, posY, posZ, false) < 3)
+    public void renderParticle(IVertexBuilder bufferBad, ActiveRenderInfo activeRenderInfo, float v) {
+        if (entity instanceof ClientPlayerEntity && Minecraft.getInstance().player.getUniqueID().equals(entity.getUniqueID()) && Minecraft.getInstance().gameSettings.getPointOfView() == PointOfView.FIRST_PERSON && this.entity.getPosition().add(0, 1, 0).distanceSq(posX, posY, posZ, true) < 3)
             return;
         Vector3d vector3d = activeRenderInfo.getProjectedView();
         double x = entity.lastTickPosX + (vector3d.x - entity.lastTickPosX);
         double y = entity.lastTickPosY + (vector3d.y - entity.lastTickPosY);
         double z = entity.lastTickPosZ + (vector3d.z - entity.lastTickPosZ);
+        Tessellator tessellator = Tessellator.getInstance();
+        BufferBuilder bufferBuilder = tessellator.getBuffer();
+        bufferBuilder.begin(3, DefaultVertexFormats.POSITION_COLOR_LIGHTMAP);
         for (Vector3d line : lines) {
-            buffer.pos(line.x - x, line.y - y, line.z - z).color(1f, 1f, 1f, 1f).lightmap(240, 240).endVertex();
+            bufferBuilder.pos(line.x - x, line.y - y, line.z - z).color(1f, 1f, 1f, 1f).lightmap(240, 240).endVertex();
         }
+        tessellator.draw();
     }
 
     @Override
     public IParticleRenderType getRenderType() {
-        return new IParticleRenderType() {
-            @Override
-            public void beginRender(BufferBuilder builder, TextureManager manager) {
-                RenderSystem.enableBlend();
-                RenderSystem.blendFuncSeparate(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA, GlStateManager.SourceFactor.ONE, GlStateManager.DestFactor.ZERO);
-                RenderSystem.lineWidth(2.0F);
-                RenderSystem.disableTexture();
-                builder.begin(3, DefaultVertexFormats.POSITION_COLOR_LIGHTMAP);
-            }
-
-            @Override
-            public void finishRender(Tessellator tessellator) {
-                tessellator.draw();
-                RenderSystem.disableBlend();
-                RenderSystem.enableTexture();
-            }
-        };
+        return RENDER;
     }
 
     private Direction getRandomFacing(Random random, Direction opposite) {

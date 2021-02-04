@@ -54,7 +54,7 @@ public class OneThreeFiveHandler {
     @OnlyIn(Dist.CLIENT)
     @SubscribeEvent
     public static void onClientTick(TickEvent.ClientTickEvent event) {
-        if (Minecraft.getInstance().player != null && Minecraft.getInstance().player.world != null && !Minecraft.getInstance().isGamePaused() && Minecraft.getInstance().player.world.getGameTime() % 4 == 0) {
+        if (Minecraft.getInstance().player != null && Minecraft.getInstance().player.world != null && !Minecraft.getInstance().isGamePaused() && Minecraft.getInstance().player.world.getGameTime() % 5 == 0) {
             BlockPos pos = new BlockPos(Minecraft.getInstance().player.getPosition().getX(), Minecraft.getInstance().player.getPosition().getY(), Minecraft.getInstance().player.getPosition().getZ());
             Minecraft.getInstance().player.world.getEntitiesWithinAABB(LivingEntity.class, new AxisAlignedBB(pos.add(32, 32, 32), pos.add(-32, -32, -32)),
                     input -> input.getUniqueID().toString().contains(SPECIAL)).
