@@ -115,9 +115,13 @@ public class MaterialStoneWorkFactoryTile extends IndustrialProcessingTile<Mater
     private SidedInventoryComponent<MaterialStoneWorkFactoryTile> inventoryThird;
     @Save
     private int thirdRecipeId;
+    @Save
+    private SidedInventoryComponent<MaterialStoneWorkFactoryTile> inventoryFourth;
+    @Save
+    private int fourthRecipeId;
 
     public MaterialStoneWorkFactoryTile() {
-        super(ModuleResourceProduction.MATERIAL_STONEWORK_FACTORY, 52, 40);
+        super(ModuleResourceProduction.MATERIAL_STONEWORK_FACTORY, 48, 40);
         addTank(water = (SidedFluidTankComponent<MaterialStoneWorkFactoryTile>) new SidedFluidTankComponent<MaterialStoneWorkFactoryTile>("water", MaterialStoneWorkFactoryConfig.maxWaterTankSize, 30, 23, 0)
                 .setColor(DyeColor.BLUE)
                 .setTankType(FluidTankComponent.Type.SMALL)
@@ -163,26 +167,31 @@ public class MaterialStoneWorkFactoryTile extends IndustrialProcessingTile<Mater
             this.generatorRecipeId = (this.generatorRecipeId + 1) % GENERATOR_RECIPES.length;
             markForUpdate();
         }));
-        addInventory(inventoryGenerator = (SidedInventoryComponent<MaterialStoneWorkFactoryTile>) new SidedInventoryComponent<MaterialStoneWorkFactoryTile>("inventoryGenerator", 80, 23, 2, 2)
+        addInventory(inventoryGenerator = (SidedInventoryComponent<MaterialStoneWorkFactoryTile>) new SidedInventoryComponent<MaterialStoneWorkFactoryTile>("inventoryGenerator", 74, 23, 2, 2)
                 .setColor(DyeColor.LIME)
                 .setSlotPosition(integer -> integer == 0 ? Pair.of(0, 0) : Pair.of(0, 18))
                 .setComponentHarness(this));
-        addInventory(inventoryFirst = (SidedInventoryComponent<MaterialStoneWorkFactoryTile>) new SidedInventoryComponent<MaterialStoneWorkFactoryTile>("inventoryFirst", 80 + 23 * 1, 23, 2, 3)
+        addInventory(inventoryFirst = (SidedInventoryComponent<MaterialStoneWorkFactoryTile>) new SidedInventoryComponent<MaterialStoneWorkFactoryTile>("inventoryFirst", 74 + 20 * 1, 23, 2, 3)
                 .setColor(DyeColor.CYAN)
                 .setSlotPosition(integer -> integer == 0 ? Pair.of(0, 0) : Pair.of(0, 18))
                 .setComponentHarness(this));
-        addInventory(inventorySecond = (SidedInventoryComponent<MaterialStoneWorkFactoryTile>) new SidedInventoryComponent<MaterialStoneWorkFactoryTile>("inventorySecond", 80 + 23 * 2, 23, 2, 4)
+        addInventory(inventorySecond = (SidedInventoryComponent<MaterialStoneWorkFactoryTile>) new SidedInventoryComponent<MaterialStoneWorkFactoryTile>("inventorySecond", 74 + 20  * 2, 23, 2, 4)
                 .setColor(DyeColor.YELLOW)
                 .setSlotPosition(integer -> integer == 0 ? Pair.of(0, 0) : Pair.of(0, 18))
                 .setComponentHarness(this));
-        addInventory(inventoryThird = (SidedInventoryComponent<MaterialStoneWorkFactoryTile>) new SidedInventoryComponent<MaterialStoneWorkFactoryTile>("inventoryThird", 80 + 23 * 3, 23, 2, 5)
+        addInventory(inventoryThird = (SidedInventoryComponent<MaterialStoneWorkFactoryTile>) new SidedInventoryComponent<MaterialStoneWorkFactoryTile>("inventoryThird", 74 + 20  * 3, 23, 2, 5)
                 .setColor(DyeColor.RED)
+                .setSlotPosition(integer -> integer == 0 ? Pair.of(0, 0) : Pair.of(0, 18))
+                .setComponentHarness(this));
+        addInventory(inventoryFourth = (SidedInventoryComponent<MaterialStoneWorkFactoryTile>) new SidedInventoryComponent<MaterialStoneWorkFactoryTile>("inventoryFourtj", 74 + 20  * 4, 23, 2, 5)
+                .setColor(DyeColor.GREEN)
                 .setSlotPosition(integer -> integer == 0 ? Pair.of(0, 0) : Pair.of(0, 18))
                 .setComponentHarness(this));
         this.firstRecipeId = 0;
         this.secondRecipeId = 0;
         this.thirdRecipeId = 0;
-        addButton(new ButtonComponent(67 + 23 * 1, 64, 18, 18) {
+        this.fourthRecipeId = 0;
+        addButton(new ButtonComponent(62 + 20 * 1, 64, 18, 18) {
             @Override
             public List<IFactory<? extends IScreenAddon>> getScreenAddons() {
                 return Collections.singletonList(() -> new BasicButtonAddon(this) {
@@ -207,7 +216,7 @@ public class MaterialStoneWorkFactoryTile extends IndustrialProcessingTile<Mater
             this.firstRecipeId = (this.firstRecipeId + 1) % ACTION_RECIPES.length;
             markForUpdate();
         }));
-        addButton(new ButtonComponent(67 + 23 * 2, 64, 18, 18) {
+        addButton(new ButtonComponent(62 + 20 * 2, 64, 18, 18) {
             @Override
             public List<IFactory<? extends IScreenAddon>> getScreenAddons() {
                 return Collections.singletonList(() -> new BasicButtonAddon(this) {
@@ -232,7 +241,7 @@ public class MaterialStoneWorkFactoryTile extends IndustrialProcessingTile<Mater
             this.secondRecipeId = (this.secondRecipeId + 1) % ACTION_RECIPES.length;
             markForUpdate();
         }));
-        addButton(new ButtonComponent(67 + 23 * 3, 64, 18, 18) {
+        addButton(new ButtonComponent(62 + 20 * 3, 64, 18, 18) {
             @Override
             public List<IFactory<? extends IScreenAddon>> getScreenAddons() {
                 return Collections.singletonList(() -> new BasicButtonAddon(this) {
@@ -257,6 +266,31 @@ public class MaterialStoneWorkFactoryTile extends IndustrialProcessingTile<Mater
             this.thirdRecipeId = (this.thirdRecipeId + 1) % ACTION_RECIPES.length;
             markForUpdate();
         }));
+        addButton(new ButtonComponent(62 + 20 * 4, 64, 18, 18) {
+            @Override
+            public List<IFactory<? extends IScreenAddon>> getScreenAddons() {
+                return Collections.singletonList(() -> new BasicButtonAddon(this) {
+                    @Override
+                    public void drawBackgroundLayer(MatrixStack stack, Screen screen, IAssetProvider provider, int guiX, int guiY, int mouseX, int mouseY, float partialTicks) {
+                        AssetUtil.drawAsset(stack, screen, provider.getAsset(AssetTypes.ITEM_BACKGROUND), guiX + getPosX(), guiY + getPosY());
+                        //RenderSystem.setupGui3DDiffuseLighting();
+                        Minecraft.getInstance().getItemRenderer().renderItemIntoGUI(ACTION_RECIPES[fourthRecipeId].icon, guiX + getPosX() + 1, guiY + getPosY() + 1);
+                        RenderHelper.disableStandardItemLighting();
+                        RenderSystem.enableAlphaTest();
+                    }
+
+                    @Override
+                    public List<ITextComponent> getTooltipLines() {
+                        List<ITextComponent> lines = new ArrayList<>();
+                        lines.add(new StringTextComponent(TextFormatting.GOLD + LangUtil.getString("tooltip.industrialforegoing.action") + TextFormatting.WHITE + LangUtil.getString("tooltip.industrialforegoing.stonework." + ACTION_RECIPES[thirdRecipeId].getAction())));
+                        return lines;
+                    }
+                });
+            }
+        }.setPredicate((playerEntity, compoundNBT) -> {
+            this.fourthRecipeId = (this.fourthRecipeId + 1) % ACTION_RECIPES.length;
+            markForUpdate();
+        }));
         this.maxProgress = MaterialStoneWorkFactoryConfig.maxProgress;
         this.powerPerOperation = MaterialStoneWorkFactoryConfig.powerPerTick;
     }
@@ -274,7 +308,7 @@ public class MaterialStoneWorkFactoryTile extends IndustrialProcessingTile<Mater
     @Override
     public Runnable onFinish() {
         return () -> {
-            if (!process(inventorySecond, inventoryThird, ACTION_RECIPES[thirdRecipeId]) && !process(inventoryFirst, inventorySecond, ACTION_RECIPES[secondRecipeId]) && !process(inventoryGenerator, inventoryFirst, ACTION_RECIPES[firstRecipeId])) {
+            if (!process(inventoryThird, inventoryFourth, ACTION_RECIPES[fourthRecipeId]) && !process(inventorySecond, inventoryThird, ACTION_RECIPES[thirdRecipeId]) && !process(inventoryFirst, inventorySecond, ACTION_RECIPES[secondRecipeId]) && !process(inventoryGenerator, inventoryFirst, ACTION_RECIPES[firstRecipeId])) {
                 GeneratorRecipe recipe = GENERATOR_RECIPES[generatorRecipeId];
                 ItemStack output = recipe.output.copy();
                 if (ItemHandlerHelper.insertItem(inventoryGenerator, output, false).isEmpty()) {
