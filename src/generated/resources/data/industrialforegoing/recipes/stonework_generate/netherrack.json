@@ -1,0 +1,11 @@
+{
+  "output": {
+    "item": "minecraft:netherrack",
+    "count": 1
+  },
+  "waterNeed": 250,
+  "lavaNeed": 400,
+  "waterConsume": 250,
+  "lavaConsume": 200,
+  "type": "industrialforegoing:stonework_generate"
+}

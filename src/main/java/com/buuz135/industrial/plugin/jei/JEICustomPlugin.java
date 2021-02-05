@@ -33,10 +33,7 @@ import com.buuz135.industrial.plugin.jei.generator.MycelialGeneratorCategory;
 import com.buuz135.industrial.plugin.jei.generator.MycelialGeneratorRecipe;
 import com.buuz135.industrial.plugin.jei.machineproduce.MachineProduceCategory;
 import com.buuz135.industrial.plugin.jei.machineproduce.MachineProduceWrapper;
-import com.buuz135.industrial.recipe.DissolutionChamberRecipe;
-import com.buuz135.industrial.recipe.FluidExtractorRecipe;
-import com.buuz135.industrial.recipe.LaserDrillFluidRecipe;
-import com.buuz135.industrial.recipe.LaserDrillOreRecipe;
+import com.buuz135.industrial.recipe.*;
 import com.buuz135.industrial.utils.IndustrialTags;
 import com.buuz135.industrial.utils.Reference;
 import com.hrznstudio.titanium.util.RecipeUtil;
@@ -76,6 +73,7 @@ public class JEICustomPlugin implements IModPlugin {
     private List<MycelialGeneratorCategory> mycelialGeneratorCategories;
     private StoneWorkCategory stoneWorkCategory;
     private MachineProduceCategory machineProduceCategory;
+    private StoneWorkGeneratorCategory stoneWorkGeneratorCategory;
 
     public static void showUses(ItemStack stack) {
         //if (recipesGui != null && recipeRegistry != null)
@@ -144,6 +142,8 @@ public class JEICustomPlugin implements IModPlugin {
         registry.addRecipeCategories(stoneWorkCategory);
         machineProduceCategory = new MachineProduceCategory(registry.getJeiHelpers().getGuiHelper());
         registry.addRecipeCategories(machineProduceCategory);
+        stoneWorkGeneratorCategory = new StoneWorkGeneratorCategory(registry.getJeiHelpers().getGuiHelper());
+        registry.addRecipeCategories(stoneWorkGeneratorCategory);
     }
 
 
@@ -159,8 +159,8 @@ public class JEICustomPlugin implements IModPlugin {
         }
 
         List<StoneWorkCategory.Wrapper> perfectStoneWorkWrappers = new ArrayList<>();
-        for (MaterialStoneWorkFactoryTile.GeneratorRecipe generatorRecipe : MaterialStoneWorkFactoryTile.GENERATOR_RECIPES) {
-            List<StoneWorkCategory.Wrapper> wrappers = findAllStoneWorkOutputs(generatorRecipe.getOutput(), new ArrayList<>());
+        for (StoneWorkGenerateRecipe generatorRecipe : RecipeUtil.getRecipes(Minecraft.getInstance().world, StoneWorkGenerateRecipe.SERIALIZER.getRecipeType())) {
+            List<StoneWorkCategory.Wrapper> wrappers = findAllStoneWorkOutputs(generatorRecipe.output, new ArrayList<>());
             for (StoneWorkCategory.Wrapper workWrapper : new ArrayList<>(wrappers)) {
                 if (perfectStoneWorkWrappers.stream().noneMatch(stoneWorkWrapper -> workWrapper.getOutput().isItemEqual(stoneWorkWrapper.getOutput()))) {
                     boolean isSomoneShorter = false;
@@ -179,7 +179,6 @@ public class JEICustomPlugin implements IModPlugin {
                     if (!isSomoneShorter) perfectStoneWorkWrappers.add(workWrapper);
                 }
             }
-            perfectStoneWorkWrappers.add(new StoneWorkCategory.Wrapper(generatorRecipe.getOutput(), new ArrayList<>(), generatorRecipe.getOutput()));
         }
         registration.addRecipes(perfectStoneWorkWrappers, stoneWorkCategory.getUid());
 
@@ -199,7 +198,7 @@ public class JEICustomPlugin implements IModPlugin {
                 new MachineProduceWrapper(ModuleResourceProduction.WATER_CONDENSATOR, new FluidStack(Fluids.WATER,  1000))
         ), machineProduceCategory.getUid());
 
-
+        registration.addRecipes(RecipeUtil.getRecipes(Minecraft.getInstance().world, StoneWorkGenerateRecipe.SERIALIZER.getRecipeType()), stoneWorkGeneratorCategory.getUid());
     }
 
     private List<BioReactorRecipeCategory.ReactorRecipeWrapper> generateBioreactorRecipes() {
@@ -254,7 +253,7 @@ public class JEICustomPlugin implements IModPlugin {
                 }
             }
         }
-        registration.addRecipeCatalyst(new ItemStack(ModuleResourceProduction.MATERIAL_STONEWORK_FACTORY), stoneWorkCategory.getUid());
+        registration.addRecipeCatalyst(new ItemStack(ModuleResourceProduction.MATERIAL_STONEWORK_FACTORY), stoneWorkCategory.getUid(), stoneWorkGeneratorCategory.getUid());
         registration.addRecipeCatalyst(new ItemStack(ModuleResourceProduction.POTION_BREWER), VanillaRecipeCategoryUid.BREWING);
         registration.addRecipeCatalyst(new ItemStack(ModuleMisc.ENCHANTMENT_APPLICATOR), VanillaRecipeCategoryUid.ANVIL);
         registration.addRecipeCatalyst(new ItemStack(ModuleResourceProduction.RESOURCEFUL_FURNACE), VanillaRecipeCategoryUid.FURNACE);

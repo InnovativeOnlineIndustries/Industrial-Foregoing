@@ -80,6 +80,19 @@ public class AnimalRancherTile extends IndustrialAreaWorkingTile<AnimalRancherTi
             if (mobs.size() > 0) {
                 for (CreatureEntity mob : mobs) {
                     FakePlayer player = IndustrialForegoing.getFakePlayer(world, mob.getPosition()); //getPosition
+                    //SHEAR INTERACTION
+                    ItemStack shears = new ItemStack(Items.SHEARS);
+                    if (mob instanceof IForgeShearable && ((IForgeShearable) mob).isShearable(shears, this.world, mob.getPosition())) { //getPosition
+                        List<ItemStack> items = ((IForgeShearable) mob).onSheared(player, shears, this.world, mob.getPosition(), 0); //getPosition
+                        items.forEach(stack -> ItemHandlerHelper.insertItem(output, stack, false));
+                        if (items.size() > 0) {
+                            return new WorkAction(0.35f, powerPerOperation);
+                        }
+                    }
+                    if (mob instanceof SquidEntity && !ItemStackUtils.isInventoryFull(output) && world.rand.nextBoolean() && world.rand.nextBoolean() && world.rand.nextBoolean() && world.rand.nextBoolean()) {
+                        ItemHandlerHelper.insertItem(output, new ItemStack(Items.BLACK_DYE), false);
+                        return new WorkAction(0.35f, powerPerOperation);
+                    }
                     //BUCKET INTERACTION
                     if (mob instanceof AnimalEntity && tank.getFluidAmount() + 1000 <= tank.getCapacity()) {
                         player.setHeldItem(Hand.MAIN_HAND, new ItemStack(Items.BUCKET));
@@ -93,19 +106,6 @@ public class AnimalRancherTile extends IndustrialAreaWorkingTile<AnimalRancherTi
                             }
                             player.setHeldItem(Hand.MAIN_HAND, ItemStack.EMPTY);
                         }
-                    }
-                    //SHEAR INTERACTION
-                    ItemStack shears = new ItemStack(Items.SHEARS);
-                    if (mob instanceof IForgeShearable && ((IForgeShearable) mob).isShearable(shears, this.world, mob.getPosition())) { //getPosition
-                        List<ItemStack> items = ((IForgeShearable) mob).onSheared(player, shears, this.world, mob.getPosition(), 0); //getPosition
-                        items.forEach(stack -> ItemHandlerHelper.insertItem(output, stack, false));
-                        if (items.size() > 0) {
-                            return new WorkAction(0.35f, powerPerOperation);
-                        }
-                    }
-                    if (mob instanceof SquidEntity && !ItemStackUtils.isInventoryFull(output) && world.rand.nextBoolean() && world.rand.nextBoolean() && world.rand.nextBoolean() && world.rand.nextBoolean()) {
-                        ItemHandlerHelper.insertItem(output, new ItemStack(Items.BLACK_DYE), false);
-                        return new WorkAction(0.35f, powerPerOperation);
                     }
                 }
             }

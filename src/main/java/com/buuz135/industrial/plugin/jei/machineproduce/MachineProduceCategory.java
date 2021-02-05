@@ -114,7 +114,6 @@ public class MachineProduceCategory implements IRecipeCategory<MachineProduceWra
             AssetUtil.drawAsset(matrixStack, Minecraft.getInstance().currentScreen, DefaultAssetProvider.DEFAULT_PROVIDER.getAsset(AssetTypes.TANK_SMALL), 56 , Minecraft.getInstance().fontRenderer.FONT_HEIGHT / 2);
         } else {
             SlotsScreenAddon.drawAsset(matrixStack, Minecraft.getInstance().currentScreen, DefaultAssetProvider.DEFAULT_PROVIDER, 56 , Minecraft.getInstance().fontRenderer.FONT_HEIGHT / 2, 0, 0, 1, integer -> Pair.of(1,1), integer -> ItemStack.EMPTY, true, integer -> new Color(DyeColor.ORANGE.getFireworkColor()), integer -> true);
-
         }
     }
 
