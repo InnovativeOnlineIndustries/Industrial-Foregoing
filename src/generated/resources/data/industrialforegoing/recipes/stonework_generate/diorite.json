@@ -1,0 +1,11 @@
+{
+  "output": {
+    "item": "minecraft:diorite",
+    "count": 1
+  },
+  "waterNeed": 200,
+  "lavaNeed": 250,
+  "waterConsume": 200,
+  "lavaConsume": 250,
+  "type": "industrialforegoing:stonework_generate"
+}

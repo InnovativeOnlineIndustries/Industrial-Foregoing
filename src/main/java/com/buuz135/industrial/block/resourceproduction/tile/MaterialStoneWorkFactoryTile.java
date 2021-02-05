@@ -24,7 +24,9 @@ package com.buuz135.industrial.block.resourceproduction.tile;
 import com.buuz135.industrial.block.tile.IndustrialProcessingTile;
 import com.buuz135.industrial.config.machine.resourceproduction.MaterialStoneWorkFactoryConfig;
 import com.buuz135.industrial.module.ModuleResourceProduction;
+import com.buuz135.industrial.recipe.StoneWorkGenerateRecipe;
 import com.buuz135.industrial.utils.CraftingUtils;
+import com.buuz135.industrial.utils.Reference;
 import com.hrznstudio.titanium.annotation.Save;
 import com.hrznstudio.titanium.api.IFactory;
 import com.hrznstudio.titanium.api.client.AssetTypes;
@@ -50,36 +52,25 @@ import net.minecraft.item.DyeColor;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.item.crafting.FurnaceRecipe;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.World;
-import net.minecraftforge.fluids.capability.IFluidHandler;
-import net.minecraftforge.fluids.capability.templates.FluidTank;
 import net.minecraftforge.items.ItemHandlerHelper;
 import org.apache.commons.lang3.tuple.Pair;
 
 import javax.annotation.Nonnull;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.function.BiConsumer;
+import java.util.*;
 import java.util.function.BiFunction;
-import java.util.function.BiPredicate;
+import java.util.stream.Collectors;
 
 public class MaterialStoneWorkFactoryTile extends IndustrialProcessingTile<MaterialStoneWorkFactoryTile> {
 
+    public static ResourceLocation DEFAULT = new ResourceLocation(Reference.MOD_ID, "stonework_generate/cobblestone");
+
     private int maxProgress;
     private int powerPerOperation;
-
-    public static GeneratorRecipe[] GENERATOR_RECIPES = new GeneratorRecipe[]{
-            new GeneratorRecipe(new ItemStack(Blocks.COBBLESTONE), 1000, 1000, 0, 0),
-            new GeneratorRecipe(new ItemStack(Blocks.NETHERRACK), 250, 400, 250, 200),
-            new GeneratorRecipe(new ItemStack(Blocks.OBSIDIAN), 1000, 1000, 0, 1000),
-            new GeneratorRecipe(new ItemStack(Blocks.GRANITE), 200, 200, 200, 200),
-            new GeneratorRecipe(new ItemStack(Blocks.DIORITE), 200, 250, 200, 250),
-            new GeneratorRecipe(new ItemStack(Blocks.ANDESITE), 300, 300, 300, 300)
-    };
 
     public static StoneWorkAction[] ACTION_RECIPES = new StoneWorkAction[]{
             new StoneWorkAction(new ItemStack(Blocks.FURNACE), (world1, itemStack) -> {
@@ -102,7 +93,7 @@ public class MaterialStoneWorkFactoryTile extends IndustrialProcessingTile<Mater
     @Save
     private SidedInventoryComponent<MaterialStoneWorkFactoryTile> inventoryGenerator;
     @Save
-    private int generatorRecipeId;
+    private String generatorRecipe;
     @Save
     private SidedInventoryComponent<MaterialStoneWorkFactoryTile> inventoryFirst;
     @Save
@@ -134,37 +125,40 @@ public class MaterialStoneWorkFactoryTile extends IndustrialProcessingTile<Mater
                 .setTankAction(FluidTankComponent.Action.FILL)
                 .setComponentHarness(this)
                 .setValidator(fluidStack -> fluidStack.getFluid().isEquivalentTo(Fluids.LAVA)));
-        this.generatorRecipeId = 0;
+        this.generatorRecipe = DEFAULT.toString();
         addButton(new ButtonComponent(54, 64, 18, 18) {
             @Override
             public List<IFactory<? extends IScreenAddon>> getScreenAddons() {
                 return Collections.singletonList(() -> new BasicButtonAddon(this) {
                     @Override
                     public void drawBackgroundLayer(MatrixStack stack, Screen screen, IAssetProvider provider, int guiX, int guiY, int mouseX, int mouseY, float partialTicks) {
-                        AssetUtil.drawAsset(stack, screen, provider.getAsset(AssetTypes.ITEM_BACKGROUND), guiX + getPosX(), guiY + getPosY());
-                        //RenderSystem.setupGui3DDiffuseLighting();
-                        Minecraft.getInstance().getItemRenderer().renderItemIntoGUI(GENERATOR_RECIPES[generatorRecipeId].output, guiX + getPosX() + 1, guiY + getPosY() + 1);
-                        RenderHelper.disableStandardItemLighting();
-                        RenderSystem.enableAlphaTest();
+                        getRecipe().ifPresent(recipe -> {
+                            AssetUtil.drawAsset(stack, screen, provider.getAsset(AssetTypes.ITEM_BACKGROUND), guiX + getPosX(), guiY + getPosY());
+                            //RenderSystem.setupGui3DDiffuseLighting();
+                            Minecraft.getInstance().getItemRenderer().renderItemIntoGUI(recipe.output, guiX + getPosX() + 1, guiY + getPosY() + 1);
+                            RenderHelper.disableStandardItemLighting();
+                            RenderSystem.enableAlphaTest();
+                        });
                     }
 
                     @Override
                     public List<ITextComponent> getTooltipLines() {
-                        GeneratorRecipe recipe = GENERATOR_RECIPES[generatorRecipeId];
                         List<ITextComponent> lines = new ArrayList<>();
-                        lines.add(new StringTextComponent(TextFormatting.GOLD + LangUtil.getString("tooltip.industrialforegoing.generating") + TextFormatting.WHITE + recipe.output.getDisplayName().getString()));
-                        lines.add(new StringTextComponent(TextFormatting.GOLD + LangUtil.getString("tooltip.industrialforegoing.needs")));
-                        lines.add(new StringTextComponent(TextFormatting.YELLOW + " - " + TextFormatting.WHITE + recipe.needsWater + TextFormatting.DARK_AQUA + LangUtil.getString("tooltip.industrialforegoing.mb_of", LangUtil.getString("block.minecraft.water"))));
-                        lines.add(new StringTextComponent(TextFormatting.YELLOW + " - " + TextFormatting.WHITE + recipe.needsLava + TextFormatting.DARK_AQUA + LangUtil.getString("tooltip.industrialforegoing.mb_of", LangUtil.getString("block.minecraft.lava"))));
-                        lines.add(new StringTextComponent(TextFormatting.GOLD + LangUtil.getString("tooltip.industrialforegoing.consumes")));
-                        lines.add(new StringTextComponent(TextFormatting.YELLOW + " - " + TextFormatting.WHITE + recipe.consumeWater + TextFormatting.DARK_AQUA + LangUtil.getString("tooltip.industrialforegoing.mb_of", LangUtil.getString("block.minecraft.water"))));
-                        lines.add(new StringTextComponent(TextFormatting.YELLOW + " - " + TextFormatting.WHITE + recipe.consumeLava + TextFormatting.DARK_AQUA + LangUtil.getString("tooltip.industrialforegoing.mb_of", LangUtil.getString("block.minecraft.lava"))));
+                        getRecipe().ifPresent(recipe -> {
+                            lines.add(new StringTextComponent(TextFormatting.GOLD + LangUtil.getString("tooltip.industrialforegoing.generating") + TextFormatting.WHITE + recipe.output.getDisplayName().getString()));
+                            lines.add(new StringTextComponent(TextFormatting.GOLD + LangUtil.getString("tooltip.industrialforegoing.needs")));
+                            lines.add(new StringTextComponent(TextFormatting.YELLOW + " - " + TextFormatting.WHITE + recipe.waterNeed + TextFormatting.DARK_AQUA + LangUtil.getString("tooltip.industrialforegoing.mb_of", LangUtil.getString("block.minecraft.water"))));
+                            lines.add(new StringTextComponent(TextFormatting.YELLOW + " - " + TextFormatting.WHITE + recipe.lavaNeed + TextFormatting.DARK_AQUA + LangUtil.getString("tooltip.industrialforegoing.mb_of", LangUtil.getString("block.minecraft.lava"))));
+                            lines.add(new StringTextComponent(TextFormatting.GOLD + LangUtil.getString("tooltip.industrialforegoing.consumes")));
+                            lines.add(new StringTextComponent(TextFormatting.YELLOW + " - " + TextFormatting.WHITE + recipe.waterConsume + TextFormatting.DARK_AQUA + LangUtil.getString("tooltip.industrialforegoing.mb_of", LangUtil.getString("block.minecraft.water"))));
+                            lines.add(new StringTextComponent(TextFormatting.YELLOW + " - " + TextFormatting.WHITE + recipe.lavaConsume + TextFormatting.DARK_AQUA + LangUtil.getString("tooltip.industrialforegoing.mb_of", LangUtil.getString("block.minecraft.lava"))));
+                        });
                         return lines;
                     }
                 });
             }
         }.setPredicate((playerEntity, compoundNBT) -> {
-            this.generatorRecipeId = (this.generatorRecipeId + 1) % GENERATOR_RECIPES.length;
+            getNextRecipe();
             markForUpdate();
         }));
         addInventory(inventoryGenerator = (SidedInventoryComponent<MaterialStoneWorkFactoryTile>) new SidedInventoryComponent<MaterialStoneWorkFactoryTile>("inventoryGenerator", 74, 23, 2, 2)
@@ -302,18 +296,38 @@ public class MaterialStoneWorkFactoryTile extends IndustrialProcessingTile<Mater
 
     @Override
     public boolean canIncrease() {
-        return GENERATOR_RECIPES[generatorRecipeId].canIncrease.test(water, lava) && ItemHandlerHelper.insertItem(inventoryGenerator, GENERATOR_RECIPES[generatorRecipeId].output.copy(), true).isEmpty();
+        return getRecipe().map(recipe -> recipe.canIncrease(water, lava) && ItemHandlerHelper.insertItem(inventoryGenerator, recipe.output.copy(), true).isEmpty()).orElse(false);
+    }
+
+    public Optional<StoneWorkGenerateRecipe> getRecipe(){
+        Collection<StoneWorkGenerateRecipe> recipes =  RecipeUtil.getRecipes(this.world, StoneWorkGenerateRecipe.SERIALIZER.getRecipeType());
+        for (StoneWorkGenerateRecipe recipe : recipes) {
+            if (recipe.getId().equals(new ResourceLocation(generatorRecipe))){
+                return Optional.of(recipe);
+            }
+        }
+        return recipes.stream().filter(stoneWorkGenerateRecipe -> stoneWorkGenerateRecipe.getId().equals(DEFAULT)).findFirst();
+    }
+
+    public ResourceLocation getNextRecipe(){
+        if (generatorRecipe != null){
+            List<ResourceLocation> rls = RecipeUtil.getRecipes(this.world, StoneWorkGenerateRecipe.SERIALIZER.getRecipeType()).stream().map(StoneWorkGenerateRecipe::getId).collect(Collectors.toList());
+            int currentIndex = rls.indexOf(new ResourceLocation(generatorRecipe));
+            this.generatorRecipe = rls.get((currentIndex + 1) % rls.size()).toString();
+        }
+        return DEFAULT;
     }
 
     @Override
     public Runnable onFinish() {
         return () -> {
             if (!process(inventoryThird, inventoryFourth, ACTION_RECIPES[fourthRecipeId]) && !process(inventorySecond, inventoryThird, ACTION_RECIPES[thirdRecipeId]) && !process(inventoryFirst, inventorySecond, ACTION_RECIPES[secondRecipeId]) && !process(inventoryGenerator, inventoryFirst, ACTION_RECIPES[firstRecipeId])) {
-                GeneratorRecipe recipe = GENERATOR_RECIPES[generatorRecipeId];
-                ItemStack output = recipe.output.copy();
-                if (ItemHandlerHelper.insertItem(inventoryGenerator, output, false).isEmpty()) {
-                    recipe.consume.accept(water, lava);
-                }
+                getRecipe().ifPresent(recipe -> {
+                    ItemStack output = recipe.output.copy();
+                    if (ItemHandlerHelper.insertItem(inventoryGenerator, output, false).isEmpty()) {
+                        recipe.consume(water, lava);
+                    }
+                });
             }
         };
     }
@@ -347,35 +361,6 @@ public class MaterialStoneWorkFactoryTile extends IndustrialProcessingTile<Mater
     @Override
     public int getMaxProgress() {
         return maxProgress;
-    }
-
-
-    public static class GeneratorRecipe {
-
-        private ItemStack output;
-        private BiPredicate<FluidTank, FluidTank> canIncrease;
-        private BiConsumer<FluidTankComponent, FluidTankComponent> consume;
-        private int needsWater;
-        private int needsLava;
-        private int consumeWater;
-        private int consumeLava;
-
-        public GeneratorRecipe(ItemStack output, int needsWater, int needsLava, int consumeWater, int consumeLava) {
-            this.output = output;
-            this.needsWater = needsWater;
-            this.needsLava = needsLava;
-            this.consumeWater = consumeWater;
-            this.consumeLava = consumeLava;
-            this.canIncrease = (fluidTank, fluidTank2) -> fluidTank.getFluidAmount() >= needsWater && fluidTank2.getFluidAmount() >= needsLava;
-            this.consume = (fluidTank, fluidTank2) -> {
-                fluidTank.drainForced(consumeWater, IFluidHandler.FluidAction.EXECUTE);
-                fluidTank2.drainForced(consumeLava, IFluidHandler.FluidAction.EXECUTE);
-            };
-        }
-
-        public ItemStack getOutput() {
-            return output;
-        }
     }
 
     public static class StoneWorkAction {

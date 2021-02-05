@@ -25,7 +25,6 @@ import com.buuz135.industrial.proxy.event.FakePlayerRideEntityHandler;
 import com.buuz135.industrial.proxy.event.MeatFeederTickHandler;
 import com.buuz135.industrial.proxy.event.MobDeathHandler;
 import com.buuz135.industrial.proxy.event.SkullHandler;
-import com.buuz135.industrial.utils.CraftingUtils;
 import com.google.gson.JsonParser;
 import com.hrznstudio.titanium.event.handler.EventManager;
 import com.hrznstudio.titanium.util.URLUtil;
@@ -66,7 +65,6 @@ public class CommonProxy {
         } catch (Exception e) {
             e.printStackTrace();
         }
-        CraftingUtils.generateCrushedRecipes();
     }
 
 }

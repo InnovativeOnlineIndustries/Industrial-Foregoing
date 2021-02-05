@@ -1,0 +1,11 @@
+{
+  "output": {
+    "item": "minecraft:andesite",
+    "count": 1
+  },
+  "waterNeed": 300,
+  "lavaNeed": 300,
+  "waterConsume": 300,
+  "lavaConsume": 300,
+  "type": "industrialforegoing:stonework_generate"
+}

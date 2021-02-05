@@ -1,0 +1,25 @@
+{
+  "type": "forge:conditional",
+  "recipes": [
+    {
+      "conditions": [
+        {
+          "value": {
+            "tag": "forge:silicon",
+            "type": "forge:tag_empty"
+          },
+          "type": "forge:not"
+        }
+      ],
+      "recipe": {
+        "input": {
+          "tag": "forge:sand"
+        },
+        "output": {
+          "tag": "forge:silicon"
+        },
+        "type": "industrialforegoing:crusher"
+      }
+    }
+  ]
+}
