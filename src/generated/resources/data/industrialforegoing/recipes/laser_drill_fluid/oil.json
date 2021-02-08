@@ -12,8 +12,7 @@
         "output": "{FluidName:\"pneumaticcraft:oil\",Amount:50}",
         "rarity": [
           {
-            "whitelist": {},
-            "blacklist": {
+            "whitelist": {
               "type": "minecraft:worldgen/biome",
               "values": [
                 "minecraft:desert",
@@ -28,6 +27,7 @@
                 "minecraft:warm_ocean"
               ]
             },
+            "blacklist": {},
             "depth_min": 20,
             "depth_max": 60,
             "weight": 8

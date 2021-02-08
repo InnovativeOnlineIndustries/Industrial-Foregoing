@@ -53,7 +53,7 @@ public class LaserDrillFluidRecipe extends SerializableRecipe {
     public static void init() {
         new LaserDrillFluidRecipe(new FluidStack(Fluids.LAVA, 100),  1, EMPTY, new LaserDrillRarity(LaserDrillRarity.NETHER, new RegistryKey[0], 5, 20, 8));
         new LaserDrillFluidRecipe(new FluidStack(ModuleCore.ETHER.getSourceFluid(), 10),  10, new ResourceLocation("minecraft", "wither"), new LaserDrillRarity(new RegistryKey[0], new RegistryKey[0], 0, 256, 8));
-        new LaserDrillFluidRecipe("oil", createNBT("pneumaticcraft:oil", 50),  15, EMPTY, new LaserDrillRarity(new RegistryKey[0], LaserDrillRarity.OIL, 20, 60, 8)).setModIdCondition("pneumaticcraft");
+        new LaserDrillFluidRecipe("oil", createNBT("pneumaticcraft:oil", 50),  15, EMPTY, new LaserDrillRarity( LaserDrillRarity.OIL, new RegistryKey[0], 20, 60, 8)).setModIdCondition("pneumaticcraft");
     }
 
     public CompoundNBT output;
