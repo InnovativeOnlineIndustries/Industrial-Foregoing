@@ -26,6 +26,7 @@ import com.buuz135.industrial.config.machine.core.DissolutionChamberConfig;
 import com.buuz135.industrial.module.ModuleCore;
 import com.buuz135.industrial.recipe.DissolutionChamberRecipe;
 import com.hrznstudio.titanium.annotation.Save;
+import com.hrznstudio.titanium.component.bundle.LockableInventoryBundle;
 import com.hrznstudio.titanium.component.energy.EnergyStorageComponent;
 import com.hrznstudio.titanium.component.fluid.FluidTankComponent;
 import com.hrznstudio.titanium.component.fluid.SidedFluidTankComponent;
@@ -47,7 +48,7 @@ public class DissolutionChamberTile extends IndustrialProcessingTile<Dissolution
     private int powerPerTick;
 
     @Save
-    private SidedInventoryComponent<DissolutionChamberTile> input;
+    private LockableInventoryBundle<DissolutionChamberTile> input;
     @Save
     private SidedFluidTankComponent<DissolutionChamberTile> inputFluid;
     @Save
@@ -59,14 +60,14 @@ public class DissolutionChamberTile extends IndustrialProcessingTile<Dissolution
     public DissolutionChamberTile() {
         super(ModuleCore.DISSOLUTION_CHAMBER, 102, 41);
         int slotSpacing = 22;
-        this.addInventory(input = (SidedInventoryComponent<DissolutionChamberTile>) new SidedInventoryComponent<DissolutionChamberTile>("input", 34, 19, 8, 0).
+        this.addBundle(this.input = new LockableInventoryBundle<>(this, new SidedInventoryComponent<DissolutionChamberTile>("input", 34, 19, 8, 0).
                 setColor(DyeColor.LIGHT_BLUE).
                 setSlotPosition(integer -> getSlotPos(integer)).
                 setSlotLimit(1).
                 setOutputFilter((stack, integer) -> false).
                 setComponentHarness(this).
                 setInputFilter(((stack, integer) -> !canIncrease())).
-                setOnSlotChanged((stack, integer) -> checkForRecipe()));
+                setOnSlotChanged((stack, integer) -> checkForRecipe()), 100, 64, false));
         this.addTank(this.inputFluid = (SidedFluidTankComponent<DissolutionChamberTile>) new SidedFluidTankComponent<DissolutionChamberTile>("input_fluid", DissolutionChamberConfig.maxInputTankSize, 33 + slotSpacing, 18 + slotSpacing, 1).
                 setColor(DyeColor.LIME).
                 setTankType(FluidTankComponent.Type.SMALL).
@@ -88,10 +89,10 @@ public class DissolutionChamberTile extends IndustrialProcessingTile<Dissolution
 
     private void checkForRecipe() {
         if (isServer()) {
-            if (currentRecipe != null && currentRecipe.matches(input, inputFluid)) {
+            if (currentRecipe != null && currentRecipe.matches(input.getInventory(), inputFluid)) {
                 return;
             }
-            currentRecipe = RecipeUtil.getRecipes(this.world, DissolutionChamberRecipe.SERIALIZER.getRecipeType()).stream().filter(dissolutionChamberRecipe -> dissolutionChamberRecipe.matches(input, inputFluid)).findFirst().orElse(null);
+            currentRecipe = RecipeUtil.getRecipes(this.world, DissolutionChamberRecipe.SERIALIZER.getRecipeType()).stream().filter(dissolutionChamberRecipe -> dissolutionChamberRecipe.matches(input.getInventory(), inputFluid)).findFirst().orElse(null);
         }
     }
 
@@ -112,8 +113,8 @@ public class DissolutionChamberTile extends IndustrialProcessingTile<Dissolution
             if (currentRecipe != null) {
                 DissolutionChamberRecipe dissolutionChamberRecipe = currentRecipe;
                 inputFluid.drainForced(dissolutionChamberRecipe.inputFluid, IFluidHandler.FluidAction.EXECUTE);
-                for (int i = 0; i < input.getSlots(); i++) {
-                    input.getStackInSlot(i).shrink(1);
+                for (int i = 0; i < input.getInventory().getSlots(); i++) {
+                    input.getInventory().getStackInSlot(i).shrink(1);
                 }
                 if (dissolutionChamberRecipe.outputFluid != null && !dissolutionChamberRecipe.outputFluid.isEmpty())
                     outputFluid.fillForced(dissolutionChamberRecipe.outputFluid.copy(), IFluidHandler.FluidAction.EXECUTE);

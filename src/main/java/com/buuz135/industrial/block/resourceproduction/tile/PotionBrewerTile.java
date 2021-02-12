@@ -28,6 +28,7 @@ import com.hrznstudio.titanium.annotation.Save;
 import com.hrznstudio.titanium.api.IFactory;
 import com.hrznstudio.titanium.api.client.IScreenAddon;
 import com.hrznstudio.titanium.client.screen.addon.ProgressBarScreenAddon;
+import com.hrznstudio.titanium.component.bundle.LockableInventoryBundle;
 import com.hrznstudio.titanium.component.energy.EnergyStorageComponent;
 import com.hrznstudio.titanium.component.fluid.FluidTankComponent;
 import com.hrznstudio.titanium.component.fluid.SidedFluidTankComponent;
@@ -66,7 +67,7 @@ public class PotionBrewerTile extends IndustrialProcessingTile<PotionBrewerTile>
     @Save
     private SidedInventoryComponent<PotionBrewerTile> bottleInput;
     @Save
-    private SidedInventoryComponent<PotionBrewerTile> brewingItems;
+    private LockableInventoryBundle<PotionBrewerTile> brewingItems;
     @Save
     private SidedInventoryComponent<PotionBrewerTile> output;
     @Save
@@ -111,12 +112,11 @@ public class PotionBrewerTile extends IndustrialProcessingTile<PotionBrewerTile>
                 .setOutputFilter((stack, integer) -> false)
                 .setSlotToItemStackRender(0, new ItemStack(Items.GLASS_BOTTLE))
         );
-        addInventory(brewingItems = (SidedInventoryComponent<PotionBrewerTile>) new SidedInventoryComponent<PotionBrewerTile>("brewingInput", 55, 19, 6, 3)
+        addBundle(brewingItems = new LockableInventoryBundle<>(this, new SidedInventoryComponent<PotionBrewerTile>("brewingInput", 55, 19, 6, 3)
                 .setColor(DyeColor.BLUE)
-                //.setRange(2, 3)
                 .setInputFilter((stack, integer) -> true)
-                .setOutputFilter((stack, integer) -> false)
-        );
+                .setOutputFilter((stack, integer) -> false),
+                148, 40, false));
         addInventory(output = (SidedInventoryComponent<PotionBrewerTile>) new SidedInventoryComponent<PotionBrewerTile>("output", 82, 64, 3, 4)
                 .setColor(DyeColor.MAGENTA)
                 //.setRange(1,3)
@@ -180,7 +180,7 @@ public class PotionBrewerTile extends IndustrialProcessingTile<PotionBrewerTile>
     }
 
     private boolean canBrew(int slot) {
-        ItemStack ingredient = this.brewingItems.getStackInSlot(slot);
+        ItemStack ingredient = this.brewingItems.getInventory().getStackInSlot(slot);
         NonNullList<ItemStack> input = NonNullList.create();
         input.addAll(InventoryUtil.getStacks(this.output));
         int[] indices = new int[input.size()];
@@ -208,7 +208,7 @@ public class PotionBrewerTile extends IndustrialProcessingTile<PotionBrewerTile>
         input.addAll(InventoryUtil.getStacks(this.output));
         int[] indices = new int[input.size()];
         for (int i = 0; i < indices.length; i++) indices[i] = i;
-        ItemStack ingredient = this.brewingItems.getStackInSlot(slot);
+        ItemStack ingredient = this.brewingItems.getInventory().getStackInSlot(slot);
         input.add(ingredient);
         if (ForgeEventFactory.onPotionAttemptBrew(input)) return;
         BrewingRecipeRegistry.brewPotions(input, ingredient, indices);
