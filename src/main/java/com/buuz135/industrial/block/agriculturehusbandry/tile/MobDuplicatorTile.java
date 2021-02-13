@@ -1,10 +1,5 @@
 package com.buuz135.industrial.block.agriculturehusbandry.tile;
 
-import java.util.List;
-import java.util.UUID;
-
-import javax.annotation.Nonnull;
-
 import com.buuz135.industrial.block.tile.IndustrialAreaWorkingTile;
 import com.buuz135.industrial.block.tile.RangeManager;
 import com.buuz135.industrial.config.machine.agriculturehusbandry.MobDuplicatorConfig;
@@ -20,8 +15,6 @@ import com.hrznstudio.titanium.component.fluid.FluidTankComponent;
 import com.hrznstudio.titanium.component.fluid.SidedFluidTankComponent;
 import com.hrznstudio.titanium.component.inventory.SidedInventoryComponent;
 import com.hrznstudio.titanium.item.AugmentWrapper;
-import net.minecraftforge.fluids.capability.IFluidHandler;
-
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.item.DyeColor;
 import net.minecraft.item.ItemStack;
@@ -29,6 +22,11 @@ import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.shapes.VoxelShape;
 import net.minecraft.util.math.vector.Vector3d;
+import net.minecraftforge.fluids.capability.IFluidHandler;
+
+import javax.annotation.Nonnull;
+import java.util.List;
+import java.util.UUID;
 
 public class MobDuplicatorTile extends IndustrialAreaWorkingTile<MobDuplicatorTile> {
 
@@ -106,6 +104,8 @@ public class MobDuplicatorTile extends IndustrialAreaWorkingTile<MobDuplicatorTi
 				tank.drainForced(essenceNeeded, IFluidHandler.FluidAction.EXECUTE);
 			}
 			--spawnAmount;
+		}
+		if (canSpawn > 0) {
 			return new WorkAction(1f, MobDuplicatorConfig.powerPerOperation);
 		}
 
