@@ -296,7 +296,11 @@ public class MaterialStoneWorkFactoryTile extends IndustrialProcessingTile<Mater
 
     @Override
     public boolean canIncrease() {
-        return getRecipe().map(recipe -> recipe.canIncrease(water, lava) && ItemHandlerHelper.insertItem(inventoryGenerator, recipe.output.copy(), true).isEmpty()).orElse(false);
+        return getRecipe().map(recipe -> recipe.canIncrease(water, lava) && ItemHandlerHelper.insertItem(inventoryGenerator, recipe.output.copy(), true).isEmpty()).orElse(false)
+                || process(inventoryThird, inventoryFourth, ACTION_RECIPES[fourthRecipeId], true)
+                || process(inventorySecond, inventoryThird, ACTION_RECIPES[thirdRecipeId], true)
+                || process(inventoryFirst, inventorySecond, ACTION_RECIPES[secondRecipeId], true)
+                || process(inventoryGenerator, inventoryFirst, ACTION_RECIPES[firstRecipeId], true);
     }
 
     public Optional<StoneWorkGenerateRecipe> getRecipe(){
@@ -321,7 +325,7 @@ public class MaterialStoneWorkFactoryTile extends IndustrialProcessingTile<Mater
     @Override
     public Runnable onFinish() {
         return () -> {
-            if (!process(inventoryThird, inventoryFourth, ACTION_RECIPES[fourthRecipeId]) && !process(inventorySecond, inventoryThird, ACTION_RECIPES[thirdRecipeId]) && !process(inventoryFirst, inventorySecond, ACTION_RECIPES[secondRecipeId]) && !process(inventoryGenerator, inventoryFirst, ACTION_RECIPES[firstRecipeId])) {
+            if (!process(inventoryThird, inventoryFourth, ACTION_RECIPES[fourthRecipeId], false) && !process(inventorySecond, inventoryThird, ACTION_RECIPES[thirdRecipeId], false) && !process(inventoryFirst, inventorySecond, ACTION_RECIPES[secondRecipeId], false) && !process(inventoryGenerator, inventoryFirst, ACTION_RECIPES[firstRecipeId], false)) {
                 getRecipe().ifPresent(recipe -> {
                     ItemStack output = recipe.output.copy();
                     if (ItemHandlerHelper.insertItem(inventoryGenerator, output, false).isEmpty()) {
@@ -337,15 +341,23 @@ public class MaterialStoneWorkFactoryTile extends IndustrialProcessingTile<Mater
         return powerPerOperation;
     }
 
-    private boolean process(SidedInventoryComponent input, SidedInventoryComponent output, StoneWorkAction action) {
+    private boolean process(SidedInventoryComponent input, SidedInventoryComponent output, StoneWorkAction action, boolean simulate) {
+        boolean full = true;
+        for (int i = 0; i < output.getSlots(); i++) {
+            ItemStack stack = output.getStackInSlot(i);
+            if (stack.isEmpty() || stack.getCount() < stack.getMaxStackSize()) full = false;
+        }
+        if (full) return false;
         for (int slot = 0; slot < input.getSlots(); slot++) {
             ItemStack inputStack = input.getStackInSlot(slot);
             if (inputStack.isEmpty()) continue;
             ItemStack outputStack = action.work.apply(this.world, inputStack.copy()).copy();
             if (outputStack.isEmpty()) continue;
             if (ItemHandlerHelper.insertItem(output, outputStack, true).isEmpty()) {
-                ItemHandlerHelper.insertItem(output, outputStack, false);
-                inputStack.shrink(action.getShrinkAmount());
+                if (!simulate){
+                    ItemHandlerHelper.insertItem(output, outputStack, false);
+                    inputStack.shrink(action.getShrinkAmount());
+                }
                 return true;
             }
         }
