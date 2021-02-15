@@ -28,6 +28,7 @@ import com.buuz135.industrial.item.addon.RangeAddonItem;
 import com.buuz135.industrial.module.ModuleAgricultureHusbandry;
 import com.hrznstudio.titanium.annotation.Save;
 import com.hrznstudio.titanium.api.filter.FilterSlot;
+import com.hrznstudio.titanium.component.bundle.LockableInventoryBundle;
 import com.hrznstudio.titanium.component.energy.EnergyStorageComponent;
 import com.hrznstudio.titanium.component.inventory.SidedInventoryComponent;
 import com.hrznstudio.titanium.filter.ItemStackFilter;
@@ -52,7 +53,7 @@ public class PlantSowerTile extends IndustrialAreaWorkingTile<PlantSowerTile> {
     @Save
     private ItemStackFilter filter;
     @Save
-    private SidedInventoryComponent<PlantSowerTile> input;
+    private LockableInventoryBundle<PlantSowerTile> input;
 
     public PlantSowerTile() {
         super(ModuleAgricultureHusbandry.PLANT_SOWER, RangeManager.RangeType.TOP_UP, true, PlantSowerConfig.powerPerOperation);
@@ -72,11 +73,11 @@ public class PlantSowerTile extends IndustrialAreaWorkingTile<PlantSowerTile> {
                 ++pos;
             }
         }
-        addInventory(this.input = (SidedInventoryComponent<PlantSowerTile>) new SidedInventoryComponent<PlantSowerTile>("input", 54 + 18 * 3, 22, 9, 0).
+        addBundle(this.input = new LockableInventoryBundle<>(this, new SidedInventoryComponent<PlantSowerTile>("input", 54 + 18 * 3, 22, 9, 0).
                 setColor(DyeColor.CYAN).
                 setInputFilter((itemStack, integer) -> itemStack.getItem() instanceof BlockItem && ((BlockItem) itemStack.getItem()).getBlock() instanceof IPlantable).
                 setRange(3, 3).
-                setComponentHarness(this));
+                setComponentHarness(this), 118, 84, false));
         this.maxProgress = PlantSowerConfig.maxProgress;
         this.powerPerOperation = PlantSowerConfig.powerPerOperation;
     }
@@ -87,10 +88,10 @@ public class PlantSowerTile extends IndustrialAreaWorkingTile<PlantSowerTile> {
         if (isLoaded(pos) && this.world.isAirBlock(pos) && hasEnergy(powerPerOperation)) {
             int slot = getFilteredSlot(pos);
             ItemStack stack = ItemStack.EMPTY;
-            for (int i = 0; i < input.getSlots(); i++) {
-                if (input.getStackInSlot(i).isEmpty()) continue;
-                if (filter.getFilterSlots()[slot].getFilter().isEmpty() || filter.getFilterSlots()[slot].getFilter().isItemEqual(input.getStackInSlot(i))) {
-                    stack = input.getStackInSlot(i);
+            for (int i = 0; i < input.getInventory().getSlots(); i++) {
+                if (input.getInventory().getStackInSlot(i).isEmpty()) continue;
+                if (filter.getFilterSlots()[slot].getFilter().isEmpty() || filter.getFilterSlots()[slot].getFilter().isItemEqual(input.getInventory().getStackInSlot(i))) {
+                    stack = input.getInventory().getStackInSlot(i);
                     break;
                 }
             }
@@ -113,8 +114,8 @@ public class PlantSowerTile extends IndustrialAreaWorkingTile<PlantSowerTile> {
     private int getFilteredSlot(BlockPos pos) {
         int radius = hasAugmentInstalled(RangeAddonItem.RANGE) ? (int) AugmentWrapper.getType(getInstalledAugments(RangeAddonItem.RANGE).get(0), RangeAddonItem.RANGE) + 1 : 0;
         if (radius == 0) {
-            for (int i = 0; i < input.getSlots(); ++i) {
-                if (!input.getStackInSlot(i).isEmpty()) {
+            for (int i = 0; i < input.getInventory().getSlots(); ++i) {
+                if (!input.getInventory().getStackInSlot(i).isEmpty()) {
                     return i;
                 }
             }

@@ -30,6 +30,7 @@ import com.hrznstudio.titanium.annotation.Save;
 import com.hrznstudio.titanium.api.IFactory;
 import com.hrznstudio.titanium.api.client.IScreenAddon;
 import com.hrznstudio.titanium.client.screen.addon.ProgressBarScreenAddon;
+import com.hrznstudio.titanium.component.bundle.LockableInventoryBundle;
 import com.hrznstudio.titanium.component.energy.EnergyStorageComponent;
 import com.hrznstudio.titanium.component.fluid.FluidTankComponent;
 import com.hrznstudio.titanium.component.fluid.SidedFluidTankComponent;
@@ -66,7 +67,7 @@ public class BioReactorTile extends IndustrialWorkingTile<BioReactorTile> {
     @Save
     private SidedFluidTankComponent<BioReactorTile> water;
     @Save
-    private SidedInventoryComponent<BioReactorTile> input;
+    private LockableInventoryBundle<BioReactorTile> input;
     @Save
     private ProgressBarComponent<BioReactorTile> bar;
 
@@ -78,13 +79,13 @@ public class BioReactorTile extends IndustrialWorkingTile<BioReactorTile> {
                 setTankAction(FluidTankComponent.Action.FILL).
                 setValidator(fluidStack -> fluidStack.getFluid().equals(Fluids.WATER))
         );
-        addInventory(input = (SidedInventoryComponent<BioReactorTile>) new SidedInventoryComponent<BioReactorTile>("input", 69, 22, 9, 1).
+        addBundle(input = new LockableInventoryBundle<>(this, new SidedInventoryComponent<BioReactorTile>("input", 69, 22, 9, 1).
                 setColor(DyeColor.BLUE).
                 setRange(3, 3).
                 setInputFilter((stack, integer) -> canInsert(integer, stack)).
                 setOutputFilter((stack, integer) -> false).
                 setComponentHarness(this)
-        );
+        , 136, 84, false));
         addTank(biofuel = (SidedFluidTankComponent<BioReactorTile>) new SidedFluidTankComponent<BioReactorTile>("biofuel", BioReactorConfig.maxBioFuelTankStorage, 74 + 18 * 3, 20, 2).
                 setColor(DyeColor.PURPLE).
                 setComponentHarness(this).
@@ -121,8 +122,8 @@ public class BioReactorTile extends IndustrialWorkingTile<BioReactorTile> {
             if (water.getFluidAmount() >= fluidAmount && biofuel.getCapacity() - biofuel.getFluidAmount() >= fluidAmount) {
                 water.drainForced(fluidAmount, IFluidHandler.FluidAction.EXECUTE);
                 biofuel.fillForced(new FluidStack(ModuleCore.BIOFUEL.getSourceFluid(), fluidAmount), IFluidHandler.FluidAction.EXECUTE);
-                for (int i = 0; i < input.getSlots(); i++) {
-                    input.getStackInSlot(i).shrink(1);
+                for (int i = 0; i < input.getInventory().getSlots(); i++) {
+                    input.getInventory().getStackInSlot(i).shrink(1);
                 }
                 new WorkAction(1, getPowerPerOperation);
             }
@@ -131,10 +132,10 @@ public class BioReactorTile extends IndustrialWorkingTile<BioReactorTile> {
     }
 
     private boolean canInsert(int slot, ItemStack stack) {
-        for (int i = 0; i < input.getSlots(); i++) {
-            if (i != slot && input.getStackInSlot(i).isItemEqual(stack)) {
+        for (int i = 0; i < input.getInventory().getSlots(); i++) {
+            if (i != slot && input.getInventory().getStackInSlot(i).isItemEqual(stack)) {
                 return false;
-            } else if (i == slot && input.getStackInSlot(i).isItemEqual(stack) && input.getStackInSlot(i).getCount() + stack.getCount() <= input.getStackInSlot(i).getMaxStackSize()) {
+            } else if (i == slot && input.getInventory().getStackInSlot(i).isItemEqual(stack) && input.getInventory().getStackInSlot(i).getCount() + stack.getCount() <= input.getInventory().getStackInSlot(i).getMaxStackSize()) {
                 return true;
             }
         }
@@ -146,8 +147,8 @@ public class BioReactorTile extends IndustrialWorkingTile<BioReactorTile> {
 
     private int getEfficiency() {
         int slots = 0;
-        for (int i = 0; i < input.getSlots(); i++) {
-            if (!input.getStackInSlot(i).isEmpty()) {
+        for (int i = 0; i < input.getInventory().getSlots(); i++) {
+            if (!input.getInventory().getStackInSlot(i).isEmpty()) {
                 ++slots;
             }
         }
