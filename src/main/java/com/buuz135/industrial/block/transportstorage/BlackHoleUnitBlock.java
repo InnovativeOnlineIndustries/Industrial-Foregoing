@@ -135,6 +135,7 @@ public class BlackHoleUnitBlock extends IndustrialBlock<BlackHoleUnitTile> {
         nbtBuilder.replaceOperation("stored",  "BlockEntityTag.stored");
         nbtBuilder.replaceOperation("blStack",  "BlockEntityTag.blStack");
         nbtBuilder.replaceOperation("voidItems",  "BlockEntityTag.voidItems");
+        nbtBuilder.replaceOperation("hasNBT",  "BlockEntityTag.hasNBT");
         return blockLootTables.droppingSelfWithNbt(this, nbtBuilder);
     }
 

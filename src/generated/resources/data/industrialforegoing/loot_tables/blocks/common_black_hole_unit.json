@@ -25,6 +25,11 @@
                   "source": "voidItems",
                   "target": "BlockEntityTag.voidItems",
                   "op": "replace"
+                },
+                {
+                  "source": "hasNBT",
+                  "target": "BlockEntityTag.hasNBT",
+                  "op": "replace"
                 }
               ]
             }
