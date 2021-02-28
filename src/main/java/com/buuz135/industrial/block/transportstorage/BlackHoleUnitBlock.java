@@ -154,7 +154,7 @@ public class BlackHoleUnitBlock extends IndustrialBlock<BlackHoleUnitTile> {
         if (rarity == Rarity.COMMON){
             TitaniumShapedRecipeBuilder.shapedRecipe(this)
                     .patternLine("PPP").patternLine("CEC").patternLine("CMC")
-                    .key('P', IndustrialTags.Items.PLASTIC)
+                    .key('P', Tags.Items.INGOTS_IRON)
                     .key('E', IndustrialTags.Items.GEAR_IRON)
                     .key('C', Tags.Items.CHESTS_WOODEN)
                     .key('M', IndustrialTags.Items.MACHINE_FRAME_PITY)

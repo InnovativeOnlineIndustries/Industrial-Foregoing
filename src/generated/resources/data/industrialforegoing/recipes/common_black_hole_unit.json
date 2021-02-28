@@ -22,7 +22,7 @@
         ],
         "key": {
           "P": {
-            "tag": "forge:plastic"
+            "tag": "forge:ingots/iron"
           },
           "E": {
             "tag": "forge:gears/iron"
