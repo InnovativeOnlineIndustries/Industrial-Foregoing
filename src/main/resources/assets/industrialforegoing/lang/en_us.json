@@ -444,6 +444,7 @@
   "tooltip.titanium.facing_handler.inventoryfirst": "First Inventory",
   "tooltip.titanium.facing_handler.inventorysecond": "Second Inventory",
   "tooltip.titanium.facing_handler.inventorythird": "Third Inventory",
+  "tooltip.titanium.facing_handler.inventoryfour": "Fourth Inventory",
   "tooltip.titanium.facing_handler.inputenchanteditem": "Input Enchantment Item",
   "tooltip.titanium.facing_handler.inputbook": "Input Book",
   "tooltip.titanium.facing_handler.outputnoenchanteditem": "Enchantless Item Output",
