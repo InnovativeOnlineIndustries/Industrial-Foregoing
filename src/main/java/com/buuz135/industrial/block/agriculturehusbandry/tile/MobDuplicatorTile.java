@@ -66,7 +66,7 @@ public class MobDuplicatorTile extends IndustrialAreaWorkingTile<MobDuplicatorTi
 	@Override
 	public WorkAction work() {
 
-		if (input.getStackInSlot(0).isEmpty()) return new WorkAction(1, 0);
+		if (input.getStackInSlot(0).isEmpty() || hasEnergy(MobDuplicatorConfig.powerPerOperation)) return new WorkAction(1, 0);
 		if (tank.getFluid().isEmpty()) return new WorkAction(1, 0);
 
 		ItemStack stack = input.getStackInSlot(0);

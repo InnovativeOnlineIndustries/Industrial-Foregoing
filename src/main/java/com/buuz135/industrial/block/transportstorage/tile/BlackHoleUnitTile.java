@@ -79,6 +79,8 @@ public class BlackHoleUnitTile extends BHTile<BlackHoleUnitTile> {
     private boolean voidItems;
     @Save
     private boolean useStackDisplay;
+    @Save
+    private boolean hasNBT;
 
     private BlackHoleHandler handler;
     private final LazyOptional<IItemHandler> lazyStorage;
@@ -89,6 +91,7 @@ public class BlackHoleUnitTile extends BHTile<BlackHoleUnitTile> {
         this.stored = 0;
         this.voidItems = true;
         this.useStackDisplay = false;
+        this.hasNBT = false;
         this.handler = new BlackHoleHandler(BlockUtils.getStackAmountByRarity(rarity));
         this.lazyStorage = LazyOptional.of(() -> handler);
         this.addFilter(filter = new ItemStackFilter("filter" , 1));
@@ -204,6 +207,18 @@ public class BlackHoleUnitTile extends BHTile<BlackHoleUnitTile> {
         }
     }
 
+    @Override
+    public void tick() {
+        super.tick();
+        if (isServer()){
+            if (!this.hasNBT && this.blStack.hasTag()){
+                ItemStack stack = this.blStack.copy();
+                stack.setTag(null);
+                this.setStack(stack);
+            }
+        }
+    }
+
     public void setAmount(int amount){
         boolean equal = amount == stored;
         this.stored = amount;
@@ -213,6 +228,7 @@ public class BlackHoleUnitTile extends BHTile<BlackHoleUnitTile> {
     public void setStack(ItemStack stack){
         boolean equal = blStack.isItemEqual(stack) && ItemStack.areItemStackTagsEqual(blStack, stack);
         this.blStack = stack;
+        this.hasNBT = this.blStack.hasTag();
         if (!equal) syncObject(this.blStack);
     }
 

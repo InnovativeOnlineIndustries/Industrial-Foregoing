@@ -57,6 +57,7 @@ import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.IBlockReader;
 import net.minecraft.world.World;
+import net.minecraftforge.common.Tags;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.ICapabilityProvider;
 import net.minecraftforge.common.util.LazyOptional;
@@ -144,7 +145,7 @@ public class BlackHoleTankBlock extends IndustrialBlock<BlackHoleTankTile> {
         if (rarity == Rarity.COMMON){
             TitaniumShapedRecipeBuilder.shapedRecipe(this)
                     .patternLine("PPP").patternLine("CEC").patternLine("CMC")
-                    .key('P', IndustrialTags.Items.PLASTIC)
+                    .key('P', Tags.Items.INGOTS_IRON)
                     .key('E', IndustrialTags.Items.GEAR_IRON)
                     .key('C', Items.BUCKET)
                     .key('M', IndustrialTags.Items.MACHINE_FRAME_PITY)

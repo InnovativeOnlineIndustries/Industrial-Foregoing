@@ -90,7 +90,7 @@ public class TreeCache {
             if (BlockUtils.isLeaves(world, checking) || BlockUtils.isLog(world, checking)) {
                 for (BlockPos pos : BlockPos.getAllInBoxMutable(checking.add(-1, 0, -1), checking.add(1, 1, 1))) {
                     BlockPos blockPos = pos.toImmutable();
-                    if (world.isAirBlock(blockPos) || checkedPositions.contains(blockPos) || blockPos.manhattanDistance(new Vector3i(current.getX(), current.getY(), current.getZ())) > 1000 /*BlockRegistry.cropRecolectorBlock.getMaxDistanceTreeBlocksScan()*/)
+                    if (world.isAirBlock(blockPos) || checkedPositions.contains(blockPos) || blockPos.manhattanDistance(new Vector3i(current.getX(), current.getY(), current.getZ())) > 100 /*BlockRegistry.cropRecolectorBlock.getMaxDistanceTreeBlocksScan()*/)
                         continue;
                     if (BlockUtils.isLeaves(world, blockPos)) {
                         tree.push(blockPos);

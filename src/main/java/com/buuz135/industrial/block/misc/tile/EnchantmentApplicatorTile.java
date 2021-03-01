@@ -27,7 +27,6 @@ import com.buuz135.industrial.module.ModuleCore;
 import com.buuz135.industrial.module.ModuleMisc;
 import com.hrznstudio.titanium.annotation.Save;
 import com.hrznstudio.titanium.component.energy.EnergyStorageComponent;
-import com.hrznstudio.titanium.component.fluid.FluidTankComponent;
 import com.hrznstudio.titanium.component.fluid.SidedFluidTankComponent;
 import com.hrznstudio.titanium.component.inventory.SidedInventoryComponent;
 import net.minecraft.enchantment.Enchantment;
@@ -37,10 +36,13 @@ import net.minecraft.item.DyeColor;
 import net.minecraft.item.EnchantedBookItem;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
+import net.minecraft.tileentity.TileEntity;
+import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
 import net.minecraftforge.fluids.capability.IFluidHandler;
 import org.apache.commons.lang3.tuple.Pair;
 
 import java.util.Map;
+import java.util.concurrent.atomic.AtomicInteger;
 
 public class EnchantmentApplicatorTile extends IndustrialProcessingTile<EnchantmentApplicatorTile> {
 
@@ -57,7 +59,6 @@ public class EnchantmentApplicatorTile extends IndustrialProcessingTile<Enchantm
         super(ModuleMisc.ENCHANTMENT_APPLICATOR, 112, 40);
         this.addTank(tank = (SidedFluidTankComponent<EnchantmentApplicatorTile>) new SidedFluidTankComponent<EnchantmentApplicatorTile>("essence", EnchantmentApplicatorConfig.tankSize, 34, 20, 0).
                 setColor(DyeColor.LIME).
-                setTankAction(FluidTankComponent.Action.FILL).
                 setComponentHarness(this).
                 setValidator(fluidStack -> fluidStack.getFluid().isEquivalentTo(ModuleCore.ESSENCE.getSourceFluid()))
         );
@@ -82,7 +83,14 @@ public class EnchantmentApplicatorTile extends IndustrialProcessingTile<Enchantm
     @Override
     public boolean canIncrease() {
         Pair<ItemStack, Integer> output = updateRepairOutput();
-        return !output.getLeft().isEmpty() && this.tank.getFluidAmount() >= getEssenceConsumed(output.getRight()) && this.output.getStackInSlot(0).isEmpty();
+        int amount = this.tank.getFluidAmount();
+        TileEntity tileEntity = this.world.getTileEntity(this.pos.up());
+        if (tileEntity != null && tileEntity.getCapability(CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY).isPresent()){
+            if (tileEntity.getCapability(CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY).map(iFluidHandler -> iFluidHandler.getFluidInTank(0).getFluid().isEquivalentTo(ModuleCore.ESSENCE.getSourceFluid())).orElse(false)){
+                amount += tileEntity.getCapability(CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY).map(iFluidHandler -> iFluidHandler.getFluidInTank(0).getAmount()).orElse(0);
+            }
+        }
+        return !output.getLeft().isEmpty() && amount >= getEssenceConsumed(output.getRight()) && this.output.getStackInSlot(0).isEmpty();
     }
 
     private int getEssenceConsumed(int experienceLevel) {
@@ -100,9 +108,14 @@ public class EnchantmentApplicatorTile extends IndustrialProcessingTile<Enchantm
         return () -> {
             Pair<ItemStack, Integer> output = updateRepairOutput();
             this.inputFirst.setStackInSlot(0, ItemStack.EMPTY);
-            this.inputSecond.setStackInSlot(0, ItemStack.EMPTY);
+            this.inputSecond.getStackInSlot(0).shrink(1);
             this.output.setStackInSlot(0, output.getLeft());
-            this.tank.drainForced(getEssenceConsumed(output.getRight()), IFluidHandler.FluidAction.EXECUTE);
+            AtomicInteger amount = new AtomicInteger(getEssenceConsumed(output.getRight()));
+            TileEntity tileEntity = this.world.getTileEntity(this.pos.up());
+            if (tileEntity != null){
+                tileEntity.getCapability(CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY).ifPresent(iFluidHandler -> amount.addAndGet(-iFluidHandler.drain(amount.get(), IFluidHandler.FluidAction.EXECUTE).getAmount()));
+            }
+            if (amount.get() > 0) this.tank.drainForced(amount.get(), IFluidHandler.FluidAction.EXECUTE);
         };
     }
 

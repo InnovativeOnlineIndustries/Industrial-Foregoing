@@ -177,7 +177,7 @@ public class MaterialStoneWorkFactoryTile extends IndustrialProcessingTile<Mater
                 .setColor(DyeColor.RED)
                 .setSlotPosition(integer -> integer == 0 ? Pair.of(0, 0) : Pair.of(0, 18))
                 .setComponentHarness(this));
-        addInventory(inventoryFourth = (SidedInventoryComponent<MaterialStoneWorkFactoryTile>) new SidedInventoryComponent<MaterialStoneWorkFactoryTile>("inventoryFourtj", 74 + 20  * 4, 23, 2, 5)
+        addInventory(inventoryFourth = (SidedInventoryComponent<MaterialStoneWorkFactoryTile>) new SidedInventoryComponent<MaterialStoneWorkFactoryTile>("inventoryFour", 74 + 20  * 4, 23, 2, 6)
                 .setColor(DyeColor.GREEN)
                 .setSlotPosition(integer -> integer == 0 ? Pair.of(0, 0) : Pair.of(0, 18))
                 .setComponentHarness(this));

@@ -76,19 +76,20 @@ public class BlackHoleUnitTESR extends TileEntityRenderer<BHTile> {
             ItemStack stack = tile.getDisplayStack();
             matrixStack.push();
             Direction facing = tile.getFacingDirection();
+            matrixStack.rotate(Vector3f.YP.rotationDegrees(-180));
             if (facing == Direction.NORTH) {
                 //matrixStack.translate(0, 0, 1.016 / 16D);
+                matrixStack.translate(-1, 0, 0);
             }
             if (facing == Direction.EAST) {
-                matrixStack.translate(1, 0, 0);
+                matrixStack.translate(-1, 0, -1);
                 matrixStack.rotate(Vector3f.YP.rotationDegrees(-90));
             }
             if (facing == Direction.SOUTH) {
-                matrixStack.translate(1, 0, 1);
+                matrixStack.translate(0, 0,-1);
                 matrixStack.rotate(Vector3f.YP.rotationDegrees(-180));
             }
             if (facing == Direction.WEST) {
-                matrixStack.translate(0, 0, 1);
                 matrixStack.rotate(Vector3f.YP.rotationDegrees(90));
             }
             matrixStack.translate(0.5, 0.6, 0);
