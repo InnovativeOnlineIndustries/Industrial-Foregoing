@@ -100,7 +100,7 @@ public class EnchantmentApplicatorTile extends IndustrialProcessingTile<Enchantm
         return () -> {
             Pair<ItemStack, Integer> output = updateRepairOutput();
             this.inputFirst.setStackInSlot(0, ItemStack.EMPTY);
-            this.inputSecond.setStackInSlot(0, ItemStack.EMPTY);
+            this.inputSecond.getStackInSlot(0).shrink(1);
             this.output.setStackInSlot(0, output.getLeft());
             this.tank.drainForced(getEssenceConsumed(output.getRight()), IFluidHandler.FluidAction.EXECUTE);
         };
