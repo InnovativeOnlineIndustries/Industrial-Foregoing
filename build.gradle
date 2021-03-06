@@ -151,6 +151,7 @@ dependencies {
     // at runtime, use the full JEI jar
     runtimeOnly fg.deobf("mezz.jei:jei-1.16.4:7.6.0.58")
     //}
+    compileOnly fg.deobf("curse.maven:astral-sorcery-241721:3156477")
     compileOnly fg.deobf("blusunrize.immersiveengineering:ImmersiveEngineering:1.16.3-4.1.0-+")
     compileOnly fg.deobf("vazkii.patchouli:Patchouli:1.16.2+:api")
     runtimeOnly fg.deobf("vazkii.patchouli:Patchouli:1.16.2+")
