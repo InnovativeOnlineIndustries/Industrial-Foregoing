@@ -34,7 +34,6 @@ import net.minecraft.block.BlockState;
 import net.minecraft.block.material.Material;
 import net.minecraft.data.IFinishedRecipe;
 import net.minecraft.enchantment.Enchantment;
-import net.minecraft.enchantment.EnchantmentType;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.item.ExperienceOrbEntity;
 import net.minecraft.entity.player.PlayerEntity;
@@ -72,7 +71,7 @@ public class ItemInfinityDrill extends ItemInfinity {
 
     @Override
     public boolean canApplyAtEnchantingTable(ItemStack stack, Enchantment enchantment) {
-        return enchantment.type == EnchantmentType.DIGGER;
+        return Items.DIAMOND_PICKAXE.canApplyAtEnchantingTable(stack, enchantment) || Items.DIAMOND_SHOVEL.canApplyAtEnchantingTable(stack, enchantment) ;
     }
 
     @Override

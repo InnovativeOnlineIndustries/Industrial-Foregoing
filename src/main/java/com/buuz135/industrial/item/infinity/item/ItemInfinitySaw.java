@@ -34,7 +34,6 @@ import com.google.common.cache.LoadingCache;
 import net.minecraft.block.BlockState;
 import net.minecraft.data.IFinishedRecipe;
 import net.minecraft.enchantment.Enchantment;
-import net.minecraft.enchantment.EnchantmentType;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemGroup;
@@ -74,7 +73,7 @@ public class ItemInfinitySaw extends ItemInfinity {
 
     @Override
     public boolean canApplyAtEnchantingTable(ItemStack stack, Enchantment enchantment) {
-        return enchantment.type == EnchantmentType.DIGGER;
+        return Items.DIAMOND_AXE.canApplyAtEnchantingTable(stack, enchantment) ;
     }
 
     @Override

@@ -41,8 +41,6 @@ import net.minecraft.block.Blocks;
 import net.minecraft.block.material.Material;
 import net.minecraft.data.IFinishedRecipe;
 import net.minecraft.enchantment.Enchantment;
-import net.minecraft.enchantment.EnchantmentType;
-import net.minecraft.enchantment.Enchantments;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.MobEntity;
@@ -125,7 +123,7 @@ public class ItemInfinityHammer extends ItemInfinity {
 
     @Override
     public boolean canApplyAtEnchantingTable(ItemStack stack, Enchantment enchantment) {
-        return enchantment.type == EnchantmentType.WEAPON || enchantment == Enchantments.LOOTING;
+        return Items.DIAMOND_SWORD.canApplyAtEnchantingTable(stack, enchantment) ;
     }
 
     @Override
