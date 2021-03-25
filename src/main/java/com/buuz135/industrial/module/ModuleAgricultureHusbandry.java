@@ -52,6 +52,7 @@ public class ModuleAgricultureHusbandry implements IModule {
     public static MobCrusherBlock MOB_CRUSHER = new MobCrusherBlock();
     public static HydroponicBedBlock HYDROPONIC_BED = new HydroponicBedBlock();
     public static MobDuplicatorBlock MOB_DUPLICATOR = new MobDuplicatorBlock();
+    public static WitherBuilderBlock WITHER_BUILDER = new WitherBuilderBlock();
 
     @Override
     public List<Feature.Builder> generateFeatures() {
@@ -81,6 +82,7 @@ public class ModuleAgricultureHusbandry implements IModule {
         builders.add(createFeature(MOB_CRUSHER));
         builders.add(createFeature(HYDROPONIC_BED));
         builders.add(createFeature(MOB_DUPLICATOR));
+        builders.add(createFeature(WITHER_BUILDER));
         TAB_AG_HUS.addIconStack(new ItemStack(PLANT_SOWER));
         return builders;
     }
