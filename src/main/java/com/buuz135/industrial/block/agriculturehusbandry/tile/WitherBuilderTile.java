@@ -60,7 +60,7 @@ public class WitherBuilderTile extends IndustrialAreaWorkingTile<WitherBuilderTi
 
 	@Override
 	public WorkAction work() {
-		if (!hasEnergy(MobDuplicatorConfig.powerPerOperation)) return new WorkAction(1, 0);
+		if (!hasEnergy(WitherBuilderConfig.powerPerOperation)) return new WorkAction(1, 0);
 		BlockPos pos = this.pos.add(0, 2, 0);
 		float power = 0;
 		if (this.world.getBlockState(pos).getBlock().equals(Blocks.AIR) && !getDefaultOrFind(0, bottom, new ItemStack(Blocks.SOUL_SAND)).isEmpty()) {
@@ -116,7 +116,7 @@ public class WitherBuilderTile extends IndustrialAreaWorkingTile<WitherBuilderTi
 				}
 			}
 		}
-		return new WorkAction(1, (int) power);
+		return new WorkAction(1, power > 0 ? WitherBuilderConfig.powerPerOperation : 0);
 	}
 
 	@Override
