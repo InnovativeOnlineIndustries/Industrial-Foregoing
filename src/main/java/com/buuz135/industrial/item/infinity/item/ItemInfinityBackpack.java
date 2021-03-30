@@ -112,7 +112,7 @@ public class ItemInfinityBackpack extends ItemInfinity {
         super("infinity_backpack", ModuleTool.TAB_TOOL, new Properties().maxStackSize(1), POWER_CONSUMPTION, FUEL_CONSUMPTION, false);
         this.disableArea();
         EventManager.forge(EntityItemPickupEvent.class).filter(entityItemPickupEvent -> !entityItemPickupEvent.getItem().getItem().isEmpty()).process(entityItemPickupEvent -> {
-            findFirstBackpack(entityItemPickupEvent.getPlayer()).ifPresent(target -> {
+            for (PlayerInventoryFinder.Target target : findAllBackpacks(entityItemPickupEvent.getPlayer())) {
                 ItemStack stack = target.getFinder().getStackGetter().apply(entityItemPickupEvent.getPlayer(), target.getSlot());
                 if (!stack.isEmpty()) {
                     if (stack.getItem() instanceof ItemInfinityBackpack && (getPickUpMode(stack) == 1 || getPickUpMode(stack) == 0)) {
@@ -138,7 +138,7 @@ public class ItemInfinityBackpack extends ItemInfinity {
                         }
                     }
                 }
-            });
+            }
         }).subscribe();
         EventManager.forge(PlayerXpEvent.PickupXp.class).filter(pickupXp -> pickupXp.getOrb().isAlive()).process(pickupXp -> {
             findFirstBackpack(pickupXp.getPlayer()).ifPresent(target -> {
@@ -186,6 +186,27 @@ public class ItemInfinityBackpack extends ItemInfinity {
 
     public static void setPickUpMode(ItemStack stack, int mode) {
         stack.getOrCreateTag().putInt(NBT_PICKUP, mode);
+    }
+
+    /**
+     * Generates a list of {@link PlayerInventoryFinder.Target}s defining the
+     * {@link ItemInfinityBackpack}s present in the given {@link PlayerEntity}'s inventory.
+     *
+     * @param entity The {@link PlayerEntity} whose inventory should be searched for {@link ItemInfinityBackpack}s.
+     * @return The list of all {@link ItemInfinityBackpack}s contained in the given {@link PlayerEntity}s
+     * inventory. The returned list is ordered by inventory slot ID.
+     */
+    public static List<PlayerInventoryFinder.Target> findAllBackpacks(PlayerEntity entity) {
+        List<PlayerInventoryFinder.Target> list = new ArrayList<>();
+        for (String name : PlayerInventoryFinder.FINDERS.keySet()) {
+            PlayerInventoryFinder finder = PlayerInventoryFinder.FINDERS.get(name);
+            for (int i = 0; i < finder.getSlotAmountGetter().apply(entity); i++) {
+                if (finder.getStackGetter().apply(entity, i).getItem() instanceof ItemInfinityBackpack) {
+                    list.add(new PlayerInventoryFinder.Target(name, finder, i));
+                }
+            }
+        }
+        return Collections.unmodifiableList(list);
     }
 
     public static Optional<PlayerInventoryFinder.Target> findFirstBackpack(PlayerEntity entity) {
