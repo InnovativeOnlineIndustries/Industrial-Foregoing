@@ -71,7 +71,7 @@ public class HydroponicBedTile extends IndustrialWorkingTile<HydroponicBedTile> 
 
     @Override
     public WorkAction work() {
-        if (this.etherBuffer.getProgress() == 0 && this.ether.getFluidAmount() > 0){
+        if (this.etherBuffer.getProgress() <= 0 && this.ether.getFluidAmount() > 0){
             this.ether.drainForced(1, IFluidHandler.FluidAction.EXECUTE);
             this.etherBuffer.setProgress(this.etherBuffer.getMaxProgress());
         }
