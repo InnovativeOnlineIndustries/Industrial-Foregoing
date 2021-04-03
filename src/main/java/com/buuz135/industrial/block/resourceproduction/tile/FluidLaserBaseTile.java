@@ -137,7 +137,10 @@ public class FluidLaserBaseTile extends IndustrialMachineTile<FluidLaserBaseTile
         if (!catalyst.getStackInSlot(0).isEmpty()){
             VoxelShape box = VoxelShapes.create(-1, 0, -1, 2, 3, 2).withOffset(this.pos.getX(), this.pos.getY() - 1, this.pos.getZ());
             RecipeUtil.getRecipes(this.world, LaserDrillFluidRecipe.SERIALIZER.getRecipeType())
-                    .stream().filter(laserDrillFluidRecipe -> laserDrillFluidRecipe.catalyst.test(catalyst.getStackInSlot(0))).findFirst()
+                    .stream()
+                    .filter(laserDrillFluidRecipe -> laserDrillFluidRecipe.catalyst.test(catalyst.getStackInSlot(0)))
+                    .filter(laserDrillFluidRecipe -> laserDrillFluidRecipe.getValidRarity(this.world.getBiome(this.pos).getRegistryName(), this.miningDepth) != null)
+                    .findFirst()
                     .ifPresent(laserDrillFluidRecipe -> {
                         if (!LaserDrillFluidRecipe.EMPTY.equals(laserDrillFluidRecipe.entity)){
                             List<LivingEntity> entities = this.world.getEntitiesWithinAABB(LivingEntity.class, box.getBoundingBox(), entity -> entity.getType().getRegistryName().equals(laserDrillFluidRecipe.entity));
