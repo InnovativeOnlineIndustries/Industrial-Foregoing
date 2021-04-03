@@ -71,7 +71,7 @@ public class MobDuplicatorTile extends IndustrialAreaWorkingTile<MobDuplicatorTi
 
 		ItemStack stack = input.getStackInSlot(0);
 		LivingEntity entity = (LivingEntity) ((MobImprisonmentToolItem) stack.getItem()).getEntityFromStack(stack, this.world, MobDuplicatorConfig.exactCopy && exactCopy);
-
+		if (entity == null) return new WorkAction(1, 0);
 
 		List<LivingEntity> entityAmount = world.getEntitiesWithinAABB(entity.getClass(), getWorkingArea().getBoundingBox());
 		entityAmount.removeIf(entityLiving -> !entityLiving.isAlive());
