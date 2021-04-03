@@ -71,7 +71,7 @@ public class ItemInfinityDrill extends ItemInfinity {
 
     @Override
     public boolean canApplyAtEnchantingTable(ItemStack stack, Enchantment enchantment) {
-        return Items.DIAMOND_PICKAXE.canApplyAtEnchantingTable(stack, enchantment) || Items.DIAMOND_SHOVEL.canApplyAtEnchantingTable(stack, enchantment) ;
+        return Items.DIAMOND_PICKAXE.canApplyAtEnchantingTable(new ItemStack(Items.DIAMOND_PICKAXE), enchantment) || Items.DIAMOND_SHOVEL.canApplyAtEnchantingTable(new ItemStack(Items.DIAMOND_SHOVEL), enchantment) ;
     }
 
     @Override

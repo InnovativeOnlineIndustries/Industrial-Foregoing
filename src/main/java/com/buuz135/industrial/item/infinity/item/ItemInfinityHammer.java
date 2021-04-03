@@ -123,7 +123,7 @@ public class ItemInfinityHammer extends ItemInfinity {
 
     @Override
     public boolean canApplyAtEnchantingTable(ItemStack stack, Enchantment enchantment) {
-        return Items.DIAMOND_SWORD.canApplyAtEnchantingTable(stack, enchantment) ;
+        return Items.DIAMOND_SWORD.canApplyAtEnchantingTable(new ItemStack(Items.DIAMOND_SWORD), enchantment) ;
     }
 
     @Override

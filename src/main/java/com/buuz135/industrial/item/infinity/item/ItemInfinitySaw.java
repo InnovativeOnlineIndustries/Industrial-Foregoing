@@ -73,7 +73,7 @@ public class ItemInfinitySaw extends ItemInfinity {
 
     @Override
     public boolean canApplyAtEnchantingTable(ItemStack stack, Enchantment enchantment) {
-        return Items.DIAMOND_AXE.canApplyAtEnchantingTable(stack, enchantment) ;
+        return Items.DIAMOND_AXE.canApplyAtEnchantingTable(new ItemStack(Items.DIAMOND_AXE), enchantment) ;
     }
 
     @Override

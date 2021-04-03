@@ -57,6 +57,9 @@ import com.hrznstudio.titanium.network.locator.instance.HeldStackLocatorInstance
 import com.hrznstudio.titanium.network.locator.instance.InventoryStackLocatorInstance;
 import net.minecraft.block.BlockState;
 import net.minecraft.data.IFinishedRecipe;
+import net.minecraft.enchantment.Enchantment;
+import net.minecraft.enchantment.EnchantmentHelper;
+import net.minecraft.enchantment.Enchantments;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.ai.attributes.Attribute;
 import net.minecraft.entity.ai.attributes.AttributeModifier;
@@ -220,6 +223,8 @@ public class ItemInfinityBackpack extends ItemInfinity {
         }
         return Optional.empty();
     }
+
+
 
     @Nullable
     @Override
@@ -461,13 +466,15 @@ public class ItemInfinityBackpack extends ItemInfinity {
 
     @Override
     public boolean enoughFuel(ItemStack stack) {
-        return getFuelFromStack(stack) >= FUEL_CONSUMPTION;
+        int i = EnchantmentHelper.getEnchantmentLevel(Enchantments.UNBREAKING, stack);
+        return getFuelFromStack(stack) >= FUEL_CONSUMPTION  * ( 1 / (i + 1)) ;
     }
 
     @Override
     public void consumeFuel(ItemStack stack) {
-        if (getFuelFromStack(stack) >= FUEL_CONSUMPTION) {
-            stack.getTag().getCompound("Tanks").getCompound("biofuel").putInt("Amount", Math.max(0, getFuelFromStack(stack) - FUEL_CONSUMPTION));
+        int i = EnchantmentHelper.getEnchantmentLevel(Enchantments.UNBREAKING, stack);
+        if (getFuelFromStack(stack) >= FUEL_CONSUMPTION  * ( 1 / (i + 1)) ) {
+            stack.getTag().getCompound("Tanks").getCompound("biofuel").putInt("Amount", Math.max(0, getFuelFromStack(stack) - FUEL_CONSUMPTION  * ( 1 / (i + 1)) ));
         }
     }
 
@@ -479,7 +486,12 @@ public class ItemInfinityBackpack extends ItemInfinity {
 
     @Override
     public boolean isEnchantable(ItemStack stack) {
-        return false;
+        return true;
+    }
+
+    @Override
+    public boolean canApplyAtEnchantingTable(ItemStack stack, Enchantment enchantment) {
+        return Enchantments.UNBREAKING == enchantment;
     }
 
     @Override

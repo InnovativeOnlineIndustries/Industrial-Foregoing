@@ -119,7 +119,7 @@ public class ItemInfinityTrident extends ItemInfinity {
     @Override
     public boolean canApplyAtEnchantingTable(ItemStack stack, Enchantment enchantment) {
         if (enchantment.equals(Enchantments.LOYALTY) || enchantment.equals(Enchantments.RIPTIDE) || enchantment.equals(Enchantments.CHANNELING)) return false;
-        return Items.TRIDENT.canApplyAtEnchantingTable(stack, enchantment) ;
+        return Items.TRIDENT.canApplyAtEnchantingTable(new ItemStack(Items.TRIDENT), enchantment) ;
     }
 
     @Override
