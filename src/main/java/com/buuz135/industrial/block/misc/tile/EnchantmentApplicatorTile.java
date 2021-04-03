@@ -83,7 +83,7 @@ public class EnchantmentApplicatorTile extends IndustrialProcessingTile<Enchantm
     @Override
     public boolean canIncrease() {
         Pair<ItemStack, Integer> output = updateRepairOutput();
-        int amount = this.tank.getFluidAmount();
+        long amount = this.tank.getFluidAmount();
         TileEntity tileEntity = this.world.getTileEntity(this.pos.up());
         if (tileEntity != null && tileEntity.getCapability(CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY).isPresent()){
             if (tileEntity.getCapability(CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY).map(iFluidHandler -> iFluidHandler.getFluidInTank(0).getFluid().isEquivalentTo(ModuleCore.ESSENCE.getSourceFluid())).orElse(false)){
@@ -94,13 +94,13 @@ public class EnchantmentApplicatorTile extends IndustrialProcessingTile<Enchantm
     }
 
     private int getEssenceConsumed(int experienceLevel) {
-        int xp = 0;
+        long xp = 0;
         if (experienceLevel >= 0 && experienceLevel <= 15)
-            xp = (int) (Math.pow(experienceLevel, 2) + 6 * experienceLevel);
+            xp = (long) (Math.pow(experienceLevel, 2) + 6 * experienceLevel);
         if (experienceLevel >= 16 && experienceLevel <= 30)
-            xp = (int) (2.5 * Math.pow(experienceLevel, 2) - 40 * experienceLevel + 360);
-        if (experienceLevel >= 32) xp = (int) (5.5 * Math.pow(experienceLevel, 2) - 162.5 * experienceLevel + 2220);
-        return xp * 20;
+            xp = (long) (2.5 * Math.pow(experienceLevel, 2) - 40 * experienceLevel + 360);
+        if (experienceLevel >= 32) xp = (long) (5.5 * Math.pow(experienceLevel, 2) - 162.5 * experienceLevel + 2220);
+        return xp > Integer.MAX_VALUE ? Integer.MAX_VALUE : (int) xp;
     }
 
     @Override
