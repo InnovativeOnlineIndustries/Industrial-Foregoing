@@ -23,8 +23,8 @@ package com.buuz135.industrial.block.misc.tile;
 
 import com.buuz135.industrial.block.tile.IndustrialProcessingTile;
 import com.buuz135.industrial.config.machine.misc.EnchantmentFactoryConfig;
-import com.buuz135.industrial.module.ModuleCore;
 import com.buuz135.industrial.module.ModuleMisc;
+import com.buuz135.industrial.utils.IndustrialTags;
 import com.hrznstudio.titanium.annotation.Save;
 import com.hrznstudio.titanium.component.energy.EnergyStorageComponent;
 import com.hrznstudio.titanium.component.fluid.FluidTankComponent;
@@ -54,7 +54,7 @@ public class EnchantmentFactoryTile extends IndustrialProcessingTile<Enchantment
                 setColor(DyeColor.LIME).
                 setTankAction(FluidTankComponent.Action.FILL).
                 setComponentHarness(this).
-                setValidator(fluidStack -> fluidStack.getFluid().isEquivalentTo(ModuleCore.ESSENCE.getSourceFluid()))
+                setValidator(fluidStack -> fluidStack.getFluid().isIn(IndustrialTags.Fluids.EXPERIENCE))
         );
         this.addInventory(inputFirst = (SidedInventoryComponent<EnchantmentFactoryTile>) new SidedInventoryComponent<EnchantmentFactoryTile>("input", 70, 40, 1, 1).
                 setColor(DyeColor.BLUE).
