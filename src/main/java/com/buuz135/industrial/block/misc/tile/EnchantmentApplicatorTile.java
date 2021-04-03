@@ -95,11 +95,12 @@ public class EnchantmentApplicatorTile extends IndustrialProcessingTile<Enchantm
 
     private int getEssenceConsumed(int experienceLevel) {
         long xp = 0;
-        if (experienceLevel >= 0 && experienceLevel <= 15)
+        if (experienceLevel >= 0 && experienceLevel <= 16)
             xp = (long) (Math.pow(experienceLevel, 2) + 6 * experienceLevel);
-        if (experienceLevel >= 16 && experienceLevel <= 30)
-            xp = (long) (2.5 * Math.pow(experienceLevel, 2) - 40 * experienceLevel + 360);
-        if (experienceLevel >= 32) xp = (long) (5.5 * Math.pow(experienceLevel, 2) - 162.5 * experienceLevel + 2220);
+        if (experienceLevel >= 17 && experienceLevel <= 31)
+            xp = (long) (2.5 * Math.pow(experienceLevel, 2) - 40.5 * experienceLevel + 360);
+        if (experienceLevel >= 32) xp = (long) (4.5 * Math.pow(experienceLevel, 2) - 162.5 * experienceLevel + 2220);
+        xp = xp * 20;
         return xp > Integer.MAX_VALUE ? Integer.MAX_VALUE : (int) xp;
     }
 
