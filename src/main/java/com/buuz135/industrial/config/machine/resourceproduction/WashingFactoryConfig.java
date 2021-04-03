@@ -19,21 +19,28 @@
  * FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE,
  * ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
-package com.buuz135.industrial.plugin.jei.ore;
+package com.buuz135.industrial.config.machine.resourceproduction;
 
-import com.buuz135.industrial.api.recipe.ore.OreFluidEntryFermenter;
+import com.buuz135.industrial.config.MachineResourceProductionConfig;
+import com.hrznstudio.titanium.annotation.config.ConfigFile;
+import com.hrznstudio.titanium.annotation.config.ConfigVal;
 
-public class OreFermenterWrapper {
+@ConfigFile.Child(MachineResourceProductionConfig.class)
+public class WashingFactoryConfig {
 
-    private final OreFluidEntryFermenter recipe;
+    @ConfigVal(comment = "Progress bar size [20 Ticks per Second] - Default: [100 (5s)]")
+    public static int maxProgress = 100;
 
-    public OreFermenterWrapper(OreFluidEntryFermenter recipe) {
-        this.recipe = recipe;
-    }
+    @ConfigVal(comment = "Amount of Power Consumed per Tick - Default: [60FE]")
+    public static int powerPerTick = 60;
 
-    //@Override
-    //public void getIngredients(IIngredients ingredients) {
-    //    ingredients.setInput(FluidStack.class, recipe.getInput());
-    //    ingredients.setOutput(FluidStack.class, recipe.getOutput());
-    //}
+    @ConfigVal(comment = "Max Stored Power [FE] - Default: [10000 FE]")
+    public static int maxStoredPower = 10000;
+
+    @ConfigVal(comment = "Max Amount of Stored Fluid [Meat] - Default: [8000mB]")
+    public static int maxTankSize = 8000;
+
+    @ConfigVal(comment = "Max Amount of Output Fluid  - Default: [8000mB]")
+    public static int maxOutputSize = 8000;
+
 }

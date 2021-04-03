@@ -50,6 +50,9 @@ public class ModuleResourceProduction implements IModule {
     public static OreLaserBaseBlock ORE_LASER_BASE = new OreLaserBaseBlock();
     public static LaserDrillBlock LASER_DRILL = new LaserDrillBlock();
     public static FluidLaserBaseBlock FLUID_LASER_BASE = new FluidLaserBaseBlock();
+    public static WashingFactoryBlock WASHING_FACTORY = new WashingFactoryBlock();
+    public static FermentationStationBlock FERMENTATION_STATION = new FermentationStationBlock();
+    public static FluidSievingMachineBlock FLUID_SIEVING_MACHINE = new FluidSievingMachineBlock();
 
     @Override
     public List<Feature.Builder> generateFeatures() {
@@ -70,6 +73,9 @@ public class ModuleResourceProduction implements IModule {
         features.add(createFeature(ORE_LASER_BASE));
         features.add(createFeature(LASER_DRILL));
         features.add(createFeature(FLUID_LASER_BASE));
+        features.add(createFeature(WASHING_FACTORY));
+        features.add(createFeature(FERMENTATION_STATION));
+        features.add(createFeature(FLUID_SIEVING_MACHINE));
         TAB_RESOURCE.addIconStack(new ItemStack(WATER_CONDENSATOR));
         return features;
     }

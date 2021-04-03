@@ -21,21 +21,18 @@
  */
 package com.buuz135.industrial.api.recipe.ore;
 
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.tags.ITag;
 import net.minecraftforge.fluids.FluidStack;
-
-import java.util.ArrayList;
-import java.util.List;
 
 public class OreFluidEntrySieve {
 
-    public static List<OreFluidEntrySieve> ORE_FLUID_SIEVE = new ArrayList<>();
-
     private final FluidStack input;
     private final ItemStack output;
-    private final ItemStack sieveItem;
+    private final ITag<Item> sieveItem;
 
-    public OreFluidEntrySieve(FluidStack input, ItemStack output, ItemStack sieveItem) {
+    public OreFluidEntrySieve(FluidStack input, ItemStack output, ITag<Item> sieveItem) {
         this.input = input;
         this.output = output;
         this.sieveItem = sieveItem;
@@ -49,7 +46,7 @@ public class OreFluidEntrySieve {
         return output;
     }
 
-    public ItemStack getSieveItem() {
+    public ITag<Item> getSieveItem() {
         return sieveItem;
     }
 }

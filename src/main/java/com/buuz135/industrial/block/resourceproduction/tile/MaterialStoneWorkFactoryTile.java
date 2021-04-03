@@ -276,7 +276,7 @@ public class MaterialStoneWorkFactoryTile extends IndustrialProcessingTile<Mater
                     @Override
                     public List<ITextComponent> getTooltipLines() {
                         List<ITextComponent> lines = new ArrayList<>();
-                        lines.add(new StringTextComponent(TextFormatting.GOLD + LangUtil.getString("tooltip.industrialforegoing.action") + TextFormatting.WHITE + LangUtil.getString("tooltip.industrialforegoing.stonework." + ACTION_RECIPES[thirdRecipeId].getAction())));
+                        lines.add(new StringTextComponent(TextFormatting.GOLD + LangUtil.getString("tooltip.industrialforegoing.action") + TextFormatting.WHITE + LangUtil.getString("tooltip.industrialforegoing.stonework." + ACTION_RECIPES[fourthRecipeId].getAction())));
                         return lines;
                     }
                 });

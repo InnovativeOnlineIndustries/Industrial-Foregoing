@@ -51,7 +51,7 @@ public abstract class IndustrialProcessingTile<T extends IndustrialProcessingTil
     public IndustrialProcessingTile(BasicTileBlock<T> basicTileBlock, int x, int y) {
         super(basicTileBlock);
         //this.addGuiAddonFactory(() -> new EnergyBarScreenAddon(10, 20, getEnergyStorage()));
-        this.addProgressBar(progressBar = new ProgressBarComponent<T>(x, y, 100){
+        this.addProgressBar(progressBar = new ProgressBarComponent<T>(x, y, getMaxProgress()){
                     @Override
                     public List<IFactory<? extends IScreenAddon>> getScreenAddons() {
                         return Collections.singletonList(() -> new ProgressBarScreenAddon(x, y, progressBar){

@@ -28,6 +28,7 @@ import com.buuz135.industrial.block.core.DissolutionChamberBlock;
 import com.buuz135.industrial.block.core.FluidExtractorBlock;
 import com.buuz135.industrial.block.core.LatexProcessingUnitBlock;
 import com.buuz135.industrial.block.core.tile.FluidExtractorTile;
+import com.buuz135.industrial.fluid.OreFluidInstance;
 import com.buuz135.industrial.item.*;
 import com.buuz135.industrial.item.addon.EfficiencyAddonItem;
 import com.buuz135.industrial.item.addon.RangeAddonItem;
@@ -94,6 +95,9 @@ public class ModuleCore implements IModule {
     public static TitaniumFluidInstance PINK_SLIME = new TitaniumFluidInstance(Reference.MOD_ID, "pink_slime", FluidAttributes.builder(new ResourceLocation(Reference.MOD_ID, "blocks/fluids/pink_slime_still"), new ResourceLocation(Reference.MOD_ID, "blocks/fluids/pink_slime_flow")), true, TAB_CORE);
     public static TitaniumFluidInstance BIOFUEL = new TitaniumFluidInstance(Reference.MOD_ID, "biofuel", FluidAttributes.builder(new ResourceLocation(Reference.MOD_ID, "blocks/fluids/biofuel_still"), new ResourceLocation(Reference.MOD_ID, "blocks/fluids/biofuel_flow")), true, TAB_CORE);
     public static TitaniumFluidInstance ETHER = new TitaniumFluidInstance(Reference.MOD_ID, "ether_gas", FluidAttributes.builder(new ResourceLocation(Reference.MOD_ID, "blocks/fluids/ether_gas_still"), new ResourceLocation(Reference.MOD_ID, "blocks/fluids/ether_gas_flow")).gaseous(), true, TAB_CORE);
+    public static OreFluidInstance RAW_ORE_MEAT = new OreFluidInstance(Reference.MOD_ID, "raw_ore_meat", FluidAttributes.builder(new ResourceLocation(Reference.MOD_ID, "blocks/fluids/raw_ore_meat_still"), new ResourceLocation(Reference.MOD_ID, "blocks/fluids/raw_ore_meat_flow")), true, TAB_CORE);
+    public static OreFluidInstance FERMENTED_ORE_MEAT = new OreFluidInstance(Reference.MOD_ID, "fermented_ore_meat", FluidAttributes.builder(new ResourceLocation(Reference.MOD_ID, "blocks/fluids/ether_gas_still"), new ResourceLocation(Reference.MOD_ID, "blocks/fluids/ether_gas_flow")), true, TAB_CORE);
+
 
     @Override
     public List<Feature.Builder> generateFeatures() {
@@ -148,6 +152,7 @@ public class ModuleCore implements IModule {
         features.add(Feature.builder("sludge").content(TitaniumFluidInstance.class, SLUDGE));
         features.add(Feature.builder("biofuel").content(TitaniumFluidInstance.class, BIOFUEL));
         features.add(Feature.builder("ether").content(TitaniumFluidInstance.class, ETHER));
+        features.add(Feature.builder("ore_meat").content(OreFluidInstance.class, RAW_ORE_MEAT).content(OreFluidInstance.class, FERMENTED_ORE_MEAT));
         TAB_CORE.addIconStack(new ItemStack(PLASTIC));
         features.add(createFeature(DARK_GLASS));
         builder = Feature.builder("laser_lens");

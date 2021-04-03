@@ -21,6 +21,7 @@
  */
 package com.buuz135.industrial.block.tile;
 
+import com.buuz135.industrial.proxy.client.IndustrialAssetProvider;
 import com.hrznstudio.titanium.annotation.Save;
 import com.hrznstudio.titanium.api.augment.AugmentTypes;
 import com.hrznstudio.titanium.api.redstone.IRedstoneReader;
@@ -30,6 +31,7 @@ import com.hrznstudio.titanium.block.redstone.RedstoneAction;
 import com.hrznstudio.titanium.block.redstone.RedstoneManager;
 import com.hrznstudio.titanium.block.redstone.RedstoneState;
 import com.hrznstudio.titanium.block.tile.MachineTile;
+import com.hrznstudio.titanium.client.screen.asset.IAssetProvider;
 import com.hrznstudio.titanium.component.bundle.TankInteractionBundle;
 import com.hrznstudio.titanium.component.button.RedstoneControlButtonComponent;
 import com.hrznstudio.titanium.component.fluid.FluidTankComponent;
@@ -97,4 +99,10 @@ public abstract class IndustrialMachineTile<T extends IndustrialMachineTile<T>> 
         super.onNeighborChanged(blockIn, fromPos);
         redstoneManager.setLastRedstoneState(this.getEnvironmentValue(false, null).isReceivingRedstone());
     }
+
+    @Override
+    public IAssetProvider getAssetProvider() {
+        return IndustrialAssetProvider.INSTANCE;
+    }
+
 }

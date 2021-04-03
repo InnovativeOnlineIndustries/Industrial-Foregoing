@@ -34,11 +34,13 @@ import net.minecraft.client.renderer.model.ItemCameraTransforms;
 import net.minecraft.client.renderer.texture.AtlasTexture;
 import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.entity.LivingEntity;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.tags.TagCollectionManager;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
-import net.minecraftforge.common.Tags;
 import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
 import net.minecraftforge.items.ItemStackHandler;
 
@@ -46,9 +48,14 @@ import java.awt.*;
 
 public class ItemStackUtils {
 
-    public static boolean isOre(ItemStack stack) {
-        if (stack.isEmpty()) return false;
-        return stack.getItem().isIn(Tags.Items.ORES);
+    public static ResourceLocation getOreTag(ItemStack stack) {
+        Item item = stack.getItem();
+        for (ResourceLocation owningTag : TagCollectionManager.getManager().getItemTags().getOwningTags(item)) {
+            if (owningTag.toString().startsWith("forge:ores/")){
+               return owningTag;
+            }
+        }
+        return null;
     }
 
     public static boolean isInventoryFull(ItemStackHandler handler) {

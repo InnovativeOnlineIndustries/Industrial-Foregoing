@@ -23,12 +23,7 @@ package com.buuz135.industrial.api.recipe.ore;
 
 import net.minecraftforge.fluids.FluidStack;
 
-import java.util.ArrayList;
-import java.util.List;
-
 public class OreFluidEntryFermenter {
-
-    public static List<OreFluidEntryFermenter> ORE_FLUID_FERMENTER = new ArrayList<>();
 
     private final FluidStack input;
     private final FluidStack output;
