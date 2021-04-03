@@ -102,7 +102,7 @@ public class EnchantmentExtractorTile extends IndustrialProcessingTile<Enchantme
                 setColor(DyeColor.LIME).
                 setTankAction(FluidTankComponent.Action.DRAIN).
                 setComponentHarness(this).
-                setValidator(fluidStack -> fluidStack.getFluid().isEquivalentTo(ModuleCore.ESSENCE.getSourceFluid()))
+                setValidator(fluidStack -> fluidStack.getFluid().isIn(IndustrialTags.Fluids.EXPERIENCE))
         );
         this.addButton(buttonComponent = new ButtonComponent(62 + 4, 40 + 18, 14, 14) {
             @Override

@@ -1,0 +1,19 @@
+{
+  "variants": {
+    "subfacing=north": {
+      "model": "industrialforegoing:block/fluid_sieving_machine"
+    },
+    "subfacing=south": {
+      "model": "industrialforegoing:block/fluid_sieving_machine",
+      "y": 180
+    },
+    "subfacing=west": {
+      "model": "industrialforegoing:block/fluid_sieving_machine",
+      "y": 270
+    },
+    "subfacing=east": {
+      "model": "industrialforegoing:block/fluid_sieving_machine",
+      "y": 90
+    }
+  }
+}

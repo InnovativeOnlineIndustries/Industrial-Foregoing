@@ -97,6 +97,7 @@ public class ConveyorInsertionUpgrade extends ConveyorUpgrade {
                     for (int i = 0; i < handler.getSlots(); i++) {
                         stack = handler.insertItem(i, stack, false);
                         if (stack.isEmpty()) {
+                            ((ItemEntity) entity).setItem(ItemStack.EMPTY);
                             entity.remove();
                             break;
                         } else {

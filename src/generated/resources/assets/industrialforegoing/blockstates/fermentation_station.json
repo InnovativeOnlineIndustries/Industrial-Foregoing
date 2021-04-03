@@ -1,0 +1,19 @@
+{
+  "variants": {
+    "subfacing=north": {
+      "model": "industrialforegoing:block/fermentation_station"
+    },
+    "subfacing=south": {
+      "model": "industrialforegoing:block/fermentation_station",
+      "y": 180
+    },
+    "subfacing=west": {
+      "model": "industrialforegoing:block/fermentation_station",
+      "y": 270
+    },
+    "subfacing=east": {
+      "model": "industrialforegoing:block/fermentation_station",
+      "y": 90
+    }
+  }
+}

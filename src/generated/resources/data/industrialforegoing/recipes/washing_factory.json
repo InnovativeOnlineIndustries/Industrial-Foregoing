@@ -1,0 +1,49 @@
+{
+  "type": "forge:conditional",
+  "recipes": [
+    {
+      "conditions": [
+        {
+          "values": [
+            {
+              "item": "industrialforegoing:washing_factory",
+              "type": "forge:item_exists"
+            }
+          ],
+          "type": "forge:and"
+        }
+      ],
+      "recipe": {
+        "type": "minecraft:crafting_shaped",
+        "pattern": [
+          "pcp",
+          "gmg",
+          "aba"
+        ],
+        "key": {
+          "g": {
+            "tag": "forge:plastic"
+          },
+          "c": {
+            "item": "industrialforegoing:meat_feeder"
+          },
+          "p": {
+            "item": "industrialforegoing:pink_slime_ingot"
+          },
+          "m": {
+            "tag": "industrialforegoing:machine_frame/advanced"
+          },
+          "b": {
+            "item": "minecraft:furnace"
+          },
+          "a": {
+            "tag": "forge:gears/diamond"
+          }
+        },
+        "result": {
+          "item": "industrialforegoing:washing_factory"
+        }
+      }
+    }
+  ]
+}

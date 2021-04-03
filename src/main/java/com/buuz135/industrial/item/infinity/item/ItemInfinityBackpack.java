@@ -57,6 +57,9 @@ import com.hrznstudio.titanium.network.locator.instance.HeldStackLocatorInstance
 import com.hrznstudio.titanium.network.locator.instance.InventoryStackLocatorInstance;
 import net.minecraft.block.BlockState;
 import net.minecraft.data.IFinishedRecipe;
+import net.minecraft.enchantment.Enchantment;
+import net.minecraft.enchantment.EnchantmentHelper;
+import net.minecraft.enchantment.Enchantments;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.ai.attributes.Attribute;
 import net.minecraft.entity.ai.attributes.AttributeModifier;
@@ -112,7 +115,7 @@ public class ItemInfinityBackpack extends ItemInfinity {
         super("infinity_backpack", ModuleTool.TAB_TOOL, new Properties().maxStackSize(1), POWER_CONSUMPTION, FUEL_CONSUMPTION, false);
         this.disableArea();
         EventManager.forge(EntityItemPickupEvent.class).filter(entityItemPickupEvent -> !entityItemPickupEvent.getItem().getItem().isEmpty()).process(entityItemPickupEvent -> {
-            findFirstBackpack(entityItemPickupEvent.getPlayer()).ifPresent(target -> {
+            for (PlayerInventoryFinder.Target target : findAllBackpacks(entityItemPickupEvent.getPlayer())) {
                 ItemStack stack = target.getFinder().getStackGetter().apply(entityItemPickupEvent.getPlayer(), target.getSlot());
                 if (!stack.isEmpty()) {
                     if (stack.getItem() instanceof ItemInfinityBackpack && (getPickUpMode(stack) == 1 || getPickUpMode(stack) == 0)) {
@@ -138,7 +141,7 @@ public class ItemInfinityBackpack extends ItemInfinity {
                         }
                     }
                 }
-            });
+            }
         }).subscribe();
         EventManager.forge(PlayerXpEvent.PickupXp.class).filter(pickupXp -> pickupXp.getOrb().isAlive()).process(pickupXp -> {
             findFirstBackpack(pickupXp.getPlayer()).ifPresent(target -> {
@@ -188,6 +191,27 @@ public class ItemInfinityBackpack extends ItemInfinity {
         stack.getOrCreateTag().putInt(NBT_PICKUP, mode);
     }
 
+    /**
+     * Generates a list of {@link PlayerInventoryFinder.Target}s defining the
+     * {@link ItemInfinityBackpack}s present in the given {@link PlayerEntity}'s inventory.
+     *
+     * @param entity The {@link PlayerEntity} whose inventory should be searched for {@link ItemInfinityBackpack}s.
+     * @return The list of all {@link ItemInfinityBackpack}s contained in the given {@link PlayerEntity}s
+     * inventory. The returned list is ordered by inventory slot ID.
+     */
+    public static List<PlayerInventoryFinder.Target> findAllBackpacks(PlayerEntity entity) {
+        List<PlayerInventoryFinder.Target> list = new ArrayList<>();
+        for (String name : PlayerInventoryFinder.FINDERS.keySet()) {
+            PlayerInventoryFinder finder = PlayerInventoryFinder.FINDERS.get(name);
+            for (int i = 0; i < finder.getSlotAmountGetter().apply(entity); i++) {
+                if (finder.getStackGetter().apply(entity, i).getItem() instanceof ItemInfinityBackpack) {
+                    list.add(new PlayerInventoryFinder.Target(name, finder, i));
+                }
+            }
+        }
+        return Collections.unmodifiableList(list);
+    }
+
     public static Optional<PlayerInventoryFinder.Target> findFirstBackpack(PlayerEntity entity) {
         for (String name : PlayerInventoryFinder.FINDERS.keySet()) {
             PlayerInventoryFinder finder = PlayerInventoryFinder.FINDERS.get(name);
@@ -199,6 +223,8 @@ public class ItemInfinityBackpack extends ItemInfinity {
         }
         return Optional.empty();
     }
+
+
 
     @Nullable
     @Override
@@ -298,7 +324,7 @@ public class ItemInfinityBackpack extends ItemInfinity {
         int y = 88;
         return () -> new MultipleFluidHandlerScreenProviderItemStack(stack, 1_000_000,
                 new MultipleFluidHandlerScreenProviderItemStack.TankDefinition("biofuel", -21, y + 25 * 0, fluidStack -> fluidStack.getFluid().isEquivalentTo(ModuleCore.BIOFUEL.getSourceFluid()), false, true, FluidTankComponent.Type.SMALL),
-                new MultipleFluidHandlerScreenProviderItemStack.TankDefinition("essence", -21, y + 25 * 1, fluidStack -> fluidStack.getFluid().isEquivalentTo(ModuleCore.ESSENCE.getSourceFluid()), true, true, FluidTankComponent.Type.SMALL),
+                new MultipleFluidHandlerScreenProviderItemStack.TankDefinition("essence", -21, y + 25 * 1, fluidStack -> fluidStack.getFluid().isIn(IndustrialTags.Fluids.EXPERIENCE), true, true, FluidTankComponent.Type.SMALL),
                 new MultipleFluidHandlerScreenProviderItemStack.TankDefinition("meat", -21, y + 25 * 2, fluidStack -> fluidStack.getFluid().isEquivalentTo(ModuleCore.MEAT.getSourceFluid()), false, true, FluidTankComponent.Type.SMALL)
         );
     }
@@ -440,13 +466,15 @@ public class ItemInfinityBackpack extends ItemInfinity {
 
     @Override
     public boolean enoughFuel(ItemStack stack) {
-        return getFuelFromStack(stack) >= FUEL_CONSUMPTION;
+        int i = EnchantmentHelper.getEnchantmentLevel(Enchantments.UNBREAKING, stack);
+        return getFuelFromStack(stack) >= FUEL_CONSUMPTION  * ( 1 / (i + 1)) ;
     }
 
     @Override
     public void consumeFuel(ItemStack stack) {
-        if (getFuelFromStack(stack) >= FUEL_CONSUMPTION) {
-            stack.getTag().getCompound("Tanks").getCompound("biofuel").putInt("Amount", Math.max(0, getFuelFromStack(stack) - FUEL_CONSUMPTION));
+        int i = EnchantmentHelper.getEnchantmentLevel(Enchantments.UNBREAKING, stack);
+        if (getFuelFromStack(stack) >= FUEL_CONSUMPTION  * ( 1 / (i + 1)) ) {
+            stack.getTag().getCompound("Tanks").getCompound("biofuel").putInt("Amount", Math.max(0, getFuelFromStack(stack) - FUEL_CONSUMPTION  * ( 1 / (i + 1)) ));
         }
     }
 
@@ -458,7 +486,12 @@ public class ItemInfinityBackpack extends ItemInfinity {
 
     @Override
     public boolean isEnchantable(ItemStack stack) {
-        return false;
+        return true;
+    }
+
+    @Override
+    public boolean canApplyAtEnchantingTable(ItemStack stack, Enchantment enchantment) {
+        return Enchantments.UNBREAKING == enchantment;
     }
 
     @Override

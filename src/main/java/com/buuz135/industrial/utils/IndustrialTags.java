@@ -24,6 +24,7 @@ package com.buuz135.industrial.utils;
 import com.hrznstudio.titanium.util.TagUtil;
 import net.minecraft.block.Block;
 import net.minecraft.entity.EntityType;
+import net.minecraft.fluid.Fluid;
 import net.minecraft.item.Item;
 import net.minecraft.tags.ITag;
 import net.minecraft.util.ResourceLocation;
@@ -62,4 +63,9 @@ public class IndustrialTags {
         public static final ITag<EntityType<?>> MOB_IMPRISONMENT_TOOL_BLACKLIST = TagUtil.getEntityTypeTag(new ResourceLocation(Reference.MOD_ID + ":" + "mob_imprisonment_tool_blacklist"));
     }
 
+
+    public static class Fluids {
+
+        public static final ITag<Fluid> EXPERIENCE = TagUtil.getFluidTag(new ResourceLocation("forge:experience"));
+    }
 }

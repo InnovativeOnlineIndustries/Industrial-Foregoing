@@ -46,6 +46,8 @@ import com.hrznstudio.titanium.util.FacingUtil;
 import net.minecraft.block.BlockState;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.data.IFinishedRecipe;
+import net.minecraft.enchantment.EnchantmentHelper;
+import net.minecraft.enchantment.Enchantments;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.ai.attributes.Attribute;
 import net.minecraft.entity.ai.attributes.AttributeModifier;
@@ -233,14 +235,16 @@ public class ItemInfinity extends IFCustomItem implements INamedContainerProvide
     }
 
     public boolean enoughFuel(ItemStack stack) {
-        return getFuelFromStack(stack) >= biofuelConsumption || getPowerFromStack(stack) >= powerConsumption;
+        int i = EnchantmentHelper.getEnchantmentLevel(Enchantments.UNBREAKING, stack);
+        return getFuelFromStack(stack) >= biofuelConsumption * ( 1 / (i + 1)) || getPowerFromStack(stack) >= powerConsumption * ( 1 / (i + 1));
     }
 
     public void consumeFuel(ItemStack stack) {
-        if (getFuelFromStack(stack) >= biofuelConsumption) {
-            stack.getTag().getCompound("Fluid").putInt("Amount", Math.max(0, stack.getTag().getCompound("Fluid").getInt("Amount") - biofuelConsumption));
+        int i = EnchantmentHelper.getEnchantmentLevel(Enchantments.UNBREAKING, stack);
+        if (getFuelFromStack(stack) >= biofuelConsumption * ( 1 / (i + 1))) {
+            stack.getTag().getCompound("Fluid").putInt("Amount", Math.max(0, stack.getTag().getCompound("Fluid").getInt("Amount") - biofuelConsumption * ( 1 / (i + 1))));
         } else {
-            stack.getTag().putLong("Energy", stack.getTag().getLong("Energy") - powerConsumption);
+            stack.getTag().putLong("Energy", stack.getTag().getLong("Energy") - powerConsumption * ( 1 / (i + 1)));
         }
     }
 

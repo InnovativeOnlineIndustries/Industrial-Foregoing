@@ -19,24 +19,25 @@
  * FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE,
  * ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
-package com.buuz135.industrial.plugin.jei.ore;
+package com.buuz135.industrial.config.machine.resourceproduction;
 
-import com.buuz135.industrial.api.recipe.ore.OreFluidEntryRaw;
+import com.buuz135.industrial.config.MachineResourceProductionConfig;
+import com.hrznstudio.titanium.annotation.config.ConfigFile;
+import com.hrznstudio.titanium.annotation.config.ConfigVal;
 
-public class OreWasherWrapper {
+@ConfigFile.Child(MachineResourceProductionConfig.class)
+public class FluidSievingMachineConfig {
 
-    private final OreFluidEntryRaw entryRaw;
+    @ConfigVal(comment = "Progress bar size [20 Ticks per Second] - Default: [100 (5s)]")
+    public static int maxProgress = 100;
 
-    public OreWasherWrapper(OreFluidEntryRaw entryRaw) {
-        this.entryRaw = entryRaw;
-    }
+    @ConfigVal(comment = "Amount of Power Consumed per Tick - Default: [40FE]")
+    public static int powerPerTick = 40;
 
-    //@Override
-    //public void getIngredients(IIngredients ingredients) {
-    //    //ingredients.setInputs(ItemStack.class, ItemStackUtils.getAllEntries(entryRaw.getOre()));
-    //    ingredients.setInput(FluidStack.class, entryRaw.getInput());
-    //    ingredients.setOutput(FluidStack.class, entryRaw.getOutput());
-//
-    //    //List<ItemStack> allResources = ItemStackUtils.getAllEntries(Tags.Items.DUSTS, Tags.Items.ORES, Tags.Items.INGOTS).stream().map(ItemStack::new).collect(Collectors.toList());
-    //}
+    @ConfigVal(comment = "Max Stored Power [FE] - Default: [10000 FE]")
+    public static int maxStoredPower = 10000;
+
+    @ConfigVal(comment = "Max Amount of Stored Fluid - Default: [8000mB]")
+    public static int maxTankSize = 8000;
+
 }

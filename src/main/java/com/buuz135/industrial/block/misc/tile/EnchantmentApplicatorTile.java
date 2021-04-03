@@ -23,8 +23,8 @@ package com.buuz135.industrial.block.misc.tile;
 
 import com.buuz135.industrial.block.tile.IndustrialProcessingTile;
 import com.buuz135.industrial.config.machine.misc.EnchantmentApplicatorConfig;
-import com.buuz135.industrial.module.ModuleCore;
 import com.buuz135.industrial.module.ModuleMisc;
+import com.buuz135.industrial.utils.IndustrialTags;
 import com.hrznstudio.titanium.annotation.Save;
 import com.hrznstudio.titanium.component.energy.EnergyStorageComponent;
 import com.hrznstudio.titanium.component.fluid.SidedFluidTankComponent;
@@ -60,7 +60,7 @@ public class EnchantmentApplicatorTile extends IndustrialProcessingTile<Enchantm
         this.addTank(tank = (SidedFluidTankComponent<EnchantmentApplicatorTile>) new SidedFluidTankComponent<EnchantmentApplicatorTile>("essence", EnchantmentApplicatorConfig.tankSize, 34, 20, 0).
                 setColor(DyeColor.LIME).
                 setComponentHarness(this).
-                setValidator(fluidStack -> fluidStack.getFluid().isEquivalentTo(ModuleCore.ESSENCE.getSourceFluid()))
+                setValidator(fluidStack -> fluidStack.getFluid().isIn(IndustrialTags.Fluids.EXPERIENCE))
         );
         this.addInventory(inputFirst = (SidedInventoryComponent<EnchantmentApplicatorTile>) new SidedInventoryComponent<EnchantmentApplicatorTile>("inputFirst", 60, 40, 1, 1).
                 setColor(DyeColor.BLUE).
@@ -83,10 +83,10 @@ public class EnchantmentApplicatorTile extends IndustrialProcessingTile<Enchantm
     @Override
     public boolean canIncrease() {
         Pair<ItemStack, Integer> output = updateRepairOutput();
-        int amount = this.tank.getFluidAmount();
+        long amount = this.tank.getFluidAmount();
         TileEntity tileEntity = this.world.getTileEntity(this.pos.up());
         if (tileEntity != null && tileEntity.getCapability(CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY).isPresent()){
-            if (tileEntity.getCapability(CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY).map(iFluidHandler -> iFluidHandler.getFluidInTank(0).getFluid().isEquivalentTo(ModuleCore.ESSENCE.getSourceFluid())).orElse(false)){
+            if (tileEntity.getCapability(CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY).map(iFluidHandler -> iFluidHandler.getFluidInTank(0).getFluid().isIn(IndustrialTags.Fluids.EXPERIENCE)).orElse(false)){
                 amount += tileEntity.getCapability(CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY).map(iFluidHandler -> iFluidHandler.getFluidInTank(0).getAmount()).orElse(0);
             }
         }
@@ -94,13 +94,14 @@ public class EnchantmentApplicatorTile extends IndustrialProcessingTile<Enchantm
     }
 
     private int getEssenceConsumed(int experienceLevel) {
-        int xp = 0;
-        if (experienceLevel >= 0 && experienceLevel <= 15)
-            xp = (int) (Math.pow(experienceLevel, 2) + 6 * experienceLevel);
-        if (experienceLevel >= 16 && experienceLevel <= 30)
-            xp = (int) (2.5 * Math.pow(experienceLevel, 2) - 40 * experienceLevel + 360);
-        if (experienceLevel >= 32) xp = (int) (5.5 * Math.pow(experienceLevel, 2) - 162.5 * experienceLevel + 2220);
-        return xp * 20;
+        long xp = 0;
+        if (experienceLevel >= 0 && experienceLevel <= 16)
+            xp = (long) (Math.pow(experienceLevel, 2) + 6 * experienceLevel);
+        if (experienceLevel >= 17 && experienceLevel <= 31)
+            xp = (long) (2.5 * Math.pow(experienceLevel, 2) - 40.5 * experienceLevel + 360);
+        if (experienceLevel >= 32) xp = (long) (4.5 * Math.pow(experienceLevel, 2) - 162.5 * experienceLevel + 2220);
+        xp = xp * 20;
+        return xp > Integer.MAX_VALUE ? Integer.MAX_VALUE : (int) xp;
     }
 
     @Override

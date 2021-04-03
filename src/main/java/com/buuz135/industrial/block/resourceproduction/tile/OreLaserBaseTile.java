@@ -27,6 +27,7 @@ import com.buuz135.industrial.module.ModuleResourceProduction;
 import com.buuz135.industrial.recipe.LaserDrillOreRecipe;
 import com.buuz135.industrial.utils.ItemStackUtils;
 import com.buuz135.industrial.utils.ItemStackWeightedItem;
+import com.hrznstudio.titanium._impl.TagConfig;
 import com.hrznstudio.titanium.annotation.Save;
 import com.hrznstudio.titanium.api.IFactory;
 import com.hrznstudio.titanium.api.augment.AugmentTypes;
@@ -140,7 +141,16 @@ public class OreLaserBaseTile extends IndustrialMachineTile<OreLaserBaseTile> im
                         for (int i = 0; i < lens.getSlots(); i++) {
                             if (laserDrillOreRecipe.catalyst.test(lens.getStackInSlot(i))) weight += OreLaserBaseConfig.catalystModifier;
                         }
-                        return new ItemStackWeightedItem(laserDrillOreRecipe.output.getMatchingStacks()[0].copy(), weight);
+                        ItemStack stack = laserDrillOreRecipe.output.getMatchingStacks()[0];
+                        for (String modid : TagConfig.ITEM_PREFERENCE) {
+                            for (ItemStack matchingStack : laserDrillOreRecipe.output.getMatchingStacks()) {
+                                if (matchingStack.getItem().getRegistryName().getNamespace().equals(modid)){
+                                    stack = matchingStack;
+                                    break;
+                                }
+                            }
+                        }
+                        return new ItemStackWeightedItem(stack.copy(), weight);
                     }).collect(Collectors.toList());
             if (!items.isEmpty()){
                 ItemStack stack = WeightedRandom.getRandomItem(this.world.getRandom(), items).getStack();

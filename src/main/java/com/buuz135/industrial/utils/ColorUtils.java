@@ -49,10 +49,6 @@ public class ColorUtils {
             for (int y = 0; y < sprite.getHeight(); y++) {
                 for (int x = 0; x < sprite.getWidth(); x++) {
                     int color = sprite.getPixelRGBA(0, x, y);
-                    //Color color = new Color(sprite.getPixelRGBA(frame, x, y), true);
-                    //System.out.println(color);
-                    //System.out.println(sprite);
-                    //System.out.println(color);
                     if ((color >> 24 & 0xFF) != 255) continue;
                     ++total;
                     red +=  (color >> 0) & 0xFF;
@@ -68,16 +64,18 @@ public class ColorUtils {
     public static int getColorFrom(TextureAtlasSprite sprite, Color filter) {
         if (sprite == null) return -1;
         if (sprite.getFrameCount() == 0) return -1;
-        int[][] pixelMatrix = new int[][]{{0}};//sprite.getFrameTextureData(0);
         int total = 0, red = 0, blue = 0, green = 0;
-        for (int pixel : pixelMatrix[pixelMatrix.length - 1]) {
-            Color color = new Color(pixel);
-            if (color.getAlpha() < 255 || (color.getRGB() - filter.getRGB() < 100 && color.getRGB() - filter.getRGB() > 100))
-                continue;
-            ++total;
-            red += color.getRed();
-            green += color.getGreen();
-            blue += color.getBlue();
+        for (int y = 0; y < sprite.getHeight(); y++) {
+            for (int x = 0; x < sprite.getWidth(); x++) {
+                int color = sprite.getPixelRGBA(0, x, y);
+                if ((color >> 24 & 0xFF) != 255) continue;
+                Color temp = new Color((color >> 0) & 0xFF, (color >>  8) & 0xFF, (color >> 16) & 0xFF, color >> 24 & 0xFF);
+                if ((temp.getRGB() - filter.getRGB() < 500 && temp.getRGB() - filter.getRGB() > 500)) continue;
+                ++total;
+                red +=  (color >> 0) & 0xFF;
+                green += (color >>  8) & 0xFF;
+                blue += (color >> 16) & 0xFF;
+            }
         }
         if (total > 0) return new Color(red / total, green / total, blue / total, 255).brighter().getRGB();
         return -1;

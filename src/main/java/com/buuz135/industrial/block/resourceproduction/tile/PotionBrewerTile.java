@@ -76,6 +76,11 @@ public class PotionBrewerTile extends IndustrialProcessingTile<PotionBrewerTile>
     public PotionBrewerTile() {
         super(ModuleResourceProduction.POTION_BREWER, 100, 38);
         this.state = 0;
+        addBundle(brewingItems = new LockableInventoryBundle<>(this, new SidedInventoryComponent<PotionBrewerTile>("brewingInput", 55, 19, 6, 3)
+                .setColor(DyeColor.BLUE)
+                .setInputFilter((stack, integer) -> true)
+                .setOutputFilter((stack, integer) -> false),
+                148, 40, false));
         addTank(water = (SidedFluidTankComponent<PotionBrewerTile>) new SidedFluidTankComponent<PotionBrewerTile>("water", 1000, 75, 40, 0)
                 .setColor(DyeColor.CYAN)
                 .setTankAction(FluidTankComponent.Action.FILL)
@@ -112,11 +117,6 @@ public class PotionBrewerTile extends IndustrialProcessingTile<PotionBrewerTile>
                 .setOutputFilter((stack, integer) -> false)
                 .setSlotToItemStackRender(0, new ItemStack(Items.GLASS_BOTTLE))
         );
-        addBundle(brewingItems = new LockableInventoryBundle<>(this, new SidedInventoryComponent<PotionBrewerTile>("brewingInput", 55, 19, 6, 3)
-                .setColor(DyeColor.BLUE)
-                .setInputFilter((stack, integer) -> true)
-                .setOutputFilter((stack, integer) -> false),
-                148, 40, false));
         addInventory(output = (SidedInventoryComponent<PotionBrewerTile>) new SidedInventoryComponent<PotionBrewerTile>("output", 82, 64, 3, 4)
                 .setColor(DyeColor.MAGENTA)
                 //.setRange(1,3)
