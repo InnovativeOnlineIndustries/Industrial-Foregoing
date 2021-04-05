@@ -103,16 +103,20 @@ public class ModuleTransportStorage implements IModule {
                 .eventClient(() -> () -> EventManager.mod(TextureStitchEvent.Pre.class).process(this::textureStitch));
         ConveyorUpgradeFactory.FACTORIES.forEach(conveyorUpgradeFactory -> builder.content(Item.class, new ItemConveyorUpgrade(conveyorUpgradeFactory, TAB_TRANSPORT)));
         features.add(builder);
-        features.add(createFeature(BLACK_HOLE_UNIT_COMMON));
-        features.add(createFeature(BLACK_HOLE_UNIT_PITY));
-        features.add(createFeature(BLACK_HOLE_UNIT_SIMPLE));
-        features.add(createFeature(BLACK_HOLE_UNIT_ADVANCED));
-        features.add(createFeature(BLACK_HOLE_UNIT_SUPREME));
-        features.add(createFeature(BLACK_HOLE_TANK_COMMON));
-        features.add(createFeature(BLACK_HOLE_TANK_PITY));
-        features.add(createFeature(BLACK_HOLE_TANK_SIMPLE));
-        features.add(createFeature(BLACK_HOLE_TANK_ADVANCED));
-        features.add(createFeature(BLACK_HOLE_TANK_SUPREME));
+        features.add(Feature.builder("black_hole_units")
+                .content(Block.class,BLACK_HOLE_UNIT_COMMON )
+                .content(Block.class, BLACK_HOLE_UNIT_PITY)
+                .content(Block.class, BLACK_HOLE_UNIT_SIMPLE)
+                .content(Block.class, BLACK_HOLE_UNIT_ADVANCED)
+                .content(Block.class, BLACK_HOLE_UNIT_SUPREME)
+        );
+        features.add(Feature.builder("black_hole_tanks")
+                .content(Block.class,BLACK_HOLE_TANK_COMMON )
+                .content(Block.class, BLACK_HOLE_TANK_PITY)
+                .content(Block.class, BLACK_HOLE_TANK_SIMPLE)
+                .content(Block.class, BLACK_HOLE_TANK_ADVANCED)
+                .content(Block.class, BLACK_HOLE_TANK_SUPREME)
+        );
         features.add(createFeature(BLACK_HOLE_CONTROLLER));
         return features;
     }

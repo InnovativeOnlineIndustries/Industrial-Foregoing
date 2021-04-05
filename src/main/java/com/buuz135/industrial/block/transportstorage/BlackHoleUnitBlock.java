@@ -56,6 +56,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.util.text.TextFormatting;
+import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.IBlockReader;
 import net.minecraft.world.World;
 import net.minecraftforge.common.Tags;
@@ -188,6 +189,12 @@ public class BlackHoleUnitBlock extends IndustrialBlock<BlackHoleUnitTile> {
         @Override
         public ICapabilityProvider initCapabilities(ItemStack stack, @Nullable CompoundNBT nbt) {
             return new BlackHoleUnitBlock.BlackHoleUnitCapabilityProvider(stack, this.rarity);
+        }
+
+        @Nullable
+        @Override
+        public String getCreatorModId(ItemStack itemStack) {
+            return new TranslationTextComponent("itemGroup." + this.group.getPath()).getString();
         }
     }
 
