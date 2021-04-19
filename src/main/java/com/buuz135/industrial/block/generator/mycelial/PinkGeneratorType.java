@@ -103,7 +103,7 @@ public class PinkGeneratorType implements IMycelialGeneratorType{
     }
 
     private Pair<Integer, Integer> calculate(ItemStack stack){
-        return Pair.of(10, 40);
+        return Pair.of(69, 135);
     }
 
     @Override
