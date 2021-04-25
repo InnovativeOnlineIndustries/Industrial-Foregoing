@@ -1,4 +1,5 @@
 #!/usr/bin/env groovy
+def releaseBranch = "release-1.16";
 
 pipeline {
     agent any
@@ -18,6 +19,9 @@ pipeline {
         }
 
         stage('Publish') {
+            when {
+                branch releaseBranch
+            }
             steps {
                 echo 'Deploying to Maven'
                 sh './gradlew publish'
