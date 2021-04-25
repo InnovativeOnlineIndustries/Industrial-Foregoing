@@ -34,10 +34,12 @@ apply plugin: 'eclipse'
 def isReleaseBranch = System.getenv("BRANCH") == "release-1.15" || System.getenv("BRANCH") == "release-1.16";
 
 
-def BUILD_NUMBER = System.getenv("COMMIT") ? "${project.api_version}-${System.getenv("COMMIT")}" : "${project.api_version}"
 group = "com.buuz135"
 archivesBaseName = "industrial-foregoing"
-version = "${minecraftVersion}-$BUILD_NUMBER"
+version = "${minecraftVersion}-${project.api_version}"
+if (System.getenv('BUILD_NUMBER') != null) {
+    version += "-" + System.getenv('BUILD_NUMBER')
+}
 
 sourceCompatibility = targetCompatibility = '1.8'
 compileJava {
@@ -220,10 +222,7 @@ publishing {
     }
     repositories {
         maven {
-            url "s3://cdn.hrzn.studio/maven"
-            authentication {
-                awsIm(AwsImAuthentication)
-            }
+            url "file://" + System.getenv("local_maven")
         }
     }
 }
