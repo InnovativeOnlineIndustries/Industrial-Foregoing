@@ -21,9 +21,9 @@
  */
 package com.buuz135.industrial.block.transportstorage.tile;
 
+import com.buuz135.industrial.api.IBlockContainer;
 import com.buuz135.industrial.api.conveyor.ConveyorUpgrade;
 import com.buuz135.industrial.api.conveyor.ConveyorUpgradeFactory;
-import com.buuz135.industrial.api.conveyor.IConveyorContainer;
 import com.buuz135.industrial.block.transportstorage.ConveyorBlock;
 import com.buuz135.industrial.gui.conveyor.ContainerConveyor;
 import com.buuz135.industrial.module.ModuleTransportStorage;
@@ -64,7 +64,7 @@ import java.util.Map;
 
 import static com.buuz135.industrial.block.transportstorage.ConveyorBlock.*;
 
-public class ConveyorTile extends ActiveTile<ConveyorTile> implements IConveyorContainer, ITickableTileEntity {
+public class ConveyorTile extends ActiveTile<ConveyorTile> implements IBlockContainer<ConveyorUpgradeFactory>, ITickableTileEntity {
 
     private Direction facing;
     private EnumType type;
@@ -86,12 +86,12 @@ public class ConveyorTile extends ActiveTile<ConveyorTile> implements IConveyorC
     }
 
     @Override
-    public World getConveyorWorld() {
+    public World getBlockWorld() {
         return getWorld();
     }
 
     @Override
-    public BlockPos getConveyorPosition() {
+    public BlockPos getBlockPosition() {
         return getPos();
     }
 

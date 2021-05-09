@@ -24,7 +24,8 @@ package com.buuz135.industrial.gui.conveyor;
 import com.buuz135.industrial.IndustrialForegoing;
 import com.buuz135.industrial.api.conveyor.ConveyorUpgrade;
 import com.buuz135.industrial.api.conveyor.gui.IGuiComponent;
-import com.buuz135.industrial.gui.component.FilterGuiComponent;
+import com.buuz135.industrial.gui.component.custom.FilterGuiComponent;
+import com.buuz135.industrial.gui.component.custom.ICanSendNetworkMessage;
 import com.buuz135.industrial.proxy.block.filter.IFilter;
 import com.buuz135.industrial.proxy.network.ConveyorButtonInteractMessage;
 import com.buuz135.industrial.utils.Reference;
@@ -41,7 +42,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-public class GuiConveyor extends ContainerScreen<ContainerConveyor> {
+public class GuiConveyor extends ContainerScreen<ContainerConveyor> implements ICanSendNetworkMessage {
 
     public static final ResourceLocation BG_TEXTURE = new ResourceLocation(Reference.MOD_ID, "textures/gui/conveyor.png");
 
@@ -119,6 +120,7 @@ public class GuiConveyor extends ContainerScreen<ContainerConveyor> {
         return click;
     }
 
+    @Override
     public void sendMessage(int id, CompoundNBT compound) {
         IndustrialForegoing.NETWORK.get().sendToServer(new ConveyorButtonInteractMessage(upgrade.getPos(), id, upgrade.getSide(), compound));
     }

@@ -21,6 +21,7 @@
  */
 package com.buuz135.industrial.api.conveyor;
 
+import com.buuz135.industrial.api.IBlockContainer;
 import com.google.common.collect.ImmutableSet;
 import com.hrznstudio.titanium.api.IRecipeProvider;
 import net.minecraft.entity.player.PlayerEntity;
@@ -49,7 +50,7 @@ public abstract class ConveyorUpgradeFactory extends ForgeRegistryEntry<Conveyor
         FACTORIES.add(this);
     }
 
-    public abstract ConveyorUpgrade create(IConveyorContainer container, Direction face);
+    public abstract ConveyorUpgrade create(IBlockContainer container, Direction face);
 
     @Nonnull
     public Set<Direction> getValidFacings() {

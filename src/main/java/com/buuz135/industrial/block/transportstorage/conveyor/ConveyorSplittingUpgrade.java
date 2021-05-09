@@ -22,15 +22,15 @@
 package com.buuz135.industrial.block.transportstorage.conveyor;
 
 import com.buuz135.industrial.IndustrialForegoing;
+import com.buuz135.industrial.api.IBlockContainer;
 import com.buuz135.industrial.api.conveyor.ConveyorUpgrade;
 import com.buuz135.industrial.api.conveyor.ConveyorUpgradeFactory;
-import com.buuz135.industrial.api.conveyor.IConveyorContainer;
 import com.buuz135.industrial.api.conveyor.gui.IGuiComponent;
 import com.buuz135.industrial.block.transportstorage.tile.ConveyorTile;
 import com.buuz135.industrial.gui.component.StateButtonInfo;
-import com.buuz135.industrial.gui.component.TextGuiComponent;
-import com.buuz135.industrial.gui.component.TextureGuiComponent;
-import com.buuz135.industrial.gui.component.TexturedStateButtonGuiComponent;
+import com.buuz135.industrial.gui.component.custom.TextGuiComponent;
+import com.buuz135.industrial.gui.component.custom.TextureGuiComponent;
+import com.buuz135.industrial.gui.component.custom.TexturedStateButtonGuiComponent;
 import com.buuz135.industrial.module.ModuleTransportStorage;
 import com.buuz135.industrial.proxy.network.ConveyorSplittingSyncEntityMessage;
 import com.buuz135.industrial.utils.MovementUtils;
@@ -60,13 +60,12 @@ public class ConveyorSplittingUpgrade extends ConveyorUpgrade {
     public static VoxelShape WEST = VoxelShapes.create(-0.08, 0.1, 0.3, 0.30, 0.16, 0.7);
     public static VoxelShape EAST = VoxelShapes.create(-0.05 + 0.75, 0.1, 0.3, 0.32 + 0.75, 0.16, 0.7);
 
-
     public List<Integer> handlingEntities;
     private Direction nextFacing;
     private int ratio;
     private int currentRatio;
 
-    public ConveyorSplittingUpgrade(IConveyorContainer container, ConveyorUpgradeFactory factory, Direction side) {
+    public ConveyorSplittingUpgrade(IBlockContainer container, ConveyorUpgradeFactory factory, Direction side) {
         super(container, factory, side);
         this.handlingEntities = new ArrayList<>();
         this.nextFacing = side;
@@ -81,7 +80,7 @@ public class ConveyorSplittingUpgrade extends ConveyorUpgrade {
             if (nextFacing == this.getSide()) {
                 this.handlingEntities.add(entity.getEntityId());
                 this.getContainer().getEntityFilter().add(entity.getEntityId());
-                IndustrialForegoing.NETWORK.sendToNearby(getContainer().getConveyorWorld(), getPos(), 64, new ConveyorSplittingSyncEntityMessage(this.getPos(), entity.getEntityId(), this.getSide()));
+                IndustrialForegoing.NETWORK.sendToNearby(getContainer().getBlockWorld(), getPos(), 64, new ConveyorSplittingSyncEntityMessage(this.getPos(), entity.getEntityId(), this.getSide()));
                 findNextUpgradeAndUpdate();
             }
         }
@@ -237,7 +236,7 @@ public class ConveyorSplittingUpgrade extends ConveyorUpgrade {
         }
 
         @Override
-        public ConveyorUpgrade create(IConveyorContainer container, Direction face) {
+        public ConveyorUpgrade create(IBlockContainer container, Direction face) {
             return new ConveyorSplittingUpgrade(container, this, face);
         }
 

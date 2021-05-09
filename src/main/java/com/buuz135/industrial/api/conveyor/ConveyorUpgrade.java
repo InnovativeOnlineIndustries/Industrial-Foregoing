@@ -21,6 +21,7 @@
  */
 package com.buuz135.industrial.api.conveyor;
 
+import com.buuz135.industrial.api.IBlockContainer;
 import com.buuz135.industrial.api.conveyor.gui.IGuiComponent;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.PlayerEntity;
@@ -40,11 +41,11 @@ import java.util.List;
 
 public abstract class ConveyorUpgrade implements INBTSerializable<CompoundNBT> {
 
-    private IConveyorContainer container;
+    private IBlockContainer container;
     private ConveyorUpgradeFactory factory;
     private Direction side;
 
-    public ConveyorUpgrade(IConveyorContainer container, ConveyorUpgradeFactory factory, Direction side) {
+    public ConveyorUpgrade(IBlockContainer container, ConveyorUpgradeFactory factory, Direction side) {
         this.container = container;
         this.factory = factory;
         this.side = side;
@@ -68,16 +69,16 @@ public abstract class ConveyorUpgrade implements INBTSerializable<CompoundNBT> {
         return Collections.singleton(new ItemStack(this.getFactory().getUpgradeItem(), 1));
     }
 
-    public IConveyorContainer getContainer() {
+    public IBlockContainer getContainer() {
         return container;
     }
 
     public World getWorld() {
-        return getContainer().getConveyorWorld();
+        return getContainer().getBlockWorld();
     }
 
     public BlockPos getPos() {
-        return getContainer().getConveyorPosition();
+        return getContainer().getBlockPosition();
     }
 
     public ConveyorUpgradeFactory getFactory() {

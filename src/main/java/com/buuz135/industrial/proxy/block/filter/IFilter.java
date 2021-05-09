@@ -21,8 +21,11 @@
  */
 package com.buuz135.industrial.proxy.block.filter;
 
+import com.buuz135.industrial.gui.component.custom.ICanSendNetworkMessage;
 import com.buuz135.industrial.gui.conveyor.GuiConveyor;
+import com.buuz135.industrial.gui.transporter.GuiTransporter;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.renderer.Rectangle2d;
 import net.minecraft.entity.Entity;
 import net.minecraft.item.ItemStack;
@@ -50,16 +53,23 @@ public interface IFilter<T extends Entity> {
 
     public static class GhostSlot {
 
+        public static final int MAX = 1024;
+        public static final int MIN = 1;
+
         private final int x;
         private final int y;
         private int id;
         private ItemStack stack;
+        private int amount;
+        private int maxAmount;
 
         public GhostSlot(int id, int x, int y) {
             this.id = id;
             this.x = x;
             this.y = y;
             this.stack = ItemStack.EMPTY;
+            this.amount = 1;
+            this.maxAmount = MAX;
         }
 
         public ItemStack getStack() {
@@ -70,19 +80,42 @@ public interface IFilter<T extends Entity> {
             this.stack = stack;
         }
 
+        public void increaseAmount(int amount) {
+            this.amount = Math.max(0, Math.min(this.maxAmount, this.amount + amount));
+        }
+
+        public void decreaseAmount(int amount) {
+            this.amount = Math.max(MIN, this.amount - amount);
+        }
+
+        public int getAmount() {
+            return amount;
+        }
+
+        public void setAmount(int amount) {
+            this.amount = amount;
+        }
+
+        public void setMaxAmount(int maxAmount) {
+            this.maxAmount = maxAmount;
+        }
 
         public Rectangle2d getArea() {
-            if (Minecraft.getInstance().currentScreen instanceof GuiConveyor) {
-                GuiConveyor gui = (GuiConveyor) Minecraft.getInstance().currentScreen;
+            Screen screen = Minecraft.getInstance().currentScreen;
+            if (screen instanceof GuiConveyor) {
+                GuiConveyor gui = (GuiConveyor) screen;
+                return new Rectangle2d(x + gui.getX(), y + gui.getY(), 18, 18);
+            }
+            if (screen instanceof GuiTransporter) {
+                GuiTransporter gui = (GuiTransporter) screen;
                 return new Rectangle2d(x + gui.getX(), y + gui.getY(), 18, 18);
             }
             return new Rectangle2d(0, 0, 0, 0);
         }
 
-
         public void accept(ItemStack ingredient) {
-            if (Minecraft.getInstance().currentScreen instanceof GuiConveyor) {
-                ((GuiConveyor) Minecraft.getInstance().currentScreen).sendMessage(id, ingredient.serializeNBT());
+            if (Minecraft.getInstance().currentScreen instanceof ICanSendNetworkMessage) {
+                ((ICanSendNetworkMessage) Minecraft.getInstance().currentScreen).sendMessage(id, ingredient.serializeNBT());
             }
         }
     }

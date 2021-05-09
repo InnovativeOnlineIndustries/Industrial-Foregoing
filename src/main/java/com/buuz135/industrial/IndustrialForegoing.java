@@ -96,6 +96,8 @@ public class IndustrialForegoing extends ModuleController {
         NETWORK.registerMessage(BackpackSyncMessage.class);
         NETWORK.registerMessage(BackpackOpenMessage.class);
         NETWORK.registerMessage(BackpackOpenedMessage.class);
+        NETWORK.registerMessage(TransporterSyncMessage.class);
+        NETWORK.registerMessage(TransporterButtonInteractMessage.class);
     }
 
     public IndustrialForegoing() {

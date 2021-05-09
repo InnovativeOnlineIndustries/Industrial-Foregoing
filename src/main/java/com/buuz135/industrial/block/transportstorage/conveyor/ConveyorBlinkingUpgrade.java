@@ -21,12 +21,16 @@
  */
 package com.buuz135.industrial.block.transportstorage.conveyor;
 
+import com.buuz135.industrial.api.IBlockContainer;
 import com.buuz135.industrial.api.conveyor.ConveyorUpgrade;
 import com.buuz135.industrial.api.conveyor.ConveyorUpgradeFactory;
-import com.buuz135.industrial.api.conveyor.IConveyorContainer;
 import com.buuz135.industrial.api.conveyor.gui.IGuiComponent;
 import com.buuz135.industrial.block.transportstorage.ConveyorBlock;
-import com.buuz135.industrial.gui.component.*;
+import com.buuz135.industrial.gui.component.StateButtonInfo;
+import com.buuz135.industrial.gui.component.custom.FilterGuiComponent;
+import com.buuz135.industrial.gui.component.custom.TextGuiComponent;
+import com.buuz135.industrial.gui.component.custom.TextureGuiComponent;
+import com.buuz135.industrial.gui.component.custom.TexturedStateButtonGuiComponent;
 import com.buuz135.industrial.module.ModuleTransportStorage;
 import com.buuz135.industrial.proxy.block.filter.IFilter;
 import com.buuz135.industrial.proxy.block.filter.ItemStackFilter;
@@ -66,7 +70,7 @@ public class ConveyorBlinkingUpgrade extends ConveyorUpgrade {
     private int verticalDisplacement;
     private int horizontalDisplacement;
 
-    public ConveyorBlinkingUpgrade(IConveyorContainer container, ConveyorUpgradeFactory factory, Direction side) {
+    public ConveyorBlinkingUpgrade(IBlockContainer container, ConveyorUpgradeFactory factory, Direction side) {
         super(container, factory, side);
         this.filter = new ItemStackFilter(20, 20, 3, 3);
         this.whitelist = false;
@@ -78,7 +82,7 @@ public class ConveyorBlinkingUpgrade extends ConveyorUpgrade {
     public void handleEntity(Entity entity) {
         super.handleEntity(entity);
         if (whitelist != filter.matches(entity)) return;
-        Direction direction = this.getContainer().getConveyorWorld().getBlockState(this.getContainer().getConveyorPosition()).get(ConveyorBlock.FACING);
+        Direction direction = this.getContainer().getBlockWorld().getBlockState(this.getContainer().getBlockPosition()).get(ConveyorBlock.FACING);
         Vector3d vec3d = new Vector3d(horizontalDisplacement * direction.getDirectionVec().getX(), verticalDisplacement, horizontalDisplacement * direction.getDirectionVec().getZ());
         BlockPos pos = this.getPos().add(vec3d.x, vec3d.y, vec3d.z);
         entity.setPosition(pos.getX() + 0.5, pos.getY() + 0.25, pos.getZ() + 0.5);
@@ -218,7 +222,7 @@ public class ConveyorBlinkingUpgrade extends ConveyorUpgrade {
         }
 
         @Override
-        public ConveyorUpgrade create(IConveyorContainer container, Direction face) {
+        public ConveyorUpgrade create(IBlockContainer container, Direction face) {
             return new ConveyorBlinkingUpgrade(container, this, face);
         }
 
