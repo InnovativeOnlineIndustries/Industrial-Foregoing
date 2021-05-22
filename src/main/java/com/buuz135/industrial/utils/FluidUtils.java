@@ -22,29 +22,29 @@
 package com.buuz135.industrial.utils;
 
 import net.minecraft.fluid.Fluid;
+import net.minecraft.util.ColorHelper;
+import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fluids.FluidStack;
 
 import java.util.HashMap;
 
 public class FluidUtils {
-
-    public static HashMap<Fluid, Integer> colorCache = new HashMap<>();
+    // TODO
+    // should item colors from ItemStackUtils also be cached?
+    // invalidate cache on resource reload
+    public static HashMap<ResourceLocation, Integer> colorCache = new HashMap<>();
 
     public static int getFluidColor(FluidStack stack) {
-        int color = 0xFFFFFF;
-        if (stack != null && stack.getFluid() != null) {
-            color = colorCache.getOrDefault(stack.getFluid().getAttributes().getStillTexture(stack), stack.getFluid().getAttributes().getColor(stack) != 0xffffffff ? stack.getFluid().getAttributes().getColor(stack) : ColorUtils.getColorFrom(stack.getFluid().getAttributes().getStillTexture(stack)));
-            if (!colorCache.containsKey(stack.getFluid())) colorCache.put(stack.getFluid(), color);
-        }
-        return color;
+        ResourceLocation location = stack.getFluid().getAttributes().getStillTexture(stack);
+        int tint = stack.getFluid().getAttributes().getColor(stack);
+        int textureColor = colorCache.computeIfAbsent(location, ColorUtils::getColorFrom);
+        return ColorHelper.PackedColor.blendColors(textureColor, tint);
     }
 
     public static int getFluidColor(Fluid fluid) {
-        int color = 0xFFFFFF;
-        if (fluid != null) {
-            color = colorCache.getOrDefault(fluid, fluid.getAttributes().getColor() != 0xffffffff ? fluid.getAttributes().getColor() : ColorUtils.getColorFrom(fluid.getAttributes().getStillTexture()));
-            if (!colorCache.containsKey(fluid)) colorCache.put(fluid, color);
-        }
-        return color;
+        ResourceLocation location = fluid.getAttributes().getStillTexture();
+        int tint = fluid.getAttributes().getColor();
+        int textureColor = colorCache.computeIfAbsent(location, ColorUtils::getColorFrom);
+        return ColorHelper.PackedColor.blendColors(textureColor, tint);
     }
 }

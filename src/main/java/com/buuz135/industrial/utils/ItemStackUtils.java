@@ -75,7 +75,7 @@ public class ItemStackUtils {
 
     @OnlyIn(Dist.CLIENT)
     public static int getColor(ItemStack stack) {
-        return ColorUtils.getColorFrom(Minecraft.getInstance().getItemRenderer().getItemModelWithOverrides(stack, Minecraft.getInstance().world, Minecraft.getInstance().player).getParticleTexture(), Color.GRAY);
+        return ColorUtils.getColorFrom(Minecraft.getInstance().getItemRenderer().getItemModelWithOverrides(stack, Minecraft.getInstance().world, Minecraft.getInstance().player).getParticleTexture());
     }
 
     public static void renderItemIntoGUI(MatrixStack matrixStack, ItemStack stack, int x, int y) {
