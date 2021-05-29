@@ -78,7 +78,7 @@ public class MobDuplicatorTile extends IndustrialAreaWorkingTile<MobDuplicatorTi
 		if (entityAmount.size() > 32) return new WorkAction(1, 0);
 
 		int essenceNeeded = (int) (entity.getHealth() * MobDuplicatorConfig.essenceNeeded);
-		int canSpawn = (int) ((tank.getFluid().isEmpty() ? 0 : tank.getFluid().getAmount()) / essenceNeeded);
+		int canSpawn = (int) ((tank.getFluid().isEmpty() ? 0 : tank.getFluid().getAmount()) / Math.max(essenceNeeded, 1));
 		if (canSpawn == 0) return new WorkAction(1, 0);
 
 		int spawnAmount = 1 + this.world.rand.nextInt(Math.min(canSpawn, 4));
