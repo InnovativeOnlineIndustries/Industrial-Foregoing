@@ -82,7 +82,7 @@ public class BioReactorTile extends IndustrialWorkingTile<BioReactorTile> {
         addBundle(input = new LockableInventoryBundle<>(this, new SidedInventoryComponent<BioReactorTile>("input", 69, 22, 9, 1).
                 setColor(DyeColor.BLUE).
                 setRange(3, 3).
-                setInputFilter((stack, integer) -> canInsert(integer, stack)).
+                setInputFilter((stack, integer) -> canInsert(integer - 2, stack)).
                 setOutputFilter((stack, integer) -> false).
                 setComponentHarness(this)
         , 136, 84, false));
@@ -132,15 +132,15 @@ public class BioReactorTile extends IndustrialWorkingTile<BioReactorTile> {
     }
 
     private boolean canInsert(int slot, ItemStack stack) {
+        int foundSlot = -1;
         for (int i = 0; i < input.getInventory().getSlots(); i++) {
-            if (i != slot && input.getInventory().getStackInSlot(i).isItemEqual(stack)) {
-                return false;
-            } else if (i == slot && input.getInventory().getStackInSlot(i).isItemEqual(stack) && input.getInventory().getStackInSlot(i).getCount() + stack.getCount() <= input.getInventory().getStackInSlot(i).getMaxStackSize()) {
-                return true;
+            if (input.getInventory().getStackInSlot(i).isItemEqual(stack)) {
+                foundSlot = i;
             }
         }
         for (ITag<Item> itemTag : VALID) {
-            if (itemTag.contains(stack.getItem())) return true; //contains
+            if (itemTag.contains(stack.getItem()) && (foundSlot == -1 || (input.getInventory().getStackInSlot(foundSlot).getCount() + stack.getCount() <= input.getInventory().getStackInSlot(foundSlot).getMaxStackSize() && slot == foundSlot)))
+                return true; //contains
         }
         return false;
     }
