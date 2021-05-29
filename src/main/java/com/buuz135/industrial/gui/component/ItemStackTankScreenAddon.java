@@ -39,6 +39,7 @@ import net.minecraft.client.gui.screen.inventory.ContainerScreen;
 import net.minecraft.client.renderer.texture.AtlasTexture;
 import net.minecraft.client.renderer.texture.Texture;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
+import net.minecraft.item.BucketItem;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.Direction;
 import net.minecraft.util.ResourceLocation;
@@ -48,6 +49,7 @@ import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.util.text.TranslationTextComponent;
+import net.minecraftforge.fluids.FluidAttributes;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
 import net.minecraftforge.fluids.capability.IFluidHandler;
@@ -119,13 +121,26 @@ public class ItemStackTankScreenAddon extends BasicScreenAddon implements IClick
         strings.add(new TranslationTextComponent("tooltip.titanium.tank.amount").mergeStyle(TextFormatting.GOLD).append(new StringTextComponent(TextFormatting.WHITE + new DecimalFormat().format(tank.getFluidInTank(tankSlot).getAmount()) + TextFormatting.GOLD + "/" + TextFormatting.WHITE + new DecimalFormat().format(tank.getTankCapacity(tankSlot)) + TextFormatting.DARK_AQUA + "mb")));
         if (!Minecraft.getInstance().player.inventory.getItemStack().isEmpty() && Minecraft.getInstance().player.inventory.getItemStack().getCapability(CapabilityFluidHandler.FLUID_HANDLER_ITEM_CAPABILITY).isPresent()){
             Minecraft.getInstance().player.inventory.getItemStack().getCapability(CapabilityFluidHandler.FLUID_HANDLER_ITEM_CAPABILITY).ifPresent(iFluidHandlerItem -> {
-                boolean canFillFromItem = tank.fill(iFluidHandlerItem.drain(Integer.MAX_VALUE, IFluidHandler.FluidAction.SIMULATE), IFluidHandler.FluidAction.SIMULATE) > 0;
-                boolean canDrainFromItem = iFluidHandlerItem.fill(tank.drain(Integer.MAX_VALUE, IFluidHandler.FluidAction.SIMULATE), IFluidHandler.FluidAction.SIMULATE) > 0;
-                if (canFillFromItem) strings.add(new TranslationTextComponent("tooltip.titanium.tank.can_fill_from_item").mergeStyle(TextFormatting.BLUE));
-                if (canDrainFromItem) strings.add(new TranslationTextComponent("tooltip.titanium.tank.can_drain_from_item").mergeStyle(TextFormatting.GOLD));
-                if (canFillFromItem) strings.add(new TranslationTextComponent("tooltip.titanium.tank.action_fill").mergeStyle(TextFormatting.DARK_GRAY));
-                if (canDrainFromItem) strings.add(new TranslationTextComponent("tooltip.titanium.tank.action_drain").mergeStyle(TextFormatting.DARK_GRAY));
-                if (!canDrainFromItem && !canFillFromItem){
+                boolean isBucket = Minecraft.getInstance().player.inventory.getItemStack().getItem() instanceof BucketItem;
+                int amount = isBucket ? FluidAttributes.BUCKET_VOLUME : Integer.MAX_VALUE;
+                boolean canFillFromItem = false;
+                boolean canDrainFromItem = false;
+                if (isBucket) {
+                    canFillFromItem = tank.fill(iFluidHandlerItem.drain(amount, IFluidHandler.FluidAction.SIMULATE), IFluidHandler.FluidAction.SIMULATE) == FluidAttributes.BUCKET_VOLUME;
+                    canDrainFromItem = iFluidHandlerItem.fill(tank.drain(amount, IFluidHandler.FluidAction.SIMULATE), IFluidHandler.FluidAction.SIMULATE) == FluidAttributes.BUCKET_VOLUME;
+                } else {
+                    canFillFromItem = tank.fill(iFluidHandlerItem.drain(amount, IFluidHandler.FluidAction.SIMULATE), IFluidHandler.FluidAction.SIMULATE) > 0;
+                    canDrainFromItem = iFluidHandlerItem.fill(tank.drain(amount, IFluidHandler.FluidAction.SIMULATE), IFluidHandler.FluidAction.SIMULATE) > 0;
+                }
+                if (canFillFromItem)
+                    strings.add(new TranslationTextComponent("tooltip.titanium.tank.can_fill_from_item").mergeStyle(TextFormatting.BLUE));
+                if (canDrainFromItem)
+                    strings.add(new TranslationTextComponent("tooltip.titanium.tank.can_drain_from_item").mergeStyle(TextFormatting.GOLD));
+                if (canFillFromItem)
+                    strings.add(new TranslationTextComponent("tooltip.titanium.tank.action_fill").mergeStyle(TextFormatting.DARK_GRAY));
+                if (canDrainFromItem)
+                    strings.add(new TranslationTextComponent("tooltip.titanium.tank.action_drain").mergeStyle(TextFormatting.DARK_GRAY));
+                if (!canDrainFromItem && !canFillFromItem) {
                     strings.add(new TranslationTextComponent("tooltip.titanium.tank.no_action").mergeStyle(TextFormatting.RED));
                 }
             });
@@ -158,8 +173,17 @@ public class ItemStackTankScreenAddon extends BasicScreenAddon implements IClick
                     compoundNBT.putBoolean("Invalid", true);
                 }
                 Minecraft.getInstance().player.inventory.getItemStack().getCapability(CapabilityFluidHandler.FLUID_HANDLER_ITEM_CAPABILITY).ifPresent(iFluidHandlerItem -> {
-                    boolean canFillFromItem = tank.fill(iFluidHandlerItem.drain(Integer.MAX_VALUE, IFluidHandler.FluidAction.SIMULATE), IFluidHandler.FluidAction.SIMULATE) > 0;
-                    boolean canDrainFromItem = iFluidHandlerItem.fill(tank.drain(Integer.MAX_VALUE, IFluidHandler.FluidAction.SIMULATE), IFluidHandler.FluidAction.SIMULATE) > 0;
+                    boolean isBucket = Minecraft.getInstance().player.inventory.getItemStack().getItem() instanceof BucketItem;
+                    int amount = isBucket ? FluidAttributes.BUCKET_VOLUME : Integer.MAX_VALUE;
+                    boolean canFillFromItem = false;
+                    boolean canDrainFromItem = false;
+                    if (isBucket) {
+                        canFillFromItem = tank.fill(iFluidHandlerItem.drain(amount, IFluidHandler.FluidAction.SIMULATE), IFluidHandler.FluidAction.SIMULATE) == FluidAttributes.BUCKET_VOLUME;
+                        canDrainFromItem = iFluidHandlerItem.fill(tank.drain(amount, IFluidHandler.FluidAction.SIMULATE), IFluidHandler.FluidAction.SIMULATE) == FluidAttributes.BUCKET_VOLUME;
+                    } else {
+                        canFillFromItem = tank.fill(iFluidHandlerItem.drain(amount, IFluidHandler.FluidAction.SIMULATE), IFluidHandler.FluidAction.SIMULATE) > 0;
+                        canDrainFromItem = iFluidHandlerItem.fill(tank.drain(amount, IFluidHandler.FluidAction.SIMULATE), IFluidHandler.FluidAction.SIMULATE) > 0;
+                    }
                     if (canFillFromItem && button == 0) compoundNBT.putBoolean("Fill", true);
                     if (canDrainFromItem && button == 1) compoundNBT.putBoolean("Fill", false);
                 });
