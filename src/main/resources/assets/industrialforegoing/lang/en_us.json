@@ -386,6 +386,8 @@
   "item.industrialforegoing.infinity_hammer": "Infinity Hammer",
   "item.industrialforegoing.infinity_trident": "Infinity Trident",
   "item.industrialforegoing.infinity_backpack": "Infinity Backpack",
+  "item.industrialforegoing.item_transporter_type": "Item Transporter",
+  "item.industrialforegoing.fluid_transporter_type": "Fluid Transporter",
   "tooltip.titanium.facing_handler.fuel_input": "Fuel Input",
   "tooltip.titanium.facing_handler.input_fluid": "Fluid Input",
   "tooltip.titanium.facing_handler.output_fluid": "Fluid Output",

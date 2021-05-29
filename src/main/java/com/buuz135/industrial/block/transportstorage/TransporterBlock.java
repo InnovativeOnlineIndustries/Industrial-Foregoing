@@ -45,6 +45,11 @@ public class TransporterBlock extends BasicTileBlock<TransporterTile> implements
         this.setItemGroup(group);
     }
 
+    @Override
+    public void fillItemGroup(ItemGroup group, NonNullList<ItemStack> items) {
+        //super.fillItemGroup(group, items);
+    }
+
     private static List<VoxelShape> getShapes(BlockState state, IBlockReader source, BlockPos pos, Predicate<TransporterType> filter) {
         List<VoxelShape> boxes = new ArrayList<>();
         TileEntity entity = source.getTileEntity(pos);

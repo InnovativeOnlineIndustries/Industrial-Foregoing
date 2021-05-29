@@ -80,7 +80,7 @@ public class GuiTransporter extends ContainerScreen<ContainerTransporter> implem
         y = (height - ySize) / 2;
         blit(stack, x, y, 0, 0, xSize, ySize);
         if (upgrade != null) {
-            String localized = new TranslationTextComponent(String.format("transporter.type.%s.%s", upgrade.getFactory().getRegistryName().getNamespace(), upgrade.getFactory().getRegistryName().getPath())).getString();
+            String localized = new TranslationTextComponent(upgrade.getFactory().getUpgradeItem().getTranslationKey()).getString();
             getMinecraft().fontRenderer.drawString(stack, localized, x + xSize / 2 - getMinecraft().fontRenderer.getStringWidth(localized) / 2, y + 6, 0x404040);
         }
         for (IGuiComponent iGuiComponent : componentList) {
