@@ -159,26 +159,22 @@ public class MobCrusherTile extends IndustrialAreaWorkingTile<MobCrusherTile> {
                         .withParameter(LootParameters.LAST_DAMAGE_PLAYER, player)
                         .withNullableParameter(LootParameters.DIRECT_KILLER_ENTITY, player);
                 table.generate(context.build(LootParameterSets.ENTITY)).forEach(stack -> ItemHandlerHelper.insertItem(this.output, stack, false));
-                //Drops Event
                 List<ItemEntity> extra = new ArrayList<>();
-                ForgeHooks.onLivingDrops(entity, source, extra, looting, true);
-                extra.forEach(itemEntity -> {
-                    ItemHandlerHelper.insertItem(this.output, itemEntity.getItem(), false);
-                    itemEntity.remove(false);
-                });
                 //Drop special items
                 try {
                     if (entity.captureDrops() == null) entity.captureDrops(new ArrayList<>());
                     DROP_SPECIAL_ITEMS.invoke(entity, source, looting, true);
                     if (entity.captureDrops() != null) {
-                        entity.captureDrops().forEach(itemEntity -> {
-                            ItemHandlerHelper.insertItem(this.output, itemEntity.getItem(), false);
-                            itemEntity.remove(false);
-                        });
+                        extra.addAll(entity.captureDrops());
                     }
                 } catch (IllegalAccessException | InvocationTargetException e) {
                     e.printStackTrace();
                 }
+                ForgeHooks.onLivingDrops(entity, source, extra, looting, true);
+                extra.forEach(itemEntity -> {
+                    ItemHandlerHelper.insertItem(this.output, itemEntity.getItem(), false);
+                    itemEntity.remove(false);
+                });
                 if (dropXP)
                     this.tank.fillForced(new FluidStack(ModuleCore.ESSENCE.getSourceFluid(), experience * 20), IFluidHandler.FluidAction.EXECUTE);
                 entity.setHealth(0);
