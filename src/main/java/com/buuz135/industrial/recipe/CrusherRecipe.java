@@ -6,6 +6,7 @@ import com.hrznstudio.titanium.recipe.serializer.SerializableRecipe;
 import com.hrznstudio.titanium.util.TagUtil;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.Items;
 import net.minecraft.item.crafting.IRecipeType;
 import net.minecraft.item.crafting.Ingredient;
 import net.minecraft.util.ResourceLocation;
@@ -25,8 +26,8 @@ public class CrusherRecipe extends SerializableRecipe {
     public static List<CrusherRecipe> RECIPES = new ArrayList<>();
 
     public static void init() {
-        new CrusherRecipe(new ResourceLocation(Reference.MOD_ID, "cobble_gravel"), Ingredient.fromTag(TagUtil.getItemTag(new ResourceLocation("forge:cobblestone"))), Ingredient.fromTag(TagUtil.getItemTag(new ResourceLocation("forge:gravel"))));
-        new CrusherRecipe(new ResourceLocation(Reference.MOD_ID, "gravel_sand"), Ingredient.fromTag(TagUtil.getItemTag(new ResourceLocation("forge:gravel"))), Ingredient.fromTag(TagUtil.getItemTag(new ResourceLocation("forge:sand"))));
+        new CrusherRecipe(new ResourceLocation(Reference.MOD_ID, "cobble_gravel"), Ingredient.fromTag(TagUtil.getItemTag(new ResourceLocation("forge:cobblestone"))), Ingredient.fromItems(Items.GRAVEL));
+        new CrusherRecipe(new ResourceLocation(Reference.MOD_ID, "gravel_sand"), Ingredient.fromTag(TagUtil.getItemTag(new ResourceLocation("forge:gravel"))), Ingredient.fromItems(Items.SAND));
         new CrusherRecipe(new ResourceLocation(Reference.MOD_ID, "sand_silicon"), Ingredient.fromTag(TagUtil.getItemTag(new ResourceLocation("forge:sand"))), Ingredient.fromTag(TagUtil.getItemTag(new ResourceLocation("forge:silicon"))), new ResourceLocation("forge:silicon"));
     }
 

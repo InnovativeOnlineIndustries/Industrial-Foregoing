@@ -3,7 +3,7 @@
     "tag": "forge:cobblestone"
   },
   "output": {
-    "tag": "forge:gravel"
+    "item": "minecraft:gravel"
   },
   "type": "industrialforegoing:crusher"
 }
