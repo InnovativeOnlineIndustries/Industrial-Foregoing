@@ -96,7 +96,8 @@ public class DissolutionChamberCategory implements IRecipeCategory<DissolutionCh
         }
         iIngredients.setInputLists(VanillaTypes.ITEM, input);
         iIngredients.setInput(VanillaTypes.FLUID, dissolutionChamberRecipe.inputFluid);
-        iIngredients.setOutput(VanillaTypes.ITEM, dissolutionChamberRecipe.output);
+        if (!dissolutionChamberRecipe.output.isEmpty())
+            iIngredients.setOutput(VanillaTypes.ITEM, dissolutionChamberRecipe.output);
         iIngredients.setOutput(VanillaTypes.FLUID, dissolutionChamberRecipe.outputFluid);
     }
 
@@ -108,8 +109,10 @@ public class DissolutionChamberCategory implements IRecipeCategory<DissolutionCh
                 iRecipeLayout.getItemStacks().set(i, iIngredients.getInputs(VanillaTypes.ITEM).get(i));
             }
         }
-        iRecipeLayout.getItemStacks().init(9, false, 118, 15);
-        iRecipeLayout.getItemStacks().set(9, iIngredients.getOutputs(VanillaTypes.ITEM).get(0));
+        if (!dissolutionChamberRecipe.output.isEmpty()) {
+            iRecipeLayout.getItemStacks().init(9, false, 118, 15);
+            iRecipeLayout.getItemStacks().set(9, iIngredients.getOutputs(VanillaTypes.ITEM).get(0));
+        }
 
         iRecipeLayout.getFluidStacks().init(0, true, 33 + 12 + 3, 32 + 3, 12, 13, 8000, false, smallTank);
         iRecipeLayout.getFluidStacks().set(0, iIngredients.getInputs(VanillaTypes.FLUID).get(0));
