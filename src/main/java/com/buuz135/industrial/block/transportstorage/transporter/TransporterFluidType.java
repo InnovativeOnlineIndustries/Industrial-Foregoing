@@ -56,7 +56,7 @@ public class TransporterFluidType extends FilteredTransporterType<FluidStack, IF
             while (this.queue.computeIfAbsent(value, direction -> new ArrayList<>()).size() < QUEUE_SIZE) {
                 this.queue.get(value).add(0, FluidStack.EMPTY);
             }
-            if (this.queue.size() > QUEUE_SIZE) { // Todo have always a list of empty ones
+            if (this.queue.size() > QUEUE_SIZE) {
                 this.queue.get(value).remove(this.queue.get(value).size() - 1);
             }
         }
