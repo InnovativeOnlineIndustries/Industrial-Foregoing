@@ -5,22 +5,22 @@ import com.buuz135.industrial.api.transporter.FilteredTransporterType;
 import com.buuz135.industrial.api.transporter.TransporterType;
 import com.buuz135.industrial.api.transporter.TransporterTypeFactory;
 import com.buuz135.industrial.block.transportstorage.tile.TransporterTile;
-import com.buuz135.industrial.module.ModuleTransportStorage;
 import com.buuz135.industrial.proxy.block.filter.IFilter;
 import com.buuz135.industrial.proxy.block.filter.RegulatorFilter;
 import com.buuz135.industrial.proxy.client.render.TransporterTESR;
+import com.buuz135.industrial.utils.IndustrialTags;
 import com.buuz135.industrial.utils.Reference;
 import com.google.common.collect.Sets;
 import com.hrznstudio.titanium.recipe.generator.TitaniumShapedRecipeBuilder;
 import com.hrznstudio.titanium.util.TileUtil;
 import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.vertex.IVertexBuilder;
-import net.minecraft.block.Blocks;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.IRenderTypeBuffer;
 import net.minecraft.client.renderer.model.ItemCameraTransforms;
 import net.minecraft.data.IFinishedRecipe;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.Items;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.Direction;
 import net.minecraft.util.ResourceLocation;
@@ -249,12 +249,13 @@ public class TransporterItemType extends FilteredTransporterType<ItemStack, IIte
 
         @Override
         public void registerRecipe(Consumer<IFinishedRecipe> consumer) {
-            TitaniumShapedRecipeBuilder.shapedRecipe(getUpgradeItem())
-                    .patternLine("IPI").patternLine("IDI").patternLine("ICI")
-                    .key('I', Tags.Items.INGOTS_IRON)
-                    .key('P', ModuleTransportStorage.CONVEYOR)
-                    .key('D', Blocks.HOPPER)
-                    .key('C', ModuleTransportStorage.CONVEYOR)
+            TitaniumShapedRecipeBuilder.shapedRecipe(getUpgradeItem(), 2)
+                    .patternLine("IPI").patternLine("GMG").patternLine("ICI")
+                    .key('I', Tags.Items.DUSTS_REDSTONE)
+                    .key('P', Items.ENDER_PEARL)
+                    .key('G', Tags.Items.INGOTS_GOLD)
+                    .key('M', IndustrialTags.Items.MACHINE_FRAME_PITY)
+                    .key('C', Items.PISTON)
                     .build(consumer);
         }
     }

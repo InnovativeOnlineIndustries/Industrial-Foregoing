@@ -1,0 +1,47 @@
+{
+  "type": "forge:conditional",
+  "recipes": [
+    {
+      "conditions": [
+        {
+          "values": [
+            {
+              "item": "industrialforegoing:fluid_transporter_type",
+              "type": "forge:item_exists"
+            }
+          ],
+          "type": "forge:and"
+        }
+      ],
+      "recipe": {
+        "type": "minecraft:crafting_shaped",
+        "pattern": [
+          "IPI",
+          "GMG",
+          "ICI"
+        ],
+        "key": {
+          "I": {
+            "tag": "forge:dusts/redstone"
+          },
+          "P": {
+            "item": "minecraft:ender_pearl"
+          },
+          "G": {
+            "tag": "forge:gems/lapis"
+          },
+          "M": {
+            "tag": "industrialforegoing:machine_frame/pity"
+          },
+          "C": {
+            "item": "minecraft:piston"
+          }
+        },
+        "result": {
+          "item": "industrialforegoing:fluid_transporter_type",
+          "count": 2
+        }
+      }
+    }
+  ]
+}

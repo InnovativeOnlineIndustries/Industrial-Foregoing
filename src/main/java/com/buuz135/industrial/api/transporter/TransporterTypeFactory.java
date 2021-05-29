@@ -25,7 +25,6 @@ import com.buuz135.industrial.api.IBlockContainer;
 import com.google.common.collect.ImmutableSet;
 import com.hrznstudio.titanium.api.IRecipeProvider;
 import net.minecraft.item.Item;
-import net.minecraft.item.ItemUseContext;
 import net.minecraft.util.Direction;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
@@ -66,10 +65,6 @@ public abstract class TransporterTypeFactory extends ForgeRegistryEntry<Transpor
 
     public Set<ResourceLocation> getTextures() {
         return Collections.emptySet();
-    }
-
-    public Direction getSideForPlacement(ItemUseContext context) {
-        return context.getFace().getOpposite();
     }
 
     public Item getUpgradeItem() {
