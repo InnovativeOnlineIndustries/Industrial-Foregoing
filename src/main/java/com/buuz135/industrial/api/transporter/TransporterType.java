@@ -4,9 +4,11 @@ import com.buuz135.industrial.IndustrialForegoing;
 import com.buuz135.industrial.api.IBlockContainer;
 import com.buuz135.industrial.api.conveyor.gui.IGuiComponent;
 import com.buuz135.industrial.block.transportstorage.transporter.TransporterVoxelShapes;
+import com.buuz135.industrial.gui.component.custom.TextureGuiComponent;
 import com.buuz135.industrial.item.addon.EfficiencyAddonItem;
 import com.buuz135.industrial.item.addon.SpeedAddonItem;
 import com.buuz135.industrial.proxy.network.TransporterSyncMessage;
+import com.buuz135.industrial.utils.Reference;
 import com.hrznstudio.titanium.api.augment.AugmentTypes;
 import com.hrznstudio.titanium.item.AugmentWrapper;
 import com.mojang.blaze3d.matrix.MatrixStack;
@@ -18,10 +20,13 @@ import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.Direction;
 import net.minecraft.util.Hand;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.shapes.VoxelShape;
 import net.minecraft.util.math.shapes.VoxelShapes;
 import net.minecraft.util.math.vector.Vector3f;
+import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.world.World;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
@@ -29,6 +34,7 @@ import net.minecraftforge.client.model.ModelDataManager;
 import net.minecraftforge.common.util.INBTSerializable;
 import net.minecraftforge.items.ItemHandlerHelper;
 
+import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -194,7 +200,24 @@ public class TransporterType implements INBTSerializable<CompoundNBT> {
     }
 
     public void addComponentsToGui(List<IGuiComponent> componentList) {
-
+        ResourceLocation res = new ResourceLocation(Reference.MOD_ID, "textures/gui/machines.png");
+        componentList.add(new TextureGuiComponent(158, 4, 14, 14, res, 96, 233) {
+            @Nullable
+            @Override
+            public List<ITextComponent> getTooltip(int guiX, int guiY, double mouseX, double mouseY) {
+                List<ITextComponent> components = new ArrayList<>();
+                if (!speed.isEmpty()) {
+                    components.add(speed.getDisplayName());
+                }
+                if (!efficiency.isEmpty()) {
+                    components.add(efficiency.getDisplayName());
+                }
+                if (components.isEmpty()) {
+                    components.add(new StringTextComponent("No Addons"));
+                }
+                return components;
+            }
+        });
     }
 
     public boolean ignoresCollision() {

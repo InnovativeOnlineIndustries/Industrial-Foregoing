@@ -63,6 +63,7 @@ public abstract class FilteredTransporterType<TYPE, CAP> extends TransporterType
     }
 
     public void addComponentsToGui(List<IGuiComponent> componentList) {
+        super.addComponentsToGui(componentList);
         componentList.add(new RegulatorFilterGuiComponent(this.filter.getLocX(), this.filter.getLocY(), this.filter.getSizeX(), this.filter.getSizeY()) {
             @Override
             public RegulatorFilter<TYPE, CAP> getFilter() {
@@ -84,14 +85,13 @@ public abstract class FilteredTransporterType<TYPE, CAP> extends TransporterType
             }
         });
         componentList.add(new TexturedStateButtonGuiComponent(17, 133, 40, 18, 18,
-                new StateButtonInfo(0, res, 1, 214, new String[]{"regulated_true"}),
-                new StateButtonInfo(1, res, 20, 214, new String[]{"regulated_false"})) {
+                new StateButtonInfo(0, res, 58, 233, new String[]{"regulated_true"}),
+                new StateButtonInfo(1, res, 58 + 19, 233, new String[]{"regulated_false"})) {
             @Override
             public int getState() {
                 return isRegulated ? 0 : 1;
             }
         });
-
     }
 
     public boolean ignoresCollision() {
