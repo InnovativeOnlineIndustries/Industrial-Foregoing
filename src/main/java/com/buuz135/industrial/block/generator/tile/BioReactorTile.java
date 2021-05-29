@@ -125,7 +125,7 @@ public class BioReactorTile extends IndustrialWorkingTile<BioReactorTile> {
                 for (int i = 0; i < input.getInventory().getSlots(); i++) {
                     input.getInventory().getStackInSlot(i).shrink(1);
                 }
-                new WorkAction(1, getPowerPerOperation);
+                return new WorkAction(1, getPowerPerOperation);
             }
         }
         return new WorkAction(1, 0);
