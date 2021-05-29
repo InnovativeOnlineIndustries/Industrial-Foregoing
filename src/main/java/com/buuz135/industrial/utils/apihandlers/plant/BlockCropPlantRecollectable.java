@@ -49,7 +49,11 @@ public class BlockCropPlantRecollectable extends PlantRecollectable {
     public List<ItemStack> doHarvestOperation(World world, BlockPos pos, BlockState blockState) {
         NonNullList<ItemStack> stacks = NonNullList.create();
         stacks.addAll(BlockUtils.getBlockDrops(world, pos));
-        world.setBlockState(pos, Blocks.AIR.getDefaultState());
+        if (!world.getFluidState(pos).isEmpty()) {
+            world.setBlockState(pos, Blocks.WATER.getDefaultState());
+        } else {
+            world.setBlockState(pos, Blocks.AIR.getDefaultState());
+        }
         return stacks;
     }
 
