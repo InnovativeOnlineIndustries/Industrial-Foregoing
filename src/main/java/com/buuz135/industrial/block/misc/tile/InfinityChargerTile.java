@@ -50,15 +50,17 @@ public class InfinityChargerTile extends IndustrialMachineTile<InfinityChargerTi
         if (isServer()){
             if (!chargingSlot.getStackInSlot(0).isEmpty()){
                 chargingSlot.getStackInSlot(0).getCapability(CapabilityEnergy.ENERGY).ifPresent(iEnergyStorage -> {
-                    if (iEnergyStorage instanceof InfinityEnergyStorage && this.getEnergyStorage() instanceof InfinityEnergyStorage){
-                        long added = Math.min(Long.MAX_VALUE - ((InfinityEnergyStorage) iEnergyStorage).getLongEnergyStored() , Math.min(((InfinityEnergyStorage<InfinityChargerTile>) this.getEnergyStorage()).getLongCapacity(), ((InfinityEnergyStorage<InfinityChargerTile>) this.getEnergyStorage()).getLongEnergyStored()));
-                        ((InfinityEnergyStorage) iEnergyStorage).setEnergyStored(((InfinityEnergyStorage) iEnergyStorage).getLongEnergyStored() + added);
-                        ((InfinityEnergyStorage<InfinityChargerTile>) this.getEnergyStorage()).setEnergyStored(((InfinityEnergyStorage<InfinityChargerTile>) this.getEnergyStorage()).getLongEnergyStored() - added);
-                        markForUpdate();
-                    } else {
-                        int extracted = this.getEnergyStorage().extractEnergy(Integer.MAX_VALUE, true);
-                        this.getEnergyStorage().extractEnergy(iEnergyStorage.receiveEnergy(extracted, false), false);
-                        markForUpdate();
+                    if (this.getEnergyStorage() instanceof InfinityEnergyStorage) {
+                        if (iEnergyStorage instanceof InfinityEnergyStorage) {
+                            long added = Math.min(Long.MAX_VALUE - ((InfinityEnergyStorage) iEnergyStorage).getLongEnergyStored(), Math.min(((InfinityEnergyStorage<InfinityChargerTile>) this.getEnergyStorage()).getLongCapacity(), ((InfinityEnergyStorage<InfinityChargerTile>) this.getEnergyStorage()).getLongEnergyStored()));
+                            ((InfinityEnergyStorage) iEnergyStorage).setEnergyStored(((InfinityEnergyStorage) iEnergyStorage).getLongEnergyStored() + added);
+                            ((InfinityEnergyStorage<InfinityChargerTile>) this.getEnergyStorage()).setEnergyStored(((InfinityEnergyStorage<InfinityChargerTile>) this.getEnergyStorage()).getLongEnergyStored() - added);
+                            markForUpdate();
+                        } else {
+                            int extracted = this.getEnergyStorage().getEnergyStored();
+                            ((InfinityEnergyStorage<InfinityChargerTile>) this.getEnergyStorage()).setEnergyStored(((InfinityEnergyStorage<InfinityChargerTile>) this.getEnergyStorage()).getLongEnergyStored() - iEnergyStorage.receiveEnergy(extracted, false));
+                            markForUpdate();
+                        }
                     }
                 });
             }
