@@ -26,17 +26,19 @@ public class ItemTransporterType extends IFCustomItem {
     @Override
     public ActionResultType onItemUse(ItemUseContext context) {
         BlockPos pos = context.getPos().offset(context.getFace());
-        if (!context.getWorld().getBlockState(context.getPos().offset(context.getFace())).isIn(ModuleTransportStorage.TRANSPORTER)) { //TODO Chekc if air
-            context.getWorld().setBlockState(context.getPos().offset(context.getFace()), ModuleTransportStorage.TRANSPORTER.getDefaultState());
-            pos = context.getPos().offset(context.getFace());
-        }
-        TileEntity tile = context.getWorld().getTileEntity(pos);
-        if (tile instanceof IBlockContainer) {
-            Direction side = context.getFace().getOpposite();
-            if (!((IBlockContainer) tile).hasUpgrade(side) && factory.canBeAttachedAgainst(context.getWorld(), context.getPos(), side)) {
-                ((IBlockContainer) tile).addUpgrade(side, factory);
-                if (!context.getPlayer().isCreative()) context.getItem().shrink(1);
-                return ActionResultType.SUCCESS;
+        Direction side = context.getFace().getOpposite();
+        if (factory.canBeAttachedAgainst(context.getWorld(), context.getPos(), side)) {
+            if (!context.getWorld().getBlockState(context.getPos().offset(context.getFace())).isIn(ModuleTransportStorage.TRANSPORTER) && context.getWorld().getBlockState(context.getPos().offset(context.getFace())).isAir()) {
+                context.getWorld().setBlockState(context.getPos().offset(context.getFace()), ModuleTransportStorage.TRANSPORTER.getDefaultState());
+                pos = context.getPos().offset(context.getFace());
+            }
+            TileEntity tile = context.getWorld().getTileEntity(pos);
+            if (tile instanceof IBlockContainer) {
+                if (!((IBlockContainer) tile).hasUpgrade(side) && factory.canBeAttachedAgainst(context.getWorld(), context.getPos(), side)) {
+                    ((IBlockContainer) tile).addUpgrade(side, factory);
+                    if (!context.getPlayer().isCreative()) context.getItem().shrink(1);
+                    return ActionResultType.SUCCESS;
+                }
             }
         }
 

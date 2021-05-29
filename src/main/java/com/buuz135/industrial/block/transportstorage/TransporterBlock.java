@@ -7,15 +7,19 @@ import com.hrznstudio.titanium.api.IFactory;
 import com.hrznstudio.titanium.block.BasicTileBlock;
 import com.hrznstudio.titanium.datagenerator.loot.block.BasicBlockLootTables;
 import com.hrznstudio.titanium.util.RayTraceUtils;
+import net.minecraft.block.Block;
 import net.minecraft.block.BlockRenderType;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.IWaterLoggable;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.material.MaterialColor;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.fluid.FluidState;
+import net.minecraft.fluid.Fluids;
 import net.minecraft.item.ItemGroup;
 import net.minecraft.item.ItemStack;
 import net.minecraft.loot.LootTable;
+import net.minecraft.state.StateContainer;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ActionResultType;
 import net.minecraft.util.Direction;
@@ -37,12 +41,15 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Predicate;
 
+import static net.minecraft.state.properties.BlockStateProperties.WATERLOGGED;
+
 public class TransporterBlock extends BasicTileBlock<TransporterTile> implements IWaterLoggable {
 
     public TransporterBlock(ItemGroup group) {
         super(Properties.create(Material.ANVIL, MaterialColor.ADOBE).doesNotBlockMovement().hardnessAndResistance(2.0f), TransporterTile.class);
         this.setRegistryName(Reference.MOD_ID, "transporter");
         this.setItemGroup(group);
+        this.setDefaultState(this.getDefaultState().with(WATERLOGGED, false));
     }
 
     @Override
@@ -120,6 +127,17 @@ public class TransporterBlock extends BasicTileBlock<TransporterTile> implements
         }
         return shape;
     }
+
+    @Override
+    protected void fillStateContainer(StateContainer.Builder<Block, BlockState> builder) {
+        super.fillStateContainer(builder);
+        builder.add(WATERLOGGED);
+    }
+
+    public FluidState getFluidState(BlockState state) {
+        return state.get(WATERLOGGED) ? Fluids.WATER.getStillFluidState(false) : super.getFluidState(state);
+    }
+
 
     @Override
     public boolean hasIndividualRenderVoxelShape() {
