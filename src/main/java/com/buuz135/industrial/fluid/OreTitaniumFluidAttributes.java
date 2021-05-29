@@ -80,4 +80,14 @@ public class OreTitaniumFluidAttributes extends FluidAttributes {
         String tag = getFluidTag(stack);
         return TagUtil.getItemWithPreference(TagCollectionManager.getManager().getItemTags().get(new ResourceLocation(tag.replace("forge:ores/", "forge:dusts/"))));
     }
+
+    @Override
+    public ItemStack getBucket(FluidStack stack) {
+        ItemStack bucket = super.getBucket(stack);
+        if(stack.hasTag() && stack.getTag().contains(NBT_TAG)) {
+            String tag = stack.getTag().getString(NBT_TAG);
+            bucket.getOrCreateTag().putString(NBT_TAG, tag);
+        }
+        return bucket;
+    }
 }
