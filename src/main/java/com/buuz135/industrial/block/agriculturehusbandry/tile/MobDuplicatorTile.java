@@ -2,6 +2,7 @@ package com.buuz135.industrial.block.agriculturehusbandry.tile;
 
 import com.buuz135.industrial.block.tile.IndustrialAreaWorkingTile;
 import com.buuz135.industrial.block.tile.RangeManager;
+import com.buuz135.industrial.capability.tile.BigEnergyHandler;
 import com.buuz135.industrial.config.machine.agriculturehusbandry.MobDuplicatorConfig;
 import com.buuz135.industrial.item.MobImprisonmentToolItem;
 import com.buuz135.industrial.item.addon.RangeAddonItem;
@@ -145,7 +146,12 @@ public class MobDuplicatorTile extends IndustrialAreaWorkingTile<MobDuplicatorTi
 	@Nonnull
 	@Override
 	protected EnergyStorageComponent<MobDuplicatorTile> createEnergyStorage() {
-		return new EnergyStorageComponent<>(MobDuplicatorConfig.maxStoredPower, 10, 20);
+		return new BigEnergyHandler<MobDuplicatorTile>(MobDuplicatorConfig.maxStoredPower, 10, 20) {
+			@Override
+			public void sync() {
+				MobDuplicatorTile.this.syncObject(getEnergyStorage());
+			}
+		};
 	}
 
 	@Override
