@@ -21,12 +21,16 @@
  */
 package com.buuz135.industrial.block.transportstorage.conveyor;
 
+import com.buuz135.industrial.api.IBlockContainer;
 import com.buuz135.industrial.api.conveyor.ConveyorUpgrade;
 import com.buuz135.industrial.api.conveyor.ConveyorUpgradeFactory;
-import com.buuz135.industrial.api.conveyor.IConveyorContainer;
 import com.buuz135.industrial.api.conveyor.gui.IGuiComponent;
 import com.buuz135.industrial.block.transportstorage.ConveyorBlock;
-import com.buuz135.industrial.gui.component.*;
+import com.buuz135.industrial.gui.component.StateButtonInfo;
+import com.buuz135.industrial.gui.component.custom.FilterGuiComponent;
+import com.buuz135.industrial.gui.component.custom.TextGuiComponent;
+import com.buuz135.industrial.gui.component.custom.TextureGuiComponent;
+import com.buuz135.industrial.gui.component.custom.TexturedStateButtonGuiComponent;
 import com.buuz135.industrial.module.ModuleTransportStorage;
 import com.buuz135.industrial.proxy.block.filter.IFilter;
 import com.buuz135.industrial.proxy.block.filter.ItemStackFilter;
@@ -67,7 +71,7 @@ public class ConveyorBouncingUpgrade extends ConveyorUpgrade {
     private double velocityVertical;
     private double velocityHorizontal;
 
-    public ConveyorBouncingUpgrade(IConveyorContainer container, ConveyorUpgradeFactory factory, Direction side) {
+    public ConveyorBouncingUpgrade(IBlockContainer container, ConveyorUpgradeFactory factory, Direction side) {
         super(container, factory, side);
         this.filter = new ItemStackFilter(20, 20, 3, 3);
         this.whitelist = false;
@@ -79,7 +83,7 @@ public class ConveyorBouncingUpgrade extends ConveyorUpgrade {
     public void handleEntity(Entity entity) {
         super.handleEntity(entity);
         if (whitelist != filter.matches(entity)) return;
-        Direction direction = this.getContainer().getConveyorWorld().getBlockState(this.getContainer().getConveyorPosition()).get(ConveyorBlock.FACING);
+        Direction direction = this.getContainer().getBlockWorld().getBlockState(this.getContainer().getBlockPosition()).get(ConveyorBlock.FACING);
         Vector3d vec3d = new Vector3d(velocityHorizontal * direction.getDirectionVec().getX(), velocityVertical, velocityHorizontal * direction.getDirectionVec().getZ());
         double x = vec3d.x;
         double y = vec3d.y;
@@ -226,7 +230,7 @@ public class ConveyorBouncingUpgrade extends ConveyorUpgrade {
         }
 
         @Override
-        public ConveyorUpgrade create(IConveyorContainer container, Direction face) {
+        public ConveyorUpgrade create(IBlockContainer container, Direction face) {
             return new ConveyorBouncingUpgrade(container, this, face);
         }
 

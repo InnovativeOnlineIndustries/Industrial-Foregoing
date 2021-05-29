@@ -23,6 +23,7 @@ package com.buuz135.industrial.utils.data;
 
 import com.buuz135.industrial.block.IndustrialBlock;
 import com.buuz135.industrial.module.ModuleAgricultureHusbandry;
+import com.buuz135.industrial.module.ModuleTransportStorage;
 import net.minecraft.block.Block;
 import net.minecraft.data.DataGenerator;
 import net.minecraft.state.DirectionProperty;
@@ -70,6 +71,7 @@ public class IndustrialBlockstateProvider extends BlockStateProvider {
                         builder.partialState().addModels(new ConfiguredModel(new ModelFile.UncheckedModelFile(getModel(industrialBlock))));
                     }
                 });
+        simpleBlock(ModuleTransportStorage.TRANSPORTER, new ModelFile.UncheckedModelFile(modLoc("block/" + ModuleTransportStorage.TRANSPORTER.getRegistryName().getPath())));
         //VariantBlockStateBuilder conveyor = getVariantBuilder(ModuleTransport.CONVEYOR);
         //for (ConveyorBlock.EnumType type : ConveyorBlock.TYPE.getAllowedValues()) {
         //    for (Direction direction : ConveyorBlock.FACING.getAllowedValues()) {

@@ -21,8 +21,8 @@
  */
 package com.buuz135.industrial.api.conveyor.gui;
 
-import com.buuz135.industrial.gui.conveyor.GuiConveyor;
 import com.mojang.blaze3d.matrix.MatrixStack;
+import net.minecraft.client.gui.screen.inventory.ContainerScreen;
 import net.minecraft.util.text.ITextComponent;
 
 import javax.annotation.Nullable;
@@ -38,7 +38,7 @@ public interface IGuiComponent {
 
     int getYSize();
 
-    boolean handleClick(GuiConveyor conveyor, int guiX, int guiY, double mouseX, double mouseY);
+    boolean handleClick(ContainerScreen conveyor, int guiX, int guiY, double mouseX, double mouseY);
 
     void drawGuiBackgroundLayer(MatrixStack stack, int guiX, int guiY, double mouseX, double mouseY);
 
@@ -46,6 +46,10 @@ public interface IGuiComponent {
 
     default boolean isInside(double mouseX, double mouseY) {
         return mouseX > getXPos() && mouseX < getXPos() + getXSize() && mouseY > getYPos() && mouseY < getYPos() + getYSize();
+    }
+
+    default boolean onScrolled(ContainerScreen conveyor, int guiX, int guiY, double mouseX, double mouseY, double delta) {
+        return false;
     }
 
     @Nullable

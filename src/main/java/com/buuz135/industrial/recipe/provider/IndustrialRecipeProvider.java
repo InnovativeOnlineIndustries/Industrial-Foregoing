@@ -22,6 +22,7 @@
 package com.buuz135.industrial.recipe.provider;
 
 import com.buuz135.industrial.api.conveyor.ConveyorUpgradeFactory;
+import com.buuz135.industrial.api.transporter.TransporterTypeFactory;
 import com.buuz135.industrial.item.LaserLensItem;
 import com.buuz135.industrial.item.addon.RangeAddonItem;
 import com.buuz135.industrial.module.ModuleCore;
@@ -69,6 +70,7 @@ public class IndustrialRecipeProvider extends TitaniumRecipeProvider {
         this.blocks.get().stream().filter(block -> block instanceof BasicBlock).map(block -> (BasicBlock) block).forEach(blockBase -> blockBase.registerRecipe(consumer));
         //TRANSPORT
         ConveyorUpgradeFactory.FACTORIES.forEach(conveyorUpgradeFactory -> conveyorUpgradeFactory.registerRecipe(consumer));
+        TransporterTypeFactory.FACTORIES.forEach(typeFactory -> typeFactory.registerRecipe(consumer));
         //TOOL
         ModuleTool.MOB_IMPRISONMENT_TOOL.registerRecipe(consumer);
         ModuleTool.MEAT_FEEDER.registerRecipe(consumer);

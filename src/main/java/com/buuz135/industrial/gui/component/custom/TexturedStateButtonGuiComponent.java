@@ -19,15 +19,16 @@
  * FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE,
  * ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
-package com.buuz135.industrial.gui.component;
+package com.buuz135.industrial.gui.component.custom;
 
 import com.buuz135.industrial.api.conveyor.gui.PositionedGuiComponent;
-import com.buuz135.industrial.gui.conveyor.GuiConveyor;
+import com.buuz135.industrial.gui.component.StateButtonInfo;
 import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.systems.RenderSystem;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.audio.SimpleSound;
 import net.minecraft.client.gui.AbstractGui;
+import net.minecraft.client.gui.screen.inventory.ContainerScreen;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.SoundEvents;
@@ -50,8 +51,10 @@ public abstract class TexturedStateButtonGuiComponent extends PositionedGuiCompo
     }
 
     @Override
-    public boolean handleClick(GuiConveyor conveyor, int guiX, int guiY, double mouseX, double mouseY) {
-        conveyor.sendMessage(id, new CompoundNBT());
+    public boolean handleClick(ContainerScreen conveyor, int guiX, int guiY, double mouseX, double mouseY) {
+        if (conveyor instanceof ICanSendNetworkMessage) {
+            ((ICanSendNetworkMessage) conveyor).sendMessage(id, new CompoundNBT());
+        }
         Minecraft.getInstance().getSoundHandler().play(new SimpleSound(SoundEvents.UI_BUTTON_CLICK, SoundCategory.PLAYERS, 1.0F, 1.0F, Minecraft.getInstance().player.getPosition()));//getPos
         return true;
     }

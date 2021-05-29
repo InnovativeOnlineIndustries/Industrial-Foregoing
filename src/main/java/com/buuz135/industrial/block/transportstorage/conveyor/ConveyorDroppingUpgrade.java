@@ -21,13 +21,13 @@
  */
 package com.buuz135.industrial.block.transportstorage.conveyor;
 
+import com.buuz135.industrial.api.IBlockContainer;
 import com.buuz135.industrial.api.conveyor.ConveyorUpgrade;
 import com.buuz135.industrial.api.conveyor.ConveyorUpgradeFactory;
-import com.buuz135.industrial.api.conveyor.IConveyorContainer;
 import com.buuz135.industrial.api.conveyor.gui.IGuiComponent;
-import com.buuz135.industrial.gui.component.FilterGuiComponent;
 import com.buuz135.industrial.gui.component.StateButtonInfo;
-import com.buuz135.industrial.gui.component.TexturedStateButtonGuiComponent;
+import com.buuz135.industrial.gui.component.custom.FilterGuiComponent;
+import com.buuz135.industrial.gui.component.custom.TexturedStateButtonGuiComponent;
 import com.buuz135.industrial.module.ModuleTransportStorage;
 import com.buuz135.industrial.proxy.block.filter.IFilter;
 import com.buuz135.industrial.proxy.block.filter.ItemStackFilter;
@@ -63,7 +63,7 @@ public class ConveyorDroppingUpgrade extends ConveyorUpgrade {
     private ItemStackFilter filter;
     private boolean whitelist;
 
-    public ConveyorDroppingUpgrade(IConveyorContainer container, ConveyorUpgradeFactory factory, Direction side) {
+    public ConveyorDroppingUpgrade(IBlockContainer container, ConveyorUpgradeFactory factory, Direction side) {
         super(container, factory, side);
         this.filter = new ItemStackFilter(20, 20, 5, 3);
         this.whitelist = false;
@@ -180,7 +180,7 @@ public class ConveyorDroppingUpgrade extends ConveyorUpgrade {
         }
 
         @Override
-        public ConveyorUpgrade create(IConveyorContainer container, Direction face) {
+        public ConveyorUpgrade create(IBlockContainer container, Direction face) {
             return new ConveyorDroppingUpgrade(container, this, face);
         }
 
