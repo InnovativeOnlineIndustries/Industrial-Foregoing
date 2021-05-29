@@ -112,11 +112,13 @@ public class MobImprisonmentToolItem extends IFCustomItem {
 
     @Nullable
     public Entity getEntityFromStack(ItemStack stack, World world, boolean withInfo) {
-        EntityType type = EntityType.byKey(stack.getTag().getString("entity")).orElse(null);
-        if (type != null) {
-            Entity entity = type.create(world);
-            if (withInfo) entity.read(stack.getTag());
-            return entity;
+        if (stack.hasTag()) {
+            EntityType type = EntityType.byKey(stack.getTag().getString("entity")).orElse(null);
+            if (type != null) {
+                Entity entity = type.create(world);
+                if (withInfo) entity.read(stack.getTag());
+                return entity;
+            }
         }
         return null;
     }
