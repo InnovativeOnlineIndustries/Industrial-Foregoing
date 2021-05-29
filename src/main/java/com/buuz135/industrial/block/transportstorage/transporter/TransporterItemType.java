@@ -58,7 +58,7 @@ public class TransporterItemType extends FilteredTransporterType<ItemStack, IIte
             while (this.queue.computeIfAbsent(value, direction -> new ArrayList<>()).size() < QUEUE_SIZE) {
                 this.queue.get(value).add(0, ItemStack.EMPTY);
             }
-            if (this.queue.size() > QUEUE_SIZE) { // Todo have always a list of empty ones
+            if (this.queue.size() > QUEUE_SIZE) {
                 this.queue.get(value).remove(this.queue.get(value).size() - 1);
             }
         }
@@ -94,7 +94,8 @@ public class TransporterItemType extends FilteredTransporterType<ItemStack, IIte
     @Override
     public void update() {
         super.update();
-        if (!getWorld().isRemote) {
+        float speed = getSpeed();
+        if (!getWorld().isRemote && getWorld().getGameTime() % (Math.max(1, 4 - speed)) == 0) {
             IBlockContainer container = getContainer();
             if (getAction() == TransporterTypeFactory.TransporterAction.EXTRACT && container instanceof TransporterTile) {
                 for (Direction direction : ((TransporterTile) container).getTransporterTypeMap().keySet()) {
@@ -107,8 +108,8 @@ public class TransporterItemType extends FilteredTransporterType<ItemStack, IIte
                                         || !filter(((TransporterItemType) transporterType).getFilter(), ((TransporterItemType) transporterType).isWhitelist(), origin.getStackInSlot(extractSlot), destination, ((TransporterItemType) transporterType).isRegulated()))
                                     findSlot(origin, ((TransporterItemType) transporterType).getFilter(), ((TransporterItemType) transporterType).isWhitelist(), destination, ((TransporterItemType) transporterType).isRegulated());
                                 if (!origin.getStackInSlot(extractSlot).isEmpty()) {
-                                    int amount = 1;
-                                    ItemStack extracted = origin.extractItem(extractSlot, amount, true); //TODO Upgrades
+                                    int amount = (int) (1 * getEfficiency());
+                                    ItemStack extracted = origin.extractItem(extractSlot, amount, true);
                                     int simulatedAmount = ((TransporterItemType) transporterType).getFilter().matches(extracted, destination, ((TransporterItemType) transporterType).isRegulated());
                                     if (!extracted.isEmpty() && filter(this.getFilter(), this.isWhitelist(), extracted, origin, false) && filter(((TransporterItemType) transporterType).getFilter(), ((TransporterItemType) transporterType).isWhitelist(), origin.getStackInSlot(extractSlot), destination, ((TransporterItemType) transporterType).isRegulated()) && simulatedAmount > 0) {
                                         ItemStack returned = ItemHandlerHelper.insertItem(destination, extracted, true);
@@ -243,7 +244,7 @@ public class TransporterItemType extends FilteredTransporterType<ItemStack, IIte
         @Nonnull
         @Override
         public ResourceLocation getItemModel() {
-            return new ResourceLocation(Reference.MOD_ID, "conveyor_splitting_upgrade");
+            return new ResourceLocation(Reference.MOD_ID, "block/transporters/item_transporter_" + TransporterAction.EXTRACT.name().toLowerCase() + "_" + Direction.NORTH.getString().toLowerCase());
         }
 
         @Override

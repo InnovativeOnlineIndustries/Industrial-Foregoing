@@ -178,16 +178,22 @@ public class ModuleTransportStorage implements IModule {
             }
         }
         for (TransporterTypeFactory transporterTypeFactory : TransporterTypeFactory.FACTORIES) {
+            String itemRL = Reference.MOD_ID + ":" + transporterTypeFactory.getRegistryName().getPath() + "_transporter_type#inventory";
             for (Direction upgradeFacing : transporterTypeFactory.getValidFacings()) {
                 for (TransporterTypeFactory.TransporterAction actions : TransporterTypeFactory.TransporterAction.values()) {
                     try {
                         ResourceLocation resourceLocation = transporterTypeFactory.getModel(upgradeFacing, actions);
-                        System.out.println(resourceLocation);
                         IUnbakedModel unbakedModel = event.getModelLoader().getUnbakedModel(resourceLocation);
                         TRANSPORTER_CACHE.put(resourceLocation, unbakedModel.bakeModel(event.getModelLoader(), ModelLoader.defaultTextureGetter(), new SimpleModelTransform(ImmutableMap.of()), resourceLocation));
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
+                }
+            }
+            for (ResourceLocation resourceLocation : event.getModelRegistry().keySet()) {
+                if (resourceLocation.getNamespace().equals(Reference.MOD_ID)) {
+                    if (resourceLocation.toString().equals(itemRL))
+                        event.getModelRegistry().put(resourceLocation, TRANSPORTER_CACHE.get(transporterTypeFactory.getItemModel()));
                 }
             }
         }

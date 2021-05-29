@@ -8,6 +8,7 @@ import com.buuz135.industrial.module.ModuleTransportStorage;
 import com.buuz135.industrial.proxy.client.model.TransporterModelData;
 import com.hrznstudio.titanium.block.tile.ActiveTile;
 import net.minecraft.block.BlockState;
+import net.minecraft.block.Blocks;
 import net.minecraft.entity.item.ItemEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
@@ -102,6 +103,9 @@ public class TransporterTile extends ActiveTile<TransporterTile> implements IBlo
             transporterTypeMap.remove(facing);
             requestSync();
             if (world.isRemote) ModelDataManager.requestModelDataRefresh(this);
+        }
+        if (transporterTypeMap.isEmpty()) {
+            this.world.setBlockState(this.pos, Blocks.AIR.getDefaultState());
         }
     }
 

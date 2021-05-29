@@ -4,8 +4,8 @@ import com.buuz135.industrial.api.transporter.TransporterType;
 import com.buuz135.industrial.block.transportstorage.tile.TransporterTile;
 import com.buuz135.industrial.utils.Reference;
 import com.hrznstudio.titanium.api.IFactory;
-import com.hrznstudio.titanium.api.raytrace.DistanceRayTraceResult;
 import com.hrznstudio.titanium.block.BasicTileBlock;
+import com.hrznstudio.titanium.datagenerator.loot.block.BasicBlockLootTables;
 import com.hrznstudio.titanium.util.RayTraceUtils;
 import net.minecraft.block.BlockRenderType;
 import net.minecraft.block.BlockState;
@@ -15,10 +15,12 @@ import net.minecraft.block.material.MaterialColor;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemGroup;
 import net.minecraft.item.ItemStack;
+import net.minecraft.loot.LootTable;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ActionResultType;
 import net.minecraft.util.Direction;
 import net.minecraft.util.Hand;
+import net.minecraft.util.NonNullList;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.BlockRayTraceResult;
 import net.minecraft.util.math.RayTraceResult;
@@ -65,15 +67,14 @@ public class TransporterBlock extends BasicTileBlock<TransporterTile> implements
     public ItemStack getPickBlock(BlockState state, RayTraceResult target, IBlockReader world, BlockPos pos, PlayerEntity player) {
         TileEntity tileEntity = world.getTileEntity(pos);
         if (tileEntity instanceof TransporterTile) {
-            if (target instanceof DistanceRayTraceResult) {
+            if (target instanceof BlockRayTraceResult) {
                 TransporterType upgrade = ((TransporterTile) tileEntity).getTransporterTypeMap().get(getFacingUpgradeHit(state, player.world, pos, player).getKey());
                 if (upgrade != null) {
                     return new ItemStack(upgrade.getFactory().getUpgradeItem(), 1);
                 }
             }
-            return new ItemStack(this, 1);
         }
-        return super.getPickBlock(state, target, world, pos, player);
+        return ItemStack.EMPTY;
     }
 
     public Pair<Direction, Boolean> getFacingUpgradeHit(BlockState state, World worldIn, BlockPos pos, PlayerEntity player) {
@@ -134,18 +135,27 @@ public class TransporterBlock extends BasicTileBlock<TransporterTile> implements
             if (info != null) {
                 Direction facing = info.getLeft();
                 boolean isMiddle = info.getRight();
-                if (isMiddle) {
+                if (player.isSneaking() && handStack.isEmpty()) {
                     if (((TransporterTile) tileEntity).hasUpgrade(facing)) {
-                        ((TransporterTile) tileEntity).getTransporterTypeMap().get(facing).toggleAction();
+                        ((TransporterTile) tileEntity).removeUpgrade(facing, true);
                         return ActionResultType.SUCCESS;
                     }
                 } else {
-                    if (((TransporterTile) tileEntity).hasUpgrade(facing)) {
-                        TransporterType transporterType = ((TransporterTile) tileEntity).getTransporterTypeMap().get(facing);
-                        if (transporterType.hasGui()) {
-                            ((TransporterTile) tileEntity).openGui(player, facing);
+                    if (isMiddle) {
+                        if (((TransporterTile) tileEntity).hasUpgrade(facing)) {
+                            ((TransporterTile) tileEntity).getTransporterTypeMap().get(facing).toggleAction();
+                            return ActionResultType.SUCCESS;
                         }
-                        return ActionResultType.SUCCESS;
+                    } else {
+                        if (((TransporterTile) tileEntity).hasUpgrade(facing)) {
+                            TransporterType transporterType = ((TransporterTile) tileEntity).getTransporterTypeMap().get(facing);
+                            if (!handStack.isEmpty() && transporterType.onUpgradeActivated(player, hand)) {
+                                return ActionResultType.SUCCESS;
+                            } else if (transporterType.hasGui()) {
+                                ((TransporterTile) tileEntity).openGui(player, facing);
+                                return ActionResultType.SUCCESS;
+                            }
+                        }
                     }
                 }
             }
@@ -153,4 +163,18 @@ public class TransporterBlock extends BasicTileBlock<TransporterTile> implements
         return super.onBlockActivated(state, worldIn, pos, player, hand, ray);
     }
 
+    @Override
+    public NonNullList<ItemStack> getDynamicDrops(BlockState state, World worldIn, BlockPos pos, BlockState newState, boolean isMoving) {
+        NonNullList<ItemStack> itemStacks = NonNullList.create();
+        TileEntity tileEntity = worldIn.getTileEntity(pos);
+        if (tileEntity instanceof TransporterTile) {
+            ((TransporterTile) tileEntity).getTransporterTypeMap().values().forEach(transporterType -> itemStacks.addAll(transporterType.getDrops()));
+        }
+        return itemStacks;
+    }
+
+    @Override
+    public LootTable.Builder getLootTable(@Nonnull BasicBlockLootTables blockLootTables) {
+        return blockLootTables.droppingNothing();
+    }
 }

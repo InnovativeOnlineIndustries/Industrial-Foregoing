@@ -76,7 +76,6 @@ public class TransporterFluidType extends FilteredTransporterType<FluidStack, IF
                         }
                     }
                 }
-
                 for (IFilter.GhostSlot slot : this.getFilter()) {
                     FluidStack original = FluidUtil.getFluidContained(slot.getStack()).orElse(null);
                     if (original != null && original.isFluidEqual(stack)) {
@@ -93,7 +92,8 @@ public class TransporterFluidType extends FilteredTransporterType<FluidStack, IF
     @Override
     public void update() {
         super.update();
-        if (!getWorld().isRemote) {
+        float speed = getSpeed();
+        if (!getWorld().isRemote && getWorld().getGameTime() % (Math.max(1, 4 - speed)) == 0) {
             IBlockContainer container = getContainer();
             if (getAction() == TransporterTypeFactory.TransporterAction.EXTRACT && container instanceof TransporterTile) {
                 for (Direction direction : ((TransporterTile) container).getTransporterTypeMap().keySet()) {
@@ -101,7 +101,8 @@ public class TransporterFluidType extends FilteredTransporterType<FluidStack, IF
                     if (transporterType instanceof TransporterFluidType && transporterType.getAction() == TransporterTypeFactory.TransporterAction.INSERT) {
                         TileUtil.getTileEntity(getWorld(), getPos().offset(this.getSide())).ifPresent(tileEntity -> tileEntity.getCapability(CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY, getSide().getOpposite()).ifPresent(origin -> {
                             TileUtil.getTileEntity(getWorld(), getPos().offset(direction)).ifPresent(otherTile -> otherTile.getCapability(CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY, direction.getOpposite()).ifPresent(destination -> {
-                                FluidStack simulatedStack = origin.drain(50, IFluidHandler.FluidAction.SIMULATE);
+                                int amount = (int) (50 * getEfficiency());
+                                FluidStack simulatedStack = origin.drain(amount, IFluidHandler.FluidAction.SIMULATE);
                                 int filteredAmount = ((TransporterFluidType) transporterType).getFilter().matches(simulatedStack, destination, ((TransporterFluidType) transporterType).isRegulated());
                                 if (filter(this.getFilter(), isWhitelist(), simulatedStack, origin, false) && filteredAmount > 0 && filter(((TransporterFluidType) transporterType).getFilter(), ((TransporterFluidType) transporterType).isWhitelist(), simulatedStack, destination, ((TransporterFluidType) transporterType).isRegulated())) {
                                     int simulatedInserted = destination.fill(simulatedStack, IFluidHandler.FluidAction.SIMULATE);
@@ -228,7 +229,7 @@ public class TransporterFluidType extends FilteredTransporterType<FluidStack, IF
         @Nonnull
         @Override
         public ResourceLocation getItemModel() {
-            return new ResourceLocation(Reference.MOD_ID, "conveyor_splitting_upgrade");
+            return new ResourceLocation(Reference.MOD_ID, "block/transporters/fluid_transporter_" + TransporterAction.EXTRACT.name().toLowerCase() + "_" + Direction.NORTH.getString().toLowerCase());
         }
 
         @Override
