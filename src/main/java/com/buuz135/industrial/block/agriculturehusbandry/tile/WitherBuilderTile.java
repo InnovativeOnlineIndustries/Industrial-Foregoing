@@ -1,19 +1,15 @@
 package com.buuz135.industrial.block.agriculturehusbandry.tile;
 
-import javax.annotation.Nonnull;
-
 import com.buuz135.industrial.IndustrialForegoing;
 import com.buuz135.industrial.block.tile.IndustrialAreaWorkingTile;
 import com.buuz135.industrial.block.tile.RangeManager;
-import com.buuz135.industrial.config.machine.agriculturehusbandry.MobDuplicatorConfig;
+import com.buuz135.industrial.capability.tile.BigEnergyHandler;
 import com.buuz135.industrial.config.machine.agriculturehusbandry.WitherBuilderConfig;
 import com.buuz135.industrial.module.ModuleAgricultureHusbandry;
 import com.buuz135.industrial.utils.IFFakePlayer;
 import com.hrznstudio.titanium.annotation.Save;
 import com.hrznstudio.titanium.component.energy.EnergyStorageComponent;
 import com.hrznstudio.titanium.component.inventory.SidedInventoryComponent;
-import net.minecraftforge.items.ItemStackHandler;
-
 import net.minecraft.block.Blocks;
 import net.minecraft.item.DyeColor;
 import net.minecraft.item.ItemStack;
@@ -22,6 +18,9 @@ import net.minecraft.util.Direction;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.shapes.VoxelShape;
+import net.minecraftforge.items.ItemStackHandler;
+
+import javax.annotation.Nonnull;
 
 public class WitherBuilderTile extends IndustrialAreaWorkingTile<WitherBuilderTile> {
 
@@ -144,7 +143,12 @@ public class WitherBuilderTile extends IndustrialAreaWorkingTile<WitherBuilderTi
 	@Nonnull
 	@Override
 	protected EnergyStorageComponent<WitherBuilderTile> createEnergyStorage() {
-		return new EnergyStorageComponent<>(WitherBuilderConfig.maxStoredPower, 10, 20);
+		return new BigEnergyHandler<WitherBuilderTile>(WitherBuilderConfig.maxStoredPower, 10, 20) {
+			@Override
+			public void sync() {
+				WitherBuilderTile.this.syncObject(getEnergyStorage());
+			}
+		};
 	}
 
 	@Override

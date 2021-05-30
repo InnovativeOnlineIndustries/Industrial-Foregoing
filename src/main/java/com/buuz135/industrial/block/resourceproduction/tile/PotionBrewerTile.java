@@ -137,6 +137,7 @@ public class PotionBrewerTile extends IndustrialProcessingTile<PotionBrewerTile>
         if (this.state == 0) {
             return this.water.getFluidAmount() == 1000 && !this.bottleInput.getStackInSlot(0).isEmpty();
         }
+        if (this.state >= 7) this.state = 1;
         return canBrew(this.state - 1) && this.blaze.getProgress() > 0;
     }
 
@@ -154,7 +155,7 @@ public class PotionBrewerTile extends IndustrialProcessingTile<PotionBrewerTile>
                 brewPotions(this.state - 1);
                 this.blaze.setProgress(this.blaze.getProgress() - 1);
                 ++this.state;
-                if (this.state > 7) this.state = 1;
+                if (this.state >= 7) this.state = 1;
             }
         };
     }

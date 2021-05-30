@@ -88,7 +88,11 @@ public class BlackHoleTankTile extends BHTile<BlackHoleTankTile> {
 
     @Override
     public ItemStack getDisplayStack() {
-        return tank.getFluidAmount() > 0 ? FluidUtil.getFilledBucket(tank.getFluid()) : new ItemStack(Items.BUCKET);
+        if (tank.getFluidAmount() > 0) {
+            ItemStack filledBucket = FluidUtil.getFilledBucket(tank.getFluid());
+            if(!filledBucket.isEmpty()) return filledBucket;
+        }
+        return new ItemStack(Items.BUCKET);
     }
 
     @Override

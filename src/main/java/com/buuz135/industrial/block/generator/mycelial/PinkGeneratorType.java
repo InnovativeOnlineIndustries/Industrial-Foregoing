@@ -99,11 +99,11 @@ public class PinkGeneratorType implements IMycelialGeneratorType{
 
     @Override
     public List<MycelialGeneratorRecipe> getRecipes() {
-        return ForgeRegistries.ITEMS.getValues().stream().map(ItemStack::new).filter(stack -> stack.getItem().getRegistryName().getPath().contains("pink")).map(item -> new MycelialGeneratorRecipe(Collections.singletonList(Collections.singletonList(Ingredient.fromStacks(item))), new ArrayList<>(), 10, 40)).collect(Collectors.toList());
+        return ForgeRegistries.ITEMS.getValues().stream().map(ItemStack::new).filter(stack -> stack.getItem().getRegistryName().getPath().contains("pink")).map(item -> new MycelialGeneratorRecipe(Collections.singletonList(Collections.singletonList(Ingredient.fromStacks(item))), new ArrayList<>(), 69, 135)).collect(Collectors.toList());
     }
 
     private Pair<Integer, Integer> calculate(ItemStack stack){
-        return Pair.of(10, 40);
+        return Pair.of(69, 135);
     }
 
     @Override

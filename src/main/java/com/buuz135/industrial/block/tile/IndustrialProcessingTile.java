@@ -68,15 +68,15 @@ public abstract class IndustrialProcessingTile<T extends IndustrialProcessingTil
                         });
                     }
                 }.
-                setComponentHarness(this.getSelf()).
-                setBarDirection(getBarDirection()).
-                setCanReset(tileEntity -> true).
-                setOnStart(() -> {
-                    int maxProgress = (int) Math.floor(getMaxProgress() * (this.hasAugmentInstalled(AugmentTypes.EFFICIENCY) ? AugmentWrapper.getType(this.getInstalledAugments(AugmentTypes.EFFICIENCY).get(0), AugmentTypes.EFFICIENCY) : 1));
-                    progressBar.setMaxProgress(maxProgress);
-                }).
-                setCanIncrease(tileEntity -> getEnergyStorage().getEnergyStored() > getTickPower() && canIncrease() && this.getRedstoneManager().getAction().canRun(tileEntity.getEnvironmentValue(false, null)) && this.getRedstoneManager().shouldWork()).
-                setOnTickWork(() -> {
+                        setComponentHarness(this.getSelf()).
+                        setBarDirection(getBarDirection()).
+                        setCanReset(tileEntity -> true).
+                        setOnStart(() -> {
+                            int maxProgress = (int) Math.floor(getMaxProgress() * (this.hasAugmentInstalled(AugmentTypes.EFFICIENCY) ? AugmentWrapper.getType(this.getInstalledAugments(AugmentTypes.EFFICIENCY).get(0), AugmentTypes.EFFICIENCY) : 1));
+                            progressBar.setMaxProgress(maxProgress);
+                        }).
+                        setCanIncrease(tileEntity -> getEnergyStorage().getEnergyStored() >= getTickPower() && canIncrease() && this.getRedstoneManager().getAction().canRun(tileEntity.getEnvironmentValue(false, null)) && this.getRedstoneManager().shouldWork()).
+                        setOnTickWork(() -> {
                     getEnergyStorage().extractEnergy(getTickPower(), false);
                     progressBar.setProgressIncrease(this.hasAugmentInstalled(AugmentTypes.SPEED) ? (int) AugmentWrapper.getType(this.getInstalledAugments(AugmentTypes.SPEED).get(0), AugmentTypes.SPEED) : 1);
                 }).

@@ -25,6 +25,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.texture.AtlasTexture;
 import net.minecraft.client.renderer.texture.Texture;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
+import net.minecraft.util.ColorHelper;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
@@ -46,39 +47,19 @@ public class ColorUtils {
         if (sprite == null) return -1;
         if (sprite.getFrameCount() == 0) return -1;
         float total = 0, red = 0, blue = 0, green = 0;
+        for (int x = 0; x < sprite.getWidth(); x++) {
             for (int y = 0; y < sprite.getHeight(); y++) {
-                for (int x = 0; x < sprite.getWidth(); x++) {
-                    int color = sprite.getPixelRGBA(0, x, y);
-                    if ((color >> 24 & 0xFF) != 255) continue;
-                    ++total;
-                    red +=  (color >> 0) & 0xFF;
-                    green += (color >>  8) & 0xFF;
-                    blue += (color >> 16) & 0xFF;
-                }
-            }
-
-        if (total > 0) return new Color( (int)(red / total), (int) (green / total), (int) (blue / total), 255).getRGB();
-        return -1;
-    }
-
-    public static int getColorFrom(TextureAtlasSprite sprite, Color filter) {
-        if (sprite == null) return -1;
-        if (sprite.getFrameCount() == 0) return -1;
-        int total = 0, red = 0, blue = 0, green = 0;
-        for (int y = 0; y < sprite.getHeight(); y++) {
-            for (int x = 0; x < sprite.getWidth(); x++) {
                 int color = sprite.getPixelRGBA(0, x, y);
-                if ((color >> 24 & 0xFF) != 255) continue;
-                Color temp = new Color((color >> 0) & 0xFF, (color >>  8) & 0xFF, (color >> 16) & 0xFF, color >> 24 & 0xFF);
-                if ((temp.getRGB() - filter.getRGB() < 500 && temp.getRGB() - filter.getRGB() > 500)) continue;
-                ++total;
-                red +=  (color >> 0) & 0xFF;
-                green += (color >>  8) & 0xFF;
-                blue += (color >> 16) & 0xFF;
+                int alpha = color >> 24 & 0xFF;
+                // if (alpha != 255) continue; // this creates problems for translucent textures
+                total += alpha;
+                red += (color & 0xFF) * alpha;
+                green += (color >> 8 & 0xFF) * alpha;
+                blue += (color >> 16 & 0xFF) * alpha;
             }
         }
-        if (total > 0) return new Color(red / total, green / total, blue / total, 255).brighter().getRGB();
+
+        if (total > 0) return ColorHelper.PackedColor.packColor( 255, (int)(red / total), (int) (green / total), (int) (blue / total));
         return -1;
     }
-
 }

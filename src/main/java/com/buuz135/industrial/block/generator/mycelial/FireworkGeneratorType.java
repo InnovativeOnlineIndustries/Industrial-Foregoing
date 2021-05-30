@@ -102,15 +102,19 @@ public class FireworkGeneratorType implements IMycelialGeneratorType{
         return new ArrayList<>();
     }
 
-    private Pair<Integer,Integer> calculate(ItemStack stack){
+    public static FireworkRocketItem.Shape get(int indexIn) {
+        return indexIn >= 0 && indexIn < FireworkRocketItem.Shape.values().length ? FireworkRocketItem.Shape.values()[indexIn] : FireworkRocketItem.Shape.SMALL_BALL;
+    }
+
+    private Pair<Integer, Integer> calculate(ItemStack stack) {
         CompoundNBT nbt = stack.getChildTag("Fireworks");
         int flight = nbt.getInt("Flight");
         double power = 1;
         ListNBT listnbt = nbt.getList("Explosions", 10);
         if (!listnbt.isEmpty()) {
-            for(int i = 0; i < listnbt.size(); ++i) {
+            for (int i = 0; i < listnbt.size(); ++i) {
                 CompoundNBT compound = listnbt.getCompound(i);
-                FireworkRocketItem.Shape shape = FireworkRocketItem.Shape.get(compound.getByte("Type"));
+                FireworkRocketItem.Shape shape = get(compound.getByte("Type"));
                 power *= getShapeModifier(shape);
                 int[] colors = compound.getIntArray("Colors");
                 power *= (1 + colors.length / 100D);

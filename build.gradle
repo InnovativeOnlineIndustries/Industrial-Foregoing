@@ -34,10 +34,12 @@ apply plugin: 'eclipse'
 def isReleaseBranch = System.getenv("BRANCH") == "release-1.15" || System.getenv("BRANCH") == "release-1.16";
 
 
-def BUILD_NUMBER = System.getenv("COMMIT") ? "${project.api_version}-${System.getenv("COMMIT")}" : "${project.api_version}"
 group = "com.buuz135"
 archivesBaseName = "industrial-foregoing"
-version = "${minecraftVersion}-$BUILD_NUMBER"
+version = "${minecraftVersion}-${project.api_version}"
+if (System.getenv('BUILD_NUMBER') != null) {
+    version += "-" + System.getenv('BUILD_NUMBER')
+}
 
 sourceCompatibility = targetCompatibility = '1.8'
 compileJava {
@@ -209,6 +211,9 @@ artifacts {
     archives apiJar
 }
 
+publish.dependsOn(project.tasks.getByName("assemble"))
+publish.mustRunAfter(project.tasks.getByName("build"))
+
 publishing {
     publications {
         mavenJava(MavenPublication) {
@@ -220,10 +225,7 @@ publishing {
     }
     repositories {
         maven {
-            url "s3://cdn.hrzn.studio/maven"
-            authentication {
-                awsIm(AwsImAuthentication)
-            }
+            url "file://" + System.getenv("local_maven")
         }
     }
 }
@@ -253,12 +255,10 @@ jar {
     }
 }
 
-tasks.curseforge.enabled = System.getenv("CURSE_API") != null && isReleaseBranch
+//tasks.curseforge.enabled = System.getenv("CURSE_API") != null && isReleaseBranch
 
 curseforge {
-    if (System.getenv("CURSE_API") != null) {
-        apiKey = System.getenv("CURSE_API")
-    }
+    apiKey = System.env["CURSE_API"]
     project {
         id = '266515'
         changelog = "https://github.com/InnovativeOnlineIndustries/Industrial-Foregoing/blob/changelog/CHANGELOG.md"

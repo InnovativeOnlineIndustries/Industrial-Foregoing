@@ -65,7 +65,11 @@ public class DoubleTallPlantRecollectable extends PlantRecollectable {
         BlockState blockState = world.getBlockState(pos);
         if (blockState.getBlock() instanceof CactusBlock || blockState.getBlock() instanceof SugarCaneBlock) {
             stacks.addAll(BlockUtils.getBlockDrops(world, pos));
-            world.setBlockState(pos, Blocks.AIR.getDefaultState());
+            if (!world.getFluidState(pos).isEmpty()) {
+                world.setBlockState(pos, Blocks.WATER.getDefaultState());
+            } else {
+                world.setBlockState(pos, Blocks.AIR.getDefaultState());
+            }
         }
     }
 

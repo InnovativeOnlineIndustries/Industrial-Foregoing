@@ -278,12 +278,11 @@ public class BlackHoleUnitTile extends BHTile<BlackHoleUnitTile> {
         public ItemStack insertItem(int slot, @Nonnull ItemStack stack, boolean simulate) {
             if (isItemValid(slot, stack)) {
                 int inserted = Math.min(this.amount - stored, stack.getCount());
-                if (voidItems) inserted = stack.getCount();
                 if (!simulate){
                     setStack(stack);
                     setAmount(Math.min(stored + inserted, amount));
                 }
-                if (inserted == stack.getCount()) return ItemStack.EMPTY;
+                if (inserted == stack.getCount() || voidItems) return ItemStack.EMPTY;
                 return ItemHandlerHelper.copyStackWithSize(stack, stack.getCount() - inserted);
             }
             return stack;

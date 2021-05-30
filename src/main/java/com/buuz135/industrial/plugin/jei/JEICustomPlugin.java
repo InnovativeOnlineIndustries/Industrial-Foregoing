@@ -31,6 +31,7 @@ import com.buuz135.industrial.block.generator.tile.BioReactorTile;
 import com.buuz135.industrial.block.resourceproduction.tile.MaterialStoneWorkFactoryTile;
 import com.buuz135.industrial.fluid.OreTitaniumFluidAttributes;
 import com.buuz135.industrial.gui.conveyor.GuiConveyor;
+import com.buuz135.industrial.gui.transporter.GuiTransporter;
 import com.buuz135.industrial.module.*;
 import com.buuz135.industrial.plugin.jei.category.*;
 import com.buuz135.industrial.plugin.jei.generator.MycelialGeneratorCategory;
@@ -106,6 +107,31 @@ public class JEICustomPlugin implements IModPlugin {
         registration.addGhostIngredientHandler(GuiConveyor.class, new IGhostIngredientHandler<GuiConveyor>() {
             @Override
             public <I> List<Target<I>> getTargets(GuiConveyor guiConveyor, I i, boolean b) {
+                if (i instanceof ItemStack) {
+                    return guiConveyor.getGhostSlots().stream().map(ghostSlot -> new Target<I>() {
+
+                        @Override
+                        public Rectangle2d getArea() {
+                            return ghostSlot.getArea();
+                        }
+
+                        @Override
+                        public void accept(I stack) {
+                            ghostSlot.accept((ItemStack) stack);
+                        }
+                    }).collect(Collectors.toList());
+                }
+                return Collections.emptyList();
+            }
+
+            @Override
+            public void onComplete() {
+
+            }
+        });
+        registration.addGhostIngredientHandler(GuiTransporter.class, new IGhostIngredientHandler<GuiTransporter>() {
+            @Override
+            public <I> List<Target<I>> getTargets(GuiTransporter guiConveyor, I i, boolean b) {
                 if (i instanceof ItemStack) {
                     return guiConveyor.getGhostSlots().stream().map(ghostSlot -> new Target<I>() {
 

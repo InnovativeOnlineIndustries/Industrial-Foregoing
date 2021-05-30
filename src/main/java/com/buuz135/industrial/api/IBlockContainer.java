@@ -19,8 +19,9 @@
  * FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE,
  * ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
-package com.buuz135.industrial.api.conveyor;
+package com.buuz135.industrial.api;
 
+import com.buuz135.industrial.api.conveyor.ConveyorUpgradeFactory;
 import net.minecraft.util.Direction;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
@@ -28,11 +29,11 @@ import net.minecraft.world.World;
 import java.util.ArrayList;
 import java.util.List;
 
-public interface IConveyorContainer {
+public interface IBlockContainer<T> {
 
-    World getConveyorWorld();
+    World getBlockWorld();
 
-    BlockPos getConveyorPosition();
+    BlockPos getBlockPosition();
 
     void requestSync();
 
@@ -40,20 +41,20 @@ public interface IConveyorContainer {
 
     boolean hasUpgrade(Direction facing);
 
-    void addUpgrade(Direction facing, ConveyorUpgradeFactory factory);
+    void addUpgrade(Direction facing, T factory);
 
     void removeUpgrade(Direction facing, boolean drop);
 
     List<Integer> getEntityFilter();
 
-    class Empty implements IConveyorContainer {
+    class Empty implements IBlockContainer<ConveyorUpgradeFactory> {
         @Override
-        public World getConveyorWorld() {
+        public World getBlockWorld() {
             return null;
         }
 
         @Override
-        public BlockPos getConveyorPosition() {
+        public BlockPos getBlockPosition() {
             return null;
         }
 

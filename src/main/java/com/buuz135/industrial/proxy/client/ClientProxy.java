@@ -34,10 +34,7 @@ import com.buuz135.industrial.module.ModuleTool;
 import com.buuz135.industrial.module.ModuleTransportStorage;
 import com.buuz135.industrial.proxy.CommonProxy;
 import com.buuz135.industrial.proxy.client.event.IFClientEvents;
-import com.buuz135.industrial.proxy.client.render.BlackHoleUnitTESR;
-import com.buuz135.industrial.proxy.client.render.FluidConveyorTESR;
-import com.buuz135.industrial.proxy.client.render.MycelialReactorTESR;
-import com.buuz135.industrial.proxy.client.render.WorkingAreaTESR;
+import com.buuz135.industrial.proxy.client.render.*;
 import com.buuz135.industrial.proxy.network.BackpackOpenMessage;
 import com.buuz135.industrial.utils.FluidUtils;
 import com.buuz135.industrial.utils.Reference;
@@ -127,6 +124,7 @@ public class ClientProxy extends CommonProxy {
         ClientRegistry.bindTileEntityRenderer(ModuleTransportStorage.BLACK_HOLE_TANK_SIMPLE.getTileEntityType(), BlackHoleUnitTESR::new);
         ClientRegistry.bindTileEntityRenderer(ModuleTransportStorage.BLACK_HOLE_TANK_ADVANCED.getTileEntityType(), BlackHoleUnitTESR::new);
         ClientRegistry.bindTileEntityRenderer(ModuleTransportStorage.BLACK_HOLE_TANK_SUPREME.getTileEntityType(), BlackHoleUnitTESR::new);
+        ClientRegistry.bindTileEntityRenderer(ModuleTransportStorage.TRANSPORTER.getTileEntityType(), TransporterTESR::new);
 
         RenderTypeLookup.setRenderLayer(ModuleTransportStorage.CONVEYOR, RenderType.getCutout());
         RenderTypeLookup.setRenderLayer(ModuleTransportStorage.BLACK_HOLE_TANK_COMMON, RenderType.getCutout());
@@ -206,6 +204,16 @@ public class ClientProxy extends CommonProxy {
             }
             return 0xFFFFFF;
         },ModuleTransportStorage.BLACK_HOLE_TANK_COMMON, ModuleTransportStorage.BLACK_HOLE_TANK_PITY, ModuleTransportStorage.BLACK_HOLE_TANK_SIMPLE, ModuleTransportStorage.BLACK_HOLE_TANK_ADVANCED, ModuleTransportStorage.BLACK_HOLE_TANK_SUPREME);
+        Minecraft.getInstance().getItemColors().register((stack, tintIndex) -> {
+            if (tintIndex == 1 && stack.getCapability(CapabilityFluidHandler.FLUID_HANDLER_ITEM_CAPABILITY).isPresent()) {
+                IFluidHandlerItem fluidHandlerItem = stack.getCapability(CapabilityFluidHandler.FLUID_HANDLER_ITEM_CAPABILITY).orElseGet(null);
+                if (fluidHandlerItem.getFluidInTank(0).getAmount() > 0){
+                    int color = FluidUtils.getFluidColor(fluidHandlerItem.getFluidInTank(0));
+                    if (color != -1) return color;
+                }
+            }
+            return 0xFFFFFF;
+        }, ModuleCore.RAW_ORE_MEAT.getBucketFluid(), ModuleCore.FERMENTED_ORE_MEAT.getBucketFluid());
 
         RenderingRegistry.registerEntityRenderingHandler(ModuleTool.TRIDENT_ENTITY_TYPE, InfinityTridentRenderer::new);
 

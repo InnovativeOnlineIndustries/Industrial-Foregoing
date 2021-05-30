@@ -61,7 +61,7 @@ public class InfinityEnergyStorage<T extends IComponentHarness> extends EnergySt
 
     @Override
     public int getEnergyStored() {
-        return (int) energy;
+        return this.energy > Integer.MAX_VALUE ? Integer.MAX_VALUE : (int) this.energy;
     }
 
     public void setEnergyStored(long power) {

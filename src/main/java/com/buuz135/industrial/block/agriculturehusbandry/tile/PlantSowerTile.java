@@ -34,6 +34,7 @@ import com.hrznstudio.titanium.component.inventory.SidedInventoryComponent;
 import com.hrznstudio.titanium.filter.ItemStackFilter;
 import com.hrznstudio.titanium.item.AugmentWrapper;
 import net.minecraft.block.Block;
+import net.minecraft.block.Blocks;
 import net.minecraft.item.BlockItem;
 import net.minecraft.item.DyeColor;
 import net.minecraft.item.ItemStack;
@@ -85,7 +86,7 @@ public class PlantSowerTile extends IndustrialAreaWorkingTile<PlantSowerTile> {
     @Override
     public WorkAction work() {
         BlockPos pos = getPointedBlockPos();
-        if (isLoaded(pos) && this.world.isAirBlock(pos) && hasEnergy(powerPerOperation)) {
+        if (isLoaded(pos) && (this.world.isAirBlock(pos) || this.world.getBlockState(pos).isIn(Blocks.WATER)) && hasEnergy(powerPerOperation)) {
             int slot = getFilteredSlot(pos);
             ItemStack stack = ItemStack.EMPTY;
             for (int i = 0; i < input.getInventory().getSlots(); i++) {
