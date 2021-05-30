@@ -255,7 +255,7 @@ jar {
     }
 }
 
-//tasks.curseforge.enabled = System.getenv("CURSE_API") != null && isReleaseBranch
+tasks.curseforge.enabled = System.env["CURSE_API"] != null
 
 curseforge {
     apiKey = System.env["CURSE_API"]
