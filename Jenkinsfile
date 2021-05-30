@@ -3,6 +3,9 @@ def releaseBranch = "release-1.16";
 
 pipeline {
     agent any
+    environment {
+        CURSE_API = credentials('curseforge_api_key')
+    }
     stages {
         stage('Clean') {
             steps {
@@ -25,6 +28,9 @@ pipeline {
             steps {
                 echo 'Deploying to Maven'
                 sh './gradlew publish'
+
+                echo 'Deploying to CurseForge'
+                sh './gradlew curseforge'
             }
         }
     }

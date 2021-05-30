@@ -255,12 +255,10 @@ jar {
     }
 }
 
-tasks.curseforge.enabled = System.getenv("CURSE_API") != null && isReleaseBranch
+//tasks.curseforge.enabled = System.getenv("CURSE_API") != null && isReleaseBranch
 
 curseforge {
-    if (System.getenv("CURSE_API") != null) {
-        apiKey = System.getenv("CURSE_API")
-    }
+    apiKey = System.env["CURSE_API"]
     project {
         id = '266515'
         changelog = "https://github.com/InnovativeOnlineIndustries/Industrial-Foregoing/blob/changelog/CHANGELOG.md"
