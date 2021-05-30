@@ -258,7 +258,9 @@ jar {
 tasks.curseforge.enabled = System.env["CURSE_API"] != null
 
 curseforge {
-    apiKey = System.env["CURSE_API"]
+    if (System.env["CURSE_API"] != null){
+        apiKey = System.env["CURSE_API"]
+    }
     project {
         id = '266515'
         changelog = "https://github.com/InnovativeOnlineIndustries/Industrial-Foregoing/blob/changelog/CHANGELOG.md"
