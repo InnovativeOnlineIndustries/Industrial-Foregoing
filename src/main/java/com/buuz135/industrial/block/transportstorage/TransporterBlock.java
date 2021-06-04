@@ -80,9 +80,12 @@ public class TransporterBlock extends BasicTileBlock<TransporterTile> implements
         TileEntity tileEntity = world.getTileEntity(pos);
         if (tileEntity instanceof TransporterTile) {
             if (target instanceof BlockRayTraceResult) {
-                TransporterType upgrade = ((TransporterTile) tileEntity).getTransporterTypeMap().get(getFacingUpgradeHit(state, player.world, pos, player).getKey());
-                if (upgrade != null) {
-                    return new ItemStack(upgrade.getFactory().getUpgradeItem(), 1);
+                Pair<Direction, Boolean> upgradePair = getFacingUpgradeHit(state, player.world, pos, player);
+                if (upgradePair != null) {
+                    TransporterType upgrade = ((TransporterTile) tileEntity).getTransporterTypeMap().get(upgradePair.getKey());
+                    if (upgrade != null) {
+                        return new ItemStack(upgrade.getFactory().getUpgradeItem(), 1);
+                    }
                 }
             }
         }
