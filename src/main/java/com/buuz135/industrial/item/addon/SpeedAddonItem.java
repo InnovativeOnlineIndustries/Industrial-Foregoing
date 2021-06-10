@@ -47,7 +47,7 @@ public class SpeedAddonItem extends IFCustomItem {
     private int tier;
 
     public SpeedAddonItem(int tier, ItemGroup group) {
-        super("speed_addon_" + tier, group, new Properties().maxStackSize(1));
+        super("speed_addon_" + tier, group, new Properties().maxStackSize(16));
         this.tier = tier;
     }
 

@@ -54,7 +54,7 @@ public class RangeAddonItem extends IFCustomItem {
     private int tier;
 
     public RangeAddonItem(int tier, ItemGroup group) {
-        super("range_addon" + tier, group, new Properties().maxStackSize(1));
+        super("range_addon" + tier, group, new Properties().maxStackSize(16));
         this.tier = tier;
     }
 

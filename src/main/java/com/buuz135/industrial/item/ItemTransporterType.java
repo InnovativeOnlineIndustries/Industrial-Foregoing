@@ -27,14 +27,14 @@ public class ItemTransporterType extends IFCustomItem {
     public ActionResultType onItemUse(ItemUseContext context) {
         BlockPos pos = context.getPos().offset(context.getFace());
         Direction side = context.getFace().getOpposite();
-        if (factory.canBeAttachedAgainst(context.getWorld(), context.getPos(), side)) {
+        if (factory.canBeAttachedAgainst(context.getWorld(), context.getPos(), side.getOpposite())) {
             if (!context.getWorld().getBlockState(context.getPos().offset(context.getFace())).isIn(ModuleTransportStorage.TRANSPORTER) && context.getWorld().getBlockState(context.getPos().offset(context.getFace())).isAir()) {
                 context.getWorld().setBlockState(context.getPos().offset(context.getFace()), ModuleTransportStorage.TRANSPORTER.getDefaultState());
                 pos = context.getPos().offset(context.getFace());
             }
             TileEntity tile = context.getWorld().getTileEntity(pos);
             if (tile instanceof IBlockContainer) {
-                if (!((IBlockContainer) tile).hasUpgrade(side) && factory.canBeAttachedAgainst(context.getWorld(), context.getPos(), side)) {
+                if (!((IBlockContainer) tile).hasUpgrade(side) && factory.canBeAttachedAgainst(context.getWorld(), context.getPos(), side.getOpposite())) {
                     ((IBlockContainer) tile).addUpgrade(side, factory);
                     if (!context.getPlayer().isCreative()) context.getItem().shrink(1);
                     return ActionResultType.SUCCESS;
