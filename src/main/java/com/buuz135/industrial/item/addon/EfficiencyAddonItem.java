@@ -47,7 +47,7 @@ public class EfficiencyAddonItem extends IFCustomItem {
     private int tier;
 
     public EfficiencyAddonItem(int tier, ItemGroup group) {
-        super("efficiency_addon_" + tier, group, new Properties().maxStackSize(1));
+        super("efficiency_addon_" + tier, group, new Properties().maxStackSize(16));
         this.tier = tier;
     }
 
