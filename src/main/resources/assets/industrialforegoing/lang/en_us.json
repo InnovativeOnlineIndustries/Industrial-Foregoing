@@ -392,6 +392,7 @@
   "item.industrialforegoing.infinity_launcher": "Infinity Launcher",
   "item.industrialforegoing.item_transporter_type": "Item Transporter",
   "item.industrialforegoing.fluid_transporter_type": "Fluid Transporter",
+  "item.industrialforegoing.world_transporter_type": "World Transporter",
   "tooltip.titanium.facing_handler.fuel_input": "Fuel Input",
   "tooltip.titanium.facing_handler.input_fluid": "Fluid Input",
   "tooltip.titanium.facing_handler.output_fluid": "Fluid Output",
