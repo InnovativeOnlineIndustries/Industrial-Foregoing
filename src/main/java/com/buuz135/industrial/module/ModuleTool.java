@@ -21,6 +21,7 @@
  */
 package com.buuz135.industrial.module;
 
+import com.buuz135.industrial.entity.InfinityLauncherProjectileEntity;
 import com.buuz135.industrial.entity.InfinityTridentEntity;
 import com.buuz135.industrial.item.MeatFeederItem;
 import com.buuz135.industrial.item.MobEssenceToolItem;
@@ -59,13 +60,18 @@ public class ModuleTool implements IModule {
     public static ItemInfinityHammer INFINITY_HAMMER;
     public static ItemInfinityTrident INFINITY_TRIDENT;
     public static ItemInfinityBackpack INFINITY_BACKPACK;
+    public static ItemInfinityLauncher INFINITY_LAUNCHER;
 
     public static EntityType<InfinityTridentEntity> TRIDENT_ENTITY_TYPE;
+    public static EntityType<InfinityLauncherProjectileEntity> INFINITY_LAUNCHER_PROJECTILE_ENTITY_TYPE;
 
     static {
         TRIDENT_ENTITY_TYPE = (EntityType<InfinityTridentEntity>) EntityType.Builder.<InfinityTridentEntity>create(InfinityTridentEntity::new, EntityClassification.MISC).size(0.5F, 0.5F)
                 .setShouldReceiveVelocityUpdates(true)
-                .setCustomClientFactory((spawnEntity, world) -> new InfinityTridentEntity(TRIDENT_ENTITY_TYPE,world)).trackingRange(4).func_233608_b_(20).build("trident_entity").setRegistryName(Reference.MOD_ID, "trident_entity");
+                .setCustomClientFactory((spawnEntity, world) -> new InfinityTridentEntity(TRIDENT_ENTITY_TYPE, world)).trackingRange(4).func_233608_b_(20).build("trident_entity").setRegistryName(Reference.MOD_ID, "trident_entity");
+        INFINITY_LAUNCHER_PROJECTILE_ENTITY_TYPE = (EntityType<InfinityLauncherProjectileEntity>) EntityType.Builder.<InfinityLauncherProjectileEntity>create(InfinityLauncherProjectileEntity::new, EntityClassification.MISC).size(0.5F, 0.5F)
+                .setShouldReceiveVelocityUpdates(true)
+                .setCustomClientFactory((spawnEntity, world) -> new InfinityLauncherProjectileEntity(INFINITY_LAUNCHER_PROJECTILE_ENTITY_TYPE, world)).trackingRange(4).func_233608_b_(20).build("launcher_projectile_entity").setRegistryName(Reference.MOD_ID, "launcher_projectile_entity");
     }
 
 
@@ -83,8 +89,12 @@ public class ModuleTool implements IModule {
         features.add(createFeature(INFINITY_HAMMER = new ItemInfinityHammer(TAB_TOOL)));
         features.add(Feature.builder("infinity_trident")
                 .content(Item.class, INFINITY_TRIDENT = new ItemInfinityTrident(TAB_TOOL))
-                .content(EntityType.class, (EntityType) TRIDENT_ENTITY_TYPE ));
+                .content(EntityType.class, (EntityType) TRIDENT_ENTITY_TYPE));
         features.add(createFeature(INFINITY_BACKPACK = new ItemInfinityBackpack()));
+        features.add(Feature.builder("infinity_launcher")
+                .content(Item.class, INFINITY_LAUNCHER = new ItemInfinityLauncher(TAB_TOOL))
+                .content(EntityType.class, (EntityType) INFINITY_LAUNCHER_PROJECTILE_ENTITY_TYPE)
+        );
         TAB_TOOL.addIconStack(new ItemStack(INFINITY_DRILL));
         ItemStackHarnessRegistry.register(INFINITY_SAW, stack -> new ItemStackHarness(stack, null, (IButtonHandler) stack.getItem(), CapabilityEnergy.ENERGY, CapabilityFluidHandler.FLUID_HANDLER_ITEM_CAPABILITY, CapabilityItemStackHolder.ITEMSTACK_HOLDER_CAPABILITY));
         ItemStackHarnessRegistry.register(INFINITY_DRILL, stack -> new ItemStackHarness(stack, null, (IButtonHandler) stack.getItem(), CapabilityEnergy.ENERGY, CapabilityFluidHandler.FLUID_HANDLER_ITEM_CAPABILITY, CapabilityItemStackHolder.ITEMSTACK_HOLDER_CAPABILITY));
@@ -92,6 +102,7 @@ public class ModuleTool implements IModule {
         ItemStackHarnessRegistry.register(INFINITY_TRIDENT, stack -> new ItemStackHarness(stack, null, (IButtonHandler) stack.getItem(), CapabilityEnergy.ENERGY, CapabilityFluidHandler.FLUID_HANDLER_ITEM_CAPABILITY, CapabilityItemStackHolder.ITEMSTACK_HOLDER_CAPABILITY));
         ItemStackHarnessRegistry.register(INFINITY_TRIDENT, stack -> new ItemStackHarness(stack, null, (IButtonHandler) stack.getItem(), CapabilityEnergy.ENERGY, CapabilityFluidHandler.FLUID_HANDLER_ITEM_CAPABILITY, CapabilityItemStackHolder.ITEMSTACK_HOLDER_CAPABILITY));
         ItemStackHarnessRegistry.register(INFINITY_BACKPACK, stack -> new ItemStackHarness(stack, null, (IButtonHandler) stack.getItem(), CapabilityEnergy.ENERGY, CapabilityFluidHandler.FLUID_HANDLER_ITEM_CAPABILITY, CapabilityItemStackHolder.ITEMSTACK_HOLDER_CAPABILITY));
+        ItemStackHarnessRegistry.register(INFINITY_LAUNCHER, stack -> new ItemStackHarness(stack, null, (IButtonHandler) stack.getItem(), CapabilityEnergy.ENERGY, CapabilityFluidHandler.FLUID_HANDLER_ITEM_CAPABILITY, CapabilityItemStackHolder.ITEMSTACK_HOLDER_CAPABILITY));
 
         return features;
     }

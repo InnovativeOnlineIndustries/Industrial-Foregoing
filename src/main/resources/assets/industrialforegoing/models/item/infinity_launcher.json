@@ -1,0 +1,26 @@
+{
+  "credit": "Made with Blockbench",
+  "texture_size": [
+    64,
+    64
+  ],
+  "textures": {
+    "0": "industrialforegoing:items/infinity_launcher",
+    "1": "industrialforegoing:items/infinity_launcher_projectile",
+    "particle": "industrialforegoing:items/infinity_launcher"
+  },
+  "overrides": [
+    {
+      "predicate": {
+        "industrialforegoing:cooldown": 1
+      },
+      "model": "industrialforegoing:item/infinity_launcher_empty"
+    },
+    {
+      "predicate": {
+        "industrialforegoing:cooldown": 2
+      },
+      "model": "industrialforegoing:item/infinity_launcher_full"
+    }
+  ]
+}

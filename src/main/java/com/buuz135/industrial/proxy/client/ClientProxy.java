@@ -25,6 +25,8 @@ import com.buuz135.industrial.IndustrialForegoing;
 import com.buuz135.industrial.block.tile.IndustrialAreaWorkingTile;
 import com.buuz135.industrial.block.transportstorage.tile.BlackHoleTankTile;
 import com.buuz135.industrial.block.transportstorage.tile.ConveyorTile;
+import com.buuz135.industrial.entity.client.InfinityLauncherProjectileArmorLayer;
+import com.buuz135.industrial.entity.client.InfinityLauncherProjectileRenderer;
 import com.buuz135.industrial.entity.client.InfinityTridentRenderer;
 import com.buuz135.industrial.item.infinity.InfinityTier;
 import com.buuz135.industrial.item.infinity.ItemInfinity;
@@ -38,6 +40,7 @@ import com.buuz135.industrial.proxy.client.render.*;
 import com.buuz135.industrial.proxy.network.BackpackOpenMessage;
 import com.buuz135.industrial.utils.FluidUtils;
 import com.buuz135.industrial.utils.Reference;
+import com.hrznstudio.titanium.TitaniumClient;
 import com.hrznstudio.titanium.block.BasicTileBlock;
 import com.hrznstudio.titanium.event.handler.EventManager;
 import net.minecraft.block.Block;
@@ -45,8 +48,11 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.RenderTypeLookup;
+import net.minecraft.client.renderer.entity.EntityRendererManager;
 import net.minecraft.client.renderer.model.IBakedModel;
 import net.minecraft.client.settings.KeyBinding;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.item.ItemModelsProperties;
 import net.minecraft.item.SpawnEggItem;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.tileentity.TileEntity;
@@ -216,12 +222,24 @@ public class ClientProxy extends CommonProxy {
         }, ModuleCore.RAW_ORE_MEAT.getBucketFluid(), ModuleCore.FERMENTED_ORE_MEAT.getBucketFluid());
 
         RenderingRegistry.registerEntityRenderingHandler(ModuleTool.TRIDENT_ENTITY_TYPE, InfinityTridentRenderer::new);
+        RenderingRegistry.registerEntityRenderingHandler(ModuleTool.INFINITY_LAUNCHER_PROJECTILE_ENTITY_TYPE, InfinityLauncherProjectileRenderer::new);
 
         EventManager.forge(ItemTooltipEvent.class).filter(event -> event.getItemStack().getItem().getRegistryName().getNamespace().equals(Reference.MOD_ID)).process(event -> {
-            if (Calendar.getInstance().get(Calendar.DAY_OF_MONTH) == 1 && Calendar.getInstance().get(Calendar.MONTH) == Calendar.APRIL){
+            if (Calendar.getInstance().get(Calendar.DAY_OF_MONTH) == 1 && Calendar.getInstance().get(Calendar.MONTH) == Calendar.APRIL) {
                 event.getToolTip().add(new StringTextComponent("Press Alt + F4 to cheat this item").mergeStyle(TextFormatting.DARK_AQUA));
             }
         }).subscribe();
+
+        Minecraft instance = Minecraft.getInstance();
+        EntityRendererManager manager = instance.getRenderManager();
+        manager.getSkinMap().get("default").addLayer(new InfinityLauncherProjectileArmorLayer<>(TitaniumClient.getPlayerRenderer(Minecraft.getInstance())));
+        manager.getSkinMap().get("slim").addLayer(new InfinityLauncherProjectileArmorLayer(TitaniumClient.getPlayerRenderer(Minecraft.getInstance())));
+        ItemModelsProperties.registerProperty(ModuleTool.INFINITY_LAUNCHER, new ResourceLocation(Reference.MOD_ID, "cooldown"), (stack, world, entity) -> {
+            if (entity instanceof PlayerEntity) {
+                return ((PlayerEntity) entity).getCooldownTracker().hasCooldown(stack.getItem()) ? 1 : 2;
+            }
+            return 2;
+        });
     }
 
 }
