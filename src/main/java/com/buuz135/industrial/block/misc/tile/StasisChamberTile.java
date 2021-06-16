@@ -28,10 +28,12 @@ import com.buuz135.industrial.module.ModuleMisc;
 import com.hrznstudio.titanium.component.energy.EnergyStorageComponent;
 import net.minecraft.entity.MobEntity;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.potion.EffectInstance;
 import net.minecraft.potion.Effects;
 import net.minecraft.util.math.shapes.VoxelShape;
 import net.minecraft.util.math.shapes.VoxelShapes;
+import net.minecraft.world.server.ServerWorld;
 
 import javax.annotation.Nonnull;
 import java.util.List;
@@ -54,6 +56,13 @@ public class StasisChamberTile extends IndustrialAreaWorkingTile<StasisChamberTi
             for (MobEntity entity : entities) {
                 entity.setNoAI(true);
                 entity.getPersistentData().putLong("StasisChamberTime", this.world.getGameTime());
+                if (!entity.isNonBoss() && world instanceof ServerWorld) {
+                    if (StasisChamberConfig.disableBossBars) {
+                        world.getPlayers().forEach(entity1 -> entity.removeTrackingPlayer((ServerPlayerEntity) entity1));
+                    } else {
+                        world.getPlayers().forEach(entity1 -> entity.addTrackingPlayer((ServerPlayerEntity) entity1));
+                    }
+                }
                 if (world.rand.nextBoolean() && world.rand.nextBoolean()) entity.heal(1f);
             }
             List<PlayerEntity> players = this.world.getEntitiesWithinAABB(PlayerEntity.class, getWorkingArea().getBoundingBox());
