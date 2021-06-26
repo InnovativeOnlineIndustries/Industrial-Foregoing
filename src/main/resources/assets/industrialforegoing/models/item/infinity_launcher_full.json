@@ -781,6 +781,7 @@
       }
     },
     {
+      "name": "tier_color",
       "from": [
         7.5,
         2.5,
@@ -809,7 +810,8 @@
             10.5
           ],
           "texture": "#0",
-          "cullface": "north"
+          "cullface": "north",
+          "tintindex": 0
         },
         "east": {
           "uv": [
@@ -818,7 +820,8 @@
             9.75,
             10.5
           ],
-          "texture": "#0"
+          "texture": "#0",
+          "tintindex": 0
         },
         "south": {
           "uv": [
@@ -827,7 +830,8 @@
             12,
             10.5
           ],
-          "texture": "#0"
+          "texture": "#0",
+          "tintindex": 0
         },
         "west": {
           "uv": [
@@ -836,7 +840,8 @@
             11.25,
             10.5
           ],
-          "texture": "#0"
+          "texture": "#0",
+          "tintindex": 0
         },
         "up": {
           "uv": [
@@ -845,7 +850,8 @@
             9.75,
             9
           ],
-          "texture": "#0"
+          "texture": "#0",
+          "tintindex": 0
         },
         "down": {
           "uv": [
@@ -854,7 +860,8 @@
             10.5,
             9.75
           ],
-          "texture": "#0"
+          "texture": "#0",
+          "tintindex": 0
         }
       }
     },
