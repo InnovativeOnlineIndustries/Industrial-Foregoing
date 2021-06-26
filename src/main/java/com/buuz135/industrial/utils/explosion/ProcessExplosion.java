@@ -7,9 +7,9 @@ import net.minecraft.block.Blocks;
 import net.minecraft.block.FallingBlock;
 import net.minecraft.block.material.Material;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.DamageSource;
-import net.minecraft.util.Util;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
@@ -29,7 +29,7 @@ import java.util.function.Consumer;
  */
 public class ProcessExplosion {
 
-    public static DamageSource fusionExplosion = new DamageSource("damage.de.fusionExplode").setExplosion().setDamageBypassesArmor();
+    public static DamageSource fusionExplosion = new DamageSource("damage.if.nuke").setExplosion().setDamageBypassesArmor().setFireDamage();
 
     /**
      * The origin of the explosion.
@@ -44,7 +44,6 @@ public class ProcessExplosion {
     public int maxRadius;
     public double circumference = 0;
     public double meanResistance = 0;
-    public boolean enableEffect = true;
     /**
      * Set this to false to disable the laval dropped by the explosion.
      */
@@ -74,8 +73,8 @@ public class ProcessExplosion {
      *                         If the explosion calculation completes before this time is up the process will wait till this amount of time has based before detonating.
      *                         Use -1 for manual detonation.
      */
-    public ProcessExplosion(BlockPos origin, int radius, ServerWorld world, int minimumDelayTime) {
-        this.origin = new Vector3f(origin.getX() + 0.5f, origin.getY() + 0.5f, origin.getZ() + 0.5f);
+    public ProcessExplosion(BlockPos origin, int radius, ServerWorld world, int minimumDelayTime, String owner) {
+        this.origin = new Vector3f(origin.getX(), origin.getY(), origin.getZ());
         this.shortPos = new ShortPos(origin);
         this.world = world;
         this.server = world.getServer();
@@ -83,14 +82,12 @@ public class ProcessExplosion {
         this.angularResistance = new double[121];
         Arrays.fill(angularResistance, 100);
 
-        IndustrialForegoing.LOGGER.info("Explosion Calculation Started for " + radius + " Block radius detonation!");
+        IndustrialForegoing.LOGGER.info("Explosion Calculation Started for " + radius + " Block radius detonation! by " + owner);
         maxRadius = radius;
         lavaState = Blocks.LAVA.getDefaultState();
-
     }
 
     public void updateProcess() {
-        long serverTime = Util.milliTime();
         if (startTime == -1) {
             startTime = System.currentTimeMillis();
         }
@@ -133,7 +130,7 @@ public class ProcessExplosion {
             for (int z = originPos.getZ() - radius; z < originPos.getZ() + radius; z++) {
                 double dist = calculateDistanceBetweenPoints(x, z, originPos.getX(), originPos.getZ());
                 if (dist < radius && dist >= radius - 1) {
-                    posVecUp.set(x + 0.5f, origin.getY(), z + 0.5f);
+                    posVecUp.set(x, origin.getY(), z);
                     double radialAngle = getRadialAngle(posVecUp);
                     double radialResistance = getRadialResistance(radialAngle);
                     double angularLoad = (meanResistance / radialResistance) * 1;
@@ -154,7 +151,7 @@ public class ProcessExplosion {
 
                     posVecDown.set(posVecUp.getX(), posVecUp.getY(), posVecUp.getZ());
                     double resist = trace(posVecUp, power * (1 + 8 * radialPos), (int) heightUp * 3, 1, 0, 0);
-                    posVecDown.sub(new Vector3f(0, 1, 0));
+                    posVecDown.set(posVecDown.getX(), posVecDown.getY() - 1, posVecDown.getZ());
                     resist += trace(posVecDown, power, (int) heightDown, -1, 0, 0);
                     resist *= 1 / angularLoad;
 
@@ -174,7 +171,7 @@ public class ProcessExplosion {
         scannedCache = new HashSet<>();
 
         if (radius >= maxRadius) {
-            IndustrialForegoing.LOGGER.debug("Explosion Calculation Completed!");
+            IndustrialForegoing.LOGGER.info("Explosion Calculation Completed in " + (System.currentTimeMillis() - startTime) / 1000 + "s");
             calculationComplete = true;
         }
     }
@@ -250,7 +247,7 @@ public class ProcessExplosion {
         Integer iPos = shortPos.getIntPos(posVec);
 
         if (scannedCache.contains(iPos) || destroyedCache.contains(iPos)) {
-            posVec.add(0, traceDir, 0);
+            posVec.set(posVec.getX(), posVec.getY() + traceDir, posVec.getZ());
             return trace(posVec, power, dist, traceDir, totalResist, travel);
         }
 
@@ -304,7 +301,7 @@ public class ProcessExplosion {
             scannedCache.add(iPos);
         }
 
-        posVec.add(0, traceDir, 0);
+        posVec.set(posVec.getX(), posVec.getY() + traceDir, posVec.getZ());
         return trace(posVec, power, dist, traceDir, totalResist, travel);
     }
 
@@ -329,7 +326,20 @@ public class ProcessExplosion {
 
         IndustrialForegoing.LOGGER.debug("Removing Blocks!");
         //LogHelper.startTimer("Adding Blocks For Removal");
-
+        final BlockPos pos = new BlockPos(origin.getX(), origin.getY(), origin.getZ());
+        new Thread(() -> {
+            List<Entity> list = world.getEntitiesWithinAABB(Entity.class, new AxisAlignedBB(pos, pos.add(1, 1, 1)).grow(radius * 2.5, radius * 2.5, radius * 2.5));
+            for (Entity e : list) {
+                float dmg = 10000F;
+                if (e instanceof PlayerEntity) {
+                    for (int i = 0; i < 100; i++) {
+                        e.attackEntityFrom(fusionExplosion, 100f);
+                    }
+                } else {
+                    e.attackEntityFrom(fusionExplosion, dmg);
+                }
+            }
+        }).start();
         ExplosionHelper removalHelper = new ExplosionHelper(world, new BlockPos(origin.getX(), origin.getY(), origin.getZ()), shortPos);
         int i = 0;
 
@@ -338,8 +348,8 @@ public class ProcessExplosion {
         //LogHelper.stopTimer();
         //LogHelper.startTimer("Adding Lava");
 
-        for (Integer pos : lavaPositions) {
-            world.setBlockState(shortPos.getActualPos(pos), lavaState);
+        for (Integer posI : lavaPositions) {
+            world.setBlockState(shortPos.getActualPos(posI), lavaState);
         }
 
         //LogHelper.stopTimer();
@@ -352,26 +362,6 @@ public class ProcessExplosion {
 
         isDead = true;
         detonated = true;
-
-        final BlockPos pos = new BlockPos(origin.getX(), origin.getY(), origin.getZ());
-        if (enableEffect) {
-            //DraconicNetwork.sendExplosionEffect(world.dimension(), pos, radius * 4, false);
-        }
-
-        new Thread(() -> {
-            try {
-                Thread.sleep(30);
-                List<Entity> list = world.getEntitiesWithinAABB(Entity.class, new AxisAlignedBB(pos, pos.add(1, 1, 1)).grow(radius * 2.5, radius * 2.5, radius * 2.5));
-                for (Entity e : list) {
-                    double dist = pos.distanceSq(e.getPosition());
-                    float dmg = 10000F * (1F - (float) (dist / (radius * 1.2D)));
-                    e.attackEntityFrom(fusionExplosion, dmg);
-                }
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-        }).start();
-
         IndustrialForegoing.LOGGER.debug("Total explosion time: " + (System.currentTimeMillis() - l) / 1000D + "s");
         return true;
     }

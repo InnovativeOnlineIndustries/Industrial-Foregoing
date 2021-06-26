@@ -27,6 +27,7 @@ import com.buuz135.industrial.block.transportstorage.tile.BlackHoleTankTile;
 import com.buuz135.industrial.block.transportstorage.tile.ConveyorTile;
 import com.buuz135.industrial.entity.client.InfinityLauncherProjectileArmorLayer;
 import com.buuz135.industrial.entity.client.InfinityLauncherProjectileRenderer;
+import com.buuz135.industrial.entity.client.InfinityNukeRenderer;
 import com.buuz135.industrial.entity.client.InfinityTridentRenderer;
 import com.buuz135.industrial.item.infinity.InfinityTier;
 import com.buuz135.industrial.item.infinity.ItemInfinity;
@@ -223,6 +224,7 @@ public class ClientProxy extends CommonProxy {
 
         RenderingRegistry.registerEntityRenderingHandler(ModuleTool.TRIDENT_ENTITY_TYPE, InfinityTridentRenderer::new);
         RenderingRegistry.registerEntityRenderingHandler(ModuleTool.INFINITY_LAUNCHER_PROJECTILE_ENTITY_TYPE, InfinityLauncherProjectileRenderer::new);
+        RenderingRegistry.registerEntityRenderingHandler(ModuleTool.INFINITY_NUKE_ENTITY_TYPE, InfinityNukeRenderer::new);
 
         EventManager.forge(ItemTooltipEvent.class).filter(event -> event.getItemStack().getItem().getRegistryName().getNamespace().equals(Reference.MOD_ID)).process(event -> {
             if (Calendar.getInstance().get(Calendar.DAY_OF_MONTH) == 1 && Calendar.getInstance().get(Calendar.MONTH) == Calendar.APRIL) {

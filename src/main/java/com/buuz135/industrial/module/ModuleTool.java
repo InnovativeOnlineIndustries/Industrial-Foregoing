@@ -22,6 +22,7 @@
 package com.buuz135.industrial.module;
 
 import com.buuz135.industrial.entity.InfinityLauncherProjectileEntity;
+import com.buuz135.industrial.entity.InfinityNukeEntity;
 import com.buuz135.industrial.entity.InfinityTridentEntity;
 import com.buuz135.industrial.item.MeatFeederItem;
 import com.buuz135.industrial.item.MobEssenceToolItem;
@@ -40,6 +41,8 @@ import net.minecraft.entity.EntityClassification;
 import net.minecraft.entity.EntityType;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.SoundEvent;
 import net.minecraft.world.World;
 import net.minecraftforge.energy.CapabilityEnergy;
 import net.minecraftforge.event.world.BlockEvent;
@@ -61,9 +64,14 @@ public class ModuleTool implements IModule {
     public static ItemInfinityTrident INFINITY_TRIDENT;
     public static ItemInfinityBackpack INFINITY_BACKPACK;
     public static ItemInfinityLauncher INFINITY_LAUNCHER;
+    public static final SoundEvent NUKE_CHARGING = new SoundEvent(new ResourceLocation(Reference.MOD_ID, "nuke_charging")).setRegistryName(new ResourceLocation(Reference.MOD_ID, "nuke_charging"));
 
     public static EntityType<InfinityTridentEntity> TRIDENT_ENTITY_TYPE;
     public static EntityType<InfinityLauncherProjectileEntity> INFINITY_LAUNCHER_PROJECTILE_ENTITY_TYPE;
+    public static final SoundEvent NUKE_EXPLOSION = new SoundEvent(new ResourceLocation(Reference.MOD_ID, "nuke_explosion")).setRegistryName(new ResourceLocation(Reference.MOD_ID, "nuke_explosion"));
+    public static final SoundEvent NUKE_ARMING = new SoundEvent(new ResourceLocation(Reference.MOD_ID, "nuke_arming")).setRegistryName(new ResourceLocation(Reference.MOD_ID, "nuke_arming"));
+    public static ItemInfinityNuke INFINITY_NUKE;
+    public static EntityType<InfinityNukeEntity> INFINITY_NUKE_ENTITY_TYPE;
 
     static {
         TRIDENT_ENTITY_TYPE = (EntityType<InfinityTridentEntity>) EntityType.Builder.<InfinityTridentEntity>create(InfinityTridentEntity::new, EntityClassification.MISC).size(0.5F, 0.5F)
@@ -72,8 +80,10 @@ public class ModuleTool implements IModule {
         INFINITY_LAUNCHER_PROJECTILE_ENTITY_TYPE = (EntityType<InfinityLauncherProjectileEntity>) EntityType.Builder.<InfinityLauncherProjectileEntity>create(InfinityLauncherProjectileEntity::new, EntityClassification.MISC).size(0.5F, 0.5F)
                 .setShouldReceiveVelocityUpdates(true)
                 .setCustomClientFactory((spawnEntity, world) -> new InfinityLauncherProjectileEntity(INFINITY_LAUNCHER_PROJECTILE_ENTITY_TYPE, world)).trackingRange(4).func_233608_b_(20).build("launcher_projectile_entity").setRegistryName(Reference.MOD_ID, "launcher_projectile_entity");
+        INFINITY_NUKE_ENTITY_TYPE = (EntityType<InfinityNukeEntity>) EntityType.Builder.<InfinityNukeEntity>create(InfinityNukeEntity::new, EntityClassification.MISC).size(0.5F, 1.5F)
+                .setShouldReceiveVelocityUpdates(true)
+                .setCustomClientFactory((spawnEntity, world) -> new InfinityNukeEntity(INFINITY_NUKE_ENTITY_TYPE, world)).immuneToFire().trackingRange(8).func_233608_b_(20).build("infinity_nuke").setRegistryName(Reference.MOD_ID, "infinity_nuke");
     }
-
 
     @Override
     public List<Feature.Builder> generateFeatures() {
@@ -95,6 +105,12 @@ public class ModuleTool implements IModule {
                 .content(Item.class, INFINITY_LAUNCHER = new ItemInfinityLauncher(TAB_TOOL))
                 .content(EntityType.class, (EntityType) INFINITY_LAUNCHER_PROJECTILE_ENTITY_TYPE)
         );
+        features.add(Feature.builder("infinity_nuke")
+                .content(Item.class, INFINITY_NUKE = new ItemInfinityNuke(TAB_TOOL))
+                .content(EntityType.class, (EntityType) INFINITY_NUKE_ENTITY_TYPE)
+                .content(SoundEvent.class, NUKE_CHARGING)
+                .content(SoundEvent.class, NUKE_EXPLOSION)
+        );
         TAB_TOOL.addIconStack(new ItemStack(INFINITY_DRILL));
         ItemStackHarnessRegistry.register(INFINITY_SAW, stack -> new ItemStackHarness(stack, null, (IButtonHandler) stack.getItem(), CapabilityEnergy.ENERGY, CapabilityFluidHandler.FLUID_HANDLER_ITEM_CAPABILITY, CapabilityItemStackHolder.ITEMSTACK_HOLDER_CAPABILITY));
         ItemStackHarnessRegistry.register(INFINITY_DRILL, stack -> new ItemStackHarness(stack, null, (IButtonHandler) stack.getItem(), CapabilityEnergy.ENERGY, CapabilityFluidHandler.FLUID_HANDLER_ITEM_CAPABILITY, CapabilityItemStackHolder.ITEMSTACK_HOLDER_CAPABILITY));
@@ -103,7 +119,7 @@ public class ModuleTool implements IModule {
         ItemStackHarnessRegistry.register(INFINITY_TRIDENT, stack -> new ItemStackHarness(stack, null, (IButtonHandler) stack.getItem(), CapabilityEnergy.ENERGY, CapabilityFluidHandler.FLUID_HANDLER_ITEM_CAPABILITY, CapabilityItemStackHolder.ITEMSTACK_HOLDER_CAPABILITY));
         ItemStackHarnessRegistry.register(INFINITY_BACKPACK, stack -> new ItemStackHarness(stack, null, (IButtonHandler) stack.getItem(), CapabilityEnergy.ENERGY, CapabilityFluidHandler.FLUID_HANDLER_ITEM_CAPABILITY, CapabilityItemStackHolder.ITEMSTACK_HOLDER_CAPABILITY));
         ItemStackHarnessRegistry.register(INFINITY_LAUNCHER, stack -> new ItemStackHarness(stack, null, (IButtonHandler) stack.getItem(), CapabilityEnergy.ENERGY, CapabilityFluidHandler.FLUID_HANDLER_ITEM_CAPABILITY, CapabilityItemStackHolder.ITEMSTACK_HOLDER_CAPABILITY));
-
+        ItemStackHarnessRegistry.register(INFINITY_NUKE, stack -> new ItemStackHarness(stack, null, (IButtonHandler) stack.getItem(), CapabilityEnergy.ENERGY, CapabilityFluidHandler.FLUID_HANDLER_ITEM_CAPABILITY, CapabilityItemStackHolder.ITEMSTACK_HOLDER_CAPABILITY));
         return features;
     }
 }

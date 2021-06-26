@@ -50,7 +50,6 @@ public class ShortPos {
         int xp = ((int) position.getX() - relativeTo.getX()) + 2048;
         int yp = (int) position.getY();
         int zp = ((int) position.getZ() - relativeTo.getZ()) + 2048;
-
         return (yp << 24) | (xp << 12) | zp;
     }
 
@@ -67,9 +66,7 @@ public class ShortPos {
         int zp = (intPos & 0xFFF) - 2048;
 
         int finalX = relativeTo.getX() + xp;
-        if (finalX < 0) finalX -= 1;
         int finalZ = relativeTo.getZ() + zp;
-        if (finalZ < 0) finalZ -= 1;
 
         return new BlockPos(finalX, yp, finalZ); //-1 so it gives a proper position
     }
