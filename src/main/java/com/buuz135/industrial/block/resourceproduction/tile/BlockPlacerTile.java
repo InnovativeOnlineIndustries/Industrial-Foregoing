@@ -26,6 +26,7 @@ import com.buuz135.industrial.block.tile.IndustrialAreaWorkingTile;
 import com.buuz135.industrial.block.tile.RangeManager;
 import com.buuz135.industrial.config.machine.resourceproduction.BlockPlacerConfig;
 import com.buuz135.industrial.module.ModuleResourceProduction;
+import com.buuz135.industrial.utils.BlockUtils;
 import com.buuz135.industrial.utils.IFFakePlayer;
 import com.hrznstudio.titanium.annotation.Save;
 import com.hrznstudio.titanium.component.energy.EnergyStorageComponent;
@@ -55,7 +56,7 @@ public class BlockPlacerTile extends IndustrialAreaWorkingTile<BlockPlacerTile> 
 
     @Override
     public WorkAction work() {
-        if (hasEnergy(getPowerPerOperation)) {
+        if (hasEnergy(getPowerPerOperation) && BlockUtils.canBlockBeBroken(this.world, this.pos)) {
             BlockPos pointed = getPointedBlockPos();
             if (isLoaded(pointed) && world.isAirBlock(pointed)) {
                 for (int i = 0; i < input.getSlots(); i++) {
