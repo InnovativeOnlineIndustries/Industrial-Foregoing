@@ -58,6 +58,7 @@ import net.minecraft.item.SpawnEggItem;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.SoundEvent;
 import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraftforge.client.event.ModelBakeEvent;
@@ -65,6 +66,7 @@ import net.minecraftforge.client.model.obj.OBJModel;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.util.Constants;
 import net.minecraftforge.common.util.NonNullLazy;
+import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.event.entity.player.ItemTooltipEvent;
 import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
@@ -85,6 +87,9 @@ public class ClientProxy extends CommonProxy {
     public static IBakedModel ears_baked;
     public static OBJModel ears_model;
 
+    public static final SoundEvent NUKE_EXPLOSION = new SoundEvent(new ResourceLocation(Reference.MOD_ID, "nuke_explosion")).setRegistryName(new ResourceLocation(Reference.MOD_ID, "nuke_explosion"));
+    public static final SoundEvent NUKE_ARMING = new SoundEvent(new ResourceLocation(Reference.MOD_ID, "nuke_arming")).setRegistryName(new ResourceLocation(Reference.MOD_ID, "nuke_arming"));
+
     public KeyBinding OPEN_BACKPACK;
 
     @Override
@@ -92,7 +97,7 @@ public class ClientProxy extends CommonProxy {
         OPEN_BACKPACK = new KeyBinding("key.industrialforegoing.backpack.desc", -1, "key.industrialforegoing.category");
         ClientRegistry.registerKeyBinding(OPEN_BACKPACK);
         EventManager.forge(TickEvent.ClientTickEvent.class).process(event -> {
-            if (OPEN_BACKPACK.isPressed()){
+            if (OPEN_BACKPACK.isPressed()) {
                 IndustrialForegoing.NETWORK.get().sendToServer(new BackpackOpenMessage(Screen.hasControlDown()));
             }
         }).subscribe();
@@ -103,6 +108,7 @@ public class ClientProxy extends CommonProxy {
         EventManager.mod(ModelBakeEvent.class).process(event -> {
             ears_baked = event.getModelRegistry().get(new ResourceLocation(Reference.MOD_ID, "block/catears"));
         }).subscribe();
+        EventManager.forgeGeneric(RegistryEvent.Register.class, SoundEvent.class).process(registryEvent -> ((RegistryEvent.Register) registryEvent).getRegistry().registerAll(NUKE_ARMING, NUKE_EXPLOSION)).subscribe();
 
         NonNullLazy<List<Block>> blocksToProcess = NonNullLazy.of(() ->
                 ForgeRegistries.BLOCKS.getValues()

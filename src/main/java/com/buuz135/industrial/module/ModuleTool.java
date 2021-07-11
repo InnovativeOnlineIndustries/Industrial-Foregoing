@@ -68,8 +68,7 @@ public class ModuleTool implements IModule {
 
     public static EntityType<InfinityTridentEntity> TRIDENT_ENTITY_TYPE;
     public static EntityType<InfinityLauncherProjectileEntity> INFINITY_LAUNCHER_PROJECTILE_ENTITY_TYPE;
-    public static final SoundEvent NUKE_EXPLOSION = new SoundEvent(new ResourceLocation(Reference.MOD_ID, "nuke_explosion")).setRegistryName(new ResourceLocation(Reference.MOD_ID, "nuke_explosion"));
-    public static final SoundEvent NUKE_ARMING = new SoundEvent(new ResourceLocation(Reference.MOD_ID, "nuke_arming")).setRegistryName(new ResourceLocation(Reference.MOD_ID, "nuke_arming"));
+
     public static ItemInfinityNuke INFINITY_NUKE;
     public static EntityType<InfinityNukeEntity> INFINITY_NUKE_ENTITY_TYPE;
 
@@ -108,8 +107,6 @@ public class ModuleTool implements IModule {
         features.add(Feature.builder("infinity_nuke")
                 .content(Item.class, INFINITY_NUKE = new ItemInfinityNuke(TAB_TOOL))
                 .content(EntityType.class, (EntityType) INFINITY_NUKE_ENTITY_TYPE)
-                .content(SoundEvent.class, NUKE_CHARGING)
-                .content(SoundEvent.class, NUKE_EXPLOSION)
         );
         TAB_TOOL.addIconStack(new ItemStack(INFINITY_DRILL));
         ItemStackHarnessRegistry.register(INFINITY_SAW, stack -> new ItemStackHarness(stack, null, (IButtonHandler) stack.getItem(), CapabilityEnergy.ENERGY, CapabilityFluidHandler.FLUID_HANDLER_ITEM_CAPABILITY, CapabilityItemStackHolder.ITEMSTACK_HOLDER_CAPABILITY));

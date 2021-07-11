@@ -7,6 +7,7 @@ import net.minecraft.block.Blocks;
 import net.minecraft.block.FallingBlock;
 import net.minecraft.block.material.Material;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.passive.CatEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.DamageSource;
@@ -330,6 +331,7 @@ public class ProcessExplosion {
         new Thread(() -> {
             List<Entity> list = world.getEntitiesWithinAABB(Entity.class, new AxisAlignedBB(pos, pos.add(1, 1, 1)).grow(radius * 2.5, radius * 2.5, radius * 2.5));
             for (Entity e : list) {
+                if (e instanceof CatEntity) continue;
                 float dmg = 10000F;
                 if (e instanceof PlayerEntity) {
                     for (int i = 0; i < 100; i++) {

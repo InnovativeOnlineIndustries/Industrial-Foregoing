@@ -2,6 +2,7 @@ package com.buuz135.industrial.entity;
 
 import com.buuz135.industrial.item.infinity.item.ItemInfinityNuke;
 import com.buuz135.industrial.module.ModuleTool;
+import com.buuz135.industrial.proxy.client.ClientProxy;
 import com.buuz135.industrial.proxy.client.sound.TickeableSound;
 import com.buuz135.industrial.utils.explosion.ExplosionTickHandler;
 import com.buuz135.industrial.utils.explosion.ProcessExplosion;
@@ -109,7 +110,7 @@ public class InfinityNukeEntity extends Entity {
         if (chargingSound != null) {
             chargingSound.increase();
             if (!Minecraft.getInstance().getSoundHandler().isPlaying(chargingSound) && explodingSound == null) {
-                explodingSound = new TickeableSound(this.world, this.getPosition(), ModuleTool.NUKE_EXPLOSION, this.getDataManager().get(RADIUS), 10);
+                explodingSound = new TickeableSound(this.world, this.getPosition(), ClientProxy.NUKE_EXPLOSION, this.getDataManager().get(RADIUS), 10);
                 explodingSound.setPitch(1);
                 Minecraft.getInstance().getSoundHandler().play(explodingSound);
             }
@@ -155,7 +156,7 @@ public class InfinityNukeEntity extends Entity {
     public ActionResultType processInitialInteract(PlayerEntity player, Hand hand) {
         if (this.isExploding()) return ActionResultType.SUCCESS;
         if (player.world.isRemote && hand == Hand.MAIN_HAND && player.getHeldItem(hand).isEmpty()) {
-            Minecraft.getInstance().getSoundHandler().play(new SimpleSound(ModuleTool.NUKE_ARMING, SoundCategory.BLOCKS, 1, 1, this.getPosition()));
+            arm();
         }
         if (!player.world.isRemote && hand == Hand.MAIN_HAND) {
             if (player.getHeldItem(hand).isEmpty()) {
@@ -177,6 +178,11 @@ public class InfinityNukeEntity extends Entity {
             }
         }
         return super.processInitialInteract(player, hand);
+    }
+
+    @OnlyIn(Dist.CLIENT)
+    private void arm() {
+        Minecraft.getInstance().getSoundHandler().play(new SimpleSound(ClientProxy.NUKE_ARMING, SoundCategory.BLOCKS, 1, 1, this.getPosition()));
     }
 
     @Override
