@@ -66,7 +66,7 @@ public class FluidPlacerTile extends IndustrialAreaWorkingTile<FluidPlacerTile> 
                     tank.drainForced(FluidAttributes.BUCKET_VOLUME, IFluidHandler.FluidAction.EXECUTE);
                     increasePointer();
                     return new WorkAction(1, getPowerPerOperation);
-                } else if (world.isAirBlock(getPointedBlockPos())) {
+                } else if (world.isAirBlock(getPointedBlockPos()) || !world.getFluidState(getPointedBlockPos()).isSource()) {
                     world.setBlockState(getPointedBlockPos(), tank.getFluid().getFluid().getDefaultState().getBlockState());
                     tank.drainForced(FluidAttributes.BUCKET_VOLUME, IFluidHandler.FluidAction.EXECUTE);
                     increasePointer();
