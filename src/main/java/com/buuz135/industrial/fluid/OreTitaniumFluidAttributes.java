@@ -73,7 +73,7 @@ public class OreTitaniumFluidAttributes extends FluidAttributes {
     }
 
     public static boolean isValid(ResourceLocation resourceLocation){
-        return TagCollectionManager.getManager().getItemTags().getRegisteredTags().contains(new ResourceLocation("forge:dusts/" + resourceLocation.toString().replace("forge:ores/" ,"")));
+        return TagCollectionManager.getManager().getItemTags().getRegisteredTags().contains(new ResourceLocation("forge:dusts/" + resourceLocation.toString().replace("forge:ores/", ""))) && !TagCollectionManager.getManager().getItemTags().get(resourceLocation).getAllElements().isEmpty();
     }
 
     public static ItemStack getOutputDust(FluidStack stack){
