@@ -240,11 +240,11 @@ public class ItemInfinity extends IFCustomItem implements INamedContainerProvide
     }
 
     public void consumeFuel(ItemStack stack) {
-        int i = EnchantmentHelper.getEnchantmentLevel(Enchantments.UNBREAKING, stack);
+        double i = EnchantmentHelper.getEnchantmentLevel(Enchantments.UNBREAKING, stack);
         if (getFuelFromStack(stack) >= biofuelConsumption * ( 1 / (i + 1))) {
-            stack.getTag().getCompound("Fluid").putInt("Amount", Math.max(0, stack.getTag().getCompound("Fluid").getInt("Amount") - biofuelConsumption * ( 1 / (i + 1))));
+            stack.getTag().getCompound("Fluid").putInt("Amount", (int) Math.max(0, stack.getTag().getCompound("Fluid").getInt("Amount") - biofuelConsumption * (1 / (i + 1))));
         } else {
-            stack.getTag().putLong("Energy", stack.getTag().getLong("Energy") - powerConsumption * ( 1 / (i + 1)));
+            stack.getTag().putLong("Energy", (long) (stack.getTag().getLong("Energy") - powerConsumption * (1 / (i + 1))));
         }
     }
 
