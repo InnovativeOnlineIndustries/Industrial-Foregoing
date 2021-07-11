@@ -35,6 +35,7 @@ import net.minecraft.item.DyeColor;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.util.Hand;
+import net.minecraft.util.math.BlockPos;
 import net.minecraftforge.common.util.FakePlayer;
 import net.minecraftforge.items.ItemHandlerHelper;
 
@@ -60,17 +61,18 @@ public class BlockBreakerTile extends IndustrialAreaWorkingTile<BlockBreakerTile
     @Override
     public WorkAction work() {
         if (hasEnergy(getPowerPerOperation)) {
-            if (isLoaded(getPointedBlockPos()) && !world.isAirBlock(getPointedBlockPos()) && BlockUtils.canBlockBeBroken(this.world, getPointedBlockPos())) {
-                FakePlayer fakePlayer = IndustrialForegoing.getFakePlayer(this.world, getPointedBlockPos());
+            BlockPos pointed = getPointedBlockPos();
+            if (isLoaded(pointed) && !world.isAirBlock(pointed) && BlockUtils.canBlockBeBroken(this.world, pointed)) {
+                FakePlayer fakePlayer = IndustrialForegoing.getFakePlayer(this.world, pointed);
                 fakePlayer.setHeldItem(Hand.MAIN_HAND, new ItemStack(Items.DIAMOND_PICKAXE));
-                if (this.world.getBlockState(this.getPointedBlockPos()).getBlockHardness(this.world, this.getPointedBlockPos()) >= 0 && this.world.getBlockState(getPointedBlockPos()).canHarvestBlock(this.world, getPointedBlockPos(), fakePlayer)) {
-                    for (ItemStack blockDrop : BlockUtils.getBlockDrops(this.world, getPointedBlockPos())) {
+                if (this.world.getBlockState(pointed).getBlockHardness(this.world, pointed) >= 0 && this.world.getBlockState(pointed).canHarvestBlock(this.world, pointed, fakePlayer)) {
+                    for (ItemStack blockDrop : BlockUtils.getBlockDrops(this.world, pointed)) {
                         ItemStack result = ItemHandlerHelper.insertItem(output, blockDrop, false);
                         if (!result.isEmpty()) {
-                            BlockUtils.spawnItemStack(result, this.world, getPointedBlockPos());
+                            BlockUtils.spawnItemStack(result, this.world, pointed);
                         }
                     }
-                    this.world.setBlockState(getPointedBlockPos(), Blocks.AIR.getDefaultState());
+                    this.world.setBlockState(pointed, Blocks.AIR.getDefaultState());
                     increasePointer();
                     return new WorkAction(1, getPowerPerOperation);
                 }
