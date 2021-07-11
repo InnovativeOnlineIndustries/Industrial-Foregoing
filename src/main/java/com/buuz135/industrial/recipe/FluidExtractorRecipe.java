@@ -38,8 +38,8 @@ import net.minecraft.world.World;
 import net.minecraftforge.fluids.FluidStack;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Stream;
 
 public class FluidExtractorRecipe extends SerializableRecipe {
 
@@ -62,6 +62,9 @@ public class FluidExtractorRecipe extends SerializableRecipe {
     public FluidStack output;
     public boolean defaultRecipe;
 
+    // see updateIngredient()
+    private transient Ingredient ingredient;
+
     public FluidExtractorRecipe(ResourceLocation resourceLocation) {
         super(resourceLocation);
     }
@@ -77,7 +80,7 @@ public class FluidExtractorRecipe extends SerializableRecipe {
     }
 
     public boolean matches(World world, BlockPos pos) {
-        return Ingredient.fromItemListStream(Arrays.asList(this.input).stream()).test(new ItemStack(world.getBlockState(pos).getBlock()));
+        return getOrCacheInput().test(new ItemStack(world.getBlockState(pos).getBlock()));
     }
 
     @Override
@@ -108,5 +111,20 @@ public class FluidExtractorRecipe extends SerializableRecipe {
     @Override
     public IRecipeType<?> getType() {
         return SERIALIZER.getRecipeType();
+    }
+
+    /**
+     * This is used to cache the ingredient used in {@link #matches(World, BlockPos)} in order to
+     * avoid creating the same Ingredient each work tick, which could cause a massive performance hit.
+     *
+     * Note that this is not an optimal solution, as ideally, the recipe itself would use {@link Ingredient} directly,
+     * however due to the way recipes are currently being created at static init, this would cause crashes with unbound
+     * tags during Ingredient construction (specifically during Forge's isSimple check)
+     */
+    private Ingredient getOrCacheInput() {
+        if(ingredient == null) {
+            ingredient = Ingredient.fromItemListStream(Stream.of(this.input));
+        }
+        return ingredient;
     }
 }
