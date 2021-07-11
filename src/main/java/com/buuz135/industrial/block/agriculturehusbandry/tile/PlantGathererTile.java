@@ -37,6 +37,7 @@ import com.hrznstudio.titanium.component.fluid.SidedFluidTankComponent;
 import com.hrznstudio.titanium.component.inventory.SidedInventoryComponent;
 import net.minecraft.item.DyeColor;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.math.BlockPos;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.capability.IFluidHandler;
 import net.minecraftforge.items.ItemHandlerHelper;
@@ -73,13 +74,14 @@ public class PlantGathererTile extends IndustrialAreaWorkingTile<PlantGathererTi
         if (hasEnergy(powerPerOperation)) {
             int amount = Math.max(1, BlockUtils.getBlockPosInAABB(getWorkingArea().getBoundingBox()).size() / 4);
             for (int i = 0; i < amount; i++) {
-                if (isLoaded(getPointedBlockPos()) && !ItemStackUtils.isInventoryFull(output)) {
-                    Optional<PlantRecollectable> optional = IFRegistries.PLANT_RECOLLECTABLES_REGISTRY.getValues().stream().filter(plantRecollectable -> plantRecollectable.canBeHarvested(this.world, getPointedBlockPos(), this.world.getBlockState(getPointedBlockPos()))).findFirst();
+                BlockPos pointed = getPointedBlockPos();
+                if (isLoaded(pointed) && !ItemStackUtils.isInventoryFull(output)) {
+                    Optional<PlantRecollectable> optional = IFRegistries.PLANT_RECOLLECTABLES_REGISTRY.getValues().stream().filter(plantRecollectable -> plantRecollectable.canBeHarvested(this.world, pointed, this.world.getBlockState(pointed))).findFirst();
                     if (optional.isPresent()) {
-                        List<ItemStack> drops = optional.get().doHarvestOperation(this.world, getPointedBlockPos(), this.world.getBlockState(getPointedBlockPos()));
+                        List<ItemStack> drops = optional.get().doHarvestOperation(this.world, pointed, this.world.getBlockState(pointed));
                         tank.fill(new FluidStack(ModuleCore.SLUDGE.getSourceFluid(), 10 * drops.size()), IFluidHandler.FluidAction.EXECUTE);
                         drops.forEach(stack -> ItemHandlerHelper.insertItem(output, stack, false));
-                        if (optional.get().shouldCheckNextPlant(this.world, getPointedBlockPos(), this.world.getBlockState(getPointedBlockPos()))) {
+                        if (optional.get().shouldCheckNextPlant(this.world, pointed, this.world.getBlockState(pointed))) {
                             increasePointer();
                         }
                         return new WorkAction(0.3f, powerPerOperation);
