@@ -103,10 +103,11 @@ public class TransporterItemType extends FilteredTransporterType<ItemStack, IIte
                     if (transporterType instanceof TransporterItemType && transporterType.getAction() == TransporterTypeFactory.TransporterAction.INSERT) {
                         TileUtil.getTileEntity(getWorld(), getPos().offset(this.getSide())).ifPresent(tileEntity -> tileEntity.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, getSide().getOpposite()).ifPresent(origin -> {
                             TileUtil.getTileEntity(getWorld(), getPos().offset(direction)).ifPresent(otherTile -> otherTile.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, direction.getOpposite()).ifPresent(destination -> {
-                                if (origin.getStackInSlot(extractSlot).isEmpty()
+                                if (extractSlot >= origin.getSlots() || origin.getStackInSlot(extractSlot).isEmpty()
                                         || !filter(this.getFilter(), this.isWhitelist(), origin.getStackInSlot(extractSlot), origin, false)
                                         || !filter(((TransporterItemType) transporterType).getFilter(), ((TransporterItemType) transporterType).isWhitelist(), origin.getStackInSlot(extractSlot), destination, ((TransporterItemType) transporterType).isRegulated()))
                                     findSlot(origin, ((TransporterItemType) transporterType).getFilter(), ((TransporterItemType) transporterType).isWhitelist(), destination, ((TransporterItemType) transporterType).isRegulated());
+                                if (extractSlot >= origin.getSlots()) return;
                                 if (!origin.getStackInSlot(extractSlot).isEmpty()) {
                                     int amount = (int) (1 * getEfficiency());
                                     ItemStack extracted = origin.extractItem(extractSlot, amount, true);
