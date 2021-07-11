@@ -37,4 +37,7 @@ public class StasisChamberConfig {
     @ConfigVal(comment = "Max Stored Power [FE] - Default: [10000 FE]")
     public static int maxStoredPower = 10000;
 
+    @ConfigVal(comment = "If true, the boss bar of an entity with the AI disable won't be rendered")
+    public static boolean disableBossBars = true;
+
 }

@@ -32,7 +32,9 @@ import mezz.jei.api.gui.ingredient.IGuiFluidStackGroup;
 import mezz.jei.api.helpers.IGuiHelper;
 import mezz.jei.api.ingredients.IIngredients;
 import mezz.jei.api.recipe.category.IRecipeCategory;
+import net.minecraft.client.Minecraft;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.text.TextFormatting;
 import net.minecraft.util.text.TranslationTextComponent;
 
 public class FermentationStationCategory implements IRecipeCategory<OreFluidEntryFermenter> {
@@ -65,7 +67,7 @@ public class FermentationStationCategory implements IRecipeCategory<OreFluidEntr
     @Override
     public IDrawable getBackground() {
         int offset = 45;
-        return helper.createDrawable(new ResourceLocation(Reference.MOD_ID, "textures/gui/jei.png"), 142 + offset, 29, 112 - offset,  50);
+        return helper.createDrawable(new ResourceLocation(Reference.MOD_ID, "textures/gui/jei.png"), 142 + offset, 29, 112 - offset, 60);
     }
 
     @Override
@@ -91,6 +93,6 @@ public class FermentationStationCategory implements IRecipeCategory<OreFluidEntr
 
     @Override
     public void draw(OreFluidEntryFermenter recipe, MatrixStack matrixStack, double mouseX, double mouseY) {
-
+        Minecraft.getInstance().fontRenderer.drawString(matrixStack, TextFormatting.DARK_AQUA + "Up to 500mb", 3, 52, 0xFFFFFF);
     }
 }

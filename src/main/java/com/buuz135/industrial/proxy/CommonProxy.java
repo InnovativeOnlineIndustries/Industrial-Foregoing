@@ -25,6 +25,7 @@ import com.buuz135.industrial.proxy.event.FakePlayerRideEntityHandler;
 import com.buuz135.industrial.proxy.event.MeatFeederTickHandler;
 import com.buuz135.industrial.proxy.event.MobDeathHandler;
 import com.buuz135.industrial.proxy.event.SkullHandler;
+import com.buuz135.industrial.utils.explosion.ExplosionTickHandler;
 import com.google.gson.JsonParser;
 import com.hrznstudio.titanium.event.handler.EventManager;
 import com.hrznstudio.titanium.util.URLUtil;
@@ -34,6 +35,7 @@ import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.event.entity.living.LivingEvent;
 
 import java.net.URL;
@@ -59,6 +61,7 @@ public class CommonProxy {
         MinecraftForge.EVENT_BUS.register(new SkullHandler());
 
         EventManager.forge(LivingEvent.LivingUpdateEvent.class).process(MeatFeederTickHandler::onTick).subscribe();
+        EventManager.forge(TickEvent.ServerTickEvent.class).process(ExplosionTickHandler::serverTick).subscribe();
 
         try {
             new JsonParser().parse(URLUtil.readUrl(new URL(CONTRIBUTORS_FILE))).getAsJsonObject().get("uuid").getAsJsonArray().forEach(jsonElement -> CONTRIBUTORS.add(jsonElement.getAsString()));

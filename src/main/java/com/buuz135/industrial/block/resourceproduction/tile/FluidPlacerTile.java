@@ -33,6 +33,7 @@ import com.hrznstudio.titanium.component.fluid.SidedFluidTankComponent;
 import net.minecraft.fluid.Fluids;
 import net.minecraft.item.DyeColor;
 import net.minecraft.state.properties.BlockStateProperties;
+import net.minecraft.util.math.BlockPos;
 import net.minecraftforge.fluids.FluidAttributes;
 import net.minecraftforge.fluids.capability.IFluidHandler;
 
@@ -60,14 +61,15 @@ public class FluidPlacerTile extends IndustrialAreaWorkingTile<FluidPlacerTile> 
     @Override
     public WorkAction work() {
         if (hasEnergy(getPowerPerOperation)) {
-            if (isLoaded(getPointedBlockPos()) && BlockUtils.canBlockBeBroken(this.world, getPointedBlockPos()) && !world.getFluidState(getPointedBlockPos()).isSource() && tank.getFluidAmount() >= FluidAttributes.BUCKET_VOLUME) {
-                if (tank.getFluid().getFluid().isEquivalentTo(Fluids.WATER) && world.getBlockState(getPointedBlockPos()).hasProperty(BlockStateProperties.WATERLOGGED) && !world.getBlockState(getPointedBlockPos()).get(BlockStateProperties.WATERLOGGED)) {
-                    world.setBlockState(getPointedBlockPos(), world.getBlockState(getPointedBlockPos()).with(BlockStateProperties.WATERLOGGED, true));
+            BlockPos pointed = getPointedBlockPos();
+            if (isLoaded(pointed) && BlockUtils.canBlockBeBroken(this.world, pointed) && !world.getFluidState(pointed).isSource() && tank.getFluidAmount() >= FluidAttributes.BUCKET_VOLUME) {
+                if (tank.getFluid().getFluid().isEquivalentTo(Fluids.WATER) && world.getBlockState(pointed).hasProperty(BlockStateProperties.WATERLOGGED) && !world.getBlockState(pointed).get(BlockStateProperties.WATERLOGGED)) {
+                    world.setBlockState(pointed, world.getBlockState(pointed).with(BlockStateProperties.WATERLOGGED, true));
                     tank.drainForced(FluidAttributes.BUCKET_VOLUME, IFluidHandler.FluidAction.EXECUTE);
                     increasePointer();
                     return new WorkAction(1, getPowerPerOperation);
-                } else if (world.isAirBlock(getPointedBlockPos())) {
-                    world.setBlockState(getPointedBlockPos(), tank.getFluid().getFluid().getDefaultState().getBlockState());
+                } else if (world.isAirBlock(pointed) || !world.getFluidState(pointed).isSource()) {
+                    world.setBlockState(pointed, tank.getFluid().getFluid().getDefaultState().getBlockState());
                     tank.drainForced(FluidAttributes.BUCKET_VOLUME, IFluidHandler.FluidAction.EXECUTE);
                     increasePointer();
                     return new WorkAction(1, getPowerPerOperation);

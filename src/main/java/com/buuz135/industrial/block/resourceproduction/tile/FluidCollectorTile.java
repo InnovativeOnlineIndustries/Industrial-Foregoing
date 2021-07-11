@@ -34,6 +34,7 @@ import net.minecraft.block.Blocks;
 import net.minecraft.fluid.Fluid;
 import net.minecraft.item.DyeColor;
 import net.minecraft.state.properties.BlockStateProperties;
+import net.minecraft.util.math.BlockPos;
 import net.minecraftforge.fluids.FluidAttributes;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.capability.IFluidHandler;
@@ -62,13 +63,14 @@ public class FluidCollectorTile extends IndustrialAreaWorkingTile<FluidCollector
     @Override
     public WorkAction work() {
         if (hasEnergy(getPowerPerOperation)) {
-            if (isLoaded(getPointedBlockPos()) && !world.isAirBlock(getPointedBlockPos()) && BlockUtils.canBlockBeBroken(this.world, getPointedBlockPos()) && world.getFluidState(getPointedBlockPos()).isSource()) {
-                Fluid fluid = world.getFluidState(getPointedBlockPos()).getFluid();
+            BlockPos pointed = getPointedBlockPos();
+            if (isLoaded(pointed) && !world.isAirBlock(pointed) && BlockUtils.canBlockBeBroken(this.world, pointed) && world.getFluidState(pointed).isSource()) {
+                Fluid fluid = world.getFluidState(pointed).getFluid();
                 if (tank.isEmpty() || (tank.getFluid().getFluid().isEquivalentTo(fluid) && tank.getFluidAmount() + FluidAttributes.BUCKET_VOLUME <= tank.getCapacity())) {
-                    if (world.getBlockState(getPointedBlockPos()).hasProperty(BlockStateProperties.WATERLOGGED)) { //has
-                        world.setBlockState(getPointedBlockPos(), world.getBlockState(getPointedBlockPos()).with(BlockStateProperties.WATERLOGGED, false));
+                    if (world.getBlockState(pointed).hasProperty(BlockStateProperties.WATERLOGGED)) { //has
+                        world.setBlockState(pointed, world.getBlockState(pointed).with(BlockStateProperties.WATERLOGGED, false));
                     } else {
-                        world.setBlockState(getPointedBlockPos(), Blocks.AIR.getDefaultState());
+                        world.setBlockState(pointed, Blocks.AIR.getDefaultState());
                     }
                     tank.fillForced(new FluidStack(fluid, FluidAttributes.BUCKET_VOLUME), IFluidHandler.FluidAction.EXECUTE);
                     increasePointer();

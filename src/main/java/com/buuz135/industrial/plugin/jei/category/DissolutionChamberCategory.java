@@ -43,6 +43,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.Ingredient;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.ITextComponent;
+import net.minecraftforge.fluids.FluidStack;
 import org.apache.commons.lang3.tuple.Pair;
 
 import java.awt.*;
@@ -98,7 +99,7 @@ public class DissolutionChamberCategory implements IRecipeCategory<DissolutionCh
         iIngredients.setInput(VanillaTypes.FLUID, dissolutionChamberRecipe.inputFluid);
         if (!dissolutionChamberRecipe.output.isEmpty())
             iIngredients.setOutput(VanillaTypes.ITEM, dissolutionChamberRecipe.output);
-        iIngredients.setOutput(VanillaTypes.FLUID, dissolutionChamberRecipe.outputFluid);
+        iIngredients.setOutput(VanillaTypes.FLUID, dissolutionChamberRecipe.outputFluid == null ? FluidStack.EMPTY : dissolutionChamberRecipe.outputFluid);
     }
 
     @Override

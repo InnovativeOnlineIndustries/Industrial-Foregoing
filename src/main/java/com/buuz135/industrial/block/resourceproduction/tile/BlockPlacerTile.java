@@ -26,12 +26,14 @@ import com.buuz135.industrial.block.tile.IndustrialAreaWorkingTile;
 import com.buuz135.industrial.block.tile.RangeManager;
 import com.buuz135.industrial.config.machine.resourceproduction.BlockPlacerConfig;
 import com.buuz135.industrial.module.ModuleResourceProduction;
+import com.buuz135.industrial.utils.BlockUtils;
 import com.buuz135.industrial.utils.IFFakePlayer;
 import com.hrznstudio.titanium.annotation.Save;
 import com.hrznstudio.titanium.component.energy.EnergyStorageComponent;
 import com.hrznstudio.titanium.component.inventory.SidedInventoryComponent;
 import net.minecraft.item.BlockItem;
 import net.minecraft.item.DyeColor;
+import net.minecraft.util.math.BlockPos;
 
 import javax.annotation.Nonnull;
 
@@ -54,12 +56,13 @@ public class BlockPlacerTile extends IndustrialAreaWorkingTile<BlockPlacerTile> 
 
     @Override
     public WorkAction work() {
-        if (hasEnergy(getPowerPerOperation)) {
-            if (isLoaded(getPointedBlockPos()) && world.isAirBlock(getPointedBlockPos())) {
+        if (hasEnergy(getPowerPerOperation) && BlockUtils.canBlockBeBroken(this.world, this.pos)) {
+            BlockPos pointed = getPointedBlockPos();
+            if (isLoaded(pointed) && world.isAirBlock(pointed)) {
                 for (int i = 0; i < input.getSlots(); i++) {
                     if (!input.getStackInSlot(i).isEmpty() && input.getStackInSlot(i).getItem() instanceof BlockItem) {
-                        IFFakePlayer fakePlayer = (IFFakePlayer) IndustrialForegoing.getFakePlayer(world, getPointedBlockPos());
-                        if (fakePlayer.placeBlock(this.world, getPointedBlockPos(), input.getStackInSlot(i))) {
+                        IFFakePlayer fakePlayer = (IFFakePlayer) IndustrialForegoing.getFakePlayer(world, pointed);
+                        if (fakePlayer.placeBlock(this.world, pointed, input.getStackInSlot(i))) {
                             increasePointer();
                             return new WorkAction(1, getPowerPerOperation);
                         }

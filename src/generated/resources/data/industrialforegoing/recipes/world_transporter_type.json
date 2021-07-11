@@ -1,0 +1,47 @@
+{
+  "type": "forge:conditional",
+  "recipes": [
+    {
+      "conditions": [
+        {
+          "values": [
+            {
+              "item": "industrialforegoing:world_transporter_type",
+              "type": "forge:item_exists"
+            }
+          ],
+          "type": "forge:and"
+        }
+      ],
+      "recipe": {
+        "type": "minecraft:crafting_shaped",
+        "pattern": [
+          "IPI",
+          "GMG",
+          "ICI"
+        ],
+        "key": {
+          "I": {
+            "tag": "forge:dusts/redstone"
+          },
+          "P": {
+            "item": "minecraft:ender_pearl"
+          },
+          "G": {
+            "item": "minecraft:hopper"
+          },
+          "M": {
+            "tag": "industrialforegoing:machine_frame/pity"
+          },
+          "C": {
+            "item": "minecraft:dropper"
+          }
+        },
+        "result": {
+          "item": "industrialforegoing:world_transporter_type",
+          "count": 2
+        }
+      }
+    }
+  ]
+}

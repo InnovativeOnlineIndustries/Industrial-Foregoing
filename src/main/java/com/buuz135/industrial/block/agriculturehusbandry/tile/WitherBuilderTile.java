@@ -6,6 +6,7 @@ import com.buuz135.industrial.block.tile.RangeManager;
 import com.buuz135.industrial.capability.tile.BigEnergyHandler;
 import com.buuz135.industrial.config.machine.agriculturehusbandry.WitherBuilderConfig;
 import com.buuz135.industrial.module.ModuleAgricultureHusbandry;
+import com.buuz135.industrial.utils.BlockUtils;
 import com.buuz135.industrial.utils.IFFakePlayer;
 import com.hrznstudio.titanium.annotation.Save;
 import com.hrznstudio.titanium.component.energy.EnergyStorageComponent;
@@ -59,7 +60,8 @@ public class WitherBuilderTile extends IndustrialAreaWorkingTile<WitherBuilderTi
 
 	@Override
 	public WorkAction work() {
-		if (!hasEnergy(WitherBuilderConfig.powerPerOperation)) return new WorkAction(1, 0);
+		if (!hasEnergy(WitherBuilderConfig.powerPerOperation) || BlockUtils.canBlockBeBroken(this.world, this.pos))
+			return new WorkAction(1, 0);
 		BlockPos pos = this.pos.add(0, 2, 0);
 		float power = 0;
 		if (this.world.getBlockState(pos).getBlock().equals(Blocks.AIR) && !getDefaultOrFind(0, bottom, new ItemStack(Blocks.SOUL_SAND)).isEmpty()) {
@@ -105,7 +107,6 @@ public class WitherBuilderTile extends IndustrialAreaWorkingTile<WitherBuilderTi
 						temp = pos.add(i - 1, 2, 0);
 					}
 					if (this.world.getBlockState(temp).getBlock().equals(Blocks.AIR) && !getDefaultOrFind(i, top, new ItemStack(Items.WITHER_SKELETON_SKULL)).isEmpty() && this.world.getBlockState(temp.add(0, -1, 0)).getBlock().equals(Blocks.SOUL_SAND)) {
-
 						IFFakePlayer fakePlayer = (IFFakePlayer) IndustrialForegoing.getFakePlayer(world, temp);
 						ItemStack stack = getDefaultOrFind(i, top, new ItemStack(Items.WITHER_SKELETON_SKULL));
 						if (fakePlayer.placeBlock(this.world, temp, stack)) {

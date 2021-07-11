@@ -36,7 +36,7 @@ import net.minecraft.util.math.vector.Vector3f;
 
 public class InfinityTridentRenderer extends EntityRenderer<InfinityTridentEntity> {
 
-    public static final ResourceLocation TRIDENT = new ResourceLocation("textures/entity/trident.png");
+    public static final ResourceLocation TRIDENT = new ResourceLocation(Reference.MOD_ID, "textures/items/infinity_trident.png");
     private final InfinityTridentModel tridentModel = new InfinityTridentModel();
 
     public InfinityTridentRenderer(EntityRendererManager renderManagerIn) {
@@ -57,6 +57,6 @@ public class InfinityTridentRenderer extends EntityRenderer<InfinityTridentEntit
 
     @Override
     public ResourceLocation getEntityTexture(InfinityTridentEntity entity) {
-        return new ResourceLocation(Reference.MOD_ID, "textures/items/infinity_trident.png");
+        return TRIDENT;
     }
 }

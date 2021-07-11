@@ -1,0 +1,26 @@
+{
+  "nuke_explosion": {
+    "category": "block",
+    "sounds": [
+      "industrialforegoing:nuke_explosion"
+    ],
+    "subtitle": "industrialforegoing.subtitle.nuke_explosion",
+    "stream": true
+  },
+  "nuke_charging": {
+    "category": "block",
+    "sounds": [
+      "industrialforegoing:nuke_charging"
+    ],
+    "subtitle": "industrialforegoing.subtitle.nuke_charging",
+    "stream": true
+  },
+  "nuke_arming": {
+    "category": "block",
+    "sounds": [
+      "industrialforegoing:nuke_arming"
+    ],
+    "subtitle": "industrialforegoing.subtitle.nuke_arming",
+    "stream": true
+  }
+}

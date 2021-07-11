@@ -109,7 +109,7 @@ public class ItemInfinity extends IFCustomItem implements INamedContainerProvide
         this.usesArea = false;
     }
 
-    public static String getFormattedArea(InfinityTier tier, int radius, boolean usesDepth) {
+    public String getFormattedArea(ItemStack stack, InfinityTier tier, int radius, boolean usesDepth) {
         int diameter = radius * 2 + 1;
         return diameter + "x" + diameter + "x" + (tier == InfinityTier.ARTIFACT || usesDepth ? diameter : 1);
     }
@@ -261,12 +261,14 @@ public class ItemInfinity extends IFCustomItem implements INamedContainerProvide
         long power = getPowerFromStack(stack);
         Pair<InfinityTier, InfinityTier> braquet = InfinityTier.getTierBraquet(power);
         InfinityTier current = getSelectedTier(stack);
-        if (usesArea) tooltip.add(new TranslationTextComponent("text.industrialforegoing.display.current_area").appendString(" ").appendString(getFormattedArea(current, current.getRadius(), this.usesDepth)).mergeStyle(TextFormatting.GRAY));
+        if (usesArea)
+            tooltip.add(new TranslationTextComponent("text.industrialforegoing.display.current_area").appendString(" ").appendString(getFormattedArea(stack, current, current.getRadius(), this.usesDepth)).mergeStyle(TextFormatting.GRAY));
         tooltip.add(new TranslationTextComponent("text.industrialforegoing.display.tier").appendString(" " + braquet.getLeft().getColor() + braquet.getLeft().getLocalizedName()).mergeStyle(TextFormatting.GRAY));
         tooltip.add(new TranslationTextComponent("text.industrialforegoing.display.power").appendString(" ").appendString(TextFormatting.RED + NumberFormat.getNumberInstance(Locale.ROOT).format(power) + TextFormatting.GREEN).appendString("/").appendString(NumberFormat.getNumberInstance(Locale.ROOT).format(braquet.getRight().getPowerNeeded())).appendString("RF ").append(new TranslationTextComponent("text.industrialforegoing.display.next_tier")).mergeStyle(TextFormatting.GRAY));
         int fuelAmount = getFuelFromStack(stack);
         tooltip.add(new TranslationTextComponent("text.industrialforegoing.display.fluid").appendString(" ").appendString(TextFormatting.LIGHT_PURPLE + NumberFormat.getNumberInstance(Locale.ROOT).format(fuelAmount) + TextFormatting.GRAY).appendString("/").appendString(NumberFormat.getNumberInstance(Locale.ROOT).format(1000000)).appendString(" mb of Biofuel").mergeStyle(TextFormatting.GRAY));
-        if (usesArea) tooltip.add(new TranslationTextComponent("text.industrialforegoing.display.max_area").appendString(" ").appendString(getFormattedArea(braquet.getLeft(), braquet.getLeft().getRadius(), this.usesDepth)).mergeStyle(TextFormatting.GRAY));
+        if (usesArea)
+            tooltip.add(new TranslationTextComponent("text.industrialforegoing.display.max_area").appendString(" ").appendString(getFormattedArea(stack, braquet.getLeft(), braquet.getLeft().getRadius(), this.usesDepth)).mergeStyle(TextFormatting.GRAY));
         if (canCharge(stack)) {
             tooltip.add(new TranslationTextComponent("text.industrialforegoing.display.charging").mergeStyle(TextFormatting.GRAY).append(new TranslationTextComponent("text.industrialforegoing.display.enabled").mergeStyle(TextFormatting.GREEN)));
         } else {
@@ -379,7 +381,7 @@ public class ItemInfinity extends IFCustomItem implements INamedContainerProvide
             @Override
             public String getText() {
                 InfinityTier current = ItemInfinity.getSelectedTier(stack.get());
-                return TextFormatting.DARK_GRAY + "Area: " + ItemInfinity.getFormattedArea(current, current.getRadius(), usesDepth);
+                return TextFormatting.DARK_GRAY + "Area: " + getFormattedArea(stack.get(), current, current.getRadius(), usesDepth);
             }
         });
         factory.add(() -> new StateButtonAddon(new ButtonComponent(54, 36, 14, 14).setId(3), new StateButtonInfo(0, AssetTypes.BUTTON_SIDENESS_ENABLED), new StateButtonInfo(1, AssetTypes.BUTTON_SIDENESS_DISABLED)) {

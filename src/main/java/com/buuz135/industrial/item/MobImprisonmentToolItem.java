@@ -59,31 +59,40 @@ public class MobImprisonmentToolItem extends IFCustomItem {
         Direction facing = context.getFace();
         World worldIn = context.getWorld();
         ItemStack stack = context.getItem();
-        if (player.getEntityWorld().isRemote) return ActionResultType.FAIL;
-        if (!containsEntity(stack)) return ActionResultType.FAIL;
-        Entity entity = getEntityFromStack(stack, worldIn, true);
-        BlockPos blockPos = pos.offset(facing);
-        entity.setPositionAndRotation(blockPos.getX() + 0.5, blockPos.getY(), blockPos.getZ() + 0.5, 0, 0);
-        stack.setTag(new CompoundNBT());
-        worldIn.addEntity(entity);
-        //if (entity instanceof LivingEntity) ((LivingEntity) entity).play;
+        if (!release(player, pos, facing, worldIn, stack)) return ActionResultType.FAIL;
         return ActionResultType.SUCCESS;
     }
 
     @Override
     public ActionResultType itemInteractionForEntity(ItemStack stack, PlayerEntity playerIn, LivingEntity target, Hand hand) {
-        if (target.getEntityWorld().isRemote) return ActionResultType.FAIL;
-        if (target instanceof PlayerEntity || !target.isNonBoss() || !target.isAlive()) return ActionResultType.FAIL;
-        if (containsEntity(stack)) return ActionResultType.FAIL;
-        if (isBlacklisted(target.getType())) return ActionResultType.FAIL;
+        if (!capture(stack, target)) return ActionResultType.FAIL;
+        playerIn.swingArm(hand);
+        playerIn.setHeldItem(hand, stack);
+        return ActionResultType.SUCCESS;
+    }
+
+    public boolean capture(ItemStack stack, LivingEntity target) {
+        if (target.getEntityWorld().isRemote) return false;
+        if (target instanceof PlayerEntity || !target.isNonBoss() || !target.isAlive()) return false;
+        if (containsEntity(stack)) return false;
+        if (isBlacklisted(target.getType())) return false;
         CompoundNBT nbt = new CompoundNBT();
         nbt.putString("entity", EntityType.getKey(target.getType()).toString());
         target.writeWithoutTypeId(nbt);
         stack.setTag(nbt);
-        playerIn.swingArm(hand);
-        playerIn.setHeldItem(hand, stack);
         target.remove(true);
-        return ActionResultType.SUCCESS;
+        return true;
+    }
+
+    public boolean release(PlayerEntity player, BlockPos pos, Direction facing, World worldIn, ItemStack stack) {
+        if (player.getEntityWorld().isRemote) return false;
+        if (!containsEntity(stack)) return false;
+        Entity entity = getEntityFromStack(stack, worldIn, true);
+        BlockPos blockPos = pos.offset(facing);
+        entity.setPositionAndRotation(blockPos.getX() + 0.5, blockPos.getY(), blockPos.getZ() + 0.5, 0, 0);
+        stack.setTag(new CompoundNBT());
+        worldIn.addEntity(entity);
+        return true;
     }
 
     public boolean isBlacklisted(EntityType<?> entity) {

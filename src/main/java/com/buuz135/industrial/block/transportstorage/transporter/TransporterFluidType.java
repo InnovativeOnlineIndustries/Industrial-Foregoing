@@ -107,7 +107,7 @@ public class TransporterFluidType extends FilteredTransporterType<FluidStack, IF
                                 if (filter(this.getFilter(), isWhitelist(), simulatedStack, origin, false) && filteredAmount > 0 && filter(((TransporterFluidType) transporterType).getFilter(), ((TransporterFluidType) transporterType).isWhitelist(), simulatedStack, destination, ((TransporterFluidType) transporterType).isRegulated())) {
                                     int simulatedInserted = destination.fill(simulatedStack, IFluidHandler.FluidAction.SIMULATE);
                                     if (simulatedInserted > 0) {
-                                        destination.fill(origin.drain(filteredAmount, IFluidHandler.FluidAction.EXECUTE), IFluidHandler.FluidAction.EXECUTE);
+                                        destination.fill(origin.drain(simulatedInserted, IFluidHandler.FluidAction.EXECUTE), IFluidHandler.FluidAction.EXECUTE);
                                         ((TransporterFluidType) transporterType).addTransferedStack(getSide(), simulatedStack);
                                     }
                                 }

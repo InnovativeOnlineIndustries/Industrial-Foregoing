@@ -27,6 +27,7 @@ import com.buuz135.industrial.block.transportstorage.*;
 import com.buuz135.industrial.block.transportstorage.conveyor.*;
 import com.buuz135.industrial.block.transportstorage.transporter.TransporterFluidType;
 import com.buuz135.industrial.block.transportstorage.transporter.TransporterItemType;
+import com.buuz135.industrial.block.transportstorage.transporter.TransporterWorldType;
 import com.buuz135.industrial.gui.conveyor.ContainerConveyor;
 import com.buuz135.industrial.gui.conveyor.GuiConveyor;
 import com.buuz135.industrial.gui.transporter.ContainerTransporter;
@@ -96,6 +97,7 @@ public class ModuleTransportStorage implements IModule {
 
     public static TransporterTypeFactory ITEM_TRANSPORTER = new TransporterItemType.Factory();
     public static TransporterTypeFactory FLUID_TRANSPORTER = new TransporterFluidType.Factory();
+    public static TransporterTypeFactory WORLD_TRANSPORTER = new TransporterWorldType.Factory();
 
     public static TransporterBlock TRANSPORTER = new TransporterBlock(TAB_TRANSPORT);
     public static HashMap<ResourceLocation, IBakedModel> TRANSPORTER_CACHE = new HashMap<>();
