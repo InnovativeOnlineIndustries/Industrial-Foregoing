@@ -121,11 +121,6 @@ repositories {
         url "https://maven.tterrag.com/"
     }
     maven {
-        // location of a maven mirror for JEI files, as a fallback
-        name = "ModMaven"
-        url = "https://modmaven.k-4u.nl"
-    }
-    maven {
         url 'https://cdn.hrzn.studio/maven/'
     }
     maven {
@@ -139,6 +134,15 @@ repositories {
         url = "https://www.cursemaven.com"
     }
     maven { url "https://maven.theillusivec4.top/" }
+    maven { url "https://maven.saps.dev/minecraft/"}
+    maven {
+        // location of a maven mirror for JEI files, as a fallback
+        name = "ModMaven"
+        url = "https://modmaven.dev"
+    }
+    maven {
+        url "https://maven.architectury.dev/"
+    }
 }
 
 dependencies {
@@ -161,6 +165,11 @@ dependencies {
     compileOnly fg.deobf("curse.maven:farmers-delight-398521:3091999")
     compileOnly fg.deobf("top.theillusivec4.curios:curios-forge:1.16.5-4.0.5.2:api")
     runtimeOnly fg.deobf("top.theillusivec4.curios:curios-forge:1.16.5-4.0.5.2")
+    compile fg.deobf("dev.ftb.mods:ftb-chunks-forge:1605.3.1-build.25")
+    compile fg.deobf("me.shedaniel:architectury-forge:1.19.27")
+    compile fg.deobf("dev.ftb.mods:ftb-library-forge:1605.3.1-build.48")
+    compile fg.deobf("dev.ftb.mods:ftb-teams-forge:1605.2.1-build.17")
+    compile fg.deobf("dev.ftb.mods:ftb-ranks-forge:1605.1.4-build.6")
 }
 
 afterEvaluate {

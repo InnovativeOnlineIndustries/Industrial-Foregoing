@@ -51,8 +51,11 @@ import org.lwjgl.opengl.GL11;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.function.BiPredicate;
 
 public class BlockUtils {
+
+    public static BiPredicate<World, BlockPos> CLAIMED_CHUNK_CHECKER = (world, pos) -> true;
 
     public static List<BlockPos> getBlockPosInAABB(AxisAlignedBB axisAlignedBB) {
         List<BlockPos> blocks = new ArrayList<>();
@@ -99,6 +102,10 @@ public class BlockUtils {
         BlockEvent.BreakEvent event = new BlockEvent.BreakEvent(world, pos, world.getBlockState(pos), IndustrialForegoing.getFakePlayer(world));
         MinecraftForge.EVENT_BUS.post(event);
         return !event.isCanceled();
+    }
+
+    public static boolean canBlockBeBrokenPlugin(World world, BlockPos pos) {
+        return CLAIMED_CHUNK_CHECKER.test(world, pos);
     }
 
     public static List<ItemStack> getBlockDrops(World world, BlockPos pos) {
