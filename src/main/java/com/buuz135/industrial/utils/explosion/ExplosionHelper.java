@@ -135,7 +135,7 @@ public class ExplosionHelper {
                 HashSet<Integer> set = helper.toRemove.removeFirst();
                 for (int pos : set) {
                     BlockPos blockPos = helper.shortPos.getActualPos(pos);
-                    if (BlockUtils.canBlockBeBroken(helper.serverWorld, blockPos)) {
+                    if (BlockUtils.canBlockBeBrokenPlugin(helper.serverWorld, blockPos)) {
                         chunks.add(helper.removeBlock(helper.shortPos.getActualPos(pos)));
                     }
 
