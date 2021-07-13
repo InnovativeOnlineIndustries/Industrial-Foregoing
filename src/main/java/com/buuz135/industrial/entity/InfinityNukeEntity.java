@@ -82,7 +82,7 @@ public class InfinityNukeEntity extends Entity {
 
         if (exploding) {
             if (world instanceof ServerWorld && explosionHelper == null) {
-                explosionHelper = new ProcessExplosion(this.getPosition(), ItemInfinityNuke.getRadius(original), (ServerWorld) this.world, 39, placedBy.getDisplayName().getString());
+                explosionHelper = new ProcessExplosion(this.getPosition(), ItemInfinityNuke.getRadius(original), (ServerWorld) this.world, 39, placedBy != null ? placedBy.getDisplayName().getString() : "");
                 ExplosionTickHandler.processExplosionList.add(explosionHelper);
             }
             setTicksExploding(this.getTicksExploding() + 1);

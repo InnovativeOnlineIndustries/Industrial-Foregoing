@@ -1,5 +1,6 @@
 package com.buuz135.industrial.item.infinity.item;
 
+import com.buuz135.industrial.IndustrialForegoing;
 import com.buuz135.industrial.entity.InfinityNukeEntity;
 import com.buuz135.industrial.item.infinity.InfinityTier;
 import com.buuz135.industrial.item.infinity.ItemInfinity;
@@ -40,6 +41,7 @@ public class ItemInfinityNuke extends ItemInfinity {
         entity.setPositionAndRotation(blockPos.getX() + 0.5, blockPos.getY(), blockPos.getZ() + 0.5, 0, 0);
         context.getPlayer().setHeldItem(context.getHand(), ItemStack.EMPTY);
         context.getWorld().addEntity(entity);
+        IndustrialForegoing.LOGGER.info(context.getPlayer().getUniqueID() + " (" + context.getPlayer().getDisplayName().toString() + ") placed an Infinity Nuke");
         return ActionResultType.SUCCESS;
     }
 
