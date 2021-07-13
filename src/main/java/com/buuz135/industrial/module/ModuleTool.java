@@ -81,7 +81,7 @@ public class ModuleTool implements IModule {
                 .setCustomClientFactory((spawnEntity, world) -> new InfinityLauncherProjectileEntity(INFINITY_LAUNCHER_PROJECTILE_ENTITY_TYPE, world)).trackingRange(4).func_233608_b_(20).build("launcher_projectile_entity").setRegistryName(Reference.MOD_ID, "launcher_projectile_entity");
         INFINITY_NUKE_ENTITY_TYPE = (EntityType<InfinityNukeEntity>) EntityType.Builder.<InfinityNukeEntity>create(InfinityNukeEntity::new, EntityClassification.MISC).size(0.5F, 1.5F)
                 .setShouldReceiveVelocityUpdates(true)
-                .setCustomClientFactory((spawnEntity, world) -> new InfinityNukeEntity(INFINITY_NUKE_ENTITY_TYPE, world)).immuneToFire().trackingRange(8).func_233608_b_(20).build("infinity_nuke").setRegistryName(Reference.MOD_ID, "infinity_nuke");
+                .setCustomClientFactory((spawnEntity, world) -> new InfinityNukeEntity(INFINITY_NUKE_ENTITY_TYPE, world)).immuneToFire().trackingRange(8).func_233608_b_(20).disableSummoning().build("infinity_nuke").setRegistryName(Reference.MOD_ID, "infinity_nuke");
     }
 
     @Override

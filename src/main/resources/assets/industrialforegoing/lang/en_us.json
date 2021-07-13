@@ -557,5 +557,6 @@
   "item.industrialforegoing.speed": "Speed ",
   "industrialforegoing.subtitle.nuke_arming": "Infinity Nuke being armed",
   "industrialforegoing.subtitle.nuke_charging": "Infinity Nuke is charging",
-  "industrialforegoing.subtitle.nuke_explosion": "Embrace Infinity Nuke's death and destruction"
+  "industrialforegoing.subtitle.nuke_explosion": "Embrace Infinity Nuke's death and destruction",
+  "entity.industrialforegoing.infinity_nuke": "Infinity Nuke"
 }
