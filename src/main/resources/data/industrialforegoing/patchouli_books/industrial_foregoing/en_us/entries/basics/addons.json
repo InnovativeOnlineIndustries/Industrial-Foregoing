@@ -22,6 +22,12 @@
       "item": "industrialforegoing:efficiency_addon_2",
       "title": "Efficiency",
       "text": "Decreases the amount of ticks need to complete an operation. $(br2)Tier 1 -> -10%$(br)Tier 2 -> -20%"
+    },
+    {
+      "type": "spotlight",
+      "item": "industrialforegoing:processing_addon_2",
+      "title": "Processing",
+      "text": "Increased the amount of operations done when a machine finishes processing. $(br2)Tier 1 -> +1 Operation $(br)Tier 2 -> +2 Operations"
     }
   ]
 }

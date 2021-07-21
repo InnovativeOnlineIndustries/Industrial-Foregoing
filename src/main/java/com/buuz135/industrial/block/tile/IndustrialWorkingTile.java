@@ -21,6 +21,7 @@
  */
 package com.buuz135.industrial.block.tile;
 
+import com.buuz135.industrial.item.addon.ProcessingAddonItem;
 import com.buuz135.industrial.proxy.client.IndustrialAssetProvider;
 import com.hrznstudio.titanium.annotation.Save;
 import com.hrznstudio.titanium.api.IFactory;
@@ -33,6 +34,7 @@ import com.hrznstudio.titanium.component.progress.ProgressBarComponent;
 import com.hrznstudio.titanium.item.AugmentWrapper;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.DyeColor;
+import net.minecraft.item.ItemStack;
 import net.minecraft.util.ActionResultType;
 import net.minecraft.util.Direction;
 import net.minecraft.util.Hand;
@@ -76,10 +78,15 @@ public abstract class IndustrialWorkingTile<T extends IndustrialWorkingTile<T>> 
                 .setOnFinishWork(() -> {
                     if (isServer()) {
                         WorkAction work = work();
+                        this.getEnergyStorage().extractEnergy(work.getEnergyConsumed(), false);
+                        int operations = (int) (this.hasAugmentInstalled(ProcessingAddonItem.PROCESSING) ? AugmentWrapper.getType(this.getInstalledAugments(ProcessingAddonItem.PROCESSING).get(0), ProcessingAddonItem.PROCESSING) - 1 : 0);
+                        for (int i = 0; i < operations; i++) {
+                            work = work();
+                            this.getEnergyStorage().extractEnergy(work.getEnergyConsumed(), false);
+                        }
                         int maxProgress = (int) Math.floor(getMaxProgress() * (this.hasAugmentInstalled(AugmentTypes.EFFICIENCY) ? AugmentWrapper.getType(this.getInstalledAugments(AugmentTypes.EFFICIENCY).get(0), AugmentTypes.EFFICIENCY) : 1));
                         workingBar.setMaxProgress(maxProgress);
                         workingBar.setProgress((int) (maxProgress * work.getWorkAmount()));
-                        this.getEnergyStorage().extractEnergy(work.getEnergyConsumed(), false);
                         this.getRedstoneManager().finish();
                     }
                 })
@@ -112,6 +119,13 @@ public abstract class IndustrialWorkingTile<T extends IndustrialWorkingTile<T>> 
     @Override
     public IAssetProvider getAssetProvider() {
         return IndustrialAssetProvider.INSTANCE;
+    }
+
+    @Override
+    public boolean canAcceptAugment(ItemStack augment) {
+        if (AugmentWrapper.hasType(augment, ProcessingAddonItem.PROCESSING))
+            return !hasAugmentInstalled(ProcessingAddonItem.PROCESSING);
+        return super.canAcceptAugment(augment);
     }
 
     public class WorkAction {

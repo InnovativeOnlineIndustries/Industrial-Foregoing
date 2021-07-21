@@ -555,6 +555,7 @@
   "item.industrialforegoing.addon": "Addon: ",
   "item.industrialforegoing.efficiency": "Efficiency ",
   "item.industrialforegoing.speed": "Speed ",
+  "item.industrialforegoing.processing": "Processing ",
   "industrialforegoing.subtitle.nuke_arming": "Infinity Nuke being armed",
   "industrialforegoing.subtitle.nuke_charging": "Infinity Nuke is charging",
   "industrialforegoing.subtitle.nuke_explosion": "Embrace Infinity Nuke's death and destruction",

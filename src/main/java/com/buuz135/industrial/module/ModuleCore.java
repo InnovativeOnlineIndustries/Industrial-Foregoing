@@ -31,6 +31,7 @@ import com.buuz135.industrial.block.core.tile.FluidExtractorTile;
 import com.buuz135.industrial.fluid.OreFluidInstance;
 import com.buuz135.industrial.item.*;
 import com.buuz135.industrial.item.addon.EfficiencyAddonItem;
+import com.buuz135.industrial.item.addon.ProcessingAddonItem;
 import com.buuz135.industrial.item.addon.RangeAddonItem;
 import com.buuz135.industrial.item.addon.SpeedAddonItem;
 import com.buuz135.industrial.proxy.StrawRegistry;
@@ -85,6 +86,8 @@ public class ModuleCore implements IModule {
     public static SpeedAddonItem SPEED_ADDON_2 = new SpeedAddonItem(2, TAB_CORE);
     public static EfficiencyAddonItem EFFICIENCY_ADDON_1 = new EfficiencyAddonItem(1, TAB_CORE);
     public static EfficiencyAddonItem EFFICIENCY_ADDON_2 = new EfficiencyAddonItem(2, TAB_CORE);
+    public static ProcessingAddonItem PROCESSING_ADDON_1 = new ProcessingAddonItem(1, TAB_CORE);
+    public static ProcessingAddonItem PROCESSING_ADDON_2 = new ProcessingAddonItem(2, TAB_CORE);
     public static DarkGlassBlock DARK_GLASS = new DarkGlassBlock();
 
     public static TitaniumFluidInstance LATEX = new TitaniumFluidInstance(Reference.MOD_ID, "latex", FluidAttributes.builder(new ResourceLocation(Reference.MOD_ID, "blocks/fluids/latex_still"), new ResourceLocation(Reference.MOD_ID, "blocks/fluids/latex_flow")), true, TAB_CORE);
@@ -146,6 +149,7 @@ public class ModuleCore implements IModule {
         features.add(builder);
         features.add(Feature.builder("speed_addons").content(Item.class, SPEED_ADDON_1).content(Item.class, SPEED_ADDON_2));
         features.add(Feature.builder("efficiency_addons").content(Item.class, EFFICIENCY_ADDON_1).content(Item.class, EFFICIENCY_ADDON_2));
+        features.add(Feature.builder("processing_addons").content(Item.class, PROCESSING_ADDON_1).content(Item.class, PROCESSING_ADDON_2));
         features.add(Feature.builder("meat").content(TitaniumFluidInstance.class, MEAT));
         features.add(Feature.builder("sewage").content(TitaniumFluidInstance.class, SEWAGE));
         features.add(Feature.builder("essence").content(TitaniumFluidInstance.class, ESSENCE));
