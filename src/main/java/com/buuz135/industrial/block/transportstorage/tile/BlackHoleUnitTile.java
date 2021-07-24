@@ -319,7 +319,12 @@ public class BlackHoleUnitTile extends BHTile<BlackHoleUnitTile> {
         public boolean isItemValid(int slot, @Nonnull ItemStack stack) {
             if (slot == 0){
                 ItemStack fl = blStack;
-                if (!filter.getFilterSlots()[slot].getFilter().isEmpty()) fl = filter.getFilterSlots()[slot].getFilter();
+                if (!filter.getFilterSlots()[slot].getFilter().isEmpty()) {
+                    ItemStack filterStack = filter.getFilterSlots()[slot].getFilter();
+                    if (filterStack.isItemEqual(fl) && ItemStack.areItemStackTagsEqual(filterStack, fl)) {
+                        fl = filter.getFilterSlots()[slot].getFilter();
+                    }
+                }
                 return fl.isEmpty() || (fl.isItemEqual(stack) && ItemStack.areItemStackTagsEqual(fl, stack));
             }
             return false;
