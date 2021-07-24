@@ -88,9 +88,7 @@ public class EnchantmentApplicatorTile extends IndustrialProcessingTile<Enchantm
         long amount = this.tank.getFluidAmount();
         TileEntity tileEntity = this.world.getTileEntity(this.pos.up());
         if (tileEntity != null && tileEntity.getCapability(CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY).isPresent()){
-            if (tileEntity.getCapability(CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY).map(iFluidHandler -> iFluidHandler.getFluidInTank(0).getFluid().isIn(IndustrialTags.Fluids.EXPERIENCE)).orElse(false)){
-                amount += tileEntity.getCapability(CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY).map(iFluidHandler -> iFluidHandler.drain(new FluidStack(ModuleCore.ESSENCE.getSourceFluid(), Integer.MAX_VALUE), IFluidHandler.FluidAction.SIMULATE).getAmount()).orElse(0);
-            }
+            amount += tileEntity.getCapability(CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY).map(iFluidHandler -> iFluidHandler.drain(new FluidStack(ModuleCore.ESSENCE.getSourceFluid(), Integer.MAX_VALUE), IFluidHandler.FluidAction.SIMULATE).getAmount()).orElse(0);
         }
         return !output.getLeft().isEmpty() && amount >= getEssenceConsumed(output.getRight()) && this.output.getStackInSlot(0).isEmpty();
     }
