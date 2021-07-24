@@ -21,6 +21,7 @@
  */
 package com.buuz135.industrial.block.tile;
 
+import com.buuz135.industrial.item.addon.ProcessingAddonItem;
 import com.hrznstudio.titanium.annotation.Save;
 import com.hrznstudio.titanium.api.IFactory;
 import com.hrznstudio.titanium.api.augment.AugmentTypes;
@@ -81,7 +82,10 @@ public abstract class IndustrialProcessingTile<T extends IndustrialProcessingTil
                     progressBar.setProgressIncrease(this.hasAugmentInstalled(AugmentTypes.SPEED) ? (int) AugmentWrapper.getType(this.getInstalledAugments(AugmentTypes.SPEED).get(0), AugmentTypes.SPEED) : 1);
                 }).
                 setOnFinishWork(() -> {
-                    onFinish().run();
+                    int operations = (int) (this.hasAugmentInstalled(ProcessingAddonItem.PROCESSING) ? AugmentWrapper.getType(this.getInstalledAugments(ProcessingAddonItem.PROCESSING).get(0), ProcessingAddonItem.PROCESSING) : 1);
+                    for (int i = 0; i < operations; i++) {
+                        onFinish().run();
+                    }
                     this.getRedstoneManager().finish();
                 })
         );

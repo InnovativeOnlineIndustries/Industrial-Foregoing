@@ -60,7 +60,7 @@ public class WitherBuilderTile extends IndustrialAreaWorkingTile<WitherBuilderTi
 
 	@Override
 	public WorkAction work() {
-		if (!hasEnergy(WitherBuilderConfig.powerPerOperation) || BlockUtils.canBlockBeBroken(this.world, this.pos))
+		if (!hasEnergy(WitherBuilderConfig.powerPerOperation) || !BlockUtils.canBlockBeBroken(this.world, this.pos))
 			return new WorkAction(1, 0);
 		BlockPos pos = this.pos.add(0, 2, 0);
 		float power = 0;

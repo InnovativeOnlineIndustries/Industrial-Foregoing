@@ -23,6 +23,7 @@ package com.buuz135.industrial.block.misc.tile;
 
 import com.buuz135.industrial.block.tile.IndustrialProcessingTile;
 import com.buuz135.industrial.config.machine.misc.EnchantmentApplicatorConfig;
+import com.buuz135.industrial.module.ModuleCore;
 import com.buuz135.industrial.module.ModuleMisc;
 import com.buuz135.industrial.utils.IndustrialTags;
 import com.hrznstudio.titanium.annotation.Save;
@@ -37,6 +38,7 @@ import net.minecraft.item.EnchantedBookItem;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
 import net.minecraftforge.fluids.capability.IFluidHandler;
 import org.apache.commons.lang3.tuple.Pair;
@@ -87,7 +89,7 @@ public class EnchantmentApplicatorTile extends IndustrialProcessingTile<Enchantm
         TileEntity tileEntity = this.world.getTileEntity(this.pos.up());
         if (tileEntity != null && tileEntity.getCapability(CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY).isPresent()){
             if (tileEntity.getCapability(CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY).map(iFluidHandler -> iFluidHandler.getFluidInTank(0).getFluid().isIn(IndustrialTags.Fluids.EXPERIENCE)).orElse(false)){
-                amount += tileEntity.getCapability(CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY).map(iFluidHandler -> iFluidHandler.getFluidInTank(0).getAmount()).orElse(0);
+                amount += tileEntity.getCapability(CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY).map(iFluidHandler -> iFluidHandler.drain(new FluidStack(ModuleCore.ESSENCE.getSourceFluid(), Integer.MAX_VALUE), IFluidHandler.FluidAction.SIMULATE).getAmount()).orElse(0);
             }
         }
         return !output.getLeft().isEmpty() && amount >= getEssenceConsumed(output.getRight()) && this.output.getStackInSlot(0).isEmpty();
@@ -114,7 +116,7 @@ public class EnchantmentApplicatorTile extends IndustrialProcessingTile<Enchantm
             AtomicInteger amount = new AtomicInteger(getEssenceConsumed(output.getRight()));
             TileEntity tileEntity = this.world.getTileEntity(this.pos.up());
             if (tileEntity != null){
-                tileEntity.getCapability(CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY).ifPresent(iFluidHandler -> amount.addAndGet(-iFluidHandler.drain(amount.get(), IFluidHandler.FluidAction.EXECUTE).getAmount()));
+                tileEntity.getCapability(CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY).ifPresent(iFluidHandler -> amount.addAndGet(-iFluidHandler.drain(new FluidStack(ModuleCore.ESSENCE.getSourceFluid(), amount.get()), IFluidHandler.FluidAction.EXECUTE).getAmount()));
             }
             if (amount.get() > 0) this.tank.drainForced(amount.get(), IFluidHandler.FluidAction.EXECUTE);
         };
