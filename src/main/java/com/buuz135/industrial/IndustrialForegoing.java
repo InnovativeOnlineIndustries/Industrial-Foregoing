@@ -119,7 +119,7 @@ public class IndustrialForegoing extends ModuleController {
                     registerReward();
                 }
             }, new String[]{"normal"}));
-        } catch (MalformedURLException e) {
+        } catch (Exception e) {
             LOGGER.catching(e);
         }
         LaserDrillRarity.init();
