@@ -32,6 +32,7 @@ import com.buuz135.industrial.utils.Reference;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.systems.RenderSystem;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
+import net.minecraft.client.renderer.GameRenderer;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.ResourceLocation;
@@ -74,8 +75,9 @@ public class GuiConveyor extends AbstractContainerScreen<ContainerConveyor> impl
     @Override
     protected void renderBg(PoseStack stack, float partialTicks, int mouseX, int mouseY) { //background
         this.renderBackground(stack);
-        RenderSystem.color4f(1, 1, 1, 1);
-        getMinecraft().getTextureManager().bind(BG_TEXTURE);
+        RenderSystem.setShader(GameRenderer::getPositionTexShader);
+        RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
+        RenderSystem.setShaderTexture(0, BG_TEXTURE);
         x = (width - imageWidth) / 2;
         y = (height - imageHeight) / 2;
         blit(stack, x, y, 0, 0, imageWidth, imageHeight);

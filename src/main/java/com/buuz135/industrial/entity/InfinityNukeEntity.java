@@ -29,7 +29,7 @@ import net.minecraft.world.level.Level;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
-import net.minecraftforge.fml.network.NetworkHooks;
+import net.minecraftforge.fmllegacy.network.NetworkHooks;
 import net.minecraftforge.items.ItemHandlerHelper;
 
 import javax.annotation.Nullable;
@@ -95,7 +95,7 @@ public class InfinityNukeEntity extends Entity {
             }
         }
         if (explosionHelper != null && explosionHelper.isDead) {
-            this.remove();
+            this.onClientRemoval();
         }
         if (level.isClientSide) {
             tickClient();
@@ -162,7 +162,7 @@ public class InfinityNukeEntity extends Entity {
             if (player.getItemInHand(hand).isEmpty()) {
                 if (player.isShiftKeyDown()) {
                     ItemHandlerHelper.giveItemToPlayer(player, this.original);
-                    this.remove();
+                    this.onClientRemoval();
                     return InteractionResult.SUCCESS;
                 } else {
                     this.setArmed(!isArmed());
@@ -186,13 +186,13 @@ public class InfinityNukeEntity extends Entity {
     }
 
     @Override
-    protected boolean isMovementNoisy() {
-        return false;
+    protected MovementEmission getMovementEmission() {
+        return MovementEmission.EVENTS;
     }
 
     @Override
     public boolean isPickable() {
-        return !this.removed;
+        return !this.isAlive();
     }
 
     public ItemStack getOriginal() {

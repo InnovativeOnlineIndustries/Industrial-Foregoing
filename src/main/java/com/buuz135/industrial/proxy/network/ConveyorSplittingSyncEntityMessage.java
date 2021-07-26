@@ -25,11 +25,12 @@ import com.buuz135.industrial.api.conveyor.ConveyorUpgrade;
 import com.buuz135.industrial.block.transportstorage.conveyor.ConveyorSplittingUpgrade;
 import com.buuz135.industrial.block.transportstorage.tile.ConveyorTile;
 import com.hrznstudio.titanium.network.Message;
+import net.minecraftforge.fmllegacy.network.NetworkEvent;
+
 import net.minecraft.client.Minecraft;
-import net.minecraft.world.level.block.entity.BlockEntity;
-import net.minecraft.core.Direction;
 import net.minecraft.core.BlockPos;
-import net.minecraftforge.fml.network.NetworkEvent;
+import net.minecraft.core.Direction;
+import net.minecraft.world.level.block.entity.BlockEntity;
 
 public class ConveyorSplittingSyncEntityMessage extends Message {
 

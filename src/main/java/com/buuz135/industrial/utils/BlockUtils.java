@@ -82,7 +82,7 @@ public class BlockUtils {
     }
 
     public static boolean isBlockStateTag(BlockState state, SetTag.Named<Block> tag) {
-        return state.getBlock().is(tag);
+        return state.is(tag);
     }
 
     public static boolean isLog(Level world, BlockPos pos) {

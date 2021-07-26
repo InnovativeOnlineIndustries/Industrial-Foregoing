@@ -3,11 +3,12 @@ package com.buuz135.industrial.proxy.network;
 import com.buuz135.industrial.block.transportstorage.tile.TransporterTile;
 import com.hrznstudio.titanium.network.Message;
 import com.hrznstudio.titanium.util.TileUtil;
+import net.minecraftforge.fmllegacy.network.NetworkEvent;
+
 import net.minecraft.client.Minecraft;
-import net.minecraft.nbt.CompoundTag;
-import net.minecraft.core.Direction;
 import net.minecraft.core.BlockPos;
-import net.minecraftforge.fml.network.NetworkEvent;
+import net.minecraft.core.Direction;
+import net.minecraft.nbt.CompoundTag;
 
 public class TransporterSyncMessage extends Message {
 

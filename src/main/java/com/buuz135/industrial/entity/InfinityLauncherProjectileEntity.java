@@ -28,7 +28,7 @@ import net.minecraft.world.phys.Vec3;
 import net.minecraft.world.level.Level;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
-import net.minecraftforge.fml.network.NetworkHooks;
+import net.minecraftforge.fmllegacy.network.NetworkHooks;
 
 public class InfinityLauncherProjectileEntity extends AbstractArrow {
 
@@ -72,7 +72,7 @@ public class InfinityLauncherProjectileEntity extends AbstractArrow {
 
                 }
             }
-            this.remove();
+            this.onClientRemoval();
         }
     }
 
@@ -163,7 +163,7 @@ public class InfinityLauncherProjectileEntity extends AbstractArrow {
                 }
                 this.playSound(SoundEvents.ITEM_FRAME_REMOVE_ITEM, 1.0F, 1.2F / (this.random.nextFloat() * 0.2F + 0.9F));
                 if (this.getPierceLevel() <= 0) {
-                    this.remove();
+                    this.onClientRemoval();
                 }
             } else {
                 entity.setRemainingFireTicks(k);
@@ -175,7 +175,7 @@ public class InfinityLauncherProjectileEntity extends AbstractArrow {
                         this.spawnAtLocation(this.getPickupItem(), 0.1F);
                     }
 
-                    this.remove();
+                    this.onClientRemoval();
                 }
             }
         }
@@ -192,7 +192,7 @@ public class InfinityLauncherProjectileEntity extends AbstractArrow {
 
                 }
             }
-            this.remove();
+            this.onClientRemoval();
         }
     }
 

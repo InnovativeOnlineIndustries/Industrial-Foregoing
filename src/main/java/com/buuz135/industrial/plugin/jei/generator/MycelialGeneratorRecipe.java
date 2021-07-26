@@ -21,7 +21,8 @@
  */
 package com.buuz135.industrial.plugin.jei.generator;
 
-import net.minecraft.item.crafting.Ingredient;
+import net.minecraft.world.item.crafting.Ingredient;
+
 import net.minecraftforge.fluids.FluidStack;
 
 import java.util.List;

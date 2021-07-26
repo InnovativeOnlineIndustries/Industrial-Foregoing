@@ -21,11 +21,11 @@
  */
 package com.buuz135.industrial.proxy.network;
 
+import java.util.UUID;
+
 import com.buuz135.industrial.item.infinity.OneThreeFiveHandler;
 import com.hrznstudio.titanium.network.Message;
-import net.minecraftforge.fml.network.NetworkEvent;
-
-import java.util.UUID;
+import net.minecraftforge.fmllegacy.network.NetworkEvent;
 
 public class SpecialParticleMessage extends Message {
 

@@ -66,7 +66,7 @@ public class OreFluid extends FlowingFluid {
     @ParametersAreNonnullByDefault
     protected void beforeDestroyingBlock(LevelAccessor worldIn, BlockPos pos, BlockState state) {
         // copied from the WaterFluid implementation
-        BlockEntity tileentity = state.getBlock().hasTileEntity(state) ? worldIn.getBlockEntity(pos) : null;
+        BlockEntity tileentity = state.hasBlockEntity() ? worldIn.getBlockEntity(pos) : null;
         Block.dropResources(state, worldIn, pos, tileentity);
     }
 

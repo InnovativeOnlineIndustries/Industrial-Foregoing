@@ -23,8 +23,9 @@ package com.buuz135.industrial.proxy.network;
 
 import com.buuz135.industrial.worlddata.BackpackDataManager;
 import com.hrznstudio.titanium.network.Message;
+import net.minecraftforge.fmllegacy.network.NetworkEvent;
+
 import net.minecraft.nbt.CompoundTag;
-import net.minecraftforge.fml.network.NetworkEvent;
 
 public class BackpackSyncMessage extends Message {
 

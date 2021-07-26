@@ -51,7 +51,7 @@ import net.minecraft.world.level.Level;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
-import net.minecraftforge.fml.network.NetworkHooks;
+import net.minecraftforge.fmllegacy.network.NetworkHooks;
 
 import java.util.List;
 
@@ -108,7 +108,7 @@ public class InfinityTridentEntity extends AbstractArrow {
                 if (!this.level.isClientSide && this.pickup == AbstractArrow.Pickup.ALLOWED) {
                     this.spawnAtLocation(this.getPickupItem(), 0.1F);
                 }
-                this.remove();
+                this.onClientRemoval();
             } else if (loyaltyLevel > 0){
                 this.setNoPhysics(true);
                 Vec3 vector3d = new Vec3(entity.getX() - this.getX(), entity.getEyeY() - this.getY(), entity.getZ() - this.getZ());
