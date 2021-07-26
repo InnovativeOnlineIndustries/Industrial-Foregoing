@@ -28,13 +28,15 @@ import com.buuz135.industrial.module.ModuleAgricultureHusbandry;
 import com.hrznstudio.titanium.annotation.Save;
 import com.hrznstudio.titanium.component.energy.EnergyStorageComponent;
 import com.hrznstudio.titanium.component.inventory.SidedInventoryComponent;
-import net.minecraft.entity.passive.AnimalEntity;
-import net.minecraft.item.DyeColor;
-import net.minecraft.item.ItemStack;
+import net.minecraft.world.entity.animal.Animal;
+import net.minecraft.world.item.DyeColor;
+import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.items.ItemHandlerHelper;
 
 import javax.annotation.Nonnull;
 import java.util.List;
+
+import com.buuz135.industrial.block.tile.IndustrialWorkingTile.WorkAction;
 
 public class AnimalFeederTile extends IndustrialAreaWorkingTile<AnimalFeederTile> {
 
@@ -59,11 +61,11 @@ public class AnimalFeederTile extends IndustrialAreaWorkingTile<AnimalFeederTile
     @Override
     public WorkAction work() {
         if (hasEnergy(powerPerOperation)) {
-            List<AnimalEntity> mobs = this.world.getEntitiesWithinAABB(AnimalEntity.class, getWorkingArea().getBoundingBox());
+            List<Animal> mobs = this.level.getEntitiesOfClass(Animal.class, getWorkingArea().bounds());
             if (mobs.size() == 0 || mobs.size() > 35) return new WorkAction(1, 0);
-            mobs.removeIf(animalEntity -> animalEntity.getGrowingAge() != 0 || !animalEntity.canFallInLove() || getFeedingItem(animalEntity).isEmpty());
-            for (AnimalEntity firstParent : mobs) {
-                for (AnimalEntity secondParent : mobs) {
+            mobs.removeIf(animalEntity -> animalEntity.getAge() != 0 || !animalEntity.canFallInLove() || getFeedingItem(animalEntity).isEmpty());
+            for (Animal firstParent : mobs) {
+                for (Animal secondParent : mobs) {
                     if (firstParent.equals(secondParent) || !firstParent.getClass().equals(secondParent.getClass()))
                         continue;
                     ItemStack stack = getFeedingItem(firstParent);
@@ -85,9 +87,9 @@ public class AnimalFeederTile extends IndustrialAreaWorkingTile<AnimalFeederTile
         return new WorkAction(1, 0);
     }
 
-    private ItemStack getFeedingItem(AnimalEntity entity) {
+    private ItemStack getFeedingItem(Animal entity) {
         for (int i = 0; i < input.getSlots(); i++) {
-            if (entity.isBreedingItem(input.getStackInSlot(i))) return input.getStackInSlot(i);
+            if (entity.isFood(input.getStackInSlot(i))) return input.getStackInSlot(i);
         }
         return ItemStack.EMPTY;
     }

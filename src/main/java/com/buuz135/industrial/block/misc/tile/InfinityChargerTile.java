@@ -27,7 +27,7 @@ import com.buuz135.industrial.module.ModuleMisc;
 import com.hrznstudio.titanium.annotation.Save;
 import com.hrznstudio.titanium.component.energy.EnergyStorageComponent;
 import com.hrznstudio.titanium.component.inventory.SidedInventoryComponent;
-import net.minecraft.item.DyeColor;
+import net.minecraft.world.item.DyeColor;
 import net.minecraftforge.energy.CapabilityEnergy;
 
 public class InfinityChargerTile extends IndustrialMachineTile<InfinityChargerTile> {

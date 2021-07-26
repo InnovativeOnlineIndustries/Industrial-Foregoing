@@ -27,18 +27,21 @@ import com.buuz135.industrial.module.ModuleAgricultureHusbandry;
 import com.buuz135.industrial.utils.IndustrialTags;
 import com.hrznstudio.titanium.api.IFactory;
 import com.hrznstudio.titanium.recipe.generator.TitaniumShapedRecipeBuilder;
-import net.minecraft.block.Blocks;
-import net.minecraft.data.IFinishedRecipe;
-import net.minecraft.item.Items;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.data.recipes.FinishedRecipe;
+import net.minecraft.world.item.Items;
 import net.minecraft.tags.ItemTags;
 
 import javax.annotation.Nonnull;
 import java.util.function.Consumer;
 
+import com.hrznstudio.titanium.block.RotatableBlock.RotationType;
+import net.minecraft.world.level.block.state.BlockBehaviour.Properties;
+
 public class PlantFertilizerBlock extends IndustrialBlock<PlantFertilizerTile> {
 
     public PlantFertilizerBlock() {
-        super("plant_fertilizer", Properties.from(Blocks.IRON_BLOCK), PlantFertilizerTile.class, ModuleAgricultureHusbandry.TAB_AG_HUS);
+        super("plant_fertilizer", Properties.copy(Blocks.IRON_BLOCK), PlantFertilizerTile.class, ModuleAgricultureHusbandry.TAB_AG_HUS);
     }
 
     @Override
@@ -53,15 +56,15 @@ public class PlantFertilizerBlock extends IndustrialBlock<PlantFertilizerTile> {
     }
 
     @Override
-    public void registerRecipe(Consumer<IFinishedRecipe> consumer) {
+    public void registerRecipe(Consumer<FinishedRecipe> consumer) {
         TitaniumShapedRecipeBuilder.shapedRecipe(this)
-                .patternLine("PBP").patternLine("LML").patternLine("GRG")
-                .key('P', IndustrialTags.Items.PLASTIC)
-                .key('B', Items.GLASS_BOTTLE)
-                .key('L', Items.LEATHER)
-                .key('M', IndustrialTags.Items.MACHINE_FRAME_SIMPLE)
-                .key('R', Items.REDSTONE)
-                .key('G', ItemTags.makeWrapperTag("forge:gears/iron"))
-                .build(consumer);
+                .pattern("PBP").pattern("LML").pattern("GRG")
+                .define('P', IndustrialTags.Items.PLASTIC)
+                .define('B', Items.GLASS_BOTTLE)
+                .define('L', Items.LEATHER)
+                .define('M', IndustrialTags.Items.MACHINE_FRAME_SIMPLE)
+                .define('R', Items.REDSTONE)
+                .define('G', ItemTags.bind("forge:gears/iron"))
+                .save(consumer);
     }
 }

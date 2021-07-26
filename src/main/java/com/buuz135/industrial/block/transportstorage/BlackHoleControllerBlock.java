@@ -27,17 +27,19 @@ import com.buuz135.industrial.module.ModuleTransportStorage;
 import com.buuz135.industrial.utils.IndustrialTags;
 import com.hrznstudio.titanium.api.IFactory;
 import com.hrznstudio.titanium.recipe.generator.TitaniumShapedRecipeBuilder;
-import net.minecraft.block.Blocks;
-import net.minecraft.data.IFinishedRecipe;
-import net.minecraft.item.Items;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.data.recipes.FinishedRecipe;
+import net.minecraft.world.item.Items;
 import net.minecraftforge.common.Tags;
 
 import java.util.function.Consumer;
 
+import net.minecraft.world.level.block.state.BlockBehaviour.Properties;
+
 public class BlackHoleControllerBlock extends IndustrialBlock<BlackHoleControllerTile> {
 
     public BlackHoleControllerBlock() {
-        super("black_hole_controller", Properties.from(Blocks.IRON_BLOCK), BlackHoleControllerTile.class, ModuleTransportStorage.TAB_TRANSPORT);
+        super("black_hole_controller", Properties.copy(Blocks.IRON_BLOCK), BlackHoleControllerTile.class, ModuleTransportStorage.TAB_TRANSPORT);
     }
 
     @Override
@@ -46,14 +48,14 @@ public class BlackHoleControllerBlock extends IndustrialBlock<BlackHoleControlle
     }
 
     @Override
-    public void registerRecipe(Consumer<IFinishedRecipe> consumer) {
+    public void registerRecipe(Consumer<FinishedRecipe> consumer) {
         TitaniumShapedRecipeBuilder.shapedRecipe(this)
-                .patternLine("PGP").patternLine("NEN").patternLine("PMP")
-                .key('P', IndustrialTags.Items.PLASTIC)
-                .key('G', IndustrialTags.Items.GEAR_DIAMOND)
-                .key('N', Items.ENDER_EYE)
-                .key('E', Tags.Items.CHESTS_ENDER)
-                .key('M', IndustrialTags.Items.MACHINE_FRAME_SUPREME)
-                .build(consumer);
+                .pattern("PGP").pattern("NEN").pattern("PMP")
+                .define('P', IndustrialTags.Items.PLASTIC)
+                .define('G', IndustrialTags.Items.GEAR_DIAMOND)
+                .define('N', Items.ENDER_EYE)
+                .define('E', Tags.Items.CHESTS_ENDER)
+                .define('M', IndustrialTags.Items.MACHINE_FRAME_SUPREME)
+                .save(consumer);
     }
 }

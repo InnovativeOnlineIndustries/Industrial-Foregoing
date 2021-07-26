@@ -21,10 +21,10 @@
  */
 package com.buuz135.industrial.api.plant;
 
-import net.minecraft.block.BlockState;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.level.Level;
 import net.minecraftforge.registries.ForgeRegistryEntry;
 
 import java.util.ArrayList;
@@ -44,7 +44,7 @@ public abstract class PlantRecollectable extends ForgeRegistryEntry<PlantRecolle
      * @param blockState The BlockState of the Block.
      * @return True if it can be harvested, false if it can't be harvested.
      */
-    public abstract boolean canBeHarvested(World world, BlockPos pos, BlockState blockState);
+    public abstract boolean canBeHarvested(Level world, BlockPos pos, BlockState blockState);
 
     /**
      * Harvests the block
@@ -54,7 +54,7 @@ public abstract class PlantRecollectable extends ForgeRegistryEntry<PlantRecolle
      * @param blockState The BlockState of the Block.
      * @return A list of the drops of that Block.
      */
-    public abstract List<ItemStack> doHarvestOperation(World world, BlockPos pos, BlockState blockState);
+    public abstract List<ItemStack> doHarvestOperation(Level world, BlockPos pos, BlockState blockState);
 
     /**
      * Harvests the block
@@ -65,7 +65,7 @@ public abstract class PlantRecollectable extends ForgeRegistryEntry<PlantRecolle
      * @param extras     An extra of values inserted in the Gatherer.
      * @return A list of the drops of that Block.
      */
-    public List<ItemStack> doHarvestOperation(World world, BlockPos pos, BlockState blockState, Object... extras) {
+    public List<ItemStack> doHarvestOperation(Level world, BlockPos pos, BlockState blockState, Object... extras) {
         return doHarvestOperation(world, pos, blockState);
     }
 
@@ -77,7 +77,7 @@ public abstract class PlantRecollectable extends ForgeRegistryEntry<PlantRecolle
      * @param blockState The BlockState of the Block.
      * @return True if the harvester should check the next position or false if it should keep checking the current position.
      */
-    public abstract boolean shouldCheckNextPlant(World world, BlockPos pos, BlockState blockState);
+    public abstract boolean shouldCheckNextPlant(Level world, BlockPos pos, BlockState blockState);
 
     /**
      * Returns the priority of the handler. The bigger it is the more priority it has.

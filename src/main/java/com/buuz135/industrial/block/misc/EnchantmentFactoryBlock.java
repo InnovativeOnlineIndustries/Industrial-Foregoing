@@ -28,17 +28,17 @@ import com.buuz135.industrial.utils.IndustrialTags;
 import com.hrznstudio.titanium.api.IFactory;
 import com.hrznstudio.titanium.block.RotatableBlock;
 import com.hrznstudio.titanium.recipe.generator.TitaniumShapedRecipeBuilder;
-import net.minecraft.block.AbstractBlock;
-import net.minecraft.block.Blocks;
-import net.minecraft.data.IFinishedRecipe;
-import net.minecraft.item.Items;
+import net.minecraft.world.level.block.state.BlockBehaviour;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.data.recipes.FinishedRecipe;
+import net.minecraft.world.item.Items;
 
 import java.util.function.Consumer;
 
 public class EnchantmentFactoryBlock extends IndustrialBlock<EnchantmentFactoryTile> {
 
     public EnchantmentFactoryBlock() {
-        super("enchantment_factory", AbstractBlock.Properties.from(Blocks.IRON_BLOCK), EnchantmentFactoryTile.class, ModuleMisc.TAB_MISC);
+        super("enchantment_factory", BlockBehaviour.Properties.copy(Blocks.IRON_BLOCK), EnchantmentFactoryTile.class, ModuleMisc.TAB_MISC);
     }
 
     @Override
@@ -52,14 +52,14 @@ public class EnchantmentFactoryBlock extends IndustrialBlock<EnchantmentFactoryT
     }
 
     @Override
-    public void registerRecipe(Consumer<IFinishedRecipe> consumer) {
+    public void registerRecipe(Consumer<FinishedRecipe> consumer) {
         TitaniumShapedRecipeBuilder.shapedRecipe(this)
-                .patternLine("PBP").patternLine("DMD").patternLine("OOO")
-                .key('P', IndustrialTags.Items.PLASTIC)
-                .key('D', Items.DIAMOND)
-                .key('B', Items.BOOK)
-                .key('O', Blocks.OBSIDIAN)
-                .key('M', IndustrialTags.Items.MACHINE_FRAME_ADVANCED)
-                .build(consumer);
+                .pattern("PBP").pattern("DMD").pattern("OOO")
+                .define('P', IndustrialTags.Items.PLASTIC)
+                .define('D', Items.DIAMOND)
+                .define('B', Items.BOOK)
+                .define('O', Blocks.OBSIDIAN)
+                .define('M', IndustrialTags.Items.MACHINE_FRAME_ADVANCED)
+                .save(consumer);
     }
 }

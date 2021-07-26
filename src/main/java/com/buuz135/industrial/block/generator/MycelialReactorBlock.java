@@ -27,29 +27,32 @@ import com.buuz135.industrial.block.generator.tile.MycelialReactorTile;
 import com.buuz135.industrial.module.ModuleGenerator;
 import com.buuz135.industrial.worlddata.MycelialDataManager;
 import com.hrznstudio.titanium.api.IFactory;
-import net.minecraft.block.BlockState;
-import net.minecraft.block.Blocks;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.ItemStack;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.ActionResultType;
-import net.minecraft.util.Hand;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.BlockRayTraceResult;
-import net.minecraft.util.text.StringTextComponent;
-import net.minecraft.util.text.TextFormatting;
-import net.minecraft.util.text.TranslationTextComponent;
-import net.minecraft.world.World;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.InteractionResult;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.phys.BlockHitResult;
+import net.minecraft.network.chat.TextComponent;
+import net.minecraft.ChatFormatting;
+import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.world.level.Level;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.List;
 
+import com.hrznstudio.titanium.block.RotatableBlock.RotationType;
+import net.minecraft.world.level.block.state.BlockBehaviour.Properties;
+
 public class MycelialReactorBlock extends IndustrialBlock<MycelialReactorTile> {
 
     public MycelialReactorBlock() {
-        super("mycelial_reactor", Properties.from(Blocks.IRON_BLOCK), MycelialReactorTile.class, ModuleGenerator.TAB_GENERATOR);
+        super("mycelial_reactor", Properties.copy(Blocks.IRON_BLOCK), MycelialReactorTile.class, ModuleGenerator.TAB_GENERATOR);
     }
 
     @Override
@@ -64,29 +67,29 @@ public class MycelialReactorBlock extends IndustrialBlock<MycelialReactorTile> {
     }
 
     @Override
-    public void onBlockPlacedBy(World worldIn, BlockPos pos, BlockState state, @Nullable LivingEntity placer, ItemStack stack) {
-        super.onBlockPlacedBy(worldIn, pos, state, placer, stack);
-        TileEntity entity = worldIn.getTileEntity(pos);
+    public void setPlacedBy(Level worldIn, BlockPos pos, BlockState state, @Nullable LivingEntity placer, ItemStack stack) {
+        super.setPlacedBy(worldIn, pos, state, placer, stack);
+        BlockEntity entity = worldIn.getBlockEntity(pos);
         if (entity instanceof MycelialReactorTile && placer != null){
-            ((MycelialReactorTile) entity).setOwner(placer.getUniqueID().toString());
+            ((MycelialReactorTile) entity).setOwner(placer.getUUID().toString());
         }
     }
 
     @Override
-    public ActionResultType onBlockActivated(BlockState state, World worldIn, BlockPos pos, PlayerEntity player, Hand hand, BlockRayTraceResult ray) {
-        TileEntity tileEntity = worldIn.getTileEntity(pos);
-        if (player.isSneaking() && !worldIn.isRemote && tileEntity instanceof MycelialReactorTile){
+    public InteractionResult use(BlockState state, Level worldIn, BlockPos pos, Player player, InteractionHand hand, BlockHitResult ray) {
+        BlockEntity tileEntity = worldIn.getBlockEntity(pos);
+        if (player.isShiftKeyDown() && !worldIn.isClientSide && tileEntity instanceof MycelialReactorTile){
             List<String> available = MycelialDataManager.getReactorAvailable(((MycelialReactorTile) tileEntity).getOwner(), worldIn, false);
             if (available.size() != IMycelialGeneratorType.TYPES.size()){
-                player.sendMessage(new StringTextComponent("Generators not running:").mergeStyle(TextFormatting.RED), player.getUniqueID());
+                player.sendMessage(new TextComponent("Generators not running:").withStyle(ChatFormatting.RED), player.getUUID());
             }
             for (IMycelialGeneratorType type : IMycelialGeneratorType.TYPES) {
                 if (!available.contains(type.getName())){
-                    player.sendMessage(new TranslationTextComponent("block.industrialforegoing.mycelial_" + type.getName()).mergeStyle(TextFormatting.RED), player.getUniqueID());
+                    player.sendMessage(new TranslatableComponent("block.industrialforegoing.mycelial_" + type.getName()).withStyle(ChatFormatting.RED), player.getUUID());
                 }
             }
         }
-        return super.onBlockActivated(state, worldIn, pos, player, hand, ray);
+        return super.use(state, worldIn, pos, player, hand, ray);
     }
 
 }

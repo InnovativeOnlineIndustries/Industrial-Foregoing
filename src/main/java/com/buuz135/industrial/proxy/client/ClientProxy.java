@@ -44,23 +44,23 @@ import com.buuz135.industrial.utils.Reference;
 import com.hrznstudio.titanium.TitaniumClient;
 import com.hrznstudio.titanium.block.BasicTileBlock;
 import com.hrznstudio.titanium.event.handler.EventManager;
-import net.minecraft.block.Block;
+import net.minecraft.world.level.block.Block;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.screen.Screen;
+import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.renderer.RenderType;
-import net.minecraft.client.renderer.RenderTypeLookup;
-import net.minecraft.client.renderer.entity.EntityRendererManager;
-import net.minecraft.client.renderer.model.IBakedModel;
-import net.minecraft.client.settings.KeyBinding;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.ItemModelsProperties;
-import net.minecraft.item.SpawnEggItem;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.SoundEvent;
-import net.minecraft.util.text.StringTextComponent;
-import net.minecraft.util.text.TextFormatting;
+import net.minecraft.client.renderer.ItemBlockRenderTypes;
+import net.minecraft.client.renderer.entity.EntityRenderDispatcher;
+import net.minecraft.client.resources.model.BakedModel;
+import net.minecraft.client.KeyMapping;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.client.renderer.item.ItemProperties;
+import net.minecraft.world.item.SpawnEggItem;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.sounds.SoundEvent;
+import net.minecraft.network.chat.TextComponent;
+import net.minecraft.ChatFormatting;
 import net.minecraftforge.client.event.ModelBakeEvent;
 import net.minecraftforge.client.model.obj.OBJModel;
 import net.minecraftforge.common.MinecraftForge;
@@ -84,20 +84,20 @@ public class ClientProxy extends CommonProxy {
 
     public static final ResourceLocation beacon = new ResourceLocation("textures/entity/beacon_beam.png");
     public static ResourceLocation GUI = new ResourceLocation(Reference.MOD_ID, "textures/gui/machines.png");
-    public static IBakedModel ears_baked;
+    public static BakedModel ears_baked;
     public static OBJModel ears_model;
 
     public static final SoundEvent NUKE_EXPLOSION = new SoundEvent(new ResourceLocation(Reference.MOD_ID, "nuke_explosion")).setRegistryName(new ResourceLocation(Reference.MOD_ID, "nuke_explosion"));
     public static final SoundEvent NUKE_ARMING = new SoundEvent(new ResourceLocation(Reference.MOD_ID, "nuke_arming")).setRegistryName(new ResourceLocation(Reference.MOD_ID, "nuke_arming"));
 
-    public KeyBinding OPEN_BACKPACK;
+    public KeyMapping OPEN_BACKPACK;
 
     @Override
     public void run() {
-        OPEN_BACKPACK = new KeyBinding("key.industrialforegoing.backpack.desc", -1, "key.industrialforegoing.category");
+        OPEN_BACKPACK = new KeyMapping("key.industrialforegoing.backpack.desc", -1, "key.industrialforegoing.category");
         ClientRegistry.registerKeyBinding(OPEN_BACKPACK);
         EventManager.forge(TickEvent.ClientTickEvent.class).process(event -> {
-            if (OPEN_BACKPACK.isPressed()) {
+            if (OPEN_BACKPACK.consumeClick()) {
                 IndustrialForegoing.NETWORK.get().sendToServer(new BackpackOpenMessage(Screen.hasControlDown()));
             }
         }).subscribe();
@@ -139,17 +139,17 @@ public class ClientProxy extends CommonProxy {
         ClientRegistry.bindTileEntityRenderer(ModuleTransportStorage.BLACK_HOLE_TANK_SUPREME.getTileEntityType(), BlackHoleUnitTESR::new);
         ClientRegistry.bindTileEntityRenderer(ModuleTransportStorage.TRANSPORTER.getTileEntityType(), TransporterTESR::new);
 
-        RenderTypeLookup.setRenderLayer(ModuleTransportStorage.CONVEYOR, RenderType.getCutout());
-        RenderTypeLookup.setRenderLayer(ModuleTransportStorage.BLACK_HOLE_TANK_COMMON, RenderType.getCutout());
-        RenderTypeLookup.setRenderLayer(ModuleTransportStorage.BLACK_HOLE_TANK_PITY, RenderType.getCutout());
-        RenderTypeLookup.setRenderLayer(ModuleTransportStorage.BLACK_HOLE_TANK_SIMPLE, RenderType.getCutout());
-        RenderTypeLookup.setRenderLayer(ModuleTransportStorage.BLACK_HOLE_TANK_ADVANCED, RenderType.getCutout());
-        RenderTypeLookup.setRenderLayer(ModuleTransportStorage.BLACK_HOLE_TANK_SUPREME, RenderType.getCutout());
-        RenderTypeLookup.setRenderLayer(ModuleCore.DARK_GLASS, RenderType.getTranslucent());
+        ItemBlockRenderTypes.setRenderLayer(ModuleTransportStorage.CONVEYOR, RenderType.cutout());
+        ItemBlockRenderTypes.setRenderLayer(ModuleTransportStorage.BLACK_HOLE_TANK_COMMON, RenderType.cutout());
+        ItemBlockRenderTypes.setRenderLayer(ModuleTransportStorage.BLACK_HOLE_TANK_PITY, RenderType.cutout());
+        ItemBlockRenderTypes.setRenderLayer(ModuleTransportStorage.BLACK_HOLE_TANK_SIMPLE, RenderType.cutout());
+        ItemBlockRenderTypes.setRenderLayer(ModuleTransportStorage.BLACK_HOLE_TANK_ADVANCED, RenderType.cutout());
+        ItemBlockRenderTypes.setRenderLayer(ModuleTransportStorage.BLACK_HOLE_TANK_SUPREME, RenderType.cutout());
+        ItemBlockRenderTypes.setRenderLayer(ModuleCore.DARK_GLASS, RenderType.translucent());
 
         Minecraft.getInstance().getBlockColors().register((state, worldIn, pos, tintIndex) -> {
             if (tintIndex == 0 && worldIn != null && pos != null) {
-                TileEntity entity = worldIn.getTileEntity(pos);
+                BlockEntity entity = worldIn.getBlockEntity(pos);
                 if (entity instanceof ConveyorTile) {
                     return ((ConveyorTile) entity).getColor();
                 }
@@ -161,9 +161,9 @@ public class ClientProxy extends CommonProxy {
                 SpawnEggItem info = null;
                 if (stack.hasTag() && stack.getTag().contains("entity", Constants.NBT.TAG_STRING)) {
                     ResourceLocation id = new ResourceLocation(stack.getTag().getString("entity"));
-                    info = SpawnEggItem.getEgg(ForgeRegistries.ENTITIES.getValue(id));
+                    info = SpawnEggItem.byId(ForgeRegistries.ENTITIES.getValue(id));
                 }
-                return info == null ? 0x636363 : tintIndex == 3 ? ModuleTool.MOB_IMPRISONMENT_TOOL.isBlacklisted(info.getType(new CompoundNBT())) ? 0xDB201A : 0x636363 : info.getColor(tintIndex - 1);
+                return info == null ? 0x636363 : tintIndex == 3 ? ModuleTool.MOB_IMPRISONMENT_TOOL.isBlacklisted(info.getType(new CompoundTag())) ? 0xDB201A : 0x636363 : info.getColor(tintIndex - 1);
             }
             return 0xFFFFFF;
         }, ModuleTool.MOB_IMPRISONMENT_TOOL);
@@ -174,8 +174,8 @@ public class ClientProxy extends CommonProxy {
             return 0xFFFFFF;
         }, ModuleTool.INFINITY_BACKPACK, ModuleTool.INFINITY_LAUNCHER, ModuleTool.INFINITY_NUKE, ModuleTool.INFINITY_TRIDENT, ModuleTool.INFINITY_HAMMER, ModuleTool.INFINITY_SAW, ModuleTool.INFINITY_DRILL);
         Minecraft.getInstance().getBlockColors().register((state, worldIn, pos, tintIndex) -> {
-            if (tintIndex == 0 && worldIn != null && pos != null && worldIn.getTileEntity(pos) instanceof BlackHoleTankTile) {
-                BlackHoleTankTile tank = (BlackHoleTankTile) worldIn.getTileEntity(pos);
+            if (tintIndex == 0 && worldIn != null && pos != null && worldIn.getBlockEntity(pos) instanceof BlackHoleTankTile) {
+                BlackHoleTankTile tank = (BlackHoleTankTile) worldIn.getBlockEntity(pos);
                 if (tank != null && tank.getTank().getFluidAmount() > 0) {
                     int color = FluidUtils.getFluidColor(tank.getTank().getFluid());
                     if (color != -1) return color;
@@ -210,17 +210,17 @@ public class ClientProxy extends CommonProxy {
 
         EventManager.forge(ItemTooltipEvent.class).filter(event -> event.getItemStack().getItem().getRegistryName().getNamespace().equals(Reference.MOD_ID)).process(event -> {
             if (Calendar.getInstance().get(Calendar.DAY_OF_MONTH) == 1 && Calendar.getInstance().get(Calendar.MONTH) == Calendar.APRIL) {
-                event.getToolTip().add(new StringTextComponent("Press Alt + F4 to cheat this item").mergeStyle(TextFormatting.DARK_AQUA));
+                event.getToolTip().add(new TextComponent("Press Alt + F4 to cheat this item").withStyle(ChatFormatting.DARK_AQUA));
             }
         }).subscribe();
 
         Minecraft instance = Minecraft.getInstance();
-        EntityRendererManager manager = instance.getRenderManager();
+        EntityRenderDispatcher manager = instance.getEntityRenderDispatcher();
         manager.getSkinMap().get("default").addLayer(new InfinityLauncherProjectileArmorLayer<>(TitaniumClient.getPlayerRenderer(Minecraft.getInstance())));
         manager.getSkinMap().get("slim").addLayer(new InfinityLauncherProjectileArmorLayer(TitaniumClient.getPlayerRenderer(Minecraft.getInstance())));
-        ItemModelsProperties.registerProperty(ModuleTool.INFINITY_LAUNCHER, new ResourceLocation(Reference.MOD_ID, "cooldown"), (stack, world, entity) -> {
-            if (entity instanceof PlayerEntity) {
-                return ((PlayerEntity) entity).getCooldownTracker().hasCooldown(stack.getItem()) ? 1 : 2;
+        ItemProperties.register(ModuleTool.INFINITY_LAUNCHER, new ResourceLocation(Reference.MOD_ID, "cooldown"), (stack, world, entity) -> {
+            if (entity instanceof Player) {
+                return ((Player) entity).getCooldowns().isOnCooldown(stack.getItem()) ? 1 : 2;
             }
             return 2;
         });

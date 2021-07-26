@@ -22,30 +22,31 @@
 package com.buuz135.industrial.item;
 
 import com.buuz135.industrial.api.straw.StrawHandler;
+import com.buuz135.industrial.utils.FluidUtils;
 import com.buuz135.industrial.utils.IndustrialTags;
 import com.buuz135.industrial.utils.StrawUtils;
 import com.hrznstudio.titanium.recipe.generator.TitaniumShapedRecipeBuilder;
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockState;
-import net.minecraft.block.IBucketPickupHandler;
-import net.minecraft.data.IFinishedRecipe;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.fluid.FluidState;
-import net.minecraft.fluid.Fluids;
-import net.minecraft.item.ItemGroup;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.UseAction;
-import net.minecraft.util.ActionResult;
-import net.minecraft.util.Hand;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.BlockRayTraceResult;
-import net.minecraft.util.math.RayTraceContext;
-import net.minecraft.util.math.RayTraceResult;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.StringTextComponent;
-import net.minecraft.util.text.TextFormatting;
-import net.minecraft.world.World;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.BucketPickup;
+import net.minecraft.data.recipes.FinishedRecipe;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.level.material.FluidState;
+import net.minecraft.world.level.material.Fluids;
+import net.minecraft.world.item.CreativeModeTab;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.UseAnim;
+import net.minecraft.world.InteractionResultHolder;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.phys.BlockHitResult;
+import net.minecraft.world.level.ClipContext;
+import net.minecraft.world.phys.HitResult;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.TextComponent;
+import net.minecraft.ChatFormatting;
+import net.minecraft.world.level.Level;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -53,29 +54,36 @@ import java.util.List;
 import java.util.Optional;
 import java.util.function.Consumer;
 
+import com.hrznstudio.titanium.item.BasicItem.Key;
+import net.minecraftforge.fluids.FluidUtil;
+import net.minecraftforge.fluids.capability.wrappers.BucketPickupHandlerWrapper;
+
+import net.minecraft.world.item.Item.Properties;
+
 ;
 
 public class ItemStraw extends IFCustomItem {
 
-    public ItemStraw(ItemGroup group) {
-        super("straw", group, new Properties().maxStackSize(1));
+    public ItemStraw(CreativeModeTab group) {
+        super("straw", group, new Properties().stacksTo(1));
     }
 
     @Override
     @Nonnull
-    public ItemStack onItemUseFinish(@Nonnull ItemStack heldStack, World world, LivingEntity entity) {
-        if (!world.isRemote && entity instanceof PlayerEntity) {
-            PlayerEntity player = (PlayerEntity) entity;
-            RayTraceResult result = rayTrace(world, player, RayTraceContext.FluidMode.SOURCE_ONLY);
-            if (result != null && result.getType() == RayTraceResult.Type.BLOCK) {
-                BlockRayTraceResult blockRayTraceResult = (BlockRayTraceResult) result;
-                BlockPos pos = blockRayTraceResult.getPos();
+    public ItemStack finishUsingItem(@Nonnull ItemStack heldStack, Level world, LivingEntity entity) {
+        if (!world.isClientSide && entity instanceof Player) {
+            Player player = (Player) entity;
+            HitResult result = getPlayerPOVHitResult(world, player, ClipContext.Fluid.SOURCE_ONLY);
+            if (result != null && result.getType() == HitResult.Type.BLOCK) {
+                BlockHitResult blockRayTraceResult = (BlockHitResult) result;
+                BlockPos pos = blockRayTraceResult.getBlockPos();
                 BlockState state = world.getBlockState(pos);
                 Block block = state.getBlock();
                 FluidState fluidState = state.getFluidState();
-                if (fluidState != Fluids.EMPTY.getDefaultState() && block instanceof IBucketPickupHandler && fluidState.isSource()) {
-                    StrawUtils.getStrawHandler(fluidState.getFluid()).ifPresent(handler -> {
-                        handler.onDrink(world, pos, ((IBucketPickupHandler) block).pickupFluid(world, pos, state), player, false);
+                if (fluidState != Fluids.EMPTY.defaultFluidState() && block instanceof BucketPickup && fluidState.isSource()) {
+                    StrawUtils.getStrawHandler(fluidState.getType()).ifPresent(handler -> {
+                        // TODO: 26/07/2021 Fix
+//                        handler.onDrink(world, pos, ((BucketPickup) block).pickupBlock(world, pos, state), player, false);
                     });
                     return heldStack;
                 } /*else if (block.hasTileEntity(state)) {
@@ -106,24 +114,24 @@ public class ItemStraw extends IFCustomItem {
                 }*/
             }
         }
-        return super.onItemUseFinish(heldStack, world, entity);
+        return super.finishUsingItem(heldStack, world, entity);
     }
 
     @Override
     @Nonnull
-    public ActionResult<ItemStack> onItemRightClick(World worldIn, PlayerEntity playerIn, @Nonnull Hand handIn) {
-        RayTraceResult result = rayTrace(worldIn, playerIn, RayTraceContext.FluidMode.SOURCE_ONLY);
-        if (result != null && result.getType() == RayTraceResult.Type.BLOCK) {
-            BlockRayTraceResult blockRayTraceResult = (BlockRayTraceResult) result;
-            BlockPos pos = blockRayTraceResult.getPos();
+    public InteractionResultHolder<ItemStack> use(Level worldIn, Player playerIn, @Nonnull InteractionHand handIn) {
+        HitResult result = getPlayerPOVHitResult(worldIn, playerIn, ClipContext.Fluid.SOURCE_ONLY);
+        if (result != null && result.getType() == HitResult.Type.BLOCK) {
+            BlockHitResult blockRayTraceResult = (BlockHitResult) result;
+            BlockPos pos = blockRayTraceResult.getBlockPos();
             BlockState state = worldIn.getBlockState(pos);
             Block block = state.getBlock();
             FluidState fluid = state.getFluidState();//FluidRegistry.lookupFluidForBlock(block);
             if (fluid != null) {
-                Optional<StrawHandler> handler = StrawUtils.getStrawHandler(fluid.getFluid());
+                Optional<StrawHandler> handler = StrawUtils.getStrawHandler(fluid.getType());
                 if (handler.isPresent()) {
-                    playerIn.setActiveHand(handIn);
-                    return ActionResult.resultSuccess(playerIn.getHeldItem(handIn)); //success accepted
+                    playerIn.startUsingItem(handIn);
+                    return InteractionResultHolder.success(playerIn.getItemInHand(handIn)); //success accepted
                 }
             }/*
             if (block.hasTileEntity(state)) {
@@ -151,7 +159,7 @@ public class ItemStraw extends IFCustomItem {
                 }
             }*/
         }
-        return super.onItemRightClick(worldIn, playerIn, handIn);
+        return super.use(worldIn, playerIn, handIn);
     }
 
     @Override
@@ -160,8 +168,8 @@ public class ItemStraw extends IFCustomItem {
     }
 
     @Override
-    public UseAction getUseAction(ItemStack p_77661_1_) {
-        return UseAction.DRINK;
+    public UseAnim getUseAnimation(ItemStack p_77661_1_) {
+        return UseAnim.DRINK;
     }
 
     @Override
@@ -170,16 +178,16 @@ public class ItemStraw extends IFCustomItem {
     }
 
     @Override
-    public void addTooltipDetails(@Nullable Key key, ItemStack stack, List<ITextComponent> tooltip, boolean advanced) {
+    public void addTooltipDetails(@Nullable Key key, ItemStack stack, List<Component> tooltip, boolean advanced) {
         super.addTooltipDetails(key, stack, tooltip, advanced);
-        tooltip.add(new StringTextComponent(TextFormatting.GRAY + "\"The One Who Codes\""));
+        tooltip.add(new TextComponent(ChatFormatting.GRAY + "\"The One Who Codes\""));
     }
 
     @Override
-    public void registerRecipe(Consumer<IFinishedRecipe> consumer) {
+    public void registerRecipe(Consumer<FinishedRecipe> consumer) {
         TitaniumShapedRecipeBuilder.shapedRecipe(this)
-                .patternLine("PP ").patternLine(" P ").patternLine(" P ")
-                .key('P', IndustrialTags.Items.PLASTIC)
-                .build(consumer);
+                .pattern("PP ").pattern(" P ").pattern(" P ")
+                .define('P', IndustrialTags.Items.PLASTIC)
+                .save(consumer);
     }
 }

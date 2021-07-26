@@ -29,20 +29,31 @@ import com.hrznstudio.titanium.annotation.Save;
 import com.hrznstudio.titanium.component.energy.EnergyStorageComponent;
 import com.hrznstudio.titanium.component.fluid.FluidTankComponent;
 import com.hrznstudio.titanium.component.fluid.SidedFluidTankComponent;
-import net.minecraft.entity.*;
-import net.minecraft.item.DyeColor;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.Direction;
-import net.minecraft.util.math.AxisAlignedBB;
+
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.item.DyeColor;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.core.Direction;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.phys.AABB;
 import net.minecraft.world.Difficulty;
-import net.minecraft.world.IServerWorld;
-import net.minecraft.world.biome.MobSpawnInfo;
-import net.minecraft.world.server.ServerWorld;
+import net.minecraft.world.level.ServerLevelAccessor;
+import net.minecraft.world.level.biome.MobSpawnSettings;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.capability.IFluidHandler;
 
 import javax.annotation.Nonnull;
 import java.util.List;
+
+import com.buuz135.industrial.block.tile.IndustrialWorkingTile.WorkAction;
+
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.Mob;
+import net.minecraft.world.entity.MobCategory;
+import net.minecraft.world.entity.MobSpawnType;
+import net.minecraft.world.entity.SpawnPlacements;
 
 public class MechanicalDirtTile extends IndustrialWorkingTile<MechanicalDirtTile> {
 
@@ -57,25 +68,25 @@ public class MechanicalDirtTile extends IndustrialWorkingTile<MechanicalDirtTile
                 setColor(DyeColor.BROWN).
                 setComponentHarness(this).
                 setTankAction(FluidTankComponent.Action.FILL).
-                setValidator(fluidStack -> fluidStack.getFluid().isEquivalentTo(ModuleCore.MEAT.getSourceFluid()))
+                setValidator(fluidStack -> fluidStack.getFluid().isSame(ModuleCore.MEAT.getSourceFluid()))
         );
         this.getPowerPerOperation = MechanicalDirtConfig.powerPerOperation;
     }
 
     @Override
     public WorkAction work() {
-        if (world.rand.nextDouble() > 0.1
-                || world.getDifficulty() == Difficulty.PEACEFUL
-                || (world.isDaytime() && world.getBrightness(pos.up()) > 0.5f && world.canBlockSeeSky(pos.up()))
-                || world.getEntitiesWithinAABB(MobEntity.class, new AxisAlignedBB(0, 0, 0, 1, 1, 1).offset(pos).grow(3)).size() > 10
-                || world.getLight(pos.up()) > 7) {
+        if (level.random.nextDouble() > 0.1
+                || level.getDifficulty() == Difficulty.PEACEFUL
+                || (level.isDay() && level.getBrightness(worldPosition.above()) > 0.5f && level.canSeeSkyFromBelowWater(worldPosition.above()))
+                || level.getEntitiesOfClass(Mob.class, new AABB(0, 0, 0, 1, 1, 1).move(worldPosition).inflate(3)).size() > 10
+                || level.getMaxLocalRawBrightness(worldPosition.above()) > 7) {
             if (hasEnergy(getPowerPerOperation / 10)) return new WorkAction(0.5f, getPowerPerOperation / 10);
             return new WorkAction(1, 0);
         }
         if (meat.getFluidAmount() >= 20 && isServer()) {
-            MobEntity entity = getMobToSpawn();
+            Mob entity = getMobToSpawn();
             if (entity != null) {
-                world.addEntity(entity);
+                level.addFreshEntity(entity);
                 meat.drainForced(20, IFluidHandler.FluidAction.EXECUTE);
                 if (hasEnergy(getPowerPerOperation)) return new WorkAction(0.5f, getPowerPerOperation);
             }
@@ -83,18 +94,18 @@ public class MechanicalDirtTile extends IndustrialWorkingTile<MechanicalDirtTile
         return new WorkAction(1, 0);
     }
 
-    private MobEntity getMobToSpawn() {
-        List<MobSpawnInfo.Spawners> spawnListEntries = ((ServerWorld)this.world).getChunkProvider().getChunkGenerator().func_230353_a_(this.world.getBiome(this.pos.up()), ((ServerWorld)this.world).func_241112_a_() ,EntityClassification.MONSTER, this.pos.up());
+    private Mob getMobToSpawn() {
+        List<MobSpawnSettings.SpawnerData> spawnListEntries = ((ServerLevel)this.level).getChunkSource().getGenerator().getMobsAt(this.level.getBiome(this.worldPosition.above()), ((ServerLevel)this.level).structureFeatureManager() ,MobCategory.MONSTER, this.worldPosition.above()).unwrap();
         if (spawnListEntries.size() == 0) return null;
-        MobSpawnInfo.Spawners spawnListEntry = spawnListEntries.get(world.rand.nextInt(spawnListEntries.size()));
-        if (!EntitySpawnPlacementRegistry.canSpawnEntity(spawnListEntry.type, (IServerWorld) this.world, SpawnReason.NATURAL, pos.up(), world.rand))
+        MobSpawnSettings.SpawnerData spawnListEntry = spawnListEntries.get(level.random.nextInt(spawnListEntries.size()));
+        if (!SpawnPlacements.checkSpawnRules(spawnListEntry.type, (ServerLevelAccessor) this.level, MobSpawnType.NATURAL, worldPosition.above(), level.random))
             return null;
-        Entity entity = spawnListEntry.type.create(world);
-        if (entity instanceof MobEntity) {
-            ((MobEntity) entity).onInitialSpawn((IServerWorld) world, world.getDifficultyForLocation(pos), SpawnReason.NATURAL, null, null);
-            entity.setPosition(pos.getX() + 0.5, pos.getY() + 1.001, pos.getZ() + 0.5);
-            if (world.hasNoCollisions(entity) && world.checkNoEntityCollision(entity, world.getBlockState(pos.up()).getShape(world, pos.up()))) { //doesNotCollide
-                return (MobEntity) entity;
+        Entity entity = spawnListEntry.type.create(level);
+        if (entity instanceof Mob) {
+            ((Mob) entity).finalizeSpawn((ServerLevelAccessor) level, level.getCurrentDifficultyAt(worldPosition), MobSpawnType.NATURAL, null, null);
+            entity.setPos(worldPosition.getX() + 0.5, worldPosition.getY() + 1.001, worldPosition.getZ() + 0.5);
+            if (level.noCollision(entity) && level.isUnobstructed(entity, level.getBlockState(worldPosition.above()).getShape(level, worldPosition.above()))) { //doesNotCollide
+                return (Mob) entity;
             }
         }
         return null;
@@ -104,12 +115,13 @@ public class MechanicalDirtTile extends IndustrialWorkingTile<MechanicalDirtTile
         return meat;
     }
 
+
     @Override
-    public void tick() {
-        super.tick();
-        if (isServer() && this.world.getGameTime() % 5 == 0) {
+    public void serverTick(Level level, BlockPos pos, BlockState state, MechanicalDirtTile blockEntity) {
+        super.serverTick(level, pos, state, blockEntity);
+        if (this.level.getGameTime() % 5 == 0) {
             for (Direction direction : Direction.Plane.HORIZONTAL) {
-                TileEntity tile = world.getTileEntity(pos.offset(direction));
+                BlockEntity tile = level.getBlockEntity(worldPosition.relative(direction));
                 if (tile instanceof MechanicalDirtTile) {
                     int difference = meat.getFluidAmount() - ((MechanicalDirtTile) tile).getMeat().getFluidAmount();
                     if (difference > 0) {

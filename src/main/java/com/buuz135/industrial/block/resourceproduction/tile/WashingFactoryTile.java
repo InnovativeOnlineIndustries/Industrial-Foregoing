@@ -13,8 +13,8 @@ import com.hrznstudio.titanium.component.fluid.FluidTankComponent;
 import com.hrznstudio.titanium.component.fluid.SidedFluidTankComponent;
 import com.hrznstudio.titanium.component.inventory.SidedInventoryComponent;
 import com.hrznstudio.titanium.container.addon.IContainerAddon;
-import net.minecraft.item.DyeColor;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.world.item.DyeColor;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.common.Tags;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.capability.IFluidHandler;
@@ -37,7 +37,7 @@ public class WashingFactoryTile extends IndustrialProcessingTile<WashingFactoryT
         addInventory(this.input = (SidedInventoryComponent<WashingFactoryTile>) new SidedInventoryComponent<WashingFactoryTile>("input", 40, 40, 1, 0)
                 .setColor(DyeColor.BLUE)
                 .setInputFilter((stack, integer) -> {
-                    if (!stack.getItem().isIn(Tags.Items.ORES)) return false;
+                    if (!stack.getItem().is(Tags.Items.ORES)) return false;
                     for (ResourceLocation resourceLocation : stack.getItem().getTags()) {
                         if (resourceLocation.toString().startsWith("forge:ores/") && OreTitaniumFluidAttributes.isValid(resourceLocation)){
                             return true;
@@ -49,7 +49,7 @@ public class WashingFactoryTile extends IndustrialProcessingTile<WashingFactoryT
         addTank(this.meatInput = (SidedFluidTankComponent<WashingFactoryTile>) new SidedFluidTankComponent<WashingFactoryTile>("meat", WashingFactoryConfig.maxTankSize, 70, 20, 1)
                 .setColor(DyeColor.BROWN)
                 .setTankAction(FluidTankComponent.Action.FILL)
-                .setValidator(fluidStack -> fluidStack.getFluid().isEquivalentTo(ModuleCore.MEAT.getSourceFluid()))
+                .setValidator(fluidStack -> fluidStack.getFluid().isSame(ModuleCore.MEAT.getSourceFluid()))
         );
         addTank(this.meatOutput = (SidedFluidTankComponent<WashingFactoryTile>)  new SidedFluidTankComponent<WashingFactoryTile>("output", WashingFactoryConfig.maxOutputSize, 135, 20, 2){
                     @Override

@@ -7,33 +7,33 @@ import com.hrznstudio.titanium.api.IFactory;
 import com.hrznstudio.titanium.block.BasicTileBlock;
 import com.hrznstudio.titanium.datagenerator.loot.block.BasicBlockLootTables;
 import com.hrznstudio.titanium.util.RayTraceUtils;
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockRenderType;
-import net.minecraft.block.BlockState;
-import net.minecraft.block.IWaterLoggable;
-import net.minecraft.block.material.Material;
-import net.minecraft.block.material.MaterialColor;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.fluid.FluidState;
-import net.minecraft.fluid.Fluids;
-import net.minecraft.item.ItemGroup;
-import net.minecraft.item.ItemStack;
-import net.minecraft.loot.LootTable;
-import net.minecraft.state.StateContainer;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.ActionResultType;
-import net.minecraft.util.Direction;
-import net.minecraft.util.Hand;
-import net.minecraft.util.NonNullList;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.BlockRayTraceResult;
-import net.minecraft.util.math.RayTraceResult;
-import net.minecraft.util.math.shapes.IBooleanFunction;
-import net.minecraft.util.math.shapes.ISelectionContext;
-import net.minecraft.util.math.shapes.VoxelShape;
-import net.minecraft.util.math.shapes.VoxelShapes;
-import net.minecraft.world.IBlockReader;
-import net.minecraft.world.World;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.RenderShape;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.SimpleWaterloggedBlock;
+import net.minecraft.world.level.material.Material;
+import net.minecraft.world.level.material.MaterialColor;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.level.material.FluidState;
+import net.minecraft.world.level.material.Fluids;
+import net.minecraft.world.item.CreativeModeTab;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.storage.loot.LootTable;
+import net.minecraft.world.level.block.state.StateDefinition;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.InteractionResult;
+import net.minecraft.core.Direction;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.core.NonNullList;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.phys.BlockHitResult;
+import net.minecraft.world.phys.HitResult;
+import net.minecraft.world.phys.shapes.BooleanOp;
+import net.minecraft.world.phys.shapes.CollisionContext;
+import net.minecraft.world.phys.shapes.VoxelShape;
+import net.minecraft.world.phys.shapes.Shapes;
+import net.minecraft.world.level.BlockGetter;
+import net.minecraft.world.level.Level;
 import org.apache.commons.lang3.tuple.Pair;
 
 import javax.annotation.Nonnull;
@@ -41,25 +41,25 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Predicate;
 
-import static net.minecraft.state.properties.BlockStateProperties.WATERLOGGED;
+import static net.minecraft.world.level.block.state.properties.BlockStateProperties.WATERLOGGED;
 
-public class TransporterBlock extends BasicTileBlock<TransporterTile> implements IWaterLoggable {
+public class TransporterBlock extends BasicTileBlock<TransporterTile> implements SimpleWaterloggedBlock {
 
-    public TransporterBlock(ItemGroup group) {
-        super(Properties.create(Material.ANVIL, MaterialColor.ADOBE).doesNotBlockMovement().hardnessAndResistance(2.0f), TransporterTile.class);
+    public TransporterBlock(CreativeModeTab group) {
+        super(Properties.of(Material.HEAVY_METAL, MaterialColor.COLOR_ORANGE).noCollission().strength(2.0f), TransporterTile.class);
         this.setRegistryName(Reference.MOD_ID, "transporter");
         this.setItemGroup(group);
-        this.setDefaultState(this.getDefaultState().with(WATERLOGGED, false));
+        this.registerDefaultState(this.defaultBlockState().setValue(WATERLOGGED, false));
     }
 
     @Override
-    public void fillItemGroup(ItemGroup group, NonNullList<ItemStack> items) {
+    public void fillItemCategory(CreativeModeTab group, NonNullList<ItemStack> items) {
         //super.fillItemGroup(group, items);
     }
 
-    private static List<VoxelShape> getShapes(BlockState state, IBlockReader source, BlockPos pos, Predicate<TransporterType> filter) {
+    private static List<VoxelShape> getShapes(BlockState state, BlockGetter source, BlockPos pos, Predicate<TransporterType> filter) {
         List<VoxelShape> boxes = new ArrayList<>();
-        TileEntity entity = source.getTileEntity(pos);
+        BlockEntity entity = source.getBlockEntity(pos);
         if (entity instanceof TransporterTile) {
             for (TransporterType upgrade : ((TransporterTile) entity).getTransporterTypeMap().values())
                 if (upgrade != null && filter.test(upgrade)) {
@@ -76,11 +76,11 @@ public class TransporterBlock extends BasicTileBlock<TransporterTile> implements
     }
 
     @Override
-    public ItemStack getPickBlock(BlockState state, RayTraceResult target, IBlockReader world, BlockPos pos, PlayerEntity player) {
-        TileEntity tileEntity = world.getTileEntity(pos);
+    public ItemStack getPickBlock(BlockState state, HitResult target, BlockGetter world, BlockPos pos, Player player) {
+        BlockEntity tileEntity = world.getBlockEntity(pos);
         if (tileEntity instanceof TransporterTile) {
-            if (target instanceof BlockRayTraceResult) {
-                Pair<Direction, Boolean> upgradePair = getFacingUpgradeHit(state, player.world, pos, player);
+            if (target instanceof BlockHitResult) {
+                Pair<Direction, Boolean> upgradePair = getFacingUpgradeHit(state, player.level, pos, player);
                 if (upgradePair != null) {
                     TransporterType upgrade = ((TransporterTile) tileEntity).getTransporterTypeMap().get(upgradePair.getKey());
                     if (upgrade != null) {
@@ -92,17 +92,17 @@ public class TransporterBlock extends BasicTileBlock<TransporterTile> implements
         return ItemStack.EMPTY;
     }
 
-    public Pair<Direction, Boolean> getFacingUpgradeHit(BlockState state, World worldIn, BlockPos pos, PlayerEntity player) {
-        TileEntity tileEntity = worldIn.getTileEntity(pos);
-        RayTraceResult result = RayTraceUtils.rayTraceSimple(worldIn, player, 32, 0);
-        if (result instanceof BlockRayTraceResult) {
-            VoxelShape hit = RayTraceUtils.rayTraceVoxelShape((BlockRayTraceResult) result, worldIn, player, 32, 0);
+    public Pair<Direction, Boolean> getFacingUpgradeHit(BlockState state, Level worldIn, BlockPos pos, Player player) {
+        BlockEntity tileEntity = worldIn.getBlockEntity(pos);
+        HitResult result = RayTraceUtils.rayTraceSimple(worldIn, player, 32, 0);
+        if (result instanceof BlockHitResult) {
+            VoxelShape hit = RayTraceUtils.rayTraceVoxelShape((BlockHitResult) result, worldIn, player, 32, 0);
             if (hit != null && tileEntity instanceof TransporterTile) {
                 for (Direction direction : ((TransporterTile) tileEntity).getTransporterTypeMap().keySet()) {
-                    if (VoxelShapes.compare(((TransporterTile) tileEntity).getTransporterTypeMap().get(direction).getCenterBoundingBox(), hit, IBooleanFunction.AND)) {
+                    if (Shapes.joinIsNotEmpty(((TransporterTile) tileEntity).getTransporterTypeMap().get(direction).getCenterBoundingBox(), hit, BooleanOp.AND)) {
                         return Pair.of(direction, true);
                     }
-                    if (VoxelShapes.compare(((TransporterTile) tileEntity).getTransporterTypeMap().get(direction).getBorderBoundingBox(), hit, IBooleanFunction.AND)) {
+                    if (Shapes.joinIsNotEmpty(((TransporterTile) tileEntity).getTransporterTypeMap().get(direction).getBorderBoundingBox(), hit, BooleanOp.AND)) {
                         return Pair.of(direction, false);
                     }
                 }
@@ -112,33 +112,33 @@ public class TransporterBlock extends BasicTileBlock<TransporterTile> implements
     }
 
     @Override
-    public List<VoxelShape> getBoundingBoxes(BlockState state, IBlockReader source, BlockPos pos) {
+    public List<VoxelShape> getBoundingBoxes(BlockState state, BlockGetter source, BlockPos pos) {
         return getShapes(state, source, pos, conveyorUpgrade -> true);
     }
 
     @Override
-    public VoxelShape getShape(BlockState state, IBlockReader world, BlockPos pos, ISelectionContext p_220053_4_) {
-        return getShapes(state, world, pos, transporterType -> true).stream().reduce((voxelShape, voxelShape2) -> VoxelShapes.combine(voxelShape, voxelShape2, IBooleanFunction.OR)).orElseGet(VoxelShapes::empty);
+    public VoxelShape getShape(BlockState state, BlockGetter world, BlockPos pos, CollisionContext p_220053_4_) {
+        return getShapes(state, world, pos, transporterType -> true).stream().reduce((voxelShape, voxelShape2) -> Shapes.joinUnoptimized(voxelShape, voxelShape2, BooleanOp.OR)).orElseGet(Shapes::empty);
     }
 
     @Nonnull
     @Override
-    public VoxelShape getCollisionShape(BlockState state, IBlockReader world, BlockPos pos, ISelectionContext selectionContext) {
-        VoxelShape shape = VoxelShapes.empty();
+    public VoxelShape getCollisionShape(BlockState state, BlockGetter world, BlockPos pos, CollisionContext selectionContext) {
+        VoxelShape shape = Shapes.empty();
         for (VoxelShape shape1 : getShapes(state, world, pos, conveyorUpgrade -> !conveyorUpgrade.ignoresCollision())) {
-            shape = VoxelShapes.combineAndSimplify(shape, shape1, IBooleanFunction.OR);
+            shape = Shapes.join(shape, shape1, BooleanOp.OR);
         }
         return shape;
     }
 
     @Override
-    protected void fillStateContainer(StateContainer.Builder<Block, BlockState> builder) {
-        super.fillStateContainer(builder);
+    protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder) {
+        super.createBlockStateDefinition(builder);
         builder.add(WATERLOGGED);
     }
 
     public FluidState getFluidState(BlockState state) {
-        return state.get(WATERLOGGED) ? Fluids.WATER.getStillFluidState(false) : super.getFluidState(state);
+        return state.getValue(WATERLOGGED) ? Fluids.WATER.getSource(false) : super.getFluidState(state);
     }
 
 
@@ -148,51 +148,51 @@ public class TransporterBlock extends BasicTileBlock<TransporterTile> implements
     }
 
     @Override
-    public BlockRenderType getRenderType(BlockState p_149645_1_) {
-        return BlockRenderType.MODEL;
+    public RenderShape getRenderShape(BlockState p_149645_1_) {
+        return RenderShape.MODEL;
     }
 
     @Override
-    public ActionResultType onBlockActivated(BlockState state, World worldIn, BlockPos pos, PlayerEntity player, Hand hand, BlockRayTraceResult ray) {
-        TileEntity tileEntity = worldIn.getTileEntity(pos);
-        ItemStack handStack = player.getHeldItem(hand);
+    public InteractionResult use(BlockState state, Level worldIn, BlockPos pos, Player player, InteractionHand hand, BlockHitResult ray) {
+        BlockEntity tileEntity = worldIn.getBlockEntity(pos);
+        ItemStack handStack = player.getItemInHand(hand);
         if (tileEntity instanceof TransporterTile) {
             Pair<Direction, Boolean> info = getFacingUpgradeHit(state, worldIn, pos, player);
             if (info != null) {
                 Direction facing = info.getLeft();
                 boolean isMiddle = info.getRight();
-                if (player.isSneaking() && handStack.isEmpty()) {
+                if (player.isShiftKeyDown() && handStack.isEmpty()) {
                     if (((TransporterTile) tileEntity).hasUpgrade(facing)) {
                         ((TransporterTile) tileEntity).removeUpgrade(facing, true);
-                        return ActionResultType.SUCCESS;
+                        return InteractionResult.SUCCESS;
                     }
                 } else {
                     if (isMiddle) {
                         if (((TransporterTile) tileEntity).hasUpgrade(facing)) {
                             ((TransporterTile) tileEntity).getTransporterTypeMap().get(facing).toggleAction();
-                            return ActionResultType.SUCCESS;
+                            return InteractionResult.SUCCESS;
                         }
                     } else {
                         if (((TransporterTile) tileEntity).hasUpgrade(facing)) {
                             TransporterType transporterType = ((TransporterTile) tileEntity).getTransporterTypeMap().get(facing);
                             if (!handStack.isEmpty() && transporterType.onUpgradeActivated(player, hand)) {
-                                return ActionResultType.SUCCESS;
+                                return InteractionResult.SUCCESS;
                             } else if (transporterType.hasGui()) {
                                 ((TransporterTile) tileEntity).openGui(player, facing);
-                                return ActionResultType.SUCCESS;
+                                return InteractionResult.SUCCESS;
                             }
                         }
                     }
                 }
             }
         }
-        return super.onBlockActivated(state, worldIn, pos, player, hand, ray);
+        return super.use(state, worldIn, pos, player, hand, ray);
     }
 
     @Override
-    public NonNullList<ItemStack> getDynamicDrops(BlockState state, World worldIn, BlockPos pos, BlockState newState, boolean isMoving) {
+    public NonNullList<ItemStack> getDynamicDrops(BlockState state, Level worldIn, BlockPos pos, BlockState newState, boolean isMoving) {
         NonNullList<ItemStack> itemStacks = NonNullList.create();
-        TileEntity tileEntity = worldIn.getTileEntity(pos);
+        BlockEntity tileEntity = worldIn.getBlockEntity(pos);
         if (tileEntity instanceof TransporterTile) {
             ((TransporterTile) tileEntity).getTransporterTypeMap().values().forEach(transporterType -> itemStacks.addAll(transporterType.getDrops()));
         }

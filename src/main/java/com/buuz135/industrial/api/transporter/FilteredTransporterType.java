@@ -9,10 +9,10 @@ import com.buuz135.industrial.gui.component.custom.TexturedStateButtonGuiCompone
 import com.buuz135.industrial.proxy.block.filter.RegulatorFilter;
 import com.buuz135.industrial.proxy.network.TransporterSyncMessage;
 import com.buuz135.industrial.utils.Reference;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.util.Direction;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.core.Direction;
+import net.minecraft.resources.ResourceLocation;
 
 import java.util.List;
 
@@ -33,12 +33,12 @@ public abstract class FilteredTransporterType<TYPE, CAP> extends TransporterType
         return true;
     }
 
-    public void handleButtonInteraction(int buttonId, CompoundNBT compound) {
+    public void handleButtonInteraction(int buttonId, CompoundTag compound) {
         if (buttonId >= 0 && buttonId < filter.getFilter().length) {
             if (compound.contains("Amount")) {
                 this.filter.getFilter()[buttonId].increaseAmount(compound.getInt("Amount"));
             } else {
-                this.filter.setFilter(buttonId, ItemStack.read(compound));
+                this.filter.setFilter(buttonId, ItemStack.of(compound));
             }
             this.getContainer().requestSync();
         }
@@ -54,12 +54,12 @@ public abstract class FilteredTransporterType<TYPE, CAP> extends TransporterType
 
     public abstract RegulatorFilter<TYPE, CAP> createFilter();
 
-    public void handleRenderSync(Direction origin, CompoundNBT compoundNBT) {
+    public void handleRenderSync(Direction origin, CompoundTag compoundNBT) {
 
     }
 
-    public void syncRender(Direction origin, CompoundNBT compoundNBT) {
-        IndustrialForegoing.NETWORK.sendToNearby(getWorld(), getPos(), 32, new TransporterSyncMessage(getPos(), compoundNBT, getSide().getIndex(), origin.getIndex()));
+    public void syncRender(Direction origin, CompoundTag compoundNBT) {
+        IndustrialForegoing.NETWORK.sendToNearby(getWorld(), getPos(), 32, new TransporterSyncMessage(getPos(), compoundNBT, getSide().get3DDataValue(), origin.get3DDataValue()));
     }
 
     public void addComponentsToGui(List<IGuiComponent> componentList) {
@@ -99,8 +99,8 @@ public abstract class FilteredTransporterType<TYPE, CAP> extends TransporterType
     }
 
     @Override
-    public CompoundNBT serializeNBT() {
-        CompoundNBT compoundNBT = super.serializeNBT();
+    public CompoundTag serializeNBT() {
+        CompoundTag compoundNBT = super.serializeNBT();
         compoundNBT.put("Filter", filter.serializeNBT());
         compoundNBT.putBoolean("Whitelist", whitelist);
         compoundNBT.putBoolean("Regulated", isRegulated);
@@ -108,7 +108,7 @@ public abstract class FilteredTransporterType<TYPE, CAP> extends TransporterType
     }
 
     @Override
-    public void deserializeNBT(CompoundNBT nbt) {
+    public void deserializeNBT(CompoundTag nbt) {
         super.deserializeNBT(nbt);
         if (nbt.contains("Filter")) filter.deserializeNBT(nbt.getCompound("Filter"));
         whitelist = nbt.getBoolean("Whitelist");

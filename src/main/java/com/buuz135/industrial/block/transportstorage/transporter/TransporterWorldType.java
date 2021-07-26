@@ -12,19 +12,19 @@ import com.buuz135.industrial.utils.Reference;
 import com.google.common.collect.Sets;
 import com.hrznstudio.titanium.recipe.generator.TitaniumShapedRecipeBuilder;
 import com.hrznstudio.titanium.util.TileUtil;
-import com.mojang.blaze3d.matrix.MatrixStack;
-import net.minecraft.client.renderer.IRenderTypeBuffer;
-import net.minecraft.data.IFinishedRecipe;
-import net.minecraft.entity.item.ItemEntity;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.Items;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.util.Direction;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.math.AxisAlignedBB;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.vector.Vector3f;
-import net.minecraft.world.World;
+import com.mojang.blaze3d.vertex.PoseStack;
+import net.minecraft.client.renderer.MultiBufferSource;
+import net.minecraft.data.recipes.FinishedRecipe;
+import net.minecraft.world.entity.item.ItemEntity;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.core.Direction;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.phys.AABB;
+import net.minecraft.core.BlockPos;
+import com.mojang.math.Vector3f;
+import net.minecraft.world.level.Level;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.common.Tags;
@@ -34,6 +34,8 @@ import net.minecraftforge.items.IItemHandler;
 import javax.annotation.Nonnull;
 import java.util.Set;
 import java.util.function.Consumer;
+
+import com.buuz135.industrial.api.transporter.TransporterTypeFactory.TransporterAction;
 
 public class TransporterWorldType extends FilteredTransporterType<ItemStack, IItemHandler> {
 
@@ -53,14 +55,14 @@ public class TransporterWorldType extends FilteredTransporterType<ItemStack, IIt
                 int amount = 0;
                 if (isRegulated) {
                     for (int i = 0; i < itemHandler.getSlots(); i++) {
-                        if (itemHandler.getStackInSlot(i).isItemEqual(stack)) {
+                        if (itemHandler.getStackInSlot(i).sameItem(stack)) {
                             amount += itemHandler.getStackInSlot(i).getCount();
                         }
                     }
                 }
 
                 for (IFilter.GhostSlot slot : this.getFilter()) {
-                    if (stack.isItemEqual(slot.getStack())) {
+                    if (stack.sameItem(slot.getStack())) {
                         int maxAmount = isRegulated ? slot.getAmount() : Integer.MAX_VALUE;
                         int returnAmount = Math.min(stack.getCount(), maxAmount - amount);
                         if (returnAmount > 0) return returnAmount;
@@ -75,10 +77,10 @@ public class TransporterWorldType extends FilteredTransporterType<ItemStack, IIt
     public void update() {
         super.update();
         float speed = getSpeed();
-        if (!getWorld().isRemote && getWorld().getGameTime() % (Math.max(1, 4 - speed)) == 0) {
+        if (!getWorld().isClientSide && getWorld().getGameTime() % (Math.max(1, 4 - speed)) == 0) {
             IBlockContainer container = getContainer();
             if (getAction() == TransporterTypeFactory.TransporterAction.EXTRACT && container instanceof TransporterTile) {
-                TileUtil.getTileEntity(getWorld(), getPos().offset(this.getSide())).ifPresent(tileEntity -> tileEntity.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, getSide().getOpposite()).ifPresent(origin -> {
+                TileUtil.getTileEntity(getWorld(), getPos().relative(this.getSide())).ifPresent(tileEntity -> tileEntity.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, getSide().getOpposite()).ifPresent(origin -> {
                     if (origin.getStackInSlot(extractSlot).isEmpty() || !filter(this.getFilter(), this.isWhitelist(), origin.getStackInSlot(extractSlot), origin, false))
                         findSlot(origin);
                     if (!origin.getStackInSlot(extractSlot).isEmpty() && filter(this.getFilter(), this.isWhitelist(), origin.getStackInSlot(extractSlot), origin, false)) {
@@ -86,16 +88,16 @@ public class TransporterWorldType extends FilteredTransporterType<ItemStack, IIt
                         ItemStack extracted = origin.extractItem(extractSlot, amount, false);
                         if (extracted.isEmpty()) return;
                         ItemEntity item = new ItemEntity(getWorld(), getPos().getX() + 0.5, getPos().getY() + 0.2, getPos().getZ() + 0.5);
-                        item.setMotion(0, 0, 0);
-                        item.setPickupDelay(4);
+                        item.setDeltaMovement(0, 0, 0);
+                        item.setPickUpDelay(4);
                         item.setItem(extracted);
-                        getWorld().addEntity(item);
+                        getWorld().addFreshEntity(item);
                     }
                 }));
             }
             if (getAction() == TransporterTypeFactory.TransporterAction.INSERT && container instanceof TransporterTile) {
-                TileUtil.getTileEntity(getWorld(), getPos().offset(this.getSide())).ifPresent(tileEntity -> tileEntity.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, getSide().getOpposite()).ifPresent(origin -> {
-                    for (ItemEntity item : this.getWorld().getEntitiesWithinAABB(ItemEntity.class, new AxisAlignedBB(this.getPos().getX(), this.getPos().getY(), this.getPos().getZ(), this.getPos().getX() + 1, this.getPos().getY() + 1, this.getPos().getZ() + 1))) {
+                TileUtil.getTileEntity(getWorld(), getPos().relative(this.getSide())).ifPresent(tileEntity -> tileEntity.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, getSide().getOpposite()).ifPresent(origin -> {
+                    for (ItemEntity item : this.getWorld().getEntitiesOfClass(ItemEntity.class, new AABB(this.getPos().getX(), this.getPos().getY(), this.getPos().getZ(), this.getPos().getX() + 1, this.getPos().getY() + 1, this.getPos().getZ() + 1))) {
                         if (item.isAlive()) {
                             ItemStack stack = item.getItem().copy();
                             int amount = Math.min(stack.getCount(), (int) (1 * getEfficiency()));
@@ -150,13 +152,13 @@ public class TransporterWorldType extends FilteredTransporterType<ItemStack, IIt
     }
 
     @Override
-    public void handleRenderSync(Direction origin, CompoundNBT compoundNBT) {
+    public void handleRenderSync(Direction origin, CompoundTag compoundNBT) {
 
     }
 
     @OnlyIn(Dist.CLIENT)
     @Override
-    public void renderTransfer(Vector3f pos, Direction direction, int step, MatrixStack stack, int combinedOverlayIn, IRenderTypeBuffer buffer) {
+    public void renderTransfer(Vector3f pos, Direction direction, int step, PoseStack stack, int combinedOverlayIn, MultiBufferSource buffer) {
         super.renderTransfer(pos, direction, step, stack, combinedOverlayIn, buffer);
 
     }
@@ -175,7 +177,7 @@ public class TransporterWorldType extends FilteredTransporterType<ItemStack, IIt
         @Override
         @Nonnull
         public ResourceLocation getModel(Direction upgradeSide, TransporterAction action) {
-            return new ResourceLocation(Reference.MOD_ID, "block/transporters/world_transporter_" + action.name().toLowerCase() + "_" + upgradeSide.getString().toLowerCase());
+            return new ResourceLocation(Reference.MOD_ID, "block/transporters/world_transporter_" + action.name().toLowerCase() + "_" + upgradeSide.getSerializedName().toLowerCase());
         }
 
         @Override
@@ -184,26 +186,26 @@ public class TransporterWorldType extends FilteredTransporterType<ItemStack, IIt
         }
 
         @Override
-        public boolean canBeAttachedAgainst(World world, BlockPos pos, Direction face) {
+        public boolean canBeAttachedAgainst(Level world, BlockPos pos, Direction face) {
             return TileUtil.getTileEntity(world, pos).map(tileEntity -> tileEntity.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, face).isPresent()).orElse(false);
         }
 
         @Nonnull
         @Override
         public ResourceLocation getItemModel() {
-            return new ResourceLocation(Reference.MOD_ID, "block/transporters/world_transporter_" + TransporterAction.EXTRACT.name().toLowerCase() + "_" + Direction.NORTH.getString().toLowerCase());
+            return new ResourceLocation(Reference.MOD_ID, "block/transporters/world_transporter_" + TransporterAction.EXTRACT.name().toLowerCase() + "_" + Direction.NORTH.getSerializedName().toLowerCase());
         }
 
         @Override
-        public void registerRecipe(Consumer<IFinishedRecipe> consumer) {
+        public void registerRecipe(Consumer<FinishedRecipe> consumer) {
             TitaniumShapedRecipeBuilder.shapedRecipe(getUpgradeItem(), 2)
-                    .patternLine("IPI").patternLine("GMG").patternLine("ICI")
-                    .key('I', Tags.Items.DUSTS_REDSTONE)
-                    .key('P', Items.ENDER_PEARL)
-                    .key('G', Items.HOPPER)
-                    .key('M', IndustrialTags.Items.MACHINE_FRAME_PITY)
-                    .key('C', Items.DROPPER)
-                    .build(consumer);
+                    .pattern("IPI").pattern("GMG").pattern("ICI")
+                    .define('I', Tags.Items.DUSTS_REDSTONE)
+                    .define('P', Items.ENDER_PEARL)
+                    .define('G', Items.HOPPER)
+                    .define('M', IndustrialTags.Items.MACHINE_FRAME_PITY)
+                    .define('C', Items.DROPPER)
+                    .save(consumer);
         }
     }
 }

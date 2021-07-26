@@ -42,15 +42,15 @@ import com.hrznstudio.titanium.component.sideness.IFacingComponent;
 import com.hrznstudio.titanium.item.AugmentWrapper;
 import com.hrznstudio.titanium.util.FacingUtil;
 import com.hrznstudio.titanium.util.RecipeUtil;
-import net.minecraft.item.DyeColor;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.WeightedRandom;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.StringTextComponent;
-import net.minecraft.util.text.TextFormatting;
-import net.minecraft.util.text.TranslationTextComponent;
-import net.minecraft.world.World;
+import net.minecraft.world.item.DyeColor;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.util.WeighedRandom;
+import net.minecraft.core.BlockPos;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.TextComponent;
+import net.minecraft.ChatFormatting;
+import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.world.level.Level;
 import net.minecraftforge.items.ItemHandlerHelper;
 
 import java.text.DecimalFormat;
@@ -73,15 +73,15 @@ public class OreLaserBaseTile extends IndustrialMachineTile<OreLaserBaseTile> im
     public OreLaserBaseTile() {
         super(ModuleResourceProduction.ORE_LASER_BASE);
         setShowEnergy(false);
-        this.miningDepth = this.getPos().getY();
+        this.miningDepth = this.getBlockPos().getY();
         this.addProgressBar(work = new ProgressBarComponent<OreLaserBaseTile>(12, 22, 0, OreLaserBaseConfig.maxProgress){
                     @Override
                     public List<IFactory<? extends IScreenAddon>> getScreenAddons() {
                         return Collections.singletonList(() -> new ProgressBarScreenAddon<OreLaserBaseTile>(work.getPosX(), work.getPosY(), this){
                             @Override
-                            public List<ITextComponent> getTooltipLines() {
-                                List<ITextComponent> tooltip = new ArrayList<>();
-                                tooltip.add(new StringTextComponent(TextFormatting.GOLD + new TranslationTextComponent("tooltip.titanium.progressbar.progress").getString()+ TextFormatting.WHITE + new DecimalFormat().format(work.getProgress()) + TextFormatting.GOLD + "/" + TextFormatting.WHITE + new DecimalFormat().format(work.getMaxProgress())));
+                            public List<Component> getTooltipLines() {
+                                List<Component> tooltip = new ArrayList<>();
+                                tooltip.add(new TextComponent(ChatFormatting.GOLD + new TranslatableComponent("tooltip.titanium.progressbar.progress").getString()+ ChatFormatting.WHITE + new DecimalFormat().format(work.getProgress()) + ChatFormatting.GOLD + "/" + ChatFormatting.WHITE + new DecimalFormat().format(work.getMaxProgress())));
                                 return tooltip;
                             }
                         });
@@ -121,29 +121,29 @@ public class OreLaserBaseTile extends IndustrialMachineTile<OreLaserBaseTile> im
         this.addGuiAddonFactory(() -> new TextScreenAddon("" ,70, y + 3, false){
             @Override
             public String getText() {
-                return TextFormatting.DARK_GRAY + new TranslationTextComponent("text.industrialforegoing.depth").getString() + miningDepth;
+                return ChatFormatting.DARK_GRAY + new TranslatableComponent("text.industrialforegoing.depth").getString() + miningDepth;
             }
         });
     }
 
     @Override
-    public void setWorldAndPos(World world, BlockPos pos) {
-        super.setWorldAndPos(world, pos);
-        if (this.miningDepth == 0) this.miningDepth = this.pos.getY();
+    public void setLevelAndPosition(Level world, BlockPos pos) {
+        super.setLevelAndPosition(world, pos);
+        if (this.miningDepth == 0) this.miningDepth = this.worldPosition.getY();
     }
 
     private void onWork(){
         if (!ItemStackUtils.isInventoryFull(this.output)){
-            List<ItemStackWeightedItem> items = RecipeUtil.getRecipes(this.world, LaserDrillOreRecipe.SERIALIZER.getRecipeType()).stream()
-                    .filter(laserDrillOreRecipe -> laserDrillOreRecipe.getValidRarity(this.world.getBiome(this.pos).getRegistryName(), this.miningDepth) != null)
+            List<ItemStackWeightedItem> items = RecipeUtil.getRecipes(this.level, LaserDrillOreRecipe.SERIALIZER.getRecipeType()).stream()
+                    .filter(laserDrillOreRecipe -> laserDrillOreRecipe.getValidRarity(this.level.getBiome(this.worldPosition).getRegistryName(), this.miningDepth) != null)
                     .map(laserDrillOreRecipe -> {
-                        int weight = laserDrillOreRecipe.getValidRarity(this.world.getBiome(this.pos).getRegistryName(), this.miningDepth).weight;
+                        int weight = laserDrillOreRecipe.getValidRarity(this.level.getBiome(this.worldPosition).getRegistryName(), this.miningDepth).weight;
                         for (int i = 0; i < lens.getSlots(); i++) {
                             if (laserDrillOreRecipe.catalyst.test(lens.getStackInSlot(i))) weight += OreLaserBaseConfig.catalystModifier;
                         }
-                        ItemStack stack = laserDrillOreRecipe.output.getMatchingStacks()[0];
+                        ItemStack stack = laserDrillOreRecipe.output.getItems()[0];
                         for (String modid : TagConfig.ITEM_PREFERENCE) {
-                            for (ItemStack matchingStack : laserDrillOreRecipe.output.getMatchingStacks()) {
+                            for (ItemStack matchingStack : laserDrillOreRecipe.output.getItems()) {
                                 if (matchingStack.getItem().getRegistryName().getNamespace().equals(modid)){
                                     stack = matchingStack;
                                     break;
@@ -153,7 +153,7 @@ public class OreLaserBaseTile extends IndustrialMachineTile<OreLaserBaseTile> im
                         return new ItemStackWeightedItem(stack.copy(), weight);
                     }).collect(Collectors.toList());
             if (!items.isEmpty()){
-                ItemStack stack = WeightedRandom.getRandomItem(this.world.getRandom(), items).getStack();
+                ItemStack stack = WeighedRandom.getRandomItem(this.level.getRandom(), items).getStack();
                 ItemHandlerHelper.insertItem(output, stack, false);
             }
         }

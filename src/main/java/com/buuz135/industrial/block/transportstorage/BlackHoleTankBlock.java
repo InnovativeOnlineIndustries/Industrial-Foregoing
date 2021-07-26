@@ -36,28 +36,27 @@ import com.hrznstudio.titanium.nbthandler.NBTManager;
 import com.hrznstudio.titanium.recipe.generator.TitaniumShapedRecipeBuilder;
 import com.hrznstudio.titanium.util.LangUtil;
 import com.mojang.datafixers.types.Type;
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockState;
-import net.minecraft.block.Blocks;
-import net.minecraft.client.util.ITooltipFlag;
-import net.minecraft.data.IFinishedRecipe;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.*;
-import net.minecraft.loot.LootTable;
-import net.minecraft.loot.functions.CopyNbt;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.tags.ITag;
-import net.minecraft.tileentity.TileEntityType;
-import net.minecraft.util.Direction;
-import net.minecraft.util.NonNullList;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.StringTextComponent;
-import net.minecraft.util.text.TextFormatting;
-import net.minecraft.util.text.TranslationTextComponent;
-import net.minecraft.world.IBlockReader;
-import net.minecraft.world.World;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.item.TooltipFlag;
+import net.minecraft.data.recipes.FinishedRecipe;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.level.storage.loot.LootTable;
+import net.minecraft.world.level.storage.loot.functions.CopyNbtFunction;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.tags.Tag;
+import net.minecraft.world.level.block.entity.BlockEntityType;
+import net.minecraft.core.Direction;
+import net.minecraft.core.NonNullList;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.core.BlockPos;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.TextComponent;
+import net.minecraft.ChatFormatting;
+import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.world.level.BlockGetter;
+import net.minecraft.world.level.Level;
 import net.minecraftforge.common.Tags;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.ICapabilityProvider;
@@ -71,13 +70,23 @@ import java.text.DecimalFormat;
 import java.util.List;
 import java.util.function.Consumer;
 
+import com.hrznstudio.titanium.block.RotatableBlock.RotationType;
+import net.minecraft.world.level.block.state.BlockBehaviour.Properties;
+import net.minecraft.world.item.Item.Properties;
+
+import net.minecraft.world.item.BlockItem;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
+import net.minecraft.world.item.Rarity;
+
 public class BlackHoleTankBlock extends IndustrialBlock<BlackHoleTankTile> {
 
     private Rarity rarity;
-    private TileEntityType tileEntityType;
+    private BlockEntityType tileEntityType;
 
     public BlackHoleTankBlock(Rarity rarity) {
-        super(rarity.name().toLowerCase() + "_black_hole_tank",  Properties.from(Blocks.IRON_BLOCK), BlackHoleTankTile.class, ModuleTransportStorage.TAB_TRANSPORT);
+        super(rarity.name().toLowerCase() + "_black_hole_tank",  Properties.copy(Blocks.IRON_BLOCK), BlackHoleTankTile.class, ModuleTransportStorage.TAB_TRANSPORT);
         this.rarity = rarity;
     }
 
@@ -92,25 +101,25 @@ public class BlackHoleTankBlock extends IndustrialBlock<BlackHoleTankTile> {
         setItem(item);
         registry.content(Item.class, item);
         NBTManager.getInstance().scanTileClassForAnnotations(BlackHoleTankTile.class);
-        tileEntityType = TileEntityType.Builder.create(this.getTileEntityFactory()::create, new Block[]{this}).build((Type) null);
+        tileEntityType = BlockEntityType.Builder.of(this.getTileEntityFactory()::create, new Block[]{this}).build((Type) null);
         tileEntityType.setRegistryName(new ResourceLocation(Reference.MOD_ID, rarity.name().toLowerCase() + "_black_hole_tank"));
-        registry.content(TileEntityType.class, tileEntityType);
+        registry.content(BlockEntityType.class, tileEntityType);
     }
 
     @Override
-    public void addInformation(ItemStack stack, @Nullable IBlockReader worldIn, List<ITextComponent> tooltip, ITooltipFlag flagIn) {
-        super.addInformation(stack, worldIn, tooltip, flagIn);
+    public void appendHoverText(ItemStack stack, @Nullable BlockGetter worldIn, List<Component> tooltip, TooltipFlag flagIn) {
+        super.appendHoverText(stack, worldIn, tooltip, flagIn);
         stack.getCapability(CapabilityFluidHandler.FLUID_HANDLER_ITEM_CAPABILITY).ifPresent(iFluidHandlerItem -> {
             if (!iFluidHandlerItem.getFluidInTank(0).isEmpty()){
-                tooltip.add(new StringTextComponent(TextFormatting.GOLD + LangUtil.getString("text.industrialforegoing.tooltip.contains") +": " + TextFormatting.WHITE + new DecimalFormat().format(iFluidHandlerItem.getFluidInTank(0).getAmount()) + TextFormatting.YELLOW + LangUtil.getString("tooltip.industrialforegoing.mb_of",TextFormatting.DARK_AQUA+ iFluidHandlerItem.getFluidInTank(0).getDisplayName().getString())));
+                tooltip.add(new TextComponent(ChatFormatting.GOLD + LangUtil.getString("text.industrialforegoing.tooltip.contains") +": " + ChatFormatting.WHITE + new DecimalFormat().format(iFluidHandlerItem.getFluidInTank(0).getAmount()) + ChatFormatting.YELLOW + LangUtil.getString("tooltip.industrialforegoing.mb_of",ChatFormatting.DARK_AQUA+ iFluidHandlerItem.getFluidInTank(0).getDisplayName().getString())));
             }
         });
-        tooltip.add(new StringTextComponent(TextFormatting.GOLD + LangUtil.getString("text.industrialforegoing.tooltip.can_hold") + ": " + TextFormatting.WHITE+ new DecimalFormat().format(BlockUtils.getFluidAmountByRarity(rarity)) + TextFormatting.DARK_AQUA + LangUtil.getString("text.industrialforegoing.tooltip.mb")));
+        tooltip.add(new TextComponent(ChatFormatting.GOLD + LangUtil.getString("text.industrialforegoing.tooltip.can_hold") + ": " + ChatFormatting.WHITE+ new DecimalFormat().format(BlockUtils.getFluidAmountByRarity(rarity)) + ChatFormatting.DARK_AQUA + LangUtil.getString("text.industrialforegoing.tooltip.mb")));
     }
 
     @Override
     public IFactory<BlockItem> getItemBlockFactory() {
-        return () -> (BlockItem) new BlackHoleTankItem(this, new Item.Properties().group(this.getItemGroup()), rarity).setRegistryName(this.getRegistryName());
+        return () -> (BlockItem) new BlackHoleTankItem(this, new Item.Properties().tab(this.getItemGroup()), rarity).setRegistryName(this.getRegistryName());
     }
 
     @Override
@@ -119,51 +128,51 @@ public class BlackHoleTankBlock extends IndustrialBlock<BlackHoleTankTile> {
     }
 
     @Override
-    public TileEntityType getTileEntityType() {
+    public BlockEntityType getTileEntityType() {
         return tileEntityType;
     }
 
     @Override
-    public void onBlockClicked(BlockState state, World worldIn, BlockPos pos, PlayerEntity player) {
+    public void attack(BlockState state, Level worldIn, BlockPos pos, Player player) {
         //getTile(worldIn, pos).ifPresent(tile -> tile.onClicked(player));
     }
 
     @Override
     public LootTable.Builder getLootTable(@Nonnull BasicBlockLootTables blockLootTables) {
-        CopyNbt.Builder nbtBuilder = CopyNbt.builder(CopyNbt.Source.BLOCK_ENTITY);
-        nbtBuilder.replaceOperation("tank",  "BlockEntityTag.tank");
-        nbtBuilder.replaceOperation("filter",  "BlockEntityTag.filter");
+        CopyNbtFunction.Builder nbtBuilder = CopyNbtFunction.copyData(CopyNbtFunction.DataSource.BLOCK_ENTITY);
+        nbtBuilder.copy("tank",  "BlockEntityTag.tank");
+        nbtBuilder.copy("filter",  "BlockEntityTag.filter");
         return blockLootTables.droppingSelfWithNbt(this, nbtBuilder);
     }
 
     @Override
-    public NonNullList<ItemStack> getDynamicDrops(BlockState state, World worldIn, BlockPos pos, BlockState newState, boolean isMoving) {
+    public NonNullList<ItemStack> getDynamicDrops(BlockState state, Level worldIn, BlockPos pos, BlockState newState, boolean isMoving) {
         return NonNullList.create();
     }
 
     @Override
-    public void registerRecipe(Consumer<IFinishedRecipe> consumer) {
+    public void registerRecipe(Consumer<FinishedRecipe> consumer) {
         if (rarity == Rarity.COMMON){
             TitaniumShapedRecipeBuilder.shapedRecipe(this)
-                    .patternLine("PPP").patternLine("CEC").patternLine("CMC")
-                    .key('P', Tags.Items.INGOTS_IRON)
-                    .key('E', IndustrialTags.Items.GEAR_IRON)
-                    .key('C', Items.BUCKET)
-                    .key('M', IndustrialTags.Items.MACHINE_FRAME_PITY)
-                    .build(consumer);
+                    .pattern("PPP").pattern("CEC").pattern("CMC")
+                    .define('P', Tags.Items.INGOTS_IRON)
+                    .define('E', IndustrialTags.Items.GEAR_IRON)
+                    .define('C', Items.BUCKET)
+                    .define('M', IndustrialTags.Items.MACHINE_FRAME_PITY)
+                    .save(consumer);
         } else {
-            ITag tag = IndustrialTags.Items.MACHINE_FRAME_PITY;
+            Tag tag = IndustrialTags.Items.MACHINE_FRAME_PITY;
             if (rarity == ModuleCore.SIMPLE_RARITY) tag = IndustrialTags.Items.MACHINE_FRAME_SIMPLE;
             if (rarity == ModuleCore.ADVANCED_RARITY) tag = IndustrialTags.Items.MACHINE_FRAME_ADVANCED;
             if (rarity == ModuleCore.SUPREME_RARITY) tag = IndustrialTags.Items.MACHINE_FRAME_SUPREME;
             TitaniumShapedRecipeBuilder.shapedRecipe(this)
-                    .patternLine("PPP").patternLine("NEN").patternLine("CMC")
-                    .key('P', IndustrialTags.Items.PLASTIC)
-                    .key('N', Items.ENDER_EYE)
-                    .key('E', Items.ENDER_PEARL)
-                    .key('C', Items.BUCKET)
-                    .key('M', tag)
-                    .build(consumer);
+                    .pattern("PPP").pattern("NEN").pattern("CMC")
+                    .define('P', IndustrialTags.Items.PLASTIC)
+                    .define('N', Items.ENDER_EYE)
+                    .define('E', Items.ENDER_PEARL)
+                    .define('C', Items.BUCKET)
+                    .define('M', tag)
+                    .save(consumer);
         }
     }
 
@@ -178,14 +187,14 @@ public class BlackHoleTankBlock extends IndustrialBlock<BlackHoleTankTile> {
 
         @Nullable
         @Override
-        public ICapabilityProvider initCapabilities(ItemStack stack, @Nullable CompoundNBT nbt) {
+        public ICapabilityProvider initCapabilities(ItemStack stack, @Nullable CompoundTag nbt) {
             return new BlackHoleTankCapabilityProvider(stack, this.rarity);
         }
 
         @Nullable
         @Override
         public String getCreatorModId(ItemStack itemStack) {
-            return new TranslationTextComponent("itemGroup." + this.group.getPath()).getString();
+            return new TranslatableComponent("itemGroup." + this.category.getRecipeFolderName()).getString();
         }
     }
 

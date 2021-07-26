@@ -28,9 +28,9 @@ import com.hrznstudio.titanium.annotation.Save;
 import com.hrznstudio.titanium.component.energy.EnergyStorageComponent;
 import com.hrznstudio.titanium.component.fluid.SidedFluidTankComponent;
 import com.hrznstudio.titanium.component.inventory.SidedInventoryComponent;
-import net.minecraft.fluid.Fluids;
-import net.minecraft.item.DyeColor;
-import net.minecraft.item.ItemStack;
+import net.minecraft.world.level.material.Fluids;
+import net.minecraft.world.item.DyeColor;
+import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.fluids.capability.IFluidHandler;
 import net.minecraftforge.items.ItemHandlerHelper;
 
@@ -53,11 +53,11 @@ public class LatexProcessingUnitTile extends IndustrialProcessingTile<LatexProce
         this.addTank(latex = (SidedFluidTankComponent<LatexProcessingUnitTile>) new SidedFluidTankComponent<LatexProcessingUnitTile>("latex", LatexProcessingUnitConfig.maxLatexTankSize, 29, 20, 0).
                 setColor(DyeColor.LIGHT_GRAY).
                 setComponentHarness(this).
-                setValidator(fluidStack -> fluidStack.getFluid().isEquivalentTo(ModuleCore.LATEX.getSourceFluid())));
+                setValidator(fluidStack -> fluidStack.getFluid().isSame(ModuleCore.LATEX.getSourceFluid())));
         this.addTank(water = (SidedFluidTankComponent<LatexProcessingUnitTile>) new SidedFluidTankComponent<LatexProcessingUnitTile>("water", LatexProcessingUnitConfig.maxWaterTankSize, 30 + 18, 20, 1).
                 setColor(DyeColor.BLUE).
                 setComponentHarness(this).
-                setValidator(fluidStack -> fluidStack.getFluid().isEquivalentTo(Fluids.WATER)));
+                setValidator(fluidStack -> fluidStack.getFluid().isSame(Fluids.WATER)));
         this.addInventory(output = (SidedInventoryComponent<LatexProcessingUnitTile>) new SidedInventoryComponent<LatexProcessingUnitTile>("output", 70 + 34, 22, 9, 2).
                 setColor(DyeColor.ORANGE).
                 setRange(3, 3).

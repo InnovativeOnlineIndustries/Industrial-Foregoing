@@ -23,15 +23,15 @@ package com.buuz135.industrial.utils.apihandlers.plant;
 
 import com.buuz135.industrial.api.plant.PlantRecollectable;
 import com.buuz135.industrial.utils.BlockUtils;
-import net.minecraft.block.BlockState;
-import net.minecraft.block.Blocks;
-import net.minecraft.block.CactusBlock;
-import net.minecraft.block.SugarCaneBlock;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.Direction;
-import net.minecraft.util.NonNullList;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.CactusBlock;
+import net.minecraft.world.level.block.SugarCaneBlock;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.core.Direction;
+import net.minecraft.core.NonNullList;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.level.Level;
 
 import java.util.Arrays;
 import java.util.List;
@@ -43,32 +43,32 @@ public class DoubleTallPlantRecollectable extends PlantRecollectable {
     }
 
     @Override
-    public boolean canBeHarvested(World world, BlockPos pos, BlockState blockState) {
-        return (blockState.getBlock() instanceof CactusBlock && world.getBlockState(pos.up()).getBlock() instanceof CactusBlock)
-                || (blockState.getBlock() instanceof SugarCaneBlock && world.getBlockState(pos.up()).getBlock() instanceof SugarCaneBlock);
+    public boolean canBeHarvested(Level world, BlockPos pos, BlockState blockState) {
+        return (blockState.getBlock() instanceof CactusBlock && world.getBlockState(pos.above()).getBlock() instanceof CactusBlock)
+                || (blockState.getBlock() instanceof SugarCaneBlock && world.getBlockState(pos.above()).getBlock() instanceof SugarCaneBlock);
     }
 
     @Override
-    public List<ItemStack> doHarvestOperation(World world, BlockPos pos, BlockState blockState) {
+    public List<ItemStack> doHarvestOperation(Level world, BlockPos pos, BlockState blockState) {
         NonNullList<ItemStack> stacks = NonNullList.create();
-        harvestBlock(stacks, world, pos.offset(Direction.UP, 2));
-        harvestBlock(stacks, world, pos.offset(Direction.UP, 1));
+        harvestBlock(stacks, world, pos.relative(Direction.UP, 2));
+        harvestBlock(stacks, world, pos.relative(Direction.UP, 1));
         return stacks;
     }
 
     @Override
-    public boolean shouldCheckNextPlant(World world, BlockPos pos, BlockState blockState) {
+    public boolean shouldCheckNextPlant(Level world, BlockPos pos, BlockState blockState) {
         return true;
     }
 
-    private void harvestBlock(NonNullList<ItemStack> stacks, World world, BlockPos pos) {
+    private void harvestBlock(NonNullList<ItemStack> stacks, Level world, BlockPos pos) {
         BlockState blockState = world.getBlockState(pos);
         if (blockState.getBlock() instanceof CactusBlock || blockState.getBlock() instanceof SugarCaneBlock) {
             stacks.addAll(BlockUtils.getBlockDrops(world, pos));
             if (!world.getFluidState(pos).isEmpty()) {
-                world.setBlockState(pos, Blocks.WATER.getDefaultState());
+                world.setBlockAndUpdate(pos, Blocks.WATER.defaultBlockState());
             } else {
-                world.setBlockState(pos, Blocks.AIR.getDefaultState());
+                world.setBlockAndUpdate(pos, Blocks.AIR.defaultBlockState());
             }
         }
     }

@@ -11,23 +11,23 @@ import com.buuz135.industrial.proxy.network.TransporterSyncMessage;
 import com.buuz135.industrial.utils.Reference;
 import com.hrznstudio.titanium.api.augment.AugmentTypes;
 import com.hrznstudio.titanium.item.AugmentWrapper;
-import com.mojang.blaze3d.matrix.MatrixStack;
-import net.minecraft.client.renderer.IRenderTypeBuffer;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.Direction;
-import net.minecraft.util.Hand;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.shapes.VoxelShape;
-import net.minecraft.util.math.shapes.VoxelShapes;
-import net.minecraft.util.math.vector.Vector3f;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.StringTextComponent;
-import net.minecraft.world.World;
+import com.mojang.blaze3d.vertex.PoseStack;
+import net.minecraft.client.renderer.MultiBufferSource;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.core.Direction;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.phys.shapes.VoxelShape;
+import net.minecraft.world.phys.shapes.Shapes;
+import com.mojang.math.Vector3f;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.TextComponent;
+import net.minecraft.world.level.Level;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.client.model.ModelDataManager;
@@ -39,7 +39,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
-public class TransporterType implements INBTSerializable<CompoundNBT> {
+public class TransporterType implements INBTSerializable<CompoundTag> {
 
     private IBlockContainer container;
     private TransporterTypeFactory factory;
@@ -57,8 +57,8 @@ public class TransporterType implements INBTSerializable<CompoundNBT> {
         this.efficiency = ItemStack.EMPTY;
     }
 
-    public boolean onUpgradeActivated(PlayerEntity player, Hand hand) {
-        ItemStack handStack = player.getHeldItem(hand);
+    public boolean onUpgradeActivated(Player player, InteractionHand hand) {
+        ItemStack handStack = player.getItemInHand(hand);
         if (!handStack.isEmpty()) {
             if (efficiency.isEmpty() && handStack.getItem() instanceof EfficiencyAddonItem) {
                 efficiency = ItemHandlerHelper.copyStackWithSize(handStack, 1);
@@ -90,7 +90,7 @@ public class TransporterType implements INBTSerializable<CompoundNBT> {
         return container;
     }
 
-    public World getWorld() {
+    public Level getWorld() {
         return getContainer().getBlockWorld();
     }
 
@@ -146,7 +146,7 @@ public class TransporterType implements INBTSerializable<CompoundNBT> {
             case UP:
                 return TransporterVoxelShapes.UP_RING;
         }
-        return VoxelShapes.empty();
+        return Shapes.empty();
     }
 
     public VoxelShape getCenterBoundingBox() {
@@ -180,23 +180,23 @@ public class TransporterType implements INBTSerializable<CompoundNBT> {
             case UP:
                 return TransporterVoxelShapes.UP_MIDDLE_INSERT;
         }
-        return VoxelShapes.empty();
+        return Shapes.empty();
     }
 
     public boolean hasGui() {
         return true;
     }
 
-    public void handleButtonInteraction(int buttonId, CompoundNBT compound) {
+    public void handleButtonInteraction(int buttonId, CompoundTag compound) {
 
     }
 
-    public void handleRenderSync(Direction origin, CompoundNBT compoundNBT) {
+    public void handleRenderSync(Direction origin, CompoundTag compoundNBT) {
 
     }
 
-    public void syncRender(Direction origin, CompoundNBT compoundNBT) {
-        IndustrialForegoing.NETWORK.sendToNearby(getWorld(), getPos(), 32, new TransporterSyncMessage(getPos(), compoundNBT, getSide().getIndex(), origin.getIndex()));
+    public void syncRender(Direction origin, CompoundTag compoundNBT) {
+        IndustrialForegoing.NETWORK.sendToNearby(getWorld(), getPos(), 32, new TransporterSyncMessage(getPos(), compoundNBT, getSide().get3DDataValue(), origin.get3DDataValue()));
     }
 
     public void addComponentsToGui(List<IGuiComponent> componentList) {
@@ -204,16 +204,16 @@ public class TransporterType implements INBTSerializable<CompoundNBT> {
         componentList.add(new TextureGuiComponent(158, 4, 14, 14, res, 96, 233) {
             @Nullable
             @Override
-            public List<ITextComponent> getTooltip(int guiX, int guiY, double mouseX, double mouseY) {
-                List<ITextComponent> components = new ArrayList<>();
+            public List<Component> getTooltip(int guiX, int guiY, double mouseX, double mouseY) {
+                List<Component> components = new ArrayList<>();
                 if (!speed.isEmpty()) {
-                    components.add(speed.getDisplayName());
+                    components.add(speed.getHoverName());
                 }
                 if (!efficiency.isEmpty()) {
-                    components.add(efficiency.getDisplayName());
+                    components.add(efficiency.getHoverName());
                 }
                 if (components.isEmpty()) {
-                    components.add(new StringTextComponent("No Addons"));
+                    components.add(new TextComponent("No Addons"));
                 }
                 return components;
             }
@@ -231,13 +231,13 @@ public class TransporterType implements INBTSerializable<CompoundNBT> {
             action = TransporterTypeFactory.TransporterAction.EXTRACT;
         }
         this.getContainer().requestSync();
-        if (this.getWorld().isRemote && getContainer() instanceof TileEntity)
-            ModelDataManager.requestModelDataRefresh((TileEntity) getContainer());
+        if (this.getWorld().isClientSide && getContainer() instanceof BlockEntity)
+            ModelDataManager.requestModelDataRefresh((BlockEntity) getContainer());
     }
 
     @Override
-    public CompoundNBT serializeNBT() {
-        CompoundNBT compoundNBT = new CompoundNBT();
+    public CompoundTag serializeNBT() {
+        CompoundTag compoundNBT = new CompoundTag();
         compoundNBT.putBoolean("Insert", action == TransporterTypeFactory.TransporterAction.INSERT);
         compoundNBT.put("Efficiency", this.efficiency.serializeNBT());
         compoundNBT.put("Speed", this.speed.serializeNBT());
@@ -245,10 +245,10 @@ public class TransporterType implements INBTSerializable<CompoundNBT> {
     }
 
     @Override
-    public void deserializeNBT(CompoundNBT nbt) {
+    public void deserializeNBT(CompoundTag nbt) {
         action = nbt.getBoolean("Insert") ? TransporterTypeFactory.TransporterAction.INSERT : TransporterTypeFactory.TransporterAction.EXTRACT;
-        speed = ItemStack.read(nbt.getCompound("Speed"));
-        efficiency = ItemStack.read(nbt.getCompound("Efficiency"));
+        speed = ItemStack.of(nbt.getCompound("Speed"));
+        efficiency = ItemStack.of(nbt.getCompound("Efficiency"));
     }
 
     public float getSpeed() {
@@ -260,7 +260,7 @@ public class TransporterType implements INBTSerializable<CompoundNBT> {
     }
 
     @OnlyIn(Dist.CLIENT)
-    public void renderTransfer(Vector3f pos, Direction direction, int step, MatrixStack stack, int combinedOverlayIn, IRenderTypeBuffer buffer) {
+    public void renderTransfer(Vector3f pos, Direction direction, int step, PoseStack stack, int combinedOverlayIn, MultiBufferSource buffer) {
 
     }
 }

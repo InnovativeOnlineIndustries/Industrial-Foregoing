@@ -27,16 +27,18 @@ import com.buuz135.industrial.module.ModuleResourceProduction;
 import com.buuz135.industrial.utils.IndustrialTags;
 import com.hrznstudio.titanium.api.IFactory;
 import com.hrznstudio.titanium.recipe.generator.TitaniumShapedRecipeBuilder;
-import net.minecraft.block.Blocks;
-import net.minecraft.data.IFinishedRecipe;
-import net.minecraft.item.Items;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.data.recipes.FinishedRecipe;
+import net.minecraft.world.item.Items;
 
 import java.util.function.Consumer;
+
+import net.minecraft.world.level.block.state.BlockBehaviour.Properties;
 
 public class FluidLaserBaseBlock extends IndustrialBlock<FluidLaserBaseTile> {
 
     public FluidLaserBaseBlock() {
-        super("fluid_laser_base", Properties.from(Blocks.IRON_BLOCK), FluidLaserBaseTile.class, ModuleResourceProduction.TAB_RESOURCE);
+        super("fluid_laser_base", Properties.copy(Blocks.IRON_BLOCK), FluidLaserBaseTile.class, ModuleResourceProduction.TAB_RESOURCE);
     }
 
     @Override
@@ -45,14 +47,14 @@ public class FluidLaserBaseBlock extends IndustrialBlock<FluidLaserBaseTile> {
     }
 
     @Override
-    public void registerRecipe(Consumer<IFinishedRecipe> consumer) {
-        TitaniumShapedRecipeBuilder.shapedRecipe(this).patternLine("pfp").patternLine("bmb").patternLine("grg")
-                .key('p', IndustrialTags.Items.PLASTIC)
-                .key('f', Items.DIAMOND_PICKAXE)
-                .key('b', Items.BUCKET)
-                .key('m', IndustrialTags.Items.MACHINE_FRAME_ADVANCED)
-                .key('g', IndustrialTags.Items.GEAR_DIAMOND)
-                .key('r', Items.REDSTONE)
-                .build(consumer);
+    public void registerRecipe(Consumer<FinishedRecipe> consumer) {
+        TitaniumShapedRecipeBuilder.shapedRecipe(this).pattern("pfp").pattern("bmb").pattern("grg")
+                .define('p', IndustrialTags.Items.PLASTIC)
+                .define('f', Items.DIAMOND_PICKAXE)
+                .define('b', Items.BUCKET)
+                .define('m', IndustrialTags.Items.MACHINE_FRAME_ADVANCED)
+                .define('g', IndustrialTags.Items.GEAR_DIAMOND)
+                .define('r', Items.REDSTONE)
+                .save(consumer);
     }
 }

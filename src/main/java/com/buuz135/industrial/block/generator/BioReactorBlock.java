@@ -27,19 +27,22 @@ import com.buuz135.industrial.module.ModuleGenerator;
 import com.buuz135.industrial.utils.IndustrialTags;
 import com.hrznstudio.titanium.api.IFactory;
 import com.hrznstudio.titanium.recipe.generator.TitaniumShapedRecipeBuilder;
-import net.minecraft.block.Blocks;
-import net.minecraft.data.IFinishedRecipe;
-import net.minecraft.item.Items;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.data.recipes.FinishedRecipe;
+import net.minecraft.world.item.Items;
 import net.minecraft.tags.ItemTags;
 import net.minecraftforge.common.Tags;
 
 import javax.annotation.Nonnull;
 import java.util.function.Consumer;
 
+import com.hrznstudio.titanium.block.RotatableBlock.RotationType;
+import net.minecraft.world.level.block.state.BlockBehaviour.Properties;
+
 public class BioReactorBlock extends IndustrialBlock<BioReactorTile> {
 
     public BioReactorBlock() {
-        super("bioreactor", Properties.from(Blocks.IRON_BLOCK), BioReactorTile.class, ModuleGenerator.TAB_GENERATOR);
+        super("bioreactor", Properties.copy(Blocks.IRON_BLOCK), BioReactorTile.class, ModuleGenerator.TAB_GENERATOR);
     }
 
     @Override
@@ -54,15 +57,15 @@ public class BioReactorBlock extends IndustrialBlock<BioReactorTile> {
     }
 
     @Override
-    public void registerRecipe(Consumer<IFinishedRecipe> consumer) {
+    public void registerRecipe(Consumer<FinishedRecipe> consumer) {
         TitaniumShapedRecipeBuilder.shapedRecipe(this)
-                .patternLine("PDP").patternLine("SMS").patternLine("ARA")
-                .key('P', IndustrialTags.Items.PLASTIC)
-                .key('D', ItemTags.makeWrapperTag("forge:gears/diamond"))
-                .key('S', Tags.Items.SLIMEBALLS)
-                .key('A', Items.BRICK)
-                .key('M', IndustrialTags.Items.MACHINE_FRAME_PITY)
-                .key('R', Items.SUGAR)
-                .build(consumer);
+                .pattern("PDP").pattern("SMS").pattern("ARA")
+                .define('P', IndustrialTags.Items.PLASTIC)
+                .define('D', ItemTags.bind("forge:gears/diamond"))
+                .define('S', Tags.Items.SLIMEBALLS)
+                .define('A', Items.BRICK)
+                .define('M', IndustrialTags.Items.MACHINE_FRAME_PITY)
+                .define('R', Items.SUGAR)
+                .save(consumer);
     }
 }

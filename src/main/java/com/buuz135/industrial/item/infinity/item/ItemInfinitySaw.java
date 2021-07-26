@@ -31,17 +31,17 @@ import com.buuz135.industrial.utils.apihandlers.plant.TreeCache;
 import com.google.common.cache.CacheBuilder;
 import com.google.common.cache.CacheLoader;
 import com.google.common.cache.LoadingCache;
-import net.minecraft.block.BlockState;
-import net.minecraft.data.IFinishedRecipe;
-import net.minecraft.enchantment.Enchantment;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.ItemGroup;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.Items;
-import net.minecraft.item.crafting.Ingredient;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.data.recipes.FinishedRecipe;
+import net.minecraft.world.item.enchantment.Enchantment;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.CreativeModeTab;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
+import net.minecraft.world.item.crafting.Ingredient;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.level.Level;
 import net.minecraftforge.common.ToolType;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.items.ItemHandlerHelper;
@@ -53,11 +53,13 @@ import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
 import java.util.function.Consumer;
 
+import net.minecraft.world.item.Item.Properties;
+
 public class ItemInfinitySaw extends ItemInfinity {
 
-    public static LoadingCache<Pair<World, BlockPos>, TreeCache> SAW_CACHE = CacheBuilder.newBuilder().expireAfterAccess(5, TimeUnit.MINUTES).build(new CacheLoader<Pair<World, BlockPos>, TreeCache>() {
+    public static LoadingCache<Pair<Level, BlockPos>, TreeCache> SAW_CACHE = CacheBuilder.newBuilder().expireAfterAccess(5, TimeUnit.MINUTES).build(new CacheLoader<Pair<Level, BlockPos>, TreeCache>() {
         @Override
-        public TreeCache load(Pair<World, BlockPos> key) throws Exception {
+        public TreeCache load(Pair<Level, BlockPos> key) throws Exception {
             TreeCache cache = new TreeCache(key.getLeft(), key.getRight());
             cache.scanForTreeBlockSection();
             return cache;
@@ -67,8 +69,8 @@ public class ItemInfinitySaw extends ItemInfinity {
     public static int POWER_CONSUMPTION = 10000;
     public static int FUEL_CONSUMPTION = 3;
 
-    public ItemInfinitySaw(ItemGroup group) {
-        super("infinity_saw", group, new Properties().maxStackSize(1).addToolType(ToolType.AXE, 3), POWER_CONSUMPTION, FUEL_CONSUMPTION, false);
+    public ItemInfinitySaw(CreativeModeTab group) {
+        super("infinity_saw", group, new Properties().stacksTo(1).addToolType(ToolType.AXE, 3), POWER_CONSUMPTION, FUEL_CONSUMPTION, false);
     }
 
     @Override
@@ -77,13 +79,13 @@ public class ItemInfinitySaw extends ItemInfinity {
     }
 
     @Override
-    public boolean canHarvestBlock(BlockState blockIn) {
-        return Items.DIAMOND_AXE.canHarvestBlock(blockIn);
+    public boolean isCorrectToolForDrops(BlockState blockIn) {
+        return Items.DIAMOND_AXE.isCorrectToolForDrops(blockIn);
     }
 
     @Override
-    public boolean onBlockDestroyed(ItemStack stack, World worldIn, BlockState state, BlockPos pos, LivingEntity entityLiving) {
-        if (entityLiving instanceof PlayerEntity) {
+    public boolean mineBlock(ItemStack stack, Level worldIn, BlockState state, BlockPos pos, LivingEntity entityLiving) {
+        if (entityLiving instanceof Player) {
             if (BlockUtils.isLog(worldIn, pos)) {
                 try {
                     TreeCache cache = SAW_CACHE.get(Pair.of(worldIn, pos));
@@ -104,7 +106,7 @@ public class ItemInfinitySaw extends ItemInfinity {
                             }
                             consumeFuel(stack);
                         }
-                        itemStacks.forEach(itemStack -> ItemHandlerHelper.giveItemToPlayer((PlayerEntity) entityLiving, itemStack));
+                        itemStacks.forEach(itemStack -> ItemHandlerHelper.giveItemToPlayer((Player) entityLiving, itemStack));
                         return false;
                     }
                 } catch (ExecutionException e) {
@@ -120,17 +122,17 @@ public class ItemInfinitySaw extends ItemInfinity {
     }
 
     @Override
-    public void registerRecipe(Consumer<IFinishedRecipe> consumer) {
+    public void registerRecipe(Consumer<FinishedRecipe> consumer) {
         new DissolutionChamberRecipe(this.getRegistryName(),
-                new Ingredient.IItemList[]{
-                        new Ingredient.SingleItemList(new ItemStack(Items.DIAMOND_BLOCK)),
-                        new Ingredient.SingleItemList(new ItemStack(Items.DIAMOND_PICKAXE)),
-                        new Ingredient.SingleItemList(new ItemStack(Items.DIAMOND_AXE)),
-                        new Ingredient.SingleItemList(new ItemStack(Items.DIAMOND_AXE)),
-                        new Ingredient.SingleItemList(new ItemStack(ModuleCore.RANGE_ADDONS[11])),
-                        new Ingredient.TagList(IndustrialTags.Items.GEAR_GOLD),
-                        new Ingredient.TagList(IndustrialTags.Items.GEAR_GOLD),
-                        new Ingredient.TagList(IndustrialTags.Items.GEAR_GOLD),
+                new Ingredient.Value[]{
+                        new Ingredient.ItemValue(new ItemStack(Items.DIAMOND_BLOCK)),
+                        new Ingredient.ItemValue(new ItemStack(Items.DIAMOND_PICKAXE)),
+                        new Ingredient.ItemValue(new ItemStack(Items.DIAMOND_AXE)),
+                        new Ingredient.ItemValue(new ItemStack(Items.DIAMOND_AXE)),
+                        new Ingredient.ItemValue(new ItemStack(ModuleCore.RANGE_ADDONS[11])),
+                        new Ingredient.TagValue(IndustrialTags.Items.GEAR_GOLD),
+                        new Ingredient.TagValue(IndustrialTags.Items.GEAR_GOLD),
+                        new Ingredient.TagValue(IndustrialTags.Items.GEAR_GOLD),
                 },
                 new FluidStack(ModuleCore.PINK_SLIME.getSourceFluid(), 2000), 400, new ItemStack(this), FluidStack.EMPTY);
     }

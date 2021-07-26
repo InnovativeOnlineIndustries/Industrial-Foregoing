@@ -36,16 +36,16 @@ import com.buuz135.industrial.proxy.network.ConveyorSplittingSyncEntityMessage;
 import com.buuz135.industrial.utils.MovementUtils;
 import com.buuz135.industrial.utils.Reference;
 import com.hrznstudio.titanium.recipe.generator.TitaniumShapedRecipeBuilder;
-import net.minecraft.block.Blocks;
-import net.minecraft.data.IFinishedRecipe;
-import net.minecraft.entity.Entity;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.util.Direction;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.math.AxisAlignedBB;
-import net.minecraft.util.math.shapes.VoxelShape;
-import net.minecraft.util.math.shapes.VoxelShapes;
-import net.minecraft.util.text.TextFormatting;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.data.recipes.FinishedRecipe;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.core.Direction;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.phys.AABB;
+import net.minecraft.world.phys.shapes.VoxelShape;
+import net.minecraft.world.phys.shapes.Shapes;
+import net.minecraft.ChatFormatting;
 import net.minecraftforge.common.Tags;
 
 import javax.annotation.Nonnull;
@@ -55,10 +55,10 @@ import java.util.function.Consumer;
 
 public class ConveyorSplittingUpgrade extends ConveyorUpgrade {
 
-    public static VoxelShape NORTH = VoxelShapes.create(-0.08 + 0.75 / 2D, 0.1, 0.3 - 0.38, 0.32 + 0.75 / 2D, 0.16, 0.7 - 0.4);
-    public static VoxelShape SOUTH = VoxelShapes.create(-0.08 + 0.75 / 2D, 0.1, 0.3 + 0.40, 0.32 + 0.75 / 2D, 0.16, 0.7 + 0.38);
-    public static VoxelShape WEST = VoxelShapes.create(-0.08, 0.1, 0.3, 0.30, 0.16, 0.7);
-    public static VoxelShape EAST = VoxelShapes.create(-0.05 + 0.75, 0.1, 0.3, 0.32 + 0.75, 0.16, 0.7);
+    public static VoxelShape NORTH = Shapes.box(-0.08 + 0.75 / 2D, 0.1, 0.3 - 0.38, 0.32 + 0.75 / 2D, 0.16, 0.7 - 0.4);
+    public static VoxelShape SOUTH = Shapes.box(-0.08 + 0.75 / 2D, 0.1, 0.3 + 0.40, 0.32 + 0.75 / 2D, 0.16, 0.7 + 0.38);
+    public static VoxelShape WEST = Shapes.box(-0.08, 0.1, 0.3, 0.30, 0.16, 0.7);
+    public static VoxelShape EAST = Shapes.box(-0.05 + 0.75, 0.1, 0.3, 0.32 + 0.75, 0.16, 0.7);
 
     public List<Integer> handlingEntities;
     private Direction nextFacing;
@@ -76,15 +76,15 @@ public class ConveyorSplittingUpgrade extends ConveyorUpgrade {
     @Override
     public void handleEntity(Entity entity) {
         super.handleEntity(entity);
-        if (!getWorld().isRemote && !this.getContainer().getEntityFilter().contains(entity.getEntityId())) {
+        if (!getWorld().isClientSide && !this.getContainer().getEntityFilter().contains(entity.getId())) {
             if (nextFacing == this.getSide()) {
-                this.handlingEntities.add(entity.getEntityId());
-                this.getContainer().getEntityFilter().add(entity.getEntityId());
-                IndustrialForegoing.NETWORK.sendToNearby(getContainer().getBlockWorld(), getPos(), 64, new ConveyorSplittingSyncEntityMessage(this.getPos(), entity.getEntityId(), this.getSide()));
+                this.handlingEntities.add(entity.getId());
+                this.getContainer().getEntityFilter().add(entity.getId());
+                IndustrialForegoing.NETWORK.sendToNearby(getContainer().getBlockWorld(), getPos(), 64, new ConveyorSplittingSyncEntityMessage(this.getPos(), entity.getId(), this.getSide()));
                 findNextUpgradeAndUpdate();
             }
         }
-        if (handlingEntities.contains(entity.getEntityId())) {
+        if (handlingEntities.contains(entity.getId())) {
             MovementUtils.handleConveyorMovement(entity, this.getSide(), this.getPos(), ((ConveyorTile) this.getContainer()).getConveyorType());
         }
     }
@@ -93,9 +93,9 @@ public class ConveyorSplittingUpgrade extends ConveyorUpgrade {
     public void update() {
         super.update();
         if (handlingEntities.isEmpty()) return;
-        AxisAlignedBB box = this.getWorld().getBlockState(this.getPos()).getCollisionShape(this.getWorld(), this.getPos()).toBoundingBoxList().get(0).offset(this.getPos()).grow(0.04);
+        AABB box = this.getWorld().getBlockState(this.getPos()).getCollisionShape(this.getWorld(), this.getPos()).toAabbs().get(0).move(this.getPos()).inflate(0.04);
         for (Integer integer : new ArrayList<>(handlingEntities)) {
-            Entity entity = this.getWorld().getEntityByID(integer);
+            Entity entity = this.getWorld().getEntity(integer);
             if (entity != null && !box.intersects(entity.getBoundingBox())) {
                 handlingEntities.remove(integer);
                 this.getContainer().getEntityFilter().remove(integer);
@@ -118,11 +118,11 @@ public class ConveyorSplittingUpgrade extends ConveyorUpgrade {
             return;
         }
         currentRatio = ratio;
-        Direction facing = nextFacing.rotateY();
+        Direction facing = nextFacing.getClockWise();
         ConveyorUpgrade conveyorUpgrade = ((ConveyorTile) this.getContainer()).getUpgradeMap().get(facing);
         int y = 0;
         while (!(conveyorUpgrade instanceof ConveyorSplittingUpgrade) && y < 10) {
-            facing = facing.rotateY();
+            facing = facing.getClockWise();
             conveyorUpgrade = ((ConveyorTile) this.getContainer()).getUpgradeMap().get(facing);
             ++y;
         }
@@ -158,16 +158,16 @@ public class ConveyorSplittingUpgrade extends ConveyorUpgrade {
     }
 
     @Override
-    public CompoundNBT serializeNBT() {
-        CompoundNBT compound = super.serializeNBT() == null ? new CompoundNBT() : super.serializeNBT();
-        compound.putString("NextFacing", nextFacing.getString());
+    public CompoundTag serializeNBT() {
+        CompoundTag compound = super.serializeNBT() == null ? new CompoundTag() : super.serializeNBT();
+        compound.putString("NextFacing", nextFacing.getSerializedName());
         compound.putInt("Ratio", ratio);
         compound.putInt("CurrentRatio", currentRatio);
         return compound;
     }
 
     @Override
-    public void deserializeNBT(CompoundNBT nbt) {
+    public void deserializeNBT(CompoundTag nbt) {
         super.deserializeNBT(nbt);
         nextFacing = Direction.byName(nbt.getString("NextFacing"));
         ratio = nbt.getInt("Ratio");
@@ -195,7 +195,7 @@ public class ConveyorSplittingUpgrade extends ConveyorUpgrade {
         componentList.add(new TextGuiComponent(40, 31) {
             @Override
             public String getText() {
-                return TextFormatting.DARK_GRAY + (ratio < 10 ? " " : "") + ratio;
+                return ChatFormatting.DARK_GRAY + (ratio < 10 ? " " : "") + ratio;
             }
         });
         componentList.add(new TexturedStateButtonGuiComponent(0, 60, 26, 14, 14,
@@ -215,7 +215,7 @@ public class ConveyorSplittingUpgrade extends ConveyorUpgrade {
     }
 
     @Override
-    public void handleButtonInteraction(int buttonId, CompoundNBT compound) {
+    public void handleButtonInteraction(int buttonId, CompoundTag compound) {
         super.handleButtonInteraction(buttonId, compound);
         if (buttonId == 0 && ratio <= 64) {
             ++ratio;
@@ -243,7 +243,7 @@ public class ConveyorSplittingUpgrade extends ConveyorUpgrade {
         @Override
         @Nonnull
         public ResourceLocation getModel(Direction upgradeSide, Direction conveyorFacing) {
-            return new ResourceLocation(Reference.MOD_ID, "block/conveyor_upgrade_splitting_" + upgradeSide.getString().toLowerCase());
+            return new ResourceLocation(Reference.MOD_ID, "block/conveyor_upgrade_splitting_" + upgradeSide.getSerializedName().toLowerCase());
         }
 
         @Nonnull
@@ -253,14 +253,14 @@ public class ConveyorSplittingUpgrade extends ConveyorUpgrade {
         }
 
         @Override
-        public void registerRecipe(Consumer<IFinishedRecipe> consumer) {
+        public void registerRecipe(Consumer<FinishedRecipe> consumer) {
             TitaniumShapedRecipeBuilder.shapedRecipe(getUpgradeItem())
-                    .patternLine("IPI").patternLine("IDI").patternLine("ICI")
-                    .key('I', Tags.Items.INGOTS_IRON)
-                    .key('P', ModuleTransportStorage.CONVEYOR)
-                    .key('D', Blocks.HOPPER)
-                    .key('C', ModuleTransportStorage.CONVEYOR)
-                    .build(consumer);
+                    .pattern("IPI").pattern("IDI").pattern("ICI")
+                    .define('I', Tags.Items.INGOTS_IRON)
+                    .define('P', ModuleTransportStorage.CONVEYOR)
+                    .define('D', Blocks.HOPPER)
+                    .define('C', ModuleTransportStorage.CONVEYOR)
+                    .save(consumer);
         }
     }
 }

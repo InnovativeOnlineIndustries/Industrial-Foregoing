@@ -23,10 +23,10 @@ package com.buuz135.industrial.gui.component.custom;
 
 
 import com.buuz135.industrial.api.conveyor.gui.PositionedGuiComponent;
-import com.mojang.blaze3d.matrix.MatrixStack;
+import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.screen.inventory.ContainerScreen;
-import net.minecraft.util.text.ITextComponent;
+import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
+import net.minecraft.network.chat.Component;
 
 import javax.annotation.Nullable;
 import java.util.List;
@@ -38,23 +38,23 @@ public abstract class TextGuiComponent extends PositionedGuiComponent {
     }
 
     @Override
-    public boolean handleClick(ContainerScreen conveyor, int guiX, int guiY, double mouseX, double mouseY) {
+    public boolean handleClick(AbstractContainerScreen conveyor, int guiX, int guiY, double mouseX, double mouseY) {
         return false;
     }
 
     @Override
-    public void drawGuiBackgroundLayer(MatrixStack stack, int guiX, int guiY, double mouseX, double mouseY) {
-        Minecraft.getInstance().fontRenderer.drawString(stack, getText(), guiX + getXPos(), guiY + getYPos(), 0xffffff);
+    public void drawGuiBackgroundLayer(PoseStack stack, int guiX, int guiY, double mouseX, double mouseY) {
+        Minecraft.getInstance().font.draw(stack, getText(), guiX + getXPos(), guiY + getYPos(), 0xffffff);
     }
 
     @Override
-    public void drawGuiForegroundLayer(MatrixStack stack, int guiX, int guiY, double mouseX, double mouseY) {
+    public void drawGuiForegroundLayer(PoseStack stack, int guiX, int guiY, double mouseX, double mouseY) {
 
     }
 
     @Nullable
     @Override
-    public List<ITextComponent> getTooltip(int guiX, int guiY, double mouseX, double mouseY) {
+    public List<Component> getTooltip(int guiX, int guiY, double mouseX, double mouseY) {
         return null;
     }
 

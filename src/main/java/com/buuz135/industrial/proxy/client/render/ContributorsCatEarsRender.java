@@ -24,78 +24,78 @@ package com.buuz135.industrial.proxy.client.render;
 import com.buuz135.industrial.proxy.client.ClientProxy;
 import com.buuz135.industrial.utils.Reference;
 import com.hrznstudio.titanium.reward.storage.ClientRewardStorage;
-import com.mojang.blaze3d.matrix.MatrixStack;
-import net.minecraft.block.Blocks;
+import com.mojang.blaze3d.vertex.PoseStack;
+import net.minecraft.world.level.block.Blocks;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.entity.player.AbstractClientPlayerEntity;
-import net.minecraft.client.renderer.IRenderTypeBuffer;
+import net.minecraft.client.player.AbstractClientPlayer;
+import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
-import net.minecraft.client.renderer.entity.IEntityRenderer;
-import net.minecraft.client.renderer.entity.layers.LayerRenderer;
-import net.minecraft.client.renderer.entity.model.PlayerModel;
-import net.minecraft.client.renderer.model.IBakedModel;
-import net.minecraft.client.renderer.texture.AtlasTexture;
+import net.minecraft.client.renderer.entity.RenderLayerParent;
+import net.minecraft.client.renderer.entity.layers.RenderLayer;
+import net.minecraft.client.model.PlayerModel;
+import net.minecraft.client.resources.model.BakedModel;
+import net.minecraft.client.renderer.texture.TextureAtlas;
 import net.minecraft.client.renderer.texture.OverlayTexture;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.math.vector.Vector3f;
+import net.minecraft.resources.ResourceLocation;
+import com.mojang.math.Vector3f;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
 import java.util.Calendar;
 
-public class ContributorsCatEarsRender extends LayerRenderer<AbstractClientPlayerEntity, PlayerModel<AbstractClientPlayerEntity>> {
+public class ContributorsCatEarsRender extends RenderLayer<AbstractClientPlayer, PlayerModel<AbstractClientPlayer>> {
 
-    public ContributorsCatEarsRender(IEntityRenderer<AbstractClientPlayerEntity, PlayerModel<AbstractClientPlayerEntity>> p_i50926_1_) {
+    public ContributorsCatEarsRender(RenderLayerParent<AbstractClientPlayer, PlayerModel<AbstractClientPlayer>> p_i50926_1_) {
         super(p_i50926_1_);
     }
 
     @Override
-    public void render(MatrixStack stack, IRenderTypeBuffer buffer, int p_225628_3_, AbstractClientPlayerEntity entitylivingbaseIn, float limbSwing, float limbSwingAmount, float partialTicks, float ageInTicks, float netHeadYaw, float headPitch) {
-        if (!ClientRewardStorage.REWARD_STORAGE.getRewards().containsKey(entitylivingbaseIn.getUniqueID())) return;
-        if (!ClientRewardStorage.REWARD_STORAGE.getRewards().get(entitylivingbaseIn.getUniqueID()).getEnabled().containsKey(new ResourceLocation(Reference.MOD_ID, "cat_ears")))
+    public void render(PoseStack stack, MultiBufferSource buffer, int p_225628_3_, AbstractClientPlayer entitylivingbaseIn, float limbSwing, float limbSwingAmount, float partialTicks, float ageInTicks, float netHeadYaw, float headPitch) {
+        if (!ClientRewardStorage.REWARD_STORAGE.getRewards().containsKey(entitylivingbaseIn.getUUID())) return;
+        if (!ClientRewardStorage.REWARD_STORAGE.getRewards().get(entitylivingbaseIn.getUUID()).getEnabled().containsKey(new ResourceLocation(Reference.MOD_ID, "cat_ears")))
             return;
-        stack.push();
+        stack.pushPose();
         stack.translate(0, -0.015f, 0);
-        if (!entitylivingbaseIn.inventory.armorInventory.get(3).isEmpty()) stack.translate(0, -0.02f, 0);
+        if (!entitylivingbaseIn.inventory.armor.get(3).isEmpty()) stack.translate(0, -0.02f, 0);
         if (entitylivingbaseIn.isCrouching()) stack.translate(0, 0.27f, 0);
-        stack.rotate(Vector3f.YP.rotationDegrees(90));
-        stack.rotate(Vector3f.XP.rotationDegrees(180));
-        stack.rotate(Vector3f.YN.rotationDegrees(netHeadYaw));
-        stack.rotate(Vector3f.ZN.rotationDegrees(headPitch));
-        Minecraft.getInstance().getTextureManager().bindTexture(AtlasTexture.LOCATION_BLOCKS_TEXTURE);
+        stack.mulPose(Vector3f.YP.rotationDegrees(90));
+        stack.mulPose(Vector3f.XP.rotationDegrees(180));
+        stack.mulPose(Vector3f.YN.rotationDegrees(netHeadYaw));
+        stack.mulPose(Vector3f.ZN.rotationDegrees(headPitch));
+        Minecraft.getInstance().getTextureManager().bind(TextureAtlas.LOCATION_BLOCKS);
         Calendar calendar = Calendar.getInstance();
         if (calendar.get(Calendar.MONTH) == Calendar.OCTOBER) {
             spookyScarySkeletons(stack, buffer);
         } else if (calendar.get(Calendar.MONTH) == Calendar.DECEMBER) {
             itsSnowyHere(stack, buffer);
         } else if (ClientProxy.ears_baked != null){
-            Minecraft.getInstance().getBlockRendererDispatcher().getBlockModelRenderer().renderModelBrightnessColor(stack.getLast(), buffer.getBuffer(RenderType.getCutout()), null, ClientProxy.ears_baked, 1f, 1f, 1f, p_225628_3_, OverlayTexture.NO_OVERLAY);
+            Minecraft.getInstance().getBlockRenderer().getModelRenderer().renderModel(stack.last(), buffer.getBuffer(RenderType.cutout()), null, ClientProxy.ears_baked, 1f, 1f, 1f, p_225628_3_, OverlayTexture.NO_OVERLAY);
         }
-        stack.pop();
+        stack.popPose();
     }
 
     @OnlyIn(Dist.CLIENT)
-    public void spookyScarySkeletons(MatrixStack stack, IRenderTypeBuffer buffer) {
-        IBakedModel pumpkin = Minecraft.getInstance().getBlockRendererDispatcher().getModelForState(Minecraft.getInstance().world.getGameTime() % 200 < 100 ? Blocks.CARVED_PUMPKIN.getDefaultState() : Blocks.JACK_O_LANTERN.getDefaultState());
-        stack.rotate(Vector3f.YN.rotationDegrees(90f));
+    public void spookyScarySkeletons(PoseStack stack, MultiBufferSource buffer) {
+        BakedModel pumpkin = Minecraft.getInstance().getBlockRenderer().getBlockModel(Minecraft.getInstance().level.getGameTime() % 200 < 100 ? Blocks.CARVED_PUMPKIN.defaultBlockState() : Blocks.JACK_O_LANTERN.defaultBlockState());
+        stack.mulPose(Vector3f.YN.rotationDegrees(90f));
         stack.translate(0.08f, 0.485f, -0.1f);
         stack.scale(2 / 16f, 2 / 16f, 2 / 16f);
 
-        Minecraft.getInstance().getBlockRendererDispatcher().getBlockModelRenderer().renderModelBrightnessColor(stack.getLast(), buffer.getBuffer(RenderType.getSolid()), null, pumpkin, 0.5f, 255, 255, 255, 255);
+        Minecraft.getInstance().getBlockRenderer().getModelRenderer().renderModel(stack.last(), buffer.getBuffer(RenderType.solid()), null, pumpkin, 0.5f, 255, 255, 255, 255);
         stack.translate(-0.08f * 28f, 0f, 0f);
-        Minecraft.getInstance().getBlockRendererDispatcher().getBlockModelRenderer().renderModelBrightnessColor(stack.getLast(), buffer.getBuffer(RenderType.getSolid()), null, pumpkin, 0.5f, 255, 255, 255, 255);
+        Minecraft.getInstance().getBlockRenderer().getModelRenderer().renderModel(stack.last(), buffer.getBuffer(RenderType.solid()), null, pumpkin, 0.5f, 255, 255, 255, 255);
     }
 
     @OnlyIn(Dist.CLIENT)
-    public void itsSnowyHere(MatrixStack stack, IRenderTypeBuffer buffer) {
-        IBakedModel pumpkin = Minecraft.getInstance().getBlockRendererDispatcher().getModelForState(Blocks.CAKE.getDefaultState());
-        stack.rotate(Vector3f.YN.rotationDegrees(90f));
+    public void itsSnowyHere(PoseStack stack, MultiBufferSource buffer) {
+        BakedModel pumpkin = Minecraft.getInstance().getBlockRenderer().getBlockModel(Blocks.CAKE.defaultBlockState());
+        stack.mulPose(Vector3f.YN.rotationDegrees(90f));
         stack.translate(0.08f, 0.485f, -0.1f);
         stack.scale(2 / 16f, 2 / 16f, 2 / 16f);
 
-        Minecraft.getInstance().getBlockRendererDispatcher().getBlockModelRenderer().renderModelBrightnessColor(stack.getLast(), buffer.getBuffer(RenderType.getSolid()), null, pumpkin, 255, 255, 255, 255, 255);
+        Minecraft.getInstance().getBlockRenderer().getModelRenderer().renderModel(stack.last(), buffer.getBuffer(RenderType.solid()), null, pumpkin, 255, 255, 255, 255, 255);
         stack.translate(-0.08f * 28f, 0f, 0f);
-        Minecraft.getInstance().getBlockRendererDispatcher().getBlockModelRenderer().renderModelBrightnessColor(stack.getLast(), buffer.getBuffer(RenderType.getSolid()), null, pumpkin, 255, 255, 255, 255, 255);
+        Minecraft.getInstance().getBlockRenderer().getModelRenderer().renderModel(stack.last(), buffer.getBuffer(RenderType.solid()), null, pumpkin, 255, 255, 255, 255, 255);
     }
 
 }

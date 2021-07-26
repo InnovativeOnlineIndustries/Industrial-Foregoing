@@ -43,35 +43,35 @@ import com.hrznstudio.titanium.network.locator.LocatorFactory;
 import com.hrznstudio.titanium.network.locator.PlayerInventoryFinder;
 import com.hrznstudio.titanium.network.locator.instance.HeldStackLocatorInstance;
 import com.hrznstudio.titanium.util.FacingUtil;
-import net.minecraft.block.BlockState;
-import net.minecraft.client.gui.screen.Screen;
-import net.minecraft.data.IFinishedRecipe;
-import net.minecraft.enchantment.EnchantmentHelper;
-import net.minecraft.enchantment.Enchantments;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.ai.attributes.Attribute;
-import net.minecraft.entity.ai.attributes.AttributeModifier;
-import net.minecraft.entity.ai.attributes.Attributes;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.entity.player.ServerPlayerEntity;
-import net.minecraft.inventory.EquipmentSlotType;
-import net.minecraft.inventory.container.Container;
-import net.minecraft.inventory.container.INamedContainerProvider;
-import net.minecraft.item.ItemGroup;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.UseAction;
-import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.client.gui.screens.Screen;
+import net.minecraft.data.recipes.FinishedRecipe;
+import net.minecraft.world.item.enchantment.EnchantmentHelper;
+import net.minecraft.world.item.enchantment.Enchantments;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.ai.attributes.Attribute;
+import net.minecraft.world.entity.ai.attributes.AttributeModifier;
+import net.minecraft.world.entity.ai.attributes.Attributes;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.entity.EquipmentSlot;
+import net.minecraft.world.inventory.AbstractContainerMenu;
+import net.minecraft.world.MenuProvider;
+import net.minecraft.world.item.CreativeModeTab;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.UseAnim;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.util.*;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.TextFormatting;
-import net.minecraft.util.text.TranslationTextComponent;
-import net.minecraft.world.World;
+import net.minecraft.core.BlockPos;
+import net.minecraft.network.chat.Component;
+import net.minecraft.ChatFormatting;
+import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.world.level.Level;
 import net.minecraftforge.common.capabilities.ICapabilityProvider;
 import net.minecraftforge.fluids.FluidStack;
-import net.minecraftforge.fml.network.NetworkDirection;
-import net.minecraftforge.fml.network.NetworkHooks;
+import net.minecraftforge.fmllegacy.network.NetworkDirection;
+import net.minecraftforge.fmllegacy.network.NetworkHooks;
 import org.apache.commons.lang3.tuple.Pair;
 
 import javax.annotation.Nonnull;
@@ -82,14 +82,23 @@ import java.util.function.BiFunction;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
 
-public class ItemInfinity extends IFCustomItem implements INamedContainerProvider, IButtonHandler, IInfinityDrillScreenAddons {
+import com.hrznstudio.titanium.item.BasicItem.Key;
+import net.minecraft.world.item.Item.Properties;
+
+import net.minecraft.core.Direction;
+import net.minecraft.core.NonNullList;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.InteractionResultHolder;
+import net.minecraft.world.inventory.ContainerLevelAccess;
+
+public class ItemInfinity extends IFCustomItem implements MenuProvider, IButtonHandler, IInfinityDrillScreenAddons {
 
     private final int powerConsumption;
     private final int biofuelConsumption;
     private final boolean usesDepth;
     private boolean usesArea;
 
-    public ItemInfinity(String name, ItemGroup group, Properties builder, int powerConsumption, int biofuelConsumption, boolean usesDepth) {
+    public ItemInfinity(String name, CreativeModeTab group, Properties builder, int powerConsumption, int biofuelConsumption, boolean usesDepth) {
         super(name, group, builder);
         this.powerConsumption = powerConsumption;
         this.biofuelConsumption = biofuelConsumption;
@@ -124,15 +133,15 @@ public class ItemInfinity extends IFCustomItem implements INamedContainerProvide
     }
 
     @Override
-    public void onCreated(ItemStack stack, World worldIn, PlayerEntity playerIn) {
-        super.onCreated(stack, worldIn, playerIn);
+    public void onCraftedBy(ItemStack stack, Level worldIn, Player playerIn) {
+        super.onCraftedBy(stack, worldIn, playerIn);
         addNbt(stack, 0, 0, false);
     }
 
     public void addNbt(ItemStack stack, long power, int fuel, boolean special) {
-        CompoundNBT tagCompound = new CompoundNBT();
+        CompoundTag tagCompound = new CompoundTag();
         tagCompound.putLong("Energy", power);
-        CompoundNBT fluid = new CompoundNBT();
+        CompoundTag fluid = new CompoundTag();
         fluid.putString("FluidName", "biofuel");
         fluid.putInt("Amount", fuel);
         tagCompound.put("Fluid", fluid);
@@ -143,8 +152,8 @@ public class ItemInfinity extends IFCustomItem implements INamedContainerProvide
     }
 
     @Override
-    public void fillItemGroup(ItemGroup group, NonNullList<ItemStack> items) {
-        if (isInGroup(group)) {
+    public void fillItemCategory(CreativeModeTab group, NonNullList<ItemStack> items) {
+        if (allowdedIn(group)) {
             for (InfinityTier value : InfinityTier.values()) {
                 items.add(createStack(value.getPowerNeeded(), 0, false));
             }
@@ -164,13 +173,13 @@ public class ItemInfinity extends IFCustomItem implements INamedContainerProvide
     }
 
     @Override
-    public int getItemEnchantability() {
+    public int getEnchantmentValue() {
         return 50;
     }
 
     @Override
-    public UseAction getUseAction(ItemStack p_77661_1_) {
-        return UseAction.BOW;
+    public UseAnim getUseAnimation(ItemStack p_77661_1_) {
+        return UseAnim.BOW;
     }
 
     @Override
@@ -235,12 +244,12 @@ public class ItemInfinity extends IFCustomItem implements INamedContainerProvide
     }
 
     public boolean enoughFuel(ItemStack stack) {
-        int i = EnchantmentHelper.getEnchantmentLevel(Enchantments.UNBREAKING, stack);
+        int i = EnchantmentHelper.getItemEnchantmentLevel(Enchantments.UNBREAKING, stack);
         return getFuelFromStack(stack) >= biofuelConsumption * ( 1 / (i + 1)) || getPowerFromStack(stack) >= powerConsumption * ( 1 / (i + 1));
     }
 
     public void consumeFuel(ItemStack stack) {
-        double i = EnchantmentHelper.getEnchantmentLevel(Enchantments.UNBREAKING, stack);
+        double i = EnchantmentHelper.getItemEnchantmentLevel(Enchantments.UNBREAKING, stack);
         if (getFuelFromStack(stack) >= biofuelConsumption * ( 1 / (i + 1))) {
             stack.getTag().getCompound("Fluid").putInt("Amount", (int) Math.max(0, stack.getTag().getCompound("Fluid").getInt("Amount") - biofuelConsumption * (1 / (i + 1))));
         } else {
@@ -257,98 +266,98 @@ public class ItemInfinity extends IFCustomItem implements INamedContainerProvide
     }
 
     @Override
-    public void addTooltipDetails(@Nullable Key key, ItemStack stack, List<ITextComponent> tooltip, boolean advanced) {
+    public void addTooltipDetails(@Nullable Key key, ItemStack stack, List<Component> tooltip, boolean advanced) {
         long power = getPowerFromStack(stack);
         Pair<InfinityTier, InfinityTier> braquet = InfinityTier.getTierBraquet(power);
         InfinityTier current = getSelectedTier(stack);
         if (usesArea)
-            tooltip.add(new TranslationTextComponent("text.industrialforegoing.display.current_area").appendString(" ").appendString(getFormattedArea(stack, current, current.getRadius(), this.usesDepth)).mergeStyle(TextFormatting.GRAY));
-        tooltip.add(new TranslationTextComponent("text.industrialforegoing.display.tier").appendString(" " + braquet.getLeft().getColor() + braquet.getLeft().getLocalizedName()).mergeStyle(TextFormatting.GRAY));
-        tooltip.add(new TranslationTextComponent("text.industrialforegoing.display.power").appendString(" ").appendString(TextFormatting.RED + NumberFormat.getNumberInstance(Locale.ROOT).format(power) + TextFormatting.GREEN).appendString("/").appendString(NumberFormat.getNumberInstance(Locale.ROOT).format(braquet.getRight().getPowerNeeded())).appendString("RF ").append(new TranslationTextComponent("text.industrialforegoing.display.next_tier")).mergeStyle(TextFormatting.GRAY));
+            tooltip.add(new TranslatableComponent("text.industrialforegoing.display.current_area").append(" ").append(getFormattedArea(stack, current, current.getRadius(), this.usesDepth)).withStyle(ChatFormatting.GRAY));
+        tooltip.add(new TranslatableComponent("text.industrialforegoing.display.tier").append(" " + braquet.getLeft().getColor() + braquet.getLeft().getLocalizedName()).withStyle(ChatFormatting.GRAY));
+        tooltip.add(new TranslatableComponent("text.industrialforegoing.display.power").append(" ").append(ChatFormatting.RED + NumberFormat.getNumberInstance(Locale.ROOT).format(power) + ChatFormatting.GREEN).append("/").append(NumberFormat.getNumberInstance(Locale.ROOT).format(braquet.getRight().getPowerNeeded())).append("RF ").append(new TranslatableComponent("text.industrialforegoing.display.next_tier")).withStyle(ChatFormatting.GRAY));
         int fuelAmount = getFuelFromStack(stack);
-        tooltip.add(new TranslationTextComponent("text.industrialforegoing.display.fluid").appendString(" ").appendString(TextFormatting.LIGHT_PURPLE + NumberFormat.getNumberInstance(Locale.ROOT).format(fuelAmount) + TextFormatting.GRAY).appendString("/").appendString(NumberFormat.getNumberInstance(Locale.ROOT).format(1000000)).appendString(" mb of Biofuel").mergeStyle(TextFormatting.GRAY));
+        tooltip.add(new TranslatableComponent("text.industrialforegoing.display.fluid").append(" ").append(ChatFormatting.LIGHT_PURPLE + NumberFormat.getNumberInstance(Locale.ROOT).format(fuelAmount) + ChatFormatting.GRAY).append("/").append(NumberFormat.getNumberInstance(Locale.ROOT).format(1000000)).append(" mb of Biofuel").withStyle(ChatFormatting.GRAY));
         if (usesArea)
-            tooltip.add(new TranslationTextComponent("text.industrialforegoing.display.max_area").appendString(" ").appendString(getFormattedArea(stack, braquet.getLeft(), braquet.getLeft().getRadius(), this.usesDepth)).mergeStyle(TextFormatting.GRAY));
+            tooltip.add(new TranslatableComponent("text.industrialforegoing.display.max_area").append(" ").append(getFormattedArea(stack, braquet.getLeft(), braquet.getLeft().getRadius(), this.usesDepth)).withStyle(ChatFormatting.GRAY));
         if (canCharge(stack)) {
-            tooltip.add(new TranslationTextComponent("text.industrialforegoing.display.charging").mergeStyle(TextFormatting.GRAY).append(new TranslationTextComponent("text.industrialforegoing.display.enabled").mergeStyle(TextFormatting.GREEN)));
+            tooltip.add(new TranslatableComponent("text.industrialforegoing.display.charging").withStyle(ChatFormatting.GRAY).append(new TranslatableComponent("text.industrialforegoing.display.enabled").withStyle(ChatFormatting.GREEN)));
         } else {
-            tooltip.add(new TranslationTextComponent("text.industrialforegoing.display.charging").mergeStyle(TextFormatting.GRAY).append(new TranslationTextComponent("text.industrialforegoing.display.disabled").mergeStyle(TextFormatting.RED)));
+            tooltip.add(new TranslatableComponent("text.industrialforegoing.display.charging").withStyle(ChatFormatting.GRAY).append(new TranslatableComponent("text.industrialforegoing.display.disabled").withStyle(ChatFormatting.RED)));
         }
         if (isSpecial(stack))
-            tooltip.add(new TranslationTextComponent("text.industrialforegoing.display.special").mergeStyle(TextFormatting.GOLD));
+            tooltip.add(new TranslatableComponent("text.industrialforegoing.display.special").withStyle(ChatFormatting.GOLD));
     }
 
     public Pair<BlockPos, BlockPos> getArea(BlockPos pos, Direction facing, InfinityTier currentTier, boolean withDepth) {
         int radius = currentTier.getRadius();
-        BlockPos bottomLeft = pos.offset(facing.getAxis() == Direction.Axis.Y ? Direction.SOUTH : Direction.DOWN, radius).offset(facing.getAxis() == Direction.Axis.Y ? Direction.WEST : facing.rotateYCCW(), radius);
-        BlockPos topRight = pos.offset(facing.getAxis() == Direction.Axis.Y ? Direction.NORTH : Direction.UP, radius).offset(facing.getAxis() == Direction.Axis.Y ? Direction.EAST : facing.rotateY(), radius);
+        BlockPos bottomLeft = pos.relative(facing.getAxis() == Direction.Axis.Y ? Direction.SOUTH : Direction.DOWN, radius).relative(facing.getAxis() == Direction.Axis.Y ? Direction.WEST : facing.getCounterClockWise(), radius);
+        BlockPos topRight = pos.relative(facing.getAxis() == Direction.Axis.Y ? Direction.NORTH : Direction.UP, radius).relative(facing.getAxis() == Direction.Axis.Y ? Direction.EAST : facing.getClockWise(), radius);
         if (facing.getAxis() != Direction.Axis.Y && radius > 0) {
-            bottomLeft = bottomLeft.offset(Direction.UP, radius - 1);
-            topRight = topRight.offset(Direction.UP, radius - 1);
+            bottomLeft = bottomLeft.relative(Direction.UP, radius - 1);
+            topRight = topRight.relative(Direction.UP, radius - 1);
         }
         if (currentTier == InfinityTier.ARTIFACT && withDepth) {
-            topRight = topRight.offset(facing.getOpposite(), radius);
+            topRight = topRight.relative(facing.getOpposite(), radius);
         }
         return Pair.of(bottomLeft, topRight);
     }
 
     @Override
-    public Multimap<Attribute, AttributeModifier> getAttributeModifiers(EquipmentSlotType slot, ItemStack stack) {
+    public Multimap<Attribute, AttributeModifier> getAttributeModifiers(EquipmentSlot slot, ItemStack stack) {
         Multimap<Attribute, AttributeModifier> multimap = MultimapBuilder.hashKeys().arrayListValues().build();
-        if (slot == EquipmentSlotType.MAINHAND) {
-            multimap.put(Attributes.ATTACK_DAMAGE, new AttributeModifier(ATTACK_DAMAGE_MODIFIER, "Tool modifier", 3, AttributeModifier.Operation.ADDITION)); //AttackDamage
-            multimap.put(Attributes.ATTACK_SPEED, new AttributeModifier(ATTACK_SPEED_MODIFIER, "Tool modifier", -2.5D, AttributeModifier.Operation.ADDITION)); //AttackSpeed
+        if (slot == EquipmentSlot.MAINHAND) {
+            multimap.put(Attributes.ATTACK_DAMAGE, new AttributeModifier(BASE_ATTACK_DAMAGE_UUID, "Tool modifier", 3, AttributeModifier.Operation.ADDITION)); //AttackDamage
+            multimap.put(Attributes.ATTACK_SPEED, new AttributeModifier(BASE_ATTACK_SPEED_UUID, "Tool modifier", -2.5D, AttributeModifier.Operation.ADDITION)); //AttackSpeed
         }
         return multimap;
     }
 
     @Override
-    public ITextComponent getDisplayName() {
-        return new TranslationTextComponent(this.getTranslationKey()).mergeStyle(TextFormatting.DARK_GRAY);
+    public Component getDisplayName() {
+        return new TranslatableComponent(this.getDescriptionId()).withStyle(ChatFormatting.DARK_GRAY);
     }
 
     @Nullable
     @Override
-    public Container createMenu(int menu, PlayerInventory p_createMenu_2_, PlayerEntity playerEntity) {
-        return new BasicAddonContainer(ItemStackHarnessRegistry.getHarnessCreators().get(this).apply(playerEntity.getHeldItemMainhand()), new HeldStackLocatorInstance(true), new IWorldPosCallable() {
+    public AbstractContainerMenu createMenu(int menu, Inventory p_createMenu_2_, Player playerEntity) {
+        return new BasicAddonContainer(ItemStackHarnessRegistry.getHarnessCreators().get(this).apply(playerEntity.getMainHandItem()), new HeldStackLocatorInstance(true), new ContainerLevelAccess() {
             @Override
-            public <T> Optional<T> apply(BiFunction<World, BlockPos, T> p_221484_1_) {
+            public <T> Optional<T> evaluate(BiFunction<Level, BlockPos, T> p_221484_1_) {
                 return Optional.empty();
             }
         }, playerEntity.inventory, menu);
     }
 
     @Override
-    public ActionResult<ItemStack> onItemRightClick(World worldIn, PlayerEntity player, Hand handIn) {
+    public InteractionResultHolder<ItemStack> use(Level worldIn, Player player, InteractionHand handIn) {
         if (player.isCrouching()) {
-            if (player instanceof ServerPlayerEntity) {
-                IndustrialForegoing.NETWORK.get().sendTo(new BackpackOpenedMessage(player.inventory.currentItem, PlayerInventoryFinder.MAIN), ((ServerPlayerEntity) player).connection.getNetworkManager(), NetworkDirection.PLAY_TO_CLIENT);
-                NetworkHooks.openGui((ServerPlayerEntity) player, this, buffer ->
-                        LocatorFactory.writePacketBuffer(buffer, new HeldStackLocatorInstance(handIn == Hand.MAIN_HAND)));
+            if (player instanceof ServerPlayer) {
+                IndustrialForegoing.NETWORK.get().sendTo(new BackpackOpenedMessage(player.inventory.selected, PlayerInventoryFinder.MAIN), ((ServerPlayer) player).connection.getConnection(), NetworkDirection.PLAY_TO_CLIENT);
+                NetworkHooks.openGui((ServerPlayer) player, this, buffer ->
+                        LocatorFactory.writePacketBuffer(buffer, new HeldStackLocatorInstance(handIn == InteractionHand.MAIN_HAND)));
             }
-            return ActionResult.resultSuccess(player.getHeldItem(handIn));
+            return InteractionResultHolder.success(player.getItemInHand(handIn));
         }
-        if (CommonProxy.CONTRIBUTORS.contains(player.getUniqueID().toString())) {
-            player.getHeldItem(handIn).getOrCreateTag().putBoolean("Special", true);
+        if (CommonProxy.CONTRIBUTORS.contains(player.getUUID().toString())) {
+            player.getItemInHand(handIn).getOrCreateTag().putBoolean("Special", true);
         }
-        return super.onItemRightClick(worldIn, player, handIn);
+        return super.use(worldIn, player, handIn);
     }
 
     @Override
-    public boolean shouldSyncTag() {
+    public boolean shouldOverrideMultiplayerNbt() {
         return true;
     }
 
     @Nullable
     @Override
-    public ICapabilityProvider initCapabilities(ItemStack stack, @Nullable CompoundNBT nbt) {
+    public ICapabilityProvider initCapabilities(ItemStack stack, @Nullable CompoundTag nbt) {
         return new InfinityCapabilityProvider(stack, getTankConstructor(stack), getEnergyConstructor(stack));
     }
 
     @Override
-    public void handleButtonMessage(int id, PlayerEntity playerEntity, CompoundNBT compound) {
-        ItemStack stack = playerEntity.getHeldItem(Hand.MAIN_HAND);
-        if (!(stack.getItem() instanceof ItemInfinity)) stack = playerEntity.getHeldItem(Hand.OFF_HAND);
+    public void handleButtonMessage(int id, Player playerEntity, CompoundTag compound) {
+        ItemStack stack = playerEntity.getItemInHand(InteractionHand.MAIN_HAND);
+        if (!(stack.getItem() instanceof ItemInfinity)) stack = playerEntity.getItemInHand(InteractionHand.OFF_HAND);
         if (stack.getItem() instanceof ItemInfinity) {
             if (id == 1) {
                 InfinityTier prev = getSelectedTier(stack).getPrev(InfinityTier.getTierBraquet(getPowerFromStack(stack)).getLeft());
@@ -368,7 +377,7 @@ public class ItemInfinity extends IFCustomItem implements INamedContainerProvide
     }
 
     @Override
-    public void registerRecipe(Consumer<IFinishedRecipe> consumer) {
+    public void registerRecipe(Consumer<FinishedRecipe> consumer) {
 
     }
 
@@ -381,7 +390,7 @@ public class ItemInfinity extends IFCustomItem implements INamedContainerProvide
             @Override
             public String getText() {
                 InfinityTier current = ItemInfinity.getSelectedTier(stack.get());
-                return TextFormatting.DARK_GRAY + "Area: " + getFormattedArea(stack.get(), current, current.getRadius(), usesDepth);
+                return ChatFormatting.DARK_GRAY + "Area: " + getFormattedArea(stack.get(), current, current.getRadius(), usesDepth);
             }
         });
         factory.add(() -> new StateButtonAddon(new ButtonComponent(54, 36, 14, 14).setId(3), new StateButtonInfo(0, AssetTypes.BUTTON_SIDENESS_ENABLED), new StateButtonInfo(1, AssetTypes.BUTTON_SIDENESS_DISABLED)) {
@@ -394,9 +403,9 @@ public class ItemInfinity extends IFCustomItem implements INamedContainerProvide
             @Override
             public String getText() {
                 if (ItemInfinity.canCharge(stack.get())) {//setStyle
-                    return TextFormatting.DARK_GRAY + new TranslationTextComponent("text.industrialforegoing.display.charging").getString() + TextFormatting.GREEN + new TranslationTextComponent("text.industrialforegoing.display.enabled").getString();
+                    return ChatFormatting.DARK_GRAY + new TranslatableComponent("text.industrialforegoing.display.charging").getString() + ChatFormatting.GREEN + new TranslatableComponent("text.industrialforegoing.display.enabled").getString();
                 } else {
-                    return TextFormatting.DARK_GRAY + new TranslationTextComponent("text.industrialforegoing.display.charging").getString() + TextFormatting.RED + new TranslationTextComponent("text.industrialforegoing.display.disabled").getString();
+                    return ChatFormatting.DARK_GRAY + new TranslatableComponent("text.industrialforegoing.display.charging").getString() + ChatFormatting.RED + new TranslatableComponent("text.industrialforegoing.display.disabled").getString();
                 }
             }
         });
@@ -407,7 +416,7 @@ public class ItemInfinity extends IFCustomItem implements INamedContainerProvide
                     return ItemInfinity.this.isSpecialEnabled(stack.get()) ? 0 : 1;
                 }
             });
-            factory.add(() -> new TextScreenAddon(TextFormatting.GOLD + new TranslationTextComponent("text.industrialforegoing.display.special").getString(), 12 + 14 + 4, 84, false));
+            factory.add(() -> new TextScreenAddon(ChatFormatting.GOLD + new TranslatableComponent("text.industrialforegoing.display.special").getString(), 12 + 14 + 4, 84, false));
         }
         return factory;
     }
@@ -446,7 +455,7 @@ public class ItemInfinity extends IFCustomItem implements INamedContainerProvide
             @Override
             public void setEnergyStored(long energy) {
                 if (!stack.hasTag()) {
-                    stack.setTag(new CompoundNBT());
+                    stack.setTag(new CompoundTag());
                 }
                 stack.getTag().putLong("Energy", Math.min(energy, InfinityTier.ARTIFACT.getPowerNeeded()));
             }

@@ -29,26 +29,26 @@ import com.buuz135.industrial.recipe.DissolutionChamberRecipe;
 import com.buuz135.industrial.utils.BlockUtils;
 import com.buuz135.industrial.utils.IndustrialTags;
 import com.hrznstudio.titanium.util.RayTraceUtils;
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockState;
-import net.minecraft.block.material.Material;
-import net.minecraft.data.IFinishedRecipe;
-import net.minecraft.enchantment.Enchantment;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.item.ExperienceOrbEntity;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.player.ServerPlayerEntity;
-import net.minecraft.item.ItemGroup;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.Items;
-import net.minecraft.item.crafting.Ingredient;
-import net.minecraft.util.Direction;
-import net.minecraft.util.math.AxisAlignedBB;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.BlockRayTraceResult;
-import net.minecraft.util.math.RayTraceResult;
-import net.minecraft.world.World;
-import net.minecraft.world.server.ServerWorld;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.material.Material;
+import net.minecraft.data.recipes.FinishedRecipe;
+import net.minecraft.world.item.enchantment.Enchantment;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.ExperienceOrb;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.item.CreativeModeTab;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
+import net.minecraft.world.item.crafting.Ingredient;
+import net.minecraft.core.Direction;
+import net.minecraft.world.phys.AABB;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.phys.BlockHitResult;
+import net.minecraft.world.phys.HitResult;
+import net.minecraft.world.level.Level;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraftforge.common.ForgeHooks;
 import net.minecraftforge.common.ToolType;
 import net.minecraftforge.fluids.FluidStack;
@@ -59,14 +59,16 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Consumer;
 
+import net.minecraft.world.item.Item.Properties;
+
 public class ItemInfinityDrill extends ItemInfinity {
 
-    public static Material[] mineableMaterials = {Material.ORGANIC, Material.EARTH, Material.ANVIL, Material.CLAY, Material.GLASS, Material.ICE, Material.IRON, Material.PACKED_ICE, Material.PISTON, Material.ROCK, Material.SAND, Material.SNOW};
+    public static Material[] mineableMaterials = {Material.GRASS, Material.DIRT, Material.HEAVY_METAL, Material.CLAY, Material.GLASS, Material.ICE, Material.METAL, Material.ICE_SOLID, Material.PISTON, Material.STONE, Material.SAND, Material.TOP_SNOW};
     public static int POWER_CONSUMPTION = 10000;
     public static int FUEL_CONSUMPTION = 30;
 
-    public ItemInfinityDrill(ItemGroup group) {
-        super("infinity_drill", group, new Properties().maxStackSize(1).addToolType(ToolType.PICKAXE, 6).addToolType(ToolType.SHOVEL, 6), POWER_CONSUMPTION, FUEL_CONSUMPTION, false);
+    public ItemInfinityDrill(CreativeModeTab group) {
+        super("infinity_drill", group, new Properties().stacksTo(1).addToolType(ToolType.PICKAXE, 6).addToolType(ToolType.SHOVEL, 6), POWER_CONSUMPTION, FUEL_CONSUMPTION, false);
     }
 
     @Override
@@ -75,31 +77,31 @@ public class ItemInfinityDrill extends ItemInfinity {
     }
 
     @Override
-    public boolean canHarvestBlock(BlockState blockIn) {
-        return Items.DIAMOND_PICKAXE.canHarvestBlock(blockIn) || Items.DIAMOND_SHOVEL.canHarvestBlock(blockIn);
+    public boolean isCorrectToolForDrops(BlockState blockIn) {
+        return Items.DIAMOND_PICKAXE.isCorrectToolForDrops(blockIn) || Items.DIAMOND_SHOVEL.isCorrectToolForDrops(blockIn);
     }
 
     @Override
-    public boolean onBlockDestroyed(ItemStack stack, World worldIn, BlockState state, BlockPos pos, LivingEntity entityLiving) {
-        if (entityLiving instanceof PlayerEntity) {
-            RayTraceResult rayTraceResult = RayTraceUtils.rayTraceSimple(worldIn, entityLiving, 16, 0);
-            if (rayTraceResult.getType() == RayTraceResult.Type.BLOCK) {
-                BlockRayTraceResult blockResult = (BlockRayTraceResult) rayTraceResult;
-                Direction facing = blockResult.getFace();
+    public boolean mineBlock(ItemStack stack, Level worldIn, BlockState state, BlockPos pos, LivingEntity entityLiving) {
+        if (entityLiving instanceof Player) {
+            HitResult rayTraceResult = RayTraceUtils.rayTraceSimple(worldIn, entityLiving, 16, 0);
+            if (rayTraceResult.getType() == HitResult.Type.BLOCK) {
+                BlockHitResult blockResult = (BlockHitResult) rayTraceResult;
+                Direction facing = blockResult.getDirection();
                 InfinityTier currentTier = getSelectedTier(stack);
                 Pair<BlockPos, BlockPos> area = getArea(pos, facing, currentTier, true);
                 List<ItemStack> totalDrops = new ArrayList<>();
-                BlockPos.getAllInBoxMutable(area.getLeft(), area.getRight()).forEach(blockPos -> {
-                    if (enoughFuel(stack) && worldIn.getTileEntity(blockPos) == null && worldIn instanceof ServerWorld && entityLiving instanceof ServerPlayerEntity && !worldIn.isAirBlock(blockPos)) {
+                BlockPos.betweenClosed(area.getLeft(), area.getRight()).forEach(blockPos -> {
+                    if (enoughFuel(stack) && worldIn.getBlockEntity(blockPos) == null && worldIn instanceof ServerLevel && entityLiving instanceof ServerPlayer && !worldIn.isEmptyBlock(blockPos)) {
                         BlockState tempState = worldIn.getBlockState(blockPos);
                         Block block = tempState.getBlock();
                         if (!BlockUtils.isBlockstateInMaterial(tempState, mineableMaterials)) return;
-                        if (tempState.getBlockHardness(worldIn, blockPos) < 0) return;
-                        int xp = ForgeHooks.onBlockBreakEvent(worldIn, ((ServerPlayerEntity) entityLiving).interactionManager.getGameType(), (ServerPlayerEntity) entityLiving, blockPos);
-                        if (xp >= 0 && block.removedByPlayer(tempState, worldIn, blockPos, (PlayerEntity) entityLiving, true, tempState.getFluidState())) {
-                            block.onPlayerDestroy(worldIn, blockPos, tempState);
+                        if (tempState.getDestroySpeed(worldIn, blockPos) < 0) return;
+                        int xp = ForgeHooks.onBlockBreakEvent(worldIn, ((ServerPlayer) entityLiving).gameMode.getGameModeForPlayer(), (ServerPlayer) entityLiving, blockPos);
+                        if (xp >= 0 && block.removedByPlayer(tempState, worldIn, blockPos, (Player) entityLiving, true, tempState.getFluidState())) {
+                            block.destroy(worldIn, blockPos, tempState);
                             //block.harvestBlock(worldIn, (PlayerEntity) entityLiving, blockPos, tempState, null, stack);
-                            Block.getDrops(tempState, (ServerWorld) worldIn, blockPos, null, (PlayerEntity) entityLiving, stack).forEach(itemStack -> {
+                            Block.getDrops(tempState, (ServerLevel) worldIn, blockPos, null, (Player) entityLiving, stack).forEach(itemStack -> {
                                 boolean combined = false;
                                 for (ItemStack drop : totalDrops) {
                                     if (ItemHandlerHelper.canItemStacksStack(drop, itemStack)) {
@@ -112,32 +114,32 @@ public class ItemInfinityDrill extends ItemInfinity {
                                     totalDrops.add(itemStack);
                                 }
                             });
-                            block.dropXpOnBlockBreak((ServerWorld) worldIn, blockPos, xp);
+                            block.popExperience((ServerLevel) worldIn, blockPos, xp);
                             consumeFuel(stack);
                         }
                     }
                 });
                 totalDrops.forEach(itemStack -> {
-                    Block.spawnAsEntity(worldIn, entityLiving.getPosition(), itemStack);
+                    Block.popResource(worldIn, entityLiving.blockPosition(), itemStack);
                 });
-                worldIn.getEntitiesWithinAABB(ExperienceOrbEntity.class, new AxisAlignedBB(area.getLeft(), area.getRight()).grow(1)).forEach(entityXPOrb -> entityXPOrb.setPositionAndUpdate(entityLiving.getPosition().getX(), entityLiving.getPosition().getY(), entityLiving.getPosition().getZ()));
+                worldIn.getEntitiesOfClass(ExperienceOrb.class, new AABB(area.getLeft(), area.getRight()).inflate(1)).forEach(entityXPOrb -> entityXPOrb.teleportTo(entityLiving.blockPosition().getX(), entityLiving.blockPosition().getY(), entityLiving.blockPosition().getZ()));
             }
         }
-        return super.onBlockDestroyed(stack, worldIn, state, pos, entityLiving);
+        return super.mineBlock(stack, worldIn, state, pos, entityLiving);
     }
 
     @Override
-    public void registerRecipe(Consumer<IFinishedRecipe> consumer) {
+    public void registerRecipe(Consumer<FinishedRecipe> consumer) {
         new DissolutionChamberRecipe(this.getRegistryName(),
-                new Ingredient.IItemList[]{
-                        new Ingredient.SingleItemList(new ItemStack(Items.DIAMOND_BLOCK)),
-                        new Ingredient.SingleItemList(new ItemStack(Items.DIAMOND_SHOVEL)),
-                        new Ingredient.SingleItemList(new ItemStack(Items.DIAMOND_BLOCK)),
-                        new Ingredient.SingleItemList(new ItemStack(Items.DIAMOND_BLOCK)),
-                        new Ingredient.SingleItemList(new ItemStack(ModuleCore.RANGE_ADDONS[11])),
-                        new Ingredient.TagList(IndustrialTags.Items.GEAR_GOLD),
-                        new Ingredient.TagList(IndustrialTags.Items.GEAR_GOLD),
-                        new Ingredient.TagList(IndustrialTags.Items.GEAR_GOLD),
+                new Ingredient.Value[]{
+                        new Ingredient.ItemValue(new ItemStack(Items.DIAMOND_BLOCK)),
+                        new Ingredient.ItemValue(new ItemStack(Items.DIAMOND_SHOVEL)),
+                        new Ingredient.ItemValue(new ItemStack(Items.DIAMOND_BLOCK)),
+                        new Ingredient.ItemValue(new ItemStack(Items.DIAMOND_BLOCK)),
+                        new Ingredient.ItemValue(new ItemStack(ModuleCore.RANGE_ADDONS[11])),
+                        new Ingredient.TagValue(IndustrialTags.Items.GEAR_GOLD),
+                        new Ingredient.TagValue(IndustrialTags.Items.GEAR_GOLD),
+                        new Ingredient.TagValue(IndustrialTags.Items.GEAR_GOLD),
                 },
                 new FluidStack(ModuleCore.PINK_SLIME.getSourceFluid(), 2000), 400, new ItemStack(this), FluidStack.EMPTY);
     }

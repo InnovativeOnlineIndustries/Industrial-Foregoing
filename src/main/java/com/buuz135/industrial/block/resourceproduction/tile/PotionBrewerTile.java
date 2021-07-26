@@ -36,17 +36,17 @@ import com.hrznstudio.titanium.component.inventory.SidedInventoryComponent;
 import com.hrznstudio.titanium.component.progress.ProgressBarComponent;
 import com.hrznstudio.titanium.util.InventoryUtil;
 import com.hrznstudio.titanium.util.ItemHandlerUtil;
-import net.minecraft.fluid.Fluids;
-import net.minecraft.item.DyeColor;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.Items;
-import net.minecraft.potion.PotionBrewing;
-import net.minecraft.potion.PotionUtils;
-import net.minecraft.potion.Potions;
-import net.minecraft.util.NonNullList;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.StringTextComponent;
-import net.minecraft.util.text.TextFormatting;
+import net.minecraft.world.level.material.Fluids;
+import net.minecraft.world.item.DyeColor;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
+import net.minecraft.world.item.alchemy.PotionBrewing;
+import net.minecraft.world.item.alchemy.PotionUtils;
+import net.minecraft.world.item.alchemy.Potions;
+import net.minecraft.core.NonNullList;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.TextComponent;
+import net.minecraft.ChatFormatting;
 import net.minecraftforge.common.brewing.BrewingRecipeRegistry;
 import net.minecraftforge.event.ForgeEventFactory;
 import net.minecraftforge.items.ItemHandlerHelper;
@@ -85,16 +85,16 @@ public class PotionBrewerTile extends IndustrialProcessingTile<PotionBrewerTile>
                 .setColor(DyeColor.CYAN)
                 .setTankAction(FluidTankComponent.Action.FILL)
                 .setTankType(FluidTankComponent.Type.SMALL)
-                .setValidator(fluidStack -> fluidStack.getFluid().isEquivalentTo(Fluids.WATER))
+                .setValidator(fluidStack -> fluidStack.getFluid().isSame(Fluids.WATER))
         );
         addProgressBar(blaze = new ProgressBarComponent<PotionBrewerTile>(30, 20, 100) {
                     @Override
                     public List<IFactory<? extends IScreenAddon>> getScreenAddons() {
                         return Collections.singletonList(() -> new ProgressBarScreenAddon<PotionBrewerTile>(30, 20, this) {
                             @Override
-                            public List<ITextComponent> getTooltipLines() {
-                                List<ITextComponent> tooltip = new ArrayList<>();
-                                tooltip.add(new StringTextComponent(TextFormatting.GOLD + "Blaze Fuel: " + TextFormatting.WHITE + new DecimalFormat().format(blaze.getProgress()) + TextFormatting.GOLD + "/" + TextFormatting.WHITE + new DecimalFormat().format(blaze.getMaxProgress())));
+                            public List<Component> getTooltipLines() {
+                                List<Component> tooltip = new ArrayList<>();
+                                tooltip.add(new TextComponent(ChatFormatting.GOLD + "Blaze Fuel: " + ChatFormatting.WHITE + new DecimalFormat().format(blaze.getProgress()) + ChatFormatting.GOLD + "/" + ChatFormatting.WHITE + new DecimalFormat().format(blaze.getMaxProgress())));
                                 return tooltip;
                             }
                         });
@@ -147,7 +147,7 @@ public class PotionBrewerTile extends IndustrialProcessingTile<PotionBrewerTile>
             if (this.state == 0) {
                 int bottleAmount = Math.min(3, this.bottleInput.getStackInSlot(0).getCount());
                 for (int i = 0; i < bottleAmount; i++) {
-                    ItemHandlerHelper.insertItem(this.output, PotionUtils.addPotionToItemStack(new ItemStack(Items.POTION), Potions.WATER), false);
+                    ItemHandlerHelper.insertItem(this.output, PotionUtils.setPotion(new ItemStack(Items.POTION), Potions.WATER), false);
                     this.bottleInput.getStackInSlot(0).shrink(1);
                 }
                 ++this.state;
@@ -190,12 +190,12 @@ public class PotionBrewerTile extends IndustrialProcessingTile<PotionBrewerTile>
             return BrewingRecipeRegistry.canBrew(input, ingredient, indices); // divert to VanillaBrewingRegistry
         if (ingredient.isEmpty()) {
             return false;
-        } else if (!PotionBrewing.isReagent(ingredient)) {
+        } else if (!PotionBrewing.isIngredient(ingredient)) {
             return false;
         } else {
             for (int i = 0; i < 3; ++i) {
                 ItemStack itemstack1 = this.output.getStackInSlot(i);
-                if (!itemstack1.isEmpty() && PotionBrewing.hasConversions(itemstack1, ingredient)) {
+                if (!itemstack1.isEmpty() && PotionBrewing.hasMix(itemstack1, ingredient)) {
                     return true;
                 }
             }

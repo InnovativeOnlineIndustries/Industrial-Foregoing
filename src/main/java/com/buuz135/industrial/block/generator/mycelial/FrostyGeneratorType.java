@@ -24,20 +24,20 @@ package com.buuz135.industrial.block.generator.mycelial;
 import com.buuz135.industrial.plugin.jei.generator.MycelialGeneratorRecipe;
 import com.buuz135.industrial.utils.IndustrialTags;
 import com.hrznstudio.titanium.component.inventory.SidedInventoryComponent;
-import net.minecraft.block.Blocks;
-import net.minecraft.data.ShapedRecipeBuilder;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.item.DyeColor;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.Items;
-import net.minecraft.item.crafting.Ingredient;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.potion.EffectInstance;
-import net.minecraft.potion.Effects;
-import net.minecraft.util.math.AxisAlignedBB;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.data.recipes.ShapedRecipeBuilder;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.item.DyeColor;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
+import net.minecraft.world.item.crafting.Ingredient;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.world.effect.MobEffectInstance;
+import net.minecraft.world.effect.MobEffects;
+import net.minecraft.world.phys.AABB;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.level.Level;
 import net.minecraftforge.common.util.INBTSerializable;
 import net.minecraftforge.fluids.FluidStack;
 import org.apache.commons.lang3.tuple.Pair;
@@ -71,12 +71,12 @@ public class FrostyGeneratorType implements IMycelialGeneratorType{
     }
 
     @Override
-    public boolean canStart(INBTSerializable<CompoundNBT>[] inputs) {
+    public boolean canStart(INBTSerializable<CompoundTag>[] inputs) {
         return inputs.length > 0 && inputs[0] instanceof SidedInventoryComponent && ((SidedInventoryComponent<?>) inputs[0]).getStackInSlot(0).getCount() > 0;
     }
 
     @Override
-    public Pair<Integer, Integer> getTimeAndPowerGeneration(INBTSerializable<CompoundNBT>[] inputs) {
+    public Pair<Integer, Integer> getTimeAndPowerGeneration(INBTSerializable<CompoundTag>[] inputs) {
         if (inputs.length > 0 && inputs[0] instanceof SidedInventoryComponent && ((SidedInventoryComponent<?>) inputs[0]).getStackInSlot(0).getCount() > 0){
             ItemStack stack = ((SidedInventoryComponent<?>) inputs[0]).getStackInSlot(0).copy();
             ((SidedInventoryComponent<?>) inputs[0]).getStackInSlot(0).shrink(1);
@@ -106,7 +106,7 @@ public class FrostyGeneratorType implements IMycelialGeneratorType{
         for (Item item : new Item[]{Items.ICE, Items.PACKED_ICE, Items.SNOWBALL, Items.SNOW_BLOCK, Items.SNOW, Items.BLUE_ICE}) {
             ItemStack stack = new ItemStack(item);
             Pair<Integer, Integer> power = calculate(stack);
-            recipes.add(new MycelialGeneratorRecipe(Collections.singletonList(Collections.singletonList(Ingredient.fromStacks(stack))), new ArrayList<>(), power.getLeft(), power.getRight()));
+            recipes.add(new MycelialGeneratorRecipe(Collections.singletonList(Collections.singletonList(Ingredient.of(stack))), new ArrayList<>(), power.getLeft(), power.getRight()));
         }
         return recipes;
     }
@@ -123,17 +123,17 @@ public class FrostyGeneratorType implements IMycelialGeneratorType{
 
     @Override
     public ShapedRecipeBuilder addIngredients(ShapedRecipeBuilder recipeBuilder) {
-        recipeBuilder = recipeBuilder.key('B', Items.SNOWBALL)
-                .key('C', Blocks.ICE)
-                .key('M', IndustrialTags.Items.MACHINE_FRAME_SIMPLE);
+        recipeBuilder = recipeBuilder.define('B', Items.SNOWBALL)
+                .define('C', Blocks.ICE)
+                .define('M', IndustrialTags.Items.MACHINE_FRAME_SIMPLE);
         return recipeBuilder;
     }
 
     @Override
-    public void onTick(World world, BlockPos pos) {
-        AxisAlignedBB area = new AxisAlignedBB(pos.getX() - 3, pos.getY() - 3, pos.getZ() - 3, pos.getX() + 3, pos.getY() + 3, pos.getZ() + 3);
-        for (LivingEntity livingEntity : world.getEntitiesWithinAABB(LivingEntity.class, area)) {
-            livingEntity.addPotionEffect(new EffectInstance(Effects.SLOWNESS, 10, 4));
+    public void onTick(Level world, BlockPos pos) {
+        AABB area = new AABB(pos.getX() - 3, pos.getY() - 3, pos.getZ() - 3, pos.getX() + 3, pos.getY() + 3, pos.getZ() + 3);
+        for (LivingEntity livingEntity : world.getEntitiesOfClass(LivingEntity.class, area)) {
+            livingEntity.addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SLOWDOWN, 10, 4));
         }
     }
 

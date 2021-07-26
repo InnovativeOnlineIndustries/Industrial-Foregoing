@@ -27,17 +27,20 @@ import com.buuz135.industrial.module.ModuleMisc;
 import com.buuz135.industrial.utils.IndustrialTags;
 import com.hrznstudio.titanium.api.IFactory;
 import com.hrznstudio.titanium.recipe.generator.TitaniumShapedRecipeBuilder;
-import net.minecraft.block.Blocks;
-import net.minecraft.data.IFinishedRecipe;
-import net.minecraft.item.Items;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.data.recipes.FinishedRecipe;
+import net.minecraft.world.item.Items;
 import net.minecraft.tags.ItemTags;
 
 import java.util.function.Consumer;
 
+import com.hrznstudio.titanium.block.RotatableBlock.RotationType;
+import net.minecraft.world.level.block.state.BlockBehaviour.Properties;
+
 public class EnchantmentSorterBlock extends IndustrialBlock<EnchantmentSorterTile> {
 
     public EnchantmentSorterBlock() {
-        super("enchantment_sorter", Properties.from(Blocks.IRON_BLOCK), EnchantmentSorterTile.class, ModuleMisc.TAB_MISC);
+        super("enchantment_sorter", Properties.copy(Blocks.IRON_BLOCK), EnchantmentSorterTile.class, ModuleMisc.TAB_MISC);
     }
 
     @Override
@@ -51,16 +54,16 @@ public class EnchantmentSorterBlock extends IndustrialBlock<EnchantmentSorterTil
     }
 
     @Override
-    public void registerRecipe(Consumer<IFinishedRecipe> consumer) {
+    public void registerRecipe(Consumer<FinishedRecipe> consumer) {
         TitaniumShapedRecipeBuilder.shapedRecipe(this)
-                .patternLine("PSP").patternLine("BME").patternLine("PGP")
-                .key('P', IndustrialTags.Items.PLASTIC)
-                .key('S', Items.ENDER_PEARL)
-                .key('B', Items.BOOK)
-                .key('E', Items.ENCHANTED_BOOK)
-                .key('M', IndustrialTags.Items.MACHINE_FRAME_ADVANCED)
-                .key('G', ItemTags.makeWrapperTag("forge:gears/diamond"))
-                .build(consumer);
+                .pattern("PSP").pattern("BME").pattern("PGP")
+                .define('P', IndustrialTags.Items.PLASTIC)
+                .define('S', Items.ENDER_PEARL)
+                .define('B', Items.BOOK)
+                .define('E', Items.ENCHANTED_BOOK)
+                .define('M', IndustrialTags.Items.MACHINE_FRAME_ADVANCED)
+                .define('G', ItemTags.bind("forge:gears/diamond"))
+                .save(consumer);
     }
 
 }

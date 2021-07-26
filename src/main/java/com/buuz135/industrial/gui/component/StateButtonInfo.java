@@ -21,9 +21,9 @@
  */
 package com.buuz135.industrial.gui.component;
 
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.TranslationTextComponent;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.TranslatableComponent;
 
 public class StateButtonInfo {
 
@@ -31,16 +31,16 @@ public class StateButtonInfo {
     private final ResourceLocation texture;
     private final int textureX;
     private final int textureY;
-    private final ITextComponent[] tooltip;
+    private final Component[] tooltip;
 
     public StateButtonInfo(int state, ResourceLocation texture, int textureX, int textureY, String[] tooltip) {
         this.state = state;
         this.texture = texture;
         this.textureX = textureX;
         this.textureY = textureY;
-        this.tooltip = new ITextComponent[tooltip.length];
+        this.tooltip = new Component[tooltip.length];
         for (int i = 0; i < tooltip.length; i++) {
-            this.tooltip[i] = new TranslationTextComponent("conveyor.upgrade.industrialforegoing.tooltip." + tooltip[i]);
+            this.tooltip[i] = new TranslatableComponent("conveyor.upgrade.industrialforegoing.tooltip." + tooltip[i]);
         }
     }
 
@@ -60,7 +60,7 @@ public class StateButtonInfo {
         return textureY;
     }
 
-    public ITextComponent[] getTooltip() {
+    public Component[] getTooltip() {
         return tooltip;
     }
 }

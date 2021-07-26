@@ -55,35 +55,35 @@ import com.hrznstudio.titanium.network.locator.LocatorFactory;
 import com.hrznstudio.titanium.network.locator.PlayerInventoryFinder;
 import com.hrznstudio.titanium.network.locator.instance.HeldStackLocatorInstance;
 import com.hrznstudio.titanium.network.locator.instance.InventoryStackLocatorInstance;
-import net.minecraft.block.BlockState;
-import net.minecraft.data.IFinishedRecipe;
-import net.minecraft.enchantment.Enchantment;
-import net.minecraft.enchantment.EnchantmentHelper;
-import net.minecraft.enchantment.Enchantments;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.ai.attributes.Attribute;
-import net.minecraft.entity.ai.attributes.AttributeModifier;
-import net.minecraft.entity.item.ExperienceOrbEntity;
-import net.minecraft.entity.item.ItemEntity;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.entity.player.ServerPlayerEntity;
-import net.minecraft.inventory.EquipmentSlotType;
-import net.minecraft.inventory.container.Container;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.crafting.Ingredient;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.particles.ParticleTypes;
-import net.minecraft.util.ActionResult;
-import net.minecraft.util.Hand;
-import net.minecraft.util.IWorldPosCallable;
-import net.minecraft.util.math.AxisAlignedBB;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.StringTextComponent;
-import net.minecraft.util.text.TextFormatting;
-import net.minecraft.util.text.TranslationTextComponent;
-import net.minecraft.world.World;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.data.recipes.FinishedRecipe;
+import net.minecraft.world.item.enchantment.Enchantment;
+import net.minecraft.world.item.enchantment.EnchantmentHelper;
+import net.minecraft.world.item.enchantment.Enchantments;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.ai.attributes.Attribute;
+import net.minecraft.world.entity.ai.attributes.AttributeModifier;
+import net.minecraft.world.entity.ExperienceOrb;
+import net.minecraft.world.entity.item.ItemEntity;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.entity.EquipmentSlot;
+import net.minecraft.world.inventory.AbstractContainerMenu;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.crafting.Ingredient;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.world.InteractionResultHolder;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.inventory.ContainerLevelAccess;
+import net.minecraft.world.phys.AABB;
+import net.minecraft.core.BlockPos;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.TextComponent;
+import net.minecraft.ChatFormatting;
+import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.world.level.Level;
 import net.minecraftforge.common.capabilities.ICapabilityProvider;
 import net.minecraftforge.event.entity.player.EntityItemPickupEvent;
 import net.minecraftforge.event.entity.player.PlayerXpEvent;
@@ -92,8 +92,8 @@ import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
 import net.minecraftforge.fluids.capability.IFluidHandler;
 import net.minecraftforge.fluids.capability.IFluidHandlerItem;
-import net.minecraftforge.fml.network.NetworkDirection;
-import net.minecraftforge.fml.network.NetworkHooks;
+import net.minecraftforge.fmllegacy.network.NetworkDirection;
+import net.minecraftforge.fmllegacy.network.NetworkHooks;
 import net.minecraftforge.items.ItemHandlerHelper;
 
 import javax.annotation.Nullable;
@@ -102,6 +102,9 @@ import java.util.*;
 import java.util.function.BiFunction;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
+
+import com.hrznstudio.titanium.item.BasicItem.Key;
+import net.minecraft.world.item.Item.Properties;
 
 public class ItemInfinityBackpack extends ItemInfinity {
 
@@ -112,14 +115,14 @@ public class ItemInfinityBackpack extends ItemInfinity {
     private static String NBT_PICKUP = "AutoPickUpMode";
 
     public ItemInfinityBackpack() {
-        super("infinity_backpack", ModuleTool.TAB_TOOL, new Properties().maxStackSize(1), POWER_CONSUMPTION, FUEL_CONSUMPTION, false);
+        super("infinity_backpack", ModuleTool.TAB_TOOL, new Properties().stacksTo(1), POWER_CONSUMPTION, FUEL_CONSUMPTION, false);
         this.disableArea();
         EventManager.forge(EntityItemPickupEvent.class).filter(entityItemPickupEvent -> !entityItemPickupEvent.getItem().getItem().isEmpty()).process(entityItemPickupEvent -> {
             for (PlayerInventoryFinder.Target target : findAllBackpacks(entityItemPickupEvent.getPlayer())) {
                 ItemStack stack = target.getFinder().getStackGetter().apply(entityItemPickupEvent.getPlayer(), target.getSlot());
                 if (!stack.isEmpty()) {
                     if (stack.getItem() instanceof ItemInfinityBackpack && (getPickUpMode(stack) == 1 || getPickUpMode(stack) == 0)) {
-                        BackpackDataManager manager = BackpackDataManager.getData(entityItemPickupEvent.getItem().world);
+                        BackpackDataManager manager = BackpackDataManager.getData(entityItemPickupEvent.getItem().level);
                         if (manager != null && stack.getOrCreateTag().contains("Id")) {
                             BackpackDataManager.BackpackItemHandler handler = manager.getBackpack(stack.getOrCreateTag().getString("Id"));
                             if (handler != null) {
@@ -127,12 +130,12 @@ public class ItemInfinityBackpack extends ItemInfinity {
                                 for (int pos = 0; pos < handler.getSlots(); pos++) {
                                     ItemStack slotStack = handler.getSlotDefinition(pos).getStack().copy();
                                     slotStack.setCount(1);
-                                    if (!slotStack.isEmpty() && slotStack.getStack().isItemEqual(picked) && ItemStack.areItemStackTagsEqual(slotStack, picked)) {
+                                    if (!slotStack.isEmpty() && slotStack.getContainerItem().sameItem(picked) && ItemStack.tagMatches(slotStack, picked)) {
                                         ItemStack returned = handler.insertItem(pos, picked.copy(), false);
                                         picked.setCount(returned.getCount());
                                         entityItemPickupEvent.setResult(Event.Result.ALLOW);
-                                        if (entityItemPickupEvent.getPlayer() instanceof ServerPlayerEntity) {
-                                            sync(entityItemPickupEvent.getPlayer().world, stack.getOrCreateTag().getString("Id"), (ServerPlayerEntity) entityItemPickupEvent.getPlayer());
+                                        if (entityItemPickupEvent.getPlayer() instanceof ServerPlayer) {
+                                            sync(entityItemPickupEvent.getPlayer().level, stack.getOrCreateTag().getString("Id"), (ServerPlayer) entityItemPickupEvent.getPlayer());
                                         }
                                         return;
                                     }
@@ -149,12 +152,12 @@ public class ItemInfinityBackpack extends ItemInfinity {
                 if (!stack.isEmpty()) {
                     if (stack.getItem() instanceof ItemInfinityBackpack && (getPickUpMode(stack) == 2 || getPickUpMode(stack) == 0)) {
                         if (stack.getCapability(CapabilityFluidHandler.FLUID_HANDLER_ITEM_CAPABILITY).isPresent()) {
-                            ExperienceOrbEntity entity = pickupXp.getOrb();
+                            ExperienceOrb entity = pickupXp.getOrb();
                             IFluidHandlerItem handlerItem = stack.getCapability(CapabilityFluidHandler.FLUID_HANDLER_ITEM_CAPABILITY).orElse(null);
                             if (handlerItem != null) {
-                                if (handlerItem.fill(new FluidStack(ModuleCore.ESSENCE.getSourceFluid(), entity.getXpValue() * 20), IFluidHandler.FluidAction.SIMULATE) > 0){
-                                    handlerItem.fill(new FluidStack(ModuleCore.ESSENCE.getSourceFluid(), entity.getXpValue() * 20), IFluidHandler.FluidAction.EXECUTE);
-                                    entity.remove();
+                                if (handlerItem.fill(new FluidStack(ModuleCore.ESSENCE.getSourceFluid(), entity.getValue() * 20), IFluidHandler.FluidAction.SIMULATE) > 0){
+                                    handlerItem.fill(new FluidStack(ModuleCore.ESSENCE.getSourceFluid(), entity.getValue() * 20), IFluidHandler.FluidAction.EXECUTE);
+                                    entity.onClientRemoval();
                                     pickupXp.setCanceled(true);
                                 }
 
@@ -171,8 +174,8 @@ public class ItemInfinityBackpack extends ItemInfinity {
         return braquet == InfinityTier.ARTIFACT ? Integer.MAX_VALUE : (int) (2048 * Math.pow(8, braquet.getRadius()));
     }
 
-    public static void sync(World world, String id, ServerPlayerEntity player) {
-        IndustrialForegoing.NETWORK.get().sendTo(new BackpackSyncMessage(id, BackpackDataManager.getData(world).getBackpack(id).serializeNBT()), player.connection.getNetworkManager(), NetworkDirection.PLAY_TO_CLIENT);
+    public static void sync(Level world, String id, ServerPlayer player) {
+        IndustrialForegoing.NETWORK.get().sendTo(new BackpackSyncMessage(id, BackpackDataManager.getData(world).getBackpack(id).serializeNBT()), player.connection.getConnection(), NetworkDirection.PLAY_TO_CLIENT);
     }
 
     public static boolean isMagnetEnabled(ItemStack stack) {
@@ -199,7 +202,7 @@ public class ItemInfinityBackpack extends ItemInfinity {
      * @return The list of all {@link ItemInfinityBackpack}s contained in the given {@link PlayerEntity}s
      * inventory. The returned list is ordered by inventory slot ID.
      */
-    public static List<PlayerInventoryFinder.Target> findAllBackpacks(PlayerEntity entity) {
+    public static List<PlayerInventoryFinder.Target> findAllBackpacks(Player entity) {
         List<PlayerInventoryFinder.Target> list = new ArrayList<>();
         for (String name : PlayerInventoryFinder.FINDERS.keySet()) {
             PlayerInventoryFinder finder = PlayerInventoryFinder.FINDERS.get(name);
@@ -212,7 +215,7 @@ public class ItemInfinityBackpack extends ItemInfinity {
         return Collections.unmodifiableList(list);
     }
 
-    public static Optional<PlayerInventoryFinder.Target> findFirstBackpack(PlayerEntity entity) {
+    public static Optional<PlayerInventoryFinder.Target> findFirstBackpack(Player entity) {
         for (String name : PlayerInventoryFinder.FINDERS.keySet()) {
             PlayerInventoryFinder finder = PlayerInventoryFinder.FINDERS.get(name);
             for (int i = 0; i < finder.getSlotAmountGetter().apply(entity); i++) {
@@ -228,65 +231,65 @@ public class ItemInfinityBackpack extends ItemInfinity {
 
     @Nullable
     @Override
-    public ICapabilityProvider initCapabilities(ItemStack stack, @Nullable CompoundNBT nbt) {
+    public ICapabilityProvider initCapabilities(ItemStack stack, @Nullable CompoundTag nbt) {
         return new BackpackCapabilityProvider(stack, getTankConstructor(stack), getEnergyConstructor(stack));
     }
 
     @Override
-    public ActionResult<ItemStack> onItemRightClick(World worldIn, PlayerEntity player, Hand handIn) {
-        ItemStack stack = player.getHeldItem(handIn);
-        if (player instanceof ServerPlayerEntity) {
+    public InteractionResultHolder<ItemStack> use(Level worldIn, Player player, InteractionHand handIn) {
+        ItemStack stack = player.getItemInHand(handIn);
+        if (player instanceof ServerPlayer) {
             if (!stack.hasTag() || !stack.getTag().contains("Id")) {
                 UUID id = UUID.randomUUID();
-                CompoundNBT nbt = stack.getOrCreateTag();
+                CompoundTag nbt = stack.getOrCreateTag();
                 nbt.putString("Id", id.toString());
                 BackpackDataManager.getData(worldIn).createBackPack(id);
                 stack.setTag(nbt);
             }
             String id = stack.getTag().getString("Id");
-            IndustrialForegoing.NETWORK.get().sendTo(new BackpackOpenedMessage(player.inventory.currentItem, PlayerInventoryFinder.MAIN), ((ServerPlayerEntity) player).connection.getNetworkManager(), NetworkDirection.PLAY_TO_CLIENT);
-            sync(worldIn, id, (ServerPlayerEntity) player);
-            NetworkHooks.openGui((ServerPlayerEntity) player, this, buffer ->
-                    LocatorFactory.writePacketBuffer(buffer, new HeldStackLocatorInstance(handIn == Hand.MAIN_HAND)));
-            return ActionResult.resultSuccess(player.getHeldItem(handIn));
+            IndustrialForegoing.NETWORK.get().sendTo(new BackpackOpenedMessage(player.inventory.selected, PlayerInventoryFinder.MAIN), ((ServerPlayer) player).connection.getConnection(), NetworkDirection.PLAY_TO_CLIENT);
+            sync(worldIn, id, (ServerPlayer) player);
+            NetworkHooks.openGui((ServerPlayer) player, this, buffer ->
+                    LocatorFactory.writePacketBuffer(buffer, new HeldStackLocatorInstance(handIn == InteractionHand.MAIN_HAND)));
+            return InteractionResultHolder.success(player.getItemInHand(handIn));
         }
-        if (CommonProxy.CONTRIBUTORS.contains(player.getUniqueID().toString())) {
-            player.getHeldItem(handIn).getOrCreateTag().putBoolean("Special", true);
+        if (CommonProxy.CONTRIBUTORS.contains(player.getUUID().toString())) {
+            player.getItemInHand(handIn).getOrCreateTag().putBoolean("Special", true);
         }
-        return super.onItemRightClick(worldIn, player, handIn);
+        return super.use(worldIn, player, handIn);
     }
 
     @Override
-    public void inventoryTick(ItemStack stack, World worldIn, Entity entityIn, int itemSlot, boolean isSelected) {
+    public void inventoryTick(ItemStack stack, Level worldIn, Entity entityIn, int itemSlot, boolean isSelected) {
         if (isMagnetEnabled(stack)) {
-            for (ItemEntity itemEntity : entityIn.world.getEntitiesWithinAABB(ItemEntity.class, new AxisAlignedBB(entityIn.getPosX(), entityIn.getPosY(), entityIn.getPosY(), entityIn.getPosX(), entityIn.getPosY(), entityIn.getPosZ()).grow(5))) {
-                if (entityIn.world.isRemote) {
-                    if (itemEntity.isOnGround() && worldIn.rand.nextInt(5) < 1)
-                        itemEntity.world.addParticle(ParticleTypes.PORTAL, itemEntity.getPosX(), itemEntity.getPosY() + 0.5, itemEntity.getPosZ(), 0, -0.5, 0);
+            for (ItemEntity itemEntity : entityIn.level.getEntitiesOfClass(ItemEntity.class, new AABB(entityIn.getX(), entityIn.getY(), entityIn.getY(), entityIn.getX(), entityIn.getY(), entityIn.getZ()).inflate(5))) {
+                if (entityIn.level.isClientSide) {
+                    if (itemEntity.isOnGround() && worldIn.random.nextInt(5) < 1)
+                        itemEntity.level.addParticle(ParticleTypes.PORTAL, itemEntity.getX(), itemEntity.getY() + 0.5, itemEntity.getZ(), 0, -0.5, 0);
                 } else {
-                    if (!itemEntity.cannotPickup() && enoughFuel(stack)) {
-                        itemEntity.setPositionAndUpdate(entityIn.getPosX(), entityIn.getPosY(), entityIn.getPosZ());
+                    if (!itemEntity.hasPickUpDelay() && enoughFuel(stack)) {
+                        itemEntity.teleportTo(entityIn.getX(), entityIn.getY(), entityIn.getZ());
                         consumeFuel(stack);
                     }
                 }
             }
         }
-        if (!entityIn.world.isRemote && entityIn instanceof PlayerEntity) {
+        if (!entityIn.level.isClientSide && entityIn instanceof Player) {
             if (enoughFuel(stack)) {
-                if ((((PlayerEntity) entityIn).getFoodStats().needFood() || ((PlayerEntity) entityIn).getFoodStats().getSaturationLevel() < 10) && stack.getCapability(CapabilityFluidHandler.FLUID_HANDLER_ITEM_CAPABILITY).isPresent()) {
+                if ((((Player) entityIn).getFoodData().needsFood() || ((Player) entityIn).getFoodData().getSaturationLevel() < 10) && stack.getCapability(CapabilityFluidHandler.FLUID_HANDLER_ITEM_CAPABILITY).isPresent()) {
                     IFluidHandlerItem handlerItem = stack.getCapability(CapabilityFluidHandler.FLUID_HANDLER_ITEM_CAPABILITY).orElseGet(null);
                     if (handlerItem instanceof MultipleFluidHandlerScreenProviderItemStack) {
                         FluidStack fluidStack = handlerItem.getFluidInTank(2);
                         if (!fluidStack.isEmpty() && fluidStack.getAmount() >= 400) {
                             ((MultipleFluidHandlerScreenProviderItemStack) handlerItem).setFluidInTank(2, new FluidStack(ModuleCore.MEAT.getSourceFluid(), fluidStack.getAmount() - 400));
-                            ((PlayerEntity) entityIn).getFoodStats().addStats(1, 1);
+                            ((Player) entityIn).getFoodData().eat(1, 1);
                             consumeFuel(stack);
                         }
                     }
                 }
             }
-            if (entityIn.world.getGameTime() % 10 == 0) {
-                BackpackDataManager manager = BackpackDataManager.getData(entityIn.world);
+            if (entityIn.level.getGameTime() % 10 == 0) {
+                BackpackDataManager manager = BackpackDataManager.getData(entityIn.level);
                 if (manager != null && stack.getOrCreateTag().contains("Id")) {
                     BackpackDataManager.BackpackItemHandler handler = manager.getBackpack(stack.getOrCreateTag().getString("Id"));
                     if (handler != null) {
@@ -296,15 +299,15 @@ public class ItemInfinityBackpack extends ItemInfinity {
                         if (enoughFuel(stack)) {
                             for (int i = 0; i < BackpackDataManager.SLOT_AMOUNT; i++) {
                                 if (!handler.getStackInSlot(i).isEmpty() && handler.getSlotDefinition(i).isRefillItems()) {
-                                    PlayerInventory inventory = ((PlayerEntity) entityIn).inventory;
+                                    Inventory inventory = ((Player) entityIn).inventory;
                                     for (int inv = 0; inv <= 35; inv++) {
-                                        ItemStack inventoryStack = inventory.getStackInSlot(inv);
+                                        ItemStack inventoryStack = inventory.getItem(inv);
                                         if (!inventoryStack.isEmpty() && inventoryStack.getCount() < inventoryStack.getMaxStackSize() && handler.isItemValid(i, inventoryStack) && enoughFuel(stack)) {
                                             int extracting = inventoryStack.getMaxStackSize() - inventoryStack.getCount();
                                             ItemStack extractedSLot = handler.extractItem(i, extracting, false);
                                             inventoryStack.setCount(inventoryStack.getCount() + extractedSLot.getCount());
-                                            if (entityIn instanceof ServerPlayerEntity)
-                                                sync(entityIn.world, stack.getOrCreateTag().getString("Id"), (ServerPlayerEntity) entityIn);
+                                            if (entityIn instanceof ServerPlayer)
+                                                sync(entityIn.level, stack.getOrCreateTag().getString("Id"), (ServerPlayer) entityIn);
                                             consumeFuel(stack);
                                             return;
                                         }
@@ -323,9 +326,9 @@ public class ItemInfinityBackpack extends ItemInfinity {
     public IFactory<FluidHandlerScreenProviderItemStack> getTankConstructor(ItemStack stack) {
         int y = 88;
         return () -> new MultipleFluidHandlerScreenProviderItemStack(stack, 1_000_000,
-                new MultipleFluidHandlerScreenProviderItemStack.TankDefinition("biofuel", -21, y + 25 * 0, fluidStack -> fluidStack.getFluid().isEquivalentTo(ModuleCore.BIOFUEL.getSourceFluid()), false, true, FluidTankComponent.Type.SMALL),
-                new MultipleFluidHandlerScreenProviderItemStack.TankDefinition("essence", -21, y + 25 * 1, fluidStack -> fluidStack.getFluid().isIn(IndustrialTags.Fluids.EXPERIENCE), true, true, FluidTankComponent.Type.SMALL),
-                new MultipleFluidHandlerScreenProviderItemStack.TankDefinition("meat", -21, y + 25 * 2, fluidStack -> fluidStack.getFluid().isEquivalentTo(ModuleCore.MEAT.getSourceFluid()), false, true, FluidTankComponent.Type.SMALL)
+                new MultipleFluidHandlerScreenProviderItemStack.TankDefinition("biofuel", -21, y + 25 * 0, fluidStack -> fluidStack.getFluid().isSame(ModuleCore.BIOFUEL.getSourceFluid()), false, true, FluidTankComponent.Type.SMALL),
+                new MultipleFluidHandlerScreenProviderItemStack.TankDefinition("essence", -21, y + 25 * 1, fluidStack -> fluidStack.getFluid().is(IndustrialTags.Fluids.EXPERIENCE), true, true, FluidTankComponent.Type.SMALL),
+                new MultipleFluidHandlerScreenProviderItemStack.TankDefinition("meat", -21, y + 25 * 2, fluidStack -> fluidStack.getFluid().isSame(ModuleCore.MEAT.getSourceFluid()), false, true, FluidTankComponent.Type.SMALL)
         );
     }
 
@@ -344,7 +347,7 @@ public class ItemInfinityBackpack extends ItemInfinity {
             @Override
             public void setEnergyStored(long energy) {
                 if (!stack.hasTag()) {
-                    stack.setTag(new CompoundNBT());
+                    stack.setTag(new CompoundTag());
                 }
                 stack.getTag().putLong("Energy", Math.min(energy, InfinityTier.ARTIFACT.getPowerNeeded()));
             }
@@ -357,18 +360,18 @@ public class ItemInfinityBackpack extends ItemInfinity {
     }
 
     @Override
-    public void handleButtonMessage(int id, PlayerEntity playerEntity, CompoundNBT compound) {
+    public void handleButtonMessage(int id, Player playerEntity, CompoundTag compound) {
         findFirstBackpack(playerEntity).ifPresent(target -> {
             ItemStack stack = target.getFinder().getStackGetter().apply(playerEntity, target.getSlot());
             if (!stack.isEmpty()) {
-                if (id == 4 && playerEntity instanceof ServerPlayerEntity) {
+                if (id == 4 && playerEntity instanceof ServerPlayer) {
                     String backpackId = compound.getString("Id");
-                    ItemStack cursor = playerEntity.inventory.getItemStack();
+                    ItemStack cursor = playerEntity.inventory.getSelected();
                     boolean shift = compound.getBoolean("Shift");
                     boolean ctrl = compound.getBoolean("Ctrl");
                     int button = compound.getInt("Button");
                     int slot = compound.getInt("Slot");
-                    BackpackDataManager dataManager = BackpackDataManager.getData(playerEntity.world);
+                    BackpackDataManager dataManager = BackpackDataManager.getData(playerEntity.level);
                     BackpackDataManager.BackpackItemHandler handler = dataManager.getBackpack(backpackId);
                     ItemStack result = ItemStack.EMPTY;
                     boolean hasCursorChanged = false;
@@ -418,10 +421,11 @@ public class ItemInfinityBackpack extends ItemInfinity {
                         }
                     }
                     if (hasCursorChanged) {
-                        playerEntity.inventory.setItemStack(result);
-                        ((ServerPlayerEntity) playerEntity).updateHeldItem();
+                        // TODO: 26/07/2021 fix
+                        playerEntity.inventory.setPickedItem(result);
+//                        ((ServerPlayer) playerEntity).broadcastCarriedItem();
                     }
-                    sync(playerEntity.world, backpackId, (ServerPlayerEntity) playerEntity);
+                    sync(playerEntity.level, backpackId, (ServerPlayer) playerEntity);
                 }
                 if (id == 10) {
                     setMagnet(stack, !isMagnetEnabled(stack));
@@ -440,7 +444,7 @@ public class ItemInfinityBackpack extends ItemInfinity {
     }
 
     public void addNbt(ItemStack stack, long power, int fuel, boolean special) {
-        CompoundNBT tagCompound = new CompoundNBT();
+        CompoundTag tagCompound = new CompoundTag();
         tagCompound.putLong("Energy", power);
         tagCompound.putBoolean("Special", special);
         tagCompound.putString("Selected", InfinityTier.getTierBraquet(power).getLeft().name());
@@ -449,9 +453,9 @@ public class ItemInfinityBackpack extends ItemInfinity {
     }
 
     @Override
-    public void addTooltipDetails(@Nullable Key key, ItemStack stack, List<ITextComponent> tooltip, boolean advanced) {
+    public void addTooltipDetails(@Nullable Key key, ItemStack stack, List<Component> tooltip, boolean advanced) {
         //tooltip.add(stack.getOrCreateTag().toFormattedComponent());
-        tooltip.add(new StringTextComponent(TextFormatting.GRAY + new TranslationTextComponent("text.industrialforegoing.tooltip.can_hold").getString() + ": " + TextFormatting.DARK_AQUA + NumberFormat.getInstance(Locale.ROOT).format(getSlotSize(stack)) + TextFormatting.GRAY + " " + new TranslationTextComponent("text.industrialforegoing.tooltip.items").getString()));
+        tooltip.add(new TextComponent(ChatFormatting.GRAY + new TranslatableComponent("text.industrialforegoing.tooltip.can_hold").getString() + ": " + ChatFormatting.DARK_AQUA + NumberFormat.getInstance(Locale.ROOT).format(getSlotSize(stack)) + ChatFormatting.GRAY + " " + new TranslatableComponent("text.industrialforegoing.tooltip.items").getString()));
         super.addTooltipDetails(key, stack, tooltip, advanced);
     }
 
@@ -466,20 +470,20 @@ public class ItemInfinityBackpack extends ItemInfinity {
 
     @Override
     public boolean enoughFuel(ItemStack stack) {
-        int i = EnchantmentHelper.getEnchantmentLevel(Enchantments.UNBREAKING, stack);
+        int i = EnchantmentHelper.getItemEnchantmentLevel(Enchantments.UNBREAKING, stack);
         return getFuelFromStack(stack) >= FUEL_CONSUMPTION  * ( 1 / (i + 1)) ;
     }
 
     @Override
     public void consumeFuel(ItemStack stack) {
-        int i = EnchantmentHelper.getEnchantmentLevel(Enchantments.UNBREAKING, stack);
+        int i = EnchantmentHelper.getItemEnchantmentLevel(Enchantments.UNBREAKING, stack);
         if (getFuelFromStack(stack) >= FUEL_CONSUMPTION  * ( 1 / (i + 1)) ) {
             stack.getTag().getCompound("Tanks").getCompound("biofuel").putInt("Amount", Math.max(0, getFuelFromStack(stack) - FUEL_CONSUMPTION  * ( 1 / (i + 1)) ));
         }
     }
 
     @Override
-    public Multimap<Attribute, AttributeModifier> getAttributeModifiers(EquipmentSlotType slot, ItemStack stack) {
+    public Multimap<Attribute, AttributeModifier> getAttributeModifiers(EquipmentSlot slot, ItemStack stack) {
         Multimap<Attribute, AttributeModifier> multimap = MultimapBuilder.hashKeys().arrayListValues().build();
         return multimap;
     }
@@ -501,21 +505,21 @@ public class ItemInfinityBackpack extends ItemInfinity {
 
     @Nullable
     @Override
-    public Container createMenu(int menu, PlayerInventory p_createMenu_2_, PlayerEntity playerEntity) {
+    public AbstractContainerMenu createMenu(int menu, Inventory p_createMenu_2_, Player playerEntity) {
         return findFirstBackpack(playerEntity).map(target -> {
             ItemStack stack = target.getFinder().getStackGetter().apply(playerEntity, target.getSlot());
             if (!stack.isEmpty()) {
                 if (!stack.hasTag() || !stack.getTag().contains("Id")) {
                     UUID id = UUID.randomUUID();
-                    CompoundNBT nbt = stack.getOrCreateTag();
+                    CompoundTag nbt = stack.getOrCreateTag();
                     nbt.putString("Id", id.toString());
-                    BackpackDataManager.getData(playerEntity.world).createBackPack(id);
+                    BackpackDataManager.getData(playerEntity.level).createBackPack(id);
                     stack.setTag(nbt);
                 }
                 String id = stack.getTag().getString("Id");
-                return new BackpackContainer(ItemStackHarnessRegistry.getHarnessCreators().get(this).apply(stack), new InventoryStackLocatorInstance(target.getName(), target.getSlot()), new IWorldPosCallable() {
+                return new BackpackContainer(ItemStackHarnessRegistry.getHarnessCreators().get(this).apply(stack), new InventoryStackLocatorInstance(target.getName(), target.getSlot()), new ContainerLevelAccess() {
                     @Override
-                    public <T> Optional<T> apply(BiFunction<World, BlockPos, T> p_221484_1_) {
+                    public <T> Optional<T> evaluate(BiFunction<Level, BlockPos, T> p_221484_1_) {
                         return Optional.empty();
                     }
                 }, playerEntity.inventory, menu, id);
@@ -542,7 +546,7 @@ public class ItemInfinityBackpack extends ItemInfinity {
         factory.add(() -> new AssetScreenAddon(AssetTypes.AUGMENT_BACKGROUND, 175, 10, true));
         int x = 181;
         int y = 19;
-        factory.add(() -> new StateButtonAddon(new ButtonComponent(x, 16 + y * 0, 14, 14).setId(10), new StateButtonInfo(0, AssetTypes.BUTTON_SIDENESS_ENABLED, TextFormatting.GREEN + new TranslationTextComponent("tooltip.industrialforegoing.backpack.magnet_enabled").getString()), new StateButtonInfo(1, AssetTypes.BUTTON_SIDENESS_DISABLED, TextFormatting.RED + new TranslationTextComponent("tooltip.industrialforegoing.backpack.magnet_disabled").getString())) {
+        factory.add(() -> new StateButtonAddon(new ButtonComponent(x, 16 + y * 0, 14, 14).setId(10), new StateButtonInfo(0, AssetTypes.BUTTON_SIDENESS_ENABLED, ChatFormatting.GREEN + new TranslatableComponent("tooltip.industrialforegoing.backpack.magnet_enabled").getString()), new StateButtonInfo(1, AssetTypes.BUTTON_SIDENESS_DISABLED, ChatFormatting.RED + new TranslatableComponent("tooltip.industrialforegoing.backpack.magnet_disabled").getString())) {
             @Override
             public int getState() {
                 return isMagnetEnabled(stack.get()) ? 0 : 1;
@@ -550,34 +554,34 @@ public class ItemInfinityBackpack extends ItemInfinity {
         });
         factory.add(() -> new StateButtonAddon(new ButtonComponent(x, 16 + y * 1, 14, 14).setId(11),
                 new StateButtonInfo(0, AssetTypes.BUTTON_SIDENESS_ENABLED,
-                        TextFormatting.GREEN + new TranslationTextComponent("tooltip.industrialforegoing.backpack.pickup_all").getString(),
-                        TextFormatting.GRAY + new TranslationTextComponent("tooltip.industrialforegoing.backpack.pickup_extra").getString(),
-                        TextFormatting.GRAY + new TranslationTextComponent("tooltip.industrialforegoing.backpack.pickup_extra_1").getString()),
+                        ChatFormatting.GREEN + new TranslatableComponent("tooltip.industrialforegoing.backpack.pickup_all").getString(),
+                        ChatFormatting.GRAY + new TranslatableComponent("tooltip.industrialforegoing.backpack.pickup_extra").getString(),
+                        ChatFormatting.GRAY + new TranslatableComponent("tooltip.industrialforegoing.backpack.pickup_extra_1").getString()),
                 new StateButtonInfo(1, AssetTypes.BUTTON_SIDENESS_PULL,
-                        TextFormatting.GREEN + new TranslationTextComponent("tooltip.industrialforegoing.backpack.item_pickup_enabled").getString(),
-                        TextFormatting.GRAY + new TranslationTextComponent("tooltip.industrialforegoing.backpack.pickup_extra").getString(),
-                        TextFormatting.GRAY + new TranslationTextComponent("tooltip.industrialforegoing.backpack.pickup_extra_1").getString()),
+                        ChatFormatting.GREEN + new TranslatableComponent("tooltip.industrialforegoing.backpack.item_pickup_enabled").getString(),
+                        ChatFormatting.GRAY + new TranslatableComponent("tooltip.industrialforegoing.backpack.pickup_extra").getString(),
+                        ChatFormatting.GRAY + new TranslatableComponent("tooltip.industrialforegoing.backpack.pickup_extra_1").getString()),
                 new StateButtonInfo(2, AssetTypes.BUTTON_SIDENESS_PUSH,
-                        TextFormatting.GREEN + new TranslationTextComponent("tooltip.industrialforegoing.backpack.xp_pickup_enabled").getString(),
-                        TextFormatting.GRAY + new TranslationTextComponent("tooltip.industrialforegoing.backpack.pickup_extra").getString(),
-                        TextFormatting.GRAY + new TranslationTextComponent("tooltip.industrialforegoing.backpack.pickup_extra_1").getString()),
+                        ChatFormatting.GREEN + new TranslatableComponent("tooltip.industrialforegoing.backpack.xp_pickup_enabled").getString(),
+                        ChatFormatting.GRAY + new TranslatableComponent("tooltip.industrialforegoing.backpack.pickup_extra").getString(),
+                        ChatFormatting.GRAY + new TranslatableComponent("tooltip.industrialforegoing.backpack.pickup_extra_1").getString()),
                 new StateButtonInfo(3, AssetTypes.BUTTON_SIDENESS_DISABLED,
-                        TextFormatting.RED + new TranslationTextComponent("tooltip.industrialforegoing.backpack.pickup_disabled").getString(),
-                        TextFormatting.GRAY + new TranslationTextComponent("tooltip.industrialforegoing.backpack.pickup_extra").getString(),
-                        TextFormatting.GRAY + new TranslationTextComponent("tooltip.industrialforegoing.backpack.pickup_extra_1").getString())) {
+                        ChatFormatting.RED + new TranslatableComponent("tooltip.industrialforegoing.backpack.pickup_disabled").getString(),
+                        ChatFormatting.GRAY + new TranslatableComponent("tooltip.industrialforegoing.backpack.pickup_extra").getString(),
+                        ChatFormatting.GRAY + new TranslatableComponent("tooltip.industrialforegoing.backpack.pickup_extra_1").getString())) {
             @Override
             public int getState() {
                 return getPickUpMode(stack.get());
             }
         });
-        factory.add(() -> new StateButtonAddon(new ButtonComponent(x, 16 + y * 2, 14, 14).setId(3), new StateButtonInfo(0, AssetTypes.BUTTON_SIDENESS_ENABLED, TextFormatting.GREEN + new TranslationTextComponent("text.industrialforegoing.display.charging").getString() + new TranslationTextComponent("text.industrialforegoing.display.enabled").getString()), new StateButtonInfo(1, AssetTypes.BUTTON_SIDENESS_DISABLED, TextFormatting.RED + new TranslationTextComponent("text.industrialforegoing.display.charging").getString() + new TranslationTextComponent("text.industrialforegoing.display.disabled").getString())) {
+        factory.add(() -> new StateButtonAddon(new ButtonComponent(x, 16 + y * 2, 14, 14).setId(3), new StateButtonInfo(0, AssetTypes.BUTTON_SIDENESS_ENABLED, ChatFormatting.GREEN + new TranslatableComponent("text.industrialforegoing.display.charging").getString() + new TranslatableComponent("text.industrialforegoing.display.enabled").getString()), new StateButtonInfo(1, AssetTypes.BUTTON_SIDENESS_DISABLED, ChatFormatting.RED + new TranslatableComponent("text.industrialforegoing.display.charging").getString() + new TranslatableComponent("text.industrialforegoing.display.disabled").getString())) {
             @Override
             public int getState() {
                 return ItemInfinity.canCharge(stack.get()) ? 0 : 1;
             }
         });
         if (isSpecial(stack.get())) {
-            factory.add(() -> new StateButtonAddon(new ButtonComponent(x, 16 + y * 3, 14, 14).setId(-10), new StateButtonInfo(0, AssetTypes.BUTTON_SIDENESS_ENABLED, TextFormatting.GOLD + new TranslationTextComponent("text.industrialforegoing.display.special").getString()), new StateButtonInfo(1, AssetTypes.BUTTON_SIDENESS_DISABLED, TextFormatting.GOLD + new TranslationTextComponent("text.industrialforegoing.display.special").getString())) {
+            factory.add(() -> new StateButtonAddon(new ButtonComponent(x, 16 + y * 3, 14, 14).setId(-10), new StateButtonInfo(0, AssetTypes.BUTTON_SIDENESS_ENABLED, ChatFormatting.GOLD + new TranslatableComponent("text.industrialforegoing.display.special").getString()), new StateButtonInfo(1, AssetTypes.BUTTON_SIDENESS_DISABLED, ChatFormatting.GOLD + new TranslatableComponent("text.industrialforegoing.display.special").getString())) {
                 @Override
                 public int getState() {
                     return ModuleTool.INFINITY_BACKPACK.isSpecialEnabled(stack.get()) ? 0 : 1;
@@ -588,17 +592,17 @@ public class ItemInfinityBackpack extends ItemInfinity {
     }
 
     @Override
-    public void registerRecipe(Consumer<IFinishedRecipe> consumer) {
+    public void registerRecipe(Consumer<FinishedRecipe> consumer) {
         new DissolutionChamberRecipe(this.getRegistryName(),
-                new Ingredient.IItemList[]{
-                        new Ingredient.SingleItemList(new ItemStack(ModuleTransportStorage.BLACK_HOLE_UNIT_COMMON)),
-                        new Ingredient.TagList(IndustrialTags.Items.GEAR_DIAMOND),
-                        new Ingredient.SingleItemList(new ItemStack(ModuleTransportStorage.BLACK_HOLE_UNIT_COMMON)),
-                        new Ingredient.SingleItemList(new ItemStack(ModuleTransportStorage.BLACK_HOLE_TANK_COMMON)),
-                        new Ingredient.SingleItemList(new ItemStack(ModuleTransportStorage.BLACK_HOLE_TANK_COMMON)),
-                        new Ingredient.TagList(IndustrialTags.Items.GEAR_GOLD),
-                        new Ingredient.TagList(IndustrialTags.Items.GEAR_GOLD),
-                        new Ingredient.TagList(IndustrialTags.Items.GEAR_GOLD),
+                new Ingredient.Value[]{
+                        new Ingredient.ItemValue(new ItemStack(ModuleTransportStorage.BLACK_HOLE_UNIT_COMMON)),
+                        new Ingredient.TagValue(IndustrialTags.Items.GEAR_DIAMOND),
+                        new Ingredient.ItemValue(new ItemStack(ModuleTransportStorage.BLACK_HOLE_UNIT_COMMON)),
+                        new Ingredient.ItemValue(new ItemStack(ModuleTransportStorage.BLACK_HOLE_TANK_COMMON)),
+                        new Ingredient.ItemValue(new ItemStack(ModuleTransportStorage.BLACK_HOLE_TANK_COMMON)),
+                        new Ingredient.TagValue(IndustrialTags.Items.GEAR_GOLD),
+                        new Ingredient.TagValue(IndustrialTags.Items.GEAR_GOLD),
+                        new Ingredient.TagValue(IndustrialTags.Items.GEAR_GOLD),
                 },
                 new FluidStack(ModuleCore.PINK_SLIME.getSourceFluid(), 2000), 400, new ItemStack(this), FluidStack.EMPTY);
     }

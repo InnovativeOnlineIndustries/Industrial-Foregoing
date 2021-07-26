@@ -26,8 +26,8 @@ import com.buuz135.industrial.utils.Reference;
 import com.hrznstudio.titanium.event.handler.EventManager;
 import com.hrznstudio.titanium.module.Feature;
 import com.hrznstudio.titanium.tab.AdvancedTitaniumTab;
-import net.minecraft.block.Block;
-import net.minecraft.entity.MobEntity;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.entity.Mob;
 import net.minecraftforge.event.entity.living.LivingEvent;
 
 import java.util.ArrayList;
@@ -49,10 +49,10 @@ public class ModuleMisc implements IModule {
         List<Feature.Builder> features = new ArrayList<>();
         features.add(Feature.builder("stasis_chamber")
                 .content(Block.class, STASIS_CHAMBER)
-                .event(EventManager.forge(LivingEvent.LivingUpdateEvent.class).filter(livingUpdateEvent -> livingUpdateEvent.getEntityLiving() instanceof MobEntity && livingUpdateEvent.getEntityLiving().getPersistentData().contains("StasisChamberTime")).process(livingUpdateEvent -> {
+                .event(EventManager.forge(LivingEvent.LivingUpdateEvent.class).filter(livingUpdateEvent -> livingUpdateEvent.getEntityLiving() instanceof Mob && livingUpdateEvent.getEntityLiving().getPersistentData().contains("StasisChamberTime")).process(livingUpdateEvent -> {
                     long time = livingUpdateEvent.getEntityLiving().getPersistentData().getLong("StasisChamberTime");
-                    if (time + 50 <= livingUpdateEvent.getEntityLiving().world.getGameTime()) {
-                        ((MobEntity) livingUpdateEvent.getEntityLiving()).setNoAI(false);
+                    if (time + 50 <= livingUpdateEvent.getEntityLiving().level.getGameTime()) {
+                        ((Mob) livingUpdateEvent.getEntityLiving()).setNoAi(false);
                     }
                 }))
         );

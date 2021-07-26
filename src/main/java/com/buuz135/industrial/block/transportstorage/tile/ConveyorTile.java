@@ -30,22 +30,24 @@ import com.buuz135.industrial.module.ModuleTransportStorage;
 import com.buuz135.industrial.proxy.client.model.ConveyorModelData;
 import com.buuz135.industrial.utils.MovementUtils;
 import com.hrznstudio.titanium.block.tile.ActiveTile;
-import net.minecraft.block.BlockState;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.item.ItemEntity;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.entity.player.ServerPlayerEntity;
-import net.minecraft.inventory.container.Container;
-import net.minecraft.item.DyeColor;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.tileentity.ITickableTileEntity;
-import net.minecraft.util.Direction;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.math.AxisAlignedBB;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.item.ItemEntity;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.inventory.AbstractContainerMenu;
+import net.minecraft.world.item.DyeColor;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.world.level.block.entity.TickableBlockEntity;
+import net.minecraft.core.Direction;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.phys.AABB;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.level.Level;
+
+import com.hrznstudio.titanium.block.tile.ITickableBlockEntity;
 import net.minecraftforge.client.model.ModelDataManager;
 import net.minecraftforge.client.model.data.IModelData;
 import net.minecraftforge.client.model.data.ModelDataMap;
@@ -64,7 +66,9 @@ import java.util.Map;
 
 import static com.buuz135.industrial.block.transportstorage.ConveyorBlock.*;
 
-public class ConveyorTile extends ActiveTile<ConveyorTile> implements IBlockContainer<ConveyorUpgradeFactory>, ITickableTileEntity {
+import com.buuz135.industrial.block.transportstorage.ConveyorBlock.EnumType;
+
+public class ConveyorTile extends ActiveTile<ConveyorTile> implements IBlockContainer<ConveyorUpgradeFactory>, ITickableBlockEntity {
 
     private Direction facing;
     private EnumType type;
@@ -79,20 +83,20 @@ public class ConveyorTile extends ActiveTile<ConveyorTile> implements IBlockCont
         super(ModuleTransportStorage.CONVEYOR);
         this.facing = Direction.NORTH;
         this.type = ConveyorBlock.EnumType.FLAT;
-        this.color = DyeColor.WHITE.getMapColor().colorValue;
+        this.color = DyeColor.WHITE.getMaterialColor().col;
         this.filter = new ArrayList<>();
         this.sticky = false;
         this.tank = new FluidTank(250);
     }
 
     @Override
-    public World getBlockWorld() {
-        return getWorld();
+    public Level getBlockWorld() {
+        return getLevel();
     }
 
     @Override
     public BlockPos getBlockPosition() {
-        return getPos();
+        return getBlockPos();
     }
 
     @Override
@@ -126,25 +130,25 @@ public class ConveyorTile extends ActiveTile<ConveyorTile> implements IBlockCont
         if (!hasUpgrade(facing)) {
             upgradeMap.put(facing, upgrade.create(this, facing));
             requestSync();
-            if (world.isRemote) ModelDataManager.requestModelDataRefresh(this);
+            if (level.isClientSide) ModelDataManager.requestModelDataRefresh(this);
         }
     }
 
     @Override
     public void removeUpgrade(Direction facing, boolean drop) {
         if (hasUpgrade(facing)) {
-            if (!world.isRemote && drop) {
+            if (!level.isClientSide && drop) {
                 ConveyorUpgrade upgrade = upgradeMap.get(facing);
                 for (ItemStack stack : upgrade.getDrops()) {
-                    ItemEntity item = new ItemEntity(world, pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5);
+                    ItemEntity item = new ItemEntity(level, worldPosition.getX() + 0.5, worldPosition.getY() + 0.5, worldPosition.getZ() + 0.5);
                     item.setItem(stack);
-                    world.addEntity(item);
+                    level.addFreshEntity(item);
                 }
             }
             upgradeMap.get(facing).onUpgradeRemoved();
             upgradeMap.remove(facing);
             requestSync();
-            if (world.isRemote) ModelDataManager.requestModelDataRefresh(this);
+            if (level.isClientSide) ModelDataManager.requestModelDataRefresh(this);
         }
     }
 
@@ -181,7 +185,7 @@ public class ConveyorTile extends ActiveTile<ConveyorTile> implements IBlockCont
     }
 
     public void setColor(DyeColor color) {
-        this.color = color.getMapColor().colorValue;
+        this.color = color.getMaterialColor().col;
         markForUpdate();
     }
 
@@ -195,44 +199,44 @@ public class ConveyorTile extends ActiveTile<ConveyorTile> implements IBlockCont
     }
 
     @Override
-    public CompoundNBT write(CompoundNBT compound) {
-        compound = super.write(compound);
-        compound.putString("Facing", facing.getString()); //getName
+    public CompoundTag save(CompoundTag compound) {
+        compound = super.save(compound);
+        compound.putString("Facing", facing.getSerializedName()); //getName
         compound.putString("Type", type.getName());
         compound.putInt("Color", color);
         compound.putBoolean("Sticky", sticky);
-        CompoundNBT upgrades = new CompoundNBT();
+        CompoundTag upgrades = new CompoundTag();
         for (Direction facing : Direction.values()) {
             if (!hasUpgrade(facing)) {
                 continue;
             }
-            CompoundNBT upgradeTag = new CompoundNBT();
+            CompoundTag upgradeTag = new CompoundTag();
             ConveyorUpgrade upgrade = upgradeMap.get(facing);
             upgradeTag.putString("factory", upgrade.getFactory().getRegistryName().toString());
-            CompoundNBT customNBT = upgrade.serializeNBT();
+            CompoundTag customNBT = upgrade.serializeNBT();
             if (customNBT != null)
                 upgradeTag.put("customNBT", customNBT);
-            upgrades.put(facing.getString(), upgradeTag);
+            upgrades.put(facing.getSerializedName(), upgradeTag);
         }
         compound.put("Upgrades", upgrades);
-        compound.put("Tank", tank.writeToNBT(new CompoundNBT()));
+        compound.put("Tank", tank.writeToNBT(new CompoundTag()));
         return compound;
     }
 
     @Override //read
-    public void read(BlockState state, CompoundNBT compound) {
-        super.read(state, compound);
+    public void load(BlockState state, CompoundTag compound) {
+        super.load(state, compound);
         this.facing = Direction.byName(compound.getString("Facing"));
         this.type = ConveyorBlock.EnumType.getFromName(compound.getString("Type"));
         this.color = compound.getInt("Color");
         this.sticky = compound.getBoolean("Sticky");
         if (compound.contains("Upgrades")) {
-            CompoundNBT upgradesTag = compound.getCompound("Upgrades");
+            CompoundTag upgradesTag = compound.getCompound("Upgrades");
             //upgradeMap.clear();
             for (Direction facing : Direction.values()) {
-                if (!upgradesTag.contains(facing.getString()))
+                if (!upgradesTag.contains(facing.getSerializedName()))
                     continue;
-                CompoundNBT upgradeTag = upgradesTag.getCompound(facing.getString());
+                CompoundTag upgradeTag = upgradesTag.getCompound(facing.getSerializedName());
                 ConveyorUpgradeFactory factory = null;
                 for (ConveyorUpgradeFactory conveyorUpgradeFactory : ConveyorUpgradeFactory.FACTORIES) {
                     if (conveyorUpgradeFactory.getRegistryName().equals(new ResourceLocation(upgradeTag.getString("factory")))) {
@@ -257,21 +261,21 @@ public class ConveyorTile extends ActiveTile<ConveyorTile> implements IBlockCont
 
     public void markForUpdate() {
         super.markForUpdate();
-        this.world.setBlockState(pos, this.world.getBlockState(pos).with(FACING, facing).with(TYPE, type));
-        this.world.getTileEntity(pos).read(this.world.getBlockState(pos), write(new CompoundNBT())); //read
+        this.level.setBlockAndUpdate(worldPosition, this.level.getBlockState(worldPosition).setValue(FACING, facing).setValue(TYPE, type));
+        this.level.getBlockEntity(worldPosition).load(this.level.getBlockState(worldPosition), save(new CompoundTag())); //read
     }
 
-    public List<AxisAlignedBB> getCollisionBoxes() {
-        List<AxisAlignedBB> boxes = new ArrayList<>();
+    public List<AABB> getCollisionBoxes() {
+        List<AABB> boxes = new ArrayList<>();
         Direction facing = this.facing;
         if (type.isDown()) facing = facing.getOpposite();
         double height = 1;
         while (height > 0) {
             if (facing == Direction.NORTH || facing == Direction.SOUTH) {
-                boxes.add(new AxisAlignedBB(0, 0, facing == Direction.NORTH ? 0 : 1D - height, 1, 1 - height, facing == Direction.NORTH ? height : 1));
+                boxes.add(new AABB(0, 0, facing == Direction.NORTH ? 0 : 1D - height, 1, 1 - height, facing == Direction.NORTH ? height : 1));
             }
             if (facing == Direction.WEST || facing == Direction.EAST) {
-                boxes.add(new AxisAlignedBB(facing == Direction.WEST ? 0 : 1D - height, 0, 0, facing == Direction.WEST ? height : 1, 1 - height, 1));
+                boxes.add(new AABB(facing == Direction.WEST ? 0 : 1D - height, 0, 0, facing == Direction.WEST ? height : 1, 1 - height, 1));
             }
             height -= 0.1D;
         }
@@ -285,9 +289,9 @@ public class ConveyorTile extends ActiveTile<ConveyorTile> implements IBlockCont
             }
         }
         if (entity.isAlive()) {
-            if (!this.getEntityFilter().contains(entity.getEntityId()))
-                MovementUtils.handleConveyorMovement(entity, facing, this.pos, type);
-            if (entity instanceof ItemEntity && sticky) ((ItemEntity) entity).setPickupDelay(5);
+            if (!this.getEntityFilter().contains(entity.getId()))
+                MovementUtils.handleConveyorMovement(entity, facing, this.worldPosition, type);
+            if (entity instanceof ItemEntity && sticky) ((ItemEntity) entity).setPickUpDelay(5);
         }
     }
 
@@ -305,11 +309,11 @@ public class ConveyorTile extends ActiveTile<ConveyorTile> implements IBlockCont
             new ArrayList<>(upgradeMap.keySet()).forEach(facing1 -> this.removeUpgrade(facing1, true));
         }
         upgradeMap.values().forEach(ConveyorUpgrade::update);
-        if (!world.isRemote && tank.getFluidAmount() > 0 && world.getGameTime() % 3 == 0 && world.getBlockState(this.pos.offset(facing)).getBlock() instanceof ConveyorBlock && world.getTileEntity(this.pos.offset(facing)) instanceof ConveyorTile) {
-            BlockState state = world.getBlockState(this.pos.offset(facing));
-            if (!state.get(ConveyorBlock.TYPE).isVertical()) {
+        if (!level.isClientSide && tank.getFluidAmount() > 0 && level.getGameTime() % 3 == 0 && level.getBlockState(this.worldPosition.relative(facing)).getBlock() instanceof ConveyorBlock && level.getBlockEntity(this.worldPosition.relative(facing)) instanceof ConveyorTile) {
+            BlockState state = level.getBlockState(this.worldPosition.relative(facing));
+            if (!state.getValue(ConveyorBlock.TYPE).isVertical()) {
                 int amount = Math.max(tank.getFluidAmount() - 1, 1);
-                ConveyorTile conveyorTile = (ConveyorTile) world.getTileEntity(this.pos.offset(facing));
+                ConveyorTile conveyorTile = (ConveyorTile) level.getBlockEntity(this.worldPosition.relative(facing));
                 FluidStack drained = tank.drain(conveyorTile.getTank().fill(tank.drain(amount, IFluidHandler.FluidAction.SIMULATE), IFluidHandler.FluidAction.EXECUTE), IFluidHandler.FluidAction.EXECUTE);
                 if (!drained.isEmpty() && drained.getAmount() > 0) {
                     this.requestFluidSync();
@@ -317,7 +321,7 @@ public class ConveyorTile extends ActiveTile<ConveyorTile> implements IBlockCont
                 }
             }
         }
-        if (!world.isRemote && world.getGameTime() % 6 == 0 && needsFluidSync) {
+        if (!level.isClientSide && level.getGameTime() % 6 == 0 && needsFluidSync) {
             markForUpdate();
             this.needsFluidSync = false;
         }
@@ -331,15 +335,15 @@ public class ConveyorTile extends ActiveTile<ConveyorTile> implements IBlockCont
 
     @Nullable
     @Override
-    public Container createMenu(int menu, PlayerInventory inventoryPlayer, PlayerEntity entityPlayer) {
-        return new ContainerConveyor(menu, this, ModuleTransportStorage.CONVEYOR.getFacingUpgradeHit(this.world.getBlockState(this.pos), this.world, this.pos, entityPlayer), inventoryPlayer);
+    public AbstractContainerMenu createMenu(int menu, Inventory inventoryPlayer, Player entityPlayer) {
+        return new ContainerConveyor(menu, this, ModuleTransportStorage.CONVEYOR.getFacingUpgradeHit(this.level.getBlockState(this.worldPosition), this.level, this.worldPosition, entityPlayer), inventoryPlayer);
     }
 
-    public void openGui(PlayerEntity player, Direction facing) {
-        if (player instanceof ServerPlayerEntity) {
-            NetworkHooks.openGui((ServerPlayerEntity) player, this, packetBuffer -> {
-                packetBuffer.writeBlockPos(pos);
-                packetBuffer.writeEnumValue(facing);
+    public void openGui(Player player, Direction facing) {
+        if (player instanceof ServerPlayer) {
+            NetworkHooks.openGui((ServerPlayer) player, this, packetBuffer -> {
+                packetBuffer.writeBlockPos(worldPosition);
+                packetBuffer.writeEnum(facing);
             });
         }
     }

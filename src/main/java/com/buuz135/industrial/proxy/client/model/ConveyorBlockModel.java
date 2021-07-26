@@ -26,16 +26,16 @@ import com.buuz135.industrial.block.transportstorage.ConveyorBlock;
 import com.buuz135.industrial.module.ModuleTransportStorage;
 import com.google.common.cache.Cache;
 import com.google.common.cache.CacheBuilder;
-import com.mojang.blaze3d.matrix.MatrixStack;
-import net.minecraft.block.BlockState;
-import net.minecraft.client.renderer.model.BakedQuad;
-import net.minecraft.client.renderer.model.IBakedModel;
-import net.minecraft.client.renderer.model.ItemCameraTransforms;
-import net.minecraft.client.renderer.model.ItemOverrideList;
+import com.mojang.blaze3d.vertex.PoseStack;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.client.renderer.block.model.BakedQuad;
+import net.minecraft.client.resources.model.BakedModel;
+import net.minecraft.client.renderer.block.model.ItemTransforms;
+import net.minecraft.client.renderer.block.model.ItemOverrides;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
-import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
-import net.minecraft.client.renderer.vertex.VertexFormat;
-import net.minecraft.util.Direction;
+import com.mojang.blaze3d.vertex.DefaultVertexFormat;
+import com.mojang.blaze3d.vertex.VertexFormat;
+import net.minecraft.core.Direction;
 import net.minecraftforge.client.model.data.IDynamicBakedModel;
 import net.minecraftforge.client.model.data.IModelData;
 import org.apache.commons.lang3.tuple.Pair;
@@ -48,12 +48,12 @@ public class ConveyorBlockModel implements IDynamicBakedModel {
 
     public static Cache<Pair<Pair<String, Pair<Direction, Direction>>, Direction>, List<BakedQuad>> CACHE = CacheBuilder.newBuilder().build();
     private VertexFormat format;
-    private IBakedModel previousConveyor;
+    private BakedModel previousConveyor;
     private Map<Direction, List<BakedQuad>> prevQuads = new HashMap<>();
 
-    public ConveyorBlockModel(IBakedModel previousConveyor) {
+    public ConveyorBlockModel(BakedModel previousConveyor) {
         this.previousConveyor = previousConveyor;
-        this.format = DefaultVertexFormats.BLOCK;
+        this.format = DefaultVertexFormat.BLOCK;
     }
 
     @Nonnull
@@ -71,16 +71,16 @@ public class ConveyorBlockModel implements IDynamicBakedModel {
             for (ConveyorUpgrade upgrade : extraData.getData(ConveyorModelData.UPGRADE_PROPERTY).getUpgrades().values()) {
                 if (upgrade == null)
                     continue;
-                List<BakedQuad> upgradeQuads = CACHE.getIfPresent(Pair.of(Pair.of(upgrade.getFactory().getRegistryName().toString(), Pair.of(upgrade.getSide(), state.get(ConveyorBlock.FACING))), side));
+                List<BakedQuad> upgradeQuads = CACHE.getIfPresent(Pair.of(Pair.of(upgrade.getFactory().getRegistryName().toString(), Pair.of(upgrade.getSide(), state.getValue(ConveyorBlock.FACING))), side));
                 if (upgradeQuads == null) {
                     try {
-                        IBakedModel model = ModuleTransportStorage.CONVEYOR_UPGRADES_CACHE.get(upgrade.getFactory().getModel(upgrade.getSide(), state.get(ConveyorBlock.FACING)));
+                        BakedModel model = ModuleTransportStorage.CONVEYOR_UPGRADES_CACHE.get(upgrade.getFactory().getModel(upgrade.getSide(), state.getValue(ConveyorBlock.FACING)));
                         upgradeQuads = model.getQuads(state, side, rand, extraData);
                     } catch (Exception e) {
                         e.printStackTrace();
                         continue;
                     }
-                    CACHE.put(Pair.of(Pair.of(upgrade.getFactory().getRegistryName().toString(), Pair.of(upgrade.getSide(), state.get(ConveyorBlock.FACING))), side), upgradeQuads);
+                    CACHE.put(Pair.of(Pair.of(upgrade.getFactory().getRegistryName().toString(), Pair.of(upgrade.getSide(), state.getValue(ConveyorBlock.FACING))), side), upgradeQuads);
                 }
                 if (!upgradeQuads.isEmpty()) {
                     quads.addAll(upgradeQuads);
@@ -91,8 +91,8 @@ public class ConveyorBlockModel implements IDynamicBakedModel {
     }
 
     @Override
-    public boolean isAmbientOcclusion() {
-        return previousConveyor.isAmbientOcclusion();
+    public boolean useAmbientOcclusion() {
+        return previousConveyor.useAmbientOcclusion();
     }
 
     @Override
@@ -101,34 +101,34 @@ public class ConveyorBlockModel implements IDynamicBakedModel {
     }
 
     @Override
-    public boolean isSideLit() {
-        return previousConveyor.isSideLit();
+    public boolean usesBlockLight() {
+        return previousConveyor.usesBlockLight();
     }
 
     @Override
-    public boolean isBuiltInRenderer() {
-        return previousConveyor.isBuiltInRenderer();
-    }
-
-    @Nonnull
-    @Override
-    public TextureAtlasSprite getParticleTexture() {
-        return previousConveyor.getParticleTexture();
+    public boolean isCustomRenderer() {
+        return previousConveyor.isCustomRenderer();
     }
 
     @Nonnull
     @Override
-    public ItemOverrideList getOverrides() {
+    public TextureAtlasSprite getParticleIcon() {
+        return previousConveyor.getParticleIcon();
+    }
+
+    @Nonnull
+    @Override
+    public ItemOverrides getOverrides() {
         return previousConveyor.getOverrides();
     }
 
     @Override
-    public IBakedModel handlePerspective(ItemCameraTransforms.TransformType cameraTransformType, MatrixStack mat) {
+    public BakedModel handlePerspective(ItemTransforms.TransformType cameraTransformType, PoseStack mat) {
         return previousConveyor.handlePerspective(cameraTransformType, mat);
     }
 
     @Override
-    public ItemCameraTransforms getItemCameraTransforms() {
-        return previousConveyor.getItemCameraTransforms();
+    public ItemTransforms getTransforms() {
+        return previousConveyor.getTransforms();
     }
 }

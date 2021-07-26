@@ -22,16 +22,16 @@
 package com.buuz135.industrial.utils;
 
 import com.mojang.authlib.GameProfile;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.ItemUseContext;
-import net.minecraft.util.ActionResultType;
-import net.minecraft.util.Direction;
-import net.minecraft.util.Hand;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.BlockRayTraceResult;
-import net.minecraft.util.math.vector.Vector3d;
-import net.minecraft.world.World;
-import net.minecraft.world.server.ServerWorld;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.context.UseOnContext;
+import net.minecraft.world.InteractionResult;
+import net.minecraft.core.Direction;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.phys.BlockHitResult;
+import net.minecraft.world.phys.Vec3;
+import net.minecraft.world.level.Level;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraftforge.common.ForgeHooks;
 import net.minecraftforge.common.util.FakePlayer;
 
@@ -43,7 +43,7 @@ public class IFFakePlayer extends FakePlayer {
 
     private static GameProfile PROFILE = new GameProfile(uuid, "[IF]");
 
-    public IFFakePlayer(ServerWorld worldIn) {
+    public IFFakePlayer(ServerLevel worldIn) {
         super(worldIn, PROFILE);
     }
 
@@ -52,8 +52,8 @@ public class IFFakePlayer extends FakePlayer {
 
     }
 
-    public boolean placeBlock(World world, BlockPos pos, ItemStack stack) {
-        this.setHeldItem(Hand.MAIN_HAND, stack);
-        return ForgeHooks.onPlaceItemIntoWorld(new ItemUseContext(this, Hand.MAIN_HAND, new BlockRayTraceResult(new Vector3d(0, 0, 0), Direction.DOWN, pos, false))) == ActionResultType.SUCCESS;
+    public boolean placeBlock(Level world, BlockPos pos, ItemStack stack) {
+        this.setItemInHand(InteractionHand.MAIN_HAND, stack);
+        return ForgeHooks.onPlaceItemIntoWorld(new UseOnContext(this, InteractionHand.MAIN_HAND, new BlockHitResult(new Vec3(0, 0, 0), Direction.DOWN, pos, false))) == InteractionResult.SUCCESS;
     }
 }

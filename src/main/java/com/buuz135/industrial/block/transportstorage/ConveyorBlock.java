@@ -34,35 +34,35 @@ import com.hrznstudio.titanium.recipe.generator.TitaniumShapedRecipeBuilder;
 import com.hrznstudio.titanium.util.RayTraceUtils;
 import com.hrznstudio.titanium.util.TileUtil;
 import net.minecraft.block.*;
-import net.minecraft.block.material.Material;
-import net.minecraft.block.material.MaterialColor;
-import net.minecraft.data.IFinishedRecipe;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntitySpawnPlacementRegistry;
-import net.minecraft.entity.EntityType;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.fluid.FluidState;
-import net.minecraft.fluid.Fluids;
+import net.minecraft.world.level.material.Material;
+import net.minecraft.world.level.material.MaterialColor;
+import net.minecraft.data.recipes.FinishedRecipe;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.SpawnPlacements;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.level.material.FluidState;
+import net.minecraft.world.level.material.Fluids;
 import net.minecraft.item.*;
-import net.minecraft.state.BooleanProperty;
-import net.minecraft.state.DirectionProperty;
-import net.minecraft.state.EnumProperty;
-import net.minecraft.state.StateContainer;
-import net.minecraft.state.properties.BlockStateProperties;
-import net.minecraft.tileentity.TileEntity;
+import net.minecraft.world.level.block.state.properties.BooleanProperty;
+import net.minecraft.world.level.block.state.properties.DirectionProperty;
+import net.minecraft.world.level.block.state.properties.EnumProperty;
+import net.minecraft.world.level.block.state.StateDefinition;
+import net.minecraft.world.level.block.state.properties.BlockStateProperties;
+import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.util.*;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.BlockRayTraceResult;
-import net.minecraft.util.math.RayTraceResult;
-import net.minecraft.util.math.shapes.IBooleanFunction;
-import net.minecraft.util.math.shapes.ISelectionContext;
-import net.minecraft.util.math.shapes.VoxelShape;
-import net.minecraft.util.math.shapes.VoxelShapes;
-import net.minecraft.util.math.vector.Vector3d;
-import net.minecraft.util.text.TranslationTextComponent;
-import net.minecraft.world.IBlockReader;
-import net.minecraft.world.World;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.phys.BlockHitResult;
+import net.minecraft.world.phys.HitResult;
+import net.minecraft.world.phys.shapes.BooleanOp;
+import net.minecraft.world.phys.shapes.CollisionContext;
+import net.minecraft.world.phys.shapes.VoxelShape;
+import net.minecraft.world.phys.shapes.Shapes;
+import net.minecraft.world.phys.Vec3;
+import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.world.level.BlockGetter;
+import net.minecraft.world.level.Level;
 import net.minecraftforge.common.Tags;
 
 import javax.annotation.Nonnull;
@@ -73,18 +73,37 @@ import java.util.Optional;
 import java.util.function.Consumer;
 import java.util.function.Predicate;
 
-public class ConveyorBlock extends BasicTileBlock<ConveyorTile> implements IWaterLoggable, IRecipeProvider {
+import net.minecraft.world.level.block.state.BlockBehaviour.Properties;
+
+import net.minecraft.core.Direction;
+import net.minecraft.core.NonNullList;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.InteractionResult;
+import net.minecraft.world.item.BlockItem;
+import net.minecraft.world.item.CreativeModeTab;
+import net.minecraft.world.item.DyeItem;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
+import net.minecraft.world.item.context.BlockPlaceContext;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.HorizontalDirectionalBlock;
+import net.minecraft.world.level.block.RenderShape;
+import net.minecraft.world.level.block.SimpleWaterloggedBlock;
+import net.minecraft.world.level.block.state.BlockState;
+
+public class ConveyorBlock extends BasicTileBlock<ConveyorTile> implements SimpleWaterloggedBlock, IRecipeProvider {
 
     public static final BooleanProperty WATERLOGGED = BlockStateProperties.WATERLOGGED;
-    public static final DirectionProperty FACING = HorizontalBlock.HORIZONTAL_FACING;
+    public static final DirectionProperty FACING = HorizontalDirectionalBlock.FACING;
     public static final EnumProperty<EnumType> TYPE = EnumProperty.create("type", EnumType.class);
     //public static final EnumProperty<EnumSides> SIDES = EnumProperty.create("sides", EnumSides.class);
     private ConveyorItem item;
 
-    public ConveyorBlock(ItemGroup group) {
-        super(Properties.create(Material.ANVIL, MaterialColor.ADOBE).doesNotBlockMovement().hardnessAndResistance(2.0f), ConveyorTile.class);
+    public ConveyorBlock(CreativeModeTab group) {
+        super(Properties.of(Material.HEAVY_METAL, MaterialColor.COLOR_ORANGE).noCollission().strength(2.0f), ConveyorTile.class);
         this.setRegistryName(Reference.MOD_ID, "conveyor");
-        this.setDefaultState(this.getDefaultState().with(FACING, Direction.NORTH).with(WATERLOGGED, false));
+        this.registerDefaultState(this.defaultBlockState().setValue(FACING, Direction.NORTH).setValue(WATERLOGGED, false));
         this.item = new ConveyorItem(this, group);
         this.setItemGroup(group);
     }
@@ -100,29 +119,29 @@ public class ConveyorBlock extends BasicTileBlock<ConveyorTile> implements IWate
     }
 
     @Override
-    public int getWeakPower(BlockState blockState, IBlockReader world, BlockPos pos, Direction side) {
-        TileEntity tileEntity = world.getTileEntity(pos);
+    public int getSignal(BlockState blockState, BlockGetter world, BlockPos pos, Direction side) {
+        BlockEntity tileEntity = world.getBlockEntity(pos);
         if (tileEntity instanceof ConveyorTile) {
             return ((ConveyorTile) tileEntity).getPower();
         }
-        return super.getWeakPower(blockState, world, pos, side);
+        return super.getSignal(blockState, world, pos, side);
     }
 
     @Override
-    public int getStrongPower(BlockState blockState, IBlockReader world, BlockPos pos, Direction side) {
-        TileEntity tileEntity = world.getTileEntity(pos);
+    public int getDirectSignal(BlockState blockState, BlockGetter world, BlockPos pos, Direction side) {
+        BlockEntity tileEntity = world.getBlockEntity(pos);
         if (tileEntity instanceof ConveyorTile) {
             return side == Direction.UP ? ((ConveyorTile) tileEntity).getPower() : 0;
         }
-        return super.getStrongPower(blockState, world, pos, side);
+        return super.getDirectSignal(blockState, world, pos, side);
     }
 
     @Override
-    public ItemStack getPickBlock(BlockState state, RayTraceResult target, IBlockReader world, BlockPos pos, PlayerEntity player) {
-        TileEntity tileEntity = world.getTileEntity(pos);
+    public ItemStack getPickBlock(BlockState state, HitResult target, BlockGetter world, BlockPos pos, Player player) {
+        BlockEntity tileEntity = world.getBlockEntity(pos);
         if (tileEntity instanceof ConveyorTile) {
             if (target instanceof DistanceRayTraceResult) {
-                ConveyorUpgrade upgrade = ((ConveyorTile) tileEntity).getUpgradeMap().get(getFacingUpgradeHit(state, player.world, pos, player));
+                ConveyorUpgrade upgrade = ((ConveyorTile) tileEntity).getUpgradeMap().get(getFacingUpgradeHit(state, player.level, pos, player));
                 if (upgrade != null) {
                     return new ItemStack(upgrade.getFactory().getUpgradeItem(), 1);
                 }
@@ -133,19 +152,19 @@ public class ConveyorBlock extends BasicTileBlock<ConveyorTile> implements IWate
     }
 
     @Override
-    public BlockState getStateAtViewpoint(BlockState state, IBlockReader world, BlockPos pos, Vector3d viewpoint) {
-        TileEntity tileEntity = world.getTileEntity(pos);
+    public BlockState getStateAtViewpoint(BlockState state, BlockGetter world, BlockPos pos, Vec3 viewpoint) {
+        BlockEntity tileEntity = world.getBlockEntity(pos);
         if (tileEntity instanceof ConveyorTile) {
-            state = state.with(FACING, ((ConveyorTile) tileEntity).getFacing()).with(TYPE, ((ConveyorTile) tileEntity).getConveyorType());
+            state = state.setValue(FACING, ((ConveyorTile) tileEntity).getFacing()).setValue(TYPE, ((ConveyorTile) tileEntity).getConveyorType());
         }
-        if (state.get(TYPE).equals(EnumType.FLAT) || state.get(TYPE).equals(EnumType.FLAT_FAST)) {
-            Direction right = state.get(FACING).rotateY();
-            Direction left = state.get(FACING).rotateYCCW();
-            if (isConveyorAndFacing(pos.offset(right), world, left) && isConveyorAndFacing(pos.offset(left), world, right) || (isConveyorAndFacing(pos.offset(right).down(), world, left) && isConveyorAndFacing(pos.offset(left).down(), world, right))) {
+        if (state.getValue(TYPE).equals(EnumType.FLAT) || state.getValue(TYPE).equals(EnumType.FLAT_FAST)) {
+            Direction right = state.getValue(FACING).getClockWise();
+            Direction left = state.getValue(FACING).getCounterClockWise();
+            if (isConveyorAndFacing(pos.relative(right), world, left) && isConveyorAndFacing(pos.relative(left), world, right) || (isConveyorAndFacing(pos.relative(right).below(), world, left) && isConveyorAndFacing(pos.relative(left).below(), world, right))) {
                 //state = state.with(SIDES, EnumSides.BOTH);
-            } else if (isConveyorAndFacing(pos.offset(right), world, left) || isConveyorAndFacing(pos.offset(right).down(), world, left)) {
+            } else if (isConveyorAndFacing(pos.relative(right), world, left) || isConveyorAndFacing(pos.relative(right).below(), world, left)) {
                 //state = state.with(SIDES, EnumSides.RIGHT);
-            } else if (isConveyorAndFacing(pos.offset(left), world, right) || isConveyorAndFacing(pos.offset(left).down(), world, right)) {
+            } else if (isConveyorAndFacing(pos.relative(left), world, right) || isConveyorAndFacing(pos.relative(left).below(), world, right)) {
                 //state = state.with(SIDES, EnumSides.LEFT);
             } else {
                 //state = state.with(SIDES, EnumSides.NONE);
@@ -154,8 +173,8 @@ public class ConveyorBlock extends BasicTileBlock<ConveyorTile> implements IWate
         return state;
     }
 
-    private boolean isConveyorAndFacing(BlockPos pos, IBlockReader world, Direction toFace) {
-        return world.getBlockState(pos).getBlock() instanceof ConveyorBlock && (toFace == null || world.getBlockState(pos).get(FACING).equals(toFace));
+    private boolean isConveyorAndFacing(BlockPos pos, BlockGetter world, Direction toFace) {
+        return world.getBlockState(pos).getBlock() instanceof ConveyorBlock && (toFace == null || world.getBlockState(pos).getValue(FACING).equals(toFace));
     }
 
     //@Override
@@ -164,7 +183,7 @@ public class ConveyorBlock extends BasicTileBlock<ConveyorTile> implements IWate
     //}
 
     @Override
-    public void neighborChanged(BlockState state, World worldIn, BlockPos pos, Block blockIn, BlockPos fromPos, boolean p_220069_6_) {
+    public void neighborChanged(BlockState state, Level worldIn, BlockPos pos, Block blockIn, BlockPos fromPos, boolean p_220069_6_) {
         super.neighborChanged(state, worldIn, pos, blockIn, fromPos, p_220069_6_);
         //        if (!worldIn.isRemote && !canPlaceBlockAt(worldIn, pos)) {
 //            worldIn.destroyBlock(pos, false);
@@ -172,49 +191,49 @@ public class ConveyorBlock extends BasicTileBlock<ConveyorTile> implements IWate
     }
 
     @Override
-    public List<VoxelShape> getBoundingBoxes(BlockState state, IBlockReader source, BlockPos pos) {
+    public List<VoxelShape> getBoundingBoxes(BlockState state, BlockGetter source, BlockPos pos) {
         return getShapes(state, source, pos, conveyorUpgrade -> true);
     }
 
-    private static List<VoxelShape> getShapes(BlockState state, IBlockReader source, BlockPos pos, Predicate<ConveyorUpgrade> filter){
+    private static List<VoxelShape> getShapes(BlockState state, BlockGetter source, BlockPos pos, Predicate<ConveyorUpgrade> filter){
         List<VoxelShape> boxes = new ArrayList<>();
-        if (state.get(TYPE).isVertical()) {
-            boxes.add(VoxelShapes.create(0, 0, 0, 1, 1 / 16D, 1));
+        if (state.getValue(TYPE).isVertical()) {
+            boxes.add(Shapes.box(0, 0, 0, 1, 1 / 16D, 1));
         } else {
-            boxes.add(VoxelShapes.create(0, 0, 0, 1, 1 / 16D, 1));
+            boxes.add(Shapes.box(0, 0, 0, 1, 1 / 16D, 1));
         }
-        TileEntity entity = source.getTileEntity(pos);
+        BlockEntity entity = source.getBlockEntity(pos);
         if (entity instanceof ConveyorTile) {
             for (ConveyorUpgrade upgrade : ((ConveyorTile) entity).getUpgradeMap().values())
                 if (upgrade != null && filter.test(upgrade))
-                    boxes.add(VoxelShapes.create(upgrade.getBoundingBox().getBoundingBox()));
+                    boxes.add(Shapes.create(upgrade.getBoundingBox().bounds()));
         }
         return boxes;
     }
 
     @Nonnull
     @Override
-    public VoxelShape getCollisionShape(BlockState state, IBlockReader world, BlockPos pos, ISelectionContext selectionContext) {
-        VoxelShape shape = VoxelShapes.empty();
+    public VoxelShape getCollisionShape(BlockState state, BlockGetter world, BlockPos pos, CollisionContext selectionContext) {
+        VoxelShape shape = Shapes.empty();
         for (VoxelShape shape1 : getShapes(state, world, pos, conveyorUpgrade -> !conveyorUpgrade.ignoresCollision())) {
-            shape = VoxelShapes.combineAndSimplify(shape, shape1, IBooleanFunction.OR);
+            shape = Shapes.join(shape, shape1, BooleanOp.OR);
         }
         return shape;
     }
 
     @Override
-    public boolean hasCustomBoxes(BlockState state, IBlockReader source, BlockPos pos) {
+    public boolean hasCustomBoxes(BlockState state, BlockGetter source, BlockPos pos) {
         return true;
     }
 
     @Override
-    protected void fillStateContainer(StateContainer.Builder<Block, BlockState> builder) {
-        super.fillStateContainer(builder);
+    protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder) {
+        super.createBlockStateDefinition(builder);
         builder.add(FACING, TYPE, WATERLOGGED);
     }
 
     public FluidState getFluidState(BlockState state) {
-        return state.get(WATERLOGGED) ? Fluids.WATER.getStillFluidState(false) : super.getFluidState(state);
+        return state.getValue(WATERLOGGED) ? Fluids.WATER.getSource(false) : super.getFluidState(state);
     }
 
     @Override
@@ -228,117 +247,117 @@ public class ConveyorBlock extends BasicTileBlock<ConveyorTile> implements IWate
     }
 
     @Override
-    public void onBlockPlacedBy(World worldIn, BlockPos pos, BlockState state, LivingEntity placer, ItemStack stack) {
-        super.onBlockPlacedBy(worldIn, pos, state, placer, stack);
+    public void setPlacedBy(Level worldIn, BlockPos pos, BlockState state, LivingEntity placer, ItemStack stack) {
+        super.setPlacedBy(worldIn, pos, state, placer, stack);
         if (placer != null) {
-            TileEntity tileEntity = worldIn.getTileEntity(pos);
+            BlockEntity tileEntity = worldIn.getBlockEntity(pos);
             if (tileEntity instanceof ConveyorTile) {
-                ((ConveyorTile) tileEntity).setFacing(placer.getHorizontalFacing());
+                ((ConveyorTile) tileEntity).setFacing(placer.getDirection());
             }
             updateConveyorPlacing(worldIn, pos, state, true);
         }
     }
 
-    private void updateConveyorPlacing(World worldIn, BlockPos pos, BlockState state, boolean first) {
-        TileEntity entity = worldIn.getTileEntity(pos);
+    private void updateConveyorPlacing(Level worldIn, BlockPos pos, BlockState state, boolean first) {
+        BlockEntity entity = worldIn.getBlockEntity(pos);
         if (entity instanceof ConveyorTile) {
             Direction direction = ((ConveyorTile) entity).getFacing();
-            Direction right = state.get(FACING).rotateY();
-            Direction left = state.get(FACING).rotateYCCW();
+            Direction right = state.getValue(FACING).getClockWise();
+            Direction left = state.getValue(FACING).getCounterClockWise();
             if (((ConveyorTile) entity).getUpgradeMap().isEmpty()) {
-                if (isConveyorAndFacing(pos.up().offset(direction), worldIn, null)) {//SELF UP
+                if (isConveyorAndFacing(pos.above().relative(direction), worldIn, null)) {//SELF UP
                     ((ConveyorTile) entity).setType(((ConveyorTile) entity).getConveyorType().getVertical(Direction.UP));
-                } else if (isConveyorAndFacing(pos.up().offset(direction.getOpposite()), worldIn, null)) { //SELF DOWN
+                } else if (isConveyorAndFacing(pos.above().relative(direction.getOpposite()), worldIn, null)) { //SELF DOWN
                     ((ConveyorTile) entity).setType(((ConveyorTile) entity).getConveyorType().getVertical(Direction.DOWN));
                 }
             }
             //UPDATE SURROUNDINGS
             if (!first) return;
-            if (isConveyorAndFacing(pos.offset(direction.getOpposite()).down(), worldIn, direction)) { //BACK DOWN
-                updateConveyorPlacing(worldIn, pos.offset(direction.getOpposite()).down(), state, false);
+            if (isConveyorAndFacing(pos.relative(direction.getOpposite()).below(), worldIn, direction)) { //BACK DOWN
+                updateConveyorPlacing(worldIn, pos.relative(direction.getOpposite()).below(), state, false);
             }
-            if (isConveyorAndFacing(pos.offset(left).down(), worldIn, right)) { //LEFT DOWN
-                updateConveyorPlacing(worldIn, pos.offset(left).down(), state, false);
+            if (isConveyorAndFacing(pos.relative(left).below(), worldIn, right)) { //LEFT DOWN
+                updateConveyorPlacing(worldIn, pos.relative(left).below(), state, false);
             }
-            if (isConveyorAndFacing(pos.offset(right).down(), worldIn, left)) { //RIGHT DOWN
-                updateConveyorPlacing(worldIn, pos.offset(right).down(), state, false);
+            if (isConveyorAndFacing(pos.relative(right).below(), worldIn, left)) { //RIGHT DOWN
+                updateConveyorPlacing(worldIn, pos.relative(right).below(), state, false);
             }
-            if (isConveyorAndFacing(pos.offset(direction).down(), worldIn, direction)) { //FRONT DOWN
-                updateConveyorPlacing(worldIn, pos.offset(direction).down(), state, false);
+            if (isConveyorAndFacing(pos.relative(direction).below(), worldIn, direction)) { //FRONT DOWN
+                updateConveyorPlacing(worldIn, pos.relative(direction).below(), state, false);
             }
-            worldIn.notifyBlockUpdate(pos, state, state, 3);
+            worldIn.sendBlockUpdated(pos, state, state, 3);
         }
     }
 
     @Override
-    public ActionResultType onBlockActivated(BlockState state, World worldIn, BlockPos pos, PlayerEntity player, Hand hand, BlockRayTraceResult ray) {
-        TileEntity tileEntity = worldIn.getTileEntity(pos);
-        ItemStack handStack = player.getHeldItem(hand);
+    public InteractionResult use(BlockState state, Level worldIn, BlockPos pos, Player player, InteractionHand hand, BlockHitResult ray) {
+        BlockEntity tileEntity = worldIn.getBlockEntity(pos);
+        ItemStack handStack = player.getItemInHand(hand);
         if (tileEntity instanceof ConveyorTile) {
             Direction facing = getFacingUpgradeHit(state, worldIn, pos, player);
             if (player.isCrouching()) {
                 if (facing != null) {
                     ((ConveyorTile) tileEntity).removeUpgrade(facing, true);
-                    return ActionResultType.SUCCESS;
+                    return InteractionResult.SUCCESS;
                 }
-                return ActionResultType.PASS;
+                return InteractionResult.PASS;
             } else {
                 if (facing == null) {
                     if (handStack.getItem().equals(Items.GLOWSTONE_DUST) && !((ConveyorTile) tileEntity).getConveyorType().isFast()) {
                         ((ConveyorTile) tileEntity).setType(((ConveyorTile) tileEntity).getConveyorType().getFast());
                         handStack.shrink(1);
-                        return ActionResultType.SUCCESS;
+                        return InteractionResult.SUCCESS;
                     }
                     if (handStack.getItem().equals(ModuleCore.PLASTIC) && !((ConveyorTile) tileEntity).isSticky()) {
                         ((ConveyorTile) tileEntity).setSticky(true);
                         handStack.shrink(1);
-                        return ActionResultType.SUCCESS;
+                        return InteractionResult.SUCCESS;
                     }
                     if (handStack.getItem() instanceof DyeItem) {
                         ((ConveyorTile) tileEntity).setColor(((DyeItem) handStack.getItem()).getDyeColor());
-                        return ActionResultType.SUCCESS;
+                        return InteractionResult.SUCCESS;
                     }
                 } else {
                     if (((ConveyorTile) tileEntity).hasUpgrade(facing)) {
                         ConveyorUpgrade upgrade = ((ConveyorTile) tileEntity).getUpgradeMap().get(facing);
                         if (upgrade.onUpgradeActivated(player, hand)) {
-                            return ActionResultType.SUCCESS;
+                            return InteractionResult.SUCCESS;
                         } else if (upgrade.hasGui()) {
                             ((ConveyorTile) tileEntity).openGui(player, facing);
-                            return ActionResultType.SUCCESS;
+                            return InteractionResult.SUCCESS;
                         }
                     }
                 }
-                return ActionResultType.PASS;
+                return InteractionResult.PASS;
             }
         }
-        return super.onBlockActivated(state, worldIn, pos, player, hand, ray);
+        return super.use(state, worldIn, pos, player, hand, ray);
     }
 
     @Override
-    public VoxelShape getShape(BlockState state, IBlockReader world, BlockPos pos, ISelectionContext p_220053_4_) {
-        if (state.get(TYPE).isVertical()) {
-            return VoxelShapes.create(0, 0, 0, 1, 0.40, 1);
+    public VoxelShape getShape(BlockState state, BlockGetter world, BlockPos pos, CollisionContext p_220053_4_) {
+        if (state.getValue(TYPE).isVertical()) {
+            return Shapes.box(0, 0, 0, 1, 0.40, 1);
         } else {
-            VoxelShape shape = VoxelShapes.create(0, 0, 0, 1, 1 / 16D, 1);
-            TileEntity entity = world.getTileEntity(pos);
+            VoxelShape shape = Shapes.box(0, 0, 0, 1, 1 / 16D, 1);
+            BlockEntity entity = world.getBlockEntity(pos);
             if (entity instanceof ConveyorTile) {
                 for (ConveyorUpgrade upgrade : ((ConveyorTile) entity).getUpgradeMap().values())
                     if (upgrade != null)
-                        shape = VoxelShapes.or(shape, VoxelShapes.create(upgrade.getBoundingBox().getBoundingBox()));
+                        shape = Shapes.or(shape, Shapes.create(upgrade.getBoundingBox().bounds()));
             }
             return shape;
         }
     }
 
-    public Direction getFacingUpgradeHit(BlockState state, World worldIn, BlockPos pos, PlayerEntity player) {
-        TileEntity tileEntity = worldIn.getTileEntity(pos);
-        RayTraceResult result = RayTraceUtils.rayTraceSimple(worldIn, player, 32, 0);
-        if (result instanceof BlockRayTraceResult) {
-            VoxelShape hit = RayTraceUtils.rayTraceVoxelShape((BlockRayTraceResult) result, worldIn, player, 32, 0);
+    public Direction getFacingUpgradeHit(BlockState state, Level worldIn, BlockPos pos, Player player) {
+        BlockEntity tileEntity = worldIn.getBlockEntity(pos);
+        HitResult result = RayTraceUtils.rayTraceSimple(worldIn, player, 32, 0);
+        if (result instanceof BlockHitResult) {
+            VoxelShape hit = RayTraceUtils.rayTraceVoxelShape((BlockHitResult) result, worldIn, player, 32, 0);
             if (hit != null && tileEntity instanceof ConveyorTile) {
                 for (Direction direction : ((ConveyorTile) tileEntity).getUpgradeMap().keySet()) {
-                    if (VoxelShapes.compare(((ConveyorTile) tileEntity).getUpgradeMap().get(direction).getBoundingBox(), hit, IBooleanFunction.AND)) {
+                    if (Shapes.joinIsNotEmpty(((ConveyorTile) tileEntity).getUpgradeMap().get(direction).getBoundingBox(), hit, BooleanOp.AND)) {
                         return direction;
                     }
                 }
@@ -354,34 +373,34 @@ public class ConveyorBlock extends BasicTileBlock<ConveyorTile> implements IWate
 
     @Nullable
     @Override
-    public TileEntity createTileEntity(BlockState state, IBlockReader world) {
+    public BlockEntity createTileEntity(BlockState state, BlockGetter world) {
         ConveyorTile tile = new ConveyorTile();
         return tile;
     }
 
     @Nullable
     @Override
-    public BlockState getStateForPlacement(BlockItemUseContext context) {
-        FluidState ifluidstate = context.getWorld().getFluidState(context.getPos());
-        return this.getDefaultState().with(FACING, context.getPlayer().getHorizontalFacing()).with(WATERLOGGED, Boolean.valueOf(ifluidstate.getFluid() == Fluids.WATER));
+    public BlockState getStateForPlacement(BlockPlaceContext context) {
+        FluidState ifluidstate = context.getLevel().getFluidState(context.getClickedPos());
+        return this.defaultBlockState().setValue(FACING, context.getPlayer().getDirection()).setValue(WATERLOGGED, Boolean.valueOf(ifluidstate.getType() == Fluids.WATER));
     }
 
     @Override
-    public BlockRenderType getRenderType(BlockState p_149645_1_) {
-        return BlockRenderType.MODEL;
+    public RenderShape getRenderShape(BlockState p_149645_1_) {
+        return RenderShape.MODEL;
     }
 
     @Override
-    public void onEntityCollision(BlockState state, World worldIn, BlockPos pos, Entity entityIn) {
-        super.onEntityCollision(state, worldIn, pos, entityIn);
-        TileEntity entity = worldIn.getTileEntity(pos);
+    public void entityInside(BlockState state, Level worldIn, BlockPos pos, Entity entityIn) {
+        super.entityInside(state, worldIn, pos, entityIn);
+        BlockEntity entity = worldIn.getBlockEntity(pos);
         if (entity instanceof ConveyorTile) {
             ((ConveyorTile) entity).handleEntityMovement(entityIn);
         }
     }
 
     @Override
-    public NonNullList<ItemStack> getDynamicDrops(BlockState state, World worldIn, BlockPos pos, BlockState newState, boolean isMoving) {
+    public NonNullList<ItemStack> getDynamicDrops(BlockState state, Level worldIn, BlockPos pos, BlockState newState, boolean isMoving) {
         NonNullList<ItemStack> drops = NonNullList.create();
         Optional<ConveyorTile> entity = TileUtil.getTileEntity(worldIn, pos, ConveyorTile.class);
         entity.ifPresent(tileEntityConveyor -> {
@@ -398,12 +417,12 @@ public class ConveyorBlock extends BasicTileBlock<ConveyorTile> implements IWate
     }
 
     @Override
-    public boolean canCreatureSpawn(BlockState state, IBlockReader world, BlockPos pos, EntitySpawnPlacementRegistry.PlacementType type, @Nullable EntityType<?> entityType) {
+    public boolean canCreatureSpawn(BlockState state, BlockGetter world, BlockPos pos, SpawnPlacements.Type type, @Nullable EntityType<?> entityType) {
         return true;
     }
 
     @Override
-    public boolean canSpawnInBlock() {
+    public boolean isPossibleToRespawnInThis() {
         return true;
     }
 
@@ -413,21 +432,21 @@ public class ConveyorBlock extends BasicTileBlock<ConveyorTile> implements IWate
 
     @Nullable
     @Override
-    public TileEntity createNewTileEntity(IBlockReader worldIn) {
+    public BlockEntity newBlockEntity(BlockGetter worldIn) {
         return new ConveyorTile();
     }
 
     @Override
-    public void registerRecipe(Consumer<IFinishedRecipe> consumer) {
+    public void registerRecipe(Consumer<FinishedRecipe> consumer) {
         TitaniumShapedRecipeBuilder.shapedRecipe(this, 6)
-                .patternLine("ppp").patternLine("iri").patternLine("ppp")
-                .key('p', IndustrialTags.Items.PLASTIC)
-                .key('i', Tags.Items.INGOTS_IRON)
-                .key('r', Items.REDSTONE)
-                .build(consumer);
+                .pattern("ppp").pattern("iri").pattern("ppp")
+                .define('p', IndustrialTags.Items.PLASTIC)
+                .define('i', Tags.Items.INGOTS_IRON)
+                .define('r', Items.REDSTONE)
+                .save(consumer);
     }
 
-    public enum EnumType implements IStringSerializable {
+    public enum EnumType implements StringRepresentable {
 
         FLAT(false, "industrialforegoing:block/conveyor"),
         UP(false, "industrialforegoing:block/conveyor_ramp_inverted", "industrialforegoing:blocks/conveyor_color_inverted"),
@@ -509,7 +528,7 @@ public class ConveyorBlock extends BasicTileBlock<ConveyorTile> implements IWate
         }
 
         public String getName() {
-            return getString();
+            return getSerializedName();
         }
 
         public String getModel() {
@@ -526,35 +545,35 @@ public class ConveyorBlock extends BasicTileBlock<ConveyorTile> implements IWate
         }
 
         @Override
-        public String getString() { //getName
+        public String getSerializedName() { //getName
             return this.toString().toLowerCase();
         }
     }
 
-    public enum EnumSides implements IStringSerializable {
+    public enum EnumSides implements StringRepresentable {
         NONE, LEFT, RIGHT, BOTH;
 
         public String getName() {
-            return getString();
+            return getSerializedName();
         }
 
         @Override
-        public String getString() { //getName
+        public String getSerializedName() { //getName
             return this.toString().toLowerCase();
         }
     }
 
     private class ConveyorItem extends BlockItem {
 
-        public ConveyorItem(Block block, ItemGroup group) {
-            super(block, new Item.Properties().group(group));
+        public ConveyorItem(Block block, CreativeModeTab group) {
+            super(block, new Item.Properties().tab(group));
             this.setRegistryName(block.getRegistryName());
         }
 
         @Nullable
         @Override
         public String getCreatorModId(ItemStack itemStack) {
-            return new TranslationTextComponent("itemGroup." + this.group.getPath()).getString();
+            return new TranslatableComponent("itemGroup." + this.category.getRecipeFolderName()).getString();
         }
     }
 

@@ -31,9 +31,9 @@ import com.hrznstudio.titanium.component.energy.EnergyStorageComponent;
 import com.hrznstudio.titanium.component.fluid.FluidTankComponent;
 import com.hrznstudio.titanium.component.fluid.SidedFluidTankComponent;
 import com.hrznstudio.titanium.component.inventory.SidedInventoryComponent;
-import net.minecraft.item.DyeColor;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
+import net.minecraft.world.item.DyeColor;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.fluids.capability.IFluidHandler;
 import net.minecraftforge.items.ItemHandlerHelper;
 
@@ -54,7 +54,7 @@ public class SludgeRefinerTile extends IndustrialProcessingTile<SludgeRefinerTil
                 .setColor(DyeColor.MAGENTA)
                 .setComponentHarness(this)
                 .setTankAction(FluidTankComponent.Action.FILL)
-                .setValidator(fluidStack -> fluidStack.getFluid().isEquivalentTo(ModuleCore.SLUDGE.getSourceFluid()))
+                .setValidator(fluidStack -> fluidStack.getFluid().isSame(ModuleCore.SLUDGE.getSourceFluid()))
         );
         addInventory(output = (SidedInventoryComponent<SludgeRefinerTile>) new SidedInventoryComponent<SludgeRefinerTile>("output", 80, 22, 5 * 3, 1)
                 .setColor(DyeColor.ORANGE)
@@ -73,7 +73,7 @@ public class SludgeRefinerTile extends IndustrialProcessingTile<SludgeRefinerTil
     @Override
     public Runnable onFinish() {
         return () -> {
-            Item item = IndustrialTags.Items.SLUDGE_OUTPUT.getRandomElement(this.world.rand);
+            Item item = IndustrialTags.Items.SLUDGE_OUTPUT.getRandomElement(this.level.random);
             if (item != null && ItemHandlerHelper.insertItem(output, new ItemStack(item), true).isEmpty()) {
                 sludge.drainForced(500, IFluidHandler.FluidAction.EXECUTE);
                 ItemHandlerHelper.insertItem(output, new ItemStack(item), false);

@@ -29,11 +29,11 @@ import com.buuz135.industrial.utils.explosion.ExplosionTickHandler;
 import com.google.gson.JsonParser;
 import com.hrznstudio.titanium.event.handler.EventManager;
 import com.hrznstudio.titanium.util.URLUtil;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.util.DamageSource;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.TextFormatting;
-import net.minecraft.util.text.TranslationTextComponent;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.network.chat.Component;
+import net.minecraft.ChatFormatting;
+import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.event.entity.living.LivingEvent;
@@ -49,8 +49,8 @@ public class CommonProxy {
 
     public static DamageSource custom = new DamageSource("if_custom") {
         @Override
-        public ITextComponent getDeathMessage(LivingEntity entityLivingBaseIn) {
-            return new TranslationTextComponent("text.industrialforegoing.chat.slaughter_kill", entityLivingBaseIn.getDisplayName(), TextFormatting.RESET);
+        public Component getLocalizedDeathMessage(LivingEntity entityLivingBaseIn) {
+            return new TranslatableComponent("text.industrialforegoing.chat.slaughter_kill", entityLivingBaseIn.getDisplayName(), ChatFormatting.RESET);
         }
     };
 

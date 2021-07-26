@@ -24,17 +24,17 @@ package com.buuz135.industrial.item;
 import com.buuz135.industrial.module.ModuleCore;
 import com.buuz135.industrial.module.ModuleTool;
 import com.hrznstudio.titanium.recipe.generator.TitaniumShapedRecipeBuilder;
-import net.minecraft.data.IFinishedRecipe;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.ItemGroup;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.Items;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.StringTextComponent;
-import net.minecraft.util.text.TextFormatting;
-import net.minecraft.world.World;
+import net.minecraft.data.recipes.FinishedRecipe;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.CreativeModeTab;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.TextComponent;
+import net.minecraft.ChatFormatting;
+import net.minecraft.world.level.Level;
 import net.minecraftforge.common.Tags;
 import net.minecraftforge.common.capabilities.ICapabilityProvider;
 import net.minecraftforge.fluids.FluidStack;
@@ -48,19 +48,22 @@ import java.util.List;
 import java.util.Locale;
 import java.util.function.Consumer;
 
+import com.hrznstudio.titanium.item.BasicItem.Key;
+import net.minecraft.world.item.Item.Properties;
+
 public class MeatFeederItem extends IFCustomItem {
 
-    public MeatFeederItem(ItemGroup group) {
-        super("meat_feeder", group, new Properties().maxStackSize(1));
+    public MeatFeederItem(CreativeModeTab group) {
+        super("meat_feeder", group, new Properties().stacksTo(1));
     }
 
     @Nullable
     @Override
-    public ICapabilityProvider initCapabilities(ItemStack stack, @Nullable CompoundNBT nbt) {
+    public ICapabilityProvider initCapabilities(ItemStack stack, @Nullable CompoundTag nbt) {
         FluidHandlerItemStack handlerItemStack = new FluidHandlerItemStack(stack, 128000) {
             @Override
             public boolean canFillFluidType(FluidStack fluid) {
-                return fluid.getFluid().isEquivalentTo(ModuleCore.MEAT.getSourceFluid());
+                return fluid.getFluid().isSame(ModuleCore.MEAT.getSourceFluid());
             }
         };
         handlerItemStack.fill(new FluidStack(ModuleCore.MEAT.getSourceFluid(), 0), IFluidHandler.FluidAction.EXECUTE);
@@ -73,10 +76,10 @@ public class MeatFeederItem extends IFCustomItem {
     }
 
     @Override
-    public void addTooltipDetails(@Nullable Key key, ItemStack stack, List<ITextComponent> tooltip, boolean advanced) {
+    public void addTooltipDetails(@Nullable Key key, ItemStack stack, List<Component> tooltip, boolean advanced) {
         super.addTooltipDetails(key, stack, tooltip, advanced);
         if (stack.getTag() != null && key == null) {
-            tooltip.add(new StringTextComponent(NumberFormat.getNumberInstance(Locale.ROOT).format(stack.getTag().getCompound("Fluid").getInt("Amount")) + TextFormatting.GOLD + "/" + TextFormatting.WHITE + NumberFormat.getNumberInstance(Locale.ROOT).format(128000) + TextFormatting.GOLD + "mb of Meat"));
+            tooltip.add(new TextComponent(NumberFormat.getNumberInstance(Locale.ROOT).format(stack.getTag().getCompound("Fluid").getInt("Amount")) + ChatFormatting.GOLD + "/" + ChatFormatting.WHITE + NumberFormat.getNumberInstance(Locale.ROOT).format(128000) + ChatFormatting.GOLD + "mb of Meat"));
         }
     }
 
@@ -91,11 +94,11 @@ public class MeatFeederItem extends IFCustomItem {
     }
 
     @Override
-    public void inventoryTick(ItemStack stack, World worldIn, Entity entityIn, int itemSlot, boolean isSelected) {
+    public void inventoryTick(ItemStack stack, Level worldIn, Entity entityIn, int itemSlot, boolean isSelected) {
         super.inventoryTick(stack, worldIn, entityIn, itemSlot, isSelected);
-        if (!worldIn.isRemote && entityIn instanceof PlayerEntity) {
-            PlayerEntity player = (PlayerEntity) entityIn;
-            if (player.getFoodStats().needFood() || player.getFoodStats().getSaturationLevel() < 10) {
+        if (!worldIn.isClientSide && entityIn instanceof Player) {
+            Player player = (Player) entityIn;
+            if (player.getFoodData().needsFood() || player.getFoodData().getSaturationLevel() < 10) {
                 if (stack.getItem().equals(ModuleTool.MEAT_FEEDER)) {
                         meatTick(stack, player);
                 }
@@ -103,23 +106,23 @@ public class MeatFeederItem extends IFCustomItem {
         }
     }
 
-    public static boolean meatTick(ItemStack stack, PlayerEntity player) {
+    public static boolean meatTick(ItemStack stack, Player player) {
         int filledAmount = ((MeatFeederItem) stack.getItem()).getFilledAmount(stack);
-        if (filledAmount >= 400 && (player.getFoodStats().getSaturationLevel() < 20 || player.getFoodStats().getFoodLevel() < 20)) {
+        if (filledAmount >= 400 && (player.getFoodData().getSaturationLevel() < 20 || player.getFoodData().getFoodLevel() < 20)) {
             ((MeatFeederItem) stack.getItem()).drain(stack, 400);
-            player.getFoodStats().addStats(1, 1);
+            player.getFoodData().eat(1, 1);
             return true;
         }
         return false;
     }
 
     @Override
-    public void registerRecipe(Consumer<IFinishedRecipe> consumer) {
+    public void registerRecipe(Consumer<FinishedRecipe> consumer) {
         TitaniumShapedRecipeBuilder.shapedRecipe(this)
-                .patternLine("pip").patternLine("gig").patternLine(" i ")
-                .key('p', ModuleCore.PLASTIC)
-                .key('i', Tags.Items.INGOTS_IRON)
-                .key('g', Items.GLASS_BOTTLE)
-                .build(consumer);
+                .pattern("pip").pattern("gig").pattern(" i ")
+                .define('p', ModuleCore.PLASTIC)
+                .define('i', Tags.Items.INGOTS_IRON)
+                .define('g', Items.GLASS_BOTTLE)
+                .save(consumer);
     }
 }

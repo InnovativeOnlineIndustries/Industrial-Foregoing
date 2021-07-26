@@ -23,15 +23,15 @@ package com.buuz135.industrial.proxy.network;
 
 import com.buuz135.industrial.worlddata.BackpackDataManager;
 import com.hrznstudio.titanium.network.Message;
-import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraftforge.fml.network.NetworkEvent;
 
 public class BackpackSyncMessage extends Message {
 
     public String id;
-    public CompoundNBT backpack;
+    public CompoundTag backpack;
 
-    public BackpackSyncMessage(String id, CompoundNBT backpack) {
+    public BackpackSyncMessage(String id, CompoundTag backpack) {
         this.id = id;
         this.backpack = backpack;
     }

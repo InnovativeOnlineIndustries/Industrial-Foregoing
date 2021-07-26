@@ -34,14 +34,16 @@ import com.hrznstudio.titanium.client.screen.addon.StateButtonAddon;
 import com.hrznstudio.titanium.client.screen.addon.StateButtonInfo;
 import com.hrznstudio.titanium.component.button.ButtonComponent;
 import com.hrznstudio.titanium.component.energy.EnergyStorageComponent;
-import net.minecraft.entity.passive.AnimalEntity;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.Items;
-import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.entity.animal.Animal;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
+import net.minecraft.core.BlockPos;
 
 import javax.annotation.Nonnull;
 import java.util.Collections;
 import java.util.List;
+
+import com.buuz135.industrial.block.tile.IndustrialWorkingTile.WorkAction;
 
 public class AnimalBabySeparatorTile extends IndustrialAreaWorkingTile<AnimalBabySeparatorTile> {
 
@@ -80,12 +82,12 @@ public class AnimalBabySeparatorTile extends IndustrialAreaWorkingTile<AnimalBab
 
     @Override
     public WorkAction work() {
-        if (this.world != null && hasEnergy(powerPerOperation)) {
-            List<AnimalEntity> mobs = this.world.getEntitiesWithinAABB(AnimalEntity.class, getWorkingArea().getBoundingBox());
-            mobs.removeIf(animalEntity -> !animalEntity.isChild() == !movingAdults);
+        if (this.level != null && hasEnergy(powerPerOperation)) {
+            List<Animal> mobs = this.level.getEntitiesOfClass(Animal.class, getWorkingArea().bounds());
+            mobs.removeIf(animalEntity -> !animalEntity.isBaby() == !movingAdults);
             if (mobs.size() == 0) return new WorkAction(1, 0);
-            BlockPos pos = this.getPos().offset(this.getFacingDirection());
-            mobs.get(0).setPosition(pos.getX() + 0.5, pos.getY(), pos.getZ() + 0.5);
+            BlockPos pos = this.getBlockPos().relative(this.getFacingDirection());
+            mobs.get(0).setPos(pos.getX() + 0.5, pos.getY(), pos.getZ() + 0.5);
             return new WorkAction(0.25f, powerPerOperation);
         }
         return new WorkAction(1, 0);

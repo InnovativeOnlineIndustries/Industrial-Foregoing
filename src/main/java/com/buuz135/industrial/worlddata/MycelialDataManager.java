@@ -22,15 +22,15 @@
 package com.buuz135.industrial.worlddata;
 
 import com.buuz135.industrial.block.generator.mycelial.IMycelialGeneratorType;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.util.RegistryKey;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.registry.Registry;
-import net.minecraft.world.IWorld;
-import net.minecraft.world.World;
-import net.minecraft.world.server.ServerWorld;
-import net.minecraft.world.storage.WorldSavedData;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.resources.ResourceKey;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Registry;
+import net.minecraft.world.level.LevelAccessor;
+import net.minecraft.world.level.Level;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.world.level.saveddata.SavedData;
 import net.minecraftforge.common.util.INBTSerializable;
 
 import javax.annotation.Nullable;
@@ -38,7 +38,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-public class MycelialDataManager extends WorldSavedData {
+public class MycelialDataManager extends SavedData {
 
     public static final String NAME = "IFMycelial";
     public HashMap<String, HashMap<String, List<GeneratorInfo>>> infos;
@@ -48,34 +48,34 @@ public class MycelialDataManager extends WorldSavedData {
         infos = new HashMap();
     }
 
-    public static void setGeneratorInfo(String uuid, World world, BlockPos pos, IMycelialGeneratorType type){
-        if (world instanceof ServerWorld){
+    public static void setGeneratorInfo(String uuid, Level world, BlockPos pos, IMycelialGeneratorType type){
+        if (world instanceof ServerLevel){
             MycelialDataManager dataManager = getData(world);
             List<GeneratorInfo> generatorInfos = dataManager.getInfos().computeIfAbsent(uuid, s -> new HashMap<>()).computeIfAbsent(type.getName(), s -> new ArrayList<>());
             boolean updated = false;
             for (GeneratorInfo generatorInfo : generatorInfos) {
-                if (generatorInfo.pos.equals(pos) && generatorInfo.world.equals(world.getDimensionKey())){
+                if (generatorInfo.pos.equals(pos) && generatorInfo.world.equals(world.dimension())){
                     updated = true;
                     generatorInfo.lastRun = world.getGameTime();
                 }
             }
             if (!updated){
-                generatorInfos.add(new GeneratorInfo(world.getGameTime(), 0 , pos, world.getDimensionKey()));
+                generatorInfos.add(new GeneratorInfo(world.getGameTime(), 0 , pos, world.dimension()));
             }
-            dataManager.markDirty();
+            dataManager.setDirty();
         }
     }
 
-    public static void removeGeneratorInfo(String uuid, World world, BlockPos pos, IMycelialGeneratorType type){
+    public static void removeGeneratorInfo(String uuid, Level world, BlockPos pos, IMycelialGeneratorType type){
         MycelialDataManager dataManager = getData(world);
         List<GeneratorInfo> generatorInfos = dataManager.getInfos().computeIfAbsent(uuid, s -> new HashMap<>()).computeIfAbsent(type.getName(), s -> new ArrayList<>());
-        generatorInfos.removeIf(generatorInfo -> generatorInfo.world.equals(world.getDimensionKey()) && generatorInfo.pos.equals(pos));
-        dataManager.markDirty();
+        generatorInfos.removeIf(generatorInfo -> generatorInfo.world.equals(world.dimension()) && generatorInfo.pos.equals(pos));
+        dataManager.setDirty();
     }
 
-    public static List<String> getReactorAvailable(String uuid, World world, boolean execute){
+    public static List<String> getReactorAvailable(String uuid, Level world, boolean execute){
         List<String> names = new ArrayList<>();
-        if (world instanceof ServerWorld){
+        if (world instanceof ServerLevel){
             MycelialDataManager dataManager = getData(world);
             HashMap<String, List<GeneratorInfo>> generators = dataManager.getInfos().computeIfAbsent(uuid, s -> new HashMap<>());
             for (IMycelialGeneratorType type : IMycelialGeneratorType.TYPES) {
@@ -83,7 +83,7 @@ public class MycelialDataManager extends WorldSavedData {
                     if (generatorInfo.lastTracked + 5 <= world.getGameTime()  && generatorInfo.lastRun + 5 >= world.getGameTime()){
                         names.add(type.getName());
                         if (execute) generatorInfo.lastTracked = world.getGameTime();
-                        dataManager.markDirty();
+                        dataManager.setDirty();
                         break;
                     }
                 }
@@ -97,14 +97,14 @@ public class MycelialDataManager extends WorldSavedData {
     }
 
     @Override
-    public void read(CompoundNBT nbt) {
+    public void load(CompoundTag nbt) {
         infos = new HashMap<>();
-        for (String uuid : nbt.getCompound("values").keySet()) {
-            CompoundNBT uuidNbt = nbt.getCompound("values").getCompound(uuid);
+        for (String uuid : nbt.getCompound("values").getAllKeys()) {
+            CompoundTag uuidNbt = nbt.getCompound("values").getCompound(uuid);
             HashMap<String, List<GeneratorInfo>> generators = new HashMap<>();
-            for (String genName : uuidNbt.keySet()) {
-                CompoundNBT genNbt = uuidNbt.getCompound(genName);
-                for (String s : genNbt.keySet()) {
+            for (String genName : uuidNbt.getAllKeys()) {
+                CompoundTag genNbt = uuidNbt.getCompound(genName);
+                for (String s : genNbt.getAllKeys()) {
                     GeneratorInfo generatorInfo = new GeneratorInfo();
                     generatorInfo.deserializeNBT(genNbt.getCompound(s));
                     generators.computeIfAbsent(genName, s1 -> new ArrayList<>()).add(generatorInfo);
@@ -115,13 +115,13 @@ public class MycelialDataManager extends WorldSavedData {
     }
 
     @Override
-    public CompoundNBT write(CompoundNBT compound) {
-        CompoundNBT values = new CompoundNBT();
+    public CompoundTag save(CompoundTag compound) {
+        CompoundTag values = new CompoundTag();
         for (String uuid : infos.keySet()) {
-            CompoundNBT uuidNbt = new CompoundNBT();
+            CompoundTag uuidNbt = new CompoundTag();
             for (String genName : infos.get(uuid).keySet()) {
                 int i = 0;
-                CompoundNBT genNbt = new CompoundNBT();
+                CompoundTag genNbt = new CompoundTag();
                 for (GeneratorInfo generatorInfo : infos.get(uuid).get(genName)) {
                     genNbt.put(i +"", generatorInfo.serializeNBT());
                     ++i;
@@ -135,23 +135,23 @@ public class MycelialDataManager extends WorldSavedData {
     }
 
     @Nullable
-    public static MycelialDataManager getData(IWorld world) {
-        if (world instanceof ServerWorld) {
-            ServerWorld serverWorld = ((ServerWorld) world).getServer().getWorld(World.OVERWORLD);
-            MycelialDataManager data = serverWorld.getSavedData().getOrCreate(MycelialDataManager::new, NAME);
+    public static MycelialDataManager getData(LevelAccessor world) {
+        if (world instanceof ServerLevel) {
+            ServerLevel serverWorld = ((ServerLevel) world).getServer().getLevel(Level.OVERWORLD);
+            MycelialDataManager data = serverWorld.getDataStorage().computeIfAbsent(MycelialDataManager::new, NAME);
             return data;
         }
         return null;
     }
 
-    public static class GeneratorInfo implements INBTSerializable<CompoundNBT> {
+    public static class GeneratorInfo implements INBTSerializable<CompoundTag> {
 
         private long lastRun;
         private long lastTracked;
         private BlockPos pos;
-        private RegistryKey<World> world;
+        private ResourceKey<Level> world;
 
-        public GeneratorInfo(long lastRun, long lastTracked, BlockPos pos, RegistryKey<World> world) {
+        public GeneratorInfo(long lastRun, long lastTracked, BlockPos pos, ResourceKey<Level> world) {
             this.lastRun = lastRun;
             this.lastTracked = lastTracked;
             this.pos = pos;
@@ -162,21 +162,21 @@ public class MycelialDataManager extends WorldSavedData {
         }
 
         @Override
-        public CompoundNBT serializeNBT() {
-            CompoundNBT compoundNBT = new CompoundNBT();
+        public CompoundTag serializeNBT() {
+            CompoundTag compoundNBT = new CompoundTag();
             compoundNBT.putLong("Run", lastRun);
             compoundNBT.putLong("Track", lastTracked);
-            compoundNBT.putLong("Pos", pos.toLong());
-            compoundNBT.putString("RKValue", world.getLocation().toString());
+            compoundNBT.putLong("Pos", pos.asLong());
+            compoundNBT.putString("RKValue", world.location().toString());
             return compoundNBT;
         }
 
         @Override
-        public void deserializeNBT(CompoundNBT nbt) {
+        public void deserializeNBT(CompoundTag nbt) {
             lastRun = nbt.getLong("Run");
             lastTracked = nbt.getLong("Track");
-            pos = BlockPos.fromLong(nbt.getLong("Pos"));
-            this.world = RegistryKey.getOrCreateKey(Registry.WORLD_KEY, new ResourceLocation(nbt.getString("RKValue")));
+            pos = BlockPos.of(nbt.getLong("Pos"));
+            this.world = ResourceKey.create(Registry.DIMENSION_REGISTRY, new ResourceLocation(nbt.getString("RKValue")));
         }
     }
 }

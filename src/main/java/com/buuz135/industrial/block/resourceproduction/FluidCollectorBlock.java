@@ -27,18 +27,21 @@ import com.buuz135.industrial.module.ModuleResourceProduction;
 import com.buuz135.industrial.utils.IndustrialTags;
 import com.hrznstudio.titanium.api.IFactory;
 import com.hrznstudio.titanium.recipe.generator.TitaniumShapedRecipeBuilder;
-import net.minecraft.block.Blocks;
-import net.minecraft.data.IFinishedRecipe;
-import net.minecraft.item.Items;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.data.recipes.FinishedRecipe;
+import net.minecraft.world.item.Items;
 import net.minecraft.tags.ItemTags;
 
 import javax.annotation.Nonnull;
 import java.util.function.Consumer;
 
+import com.hrznstudio.titanium.block.RotatableBlock.RotationType;
+import net.minecraft.world.level.block.state.BlockBehaviour.Properties;
+
 public class FluidCollectorBlock extends IndustrialBlock<FluidCollectorTile> {
 
     public FluidCollectorBlock() {
-        super("fluid_collector", Properties.from(Blocks.IRON_BLOCK), FluidCollectorTile.class, ModuleResourceProduction.TAB_RESOURCE);
+        super("fluid_collector", Properties.copy(Blocks.IRON_BLOCK), FluidCollectorTile.class, ModuleResourceProduction.TAB_RESOURCE);
     }
 
     @Override
@@ -53,14 +56,14 @@ public class FluidCollectorBlock extends IndustrialBlock<FluidCollectorTile> {
     }
 
     @Override
-    public void registerRecipe(Consumer<IFinishedRecipe> consumer) {
+    public void registerRecipe(Consumer<FinishedRecipe> consumer) {
         TitaniumShapedRecipeBuilder.shapedRecipe(this)
-                .patternLine("PBP").patternLine("BMB").patternLine("SRS")
-                .key('P', IndustrialTags.Items.PLASTIC)
-                .key('B', Items.BUCKET)
-                .key('M', IndustrialTags.Items.MACHINE_FRAME_PITY)
-                .key('R', Items.REDSTONE)
-                .key('S', ItemTags.makeWrapperTag("forge:gears/iron"))
-                .build(consumer);
+                .pattern("PBP").pattern("BMB").pattern("SRS")
+                .define('P', IndustrialTags.Items.PLASTIC)
+                .define('B', Items.BUCKET)
+                .define('M', IndustrialTags.Items.MACHINE_FRAME_PITY)
+                .define('R', Items.REDSTONE)
+                .define('S', ItemTags.bind("forge:gears/iron"))
+                .save(consumer);
     }
 }

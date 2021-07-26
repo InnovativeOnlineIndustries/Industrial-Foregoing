@@ -26,9 +26,9 @@ import com.buuz135.industrial.item.infinity.InfinityEnergyStorage;
 import com.buuz135.industrial.worlddata.BackpackDataManager;
 import com.hrznstudio.titanium.api.IFactory;
 import com.hrznstudio.titanium.capability.FluidHandlerScreenProviderItemStack;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.Direction;
-import net.minecraft.world.World;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.core.Direction;
+import net.minecraft.world.level.Level;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.fml.server.ServerLifecycleHooks;
@@ -55,7 +55,7 @@ public class BackpackCapabilityProvider extends InfinityCapabilityProvider {
                 if (BackpackDataManager.CLIENT_SIDE_BACKPACKS.containsKey(id)){
                     itemHandlerLazyOptional = LazyOptional.of(() -> BackpackDataManager.CLIENT_SIDE_BACKPACKS.get(id));
                 } else if (ServerLifecycleHooks.getCurrentServer() != null){
-                    BackpackDataManager manager = BackpackDataManager.getData(ServerLifecycleHooks.getCurrentServer().getWorld(World.OVERWORLD));
+                    BackpackDataManager manager = BackpackDataManager.getData(ServerLifecycleHooks.getCurrentServer().getLevel(Level.OVERWORLD));
                     if (manager != null){
                         BackpackDataManager.BackpackItemHandler backpack = manager.getBackpack(id);
                         if (backpack != null){

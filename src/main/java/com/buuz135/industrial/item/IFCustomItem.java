@@ -23,25 +23,27 @@ package com.buuz135.industrial.item;
 
 import com.hrznstudio.titanium.api.IRecipeProvider;
 import com.hrznstudio.titanium.item.BasicItem;
-import net.minecraft.item.ItemGroup;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.text.TranslationTextComponent;
+import net.minecraft.world.item.CreativeModeTab;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.network.chat.TranslatableComponent;
 
 import javax.annotation.Nullable;
 
+import net.minecraft.world.item.Item.Properties;
+
 public abstract class IFCustomItem extends BasicItem implements IRecipeProvider {
 
-    public IFCustomItem(String name, ItemGroup group, Properties builder) {
-        super(name, builder.group(group));
+    public IFCustomItem(String name, CreativeModeTab group, Properties builder) {
+        super(name, builder.tab(group));
     }
 
-    public IFCustomItem(String name, ItemGroup group) {
+    public IFCustomItem(String name, CreativeModeTab group) {
         this(name, group, new Properties());
     }
 
     @Nullable
     @Override
     public String getCreatorModId(ItemStack itemStack) {
-        return new TranslationTextComponent("itemGroup." + this.group.getPath()).getString();
+        return new TranslatableComponent("itemGroup." + this.category.getRecipeFolderName()).getString();
     }
 }

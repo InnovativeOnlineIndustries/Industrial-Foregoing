@@ -25,13 +25,13 @@ import com.hrznstudio.titanium.api.client.AssetTypes;
 import com.hrznstudio.titanium.client.screen.addon.BasicScreenAddon;
 import com.hrznstudio.titanium.client.screen.asset.IAssetProvider;
 import com.hrznstudio.titanium.util.AssetUtil;
-import com.mojang.blaze3d.matrix.MatrixStack;
+import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.systems.RenderSystem;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.screen.Screen;
-import net.minecraft.client.renderer.RenderHelper;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.text.ITextComponent;
+import net.minecraft.client.gui.screens.Screen;
+import com.mojang.blaze3d.platform.Lighting;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.network.chat.Component;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -57,16 +57,16 @@ public abstract class ItemGuiAddon extends BasicScreenAddon {
 
 
     @Override
-    public void drawBackgroundLayer(MatrixStack stack, Screen screen, IAssetProvider provider, int guiX, int guiY, int mouseX, int mouseY, float partialTicks) {
+    public void drawBackgroundLayer(PoseStack stack, Screen screen, IAssetProvider provider, int guiX, int guiY, int mouseX, int mouseY, float partialTicks) {
         AssetUtil.drawAsset(stack, screen, provider.getAsset(AssetTypes.ITEM_BACKGROUND), guiX + getPosX(), guiY + getPosY());
         //RenderSystem.setupGui3DDiffuseLighting();
-        Minecraft.getInstance().getItemRenderer().renderItemIntoGUI(getItemStack(), guiX + getPosX() + 1, guiY + getPosY() + 1);
-        RenderHelper.disableStandardItemLighting();
+        Minecraft.getInstance().getItemRenderer().renderGuiItem(getItemStack(), guiX + getPosX() + 1, guiY + getPosY() + 1);
+        Lighting.turnOff();
         RenderSystem.enableAlphaTest();
     }
 
     @Override
-    public void drawForegroundLayer(MatrixStack stack, Screen screen, IAssetProvider provider, int guiX, int guiY, int mouseX, int mouseY) {
+    public void drawForegroundLayer(PoseStack stack, Screen screen, IAssetProvider provider, int guiX, int guiY, int mouseX, int mouseY) {
 
     }
 
@@ -76,8 +76,8 @@ public abstract class ItemGuiAddon extends BasicScreenAddon {
     }
 
     @Override
-    public List<ITextComponent> getTooltipLines() {
-        return this.tooltip ? Minecraft.getInstance().currentScreen.getTooltipFromItem(getItemStack()) : new ArrayList<>();
+    public List<Component> getTooltipLines() {
+        return this.tooltip ? Minecraft.getInstance().screen.getTooltipFromItem(getItemStack()) : new ArrayList<>();
     }
 
     public abstract ItemStack getItemStack();

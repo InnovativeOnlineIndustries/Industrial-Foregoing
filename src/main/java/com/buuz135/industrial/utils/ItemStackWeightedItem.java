@@ -21,10 +21,10 @@
  */
 package com.buuz135.industrial.utils;
 
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.WeightedRandom;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.util.WeighedRandom;
 
-public class ItemStackWeightedItem extends WeightedRandom.Item {
+public class ItemStackWeightedItem extends WeighedRandom.WeighedRandomItem {
 
     private ItemStack stack;
 

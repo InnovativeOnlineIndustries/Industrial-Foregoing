@@ -25,11 +25,11 @@ import com.buuz135.industrial.item.infinity.InfinityEnergyStorage;
 import com.hrznstudio.titanium.api.client.IAsset;
 import com.hrznstudio.titanium.client.screen.addon.BasicScreenAddon;
 import com.hrznstudio.titanium.client.screen.asset.IAssetProvider;
-import com.mojang.blaze3d.matrix.MatrixStack;
-import net.minecraft.client.gui.screen.Screen;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.StringTextComponent;
-import net.minecraft.util.text.TextFormatting;
+import com.mojang.blaze3d.vertex.PoseStack;
+import net.minecraft.client.gui.screens.Screen;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.TextComponent;
+import net.minecraft.ChatFormatting;
 
 import java.text.DecimalFormat;
 import java.util.Arrays;
@@ -50,8 +50,8 @@ public class InfinityEnergyScreenAddon extends BasicScreenAddon {
         this.tier = handler.getLongCapacity();
     }
 
-    public static java.util.List<ITextComponent> getTooltip(long stored, long capacity) {
-        return Arrays.asList(new StringTextComponent(TextFormatting.GOLD + "Power:"), new StringTextComponent(new DecimalFormat().format(stored) + TextFormatting.GOLD + "/" + TextFormatting.WHITE + new DecimalFormat().format(capacity) + TextFormatting.DARK_AQUA + " FE"));
+    public static java.util.List<Component> getTooltip(long stored, long capacity) {
+        return Arrays.asList(new TextComponent(ChatFormatting.GOLD + "Power:"), new TextComponent(new DecimalFormat().format(stored) + ChatFormatting.GOLD + "/" + ChatFormatting.WHITE + new DecimalFormat().format(capacity) + ChatFormatting.DARK_AQUA + " FE"));
     }
 
     @Override
@@ -65,17 +65,17 @@ public class InfinityEnergyScreenAddon extends BasicScreenAddon {
     }
 
     @Override
-    public void drawBackgroundLayer(MatrixStack stack, Screen screen, IAssetProvider provider, int guiX, int guiY, int mouseX, int mouseY, float partialTicks) {
+    public void drawBackgroundLayer(PoseStack stack, Screen screen, IAssetProvider provider, int guiX, int guiY, int mouseX, int mouseY, float partialTicks) {
         background = drawBackground(stack, screen, provider, getPosX(), getPosY(), guiX, guiY);
     }
 
     @Override
-    public void drawForegroundLayer(MatrixStack stack, Screen screen, IAssetProvider provider, int guiX, int guiY, int mouseX, int mouseY) {
+    public void drawForegroundLayer(PoseStack stack, Screen screen, IAssetProvider provider, int guiX, int guiY, int mouseX, int mouseY) {
         drawForeground(stack, screen, provider, getPosX(), getPosY(), guiX, guiY, handler.getLongEnergyStored(), tier);
     }
 
     @Override
-    public List<ITextComponent> getTooltipLines() {
+    public List<Component> getTooltipLines() {
         return getTooltip(handler.getLongEnergyStored(), tier);
     }
 }

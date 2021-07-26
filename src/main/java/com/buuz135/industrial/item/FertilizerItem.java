@@ -21,44 +21,46 @@
  */
 package com.buuz135.industrial.item;
 
-import net.minecraft.data.IFinishedRecipe;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.BoneMealItem;
-import net.minecraft.item.ItemGroup;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.ItemUseContext;
-import net.minecraft.util.ActionResultType;
-import net.minecraft.util.Direction;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
+import net.minecraft.data.recipes.FinishedRecipe;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.BoneMealItem;
+import net.minecraft.world.item.CreativeModeTab;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.context.UseOnContext;
+import net.minecraft.world.InteractionResult;
+import net.minecraft.core.Direction;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.level.Level;
 
 import java.util.function.Consumer;
 
+import net.minecraft.world.item.Item.Properties;
+
 public class FertilizerItem extends IFCustomItem {
 
-    public FertilizerItem(ItemGroup group) {
+    public FertilizerItem(CreativeModeTab group) {
         super("fertilizer", group, new Properties());
     }
 
     @Override
-    public ActionResultType onItemUse(ItemUseContext context) {
-        PlayerEntity player = context.getPlayer();
-        ItemStack itemstack = context.getItem();
-        Direction facing = context.getFace();
-        BlockPos pos = context.getPos();
-        World worldIn = context.getWorld();
-        if (!player.canPlayerEdit(pos.offset(facing), facing, itemstack)) return ActionResultType.FAIL;
+    public InteractionResult useOn(UseOnContext context) {
+        Player player = context.getPlayer();
+        ItemStack itemstack = context.getItemInHand();
+        Direction facing = context.getClickedFace();
+        BlockPos pos = context.getClickedPos();
+        Level worldIn = context.getLevel();
+        if (!player.mayUseItemAt(pos.relative(facing), facing, itemstack)) return InteractionResult.FAIL;
         if (BoneMealItem.applyBonemeal(itemstack, worldIn, pos, player)) {
-            if (!worldIn.isRemote) {
-                worldIn.playEvent(2005, pos, 0);
+            if (!worldIn.isClientSide) {
+                worldIn.levelEvent(2005, pos, 0);
             }
-            return ActionResultType.SUCCESS;
+            return InteractionResult.SUCCESS;
         }
-        return ActionResultType.PASS;
+        return InteractionResult.PASS;
     }
 
     @Override
-    public void registerRecipe(Consumer<IFinishedRecipe> consumer) {
+    public void registerRecipe(Consumer<FinishedRecipe> consumer) {
 
     }
 }

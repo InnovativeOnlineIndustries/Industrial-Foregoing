@@ -27,17 +27,19 @@ import com.buuz135.industrial.module.ModuleResourceProduction;
 import com.buuz135.industrial.utils.IndustrialTags;
 import com.hrznstudio.titanium.api.IFactory;
 import com.hrznstudio.titanium.recipe.generator.TitaniumShapedRecipeBuilder;
-import net.minecraft.block.Blocks;
-import net.minecraft.data.IFinishedRecipe;
-import net.minecraft.item.Items;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.data.recipes.FinishedRecipe;
+import net.minecraft.world.item.Items;
 import net.minecraftforge.common.Tags;
 
 import java.util.function.Consumer;
 
+import net.minecraft.world.level.block.state.BlockBehaviour.Properties;
+
 public class OreLaserBaseBlock extends IndustrialBlock<OreLaserBaseTile> {
 
     public OreLaserBaseBlock() {
-        super("ore_laser_base", Properties.from(Blocks.IRON_BLOCK), OreLaserBaseTile.class, ModuleResourceProduction.TAB_RESOURCE);
+        super("ore_laser_base", Properties.copy(Blocks.IRON_BLOCK), OreLaserBaseTile.class, ModuleResourceProduction.TAB_RESOURCE);
     }
 
     @Override
@@ -46,14 +48,14 @@ public class OreLaserBaseBlock extends IndustrialBlock<OreLaserBaseTile> {
     }
 
     @Override
-    public void registerRecipe(Consumer<IFinishedRecipe> consumer) {
-        TitaniumShapedRecipeBuilder.shapedRecipe(this).patternLine("pfp").patternLine("bmb").patternLine("grg")
-                .key('p', IndustrialTags.Items.PLASTIC)
-                .key('f', Items.DIAMOND_PICKAXE)
-                .key('b', Tags.Items.ORES_IRON)
-                .key('m', IndustrialTags.Items.MACHINE_FRAME_ADVANCED)
-                .key('g', IndustrialTags.Items.GEAR_DIAMOND)
-                .key('r', Tags.Items.DUSTS_REDSTONE)
-                .build(consumer);
+    public void registerRecipe(Consumer<FinishedRecipe> consumer) {
+        TitaniumShapedRecipeBuilder.shapedRecipe(this).pattern("pfp").pattern("bmb").pattern("grg")
+                .define('p', IndustrialTags.Items.PLASTIC)
+                .define('f', Items.DIAMOND_PICKAXE)
+                .define('b', Tags.Items.ORES_IRON)
+                .define('m', IndustrialTags.Items.MACHINE_FRAME_ADVANCED)
+                .define('g', IndustrialTags.Items.GEAR_DIAMOND)
+                .define('r', Tags.Items.DUSTS_REDSTONE)
+                .save(consumer);
     }
 }

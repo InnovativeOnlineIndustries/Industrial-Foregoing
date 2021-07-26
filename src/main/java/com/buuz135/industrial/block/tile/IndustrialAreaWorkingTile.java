@@ -32,10 +32,10 @@ import com.hrznstudio.titanium.client.screen.addon.StateButtonAddon;
 import com.hrznstudio.titanium.client.screen.addon.StateButtonInfo;
 import com.hrznstudio.titanium.component.button.ButtonComponent;
 import com.hrznstudio.titanium.item.AugmentWrapper;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.math.AxisAlignedBB;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.shapes.VoxelShape;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.phys.AABB;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.phys.shapes.VoxelShape;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -75,11 +75,11 @@ public abstract class IndustrialAreaWorkingTile<T extends IndustrialAreaWorkingT
     }
 
     public VoxelShape getWorkingArea() {
-        return new RangeManager(this.pos, this.getFacingDirection(), this.type).get(hasAugmentInstalled(RangeAddonItem.RANGE) ? ((int) AugmentWrapper.getType(getInstalledAugments(RangeAddonItem.RANGE).get(0), RangeAddonItem.RANGE) + 1) : 0);
+        return new RangeManager(this.worldPosition, this.getFacingDirection(), this.type).get(hasAugmentInstalled(RangeAddonItem.RANGE) ? ((int) AugmentWrapper.getType(getInstalledAugments(RangeAddonItem.RANGE).get(0), RangeAddonItem.RANGE) + 1) : 0);
     }
 
     public BlockPos getPointedBlockPos() {
-        List<BlockPos> blockPosList = BlockUtils.getBlockPosInAABB(getWorkingArea().getBoundingBox());
+        List<BlockPos> blockPosList = BlockUtils.getBlockPosInAABB(getWorkingArea().bounds());
         pointer = safetyPointerCheck(blockPosList);
         return blockPosList.get(pointer);
     }
@@ -97,7 +97,7 @@ public abstract class IndustrialAreaWorkingTile<T extends IndustrialAreaWorkingT
     }
 
     public boolean isLoaded(BlockPos pos) {
-        return world.isAreaLoaded(pos, pos);
+        return level.hasChunksAt(pos, pos);
     }
 
     @Override
@@ -108,7 +108,7 @@ public abstract class IndustrialAreaWorkingTile<T extends IndustrialAreaWorkingT
     }
 
     @Override
-    public AxisAlignedBB getRenderBoundingBox() {
-        return getWorkingArea().getBoundingBox();
+    public AABB getRenderBoundingBox() {
+        return getWorkingArea().bounds();
     }
 }

@@ -22,12 +22,12 @@
 package com.buuz135.industrial.utils.apihandlers.straw;
 
 import com.buuz135.industrial.utils.Triple;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.fluid.Fluid;
-import net.minecraft.potion.Effect;
-import net.minecraft.potion.EffectInstance;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.level.material.Fluid;
+import net.minecraft.world.effect.MobEffect;
+import net.minecraft.world.effect.MobEffectInstance;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.level.Level;
 
 import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.ArrayList;
@@ -35,25 +35,25 @@ import java.util.List;
 
 @ParametersAreNonnullByDefault
 public class PotionStrawHandler extends StrawHandlerBase {
-    private List<Triple<Effect, Integer, Integer>> potions = new ArrayList<>();
+    private List<Triple<MobEffect, Integer, Integer>> potions = new ArrayList<>();
 
     public PotionStrawHandler(Fluid fluid) {
         super(() -> fluid);
     }
 
-    public PotionStrawHandler addPotion(EffectInstance effect) {
-        return addPotion(effect.getPotion(), effect.getDuration(), effect.getAmplifier());
+    public PotionStrawHandler addPotion(MobEffectInstance effect) {
+        return addPotion(effect.getEffect(), effect.getDuration(), effect.getAmplifier());
     }
 
-    public PotionStrawHandler addPotion(Effect potion, Integer duration, Integer amplifier) {
+    public PotionStrawHandler addPotion(MobEffect potion, Integer duration, Integer amplifier) {
         potions.add(new Triple<>(potion, duration, amplifier));
         return this;
     }
 
     @Override
-    public void onDrink(World world, BlockPos pos, Fluid stack, PlayerEntity player, boolean fromFluidContainer) {
-        for (Triple<Effect, Integer, Integer> triple : potions) {
-            player.addPotionEffect(new EffectInstance(triple.getA(), triple.getB(), triple.getC()));
+    public void onDrink(Level world, BlockPos pos, Fluid stack, Player player, boolean fromFluidContainer) {
+        for (Triple<MobEffect, Integer, Integer> triple : potions) {
+            player.addEffect(new MobEffectInstance(triple.getA(), triple.getB(), triple.getC()));
         }
     }
 }

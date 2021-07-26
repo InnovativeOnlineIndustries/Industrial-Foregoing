@@ -26,8 +26,8 @@ import com.hrznstudio.titanium.api.IFactory;
 import com.hrznstudio.titanium.api.client.IScreenAddon;
 import com.hrznstudio.titanium.capability.FluidHandlerScreenProviderItemStack;
 import com.hrznstudio.titanium.component.fluid.FluidTankComponent;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraftforge.fluids.FluidStack;
 
 import javax.annotation.Nonnull;
@@ -35,6 +35,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.function.Predicate;
+
+import net.minecraftforge.fluids.capability.IFluidHandler.FluidAction;
 
 public class MultipleFluidHandlerScreenProviderItemStack  extends FluidHandlerScreenProviderItemStack {
 
@@ -72,7 +74,7 @@ public class MultipleFluidHandlerScreenProviderItemStack  extends FluidHandlerSc
     @Nonnull
     @Override
     public FluidStack getFluidInTank(int tank) {
-        CompoundNBT compoundNBT = getContainer().getOrCreateChildTag(NBT_TANKS);
+        CompoundTag compoundNBT = getContainer().getOrCreateTagElement(NBT_TANKS);
         if (!compoundNBT.contains(tankDefinitions[tank].name)){
             return FluidStack.EMPTY;
         }
@@ -80,8 +82,8 @@ public class MultipleFluidHandlerScreenProviderItemStack  extends FluidHandlerSc
     }
 
     public void setFluidInTank(int tank, FluidStack fluidStack){
-        CompoundNBT compoundNBT = getContainer().getOrCreateChildTag(NBT_TANKS);
-        compoundNBT.put(tankDefinitions[tank].name,fluidStack.writeToNBT(new CompoundNBT()));
+        CompoundTag compoundNBT = getContainer().getOrCreateTagElement(NBT_TANKS);
+        compoundNBT.put(tankDefinitions[tank].name,fluidStack.writeToNBT(new CompoundTag()));
     }
 
     @Override

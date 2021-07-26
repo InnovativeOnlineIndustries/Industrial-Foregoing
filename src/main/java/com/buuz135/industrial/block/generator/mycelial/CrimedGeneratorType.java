@@ -24,14 +24,14 @@ package com.buuz135.industrial.block.generator.mycelial;
 import com.buuz135.industrial.plugin.jei.generator.MycelialGeneratorRecipe;
 import com.buuz135.industrial.utils.IndustrialTags;
 import com.hrznstudio.titanium.component.inventory.SidedInventoryComponent;
-import net.minecraft.block.Blocks;
-import net.minecraft.data.ShapedRecipeBuilder;
-import net.minecraft.item.DyeColor;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.Items;
-import net.minecraft.item.crafting.Ingredient;
-import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.data.recipes.ShapedRecipeBuilder;
+import net.minecraft.world.item.DyeColor;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
+import net.minecraft.world.item.crafting.Ingredient;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraftforge.common.util.INBTSerializable;
 import net.minecraftforge.fluids.FluidStack;
 import org.apache.commons.lang3.tuple.Pair;
@@ -65,12 +65,12 @@ public class CrimedGeneratorType implements IMycelialGeneratorType {
     }
 
     @Override
-    public boolean canStart(INBTSerializable<CompoundNBT>[] inputs) {
+    public boolean canStart(INBTSerializable<CompoundTag>[] inputs) {
         return inputs.length > 0 && inputs[0] instanceof SidedInventoryComponent && ((SidedInventoryComponent<?>) inputs[0]).getStackInSlot(0).getCount() > 0;
     }
 
     @Override
-    public Pair<Integer, Integer> getTimeAndPowerGeneration(INBTSerializable<CompoundNBT>[] inputs) {
+    public Pair<Integer, Integer> getTimeAndPowerGeneration(INBTSerializable<CompoundTag>[] inputs) {
         if (inputs.length > 0 && inputs[0] instanceof SidedInventoryComponent && ((SidedInventoryComponent<?>) inputs[0]).getStackInSlot(0).getCount() > 0) {
             ItemStack stack = ((SidedInventoryComponent<?>) inputs[0]).getStackInSlot(0).copy();
             ((SidedInventoryComponent<?>) inputs[0]).getStackInSlot(0).shrink(1);
@@ -100,16 +100,16 @@ public class CrimedGeneratorType implements IMycelialGeneratorType {
         for (Item item : new Item[]{Items.CRIMSON_FUNGUS, Items.CRIMSON_ROOTS, Items.WEEPING_VINES, Items.WARPED_FUNGUS, Items.WARPED_ROOTS, Items.NETHER_SPROUTS, Items.TWISTING_VINES, Items.SHROOMLIGHT, Items.NETHER_WART_BLOCK, Items.WARPED_WART_BLOCK}) {
             ItemStack stack = new ItemStack(item);
             Pair<Integer, Integer> power = calculate(stack);
-            recipes.add(new MycelialGeneratorRecipe(Collections.singletonList(Collections.singletonList(Ingredient.fromStacks(stack))), new ArrayList<>(), power.getLeft(), power.getRight()));
+            recipes.add(new MycelialGeneratorRecipe(Collections.singletonList(Collections.singletonList(Ingredient.of(stack))), new ArrayList<>(), power.getLeft(), power.getRight()));
         }
         return recipes;
     }
 
     @Override
     public ShapedRecipeBuilder addIngredients(ShapedRecipeBuilder recipeBuilder) {
-        recipeBuilder = recipeBuilder.key('B', Blocks.NETHER_WART_BLOCK)
-                .key('C', Blocks.CRIMSON_FUNGUS)
-                .key('M', IndustrialTags.Items.MACHINE_FRAME_ADVANCED);
+        recipeBuilder = recipeBuilder.define('B', Blocks.NETHER_WART_BLOCK)
+                .define('C', Blocks.CRIMSON_FUNGUS)
+                .define('M', IndustrialTags.Items.MACHINE_FRAME_ADVANCED);
         return recipeBuilder;
     }
 

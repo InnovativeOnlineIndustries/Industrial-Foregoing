@@ -35,9 +35,9 @@ import com.hrznstudio.titanium.annotation.Save;
 import com.hrznstudio.titanium.component.energy.EnergyStorageComponent;
 import com.hrznstudio.titanium.component.fluid.SidedFluidTankComponent;
 import com.hrznstudio.titanium.component.inventory.SidedInventoryComponent;
-import net.minecraft.item.DyeColor;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.item.DyeColor;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.core.BlockPos;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.capability.IFluidHandler;
 import net.minecraftforge.items.ItemHandlerHelper;
@@ -45,6 +45,8 @@ import net.minecraftforge.items.ItemHandlerHelper;
 import javax.annotation.Nonnull;
 import java.util.List;
 import java.util.Optional;
+
+import com.buuz135.industrial.block.tile.IndustrialWorkingTile.WorkAction;
 
 public class PlantGathererTile extends IndustrialAreaWorkingTile<PlantGathererTile> {
 
@@ -72,16 +74,16 @@ public class PlantGathererTile extends IndustrialAreaWorkingTile<PlantGathererTi
     @Override
     public IndustrialWorkingTile.WorkAction work() {
         if (hasEnergy(powerPerOperation)) {
-            int amount = Math.max(1, BlockUtils.getBlockPosInAABB(getWorkingArea().getBoundingBox()).size() / 4);
+            int amount = Math.max(1, BlockUtils.getBlockPosInAABB(getWorkingArea().bounds()).size() / 4);
             for (int i = 0; i < amount; i++) {
                 BlockPos pointed = getPointedBlockPos();
                 if (isLoaded(pointed) && !ItemStackUtils.isInventoryFull(output)) {
-                    Optional<PlantRecollectable> optional = IFRegistries.PLANT_RECOLLECTABLES_REGISTRY.getValues().stream().filter(plantRecollectable -> plantRecollectable.canBeHarvested(this.world, pointed, this.world.getBlockState(pointed))).findFirst();
+                    Optional<PlantRecollectable> optional = IFRegistries.PLANT_RECOLLECTABLES_REGISTRY.getValues().stream().filter(plantRecollectable -> plantRecollectable.canBeHarvested(this.level, pointed, this.level.getBlockState(pointed))).findFirst();
                     if (optional.isPresent()) {
-                        List<ItemStack> drops = optional.get().doHarvestOperation(this.world, pointed, this.world.getBlockState(pointed));
+                        List<ItemStack> drops = optional.get().doHarvestOperation(this.level, pointed, this.level.getBlockState(pointed));
                         tank.fill(new FluidStack(ModuleCore.SLUDGE.getSourceFluid(), 10 * drops.size()), IFluidHandler.FluidAction.EXECUTE);
                         drops.forEach(stack -> ItemHandlerHelper.insertItem(output, stack, false));
-                        if (optional.get().shouldCheckNextPlant(this.world, pointed, this.world.getBlockState(pointed))) {
+                        if (optional.get().shouldCheckNextPlant(this.level, pointed, this.level.getBlockState(pointed))) {
                             increasePointer();
                         }
                         return new WorkAction(0.3f, powerPerOperation);

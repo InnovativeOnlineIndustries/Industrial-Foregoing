@@ -31,17 +31,19 @@ import com.hrznstudio.titanium.component.energy.EnergyStorageComponent;
 import com.hrznstudio.titanium.component.fluid.FluidTankComponent;
 import com.hrznstudio.titanium.component.fluid.SidedFluidTankComponent;
 import com.hrznstudio.titanium.util.RecipeUtil;
-import net.minecraft.item.DyeColor;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.ChunkPos;
-import net.minecraft.world.DimensionType;
-import net.minecraft.world.World;
+import net.minecraft.world.item.DyeColor;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.level.ChunkPos;
+import net.minecraft.world.level.dimension.DimensionType;
+import net.minecraft.world.level.Level;
 import net.minecraftforge.fluids.capability.IFluidHandler;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.Collection;
 import java.util.HashMap;
+
+import com.buuz135.industrial.block.tile.IndustrialWorkingTile.WorkAction;
 
 public class FluidExtractorTile extends IndustrialAreaWorkingTile<FluidExtractorTile> {
 
@@ -67,18 +69,18 @@ public class FluidExtractorTile extends IndustrialAreaWorkingTile<FluidExtractor
     @Override
     public WorkAction work() {
         BlockPos pos = getPointedBlockPos();
-        if (isLoaded(pos) && !this.world.isAirBlock(pos) && this.tank.getFluidAmount() < this.tank.getCapacity()) {
-            if (currentRecipe == null || !currentRecipe.matches(this.world, pos) || currentRecipe.defaultRecipe)
-                currentRecipe = findRecipe(this.world, pos);
+        if (isLoaded(pos) && !this.level.isEmptyBlock(pos) && this.tank.getFluidAmount() < this.tank.getCapacity()) {
+            if (currentRecipe == null || !currentRecipe.matches(this.level, pos) || currentRecipe.defaultRecipe)
+                currentRecipe = findRecipe(this.level, pos);
             if (currentRecipe != null) {//GetDimensionType
-                FluidExtractionProgress extractionProgress = EXTRACTION.computeIfAbsent(this.world.getDimensionType(), dimensionType -> new HashMap<>()).computeIfAbsent(this.world.getChunkAt(pos).getPos(), chunkPos -> new HashMap<>()).computeIfAbsent(pos, pos1 -> new FluidExtractionProgress(this.world));
+                FluidExtractionProgress extractionProgress = EXTRACTION.computeIfAbsent(this.level.dimensionType(), dimensionType -> new HashMap<>()).computeIfAbsent(this.level.getChunkAt(pos).getPos(), chunkPos -> new HashMap<>()).computeIfAbsent(pos, pos1 -> new FluidExtractionProgress(this.level));
                 tank.fillForced(currentRecipe.output.copy(), IFluidHandler.FluidAction.EXECUTE);
-                if (this.world.rand.nextDouble() <= currentRecipe.breakChance) {
+                if (this.level.random.nextDouble() <= currentRecipe.breakChance) {
                     extractionProgress.setProgress(extractionProgress.getProgress() + 1);
                 }
                 if (extractionProgress.getProgress() > 7) {
                     extractionProgress.setProgress(0);
-                    this.world.setBlockState(pos, currentRecipe.result.getDefaultState());
+                    this.level.setBlockAndUpdate(pos, currentRecipe.result.defaultBlockState());
                 }
                 if (hasEnergy(powerPerOperation)) return new WorkAction(0.4f, powerPerOperation);
                 return new WorkAction(1f, 0);
@@ -98,7 +100,7 @@ public class FluidExtractorTile extends IndustrialAreaWorkingTile<FluidExtractor
     }
 
     @Nullable
-    public FluidExtractorRecipe findRecipe(World world, BlockPos pos) {
+    public FluidExtractorRecipe findRecipe(Level world, BlockPos pos) {
         Collection<FluidExtractorRecipe> recipeList = RecipeUtil.getRecipes(world, FluidExtractorRecipe.SERIALIZER.getRecipeType());
         for (FluidExtractorRecipe recipe : recipeList) {
             if (!recipe.defaultRecipe && recipe.matches(world, pos)) return recipe;
@@ -120,9 +122,9 @@ public class FluidExtractorTile extends IndustrialAreaWorkingTile<FluidExtractor
         private int progress;
         private int breakID;
 
-        public FluidExtractionProgress(World world) {
+        public FluidExtractionProgress(Level world) {
             this.progress = 0;
-            this.breakID = world.rand.nextInt();
+            this.breakID = world.random.nextInt();
         }
 
         public int getProgress() {

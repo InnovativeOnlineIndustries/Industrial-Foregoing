@@ -25,7 +25,7 @@ import com.buuz135.industrial.block.resourceproduction.*;
 import com.buuz135.industrial.utils.Reference;
 import com.hrznstudio.titanium.module.Feature;
 import com.hrznstudio.titanium.tab.AdvancedTitaniumTab;
-import net.minecraft.item.ItemStack;
+import net.minecraft.world.item.ItemStack;
 
 import java.util.ArrayList;
 import java.util.List;

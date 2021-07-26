@@ -21,18 +21,18 @@
  */
 package com.buuz135.industrial.api.recipe.ore;
 
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.tags.ITag;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.tags.Tag;
 import net.minecraftforge.fluids.FluidStack;
 
 public class OreFluidEntrySieve {
 
     private final FluidStack input;
     private final ItemStack output;
-    private final ITag<Item> sieveItem;
+    private final Tag<Item> sieveItem;
 
-    public OreFluidEntrySieve(FluidStack input, ItemStack output, ITag<Item> sieveItem) {
+    public OreFluidEntrySieve(FluidStack input, ItemStack output, Tag<Item> sieveItem) {
         this.input = input;
         this.output = output;
         this.sieveItem = sieveItem;
@@ -46,7 +46,7 @@ public class OreFluidEntrySieve {
         return output;
     }
 
-    public ITag<Item> getSieveItem() {
+    public Tag<Item> getSieveItem() {
         return sieveItem;
     }
 }

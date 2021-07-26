@@ -16,10 +16,10 @@ import com.hrznstudio.titanium.component.energy.EnergyStorageComponent;
 import com.hrznstudio.titanium.component.fluid.FluidTankComponent;
 import com.hrznstudio.titanium.component.fluid.SidedFluidTankComponent;
 import com.hrznstudio.titanium.container.addon.IContainerAddon;
-import net.minecraft.item.DyeColor;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.TranslationTextComponent;
+import net.minecraft.world.item.DyeColor;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.capability.IFluidHandler;
 
@@ -60,7 +60,7 @@ public class FermentationStationTile extends IndustrialProcessingTile<Fermentati
                 }
                         .setColor(DyeColor.BROWN)
                         .setTankAction(FluidTankComponent.Action.FILL)
-                        .setValidator(fluidStack -> !isSealed && fluidStack.getFluid().isEquivalentTo(ModuleCore.RAW_ORE_MEAT.getSourceFluid()))
+                        .setValidator(fluidStack -> !isSealed && fluidStack.getFluid().isSame(ModuleCore.RAW_ORE_MEAT.getSourceFluid()))
         );
         addTank(this.output = (SidedFluidTankComponent<FermentationStationTile>) new SidedFluidTankComponent<FermentationStationTile>("output", 32000, 130, 20, 1) {
                     @Override
@@ -80,7 +80,7 @@ public class FermentationStationTile extends IndustrialProcessingTile<Fermentati
                 .setColor(DyeColor.LIME)
                 .setTankType(FluidTankComponent.Type.SMALL)
                 .setTankAction(FluidTankComponent.Action.FILL)
-                .setValidator(fluidStack -> fluidStack.getFluid().isEquivalentTo(ModuleCore.PINK_SLIME.getSourceFluid()) || fluidStack.getFluid().isEquivalentTo(ModuleCore.ETHER.getSourceFluid()))
+                .setValidator(fluidStack -> fluidStack.getFluid().isSame(ModuleCore.PINK_SLIME.getSourceFluid()) || fluidStack.getFluid().isSame(ModuleCore.ETHER.getSourceFluid()))
         );
         this.production = 0;
         this.seal = 0;
@@ -111,11 +111,11 @@ public class FermentationStationTile extends IndustrialProcessingTile<Fermentati
                             }
 
                             @Override
-                            public List<ITextComponent> getTooltipLines() {
+                            public List<Component> getTooltipLines() {
                                 ProductionType type = ProductionType.values()[production];
-                                List<ITextComponent> list = new ArrayList<>(super.getTooltipLines());
-                                list.add(new TranslationTextComponent("text.industrialforegoing.tooltip.fermentation_station.time").appendString(type.getTicks() / 20 + "s"));
-                                list.add(new TranslationTextComponent("text.industrialforegoing.tooltip.fermentation_station.catalyst").appendString(type.getNeededFluid().isEmpty() ? "None" : new TranslationTextComponent(type.getNeededFluid().getTranslationKey()).getString()));
+                                List<Component> list = new ArrayList<>(super.getTooltipLines());
+                                list.add(new TranslatableComponent("text.industrialforegoing.tooltip.fermentation_station.time").append(type.getTicks() / 20 + "s"));
+                                list.add(new TranslatableComponent("text.industrialforegoing.tooltip.fermentation_station.catalyst").append(type.getNeededFluid().isEmpty() ? "None" : new TranslatableComponent(type.getNeededFluid().getTranslationKey()).getString()));
 
                                 return list;
                             }
@@ -146,7 +146,7 @@ public class FermentationStationTile extends IndustrialProcessingTile<Fermentati
     public boolean canIncrease() {
         ProductionType productionType = ProductionType.values()[this.production];
         int multipliedAmount = productionType.amount * this.input.getFluidAmount();
-        return isSealed && this.output.getFluidAmount() + multipliedAmount <= this.output.getCapacity() && (productionType.neededFluid.isEmpty() || (!this.catalyst.isEmpty() && productionType.neededFluid.getFluid().isEquivalentTo(this.catalyst.getFluid().getFluid()) && this.catalyst.getFluidAmount() >= (productionType.neededFluid.getAmount()  * this.input.getFluidAmount() / 100)));
+        return isSealed && this.output.getFluidAmount() + multipliedAmount <= this.output.getCapacity() && (productionType.neededFluid.isEmpty() || (!this.catalyst.isEmpty() && productionType.neededFluid.getFluid().isSame(this.catalyst.getFluid().getFluid()) && this.catalyst.getFluidAmount() >= (productionType.neededFluid.getAmount()  * this.input.getFluidAmount() / 100)));
     }
 
     @Override

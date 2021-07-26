@@ -28,14 +28,16 @@ import com.hrznstudio.titanium.annotation.Save;
 import com.hrznstudio.titanium.component.energy.EnergyStorageComponent;
 import com.hrznstudio.titanium.component.fluid.FluidTankComponent;
 import com.hrznstudio.titanium.component.fluid.SidedFluidTankComponent;
-import net.minecraft.fluid.FluidState;
-import net.minecraft.fluid.Fluids;
-import net.minecraft.item.DyeColor;
-import net.minecraft.util.Direction;
+import net.minecraft.world.level.material.FluidState;
+import net.minecraft.world.level.material.Fluids;
+import net.minecraft.world.item.DyeColor;
+import net.minecraft.core.Direction;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.capability.IFluidHandler;
 
 import javax.annotation.Nonnull;
+
+import com.buuz135.industrial.block.tile.IndustrialWorkingTile.WorkAction;
 
 public class WaterCondensatorTile extends IndustrialWorkingTile<WaterCondensatorTile> {
 
@@ -51,7 +53,7 @@ public class WaterCondensatorTile extends IndustrialWorkingTile<WaterCondensator
                 setColor(DyeColor.BLUE).
                 setComponentHarness(this).
                 setTankAction(FluidTankComponent.Action.DRAIN).
-                setValidator(fluidStack -> fluidStack.getFluid().isEquivalentTo(Fluids.WATER)));
+                setValidator(fluidStack -> fluidStack.getFluid().isSame(Fluids.WATER)));
         this.getMaxProgress = WaterCondensatorConfig.maxProgress;
         this.getPowerPerOperation = WaterCondensatorConfig.powerPerOperation;
     }
@@ -84,9 +86,9 @@ public class WaterCondensatorTile extends IndustrialWorkingTile<WaterCondensator
     private int getWaterSources() {
         int amount = 0;
         for (Direction value : Direction.values()) {
-            if (!world.isAreaLoaded(this.pos.offset(value), this.pos.offset(value))) continue;
-            FluidState fluidState = this.world.getFluidState(this.pos.offset(value));
-            if (fluidState.getFluid().equals(Fluids.WATER) && fluidState.isSource()) {
+            if (!level.hasChunksAt(this.worldPosition.relative(value), this.worldPosition.relative(value))) continue;
+            FluidState fluidState = this.level.getFluidState(this.worldPosition.relative(value));
+            if (fluidState.getType().equals(Fluids.WATER) && fluidState.isSource()) {
                 ++amount;
             }
         }

@@ -24,10 +24,9 @@ package com.buuz135.industrial.block.generator.mycelial;
 import com.buuz135.industrial.plugin.jei.generator.MycelialGeneratorRecipe;
 import com.buuz135.industrial.utils.IndustrialTags;
 import com.hrznstudio.titanium.component.inventory.SidedInventoryComponent;
-import net.minecraft.data.ShapedRecipeBuilder;
-import net.minecraft.item.*;
-import net.minecraft.item.crafting.Ingredient;
-import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.data.recipes.ShapedRecipeBuilder;
+import net.minecraft.world.item.crafting.Ingredient;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraftforge.common.Tags;
 import net.minecraftforge.common.util.INBTSerializable;
 import net.minecraftforge.fluids.FluidStack;
@@ -41,6 +40,12 @@ import java.util.List;
 import java.util.function.BiPredicate;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
+
+import net.minecraft.world.food.FoodProperties;
+import net.minecraft.world.item.DyeColor;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
 
 public class CulinaryGeneratorType implements IMycelialGeneratorType{
 
@@ -57,7 +62,7 @@ public class CulinaryGeneratorType implements IMycelialGeneratorType{
 
     @Override
     public List<BiPredicate<ItemStack, Integer>> getSlotInputPredicates() {
-        return Arrays.asList((stack, slot) -> stack.getItem().isFood());
+        return Arrays.asList((stack, slot) -> stack.getItem().isEdible());
     }
 
     @Override
@@ -66,12 +71,12 @@ public class CulinaryGeneratorType implements IMycelialGeneratorType{
     }
 
     @Override
-    public boolean canStart(INBTSerializable<CompoundNBT>[] inputs) {
+    public boolean canStart(INBTSerializable<CompoundTag>[] inputs) {
         return inputs.length > 0 && inputs[0] instanceof SidedInventoryComponent && ((SidedInventoryComponent<?>) inputs[0]).getStackInSlot(0).getCount() > 0;
     }
 
     @Override
-    public Pair<Integer, Integer> getTimeAndPowerGeneration(INBTSerializable<CompoundNBT>[] inputs) {
+    public Pair<Integer, Integer> getTimeAndPowerGeneration(INBTSerializable<CompoundTag>[] inputs) {
         if (inputs.length > 0 && inputs[0] instanceof SidedInventoryComponent && ((SidedInventoryComponent<?>) inputs[0]).getStackInSlot(0).getCount() > 0){
             ItemStack food = ((SidedInventoryComponent<?>) inputs[0]).getStackInSlot(0).copy();
             ((SidedInventoryComponent<?>) inputs[0]).getStackInSlot(0).shrink(1);
@@ -97,19 +102,19 @@ public class CulinaryGeneratorType implements IMycelialGeneratorType{
 
     @Override
     public List<MycelialGeneratorRecipe> getRecipes() {
-        return ForgeRegistries.ITEMS.getValues().stream().filter(Item::isFood).map(ItemStack::new).map(item -> new MycelialGeneratorRecipe(Collections.singletonList(Collections.singletonList(Ingredient.fromStacks(item))), new ArrayList<>(), calculate(item).getLeft(), calculate(item).getRight())).collect(Collectors.toList());
+        return ForgeRegistries.ITEMS.getValues().stream().filter(Item::isEdible).map(ItemStack::new).map(item -> new MycelialGeneratorRecipe(Collections.singletonList(Collections.singletonList(Ingredient.of(item))), new ArrayList<>(), calculate(item).getLeft(), calculate(item).getRight())).collect(Collectors.toList());
     }
 
     private Pair<Integer,Integer> calculate(ItemStack stack){
-        Food food = stack.getItem().getFood();
-        return Pair.of(food.getHealing() * 160,  (int) (food.getSaturation() * 80));
+        FoodProperties food = stack.getItem().getFoodProperties();
+        return Pair.of(food.getNutrition() * 160,  (int) (food.getSaturationModifier() * 80));
     }
 
     @Override
     public ShapedRecipeBuilder addIngredients(ShapedRecipeBuilder recipeBuilder) {
-        recipeBuilder = recipeBuilder.key('B', Tags.Items.CROPS)
-                .key('C', Items.COOKED_BEEF)
-                .key('M', IndustrialTags.Items.MACHINE_FRAME_SIMPLE);
+        recipeBuilder = recipeBuilder.define('B', Tags.Items.CROPS)
+                .define('C', Items.COOKED_BEEF)
+                .define('M', IndustrialTags.Items.MACHINE_FRAME_SIMPLE);
         return recipeBuilder;
     }
 }

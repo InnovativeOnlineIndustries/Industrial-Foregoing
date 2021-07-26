@@ -36,10 +36,10 @@ import com.hrznstudio.titanium.component.bundle.TankInteractionBundle;
 import com.hrznstudio.titanium.component.button.RedstoneControlButtonComponent;
 import com.hrznstudio.titanium.component.fluid.FluidTankComponent;
 import com.hrznstudio.titanium.item.AugmentWrapper;
-import net.minecraft.block.Block;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.Direction;
-import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.core.Direction;
+import net.minecraft.core.BlockPos;
 import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
 
 public abstract class IndustrialMachineTile<T extends IndustrialMachineTile<T>> extends MachineTile<T> implements IRedstoneReader {
@@ -86,11 +86,11 @@ public abstract class IndustrialMachineTile<T extends IndustrialMachineTile<T>> 
     public IRedstoneState getEnvironmentValue(boolean strongPower, Direction direction) {
         if (strongPower) {
             if (direction == null) {
-                return this.world.isBlockPowered(this.pos) ? RedstoneState.ON : RedstoneState.OFF;
+                return this.level.hasNeighborSignal(this.worldPosition) ? RedstoneState.ON : RedstoneState.OFF;
             }
-            return this.world.isSidePowered(this.pos, direction) ? RedstoneState.ON : RedstoneState.OFF;
+            return this.level.hasSignal(this.worldPosition, direction) ? RedstoneState.ON : RedstoneState.OFF;
         } else {
-            return this.world.getRedstonePowerFromNeighbors(this.pos) > 0 ? RedstoneState.ON : RedstoneState.OFF;
+            return this.level.getBestNeighborSignal(this.worldPosition) > 0 ? RedstoneState.ON : RedstoneState.OFF;
         }
     }
 

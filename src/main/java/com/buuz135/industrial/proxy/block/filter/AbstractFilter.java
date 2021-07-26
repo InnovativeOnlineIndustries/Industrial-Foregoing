@@ -21,7 +21,7 @@
  */
 package com.buuz135.industrial.proxy.block.filter;
 
-import net.minecraft.entity.Entity;
+import net.minecraft.world.entity.Entity;
 
 public abstract class AbstractFilter<T extends Entity> implements IFilter<T> {
 

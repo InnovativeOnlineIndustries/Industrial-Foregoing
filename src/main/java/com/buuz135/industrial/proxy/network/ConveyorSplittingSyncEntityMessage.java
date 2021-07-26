@@ -26,9 +26,9 @@ import com.buuz135.industrial.block.transportstorage.conveyor.ConveyorSplittingU
 import com.buuz135.industrial.block.transportstorage.tile.ConveyorTile;
 import com.hrznstudio.titanium.network.Message;
 import net.minecraft.client.Minecraft;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.Direction;
-import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.core.Direction;
+import net.minecraft.core.BlockPos;
 import net.minecraftforge.fml.network.NetworkEvent;
 
 public class ConveyorSplittingSyncEntityMessage extends Message {
@@ -40,7 +40,7 @@ public class ConveyorSplittingSyncEntityMessage extends Message {
     public ConveyorSplittingSyncEntityMessage(BlockPos pos, int entityID, Direction facingCurrent) {
         this.pos = pos;
         this.entityID = entityID;
-        this.facingCurrent = facingCurrent.getString();
+        this.facingCurrent = facingCurrent.getSerializedName();
     }
 
     public ConveyorSplittingSyncEntityMessage() {
@@ -49,7 +49,7 @@ public class ConveyorSplittingSyncEntityMessage extends Message {
     @Override
     protected void handleMessage(NetworkEvent.Context context) {
         context.enqueueWork(() -> {
-            TileEntity entity = Minecraft.getInstance().player.world.getTileEntity(pos);
+            BlockEntity entity = Minecraft.getInstance().player.level.getBlockEntity(pos);
             Direction facingDirection = Direction.byName(facingCurrent);
             if (entity instanceof ConveyorTile) {
                 if (((ConveyorTile) entity).hasUpgrade(facingDirection)) {

@@ -34,12 +34,12 @@ import com.hrznstudio.titanium.component.energy.EnergyStorageComponent;
 import com.hrznstudio.titanium.component.inventory.SidedInventoryComponent;
 import com.hrznstudio.titanium.component.progress.ProgressBarComponent;
 import com.hrznstudio.titanium.util.FacingUtil;
-import net.minecraft.item.DyeColor;
-import net.minecraft.item.DyeItem;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.StringTextComponent;
-import net.minecraft.util.text.TextFormatting;
+import net.minecraft.world.item.DyeColor;
+import net.minecraft.world.item.DyeItem;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.TextComponent;
+import net.minecraft.ChatFormatting;
 import net.minecraftforge.common.Tags;
 import net.minecraftforge.items.ItemHandlerHelper;
 
@@ -92,19 +92,19 @@ public class DyeMixerTile extends IndustrialProcessingTile<DyeMixerTile> {
         super(ModuleResourceProduction.DYE_MIXER, 96, 40);
         addInventory(this.inputRed = (SidedInventoryComponent<DyeMixerTile>) new SidedInventoryComponent<DyeMixerTile>("input_red", 33, 21, 1, 0)
                 .setColor(DyeColor.RED)
-                .setInputFilter((stack, integer) -> stack.getItem().isIn(Tags.Items.DYES_RED))
+                .setInputFilter((stack, integer) -> stack.getItem().is(Tags.Items.DYES_RED))
                 .setOutputFilter((stack, integer) -> false)
                 .setComponentHarness(this)
         );
         addInventory(this.inputGreen = (SidedInventoryComponent<DyeMixerTile>) new SidedInventoryComponent<DyeMixerTile>("input_green", 33, 22 + 18, 1, 1)
                 .setColor(DyeColor.GREEN)
-                .setInputFilter((stack, integer) -> stack.getItem().isIn(Tags.Items.DYES_GREEN))
+                .setInputFilter((stack, integer) -> stack.getItem().is(Tags.Items.DYES_GREEN))
                 .setOutputFilter((stack, integer) -> false)
                 .setComponentHarness(this)
         );
         addInventory(this.inputBlue = (SidedInventoryComponent<DyeMixerTile>) new SidedInventoryComponent<DyeMixerTile>("input_blue", 33, 23 + 18 * 2, 1, 2)
                 .setColor(DyeColor.BLUE)
-                .setInputFilter((stack, integer) -> stack.getItem().isIn(Tags.Items.DYES_BLUE))
+                .setInputFilter((stack, integer) -> stack.getItem().is(Tags.Items.DYES_BLUE))
                 .setOutputFilter((stack, integer) -> false)
                 .setComponentHarness(this)
         );
@@ -113,8 +113,8 @@ public class DyeMixerTile extends IndustrialProcessingTile<DyeMixerTile> {
             public List<IFactory<? extends IScreenAddon>> getScreenAddons() {
                 return Collections.singletonList(() -> new ProgressBarScreenAddon<DyeMixerTile>(red.getPosX(), red.getPosY(), this) {
                     @Override
-                    public List<ITextComponent> getTooltipLines() {
-                        return Arrays.asList(new StringTextComponent(TextFormatting.GOLD + "Amount: " + TextFormatting.WHITE + NumberFormat.getNumberInstance(Locale.ROOT).format(red.getProgress()) + TextFormatting.GOLD + "/" + TextFormatting.WHITE + NumberFormat.getNumberInstance(Locale.ROOT).format(red.getMaxProgress())));
+                    public List<Component> getTooltipLines() {
+                        return Arrays.asList(new TextComponent(ChatFormatting.GOLD + "Amount: " + ChatFormatting.WHITE + NumberFormat.getNumberInstance(Locale.ROOT).format(red.getProgress()) + ChatFormatting.GOLD + "/" + ChatFormatting.WHITE + NumberFormat.getNumberInstance(Locale.ROOT).format(red.getMaxProgress())));
                     }
                 });
             }
@@ -127,8 +127,8 @@ public class DyeMixerTile extends IndustrialProcessingTile<DyeMixerTile> {
             public List<IFactory<? extends IScreenAddon>> getScreenAddons() {
                 return Collections.singletonList(() -> new ProgressBarScreenAddon<DyeMixerTile>(blue.getPosX(), blue.getPosY(), this) {
                     @Override
-                    public List<ITextComponent> getTooltipLines() {
-                        return Arrays.asList(new StringTextComponent(TextFormatting.GOLD + "Amount: " + TextFormatting.WHITE + NumberFormat.getNumberInstance(Locale.ROOT).format(blue.getProgress()) + TextFormatting.GOLD + "/" + TextFormatting.WHITE + NumberFormat.getNumberInstance(Locale.ROOT).format(blue.getMaxProgress())));
+                    public List<Component> getTooltipLines() {
+                        return Arrays.asList(new TextComponent(ChatFormatting.GOLD + "Amount: " + ChatFormatting.WHITE + NumberFormat.getNumberInstance(Locale.ROOT).format(blue.getProgress()) + ChatFormatting.GOLD + "/" + ChatFormatting.WHITE + NumberFormat.getNumberInstance(Locale.ROOT).format(blue.getMaxProgress())));
                     }
                 });
             }
@@ -141,8 +141,8 @@ public class DyeMixerTile extends IndustrialProcessingTile<DyeMixerTile> {
             public List<IFactory<? extends IScreenAddon>> getScreenAddons() {
                 return Collections.singletonList(() -> new ProgressBarScreenAddon<DyeMixerTile>(green.getPosX(), green.getPosY(), this) {
                     @Override
-                    public List<ITextComponent> getTooltipLines() {
-                        return Arrays.asList(new StringTextComponent(TextFormatting.GOLD + "Amount: " + TextFormatting.WHITE + NumberFormat.getNumberInstance(Locale.ROOT).format(green.getProgress()) + TextFormatting.GOLD + "/" + TextFormatting.WHITE + NumberFormat.getNumberInstance(Locale.ROOT).format(green.getMaxProgress())));
+                    public List<Component> getTooltipLines() {
+                        return Arrays.asList(new TextComponent(ChatFormatting.GOLD + "Amount: " + ChatFormatting.WHITE + NumberFormat.getNumberInstance(Locale.ROOT).format(green.getProgress()) + ChatFormatting.GOLD + "/" + ChatFormatting.WHITE + NumberFormat.getNumberInstance(Locale.ROOT).format(green.getMaxProgress())));
                     }
                 });
             }
@@ -171,7 +171,7 @@ public class DyeMixerTile extends IndustrialProcessingTile<DyeMixerTile> {
         addGuiAddonFactory(() -> new ItemGuiAddon(133, 20) {
             @Override
             public ItemStack getItemStack() {
-                return new ItemStack(DyeItem.getItem(DyeColor.byId(dye)));
+                return new ItemStack(DyeItem.byColor(DyeColor.byId(dye)));
             }
         });
         this.getPowerPerTick = DyeMixerConfig.powerPerTick;
@@ -183,7 +183,7 @@ public class DyeMixerTile extends IndustrialProcessingTile<DyeMixerTile> {
         increaseBar(inputGreen.getStackInSlot(0), green);
         increaseBar(inputBlue.getStackInSlot(0), blue);
         ColorUsage color = colorUsages[dye];
-        ItemStack dye = new ItemStack(DyeItem.getItem(DyeColor.byId(this.dye)));
+        ItemStack dye = new ItemStack(DyeItem.byColor(DyeColor.byId(this.dye)));
         return red.getProgress() >= color.r && green.getProgress() >= color.g && blue.getProgress() >= color.b && ItemHandlerHelper.insertItem(output, dye, true).isEmpty();
     }
 
@@ -198,7 +198,7 @@ public class DyeMixerTile extends IndustrialProcessingTile<DyeMixerTile> {
     @Override
     public Runnable onFinish() {
         return () -> {
-            ItemStack dye = new ItemStack(DyeItem.getItem(DyeColor.byId(this.dye)));
+            ItemStack dye = new ItemStack(DyeItem.byColor(DyeColor.byId(this.dye)));
             if (ItemHandlerHelper.insertItem(output, dye, true).isEmpty()) {
                 ColorUsage color = colorUsages[this.dye];
                 red.setProgress(red.getProgress() - color.r);

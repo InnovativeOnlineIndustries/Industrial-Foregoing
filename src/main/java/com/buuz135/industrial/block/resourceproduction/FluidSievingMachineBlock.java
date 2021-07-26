@@ -8,10 +8,10 @@ import com.buuz135.industrial.utils.IndustrialTags;
 import com.hrznstudio.titanium.api.IFactory;
 import com.hrznstudio.titanium.block.RotatableBlock;
 import com.hrznstudio.titanium.recipe.generator.TitaniumShapedRecipeBuilder;
-import net.minecraft.block.AbstractBlock;
-import net.minecraft.block.Blocks;
-import net.minecraft.data.IFinishedRecipe;
-import net.minecraft.item.Items;
+import net.minecraft.world.level.block.state.BlockBehaviour;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.data.recipes.FinishedRecipe;
+import net.minecraft.world.item.Items;
 
 import javax.annotation.Nonnull;
 import java.util.function.Consumer;
@@ -19,7 +19,7 @@ import java.util.function.Consumer;
 public class FluidSievingMachineBlock extends IndustrialBlock<FluidSievingMachineTile> {
 
     public FluidSievingMachineBlock() {
-        super("fluid_sieving_machine", AbstractBlock.Properties.from(Blocks.IRON_BLOCK), FluidSievingMachineTile.class, ModuleResourceProduction.TAB_RESOURCE);
+        super("fluid_sieving_machine", BlockBehaviour.Properties.copy(Blocks.IRON_BLOCK), FluidSievingMachineTile.class, ModuleResourceProduction.TAB_RESOURCE);
     }
 
     @Override
@@ -34,14 +34,14 @@ public class FluidSievingMachineBlock extends IndustrialBlock<FluidSievingMachin
     }
 
     @Override
-    public void registerRecipe(Consumer<IFinishedRecipe> consumer) {
-        TitaniumShapedRecipeBuilder.shapedRecipe(this).patternLine("pcp").patternLine("ggg").patternLine("aba")
-                .key('p', IndustrialTags.Items.PLASTIC)
-                .key('c', ModuleCore.PINK_SLIME_ITEM)
-                .key('g', Items.IRON_BARS)
-                .key('b', IndustrialTags.Items.MACHINE_FRAME_ADVANCED)
-                .key('a', IndustrialTags.Items.GEAR_GOLD)
-                .build(consumer);
+    public void registerRecipe(Consumer<FinishedRecipe> consumer) {
+        TitaniumShapedRecipeBuilder.shapedRecipe(this).pattern("pcp").pattern("ggg").pattern("aba")
+                .define('p', IndustrialTags.Items.PLASTIC)
+                .define('c', ModuleCore.PINK_SLIME_ITEM)
+                .define('g', Items.IRON_BARS)
+                .define('b', IndustrialTags.Items.MACHINE_FRAME_ADVANCED)
+                .define('a', IndustrialTags.Items.GEAR_GOLD)
+                .save(consumer);
     }
 
 }

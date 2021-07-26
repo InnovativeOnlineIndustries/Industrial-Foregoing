@@ -26,13 +26,13 @@ import com.buuz135.industrial.plugin.jei.generator.MycelialGeneratorRecipe;
 import com.buuz135.industrial.utils.IndustrialTags;
 import com.hrznstudio.titanium.component.fluid.SidedFluidTankComponent;
 import com.hrznstudio.titanium.component.inventory.SidedInventoryComponent;
-import net.minecraft.data.ShapedRecipeBuilder;
-import net.minecraft.item.DyeColor;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.Items;
-import net.minecraft.item.crafting.Ingredient;
-import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.data.recipes.ShapedRecipeBuilder;
+import net.minecraft.world.item.DyeColor;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
+import net.minecraft.world.item.crafting.Ingredient;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraftforge.common.Tags;
 import net.minecraftforge.common.util.INBTSerializable;
 import net.minecraftforge.fluids.FluidStack;
@@ -60,21 +60,21 @@ public class MeatallurgicGeneratorType implements IMycelialGeneratorType{
 
     @Override
     public List<BiPredicate<ItemStack, Integer>> getSlotInputPredicates() {
-        return Arrays.asList(null, (stack, slot) -> stack.getItem().isIn(Tags.Items.INGOTS));
+        return Arrays.asList(null, (stack, slot) -> stack.getItem().is(Tags.Items.INGOTS));
     }
 
     @Override
     public List<Predicate<FluidStack>> getTankInputPredicates() {
-        return Arrays.asList(fluidStack -> fluidStack.getFluid().isEquivalentTo(ModuleCore.MEAT.getSourceFluid()), null);
+        return Arrays.asList(fluidStack -> fluidStack.getFluid().isSame(ModuleCore.MEAT.getSourceFluid()), null);
     }
 
     @Override
-    public boolean canStart(INBTSerializable<CompoundNBT>[] inputs) {
+    public boolean canStart(INBTSerializable<CompoundTag>[] inputs) {
         return inputs.length >= 2 && inputs[0] instanceof SidedFluidTankComponent && inputs[1] instanceof SidedInventoryComponent && ((SidedFluidTankComponent<?>) inputs[0]).getFluidAmount() >= 250 && ((SidedInventoryComponent<?>) inputs[1]).getStackInSlot(0).getCount() > 0;
     }
 
     @Override
-    public Pair<Integer, Integer> getTimeAndPowerGeneration(INBTSerializable<CompoundNBT>[] inputs) {
+    public Pair<Integer, Integer> getTimeAndPowerGeneration(INBTSerializable<CompoundTag>[] inputs) {
         if (inputs.length >= 2 && inputs[0] instanceof SidedFluidTankComponent && inputs[1] instanceof SidedInventoryComponent){
             if (((SidedFluidTankComponent<?>) inputs[0]).getFluidAmount() >= 250 && ((SidedInventoryComponent<?>) inputs[1]).getStackInSlot(0).getCount() > 0){
                 ((SidedFluidTankComponent<?>) inputs[0]).drainForced(250, IFluidHandler.FluidAction.EXECUTE);
@@ -102,14 +102,14 @@ public class MeatallurgicGeneratorType implements IMycelialGeneratorType{
 
     @Override
     public List<MycelialGeneratorRecipe> getRecipes() {
-        return Collections.singletonList(new MycelialGeneratorRecipe(Arrays.asList(new ArrayList<>(), Collections.singletonList(Ingredient.fromTag(Tags.Items.INGOTS))), Arrays.asList(Collections.singletonList(new FluidStack(ModuleCore.MEAT.getSourceFluid(), 250)), Collections.emptyList()), 20*20, 100));
+        return Collections.singletonList(new MycelialGeneratorRecipe(Arrays.asList(new ArrayList<>(), Collections.singletonList(Ingredient.of(Tags.Items.INGOTS))), Arrays.asList(Collections.singletonList(new FluidStack(ModuleCore.MEAT.getSourceFluid(), 250)), Collections.emptyList()), 20*20, 100));
     }
 
     @Override
     public ShapedRecipeBuilder addIngredients(ShapedRecipeBuilder recipeBuilder) {
-        recipeBuilder = recipeBuilder.key('B', Tags.Items.INGOTS)
-                .key('C', ModuleCore.MEAT.getBucketFluid())
-                .key('M', IndustrialTags.Items.MACHINE_FRAME_SUPREME);
+        recipeBuilder = recipeBuilder.define('B', Tags.Items.INGOTS)
+                .define('C', ModuleCore.MEAT.getBucketFluid())
+                .define('M', IndustrialTags.Items.MACHINE_FRAME_SUPREME);
         return recipeBuilder;
     }
 }

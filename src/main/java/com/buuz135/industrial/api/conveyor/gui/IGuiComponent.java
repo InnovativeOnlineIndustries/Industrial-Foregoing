@@ -21,9 +21,9 @@
  */
 package com.buuz135.industrial.api.conveyor.gui;
 
-import com.mojang.blaze3d.matrix.MatrixStack;
-import net.minecraft.client.gui.screen.inventory.ContainerScreen;
-import net.minecraft.util.text.ITextComponent;
+import com.mojang.blaze3d.vertex.PoseStack;
+import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
+import net.minecraft.network.chat.Component;
 
 import javax.annotation.Nullable;
 import java.util.List;
@@ -38,20 +38,20 @@ public interface IGuiComponent {
 
     int getYSize();
 
-    boolean handleClick(ContainerScreen conveyor, int guiX, int guiY, double mouseX, double mouseY);
+    boolean handleClick(AbstractContainerScreen conveyor, int guiX, int guiY, double mouseX, double mouseY);
 
-    void drawGuiBackgroundLayer(MatrixStack stack, int guiX, int guiY, double mouseX, double mouseY);
+    void drawGuiBackgroundLayer(PoseStack stack, int guiX, int guiY, double mouseX, double mouseY);
 
-    void drawGuiForegroundLayer(MatrixStack stack, int guiX, int guiY, double mouseX, double mouseY);
+    void drawGuiForegroundLayer(PoseStack stack, int guiX, int guiY, double mouseX, double mouseY);
 
     default boolean isInside(double mouseX, double mouseY) {
         return mouseX > getXPos() && mouseX < getXPos() + getXSize() && mouseY > getYPos() && mouseY < getYPos() + getYSize();
     }
 
-    default boolean onScrolled(ContainerScreen conveyor, int guiX, int guiY, double mouseX, double mouseY, double delta) {
+    default boolean onScrolled(AbstractContainerScreen conveyor, int guiX, int guiY, double mouseX, double mouseY, double delta) {
         return false;
     }
 
     @Nullable
-    List<ITextComponent> getTooltip(int guiX, int guiY, double mouseX, double mouseY);
+    List<Component> getTooltip(int guiX, int guiY, double mouseX, double mouseY);
 }

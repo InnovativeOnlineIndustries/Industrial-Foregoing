@@ -24,14 +24,14 @@ package com.buuz135.industrial.block.generator.mycelial;
 import com.buuz135.industrial.plugin.jei.generator.MycelialGeneratorRecipe;
 import com.buuz135.industrial.utils.IndustrialTags;
 import com.hrznstudio.titanium.component.inventory.SidedInventoryComponent;
-import net.minecraft.block.Blocks;
-import net.minecraft.data.ShapedRecipeBuilder;
-import net.minecraft.item.DyeColor;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.Items;
-import net.minecraft.item.crafting.Ingredient;
-import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.data.recipes.ShapedRecipeBuilder;
+import net.minecraft.world.item.DyeColor;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
+import net.minecraft.world.item.crafting.Ingredient;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraftforge.common.Tags;
 import net.minecraftforge.common.util.INBTSerializable;
 import net.minecraftforge.fluids.FluidStack;
@@ -68,12 +68,12 @@ public class PinkGeneratorType implements IMycelialGeneratorType{
     }
 
     @Override
-    public boolean canStart(INBTSerializable<CompoundNBT>[] inputs) {
+    public boolean canStart(INBTSerializable<CompoundTag>[] inputs) {
         return inputs.length > 0 && inputs[0] instanceof SidedInventoryComponent && ((SidedInventoryComponent<?>) inputs[0]).getStackInSlot(0).getCount() > 0;
     }
 
     @Override
-    public Pair<Integer, Integer> getTimeAndPowerGeneration(INBTSerializable<CompoundNBT>[] inputs) {
+    public Pair<Integer, Integer> getTimeAndPowerGeneration(INBTSerializable<CompoundTag>[] inputs) {
         if (inputs.length > 0 && inputs[0] instanceof SidedInventoryComponent && ((SidedInventoryComponent<?>) inputs[0]).getStackInSlot(0).getCount() > 0){
             ItemStack stack = ((SidedInventoryComponent<?>) inputs[0]).getStackInSlot(0).copy();
             ((SidedInventoryComponent<?>) inputs[0]).getStackInSlot(0).shrink(1);
@@ -99,7 +99,7 @@ public class PinkGeneratorType implements IMycelialGeneratorType{
 
     @Override
     public List<MycelialGeneratorRecipe> getRecipes() {
-        return ForgeRegistries.ITEMS.getValues().stream().map(ItemStack::new).filter(stack -> stack.getItem().getRegistryName().getPath().contains("pink")).map(item -> new MycelialGeneratorRecipe(Collections.singletonList(Collections.singletonList(Ingredient.fromStacks(item))), new ArrayList<>(), 69, 135)).collect(Collectors.toList());
+        return ForgeRegistries.ITEMS.getValues().stream().map(ItemStack::new).filter(stack -> stack.getItem().getRegistryName().getPath().contains("pink")).map(item -> new MycelialGeneratorRecipe(Collections.singletonList(Collections.singletonList(Ingredient.of(item))), new ArrayList<>(), 69, 135)).collect(Collectors.toList());
     }
 
     private Pair<Integer, Integer> calculate(ItemStack stack){
@@ -108,9 +108,9 @@ public class PinkGeneratorType implements IMycelialGeneratorType{
 
     @Override
     public ShapedRecipeBuilder addIngredients(ShapedRecipeBuilder recipeBuilder) {
-        recipeBuilder = recipeBuilder.key('B', Tags.Items.DYES_PINK)
-                .key('C', Blocks.PINK_WOOL)
-                .key('M', IndustrialTags.Items.MACHINE_FRAME_SIMPLE);
+        recipeBuilder = recipeBuilder.define('B', Tags.Items.DYES_PINK)
+                .define('C', Blocks.PINK_WOOL)
+                .define('M', IndustrialTags.Items.MACHINE_FRAME_SIMPLE);
         return recipeBuilder;
     }
 

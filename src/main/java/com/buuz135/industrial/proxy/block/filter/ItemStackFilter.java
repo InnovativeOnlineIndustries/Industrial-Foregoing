@@ -22,11 +22,11 @@
 package com.buuz135.industrial.proxy.block.filter;
 
 import com.buuz135.industrial.module.ModuleTool;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.item.ItemEntity;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.item.ItemEntity;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidUtil;
 
@@ -49,7 +49,7 @@ public class ItemStackFilter extends AbstractFilter<Entity> {
         }
         if (isEmpty) return false;
         for (GhostSlot stack : this.getFilter()) {
-            if (entity instanceof ItemEntity && stack.getStack().isItemEqual(((ItemEntity) entity).getItem()))
+            if (entity instanceof ItemEntity && stack.getStack().sameItem(((ItemEntity) entity).getItem()))
                 return true;
             if (entity instanceof LivingEntity && stack.getStack().getItem().equals(ModuleTool.MOB_IMPRISONMENT_TOOL) && ModuleTool.MOB_IMPRISONMENT_TOOL.containsEntity(stack.getStack())
                     && entity.getType().getRegistryName().toString().equalsIgnoreCase(ModuleTool.MOB_IMPRISONMENT_TOOL.getID(stack.getStack()))) {
@@ -67,7 +67,7 @@ public class ItemStackFilter extends AbstractFilter<Entity> {
         }
         if (isEmpty) return false;
         for (GhostSlot stack : this.getFilter()) {
-            if (itemStack.isItemEqual(stack.getStack())) return true;
+            if (itemStack.sameItem(stack.getStack())) return true;
         }
         return false;
     }
@@ -92,8 +92,8 @@ public class ItemStackFilter extends AbstractFilter<Entity> {
     }
 
     @Override
-    public CompoundNBT serializeNBT() {
-        CompoundNBT compound = new CompoundNBT();
+    public CompoundTag serializeNBT() {
+        CompoundTag compound = new CompoundTag();
         for (int i = 0; i < this.getFilter().length; i++) {
             if (!this.getFilter()[i].getStack().isEmpty())
                 compound.put(String.valueOf(i), this.getFilter()[i].getStack().serializeNBT());
@@ -102,10 +102,10 @@ public class ItemStackFilter extends AbstractFilter<Entity> {
     }
 
     @Override
-    public void deserializeNBT(CompoundNBT nbt) {
+    public void deserializeNBT(CompoundTag nbt) {
         for (int i = 0; i < this.getFilter().length; i++) {
             if (nbt.contains(String.valueOf(i))) {
-                this.getFilter()[i].setStack(ItemStack.read(nbt.getCompound(String.valueOf(i))));
+                this.getFilter()[i].setStack(ItemStack.of(nbt.getCompound(String.valueOf(i))));
             } else this.getFilter()[i].setStack(ItemStack.EMPTY);
         }
     }

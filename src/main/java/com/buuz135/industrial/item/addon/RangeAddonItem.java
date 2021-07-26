@@ -26,24 +26,27 @@ import com.buuz135.industrial.module.ModuleCore;
 import com.buuz135.industrial.recipe.DissolutionChamberRecipe;
 import com.hrznstudio.titanium.api.augment.IAugmentType;
 import com.hrznstudio.titanium.item.AugmentWrapper;
-import net.minecraft.data.IFinishedRecipe;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemGroup;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.Items;
-import net.minecraft.item.crafting.Ingredient;
-import net.minecraft.util.NonNullList;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.StringTextComponent;
-import net.minecraft.util.text.TextFormatting;
-import net.minecraft.util.text.TranslationTextComponent;
-import net.minecraft.world.World;
+import net.minecraft.data.recipes.FinishedRecipe;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.CreativeModeTab;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
+import net.minecraft.world.item.crafting.Ingredient;
+import net.minecraft.core.NonNullList;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.TextComponent;
+import net.minecraft.ChatFormatting;
+import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.world.level.Level;
 import net.minecraftforge.fluids.FluidStack;
 
 import javax.annotation.Nullable;
 import java.util.List;
 import java.util.function.Consumer;
+
+import com.hrznstudio.titanium.item.BasicItem.Key;
+import net.minecraft.world.item.Item.Properties;
 
 public class RangeAddonItem extends IFCustomItem {
 
@@ -53,25 +56,25 @@ public class RangeAddonItem extends IFCustomItem {
 
     private int tier;
 
-    public RangeAddonItem(int tier, ItemGroup group) {
-        super("range_addon" + tier, group, new Properties().maxStackSize(16));
+    public RangeAddonItem(int tier, CreativeModeTab group) {
+        super("range_addon" + tier, group, new Properties().stacksTo(16));
         this.tier = tier;
     }
 
     @Override
-    public void onCreated(ItemStack stack, World worldIn, PlayerEntity playerIn) {
-        super.onCreated(stack, worldIn, playerIn);
+    public void onCraftedBy(ItemStack stack, Level worldIn, Player playerIn) {
+        super.onCraftedBy(stack, worldIn, playerIn);
         AugmentWrapper.setType(stack, RANGE, tier);
     }
 
     @Override
-    public String getTranslationKey() {
-        return new TranslationTextComponent("item.industrialforegoing.addon").getString() + new TranslationTextComponent("item.industrialforegoing.range_addon").getString() + "Tier " + (tier + 1) + " ";
+    public String getDescriptionId() {
+        return new TranslatableComponent("item.industrialforegoing.addon").getString() + new TranslatableComponent("item.industrialforegoing.range_addon").getString() + "Tier " + (tier + 1) + " ";
     }
 
     @Override
-    public void addTooltipDetails(@Nullable Key key, ItemStack stack, List<ITextComponent> tooltip, boolean advanced) {
-        tooltip.add(new StringTextComponent(TextFormatting.GRAY + new TranslationTextComponent("text.industrialforegoing.extra_range").getString() + "+" + (tier + 1)));
+    public void addTooltipDetails(@Nullable Key key, ItemStack stack, List<Component> tooltip, boolean advanced) {
+        tooltip.add(new TextComponent(ChatFormatting.GRAY + new TranslatableComponent("text.industrialforegoing.extra_range").getString() + "+" + (tier + 1)));
     }
 
     @Override
@@ -80,22 +83,22 @@ public class RangeAddonItem extends IFCustomItem {
     }
 
     @Override
-    public void registerRecipe(Consumer<IFinishedRecipe> consumer) {
-        new DissolutionChamberRecipe(getRegistryName(), new Ingredient.IItemList[]{
-                new Ingredient.SingleItemList(new ItemStack(Items.REDSTONE)),
-                new Ingredient.SingleItemList(new ItemStack(Items.REDSTONE)),
-                new Ingredient.SingleItemList(new ItemStack(Items.GLASS_PANE)),
-                new Ingredient.SingleItemList(new ItemStack(Items.GLASS_PANE)),
-                new Ingredient.SingleItemList(new ItemStack(MATERIALS[tier])),
-                new Ingredient.SingleItemList(new ItemStack(MATERIALS[tier])),
-                new Ingredient.SingleItemList(new ItemStack(MATERIALS[tier])),
-                new Ingredient.SingleItemList(new ItemStack(MATERIALS[tier]))
+    public void registerRecipe(Consumer<FinishedRecipe> consumer) {
+        new DissolutionChamberRecipe(getRegistryName(), new Ingredient.Value[]{
+                new Ingredient.ItemValue(new ItemStack(Items.REDSTONE)),
+                new Ingredient.ItemValue(new ItemStack(Items.REDSTONE)),
+                new Ingredient.ItemValue(new ItemStack(Items.GLASS_PANE)),
+                new Ingredient.ItemValue(new ItemStack(Items.GLASS_PANE)),
+                new Ingredient.ItemValue(new ItemStack(MATERIALS[tier])),
+                new Ingredient.ItemValue(new ItemStack(MATERIALS[tier])),
+                new Ingredient.ItemValue(new ItemStack(MATERIALS[tier])),
+                new Ingredient.ItemValue(new ItemStack(MATERIALS[tier]))
         }, new FluidStack(ModuleCore.LATEX.getSourceFluid(), 1000), 200, new ItemStack(this), FluidStack.EMPTY);
     }
 
     @Override
-    public void fillItemGroup(ItemGroup group, NonNullList<ItemStack> items) {
-        if (isInGroup(group)) {
+    public void fillItemCategory(CreativeModeTab group, NonNullList<ItemStack> items) {
+        if (allowdedIn(group)) {
             ItemStack stack = new ItemStack(this);
             AugmentWrapper.setType(stack, RANGE, tier);
             items.add(stack);

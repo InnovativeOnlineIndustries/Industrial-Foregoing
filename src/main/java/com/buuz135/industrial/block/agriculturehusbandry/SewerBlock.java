@@ -27,18 +27,21 @@ import com.buuz135.industrial.module.ModuleAgricultureHusbandry;
 import com.buuz135.industrial.utils.IndustrialTags;
 import com.hrznstudio.titanium.api.IFactory;
 import com.hrznstudio.titanium.recipe.generator.TitaniumShapedRecipeBuilder;
-import net.minecraft.block.Blocks;
-import net.minecraft.data.IFinishedRecipe;
-import net.minecraft.item.Items;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.data.recipes.FinishedRecipe;
+import net.minecraft.world.item.Items;
 import net.minecraft.tags.ItemTags;
 
 import javax.annotation.Nonnull;
 import java.util.function.Consumer;
 
+import com.hrznstudio.titanium.block.RotatableBlock.RotationType;
+import net.minecraft.world.level.block.state.BlockBehaviour.Properties;
+
 public class SewerBlock extends IndustrialBlock<SewerTile> {
 
     public SewerBlock() {
-        super("sewer", Properties.from(Blocks.IRON_BLOCK), SewerTile.class, ModuleAgricultureHusbandry.TAB_AG_HUS);
+        super("sewer", Properties.copy(Blocks.IRON_BLOCK), SewerTile.class, ModuleAgricultureHusbandry.TAB_AG_HUS);
     }
 
     @Nonnull
@@ -53,14 +56,14 @@ public class SewerBlock extends IndustrialBlock<SewerTile> {
     }
 
     @Override
-    public void registerRecipe(Consumer<IFinishedRecipe> consumer) {
+    public void registerRecipe(Consumer<FinishedRecipe> consumer) {
         TitaniumShapedRecipeBuilder.shapedRecipe(this)
-                .patternLine("PEP").patternLine("BMB").patternLine("BGB")
-                .key('P', IndustrialTags.Items.PLASTIC)
-                .key('E', Items.BUCKET)
-                .key('B', Items.BRICK)
-                .key('M', IndustrialTags.Items.MACHINE_FRAME_PITY)
-                .key('G', ItemTags.makeWrapperTag("forge:gears/iron"))
-                .build(consumer);
+                .pattern("PEP").pattern("BMB").pattern("BGB")
+                .define('P', IndustrialTags.Items.PLASTIC)
+                .define('E', Items.BUCKET)
+                .define('B', Items.BRICK)
+                .define('M', IndustrialTags.Items.MACHINE_FRAME_PITY)
+                .define('G', ItemTags.bind("forge:gears/iron"))
+                .save(consumer);
     }
 }

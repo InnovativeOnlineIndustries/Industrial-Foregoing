@@ -25,15 +25,15 @@ import com.hrznstudio.titanium.api.client.AssetTypes;
 import com.hrznstudio.titanium.client.screen.addon.BasicScreenAddon;
 import com.hrznstudio.titanium.client.screen.asset.IAssetProvider;
 import com.hrznstudio.titanium.util.AssetUtil;
-import com.mojang.blaze3d.matrix.MatrixStack;
+import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.systems.RenderSystem;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.screen.Screen;
-import net.minecraft.client.renderer.RenderHelper;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.StringTextComponent;
-import net.minecraft.util.text.TextFormatting;
+import net.minecraft.client.gui.screens.Screen;
+import com.mojang.blaze3d.platform.Lighting;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.TextComponent;
+import net.minecraft.ChatFormatting;
 import net.minecraftforge.items.ItemHandlerHelper;
 
 import java.text.DecimalFormat;
@@ -61,22 +61,22 @@ public abstract class BigItemGuiAddon extends BasicScreenAddon {
 
 
     @Override
-    public void drawBackgroundLayer(MatrixStack stack, Screen screen, IAssetProvider provider, int guiX, int guiY, int mouseX, int mouseY, float partialTicks) {
+    public void drawBackgroundLayer(PoseStack stack, Screen screen, IAssetProvider provider, int guiX, int guiY, int mouseX, int mouseY, float partialTicks) {
         AssetUtil.drawAsset(stack, screen, provider.getAsset(AssetTypes.ITEM_BACKGROUND), guiX + getPosX(), guiY + getPosY());
         //RenderSystem.setupGui3DDiffuseLighting();
-        Minecraft.getInstance().getItemRenderer().renderItemIntoGUI(ItemHandlerHelper.copyStackWithSize(getItemStack(), 1), guiX + getPosX() + 1, guiY + getPosY() + 1);
-        RenderHelper.disableStandardItemLighting();
+        Minecraft.getInstance().getItemRenderer().renderGuiItem(ItemHandlerHelper.copyStackWithSize(getItemStack(), 1), guiX + getPosX() + 1, guiY + getPosY() + 1);
+        Lighting.turnOff();
         RenderSystem.enableAlphaTest();
-        stack.push();
+        stack.pushPose();
         stack.translate(0,0, 260);
         stack.scale(0.5f, 0.5f, 0.5f);
         String amount = getAmountDisplay();
-        Minecraft.getInstance().fontRenderer.drawString(stack, TextFormatting.DARK_GRAY + amount , (guiX + getPosX() + 16 - Minecraft.getInstance().fontRenderer.getStringWidth(amount) / 2f)*2, (guiY + getPosY() + 19)*2, 0xFFFFFF);
-        stack.pop();
+        Minecraft.getInstance().font.draw(stack, ChatFormatting.DARK_GRAY + amount , (guiX + getPosX() + 16 - Minecraft.getInstance().font.width(amount) / 2f)*2, (guiY + getPosY() + 19)*2, 0xFFFFFF);
+        stack.popPose();
     }
 
     @Override
-    public void drawForegroundLayer(MatrixStack stack, Screen screen, IAssetProvider provider, int guiX, int guiY, int mouseX, int mouseY) {
+    public void drawForegroundLayer(PoseStack stack, Screen screen, IAssetProvider provider, int guiX, int guiY, int mouseX, int mouseY) {
 
     }
 
@@ -86,10 +86,10 @@ public abstract class BigItemGuiAddon extends BasicScreenAddon {
     }
 
     @Override
-    public List<ITextComponent> getTooltipLines() {
+    public List<Component> getTooltipLines() {
         if (this.tooltip && !getItemStack().isEmpty()){
-            List<ITextComponent> tp = Minecraft.getInstance().currentScreen.getTooltipFromItem(getItemStack());
-            tp.add(new StringTextComponent(TextFormatting.GOLD + new DecimalFormat().format(getAmount())));
+            List<Component> tp = Minecraft.getInstance().screen.getTooltipFromItem(getItemStack());
+            tp.add(new TextComponent(ChatFormatting.GOLD + new DecimalFormat().format(getAmount())));
             return tp;
         }
         return new ArrayList<>();

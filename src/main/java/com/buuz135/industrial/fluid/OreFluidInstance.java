@@ -10,13 +10,13 @@ package com.buuz135.industrial.fluid;
 import com.buuz135.industrial.item.OreBucketItem;
 import com.hrznstudio.titanium.module.api.IAlternativeEntries;
 import com.hrznstudio.titanium.module.api.RegistryManager;
-import net.minecraft.block.Block;
-import net.minecraft.block.FlowingFluidBlock;
-import net.minecraft.block.material.Material;
-import net.minecraft.fluid.Fluid;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemGroup;
-import net.minecraft.item.Items;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.LiquidBlock;
+import net.minecraft.world.level.material.Material;
+import net.minecraft.world.level.material.Fluid;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.CreativeModeTab;
+import net.minecraft.world.item.Items;
 import net.minecraftforge.fluids.FluidAttributes;
 
 public class OreFluidInstance extends net.minecraftforge.registries.ForgeRegistryEntry<OreFluidInstance> implements IAlternativeEntries {
@@ -26,7 +26,7 @@ public class OreFluidInstance extends net.minecraftforge.registries.ForgeRegistr
     private Item bucketFluid;
     private Block blockFluid;
 
-    public OreFluidInstance(String modid, String fluid, FluidAttributes.Builder attributes, boolean hasBucket, ItemGroup group) {
+    public OreFluidInstance(String modid, String fluid, FluidAttributes.Builder attributes, boolean hasBucket, CreativeModeTab group) {
         this.sourceFluid = (OreFluid) new OreFluid.Source(attributes){
 
         }.setRegistryName(modid, fluid);
@@ -34,8 +34,8 @@ public class OreFluidInstance extends net.minecraftforge.registries.ForgeRegistr
         this.sourceFluid = this.sourceFluid.setSourceFluid(sourceFluid).setFlowingFluid(flowingFluid);
         this.flowingFluid = this.flowingFluid.setSourceFluid(sourceFluid).setFlowingFluid(flowingFluid);
         if (hasBucket)
-            this.bucketFluid = new OreBucketItem(this::getSourceFluid, new Item.Properties().containerItem(Items.BUCKET).maxStackSize(1).group(group)).setRegistryName(modid, fluid + "_bucket");
-        this.blockFluid = new FlowingFluidBlock(sourceFluid, Block.Properties.create(Material.WATER).doesNotBlockMovement().hardnessAndResistance(100.0F).noDrops()) {
+            this.bucketFluid = new OreBucketItem(this::getSourceFluid, new Item.Properties().craftRemainder(Items.BUCKET).stacksTo(1).tab(group)).setRegistryName(modid, fluid + "_bucket");
+        this.blockFluid = new LiquidBlock(sourceFluid, Block.Properties.of(Material.WATER).noCollission().strength(100.0F).noDrops()) {
         }.setRegistryName(modid, fluid + "_block");
         this.sourceFluid.setBlockFluid(blockFluid).setBucketFluid(bucketFluid);
         this.flowingFluid.setBlockFluid(blockFluid).setBucketFluid(bucketFluid);

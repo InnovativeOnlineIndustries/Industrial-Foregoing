@@ -3,18 +3,20 @@ package com.buuz135.industrial.fluid;
 import com.buuz135.industrial.utils.ItemStackUtils;
 import com.hrznstudio.titanium.util.TagUtil;
 import net.minecraft.client.Minecraft;
-import net.minecraft.fluid.Fluid;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.tags.TagCollectionManager;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.StringTextComponent;
-import net.minecraft.util.text.TranslationTextComponent;
+import net.minecraft.world.level.material.Fluid;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.tags.SerializationTags;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.TextComponent;
+import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraftforge.fluids.FluidAttributes;
 import net.minecraftforge.fluids.FluidStack;
 
 import java.util.List;
+
+import net.minecraftforge.fluids.FluidAttributes.Builder;
 
 public class OreTitaniumFluidAttributes extends FluidAttributes {
 
@@ -26,9 +28,9 @@ public class OreTitaniumFluidAttributes extends FluidAttributes {
 
     @Override
     public int getColor(FluidStack stack) {
-        if (Minecraft.getInstance().world != null && stack.hasTag() && stack.getTag().contains(NBT_TAG)){
+        if (Minecraft.getInstance().level != null && stack.hasTag() && stack.getTag().contains(NBT_TAG)){
             String tag = stack.getTag().getString(NBT_TAG);
-            List<Item> items = TagCollectionManager.getManager().getItemTags().getTagByID(new ResourceLocation(tag.replace("forge:ores/", "forge:dusts/"))).getAllElements();
+            List<Item> items = SerializationTags.getInstance().getItems().getTagOrEmpty(new ResourceLocation(tag.replace("forge:ores/", "forge:dusts/"))).getValues();
             if (items.size() > 0){
                 return ItemStackUtils.getColor(new ItemStack(items.get(0)));
             }
@@ -41,25 +43,25 @@ public class OreTitaniumFluidAttributes extends FluidAttributes {
         String extra = "";
         if (stack.hasTag() && stack.getTag().contains(NBT_TAG)){
             String tag = stack.getTag().getString(NBT_TAG);
-            List<Item> items = TagCollectionManager.getManager().getItemTags().getTagByID(new ResourceLocation(tag)).getAllElements();
+            List<Item> items = SerializationTags.getInstance().getItems().getTagOrEmpty(new ResourceLocation(tag)).getValues();
             if (items.size() > 0){
-                extra = " (" + new TranslationTextComponent(items.get(0).getTranslationKey()).getString() + ")";
+                extra = " (" + new TranslatableComponent(items.get(0).getDescriptionId()).getString() + ")";
             }
         }
-        return new TranslationTextComponent(super.getTranslationKey(stack)).getString() + extra;
+        return new TranslatableComponent(super.getTranslationKey(stack)).getString() + extra;
     }
 
     @Override
-    public ITextComponent getDisplayName(FluidStack stack) {
+    public Component getDisplayName(FluidStack stack) {
         String extra = "";
         if (stack.hasTag() && stack.getTag().contains(NBT_TAG)){
             String tag = stack.getTag().getString(NBT_TAG);
-            List<Item> items = TagCollectionManager.getManager().getItemTags().getTagByID(new ResourceLocation(tag)).getAllElements();
+            List<Item> items = SerializationTags.getInstance().getItems().getTagOrEmpty(new ResourceLocation(tag)).getValues();
             if (items.size() > 0){
-                extra = " (" + new TranslationTextComponent(items.get(0).getTranslationKey()).getString() + ")";
+                extra = " (" + new TranslatableComponent(items.get(0).getDescriptionId()).getString() + ")";
             }
         }
-        return new StringTextComponent(super.getDisplayName(stack).getString() + extra);
+        return new TextComponent(super.getDisplayName(stack).getString() + extra);
     }
 
     public static FluidStack getFluidWithTag(OreFluidInstance fluidInstance, int amount, ResourceLocation itemITag){
@@ -73,12 +75,12 @@ public class OreTitaniumFluidAttributes extends FluidAttributes {
     }
 
     public static boolean isValid(ResourceLocation resourceLocation){
-        return TagCollectionManager.getManager().getItemTags().getRegisteredTags().contains(new ResourceLocation("forge:dusts/" + resourceLocation.toString().replace("forge:ores/", ""))) && !TagCollectionManager.getManager().getItemTags().get(resourceLocation).getAllElements().isEmpty();
+        return SerializationTags.getInstance().getItems().getAvailableTags().contains(new ResourceLocation("forge:dusts/" + resourceLocation.toString().replace("forge:ores/", ""))) && !SerializationTags.getInstance().getItems().getTag(resourceLocation).getValues().isEmpty();
     }
 
     public static ItemStack getOutputDust(FluidStack stack){
         String tag = getFluidTag(stack);
-        return TagUtil.getItemWithPreference(TagCollectionManager.getManager().getItemTags().get(new ResourceLocation(tag.replace("forge:ores/", "forge:dusts/"))));
+        return TagUtil.getItemWithPreference(SerializationTags.getInstance().getItems().getTag(new ResourceLocation(tag.replace("forge:ores/", "forge:dusts/"))));
     }
 
     @Override

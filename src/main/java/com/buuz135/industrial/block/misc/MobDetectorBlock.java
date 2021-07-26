@@ -28,39 +28,42 @@ import com.buuz135.industrial.utils.IndustrialTags;
 import com.hrznstudio.titanium.api.IFactory;
 import com.hrznstudio.titanium.block.RotatableBlock;
 import com.hrznstudio.titanium.recipe.generator.TitaniumShapedRecipeBuilder;
-import net.minecraft.block.BlockState;
-import net.minecraft.block.Blocks;
-import net.minecraft.data.IFinishedRecipe;
-import net.minecraft.item.Items;
-import net.minecraft.util.Direction;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.IBlockReader;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.data.recipes.FinishedRecipe;
+import net.minecraft.world.item.Items;
+import net.minecraft.core.Direction;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.level.BlockGetter;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.function.Consumer;
 
+import com.hrznstudio.titanium.block.RotatableBlock.RotationType;
+import net.minecraft.world.level.block.state.BlockBehaviour.Properties;
+
 public class MobDetectorBlock extends IndustrialBlock<MobDetectorTile> {
 
     public MobDetectorBlock() {
-        super("mob_detector", Properties.from(Blocks.IRON_BLOCK), MobDetectorTile.class, ModuleMisc.TAB_MISC);
+        super("mob_detector", Properties.copy(Blocks.IRON_BLOCK), MobDetectorTile.class, ModuleMisc.TAB_MISC);
     }
 
     @Override
-    public boolean canConnectRedstone(BlockState state, IBlockReader world, BlockPos pos, @Nullable Direction side) {
+    public boolean canConnectRedstone(BlockState state, BlockGetter world, BlockPos pos, @Nullable Direction side) {
         return true;
     }
 
     @Override
-    public boolean canProvidePower(BlockState state) {
+    public boolean isSignalSource(BlockState state) {
         return true;
     }
 
     @Override
-    public int getWeakPower(BlockState blockState, IBlockReader world, BlockPos pos, Direction side) {
-        Direction facing = blockState.get(RotatableBlock.FACING_HORIZONTAL);
-        if (side != facing && world.getTileEntity(pos) instanceof MobDetectorTile) {
-            return ((MobDetectorTile) world.getTileEntity(pos)).getRedstoneSignal();
+    public int getSignal(BlockState blockState, BlockGetter world, BlockPos pos, Direction side) {
+        Direction facing = blockState.getValue(RotatableBlock.FACING_HORIZONTAL);
+        if (side != facing && world.getBlockEntity(pos) instanceof MobDetectorTile) {
+            return ((MobDetectorTile) world.getBlockEntity(pos)).getRedstoneSignal();
         }
         return 0;
     }
@@ -77,15 +80,15 @@ public class MobDetectorBlock extends IndustrialBlock<MobDetectorTile> {
     }
 
     @Override
-    public void registerRecipe(Consumer<IFinishedRecipe> consumer) {
+    public void registerRecipe(Consumer<FinishedRecipe> consumer) {
         TitaniumShapedRecipeBuilder.shapedRecipe(this)
-            .patternLine("ppp").patternLine("rcr").patternLine("omo")
-            .key('p', IndustrialTags.Items.PLASTIC)
-            .key('r', Items.REPEATER)
-            .key('c', Items.COMPARATOR)
-            .key('o', Items.OBSERVER)
-            .key('m', IndustrialTags.Items.MACHINE_FRAME_SIMPLE)
-            .build(consumer);
+            .pattern("ppp").pattern("rcr").pattern("omo")
+            .define('p', IndustrialTags.Items.PLASTIC)
+            .define('r', Items.REPEATER)
+            .define('c', Items.COMPARATOR)
+            .define('o', Items.OBSERVER)
+            .define('m', IndustrialTags.Items.MACHINE_FRAME_SIMPLE)
+            .save(consumer);
     }
 
 }

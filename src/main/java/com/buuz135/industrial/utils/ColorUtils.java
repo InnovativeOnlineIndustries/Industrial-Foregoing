@@ -22,11 +22,11 @@
 package com.buuz135.industrial.utils;
 
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.texture.AtlasTexture;
-import net.minecraft.client.renderer.texture.Texture;
+import net.minecraft.client.renderer.texture.TextureAtlas;
+import net.minecraft.client.renderer.texture.AbstractTexture;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
-import net.minecraft.util.ColorHelper;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.FastColor;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
@@ -36,9 +36,9 @@ import java.awt.*;
 public class ColorUtils {
 
     public static int getColorFrom(ResourceLocation location) {
-        Texture texture = Minecraft.getInstance().getTextureManager().getTexture(AtlasTexture.LOCATION_BLOCKS_TEXTURE);
-        if (texture instanceof AtlasTexture) {
-            return getColorFrom(((AtlasTexture) texture).getSprite(location));
+        AbstractTexture texture = Minecraft.getInstance().getTextureManager().getTexture(TextureAtlas.LOCATION_BLOCKS);
+        if (texture instanceof TextureAtlas) {
+            return getColorFrom(((TextureAtlas) texture).getSprite(location));
         }
         return 0;
     }
@@ -59,7 +59,7 @@ public class ColorUtils {
             }
         }
 
-        if (total > 0) return ColorHelper.PackedColor.packColor( 255, (int)(red / total), (int) (green / total), (int) (blue / total));
+        if (total > 0) return FastColor.ARGB32.color( 255, (int)(red / total), (int) (green / total), (int) (blue / total));
         return -1;
     }
 }

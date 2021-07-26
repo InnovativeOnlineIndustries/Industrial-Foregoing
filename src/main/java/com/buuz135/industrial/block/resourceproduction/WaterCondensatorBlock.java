@@ -27,26 +27,29 @@ import com.buuz135.industrial.module.ModuleResourceProduction;
 import com.buuz135.industrial.utils.IndustrialTags;
 import com.hrznstudio.titanium.api.IFactory;
 import com.hrznstudio.titanium.recipe.generator.TitaniumShapedRecipeBuilder;
-import net.minecraft.block.Blocks;
-import net.minecraft.client.util.ITooltipFlag;
-import net.minecraft.data.IFinishedRecipe;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.Items;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.item.TooltipFlag;
+import net.minecraft.data.recipes.FinishedRecipe;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
 import net.minecraft.tags.ItemTags;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.TextFormatting;
-import net.minecraft.util.text.TranslationTextComponent;
-import net.minecraft.world.IBlockReader;
+import net.minecraft.network.chat.Component;
+import net.minecraft.ChatFormatting;
+import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.world.level.BlockGetter;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.List;
 import java.util.function.Consumer;
 
+import com.hrznstudio.titanium.block.RotatableBlock.RotationType;
+import net.minecraft.world.level.block.state.BlockBehaviour.Properties;
+
 public class WaterCondensatorBlock extends IndustrialBlock<WaterCondensatorTile> {
 
     public WaterCondensatorBlock() {
-        super("water_condensator", Properties.from(Blocks.IRON_BLOCK), WaterCondensatorTile.class, ModuleResourceProduction.TAB_RESOURCE);
+        super("water_condensator", Properties.copy(Blocks.IRON_BLOCK), WaterCondensatorTile.class, ModuleResourceProduction.TAB_RESOURCE);
 
     }
 
@@ -62,20 +65,20 @@ public class WaterCondensatorBlock extends IndustrialBlock<WaterCondensatorTile>
     }
 
     @Override
-    public void registerRecipe(Consumer<IFinishedRecipe> consumer) {
+    public void registerRecipe(Consumer<FinishedRecipe> consumer) {
         TitaniumShapedRecipeBuilder.shapedRecipe(this)
-                .patternLine("PBP").patternLine("LML").patternLine("GRG")
-                .key('P', IndustrialTags.Items.PLASTIC)
-                .key('B', Items.WATER_BUCKET)
-                .key('L', Items.PISTON)
-                .key('M', IndustrialTags.Items.MACHINE_FRAME_PITY)
-                .key('R', Items.REDSTONE)
-                .key('G', ItemTags.makeWrapperTag("forge:gears/iron"))
-                .build(consumer);
+                .pattern("PBP").pattern("LML").pattern("GRG")
+                .define('P', IndustrialTags.Items.PLASTIC)
+                .define('B', Items.WATER_BUCKET)
+                .define('L', Items.PISTON)
+                .define('M', IndustrialTags.Items.MACHINE_FRAME_PITY)
+                .define('R', Items.REDSTONE)
+                .define('G', ItemTags.bind("forge:gears/iron"))
+                .save(consumer);
     }
 
     @Override
-    public void addInformation(ItemStack stack, @Nullable IBlockReader worldIn, List<ITextComponent> tooltip, ITooltipFlag flagIn) {
-        tooltip.add(new TranslationTextComponent("text.industrialforegoing.tooltip.power_optional").mergeStyle(TextFormatting.GOLD));
+    public void appendHoverText(ItemStack stack, @Nullable BlockGetter worldIn, List<Component> tooltip, TooltipFlag flagIn) {
+        tooltip.add(new TranslatableComponent("text.industrialforegoing.tooltip.power_optional").withStyle(ChatFormatting.GOLD));
     }
 }

@@ -7,19 +7,19 @@ import com.buuz135.industrial.gui.transporter.ContainerTransporter;
 import com.buuz135.industrial.module.ModuleTransportStorage;
 import com.buuz135.industrial.proxy.client.model.TransporterModelData;
 import com.hrznstudio.titanium.block.tile.ActiveTile;
-import net.minecraft.block.BlockState;
-import net.minecraft.block.Blocks;
-import net.minecraft.entity.item.ItemEntity;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.entity.player.ServerPlayerEntity;
-import net.minecraft.inventory.container.Container;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.util.Direction;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.entity.item.ItemEntity;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.inventory.AbstractContainerMenu;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.core.Direction;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.level.Level;
 import net.minecraftforge.client.model.ModelDataManager;
 import net.minecraftforge.client.model.data.IModelData;
 import net.minecraftforge.client.model.data.ModelDataMap;
@@ -48,13 +48,13 @@ public class TransporterTile extends ActiveTile<TransporterTile> implements IBlo
     }
 
     @Override
-    public World getBlockWorld() {
-        return this.world;
+    public Level getBlockWorld() {
+        return this.level;
     }
 
     @Override
     public BlockPos getBlockPosition() {
-        return this.pos;
+        return this.worldPosition;
     }
 
     @Override
@@ -84,44 +84,44 @@ public class TransporterTile extends ActiveTile<TransporterTile> implements IBlo
         if (!hasUpgrade(facing)) {
             transporterTypeMap.put(facing, factory.create(this, facing, TransporterTypeFactory.TransporterAction.EXTRACT));
             requestSync();
-            if (world.isRemote) ModelDataManager.requestModelDataRefresh(this);
+            if (level.isClientSide) ModelDataManager.requestModelDataRefresh(this);
         }
     }
 
     @Override
     public void removeUpgrade(Direction facing, boolean drop) {
         if (hasUpgrade(facing)) {
-            if (!world.isRemote && drop) {
+            if (!level.isClientSide && drop) {
                 TransporterType upgrade = transporterTypeMap.get(facing);
                 for (ItemStack stack : upgrade.getDrops()) {
-                    ItemEntity item = new ItemEntity(world, pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5);
+                    ItemEntity item = new ItemEntity(level, worldPosition.getX() + 0.5, worldPosition.getY() + 0.5, worldPosition.getZ() + 0.5);
                     item.setItem(stack);
-                    world.addEntity(item);
+                    level.addFreshEntity(item);
                 }
             }
             transporterTypeMap.get(facing).onUpgradeRemoved();
             transporterTypeMap.remove(facing);
             requestSync();
-            if (world.isRemote) ModelDataManager.requestModelDataRefresh(this);
+            if (level.isClientSide) ModelDataManager.requestModelDataRefresh(this);
         }
         if (transporterTypeMap.isEmpty()) {
-            this.world.setBlockState(this.pos, Blocks.AIR.getDefaultState());
+            this.level.setBlockAndUpdate(this.worldPosition, Blocks.AIR.defaultBlockState());
         }
     }
 
-    public void openGui(PlayerEntity player, Direction facing) {
-        if (player instanceof ServerPlayerEntity) {
-            NetworkHooks.openGui((ServerPlayerEntity) player, this, packetBuffer -> {
-                packetBuffer.writeBlockPos(pos);
-                packetBuffer.writeEnumValue(facing);
+    public void openGui(Player player, Direction facing) {
+        if (player instanceof ServerPlayer) {
+            NetworkHooks.openGui((ServerPlayer) player, this, packetBuffer -> {
+                packetBuffer.writeBlockPos(worldPosition);
+                packetBuffer.writeEnum(facing);
             });
         }
     }
 
     @Nullable
     @Override
-    public Container createMenu(int menu, PlayerInventory inventoryPlayer, PlayerEntity entityPlayer) {
-        return new ContainerTransporter(menu, this, ModuleTransportStorage.TRANSPORTER.getFacingUpgradeHit(this.world.getBlockState(this.pos), this.world, this.pos, entityPlayer).getLeft(), inventoryPlayer);
+    public AbstractContainerMenu createMenu(int menu, Inventory inventoryPlayer, Player entityPlayer) {
+        return new ContainerTransporter(menu, this, ModuleTransportStorage.TRANSPORTER.getFacingUpgradeHit(this.level.getBlockState(this.worldPosition), this.level, this.worldPosition, entityPlayer).getLeft(), inventoryPlayer);
     }
 
     @Override
@@ -140,35 +140,35 @@ public class TransporterTile extends ActiveTile<TransporterTile> implements IBlo
     }
 
     @Override
-    public CompoundNBT write(CompoundNBT compound) {
-        compound = super.write(compound);
-        CompoundNBT upgrades = new CompoundNBT();
+    public CompoundTag save(CompoundTag compound) {
+        compound = super.save(compound);
+        CompoundTag upgrades = new CompoundTag();
         for (Direction facing : Direction.values()) {
             if (!hasUpgrade(facing)) {
                 continue;
             }
-            CompoundNBT upgradeTag = new CompoundNBT();
+            CompoundTag upgradeTag = new CompoundTag();
             TransporterType upgrade = getTransporterTypeMap().get(facing);
             upgradeTag.putString("factory", upgrade.getFactory().getRegistryName().toString());
-            CompoundNBT customNBT = upgrade.serializeNBT();
+            CompoundTag customNBT = upgrade.serializeNBT();
             if (customNBT != null)
                 upgradeTag.put("customNBT", customNBT);
-            upgrades.put(facing.getString(), upgradeTag);
+            upgrades.put(facing.getSerializedName(), upgradeTag);
         }
         compound.put("Transporters", upgrades);
         return compound;
     }
 
     @Override
-    public void read(BlockState state, CompoundNBT compound) {
-        super.read(state, compound);
+    public void load(BlockState state, CompoundTag compound) {
+        super.load(state, compound);
         if (compound.contains("Transporters")) {
-            CompoundNBT upgradesTag = compound.getCompound("Transporters");
+            CompoundTag upgradesTag = compound.getCompound("Transporters");
             //upgradeMap.clear();
             for (Direction facing : Direction.values()) {
-                if (!upgradesTag.contains(facing.getString()))
+                if (!upgradesTag.contains(facing.getSerializedName()))
                     continue;
-                CompoundNBT upgradeTag = upgradesTag.getCompound(facing.getString());
+                CompoundTag upgradeTag = upgradesTag.getCompound(facing.getSerializedName());
                 TransporterTypeFactory factory = null;
                 for (TransporterTypeFactory transporterTypeFactory : TransporterTypeFactory.FACTORIES) {
                     if (transporterTypeFactory.getRegistryName().equals(new ResourceLocation(upgradeTag.getString("factory")))) {

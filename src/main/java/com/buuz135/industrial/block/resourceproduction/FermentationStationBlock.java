@@ -6,17 +6,20 @@ import com.buuz135.industrial.module.ModuleResourceProduction;
 import com.buuz135.industrial.utils.IndustrialTags;
 import com.hrznstudio.titanium.api.IFactory;
 import com.hrznstudio.titanium.recipe.generator.TitaniumShapedRecipeBuilder;
-import net.minecraft.block.Blocks;
-import net.minecraft.data.IFinishedRecipe;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.data.recipes.FinishedRecipe;
 import net.minecraft.tags.ItemTags;
 
 import javax.annotation.Nonnull;
 import java.util.function.Consumer;
 
+import com.hrznstudio.titanium.block.RotatableBlock.RotationType;
+import net.minecraft.world.level.block.state.BlockBehaviour.Properties;
+
 public class FermentationStationBlock extends IndustrialBlock<FermentationStationTile> {
 
     public FermentationStationBlock() {
-        super("fermentation_station", Properties.from(Blocks.IRON_BLOCK), FermentationStationTile.class, ModuleResourceProduction.TAB_RESOURCE);
+        super("fermentation_station", Properties.copy(Blocks.IRON_BLOCK), FermentationStationTile.class, ModuleResourceProduction.TAB_RESOURCE);
     }
 
     @Override
@@ -31,12 +34,12 @@ public class FermentationStationBlock extends IndustrialBlock<FermentationStatio
     }
 
     @Override
-    public void registerRecipe(Consumer<IFinishedRecipe> consumer) {
-        TitaniumShapedRecipeBuilder.shapedRecipe(this).patternLine("pwp").patternLine("wgw").patternLine("pbp")
-                .key('p', IndustrialTags.Items.PLASTIC)
-                .key('w', ItemTags.LOGS)
-                .key('g', IndustrialTags.Items.GEAR_GOLD)
-                .key('b', IndustrialTags.Items.MACHINE_FRAME_SIMPLE)
-                .build(consumer);
+    public void registerRecipe(Consumer<FinishedRecipe> consumer) {
+        TitaniumShapedRecipeBuilder.shapedRecipe(this).pattern("pwp").pattern("wgw").pattern("pbp")
+                .define('p', IndustrialTags.Items.PLASTIC)
+                .define('w', ItemTags.LOGS)
+                .define('g', IndustrialTags.Items.GEAR_GOLD)
+                .define('b', IndustrialTags.Items.MACHINE_FRAME_SIMPLE)
+                .save(consumer);
     }
 }

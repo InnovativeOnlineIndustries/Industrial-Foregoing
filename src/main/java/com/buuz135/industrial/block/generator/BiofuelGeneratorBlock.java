@@ -27,17 +27,20 @@ import com.buuz135.industrial.module.ModuleGenerator;
 import com.buuz135.industrial.utils.IndustrialTags;
 import com.hrznstudio.titanium.api.IFactory;
 import com.hrznstudio.titanium.recipe.generator.TitaniumShapedRecipeBuilder;
-import net.minecraft.block.Blocks;
-import net.minecraft.data.IFinishedRecipe;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.data.recipes.FinishedRecipe;
 import net.minecraft.tags.ItemTags;
 
 import javax.annotation.Nonnull;
 import java.util.function.Consumer;
 
+import com.hrznstudio.titanium.block.RotatableBlock.RotationType;
+import net.minecraft.world.level.block.state.BlockBehaviour.Properties;
+
 public class BiofuelGeneratorBlock extends IndustrialBlock<BiofuelGeneratorTile> {
 
     public BiofuelGeneratorBlock() {
-        super("biofuel_generator", Properties.from(Blocks.IRON_BLOCK), BiofuelGeneratorTile.class, ModuleGenerator.TAB_GENERATOR);
+        super("biofuel_generator", Properties.copy(Blocks.IRON_BLOCK), BiofuelGeneratorTile.class, ModuleGenerator.TAB_GENERATOR);
     }
 
     @Override
@@ -52,14 +55,14 @@ public class BiofuelGeneratorBlock extends IndustrialBlock<BiofuelGeneratorTile>
     }
 
     @Override
-    public void registerRecipe(Consumer<IFinishedRecipe> consumer) {
+    public void registerRecipe(Consumer<FinishedRecipe> consumer) {
         TitaniumShapedRecipeBuilder.shapedRecipe(this)
-                .patternLine("PDP").patternLine("SMS").patternLine("ASA")
-                .key('P', IndustrialTags.Items.PLASTIC)
-                .key('D', Blocks.FURNACE)
-                .key('S', Blocks.PISTON)
-                .key('A', ItemTags.makeWrapperTag("forge:gears/gold"))
-                .key('M', IndustrialTags.Items.MACHINE_FRAME_PITY)
-                .build(consumer);
+                .pattern("PDP").pattern("SMS").pattern("ASA")
+                .define('P', IndustrialTags.Items.PLASTIC)
+                .define('D', Blocks.FURNACE)
+                .define('S', Blocks.PISTON)
+                .define('A', ItemTags.bind("forge:gears/gold"))
+                .define('M', IndustrialTags.Items.MACHINE_FRAME_PITY)
+                .save(consumer);
     }
 }

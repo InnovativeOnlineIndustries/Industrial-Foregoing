@@ -27,18 +27,21 @@ import com.buuz135.industrial.module.ModuleResourceProduction;
 import com.buuz135.industrial.utils.IndustrialTags;
 import com.hrznstudio.titanium.api.IFactory;
 import com.hrznstudio.titanium.recipe.generator.TitaniumShapedRecipeBuilder;
-import net.minecraft.block.Blocks;
-import net.minecraft.data.IFinishedRecipe;
-import net.minecraft.item.Items;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.data.recipes.FinishedRecipe;
+import net.minecraft.world.item.Items;
 import net.minecraft.tags.ItemTags;
 
 import javax.annotation.Nonnull;
 import java.util.function.Consumer;
 
+import com.hrznstudio.titanium.block.RotatableBlock.RotationType;
+import net.minecraft.world.level.block.state.BlockBehaviour.Properties;
+
 public class ResourcefulFurnaceBlock extends IndustrialBlock<ResourcefulFurnaceTile> {
 
     public ResourcefulFurnaceBlock() {
-        super("resourceful_furnace", Properties.from(Blocks.IRON_BLOCK), ResourcefulFurnaceTile.class, ModuleResourceProduction.TAB_RESOURCE);
+        super("resourceful_furnace", Properties.copy(Blocks.IRON_BLOCK), ResourcefulFurnaceTile.class, ModuleResourceProduction.TAB_RESOURCE);
     }
 
     @Override
@@ -53,14 +56,14 @@ public class ResourcefulFurnaceBlock extends IndustrialBlock<ResourcefulFurnaceT
     }
 
     @Override
-    public void registerRecipe(Consumer<IFinishedRecipe> consumer) {
+    public void registerRecipe(Consumer<FinishedRecipe> consumer) {
         TitaniumShapedRecipeBuilder.shapedRecipe(this)
-                .patternLine("PBP").patternLine("LML").patternLine("PRP")
-                .key('P', IndustrialTags.Items.PLASTIC)
-                .key('B', Items.BUCKET)
-                .key('L', Items.FURNACE)
-                .key('M', IndustrialTags.Items.MACHINE_FRAME_PITY)
-                .key('R', ItemTags.makeWrapperTag("forge:gears/gold"))
-                .build(consumer);
+                .pattern("PBP").pattern("LML").pattern("PRP")
+                .define('P', IndustrialTags.Items.PLASTIC)
+                .define('B', Items.BUCKET)
+                .define('L', Items.FURNACE)
+                .define('M', IndustrialTags.Items.MACHINE_FRAME_PITY)
+                .define('R', ItemTags.bind("forge:gears/gold"))
+                .save(consumer);
     }
 }

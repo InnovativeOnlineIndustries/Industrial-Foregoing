@@ -27,16 +27,19 @@ import com.buuz135.industrial.module.ModuleMisc;
 import com.buuz135.industrial.utils.IndustrialTags;
 import com.hrznstudio.titanium.api.IFactory;
 import com.hrznstudio.titanium.recipe.generator.TitaniumShapedRecipeBuilder;
-import net.minecraft.block.Blocks;
-import net.minecraft.data.IFinishedRecipe;
-import net.minecraft.item.Items;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.data.recipes.FinishedRecipe;
+import net.minecraft.world.item.Items;
 
 import java.util.function.Consumer;
+
+import com.hrznstudio.titanium.block.RotatableBlock.RotationType;
+import net.minecraft.world.level.block.state.BlockBehaviour.Properties;
 
 public class InfinityChargerBlock extends IndustrialBlock<InfinityChargerTile> {
 
     public InfinityChargerBlock() {
-        super("infinity_charger", Properties.from(Blocks.IRON_BLOCK), InfinityChargerTile.class, ModuleMisc.TAB_MISC);
+        super("infinity_charger", Properties.copy(Blocks.IRON_BLOCK), InfinityChargerTile.class, ModuleMisc.TAB_MISC);
     }
 
     @Override
@@ -50,15 +53,15 @@ public class InfinityChargerBlock extends IndustrialBlock<InfinityChargerTile> {
     }
 
     @Override
-    public void registerRecipe(Consumer<IFinishedRecipe> consumer) {
+    public void registerRecipe(Consumer<FinishedRecipe> consumer) {
         TitaniumShapedRecipeBuilder.shapedRecipe(this)
-                .patternLine("ppp").patternLine("rcr").patternLine("omo")
-                .key('p', IndustrialTags.Items.PLASTIC)
-                .key('r', Items.REPEATER)
-                .key('c', IndustrialTags.Items.GEAR_DIAMOND)
-                .key('o', Items.REDSTONE_BLOCK)
-                .key('m', IndustrialTags.Items.MACHINE_FRAME_ADVANCED)
-                .build(consumer);
+                .pattern("ppp").pattern("rcr").pattern("omo")
+                .define('p', IndustrialTags.Items.PLASTIC)
+                .define('r', Items.REPEATER)
+                .define('c', IndustrialTags.Items.GEAR_DIAMOND)
+                .define('o', Items.REDSTONE_BLOCK)
+                .define('m', IndustrialTags.Items.MACHINE_FRAME_ADVANCED)
+                .save(consumer);
     }
 
 }

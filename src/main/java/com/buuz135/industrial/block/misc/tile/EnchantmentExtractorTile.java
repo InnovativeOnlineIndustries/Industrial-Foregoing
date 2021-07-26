@@ -39,13 +39,13 @@ import com.hrznstudio.titanium.component.fluid.FluidTankComponent;
 import com.hrznstudio.titanium.component.fluid.SidedFluidTankComponent;
 import com.hrznstudio.titanium.component.inventory.SidedInventoryComponent;
 import com.hrznstudio.titanium.util.LangUtil;
-import net.minecraft.enchantment.Enchantment;
-import net.minecraft.enchantment.EnchantmentHelper;
-import net.minecraft.inventory.container.RepairContainer;
-import net.minecraft.item.DyeColor;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.Items;
-import net.minecraft.util.text.TextFormatting;
+import net.minecraft.world.item.enchantment.Enchantment;
+import net.minecraft.world.item.enchantment.EnchantmentHelper;
+import net.minecraft.world.inventory.AnvilMenu;
+import net.minecraft.world.item.DyeColor;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
+import net.minecraft.ChatFormatting;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.capability.IFluidHandler;
 import net.minecraftforge.items.ItemHandlerHelper;
@@ -77,7 +77,7 @@ public class EnchantmentExtractorTile extends IndustrialProcessingTile<Enchantme
         this.addInventory(inputEnchantedItem = (SidedInventoryComponent<EnchantmentExtractorTile>) new SidedInventoryComponent<EnchantmentExtractorTile>("inputEnchantedItem", 40, 22, 1, 0).
                 setColor(DyeColor.BLUE).
                 setSlotLimit(1).
-                setInputFilter((stack, integer) -> (stack.isEnchanted() || stack.getItem() == Items.ENCHANTED_BOOK) && !stack.getItem().isIn(IndustrialTags.Items.ENCHANTMENT_EXTRACTOR_BLACKLIST)).
+                setInputFilter((stack, integer) -> (stack.isEnchanted() || stack.getItem() == Items.ENCHANTED_BOOK) && !stack.getItem().is(IndustrialTags.Items.ENCHANTMENT_EXTRACTOR_BLACKLIST)).
                 setOutputFilter((stack, integer) -> false).
                 setComponentHarness(this)
         );
@@ -102,14 +102,14 @@ public class EnchantmentExtractorTile extends IndustrialProcessingTile<Enchantme
                 setColor(DyeColor.LIME).
                 setTankAction(FluidTankComponent.Action.DRAIN).
                 setComponentHarness(this).
-                setValidator(fluidStack -> fluidStack.getFluid().isIn(IndustrialTags.Fluids.EXPERIENCE))
+                setValidator(fluidStack -> fluidStack.getFluid().is(IndustrialTags.Fluids.EXPERIENCE))
         );
         this.addButton(buttonComponent = new ButtonComponent(62 + 4, 40 + 18, 14, 14) {
             @Override
             public List<IFactory<? extends IScreenAddon>> getScreenAddons() {
                 return Collections.singletonList(() -> new StateButtonAddon(this,
-                        new StateButtonInfo(0, AssetTypes.BUTTON_SIDENESS_ENABLED, TextFormatting.GOLD + LangUtil.getString("tooltip.industrialforegoing.enchantment_extractor.extract"), "tooltip.industrialforegoing.enchantment_extractor.extract_extra"),
-                        new StateButtonInfo(1, AssetTypes.BUTTON_SIDENESS_DISABLED, TextFormatting.GOLD + LangUtil.getString("tooltip.industrialforegoing.enchantment_extractor.consume"), "tooltip.industrialforegoing.enchantment_extractor.consume_extra")) {
+                        new StateButtonInfo(0, AssetTypes.BUTTON_SIDENESS_ENABLED, ChatFormatting.GOLD + LangUtil.getString("tooltip.industrialforegoing.enchantment_extractor.extract"), "tooltip.industrialforegoing.enchantment_extractor.extract_extra"),
+                        new StateButtonInfo(1, AssetTypes.BUTTON_SIDENESS_DISABLED, ChatFormatting.GOLD + LangUtil.getString("tooltip.industrialforegoing.enchantment_extractor.consume"), "tooltip.industrialforegoing.enchantment_extractor.consume_extra")) {
                     @Override
                     public int getState() {
                         return extractEnchants ? 0 : 1;
@@ -142,7 +142,7 @@ public class EnchantmentExtractorTile extends IndustrialProcessingTile<Enchantme
                         input.shrink(1);
                         ItemHandlerHelper.insertItem(this.outputNoEnchantedItem, output, false);
                     } else if (map.size() == 1) {
-                        ItemStack output = removeEnchantments(input, input.getDamage(), input.getCount());
+                        ItemStack output = removeEnchantments(input, input.getDamageValue(), input.getCount());
                         input.shrink(1);
                         ItemHandlerHelper.insertItem(this.outputNoEnchantedItem, output, false);
                         ItemHandlerHelper.insertItem(this.outputEnchantedBook, book, false);
@@ -150,8 +150,8 @@ public class EnchantmentExtractorTile extends IndustrialProcessingTile<Enchantme
                     } else {
                         Map<Enchantment, Integer> cleanMap = EnchantmentHelper.getEnchantments(input).entrySet().stream().filter((enchantmentPair) -> !enchantmentPair.getKey().equals(selected)).collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
                         if (input.getItem() == Items.ENCHANTED_BOOK) {
-                            input.removeChildTag("Enchantments");
-                            input.removeChildTag("StoredEnchantments");
+                            input.removeTagKey("Enchantments");
+                            input.removeTagKey("StoredEnchantments");
                         }
                         EnchantmentHelper.setEnchantments(cleanMap, input);
                         ItemHandlerHelper.insertItem(this.outputEnchantedBook, book, false);
@@ -160,7 +160,7 @@ public class EnchantmentExtractorTile extends IndustrialProcessingTile<Enchantme
                 }
             } else {
                 int essence = getEnchantmentXp(input) * 20;
-                ItemStack output = removeEnchantments(input, input.getDamage(), input.getCount());
+                ItemStack output = removeEnchantments(input, input.getDamageValue(), input.getCount());
                 input.shrink(1);
                 ItemHandlerHelper.insertItem(this.outputNoEnchantedItem, output, false);
                 this.tank.fillForced(new FluidStack(ModuleCore.ESSENCE.getSourceFluid(), essence), IFluidHandler.FluidAction.EXECUTE);
@@ -195,7 +195,7 @@ public class EnchantmentExtractorTile extends IndustrialProcessingTile<Enchantme
             Enchantment enchantment = entry.getKey();
             Integer integer = entry.getValue();
             if (!enchantment.isCurse()) {
-                xp += enchantment.getMinEnchantability(integer);
+                xp += enchantment.getMinCost(integer);
             }
         }
         return xp;
@@ -203,12 +203,12 @@ public class EnchantmentExtractorTile extends IndustrialProcessingTile<Enchantme
 
     private ItemStack removeEnchantments(ItemStack stack, int damage, int count) {
         ItemStack itemstack = stack.copy();
-        itemstack.removeChildTag("Enchantments");
-        itemstack.removeChildTag("StoredEnchantments");
+        itemstack.removeTagKey("Enchantments");
+        itemstack.removeTagKey("StoredEnchantments");
         if (damage > 0) {
-            itemstack.setDamage(damage);
+            itemstack.setDamageValue(damage);
         } else {
-            itemstack.removeChildTag("Damage");
+            itemstack.removeTagKey("Damage");
         }
         itemstack.setCount(count);
         Map<Enchantment, Integer> map = EnchantmentHelper.getEnchantments(stack).entrySet().stream().filter((enchantmentPair) -> enchantmentPair.getKey().isCurse()).collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
@@ -216,13 +216,13 @@ public class EnchantmentExtractorTile extends IndustrialProcessingTile<Enchantme
         itemstack.setRepairCost(0);
         if (itemstack.getItem() == Items.ENCHANTED_BOOK && map.size() == 0) {
             itemstack = new ItemStack(Items.BOOK);
-            if (stack.hasDisplayName()) {
-                itemstack.setDisplayName(stack.getDisplayName());
+            if (stack.hasCustomHoverName()) {
+                itemstack.setHoverName(stack.getHoverName());
             }
         }
 
         for (int i = 0; i < map.size(); ++i) {
-            itemstack.setRepairCost(RepairContainer.getNewRepairCost(itemstack.getRepairCost()));
+            itemstack.setRepairCost(AnvilMenu.calculateIncreasedRepairCost(itemstack.getBaseRepairCost()));
         }
 
         return itemstack;

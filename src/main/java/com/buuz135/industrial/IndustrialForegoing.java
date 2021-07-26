@@ -46,15 +46,15 @@ import com.hrznstudio.titanium.network.locator.PlayerInventoryFinder;
 import com.hrznstudio.titanium.reward.Reward;
 import com.hrznstudio.titanium.reward.RewardGiver;
 import com.hrznstudio.titanium.reward.RewardManager;
-import net.minecraft.block.Block;
+import net.minecraft.world.level.block.Block;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.entity.EntityRendererManager;
-import net.minecraft.item.crafting.IRecipeSerializer;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.DimensionType;
-import net.minecraft.world.World;
-import net.minecraft.world.server.ServerWorld;
+import net.minecraft.client.renderer.entity.EntityRenderDispatcher;
+import net.minecraft.world.item.crafting.RecipeSerializer;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.level.dimension.DimensionType;
+import net.minecraft.world.level.Level;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.client.event.ModelRegistryEvent;
@@ -67,8 +67,8 @@ import net.minecraftforge.fml.DistExecutor;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
-import net.minecraftforge.fml.event.lifecycle.GatherDataEvent;
-import net.minecraftforge.fml.event.server.FMLServerStartingEvent;
+import net.minecraftforge.fmlserverevents.FMLServerStartingEvent;
+import net.minecraftforge.forge.event.lifecycle.GatherDataEvent;
 import net.minecraftforge.registries.ForgeRegistries;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -108,7 +108,7 @@ public class IndustrialForegoing extends ModuleController {
 
         EventManager.mod(FMLCommonSetupEvent.class).process(fmlCommonSetupEvent -> proxy.run()).subscribe();
         EventManager.forge(FMLServerStartingEvent.class).process(fmlServerStartingEvent -> worldFakePlayer.clear()).subscribe();
-        EventManager.modGeneric(RegistryEvent.Register.class, IRecipeSerializer.class)
+        EventManager.modGeneric(RegistryEvent.Register.class, RecipeSerializer.class)
                 .process(register -> ((RegistryEvent.Register) register).getRegistry().registerAll(FluidExtractorRecipe.SERIALIZER, DissolutionChamberRecipe.SERIALIZER, LaserDrillOreRecipe.SERIALIZER, LaserDrillFluidRecipe.SERIALIZER, StoneWorkGenerateRecipe.SERIALIZER, CrusherRecipe.SERIALIZER)).subscribe();
         //EventManager.forge(ItemTooltipEvent.class).filter(itemTooltipEvent -> itemTooltipEvent.getItemStack().hasTag()).process(itemTooltipEvent -> itemTooltipEvent.getToolTip().add(itemTooltipEvent.getItemStack().getTag().toFormattedComponent())).subscribe();
         IFRegistries.poke();
@@ -127,20 +127,20 @@ public class IndustrialForegoing extends ModuleController {
         ForgeMod.enableMilkFluid();
     }
 
-    public static FakePlayer getFakePlayer(World world) {
-        if (worldFakePlayer.containsKey(world.getDimensionType()))
-            return worldFakePlayer.get(world.getDimensionType());
-        if (world instanceof ServerWorld) {
-            IFFakePlayer fakePlayer = new IFFakePlayer((ServerWorld) world);
-            worldFakePlayer.put(world.getDimensionType(), fakePlayer);
+    public static FakePlayer getFakePlayer(Level world) {
+        if (worldFakePlayer.containsKey(world.dimensionType()))
+            return worldFakePlayer.get(world.dimensionType());
+        if (world instanceof ServerLevel) {
+            IFFakePlayer fakePlayer = new IFFakePlayer((ServerLevel) world);
+            worldFakePlayer.put(world.dimensionType(), fakePlayer);
             return fakePlayer;
         }
         return null;
     }
 
-    public static FakePlayer getFakePlayer(World world, BlockPos pos) {
+    public static FakePlayer getFakePlayer(Level world, BlockPos pos) {
         FakePlayer player = getFakePlayer(world);
-        if (player != null) player.setPositionAndRotation(pos.getX(), pos.getY(), pos.getZ(), 90, 90);
+        if (player != null) player.absMoveTo(pos.getX(), pos.getY(), pos.getZ(), 90, 90);
         return player;
     }
 
@@ -205,10 +205,11 @@ public class IndustrialForegoing extends ModuleController {
 
     @OnlyIn(Dist.CLIENT)
     private void registerReward() {
-        Minecraft instance = Minecraft.getInstance();
-        EntityRendererManager manager = instance.getRenderManager();
-        manager.getSkinMap().get("default").addLayer(new ContributorsCatEarsRender(TitaniumClient.getPlayerRenderer(Minecraft.getInstance())));
-        manager.getSkinMap().get("slim").addLayer(new ContributorsCatEarsRender(TitaniumClient.getPlayerRenderer(Minecraft.getInstance())));
+        //TODO: Fix Rewards
+//        Minecraft instance = Minecraft.getInstance();
+//        EntityRenderDispatcher manager = instance.getEntityRenderDispatcher();
+//        manager.getSkinMap().get("default").addLayer(new ContributorsCatEarsRender(TitaniumClient.getPlayerRenderer(Minecraft.getInstance())));
+//        manager.getSkinMap().get("slim").addLayer(new ContributorsCatEarsRender(TitaniumClient.getPlayerRenderer(Minecraft.getInstance())));
     }
 
 }

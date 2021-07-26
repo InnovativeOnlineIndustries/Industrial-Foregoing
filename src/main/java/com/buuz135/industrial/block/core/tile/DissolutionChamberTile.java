@@ -32,10 +32,10 @@ import com.hrznstudio.titanium.component.fluid.FluidTankComponent;
 import com.hrznstudio.titanium.component.fluid.SidedFluidTankComponent;
 import com.hrznstudio.titanium.component.inventory.SidedInventoryComponent;
 import com.hrznstudio.titanium.util.RecipeUtil;
-import net.minecraft.item.DyeColor;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
+import net.minecraft.world.item.DyeColor;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.level.Level;
 import net.minecraftforge.fluids.capability.IFluidHandler;
 import net.minecraftforge.items.ItemHandlerHelper;
 import org.apache.commons.lang3.tuple.Pair;
@@ -92,13 +92,13 @@ public class DissolutionChamberTile extends IndustrialProcessingTile<Dissolution
             if (currentRecipe != null && currentRecipe.matches(input.getInventory(), inputFluid)) {
                 return;
             }
-            currentRecipe = RecipeUtil.getRecipes(this.world, DissolutionChamberRecipe.SERIALIZER.getRecipeType()).stream().filter(dissolutionChamberRecipe -> dissolutionChamberRecipe.matches(input.getInventory(), inputFluid)).findFirst().orElse(null);
+            currentRecipe = RecipeUtil.getRecipes(this.level, DissolutionChamberRecipe.SERIALIZER.getRecipeType()).stream().filter(dissolutionChamberRecipe -> dissolutionChamberRecipe.matches(input.getInventory(), inputFluid)).findFirst().orElse(null);
         }
     }
 
     @Override
-    public void setWorldAndPos(World world, BlockPos pos) {
-        super.setWorldAndPos(world, pos);
+    public void setLevelAndPosition(Level world, BlockPos pos) {
+        super.setLevelAndPosition(world, pos);
         checkForRecipe();
     }
 
@@ -119,7 +119,7 @@ public class DissolutionChamberTile extends IndustrialProcessingTile<Dissolution
                 if (dissolutionChamberRecipe.outputFluid != null && !dissolutionChamberRecipe.outputFluid.isEmpty())
                     outputFluid.fillForced(dissolutionChamberRecipe.outputFluid.copy(), IFluidHandler.FluidAction.EXECUTE);
                 ItemStack outputStack = dissolutionChamberRecipe.output.copy();
-                outputStack.getItem().onCreated(outputStack, this.world, null);
+                outputStack.getItem().onCraftedBy(outputStack, this.level, null);
                 ItemHandlerHelper.insertItem(output, outputStack, false);
                 checkForRecipe();
             }

@@ -27,7 +27,9 @@ import com.hrznstudio.titanium.api.client.IScreenAddon;
 import com.hrznstudio.titanium.component.IComponentHarness;
 import com.hrznstudio.titanium.component.energy.EnergyStorageComponent;
 import com.hrznstudio.titanium.container.addon.IContainerAddon;
-import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.IntTag;
+import net.minecraft.nbt.Tag;
 
 import javax.annotation.Nonnull;
 import java.util.Collections;
@@ -101,15 +103,18 @@ public class InfinityEnergyStorage<T extends IComponentHarness> extends EnergySt
     }
 
     @Override
-    public CompoundNBT serializeNBT() {
-        CompoundNBT nbt = new CompoundNBT();
+    public CompoundTag serializeNBT() {
+        CompoundTag nbt = new CompoundTag();
         nbt.putLong("energy", this.energy);
         return nbt;
     }
 
+
     @Override
-    public void deserializeNBT(CompoundNBT nbt) {
-        this.energy = nbt.getLong("energy");
+    public void deserializeNBT(Tag nbt) {
+        if (!(nbt instanceof IntTag intNbt))
+            throw new IllegalArgumentException("Can not deserialize to an instance that isn't the default implementation");
+        this.energy = intNbt.getAsInt();
     }
 
 

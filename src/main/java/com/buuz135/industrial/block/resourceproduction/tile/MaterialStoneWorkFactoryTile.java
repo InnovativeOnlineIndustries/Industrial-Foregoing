@@ -41,22 +41,22 @@ import com.hrznstudio.titanium.component.inventory.SidedInventoryComponent;
 import com.hrznstudio.titanium.util.AssetUtil;
 import com.hrznstudio.titanium.util.LangUtil;
 import com.hrznstudio.titanium.util.RecipeUtil;
-import com.mojang.blaze3d.matrix.MatrixStack;
+import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.systems.RenderSystem;
-import net.minecraft.block.Blocks;
+import net.minecraft.world.level.block.Blocks;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.screen.Screen;
-import net.minecraft.client.renderer.RenderHelper;
-import net.minecraft.fluid.Fluids;
-import net.minecraft.item.DyeColor;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.Items;
-import net.minecraft.item.crafting.FurnaceRecipe;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.StringTextComponent;
-import net.minecraft.util.text.TextFormatting;
-import net.minecraft.world.World;
+import net.minecraft.client.gui.screens.Screen;
+import com.mojang.blaze3d.platform.Lighting;
+import net.minecraft.world.level.material.Fluids;
+import net.minecraft.world.item.DyeColor;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
+import net.minecraft.world.item.crafting.SmeltingRecipe;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.TextComponent;
+import net.minecraft.ChatFormatting;
+import net.minecraft.world.level.Level;
 import net.minecraftforge.items.ItemHandlerHelper;
 import org.apache.commons.lang3.tuple.Pair;
 
@@ -74,9 +74,9 @@ public class MaterialStoneWorkFactoryTile extends IndustrialProcessingTile<Mater
 
     public static StoneWorkAction[] ACTION_RECIPES = new StoneWorkAction[]{
             new StoneWorkAction(new ItemStack(Blocks.FURNACE), (world1, itemStack) -> {
-                FurnaceRecipe recipe = RecipeUtil.getSmelingRecipeFor(world1, itemStack);
+                SmeltingRecipe recipe = RecipeUtil.getSmelingRecipeFor(world1, itemStack);
                 if (recipe != null) {
-                    return recipe.getRecipeOutput();
+                    return recipe.getResultItem();
                 }
                 return ItemStack.EMPTY;
             }, 1, "smelt"),
@@ -118,40 +118,40 @@ public class MaterialStoneWorkFactoryTile extends IndustrialProcessingTile<Mater
                 .setTankType(FluidTankComponent.Type.SMALL)
                 .setTankAction(FluidTankComponent.Action.FILL)
                 .setComponentHarness(this)
-                .setValidator(fluidStack -> fluidStack.getFluid().isEquivalentTo(Fluids.WATER)));
+                .setValidator(fluidStack -> fluidStack.getFluid().isSame(Fluids.WATER)));
         addTank(lava = (SidedFluidTankComponent<MaterialStoneWorkFactoryTile>) new SidedFluidTankComponent<MaterialStoneWorkFactoryTile>("lava", MaterialStoneWorkFactoryConfig.maxLavaTankSize, 30, 55, 1)
                 .setColor(DyeColor.ORANGE)
                 .setTankType(FluidTankComponent.Type.SMALL)
                 .setTankAction(FluidTankComponent.Action.FILL)
                 .setComponentHarness(this)
-                .setValidator(fluidStack -> fluidStack.getFluid().isEquivalentTo(Fluids.LAVA)));
+                .setValidator(fluidStack -> fluidStack.getFluid().isSame(Fluids.LAVA)));
         this.generatorRecipe = DEFAULT.toString();
         addButton(new ButtonComponent(54, 64, 18, 18) {
             @Override
             public List<IFactory<? extends IScreenAddon>> getScreenAddons() {
                 return Collections.singletonList(() -> new BasicButtonAddon(this) {
                     @Override
-                    public void drawBackgroundLayer(MatrixStack stack, Screen screen, IAssetProvider provider, int guiX, int guiY, int mouseX, int mouseY, float partialTicks) {
+                    public void drawBackgroundLayer(PoseStack stack, Screen screen, IAssetProvider provider, int guiX, int guiY, int mouseX, int mouseY, float partialTicks) {
                         getRecipe().ifPresent(recipe -> {
                             AssetUtil.drawAsset(stack, screen, provider.getAsset(AssetTypes.ITEM_BACKGROUND), guiX + getPosX(), guiY + getPosY());
                             //RenderSystem.setupGui3DDiffuseLighting();
-                            Minecraft.getInstance().getItemRenderer().renderItemIntoGUI(recipe.output, guiX + getPosX() + 1, guiY + getPosY() + 1);
-                            RenderHelper.disableStandardItemLighting();
+                            Minecraft.getInstance().getItemRenderer().renderGuiItem(recipe.output, guiX + getPosX() + 1, guiY + getPosY() + 1);
+                            Lighting.turnOff();
                             RenderSystem.enableAlphaTest();
                         });
                     }
 
                     @Override
-                    public List<ITextComponent> getTooltipLines() {
-                        List<ITextComponent> lines = new ArrayList<>();
+                    public List<Component> getTooltipLines() {
+                        List<Component> lines = new ArrayList<>();
                         getRecipe().ifPresent(recipe -> {
-                            lines.add(new StringTextComponent(TextFormatting.GOLD + LangUtil.getString("tooltip.industrialforegoing.generating") + TextFormatting.WHITE + recipe.output.getDisplayName().getString()));
-                            lines.add(new StringTextComponent(TextFormatting.GOLD + LangUtil.getString("tooltip.industrialforegoing.needs")));
-                            lines.add(new StringTextComponent(TextFormatting.YELLOW + " - " + TextFormatting.WHITE + recipe.waterNeed + TextFormatting.DARK_AQUA + LangUtil.getString("tooltip.industrialforegoing.mb_of", LangUtil.getString("block.minecraft.water"))));
-                            lines.add(new StringTextComponent(TextFormatting.YELLOW + " - " + TextFormatting.WHITE + recipe.lavaNeed + TextFormatting.DARK_AQUA + LangUtil.getString("tooltip.industrialforegoing.mb_of", LangUtil.getString("block.minecraft.lava"))));
-                            lines.add(new StringTextComponent(TextFormatting.GOLD + LangUtil.getString("tooltip.industrialforegoing.consumes")));
-                            lines.add(new StringTextComponent(TextFormatting.YELLOW + " - " + TextFormatting.WHITE + recipe.waterConsume + TextFormatting.DARK_AQUA + LangUtil.getString("tooltip.industrialforegoing.mb_of", LangUtil.getString("block.minecraft.water"))));
-                            lines.add(new StringTextComponent(TextFormatting.YELLOW + " - " + TextFormatting.WHITE + recipe.lavaConsume + TextFormatting.DARK_AQUA + LangUtil.getString("tooltip.industrialforegoing.mb_of", LangUtil.getString("block.minecraft.lava"))));
+                            lines.add(new TextComponent(ChatFormatting.GOLD + LangUtil.getString("tooltip.industrialforegoing.generating") + ChatFormatting.WHITE + recipe.output.getHoverName().getString()));
+                            lines.add(new TextComponent(ChatFormatting.GOLD + LangUtil.getString("tooltip.industrialforegoing.needs")));
+                            lines.add(new TextComponent(ChatFormatting.YELLOW + " - " + ChatFormatting.WHITE + recipe.waterNeed + ChatFormatting.DARK_AQUA + LangUtil.getString("tooltip.industrialforegoing.mb_of", LangUtil.getString("block.minecraft.water"))));
+                            lines.add(new TextComponent(ChatFormatting.YELLOW + " - " + ChatFormatting.WHITE + recipe.lavaNeed + ChatFormatting.DARK_AQUA + LangUtil.getString("tooltip.industrialforegoing.mb_of", LangUtil.getString("block.minecraft.lava"))));
+                            lines.add(new TextComponent(ChatFormatting.GOLD + LangUtil.getString("tooltip.industrialforegoing.consumes")));
+                            lines.add(new TextComponent(ChatFormatting.YELLOW + " - " + ChatFormatting.WHITE + recipe.waterConsume + ChatFormatting.DARK_AQUA + LangUtil.getString("tooltip.industrialforegoing.mb_of", LangUtil.getString("block.minecraft.water"))));
+                            lines.add(new TextComponent(ChatFormatting.YELLOW + " - " + ChatFormatting.WHITE + recipe.lavaConsume + ChatFormatting.DARK_AQUA + LangUtil.getString("tooltip.industrialforegoing.mb_of", LangUtil.getString("block.minecraft.lava"))));
                         });
                         return lines;
                     }
@@ -190,18 +190,18 @@ public class MaterialStoneWorkFactoryTile extends IndustrialProcessingTile<Mater
             public List<IFactory<? extends IScreenAddon>> getScreenAddons() {
                 return Collections.singletonList(() -> new BasicButtonAddon(this) {
                     @Override
-                    public void drawBackgroundLayer(MatrixStack stack, Screen screen, IAssetProvider provider, int guiX, int guiY, int mouseX, int mouseY, float partialTicks) {
+                    public void drawBackgroundLayer(PoseStack stack, Screen screen, IAssetProvider provider, int guiX, int guiY, int mouseX, int mouseY, float partialTicks) {
                         AssetUtil.drawAsset(stack, screen, provider.getAsset(AssetTypes.ITEM_BACKGROUND), guiX + getPosX(), guiY + getPosY());
                         //RenderSystem.setupGui3DDiffuseLighting();
-                        Minecraft.getInstance().getItemRenderer().renderItemIntoGUI(ACTION_RECIPES[firstRecipeId].icon, guiX + getPosX() + 1, guiY + getPosY() + 1);
-                        RenderHelper.disableStandardItemLighting();
+                        Minecraft.getInstance().getItemRenderer().renderGuiItem(ACTION_RECIPES[firstRecipeId].icon, guiX + getPosX() + 1, guiY + getPosY() + 1);
+                        Lighting.turnOff();
                         RenderSystem.enableAlphaTest();
                     }
 
                     @Override
-                    public List<ITextComponent> getTooltipLines() {
-                        List<ITextComponent> lines = new ArrayList<>();
-                        lines.add(new StringTextComponent(TextFormatting.GOLD + LangUtil.getString("tooltip.industrialforegoing.action") + TextFormatting.WHITE + LangUtil.getString("tooltip.industrialforegoing.stonework." + ACTION_RECIPES[firstRecipeId].getAction())));
+                    public List<Component> getTooltipLines() {
+                        List<Component> lines = new ArrayList<>();
+                        lines.add(new TextComponent(ChatFormatting.GOLD + LangUtil.getString("tooltip.industrialforegoing.action") + ChatFormatting.WHITE + LangUtil.getString("tooltip.industrialforegoing.stonework." + ACTION_RECIPES[firstRecipeId].getAction())));
                         return lines;
                     }
                 });
@@ -215,18 +215,18 @@ public class MaterialStoneWorkFactoryTile extends IndustrialProcessingTile<Mater
             public List<IFactory<? extends IScreenAddon>> getScreenAddons() {
                 return Collections.singletonList(() -> new BasicButtonAddon(this) {
                     @Override
-                    public void drawBackgroundLayer(MatrixStack stack, Screen screen, IAssetProvider provider, int guiX, int guiY, int mouseX, int mouseY, float partialTicks) {
+                    public void drawBackgroundLayer(PoseStack stack, Screen screen, IAssetProvider provider, int guiX, int guiY, int mouseX, int mouseY, float partialTicks) {
                         AssetUtil.drawAsset(stack, screen, provider.getAsset(AssetTypes.ITEM_BACKGROUND), guiX + getPosX(), guiY + getPosY());
                         //RenderSystem.setupGui3DDiffuseLighting();
-                        Minecraft.getInstance().getItemRenderer().renderItemIntoGUI(ACTION_RECIPES[secondRecipeId].icon, guiX + getPosX() + 1, guiY + getPosY() + 1);
-                        RenderHelper.disableStandardItemLighting();
+                        Minecraft.getInstance().getItemRenderer().renderGuiItem(ACTION_RECIPES[secondRecipeId].icon, guiX + getPosX() + 1, guiY + getPosY() + 1);
+                        Lighting.turnOff();
                         RenderSystem.enableAlphaTest();
                     }
 
                     @Override
-                    public List<ITextComponent> getTooltipLines() {
-                        List<ITextComponent> lines = new ArrayList<>();
-                        lines.add(new StringTextComponent(TextFormatting.GOLD + LangUtil.getString("tooltip.industrialforegoing.action") + TextFormatting.WHITE + LangUtil.getString("tooltip.industrialforegoing.stonework." + ACTION_RECIPES[secondRecipeId].getAction())));
+                    public List<Component> getTooltipLines() {
+                        List<Component> lines = new ArrayList<>();
+                        lines.add(new TextComponent(ChatFormatting.GOLD + LangUtil.getString("tooltip.industrialforegoing.action") + ChatFormatting.WHITE + LangUtil.getString("tooltip.industrialforegoing.stonework." + ACTION_RECIPES[secondRecipeId].getAction())));
                         return lines;
                     }
                 });
@@ -240,18 +240,18 @@ public class MaterialStoneWorkFactoryTile extends IndustrialProcessingTile<Mater
             public List<IFactory<? extends IScreenAddon>> getScreenAddons() {
                 return Collections.singletonList(() -> new BasicButtonAddon(this) {
                     @Override
-                    public void drawBackgroundLayer(MatrixStack stack, Screen screen, IAssetProvider provider, int guiX, int guiY, int mouseX, int mouseY, float partialTicks) {
+                    public void drawBackgroundLayer(PoseStack stack, Screen screen, IAssetProvider provider, int guiX, int guiY, int mouseX, int mouseY, float partialTicks) {
                         AssetUtil.drawAsset(stack, screen, provider.getAsset(AssetTypes.ITEM_BACKGROUND), guiX + getPosX(), guiY + getPosY());
                         //RenderSystem.setupGui3DDiffuseLighting();
-                        Minecraft.getInstance().getItemRenderer().renderItemIntoGUI(ACTION_RECIPES[thirdRecipeId].icon, guiX + getPosX() + 1, guiY + getPosY() + 1);
-                        RenderHelper.disableStandardItemLighting();
+                        Minecraft.getInstance().getItemRenderer().renderGuiItem(ACTION_RECIPES[thirdRecipeId].icon, guiX + getPosX() + 1, guiY + getPosY() + 1);
+                        Lighting.turnOff();
                         RenderSystem.enableAlphaTest();
                     }
 
                     @Override
-                    public List<ITextComponent> getTooltipLines() {
-                        List<ITextComponent> lines = new ArrayList<>();
-                        lines.add(new StringTextComponent(TextFormatting.GOLD + LangUtil.getString("tooltip.industrialforegoing.action") + TextFormatting.WHITE + LangUtil.getString("tooltip.industrialforegoing.stonework." + ACTION_RECIPES[thirdRecipeId].getAction())));
+                    public List<Component> getTooltipLines() {
+                        List<Component> lines = new ArrayList<>();
+                        lines.add(new TextComponent(ChatFormatting.GOLD + LangUtil.getString("tooltip.industrialforegoing.action") + ChatFormatting.WHITE + LangUtil.getString("tooltip.industrialforegoing.stonework." + ACTION_RECIPES[thirdRecipeId].getAction())));
                         return lines;
                     }
                 });
@@ -265,18 +265,18 @@ public class MaterialStoneWorkFactoryTile extends IndustrialProcessingTile<Mater
             public List<IFactory<? extends IScreenAddon>> getScreenAddons() {
                 return Collections.singletonList(() -> new BasicButtonAddon(this) {
                     @Override
-                    public void drawBackgroundLayer(MatrixStack stack, Screen screen, IAssetProvider provider, int guiX, int guiY, int mouseX, int mouseY, float partialTicks) {
+                    public void drawBackgroundLayer(PoseStack stack, Screen screen, IAssetProvider provider, int guiX, int guiY, int mouseX, int mouseY, float partialTicks) {
                         AssetUtil.drawAsset(stack, screen, provider.getAsset(AssetTypes.ITEM_BACKGROUND), guiX + getPosX(), guiY + getPosY());
                         //RenderSystem.setupGui3DDiffuseLighting();
-                        Minecraft.getInstance().getItemRenderer().renderItemIntoGUI(ACTION_RECIPES[fourthRecipeId].icon, guiX + getPosX() + 1, guiY + getPosY() + 1);
-                        RenderHelper.disableStandardItemLighting();
+                        Minecraft.getInstance().getItemRenderer().renderGuiItem(ACTION_RECIPES[fourthRecipeId].icon, guiX + getPosX() + 1, guiY + getPosY() + 1);
+                        Lighting.turnOff();
                         RenderSystem.enableAlphaTest();
                     }
 
                     @Override
-                    public List<ITextComponent> getTooltipLines() {
-                        List<ITextComponent> lines = new ArrayList<>();
-                        lines.add(new StringTextComponent(TextFormatting.GOLD + LangUtil.getString("tooltip.industrialforegoing.action") + TextFormatting.WHITE + LangUtil.getString("tooltip.industrialforegoing.stonework." + ACTION_RECIPES[fourthRecipeId].getAction())));
+                    public List<Component> getTooltipLines() {
+                        List<Component> lines = new ArrayList<>();
+                        lines.add(new TextComponent(ChatFormatting.GOLD + LangUtil.getString("tooltip.industrialforegoing.action") + ChatFormatting.WHITE + LangUtil.getString("tooltip.industrialforegoing.stonework." + ACTION_RECIPES[fourthRecipeId].getAction())));
                         return lines;
                     }
                 });
@@ -304,7 +304,7 @@ public class MaterialStoneWorkFactoryTile extends IndustrialProcessingTile<Mater
     }
 
     public Optional<StoneWorkGenerateRecipe> getRecipe(){
-        Collection<StoneWorkGenerateRecipe> recipes =  RecipeUtil.getRecipes(this.world, StoneWorkGenerateRecipe.SERIALIZER.getRecipeType());
+        Collection<StoneWorkGenerateRecipe> recipes =  RecipeUtil.getRecipes(this.level, StoneWorkGenerateRecipe.SERIALIZER.getRecipeType());
         for (StoneWorkGenerateRecipe recipe : recipes) {
             if (recipe.getId().equals(new ResourceLocation(generatorRecipe))){
                 return Optional.of(recipe);
@@ -315,7 +315,7 @@ public class MaterialStoneWorkFactoryTile extends IndustrialProcessingTile<Mater
 
     public ResourceLocation getNextRecipe(){
         if (generatorRecipe != null){
-            List<ResourceLocation> rls = RecipeUtil.getRecipes(this.world, StoneWorkGenerateRecipe.SERIALIZER.getRecipeType()).stream().map(StoneWorkGenerateRecipe::getId).collect(Collectors.toList());
+            List<ResourceLocation> rls = RecipeUtil.getRecipes(this.level, StoneWorkGenerateRecipe.SERIALIZER.getRecipeType()).stream().map(StoneWorkGenerateRecipe::getId).collect(Collectors.toList());
             int currentIndex = rls.indexOf(new ResourceLocation(generatorRecipe));
             this.generatorRecipe = rls.get((currentIndex + 1) % rls.size()).toString();
         }
@@ -351,7 +351,7 @@ public class MaterialStoneWorkFactoryTile extends IndustrialProcessingTile<Mater
         for (int slot = 0; slot < input.getSlots(); slot++) {
             ItemStack inputStack = input.getStackInSlot(slot);
             if (inputStack.isEmpty()) continue;
-            ItemStack outputStack = action.work.apply(this.world, inputStack.copy()).copy();
+            ItemStack outputStack = action.work.apply(this.level, inputStack.copy()).copy();
             if (outputStack.isEmpty()) continue;
             if (ItemHandlerHelper.insertItem(output, outputStack, true).isEmpty()) {
                 if (!simulate){
@@ -378,11 +378,11 @@ public class MaterialStoneWorkFactoryTile extends IndustrialProcessingTile<Mater
     public static class StoneWorkAction {
 
         private final ItemStack icon;
-        private final BiFunction<World, ItemStack, ItemStack> work;
+        private final BiFunction<Level, ItemStack, ItemStack> work;
         private final int shrinkAmount;
         private final String action;
 
-        private StoneWorkAction(ItemStack icon, BiFunction<World, ItemStack, ItemStack> work, int shrinkAmount, String action) {
+        private StoneWorkAction(ItemStack icon, BiFunction<Level, ItemStack, ItemStack> work, int shrinkAmount, String action) {
             this.icon = icon;
             this.work = work;
             this.shrinkAmount = shrinkAmount;
@@ -393,7 +393,7 @@ public class MaterialStoneWorkFactoryTile extends IndustrialProcessingTile<Mater
             return icon;
         }
 
-        public BiFunction<World, ItemStack, ItemStack> getWork() {
+        public BiFunction<Level, ItemStack, ItemStack> getWork() {
             return work;
         }
 

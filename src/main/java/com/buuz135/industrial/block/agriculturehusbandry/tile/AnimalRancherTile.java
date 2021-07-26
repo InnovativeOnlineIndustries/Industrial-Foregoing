@@ -31,13 +31,13 @@ import com.hrznstudio.titanium.annotation.Save;
 import com.hrznstudio.titanium.component.energy.EnergyStorageComponent;
 import com.hrznstudio.titanium.component.fluid.SidedFluidTankComponent;
 import com.hrznstudio.titanium.component.inventory.SidedInventoryComponent;
-import net.minecraft.entity.CreatureEntity;
-import net.minecraft.entity.passive.AnimalEntity;
-import net.minecraft.entity.passive.SquidEntity;
-import net.minecraft.item.DyeColor;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.Items;
-import net.minecraft.util.Hand;
+import net.minecraft.world.entity.PathfinderMob;
+import net.minecraft.world.entity.animal.Animal;
+import net.minecraft.world.entity.animal.Squid;
+import net.minecraft.world.item.DyeColor;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
+import net.minecraft.world.InteractionHand;
 import net.minecraftforge.common.IForgeShearable;
 import net.minecraftforge.common.util.FakePlayer;
 import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
@@ -47,6 +47,8 @@ import net.minecraftforge.items.ItemHandlerHelper;
 
 import javax.annotation.Nonnull;
 import java.util.List;
+
+import com.buuz135.industrial.block.tile.IndustrialWorkingTile.WorkAction;
 
 public class AnimalRancherTile extends IndustrialAreaWorkingTile<AnimalRancherTile> {
 
@@ -76,35 +78,35 @@ public class AnimalRancherTile extends IndustrialAreaWorkingTile<AnimalRancherTi
     @Override
     public WorkAction work() {
         if (hasEnergy(powerPerOperation)) {
-            List<CreatureEntity> mobs = this.world.getEntitiesWithinAABB(CreatureEntity.class, getWorkingArea().getBoundingBox());
+            List<PathfinderMob> mobs = this.level.getEntitiesOfClass(PathfinderMob.class, getWorkingArea().bounds());
             if (mobs.size() > 0) {
-                for (CreatureEntity mob : mobs) {
-                    FakePlayer player = IndustrialForegoing.getFakePlayer(world, mob.getPosition()); //getPosition
+                for (PathfinderMob mob : mobs) {
+                    FakePlayer player = IndustrialForegoing.getFakePlayer(level, mob.blockPosition()); //getPosition
                     //SHEAR INTERACTION
                     ItemStack shears = new ItemStack(Items.SHEARS);
-                    if (mob instanceof IForgeShearable && ((IForgeShearable) mob).isShearable(shears, this.world, mob.getPosition())) { //getPosition
-                        List<ItemStack> items = ((IForgeShearable) mob).onSheared(player, shears, this.world, mob.getPosition(), 0); //getPosition
+                    if (mob instanceof IForgeShearable && ((IForgeShearable) mob).isShearable(shears, this.level, mob.blockPosition())) { //getPosition
+                        List<ItemStack> items = ((IForgeShearable) mob).onSheared(player, shears, this.level, mob.blockPosition(), 0); //getPosition
                         items.forEach(stack -> ItemHandlerHelper.insertItem(output, stack, false));
                         if (items.size() > 0) {
                             return new WorkAction(0.35f, powerPerOperation);
                         }
                     }
-                    if (mob instanceof SquidEntity && !ItemStackUtils.isInventoryFull(output) && world.rand.nextBoolean() && world.rand.nextBoolean() && world.rand.nextBoolean() && world.rand.nextBoolean()) {
+                    if (mob instanceof Squid && !ItemStackUtils.isInventoryFull(output) && level.random.nextBoolean() && level.random.nextBoolean() && level.random.nextBoolean() && level.random.nextBoolean()) {
                         ItemHandlerHelper.insertItem(output, new ItemStack(Items.BLACK_DYE), false);
                         return new WorkAction(0.35f, powerPerOperation);
                     }
                     //BUCKET INTERACTION
-                    if (mob instanceof AnimalEntity && tank.getFluidAmount() + 1000 <= tank.getCapacity()) {
-                        player.setHeldItem(Hand.MAIN_HAND, new ItemStack(Items.BUCKET));
-                        if (((AnimalEntity) mob).func_230254_b_(player, Hand.MAIN_HAND).isSuccessOrConsume()) { //ProcessInteract
-                            ItemStack stack = player.getHeldItem(Hand.MAIN_HAND);
+                    if (mob instanceof Animal && tank.getFluidAmount() + 1000 <= tank.getCapacity()) {
+                        player.setItemInHand(InteractionHand.MAIN_HAND, new ItemStack(Items.BUCKET));
+                        if (((Animal) mob).mobInteract(player, InteractionHand.MAIN_HAND).consumesAction()) { //ProcessInteract
+                            ItemStack stack = player.getItemInHand(InteractionHand.MAIN_HAND);
                             IFluidHandlerItem fluidHandlerItem = stack.getCapability(CapabilityFluidHandler.FLUID_HANDLER_ITEM_CAPABILITY).orElse(null);
                             if (fluidHandlerItem != null) {
                                 tank.fillForced(fluidHandlerItem.drain(Integer.MAX_VALUE, IFluidHandler.FluidAction.EXECUTE), IFluidHandler.FluidAction.EXECUTE);
-                                player.setHeldItem(Hand.MAIN_HAND, ItemStack.EMPTY);
+                                player.setItemInHand(InteractionHand.MAIN_HAND, ItemStack.EMPTY);
                                 return new WorkAction(0.35f, powerPerOperation);
                             }
-                            player.setHeldItem(Hand.MAIN_HAND, ItemStack.EMPTY);
+                            player.setItemInHand(InteractionHand.MAIN_HAND, ItemStack.EMPTY);
                         }
                     }
                 }

@@ -24,11 +24,11 @@ package com.buuz135.industrial.api.transporter;
 import com.buuz135.industrial.api.IBlockContainer;
 import com.google.common.collect.ImmutableSet;
 import com.hrznstudio.titanium.api.IRecipeProvider;
-import net.minecraft.item.Item;
-import net.minecraft.util.Direction;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
+import net.minecraft.world.item.Item;
+import net.minecraft.core.Direction;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.level.Level;
 import net.minecraftforge.registries.ForgeRegistryEntry;
 
 import javax.annotation.Nonnull;
@@ -75,7 +75,7 @@ public abstract class TransporterTypeFactory extends ForgeRegistryEntry<Transpor
         this.upgradeItem = upgradeItem;
     }
 
-    public abstract boolean canBeAttachedAgainst(World world, BlockPos pos, Direction face);
+    public abstract boolean canBeAttachedAgainst(Level world, BlockPos pos, Direction face);
 
     public enum TransporterAction {
         INSERT,

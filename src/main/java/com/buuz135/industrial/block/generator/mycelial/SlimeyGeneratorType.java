@@ -25,14 +25,14 @@ import com.buuz135.industrial.plugin.jei.generator.MycelialGeneratorRecipe;
 import com.buuz135.industrial.utils.IndustrialTags;
 import com.hrznstudio.titanium.component.fluid.SidedFluidTankComponent;
 import com.hrznstudio.titanium.component.inventory.SidedInventoryComponent;
-import net.minecraft.block.Blocks;
-import net.minecraft.data.ShapedRecipeBuilder;
-import net.minecraft.item.DyeColor;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.Items;
-import net.minecraft.item.crafting.Ingredient;
-import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.data.recipes.ShapedRecipeBuilder;
+import net.minecraft.world.item.DyeColor;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
+import net.minecraft.world.item.crafting.Ingredient;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraftforge.common.ForgeMod;
 import net.minecraftforge.common.Tags;
 import net.minecraftforge.common.util.INBTSerializable;
@@ -61,21 +61,21 @@ public class SlimeyGeneratorType implements IMycelialGeneratorType{
 
     @Override
     public List<BiPredicate<ItemStack, Integer>> getSlotInputPredicates() {
-        return Arrays.asList(null, (stack, slot) -> stack.getItem().isIn(Tags.Items.SLIMEBALLS));
+        return Arrays.asList(null, (stack, slot) -> stack.getItem().is(Tags.Items.SLIMEBALLS));
     }
 
     @Override
     public List<Predicate<FluidStack>> getTankInputPredicates() {
-        return Arrays.asList(fluidStack -> fluidStack.getFluid().isEquivalentTo(ForgeMod.MILK.get()), null);
+        return Arrays.asList(fluidStack -> fluidStack.getFluid().isSame(ForgeMod.MILK.get()), null);
     }
 
     @Override
-    public boolean canStart(INBTSerializable<CompoundNBT>[] inputs) {
+    public boolean canStart(INBTSerializable<CompoundTag>[] inputs) {
         return inputs.length >= 2 && inputs[0] instanceof SidedFluidTankComponent && inputs[1] instanceof SidedInventoryComponent && ((SidedFluidTankComponent<?>) inputs[0]).getFluidAmount() >= 250 && ((SidedInventoryComponent<?>) inputs[1]).getStackInSlot(0).getCount() > 0;
     }
 
     @Override
-    public Pair<Integer, Integer> getTimeAndPowerGeneration(INBTSerializable<CompoundNBT>[] inputs) {
+    public Pair<Integer, Integer> getTimeAndPowerGeneration(INBTSerializable<CompoundTag>[] inputs) {
         if (inputs.length >= 2 && inputs[0] instanceof SidedFluidTankComponent && inputs[1] instanceof SidedInventoryComponent){
             if (((SidedFluidTankComponent<?>) inputs[0]).getFluidAmount() >= 250 && ((SidedInventoryComponent<?>) inputs[1]).getStackInSlot(0).getCount() > 0){
                 ((SidedFluidTankComponent<?>) inputs[0]).drainForced(250, IFluidHandler.FluidAction.EXECUTE);
@@ -103,14 +103,14 @@ public class SlimeyGeneratorType implements IMycelialGeneratorType{
 
     @Override
     public List<MycelialGeneratorRecipe> getRecipes() {
-        return Collections.singletonList(new MycelialGeneratorRecipe(Arrays.asList(new ArrayList<>(), Collections.singletonList(Ingredient.fromTag(Tags.Items.SLIMEBALLS))), Arrays.asList(Arrays.asList(new FluidStack(ForgeMod.MILK.get(), 250)), Arrays.asList()), 20*20, 200));
+        return Collections.singletonList(new MycelialGeneratorRecipe(Arrays.asList(new ArrayList<>(), Collections.singletonList(Ingredient.of(Tags.Items.SLIMEBALLS))), Arrays.asList(Arrays.asList(new FluidStack(ForgeMod.MILK.get(), 250)), Arrays.asList()), 20*20, 200));
     }
 
     @Override
     public ShapedRecipeBuilder addIngredients(ShapedRecipeBuilder recipeBuilder) {
-        recipeBuilder = recipeBuilder.key('B', Blocks.SLIME_BLOCK)
-                .key('C', Items.MILK_BUCKET)
-                .key('M', IndustrialTags.Items.MACHINE_FRAME_ADVANCED);
+        recipeBuilder = recipeBuilder.define('B', Blocks.SLIME_BLOCK)
+                .define('C', Items.MILK_BUCKET)
+                .define('M', IndustrialTags.Items.MACHINE_FRAME_ADVANCED);
         return recipeBuilder;
     }
 }

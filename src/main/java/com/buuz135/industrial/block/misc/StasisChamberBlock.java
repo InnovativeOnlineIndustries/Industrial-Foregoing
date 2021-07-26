@@ -27,17 +27,20 @@ import com.buuz135.industrial.module.ModuleMisc;
 import com.buuz135.industrial.utils.IndustrialTags;
 import com.hrznstudio.titanium.api.IFactory;
 import com.hrznstudio.titanium.recipe.generator.TitaniumShapedRecipeBuilder;
-import net.minecraft.block.Blocks;
-import net.minecraft.data.IFinishedRecipe;
-import net.minecraft.item.Items;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.data.recipes.FinishedRecipe;
+import net.minecraft.world.item.Items;
 
 import javax.annotation.Nonnull;
 import java.util.function.Consumer;
 
+import com.hrznstudio.titanium.block.RotatableBlock.RotationType;
+import net.minecraft.world.level.block.state.BlockBehaviour.Properties;
+
 public class StasisChamberBlock extends IndustrialBlock<StasisChamberTile> {
 
     public StasisChamberBlock() {
-        super("stasis_chamber", Properties.from(Blocks.IRON_BLOCK), StasisChamberTile.class, ModuleMisc.TAB_MISC);
+        super("stasis_chamber", Properties.copy(Blocks.IRON_BLOCK), StasisChamberTile.class, ModuleMisc.TAB_MISC);
     }
 
     @Override
@@ -52,13 +55,13 @@ public class StasisChamberBlock extends IndustrialBlock<StasisChamberTile> {
     }
 
     @Override
-    public void registerRecipe(Consumer<IFinishedRecipe> consumer) {
-        TitaniumShapedRecipeBuilder.shapedRecipe(this).patternLine("sss").patternLine("gmg").patternLine("ipi")
-                .key('s', Blocks.SOUL_SAND)
-                .key('g', Items.GHAST_TEAR)
-                .key('m', IndustrialTags.Items.MACHINE_FRAME_ADVANCED)
-                .key('i', IndustrialTags.Items.GEAR_GOLD)
-                .key('p', Blocks.PISTON)
-                .build(consumer);
+    public void registerRecipe(Consumer<FinishedRecipe> consumer) {
+        TitaniumShapedRecipeBuilder.shapedRecipe(this).pattern("sss").pattern("gmg").pattern("ipi")
+                .define('s', Blocks.SOUL_SAND)
+                .define('g', Items.GHAST_TEAR)
+                .define('m', IndustrialTags.Items.MACHINE_FRAME_ADVANCED)
+                .define('i', IndustrialTags.Items.GEAR_GOLD)
+                .define('p', Blocks.PISTON)
+                .save(consumer);
     }
 }

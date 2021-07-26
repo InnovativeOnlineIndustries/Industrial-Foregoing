@@ -29,19 +29,24 @@ import com.buuz135.industrial.utils.BlockUtils;
 import com.hrznstudio.titanium.annotation.Save;
 import com.hrznstudio.titanium.component.energy.EnergyStorageComponent;
 import com.hrznstudio.titanium.component.inventory.SidedInventoryComponent;
-import net.minecraft.fluid.FluidState;
-import net.minecraft.fluid.Fluids;
-import net.minecraft.item.DyeColor;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.Items;
-import net.minecraft.loot.*;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.shapes.VoxelShape;
-import net.minecraft.util.math.vector.Vector3d;
-import net.minecraft.world.server.ServerWorld;
+import net.minecraft.world.level.material.FluidState;
+import net.minecraft.world.level.material.Fluids;
+import net.minecraft.world.item.DyeColor;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.phys.shapes.VoxelShape;
+import net.minecraft.world.phys.Vec3;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraftforge.items.ItemHandlerHelper;
 
 import javax.annotation.Nonnull;
+
+import net.minecraft.world.level.storage.loot.BuiltInLootTables;
+import net.minecraft.world.level.storage.loot.LootContext;
+import net.minecraft.world.level.storage.loot.LootTable;
+import net.minecraft.world.level.storage.loot.parameters.LootContextParamSets;
+import net.minecraft.world.level.storage.loot.parameters.LootContextParams;
 
 public class MarineFisherTile extends IndustrialAreaWorkingTile<MarineFisherTile> {
 
@@ -65,12 +70,12 @@ public class MarineFisherTile extends IndustrialAreaWorkingTile<MarineFisherTile
     public WorkAction work() {
         if (hasEnergy(powerPerOperation)) {
             if (getWaterSources() < 9) return new WorkAction(1, 0);
-            LootTable fishingTable = this.world.getServer().getLootTableManager().getLootTableFromLocation(LootTables.GAMEPLAY_FISHING);
-            if (this.world.rand.nextDouble() <= 0.05) {
-                fishingTable = this.world.getServer().getLootTableManager().getLootTableFromLocation(LootTables.GAMEPLAY_FISHING_TREASURE);
+            LootTable fishingTable = this.level.getServer().getLootTables().get(BuiltInLootTables.FISHING);
+            if (this.level.random.nextDouble() <= 0.05) {
+                fishingTable = this.level.getServer().getLootTables().get(BuiltInLootTables.FISHING_TREASURE);
             }
-            LootContext.Builder context = new LootContext.Builder((ServerWorld) this.world).withParameter(LootParameters.field_237457_g_, new Vector3d(this.pos.getX(), this.pos.getY(), this.pos.getZ())).withParameter(LootParameters.TOOL, new ItemStack(Items.FISHING_ROD));
-            fishingTable.generate(context.build(LootParameterSets.FISHING)).forEach(stack -> ItemHandlerHelper.insertItem(output, stack, false));
+            LootContext.Builder context = new LootContext.Builder((ServerLevel) this.level).withParameter(LootContextParams.ORIGIN, new Vec3(this.worldPosition.getX(), this.worldPosition.getY(), this.worldPosition.getZ())).withParameter(LootContextParams.TOOL, new ItemStack(Items.FISHING_ROD));
+            fishingTable.getRandomItems(context.create(LootContextParamSets.FISHING)).forEach(stack -> ItemHandlerHelper.insertItem(output, stack, false));
             return new WorkAction(1f, powerPerOperation);
         }
         return new WorkAction(1f, 0);
@@ -93,15 +98,15 @@ public class MarineFisherTile extends IndustrialAreaWorkingTile<MarineFisherTile
     }
 
     public VoxelShape getWorkingArea() {
-        return new RangeManager(this.pos, this.getFacingDirection(), RangeManager.RangeType.BOTTOM).get(1);
+        return new RangeManager(this.worldPosition, this.getFacingDirection(), RangeManager.RangeType.BOTTOM).get(1);
     }
 
     private int getWaterSources() {
         int amount = 0;
-        for (BlockPos pos : BlockUtils.getBlockPosInAABB(getWorkingArea().getBoundingBox())) {
-            if (!world.isAreaLoaded(pos, pos)) continue;
-            FluidState fluidState = this.world.getFluidState(pos);
-            if (fluidState.getFluid().equals(Fluids.WATER) && fluidState.isSource()) {
+        for (BlockPos pos : BlockUtils.getBlockPosInAABB(getWorkingArea().bounds())) {
+            if (!level.hasChunksAt(pos, pos)) continue;
+            FluidState fluidState = this.level.getFluidState(pos);
+            if (fluidState.getType().equals(Fluids.WATER) && fluidState.isSource()) {
                 ++amount;
             }
         }

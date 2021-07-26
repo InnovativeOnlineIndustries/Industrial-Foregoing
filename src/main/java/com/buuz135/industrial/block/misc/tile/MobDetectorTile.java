@@ -26,10 +26,12 @@ import com.buuz135.industrial.block.tile.IndustrialAreaWorkingTile;
 import com.buuz135.industrial.block.tile.RangeManager;
 import com.buuz135.industrial.module.ModuleMisc;
 import com.hrznstudio.titanium.component.energy.EnergyStorageComponent;
-import net.minecraft.entity.LivingEntity;
+import net.minecraft.world.entity.LivingEntity;
 
 import javax.annotation.Nonnull;
 import java.util.List;
+
+import com.buuz135.industrial.block.tile.IndustrialWorkingTile.WorkAction;
 
 public class MobDetectorTile extends IndustrialAreaWorkingTile<MobDetectorTile> {
 
@@ -42,10 +44,10 @@ public class MobDetectorTile extends IndustrialAreaWorkingTile<MobDetectorTile> 
 
     @Override
     public WorkAction work() {
-        if (this.world != null && this.world.getBlockState(pos).getBlock() instanceof MobDetectorBlock) {
-            List<LivingEntity> living = this.world.getEntitiesWithinAABB(LivingEntity.class, getWorkingArea().getBoundingBox());
+        if (this.level != null && this.level.getBlockState(worldPosition).getBlock() instanceof MobDetectorBlock) {
+            List<LivingEntity> living = this.level.getEntitiesOfClass(LivingEntity.class, getWorkingArea().bounds());
             redstoneSignal = Math.min(living.size(), 15);
-            this.world.notifyNeighborsOfStateChange(this.pos, this.getBasicTileBlock());
+            this.level.updateNeighborsAt(this.worldPosition, this.getBasicTileBlock());
         }
         return new WorkAction(1, 0);
     }

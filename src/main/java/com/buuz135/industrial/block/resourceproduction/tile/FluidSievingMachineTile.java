@@ -13,9 +13,9 @@ import com.hrznstudio.titanium.component.fluid.SidedFluidTankComponent;
 import com.hrznstudio.titanium.component.inventory.SidedInventoryComponent;
 import com.hrznstudio.titanium.container.addon.IContainerAddon;
 import com.hrznstudio.titanium.util.InventoryUtil;
-import net.minecraft.block.Blocks;
-import net.minecraft.item.DyeColor;
-import net.minecraft.item.ItemStack;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.item.DyeColor;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.tags.ItemTags;
 import net.minecraftforge.fluids.capability.IFluidHandler;
 import net.minecraftforge.items.ItemHandlerHelper;
@@ -48,11 +48,11 @@ public class FluidSievingMachineTile extends IndustrialProcessingTile<FluidSievi
                 }
                         .setColor(DyeColor.BROWN)
                         .setTankAction(FluidTankComponent.Action.FILL)
-                .setValidator(stack -> stack.getFluid().isEquivalentTo(ModuleCore.FERMENTED_ORE_MEAT.getSourceFluid()))
+                .setValidator(stack -> stack.getFluid().isSame(ModuleCore.FERMENTED_ORE_MEAT.getSourceFluid()))
         );
         addInventory(this.sand = (SidedInventoryComponent<FluidSievingMachineTile>) new SidedInventoryComponent<FluidSievingMachineTile>("sand", 60, 31, 4, 1)
                         .setColor(DyeColor.YELLOW)
-                .setInputFilter((stack, integer) -> stack.getItem().isIn(ItemTags.SAND))
+                .setInputFilter((stack, integer) -> stack.getItem().is(ItemTags.SAND))
                 .setSlotToItemStackRender(0, new ItemStack(Blocks.SAND))
                 .setSlotToItemStackRender(1, new ItemStack(Blocks.SAND))
                 .setSlotToItemStackRender(2, new ItemStack(Blocks.SAND))

@@ -26,16 +26,16 @@ import com.buuz135.industrial.api.transporter.TransporterTypeFactory;
 import com.buuz135.industrial.module.ModuleTransportStorage;
 import com.google.common.cache.Cache;
 import com.google.common.cache.CacheBuilder;
-import com.mojang.blaze3d.matrix.MatrixStack;
-import net.minecraft.block.BlockState;
-import net.minecraft.client.renderer.model.BakedQuad;
-import net.minecraft.client.renderer.model.IBakedModel;
-import net.minecraft.client.renderer.model.ItemCameraTransforms;
-import net.minecraft.client.renderer.model.ItemOverrideList;
+import com.mojang.blaze3d.vertex.PoseStack;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.client.renderer.block.model.BakedQuad;
+import net.minecraft.client.resources.model.BakedModel;
+import net.minecraft.client.renderer.block.model.ItemTransforms;
+import net.minecraft.client.renderer.block.model.ItemOverrides;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
-import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
-import net.minecraft.client.renderer.vertex.VertexFormat;
-import net.minecraft.util.Direction;
+import com.mojang.blaze3d.vertex.DefaultVertexFormat;
+import com.mojang.blaze3d.vertex.VertexFormat;
+import net.minecraft.core.Direction;
 import net.minecraftforge.client.model.data.IDynamicBakedModel;
 import net.minecraftforge.client.model.data.IModelData;
 import org.apache.commons.lang3.tuple.Pair;
@@ -48,12 +48,12 @@ public class TransporterBlockModel implements IDynamicBakedModel {
 
     public static Cache<Pair<Pair<String, Pair<Direction, TransporterTypeFactory.TransporterAction>>, Direction>, List<BakedQuad>> CACHE = CacheBuilder.newBuilder().build();
     private VertexFormat format;
-    private IBakedModel previousModel;
+    private BakedModel previousModel;
     private Map<Direction, List<BakedQuad>> prevQuads = new HashMap<>();
 
-    public TransporterBlockModel(IBakedModel previousConveyor) {
+    public TransporterBlockModel(BakedModel previousConveyor) {
         this.previousModel = previousConveyor;
-        this.format = DefaultVertexFormats.BLOCK;
+        this.format = DefaultVertexFormat.BLOCK;
     }
 
     @Nonnull
@@ -75,7 +75,7 @@ public class TransporterBlockModel implements IDynamicBakedModel {
                 List<BakedQuad> upgradeQuads = CACHE.getIfPresent(Pair.of(Pair.of(upgrade.getFactory().getRegistryName().toString(), Pair.of(upgrade.getSide(), upgrade.getAction())), side));
                 if (upgradeQuads == null) {
                     try {
-                        IBakedModel model = ModuleTransportStorage.TRANSPORTER_CACHE.get(upgrade.getFactory().getModel(upgrade.getSide(), upgrade.getAction()));
+                        BakedModel model = ModuleTransportStorage.TRANSPORTER_CACHE.get(upgrade.getFactory().getModel(upgrade.getSide(), upgrade.getAction()));
                         upgradeQuads = model.getQuads(state, side, rand, extraData);
                     } catch (Exception e) {
                         e.printStackTrace();
@@ -92,8 +92,8 @@ public class TransporterBlockModel implements IDynamicBakedModel {
     }
 
     @Override
-    public boolean isAmbientOcclusion() {
-        return previousModel.isAmbientOcclusion();
+    public boolean useAmbientOcclusion() {
+        return previousModel.useAmbientOcclusion();
     }
 
     @Override
@@ -102,34 +102,34 @@ public class TransporterBlockModel implements IDynamicBakedModel {
     }
 
     @Override
-    public boolean isSideLit() {
-        return previousModel.isSideLit();
+    public boolean usesBlockLight() {
+        return previousModel.usesBlockLight();
     }
 
     @Override
-    public boolean isBuiltInRenderer() {
-        return previousModel.isBuiltInRenderer();
-    }
-
-    @Nonnull
-    @Override
-    public TextureAtlasSprite getParticleTexture() {
-        return previousModel.getParticleTexture();
+    public boolean isCustomRenderer() {
+        return previousModel.isCustomRenderer();
     }
 
     @Nonnull
     @Override
-    public ItemOverrideList getOverrides() {
+    public TextureAtlasSprite getParticleIcon() {
+        return previousModel.getParticleIcon();
+    }
+
+    @Nonnull
+    @Override
+    public ItemOverrides getOverrides() {
         return previousModel.getOverrides();
     }
 
     @Override
-    public IBakedModel handlePerspective(ItemCameraTransforms.TransformType cameraTransformType, MatrixStack mat) {
+    public BakedModel handlePerspective(ItemTransforms.TransformType cameraTransformType, PoseStack mat) {
         return previousModel.handlePerspective(cameraTransformType, mat);
     }
 
     @Override
-    public ItemCameraTransforms getItemCameraTransforms() {
-        return previousModel.getItemCameraTransforms();
+    public ItemTransforms getTransforms() {
+        return previousModel.getTransforms();
     }
 }

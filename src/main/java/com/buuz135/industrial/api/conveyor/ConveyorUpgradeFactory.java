@@ -24,12 +24,12 @@ package com.buuz135.industrial.api.conveyor;
 import com.buuz135.industrial.api.IBlockContainer;
 import com.google.common.collect.ImmutableSet;
 import com.hrznstudio.titanium.api.IRecipeProvider;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.Item;
-import net.minecraft.util.Direction;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.Item;
+import net.minecraft.core.Direction;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.level.Level;
 import net.minecraftforge.registries.ForgeRegistryEntry;
 
 import javax.annotation.Nonnull;
@@ -67,8 +67,8 @@ public abstract class ConveyorUpgradeFactory extends ForgeRegistryEntry<Conveyor
         return Collections.emptySet();
     }
 
-    public Direction getSideForPlacement(World world, BlockPos pos, PlayerEntity player) {
-        return player.getHorizontalFacing();
+    public Direction getSideForPlacement(Level world, BlockPos pos, Player player) {
+        return player.getDirection();
     }
 
     public Item getUpgradeItem() {

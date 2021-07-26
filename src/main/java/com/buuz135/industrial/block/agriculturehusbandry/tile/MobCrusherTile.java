@@ -42,33 +42,33 @@ import com.hrznstudio.titanium.component.fluid.SidedFluidTankComponent;
 import com.hrznstudio.titanium.component.inventory.SidedInventoryComponent;
 import com.hrznstudio.titanium.item.AugmentWrapper;
 import com.hrznstudio.titanium.util.LangUtil;
-import net.minecraft.enchantment.EnchantmentHelper;
-import net.minecraft.enchantment.Enchantments;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.MobEntity;
-import net.minecraft.entity.boss.WitherEntity;
-import net.minecraft.entity.item.ItemEntity;
-import net.minecraft.entity.passive.AnimalEntity;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.DyeColor;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.Items;
-import net.minecraft.loot.LootContext;
-import net.minecraft.loot.LootParameterSets;
-import net.minecraft.loot.LootParameters;
-import net.minecraft.loot.LootTable;
-import net.minecraft.util.DamageSource;
-import net.minecraft.util.Hand;
-import net.minecraft.util.math.AxisAlignedBB;
-import net.minecraft.util.math.shapes.VoxelShape;
-import net.minecraft.util.math.vector.Vector3d;
-import net.minecraft.util.text.TextFormatting;
-import net.minecraft.world.server.ServerWorld;
+import net.minecraft.world.item.enchantment.EnchantmentHelper;
+import net.minecraft.world.item.enchantment.Enchantments;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.Mob;
+import net.minecraft.world.entity.boss.wither.WitherBoss;
+import net.minecraft.world.entity.item.ItemEntity;
+import net.minecraft.world.entity.animal.Animal;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.DyeColor;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
+import net.minecraft.world.level.storage.loot.LootContext;
+import net.minecraft.world.level.storage.loot.parameters.LootContextParamSets;
+import net.minecraft.world.level.storage.loot.parameters.LootContextParams;
+import net.minecraft.world.level.storage.loot.LootTable;
+import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.phys.AABB;
+import net.minecraft.world.phys.shapes.VoxelShape;
+import net.minecraft.world.phys.Vec3;
+import net.minecraft.ChatFormatting;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraftforge.common.ForgeHooks;
 import net.minecraftforge.common.util.FakePlayer;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.capability.IFluidHandler;
-import net.minecraftforge.fml.common.ObfuscationReflectionHelper;
+import net.minecraftforge.fml.util.ObfuscationReflectionHelper;
 import net.minecraftforge.items.ItemHandlerHelper;
 
 import java.lang.reflect.InvocationTargetException;
@@ -78,10 +78,12 @@ import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import com.buuz135.industrial.block.tile.IndustrialWorkingTile.WorkAction;
+
 public class MobCrusherTile extends IndustrialAreaWorkingTile<MobCrusherTile> {
 
-    private final Method GET_EXPERIENCE_POINTS = ObfuscationReflectionHelper.findMethod(LivingEntity.class, "func_70693_a", PlayerEntity.class);
-    private final Method DROP_SPECIAL_ITEMS = ObfuscationReflectionHelper.findMethod(MobEntity.class, "func_213333_a", DamageSource.class, int.class, boolean.class);
+    private final Method GET_EXPERIENCE_POINTS = ObfuscationReflectionHelper.findMethod(LivingEntity.class, "getExperienceReward", Player.class);
+    private final Method DROP_SPECIAL_ITEMS = ObfuscationReflectionHelper.findMethod(Mob.class, "dropCustomDeathLoot", DamageSource.class, int.class, boolean.class);
 
     @Save
     private SidedInventoryComponent<MobCrusherTile> output;
@@ -100,7 +102,7 @@ public class MobCrusherTile extends IndustrialAreaWorkingTile<MobCrusherTile> {
                 setColor(DyeColor.LIME).
                 setTankAction(FluidTankComponent.Action.DRAIN).
                 setComponentHarness(this).
-                setValidator(fluidStack -> fluidStack.getFluid().isIn(IndustrialTags.Fluids.EXPERIENCE))
+                setValidator(fluidStack -> fluidStack.getFluid().is(IndustrialTags.Fluids.EXPERIENCE))
         );
         this.addInventory(output = (SidedInventoryComponent<MobCrusherTile>) new SidedInventoryComponent<MobCrusherTile>("output", 64, 22, 6 * 3, 1).
                 setColor(DyeColor.ORANGE).
@@ -112,8 +114,8 @@ public class MobCrusherTile extends IndustrialAreaWorkingTile<MobCrusherTile> {
             @Override
             public List<IFactory<? extends IScreenAddon>> getScreenAddons() {
                 return Collections.singletonList(() -> new StateButtonAddon(this,
-                        new StateButtonInfo(0, AssetTypes.BUTTON_SIDENESS_ENABLED, TextFormatting.GOLD + LangUtil.getString("tooltip.industrialforegoing.mob_crusher.produce"), "tooltip.industrialforegoing.mob_crusher.produce_extra"),
-                        new StateButtonInfo(1, AssetTypes.BUTTON_SIDENESS_DISABLED, TextFormatting.GOLD + LangUtil.getString("tooltip.industrialforegoing.mob_crusher.consume"), "tooltip.industrialforegoing.mob_crusher.consume_extra_1", "tooltip.industrialforegoing.mob_crusher.consume_extra_2")) {
+                        new StateButtonInfo(0, AssetTypes.BUTTON_SIDENESS_ENABLED, ChatFormatting.GOLD + LangUtil.getString("tooltip.industrialforegoing.mob_crusher.produce"), "tooltip.industrialforegoing.mob_crusher.produce_extra"),
+                        new StateButtonInfo(1, AssetTypes.BUTTON_SIDENESS_DISABLED, ChatFormatting.GOLD + LangUtil.getString("tooltip.industrialforegoing.mob_crusher.consume"), "tooltip.industrialforegoing.mob_crusher.consume_extra_1", "tooltip.industrialforegoing.mob_crusher.consume_extra_2")) {
                     @Override
                     public int getState() {
                         return dropXP ? 0 : 1;
@@ -129,11 +131,11 @@ public class MobCrusherTile extends IndustrialAreaWorkingTile<MobCrusherTile> {
     @Override
     public WorkAction work() {
         if (hasEnergy(MobCrusherConfig.powerPerOperation)) {
-            List<MobEntity> mobs = this.world.getEntitiesWithinAABB(MobEntity.class, getWorkingArea().getBoundingBox()).stream().filter(mobEntity -> !(mobEntity instanceof AnimalEntity &&
-            mobEntity.isChild()) && !mobEntity.isInvulnerable() && !(mobEntity instanceof WitherEntity && ((WitherEntity) mobEntity).getInvulTime() > 0)).filter(LivingEntity::isAlive).collect(Collectors.toList());
+            List<Mob> mobs = this.level.getEntitiesOfClass(Mob.class, getWorkingArea().bounds()).stream().filter(mobEntity -> !(mobEntity instanceof Animal &&
+            mobEntity.isBaby()) && !mobEntity.isInvulnerable() && !(mobEntity instanceof WitherBoss && ((WitherBoss) mobEntity).getInvulnerableTicks() > 0)).filter(LivingEntity::isAlive).collect(Collectors.toList());
             if (mobs.size() > 0) {
-                MobEntity entity = mobs.get(0);
-                FakePlayer player = IndustrialForegoing.getFakePlayer(this.world);
+                Mob entity = mobs.get(0);
+                FakePlayer player = IndustrialForegoing.getFakePlayer(this.level);
                 int experience = 0;
                 try {
                     experience = (int) GET_EXPERIENCE_POINTS.invoke(entity, player);
@@ -142,23 +144,23 @@ public class MobCrusherTile extends IndustrialAreaWorkingTile<MobCrusherTile> {
                 }
                 int looting = 0;
                 if (!dropXP) {
-                    looting = this.world.rand.nextInt(4);
+                    looting = this.level.random.nextInt(4);
                     ItemStack sword = new ItemStack(Items.DIAMOND_SWORD);
-                    EnchantmentHelper.setEnchantments(Collections.singletonMap(Enchantments.LOOTING, looting), sword);
-                    player.setHeldItem(Hand.MAIN_HAND, sword);
+                    EnchantmentHelper.setEnchantments(Collections.singletonMap(Enchantments.MOB_LOOTING, looting), sword);
+                    player.setItemInHand(InteractionHand.MAIN_HAND, sword);
                 }
                 //Loot from table
-                DamageSource source = DamageSource.causePlayerDamage(player);
-                LootTable table = this.world.getServer().getLootTableManager().getLootTableFromLocation(entity.getLootTableResourceLocation());
-                LootContext.Builder context = new LootContext.Builder((ServerWorld) this.world)
-                        .withRandom(this.world.rand)
-                        .withParameter(LootParameters.THIS_ENTITY, entity)
-                        .withParameter(LootParameters.DAMAGE_SOURCE, source)
-                        .withParameter(LootParameters.field_237457_g_, new Vector3d(this.pos.getX(), this.pos.getY(), this.pos.getZ()))
-                        .withParameter(LootParameters.KILLER_ENTITY, player)
-                        .withParameter(LootParameters.LAST_DAMAGE_PLAYER, player)
-                        .withNullableParameter(LootParameters.DIRECT_KILLER_ENTITY, player);
-                table.generate(context.build(LootParameterSets.ENTITY)).forEach(stack -> ItemHandlerHelper.insertItem(this.output, stack, false));
+                DamageSource source = DamageSource.playerAttack(player);
+                LootTable table = this.level.getServer().getLootTables().get(entity.getLootTable());
+                LootContext.Builder context = new LootContext.Builder((ServerLevel) this.level)
+                        .withRandom(this.level.random)
+                        .withParameter(LootContextParams.THIS_ENTITY, entity)
+                        .withParameter(LootContextParams.DAMAGE_SOURCE, source)
+                        .withParameter(LootContextParams.ORIGIN, new Vec3(this.worldPosition.getX(), this.worldPosition.getY(), this.worldPosition.getZ()))
+                        .withParameter(LootContextParams.KILLER_ENTITY, player)
+                        .withParameter(LootContextParams.LAST_DAMAGE_PLAYER, player)
+                        .withOptionalParameter(LootContextParams.DIRECT_KILLER_ENTITY, player);
+                table.getRandomItems(context.create(LootContextParamSets.ENTITY)).forEach(stack -> ItemHandlerHelper.insertItem(this.output, stack, false));
                 List<ItemEntity> extra = new ArrayList<>();
                 //Drop special items
                 try {
@@ -179,7 +181,7 @@ public class MobCrusherTile extends IndustrialAreaWorkingTile<MobCrusherTile> {
                     this.tank.fillForced(new FluidStack(ModuleCore.ESSENCE.getSourceFluid(), experience * 20), IFluidHandler.FluidAction.EXECUTE);
                 entity.setHealth(0);
                 entity.remove(false);
-                player.setHeldItem(Hand.MAIN_HAND, ItemStack.EMPTY);
+                player.setItemInHand(InteractionHand.MAIN_HAND, ItemStack.EMPTY);
                 return new WorkAction(0.1f, MobCrusherConfig.powerPerOperation);
             }
         }
@@ -187,10 +189,10 @@ public class MobCrusherTile extends IndustrialAreaWorkingTile<MobCrusherTile> {
     }
 
     public VoxelShape getWorkingArea() {
-        return new RangeManager(this.pos, this.getFacingDirection(), RangeManager.RangeType.BEHIND){
+        return new RangeManager(this.worldPosition, this.getFacingDirection(), RangeManager.RangeType.BEHIND){
             @Override
-            public AxisAlignedBB getBox() {
-                return super.getBox().expand(0,2, 0);
+            public AABB getBox() {
+                return super.getBox().expandTowards(0,2, 0);
             }
         }.get(hasAugmentInstalled(RangeAddonItem.RANGE) ? ((int) AugmentWrapper.getType(getInstalledAugments(RangeAddonItem.RANGE).get(0), RangeAddonItem.RANGE) + 1) : 0);
     }

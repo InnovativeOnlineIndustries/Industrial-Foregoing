@@ -22,11 +22,11 @@
 package com.buuz135.industrial.utils.apihandlers.straw;
 
 import com.buuz135.industrial.module.ModuleCore;
-import net.minecraft.entity.item.ExperienceOrbEntity;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.fluid.Fluid;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
+import net.minecraft.world.entity.ExperienceOrb;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.level.material.Fluid;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.level.Level;
 
 import javax.annotation.ParametersAreNonnullByDefault;
 
@@ -38,7 +38,7 @@ public class EssenceStrawHandler extends StrawHandlerBase {
     }
 
     @Override
-    public void onDrink(World world, BlockPos pos, Fluid stack, PlayerEntity player, boolean fromFluidContainer) {
-        world.addEntity(new ExperienceOrbEntity(world, player.getPosition().getX(), player.getPosition().getY(), player.getPosition().getZ(), world.rand.nextInt(10) + 8));
+    public void onDrink(Level world, BlockPos pos, Fluid stack, Player player, boolean fromFluidContainer) {
+        world.addFreshEntity(new ExperienceOrb(world, player.blockPosition().getX(), player.blockPosition().getY(), player.blockPosition().getZ(), world.random.nextInt(10) + 8));
     }
 }

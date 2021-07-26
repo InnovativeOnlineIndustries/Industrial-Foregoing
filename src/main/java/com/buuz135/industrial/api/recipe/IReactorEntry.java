@@ -21,8 +21,8 @@
  */
 package com.buuz135.industrial.api.recipe;
 
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.nbt.CompoundTag;
 
 import java.util.function.Predicate;
 
@@ -32,5 +32,5 @@ public interface IReactorEntry {
 
     ItemStack getStack();
 
-    Predicate<CompoundNBT> getNbtCheck();
+    Predicate<CompoundTag> getNbtCheck();
 }

@@ -27,17 +27,20 @@ import com.buuz135.industrial.module.ModuleGenerator;
 import com.buuz135.industrial.utils.IndustrialTags;
 import com.hrznstudio.titanium.api.IFactory;
 import com.hrznstudio.titanium.recipe.generator.TitaniumShapedRecipeBuilder;
-import net.minecraft.block.Blocks;
-import net.minecraft.data.IFinishedRecipe;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.data.recipes.FinishedRecipe;
 import net.minecraftforge.common.Tags;
 
 import javax.annotation.Nonnull;
 import java.util.function.Consumer;
 
+import com.hrznstudio.titanium.block.RotatableBlock.RotationType;
+import net.minecraft.world.level.block.state.BlockBehaviour.Properties;
+
 public class PitifulGeneratorBlock extends IndustrialBlock<PitifulGeneratorTile> {
 
     public PitifulGeneratorBlock() {
-        super("pitiful_generator", Properties.from(Blocks.COBBLESTONE), PitifulGeneratorTile.class, ModuleGenerator.TAB_GENERATOR);
+        super("pitiful_generator", Properties.copy(Blocks.COBBLESTONE), PitifulGeneratorTile.class, ModuleGenerator.TAB_GENERATOR);
     }
 
     @Nonnull
@@ -52,13 +55,13 @@ public class PitifulGeneratorBlock extends IndustrialBlock<PitifulGeneratorTile>
     }
 
     @Override
-    public void registerRecipe(Consumer<IFinishedRecipe> consumer) {
-        TitaniumShapedRecipeBuilder.shapedRecipe(this).patternLine("pdp").patternLine("gmg").patternLine("pfp")
-                .key('p', Blocks.COBBLESTONE)
-                .key('d', Tags.Items.INGOTS_GOLD)
-                .key('g', Blocks.IRON_BARS)
-                .key('m', IndustrialTags.Items.MACHINE_FRAME_PITY)
-                .key('f', Blocks.FURNACE)
-                .build(consumer);
+    public void registerRecipe(Consumer<FinishedRecipe> consumer) {
+        TitaniumShapedRecipeBuilder.shapedRecipe(this).pattern("pdp").pattern("gmg").pattern("pfp")
+                .define('p', Blocks.COBBLESTONE)
+                .define('d', Tags.Items.INGOTS_GOLD)
+                .define('g', Blocks.IRON_BARS)
+                .define('m', IndustrialTags.Items.MACHINE_FRAME_PITY)
+                .define('f', Blocks.FURNACE)
+                .save(consumer);
     }
 }

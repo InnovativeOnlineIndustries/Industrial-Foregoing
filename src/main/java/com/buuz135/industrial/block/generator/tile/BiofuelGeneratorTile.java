@@ -29,7 +29,7 @@ import com.hrznstudio.titanium.annotation.Save;
 import com.hrznstudio.titanium.component.fluid.FluidTankComponent;
 import com.hrznstudio.titanium.component.fluid.SidedFluidTankComponent;
 import com.hrznstudio.titanium.component.progress.ProgressBarComponent;
-import net.minecraft.item.DyeColor;
+import net.minecraft.world.item.DyeColor;
 import net.minecraftforge.fluids.capability.IFluidHandler;
 
 import javax.annotation.Nonnull;
@@ -48,7 +48,7 @@ public class BiofuelGeneratorTile extends IndustrialGeneratorTile<BiofuelGenerat
                 setColor(DyeColor.PURPLE).
                 setComponentHarness(this).
                 setTankAction(FluidTankComponent.Action.FILL).
-                setValidator(fluidStack -> fluidStack.getFluid().isEquivalentTo(ModuleCore.BIOFUEL.getSourceFluid()))
+                setValidator(fluidStack -> fluidStack.getFluid().isSame(ModuleCore.BIOFUEL.getSourceFluid()))
         );
         this.getPowerPerTick = BiofuelGeneratorConfig.powerPerTick;
         this.getExtractionRate = BiofuelGeneratorConfig.extractionRate;

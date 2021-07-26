@@ -27,24 +27,29 @@ import com.buuz135.industrial.module.ModuleAgricultureHusbandry;
 import com.buuz135.industrial.utils.IndustrialTags;
 import com.hrznstudio.titanium.api.IFactory;
 import com.hrznstudio.titanium.recipe.generator.TitaniumShapedRecipeBuilder;
-import net.minecraft.block.Blocks;
-import net.minecraft.data.IFinishedRecipe;
-import net.minecraft.item.Items;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.data.recipes.FinishedRecipe;
+import net.minecraft.world.item.Items;
 import net.minecraft.tags.ItemTags;
 import net.minecraftforge.common.Tags;
 
 import javax.annotation.Nonnull;
 import java.util.function.Consumer;
 
+import com.hrznstudio.titanium.block.RotatableBlock.RotationType;
+
+import net.minecraft.world.level.block.entity.BlockEntityType;
+import net.minecraft.world.level.block.state.BlockBehaviour.Properties;
+
 public class AnimalBabySeparatorBlock extends IndustrialBlock<AnimalBabySeparatorTile> {
 
     public AnimalBabySeparatorBlock() {
-        super("animal_baby_separator", Properties.from(Blocks.IRON_BLOCK), AnimalBabySeparatorTile.class, ModuleAgricultureHusbandry.TAB_AG_HUS);
+        super("animal_baby_separator", Properties.copy(Blocks.IRON_BLOCK), AnimalBabySeparatorTile.class, ModuleAgricultureHusbandry.TAB_AG_HUS);
     }
 
     @Override
-    public IFactory<AnimalBabySeparatorTile> getTileEntityFactory() {
-        return AnimalBabySeparatorTile::new;
+    public BlockEntityType.BlockEntitySupplier<AnimalBabySeparatorTile> getTileEntityFactory() {
+        return null;
     }
 
     @Nonnull
@@ -54,15 +59,15 @@ public class AnimalBabySeparatorBlock extends IndustrialBlock<AnimalBabySeparato
     }
 
     @Override
-    public void registerRecipe(Consumer<IFinishedRecipe> consumer) {
+    public void registerRecipe(Consumer<FinishedRecipe> consumer) {
         TitaniumShapedRecipeBuilder.shapedRecipe(this)
-                .patternLine("PAP").patternLine("CMC").patternLine("DGD")
-                .key('P', IndustrialTags.Items.PLASTIC)
-                .key('A', Items.GOLDEN_CARROT)
-                .key('C', Items.WHEAT)
-                .key('G', ItemTags.makeWrapperTag("forge:gears/gold"))
-                .key('D', Tags.Items.DYES_PURPLE)
-                .key('M', IndustrialTags.Items.MACHINE_FRAME_PITY)
-                .build(consumer);
+                .pattern("PAP").pattern("CMC").pattern("DGD")
+                .define('P', IndustrialTags.Items.PLASTIC)
+                .define('A', Items.GOLDEN_CARROT)
+                .define('C', Items.WHEAT)
+                .define('G', ItemTags.bind("forge:gears/gold"))
+                .define('D', Tags.Items.DYES_PURPLE)
+                .define('M', IndustrialTags.Items.MACHINE_FRAME_PITY)
+                .save(consumer);
     }
 }

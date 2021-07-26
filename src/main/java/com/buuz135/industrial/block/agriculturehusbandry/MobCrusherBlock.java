@@ -27,17 +27,20 @@ import com.buuz135.industrial.module.ModuleAgricultureHusbandry;
 import com.buuz135.industrial.utils.IndustrialTags;
 import com.hrznstudio.titanium.api.IFactory;
 import com.hrznstudio.titanium.recipe.generator.TitaniumShapedRecipeBuilder;
-import net.minecraft.block.Blocks;
-import net.minecraft.data.IFinishedRecipe;
-import net.minecraft.item.Items;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.data.recipes.FinishedRecipe;
+import net.minecraft.world.item.Items;
 import net.minecraft.tags.ItemTags;
 
 import java.util.function.Consumer;
 
+import com.hrznstudio.titanium.block.RotatableBlock.RotationType;
+import net.minecraft.world.level.block.state.BlockBehaviour.Properties;
+
 public class MobCrusherBlock extends IndustrialBlock<MobCrusherTile> {
 
     public MobCrusherBlock() {
-        super("mob_crusher", Properties.from(Blocks.IRON_BLOCK), MobCrusherTile.class, ModuleAgricultureHusbandry.TAB_AG_HUS);
+        super("mob_crusher", Properties.copy(Blocks.IRON_BLOCK), MobCrusherTile.class, ModuleAgricultureHusbandry.TAB_AG_HUS);
     }
 
     @Override
@@ -51,15 +54,15 @@ public class MobCrusherBlock extends IndustrialBlock<MobCrusherTile> {
     }
 
     @Override
-    public void registerRecipe(Consumer<IFinishedRecipe> consumer) {
+    public void registerRecipe(Consumer<FinishedRecipe> consumer) {
         TitaniumShapedRecipeBuilder.shapedRecipe(this)
-                .patternLine("PSP").patternLine("BMB").patternLine("GRG")
-                .key('P', IndustrialTags.Items.PLASTIC)
-                .key('S', Items.IRON_SWORD)
-                .key('B', Items.BOOK)
-                .key('M', IndustrialTags.Items.MACHINE_FRAME_ADVANCED)
-                .key('R', Items.REDSTONE)
-                .key('G', ItemTags.makeWrapperTag("forge:gears/gold"))
-                .build(consumer);
+                .pattern("PSP").pattern("BMB").pattern("GRG")
+                .define('P', IndustrialTags.Items.PLASTIC)
+                .define('S', Items.IRON_SWORD)
+                .define('B', Items.BOOK)
+                .define('M', IndustrialTags.Items.MACHINE_FRAME_ADVANCED)
+                .define('R', Items.REDSTONE)
+                .define('G', ItemTags.bind("forge:gears/gold"))
+                .save(consumer);
     }
 }

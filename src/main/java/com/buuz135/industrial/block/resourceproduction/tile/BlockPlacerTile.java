@@ -31,11 +31,13 @@ import com.buuz135.industrial.utils.IFFakePlayer;
 import com.hrznstudio.titanium.annotation.Save;
 import com.hrznstudio.titanium.component.energy.EnergyStorageComponent;
 import com.hrznstudio.titanium.component.inventory.SidedInventoryComponent;
-import net.minecraft.item.BlockItem;
-import net.minecraft.item.DyeColor;
-import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.item.BlockItem;
+import net.minecraft.world.item.DyeColor;
+import net.minecraft.core.BlockPos;
 
 import javax.annotation.Nonnull;
+
+import com.buuz135.industrial.block.tile.IndustrialWorkingTile.WorkAction;
 
 public class BlockPlacerTile extends IndustrialAreaWorkingTile<BlockPlacerTile> {
 
@@ -56,13 +58,13 @@ public class BlockPlacerTile extends IndustrialAreaWorkingTile<BlockPlacerTile> 
 
     @Override
     public WorkAction work() {
-        if (hasEnergy(getPowerPerOperation) && BlockUtils.canBlockBeBroken(this.world, this.pos)) {
+        if (hasEnergy(getPowerPerOperation) && BlockUtils.canBlockBeBroken(this.level, this.worldPosition)) {
             BlockPos pointed = getPointedBlockPos();
-            if (isLoaded(pointed) && world.isAirBlock(pointed)) {
+            if (isLoaded(pointed) && level.isEmptyBlock(pointed)) {
                 for (int i = 0; i < input.getSlots(); i++) {
                     if (!input.getStackInSlot(i).isEmpty() && input.getStackInSlot(i).getItem() instanceof BlockItem) {
-                        IFFakePlayer fakePlayer = (IFFakePlayer) IndustrialForegoing.getFakePlayer(world, pointed);
-                        if (fakePlayer.placeBlock(this.world, pointed, input.getStackInSlot(i))) {
+                        IFFakePlayer fakePlayer = (IFFakePlayer) IndustrialForegoing.getFakePlayer(level, pointed);
+                        if (fakePlayer.placeBlock(this.level, pointed, input.getStackInSlot(i))) {
                             increasePointer();
                             return new WorkAction(1, getPowerPerOperation);
                         }

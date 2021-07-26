@@ -28,17 +28,20 @@ import com.buuz135.industrial.module.ModuleResourceProduction;
 import com.buuz135.industrial.utils.IndustrialTags;
 import com.hrznstudio.titanium.api.IFactory;
 import com.hrznstudio.titanium.recipe.generator.TitaniumShapedRecipeBuilder;
-import net.minecraft.block.Blocks;
-import net.minecraft.data.IFinishedRecipe;
-import net.minecraft.item.Items;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.data.recipes.FinishedRecipe;
+import net.minecraft.world.item.Items;
 
 import javax.annotation.Nonnull;
 import java.util.function.Consumer;
 
+import com.hrznstudio.titanium.block.RotatableBlock.RotationType;
+import net.minecraft.world.level.block.state.BlockBehaviour.Properties;
+
 public class MaterialStoneWorkFactoryBlock extends IndustrialBlock<MaterialStoneWorkFactoryTile> {
 
     public MaterialStoneWorkFactoryBlock() {
-        super("material_stonework_factory", Properties.from(Blocks.IRON_BLOCK), MaterialStoneWorkFactoryTile.class, ModuleResourceProduction.TAB_RESOURCE);
+        super("material_stonework_factory", Properties.copy(Blocks.IRON_BLOCK), MaterialStoneWorkFactoryTile.class, ModuleResourceProduction.TAB_RESOURCE);
     }
 
     @Override
@@ -53,15 +56,15 @@ public class MaterialStoneWorkFactoryBlock extends IndustrialBlock<MaterialStone
     }
 
     @Override
-    public void registerRecipe(Consumer<IFinishedRecipe> consumer) {
-        TitaniumShapedRecipeBuilder.shapedRecipe(this).patternLine("pcp").patternLine("gmf").patternLine("aba")
-                .key('p', IndustrialTags.Items.PLASTIC)
-                .key('c', Blocks.CRAFTING_TABLE)
-                .key('g', Items.DIAMOND_PICKAXE)
-                .key('m', IndustrialTags.Items.MACHINE_FRAME_ADVANCED)
-                .key('f', Blocks.FURNACE)
-                .key('a', IndustrialTags.Items.GEAR_GOLD)
-                .key('b', ModuleCore.PINK_SLIME_ITEM)
-                .build(consumer);
+    public void registerRecipe(Consumer<FinishedRecipe> consumer) {
+        TitaniumShapedRecipeBuilder.shapedRecipe(this).pattern("pcp").pattern("gmf").pattern("aba")
+                .define('p', IndustrialTags.Items.PLASTIC)
+                .define('c', Blocks.CRAFTING_TABLE)
+                .define('g', Items.DIAMOND_PICKAXE)
+                .define('m', IndustrialTags.Items.MACHINE_FRAME_ADVANCED)
+                .define('f', Blocks.FURNACE)
+                .define('a', IndustrialTags.Items.GEAR_GOLD)
+                .define('b', ModuleCore.PINK_SLIME_ITEM)
+                .save(consumer);
     }
 }

@@ -25,14 +25,17 @@ import com.buuz135.industrial.block.IndustrialBlock;
 import com.buuz135.industrial.block.resourceproduction.tile.MechanicalDirtTile;
 import com.buuz135.industrial.module.ModuleResourceProduction;
 import com.hrznstudio.titanium.api.IFactory;
-import net.minecraft.block.Blocks;
+import net.minecraft.world.level.block.Blocks;
 
 import javax.annotation.Nonnull;
+
+import com.hrznstudio.titanium.block.RotatableBlock.RotationType;
+import net.minecraft.world.level.block.state.BlockBehaviour.Properties;
 
 public class MechanicalDirtBlock extends IndustrialBlock<MechanicalDirtTile> {
 
     public MechanicalDirtBlock() {
-        super("mechanical_dirt", Properties.from(Blocks.IRON_BLOCK), MechanicalDirtTile.class, ModuleResourceProduction.TAB_RESOURCE);
+        super("mechanical_dirt", Properties.copy(Blocks.IRON_BLOCK), MechanicalDirtTile.class, ModuleResourceProduction.TAB_RESOURCE);
     }
 
     @Override

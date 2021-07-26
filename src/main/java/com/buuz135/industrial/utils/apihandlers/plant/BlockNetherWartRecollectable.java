@@ -23,13 +23,13 @@ package com.buuz135.industrial.utils.apihandlers.plant;
 
 import com.buuz135.industrial.api.plant.PlantRecollectable;
 import com.buuz135.industrial.utils.BlockUtils;
-import net.minecraft.block.BlockState;
-import net.minecraft.block.Blocks;
-import net.minecraft.block.NetherWartBlock;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.NonNullList;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.NetherWartBlock;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.core.NonNullList;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.level.Level;
 
 import java.util.Arrays;
 import java.util.List;
@@ -41,20 +41,20 @@ public class BlockNetherWartRecollectable extends PlantRecollectable {
     }
 
     @Override
-    public boolean canBeHarvested(World world, BlockPos pos, BlockState blockState) {
-        return blockState.getBlock() instanceof NetherWartBlock && blockState.get(NetherWartBlock.AGE) >= 3;
+    public boolean canBeHarvested(Level world, BlockPos pos, BlockState blockState) {
+        return blockState.getBlock() instanceof NetherWartBlock && blockState.getValue(NetherWartBlock.AGE) >= 3;
     }
 
     @Override
-    public List<ItemStack> doHarvestOperation(World world, BlockPos pos, BlockState blockState) {
+    public List<ItemStack> doHarvestOperation(Level world, BlockPos pos, BlockState blockState) {
         NonNullList<ItemStack> stacks = NonNullList.create();
         stacks.addAll(BlockUtils.getBlockDrops(world, pos));
-        world.setBlockState(pos, Blocks.AIR.getDefaultState());
+        world.setBlockAndUpdate(pos, Blocks.AIR.defaultBlockState());
         return stacks;
     }
 
     @Override
-    public boolean shouldCheckNextPlant(World world, BlockPos pos, BlockState blockState) {
+    public boolean shouldCheckNextPlant(Level world, BlockPos pos, BlockState blockState) {
         return true;
     }
 

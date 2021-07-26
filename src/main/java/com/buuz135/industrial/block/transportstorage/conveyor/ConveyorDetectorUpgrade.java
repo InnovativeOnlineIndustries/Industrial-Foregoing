@@ -33,18 +33,18 @@ import com.buuz135.industrial.proxy.block.filter.IFilter;
 import com.buuz135.industrial.proxy.block.filter.ItemStackFilter;
 import com.buuz135.industrial.utils.Reference;
 import com.hrznstudio.titanium.recipe.generator.TitaniumShapedRecipeBuilder;
-import net.minecraft.block.Blocks;
-import net.minecraft.data.IFinishedRecipe;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.util.Direction;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.shapes.VoxelShape;
-import net.minecraft.util.math.shapes.VoxelShapes;
-import net.minecraft.world.World;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.data.recipes.FinishedRecipe;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.core.Direction;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.phys.shapes.VoxelShape;
+import net.minecraft.world.phys.shapes.Shapes;
+import net.minecraft.world.level.Level;
 import net.minecraftforge.common.Tags;
 
 import javax.annotation.Nonnull;
@@ -55,7 +55,7 @@ import java.util.function.Consumer;
 
 public class ConveyorDetectorUpgrade extends ConveyorUpgrade {
 
-    public static VoxelShape BB = VoxelShapes.create(0.0625 * 3, 0.0625, 0.0625 * 3, 0.0625 * 13, 0.0625 * 1.2, 0.0625 * 13);
+    public static VoxelShape BB = Shapes.box(0.0625 * 3, 0.0625, 0.0625 * 3, 0.0625 * 13, 0.0625 * 1.2, 0.0625 * 13);
 
     private ItemStackFilter filter;
     private boolean hasEntity;
@@ -72,15 +72,15 @@ public class ConveyorDetectorUpgrade extends ConveyorUpgrade {
 
     @Override
     public void update() {
-        if (getWorld().isRemote)
+        if (getWorld().isClientSide)
             return;
         boolean previous = hasEntity;
         hasEntity = false;
-        List<Entity> entities = getWorld().getEntitiesWithinAABB(Entity.class, getBoundingBox().getBoundingBox().offset(getPos()).grow(0.01));
+        List<Entity> entities = getWorld().getEntitiesOfClass(Entity.class, getBoundingBox().bounds().move(getPos()).inflate(0.01));
         hasEntity = !entities.isEmpty() && whitelist == someoneMatchesFilter(entities);
         if (inverted) hasEntity = !hasEntity;
         if (previous != hasEntity)
-            getWorld().notifyNeighborsOfStateChange(getPos(), getWorld().getBlockState(getPos()).getBlock());
+            getWorld().updateNeighborsAt(getPos(), getWorld().getBlockState(getPos()).getBlock());
     }
 
     private boolean someoneMatchesFilter(List<Entity> entities) {
@@ -93,8 +93,8 @@ public class ConveyorDetectorUpgrade extends ConveyorUpgrade {
     }
 
     @Override
-    public CompoundNBT serializeNBT() {
-        CompoundNBT compound = super.serializeNBT() == null ? new CompoundNBT() : super.serializeNBT();
+    public CompoundTag serializeNBT() {
+        CompoundTag compound = super.serializeNBT() == null ? new CompoundTag() : super.serializeNBT();
         compound.put("Filter", filter.serializeNBT());
         compound.putBoolean("Whitelist", whitelist);
         compound.putBoolean("Inverted", inverted);
@@ -102,7 +102,7 @@ public class ConveyorDetectorUpgrade extends ConveyorUpgrade {
     }
 
     @Override
-    public void deserializeNBT(CompoundNBT nbt) {
+    public void deserializeNBT(CompoundTag nbt) {
         super.deserializeNBT(nbt);
         if (nbt.contains("Filter")) filter.deserializeNBT(nbt.getCompound("Filter"));
         whitelist = nbt.getBoolean("Whitelist");
@@ -130,10 +130,10 @@ public class ConveyorDetectorUpgrade extends ConveyorUpgrade {
     }
 
     @Override
-    public void handleButtonInteraction(int buttonId, CompoundNBT compound) {
+    public void handleButtonInteraction(int buttonId, CompoundTag compound) {
         super.handleButtonInteraction(buttonId, compound);
         if (buttonId >= 0 && buttonId < filter.getFilter().length) {
-            this.filter.setFilter(buttonId, ItemStack.read(compound));
+            this.filter.setFilter(buttonId, ItemStack.of(compound));
             this.getContainer().requestSync();
         }
         if (buttonId == 16) {
@@ -196,7 +196,7 @@ public class ConveyorDetectorUpgrade extends ConveyorUpgrade {
         }
 
         @Override
-        public Direction getSideForPlacement(World world, BlockPos pos, PlayerEntity player) {
+        public Direction getSideForPlacement(Level world, BlockPos pos, Player player) {
             return Direction.DOWN;
         }
 
@@ -213,14 +213,14 @@ public class ConveyorDetectorUpgrade extends ConveyorUpgrade {
         }
 
         @Override
-        public void registerRecipe(Consumer<IFinishedRecipe> consumer) {
+        public void registerRecipe(Consumer<FinishedRecipe> consumer) {
             TitaniumShapedRecipeBuilder.shapedRecipe(getUpgradeItem())
-                    .patternLine("IPI").patternLine("IDI").patternLine("ICI")
-                    .key('I', Tags.Items.INGOTS_IRON)
-                    .key('P', Blocks.STONE_PRESSURE_PLATE)
-                    .key('D', Blocks.COMPARATOR)
-                    .key('C', ModuleTransportStorage.CONVEYOR)
-                    .build(consumer);
+                    .pattern("IPI").pattern("IDI").pattern("ICI")
+                    .define('I', Tags.Items.INGOTS_IRON)
+                    .define('P', Blocks.STONE_PRESSURE_PLATE)
+                    .define('D', Blocks.COMPARATOR)
+                    .define('C', ModuleTransportStorage.CONVEYOR)
+                    .save(consumer);
 
         }
     }

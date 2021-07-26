@@ -32,18 +32,20 @@ import com.hrznstudio.titanium.component.energy.EnergyStorageComponent;
 import com.hrznstudio.titanium.component.fluid.FluidTankComponent;
 import com.hrznstudio.titanium.component.fluid.SidedFluidTankComponent;
 import com.hrznstudio.titanium.item.AugmentWrapper;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.MobEntity;
-import net.minecraft.entity.passive.AnimalEntity;
-import net.minecraft.item.DyeColor;
-import net.minecraft.util.math.AxisAlignedBB;
-import net.minecraft.util.math.shapes.VoxelShape;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.Mob;
+import net.minecraft.world.entity.animal.Animal;
+import net.minecraft.world.item.DyeColor;
+import net.minecraft.world.phys.AABB;
+import net.minecraft.world.phys.shapes.VoxelShape;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.capability.IFluidHandler;
 
 import javax.annotation.Nonnull;
 import java.util.List;
 import java.util.stream.Collectors;
+
+import com.buuz135.industrial.block.tile.IndustrialWorkingTile.WorkAction;
 
 public class SlaughterFactoryTile extends IndustrialAreaWorkingTile<SlaughterFactoryTile> {
 
@@ -61,13 +63,13 @@ public class SlaughterFactoryTile extends IndustrialAreaWorkingTile<SlaughterFac
                 setColor(DyeColor.BROWN).
                 setTankAction(FluidTankComponent.Action.DRAIN).
                 setComponentHarness(this).
-                setValidator(fluidStack -> fluidStack.getFluid().isEquivalentTo(ModuleCore.MEAT.getSourceFluid()))
+                setValidator(fluidStack -> fluidStack.getFluid().isSame(ModuleCore.MEAT.getSourceFluid()))
         );
         addTank(pinkSlime = (SidedFluidTankComponent<SlaughterFactoryTile>) new SidedFluidTankComponent<SlaughterFactoryTile>("pink_slime", SlaughterFactoryConfig.maxPinkSlimeTankSize, 63, 20, 1).
                 setColor(DyeColor.PINK).
                 setTankAction(FluidTankComponent.Action.DRAIN).
                 setComponentHarness(this).
-                setValidator(fluidStack -> fluidStack.getFluid().isEquivalentTo(ModuleCore.PINK_SLIME.getSourceFluid())));
+                setValidator(fluidStack -> fluidStack.getFluid().isSame(ModuleCore.PINK_SLIME.getSourceFluid())));
         this.maxProgress = SlaughterFactoryConfig.maxProgress;
         this.powerPerOperation = SlaughterFactoryConfig.powerPerOperation;
     }
@@ -75,14 +77,14 @@ public class SlaughterFactoryTile extends IndustrialAreaWorkingTile<SlaughterFac
     @Override
     public WorkAction work() {
         if (hasEnergy(powerPerOperation)) {
-            List<MobEntity> mobs = this.world.getEntitiesWithinAABB(MobEntity.class, getWorkingArea().getBoundingBox()).stream().filter(LivingEntity::isAlive).collect(Collectors.toList());
+            List<Mob> mobs = this.level.getEntitiesOfClass(Mob.class, getWorkingArea().bounds()).stream().filter(LivingEntity::isAlive).collect(Collectors.toList());
             if (mobs.size() > 0) {
-                MobEntity entity = mobs.get(0);
+                Mob entity = mobs.get(0);
                 float currentHealth = entity.getHealth();
                 entity.remove(true);
                 if (!entity.isAlive()) {
-                    meat.fillForced(new FluidStack(ModuleCore.MEAT.getSourceFluid(), entity instanceof AnimalEntity ? (int) (currentHealth) : (int) currentHealth * 20), IFluidHandler.FluidAction.EXECUTE);
-                    pinkSlime.fillForced(new FluidStack(ModuleCore.PINK_SLIME.getSourceFluid(), entity instanceof AnimalEntity ? (int) (currentHealth * 20) : (int) currentHealth), IFluidHandler.FluidAction.EXECUTE);
+                    meat.fillForced(new FluidStack(ModuleCore.MEAT.getSourceFluid(), entity instanceof Animal ? (int) (currentHealth) : (int) currentHealth * 20), IFluidHandler.FluidAction.EXECUTE);
+                    pinkSlime.fillForced(new FluidStack(ModuleCore.PINK_SLIME.getSourceFluid(), entity instanceof Animal ? (int) (currentHealth * 20) : (int) currentHealth), IFluidHandler.FluidAction.EXECUTE);
                     return new WorkAction(0.2f, powerPerOperation);
                 }
             }
@@ -96,10 +98,10 @@ public class SlaughterFactoryTile extends IndustrialAreaWorkingTile<SlaughterFac
     }
 
     public VoxelShape getWorkingArea() {
-        return new RangeManager(this.pos, this.getFacingDirection(), RangeManager.RangeType.BEHIND){
+        return new RangeManager(this.worldPosition, this.getFacingDirection(), RangeManager.RangeType.BEHIND){
             @Override
-            public AxisAlignedBB getBox() {
-                return super.getBox().expand(0,2, 0);
+            public AABB getBox() {
+                return super.getBox().expandTowards(0,2, 0);
             }
         }.get(hasAugmentInstalled(RangeAddonItem.RANGE) ? ((int) AugmentWrapper.getType(getInstalledAugments(RangeAddonItem.RANGE).get(0), RangeAddonItem.RANGE) + 1) : 0);
     }

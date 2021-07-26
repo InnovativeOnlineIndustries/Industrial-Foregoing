@@ -37,24 +37,24 @@ import com.hrznstudio.titanium.filter.ItemStackFilter;
 import com.hrznstudio.titanium.util.AssetUtil;
 import com.hrznstudio.titanium.util.LangUtil;
 import com.hrznstudio.titanium.util.RayTraceUtils;
-import com.mojang.blaze3d.matrix.MatrixStack;
+import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.systems.RenderSystem;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.screen.Screen;
-import net.minecraft.client.renderer.RenderHelper;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.DyeColor;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.Items;
-import net.minecraft.item.Rarity;
-import net.minecraft.util.ActionResultType;
-import net.minecraft.util.Direction;
-import net.minecraft.util.Hand;
-import net.minecraft.util.math.BlockRayTraceResult;
-import net.minecraft.util.math.RayTraceResult;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.StringTextComponent;
-import net.minecraft.util.text.TextFormatting;
+import net.minecraft.client.gui.screens.Screen;
+import com.mojang.blaze3d.platform.Lighting;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.DyeColor;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
+import net.minecraft.world.item.Rarity;
+import net.minecraft.world.InteractionResult;
+import net.minecraft.core.Direction;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.phys.BlockHitResult;
+import net.minecraft.world.phys.HitResult;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.TextComponent;
+import net.minecraft.ChatFormatting;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.items.CapabilityItemHandler;
@@ -119,17 +119,17 @@ public class BlackHoleUnitTile extends BHTile<BlackHoleUnitTile> {
             public List<IFactory<? extends IScreenAddon>> getScreenAddons() {
                 return Collections.singletonList(() -> new BasicButtonAddon(this) {
                     @Override
-                    public void drawBackgroundLayer(MatrixStack stack, Screen screen, IAssetProvider provider, int guiX, int guiY, int mouseX, int mouseY, float partialTicks) {
+                    public void drawBackgroundLayer(PoseStack stack, Screen screen, IAssetProvider provider, int guiX, int guiY, int mouseX, int mouseY, float partialTicks) {
                         AssetUtil.drawAsset(stack, screen, provider.getAsset(AssetTypes.ITEM_BACKGROUND), guiX + getPosX(), guiY + getPosY());
-                        Minecraft.getInstance().getItemRenderer().renderItemIntoGUI(new ItemStack(voidItems ? Items.MAGMA_CREAM: Items.SLIME_BALL), guiX + getPosX() + 1, guiY + getPosY() + 1);
-                        RenderHelper.disableStandardItemLighting();
+                        Minecraft.getInstance().getItemRenderer().renderGuiItem(new ItemStack(voidItems ? Items.MAGMA_CREAM: Items.SLIME_BALL), guiX + getPosX() + 1, guiY + getPosY() + 1);
+                        Lighting.turnOff();
                         RenderSystem.enableAlphaTest();
                     }
 
                     @Override
-                    public List<ITextComponent> getTooltipLines() {
-                        List<ITextComponent> lines = new ArrayList<>();
-                        lines.add(new StringTextComponent(TextFormatting.GOLD + LangUtil.getString("tooltip.industrialforegoing.bl." + ( voidItems ? "void_unit" : "no_void_unit"))));
+                    public List<Component> getTooltipLines() {
+                        List<Component> lines = new ArrayList<>();
+                        lines.add(new TextComponent(ChatFormatting.GOLD + LangUtil.getString("tooltip.industrialforegoing.bl." + ( voidItems ? "void_unit" : "no_void_unit"))));
                         return lines;
                     }
                 });
@@ -143,17 +143,17 @@ public class BlackHoleUnitTile extends BHTile<BlackHoleUnitTile> {
             public List<IFactory<? extends IScreenAddon>> getScreenAddons() {
                 return Collections.singletonList(() -> new BasicButtonAddon(this) {
                     @Override
-                    public void drawBackgroundLayer(MatrixStack stack, Screen screen, IAssetProvider provider, int guiX, int guiY, int mouseX, int mouseY, float partialTicks) {
+                    public void drawBackgroundLayer(PoseStack stack, Screen screen, IAssetProvider provider, int guiX, int guiY, int mouseX, int mouseY, float partialTicks) {
                         AssetUtil.drawAsset(stack, screen, provider.getAsset(AssetTypes.ITEM_BACKGROUND), guiX + getPosX(), guiY + getPosY());
-                        Minecraft.getInstance().getItemRenderer().renderItemIntoGUI(new ItemStack(useStackDisplay ? Items.IRON_BLOCK: Items.IRON_INGOT), guiX + getPosX() + 1, guiY + getPosY() + 1);
-                        RenderHelper.disableStandardItemLighting();
+                        Minecraft.getInstance().getItemRenderer().renderGuiItem(new ItemStack(useStackDisplay ? Items.IRON_BLOCK: Items.IRON_INGOT), guiX + getPosX() + 1, guiY + getPosY() + 1);
+                        Lighting.turnOff();
                         RenderSystem.enableAlphaTest();
                     }
 
                     @Override
-                    public List<ITextComponent> getTooltipLines() {
-                        List<ITextComponent> lines = new ArrayList<>();
-                        lines.add(new StringTextComponent(TextFormatting.GOLD + LangUtil.getString("tooltip.industrialforegoing.bl." + ( useStackDisplay ? "stack_unit" : "compact_unit"))));
+                    public List<Component> getTooltipLines() {
+                        List<Component> lines = new ArrayList<>();
+                        lines.add(new TextComponent(ChatFormatting.GOLD + LangUtil.getString("tooltip.industrialforegoing.bl." + ( useStackDisplay ? "stack_unit" : "compact_unit"))));
                         return lines;
                     }
                 });
@@ -171,37 +171,37 @@ public class BlackHoleUnitTile extends BHTile<BlackHoleUnitTile> {
     }
 
     @Override
-    public ActionResultType onActivated(PlayerEntity playerIn, Hand hand, Direction facing, double hitX, double hitY, double hitZ) {
-        if (super.onActivated(playerIn, hand, facing, hitX, hitY, hitZ) == ActionResultType.SUCCESS) {
-            return ActionResultType.SUCCESS;
+    public InteractionResult onActivated(Player playerIn, InteractionHand hand, Direction facing, double hitX, double hitY, double hitZ) {
+        if (super.onActivated(playerIn, hand, facing, hitX, hitY, hitZ) == InteractionResult.SUCCESS) {
+            return InteractionResult.SUCCESS;
         }
-        if (playerIn.isSneaking()){
+        if (playerIn.isShiftKeyDown()){
             openGui(playerIn);
         } else if (facing.equals(this.getFacingDirection())){
-            ItemStack stack = playerIn.getHeldItem(hand);
+            ItemStack stack = playerIn.getItemInHand(hand);
             if (!stack.isEmpty() && handler.isItemValid(0, stack)) {
-                playerIn.setHeldItem(hand, handler.insertItem(0, stack, false));
-            } else if (System.currentTimeMillis() - INTERACTION_LOGGER.getOrDefault(playerIn.getUniqueID(), System.currentTimeMillis()) < 300) {
-                for (ItemStack itemStack : playerIn.inventory.mainInventory) {
+                playerIn.setItemInHand(hand, handler.insertItem(0, stack, false));
+            } else if (System.currentTimeMillis() - INTERACTION_LOGGER.getOrDefault(playerIn.getUUID(), System.currentTimeMillis()) < 300) {
+                for (ItemStack itemStack : playerIn.inventory.items) {
                     if (!itemStack.isEmpty() && handler.insertItem(0, itemStack, true).isEmpty()) {
                         handler.insertItem(0, itemStack.copy(), false);
                         itemStack.setCount(0);
                     }
                 }
             }
-            INTERACTION_LOGGER.put(playerIn.getUniqueID(), System.currentTimeMillis());
+            INTERACTION_LOGGER.put(playerIn.getUUID(), System.currentTimeMillis());
         }
-        return ActionResultType.SUCCESS;
+        return InteractionResult.SUCCESS;
     }
 
-    public void onClicked(PlayerEntity playerIn) {
+    public void onClicked(Player playerIn) {
         if (isServer()){
-            RayTraceResult rayTraceResult = RayTraceUtils.rayTraceSimple(this.world, playerIn, 16, 0);
-            if (rayTraceResult.getType() == RayTraceResult.Type.BLOCK) {
-                BlockRayTraceResult blockResult = (BlockRayTraceResult) rayTraceResult;
-                Direction facing = blockResult.getFace();
+            HitResult rayTraceResult = RayTraceUtils.rayTraceSimple(this.level, playerIn, 16, 0);
+            if (rayTraceResult.getType() == HitResult.Type.BLOCK) {
+                BlockHitResult blockResult = (BlockHitResult) rayTraceResult;
+                Direction facing = blockResult.getDirection();
                 if (facing.equals(this.getFacingDirection())){
-                    ItemHandlerHelper.giveItemToPlayer(playerIn, handler.extractItem(0, playerIn.isSneaking() ? 64 : 1, false));
+                    ItemHandlerHelper.giveItemToPlayer(playerIn, handler.extractItem(0, playerIn.isShiftKeyDown() ? 64 : 1, false));
                 }
             }
         }
@@ -226,7 +226,7 @@ public class BlackHoleUnitTile extends BHTile<BlackHoleUnitTile> {
     }
 
     public void setStack(ItemStack stack){
-        boolean equal = blStack.isItemEqual(stack) && ItemStack.areItemStackTagsEqual(blStack, stack);
+        boolean equal = blStack.sameItem(stack) && ItemStack.tagMatches(blStack, stack);
         this.blStack = stack;
         this.hasNBT = this.blStack.hasTag();
         if (!equal) syncObject(this.blStack);
@@ -321,11 +321,11 @@ public class BlackHoleUnitTile extends BHTile<BlackHoleUnitTile> {
                 ItemStack fl = blStack;
                 if (!filter.getFilterSlots()[slot].getFilter().isEmpty()) {
                     ItemStack filterStack = filter.getFilterSlots()[slot].getFilter();
-                    if (filterStack.isItemEqual(fl) && ItemStack.areItemStackTagsEqual(filterStack, fl)) {
+                    if (filterStack.sameItem(fl) && ItemStack.tagMatches(filterStack, fl)) {
                         fl = filter.getFilterSlots()[slot].getFilter();
                     }
                 }
-                return fl.isEmpty() || (fl.isItemEqual(stack) && ItemStack.areItemStackTagsEqual(fl, stack));
+                return fl.isEmpty() || (fl.sameItem(stack) && ItemStack.tagMatches(fl, stack));
             }
             return false;
         }

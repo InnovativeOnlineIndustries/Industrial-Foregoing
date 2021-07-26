@@ -23,10 +23,10 @@ package com.buuz135.industrial.proxy.network;
 
 import com.buuz135.industrial.block.transportstorage.tile.TransporterTile;
 import com.hrznstudio.titanium.network.Message;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.Direction;
-import net.minecraft.util.math.BlockPos;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.core.Direction;
+import net.minecraft.core.BlockPos;
 import net.minecraftforge.fml.network.NetworkEvent;
 
 public class TransporterButtonInteractMessage extends Message {
@@ -34,12 +34,12 @@ public class TransporterButtonInteractMessage extends Message {
     private BlockPos pos;
     private int buttonId;
     private int facing;
-    private CompoundNBT compound;
+    private CompoundTag compound;
 
-    public TransporterButtonInteractMessage(BlockPos pos, int buttonId, Direction facing, CompoundNBT compound) {
+    public TransporterButtonInteractMessage(BlockPos pos, int buttonId, Direction facing, CompoundTag compound) {
         this.pos = pos;
         this.buttonId = buttonId;
-        this.facing = facing.getIndex();
+        this.facing = facing.get3DDataValue();
         this.compound = compound;
     }
 
@@ -50,8 +50,8 @@ public class TransporterButtonInteractMessage extends Message {
     @Override
     protected void handleMessage(NetworkEvent.Context context) {
         context.enqueueWork(() -> {
-            TileEntity entity = context.getSender().getServerWorld().getTileEntity(pos);
-            Direction facing = Direction.byIndex(this.facing);
+            BlockEntity entity = context.getSender().getLevel().getBlockEntity(pos);
+            Direction facing = Direction.from3DDataValue(this.facing);
             if (entity instanceof TransporterTile) {
                 if (((TransporterTile) entity).hasUpgrade(facing)) {
                     ((TransporterTile) entity).getTransporterTypeMap().get(facing).handleButtonInteraction(buttonId, compound);

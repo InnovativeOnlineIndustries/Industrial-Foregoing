@@ -24,13 +24,13 @@ package com.buuz135.industrial.item;
 import com.buuz135.industrial.api.IBlockContainer;
 import com.buuz135.industrial.api.conveyor.ConveyorUpgradeFactory;
 import com.buuz135.industrial.block.transportstorage.tile.ConveyorTile;
-import net.minecraft.data.IFinishedRecipe;
-import net.minecraft.item.ItemGroup;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.ItemUseContext;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.ActionResultType;
-import net.minecraft.util.Direction;
+import net.minecraft.data.recipes.FinishedRecipe;
+import net.minecraft.world.item.CreativeModeTab;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.context.UseOnContext;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.InteractionResult;
+import net.minecraft.core.Direction;
 
 import java.util.function.Consumer;
 
@@ -38,32 +38,32 @@ public class ItemConveyorUpgrade extends IFCustomItem {
 
     private final ConveyorUpgradeFactory factory;
 
-    public ItemConveyorUpgrade(ConveyorUpgradeFactory upgradeFactory, ItemGroup group) {
+    public ItemConveyorUpgrade(ConveyorUpgradeFactory upgradeFactory, CreativeModeTab group) {
         super("conveyor_" + upgradeFactory.getRegistryName().getPath() + "_upgrade", group);
         this.factory = upgradeFactory;
         this.factory.setUpgradeItem(this);
     }
 
     @Override
-    public ActionResultType onItemUse(ItemUseContext context) {
+    public InteractionResult useOn(UseOnContext context) {
         if (!context.getPlayer().isCrouching()) {
-            TileEntity tile = context.getWorld().getTileEntity(context.getPos());
+            BlockEntity tile = context.getLevel().getBlockEntity(context.getClickedPos());
             if (tile instanceof ConveyorTile && ((ConveyorTile) tile).getConveyorType().isVertical())
-                return ActionResultType.PASS;
+                return InteractionResult.PASS;
             if (tile instanceof IBlockContainer) {
-                Direction side = factory.getSideForPlacement(context.getWorld(), context.getPos(), context.getPlayer());
+                Direction side = factory.getSideForPlacement(context.getLevel(), context.getClickedPos(), context.getPlayer());
                 if (!((IBlockContainer) tile).hasUpgrade(side)) {
                     ((IBlockContainer) tile).addUpgrade(side, factory);
-                    if (!context.getPlayer().isCreative()) context.getItem().shrink(1);
-                    return ActionResultType.SUCCESS;
+                    if (!context.getPlayer().isCreative()) context.getItemInHand().shrink(1);
+                    return InteractionResult.SUCCESS;
                 }
             }
         }
-        return ActionResultType.PASS;
+        return InteractionResult.PASS;
     }
 
     @Override
-    public String getTranslationKey(ItemStack stack) {
+    public String getDescriptionId(ItemStack stack) {
         if (factory == null)
             return "conveyor.upgrade.error";
         return String.format("conveyor.upgrade.%s.%s", factory.getRegistryName().getNamespace(), factory.getRegistryName().getPath());
@@ -71,7 +71,7 @@ public class ItemConveyorUpgrade extends IFCustomItem {
 
 
     @Override
-    public void registerRecipe(Consumer<IFinishedRecipe> consumer) {
+    public void registerRecipe(Consumer<FinishedRecipe> consumer) {
 
     }
 }

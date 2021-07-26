@@ -27,18 +27,21 @@ import com.buuz135.industrial.module.ModuleResourceProduction;
 import com.buuz135.industrial.utils.IndustrialTags;
 import com.hrznstudio.titanium.api.IFactory;
 import com.hrznstudio.titanium.recipe.generator.TitaniumShapedRecipeBuilder;
-import net.minecraft.block.Blocks;
-import net.minecraft.data.IFinishedRecipe;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.data.recipes.FinishedRecipe;
 import net.minecraft.tags.ItemTags;
 import net.minecraftforge.common.Tags;
 
 import javax.annotation.Nonnull;
 import java.util.function.Consumer;
 
+import com.hrznstudio.titanium.block.RotatableBlock.RotationType;
+import net.minecraft.world.level.block.state.BlockBehaviour.Properties;
+
 public class DyeMixerBlock extends IndustrialBlock<DyeMixerTile> {
 
     public DyeMixerBlock() {
-        super("dye_mixer", Properties.from(Blocks.IRON_BLOCK), DyeMixerTile.class, ModuleResourceProduction.TAB_RESOURCE);
+        super("dye_mixer", Properties.copy(Blocks.IRON_BLOCK), DyeMixerTile.class, ModuleResourceProduction.TAB_RESOURCE);
     }
 
     @Override
@@ -53,13 +56,13 @@ public class DyeMixerBlock extends IndustrialBlock<DyeMixerTile> {
     }
 
     @Override
-    public void registerRecipe(Consumer<IFinishedRecipe> consumer) {
+    public void registerRecipe(Consumer<FinishedRecipe> consumer) {
         TitaniumShapedRecipeBuilder.shapedRecipe(this)
-                .patternLine("PDP").patternLine("DMD").patternLine("PRP")
-                .key('P', IndustrialTags.Items.PLASTIC)
-                .key('D', Tags.Items.DYES)
-                .key('M', IndustrialTags.Items.MACHINE_FRAME_PITY)
-                .key('R', ItemTags.makeWrapperTag("forge:gears/gold"))
-                .build(consumer);
+                .pattern("PDP").pattern("DMD").pattern("PRP")
+                .define('P', IndustrialTags.Items.PLASTIC)
+                .define('D', Tags.Items.DYES)
+                .define('M', IndustrialTags.Items.MACHINE_FRAME_PITY)
+                .define('R', ItemTags.bind("forge:gears/gold"))
+                .save(consumer);
     }
 }

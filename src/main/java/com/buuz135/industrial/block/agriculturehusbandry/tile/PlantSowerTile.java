@@ -33,16 +33,18 @@ import com.hrznstudio.titanium.component.energy.EnergyStorageComponent;
 import com.hrznstudio.titanium.component.inventory.SidedInventoryComponent;
 import com.hrznstudio.titanium.filter.ItemStackFilter;
 import com.hrznstudio.titanium.item.AugmentWrapper;
-import net.minecraft.block.Block;
-import net.minecraft.block.Blocks;
-import net.minecraft.item.BlockItem;
-import net.minecraft.item.DyeColor;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.Direction;
-import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.item.BlockItem;
+import net.minecraft.world.item.DyeColor;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.core.Direction;
+import net.minecraft.core.BlockPos;
 import net.minecraftforge.common.IPlantable;
 
 import javax.annotation.Nonnull;
+
+import com.buuz135.industrial.block.tile.IndustrialWorkingTile.WorkAction;
 
 public class PlantSowerTile extends IndustrialAreaWorkingTile<PlantSowerTile> {
 
@@ -86,20 +88,20 @@ public class PlantSowerTile extends IndustrialAreaWorkingTile<PlantSowerTile> {
     @Override
     public WorkAction work() {
         BlockPos pos = getPointedBlockPos();
-        if (isLoaded(pos) && (this.world.isAirBlock(pos) || this.world.getBlockState(pos).isIn(Blocks.WATER)) && hasEnergy(powerPerOperation)) {
+        if (isLoaded(pos) && (this.level.isEmptyBlock(pos) || this.level.getBlockState(pos).is(Blocks.WATER)) && hasEnergy(powerPerOperation)) {
             int slot = getFilteredSlot(pos);
             ItemStack stack = ItemStack.EMPTY;
             for (int i = 0; i < input.getInventory().getSlots(); i++) {
                 if (input.getInventory().getStackInSlot(i).isEmpty()) continue;
-                if (filter.getFilterSlots()[slot].getFilter().isEmpty() || filter.getFilterSlots()[slot].getFilter().isItemEqual(input.getInventory().getStackInSlot(i))) {
+                if (filter.getFilterSlots()[slot].getFilter().isEmpty() || filter.getFilterSlots()[slot].getFilter().sameItem(input.getInventory().getStackInSlot(i))) {
                     stack = input.getInventory().getStackInSlot(i);
                     break;
                 }
             }
             if (!stack.isEmpty() && stack.getItem() instanceof BlockItem && ((BlockItem) stack.getItem()).getBlock() instanceof IPlantable) {
                 Block block = ((BlockItem) stack.getItem()).getBlock();
-                if (this.world.getBlockState(pos.down()).canSustainPlant(world, pos.down(), Direction.UP, (IPlantable) block)) {
-                    if (this.world.setBlockState(pos, ((IPlantable) block).getPlant(world, pos))) {
+                if (this.level.getBlockState(pos.below()).canSustainPlant(level, pos.below(), Direction.UP, (IPlantable) block)) {
+                    if (this.level.setBlockAndUpdate(pos, ((IPlantable) block).getPlant(level, pos))) {
                         stack.shrink(1);
                         increasePointer();
                         return new WorkAction(0.2f, powerPerOperation);
@@ -121,8 +123,8 @@ public class PlantSowerTile extends IndustrialAreaWorkingTile<PlantSowerTile> {
                 }
             }
         }
-        int x = Math.round(1.49F * (pos.getX() - this.pos.getX()) / radius);
-        int z = Math.round(1.49F * (pos.getZ() - this.pos.getZ()) / radius);
+        int x = Math.round(1.49F * (pos.getX() - this.worldPosition.getX()) / radius);
+        int z = Math.round(1.49F * (pos.getZ() - this.worldPosition.getZ()) / radius);
         return 4 + x + 3 * z;
     }
 

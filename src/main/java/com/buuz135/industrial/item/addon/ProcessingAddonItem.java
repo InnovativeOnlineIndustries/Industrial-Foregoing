@@ -27,20 +27,22 @@ import com.buuz135.industrial.recipe.DissolutionChamberRecipe;
 import com.buuz135.industrial.utils.IndustrialTags;
 import com.hrznstudio.titanium.api.augment.IAugmentType;
 import com.hrznstudio.titanium.item.AugmentWrapper;
-import net.minecraft.data.IFinishedRecipe;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemGroup;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.Items;
-import net.minecraft.item.crafting.Ingredient;
-import net.minecraft.tags.ITag;
-import net.minecraft.util.NonNullList;
-import net.minecraft.util.text.TranslationTextComponent;
-import net.minecraft.world.World;
+import net.minecraft.data.recipes.FinishedRecipe;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.CreativeModeTab;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
+import net.minecraft.world.item.crafting.Ingredient;
+import net.minecraft.tags.Tag;
+import net.minecraft.core.NonNullList;
+import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.world.level.Level;
 import net.minecraftforge.fluids.FluidStack;
 
 import java.util.function.Consumer;
+
+import net.minecraft.world.item.Item.Properties;
 
 public class ProcessingAddonItem extends IFCustomItem {
 
@@ -48,40 +50,40 @@ public class ProcessingAddonItem extends IFCustomItem {
 
     private int tier;
 
-    public ProcessingAddonItem(int tier, ItemGroup group) {
-        super("processing_addon_" + tier, group, new Properties().maxStackSize(16));
+    public ProcessingAddonItem(int tier, CreativeModeTab group) {
+        super("processing_addon_" + tier, group, new Properties().stacksTo(16));
         this.tier = tier;
     }
 
     @Override
-    public void onCreated(ItemStack stack, World worldIn, PlayerEntity playerIn) {
-        super.onCreated(stack, worldIn, playerIn);
+    public void onCraftedBy(ItemStack stack, Level worldIn, Player playerIn) {
+        super.onCraftedBy(stack, worldIn, playerIn);
         AugmentWrapper.setType(stack, PROCESSING, 1 + tier);
     }
 
     @Override
-    public void registerRecipe(Consumer<IFinishedRecipe> consumer) {
-        ITag<Item> tierMaterial = tier == 1 ? IndustrialTags.Items.GEAR_GOLD : IndustrialTags.Items.GEAR_DIAMOND;
-        new DissolutionChamberRecipe(getRegistryName(), new Ingredient.IItemList[]{
-                new Ingredient.SingleItemList(new ItemStack(Items.REDSTONE)),
-                new Ingredient.SingleItemList(new ItemStack(Items.REDSTONE)),
-                new Ingredient.SingleItemList(new ItemStack(Items.GLASS_PANE)),
-                new Ingredient.SingleItemList(new ItemStack(Items.GLASS_PANE)),
-                new Ingredient.TagList(tierMaterial),
-                new Ingredient.TagList(tierMaterial),
-                new Ingredient.SingleItemList(new ItemStack(Items.FURNACE)),
-                new Ingredient.SingleItemList(new ItemStack(Items.CRAFTING_TABLE))
+    public void registerRecipe(Consumer<FinishedRecipe> consumer) {
+        Tag<Item> tierMaterial = tier == 1 ? IndustrialTags.Items.GEAR_GOLD : IndustrialTags.Items.GEAR_DIAMOND;
+        new DissolutionChamberRecipe(getRegistryName(), new Ingredient.Value[]{
+                new Ingredient.ItemValue(new ItemStack(Items.REDSTONE)),
+                new Ingredient.ItemValue(new ItemStack(Items.REDSTONE)),
+                new Ingredient.ItemValue(new ItemStack(Items.GLASS_PANE)),
+                new Ingredient.ItemValue(new ItemStack(Items.GLASS_PANE)),
+                new Ingredient.TagValue(tierMaterial),
+                new Ingredient.TagValue(tierMaterial),
+                new Ingredient.ItemValue(new ItemStack(Items.FURNACE)),
+                new Ingredient.ItemValue(new ItemStack(Items.CRAFTING_TABLE))
         }, new FluidStack(ModuleCore.LATEX.getSourceFluid(), 1000), 200, new ItemStack(this), FluidStack.EMPTY);
     }
 
     @Override
-    public String getTranslationKey() {
-        return new TranslationTextComponent("item.industrialforegoing.addon").getString() + new TranslationTextComponent("item.industrialforegoing.processing").getString() + "Tier " + tier + " ";
+    public String getDescriptionId() {
+        return new TranslatableComponent("item.industrialforegoing.addon").getString() + new TranslatableComponent("item.industrialforegoing.processing").getString() + "Tier " + tier + " ";
     }
 
     @Override
-    public void fillItemGroup(ItemGroup group, NonNullList<ItemStack> items) {
-        if (isInGroup(group)) {
+    public void fillItemCategory(CreativeModeTab group, NonNullList<ItemStack> items) {
+        if (allowdedIn(group)) {
             ItemStack stack = new ItemStack(this);
             AugmentWrapper.setType(stack, PROCESSING, 1 + tier);
             items.add(stack);

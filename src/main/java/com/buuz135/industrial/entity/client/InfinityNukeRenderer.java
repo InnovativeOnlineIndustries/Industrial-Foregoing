@@ -23,16 +23,16 @@ package com.buuz135.industrial.entity.client;
 
 import com.buuz135.industrial.entity.InfinityNukeEntity;
 import com.buuz135.industrial.utils.Reference;
-import com.mojang.blaze3d.matrix.MatrixStack;
-import com.mojang.blaze3d.vertex.IVertexBuilder;
-import net.minecraft.client.renderer.IRenderTypeBuffer;
+import com.mojang.blaze3d.vertex.PoseStack;
+import com.mojang.blaze3d.vertex.VertexConsumer;
+import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.entity.EntityRenderer;
-import net.minecraft.client.renderer.entity.EntityRendererManager;
+import net.minecraft.client.renderer.entity.EntityRenderDispatcher;
 import net.minecraft.client.renderer.texture.OverlayTexture;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.math.MathHelper;
-import net.minecraft.util.math.vector.Vector3f;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.util.Mth;
+import com.mojang.math.Vector3f;
 
 public class InfinityNukeRenderer extends EntityRenderer<InfinityNukeEntity> {
 
@@ -42,40 +42,40 @@ public class InfinityNukeRenderer extends EntityRenderer<InfinityNukeEntity> {
     private final InfinityNukeModelArmed nukeModelArmedBig = new InfinityNukeModelArmed(0.2f);
 
 
-    public InfinityNukeRenderer(EntityRendererManager renderManagerIn) {
+    public InfinityNukeRenderer(EntityRenderDispatcher renderManagerIn) {
         super(renderManagerIn);
     }
 
     @Override
-    public void render(InfinityNukeEntity entityIn, float entityYaw, float partialTicks, MatrixStack matrixStackIn, IRenderTypeBuffer bufferIn, int packedLightIn) {
-        matrixStackIn.push();
+    public void render(InfinityNukeEntity entityIn, float entityYaw, float partialTicks, PoseStack matrixStackIn, MultiBufferSource bufferIn, int packedLightIn) {
+        matrixStackIn.pushPose();
         //matrixStackIn.rotate(Vector3f.YP.rotationDegrees(MathHelper.lerp(partialTicks, entityIn.prevRotationYaw, entityIn.rotationYaw) - 90.0F));
-        matrixStackIn.rotate(Vector3f.ZP.rotationDegrees(MathHelper.lerp(partialTicks, entityIn.prevRotationPitch, entityIn.rotationPitch) - 180.0F));
+        matrixStackIn.mulPose(Vector3f.ZP.rotationDegrees(Mth.lerp(partialTicks, entityIn.xRotO, entityIn.xRot) - 180.0F));
         matrixStackIn.translate(0, -1.35, 0.05);
-        IVertexBuilder ivertexbuilder = net.minecraft.client.renderer.ItemRenderer.getEntityGlintVertexBuilder(bufferIn, RenderType.getEntityTranslucent(this.getEntityTexture(entityIn)), false, false);
+        VertexConsumer ivertexbuilder = net.minecraft.client.renderer.entity.ItemRenderer.getFoilBufferDirect(bufferIn, RenderType.entityTranslucent(this.getTextureLocation(entityIn)), false, false);
         if (entityIn.isDataArmed()) {
             if (entityIn.isDataExploding()) {
-                double time = 7 + entityIn.getEntityWorld().getRandom().nextInt(50);
-                matrixStackIn.translate((entityIn.getEntityWorld().getRandom().nextDouble() - 0.5) / time, 0, (entityIn.getEntityWorld().getRandom().nextDouble() - 0.5) / time);
+                double time = 7 + entityIn.getCommandSenderWorld().getRandom().nextInt(50);
+                matrixStackIn.translate((entityIn.getCommandSenderWorld().getRandom().nextDouble() - 0.5) / time, 0, (entityIn.getCommandSenderWorld().getRandom().nextDouble() - 0.5) / time);
 
             }
-            this.nukeModelArmed.render(matrixStackIn, ivertexbuilder, packedLightIn, OverlayTexture.NO_OVERLAY, 1.0F, 1.0F, 1.0F, 1.0F);
-            if (entityIn.isDataExploding() && entityIn.world.getRandom().nextDouble() < 0.96) {
+            this.nukeModelArmed.renderToBuffer(matrixStackIn, ivertexbuilder, packedLightIn, OverlayTexture.NO_OVERLAY, 1.0F, 1.0F, 1.0F, 1.0F);
+            if (entityIn.isDataExploding() && entityIn.level.getRandom().nextDouble() < 0.96) {
                 float f = partialTicks + entityIn.getDataTicksExploding() + 10;
-                ivertexbuilder = net.minecraft.client.renderer.ItemRenderer.getEntityGlintVertexBuilder(bufferIn, RenderType.getEnergySwirl(new ResourceLocation(Reference.MOD_ID, "textures/blocks/mycelial_clean.png"), f * (entityIn.getDataTicksExploding() / 50000f), f * (entityIn.getDataTicksExploding() / 50000f)), false, false);
+                ivertexbuilder = net.minecraft.client.renderer.entity.ItemRenderer.getFoilBufferDirect(bufferIn, RenderType.energySwirl(new ResourceLocation(Reference.MOD_ID, "textures/blocks/mycelial_clean.png"), f * (entityIn.getDataTicksExploding() / 50000f), f * (entityIn.getDataTicksExploding() / 50000f)), false, false);
                 //matrixStackIn.scale(1.1f,1.1f,1.1f);
-                nukeModelArmedBig.render(matrixStackIn, ivertexbuilder, packedLightIn, OverlayTexture.NO_OVERLAY, 1.0F, 1.0F, 1.0F, 0.1F);
+                nukeModelArmedBig.renderToBuffer(matrixStackIn, ivertexbuilder, packedLightIn, OverlayTexture.NO_OVERLAY, 1.0F, 1.0F, 1.0F, 0.1F);
             }
         } else {
-            this.nukeModel.render(matrixStackIn, ivertexbuilder, packedLightIn, OverlayTexture.NO_OVERLAY, 1.0F, 1.0F, 1.0F, 1.0F);
+            this.nukeModel.renderToBuffer(matrixStackIn, ivertexbuilder, packedLightIn, OverlayTexture.NO_OVERLAY, 1.0F, 1.0F, 1.0F, 1.0F);
         }
 
-        matrixStackIn.pop();
+        matrixStackIn.popPose();
         super.render(entityIn, entityYaw, partialTicks, matrixStackIn, bufferIn, packedLightIn);
     }
 
     @Override
-    public ResourceLocation getEntityTexture(InfinityNukeEntity entity) {
+    public ResourceLocation getTextureLocation(InfinityNukeEntity entity) {
         return NUKE;
     }
 

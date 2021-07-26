@@ -16,21 +16,23 @@ import com.hrznstudio.titanium.component.fluid.FluidTankComponent;
 import com.hrznstudio.titanium.component.fluid.SidedFluidTankComponent;
 import com.hrznstudio.titanium.component.inventory.SidedInventoryComponent;
 import com.hrznstudio.titanium.item.AugmentWrapper;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.MobEntity;
-import net.minecraft.entity.SpawnReason;
-import net.minecraft.item.DyeColor;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.math.AxisAlignedBB;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.shapes.VoxelShape;
-import net.minecraft.util.math.vector.Vector3d;
-import net.minecraft.world.IServerWorld;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.Mob;
+import net.minecraft.world.entity.MobSpawnType;
+import net.minecraft.world.item.DyeColor;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.phys.AABB;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.phys.shapes.VoxelShape;
+import net.minecraft.world.phys.Vec3;
+import net.minecraft.world.level.ServerLevelAccessor;
 import net.minecraftforge.fluids.capability.IFluidHandler;
 
 import javax.annotation.Nonnull;
 import java.util.List;
 import java.util.UUID;
+
+import com.buuz135.industrial.block.tile.IndustrialWorkingTile.WorkAction;
 
 public class MobDuplicatorTile extends IndustrialAreaWorkingTile<MobDuplicatorTile> {
 
@@ -50,7 +52,7 @@ public class MobDuplicatorTile extends IndustrialAreaWorkingTile<MobDuplicatorTi
 				.setColor(DyeColor.LIME)
 				.setTankAction(FluidTankComponent.Action.FILL)
 				.setComponentHarness(this)
-				.setValidator(fluidStack -> fluidStack.getFluid().isIn(IndustrialTags.Fluids.EXPERIENCE))
+				.setValidator(fluidStack -> fluidStack.getFluid().is(IndustrialTags.Fluids.EXPERIENCE))
 		);
 
 		this.addInventory(input = (SidedInventoryComponent<MobDuplicatorTile>) new SidedInventoryComponent<MobDuplicatorTile>("mob_imprisonment_tool", 64, 22, 1, 1)
@@ -71,10 +73,10 @@ public class MobDuplicatorTile extends IndustrialAreaWorkingTile<MobDuplicatorTi
 		if (tank.getFluid().isEmpty()) return new WorkAction(1, 0);
 
 		ItemStack stack = input.getStackInSlot(0);
-		LivingEntity entity = (LivingEntity) ((MobImprisonmentToolItem) stack.getItem()).getEntityFromStack(stack, this.world, MobDuplicatorConfig.exactCopy && exactCopy);
+		LivingEntity entity = (LivingEntity) ((MobImprisonmentToolItem) stack.getItem()).getEntityFromStack(stack, this.level, MobDuplicatorConfig.exactCopy && exactCopy);
 		if (entity == null) return new WorkAction(1, 0);
 
-		List<LivingEntity> entityAmount = world.getEntitiesWithinAABB(entity.getClass(), getWorkingArea().getBoundingBox());
+		List<LivingEntity> entityAmount = level.getEntitiesOfClass(entity.getClass(), getWorkingArea().bounds());
 		entityAmount.removeIf(entityLiving -> !entityLiving.isAlive());
 		if (entityAmount.size() > 32) return new WorkAction(1, 0);
 
@@ -82,23 +84,23 @@ public class MobDuplicatorTile extends IndustrialAreaWorkingTile<MobDuplicatorTi
 		int canSpawn = (int) ((tank.getFluid().isEmpty() ? 0 : tank.getFluid().getAmount()) / Math.max(essenceNeeded, 1));
 		if (canSpawn == 0) return new WorkAction(1, 0);
 
-		int spawnAmount = 1 + this.world.rand.nextInt(Math.min(canSpawn, 4));
-		List<BlockPos> blocks = BlockUtils.getBlockPosInAABB(getWorkingArea().getBoundingBox());
+		int spawnAmount = 1 + this.level.random.nextInt(Math.min(canSpawn, 4));
+		List<BlockPos> blocks = BlockUtils.getBlockPosInAABB(getWorkingArea().bounds());
 		while (spawnAmount > 0) {
 			if (tank.getFluid().getAmount() >= essenceNeeded) {
-				entity = (LivingEntity) ((MobImprisonmentToolItem) stack.getItem()).getEntityFromStack(stack, this.world, MobDuplicatorConfig.exactCopy && exactCopy);
+				entity = (LivingEntity) ((MobImprisonmentToolItem) stack.getItem()).getEntityFromStack(stack, this.level, MobDuplicatorConfig.exactCopy && exactCopy);
 				int tries = 20;
-				Vector3d random = blockPosToVec3d(blocks.get(this.world.rand.nextInt(blocks.size())));
+				Vec3 random = blockPosToVec3d(blocks.get(this.level.random.nextInt(blocks.size())));
 				random = random.add(0.5, 0, 0.5);
-				entity.setLocationAndAngles(random.x, random.y, random.z, world.rand.nextFloat() * 360F, 0);
-				entity.setUniqueId(UUID.randomUUID());
-				if (entity instanceof MobEntity){
-					((MobEntity) entity).onInitialSpawn((IServerWorld) this.world, this.world.getDifficultyForLocation(this.pos), SpawnReason.MOB_SUMMONED, null, null);
+				entity.moveTo(random.x, random.y, random.z, level.random.nextFloat() * 360F, 0);
+				entity.setUUID(UUID.randomUUID());
+				if (entity instanceof Mob){
+					((Mob) entity).finalizeSpawn((ServerLevelAccessor) this.level, this.level.getCurrentDifficultyAt(this.worldPosition), MobSpawnType.MOB_SUMMONED, null, null);
 				}
 				while (tries > 0 && !canEntitySpawn(entity)) {
-					random = blockPosToVec3d(blocks.get(this.world.rand.nextInt(blocks.size())));
+					random = blockPosToVec3d(blocks.get(this.level.random.nextInt(blocks.size())));
 					random = random.add(0.5, 0, 0.5);
-					entity.setLocationAndAngles(random.x, random.y, random.z, world.rand.nextFloat() * 360F, 0);
+					entity.moveTo(random.x, random.y, random.z, level.random.nextFloat() * 360F, 0);
 					--tries;
 				}
 				if (tries <= 0) {
@@ -106,7 +108,7 @@ public class MobDuplicatorTile extends IndustrialAreaWorkingTile<MobDuplicatorTi
 					continue;
 				}
 
-				this.world.addEntity(entity);
+				this.level.addFreshEntity(entity);
 
 				tank.drainForced(essenceNeeded, IFluidHandler.FluidAction.EXECUTE);
 			}
@@ -120,19 +122,19 @@ public class MobDuplicatorTile extends IndustrialAreaWorkingTile<MobDuplicatorTi
 	}
 
 	private boolean canEntitySpawn(LivingEntity living) {
-		return this.world.checkNoEntityCollision(living) && (!this.world.containsAnyLiquid(living.getBoundingBox()));
+		return this.level.isUnobstructed(living) && (!this.level.containsAnyLiquid(living.getBoundingBox()));
 	}
 
-	private Vector3d blockPosToVec3d(BlockPos blockPos) {
-		return new Vector3d(blockPos.getX(), blockPos.getY(), blockPos.getZ());
+	private Vec3 blockPosToVec3d(BlockPos blockPos) {
+		return new Vec3(blockPos.getX(), blockPos.getY(), blockPos.getZ());
 	}
 
 	@Override
 	public VoxelShape getWorkingArea() {
-		return new RangeManager(this.pos, this.getFacingDirection(), RangeManager.RangeType.TOP_UP) {
+		return new RangeManager(this.worldPosition, this.getFacingDirection(), RangeManager.RangeType.TOP_UP) {
 			@Override
-			public AxisAlignedBB getBox() {
-				return super.getBox().expand(0, 1, 0);
+			public AABB getBox() {
+				return super.getBox().expandTowards(0, 1, 0);
 			}
 		}.get(hasAugmentInstalled(RangeAddonItem.RANGE) ? ((int) AugmentWrapper.getType(getInstalledAugments(RangeAddonItem.RANGE).get(0), RangeAddonItem.RANGE) + 1) : 0);
 	}

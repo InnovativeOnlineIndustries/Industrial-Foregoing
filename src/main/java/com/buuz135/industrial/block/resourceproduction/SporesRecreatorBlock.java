@@ -27,18 +27,21 @@ import com.buuz135.industrial.module.ModuleResourceProduction;
 import com.buuz135.industrial.utils.IndustrialTags;
 import com.hrznstudio.titanium.api.IFactory;
 import com.hrznstudio.titanium.recipe.generator.TitaniumShapedRecipeBuilder;
-import net.minecraft.block.Blocks;
-import net.minecraft.data.IFinishedRecipe;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.data.recipes.FinishedRecipe;
 import net.minecraft.tags.ItemTags;
 import net.minecraftforge.common.Tags;
 
 import javax.annotation.Nonnull;
 import java.util.function.Consumer;
 
+import com.hrznstudio.titanium.block.RotatableBlock.RotationType;
+import net.minecraft.world.level.block.state.BlockBehaviour.Properties;
+
 public class SporesRecreatorBlock extends IndustrialBlock<SporesRecreatorTile> {
 
     public SporesRecreatorBlock() {
-        super("spores_recreator", Properties.from(Blocks.IRON_BLOCK), SporesRecreatorTile.class, ModuleResourceProduction.TAB_RESOURCE);
+        super("spores_recreator", Properties.copy(Blocks.IRON_BLOCK), SporesRecreatorTile.class, ModuleResourceProduction.TAB_RESOURCE);
     }
 
     @Override
@@ -53,13 +56,13 @@ public class SporesRecreatorBlock extends IndustrialBlock<SporesRecreatorTile> {
     }
 
     @Override
-    public void registerRecipe(Consumer<IFinishedRecipe> consumer) {
+    public void registerRecipe(Consumer<FinishedRecipe> consumer) {
         TitaniumShapedRecipeBuilder.shapedRecipe(this)
-                .patternLine("PSP").patternLine("IMI").patternLine("PSP")
-                .key('P', IndustrialTags.Items.PLASTIC)
-                .key('I', Tags.Items.MUSHROOMS)
-                .key('M', IndustrialTags.Items.MACHINE_FRAME_PITY)
-                .key('S', ItemTags.makeWrapperTag("forge:gears/iron"))
-                .build(consumer);
+                .pattern("PSP").pattern("IMI").pattern("PSP")
+                .define('P', IndustrialTags.Items.PLASTIC)
+                .define('I', Tags.Items.MUSHROOMS)
+                .define('M', IndustrialTags.Items.MACHINE_FRAME_PITY)
+                .define('S', ItemTags.bind("forge:gears/iron"))
+                .save(consumer);
     }
 }

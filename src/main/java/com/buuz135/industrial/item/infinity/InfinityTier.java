@@ -21,26 +21,26 @@
  */
 package com.buuz135.industrial.item.infinity;
 
-import net.minecraft.util.text.TextFormatting;
-import net.minecraft.util.text.TranslationTextComponent;
+import net.minecraft.ChatFormatting;
+import net.minecraft.network.chat.TranslatableComponent;
 import org.apache.commons.lang3.tuple.Pair;
 
 public enum InfinityTier {
-    POOR("poor", 0, 0, TextFormatting.GRAY, 0x7c7c7a),//1x1
-    COMMON("common", 4_000_000, 1, TextFormatting.WHITE, 0xFFFFFF), //3x3
-    UNCOMMON("uncommon", 16_000_000, 2, TextFormatting.GREEN, 0x1ce819), //5x5
-    RARE("rare", 80_000_000, 3, TextFormatting.BLUE, 0x0087ff), //7x7
-    EPIC("epic", 480_000_000, 4, TextFormatting.DARK_PURPLE, 0xe100ff), //9x9
-    LEGENDARY("legendary", 3_360_000_000L, 5, TextFormatting.GOLD, 0xffaa00), //11x11
-    ARTIFACT("artifact", Long.MAX_VALUE, 6, TextFormatting.YELLOW, 0xfff887); //13x13
+    POOR("poor", 0, 0, ChatFormatting.GRAY, 0x7c7c7a),//1x1
+    COMMON("common", 4_000_000, 1, ChatFormatting.WHITE, 0xFFFFFF), //3x3
+    UNCOMMON("uncommon", 16_000_000, 2, ChatFormatting.GREEN, 0x1ce819), //5x5
+    RARE("rare", 80_000_000, 3, ChatFormatting.BLUE, 0x0087ff), //7x7
+    EPIC("epic", 480_000_000, 4, ChatFormatting.DARK_PURPLE, 0xe100ff), //9x9
+    LEGENDARY("legendary", 3_360_000_000L, 5, ChatFormatting.GOLD, 0xffaa00), //11x11
+    ARTIFACT("artifact", Long.MAX_VALUE, 6, ChatFormatting.YELLOW, 0xfff887); //13x13
 
     private final String name;
-    private final TextFormatting color;
+    private final ChatFormatting color;
     private final int textureColor;
     private long powerNeeded;
     private int radius;
 
-    InfinityTier(String name, long powerNeeded, int radius, TextFormatting color, int textureColor) {
+    InfinityTier(String name, long powerNeeded, int radius, ChatFormatting color, int textureColor) {
         this.name = name;
         this.powerNeeded = powerNeeded;
         this.radius = radius;
@@ -59,7 +59,7 @@ public enum InfinityTier {
     }
 
     public String getLocalizedName() {
-        return new TranslationTextComponent("text.industrialforegoing.tooltip.infinitydrill." + name).getString();
+        return new TranslatableComponent("text.industrialforegoing.tooltip.infinitydrill." + name).getString();
     }
 
     public String getName() {
@@ -82,7 +82,7 @@ public enum InfinityTier {
         this.radius = radius;
     }
 
-    public TextFormatting getColor() {
+    public ChatFormatting getColor() {
         return color;
     }
 

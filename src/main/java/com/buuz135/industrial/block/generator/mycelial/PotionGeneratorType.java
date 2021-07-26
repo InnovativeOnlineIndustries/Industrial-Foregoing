@@ -24,15 +24,14 @@ package com.buuz135.industrial.block.generator.mycelial;
 import com.buuz135.industrial.plugin.jei.generator.MycelialGeneratorRecipe;
 import com.buuz135.industrial.utils.IndustrialTags;
 import com.hrznstudio.titanium.component.inventory.SidedInventoryComponent;
-import net.minecraft.block.Blocks;
-import net.minecraft.data.ShapedRecipeBuilder;
-import net.minecraft.item.*;
-import net.minecraft.item.crafting.Ingredient;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.potion.EffectInstance;
-import net.minecraft.potion.Potion;
-import net.minecraft.potion.PotionUtils;
-import net.minecraft.potion.Potions;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.data.recipes.ShapedRecipeBuilder;
+import net.minecraft.world.item.crafting.Ingredient;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.world.effect.MobEffectInstance;
+import net.minecraft.world.item.alchemy.Potion;
+import net.minecraft.world.item.alchemy.PotionUtils;
+import net.minecraft.world.item.alchemy.Potions;
 import net.minecraftforge.common.util.INBTSerializable;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.registries.ForgeRegistries;
@@ -42,6 +41,14 @@ import java.util.*;
 import java.util.function.BiPredicate;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
+
+import net.minecraft.world.item.DyeColor;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
+import net.minecraft.world.item.LingeringPotionItem;
+import net.minecraft.world.item.PotionItem;
+import net.minecraft.world.item.ThrowablePotionItem;
 
 public class PotionGeneratorType implements IMycelialGeneratorType{
 
@@ -66,12 +73,12 @@ public class PotionGeneratorType implements IMycelialGeneratorType{
     }
 
     @Override
-    public boolean canStart(INBTSerializable<CompoundNBT>[] inputs) {
+    public boolean canStart(INBTSerializable<CompoundTag>[] inputs) {
         return inputs.length > 0 && inputs[0] instanceof SidedInventoryComponent && ((SidedInventoryComponent<?>) inputs[0]).getStackInSlot(0).getCount() > 0 && getSlotInputPredicates().get(0).test(((SidedInventoryComponent<?>) inputs[0]).getStackInSlot(0), 0);
     }
 
     @Override
-    public Pair<Integer, Integer> getTimeAndPowerGeneration(INBTSerializable<CompoundNBT>[] inputs) {
+    public Pair<Integer, Integer> getTimeAndPowerGeneration(INBTSerializable<CompoundTag>[] inputs) {
         if (inputs.length > 0 && inputs[0] instanceof SidedInventoryComponent && ((SidedInventoryComponent<?>) inputs[0]).getStackInSlot(0).getCount() > 0){
             ItemStack calculate = ((SidedInventoryComponent<?>) inputs[0]).getStackInSlot(0).copy();
             ItemStack stack = ((SidedInventoryComponent<?>) inputs[0]).getStackInSlot(0);
@@ -103,19 +110,19 @@ public class PotionGeneratorType implements IMycelialGeneratorType{
     @Override
     public List<MycelialGeneratorRecipe> getRecipes() {
         return ForgeRegistries.POTION_TYPES.getValues().stream().filter(potion -> potion != Potions.EMPTY).map(effect -> Arrays.asList(
-                PotionUtils.addPotionToItemStack(new ItemStack(Items.POTION), effect),
-                PotionUtils.addPotionToItemStack(new ItemStack(Items.SPLASH_POTION), effect),
-                PotionUtils.addPotionToItemStack(new ItemStack(Items.LINGERING_POTION), effect)
+                PotionUtils.setPotion(new ItemStack(Items.POTION), effect),
+                PotionUtils.setPotion(new ItemStack(Items.SPLASH_POTION), effect),
+                PotionUtils.setPotion(new ItemStack(Items.LINGERING_POTION), effect)
                 ))
                 .flatMap(Collection::stream)
-                .map(stack -> new MycelialGeneratorRecipe(Collections.singletonList(Collections.singletonList(Ingredient.fromStacks(stack))), new ArrayList<>(), calculate(stack).getLeft(), calculate(stack).getRight())).collect(Collectors.toList());
+                .map(stack -> new MycelialGeneratorRecipe(Collections.singletonList(Collections.singletonList(Ingredient.of(stack))), new ArrayList<>(), calculate(stack).getLeft(), calculate(stack).getRight())).collect(Collectors.toList());
     }
 
     private Pair<Integer,Integer> calculate(ItemStack stack){
-        Potion potion = PotionUtils.getPotionFromItem(stack);
+        Potion potion = PotionUtils.getPotion(stack);
         int duration = 80;
         int amplifier = 1;
-        for (EffectInstance potionEffect : potion.getEffects()) {
+        for (MobEffectInstance potionEffect : potion.getEffects()) {
             duration += potionEffect.getDuration();
             amplifier += potionEffect.getAmplifier();
         }
@@ -127,9 +134,9 @@ public class PotionGeneratorType implements IMycelialGeneratorType{
 
     @Override
     public ShapedRecipeBuilder addIngredients(ShapedRecipeBuilder recipeBuilder) {
-        recipeBuilder = recipeBuilder.key('B', Items.NETHER_WART)
-                .key('C', Blocks.BREWING_STAND)
-                .key('M', IndustrialTags.Items.MACHINE_FRAME_ADVANCED);
+        recipeBuilder = recipeBuilder.define('B', Items.NETHER_WART)
+                .define('C', Blocks.BREWING_STAND)
+                .define('M', IndustrialTags.Items.MACHINE_FRAME_ADVANCED);
         return recipeBuilder;
     }
 }

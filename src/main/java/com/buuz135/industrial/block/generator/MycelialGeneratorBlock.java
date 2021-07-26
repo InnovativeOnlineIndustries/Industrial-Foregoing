@@ -27,37 +27,36 @@ import com.buuz135.industrial.block.generator.tile.MycelialGeneratorTile;
 import com.buuz135.industrial.module.ModuleGenerator;
 import com.buuz135.industrial.utils.Reference;
 import com.buuz135.industrial.worlddata.MycelialDataManager;
-import com.hrznstudio.titanium.api.IFactory;
 import com.hrznstudio.titanium.module.api.RegistryManager;
 import com.hrznstudio.titanium.nbthandler.NBTManager;
 import com.hrznstudio.titanium.recipe.generator.TitaniumShapedRecipeBuilder;
 import com.mojang.datafixers.types.Type;
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockState;
-import net.minecraft.block.Blocks;
-import net.minecraft.data.IFinishedRecipe;
-import net.minecraft.data.ShapedRecipeBuilder;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.item.BlockItem;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.Items;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.tileentity.TileEntityType;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.data.recipes.FinishedRecipe;
+import net.minecraft.data.recipes.ShapedRecipeBuilder;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.item.BlockItem;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.entity.BlockEntityType;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.level.Level;
 
 import javax.annotation.Nullable;
 import java.util.function.Consumer;
 
 public class MycelialGeneratorBlock extends IndustrialBlock<MycelialGeneratorTile> {
 
-    private TileEntityType tileEntityType;
+    private BlockEntityType tileEntityType;
     private final IMycelialGeneratorType type;
 
     public MycelialGeneratorBlock(IMycelialGeneratorType type) {
-        super("mycelial_" + type.getName(), Properties.from(Blocks.IRON_BLOCK), MycelialGeneratorTile.class, ModuleGenerator.TAB_GENERATOR);
+        super("mycelial_" + type.getName(), Properties.copy(Blocks.IRON_BLOCK), MycelialGeneratorTile.class, ModuleGenerator.TAB_GENERATOR);
         this.type = type;
     }
 
@@ -67,14 +66,14 @@ public class MycelialGeneratorBlock extends IndustrialBlock<MycelialGeneratorTil
         setItem(item);
         registry.content(Item.class, item);
         NBTManager.getInstance().scanTileClassForAnnotations(MycelialGeneratorTile.class);
-        tileEntityType = TileEntityType.Builder.create(this.getTileEntityFactory()::create, new Block[]{this}).build((Type) null);
+        tileEntityType = BlockEntityType.Builder.of(this.getTileEntityFactory()::create, new Block[]{this}).build((Type) null);
         tileEntityType.setRegistryName(new ResourceLocation(Reference.MOD_ID, "mycelial_generator_"+type.getName()));
-        registry.content(TileEntityType.class, tileEntityType);
+        registry.content(BlockEntityType.class, tileEntityType);
     }
 
     @Override
-    public IFactory<MycelialGeneratorTile> getTileEntityFactory() {
-        return () -> new MycelialGeneratorTile(this, type);
+    public BlockEntityType.BlockEntitySupplier<MycelialGeneratorTile> getTileEntityFactory() {
+        return (BlockEntityType.BlockEntitySupplier<MycelialGeneratorTile>) new MycelialGeneratorTile(this, type);
     }
 
     @Override
@@ -87,32 +86,32 @@ public class MycelialGeneratorBlock extends IndustrialBlock<MycelialGeneratorTil
     }
 
     @Override
-    public void onBlockPlacedBy(World worldIn, BlockPos pos, BlockState state, @Nullable LivingEntity placer, ItemStack stack) {
-        super.onBlockPlacedBy(worldIn, pos, state, placer, stack);
-        TileEntity entity = worldIn.getTileEntity(pos);
+    public void setPlacedBy(Level worldIn, BlockPos pos, BlockState state, @Nullable LivingEntity placer, ItemStack stack) {
+        super.setPlacedBy(worldIn, pos, state, placer, stack);
+        BlockEntity entity = worldIn.getBlockEntity(pos);
         if (entity instanceof MycelialGeneratorTile && placer != null){
-            ((MycelialGeneratorTile) entity).setOwner(placer.getUniqueID().toString());
+            ((MycelialGeneratorTile) entity).setOwner(placer.getUUID().toString());
         }
     }
 
     @Override
-    public void onReplaced(BlockState state, World worldIn, BlockPos pos, BlockState newState, boolean isMoving) {
-        TileEntity entity = worldIn.getTileEntity(pos);
+    public void onRemove(BlockState state, Level worldIn, BlockPos pos, BlockState newState, boolean isMoving) {
+        BlockEntity entity = worldIn.getBlockEntity(pos);
         if (entity instanceof  MycelialGeneratorTile){
             MycelialDataManager.removeGeneratorInfo(((MycelialGeneratorTile) entity).getOwner(), worldIn, pos, type);
         }
-        super.onReplaced(state, worldIn, pos, newState, isMoving);
+        super.onRemove(state, worldIn, pos, newState, isMoving);
     }
 
     @Override
-    public void registerRecipe(Consumer<IFinishedRecipe> consumer) {
-        ShapedRecipeBuilder recipe = TitaniumShapedRecipeBuilder.shapedRecipe(this).patternLine("BBB").patternLine("BCB").patternLine("RMR")
-                .key('R', Items.REDSTONE);
-        type.addIngredients(recipe).build(consumer);
+    public void registerRecipe(Consumer<FinishedRecipe> consumer) {
+        ShapedRecipeBuilder recipe = TitaniumShapedRecipeBuilder.shapedRecipe(this).pattern("BBB").pattern("BCB").pattern("RMR")
+                .define('R', Items.REDSTONE);
+        type.addIngredients(recipe).save(consumer);
     }
 
     @Override
-    public TileEntityType getTileEntityType() {
+    public BlockEntityType getTileEntityType() {
         return tileEntityType;
     }
 }

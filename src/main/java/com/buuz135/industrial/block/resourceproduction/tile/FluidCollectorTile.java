@@ -30,16 +30,18 @@ import com.hrznstudio.titanium.annotation.Save;
 import com.hrznstudio.titanium.component.energy.EnergyStorageComponent;
 import com.hrznstudio.titanium.component.fluid.FluidTankComponent;
 import com.hrznstudio.titanium.component.fluid.SidedFluidTankComponent;
-import net.minecraft.block.Blocks;
-import net.minecraft.fluid.Fluid;
-import net.minecraft.item.DyeColor;
-import net.minecraft.state.properties.BlockStateProperties;
-import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.material.Fluid;
+import net.minecraft.world.item.DyeColor;
+import net.minecraft.world.level.block.state.properties.BlockStateProperties;
+import net.minecraft.core.BlockPos;
 import net.minecraftforge.fluids.FluidAttributes;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.capability.IFluidHandler;
 
 import javax.annotation.Nonnull;
+
+import com.buuz135.industrial.block.tile.IndustrialWorkingTile.WorkAction;
 
 public class FluidCollectorTile extends IndustrialAreaWorkingTile<FluidCollectorTile> {
 
@@ -64,13 +66,13 @@ public class FluidCollectorTile extends IndustrialAreaWorkingTile<FluidCollector
     public WorkAction work() {
         if (hasEnergy(getPowerPerOperation)) {
             BlockPos pointed = getPointedBlockPos();
-            if (isLoaded(pointed) && !world.isAirBlock(pointed) && BlockUtils.canBlockBeBroken(this.world, pointed) && world.getFluidState(pointed).isSource()) {
-                Fluid fluid = world.getFluidState(pointed).getFluid();
-                if (tank.isEmpty() || (tank.getFluid().getFluid().isEquivalentTo(fluid) && tank.getFluidAmount() + FluidAttributes.BUCKET_VOLUME <= tank.getCapacity())) {
-                    if (world.getBlockState(pointed).hasProperty(BlockStateProperties.WATERLOGGED)) { //has
-                        world.setBlockState(pointed, world.getBlockState(pointed).with(BlockStateProperties.WATERLOGGED, false));
+            if (isLoaded(pointed) && !level.isEmptyBlock(pointed) && BlockUtils.canBlockBeBroken(this.level, pointed) && level.getFluidState(pointed).isSource()) {
+                Fluid fluid = level.getFluidState(pointed).getType();
+                if (tank.isEmpty() || (tank.getFluid().getFluid().isSame(fluid) && tank.getFluidAmount() + FluidAttributes.BUCKET_VOLUME <= tank.getCapacity())) {
+                    if (level.getBlockState(pointed).hasProperty(BlockStateProperties.WATERLOGGED)) { //has
+                        level.setBlockAndUpdate(pointed, level.getBlockState(pointed).setValue(BlockStateProperties.WATERLOGGED, false));
                     } else {
-                        world.setBlockState(pointed, Blocks.AIR.getDefaultState());
+                        level.setBlockAndUpdate(pointed, Blocks.AIR.defaultBlockState());
                     }
                     tank.fillForced(new FluidStack(fluid, FluidAttributes.BUCKET_VOLUME), IFluidHandler.FluidAction.EXECUTE);
                     increasePointer();

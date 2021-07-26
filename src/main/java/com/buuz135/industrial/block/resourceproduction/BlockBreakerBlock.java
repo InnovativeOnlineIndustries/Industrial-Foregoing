@@ -27,18 +27,21 @@ import com.buuz135.industrial.module.ModuleResourceProduction;
 import com.buuz135.industrial.utils.IndustrialTags;
 import com.hrznstudio.titanium.api.IFactory;
 import com.hrznstudio.titanium.recipe.generator.TitaniumShapedRecipeBuilder;
-import net.minecraft.block.Blocks;
-import net.minecraft.data.IFinishedRecipe;
-import net.minecraft.item.Items;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.data.recipes.FinishedRecipe;
+import net.minecraft.world.item.Items;
 import net.minecraft.tags.ItemTags;
 
 import javax.annotation.Nonnull;
 import java.util.function.Consumer;
 
+import com.hrznstudio.titanium.block.RotatableBlock.RotationType;
+import net.minecraft.world.level.block.state.BlockBehaviour.Properties;
+
 public class BlockBreakerBlock extends IndustrialBlock<BlockBreakerTile> {
 
     public BlockBreakerBlock() {
-        super("block_breaker", Properties.from(Blocks.IRON_BLOCK), BlockBreakerTile.class, ModuleResourceProduction.TAB_RESOURCE);
+        super("block_breaker", Properties.copy(Blocks.IRON_BLOCK), BlockBreakerTile.class, ModuleResourceProduction.TAB_RESOURCE);
     }
 
     @Override
@@ -53,16 +56,16 @@ public class BlockBreakerBlock extends IndustrialBlock<BlockBreakerTile> {
     }
 
     @Override
-    public void registerRecipe(Consumer<IFinishedRecipe> consumer) {
+    public void registerRecipe(Consumer<FinishedRecipe> consumer) {
         TitaniumShapedRecipeBuilder.shapedRecipe(this)
-                .patternLine("PGP").patternLine("IMD").patternLine("SRS")
-                .key('P', IndustrialTags.Items.PLASTIC)
-                .key('I', Items.IRON_PICKAXE)
-                .key('D', Items.IRON_SHOVEL)
-                .key('M', IndustrialTags.Items.MACHINE_FRAME_PITY)
-                .key('R', Items.REDSTONE)
-                .key('G', ItemTags.makeWrapperTag("forge:gears/gold"))
-                .key('S', ItemTags.makeWrapperTag("forge:gears/iron"))
-                .build(consumer);
+                .pattern("PGP").pattern("IMD").pattern("SRS")
+                .define('P', IndustrialTags.Items.PLASTIC)
+                .define('I', Items.IRON_PICKAXE)
+                .define('D', Items.IRON_SHOVEL)
+                .define('M', IndustrialTags.Items.MACHINE_FRAME_PITY)
+                .define('R', Items.REDSTONE)
+                .define('G', ItemTags.bind("forge:gears/gold"))
+                .define('S', ItemTags.bind("forge:gears/iron"))
+                .save(consumer);
     }
 }

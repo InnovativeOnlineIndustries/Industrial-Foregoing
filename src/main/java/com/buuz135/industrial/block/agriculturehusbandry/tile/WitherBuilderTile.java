@@ -11,17 +11,19 @@ import com.buuz135.industrial.utils.IFFakePlayer;
 import com.hrznstudio.titanium.annotation.Save;
 import com.hrznstudio.titanium.component.energy.EnergyStorageComponent;
 import com.hrznstudio.titanium.component.inventory.SidedInventoryComponent;
-import net.minecraft.block.Blocks;
-import net.minecraft.item.DyeColor;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.Items;
-import net.minecraft.util.Direction;
-import net.minecraft.util.math.AxisAlignedBB;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.shapes.VoxelShape;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.item.DyeColor;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
+import net.minecraft.core.Direction;
+import net.minecraft.world.phys.AABB;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.phys.shapes.VoxelShape;
 import net.minecraftforge.items.ItemStackHandler;
 
 import javax.annotation.Nonnull;
+
+import com.buuz135.industrial.block.tile.IndustrialWorkingTile.WorkAction;
 
 public class WitherBuilderTile extends IndustrialAreaWorkingTile<WitherBuilderTile> {
 
@@ -60,40 +62,40 @@ public class WitherBuilderTile extends IndustrialAreaWorkingTile<WitherBuilderTi
 
 	@Override
 	public WorkAction work() {
-		if (!hasEnergy(WitherBuilderConfig.powerPerOperation) || !BlockUtils.canBlockBeBroken(this.world, this.pos))
+		if (!hasEnergy(WitherBuilderConfig.powerPerOperation) || !BlockUtils.canBlockBeBroken(this.level, this.worldPosition))
 			return new WorkAction(1, 0);
-		BlockPos pos = this.pos.add(0, 2, 0);
+		BlockPos pos = this.worldPosition.offset(0, 2, 0);
 		float power = 0;
-		if (this.world.getBlockState(pos).getBlock().equals(Blocks.AIR) && !getDefaultOrFind(0, bottom, new ItemStack(Blocks.SOUL_SAND)).isEmpty()) {
-			this.world.setBlockState(pos, Blocks.SOUL_SAND.getDefaultState());
+		if (this.level.getBlockState(pos).getBlock().equals(Blocks.AIR) && !getDefaultOrFind(0, bottom, new ItemStack(Blocks.SOUL_SAND)).isEmpty()) {
+			this.level.setBlockAndUpdate(pos, Blocks.SOUL_SAND.defaultBlockState());
 			getDefaultOrFind(0, bottom, new ItemStack(Blocks.SOUL_SAND)).shrink(1);
 			power += 1 / 7f;
 		}
-		if (this.world.getBlockState(pos).getBlock().equals(Blocks.SOUL_SAND)) {
+		if (this.level.getBlockState(pos).getBlock().equals(Blocks.SOUL_SAND)) {
 			for (int i = 0; i < 3; ++i) {
 				BlockPos temp;
 				if (getFacingDirection() == Direction.EAST || getFacingDirection() == Direction.WEST) {
-					temp = pos.add(0, 1, i - 1);
+					temp = pos.offset(0, 1, i - 1);
 				} else {
-					temp = pos.add(i - 1, 1, 0);
+					temp = pos.offset(i - 1, 1, 0);
 				}
-				if (this.world.getBlockState(temp).getBlock().equals(Blocks.AIR) && !getDefaultOrFind(i, middle, new ItemStack(Blocks.SOUL_SAND)).isEmpty()) {
-					this.world.setBlockState(temp, Blocks.SOUL_SAND.getDefaultState());
+				if (this.level.getBlockState(temp).getBlock().equals(Blocks.AIR) && !getDefaultOrFind(i, middle, new ItemStack(Blocks.SOUL_SAND)).isEmpty()) {
+					this.level.setBlockAndUpdate(temp, Blocks.SOUL_SAND.defaultBlockState());
 					getDefaultOrFind(i, middle, new ItemStack(Blocks.SOUL_SAND)).shrink(1);
 					power += 1 / 7f;
 				}
 			}
 		}
-		if (this.world.getBlockState(pos).getBlock().equals(Blocks.SOUL_SAND)) {
+		if (this.level.getBlockState(pos).getBlock().equals(Blocks.SOUL_SAND)) {
 			boolean secondRow = true;
 			for (int i = 0; i < 3; ++i) {
 				BlockPos temp;
 				if (getFacingDirection() == Direction.EAST || getFacingDirection() == Direction.WEST) {
-					temp = pos.add(0, 1, i - 1);
+					temp = pos.offset(0, 1, i - 1);
 				} else {
-					temp = pos.add(i - 1, 1, 0);
+					temp = pos.offset(i - 1, 1, 0);
 				}
-				if (!this.world.getBlockState(temp).getBlock().equals(Blocks.SOUL_SAND)) {
+				if (!this.level.getBlockState(temp).getBlock().equals(Blocks.SOUL_SAND)) {
 					secondRow = false;
 					break;
 				}
@@ -102,14 +104,14 @@ public class WitherBuilderTile extends IndustrialAreaWorkingTile<WitherBuilderTi
 				for (int i = 0; i < 3; ++i) {
 					BlockPos temp;
 					if (getFacingDirection() == Direction.EAST || getFacingDirection() == Direction.WEST) {
-						temp = pos.add(0, 2, i - 1);
+						temp = pos.offset(0, 2, i - 1);
 					} else {
-						temp = pos.add(i - 1, 2, 0);
+						temp = pos.offset(i - 1, 2, 0);
 					}
-					if (this.world.getBlockState(temp).getBlock().equals(Blocks.AIR) && !getDefaultOrFind(i, top, new ItemStack(Items.WITHER_SKELETON_SKULL)).isEmpty() && this.world.getBlockState(temp.add(0, -1, 0)).getBlock().equals(Blocks.SOUL_SAND)) {
-						IFFakePlayer fakePlayer = (IFFakePlayer) IndustrialForegoing.getFakePlayer(world, temp);
+					if (this.level.getBlockState(temp).getBlock().equals(Blocks.AIR) && !getDefaultOrFind(i, top, new ItemStack(Items.WITHER_SKELETON_SKULL)).isEmpty() && this.level.getBlockState(temp.offset(0, -1, 0)).getBlock().equals(Blocks.SOUL_SAND)) {
+						IFFakePlayer fakePlayer = (IFFakePlayer) IndustrialForegoing.getFakePlayer(level, temp);
 						ItemStack stack = getDefaultOrFind(i, top, new ItemStack(Items.WITHER_SKELETON_SKULL));
-						if (fakePlayer.placeBlock(this.world, temp, stack)) {
+						if (fakePlayer.placeBlock(this.level, temp, stack)) {
 							power += 1 / 7f;
 						}
 					}
@@ -122,13 +124,13 @@ public class WitherBuilderTile extends IndustrialAreaWorkingTile<WitherBuilderTi
 	@Override
 	public VoxelShape getWorkingArea() {
 
-		return new RangeManager(this.pos, this.getFacingDirection(), RangeManager.RangeType.TOP_UP) {
+		return new RangeManager(this.worldPosition, this.getFacingDirection(), RangeManager.RangeType.TOP_UP) {
 			@Override
-			public AxisAlignedBB getBox() {
+			public AABB getBox() {
 				if (getFacingDirection() == Direction.EAST || getFacingDirection() == Direction.WEST) {
-					return super.getBox().offset(new BlockPos(0, 1, 0)).grow(0, 1, 1);
+					return super.getBox().move(new BlockPos(0, 1, 0)).inflate(0, 1, 1);
 				} else {
-					return super.getBox().offset(new BlockPos(0, 1, 0)).grow(1, 1, 0);
+					return super.getBox().move(new BlockPos(0, 1, 0)).inflate(1, 1, 0);
 				}
 			}
 		}.get(0);
@@ -159,10 +161,10 @@ public class WitherBuilderTile extends IndustrialAreaWorkingTile<WitherBuilderTi
 
 
 	public ItemStack getDefaultOrFind(int i, ItemStackHandler handler, ItemStack filter) {
-		if (handler.getStackInSlot(i).isItemEqual(filter)) return handler.getStackInSlot(i);
+		if (handler.getStackInSlot(i).sameItem(filter)) return handler.getStackInSlot(i);
 		for (ItemStackHandler h : new ItemStackHandler[] {top, middle, bottom}) {
 			for (int s = 0; s < h.getSlots(); ++s) {
-				if (h.getStackInSlot(s).isItemEqual(filter)) return h.getStackInSlot(s);
+				if (h.getStackInSlot(s).sameItem(filter)) return h.getStackInSlot(s);
 			}
 		}
 		return ItemStack.EMPTY;

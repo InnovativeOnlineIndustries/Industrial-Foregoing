@@ -23,23 +23,23 @@ package com.buuz135.industrial.proxy.client.event;
 
 import com.buuz135.industrial.item.infinity.InfinityTier;
 import com.buuz135.industrial.module.ModuleTool;
-import com.mojang.blaze3d.matrix.MatrixStack;
-import com.mojang.blaze3d.vertex.IVertexBuilder;
-import net.minecraft.block.FlowingFluidBlock;
+import com.mojang.blaze3d.vertex.PoseStack;
+import com.mojang.blaze3d.vertex.VertexConsumer;
+import net.minecraft.world.level.block.LiquidBlock;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.ActiveRenderInfo;
+import net.minecraft.client.Camera;
 import net.minecraft.client.renderer.RenderType;
-import net.minecraft.client.renderer.WorldRenderer;
-import net.minecraft.client.settings.PointOfView;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.Hand;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.BlockRayTraceResult;
-import net.minecraft.util.math.RayTraceResult;
-import net.minecraft.util.math.shapes.VoxelShape;
-import net.minecraft.util.math.vector.Vector3f;
-import net.minecraft.world.World;
-import net.minecraftforge.client.event.DrawHighlightEvent;
+import net.minecraft.client.renderer.LevelRenderer;
+import net.minecraft.client.CameraType;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.phys.BlockHitResult;
+import net.minecraft.world.phys.HitResult;
+import net.minecraft.world.phys.shapes.VoxelShape;
+import com.mojang.math.Vector3f;
+import net.minecraft.world.level.Level;
+import net.minecraftforge.client.event.DrawSelectionEvent;
 import net.minecraftforge.client.event.RenderPlayerEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fluids.IFluidBlock;
@@ -48,41 +48,41 @@ import org.apache.commons.lang3.tuple.Pair;
 public class IFClientEvents {
 
     @SubscribeEvent
-    public void blockOverlayEvent(DrawHighlightEvent event) {
-        RayTraceResult hit = event.getTarget();
-        if (hit.getType() == RayTraceResult.Type.BLOCK && Minecraft.getInstance().player.getHeldItemMainhand().getItem().equals(ModuleTool.INFINITY_DRILL)) {
-            BlockRayTraceResult blockRayTraceResult = (BlockRayTraceResult) hit;
+    public void blockOverlayEvent(DrawSelectionEvent event) {
+        HitResult hit = event.getTarget();
+        if (hit.getType() == HitResult.Type.BLOCK && Minecraft.getInstance().player.getMainHandItem().getItem().equals(ModuleTool.INFINITY_DRILL)) {
+            BlockHitResult blockRayTraceResult = (BlockHitResult) hit;
             event.setCanceled(true);
-            ItemStack hand = Minecraft.getInstance().player.getHeldItemMainhand();
+            ItemStack hand = Minecraft.getInstance().player.getMainHandItem();
             InfinityTier tier = ModuleTool.INFINITY_DRILL.getSelectedTier(hand);
-            World world = Minecraft.getInstance().player.world;
-            Pair<BlockPos, BlockPos> area = ModuleTool.INFINITY_DRILL.getArea(blockRayTraceResult.getPos(), blockRayTraceResult.getFace(), tier, false);
-            MatrixStack stack = new MatrixStack();
-            stack.push();
-            ActiveRenderInfo info = event.getInfo();
-            stack.rotate(Vector3f.XP.rotationDegrees(info.getPitch()));
-            stack.rotate(Vector3f.YP.rotationDegrees(info.getYaw() + 180));
-            double d0 = info.getProjectedView().getX();
-            double d1 = info.getProjectedView().getY();
-            double d2 = info.getProjectedView().getZ();
-            IVertexBuilder builder = Minecraft.getInstance().getRenderTypeBuffers().getOutlineBufferSource().getBuffer(RenderType.getLines());
-            BlockPos.getAllInBoxMutable(area.getLeft(), area.getRight()).forEach(blockPos -> {
+            Level world = Minecraft.getInstance().player.level;
+            Pair<BlockPos, BlockPos> area = ModuleTool.INFINITY_DRILL.getArea(blockRayTraceResult.getBlockPos(), blockRayTraceResult.getDirection(), tier, false);
+            PoseStack stack = new PoseStack();
+            stack.pushPose();
+            Camera info = event.getInfo();
+            stack.mulPose(Vector3f.XP.rotationDegrees(info.getXRot()));
+            stack.mulPose(Vector3f.YP.rotationDegrees(info.getYRot() + 180));
+            double d0 = info.getPosition().x();
+            double d1 = info.getPosition().y();
+            double d2 = info.getPosition().z();
+            VertexConsumer builder = Minecraft.getInstance().renderBuffers().outlineBufferSource().getBuffer(RenderType.lines());
+            BlockPos.betweenClosed(area.getLeft(), area.getRight()).forEach(blockPos -> {
                 VoxelShape shape = world.getBlockState(blockPos).getShape(world, blockPos);
-                if (shape != null && !shape.isEmpty() && !world.isAirBlock(blockPos) && world.getBlockState(blockPos).getBlockHardness(world, blockPos) >= 0 && !(world.getBlockState(blockPos).getBlock() instanceof IFluidBlock) && !(world.getBlockState(blockPos).getBlock() instanceof FlowingFluidBlock)) {
-                    WorldRenderer.drawBoundingBox(stack, builder, shape.getBoundingBox().offset(blockPos.getX() - d0, blockPos.getY() - d1, blockPos.getZ() - d2), 0, 0, 0, 0.35F);
+                if (shape != null && !shape.isEmpty() && !world.isEmptyBlock(blockPos) && world.getBlockState(blockPos).getDestroySpeed(world, blockPos) >= 0 && !(world.getBlockState(blockPos).getBlock() instanceof IFluidBlock) && !(world.getBlockState(blockPos).getBlock() instanceof LiquidBlock)) {
+                    LevelRenderer.renderLineBox(stack, builder, shape.bounds().move(blockPos.getX() - d0, blockPos.getY() - d1, blockPos.getZ() - d2), 0, 0, 0, 0.35F);
                 }
             });
-            stack.pop();
+            stack.popPose();
         }
     }
 
     @SubscribeEvent
     public void onRenderPre(RenderPlayerEvent.Pre event) {
-        if (event.getPlayer().getUniqueID().equals(Minecraft.getInstance().player.getUniqueID()) && Minecraft.getInstance().gameSettings.getPointOfView() == PointOfView.FIRST_PERSON)
+        if (event.getPlayer().getUUID().equals(Minecraft.getInstance().player.getUUID()) && Minecraft.getInstance().options.getCameraType() == CameraType.FIRST_PERSON)
             return;
-        if (event.getPlayer().getHeldItem(Hand.MAIN_HAND).getItem().equals(ModuleTool.INFINITY_DRILL))
-            event.getPlayer().setActiveHand(Hand.MAIN_HAND);
-        else if (event.getPlayer().getHeldItem(Hand.OFF_HAND).getItem().equals(ModuleTool.INFINITY_DRILL))
-            event.getPlayer().setActiveHand(Hand.OFF_HAND);
+        if (event.getPlayer().getItemInHand(InteractionHand.MAIN_HAND).getItem().equals(ModuleTool.INFINITY_DRILL))
+            event.getPlayer().startUsingItem(InteractionHand.MAIN_HAND);
+        else if (event.getPlayer().getItemInHand(InteractionHand.OFF_HAND).getItem().equals(ModuleTool.INFINITY_DRILL))
+            event.getPlayer().startUsingItem(InteractionHand.OFF_HAND);
     }
 }

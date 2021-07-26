@@ -4,65 +4,65 @@ package com.buuz135.industrial.entity.client;// Made with Blockbench 3.8.4
 
 
 import com.buuz135.industrial.entity.InfinityNukeEntity;
-import com.mojang.blaze3d.matrix.MatrixStack;
-import com.mojang.blaze3d.vertex.IVertexBuilder;
-import net.minecraft.client.renderer.entity.model.EntityModel;
-import net.minecraft.client.renderer.model.ModelRenderer;
+import com.mojang.blaze3d.vertex.PoseStack;
+import com.mojang.blaze3d.vertex.VertexConsumer;
+import net.minecraft.client.model.EntityModel;
+import net.minecraft.client.model.geom.ModelPart;
 
 public class InfinityNukeModelArmed extends EntityModel<InfinityNukeEntity> {
-    private final ModelRenderer top;
-    private final ModelRenderer bottom;
-    private final ModelRenderer core;
-    private final ModelRenderer leg_left;
-    private final ModelRenderer leg_right;
-    private final ModelRenderer bone;
+    private final ModelPart top;
+    private final ModelPart bottom;
+    private final ModelPart core;
+    private final ModelPart leg_left;
+    private final ModelPart leg_right;
+    private final ModelPart bone;
 
     public InfinityNukeModelArmed(float size) {
-        textureWidth = 64;
-        textureHeight = 64;
+        texWidth = 64;
+        texHeight = 64;
 
-        top = new ModelRenderer(this);
-        top.setRotationPoint(-8.0F, 17.4F, 8.0F);
-        top.setTextureOffset(60, 53).addBox(10.0F, -10.4F, -11.0F, -4.0F, 3.0F, 4.0F, size, false);
-        top.setTextureOffset(48, 24).addBox(6.0F, -12.4F, -11.0F, 4.0F, 1.0F, 4.0F, size, false);
-        top.setTextureOffset(32, 52).addBox(4.0F, -11.4F, -13.0F, 8.0F, 4.0F, 8.0F, size, false);
+        top = new ModelPart(this);
+        top.setPos(-8.0F, 17.4F, 8.0F);
+        top.texOffs(60, 53).addBox(10.0F, -10.4F, -11.0F, -4.0F, 3.0F, 4.0F, size, false);
+        top.texOffs(48, 24).addBox(6.0F, -12.4F, -11.0F, 4.0F, 1.0F, 4.0F, size, false);
+        top.texOffs(32, 52).addBox(4.0F, -11.4F, -13.0F, 8.0F, 4.0F, 8.0F, size, false);
 
-        bottom = new ModelRenderer(this);
-        bottom.setRotationPoint(-8.0F, 17.4F, 8.0F);
-        bottom.setTextureOffset(60, 53).addBox(10.0F, -7.4F, -11.0F, -4.0F, 3.0F, 4.0F, size, true);
-        bottom.setTextureOffset(0, 52).addBox(4.0F, -7.4F, -13.0F, 8.0F, 4.0F, 8.0F, size, false);
+        bottom = new ModelPart(this);
+        bottom.setPos(-8.0F, 17.4F, 8.0F);
+        bottom.texOffs(60, 53).addBox(10.0F, -7.4F, -11.0F, -4.0F, 3.0F, 4.0F, size, true);
+        bottom.texOffs(0, 52).addBox(4.0F, -7.4F, -13.0F, 8.0F, 4.0F, 8.0F, size, false);
 
-        core = new ModelRenderer(this);
-        core.setRotationPoint(-8.0F, 17.4F, 8.0F);
-        core.setTextureOffset(50, 35).addBox(5.0F, -7.9F, -9.5F, 6.0F, 1.0F, 1.0F, size, false);
-        core.setTextureOffset(52, 29).addBox(6.5F, -8.9F, -10.5F, 3.0F, 3.0F, 3.0F, size, false);
+        core = new ModelPart(this);
+        core.setPos(-8.0F, 17.4F, 8.0F);
+        core.texOffs(50, 35).addBox(5.0F, -7.9F, -9.5F, 6.0F, 1.0F, 1.0F, size, false);
+        core.texOffs(52, 29).addBox(6.5F, -8.9F, -10.5F, 3.0F, 3.0F, 3.0F, size, false);
 
-        leg_left = new ModelRenderer(this);
-        leg_left.setRotationPoint(-8.0F, 18.4F, 8.0F);
-        leg_left.setTextureOffset(49, 5).addBox(11.0F, -16.4F, -10.5F, 2.0F, 16.0F, 3.0F, size, false);
-        leg_left.setTextureOffset(56, 37).addBox(11.0F, 1.6F, -13.0F, 2.0F, 4.0F, 2.0F, size, true);
-        leg_left.setTextureOffset(56, 43).addBox(11.0F, 1.6F, -7.0F, 2.0F, 4.0F, 2.0F, size, false);
-        leg_left.setTextureOffset(0, 42).addBox(11.0F, -0.4F, -13.0F, 2.0F, 2.0F, 8.0F, size, false);
+        leg_left = new ModelPart(this);
+        leg_left.setPos(-8.0F, 18.4F, 8.0F);
+        leg_left.texOffs(49, 5).addBox(11.0F, -16.4F, -10.5F, 2.0F, 16.0F, 3.0F, size, false);
+        leg_left.texOffs(56, 37).addBox(11.0F, 1.6F, -13.0F, 2.0F, 4.0F, 2.0F, size, true);
+        leg_left.texOffs(56, 43).addBox(11.0F, 1.6F, -7.0F, 2.0F, 4.0F, 2.0F, size, false);
+        leg_left.texOffs(0, 42).addBox(11.0F, -0.4F, -13.0F, 2.0F, 2.0F, 8.0F, size, false);
 
-        leg_right = new ModelRenderer(this);
-        leg_right.setRotationPoint(-8.0F, 17.4F, 8.0F);
-        leg_right.setTextureOffset(56, 37).addBox(3.0F, 2.6F, -13.0F, 2.0F, 4.0F, 2.0F, size, false);
-        leg_right.setTextureOffset(0, 42).addBox(3.0F, 0.6F, -13.0F, 2.0F, 2.0F, 8.0F, size, false);
-        leg_right.setTextureOffset(56, 43).addBox(3.0F, 2.6F, -7.0F, 2.0F, 4.0F, 2.0F, size, false);
-        leg_right.setTextureOffset(54, 5).addBox(3.0F, -15.4F, -10.5F, 2.0F, 16.0F, 3.0F, size, false);
+        leg_right = new ModelPart(this);
+        leg_right.setPos(-8.0F, 17.4F, 8.0F);
+        leg_right.texOffs(56, 37).addBox(3.0F, 2.6F, -13.0F, 2.0F, 4.0F, 2.0F, size, false);
+        leg_right.texOffs(0, 42).addBox(3.0F, 0.6F, -13.0F, 2.0F, 2.0F, 8.0F, size, false);
+        leg_right.texOffs(56, 43).addBox(3.0F, 2.6F, -7.0F, 2.0F, 4.0F, 2.0F, size, false);
+        leg_right.texOffs(54, 5).addBox(3.0F, -15.4F, -10.5F, 2.0F, 16.0F, 3.0F, size, false);
 
-        bone = new ModelRenderer(this);
-        bone.setRotationPoint(0.0F, 24.0F, 0.0F);
-        bone.setTextureOffset(42, 0).addBox(-5.0F, -23.0F, -1.5F, 10.0F, 4.0F, 1.0F, size, false);
+        bone = new ModelPart(this);
+        bone.setPos(0.0F, 24.0F, 0.0F);
+        bone.texOffs(42, 0).addBox(-5.0F, -23.0F, -1.5F, 10.0F, 4.0F, 1.0F, size, false);
     }
 
     @Override
-    public void setRotationAngles(InfinityNukeEntity entity, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch) {
+    public void setupAnim(InfinityNukeEntity entity, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch) {
         //previously the render function, render code was moved to a method below
     }
 
     @Override
-    public void render(MatrixStack matrixStack, IVertexBuilder buffer, int packedLight, int packedOverlay, float red, float green, float blue, float alpha) {
+    public void renderToBuffer(PoseStack matrixStack, VertexConsumer buffer, int packedLight, int packedOverlay, float red, float green, float blue, float alpha) {
         top.render(matrixStack, buffer, packedLight, packedOverlay);
         bottom.render(matrixStack, buffer, packedLight, packedOverlay);
         core.render(matrixStack, buffer, packedLight, packedOverlay);
@@ -71,9 +71,9 @@ public class InfinityNukeModelArmed extends EntityModel<InfinityNukeEntity> {
         bone.render(matrixStack, buffer, packedLight, packedOverlay);
     }
 
-    public void setRotationAngle(ModelRenderer modelRenderer, float x, float y, float z) {
-        modelRenderer.rotateAngleX = x;
-        modelRenderer.rotateAngleY = y;
-        modelRenderer.rotateAngleZ = z;
+    public void setRotationAngle(ModelPart modelRenderer, float x, float y, float z) {
+        modelRenderer.xRot = x;
+        modelRenderer.yRot = y;
+        modelRenderer.zRot = z;
     }
 }

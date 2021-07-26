@@ -29,15 +29,15 @@ import com.buuz135.industrial.utils.Reference;
 import com.hrznstudio.titanium.component.fluid.FluidTankComponent;
 import com.hrznstudio.titanium.recipe.serializer.GenericSerializer;
 import com.hrznstudio.titanium.recipe.serializer.SerializableRecipe;
-import net.minecraft.block.Blocks;
-import net.minecraft.fluid.Fluids;
-import net.minecraft.inventory.IInventory;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.Items;
-import net.minecraft.item.crafting.IRecipeType;
-import net.minecraft.item.crafting.Ingredient;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.world.World;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.material.Fluids;
+import net.minecraft.world.Container;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
+import net.minecraft.world.item.crafting.RecipeType;
+import net.minecraft.world.item.crafting.Ingredient;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.level.Level;
 import net.minecraftforge.common.Tags;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.capability.IFluidHandler;
@@ -52,88 +52,88 @@ public class DissolutionChamberRecipe extends SerializableRecipe {
     public static List<DissolutionChamberRecipe> RECIPES = new ArrayList<>();
 
     static {
-        new DissolutionChamberRecipe(new ResourceLocation(Reference.MOD_ID, "pink_slime_ball"), new Ingredient.IItemList[]{new Ingredient.SingleItemList(new ItemStack(Items.GLASS_PANE))}, new FluidStack(ModuleCore.PINK_SLIME.getSourceFluid(), 300), 200, new ItemStack(ModuleCore.PINK_SLIME_ITEM), new FluidStack(Fluids.WATER, 150));
+        new DissolutionChamberRecipe(new ResourceLocation(Reference.MOD_ID, "pink_slime_ball"), new Ingredient.Value[]{new Ingredient.ItemValue(new ItemStack(Items.GLASS_PANE))}, new FluidStack(ModuleCore.PINK_SLIME.getSourceFluid(), 300), 200, new ItemStack(ModuleCore.PINK_SLIME_ITEM), new FluidStack(Fluids.WATER, 150));
         new DissolutionChamberRecipe(new ResourceLocation(Reference.MOD_ID, "pink_slime_ingot"),
-                new Ingredient.IItemList[]{
-                        new Ingredient.TagList(Tags.Items.INGOTS_IRON),
-                        new Ingredient.TagList(Tags.Items.INGOTS_IRON),
-                        new Ingredient.TagList(Tags.Items.INGOTS_GOLD),
-                        new Ingredient.TagList(Tags.Items.INGOTS_GOLD),
+                new Ingredient.Value[]{
+                        new Ingredient.TagValue(Tags.Items.INGOTS_IRON),
+                        new Ingredient.TagValue(Tags.Items.INGOTS_IRON),
+                        new Ingredient.TagValue(Tags.Items.INGOTS_GOLD),
+                        new Ingredient.TagValue(Tags.Items.INGOTS_GOLD),
                 }, new FluidStack(ModuleCore.PINK_SLIME.getSourceFluid(), 1000), 300, new ItemStack(ModuleCore.PINK_SLIME_INGOT), FluidStack.EMPTY);
         new DissolutionChamberRecipe(new ResourceLocation(Reference.MOD_ID, "mechanical_dirt"),
-                new Ingredient.IItemList[]{
-                        new Ingredient.SingleItemList(new ItemStack(Blocks.DIRT)),
-                        new Ingredient.SingleItemList(new ItemStack(Blocks.DIRT)),
-                        new Ingredient.SingleItemList(new ItemStack(Items.ROTTEN_FLESH)),
-                        new Ingredient.SingleItemList(new ItemStack(Items.ROTTEN_FLESH)),
-                        new Ingredient.TagList(IndustrialTags.Items.MACHINE_FRAME_PITY),
+                new Ingredient.Value[]{
+                        new Ingredient.ItemValue(new ItemStack(Blocks.DIRT)),
+                        new Ingredient.ItemValue(new ItemStack(Blocks.DIRT)),
+                        new Ingredient.ItemValue(new ItemStack(Items.ROTTEN_FLESH)),
+                        new Ingredient.ItemValue(new ItemStack(Items.ROTTEN_FLESH)),
+                        new Ingredient.TagValue(IndustrialTags.Items.MACHINE_FRAME_PITY),
                 }, new FluidStack(ModuleCore.MEAT.getSourceFluid(), 1000), 100, new ItemStack(ModuleResourceProduction.MECHANICAL_DIRT), FluidStack.EMPTY);
         new DissolutionChamberRecipe(new ResourceLocation(Reference.MOD_ID, "simple_machine_frame"),
-                new Ingredient.IItemList[]{
-                        new Ingredient.TagList(IndustrialTags.Items.PLASTIC),
-                        new Ingredient.TagList(IndustrialTags.Items.MACHINE_FRAME_PITY),
-                        new Ingredient.TagList(IndustrialTags.Items.PLASTIC),
-                        new Ingredient.SingleItemList(new ItemStack(Items.NETHER_BRICK)),
-                        new Ingredient.SingleItemList(new ItemStack(Items.NETHER_BRICK)),
-                        new Ingredient.TagList(Tags.Items.INGOTS_IRON),
-                        new Ingredient.TagList(IndustrialTags.Items.GEAR_GOLD),
-                        new Ingredient.TagList(Tags.Items.INGOTS_IRON)
+                new Ingredient.Value[]{
+                        new Ingredient.TagValue(IndustrialTags.Items.PLASTIC),
+                        new Ingredient.TagValue(IndustrialTags.Items.MACHINE_FRAME_PITY),
+                        new Ingredient.TagValue(IndustrialTags.Items.PLASTIC),
+                        new Ingredient.ItemValue(new ItemStack(Items.NETHER_BRICK)),
+                        new Ingredient.ItemValue(new ItemStack(Items.NETHER_BRICK)),
+                        new Ingredient.TagValue(Tags.Items.INGOTS_IRON),
+                        new Ingredient.TagValue(IndustrialTags.Items.GEAR_GOLD),
+                        new Ingredient.TagValue(Tags.Items.INGOTS_IRON)
                 },
                 new FluidStack(ModuleCore.LATEX.getSourceFluid(), 250), 300, new ItemStack(ModuleCore.SIMPLE), FluidStack.EMPTY);
         new DissolutionChamberRecipe(new ResourceLocation(Reference.MOD_ID, "advanced_machine_frame"),
-                new Ingredient.IItemList[]{
-                        new Ingredient.TagList(IndustrialTags.Items.PLASTIC),
-                        new Ingredient.TagList(IndustrialTags.Items.MACHINE_FRAME_SIMPLE),
-                        new Ingredient.TagList(IndustrialTags.Items.PLASTIC),
-                        new Ingredient.SingleItemList(new ItemStack(Items.NETHERITE_SCRAP)),
-                        new Ingredient.SingleItemList(new ItemStack(Items.NETHERITE_SCRAP)),
-                        new Ingredient.TagList(Tags.Items.INGOTS_GOLD),
-                        new Ingredient.TagList(IndustrialTags.Items.GEAR_DIAMOND),
-                        new Ingredient.TagList(Tags.Items.INGOTS_GOLD)
+                new Ingredient.Value[]{
+                        new Ingredient.TagValue(IndustrialTags.Items.PLASTIC),
+                        new Ingredient.TagValue(IndustrialTags.Items.MACHINE_FRAME_SIMPLE),
+                        new Ingredient.TagValue(IndustrialTags.Items.PLASTIC),
+                        new Ingredient.ItemValue(new ItemStack(Items.NETHERITE_SCRAP)),
+                        new Ingredient.ItemValue(new ItemStack(Items.NETHERITE_SCRAP)),
+                        new Ingredient.TagValue(Tags.Items.INGOTS_GOLD),
+                        new Ingredient.TagValue(IndustrialTags.Items.GEAR_DIAMOND),
+                        new Ingredient.TagValue(Tags.Items.INGOTS_GOLD)
                 },
                 new FluidStack(ModuleCore.PINK_SLIME.getSourceFluid(), 500), 300, new ItemStack(ModuleCore.ADVANCED), FluidStack.EMPTY);
         new DissolutionChamberRecipe(new ResourceLocation(Reference.MOD_ID, "dark_glass"),
-                new Ingredient.IItemList[]{
-                        new Ingredient.SingleItemList(new ItemStack(Blocks.SOUL_SAND)),
-                        new Ingredient.SingleItemList(new ItemStack(Blocks.SOUL_SAND)),
-                        new Ingredient.SingleItemList(new ItemStack(Blocks.SOUL_SAND)),
-                        new Ingredient.SingleItemList(new ItemStack(Blocks.SOUL_SAND)),
-                        new Ingredient.SingleItemList(new ItemStack(Blocks.SOUL_SAND)),
-                        new Ingredient.SingleItemList(new ItemStack(Blocks.SOUL_SAND)),
-                        new Ingredient.SingleItemList(new ItemStack(Blocks.SOUL_SAND)),
-                        new Ingredient.SingleItemList(new ItemStack(Blocks.SOUL_SAND)),
+                new Ingredient.Value[]{
+                        new Ingredient.ItemValue(new ItemStack(Blocks.SOUL_SAND)),
+                        new Ingredient.ItemValue(new ItemStack(Blocks.SOUL_SAND)),
+                        new Ingredient.ItemValue(new ItemStack(Blocks.SOUL_SAND)),
+                        new Ingredient.ItemValue(new ItemStack(Blocks.SOUL_SAND)),
+                        new Ingredient.ItemValue(new ItemStack(Blocks.SOUL_SAND)),
+                        new Ingredient.ItemValue(new ItemStack(Blocks.SOUL_SAND)),
+                        new Ingredient.ItemValue(new ItemStack(Blocks.SOUL_SAND)),
+                        new Ingredient.ItemValue(new ItemStack(Blocks.SOUL_SAND)),
                 },
                 new FluidStack(ModuleCore.LATEX.getSourceFluid(), 100), 100, new ItemStack(ModuleCore.DARK_GLASS, 8), FluidStack.EMPTY);
         new DissolutionChamberRecipe(new ResourceLocation(Reference.MOD_ID, "supreme_machine_frame"),
-                new Ingredient.IItemList[]{
-                        new Ingredient.TagList(IndustrialTags.Items.PLASTIC),
-                        new Ingredient.TagList(IndustrialTags.Items.MACHINE_FRAME_ADVANCED),
-                        new Ingredient.TagList(IndustrialTags.Items.PLASTIC),
-                        new Ingredient.SingleItemList(new ItemStack(Items.NETHERITE_INGOT)),
-                        new Ingredient.SingleItemList(new ItemStack(Items.NETHERITE_INGOT)),
-                        new Ingredient.TagList(Tags.Items.GEMS_DIAMOND),
-                        new Ingredient.TagList(IndustrialTags.Items.GEAR_DIAMOND),
-                        new Ingredient.TagList(Tags.Items.GEMS_DIAMOND)
+                new Ingredient.Value[]{
+                        new Ingredient.TagValue(IndustrialTags.Items.PLASTIC),
+                        new Ingredient.TagValue(IndustrialTags.Items.MACHINE_FRAME_ADVANCED),
+                        new Ingredient.TagValue(IndustrialTags.Items.PLASTIC),
+                        new Ingredient.ItemValue(new ItemStack(Items.NETHERITE_INGOT)),
+                        new Ingredient.ItemValue(new ItemStack(Items.NETHERITE_INGOT)),
+                        new Ingredient.TagValue(Tags.Items.GEMS_DIAMOND),
+                        new Ingredient.TagValue(IndustrialTags.Items.GEAR_DIAMOND),
+                        new Ingredient.TagValue(Tags.Items.GEMS_DIAMOND)
                 },
                 new FluidStack(ModuleCore.ETHER.getSourceFluid(), 135), 300, new ItemStack(ModuleCore.SUPREME), FluidStack.EMPTY);
         new DissolutionChamberRecipe(new ResourceLocation(Reference.MOD_ID, "mycelial_reactor"),
-                new Ingredient.IItemList[]{
-                        new Ingredient.TagList(IndustrialTags.Items.PLASTIC),
-                        new Ingredient.TagList(IndustrialTags.Items.MACHINE_FRAME_SUPREME),
-                        new Ingredient.TagList(IndustrialTags.Items.PLASTIC),
-                        new Ingredient.SingleItemList(new ItemStack(Items.NETHERITE_INGOT)),
-                        new Ingredient.SingleItemList(new ItemStack(Items.NETHERITE_INGOT)),
-                        new Ingredient.TagList(IndustrialTags.Items.GEAR_DIAMOND),
-                        new Ingredient.SingleItemList(new ItemStack(Items.NETHER_STAR)),
-                        new Ingredient.TagList(IndustrialTags.Items.GEAR_DIAMOND)
+                new Ingredient.Value[]{
+                        new Ingredient.TagValue(IndustrialTags.Items.PLASTIC),
+                        new Ingredient.TagValue(IndustrialTags.Items.MACHINE_FRAME_SUPREME),
+                        new Ingredient.TagValue(IndustrialTags.Items.PLASTIC),
+                        new Ingredient.ItemValue(new ItemStack(Items.NETHERITE_INGOT)),
+                        new Ingredient.ItemValue(new ItemStack(Items.NETHERITE_INGOT)),
+                        new Ingredient.TagValue(IndustrialTags.Items.GEAR_DIAMOND),
+                        new Ingredient.ItemValue(new ItemStack(Items.NETHER_STAR)),
+                        new Ingredient.TagValue(IndustrialTags.Items.GEAR_DIAMOND)
                 },
                 new FluidStack(ModuleCore.ETHER.getSourceFluid(), 500), 600, new ItemStack(ModuleGenerator.MYCELIAL_REACTOR), FluidStack.EMPTY);
         new DissolutionChamberRecipe(new ResourceLocation(Reference.MOD_ID, "xp_bottles"),
-                new Ingredient.IItemList[]{},
+                new Ingredient.Value[]{},
                 new FluidStack(ModuleCore.ESSENCE.getSourceFluid(), 250), 5, new ItemStack(Items.EXPERIENCE_BOTTLE), FluidStack.EMPTY);
     }
 
-    public Ingredient.IItemList[] input;
+    public Ingredient.Value[] input;
     public FluidStack inputFluid;
     public int processingTime;
     public ItemStack output;
@@ -143,19 +143,19 @@ public class DissolutionChamberRecipe extends SerializableRecipe {
         super(resourceLocation);
     }
 
-    public DissolutionChamberRecipe(ResourceLocation resourceLocation, Ingredient.IItemList[] input, FluidStack inputFluid, int processingTime, ItemStack output, FluidStack outputFluid) {
+    public DissolutionChamberRecipe(ResourceLocation resourceLocation, Ingredient.Value[] input, FluidStack inputFluid, int processingTime, ItemStack output, FluidStack outputFluid) {
         super(resourceLocation);
         this.input = input;
         this.inputFluid = inputFluid;
         this.processingTime = processingTime;
         this.output = output;
-        this.output.getItem().onCreated(this.output, null, null);
+        this.output.getItem().onCraftedBy(this.output, null, null);
         this.outputFluid = outputFluid;
         RECIPES.add(this);
     }
 
     @Override
-    public boolean matches(IInventory inv, World worldIn) {
+    public boolean matches(Container inv, Level worldIn) {
         return false;
     }
 
@@ -165,12 +165,12 @@ public class DissolutionChamberRecipe extends SerializableRecipe {
         for (int i = 0; i < handler.getSlots(); i++) {
             if (!handler.getStackInSlot(i).isEmpty()) handlerItems.add(handler.getStackInSlot(i).copy());
         }
-        for (Ingredient.IItemList iItemList : input) {
+        for (Ingredient.Value iItemList : input) {
             boolean found = false;
-            for (ItemStack stack : iItemList.getStacks()) {
+            for (ItemStack stack : iItemList.getItems()) {
                 int i = 0;
                 for (; i < handlerItems.size(); i++) {
-                    if (handlerItems.get(i).isItemEqual(stack)) {
+                    if (handlerItems.get(i).sameItem(stack)) {
                         found = true;
                         break;
                     }
@@ -186,17 +186,17 @@ public class DissolutionChamberRecipe extends SerializableRecipe {
     }
 
     @Override
-    public ItemStack getCraftingResult(IInventory inv) {
+    public ItemStack assemble(Container inv) {
         return ItemStack.EMPTY;
     }
 
     @Override
-    public boolean canFit(int width, int height) {
+    public boolean canCraftInDimensions(int width, int height) {
         return false;
     }
 
     @Override
-    public ItemStack getRecipeOutput() {
+    public ItemStack getResultItem() {
         return output;
     }
 
@@ -206,7 +206,7 @@ public class DissolutionChamberRecipe extends SerializableRecipe {
     }
 
     @Override
-    public IRecipeType<?> getType() {
+    public RecipeType<?> getType() {
         return SERIALIZER.getRecipeType();
     }
 }

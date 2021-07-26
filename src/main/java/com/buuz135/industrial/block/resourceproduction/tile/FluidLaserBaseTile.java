@@ -41,18 +41,18 @@ import com.hrznstudio.titanium.component.sideness.IFacingComponent;
 import com.hrznstudio.titanium.item.AugmentWrapper;
 import com.hrznstudio.titanium.util.FacingUtil;
 import com.hrznstudio.titanium.util.RecipeUtil;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.item.DyeColor;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.DamageSource;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.shapes.VoxelShape;
-import net.minecraft.util.math.shapes.VoxelShapes;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.StringTextComponent;
-import net.minecraft.util.text.TextFormatting;
-import net.minecraft.util.text.TranslationTextComponent;
-import net.minecraft.world.World;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.item.DyeColor;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.phys.shapes.VoxelShape;
+import net.minecraft.world.phys.shapes.Shapes;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.TextComponent;
+import net.minecraft.ChatFormatting;
+import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.world.level.Level;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.capability.IFluidHandler;
 
@@ -75,15 +75,15 @@ public class FluidLaserBaseTile extends IndustrialMachineTile<FluidLaserBaseTile
     public FluidLaserBaseTile() {
         super(ModuleResourceProduction.FLUID_LASER_BASE);
         setShowEnergy(false);
-        this.miningDepth = this.getPos().getY();
+        this.miningDepth = this.getBlockPos().getY();
         this.addProgressBar(work = new ProgressBarComponent<FluidLaserBaseTile>(74, 24 + 18, 0, FluidLaserBaseConfig.maxProgress){
                     @Override
                     public List<IFactory<? extends IScreenAddon>> getScreenAddons() {
                         return Collections.singletonList(() -> new ProgressBarScreenAddon<FluidLaserBaseTile>(work.getPosX(), work.getPosY(), this){
                             @Override
-                            public List<ITextComponent> getTooltipLines() {
-                                List<ITextComponent> tooltip = new ArrayList<>();
-                                tooltip.add(new StringTextComponent(TextFormatting.GOLD + new TranslationTextComponent("tooltip.titanium.progressbar.progress").getString() + TextFormatting.WHITE + new DecimalFormat().format(work.getProgress()) + TextFormatting.GOLD + "/" + TextFormatting.WHITE + new DecimalFormat().format(work.getMaxProgress())));
+                            public List<Component> getTooltipLines() {
+                                List<Component> tooltip = new ArrayList<>();
+                                tooltip.add(new TextComponent(ChatFormatting.GOLD + new TranslatableComponent("tooltip.titanium.progressbar.progress").getString() + ChatFormatting.WHITE + new DecimalFormat().format(work.getProgress()) + ChatFormatting.GOLD + "/" + ChatFormatting.WHITE + new DecimalFormat().format(work.getMaxProgress())));
                                 return tooltip;
                             }
                         });
@@ -122,32 +122,32 @@ public class FluidLaserBaseTile extends IndustrialMachineTile<FluidLaserBaseTile
         this.addGuiAddonFactory(() -> new TextScreenAddon("" ,70, y + 3, false){
             @Override
             public String getText() {
-                return TextFormatting.DARK_GRAY +  new TranslationTextComponent("text.industrialforegoing.depth").getString() + miningDepth;
+                return ChatFormatting.DARK_GRAY +  new TranslatableComponent("text.industrialforegoing.depth").getString() + miningDepth;
             }
         });
     }
 
     @Override
-    public void setWorldAndPos(World world, BlockPos pos) {
-        super.setWorldAndPos(world, pos);
-        if (this.miningDepth == 0) this.miningDepth = this.pos.getY();
+    public void setLevelAndPosition(Level world, BlockPos pos) {
+        super.setLevelAndPosition(world, pos);
+        if (this.miningDepth == 0) this.miningDepth = this.worldPosition.getY();
     }
 
     private void onWork(){
         if (!catalyst.getStackInSlot(0).isEmpty()){
-            VoxelShape box = VoxelShapes.create(-1, 0, -1, 2, 3, 2).withOffset(this.pos.getX(), this.pos.getY() - 1, this.pos.getZ());
-            RecipeUtil.getRecipes(this.world, LaserDrillFluidRecipe.SERIALIZER.getRecipeType())
+            VoxelShape box = Shapes.box(-1, 0, -1, 2, 3, 2).move(this.worldPosition.getX(), this.worldPosition.getY() - 1, this.worldPosition.getZ());
+            RecipeUtil.getRecipes(this.level, LaserDrillFluidRecipe.SERIALIZER.getRecipeType())
                     .stream()
                     .filter(laserDrillFluidRecipe -> laserDrillFluidRecipe.catalyst.test(catalyst.getStackInSlot(0)))
-                    .filter(laserDrillFluidRecipe -> laserDrillFluidRecipe.getValidRarity(this.world.getBiome(this.pos).getRegistryName(), this.miningDepth) != null)
+                    .filter(laserDrillFluidRecipe -> laserDrillFluidRecipe.getValidRarity(this.level.getBiome(this.worldPosition).getRegistryName(), this.miningDepth) != null)
                     .findFirst()
                     .ifPresent(laserDrillFluidRecipe -> {
                         if (!LaserDrillFluidRecipe.EMPTY.equals(laserDrillFluidRecipe.entity)){
-                            List<LivingEntity> entities = this.world.getEntitiesWithinAABB(LivingEntity.class, box.getBoundingBox(), entity -> entity.getType().getRegistryName().equals(laserDrillFluidRecipe.entity));
+                            List<LivingEntity> entities = this.level.getEntitiesOfClass(LivingEntity.class, box.bounds(), entity -> entity.getType().getRegistryName().equals(laserDrillFluidRecipe.entity));
                             if (entities.size() > 0){
                                 LivingEntity first = entities.get(0);
                                 if (first.getHealth() > 5){
-                                    first.attackEntityFrom(DamageSource.GENERIC, 5);
+                                    first.hurt(DamageSource.GENERIC, 5);
                                     output.fillForced(FluidStack.loadFluidStackFromNBT(laserDrillFluidRecipe.output), IFluidHandler.FluidAction.EXECUTE);
                                 }
                             }

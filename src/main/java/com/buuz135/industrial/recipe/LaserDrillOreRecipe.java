@@ -26,16 +26,16 @@ import com.buuz135.industrial.utils.Reference;
 import com.hrznstudio.titanium.recipe.serializer.GenericSerializer;
 import com.hrznstudio.titanium.recipe.serializer.SerializableRecipe;
 import com.hrznstudio.titanium.util.TagUtil;
-import net.minecraft.block.Blocks;
-import net.minecraft.inventory.IInventory;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.crafting.IRecipeType;
-import net.minecraft.item.crafting.Ingredient;
-import net.minecraft.util.IItemProvider;
-import net.minecraft.util.RegistryKey;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.world.World;
-import net.minecraft.world.biome.Biomes;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.Container;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.crafting.RecipeType;
+import net.minecraft.world.item.crafting.Ingredient;
+import net.minecraft.world.level.ItemLike;
+import net.minecraft.resources.ResourceKey;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.biome.Biomes;
 import net.minecraftforge.common.crafting.conditions.ICondition;
 import net.minecraftforge.common.crafting.conditions.IConditionSerializer;
 import net.minecraftforge.common.crafting.conditions.NotCondition;
@@ -56,29 +56,29 @@ public class LaserDrillOreRecipe extends SerializableRecipe {
         createWithDefault("coal", Blocks.COAL_ORE, 15, 5, 132, 10 ,4);
         createWithDefault("iron", Blocks.IRON_ORE, 12, 5, 68, 20, 3);
         createWithDefault("redstone", Blocks.REDSTONE_ORE, 14, 5, 16, 28, 4);
-        new LaserDrillOreRecipe("gold", Ingredient.fromItems(Blocks.GOLD_ORE), 4, null,
-                new LaserDrillRarity(new RegistryKey[]{Biomes.BADLANDS, Biomes.BADLANDS_PLATEAU, Biomes.ERODED_BADLANDS, Biomes.MODIFIED_BADLANDS_PLATEAU, Biomes.MODIFIED_WOODED_BADLANDS_PLATEAU, Biomes.WOODED_BADLANDS_PLATEAU}, new RegistryKey[0], 32, 80, 16),
-                new LaserDrillRarity(new RegistryKey[0], LaserDrillRarity.END, 5, 32, 6),
-                new LaserDrillRarity(new RegistryKey[0], LaserDrillRarity.END, 0, 255, 1));
+        new LaserDrillOreRecipe("gold", Ingredient.of(Blocks.GOLD_ORE), 4, null,
+                new LaserDrillRarity(new ResourceKey[]{Biomes.BADLANDS, Biomes.BADLANDS_PLATEAU, Biomes.ERODED_BADLANDS, Biomes.MODIFIED_BADLANDS_PLATEAU, Biomes.MODIFIED_WOODED_BADLANDS_PLATEAU, Biomes.WOODED_BADLANDS_PLATEAU}, new ResourceKey[0], 32, 80, 16),
+                new LaserDrillRarity(new ResourceKey[0], LaserDrillRarity.END, 5, 32, 6),
+                new LaserDrillRarity(new ResourceKey[0], LaserDrillRarity.END, 0, 255, 1));
         createWithDefault("lapis", Blocks.LAPIS_ORE, 11, 13, 34, 14, 2);
-        new LaserDrillOreRecipe("emerald", Ingredient.fromItems(Blocks.EMERALD_ORE), 5, null,
-                new LaserDrillRarity(new RegistryKey[]{Biomes.MOUNTAINS, Biomes.MOUNTAIN_EDGE, Biomes.GRAVELLY_MOUNTAINS, Biomes.MODIFIED_GRAVELLY_MOUNTAINS, Biomes.SNOWY_MOUNTAINS, Biomes.SNOWY_TAIGA_MOUNTAINS}, new RegistryKey[0], 5, 29, 8),
-                new LaserDrillRarity(new RegistryKey[0], LaserDrillRarity.END, 0, 255, 1));
+        new LaserDrillOreRecipe("emerald", Ingredient.of(Blocks.EMERALD_ORE), 5, null,
+                new LaserDrillRarity(new ResourceKey[]{Biomes.MOUNTAINS, Biomes.MOUNTAIN_EDGE, Biomes.GRAVELLY_MOUNTAINS, Biomes.MODIFIED_GRAVELLY_MOUNTAINS, Biomes.SNOWY_MOUNTAINS, Biomes.SNOWY_TAIGA_MOUNTAINS}, new ResourceKey[0], 5, 29, 8),
+                new LaserDrillRarity(new ResourceKey[0], LaserDrillRarity.END, 0, 255, 1));
         createWithDefault("diamond", Blocks.DIAMOND_ORE, 3, 5, 16, 4, 1);
-        new LaserDrillOreRecipe("quartz", Ingredient.fromItems(Blocks.NETHER_QUARTZ_ORE), 0, null,
-                new LaserDrillRarity(LaserDrillRarity.NETHER, new RegistryKey[0], 7, 117, 12),
-                new LaserDrillRarity(new RegistryKey[0], LaserDrillRarity.END, 0, 255, 1));
-        new LaserDrillOreRecipe("glowstone", Ingredient.fromItems(Blocks.GLOWSTONE), 4, null,
-                new LaserDrillRarity(LaserDrillRarity.NETHER, new RegistryKey[0], 7, 117, 8),
-                new LaserDrillRarity(new RegistryKey[0], LaserDrillRarity.END, 0, 255, 1));
-        new LaserDrillOreRecipe("uranium", Ingredient.fromTag(TagUtil.getItemTag(new ResourceLocation("forge", "ores/uranium"))), 5, new ResourceLocation("forge", "ores/uranium"),
-                new LaserDrillRarity(LaserDrillRarity.NETHER, new RegistryKey[0], 5, 29, 5),
-                new LaserDrillRarity(new RegistryKey[0], LaserDrillRarity.END, 0, 255, 1));
+        new LaserDrillOreRecipe("quartz", Ingredient.of(Blocks.NETHER_QUARTZ_ORE), 0, null,
+                new LaserDrillRarity(LaserDrillRarity.NETHER, new ResourceKey[0], 7, 117, 12),
+                new LaserDrillRarity(new ResourceKey[0], LaserDrillRarity.END, 0, 255, 1));
+        new LaserDrillOreRecipe("glowstone", Ingredient.of(Blocks.GLOWSTONE), 4, null,
+                new LaserDrillRarity(LaserDrillRarity.NETHER, new ResourceKey[0], 7, 117, 8),
+                new LaserDrillRarity(new ResourceKey[0], LaserDrillRarity.END, 0, 255, 1));
+        new LaserDrillOreRecipe("uranium", Ingredient.of(TagUtil.getItemTag(new ResourceLocation("forge", "ores/uranium"))), 5, new ResourceLocation("forge", "ores/uranium"),
+                new LaserDrillRarity(LaserDrillRarity.NETHER, new ResourceKey[0], 5, 29, 5),
+                new LaserDrillRarity(new ResourceKey[0], LaserDrillRarity.END, 0, 255, 1));
         createWithDefault("sulfur", 4, 5, 10, 6, 1);
         createWithDefault("galena", 10, 15, 30, 6, 1);
-        new LaserDrillOreRecipe("iridium", Ingredient.fromTag(TagUtil.getItemTag(new ResourceLocation("forge", "ores/iridium"))), 0, new ResourceLocation("forge", "ores/iridium"),
-                new LaserDrillRarity(LaserDrillRarity.END, new RegistryKey[0], 5, 68, 8),
-                new LaserDrillRarity(new RegistryKey[0], LaserDrillRarity.END, 0, 255, 1));
+        new LaserDrillOreRecipe("iridium", Ingredient.of(TagUtil.getItemTag(new ResourceLocation("forge", "ores/iridium"))), 0, new ResourceLocation("forge", "ores/iridium"),
+                new LaserDrillRarity(LaserDrillRarity.END, new ResourceKey[0], 5, 68, 8),
+                new LaserDrillRarity(new ResourceKey[0], LaserDrillRarity.END, 0, 255, 1));
         createWithDefault("ruby", 14, 30, 70, 6, 1);
         createWithDefault("sapphire", 11, 30, 70, 6, 1);
         createWithDefault("peridot", 13, 30, 70, 6, 1);
@@ -100,7 +100,7 @@ public class LaserDrillOreRecipe extends SerializableRecipe {
         createWithDefault("yellorium", 4, 16, 68, 3, 1);
         createNether("cobalt", 11, 34, 96, 8);
         createNether("ardite", 4, 89, 116, 8);
-        new LaserDrillOreRecipe("ancient_debris", Ingredient.fromItems(Blocks.ANCIENT_DEBRIS),  12, null, new LaserDrillRarity(LaserDrillRarity.NETHER,new RegistryKey[0], 1, 20, 1));
+        new LaserDrillOreRecipe("ancient_debris", Ingredient.of(Blocks.ANCIENT_DEBRIS),  12, null, new LaserDrillRarity(LaserDrillRarity.NETHER,new ResourceKey[0], 1, 20, 1));
         createWithDefault("niter", 4, 5, 20, 2, 1);
         createWithDefault("arcane", 2, 45, 60, 3, 1);
         createWithDefault("bitumen", 15, 50, 60, 2, 1);
@@ -109,39 +109,39 @@ public class LaserDrillOreRecipe extends SerializableRecipe {
         createWithDefault("yellorite", 4, 15, 50, 3, 1);
     }
 
-    public static LaserDrillOreRecipe createWithDefault(String name, IItemProvider output, int color, int min, int max, int weight, int defaultWeight){
-        return createWithDefault(name, Ingredient.fromItems(output), color, min, max, weight, defaultWeight, null);
+    public static LaserDrillOreRecipe createWithDefault(String name, ItemLike output, int color, int min, int max, int weight, int defaultWeight){
+        return createWithDefault(name, Ingredient.of(output), color, min, max, weight, defaultWeight, null);
     }
 
     public static LaserDrillOreRecipe createWithDefault(String name, int color, int min, int max, int weight, int defaultWeight){
         ResourceLocation rl = new ResourceLocation("forge", "ores/" + name);
-        return createWithDefault(name, Ingredient.fromTag(TagUtil.getItemTag(rl)), color, min, max, weight, defaultWeight, rl);
+        return createWithDefault(name, Ingredient.of(TagUtil.getItemTag(rl)), color, min, max, weight, defaultWeight, rl);
     }
 
     public static LaserDrillOreRecipe createWithDefault(String name, Ingredient output, int color, int min, int max, int weight, int defaultWeight, ResourceLocation isTag){
         return new LaserDrillOreRecipe(name, output, color, isTag,
-                new LaserDrillRarity(new RegistryKey[0], LaserDrillRarity.END, min, max, weight),
-                new LaserDrillRarity(new RegistryKey[0], LaserDrillRarity.END, 0, 255, defaultWeight));
+                new LaserDrillRarity(new ResourceKey[0], LaserDrillRarity.END, min, max, weight),
+                new LaserDrillRarity(new ResourceKey[0], LaserDrillRarity.END, 0, 255, defaultWeight));
     }
 
     public static LaserDrillOreRecipe createEnd(String name, int color, int min, int max, int weight){
         ResourceLocation rl = new ResourceLocation("forge", "ores/" + name);
-        return createEnd(name, Ingredient.fromTag(TagUtil.getItemTag(rl)), color, min, max, weight, rl);
+        return createEnd(name, Ingredient.of(TagUtil.getItemTag(rl)), color, min, max, weight, rl);
     }
 
     public static LaserDrillOreRecipe createEnd(String name, Ingredient output, int color, int min, int max, int weight, ResourceLocation isTag){
         return new LaserDrillOreRecipe(name, output, color, isTag,
-                new LaserDrillRarity( LaserDrillRarity.END,new RegistryKey[0], min, max, weight));
+                new LaserDrillRarity( LaserDrillRarity.END,new ResourceKey[0], min, max, weight));
     }
 
     public static LaserDrillOreRecipe createNether(String name, int color, int min, int max, int weight){
         ResourceLocation rl = new ResourceLocation("forge", "ores/" + name);
-        return createNether(name, Ingredient.fromTag(TagUtil.getItemTag(rl)), color, min, max, weight, rl);
+        return createNether(name, Ingredient.of(TagUtil.getItemTag(rl)), color, min, max, weight, rl);
     }
 
     public static LaserDrillOreRecipe createNether(String name, Ingredient output, int color, int min, int max, int weight, ResourceLocation isTag){
         return new LaserDrillOreRecipe(name, output, color,isTag,
-                new LaserDrillRarity(LaserDrillRarity.NETHER,new RegistryKey[0], min, max, weight));
+                new LaserDrillRarity(LaserDrillRarity.NETHER,new ResourceKey[0], min, max, weight));
     }
 
     public Ingredient output;
@@ -160,7 +160,7 @@ public class LaserDrillOreRecipe extends SerializableRecipe {
     }
 
     public LaserDrillOreRecipe(String name,Ingredient output, int color, ResourceLocation isTag, LaserDrillRarity... rarity) {
-        this(name, output, Ingredient.fromItems(ModuleCore.LASER_LENS[color]),isTag, rarity);
+        this(name, output, Ingredient.of(ModuleCore.LASER_LENS[color]),isTag, rarity);
     }
 
     public LaserDrillOreRecipe(ResourceLocation resourceLocation) {
@@ -168,22 +168,22 @@ public class LaserDrillOreRecipe extends SerializableRecipe {
     }
 
     @Override
-    public boolean matches(IInventory inv, World worldIn) {
+    public boolean matches(Container inv, Level worldIn) {
         return false;
     }
 
     @Override
-    public ItemStack getCraftingResult(IInventory inv) {
+    public ItemStack assemble(Container inv) {
         return ItemStack.EMPTY;
     }
 
     @Override
-    public boolean canFit(int width, int height) {
+    public boolean canCraftInDimensions(int width, int height) {
         return false;
     }
 
     @Override
-    public ItemStack getRecipeOutput() {
+    public ItemStack getResultItem() {
         return ItemStack.EMPTY;
     }
 
@@ -193,7 +193,7 @@ public class LaserDrillOreRecipe extends SerializableRecipe {
     }
 
     @Override
-    public IRecipeType<?> getType() {
+    public RecipeType<?> getType() {
         return SERIALIZER.getRecipeType();
     }
 
@@ -209,7 +209,7 @@ public class LaserDrillOreRecipe extends SerializableRecipe {
     public LaserDrillRarity getValidRarity(ResourceLocation biome, int height){
         for (LaserDrillRarity laserDrillRarity : rarity) {
             if (laserDrillRarity.depth_max >= height && laserDrillRarity.depth_min <= height){
-                if (laserDrillRarity.whitelist.length == 0 ? Arrays.stream(laserDrillRarity.blacklist).noneMatch(registryKey -> registryKey.getLocation().equals(biome)) : Arrays.stream(laserDrillRarity.whitelist).anyMatch(registryKey -> registryKey.getLocation().equals(biome))) return laserDrillRarity;
+                if (laserDrillRarity.whitelist.length == 0 ? Arrays.stream(laserDrillRarity.blacklist).noneMatch(registryKey -> registryKey.location().equals(biome)) : Arrays.stream(laserDrillRarity.whitelist).anyMatch(registryKey -> registryKey.location().equals(biome))) return laserDrillRarity;
             }
         }
         return null;

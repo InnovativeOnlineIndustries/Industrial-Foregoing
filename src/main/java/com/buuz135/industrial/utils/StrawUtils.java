@@ -24,7 +24,7 @@ package com.buuz135.industrial.utils;
 import com.buuz135.industrial.api.straw.StrawHandler;
 import com.buuz135.industrial.registry.IFRegistries;
 import com.google.common.collect.Lists;
-import net.minecraft.fluid.Fluid;
+import net.minecraft.world.level.material.Fluid;
 
 import javax.annotation.Nonnull;
 import java.util.Comparator;

@@ -22,7 +22,7 @@
 package com.buuz135.industrial.utils.apihandlers.straw;
 
 import com.buuz135.industrial.api.straw.StrawHandler;
-import net.minecraft.fluid.Fluid;
+import net.minecraft.world.level.material.Fluid;
 
 import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.function.Supplier;

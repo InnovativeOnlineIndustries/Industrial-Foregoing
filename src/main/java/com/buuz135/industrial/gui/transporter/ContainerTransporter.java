@@ -22,29 +22,29 @@
 package com.buuz135.industrial.gui.transporter;
 
 import com.buuz135.industrial.block.transportstorage.tile.TransporterTile;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.inventory.container.Container;
-import net.minecraft.inventory.container.ContainerType;
-import net.minecraft.inventory.container.Slot;
-import net.minecraft.item.ItemStack;
-import net.minecraft.network.PacketBuffer;
-import net.minecraft.util.Direction;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.world.inventory.AbstractContainerMenu;
+import net.minecraft.world.inventory.MenuType;
+import net.minecraft.world.inventory.Slot;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.core.Direction;
 import net.minecraftforge.registries.ObjectHolder;
 
-public class ContainerTransporter extends Container {
+public class ContainerTransporter extends AbstractContainerMenu {
 
     @ObjectHolder("industrialforegoing:transporter")
-    public static ContainerType<ContainerTransporter> TYPE;
+    public static MenuType<ContainerTransporter> TYPE;
 
     private final TransporterTile conveyor;
     private Direction facing;
 
-    public ContainerTransporter(int id, PlayerInventory player, PacketBuffer buffer) {
-        this(id, (TransporterTile) player.player.getEntityWorld().getTileEntity(buffer.readBlockPos()), buffer.readEnumValue(Direction.class), player);
+    public ContainerTransporter(int id, Inventory player, FriendlyByteBuf buffer) {
+        this(id, (TransporterTile) player.player.getCommandSenderWorld().getBlockEntity(buffer.readBlockPos()), buffer.readEnum(Direction.class), player);
     }
 
-    public ContainerTransporter(int id, TransporterTile conveyor, Direction facing, PlayerInventory player) {
+    public ContainerTransporter(int id, TransporterTile conveyor, Direction facing, Inventory player) {
         super(TYPE, id);
         this.conveyor = conveyor;
         this.facing = facing;
@@ -54,7 +54,7 @@ public class ContainerTransporter extends Container {
         createPlayerInventory(player);
     }
 
-    private void createPlayerInventory(PlayerInventory player) {
+    private void createPlayerInventory(Inventory player) {
         for (int k = 0; k < 9; k++) {
             addSlot(new Slot(player, k, 8 + k * 18, 142));
         }
@@ -66,7 +66,7 @@ public class ContainerTransporter extends Container {
     }
 
     @Override
-    public boolean canInteractWith(PlayerEntity playerIn) {
+    public boolean stillValid(Player playerIn) {
         return true;
     }
 
@@ -79,7 +79,7 @@ public class ContainerTransporter extends Container {
     }
 
     @Override
-    public ItemStack transferStackInSlot(PlayerEntity playerIn, int index) {
+    public ItemStack quickMoveStack(Player playerIn, int index) {
         return ItemStack.EMPTY;
     }
 }

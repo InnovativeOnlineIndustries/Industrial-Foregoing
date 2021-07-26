@@ -24,16 +24,15 @@ package com.buuz135.industrial.block.generator.mycelial;
 import com.buuz135.industrial.plugin.jei.generator.MycelialGeneratorRecipe;
 import com.buuz135.industrial.utils.IndustrialTags;
 import com.hrznstudio.titanium.component.inventory.SidedInventoryComponent;
-import net.minecraft.data.ShapedRecipeBuilder;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.item.*;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.nbt.ListNBT;
-import net.minecraft.potion.EffectInstance;
-import net.minecraft.potion.Effects;
-import net.minecraft.util.math.AxisAlignedBB;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
+import net.minecraft.data.recipes.ShapedRecipeBuilder;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.ListTag;
+import net.minecraft.world.effect.MobEffectInstance;
+import net.minecraft.world.effect.MobEffects;
+import net.minecraft.world.phys.AABB;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.level.Level;
 import net.minecraftforge.common.util.INBTSerializable;
 import net.minecraftforge.fluids.FluidStack;
 import org.apache.commons.lang3.tuple.Pair;
@@ -43,6 +42,12 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.function.BiPredicate;
 import java.util.function.Predicate;
+
+import net.minecraft.world.item.DyeColor;
+import net.minecraft.world.item.FireworkRocketItem;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
 
 public class FireworkGeneratorType implements IMycelialGeneratorType{
 
@@ -68,12 +73,12 @@ public class FireworkGeneratorType implements IMycelialGeneratorType{
     }
 
     @Override
-    public boolean canStart(INBTSerializable<CompoundNBT>[] inputs) {
+    public boolean canStart(INBTSerializable<CompoundTag>[] inputs) {
         return inputs.length > 0 && inputs[0] instanceof SidedInventoryComponent && ((SidedInventoryComponent<?>) inputs[0]).getStackInSlot(0).getCount() > 0;
     }
 
     @Override
-    public Pair<Integer, Integer> getTimeAndPowerGeneration(INBTSerializable<CompoundNBT>[] inputs) {
+    public Pair<Integer, Integer> getTimeAndPowerGeneration(INBTSerializable<CompoundTag>[] inputs) {
         if (inputs.length > 0 && inputs[0] instanceof SidedInventoryComponent && ((SidedInventoryComponent<?>) inputs[0]).getStackInSlot(0).getCount() > 0){
             ItemStack stack = ((SidedInventoryComponent<?>) inputs[0]).getStackInSlot(0);
             stack.shrink(1);
@@ -107,13 +112,13 @@ public class FireworkGeneratorType implements IMycelialGeneratorType{
     }
 
     private Pair<Integer, Integer> calculate(ItemStack stack) {
-        CompoundNBT nbt = stack.getChildTag("Fireworks");
+        CompoundTag nbt = stack.getTagElement("Fireworks");
         int flight = nbt.getInt("Flight");
         double power = 1;
-        ListNBT listnbt = nbt.getList("Explosions", 10);
+        ListTag listnbt = nbt.getList("Explosions", 10);
         if (!listnbt.isEmpty()) {
             for (int i = 0; i < listnbt.size(); ++i) {
-                CompoundNBT compound = listnbt.getCompound(i);
+                CompoundTag compound = listnbt.getCompound(i);
                 FireworkRocketItem.Shape shape = get(compound.getByte("Type"));
                 power *= getShapeModifier(shape);
                 int[] colors = compound.getIntArray("Colors");
@@ -143,17 +148,17 @@ public class FireworkGeneratorType implements IMycelialGeneratorType{
 
     @Override
     public ShapedRecipeBuilder addIngredients(ShapedRecipeBuilder recipeBuilder) {
-        recipeBuilder = recipeBuilder.key('B', Items.GUNPOWDER)
-                .key('C', Items.PAPER)
-                .key('M', IndustrialTags.Items.MACHINE_FRAME_ADVANCED);
+        recipeBuilder = recipeBuilder.define('B', Items.GUNPOWDER)
+                .define('C', Items.PAPER)
+                .define('M', IndustrialTags.Items.MACHINE_FRAME_ADVANCED);
         return recipeBuilder;
     }
 
     @Override
-    public void onTick(World world, BlockPos pos) {
-        AxisAlignedBB area = new AxisAlignedBB(pos.getX() - 3, pos.getY() - 3, pos.getZ() - 3, pos.getX() + 3, pos.getY() + 3, pos.getZ() + 3);
-        for (LivingEntity livingEntity : world.getEntitiesWithinAABB(LivingEntity.class, area)) {
-            livingEntity.addPotionEffect(new EffectInstance(Effects.LEVITATION, 10, 2));
+    public void onTick(Level world, BlockPos pos) {
+        AABB area = new AABB(pos.getX() - 3, pos.getY() - 3, pos.getZ() - 3, pos.getX() + 3, pos.getY() + 3, pos.getZ() + 3);
+        for (LivingEntity livingEntity : world.getEntitiesOfClass(LivingEntity.class, area)) {
+            livingEntity.addEffect(new MobEffectInstance(MobEffects.LEVITATION, 10, 2));
         }
     }
 }

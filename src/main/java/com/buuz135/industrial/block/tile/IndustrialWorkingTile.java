@@ -32,16 +32,16 @@ import com.hrznstudio.titanium.client.screen.addon.ProgressBarScreenAddon;
 import com.hrznstudio.titanium.client.screen.asset.IAssetProvider;
 import com.hrznstudio.titanium.component.progress.ProgressBarComponent;
 import com.hrznstudio.titanium.item.AugmentWrapper;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.DyeColor;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.ActionResultType;
-import net.minecraft.util.Direction;
-import net.minecraft.util.Hand;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.StringTextComponent;
-import net.minecraft.util.text.TextFormatting;
-import net.minecraft.util.text.TranslationTextComponent;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.DyeColor;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.InteractionResult;
+import net.minecraft.core.Direction;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.TextComponent;
+import net.minecraft.ChatFormatting;
+import net.minecraft.network.chat.TranslatableComponent;
 
 import java.text.DecimalFormat;
 import java.util.ArrayList;
@@ -60,13 +60,13 @@ public abstract class IndustrialWorkingTile<T extends IndustrialWorkingTile<T>> 
             public List<IFactory<? extends IScreenAddon>> getScreenAddons() {
                 return Collections.singletonList(() -> new ProgressBarScreenAddon(30, 20, workingBar) {
                     @Override
-                    public List<ITextComponent> getTooltipLines() {
-                        List<ITextComponent> tooltip = new ArrayList<>();
-                        tooltip.add(new StringTextComponent(TextFormatting.GOLD + new TranslationTextComponent("tooltip.titanium.progressbar.progress").getString() + TextFormatting.WHITE + new DecimalFormat().format(workingBar.getProgress()) + TextFormatting.GOLD + "/" + TextFormatting.WHITE + new DecimalFormat().format(workingBar.getMaxProgress())));
+                    public List<Component> getTooltipLines() {
+                        List<Component> tooltip = new ArrayList<>();
+                        tooltip.add(new TextComponent(ChatFormatting.GOLD + new TranslatableComponent("tooltip.titanium.progressbar.progress").getString() + ChatFormatting.WHITE + new DecimalFormat().format(workingBar.getProgress()) + ChatFormatting.GOLD + "/" + ChatFormatting.WHITE + new DecimalFormat().format(workingBar.getMaxProgress())));
                         int progress = (workingBar.getMaxProgress() - workingBar.getProgress());
                         if (!workingBar.getIncreaseType()) progress = workingBar.getMaxProgress() - progress;
-                        tooltip.add(new StringTextComponent(TextFormatting.GOLD + "ETA: " + TextFormatting.WHITE + new DecimalFormat().format(Math.ceil(progress * workingBar.getTickingTime() / 20D / workingBar.getProgressIncrease())) + TextFormatting.DARK_AQUA + "s"));
-                        if (estimatedPower > 0) tooltip.add(new StringTextComponent(TextFormatting.GOLD + new TranslationTextComponent("tooltip.industrialforegoing.usage").getString() + TextFormatting.WHITE + estimatedPower + TextFormatting.DARK_AQUA + " FE"));
+                        tooltip.add(new TextComponent(ChatFormatting.GOLD + "ETA: " + ChatFormatting.WHITE + new DecimalFormat().format(Math.ceil(progress * workingBar.getTickingTime() / 20D / workingBar.getProgressIncrease())) + ChatFormatting.DARK_AQUA + "s"));
+                        if (estimatedPower > 0) tooltip.add(new TextComponent(ChatFormatting.GOLD + new TranslatableComponent("tooltip.industrialforegoing.usage").getString() + ChatFormatting.WHITE + estimatedPower + ChatFormatting.DARK_AQUA + " FE"));
                         return tooltip;
                     }
                 });
@@ -99,11 +99,11 @@ public abstract class IndustrialWorkingTile<T extends IndustrialWorkingTile<T>> 
     }
 
     @Override
-    public ActionResultType onActivated(PlayerEntity playerIn, Hand hand, Direction facing, double hitX, double hitY, double hitZ) {
-        if (super.onActivated(playerIn, hand, facing, hitX, hitY, hitZ) == ActionResultType.SUCCESS)
-            return ActionResultType.SUCCESS;
+    public InteractionResult onActivated(Player playerIn, InteractionHand hand, Direction facing, double hitX, double hitY, double hitZ) {
+        if (super.onActivated(playerIn, hand, facing, hitX, hitY, hitZ) == InteractionResult.SUCCESS)
+            return InteractionResult.SUCCESS;
         openGui(playerIn);
-        return ActionResultType.PASS;
+        return InteractionResult.PASS;
     }
 
     public abstract WorkAction work();

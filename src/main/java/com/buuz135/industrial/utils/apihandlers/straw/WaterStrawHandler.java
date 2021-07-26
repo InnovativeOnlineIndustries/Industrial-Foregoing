@@ -21,16 +21,16 @@
  */
 package com.buuz135.industrial.utils.apihandlers.straw;
 
-import net.minecraft.block.Blocks;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.fluid.Fluid;
-import net.minecraft.fluid.Fluids;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.util.SoundCategory;
-import net.minecraft.util.SoundEvents;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.level.material.Fluid;
+import net.minecraft.world.level.material.Fluids;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.sounds.SoundSource;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.level.Level;
 
 import javax.annotation.ParametersAreNonnullByDefault;
 
@@ -43,13 +43,13 @@ public class WaterStrawHandler extends StrawHandlerBase {
     }
 
     @Override
-    public void onDrink(World world, BlockPos pos, Fluid stack, PlayerEntity player, boolean fromFluidContainer) {
-        player.extinguish();
-        CompoundNBT tag = player.getPersistentData();
+    public void onDrink(Level world, BlockPos pos, Fluid stack, Player player, boolean fromFluidContainer) {
+        player.clearFire();
+        CompoundTag tag = player.getPersistentData();
         if (tag.contains("lavaDrink") && world.getGameTime() - tag.getLong("lavaDrink") < 120) { //6 Seconds to drink water after drinking lava to create obsidian
-            player.entityDropItem(new ItemStack(Blocks.OBSIDIAN), player.getEyeHeight());
+            player.spawnAtLocation(new ItemStack(Blocks.OBSIDIAN), player.getEyeHeight());
             tag.putLong("lavaDrink", 0);
-            world.playSound(null, player.getPosition().getX(), player.getPosition().getY(), player.getPosition().getZ(), SoundEvents.ENTITY_PLAYER_BURP, SoundCategory.PLAYERS, 1.5F, world.rand.nextFloat() * 0.1F + 0.9F);
+            world.playSound(null, player.blockPosition().getX(), player.blockPosition().getY(), player.blockPosition().getZ(), SoundEvents.PLAYER_BURP, SoundSource.PLAYERS, 1.5F, world.random.nextFloat() * 0.1F + 0.9F);
         }
     }
 

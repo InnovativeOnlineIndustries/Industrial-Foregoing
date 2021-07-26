@@ -25,11 +25,11 @@ import com.buuz135.industrial.gui.component.custom.ICanSendNetworkMessage;
 import com.buuz135.industrial.gui.conveyor.GuiConveyor;
 import com.buuz135.industrial.gui.transporter.GuiTransporter;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.screen.Screen;
-import net.minecraft.client.renderer.Rectangle2d;
-import net.minecraft.entity.Entity;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.client.gui.screens.Screen;
+import net.minecraft.client.renderer.Rect2i;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraftforge.fluids.FluidStack;
 
 
@@ -47,9 +47,9 @@ public interface IFilter<T extends Entity> {
 
     GhostSlot[] getFilter();
 
-    CompoundNBT serializeNBT();
+    CompoundTag serializeNBT();
 
-    void deserializeNBT(CompoundNBT nbt);
+    void deserializeNBT(CompoundTag nbt);
 
     public static class GhostSlot {
 
@@ -100,22 +100,22 @@ public interface IFilter<T extends Entity> {
             this.maxAmount = maxAmount;
         }
 
-        public Rectangle2d getArea() {
-            Screen screen = Minecraft.getInstance().currentScreen;
+        public Rect2i getArea() {
+            Screen screen = Minecraft.getInstance().screen;
             if (screen instanceof GuiConveyor) {
                 GuiConveyor gui = (GuiConveyor) screen;
-                return new Rectangle2d(x + gui.getX(), y + gui.getY(), 18, 18);
+                return new Rect2i(x + gui.getX(), y + gui.getY(), 18, 18);
             }
             if (screen instanceof GuiTransporter) {
                 GuiTransporter gui = (GuiTransporter) screen;
-                return new Rectangle2d(x + gui.getX(), y + gui.getY(), 18, 18);
+                return new Rect2i(x + gui.getX(), y + gui.getY(), 18, 18);
             }
-            return new Rectangle2d(0, 0, 0, 0);
+            return new Rect2i(0, 0, 0, 0);
         }
 
         public void accept(ItemStack ingredient) {
-            if (Minecraft.getInstance().currentScreen instanceof ICanSendNetworkMessage) {
-                ((ICanSendNetworkMessage) Minecraft.getInstance().currentScreen).sendMessage(id, ingredient.serializeNBT());
+            if (Minecraft.getInstance().screen instanceof ICanSendNetworkMessage) {
+                ((ICanSendNetworkMessage) Minecraft.getInstance().screen).sendMessage(id, ingredient.serializeNBT());
             }
         }
     }

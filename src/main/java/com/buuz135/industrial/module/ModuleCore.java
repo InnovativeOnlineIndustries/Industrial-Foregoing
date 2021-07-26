@@ -40,13 +40,13 @@ import com.hrznstudio.titanium.event.handler.EventManager;
 import com.hrznstudio.titanium.fluid.TitaniumFluidInstance;
 import com.hrznstudio.titanium.module.Feature;
 import com.hrznstudio.titanium.tab.AdvancedTitaniumTab;
-import net.minecraft.block.Block;
-import net.minecraft.item.DyeColor;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.Rarity;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.text.TextFormatting;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.item.DyeColor;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Rarity;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.ChatFormatting;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.client.event.TextureStitchEvent;
@@ -104,10 +104,10 @@ public class ModuleCore implements IModule {
 
     @Override
     public List<Feature.Builder> generateFeatures() {
-        PITY_RARITY = Rarity.create("pity", TextFormatting.GREEN);
-        SIMPLE_RARITY = Rarity.create("simple", TextFormatting.AQUA);
-        ADVANCED_RARITY = Rarity.create("advanced", TextFormatting.LIGHT_PURPLE);
-        SUPREME_RARITY = Rarity.create("supreme", TextFormatting.GOLD);
+        PITY_RARITY = Rarity.create("pity", ChatFormatting.GREEN);
+        SIMPLE_RARITY = Rarity.create("simple", ChatFormatting.AQUA);
+        ADVANCED_RARITY = Rarity.create("advanced", ChatFormatting.LIGHT_PURPLE);
+        SUPREME_RARITY = Rarity.create("supreme", ChatFormatting.GOLD);
         PITY = (MachineFrameBlock) new MachineFrameBlock(PITY_RARITY, TAB_CORE).setRegistryName("machine_frame_pity");
         SIMPLE = (MachineFrameBlock) new MachineFrameBlock(SIMPLE_RARITY, TAB_CORE).setRegistryName("machine_frame_simple");
         ADVANCED = (MachineFrameBlock) new MachineFrameBlock(ADVANCED_RARITY, TAB_CORE).setRegistryName("machine_frame_advanced");
@@ -123,8 +123,8 @@ public class ModuleCore implements IModule {
                 content(Block.class, FLUID_EXTRACTOR).
                 content(Block.class, LATEX_PROCESSING).
                 event(EventManager.forge(TickEvent.WorldTickEvent.class).
-                        filter(worldTickEvent -> worldTickEvent.phase == TickEvent.Phase.END && worldTickEvent.type == TickEvent.Type.WORLD && worldTickEvent.world.getGameTime() % 40 == 0 && FluidExtractorTile.EXTRACTION.containsKey(worldTickEvent.world.getDimensionType())).
-                        process(worldTickEvent -> FluidExtractorTile.EXTRACTION.get(worldTickEvent.world.getDimensionType()).values().forEach(blockPosFluidExtractionProgressHashMap -> blockPosFluidExtractionProgressHashMap.keySet().forEach(pos -> worldTickEvent.world.sendBlockBreakProgress(blockPosFluidExtractionProgressHashMap.get(pos).getBreakID(), pos, blockPosFluidExtractionProgressHashMap.get(pos).getProgress()))))));
+                        filter(worldTickEvent -> worldTickEvent.phase == TickEvent.Phase.END && worldTickEvent.type == TickEvent.Type.WORLD && worldTickEvent.world.getGameTime() % 40 == 0 && FluidExtractorTile.EXTRACTION.containsKey(worldTickEvent.world.dimensionType())).
+                        process(worldTickEvent -> FluidExtractorTile.EXTRACTION.get(worldTickEvent.world.dimensionType()).values().forEach(blockPosFluidExtractionProgressHashMap -> blockPosFluidExtractionProgressHashMap.keySet().forEach(pos -> worldTickEvent.world.destroyBlockProgress(blockPosFluidExtractionProgressHashMap.get(pos).getBreakID(), pos, blockPosFluidExtractionProgressHashMap.get(pos).getProgress()))))));
         features.add(Feature.builder("pink_slime").
                 content(Item.class, PINK_SLIME_ITEM).
                 content(Item.class, PINK_SLIME_INGOT).

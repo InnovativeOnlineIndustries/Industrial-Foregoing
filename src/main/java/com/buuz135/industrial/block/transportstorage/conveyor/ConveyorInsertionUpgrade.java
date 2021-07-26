@@ -35,20 +35,20 @@ import com.buuz135.industrial.proxy.block.filter.ItemStackFilter;
 import com.buuz135.industrial.utils.IndustrialTags;
 import com.buuz135.industrial.utils.Reference;
 import com.hrznstudio.titanium.recipe.generator.TitaniumShapedRecipeBuilder;
-import net.minecraft.block.Blocks;
-import net.minecraft.data.IFinishedRecipe;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.item.ItemEntity;
-import net.minecraft.entity.player.ServerPlayerEntity;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.Direction;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.math.AxisAlignedBB;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.shapes.VoxelShape;
-import net.minecraft.util.math.shapes.VoxelShapes;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.data.recipes.FinishedRecipe;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.item.ItemEntity;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.core.Direction;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.phys.AABB;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.phys.shapes.VoxelShape;
+import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraftforge.common.Tags;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.util.LazyOptional;
@@ -64,15 +64,15 @@ import java.util.function.Consumer;
 
 public class ConveyorInsertionUpgrade extends ConveyorUpgrade {
 
-    public static VoxelShape NORTHBB = VoxelShapes.create(0.0625 * 2, 0, -0.0625 * 2, 0.0625 * 14, 0.0625 * 9, 0.0625 * 2);
-    public static VoxelShape SOUTHBB = VoxelShapes.create(0.0625 * 2, 0, 0.0625 * 14, 0.0625 * 14, 0.0625 * 9, 0.0625 * 18);
-    public static VoxelShape EASTBB = VoxelShapes.create(0.0625 * 14, 0, 0.0625 * 2, 0.0625 * 18, 0.0625 * 9, 0.0625 * 14);
-    public static VoxelShape WESTBB = VoxelShapes.create(-0.0625 * 2, 0, 0.0625 * 2, 0.0625 * 2, 0.0625 * 9, 0.0625 * 14);
+    public static VoxelShape NORTHBB = Shapes.box(0.0625 * 2, 0, -0.0625 * 2, 0.0625 * 14, 0.0625 * 9, 0.0625 * 2);
+    public static VoxelShape SOUTHBB = Shapes.box(0.0625 * 2, 0, 0.0625 * 14, 0.0625 * 14, 0.0625 * 9, 0.0625 * 18);
+    public static VoxelShape EASTBB = Shapes.box(0.0625 * 14, 0, 0.0625 * 2, 0.0625 * 18, 0.0625 * 9, 0.0625 * 14);
+    public static VoxelShape WESTBB = Shapes.box(-0.0625 * 2, 0, 0.0625 * 2, 0.0625 * 2, 0.0625 * 9, 0.0625 * 14);
 
-    public static VoxelShape NORTHBB_BIG = VoxelShapes.create(0.0625 * 2, 0, -0.0625 * 2, 0.0625 * 14, 0.0625 * 9, 0.0625 * 14);
-    public static VoxelShape SOUTHBB_BIG = VoxelShapes.create(0.0625 * 2, 0, 0.0625 * 2, 0.0625 * 14, 0.0625 * 9, 0.0625 * 18);
-    public static VoxelShape EASTBB_BIG = VoxelShapes.create(0.0625 * 2, 0, 0.0625 * 2, 0.0625 * 18, 0.0625 * 9, 0.0625 * 14);
-    public static VoxelShape WESTBB_BIG = VoxelShapes.create(-0.0625 * 2, 0, 0.0625 * 2, 0.0625 * 14, 0.0625 * 9, 0.0625 * 14);
+    public static VoxelShape NORTHBB_BIG = Shapes.box(0.0625 * 2, 0, -0.0625 * 2, 0.0625 * 14, 0.0625 * 9, 0.0625 * 14);
+    public static VoxelShape SOUTHBB_BIG = Shapes.box(0.0625 * 2, 0, 0.0625 * 2, 0.0625 * 14, 0.0625 * 9, 0.0625 * 18);
+    public static VoxelShape EASTBB_BIG = Shapes.box(0.0625 * 2, 0, 0.0625 * 2, 0.0625 * 18, 0.0625 * 9, 0.0625 * 14);
+    public static VoxelShape WESTBB_BIG = Shapes.box(-0.0625 * 2, 0, 0.0625 * 2, 0.0625 * 14, 0.0625 * 9, 0.0625 * 14);
 
     private ItemStackFilter filter;
     private boolean whitelist;
@@ -87,11 +87,11 @@ public class ConveyorInsertionUpgrade extends ConveyorUpgrade {
 
     @Override
     public void handleEntity(Entity entity) {
-        if (getWorld().isRemote)
+        if (getWorld().isClientSide)
             return;
         if (entity instanceof ItemEntity) {
             getHandlerCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY).ifPresent(handler -> {
-                if (getWorkingBox().getBoundingBox().offset(getPos()).grow(0.01).intersects(entity.getBoundingBox())) {
+                if (getWorkingBox().bounds().move(getPos()).inflate(0.01).intersects(entity.getBoundingBox())) {
                     if (whitelist != filter.matches((ItemEntity) entity)) return;
                     ItemStack stack = ((ItemEntity) entity).getItem();
                     for (int i = 0; i < handler.getSlots(); i++) {
@@ -112,7 +112,7 @@ public class ConveyorInsertionUpgrade extends ConveyorUpgrade {
 
     @Override
     public void update() {
-        if (getWorld().isRemote)
+        if (getWorld().isClientSide)
             return;
         if (getWorld().getGameTime() % 2 == 0 && getContainer() instanceof ConveyorTile) {
             IFluidTank tank = ((ConveyorTile) getContainer()).getTank();
@@ -126,20 +126,20 @@ public class ConveyorInsertionUpgrade extends ConveyorUpgrade {
     }
 
     private <T> LazyOptional<T> getHandlerCapability(Capability<T> capability) {
-        BlockPos offsetPos = getPos().offset(getSide());
-        TileEntity tile = getWorld().getTileEntity(offsetPos);
+        BlockPos offsetPos = getPos().relative(getSide());
+        BlockEntity tile = getWorld().getBlockEntity(offsetPos);
         if (tile != null && tile.getCapability(capability, getSide().getOpposite()).isPresent())
             return tile.getCapability(capability, getSide().getOpposite());
-        for (Entity entity : getWorld().getEntitiesWithinAABB(Entity.class, new AxisAlignedBB(0, 0, 0, 1, 1, 1).offset(offsetPos))) {
-            if (entity.getCapability(capability, entity instanceof ServerPlayerEntity ? null : getSide().getOpposite()).isPresent())
-                return entity.getCapability(capability, entity instanceof ServerPlayerEntity ? null : getSide().getOpposite());
+        for (Entity entity : getWorld().getEntitiesOfClass(Entity.class, new AABB(0, 0, 0, 1, 1, 1).move(offsetPos))) {
+            if (entity.getCapability(capability, entity instanceof ServerPlayer ? null : getSide().getOpposite()).isPresent())
+                return entity.getCapability(capability, entity instanceof ServerPlayer ? null : getSide().getOpposite());
         }
         return LazyOptional.empty();
     }
 
     @Override
-    public CompoundNBT serializeNBT() {
-        CompoundNBT compound = super.serializeNBT() == null ? new CompoundNBT() : super.serializeNBT();
+    public CompoundTag serializeNBT() {
+        CompoundTag compound = super.serializeNBT() == null ? new CompoundTag() : super.serializeNBT();
         compound.put("Filter", filter.serializeNBT());
         compound.putBoolean("Whitelist", whitelist);
         compound.putBoolean("FullArea", fullArea);
@@ -147,7 +147,7 @@ public class ConveyorInsertionUpgrade extends ConveyorUpgrade {
     }
 
     @Override
-    public void deserializeNBT(CompoundNBT nbt) {
+    public void deserializeNBT(CompoundTag nbt) {
         super.deserializeNBT(nbt);
         if (nbt.contains("Filter")) filter.deserializeNBT(nbt.getCompound("Filter"));
         whitelist = nbt.getBoolean("Whitelist");
@@ -190,10 +190,10 @@ public class ConveyorInsertionUpgrade extends ConveyorUpgrade {
     }
 
     @Override
-    public void handleButtonInteraction(int buttonId, CompoundNBT compound) {
+    public void handleButtonInteraction(int buttonId, CompoundTag compound) {
         super.handleButtonInteraction(buttonId, compound);
         if (buttonId >= 0 && buttonId < filter.getFilter().length) {
-            this.filter.setFilter(buttonId, ItemStack.read(compound));
+            this.filter.setFilter(buttonId, ItemStack.of(compound));
             this.getContainer().requestSync();
         }
         if (buttonId == 16) {
@@ -248,7 +248,7 @@ public class ConveyorInsertionUpgrade extends ConveyorUpgrade {
         @Override
         @Nonnull
         public ResourceLocation getModel(Direction upgradeSide, Direction conveyorFacing) {
-            return new ResourceLocation(Reference.MOD_ID, "block/conveyor_upgrade_inserter_" + upgradeSide.getString().toLowerCase());
+            return new ResourceLocation(Reference.MOD_ID, "block/conveyor_upgrade_inserter_" + upgradeSide.getSerializedName().toLowerCase());
         }
 
         @Nonnull
@@ -258,14 +258,14 @@ public class ConveyorInsertionUpgrade extends ConveyorUpgrade {
         }
 
         @Override
-        public void registerRecipe(Consumer<IFinishedRecipe> consumer) {
+        public void registerRecipe(Consumer<FinishedRecipe> consumer) {
             TitaniumShapedRecipeBuilder.shapedRecipe(getUpgradeItem())
-                    .patternLine("IPI").patternLine("IDI").patternLine("ICI")
-                    .key('I', Tags.Items.INGOTS_IRON)
-                    .key('P', IndustrialTags.Items.PLASTIC)
-                    .key('D', Blocks.HOPPER)
-                    .key('C', ModuleTransportStorage.CONVEYOR)
-                    .build(consumer);
+                    .pattern("IPI").pattern("IDI").pattern("ICI")
+                    .define('I', Tags.Items.INGOTS_IRON)
+                    .define('P', IndustrialTags.Items.PLASTIC)
+                    .define('D', Blocks.HOPPER)
+                    .define('C', ModuleTransportStorage.CONVEYOR)
+                    .save(consumer);
 
         }
     }

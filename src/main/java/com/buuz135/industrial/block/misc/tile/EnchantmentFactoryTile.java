@@ -30,11 +30,11 @@ import com.hrznstudio.titanium.component.energy.EnergyStorageComponent;
 import com.hrznstudio.titanium.component.fluid.FluidTankComponent;
 import com.hrznstudio.titanium.component.fluid.SidedFluidTankComponent;
 import com.hrznstudio.titanium.component.inventory.SidedInventoryComponent;
-import net.minecraft.enchantment.EnchantmentHelper;
-import net.minecraft.item.DyeColor;
-import net.minecraft.item.EnchantedBookItem;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.Items;
+import net.minecraft.world.item.enchantment.EnchantmentHelper;
+import net.minecraft.world.item.DyeColor;
+import net.minecraft.world.item.EnchantedBookItem;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
 import net.minecraftforge.fluids.capability.IFluidHandler;
 
 public class EnchantmentFactoryTile extends IndustrialProcessingTile<EnchantmentFactoryTile> {
@@ -54,7 +54,7 @@ public class EnchantmentFactoryTile extends IndustrialProcessingTile<Enchantment
                 setColor(DyeColor.LIME).
                 setTankAction(FluidTankComponent.Action.FILL).
                 setComponentHarness(this).
-                setValidator(fluidStack -> fluidStack.getFluid().isIn(IndustrialTags.Fluids.EXPERIENCE))
+                setValidator(fluidStack -> fluidStack.getFluid().is(IndustrialTags.Fluids.EXPERIENCE))
         );
         this.addInventory(inputFirst = (SidedInventoryComponent<EnchantmentFactoryTile>) new SidedInventoryComponent<EnchantmentFactoryTile>("input", 70, 40, 1, 1).
                 setColor(DyeColor.BLUE).
@@ -78,7 +78,7 @@ public class EnchantmentFactoryTile extends IndustrialProcessingTile<Enchantment
     @Override
     public Runnable onFinish() {
         return () -> {
-            ItemStack output = EnchantmentHelper.addRandomEnchantment(this.world.rand, this.inputFirst.getStackInSlot(0).copy(), 50, true);
+            ItemStack output = EnchantmentHelper.enchantItem(this.level.random, this.inputFirst.getStackInSlot(0).copy(), 50, true);
             this.inputFirst.setStackInSlot(0, ItemStack.EMPTY);
             this.output.setStackInSlot(0, output);
             this.tank.drainForced(XP_30 * 20, IFluidHandler.FluidAction.EXECUTE);

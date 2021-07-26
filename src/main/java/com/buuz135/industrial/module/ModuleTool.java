@@ -37,13 +37,13 @@ import com.hrznstudio.titanium.itemstack.ItemStackHarnessRegistry;
 import com.hrznstudio.titanium.module.Feature;
 import com.hrznstudio.titanium.network.IButtonHandler;
 import com.hrznstudio.titanium.tab.AdvancedTitaniumTab;
-import net.minecraft.entity.EntityClassification;
-import net.minecraft.entity.EntityType;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.SoundEvent;
-import net.minecraft.world.World;
+import net.minecraft.world.entity.MobCategory;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.sounds.SoundEvent;
+import net.minecraft.world.level.Level;
 import net.minecraftforge.energy.CapabilityEnergy;
 import net.minecraftforge.event.world.BlockEvent;
 import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
@@ -73,15 +73,15 @@ public class ModuleTool implements IModule {
     public static EntityType<InfinityNukeEntity> INFINITY_NUKE_ENTITY_TYPE;
 
     static {
-        TRIDENT_ENTITY_TYPE = (EntityType<InfinityTridentEntity>) EntityType.Builder.<InfinityTridentEntity>create(InfinityTridentEntity::new, EntityClassification.MISC).size(0.5F, 0.5F)
+        TRIDENT_ENTITY_TYPE = (EntityType<InfinityTridentEntity>) EntityType.Builder.<InfinityTridentEntity>of(InfinityTridentEntity::new, MobCategory.MISC).sized(0.5F, 0.5F)
                 .setShouldReceiveVelocityUpdates(true)
-                .setCustomClientFactory((spawnEntity, world) -> new InfinityTridentEntity(TRIDENT_ENTITY_TYPE, world)).trackingRange(4).func_233608_b_(20).build("trident_entity").setRegistryName(Reference.MOD_ID, "trident_entity");
-        INFINITY_LAUNCHER_PROJECTILE_ENTITY_TYPE = (EntityType<InfinityLauncherProjectileEntity>) EntityType.Builder.<InfinityLauncherProjectileEntity>create(InfinityLauncherProjectileEntity::new, EntityClassification.MISC).size(0.5F, 0.5F)
+                .setCustomClientFactory((spawnEntity, world) -> new InfinityTridentEntity(TRIDENT_ENTITY_TYPE, world)).clientTrackingRange(4).updateInterval(20).build("trident_entity").setRegistryName(Reference.MOD_ID, "trident_entity");
+        INFINITY_LAUNCHER_PROJECTILE_ENTITY_TYPE = (EntityType<InfinityLauncherProjectileEntity>) EntityType.Builder.<InfinityLauncherProjectileEntity>of(InfinityLauncherProjectileEntity::new, MobCategory.MISC).sized(0.5F, 0.5F)
                 .setShouldReceiveVelocityUpdates(true)
-                .setCustomClientFactory((spawnEntity, world) -> new InfinityLauncherProjectileEntity(INFINITY_LAUNCHER_PROJECTILE_ENTITY_TYPE, world)).trackingRange(4).func_233608_b_(20).build("launcher_projectile_entity").setRegistryName(Reference.MOD_ID, "launcher_projectile_entity");
-        INFINITY_NUKE_ENTITY_TYPE = (EntityType<InfinityNukeEntity>) EntityType.Builder.<InfinityNukeEntity>create(InfinityNukeEntity::new, EntityClassification.MISC).size(0.5F, 1.5F)
+                .setCustomClientFactory((spawnEntity, world) -> new InfinityLauncherProjectileEntity(INFINITY_LAUNCHER_PROJECTILE_ENTITY_TYPE, world)).clientTrackingRange(4).updateInterval(20).build("launcher_projectile_entity").setRegistryName(Reference.MOD_ID, "launcher_projectile_entity");
+        INFINITY_NUKE_ENTITY_TYPE = (EntityType<InfinityNukeEntity>) EntityType.Builder.<InfinityNukeEntity>of(InfinityNukeEntity::new, MobCategory.MISC).sized(0.5F, 1.5F)
                 .setShouldReceiveVelocityUpdates(true)
-                .setCustomClientFactory((spawnEntity, world) -> new InfinityNukeEntity(INFINITY_NUKE_ENTITY_TYPE, world)).immuneToFire().trackingRange(8).func_233608_b_(20).disableSummoning().build("infinity_nuke").setRegistryName(Reference.MOD_ID, "infinity_nuke");
+                .setCustomClientFactory((spawnEntity, world) -> new InfinityNukeEntity(INFINITY_NUKE_ENTITY_TYPE, world)).fireImmune().clientTrackingRange(8).updateInterval(20).noSummon().build("infinity_nuke").setRegistryName(Reference.MOD_ID, "infinity_nuke");
     }
 
     @Override
@@ -91,9 +91,9 @@ public class ModuleTool implements IModule {
         features.add(Feature.builder("mob_imprisonment_tool").content(Item.class, MOB_IMPRISONMENT_TOOL = new MobImprisonmentToolItem(TAB_TOOL)));
         features.add(Feature.builder("infinity_drill").content(Item.class, INFINITY_DRILL = new ItemInfinityDrill(TAB_TOOL)));
         //features.add(Feature.builder("mob_essence_tool").content(Item.class, MOB_ESSENCE_TOOL = new MobEssenceToolItem(TAB_TOOL)));
-        features.add(Feature.builder("infinity_saw").content(Item.class, INFINITY_SAW = new ItemInfinitySaw(TAB_TOOL)).event(EventManager.forge(BlockEvent.BreakEvent.class).filter(breakEvent -> breakEvent.getPlayer().getHeldItemMainhand().getItem() == INFINITY_SAW && BlockUtils.isLog((World) breakEvent.getWorld(), breakEvent.getPos())).process(breakEvent -> {
+        features.add(Feature.builder("infinity_saw").content(Item.class, INFINITY_SAW = new ItemInfinitySaw(TAB_TOOL)).event(EventManager.forge(BlockEvent.BreakEvent.class).filter(breakEvent -> breakEvent.getPlayer().getMainHandItem().getItem() == INFINITY_SAW && BlockUtils.isLog((Level) breakEvent.getWorld(), breakEvent.getPos())).process(breakEvent -> {
             breakEvent.setCanceled(true);
-            breakEvent.getPlayer().getHeldItemMainhand().onBlockDestroyed((World) breakEvent.getWorld(), breakEvent.getState(), breakEvent.getPos(), breakEvent.getPlayer());
+            breakEvent.getPlayer().getMainHandItem().mineBlock((Level) breakEvent.getWorld(), breakEvent.getState(), breakEvent.getPos(), breakEvent.getPlayer());
         })));
         features.add(createFeature(INFINITY_HAMMER = new ItemInfinityHammer(TAB_TOOL)));
         features.add(Feature.builder("infinity_trident")

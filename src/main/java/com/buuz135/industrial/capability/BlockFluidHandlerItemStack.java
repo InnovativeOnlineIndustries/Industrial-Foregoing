@@ -21,8 +21,8 @@
  */
 package com.buuz135.industrial.capability;
 
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.capability.templates.FluidHandlerItemStack;
 
@@ -40,7 +40,7 @@ public class BlockFluidHandlerItemStack extends FluidHandlerItemStack.SwapEmpty 
     @Nonnull
     public FluidStack getFluid()
     {
-        CompoundNBT tagCompound = container.getTag();
+        CompoundTag tagCompound = container.getTag();
         if (tagCompound == null || !tagCompound.contains("BlockEntityTag") || !tagCompound.getCompound("BlockEntityTag").contains(tagName))
         {
             return FluidStack.EMPTY;
@@ -53,13 +53,13 @@ public class BlockFluidHandlerItemStack extends FluidHandlerItemStack.SwapEmpty 
     {
         if (!container.hasTag())
         {
-            CompoundNBT compoundNBT = new CompoundNBT();
-            CompoundNBT blockEntityTag = new CompoundNBT();
+            CompoundTag compoundNBT = new CompoundTag();
+            CompoundTag blockEntityTag = new CompoundTag();
             compoundNBT.put("BlockEntityTag", blockEntityTag);
             container.setTag(compoundNBT);
         }
 
-        CompoundNBT fluidTag = new CompoundNBT();
+        CompoundTag fluidTag = new CompoundTag();
         fluid.writeToNBT(fluidTag);
         container.getTag().getCompound("BlockEntityTag").put(tagName, fluidTag);
     }

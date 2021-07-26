@@ -22,12 +22,12 @@
 package com.buuz135.industrial.gui.component.custom;
 
 import com.buuz135.industrial.api.conveyor.gui.PositionedGuiComponent;
-import com.mojang.blaze3d.matrix.MatrixStack;
+import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.screen.inventory.ContainerScreen;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.TranslationTextComponent;
+import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.TranslatableComponent;
 
 import javax.annotation.Nullable;
 import java.util.ArrayList;
@@ -38,7 +38,7 @@ public class TextureGuiComponent extends PositionedGuiComponent {
     private final ResourceLocation resourceLocation;
     private final int textureX;
     private final int textureY;
-    private final List<ITextComponent> tooltip;
+    private final List<Component> tooltip;
 
     public TextureGuiComponent(int x, int y, int xSize, int ySize, ResourceLocation resourceLocation, int textureX, int textureY, String... tooltip) {
         super(x, y, xSize, ySize);
@@ -48,30 +48,30 @@ public class TextureGuiComponent extends PositionedGuiComponent {
         this.tooltip = new ArrayList<>();
         if (tooltip != null) {
             for (int i = 0; i < tooltip.length; i++) {
-                this.tooltip.add(new TranslationTextComponent("conveyor.upgrade.industrialforegoing.tooltip." + tooltip[i]));
+                this.tooltip.add(new TranslatableComponent("conveyor.upgrade.industrialforegoing.tooltip." + tooltip[i]));
             }
         }
     }
 
     @Override
-    public boolean handleClick(ContainerScreen conveyor, int guiX, int guiY, double mouseX, double mouseY) {
+    public boolean handleClick(AbstractContainerScreen conveyor, int guiX, int guiY, double mouseX, double mouseY) {
         return false;
     }
 
     @Override
-    public void drawGuiBackgroundLayer(MatrixStack stack, int guiX, int guiY, double mouseX, double mouseY) {
-        Minecraft.getInstance().getTextureManager().bindTexture(resourceLocation);
-        Minecraft.getInstance().currentScreen.blit(stack, guiX + getXPos(), guiY + getYPos(), textureX, textureY, getXSize(), getYSize());
+    public void drawGuiBackgroundLayer(PoseStack stack, int guiX, int guiY, double mouseX, double mouseY) {
+        Minecraft.getInstance().getTextureManager().bind(resourceLocation);
+        Minecraft.getInstance().screen.blit(stack, guiX + getXPos(), guiY + getYPos(), textureX, textureY, getXSize(), getYSize());
     }
 
     @Override
-    public void drawGuiForegroundLayer(MatrixStack stack, int guiX, int guiY, double mouseX, double mouseY) {
+    public void drawGuiForegroundLayer(PoseStack stack, int guiX, int guiY, double mouseX, double mouseY) {
 
     }
 
     @Nullable
     @Override
-    public List<ITextComponent> getTooltip(int guiX, int guiY, double mouseX, double mouseY) {
+    public List<Component> getTooltip(int guiX, int guiY, double mouseX, double mouseY) {
         return tooltip;
     }
 }

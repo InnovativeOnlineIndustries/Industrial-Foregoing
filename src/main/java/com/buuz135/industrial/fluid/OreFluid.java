@@ -7,21 +7,21 @@
 
 package com.buuz135.industrial.fluid;
 
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockState;
-import net.minecraft.block.FlowingFluidBlock;
-import net.minecraft.fluid.FlowingFluid;
-import net.minecraft.fluid.Fluid;
-import net.minecraft.fluid.FluidState;
-import net.minecraft.item.Item;
-import net.minecraft.state.StateContainer;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.LiquidBlock;
+import net.minecraft.world.level.material.FlowingFluid;
+import net.minecraft.world.level.material.Fluid;
+import net.minecraft.world.level.material.FluidState;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.tags.FluidTags;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.Direction;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.IBlockReader;
-import net.minecraft.world.IWorld;
-import net.minecraft.world.IWorldReader;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.core.Direction;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.level.BlockGetter;
+import net.minecraft.world.level.LevelAccessor;
+import net.minecraft.world.level.LevelReader;
 import net.minecraftforge.fluids.FluidAttributes;
 
 import javax.annotation.Nonnull;
@@ -41,7 +41,7 @@ public class OreFluid extends FlowingFluid {
 
     @Override
     @Nonnull
-    public Fluid getFlowingFluid() {
+    public Fluid getFlowing() {
         return flowingFluid;
     }
 
@@ -53,47 +53,47 @@ public class OreFluid extends FlowingFluid {
 
     @Override
     @Nonnull
-    public Fluid getStillFluid() {
+    public Fluid getSource() {
         return sourceFluid;
     }
 
     @Override
-    protected boolean canSourcesMultiply() {
+    protected boolean canConvertToSource() {
         return false;
     }
 
     @Override
     @ParametersAreNonnullByDefault
-    protected void beforeReplacingBlock(IWorld worldIn, BlockPos pos, BlockState state) {
+    protected void beforeDestroyingBlock(LevelAccessor worldIn, BlockPos pos, BlockState state) {
         // copied from the WaterFluid implementation
-        TileEntity tileentity = state.getBlock().hasTileEntity(state) ? worldIn.getTileEntity(pos) : null;
-        Block.spawnDrops(state, worldIn, pos, tileentity);
+        BlockEntity tileentity = state.getBlock().hasTileEntity(state) ? worldIn.getBlockEntity(pos) : null;
+        Block.dropResources(state, worldIn, pos, tileentity);
     }
 
     @Override
-    protected int getSlopeFindDistance(@Nonnull IWorldReader world) {
+    protected int getSlopeFindDistance(@Nonnull LevelReader world) {
         return 4;
     }
 
     @Override
-    protected int getLevelDecreasePerBlock(@Nonnull IWorldReader world) {
+    protected int getDropOff(@Nonnull LevelReader world) {
         return 1;
     }
 
     @Override
     @Nonnull
-    public Item getFilledBucket() {
+    public Item getBucket() {
         return bucketFluid;
     }
 
     @Override
     @ParametersAreNonnullByDefault
-    protected boolean canDisplace(FluidState p_215665_1_, IBlockReader p_215665_2_, BlockPos p_215665_3_, Fluid p_215665_4_, Direction p_215665_5_) {
-        return p_215665_5_ == Direction.DOWN && !p_215665_4_.isIn(FluidTags.WATER);
+    protected boolean canBeReplacedWith(FluidState p_215665_1_, BlockGetter p_215665_2_, BlockPos p_215665_3_, Fluid p_215665_4_, Direction p_215665_5_) {
+        return p_215665_5_ == Direction.DOWN && !p_215665_4_.is(FluidTags.WATER);
     }
 
     @Override
-    public int getTickRate(@Nonnull IWorldReader p_205569_1_) {
+    public int getTickDelay(@Nonnull LevelReader p_205569_1_) {
         return 5;
     }
 
@@ -104,8 +104,8 @@ public class OreFluid extends FlowingFluid {
 
     @Override
     @Nonnull
-    protected BlockState getBlockState(@Nonnull FluidState state) {
-        return blockFluid.getDefaultState().with(FlowingFluidBlock.LEVEL, getLevelFromState(state));
+    protected BlockState createLegacyBlock(@Nonnull FluidState state) {
+        return blockFluid.defaultBlockState().setValue(LiquidBlock.LEVEL, getLegacyLevel(state));
     }
 
     @Override
@@ -114,12 +114,12 @@ public class OreFluid extends FlowingFluid {
     }
 
     @Override
-    public int getLevel(@Nonnull FluidState p_207192_1_) {
+    public int getAmount(@Nonnull FluidState p_207192_1_) {
         return 0;
     }
 
     @Override
-    public boolean isEquivalentTo(Fluid fluidIn) {
+    public boolean isSame(Fluid fluidIn) {
         return fluidIn == sourceFluid || fluidIn == flowingFluid;
     }
 
@@ -147,7 +147,7 @@ public class OreFluid extends FlowingFluid {
 
     public static class Flowing extends OreFluid {
         {
-            setDefaultState(getStateContainer().getBaseState().with(LEVEL_1_8, 7));
+            registerDefaultState(getStateDefinition().any().setValue(LEVEL, 7));
         }
 
         public Flowing(FluidAttributes.Builder fluidAttributes) {
@@ -155,14 +155,14 @@ public class OreFluid extends FlowingFluid {
         }
 
         @Override
-        protected void fillStateContainer(StateContainer.Builder<Fluid, FluidState> builder) {
-            super.fillStateContainer(builder);
-            builder.add(LEVEL_1_8);
+        protected void createFluidStateDefinition(StateDefinition.Builder<Fluid, FluidState> builder) {
+            super.createFluidStateDefinition(builder);
+            builder.add(LEVEL);
         }
 
         @Override
-        public int getLevel(@Nonnull FluidState p_207192_1_) {
-            return p_207192_1_.get(LEVEL_1_8);
+        public int getAmount(@Nonnull FluidState p_207192_1_) {
+            return p_207192_1_.getValue(LEVEL);
         }
 
         @Override
@@ -178,7 +178,7 @@ public class OreFluid extends FlowingFluid {
         }
 
         @Override
-        public int getLevel(@Nonnull FluidState p_207192_1_) {
+        public int getAmount(@Nonnull FluidState p_207192_1_) {
             return 8;
         }
 

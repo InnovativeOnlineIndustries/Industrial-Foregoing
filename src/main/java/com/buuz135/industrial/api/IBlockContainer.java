@@ -22,16 +22,16 @@
 package com.buuz135.industrial.api;
 
 import com.buuz135.industrial.api.conveyor.ConveyorUpgradeFactory;
-import net.minecraft.util.Direction;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
+import net.minecraft.core.Direction;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.level.Level;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public interface IBlockContainer<T> {
 
-    World getBlockWorld();
+    Level getBlockWorld();
 
     BlockPos getBlockPosition();
 
@@ -49,7 +49,7 @@ public interface IBlockContainer<T> {
 
     class Empty implements IBlockContainer<ConveyorUpgradeFactory> {
         @Override
-        public World getBlockWorld() {
+        public Level getBlockWorld() {
             return null;
         }
 

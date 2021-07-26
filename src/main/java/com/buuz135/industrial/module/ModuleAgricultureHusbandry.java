@@ -29,8 +29,8 @@ import com.buuz135.industrial.utils.apihandlers.plant.*;
 import com.hrznstudio.titanium.event.handler.EventManager;
 import com.hrznstudio.titanium.module.Feature;
 import com.hrznstudio.titanium.tab.AdvancedTitaniumTab;
-import net.minecraft.block.Block;
-import net.minecraft.item.ItemStack;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.event.RegistryEvent;
 
 import java.util.ArrayList;

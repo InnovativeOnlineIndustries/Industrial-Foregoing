@@ -4,13 +4,13 @@ import com.buuz135.industrial.utils.Reference;
 import com.hrznstudio.titanium.recipe.serializer.GenericSerializer;
 import com.hrznstudio.titanium.recipe.serializer.SerializableRecipe;
 import com.hrznstudio.titanium.util.TagUtil;
-import net.minecraft.inventory.IInventory;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.Items;
-import net.minecraft.item.crafting.IRecipeType;
-import net.minecraft.item.crafting.Ingredient;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.world.World;
+import net.minecraft.world.Container;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
+import net.minecraft.world.item.crafting.RecipeType;
+import net.minecraft.world.item.crafting.Ingredient;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.level.Level;
 import net.minecraftforge.common.crafting.conditions.ICondition;
 import net.minecraftforge.common.crafting.conditions.IConditionSerializer;
 import net.minecraftforge.common.crafting.conditions.NotCondition;
@@ -26,9 +26,9 @@ public class CrusherRecipe extends SerializableRecipe {
     public static List<CrusherRecipe> RECIPES = new ArrayList<>();
 
     public static void init() {
-        new CrusherRecipe(new ResourceLocation(Reference.MOD_ID, "cobble_gravel"), Ingredient.fromTag(TagUtil.getItemTag(new ResourceLocation("forge:cobblestone"))), Ingredient.fromItems(Items.GRAVEL));
-        new CrusherRecipe(new ResourceLocation(Reference.MOD_ID, "gravel_sand"), Ingredient.fromTag(TagUtil.getItemTag(new ResourceLocation("forge:gravel"))), Ingredient.fromItems(Items.SAND));
-        new CrusherRecipe(new ResourceLocation(Reference.MOD_ID, "sand_silicon"), Ingredient.fromTag(TagUtil.getItemTag(new ResourceLocation("forge:sand"))), Ingredient.fromTag(TagUtil.getItemTag(new ResourceLocation("forge:silicon"))), new ResourceLocation("forge:silicon"));
+        new CrusherRecipe(new ResourceLocation(Reference.MOD_ID, "cobble_gravel"), Ingredient.of(TagUtil.getItemTag(new ResourceLocation("forge:cobblestone"))), Ingredient.of(Items.GRAVEL));
+        new CrusherRecipe(new ResourceLocation(Reference.MOD_ID, "gravel_sand"), Ingredient.of(TagUtil.getItemTag(new ResourceLocation("forge:gravel"))), Ingredient.of(Items.SAND));
+        new CrusherRecipe(new ResourceLocation(Reference.MOD_ID, "sand_silicon"), Ingredient.of(TagUtil.getItemTag(new ResourceLocation("forge:sand"))), Ingredient.of(TagUtil.getItemTag(new ResourceLocation("forge:silicon"))), new ResourceLocation("forge:silicon"));
     }
 
     public Ingredient input;
@@ -52,22 +52,22 @@ public class CrusherRecipe extends SerializableRecipe {
     }
 
     @Override
-    public boolean matches(IInventory inv, World worldIn) {
+    public boolean matches(Container inv, Level worldIn) {
         return false;
     }
 
     @Override
-    public ItemStack getCraftingResult(IInventory inv) {
+    public ItemStack assemble(Container inv) {
         return ItemStack.EMPTY;
     }
 
     @Override
-    public boolean canFit(int width, int height) {
+    public boolean canCraftInDimensions(int width, int height) {
         return false;
     }
 
     @Override
-    public ItemStack getRecipeOutput() {
+    public ItemStack getResultItem() {
         return ItemStack.EMPTY;
     }
 
@@ -77,7 +77,7 @@ public class CrusherRecipe extends SerializableRecipe {
     }
 
     @Override
-    public IRecipeType<?> getType() {
+    public RecipeType<?> getType() {
         return SERIALIZER.getRecipeType();
     }
 

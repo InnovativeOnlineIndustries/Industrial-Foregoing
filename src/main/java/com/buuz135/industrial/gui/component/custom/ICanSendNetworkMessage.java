@@ -1,8 +1,8 @@
 package com.buuz135.industrial.gui.component.custom;
 
-import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.nbt.CompoundTag;
 
 public interface ICanSendNetworkMessage {
 
-    public void sendMessage(int id, CompoundNBT compound);
+    public void sendMessage(int id, CompoundTag compound);
 }

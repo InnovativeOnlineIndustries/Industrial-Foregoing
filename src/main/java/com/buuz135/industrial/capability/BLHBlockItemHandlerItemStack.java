@@ -21,8 +21,8 @@
  */
 package com.buuz135.industrial.capability;
 
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.ItemHandlerHelper;
 
@@ -102,11 +102,11 @@ public class BLHBlockItemHandlerItemStack implements IItemHandler {
     @Override
     public boolean isItemValid(int slot, @Nonnull ItemStack stack) {
         ItemStack current = getStack();
-        return current.isEmpty() || (current.isItemEqual(stack) && ItemStack.areItemStackTagsEqual(current, stack));
+        return current.isEmpty() || (current.sameItem(stack) && ItemStack.tagMatches(current, stack));
     }
 
     public int getAmount(){
-        CompoundNBT tag = getTag();
+        CompoundTag tag = getTag();
         if (tag != null && tag.contains("stored")){
             return tag.getInt("stored");
         }
@@ -114,15 +114,15 @@ public class BLHBlockItemHandlerItemStack implements IItemHandler {
     }
 
     public ItemStack getStack(){
-        CompoundNBT tag = getTag();
+        CompoundTag tag = getTag();
         if (tag != null && tag.contains("blStack")){
-            return ItemStack.read(tag.getCompound("blStack"));
+            return ItemStack.of(tag.getCompound("blStack"));
         }
         return ItemStack.EMPTY;
     }
 
     private boolean getVoid(){
-        CompoundNBT tag = getTag();
+        CompoundTag tag = getTag();
         if (tag != null && tag.contains("voidItems")){
             return tag.getBoolean("voidItems");
         }
@@ -130,26 +130,26 @@ public class BLHBlockItemHandlerItemStack implements IItemHandler {
     }
 
     private void setAmount(int amount){
-        CompoundNBT tag = getTag();
+        CompoundTag tag = getTag();
         if (tag == null){
-            CompoundNBT compoundNBT = new CompoundNBT();
-            compoundNBT.put("BlockEntityTag", new CompoundNBT());
+            CompoundTag compoundNBT = new CompoundTag();
+            compoundNBT.put("BlockEntityTag", new CompoundTag());
             this.stack.setTag(compoundNBT);
         }
         this.stack.getTag().getCompound("BlockEntityTag").putInt("stored", amount);
     }
 
     private void setStack(ItemStack stack){
-        CompoundNBT tag = getTag();
+        CompoundTag tag = getTag();
         if (tag == null){
-            CompoundNBT compoundNBT = new CompoundNBT();
-            compoundNBT.put("BlockEntityTag", new CompoundNBT());
+            CompoundTag compoundNBT = new CompoundTag();
+            compoundNBT.put("BlockEntityTag", new CompoundTag());
             this.stack.setTag(compoundNBT);
         }
         this.stack.getTag().getCompound("BlockEntityTag").put("blStack", stack.serializeNBT());
     }
 
-    private CompoundNBT getTag(){
+    private CompoundTag getTag(){
         if (stack.hasTag() && stack.getTag().contains("BlockEntityTag")) return stack.getTag().getCompound("BlockEntityTag");
         return null;
     }

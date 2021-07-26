@@ -21,12 +21,12 @@
  */
 package com.buuz135.industrial.worlddata;
 
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.world.IWorld;
-import net.minecraft.world.World;
-import net.minecraft.world.server.ServerWorld;
-import net.minecraft.world.storage.WorldSavedData;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.world.level.LevelAccessor;
+import net.minecraft.world.level.Level;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.world.level.saveddata.SavedData;
 import net.minecraftforge.common.util.INBTSerializable;
 import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.ItemHandlerHelper;
@@ -38,7 +38,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.UUID;
 
-public class BackpackDataManager extends WorldSavedData {
+public class BackpackDataManager extends SavedData {
 
     public static HashMap<String, BackpackItemHandler> CLIENT_SIDE_BACKPACKS = new HashMap<>();
 
@@ -58,7 +58,7 @@ public class BackpackDataManager extends WorldSavedData {
 
     public void createBackPack(UUID uuid){
         this.itemHandlers.put(uuid.toString(), new BackpackItemHandler(this));
-        markDirty();
+        setDirty();
     }
 
     public BackpackItemHandler getBackpack(String id){
@@ -66,10 +66,10 @@ public class BackpackDataManager extends WorldSavedData {
     }
 
     @Override
-    public void read(CompoundNBT nbt) {
+    public void load(CompoundTag nbt) {
         itemHandlers = new HashMap<>();
-        CompoundNBT backpacks = nbt.getCompound("Backpacks");
-        for (String s : backpacks.keySet()) {
+        CompoundTag backpacks = nbt.getCompound("Backpacks");
+        for (String s : backpacks.getAllKeys()) {
             BackpackItemHandler hander = new BackpackItemHandler(this);
             hander.deserializeNBT(backpacks.getCompound(s));
             itemHandlers.put(s, hander);
@@ -77,24 +77,24 @@ public class BackpackDataManager extends WorldSavedData {
     }
 
     @Override
-    public CompoundNBT write(CompoundNBT compound) {
-        CompoundNBT nbt = new CompoundNBT();
+    public CompoundTag save(CompoundTag compound) {
+        CompoundTag nbt = new CompoundTag();
         itemHandlers.forEach((s, iItemHandler) -> nbt.put(s, iItemHandler.serializeNBT()));
         compound.put("Backpacks", nbt);
         return compound;
     }
 
     @Nullable
-    public static BackpackDataManager getData(IWorld world) {
-        if (world instanceof ServerWorld) {
-            ServerWorld serverWorld = ((ServerWorld) world).getServer().getWorld(World.OVERWORLD);
-            BackpackDataManager data = serverWorld.getSavedData().getOrCreate(BackpackDataManager::new, NAME);
+    public static BackpackDataManager getData(LevelAccessor world) {
+        if (world instanceof ServerLevel) {
+            ServerLevel serverWorld = ((ServerLevel) world).getServer().getLevel(Level.OVERWORLD);
+            BackpackDataManager data = serverWorld.getDataStorage().computeIfAbsent(BackpackDataManager::new, NAME);
             return data;
         }
         return null;
     }
 
-    public static class BackpackItemHandler implements IItemHandler, INBTSerializable<CompoundNBT> {
+    public static class BackpackItemHandler implements IItemHandler, INBTSerializable<CompoundTag> {
 
         private List<SlotDefinition> definitionList;
         private int maxAmount;
@@ -110,21 +110,21 @@ public class BackpackDataManager extends WorldSavedData {
         }
 
         @Override
-        public CompoundNBT serializeNBT() {
-            CompoundNBT slots = new CompoundNBT();
+        public CompoundTag serializeNBT() {
+            CompoundTag slots = new CompoundTag();
             for (int i = 0; i < definitionList.size(); i++) {
                 slots.put(i + "", definitionList.get(i).serializeNBT());
             }
-            CompoundNBT output = new CompoundNBT();
+            CompoundTag output = new CompoundTag();
             output.put("Slots", slots);
             output.putInt("MaxAmount", this.maxAmount);
             return output;
         }
 
         @Override
-        public void deserializeNBT(CompoundNBT nbt) {
-            CompoundNBT slots = nbt.getCompound("Slots");
-            for (String s : slots.keySet()) {
+        public void deserializeNBT(CompoundTag nbt) {
+            CompoundTag slots = nbt.getCompound("Slots");
+            for (String s : slots.getAllKeys()) {
                 definitionList.get(Integer.parseInt(s)).deserializeNBT(slots.getCompound(s));
             }
             this.maxAmount = nbt.getInt("MaxAmount");
@@ -191,7 +191,7 @@ public class BackpackDataManager extends WorldSavedData {
         @Override
         public boolean isItemValid(int slot, @Nonnull ItemStack stack) {
             SlotDefinition def = definitionList.get(slot);
-            return def.getStack().isEmpty() || (def.getStack().isItemEqual(stack) && ItemStack.areItemStackTagsEqual(def.getStack(), stack));
+            return def.getStack().isEmpty() || (def.getStack().sameItem(stack) && ItemStack.tagMatches(def.getStack(), stack));
         }
 
         public void setMaxAmount(int maxAmount) {
@@ -200,7 +200,7 @@ public class BackpackDataManager extends WorldSavedData {
         }
 
         public void markDirty(){
-            if (dataManager != null)dataManager.markDirty();
+            if (dataManager != null)dataManager.setDirty();
         }
 
         public SlotDefinition getSlotDefinition(int slot){
@@ -208,7 +208,7 @@ public class BackpackDataManager extends WorldSavedData {
         }
     }
 
-    public static class SlotDefinition implements INBTSerializable<CompoundNBT>{
+    public static class SlotDefinition implements INBTSerializable<CompoundTag>{
 
         private ItemStack stack;
         private int amount;
@@ -243,8 +243,8 @@ public class BackpackDataManager extends WorldSavedData {
         }
 
         @Override
-        public CompoundNBT serializeNBT() {
-            CompoundNBT compoundNBT = new CompoundNBT();
+        public CompoundTag serializeNBT() {
+            CompoundTag compoundNBT = new CompoundTag();
             compoundNBT.put("Stack", stack.serializeNBT());
             compoundNBT.putInt("Amount", amount);
             compoundNBT.putBoolean("Void", voidItems);
@@ -253,8 +253,8 @@ public class BackpackDataManager extends WorldSavedData {
         }
 
         @Override
-        public void deserializeNBT(CompoundNBT nbt) {
-            this.stack = ItemStack.read(nbt.getCompound("Stack"));
+        public void deserializeNBT(CompoundTag nbt) {
+            this.stack = ItemStack.of(nbt.getCompound("Stack"));
             this.amount = nbt.getInt("Amount");
             this.voidItems = nbt.getBoolean("Void");
             this.refillItems = nbt.getBoolean("Refill");

@@ -23,21 +23,21 @@ package com.buuz135.industrial.proxy.client.particle;
 
 import com.mojang.blaze3d.platform.GlStateManager;
 import com.mojang.blaze3d.systems.RenderSystem;
-import com.mojang.blaze3d.vertex.IVertexBuilder;
+import com.mojang.blaze3d.vertex.VertexConsumer;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.entity.player.ClientPlayerEntity;
-import net.minecraft.client.particle.IParticleRenderType;
+import net.minecraft.client.player.LocalPlayer;
+import net.minecraft.client.particle.ParticleRenderType;
 import net.minecraft.client.particle.Particle;
-import net.minecraft.client.renderer.ActiveRenderInfo;
-import net.minecraft.client.renderer.BufferBuilder;
-import net.minecraft.client.renderer.Tessellator;
+import net.minecraft.client.Camera;
+import com.mojang.blaze3d.vertex.BufferBuilder;
+import com.mojang.blaze3d.vertex.Tesselator;
 import net.minecraft.client.renderer.texture.TextureManager;
-import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
-import net.minecraft.client.settings.PointOfView;
-import net.minecraft.client.world.ClientWorld;
-import net.minecraft.entity.Entity;
-import net.minecraft.util.Direction;
-import net.minecraft.util.math.vector.Vector3d;
+import com.mojang.blaze3d.vertex.DefaultVertexFormat;
+import net.minecraft.client.CameraType;
+import net.minecraft.client.multiplayer.ClientLevel;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.core.Direction;
+import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
@@ -48,9 +48,9 @@ import java.util.Random;
 @OnlyIn(Dist.CLIENT)
 public class ParticleVex extends Particle {
 
-    public static IParticleRenderType RENDER = new IParticleRenderType() {
+    public static ParticleRenderType RENDER = new ParticleRenderType() {
         @Override
-        public void beginRender(BufferBuilder builder, TextureManager manager) {
+        public void begin(BufferBuilder builder, TextureManager manager) {
             RenderSystem.enableBlend();
             RenderSystem.blendFuncSeparate(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA, GlStateManager.SourceFactor.ONE, GlStateManager.DestFactor.ZERO);
             RenderSystem.lineWidth(1.5F);
@@ -58,7 +58,7 @@ public class ParticleVex extends Particle {
         }
 
         @Override
-        public void finishRender(Tessellator tessellator) {
+        public void end(Tesselator tessellator) {
             RenderSystem.disableBlend();
             RenderSystem.enableTexture();
         }
@@ -66,67 +66,67 @@ public class ParticleVex extends Particle {
 
     private final Entity entity;
     private List<Direction> directions;
-    private List<Vector3d> lines;
+    private List<Vec3> lines;
     private boolean isDying = false;
 
     public ParticleVex(Entity entity) { //getPosition
-        super((ClientWorld) entity.world, entity.getPosX() + entity.world.rand.nextDouble() - 0.5, entity.getPosY() + 1 + entity.world.rand.nextDouble() - 0.5, entity.getPosZ() + entity.world.rand.nextDouble() - 0.5);
+        super((ClientLevel) entity.level, entity.getX() + entity.level.random.nextDouble() - 0.5, entity.getY() + 1 + entity.level.random.nextDouble() - 0.5, entity.getZ() + entity.level.random.nextDouble() - 0.5);
         this.entity = entity;
         directions = new ArrayList<>();
         Direction prev = Direction.NORTH;
         directions.add(0, prev);
         for (int i = 1; i < 50; i++) {
             prev = directions.get(i - 1);
-            directions.add(i, world.rand.nextDouble() < 0.05 ? getRandomFacing(world.rand, prev) : prev);
+            directions.add(i, level.random.nextDouble() < 0.05 ? getRandomFacing(level.random, prev) : prev);
         }
         calculateLines();
-        this.maxAge = 500;
+        this.lifetime = 500;
     }
 
     @Override
     public void tick() {
         super.tick();
-        if (this.entity.getPosition().distanceSq(posX, posY, posZ, true) > 2) {
+        if (this.entity.blockPosition().distSqr(x, y, z, true) > 2) {
             isDying = true;
         }
-        if (!isDying && !this.isExpired) {
-            directions.add(0, world.rand.nextDouble() < 0.05 ? getRandomFacing(world.rand, directions.get(0)) : directions.get(0));
+        if (!isDying && !this.removed) {
+            directions.add(0, level.random.nextDouble() < 0.05 ? getRandomFacing(level.random, directions.get(0)) : directions.get(0));
             directions.remove(50);
-            Vector3d directionVector = new Vector3d(directions.get(0).getDirectionVec().getX(), directions.get(0).getDirectionVec().getY(), directions.get(0).getDirectionVec().getZ()).scale(0.01);
-            this.setPosition(posX - directionVector.x, posY - directionVector.y, posZ - directionVector.z);
+            Vec3 directionVector = new Vec3(directions.get(0).getNormal().getX(), directions.get(0).getNormal().getY(), directions.get(0).getNormal().getZ()).scale(0.01);
+            this.setPos(x - directionVector.x, y - directionVector.y, z - directionVector.z);
             calculateLines();
         } else {
             directions.remove(directions.size() - 1);
             calculateLines();
-            if (directions.isEmpty()) this.setExpired();
+            if (directions.isEmpty()) this.remove();
         }
     }
 
     @Override
-    public void renderParticle(IVertexBuilder bufferBad, ActiveRenderInfo activeRenderInfo, float v) {
-        if (entity instanceof ClientPlayerEntity && Minecraft.getInstance().player.getUniqueID().equals(entity.getUniqueID()) && Minecraft.getInstance().gameSettings.getPointOfView() == PointOfView.FIRST_PERSON && this.entity.getPosition().add(0, 1, 0).distanceSq(posX, posY, posZ, true) < 3)
+    public void render(VertexConsumer bufferBad, Camera activeRenderInfo, float v) {
+        if (entity instanceof LocalPlayer && Minecraft.getInstance().player.getUUID().equals(entity.getUUID()) && Minecraft.getInstance().options.getCameraType() == CameraType.FIRST_PERSON && this.entity.blockPosition().offset(0, 1, 0).distSqr(x, y, z, true) < 3)
             return;
-        Vector3d vector3d = activeRenderInfo.getProjectedView();
-        double x = entity.lastTickPosX + (vector3d.x - entity.lastTickPosX);
-        double y = entity.lastTickPosY + (vector3d.y - entity.lastTickPosY);
-        double z = entity.lastTickPosZ + (vector3d.z - entity.lastTickPosZ);
-        Tessellator tessellator = Tessellator.getInstance();
-        BufferBuilder bufferBuilder = tessellator.getBuffer();
-        bufferBuilder.begin(3, DefaultVertexFormats.POSITION_COLOR_LIGHTMAP);
-        for (Vector3d line : lines) {
-            bufferBuilder.pos(line.x - x, line.y - y, line.z - z).color(1f, 1f, 1f, 1f).lightmap(240, 240).endVertex();
+        Vec3 vector3d = activeRenderInfo.getPosition();
+        double x = entity.xOld + (vector3d.x - entity.xOld);
+        double y = entity.yOld + (vector3d.y - entity.yOld);
+        double z = entity.zOld + (vector3d.z - entity.zOld);
+        Tesselator tessellator = Tesselator.getInstance();
+        BufferBuilder bufferBuilder = tessellator.getBuilder();
+        bufferBuilder.begin(3, DefaultVertexFormat.POSITION_COLOR_LIGHTMAP);
+        for (Vec3 line : lines) {
+            bufferBuilder.vertex(line.x - x, line.y - y, line.z - z).color(1f, 1f, 1f, 1f).uv2(240, 240).endVertex();
         }
-        tessellator.draw();
+        tessellator.end();
     }
 
     @Override
-    public IParticleRenderType getRenderType() {
+    public ParticleRenderType getRenderType() {
         return RENDER;
     }
 
     private Direction getRandomFacing(Random random, Direction opposite) {
-        Direction facing = Direction.getRandomDirection(random); //random
-        while (facing.getOpposite().equals(opposite)) facing = Direction.getRandomDirection(random);
+        Direction facing = Direction.getRandom(random); //random
+        while (facing.getOpposite().equals(opposite)) facing = Direction.getRandom(random);
         return facing;
     }
 
@@ -135,12 +135,12 @@ public class ParticleVex extends Particle {
         if (directions.size() == 0) return;
         Direction prev = directions.get(0);
         int currentPosition = 0;
-        Vector3d prevBlockPos = new Vector3d(posX, posY, posZ);
+        Vec3 prevBlockPos = new Vec3(x, y, z);
         lines.add(prevBlockPos);
         for (int i = 1; i < directions.size(); i++) {
             if (!directions.get(i).equals(prev) || i == directions.size() - 1) {
-                Vector3d directionVector = new Vector3d(prev.getDirectionVec().getX(), prev.getDirectionVec().getY(), prev.getDirectionVec().getZ()).scale(0.01);
-                Vector3d endBlockPos = new Vector3d(prevBlockPos.x + directionVector.x * (i - currentPosition), prevBlockPos.y + directionVector.y * (i - currentPosition), prevBlockPos.z + directionVector.z * (i - currentPosition));
+                Vec3 directionVector = new Vec3(prev.getNormal().getX(), prev.getNormal().getY(), prev.getNormal().getZ()).scale(0.01);
+                Vec3 endBlockPos = new Vec3(prevBlockPos.x + directionVector.x * (i - currentPosition), prevBlockPos.y + directionVector.y * (i - currentPosition), prevBlockPos.z + directionVector.z * (i - currentPosition));
                 lines.add(endBlockPos);
                 prev = directions.get(i);
                 currentPosition = i;

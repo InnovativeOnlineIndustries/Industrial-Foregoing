@@ -27,17 +27,20 @@ import com.buuz135.industrial.module.ModuleAgricultureHusbandry;
 import com.buuz135.industrial.utils.IndustrialTags;
 import com.hrznstudio.titanium.api.IFactory;
 import com.hrznstudio.titanium.recipe.generator.TitaniumShapedRecipeBuilder;
-import net.minecraft.block.Blocks;
-import net.minecraft.data.IFinishedRecipe;
-import net.minecraft.item.Items;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.data.recipes.FinishedRecipe;
+import net.minecraft.world.item.Items;
 
 import javax.annotation.Nonnull;
 import java.util.function.Consumer;
 
+import com.hrznstudio.titanium.block.RotatableBlock.RotationType;
+import net.minecraft.world.level.block.state.BlockBehaviour.Properties;
+
 public class AnimalRancherBlock extends IndustrialBlock<AnimalRancherTile> {
 
     public AnimalRancherBlock() {
-        super("animal_rancher", Properties.from(Blocks.IRON_BLOCK), AnimalRancherTile.class, ModuleAgricultureHusbandry.TAB_AG_HUS);
+        super("animal_rancher", Properties.copy(Blocks.IRON_BLOCK), AnimalRancherTile.class, ModuleAgricultureHusbandry.TAB_AG_HUS);
     }
 
     @Override
@@ -52,14 +55,14 @@ public class AnimalRancherBlock extends IndustrialBlock<AnimalRancherTile> {
     }
 
     @Override
-    public void registerRecipe(Consumer<IFinishedRecipe> consumer) {
+    public void registerRecipe(Consumer<FinishedRecipe> consumer) {
         TitaniumShapedRecipeBuilder.shapedRecipe(this)
-                .patternLine("PPP").patternLine("SBS").patternLine("GMG")
-                .key('P', IndustrialTags.Items.PLASTIC)
-                .key('G', IndustrialTags.Items.GEAR_GOLD)
-                .key('S', Items.SHEARS)
-                .key('B', Items.BUCKET)
-                .key('M', IndustrialTags.Items.MACHINE_FRAME_PITY)
-                .build(consumer);
+                .pattern("PPP").pattern("SBS").pattern("GMG")
+                .define('P', IndustrialTags.Items.PLASTIC)
+                .define('G', IndustrialTags.Items.GEAR_GOLD)
+                .define('S', Items.SHEARS)
+                .define('B', Items.BUCKET)
+                .define('M', IndustrialTags.Items.MACHINE_FRAME_PITY)
+                .save(consumer);
     }
 }

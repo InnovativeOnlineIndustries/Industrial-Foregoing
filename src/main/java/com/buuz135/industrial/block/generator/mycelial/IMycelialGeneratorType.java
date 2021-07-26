@@ -22,13 +22,13 @@
 package com.buuz135.industrial.block.generator.mycelial;
 
 import com.buuz135.industrial.plugin.jei.generator.MycelialGeneratorRecipe;
-import net.minecraft.data.ShapedRecipeBuilder;
-import net.minecraft.item.DyeColor;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
+import net.minecraft.data.recipes.ShapedRecipeBuilder;
+import net.minecraft.world.item.DyeColor;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.level.Level;
 import net.minecraftforge.common.util.INBTSerializable;
 import net.minecraftforge.fluids.FluidStack;
 import org.apache.commons.lang3.tuple.Pair;
@@ -52,9 +52,9 @@ public interface IMycelialGeneratorType {
 
     List<Predicate<FluidStack>> getTankInputPredicates();
 
-    boolean canStart(INBTSerializable<CompoundNBT>[] inputs);
+    boolean canStart(INBTSerializable<CompoundTag>[] inputs);
 
-    Pair<Integer, Integer> getTimeAndPowerGeneration(INBTSerializable<CompoundNBT>[] inputs);
+    Pair<Integer, Integer> getTimeAndPowerGeneration(INBTSerializable<CompoundTag>[] inputs);
 
     DyeColor[] getInputColors();
 
@@ -66,7 +66,7 @@ public interface IMycelialGeneratorType {
 
     ShapedRecipeBuilder addIngredients(ShapedRecipeBuilder recipeBuilder);
 
-    default void onTick(World world, BlockPos pos){
+    default void onTick(Level world, BlockPos pos){
 
     }
 

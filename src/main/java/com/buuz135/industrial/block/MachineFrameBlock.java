@@ -24,21 +24,27 @@ package com.buuz135.industrial.block;
 import com.hrznstudio.titanium.api.IFactory;
 import com.hrznstudio.titanium.block.BasicBlock;
 import com.hrznstudio.titanium.datagenerator.loot.block.BasicBlockLootTables;
-import net.minecraft.block.BlockState;
-import net.minecraft.block.Blocks;
-import net.minecraft.item.*;
-import net.minecraft.loot.LootTable;
-import net.minecraft.util.text.TranslationTextComponent;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.storage.loot.LootTable;
+import net.minecraft.network.chat.TranslatableComponent;
 
 import javax.annotation.Nullable;
+
+import net.minecraft.world.item.BlockItem;
+import net.minecraft.world.item.CreativeModeTab;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Rarity;
+import net.minecraft.world.item.context.BlockPlaceContext;
 
 public class MachineFrameBlock extends BasicBlock {
 
     private MachineFrameItem item;
     private Rarity rarity;
 
-    public MachineFrameBlock(Rarity rarity, ItemGroup group) {
-        super(Properties.from(Blocks.IRON_BLOCK));
+    public MachineFrameBlock(Rarity rarity, CreativeModeTab group) {
+        super(Properties.copy(Blocks.IRON_BLOCK));
         this.setItemGroup(group);
         this.rarity = rarity;
     }
@@ -60,20 +66,20 @@ public class MachineFrameBlock extends BasicBlock {
 
     public class MachineFrameItem extends BlockItem {
 
-        public MachineFrameItem(BasicBlock blockIn, Rarity rarity, ItemGroup group) {
-            super(blockIn, new Item.Properties().group(group).rarity(rarity));
+        public MachineFrameItem(BasicBlock blockIn, Rarity rarity, CreativeModeTab group) {
+            super(blockIn, new Item.Properties().tab(group).rarity(rarity));
             this.setRegistryName(blockIn.getRegistryName());
         }
 
         @Override
-        protected boolean canPlace(BlockItemUseContext p_195944_1_, BlockState p_195944_2_) {
+        protected boolean canPlace(BlockPlaceContext p_195944_1_, BlockState p_195944_2_) {
             return false;
         }
 
         @Nullable
         @Override
         public String getCreatorModId(ItemStack itemStack) {
-            return new TranslationTextComponent("itemGroup." + this.group.getPath()).getString();
+            return new TranslatableComponent("itemGroup." + this.category.getRecipeFolderName()).getString();
         }
 
     }

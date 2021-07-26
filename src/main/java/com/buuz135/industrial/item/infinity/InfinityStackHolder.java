@@ -27,7 +27,7 @@ import com.hrznstudio.titanium.api.client.IScreenAddonProvider;
 import com.hrznstudio.titanium.capability.ItemStackHolderCapability;
 import com.hrznstudio.titanium.network.locator.PlayerInventoryFinder;
 import net.minecraft.client.Minecraft;
-import net.minecraft.item.ItemStack;
+import net.minecraft.world.item.ItemStack;
 
 import java.util.ArrayList;
 import java.util.List;

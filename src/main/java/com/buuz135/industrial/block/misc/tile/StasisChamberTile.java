@@ -26,17 +26,19 @@ import com.buuz135.industrial.block.tile.RangeManager;
 import com.buuz135.industrial.config.machine.misc.StasisChamberConfig;
 import com.buuz135.industrial.module.ModuleMisc;
 import com.hrznstudio.titanium.component.energy.EnergyStorageComponent;
-import net.minecraft.entity.MobEntity;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.player.ServerPlayerEntity;
-import net.minecraft.potion.EffectInstance;
-import net.minecraft.potion.Effects;
-import net.minecraft.util.math.shapes.VoxelShape;
-import net.minecraft.util.math.shapes.VoxelShapes;
-import net.minecraft.world.server.ServerWorld;
+import net.minecraft.world.entity.Mob;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.effect.MobEffectInstance;
+import net.minecraft.world.effect.MobEffects;
+import net.minecraft.world.phys.shapes.VoxelShape;
+import net.minecraft.world.phys.shapes.Shapes;
+import net.minecraft.server.level.ServerLevel;
 
 import javax.annotation.Nonnull;
 import java.util.List;
+
+import com.buuz135.industrial.block.tile.IndustrialWorkingTile.WorkAction;
 
 public class StasisChamberTile extends IndustrialAreaWorkingTile<StasisChamberTile> {
 
@@ -52,23 +54,23 @@ public class StasisChamberTile extends IndustrialAreaWorkingTile<StasisChamberTi
     @Override
     public WorkAction work() {
         if (hasEnergy(getPowerPerOperation)) {
-            List<MobEntity> entities = this.world.getEntitiesWithinAABB(MobEntity.class, getWorkingArea().getBoundingBox());
-            for (MobEntity entity : entities) {
-                entity.setNoAI(true);
-                entity.getPersistentData().putLong("StasisChamberTime", this.world.getGameTime());
-                if (!entity.isNonBoss() && world instanceof ServerWorld) {
+            List<Mob> entities = this.level.getEntitiesOfClass(Mob.class, getWorkingArea().bounds());
+            for (Mob entity : entities) {
+                entity.setNoAi(true);
+                entity.getPersistentData().putLong("StasisChamberTime", this.level.getGameTime());
+                if (!entity.canChangeDimensions() && level instanceof ServerLevel) {
                     if (StasisChamberConfig.disableBossBars) {
-                        world.getPlayers().forEach(entity1 -> entity.removeTrackingPlayer((ServerPlayerEntity) entity1));
+                        level.players().forEach(entity1 -> entity.stopSeenByPlayer((ServerPlayer) entity1));
                     } else {
-                        world.getPlayers().forEach(entity1 -> entity.addTrackingPlayer((ServerPlayerEntity) entity1));
+                        level.players().forEach(entity1 -> entity.startSeenByPlayer((ServerPlayer) entity1));
                     }
                 }
-                if (world.rand.nextBoolean() && world.rand.nextBoolean()) entity.heal(1f);
+                if (level.random.nextBoolean() && level.random.nextBoolean()) entity.heal(1f);
             }
-            List<PlayerEntity> players = this.world.getEntitiesWithinAABB(PlayerEntity.class, getWorkingArea().getBoundingBox());
+            List<Player> players = this.level.getEntitiesOfClass(Player.class, getWorkingArea().bounds());
             players.forEach(playerEntity -> {
-                playerEntity.addPotionEffect(new EffectInstance(Effects.SLOWNESS, 25, 135));
-                if (world.rand.nextBoolean()) playerEntity.heal(1f);
+                playerEntity.addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SLOWDOWN, 25, 135));
+                if (level.random.nextBoolean()) playerEntity.heal(1f);
             });
             return new WorkAction(0.5f, getPowerPerOperation);
         }
@@ -77,7 +79,7 @@ public class StasisChamberTile extends IndustrialAreaWorkingTile<StasisChamberTi
 
     @Override
     public VoxelShape getWorkingArea() {
-        return VoxelShapes.create(-1, 0, -1, 2, 3, 2).withOffset(this.pos.getX(), this.pos.getY() + 1, this.pos.getZ());
+        return Shapes.box(-1, 0, -1, 2, 3, 2).move(this.worldPosition.getX(), this.worldPosition.getY() + 1, this.worldPosition.getZ());
     }
 
     @Nonnull

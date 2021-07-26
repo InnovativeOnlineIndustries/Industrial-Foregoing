@@ -24,27 +24,27 @@ package com.buuz135.industrial.utils;
 import com.buuz135.industrial.IndustrialForegoing;
 import com.buuz135.industrial.module.ModuleCore;
 import com.mojang.blaze3d.systems.RenderSystem;
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockState;
-import net.minecraft.block.Blocks;
-import net.minecraft.block.material.Material;
-import net.minecraft.client.renderer.BufferBuilder;
-import net.minecraft.client.renderer.RenderHelper;
-import net.minecraft.client.renderer.Tessellator;
-import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
-import net.minecraft.entity.item.ItemEntity;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.Rarity;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.material.Material;
+import com.mojang.blaze3d.vertex.BufferBuilder;
+import com.mojang.blaze3d.platform.Lighting;
+import com.mojang.blaze3d.vertex.Tesselator;
+import com.mojang.blaze3d.vertex.DefaultVertexFormat;
+import net.minecraft.world.entity.item.ItemEntity;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Rarity;
 import net.minecraft.tags.BlockTags;
-import net.minecraft.tags.ITag;
 import net.minecraft.tags.Tag;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.Direction;
-import net.minecraft.util.NonNullList;
-import net.minecraft.util.math.AxisAlignedBB;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
-import net.minecraft.world.server.ServerWorld;
+import net.minecraft.tags.SetTag;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.core.Direction;
+import net.minecraft.core.NonNullList;
+import net.minecraft.world.phys.AABB;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.level.Level;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.world.BlockEvent;
 import org.lwjgl.opengl.GL11;
@@ -55,9 +55,9 @@ import java.util.function.BiPredicate;
 
 public class BlockUtils {
 
-    public static BiPredicate<World, BlockPos> CLAIMED_CHUNK_CHECKER = (world, pos) -> true;
+    public static BiPredicate<Level, BlockPos> CLAIMED_CHUNK_CHECKER = (world, pos) -> true;
 
-    public static List<BlockPos> getBlockPosInAABB(AxisAlignedBB axisAlignedBB) {
+    public static List<BlockPos> getBlockPosInAABB(AABB axisAlignedBB) {
         List<BlockPos> blocks = new ArrayList<>();
         for (double y = axisAlignedBB.minY; y < axisAlignedBB.maxY; ++y) {
             for (double x = axisAlignedBB.minX; x < axisAlignedBB.maxX; ++x) {
@@ -77,54 +77,54 @@ public class BlockUtils {
         return false;
     }
 
-    public static boolean isBlockTag(World world, BlockPos pos, ITag.INamedTag<Block> tag) {
+    public static boolean isBlockTag(Level world, BlockPos pos, Tag.Named<Block> tag) {
         return isBlockStateTag(world.getBlockState(pos), tag);
     }
 
-    public static boolean isBlockStateTag(BlockState state, Tag.INamedTag<Block> tag) {
-        return state.getBlock().isIn(tag);
+    public static boolean isBlockStateTag(BlockState state, SetTag.Named<Block> tag) {
+        return state.getBlock().is(tag);
     }
 
-    public static boolean isLog(World world, BlockPos pos) {
+    public static boolean isLog(Level world, BlockPos pos) {
         return isBlockTag(world, pos, BlockTags.LOGS);
     }
 
-    public static boolean isLeaves(World world, BlockPos pos) {
-        return world.getBlockState(pos).getMaterial() == Material.LEAVES || world.getBlockState(pos).isIn(BlockTags.WART_BLOCKS) || world.getBlockState(pos).isIn(BlockTags.LEAVES) || world.getBlockState(pos).getBlock().equals(Blocks.SHROOMLIGHT);
+    public static boolean isLeaves(Level world, BlockPos pos) {
+        return world.getBlockState(pos).getMaterial() == Material.LEAVES || world.getBlockState(pos).is(BlockTags.WART_BLOCKS) || world.getBlockState(pos).is(BlockTags.LEAVES) || world.getBlockState(pos).getBlock().equals(Blocks.SHROOMLIGHT);
     }
 
-    public static boolean isChorus(World world, BlockPos pos) {
+    public static boolean isChorus(Level world, BlockPos pos) {
         return world.getBlockState(pos).getBlock().equals(Blocks.CHORUS_PLANT) || world.getBlockState(pos).getBlock().equals(Blocks.CHORUS_FLOWER);
     }
 
-    public static boolean canBlockBeBroken(World world, BlockPos pos) {
+    public static boolean canBlockBeBroken(Level world, BlockPos pos) {
         //if (world.isAirBlock(pos)) return false;
         BlockEvent.BreakEvent event = new BlockEvent.BreakEvent(world, pos, world.getBlockState(pos), IndustrialForegoing.getFakePlayer(world));
         MinecraftForge.EVENT_BUS.post(event);
         return !event.isCanceled();
     }
 
-    public static boolean canBlockBeBrokenPlugin(World world, BlockPos pos) {
+    public static boolean canBlockBeBrokenPlugin(Level world, BlockPos pos) {
         return CLAIMED_CHUNK_CHECKER.test(world, pos);
     }
 
-    public static List<ItemStack> getBlockDrops(World world, BlockPos pos) {
+    public static List<ItemStack> getBlockDrops(Level world, BlockPos pos) {
         return getBlockDrops(world, pos, 0);
     }
 
-    public static List<ItemStack> getBlockDrops(World world, BlockPos pos, int fortune) {
+    public static List<ItemStack> getBlockDrops(Level world, BlockPos pos, int fortune) {
         BlockState state = world.getBlockState(pos);
         NonNullList<ItemStack> stacks = NonNullList.create();
-        stacks.addAll(Block.getDrops(state, (ServerWorld) world, pos, world.getTileEntity(pos)));
+        stacks.addAll(Block.getDrops(state, (ServerLevel) world, pos, world.getBlockEntity(pos)));
         return stacks;
     }
 
-    public static boolean spawnItemStack(ItemStack stack, World world, BlockPos pos) {
+    public static boolean spawnItemStack(ItemStack stack, Level world, BlockPos pos) {
         ItemEntity item = new ItemEntity(world, pos.getX() + 0.5, pos.getY() + 0.2, pos.getZ() + 0.5);
-        item.setMotion(0, -1, 0);
-        item.setPickupDelay(40);
+        item.setDeltaMovement(0, -1, 0);
+        item.setPickUpDelay(40);
         item.setItem(stack);
-        return world.addEntity(item);
+        return world.addFreshEntity(item);
     }
 
     public static int getStackAmountByRarity(Rarity rarity){
@@ -143,8 +143,8 @@ public class BlockUtils {
         return Integer.MAX_VALUE;
     }
 
-    public static void renderLaserBeam(TileEntity tile, double x, double y, double z, Direction direction, float partialTicks, int length) {
-        Tessellator tess = Tessellator.getInstance();
+    public static void renderLaserBeam(BlockEntity tile, double x, double y, double z, Direction direction, float partialTicks, int length) {
+        Tesselator tess = Tesselator.getInstance();
         RenderSystem.pushMatrix();
         double tempX = x;
         double tempY = y;
@@ -174,15 +174,15 @@ public class BlockUtils {
                 tempY -= length;
 
         }
-        RenderHelper.disableStandardItemLighting();
+        Lighting.turnOff();
         //OpenGlHelper.setLightmapTextureCoords(OpenGlHelper.lightmapTexUnit, 240.0F, 240.0F);
         GL11.glDisable(GL11.GL_CULL_FACE);
         GL11.glDisable(GL11.GL_BLEND);
         GL11.glDepthMask(true);
-        BufferBuilder buffer = tess.getBuffer();
-        buffer.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_TEX);
-        float d1 = -(tile.getWorld().getGameTime() % 15) / 15f;
-        float d2 = (tile.getWorld().getGameTime() % 40) / 2f;
+        BufferBuilder buffer = tess.getBuilder();
+        buffer.begin(GL11.GL_QUADS, DefaultVertexFormat.POSITION_TEX);
+        float d1 = -(tile.getLevel().getGameTime() % 15) / 15f;
+        float d2 = (tile.getLevel().getGameTime() % 40) / 2f;
         double pointA = 0.45 - d2 / 200D;
         if (d2 >= 10) {
             pointA = 0.35 + d2 / 200D;
@@ -192,23 +192,23 @@ public class BlockUtils {
         float uEnd = 1.0f;
         float vStart = -1.0F + d1;
         float vEnd = (length * 2) + vStart;
-        buffer.pos(tempX + pointA, tempY + length, tempZ + pointA).tex(uEnd, vEnd).endVertex();
-        buffer.pos(tempX + pointA, tempY, tempZ + pointA).tex(uEnd, vStart).endVertex();
-        buffer.pos(tempX + pointB, tempY, tempZ + pointA).tex(uStart, vStart).endVertex();
-        buffer.pos(tempX + pointB, tempY + length, tempZ + pointA).tex(uStart, vEnd).endVertex();
-        buffer.pos(tempX + pointB, tempY + length, tempZ + pointB).tex(uEnd, vEnd).endVertex();
-        buffer.pos(tempX + pointB, tempY, tempZ + pointB).tex(uEnd, vStart).endVertex();
-        buffer.pos(tempX + pointA, tempY, tempZ + pointB).tex(uStart, vStart).endVertex();
-        buffer.pos(tempX + pointA, tempY + length, tempZ + pointB).tex(uStart, vEnd).endVertex();
-        buffer.pos(tempX + pointB, tempY + length, tempZ + pointA).tex(uEnd, vEnd).endVertex();
-        buffer.pos(tempX + pointB, tempY, tempZ + pointA).tex(uEnd, vStart).endVertex();
-        buffer.pos(tempX + pointB, tempY, tempZ + pointB).tex(uStart, vStart).endVertex();
-        buffer.pos(tempX + pointB, tempY + length, tempZ + pointB).tex(uStart, vEnd).endVertex();
-        buffer.pos(tempX + pointA, tempY + length, tempZ + pointB).tex(uEnd, vEnd).endVertex();
-        buffer.pos(tempX + pointA, tempY, tempZ + pointB).tex(uEnd, vStart).endVertex();
-        buffer.pos(tempX + pointA, tempY, tempZ + pointA).tex(uStart, vStart).endVertex();
-        buffer.pos(tempX + pointA, tempY + length, tempZ + pointA).tex(uStart, vEnd).endVertex();
-        tess.draw();
+        buffer.vertex(tempX + pointA, tempY + length, tempZ + pointA).uv(uEnd, vEnd).endVertex();
+        buffer.vertex(tempX + pointA, tempY, tempZ + pointA).uv(uEnd, vStart).endVertex();
+        buffer.vertex(tempX + pointB, tempY, tempZ + pointA).uv(uStart, vStart).endVertex();
+        buffer.vertex(tempX + pointB, tempY + length, tempZ + pointA).uv(uStart, vEnd).endVertex();
+        buffer.vertex(tempX + pointB, tempY + length, tempZ + pointB).uv(uEnd, vEnd).endVertex();
+        buffer.vertex(tempX + pointB, tempY, tempZ + pointB).uv(uEnd, vStart).endVertex();
+        buffer.vertex(tempX + pointA, tempY, tempZ + pointB).uv(uStart, vStart).endVertex();
+        buffer.vertex(tempX + pointA, tempY + length, tempZ + pointB).uv(uStart, vEnd).endVertex();
+        buffer.vertex(tempX + pointB, tempY + length, tempZ + pointA).uv(uEnd, vEnd).endVertex();
+        buffer.vertex(tempX + pointB, tempY, tempZ + pointA).uv(uEnd, vStart).endVertex();
+        buffer.vertex(tempX + pointB, tempY, tempZ + pointB).uv(uStart, vStart).endVertex();
+        buffer.vertex(tempX + pointB, tempY + length, tempZ + pointB).uv(uStart, vEnd).endVertex();
+        buffer.vertex(tempX + pointA, tempY + length, tempZ + pointB).uv(uEnd, vEnd).endVertex();
+        buffer.vertex(tempX + pointA, tempY, tempZ + pointB).uv(uEnd, vStart).endVertex();
+        buffer.vertex(tempX + pointA, tempY, tempZ + pointA).uv(uStart, vStart).endVertex();
+        buffer.vertex(tempX + pointA, tempY + length, tempZ + pointA).uv(uStart, vEnd).endVertex();
+        tess.end();
         //RenderSystem.setupGui3DDiffuseLighting();
         GL11.glEnable(GL11.GL_CULL_FACE);
         //GL11.glEnable(GL11.GL_BLEND);

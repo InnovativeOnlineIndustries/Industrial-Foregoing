@@ -21,23 +21,25 @@
  */
 package com.buuz135.industrial.item;
 
-import net.minecraft.data.IFinishedRecipe;
-import net.minecraft.item.ItemGroup;
+import net.minecraft.data.recipes.FinishedRecipe;
+import net.minecraft.world.item.CreativeModeTab;
 
 import java.util.function.Consumer;
 
+import net.minecraft.world.item.Item.Properties;
+
 public class RecipelessCustomItem extends IFCustomItem {
 
-    public RecipelessCustomItem(String name, ItemGroup group, Properties builder) {
+    public RecipelessCustomItem(String name, CreativeModeTab group, Properties builder) {
         super(name, group, builder);
     }
 
-    public RecipelessCustomItem(String name, ItemGroup group) {
+    public RecipelessCustomItem(String name, CreativeModeTab group) {
         super(name, group);
     }
 
     @Override
-    public void registerRecipe(Consumer<IFinishedRecipe> consumer) {
+    public void registerRecipe(Consumer<FinishedRecipe> consumer) {
 
     }
 }

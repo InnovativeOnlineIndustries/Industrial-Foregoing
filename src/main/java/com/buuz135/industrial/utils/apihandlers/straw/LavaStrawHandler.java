@@ -21,13 +21,13 @@
  */
 package com.buuz135.industrial.utils.apihandlers.straw;
 
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.fluid.Fluid;
-import net.minecraft.fluid.Fluids;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.util.DamageSource;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.level.material.Fluid;
+import net.minecraft.world.level.material.Fluids;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.level.Level;
 
 import javax.annotation.ParametersAreNonnullByDefault;
 
@@ -39,10 +39,10 @@ public class LavaStrawHandler extends StrawHandlerBase {
     }
 
     @Override
-    public void onDrink(World world, BlockPos pos, Fluid stack, PlayerEntity player, boolean fromFluidContainer) {
-        player.attackEntityFrom(DamageSource.LAVA, 7);
-        player.setFire(30);
-        CompoundNBT tag = player.getPersistentData();
+    public void onDrink(Level world, BlockPos pos, Fluid stack, Player player, boolean fromFluidContainer) {
+        player.hurt(DamageSource.LAVA, 7);
+        player.setSecondsOnFire(30);
+        CompoundTag tag = player.getPersistentData();
         tag.putLong("lavaDrink", world.getGameTime());
     }
 }

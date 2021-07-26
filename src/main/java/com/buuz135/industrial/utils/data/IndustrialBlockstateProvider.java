@@ -24,11 +24,11 @@ package com.buuz135.industrial.utils.data;
 import com.buuz135.industrial.block.IndustrialBlock;
 import com.buuz135.industrial.module.ModuleAgricultureHusbandry;
 import com.buuz135.industrial.module.ModuleTransportStorage;
-import net.minecraft.block.Block;
+import net.minecraft.world.level.block.Block;
 import net.minecraft.data.DataGenerator;
-import net.minecraft.state.DirectionProperty;
-import net.minecraft.util.Direction;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.world.level.block.state.properties.DirectionProperty;
+import net.minecraft.core.Direction;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.client.model.generators.BlockStateProvider;
 import net.minecraftforge.client.model.generators.ConfiguredModel;
 import net.minecraftforge.client.model.generators.ModelFile;
@@ -62,9 +62,9 @@ public class IndustrialBlockstateProvider extends BlockStateProvider {
                     VariantBlockStateBuilder builder = getVariantBuilder(industrialBlock);
                     if (industrialBlock.getRotationType().getProperties().length > 0) {
                         for (DirectionProperty property : industrialBlock.getRotationType().getProperties()) {
-                            for (Direction allowedValue : property.getAllowedValues()) {
+                            for (Direction allowedValue : property.getPossibleValues()) {
                                 builder.partialState().with(property, allowedValue)
-                                        .addModels(new ConfiguredModel(new ModelFile.UncheckedModelFile(getModel(industrialBlock)), allowedValue.getHorizontalIndex() == -1 ? allowedValue.getOpposite().getAxisDirection().getOffset() * 90 : 0, (int) allowedValue.getOpposite().getHorizontalAngle(), false));
+                                        .addModels(new ConfiguredModel(new ModelFile.UncheckedModelFile(getModel(industrialBlock)), allowedValue.get2DDataValue() == -1 ? allowedValue.getOpposite().getAxisDirection().getStep() * 90 : 0, (int) allowedValue.getOpposite().toYRot(), false));
                             }
                         }
                     } else {

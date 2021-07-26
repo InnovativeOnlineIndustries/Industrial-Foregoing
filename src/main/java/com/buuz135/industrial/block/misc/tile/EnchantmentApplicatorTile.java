@@ -30,14 +30,14 @@ import com.hrznstudio.titanium.annotation.Save;
 import com.hrznstudio.titanium.component.energy.EnergyStorageComponent;
 import com.hrznstudio.titanium.component.fluid.SidedFluidTankComponent;
 import com.hrznstudio.titanium.component.inventory.SidedInventoryComponent;
-import net.minecraft.enchantment.Enchantment;
-import net.minecraft.enchantment.EnchantmentHelper;
-import net.minecraft.inventory.container.RepairContainer;
-import net.minecraft.item.DyeColor;
-import net.minecraft.item.EnchantedBookItem;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.Items;
-import net.minecraft.tileentity.TileEntity;
+import net.minecraft.world.item.enchantment.Enchantment;
+import net.minecraft.world.item.enchantment.EnchantmentHelper;
+import net.minecraft.world.inventory.AnvilMenu;
+import net.minecraft.world.item.DyeColor;
+import net.minecraft.world.item.EnchantedBookItem;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
+import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
 import net.minecraftforge.fluids.capability.IFluidHandler;
@@ -62,7 +62,7 @@ public class EnchantmentApplicatorTile extends IndustrialProcessingTile<Enchantm
         this.addTank(tank = (SidedFluidTankComponent<EnchantmentApplicatorTile>) new SidedFluidTankComponent<EnchantmentApplicatorTile>("essence", EnchantmentApplicatorConfig.tankSize, 34, 20, 0).
                 setColor(DyeColor.LIME).
                 setComponentHarness(this).
-                setValidator(fluidStack -> fluidStack.getFluid().isIn(IndustrialTags.Fluids.EXPERIENCE))
+                setValidator(fluidStack -> fluidStack.getFluid().is(IndustrialTags.Fluids.EXPERIENCE))
         );
         this.addInventory(inputFirst = (SidedInventoryComponent<EnchantmentApplicatorTile>) new SidedInventoryComponent<EnchantmentApplicatorTile>("inputFirst", 60, 40, 1, 1).
                 setColor(DyeColor.BLUE).
@@ -86,7 +86,7 @@ public class EnchantmentApplicatorTile extends IndustrialProcessingTile<Enchantm
     public boolean canIncrease() {
         Pair<ItemStack, Integer> output = updateRepairOutput();
         long amount = this.tank.getFluidAmount();
-        TileEntity tileEntity = this.world.getTileEntity(this.pos.up());
+        BlockEntity tileEntity = this.level.getBlockEntity(this.worldPosition.above());
         if (tileEntity != null && tileEntity.getCapability(CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY).isPresent()){
             amount += tileEntity.getCapability(CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY).map(iFluidHandler -> iFluidHandler.drain(new FluidStack(ModuleCore.ESSENCE.getSourceFluid(), Integer.MAX_VALUE), IFluidHandler.FluidAction.SIMULATE).getAmount()).orElse(0);
         }
@@ -112,7 +112,7 @@ public class EnchantmentApplicatorTile extends IndustrialProcessingTile<Enchantm
             this.inputSecond.getStackInSlot(0).shrink(1);
             this.output.setStackInSlot(0, output.getLeft());
             AtomicInteger amount = new AtomicInteger(getEssenceConsumed(output.getRight()));
-            TileEntity tileEntity = this.world.getTileEntity(this.pos.up());
+            BlockEntity tileEntity = this.level.getBlockEntity(this.worldPosition.above());
             if (tileEntity != null){
                 tileEntity.getCapability(CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY).ifPresent(iFluidHandler -> amount.addAndGet(-iFluidHandler.drain(new FluidStack(ModuleCore.ESSENCE.getSourceFluid(), amount.get()), IFluidHandler.FluidAction.EXECUTE).getAmount()));
             }
@@ -152,37 +152,37 @@ public class EnchantmentApplicatorTile extends IndustrialProcessingTile<Enchantm
             ItemStack inputFirstCopy = inputFirst.copy();
             ItemStack inputSecond = this.inputSecond.getStackInSlot(0);
             Map<Enchantment, Integer> map = EnchantmentHelper.getEnchantments(inputFirstCopy);
-            j = j + inputFirst.getRepairCost() + (inputSecond.isEmpty() ? 0 : inputSecond.getRepairCost());
+            j = j + inputFirst.getBaseRepairCost() + (inputSecond.isEmpty() ? 0 : inputSecond.getBaseRepairCost());
             ;
             boolean addEnchantment = false;
             if (!inputSecond.isEmpty()) {
                 addEnchantment = inputSecond.getItem() == Items.ENCHANTED_BOOK && !EnchantedBookItem.getEnchantments(inputSecond).isEmpty();
-                if (inputFirstCopy.isDamageable() && inputFirstCopy.getItem().getIsRepairable(inputFirst, inputSecond)) { //Combine
-                    int l2 = Math.min(inputFirstCopy.getDamage(), inputFirstCopy.getMaxDamage() / 4);
+                if (inputFirstCopy.isDamageableItem() && inputFirstCopy.getItem().isValidRepairItem(inputFirst, inputSecond)) { //Combine
+                    int l2 = Math.min(inputFirstCopy.getDamageValue(), inputFirstCopy.getMaxDamage() / 4);
                     if (l2 <= 0) { //No Output
                         return Pair.of(ItemStack.EMPTY, 0);
                     }
                     for (int i3 = 0; l2 > 0 && i3 < inputSecond.getCount(); ++i3) {
-                        int j3 = inputFirstCopy.getDamage() - l2;
-                        inputFirstCopy.setDamage(j3);
+                        int j3 = inputFirstCopy.getDamageValue() - l2;
+                        inputFirstCopy.setDamageValue(j3);
                         ++i;
-                        l2 = Math.min(inputFirstCopy.getDamage(), inputFirstCopy.getMaxDamage() / 4);
+                        l2 = Math.min(inputFirstCopy.getDamageValue(), inputFirstCopy.getMaxDamage() / 4);
                     }
                 } else {
-                    if (!addEnchantment && (inputFirstCopy.getItem() != inputSecond.getItem() || !inputFirstCopy.isDamageable())) {
+                    if (!addEnchantment && (inputFirstCopy.getItem() != inputSecond.getItem() || !inputFirstCopy.isDamageableItem())) {
                         return Pair.of(ItemStack.EMPTY, 0); //No output
                     }
-                    if (inputFirstCopy.isDamageable() && !addEnchantment) {
-                        int l = inputFirst.getMaxDamage() - inputFirst.getDamage();
-                        int i1 = inputSecond.getMaxDamage() - inputSecond.getDamage();
+                    if (inputFirstCopy.isDamageableItem() && !addEnchantment) {
+                        int l = inputFirst.getMaxDamage() - inputFirst.getDamageValue();
+                        int i1 = inputSecond.getMaxDamage() - inputSecond.getDamageValue();
                         int j1 = i1 + inputFirstCopy.getMaxDamage() * 12 / 100;
                         int k1 = l + j1;
                         int l1 = inputFirstCopy.getMaxDamage() - k1;
                         if (l1 < 0) {
                             l1 = 0;
                         }
-                        if (l1 < inputFirstCopy.getDamage()) {
-                            inputFirstCopy.setDamage(l1);
+                        if (l1 < inputFirstCopy.getDamageValue()) {
+                            inputFirstCopy.setDamageValue(l1);
                             i += 2;
                         }
                     }
@@ -194,7 +194,7 @@ public class EnchantmentApplicatorTile extends IndustrialProcessingTile<Enchantm
                             int enchantmentValue = map.getOrDefault(enchantment1, 0);
                             int j2 = map1.get(enchantment1);
                             j2 = enchantmentValue == j2 ? j2 + 1 : Math.max(j2, enchantmentValue);
-                            boolean flag1 = enchantment1.canApply(inputFirst);
+                            boolean flag1 = enchantment1.canEnchant(inputFirst);
                             for (Enchantment enchantment : map.keySet()) {
                                 if (enchantment != enchantment1 && !enchantment1.isCompatibleWith(enchantment)) {
                                     flag1 = false;
@@ -244,12 +244,12 @@ public class EnchantmentApplicatorTile extends IndustrialProcessingTile<Enchantm
                 inputFirstCopy = ItemStack.EMPTY;
             }
             if (!inputFirstCopy.isEmpty()) {
-                int repairCost = inputFirstCopy.getRepairCost();
-                if (!inputSecond.isEmpty() && repairCost < inputSecond.getRepairCost()) {
-                    repairCost = inputSecond.getRepairCost();
+                int repairCost = inputFirstCopy.getBaseRepairCost();
+                if (!inputSecond.isEmpty() && repairCost < inputSecond.getBaseRepairCost()) {
+                    repairCost = inputSecond.getBaseRepairCost();
                 }
                 if (k != i || k == 0) {
-                    repairCost = RepairContainer.getNewRepairCost(repairCost);
+                    repairCost = AnvilMenu.calculateIncreasedRepairCost(repairCost);
                 }
                 inputFirstCopy.setRepairCost(repairCost);
                 EnchantmentHelper.setEnchantments(map, inputFirstCopy);

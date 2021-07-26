@@ -16,7 +16,7 @@ buildscript {
         }
     }
     dependencies {
-        classpath group: 'net.minecraftforge.gradle', name: 'ForgeGradle', version: '3.+', changing: true
+        classpath group: 'net.minecraftforge.gradle', name: 'ForgeGradle', version: '5.1.+', changing: true
         classpath "gradle.plugin.com.matthewprenger:CurseGradle:1.4.0"
     }
 }
@@ -41,13 +41,14 @@ if (System.getenv('BUILD_NUMBER') != null) {
     version += "-" + System.getenv('BUILD_NUMBER')
 }
 
-sourceCompatibility = targetCompatibility = '1.8'
-compileJava {
-    sourceCompatibility = targetCompatibility = '1.8'
-}
+java.toolchain.languageVersion = JavaLanguageVersion.of(16)
+
+println('Java: ' + System.getProperty('java.version') + ' JVM: ' + System.getProperty('java.vm.version') + '(' + System.getProperty('java.vendor') + ') Arch: ' + System.getProperty('os.arch'))
 
 minecraft {
-    mappings channel: 'snapshot', version: '20200916-1.16.2'
+    mappings channel: 'official', version: '1.17.1'
+    accessTransformer = file('src/main/resources/META-INF/accesstransformer.cfg')
+
     runs {
         client {
             workingDirectory project.file('run')
@@ -146,30 +147,30 @@ repositories {
 }
 
 dependencies {
-    minecraft 'net.minecraftforge:forge:1.16.5-36.0.1'
+    minecraft 'net.minecraftforge:forge:1.17.1-37.0.10'
     if (findProject(':titanium') != null) {
-        compile project(':titanium')
+        implementation project(':titanium')
     } else {
-        compile fg.deobf (project.dependencies.create('com.hrznstudio:titanium:1.16.5-3.2.8.2'))
+        implementation fg.deobf (project.dependencies.create('com.hrznstudio:titanium:1.16.5-3.2.8.2'))
     }
     //if (findProject(':workspace') == null) {
-    compileOnly fg.deobf("mezz.jei:jei-1.16.4:7.6.1.71:api")
-    // at runtime, use the full JEI jar
-    runtimeOnly fg.deobf("mezz.jei:jei-1.16.4:7.6.1.71")
-    //}
-    compileOnly fg.deobf("curse.maven:astral-sorcery-241721:3156477")
-    compileOnly fg.deobf("blusunrize.immersiveengineering:ImmersiveEngineering:1.16.3-4.1.0-+")
-    compileOnly fg.deobf("vazkii.patchouli:Patchouli:1.16.4-53.1:api")
-    runtimeOnly fg.deobf("vazkii.patchouli:Patchouli:1.16.4-53.1")
-    //runtimeOnly fg.deobf("curse.maven:zycraft:3099577")
-    compileOnly fg.deobf("curse.maven:farmers-delight-398521:3091999")
-    compileOnly fg.deobf("top.theillusivec4.curios:curios-forge:1.16.5-4.0.5.2:api")
-    runtimeOnly fg.deobf("top.theillusivec4.curios:curios-forge:1.16.5-4.0.5.2")
-    compileOnly fg.deobf("dev.ftb.mods:ftb-chunks-forge:1605.3.1-build.25")
-    compileOnly fg.deobf("me.shedaniel:architectury-forge:1.19.27")
-    compileOnly fg.deobf("dev.ftb.mods:ftb-library-forge:1605.3.1-build.48")
-    compileOnly fg.deobf("dev.ftb.mods:ftb-teams-forge:1605.2.1-build.17")
-    compileOnly fg.deobf("dev.ftb.mods:ftb-ranks-forge:1605.1.4-build.6")
+//    compileOnly fg.deobf("mezz.jei:jei-1.16.4:7.6.1.71:api")
+//    // at runtime, use the full JEI jar
+//    runtimeOnly fg.deobf("mezz.jei:jei-1.16.4:7.6.1.71")
+//    //}
+//    compileOnly fg.deobf("curse.maven:astral-sorcery-241721:3156477")
+//    compileOnly fg.deobf("blusunrize.immersiveengineering:ImmersiveEngineering:1.16.3-4.1.0-+")
+//    compileOnly fg.deobf("vazkii.patchouli:Patchouli:1.16.4-53.1:api")
+//    runtimeOnly fg.deobf("vazkii.patchouli:Patchouli:1.16.4-53.1")
+//    //runtimeOnly fg.deobf("curse.maven:zycraft:3099577")
+//    compileOnly fg.deobf("curse.maven:farmers-delight-398521:3091999")
+//    compileOnly fg.deobf("top.theillusivec4.curios:curios-forge:1.16.5-4.0.5.2:api")
+//    runtimeOnly fg.deobf("top.theillusivec4.curios:curios-forge:1.16.5-4.0.5.2")
+//    compileOnly fg.deobf("dev.ftb.mods:ftb-chunks-forge:1605.3.1-build.25")
+//    compileOnly fg.deobf("me.shedaniel:architectury-forge:1.19.27")
+//    compileOnly fg.deobf("dev.ftb.mods:ftb-library-forge:1605.3.1-build.48")
+//    compileOnly fg.deobf("dev.ftb.mods:ftb-teams-forge:1605.2.1-build.17")
+//    compileOnly fg.deobf("dev.ftb.mods:ftb-ranks-forge:1605.1.4-build.6")
 }
 
 afterEvaluate {

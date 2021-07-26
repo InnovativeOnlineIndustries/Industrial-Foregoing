@@ -23,16 +23,16 @@ package com.buuz135.industrial.gui.component.custom;
 
 import com.buuz135.industrial.api.conveyor.gui.PositionedGuiComponent;
 import com.buuz135.industrial.gui.component.StateButtonInfo;
-import com.mojang.blaze3d.matrix.MatrixStack;
+import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.systems.RenderSystem;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.audio.SimpleSound;
-import net.minecraft.client.gui.AbstractGui;
-import net.minecraft.client.gui.screen.inventory.ContainerScreen;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.util.SoundCategory;
-import net.minecraft.util.SoundEvents;
-import net.minecraft.util.text.ITextComponent;
+import net.minecraft.client.resources.sounds.SimpleSoundInstance;
+import net.minecraft.client.gui.GuiComponent;
+import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.sounds.SoundSource;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.network.chat.Component;
 
 import javax.annotation.Nullable;
 import java.util.Arrays;
@@ -51,31 +51,31 @@ public abstract class TexturedStateButtonGuiComponent extends PositionedGuiCompo
     }
 
     @Override
-    public boolean handleClick(ContainerScreen conveyor, int guiX, int guiY, double mouseX, double mouseY) {
+    public boolean handleClick(AbstractContainerScreen conveyor, int guiX, int guiY, double mouseX, double mouseY) {
         if (conveyor instanceof ICanSendNetworkMessage) {
-            ((ICanSendNetworkMessage) conveyor).sendMessage(id, new CompoundNBT());
+            ((ICanSendNetworkMessage) conveyor).sendMessage(id, new CompoundTag());
         }
-        Minecraft.getInstance().getSoundHandler().play(new SimpleSound(SoundEvents.UI_BUTTON_CLICK, SoundCategory.PLAYERS, 1.0F, 1.0F, Minecraft.getInstance().player.getPosition()));//getPos
+        Minecraft.getInstance().getSoundManager().play(new SimpleSoundInstance(SoundEvents.UI_BUTTON_CLICK, SoundSource.PLAYERS, 1.0F, 1.0F, Minecraft.getInstance().player.blockPosition()));//getPos
         return true;
     }
 
     @Override
-    public void drawGuiBackgroundLayer(MatrixStack stack, int guiX, int guiY, double mouseX, double mouseY) {
+    public void drawGuiBackgroundLayer(PoseStack stack, int guiX, int guiY, double mouseX, double mouseY) {
         StateButtonInfo buttonInfo = getStateInfo();
         if (buttonInfo != null) {
             RenderSystem.color4f(1, 1, 1, 1);
-            Minecraft.getInstance().getTextureManager().bindTexture(buttonInfo.getTexture());
-            Minecraft.getInstance().currentScreen.blit(stack, guiX + getXPos(), guiY + getYPos(), buttonInfo.getTextureX(), buttonInfo.getTextureY(), getXSize(), getYSize()); //blit
+            Minecraft.getInstance().getTextureManager().bind(buttonInfo.getTexture());
+            Minecraft.getInstance().screen.blit(stack, guiX + getXPos(), guiY + getYPos(), buttonInfo.getTextureX(), buttonInfo.getTextureY(), getXSize(), getYSize()); //blit
         }
     }
 
     @Override
-    public void drawGuiForegroundLayer(MatrixStack stack, int guiX, int guiY, double mouseX, double mouseY) {
+    public void drawGuiForegroundLayer(PoseStack stack, int guiX, int guiY, double mouseX, double mouseY) {
         StateButtonInfo buttonInfo = getStateInfo();
         if (buttonInfo != null && isInside(mouseX, mouseY)) {
             RenderSystem.disableLighting();
             RenderSystem.enableDepthTest();
-            AbstractGui.fill(stack, getXPos() - guiX, getYPos() - guiY, getXPos() + getXSize() - guiX, getYPos() + getYSize() - guiY, -2130706433);//fill
+            GuiComponent.fill(stack, getXPos() - guiX, getYPos() - guiY, getXPos() + getXSize() - guiX, getYPos() + getYSize() - guiY, -2130706433);//fill
             RenderSystem.enableLighting();
             RenderSystem.disableAlphaTest();
         }
@@ -83,7 +83,7 @@ public abstract class TexturedStateButtonGuiComponent extends PositionedGuiCompo
 
     @Nullable
     @Override
-    public List<ITextComponent> getTooltip(int guiX, int guiY, double mouseX, double mouseY) {
+    public List<Component> getTooltip(int guiX, int guiY, double mouseX, double mouseY) {
         StateButtonInfo buttonInfo = getStateInfo();
         if (buttonInfo != null) {
             return Arrays.asList(buttonInfo.getTooltip());

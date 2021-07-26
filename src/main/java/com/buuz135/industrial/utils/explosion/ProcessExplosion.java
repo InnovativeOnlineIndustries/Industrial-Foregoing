@@ -1,22 +1,22 @@
 package com.buuz135.industrial.utils.explosion;
 
 import com.buuz135.industrial.IndustrialForegoing;
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockState;
-import net.minecraft.block.Blocks;
-import net.minecraft.block.FallingBlock;
-import net.minecraft.block.material.Material;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.passive.CatEntity;
-import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.FallingBlock;
+import net.minecraft.world.level.material.Material;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.animal.Cat;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.server.MinecraftServer;
-import net.minecraft.util.DamageSource;
-import net.minecraft.util.math.AxisAlignedBB;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.MathHelper;
-import net.minecraft.util.math.vector.Vector3f;
-import net.minecraft.world.gen.SimplexNoiseGenerator;
-import net.minecraft.world.server.ServerWorld;
+import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.phys.AABB;
+import net.minecraft.core.BlockPos;
+import net.minecraft.util.Mth;
+import com.mojang.math.Vector3f;
+import net.minecraft.world.level.levelgen.synth.SimplexNoise;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraftforge.fluids.IFluidBlock;
 
 import java.util.Arrays;
@@ -30,13 +30,13 @@ import java.util.function.Consumer;
  */
 public class ProcessExplosion {
 
-    public static DamageSource fusionExplosion = new DamageSource("damage.if.nuke").setExplosion().setDamageBypassesArmor().setFireDamage();
+    public static DamageSource fusionExplosion = new DamageSource("damage.if.nuke").setExplosion().bypassArmor().setIsFire();
 
     /**
      * The origin of the explosion.
      */
     public final Vector3f origin;
-    private final ServerWorld world;
+    private final ServerLevel world;
     private final MinecraftServer server;
     private final int minimumDelay;
     public double[] angularResistance;
@@ -74,7 +74,7 @@ public class ProcessExplosion {
      *                         If the explosion calculation completes before this time is up the process will wait till this amount of time has based before detonating.
      *                         Use -1 for manual detonation.
      */
-    public ProcessExplosion(BlockPos origin, int radius, ServerWorld world, int minimumDelayTime, String owner) {
+    public ProcessExplosion(BlockPos origin, int radius, ServerLevel world, int minimumDelayTime, String owner) {
         this.origin = new Vector3f(origin.getX(), origin.getY(), origin.getZ());
         this.shortPos = new ShortPos(origin);
         this.world = world;
@@ -85,7 +85,7 @@ public class ProcessExplosion {
 
         IndustrialForegoing.LOGGER.info("Explosion Calculation Started for " + radius + " Block radius detonation! by " + owner);
         maxRadius = radius;
-        lavaState = Blocks.LAVA.getDefaultState();
+        lavaState = Blocks.LAVA.defaultBlockState();
     }
 
     public void updateProcess() {
@@ -103,7 +103,7 @@ public class ProcessExplosion {
             updateCalculation();
             t = System.currentTimeMillis() - t;
             calcWait = t / 40;
-            IndustrialForegoing.LOGGER.debug("Calculation Progress: " + MathHelper.floor((((double) radius / (double) maxRadius) * 100D)) + "% " + (Runtime.getRuntime().freeMemory() / 1000000));
+            IndustrialForegoing.LOGGER.debug("Calculation Progress: " + Mth.floor((((double) radius / (double) maxRadius) * 100D)) + "% " + (Runtime.getRuntime().freeMemory() / 1000000));
             if (calcWait > 0) {
                 IndustrialForegoing.LOGGER.debug("Explosion Calc loop took " + t + "ms! Waiting " + calcWait + " ticks before continuing");
             }
@@ -120,18 +120,18 @@ public class ProcessExplosion {
     }
 
     public void updateCalculation() {
-        BlockPos originPos = new BlockPos(origin.getX(), origin.getY(), origin.getZ());
+        BlockPos originPos = new BlockPos(origin.x(), origin.y(), origin.z());
 
         double maxCoreHeight = 20D * (maxRadius / 150D);
 
         Vector3f posVecUp = new Vector3f();
         Vector3f posVecDown = new Vector3f();
-        SimplexNoiseGenerator noise = new SimplexNoiseGenerator(world.getRandom());
+        SimplexNoise noise = new SimplexNoise(world.getRandom());
         for (int x = originPos.getX() - radius; x < originPos.getX() + radius; x++) {
             for (int z = originPos.getZ() - radius; z < originPos.getZ() + radius; z++) {
                 double dist = calculateDistanceBetweenPoints(x, z, originPos.getX(), originPos.getZ());
                 if (dist < radius && dist >= radius - 1) {
-                    posVecUp.set(x, origin.getY(), z);
+                    posVecUp.set(x, origin.y(), z);
                     double radialAngle = getRadialAngle(posVecUp);
                     double radialResistance = getRadialResistance(radialAngle);
                     double angularLoad = (meanResistance / radialResistance) * 1;
@@ -150,9 +150,9 @@ public class ProcessExplosion {
                     heightDown += (Math.abs(sim) * 4) + world.getRandom().nextDouble();
                     heightUp += (Math.abs(sim) * 4) + world.getRandom().nextDouble();
 
-                    posVecDown.set(posVecUp.getX(), posVecUp.getY(), posVecUp.getZ());
+                    posVecDown.set(posVecUp.x(), posVecUp.y(), posVecUp.z());
                     double resist = trace(posVecUp, power * (1 + 8 * radialPos), (int) heightUp * 3, 1, 0, 0);
-                    posVecDown.set(posVecDown.getX(), posVecDown.getY() - 1, posVecDown.getZ());
+                    posVecDown.set(posVecDown.x(), posVecDown.y() - 1, posVecDown.z());
                     resist += trace(posVecDown, power, (int) heightDown, -1, 0, 0);
                     resist *= 1 / angularLoad;
 
@@ -193,7 +193,7 @@ public class ProcessExplosion {
     }
 
     public double getRadialAngle(Vector3f pos) {
-        double theta = Math.atan2(pos.getX() - origin.getX(), origin.getZ() - pos.getZ());
+        double theta = Math.atan2(pos.x() - origin.x(), origin.z() - pos.z());
 
         if (theta < 0.0) {
             theta += Math.PI * 2;
@@ -203,11 +203,11 @@ public class ProcessExplosion {
     }
 
     public double getRadialResistance(double radialPos) {
-        int min = MathHelper.floor(radialPos);
+        int min = Mth.floor(radialPos);
         if (min >= angularResistance.length) {
             min -= angularResistance.length;
         }
-        int max = MathHelper.ceil(radialPos);
+        int max = Mth.ceil(radialPos);
         if (max >= angularResistance.length) {
             max -= angularResistance.length;
         }
@@ -218,12 +218,12 @@ public class ProcessExplosion {
     }
 
     public void addRadialResistance(double radialPos, double power) {
-        int min = MathHelper.floor(radialPos);
+        int min = Mth.floor(radialPos);
         if (min >= angularResistance.length) {
             min -= angularResistance.length;
         }
 
-        int max = MathHelper.ceil(radialPos);
+        int max = Mth.ceil(radialPos);
         if (max >= angularResistance.length) {
             max -= angularResistance.length;
         }
@@ -239,7 +239,7 @@ public class ProcessExplosion {
         if (dist > 100) {
             dist = 100;
         }
-        if (dist <= 0 || power <= 0 || posVec.getY() < 0 || posVec.getY() > 255) {
+        if (dist <= 0 || power <= 0 || posVec.y() < 0 || posVec.y() > 255) {
             return totalResist;
         }
 
@@ -248,11 +248,11 @@ public class ProcessExplosion {
         Integer iPos = shortPos.getIntPos(posVec);
 
         if (scannedCache.contains(iPos) || destroyedCache.contains(iPos)) {
-            posVec.set(posVec.getX(), posVec.getY() + traceDir, posVec.getZ());
+            posVec.set(posVec.x(), posVec.y() + traceDir, posVec.z());
             return trace(posVec, power, dist, traceDir, totalResist, travel);
         }
 
-        BlockPos pos = new BlockPos(posVec.getX(), posVec.getY(), posVec.getZ());
+        BlockPos pos = new BlockPos(posVec.x(), posVec.y(), posVec.z());
 
         double r = 1;
 
@@ -292,7 +292,7 @@ public class ProcessExplosion {
         totalResist += r;
         power -= r;
 
-        if (dist == 1 && traceDir == -1 && lava && world.getRandom().nextInt(250) == 0 && !world.isAirBlock(pos.down())) {
+        if (dist == 1 && traceDir == -1 && lava && world.getRandom().nextInt(250) == 0 && !world.isEmptyBlock(pos.below())) {
             dist = 0;
             if (destroyedCache.contains(iPos)) {
                 destroyedCache.remove(iPos);
@@ -302,7 +302,7 @@ public class ProcessExplosion {
             scannedCache.add(iPos);
         }
 
-        posVec.set(posVec.getX(), posVec.getY() + traceDir, posVec.getZ());
+        posVec.set(posVec.x(), posVec.y() + traceDir, posVec.z());
         return trace(posVec, power, dist, traceDir, totalResist, travel);
     }
 
@@ -327,22 +327,22 @@ public class ProcessExplosion {
 
         IndustrialForegoing.LOGGER.debug("Removing Blocks!");
         //LogHelper.startTimer("Adding Blocks For Removal");
-        final BlockPos pos = new BlockPos(origin.getX(), origin.getY(), origin.getZ());
+        final BlockPos pos = new BlockPos(origin.x(), origin.y(), origin.z());
         new Thread(() -> {
-            List<Entity> list = world.getEntitiesWithinAABB(Entity.class, new AxisAlignedBB(pos, pos.add(1, 1, 1)).grow(radius * 2.5, radius * 2.5, radius * 2.5));
+            List<Entity> list = world.getEntitiesOfClass(Entity.class, new AABB(pos, pos.offset(1, 1, 1)).inflate(radius * 2.5, radius * 2.5, radius * 2.5));
             for (Entity e : list) {
-                if (e instanceof CatEntity) continue;
+                if (e instanceof Cat) continue;
                 float dmg = 10000F;
-                if (e instanceof PlayerEntity) {
+                if (e instanceof Player) {
                     for (int i = 0; i < 100; i++) {
-                        e.attackEntityFrom(fusionExplosion, 100f);
+                        e.hurt(fusionExplosion, 100f);
                     }
                 } else {
-                    e.attackEntityFrom(fusionExplosion, dmg);
+                    e.hurt(fusionExplosion, dmg);
                 }
             }
         }).start();
-        ExplosionHelper removalHelper = new ExplosionHelper(world, new BlockPos(origin.getX(), origin.getY(), origin.getZ()), shortPos);
+        ExplosionHelper removalHelper = new ExplosionHelper(world, new BlockPos(origin.x(), origin.y(), origin.z()), shortPos);
         int i = 0;
 
         removalHelper.setBlocksForRemoval(destroyedBlocks);
@@ -351,7 +351,7 @@ public class ProcessExplosion {
         //LogHelper.startTimer("Adding Lava");
 
         for (Integer posI : lavaPositions) {
-            world.setBlockState(shortPos.getActualPos(posI), lavaState);
+            world.setBlockAndUpdate(shortPos.getActualPos(posI), lavaState);
         }
 
         //LogHelper.stopTimer();

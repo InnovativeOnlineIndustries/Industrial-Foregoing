@@ -24,7 +24,7 @@ package com.buuz135.industrial.registry;
 import com.buuz135.industrial.api.plant.PlantRecollectable;
 import com.buuz135.industrial.api.straw.StrawHandler;
 import com.buuz135.industrial.utils.Reference;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.registries.ForgeRegistry;
 import net.minecraftforge.registries.RegistryBuilder;
 
