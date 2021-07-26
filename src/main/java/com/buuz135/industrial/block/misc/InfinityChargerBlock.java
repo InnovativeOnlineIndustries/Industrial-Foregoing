@@ -34,6 +34,8 @@ import net.minecraft.world.item.Items;
 import java.util.function.Consumer;
 
 import com.hrznstudio.titanium.block.RotatableBlock.RotationType;
+
+import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockBehaviour.Properties;
 
 public class InfinityChargerBlock extends IndustrialBlock<InfinityChargerTile> {
@@ -43,7 +45,7 @@ public class InfinityChargerBlock extends IndustrialBlock<InfinityChargerTile> {
     }
 
     @Override
-    public IFactory<InfinityChargerTile> getTileEntityFactory() {
+    public BlockEntityType.BlockEntitySupplier<InfinityChargerTile> getTileEntityFactory() {
         return InfinityChargerTile::new;
     }
 

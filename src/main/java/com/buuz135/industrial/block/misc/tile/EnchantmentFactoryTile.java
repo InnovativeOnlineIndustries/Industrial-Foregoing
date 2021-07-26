@@ -30,11 +30,15 @@ import com.hrznstudio.titanium.component.energy.EnergyStorageComponent;
 import com.hrznstudio.titanium.component.fluid.FluidTankComponent;
 import com.hrznstudio.titanium.component.fluid.SidedFluidTankComponent;
 import com.hrznstudio.titanium.component.inventory.SidedInventoryComponent;
+
+import net.minecraft.core.BlockPos;
 import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.item.DyeColor;
 import net.minecraft.world.item.EnchantedBookItem;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
+import net.minecraft.world.level.block.state.BlockState;
+
 import net.minecraftforge.fluids.capability.IFluidHandler;
 
 public class EnchantmentFactoryTile extends IndustrialProcessingTile<EnchantmentFactoryTile> {
@@ -48,8 +52,8 @@ public class EnchantmentFactoryTile extends IndustrialProcessingTile<Enchantment
     @Save
     private SidedInventoryComponent<EnchantmentFactoryTile> output;
 
-    public EnchantmentFactoryTile() {
-        super(ModuleMisc.ENCHANTMENT_FACTORY, 100, 40);
+    public EnchantmentFactoryTile(BlockPos blockPos, BlockState blockState) {
+        super(ModuleMisc.ENCHANTMENT_FACTORY, 100, 40, blockPos, blockState);
         this.addTank(tank = (SidedFluidTankComponent<EnchantmentFactoryTile>) new SidedFluidTankComponent<EnchantmentFactoryTile>("essence", EnchantmentFactoryConfig.tankSize, 34, 20, 0).
                 setColor(DyeColor.LIME).
                 setTankAction(FluidTankComponent.Action.FILL).

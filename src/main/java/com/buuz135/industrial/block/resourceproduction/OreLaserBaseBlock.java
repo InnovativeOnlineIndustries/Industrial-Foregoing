@@ -34,6 +34,7 @@ import net.minecraftforge.common.Tags;
 
 import java.util.function.Consumer;
 
+import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockBehaviour.Properties;
 
 public class OreLaserBaseBlock extends IndustrialBlock<OreLaserBaseTile> {
@@ -43,7 +44,7 @@ public class OreLaserBaseBlock extends IndustrialBlock<OreLaserBaseTile> {
     }
 
     @Override
-    public IFactory<OreLaserBaseTile> getTileEntityFactory() {
+    public BlockEntityType.BlockEntitySupplier<OreLaserBaseTile> getTileEntityFactory() {
         return OreLaserBaseTile::new;
     }
 

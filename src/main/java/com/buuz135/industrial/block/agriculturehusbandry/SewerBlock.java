@@ -36,6 +36,8 @@ import javax.annotation.Nonnull;
 import java.util.function.Consumer;
 
 import com.hrznstudio.titanium.block.RotatableBlock.RotationType;
+
+import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockBehaviour.Properties;
 
 public class SewerBlock extends IndustrialBlock<SewerTile> {
@@ -51,8 +53,8 @@ public class SewerBlock extends IndustrialBlock<SewerTile> {
     }
 
     @Override
-    public IFactory<SewerTile> getTileEntityFactory() {
-        return () -> new SewerTile();
+    public BlockEntityType.BlockEntitySupplier<SewerTile> getTileEntityFactory() {
+        return SewerTile::new;
     }
 
     @Override

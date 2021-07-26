@@ -36,6 +36,8 @@ import javax.annotation.Nonnull;
 import java.util.function.Consumer;
 
 import com.hrznstudio.titanium.block.RotatableBlock.RotationType;
+
+import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockBehaviour.Properties;
 
 public class MaterialStoneWorkFactoryBlock extends IndustrialBlock<MaterialStoneWorkFactoryTile> {
@@ -45,8 +47,8 @@ public class MaterialStoneWorkFactoryBlock extends IndustrialBlock<MaterialStone
     }
 
     @Override
-    public IFactory<MaterialStoneWorkFactoryTile> getTileEntityFactory() {
-        return () -> new MaterialStoneWorkFactoryTile();
+    public BlockEntityType.BlockEntitySupplier<MaterialStoneWorkFactoryTile> getTileEntityFactory() {
+        return MaterialStoneWorkFactoryTile::new;
     }
 
     @Nonnull

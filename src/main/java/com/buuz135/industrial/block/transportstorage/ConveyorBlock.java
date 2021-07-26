@@ -34,6 +34,7 @@ import com.hrznstudio.titanium.recipe.generator.TitaniumShapedRecipeBuilder;
 import com.hrznstudio.titanium.util.RayTraceUtils;
 import com.hrznstudio.titanium.util.TileUtil;
 import net.minecraft.block.*;
+import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.material.Material;
 import net.minecraft.world.level.material.MaterialColor;
 import net.minecraft.data.recipes.FinishedRecipe;
@@ -237,7 +238,7 @@ public class ConveyorBlock extends BasicTileBlock<ConveyorTile> implements Simpl
     }
 
     @Override
-    public IFactory<ConveyorTile> getTileEntityFactory() {
+    public BlockEntityType.BlockEntitySupplier<ConveyorTile> getTileEntityFactory() {
         return ConveyorTile::new;
     }
 

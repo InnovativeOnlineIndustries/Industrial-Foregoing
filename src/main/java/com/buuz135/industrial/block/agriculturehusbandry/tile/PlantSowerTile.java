@@ -40,6 +40,8 @@ import net.minecraft.world.item.DyeColor;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.core.Direction;
 import net.minecraft.core.BlockPos;
+import net.minecraft.world.level.block.state.BlockState;
+
 import net.minecraftforge.common.IPlantable;
 
 import javax.annotation.Nonnull;
@@ -58,8 +60,8 @@ public class PlantSowerTile extends IndustrialAreaWorkingTile<PlantSowerTile> {
     @Save
     private LockableInventoryBundle<PlantSowerTile> input;
 
-    public PlantSowerTile() {
-        super(ModuleAgricultureHusbandry.PLANT_SOWER, RangeManager.RangeType.TOP_UP, true, PlantSowerConfig.powerPerOperation);
+    public PlantSowerTile(BlockPos blockPos, BlockState blockState) {
+        super(ModuleAgricultureHusbandry.PLANT_SOWER, RangeManager.RangeType.TOP_UP, true, PlantSowerConfig.powerPerOperation, blockPos, blockState);
         addFilter(this.filter = new ItemStackFilter("filter", 9) {
             @Override
             public void onContentChanged() {

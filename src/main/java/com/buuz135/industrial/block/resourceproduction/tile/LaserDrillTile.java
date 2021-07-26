@@ -30,6 +30,7 @@ import com.hrznstudio.titanium.annotation.Save;
 import com.hrznstudio.titanium.client.screen.addon.TextScreenAddon;
 import com.hrznstudio.titanium.component.energy.EnergyStorageComponent;
 import net.minecraft.core.BlockPos;
+import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.core.Vec3i;
@@ -43,8 +44,8 @@ public class LaserDrillTile extends IndustrialAreaWorkingTile<LaserDrillTile> {
     @Save
     private BlockPos target;
 
-    public LaserDrillTile() {
-        super(ModuleResourceProduction.LASER_DRILL, RangeManager.RangeType.BEHIND, false, LaserDrillConfig.powerPerOperation);
+    public LaserDrillTile(BlockPos blockPos, BlockState blockState) {
+        super(ModuleResourceProduction.LASER_DRILL, RangeManager.RangeType.BEHIND, false, LaserDrillConfig.powerPerOperation, blockPos, blockState);
         this.target = BlockPos.ZERO;
         addGuiAddonFactory(() -> new TextScreenAddon(ChatFormatting.DARK_GRAY + new TranslatableComponent("text.industrialforegoing.target").getString(), 44 ,26, false));
         addGuiAddonFactory(() -> new TextScreenAddon("Target: ", 44 ,36, false){

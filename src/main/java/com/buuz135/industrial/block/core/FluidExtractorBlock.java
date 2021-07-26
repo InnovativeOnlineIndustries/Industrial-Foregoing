@@ -44,6 +44,8 @@ import java.util.List;
 import java.util.function.Consumer;
 
 import com.hrznstudio.titanium.block.RotatableBlock.RotationType;
+
+import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockBehaviour.Properties;
 
 public class FluidExtractorBlock extends IndustrialBlock<FluidExtractorTile> {
@@ -53,7 +55,7 @@ public class FluidExtractorBlock extends IndustrialBlock<FluidExtractorTile> {
     }
 
     @Override
-    public IFactory<FluidExtractorTile> getTileEntityFactory() {
+    public BlockEntityType.BlockEntitySupplier<FluidExtractorTile> getTileEntityFactory() {
         return FluidExtractorTile::new;
     }
 

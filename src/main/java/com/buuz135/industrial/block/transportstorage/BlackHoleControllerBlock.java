@@ -34,6 +34,7 @@ import net.minecraftforge.common.Tags;
 
 import java.util.function.Consumer;
 
+import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockBehaviour.Properties;
 
 public class BlackHoleControllerBlock extends IndustrialBlock<BlackHoleControllerTile> {
@@ -43,7 +44,7 @@ public class BlackHoleControllerBlock extends IndustrialBlock<BlackHoleControlle
     }
 
     @Override
-    public IFactory<BlackHoleControllerTile> getTileEntityFactory() {
+    public BlockEntityType.BlockEntitySupplier<BlackHoleControllerTile> getTileEntityFactory() {
         return BlackHoleControllerTile::new;
     }
 

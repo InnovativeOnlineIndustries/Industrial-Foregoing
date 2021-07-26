@@ -34,6 +34,8 @@ import com.hrznstudio.titanium.component.fluid.FluidTankComponent;
 import com.hrznstudio.titanium.component.fluid.SidedFluidTankComponent;
 import com.hrznstudio.titanium.component.inventory.SidedInventoryComponent;
 import com.hrznstudio.titanium.component.progress.ProgressBarComponent;
+
+import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.item.DyeColor;
 import net.minecraft.nbt.CompoundTag;
@@ -60,8 +62,8 @@ public class MycelialGeneratorTile extends IndustrialGeneratorTile<MycelialGener
     @Save
     private String owner;
 
-    public MycelialGeneratorTile(BasicTileBlock<MycelialGeneratorTile> basicTileBlock, IMycelialGeneratorType type) {
-        super(basicTileBlock);
+    public MycelialGeneratorTile(BasicTileBlock<MycelialGeneratorTile> basicTileBlock, IMycelialGeneratorType type, BlockPos blockPos, BlockState blockState) {
+        super(basicTileBlock, blockPos, blockState);
         this.type = type;
         this.powerGeneration = 10;
         this.inputs = new INBTSerializable[this.type.getInputs().length];

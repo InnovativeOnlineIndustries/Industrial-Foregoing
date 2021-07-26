@@ -38,6 +38,7 @@ import net.minecraft.world.entity.animal.Animal;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.core.BlockPos;
+import net.minecraft.world.level.block.state.BlockState;
 
 import javax.annotation.Nonnull;
 import java.util.Collections;
@@ -53,8 +54,8 @@ public class AnimalBabySeparatorTile extends IndustrialAreaWorkingTile<AnimalBab
     @Save
     private boolean movingAdults;
 
-    public AnimalBabySeparatorTile() {
-        super(ModuleAgricultureHusbandry.ANIMAL_BABY_SEPARATOR, RangeManager.RangeType.BEHIND, true, AnimalBabySeparatorConfig.powerPerOperation);
+    public AnimalBabySeparatorTile(BlockPos blockPos, BlockState blockState) {
+        super(ModuleAgricultureHusbandry.ANIMAL_BABY_SEPARATOR, RangeManager.RangeType.BEHIND, true, AnimalBabySeparatorConfig.powerPerOperation,blockPos, blockState);
         this.movingAdults = false;
         addButton(new ButtonComponent(42, 20, 18, 18) {
             @Override

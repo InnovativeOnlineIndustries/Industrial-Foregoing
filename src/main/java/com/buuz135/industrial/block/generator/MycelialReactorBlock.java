@@ -27,6 +27,8 @@ import com.buuz135.industrial.block.generator.tile.MycelialReactorTile;
 import com.buuz135.industrial.module.ModuleGenerator;
 import com.buuz135.industrial.worlddata.MycelialDataManager;
 import com.hrznstudio.titanium.api.IFactory;
+
+import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.entity.LivingEntity;
@@ -56,7 +58,7 @@ public class MycelialReactorBlock extends IndustrialBlock<MycelialReactorTile> {
     }
 
     @Override
-    public IFactory<MycelialReactorTile> getTileEntityFactory() {
+    public BlockEntityType.BlockEntitySupplier<MycelialReactorTile> getTileEntityFactory() {
         return MycelialReactorTile::new;
     }
 

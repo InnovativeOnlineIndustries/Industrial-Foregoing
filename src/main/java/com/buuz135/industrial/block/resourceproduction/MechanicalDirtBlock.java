@@ -30,6 +30,8 @@ import net.minecraft.world.level.block.Blocks;
 import javax.annotation.Nonnull;
 
 import com.hrznstudio.titanium.block.RotatableBlock.RotationType;
+
+import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockBehaviour.Properties;
 
 public class MechanicalDirtBlock extends IndustrialBlock<MechanicalDirtTile> {
@@ -39,7 +41,7 @@ public class MechanicalDirtBlock extends IndustrialBlock<MechanicalDirtTile> {
     }
 
     @Override
-    public IFactory<MechanicalDirtTile> getTileEntityFactory() {
+    public BlockEntityType.BlockEntitySupplier<MechanicalDirtTile> getTileEntityFactory() {
         return MechanicalDirtTile::new;
     }
 

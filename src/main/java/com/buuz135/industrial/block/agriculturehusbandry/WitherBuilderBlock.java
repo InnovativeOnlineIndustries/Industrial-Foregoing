@@ -16,6 +16,8 @@ import net.minecraft.data.recipes.FinishedRecipe;
 import net.minecraft.world.item.Items;
 
 import com.hrznstudio.titanium.block.RotatableBlock.RotationType;
+
+import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockBehaviour.Properties;
 
 public class WitherBuilderBlock extends IndustrialBlock<WitherBuilderTile> {
@@ -25,7 +27,7 @@ public class WitherBuilderBlock extends IndustrialBlock<WitherBuilderTile> {
 	}
 
 	@Override
-	public IFactory<WitherBuilderTile> getTileEntityFactory() {
+	public BlockEntityType.BlockEntitySupplier<WitherBuilderTile> getTileEntityFactory() {
 		return WitherBuilderTile::new;
 	}
 

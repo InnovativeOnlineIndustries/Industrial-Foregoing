@@ -9,6 +9,7 @@ import com.hrznstudio.titanium.datagenerator.loot.block.BasicBlockLootTables;
 import com.hrznstudio.titanium.util.RayTraceUtils;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.RenderShape;
+import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.SimpleWaterloggedBlock;
 import net.minecraft.world.level.material.Material;
@@ -71,7 +72,7 @@ public class TransporterBlock extends BasicTileBlock<TransporterTile> implements
     }
 
     @Override
-    public IFactory<TransporterTile> getTileEntityFactory() {
+    public BlockEntityType.BlockEntitySupplier<TransporterTile> getTileEntityFactory() {
         return TransporterTile::new;
     }
 

@@ -26,7 +26,10 @@ import com.buuz135.industrial.block.tile.IndustrialAreaWorkingTile;
 import com.buuz135.industrial.block.tile.RangeManager;
 import com.buuz135.industrial.module.ModuleMisc;
 import com.hrznstudio.titanium.component.energy.EnergyStorageComponent;
+
+import net.minecraft.core.BlockPos;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.level.block.state.BlockState;
 
 import javax.annotation.Nonnull;
 import java.util.List;
@@ -37,8 +40,8 @@ public class MobDetectorTile extends IndustrialAreaWorkingTile<MobDetectorTile> 
 
     private int redstoneSignal;
 
-    public MobDetectorTile() {
-        super(ModuleMisc.MOB_DETECTOR, RangeManager.RangeType.BEHIND, true, 0);
+    public MobDetectorTile(BlockPos blockPos, BlockState blockState) {
+        super(ModuleMisc.MOB_DETECTOR, RangeManager.RangeType.BEHIND, true, 0, blockPos, blockState);
         this.redstoneSignal = 0;
     }
 

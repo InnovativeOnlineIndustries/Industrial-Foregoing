@@ -33,6 +33,7 @@ import net.minecraft.world.item.Items;
 
 import java.util.function.Consumer;
 
+import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockBehaviour.Properties;
 
 public class MarineFisherBlock extends IndustrialBlock<MarineFisherTile> {
@@ -42,7 +43,7 @@ public class MarineFisherBlock extends IndustrialBlock<MarineFisherTile> {
     }
 
     @Override
-    public IFactory<MarineFisherTile> getTileEntityFactory() {
+    public BlockEntityType.BlockEntitySupplier<MarineFisherTile> getTileEntityFactory() {
         return MarineFisherTile::new;
     }
 

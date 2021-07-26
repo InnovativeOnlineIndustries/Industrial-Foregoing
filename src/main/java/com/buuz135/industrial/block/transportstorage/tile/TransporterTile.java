@@ -25,6 +25,7 @@ import net.minecraftforge.client.model.data.IModelData;
 import net.minecraftforge.client.model.data.ModelDataMap;
 import net.minecraftforge.common.util.Constants;
 import net.minecraftforge.fml.network.NetworkHooks;
+import net.minecraftforge.fmllegacy.network.NetworkHooks;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -37,8 +38,8 @@ public class TransporterTile extends ActiveTile<TransporterTile> implements IBlo
 
     private Map<Direction, TransporterType> transporterTypeMap = new HashMap<>();
 
-    public TransporterTile() {
-        super(ModuleTransportStorage.TRANSPORTER);
+    public TransporterTile(BlockPos blockPos, BlockState blockState) {
+        super(ModuleTransportStorage.TRANSPORTER, blockPos, blockState);
     }
 
     @Nonnull

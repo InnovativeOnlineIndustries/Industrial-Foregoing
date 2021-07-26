@@ -21,6 +21,10 @@
  */
 package com.buuz135.industrial.block.generator;
 
+import java.util.function.Consumer;
+
+import javax.annotation.Nullable;
+
 import com.buuz135.industrial.block.IndustrialBlock;
 import com.buuz135.industrial.block.generator.mycelial.IMycelialGeneratorType;
 import com.buuz135.industrial.block.generator.tile.MycelialGeneratorTile;
@@ -31,24 +35,22 @@ import com.hrznstudio.titanium.module.api.RegistryManager;
 import com.hrznstudio.titanium.nbthandler.NBTManager;
 import com.hrznstudio.titanium.recipe.generator.TitaniumShapedRecipeBuilder;
 import com.mojang.datafixers.types.Type;
-import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.level.block.Blocks;
+
+import net.minecraft.core.BlockPos;
 import net.minecraft.data.recipes.FinishedRecipe;
 import net.minecraft.data.recipes.ShapedRecipeBuilder;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityType;
-import net.minecraft.resources.ResourceLocation;
-import net.minecraft.core.BlockPos;
-import net.minecraft.world.level.Level;
-
-import javax.annotation.Nullable;
-import java.util.function.Consumer;
+import net.minecraft.world.level.block.state.BlockState;
 
 public class MycelialGeneratorBlock extends IndustrialBlock<MycelialGeneratorTile> {
 
@@ -73,7 +75,7 @@ public class MycelialGeneratorBlock extends IndustrialBlock<MycelialGeneratorTil
 
     @Override
     public BlockEntityType.BlockEntitySupplier<MycelialGeneratorTile> getTileEntityFactory() {
-        return (BlockEntityType.BlockEntitySupplier<MycelialGeneratorTile>) new MycelialGeneratorTile(this, type);
+        return (p_155268_, p_155269_) -> new MycelialGeneratorTile(this, type, p_155268_, p_155269_);
     }
 
     @Override

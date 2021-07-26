@@ -15,6 +15,8 @@ import javax.annotation.Nonnull;
 import java.util.function.Consumer;
 
 import com.hrznstudio.titanium.block.RotatableBlock.RotationType;
+
+import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockBehaviour.Properties;
 
 public class WashingFactoryBlock extends IndustrialBlock<WashingFactoryTile> {
@@ -24,7 +26,7 @@ public class WashingFactoryBlock extends IndustrialBlock<WashingFactoryTile> {
     }
 
     @Override
-    public IFactory<WashingFactoryTile> getTileEntityFactory() {
+    public BlockEntityType.BlockEntitySupplier<WashingFactoryTile> getTileEntityFactory() {
         return WashingFactoryTile::new;
     }
 

@@ -34,6 +34,7 @@ import com.hrznstudio.titanium.util.RecipeUtil;
 import net.minecraft.world.item.DyeColor;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.ChunkPos;
+import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.dimension.DimensionType;
 import net.minecraft.world.level.Level;
 import net.minecraftforge.fluids.capability.IFluidHandler;
@@ -55,8 +56,8 @@ public class FluidExtractorTile extends IndustrialAreaWorkingTile<FluidExtractor
     @Save
     private SidedFluidTankComponent<FluidExtractorTile> tank;
 
-    public FluidExtractorTile() {
-        super(ModuleCore.FLUID_EXTRACTOR, RangeManager.RangeType.BEHIND, false, FluidExtractorConfig.powerPerOperation);
+    public FluidExtractorTile(BlockPos blockPos, BlockState blockState) {
+        super(ModuleCore.FLUID_EXTRACTOR, RangeManager.RangeType.BEHIND, false, FluidExtractorConfig.powerPerOperation, blockPos, blockState);
         addTank(tank = (SidedFluidTankComponent<FluidExtractorTile>) new SidedFluidTankComponent<FluidExtractorTile>("latex", FluidExtractorConfig.maxLatexTankSize, 43, 20, 0).
                 setColor(DyeColor.LIGHT_GRAY).
                 setTankAction(FluidTankComponent.Action.DRAIN).

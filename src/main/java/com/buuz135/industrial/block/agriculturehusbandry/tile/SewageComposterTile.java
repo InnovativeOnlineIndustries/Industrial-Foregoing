@@ -30,8 +30,12 @@ import com.hrznstudio.titanium.component.energy.EnergyStorageComponent;
 import com.hrznstudio.titanium.component.fluid.FluidTankComponent;
 import com.hrznstudio.titanium.component.fluid.SidedFluidTankComponent;
 import com.hrznstudio.titanium.component.inventory.SidedInventoryComponent;
+
+import net.minecraft.core.BlockPos;
 import net.minecraft.world.item.DyeColor;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.block.state.BlockState;
+
 import net.minecraftforge.fluids.capability.IFluidHandler;
 import net.minecraftforge.items.ItemHandlerHelper;
 
@@ -47,8 +51,8 @@ public class SewageComposterTile extends IndustrialProcessingTile<SewageComposte
     @Save
     public SidedInventoryComponent<SewageComposterTile> fertilizerOutput;
 
-    public SewageComposterTile() {
-        super(ModuleAgricultureHusbandry.SEWAGE_COMPOSTER, 57, 40);
+    public SewageComposterTile(BlockPos blockPos, BlockState blockState) {
+        super(ModuleAgricultureHusbandry.SEWAGE_COMPOSTER, 57, 40, blockPos, blockState);
         this.addTank(sewage = (SidedFluidTankComponent<SewageComposterTile>) new SidedFluidTankComponent<SewageComposterTile>("sewage", SewageComposterConfig.maxTankSize, 30, 20, 0).
                 setColor(DyeColor.BROWN).
                 setTankAction(FluidTankComponent.Action.FILL).

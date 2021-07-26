@@ -33,6 +33,7 @@ import com.hrznstudio.titanium.client.screen.addon.StateButtonInfo;
 import com.hrznstudio.titanium.component.button.ButtonComponent;
 import com.hrznstudio.titanium.item.AugmentWrapper;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.phys.shapes.VoxelShape;
@@ -50,8 +51,8 @@ public abstract class IndustrialAreaWorkingTile<T extends IndustrialAreaWorkingT
     private RangeManager.RangeType type;
     private boolean acceptsRangeUpgrades;
 
-    public IndustrialAreaWorkingTile(BasicTileBlock<T> basicTileBlock, RangeManager.RangeType type, boolean acceptsRangeUpgrades, int estimatedPower) {
-        super(basicTileBlock, estimatedPower);
+    public IndustrialAreaWorkingTile(BasicTileBlock<T> basicTileBlock, RangeManager.RangeType type, boolean acceptsRangeUpgrades, int estimatedPower, BlockPos blockPos, BlockState blockState) {
+        super(basicTileBlock, estimatedPower, blockPos, blockState);
         this.pointer = 0;
         this.showingArea = false;
         addButton(areaButton = new ButtonComponent(154 - 18, 84, 14, 14) {

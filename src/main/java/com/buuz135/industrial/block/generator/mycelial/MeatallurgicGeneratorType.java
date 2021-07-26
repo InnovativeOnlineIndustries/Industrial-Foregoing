@@ -60,7 +60,7 @@ public class MeatallurgicGeneratorType implements IMycelialGeneratorType{
 
     @Override
     public List<BiPredicate<ItemStack, Integer>> getSlotInputPredicates() {
-        return Arrays.asList(null, (stack, slot) -> stack.getItem().is(Tags.Items.INGOTS));
+        return Arrays.asList(null, (stack, slot) -> stack.is(Tags.Items.INGOTS));
     }
 
     @Override

@@ -59,7 +59,7 @@ public class MagmaGeneratorType implements IMycelialGeneratorType{
 
     @Override
     public List<BiPredicate<ItemStack, Integer>> getSlotInputPredicates() {
-        return Arrays.asList(null, (stack, slot) -> stack.getItem().is(Tags.Items.DUSTS_REDSTONE));
+        return Arrays.asList(null, (stack, slot) -> stack.is(Tags.Items.DUSTS_REDSTONE));
     }
 
     @Override

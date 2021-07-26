@@ -36,6 +36,8 @@ import javax.annotation.Nonnull;
 import java.util.function.Consumer;
 
 import com.hrznstudio.titanium.block.RotatableBlock.RotationType;
+
+import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockBehaviour.Properties;
 
 public class FluidPlacerBlock extends IndustrialBlock<FluidPlacerTile> {
@@ -45,7 +47,7 @@ public class FluidPlacerBlock extends IndustrialBlock<FluidPlacerTile> {
     }
 
     @Override
-    public IFactory<FluidPlacerTile> getTileEntityFactory() {
+    public BlockEntityType.BlockEntitySupplier<FluidPlacerTile> getTileEntityFactory() {
         return FluidPlacerTile::new;
     }
 

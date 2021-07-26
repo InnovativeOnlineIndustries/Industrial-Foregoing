@@ -34,6 +34,8 @@ import net.minecraft.tags.ItemTags;
 import java.util.function.Consumer;
 
 import com.hrznstudio.titanium.block.RotatableBlock.RotationType;
+
+import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockBehaviour.Properties;
 
 public class EnchantmentApplicatorBlock extends IndustrialBlock<EnchantmentApplicatorTile> {
@@ -43,7 +45,7 @@ public class EnchantmentApplicatorBlock extends IndustrialBlock<EnchantmentAppli
     }
 
     @Override
-    public IFactory<EnchantmentApplicatorTile> getTileEntityFactory() {
+    public BlockEntityType.BlockEntitySupplier<EnchantmentApplicatorTile> getTileEntityFactory() {
         return EnchantmentApplicatorTile::new;
     }
 

@@ -36,6 +36,8 @@ import net.minecraft.world.item.DyeColor;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.state.BlockState;
+
 import net.minecraftforge.fluids.capability.IFluidHandler;
 import net.minecraftforge.items.ItemHandlerHelper;
 import org.apache.commons.lang3.tuple.Pair;
@@ -57,8 +59,8 @@ public class DissolutionChamberTile extends IndustrialProcessingTile<Dissolution
     private SidedFluidTankComponent<DissolutionChamberTile> outputFluid;
     private DissolutionChamberRecipe currentRecipe;
 
-    public DissolutionChamberTile() {
-        super(ModuleCore.DISSOLUTION_CHAMBER, 102, 41);
+    public DissolutionChamberTile(BlockPos blockPos, BlockState blockState) {
+        super(ModuleCore.DISSOLUTION_CHAMBER, 102, 41, blockPos, blockState);
         int slotSpacing = 22;
         this.addBundle(this.input = new LockableInventoryBundle<>(this, new SidedInventoryComponent<DissolutionChamberTile>("input", 34, 19, 8, 0).
                 setColor(DyeColor.LIGHT_BLUE).

@@ -46,8 +46,8 @@ public class HydroponicBedTile extends IndustrialWorkingTile<HydroponicBedTile> 
     @Save
     private SidedInventoryComponent<HydroponicBedTile> output;
 
-    public HydroponicBedTile() {
-        super(ModuleAgricultureHusbandry.HYDROPONIC_BED, 500);
+    public HydroponicBedTile(BlockPos blockPos, BlockState blockState) {
+        super(ModuleAgricultureHusbandry.HYDROPONIC_BED, 500, blockPos, blockState);
         addTank(this.water = (SidedFluidTankComponent<HydroponicBedTile>) new SidedFluidTankComponent<HydroponicBedTile>("water", 1000 ,43, 20, 0)
                 .setColor(DyeColor.BLUE)
                 .setTankType(FluidTankComponent.Type.SMALL)

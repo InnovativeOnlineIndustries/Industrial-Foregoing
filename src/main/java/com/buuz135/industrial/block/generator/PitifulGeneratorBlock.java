@@ -35,6 +35,8 @@ import javax.annotation.Nonnull;
 import java.util.function.Consumer;
 
 import com.hrznstudio.titanium.block.RotatableBlock.RotationType;
+
+import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockBehaviour.Properties;
 
 public class PitifulGeneratorBlock extends IndustrialBlock<PitifulGeneratorTile> {
@@ -50,7 +52,7 @@ public class PitifulGeneratorBlock extends IndustrialBlock<PitifulGeneratorTile>
     }
 
     @Override
-    public IFactory<PitifulGeneratorTile> getTileEntityFactory() {
+    public BlockEntityType.BlockEntitySupplier<PitifulGeneratorTile> getTileEntityFactory() {
         return PitifulGeneratorTile::new;
     }
 

@@ -7,6 +7,8 @@ import com.buuz135.industrial.module.ModuleCore;
 import com.buuz135.industrial.utils.IndustrialTags;
 import com.hrznstudio.titanium.api.IFactory;
 import com.hrznstudio.titanium.recipe.generator.TitaniumShapedRecipeBuilder;
+
+import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.data.recipes.FinishedRecipe;
@@ -28,7 +30,7 @@ public class HydroponicBedBlock extends IndustrialBlock<HydroponicBedTile> {
     }
 
     @Override
-    public IFactory<HydroponicBedTile> getTileEntityFactory() {
+    public BlockEntityType.BlockEntitySupplier<HydroponicBedTile> getTileEntityFactory() {
         return HydroponicBedTile::new;
     }
 

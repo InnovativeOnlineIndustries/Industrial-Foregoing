@@ -36,6 +36,9 @@ import com.hrznstudio.titanium.component.fluid.FluidTankComponent;
 import com.hrznstudio.titanium.component.fluid.SidedFluidTankComponent;
 import com.hrznstudio.titanium.component.inventory.SidedInventoryComponent;
 import com.hrznstudio.titanium.component.progress.ProgressBarComponent;
+
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.material.Fluids;
 import net.minecraft.world.item.DyeColor;
 import net.minecraft.world.item.Item;
@@ -73,8 +76,8 @@ public class BioReactorTile extends IndustrialWorkingTile<BioReactorTile> {
     @Save
     private ProgressBarComponent<BioReactorTile> bar;
 
-    public BioReactorTile() {
-        super(ModuleGenerator.BIOREACTOR, BioReactorConfig.powerPerOperation);
+    public BioReactorTile(BlockPos blockPos, BlockState blockState) {
+        super(ModuleGenerator.BIOREACTOR, BioReactorConfig.powerPerOperation, blockPos, blockState);
         addTank(water = (SidedFluidTankComponent<BioReactorTile>) new SidedFluidTankComponent<BioReactorTile>("water", BioReactorConfig.maxWaterTankStorage, 45, 20, 0).
                 setColor(DyeColor.CYAN).
                 setComponentHarness(this).

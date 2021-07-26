@@ -22,21 +22,24 @@
 package com.buuz135.industrial.block.tile;
 
 
+import javax.annotation.Nonnull;
+
 import com.buuz135.industrial.capability.tile.BigEnergyHandler;
 import com.hrznstudio.titanium.block.BasicTileBlock;
 import com.hrznstudio.titanium.block.tile.GeneratorTile;
 import com.hrznstudio.titanium.component.energy.EnergyStorageComponent;
-import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.InteractionResult;
+
+import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.world.InteractionHand;
-
-import javax.annotation.Nonnull;
+import net.minecraft.world.InteractionResult;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.level.block.state.BlockState;
 
 public abstract class IndustrialGeneratorTile<T extends IndustrialGeneratorTile<T>> extends GeneratorTile<T> {
 
-    public IndustrialGeneratorTile(BasicTileBlock<T> basicTileBlock) {
-        super(basicTileBlock);
+    public IndustrialGeneratorTile(BasicTileBlock<T> basicTileBlock, BlockPos blockPos, BlockState blockState) {
+        super(basicTileBlock, blockPos, blockState);
     }
 
     @Override

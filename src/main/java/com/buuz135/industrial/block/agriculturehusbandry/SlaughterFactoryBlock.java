@@ -36,6 +36,8 @@ import javax.annotation.Nonnull;
 import java.util.function.Consumer;
 
 import com.hrznstudio.titanium.block.RotatableBlock.RotationType;
+
+import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockBehaviour.Properties;
 
 public class SlaughterFactoryBlock extends IndustrialBlock<SlaughterFactoryTile> {
@@ -44,8 +46,9 @@ public class SlaughterFactoryBlock extends IndustrialBlock<SlaughterFactoryTile>
         super("mob_slaughter_factory", Properties.copy(Blocks.IRON_BLOCK), SlaughterFactoryTile.class, ModuleAgricultureHusbandry.TAB_AG_HUS);
     }
 
+
     @Override
-    public IFactory<SlaughterFactoryTile> getTileEntityFactory() {
+    public BlockEntityType.BlockEntitySupplier<SlaughterFactoryTile> getTileEntityFactory() {
         return SlaughterFactoryTile::new;
     }
 

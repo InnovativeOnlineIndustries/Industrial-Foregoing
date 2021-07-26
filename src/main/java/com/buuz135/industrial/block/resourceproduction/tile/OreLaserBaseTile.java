@@ -51,6 +51,8 @@ import net.minecraft.network.chat.TextComponent;
 import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.state.BlockState;
+
 import net.minecraftforge.items.ItemHandlerHelper;
 
 import java.text.DecimalFormat;
@@ -70,8 +72,8 @@ public class OreLaserBaseTile extends IndustrialMachineTile<OreLaserBaseTile> im
     @Save
     private int miningDepth;
 
-    public OreLaserBaseTile() {
-        super(ModuleResourceProduction.ORE_LASER_BASE);
+    public OreLaserBaseTile(BlockPos blockPos, BlockState blockState) {
+        super(ModuleResourceProduction.ORE_LASER_BASE, blockPos, blockState);
         setShowEnergy(false);
         this.miningDepth = this.getBlockPos().getY();
         this.addProgressBar(work = new ProgressBarComponent<OreLaserBaseTile>(12, 22, 0, OreLaserBaseConfig.maxProgress){

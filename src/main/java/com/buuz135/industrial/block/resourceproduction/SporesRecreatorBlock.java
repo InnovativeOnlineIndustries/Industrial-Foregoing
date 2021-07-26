@@ -36,6 +36,8 @@ import javax.annotation.Nonnull;
 import java.util.function.Consumer;
 
 import com.hrznstudio.titanium.block.RotatableBlock.RotationType;
+
+import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockBehaviour.Properties;
 
 public class SporesRecreatorBlock extends IndustrialBlock<SporesRecreatorTile> {
@@ -45,7 +47,7 @@ public class SporesRecreatorBlock extends IndustrialBlock<SporesRecreatorTile> {
     }
 
     @Override
-    public IFactory<SporesRecreatorTile> getTileEntityFactory() {
+    public BlockEntityType.BlockEntitySupplier<SporesRecreatorTile> getTileEntityFactory() {
         return SporesRecreatorTile::new;
     }
 

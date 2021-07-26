@@ -34,6 +34,8 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.data.recipes.FinishedRecipe;
 import net.minecraft.world.item.Items;
+import net.minecraft.world.level.block.entity.BlockEntityType;
+
 import net.minecraftforge.common.Tags;
 
 import javax.annotation.Nonnull;
@@ -52,7 +54,7 @@ public class LatexProcessingUnitBlock extends IndustrialBlock<LatexProcessingUni
     }
 
     @Override
-    public IFactory<LatexProcessingUnitTile> getTileEntityFactory() {
+    public BlockEntityType.BlockEntitySupplier<LatexProcessingUnitTile> getTileEntityFactory() {
         return LatexProcessingUnitTile::new;
     }
 

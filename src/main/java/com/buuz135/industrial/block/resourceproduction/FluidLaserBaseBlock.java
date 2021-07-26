@@ -33,6 +33,7 @@ import net.minecraft.world.item.Items;
 
 import java.util.function.Consumer;
 
+import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockBehaviour.Properties;
 
 public class FluidLaserBaseBlock extends IndustrialBlock<FluidLaserBaseTile> {
@@ -42,7 +43,7 @@ public class FluidLaserBaseBlock extends IndustrialBlock<FluidLaserBaseTile> {
     }
 
     @Override
-    public IFactory<FluidLaserBaseTile> getTileEntityFactory() {
+    public BlockEntityType.BlockEntitySupplier<FluidLaserBaseTile> getTileEntityFactory() {
         return FluidLaserBaseTile::new;
     }
 

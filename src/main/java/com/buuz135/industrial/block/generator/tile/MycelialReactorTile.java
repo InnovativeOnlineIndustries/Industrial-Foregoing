@@ -21,6 +21,13 @@
  */
 package com.buuz135.industrial.block.generator.tile;
 
+import java.text.DecimalFormat;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+
+import javax.annotation.Nonnull;
+
 import com.buuz135.industrial.block.generator.mycelial.IMycelialGeneratorType;
 import com.buuz135.industrial.block.tile.IndustrialGeneratorTile;
 import com.buuz135.industrial.module.ModuleGenerator;
@@ -30,17 +37,14 @@ import com.hrznstudio.titanium.api.IFactory;
 import com.hrznstudio.titanium.api.client.IScreenAddon;
 import com.hrznstudio.titanium.client.screen.addon.ProgressBarScreenAddon;
 import com.hrznstudio.titanium.component.progress.ProgressBarComponent;
-import net.minecraft.world.item.DyeColor;
+
+import net.minecraft.ChatFormatting;
+import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.TextComponent;
-import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.TranslatableComponent;
-
-import javax.annotation.Nonnull;
-import java.text.DecimalFormat;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
+import net.minecraft.world.item.DyeColor;
+import net.minecraft.world.level.block.state.BlockState;
 
 public class MycelialReactorTile extends IndustrialGeneratorTile<MycelialReactorTile> {
 
@@ -48,8 +52,8 @@ public class MycelialReactorTile extends IndustrialGeneratorTile<MycelialReactor
     private String owner;
     private ProgressBarComponent<MycelialReactorTile> bar;
 
-    public MycelialReactorTile() {
-        super(ModuleGenerator.MYCELIAL_REACTOR);
+    public MycelialReactorTile(BlockPos blockPos, BlockState blockState) {
+        super(ModuleGenerator.MYCELIAL_REACTOR, blockPos, blockState);
     }
 
     @Nonnull

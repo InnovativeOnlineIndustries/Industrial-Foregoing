@@ -37,6 +37,8 @@ import javax.annotation.Nonnull;
 import java.util.function.Consumer;
 
 import com.hrznstudio.titanium.block.RotatableBlock.RotationType;
+
+import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockBehaviour.Properties;
 
 public class DissolutionChamberBlock extends IndustrialBlock<DissolutionChamberTile> {
@@ -46,7 +48,7 @@ public class DissolutionChamberBlock extends IndustrialBlock<DissolutionChamberT
     }
 
     @Override
-    public IFactory<DissolutionChamberTile> getTileEntityFactory() {
+    public BlockEntityType.BlockEntitySupplier<DissolutionChamberTile> getTileEntityFactory() {
         return DissolutionChamberTile::new;
     }
 

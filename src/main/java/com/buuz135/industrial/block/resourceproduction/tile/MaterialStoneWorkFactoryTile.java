@@ -43,10 +43,14 @@ import com.hrznstudio.titanium.util.LangUtil;
 import com.hrznstudio.titanium.util.RecipeUtil;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.systems.RenderSystem;
+
+import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screens.Screen;
 import com.mojang.blaze3d.platform.Lighting;
+
+import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.material.Fluids;
 import net.minecraft.world.item.DyeColor;
 import net.minecraft.world.item.ItemStack;
@@ -111,8 +115,8 @@ public class MaterialStoneWorkFactoryTile extends IndustrialProcessingTile<Mater
     @Save
     private int fourthRecipeId;
 
-    public MaterialStoneWorkFactoryTile() {
-        super(ModuleResourceProduction.MATERIAL_STONEWORK_FACTORY, 48, 40);
+    public MaterialStoneWorkFactoryTile(BlockPos blockPos, BlockState blockState) {
+        super(ModuleResourceProduction.MATERIAL_STONEWORK_FACTORY, 48, 40, blockPos, blockState);
         addTank(water = (SidedFluidTankComponent<MaterialStoneWorkFactoryTile>) new SidedFluidTankComponent<MaterialStoneWorkFactoryTile>("water", MaterialStoneWorkFactoryConfig.maxWaterTankSize, 30, 23, 0)
                 .setColor(DyeColor.BLUE)
                 .setTankType(FluidTankComponent.Type.SMALL)

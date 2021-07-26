@@ -28,6 +28,8 @@ import com.buuz135.industrial.utils.IndustrialTags;
 import com.hrznstudio.titanium.api.IFactory;
 import com.hrznstudio.titanium.block.RotatableBlock;
 import com.hrznstudio.titanium.recipe.generator.TitaniumShapedRecipeBuilder;
+
+import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.data.recipes.FinishedRecipe;
@@ -50,11 +52,6 @@ public class MobDetectorBlock extends IndustrialBlock<MobDetectorTile> {
     }
 
     @Override
-    public boolean canConnectRedstone(BlockState state, BlockGetter world, BlockPos pos, @Nullable Direction side) {
-        return true;
-    }
-
-    @Override
     public boolean isSignalSource(BlockState state) {
         return true;
     }
@@ -69,7 +66,7 @@ public class MobDetectorBlock extends IndustrialBlock<MobDetectorTile> {
     }
 
     @Override
-    public IFactory<MobDetectorTile> getTileEntityFactory() {
+    public BlockEntityType.BlockEntitySupplier<MobDetectorTile> getTileEntityFactory() {
         return MobDetectorTile::new;
     }
 

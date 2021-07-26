@@ -31,9 +31,13 @@ import com.hrznstudio.titanium.component.energy.EnergyStorageComponent;
 import com.hrznstudio.titanium.component.fluid.FluidTankComponent;
 import com.hrznstudio.titanium.component.fluid.SidedFluidTankComponent;
 import com.hrznstudio.titanium.component.inventory.SidedInventoryComponent;
+
+import net.minecraft.core.BlockPos;
 import net.minecraft.world.item.DyeColor;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.block.state.BlockState;
+
 import net.minecraftforge.fluids.capability.IFluidHandler;
 import net.minecraftforge.items.ItemHandlerHelper;
 
@@ -48,8 +52,8 @@ public class SludgeRefinerTile extends IndustrialProcessingTile<SludgeRefinerTil
     @Save
     private SidedInventoryComponent<SludgeRefinerTile> output;
 
-    public SludgeRefinerTile() {
-        super(ModuleResourceProduction.SLUDGE_REFINER, 53, 40);
+    public SludgeRefinerTile(BlockPos blockPos, BlockState blockState) {
+        super(ModuleResourceProduction.SLUDGE_REFINER, 53, 40, blockPos, blockState);
         addTank(sludge = (SidedFluidTankComponent<SludgeRefinerTile>) new SidedFluidTankComponent<SludgeRefinerTile>("sludge", SludgeRefinerConfig.maxSludgeTankSize, 31, 20, 0)
                 .setColor(DyeColor.MAGENTA)
                 .setComponentHarness(this)

@@ -31,6 +31,7 @@ import com.hrznstudio.titanium.component.energy.EnergyStorageComponent;
 import com.hrznstudio.titanium.component.fluid.FluidTankComponent;
 import com.hrznstudio.titanium.component.fluid.SidedFluidTankComponent;
 import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.material.Fluid;
 import net.minecraft.world.item.DyeColor;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
@@ -51,8 +52,8 @@ public class FluidCollectorTile extends IndustrialAreaWorkingTile<FluidCollector
     @Save
     private SidedFluidTankComponent<FluidCollectorTile> tank;
 
-    public FluidCollectorTile() {
-        super(ModuleResourceProduction.FLUID_COLLECTOR, RangeManager.RangeType.BEHIND, false,FluidCollectorConfig.powerPerOperation);
+    public FluidCollectorTile(BlockPos blockPos, BlockState blockState) {
+        super(ModuleResourceProduction.FLUID_COLLECTOR, RangeManager.RangeType.BEHIND, false,FluidCollectorConfig.powerPerOperation, blockPos, blockState);
         this.addTank(this.tank = (SidedFluidTankComponent<FluidCollectorTile>) new SidedFluidTankComponent<FluidCollectorTile>("output", FluidCollectorConfig.maxOutputTankSize, 43, 20, 0)
                 .setColor(DyeColor.ORANGE)
                 .setTankAction(FluidTankComponent.Action.DRAIN)

@@ -42,6 +42,8 @@ import com.mojang.blaze3d.systems.RenderSystem;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screens.Screen;
 import com.mojang.blaze3d.platform.Lighting;
+
+import net.minecraft.core.BlockPos;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.DyeColor;
 import net.minecraft.world.item.ItemStack;
@@ -50,6 +52,7 @@ import net.minecraft.world.item.Rarity;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.core.Direction;
 import net.minecraft.world.InteractionHand;
+import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.HitResult;
 import net.minecraft.network.chat.Component;
@@ -85,8 +88,8 @@ public class BlackHoleUnitTile extends BHTile<BlackHoleUnitTile> {
     private BlackHoleHandler handler;
     private final LazyOptional<IItemHandler> lazyStorage;
 
-    public BlackHoleUnitTile(BasicTileBlock<BlackHoleUnitTile> basicTileBlock, Rarity rarity) {
-        super(basicTileBlock);
+    public BlackHoleUnitTile(BasicTileBlock<BlackHoleUnitTile> basicTileBlock, Rarity rarity, BlockPos blockPos, BlockState blockState) {
+        super(basicTileBlock, blockPos, blockState);
         this.blStack = ItemStack.EMPTY;
         this.stored = 0;
         this.voidItems = true;

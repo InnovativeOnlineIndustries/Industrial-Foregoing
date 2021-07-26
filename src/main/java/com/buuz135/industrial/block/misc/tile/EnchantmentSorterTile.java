@@ -27,9 +27,13 @@ import com.buuz135.industrial.module.ModuleMisc;
 import com.hrznstudio.titanium.annotation.Save;
 import com.hrznstudio.titanium.component.energy.EnergyStorageComponent;
 import com.hrznstudio.titanium.component.inventory.SidedInventoryComponent;
+
+import net.minecraft.core.BlockPos;
 import net.minecraft.world.item.DyeColor;
 import net.minecraft.world.item.EnchantedBookItem;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.block.state.BlockState;
+
 import net.minecraftforge.items.ItemHandlerHelper;
 
 public class EnchantmentSorterTile extends IndustrialProcessingTile<EnchantmentSorterTile> {
@@ -41,8 +45,8 @@ public class EnchantmentSorterTile extends IndustrialProcessingTile<EnchantmentS
     @Save
     private SidedInventoryComponent<EnchantmentSorterTile> enchantedItems;
 
-    public EnchantmentSorterTile() {
-        super(ModuleMisc.ENCHANTMENT_SORTER, 57, 40);
+    public EnchantmentSorterTile(BlockPos blockPos, BlockState blockState) {
+        super(ModuleMisc.ENCHANTMENT_SORTER, 57, 40, blockPos, blockState);
         this.addInventory(input = (SidedInventoryComponent<EnchantmentSorterTile>) new SidedInventoryComponent<EnchantmentSorterTile>("input", 35, 40, 1, 0).
                 setColor(DyeColor.BLUE).
                 setOutputFilter((stack, integer) -> false).

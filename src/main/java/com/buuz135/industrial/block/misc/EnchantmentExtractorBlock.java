@@ -35,6 +35,8 @@ import net.minecraft.tags.ItemTags;
 import java.util.function.Consumer;
 
 import com.hrznstudio.titanium.block.RotatableBlock.RotationType;
+
+import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockBehaviour.Properties;
 
 public class EnchantmentExtractorBlock extends IndustrialBlock<EnchantmentExtractorTile> {
@@ -44,7 +46,7 @@ public class EnchantmentExtractorBlock extends IndustrialBlock<EnchantmentExtrac
     }
 
     @Override
-    public IFactory<EnchantmentExtractorTile> getTileEntityFactory() {
+    public BlockEntityType.BlockEntitySupplier<EnchantmentExtractorTile> getTileEntityFactory() {
         return EnchantmentExtractorTile::new;
     }
 

@@ -36,6 +36,8 @@ import javax.annotation.Nonnull;
 import java.util.function.Consumer;
 
 import com.hrznstudio.titanium.block.RotatableBlock.RotationType;
+
+import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockBehaviour.Properties;
 
 public class DyeMixerBlock extends IndustrialBlock<DyeMixerTile> {
@@ -45,7 +47,7 @@ public class DyeMixerBlock extends IndustrialBlock<DyeMixerTile> {
     }
 
     @Override
-    public IFactory<DyeMixerTile> getTileEntityFactory() {
+    public BlockEntityType.BlockEntitySupplier<DyeMixerTile> getTileEntityFactory() {
         return DyeMixerTile::new;
     }
 

@@ -36,6 +36,9 @@ import com.hrznstudio.titanium.component.inventory.SidedInventoryComponent;
 import com.hrznstudio.titanium.component.progress.ProgressBarComponent;
 import com.hrznstudio.titanium.util.InventoryUtil;
 import com.hrznstudio.titanium.util.ItemHandlerUtil;
+
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.material.Fluids;
 import net.minecraft.world.item.DyeColor;
 import net.minecraft.world.item.ItemStack;
@@ -73,8 +76,8 @@ public class PotionBrewerTile extends IndustrialProcessingTile<PotionBrewerTile>
     @Save
     private int state;
 
-    public PotionBrewerTile() {
-        super(ModuleResourceProduction.POTION_BREWER, 100, 38);
+    public PotionBrewerTile(BlockPos blockPos, BlockState blockState) {
+        super(ModuleResourceProduction.POTION_BREWER, 100, 38, blockPos,blockState);
         this.state = 0;
         addBundle(brewingItems = new LockableInventoryBundle<>(this, new SidedInventoryComponent<PotionBrewerTile>("brewingInput", 55, 19, 6, 3)
                 .setColor(DyeColor.BLUE)

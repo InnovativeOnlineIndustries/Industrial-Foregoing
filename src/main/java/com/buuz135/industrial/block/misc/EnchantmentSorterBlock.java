@@ -35,6 +35,8 @@ import net.minecraft.tags.ItemTags;
 import java.util.function.Consumer;
 
 import com.hrznstudio.titanium.block.RotatableBlock.RotationType;
+
+import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockBehaviour.Properties;
 
 public class EnchantmentSorterBlock extends IndustrialBlock<EnchantmentSorterTile> {
@@ -44,7 +46,7 @@ public class EnchantmentSorterBlock extends IndustrialBlock<EnchantmentSorterTil
     }
 
     @Override
-    public IFactory<EnchantmentSorterTile> getTileEntityFactory() {
+    public BlockEntityType.BlockEntitySupplier<EnchantmentSorterTile> getTileEntityFactory() {
         return EnchantmentSorterTile::new;
     }
 

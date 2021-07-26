@@ -30,6 +30,9 @@ import com.hrznstudio.titanium.component.fluid.FluidTankComponent;
 import com.hrznstudio.titanium.component.fluid.SidedFluidTankComponent;
 import com.hrznstudio.titanium.component.inventory.SidedInventoryComponent;
 import com.hrznstudio.titanium.util.ItemHandlerUtil;
+
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.material.Fluids;
 import net.minecraft.world.item.DyeColor;
 import net.minecraft.world.item.ItemStack;
@@ -51,8 +54,8 @@ public class SporesRecreatorTile extends IndustrialProcessingTile<SporesRecreato
     @Save
     private SidedInventoryComponent<SporesRecreatorTile> output;
 
-    public SporesRecreatorTile() {
-        super(ModuleResourceProduction.SPORES_RECREATOR, 79, 40);
+    public SporesRecreatorTile(BlockPos blockPos, BlockState blockState) {
+        super(ModuleResourceProduction.SPORES_RECREATOR, 79, 40, blockPos, blockState);
         addTank(tank = (SidedFluidTankComponent<SporesRecreatorTile>) new SidedFluidTankComponent<SporesRecreatorTile>("water", SporeRecreatorConfig.maxWaterTankSize, 31, 20, 0).
                 setColor(DyeColor.CYAN).
                 setTankAction(FluidTankComponent.Action.FILL).

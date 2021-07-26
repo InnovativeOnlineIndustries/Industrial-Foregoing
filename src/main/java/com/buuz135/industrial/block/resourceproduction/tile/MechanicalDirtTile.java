@@ -62,8 +62,8 @@ public class MechanicalDirtTile extends IndustrialWorkingTile<MechanicalDirtTile
     @Save
     private SidedFluidTankComponent<MechanicalDirtTile> meat;
 
-    public MechanicalDirtTile() {
-        super(ModuleResourceProduction.MECHANICAL_DIRT, MechanicalDirtConfig.powerPerOperation);
+    public MechanicalDirtTile(BlockPos blockPos, BlockState blockState) {
+        super(ModuleResourceProduction.MECHANICAL_DIRT, MechanicalDirtConfig.powerPerOperation, blockPos, blockState);
         addTank(meat = (SidedFluidTankComponent<MechanicalDirtTile>) new SidedFluidTankComponent<MechanicalDirtTile>("meat", MechanicalDirtConfig.maxMeatTankSize, 43, 20, 0).
                 setColor(DyeColor.BROWN).
                 setComponentHarness(this).

@@ -35,6 +35,8 @@ import javax.annotation.Nonnull;
 import java.util.function.Consumer;
 
 import com.hrznstudio.titanium.block.RotatableBlock.RotationType;
+
+import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockBehaviour.Properties;
 
 public class AnimalRancherBlock extends IndustrialBlock<AnimalRancherTile> {
@@ -44,7 +46,7 @@ public class AnimalRancherBlock extends IndustrialBlock<AnimalRancherTile> {
     }
 
     @Override
-    public IFactory<AnimalRancherTile> getTileEntityFactory() {
+    public BlockEntityType.BlockEntitySupplier<AnimalRancherTile> getTileEntityFactory() {
         return AnimalRancherTile::new;
     }
 

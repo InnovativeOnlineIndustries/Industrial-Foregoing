@@ -30,6 +30,8 @@ import com.buuz135.industrial.module.ModuleTransportStorage;
 import com.buuz135.industrial.proxy.client.model.ConveyorModelData;
 import com.buuz135.industrial.utils.MovementUtils;
 import com.hrznstudio.titanium.block.tile.ActiveTile;
+
+import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.item.ItemEntity;
@@ -40,7 +42,6 @@ import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.item.DyeColor;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.world.level.block.entity.TickableBlockEntity;
 import net.minecraft.core.Direction;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.phys.AABB;
@@ -55,7 +56,6 @@ import net.minecraftforge.common.util.Constants;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.capability.IFluidHandler;
 import net.minecraftforge.fluids.capability.templates.FluidTank;
-import net.minecraftforge.fml.network.NetworkHooks;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -67,6 +67,7 @@ import java.util.Map;
 import static com.buuz135.industrial.block.transportstorage.ConveyorBlock.*;
 
 import com.buuz135.industrial.block.transportstorage.ConveyorBlock.EnumType;
+import net.minecraftforge.fmllegacy.network.NetworkHooks;
 
 public class ConveyorTile extends ActiveTile<ConveyorTile> implements IBlockContainer<ConveyorUpgradeFactory>, ITickableBlockEntity {
 
@@ -79,8 +80,8 @@ public class ConveyorTile extends ActiveTile<ConveyorTile> implements IBlockCont
     private FluidTank tank;
     private boolean needsFluidSync;
 
-    public ConveyorTile() {
-        super(ModuleTransportStorage.CONVEYOR);
+    public ConveyorTile(BlockPos blockPos, BlockState blockState) {
+        super(ModuleTransportStorage.CONVEYOR, blockPos, blockState);
         this.facing = Direction.NORTH;
         this.type = ConveyorBlock.EnumType.FLAT;
         this.color = DyeColor.WHITE.getMaterialColor().col;
@@ -304,14 +305,10 @@ public class ConveyorTile extends ActiveTile<ConveyorTile> implements IBlockCont
     }
 
     @Override
-    public void tick() {
-        if (type.isVertical() && !upgradeMap.isEmpty()) {
-            new ArrayList<>(upgradeMap.keySet()).forEach(facing1 -> this.removeUpgrade(facing1, true));
-        }
-        upgradeMap.values().forEach(ConveyorUpgrade::update);
+    public void serverTick(Level level, BlockPos pos, BlockState state, ConveyorTile blockEntity) {
         if (!level.isClientSide && tank.getFluidAmount() > 0 && level.getGameTime() % 3 == 0 && level.getBlockState(this.worldPosition.relative(facing)).getBlock() instanceof ConveyorBlock && level.getBlockEntity(this.worldPosition.relative(facing)) instanceof ConveyorTile) {
-            BlockState state = level.getBlockState(this.worldPosition.relative(facing));
-            if (!state.getValue(ConveyorBlock.TYPE).isVertical()) {
+            BlockState state1 = level.getBlockState(this.worldPosition.relative(facing));
+            if (!state1.getValue(ConveyorBlock.TYPE).isVertical()) {
                 int amount = Math.max(tank.getFluidAmount() - 1, 1);
                 ConveyorTile conveyorTile = (ConveyorTile) level.getBlockEntity(this.worldPosition.relative(facing));
                 FluidStack drained = tank.drain(conveyorTile.getTank().fill(tank.drain(amount, IFluidHandler.FluidAction.SIMULATE), IFluidHandler.FluidAction.EXECUTE), IFluidHandler.FluidAction.EXECUTE);
@@ -326,6 +323,15 @@ public class ConveyorTile extends ActiveTile<ConveyorTile> implements IBlockCont
             this.needsFluidSync = false;
         }
     }
+
+    @Override
+    public void clientTick(Level level, BlockPos pos, BlockState state, ConveyorTile blockEntity) {
+        if (type.isVertical() && !upgradeMap.isEmpty()) {
+            new ArrayList<>(upgradeMap.keySet()).forEach(facing1 -> this.removeUpgrade(facing1, true));
+        }
+        upgradeMap.values().forEach(ConveyorUpgrade::update);
+    }
+
 
     @Nonnull
     @Override

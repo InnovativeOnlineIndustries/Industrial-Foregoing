@@ -28,6 +28,9 @@ import com.hrznstudio.titanium.annotation.Save;
 import com.hrznstudio.titanium.component.energy.EnergyStorageComponent;
 import com.hrznstudio.titanium.component.fluid.SidedFluidTankComponent;
 import com.hrznstudio.titanium.component.inventory.SidedInventoryComponent;
+
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.material.Fluids;
 import net.minecraft.world.item.DyeColor;
 import net.minecraft.world.item.ItemStack;
@@ -48,8 +51,8 @@ public class LatexProcessingUnitTile extends IndustrialProcessingTile<LatexProce
     @Save
     private SidedInventoryComponent<LatexProcessingUnitTile> output;
 
-    public LatexProcessingUnitTile() {
-        super(ModuleCore.LATEX_PROCESSING, 48 + 25, 40);
+    public LatexProcessingUnitTile(BlockPos blockPos, BlockState blockState) {
+        super(ModuleCore.LATEX_PROCESSING, 48 + 25, 40, blockPos, blockState);
         this.addTank(latex = (SidedFluidTankComponent<LatexProcessingUnitTile>) new SidedFluidTankComponent<LatexProcessingUnitTile>("latex", LatexProcessingUnitConfig.maxLatexTankSize, 29, 20, 0).
                 setColor(DyeColor.LIGHT_GRAY).
                 setComponentHarness(this).

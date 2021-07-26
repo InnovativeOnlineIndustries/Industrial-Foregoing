@@ -16,6 +16,7 @@ import net.minecraft.world.item.DyeColor;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.core.Direction;
+import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.phys.shapes.VoxelShape;
@@ -36,8 +37,8 @@ public class WitherBuilderTile extends IndustrialAreaWorkingTile<WitherBuilderTi
 	@Save
 	private SidedInventoryComponent<WitherBuilderTile> bottom;
 
-	public WitherBuilderTile() {
-		super(ModuleAgricultureHusbandry.WITHER_BUILDER, RangeManager.RangeType.TOP_UP, true, WitherBuilderConfig.powerPerOperation);
+	public WitherBuilderTile(BlockPos blockPos, BlockState blockState) {
+		super(ModuleAgricultureHusbandry.WITHER_BUILDER, RangeManager.RangeType.TOP_UP, true, WitherBuilderConfig.powerPerOperation, blockPos, blockState);
 
 
 		this.addInventory(top = (SidedInventoryComponent<WitherBuilderTile>) new SidedInventoryComponent<WitherBuilderTile>("wither_skulls", 64, 25, 3, 0)

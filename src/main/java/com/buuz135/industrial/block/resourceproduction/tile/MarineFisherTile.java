@@ -29,6 +29,8 @@ import com.buuz135.industrial.utils.BlockUtils;
 import com.hrznstudio.titanium.annotation.Save;
 import com.hrznstudio.titanium.component.energy.EnergyStorageComponent;
 import com.hrznstudio.titanium.component.inventory.SidedInventoryComponent;
+
+import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.material.FluidState;
 import net.minecraft.world.level.material.Fluids;
 import net.minecraft.world.item.DyeColor;
@@ -56,8 +58,8 @@ public class MarineFisherTile extends IndustrialAreaWorkingTile<MarineFisherTile
     @Save
     private SidedInventoryComponent<MarineFisherTile> output;
 
-    public MarineFisherTile() {
-        super(ModuleResourceProduction.MARINE_FISHER, RangeManager.RangeType.BOTTOM, false, MarineFisherConfig.powerPerOperation);
+    public MarineFisherTile(BlockPos blockPos, BlockState blockState) {
+        super(ModuleResourceProduction.MARINE_FISHER, RangeManager.RangeType.BOTTOM, false, MarineFisherConfig.powerPerOperation, blockPos, blockState);
         addInventory(output = (SidedInventoryComponent<MarineFisherTile>) new SidedInventoryComponent<MarineFisherTile>("output", 50, 22, 3 * 6, 0)
                 .setColor(DyeColor.ORANGE)
                 .setRange(6, 3)

@@ -36,6 +36,8 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.SmeltingRecipe;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.state.BlockState;
+
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.capability.IFluidHandler;
 import net.minecraftforge.items.ItemHandlerHelper;
@@ -56,8 +58,8 @@ public class ResourcefulFurnaceTile extends IndustrialProcessingTile<Resourceful
 
     private SmeltingRecipe[] recipes;
 
-    public ResourcefulFurnaceTile() {
-        super(ModuleResourceProduction.RESOURCEFUL_FURNACE, 74, 22 + 18);
+    public ResourcefulFurnaceTile(BlockPos blockPos, BlockState blockState) {
+        super(ModuleResourceProduction.RESOURCEFUL_FURNACE, 74, 22 + 18, blockPos, blockState);
         addInventory(this.input = (SidedInventoryComponent<ResourcefulFurnaceTile>) new SidedInventoryComponent<ResourcefulFurnaceTile>("input", 44, 22, 3, 0).
                 setColor(DyeColor.BLUE).
                 setSlotLimit(1).
@@ -76,9 +78,10 @@ public class ResourcefulFurnaceTile extends IndustrialProcessingTile<Resourceful
         this.getPowerPerTick = ResourcefulFurnaceConfig.powerPerTick;
     }
 
+    // TODO: 26/07/2021 This maybe right?
     @Override
-    public void setLevelAndPosition(Level p_226984_1_, BlockPos p_226984_2_) {
-        super.setLevelAndPosition(p_226984_1_, p_226984_2_);
+    public void setChanged() {
+        super.setChanged();
         checkForRecipe(0);
         checkForRecipe(1);
         checkForRecipe(2);

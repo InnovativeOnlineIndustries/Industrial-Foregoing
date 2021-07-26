@@ -15,6 +15,7 @@ import net.minecraft.world.item.Items;
 import net.minecraft.tags.ItemTags;
 
 
+import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockBehaviour.Properties;
 
 public class MobDuplicatorBlock extends IndustrialBlock<MobDuplicatorTile> {
@@ -24,7 +25,7 @@ public class MobDuplicatorBlock extends IndustrialBlock<MobDuplicatorTile> {
 	}
 
 	@Override
-	public IFactory<MobDuplicatorTile> getTileEntityFactory() {
+	public BlockEntityType.BlockEntitySupplier<MobDuplicatorTile> getTileEntityFactory() {
 		return MobDuplicatorTile::new;
 	}
 

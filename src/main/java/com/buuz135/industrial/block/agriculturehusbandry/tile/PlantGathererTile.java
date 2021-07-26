@@ -38,6 +38,8 @@ import com.hrznstudio.titanium.component.inventory.SidedInventoryComponent;
 import net.minecraft.world.item.DyeColor;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.core.BlockPos;
+import net.minecraft.world.level.block.state.BlockState;
+
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.capability.IFluidHandler;
 import net.minecraftforge.items.ItemHandlerHelper;
@@ -58,8 +60,8 @@ public class PlantGathererTile extends IndustrialAreaWorkingTile<PlantGathererTi
     @Save
     private SidedFluidTankComponent<PlantGathererTile> tank;
 
-    public PlantGathererTile() {
-        super(ModuleAgricultureHusbandry.PLANT_GATHERER, RangeManager.RangeType.BEHIND, true, PlantGathererConfig.powerPerOperation);
+    public PlantGathererTile(BlockPos blockPos, BlockState blockState) {
+        super(ModuleAgricultureHusbandry.PLANT_GATHERER, RangeManager.RangeType.BEHIND, true, PlantGathererConfig.powerPerOperation, blockPos, blockState);
         addInventory(output = (SidedInventoryComponent<PlantGathererTile>) new SidedInventoryComponent<PlantGathererTile>("output", 70, 22, 3 * 5, 0)
                 .setColor(DyeColor.ORANGE)
                 .setRange(5, 3)

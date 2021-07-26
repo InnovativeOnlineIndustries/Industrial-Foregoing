@@ -35,6 +35,8 @@ import net.minecraft.tags.ItemTags;
 import java.util.function.Consumer;
 
 import com.hrznstudio.titanium.block.RotatableBlock.RotationType;
+
+import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockBehaviour.Properties;
 
 public class MobCrusherBlock extends IndustrialBlock<MobCrusherTile> {
@@ -44,7 +46,7 @@ public class MobCrusherBlock extends IndustrialBlock<MobCrusherTile> {
     }
 
     @Override
-    public IFactory<MobCrusherTile> getTileEntityFactory() {
+    public BlockEntityType.BlockEntitySupplier<MobCrusherTile> getTileEntityFactory() {
         return MobCrusherTile::new;
     }
 

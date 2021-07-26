@@ -30,10 +30,14 @@ import com.hrznstudio.titanium.annotation.Save;
 import com.hrznstudio.titanium.component.energy.EnergyStorageComponent;
 import com.hrznstudio.titanium.component.fluid.FluidTankComponent;
 import com.hrznstudio.titanium.component.fluid.SidedFluidTankComponent;
+
+import net.minecraft.core.BlockPos;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.ExperienceOrb;
 import net.minecraft.world.entity.animal.Animal;
 import net.minecraft.world.item.DyeColor;
+import net.minecraft.world.level.block.state.BlockState;
+
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.capability.IFluidHandler;
 
@@ -52,8 +56,8 @@ public class SewerTile extends IndustrialAreaWorkingTile<SewerTile> {
     @Save
     public SidedFluidTankComponent<SewerTile> essence;
 
-    public SewerTile() {
-        super(ModuleAgricultureHusbandry.SEWER, RangeManager.RangeType.TOP, true, SewerConfig.powerPerOperation);
+    public SewerTile(BlockPos blockPos, BlockState blockState) {
+        super(ModuleAgricultureHusbandry.SEWER, RangeManager.RangeType.TOP, true, SewerConfig.powerPerOperation, blockPos, blockState);
         this.addTank(sewage = (SidedFluidTankComponent<SewerTile>) new SidedFluidTankComponent<SewerTile>("sewage", SewerConfig.maxSewageTankSize, 45, 20, 0).
                 setColor(DyeColor.BROWN).
                 setTankAction(FluidTankComponent.Action.DRAIN).
@@ -68,7 +72,7 @@ public class SewerTile extends IndustrialAreaWorkingTile<SewerTile> {
 
     @Override
     public WorkAction work() {
-        List<Entity> entities = this.level.getEntitiesOfClass(Animal.class, getWorkingArea().bounds());
+        List<Animal> entities = this.level.getEntitiesOfClass(Animal.class, getWorkingArea().bounds());
         int amount = entities.size();
         if (amount > 0 && hasEnergy(powerPerOperation * amount)) {
             sewage.fillForced(new FluidStack(ModuleCore.SEWAGE.getSourceFluid(), 50 * amount), IFluidHandler.FluidAction.EXECUTE);
@@ -78,7 +82,7 @@ public class SewerTile extends IndustrialAreaWorkingTile<SewerTile> {
         for (ExperienceOrb experienceOrbEntity : orb) {
             if (experienceOrbEntity.isAlive() && essence.getFluidAmount() + experienceOrbEntity.value * 20 <= essence.getCapacity()) {
                 essence.fillForced(new FluidStack(ModuleCore.ESSENCE.getSourceFluid(), experienceOrbEntity.value * 20), IFluidHandler.FluidAction.EXECUTE);
-                experienceOrbEntity.remove();
+                experienceOrbEntity.onClientRemoval();
             }
         }
         return new WorkAction(1, powerPerOperation * amount);

@@ -34,12 +34,16 @@ import com.hrznstudio.titanium.component.energy.EnergyStorageComponent;
 import com.hrznstudio.titanium.component.inventory.SidedInventoryComponent;
 import com.hrznstudio.titanium.component.progress.ProgressBarComponent;
 import com.hrznstudio.titanium.util.FacingUtil;
+
+import net.minecraft.core.BlockPos;
 import net.minecraft.world.item.DyeColor;
 import net.minecraft.world.item.DyeItem;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.TextComponent;
 import net.minecraft.ChatFormatting;
+import net.minecraft.world.level.block.state.BlockState;
+
 import net.minecraftforge.common.Tags;
 import net.minecraftforge.items.ItemHandlerHelper;
 
@@ -88,23 +92,23 @@ public class DyeMixerTile extends IndustrialProcessingTile<DyeMixerTile> {
     @Save
     private int dye;
 
-    public DyeMixerTile() {
-        super(ModuleResourceProduction.DYE_MIXER, 96, 40);
+    public DyeMixerTile(BlockPos blockPos, BlockState blockState) {
+        super(ModuleResourceProduction.DYE_MIXER, 96, 40, blockPos,blockState);
         addInventory(this.inputRed = (SidedInventoryComponent<DyeMixerTile>) new SidedInventoryComponent<DyeMixerTile>("input_red", 33, 21, 1, 0)
                 .setColor(DyeColor.RED)
-                .setInputFilter((stack, integer) -> stack.getItem().is(Tags.Items.DYES_RED))
+                .setInputFilter((stack, integer) -> stack.is(Tags.Items.DYES_RED))
                 .setOutputFilter((stack, integer) -> false)
                 .setComponentHarness(this)
         );
         addInventory(this.inputGreen = (SidedInventoryComponent<DyeMixerTile>) new SidedInventoryComponent<DyeMixerTile>("input_green", 33, 22 + 18, 1, 1)
                 .setColor(DyeColor.GREEN)
-                .setInputFilter((stack, integer) -> stack.getItem().is(Tags.Items.DYES_GREEN))
+                .setInputFilter((stack, integer) -> stack.is(Tags.Items.DYES_GREEN))
                 .setOutputFilter((stack, integer) -> false)
                 .setComponentHarness(this)
         );
         addInventory(this.inputBlue = (SidedInventoryComponent<DyeMixerTile>) new SidedInventoryComponent<DyeMixerTile>("input_blue", 33, 23 + 18 * 2, 1, 2)
                 .setColor(DyeColor.BLUE)
-                .setInputFilter((stack, integer) -> stack.getItem().is(Tags.Items.DYES_BLUE))
+                .setInputFilter((stack, integer) -> stack.is(Tags.Items.DYES_BLUE))
                 .setOutputFilter((stack, integer) -> false)
                 .setComponentHarness(this)
         );

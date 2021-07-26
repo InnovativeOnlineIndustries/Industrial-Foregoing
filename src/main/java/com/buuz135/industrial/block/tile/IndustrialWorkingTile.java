@@ -32,6 +32,8 @@ import com.hrznstudio.titanium.client.screen.addon.ProgressBarScreenAddon;
 import com.hrznstudio.titanium.client.screen.asset.IAssetProvider;
 import com.hrznstudio.titanium.component.progress.ProgressBarComponent;
 import com.hrznstudio.titanium.item.AugmentWrapper;
+
+import net.minecraft.core.BlockPos;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.DyeColor;
 import net.minecraft.world.item.ItemStack;
@@ -42,6 +44,7 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.TextComponent;
 import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.world.level.block.state.BlockState;
 
 import java.text.DecimalFormat;
 import java.util.ArrayList;
@@ -53,8 +56,8 @@ public abstract class IndustrialWorkingTile<T extends IndustrialWorkingTile<T>> 
     @Save
     private ProgressBarComponent<T> workingBar;
 
-    public IndustrialWorkingTile(BasicTileBlock<T> basicTileBlock, int estimatedPower) {
-        super(basicTileBlock);
+    public IndustrialWorkingTile(BasicTileBlock<T> basicTileBlock, int estimatedPower, BlockPos blockPos, BlockState blockState) {
+        super(basicTileBlock, blockPos, blockState);
         this.addProgressBar(workingBar = new ProgressBarComponent<T>(30, 20, getMaxProgress(), getMaxProgress()) {
             @Override
             public List<IFactory<? extends IScreenAddon>> getScreenAddons() {

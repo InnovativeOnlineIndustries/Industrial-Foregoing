@@ -16,10 +16,14 @@ import com.hrznstudio.titanium.component.energy.EnergyStorageComponent;
 import com.hrznstudio.titanium.component.fluid.FluidTankComponent;
 import com.hrznstudio.titanium.component.fluid.SidedFluidTankComponent;
 import com.hrznstudio.titanium.container.addon.IContainerAddon;
+
+import net.minecraft.core.BlockPos;
 import net.minecraft.world.item.DyeColor;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.world.level.block.state.BlockState;
+
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.capability.IFluidHandler;
 
@@ -45,8 +49,8 @@ public class FermentationStationTile extends IndustrialProcessingTile<Fermentati
     @Save
     private boolean isSealed;
 
-    public FermentationStationTile() {
-        super(ModuleResourceProduction.FERMENTATION_STATION, 90, 40);
+    public FermentationStationTile(BlockPos blockPos, BlockState blockState) {
+        super(ModuleResourceProduction.FERMENTATION_STATION, 90, 40, blockPos, blockState);
         addTank(this.input = (SidedFluidTankComponent<FermentationStationTile>) new SidedFluidTankComponent<FermentationStationTile>("input", 4000, 50, 20, 0) {
                     @Override
                     protected void onContentsChanged() {

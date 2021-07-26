@@ -29,6 +29,8 @@ import com.hrznstudio.titanium.api.filter.FilterSlot;
 import com.hrznstudio.titanium.block.BasicTileBlock;
 import com.hrznstudio.titanium.component.fluid.SidedFluidTankComponent;
 import com.hrznstudio.titanium.filter.ItemStackFilter;
+
+import net.minecraft.core.BlockPos;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.DyeColor;
 import net.minecraft.world.item.ItemStack;
@@ -37,6 +39,8 @@ import net.minecraft.world.item.Rarity;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.core.Direction;
 import net.minecraft.world.InteractionHand;
+import net.minecraft.world.level.block.state.BlockState;
+
 import net.minecraftforge.fluids.FluidUtil;
 import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
 
@@ -50,8 +54,8 @@ public class BlackHoleTankTile extends BHTile<BlackHoleTankTile> {
     private ItemStackFilter filter;
     private boolean isEmpty;
 
-    public BlackHoleTankTile(BasicTileBlock<BlackHoleTankTile> base, Rarity rarity) {
-        super(base);
+    public BlackHoleTankTile(BasicTileBlock<BlackHoleTankTile> base, Rarity rarity, BlockPos blockPos, BlockState blockState) {
+        super(base, blockPos, blockState);
         this.addTank(this.tank = (BigSidedFluidTankComponent<BlackHoleTankTile>) new BigSidedFluidTankComponent<BlackHoleTankTile>("tank", BlockUtils.getFluidAmountByRarity(rarity), 20, 20, 0) {
             @Override
             public void sync() {

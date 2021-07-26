@@ -44,6 +44,8 @@ import java.util.List;
 import java.util.function.Consumer;
 
 import com.hrznstudio.titanium.block.RotatableBlock.RotationType;
+
+import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockBehaviour.Properties;
 
 public class WaterCondensatorBlock extends IndustrialBlock<WaterCondensatorTile> {
@@ -54,7 +56,7 @@ public class WaterCondensatorBlock extends IndustrialBlock<WaterCondensatorTile>
     }
 
     @Override
-    public IFactory<WaterCondensatorTile> getTileEntityFactory() {
+    public BlockEntityType.BlockEntitySupplier<WaterCondensatorTile> getTileEntityFactory() {
         return WaterCondensatorTile::new;
     }
 

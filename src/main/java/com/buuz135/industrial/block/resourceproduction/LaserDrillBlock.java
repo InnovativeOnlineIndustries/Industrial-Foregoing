@@ -27,6 +27,8 @@ import com.buuz135.industrial.module.ModuleResourceProduction;
 import com.buuz135.industrial.utils.IndustrialTags;
 import com.hrznstudio.titanium.api.IFactory;
 import com.hrznstudio.titanium.recipe.generator.TitaniumShapedRecipeBuilder;
+
+import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.data.recipes.FinishedRecipe;
@@ -52,7 +54,7 @@ public class LaserDrillBlock extends IndustrialBlock<LaserDrillTile> {
     }
 
     @Override
-    public IFactory<LaserDrillTile> getTileEntityFactory() {
+    public BlockEntityType.BlockEntitySupplier<LaserDrillTile> getTileEntityFactory() {
         return LaserDrillTile::new;
     }
 

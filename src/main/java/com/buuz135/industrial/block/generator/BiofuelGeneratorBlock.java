@@ -35,6 +35,8 @@ import javax.annotation.Nonnull;
 import java.util.function.Consumer;
 
 import com.hrznstudio.titanium.block.RotatableBlock.RotationType;
+
+import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockBehaviour.Properties;
 
 public class BiofuelGeneratorBlock extends IndustrialBlock<BiofuelGeneratorTile> {
@@ -44,7 +46,7 @@ public class BiofuelGeneratorBlock extends IndustrialBlock<BiofuelGeneratorTile>
     }
 
     @Override
-    public IFactory<BiofuelGeneratorTile> getTileEntityFactory() {
+    public BlockEntityType.BlockEntitySupplier<BiofuelGeneratorTile> getTileEntityFactory() {
         return BiofuelGeneratorTile::new;
     }
 

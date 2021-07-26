@@ -49,7 +49,7 @@ public class AnimalBabySeparatorBlock extends IndustrialBlock<AnimalBabySeparato
 
     @Override
     public BlockEntityType.BlockEntitySupplier<AnimalBabySeparatorTile> getTileEntityFactory() {
-        return null;
+        return AnimalBabySeparatorTile::new;
     }
 
     @Nonnull

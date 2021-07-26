@@ -37,6 +37,8 @@ import javax.annotation.Nonnull;
 import java.util.function.Consumer;
 
 import com.hrznstudio.titanium.block.RotatableBlock.RotationType;
+
+import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockBehaviour.Properties;
 
 public class BioReactorBlock extends IndustrialBlock<BioReactorTile> {
@@ -46,7 +48,7 @@ public class BioReactorBlock extends IndustrialBlock<BioReactorTile> {
     }
 
     @Override
-    public IFactory<BioReactorTile> getTileEntityFactory() {
+    public BlockEntityType.BlockEntitySupplier<BioReactorTile> getTileEntityFactory() {
         return BioReactorTile::new;
     }
 

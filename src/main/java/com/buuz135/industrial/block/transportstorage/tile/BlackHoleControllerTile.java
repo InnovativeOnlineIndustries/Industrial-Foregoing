@@ -27,12 +27,16 @@ import com.buuz135.industrial.module.ModuleTransportStorage;
 import com.hrznstudio.titanium.annotation.Save;
 import com.hrznstudio.titanium.block.tile.ActiveTile;
 import com.hrznstudio.titanium.component.inventory.InventoryComponent;
+
+import net.minecraft.core.BlockPos;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.DyeColor;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.core.Direction;
 import net.minecraft.world.InteractionHand;
+import net.minecraft.world.level.block.state.BlockState;
+
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.fluids.FluidStack;
@@ -57,8 +61,8 @@ public class BlackHoleControllerTile extends ActiveTile<BlackHoleControllerTile>
     private LazyOptional<BlackHoleControllerInventory> lazyInventory;
     private LazyOptional<BlackHoleControllerTank> lazyTank;
 
-    public BlackHoleControllerTile() {
-        super(ModuleTransportStorage.BLACK_HOLE_CONTROLLER);
+    public BlackHoleControllerTile(BlockPos blockPos, BlockState blockState) {
+        super(ModuleTransportStorage.BLACK_HOLE_CONTROLLER, blockPos, blockState);
         addInventory(this.units_storage = new InventoryComponent<BlackHoleControllerTile>("units_storage", 53, 20, 4*4)
                 .setSlotLimit(1)
                 .setInputFilter((itemStack, integer) -> itemStack.getItem() instanceof BlackHoleTankBlock.BlackHoleTankItem || itemStack.getItem() instanceof BlackHoleUnitBlock.BlackHoleUnitItem)

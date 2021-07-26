@@ -28,6 +28,9 @@ import com.hrznstudio.titanium.annotation.Save;
 import com.hrznstudio.titanium.component.energy.EnergyStorageComponent;
 import com.hrznstudio.titanium.component.fluid.FluidTankComponent;
 import com.hrznstudio.titanium.component.fluid.SidedFluidTankComponent;
+
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.material.FluidState;
 import net.minecraft.world.level.material.Fluids;
 import net.minecraft.world.item.DyeColor;
@@ -47,8 +50,8 @@ public class WaterCondensatorTile extends IndustrialWorkingTile<WaterCondensator
     @Save
     private SidedFluidTankComponent<WaterCondensatorTile> water;
 
-    public WaterCondensatorTile() {
-        super(ModuleResourceProduction.WATER_CONDENSATOR, WaterCondensatorConfig.powerPerOperation);
+    public WaterCondensatorTile(BlockPos blockPos, BlockState blockState) {
+        super(ModuleResourceProduction.WATER_CONDENSATOR, WaterCondensatorConfig.powerPerOperation, blockPos, blockState);
         this.addTank(water = (SidedFluidTankComponent<WaterCondensatorTile>) new SidedFluidTankComponent<WaterCondensatorTile>("water", WaterCondensatorConfig.maxWaterTankSize, 30 + 13, 20, 0).
                 setColor(DyeColor.BLUE).
                 setComponentHarness(this).

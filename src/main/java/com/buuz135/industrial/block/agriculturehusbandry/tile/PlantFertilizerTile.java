@@ -50,11 +50,11 @@ public class PlantFertilizerTile extends IndustrialAreaWorkingTile<PlantFertiliz
     @Save
     public SidedInventoryComponent<PlantFertilizerTile> fertilizer;
 
-    public PlantFertilizerTile() {
-        super(ModuleAgricultureHusbandry.PLANT_FERTILIZER, RangeManager.RangeType.BEHIND, true, PlantFertilizerConfig.powerPerOperation);
+    public PlantFertilizerTile(BlockPos blockPos, BlockState blockState) {
+        super(ModuleAgricultureHusbandry.PLANT_FERTILIZER, RangeManager.RangeType.BEHIND, true, PlantFertilizerConfig.powerPerOperation, blockPos, blockState);
         addInventory(fertilizer = (SidedInventoryComponent<PlantFertilizerTile>) new SidedInventoryComponent<PlantFertilizerTile>("fertilizer", 50, 22, 3 * 6, 0).
                 setColor(DyeColor.BROWN).
-                setInputFilter((stack, integer) -> stack.getItem().is(IndustrialTags.Items.FERTILIZER)).
+                setInputFilter((stack, integer) -> stack.is(IndustrialTags.Items.FERTILIZER)).
                 setOutputFilter((stack, integer) -> false).
                 setRange(6, 3).
                 setComponentHarness(this)

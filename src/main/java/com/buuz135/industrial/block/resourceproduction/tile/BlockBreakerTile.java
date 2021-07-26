@@ -36,6 +36,8 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.core.BlockPos;
+import net.minecraft.world.level.block.state.BlockState;
+
 import net.minecraftforge.common.util.FakePlayer;
 import net.minecraftforge.items.ItemHandlerHelper;
 
@@ -51,8 +53,8 @@ public class BlockBreakerTile extends IndustrialAreaWorkingTile<BlockBreakerTile
     @Save
     private SidedInventoryComponent<BlockBreakerTile> output;
 
-    public BlockBreakerTile() {
-        super(ModuleResourceProduction.BLOCK_BREAKER, RangeManager.RangeType.BEHIND, false,  BlockBreakerConfig.powerPerOperation);
+    public BlockBreakerTile(BlockPos blockPos, BlockState blockState) {
+        super(ModuleResourceProduction.BLOCK_BREAKER, RangeManager.RangeType.BEHIND, false,  BlockBreakerConfig.powerPerOperation, blockPos, blockState);
         this.addInventory(this.output = (SidedInventoryComponent<BlockBreakerTile>) new SidedInventoryComponent<BlockBreakerTile>("output", 54, 22, 3 * 6, 0).
                 setColor(DyeColor.ORANGE).
                 setRange(6, 3));

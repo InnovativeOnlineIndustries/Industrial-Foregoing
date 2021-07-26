@@ -72,13 +72,13 @@ import java.util.function.Consumer;
 
 import com.hrznstudio.titanium.block.RotatableBlock.RotationType;
 import net.minecraft.world.level.block.state.BlockBehaviour.Properties;
-import net.minecraft.world.item.Item.Properties;
 
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.Rarity;
+import net.minecraft.world.level.storage.loot.providers.nbt.ContextNbtProvider;
 
 public class BlackHoleTankBlock extends IndustrialBlock<BlackHoleTankTile> {
 
@@ -91,8 +91,8 @@ public class BlackHoleTankBlock extends IndustrialBlock<BlackHoleTankTile> {
     }
 
     @Override
-    public IFactory<BlackHoleTankTile> getTileEntityFactory() {
-        return () -> new BlackHoleTankTile(this, rarity);
+    public BlockEntityType.BlockEntitySupplier<BlackHoleTankTile> getTileEntityFactory() {
+        return (p_155268_, p_155269_) -> new BlackHoleTankTile(this, rarity, p_155268_, p_155269_);
     }
 
     @Override
@@ -139,7 +139,7 @@ public class BlackHoleTankBlock extends IndustrialBlock<BlackHoleTankTile> {
 
     @Override
     public LootTable.Builder getLootTable(@Nonnull BasicBlockLootTables blockLootTables) {
-        CopyNbtFunction.Builder nbtBuilder = CopyNbtFunction.copyData(CopyNbtFunction.DataSource.BLOCK_ENTITY);
+        CopyNbtFunction.Builder nbtBuilder = CopyNbtFunction.copyData(ContextNbtProvider.BLOCK_ENTITY);
         nbtBuilder.copy("tank",  "BlockEntityTag.tank");
         nbtBuilder.copy("filter",  "BlockEntityTag.filter");
         return blockLootTables.droppingSelfWithNbt(this, nbtBuilder);

@@ -37,11 +37,14 @@ import com.mojang.blaze3d.systems.RenderSystem;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screens.Screen;
 import com.mojang.blaze3d.platform.Lighting;
+
+import net.minecraft.core.BlockPos;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.TextComponent;
 import net.minecraft.ChatFormatting;
+import net.minecraft.world.level.block.state.BlockState;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -52,8 +55,8 @@ public abstract class BHTile<T extends BHTile<T>> extends ActiveTile<T> {
     @Save
     public boolean display;
 
-    public BHTile(BasicTileBlock<T> base) {
-        super(base);
+    public BHTile(BasicTileBlock<T> base, BlockPos blockPos, BlockState blockState) {
+        super(base,blockPos, blockState);
         this.display = true;
         addButton(new ButtonComponent(82+ 20 * 3, 64+16, 18, 18) {
             @Override

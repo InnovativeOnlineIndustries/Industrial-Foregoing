@@ -61,7 +61,7 @@ public class SlimeyGeneratorType implements IMycelialGeneratorType{
 
     @Override
     public List<BiPredicate<ItemStack, Integer>> getSlotInputPredicates() {
-        return Arrays.asList(null, (stack, slot) -> stack.getItem().is(Tags.Items.SLIMEBALLS));
+        return Arrays.asList(null, (stack, slot) -> stack.is(Tags.Items.SLIMEBALLS));
     }
 
     @Override

@@ -31,6 +31,8 @@ import com.hrznstudio.titanium.annotation.Save;
 import com.hrznstudio.titanium.component.energy.EnergyStorageComponent;
 import com.hrznstudio.titanium.component.fluid.SidedFluidTankComponent;
 import com.hrznstudio.titanium.component.inventory.SidedInventoryComponent;
+
+import net.minecraft.core.BlockPos;
 import net.minecraft.world.entity.PathfinderMob;
 import net.minecraft.world.entity.animal.Animal;
 import net.minecraft.world.entity.animal.Squid;
@@ -38,6 +40,8 @@ import net.minecraft.world.item.DyeColor;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.InteractionHand;
+import net.minecraft.world.level.block.state.BlockState;
+
 import net.minecraftforge.common.IForgeShearable;
 import net.minecraftforge.common.util.FakePlayer;
 import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
@@ -60,8 +64,8 @@ public class AnimalRancherTile extends IndustrialAreaWorkingTile<AnimalRancherTi
     @Save
     private SidedInventoryComponent<AnimalRancherTile> output;
 
-    public AnimalRancherTile() {
-        super(ModuleAgricultureHusbandry.ANIMAL_RANCHER, RangeManager.RangeType.BEHIND, true, AnimalRancherConfig.powerPerOperation);
+    public AnimalRancherTile(BlockPos blockPos, BlockState blockState) {
+        super(ModuleAgricultureHusbandry.ANIMAL_RANCHER, RangeManager.RangeType.BEHIND, true, AnimalRancherConfig.powerPerOperation, blockPos, blockState);
         this.addTank(tank = (SidedFluidTankComponent<AnimalRancherTile>) new SidedFluidTankComponent<AnimalRancherTile>("fluid_output", AnimalRancherConfig.maxTankSize, 47, 20, 0).
                 setColor(DyeColor.WHITE).
                 setComponentHarness(this)

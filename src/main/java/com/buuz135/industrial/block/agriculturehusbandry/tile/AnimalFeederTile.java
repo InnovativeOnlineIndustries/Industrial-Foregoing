@@ -28,9 +28,13 @@ import com.buuz135.industrial.module.ModuleAgricultureHusbandry;
 import com.hrznstudio.titanium.annotation.Save;
 import com.hrznstudio.titanium.component.energy.EnergyStorageComponent;
 import com.hrznstudio.titanium.component.inventory.SidedInventoryComponent;
+
+import net.minecraft.core.BlockPos;
 import net.minecraft.world.entity.animal.Animal;
 import net.minecraft.world.item.DyeColor;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.block.state.BlockState;
+
 import net.minecraftforge.items.ItemHandlerHelper;
 
 import javax.annotation.Nonnull;
@@ -46,8 +50,8 @@ public class AnimalFeederTile extends IndustrialAreaWorkingTile<AnimalFeederTile
     @Save
     private SidedInventoryComponent<AnimalFeederTile> input;
 
-    public AnimalFeederTile() {
-        super(ModuleAgricultureHusbandry.ANIMAL_FEEDER, RangeManager.RangeType.BEHIND, true, AnimalFeederConfig.powerPerOperation);
+    public AnimalFeederTile(BlockPos blockPos, BlockState blockState) {
+        super(ModuleAgricultureHusbandry.ANIMAL_FEEDER, RangeManager.RangeType.BEHIND, true, AnimalFeederConfig.powerPerOperation, blockPos, blockState);
         addInventory(input = (SidedInventoryComponent<AnimalFeederTile>) new SidedInventoryComponent<AnimalFeederTile>("food", 53, 22, 6 * 3, 0)
                 .setColor(DyeColor.BLUE)
                 .setOutputFilter((stack, integer) -> false)

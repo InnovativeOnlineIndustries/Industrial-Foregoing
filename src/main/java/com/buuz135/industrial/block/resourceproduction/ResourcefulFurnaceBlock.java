@@ -36,6 +36,8 @@ import javax.annotation.Nonnull;
 import java.util.function.Consumer;
 
 import com.hrznstudio.titanium.block.RotatableBlock.RotationType;
+
+import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockBehaviour.Properties;
 
 public class ResourcefulFurnaceBlock extends IndustrialBlock<ResourcefulFurnaceTile> {
@@ -45,7 +47,7 @@ public class ResourcefulFurnaceBlock extends IndustrialBlock<ResourcefulFurnaceT
     }
 
     @Override
-    public IFactory<ResourcefulFurnaceTile> getTileEntityFactory() {
+    public BlockEntityType.BlockEntitySupplier<ResourcefulFurnaceTile> getTileEntityFactory() {
         return ResourcefulFurnaceTile::new;
     }
 

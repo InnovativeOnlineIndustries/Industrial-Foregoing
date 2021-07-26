@@ -36,6 +36,8 @@ import javax.annotation.Nonnull;
 import java.util.function.Consumer;
 
 import com.hrznstudio.titanium.block.RotatableBlock.RotationType;
+
+import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockBehaviour.Properties;
 
 public class SludgeRefinerBlock extends IndustrialBlock<SludgeRefinerTile> {
@@ -45,7 +47,7 @@ public class SludgeRefinerBlock extends IndustrialBlock<SludgeRefinerTile> {
     }
 
     @Override
-    public IFactory<SludgeRefinerTile> getTileEntityFactory() {
+    public BlockEntityType.BlockEntitySupplier<SludgeRefinerTile> getTileEntityFactory() {
         return SludgeRefinerTile::new;
     }
 

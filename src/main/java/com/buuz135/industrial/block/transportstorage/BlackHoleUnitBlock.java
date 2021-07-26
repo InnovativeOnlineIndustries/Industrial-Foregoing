@@ -72,13 +72,13 @@ import java.util.List;
 import java.util.function.Consumer;
 
 import net.minecraft.world.level.block.state.BlockBehaviour.Properties;
-import net.minecraft.world.item.Item.Properties;
 
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.Rarity;
+import net.minecraft.world.level.storage.loot.providers.nbt.ContextNbtProvider;
 
 public class BlackHoleUnitBlock extends IndustrialBlock<BlackHoleUnitTile> {
 
@@ -91,8 +91,8 @@ public class BlackHoleUnitBlock extends IndustrialBlock<BlackHoleUnitTile> {
     }
 
     @Override
-    public IFactory<BlackHoleUnitTile> getTileEntityFactory() {
-        return () -> new BlackHoleUnitTile(this, rarity);
+    public BlockEntityType.BlockEntitySupplier<BlackHoleUnitTile> getTileEntityFactory() {
+        return (p_155268_, p_155269_) -> new BlackHoleUnitTile(this, rarity, p_155268_, p_155269_);
     }
 
     @Override
@@ -141,7 +141,7 @@ public class BlackHoleUnitBlock extends IndustrialBlock<BlackHoleUnitTile> {
 
     @Override
     public LootTable.Builder getLootTable(@Nonnull BasicBlockLootTables blockLootTables) {
-        CopyNbtFunction.Builder nbtBuilder = CopyNbtFunction.copyData(CopyNbtFunction.DataSource.BLOCK_ENTITY);
+        CopyNbtFunction.Builder nbtBuilder = CopyNbtFunction.copyData(ContextNbtProvider.BLOCK_ENTITY);
         nbtBuilder.copy("stored",  "BlockEntityTag.stored");
         nbtBuilder.copy("blStack",  "BlockEntityTag.blStack");
         nbtBuilder.copy("voidItems",  "BlockEntityTag.voidItems");

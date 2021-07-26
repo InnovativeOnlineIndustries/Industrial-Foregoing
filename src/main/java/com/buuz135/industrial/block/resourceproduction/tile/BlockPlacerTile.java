@@ -34,6 +34,7 @@ import com.hrznstudio.titanium.component.inventory.SidedInventoryComponent;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.DyeColor;
 import net.minecraft.core.BlockPos;
+import net.minecraft.world.level.block.state.BlockState;
 
 import javax.annotation.Nonnull;
 
@@ -47,8 +48,8 @@ public class BlockPlacerTile extends IndustrialAreaWorkingTile<BlockPlacerTile> 
     @Save
     private SidedInventoryComponent<BlockPlacerTile> input;
 
-    public BlockPlacerTile() {
-        super(ModuleResourceProduction.BLOCK_PLACER, RangeManager.RangeType.BEHIND, false, BlockPlacerConfig.powerPerOperation);
+    public BlockPlacerTile(BlockPos blockPos, BlockState blockState) {
+        super(ModuleResourceProduction.BLOCK_PLACER, RangeManager.RangeType.BEHIND, false, BlockPlacerConfig.powerPerOperation, blockPos, blockState);
         this.addInventory(this.input = (SidedInventoryComponent<BlockPlacerTile>) new SidedInventoryComponent<BlockPlacerTile>("input", 54, 22, 3 * 6, 0).
                 setColor(DyeColor.BLUE).
                 setRange(6, 3));

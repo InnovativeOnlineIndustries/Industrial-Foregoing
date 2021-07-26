@@ -32,10 +32,13 @@ import com.hrznstudio.titanium.component.energy.EnergyStorageComponent;
 import com.hrznstudio.titanium.component.fluid.FluidTankComponent;
 import com.hrznstudio.titanium.component.fluid.SidedFluidTankComponent;
 import com.hrznstudio.titanium.item.AugmentWrapper;
+
+import net.minecraft.core.BlockPos;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.animal.Animal;
 import net.minecraft.world.item.DyeColor;
+import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import net.minecraftforge.fluids.FluidStack;
@@ -57,8 +60,8 @@ public class SlaughterFactoryTile extends IndustrialAreaWorkingTile<SlaughterFac
     @Save
     private SidedFluidTankComponent<SlaughterFactoryTile> pinkSlime;
 
-    public SlaughterFactoryTile() {
-        super(ModuleAgricultureHusbandry.SLAUGHTER_FACTORY, RangeManager.RangeType.BEHIND, true, SlaughterFactoryConfig.powerPerOperation);
+    public SlaughterFactoryTile(BlockPos blockPos, BlockState blockState) {
+        super(ModuleAgricultureHusbandry.SLAUGHTER_FACTORY, RangeManager.RangeType.BEHIND, true, SlaughterFactoryConfig.powerPerOperation, blockPos, blockState);
         addTank(meat = (SidedFluidTankComponent<SlaughterFactoryTile>) new SidedFluidTankComponent<SlaughterFactoryTile>("meat", SlaughterFactoryConfig.maxMeatTankSize, 43, 20, 0).
                 setColor(DyeColor.BROWN).
                 setTankAction(FluidTankComponent.Action.DRAIN).

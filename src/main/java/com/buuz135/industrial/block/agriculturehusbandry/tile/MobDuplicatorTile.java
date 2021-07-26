@@ -21,6 +21,7 @@ import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.MobSpawnType;
 import net.minecraft.world.item.DyeColor;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.phys.shapes.VoxelShape;
@@ -46,8 +47,8 @@ public class MobDuplicatorTile extends IndustrialAreaWorkingTile<MobDuplicatorTi
 	@Save
 	private SidedInventoryComponent<MobDuplicatorTile> input;
 
-	public MobDuplicatorTile() {
-		super(ModuleAgricultureHusbandry.MOB_DUPLICATOR, RangeManager.RangeType.TOP_UP, true, MobDuplicatorConfig.powerPerOperation);
+	public MobDuplicatorTile(BlockPos blockPos, BlockState blockState) {
+		super(ModuleAgricultureHusbandry.MOB_DUPLICATOR, RangeManager.RangeType.TOP_UP, true, MobDuplicatorConfig.powerPerOperation, blockPos, blockState);
 		this.addTank(tank = (SidedFluidTankComponent<MobDuplicatorTile>) new SidedFluidTankComponent<MobDuplicatorTile>("essence", MobDuplicatorConfig.tankSize, 43, 20, 0)
 				.setColor(DyeColor.LIME)
 				.setTankAction(FluidTankComponent.Action.FILL)

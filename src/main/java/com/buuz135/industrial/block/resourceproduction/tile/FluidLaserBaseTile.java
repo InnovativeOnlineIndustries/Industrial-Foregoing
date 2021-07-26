@@ -46,6 +46,7 @@ import net.minecraft.world.item.DyeColor;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.core.BlockPos;
+import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.network.chat.Component;
@@ -72,8 +73,8 @@ public class FluidLaserBaseTile extends IndustrialMachineTile<FluidLaserBaseTile
     @Save
     private int miningDepth;
 
-    public FluidLaserBaseTile() {
-        super(ModuleResourceProduction.FLUID_LASER_BASE);
+    public FluidLaserBaseTile(BlockPos blockPos, BlockState blockState) {
+        super(ModuleResourceProduction.FLUID_LASER_BASE, blockPos, blockState);
         setShowEnergy(false);
         this.miningDepth = this.getBlockPos().getY();
         this.addProgressBar(work = new ProgressBarComponent<FluidLaserBaseTile>(74, 24 + 18, 0, FluidLaserBaseConfig.maxProgress){

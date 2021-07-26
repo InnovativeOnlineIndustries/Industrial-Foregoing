@@ -29,7 +29,11 @@ import com.hrznstudio.titanium.annotation.Save;
 import com.hrznstudio.titanium.component.fluid.FluidTankComponent;
 import com.hrznstudio.titanium.component.fluid.SidedFluidTankComponent;
 import com.hrznstudio.titanium.component.progress.ProgressBarComponent;
+
+import net.minecraft.core.BlockPos;
 import net.minecraft.world.item.DyeColor;
+import net.minecraft.world.level.block.state.BlockState;
+
 import net.minecraftforge.fluids.capability.IFluidHandler;
 
 import javax.annotation.Nonnull;
@@ -42,8 +46,8 @@ public class BiofuelGeneratorTile extends IndustrialGeneratorTile<BiofuelGenerat
     @Save
     private SidedFluidTankComponent<BiofuelGeneratorTile> biofuel;
 
-    public BiofuelGeneratorTile() {
-        super(ModuleGenerator.BIOFUEL_GENERATOR);
+    public BiofuelGeneratorTile(BlockPos blockPos, BlockState blockState) {
+        super(ModuleGenerator.BIOFUEL_GENERATOR, blockPos, blockState);
         addTank(biofuel = (SidedFluidTankComponent<BiofuelGeneratorTile>) new SidedFluidTankComponent<BiofuelGeneratorTile>("biofuel", BiofuelGeneratorConfig.maxBiofuelTankSize, 43, 20, 0).
                 setColor(DyeColor.PURPLE).
                 setComponentHarness(this).

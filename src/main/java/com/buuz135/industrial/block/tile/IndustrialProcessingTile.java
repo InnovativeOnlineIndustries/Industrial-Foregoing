@@ -30,6 +30,8 @@ import com.hrznstudio.titanium.block.BasicTileBlock;
 import com.hrznstudio.titanium.client.screen.addon.ProgressBarScreenAddon;
 import com.hrznstudio.titanium.component.progress.ProgressBarComponent;
 import com.hrznstudio.titanium.item.AugmentWrapper;
+
+import net.minecraft.core.BlockPos;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.core.Direction;
@@ -38,6 +40,7 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.TextComponent;
 import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.world.level.block.state.BlockState;
 
 import java.text.DecimalFormat;
 import java.util.ArrayList;
@@ -49,8 +52,8 @@ public abstract class IndustrialProcessingTile<T extends IndustrialProcessingTil
     @Save
     private ProgressBarComponent<T> progressBar;
 
-    public IndustrialProcessingTile(BasicTileBlock<T> basicTileBlock, int x, int y) {
-        super(basicTileBlock);
+    public IndustrialProcessingTile(BasicTileBlock<T> basicTileBlock, int x, int y, BlockPos blockPos, BlockState blockState) {
+        super(basicTileBlock, blockPos, blockState);
         //this.addGuiAddonFactory(() -> new EnergyBarScreenAddon(10, 20, getEnergyStorage()));
         this.addProgressBar(progressBar = new ProgressBarComponent<T>(x, y, getMaxProgress()){
                     @Override
