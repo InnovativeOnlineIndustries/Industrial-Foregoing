@@ -84,7 +84,9 @@ public abstract class IndustrialProcessingTile<T extends IndustrialProcessingTil
                 setOnFinishWork(() -> {
                     int operations = (int) (this.hasAugmentInstalled(ProcessingAddonItem.PROCESSING) ? AugmentWrapper.getType(this.getInstalledAugments(ProcessingAddonItem.PROCESSING).get(0), ProcessingAddonItem.PROCESSING) : 1);
                     for (int i = 0; i < operations; i++) {
-                        onFinish().run();
+                        if (canIncrease()){
+                            onFinish().run();
+                        }
                     }
                     this.getRedstoneManager().finish();
                 })
