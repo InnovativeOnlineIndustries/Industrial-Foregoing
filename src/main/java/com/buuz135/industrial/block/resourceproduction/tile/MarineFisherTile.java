@@ -66,7 +66,7 @@ public class MarineFisherTile extends IndustrialAreaWorkingTile<MarineFisherTile
         if (hasEnergy(powerPerOperation)) {
             if (getWaterSources() < 9) return new WorkAction(1, 0);
             LootTable fishingTable = this.world.getServer().getLootTableManager().getLootTableFromLocation(LootTables.GAMEPLAY_FISHING);
-            if (this.world.rand.nextDouble() <= 0.05) {
+            if (this.world.rand.nextDouble() <= 0.02) {
                 fishingTable = this.world.getServer().getLootTableManager().getLootTableFromLocation(LootTables.GAMEPLAY_FISHING_TREASURE);
             }
             LootContext.Builder context = new LootContext.Builder((ServerWorld) this.world).withParameter(LootParameters.field_237457_g_, new Vector3d(this.pos.getX(), this.pos.getY(), this.pos.getZ())).withParameter(LootParameters.TOOL, new ItemStack(Items.FISHING_ROD));
