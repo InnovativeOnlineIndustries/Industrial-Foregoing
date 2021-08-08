@@ -2,9 +2,8 @@ import se.bjurr.gitchangelog.plugin.gradle.GitChangelogTask
 
 buildscript {
     repositories {
-        jcenter()
         mavenCentral()
-        maven { url = "https://files.minecraftforge.net/maven" }
+        maven { url = 'https://maven.minecraftforge.net' }
         maven {
             url "https://plugins.gradle.org/m2/"
         }
@@ -16,17 +15,16 @@ buildscript {
         }
     }
     dependencies {
-        classpath group: 'net.minecraftforge.gradle', name: 'ForgeGradle', version: '3.+', changing: true
+        classpath group: 'net.minecraftforge.gradle', name: 'ForgeGradle', version: '5.1.+', changing: true
         classpath "gradle.plugin.com.matthewprenger:CurseGradle:1.4.0"
     }
 }
 
 plugins {
-    id "com.github.hierynomus.license" version "0.14.0"
-    id 'java'
     id 'maven-publish'
+    id 'org.cadixdev.licenser' version '0.6.1'
     id "com.matthewprenger.cursegradle" version "1.4.0"
-    id "se.bjurr.gitchangelog.git-changelog-gradle-plugin" version "1.64"
+    id "se.bjurr.gitchangelog.git-changelog-gradle-plugin" version "1.71.4"
 }
 apply plugin: 'net.minecraftforge.gradle'
 apply plugin: 'eclipse'
@@ -147,11 +145,8 @@ repositories {
 
 dependencies {
     minecraft 'net.minecraftforge:forge:1.16.5-36.0.1'
-    if (findProject(':titanium') != null) {
-        compile project(':titanium')
-    } else {
-        compile fg.deobf (project.dependencies.create('com.hrznstudio:titanium:1.16.5-3.2.8.2'))
-    }
+    compileOnly fg.deobf ('com.hrznstudio:titanium:1.16.5-3.2.8.2')
+    runtimeOnly fg.deobf ('com.hrznstudio:titanium:1.16.5-3.2.8.2')
     //if (findProject(':workspace') == null) {
     compileOnly fg.deobf("mezz.jei:jei-1.16.4:7.6.1.71:api")
     // at runtime, use the full JEI jar
@@ -175,25 +170,6 @@ dependencies {
 afterEvaluate {
     tasks.withType(JavaCompile) {
         options.compilerArgs << "-Xmaxerrs" << "2000"
-    }
-}
-
-processResources {
-    // this will ensure that this task is redone when the versions change.
-    inputs.property 'version', project.version
-    inputs.property 'mcversion', '1.16.3'
-
-    // replace stuff in mcmod.info, nothing else
-    from(sourceSets.main.resources.srcDirs) {
-        include 'META_INF/mods.toml'
-
-        // replace version and mcversion
-        expand 'version':project.version, 'mcversion': '1.16.3'
-    }
-
-    // copy everything else except the mcmod.info
-    from(sourceSets.main.resources.srcDirs) {
-        exclude 'META_INF/mods.toml'
     }
 }
 
@@ -240,16 +216,15 @@ publishing {
 }
 
 license {
-    header rootProject.file('HEADER')
-    include "**/*.java"
-    ext.year = Calendar.getInstance().get(Calendar.YEAR)
-    ext.name = 'Buuz135'
-    ext.project = "Industrial Foregoing"
-    ignoreFailures = true
-    mapping {
-        java='SLASHSTAR_STYLE'
+    header = project.file('HEADER')
+    ext {
+        year = Calendar.getInstance().get(Calendar.YEAR)
+        name = 'Buuz135'
+        mod = 'Industrial foregoing'
     }
 }
+
+
 jar {
     manifest {
         attributes([
