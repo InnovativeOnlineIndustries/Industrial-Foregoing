@@ -80,10 +80,12 @@ public class WashingFactoryTile extends IndustrialProcessingTile<WashingFactoryT
     public Runnable onFinish() {
         return () -> {
             ResourceLocation resourceLocation = ItemStackUtils.getOreTag(this.input.getStackInSlot(0));
-            this.input.getStackInSlot(0).shrink(1);
-            this.meatInput.drainForced(100, IFluidHandler.FluidAction.EXECUTE);
-            FluidStack output = OreTitaniumFluidAttributes.getFluidWithTag(ModuleCore.RAW_ORE_MEAT, 100, resourceLocation);
-            this.meatOutput.fillForced(output, IFluidHandler.FluidAction.EXECUTE);
+            if (resourceLocation != null){
+                this.input.getStackInSlot(0).shrink(1);
+                this.meatInput.drainForced(100, IFluidHandler.FluidAction.EXECUTE);
+                FluidStack output = OreTitaniumFluidAttributes.getFluidWithTag(ModuleCore.RAW_ORE_MEAT, 100, resourceLocation);
+                this.meatOutput.fillForced(output, IFluidHandler.FluidAction.EXECUTE);
+            }
         };
     }
 
