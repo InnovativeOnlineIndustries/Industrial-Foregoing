@@ -88,9 +88,7 @@ public class EnchantmentApplicatorTile extends IndustrialProcessingTile<Enchantm
         long amount = this.tank.getFluidAmount();
         TileEntity tileEntity = this.world.getTileEntity(this.pos.up());
         if (tileEntity != null && tileEntity.getCapability(CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY).isPresent()){
-            if (tileEntity.getCapability(CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY).map(iFluidHandler -> iFluidHandler.getFluidInTank(0).getFluid().isIn(IndustrialTags.Fluids.EXPERIENCE)).orElse(false)){
-                amount += tileEntity.getCapability(CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY).map(iFluidHandler -> iFluidHandler.drain(new FluidStack(ModuleCore.ESSENCE.getSourceFluid(), Integer.MAX_VALUE), IFluidHandler.FluidAction.SIMULATE).getAmount()).orElse(0);
-            }
+            amount += tileEntity.getCapability(CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY).map(iFluidHandler -> iFluidHandler.drain(new FluidStack(ModuleCore.ESSENCE.getSourceFluid(), Integer.MAX_VALUE), IFluidHandler.FluidAction.SIMULATE).getAmount()).orElse(0);
         }
         return !output.getLeft().isEmpty() && amount >= getEssenceConsumed(output.getRight()) && this.output.getStackInSlot(0).isEmpty();
     }
@@ -207,9 +205,9 @@ public class EnchantmentApplicatorTile extends IndustrialProcessingTile<Enchantm
                                 flag3 = true;
                             } else {
                                 flag2 = true;
-//                                if (j2 > enchantment1.getMaxLevel()) {
-//                                    j2 = enchantment1.getMaxLevel();
-//                                }
+                                if (!EnchantmentApplicatorConfig.ignoreEnchantMaxLevels && j2 > enchantment1.getMaxLevel()) {
+                                    j2 = enchantment1.getMaxLevel();
+                                }
                                 map.put(enchantment1, j2);
                                 int enchantmentRarity = 0;
                                 switch (enchantment1.getRarity()) {

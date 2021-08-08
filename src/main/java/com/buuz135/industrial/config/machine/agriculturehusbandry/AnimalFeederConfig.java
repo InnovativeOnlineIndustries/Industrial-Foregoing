@@ -37,4 +37,7 @@ public class AnimalFeederConfig {
     @ConfigVal(comment = "Max Stored Power [FE] - Default: [10000 FE]")
     public static int maxStoredPower = 10000;
 
+    @ConfigVal(comment = "How many animals there need to be in the area to stop the machine from working")
+    public static int maxAnimalInTheArea = 35;
+
 }

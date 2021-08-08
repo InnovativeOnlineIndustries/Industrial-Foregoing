@@ -60,7 +60,7 @@ public class AnimalFeederTile extends IndustrialAreaWorkingTile<AnimalFeederTile
     public WorkAction work() {
         if (hasEnergy(powerPerOperation)) {
             List<AnimalEntity> mobs = this.world.getEntitiesWithinAABB(AnimalEntity.class, getWorkingArea().getBoundingBox());
-            if (mobs.size() == 0 || mobs.size() > 35) return new WorkAction(1, 0);
+            if (mobs.size() == 0 || mobs.size() > AnimalFeederConfig.maxAnimalInTheArea) return new WorkAction(1, 0);
             mobs.removeIf(animalEntity -> animalEntity.getGrowingAge() != 0 || !animalEntity.canFallInLove() || getFeedingItem(animalEntity).isEmpty());
             for (AnimalEntity firstParent : mobs) {
                 for (AnimalEntity secondParent : mobs) {
