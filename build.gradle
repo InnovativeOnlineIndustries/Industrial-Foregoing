@@ -37,6 +37,8 @@ archivesBaseName = "industrial-foregoing"
 version = "${minecraftVersion}-${project.api_version}"
 if (System.getenv('BUILD_NUMBER') != null) {
     version += "-" + System.getenv('BUILD_NUMBER')
+}else{
+    System.setProperty("org.gradle.java.home", "C:/Program Files/AdoptOpenJDK/jdk-8.0.265.01-hotspot")
 }
 
 sourceCompatibility = targetCompatibility = '1.8'
