@@ -6,9 +6,4 @@ labels: 'type: bug, version: 1.12'
 assignees: ''
 
 ---
-
-**Industrial Foregoing Version:**
-
-**TeslaCoreLib Version:**
-
-**Crashlog If Applicable (Upload to pastebin/gist):**
+**NOT LONGER SUPPORTED**

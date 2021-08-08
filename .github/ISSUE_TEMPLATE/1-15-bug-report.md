@@ -6,9 +6,4 @@ labels: 'type: bug, version: 1.15'
 assignees: ''
 
 ---
-
-**Industrial Foregoing Version:**
-
-**Titanium Version:**
-
-**Crashlog If Applicable (Upload to pastebin/gist):**
+**NOT LONGER SUPPORTED**

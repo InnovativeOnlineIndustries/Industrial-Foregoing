@@ -1,15 +1,47 @@
----
-name: 1.16 Bug report
-about: Create a report to help us improve
-title: "[1.16] Issue Title"
-labels: 'type: bug, version: 1.16'
-assignees: ''
-
----
-**DO NOT REPORT AN ISSUE IF YOU HAVEN'T TESTED THE ISSUE WITH THE LATEST VERSION IN CURSEFORGE**
-
-**Industrial Foregoing Version:**
-
-**Titanium Version:**
-
-**Crashlog If Applicable (Upload to pastebin/gist):**
+name: 1.16 Issue
+description: Report a bug or problem with Industrial Foregoing
+body:
+- type: markdown
+  attributes:
+  value: "*Please use the search functionality before reporting an issue. Also take a look at the closed issues!*"
+- type: textarea
+  attributes:
+  label: Issue description
+  description: A clear and concise description of the issue and if appropriate what the expected outcome should have been.
+  validations:
+  required: true
+- type: textarea
+  attributes:
+  label: Steps to reproduce
+  description: If there are specific steps that need to be taken to reproduce the issue list them here.
+  placeholder: |
+  1. Start by doing...
+  2. Next do...
+  3. See result described above
+- type: input
+  attributes:
+  label: Forge version
+  description: What version of Forge are you using?
+  placeholder: e.g. 36.1.32
+  validations:
+  required: true
+- type: input
+  attributes:
+  label: Mod Version version
+  description: What version of Industrial Foregoing are you using?
+  validations:
+  required: true
+- type: input
+  attributes:
+  label: Titanium Mod Version version
+  description: What version of Titanium are you using?
+  validations:
+  required: true
+- type: textarea
+  attributes:
+  label: Other relevant versions
+  description: If this issue is related to any other mods list their versions here.
+- type: input
+  attributes:
+  label: "If a (crash)log is relevant for this issue, link it here: (It's almost always relevant)"
+  description: "Please provide a [gist](https://gist.github.com/) / [pastebin](https://pastebin.com/) / etc link here. (Make sure that it isn't set to expire!)"
