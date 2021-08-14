@@ -1,0 +1,34 @@
+{
+  "type": "forge:conditional",
+  "recipes": [
+    {
+      "conditions": [
+        {
+          "values": [
+            {
+              "item": "titanium:iron_gear",
+              "type": "forge:item_exists"
+            }
+          ],
+          "type": "forge:and"
+        }
+      ],
+      "recipe": {
+        "type": "minecraft:crafting_shaped",
+        "pattern": [
+          " P ",
+          "P P",
+          " P "
+        ],
+        "key": {
+          "P": {
+            "item": "minecraft:iron_ingot"
+          }
+        },
+        "result": {
+          "item": "titanium:iron_gear"
+        }
+      }
+    }
+  ]
+}
