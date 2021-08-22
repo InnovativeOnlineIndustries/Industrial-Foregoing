@@ -1,18 +1,22 @@
 package com.buuz135.industrial.plugin.jei.category;
 
+import java.util.List;
+
 import com.buuz135.industrial.block.resourceproduction.tile.MaterialStoneWorkFactoryTile;
 import com.buuz135.industrial.utils.Reference;
-import com.mojang.blaze3d.matrix.MatrixStack;
+import com.mojang.blaze3d.vertex.PoseStack;
 import mezz.jei.api.constants.VanillaTypes;
 import mezz.jei.api.gui.IRecipeLayout;
 import mezz.jei.api.gui.drawable.IDrawable;
 import mezz.jei.api.helpers.IGuiHelper;
 import mezz.jei.api.ingredients.IIngredients;
 import mezz.jei.api.recipe.category.IRecipeCategory;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.ResourceLocation;
 
-import java.util.List;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.TextComponent;
+import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.item.ItemStack;
 
 public class StoneWorkCategory implements IRecipeCategory<StoneWorkCategory.Wrapper> {
 
@@ -35,8 +39,9 @@ public class StoneWorkCategory implements IRecipeCategory<StoneWorkCategory.Wrap
     }
 
     @Override
-    public String getTitle() {
-        return "Material StoneWork Factory";
+    public Component getTitle() {
+        // TODO: 21/08/2021 Make this translatable.
+        return new TextComponent("Material StoneWork Factory");
     }
 
     @Override
@@ -71,7 +76,7 @@ public class StoneWorkCategory implements IRecipeCategory<StoneWorkCategory.Wrap
     }
 
     @Override
-    public void draw(Wrapper recipe, MatrixStack matrixStack, double mouseX, double mouseY) {
+    public void draw(Wrapper recipe, PoseStack stack, double mouseX, double mouseY) {
 
 
     }

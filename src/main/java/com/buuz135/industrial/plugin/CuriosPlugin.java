@@ -21,6 +21,8 @@
  */
 package com.buuz135.industrial.plugin;
 
+import javax.annotation.Nullable;
+
 import com.buuz135.industrial.item.MeatFeederItem;
 import com.buuz135.industrial.item.infinity.item.ItemInfinityBackpack;
 import com.buuz135.industrial.plugin.curios.InfinityBackpackCurios;
@@ -31,10 +33,6 @@ import com.hrznstudio.titanium.event.handler.EventManager;
 import com.hrznstudio.titanium.network.locator.PlayerInventoryFinder;
 import com.hrznstudio.titanium.plugin.FeaturePluginInstance;
 import com.hrznstudio.titanium.plugin.PluginPhase;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.Direction;
-import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.ICapabilityProvider;
 import net.minecraftforge.common.util.LazyOptional;
@@ -46,7 +44,10 @@ import top.theillusivec4.curios.api.CuriosCapability;
 import top.theillusivec4.curios.api.SlotTypeMessage;
 import top.theillusivec4.curios.api.SlotTypePreset;
 
-import javax.annotation.Nullable;
+import net.minecraft.core.Direction;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.item.ItemStack;
 
 @FeaturePlugin(value = "curios", type = FeaturePlugin.FeaturePluginType.MOD)
 public class CuriosPlugin implements FeaturePluginInstance {

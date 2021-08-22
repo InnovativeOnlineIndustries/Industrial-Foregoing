@@ -21,6 +21,11 @@
  */
 package com.buuz135.industrial.plugin.jei.category;
 
+import java.util.Collections;
+import java.util.stream.Collectors;
+
+import javax.annotation.Nullable;
+
 import com.buuz135.industrial.utils.Reference;
 import mezz.jei.api.constants.VanillaTypes;
 import mezz.jei.api.gui.IRecipeLayout;
@@ -30,15 +35,14 @@ import mezz.jei.api.gui.ingredient.IGuiItemStackGroup;
 import mezz.jei.api.helpers.IGuiHelper;
 import mezz.jei.api.ingredients.IIngredients;
 import mezz.jei.api.recipe.category.IRecipeCategory;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.tags.ITag;
-import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fluids.FluidStack;
 
-import javax.annotation.Nullable;
-import java.util.Collections;
-import java.util.stream.Collectors;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.tags.Tag;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
 
 public class BioReactorRecipeCategory implements IRecipeCategory<BioReactorRecipeCategory.ReactorRecipeWrapper> {
 
@@ -46,12 +50,12 @@ public class BioReactorRecipeCategory implements IRecipeCategory<BioReactorRecip
 
     private IGuiHelper guiHelper;
     private IDrawable tankOverlay;
-    private String title;
+    private Component title;
 
     public BioReactorRecipeCategory(IGuiHelper guiHelper, String title) {
         this.guiHelper = guiHelper;
         tankOverlay = guiHelper.createDrawable(new ResourceLocation(Reference.MOD_ID, "textures/gui/jei.png"), 1, 207, 12, 48);
-        this.title = title;
+        this.title = new TranslatableComponent(title);
     }
 
     @Override
@@ -65,7 +69,7 @@ public class BioReactorRecipeCategory implements IRecipeCategory<BioReactorRecip
     }
 
     @Override
-    public String getTitle() {
+    public Component getTitle() {
         return title;
     }
 
@@ -83,7 +87,7 @@ public class BioReactorRecipeCategory implements IRecipeCategory<BioReactorRecip
 
     @Override
     public void setIngredients(ReactorRecipeWrapper reactorRecipeWrapper, IIngredients iIngredients) {
-        iIngredients.setInputLists(VanillaTypes.ITEM, Collections.singletonList(reactorRecipeWrapper.getStack().getAllElements().stream().map(ItemStack::new).collect(Collectors.toList())));
+        iIngredients.setInputLists(VanillaTypes.ITEM, Collections.singletonList(reactorRecipeWrapper.getStack().getValues().stream().map(ItemStack::new).collect(Collectors.toList())));
         iIngredients.setOutput(VanillaTypes.FLUID, reactorRecipeWrapper.getFluid());
     }
 
@@ -102,16 +106,16 @@ public class BioReactorRecipeCategory implements IRecipeCategory<BioReactorRecip
 
     public static class ReactorRecipeWrapper {
 
-        private ITag<Item> stack;
+        private Tag<Item> stack;
         private FluidStack fluid;
 
-        public ReactorRecipeWrapper(ITag<Item> stack, FluidStack fluid) {
+        public ReactorRecipeWrapper(Tag<Item> stack, FluidStack fluid) {
             this.stack = stack;
             this.fluid = fluid;
         }
 
 
-        public ITag<Item> getStack() {
+        public Tag<Item> getStack() {
             return stack;
         }
 

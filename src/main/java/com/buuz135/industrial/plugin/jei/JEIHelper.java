@@ -21,7 +21,7 @@
  */
 package com.buuz135.industrial.plugin.jei;
 
-import net.minecraft.item.ItemStack;
+import net.minecraft.world.item.ItemStack;
 
 public class JEIHelper {
 

@@ -21,12 +21,13 @@
  */
 package com.buuz135.industrial.plugin.jei.machineproduce;
 
-import net.minecraft.block.Block;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.crafting.Ingredient;
-import net.minecraft.tags.ITag;
 import net.minecraftforge.fluids.FluidStack;
+
+import net.minecraft.tags.Tag;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.crafting.Ingredient;
+import net.minecraft.world.level.block.Block;
 
 public class MachineProduceWrapper {
 
@@ -36,13 +37,13 @@ public class MachineProduceWrapper {
 
     public MachineProduceWrapper(Block block, ItemStack... output) {
         this.block = block;
-        this.outputItem = Ingredient.fromStacks(output);
+        this.outputItem = Ingredient.of(output);
         this.outputFluid = FluidStack.EMPTY;
     }
 
-    public MachineProduceWrapper(Block block, ITag<Item> output) {
+    public MachineProduceWrapper(Block block, Tag<Item> output) {
         this.block = block;
-        this.outputItem = Ingredient.fromTag(output);
+        this.outputItem = Ingredient.of(output);
         this.outputFluid = FluidStack.EMPTY;
     }
 

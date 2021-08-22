@@ -24,7 +24,7 @@ package com.buuz135.industrial.plugin.jei.category;
 import com.buuz135.industrial.api.recipe.ore.OreFluidEntryFermenter;
 import com.buuz135.industrial.module.ModuleResourceProduction;
 import com.buuz135.industrial.utils.Reference;
-import com.mojang.blaze3d.matrix.MatrixStack;
+import com.mojang.blaze3d.vertex.PoseStack;
 import mezz.jei.api.constants.VanillaTypes;
 import mezz.jei.api.gui.IRecipeLayout;
 import mezz.jei.api.gui.drawable.IDrawable;
@@ -32,10 +32,12 @@ import mezz.jei.api.gui.ingredient.IGuiFluidStackGroup;
 import mezz.jei.api.helpers.IGuiHelper;
 import mezz.jei.api.ingredients.IIngredients;
 import mezz.jei.api.recipe.category.IRecipeCategory;
+
+import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.text.TextFormatting;
-import net.minecraft.util.text.TranslationTextComponent;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.resources.ResourceLocation;
 
 public class FermentationStationCategory implements IRecipeCategory<OreFluidEntryFermenter> {
 
@@ -60,8 +62,9 @@ public class FermentationStationCategory implements IRecipeCategory<OreFluidEntr
     }
 
     @Override
-    public String getTitle() {
-        return new TranslationTextComponent(ModuleResourceProduction.FERMENTATION_STATION.getTranslationKey()).getString();
+    public Component getTitle() {
+        // TODO: 21/08/2021 Make translatable
+        return new TranslatableComponent(ModuleResourceProduction.FERMENTATION_STATION.getDescriptionId());
     }
 
     @Override
@@ -92,7 +95,7 @@ public class FermentationStationCategory implements IRecipeCategory<OreFluidEntr
     }
 
     @Override
-    public void draw(OreFluidEntryFermenter recipe, MatrixStack matrixStack, double mouseX, double mouseY) {
-        Minecraft.getInstance().fontRenderer.drawString(matrixStack, TextFormatting.DARK_AQUA + "Up to 500mb", 3, 52, 0xFFFFFF);
+    public void draw(OreFluidEntryFermenter recipe, PoseStack stack, double mouseX, double mouseY) {
+        Minecraft.getInstance().font.draw(stack, ChatFormatting.DARK_AQUA + "Up to 500mb", 3, 52, 0xFFFFFF);
     }
 }

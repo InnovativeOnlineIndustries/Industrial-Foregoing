@@ -153,6 +153,12 @@ dependencies {
     } else {
         implementation fg.deobf (project.dependencies.create('com.hrznstudio:titanium:1.16.5-3.2.8.2'))
     }
+    // Until jei-1.17.1 is actully out
+    compileOnly fg.deobf(files("mods/jei-1.17.1-8.0.0.9999-api.jar"))
+    runtimeOnly fg.deobf(files("mods/jei-1.17.1-8.0.0.9999.jar"))
+
+    compileOnly fg.deobf("top.theillusivec4.curios:curios-forge:1.17.1-5.0.0.1:api")
+    runtimeOnly fg.deobf("top.theillusivec4.curios:curios-forge:1.17.1-5.0.0.1")
     //if (findProject(':workspace') == null) {
 //    compileOnly fg.deobf("mezz.jei:jei-1.16.4:7.6.1.71:api")
 //    // at runtime, use the full JEI jar

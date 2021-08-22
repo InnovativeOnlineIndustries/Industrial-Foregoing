@@ -21,9 +21,13 @@
  */
 package com.buuz135.industrial.plugin.jei.category;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
 import com.buuz135.industrial.recipe.FluidExtractorRecipe;
 import com.buuz135.industrial.utils.Reference;
-import com.mojang.blaze3d.matrix.MatrixStack;
+import com.mojang.blaze3d.vertex.PoseStack;
 import mezz.jei.api.constants.VanillaTypes;
 import mezz.jei.api.gui.IRecipeLayout;
 import mezz.jei.api.gui.drawable.IDrawable;
@@ -32,16 +36,13 @@ import mezz.jei.api.gui.ingredient.IGuiItemStackGroup;
 import mezz.jei.api.helpers.IGuiHelper;
 import mezz.jei.api.ingredients.IIngredients;
 import mezz.jei.api.recipe.category.IRecipeCategory;
-import net.minecraft.client.Minecraft;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.StringTextComponent;
-import net.minecraft.util.text.TextFormatting;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
+import net.minecraft.ChatFormatting;
+import net.minecraft.client.Minecraft;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.TextComponent;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.item.ItemStack;
 
 public class FluidExtractorCategory implements IRecipeCategory<FluidExtractorRecipe> {
 
@@ -66,8 +67,8 @@ public class FluidExtractorCategory implements IRecipeCategory<FluidExtractorRec
     }
 
     @Override
-    public String getTitle() {
-        return "Fluid Extractor";
+    public Component getTitle() {
+        return new TextComponent("Fluid Extractor");
     }
 
     @Override
@@ -82,7 +83,7 @@ public class FluidExtractorCategory implements IRecipeCategory<FluidExtractorRec
 
     @Override
     public void setIngredients(FluidExtractorRecipe fluidExtractorRecipe, IIngredients ingredients) {
-        ingredients.setInputs(VanillaTypes.ITEM, new ArrayList<>(fluidExtractorRecipe.input.getStacks()));
+        ingredients.setInputs(VanillaTypes.ITEM, new ArrayList<>(fluidExtractorRecipe.input.getItems()));
         ingredients.setOutput(VanillaTypes.FLUID, fluidExtractorRecipe.output);
         if (!new ItemStack(fluidExtractorRecipe.result).isEmpty())
             ingredients.setOutput(VanillaTypes.ITEM, new ItemStack(fluidExtractorRecipe.result));
@@ -106,19 +107,19 @@ public class FluidExtractorCategory implements IRecipeCategory<FluidExtractorRec
     }
 
     @Override
-    public void draw(FluidExtractorRecipe recipe, MatrixStack matrixStack, double mouseX, double mouseY) {
-        Minecraft.getInstance().fontRenderer.drawString(matrixStack, TextFormatting.DARK_GRAY + "Production: ", 80, 6, 0xFFFFFF);
-        Minecraft.getInstance().fontRenderer.drawString(matrixStack, TextFormatting.DARK_GRAY + "" + recipe.output.getAmount() + "mb/12ticks", 80, 6 + (Minecraft.getInstance().fontRenderer.FONT_HEIGHT + 2) * 1, 0xFFFFFF);
-        Minecraft.getInstance().fontRenderer.drawString(matrixStack, TextFormatting.DARK_GRAY + "" + "Average: ", 80, 6 + (Minecraft.getInstance().fontRenderer.FONT_HEIGHT + 2) * 2, 0xFFFFFF);
-        Minecraft.getInstance().fontRenderer.drawString(matrixStack, TextFormatting.DARK_GRAY + "" + ((int) (8 / recipe.breakChance) * recipe.output.getAmount()) + "mb", 80, 6 + (Minecraft.getInstance().fontRenderer.FONT_HEIGHT + 2) * 3, 0xFFFFFF);
+    public void draw(FluidExtractorRecipe recipe, PoseStack stack, double mouseX, double mouseY) {
+        Minecraft.getInstance().font.draw(stack, ChatFormatting.DARK_GRAY + "Production: ", 80, 6, 0xFFFFFF);
+        Minecraft.getInstance().font.draw(stack, ChatFormatting.DARK_GRAY + "" + recipe.output.getAmount() + "mb/12ticks", 80, 6 + (Minecraft.getInstance().font.lineHeight + 2) * 1, 0xFFFFFF);
+        Minecraft.getInstance().font.draw(stack, ChatFormatting.DARK_GRAY + "" + "Average: ", 80, 6 + (Minecraft.getInstance().font.lineHeight + 2) * 2, 0xFFFFFF);
+        Minecraft.getInstance().font.draw(stack, ChatFormatting.DARK_GRAY + "" + ((int) (8 / recipe.breakChance) * recipe.output.getAmount()) + "mb", 80, 6 + (Minecraft.getInstance().font.lineHeight + 2) * 3, 0xFFFFFF);
     }
 
     @Override
-    public List<ITextComponent> getTooltipStrings(FluidExtractorRecipe recipe, double mouseX, double mouseY) {
+    public List<Component> getTooltipStrings(FluidExtractorRecipe recipe, double mouseX, double mouseY) {
         if (mouseX >= 78 && mouseX <= 140 && mouseY >= 5 && mouseY <= 25)
-            return Arrays.asList(new StringTextComponent("Production rate"));
+            return Arrays.asList(new TextComponent("Production rate"));
         if (mouseX >= 78 && mouseX <= 120 && mouseY >= 25 && mouseY <= 45)
-            return Arrays.asList(new StringTextComponent("Average numbers aren't real numbers"));
+            return Arrays.asList(new TextComponent("Average numbers aren't real numbers"));
         return new ArrayList<>();
     }
 }

@@ -21,12 +21,16 @@
  */
 package com.buuz135.industrial.plugin.jei.machineproduce;
 
+import java.awt.Color;
+import java.util.Arrays;
+import java.util.Collections;
+
 import com.buuz135.industrial.utils.Reference;
 import com.hrznstudio.titanium.api.client.AssetTypes;
 import com.hrznstudio.titanium.client.screen.addon.SlotsScreenAddon;
 import com.hrznstudio.titanium.client.screen.asset.DefaultAssetProvider;
 import com.hrznstudio.titanium.util.AssetUtil;
-import com.mojang.blaze3d.matrix.MatrixStack;
+import com.mojang.blaze3d.vertex.PoseStack;
 import mezz.jei.api.constants.VanillaTypes;
 import mezz.jei.api.gui.IRecipeLayout;
 import mezz.jei.api.gui.drawable.IDrawable;
@@ -35,15 +39,14 @@ import mezz.jei.api.gui.ingredient.IGuiItemStackGroup;
 import mezz.jei.api.helpers.IGuiHelper;
 import mezz.jei.api.ingredients.IIngredients;
 import mezz.jei.api.recipe.category.IRecipeCategory;
-import net.minecraft.client.Minecraft;
-import net.minecraft.item.DyeColor;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.ResourceLocation;
 import org.apache.commons.lang3.tuple.Pair;
 
-import java.awt.*;
-import java.util.Arrays;
-import java.util.Collections;
+import net.minecraft.client.Minecraft;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.TextComponent;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.item.DyeColor;
+import net.minecraft.world.item.ItemStack;
 
 public class MachineProduceCategory implements IRecipeCategory<MachineProduceWrapper> {
 
@@ -68,8 +71,8 @@ public class MachineProduceCategory implements IRecipeCategory<MachineProduceWra
     }
 
     @Override
-    public String getTitle() {
-        return "Machine Outputs";
+    public Component getTitle() {
+        return new TextComponent( "Machine Outputs");
     }
 
     @Override
@@ -88,7 +91,7 @@ public class MachineProduceCategory implements IRecipeCategory<MachineProduceWra
         if (machineProduceWrapper.getOutputItem() == null){
             iIngredients.setOutput(VanillaTypes.FLUID, machineProduceWrapper.getOutputFluid());
         } else {
-            iIngredients.setOutputLists(VanillaTypes.ITEM, Collections.singletonList(Arrays.asList(machineProduceWrapper.getOutputItem().getMatchingStacks().clone())));
+            iIngredients.setOutputLists(VanillaTypes.ITEM, Collections.singletonList(Arrays.asList(machineProduceWrapper.getOutputItem().getItems().clone())));
         }
     }
 
@@ -109,11 +112,11 @@ public class MachineProduceCategory implements IRecipeCategory<MachineProduceWra
     }
 
     @Override
-    public void draw(MachineProduceWrapper recipe, MatrixStack matrixStack, double mouseX, double mouseY) {
+    public void draw(MachineProduceWrapper recipe, PoseStack stack, double mouseX, double mouseY) {
         if (recipe.getOutputItem() == null){
-            AssetUtil.drawAsset(matrixStack, Minecraft.getInstance().currentScreen, DefaultAssetProvider.DEFAULT_PROVIDER.getAsset(AssetTypes.TANK_SMALL), 56 , Minecraft.getInstance().fontRenderer.FONT_HEIGHT / 2);
+            AssetUtil.drawAsset(stack, Minecraft.getInstance().screen, DefaultAssetProvider.DEFAULT_PROVIDER.getAsset(AssetTypes.TANK_SMALL), 56 , Minecraft.getInstance().font.lineHeight / 2);
         } else {
-            SlotsScreenAddon.drawAsset(matrixStack, Minecraft.getInstance().currentScreen, DefaultAssetProvider.DEFAULT_PROVIDER, 56 , Minecraft.getInstance().fontRenderer.FONT_HEIGHT / 2, 0, 0, 1, integer -> Pair.of(1,1), integer -> ItemStack.EMPTY, true, integer -> new Color(DyeColor.ORANGE.getFireworkColor()), integer -> true);
+            SlotsScreenAddon.drawAsset(stack, Minecraft.getInstance().screen, DefaultAssetProvider.DEFAULT_PROVIDER, 56 , Minecraft.getInstance().font.lineHeight / 2, 0, 0, 1, integer -> Pair.of(1,1), integer -> ItemStack.EMPTY, true, integer -> new Color(DyeColor.ORANGE.getFireworkColor()), integer -> true);
         }
     }
 

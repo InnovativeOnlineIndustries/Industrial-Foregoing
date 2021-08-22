@@ -21,12 +21,15 @@
  */
 package com.buuz135.industrial.plugin.jei.category;
 
+import java.awt.Color;
+import java.util.stream.Collectors;
+
 import com.buuz135.industrial.api.recipe.ore.OreFluidEntrySieve;
 import com.buuz135.industrial.module.ModuleResourceProduction;
 import com.buuz135.industrial.utils.Reference;
 import com.hrznstudio.titanium.client.screen.addon.SlotsScreenAddon;
 import com.hrznstudio.titanium.client.screen.asset.DefaultAssetProvider;
-import com.mojang.blaze3d.matrix.MatrixStack;
+import com.mojang.blaze3d.vertex.PoseStack;
 import mezz.jei.api.constants.VanillaTypes;
 import mezz.jei.api.gui.IRecipeLayout;
 import mezz.jei.api.gui.drawable.IDrawable;
@@ -35,15 +38,14 @@ import mezz.jei.api.gui.ingredient.IGuiItemStackGroup;
 import mezz.jei.api.helpers.IGuiHelper;
 import mezz.jei.api.ingredients.IIngredients;
 import mezz.jei.api.recipe.category.IRecipeCategory;
-import net.minecraft.client.Minecraft;
-import net.minecraft.item.DyeColor;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.text.TranslationTextComponent;
 import org.apache.commons.lang3.tuple.Pair;
 
-import java.awt.*;
-import java.util.stream.Collectors;
+import net.minecraft.client.Minecraft;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.item.DyeColor;
+import net.minecraft.world.item.ItemStack;
 
 public class FluidSieveCategory implements IRecipeCategory<OreFluidEntrySieve> {
 
@@ -68,8 +70,8 @@ public class FluidSieveCategory implements IRecipeCategory<OreFluidEntrySieve> {
     }
 
     @Override
-    public String getTitle() {
-        return new TranslationTextComponent(ModuleResourceProduction.FLUID_SIEVING_MACHINE.getTranslationKey()).getString();
+    public Component getTitle() {
+        return new TranslatableComponent(ModuleResourceProduction.FLUID_SIEVING_MACHINE.getDescriptionId());
     }
 
     @Override
@@ -84,7 +86,7 @@ public class FluidSieveCategory implements IRecipeCategory<OreFluidEntrySieve> {
 
     @Override
     public void setIngredients(OreFluidEntrySieve oreWasherWrapper, IIngredients iIngredients) {
-        iIngredients.setInputs(VanillaTypes.ITEM,  oreWasherWrapper.getSieveItem().getAllElements().stream().map(ItemStack::new).collect(Collectors.toList()));
+        iIngredients.setInputs(VanillaTypes.ITEM,  oreWasherWrapper.getSieveItem().getValues().stream().map(ItemStack::new).collect(Collectors.toList()));
         iIngredients.setInput(VanillaTypes.FLUID, oreWasherWrapper.getInput());
         iIngredients.setOutput(VanillaTypes.ITEM, oreWasherWrapper.getOutput());
     }
@@ -104,9 +106,9 @@ public class FluidSieveCategory implements IRecipeCategory<OreFluidEntrySieve> {
     }
 
     @Override
-    public void draw(OreFluidEntrySieve recipe, MatrixStack matrixStack, double mouseX, double mouseY) {
-        SlotsScreenAddon.drawAsset(matrixStack, Minecraft.getInstance().currentScreen, DefaultAssetProvider.DEFAULT_PROVIDER, 24, 36, 0, 0, 1, integer -> Pair.of(18 * (integer % 1), 18 * (integer / 1)), integer -> ItemStack.EMPTY, true, integer -> new Color(DyeColor.BLUE.getFireworkColor()), integer -> true);
-        SlotsScreenAddon.drawAsset(matrixStack, Minecraft.getInstance().currentScreen, DefaultAssetProvider.DEFAULT_PROVIDER, 50, 17, 0, 0, 1, integer -> Pair.of(18 * (integer % 1), 18 * (integer / 1)), integer -> ItemStack.EMPTY, true, integer -> new Color(DyeColor.ORANGE.getFireworkColor()), integer -> true);
+    public void draw(OreFluidEntrySieve recipe, PoseStack stack, double mouseX, double mouseY) {
+        SlotsScreenAddon.drawAsset(stack, Minecraft.getInstance().screen, DefaultAssetProvider.DEFAULT_PROVIDER, 24, 36, 0, 0, 1, integer -> Pair.of(18 * (integer % 1), 18 * (integer / 1)), integer -> ItemStack.EMPTY, true, integer -> new Color(DyeColor.BLUE.getFireworkColor()), integer -> true);
+        SlotsScreenAddon.drawAsset(stack, Minecraft.getInstance().screen, DefaultAssetProvider.DEFAULT_PROVIDER, 50, 17, 0, 0, 1, integer -> Pair.of(18 * (integer % 1), 18 * (integer / 1)), integer -> ItemStack.EMPTY, true, integer -> new Color(DyeColor.ORANGE.getFireworkColor()), integer -> true);
 
     }
 }
