@@ -71,6 +71,7 @@ import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.World;
 import net.minecraftforge.common.capabilities.ICapabilityProvider;
 import net.minecraftforge.fluids.FluidStack;
+import net.minecraftforge.fml.DistExecutor;
 import net.minecraftforge.fml.network.NetworkDirection;
 import net.minecraftforge.fml.network.NetworkHooks;
 import org.apache.commons.lang3.tuple.Pair;
@@ -196,7 +197,7 @@ public class ItemInfinity extends IFCustomItem implements INamedContainerProvide
 
     @Override
     public double getDurabilityForDisplay(ItemStack stack) {
-        if (!Screen.hasShiftDown()) { //hasShiftDown
+        if (DistExecutor.safeRunForDist(() -> () -> !Screen.hasShiftDown(), () -> () -> true)) { //hasShiftDown
             int fuel = getFuelFromStack(stack);
             return 1 - fuel / 1_000_000D;
         } else {
@@ -207,7 +208,7 @@ public class ItemInfinity extends IFCustomItem implements INamedContainerProvide
 
     @Override
     public int getRGBDurabilityForDisplay(ItemStack stack) {
-        return !Screen.hasShiftDown() ? 0xcb00ff /*Purple*/ : 0x00d0ff /*Cyan*/;
+        return DistExecutor.safeRunForDist(() -> () -> !Screen.hasShiftDown(), () -> () -> true) ? 0xcb00ff /*Purple*/ : 0x00d0ff /*Cyan*/;
     }
 
     @Override
