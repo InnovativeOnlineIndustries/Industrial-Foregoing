@@ -197,7 +197,7 @@ public class ItemInfinity extends IFCustomItem implements INamedContainerProvide
 
     @Override
     public double getDurabilityForDisplay(ItemStack stack) {
-        if (DistExecutor.safeRunForDist(() -> () -> !Screen.hasShiftDown(), () -> () -> true)) { //hasShiftDown
+        if (!DistExecutor.safeRunForDist(() ->  Screen::hasShiftDown, () -> Boolean.FALSE::booleanValue)) { //hasShiftDown
             int fuel = getFuelFromStack(stack);
             return 1 - fuel / 1_000_000D;
         } else {
@@ -208,7 +208,7 @@ public class ItemInfinity extends IFCustomItem implements INamedContainerProvide
 
     @Override
     public int getRGBDurabilityForDisplay(ItemStack stack) {
-        return DistExecutor.safeRunForDist(() -> () -> !Screen.hasShiftDown(), () -> () -> true) ? 0xcb00ff /*Purple*/ : 0x00d0ff /*Cyan*/;
+        return !DistExecutor.safeRunForDist(() -> Screen::hasShiftDown, () -> Boolean.FALSE::booleanValue) ? 0xcb00ff /*Purple*/ : 0x00d0ff /*Cyan*/;
     }
 
     @Override
