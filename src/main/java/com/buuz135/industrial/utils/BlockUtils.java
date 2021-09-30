@@ -120,7 +120,7 @@ public class BlockUtils {
     }
 
     public static boolean spawnItemStack(ItemStack stack, Level world, BlockPos pos) {
-        ItemEntity item = new ItemEntity(world, pos.getX() + 0.5, pos.getY() + 0.2, pos.getZ() + 0.5);
+        ItemEntity item = new ItemEntity(world, pos.getX() + 0.5, pos.getY() + 0.2, pos.getZ() + 0.5, stack);
         item.setDeltaMovement(0, -1, 0);
         item.setPickUpDelay(40);
         item.setItem(stack);
@@ -144,75 +144,75 @@ public class BlockUtils {
     }
 
     public static void renderLaserBeam(BlockEntity tile, double x, double y, double z, Direction direction, float partialTicks, int length) {
-        Tesselator tess = Tesselator.getInstance();
-        RenderSystem.pushMatrix();
-        double tempX = x;
-        double tempY = y;
-        double tempZ = z;
-        switch (direction) {
-            case NORTH:
-                RenderSystem.rotatef(270, 1, 0, 0);
-                tempY = -z;
-                tempZ = y;
-                break;
-            case SOUTH:
-                RenderSystem.rotatef(90, 1, 0, 0);
-                tempY = z + 1;
-                tempZ = -y - 1;
-                break;
-            case EAST:
-                RenderSystem.rotatef(270, 0, 0, 1);
-                tempY = x + 1;
-                tempX = -y - 1;
-                break;
-            case WEST:
-                RenderSystem.rotatef(90, 0, 0, 1);
-                tempY = -x;
-                tempX = y;
-                break;
-            default:
-                tempY -= length;
-
-        }
-        Lighting.turnOff();
-        //OpenGlHelper.setLightmapTextureCoords(OpenGlHelper.lightmapTexUnit, 240.0F, 240.0F);
-        GL11.glDisable(GL11.GL_CULL_FACE);
-        GL11.glDisable(GL11.GL_BLEND);
-        GL11.glDepthMask(true);
-        BufferBuilder buffer = tess.getBuilder();
-        buffer.begin(GL11.GL_QUADS, DefaultVertexFormat.POSITION_TEX);
-        float d1 = -(tile.getLevel().getGameTime() % 15) / 15f;
-        float d2 = (tile.getLevel().getGameTime() % 40) / 2f;
-        double pointA = 0.45 - d2 / 200D;
-        if (d2 >= 10) {
-            pointA = 0.35 + d2 / 200D;
-        }
-        double pointB = 1 - pointA;
-        float uStart = 0.0f;
-        float uEnd = 1.0f;
-        float vStart = -1.0F + d1;
-        float vEnd = (length * 2) + vStart;
-        buffer.vertex(tempX + pointA, tempY + length, tempZ + pointA).uv(uEnd, vEnd).endVertex();
-        buffer.vertex(tempX + pointA, tempY, tempZ + pointA).uv(uEnd, vStart).endVertex();
-        buffer.vertex(tempX + pointB, tempY, tempZ + pointA).uv(uStart, vStart).endVertex();
-        buffer.vertex(tempX + pointB, tempY + length, tempZ + pointA).uv(uStart, vEnd).endVertex();
-        buffer.vertex(tempX + pointB, tempY + length, tempZ + pointB).uv(uEnd, vEnd).endVertex();
-        buffer.vertex(tempX + pointB, tempY, tempZ + pointB).uv(uEnd, vStart).endVertex();
-        buffer.vertex(tempX + pointA, tempY, tempZ + pointB).uv(uStart, vStart).endVertex();
-        buffer.vertex(tempX + pointA, tempY + length, tempZ + pointB).uv(uStart, vEnd).endVertex();
-        buffer.vertex(tempX + pointB, tempY + length, tempZ + pointA).uv(uEnd, vEnd).endVertex();
-        buffer.vertex(tempX + pointB, tempY, tempZ + pointA).uv(uEnd, vStart).endVertex();
-        buffer.vertex(tempX + pointB, tempY, tempZ + pointB).uv(uStart, vStart).endVertex();
-        buffer.vertex(tempX + pointB, tempY + length, tempZ + pointB).uv(uStart, vEnd).endVertex();
-        buffer.vertex(tempX + pointA, tempY + length, tempZ + pointB).uv(uEnd, vEnd).endVertex();
-        buffer.vertex(tempX + pointA, tempY, tempZ + pointB).uv(uEnd, vStart).endVertex();
-        buffer.vertex(tempX + pointA, tempY, tempZ + pointA).uv(uStart, vStart).endVertex();
-        buffer.vertex(tempX + pointA, tempY + length, tempZ + pointA).uv(uStart, vEnd).endVertex();
-        tess.end();
-        //RenderSystem.setupGui3DDiffuseLighting();
-        GL11.glEnable(GL11.GL_CULL_FACE);
-        //GL11.glEnable(GL11.GL_BLEND);
-
-        RenderSystem.popMatrix();
+//        Tesselator tess = Tesselator.getInstance();
+//        RenderSystem.pushMatrix();
+//        double tempX = x;
+//        double tempY = y;
+//        double tempZ = z;
+//        switch (direction) {
+//            case NORTH:
+//                RenderSystem.rotatef(270, 1, 0, 0);
+//                tempY = -z;
+//                tempZ = y;
+//                break;
+//            case SOUTH:
+//                RenderSystem.rotatef(90, 1, 0, 0);
+//                tempY = z + 1;
+//                tempZ = -y - 1;
+//                break;
+//            case EAST:
+//                RenderSystem.rotatef(270, 0, 0, 1);
+//                tempY = x + 1;
+//                tempX = -y - 1;
+//                break;
+//            case WEST:
+//                RenderSystem.rotatef(90, 0, 0, 1);
+//                tempY = -x;
+//                tempX = y;
+//                break;
+//            default:
+//                tempY -= length;
+//
+//        }
+//        Lighting.turnOff();
+//        //OpenGlHelper.setLightmapTextureCoords(OpenGlHelper.lightmapTexUnit, 240.0F, 240.0F);
+//        GL11.glDisable(GL11.GL_CULL_FACE);
+//        GL11.glDisable(GL11.GL_BLEND);
+//        GL11.glDepthMask(true);
+//        BufferBuilder buffer = tess.getBuilder();
+//        buffer.begin(GL11.GL_QUADS, DefaultVertexFormat.POSITION_TEX);
+//        float d1 = -(tile.getLevel().getGameTime() % 15) / 15f;
+//        float d2 = (tile.getLevel().getGameTime() % 40) / 2f;
+//        double pointA = 0.45 - d2 / 200D;
+//        if (d2 >= 10) {
+//            pointA = 0.35 + d2 / 200D;
+//        }
+//        double pointB = 1 - pointA;
+//        float uStart = 0.0f;
+//        float uEnd = 1.0f;
+//        float vStart = -1.0F + d1;
+//        float vEnd = (length * 2) + vStart;
+//        buffer.vertex(tempX + pointA, tempY + length, tempZ + pointA).uv(uEnd, vEnd).endVertex();
+//        buffer.vertex(tempX + pointA, tempY, tempZ + pointA).uv(uEnd, vStart).endVertex();
+//        buffer.vertex(tempX + pointB, tempY, tempZ + pointA).uv(uStart, vStart).endVertex();
+//        buffer.vertex(tempX + pointB, tempY + length, tempZ + pointA).uv(uStart, vEnd).endVertex();
+//        buffer.vertex(tempX + pointB, tempY + length, tempZ + pointB).uv(uEnd, vEnd).endVertex();
+//        buffer.vertex(tempX + pointB, tempY, tempZ + pointB).uv(uEnd, vStart).endVertex();
+//        buffer.vertex(tempX + pointA, tempY, tempZ + pointB).uv(uStart, vStart).endVertex();
+//        buffer.vertex(tempX + pointA, tempY + length, tempZ + pointB).uv(uStart, vEnd).endVertex();
+//        buffer.vertex(tempX + pointB, tempY + length, tempZ + pointA).uv(uEnd, vEnd).endVertex();
+//        buffer.vertex(tempX + pointB, tempY, tempZ + pointA).uv(uEnd, vStart).endVertex();
+//        buffer.vertex(tempX + pointB, tempY, tempZ + pointB).uv(uStart, vStart).endVertex();
+//        buffer.vertex(tempX + pointB, tempY + length, tempZ + pointB).uv(uStart, vEnd).endVertex();
+//        buffer.vertex(tempX + pointA, tempY + length, tempZ + pointB).uv(uEnd, vEnd).endVertex();
+//        buffer.vertex(tempX + pointA, tempY, tempZ + pointB).uv(uEnd, vStart).endVertex();
+//        buffer.vertex(tempX + pointA, tempY, tempZ + pointA).uv(uStart, vStart).endVertex();
+//        buffer.vertex(tempX + pointA, tempY + length, tempZ + pointA).uv(uStart, vEnd).endVertex();
+//        tess.end();
+//        //RenderSystem.setupGui3DDiffuseLighting();
+//        GL11.glEnable(GL11.GL_CULL_FACE);
+//        //GL11.glEnable(GL11.GL_BLEND);
+//
+//        RenderSystem.popMatrix();
     }
 }

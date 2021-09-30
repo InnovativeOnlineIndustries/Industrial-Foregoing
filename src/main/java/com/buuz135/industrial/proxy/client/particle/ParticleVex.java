@@ -112,7 +112,7 @@ public class ParticleVex extends Particle {
         double z = entity.zOld + (vector3d.z - entity.zOld);
         Tesselator tessellator = Tesselator.getInstance();
         BufferBuilder bufferBuilder = tessellator.getBuilder();
-        bufferBuilder.begin(3, DefaultVertexFormat.POSITION_COLOR_LIGHTMAP);
+//        bufferBuilder.begin(3, DefaultVertexFormat.POSITION_COLOR_LIGHTMAP);
         for (Vec3 line : lines) {
             bufferBuilder.vertex(line.x - x, line.y - y, line.z - z).color(1f, 1f, 1f, 1f).uv2(240, 240).endVertex();
         }

@@ -22,6 +22,7 @@
 package com.buuz135.industrial.item;
 
 import net.minecraft.data.recipes.FinishedRecipe;
+import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.CreativeModeTab;
@@ -71,7 +72,7 @@ public class MobEssenceToolItem extends IFCustomItem {
             compoundNBT.putInt("Kills", 1);
             stack.setTag(compoundNBT);
             playerIn.setItemInHand(hand, stack);
-            target.remove(true);
+            target.remove(Entity.RemovalReason.KILLED);
             return InteractionResult.SUCCESS;
         }
         return super.interactLivingEntity(stack, playerIn, target, hand);

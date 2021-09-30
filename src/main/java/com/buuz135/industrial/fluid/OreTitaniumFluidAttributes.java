@@ -32,7 +32,8 @@ public class OreTitaniumFluidAttributes extends FluidAttributes {
             String tag = stack.getTag().getString(NBT_TAG);
             List<Item> items = SerializationTags.getInstance().getTagOrThrow(Registry.ITEM_REGISTRY, new ResourceLocation(tag.replace("forge:ores/", "forge:dusts/")), resourceLocation -> null).getValues();
             if (items.size() > 0){
-                return ItemStackUtils.getColor(new ItemStack(items.get(0)));
+//                return ItemStackUtils.getColor(new ItemStack(items.get(0)));
+                return 0;
             }
         }
         return super.getColor(stack);

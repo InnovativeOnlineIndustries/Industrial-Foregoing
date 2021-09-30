@@ -34,6 +34,7 @@ import com.hrznstudio.titanium.component.fluid.SidedFluidTankComponent;
 import com.hrznstudio.titanium.item.AugmentWrapper;
 
 import net.minecraft.core.BlockPos;
+import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.animal.Animal;
@@ -84,7 +85,7 @@ public class SlaughterFactoryTile extends IndustrialAreaWorkingTile<SlaughterFac
             if (mobs.size() > 0) {
                 Mob entity = mobs.get(0);
                 float currentHealth = entity.getHealth();
-                entity.remove(true);
+                entity.remove(Entity.RemovalReason.KILLED);
                 if (!entity.isAlive()) {
                     meat.fillForced(new FluidStack(ModuleCore.MEAT.getSourceFluid(), entity instanceof Animal ? (int) (currentHealth) : (int) currentHealth * 20), IFluidHandler.FluidAction.EXECUTE);
                     pinkSlime.fillForced(new FluidStack(ModuleCore.PINK_SLIME.getSourceFluid(), entity instanceof Animal ? (int) (currentHealth * 20) : (int) currentHealth), IFluidHandler.FluidAction.EXECUTE);

@@ -66,8 +66,8 @@ public abstract class BHTile<T extends BHTile<T>> extends ActiveTile<T> {
                     public void drawBackgroundLayer(PoseStack stack, Screen screen, IAssetProvider provider, int guiX, int guiY, int mouseX, int mouseY, float partialTicks) {
                         AssetUtil.drawAsset(stack, screen, provider.getAsset(AssetTypes.ITEM_BACKGROUND), guiX + getPosX(), guiY + getPosY());
                         Minecraft.getInstance().getItemRenderer().renderGuiItem(new ItemStack(display ? Items.ENDER_EYE: Items.ENDER_PEARL), guiX + getPosX() + 1, guiY + getPosY() + 1);
-                        Lighting.turnOff();
-                        RenderSystem.enableAlphaTest();
+//                        Lighting.turnOff();
+//                        RenderSystem.enableAlphaTest();
                     }
 
                     @Override

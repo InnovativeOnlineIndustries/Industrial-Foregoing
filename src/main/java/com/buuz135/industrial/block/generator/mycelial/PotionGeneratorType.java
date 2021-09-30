@@ -109,7 +109,7 @@ public class PotionGeneratorType implements IMycelialGeneratorType{
 
     @Override
     public List<MycelialGeneratorRecipe> getRecipes() {
-        return ForgeRegistries.POTION_TYPES.getValues().stream().filter(potion -> potion != Potions.EMPTY).map(effect -> Arrays.asList(
+        return ForgeRegistries.POTIONS.getValues().stream().filter(potion -> potion != Potions.EMPTY).map(effect -> Arrays.asList(
                 PotionUtils.setPotion(new ItemStack(Items.POTION), effect),
                 PotionUtils.setPotion(new ItemStack(Items.SPLASH_POTION), effect),
                 PotionUtils.setPotion(new ItemStack(Items.LINGERING_POTION), effect)

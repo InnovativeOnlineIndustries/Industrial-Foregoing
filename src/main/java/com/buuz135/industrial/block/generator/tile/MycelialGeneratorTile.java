@@ -36,6 +36,7 @@ import com.hrznstudio.titanium.component.inventory.SidedInventoryComponent;
 import com.hrznstudio.titanium.component.progress.ProgressBarComponent;
 
 import net.minecraft.core.BlockPos;
+import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.item.DyeColor;
 import net.minecraft.nbt.CompoundTag;
@@ -130,12 +131,12 @@ public class MycelialGeneratorTile extends IndustrialGeneratorTile<MycelialGener
     }
 
     @Override
-    public void tick() {
-        if (isServer() && bar.getCanIncrease().test(this) && (bar.getProgress() != 0 || canStart()) && this.level.getGameTime() % 5 == 0){
-            MycelialDataManager.setGeneratorInfo(owner, this.level, this.worldPosition, this.type);
+    public void serverTick(Level level, BlockPos pos, BlockState state, MycelialGeneratorTile blockEntity) {
+        if (bar.getCanIncrease().test(this) && (bar.getProgress() != 0 || canStart()) && this.level.getGameTime() % 5 == 0){
+//            MycelialDataManager.setGeneratorInfo(owner, this.level, this.worldPosition, this.type);
             type.onTick(this.level, this.worldPosition);
         }
-        super.tick();
+        super.serverTick(level, pos, state, blockEntity);
     }
 
     @Override
@@ -147,11 +148,11 @@ public class MycelialGeneratorTile extends IndustrialGeneratorTile<MycelialGener
     }
 
     @Override
-    public void load(BlockState state, CompoundTag compound) {
+    public void load(CompoundTag compound) {
         for (int i = 0; i < this.inputs.length; i++) {
             this.inputs[i].deserializeNBT(compound.getCompound("input_" + i));
         }
-        super.load(state, compound);
+        super.load(compound);
     }
 
     @Override

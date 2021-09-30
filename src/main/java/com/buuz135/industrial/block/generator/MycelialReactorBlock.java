@@ -81,15 +81,15 @@ public class MycelialReactorBlock extends IndustrialBlock<MycelialReactorTile> {
     public InteractionResult use(BlockState state, Level worldIn, BlockPos pos, Player player, InteractionHand hand, BlockHitResult ray) {
         BlockEntity tileEntity = worldIn.getBlockEntity(pos);
         if (player.isShiftKeyDown() && !worldIn.isClientSide && tileEntity instanceof MycelialReactorTile){
-            List<String> available = MycelialDataManager.getReactorAvailable(((MycelialReactorTile) tileEntity).getOwner(), worldIn, false);
-            if (available.size() != IMycelialGeneratorType.TYPES.size()){
-                player.sendMessage(new TextComponent("Generators not running:").withStyle(ChatFormatting.RED), player.getUUID());
-            }
-            for (IMycelialGeneratorType type : IMycelialGeneratorType.TYPES) {
-                if (!available.contains(type.getName())){
-                    player.sendMessage(new TranslatableComponent("block.industrialforegoing.mycelial_" + type.getName()).withStyle(ChatFormatting.RED), player.getUUID());
-                }
-            }
+//            List<String> available = MycelialDataManager.getReactorAvailable(((MycelialReactorTile) tileEntity).getOwner(), worldIn, false);
+//            if (available.size() != IMycelialGeneratorType.TYPES.size()){
+//                player.sendMessage(new TextComponent("Generators not running:").withStyle(ChatFormatting.RED), player.getUUID());
+//            }
+//            for (IMycelialGeneratorType type : IMycelialGeneratorType.TYPES) {
+//                if (!available.contains(type.getName())){
+//                    player.sendMessage(new TranslatableComponent("block.industrialforegoing.mycelial_" + type.getName()).withStyle(ChatFormatting.RED), player.getUUID());
+//                }
+//            }
         }
         return super.use(state, worldIn, pos, player, hand, ray);
     }

@@ -43,7 +43,6 @@ import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.data.recipes.FinishedRecipe;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.item.*;
 import net.minecraft.world.level.storage.loot.LootTable;
 import net.minecraft.world.level.storage.loot.functions.CopyNbtFunction;
 import net.minecraft.nbt.CompoundTag;

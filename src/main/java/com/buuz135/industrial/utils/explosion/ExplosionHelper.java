@@ -53,11 +53,12 @@ public class ExplosionHelper {
         LevelChunk chunk = getChunk(pos);
         BlockState oldState = chunk.getBlockState(pos);
 
-        if (oldState.getBlock().hasTileEntity(oldState)) {
-            serverWorld.removeBlock(pos, false);
-            serverWorld.getLightEngine().checkBlock(pos);
-            return chunk;
-        }
+        // TODO: 22/08/2021 hasTileentity.
+//        if (oldState.getBlock().hasTileEntity(oldState)) {
+//            serverWorld.removeBlock(pos, false);
+//            serverWorld.getLightEngine().checkBlock(pos);
+//            return chunk;
+//        }
 
         LevelChunkSection storage = getBlockStorage(pos);
         if (storage != null) {
@@ -163,12 +164,12 @@ public class ExplosionHelper {
             for (LevelChunk chunk : chunks) {
                 chunk.setUnsaved(true);
                 ThreadedLevelLightEngine lightManager = (ThreadedLevelLightEngine) helper.serverWorld.getLightEngine();
-                lightManager.lightChunk(chunk, false)
-                        .thenRun(() -> helper.serverWorld.getChunkSource().chunkMap.getPlayers(chunk.getPos(), false)
-                                .forEach(e -> e.connection.send(new ClientboundLightUpdatePacket(chunk.getPos(), helper.serverWorld.getLightEngine(), true))));
-
-                ClientboundLevelChunkPacket packet = new ClientboundLevelChunkPacket(chunk, 65535);
-                helper.serverWorld.getChunkSource().chunkMap.getPlayers(chunk.getPos(), false).forEach(e -> e.connection.send(packet));
+//                lightManager.lightChunk(chunk, false)
+//                        .thenRun(() -> helper.serverWorld.getChunkSource().chunkMap.getPlayers(chunk.getPos(), false)
+//                                .forEach(e -> e.connection.send(new ClientboundLightUpdatePacket(chunk.getPos(), helper.serverWorld.getLightEngine(), true))));
+//
+//                ClientboundLevelChunkPacket packet = new ClientboundLevelChunkPacket(chunk, 65535);
+//                helper.serverWorld.getChunkSource().chunkMap.getPlayers(chunk.getPos(), false).forEach(e -> e.connection.send(packet));
             }
         }
 

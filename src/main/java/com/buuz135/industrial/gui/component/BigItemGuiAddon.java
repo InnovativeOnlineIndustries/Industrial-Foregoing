@@ -65,8 +65,8 @@ public abstract class BigItemGuiAddon extends BasicScreenAddon {
         AssetUtil.drawAsset(stack, screen, provider.getAsset(AssetTypes.ITEM_BACKGROUND), guiX + getPosX(), guiY + getPosY());
         //RenderSystem.setupGui3DDiffuseLighting();
         Minecraft.getInstance().getItemRenderer().renderGuiItem(ItemHandlerHelper.copyStackWithSize(getItemStack(), 1), guiX + getPosX() + 1, guiY + getPosY() + 1);
-        Lighting.turnOff();
-        RenderSystem.enableAlphaTest();
+//        Lighting.turnOff();
+//        RenderSystem.enableAlphaTest();
         stack.pushPose();
         stack.translate(0,0, 260);
         stack.scale(0.5f, 0.5f, 0.5f);

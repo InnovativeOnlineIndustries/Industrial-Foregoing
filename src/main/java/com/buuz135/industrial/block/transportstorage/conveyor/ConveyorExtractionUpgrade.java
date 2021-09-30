@@ -151,7 +151,7 @@ public class ConveyorExtractionUpgrade extends ConveyorUpgrade {
                     ItemStack stack = itemHandler.extractItem(i, 4, true);
                     if (stack.isEmpty() || whitelist != filter.matches(stack))
                         continue;
-                    ItemEntity item = new ItemEntity(getWorld(), getPos().getX() + 0.5, getPos().getY() + 0.2, getPos().getZ() + 0.5);
+                    ItemEntity item = new ItemEntity(getWorld(), getPos().getX() + 0.5, getPos().getY() + 0.2, getPos().getZ() + 0.5, stack);
                     item.setDeltaMovement(0, -1, 0);
                     item.setPickUpDelay(40);
                     item.setItem(itemHandler.extractItem(i, 4, false));

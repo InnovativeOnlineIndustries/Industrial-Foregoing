@@ -1,6 +1,3 @@
 rootProject.name='industrial-foregoing'
 
-include 'titanium'
-
-project(':titanium').projectDir = new File('Titanium/')
 

@@ -1,5 +1,13 @@
 package com.buuz135.industrial.block.resourceproduction.tile;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
+import java.util.function.Predicate;
+
+import javax.annotation.Nonnull;
+
 import com.buuz135.industrial.block.tile.IndustrialProcessingTile;
 import com.buuz135.industrial.config.machine.resourceproduction.FermentationStationConfig;
 import com.buuz135.industrial.fluid.OreTitaniumFluidAttributes;
@@ -16,23 +24,16 @@ import com.hrznstudio.titanium.component.energy.EnergyStorageComponent;
 import com.hrznstudio.titanium.component.fluid.FluidTankComponent;
 import com.hrznstudio.titanium.component.fluid.SidedFluidTankComponent;
 import com.hrznstudio.titanium.container.addon.IContainerAddon;
-
-import net.minecraft.core.BlockPos;
-import net.minecraft.world.item.DyeColor;
-import net.minecraft.resources.ResourceLocation;
-import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.TranslatableComponent;
-import net.minecraft.world.level.block.state.BlockState;
-
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.capability.IFluidHandler;
 
-import javax.annotation.Nonnull;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
-import java.util.function.Predicate;
+import net.minecraft.core.BlockPos;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.item.DyeColor;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.state.BlockState;
 
 public class FermentationStationTile extends IndustrialProcessingTile<FermentationStationTile> {
 
@@ -133,16 +134,14 @@ public class FermentationStationTile extends IndustrialProcessingTile<Fermentati
     }
 
     @Override
-    public void tick() {
-        super.tick();
-        if (isServer()){
-            if (seal < SealType.values().length){
-                boolean sealValue = SealType.values()[seal].canSeal.test(input);
-                if (sealValue != this.isSealed){
-                    markForUpdate();
-                }
-                this.isSealed = sealValue;
+    public void serverTick(Level level, BlockPos pos, BlockState state, FermentationStationTile blockEntity) {
+        super.serverTick(level, pos, state, blockEntity);
+        if (seal < SealType.values().length) {
+            boolean sealValue = SealType.values()[seal].canSeal.test(input);
+            if (sealValue != this.isSealed) {
+                markForUpdate();
             }
+            this.isSealed = sealValue;
         }
     }
 

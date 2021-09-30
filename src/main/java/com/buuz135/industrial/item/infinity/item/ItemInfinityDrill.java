@@ -50,7 +50,6 @@ import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.level.Level;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraftforge.common.ForgeHooks;
-import net.minecraftforge.common.ToolType;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.items.ItemHandlerHelper;
 import org.apache.commons.lang3.tuple.Pair;
@@ -68,7 +67,8 @@ public class ItemInfinityDrill extends ItemInfinity {
     public static int FUEL_CONSUMPTION = 30;
 
     public ItemInfinityDrill(CreativeModeTab group) {
-        super("infinity_drill", group, new Properties().stacksTo(1).addToolType(ToolType.PICKAXE, 6).addToolType(ToolType.SHOVEL, 6), POWER_CONSUMPTION, FUEL_CONSUMPTION, false);
+        //.addToolType(ToolType.PICKAXE, 6).addToolType(ToolType.SHOVEL, 6)
+        super("infinity_drill", group, new Properties().stacksTo(1), POWER_CONSUMPTION, FUEL_CONSUMPTION, false);
     }
 
     @Override

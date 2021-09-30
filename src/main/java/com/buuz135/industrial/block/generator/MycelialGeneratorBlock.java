@@ -100,7 +100,7 @@ public class MycelialGeneratorBlock extends IndustrialBlock<MycelialGeneratorTil
     public void onRemove(BlockState state, Level worldIn, BlockPos pos, BlockState newState, boolean isMoving) {
         BlockEntity entity = worldIn.getBlockEntity(pos);
         if (entity instanceof  MycelialGeneratorTile){
-            MycelialDataManager.removeGeneratorInfo(((MycelialGeneratorTile) entity).getOwner(), worldIn, pos, type);
+//            MycelialDataManager.removeGeneratorInfo(((MycelialGeneratorTile) entity).getOwner(), worldIn, pos, type);
         }
         super.onRemove(state, worldIn, pos, newState, isMoving);
     }

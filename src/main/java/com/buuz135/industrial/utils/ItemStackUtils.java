@@ -50,11 +50,12 @@ public class ItemStackUtils {
 
     public static ResourceLocation getOreTag(ItemStack stack) {
         Item item = stack.getItem();
-        for (ResourceLocation owningTag : SerializationTags.getInstance().getItems().getMatchingTags(item)) {
-            if (owningTag.toString().startsWith("forge:ores/")){
-               return owningTag;
-            }
-        }
+        // TODO: 22/08/2021 ore tags
+//        for (ResourceLocation owningTag : SerializationTags.getInstance().getMatchingTags(item)) {
+//            if (owningTag.toString().startsWith("forge:ores/")){
+//               return owningTag;
+//            }
+//        }
         return null;
     }
 
@@ -73,46 +74,47 @@ public class ItemStackUtils {
         return stack.getCapability(CapabilityFluidHandler.FLUID_HANDLER_ITEM_CAPABILITY).isPresent();// && !stack.getItem().equals(ForgeModContainer.getInstance().universalBucket);
     }
 
-    @OnlyIn(Dist.CLIENT)
-    public static int getColor(ItemStack stack) {
-        return ColorUtils.getColorFrom(Minecraft.getInstance().getItemRenderer().getModel(stack, Minecraft.getInstance().level, Minecraft.getInstance().player).getParticleIcon());
-    }
-
-    public static void renderItemIntoGUI(PoseStack matrixStack, ItemStack stack, int x, int y) {
-        renderItemModelIntoGUI(matrixStack, stack, x, y, Minecraft.getInstance().getItemRenderer().getModel(stack, (Level)null, (LivingEntity)null));
-    }
+    // TODO: 22/08/2021 render
+//    @OnlyIn(Dist.CLIENT)
+//    public static int getColor(ItemStack stack) {
+//        return ColorUtils.getColorFrom(Minecraft.getInstance().getItemRenderer().getModel(stack, Minecraft.getInstance().level, Minecraft.getInstance().player).getParticleIcon());
+//    }
+//
+//    public static void renderItemIntoGUI(PoseStack matrixStack, ItemStack stack, int x, int y) {
+//        renderItemModelIntoGUI(matrixStack, stack, x, y, Minecraft.getInstance().getItemRenderer().getModel(stack, (Level)null, (LivingEntity)null));
+//    }
 
     @OnlyIn(Dist.CLIENT)
     public static void renderItemModelIntoGUI(PoseStack matrixstack, ItemStack stack, int x, int y, BakedModel bakedmodel) {
-        RenderSystem.pushMatrix();
-        Minecraft.getInstance().getTextureManager().bind(TextureAtlas.LOCATION_BLOCKS);
-        Minecraft.getInstance().getTextureManager().getTexture(TextureAtlas.LOCATION_BLOCKS).setFilter(false, false);
-        RenderSystem.enableRescaleNormal();
-        RenderSystem.enableAlphaTest();
-        RenderSystem.defaultAlphaFunc();
-        RenderSystem.enableBlend();
-        RenderSystem.blendFunc(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA);
-        RenderSystem.color4f(1.0F, 1.0F, 1.0F, 1.0F);
-        RenderSystem.translatef((float)x, (float)y, 100.0F + Minecraft.getInstance().getItemRenderer().blitOffset);
-        RenderSystem.translatef(8.0F, 8.0F, 0.0F);
-        RenderSystem.scalef(1.0F, -1.0F, 1.0F);
-        RenderSystem.scalef(16.0F, 16.0F, 16.0F);
-        MultiBufferSource.BufferSource irendertypebuffer$impl = Minecraft.getInstance().renderBuffers().bufferSource();
-        boolean flag = !bakedmodel.usesBlockLight();
-        if (flag) {
-            Lighting.setupForFlatItems();
-        }
-
-        Minecraft.getInstance().getItemRenderer().render(stack, ItemTransforms.TransformType.GUI, false, matrixstack, irendertypebuffer$impl, 15728880, OverlayTexture.NO_OVERLAY, bakedmodel);
-        irendertypebuffer$impl.endBatch();
-        RenderSystem.enableDepthTest();
-        if (flag) {
-            Lighting.setupFor3DItems();
-        }
-
-        RenderSystem.disableAlphaTest();
-        RenderSystem.disableRescaleNormal();
-        RenderSystem.popMatrix();
+//        RenderSystem.pushMatrix();
+//        Minecraft.getInstance().getTextureManager().bind(TextureAtlas.LOCATION_BLOCKS);
+//        Minecraft.getInstance().getTextureManager().getTexture(TextureAtlas.LOCATION_BLOCKS).setFilter(false, false);
+//        RenderSystem.enableRescaleNormal();
+//        RenderSystem.enableAlphaTest();
+//        RenderSystem.defaultAlphaFunc();
+//        RenderSystem.enableBlend();
+//        RenderSystem.blendFunc(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA);
+//        RenderSystem.color4f(1.0F, 1.0F, 1.0F, 1.0F);
+//        RenderSystem.translatef((float)x, (float)y, 100.0F + Minecraft.getInstance().getItemRenderer().blitOffset);
+//        RenderSystem.translatef(8.0F, 8.0F, 0.0F);
+//        RenderSystem.scalef(1.0F, -1.0F, 1.0F);
+//        RenderSystem.scalef(16.0F, 16.0F, 16.0F);
+//        MultiBufferSource.BufferSource irendertypebuffer$impl = Minecraft.getInstance().renderBuffers().bufferSource();
+//        boolean flag = !bakedmodel.usesBlockLight();
+//        if (flag) {
+//            Lighting.setupForFlatItems();
+//        }
+//
+//        Minecraft.getInstance().getItemRenderer().render(stack, ItemTransforms.TransformType.GUI, false, matrixstack, irendertypebuffer$impl, 15728880, OverlayTexture.NO_OVERLAY, bakedmodel);
+//        irendertypebuffer$impl.endBatch();
+//        RenderSystem.enableDepthTest();
+//        if (flag) {
+//            Lighting.setupFor3DItems();
+//        }
+//
+//        RenderSystem.disableAlphaTest();
+//        RenderSystem.disableRescaleNormal();
+//        RenderSystem.popMatrix();
     }
 
 }

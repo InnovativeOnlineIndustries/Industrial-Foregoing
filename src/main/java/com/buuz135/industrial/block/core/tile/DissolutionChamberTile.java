@@ -99,8 +99,8 @@ public class DissolutionChamberTile extends IndustrialProcessingTile<Dissolution
     }
 
     @Override
-    public void setLevelAndPosition(Level world, BlockPos pos) {
-        super.setLevelAndPosition(world, pos);
+    public void setChanged() {
+        super.setChanged();
         checkForRecipe();
     }
 

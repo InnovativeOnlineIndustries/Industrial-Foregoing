@@ -6,7 +6,7 @@
 # The name of the mod loader type to load - for regular FML @Mod mods it should be javafml
 modLoader = "javafml" #mandatory
 # A version range to match for said mod loader - for regular FML @Mod it will be the minecraft version (without the 1.)
-loaderVersion = "[34,)" #mandatory
+loaderVersion = "[37,)" #mandatory
 license = "MIT"
 # A URL to refer people to when problems occur with this mod
 
@@ -26,15 +26,15 @@ displayName = "Industrial Foregoing" #mandatory
 description = '''
 IF: You need to automate all the things
 '''
-[[dependencies.industrialforegoing]] #optional
-modId = "titanium" #mandatory
-mandatory = true #mandatory
-versionRange = "[3.2.5,)" #mandatory
-ordering = "NONE"
-side = "BOTH"
+#[[dependencies.industrialforegoing]] #optional
+#modId = "titanium" #mandatory
+#mandatory = true #mandatory
+#versionRange = "[3.2.5,)" #mandatory
+#ordering = "NONE"
+#side = "BOTH"
 [[dependencies.industrialforegoing]] #optional
 modId = "forge" #mandatory
 mandatory = true #mandatory
-versionRange = "[36.0.1,)" #mandatory
+versionRange = "[37.0.1,)" #mandatory
 ordering = "NONE"
 side = "BOTH"

@@ -61,8 +61,8 @@ public abstract class ItemGuiAddon extends BasicScreenAddon {
         AssetUtil.drawAsset(stack, screen, provider.getAsset(AssetTypes.ITEM_BACKGROUND), guiX + getPosX(), guiY + getPosY());
         //RenderSystem.setupGui3DDiffuseLighting();
         Minecraft.getInstance().getItemRenderer().renderGuiItem(getItemStack(), guiX + getPosX() + 1, guiY + getPosY() + 1);
-        Lighting.turnOff();
-        RenderSystem.enableAlphaTest();
+//        Lighting.turnOff();
+//        RenderSystem.enableAlphaTest();
     }
 
     @Override

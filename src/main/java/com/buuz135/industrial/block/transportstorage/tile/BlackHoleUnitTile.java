@@ -52,6 +52,7 @@ import net.minecraft.world.item.Rarity;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.core.Direction;
 import net.minecraft.world.InteractionHand;
+import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.HitResult;
@@ -125,8 +126,8 @@ public class BlackHoleUnitTile extends BHTile<BlackHoleUnitTile> {
                     public void drawBackgroundLayer(PoseStack stack, Screen screen, IAssetProvider provider, int guiX, int guiY, int mouseX, int mouseY, float partialTicks) {
                         AssetUtil.drawAsset(stack, screen, provider.getAsset(AssetTypes.ITEM_BACKGROUND), guiX + getPosX(), guiY + getPosY());
                         Minecraft.getInstance().getItemRenderer().renderGuiItem(new ItemStack(voidItems ? Items.MAGMA_CREAM: Items.SLIME_BALL), guiX + getPosX() + 1, guiY + getPosY() + 1);
-                        Lighting.turnOff();
-                        RenderSystem.enableAlphaTest();
+//                        Lighting.turnOff();
+//                        RenderSystem.enableAlphaTest();
                     }
 
                     @Override
@@ -149,8 +150,8 @@ public class BlackHoleUnitTile extends BHTile<BlackHoleUnitTile> {
                     public void drawBackgroundLayer(PoseStack stack, Screen screen, IAssetProvider provider, int guiX, int guiY, int mouseX, int mouseY, float partialTicks) {
                         AssetUtil.drawAsset(stack, screen, provider.getAsset(AssetTypes.ITEM_BACKGROUND), guiX + getPosX(), guiY + getPosY());
                         Minecraft.getInstance().getItemRenderer().renderGuiItem(new ItemStack(useStackDisplay ? Items.IRON_BLOCK: Items.IRON_INGOT), guiX + getPosX() + 1, guiY + getPosY() + 1);
-                        Lighting.turnOff();
-                        RenderSystem.enableAlphaTest();
+//                        Lighting.turnOff();
+//                        RenderSystem.enableAlphaTest();
                     }
 
                     @Override
@@ -211,8 +212,8 @@ public class BlackHoleUnitTile extends BHTile<BlackHoleUnitTile> {
     }
 
     @Override
-    public void tick() {
-        super.tick();
+    public void serverTick(Level level, BlockPos pos, BlockState state, BlackHoleUnitTile blockEntity) {
+        super.serverTick(level, pos, state, blockEntity);
         if (isServer()){
             if (!this.hasNBT && this.blStack.hasTag()){
                 ItemStack stack = this.blStack.copy();

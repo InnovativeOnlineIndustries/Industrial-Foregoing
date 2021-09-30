@@ -15,6 +15,7 @@ import com.hrznstudio.titanium.util.TileUtil;
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.data.recipes.FinishedRecipe;
+import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
@@ -87,7 +88,7 @@ public class TransporterWorldType extends FilteredTransporterType<ItemStack, IIt
                         int amount = (int) (1 * getEfficiency());
                         ItemStack extracted = origin.extractItem(extractSlot, amount, false);
                         if (extracted.isEmpty()) return;
-                        ItemEntity item = new ItemEntity(getWorld(), getPos().getX() + 0.5, getPos().getY() + 0.2, getPos().getZ() + 0.5);
+                        ItemEntity item = new ItemEntity(getWorld(), getPos().getX() + 0.5, getPos().getY() + 0.2, getPos().getZ() + 0.5, extracted);
                         item.setDeltaMovement(0, 0, 0);
                         item.setPickUpDelay(4);
                         item.setItem(extracted);
@@ -112,7 +113,7 @@ public class TransporterWorldType extends FilteredTransporterType<ItemStack, IIt
                                         originStack.shrink(amount - stack.getCount());
                                         if (originStack.isEmpty()) {
                                             item.setItem(ItemStack.EMPTY);
-                                            item.remove();
+                                            item.remove(Entity.RemovalReason.KILLED);
                                             return;
                                         } else {
                                             item.setItem(originStack);

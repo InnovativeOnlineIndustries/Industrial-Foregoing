@@ -77,7 +77,6 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.world.level.Level;
-import net.minecraftforge.common.ToolType;
 import net.minecraftforge.fluids.FluidStack;
 
 import java.util.HashMap;
@@ -106,7 +105,8 @@ public class ItemInfinityHammer extends ItemInfinity {
     }
 
     public ItemInfinityHammer(CreativeModeTab group) {
-        super("infinity_hammer", group, new Properties().addToolType(ToolType.get("sword"), 1).stacksTo(1), POWER_CONSUMPTION, FUEL_CONSUMPTION, true);
+        //.addToolType(ToolType.get("sword"), 1)
+        super("infinity_hammer", group, new Properties().stacksTo(1), POWER_CONSUMPTION, FUEL_CONSUMPTION, true);
     }
 
     public static ItemStack createHead(String name) {
@@ -144,7 +144,7 @@ public class ItemInfinityHammer extends ItemInfinity {
             return 15.0F;
         } else {
             Material material = state.getMaterial();
-            return material != Material.PLANT && material != Material.REPLACEABLE_PLANT && material != Material.CORAL && !state.is(BlockTags.LEAVES) && material != Material.VEGETABLE ? 1.0F : 1.5F;
+            return material != Material.PLANT && material != Material.REPLACEABLE_PLANT && !state.is(BlockTags.LEAVES) && material != Material.VEGETABLE ? 1.0F : 1.5F;
         }
     }
 

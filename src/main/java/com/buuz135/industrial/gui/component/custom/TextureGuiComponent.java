@@ -60,7 +60,7 @@ public class TextureGuiComponent extends PositionedGuiComponent {
 
     @Override
     public void drawGuiBackgroundLayer(PoseStack stack, int guiX, int guiY, double mouseX, double mouseY) {
-        Minecraft.getInstance().getTextureManager().bind(resourceLocation);
+//        Minecraft.getInstance().getTextureManager().bind(resourceLocation);
         Minecraft.getInstance().screen.blit(stack, guiX + getXPos(), guiY + getYPos(), textureX, textureY, getXSize(), getYSize());
     }
 

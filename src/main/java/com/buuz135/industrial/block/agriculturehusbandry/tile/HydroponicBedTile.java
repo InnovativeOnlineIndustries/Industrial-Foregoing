@@ -12,6 +12,8 @@ import com.hrznstudio.titanium.component.fluid.FluidTankComponent;
 import com.hrznstudio.titanium.component.fluid.SidedFluidTankComponent;
 import com.hrznstudio.titanium.component.inventory.SidedInventoryComponent;
 import com.hrznstudio.titanium.component.progress.ProgressBarComponent;
+
+import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.BonemealableBlock;
@@ -123,9 +125,9 @@ public class HydroponicBedTile extends IndustrialWorkingTile<HydroponicBedTile> 
     }
 
     @Override
-    public void tick() {
-        super.tick();
-        if (isServer() && this.level.getGameTime() % 5 == 0) {
+    public void serverTick(Level level, BlockPos pos, BlockState state, HydroponicBedTile blockEntity) {
+        super.serverTick(level, pos, state, blockEntity);
+        if (this.level.getGameTime() % 5 == 0) {
             for (Direction direction : Direction.Plane.HORIZONTAL) {
                 BlockEntity tile = level.getBlockEntity(worldPosition.relative(direction));
                 if (tile instanceof HydroponicBedTile) {

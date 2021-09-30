@@ -57,22 +57,22 @@ public abstract class SlotDefinitionGuiAddon extends BasicButtonAddon {
 
     @Override
     public void drawBackgroundLayer(PoseStack stack, Screen screen, IAssetProvider provider, int guiX, int guiY, int mouseX, int mouseY, float partialTicks) {
-        if (!getItemStack().isEmpty() && getItemStack().hasTag()){
-            BackpackDataManager.BackpackItemHandler handler = BackpackDataManager.CLIENT_SIDE_BACKPACKS.getOrDefault(getItemStack().getTag().getString("Id"), null);
-            AssetUtil.drawAsset(stack, screen, provider.getAsset(AssetTypes.SLOT), guiX + getPosX(), guiY + getPosY());
-            if (handler != null){
-                BackpackDataManager.SlotDefinition display = handler.getSlotDefinition(slotId);
-                if (!display.getStack().isEmpty()){
-                    Minecraft.getInstance().getItemRenderer().renderGuiItem(display.getStack(), guiX + getPosX() + 1, guiY + getPosY() + 1);
-                    stack.pushPose();
-                    stack.translate(0,0, 260);
-                    stack.scale(0.5f, 0.5f, 0.5f);
-                    String amount = NumberUtils.getFormatedBigNumber(display.getAmount());
-                    Minecraft.getInstance().font.drawShadow(stack, amount , (guiX + getPosX() + 17 - Minecraft.getInstance().font.width(amount) / 2f)*2, (guiY + getPosY() + 13)*2, 0xFFFFFF);
-                    stack.popPose();
-                }
-            }
-        }
+//        if (!getItemStack().isEmpty() && getItemStack().hasTag()){
+//            BackpackDataManager.BackpackItemHandler handler = BackpackDataManager.CLIENT_SIDE_BACKPACKS.getOrDefault(getItemStack().getTag().getString("Id"), null);
+//            AssetUtil.drawAsset(stack, screen, provider.getAsset(AssetTypes.SLOT), guiX + getPosX(), guiY + getPosY());
+//            if (handler != null){
+//                BackpackDataManager.SlotDefinition display = handler.getSlotDefinition(slotId);
+//                if (!display.getStack().isEmpty()){
+//                    Minecraft.getInstance().getItemRenderer().renderGuiItem(display.getStack(), guiX + getPosX() + 1, guiY + getPosY() + 1);
+//                    stack.pushPose();
+//                    stack.translate(0,0, 260);
+//                    stack.scale(0.5f, 0.5f, 0.5f);
+//                    String amount = NumberUtils.getFormatedBigNumber(display.getAmount());
+//                    Minecraft.getInstance().font.drawShadow(stack, amount , (guiX + getPosX() + 17 - Minecraft.getInstance().font.width(amount) / 2f)*2, (guiY + getPosY() + 13)*2, 0xFFFFFF);
+//                    stack.popPose();
+//                }
+//            }
+//        }
     }
 
     @Override
@@ -104,27 +104,28 @@ public abstract class SlotDefinitionGuiAddon extends BasicButtonAddon {
 
     @Override
     public List<Component> getTooltipLines() {
-        List<Component> lines = new ArrayList<>();
-        BackpackDataManager.BackpackItemHandler handler = BackpackDataManager.CLIENT_SIDE_BACKPACKS.getOrDefault(getItemStack().getTag().getString("Id"), null);
-        if (handler != null) {
-            BackpackDataManager.SlotDefinition display = handler.getSlotDefinition(slotId);
-            if (!display.getStack().isEmpty()) {
-                lines.addAll(Minecraft.getInstance().screen.getTooltipFromItem(display.getStack()));
-                lines.add(new TextComponent(ChatFormatting.GOLD + new DecimalFormat().format(display.getAmount())));
-            }
-            String changeVoid = ChatFormatting.DARK_GRAY + new TranslatableComponent("text.industrialforegoing.tooltip.ctrl_left").getString();
-            if (display.isVoidItems()){
-                lines.add(new TextComponent(ChatFormatting.GOLD +new TranslatableComponent("tooltip.industrialforegoing.backpack.void").getString() + ChatFormatting.GREEN + new TranslatableComponent("text.industrialforegoing.display.enabled").getString() + " " + changeVoid));
-            } else {
-                lines.add(new TextComponent(ChatFormatting.GOLD + new TranslatableComponent("tooltip.industrialforegoing.backpack.void").getString() +ChatFormatting.RED + new TranslatableComponent("text.industrialforegoing.display.disabled").getString() + " "  + changeVoid));
-            }
-            String changeRefill = ChatFormatting.DARK_GRAY + new TranslatableComponent("text.industrialforegoing.tooltip.ctrl_right").getString();
-            if (display.isRefillItems()){
-                lines.add(new TextComponent(ChatFormatting.GOLD + new TranslatableComponent("tooltip.industrialforegoing.backpack.refill").getString() + ChatFormatting.GREEN + new TranslatableComponent("text.industrialforegoing.display.enabled").getString() + " " + changeRefill));
-            } else {
-                lines.add(new TextComponent(ChatFormatting.GOLD + new TranslatableComponent("tooltip.industrialforegoing.backpack.refill").getString()+ ChatFormatting.RED + new TranslatableComponent("text.industrialforegoing.display.disabled").getString() + " " + changeRefill));
-            }
-        }
-        return lines;
+        return (List<Component>) new TextComponent("");
+//        List<Component> lines = new ArrayList<>();
+//        BackpackDataManager.BackpackItemHandler handler = BackpackDataManager.CLIENT_SIDE_BACKPACKS.getOrDefault(getItemStack().getTag().getString("Id"), null);
+//        if (handler != null) {
+//            BackpackDataManager.SlotDefinition display = handler.getSlotDefinition(slotId);
+//            if (!display.getStack().isEmpty()) {
+//                lines.addAll(Minecraft.getInstance().screen.getTooltipFromItem(display.getStack()));
+//                lines.add(new TextComponent(ChatFormatting.GOLD + new DecimalFormat().format(display.getAmount())));
+//            }
+//            String changeVoid = ChatFormatting.DARK_GRAY + new TranslatableComponent("text.industrialforegoing.tooltip.ctrl_left").getString();
+//            if (display.isVoidItems()){
+//                lines.add(new TextComponent(ChatFormatting.GOLD +new TranslatableComponent("tooltip.industrialforegoing.backpack.void").getString() + ChatFormatting.GREEN + new TranslatableComponent("text.industrialforegoing.display.enabled").getString() + " " + changeVoid));
+//            } else {
+//                lines.add(new TextComponent(ChatFormatting.GOLD + new TranslatableComponent("tooltip.industrialforegoing.backpack.void").getString() +ChatFormatting.RED + new TranslatableComponent("text.industrialforegoing.display.disabled").getString() + " "  + changeVoid));
+//            }
+//            String changeRefill = ChatFormatting.DARK_GRAY + new TranslatableComponent("text.industrialforegoing.tooltip.ctrl_right").getString();
+//            if (display.isRefillItems()){
+//                lines.add(new TextComponent(ChatFormatting.GOLD + new TranslatableComponent("tooltip.industrialforegoing.backpack.refill").getString() + ChatFormatting.GREEN + new TranslatableComponent("text.industrialforegoing.display.enabled").getString() + " " + changeRefill));
+//            } else {
+//                lines.add(new TextComponent(ChatFormatting.GOLD + new TranslatableComponent("tooltip.industrialforegoing.backpack.refill").getString()+ ChatFormatting.RED + new TranslatableComponent("text.industrialforegoing.display.disabled").getString() + " " + changeRefill));
+//            }
+//        }
+//        return lines;
     }
 }

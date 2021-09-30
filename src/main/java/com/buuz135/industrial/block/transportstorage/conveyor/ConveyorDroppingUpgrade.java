@@ -83,7 +83,7 @@ public class ConveyorDroppingUpgrade extends ConveyorUpgrade {
                         for (int i = 0; i < handler.getSlots(); i++) {
                             stack = handler.insertItem(i, stack, false);
                             if (stack.isEmpty()) {
-                                entity.remove();
+                                entity.remove(Entity.RemovalReason.KILLED);
                                 break;
                             } else {
                                 ((ItemEntity) entity).setItem(stack);

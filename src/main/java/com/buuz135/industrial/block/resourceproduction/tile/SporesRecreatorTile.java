@@ -66,7 +66,7 @@ public class SporesRecreatorTile extends IndustrialProcessingTile<SporesRecreato
                 .setColor(DyeColor.BLUE)
                 .setRange(1, 3)
                 .setComponentHarness(this)
-                .setInputFilter((stack, integer) -> stack.getItem().is(Tags.Items.MUSHROOMS) || stack.getItem().equals(Items.CRIMSON_FUNGUS) || stack.getItem().equals(Items.WARPED_FUNGUS))
+                .setInputFilter((stack, integer) -> stack.is(Tags.Items.MUSHROOMS) || stack.getItem().equals(Items.CRIMSON_FUNGUS) || stack.getItem().equals(Items.WARPED_FUNGUS))
                 .setOutputFilter((stack, integer) -> false)
         );
         addInventory(output = (SidedInventoryComponent<SporesRecreatorTile>) new SidedInventoryComponent<SporesRecreatorTile>("output", 110, 22, 9, 2)
@@ -81,7 +81,7 @@ public class SporesRecreatorTile extends IndustrialProcessingTile<SporesRecreato
     @Override
     public boolean canIncrease() {
         return !ItemHandlerUtil.getFirstItem(input).isEmpty() && tank.getFluidAmount() >= 100
-                && (ItemHandlerUtil.getFirstItem(input).getItem().is(Tags.Items.MUSHROOMS) ?  tank.getFluid().getFluid().isSame(Fluids.WATER) : tank.getFluid().getFluid().isSame(Fluids.LAVA))
+                && (ItemHandlerUtil.getFirstItem(input).is(Tags.Items.MUSHROOMS) ?  tank.getFluid().getFluid().isSame(Fluids.WATER) : tank.getFluid().getFluid().isSame(Fluids.LAVA))
         && ItemHandlerHelper.insertItem(output, new ItemStack(ItemHandlerUtil.getFirstItem(input).getItem(), 2), true).isEmpty();
     }
 

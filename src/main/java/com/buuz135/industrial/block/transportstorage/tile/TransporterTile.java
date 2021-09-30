@@ -24,7 +24,6 @@ import net.minecraftforge.client.model.ModelDataManager;
 import net.minecraftforge.client.model.data.IModelData;
 import net.minecraftforge.client.model.data.ModelDataMap;
 import net.minecraftforge.common.util.Constants;
-import net.minecraftforge.fml.network.NetworkHooks;
 import net.minecraftforge.fmllegacy.network.NetworkHooks;
 
 import javax.annotation.Nonnull;
@@ -69,10 +68,15 @@ public class TransporterTile extends ActiveTile<TransporterTile> implements IBlo
     }
 
     @Override
-    public void tick() {
-        super.tick();
-        if (isServer()) getTransporterTypeMap().values().forEach(TransporterType::update);
-        if (isClient()) getTransporterTypeMap().values().forEach(TransporterType::updateClient);
+    public void serverTick(Level level, BlockPos pos, BlockState state, TransporterTile blockEntity) {
+        super.serverTick(level, pos, state, blockEntity);
+        getTransporterTypeMap().values().forEach(TransporterType::update);
+    }
+
+    @Override
+    public void clientTick(Level level, BlockPos pos, BlockState state, TransporterTile blockEntity) {
+        super.clientTick(level, pos, state, blockEntity);
+        getTransporterTypeMap().values().forEach(TransporterType::updateClient);
     }
 
     @Override
@@ -95,7 +99,7 @@ public class TransporterTile extends ActiveTile<TransporterTile> implements IBlo
             if (!level.isClientSide && drop) {
                 TransporterType upgrade = transporterTypeMap.get(facing);
                 for (ItemStack stack : upgrade.getDrops()) {
-                    ItemEntity item = new ItemEntity(level, worldPosition.getX() + 0.5, worldPosition.getY() + 0.5, worldPosition.getZ() + 0.5);
+                    ItemEntity item = new ItemEntity(level, worldPosition.getX() + 0.5, worldPosition.getY() + 0.5, worldPosition.getZ() + 0.5, stack);
                     item.setItem(stack);
                     level.addFreshEntity(item);
                 }
@@ -161,8 +165,8 @@ public class TransporterTile extends ActiveTile<TransporterTile> implements IBlo
     }
 
     @Override
-    public void load(BlockState state, CompoundTag compound) {
-        super.load(state, compound);
+    public void load(CompoundTag compound) {
+        super.load(compound);
         if (compound.contains("Transporters")) {
             CompoundTag upgradesTag = compound.getCompound("Transporters");
             //upgradeMap.clear();
@@ -187,6 +191,5 @@ public class TransporterTile extends ActiveTile<TransporterTile> implements IBlo
                 }
             }
         }
-
     }
 }

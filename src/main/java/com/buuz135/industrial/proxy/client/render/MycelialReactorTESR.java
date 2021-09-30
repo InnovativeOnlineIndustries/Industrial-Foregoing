@@ -40,64 +40,61 @@ import com.mojang.math.Vector3f;
 
 import java.awt.*;
 
-public class MycelialReactorTESR extends BlockEntityRenderer<MycelialReactorTile> {
+public class MycelialReactorTESR implements BlockEntityRenderer<MycelialReactorTile> {
 
-    public static RenderType TYPE = createRenderType();
+//    public static RenderType TYPE = createRenderType();
 
-    public static RenderType createRenderType() {
-        RenderType.CompositeState state = RenderType.CompositeState.builder().setTextureState(new RenderStateShard.TextureStateShard(new ResourceLocation("industrialforegoing", "textures/blocks/mycelial.png"), false, false)).setTransparencyState(new RenderStateShard.TransparencyStateShard("translucent_transparency", () -> {
-            RenderSystem.enableBlend();
-            RenderSystem.blendFunc(GlStateManager.SourceFactor.ONE, GlStateManager.DestFactor.ONE);
-        }, () -> {
-            RenderSystem.disableBlend();
-        })).createCompositeState(true);
-        return RenderType.create("mycelial_render", DefaultVertexFormat.POSITION_TEX_COLOR, 7, 262144, false, true, state);
-    }
+//    public static RenderType createRenderType() {
+//        RenderType.CompositeState state = RenderType.CompositeState.builder().setTextureState(new RenderStateShard.TextureStateShard(new ResourceLocation("industrialforegoing", "textures/blocks/mycelial.png"), false, false)).setTransparencyState(new RenderStateShard.TransparencyStateShard("translucent_transparency", () -> {
+//            RenderSystem.enableBlend();
+//            RenderSystem.blendFunc(GlStateManager.SourceFactor.ONE, GlStateManager.DestFactor.ONE);
+//        }, () -> {
+//            RenderSystem.disableBlend();
+//        })).createCompositeState(true);
+//        return RenderType.create("mycelial_render", DefaultVertexFormat.POSITION_TEX_COLOR, 7, 262144, false, true, state);
+//    }
 
-    public MycelialReactorTESR(BlockEntityRenderDispatcher rendererDispatcherIn) {
-        super(rendererDispatcherIn);
-    }
 
     @Override
     public void render(MycelialReactorTile te, float partialTicks, PoseStack stack, MultiBufferSource buffer, int combinedLightIn, int combinedOverlayIn) {
-        if (te.getBar().getProgress() == 0) return;
-        stack.pushPose();
-        stack.translate(0.5, 1.75, 0.5D);
-        stack.mulPose(Minecraft.getInstance().getEntityRenderDispatcher().cameraOrientation());
-        stack.mulPose(Vector3f.ZP.rotationDegrees(90f));
-        stack.mulPose(Vector3f.XP.rotationDegrees(90f));
-        double speed = 60;
-        //if (true) speed = 20;
-        float sin = ((float) Math.sin(te.getLevel().getGameTime() / speed)) * 0.05f;
-
-        VertexConsumer buffer1 = buffer.getBuffer(TYPE);
-        Matrix4f matrix = stack.last().pose();
-        float pX1 = 1;
-        float u = 1;
-        float pX2 = 0;
-        float u2 = 0;
-        int color = Color.CYAN.getRGB();
-        int red = FastColor.ARGB32.red(color);
-        int green = FastColor.ARGB32.green(color);
-        int blue = FastColor.ARGB32.blue(color);
-        float xOffset =-0.75f;
-        float yOffset =-0f;
-        float zOffset = -0.75f;
-        int alpha = 256;
-        buffer1.vertex(matrix, pX2 + xOffset + sin , yOffset, 0 + zOffset + sin).uv(u2, 0).color(red, green, blue, alpha).endVertex();
-        buffer1.vertex(matrix, pX1 + xOffset - sin + 0.5f, yOffset, 0 + zOffset + sin).uv(u, 0).color(red, green, blue, alpha).endVertex();
-        buffer1.vertex(matrix, pX1 + xOffset - sin + 0.5f, yOffset, 1.5f + zOffset - sin).uv(u, 1).color(red, green, blue, alpha).endVertex();
-        buffer1.vertex(matrix, pX2 + xOffset +sin , yOffset, 1.5f + zOffset - sin).uv(u2, 1).color(red, green, blue, alpha).endVertex();
-        yOffset = 0.01f;
-        sin = ((float) Math.cos(te.getLevel().getGameTime() / speed)) * 0.05f;
-        color = new Color(0xB578FF).getRGB();
-        red = FastColor.ARGB32.red(color);
-        green = FastColor.ARGB32.green(color);
-        blue = FastColor.ARGB32.blue(color);
-        buffer1.vertex(matrix, pX2 + xOffset + sin , yOffset, 0 + zOffset + sin).uv(u2, 0).color(red, green, blue, alpha).endVertex();
-        buffer1.vertex(matrix, pX1 + xOffset - sin + 0.5f, yOffset, 0 + zOffset - sin).uv(u, 0).color(red, green, blue, alpha).endVertex();
-        buffer1.vertex(matrix, pX1 + xOffset + sin + 0.5f, yOffset, 1.5f + zOffset + sin).uv(u, 1).color(red, green, blue, alpha).endVertex();
-        buffer1.vertex(matrix, pX2 + xOffset -sin, yOffset, 1.5f + zOffset + sin).uv(u2, 1).color(red, green, blue, alpha).endVertex();
-        stack.popPose();
+//        if (te.getBar().getProgress() == 0) return;
+//        stack.pushPose();
+//        stack.translate(0.5, 1.75, 0.5D);
+//        stack.mulPose(Minecraft.getInstance().getEntityRenderDispatcher().cameraOrientation());
+//        stack.mulPose(Vector3f.ZP.rotationDegrees(90f));
+//        stack.mulPose(Vector3f.XP.rotationDegrees(90f));
+//        double speed = 60;
+//        //if (true) speed = 20;
+//        float sin = ((float) Math.sin(te.getLevel().getGameTime() / speed)) * 0.05f;
+//
+//        VertexConsumer buffer1 = buffer.getBuffer(TYPE);
+//        Matrix4f matrix = stack.last().pose();
+//        float pX1 = 1;
+//        float u = 1;
+//        float pX2 = 0;
+//        float u2 = 0;
+//        int color = Color.CYAN.getRGB();
+//        int red = FastColor.ARGB32.red(color);
+//        int green = FastColor.ARGB32.green(color);
+//        int blue = FastColor.ARGB32.blue(color);
+//        float xOffset =-0.75f;
+//        float yOffset =-0f;
+//        float zOffset = -0.75f;
+//        int alpha = 256;
+//        buffer1.vertex(matrix, pX2 + xOffset + sin , yOffset, 0 + zOffset + sin).uv(u2, 0).color(red, green, blue, alpha).endVertex();
+//        buffer1.vertex(matrix, pX1 + xOffset - sin + 0.5f, yOffset, 0 + zOffset + sin).uv(u, 0).color(red, green, blue, alpha).endVertex();
+//        buffer1.vertex(matrix, pX1 + xOffset - sin + 0.5f, yOffset, 1.5f + zOffset - sin).uv(u, 1).color(red, green, blue, alpha).endVertex();
+//        buffer1.vertex(matrix, pX2 + xOffset +sin , yOffset, 1.5f + zOffset - sin).uv(u2, 1).color(red, green, blue, alpha).endVertex();
+//        yOffset = 0.01f;
+//        sin = ((float) Math.cos(te.getLevel().getGameTime() / speed)) * 0.05f;
+//        color = new Color(0xB578FF).getRGB();
+//        red = FastColor.ARGB32.red(color);
+//        green = FastColor.ARGB32.green(color);
+//        blue = FastColor.ARGB32.blue(color);
+//        buffer1.vertex(matrix, pX2 + xOffset + sin , yOffset, 0 + zOffset + sin).uv(u2, 0).color(red, green, blue, alpha).endVertex();
+//        buffer1.vertex(matrix, pX1 + xOffset - sin + 0.5f, yOffset, 0 + zOffset - sin).uv(u, 0).color(red, green, blue, alpha).endVertex();
+//        buffer1.vertex(matrix, pX1 + xOffset + sin + 0.5f, yOffset, 1.5f + zOffset + sin).uv(u, 1).color(red, green, blue, alpha).endVertex();
+//        buffer1.vertex(matrix, pX2 + xOffset -sin, yOffset, 1.5f + zOffset + sin).uv(u2, 1).color(red, green, blue, alpha).endVertex();
+//        stack.popPose();
     }
 }

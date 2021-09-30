@@ -77,9 +77,10 @@ public class MobDuplicatorTile extends IndustrialAreaWorkingTile<MobDuplicatorTi
 		LivingEntity entity = (LivingEntity) ((MobImprisonmentToolItem) stack.getItem()).getEntityFromStack(stack, this.level, MobDuplicatorConfig.exactCopy && exactCopy);
 		if (entity == null) return new WorkAction(1, 0);
 
-		List<LivingEntity> entityAmount = level.getEntitiesOfClass(entity.getClass(), getWorkingArea().bounds());
-		entityAmount.removeIf(entityLiving -> !entityLiving.isAlive());
-		if (entityAmount.size() > 32) return new WorkAction(1, 0);
+		// TODO: 22/08/2021 Fix
+//		List<LivingEntity> entityAmount = level.getEntitiesOfClass(entity.getClass(), getWorkingArea().bounds());
+//		entityAmount.removeIf(entityLiving -> !entityLiving.isAlive());
+//		if (entityAmount.size() > 32) return new WorkAction(1, 0);
 
 		int essenceNeeded = (int) (entity.getHealth() * MobDuplicatorConfig.essenceNeeded);
 		int canSpawn = (int) ((tank.getFluid().isEmpty() ? 0 : tank.getFluid().getAmount()) / Math.max(essenceNeeded, 1));

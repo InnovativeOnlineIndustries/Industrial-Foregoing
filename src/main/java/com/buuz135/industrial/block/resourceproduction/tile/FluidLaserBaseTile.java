@@ -129,8 +129,8 @@ public class FluidLaserBaseTile extends IndustrialMachineTile<FluidLaserBaseTile
     }
 
     @Override
-    public void setLevelAndPosition(Level world, BlockPos pos) {
-        super.setLevelAndPosition(world, pos);
+    public void setChanged() {
+        super.setChanged();
         if (this.miningDepth == 0) this.miningDepth = this.worldPosition.getY();
     }
 

@@ -21,6 +21,15 @@
  */
 package com.buuz135.industrial.block.transportstorage;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
+import java.util.function.Consumer;
+import java.util.function.Predicate;
+
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+
 import com.buuz135.industrial.api.conveyor.ConveyorUpgrade;
 import com.buuz135.industrial.block.transportstorage.tile.ConveyorTile;
 import com.buuz135.industrial.module.ModuleCore;
@@ -33,53 +42,21 @@ import com.hrznstudio.titanium.block.BasicTileBlock;
 import com.hrznstudio.titanium.recipe.generator.TitaniumShapedRecipeBuilder;
 import com.hrznstudio.titanium.util.RayTraceUtils;
 import com.hrznstudio.titanium.util.TileUtil;
-import net.minecraft.block.*;
-import net.minecraft.world.level.block.entity.BlockEntityType;
-import net.minecraft.world.level.material.Material;
-import net.minecraft.world.level.material.MaterialColor;
-import net.minecraft.data.recipes.FinishedRecipe;
-import net.minecraft.world.entity.Entity;
-import net.minecraft.world.entity.SpawnPlacements;
-import net.minecraft.world.entity.EntityType;
-import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.level.material.FluidState;
-import net.minecraft.world.level.material.Fluids;
-import net.minecraft.item.*;
-import net.minecraft.world.level.block.state.properties.BooleanProperty;
-import net.minecraft.world.level.block.state.properties.DirectionProperty;
-import net.minecraft.world.level.block.state.properties.EnumProperty;
-import net.minecraft.world.level.block.state.StateDefinition;
-import net.minecraft.world.level.block.state.properties.BlockStateProperties;
-import net.minecraft.world.level.block.entity.BlockEntity;
-import net.minecraft.util.*;
-import net.minecraft.core.BlockPos;
-import net.minecraft.world.phys.BlockHitResult;
-import net.minecraft.world.phys.HitResult;
-import net.minecraft.world.phys.shapes.BooleanOp;
-import net.minecraft.world.phys.shapes.CollisionContext;
-import net.minecraft.world.phys.shapes.VoxelShape;
-import net.minecraft.world.phys.shapes.Shapes;
-import net.minecraft.world.phys.Vec3;
-import net.minecraft.network.chat.TranslatableComponent;
-import net.minecraft.world.level.BlockGetter;
-import net.minecraft.world.level.Level;
 import net.minecraftforge.common.Tags;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
-import java.util.function.Consumer;
-import java.util.function.Predicate;
-
-import net.minecraft.world.level.block.state.BlockBehaviour.Properties;
-
+import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.NonNullList;
+import net.minecraft.data.recipes.FinishedRecipe;
+import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.util.StringRepresentable;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.SpawnPlacements;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.DyeItem;
@@ -87,11 +64,31 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.context.BlockPlaceContext;
+import net.minecraft.world.level.BlockGetter;
+import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.HorizontalDirectionalBlock;
 import net.minecraft.world.level.block.RenderShape;
 import net.minecraft.world.level.block.SimpleWaterloggedBlock;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.state.StateDefinition;
+import net.minecraft.world.level.block.state.properties.BlockStateProperties;
+import net.minecraft.world.level.block.state.properties.BooleanProperty;
+import net.minecraft.world.level.block.state.properties.DirectionProperty;
+import net.minecraft.world.level.block.state.properties.EnumProperty;
+import net.minecraft.world.level.material.FluidState;
+import net.minecraft.world.level.material.Fluids;
+import net.minecraft.world.level.material.Material;
+import net.minecraft.world.level.material.MaterialColor;
+import net.minecraft.world.phys.BlockHitResult;
+import net.minecraft.world.phys.HitResult;
+import net.minecraft.world.phys.Vec3;
+import net.minecraft.world.phys.shapes.BooleanOp;
+import net.minecraft.world.phys.shapes.CollisionContext;
+import net.minecraft.world.phys.shapes.Shapes;
+import net.minecraft.world.phys.shapes.VoxelShape;
 
 public class ConveyorBlock extends BasicTileBlock<ConveyorTile> implements SimpleWaterloggedBlock, IRecipeProvider {
 
@@ -243,11 +240,6 @@ public class ConveyorBlock extends BasicTileBlock<ConveyorTile> implements Simpl
     }
 
     @Override
-    public boolean hasTileEntity(BlockState state) {
-        return true;
-    }
-
-    @Override
     public void setPlacedBy(Level worldIn, BlockPos pos, BlockState state, LivingEntity placer, ItemStack stack) {
         super.setPlacedBy(worldIn, pos, state, placer, stack);
         if (placer != null) {
@@ -374,8 +366,8 @@ public class ConveyorBlock extends BasicTileBlock<ConveyorTile> implements Simpl
 
     @Nullable
     @Override
-    public BlockEntity createTileEntity(BlockState state, BlockGetter world) {
-        ConveyorTile tile = new ConveyorTile();
+    public BlockEntity newBlockEntity(BlockPos p_153215_, BlockState p_153216_) {
+        ConveyorTile tile = new ConveyorTile(p_153215_, p_153216_);
         return tile;
     }
 
@@ -429,12 +421,6 @@ public class ConveyorBlock extends BasicTileBlock<ConveyorTile> implements Simpl
 
     public ConveyorItem getItem() {
         return item;
-    }
-
-    @Nullable
-    @Override
-    public BlockEntity newBlockEntity(BlockGetter worldIn) {
-        return new ConveyorTile();
     }
 
     @Override

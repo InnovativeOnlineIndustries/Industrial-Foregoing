@@ -45,113 +45,118 @@ import net.minecraft.network.chat.TextComponent;
 import net.minecraft.ChatFormatting;
 import org.lwjgl.opengl.GL11;
 
-public class BlackHoleUnitTESR extends BlockEntityRenderer<BHTile> {
-
-    public static RenderType createRenderType(ResourceLocation texture) {
-        RenderType.CompositeState state = RenderType.CompositeState.builder().setTextureState(new RenderStateShard.TextureStateShard(texture, false, false)).setTransparencyState(new RenderStateShard.TransparencyStateShard("translucent_transparency", () -> {
-            RenderSystem.enableBlend();
-            RenderSystem.blendFuncSeparate(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA, GlStateManager.SourceFactor.ONE, GlStateManager.DestFactor.ZERO);
-            RenderSystem.enableAlphaTest();
-            Lighting.turnOff();
-            if (Minecraft.useAmbientOcclusion()) {
-                RenderSystem.shadeModel(GL11.GL_SMOOTH);
-            } else {
-                RenderSystem.shadeModel(GL11.GL_FLAT);
-            }
-            RenderSystem.disableCull();
-        }, () -> {
-            RenderSystem.disableBlend();
-            RenderSystem.disableAlphaTest();
-        })).createCompositeState(true);
-        return RenderType.create("black_hole_label", DefaultVertexFormat.POSITION_TEX_COLOR, 7, 32, false, true, state);
-    }
-
-    public BlackHoleUnitTESR(BlockEntityRenderDispatcher rendererDispatcherIn) {
-        super(rendererDispatcherIn);
-    }
-
+public class BlackHoleUnitTESR implements BlockEntityRenderer<BHTile> {
+    // TODO: 22/08/2021 stub
     @Override
-    public void render(BHTile tile, float partialTicks, PoseStack matrixStack, MultiBufferSource bufferIn, int combinedLightIn, int combinedOverlayIn) {
-        if (!tile.getDisplayStack().isEmpty() && tile.shouldDisplay()){
-            ItemStack stack = tile.getDisplayStack();
-            matrixStack.pushPose();
-            Direction facing = tile.getFacingDirection();
-            matrixStack.mulPose(Vector3f.YP.rotationDegrees(-180));
-            if (facing == Direction.NORTH) {
-                //matrixStack.translate(0, 0, 1.016 / 16D);
-                matrixStack.translate(-1, 0, 0);
-            }
-            if (facing == Direction.EAST) {
-                matrixStack.translate(-1, 0, -1);
-                matrixStack.mulPose(Vector3f.YP.rotationDegrees(-90));
-            }
-            if (facing == Direction.SOUTH) {
-                matrixStack.translate(0, 0,-1);
-                matrixStack.mulPose(Vector3f.YP.rotationDegrees(-180));
-            }
-            if (facing == Direction.WEST) {
-                matrixStack.mulPose(Vector3f.YP.rotationDegrees(90));
-            }
-            matrixStack.translate(0.5, 0.6, 0);
-            if (stack.getItem() instanceof BlockItem){
-                matrixStack.scale(0.35f, 0.35f, 0.35f);
-            } else {
-                matrixStack.scale(0.4f, 0.4f, 0.4f);
-            }
-            Minecraft.getInstance().getItemRenderer().renderStatic(stack, ItemTransforms.TransformType.NONE, 0xF000F0, combinedOverlayIn, matrixStack, bufferIn);
-            matrixStack.popPose();
-            renderText(matrixStack, bufferIn, combinedOverlayIn, new TextComponent(ChatFormatting.WHITE + tile.getFormatedDisplayAmount()), facing, 0.015f);
-        }
+    public void render(BHTile p_112307_, float p_112308_, PoseStack p_112309_, MultiBufferSource p_112310_, int p_112311_, int p_112312_) {
+
     }
-    /* Thanks Mekanism */
-    private void renderText(PoseStack matrix, MultiBufferSource renderer, int overlayLight, Component text, Direction side, float maxScale) {
-        matrix.pushPose();
-        matrix.translate(0, -0.3725, 0);
-        switch (side) {
-            case SOUTH:
-                matrix.translate(0, 1, 0.0001);
-                matrix.mulPose(Vector3f.XP.rotationDegrees(90));
-                break;
-            case NORTH:
-                matrix.translate(1, 1, 0.9999);
-                matrix.mulPose(Vector3f.YP.rotationDegrees(180));
-                matrix.mulPose(Vector3f.XP.rotationDegrees(90));
-                break;
-            case EAST:
-                matrix.translate(0.0001, 1, 1);
-                matrix.mulPose(Vector3f.YP.rotationDegrees(90));
-                matrix.mulPose(Vector3f.XP.rotationDegrees(90));
-                break;
-            case WEST:
-                matrix.translate(0.9999, 1, 0);
-                matrix.mulPose(Vector3f.YP.rotationDegrees(-90));
-                matrix.mulPose(Vector3f.XP.rotationDegrees(90));
-                break;
-        }
 
-        float displayWidth = 1;
-        float displayHeight = 1;
-        matrix.translate(displayWidth / 2, 1, displayHeight / 2);
-        matrix.mulPose(Vector3f.XP.rotationDegrees(-90));
-
-        Font font = renderer.getFont();
-
-        int requiredWidth = Math.max(font.width(text), 1);
-        int requiredHeight = font.lineHeight + 2;
-        float scaler = 0.4F;
-        float scaleX = displayWidth / requiredWidth;
-        float scale = scaleX * scaler;
-        if (maxScale > 0) {
-            scale = Math.min(scale, maxScale);
-        }
-
-        matrix.scale(scale, -scale, scale);
-        int realHeight = (int) Math.floor(displayHeight / scale);
-        int realWidth = (int) Math.floor(displayWidth / scale);
-        int offsetX = (realWidth - requiredWidth) / 2;
-        int offsetY = (realHeight - requiredHeight) / 2;
-        font.drawInBatch(text, offsetX - realWidth / 2, 3 + offsetY - realHeight / 2, overlayLight,
-                false, matrix.last().pose(), renderer, false, 0, 0xF000F0);
-        matrix.popPose();
-    }
+//    public static RenderType createRenderType(ResourceLocation texture) {
+//        RenderType.CompositeState state = RenderType.CompositeState.builder().setTextureState(new RenderStateShard.TextureStateShard(texture, false, false)).setTransparencyState(new RenderStateShard.TransparencyStateShard("translucent_transparency", () -> {
+//            RenderSystem.enableBlend();
+//            RenderSystem.blendFuncSeparate(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA, GlStateManager.SourceFactor.ONE, GlStateManager.DestFactor.ZERO);
+//            RenderSystem.enableAlphaTest();
+//            Lighting.turnOff();
+//            if (Minecraft.useAmbientOcclusion()) {
+//                RenderSystem.shadeModel(GL11.GL_SMOOTH);
+//            } else {
+//                RenderSystem.shadeModel(GL11.GL_FLAT);
+//            }
+//            RenderSystem.disableCull();
+//        }, () -> {
+//            RenderSystem.disableBlend();
+//            RenderSystem.disableAlphaTest();
+//        })).createCompositeState(true);
+//        return RenderType.create("black_hole_label", DefaultVertexFormat.POSITION_TEX_COLOR, 7, 32, false, true, state);
+//    }
+//
+//    public BlackHoleUnitTESR(BlockEntityRenderDispatcher rendererDispatcherIn) {
+//        super(rendererDispatcherIn);
+//    }
+//
+//    @Override
+//    public void render(BHTile tile, float partialTicks, PoseStack matrixStack, MultiBufferSource bufferIn, int combinedLightIn, int combinedOverlayIn) {
+//        if (!tile.getDisplayStack().isEmpty() && tile.shouldDisplay()){
+//            ItemStack stack = tile.getDisplayStack();
+//            matrixStack.pushPose();
+//            Direction facing = tile.getFacingDirection();
+//            matrixStack.mulPose(Vector3f.YP.rotationDegrees(-180));
+//            if (facing == Direction.NORTH) {
+//                //matrixStack.translate(0, 0, 1.016 / 16D);
+//                matrixStack.translate(-1, 0, 0);
+//            }
+//            if (facing == Direction.EAST) {
+//                matrixStack.translate(-1, 0, -1);
+//                matrixStack.mulPose(Vector3f.YP.rotationDegrees(-90));
+//            }
+//            if (facing == Direction.SOUTH) {
+//                matrixStack.translate(0, 0,-1);
+//                matrixStack.mulPose(Vector3f.YP.rotationDegrees(-180));
+//            }
+//            if (facing == Direction.WEST) {
+//                matrixStack.mulPose(Vector3f.YP.rotationDegrees(90));
+//            }
+//            matrixStack.translate(0.5, 0.6, 0);
+//            if (stack.getItem() instanceof BlockItem){
+//                matrixStack.scale(0.35f, 0.35f, 0.35f);
+//            } else {
+//                matrixStack.scale(0.4f, 0.4f, 0.4f);
+//            }
+//            Minecraft.getInstance().getItemRenderer().renderStatic(stack, ItemTransforms.TransformType.NONE, 0xF000F0, combinedOverlayIn, matrixStack, bufferIn);
+//            matrixStack.popPose();
+//            renderText(matrixStack, bufferIn, combinedOverlayIn, new TextComponent(ChatFormatting.WHITE + tile.getFormatedDisplayAmount()), facing, 0.015f);
+//        }
+//    }
+//    /* Thanks Mekanism */
+//    private void renderText(PoseStack matrix, MultiBufferSource renderer, int overlayLight, Component text, Direction side, float maxScale) {
+//        matrix.pushPose();
+//        matrix.translate(0, -0.3725, 0);
+//        switch (side) {
+//            case SOUTH:
+//                matrix.translate(0, 1, 0.0001);
+//                matrix.mulPose(Vector3f.XP.rotationDegrees(90));
+//                break;
+//            case NORTH:
+//                matrix.translate(1, 1, 0.9999);
+//                matrix.mulPose(Vector3f.YP.rotationDegrees(180));
+//                matrix.mulPose(Vector3f.XP.rotationDegrees(90));
+//                break;
+//            case EAST:
+//                matrix.translate(0.0001, 1, 1);
+//                matrix.mulPose(Vector3f.YP.rotationDegrees(90));
+//                matrix.mulPose(Vector3f.XP.rotationDegrees(90));
+//                break;
+//            case WEST:
+//                matrix.translate(0.9999, 1, 0);
+//                matrix.mulPose(Vector3f.YP.rotationDegrees(-90));
+//                matrix.mulPose(Vector3f.XP.rotationDegrees(90));
+//                break;
+//        }
+//
+//        float displayWidth = 1;
+//        float displayHeight = 1;
+//        matrix.translate(displayWidth / 2, 1, displayHeight / 2);
+//        matrix.mulPose(Vector3f.XP.rotationDegrees(-90));
+//
+//        Font font = renderer.getFont();
+//
+//        int requiredWidth = Math.max(font.width(text), 1);
+//        int requiredHeight = font.lineHeight + 2;
+//        float scaler = 0.4F;
+//        float scaleX = displayWidth / requiredWidth;
+//        float scale = scaleX * scaler;
+//        if (maxScale > 0) {
+//            scale = Math.min(scale, maxScale);
+//        }
+//
+//        matrix.scale(scale, -scale, scale);
+//        int realHeight = (int) Math.floor(displayHeight / scale);
+//        int realWidth = (int) Math.floor(displayWidth / scale);
+//        int offsetX = (realWidth - requiredWidth) / 2;
+//        int offsetY = (realHeight - requiredHeight) / 2;
+//        font.drawInBatch(text, offsetX - realWidth / 2, 3 + offsetY - realHeight / 2, overlayLight,
+//                false, matrix.last().pose(), renderer, false, 0, 0xF000F0);
+//        matrix.popPose();
+//    }
 }

@@ -53,18 +53,18 @@ public class GeneratorBackgroundScreenAddon extends BasicScreenAddon {
 
     @Override
     public void drawBackgroundLayer(PoseStack stack, Screen screen, IAssetProvider provider, int guiX, int guiY, int mouseX, int mouseY, float partialTicks) {
-        float scale = 4;
-        stack.pushPose();
-        stack.scale(scale, scale, scale);
-        ItemStackUtils.renderItemIntoGUI(stack, new ItemStack(type.getDisplay()), guiX + getPosX(),guiY + getPosY());
-        stack.scale(1/scale, 1/scale, 1/scale);
-        RenderSystem.enableBlend();
-        RenderSystem.blendFunc(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA);
-        RenderSystem.color4f(1,1,1, 0.6f);
-        Minecraft.getInstance().getTextureManager().bind(IAssetProvider.DEFAULT_LOCATION);
-        stack.translate(0,0, 200);
-        screen.blit(stack, guiX+ getPosX() - 24 ,guiY + this.getPosY() - 24 , 4, 4, 64, 64);
-        stack.popPose();
+//        float scale = 4;
+//        stack.pushPose();
+//        stack.scale(scale, scale, scale);
+//        ItemStackUtils.renderItemIntoGUI(stack, new ItemStack(type.getDisplay()), guiX + getPosX(),guiY + getPosY());
+//        stack.scale(1/scale, 1/scale, 1/scale);
+//        RenderSystem.enableBlend();
+//        RenderSystem.blendFunc(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA);
+//        RenderSystem.color4f(1,1,1, 0.6f);
+//        Minecraft.getInstance().getTextureManager().bind(IAssetProvider.DEFAULT_LOCATION);
+//        stack.translate(0,0, 200);
+//        screen.blit(stack, guiX+ getPosX() - 24 ,guiY + this.getPosY() - 24 , 4, 4, 64, 64);
+//        stack.popPose();
     }
 
     @Override

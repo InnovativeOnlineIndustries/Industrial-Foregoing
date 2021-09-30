@@ -44,6 +44,7 @@ import com.hrznstudio.titanium.item.AugmentWrapper;
 import com.hrznstudio.titanium.util.LangUtil;
 
 import net.minecraft.core.BlockPos;
+import net.minecraft.world.entity.Entity;
 import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.item.enchantment.Enchantments;
 import net.minecraft.world.entity.LivingEntity;
@@ -178,12 +179,12 @@ public class MobCrusherTile extends IndustrialAreaWorkingTile<MobCrusherTile> {
                 ForgeHooks.onLivingDrops(entity, source, extra, looting, true);
                 extra.forEach(itemEntity -> {
                     ItemHandlerHelper.insertItem(this.output, itemEntity.getItem(), false);
-                    itemEntity.remove(false);
+                    itemEntity.remove(Entity.RemovalReason.KILLED);
                 });
                 if (dropXP)
                     this.tank.fillForced(new FluidStack(ModuleCore.ESSENCE.getSourceFluid(), experience * 20), IFluidHandler.FluidAction.EXECUTE);
                 entity.setHealth(0);
-                entity.remove(false);
+                entity.remove(Entity.RemovalReason.KILLED);
                 player.setItemInHand(InteractionHand.MAIN_HAND, ItemStack.EMPTY);
                 return new WorkAction(0.1f, MobCrusherConfig.powerPerOperation);
             }

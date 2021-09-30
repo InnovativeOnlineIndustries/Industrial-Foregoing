@@ -29,34 +29,43 @@ import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.entity.EntityRenderer;
 import net.minecraft.client.renderer.entity.EntityRenderDispatcher;
+import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
 import com.mojang.math.Vector3f;
 
 public class InfinityLauncherProjectileRenderer extends EntityRenderer<InfinityLauncherProjectileEntity> {
-
-    public static final ResourceLocation PROJECTILE = new ResourceLocation(Reference.MOD_ID, "textures/items/infinity_launcher_projectile.png");
-    private final InfinityLauncherProjectileModel projectileModel = new InfinityLauncherProjectileModel();
-
-    public InfinityLauncherProjectileRenderer(EntityRenderDispatcher renderManagerIn) {
-        super(renderManagerIn);
+    protected InfinityLauncherProjectileRenderer(EntityRendererProvider.Context p_174008_) {
+        super(p_174008_);
     }
 
     @Override
-    public void render(InfinityLauncherProjectileEntity entityIn, float entityYaw, float partialTicks, PoseStack matrixStackIn, MultiBufferSource bufferIn, int packedLightIn) {
-        matrixStackIn.pushPose();
-        matrixStackIn.mulPose(Vector3f.YP.rotationDegrees(Mth.lerp(partialTicks, entityIn.yRotO, entityIn.yRot) - 90.0F));
-        matrixStackIn.mulPose(Vector3f.ZP.rotationDegrees(Mth.lerp(partialTicks, entityIn.xRotO, entityIn.xRot) + 90.0F));
-        matrixStackIn.translate(0, -0.8, 0);
-        VertexConsumer ivertexbuilder = bufferIn.getBuffer(RenderType.entityCutout(this.getTextureLocation(entityIn)));
-        this.projectileModel.renderToBuffer(matrixStackIn, ivertexbuilder, packedLightIn, OverlayTexture.NO_OVERLAY, 1.0F, 1.0F, 1.0F, 1.0F);
-        matrixStackIn.popPose();
-        super.render(entityIn, entityYaw, partialTicks, matrixStackIn, bufferIn, packedLightIn);
+    public ResourceLocation getTextureLocation(InfinityLauncherProjectileEntity p_114482_) {
+        return null;
     }
 
-    @Override
-    public ResourceLocation getTextureLocation(InfinityLauncherProjectileEntity entity) {
-        return PROJECTILE;
-    }
+//    public static final ResourceLocation PROJECTILE = new ResourceLocation(Reference.MOD_ID, "textures/items/infinity_launcher_projectile.png");
+//    private final InfinityLauncherProjectileModel projectileModel = new InfinityLauncherProjectileModel();
+//
+//    public InfinityLauncherProjectileRenderer(EntityRenderDispatcher renderManagerIn) {s
+//        super(renderManagerIn);
+//    }
+//
+//    @Override
+//    public void render(InfinityLauncherProjectileEntity entityIn, float entityYaw, float partialTicks, PoseStack matrixStackIn, MultiBufferSource bufferIn, int packedLightIn) {
+//        matrixStackIn.pushPose();
+//        matrixStackIn.mulPose(Vector3f.YP.rotationDegrees(Mth.lerp(partialTicks, entityIn.yRotO, entityIn.yRot) - 90.0F));
+//        matrixStackIn.mulPose(Vector3f.ZP.rotationDegrees(Mth.lerp(partialTicks, entityIn.xRotO, entityIn.xRot) + 90.0F));
+//        matrixStackIn.translate(0, -0.8, 0);
+//        VertexConsumer ivertexbuilder = bufferIn.getBuffer(RenderType.entityCutout(this.getTextureLocation(entityIn)));
+//        this.projectileModel.renderToBuffer(matrixStackIn, ivertexbuilder, packedLightIn, OverlayTexture.NO_OVERLAY, 1.0F, 1.0F, 1.0F, 1.0F);
+//        matrixStackIn.popPose();
+//        super.render(entityIn, entityYaw, partialTicks, matrixStackIn, bufferIn, packedLightIn);
+//    }
+//
+//    @Override
+//    public ResourceLocation getTextureLocation(InfinityLauncherProjectileEntity entity) {
+//        return PROJECTILE;
+//    }
 }

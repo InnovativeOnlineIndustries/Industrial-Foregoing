@@ -64,17 +64,17 @@ public class MycelialReactorTile extends IndustrialGeneratorTile<MycelialReactor
 
     @Override
     public int consumeFuel() {
-        MycelialDataManager.getReactorAvailable(owner, this.level, true);
+//        MycelialDataManager.getReactorAvailable(owner, this.level, true);
         return 5;
     }
 
     @Override
     public boolean canStart() {
-        int amount = MycelialDataManager.getReactorAvailable(owner, this.level, false).size();
-        if (amount == IMycelialGeneratorType.TYPES.size()){
-            MycelialDataManager.getReactorAvailable(owner, this.level, true);
-            return true;
-        }
+//        int amount = MycelialDataManager.getReactorAvailable(owner, this.level, false).size();
+//        if (amount == IMycelialGeneratorType.TYPES.size()){
+//            MycelialDataManager.getReactorAvailable(owner, this.level, true);
+//            return true;
+//        }
         markForUpdate();
         return false;
     }

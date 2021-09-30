@@ -17,12 +17,12 @@ public class InfinityLauncherProjectileArmorLayer<T extends LivingEntity, M exte
 
     public static HashMap<String, Integer> PROJECTILE_AMOUNT = new HashMap<>();
 
-    private final EntityRenderDispatcher entityRendererManager;
+//    private final EntityRenderDispatcher entityRendererManager;
     private InfinityLauncherProjectileEntity projectile;
 
     public InfinityLauncherProjectileArmorLayer(LivingEntityRenderer<T, M> livingRenderer) {
         super(livingRenderer);
-        this.entityRendererManager = livingRenderer.getDispatcher();
+//        this.entityRendererManager = livingRenderer.getDispatcher();
     }
 
     @Override
@@ -38,6 +38,6 @@ public class InfinityLauncherProjectileArmorLayer<T extends LivingEntity, M exte
         this.projectile.xRot = (float) (Math.atan2((double) p_225632_6_, (double) f) * (double) (180F / (float) Math.PI));
         this.projectile.yRotO = this.projectile.yRot;
         this.projectile.xRotO = this.projectile.xRot;
-        this.entityRendererManager.render(this.projectile, 0.0D, 0.0D, 0.0D, 0.0F, p_225632_8_, p_225632_1_, p_225632_2_, p_225632_3_);
+//        this.entityRendererManager.render(this.projectile, 0.0D, 0.0D, 0.0D, 0.0F, p_225632_8_, p_225632_1_, p_225632_2_, p_225632_3_);
     }
 }

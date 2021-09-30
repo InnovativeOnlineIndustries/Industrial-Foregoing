@@ -69,7 +69,7 @@ import static com.buuz135.industrial.block.transportstorage.ConveyorBlock.*;
 import com.buuz135.industrial.block.transportstorage.ConveyorBlock.EnumType;
 import net.minecraftforge.fmllegacy.network.NetworkHooks;
 
-public class ConveyorTile extends ActiveTile<ConveyorTile> implements IBlockContainer<ConveyorUpgradeFactory>, ITickableBlockEntity {
+public class ConveyorTile extends ActiveTile<ConveyorTile> implements IBlockContainer<ConveyorUpgradeFactory> {
 
     private Direction facing;
     private EnumType type;
@@ -141,7 +141,7 @@ public class ConveyorTile extends ActiveTile<ConveyorTile> implements IBlockCont
             if (!level.isClientSide && drop) {
                 ConveyorUpgrade upgrade = upgradeMap.get(facing);
                 for (ItemStack stack : upgrade.getDrops()) {
-                    ItemEntity item = new ItemEntity(level, worldPosition.getX() + 0.5, worldPosition.getY() + 0.5, worldPosition.getZ() + 0.5);
+                    ItemEntity item = new ItemEntity(level, worldPosition.getX() + 0.5, worldPosition.getY() + 0.5, worldPosition.getZ() + 0.5, stack);
                     item.setItem(stack);
                     level.addFreshEntity(item);
                 }
@@ -225,8 +225,8 @@ public class ConveyorTile extends ActiveTile<ConveyorTile> implements IBlockCont
     }
 
     @Override //read
-    public void load(BlockState state, CompoundTag compound) {
-        super.load(state, compound);
+    public void load(CompoundTag compound) {
+        super.load(compound);
         this.facing = Direction.byName(compound.getString("Facing"));
         this.type = ConveyorBlock.EnumType.getFromName(compound.getString("Type"));
         this.color = compound.getInt("Color");
@@ -263,7 +263,7 @@ public class ConveyorTile extends ActiveTile<ConveyorTile> implements IBlockCont
     public void markForUpdate() {
         super.markForUpdate();
         this.level.setBlockAndUpdate(worldPosition, this.level.getBlockState(worldPosition).setValue(FACING, facing).setValue(TYPE, type));
-        this.level.getBlockEntity(worldPosition).load(this.level.getBlockState(worldPosition), save(new CompoundTag())); //read
+        this.level.getBlockEntity(worldPosition).load(save(new CompoundTag())); //read
     }
 
     public List<AABB> getCollisionBoxes() {

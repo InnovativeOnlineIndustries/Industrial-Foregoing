@@ -42,7 +42,6 @@ import net.minecraft.world.item.Items;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.Level;
-import net.minecraftforge.common.ToolType;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.items.ItemHandlerHelper;
 import org.apache.commons.lang3.tuple.Pair;
@@ -70,7 +69,8 @@ public class ItemInfinitySaw extends ItemInfinity {
     public static int FUEL_CONSUMPTION = 3;
 
     public ItemInfinitySaw(CreativeModeTab group) {
-        super("infinity_saw", group, new Properties().stacksTo(1).addToolType(ToolType.AXE, 3), POWER_CONSUMPTION, FUEL_CONSUMPTION, false);
+//        .addToolType(ToolAction.AXE, 3)
+        super("infinity_saw", group, new Properties().stacksTo(1), POWER_CONSUMPTION, FUEL_CONSUMPTION, false);
     }
 
     @Override

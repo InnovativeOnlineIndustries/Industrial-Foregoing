@@ -21,8 +21,6 @@
  */
 package com.buuz135.industrial.plugin.curios;
 
-import com.buuz135.industrial.item.infinity.item.ItemInfinityBackpack;
-import com.buuz135.industrial.module.ModuleTool;
 import com.buuz135.industrial.plugin.CuriosPlugin;
 import com.mojang.blaze3d.vertex.PoseStack;
 import top.theillusivec4.curios.api.SlotContext;
@@ -51,9 +49,9 @@ public class InfinityBackpackCurios implements ICurio, ICurioRenderer {
     @Override
     public void curioTick(String identifier, int index, LivingEntity livingEntity) {
         ItemStack stack = CuriosPlugin.getStack(livingEntity, SlotTypePreset.BACK, 0);
-        if (stack.getItem() instanceof ItemInfinityBackpack){
-            ModuleTool.INFINITY_BACKPACK.inventoryTick(stack, livingEntity.level, livingEntity, 0, false);
-        }
+//        if (stack.getItem() instanceof ItemInfinityBackpack){
+//            ModuleTool.INFINITY_BACKPACK.inventoryTick(stack, livingEntity.level, livingEntity, 0, false);
+//        }
     }
 
     @Override

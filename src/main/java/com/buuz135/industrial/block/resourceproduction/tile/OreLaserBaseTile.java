@@ -129,8 +129,8 @@ public class OreLaserBaseTile extends IndustrialMachineTile<OreLaserBaseTile> im
     }
 
     @Override
-    public void setLevelAndPosition(Level world, BlockPos pos) {
-        super.setLevelAndPosition(world, pos);
+    public void setChanged() {
+        super.setChanged();
         if (this.miningDepth == 0) this.miningDepth = this.worldPosition.getY();
     }
 
@@ -155,7 +155,7 @@ public class OreLaserBaseTile extends IndustrialMachineTile<OreLaserBaseTile> im
                         return new ItemStackWeightedItem(stack.copy(), weight);
                     }).collect(Collectors.toList());
             if (!items.isEmpty()){
-                ItemStack stack = WeighedRandom.getRandomItem(this.level.getRandom(), items).getStack();
+                ItemStack stack = WeighedRandom.getRandomItem(this.level.getRandom(), items).get().getStack();
                 ItemHandlerHelper.insertItem(output, stack, false);
             }
         }

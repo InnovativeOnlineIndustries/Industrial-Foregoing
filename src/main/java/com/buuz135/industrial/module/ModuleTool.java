@@ -62,7 +62,7 @@ public class ModuleTool implements IModule {
     public static ItemInfinitySaw INFINITY_SAW;
     public static ItemInfinityHammer INFINITY_HAMMER;
     public static ItemInfinityTrident INFINITY_TRIDENT;
-    public static ItemInfinityBackpack INFINITY_BACKPACK;
+//    public static ItemInfinityBackpack INFINITY_BACKPACK;
     public static ItemInfinityLauncher INFINITY_LAUNCHER;
     public static final SoundEvent NUKE_CHARGING = new SoundEvent(new ResourceLocation(Reference.MOD_ID, "nuke_charging")).setRegistryName(new ResourceLocation(Reference.MOD_ID, "nuke_charging"));
 
@@ -99,7 +99,7 @@ public class ModuleTool implements IModule {
         features.add(Feature.builder("infinity_trident")
                 .content(Item.class, INFINITY_TRIDENT = new ItemInfinityTrident(TAB_TOOL))
                 .content(EntityType.class, (EntityType) TRIDENT_ENTITY_TYPE));
-        features.add(createFeature(INFINITY_BACKPACK = new ItemInfinityBackpack()));
+//        features.add(createFeature(INFINITY_BACKPACK = new ItemInfinityBackpack()));
         features.add(Feature.builder("infinity_launcher")
                 .content(Item.class, INFINITY_LAUNCHER = new ItemInfinityLauncher(TAB_TOOL))
                 .content(EntityType.class, (EntityType) INFINITY_LAUNCHER_PROJECTILE_ENTITY_TYPE)
@@ -114,7 +114,7 @@ public class ModuleTool implements IModule {
         ItemStackHarnessRegistry.register(INFINITY_HAMMER, stack -> new ItemStackHarness(stack, null, (IButtonHandler) stack.getItem(), CapabilityEnergy.ENERGY, CapabilityFluidHandler.FLUID_HANDLER_ITEM_CAPABILITY, CapabilityItemStackHolder.ITEMSTACK_HOLDER_CAPABILITY));
         ItemStackHarnessRegistry.register(INFINITY_TRIDENT, stack -> new ItemStackHarness(stack, null, (IButtonHandler) stack.getItem(), CapabilityEnergy.ENERGY, CapabilityFluidHandler.FLUID_HANDLER_ITEM_CAPABILITY, CapabilityItemStackHolder.ITEMSTACK_HOLDER_CAPABILITY));
         ItemStackHarnessRegistry.register(INFINITY_TRIDENT, stack -> new ItemStackHarness(stack, null, (IButtonHandler) stack.getItem(), CapabilityEnergy.ENERGY, CapabilityFluidHandler.FLUID_HANDLER_ITEM_CAPABILITY, CapabilityItemStackHolder.ITEMSTACK_HOLDER_CAPABILITY));
-        ItemStackHarnessRegistry.register(INFINITY_BACKPACK, stack -> new ItemStackHarness(stack, null, (IButtonHandler) stack.getItem(), CapabilityEnergy.ENERGY, CapabilityFluidHandler.FLUID_HANDLER_ITEM_CAPABILITY, CapabilityItemStackHolder.ITEMSTACK_HOLDER_CAPABILITY));
+//        ItemStackHarnessRegistry.register(INFINITY_BACKPACK, stack -> new ItemStackHarness(stack, null, (IButtonHandler) stack.getItem(), CapabilityEnergy.ENERGY, CapabilityFluidHandler.FLUID_HANDLER_ITEM_CAPABILITY, CapabilityItemStackHolder.ITEMSTACK_HOLDER_CAPABILITY));
         ItemStackHarnessRegistry.register(INFINITY_LAUNCHER, stack -> new ItemStackHarness(stack, null, (IButtonHandler) stack.getItem(), CapabilityEnergy.ENERGY, CapabilityFluidHandler.FLUID_HANDLER_ITEM_CAPABILITY, CapabilityItemStackHolder.ITEMSTACK_HOLDER_CAPABILITY));
         ItemStackHarnessRegistry.register(INFINITY_NUKE, stack -> new ItemStackHarness(stack, null, (IButtonHandler) stack.getItem(), CapabilityEnergy.ENERGY, CapabilityFluidHandler.FLUID_HANDLER_ITEM_CAPABILITY, CapabilityItemStackHolder.ITEMSTACK_HOLDER_CAPABILITY));
         return features;

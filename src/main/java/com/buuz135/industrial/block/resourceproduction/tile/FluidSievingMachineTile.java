@@ -56,7 +56,7 @@ public class FluidSievingMachineTile extends IndustrialProcessingTile<FluidSievi
         );
         addInventory(this.sand = (SidedInventoryComponent<FluidSievingMachineTile>) new SidedInventoryComponent<FluidSievingMachineTile>("sand", 60, 31, 4, 1)
                         .setColor(DyeColor.YELLOW)
-                .setInputFilter((stack, integer) -> stack.getItem().is(ItemTags.SAND))
+                .setInputFilter((stack, integer) -> stack.is(ItemTags.SAND))
                 .setSlotToItemStackRender(0, new ItemStack(Blocks.SAND))
                 .setSlotToItemStackRender(1, new ItemStack(Blocks.SAND))
                 .setSlotToItemStackRender(2, new ItemStack(Blocks.SAND))

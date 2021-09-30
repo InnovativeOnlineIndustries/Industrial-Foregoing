@@ -63,8 +63,8 @@ public abstract class TexturedStateButtonGuiComponent extends PositionedGuiCompo
     public void drawGuiBackgroundLayer(PoseStack stack, int guiX, int guiY, double mouseX, double mouseY) {
         StateButtonInfo buttonInfo = getStateInfo();
         if (buttonInfo != null) {
-            RenderSystem.color4f(1, 1, 1, 1);
-            Minecraft.getInstance().getTextureManager().bind(buttonInfo.getTexture());
+//            RenderSystem.color4f(1, 1, 1, 1);
+//            Minecraft.getInstance().getTextureManager().bind(buttonInfo.getTexture());
             Minecraft.getInstance().screen.blit(stack, guiX + getXPos(), guiY + getYPos(), buttonInfo.getTextureX(), buttonInfo.getTextureY(), getXSize(), getYSize()); //blit
         }
     }
@@ -73,11 +73,11 @@ public abstract class TexturedStateButtonGuiComponent extends PositionedGuiCompo
     public void drawGuiForegroundLayer(PoseStack stack, int guiX, int guiY, double mouseX, double mouseY) {
         StateButtonInfo buttonInfo = getStateInfo();
         if (buttonInfo != null && isInside(mouseX, mouseY)) {
-            RenderSystem.disableLighting();
-            RenderSystem.enableDepthTest();
+//            RenderSystem.disableLighting();
+//            RenderSystem.enableDepthTest();
             GuiComponent.fill(stack, getXPos() - guiX, getYPos() - guiY, getXPos() + getXSize() - guiX, getYPos() + getYSize() - guiY, -2130706433);//fill
-            RenderSystem.enableLighting();
-            RenderSystem.disableAlphaTest();
+//            RenderSystem.enableLighting();
+//            RenderSystem.disableAlphaTest();
         }
     }
 

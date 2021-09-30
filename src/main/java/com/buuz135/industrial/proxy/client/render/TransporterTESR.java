@@ -21,26 +21,26 @@ import com.mojang.math.Vector3f;
 
 import java.util.Map;
 
-public class TransporterTESR extends BlockEntityRenderer<TransporterTile> {
+public class TransporterTESR implements BlockEntityRenderer<TransporterTile> {
 
 
-    public static RenderType TYPE = createRenderType();
+//    public static RenderType TYPE = createRenderType();
 
-    public TransporterTESR(BlockEntityRenderDispatcher rendererDispatcherIn) {
-        super(rendererDispatcherIn);
-    }
+//    public TransporterTESR(BlockEntityRenderDispatcher rendererDispatcherIn) {
+//        super(rendererDispatcherIn);
+//    }
 
-    public static RenderType createRenderType() {
-        RenderType.CompositeState state = RenderType.CompositeState.builder().setTextureState(new RenderStateShard.TextureStateShard(new ResourceLocation("industrialforegoing", "textures/blocks/transporters/particle.png"), false, false)).setTransparencyState(new RenderStateShard.TransparencyStateShard("translucent_transparency", () -> {
-            RenderSystem.depthMask(true);
-            RenderSystem.enableBlend();
-            RenderSystem.blendFunc(GlStateManager.SourceFactor.ONE, GlStateManager.DestFactor.ONE);
-        }, () -> {
-            RenderSystem.disableBlend();
-            RenderSystem.defaultBlendFunc();
-        })).createCompositeState(true);
-        return RenderType.create("transporter_render", DefaultVertexFormat.POSITION_TEX_COLOR, 7, 262144, false, true, state);
-    }
+//    public static RenderType createRenderType() {
+//        RenderType.CompositeState state = RenderType.CompositeState.builder().setTextureState(new RenderStateShard.TextureStateShard(new ResourceLocation("industrialforegoing", "textures/blocks/transporters/particle.png"), false, false)).setTransparencyState(new RenderStateShard.TransparencyStateShard("translucent_transparency", () -> {
+//            RenderSystem.depthMask(true);
+//            RenderSystem.enableBlend();
+//            RenderSystem.blendFunc(GlStateManager.SourceFactor.ONE, GlStateManager.DestFactor.ONE);
+//        }, () -> {
+//            RenderSystem.disableBlend();
+//            RenderSystem.defaultBlendFunc();
+//        })).createCompositeState(true);
+//        return RenderType.create("transporter_render", DefaultVertexFormat.POSITION_TEX_COLOR, 7, 262144, false, true, state);
+//    }
 
     public static Vector3f getPath(Direction from, Direction to, double step) {
         float totalSteps = 6.15f;

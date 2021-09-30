@@ -62,7 +62,7 @@ public class ContributorsCatEarsRender extends RenderLayer<AbstractClientPlayer,
         stack.mulPose(Vector3f.XP.rotationDegrees(180));
         stack.mulPose(Vector3f.YN.rotationDegrees(netHeadYaw));
         stack.mulPose(Vector3f.ZN.rotationDegrees(headPitch));
-        Minecraft.getInstance().getTextureManager().bind(TextureAtlas.LOCATION_BLOCKS);
+//        Minecraft.getInstance().getTextureManager().bind(TextureAtlas.LOCATION_BLOCKS);
         Calendar calendar = Calendar.getInstance();
         if (calendar.get(Calendar.MONTH) == Calendar.OCTOBER) {
             spookyScarySkeletons(stack, buffer);

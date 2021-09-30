@@ -55,7 +55,7 @@ public abstract class RegulatorFilterGuiComponent extends PositionedGuiComponent
                 int posY = guiY + getXPos() + i * 18;
                 if (mouseX > posX + 1 && mouseX < posX + 1 + 16 && mouseY > posY + 1 && mouseY < posY + 1 + 16) {
                     if (conveyor instanceof ICanSendNetworkMessage) {
-                        ((ICanSendNetworkMessage) conveyor).sendMessage(pos, Minecraft.getInstance().player.inventory.getCarried().serializeNBT());
+                        ((ICanSendNetworkMessage) conveyor).sendMessage(pos, Minecraft.getInstance().player.inventory.getSelected().serializeNBT());
                     }
                     return true;
                 }
@@ -100,7 +100,7 @@ public abstract class RegulatorFilterGuiComponent extends PositionedGuiComponent
             for (int x = 0; x < getXSize(); x++) {
                 int posX = guiX + getXPos() + x * 18;
                 int posY = guiY + getXPos() + i * 18;
-                Minecraft.getInstance().getTextureManager().bind(BG_TEXTURE);
+//                Minecraft.getInstance().getTextureManager().bind(BG_TEXTURE);
                 Minecraft.getInstance().screen.blit(stack, posX, posY, 176, 0, 18, 18); //blit
                 if (!getFilter().getFilter()[pos].getStack().isEmpty()) {
                     Minecraft.getInstance().getItemRenderer().renderGuiItem(getFilter().getFilter()[pos].getStack(), posX + 1, posY + 1);

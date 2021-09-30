@@ -140,8 +140,8 @@ public class MaterialStoneWorkFactoryTile extends IndustrialProcessingTile<Mater
                             AssetUtil.drawAsset(stack, screen, provider.getAsset(AssetTypes.ITEM_BACKGROUND), guiX + getPosX(), guiY + getPosY());
                             //RenderSystem.setupGui3DDiffuseLighting();
                             Minecraft.getInstance().getItemRenderer().renderGuiItem(recipe.output, guiX + getPosX() + 1, guiY + getPosY() + 1);
-                            Lighting.turnOff();
-                            RenderSystem.enableAlphaTest();
+//                            Lighting.turnOff();
+//                            RenderSystem.enableAlphaTest();
                         });
                     }
 
@@ -198,8 +198,8 @@ public class MaterialStoneWorkFactoryTile extends IndustrialProcessingTile<Mater
                         AssetUtil.drawAsset(stack, screen, provider.getAsset(AssetTypes.ITEM_BACKGROUND), guiX + getPosX(), guiY + getPosY());
                         //RenderSystem.setupGui3DDiffuseLighting();
                         Minecraft.getInstance().getItemRenderer().renderGuiItem(ACTION_RECIPES[firstRecipeId].icon, guiX + getPosX() + 1, guiY + getPosY() + 1);
-                        Lighting.turnOff();
-                        RenderSystem.enableAlphaTest();
+//                        Lighting.turnOff();
+//                        RenderSystem.enableAlphaTest();
                     }
 
                     @Override
@@ -223,8 +223,8 @@ public class MaterialStoneWorkFactoryTile extends IndustrialProcessingTile<Mater
                         AssetUtil.drawAsset(stack, screen, provider.getAsset(AssetTypes.ITEM_BACKGROUND), guiX + getPosX(), guiY + getPosY());
                         //RenderSystem.setupGui3DDiffuseLighting();
                         Minecraft.getInstance().getItemRenderer().renderGuiItem(ACTION_RECIPES[secondRecipeId].icon, guiX + getPosX() + 1, guiY + getPosY() + 1);
-                        Lighting.turnOff();
-                        RenderSystem.enableAlphaTest();
+//                        Lighting.turnOff();
+//                        RenderSystem.enableAlphaTest();
                     }
 
                     @Override
@@ -248,8 +248,8 @@ public class MaterialStoneWorkFactoryTile extends IndustrialProcessingTile<Mater
                         AssetUtil.drawAsset(stack, screen, provider.getAsset(AssetTypes.ITEM_BACKGROUND), guiX + getPosX(), guiY + getPosY());
                         //RenderSystem.setupGui3DDiffuseLighting();
                         Minecraft.getInstance().getItemRenderer().renderGuiItem(ACTION_RECIPES[thirdRecipeId].icon, guiX + getPosX() + 1, guiY + getPosY() + 1);
-                        Lighting.turnOff();
-                        RenderSystem.enableAlphaTest();
+//                        Lighting.turnOff();
+//                        RenderSystem.enableAlphaTest();
                     }
 
                     @Override
@@ -273,8 +273,8 @@ public class MaterialStoneWorkFactoryTile extends IndustrialProcessingTile<Mater
                         AssetUtil.drawAsset(stack, screen, provider.getAsset(AssetTypes.ITEM_BACKGROUND), guiX + getPosX(), guiY + getPosY());
                         //RenderSystem.setupGui3DDiffuseLighting();
                         Minecraft.getInstance().getItemRenderer().renderGuiItem(ACTION_RECIPES[fourthRecipeId].icon, guiX + getPosX() + 1, guiY + getPosY() + 1);
-                        Lighting.turnOff();
-                        RenderSystem.enableAlphaTest();
+//                        Lighting.turnOff();
+//                        RenderSystem.enableAlphaTest();
                     }
 
                     @Override
