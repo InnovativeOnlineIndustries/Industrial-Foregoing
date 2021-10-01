@@ -133,7 +133,7 @@ public class MycelialGeneratorTile extends IndustrialGeneratorTile<MycelialGener
     @Override
     public void serverTick(Level level, BlockPos pos, BlockState state, MycelialGeneratorTile blockEntity) {
         if (bar.getCanIncrease().test(this) && (bar.getProgress() != 0 || canStart()) && this.level.getGameTime() % 5 == 0){
-//            MycelialDataManager.setGeneratorInfo(owner, this.level, this.worldPosition, this.type);
+            MycelialDataManager.setGeneratorInfo(owner, this.level, this.worldPosition, this.type);
             type.onTick(this.level, this.worldPosition);
         }
         super.serverTick(level, pos, state, blockEntity);
