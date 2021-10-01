@@ -1,7 +1,7 @@
 {
   "name": "Infinity Saw",
   "icon": "industrialforegoing:infinity_saw",
-  "category": "tools",
+  "category": "industrialforegoing:tools",
   "sortnum": 3,
   "read_by_default": true,
   "pages": [

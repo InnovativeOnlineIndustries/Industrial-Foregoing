@@ -1,7 +1,7 @@
 {
   "name": "Enchantment Applicator",
   "icon": "industrialforegoing:enchantment_applicator",
-  "category": "misc",
+  "category": "industrialforegoing:misc",
   "sortnum": 3,
   "read_by_default": true,
   "pages": [

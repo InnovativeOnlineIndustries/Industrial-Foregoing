@@ -1,7 +1,7 @@
 {
   "name": "Mob Slaughter Factory",
   "icon": "industrialforegoing:mob_slaughter_factory",
-  "category": "agriculture_husbandry",
+  "category": "industrialforegoing:agriculture_husbandry",
   "sortnum": 9,
   "read_by_default": true,
   "pages": [

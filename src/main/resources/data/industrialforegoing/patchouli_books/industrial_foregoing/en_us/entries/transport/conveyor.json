@@ -1,7 +1,7 @@
 {
   "name": "Conveyors",
   "icon": "industrialforegoing:conveyor",
-  "category": "transport",
+  "category": "industrialforegoing:transport",
   "sortnum": 0,
   "read_by_default": true,
   "pages": [

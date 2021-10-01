@@ -1,7 +1,7 @@
 {
   "name": "Fluid Collector",
   "icon": "industrialforegoing:fluid_collector",
-  "category": "resource_production",
+  "category": "industrialforegoing:resource_production",
   "sortnum": 7,
   "read_by_default": true,
   "pages": [

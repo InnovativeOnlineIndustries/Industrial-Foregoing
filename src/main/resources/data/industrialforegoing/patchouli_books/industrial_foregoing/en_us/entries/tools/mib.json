@@ -1,7 +1,7 @@
 {
   "name": "Mob Imprisonment Tool",
   "icon": "industrialforegoing:mob_imprisonment_tool",
-  "category": "tools",
+  "category": "industrialforegoing:tools",
   "sortnum": 0,
   "read_by_default": true,
   "pages": [

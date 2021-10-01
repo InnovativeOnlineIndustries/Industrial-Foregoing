@@ -1,7 +1,7 @@
 {
   "name": "Animal Rancher",
   "icon": "industrialforegoing:animal_rancher",
-  "category": "agriculture_husbandry",
+  "category": "industrialforegoing:agriculture_husbandry",
   "sortnum": 0,
   "read_by_default": true,
   "pages": [

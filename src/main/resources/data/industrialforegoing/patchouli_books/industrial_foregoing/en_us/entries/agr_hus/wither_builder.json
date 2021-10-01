@@ -1,7 +1,7 @@
 {
   "name": "Wither Builder",
   "icon": "industrialforegoing:wither_builder",
-  "category": "agriculture_husbandry",
+  "category": "industrialforegoing:agriculture_husbandry",
   "read_by_default": true,
   "pages": [
     {

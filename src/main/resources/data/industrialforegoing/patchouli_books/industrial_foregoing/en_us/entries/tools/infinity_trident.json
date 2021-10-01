@@ -1,7 +1,7 @@
 {
   "name": "Infinity Trident",
   "icon": "industrialforegoing:infinity_trident",
-  "category": "tools",
+  "category": "industrialforegoing:tools",
   "sortnum": 3,
   "read_by_default": true,
   "pages": [

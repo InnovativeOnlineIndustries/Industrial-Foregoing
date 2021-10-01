@@ -1,7 +1,7 @@
 {
   "name": "Infinity Nuke",
   "icon": "industrialforegoing:infinity_nuke",
-  "category": "tools",
+  "category": "industrialforegoing:tools",
   "sortnum": 3,
   "read_by_default": true,
   "pages": [

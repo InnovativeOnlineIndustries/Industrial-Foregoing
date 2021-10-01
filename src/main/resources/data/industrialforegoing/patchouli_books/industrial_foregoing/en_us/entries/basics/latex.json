@@ -1,7 +1,7 @@
 {
   "name": "Latex (Fluid)",
   "icon": "industrialforegoing:latex_bucket",
-  "category": "basics",
+  "category": "industrialforegoing:basics",
   "sortnum": 3,
   "read_by_default": true,
   "pages": [

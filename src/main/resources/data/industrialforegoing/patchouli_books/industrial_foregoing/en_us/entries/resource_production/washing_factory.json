@@ -1,7 +1,7 @@
 {
   "name": "Washing Factory",
   "icon": "industrialforegoing:washing_factory",
-  "category": "resource_production",
+  "category": "industrialforegoing:resource_production",
   "sortnum": 19,
   "read_by_default": true,
   "pages": [

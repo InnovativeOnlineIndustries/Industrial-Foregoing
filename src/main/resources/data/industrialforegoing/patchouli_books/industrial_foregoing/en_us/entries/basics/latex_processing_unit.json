@@ -1,7 +1,7 @@
 {
   "name": "Latex Processing Unit",
   "icon": "industrialforegoing:latex_processing_unit",
-  "category": "basics",
+  "category": "industrialforegoing:basics",
   "sortnum": 1,
   "read_by_default": true,
   "pages": [

@@ -1,7 +1,7 @@
 {
   "name": "Dye Mixer",
   "icon": "industrialforegoing:dye_mixer",
-  "category": "resource_production",
+  "category": "industrialforegoing:resource_production",
   "sortnum": 12,
   "read_by_default": true,
   "pages": [

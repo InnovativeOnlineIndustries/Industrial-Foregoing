@@ -1,7 +1,7 @@
 {
   "name": "Potion Brewer",
   "icon": "industrialforegoing:potion_brewer",
-  "category": "resource_production",
+  "category": "industrialforegoing:resource_production",
   "sortnum": 9,
   "read_by_default": true,
   "pages": [

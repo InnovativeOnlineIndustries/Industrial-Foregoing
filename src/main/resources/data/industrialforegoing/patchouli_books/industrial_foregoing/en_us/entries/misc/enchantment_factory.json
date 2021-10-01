@@ -1,7 +1,7 @@
 {
   "name": "Enchantment Factory",
   "icon": "industrialforegoing:enchantment_factory",
-  "category": "misc",
+  "category": "industrialforegoing:misc",
   "sortnum": 0,
   "read_by_default": true,
   "pages": [

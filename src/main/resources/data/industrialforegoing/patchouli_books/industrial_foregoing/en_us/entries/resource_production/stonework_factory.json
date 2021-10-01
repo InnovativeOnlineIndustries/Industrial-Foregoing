@@ -1,7 +1,7 @@
 {
   "name": "Material StoneWork Factory",
   "icon": "industrialforegoing:material_stonework_factory",
-  "category": "resource_production",
+  "category": "industrialforegoing:resource_production",
   "sortnum": 0,
   "read_by_default": true,
   "pages": [

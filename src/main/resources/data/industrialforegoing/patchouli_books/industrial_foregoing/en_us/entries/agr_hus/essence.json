@@ -1,7 +1,7 @@
 {
   "name": "Essence (Bucket)",
   "icon": "industrialforegoing:essence_bucket",
-  "category": "agriculture_husbandry",
+  "category": "industrialforegoing:agriculture_husbandry",
   "sortnum": 7,
   "read_by_default": true,
   "pages": [

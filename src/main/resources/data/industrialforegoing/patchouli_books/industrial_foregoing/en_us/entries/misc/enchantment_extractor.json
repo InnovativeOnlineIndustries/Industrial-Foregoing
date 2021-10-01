@@ -1,7 +1,7 @@
 {
   "name": "Enchantment Extractor",
   "icon": "industrialforegoing:enchantment_extractor",
-  "category": "misc",
+  "category": "industrialforegoing:misc",
   "sortnum": 4,
   "read_by_default": true,
   "pages": [

@@ -1,7 +1,7 @@
 {
   "name": "Resourceful Furnace",
   "icon": "industrialforegoing:resourceful_furnace",
-  "category": "resource_production",
+  "category": "industrialforegoing:resource_production",
   "sortnum": 6,
   "read_by_default": true,
   "pages": [

@@ -1,7 +1,7 @@
 {
   "name": "Infinity Tools",
   "icon": "industrialforegoing:infinity_drill",
-  "category": "tools",
+  "category": "industrialforegoing:tools",
   "sortnum": 2,
   "read_by_default": true,
   "pages": [

@@ -1,7 +1,7 @@
 {
   "name": "Mob Detector",
   "icon": "industrialforegoing:mob_detector",
-  "category": "misc",
+  "category": "industrialforegoing:misc",
   "sortnum": 6,
   "read_by_default": true,
   "pages": [

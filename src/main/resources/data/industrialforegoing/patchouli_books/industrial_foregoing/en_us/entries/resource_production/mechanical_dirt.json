@@ -1,7 +1,7 @@
 {
   "name": "Mechanical Dirt",
   "icon": "industrialforegoing:mechanical_dirt",
-  "category": "resource_production",
+  "category": "industrialforegoing:resource_production",
   "sortnum": 1,
   "read_by_default": true,
   "pages": [

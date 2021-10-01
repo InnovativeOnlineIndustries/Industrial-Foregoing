@@ -1,7 +1,7 @@
 {
   "name": "Fluid Laser Base",
   "icon": "industrialforegoing:fluid_laser_base",
-  "category": "resource_production",
+  "category": "industrialforegoing:resource_production",
   "sortnum": 15,
   "read_by_default": true,
   "pages": [

@@ -1,7 +1,7 @@
 {
   "name": "Plant Gatherer",
   "icon": "industrialforegoing:plant_gatherer",
-  "category": "agriculture_husbandry",
+  "category": "industrialforegoing:agriculture_husbandry",
   "sortnum": 1,
   "read_by_default": true,
   "pages": [

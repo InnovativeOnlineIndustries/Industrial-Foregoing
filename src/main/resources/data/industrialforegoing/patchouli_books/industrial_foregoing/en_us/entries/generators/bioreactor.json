@@ -1,7 +1,7 @@
 {
   "name": "Bioreactor",
   "icon": "industrialforegoing:bioreactor",
-  "category": "generators",
+  "category": "industrialforegoing:generators",
   "sortnum": 2,
   "read_by_default": true,
   "pages": [

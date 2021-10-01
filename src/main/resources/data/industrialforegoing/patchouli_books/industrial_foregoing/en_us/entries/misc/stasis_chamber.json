@@ -1,7 +1,7 @@
 {
   "name": "Stasis Chamber",
   "icon": "industrialforegoing:stasis_chamber",
-  "category": "misc",
+  "category": "industrialforegoing:misc",
   "sortnum": 5,
   "read_by_default": true,
   "pages": [

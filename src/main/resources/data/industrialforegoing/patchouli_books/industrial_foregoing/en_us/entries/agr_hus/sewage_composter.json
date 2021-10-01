@@ -1,7 +1,7 @@
 {
   "name": "Sewage Composter",
   "icon": "industrialforegoing:sewage_composter",
-  "category": "agriculture_husbandry",
+  "category": "industrialforegoing:agriculture_husbandry",
   "sortnum": 14,
   "read_by_default": true,
   "pages": [

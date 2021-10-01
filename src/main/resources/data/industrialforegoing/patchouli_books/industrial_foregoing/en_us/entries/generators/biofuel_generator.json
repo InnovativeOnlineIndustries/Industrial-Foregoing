@@ -1,7 +1,7 @@
 {
   "name": "Biofuel Generator",
   "icon": "industrialforegoing:biofuel_generator",
-  "category": "generators",
+  "category": "industrialforegoing:generators",
   "sortnum": 3,
   "read_by_default": true,
   "pages": [

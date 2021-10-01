@@ -166,6 +166,11 @@ dependencies {
 
     compileOnly fg.deobf("top.theillusivec4.curios:curios-forge:${curios_mc_version}-${curios_version}:api")
     runtimeOnly fg.deobf("top.theillusivec4.curios:curios-forge:${curios_mc_version}-${curios_version}")
+
+    // compiled from github
+    compileOnly fg.deobf("vazkii.patchouli:Patchouli:1.17.1-56-SNAPSHOT:api")
+    runtimeOnly fg.deobf("vazkii.patchouli:Patchouli:1.17.1-56-SNAPSHOT")
+
     //if (findProject(':workspace') == null) {
 //    compileOnly fg.deobf("mezz.jei:jei-1.16.4:7.6.1.71:api")
 //    // at runtime, use the full JEI jar

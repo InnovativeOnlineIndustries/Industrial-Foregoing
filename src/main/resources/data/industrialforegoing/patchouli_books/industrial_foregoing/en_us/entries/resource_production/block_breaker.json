@@ -1,7 +1,7 @@
 {
   "name": "Block Breaker",
   "icon": "industrialforegoing:block_breaker",
-  "category": "resource_production",
+  "category": "industrialforegoing:resource_production",
   "sortnum": 2,
   "read_by_default": true,
   "pages": [

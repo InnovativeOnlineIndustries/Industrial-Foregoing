@@ -1,7 +1,7 @@
 {
   "name": "Pififul Generator",
   "icon": "industrialforegoing:pitiful_generator",
-  "category": "generators",
+  "category": "industrialforegoing:generators",
   "sortnum": 0,
   "read_by_default": true,
   "pages": [

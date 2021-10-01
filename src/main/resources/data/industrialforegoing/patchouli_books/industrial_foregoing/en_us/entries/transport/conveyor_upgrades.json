@@ -1,7 +1,7 @@
 {
   "name": "Conveyor Upgrades",
   "icon": "industrialforegoing:conveyor_extraction_upgrade",
-  "category": "transport",
+  "category": "industrialforegoing:transport",
   "sortnum": 1,
   "read_by_default": true,
   "pages": [

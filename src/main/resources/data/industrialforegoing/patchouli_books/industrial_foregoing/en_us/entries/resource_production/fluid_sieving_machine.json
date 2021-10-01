@@ -1,7 +1,7 @@
 {
   "name": "Fluid Sieving Machine",
   "icon": "industrialforegoing:fluid_sieving_machine",
-  "category": "resource_production",
+  "category": "industrialforegoing:resource_production",
   "sortnum": 21,
   "read_by_default": true,
   "pages": [

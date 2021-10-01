@@ -1,7 +1,7 @@
 {
   "name": "Fluid Transporter",
   "icon": "industrialforegoing:fluid_transporter_type",
-  "category": "transport",
+  "category": "industrialforegoing:transport",
   "sortnum": 0,
   "read_by_default": true,
   "pages": [

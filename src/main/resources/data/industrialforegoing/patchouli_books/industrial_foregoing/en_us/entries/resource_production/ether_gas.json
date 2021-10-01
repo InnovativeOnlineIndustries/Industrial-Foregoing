@@ -1,7 +1,7 @@
 {
   "name": "Ether Gas (Bucket)",
   "icon": "industrialforegoing:ether_gas_bucket",
-  "category": "resource_production",
+  "category": "industrialforegoing:resource_production",
   "sortnum": 13,
   "read_by_default": true,
   "pages": [

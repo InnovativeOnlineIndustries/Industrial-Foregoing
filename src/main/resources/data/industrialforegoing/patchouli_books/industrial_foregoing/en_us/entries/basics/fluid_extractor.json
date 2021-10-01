@@ -1,7 +1,7 @@
 {
   "name": "Fluid Extractor",
   "icon": "industrialforegoing:fluid_extractor",
-  "category": "basics",
+  "category": "industrialforegoing:basics",
   "sortnum": 0,
   "read_by_default": true,
   "pages": [

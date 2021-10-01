@@ -1,7 +1,7 @@
 {
   "name": "Infinity Hammer",
   "icon": "industrialforegoing:infinity_hammer",
-  "category": "tools",
+  "category": "industrialforegoing:tools",
   "sortnum": 3,
   "read_by_default": true,
   "pages": [

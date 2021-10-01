@@ -1,7 +1,7 @@
 {
   "name": "Spores Recreator",
   "icon": "industrialforegoing:spores_recreator",
-  "category": "resource_production",
+  "category": "industrialforegoing:resource_production",
   "sortnum": 8,
   "read_by_default": true,
   "pages": [

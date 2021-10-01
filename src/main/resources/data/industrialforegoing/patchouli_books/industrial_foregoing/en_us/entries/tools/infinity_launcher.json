@@ -1,7 +1,7 @@
 {
   "name": "Infinity Launcher",
   "icon": "industrialforegoing:infinity_launcher",
-  "category": "tools",
+  "category": "industrialforegoing:tools",
   "sortnum": 3,
   "read_by_default": true,
   "pages": [

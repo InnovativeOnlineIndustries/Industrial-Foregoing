@@ -1,7 +1,7 @@
 {
   "name": "Ore Laser Base",
   "icon": "industrialforegoing:ore_laser_base",
-  "category": "resource_production",
+  "category": "industrialforegoing:resource_production",
   "sortnum": 14,
   "read_by_default": true,
   "pages": [
