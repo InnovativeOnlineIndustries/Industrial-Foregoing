@@ -22,7 +22,7 @@ buildscript {
 }
 
 plugins {
-    id "com.github.hierynomus.license" version "0.14.0"
+    id "com.github.hierynomus.license" version "0.16.1"
     id 'java'
     id 'maven-publish'
     id "com.matthewprenger.cursegradle" version "1.4.0"
@@ -31,7 +31,7 @@ plugins {
 apply plugin: 'net.minecraftforge.gradle'
 apply plugin: 'eclipse'
 
-def isReleaseBranch = System.getenv("BRANCH") == "release-1.15" || System.getenv("BRANCH") == "release-1.16";
+def isReleaseBranch = System.getenv("BRANCH") == "release-1.15" || System.getenv("BRANCH") == "release-1.16" || System.getenv("BRANCH") == "release-1.17";
 
 
 group = "com.buuz135"
@@ -290,7 +290,7 @@ curseforge {
         changelog = "https://github.com/InnovativeOnlineIndustries/Industrial-Foregoing/blob/changelog/CHANGELOG.md"
         changelogType = 'markdown'
         releaseType = 'beta'
-        addGameVersion '1.16.5'
+        addGameVersion '1.17.1'
 
         mainArtifact(jar){
             relations {
@@ -311,6 +311,10 @@ task makeChangelog(type: GitChangelogTask) {
     untaggedName = "Version ${project.version}"
     //fromCommit = "6a5a3df3665643ea181873312e3801db7c662686"
     fromRef = "refs/tags/2.3.0"
-    toRef = "release-1.16"
+    toRef = "release-1.17"
     templateContent = file("changelog.mustache").getText("UTF-8")
+}
+
+tasks.withType(Jar).all {
+    duplicatesStrategy = DuplicatesStrategy.INCLUDE
 }
