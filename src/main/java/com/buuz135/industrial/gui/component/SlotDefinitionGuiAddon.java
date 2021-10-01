@@ -57,22 +57,22 @@ public abstract class SlotDefinitionGuiAddon extends BasicButtonAddon {
 
     @Override
     public void drawBackgroundLayer(PoseStack stack, Screen screen, IAssetProvider provider, int guiX, int guiY, int mouseX, int mouseY, float partialTicks) {
-//        if (!getItemStack().isEmpty() && getItemStack().hasTag()){
-//            BackpackDataManager.BackpackItemHandler handler = BackpackDataManager.CLIENT_SIDE_BACKPACKS.getOrDefault(getItemStack().getTag().getString("Id"), null);
-//            AssetUtil.drawAsset(stack, screen, provider.getAsset(AssetTypes.SLOT), guiX + getPosX(), guiY + getPosY());
-//            if (handler != null){
-//                BackpackDataManager.SlotDefinition display = handler.getSlotDefinition(slotId);
-//                if (!display.getStack().isEmpty()){
-//                    Minecraft.getInstance().getItemRenderer().renderGuiItem(display.getStack(), guiX + getPosX() + 1, guiY + getPosY() + 1);
-//                    stack.pushPose();
-//                    stack.translate(0,0, 260);
-//                    stack.scale(0.5f, 0.5f, 0.5f);
-//                    String amount = NumberUtils.getFormatedBigNumber(display.getAmount());
-//                    Minecraft.getInstance().font.drawShadow(stack, amount , (guiX + getPosX() + 17 - Minecraft.getInstance().font.width(amount) / 2f)*2, (guiY + getPosY() + 13)*2, 0xFFFFFF);
-//                    stack.popPose();
-//                }
-//            }
-//        }
+        if (!getItemStack().isEmpty() && getItemStack().hasTag()){
+            BackpackDataManager.BackpackItemHandler handler = BackpackDataManager.CLIENT_SIDE_BACKPACKS.getOrDefault(getItemStack().getTag().getString("Id"), null);
+            AssetUtil.drawAsset(stack, screen, provider.getAsset(AssetTypes.SLOT), guiX + getPosX(), guiY + getPosY());
+            if (handler != null){
+                BackpackDataManager.SlotDefinition display = handler.getSlotDefinition(slotId);
+                if (!display.getStack().isEmpty()){
+                    Minecraft.getInstance().getItemRenderer().renderGuiItem(display.getStack(), guiX + getPosX() + 1, guiY + getPosY() + 1);
+                    stack.pushPose();
+                    stack.translate(0,0, 260);
+                    stack.scale(0.5f, 0.5f, 0.5f);
+                    String amount = NumberUtils.getFormatedBigNumber(display.getAmount());
+                    Minecraft.getInstance().font.drawShadow(stack, amount , (guiX + getPosX() + 17 - Minecraft.getInstance().font.width(amount) / 2f)*2, (guiY + getPosY() + 13)*2, 0xFFFFFF);
+                    stack.popPose();
+                }
+            }
+        }
     }
 
     @Override

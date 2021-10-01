@@ -39,247 +39,242 @@ import java.util.List;
 import java.util.UUID;
 
 public class BackpackDataManager extends SavedData {
+    public static HashMap<String, BackpackItemHandler> CLIENT_SIDE_BACKPACKS = new HashMap<>();
+
+    public static final String NAME = "IFBackpack";
+    public static final int SLOT_AMOUNT = 4*8;
+    public HashMap<String, BackpackItemHandler> itemHandlers;
+
+    public BackpackDataManager(String name) {
+        itemHandlers = new HashMap<>();
+    }
+
+    public BackpackDataManager() {
+        itemHandlers = new HashMap<>();
+    }
+
+    public void createBackPack(UUID uuid){
+        this.itemHandlers.put(uuid.toString(), new BackpackItemHandler(this));
+        setDirty();
+    }
+
+    public BackpackItemHandler getBackpack(String id){
+        return itemHandlers.get(id);
+    }
+
+    public static BackpackDataManager load(CompoundTag nbt) {
+        BackpackDataManager manager = new BackpackDataManager();
+        manager.itemHandlers = new HashMap<>();
+        CompoundTag backpacks = nbt.getCompound("Backpacks");
+        for (String s : backpacks.getAllKeys()) {
+            BackpackItemHandler hander = new BackpackItemHandler(manager);
+            hander.deserializeNBT(backpacks.getCompound(s));
+            manager.itemHandlers.put(s, hander);
+        }
+
+        return manager;
+    }
+
     @Override
-    public CompoundTag save(CompoundTag p_77763_) {
+    public CompoundTag save(CompoundTag compound) {
+        CompoundTag nbt = new CompoundTag();
+        itemHandlers.forEach((s, iItemHandler) -> nbt.put(s, iItemHandler.serializeNBT()));
+        compound.put("Backpacks", nbt);
+        return compound;
+    }
+
+    @Nullable
+    public static BackpackDataManager getData(LevelAccessor world) {
+        if (world instanceof ServerLevel) {
+            ServerLevel serverWorld = ((ServerLevel) world).getServer().getLevel(Level.OVERWORLD);
+            BackpackDataManager data = serverWorld.getDataStorage().computeIfAbsent(BackpackDataManager::load, BackpackDataManager::new, NAME);
+            return data;
+        }
         return null;
     }
 
-//    public static HashMap<String, BackpackItemHandler> CLIENT_SIDE_BACKPACKS = new HashMap<>();
-//
-//    public static final String NAME = "IFBackpack";
-//    public static final int SLOT_AMOUNT = 4*8;
-//    public HashMap<String, BackpackItemHandler> itemHandlers;
-//
-//    public BackpackDataManager(String name) {
-//        super(name);
-//        itemHandlers = new HashMap<>();
-//    }
-//
-//    public BackpackDataManager() {
-//        super(NAME);
-//        itemHandlers = new HashMap<>();
-//    }
-//
-//    public void createBackPack(UUID uuid){
-//        this.itemHandlers.put(uuid.toString(), new BackpackItemHandler(this));
-//        setDirty();
-//    }
-//
-//    public BackpackItemHandler getBackpack(String id){
-//        return itemHandlers.get(id);
-//    }
-//
-//    @Override
-//    public void load(CompoundTag nbt) {
-//        itemHandlers = new HashMap<>();
-//        CompoundTag backpacks = nbt.getCompound("Backpacks");
-//        for (String s : backpacks.getAllKeys()) {
-//            BackpackItemHandler hander = new BackpackItemHandler(this);
-//            hander.deserializeNBT(backpacks.getCompound(s));
-//            itemHandlers.put(s, hander);
-//        }
-//    }
-//
-//    @Override
-//    public CompoundTag save(CompoundTag compound) {
-//        CompoundTag nbt = new CompoundTag();
-//        itemHandlers.forEach((s, iItemHandler) -> nbt.put(s, iItemHandler.serializeNBT()));
-//        compound.put("Backpacks", nbt);
-//        return compound;
-//    }
-//
-//    @Nullable
-//    public static BackpackDataManager getData(LevelAccessor world) {
-//        if (world instanceof ServerLevel) {
-//            ServerLevel serverWorld = ((ServerLevel) world).getServer().getLevel(Level.OVERWORLD);
-//            BackpackDataManager data = serverWorld.getDataStorage().computeIfAbsent(BackpackDataManager::new, NAME);
-//            return data;
-//        }
-//        return null;
-//    }
-//
-//    public static class BackpackItemHandler implements IItemHandler, INBTSerializable<CompoundTag> {
-//
-//        private List<SlotDefinition> definitionList;
-//        private int maxAmount;
-//        private BackpackDataManager dataManager;
-//
-//        public BackpackItemHandler(BackpackDataManager manager){
-//            definitionList = new ArrayList<>();
-//            for (int i = 0; i < SLOT_AMOUNT; i++) {
-//                definitionList.add(new SlotDefinition(this));
-//            }
-//            this.maxAmount = 2048;
-//            this.dataManager = manager;
-//        }
-//
-//        @Override
-//        public CompoundTag serializeNBT() {
-//            CompoundTag slots = new CompoundTag();
-//            for (int i = 0; i < definitionList.size(); i++) {
-//                slots.put(i + "", definitionList.get(i).serializeNBT());
-//            }
-//            CompoundTag output = new CompoundTag();
-//            output.put("Slots", slots);
-//            output.putInt("MaxAmount", this.maxAmount);
-//            return output;
-//        }
-//
-//        @Override
-//        public void deserializeNBT(CompoundTag nbt) {
-//            CompoundTag slots = nbt.getCompound("Slots");
-//            for (String s : slots.getAllKeys()) {
-//                definitionList.get(Integer.parseInt(s)).deserializeNBT(slots.getCompound(s));
-//            }
-//            this.maxAmount = nbt.getInt("MaxAmount");
-//        }
-//
-//        @Override
-//        public int getSlots() {
-//            return definitionList.size();
-//        }
-//
-//        @Nonnull
-//        @Override
-//        public ItemStack getStackInSlot(int slot) {
-//            return ItemHandlerHelper.copyStackWithSize(definitionList.get(slot).getStack(), definitionList.get(slot).getAmount());
-//        }
-//
-//        @Nonnull
-//        @Override
-//        public ItemStack insertItem(int slot, @Nonnull ItemStack stack, boolean simulate) {
-//            if (isItemValid(slot, stack)) {
-//                SlotDefinition definition = definitionList.get(slot);
-//                int inserted = Math.min(maxAmount - definition.getAmount(), stack.getCount());
-//                if (definition.isVoidItems()) inserted = stack.getCount(); //Void
-//                if (!simulate){
-//                    definition.setStack(stack);
-//                    definition.setAmount(Math.min(definition.getAmount() + inserted, maxAmount));
-//                    markDirty();
-//                }
-//                if (inserted == stack.getCount()) return ItemStack.EMPTY;
-//                return ItemHandlerHelper.copyStackWithSize(stack, stack.getCount() - inserted);
-//            }
-//            return stack;
-//        }
-//
-//        @Nonnull
-//        @Override
-//        public ItemStack extractItem(int slot, int amount, boolean simulate) {
-//            if (amount == 0) return ItemStack.EMPTY;
-//            SlotDefinition definition = definitionList.get(slot);
-//            if (definition.getStack().isEmpty()) return ItemStack.EMPTY;
-//            if (definition.getAmount() <= amount) {
-//                ItemStack out = definition.getStack().copy();
-//                int newAmount = definition.getAmount();
-//                if (!simulate) {
-//                    definition.setAmount(0);
-//                    markDirty();
-//                }
-//                out.setCount(newAmount);
-//                return out;
-//            } else {
-//                if (!simulate) {
-//                    definition.setAmount(definition.getAmount() - amount);
-//                    markDirty();
-//                }
-//                return ItemHandlerHelper.copyStackWithSize(definition.getStack(), amount);
-//            }
-//        }
-//
-//        @Override
-//        public int getSlotLimit(int slot) {
-//            return maxAmount;
-//        }
-//
-//        @Override
-//        public boolean isItemValid(int slot, @Nonnull ItemStack stack) {
-//            SlotDefinition def = definitionList.get(slot);
-//            return def.getStack().isEmpty() || (def.getStack().sameItem(stack) && ItemStack.tagMatches(def.getStack(), stack));
-//        }
-//
-//        public void setMaxAmount(int maxAmount) {
-//            this.maxAmount = maxAmount;
-//            markDirty();
-//        }
-//
-//        public void markDirty(){
-//            if (dataManager != null)dataManager.setDirty();
-//        }
-//
-//        public SlotDefinition getSlotDefinition(int slot){
-//            return definitionList.get(slot);
-//        }
-//    }
-//
-//    public static class SlotDefinition implements INBTSerializable<CompoundTag>{
-//
-//        private ItemStack stack;
-//        private int amount;
-//        private boolean voidItems;
-//        private boolean refillItems;
-//        private BackpackItemHandler parent;
-//
-//        public SlotDefinition(BackpackItemHandler parent){
-//            this.stack = ItemStack.EMPTY;
-//            this.amount =0;
-//            this.voidItems = true;
-//            this.refillItems = false;
-//            this.parent = parent;
-//        }
-//
-//        public ItemStack getStack() {
-//            return stack;
-//        }
-//
-//        public void setStack(ItemStack stack) {
-//            this.stack = stack;
-//            parent.markDirty();
-//        }
-//
-//        public int getAmount() {
-//            return amount;
-//        }
-//
-//        public void setAmount(int amount) {
-//            this.amount = amount;
-//            parent.markDirty();
-//        }
-//
-//        @Override
-//        public CompoundTag serializeNBT() {
-//            CompoundTag compoundNBT = new CompoundTag();
-//            compoundNBT.put("Stack", stack.serializeNBT());
-//            compoundNBT.putInt("Amount", amount);
-//            compoundNBT.putBoolean("Void", voidItems);
-//            compoundNBT.putBoolean("Refill", refillItems);
-//            return compoundNBT;
-//        }
-//
-//        @Override
-//        public void deserializeNBT(CompoundTag nbt) {
-//            this.stack = ItemStack.of(nbt.getCompound("Stack"));
-//            this.amount = nbt.getInt("Amount");
-//            this.voidItems = nbt.getBoolean("Void");
-//            this.refillItems = nbt.getBoolean("Refill");
-//        }
-//
-//        public boolean isVoidItems() {
-//            return voidItems;
-//        }
-//
-//        public void setVoidItems(boolean voidItems) {
-//            this.voidItems = voidItems;
-//            parent.markDirty();
-//        }
-//
-//        public boolean isRefillItems() {
-//            return refillItems;
-//        }
-//
-//        public void setRefillItems(boolean refillItems) {
-//            this.refillItems = refillItems;
-//            parent.markDirty();
-//        }
-//    }
+    public static class BackpackItemHandler implements IItemHandler, INBTSerializable<CompoundTag> {
+
+        private List<SlotDefinition> definitionList;
+        private int maxAmount;
+        private BackpackDataManager dataManager;
+
+        public BackpackItemHandler(BackpackDataManager manager){
+            definitionList = new ArrayList<>();
+            for (int i = 0; i < SLOT_AMOUNT; i++) {
+                definitionList.add(new SlotDefinition(this));
+            }
+            this.maxAmount = 2048;
+            this.dataManager = manager;
+        }
+
+        @Override
+        public CompoundTag serializeNBT() {
+            CompoundTag slots = new CompoundTag();
+            for (int i = 0; i < definitionList.size(); i++) {
+                slots.put(i + "", definitionList.get(i).serializeNBT());
+            }
+            CompoundTag output = new CompoundTag();
+            output.put("Slots", slots);
+            output.putInt("MaxAmount", this.maxAmount);
+            return output;
+        }
+
+        @Override
+        public void deserializeNBT(CompoundTag nbt) {
+            CompoundTag slots = nbt.getCompound("Slots");
+            for (String s : slots.getAllKeys()) {
+                definitionList.get(Integer.parseInt(s)).deserializeNBT(slots.getCompound(s));
+            }
+            this.maxAmount = nbt.getInt("MaxAmount");
+        }
+
+        @Override
+        public int getSlots() {
+            return definitionList.size();
+        }
+
+        @Nonnull
+        @Override
+        public ItemStack getStackInSlot(int slot) {
+            return ItemHandlerHelper.copyStackWithSize(definitionList.get(slot).getStack(), definitionList.get(slot).getAmount());
+        }
+
+        @Nonnull
+        @Override
+        public ItemStack insertItem(int slot, @Nonnull ItemStack stack, boolean simulate) {
+            if (isItemValid(slot, stack)) {
+                SlotDefinition definition = definitionList.get(slot);
+                int inserted = Math.min(maxAmount - definition.getAmount(), stack.getCount());
+                if (definition.isVoidItems()) inserted = stack.getCount(); //Void
+                if (!simulate){
+                    definition.setStack(stack);
+                    definition.setAmount(Math.min(definition.getAmount() + inserted, maxAmount));
+                    markDirty();
+                }
+                if (inserted == stack.getCount()) return ItemStack.EMPTY;
+                return ItemHandlerHelper.copyStackWithSize(stack, stack.getCount() - inserted);
+            }
+            return stack;
+        }
+
+        @Nonnull
+        @Override
+        public ItemStack extractItem(int slot, int amount, boolean simulate) {
+            if (amount == 0) return ItemStack.EMPTY;
+            SlotDefinition definition = definitionList.get(slot);
+            if (definition.getStack().isEmpty()) return ItemStack.EMPTY;
+            if (definition.getAmount() <= amount) {
+                ItemStack out = definition.getStack().copy();
+                int newAmount = definition.getAmount();
+                if (!simulate) {
+                    definition.setAmount(0);
+                    markDirty();
+                }
+                out.setCount(newAmount);
+                return out;
+            } else {
+                if (!simulate) {
+                    definition.setAmount(definition.getAmount() - amount);
+                    markDirty();
+                }
+                return ItemHandlerHelper.copyStackWithSize(definition.getStack(), amount);
+            }
+        }
+
+        @Override
+        public int getSlotLimit(int slot) {
+            return maxAmount;
+        }
+
+        @Override
+        public boolean isItemValid(int slot, @Nonnull ItemStack stack) {
+            SlotDefinition def = definitionList.get(slot);
+            return def.getStack().isEmpty() || (def.getStack().sameItem(stack) && ItemStack.tagMatches(def.getStack(), stack));
+        }
+
+        public void setMaxAmount(int maxAmount) {
+            this.maxAmount = maxAmount;
+            markDirty();
+        }
+
+        public void markDirty(){
+            if (dataManager != null)dataManager.setDirty();
+        }
+
+        public SlotDefinition getSlotDefinition(int slot){
+            return definitionList.get(slot);
+        }
+    }
+
+    public static class SlotDefinition implements INBTSerializable<CompoundTag>{
+
+        private ItemStack stack;
+        private int amount;
+        private boolean voidItems;
+        private boolean refillItems;
+        private BackpackItemHandler parent;
+
+        public SlotDefinition(BackpackItemHandler parent){
+            this.stack = ItemStack.EMPTY;
+            this.amount =0;
+            this.voidItems = true;
+            this.refillItems = false;
+            this.parent = parent;
+        }
+
+        public ItemStack getStack() {
+            return stack;
+        }
+
+        public void setStack(ItemStack stack) {
+            this.stack = stack;
+            parent.markDirty();
+        }
+
+        public int getAmount() {
+            return amount;
+        }
+
+        public void setAmount(int amount) {
+            this.amount = amount;
+            parent.markDirty();
+        }
+
+        @Override
+        public CompoundTag serializeNBT() {
+            CompoundTag compoundNBT = new CompoundTag();
+            compoundNBT.put("Stack", stack.serializeNBT());
+            compoundNBT.putInt("Amount", amount);
+            compoundNBT.putBoolean("Void", voidItems);
+            compoundNBT.putBoolean("Refill", refillItems);
+            return compoundNBT;
+        }
+
+        @Override
+        public void deserializeNBT(CompoundTag nbt) {
+            this.stack = ItemStack.of(nbt.getCompound("Stack"));
+            this.amount = nbt.getInt("Amount");
+            this.voidItems = nbt.getBoolean("Void");
+            this.refillItems = nbt.getBoolean("Refill");
+        }
+
+        public boolean isVoidItems() {
+            return voidItems;
+        }
+
+        public void setVoidItems(boolean voidItems) {
+            this.voidItems = voidItems;
+            parent.markDirty();
+        }
+
+        public boolean isRefillItems() {
+            return refillItems;
+        }
+
+        public void setRefillItems(boolean refillItems) {
+            this.refillItems = refillItems;
+            parent.markDirty();
+        }
+    }
 }

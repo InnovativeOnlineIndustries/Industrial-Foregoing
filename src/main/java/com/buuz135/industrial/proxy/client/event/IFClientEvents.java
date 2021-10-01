@@ -23,6 +23,7 @@ package com.buuz135.industrial.proxy.client.event;
 
 import com.buuz135.industrial.item.infinity.InfinityTier;
 import com.buuz135.industrial.module.ModuleTool;
+import com.buuz135.industrial.proxy.client.render.ContributorsCatEarsRender;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import net.minecraft.world.level.block.LiquidBlock;
@@ -78,6 +79,9 @@ public class IFClientEvents {
 
     @SubscribeEvent
     public void onRenderPre(RenderPlayerEvent.Pre event) {
+        // todo: test if rewards are rendering.
+        //event.getRenderer().addLayer(new ContributorsCatEarsRender(event.getRenderer()));
+
         if (event.getPlayer().getUUID().equals(Minecraft.getInstance().player.getUUID()) && Minecraft.getInstance().options.getCameraType() == CameraType.FIRST_PERSON)
             return;
         if (event.getPlayer().getItemInHand(InteractionHand.MAIN_HAND).getItem().equals(ModuleTool.INFINITY_DRILL))

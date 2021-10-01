@@ -43,9 +43,9 @@ public class BackpackSyncMessage extends Message {
     @Override
     protected void handleMessage(NetworkEvent.Context context) {
         context.enqueueWork(() -> {
-//            BackpackDataManager.BackpackItemHandler handler = new BackpackDataManager.BackpackItemHandler(null);
-//            handler.deserializeNBT(backpack);
-//            BackpackDataManager.CLIENT_SIDE_BACKPACKS.put(id, handler);
+            BackpackDataManager.BackpackItemHandler handler = new BackpackDataManager.BackpackItemHandler(null);
+            handler.deserializeNBT(backpack);
+            BackpackDataManager.CLIENT_SIDE_BACKPACKS.put(id, handler);
         });
     }
 }
