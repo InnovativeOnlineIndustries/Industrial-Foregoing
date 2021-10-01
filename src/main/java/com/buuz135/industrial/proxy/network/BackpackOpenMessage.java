@@ -62,7 +62,7 @@ public class BackpackOpenMessage extends Message {
                             UUID id = UUID.randomUUID();
                             CompoundTag nbt = stack.getOrCreateTag();
                             nbt.putString("Id", id.toString());
-//                            BackpackDataManager.getData(entity.level).createBackPack(id);
+                            BackpackDataManager.getData(entity.level).createBackPack(id);
                             stack.setTag(nbt);
                         }
                         String id = stack.getTag().getString("Id");

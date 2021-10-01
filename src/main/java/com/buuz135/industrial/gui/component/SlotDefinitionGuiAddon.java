@@ -104,28 +104,27 @@ public abstract class SlotDefinitionGuiAddon extends BasicButtonAddon {
 
     @Override
     public List<Component> getTooltipLines() {
-        return (List<Component>) new TextComponent("");
-//        List<Component> lines = new ArrayList<>();
-//        BackpackDataManager.BackpackItemHandler handler = BackpackDataManager.CLIENT_SIDE_BACKPACKS.getOrDefault(getItemStack().getTag().getString("Id"), null);
-//        if (handler != null) {
-//            BackpackDataManager.SlotDefinition display = handler.getSlotDefinition(slotId);
-//            if (!display.getStack().isEmpty()) {
-//                lines.addAll(Minecraft.getInstance().screen.getTooltipFromItem(display.getStack()));
-//                lines.add(new TextComponent(ChatFormatting.GOLD + new DecimalFormat().format(display.getAmount())));
-//            }
-//            String changeVoid = ChatFormatting.DARK_GRAY + new TranslatableComponent("text.industrialforegoing.tooltip.ctrl_left").getString();
-//            if (display.isVoidItems()){
-//                lines.add(new TextComponent(ChatFormatting.GOLD +new TranslatableComponent("tooltip.industrialforegoing.backpack.void").getString() + ChatFormatting.GREEN + new TranslatableComponent("text.industrialforegoing.display.enabled").getString() + " " + changeVoid));
-//            } else {
-//                lines.add(new TextComponent(ChatFormatting.GOLD + new TranslatableComponent("tooltip.industrialforegoing.backpack.void").getString() +ChatFormatting.RED + new TranslatableComponent("text.industrialforegoing.display.disabled").getString() + " "  + changeVoid));
-//            }
-//            String changeRefill = ChatFormatting.DARK_GRAY + new TranslatableComponent("text.industrialforegoing.tooltip.ctrl_right").getString();
-//            if (display.isRefillItems()){
-//                lines.add(new TextComponent(ChatFormatting.GOLD + new TranslatableComponent("tooltip.industrialforegoing.backpack.refill").getString() + ChatFormatting.GREEN + new TranslatableComponent("text.industrialforegoing.display.enabled").getString() + " " + changeRefill));
-//            } else {
-//                lines.add(new TextComponent(ChatFormatting.GOLD + new TranslatableComponent("tooltip.industrialforegoing.backpack.refill").getString()+ ChatFormatting.RED + new TranslatableComponent("text.industrialforegoing.display.disabled").getString() + " " + changeRefill));
-//            }
-//        }
-//        return lines;
+        List<Component> lines = new ArrayList<>();
+        BackpackDataManager.BackpackItemHandler handler = BackpackDataManager.CLIENT_SIDE_BACKPACKS.getOrDefault(getItemStack().getTag().getString("Id"), null);
+        if (handler != null) {
+            BackpackDataManager.SlotDefinition display = handler.getSlotDefinition(slotId);
+            if (!display.getStack().isEmpty()) {
+                lines.addAll(Minecraft.getInstance().screen.getTooltipFromItem(display.getStack()));
+                lines.add(new TextComponent(ChatFormatting.GOLD + new DecimalFormat().format(display.getAmount())));
+            }
+            String changeVoid = ChatFormatting.DARK_GRAY + new TranslatableComponent("text.industrialforegoing.tooltip.ctrl_left").getString();
+            if (display.isVoidItems()){
+                lines.add(new TextComponent(ChatFormatting.GOLD +new TranslatableComponent("tooltip.industrialforegoing.backpack.void").getString() + ChatFormatting.GREEN + new TranslatableComponent("text.industrialforegoing.display.enabled").getString() + " " + changeVoid));
+            } else {
+                lines.add(new TextComponent(ChatFormatting.GOLD + new TranslatableComponent("tooltip.industrialforegoing.backpack.void").getString() +ChatFormatting.RED + new TranslatableComponent("text.industrialforegoing.display.disabled").getString() + " "  + changeVoid));
+            }
+            String changeRefill = ChatFormatting.DARK_GRAY + new TranslatableComponent("text.industrialforegoing.tooltip.ctrl_right").getString();
+            if (display.isRefillItems()){
+                lines.add(new TextComponent(ChatFormatting.GOLD + new TranslatableComponent("tooltip.industrialforegoing.backpack.refill").getString() + ChatFormatting.GREEN + new TranslatableComponent("text.industrialforegoing.display.enabled").getString() + " " + changeRefill));
+            } else {
+                lines.add(new TextComponent(ChatFormatting.GOLD + new TranslatableComponent("tooltip.industrialforegoing.backpack.refill").getString()+ ChatFormatting.RED + new TranslatableComponent("text.industrialforegoing.display.disabled").getString() + " " + changeRefill));
+            }
+        }
+        return lines;
     }
 }
