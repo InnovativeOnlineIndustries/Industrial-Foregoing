@@ -126,7 +126,11 @@ public class MobImprisonmentToolItem extends IFCustomItem {
             EntityType type = EntityType.byKey(stack.getTag().getString("entity")).orElse(null);
             if (type != null && !(applyDuplicatorFilter && IndustrialTags.EntityTypes.MOB_DUPLICATOR_BLACKLIST.contains(type))) {
                 Entity entity = type.create(world);
-                if (withInfo) entity.read(stack.getTag());
+                if (withInfo) {
+                    entity.read(stack.getTag());
+                } else if (!type.isSummonable()) {
+                    return null;
+                }
                 return entity;
             }
         }
