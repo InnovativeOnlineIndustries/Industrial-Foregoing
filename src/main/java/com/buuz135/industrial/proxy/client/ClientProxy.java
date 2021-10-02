@@ -21,18 +21,20 @@
  */
 package com.buuz135.industrial.proxy.client;
 
-import java.net.MalformedURLException;
-import java.net.URL;
 import java.util.Calendar;
 import java.util.List;
 import java.util.Optional;
-import java.util.UUID;
 import java.util.stream.Collectors;
 
 import com.buuz135.industrial.IndustrialForegoing;
 import com.buuz135.industrial.block.tile.IndustrialAreaWorkingTile;
 import com.buuz135.industrial.block.transportstorage.tile.BlackHoleTankTile;
 import com.buuz135.industrial.block.transportstorage.tile.ConveyorTile;
+import com.buuz135.industrial.entity.client.InfinityNukeModel;
+import com.buuz135.industrial.entity.client.InfinityNukeModelArmed;
+import com.buuz135.industrial.entity.client.InfinityNukeRenderer;
+import com.buuz135.industrial.entity.client.InfinityTridentModel;
+import com.buuz135.industrial.entity.client.InfinityTridentRenderer;
 import com.buuz135.industrial.module.ModuleCore;
 import com.buuz135.industrial.module.ModuleGenerator;
 import com.buuz135.industrial.module.ModuleTool;
@@ -40,22 +42,16 @@ import com.buuz135.industrial.module.ModuleTransportStorage;
 import com.buuz135.industrial.proxy.CommonProxy;
 import com.buuz135.industrial.proxy.client.event.IFClientEvents;
 import com.buuz135.industrial.proxy.client.render.BlackHoleUnitTESR;
-import com.buuz135.industrial.proxy.client.render.ContributorsCatEarsRender;
 import com.buuz135.industrial.proxy.client.render.MycelialReactorTESR;
 import com.buuz135.industrial.proxy.client.render.WorkingAreaTESR;
 import com.buuz135.industrial.proxy.network.BackpackOpenMessage;
 import com.buuz135.industrial.utils.FluidUtils;
 import com.buuz135.industrial.utils.Reference;
-import com.hrznstudio.titanium.TitaniumClient;
 import com.hrznstudio.titanium.block.BasicTileBlock;
 import com.hrznstudio.titanium.event.handler.EventManager;
-import com.hrznstudio.titanium.reward.Reward;
-import com.hrznstudio.titanium.reward.RewardGiver;
-import com.hrznstudio.titanium.reward.RewardManager;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.client.event.EntityRenderersEvent;
 import net.minecraftforge.client.event.ModelBakeEvent;
-import net.minecraftforge.client.event.RenderPlayerEvent;
 import net.minecraftforge.client.model.obj.OBJModel;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.util.Constants;
@@ -74,13 +70,10 @@ import net.minecraft.ChatFormatting;
 import net.minecraft.client.KeyMapping;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screens.Screen;
-import net.minecraft.client.model.PlayerModel;
-import net.minecraft.client.player.AbstractClientPlayer;
+import net.minecraft.client.model.geom.builders.CubeDeformation;
 import net.minecraft.client.renderer.ItemBlockRenderTypes;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.entity.EntityRenderDispatcher;
-import net.minecraft.client.renderer.entity.LivingEntityRenderer;
-import net.minecraft.client.renderer.entity.RenderLayerParent;
 import net.minecraft.client.resources.model.BakedModel;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.TextComponent;
@@ -205,7 +198,6 @@ public class ClientProxy extends CommonProxy {
             return 0xFFFFFF;
         }, ModuleCore.RAW_ORE_MEAT.getBucketFluid(), ModuleCore.FERMENTED_ORE_MEAT.getBucketFluid());
 
-//        RenderingRegistry.registerEntityRenderingHandler(ModuleTool.TRIDENT_ENTITY_TYPE, InfinityTridentRenderer::new);
 //        RenderingRegistry.registerEntityRenderingHandler(ModuleTool.INFINITY_LAUNCHER_PROJECTILE_ENTITY_TYPE, InfinityLauncherProjectileRenderer::new);
 //        RenderingRegistry.registerEntityRenderingHandler(ModuleTool.INFINITY_NUKE_ENTITY_TYPE, InfinityNukeRenderer::new);
 
@@ -227,33 +219,44 @@ public class ClientProxy extends CommonProxy {
 //        });
     }
 
-        @SubscribeEvent
-        public static void onRegisterRenderers(EntityRenderersEvent.RegisterRenderers event) {
-            NonNullLazy<List<Block>> blocksToProcess = NonNullLazy.of(() ->
-                    ForgeRegistries.BLOCKS.getValues()
-                            .stream()
-                            .filter(basicBlock -> Optional.ofNullable(basicBlock.getRegistryName())
-                                    .map(ResourceLocation::getNamespace)
-                                    .filter(Reference.MOD_ID::equalsIgnoreCase)
-                                    .isPresent())
-                            .collect(Collectors.toList())
-            );
-            blocksToProcess.get().stream().filter(blockBase -> blockBase instanceof BasicTileBlock && IndustrialAreaWorkingTile.class.isAssignableFrom(((BasicTileBlock) blockBase).getTileClass())).forEach(blockBase -> event.registerBlockEntityRenderer(((BasicTileBlock) blockBase).getTileEntityType(), WorkingAreaTESR::new));
+    @SubscribeEvent
+    public static void onRegisterRenderers(EntityRenderersEvent.RegisterRenderers event) {
+        NonNullLazy<List<Block>> blocksToProcess = NonNullLazy.of(() ->
+                ForgeRegistries.BLOCKS.getValues()
+                        .stream()
+                        .filter(basicBlock -> Optional.ofNullable(basicBlock.getRegistryName())
+                                .map(ResourceLocation::getNamespace)
+                                .filter(Reference.MOD_ID::equalsIgnoreCase)
+                                .isPresent())
+                        .collect(Collectors.toList())
+        );
+        blocksToProcess.get().stream().filter(blockBase -> blockBase instanceof BasicTileBlock && IndustrialAreaWorkingTile.class.isAssignableFrom(((BasicTileBlock) blockBase).getTileClass())).forEach(blockBase -> event.registerBlockEntityRenderer(((BasicTileBlock) blockBase).getTileEntityType(), WorkingAreaTESR::new));
 
 
-            event.registerBlockEntityRenderer(ModuleTransportStorage.BLACK_HOLE_UNIT_COMMON.getTileEntityType(), BlackHoleUnitTESR::new);
-            event.registerBlockEntityRenderer(ModuleTransportStorage.BLACK_HOLE_UNIT_PITY.getTileEntityType(), BlackHoleUnitTESR::new);
-            event.registerBlockEntityRenderer(ModuleTransportStorage.BLACK_HOLE_UNIT_SIMPLE.getTileEntityType(), BlackHoleUnitTESR::new);
-            event.registerBlockEntityRenderer(ModuleTransportStorage.BLACK_HOLE_UNIT_ADVANCED.getTileEntityType(), BlackHoleUnitTESR::new);
-            event.registerBlockEntityRenderer(ModuleTransportStorage.BLACK_HOLE_UNIT_SUPREME.getTileEntityType(), BlackHoleUnitTESR::new);
-            event.registerBlockEntityRenderer(ModuleTransportStorage.BLACK_HOLE_TANK_COMMON.getTileEntityType(), BlackHoleUnitTESR::new);
-            event.registerBlockEntityRenderer(ModuleTransportStorage.BLACK_HOLE_TANK_PITY.getTileEntityType(), BlackHoleUnitTESR::new);
-            event.registerBlockEntityRenderer(ModuleTransportStorage.BLACK_HOLE_TANK_SIMPLE.getTileEntityType(), BlackHoleUnitTESR::new);
-            event.registerBlockEntityRenderer(ModuleTransportStorage.BLACK_HOLE_TANK_ADVANCED.getTileEntityType(), BlackHoleUnitTESR::new);
-            event.registerBlockEntityRenderer(ModuleTransportStorage.BLACK_HOLE_UNIT_COMMON.getTileEntityType(), BlackHoleUnitTESR::new);
-            event.registerBlockEntityRenderer(ModuleTransportStorage.BLACK_HOLE_TANK_SUPREME.getTileEntityType(), BlackHoleUnitTESR::new);
+        event.registerBlockEntityRenderer(ModuleTransportStorage.BLACK_HOLE_UNIT_COMMON.getTileEntityType(), BlackHoleUnitTESR::new);
+        event.registerBlockEntityRenderer(ModuleTransportStorage.BLACK_HOLE_UNIT_PITY.getTileEntityType(), BlackHoleUnitTESR::new);
+        event.registerBlockEntityRenderer(ModuleTransportStorage.BLACK_HOLE_UNIT_SIMPLE.getTileEntityType(), BlackHoleUnitTESR::new);
+        event.registerBlockEntityRenderer(ModuleTransportStorage.BLACK_HOLE_UNIT_ADVANCED.getTileEntityType(), BlackHoleUnitTESR::new);
+        event.registerBlockEntityRenderer(ModuleTransportStorage.BLACK_HOLE_UNIT_SUPREME.getTileEntityType(), BlackHoleUnitTESR::new);
+        event.registerBlockEntityRenderer(ModuleTransportStorage.BLACK_HOLE_TANK_COMMON.getTileEntityType(), BlackHoleUnitTESR::new);
+        event.registerBlockEntityRenderer(ModuleTransportStorage.BLACK_HOLE_TANK_PITY.getTileEntityType(), BlackHoleUnitTESR::new);
+        event.registerBlockEntityRenderer(ModuleTransportStorage.BLACK_HOLE_TANK_SIMPLE.getTileEntityType(), BlackHoleUnitTESR::new);
+        event.registerBlockEntityRenderer(ModuleTransportStorage.BLACK_HOLE_TANK_ADVANCED.getTileEntityType(), BlackHoleUnitTESR::new);
+        event.registerBlockEntityRenderer(ModuleTransportStorage.BLACK_HOLE_UNIT_COMMON.getTileEntityType(), BlackHoleUnitTESR::new);
+        event.registerBlockEntityRenderer(ModuleTransportStorage.BLACK_HOLE_TANK_SUPREME.getTileEntityType(), BlackHoleUnitTESR::new);
 
-            event.registerBlockEntityRenderer(ModuleGenerator.MYCELIAL_REACTOR.getTileEntityType(), MycelialReactorTESR::new);
-        }
+        event.registerBlockEntityRenderer(ModuleGenerator.MYCELIAL_REACTOR.getTileEntityType(), MycelialReactorTESR::new);
+
+        event.registerEntityRenderer(ModuleTool.TRIDENT_ENTITY_TYPE, InfinityTridentRenderer::new);
+        event.registerEntityRenderer(ModuleTool.INFINITY_NUKE_ENTITY_TYPE, InfinityNukeRenderer::new);
+    }
+
+    @SubscribeEvent
+    public static void layerDefinitions(EntityRenderersEvent.RegisterLayerDefinitions event) {
+        event.registerLayerDefinition(InfinityTridentRenderer.TRIDENT_LAYER, InfinityTridentModel::createBodyLayer);
+        event.registerLayerDefinition(InfinityNukeRenderer.NUKE_LAYER, InfinityNukeModel::createBodyLayer);
+        event.registerLayerDefinition(InfinityNukeRenderer.NUKE_ARMED_LAYER, () -> InfinityNukeModelArmed.createBodyLayer(new CubeDeformation(0f)));
+        event.registerLayerDefinition(InfinityNukeRenderer.NUKE_ARMED_BIG_LAYER, () -> InfinityNukeModelArmed.createBodyLayer(new CubeDeformation(0.2f)));
+    }
 
 }
