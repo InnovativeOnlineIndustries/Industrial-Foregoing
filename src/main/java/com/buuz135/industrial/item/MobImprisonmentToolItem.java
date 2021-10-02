@@ -88,7 +88,7 @@ public class MobImprisonmentToolItem extends IFCustomItem {
     public boolean release(PlayerEntity player, BlockPos pos, Direction facing, World worldIn, ItemStack stack) {
         if (player.getEntityWorld().isRemote) return false;
         if (!containsEntity(stack)) return false;
-        Entity entity = getEntityFromStack(stack, worldIn, true);
+        Entity entity = getEntityFromStack(stack, worldIn, true, false);
         BlockPos blockPos = pos.offset(facing);
         entity.setPositionAndRotation(blockPos.getX() + 0.5, blockPos.getY(), blockPos.getZ() + 0.5, 0, 0);
         stack.setTag(new CompoundNBT());
@@ -121,10 +121,10 @@ public class MobImprisonmentToolItem extends IFCustomItem {
     }
 
     @Nullable
-    public Entity getEntityFromStack(ItemStack stack, World world, boolean withInfo) {
+    public Entity getEntityFromStack(ItemStack stack, World world, boolean withInfo, boolean applyDuplicatorFilter) {
         if (stack.hasTag()) {
             EntityType type = EntityType.byKey(stack.getTag().getString("entity")).orElse(null);
-            if (type != null) {
+            if (type != null && !(applyDuplicatorFilter && IndustrialTags.EntityTypes.MOB_DUPLICATOR_BLACKLIST.contains(type))) {
                 Entity entity = type.create(world);
                 if (withInfo) entity.read(stack.getTag());
                 return entity;
