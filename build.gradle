@@ -158,18 +158,18 @@ dependencies {
     if (findProject(':titanium') != null) {
         implementation project(':titanium')
     } else {
-        implementation fg.deobf (project.dependencies.create('com.hrznstudio:titanium:1.17.1-3.2.8.5'))
+        implementation fg.deobf (project.dependencies.create('com.hrznstudio:titanium:1.17.1-3.3.0.0-12'))
     }
 
-    compileOnly fg.deobf("mezz.jei:jei-1.17.1:8.1.0.19:api")
-    runtimeOnly fg.deobf("mezz.jei:jei-1.17.1:8.1.0.19")
+    compileOnly fg.deobf("mezz.jei:jei-1.17.1:8.1.0.26:api")
+    runtimeOnly fg.deobf("mezz.jei:jei-1.17.1:8.1.0.26")
 
     compileOnly fg.deobf("top.theillusivec4.curios:curios-forge:${curios_mc_version}-${curios_version}:api")
     runtimeOnly fg.deobf("top.theillusivec4.curios:curios-forge:${curios_mc_version}-${curios_version}")
 
     // compiled from github
-    compileOnly fg.deobf("vazkii.patchouli:Patchouli:1.17.1-56-SNAPSHOT:api")
-    runtimeOnly fg.deobf("vazkii.patchouli:Patchouli:1.17.1-56-SNAPSHOT")
+    //compileOnly fg.deobf("vazkii.patchouli:Patchouli:1.17.1-56-SNAPSHOT:api")
+    //runtimeOnly fg.deobf("vazkii.patchouli:Patchouli:1.17.1-56-SNAPSHOT")
 
     //if (findProject(':workspace') == null) {
 //    compileOnly fg.deobf("mezz.jei:jei-1.16.4:7.6.1.71:api")
