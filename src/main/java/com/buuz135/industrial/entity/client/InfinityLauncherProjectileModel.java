@@ -19,6 +19,7 @@
  * FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE,
  * ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
+
 package com.buuz135.industrial.entity.client;
 
 
@@ -27,35 +28,40 @@ import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import net.minecraft.client.model.EntityModel;
 import net.minecraft.client.model.geom.ModelPart;
+import net.minecraft.client.model.geom.PartPose;
+import net.minecraft.client.model.geom.builders.CubeListBuilder;
+import net.minecraft.client.model.geom.builders.LayerDefinition;
+import net.minecraft.client.model.geom.builders.MeshDefinition;
+import net.minecraft.client.model.geom.builders.PartDefinition;
 
 public class InfinityLauncherProjectileModel extends EntityModel<InfinityLauncherProjectileEntity> {
 
-//    private final ModelPart bone;
+    private final ModelPart bone;
 
-    public InfinityLauncherProjectileModel() {
-//        texWidth = 32;
-//        texHeight = 32;
-//
-//        bone = new ModelPart(this);
-//        bone.setPos(0.5F, 15.5F, 0.0F);
-//        bone.texOffs(28, 3).addBox(-0.5F, -0.5F, -0.5F, 1.0F, 9.0F, 1.0F, 0.0F, false);
-//        bone.texOffs(0, 24).addBox(-2.5F, -4.5F, -2.5F, 5.0F, 3.0F, 5.0F, 0.0F, false);
-//        bone.texOffs(24, 0).addBox(-1.0F, -1.5F, -1.0F, 2.0F, 1.0F, 2.0F, 0.0F, false);
+    public InfinityLauncherProjectileModel(ModelPart model) {
+        this.bone = model;
+    }
+
+    public static LayerDefinition createBodyLayer() {
+        MeshDefinition meshDefinition = new MeshDefinition();
+        PartDefinition partDefinition = meshDefinition.getRoot();
+
+        partDefinition.addOrReplaceChild("bone", CubeListBuilder.create()
+                        .texOffs(28, 3).addBox(-0.5f, -0.5f, -0.5f, 1.0f, 9.0f, 1.0f)
+                        .texOffs(0, 24).addBox(-2.5f, -4.5f, -2.5f, 5.0f, 3.0f, 5.0f)
+                        .texOffs(24, 0).addBox(-1.0f, -1.5f, -1.0f, 2.0f, 1.0f, 2.0f),
+                PartPose.offsetAndRotation(0.5f, 15.5f, 0.0f, 0.0f, 0.0f, 0.0f));
+
+        return LayerDefinition.create(meshDefinition, 32, 32);
     }
 
     @Override
-    public void setupAnim(InfinityLauncherProjectileEntity entity, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch) {
-        //previously the render function, render code was moved to a method below
+    public void setupAnim(InfinityLauncherProjectileEntity p_102618_, float p_102619_, float p_102620_, float p_102621_, float p_102622_, float p_102623_) {
+
     }
 
     @Override
-    public void renderToBuffer(PoseStack matrixStack, VertexConsumer buffer, int packedLight, int packedOverlay, float red, float green, float blue, float alpha) {
-//        bone.render(matrixStack, buffer, packedLight, packedOverlay);
-    }
-
-    public void setRotationAngle(ModelPart modelRenderer, float x, float y, float z) {
-        modelRenderer.xRot = x;
-        modelRenderer.yRot = y;
-        modelRenderer.zRot = z;
+    public void renderToBuffer(PoseStack poseStack, VertexConsumer buffer, int packedLight, int packedOverlay, float red, float green, float blue, float alpha) {
+        bone.render(poseStack, buffer, packedLight, packedOverlay);
     }
 }

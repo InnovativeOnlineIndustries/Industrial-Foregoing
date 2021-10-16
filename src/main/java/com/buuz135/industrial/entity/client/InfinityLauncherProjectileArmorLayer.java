@@ -25,6 +25,7 @@ import com.buuz135.industrial.entity.InfinityLauncherProjectileEntity;
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.entity.EntityRenderDispatcher;
+import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.client.renderer.entity.LivingEntityRenderer;
 import net.minecraft.client.renderer.entity.layers.StuckInBodyLayer;
 import net.minecraft.client.model.PlayerModel;
@@ -38,12 +39,12 @@ public class InfinityLauncherProjectileArmorLayer<T extends LivingEntity, M exte
 
     public static HashMap<String, Integer> PROJECTILE_AMOUNT = new HashMap<>();
 
-//    private final EntityRenderDispatcher entityRendererManager;
+    private final EntityRenderDispatcher dispatcher;
     private InfinityLauncherProjectileEntity projectile;
 
-    public InfinityLauncherProjectileArmorLayer(LivingEntityRenderer<T, M> livingRenderer) {
-        super(livingRenderer);
-//        this.entityRendererManager = livingRenderer.getDispatcher();
+    public InfinityLauncherProjectileArmorLayer(EntityRendererProvider.Context p_174465_, LivingEntityRenderer<T, M> p_174466_) {
+        super(p_174466_);
+        this.dispatcher = p_174465_.getEntityRenderDispatcher();
     }
 
     @Override
@@ -59,6 +60,6 @@ public class InfinityLauncherProjectileArmorLayer<T extends LivingEntity, M exte
         this.projectile.xRot = (float) (Math.atan2((double) p_225632_6_, (double) f) * (double) (180F / (float) Math.PI));
         this.projectile.yRotO = this.projectile.yRot;
         this.projectile.xRotO = this.projectile.xRot;
-//        this.entityRendererManager.render(this.projectile, 0.0D, 0.0D, 0.0D, 0.0F, p_225632_8_, p_225632_1_, p_225632_2_, p_225632_3_);
+        this.dispatcher.render(this.projectile, 0.0D, 0.0D, 0.0D, 0.0F, p_225632_8_, p_225632_1_, p_225632_2_, p_225632_3_);
     }
 }

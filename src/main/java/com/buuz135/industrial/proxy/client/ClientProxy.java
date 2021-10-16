@@ -30,6 +30,9 @@ import com.buuz135.industrial.IndustrialForegoing;
 import com.buuz135.industrial.block.tile.IndustrialAreaWorkingTile;
 import com.buuz135.industrial.block.transportstorage.tile.BlackHoleTankTile;
 import com.buuz135.industrial.block.transportstorage.tile.ConveyorTile;
+import com.buuz135.industrial.entity.client.InfinityLauncherProjectileArmorLayer;
+import com.buuz135.industrial.entity.client.InfinityLauncherProjectileModel;
+import com.buuz135.industrial.entity.client.InfinityLauncherProjectileRenderer;
 import com.buuz135.industrial.entity.client.InfinityNukeModel;
 import com.buuz135.industrial.entity.client.InfinityNukeModelArmed;
 import com.buuz135.industrial.entity.client.InfinityNukeRenderer;
@@ -47,6 +50,7 @@ import com.buuz135.industrial.proxy.client.render.WorkingAreaTESR;
 import com.buuz135.industrial.proxy.network.BackpackOpenMessage;
 import com.buuz135.industrial.utils.FluidUtils;
 import com.buuz135.industrial.utils.Reference;
+import com.hrznstudio.titanium.TitaniumClient;
 import com.hrznstudio.titanium.block.BasicTileBlock;
 import com.hrznstudio.titanium.event.handler.EventManager;
 import net.minecraftforge.api.distmarker.Dist;
@@ -74,11 +78,13 @@ import net.minecraft.client.model.geom.builders.CubeDeformation;
 import net.minecraft.client.renderer.ItemBlockRenderTypes;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.entity.EntityRenderDispatcher;
+import net.minecraft.client.renderer.item.ItemProperties;
 import net.minecraft.client.resources.model.BakedModel;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.TextComponent;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundEvent;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.SpawnEggItem;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntity;
@@ -249,6 +255,7 @@ public class ClientProxy extends CommonProxy {
 
         event.registerEntityRenderer(ModuleTool.TRIDENT_ENTITY_TYPE, InfinityTridentRenderer::new);
         event.registerEntityRenderer(ModuleTool.INFINITY_NUKE_ENTITY_TYPE, InfinityNukeRenderer::new);
+        event.registerEntityRenderer(ModuleTool.INFINITY_LAUNCHER_PROJECTILE_ENTITY_TYPE, InfinityLauncherProjectileRenderer::new);
     }
 
     @SubscribeEvent
@@ -257,6 +264,7 @@ public class ClientProxy extends CommonProxy {
         event.registerLayerDefinition(InfinityNukeRenderer.NUKE_LAYER, InfinityNukeModel::createBodyLayer);
         event.registerLayerDefinition(InfinityNukeRenderer.NUKE_ARMED_LAYER, () -> InfinityNukeModelArmed.createBodyLayer(new CubeDeformation(0f)));
         event.registerLayerDefinition(InfinityNukeRenderer.NUKE_ARMED_BIG_LAYER, () -> InfinityNukeModelArmed.createBodyLayer(new CubeDeformation(0.2f)));
+        event.registerLayerDefinition(InfinityLauncherProjectileRenderer.PROJECTILE_LAYER, InfinityLauncherProjectileModel::createBodyLayer);
     }
 
 }
