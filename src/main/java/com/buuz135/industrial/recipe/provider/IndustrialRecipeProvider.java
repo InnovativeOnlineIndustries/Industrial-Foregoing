@@ -78,7 +78,7 @@ public class IndustrialRecipeProvider extends TitaniumRecipeProvider {
         ModuleTool.INFINITY_SAW.registerRecipe(consumer);
         ModuleTool.INFINITY_HAMMER.registerRecipe(consumer);
         ModuleTool.INFINITY_TRIDENT.registerRecipe(consumer);
-//        ModuleTool.INFINITY_BACKPACK.registerRecipe(consumer);
+        ModuleTool.INFINITY_BACKPACK.registerRecipe(consumer);
         ModuleTool.INFINITY_LAUNCHER.registerRecipe(consumer);
         ModuleTool.INFINITY_NUKE.registerRecipe(consumer);
         //CORE

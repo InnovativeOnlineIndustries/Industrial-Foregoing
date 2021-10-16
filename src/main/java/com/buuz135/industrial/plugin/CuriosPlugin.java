@@ -24,6 +24,7 @@ package com.buuz135.industrial.plugin;
 import javax.annotation.Nullable;
 
 import com.buuz135.industrial.item.MeatFeederItem;
+import com.buuz135.industrial.item.infinity.item.ItemInfinityBackpack;
 import com.buuz135.industrial.plugin.curios.InfinityBackpackCurios;
 import com.buuz135.industrial.plugin.curios.MeatFeedCurios;
 import com.buuz135.industrial.utils.Reference;
@@ -68,15 +69,15 @@ public class CuriosPlugin implements FeaturePluginInstance {
                         }
                     });
                 }
-//                if (stack.getItem() instanceof ItemInfinityBackpack){
-//                    stackEvent.addCapability(new ResourceLocation(Reference.MOD_ID, stack.getItem().getRegistryName().getPath() + "_curios"), new ICapabilityProvider() {
-//                        @Override
-//                        public <T> LazyOptional<T> getCapability(Capability<T> cap, @Nullable Direction side) {
-//                            if (cap == CuriosCapability.ITEM) return LazyOptional.of(InfinityBackpackCurios::new).cast();
-//                            return LazyOptional.empty();
-//                        }
-//                    });
-//                }
+                if (stack.getItem() instanceof ItemInfinityBackpack){
+                    stackEvent.addCapability(new ResourceLocation(Reference.MOD_ID, stack.getItem().getRegistryName().getPath() + "_curios"), new ICapabilityProvider() {
+                        @Override
+                        public <T> LazyOptional<T> getCapability(Capability<T> cap, @Nullable Direction side) {
+                            if (cap == CuriosCapability.ITEM) return LazyOptional.of(InfinityBackpackCurios::new).cast();
+                            return LazyOptional.empty();
+                        }
+                    });
+                }
             }).subscribe();
             EventManager.mod(InterModEnqueueEvent.class).process(interModEnqueueEvent -> {
                 InterModComms.sendTo("curios", SlotTypeMessage.REGISTER_TYPE, () -> SlotTypePreset.HEAD.getMessageBuilder().build());

@@ -38,6 +38,8 @@ import com.buuz135.industrial.entity.client.InfinityNukeModelArmed;
 import com.buuz135.industrial.entity.client.InfinityNukeRenderer;
 import com.buuz135.industrial.entity.client.InfinityTridentModel;
 import com.buuz135.industrial.entity.client.InfinityTridentRenderer;
+import com.buuz135.industrial.item.infinity.InfinityTier;
+import com.buuz135.industrial.item.infinity.ItemInfinity;
 import com.buuz135.industrial.module.ModuleCore;
 import com.buuz135.industrial.module.ModuleGenerator;
 import com.buuz135.industrial.module.ModuleTool;
@@ -167,12 +169,12 @@ public class ClientProxy extends CommonProxy {
             }
             return 0xFFFFFF;
         }, ModuleTool.MOB_IMPRISONMENT_TOOL);
-//        Minecraft.getInstance().getItemColors().register((stack, tintIndex) -> {
-//            if (tintIndex == 0) {
-//                return InfinityTier.getTierBraquet(ItemInfinity.getPowerFromStack(stack)).getLeft().getTextureColor();
-//            }
-//            return 0xFFFFFF;
-//        }, ModuleTool.INFINITY_BACKPACK, ModuleTool.INFINITY_LAUNCHER, ModuleTool.INFINITY_NUKE, ModuleTool.INFINITY_TRIDENT, ModuleTool.INFINITY_HAMMER, ModuleTool.INFINITY_SAW, ModuleTool.INFINITY_DRILL);
+        Minecraft.getInstance().getItemColors().register((stack, tintIndex) -> {
+            if (tintIndex == 0) {
+                return InfinityTier.getTierBraquet(ItemInfinity.getPowerFromStack(stack)).getLeft().getTextureColor();
+            }
+            return 0xFFFFFF;
+        }, ModuleTool.INFINITY_BACKPACK, ModuleTool.INFINITY_LAUNCHER, ModuleTool.INFINITY_NUKE, ModuleTool.INFINITY_TRIDENT, ModuleTool.INFINITY_HAMMER, ModuleTool.INFINITY_SAW, ModuleTool.INFINITY_DRILL);
         Minecraft.getInstance().getBlockColors().register((state, worldIn, pos, tintIndex) -> {
             if (tintIndex == 0 && worldIn != null && pos != null && worldIn.getBlockEntity(pos) instanceof BlackHoleTankTile) {
                 BlackHoleTankTile tank = (BlackHoleTankTile) worldIn.getBlockEntity(pos);
