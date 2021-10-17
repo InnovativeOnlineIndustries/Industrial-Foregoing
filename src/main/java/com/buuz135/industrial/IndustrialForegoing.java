@@ -110,7 +110,7 @@ public class IndustrialForegoing extends ModuleController {
         RewardGiver giver = RewardManager.get().getGiver(UUID.fromString("d28b7061-fb92-4064-90fb-7e02b95a72a6"), "Buuz135");
         try {
             giver.addReward(new Reward(new ResourceLocation(Reference.MOD_ID, "cat_ears"), new URL("https://raw.githubusercontent.com/Buuz135/Industrial-Foregoing/master/contributors.json"), () -> dist -> {
-            }, new String[]{"normal"}));
+            }, new String[]{"normal", "cat", "spooky", "snowy"}));
         } catch (MalformedURLException e) {
             LOGGER.catching(e);
         }

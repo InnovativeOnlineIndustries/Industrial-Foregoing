@@ -57,17 +57,17 @@ public class ContributorsCatEarsRender extends RenderLayer<AbstractClientPlayer,
         stack.translate(0, -0.015f, 0);
         if (!entitylivingbaseIn.inventory.armor.get(3).isEmpty()) stack.translate(0, -0.02f, 0);
         if (entitylivingbaseIn.isCrouching()) stack.translate(0, 0.27f, 0);
+        String type = ClientRewardStorage.REWARD_STORAGE.getRewards().get(entitylivingbaseIn.getUUID()).getEnabled().get(new ResourceLocation(Reference.MOD_ID, "cat_ears"));
         stack.mulPose(Vector3f.YP.rotationDegrees(90));
         stack.mulPose(Vector3f.XP.rotationDegrees(180));
         stack.mulPose(Vector3f.YN.rotationDegrees(netHeadYaw));
         stack.mulPose(Vector3f.ZN.rotationDegrees(headPitch));
-//        Minecraft.getInstance().getTextureManager().bind(TextureAtlas.LOCATION_BLOCKS);
         Calendar calendar = Calendar.getInstance();
-        if (calendar.get(Calendar.MONTH) == Calendar.OCTOBER) {
+        if ((calendar.get(Calendar.MONTH) == Calendar.OCTOBER && type.equalsIgnoreCase("normal")) || type.equalsIgnoreCase("spooky")) {
             spookyScarySkeletons(stack, buffer);
-        } else if (calendar.get(Calendar.MONTH) == Calendar.DECEMBER) {
+        } else if ((calendar.get(Calendar.MONTH) == Calendar.DECEMBER && type.equalsIgnoreCase("normal")) || type.equalsIgnoreCase("snowy")) {
             itsSnowyHere(stack, buffer);
-        } else if (ClientProxy.ears_baked != null){
+        } else if (ClientProxy.ears_baked != null) {
             Minecraft.getInstance().getBlockRenderer().getModelRenderer().renderModel(stack.last(), buffer.getBuffer(RenderType.cutout()), null, ClientProxy.ears_baked, 1f, 1f, 1f, p_225628_3_, OverlayTexture.NO_OVERLAY);
         }
         stack.popPose();
