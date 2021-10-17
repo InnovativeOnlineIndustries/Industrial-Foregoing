@@ -23,15 +23,15 @@ package com.buuz135.industrial.entity.client;
 
 import com.buuz135.industrial.entity.InfinityLauncherProjectileEntity;
 import com.mojang.blaze3d.vertex.PoseStack;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.model.PlayerModel;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.entity.EntityRenderDispatcher;
-import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.client.renderer.entity.LivingEntityRenderer;
 import net.minecraft.client.renderer.entity.layers.StuckInBodyLayer;
-import net.minecraft.client.model.PlayerModel;
+import net.minecraft.util.Mth;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.util.Mth;
 
 import java.util.HashMap;
 
@@ -42,9 +42,9 @@ public class InfinityLauncherProjectileArmorLayer<T extends LivingEntity, M exte
     private final EntityRenderDispatcher dispatcher;
     private InfinityLauncherProjectileEntity projectile;
 
-    public InfinityLauncherProjectileArmorLayer(EntityRendererProvider.Context p_174465_, LivingEntityRenderer<T, M> p_174466_) {
+    public InfinityLauncherProjectileArmorLayer(LivingEntityRenderer<T, M> p_174466_) {
         super(p_174466_);
-        this.dispatcher = p_174465_.getEntityRenderDispatcher();
+        this.dispatcher = Minecraft.getInstance().getEntityRenderDispatcher();
     }
 
     @Override
