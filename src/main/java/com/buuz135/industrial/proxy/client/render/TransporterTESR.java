@@ -28,16 +28,22 @@ import com.buuz135.industrial.block.transportstorage.transporter.TransporterItem
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.platform.GlStateManager;
 import com.mojang.blaze3d.systems.RenderSystem;
+
+import net.minecraft.client.renderer.GameRenderer;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderStateShard;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.blockentity.BlockEntityRenderer;
 import net.minecraft.client.renderer.blockentity.BlockEntityRenderDispatcher;
 import com.mojang.blaze3d.vertex.DefaultVertexFormat;
+
+import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
 import net.minecraft.core.Direction;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
 import net.minecraft.world.phys.Vec3;
+
+import com.mojang.blaze3d.vertex.VertexFormat;
 import com.mojang.math.Vector3f;
 
 import java.util.Map;
@@ -45,23 +51,25 @@ import java.util.Map;
 public class TransporterTESR implements BlockEntityRenderer<TransporterTile> {
 
 
-//    public static RenderType TYPE = createRenderType();
+    public static RenderType TYPE = createRenderType();
 
-//    public TransporterTESR(BlockEntityRenderDispatcher rendererDispatcherIn) {
-//        super(rendererDispatcherIn);
-//    }
+    public TransporterTESR(BlockEntityRendererProvider.Context context) {
+    }
 
-//    public static RenderType createRenderType() {
-//        RenderType.CompositeState state = RenderType.CompositeState.builder().setTextureState(new RenderStateShard.TextureStateShard(new ResourceLocation("industrialforegoing", "textures/blocks/transporters/particle.png"), false, false)).setTransparencyState(new RenderStateShard.TransparencyStateShard("translucent_transparency", () -> {
-//            RenderSystem.depthMask(true);
-//            RenderSystem.enableBlend();
-//            RenderSystem.blendFunc(GlStateManager.SourceFactor.ONE, GlStateManager.DestFactor.ONE);
-//        }, () -> {
-//            RenderSystem.disableBlend();
-//            RenderSystem.defaultBlendFunc();
-//        })).createCompositeState(true);
-//        return RenderType.create("transporter_render", DefaultVertexFormat.POSITION_TEX_COLOR, 7, 262144, false, true, state);
-//    }
+    public static RenderType createRenderType() {
+        RenderType.CompositeState state = RenderType.CompositeState.builder()
+                .setShaderState(new RenderStateShard.ShaderStateShard(GameRenderer::getPositionTexColorShader))
+                .setTextureState(new RenderStateShard.TextureStateShard(new ResourceLocation("industrialforegoing", "textures/blocks/transporters/particle.png"), false, false))
+                .setTransparencyState(new RenderStateShard.TransparencyStateShard("translucent_transparency", () -> {
+            RenderSystem.depthMask(true);
+            RenderSystem.enableBlend();
+            RenderSystem.blendFunc(GlStateManager.SourceFactor.ONE, GlStateManager.DestFactor.ONE);
+        }, () -> {
+            RenderSystem.disableBlend();
+            RenderSystem.defaultBlendFunc();
+        })).createCompositeState(true);
+        return RenderType.create("transporter_render", DefaultVertexFormat.POSITION_TEX_COLOR, VertexFormat.Mode.QUADS, 262144, false, true, state);
+    }
 
     public static Vector3f getPath(Direction from, Direction to, double step) {
         float totalSteps = 6.15f;

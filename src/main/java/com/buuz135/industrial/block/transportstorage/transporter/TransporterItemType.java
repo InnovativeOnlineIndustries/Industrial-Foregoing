@@ -201,42 +201,41 @@ public class TransporterItemType extends FilteredTransporterType<ItemStack, IIte
     @Override
     public void renderTransfer(Vector3f pos, Direction direction, int step, PoseStack stack, int combinedOverlayIn, MultiBufferSource buffer) {
         super.renderTransfer(pos, direction, step, stack, combinedOverlayIn, buffer);
-        // TODO: 22/08/2021 render stuff. 
-//        if (step < queue.computeIfAbsent(direction, v -> new ArrayList<>()).size()) {
-//            float scale = 0.10f;
-//            stack.scale(scale, scale, scale);
-//            ItemStack itemStack = queue.get(direction).get(step);
-//            if (!itemStack.isEmpty()) {
-//                Minecraft.getInstance().getItemRenderer().renderStatic(itemStack, ItemTransforms.TransformType.NONE, 0xF000F0, combinedOverlayIn, stack, buffer);
-//            } else {
-//                stack.pushPose();
-//                stack.mulPose(Minecraft.getInstance().getEntityRenderDispatcher().cameraOrientation());
-//                stack.mulPose(Vector3f.ZP.rotationDegrees(90f));
-//                stack.mulPose(Vector3f.XP.rotationDegrees(90f));
-//                VertexConsumer buffer1 = buffer.getBuffer(TransporterTESR.TYPE);
-//                Matrix4f matrix = stack.last().pose();
-//                float pX1 = 1;
-//                float u = 1;
-//                float pX2 = 0;
-//                float u2 = 0;
-//                Color CLOSE = Color.CYAN;
-//                Color FAR = new Color(0x6800FF);
-//                double ratio = (step + 2.5) / (double) QUEUE_SIZE;
-//                float xOffset = -0.75f;
-//                float yOffset = -0f;
-//                float zOffset = -0.75f;
-//                int alpha = 512;
-//                stack.scale(0.25f, 0.25f, 0.25f);
-//                int red = (int) Math.abs((ratio * FAR.getRed()) + ((1 - ratio) * CLOSE.getRed()));
-//                int green = (int) Math.abs((ratio * FAR.getGreen()) + ((1 - ratio) * CLOSE.getGreen()));
-//                int blue = (int) Math.abs((ratio * FAR.getBlue()) + ((1 - ratio) * CLOSE.getBlue()));
-//                buffer1.vertex(matrix, pX2 + xOffset, yOffset, 0 + zOffset).uv(u2, 0).color(red, green, blue, alpha).endVertex();
-//                buffer1.vertex(matrix, pX1 + xOffset + 0.5f, yOffset, 0 + zOffset).uv(u, 0).color(red, green, blue, alpha).endVertex();
-//                buffer1.vertex(matrix, pX1 + xOffset + 0.5f, yOffset, 1.5f + zOffset).uv(u, 1).color(red, green, blue, alpha).endVertex();
-//                buffer1.vertex(matrix, pX2 + xOffset, yOffset, 1.5f + zOffset).uv(u2, 1).color(red, green, blue, alpha).endVertex();
-//                stack.popPose();
-//            }
-//        }
+        if (step < queue.computeIfAbsent(direction, v -> new ArrayList<>()).size()) {
+            float scale = 0.10f;
+            stack.scale(scale, scale, scale);
+            ItemStack itemStack = queue.get(direction).get(step);
+            if (!itemStack.isEmpty()) {
+                Minecraft.getInstance().getItemRenderer().renderStatic(itemStack, ItemTransforms.TransformType.NONE, 0xF000F0, combinedOverlayIn, stack, buffer, 0);
+            } else {
+                stack.pushPose();
+                stack.mulPose(Minecraft.getInstance().getEntityRenderDispatcher().cameraOrientation());
+                stack.mulPose(Vector3f.ZP.rotationDegrees(90f));
+                stack.mulPose(Vector3f.XP.rotationDegrees(90f));
+                VertexConsumer buffer1 = buffer.getBuffer(TransporterTESR.TYPE);
+                Matrix4f matrix = stack.last().pose();
+                float pX1 = 1;
+                float u = 1;
+                float pX2 = 0;
+                float u2 = 0;
+                Color CLOSE = Color.CYAN;
+                Color FAR = new Color(0x6800FF);
+                double ratio = (step + 2.5) / (double) QUEUE_SIZE;
+                float xOffset = -0.75f;
+                float yOffset = -0f;
+                float zOffset = -0.75f;
+                int alpha = 512;
+                stack.scale(0.25f, 0.25f, 0.25f);
+                int red = (int) Math.abs((ratio * FAR.getRed()) + ((1 - ratio) * CLOSE.getRed()));
+                int green = (int) Math.abs((ratio * FAR.getGreen()) + ((1 - ratio) * CLOSE.getGreen()));
+                int blue = (int) Math.abs((ratio * FAR.getBlue()) + ((1 - ratio) * CLOSE.getBlue()));
+                buffer1.vertex(matrix, pX2 + xOffset, yOffset, 0 + zOffset).uv(u2, 0).color(red, green, blue, alpha).endVertex();
+                buffer1.vertex(matrix, pX1 + xOffset + 0.5f, yOffset, 0 + zOffset).uv(u, 0).color(red, green, blue, alpha).endVertex();
+                buffer1.vertex(matrix, pX1 + xOffset + 0.5f, yOffset, 1.5f + zOffset).uv(u, 1).color(red, green, blue, alpha).endVertex();
+                buffer1.vertex(matrix, pX2 + xOffset, yOffset, 1.5f + zOffset).uv(u2, 1).color(red, green, blue, alpha).endVertex();
+                stack.popPose();
+            }
+        }
     }
 
     public static class Factory extends TransporterTypeFactory {
