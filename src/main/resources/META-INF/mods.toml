@@ -35,6 +35,6 @@ side = "BOTH"
 [[dependencies.industrialforegoing]] #optional
 modId = "forge" #mandatory
 mandatory = true #mandatory
-versionRange = "[36.0.1,)" #mandatory
+versionRange = "[36.2.8,)" #mandatory
 ordering = "NONE"
 side = "BOTH"
