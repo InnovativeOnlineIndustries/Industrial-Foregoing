@@ -41,4 +41,7 @@ public class MobCrusherConfig {
     @ConfigVal(comment = "Max Essence [mb] - Default: [32000 mb]")
     public static int tankSize = 32000;
 
+    @ConfigVal(comment = "Attack Damage for blacklisted entities - Default: [75]")
+    public static int attackDamage = 75;
+
 }
