@@ -96,6 +96,10 @@ public class BlackHoleControllerTile extends ActiveTile<BlackHoleControllerTile>
         return ActionResultType.SUCCESS;
     }
 
+    public InventoryComponent<BlackHoleControllerTile> getUnitsStorage() {
+        return units_storage;
+    }
+
     private class BlackHoleControllerInventory implements IItemHandler{
 
         @Override

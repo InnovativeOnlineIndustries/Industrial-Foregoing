@@ -289,7 +289,7 @@ public class ItemInfinity extends IFCustomItem implements INamedContainerProvide
             topRight = topRight.offset(Direction.UP, radius - 1);
         }
         if (currentTier == InfinityTier.ARTIFACT && withDepth) {
-            topRight = topRight.offset(facing.getOpposite(), radius);
+            topRight = topRight.offset(facing.getOpposite(), radius * 2);
         }
         return Pair.of(bottomLeft, topRight);
     }

@@ -49,7 +49,7 @@ public class InfinityChargerTile extends IndustrialMachineTile<InfinityChargerTi
     public void tick() {
         super.tick();
         if (isServer()){
-            if (!chargingSlot.getStackInSlot(0).isEmpty()){
+            if (!chargingSlot.getStackInSlot(0).isEmpty() && this.getRedstoneManager().getAction().canRun(this.getEnvironmentValue(false, null)) && this.getRedstoneManager().shouldWork()){
                 chargingSlot.getStackInSlot(0).getCapability(CapabilityEnergy.ENERGY).ifPresent(iEnergyStorage -> {
                     if (this.getEnergyStorage() instanceof InfinityEnergyStorage) {
                         if (iEnergyStorage instanceof InfinityEnergyStorage) {
@@ -64,6 +64,7 @@ public class InfinityChargerTile extends IndustrialMachineTile<InfinityChargerTi
                         }
                     }
                 });
+                this.getRedstoneManager().finish();
             }
         }
     }

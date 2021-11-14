@@ -93,7 +93,7 @@ public class MobDuplicatorTile extends IndustrialAreaWorkingTile<MobDuplicatorTi
 		if (tank.getFluid().isEmpty()) return new WorkAction(1, 0);
 
 		ItemStack stack = input.getStackInSlot(0);
-		LivingEntity entity = (LivingEntity) ((MobImprisonmentToolItem) stack.getItem()).getEntityFromStack(stack, this.world, MobDuplicatorConfig.exactCopy && exactCopy);
+		LivingEntity entity = (LivingEntity) ((MobImprisonmentToolItem) stack.getItem()).getEntityFromStack(stack, this.world, MobDuplicatorConfig.exactCopy && exactCopy, true);
 		if (entity == null) return new WorkAction(1, 0);
 
 		List<LivingEntity> entityAmount = world.getEntitiesWithinAABB(entity.getClass(), getWorkingArea().getBoundingBox());
@@ -108,7 +108,7 @@ public class MobDuplicatorTile extends IndustrialAreaWorkingTile<MobDuplicatorTi
 		List<BlockPos> blocks = BlockUtils.getBlockPosInAABB(getWorkingArea().getBoundingBox());
 		while (spawnAmount > 0) {
 			if (tank.getFluid().getAmount() >= essenceNeeded) {
-				entity = (LivingEntity) ((MobImprisonmentToolItem) stack.getItem()).getEntityFromStack(stack, this.world, MobDuplicatorConfig.exactCopy && exactCopy);
+				entity = (LivingEntity) ((MobImprisonmentToolItem) stack.getItem()).getEntityFromStack(stack, this.world, MobDuplicatorConfig.exactCopy && exactCopy, true);
 				int tries = 20;
 				Vector3d random = blockPosToVec3d(blocks.get(this.world.rand.nextInt(blocks.size())));
 				random = random.add(0.5, 0, 0.5);

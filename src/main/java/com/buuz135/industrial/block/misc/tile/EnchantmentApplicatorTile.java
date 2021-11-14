@@ -194,7 +194,7 @@ public class EnchantmentApplicatorTile extends IndustrialProcessingTile<Enchantm
                         if (enchantment1 != null) {
                             int enchantmentValue = map.getOrDefault(enchantment1, 0);
                             int j2 = map1.get(enchantment1);
-                            j2 = enchantmentValue == j2 ? j2 + 1 : Math.max(j2, enchantmentValue);
+                            j2 = enchantmentValue == j2 ? (EnchantmentApplicatorConfig.ignoreEnchantMaxLevels ? j2 + 1 : j2) : Math.max(j2, enchantmentValue);
                             boolean flag1 = enchantment1.canApply(inputFirst);
                             for (Enchantment enchantment : map.keySet()) {
                                 if (enchantment != enchantment1 && !enchantment1.isCompatibleWith(enchantment)) {
@@ -206,9 +206,9 @@ public class EnchantmentApplicatorTile extends IndustrialProcessingTile<Enchantm
                                 flag3 = true;
                             } else {
                                 flag2 = true;
-                                if (!EnchantmentApplicatorConfig.ignoreEnchantMaxLevels && j2 > enchantment1.getMaxLevel()) {
-                                    j2 = enchantment1.getMaxLevel();
-                                }
+                                //if (!EnchantmentApplicatorConfig.ignoreEnchantMaxLevels && j2 > enchantment1.getMaxLevel()) {
+                                //    j2 = enchantment1.getMaxLevel();
+                                //}
                                 map.put(enchantment1, j2);
                                 int enchantmentRarity = 0;
                                 switch (enchantment1.getRarity()) {

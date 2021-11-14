@@ -122,7 +122,7 @@ public class BLHBlockItemHandlerItemStack implements IItemHandler {
         return ItemStack.EMPTY;
     }
 
-    private boolean getVoid(){
+    public boolean getVoid(){
         CompoundNBT tag = getTag();
         if (tag != null && tag.contains("voidItems")){
             return tag.getBoolean("voidItems");

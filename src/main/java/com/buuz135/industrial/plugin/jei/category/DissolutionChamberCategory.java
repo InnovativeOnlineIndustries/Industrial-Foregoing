@@ -50,6 +50,7 @@ import org.apache.commons.lang3.tuple.Pair;
 import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class DissolutionChamberCategory implements IRecipeCategory<DissolutionChamberRecipe> {
 
@@ -94,7 +95,7 @@ public class DissolutionChamberCategory implements IRecipeCategory<DissolutionCh
     public void setIngredients(DissolutionChamberRecipe dissolutionChamberRecipe, IIngredients iIngredients) {
         List<List<ItemStack>> input = new ArrayList<>();
         for (Ingredient.IItemList iItemList : dissolutionChamberRecipe.input) {
-            input.add(new ArrayList<>(iItemList.getStacks()));
+            input.add(new ArrayList<>(iItemList.getStacks().stream().peek(stack -> stack.getItem().onCreated(stack, Minecraft.getInstance().world, Minecraft.getInstance().player)).collect(Collectors.toList())));
         }
         iIngredients.setInputLists(VanillaTypes.ITEM, input);
         iIngredients.setInput(VanillaTypes.FLUID, dissolutionChamberRecipe.inputFluid);

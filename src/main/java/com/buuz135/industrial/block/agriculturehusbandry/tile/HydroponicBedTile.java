@@ -25,6 +25,7 @@ package com.buuz135.industrial.block.agriculturehusbandry.tile;
 import com.buuz135.industrial.api.plant.PlantRecollectable;
 import com.buuz135.industrial.block.tile.IndustrialWorkingTile;
 import com.buuz135.industrial.config.machine.agriculturehusbandry.AnimalRancherConfig;
+import com.buuz135.industrial.config.machine.resourceproduction.HydroponicBedConfig;
 import com.buuz135.industrial.module.ModuleAgricultureHusbandry;
 import com.buuz135.industrial.module.ModuleCore;
 import com.buuz135.industrial.registry.IFRegistries;
@@ -67,7 +68,7 @@ public class HydroponicBedTile extends IndustrialWorkingTile<HydroponicBedTile> 
     private SidedInventoryComponent<HydroponicBedTile> output;
 
     public HydroponicBedTile() {
-        super(ModuleAgricultureHusbandry.HYDROPONIC_BED, 500);
+        super(ModuleAgricultureHusbandry.HYDROPONIC_BED, HydroponicBedConfig.powerPerOperation);
         addTank(this.water = (SidedFluidTankComponent<HydroponicBedTile>) new SidedFluidTankComponent<HydroponicBedTile>("water", 1000 ,43, 20, 0)
                 .setColor(DyeColor.BLUE)
                 .setTankType(FluidTankComponent.Type.SMALL)
@@ -116,10 +117,10 @@ public class HydroponicBedTile extends IndustrialWorkingTile<HydroponicBedTile> 
                             }
                         }
                         this.water.drainForced(10, IFluidHandler.FluidAction.EXECUTE);
-                        return new WorkAction(1, 1000);
+                        return new WorkAction(1, HydroponicBedConfig.powerPerOperation);
                     } else if (this.etherBuffer.getProgress() > 0){
                         tryToHarvestAndReplant(up, state);
-                        return new WorkAction(1, 1000);
+                        return new WorkAction(1, HydroponicBedConfig.powerPerOperation);
                     }
                 } else {
                     if (!tryToHarvestAndReplant(up, state)){
@@ -135,7 +136,7 @@ public class HydroponicBedTile extends IndustrialWorkingTile<HydroponicBedTile> 
                         }
                         this.water.drainForced(10, IFluidHandler.FluidAction.EXECUTE);
                     }
-                    return new WorkAction(1, 1000);
+                    return new WorkAction(1, HydroponicBedConfig.powerPerOperation);
                 }
             }
         }
@@ -209,6 +210,11 @@ public class HydroponicBedTile extends IndustrialWorkingTile<HydroponicBedTile> 
         return false;
     }
 
+    @Override
+    public int getMaxProgress() {
+        return HydroponicBedConfig.maxProgress;
+    }
+
     @Nonnull
     @Override
     public HydroponicBedTile getSelf() {
@@ -217,6 +223,6 @@ public class HydroponicBedTile extends IndustrialWorkingTile<HydroponicBedTile> 
 
     @Override
     protected EnergyStorageComponent<HydroponicBedTile> createEnergyStorage() {
-        return new EnergyStorageComponent<>(AnimalRancherConfig.maxStoredPower, 10, 20);
+        return new EnergyStorageComponent<>(HydroponicBedConfig.maxStoredPower, 10, 20);
     }
 }
