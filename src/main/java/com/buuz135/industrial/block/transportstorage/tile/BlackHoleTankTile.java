@@ -98,6 +98,7 @@ public class BlackHoleTankTile extends BHTile<BlackHoleTankTile> {
 
     @Override
     public String getFormatedDisplayAmount() {
+        if (tank.getFluidAmount() < 1000) return tank.getFluidAmount() + " mb";
         return NumberUtils.getFormatedBigNumber(tank.getFluidAmount() / 1000) + " b";
     }
 
