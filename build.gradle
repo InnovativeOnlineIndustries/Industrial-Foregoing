@@ -167,6 +167,7 @@ dependencies {
     compileOnly fg.deobf("dev.ftb.mods:ftb-library-forge:1605.3.1-build.48")
     compileOnly fg.deobf("dev.ftb.mods:ftb-teams-forge:1605.2.1-build.17")
     compileOnly fg.deobf("dev.ftb.mods:ftb-ranks-forge:1605.1.4-build.6")
+    runtimeOnly fg.deobf("curse.maven:refined-storage-243076:3400575")
 }
 
 afterEvaluate {
