@@ -25,16 +25,15 @@ import com.buuz135.industrial.item.MeatFeederItem;
 import com.buuz135.industrial.module.ModuleTool;
 import com.buuz135.industrial.plugin.CuriosPlugin;
 import com.mojang.blaze3d.vertex.PoseStack;
-import top.theillusivec4.curios.api.SlotContext;
-import top.theillusivec4.curios.api.SlotTypePreset;
-import top.theillusivec4.curios.api.client.ICurioRenderer;
-import top.theillusivec4.curios.api.type.capability.ICurio;
-
 import net.minecraft.client.model.EntityModel;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.entity.RenderLayerParent;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.ItemStack;
+import top.theillusivec4.curios.api.SlotContext;
+import top.theillusivec4.curios.api.SlotTypePreset;
+import top.theillusivec4.curios.api.client.ICurioRenderer;
+import top.theillusivec4.curios.api.type.capability.ICurio;
 
 public class MeatFeedCurios implements ICurio, ICurioRenderer {
 
@@ -52,7 +51,7 @@ public class MeatFeedCurios implements ICurio, ICurioRenderer {
     public void curioTick(String identifier, int index, LivingEntity livingEntity) {
         ItemStack stack = CuriosPlugin.getStack(livingEntity, SlotTypePreset.HEAD, 0);
         if (stack.getItem() instanceof MeatFeederItem) {
-            ModuleTool.MEAT_FEEDER.inventoryTick(stack, livingEntity.level, livingEntity, 0, false);
+            ModuleTool.MEAT_FEEDER.get().inventoryTick(stack, livingEntity.level, livingEntity, 0, false);
         }
     }
 

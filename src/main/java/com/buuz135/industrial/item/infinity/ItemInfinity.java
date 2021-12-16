@@ -43,35 +43,39 @@ import com.hrznstudio.titanium.network.locator.LocatorFactory;
 import com.hrznstudio.titanium.network.locator.PlayerInventoryFinder;
 import com.hrznstudio.titanium.network.locator.instance.HeldStackLocatorInstance;
 import com.hrznstudio.titanium.util.FacingUtil;
-import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.ChatFormatting;
 import net.minecraft.client.gui.screens.Screen;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.core.NonNullList;
 import net.minecraft.data.recipes.FinishedRecipe;
-import net.minecraft.world.item.enchantment.EnchantmentHelper;
-import net.minecraft.world.item.enchantment.Enchantments;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.InteractionResultHolder;
+import net.minecraft.world.MenuProvider;
+import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
-import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.player.Inventory;
-import net.minecraft.server.level.ServerPlayer;
-import net.minecraft.world.entity.EquipmentSlot;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
-import net.minecraft.world.MenuProvider;
+import net.minecraft.world.inventory.ContainerLevelAccess;
 import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.UseAnim;
-import net.minecraft.nbt.CompoundTag;
-import net.minecraft.util.*;
-import net.minecraft.core.BlockPos;
-import net.minecraft.network.chat.Component;
-import net.minecraft.ChatFormatting;
-import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.world.item.enchantment.EnchantmentHelper;
+import net.minecraft.world.item.enchantment.Enchantments;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.common.capabilities.ICapabilityProvider;
 import net.minecraftforge.fluids.FluidStack;
-import net.minecraftforge.fmllegacy.network.NetworkDirection;
-import net.minecraftforge.fmllegacy.network.NetworkHooks;
+import net.minecraftforge.network.NetworkDirection;
+import net.minecraftforge.network.NetworkHooks;
 import org.apache.commons.lang3.tuple.Pair;
 
 import javax.annotation.Nonnull;
@@ -81,15 +85,6 @@ import java.util.*;
 import java.util.function.BiFunction;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
-
-import com.hrznstudio.titanium.item.BasicItem.Key;
-import net.minecraft.world.item.Item.Properties;
-
-import net.minecraft.core.Direction;
-import net.minecraft.core.NonNullList;
-import net.minecraft.world.InteractionHand;
-import net.minecraft.world.InteractionResultHolder;
-import net.minecraft.world.inventory.ContainerLevelAccess;
 
 public class ItemInfinity extends IFCustomItem implements MenuProvider, IButtonHandler, IInfinityDrillScreenAddons {
 
@@ -198,24 +193,24 @@ public class ItemInfinity extends IFCustomItem implements MenuProvider, IButtonH
     }
 
     @Override
-    public boolean showDurabilityBar(ItemStack stack) {
+    public boolean isBarVisible(ItemStack p_150899_) {
         return true;
     }
 
     @Override
-    public double getDurabilityForDisplay(ItemStack stack) {
+    public int getBarWidth(ItemStack stack) {
         if (!Screen.hasShiftDown()) { //hasShiftDown
             int fuel = getFuelFromStack(stack);
-            return 1 - fuel / 1_000_000D;
+            return (int) Math.round(13.0F - fuel* 13D / 1_000_000D);
         } else {
             long power = getPowerFromStack(stack);
-            return 1 - power / (double) InfinityTier.getTierBraquet(power).getRight().getPowerNeeded();
+            return (int) Math.round(13.0F - power * 13D / (double) InfinityTier.getTierBraquet(power).getRight().getPowerNeeded());
         }
     }
 
     @Override
-    public int getRGBDurabilityForDisplay(ItemStack stack) {
-        return !Screen.hasShiftDown() ? 0xcb00ff /*Purple*/ : 0x00d0ff /*Cyan*/;
+    public int getBarColor(ItemStack p_150901_) {
+        return !Screen.hasShiftDown() ? 0xcb00ff /*Purple*/ : 0x00d0ff;
     }
 
     @Override
@@ -319,7 +314,7 @@ public class ItemInfinity extends IFCustomItem implements MenuProvider, IButtonH
     @Nullable
     @Override
     public AbstractContainerMenu createMenu(int menu, Inventory p_createMenu_2_, Player playerEntity) {
-        return new BasicAddonContainer(ItemStackHarnessRegistry.getHarnessCreators().get(this).apply(playerEntity.getMainHandItem()), new HeldStackLocatorInstance(true), new ContainerLevelAccess() {
+        return new BasicAddonContainer(ItemStackHarnessRegistry.createItemStackHarness(playerEntity.getMainHandItem()), new HeldStackLocatorInstance(true), new ContainerLevelAccess() {
             @Override
             public <T> Optional<T> evaluate(BiFunction<Level, BlockPos, T> p_221484_1_) {
                 return Optional.empty();

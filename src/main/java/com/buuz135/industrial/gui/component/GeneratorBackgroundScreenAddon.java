@@ -22,15 +22,10 @@
 package com.buuz135.industrial.gui.component;
 
 import com.buuz135.industrial.block.generator.mycelial.IMycelialGeneratorType;
-import com.buuz135.industrial.utils.ItemStackUtils;
 import com.hrznstudio.titanium.client.screen.addon.BasicScreenAddon;
 import com.hrznstudio.titanium.client.screen.asset.IAssetProvider;
 import com.mojang.blaze3d.vertex.PoseStack;
-import com.mojang.blaze3d.platform.GlStateManager;
-import com.mojang.blaze3d.systems.RenderSystem;
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screens.Screen;
-import net.minecraft.world.item.ItemStack;
 
 public class GeneratorBackgroundScreenAddon extends BasicScreenAddon {
 
@@ -68,7 +63,7 @@ public class GeneratorBackgroundScreenAddon extends BasicScreenAddon {
     }
 
     @Override
-    public void drawForegroundLayer(PoseStack stack, Screen screen, IAssetProvider provider, int guiX, int guiY, int mouseX, int mouseY) {
+    public void drawForegroundLayer(PoseStack stack, Screen screen, IAssetProvider provider, int guiX, int guiY, int mouseX, int mouseY, float partialTicks) {
 
     }
 }

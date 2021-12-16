@@ -21,12 +21,13 @@
  */
 package com.buuz135.industrial.proxy.block.filter;
 
+import com.buuz135.industrial.item.MobImprisonmentToolItem;
 import com.buuz135.industrial.module.ModuleTool;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.nbt.CompoundTag;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidUtil;
 
@@ -51,8 +52,8 @@ public class ItemStackFilter extends AbstractFilter<Entity> {
         for (GhostSlot stack : this.getFilter()) {
             if (entity instanceof ItemEntity && stack.getStack().sameItem(((ItemEntity) entity).getItem()))
                 return true;
-            if (entity instanceof LivingEntity && stack.getStack().getItem().equals(ModuleTool.MOB_IMPRISONMENT_TOOL) && ModuleTool.MOB_IMPRISONMENT_TOOL.containsEntity(stack.getStack())
-                    && entity.getType().getRegistryName().toString().equalsIgnoreCase(ModuleTool.MOB_IMPRISONMENT_TOOL.getID(stack.getStack()))) {
+            if (entity instanceof LivingEntity && stack.getStack().getItem().equals(ModuleTool.MOB_IMPRISONMENT_TOOL) && ((MobImprisonmentToolItem)ModuleTool.MOB_IMPRISONMENT_TOOL.get()).containsEntity(stack.getStack())
+                    && entity.getType().getRegistryName().toString().equalsIgnoreCase(((MobImprisonmentToolItem)ModuleTool.MOB_IMPRISONMENT_TOOL.get()).getID(stack.getStack()))) {
                 return true;
             }
         }

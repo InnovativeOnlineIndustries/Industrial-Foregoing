@@ -21,8 +21,6 @@
  */
 package com.buuz135.industrial.proxy.network;
 
-import java.util.UUID;
-
 import com.buuz135.industrial.IndustrialForegoing;
 import com.buuz135.industrial.item.infinity.item.ItemInfinityBackpack;
 import com.buuz135.industrial.module.ModuleTool;
@@ -30,15 +28,16 @@ import com.buuz135.industrial.worlddata.BackpackDataManager;
 import com.hrznstudio.titanium.network.Message;
 import com.hrznstudio.titanium.network.locator.LocatorFactory;
 import com.hrznstudio.titanium.network.locator.instance.InventoryStackLocatorInstance;
-import net.minecraftforge.fmllegacy.network.NetworkDirection;
-import net.minecraftforge.fmllegacy.network.NetworkEvent;
-import net.minecraftforge.fmllegacy.network.NetworkHooks;
-
 import net.minecraft.ChatFormatting;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.item.ItemStack;
+import net.minecraftforge.network.NetworkDirection;
+import net.minecraftforge.network.NetworkEvent;
+import net.minecraftforge.network.NetworkHooks;
+
+import java.util.UUID;
 
 public class BackpackOpenMessage extends Message {
 
@@ -88,7 +87,7 @@ public class BackpackOpenMessage extends Message {
                         } else {
                             ItemInfinityBackpack.sync(entity.level, id, entity);
                             IndustrialForegoing.NETWORK.get().sendTo(new BackpackOpenedMessage(target.getSlot(), target.getName()), entity.connection.getConnection(), NetworkDirection.PLAY_TO_CLIENT);
-                            NetworkHooks.openGui(entity, ModuleTool.INFINITY_BACKPACK, buffer ->
+                            NetworkHooks.openGui(entity, ((ItemInfinityBackpack)ModuleTool.INFINITY_BACKPACK.get()), buffer ->
                                     LocatorFactory.writePacketBuffer(buffer, new InventoryStackLocatorInstance(target.getName(), target.getSlot())));
                             return;
                         }

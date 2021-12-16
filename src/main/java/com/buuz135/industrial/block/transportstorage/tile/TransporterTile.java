@@ -24,9 +24,11 @@ package com.buuz135.industrial.block.transportstorage.tile;
 import com.buuz135.industrial.api.IBlockContainer;
 import com.buuz135.industrial.api.transporter.TransporterType;
 import com.buuz135.industrial.api.transporter.TransporterTypeFactory;
+import com.buuz135.industrial.block.transportstorage.TransporterBlock;
 import com.buuz135.industrial.gui.transporter.ContainerTransporter;
 import com.buuz135.industrial.module.ModuleTransportStorage;
 import com.buuz135.industrial.proxy.client.model.TransporterModelData;
+import com.hrznstudio.titanium.block.BasicTileBlock;
 import com.hrznstudio.titanium.block.tile.ActiveTile;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.Blocks;
@@ -44,8 +46,7 @@ import net.minecraft.world.level.Level;
 import net.minecraftforge.client.model.ModelDataManager;
 import net.minecraftforge.client.model.data.IModelData;
 import net.minecraftforge.client.model.data.ModelDataMap;
-import net.minecraftforge.common.util.Constants;
-import net.minecraftforge.fmllegacy.network.NetworkHooks;
+import net.minecraftforge.network.NetworkHooks;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -59,7 +60,7 @@ public class TransporterTile extends ActiveTile<TransporterTile> implements IBlo
     private Map<Direction, TransporterType> transporterTypeMap = new HashMap<>();
 
     public TransporterTile(BlockPos blockPos, BlockState blockState) {
-        super(ModuleTransportStorage.TRANSPORTER, blockPos, blockState);
+        super((BasicTileBlock<TransporterTile>) ModuleTransportStorage.TRANSPORTER.get(), blockPos, blockState);
     }
 
     @Nonnull
@@ -147,7 +148,7 @@ public class TransporterTile extends ActiveTile<TransporterTile> implements IBlo
     @Nullable
     @Override
     public AbstractContainerMenu createMenu(int menu, Inventory inventoryPlayer, Player entityPlayer) {
-        return new ContainerTransporter(menu, this, ModuleTransportStorage.TRANSPORTER.getFacingUpgradeHit(this.level.getBlockState(this.worldPosition), this.level, this.worldPosition, entityPlayer).getLeft(), inventoryPlayer);
+        return new ContainerTransporter(menu, this, ((TransporterBlock)ModuleTransportStorage.TRANSPORTER.get()).getFacingUpgradeHit(this.level.getBlockState(this.worldPosition), this.level, this.worldPosition, entityPlayer).getLeft(), inventoryPlayer);
     }
 
     @Override
@@ -204,7 +205,7 @@ public class TransporterTile extends ActiveTile<TransporterTile> implements IBlo
                 }
                 if (factory != null) {
                     TransporterType upgrade = transporterTypeMap.getOrDefault(facing, factory.create(this, facing, TransporterTypeFactory.TransporterAction.EXTRACT));
-                    if (upgradeTag.contains("customNBT", Constants.NBT.TAG_COMPOUND)) {
+                    if (upgradeTag.contains("customNBT")) {
                         upgrade.deserializeNBT(upgradeTag.getCompound("customNBT"));
                         //upgradeMap.get(facing).deserializeNBT(upgradeTag.getCompound("customNBT"));
                     }

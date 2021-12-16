@@ -25,16 +25,16 @@ import com.buuz135.industrial.module.ModuleCore;
 import com.buuz135.industrial.utils.Reference;
 import com.hrznstudio.titanium.recipe.serializer.GenericSerializer;
 import com.hrznstudio.titanium.recipe.serializer.SerializableRecipe;
-import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.Blocks;
+import net.minecraft.core.BlockPos;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.tags.ItemTags;
 import net.minecraft.world.Container;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.crafting.RecipeType;
 import net.minecraft.world.item.crafting.Ingredient;
-import net.minecraft.tags.ItemTags;
-import net.minecraft.resources.ResourceLocation;
-import net.minecraft.core.BlockPos;
+import net.minecraft.world.item.crafting.RecipeType;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.Blocks;
 import net.minecraftforge.fluids.FluidStack;
 
 import java.util.ArrayList;
@@ -114,7 +114,7 @@ public class FluidExtractorRecipe extends SerializableRecipe {
     }
 
     /**
-     * This is used to cache the ingredient used in {@link #matches(World, BlockPos)} in order to
+     * This is used to cache the ingredient used in {@link #matches(Level, BlockPos)} in order to
      * avoid creating the same Ingredient each work tick, which could cause a massive performance hit.
      *
      * Note that this is not an optimal solution, as ideally, the recipe itself would use {@link Ingredient} directly,

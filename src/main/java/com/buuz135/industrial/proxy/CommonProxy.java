@@ -26,19 +26,16 @@ import com.buuz135.industrial.proxy.event.MeatFeederTickHandler;
 import com.buuz135.industrial.proxy.event.MobDeathHandler;
 import com.buuz135.industrial.proxy.event.SkullHandler;
 import com.buuz135.industrial.utils.explosion.ExplosionTickHandler;
-import com.google.gson.JsonParser;
 import com.hrznstudio.titanium.event.handler.EventManager;
-import com.hrznstudio.titanium.util.URLUtil;
-import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.damagesource.DamageSource;
-import net.minecraft.network.chat.Component;
 import net.minecraft.ChatFormatting;
+import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.event.entity.living.LivingEvent;
 
-import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -63,11 +60,6 @@ public class CommonProxy {
         EventManager.forge(LivingEvent.LivingUpdateEvent.class).process(MeatFeederTickHandler::onTick).subscribe();
         EventManager.forge(TickEvent.ServerTickEvent.class).process(ExplosionTickHandler::serverTick).subscribe();
 
-        try {
-            new JsonParser().parse(URLUtil.readUrl(new URL(CONTRIBUTORS_FILE))).getAsJsonObject().get("uuid").getAsJsonArray().forEach(jsonElement -> CONTRIBUTORS.add(jsonElement.getAsString()));
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
     }
 
 }

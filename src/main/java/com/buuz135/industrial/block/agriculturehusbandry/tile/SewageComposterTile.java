@@ -26,6 +26,7 @@ import com.buuz135.industrial.config.machine.agriculturehusbandry.SewageComposte
 import com.buuz135.industrial.module.ModuleAgricultureHusbandry;
 import com.buuz135.industrial.module.ModuleCore;
 import com.hrznstudio.titanium.annotation.Save;
+import com.hrznstudio.titanium.block.BasicTileBlock;
 import com.hrznstudio.titanium.component.energy.EnergyStorageComponent;
 import com.hrznstudio.titanium.component.fluid.FluidTankComponent;
 import com.hrznstudio.titanium.component.fluid.SidedFluidTankComponent;
@@ -52,7 +53,7 @@ public class SewageComposterTile extends IndustrialProcessingTile<SewageComposte
     public SidedInventoryComponent<SewageComposterTile> fertilizerOutput;
 
     public SewageComposterTile(BlockPos blockPos, BlockState blockState) {
-        super(ModuleAgricultureHusbandry.SEWAGE_COMPOSTER, 57, 40, blockPos, blockState);
+        super((BasicTileBlock<SewageComposterTile>) ModuleAgricultureHusbandry.SEWAGE_COMPOSTER.get(), 57, 40, blockPos, blockState);
         this.addTank(sewage = (SidedFluidTankComponent<SewageComposterTile>) new SidedFluidTankComponent<SewageComposterTile>("sewage", SewageComposterConfig.maxTankSize, 30, 20, 0).
                 setColor(DyeColor.BROWN).
                 setTankAction(FluidTankComponent.Action.FILL).
@@ -69,14 +70,14 @@ public class SewageComposterTile extends IndustrialProcessingTile<SewageComposte
 
     @Override
     public boolean canIncrease() {
-        return sewage.getFluidAmount() >= 1000 && ItemHandlerHelper.insertItem(fertilizerOutput, new ItemStack(ModuleCore.FERTILIZER), true).isEmpty();
+        return sewage.getFluidAmount() >= 1000 && ItemHandlerHelper.insertItem(fertilizerOutput, new ItemStack(ModuleCore.FERTILIZER.get()), true).isEmpty();
     }
 
     @Override
     public Runnable onFinish() {
         return () -> {
             sewage.drainForced(1000, IFluidHandler.FluidAction.EXECUTE);
-            ItemHandlerHelper.insertItem(fertilizerOutput, new ItemStack(ModuleCore.FERTILIZER), false);
+            ItemHandlerHelper.insertItem(fertilizerOutput, new ItemStack(ModuleCore.FERTILIZER.get()), false);
         };
     }
 

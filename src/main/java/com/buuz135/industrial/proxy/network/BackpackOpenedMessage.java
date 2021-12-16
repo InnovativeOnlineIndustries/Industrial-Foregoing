@@ -24,7 +24,7 @@ package com.buuz135.industrial.proxy.network;
 import com.buuz135.industrial.item.infinity.InfinityStackHolder;
 import com.hrznstudio.titanium.network.Message;
 import com.hrznstudio.titanium.network.locator.PlayerInventoryFinder;
-import net.minecraftforge.fmllegacy.network.NetworkEvent;
+import net.minecraftforge.network.NetworkEvent;
 
 public class BackpackOpenedMessage extends Message {
 

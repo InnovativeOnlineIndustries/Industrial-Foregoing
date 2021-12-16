@@ -25,6 +25,7 @@ import com.buuz135.industrial.block.tile.IndustrialWorkingTile;
 import com.buuz135.industrial.config.machine.resourceproduction.WaterCondensatorConfig;
 import com.buuz135.industrial.module.ModuleResourceProduction;
 import com.hrznstudio.titanium.annotation.Save;
+import com.hrznstudio.titanium.block.BasicTileBlock;
 import com.hrznstudio.titanium.component.energy.EnergyStorageComponent;
 import com.hrznstudio.titanium.component.fluid.FluidTankComponent;
 import com.hrznstudio.titanium.component.fluid.SidedFluidTankComponent;
@@ -51,7 +52,7 @@ public class WaterCondensatorTile extends IndustrialWorkingTile<WaterCondensator
     private SidedFluidTankComponent<WaterCondensatorTile> water;
 
     public WaterCondensatorTile(BlockPos blockPos, BlockState blockState) {
-        super(ModuleResourceProduction.WATER_CONDENSATOR, WaterCondensatorConfig.powerPerOperation, blockPos, blockState);
+        super((BasicTileBlock<WaterCondensatorTile>) ModuleResourceProduction.WATER_CONDENSATOR.get(), WaterCondensatorConfig.powerPerOperation, blockPos, blockState);
         this.addTank(water = (SidedFluidTankComponent<WaterCondensatorTile>) new SidedFluidTankComponent<WaterCondensatorTile>("water", WaterCondensatorConfig.maxWaterTankSize, 30 + 13, 20, 0).
                 setColor(DyeColor.BLUE).
                 setComponentHarness(this).

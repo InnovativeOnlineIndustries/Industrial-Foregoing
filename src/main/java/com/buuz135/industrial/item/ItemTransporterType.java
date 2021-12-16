@@ -24,13 +24,13 @@ package com.buuz135.industrial.item;
 import com.buuz135.industrial.api.IBlockContainer;
 import com.buuz135.industrial.api.transporter.TransporterTypeFactory;
 import com.buuz135.industrial.module.ModuleTransportStorage;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
 import net.minecraft.data.recipes.FinishedRecipe;
+import net.minecraft.world.InteractionResult;
 import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.level.block.entity.BlockEntity;
-import net.minecraft.world.InteractionResult;
-import net.minecraft.core.Direction;
-import net.minecraft.core.BlockPos;
 
 import java.util.function.Consumer;
 
@@ -49,8 +49,8 @@ public class ItemTransporterType extends IFCustomItem {
         BlockPos pos = context.getClickedPos().relative(context.getClickedFace());
         Direction side = context.getClickedFace().getOpposite();
         if (factory.canBeAttachedAgainst(context.getLevel(), context.getClickedPos(), side.getOpposite())) {
-            if (!context.getLevel().getBlockState(context.getClickedPos().relative(context.getClickedFace())).is(ModuleTransportStorage.TRANSPORTER) && context.getLevel().getBlockState(context.getClickedPos().relative(context.getClickedFace())).isAir()) {
-                context.getLevel().setBlockAndUpdate(context.getClickedPos().relative(context.getClickedFace()), ModuleTransportStorage.TRANSPORTER.defaultBlockState());
+            if (!context.getLevel().getBlockState(context.getClickedPos().relative(context.getClickedFace())).is(ModuleTransportStorage.TRANSPORTER.get()) && context.getLevel().getBlockState(context.getClickedPos().relative(context.getClickedFace())).isAir()) {
+                context.getLevel().setBlockAndUpdate(context.getClickedPos().relative(context.getClickedFace()), ModuleTransportStorage.TRANSPORTER.get().defaultBlockState());
                 pos = context.getClickedPos().relative(context.getClickedFace());
             }
             BlockEntity tile = context.getLevel().getBlockEntity(pos);

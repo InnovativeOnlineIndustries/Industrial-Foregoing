@@ -21,9 +21,6 @@
  */
 package com.buuz135.industrial.plugin.jei.category;
 
-import java.awt.Color;
-import java.util.stream.Collectors;
-
 import com.buuz135.industrial.api.recipe.ore.OreFluidEntrySieve;
 import com.buuz135.industrial.module.ModuleResourceProduction;
 import com.buuz135.industrial.utils.Reference;
@@ -38,14 +35,16 @@ import mezz.jei.api.gui.ingredient.IGuiItemStackGroup;
 import mezz.jei.api.helpers.IGuiHelper;
 import mezz.jei.api.ingredients.IIngredients;
 import mezz.jei.api.recipe.category.IRecipeCategory;
-import org.apache.commons.lang3.tuple.Pair;
-
 import net.minecraft.client.Minecraft;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.DyeColor;
 import net.minecraft.world.item.ItemStack;
+import org.apache.commons.lang3.tuple.Pair;
+
+import java.awt.*;
+import java.util.stream.Collectors;
 
 public class FluidSieveCategory implements IRecipeCategory<OreFluidEntrySieve> {
 
@@ -71,7 +70,7 @@ public class FluidSieveCategory implements IRecipeCategory<OreFluidEntrySieve> {
 
     @Override
     public Component getTitle() {
-        return new TranslatableComponent(ModuleResourceProduction.FLUID_SIEVING_MACHINE.getDescriptionId());
+        return new TranslatableComponent(ModuleResourceProduction.FLUID_SIEVING_MACHINE.get().getDescriptionId());
     }
 
     @Override

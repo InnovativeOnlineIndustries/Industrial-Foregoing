@@ -26,6 +26,7 @@ import com.buuz135.industrial.config.machine.resourceproduction.ResourcefulFurna
 import com.buuz135.industrial.module.ModuleCore;
 import com.buuz135.industrial.module.ModuleResourceProduction;
 import com.hrznstudio.titanium.annotation.Save;
+import com.hrznstudio.titanium.block.BasicTileBlock;
 import com.hrznstudio.titanium.component.energy.EnergyStorageComponent;
 import com.hrznstudio.titanium.component.fluid.FluidTankComponent;
 import com.hrznstudio.titanium.component.fluid.SidedFluidTankComponent;
@@ -59,7 +60,7 @@ public class ResourcefulFurnaceTile extends IndustrialProcessingTile<Resourceful
     private SmeltingRecipe[] recipes;
 
     public ResourcefulFurnaceTile(BlockPos blockPos, BlockState blockState) {
-        super(ModuleResourceProduction.RESOURCEFUL_FURNACE, 74, 22 + 18, blockPos, blockState);
+        super((BasicTileBlock<ResourcefulFurnaceTile>) ModuleResourceProduction.RESOURCEFUL_FURNACE.get(), 74, 22 + 18, blockPos, blockState);
         addInventory(this.input = (SidedInventoryComponent<ResourcefulFurnaceTile>) new SidedInventoryComponent<ResourcefulFurnaceTile>("input", 44, 22, 3, 0).
                 setColor(DyeColor.BLUE).
                 setSlotLimit(1).

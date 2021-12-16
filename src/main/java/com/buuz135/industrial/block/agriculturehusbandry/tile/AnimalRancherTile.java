@@ -28,20 +28,19 @@ import com.buuz135.industrial.config.machine.agriculturehusbandry.AnimalRancherC
 import com.buuz135.industrial.module.ModuleAgricultureHusbandry;
 import com.buuz135.industrial.utils.ItemStackUtils;
 import com.hrznstudio.titanium.annotation.Save;
+import com.hrznstudio.titanium.block.BasicTileBlock;
 import com.hrznstudio.titanium.component.energy.EnergyStorageComponent;
 import com.hrznstudio.titanium.component.fluid.SidedFluidTankComponent;
 import com.hrznstudio.titanium.component.inventory.SidedInventoryComponent;
-
 import net.minecraft.core.BlockPos;
+import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.PathfinderMob;
 import net.minecraft.world.entity.animal.Animal;
 import net.minecraft.world.entity.animal.Squid;
 import net.minecraft.world.item.DyeColor;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
-import net.minecraft.world.InteractionHand;
 import net.minecraft.world.level.block.state.BlockState;
-
 import net.minecraftforge.common.IForgeShearable;
 import net.minecraftforge.common.util.FakePlayer;
 import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
@@ -51,8 +50,6 @@ import net.minecraftforge.items.ItemHandlerHelper;
 
 import javax.annotation.Nonnull;
 import java.util.List;
-
-import com.buuz135.industrial.block.tile.IndustrialWorkingTile.WorkAction;
 
 public class AnimalRancherTile extends IndustrialAreaWorkingTile<AnimalRancherTile> {
 
@@ -65,7 +62,7 @@ public class AnimalRancherTile extends IndustrialAreaWorkingTile<AnimalRancherTi
     private SidedInventoryComponent<AnimalRancherTile> output;
 
     public AnimalRancherTile(BlockPos blockPos, BlockState blockState) {
-        super(ModuleAgricultureHusbandry.ANIMAL_RANCHER, RangeManager.RangeType.BEHIND, true, AnimalRancherConfig.powerPerOperation, blockPos, blockState);
+        super((BasicTileBlock<AnimalRancherTile>) ModuleAgricultureHusbandry.ANIMAL_RANCHER.get(), RangeManager.RangeType.BEHIND, true, AnimalRancherConfig.powerPerOperation, blockPos, blockState);
         this.addTank(tank = (SidedFluidTankComponent<AnimalRancherTile>) new SidedFluidTankComponent<AnimalRancherTile>("fluid_output", AnimalRancherConfig.maxTankSize, 47, 20, 0).
                 setColor(DyeColor.WHITE).
                 setComponentHarness(this)

@@ -29,6 +29,7 @@ import com.buuz135.industrial.module.ModuleResourceProduction;
 import com.buuz135.industrial.utils.ItemStackUtils;
 import com.hrznstudio.titanium.annotation.Save;
 import com.hrznstudio.titanium.api.IFactory;
+import com.hrznstudio.titanium.block.BasicTileBlock;
 import com.hrznstudio.titanium.component.energy.EnergyStorageComponent;
 import com.hrznstudio.titanium.component.fluid.FluidTankComponent;
 import com.hrznstudio.titanium.component.fluid.SidedFluidTankComponent;
@@ -58,7 +59,7 @@ public class WashingFactoryTile extends IndustrialProcessingTile<WashingFactoryT
     private SidedFluidTankComponent<WashingFactoryTile> meatOutput;
 
     public WashingFactoryTile(BlockPos blockPos, BlockState blockState) {
-        super(ModuleResourceProduction.WASHING_FACTORY, 100, 40, blockPos, blockState);
+        super((BasicTileBlock<WashingFactoryTile>) ModuleResourceProduction.WASHING_FACTORY.get(), 100, 40, blockPos, blockState);
         addInventory(this.input = (SidedInventoryComponent<WashingFactoryTile>) new SidedInventoryComponent<WashingFactoryTile>("input", 40, 40, 1, 0)
                 .setColor(DyeColor.BLUE)
                 .setInputFilter((stack, integer) -> {

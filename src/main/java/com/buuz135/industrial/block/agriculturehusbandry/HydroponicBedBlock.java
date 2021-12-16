@@ -26,23 +26,19 @@ import com.buuz135.industrial.block.agriculturehusbandry.tile.HydroponicBedTile;
 import com.buuz135.industrial.module.ModuleAgricultureHusbandry;
 import com.buuz135.industrial.module.ModuleCore;
 import com.buuz135.industrial.utils.IndustrialTags;
-import com.hrznstudio.titanium.api.IFactory;
 import com.hrznstudio.titanium.recipe.generator.TitaniumShapedRecipeBuilder;
-
-import net.minecraft.world.level.block.entity.BlockEntityType;
-import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.level.block.Blocks;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
 import net.minecraft.data.recipes.FinishedRecipe;
 import net.minecraft.world.item.Items;
-import net.minecraft.core.Direction;
-import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.BlockGetter;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.entity.BlockEntityType;
+import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.common.IPlantable;
 import net.minecraftforge.common.PlantType;
 
 import java.util.function.Consumer;
-
-import net.minecraft.world.level.block.state.BlockBehaviour.Properties;
 
 public class HydroponicBedBlock extends IndustrialBlock<HydroponicBedTile> {
 
@@ -69,7 +65,7 @@ public class HydroponicBedBlock extends IndustrialBlock<HydroponicBedTile> {
                 .define('D', Blocks.DIRT)
                 .define('G', IndustrialTags.Items.GEAR_GOLD)
                 .define('S', Items.IRON_HOE)
-                .define('B', ModuleCore.FERTILIZER)
+                .define('B', ModuleCore.FERTILIZER.get())
                 .define('M', IndustrialTags.Items.MACHINE_FRAME_SIMPLE)
                 .save(consumer);
     }

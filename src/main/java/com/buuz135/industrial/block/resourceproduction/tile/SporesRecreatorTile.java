@@ -25,6 +25,7 @@ import com.buuz135.industrial.block.tile.IndustrialProcessingTile;
 import com.buuz135.industrial.config.machine.resourceproduction.SporeRecreatorConfig;
 import com.buuz135.industrial.module.ModuleResourceProduction;
 import com.hrznstudio.titanium.annotation.Save;
+import com.hrznstudio.titanium.block.BasicTileBlock;
 import com.hrznstudio.titanium.component.energy.EnergyStorageComponent;
 import com.hrznstudio.titanium.component.fluid.FluidTankComponent;
 import com.hrznstudio.titanium.component.fluid.SidedFluidTankComponent;
@@ -55,7 +56,7 @@ public class SporesRecreatorTile extends IndustrialProcessingTile<SporesRecreato
     private SidedInventoryComponent<SporesRecreatorTile> output;
 
     public SporesRecreatorTile(BlockPos blockPos, BlockState blockState) {
-        super(ModuleResourceProduction.SPORES_RECREATOR, 79, 40, blockPos, blockState);
+        super((BasicTileBlock<SporesRecreatorTile>) ModuleResourceProduction.SPORES_RECREATOR.get(), 79, 40, blockPos, blockState);
         addTank(tank = (SidedFluidTankComponent<SporesRecreatorTile>) new SidedFluidTankComponent<SporesRecreatorTile>("water", SporeRecreatorConfig.maxWaterTankSize, 31, 20, 0).
                 setColor(DyeColor.CYAN).
                 setTankAction(FluidTankComponent.Action.FILL).

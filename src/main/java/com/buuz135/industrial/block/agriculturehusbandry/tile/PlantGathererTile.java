@@ -32,6 +32,7 @@ import com.buuz135.industrial.registry.IFRegistries;
 import com.buuz135.industrial.utils.BlockUtils;
 import com.buuz135.industrial.utils.ItemStackUtils;
 import com.hrznstudio.titanium.annotation.Save;
+import com.hrznstudio.titanium.block.BasicTileBlock;
 import com.hrznstudio.titanium.component.energy.EnergyStorageComponent;
 import com.hrznstudio.titanium.component.fluid.SidedFluidTankComponent;
 import com.hrznstudio.titanium.component.inventory.SidedInventoryComponent;
@@ -61,7 +62,7 @@ public class PlantGathererTile extends IndustrialAreaWorkingTile<PlantGathererTi
     private SidedFluidTankComponent<PlantGathererTile> tank;
 
     public PlantGathererTile(BlockPos blockPos, BlockState blockState) {
-        super(ModuleAgricultureHusbandry.PLANT_GATHERER, RangeManager.RangeType.BEHIND, true, PlantGathererConfig.powerPerOperation, blockPos, blockState);
+        super((BasicTileBlock<PlantGathererTile>) ModuleAgricultureHusbandry.PLANT_GATHERER.get(), RangeManager.RangeType.BEHIND, true, PlantGathererConfig.powerPerOperation, blockPos, blockState);
         addInventory(output = (SidedInventoryComponent<PlantGathererTile>) new SidedInventoryComponent<PlantGathererTile>("output", 70, 22, 3 * 5, 0)
                 .setColor(DyeColor.ORANGE)
                 .setRange(5, 3)

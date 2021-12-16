@@ -55,35 +55,35 @@ import com.hrznstudio.titanium.network.locator.LocatorFactory;
 import com.hrznstudio.titanium.network.locator.PlayerInventoryFinder;
 import com.hrznstudio.titanium.network.locator.instance.HeldStackLocatorInstance;
 import com.hrznstudio.titanium.network.locator.instance.InventoryStackLocatorInstance;
-import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.ChatFormatting;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.data.recipes.FinishedRecipe;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.TextComponent;
+import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.InteractionResultHolder;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EquipmentSlot;
+import net.minecraft.world.entity.ExperienceOrb;
+import net.minecraft.world.entity.ai.attributes.Attribute;
+import net.minecraft.world.entity.ai.attributes.AttributeModifier;
+import net.minecraft.world.entity.item.ItemEntity;
+import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.inventory.AbstractContainerMenu;
+import net.minecraft.world.inventory.ContainerLevelAccess;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.item.enchantment.Enchantments;
-import net.minecraft.world.entity.Entity;
-import net.minecraft.world.entity.ai.attributes.Attribute;
-import net.minecraft.world.entity.ai.attributes.AttributeModifier;
-import net.minecraft.world.entity.ExperienceOrb;
-import net.minecraft.world.entity.item.ItemEntity;
-import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.entity.player.Inventory;
-import net.minecraft.server.level.ServerPlayer;
-import net.minecraft.world.entity.EquipmentSlot;
-import net.minecraft.world.inventory.AbstractContainerMenu;
-import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.crafting.Ingredient;
-import net.minecraft.nbt.CompoundTag;
-import net.minecraft.core.particles.ParticleTypes;
-import net.minecraft.world.InteractionResultHolder;
-import net.minecraft.world.InteractionHand;
-import net.minecraft.world.inventory.ContainerLevelAccess;
-import net.minecraft.world.phys.AABB;
-import net.minecraft.core.BlockPos;
-import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.TextComponent;
-import net.minecraft.ChatFormatting;
-import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.phys.AABB;
 import net.minecraftforge.common.capabilities.ICapabilityProvider;
 import net.minecraftforge.event.entity.player.EntityItemPickupEvent;
 import net.minecraftforge.event.entity.player.PlayerXpEvent;
@@ -92,9 +92,9 @@ import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
 import net.minecraftforge.fluids.capability.IFluidHandler;
 import net.minecraftforge.fluids.capability.IFluidHandlerItem;
-import net.minecraftforge.fmllegacy.network.NetworkDirection;
-import net.minecraftforge.fmllegacy.network.NetworkHooks;
 import net.minecraftforge.items.ItemHandlerHelper;
+import net.minecraftforge.network.NetworkDirection;
+import net.minecraftforge.network.NetworkHooks;
 
 import javax.annotation.Nullable;
 import java.text.NumberFormat;
@@ -102,9 +102,6 @@ import java.util.*;
 import java.util.function.BiFunction;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
-
-import com.hrznstudio.titanium.item.BasicItem.Key;
-import net.minecraft.world.item.Item.Properties;
 
 public class ItemInfinityBackpack extends ItemInfinity {
 
@@ -196,10 +193,10 @@ public class ItemInfinityBackpack extends ItemInfinity {
 
     /**
      * Generates a list of {@link PlayerInventoryFinder.Target}s defining the
-     * {@link ItemInfinityBackpack}s present in the given {@link PlayerEntity}'s inventory.
+     * {@link ItemInfinityBackpack}s present in the given {@link Player}'s inventory.
      *
-     * @param entity The {@link PlayerEntity} whose inventory should be searched for {@link ItemInfinityBackpack}s.
-     * @return The list of all {@link ItemInfinityBackpack}s contained in the given {@link PlayerEntity}s
+     * @param entity The {@link Player} whose inventory should be searched for {@link ItemInfinityBackpack}s.
+     * @return The list of all {@link ItemInfinityBackpack}s contained in the given {@link Player}s
      * inventory. The returned list is ordered by inventory slot ID.
      */
     public static List<PlayerInventoryFinder.Target> findAllBackpacks(Player entity) {
@@ -584,7 +581,7 @@ public class ItemInfinityBackpack extends ItemInfinity {
             factory.add(() -> new StateButtonAddon(new ButtonComponent(x, 16 + y * 3, 14, 14).setId(-10), new StateButtonInfo(0, AssetTypes.BUTTON_SIDENESS_ENABLED, ChatFormatting.GOLD + new TranslatableComponent("text.industrialforegoing.display.special").getString()), new StateButtonInfo(1, AssetTypes.BUTTON_SIDENESS_DISABLED, ChatFormatting.GOLD + new TranslatableComponent("text.industrialforegoing.display.special").getString())) {
                 @Override
                 public int getState() {
-                    return ModuleTool.INFINITY_BACKPACK.isSpecialEnabled(stack.get()) ? 0 : 1;
+                    return ((ItemInfinityBackpack)ModuleTool.INFINITY_BACKPACK.get()).isSpecialEnabled(stack.get()) ? 0 : 1;
                 }
             });
         }
@@ -595,11 +592,11 @@ public class ItemInfinityBackpack extends ItemInfinity {
     public void registerRecipe(Consumer<FinishedRecipe> consumer) {
         new DissolutionChamberRecipe(this.getRegistryName(),
                 new Ingredient.Value[]{
-                        new Ingredient.ItemValue(new ItemStack(ModuleTransportStorage.BLACK_HOLE_UNIT_COMMON)),
+                        new Ingredient.ItemValue(new ItemStack(ModuleTransportStorage.BLACK_HOLE_UNIT_COMMON.get())),
                         new Ingredient.TagValue(IndustrialTags.Items.GEAR_DIAMOND),
-                        new Ingredient.ItemValue(new ItemStack(ModuleTransportStorage.BLACK_HOLE_UNIT_COMMON)),
-                        new Ingredient.ItemValue(new ItemStack(ModuleTransportStorage.BLACK_HOLE_TANK_COMMON)),
-                        new Ingredient.ItemValue(new ItemStack(ModuleTransportStorage.BLACK_HOLE_TANK_COMMON)),
+                        new Ingredient.ItemValue(new ItemStack(ModuleTransportStorage.BLACK_HOLE_UNIT_COMMON.get())),
+                        new Ingredient.ItemValue(new ItemStack(ModuleTransportStorage.BLACK_HOLE_TANK_COMMON.get())),
+                        new Ingredient.ItemValue(new ItemStack(ModuleTransportStorage.BLACK_HOLE_TANK_COMMON.get())),
                         new Ingredient.TagValue(IndustrialTags.Items.GEAR_GOLD),
                         new Ingredient.TagValue(IndustrialTags.Items.GEAR_GOLD),
                         new Ingredient.TagValue(IndustrialTags.Items.GEAR_GOLD),

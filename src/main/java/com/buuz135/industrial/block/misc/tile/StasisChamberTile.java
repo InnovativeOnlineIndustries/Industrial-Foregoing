@@ -25,6 +25,7 @@ import com.buuz135.industrial.block.tile.IndustrialAreaWorkingTile;
 import com.buuz135.industrial.block.tile.RangeManager;
 import com.buuz135.industrial.config.machine.misc.StasisChamberConfig;
 import com.buuz135.industrial.module.ModuleMisc;
+import com.hrznstudio.titanium.block.BasicTileBlock;
 import com.hrznstudio.titanium.component.energy.EnergyStorageComponent;
 
 import net.minecraft.core.BlockPos;
@@ -49,7 +50,7 @@ public class StasisChamberTile extends IndustrialAreaWorkingTile<StasisChamberTi
     private int getPowerPerOperation;
 
     public StasisChamberTile(BlockPos blockPos, BlockState blockState) {
-        super(ModuleMisc.STASIS_CHAMBER, RangeManager.RangeType.TOP, false, StasisChamberConfig.powerPerOperation, blockPos,blockState);
+        super((BasicTileBlock<StasisChamberTile>) ModuleMisc.STASIS_CHAMBER.get(), RangeManager.RangeType.TOP, false, StasisChamberConfig.powerPerOperation, blockPos,blockState);
         this.getMaxProgress = StasisChamberConfig.maxProgress;
         this.getPowerPerOperation = StasisChamberConfig.powerPerOperation;
     }

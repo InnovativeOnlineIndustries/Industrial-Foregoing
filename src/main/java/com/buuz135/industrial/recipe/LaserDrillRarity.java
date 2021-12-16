@@ -36,7 +36,7 @@ public class LaserDrillRarity {
 
     public static ResourceKey<Biome>[] END = new ResourceKey[]{THE_END, THE_VOID, SMALL_END_ISLANDS, END_BARRENS, END_HIGHLANDS, END_MIDLANDS};
     public static ResourceKey<Biome>[] NETHER = new ResourceKey[]{NETHER_WASTES, BASALT_DELTAS, WARPED_FOREST, CRIMSON_FOREST, SOUL_SAND_VALLEY};
-    public static ResourceKey<Biome>[] OIL = new ResourceKey[]{DESERT, DESERT_HILLS, DESERT_LAKES, OCEAN, COLD_OCEAN, DEEP_COLD_OCEAN, DEEP_FROZEN_OCEAN, DEEP_LUKEWARM_OCEAN, DEEP_WARM_OCEAN, WARM_OCEAN};
+    public static ResourceKey<Biome>[] OIL = new ResourceKey[]{DESERT, OCEAN, COLD_OCEAN, DEEP_COLD_OCEAN, DEEP_FROZEN_OCEAN, DEEP_LUKEWARM_OCEAN, WARM_OCEAN};
 
      public static void init(){
         JSONSerializableDataHandler.map(LaserDrillRarity[].class, values -> {

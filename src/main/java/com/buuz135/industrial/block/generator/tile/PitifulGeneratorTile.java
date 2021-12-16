@@ -25,6 +25,7 @@ import com.buuz135.industrial.block.tile.IndustrialGeneratorTile;
 import com.buuz135.industrial.config.machine.generator.PitifulGeneratorConfig;
 import com.buuz135.industrial.module.ModuleGenerator;
 import com.hrznstudio.titanium.annotation.Save;
+import com.hrznstudio.titanium.block.BasicTileBlock;
 import com.hrznstudio.titanium.component.inventory.SidedInventoryComponent;
 import com.hrznstudio.titanium.component.progress.ProgressBarComponent;
 
@@ -45,7 +46,7 @@ public class PitifulGeneratorTile extends IndustrialGeneratorTile<PitifulGenerat
     private SidedInventoryComponent<PitifulGeneratorTile> fuel;
 
     public PitifulGeneratorTile(BlockPos blockPos, BlockState blockState) {
-        super(ModuleGenerator.PITIFUL_GENERATOR, blockPos, blockState);
+        super((BasicTileBlock<PitifulGeneratorTile>) ModuleGenerator.PITIFUL_GENERATOR.get(), blockPos, blockState);
         this.addInventory(fuel = (SidedInventoryComponent<PitifulGeneratorTile>) new SidedInventoryComponent<PitifulGeneratorTile>("fuel_input", 46, 22, 1, 0)
                 .setColor(DyeColor.ORANGE)
                 .setInputFilter((itemStack, integer) -> ForgeHooks.getBurnTime(itemStack, RecipeType.SMELTING) != 0)

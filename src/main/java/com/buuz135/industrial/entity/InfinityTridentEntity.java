@@ -22,36 +22,32 @@
 package com.buuz135.industrial.entity;
 
 import com.buuz135.industrial.item.infinity.ItemInfinity;
+import com.buuz135.industrial.item.infinity.item.ItemInfinityTrident;
 import com.buuz135.industrial.module.ModuleTool;
-import net.minecraft.world.item.enchantment.EnchantmentHelper;
-import net.minecraft.world.entity.Entity;
-import net.minecraft.world.entity.EntityType;
-import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.entity.Mob;
-import net.minecraft.world.entity.LightningBolt;
-import net.minecraft.world.entity.ExperienceOrb;
-import net.minecraft.world.entity.item.ItemEntity;
-import net.minecraft.world.entity.player.Player;
-import net.minecraft.server.level.ServerPlayer;
-import net.minecraft.world.entity.projectile.AbstractArrow;
-import net.minecraft.world.item.ItemStack;
+import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.protocol.Packet;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
-import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
+import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.entity.*;
+import net.minecraft.world.entity.item.ItemEntity;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.entity.projectile.AbstractArrow;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.enchantment.EnchantmentHelper;
+import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.AABB;
-import net.minecraft.core.BlockPos;
 import net.minecraft.world.phys.EntityHitResult;
 import net.minecraft.world.phys.Vec3;
-import net.minecraft.world.level.Level;
-import net.minecraft.server.level.ServerLevel;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
-import net.minecraftforge.fmllegacy.network.NetworkHooks;
+import net.minecraftforge.network.NetworkHooks;
 
 import java.util.List;
 
@@ -69,22 +65,22 @@ public class InfinityTridentEntity extends AbstractArrow {
 
     public InfinityTridentEntity(EntityType<? extends InfinityTridentEntity> type, Level worldIn) {
         super(type, worldIn);
-        this.thrownStack = new ItemStack(ModuleTool.INFINITY_TRIDENT);
+        this.thrownStack = new ItemStack(ModuleTool.INFINITY_TRIDENT.get());
     }
 
     public InfinityTridentEntity(Level worldIn, LivingEntity thrower, ItemStack thrownStackIn) {
-        super(ModuleTool.TRIDENT_ENTITY_TYPE, thrower, worldIn);
-        this.thrownStack = new ItemStack(ModuleTool.INFINITY_TRIDENT);
+        super((EntityType<? extends AbstractArrow>) ModuleTool.TRIDENT_ENTITY_TYPE.get(), thrower, worldIn);
+        this.thrownStack = new ItemStack(ModuleTool.INFINITY_TRIDENT.get());
         this.thrownStack = thrownStackIn.copy();
-        this.entityData.set(LOYALTY_LEVEL, ModuleTool.INFINITY_TRIDENT.getCurrentLoyalty(thrownStack));
-        this.entityData.set(CHANNELING, ModuleTool.INFINITY_TRIDENT.getCurrentChanneling(thrownStack));
+        this.entityData.set(LOYALTY_LEVEL, ((ItemInfinityTrident)ModuleTool.INFINITY_TRIDENT.get()).getCurrentLoyalty(thrownStack));
+        this.entityData.set(CHANNELING, ((ItemInfinityTrident)ModuleTool.INFINITY_TRIDENT.get()).getCurrentChanneling(thrownStack));
         this.entityData.set(TIER, ItemInfinity.getSelectedTier(thrownStack).getRadius());
     }
 
     @OnlyIn(Dist.CLIENT)
     public InfinityTridentEntity(Level worldIn, double x, double y, double z) {
-        super(ModuleTool.TRIDENT_ENTITY_TYPE, x, y, z, worldIn);
-        this.thrownStack = new ItemStack(ModuleTool.INFINITY_TRIDENT);
+        super((EntityType<? extends AbstractArrow>) ModuleTool.TRIDENT_ENTITY_TYPE.get(), x, y, z, worldIn);
+        this.thrownStack = new ItemStack(ModuleTool.INFINITY_TRIDENT.get());
     }
 
     @Override
@@ -250,8 +246,8 @@ public class InfinityTridentEntity extends AbstractArrow {
         }
 
         this.dealtDamage = compound.getBoolean("DealtDamage");
-        this.entityData.set(LOYALTY_LEVEL, ModuleTool.INFINITY_TRIDENT.getCurrentLoyalty(thrownStack));
-        this.entityData.set(CHANNELING, ModuleTool.INFINITY_TRIDENT.getCurrentChanneling(thrownStack));
+        this.entityData.set(LOYALTY_LEVEL, ((ItemInfinityTrident)ModuleTool.INFINITY_TRIDENT.get()).getCurrentLoyalty(thrownStack));
+        this.entityData.set(CHANNELING, ((ItemInfinityTrident)ModuleTool.INFINITY_TRIDENT.get()).getCurrentChanneling(thrownStack));
         this.entityData.set(TIER, ItemInfinity.getSelectedTier(thrownStack).getRadius());
     }
 

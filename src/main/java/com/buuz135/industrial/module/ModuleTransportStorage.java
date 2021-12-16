@@ -21,6 +21,7 @@
  */
 package com.buuz135.industrial.module;
 
+import com.buuz135.industrial.IndustrialForegoing;
 import com.buuz135.industrial.api.conveyor.ConveyorUpgradeFactory;
 import com.buuz135.industrial.api.transporter.TransporterTypeFactory;
 import com.buuz135.industrial.block.transportstorage.*;
@@ -39,8 +40,9 @@ import com.buuz135.industrial.proxy.client.model.TransporterBlockModel;
 import com.buuz135.industrial.utils.Reference;
 import com.google.common.collect.ImmutableMap;
 import com.hrznstudio.titanium.event.handler.EventManager;
-import com.hrznstudio.titanium.module.Feature;
+import com.hrznstudio.titanium.module.DeferredRegistryHelper;
 import com.hrznstudio.titanium.tab.AdvancedTitaniumTab;
+import net.minecraft.world.item.Items;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.client.gui.screens.MenuScreens;
 import net.minecraft.client.resources.model.BakedModel;
@@ -52,14 +54,17 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Rarity;
 import net.minecraft.core.Direction;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.level.block.Blocks;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.client.event.ModelBakeEvent;
 import net.minecraftforge.client.event.TextureStitchEvent;
-import net.minecraftforge.client.model.ModelLoader;
+import net.minecraftforge.client.model.ForgeModelBakery;
 import net.minecraftforge.client.model.SimpleModelState;
-import net.minecraftforge.common.extensions.IForgeContainerType;
+import net.minecraftforge.common.extensions.IForgeMenuType;
+import net.minecraftforge.fml.DistExecutor;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
+import net.minecraftforge.registries.RegistryObject;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -77,69 +82,40 @@ public class ModuleTransportStorage implements IModule {
     public static ConveyorUpgradeFactory upgrade_blinking = new ConveyorBlinkingUpgrade.Factory();
     public static ConveyorUpgradeFactory upgrade_splitting = new ConveyorSplittingUpgrade.Factory();
 
-    public static ConveyorBlock CONVEYOR = new ConveyorBlock(TAB_TRANSPORT);
+    public static RegistryObject<Block> CONVEYOR = IndustrialForegoing.INSTANCE.getRegistries().register(Block.class, "conveyor", () -> new ConveyorBlock(TAB_TRANSPORT));
     public static HashMap<ResourceLocation, BakedModel> CONVEYOR_UPGRADES_CACHE = new HashMap<>();
 
-    public static BlackHoleUnitBlock BLACK_HOLE_UNIT_COMMON = new BlackHoleUnitBlock(Rarity.COMMON);
-    public static BlackHoleUnitBlock BLACK_HOLE_UNIT_PITY = new BlackHoleUnitBlock(ModuleCore.PITY_RARITY);
-    public static BlackHoleUnitBlock BLACK_HOLE_UNIT_SIMPLE = new BlackHoleUnitBlock(ModuleCore.SIMPLE_RARITY);
-    public static BlackHoleUnitBlock BLACK_HOLE_UNIT_ADVANCED = new BlackHoleUnitBlock(ModuleCore.ADVANCED_RARITY);
-    public static BlackHoleUnitBlock BLACK_HOLE_UNIT_SUPREME = new BlackHoleUnitBlock(ModuleCore.SUPREME_RARITY);
+    public static RegistryObject<Block> BLACK_HOLE_UNIT_COMMON = IndustrialForegoing.INSTANCE.getRegistries().register(Block.class, Rarity.COMMON.name().toLowerCase() + "_black_hole_unit", () -> new BlackHoleUnitBlock(Rarity.COMMON));
+    public static RegistryObject<Block> BLACK_HOLE_UNIT_PITY = IndustrialForegoing.INSTANCE.getRegistries().register(Block.class, ModuleCore.PITY_RARITY.name().toLowerCase() + "_black_hole_unit", () -> new BlackHoleUnitBlock(ModuleCore.PITY_RARITY));
+    public static RegistryObject<Block> BLACK_HOLE_UNIT_SIMPLE = IndustrialForegoing.INSTANCE.getRegistries().register(Block.class, ModuleCore.SIMPLE_RARITY.name().toLowerCase() + "_black_hole_unit", () -> new BlackHoleUnitBlock(ModuleCore.SIMPLE_RARITY));
+    public static RegistryObject<Block> BLACK_HOLE_UNIT_ADVANCED = IndustrialForegoing.INSTANCE.getRegistries().register(Block.class, ModuleCore.ADVANCED_RARITY.name().toLowerCase() + "_black_hole_unit", () -> new BlackHoleUnitBlock(ModuleCore.ADVANCED_RARITY));
+    public static RegistryObject<Block> BLACK_HOLE_UNIT_SUPREME = IndustrialForegoing.INSTANCE.getRegistries().register(Block.class, ModuleCore.SUPREME_RARITY.name().toLowerCase() + "_black_hole_unit", () -> new BlackHoleUnitBlock(ModuleCore.SUPREME_RARITY));
 
-    public static BlackHoleTankBlock BLACK_HOLE_TANK_COMMON = new BlackHoleTankBlock(Rarity.COMMON);
-    public static BlackHoleTankBlock BLACK_HOLE_TANK_PITY = new BlackHoleTankBlock(ModuleCore.PITY_RARITY);
-    public static BlackHoleTankBlock BLACK_HOLE_TANK_SIMPLE = new BlackHoleTankBlock(ModuleCore.SIMPLE_RARITY);
-    public static BlackHoleTankBlock BLACK_HOLE_TANK_ADVANCED = new BlackHoleTankBlock(ModuleCore.ADVANCED_RARITY);
-    public static BlackHoleTankBlock BLACK_HOLE_TANK_SUPREME = new BlackHoleTankBlock(ModuleCore.SUPREME_RARITY);
+    public static RegistryObject<Block> BLACK_HOLE_TANK_COMMON = IndustrialForegoing.INSTANCE.getRegistries().register(Block.class, Rarity.COMMON.name().toLowerCase() + "_black_hole_tank", () -> new BlackHoleTankBlock(Rarity.COMMON));
+    public static RegistryObject<Block> BLACK_HOLE_TANK_PITY = IndustrialForegoing.INSTANCE.getRegistries().register(Block.class, ModuleCore.PITY_RARITY.name().toLowerCase() + "_black_hole_tank", () -> new BlackHoleTankBlock(ModuleCore.PITY_RARITY));
+    public static RegistryObject<Block> BLACK_HOLE_TANK_SIMPLE = IndustrialForegoing.INSTANCE.getRegistries().register(Block.class, ModuleCore.SIMPLE_RARITY.name().toLowerCase() + "_black_hole_tank", () -> new BlackHoleTankBlock(ModuleCore.SIMPLE_RARITY));
+    public static RegistryObject<Block> BLACK_HOLE_TANK_ADVANCED = IndustrialForegoing.INSTANCE.getRegistries().register(Block.class, ModuleCore.ADVANCED_RARITY.name().toLowerCase() + "_black_hole_tank", () -> new BlackHoleTankBlock(ModuleCore.ADVANCED_RARITY));
+    public static RegistryObject<Block> BLACK_HOLE_TANK_SUPREME = IndustrialForegoing.INSTANCE.getRegistries().register(Block.class, ModuleCore.SUPREME_RARITY.name().toLowerCase() + "_black_hole_tank", () -> new BlackHoleTankBlock(ModuleCore.SUPREME_RARITY));
 
-    public static BlackHoleControllerBlock BLACK_HOLE_CONTROLLER = new BlackHoleControllerBlock();
+    public static RegistryObject<Block> BLACK_HOLE_CONTROLLER = IndustrialForegoing.INSTANCE.getRegistries().register(Block.class, "black_hole_controller", () -> new BlackHoleControllerBlock());
 
 
     public static TransporterTypeFactory ITEM_TRANSPORTER = new TransporterItemType.Factory();
     public static TransporterTypeFactory FLUID_TRANSPORTER = new TransporterFluidType.Factory();
     public static TransporterTypeFactory WORLD_TRANSPORTER = new TransporterWorldType.Factory();
 
-    public static TransporterBlock TRANSPORTER = new TransporterBlock(TAB_TRANSPORT);
+    public static RegistryObject<Block> TRANSPORTER =  IndustrialForegoing.INSTANCE.getRegistries().register(Block.class, "transporter", () -> new TransporterBlock(TAB_TRANSPORT));
     public static HashMap<ResourceLocation, BakedModel> TRANSPORTER_CACHE = new HashMap<>();
 
     @Override
-    public List<Feature.Builder> generateFeatures() {
-        TAB_TRANSPORT.addIconStack(new ItemStack(CONVEYOR));
-        List<Feature.Builder> features = new ArrayList<>();
-        features.add(Feature.builder("conveyor")
-                .content(Block.class, CONVEYOR)
-                .content(MenuType.class, (MenuType) IForgeContainerType.create(ContainerConveyor::new).setRegistryName(new ResourceLocation(Reference.MOD_ID, "conveyor")))
-                .eventClient(() -> () -> EventManager.mod(FMLClientSetupEvent.class).process(this::onClientSetupConveyor))
-        );
-        Feature.Builder builder = Feature.builder("conveyor_upgrades")
-                .eventClient(() -> () -> EventManager.mod(ModelBakeEvent.class).process(this::conveyorBake))
-                .eventClient(() -> () -> EventManager.mod(TextureStitchEvent.Pre.class).process(this::textureStitch));
-        ConveyorUpgradeFactory.FACTORIES.forEach(conveyorUpgradeFactory -> builder.content(Item.class, new ItemConveyorUpgrade(conveyorUpgradeFactory, TAB_TRANSPORT)));
-        features.add(builder);
-        features.add(Feature.builder("black_hole_units")
-                .content(Block.class,BLACK_HOLE_UNIT_COMMON )
-                .content(Block.class, BLACK_HOLE_UNIT_PITY)
-                .content(Block.class, BLACK_HOLE_UNIT_SIMPLE)
-                .content(Block.class, BLACK_HOLE_UNIT_ADVANCED)
-                .content(Block.class, BLACK_HOLE_UNIT_SUPREME)
-        );
-        features.add(Feature.builder("black_hole_tanks")
-                .content(Block.class, BLACK_HOLE_TANK_COMMON)
-                .content(Block.class, BLACK_HOLE_TANK_PITY)
-                .content(Block.class, BLACK_HOLE_TANK_SIMPLE)
-                .content(Block.class, BLACK_HOLE_TANK_ADVANCED)
-                .content(Block.class, BLACK_HOLE_TANK_SUPREME)
-        );
-        features.add(createFeature(BLACK_HOLE_CONTROLLER));
-        Feature.Builder transporters = Feature.builder("transporters")
-                .content(Block.class, TRANSPORTER)
-                .eventClient(() -> () -> EventManager.mod(ModelBakeEvent.class).process(this::transporterBake))
-                .eventClient(() -> () -> EventManager.mod(TextureStitchEvent.Pre.class).process(this::transporterTextureStitch))
-                .content(MenuType.class, (MenuType) IForgeContainerType.create(ContainerTransporter::new).setRegistryName(new ResourceLocation(Reference.MOD_ID, "transporter")))
-                .eventClient(() -> () -> EventManager.mod(FMLClientSetupEvent.class).process(this::onClientSetupTransporter));
-        TransporterTypeFactory.FACTORIES.forEach(transporterTypeFactory -> builder.content(Item.class, new ItemTransporterType(transporterTypeFactory, TAB_TRANSPORT)));
-        features.add(transporters);
-        return features;
+    public void generateFeatures(DeferredRegistryHelper registryHelper) {
+        TAB_TRANSPORT.addIconStack(() -> new ItemStack(CONVEYOR.orElse(Blocks.STONE)));
+        registryHelper.register(MenuType.class, "conveyor", () ->  (MenuType) IForgeMenuType.create(ContainerConveyor::new));
+        ConveyorUpgradeFactory.FACTORIES.forEach(conveyorUpgradeFactory -> registryHelper.register(Item.class,"conveyor_" + conveyorUpgradeFactory.getRegistryName().getPath() + "_upgrade", () -> new ItemConveyorUpgrade(conveyorUpgradeFactory, TAB_TRANSPORT)));
+        registryHelper.register(MenuType.class, "transporter", () -> (MenuType) IForgeMenuType.create(ContainerTransporter::new));
+        TransporterTypeFactory.FACTORIES.forEach(transporterTypeFactory -> registryHelper.register(Item.class, transporterTypeFactory.getRegistryName().getPath() + "_transporter_type", () ->  new ItemTransporterType(transporterTypeFactory, TAB_TRANSPORT)));
+        DistExecutor.unsafeRunWhenOn(Dist.CLIENT, () -> this::onClient);
+
     }
 
     @OnlyIn(Dist.CLIENT)
@@ -156,7 +132,7 @@ public class ModuleTransportStorage implements IModule {
                     try {
                         ResourceLocation resourceLocation = conveyorUpgradeFactory.getModel(upgradeFacing, conveyorFacing);
                         UnbakedModel unbakedModel = event.getModelLoader().getModel(resourceLocation);
-                        CONVEYOR_UPGRADES_CACHE.put(resourceLocation, unbakedModel.bake(event.getModelLoader(), ModelLoader.defaultTextureGetter(), new SimpleModelState(ImmutableMap.of()), resourceLocation));
+                        CONVEYOR_UPGRADES_CACHE.put(resourceLocation, unbakedModel.bake(event.getModelLoader(), ForgeModelBakery.defaultTextureGetter(), new SimpleModelState(ImmutableMap.of()), resourceLocation));
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
@@ -167,7 +143,7 @@ public class ModuleTransportStorage implements IModule {
 
     @OnlyIn(Dist.CLIENT)
     private void textureStitch(TextureStitchEvent.Pre pre) {
-        if (pre.getMap().location().equals(TextureAtlas.LOCATION_BLOCKS))
+        if (pre.getAtlas().location().equals(TextureAtlas.LOCATION_BLOCKS))
             ConveyorUpgradeFactory.FACTORIES.forEach(conveyorUpgradeFactory -> conveyorUpgradeFactory.getTextures().forEach(pre::addSprite));
     }
 
@@ -186,7 +162,7 @@ public class ModuleTransportStorage implements IModule {
                     try {
                         ResourceLocation resourceLocation = transporterTypeFactory.getModel(upgradeFacing, actions);
                         UnbakedModel unbakedModel = event.getModelLoader().getModel(resourceLocation);
-                        TRANSPORTER_CACHE.put(resourceLocation, unbakedModel.bake(event.getModelLoader(), ModelLoader.defaultTextureGetter(), new SimpleModelState(ImmutableMap.of()), resourceLocation));
+                        TRANSPORTER_CACHE.put(resourceLocation, unbakedModel.bake(event.getModelLoader(), ForgeModelBakery.defaultTextureGetter(), new SimpleModelState(ImmutableMap.of()), resourceLocation));
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
@@ -203,7 +179,7 @@ public class ModuleTransportStorage implements IModule {
 
     @OnlyIn(Dist.CLIENT)
     private void transporterTextureStitch(TextureStitchEvent.Pre pre) {
-        if (pre.getMap().location().equals(TextureAtlas.LOCATION_BLOCKS))
+        if (pre.getAtlas().location().equals(TextureAtlas.LOCATION_BLOCKS))
             TransporterTypeFactory.FACTORIES.forEach(transporterTypeFactory -> transporterTypeFactory.getTextures().forEach(pre::addSprite));
     }
 
@@ -215,5 +191,15 @@ public class ModuleTransportStorage implements IModule {
     @OnlyIn(Dist.CLIENT)
     private void onClientSetupTransporter(FMLClientSetupEvent event) {
         MenuScreens.register(ContainerTransporter.TYPE, GuiTransporter::new);
+    }
+
+    @OnlyIn(Dist.CLIENT)
+    private void onClient(){
+        EventManager.mod(FMLClientSetupEvent.class).process(this::onClientSetupConveyor).subscribe();
+        EventManager.mod(ModelBakeEvent.class).process(this::conveyorBake).subscribe();
+        EventManager.mod(TextureStitchEvent.Pre.class).process(this::textureStitch).subscribe();
+        EventManager.mod(ModelBakeEvent.class).process(this::transporterBake).subscribe();
+        EventManager.mod(TextureStitchEvent.Pre.class).process(this::transporterTextureStitch).subscribe();
+        EventManager.mod(FMLClientSetupEvent.class).process(this::onClientSetupTransporter).subscribe();
     }
 }

@@ -21,11 +21,24 @@
  */
 package com.buuz135.industrial.recipe.provider;
 
+import com.buuz135.industrial.module.ModuleCore;
+import com.buuz135.industrial.module.ModuleGenerator;
+import com.buuz135.industrial.module.ModuleResourceProduction;
 import com.buuz135.industrial.recipe.*;
+import com.buuz135.industrial.utils.IndustrialTags;
+import com.buuz135.industrial.utils.Reference;
 import com.hrznstudio.titanium.recipe.generator.IJSONGenerator;
 import com.hrznstudio.titanium.recipe.generator.IJsonFile;
 import com.hrznstudio.titanium.recipe.generator.TitaniumSerializableProvider;
 import net.minecraft.data.DataGenerator;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
+import net.minecraft.world.item.crafting.Ingredient;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.material.Fluids;
+import net.minecraftforge.common.Tags;
+import net.minecraftforge.fluids.FluidStack;
 
 import java.util.Map;
 
@@ -37,6 +50,85 @@ public class IndustrialSerializableProvider extends TitaniumSerializableProvider
 
     @Override
     public void add(Map<IJsonFile, IJSONGenerator> serializables) {
+        new DissolutionChamberRecipe(new ResourceLocation(Reference.MOD_ID, "pink_slime_ball"), new Ingredient.Value[]{new Ingredient.ItemValue(new ItemStack(Items.GLASS_PANE))}, new FluidStack(ModuleCore.PINK_SLIME.getSourceFluid(), 300), 200, new ItemStack(ModuleCore.PINK_SLIME_ITEM.get()), new FluidStack(Fluids.WATER, 150));
+        new DissolutionChamberRecipe(new ResourceLocation(Reference.MOD_ID, "pink_slime_ingot"),
+                new Ingredient.Value[]{
+                        new Ingredient.TagValue(Tags.Items.INGOTS_IRON),
+                        new Ingredient.TagValue(Tags.Items.INGOTS_IRON),
+                        new Ingredient.TagValue(Tags.Items.INGOTS_GOLD),
+                        new Ingredient.TagValue(Tags.Items.INGOTS_GOLD),
+                }, new FluidStack(ModuleCore.PINK_SLIME.getSourceFluid(), 1000), 300, new ItemStack(ModuleCore.PINK_SLIME_INGOT.get()), FluidStack.EMPTY);
+        new DissolutionChamberRecipe(new ResourceLocation(Reference.MOD_ID, "mechanical_dirt"),
+                new Ingredient.Value[]{
+                        new Ingredient.ItemValue(new ItemStack(Blocks.DIRT)),
+                        new Ingredient.ItemValue(new ItemStack(Blocks.DIRT)),
+                        new Ingredient.ItemValue(new ItemStack(Items.ROTTEN_FLESH)),
+                        new Ingredient.ItemValue(new ItemStack(Items.ROTTEN_FLESH)),
+                        new Ingredient.TagValue(IndustrialTags.Items.MACHINE_FRAME_PITY),
+                }, new FluidStack(ModuleCore.MEAT.getSourceFluid(), 1000), 100, new ItemStack(ModuleResourceProduction.MECHANICAL_DIRT.get()), FluidStack.EMPTY);
+        new DissolutionChamberRecipe(new ResourceLocation(Reference.MOD_ID, "simple_machine_frame"),
+                new Ingredient.Value[]{
+                        new Ingredient.TagValue(IndustrialTags.Items.PLASTIC),
+                        new Ingredient.TagValue(IndustrialTags.Items.MACHINE_FRAME_PITY),
+                        new Ingredient.TagValue(IndustrialTags.Items.PLASTIC),
+                        new Ingredient.ItemValue(new ItemStack(Items.NETHER_BRICK)),
+                        new Ingredient.ItemValue(new ItemStack(Items.NETHER_BRICK)),
+                        new Ingredient.TagValue(Tags.Items.INGOTS_IRON),
+                        new Ingredient.TagValue(IndustrialTags.Items.GEAR_GOLD),
+                        new Ingredient.TagValue(Tags.Items.INGOTS_IRON)
+                },
+                new FluidStack(ModuleCore.LATEX.getSourceFluid(), 250), 300, new ItemStack(ModuleCore.SIMPLE.get()), FluidStack.EMPTY);
+        new DissolutionChamberRecipe(new ResourceLocation(Reference.MOD_ID, "advanced_machine_frame"),
+                new Ingredient.Value[]{
+                        new Ingredient.TagValue(IndustrialTags.Items.PLASTIC),
+                        new Ingredient.TagValue(IndustrialTags.Items.MACHINE_FRAME_SIMPLE),
+                        new Ingredient.TagValue(IndustrialTags.Items.PLASTIC),
+                        new Ingredient.ItemValue(new ItemStack(Items.NETHERITE_SCRAP)),
+                        new Ingredient.ItemValue(new ItemStack(Items.NETHERITE_SCRAP)),
+                        new Ingredient.TagValue(Tags.Items.INGOTS_GOLD),
+                        new Ingredient.TagValue(IndustrialTags.Items.GEAR_DIAMOND),
+                        new Ingredient.TagValue(Tags.Items.INGOTS_GOLD)
+                },
+                new FluidStack(ModuleCore.PINK_SLIME.getSourceFluid(), 500), 300, new ItemStack(ModuleCore.ADVANCED.get()), FluidStack.EMPTY);
+        new DissolutionChamberRecipe(new ResourceLocation(Reference.MOD_ID, "dark_glass"),
+                new Ingredient.Value[]{
+                        new Ingredient.ItemValue(new ItemStack(Blocks.SOUL_SAND)),
+                        new Ingredient.ItemValue(new ItemStack(Blocks.SOUL_SAND)),
+                        new Ingredient.ItemValue(new ItemStack(Blocks.SOUL_SAND)),
+                        new Ingredient.ItemValue(new ItemStack(Blocks.SOUL_SAND)),
+                        new Ingredient.ItemValue(new ItemStack(Blocks.SOUL_SAND)),
+                        new Ingredient.ItemValue(new ItemStack(Blocks.SOUL_SAND)),
+                        new Ingredient.ItemValue(new ItemStack(Blocks.SOUL_SAND)),
+                        new Ingredient.ItemValue(new ItemStack(Blocks.SOUL_SAND)),
+                },
+                new FluidStack(ModuleCore.LATEX.getSourceFluid(), 100), 100, new ItemStack(ModuleCore.DARK_GLASS.get(), 8), FluidStack.EMPTY);
+        new DissolutionChamberRecipe(new ResourceLocation(Reference.MOD_ID, "supreme_machine_frame"),
+                new Ingredient.Value[]{
+                        new Ingredient.TagValue(IndustrialTags.Items.PLASTIC),
+                        new Ingredient.TagValue(IndustrialTags.Items.MACHINE_FRAME_ADVANCED),
+                        new Ingredient.TagValue(IndustrialTags.Items.PLASTIC),
+                        new Ingredient.ItemValue(new ItemStack(Items.NETHERITE_INGOT)),
+                        new Ingredient.ItemValue(new ItemStack(Items.NETHERITE_INGOT)),
+                        new Ingredient.TagValue(Tags.Items.GEMS_DIAMOND),
+                        new Ingredient.TagValue(IndustrialTags.Items.GEAR_DIAMOND),
+                        new Ingredient.TagValue(Tags.Items.GEMS_DIAMOND)
+                },
+                new FluidStack(ModuleCore.ETHER.getSourceFluid(), 135), 300, new ItemStack(ModuleCore.SUPREME.get()), FluidStack.EMPTY);
+        new DissolutionChamberRecipe(new ResourceLocation(Reference.MOD_ID, "mycelial_reactor"),
+                new Ingredient.Value[]{
+                        new Ingredient.TagValue(IndustrialTags.Items.PLASTIC),
+                        new Ingredient.TagValue(IndustrialTags.Items.MACHINE_FRAME_SUPREME),
+                        new Ingredient.TagValue(IndustrialTags.Items.PLASTIC),
+                        new Ingredient.ItemValue(new ItemStack(Items.NETHERITE_INGOT)),
+                        new Ingredient.ItemValue(new ItemStack(Items.NETHERITE_INGOT)),
+                        new Ingredient.TagValue(IndustrialTags.Items.GEAR_DIAMOND),
+                        new Ingredient.ItemValue(new ItemStack(Items.NETHER_STAR)),
+                        new Ingredient.TagValue(IndustrialTags.Items.GEAR_DIAMOND)
+                },
+                new FluidStack(ModuleCore.ETHER.getSourceFluid(), 500), 600, new ItemStack(ModuleGenerator.MYCELIAL_REACTOR.get()), FluidStack.EMPTY);
+        new DissolutionChamberRecipe(new ResourceLocation(Reference.MOD_ID, "xp_bottles"),
+                new Ingredient.Value[]{},
+                new FluidStack(ModuleCore.ESSENCE.getSourceFluid(), 250), 5, new ItemStack(Items.EXPERIENCE_BOTTLE), FluidStack.EMPTY);
         DissolutionChamberRecipe.RECIPES.forEach(dissolutionChamberRecipe -> serializables.put(dissolutionChamberRecipe, dissolutionChamberRecipe));
         FluidExtractorRecipe.RECIPES.forEach(fluidExtractorRecipe -> serializables.put(fluidExtractorRecipe, fluidExtractorRecipe));
         LaserDrillFluidRecipe.init();

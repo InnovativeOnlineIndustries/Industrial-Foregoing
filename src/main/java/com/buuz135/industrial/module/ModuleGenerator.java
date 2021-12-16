@@ -21,13 +21,16 @@
  */
 package com.buuz135.industrial.module;
 
+import com.buuz135.industrial.IndustrialForegoing;
 import com.buuz135.industrial.block.generator.*;
 import com.buuz135.industrial.block.generator.mycelial.IMycelialGeneratorType;
 import com.buuz135.industrial.utils.Reference;
-import com.hrznstudio.titanium.module.Feature;
+import com.hrznstudio.titanium.module.DeferredRegistryHelper;
 import com.hrznstudio.titanium.tab.AdvancedTitaniumTab;
-import net.minecraft.world.level.block.Block;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraftforge.registries.RegistryObject;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -36,27 +39,17 @@ public class ModuleGenerator implements IModule {
 
     public static AdvancedTitaniumTab TAB_GENERATOR = new AdvancedTitaniumTab(Reference.MOD_ID + "_generator", true);
 
-    public static PitifulGeneratorBlock PITIFUL_GENERATOR = new PitifulGeneratorBlock();
-    public static BioReactorBlock BIOREACTOR = new BioReactorBlock();
-    public static BiofuelGeneratorBlock BIOFUEL_GENERATOR = new BiofuelGeneratorBlock();
-    public static List<MycelialGeneratorBlock> MYCELIAL_GENERATORS = new ArrayList<>();
-    public static MycelialReactorBlock MYCELIAL_REACTOR = new MycelialReactorBlock();
+    public static RegistryObject<Block> PITIFUL_GENERATOR = IndustrialForegoing.INSTANCE.getRegistries().register(Block.class, "pitiful_generator", () -> new PitifulGeneratorBlock());
+    public static RegistryObject<Block> BIOREACTOR = IndustrialForegoing.INSTANCE.getRegistries().register(Block.class, "bioreactor", () -> new BioReactorBlock());
+    public static RegistryObject<Block> BIOFUEL_GENERATOR = IndustrialForegoing.INSTANCE.getRegistries().register(Block.class, "biofuel_generator", () -> new BiofuelGeneratorBlock());
+    public static List<RegistryObject<Block>> MYCELIAL_GENERATORS = new ArrayList<>();
+    public static RegistryObject<Block> MYCELIAL_REACTOR = IndustrialForegoing.INSTANCE.getRegistries().register(Block.class, "mycelial_reactor", () -> new MycelialReactorBlock());
 
     @Override
-    public List<Feature.Builder> generateFeatures() {
-        List<Feature.Builder> features = new ArrayList<>();
-        features.add(createFeature(PITIFUL_GENERATOR));
-        features.add(createFeature(BIOREACTOR));
-        features.add(createFeature(BIOFUEL_GENERATOR));
-        Feature.Builder mycelial = Feature.builder("mycelial_generators");
+    public void generateFeatures(DeferredRegistryHelper helper) {
         for (IMycelialGeneratorType type : IMycelialGeneratorType.TYPES) {
-            MycelialGeneratorBlock block = new MycelialGeneratorBlock(type);
-            MYCELIAL_GENERATORS.add(block);
-            mycelial.content(Block.class, block);
+            MYCELIAL_GENERATORS.add(helper.register(Block.class, "mycelial_" + type.getName(), () -> new MycelialGeneratorBlock(type)));
         }
-        features.add(mycelial);
-        features.add(createFeature(MYCELIAL_REACTOR));
-        TAB_GENERATOR.addIconStack(new ItemStack(PITIFUL_GENERATOR));
-        return features;
+        TAB_GENERATOR.addIconStack(() -> new ItemStack(PITIFUL_GENERATOR.orElse(Blocks.STONE)));
     }
 }

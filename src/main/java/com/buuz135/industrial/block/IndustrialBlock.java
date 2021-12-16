@@ -21,28 +21,28 @@
  */
 package com.buuz135.industrial.block;
 
-import com.buuz135.industrial.utils.Reference;
-import com.hrznstudio.titanium.api.IFactory;
 import com.hrznstudio.titanium.block.RotatableBlock;
 import com.hrznstudio.titanium.block.tile.BasicTile;
-import net.minecraft.world.level.block.Block;
+import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.CreativeModeTab;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.world.level.block.Block;
 
 import javax.annotation.Nullable;
+import java.util.function.Supplier;
 
 public abstract class IndustrialBlock<T extends BasicTile<T>> extends RotatableBlock<T> {
 
     public IndustrialBlock(String name, Properties properties, Class<T> tileClass, CreativeModeTab group) {
-        super(properties, tileClass);
+        super(name, properties, tileClass);
         setItemGroup(group);
-        setRegistryName(Reference.MOD_ID, name);
+        //setRegistryName(Reference.MOD_ID, name);
     }
 
-    @Override
-    public IFactory<BlockItem> getItemBlockFactory() {
+     @Override
+    public Supplier<Item> getItemBlockFactory() {
         return () -> new IndustrialBlockItem(this, this.getItemGroup());
     }
 
@@ -50,7 +50,7 @@ public abstract class IndustrialBlock<T extends BasicTile<T>> extends RotatableB
 
         public IndustrialBlockItem(Block blockIn, CreativeModeTab group) {
             super(blockIn, new Properties().tab(group));
-            this.setRegistryName(blockIn.getRegistryName());
+            //this.setRegistryName(blockIn.getRegistryName());
         }
 
         @Nullable

@@ -10,6 +10,7 @@ package com.buuz135.industrial.fluid;
 import java.util.function.Supplier;
 
 import com.buuz135.industrial.item.OreBucketItem;
+import com.hrznstudio.titanium.module.DeferredRegistryHelper;
 import com.hrznstudio.titanium.module.api.IAlternativeEntries;
 import com.hrznstudio.titanium.module.api.RegistryManager;
 import net.minecraft.world.level.block.Block;
@@ -28,28 +29,28 @@ public class OreFluidInstance extends net.minecraftforge.registries.ForgeRegistr
     private OreFluid sourceFluid;
     private Item bucketFluid;
     private Block blockFluid;
+    private String fluid;
 
     public OreFluidInstance(String modid, String fluid, FluidAttributes.Builder attributes, boolean hasBucket, CreativeModeTab group) {
-        this.sourceFluid = (OreFluid) new OreFluid.Source(attributes){
-
-        }.setRegistryName(modid, fluid);
-        this.flowingFluid = (OreFluid) new OreFluid.Flowing(attributes).setRegistryName(modid, fluid + "_fluid");
+        this.fluid = fluid;
+        this.sourceFluid = (OreFluid) new OreFluid.Source(attributes);
+        this.flowingFluid = (OreFluid) new OreFluid.Flowing(attributes);
         this.sourceFluid = this.sourceFluid.setSourceFluid(sourceFluid).setFlowingFluid(flowingFluid);
         this.flowingFluid = this.flowingFluid.setSourceFluid(sourceFluid).setFlowingFluid(flowingFluid);
         if (hasBucket)
-            this.bucketFluid = new OreBucketItem(this::getSourceFluid, new Item.Properties().craftRemainder(Items.BUCKET).stacksTo(1).tab(group)).setRegistryName(modid, fluid + "_bucket");
+            this.bucketFluid = new OreBucketItem(this::getSourceFluid, new Item.Properties().craftRemainder(Items.BUCKET).stacksTo(1).tab(group));
         this.blockFluid = new LiquidBlock(() -> sourceFluid, Block.Properties.of(Material.WATER).noCollission().strength(100.0F).noDrops()) {
-        }.setRegistryName(modid, fluid + "_block");
+        };
         this.sourceFluid.setBlockFluid(blockFluid).setBucketFluid(bucketFluid);
         this.flowingFluid.setBlockFluid(blockFluid).setBucketFluid(bucketFluid);
     }
 
     @Override
-    public void addAlternatives(RegistryManager<?> registry) {
-        registry.content(Fluid.class, flowingFluid);
-        registry.content(Fluid.class, sourceFluid);
-        registry.content(Block.class, blockFluid);
-        if (bucketFluid != null) registry.content(Item.class, bucketFluid);
+    public void addAlternatives(DeferredRegistryHelper registry) {
+        registry.register(Fluid.class, fluid + "_fluid", () -> flowingFluid);
+        registry.register(Fluid.class, fluid, () -> sourceFluid);
+        registry.register(Block.class, fluid, () -> blockFluid);
+        if (bucketFluid != null) registry.register(Item.class, fluid + "_bucket", () -> bucketFluid);
     }
 
     public OreFluid getFlowingFluid() {

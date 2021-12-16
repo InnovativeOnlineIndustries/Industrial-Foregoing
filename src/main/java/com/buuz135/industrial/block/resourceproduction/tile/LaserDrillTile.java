@@ -27,17 +27,16 @@ import com.buuz135.industrial.config.machine.resourceproduction.LaserDrillConfig
 import com.buuz135.industrial.module.ModuleResourceProduction;
 import com.buuz135.industrial.utils.BlockUtils;
 import com.hrznstudio.titanium.annotation.Save;
+import com.hrznstudio.titanium.block.BasicTileBlock;
 import com.hrznstudio.titanium.client.screen.addon.TextScreenAddon;
 import com.hrznstudio.titanium.component.energy.EnergyStorageComponent;
-import net.minecraft.core.BlockPos;
-import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.phys.shapes.VoxelShape;
-import net.minecraft.world.phys.shapes.Shapes;
-import net.minecraft.core.Vec3i;
 import net.minecraft.ChatFormatting;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Vec3i;
 import net.minecraft.network.chat.TranslatableComponent;
-
-import com.buuz135.industrial.block.tile.IndustrialWorkingTile.WorkAction;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.phys.shapes.Shapes;
+import net.minecraft.world.phys.shapes.VoxelShape;
 
 public class LaserDrillTile extends IndustrialAreaWorkingTile<LaserDrillTile> {
 
@@ -45,7 +44,7 @@ public class LaserDrillTile extends IndustrialAreaWorkingTile<LaserDrillTile> {
     private BlockPos target;
 
     public LaserDrillTile(BlockPos blockPos, BlockState blockState) {
-        super(ModuleResourceProduction.LASER_DRILL, RangeManager.RangeType.BEHIND, false, LaserDrillConfig.powerPerOperation, blockPos, blockState);
+        super((BasicTileBlock<LaserDrillTile>) ModuleResourceProduction.LASER_DRILL.get(), RangeManager.RangeType.BEHIND, false, LaserDrillConfig.powerPerOperation, blockPos, blockState);
         this.target = BlockPos.ZERO;
         addGuiAddonFactory(() -> new TextScreenAddon(ChatFormatting.DARK_GRAY + new TranslatableComponent("text.industrialforegoing.target").getString(), 44 ,26, false));
         addGuiAddonFactory(() -> new TextScreenAddon("Target: ", 44 ,36, false){

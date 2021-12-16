@@ -36,16 +36,16 @@ import com.buuz135.industrial.proxy.network.ConveyorSplittingSyncEntityMessage;
 import com.buuz135.industrial.utils.MovementUtils;
 import com.buuz135.industrial.utils.Reference;
 import com.hrznstudio.titanium.recipe.generator.TitaniumShapedRecipeBuilder;
-import net.minecraft.world.level.block.Blocks;
-import net.minecraft.data.recipes.FinishedRecipe;
-import net.minecraft.world.entity.Entity;
-import net.minecraft.nbt.CompoundTag;
-import net.minecraft.core.Direction;
-import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.phys.AABB;
-import net.minecraft.world.phys.shapes.VoxelShape;
-import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.ChatFormatting;
+import net.minecraft.core.Direction;
+import net.minecraft.data.recipes.FinishedRecipe;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.phys.AABB;
+import net.minecraft.world.phys.shapes.Shapes;
+import net.minecraft.world.phys.shapes.VoxelShape;
 import net.minecraftforge.common.Tags;
 
 import javax.annotation.Nonnull;
@@ -257,9 +257,9 @@ public class ConveyorSplittingUpgrade extends ConveyorUpgrade {
             TitaniumShapedRecipeBuilder.shapedRecipe(getUpgradeItem())
                     .pattern("IPI").pattern("IDI").pattern("ICI")
                     .define('I', Tags.Items.INGOTS_IRON)
-                    .define('P', ModuleTransportStorage.CONVEYOR)
+                    .define('P', ModuleTransportStorage.CONVEYOR.get())
                     .define('D', Blocks.HOPPER)
-                    .define('C', ModuleTransportStorage.CONVEYOR)
+                    .define('C', ModuleTransportStorage.CONVEYOR.get())
                     .save(consumer);
         }
     }

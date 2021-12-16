@@ -31,6 +31,7 @@ import com.buuz135.industrial.block.generator.tile.MycelialGeneratorTile;
 import com.buuz135.industrial.module.ModuleGenerator;
 import com.buuz135.industrial.utils.Reference;
 import com.buuz135.industrial.worlddata.MycelialDataManager;
+import com.hrznstudio.titanium.module.DeferredRegistryHelper;
 import com.hrznstudio.titanium.module.api.RegistryManager;
 import com.hrznstudio.titanium.nbthandler.NBTManager;
 import com.hrznstudio.titanium.recipe.generator.TitaniumShapedRecipeBuilder;
@@ -63,14 +64,11 @@ public class MycelialGeneratorBlock extends IndustrialBlock<MycelialGeneratorTil
     }
 
     @Override
-    public void addAlternatives(RegistryManager<?> registry) {
-        BlockItem item = (BlockItem) this.getItemBlockFactory().create();
-        setItem(item);
-        registry.content(Item.class, item);
+    public void addAlternatives(DeferredRegistryHelper registry) {
+        setItem(registry.register(Item.class, "mycelial_" + type.getName(),  this.getItemBlockFactory()));
         NBTManager.getInstance().scanTileClassForAnnotations(MycelialGeneratorTile.class);
         tileEntityType = BlockEntityType.Builder.of(this.getTileEntityFactory()::create, new Block[]{this}).build((Type) null);
-        tileEntityType.setRegistryName(new ResourceLocation(Reference.MOD_ID, "mycelial_generator_"+type.getName()));
-        registry.content(BlockEntityType.class, tileEntityType);
+        registry.registerBlockEntityType("mycelial_generator_"+type.getName(), () -> tileEntityType);
     }
 
     @Override

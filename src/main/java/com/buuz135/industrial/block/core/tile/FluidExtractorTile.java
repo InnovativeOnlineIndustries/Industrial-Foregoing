@@ -27,24 +27,23 @@ import com.buuz135.industrial.config.machine.core.FluidExtractorConfig;
 import com.buuz135.industrial.module.ModuleCore;
 import com.buuz135.industrial.recipe.FluidExtractorRecipe;
 import com.hrznstudio.titanium.annotation.Save;
+import com.hrznstudio.titanium.block.BasicTileBlock;
 import com.hrznstudio.titanium.component.energy.EnergyStorageComponent;
 import com.hrznstudio.titanium.component.fluid.FluidTankComponent;
 import com.hrznstudio.titanium.component.fluid.SidedFluidTankComponent;
 import com.hrznstudio.titanium.util.RecipeUtil;
-import net.minecraft.world.item.DyeColor;
 import net.minecraft.core.BlockPos;
+import net.minecraft.world.item.DyeColor;
 import net.minecraft.world.level.ChunkPos;
+import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.dimension.DimensionType;
-import net.minecraft.world.level.Level;
 import net.minecraftforge.fluids.capability.IFluidHandler;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.Collection;
 import java.util.HashMap;
-
-import com.buuz135.industrial.block.tile.IndustrialWorkingTile.WorkAction;
 
 public class FluidExtractorTile extends IndustrialAreaWorkingTile<FluidExtractorTile> {
 
@@ -57,7 +56,7 @@ public class FluidExtractorTile extends IndustrialAreaWorkingTile<FluidExtractor
     private SidedFluidTankComponent<FluidExtractorTile> tank;
 
     public FluidExtractorTile(BlockPos blockPos, BlockState blockState) {
-        super(ModuleCore.FLUID_EXTRACTOR, RangeManager.RangeType.BEHIND, false, FluidExtractorConfig.powerPerOperation, blockPos, blockState);
+        super((BasicTileBlock<FluidExtractorTile>) ModuleCore.FLUID_EXTRACTOR.get(), RangeManager.RangeType.BEHIND, false, FluidExtractorConfig.powerPerOperation, blockPos, blockState);
         addTank(tank = (SidedFluidTankComponent<FluidExtractorTile>) new SidedFluidTankComponent<FluidExtractorTile>("latex", FluidExtractorConfig.maxLatexTankSize, 43, 20, 0).
                 setColor(DyeColor.LIGHT_GRAY).
                 setTankAction(FluidTankComponent.Action.DRAIN).

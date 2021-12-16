@@ -27,6 +27,7 @@ import com.buuz135.industrial.module.ModuleCore;
 import com.buuz135.industrial.module.ModuleResourceProduction;
 import com.buuz135.industrial.utils.IndustrialTags;
 import com.hrznstudio.titanium.annotation.Save;
+import com.hrznstudio.titanium.block.BasicTileBlock;
 import com.hrznstudio.titanium.component.energy.EnergyStorageComponent;
 import com.hrznstudio.titanium.component.fluid.FluidTankComponent;
 import com.hrznstudio.titanium.component.fluid.SidedFluidTankComponent;
@@ -53,7 +54,7 @@ public class SludgeRefinerTile extends IndustrialProcessingTile<SludgeRefinerTil
     private SidedInventoryComponent<SludgeRefinerTile> output;
 
     public SludgeRefinerTile(BlockPos blockPos, BlockState blockState) {
-        super(ModuleResourceProduction.SLUDGE_REFINER, 53, 40, blockPos, blockState);
+        super((BasicTileBlock<SludgeRefinerTile>) ModuleResourceProduction.SLUDGE_REFINER.get(), 53, 40, blockPos, blockState);
         addTank(sludge = (SidedFluidTankComponent<SludgeRefinerTile>) new SidedFluidTankComponent<SludgeRefinerTile>("sludge", SludgeRefinerConfig.maxSludgeTankSize, 31, 20, 0)
                 .setColor(DyeColor.MAGENTA)
                 .setComponentHarness(this)

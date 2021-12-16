@@ -23,12 +23,12 @@ package com.buuz135.industrial.recipe.provider;
 
 import com.buuz135.industrial.module.ModuleCore;
 import com.buuz135.industrial.utils.IndustrialTags;
-import net.minecraft.world.level.block.Block;
-import net.minecraft.data.tags.BlockTagsProvider;
 import net.minecraft.data.DataGenerator;
+import net.minecraft.data.tags.BlockTagsProvider;
 import net.minecraft.data.tags.ItemTagsProvider;
-import net.minecraft.world.item.Item;
 import net.minecraft.tags.Tag;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.level.block.Block;
 import net.minecraftforge.common.Tags;
 import net.minecraftforge.common.data.ExistingFileHelper;
 
@@ -42,10 +42,10 @@ public class IndustrialTagsProvider {
 
         @Override
         protected void addTags() {
-            tag((Tag.Named<Block>) IndustrialTags.Blocks.MACHINE_FRAME_PITY).add(ModuleCore.PITY);
-            tag((Tag.Named<Block>) IndustrialTags.Blocks.MACHINE_FRAME_SIMPLE).add(ModuleCore.SIMPLE);
-            tag((Tag.Named<Block>) IndustrialTags.Blocks.MACHINE_FRAME_ADVANCED).add(ModuleCore.ADVANCED);
-            tag((Tag.Named<Block>) IndustrialTags.Blocks.MACHINE_FRAME_SUPREME).add(ModuleCore.SUPREME);
+            tag((Tag.Named<Block>) IndustrialTags.Blocks.MACHINE_FRAME_PITY).add(ModuleCore.PITY.get());
+            tag((Tag.Named<Block>) IndustrialTags.Blocks.MACHINE_FRAME_SIMPLE).add(ModuleCore.SIMPLE.get());
+            tag((Tag.Named<Block>) IndustrialTags.Blocks.MACHINE_FRAME_ADVANCED).add(ModuleCore.ADVANCED.get());
+            tag((Tag.Named<Block>) IndustrialTags.Blocks.MACHINE_FRAME_SUPREME).add(ModuleCore.SUPREME.get());
         }
     }
 
@@ -62,9 +62,9 @@ public class IndustrialTagsProvider {
             this.copy((Tag.Named<Block>) IndustrialTags.Blocks.MACHINE_FRAME_ADVANCED, (Tag.Named<Item>) IndustrialTags.Items.MACHINE_FRAME_ADVANCED);
             this.copy((Tag.Named<Block>) IndustrialTags.Blocks.MACHINE_FRAME_SUPREME, (Tag.Named<Item>) IndustrialTags.Items.MACHINE_FRAME_SUPREME);
 
-            tag((Tag.Named<Item>) IndustrialTags.Items.PLASTIC).add(ModuleCore.PLASTIC);
+            tag((Tag.Named<Item>) IndustrialTags.Items.PLASTIC).add(ModuleCore.PLASTIC.get());
             tag((Tag.Named<Item>) IndustrialTags.Items.SLUDGE_OUTPUT).add(net.minecraft.world.item.Items.DIRT, net.minecraft.world.item.Items.CLAY, net.minecraft.world.item.Items.GRAVEL, net.minecraft.world.item.Items.SAND, net.minecraft.world.item.Items.RED_SAND, net.minecraft.world.item.Items.SOUL_SAND);
-            tag(Tags.Items.SLIMEBALLS).add(ModuleCore.PINK_SLIME_ITEM);
+            tag(Tags.Items.SLIMEBALLS).add(ModuleCore.PINK_SLIME_ITEM.get());
         }
     }
 

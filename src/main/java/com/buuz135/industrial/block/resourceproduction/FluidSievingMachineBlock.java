@@ -26,15 +26,13 @@ import com.buuz135.industrial.block.resourceproduction.tile.FluidSievingMachineT
 import com.buuz135.industrial.module.ModuleCore;
 import com.buuz135.industrial.module.ModuleResourceProduction;
 import com.buuz135.industrial.utils.IndustrialTags;
-import com.hrznstudio.titanium.api.IFactory;
 import com.hrznstudio.titanium.block.RotatableBlock;
 import com.hrznstudio.titanium.recipe.generator.TitaniumShapedRecipeBuilder;
-
-import net.minecraft.world.level.block.entity.BlockEntityType;
-import net.minecraft.world.level.block.state.BlockBehaviour;
-import net.minecraft.world.level.block.Blocks;
 import net.minecraft.data.recipes.FinishedRecipe;
 import net.minecraft.world.item.Items;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.entity.BlockEntityType;
+import net.minecraft.world.level.block.state.BlockBehaviour;
 
 import javax.annotation.Nonnull;
 import java.util.function.Consumer;
@@ -60,7 +58,7 @@ public class FluidSievingMachineBlock extends IndustrialBlock<FluidSievingMachin
     public void registerRecipe(Consumer<FinishedRecipe> consumer) {
         TitaniumShapedRecipeBuilder.shapedRecipe(this).pattern("pcp").pattern("ggg").pattern("aba")
                 .define('p', IndustrialTags.Items.PLASTIC)
-                .define('c', ModuleCore.PINK_SLIME_ITEM)
+                .define('c', ModuleCore.PINK_SLIME_ITEM.get())
                 .define('g', Items.IRON_BARS)
                 .define('b', IndustrialTags.Items.MACHINE_FRAME_ADVANCED)
                 .define('a', IndustrialTags.Items.GEAR_GOLD)

@@ -25,37 +25,35 @@ import com.buuz135.industrial.api.IBlockContainer;
 import com.buuz135.industrial.api.conveyor.ConveyorUpgrade;
 import com.buuz135.industrial.api.conveyor.ConveyorUpgradeFactory;
 import com.buuz135.industrial.block.transportstorage.ConveyorBlock;
+import com.buuz135.industrial.block.transportstorage.ConveyorBlock.EnumType;
 import com.buuz135.industrial.gui.conveyor.ContainerConveyor;
 import com.buuz135.industrial.module.ModuleTransportStorage;
 import com.buuz135.industrial.proxy.client.model.ConveyorModelData;
 import com.buuz135.industrial.utils.MovementUtils;
+import com.hrznstudio.titanium.block.BasicTileBlock;
 import com.hrznstudio.titanium.block.tile.ActiveTile;
-
-import net.minecraft.world.level.block.entity.BlockEntity;
-import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.item.ItemEntity;
-import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.player.Inventory;
-import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.item.DyeColor;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.nbt.CompoundTag;
-import net.minecraft.core.Direction;
-import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.phys.AABB;
-import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.Level;
-
-import com.hrznstudio.titanium.block.tile.ITickableBlockEntity;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.phys.AABB;
 import net.minecraftforge.client.model.ModelDataManager;
 import net.minecraftforge.client.model.data.IModelData;
 import net.minecraftforge.client.model.data.ModelDataMap;
-import net.minecraftforge.common.util.Constants;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.capability.IFluidHandler;
 import net.minecraftforge.fluids.capability.templates.FluidTank;
+import net.minecraftforge.network.NetworkHooks;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -64,10 +62,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import static com.buuz135.industrial.block.transportstorage.ConveyorBlock.*;
-
-import com.buuz135.industrial.block.transportstorage.ConveyorBlock.EnumType;
-import net.minecraftforge.fmllegacy.network.NetworkHooks;
+import static com.buuz135.industrial.block.transportstorage.ConveyorBlock.FACING;
+import static com.buuz135.industrial.block.transportstorage.ConveyorBlock.TYPE;
 
 public class ConveyorTile extends ActiveTile<ConveyorTile> implements IBlockContainer<ConveyorUpgradeFactory> {
 
@@ -81,7 +77,7 @@ public class ConveyorTile extends ActiveTile<ConveyorTile> implements IBlockCont
     private boolean needsFluidSync;
 
     public ConveyorTile(BlockPos blockPos, BlockState blockState) {
-        super(ModuleTransportStorage.CONVEYOR, blockPos, blockState);
+        super((BasicTileBlock<ConveyorTile>) ModuleTransportStorage.CONVEYOR.get(), blockPos, blockState);
         this.facing = Direction.NORTH;
         this.type = ConveyorBlock.EnumType.FLAT;
         this.color = DyeColor.WHITE.getMaterialColor().col;
@@ -247,7 +243,7 @@ public class ConveyorTile extends ActiveTile<ConveyorTile> implements IBlockCont
                 }
                 if (factory != null) {
                     ConveyorUpgrade upgrade = upgradeMap.getOrDefault(facing, factory.create(this, facing));
-                    if (upgradeTag.contains("customNBT", Constants.NBT.TAG_COMPOUND)) {
+                    if (upgradeTag.contains("customNBT")) {
                         upgrade.deserializeNBT(upgradeTag.getCompound("customNBT"));
                         //upgradeMap.get(facing).deserializeNBT(upgradeTag.getCompound("customNBT"));
                     }
@@ -342,7 +338,7 @@ public class ConveyorTile extends ActiveTile<ConveyorTile> implements IBlockCont
     @Nullable
     @Override
     public AbstractContainerMenu createMenu(int menu, Inventory inventoryPlayer, Player entityPlayer) {
-        return new ContainerConveyor(menu, this, ModuleTransportStorage.CONVEYOR.getFacingUpgradeHit(this.level.getBlockState(this.worldPosition), this.level, this.worldPosition, entityPlayer), inventoryPlayer);
+        return new ContainerConveyor(menu, this, ((ConveyorBlock)ModuleTransportStorage.CONVEYOR.get()).getFacingUpgradeHit(this.level.getBlockState(this.worldPosition), this.level, this.worldPosition, entityPlayer), inventoryPlayer);
     }
 
     public void openGui(Player player, Direction facing) {

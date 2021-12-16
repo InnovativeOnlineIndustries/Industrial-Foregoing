@@ -32,7 +32,6 @@ import mezz.jei.api.gui.ingredient.IGuiFluidStackGroup;
 import mezz.jei.api.helpers.IGuiHelper;
 import mezz.jei.api.ingredients.IIngredients;
 import mezz.jei.api.recipe.category.IRecipeCategory;
-
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
 import net.minecraft.network.chat.Component;
@@ -64,7 +63,7 @@ public class FermentationStationCategory implements IRecipeCategory<OreFluidEntr
     @Override
     public Component getTitle() {
         // TODO: 21/08/2021 Make translatable
-        return new TranslatableComponent(ModuleResourceProduction.FERMENTATION_STATION.getDescriptionId());
+        return new TranslatableComponent(ModuleResourceProduction.FERMENTATION_STATION.get().getDescriptionId());
     }
 
     @Override

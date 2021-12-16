@@ -27,6 +27,7 @@ import com.buuz135.industrial.config.machine.agriculturehusbandry.SewerConfig;
 import com.buuz135.industrial.module.ModuleAgricultureHusbandry;
 import com.buuz135.industrial.module.ModuleCore;
 import com.hrznstudio.titanium.annotation.Save;
+import com.hrznstudio.titanium.block.BasicTileBlock;
 import com.hrznstudio.titanium.component.energy.EnergyStorageComponent;
 import com.hrznstudio.titanium.component.fluid.FluidTankComponent;
 import com.hrznstudio.titanium.component.fluid.SidedFluidTankComponent;
@@ -57,7 +58,7 @@ public class SewerTile extends IndustrialAreaWorkingTile<SewerTile> {
     public SidedFluidTankComponent<SewerTile> essence;
 
     public SewerTile(BlockPos blockPos, BlockState blockState) {
-        super(ModuleAgricultureHusbandry.SEWER, RangeManager.RangeType.TOP, true, SewerConfig.powerPerOperation, blockPos, blockState);
+        super((BasicTileBlock<SewerTile>) ModuleAgricultureHusbandry.SEWER.get(), RangeManager.RangeType.TOP, true, SewerConfig.powerPerOperation, blockPos, blockState);
         this.addTank(sewage = (SidedFluidTankComponent<SewerTile>) new SidedFluidTankComponent<SewerTile>("sewage", SewerConfig.maxSewageTankSize, 45, 20, 0).
                 setColor(DyeColor.BROWN).
                 setTankAction(FluidTankComponent.Action.DRAIN).

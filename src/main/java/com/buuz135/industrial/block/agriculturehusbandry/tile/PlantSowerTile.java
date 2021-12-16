@@ -28,6 +28,7 @@ import com.buuz135.industrial.item.addon.RangeAddonItem;
 import com.buuz135.industrial.module.ModuleAgricultureHusbandry;
 import com.hrznstudio.titanium.annotation.Save;
 import com.hrznstudio.titanium.api.filter.FilterSlot;
+import com.hrznstudio.titanium.block.BasicTileBlock;
 import com.hrznstudio.titanium.component.bundle.LockableInventoryBundle;
 import com.hrznstudio.titanium.component.energy.EnergyStorageComponent;
 import com.hrznstudio.titanium.component.inventory.SidedInventoryComponent;
@@ -61,7 +62,7 @@ public class PlantSowerTile extends IndustrialAreaWorkingTile<PlantSowerTile> {
     private LockableInventoryBundle<PlantSowerTile> input;
 
     public PlantSowerTile(BlockPos blockPos, BlockState blockState) {
-        super(ModuleAgricultureHusbandry.PLANT_SOWER, RangeManager.RangeType.TOP_UP, true, PlantSowerConfig.powerPerOperation, blockPos, blockState);
+        super((BasicTileBlock<PlantSowerTile>) ModuleAgricultureHusbandry.PLANT_SOWER.get(), RangeManager.RangeType.TOP_UP, true, PlantSowerConfig.powerPerOperation, blockPos, blockState);
         addFilter(this.filter = new ItemStackFilter("filter", 9) {
             @Override
             public void onContentChanged() {

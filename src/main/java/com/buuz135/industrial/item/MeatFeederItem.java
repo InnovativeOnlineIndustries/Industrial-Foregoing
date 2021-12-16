@@ -24,16 +24,16 @@ package com.buuz135.industrial.item;
 import com.buuz135.industrial.module.ModuleCore;
 import com.buuz135.industrial.module.ModuleTool;
 import com.hrznstudio.titanium.recipe.generator.TitaniumShapedRecipeBuilder;
+import net.minecraft.ChatFormatting;
 import net.minecraft.data.recipes.FinishedRecipe;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.TextComponent;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
-import net.minecraft.nbt.CompoundTag;
-import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.TextComponent;
-import net.minecraft.ChatFormatting;
 import net.minecraft.world.level.Level;
 import net.minecraftforge.common.Tags;
 import net.minecraftforge.common.capabilities.ICapabilityProvider;
@@ -47,9 +47,6 @@ import java.text.NumberFormat;
 import java.util.List;
 import java.util.Locale;
 import java.util.function.Consumer;
-
-import com.hrznstudio.titanium.item.BasicItem.Key;
-import net.minecraft.world.item.Item.Properties;
 
 public class MeatFeederItem extends IFCustomItem {
 
@@ -120,7 +117,7 @@ public class MeatFeederItem extends IFCustomItem {
     public void registerRecipe(Consumer<FinishedRecipe> consumer) {
         TitaniumShapedRecipeBuilder.shapedRecipe(this)
                 .pattern("pip").pattern("gig").pattern(" i ")
-                .define('p', ModuleCore.PLASTIC)
+                .define('p', ModuleCore.PLASTIC.get())
                 .define('i', Tags.Items.INGOTS_IRON)
                 .define('g', Items.GLASS_BOTTLE)
                 .save(consumer);

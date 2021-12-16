@@ -27,28 +27,27 @@ import com.buuz135.industrial.config.machine.resourceproduction.MarineFisherConf
 import com.buuz135.industrial.module.ModuleResourceProduction;
 import com.buuz135.industrial.utils.BlockUtils;
 import com.hrznstudio.titanium.annotation.Save;
+import com.hrznstudio.titanium.block.BasicTileBlock;
 import com.hrznstudio.titanium.component.energy.EnergyStorageComponent;
 import com.hrznstudio.titanium.component.inventory.SidedInventoryComponent;
-
-import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.level.material.FluidState;
-import net.minecraft.world.level.material.Fluids;
+import net.minecraft.core.BlockPos;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.item.DyeColor;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
-import net.minecraft.core.BlockPos;
-import net.minecraft.world.phys.shapes.VoxelShape;
-import net.minecraft.world.phys.Vec3;
-import net.minecraft.server.level.ServerLevel;
-import net.minecraftforge.items.ItemHandlerHelper;
-
-import javax.annotation.Nonnull;
-
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.material.FluidState;
+import net.minecraft.world.level.material.Fluids;
 import net.minecraft.world.level.storage.loot.BuiltInLootTables;
 import net.minecraft.world.level.storage.loot.LootContext;
 import net.minecraft.world.level.storage.loot.LootTable;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParamSets;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParams;
+import net.minecraft.world.phys.Vec3;
+import net.minecraft.world.phys.shapes.VoxelShape;
+import net.minecraftforge.items.ItemHandlerHelper;
+
+import javax.annotation.Nonnull;
 
 public class MarineFisherTile extends IndustrialAreaWorkingTile<MarineFisherTile> {
 
@@ -59,7 +58,7 @@ public class MarineFisherTile extends IndustrialAreaWorkingTile<MarineFisherTile
     private SidedInventoryComponent<MarineFisherTile> output;
 
     public MarineFisherTile(BlockPos blockPos, BlockState blockState) {
-        super(ModuleResourceProduction.MARINE_FISHER, RangeManager.RangeType.BOTTOM, false, MarineFisherConfig.powerPerOperation, blockPos, blockState);
+        super((BasicTileBlock<MarineFisherTile>) ModuleResourceProduction.MARINE_FISHER.get(), RangeManager.RangeType.BOTTOM, false, MarineFisherConfig.powerPerOperation, blockPos, blockState);
         addInventory(output = (SidedInventoryComponent<MarineFisherTile>) new SidedInventoryComponent<MarineFisherTile>("output", 50, 22, 3 * 6, 0)
                 .setColor(DyeColor.ORANGE)
                 .setRange(6, 3)

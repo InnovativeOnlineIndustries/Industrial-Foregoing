@@ -26,19 +26,14 @@ import com.buuz135.industrial.block.resourceproduction.tile.MaterialStoneWorkFac
 import com.buuz135.industrial.module.ModuleCore;
 import com.buuz135.industrial.module.ModuleResourceProduction;
 import com.buuz135.industrial.utils.IndustrialTags;
-import com.hrznstudio.titanium.api.IFactory;
 import com.hrznstudio.titanium.recipe.generator.TitaniumShapedRecipeBuilder;
-import net.minecraft.world.level.block.Blocks;
 import net.minecraft.data.recipes.FinishedRecipe;
 import net.minecraft.world.item.Items;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.entity.BlockEntityType;
 
 import javax.annotation.Nonnull;
 import java.util.function.Consumer;
-
-import com.hrznstudio.titanium.block.RotatableBlock.RotationType;
-
-import net.minecraft.world.level.block.entity.BlockEntityType;
-import net.minecraft.world.level.block.state.BlockBehaviour.Properties;
 
 public class MaterialStoneWorkFactoryBlock extends IndustrialBlock<MaterialStoneWorkFactoryTile> {
 
@@ -66,7 +61,7 @@ public class MaterialStoneWorkFactoryBlock extends IndustrialBlock<MaterialStone
                 .define('m', IndustrialTags.Items.MACHINE_FRAME_ADVANCED)
                 .define('f', Blocks.FURNACE)
                 .define('a', IndustrialTags.Items.GEAR_GOLD)
-                .define('b', ModuleCore.PINK_SLIME_ITEM)
+                .define('b', ModuleCore.PINK_SLIME_ITEM.get())
                 .save(consumer);
     }
 }

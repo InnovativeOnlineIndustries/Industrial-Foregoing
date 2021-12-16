@@ -27,6 +27,7 @@ import com.buuz135.industrial.module.ModuleResourceProduction;
 import com.hrznstudio.titanium.annotation.Save;
 import com.hrznstudio.titanium.api.IFactory;
 import com.hrznstudio.titanium.api.client.IScreenAddon;
+import com.hrznstudio.titanium.block.BasicTileBlock;
 import com.hrznstudio.titanium.client.screen.addon.ProgressBarScreenAddon;
 import com.hrznstudio.titanium.component.bundle.LockableInventoryBundle;
 import com.hrznstudio.titanium.component.energy.EnergyStorageComponent;
@@ -77,7 +78,7 @@ public class PotionBrewerTile extends IndustrialProcessingTile<PotionBrewerTile>
     private int state;
 
     public PotionBrewerTile(BlockPos blockPos, BlockState blockState) {
-        super(ModuleResourceProduction.POTION_BREWER, 100, 38, blockPos,blockState);
+        super((BasicTileBlock<PotionBrewerTile>) ModuleResourceProduction.POTION_BREWER.get(), 100, 38, blockPos,blockState);
         this.state = 0;
         addBundle(brewingItems = new LockableInventoryBundle<>(this, new SidedInventoryComponent<PotionBrewerTile>("brewingInput", 55, 19, 6, 3)
                 .setColor(DyeColor.BLUE)

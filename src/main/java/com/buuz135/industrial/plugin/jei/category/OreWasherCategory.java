@@ -71,7 +71,7 @@ public class OreWasherCategory implements IRecipeCategory<OreFluidEntryRaw> {
 
     @Override
     public Component getTitle() {
-        return new TranslatableComponent(ModuleResourceProduction.WASHING_FACTORY.getDescriptionId());
+        return new TranslatableComponent(ModuleResourceProduction.WASHING_FACTORY.get().getDescriptionId());
     }
 
     @Override

@@ -33,7 +33,7 @@ import java.util.List;
 public abstract class PlantRecollectable extends ForgeRegistryEntry<PlantRecollectable> {
 
     public PlantRecollectable(String name) {
-        setRegistryName(name);
+        //setRegistryName(name);
     }
 
     /**

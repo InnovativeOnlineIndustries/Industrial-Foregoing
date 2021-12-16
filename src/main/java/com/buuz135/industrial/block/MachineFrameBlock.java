@@ -21,22 +21,18 @@
  */
 package com.buuz135.industrial.block;
 
-import com.hrznstudio.titanium.api.IFactory;
 import com.hrznstudio.titanium.block.BasicBlock;
 import com.hrznstudio.titanium.datagenerator.loot.block.BasicBlockLootTables;
-import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.level.block.Blocks;
-import net.minecraft.world.level.storage.loot.LootTable;
 import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.world.item.*;
+import net.minecraft.world.item.context.BlockPlaceContext;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.storage.loot.LootTable;
 
 import javax.annotation.Nullable;
-
-import net.minecraft.world.item.BlockItem;
-import net.minecraft.world.item.CreativeModeTab;
-import net.minecraft.world.item.Item;
-import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.Rarity;
-import net.minecraft.world.item.context.BlockPlaceContext;
+import java.util.Locale;
+import java.util.function.Supplier;
 
 public class MachineFrameBlock extends BasicBlock {
 
@@ -44,7 +40,7 @@ public class MachineFrameBlock extends BasicBlock {
     private Rarity rarity;
 
     public MachineFrameBlock(Rarity rarity, CreativeModeTab group) {
-        super(Properties.copy(Blocks.IRON_BLOCK));
+        super("machine_frame_" + rarity.name().toLowerCase(Locale.ROOT), Properties.copy(Blocks.IRON_BLOCK));
         this.setItemGroup(group);
         this.rarity = rarity;
     }
@@ -55,7 +51,7 @@ public class MachineFrameBlock extends BasicBlock {
     }
 
     @Override
-    public IFactory<BlockItem> getItemBlockFactory() {
+    public Supplier<Item> getItemBlockFactory() {
         return () -> item = new MachineFrameItem(this, rarity, this.getItemGroup());
     }
 
@@ -68,7 +64,7 @@ public class MachineFrameBlock extends BasicBlock {
 
         public MachineFrameItem(BasicBlock blockIn, Rarity rarity, CreativeModeTab group) {
             super(blockIn, new Item.Properties().tab(group).rarity(rarity));
-            this.setRegistryName(blockIn.getRegistryName());
+            //this.setRegistryName(Reference.MOD_ID,"machine_frame_" + rarity.name().toLowerCase(Locale.ROOT));
         }
 
         @Override

@@ -32,6 +32,7 @@ import com.hrznstudio.titanium.annotation.Save;
 import com.hrznstudio.titanium.api.IFactory;
 import com.hrznstudio.titanium.api.augment.AugmentTypes;
 import com.hrznstudio.titanium.api.client.IScreenAddon;
+import com.hrznstudio.titanium.block.BasicTileBlock;
 import com.hrznstudio.titanium.client.screen.addon.ProgressBarScreenAddon;
 import com.hrznstudio.titanium.client.screen.addon.TextScreenAddon;
 import com.hrznstudio.titanium.component.button.ArrowButtonComponent;
@@ -42,9 +43,9 @@ import com.hrznstudio.titanium.component.sideness.IFacingComponent;
 import com.hrznstudio.titanium.item.AugmentWrapper;
 import com.hrznstudio.titanium.util.FacingUtil;
 import com.hrznstudio.titanium.util.RecipeUtil;
+import net.minecraft.util.random.WeightedRandom;
 import net.minecraft.world.item.DyeColor;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.util.WeighedRandom;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.TextComponent;
@@ -73,7 +74,7 @@ public class OreLaserBaseTile extends IndustrialMachineTile<OreLaserBaseTile> im
     private int miningDepth;
 
     public OreLaserBaseTile(BlockPos blockPos, BlockState blockState) {
-        super(ModuleResourceProduction.ORE_LASER_BASE, blockPos, blockState);
+        super((BasicTileBlock<OreLaserBaseTile>) ModuleResourceProduction.ORE_LASER_BASE.get(), blockPos, blockState);
         setShowEnergy(false);
         this.miningDepth = this.getBlockPos().getY();
         this.addProgressBar(work = new ProgressBarComponent<OreLaserBaseTile>(12, 22, 0, OreLaserBaseConfig.maxProgress){
@@ -155,7 +156,7 @@ public class OreLaserBaseTile extends IndustrialMachineTile<OreLaserBaseTile> im
                         return new ItemStackWeightedItem(stack.copy(), weight);
                     }).collect(Collectors.toList());
             if (!items.isEmpty()){
-                ItemStack stack = WeighedRandom.getRandomItem(this.level.getRandom(), items).get().getStack();
+                ItemStack stack = WeightedRandom.getRandomItem(this.level.getRandom(), items).get().getStack();
                 ItemHandlerHelper.insertItem(output, stack, false);
             }
         }

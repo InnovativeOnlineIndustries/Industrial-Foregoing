@@ -25,7 +25,7 @@ import java.util.UUID;
 
 import com.buuz135.industrial.entity.client.InfinityLauncherProjectileArmorLayer;
 import com.hrznstudio.titanium.network.Message;
-import net.minecraftforge.fmllegacy.network.NetworkEvent;
+import net.minecraftforge.network.NetworkEvent;
 
 public class PlungerPlayerHitMessage extends Message {
 

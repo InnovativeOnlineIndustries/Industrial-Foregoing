@@ -27,22 +27,21 @@ import com.buuz135.industrial.config.machine.resourceproduction.FluidCollectorCo
 import com.buuz135.industrial.module.ModuleResourceProduction;
 import com.buuz135.industrial.utils.BlockUtils;
 import com.hrznstudio.titanium.annotation.Save;
+import com.hrznstudio.titanium.block.BasicTileBlock;
 import com.hrznstudio.titanium.component.energy.EnergyStorageComponent;
 import com.hrznstudio.titanium.component.fluid.FluidTankComponent;
 import com.hrznstudio.titanium.component.fluid.SidedFluidTankComponent;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.item.DyeColor;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.level.material.Fluid;
-import net.minecraft.world.item.DyeColor;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
-import net.minecraft.core.BlockPos;
+import net.minecraft.world.level.material.Fluid;
 import net.minecraftforge.fluids.FluidAttributes;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.capability.IFluidHandler;
 
 import javax.annotation.Nonnull;
-
-import com.buuz135.industrial.block.tile.IndustrialWorkingTile.WorkAction;
 
 public class FluidCollectorTile extends IndustrialAreaWorkingTile<FluidCollectorTile> {
 
@@ -53,7 +52,7 @@ public class FluidCollectorTile extends IndustrialAreaWorkingTile<FluidCollector
     private SidedFluidTankComponent<FluidCollectorTile> tank;
 
     public FluidCollectorTile(BlockPos blockPos, BlockState blockState) {
-        super(ModuleResourceProduction.FLUID_COLLECTOR, RangeManager.RangeType.BEHIND, false,FluidCollectorConfig.powerPerOperation, blockPos, blockState);
+        super((BasicTileBlock<FluidCollectorTile>) ModuleResourceProduction.FLUID_COLLECTOR.get(), RangeManager.RangeType.BEHIND, false,FluidCollectorConfig.powerPerOperation, blockPos, blockState);
         this.addTank(this.tank = (SidedFluidTankComponent<FluidCollectorTile>) new SidedFluidTankComponent<FluidCollectorTile>("output", FluidCollectorConfig.maxOutputTankSize, 43, 20, 0)
                 .setColor(DyeColor.ORANGE)
                 .setTankAction(FluidTankComponent.Action.DRAIN)

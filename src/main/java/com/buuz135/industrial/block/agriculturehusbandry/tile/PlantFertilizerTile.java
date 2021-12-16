@@ -27,6 +27,7 @@ import com.buuz135.industrial.config.machine.agriculturehusbandry.PlantFertilize
 import com.buuz135.industrial.module.ModuleAgricultureHusbandry;
 import com.buuz135.industrial.utils.IndustrialTags;
 import com.hrznstudio.titanium.annotation.Save;
+import com.hrznstudio.titanium.block.BasicTileBlock;
 import com.hrznstudio.titanium.component.energy.EnergyStorageComponent;
 import com.hrznstudio.titanium.component.inventory.SidedInventoryComponent;
 import com.hrznstudio.titanium.util.ItemHandlerUtil;
@@ -51,7 +52,7 @@ public class PlantFertilizerTile extends IndustrialAreaWorkingTile<PlantFertiliz
     public SidedInventoryComponent<PlantFertilizerTile> fertilizer;
 
     public PlantFertilizerTile(BlockPos blockPos, BlockState blockState) {
-        super(ModuleAgricultureHusbandry.PLANT_FERTILIZER, RangeManager.RangeType.BEHIND, true, PlantFertilizerConfig.powerPerOperation, blockPos, blockState);
+        super((BasicTileBlock<PlantFertilizerTile>) ModuleAgricultureHusbandry.PLANT_FERTILIZER.get(), RangeManager.RangeType.BEHIND, true, PlantFertilizerConfig.powerPerOperation, blockPos, blockState);
         addInventory(fertilizer = (SidedInventoryComponent<PlantFertilizerTile>) new SidedInventoryComponent<PlantFertilizerTile>("fertilizer", 50, 22, 3 * 6, 0).
                 setColor(DyeColor.BROWN).
                 setInputFilter((stack, integer) -> stack.is(IndustrialTags.Items.FERTILIZER)).

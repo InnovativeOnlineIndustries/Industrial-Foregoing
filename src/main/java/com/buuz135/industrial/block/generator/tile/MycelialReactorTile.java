@@ -35,6 +35,7 @@ import com.buuz135.industrial.worlddata.MycelialDataManager;
 import com.hrznstudio.titanium.annotation.Save;
 import com.hrznstudio.titanium.api.IFactory;
 import com.hrznstudio.titanium.api.client.IScreenAddon;
+import com.hrznstudio.titanium.block.BasicTileBlock;
 import com.hrznstudio.titanium.client.screen.addon.ProgressBarScreenAddon;
 import com.hrznstudio.titanium.component.progress.ProgressBarComponent;
 
@@ -53,7 +54,7 @@ public class MycelialReactorTile extends IndustrialGeneratorTile<MycelialReactor
     private ProgressBarComponent<MycelialReactorTile> bar;
 
     public MycelialReactorTile(BlockPos blockPos, BlockState blockState) {
-        super(ModuleGenerator.MYCELIAL_REACTOR, blockPos, blockState);
+        super((BasicTileBlock<MycelialReactorTile>) ModuleGenerator.MYCELIAL_REACTOR.get(), blockPos, blockState);
     }
 
     @Nonnull

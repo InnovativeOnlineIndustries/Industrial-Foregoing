@@ -26,18 +26,17 @@ import com.buuz135.industrial.config.machine.core.DissolutionChamberConfig;
 import com.buuz135.industrial.module.ModuleCore;
 import com.buuz135.industrial.recipe.DissolutionChamberRecipe;
 import com.hrznstudio.titanium.annotation.Save;
+import com.hrznstudio.titanium.block.BasicTileBlock;
 import com.hrznstudio.titanium.component.bundle.LockableInventoryBundle;
 import com.hrznstudio.titanium.component.energy.EnergyStorageComponent;
 import com.hrznstudio.titanium.component.fluid.FluidTankComponent;
 import com.hrznstudio.titanium.component.fluid.SidedFluidTankComponent;
 import com.hrznstudio.titanium.component.inventory.SidedInventoryComponent;
 import com.hrznstudio.titanium.util.RecipeUtil;
+import net.minecraft.core.BlockPos;
 import net.minecraft.world.item.DyeColor;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.core.BlockPos;
-import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
-
 import net.minecraftforge.fluids.capability.IFluidHandler;
 import net.minecraftforge.items.ItemHandlerHelper;
 import org.apache.commons.lang3.tuple.Pair;
@@ -60,7 +59,7 @@ public class DissolutionChamberTile extends IndustrialProcessingTile<Dissolution
     private DissolutionChamberRecipe currentRecipe;
 
     public DissolutionChamberTile(BlockPos blockPos, BlockState blockState) {
-        super(ModuleCore.DISSOLUTION_CHAMBER, 102, 41, blockPos, blockState);
+        super((BasicTileBlock<DissolutionChamberTile>) ModuleCore.DISSOLUTION_CHAMBER.get(), 102, 41, blockPos, blockState);
         int slotSpacing = 22;
         this.addBundle(this.input = new LockableInventoryBundle<>(this, new SidedInventoryComponent<DissolutionChamberTile>("input", 34, 19, 8, 0).
                 setColor(DyeColor.LIGHT_BLUE).

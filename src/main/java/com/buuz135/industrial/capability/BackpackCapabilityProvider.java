@@ -21,23 +21,22 @@
  */
 package com.buuz135.industrial.capability;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-
 import com.buuz135.industrial.item.infinity.InfinityCapabilityProvider;
 import com.buuz135.industrial.item.infinity.InfinityEnergyStorage;
 import com.buuz135.industrial.worlddata.BackpackDataManager;
 import com.hrznstudio.titanium.api.IFactory;
 import com.hrznstudio.titanium.capability.FluidHandlerScreenProviderItemStack;
-import net.minecraftforge.common.capabilities.Capability;
-import net.minecraftforge.common.util.LazyOptional;
-import net.minecraftforge.fmllegacy.server.ServerLifecycleHooks;
-import net.minecraftforge.items.CapabilityItemHandler;
-import net.minecraftforge.items.IItemHandler;
-
 import net.minecraft.core.Direction;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
+import net.minecraftforge.common.capabilities.Capability;
+import net.minecraftforge.common.util.LazyOptional;
+import net.minecraftforge.items.CapabilityItemHandler;
+import net.minecraftforge.items.IItemHandler;
+import net.minecraftforge.server.ServerLifecycleHooks;
+
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 public class BackpackCapabilityProvider extends InfinityCapabilityProvider {
 

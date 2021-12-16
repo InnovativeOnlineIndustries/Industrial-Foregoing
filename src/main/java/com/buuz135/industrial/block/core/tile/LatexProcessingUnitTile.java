@@ -25,15 +25,15 @@ import com.buuz135.industrial.block.tile.IndustrialProcessingTile;
 import com.buuz135.industrial.config.machine.core.LatexProcessingUnitConfig;
 import com.buuz135.industrial.module.ModuleCore;
 import com.hrznstudio.titanium.annotation.Save;
+import com.hrznstudio.titanium.block.BasicTileBlock;
 import com.hrznstudio.titanium.component.energy.EnergyStorageComponent;
 import com.hrznstudio.titanium.component.fluid.SidedFluidTankComponent;
 import com.hrznstudio.titanium.component.inventory.SidedInventoryComponent;
-
 import net.minecraft.core.BlockPos;
-import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.level.material.Fluids;
 import net.minecraft.world.item.DyeColor;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.material.Fluids;
 import net.minecraftforge.fluids.capability.IFluidHandler;
 import net.minecraftforge.items.ItemHandlerHelper;
 
@@ -52,7 +52,7 @@ public class LatexProcessingUnitTile extends IndustrialProcessingTile<LatexProce
     private SidedInventoryComponent<LatexProcessingUnitTile> output;
 
     public LatexProcessingUnitTile(BlockPos blockPos, BlockState blockState) {
-        super(ModuleCore.LATEX_PROCESSING, 48 + 25, 40, blockPos, blockState);
+        super((BasicTileBlock<LatexProcessingUnitTile>) ModuleCore.LATEX_PROCESSING.get(), 48 + 25, 40, blockPos, blockState);
         this.addTank(latex = (SidedFluidTankComponent<LatexProcessingUnitTile>) new SidedFluidTankComponent<LatexProcessingUnitTile>("latex", LatexProcessingUnitConfig.maxLatexTankSize, 29, 20, 0).
                 setColor(DyeColor.LIGHT_GRAY).
                 setComponentHarness(this).
@@ -69,7 +69,7 @@ public class LatexProcessingUnitTile extends IndustrialProcessingTile<LatexProce
 
     @Override
     public boolean canIncrease() {
-        return latex.getFluidAmount() >= AMOUNT_LATEX && water.getFluidAmount() >= AMOUNT_WATER && ItemHandlerHelper.insertItem(output, new ItemStack(ModuleCore.TINY_DRY_RUBBER), true).isEmpty();
+        return latex.getFluidAmount() >= AMOUNT_LATEX && water.getFluidAmount() >= AMOUNT_WATER && ItemHandlerHelper.insertItem(output, new ItemStack(ModuleCore.TINY_DRY_RUBBER.get()), true).isEmpty();
     }
 
     @Override
@@ -77,7 +77,7 @@ public class LatexProcessingUnitTile extends IndustrialProcessingTile<LatexProce
         return () -> {
             latex.drain(AMOUNT_LATEX, IFluidHandler.FluidAction.EXECUTE);
             water.drain(AMOUNT_WATER, IFluidHandler.FluidAction.EXECUTE);
-            ItemHandlerHelper.insertItem(output, new ItemStack(ModuleCore.TINY_DRY_RUBBER), false);
+            ItemHandlerHelper.insertItem(output, new ItemStack(ModuleCore.TINY_DRY_RUBBER.get()), false);
         };
     }
 

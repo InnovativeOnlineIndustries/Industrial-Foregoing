@@ -29,16 +29,15 @@ import com.buuz135.industrial.module.ModuleResourceProduction;
 import com.buuz135.industrial.utils.BlockUtils;
 import com.buuz135.industrial.utils.IFFakePlayer;
 import com.hrznstudio.titanium.annotation.Save;
+import com.hrznstudio.titanium.block.BasicTileBlock;
 import com.hrznstudio.titanium.component.energy.EnergyStorageComponent;
 import com.hrznstudio.titanium.component.inventory.SidedInventoryComponent;
+import net.minecraft.core.BlockPos;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.DyeColor;
-import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.block.state.BlockState;
 
 import javax.annotation.Nonnull;
-
-import com.buuz135.industrial.block.tile.IndustrialWorkingTile.WorkAction;
 
 public class BlockPlacerTile extends IndustrialAreaWorkingTile<BlockPlacerTile> {
 
@@ -49,7 +48,7 @@ public class BlockPlacerTile extends IndustrialAreaWorkingTile<BlockPlacerTile> 
     private SidedInventoryComponent<BlockPlacerTile> input;
 
     public BlockPlacerTile(BlockPos blockPos, BlockState blockState) {
-        super(ModuleResourceProduction.BLOCK_PLACER, RangeManager.RangeType.BEHIND, false, BlockPlacerConfig.powerPerOperation, blockPos, blockState);
+        super((BasicTileBlock<BlockPlacerTile>) ModuleResourceProduction.BLOCK_PLACER.get(), RangeManager.RangeType.BEHIND, false, BlockPlacerConfig.powerPerOperation, blockPos, blockState);
         this.addInventory(this.input = (SidedInventoryComponent<BlockPlacerTile>) new SidedInventoryComponent<BlockPlacerTile>("input", 54, 22, 3 * 6, 0).
                 setColor(DyeColor.BLUE).
                 setRange(6, 3));

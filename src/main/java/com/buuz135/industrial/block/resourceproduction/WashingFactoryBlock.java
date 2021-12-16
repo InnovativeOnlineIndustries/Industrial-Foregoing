@@ -61,8 +61,8 @@ public class WashingFactoryBlock extends IndustrialBlock<WashingFactoryTile> {
     public void registerRecipe(Consumer<FinishedRecipe> consumer) {
         TitaniumShapedRecipeBuilder.shapedRecipe(this).pattern("pcp").pattern("gmg").pattern("aba")
                 .define('g', IndustrialTags.Items.PLASTIC)
-                .define('c', ModuleTool.MEAT_FEEDER)
-                .define('p', ModuleCore.PINK_SLIME_INGOT)
+                .define('c', ModuleTool.MEAT_FEEDER.get())
+                .define('p', ModuleCore.PINK_SLIME_INGOT.get())
                 .define('m', IndustrialTags.Items.MACHINE_FRAME_ADVANCED)
                 .define('b', Blocks.FURNACE)
                 .define('a', IndustrialTags.Items.GEAR_DIAMOND)

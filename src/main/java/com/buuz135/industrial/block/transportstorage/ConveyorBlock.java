@@ -21,29 +21,16 @@
  */
 package com.buuz135.industrial.block.transportstorage;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
-import java.util.function.Consumer;
-import java.util.function.Predicate;
-
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-
 import com.buuz135.industrial.api.conveyor.ConveyorUpgrade;
 import com.buuz135.industrial.block.transportstorage.tile.ConveyorTile;
 import com.buuz135.industrial.module.ModuleCore;
 import com.buuz135.industrial.utils.IndustrialTags;
-import com.buuz135.industrial.utils.Reference;
-import com.hrznstudio.titanium.api.IFactory;
 import com.hrznstudio.titanium.api.IRecipeProvider;
 import com.hrznstudio.titanium.api.raytrace.DistanceRayTraceResult;
 import com.hrznstudio.titanium.block.BasicTileBlock;
 import com.hrznstudio.titanium.recipe.generator.TitaniumShapedRecipeBuilder;
 import com.hrznstudio.titanium.util.RayTraceUtils;
 import com.hrznstudio.titanium.util.TileUtil;
-import net.minecraftforge.common.Tags;
-
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.NonNullList;
@@ -57,12 +44,7 @@ import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.SpawnPlacements;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.item.BlockItem;
-import net.minecraft.world.item.CreativeModeTab;
-import net.minecraft.world.item.DyeItem;
-import net.minecraft.world.item.Item;
-import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.Items;
+import net.minecraft.world.item.*;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
@@ -89,6 +71,16 @@ import net.minecraft.world.phys.shapes.BooleanOp;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
+import net.minecraftforge.common.Tags;
+
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
+import java.util.function.Consumer;
+import java.util.function.Predicate;
+import java.util.function.Supplier;
 
 public class ConveyorBlock extends BasicTileBlock<ConveyorTile> implements SimpleWaterloggedBlock, IRecipeProvider {
 
@@ -99,8 +91,7 @@ public class ConveyorBlock extends BasicTileBlock<ConveyorTile> implements Simpl
     private ConveyorItem item;
 
     public ConveyorBlock(CreativeModeTab group) {
-        super(Properties.of(Material.HEAVY_METAL, MaterialColor.COLOR_ORANGE).noCollission().strength(2.0f), ConveyorTile.class);
-        this.setRegistryName(Reference.MOD_ID, "conveyor");
+        super("conveyor", Properties.of(Material.HEAVY_METAL, MaterialColor.COLOR_ORANGE).noCollission().strength(2.0f), ConveyorTile.class);
         this.registerDefaultState(this.defaultBlockState().setValue(FACING, Direction.NORTH).setValue(WATERLOGGED, false));
         this.item = new ConveyorItem(this, group);
         this.setItemGroup(group);
@@ -112,7 +103,7 @@ public class ConveyorBlock extends BasicTileBlock<ConveyorTile> implements Simpl
     }
 
     @Override
-    public IFactory<BlockItem> getItemBlockFactory() {
+    public Supplier<Item> getItemBlockFactory() {
         return this::getItem;
     }
 
@@ -135,7 +126,7 @@ public class ConveyorBlock extends BasicTileBlock<ConveyorTile> implements Simpl
     }
 
     @Override
-    public ItemStack getPickBlock(BlockState state, HitResult target, BlockGetter world, BlockPos pos, Player player) {
+    public ItemStack getCloneItemStack(BlockState state, HitResult target, BlockGetter world, BlockPos pos, Player player) {
         BlockEntity tileEntity = world.getBlockEntity(pos);
         if (tileEntity instanceof ConveyorTile) {
             if (target instanceof DistanceRayTraceResult) {
@@ -146,7 +137,7 @@ public class ConveyorBlock extends BasicTileBlock<ConveyorTile> implements Simpl
             }
             return new ItemStack(this, 1);
         }
-        return super.getPickBlock(state, target, world, pos, player);
+        return super.getCloneItemStack(state, target, world, pos, player);
     }
 
     @Override
@@ -403,14 +394,14 @@ public class ConveyorBlock extends BasicTileBlock<ConveyorTile> implements Simpl
                     drops.addAll(upgrade.getDrops());
                 }
             }
-            if (tileEntityConveyor.isSticky()) drops.add(new ItemStack(ModuleCore.PLASTIC));
+            if (tileEntityConveyor.isSticky()) drops.add(new ItemStack(ModuleCore.PLASTIC.get()));
             if (tileEntityConveyor.getConveyorType().isFast()) drops.add(new ItemStack(Items.GLOWSTONE_DUST));
         });
         return drops;
     }
-
+    
     @Override
-    public boolean canCreatureSpawn(BlockState state, BlockGetter world, BlockPos pos, SpawnPlacements.Type type, @Nullable EntityType<?> entityType) {
+    public boolean isValidSpawn(BlockState state, BlockGetter world, BlockPos pos, SpawnPlacements.Type type, EntityType<?> entityType) {
         return true;
     }
 
@@ -554,7 +545,7 @@ public class ConveyorBlock extends BasicTileBlock<ConveyorTile> implements Simpl
 
         public ConveyorItem(Block block, CreativeModeTab group) {
             super(block, new Item.Properties().tab(group));
-            this.setRegistryName(block.getRegistryName());
+            //this.setRegistryName(Reference.MOD_ID, "conveyor");
         }
 
         @Nullable

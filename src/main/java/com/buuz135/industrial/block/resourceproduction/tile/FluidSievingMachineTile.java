@@ -28,20 +28,19 @@ import com.buuz135.industrial.module.ModuleCore;
 import com.buuz135.industrial.module.ModuleResourceProduction;
 import com.hrznstudio.titanium.annotation.Save;
 import com.hrznstudio.titanium.api.IFactory;
+import com.hrznstudio.titanium.block.BasicTileBlock;
 import com.hrznstudio.titanium.component.energy.EnergyStorageComponent;
 import com.hrznstudio.titanium.component.fluid.FluidTankComponent;
 import com.hrznstudio.titanium.component.fluid.SidedFluidTankComponent;
 import com.hrznstudio.titanium.component.inventory.SidedInventoryComponent;
 import com.hrznstudio.titanium.container.addon.IContainerAddon;
 import com.hrznstudio.titanium.util.InventoryUtil;
-
 import net.minecraft.core.BlockPos;
-import net.minecraft.world.level.block.Blocks;
+import net.minecraft.tags.ItemTags;
 import net.minecraft.world.item.DyeColor;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.tags.ItemTags;
+import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
-
 import net.minecraftforge.fluids.capability.IFluidHandler;
 import net.minecraftforge.items.ItemHandlerHelper;
 
@@ -59,7 +58,7 @@ public class FluidSievingMachineTile extends IndustrialProcessingTile<FluidSievi
     private SidedInventoryComponent<FluidSievingMachineTile> output;
 
     public FluidSievingMachineTile(BlockPos blockPos, BlockState blockState) {
-        super(ModuleResourceProduction.FLUID_SIEVING_MACHINE,106, 40, blockPos, blockState);
+        super((BasicTileBlock<FluidSievingMachineTile>) ModuleResourceProduction.FLUID_SIEVING_MACHINE.get(),106, 40, blockPos, blockState);
         addTank(this.input = (SidedFluidTankComponent<FluidSievingMachineTile>)  new SidedFluidTankComponent<FluidSievingMachineTile>("input", FluidSievingMachineConfig.maxTankSize, 35, 20, 0){
                     @Override
                     protected void onContentsChanged() {

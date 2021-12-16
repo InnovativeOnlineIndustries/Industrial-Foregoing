@@ -28,22 +28,20 @@ import com.buuz135.industrial.config.machine.resourceproduction.BlockBreakerConf
 import com.buuz135.industrial.module.ModuleResourceProduction;
 import com.buuz135.industrial.utils.BlockUtils;
 import com.hrznstudio.titanium.annotation.Save;
+import com.hrznstudio.titanium.block.BasicTileBlock;
 import com.hrznstudio.titanium.component.energy.EnergyStorageComponent;
 import com.hrznstudio.titanium.component.inventory.SidedInventoryComponent;
-import net.minecraft.world.level.block.Blocks;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.InteractionHand;
 import net.minecraft.world.item.DyeColor;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
-import net.minecraft.world.InteractionHand;
-import net.minecraft.core.BlockPos;
+import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
-
 import net.minecraftforge.common.util.FakePlayer;
 import net.minecraftforge.items.ItemHandlerHelper;
 
 import javax.annotation.Nonnull;
-
-import com.buuz135.industrial.block.tile.IndustrialWorkingTile.WorkAction;
 
 public class BlockBreakerTile extends IndustrialAreaWorkingTile<BlockBreakerTile> {
 
@@ -54,7 +52,7 @@ public class BlockBreakerTile extends IndustrialAreaWorkingTile<BlockBreakerTile
     private SidedInventoryComponent<BlockBreakerTile> output;
 
     public BlockBreakerTile(BlockPos blockPos, BlockState blockState) {
-        super(ModuleResourceProduction.BLOCK_BREAKER, RangeManager.RangeType.BEHIND, false,  BlockBreakerConfig.powerPerOperation, blockPos, blockState);
+        super((BasicTileBlock<BlockBreakerTile>) ModuleResourceProduction.BLOCK_BREAKER.get(), RangeManager.RangeType.BEHIND, false,  BlockBreakerConfig.powerPerOperation, blockPos, blockState);
         this.addInventory(this.output = (SidedInventoryComponent<BlockBreakerTile>) new SidedInventoryComponent<BlockBreakerTile>("output", 54, 22, 3 * 6, 0).
                 setColor(DyeColor.ORANGE).
                 setRange(6, 3));

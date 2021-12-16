@@ -26,6 +26,7 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.FallingBlock;
+import net.minecraft.world.level.levelgen.LegacyRandomSource;
 import net.minecraft.world.level.material.Material;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.animal.Cat;
@@ -147,43 +148,43 @@ public class ProcessExplosion {
 
         Vector3f posVecUp = new Vector3f();
         Vector3f posVecDown = new Vector3f();
-        // TODO: 22/08/2021 Update simplex
-//        SimplexNoise noise = new SimplexNoise(world.getRandom());
-//        for (int x = originPos.getX() - radius; x < originPos.getX() + radius; x++) {
-//            for (int z = originPos.getZ() - radius; z < originPos.getZ() + radius; z++) {
-//                double dist = calculateDistanceBetweenPoints(x, z, originPos.getX(), originPos.getZ());
-//                if (dist < radius && dist >= radius - 1) {
-//                    posVecUp.set(x, origin.y(), z);
-//                    double radialAngle = getRadialAngle(posVecUp);
-//                    double radialResistance = getRadialResistance(radialAngle);
-//                    double angularLoad = (meanResistance / radialResistance) * 1;
-//                    double radialPos = 1D - (radius / (double) maxRadius);
-//                    double coreFalloff = Math.max(0, (radialPos - 0.8) * 5);
-//                    coreFalloff = 1 - ((1 - coreFalloff) * (1 - coreFalloff) * (1 - coreFalloff));
-//                    double coreHeight = coreFalloff * maxCoreHeight;
-//                    double edgeNoise = Math.max(0, (-radialPos + 0.2) * 5);
-//                    double edgeScatter = edgeNoise * world.getRandom().nextInt(10);
-//                    double sim = noise.getValue(x / 50D, z / 50D);
-//                    edgeNoise = 1 + (Math.abs(sim) * edgeNoise * 8);
-//
-//                    double power = (10000 * radialPos * radialPos * radialPos * angularLoad * edgeNoise) + edgeScatter;
-//                    double heightUp = 20 + ((5D + (radius / 10D)) * angularLoad);
-//                    double heightDown = coreHeight + ((5D + (radius / 10D)) * angularLoad * (1 - coreFalloff));
-//                    heightDown += (Math.abs(sim) * 4) + world.getRandom().nextDouble();
-//                    heightUp += (Math.abs(sim) * 4) + world.getRandom().nextDouble();
-//
-//                    posVecDown.set(posVecUp.x(), posVecUp.y(), posVecUp.z());
-//                    double resist = trace(posVecUp, power * (1 + 8 * radialPos), (int) heightUp * 3, 1, 0, 0);
-//                    posVecDown.set(posVecDown.x(), posVecDown.y() - 1, posVecDown.z());
-//                    resist += trace(posVecDown, power, (int) heightDown, -1, 0, 0);
-//                    resist *= 1 / angularLoad;
-//
-//                    if (radialPos < 0.8) {
-//                        addRadialResistance(radialAngle, resist);
-//                    }
-//                }
-//            }
-//        }
+
+        SimplexNoise noise = new SimplexNoise(new LegacyRandomSource(world.getSeed()));
+        for (int x = originPos.getX() - radius; x < originPos.getX() + radius; x++) {
+            for (int z = originPos.getZ() - radius; z < originPos.getZ() + radius; z++) {
+                double dist = calculateDistanceBetweenPoints(x, z, originPos.getX(), originPos.getZ());
+                if (dist < radius && dist >= radius - 1) {
+                    posVecUp.set(x, origin.y(), z);
+                    double radialAngle = getRadialAngle(posVecUp);
+                    double radialResistance = getRadialResistance(radialAngle);
+                    double angularLoad = (meanResistance / radialResistance) * 1;
+                    double radialPos = 1D - (radius / (double) maxRadius);
+                    double coreFalloff = Math.max(0, (radialPos - 0.8) * 5);
+                    coreFalloff = 1 - ((1 - coreFalloff) * (1 - coreFalloff) * (1 - coreFalloff));
+                    double coreHeight = coreFalloff * maxCoreHeight;
+                    double edgeNoise = Math.max(0, (-radialPos + 0.2) * 5);
+                    double edgeScatter = edgeNoise * world.getRandom().nextInt(10);
+                    double sim = noise.getValue(x / 50D, z / 50D);
+                    edgeNoise = 1 + (Math.abs(sim) * edgeNoise * 8);
+
+                    double power = (10000 * radialPos * radialPos * radialPos * angularLoad * edgeNoise) + edgeScatter;
+                    double heightUp = 20 + ((5D + (radius / 10D)) * angularLoad);
+                    double heightDown = coreHeight + ((5D + (radius / 10D)) * angularLoad * (1 - coreFalloff));
+                    heightDown += (Math.abs(sim) * 4) + world.getRandom().nextDouble();
+                    heightUp += (Math.abs(sim) * 4) + world.getRandom().nextDouble();
+
+                    posVecDown.set(posVecUp.x(), posVecUp.y(), posVecUp.z());
+                    double resist = trace(posVecUp, power * (1 + 8 * radialPos), (int) heightUp * 3, 1, 0, 0);
+                    posVecDown.set(posVecDown.x(), posVecDown.y() - 1, posVecDown.z());
+                    resist += trace(posVecDown, power, (int) heightDown, -1, 0, 0);
+                    resist *= 1 / angularLoad;
+
+                    if (radialPos < 0.8) {
+                        addRadialResistance(radialAngle, resist);
+                    }
+                }
+            }
+        }
 
         recalcResist();
         radius++;
@@ -261,7 +262,7 @@ public class ProcessExplosion {
         if (dist > 100) {
             dist = 100;
         }
-        if (dist <= 0 || power <= 0 || posVec.y() < 0 || posVec.y() > 255) {
+        if (dist <= 0 || power <= 0 || posVec.y() < world.getMinBuildHeight() || posVec.y() > world.getMaxBuildHeight()) {
             return totalResist;
         }
 
@@ -280,35 +281,35 @@ public class ProcessExplosion {
 
         BlockState state = world.getBlockState(pos);
         Block block = state.getBlock();
-        // TODO: 22/08/2021 isAir may of gotten removed.
-//        if (!block.isAir(state, world, pos)) {
-//            Material mat = state.getMaterial();
-//            double effectivePower = (power / 10) * ((double) dist / (dist + travel));
-//
-//            r = block.getExplosionResistance();
-//
-//            if (effectivePower >= r) {
-//                destroyedCache.add(iPos);
-//            } else if (mat == Material.WATER || mat == Material.LAVA) {
-//                if (effectivePower > 5) {
-//                    destroyedCache.add(iPos);
-//                } else {
-//                    blocksToUpdate.add(iPos);
-//                }
-//                r = 10;
-//            } else {
-//                if (block instanceof IFluidBlock || block instanceof FallingBlock) {
-//                    blocksToUpdate.add(iPos);
-//                }
-//                scannedCache.add(iPos);
-//            }
-//
-//            if (r > 1000) {
-//                r = 1000;
-//            }
-//        } else {
-//            scannedCache.add(iPos);
-//        }
+
+        if (!state.isAir()) {
+            Material mat = state.getMaterial();
+            double effectivePower = (power / 10) * ((double) dist / (dist + travel));
+
+            r = block.getExplosionResistance();
+
+            if (effectivePower >= r) {
+                destroyedCache.add(iPos);
+            } else if (mat == Material.WATER || mat == Material.LAVA) {
+                if (effectivePower > 5) {
+                    destroyedCache.add(iPos);
+                } else {
+                    blocksToUpdate.add(iPos);
+                }
+                r = 10;
+            } else {
+                if (block instanceof IFluidBlock || block instanceof FallingBlock) {
+                    blocksToUpdate.add(iPos);
+                }
+                scannedCache.add(iPos);
+            }
+
+            if (r > 1000) {
+                r = 1000;
+            }
+        } else {
+            scannedCache.add(iPos);
+     }
 
         r = (r / radius) / travel;//?
 

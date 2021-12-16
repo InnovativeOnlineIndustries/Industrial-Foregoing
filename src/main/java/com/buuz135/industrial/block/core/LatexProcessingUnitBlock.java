@@ -23,31 +23,20 @@ package com.buuz135.industrial.block.core;
 
 import com.buuz135.industrial.block.IndustrialBlock;
 import com.buuz135.industrial.block.core.tile.LatexProcessingUnitTile;
-import com.buuz135.industrial.config.MachineCoreConfig;
 import com.buuz135.industrial.module.ModuleCore;
 import com.buuz135.industrial.utils.IndustrialTags;
-import com.hrznstudio.titanium.annotation.config.ConfigFile;
-import com.hrznstudio.titanium.annotation.config.ConfigVal;
-import com.hrznstudio.titanium.api.IFactory;
 import com.hrznstudio.titanium.recipe.generator.TitaniumShapedRecipeBuilder;
-import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.Blocks;
 import net.minecraft.data.recipes.FinishedRecipe;
 import net.minecraft.world.item.Items;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.entity.BlockEntityType;
-
 import net.minecraftforge.common.Tags;
 
 import javax.annotation.Nonnull;
 import java.util.function.Consumer;
 
-import com.hrznstudio.titanium.block.RotatableBlock.RotationType;
-
-@ConfigFile.Child(MachineCoreConfig.class)
 public class LatexProcessingUnitBlock extends IndustrialBlock<LatexProcessingUnitTile> {
-
-    @ConfigVal(comment = "Power consumed every tick when the machine is working")
-    public static int POWER_CONSUMED_EVERY_TICK = 20;
 
     public LatexProcessingUnitBlock() {
         super("latex_processing_unit", Block.Properties.copy(Blocks.STONE), LatexProcessingUnitTile.class, ModuleCore.TAB_CORE);

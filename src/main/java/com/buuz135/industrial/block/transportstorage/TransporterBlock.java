@@ -68,8 +68,8 @@ import static net.minecraft.world.level.block.state.properties.BlockStatePropert
 public class TransporterBlock extends BasicTileBlock<TransporterTile> implements SimpleWaterloggedBlock {
 
     public TransporterBlock(CreativeModeTab group) {
-        super(Properties.of(Material.HEAVY_METAL, MaterialColor.COLOR_ORANGE).noCollission().strength(2.0f), TransporterTile.class);
-        this.setRegistryName(Reference.MOD_ID, "transporter");
+        super("transporter", Properties.of(Material.HEAVY_METAL, MaterialColor.COLOR_ORANGE).noCollission().strength(2.0f), TransporterTile.class);
+        //this.setRegistryName(Reference.MOD_ID, "transporter");
         this.setItemGroup(group);
         this.registerDefaultState(this.defaultBlockState().setValue(WATERLOGGED, false));
     }
@@ -98,7 +98,7 @@ public class TransporterBlock extends BasicTileBlock<TransporterTile> implements
     }
 
     @Override
-    public ItemStack getPickBlock(BlockState state, HitResult target, BlockGetter world, BlockPos pos, Player player) {
+    public ItemStack getCloneItemStack(BlockState state, HitResult target, BlockGetter world, BlockPos pos, Player player) {
         BlockEntity tileEntity = world.getBlockEntity(pos);
         if (tileEntity instanceof TransporterTile) {
             if (target instanceof BlockHitResult) {

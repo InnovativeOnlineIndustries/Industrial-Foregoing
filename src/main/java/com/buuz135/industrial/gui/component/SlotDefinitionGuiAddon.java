@@ -76,8 +76,8 @@ public abstract class SlotDefinitionGuiAddon extends BasicButtonAddon {
     }
 
     @Override
-    public void drawForegroundLayer(PoseStack stack, Screen screen, IAssetProvider provider, int guiX, int guiY, int mouseX, int mouseY) {
-        if (isInside(screen, mouseX - guiX, mouseY - guiY)) {
+    public void drawForegroundLayer(PoseStack stack, Screen screen, IAssetProvider provider, int guiX, int guiY, int mouseX, int mouseY, float partialTicks) {
+        if (isMouseOver(mouseX - guiX, mouseY - guiY)) {
             stack.pushPose();
             stack.translate(0,0,256);
             AssetUtil.drawSelectingOverlay(stack, getPosX() + 1, getPosY() + 1, getPosX() + getXSize() - 1, getPosY() + getYSize() - 1);
@@ -86,8 +86,9 @@ public abstract class SlotDefinitionGuiAddon extends BasicButtonAddon {
     }
 
     @Override
-    public void handleClick(Screen screen, int guiX, int guiY, double mouseX, double mouseY, int button) {
+    public boolean mouseClicked(double mouseX, double mouseY, int button) {
         //Minecraft.getInstance().getSoundHandler().play(new SimpleSound(SoundEvents.UI_BUTTON_CLICK, SoundCategory.PLAYERS, 1f, 1f, Minecraft.getInstance().player.getPosition())); //getPosition
+        Screen screen = Minecraft.getInstance().screen;
         if (screen instanceof AbstractContainerScreen && ((AbstractContainerScreen) screen).getMenu() instanceof ILocatable) {
             ILocatable locatable = (ILocatable) ((AbstractContainerScreen) screen).getMenu();
             CompoundTag compoundNBT = new CompoundTag();
@@ -97,7 +98,9 @@ public abstract class SlotDefinitionGuiAddon extends BasicButtonAddon {
             compoundNBT.putBoolean("Shift", Screen.hasShiftDown());
             compoundNBT.putBoolean("Ctrl", Screen.hasControlDown());
             Titanium.NETWORK.get().sendToServer(new ButtonClickNetworkMessage(locatable.getLocatorInstance(), 4, compoundNBT));
+            return true;
         }
+        return false;
     }
 
     public abstract ItemStack getItemStack();

@@ -23,7 +23,7 @@ package com.buuz135.industrial.proxy.network;
 
 import com.buuz135.industrial.block.transportstorage.tile.TransporterTile;
 import com.hrznstudio.titanium.network.Message;
-import net.minecraftforge.fmllegacy.network.NetworkEvent;
+import net.minecraftforge.network.NetworkEvent;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;

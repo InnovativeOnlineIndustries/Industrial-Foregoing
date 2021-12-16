@@ -29,6 +29,17 @@ import com.buuz135.industrial.utils.explosion.ExplosionTickHandler;
 import com.buuz135.industrial.utils.explosion.ProcessExplosion;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.resources.sounds.SimpleSoundInstance;
+import net.minecraft.core.particles.BlockParticleOption;
+import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.protocol.Packet;
+import net.minecraft.network.syncher.EntityDataAccessor;
+import net.minecraft.network.syncher.EntityDataSerializers;
+import net.minecraft.network.syncher.SynchedEntityData;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.sounds.SoundSource;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
@@ -36,22 +47,11 @@ import net.minecraft.world.entity.MoverType;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
-import net.minecraft.nbt.CompoundTag;
-import net.minecraft.network.protocol.Packet;
-import net.minecraft.network.syncher.EntityDataAccessor;
-import net.minecraft.network.syncher.EntityDataSerializers;
-import net.minecraft.network.syncher.SynchedEntityData;
-import net.minecraft.core.particles.BlockParticleOption;
-import net.minecraft.core.particles.ParticleTypes;
-import net.minecraft.world.InteractionResult;
-import net.minecraft.world.InteractionHand;
-import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.level.Level;
-import net.minecraft.server.level.ServerLevel;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
-import net.minecraftforge.fmllegacy.network.NetworkHooks;
 import net.minecraftforge.items.ItemHandlerHelper;
+import net.minecraftforge.network.NetworkHooks;
 
 import javax.annotation.Nullable;
 
@@ -77,12 +77,12 @@ public class InfinityNukeEntity extends Entity {
 
     public InfinityNukeEntity(EntityType<? extends InfinityNukeEntity> entityTypeIn, Level worldIn) {
         super(entityTypeIn, worldIn);
-        this.original = new ItemStack(ModuleTool.INFINITY_NUKE);
+        this.original = new ItemStack(ModuleTool.INFINITY_NUKE.get());
         this.blocksBuilding = true;
     }
 
     public InfinityNukeEntity(Level worldIn, LivingEntity owner, ItemStack original) {
-        this(ModuleTool.INFINITY_NUKE_ENTITY_TYPE, worldIn);
+        this((EntityType<? extends InfinityNukeEntity>) ModuleTool.INFINITY_NUKE_ENTITY_TYPE.get(), worldIn);
         this.placedBy = owner;
         this.original = original;
         this.radius = ItemInfinityNuke.getRadius(original);
@@ -100,7 +100,6 @@ public class InfinityNukeEntity extends Entity {
         if (this.onGround) {
             this.setDeltaMovement(this.getDeltaMovement().multiply(0.7D, -0.5D, 0.7D));
         }
-
         if (exploding) {
             if (level instanceof ServerLevel && explosionHelper == null) {
                 explosionHelper = new ProcessExplosion(this.blockPosition(), ItemInfinityNuke.getRadius(original), (ServerLevel) this.level, 39, placedBy != null ? placedBy.getDisplayName().getString() : "");
@@ -116,6 +115,7 @@ public class InfinityNukeEntity extends Entity {
             }
         }
         if (explosionHelper != null && explosionHelper.isDead) {
+            this.remove(RemovalReason.KILLED);
             this.onClientRemoval();
         }
         if (level.isClientSide) {
@@ -126,7 +126,7 @@ public class InfinityNukeEntity extends Entity {
     @OnlyIn(Dist.CLIENT)
     private void tickClient() {
         if (chargingSound == null && this.getEntityData().get(EXPLODING)) {
-            Minecraft.getInstance().getSoundManager().play(chargingSound = new TickeableSound(this.level, this.blockPosition(), ModuleTool.NUKE_CHARGING, this.getEntityData().get(RADIUS), 10));
+            Minecraft.getInstance().getSoundManager().play(chargingSound = new TickeableSound(this.level, this.blockPosition(), ModuleTool.NUKE_CHARGING.get(), this.getEntityData().get(RADIUS), 10));
         }
         if (chargingSound != null) {
             chargingSound.increase();
@@ -183,6 +183,7 @@ public class InfinityNukeEntity extends Entity {
             if (player.getItemInHand(hand).isEmpty()) {
                 if (player.isShiftKeyDown()) {
                     ItemHandlerHelper.giveItemToPlayer(player, this.original);
+                    this.remove(RemovalReason.KILLED);
                     this.onClientRemoval();
                     return InteractionResult.SUCCESS;
                 } else {
@@ -213,7 +214,7 @@ public class InfinityNukeEntity extends Entity {
 
     @Override
     public boolean isPickable() {
-        return !this.isAlive();
+        return this.isAlive();
     }
 
     public ItemStack getOriginal() {
@@ -262,4 +263,5 @@ public class InfinityNukeEntity extends Entity {
     public int getDataTicksExploding() {
         return this.getEntityData().get(TICKS);
     }
+
 }

@@ -26,16 +26,16 @@ import com.buuz135.industrial.utils.Reference;
 import com.hrznstudio.titanium.recipe.serializer.GenericSerializer;
 import com.hrznstudio.titanium.recipe.serializer.SerializableRecipe;
 import com.hrznstudio.titanium.util.TagUtil;
-import net.minecraft.world.level.block.Blocks;
-import net.minecraft.world.Container;
-import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.crafting.RecipeType;
-import net.minecraft.world.item.crafting.Ingredient;
-import net.minecraft.world.level.ItemLike;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.Container;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.crafting.Ingredient;
+import net.minecraft.world.item.crafting.RecipeType;
+import net.minecraft.world.level.ItemLike;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.biome.Biomes;
+import net.minecraft.world.level.block.Blocks;
 import net.minecraftforge.common.crafting.conditions.ICondition;
 import net.minecraftforge.common.crafting.conditions.IConditionSerializer;
 import net.minecraftforge.common.crafting.conditions.NotCondition;
@@ -57,12 +57,12 @@ public class LaserDrillOreRecipe extends SerializableRecipe {
         createWithDefault("iron", Blocks.IRON_ORE, 12, 5, 68, 20, 3);
         createWithDefault("redstone", Blocks.REDSTONE_ORE, 14, 5, 16, 28, 4);
         new LaserDrillOreRecipe("gold", Ingredient.of(Blocks.GOLD_ORE), 4, null,
-                new LaserDrillRarity(new ResourceKey[]{Biomes.BADLANDS, Biomes.BADLANDS_PLATEAU, Biomes.ERODED_BADLANDS, Biomes.MODIFIED_BADLANDS_PLATEAU, Biomes.MODIFIED_WOODED_BADLANDS_PLATEAU, Biomes.WOODED_BADLANDS_PLATEAU}, new ResourceKey[0], 32, 80, 16),
+                new LaserDrillRarity(new ResourceKey[]{Biomes.BADLANDS, Biomes.ERODED_BADLANDS}, new ResourceKey[0], 32, 80, 16),
                 new LaserDrillRarity(new ResourceKey[0], LaserDrillRarity.END, 5, 32, 6),
                 new LaserDrillRarity(new ResourceKey[0], LaserDrillRarity.END, 0, 255, 1));
         createWithDefault("lapis", Blocks.LAPIS_ORE, 11, 13, 34, 14, 2);
         new LaserDrillOreRecipe("emerald", Ingredient.of(Blocks.EMERALD_ORE), 5, null,
-                new LaserDrillRarity(new ResourceKey[]{Biomes.MOUNTAINS, Biomes.MOUNTAIN_EDGE, Biomes.GRAVELLY_MOUNTAINS, Biomes.MODIFIED_GRAVELLY_MOUNTAINS, Biomes.SNOWY_MOUNTAINS, Biomes.SNOWY_TAIGA_MOUNTAINS}, new ResourceKey[0], 5, 29, 8),
+                new LaserDrillRarity(new ResourceKey[]{Biomes.WINDSWEPT_GRAVELLY_HILLS, Biomes.WINDSWEPT_GRAVELLY_HILLS}, new ResourceKey[0], 5, 29, 8),
                 new LaserDrillRarity(new ResourceKey[0], LaserDrillRarity.END, 0, 255, 1));
         createWithDefault("diamond", Blocks.DIAMOND_ORE, 3, 5, 16, 4, 1);
         new LaserDrillOreRecipe("quartz", Ingredient.of(Blocks.NETHER_QUARTZ_ORE), 0, null,
@@ -160,7 +160,7 @@ public class LaserDrillOreRecipe extends SerializableRecipe {
     }
 
     public LaserDrillOreRecipe(String name,Ingredient output, int color, ResourceLocation isTag, LaserDrillRarity... rarity) {
-        this(name, output, Ingredient.of(ModuleCore.LASER_LENS[color]),isTag, rarity);
+        this(name, output, Ingredient.of(ModuleCore.LASER_LENS[color].get()),isTag, rarity);
     }
 
     public LaserDrillOreRecipe(ResourceLocation resourceLocation) {

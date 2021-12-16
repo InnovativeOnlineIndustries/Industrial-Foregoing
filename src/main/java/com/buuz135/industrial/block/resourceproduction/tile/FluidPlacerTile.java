@@ -27,21 +27,19 @@ import com.buuz135.industrial.config.machine.resourceproduction.FluidPlacerConfi
 import com.buuz135.industrial.module.ModuleResourceProduction;
 import com.buuz135.industrial.utils.BlockUtils;
 import com.hrznstudio.titanium.annotation.Save;
+import com.hrznstudio.titanium.block.BasicTileBlock;
 import com.hrznstudio.titanium.component.energy.EnergyStorageComponent;
 import com.hrznstudio.titanium.component.fluid.FluidTankComponent;
 import com.hrznstudio.titanium.component.fluid.SidedFluidTankComponent;
-
-import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.level.material.Fluids;
-import net.minecraft.world.item.DyeColor;
-import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.core.BlockPos;
+import net.minecraft.world.item.DyeColor;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.state.properties.BlockStateProperties;
+import net.minecraft.world.level.material.Fluids;
 import net.minecraftforge.fluids.FluidAttributes;
 import net.minecraftforge.fluids.capability.IFluidHandler;
 
 import javax.annotation.Nonnull;
-
-import com.buuz135.industrial.block.tile.IndustrialWorkingTile.WorkAction;
 
 public class FluidPlacerTile extends IndustrialAreaWorkingTile<FluidPlacerTile> {
 
@@ -52,7 +50,7 @@ public class FluidPlacerTile extends IndustrialAreaWorkingTile<FluidPlacerTile> 
     private SidedFluidTankComponent<FluidPlacerTile> tank;
 
     public FluidPlacerTile(BlockPos blockPos, BlockState blockState) {
-        super(ModuleResourceProduction.FLUID_PLACER, RangeManager.RangeType.BEHIND, false, FluidPlacerConfig.powerPerOperation, blockPos, blockState);
+        super((BasicTileBlock<FluidPlacerTile>) ModuleResourceProduction.FLUID_PLACER.get(), RangeManager.RangeType.BEHIND, false, FluidPlacerConfig.powerPerOperation, blockPos, blockState);
         this.addTank(this.tank = (SidedFluidTankComponent<FluidPlacerTile>) new SidedFluidTankComponent<FluidPlacerTile>("input", FluidPlacerConfig.maxInputTankSize, 43, 20, 0)
                 .setColor(DyeColor.BLUE)
                 .setTankAction(FluidTankComponent.Action.FILL)

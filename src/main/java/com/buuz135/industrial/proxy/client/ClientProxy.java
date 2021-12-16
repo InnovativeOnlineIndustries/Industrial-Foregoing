@@ -22,10 +22,15 @@
 package com.buuz135.industrial.proxy.client;
 
 import com.buuz135.industrial.IndustrialForegoing;
+import com.buuz135.industrial.block.IndustrialBlock;
 import com.buuz135.industrial.block.tile.IndustrialAreaWorkingTile;
 import com.buuz135.industrial.block.transportstorage.tile.BlackHoleTankTile;
 import com.buuz135.industrial.block.transportstorage.tile.ConveyorTile;
+import com.buuz135.industrial.entity.InfinityLauncherProjectileEntity;
+import com.buuz135.industrial.entity.InfinityNukeEntity;
+import com.buuz135.industrial.entity.InfinityTridentEntity;
 import com.buuz135.industrial.entity.client.*;
+import com.buuz135.industrial.item.MobImprisonmentToolItem;
 import com.buuz135.industrial.item.infinity.InfinityTier;
 import com.buuz135.industrial.item.infinity.ItemInfinity;
 import com.buuz135.industrial.module.ModuleCore;
@@ -34,11 +39,7 @@ import com.buuz135.industrial.module.ModuleTool;
 import com.buuz135.industrial.module.ModuleTransportStorage;
 import com.buuz135.industrial.proxy.CommonProxy;
 import com.buuz135.industrial.proxy.client.event.IFClientEvents;
-import com.buuz135.industrial.proxy.client.render.BlackHoleUnitTESR;
-import com.buuz135.industrial.proxy.client.render.ContributorsCatEarsRender;
-import com.buuz135.industrial.proxy.client.render.MycelialReactorTESR;
-import com.buuz135.industrial.proxy.client.render.TransporterTESR;
-import com.buuz135.industrial.proxy.client.render.WorkingAreaTESR;
+import com.buuz135.industrial.proxy.client.render.*;
 import com.buuz135.industrial.proxy.network.BackpackOpenMessage;
 import com.buuz135.industrial.utils.FluidUtils;
 import com.buuz135.industrial.utils.Reference;
@@ -58,15 +59,16 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.TextComponent;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundEvent;
+import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.item.SpawnEggItem;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.client.ClientRegistry;
 import net.minecraftforge.client.event.EntityRenderersEvent;
 import net.minecraftforge.client.event.ModelBakeEvent;
 import net.minecraftforge.client.model.obj.OBJModel;
 import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.common.util.Constants;
 import net.minecraftforge.common.util.NonNullLazy;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.event.TickEvent;
@@ -75,7 +77,6 @@ import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
 import net.minecraftforge.fluids.capability.IFluidHandlerItem;
 import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.fmlclient.registry.ClientRegistry;
 import net.minecraftforge.registries.ForgeRegistries;
 
 import java.util.Calendar;
@@ -119,13 +120,13 @@ public class ClientProxy extends CommonProxy {
 
         //((IReloadableResourceManager) Minecraft.getInstance().getResourceManager()).addReloadListener(resourceManager -> FluidUtils.colorCache.clear());
 
-        ItemBlockRenderTypes.setRenderLayer(ModuleTransportStorage.CONVEYOR, RenderType.cutout());
-        ItemBlockRenderTypes.setRenderLayer(ModuleTransportStorage.BLACK_HOLE_TANK_COMMON, RenderType.cutout());
-        ItemBlockRenderTypes.setRenderLayer(ModuleTransportStorage.BLACK_HOLE_TANK_PITY, RenderType.cutout());
-        ItemBlockRenderTypes.setRenderLayer(ModuleTransportStorage.BLACK_HOLE_TANK_SIMPLE, RenderType.cutout());
-        ItemBlockRenderTypes.setRenderLayer(ModuleTransportStorage.BLACK_HOLE_TANK_ADVANCED, RenderType.cutout());
-        ItemBlockRenderTypes.setRenderLayer(ModuleTransportStorage.BLACK_HOLE_TANK_SUPREME, RenderType.cutout());
-        ItemBlockRenderTypes.setRenderLayer(ModuleCore.DARK_GLASS, RenderType.translucent());
+        ItemBlockRenderTypes.setRenderLayer(ModuleTransportStorage.CONVEYOR.get(), RenderType.cutout());
+        ItemBlockRenderTypes.setRenderLayer(ModuleTransportStorage.BLACK_HOLE_TANK_COMMON.get(), RenderType.cutout());
+        ItemBlockRenderTypes.setRenderLayer(ModuleTransportStorage.BLACK_HOLE_TANK_PITY.get(), RenderType.cutout());
+        ItemBlockRenderTypes.setRenderLayer(ModuleTransportStorage.BLACK_HOLE_TANK_SIMPLE.get(), RenderType.cutout());
+        ItemBlockRenderTypes.setRenderLayer(ModuleTransportStorage.BLACK_HOLE_TANK_ADVANCED.get(), RenderType.cutout());
+        ItemBlockRenderTypes.setRenderLayer(ModuleTransportStorage.BLACK_HOLE_TANK_SUPREME.get(), RenderType.cutout());
+        ItemBlockRenderTypes.setRenderLayer(ModuleCore.DARK_GLASS.get(), RenderType.translucent());
 
         Minecraft.getInstance().getBlockColors().register((state, worldIn, pos, tintIndex) -> {
             if (tintIndex == 0 && worldIn != null && pos != null) {
@@ -135,24 +136,24 @@ public class ClientProxy extends CommonProxy {
                 }
             }
             return 0xFFFFFFF;
-        }, ModuleTransportStorage.CONVEYOR);
+        }, ModuleTransportStorage.CONVEYOR.get());
         Minecraft.getInstance().getItemColors().register((stack, tintIndex) -> {
             if (tintIndex == 1 || tintIndex == 2 || tintIndex == 3) {
                 SpawnEggItem info = null;
-                if (stack.hasTag() && stack.getTag().contains("entity", Constants.NBT.TAG_STRING)) {
+                if (stack.hasTag() && stack.getTag().contains("entity")) {
                     ResourceLocation id = new ResourceLocation(stack.getTag().getString("entity"));
                     info = SpawnEggItem.byId(ForgeRegistries.ENTITIES.getValue(id));
                 }
-                return info == null ? 0x636363 : tintIndex == 3 ? ModuleTool.MOB_IMPRISONMENT_TOOL.isBlacklisted(info.getType(new CompoundTag())) ? 0xDB201A : 0x636363 : info.getColor(tintIndex - 1);
+                return info == null ? 0x636363 : tintIndex == 3 ? ((MobImprisonmentToolItem)ModuleTool.MOB_IMPRISONMENT_TOOL.get()).isBlacklisted(info.getType(new CompoundTag())) ? 0xDB201A : 0x636363 : info.getColor(tintIndex - 1);
             }
             return 0xFFFFFF;
-        }, ModuleTool.MOB_IMPRISONMENT_TOOL);
+        }, ModuleTool.MOB_IMPRISONMENT_TOOL.get());
         Minecraft.getInstance().getItemColors().register((stack, tintIndex) -> {
             if (tintIndex == 0) {
                 return InfinityTier.getTierBraquet(ItemInfinity.getPowerFromStack(stack)).getLeft().getTextureColor();
             }
             return 0xFFFFFF;
-        }, ModuleTool.INFINITY_BACKPACK, ModuleTool.INFINITY_LAUNCHER, ModuleTool.INFINITY_NUKE, ModuleTool.INFINITY_TRIDENT, ModuleTool.INFINITY_HAMMER, ModuleTool.INFINITY_SAW, ModuleTool.INFINITY_DRILL);
+        }, ModuleTool.INFINITY_BACKPACK.get(), ModuleTool.INFINITY_LAUNCHER.get(), ModuleTool.INFINITY_NUKE.get(), ModuleTool.INFINITY_TRIDENT.get(), ModuleTool.INFINITY_HAMMER.get(), ModuleTool.INFINITY_SAW.get(), ModuleTool.INFINITY_DRILL.get());
         Minecraft.getInstance().getBlockColors().register((state, worldIn, pos, tintIndex) -> {
             if (tintIndex == 0 && worldIn != null && pos != null && worldIn.getBlockEntity(pos) instanceof BlackHoleTankTile) {
                 BlackHoleTankTile tank = (BlackHoleTankTile) worldIn.getBlockEntity(pos);
@@ -162,7 +163,7 @@ public class ClientProxy extends CommonProxy {
                 }
             }
             return 0xFFFFFF;
-        }, ModuleTransportStorage.BLACK_HOLE_TANK_COMMON, ModuleTransportStorage.BLACK_HOLE_TANK_PITY, ModuleTransportStorage.BLACK_HOLE_TANK_SIMPLE, ModuleTransportStorage.BLACK_HOLE_TANK_ADVANCED, ModuleTransportStorage.BLACK_HOLE_TANK_SUPREME);
+        }, ModuleTransportStorage.BLACK_HOLE_TANK_COMMON.get(), ModuleTransportStorage.BLACK_HOLE_TANK_PITY.get(), ModuleTransportStorage.BLACK_HOLE_TANK_SIMPLE.get(), ModuleTransportStorage.BLACK_HOLE_TANK_ADVANCED.get(), ModuleTransportStorage.BLACK_HOLE_TANK_SUPREME.get());
         Minecraft.getInstance().getItemColors().register((stack, tintIndex) -> {
             if (tintIndex == 0 && stack.getCapability(CapabilityFluidHandler.FLUID_HANDLER_ITEM_CAPABILITY).isPresent()) {
                 IFluidHandlerItem fluidHandlerItem = stack.getCapability(CapabilityFluidHandler.FLUID_HANDLER_ITEM_CAPABILITY).orElseGet(null);
@@ -172,7 +173,7 @@ public class ClientProxy extends CommonProxy {
                 }
             }
             return 0xFFFFFF;
-        },ModuleTransportStorage.BLACK_HOLE_TANK_COMMON, ModuleTransportStorage.BLACK_HOLE_TANK_PITY, ModuleTransportStorage.BLACK_HOLE_TANK_SIMPLE, ModuleTransportStorage.BLACK_HOLE_TANK_ADVANCED, ModuleTransportStorage.BLACK_HOLE_TANK_SUPREME);
+        },ModuleTransportStorage.BLACK_HOLE_TANK_COMMON.get(), ModuleTransportStorage.BLACK_HOLE_TANK_PITY.get(), ModuleTransportStorage.BLACK_HOLE_TANK_SIMPLE.get(), ModuleTransportStorage.BLACK_HOLE_TANK_ADVANCED.get(), ModuleTransportStorage.BLACK_HOLE_TANK_SUPREME.get());
         Minecraft.getInstance().getItemColors().register((stack, tintIndex) -> {
             if (tintIndex == 1 && stack.getCapability(CapabilityFluidHandler.FLUID_HANDLER_ITEM_CAPABILITY).isPresent()) {
                 IFluidHandlerItem fluidHandlerItem = stack.getCapability(CapabilityFluidHandler.FLUID_HANDLER_ITEM_CAPABILITY).orElseGet(null);
@@ -214,25 +215,25 @@ public class ClientProxy extends CommonProxy {
         blocksToProcess.get().stream().filter(blockBase -> blockBase instanceof BasicTileBlock && IndustrialAreaWorkingTile.class.isAssignableFrom(((BasicTileBlock) blockBase).getTileClass())).forEach(blockBase -> event.registerBlockEntityRenderer(((BasicTileBlock) blockBase).getTileEntityType(), WorkingAreaTESR::new));
 
 
-        event.registerBlockEntityRenderer(ModuleTransportStorage.BLACK_HOLE_UNIT_COMMON.getTileEntityType(), BlackHoleUnitTESR::new);
-        event.registerBlockEntityRenderer(ModuleTransportStorage.BLACK_HOLE_UNIT_PITY.getTileEntityType(), BlackHoleUnitTESR::new);
-        event.registerBlockEntityRenderer(ModuleTransportStorage.BLACK_HOLE_UNIT_SIMPLE.getTileEntityType(), BlackHoleUnitTESR::new);
-        event.registerBlockEntityRenderer(ModuleTransportStorage.BLACK_HOLE_UNIT_ADVANCED.getTileEntityType(), BlackHoleUnitTESR::new);
-        event.registerBlockEntityRenderer(ModuleTransportStorage.BLACK_HOLE_UNIT_SUPREME.getTileEntityType(), BlackHoleUnitTESR::new);
-        event.registerBlockEntityRenderer(ModuleTransportStorage.BLACK_HOLE_TANK_COMMON.getTileEntityType(), BlackHoleUnitTESR::new);
-        event.registerBlockEntityRenderer(ModuleTransportStorage.BLACK_HOLE_TANK_PITY.getTileEntityType(), BlackHoleUnitTESR::new);
-        event.registerBlockEntityRenderer(ModuleTransportStorage.BLACK_HOLE_TANK_SIMPLE.getTileEntityType(), BlackHoleUnitTESR::new);
-        event.registerBlockEntityRenderer(ModuleTransportStorage.BLACK_HOLE_TANK_ADVANCED.getTileEntityType(), BlackHoleUnitTESR::new);
-        event.registerBlockEntityRenderer(ModuleTransportStorage.BLACK_HOLE_UNIT_COMMON.getTileEntityType(), BlackHoleUnitTESR::new);
-        event.registerBlockEntityRenderer(ModuleTransportStorage.BLACK_HOLE_TANK_SUPREME.getTileEntityType(), BlackHoleUnitTESR::new);
+        event.registerBlockEntityRenderer(((IndustrialBlock)ModuleTransportStorage.BLACK_HOLE_UNIT_COMMON.get()).getTileEntityType(), BlackHoleUnitTESR::new);
+        event.registerBlockEntityRenderer(((IndustrialBlock)ModuleTransportStorage.BLACK_HOLE_UNIT_PITY.get()).getTileEntityType(), BlackHoleUnitTESR::new);
+        event.registerBlockEntityRenderer(((IndustrialBlock)ModuleTransportStorage.BLACK_HOLE_UNIT_SIMPLE.get()).getTileEntityType(), BlackHoleUnitTESR::new);
+        event.registerBlockEntityRenderer(((IndustrialBlock)ModuleTransportStorage.BLACK_HOLE_UNIT_ADVANCED.get()).getTileEntityType(), BlackHoleUnitTESR::new);
+        event.registerBlockEntityRenderer(((IndustrialBlock)ModuleTransportStorage.BLACK_HOLE_UNIT_SUPREME.get()).getTileEntityType(), BlackHoleUnitTESR::new);
+        event.registerBlockEntityRenderer(((IndustrialBlock)ModuleTransportStorage.BLACK_HOLE_TANK_COMMON.get()).getTileEntityType(), BlackHoleUnitTESR::new);
+        event.registerBlockEntityRenderer(((IndustrialBlock)ModuleTransportStorage.BLACK_HOLE_TANK_PITY.get()).getTileEntityType(), BlackHoleUnitTESR::new);
+        event.registerBlockEntityRenderer(((IndustrialBlock)ModuleTransportStorage.BLACK_HOLE_TANK_SIMPLE.get()).getTileEntityType(), BlackHoleUnitTESR::new);
+        event.registerBlockEntityRenderer(((IndustrialBlock)ModuleTransportStorage.BLACK_HOLE_TANK_ADVANCED.get()).getTileEntityType(), BlackHoleUnitTESR::new);
+        event.registerBlockEntityRenderer(((IndustrialBlock)ModuleTransportStorage.BLACK_HOLE_UNIT_COMMON.get()).getTileEntityType(), BlackHoleUnitTESR::new);
+        event.registerBlockEntityRenderer(((IndustrialBlock)ModuleTransportStorage.BLACK_HOLE_TANK_SUPREME.get()).getTileEntityType(), BlackHoleUnitTESR::new);
 
-        event.registerBlockEntityRenderer(ModuleGenerator.MYCELIAL_REACTOR.getTileEntityType(), MycelialReactorTESR::new);
+        event.registerBlockEntityRenderer(((IndustrialBlock)ModuleGenerator.MYCELIAL_REACTOR.get()).getTileEntityType(), MycelialReactorTESR::new);
 
-        event.registerEntityRenderer(ModuleTool.TRIDENT_ENTITY_TYPE, InfinityTridentRenderer::new);
-        event.registerEntityRenderer(ModuleTool.INFINITY_NUKE_ENTITY_TYPE, InfinityNukeRenderer::new);
-        event.registerEntityRenderer(ModuleTool.INFINITY_LAUNCHER_PROJECTILE_ENTITY_TYPE, InfinityLauncherProjectileRenderer::new);
+        event.registerEntityRenderer((EntityType<? extends InfinityTridentEntity>) ModuleTool.TRIDENT_ENTITY_TYPE.get(), InfinityTridentRenderer::new);
+        event.registerEntityRenderer((EntityType<? extends InfinityNukeEntity>) ModuleTool.INFINITY_NUKE_ENTITY_TYPE.get(), InfinityNukeRenderer::new);
+        event.registerEntityRenderer((EntityType<? extends InfinityLauncherProjectileEntity>) ModuleTool.INFINITY_LAUNCHER_PROJECTILE_ENTITY_TYPE.get(), InfinityLauncherProjectileRenderer::new);
 
-        event.registerBlockEntityRenderer(ModuleTransportStorage.TRANSPORTER.getTileEntityType(), TransporterTESR::new);
+        event.registerBlockEntityRenderer(((BasicTileBlock)ModuleTransportStorage.TRANSPORTER.get()).getTileEntityType(), TransporterTESR::new);
     }
 
     @SubscribeEvent

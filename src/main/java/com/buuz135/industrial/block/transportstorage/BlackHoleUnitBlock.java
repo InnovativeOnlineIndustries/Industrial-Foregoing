@@ -28,36 +28,34 @@ import com.buuz135.industrial.module.ModuleCore;
 import com.buuz135.industrial.module.ModuleTransportStorage;
 import com.buuz135.industrial.utils.BlockUtils;
 import com.buuz135.industrial.utils.IndustrialTags;
-import com.buuz135.industrial.utils.Reference;
-import com.hrznstudio.titanium.api.IFactory;
 import com.hrznstudio.titanium.block.RotatableBlock;
 import com.hrznstudio.titanium.datagenerator.loot.block.BasicBlockLootTables;
-import com.hrznstudio.titanium.module.api.RegistryManager;
+import com.hrznstudio.titanium.module.DeferredRegistryHelper;
 import com.hrznstudio.titanium.nbthandler.NBTManager;
 import com.hrznstudio.titanium.recipe.generator.TitaniumShapedRecipeBuilder;
 import com.hrznstudio.titanium.util.LangUtil;
 import com.mojang.datafixers.types.Type;
-import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.level.block.Blocks;
-import net.minecraft.world.item.TooltipFlag;
-import net.minecraft.data.recipes.FinishedRecipe;
-import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.level.storage.loot.LootTable;
-import net.minecraft.world.level.storage.loot.functions.CopyNbtFunction;
-import net.minecraft.nbt.CompoundTag;
-import net.minecraft.tags.Tag;
-import net.minecraft.world.level.block.entity.BlockEntityType;
+import net.minecraft.ChatFormatting;
+import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.NonNullList;
-import net.minecraft.resources.ResourceLocation;
-import net.minecraft.core.BlockPos;
+import net.minecraft.data.recipes.FinishedRecipe;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.TextComponent;
-import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.tags.Tag;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.*;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.entity.BlockEntityType;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.storage.loot.LootTable;
+import net.minecraft.world.level.storage.loot.functions.CopyNbtFunction;
+import net.minecraft.world.level.storage.loot.providers.nbt.ContextNbtProvider;
 import net.minecraftforge.common.Tags;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.ICapabilityProvider;
@@ -69,15 +67,7 @@ import javax.annotation.Nullable;
 import java.text.DecimalFormat;
 import java.util.List;
 import java.util.function.Consumer;
-
-import net.minecraft.world.level.block.state.BlockBehaviour.Properties;
-
-import net.minecraft.world.item.BlockItem;
-import net.minecraft.world.item.Item;
-import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.Items;
-import net.minecraft.world.item.Rarity;
-import net.minecraft.world.level.storage.loot.providers.nbt.ContextNbtProvider;
+import java.util.function.Supplier;
 
 public class BlackHoleUnitBlock extends IndustrialBlock<BlackHoleUnitTile> {
 
@@ -95,14 +85,11 @@ public class BlackHoleUnitBlock extends IndustrialBlock<BlackHoleUnitTile> {
     }
 
     @Override
-    public void addAlternatives(RegistryManager<?> registry) {
-        BlockItem item = this.getItemBlockFactory().create();
-        setItem(item);
-        registry.content(Item.class, item);
+    public void addAlternatives(DeferredRegistryHelper registry) {
+        setItem(registry.register(Item.class, rarity.name().toLowerCase() + "_black_hole_unit", this.getItemBlockFactory()));
         NBTManager.getInstance().scanTileClassForAnnotations(BlackHoleUnitTile.class);
         tileEntityType = BlockEntityType.Builder.of(this.getTileEntityFactory()::create, new Block[]{this}).build((Type) null);
-        tileEntityType.setRegistryName(new ResourceLocation(Reference.MOD_ID, rarity.name().toLowerCase()  + "_black_hole_unit"));
-        registry.content(BlockEntityType.class, tileEntityType);
+        registry.registerBlockEntityType(rarity.name().toLowerCase()  + "_black_hole_unit", () -> tileEntityType);
     }
 
     @Override
@@ -154,8 +141,8 @@ public class BlackHoleUnitBlock extends IndustrialBlock<BlackHoleUnitTile> {
     }
 
     @Override
-    public IFactory<BlockItem> getItemBlockFactory() {
-        return () -> (BlockItem) new BlackHoleUnitItem(this, new Item.Properties().tab(this.getItemGroup()), rarity).setRegistryName(this.getRegistryName());
+    public Supplier<Item> getItemBlockFactory() {
+        return () -> (BlockItem) new BlackHoleUnitItem(this, new Item.Properties().tab(this.getItemGroup()), rarity);
     }
 
     @Override
