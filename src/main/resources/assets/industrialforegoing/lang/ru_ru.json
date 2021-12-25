@@ -119,6 +119,7 @@
   "text.industrialforegoing.plant.pumpkin": "- Pumpkin §o(Не требует пересадки)",
   "text.industrialforegoing.plant.any_tree": "- Любое похожее дерево из Майнкрафта",
   "text.industrialforegoing.plant.slime_tree": "- Слаймовые деревья из Тинкерс Констракту",
+  "death.attack.damage.if.nuke": "%1$s был расщеплён на атомы ядерной бомбой",
   "__comment": "!-- PAGE FORMAT HELP",
   "__comment1": "@L@\" -> Adds a new line",
   "__comment2": "@PAGE@\" -> Will create a new page and the following text will be in a new page",
@@ -386,8 +387,11 @@
   "item.industrialforegoing.infinity_hammer": "Бесконечный молот",
   "item.industrialforegoing.infinity_trident": "Бесконечный трезубец",
   "item.industrialforegoing.infinity_backpack": "Бесконечный рюкзак",
+  "item.industrialforegoing.infinity_launcher": "Бесконечная пусковая установка",
+  "item.industrialforegoing.infinity_nuke": "Бесконечная ядерная бомба",
   "item.industrialforegoing.item_transporter_type": "Предметный транспортёр",
   "item.industrialforegoing.fluid_transporter_type": "Жидкостный транспортёт",
+  "item.industrialforegoing.world_transporter_type": "Мировой транспортер",
   "tooltip.titanium.facing_handler.fuel_input": "Топливный вход",
   "tooltip.titanium.facing_handler.input_fluid": "Жидкостный вход",
   "tooltip.titanium.facing_handler.output_fluid": "Жидкостный выход",
@@ -547,5 +551,10 @@
   "resource.titanium.material.diamond": "Алмаз",
   "item.industrialforegoing.addon": "Улучшение: ",
   "item.industrialforegoing.efficiency": "Эффективность ",
-  "item.industrialforegoing.speed": "Скорость "
+  "item.industrialforegoing.speed": "Скорость ",
+  "item.industrialforegoing.processing": "Обработка ",
+  "industrialforegoing.subtitle.nuke_arming": "Бесконечная ядерная бомба на вооружении",
+  "industrialforegoing.subtitle.nuke_charging": "Бесконечная ядерная бомба заряжается",
+  "industrialforegoing.subtitle.nuke_explosion": "Примите смерть и разрушение от бесконечной ядерной бомбы",
+  "entity.industrialforegoing.infinity_nuke": "Бесконечная ядерная бомба"
 }
