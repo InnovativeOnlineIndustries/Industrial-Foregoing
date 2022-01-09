@@ -158,7 +158,7 @@ dependencies {
     if (findProject(':titanium') != null) {
         implementation project(':titanium')
     } else {
-        implementation fg.deobf (project.dependencies.create('com.hrznstudio:titanium:1.18-3.4.0-17'))
+        implementation fg.deobf (project.dependencies.create('com.hrznstudio:titanium:1.18-3.4.0-27'))
     }
 
     compileOnly fg.deobf("mezz.jei:jei-1.18.1:9.1.0.46:api")

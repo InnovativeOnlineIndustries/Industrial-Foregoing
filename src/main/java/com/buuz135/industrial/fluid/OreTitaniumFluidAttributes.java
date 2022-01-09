@@ -21,13 +21,7 @@
  */
 package com.buuz135.industrial.fluid;
 
-import java.util.List;
-
-import com.buuz135.industrial.utils.ItemStackUtils;
 import com.hrznstudio.titanium.util.TagUtil;
-import net.minecraftforge.fluids.FluidAttributes;
-import net.minecraftforge.fluids.FluidStack;
-
 import net.minecraft.client.Minecraft;
 import net.minecraft.core.Registry;
 import net.minecraft.network.chat.Component;
@@ -38,6 +32,10 @@ import net.minecraft.tags.SerializationTags;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.material.Fluid;
+import net.minecraftforge.fluids.FluidAttributes;
+import net.minecraftforge.fluids.FluidStack;
+
+import java.util.List;
 
 public class OreTitaniumFluidAttributes extends FluidAttributes {
 
@@ -97,17 +95,13 @@ public class OreTitaniumFluidAttributes extends FluidAttributes {
     }
 
     public static boolean isValid(ResourceLocation resourceLocation){
-        // TODO: 26/07/2021 Fix
-//        return SerializationTags.getInstance().getItems().getAvailableTags().contains(new ResourceLocation("forge:dusts/" + resourceLocation.toString().replace("forge:ores/", ""))) && !SerializationTags.getInstance().getItems().getTag(resourceLocation).getValues().isEmpty();
-        return false;
+        return SerializationTags.getInstance().getOrEmpty(Registry.ITEM_REGISTRY).getAvailableTags().contains(new ResourceLocation("forge:dusts/" + resourceLocation.toString().replace("forge:ores/", ""))) && !SerializationTags.getInstance().getOrEmpty(Registry.ITEM_REGISTRY).getTag(resourceLocation).getValues().isEmpty();
     }
 
 
     public static ItemStack getOutputDust(FluidStack stack){
         String tag = getFluidTag(stack);
-        // TODO: 26/07/2021 fix
-        return ItemStack.EMPTY;
-//        return TagUtil.getItemWithPreference(SerializationTags.getInstance().getItems().getTag(new ResourceLocation(tag.replace("forge:ores/", "forge:dusts/"))));
+        return TagUtil.getItemWithPreference(SerializationTags.getInstance().getOrEmpty(Registry.ITEM_REGISTRY).getTag(new ResourceLocation(tag.replace("forge:ores/", "forge:dusts/"))));
     }
 
     @Override

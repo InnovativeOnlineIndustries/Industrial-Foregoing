@@ -514,7 +514,7 @@ public class ItemInfinityBackpack extends ItemInfinity {
                     stack.setTag(nbt);
                 }
                 String id = stack.getTag().getString("Id");
-                return new BackpackContainer(ItemStackHarnessRegistry.getHarnessCreators().get(this).apply(stack), new InventoryStackLocatorInstance(target.getName(), target.getSlot()), new ContainerLevelAccess() {
+                return new BackpackContainer(ItemStackHarnessRegistry.getHarnessCreators().get(ModuleTool.INFINITY_BACKPACK).apply(stack), new InventoryStackLocatorInstance(target.getName(), target.getSlot()), new ContainerLevelAccess() {
                     @Override
                     public <T> Optional<T> evaluate(BiFunction<Level, BlockPos, T> p_221484_1_) {
                         return Optional.empty();
