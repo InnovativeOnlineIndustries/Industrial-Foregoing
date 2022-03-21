@@ -35,6 +35,7 @@ import net.minecraft.client.renderer.texture.TextureManager;
 import com.mojang.blaze3d.vertex.DefaultVertexFormat;
 import net.minecraft.client.CameraType;
 import net.minecraft.client.multiplayer.ClientLevel;
+import net.minecraft.core.Vec3i;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.core.Direction;
 import net.minecraft.world.phys.Vec3;
@@ -86,7 +87,7 @@ public class ParticleVex extends Particle {
     @Override
     public void tick() {
         super.tick();
-        if (this.entity.blockPosition().distSqr(x, y, z, true) > 2) {
+        if (this.entity.blockPosition().distSqr(new Vec3i(x, y, z)) > 2) {
             isDying = true;
         }
         if (!isDying && !this.removed) {
@@ -104,7 +105,7 @@ public class ParticleVex extends Particle {
 
     @Override
     public void render(VertexConsumer bufferBad, Camera activeRenderInfo, float v) {
-        if (entity instanceof LocalPlayer && Minecraft.getInstance().player.getUUID().equals(entity.getUUID()) && Minecraft.getInstance().options.getCameraType() == CameraType.FIRST_PERSON && this.entity.blockPosition().offset(0, 1, 0).distSqr(x, y, z, true) < 3)
+        if (entity instanceof LocalPlayer && Minecraft.getInstance().player.getUUID().equals(entity.getUUID()) && Minecraft.getInstance().options.getCameraType() == CameraType.FIRST_PERSON && this.entity.blockPosition().offset(0, 1, 0).distSqr(new Vec3i(x, y, z)) < 3)
             return;
         Vec3 vector3d = activeRenderInfo.getPosition();
         double x = entity.xOld + (vector3d.x - entity.xOld);

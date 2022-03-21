@@ -92,7 +92,7 @@ public class DyeMixerTile extends IndustrialProcessingTile<DyeMixerTile> {
     private int dye;
 
     public DyeMixerTile(BlockPos blockPos, BlockState blockState) {
-        super((BasicTileBlock<DyeMixerTile>) ModuleResourceProduction.DYE_MIXER.get(), 96, 40, blockPos,blockState);
+        super(ModuleResourceProduction.DYE_MIXER, 96, 40, blockPos,blockState);
         addInventory(this.inputRed = (SidedInventoryComponent<DyeMixerTile>) new SidedInventoryComponent<DyeMixerTile>("input_red", 33, 21, 1, 0)
                 .setColor(DyeColor.RED)
                 .setInputFilter((stack, integer) -> stack.is(Tags.Items.DYES_RED))

@@ -29,6 +29,7 @@ import com.buuz135.industrial.recipe.*;
 import com.buuz135.industrial.recipe.provider.IndustrialRecipeProvider;
 import com.buuz135.industrial.recipe.provider.IndustrialSerializableProvider;
 import com.buuz135.industrial.recipe.provider.IndustrialTagsProvider;
+import com.buuz135.industrial.registry.IFRegistries;
 import com.buuz135.industrial.utils.IFFakePlayer;
 import com.buuz135.industrial.utils.Reference;
 import com.buuz135.industrial.utils.data.IndustrialBlockstateProvider;
@@ -63,6 +64,7 @@ import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.forge.event.lifecycle.GatherDataEvent;
 import net.minecraftforge.registries.ForgeRegistries;
+import net.minecraftforge.registries.NewRegistryEvent;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -99,9 +101,9 @@ public class IndustrialForegoing extends ModuleController {
         proxy = new CommonProxy();
         DistExecutor.unsafeRunWhenOn(Dist.CLIENT, () -> () -> EventManager.mod(FMLClientSetupEvent.class).process(fmlClientSetupEvent -> new ClientProxy().run()).subscribe());
         DistExecutor.unsafeRunWhenOn(Dist.CLIENT, () -> () -> EventManager.mod(ModelRegistryEvent.class).process(modelRegistryEvent -> ForgeModelBakery.addSpecialModel(new ResourceLocation(Reference.MOD_ID, "block/catears"))).subscribe());
-
         EventManager.mod(FMLCommonSetupEvent.class).process(fmlCommonSetupEvent -> proxy.run()).subscribe();
         EventManager.forge(ServerStartingEvent.class).process(fmlServerStartingEvent -> worldFakePlayer.clear()).subscribe();
+        EventManager.mod(NewRegistryEvent.class).process(IFRegistries::create).subscribe();
         EventManager.modGeneric(RegistryEvent.Register.class, RecipeSerializer.class)
                 .process(register -> ((RegistryEvent.Register) register).getRegistry().registerAll(FluidExtractorRecipe.SERIALIZER, DissolutionChamberRecipe.SERIALIZER, LaserDrillOreRecipe.SERIALIZER, LaserDrillFluidRecipe.SERIALIZER, StoneWorkGenerateRecipe.SERIALIZER, CrusherRecipe.SERIALIZER)).subscribe();
         //EventManager.forge(ItemTooltipEvent.class).filter(itemTooltipEvent -> itemTooltipEvent.getItemStack().hasTag()).process(itemTooltipEvent -> itemTooltipEvent.getToolTip().add(itemTooltipEvent.getItemStack().getTag().toFormattedComponent())).subscribe();
@@ -163,7 +165,6 @@ public class IndustrialForegoing extends ModuleController {
 
     @Override
     protected void initModules() {
-        System.out.println(this);
         INSTANCE = this;
         new ModuleCore().generateFeatures(getRegistries());
         new ModuleTool().generateFeatures(getRegistries());

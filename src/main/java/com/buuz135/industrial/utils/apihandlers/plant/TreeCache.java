@@ -42,8 +42,8 @@ public class TreeCache {
     private BlockPos current;
 
     public TreeCache(Level world, BlockPos current) {
-        this.woodCache = new PriorityQueue<>(Comparator.comparingDouble(value -> ((BlockPos) value).distSqr(((BlockPos) value).getX(), current.getY(), ((BlockPos) value).getZ(), true)).reversed());
-        this.leavesCache = new PriorityQueue<>(Comparator.comparingDouble(value -> ((BlockPos) value).distSqr(current.getX(), ((BlockPos) value).getY(), current.getZ(), true)).reversed());
+        this.woodCache = new PriorityQueue<>(Comparator.comparingDouble(value -> ((BlockPos) value).distSqr(new Vec3i(((BlockPos) value).getX(), current.getY(), ((BlockPos) value).getZ()))).reversed());
+        this.leavesCache = new PriorityQueue<>(Comparator.comparingDouble(value -> ((BlockPos) value).distSqr(new Vec3i(current.getX(), ((BlockPos) value).getY(), current.getZ()))).reversed());
         this.world = world;
         this.current = current;
     }

@@ -37,6 +37,7 @@ import com.hrznstudio.titanium.nbthandler.NBTManager;
 import com.hrznstudio.titanium.recipe.generator.TitaniumShapedRecipeBuilder;
 import com.mojang.datafixers.types.Type;
 
+
 import net.minecraft.core.BlockPos;
 import net.minecraft.data.recipes.FinishedRecipe;
 import net.minecraft.data.recipes.ShapedRecipeBuilder;
@@ -52,10 +53,10 @@ import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
+import org.apache.commons.lang3.tuple.Pair;
 
 public class MycelialGeneratorBlock extends IndustrialBlock<MycelialGeneratorTile> {
 
-    private BlockEntityType tileEntityType;
     private final IMycelialGeneratorType type;
 
     public MycelialGeneratorBlock(IMycelialGeneratorType type) {
@@ -63,17 +64,17 @@ public class MycelialGeneratorBlock extends IndustrialBlock<MycelialGeneratorTil
         this.type = type;
     }
 
+    /*
     @Override
-    public void addAlternatives(DeferredRegistryHelper registry) {
-        setItem(registry.register(Item.class, "mycelial_" + type.getName(),  this.getItemBlockFactory()));
+    public static void addAlternatives(DeferredRegistryHelper registry) {
         NBTManager.getInstance().scanTileClassForAnnotations(MycelialGeneratorTile.class);
         tileEntityType = BlockEntityType.Builder.of(this.getTileEntityFactory()::create, new Block[]{this}).build((Type) null);
         registry.registerBlockEntityType("mycelial_generator_"+type.getName(), () -> tileEntityType);
-    }
+    }*/
 
     @Override
     public BlockEntityType.BlockEntitySupplier<MycelialGeneratorTile> getTileEntityFactory() {
-        return (p_155268_, p_155269_) -> new MycelialGeneratorTile(this, type, p_155268_, p_155269_);
+        return (p_155268_, p_155269_) -> new MycelialGeneratorTile(ModuleGenerator.MYCELIAL_GENERATORS.stream().filter(registryObjectRegistryObjectPair -> ((MycelialGeneratorBlock)registryObjectRegistryObjectPair.getLeft().get()).type == type).findFirst().get() ,type, p_155268_, p_155269_);
     }
 
     @Override
@@ -110,8 +111,5 @@ public class MycelialGeneratorBlock extends IndustrialBlock<MycelialGeneratorTil
         type.addIngredients(recipe).save(consumer);
     }
 
-    @Override
-    public BlockEntityType getTileEntityType() {
-        return tileEntityType;
-    }
+
 }

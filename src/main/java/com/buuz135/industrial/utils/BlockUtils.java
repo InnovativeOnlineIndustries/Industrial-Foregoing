@@ -24,6 +24,7 @@ package com.buuz135.industrial.utils;
 import com.buuz135.industrial.IndustrialForegoing;
 import com.buuz135.industrial.module.ModuleCore;
 import com.mojang.blaze3d.systems.RenderSystem;
+import net.minecraft.tags.TagKey;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.Blocks;
@@ -37,7 +38,6 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Rarity;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.tags.Tag;
-import net.minecraft.tags.SetTag;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.core.Direction;
 import net.minecraft.core.NonNullList;
@@ -77,11 +77,11 @@ public class BlockUtils {
         return false;
     }
 
-    public static boolean isBlockTag(Level world, BlockPos pos, Tag.Named<Block> tag) {
+    public static boolean isBlockTag(Level world, BlockPos pos, TagKey<Block> tag) {
         return isBlockStateTag(world.getBlockState(pos), tag);
     }
 
-    public static boolean isBlockStateTag(BlockState state, SetTag.Named<Block> tag) {
+    public static boolean isBlockStateTag(BlockState state, TagKey<Block> tag) {
         return state.is(tag);
     }
 

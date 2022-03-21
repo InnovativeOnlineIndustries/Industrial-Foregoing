@@ -43,6 +43,7 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.TextComponent;
 import net.minecraft.tags.ItemTags;
 import net.minecraft.tags.Tag;
+import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.DyeColor;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
@@ -51,6 +52,7 @@ import net.minecraft.world.level.material.Fluids;
 import net.minecraftforge.common.Tags;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.capability.IFluidHandler;
+import net.minecraftforge.registries.ForgeRegistries;
 
 import javax.annotation.Nonnull;
 import java.util.Arrays;
@@ -59,7 +61,7 @@ import java.util.List;
 
 public class BioReactorTile extends IndustrialWorkingTile<BioReactorTile> {
 
-    public static Tag<Item>[] VALID = new Tag[]{IndustrialTags.Items.BIOREACTOR_INPUT, Tags.Items.CROPS_CARROT, Tags.Items.CROPS_POTATO, Tags.Items.CROPS_NETHER_WART, Tags.Items.DYES,
+    public static TagKey<Item>[] VALID = new TagKey[]{IndustrialTags.Items.BIOREACTOR_INPUT, Tags.Items.CROPS_CARROT, Tags.Items.CROPS_POTATO, Tags.Items.CROPS_NETHER_WART, Tags.Items.DYES,
             Tags.Items.HEADS, Tags.Items.MUSHROOMS, Tags.Items.SEEDS, ItemTags.SAPLINGS};
 
     private int getMaxProgress;
@@ -75,7 +77,7 @@ public class BioReactorTile extends IndustrialWorkingTile<BioReactorTile> {
     private ProgressBarComponent<BioReactorTile> bar;
 
     public BioReactorTile(BlockPos blockPos, BlockState blockState) {
-        super((BasicTileBlock<BioReactorTile>) ModuleGenerator.BIOREACTOR.get(), BioReactorConfig.powerPerOperation, blockPos, blockState);
+        super(ModuleGenerator.BIOREACTOR, BioReactorConfig.powerPerOperation, blockPos, blockState);
         addTank(water = (SidedFluidTankComponent<BioReactorTile>) new SidedFluidTankComponent<BioReactorTile>("water", BioReactorConfig.maxWaterTankStorage, 45, 20, 0).
                 setColor(DyeColor.CYAN).
                 setComponentHarness(this).
@@ -93,7 +95,7 @@ public class BioReactorTile extends IndustrialWorkingTile<BioReactorTile> {
                 setColor(DyeColor.PURPLE).
                 setComponentHarness(this).
                 setTankAction(FluidTankComponent.Action.DRAIN).
-                setValidator(fluidStack -> fluidStack.getFluid().isSame(ModuleCore.BIOFUEL.getSourceFluid()))
+                setValidator(fluidStack -> fluidStack.getFluid().isSame(ModuleCore.BIOFUEL.getSourceFluid().get()))
         );
         addProgressBar(bar = new ProgressBarComponent<BioReactorTile>(96 + 18 * 3, 20, BioReactorConfig.maxProgress) {
                     @Override
@@ -124,7 +126,7 @@ public class BioReactorTile extends IndustrialWorkingTile<BioReactorTile> {
             int fluidAmount = ((efficiency - 1) * 10 + 80) * efficiency;
             if (water.getFluidAmount() >= fluidAmount && biofuel.getCapacity() - biofuel.getFluidAmount() >= fluidAmount) {
                 water.drainForced(fluidAmount, IFluidHandler.FluidAction.EXECUTE);
-                biofuel.fillForced(new FluidStack(ModuleCore.BIOFUEL.getSourceFluid(), fluidAmount), IFluidHandler.FluidAction.EXECUTE);
+                biofuel.fillForced(new FluidStack(ModuleCore.BIOFUEL.getSourceFluid().get(), fluidAmount), IFluidHandler.FluidAction.EXECUTE);
                 for (int i = 0; i < input.getInventory().getSlots(); i++) {
                     input.getInventory().getStackInSlot(i).shrink(1);
                 }
@@ -141,8 +143,8 @@ public class BioReactorTile extends IndustrialWorkingTile<BioReactorTile> {
                 foundSlot = i;
             }
         }
-        for (Tag<Item> itemTag : VALID) {
-            if (itemTag.contains(stack.getItem()) && (foundSlot == -1 || (input.getInventory().getStackInSlot(foundSlot).getCount() + stack.getCount() <= input.getInventory().getStackInSlot(foundSlot).getMaxStackSize() && slot == foundSlot)))
+        for (TagKey<Item> itemTag : VALID) {
+            if (ForgeRegistries.ITEMS.tags().getTag(itemTag).contains(stack.getItem()) && (foundSlot == -1 || (input.getInventory().getStackInSlot(foundSlot).getCount() + stack.getCount() <= input.getInventory().getStackInSlot(foundSlot).getMaxStackSize() && slot == foundSlot)))
                 return true; //contains
         }
         return false;

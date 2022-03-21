@@ -64,6 +64,8 @@ import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.item.enchantment.Enchantments;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.Vec3;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.fluids.FluidStack;
 
 import java.util.List;
@@ -228,7 +230,7 @@ public class ItemInfinityTrident extends ItemInfinity {
     }
 
     //GUI Stuff
-
+    @OnlyIn(Dist.CLIENT)
     @Override
     public List<IFactory<? extends IScreenAddon>> getScreenAddons(Supplier<ItemStack> stack) {
         List<IFactory<? extends IScreenAddon>> factory = super.getScreenAddons(stack);
@@ -299,7 +301,7 @@ public class ItemInfinityTrident extends ItemInfinity {
                         new Ingredient.TagValue(IndustrialTags.Items.GEAR_GOLD),
                         new Ingredient.TagValue(IndustrialTags.Items.GEAR_GOLD),
                 },
-                new FluidStack(ModuleCore.PINK_SLIME.getSourceFluid(), 2000), 400, new ItemStack(this), FluidStack.EMPTY);
+                new FluidStack(ModuleCore.PINK_SLIME.getSourceFluid().get(), 2000), 400, new ItemStack(this), FluidStack.EMPTY);
     }
 
     @Override

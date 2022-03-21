@@ -27,6 +27,8 @@ import com.buuz135.industrial.module.ModuleCore;
 import com.buuz135.industrial.utils.IndustrialTags;
 import com.hrznstudio.titanium.api.IFactory;
 import com.hrznstudio.titanium.recipe.generator.TitaniumShapedRecipeBuilder;
+import com.hrznstudio.titanium.util.TagUtil;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.data.recipes.FinishedRecipe;
 import net.minecraft.world.item.Items;
@@ -67,7 +69,7 @@ public class DissolutionChamberBlock extends IndustrialBlock<DissolutionChamberT
                 .define('B', Items.BUCKET)
                 .define('M', IndustrialTags.Items.MACHINE_FRAME_PITY)
                 .define('G', Tags.Items.INGOTS_GOLD)
-                .define('D', ItemTags.bind("forge:gears/diamond"))
+                .define('D', TagUtil.getItemTag(new ResourceLocation("forge:gears/diamond")))
                 .save(consumer);
     }
 }

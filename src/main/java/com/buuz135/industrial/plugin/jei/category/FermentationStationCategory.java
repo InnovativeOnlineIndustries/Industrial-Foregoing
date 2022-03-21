@@ -63,7 +63,7 @@ public class FermentationStationCategory implements IRecipeCategory<OreFluidEntr
     @Override
     public Component getTitle() {
         // TODO: 21/08/2021 Make translatable
-        return new TranslatableComponent(ModuleResourceProduction.FERMENTATION_STATION.get().getDescriptionId());
+        return new TranslatableComponent(ModuleResourceProduction.FERMENTATION_STATION.getLeft().get().getDescriptionId());
     }
 
     @Override

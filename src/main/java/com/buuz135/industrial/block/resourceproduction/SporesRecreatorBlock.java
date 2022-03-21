@@ -27,6 +27,8 @@ import com.buuz135.industrial.module.ModuleResourceProduction;
 import com.buuz135.industrial.utils.IndustrialTags;
 import com.hrznstudio.titanium.api.IFactory;
 import com.hrznstudio.titanium.recipe.generator.TitaniumShapedRecipeBuilder;
+import com.hrznstudio.titanium.util.TagUtil;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.data.recipes.FinishedRecipe;
 import net.minecraft.tags.ItemTags;
@@ -64,7 +66,7 @@ public class SporesRecreatorBlock extends IndustrialBlock<SporesRecreatorTile> {
                 .define('P', IndustrialTags.Items.PLASTIC)
                 .define('I', Tags.Items.MUSHROOMS)
                 .define('M', IndustrialTags.Items.MACHINE_FRAME_PITY)
-                .define('S', ItemTags.bind("forge:gears/iron"))
+                .define('S', TagUtil.getItemTag(new ResourceLocation("forge:gears/iron")))
                 .save(consumer);
     }
 }

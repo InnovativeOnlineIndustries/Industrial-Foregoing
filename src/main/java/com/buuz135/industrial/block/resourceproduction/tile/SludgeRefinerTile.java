@@ -41,8 +41,10 @@ import net.minecraft.world.level.block.state.BlockState;
 
 import net.minecraftforge.fluids.capability.IFluidHandler;
 import net.minecraftforge.items.ItemHandlerHelper;
+import net.minecraftforge.registries.ForgeRegistries;
 
 import javax.annotation.Nonnull;
+import java.util.Optional;
 
 public class SludgeRefinerTile extends IndustrialProcessingTile<SludgeRefinerTile> {
 
@@ -54,12 +56,12 @@ public class SludgeRefinerTile extends IndustrialProcessingTile<SludgeRefinerTil
     private SidedInventoryComponent<SludgeRefinerTile> output;
 
     public SludgeRefinerTile(BlockPos blockPos, BlockState blockState) {
-        super((BasicTileBlock<SludgeRefinerTile>) ModuleResourceProduction.SLUDGE_REFINER.get(), 53, 40, blockPos, blockState);
+        super(ModuleResourceProduction.SLUDGE_REFINER, 53, 40, blockPos, blockState);
         addTank(sludge = (SidedFluidTankComponent<SludgeRefinerTile>) new SidedFluidTankComponent<SludgeRefinerTile>("sludge", SludgeRefinerConfig.maxSludgeTankSize, 31, 20, 0)
                 .setColor(DyeColor.MAGENTA)
                 .setComponentHarness(this)
                 .setTankAction(FluidTankComponent.Action.FILL)
-                .setValidator(fluidStack -> fluidStack.getFluid().isSame(ModuleCore.SLUDGE.getSourceFluid()))
+                .setValidator(fluidStack -> fluidStack.getFluid().isSame(ModuleCore.SLUDGE.getSourceFluid().get()))
         );
         addInventory(output = (SidedInventoryComponent<SludgeRefinerTile>) new SidedInventoryComponent<SludgeRefinerTile>("output", 80, 22, 5 * 3, 1)
                 .setColor(DyeColor.ORANGE)
@@ -78,11 +80,13 @@ public class SludgeRefinerTile extends IndustrialProcessingTile<SludgeRefinerTil
     @Override
     public Runnable onFinish() {
         return () -> {
-            Item item = IndustrialTags.Items.SLUDGE_OUTPUT.getRandomElement(this.level.random);
-            if (item != null && ItemHandlerHelper.insertItem(output, new ItemStack(item), true).isEmpty()) {
-                sludge.drainForced(500, IFluidHandler.FluidAction.EXECUTE);
-                ItemHandlerHelper.insertItem(output, new ItemStack(item), false);
-            }
+            Optional<Item> optionalItem = ForgeRegistries.ITEMS.tags().getTag(IndustrialTags.Items.SLUDGE_OUTPUT).getRandomElement(this.level.random);
+            optionalItem.ifPresent(item -> {
+                if (ItemHandlerHelper.insertItem(output, new ItemStack(item), true).isEmpty()) {
+                    sludge.drainForced(500, IFluidHandler.FluidAction.EXECUTE);
+                    ItemHandlerHelper.insertItem(output, new ItemStack(item), false);
+                }
+            });
         };
     }
 

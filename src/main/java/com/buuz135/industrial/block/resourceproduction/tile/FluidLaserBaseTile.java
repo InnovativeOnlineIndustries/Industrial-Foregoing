@@ -74,7 +74,7 @@ public class FluidLaserBaseTile extends IndustrialMachineTile<FluidLaserBaseTile
     private int miningDepth;
 
     public FluidLaserBaseTile(BlockPos blockPos, BlockState blockState) {
-        super((BasicTileBlock<FluidLaserBaseTile>) ModuleResourceProduction.FLUID_LASER_BASE.get(), blockPos, blockState);
+        super(ModuleResourceProduction.FLUID_LASER_BASE, blockPos, blockState);
         setShowEnergy(false);
         this.miningDepth = this.getBlockPos().getY();
         this.addProgressBar(work = new ProgressBarComponent<FluidLaserBaseTile>(74, 24 + 18, 0, FluidLaserBaseConfig.maxProgress){
@@ -140,7 +140,7 @@ public class FluidLaserBaseTile extends IndustrialMachineTile<FluidLaserBaseTile
             RecipeUtil.getRecipes(this.level, LaserDrillFluidRecipe.SERIALIZER.getRecipeType())
                     .stream()
                     .filter(laserDrillFluidRecipe -> laserDrillFluidRecipe.catalyst.test(catalyst.getStackInSlot(0)))
-                    .filter(laserDrillFluidRecipe -> laserDrillFluidRecipe.getValidRarity(this.level.getBiome(this.worldPosition).getRegistryName(), this.miningDepth) != null)
+                    .filter(laserDrillFluidRecipe -> laserDrillFluidRecipe.getValidRarity(this.level.getBiome(this.worldPosition).value().getRegistryName(), this.miningDepth) != null)
                     .findFirst()
                     .ifPresent(laserDrillFluidRecipe -> {
                         if (!LaserDrillFluidRecipe.EMPTY.equals(laserDrillFluidRecipe.entity)){

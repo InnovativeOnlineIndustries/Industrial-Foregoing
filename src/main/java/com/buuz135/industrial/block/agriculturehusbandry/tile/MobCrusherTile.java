@@ -96,7 +96,7 @@ public class MobCrusherTile extends IndustrialAreaWorkingTile<MobCrusherTile> {
     private ButtonComponent buttonComponent;
 
     public MobCrusherTile(BlockPos blockPos, BlockState blockState) {
-        super((BasicTileBlock<MobCrusherTile>) ModuleAgricultureHusbandry.MOB_CRUSHER.get(), RangeManager.RangeType.BEHIND, true, MobCrusherConfig.powerPerOperation, blockPos, blockState);
+        super(ModuleAgricultureHusbandry.MOB_CRUSHER, RangeManager.RangeType.BEHIND, true, MobCrusherConfig.powerPerOperation, blockPos, blockState);
         if (!GET_EXPERIENCE_POINTS.isAccessible()) GET_EXPERIENCE_POINTS.setAccessible(true);
         if (!DROP_SPECIAL_ITEMS.isAccessible()) DROP_SPECIAL_ITEMS.setAccessible(true);
         this.dropXP = true;
@@ -180,7 +180,7 @@ public class MobCrusherTile extends IndustrialAreaWorkingTile<MobCrusherTile> {
                     itemEntity.remove(Entity.RemovalReason.KILLED);
                 });
                 if (dropXP)
-                    this.tank.fillForced(new FluidStack(ModuleCore.ESSENCE.getSourceFluid(), experience * 20), IFluidHandler.FluidAction.EXECUTE);
+                    this.tank.fillForced(new FluidStack(ModuleCore.ESSENCE.getSourceFluid().get(), experience * 20), IFluidHandler.FluidAction.EXECUTE);
                 entity.setHealth(0);
                 entity.remove(Entity.RemovalReason.KILLED);
                 player.setItemInHand(InteractionHand.MAIN_HAND, ItemStack.EMPTY);

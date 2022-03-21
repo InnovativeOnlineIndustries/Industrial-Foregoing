@@ -77,26 +77,26 @@ public class ModuleTool implements IModule {
 
     @Override
     public void generateFeatures(DeferredRegistryHelper registryHelper) {
-        MEAT_FEEDER  = registryHelper.register(Item.class, "meat_feeder", () -> new MeatFeederItem(TAB_TOOL));
-        MOB_IMPRISONMENT_TOOL  = registryHelper.register(Item.class, "mob_imprisonment_tool", () -> new MobImprisonmentToolItem(TAB_TOOL));
-        INFINITY_DRILL  = registryHelper.register(Item.class, "infinity_drill", () -> new ItemInfinityDrill(TAB_TOOL));
+        MEAT_FEEDER  = registryHelper.registerGeneric(Item.class, "meat_feeder", () -> new MeatFeederItem(TAB_TOOL));
+        MOB_IMPRISONMENT_TOOL  = registryHelper.registerGeneric(Item.class, "mob_imprisonment_tool", () -> new MobImprisonmentToolItem(TAB_TOOL));
+        INFINITY_DRILL  = registryHelper.registerGeneric(Item.class, "infinity_drill", () -> new ItemInfinityDrill(TAB_TOOL));
         //features.add(Feature.builder("mob_essence_tool").content(Item.class, MOB_ESSENCE_TOOL = new MobEssenceToolItem(TAB_TOOL)));
-        INFINITY_SAW  = registryHelper.register(Item.class, "infinity_saw", () -> new ItemInfinitySaw(TAB_TOOL));
-        INFINITY_HAMMER  = registryHelper.register(Item.class, "infinity_hammer", () -> new ItemInfinityHammer(TAB_TOOL));
-        INFINITY_TRIDENT  = registryHelper.register(Item.class, "infinity_trident", () -> new ItemInfinityTrident(TAB_TOOL));
+        INFINITY_SAW  = registryHelper.registerGeneric(Item.class, "infinity_saw", () -> new ItemInfinitySaw(TAB_TOOL));
+        INFINITY_HAMMER  = registryHelper.registerGeneric(Item.class, "infinity_hammer", () -> new ItemInfinityHammer(TAB_TOOL));
+        INFINITY_TRIDENT  = registryHelper.registerGeneric(Item.class, "infinity_trident", () -> new ItemInfinityTrident(TAB_TOOL));
         TRIDENT_ENTITY_TYPE =  registryHelper.registerEntityType("trident_entity", () ->  EntityType.Builder.<InfinityTridentEntity>of(InfinityTridentEntity::new, MobCategory.MISC).sized(0.5F, 0.5F)
                 .setShouldReceiveVelocityUpdates(true)
                 .setCustomClientFactory((spawnEntity, world) -> new InfinityTridentEntity((EntityType<? extends InfinityTridentEntity>) TRIDENT_ENTITY_TYPE.get(), world)).clientTrackingRange(4).updateInterval(20).build("trident_entity"));
-        INFINITY_BACKPACK  = registryHelper.register(Item.class, "infinity_backpack", () -> new ItemInfinityBackpack());
-        INFINITY_LAUNCHER  = registryHelper.register(Item.class, "infinity_launcher", () -> new ItemInfinityLauncher(TAB_TOOL));
+        INFINITY_BACKPACK  = registryHelper.registerGeneric(Item.class, "infinity_backpack", () -> new ItemInfinityBackpack());
+        INFINITY_LAUNCHER  = registryHelper.registerGeneric(Item.class, "infinity_launcher", () -> new ItemInfinityLauncher(TAB_TOOL));
         INFINITY_LAUNCHER_PROJECTILE_ENTITY_TYPE = registryHelper.registerEntityType("launcher_projectile_entity",  () -> EntityType.Builder.<InfinityLauncherProjectileEntity>of(InfinityLauncherProjectileEntity::new, MobCategory.MISC).sized(0.5F, 0.5F)
                 .setShouldReceiveVelocityUpdates(true)
                 .setCustomClientFactory((spawnEntity, world) -> new InfinityLauncherProjectileEntity((EntityType<? extends InfinityLauncherProjectileEntity>) INFINITY_LAUNCHER_PROJECTILE_ENTITY_TYPE.get(), world)).clientTrackingRange(4).updateInterval(20).build("launcher_projectile_entity"));
-        INFINITY_NUKE  = registryHelper.register(Item.class, "infinity_nuke", () -> new ItemInfinityNuke(TAB_TOOL));
+        INFINITY_NUKE  = registryHelper.registerGeneric(Item.class, "infinity_nuke", () -> new ItemInfinityNuke(TAB_TOOL));
         INFINITY_NUKE_ENTITY_TYPE = registryHelper.registerEntityType("infinity_nuke", () -> EntityType.Builder.<InfinityNukeEntity>of(InfinityNukeEntity::new, MobCategory.MISC).sized(0.5F, 1.5F)
                 .setShouldReceiveVelocityUpdates(true)
                 .setCustomClientFactory((spawnEntity, world) -> new InfinityNukeEntity((EntityType<? extends InfinityNukeEntity>) INFINITY_NUKE_ENTITY_TYPE.get(), world)).fireImmune().clientTrackingRange(8).updateInterval(20).noSummon().build("infinity_nuke"));
-        NUKE_CHARGING = registryHelper.register(SoundEvent.class, "nuke_charging", () -> new SoundEvent(new ResourceLocation(Reference.MOD_ID, "nuke_charging")));
+        NUKE_CHARGING = registryHelper.registerGeneric(SoundEvent.class, "nuke_charging", () -> new SoundEvent(new ResourceLocation(Reference.MOD_ID, "nuke_charging")));
         TAB_TOOL.addIconStack(() -> new ItemStack(INFINITY_DRILL.orElse(Items.STONE)));
         ItemStackHarnessRegistry.register(INFINITY_SAW, stack -> new ItemStackHarness(stack, null, (IButtonHandler) stack.getItem(), CapabilityEnergy.ENERGY, CapabilityFluidHandler.FLUID_HANDLER_ITEM_CAPABILITY, CapabilityItemStackHolder.ITEMSTACK_HOLDER_CAPABILITY));
         ItemStackHarnessRegistry.register(INFINITY_DRILL, stack -> new ItemStackHarness(stack, null, (IButtonHandler) stack.getItem(), CapabilityEnergy.ENERGY, CapabilityFluidHandler.FLUID_HANDLER_ITEM_CAPABILITY, CapabilityItemStackHolder.ITEMSTACK_HOLDER_CAPABILITY));

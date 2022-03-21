@@ -260,7 +260,7 @@ public class ConveyorBlinkingUpgrade extends ConveyorUpgrade {
                     .define('I', Tags.Items.INGOTS_IRON)
                     .define('P', Items.CHORUS_FRUIT)
                     .define('D', Blocks.PISTON)
-                    .define('C', ModuleTransportStorage.CONVEYOR.get())
+                    .define('C', ModuleTransportStorage.CONVEYOR.getLeft().get())
                     .save(consumer);
         }
     }

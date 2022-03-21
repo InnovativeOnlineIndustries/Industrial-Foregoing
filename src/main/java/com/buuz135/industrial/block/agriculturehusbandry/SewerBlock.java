@@ -27,6 +27,8 @@ import com.buuz135.industrial.module.ModuleAgricultureHusbandry;
 import com.buuz135.industrial.utils.IndustrialTags;
 import com.hrznstudio.titanium.api.IFactory;
 import com.hrznstudio.titanium.recipe.generator.TitaniumShapedRecipeBuilder;
+import com.hrznstudio.titanium.util.TagUtil;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.data.recipes.FinishedRecipe;
 import net.minecraft.world.item.Items;
@@ -65,7 +67,7 @@ public class SewerBlock extends IndustrialBlock<SewerTile> {
                 .define('E', Items.BUCKET)
                 .define('B', Items.BRICK)
                 .define('M', IndustrialTags.Items.MACHINE_FRAME_PITY)
-                .define('G', ItemTags.bind("forge:gears/iron"))
+                .define('G', TagUtil.getItemTag(new ResourceLocation("forge:gears/iron")))
                 .save(consumer);
     }
 }

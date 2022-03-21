@@ -271,7 +271,7 @@ public class ConveyorBouncingUpgrade extends ConveyorUpgrade {
                     .define('I', Tags.Items.INGOTS_IRON)
                     .define('P', Blocks.SLIME_BLOCK)
                     .define('D', Blocks.PISTON)
-                    .define('C', ModuleTransportStorage.CONVEYOR.get())
+                    .define('C', ModuleTransportStorage.CONVEYOR.getLeft().get())
                     .save(consumer);
         }
     }

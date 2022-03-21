@@ -61,7 +61,7 @@ public class EnchantmentApplicatorTile extends IndustrialProcessingTile<Enchantm
     private SidedFluidTankComponent<EnchantmentApplicatorTile> tank;
 
     public EnchantmentApplicatorTile(BlockPos blockPos, BlockState blockState) {
-        super((BasicTileBlock<EnchantmentApplicatorTile>) ModuleMisc.ENCHANTMENT_APPLICATOR.get(), 112, 40, blockPos, blockState);
+        super(ModuleMisc.ENCHANTMENT_APPLICATOR, 112, 40, blockPos, blockState);
         this.addTank(tank = (SidedFluidTankComponent<EnchantmentApplicatorTile>) new SidedFluidTankComponent<EnchantmentApplicatorTile>("essence", EnchantmentApplicatorConfig.tankSize, 34, 20, 0).
                 setColor(DyeColor.LIME).
                 setComponentHarness(this).
@@ -91,7 +91,7 @@ public class EnchantmentApplicatorTile extends IndustrialProcessingTile<Enchantm
         long amount = this.tank.getFluidAmount();
         BlockEntity tileEntity = this.level.getBlockEntity(this.worldPosition.above());
         if (tileEntity != null && tileEntity.getCapability(CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY).isPresent()){
-            amount += tileEntity.getCapability(CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY).map(iFluidHandler -> iFluidHandler.drain(new FluidStack(ModuleCore.ESSENCE.getSourceFluid(), Integer.MAX_VALUE), IFluidHandler.FluidAction.SIMULATE).getAmount()).orElse(0);
+            amount += tileEntity.getCapability(CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY).map(iFluidHandler -> iFluidHandler.drain(new FluidStack(ModuleCore.ESSENCE.getSourceFluid().get(), Integer.MAX_VALUE), IFluidHandler.FluidAction.SIMULATE).getAmount()).orElse(0);
         }
         return !output.getLeft().isEmpty() && amount >= getEssenceConsumed(output.getRight()) && this.output.getStackInSlot(0).isEmpty();
     }
@@ -117,7 +117,7 @@ public class EnchantmentApplicatorTile extends IndustrialProcessingTile<Enchantm
             AtomicInteger amount = new AtomicInteger(getEssenceConsumed(output.getRight()));
             BlockEntity tileEntity = this.level.getBlockEntity(this.worldPosition.above());
             if (tileEntity != null){
-                tileEntity.getCapability(CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY).ifPresent(iFluidHandler -> amount.addAndGet(-iFluidHandler.drain(new FluidStack(ModuleCore.ESSENCE.getSourceFluid(), amount.get()), IFluidHandler.FluidAction.EXECUTE).getAmount()));
+                tileEntity.getCapability(CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY).ifPresent(iFluidHandler -> amount.addAndGet(-iFluidHandler.drain(new FluidStack(ModuleCore.ESSENCE.getSourceFluid().get(), amount.get()), IFluidHandler.FluidAction.EXECUTE).getAmount()));
             }
             if (amount.get() > 0) this.tank.drainForced(amount.get(), IFluidHandler.FluidAction.EXECUTE);
         };

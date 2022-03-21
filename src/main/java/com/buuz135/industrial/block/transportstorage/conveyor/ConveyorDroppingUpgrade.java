@@ -219,7 +219,7 @@ public class ConveyorDroppingUpgrade extends ConveyorUpgrade {
                     .define('I', Tags.Items.INGOTS_IRON)
                     .define('P', Blocks.IRON_BARS)
                     .define('D', Blocks.DROPPER)
-                    .define('C', ModuleTransportStorage.CONVEYOR.get())
+                    .define('C', ModuleTransportStorage.CONVEYOR.getLeft().get())
                     .save(consumer);
 
         }

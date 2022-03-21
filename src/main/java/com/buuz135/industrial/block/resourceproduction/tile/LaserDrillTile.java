@@ -44,7 +44,7 @@ public class LaserDrillTile extends IndustrialAreaWorkingTile<LaserDrillTile> {
     private BlockPos target;
 
     public LaserDrillTile(BlockPos blockPos, BlockState blockState) {
-        super((BasicTileBlock<LaserDrillTile>) ModuleResourceProduction.LASER_DRILL.get(), RangeManager.RangeType.BEHIND, false, LaserDrillConfig.powerPerOperation, blockPos, blockState);
+        super(ModuleResourceProduction.LASER_DRILL, RangeManager.RangeType.BEHIND, false, LaserDrillConfig.powerPerOperation, blockPos, blockState);
         this.target = BlockPos.ZERO;
         addGuiAddonFactory(() -> new TextScreenAddon(ChatFormatting.DARK_GRAY + new TranslatableComponent("text.industrialforegoing.target").getString(), 44 ,26, false));
         addGuiAddonFactory(() -> new TextScreenAddon("Target: ", 44 ,36, false){

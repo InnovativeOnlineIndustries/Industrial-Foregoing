@@ -62,7 +62,7 @@ public class PlantSowerTile extends IndustrialAreaWorkingTile<PlantSowerTile> {
     private LockableInventoryBundle<PlantSowerTile> input;
 
     public PlantSowerTile(BlockPos blockPos, BlockState blockState) {
-        super((BasicTileBlock<PlantSowerTile>) ModuleAgricultureHusbandry.PLANT_SOWER.get(), RangeManager.RangeType.TOP_UP, true, PlantSowerConfig.powerPerOperation, blockPos, blockState);
+        super(ModuleAgricultureHusbandry.PLANT_SOWER, RangeManager.RangeType.TOP_UP, true, PlantSowerConfig.powerPerOperation, blockPos, blockState);
         addFilter(this.filter = new ItemStackFilter("filter", 9) {
             @Override
             public void onContentChanged() {

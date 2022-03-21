@@ -56,7 +56,7 @@ public class LaserLensItem extends IFCustomItem {
                         new Ingredient.TagValue(Tags.Items.GLASS_PANES),
                         new Ingredient.TagValue(DyeColor.byId(color).getTag()),
                 },
-                new FluidStack(ModuleCore.LATEX.getSourceFluid(), 250), 100, new ItemStack(this), FluidStack.EMPTY);
+                new FluidStack(ModuleCore.LATEX.getSourceFluid().get(), 250), 100, new ItemStack(this), FluidStack.EMPTY);
     }
 
     @Override

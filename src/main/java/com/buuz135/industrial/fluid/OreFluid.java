@@ -30,31 +30,23 @@ import javax.annotation.ParametersAreNonnullByDefault;
 public class OreFluid extends FlowingFluid {
 
     private final FluidAttributes.Builder fluidAttributes;
-    private Fluid flowingFluid;
-    private FlowingFluid sourceFluid;
-    private Item bucketFluid;
-    private Block blockFluid;
+    private OreFluidInstance instance;
 
-    public OreFluid(FluidAttributes.Builder fluidAttributes) {
+    public OreFluid(FluidAttributes.Builder fluidAttributes, OreFluidInstance instance) {
         this.fluidAttributes = fluidAttributes;
+        this.instance = instance;
     }
 
     @Override
     @Nonnull
     public Fluid getFlowing() {
-        return flowingFluid;
-    }
-
-    @Nonnull
-    public OreFluid setFlowingFluid(Fluid flowingFluid) {
-        this.flowingFluid = flowingFluid;
-        return this;
+        return instance.getFlowingFluid();
     }
 
     @Override
     @Nonnull
     public Fluid getSource() {
-        return sourceFluid;
+        return instance.getSourceFluid();
     }
 
     @Override
@@ -83,7 +75,7 @@ public class OreFluid extends FlowingFluid {
     @Override
     @Nonnull
     public Item getBucket() {
-        return bucketFluid;
+        return instance.getBucketFluid();
     }
 
     @Override
@@ -105,7 +97,7 @@ public class OreFluid extends FlowingFluid {
     @Override
     @Nonnull
     protected BlockState createLegacyBlock(@Nonnull FluidState state) {
-        return blockFluid.defaultBlockState().setValue(LiquidBlock.LEVEL, getLegacyLevel(state));
+        return instance.getBlockFluid().defaultBlockState().setValue(LiquidBlock.LEVEL, getLegacyLevel(state));
     }
 
     @Override
@@ -120,23 +112,7 @@ public class OreFluid extends FlowingFluid {
 
     @Override
     public boolean isSame(Fluid fluidIn) {
-        return fluidIn == sourceFluid || fluidIn == flowingFluid;
-    }
-
-    public OreFluid setSourceFluid(FlowingFluid sourceFluid) {
-        this.sourceFluid = sourceFluid;
-        return this;
-    }
-
-    @Nonnull
-    public OreFluid setBucketFluid(Item bucketFluid) {
-        this.bucketFluid = bucketFluid;
-        return this;
-    }
-
-    public OreFluid setBlockFluid(Block blockFluid) {
-        this.blockFluid = blockFluid;
-        return this;
+        return fluidIn == instance.getFlowingFluid() || fluidIn == instance.getSourceFluid();
     }
 
     @Override
@@ -150,8 +126,8 @@ public class OreFluid extends FlowingFluid {
             registerDefaultState(getStateDefinition().any().setValue(LEVEL, 7));
         }
 
-        public Flowing(FluidAttributes.Builder fluidAttributes) {
-            super(fluidAttributes);
+        public Flowing(FluidAttributes.Builder fluidAttributes, OreFluidInstance instance) {
+            super(fluidAttributes, instance);
         }
 
         @Override
@@ -173,8 +149,8 @@ public class OreFluid extends FlowingFluid {
 
     public static class Source extends OreFluid {
 
-        public Source(FluidAttributes.Builder fluidAttributes) {
-            super(fluidAttributes);
+        public Source(FluidAttributes.Builder fluidAttributes, OreFluidInstance instance) {
+            super(fluidAttributes, instance);
         }
 
         @Override

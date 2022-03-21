@@ -58,7 +58,7 @@ public class SewerTile extends IndustrialAreaWorkingTile<SewerTile> {
     public SidedFluidTankComponent<SewerTile> essence;
 
     public SewerTile(BlockPos blockPos, BlockState blockState) {
-        super((BasicTileBlock<SewerTile>) ModuleAgricultureHusbandry.SEWER.get(), RangeManager.RangeType.TOP, true, SewerConfig.powerPerOperation, blockPos, blockState);
+        super(ModuleAgricultureHusbandry.SEWER, RangeManager.RangeType.TOP, true, SewerConfig.powerPerOperation, blockPos, blockState);
         this.addTank(sewage = (SidedFluidTankComponent<SewerTile>) new SidedFluidTankComponent<SewerTile>("sewage", SewerConfig.maxSewageTankSize, 45, 20, 0).
                 setColor(DyeColor.BROWN).
                 setTankAction(FluidTankComponent.Action.DRAIN).
@@ -76,13 +76,13 @@ public class SewerTile extends IndustrialAreaWorkingTile<SewerTile> {
         List<Animal> entities = this.level.getEntitiesOfClass(Animal.class, getWorkingArea().bounds());
         int amount = entities.size();
         if (amount > 0 && hasEnergy(powerPerOperation * amount)) {
-            sewage.fillForced(new FluidStack(ModuleCore.SEWAGE.getSourceFluid(), 50 * amount), IFluidHandler.FluidAction.EXECUTE);
+            sewage.fillForced(new FluidStack(ModuleCore.SEWAGE.getSourceFluid().get(), 50 * amount), IFluidHandler.FluidAction.EXECUTE);
             ++amount;
         }
         List<ExperienceOrb> orb = this.level.getEntitiesOfClass(ExperienceOrb.class, getWorkingArea().bounds());
         for (ExperienceOrb experienceOrbEntity : orb) {
             if (experienceOrbEntity.isAlive() && essence.getFluidAmount() + experienceOrbEntity.value * 20 <= essence.getCapacity()) {
-                essence.fillForced(new FluidStack(ModuleCore.ESSENCE.getSourceFluid(), experienceOrbEntity.value * 20), IFluidHandler.FluidAction.EXECUTE);
+                essence.fillForced(new FluidStack(ModuleCore.ESSENCE.getSourceFluid().get(), experienceOrbEntity.value * 20), IFluidHandler.FluidAction.EXECUTE);
                 experienceOrbEntity.onClientRemoval();
             }
         }

@@ -21,6 +21,7 @@
  */
 package com.buuz135.industrial.fluid;
 
+import com.buuz135.industrial.utils.ItemStackUtils;
 import com.hrznstudio.titanium.util.TagUtil;
 import net.minecraft.client.Minecraft;
 import net.minecraft.core.Registry;
@@ -28,13 +29,15 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.TextComponent;
 import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.tags.SerializationTags;
+import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.material.Fluid;
 import net.minecraftforge.fluids.FluidAttributes;
 import net.minecraftforge.fluids.FluidStack;
+import net.minecraftforge.registries.ForgeRegistries;
 
+import java.util.Collection;
 import java.util.List;
 
 public class OreTitaniumFluidAttributes extends FluidAttributes {
@@ -49,10 +52,9 @@ public class OreTitaniumFluidAttributes extends FluidAttributes {
     public int getColor(FluidStack stack) {
         if (Minecraft.getInstance().level != null && stack.hasTag() && stack.getTag().contains(NBT_TAG)){
             String tag = stack.getTag().getString(NBT_TAG);
-            List<Item> items = SerializationTags.getInstance().getTagOrThrow(Registry.ITEM_REGISTRY, new ResourceLocation(tag.replace("forge:ores/", "forge:dusts/")), resourceLocation -> null).getValues();
+            List<Item> items = TagUtil.getAllEntries(ForgeRegistries.ITEMS, TagUtil.getItemTag(new ResourceLocation(tag.replace("forge:ores/", "forge:dusts/")))).stream().toList();
             if (items.size() > 0){
-//                return ItemStackUtils.getColor(new ItemStack(items.get(0)));
-                return 0;
+                //return ItemStackUtils.getColor(new ItemStack(items.get(0)));
             }
         }
         return super.getColor(stack);
@@ -63,7 +65,7 @@ public class OreTitaniumFluidAttributes extends FluidAttributes {
         String extra = "";
         if (stack.hasTag() && stack.getTag().contains(NBT_TAG)){
             String tag = stack.getTag().getString(NBT_TAG);
-            List<Item> items = SerializationTags.getInstance().getTagOrThrow(Registry.ITEM_REGISTRY,new ResourceLocation(tag), resourceLocation -> null).getValues();
+            List<Item> items = TagUtil.getAllEntries(ForgeRegistries.ITEMS, TagUtil.getItemTag(new ResourceLocation(tag.replace("forge:ores/", "forge:dusts/")))).stream().toList();
             if (items.size() > 0){
                 extra = " (" + new TranslatableComponent(items.get(0).getDescriptionId()).getString() + ")";
             }
@@ -76,7 +78,7 @@ public class OreTitaniumFluidAttributes extends FluidAttributes {
         String extra = "";
         if (stack.hasTag() && stack.getTag().contains(NBT_TAG)){
             String tag = stack.getTag().getString(NBT_TAG);
-            List<Item> items = SerializationTags.getInstance().getTagOrThrow(Registry.ITEM_REGISTRY,new ResourceLocation(tag), resourceLocation -> null).getValues();
+            List<Item> items = TagUtil.getAllEntries(ForgeRegistries.ITEMS, TagUtil.getItemTag(new ResourceLocation(tag.replace("forge:ores/", "forge:dusts/")))).stream().toList();
             if (items.size() > 0){
                 extra = " (" + new TranslatableComponent(items.get(0).getDescriptionId()).getString() + ")";
             }
@@ -95,13 +97,14 @@ public class OreTitaniumFluidAttributes extends FluidAttributes {
     }
 
     public static boolean isValid(ResourceLocation resourceLocation){
-        return SerializationTags.getInstance().getOrEmpty(Registry.ITEM_REGISTRY).getAvailableTags().contains(new ResourceLocation("forge:dusts/" + resourceLocation.toString().replace("forge:ores/", ""))) && !SerializationTags.getInstance().getOrEmpty(Registry.ITEM_REGISTRY).getTag(resourceLocation).getValues().isEmpty();
+        TagKey<Item> key = TagUtil.getItemTag(new ResourceLocation("forge:dusts/" + resourceLocation.toString().replace("forge:ores/", "")));
+        return  ForgeRegistries.ITEMS.tags().isKnownTagName(key) && !TagUtil.getAllEntries(ForgeRegistries.ITEMS, key).isEmpty();
     }
 
 
     public static ItemStack getOutputDust(FluidStack stack){
         String tag = getFluidTag(stack);
-        return TagUtil.getItemWithPreference(SerializationTags.getInstance().getOrEmpty(Registry.ITEM_REGISTRY).getTag(new ResourceLocation(tag.replace("forge:ores/", "forge:dusts/"))));
+        return TagUtil.getItemWithPreference(TagUtil.getItemTag(new ResourceLocation(tag.replace("forge:ores/", "forge:dusts/"))));
     }
 
     @Override

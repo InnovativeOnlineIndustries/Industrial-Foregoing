@@ -40,7 +40,11 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.TextComponent;
 import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraftforge.registries.RegistryObject;
+import org.apache.commons.lang3.tuple.Pair;
 
 import java.text.DecimalFormat;
 import java.util.ArrayList;
@@ -52,7 +56,7 @@ public abstract class IndustrialProcessingTile<T extends IndustrialProcessingTil
     @Save
     private ProgressBarComponent<T> progressBar;
 
-    public IndustrialProcessingTile(BasicTileBlock<T> basicTileBlock, int x, int y, BlockPos blockPos, BlockState blockState) {
+    public IndustrialProcessingTile(Pair<RegistryObject<Block>, RegistryObject<BlockEntityType<?>>> basicTileBlock, int x, int y, BlockPos blockPos, BlockState blockState) {
         super(basicTileBlock, blockPos, blockState);
         //this.addGuiAddonFactory(() -> new EnergyBarScreenAddon(10, 20, getEnergyStorage()));
         this.addProgressBar(progressBar = new ProgressBarComponent<T>(x, y, getMaxProgress()){

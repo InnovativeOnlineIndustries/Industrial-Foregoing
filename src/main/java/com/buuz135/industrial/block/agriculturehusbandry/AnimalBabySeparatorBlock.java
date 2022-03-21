@@ -27,6 +27,8 @@ import com.buuz135.industrial.module.ModuleAgricultureHusbandry;
 import com.buuz135.industrial.utils.IndustrialTags;
 import com.hrznstudio.titanium.api.IFactory;
 import com.hrznstudio.titanium.recipe.generator.TitaniumShapedRecipeBuilder;
+import com.hrznstudio.titanium.util.TagUtil;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.data.recipes.FinishedRecipe;
 import net.minecraft.world.item.Items;
@@ -65,7 +67,7 @@ public class AnimalBabySeparatorBlock extends IndustrialBlock<AnimalBabySeparato
                 .define('P', IndustrialTags.Items.PLASTIC)
                 .define('A', Items.GOLDEN_CARROT)
                 .define('C', Items.WHEAT)
-                .define('G', ItemTags.bind("forge:gears/gold"))
+                .define('G', TagUtil.getItemTag(new ResourceLocation("forge:gears/gold")))
                 .define('D', Tags.Items.DYES_PURPLE)
                 .define('M', IndustrialTags.Items.MACHINE_FRAME_PITY)
                 .save(consumer);

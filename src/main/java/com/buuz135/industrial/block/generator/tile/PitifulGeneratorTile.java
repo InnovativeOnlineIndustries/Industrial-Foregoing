@@ -46,7 +46,7 @@ public class PitifulGeneratorTile extends IndustrialGeneratorTile<PitifulGenerat
     private SidedInventoryComponent<PitifulGeneratorTile> fuel;
 
     public PitifulGeneratorTile(BlockPos blockPos, BlockState blockState) {
-        super((BasicTileBlock<PitifulGeneratorTile>) ModuleGenerator.PITIFUL_GENERATOR.get(), blockPos, blockState);
+        super(ModuleGenerator.PITIFUL_GENERATOR, blockPos, blockState);
         this.addInventory(fuel = (SidedInventoryComponent<PitifulGeneratorTile>) new SidedInventoryComponent<PitifulGeneratorTile>("fuel_input", 46, 22, 1, 0)
                 .setColor(DyeColor.ORANGE)
                 .setInputFilter((itemStack, integer) -> ForgeHooks.getBurnTime(itemStack, RecipeType.SMELTING) != 0)

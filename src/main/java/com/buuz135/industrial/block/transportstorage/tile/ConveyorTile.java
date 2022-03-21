@@ -77,7 +77,7 @@ public class ConveyorTile extends ActiveTile<ConveyorTile> implements IBlockCont
     private boolean needsFluidSync;
 
     public ConveyorTile(BlockPos blockPos, BlockState blockState) {
-        super((BasicTileBlock<ConveyorTile>) ModuleTransportStorage.CONVEYOR.get(), blockPos, blockState);
+        super((BasicTileBlock<ConveyorTile>) ModuleTransportStorage.CONVEYOR.getLeft().get(), ModuleTransportStorage.CONVEYOR.getRight().get(), blockPos, blockState);
         this.facing = Direction.NORTH;
         this.type = ConveyorBlock.EnumType.FLAT;
         this.color = DyeColor.WHITE.getMaterialColor().col;
@@ -196,8 +196,8 @@ public class ConveyorTile extends ActiveTile<ConveyorTile> implements IBlockCont
     }
 
     @Override
-    public CompoundTag save(CompoundTag compound) {
-        compound = super.save(compound);
+    protected void saveAdditional(CompoundTag compound) {
+        super.saveAdditional(compound);
         compound.putString("Facing", facing.getSerializedName()); //getName
         compound.putString("Type", type.getName());
         compound.putInt("Color", color);
@@ -217,7 +217,6 @@ public class ConveyorTile extends ActiveTile<ConveyorTile> implements IBlockCont
         }
         compound.put("Upgrades", upgrades);
         compound.put("Tank", tank.writeToNBT(new CompoundTag()));
-        return compound;
     }
 
     @Override //read
@@ -259,7 +258,9 @@ public class ConveyorTile extends ActiveTile<ConveyorTile> implements IBlockCont
     public void markForUpdate() {
         super.markForUpdate();
         this.level.setBlockAndUpdate(worldPosition, this.level.getBlockState(worldPosition).setValue(FACING, facing).setValue(TYPE, type));
-        this.level.getBlockEntity(worldPosition).load(save(new CompoundTag())); //read
+        CompoundTag compoundTag = new CompoundTag();
+        saveAdditional(compoundTag);
+        this.level.getBlockEntity(worldPosition).load(compoundTag); //read
     }
 
     public List<AABB> getCollisionBoxes() {
@@ -338,7 +339,7 @@ public class ConveyorTile extends ActiveTile<ConveyorTile> implements IBlockCont
     @Nullable
     @Override
     public AbstractContainerMenu createMenu(int menu, Inventory inventoryPlayer, Player entityPlayer) {
-        return new ContainerConveyor(menu, this, ((ConveyorBlock)ModuleTransportStorage.CONVEYOR.get()).getFacingUpgradeHit(this.level.getBlockState(this.worldPosition), this.level, this.worldPosition, entityPlayer), inventoryPlayer);
+        return new ContainerConveyor(menu, this, ((ConveyorBlock)ModuleTransportStorage.CONVEYOR.getLeft().get()).getFacingUpgradeHit(this.level.getBlockState(this.worldPosition), this.level, this.worldPosition, entityPlayer), inventoryPlayer);
     }
 
     public void openGui(Player player, Direction facing) {

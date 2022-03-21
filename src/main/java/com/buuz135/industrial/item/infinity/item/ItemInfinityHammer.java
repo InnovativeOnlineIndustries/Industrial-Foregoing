@@ -73,6 +73,8 @@ import net.minecraft.world.level.material.Material;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 import net.minecraft.world.phys.shapes.VoxelShape;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.fluids.FluidStack;
 
 import java.util.HashMap;
@@ -273,6 +275,7 @@ public class ItemInfinityHammer extends ItemInfinity {
         tooltip.add(new TranslatableComponent("text.industrialforegoing.display.beheading").append(" " + level).withStyle(ChatFormatting.GRAY));
     }
 
+    @OnlyIn(Dist.CLIENT)
     @Override
     public List<IFactory<? extends IScreenAddon>> getScreenAddons(Supplier<ItemStack> stack) {
         List<IFactory<? extends IScreenAddon>> factory = super.getScreenAddons(stack);
@@ -314,6 +317,6 @@ public class ItemInfinityHammer extends ItemInfinity {
                         new Ingredient.TagValue(IndustrialTags.Items.GEAR_GOLD),
                         new Ingredient.TagValue(IndustrialTags.Items.GEAR_GOLD),
                 },
-                new FluidStack(ModuleCore.PINK_SLIME.getSourceFluid(), 2000), 400, new ItemStack(this), FluidStack.EMPTY);
+                new FluidStack(ModuleCore.PINK_SLIME.getSourceFluid().get(), 2000), 400, new ItemStack(this), FluidStack.EMPTY);
     }
 }

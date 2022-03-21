@@ -50,7 +50,7 @@ public class FluidPlacerTile extends IndustrialAreaWorkingTile<FluidPlacerTile> 
     private SidedFluidTankComponent<FluidPlacerTile> tank;
 
     public FluidPlacerTile(BlockPos blockPos, BlockState blockState) {
-        super((BasicTileBlock<FluidPlacerTile>) ModuleResourceProduction.FLUID_PLACER.get(), RangeManager.RangeType.BEHIND, false, FluidPlacerConfig.powerPerOperation, blockPos, blockState);
+        super(ModuleResourceProduction.FLUID_PLACER, RangeManager.RangeType.BEHIND, false, FluidPlacerConfig.powerPerOperation, blockPos, blockState);
         this.addTank(this.tank = (SidedFluidTankComponent<FluidPlacerTile>) new SidedFluidTankComponent<FluidPlacerTile>("input", FluidPlacerConfig.maxInputTankSize, 43, 20, 0)
                 .setColor(DyeColor.BLUE)
                 .setTankAction(FluidTankComponent.Action.FILL)

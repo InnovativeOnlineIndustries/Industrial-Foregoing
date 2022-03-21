@@ -84,6 +84,8 @@ import net.minecraft.world.item.enchantment.Enchantments;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.AABB;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.common.capabilities.ICapabilityProvider;
 import net.minecraftforge.event.entity.player.EntityItemPickupEvent;
 import net.minecraftforge.event.entity.player.PlayerXpEvent;
@@ -152,8 +154,8 @@ public class ItemInfinityBackpack extends ItemInfinity {
                             ExperienceOrb entity = pickupXp.getOrb();
                             IFluidHandlerItem handlerItem = stack.getCapability(CapabilityFluidHandler.FLUID_HANDLER_ITEM_CAPABILITY).orElse(null);
                             if (handlerItem != null) {
-                                if (handlerItem.fill(new FluidStack(ModuleCore.ESSENCE.getSourceFluid(), entity.getValue() * 20), IFluidHandler.FluidAction.SIMULATE) > 0){
-                                    handlerItem.fill(new FluidStack(ModuleCore.ESSENCE.getSourceFluid(), entity.getValue() * 20), IFluidHandler.FluidAction.EXECUTE);
+                                if (handlerItem.fill(new FluidStack(ModuleCore.ESSENCE.getSourceFluid().get(), entity.getValue() * 20), IFluidHandler.FluidAction.SIMULATE) > 0){
+                                    handlerItem.fill(new FluidStack(ModuleCore.ESSENCE.getSourceFluid().get(), entity.getValue() * 20), IFluidHandler.FluidAction.EXECUTE);
                                     entity.onClientRemoval();
                                     pickupXp.setCanceled(true);
                                 }
@@ -278,7 +280,7 @@ public class ItemInfinityBackpack extends ItemInfinity {
                     if (handlerItem instanceof MultipleFluidHandlerScreenProviderItemStack) {
                         FluidStack fluidStack = handlerItem.getFluidInTank(2);
                         if (!fluidStack.isEmpty() && fluidStack.getAmount() >= 400) {
-                            ((MultipleFluidHandlerScreenProviderItemStack) handlerItem).setFluidInTank(2, new FluidStack(ModuleCore.MEAT.getSourceFluid(), fluidStack.getAmount() - 400));
+                            ((MultipleFluidHandlerScreenProviderItemStack) handlerItem).setFluidInTank(2, new FluidStack(ModuleCore.MEAT.getSourceFluid().get(), fluidStack.getAmount() - 400));
                             ((Player) entityIn).getFoodData().eat(1, 1);
                             consumeFuel(stack);
                         }
@@ -323,9 +325,9 @@ public class ItemInfinityBackpack extends ItemInfinity {
     public IFactory<FluidHandlerScreenProviderItemStack> getTankConstructor(ItemStack stack) {
         int y = 88;
         return () -> new MultipleFluidHandlerScreenProviderItemStack(stack, 1_000_000,
-                new MultipleFluidHandlerScreenProviderItemStack.TankDefinition("biofuel", -21, y + 25 * 0, fluidStack -> fluidStack.getFluid().isSame(ModuleCore.BIOFUEL.getSourceFluid()), false, true, FluidTankComponent.Type.SMALL),
+                new MultipleFluidHandlerScreenProviderItemStack.TankDefinition("biofuel", -21, y + 25 * 0, fluidStack -> fluidStack.getFluid().isSame(ModuleCore.BIOFUEL.getSourceFluid().get()), false, true, FluidTankComponent.Type.SMALL),
                 new MultipleFluidHandlerScreenProviderItemStack.TankDefinition("essence", -21, y + 25 * 1, fluidStack -> fluidStack.getFluid().is(IndustrialTags.Fluids.EXPERIENCE), true, true, FluidTankComponent.Type.SMALL),
-                new MultipleFluidHandlerScreenProviderItemStack.TankDefinition("meat", -21, y + 25 * 2, fluidStack -> fluidStack.getFluid().isSame(ModuleCore.MEAT.getSourceFluid()), false, true, FluidTankComponent.Type.SMALL)
+                new MultipleFluidHandlerScreenProviderItemStack.TankDefinition("meat", -21, y + 25 * 2, fluidStack -> fluidStack.getFluid().isSame(ModuleCore.MEAT.getSourceFluid().get()), false, true, FluidTankComponent.Type.SMALL)
         );
     }
 
@@ -525,6 +527,7 @@ public class ItemInfinityBackpack extends ItemInfinity {
         }).orElse(null);
     }
 
+    @OnlyIn(Dist.CLIENT)
     @Override
     public List<IFactory<? extends IScreenAddon>> getScreenAddons(Supplier<ItemStack> stack) {
         List<IFactory<? extends IScreenAddon>> factory = new ArrayList<>();
@@ -592,16 +595,16 @@ public class ItemInfinityBackpack extends ItemInfinity {
     public void registerRecipe(Consumer<FinishedRecipe> consumer) {
         new DissolutionChamberRecipe(this.getRegistryName(),
                 new Ingredient.Value[]{
-                        new Ingredient.ItemValue(new ItemStack(ModuleTransportStorage.BLACK_HOLE_UNIT_COMMON.get())),
+                        new Ingredient.ItemValue(new ItemStack(ModuleTransportStorage.BLACK_HOLE_UNIT_COMMON.getLeft().get())),
                         new Ingredient.TagValue(IndustrialTags.Items.GEAR_DIAMOND),
-                        new Ingredient.ItemValue(new ItemStack(ModuleTransportStorage.BLACK_HOLE_UNIT_COMMON.get())),
-                        new Ingredient.ItemValue(new ItemStack(ModuleTransportStorage.BLACK_HOLE_TANK_COMMON.get())),
-                        new Ingredient.ItemValue(new ItemStack(ModuleTransportStorage.BLACK_HOLE_TANK_COMMON.get())),
+                        new Ingredient.ItemValue(new ItemStack(ModuleTransportStorage.BLACK_HOLE_UNIT_COMMON.getLeft().get())),
+                        new Ingredient.ItemValue(new ItemStack(ModuleTransportStorage.BLACK_HOLE_TANK_COMMON.getLeft().get())),
+                        new Ingredient.ItemValue(new ItemStack(ModuleTransportStorage.BLACK_HOLE_TANK_COMMON.getLeft().get())),
                         new Ingredient.TagValue(IndustrialTags.Items.GEAR_GOLD),
                         new Ingredient.TagValue(IndustrialTags.Items.GEAR_GOLD),
                         new Ingredient.TagValue(IndustrialTags.Items.GEAR_GOLD),
                 },
-                new FluidStack(ModuleCore.PINK_SLIME.getSourceFluid(), 2000), 400, new ItemStack(this), FluidStack.EMPTY);
+                new FluidStack(ModuleCore.PINK_SLIME.getSourceFluid().get(), 2000), 400, new ItemStack(this), FluidStack.EMPTY);
     }
 
 }

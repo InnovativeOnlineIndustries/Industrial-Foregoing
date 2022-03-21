@@ -52,7 +52,7 @@ public class EnchantmentFactoryTile extends IndustrialProcessingTile<Enchantment
     private SidedInventoryComponent<EnchantmentFactoryTile> output;
 
     public EnchantmentFactoryTile(BlockPos blockPos, BlockState blockState) {
-        super((BasicTileBlock<EnchantmentFactoryTile>) ModuleMisc.ENCHANTMENT_FACTORY.get(), 100, 40, blockPos, blockState);
+        super(ModuleMisc.ENCHANTMENT_FACTORY, 100, 40, blockPos, blockState);
         this.addTank(tank = (SidedFluidTankComponent<EnchantmentFactoryTile>) new SidedFluidTankComponent<EnchantmentFactoryTile>("essence", EnchantmentFactoryConfig.tankSize, 34, 20, 0).
                 setColor(DyeColor.LIME).
                 setTankAction(FluidTankComponent.Action.FILL).

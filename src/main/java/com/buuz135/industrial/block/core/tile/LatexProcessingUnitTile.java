@@ -52,11 +52,11 @@ public class LatexProcessingUnitTile extends IndustrialProcessingTile<LatexProce
     private SidedInventoryComponent<LatexProcessingUnitTile> output;
 
     public LatexProcessingUnitTile(BlockPos blockPos, BlockState blockState) {
-        super((BasicTileBlock<LatexProcessingUnitTile>) ModuleCore.LATEX_PROCESSING.get(), 48 + 25, 40, blockPos, blockState);
+        super(ModuleCore.LATEX_PROCESSING, 48 + 25, 40, blockPos, blockState);
         this.addTank(latex = (SidedFluidTankComponent<LatexProcessingUnitTile>) new SidedFluidTankComponent<LatexProcessingUnitTile>("latex", LatexProcessingUnitConfig.maxLatexTankSize, 29, 20, 0).
                 setColor(DyeColor.LIGHT_GRAY).
                 setComponentHarness(this).
-                setValidator(fluidStack -> fluidStack.getFluid().isSame(ModuleCore.LATEX.getSourceFluid())));
+                setValidator(fluidStack -> fluidStack.getFluid().isSame(ModuleCore.LATEX.getSourceFluid().get())));
         this.addTank(water = (SidedFluidTankComponent<LatexProcessingUnitTile>) new SidedFluidTankComponent<LatexProcessingUnitTile>("water", LatexProcessingUnitConfig.maxWaterTankSize, 30 + 18, 20, 1).
                 setColor(DyeColor.BLUE).
                 setComponentHarness(this).

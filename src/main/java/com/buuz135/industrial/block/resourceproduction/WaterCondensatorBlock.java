@@ -27,6 +27,8 @@ import com.buuz135.industrial.module.ModuleResourceProduction;
 import com.buuz135.industrial.utils.IndustrialTags;
 import com.hrznstudio.titanium.api.IFactory;
 import com.hrznstudio.titanium.recipe.generator.TitaniumShapedRecipeBuilder;
+import com.hrznstudio.titanium.util.TagUtil;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.data.recipes.FinishedRecipe;
@@ -75,7 +77,7 @@ public class WaterCondensatorBlock extends IndustrialBlock<WaterCondensatorTile>
                 .define('L', Items.PISTON)
                 .define('M', IndustrialTags.Items.MACHINE_FRAME_PITY)
                 .define('R', Items.REDSTONE)
-                .define('G', ItemTags.bind("forge:gears/iron"))
+                .define('G', TagUtil.getItemTag(new ResourceLocation("forge:gears/iron")))
                 .save(consumer);
     }
 

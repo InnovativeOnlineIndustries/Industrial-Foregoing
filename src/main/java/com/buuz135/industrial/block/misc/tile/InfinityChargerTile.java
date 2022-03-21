@@ -40,7 +40,7 @@ public class InfinityChargerTile extends IndustrialMachineTile<InfinityChargerTi
     private SidedInventoryComponent<InfinityChargerTile> chargingSlot;
 
     public InfinityChargerTile(BlockPos blockPos, BlockState blockState) {
-        super((BasicTileBlock<InfinityChargerTile>) ModuleMisc.INFINITY_CHARGER.get(),blockPos, blockState);
+        super(ModuleMisc.INFINITY_CHARGER,blockPos, blockState);
         addInventory(chargingSlot = (SidedInventoryComponent<InfinityChargerTile>) new SidedInventoryComponent<InfinityChargerTile>("charging", 80, 40, 1, 0)
                 .setColor(DyeColor.BLUE)
                 .setSlotLimit(1)

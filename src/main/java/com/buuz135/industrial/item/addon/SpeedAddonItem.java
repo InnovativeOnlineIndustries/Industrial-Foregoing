@@ -28,6 +28,7 @@ import com.buuz135.industrial.utils.IndustrialTags;
 import com.hrznstudio.titanium.api.augment.AugmentTypes;
 import com.hrznstudio.titanium.item.AugmentWrapper;
 import net.minecraft.data.recipes.FinishedRecipe;
+import net.minecraft.tags.TagKey;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.CreativeModeTab;
@@ -61,7 +62,7 @@ public class SpeedAddonItem extends IFCustomItem {
 
     @Override
     public void registerRecipe(Consumer<FinishedRecipe> consumer) {
-        Tag<Item> tierMaterial = tier == 1 ? IndustrialTags.Items.GEAR_GOLD : IndustrialTags.Items.GEAR_DIAMOND;
+        TagKey<Item> tierMaterial = tier == 1 ? IndustrialTags.Items.GEAR_GOLD : IndustrialTags.Items.GEAR_DIAMOND;
         new DissolutionChamberRecipe(getRegistryName(), new Ingredient.Value[]{
                 new Ingredient.ItemValue(new ItemStack(Items.REDSTONE)),
                 new Ingredient.ItemValue(new ItemStack(Items.REDSTONE)),
@@ -71,7 +72,7 @@ public class SpeedAddonItem extends IFCustomItem {
                 new Ingredient.TagValue(tierMaterial),
                 new Ingredient.ItemValue(new ItemStack(Items.SUGAR)),
                 new Ingredient.ItemValue(new ItemStack(Items.SUGAR))
-        }, new FluidStack(ModuleCore.LATEX.getSourceFluid(), 1000), 200, new ItemStack(this), FluidStack.EMPTY);
+        }, new FluidStack(ModuleCore.LATEX.getSourceFluid().get(), 1000), 200, new ItemStack(this), FluidStack.EMPTY);
     }
 
     @Override

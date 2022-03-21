@@ -84,6 +84,6 @@ public class ItemInfinityNuke extends ItemInfinity {
                         new Ingredient.ItemValue(new ItemStack(Items.NETHER_STAR)),
                         new Ingredient.ItemValue(new ItemStack(Items.NETHER_STAR)),
                 },
-                new FluidStack(ModuleCore.ETHER.getSourceFluid(), 2000), 400, new ItemStack(this), FluidStack.EMPTY);
+                new FluidStack(ModuleCore.ETHER.getSourceFluid().get(), 2000), 400, new ItemStack(this), FluidStack.EMPTY);
     }
 }

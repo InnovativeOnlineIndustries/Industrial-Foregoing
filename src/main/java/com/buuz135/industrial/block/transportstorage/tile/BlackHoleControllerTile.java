@@ -59,7 +59,7 @@ public class BlackHoleControllerTile extends ActiveTile<BlackHoleControllerTile>
     private LazyOptional<BlackHoleControllerTank> lazyTank;
 
     public BlackHoleControllerTile(BlockPos blockPos, BlockState blockState) {
-        super((BasicTileBlock<BlackHoleControllerTile>) ModuleTransportStorage.BLACK_HOLE_CONTROLLER.get(), blockPos, blockState);
+        super((BasicTileBlock<BlackHoleControllerTile>) ModuleTransportStorage.BLACK_HOLE_CONTROLLER.getLeft().get(), ModuleTransportStorage.BLACK_HOLE_CONTROLLER.getRight().get(), blockPos, blockState);
         addInventory(this.units_storage = new InventoryComponent<BlackHoleControllerTile>("units_storage", 53, 20, 4*4)
                 .setSlotLimit(1)
                 .setInputFilter((itemStack, integer) -> itemStack.getItem() instanceof BlackHoleTankBlock.BlackHoleTankItem || itemStack.getItem() instanceof BlackHoleUnitBlock.BlackHoleUnitItem)

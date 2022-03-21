@@ -23,6 +23,7 @@ package com.buuz135.industrial.item;
 
 import com.buuz135.industrial.utils.IndustrialTags;
 import com.hrznstudio.titanium.recipe.generator.TitaniumShapedRecipeBuilder;
+import com.hrznstudio.titanium.util.TagUtil;
 import net.minecraft.data.recipes.FinishedRecipe;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
@@ -48,6 +49,7 @@ import java.util.function.Consumer;
 
 import com.hrznstudio.titanium.item.BasicItem.Key;
 import net.minecraft.world.item.Item.Properties;
+import net.minecraftforge.registries.ForgeRegistries;
 
 public class MobImprisonmentToolItem extends IFCustomItem {
 
@@ -99,7 +101,7 @@ public class MobImprisonmentToolItem extends IFCustomItem {
     }
 
     public boolean isBlacklisted(EntityType<?> entity) {
-        return IndustrialTags.EntityTypes.MOB_IMPRISONMENT_TOOL_BLACKLIST.contains(entity);
+        return TagUtil.hasTag(ForgeRegistries.ENTITIES, entity, IndustrialTags.EntityTypes.MOB_IMPRISONMENT_TOOL_BLACKLIST);
     }
 
     public boolean containsEntity(ItemStack stack) {

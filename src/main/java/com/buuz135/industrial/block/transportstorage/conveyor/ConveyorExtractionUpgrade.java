@@ -253,7 +253,7 @@ public class ConveyorExtractionUpgrade extends ConveyorUpgrade {
                     .define('I', Tags.Items.INGOTS_IRON)
                     .define('P', IndustrialTags.Items.PLASTIC)
                     .define('D', Blocks.DISPENSER)
-                    .define('C', ModuleTransportStorage.CONVEYOR.get())
+                    .define('C', ModuleTransportStorage.CONVEYOR.getLeft().get())
                     .save(consumer);
         }
     }

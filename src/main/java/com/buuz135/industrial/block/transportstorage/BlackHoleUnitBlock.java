@@ -45,6 +45,7 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.TextComponent;
 import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.tags.Tag;
+import net.minecraft.tags.TagKey;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.*;
 import net.minecraft.world.level.BlockGetter;
@@ -72,7 +73,6 @@ import java.util.function.Supplier;
 public class BlackHoleUnitBlock extends IndustrialBlock<BlackHoleUnitTile> {
 
     private Rarity rarity;
-    private BlockEntityType tileEntityType;
 
     public BlackHoleUnitBlock(Rarity rarity) {
         super(rarity.name().toLowerCase() + "_black_hole_unit",  Properties.copy(Blocks.IRON_BLOCK), BlackHoleUnitTile.class, ModuleTransportStorage.TAB_TRANSPORT);
@@ -81,16 +81,17 @@ public class BlackHoleUnitBlock extends IndustrialBlock<BlackHoleUnitTile> {
 
     @Override
     public BlockEntityType.BlockEntitySupplier<BlackHoleUnitTile> getTileEntityFactory() {
-        return (p_155268_, p_155269_) -> new BlackHoleUnitTile(this, rarity, p_155268_, p_155269_);
+        return (p_155268_, p_155269_) -> new BlackHoleUnitTile(this,getRarityType(), rarity, p_155268_, p_155269_);
     }
 
+    /*
     @Override
     public void addAlternatives(DeferredRegistryHelper registry) {
         setItem(registry.register(Item.class, rarity.name().toLowerCase() + "_black_hole_unit", this.getItemBlockFactory()));
         NBTManager.getInstance().scanTileClassForAnnotations(BlackHoleUnitTile.class);
         tileEntityType = BlockEntityType.Builder.of(this.getTileEntityFactory()::create, new Block[]{this}).build((Type) null);
         registry.registerBlockEntityType(rarity.name().toLowerCase()  + "_black_hole_unit", () -> tileEntityType);
-    }
+    }*/
 
     @Override
     public void appendHoverText(ItemStack stack, @Nullable BlockGetter worldIn, List<Component> tooltip, TooltipFlag flagIn) {
@@ -113,11 +114,6 @@ public class BlackHoleUnitBlock extends IndustrialBlock<BlackHoleUnitTile> {
     @Override
     public RotatableBlock.RotationType getRotationType() {
         return RotatableBlock.RotationType.FOUR_WAY;
-    }
-
-    @Override
-    public BlockEntityType getTileEntityType() {
-        return tileEntityType;
     }
 
     @Override
@@ -156,7 +152,7 @@ public class BlackHoleUnitBlock extends IndustrialBlock<BlackHoleUnitTile> {
                     .define('M', IndustrialTags.Items.MACHINE_FRAME_PITY)
                     .save(consumer);
         } else {
-            Tag tag = IndustrialTags.Items.MACHINE_FRAME_PITY;
+            TagKey<Item> tag = IndustrialTags.Items.MACHINE_FRAME_PITY;
             if (rarity == ModuleCore.SIMPLE_RARITY) tag = IndustrialTags.Items.MACHINE_FRAME_SIMPLE;
             if (rarity == ModuleCore.ADVANCED_RARITY) tag = IndustrialTags.Items.MACHINE_FRAME_ADVANCED;
             if (rarity == ModuleCore.SUPREME_RARITY) tag = IndustrialTags.Items.MACHINE_FRAME_SUPREME;
@@ -171,6 +167,14 @@ public class BlackHoleUnitBlock extends IndustrialBlock<BlackHoleUnitTile> {
         }
     }
 
+    private BlockEntityType getRarityType(){
+        if (rarity == Rarity.COMMON) return ModuleTransportStorage.BLACK_HOLE_UNIT_COMMON.getRight().get();
+        if (rarity == ModuleCore.SIMPLE_RARITY) return ModuleTransportStorage.BLACK_HOLE_UNIT_SIMPLE.getRight().get();
+        if (rarity == ModuleCore.ADVANCED_RARITY) return ModuleTransportStorage.BLACK_HOLE_UNIT_ADVANCED.getRight().get();
+        if (rarity == ModuleCore.SUPREME_RARITY) return ModuleTransportStorage.BLACK_HOLE_UNIT_SUPREME.getRight().get();
+        return ModuleTransportStorage.BLACK_HOLE_UNIT_PITY.getRight().get();
+    }
+    
     public class BlackHoleUnitItem extends BlockItem{
 
         private Rarity rarity;

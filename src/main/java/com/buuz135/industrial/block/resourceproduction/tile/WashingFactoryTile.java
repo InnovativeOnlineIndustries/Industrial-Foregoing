@@ -36,7 +36,9 @@ import com.hrznstudio.titanium.component.fluid.SidedFluidTankComponent;
 import com.hrznstudio.titanium.component.inventory.SidedInventoryComponent;
 import com.hrznstudio.titanium.container.addon.IContainerAddon;
 
+import com.hrznstudio.titanium.util.TagUtil;
 import net.minecraft.core.BlockPos;
+import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.DyeColor;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.block.state.BlockState;
@@ -44,10 +46,14 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.common.Tags;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.capability.IFluidHandler;
+import net.minecraftforge.registries.ForgeRegistries;
+import net.minecraftforge.registries.tags.IReverseTag;
 
 import javax.annotation.Nonnull;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class WashingFactoryTile extends IndustrialProcessingTile<WashingFactoryTile> {
 
@@ -59,12 +65,13 @@ public class WashingFactoryTile extends IndustrialProcessingTile<WashingFactoryT
     private SidedFluidTankComponent<WashingFactoryTile> meatOutput;
 
     public WashingFactoryTile(BlockPos blockPos, BlockState blockState) {
-        super((BasicTileBlock<WashingFactoryTile>) ModuleResourceProduction.WASHING_FACTORY.get(), 100, 40, blockPos, blockState);
+        super(ModuleResourceProduction.WASHING_FACTORY, 100, 40, blockPos, blockState);
         addInventory(this.input = (SidedInventoryComponent<WashingFactoryTile>) new SidedInventoryComponent<WashingFactoryTile>("input", 40, 40, 1, 0)
                 .setColor(DyeColor.BLUE)
                 .setInputFilter((stack, integer) -> {
                     if (!stack.is(Tags.Items.ORES)) return false;
-                    for (ResourceLocation resourceLocation : stack.getItem().getTags()) {
+
+                    for (ResourceLocation resourceLocation : ForgeRegistries.ITEMS.tags().getReverseTag(stack.getItem()).map(IReverseTag::getTagKeys).map(tagKeyStream -> tagKeyStream.map(TagKey::location).collect(Collectors.toList())).orElse(new ArrayList<>())) {
                         if (resourceLocation.toString().startsWith("forge:ores/") && OreTitaniumFluidAttributes.isValid(resourceLocation)){
                             return true;
                         }
@@ -75,7 +82,7 @@ public class WashingFactoryTile extends IndustrialProcessingTile<WashingFactoryT
         addTank(this.meatInput = (SidedFluidTankComponent<WashingFactoryTile>) new SidedFluidTankComponent<WashingFactoryTile>("meat", WashingFactoryConfig.maxTankSize, 70, 20, 1)
                 .setColor(DyeColor.BROWN)
                 .setTankAction(FluidTankComponent.Action.FILL)
-                .setValidator(fluidStack -> fluidStack.getFluid().isSame(ModuleCore.MEAT.getSourceFluid()))
+                .setValidator(fluidStack -> fluidStack.getFluid().isSame(ModuleCore.MEAT.getSourceFluid().get()))
         );
         addTank(this.meatOutput = (SidedFluidTankComponent<WashingFactoryTile>)  new SidedFluidTankComponent<WashingFactoryTile>("output", WashingFactoryConfig.maxOutputSize, 135, 20, 2){
                     @Override

@@ -27,6 +27,8 @@ import com.buuz135.industrial.module.ModuleMisc;
 import com.buuz135.industrial.utils.IndustrialTags;
 import com.hrznstudio.titanium.api.IFactory;
 import com.hrznstudio.titanium.recipe.generator.TitaniumShapedRecipeBuilder;
+import com.hrznstudio.titanium.util.TagUtil;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.data.recipes.FinishedRecipe;
 import net.minecraft.world.item.Items;
@@ -64,7 +66,7 @@ public class EnchantmentSorterBlock extends IndustrialBlock<EnchantmentSorterTil
                 .define('B', Items.BOOK)
                 .define('E', Items.ENCHANTED_BOOK)
                 .define('M', IndustrialTags.Items.MACHINE_FRAME_ADVANCED)
-                .define('G', ItemTags.bind("forge:gears/diamond"))
+                .define('G', TagUtil.getItemTag(new ResourceLocation("forge:gears/diamond")))
                 .save(consumer);
     }
 

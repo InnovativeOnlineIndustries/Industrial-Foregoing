@@ -53,6 +53,7 @@ import net.minecraft.world.InteractionResult;
 import net.minecraft.core.Direction;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.HitResult;
@@ -89,8 +90,8 @@ public class BlackHoleUnitTile extends BHTile<BlackHoleUnitTile> {
     private BlackHoleHandler handler;
     private final LazyOptional<IItemHandler> lazyStorage;
 
-    public BlackHoleUnitTile(BasicTileBlock<BlackHoleUnitTile> basicTileBlock, Rarity rarity, BlockPos blockPos, BlockState blockState) {
-        super(basicTileBlock, blockPos, blockState);
+    public BlackHoleUnitTile(BasicTileBlock<BlackHoleUnitTile> basicTileBlock, BlockEntityType<?> type, Rarity rarity, BlockPos blockPos, BlockState blockState) {
+        super(basicTileBlock, type, blockPos, blockState);
         this.blStack = ItemStack.EMPTY;
         this.stored = 0;
         this.voidItems = true;

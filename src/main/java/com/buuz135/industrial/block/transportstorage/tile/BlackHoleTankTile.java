@@ -40,6 +40,7 @@ import net.minecraft.world.InteractionResult;
 import net.minecraft.core.Direction;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 
 import net.minecraftforge.fluids.FluidUtil;
@@ -55,8 +56,8 @@ public class BlackHoleTankTile extends BHTile<BlackHoleTankTile> {
     private ItemStackFilter filter;
     private boolean isEmpty;
 
-    public BlackHoleTankTile(BasicTileBlock<BlackHoleTankTile> base, Rarity rarity, BlockPos blockPos, BlockState blockState) {
-        super(base, blockPos, blockState);
+    public BlackHoleTankTile(BasicTileBlock<BlackHoleTankTile> base, BlockEntityType<?> type,  Rarity rarity, BlockPos blockPos, BlockState blockState) {
+        super(base, type, blockPos, blockState);
         this.addTank(this.tank = (BigSidedFluidTankComponent<BlackHoleTankTile>) new BigSidedFluidTankComponent<BlackHoleTankTile>("tank", BlockUtils.getFluidAmountByRarity(rarity), 20, 20, 0) {
             @Override
             public void sync() {

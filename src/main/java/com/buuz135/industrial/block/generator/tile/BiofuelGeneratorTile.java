@@ -46,12 +46,12 @@ public class BiofuelGeneratorTile extends IndustrialGeneratorTile<BiofuelGenerat
     private SidedFluidTankComponent<BiofuelGeneratorTile> biofuel;
 
     public BiofuelGeneratorTile(BlockPos blockPos, BlockState blockState) {
-        super((BasicTileBlock<BiofuelGeneratorTile>) ModuleGenerator.BIOFUEL_GENERATOR.get(), blockPos, blockState);
+        super(ModuleGenerator.BIOFUEL_GENERATOR, blockPos, blockState);
         addTank(biofuel = (SidedFluidTankComponent<BiofuelGeneratorTile>) new SidedFluidTankComponent<BiofuelGeneratorTile>("biofuel", BiofuelGeneratorConfig.maxBiofuelTankSize, 43, 20, 0).
                 setColor(DyeColor.PURPLE).
                 setComponentHarness(this).
                 setTankAction(FluidTankComponent.Action.FILL).
-                setValidator(fluidStack -> fluidStack.getFluid().isSame(ModuleCore.BIOFUEL.getSourceFluid()))
+                setValidator(fluidStack -> fluidStack.getFluid().isSame(ModuleCore.BIOFUEL.getSourceFluid().get()))
         );
         this.getPowerPerTick = BiofuelGeneratorConfig.powerPerTick;
         this.getExtractionRate = BiofuelGeneratorConfig.extractionRate;

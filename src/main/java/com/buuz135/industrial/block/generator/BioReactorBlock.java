@@ -27,6 +27,8 @@ import com.buuz135.industrial.module.ModuleGenerator;
 import com.buuz135.industrial.utils.IndustrialTags;
 import com.hrznstudio.titanium.api.IFactory;
 import com.hrznstudio.titanium.recipe.generator.TitaniumShapedRecipeBuilder;
+import com.hrznstudio.titanium.util.TagUtil;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.data.recipes.FinishedRecipe;
 import net.minecraft.world.item.Items;
@@ -63,7 +65,7 @@ public class BioReactorBlock extends IndustrialBlock<BioReactorTile> {
         TitaniumShapedRecipeBuilder.shapedRecipe(this)
                 .pattern("PDP").pattern("SMS").pattern("ARA")
                 .define('P', IndustrialTags.Items.PLASTIC)
-                .define('D', ItemTags.bind("forge:gears/diamond"))
+                .define('D', TagUtil.getItemTag(new ResourceLocation("forge:gears/diamond")))
                 .define('S', Tags.Items.SLIMEBALLS)
                 .define('A', Items.BRICK)
                 .define('M', IndustrialTags.Items.MACHINE_FRAME_PITY)

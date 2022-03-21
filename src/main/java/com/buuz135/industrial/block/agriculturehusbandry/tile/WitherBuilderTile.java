@@ -60,7 +60,7 @@ public class WitherBuilderTile extends IndustrialAreaWorkingTile<WitherBuilderTi
 	private SidedInventoryComponent<WitherBuilderTile> bottom;
 
 	public WitherBuilderTile(BlockPos blockPos, BlockState blockState) {
-		super((BasicTileBlock<WitherBuilderTile>) ModuleAgricultureHusbandry.WITHER_BUILDER.get(), RangeManager.RangeType.TOP_UP, true, WitherBuilderConfig.powerPerOperation, blockPos, blockState);
+		super(ModuleAgricultureHusbandry.WITHER_BUILDER, RangeManager.RangeType.TOP_UP, true, WitherBuilderConfig.powerPerOperation, blockPos, blockState);
 		this.addInventory(top = (SidedInventoryComponent<WitherBuilderTile>) new SidedInventoryComponent<WitherBuilderTile>("wither_skulls", 64, 25, 3, 0)
 				.setColor(DyeColor.BLACK)
 				.setInputFilter((itemStack, integer) -> itemStack.getItem().equals(Items.WITHER_SKELETON_SKULL))

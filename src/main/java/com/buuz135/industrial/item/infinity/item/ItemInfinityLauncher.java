@@ -210,7 +210,7 @@ public class ItemInfinityLauncher extends ItemInfinity {
                         new Ingredient.TagValue(IndustrialTags.Items.GEAR_GOLD),
                         new Ingredient.TagValue(IndustrialTags.Items.GEAR_GOLD),
                 },
-                new FluidStack(ModuleCore.PINK_SLIME.getSourceFluid(), 2000), 400, new ItemStack(this), FluidStack.EMPTY);
+                new FluidStack(ModuleCore.PINK_SLIME.getSourceFluid().get(), 2000), 400, new ItemStack(this), FluidStack.EMPTY);
     }
 
     public enum PlungerAction {

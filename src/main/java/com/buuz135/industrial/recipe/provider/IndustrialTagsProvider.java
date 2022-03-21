@@ -42,10 +42,10 @@ public class IndustrialTagsProvider {
 
         @Override
         protected void addTags() {
-            tag((Tag.Named<Block>) IndustrialTags.Blocks.MACHINE_FRAME_PITY).add(ModuleCore.PITY.get());
-            tag((Tag.Named<Block>) IndustrialTags.Blocks.MACHINE_FRAME_SIMPLE).add(ModuleCore.SIMPLE.get());
-            tag((Tag.Named<Block>) IndustrialTags.Blocks.MACHINE_FRAME_ADVANCED).add(ModuleCore.ADVANCED.get());
-            tag((Tag.Named<Block>) IndustrialTags.Blocks.MACHINE_FRAME_SUPREME).add(ModuleCore.SUPREME.get());
+            tag(IndustrialTags.Blocks.MACHINE_FRAME_PITY).add(ModuleCore.PITY.get());
+            tag(IndustrialTags.Blocks.MACHINE_FRAME_SIMPLE).add(ModuleCore.SIMPLE.get());
+            tag(IndustrialTags.Blocks.MACHINE_FRAME_ADVANCED).add(ModuleCore.ADVANCED.get());
+            tag(IndustrialTags.Blocks.MACHINE_FRAME_SUPREME).add(ModuleCore.SUPREME.get());
         }
     }
 
@@ -57,13 +57,13 @@ public class IndustrialTagsProvider {
 
         @Override
         protected void addTags() {
-            this.copy((Tag.Named<Block>) IndustrialTags.Blocks.MACHINE_FRAME_PITY, (Tag.Named<Item>) IndustrialTags.Items.MACHINE_FRAME_PITY);
-            this.copy((Tag.Named<Block>) IndustrialTags.Blocks.MACHINE_FRAME_SIMPLE, (Tag.Named<Item>) IndustrialTags.Items.MACHINE_FRAME_SIMPLE);
-            this.copy((Tag.Named<Block>) IndustrialTags.Blocks.MACHINE_FRAME_ADVANCED, (Tag.Named<Item>) IndustrialTags.Items.MACHINE_FRAME_ADVANCED);
-            this.copy((Tag.Named<Block>) IndustrialTags.Blocks.MACHINE_FRAME_SUPREME, (Tag.Named<Item>) IndustrialTags.Items.MACHINE_FRAME_SUPREME);
+            this.copy(IndustrialTags.Blocks.MACHINE_FRAME_PITY,  IndustrialTags.Items.MACHINE_FRAME_PITY);
+            this.copy(IndustrialTags.Blocks.MACHINE_FRAME_SIMPLE,  IndustrialTags.Items.MACHINE_FRAME_SIMPLE);
+            this.copy(IndustrialTags.Blocks.MACHINE_FRAME_ADVANCED,  IndustrialTags.Items.MACHINE_FRAME_ADVANCED);
+            this.copy(IndustrialTags.Blocks.MACHINE_FRAME_SUPREME, IndustrialTags.Items.MACHINE_FRAME_SUPREME);
 
-            tag((Tag.Named<Item>) IndustrialTags.Items.PLASTIC).add(ModuleCore.PLASTIC.get());
-            tag((Tag.Named<Item>) IndustrialTags.Items.SLUDGE_OUTPUT).add(net.minecraft.world.item.Items.DIRT, net.minecraft.world.item.Items.CLAY, net.minecraft.world.item.Items.GRAVEL, net.minecraft.world.item.Items.SAND, net.minecraft.world.item.Items.RED_SAND, net.minecraft.world.item.Items.SOUL_SAND);
+            tag(IndustrialTags.Items.PLASTIC).add(ModuleCore.PLASTIC.get());
+            tag(IndustrialTags.Items.SLUDGE_OUTPUT).add(net.minecraft.world.item.Items.DIRT, net.minecraft.world.item.Items.CLAY, net.minecraft.world.item.Items.GRAVEL, net.minecraft.world.item.Items.SAND, net.minecraft.world.item.Items.RED_SAND, net.minecraft.world.item.Items.SOUL_SAND);
             tag(Tags.Items.SLIMEBALLS).add(ModuleCore.PINK_SLIME_ITEM.get());
         }
     }

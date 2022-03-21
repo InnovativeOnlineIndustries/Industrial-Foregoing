@@ -21,6 +21,7 @@
  */
 package com.buuz135.industrial.plugin.jei.machineproduce;
 
+import net.minecraft.tags.TagKey;
 import net.minecraftforge.fluids.FluidStack;
 
 import net.minecraft.tags.Tag;
@@ -41,7 +42,7 @@ public class MachineProduceWrapper {
         this.outputFluid = FluidStack.EMPTY;
     }
 
-    public MachineProduceWrapper(Block block, Tag<Item> output) {
+    public MachineProduceWrapper(Block block, TagKey<Item> output) {
         this.block = block;
         this.outputItem = Ingredient.of(output);
         this.outputFluid = FluidStack.EMPTY;

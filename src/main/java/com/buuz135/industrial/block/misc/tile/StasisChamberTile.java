@@ -50,7 +50,7 @@ public class StasisChamberTile extends IndustrialAreaWorkingTile<StasisChamberTi
     private int getPowerPerOperation;
 
     public StasisChamberTile(BlockPos blockPos, BlockState blockState) {
-        super((BasicTileBlock<StasisChamberTile>) ModuleMisc.STASIS_CHAMBER.get(), RangeManager.RangeType.TOP, false, StasisChamberConfig.powerPerOperation, blockPos,blockState);
+        super(ModuleMisc.STASIS_CHAMBER, RangeManager.RangeType.TOP, false, StasisChamberConfig.powerPerOperation, blockPos,blockState);
         this.getMaxProgress = StasisChamberConfig.maxProgress;
         this.getPowerPerOperation = StasisChamberConfig.powerPerOperation;
     }

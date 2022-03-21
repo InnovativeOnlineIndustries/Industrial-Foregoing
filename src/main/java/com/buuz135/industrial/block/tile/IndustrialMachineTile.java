@@ -40,9 +40,12 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.core.Direction;
 import net.minecraft.core.BlockPos;
+import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 
 import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
+import net.minecraftforge.registries.RegistryObject;
+import org.apache.commons.lang3.tuple.Pair;
 
 public abstract class IndustrialMachineTile<T extends IndustrialMachineTile<T>> extends MachineTile<T> implements IRedstoneReader {
 
@@ -53,8 +56,8 @@ public abstract class IndustrialMachineTile<T extends IndustrialMachineTile<T>> 
     private RedstoneControlButtonComponent<RedstoneAction> redstoneButton;
     private boolean tankBundleAdded;
 
-    public IndustrialMachineTile(BasicTileBlock<T> basicTileBlock, BlockPos blockPos, BlockState blockState) {
-        super(basicTileBlock, blockPos, blockState);
+    public IndustrialMachineTile(Pair<RegistryObject<Block>, RegistryObject<BlockEntityType<?>>> basicTileBlock, BlockPos blockPos, BlockState blockState) {
+        super((BasicTileBlock<T>) basicTileBlock.getLeft().get(), basicTileBlock.getRight().get(), blockPos, blockState);
         this.redstoneManager = new RedstoneManager<>(RedstoneAction.IGNORE, false);
         this.tankBundleAdded = false;
         this.addButton(redstoneButton = new RedstoneControlButtonComponent<>(154, 84, 14, 14, () -> this.redstoneManager, () -> this));

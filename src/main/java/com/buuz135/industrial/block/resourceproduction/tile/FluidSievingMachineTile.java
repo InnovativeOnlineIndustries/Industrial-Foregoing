@@ -58,7 +58,7 @@ public class FluidSievingMachineTile extends IndustrialProcessingTile<FluidSievi
     private SidedInventoryComponent<FluidSievingMachineTile> output;
 
     public FluidSievingMachineTile(BlockPos blockPos, BlockState blockState) {
-        super((BasicTileBlock<FluidSievingMachineTile>) ModuleResourceProduction.FLUID_SIEVING_MACHINE.get(),106, 40, blockPos, blockState);
+        super(ModuleResourceProduction.FLUID_SIEVING_MACHINE,106, 40, blockPos, blockState);
         addTank(this.input = (SidedFluidTankComponent<FluidSievingMachineTile>)  new SidedFluidTankComponent<FluidSievingMachineTile>("input", FluidSievingMachineConfig.maxTankSize, 35, 20, 0){
                     @Override
                     protected void onContentsChanged() {

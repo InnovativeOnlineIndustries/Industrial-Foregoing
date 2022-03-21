@@ -93,7 +93,7 @@ public class RangeAddonItem extends IFCustomItem {
                 new Ingredient.ItemValue(new ItemStack(MATERIALS[tier])),
                 new Ingredient.ItemValue(new ItemStack(MATERIALS[tier])),
                 new Ingredient.ItemValue(new ItemStack(MATERIALS[tier]))
-        }, new FluidStack(ModuleCore.LATEX.getSourceFluid(), 1000), 200, new ItemStack(this), FluidStack.EMPTY);
+        }, new FluidStack(ModuleCore.LATEX.getSourceFluid().get(), 1000), 200, new ItemStack(this), FluidStack.EMPTY);
     }
 
     @Override

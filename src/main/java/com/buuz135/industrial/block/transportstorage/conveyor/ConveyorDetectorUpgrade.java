@@ -219,7 +219,7 @@ public class ConveyorDetectorUpgrade extends ConveyorUpgrade {
                     .define('I', Tags.Items.INGOTS_IRON)
                     .define('P', Blocks.STONE_PRESSURE_PLATE)
                     .define('D', Blocks.COMPARATOR)
-                    .define('C', ModuleTransportStorage.CONVEYOR.get())
+                    .define('C', ModuleTransportStorage.CONVEYOR.getLeft().get())
                     .save(consumer);
 
         }

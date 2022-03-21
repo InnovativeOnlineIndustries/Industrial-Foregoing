@@ -56,7 +56,7 @@ public class SporesRecreatorTile extends IndustrialProcessingTile<SporesRecreato
     private SidedInventoryComponent<SporesRecreatorTile> output;
 
     public SporesRecreatorTile(BlockPos blockPos, BlockState blockState) {
-        super((BasicTileBlock<SporesRecreatorTile>) ModuleResourceProduction.SPORES_RECREATOR.get(), 79, 40, blockPos, blockState);
+        super(ModuleResourceProduction.SPORES_RECREATOR, 79, 40, blockPos, blockState);
         addTank(tank = (SidedFluidTankComponent<SporesRecreatorTile>) new SidedFluidTankComponent<SporesRecreatorTile>("water", SporeRecreatorConfig.maxWaterTankSize, 31, 20, 0).
                 setColor(DyeColor.CYAN).
                 setTankAction(FluidTankComponent.Action.FILL).

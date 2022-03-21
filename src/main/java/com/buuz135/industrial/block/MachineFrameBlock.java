@@ -46,11 +46,6 @@ public class MachineFrameBlock extends BasicBlock {
     }
 
     @Override
-    public Item asItem() {
-        return item;
-    }
-
-    @Override
     public Supplier<Item> getItemBlockFactory() {
         return () -> item = new MachineFrameItem(this, rarity, this.getItemGroup());
     }

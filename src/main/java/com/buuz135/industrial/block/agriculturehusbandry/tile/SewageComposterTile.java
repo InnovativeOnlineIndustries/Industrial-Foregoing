@@ -53,12 +53,12 @@ public class SewageComposterTile extends IndustrialProcessingTile<SewageComposte
     public SidedInventoryComponent<SewageComposterTile> fertilizerOutput;
 
     public SewageComposterTile(BlockPos blockPos, BlockState blockState) {
-        super((BasicTileBlock<SewageComposterTile>) ModuleAgricultureHusbandry.SEWAGE_COMPOSTER.get(), 57, 40, blockPos, blockState);
+        super(ModuleAgricultureHusbandry.SEWAGE_COMPOSTER, 57, 40, blockPos, blockState);
         this.addTank(sewage = (SidedFluidTankComponent<SewageComposterTile>) new SidedFluidTankComponent<SewageComposterTile>("sewage", SewageComposterConfig.maxTankSize, 30, 20, 0).
                 setColor(DyeColor.BROWN).
                 setTankAction(FluidTankComponent.Action.FILL).
                 setComponentHarness(this).
-                setValidator(fluidStack -> fluidStack.getFluid().isSame(ModuleCore.SEWAGE.getSourceFluid())));
+                setValidator(fluidStack -> fluidStack.getFluid().isSame(ModuleCore.SEWAGE.getSourceFluid().get())));
         this.addInventory(fertilizerOutput = (SidedInventoryComponent<SewageComposterTile>) new SidedInventoryComponent<SewageComposterTile>("fertilizer", 90, 22, 12, 1).
                 setColor(DyeColor.ORANGE).
                 setInputFilter((stack, integer) -> false).

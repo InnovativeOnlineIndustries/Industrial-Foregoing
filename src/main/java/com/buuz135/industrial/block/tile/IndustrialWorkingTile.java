@@ -44,7 +44,11 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.TextComponent;
 import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraftforge.registries.RegistryObject;
+import org.apache.commons.lang3.tuple.Pair;
 
 import java.text.DecimalFormat;
 import java.util.ArrayList;
@@ -56,7 +60,7 @@ public abstract class IndustrialWorkingTile<T extends IndustrialWorkingTile<T>> 
     @Save
     private ProgressBarComponent<T> workingBar;
 
-    public IndustrialWorkingTile(BasicTileBlock<T> basicTileBlock, int estimatedPower, BlockPos blockPos, BlockState blockState) {
+    public IndustrialWorkingTile(Pair<RegistryObject<Block>, RegistryObject<BlockEntityType<?>>> basicTileBlock, int estimatedPower, BlockPos blockPos, BlockState blockState) {
         super(basicTileBlock, blockPos, blockState);
         this.addProgressBar(workingBar = new ProgressBarComponent<T>(30, 20, getMaxProgress(), getMaxProgress()) {
             @Override

@@ -113,7 +113,7 @@ public class MaterialStoneWorkFactoryTile extends IndustrialProcessingTile<Mater
     private int fourthRecipeId;
 
     public MaterialStoneWorkFactoryTile(BlockPos blockPos, BlockState blockState) {
-        super((BasicTileBlock<MaterialStoneWorkFactoryTile>) ModuleResourceProduction.MATERIAL_STONEWORK_FACTORY.get(), 48, 40, blockPos, blockState);
+        super(ModuleResourceProduction.MATERIAL_STONEWORK_FACTORY, 48, 40, blockPos, blockState);
         addTank(water = (SidedFluidTankComponent<MaterialStoneWorkFactoryTile>) new SidedFluidTankComponent<MaterialStoneWorkFactoryTile>("water", MaterialStoneWorkFactoryConfig.maxWaterTankSize, 30, 23, 0)
                 .setColor(DyeColor.BLUE)
                 .setTankType(FluidTankComponent.Type.SMALL)

@@ -27,6 +27,8 @@ import com.buuz135.industrial.module.ModuleAgricultureHusbandry;
 import com.buuz135.industrial.utils.IndustrialTags;
 import com.hrznstudio.titanium.api.IFactory;
 import com.hrznstudio.titanium.recipe.generator.TitaniumShapedRecipeBuilder;
+import com.hrznstudio.titanium.util.TagUtil;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.data.recipes.FinishedRecipe;
 import net.minecraft.world.item.Items;
@@ -63,7 +65,7 @@ public class SlaughterFactoryBlock extends IndustrialBlock<SlaughterFactoryTile>
         TitaniumShapedRecipeBuilder.shapedRecipe(this)
                 .pattern("PDP").pattern("SMS").pattern("ARA")
                 .define('P', IndustrialTags.Items.PLASTIC)
-                .define('D', ItemTags.bind("forge:gears/gold"))
+                .define('D', TagUtil.getItemTag(new ResourceLocation("forge:gears/gold")))
                 .define('S', Items.IRON_SWORD)
                 .define('A', Items.IRON_AXE)
                 .define('M', IndustrialTags.Items.MACHINE_FRAME_PITY)

@@ -74,7 +74,7 @@ public class OreLaserBaseTile extends IndustrialMachineTile<OreLaserBaseTile> im
     private int miningDepth;
 
     public OreLaserBaseTile(BlockPos blockPos, BlockState blockState) {
-        super((BasicTileBlock<OreLaserBaseTile>) ModuleResourceProduction.ORE_LASER_BASE.get(), blockPos, blockState);
+        super(ModuleResourceProduction.ORE_LASER_BASE, blockPos, blockState);
         setShowEnergy(false);
         this.miningDepth = this.getBlockPos().getY();
         this.addProgressBar(work = new ProgressBarComponent<OreLaserBaseTile>(12, 22, 0, OreLaserBaseConfig.maxProgress){
@@ -138,9 +138,9 @@ public class OreLaserBaseTile extends IndustrialMachineTile<OreLaserBaseTile> im
     private void onWork(){
         if (!ItemStackUtils.isInventoryFull(this.output)){
             List<ItemStackWeightedItem> items = RecipeUtil.getRecipes(this.level, LaserDrillOreRecipe.SERIALIZER.getRecipeType()).stream()
-                    .filter(laserDrillOreRecipe -> laserDrillOreRecipe.getValidRarity(this.level.getBiome(this.worldPosition).getRegistryName(), this.miningDepth) != null)
+                    .filter(laserDrillOreRecipe -> laserDrillOreRecipe.getValidRarity(this.level.getBiome(this.worldPosition).value().getRegistryName(), this.miningDepth) != null)
                     .map(laserDrillOreRecipe -> {
-                        int weight = laserDrillOreRecipe.getValidRarity(this.level.getBiome(this.worldPosition).getRegistryName(), this.miningDepth).weight;
+                        int weight = laserDrillOreRecipe.getValidRarity(this.level.getBiome(this.worldPosition).value().getRegistryName(), this.miningDepth).weight;
                         for (int i = 0; i < lens.getSlots(); i++) {
                             if (laserDrillOreRecipe.catalyst.test(lens.getStackInSlot(i))) weight += OreLaserBaseConfig.catalystModifier;
                         }

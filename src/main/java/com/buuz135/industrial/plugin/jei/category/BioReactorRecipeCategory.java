@@ -35,6 +35,7 @@ import mezz.jei.api.gui.ingredient.IGuiItemStackGroup;
 import mezz.jei.api.helpers.IGuiHelper;
 import mezz.jei.api.ingredients.IIngredients;
 import mezz.jei.api.recipe.category.IRecipeCategory;
+import net.minecraft.tags.TagKey;
 import net.minecraftforge.fluids.FluidStack;
 
 import net.minecraft.network.chat.Component;
@@ -43,6 +44,7 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.Tag;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
+import net.minecraftforge.registries.ForgeRegistries;
 
 public class BioReactorRecipeCategory implements IRecipeCategory<BioReactorRecipeCategory.ReactorRecipeWrapper> {
 
@@ -87,7 +89,7 @@ public class BioReactorRecipeCategory implements IRecipeCategory<BioReactorRecip
 
     @Override
     public void setIngredients(ReactorRecipeWrapper reactorRecipeWrapper, IIngredients iIngredients) {
-        iIngredients.setInputLists(VanillaTypes.ITEM, Collections.singletonList(reactorRecipeWrapper.getStack().getValues().stream().map(ItemStack::new).collect(Collectors.toList())));
+        iIngredients.setInputLists(VanillaTypes.ITEM, Collections.singletonList(ForgeRegistries.ITEMS.tags().getTag(reactorRecipeWrapper.getStack()).stream().map(ItemStack::new).collect(Collectors.toList())));
         iIngredients.setOutput(VanillaTypes.FLUID, reactorRecipeWrapper.getFluid());
     }
 
@@ -106,16 +108,16 @@ public class BioReactorRecipeCategory implements IRecipeCategory<BioReactorRecip
 
     public static class ReactorRecipeWrapper {
 
-        private Tag<Item> stack;
+        private TagKey<Item> stack;
         private FluidStack fluid;
 
-        public ReactorRecipeWrapper(Tag<Item> stack, FluidStack fluid) {
+        public ReactorRecipeWrapper(TagKey<Item> stack, FluidStack fluid) {
             this.stack = stack;
             this.fluid = fluid;
         }
 
 
-        public Tag<Item> getStack() {
+        public TagKey<Item> getStack() {
             return stack;
         }
 

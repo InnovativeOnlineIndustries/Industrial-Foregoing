@@ -60,10 +60,10 @@ public class MeatFeederItem extends IFCustomItem {
         FluidHandlerItemStack handlerItemStack = new FluidHandlerItemStack(stack, 128000) {
             @Override
             public boolean canFillFluidType(FluidStack fluid) {
-                return fluid.getFluid().isSame(ModuleCore.MEAT.getSourceFluid());
+                return fluid.getFluid().isSame(ModuleCore.MEAT.getSourceFluid().get());
             }
         };
-        handlerItemStack.fill(new FluidStack(ModuleCore.MEAT.getSourceFluid(), 0), IFluidHandler.FluidAction.EXECUTE);
+        handlerItemStack.fill(new FluidStack(ModuleCore.MEAT.getSourceFluid().get(), 0), IFluidHandler.FluidAction.EXECUTE);
         return handlerItemStack;
     }
 
@@ -87,7 +87,7 @@ public class MeatFeederItem extends IFCustomItem {
 
     public void drain(ItemStack stack, int amount) {
         FluidHandlerItemStack handlerItemStack = (FluidHandlerItemStack) stack.getCapability(CapabilityFluidHandler.FLUID_HANDLER_ITEM_CAPABILITY).orElseThrow(RuntimeException::new);
-        handlerItemStack.drain(new FluidStack(ModuleCore.MEAT.getSourceFluid(), amount), IFluidHandler.FluidAction.EXECUTE);
+        handlerItemStack.drain(new FluidStack(ModuleCore.MEAT.getSourceFluid().get(), amount), IFluidHandler.FluidAction.EXECUTE);
     }
 
     @Override

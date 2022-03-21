@@ -54,7 +54,7 @@ public class AnimalBabySeparatorTile extends IndustrialAreaWorkingTile<AnimalBab
     private boolean movingAdults;
 
     public AnimalBabySeparatorTile(BlockPos blockPos, BlockState blockState) {
-        super((BasicTileBlock<AnimalBabySeparatorTile>) ModuleAgricultureHusbandry.ANIMAL_BABY_SEPARATOR.get(), RangeManager.RangeType.BEHIND, true, AnimalBabySeparatorConfig.powerPerOperation,blockPos, blockState);
+        super( ModuleAgricultureHusbandry.ANIMAL_BABY_SEPARATOR, RangeManager.RangeType.BEHIND, true, AnimalBabySeparatorConfig.powerPerOperation,blockPos, blockState);
         this.movingAdults = false;
         addButton(new ButtonComponent(42, 20, 18, 18) {
             @Override

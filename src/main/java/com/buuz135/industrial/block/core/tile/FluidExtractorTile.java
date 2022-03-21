@@ -56,7 +56,7 @@ public class FluidExtractorTile extends IndustrialAreaWorkingTile<FluidExtractor
     private SidedFluidTankComponent<FluidExtractorTile> tank;
 
     public FluidExtractorTile(BlockPos blockPos, BlockState blockState) {
-        super((BasicTileBlock<FluidExtractorTile>) ModuleCore.FLUID_EXTRACTOR.get(), RangeManager.RangeType.BEHIND, false, FluidExtractorConfig.powerPerOperation, blockPos, blockState);
+        super(ModuleCore.FLUID_EXTRACTOR, RangeManager.RangeType.BEHIND, false, FluidExtractorConfig.powerPerOperation, blockPos, blockState);
         addTank(tank = (SidedFluidTankComponent<FluidExtractorTile>) new SidedFluidTankComponent<FluidExtractorTile>("latex", FluidExtractorConfig.maxLatexTankSize, 43, 20, 0).
                 setColor(DyeColor.LIGHT_GRAY).
                 setTankAction(FluidTankComponent.Action.DRAIN).

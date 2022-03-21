@@ -60,7 +60,7 @@ public class LatexProcessingUnitBlock extends IndustrialBlock<LatexProcessingUni
                 .define('I', Tags.Items.INGOTS_IRON)
                 .define('G', Tags.Items.STORAGE_BLOCKS_REDSTONE)
                 .define('B', Items.WATER_BUCKET)
-                .define('L', ModuleCore.LATEX.getBucketFluid())
+                .define('L', ModuleCore.LATEX.getBucketFluid().get())
                 .define('M', IndustrialTags.Items.MACHINE_FRAME_PITY)
                 .define('F', Blocks.FURNACE)
                 .save(consumer);

@@ -22,7 +22,6 @@
 package com.buuz135.industrial.item;
 
 import com.buuz135.industrial.api.straw.StrawHandler;
-import com.buuz135.industrial.utils.FluidUtils;
 import com.buuz135.industrial.utils.IndustrialTags;
 import com.buuz135.industrial.utils.StrawUtils;
 import com.hrznstudio.titanium.recipe.generator.TitaniumShapedRecipeBuilder;
@@ -53,12 +52,6 @@ import javax.annotation.Nullable;
 import java.util.List;
 import java.util.Optional;
 import java.util.function.Consumer;
-
-import com.hrznstudio.titanium.item.BasicItem.Key;
-import net.minecraftforge.fluids.FluidUtil;
-import net.minecraftforge.fluids.capability.wrappers.BucketPickupHandlerWrapper;
-
-import net.minecraft.world.item.Item.Properties;
 
 ;
 

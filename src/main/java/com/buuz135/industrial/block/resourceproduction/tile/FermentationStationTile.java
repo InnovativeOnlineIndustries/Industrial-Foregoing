@@ -71,7 +71,7 @@ public class FermentationStationTile extends IndustrialProcessingTile<Fermentati
     private boolean isSealed;
 
     public FermentationStationTile(BlockPos blockPos, BlockState blockState) {
-        super((BasicTileBlock<FermentationStationTile>) ModuleResourceProduction.FERMENTATION_STATION.get(), 90, 40, blockPos, blockState);
+        super(ModuleResourceProduction.FERMENTATION_STATION, 90, 40, blockPos, blockState);
         addTank(this.input = (SidedFluidTankComponent<FermentationStationTile>) new SidedFluidTankComponent<FermentationStationTile>("input", 4000, 50, 20, 0) {
                     @Override
                     protected void onContentsChanged() {
@@ -105,7 +105,7 @@ public class FermentationStationTile extends IndustrialProcessingTile<Fermentati
                 .setColor(DyeColor.LIME)
                 .setTankType(FluidTankComponent.Type.SMALL)
                 .setTankAction(FluidTankComponent.Action.FILL)
-                .setValidator(fluidStack -> fluidStack.getFluid().isSame(ModuleCore.PINK_SLIME.getSourceFluid()) || fluidStack.getFluid().isSame(ModuleCore.ETHER.getSourceFluid()))
+                .setValidator(fluidStack -> fluidStack.getFluid().isSame(ModuleCore.PINK_SLIME.getSourceFluid().get()) || fluidStack.getFluid().isSame(ModuleCore.ETHER.getSourceFluid().get()))
         );
         this.production = 0;
         this.seal = 0;
@@ -211,8 +211,8 @@ public class FermentationStationTile extends IndustrialProcessingTile<Fermentati
 
         X_2(2,FermentationStationConfig.ticksFor2XProduction, FluidStack.EMPTY, new StateButtonInfo(0, IndustrialAssetProvider.FERMENTATION_PROCESSING_TWO, "text.industrialforegoing.tooltip.fermentation_station.processing_two")), //10 Seg
         X_3(3,FermentationStationConfig.ticksFor3XProduction, FluidStack.EMPTY, new StateButtonInfo(1, IndustrialAssetProvider.FERMENTATION_PROCESSING_THREE, "text.industrialforegoing.tooltip.fermentation_station.processing_three")), //45 seg
-        X_4(4,FermentationStationConfig.ticksFor4XProduction, new FluidStack(ModuleCore.PINK_SLIME.getSourceFluid(), 2), new StateButtonInfo(2, IndustrialAssetProvider.FERMENTATION_PROCESSING_FOUR, "text.industrialforegoing.tooltip.fermentation_station.processing_four")), //2 min
-        X_5(5,FermentationStationConfig.ticksFor5XProduction, new FluidStack(ModuleCore.ETHER.getSourceFluid(), 1), new StateButtonInfo(3, IndustrialAssetProvider.FERMENTATION_PROCESSING_FIVE, "text.industrialforegoing.tooltip.fermentation_station.processing_five")) //5 min
+        X_4(4,FermentationStationConfig.ticksFor4XProduction, new FluidStack(ModuleCore.PINK_SLIME.getSourceFluid().get(), 2), new StateButtonInfo(2, IndustrialAssetProvider.FERMENTATION_PROCESSING_FOUR, "text.industrialforegoing.tooltip.fermentation_station.processing_four")), //2 min
+        X_5(5,FermentationStationConfig.ticksFor5XProduction, new FluidStack(ModuleCore.ETHER.getSourceFluid().get(), 1), new StateButtonInfo(3, IndustrialAssetProvider.FERMENTATION_PROCESSING_FIVE, "text.industrialforegoing.tooltip.fermentation_station.processing_five")) //5 min
         ;
 
         private final int amount;

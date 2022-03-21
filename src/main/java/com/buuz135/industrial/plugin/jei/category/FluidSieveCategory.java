@@ -70,7 +70,7 @@ public class FluidSieveCategory implements IRecipeCategory<OreFluidEntrySieve> {
 
     @Override
     public Component getTitle() {
-        return new TranslatableComponent(ModuleResourceProduction.FLUID_SIEVING_MACHINE.get().getDescriptionId());
+        return new TranslatableComponent(ModuleResourceProduction.FLUID_SIEVING_MACHINE.getLeft().get().getDescriptionId());
     }
 
     @Override

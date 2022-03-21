@@ -68,7 +68,7 @@ public class MobDuplicatorTile extends IndustrialAreaWorkingTile<MobDuplicatorTi
 	private SidedInventoryComponent<MobDuplicatorTile> input;
 
 	public MobDuplicatorTile(BlockPos blockPos, BlockState blockState) {
-		super((BasicTileBlock<MobDuplicatorTile>) ModuleAgricultureHusbandry.MOB_DUPLICATOR.get(), RangeManager.RangeType.TOP_UP, true, MobDuplicatorConfig.powerPerOperation, blockPos, blockState);
+		super(ModuleAgricultureHusbandry.MOB_DUPLICATOR, RangeManager.RangeType.TOP_UP, true, MobDuplicatorConfig.powerPerOperation, blockPos, blockState);
 		this.addTank(tank = (SidedFluidTankComponent<MobDuplicatorTile>) new SidedFluidTankComponent<MobDuplicatorTile>("essence", MobDuplicatorConfig.tankSize, 43, 20, 0)
 				.setColor(DyeColor.LIME)
 				.setTankAction(FluidTankComponent.Action.FILL)

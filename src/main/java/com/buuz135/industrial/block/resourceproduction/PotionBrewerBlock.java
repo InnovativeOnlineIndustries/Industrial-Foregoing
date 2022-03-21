@@ -27,6 +27,8 @@ import com.buuz135.industrial.module.ModuleResourceProduction;
 import com.buuz135.industrial.utils.IndustrialTags;
 import com.hrznstudio.titanium.api.IFactory;
 import com.hrznstudio.titanium.recipe.generator.TitaniumShapedRecipeBuilder;
+import com.hrznstudio.titanium.util.TagUtil;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.data.recipes.FinishedRecipe;
 import net.minecraft.world.item.Items;
@@ -63,7 +65,7 @@ public class PotionBrewerBlock extends IndustrialBlock<PotionBrewerTile> {
                 .pattern("PSP").pattern("BMB").pattern("GBG")
                 .define('P', IndustrialTags.Items.PLASTIC)
                 .define('S', Blocks.BREWING_STAND)
-                .define('B', ItemTags.bind("forge:gears/gold"))
+                .define('B', TagUtil.getItemTag(new ResourceLocation("forge:gears/gold")))
                 .define('M', IndustrialTags.Items.MACHINE_FRAME_ADVANCED)
                 .define('G', Items.REPEATER)
                 .save(consumer);

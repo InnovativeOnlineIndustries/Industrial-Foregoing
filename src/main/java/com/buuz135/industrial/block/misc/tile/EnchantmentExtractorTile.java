@@ -75,7 +75,7 @@ public class EnchantmentExtractorTile extends IndustrialProcessingTile<Enchantme
     private ButtonComponent buttonComponent;
 
     public EnchantmentExtractorTile(BlockPos blockPos, BlockState blockState) {
-        super((BasicTileBlock<EnchantmentExtractorTile>) ModuleMisc.ENCHANTMENT_EXTRACTOR.get(), 62, 40, blockPos,blockState);
+        super(ModuleMisc.ENCHANTMENT_EXTRACTOR, 62, 40, blockPos,blockState);
         this.extractEnchants = true;
         this.addInventory(inputEnchantedItem = (SidedInventoryComponent<EnchantmentExtractorTile>) new SidedInventoryComponent<EnchantmentExtractorTile>("inputEnchantedItem", 40, 22, 1, 0).
                 setColor(DyeColor.BLUE).
@@ -166,7 +166,7 @@ public class EnchantmentExtractorTile extends IndustrialProcessingTile<Enchantme
                 ItemStack output = removeEnchantments(input, input.getDamageValue(), input.getCount());
                 input.shrink(1);
                 ItemHandlerHelper.insertItem(this.outputNoEnchantedItem, output, false);
-                this.tank.fillForced(new FluidStack(ModuleCore.ESSENCE.getSourceFluid(), essence), IFluidHandler.FluidAction.EXECUTE);
+                this.tank.fillForced(new FluidStack(ModuleCore.ESSENCE.getSourceFluid().get(), essence), IFluidHandler.FluidAction.EXECUTE);
             }
         };
     }

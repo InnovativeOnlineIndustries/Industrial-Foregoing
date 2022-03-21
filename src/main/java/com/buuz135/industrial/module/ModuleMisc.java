@@ -29,20 +29,22 @@ import com.hrznstudio.titanium.module.DeferredRegistryHelper;
 import com.hrznstudio.titanium.tab.AdvancedTitaniumTab;
 import net.minecraft.world.entity.Mob;
 import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraftforge.event.entity.living.LivingEvent;
 import net.minecraftforge.registries.RegistryObject;
+import org.apache.commons.lang3.tuple.Pair;
 
 
 public class ModuleMisc implements IModule {
 
     public static AdvancedTitaniumTab TAB_MISC = new AdvancedTitaniumTab(Reference.MOD_ID + "_misc", true);
-    public static RegistryObject<Block> STASIS_CHAMBER = IndustrialForegoing.INSTANCE.getRegistries().register(Block.class, "stasis_chamber", () -> new StasisChamberBlock());
-    public static RegistryObject<Block> MOB_DETECTOR = IndustrialForegoing.INSTANCE.getRegistries().register(Block.class, "mob_detector", () -> new MobDetectorBlock());
-    public static RegistryObject<Block> ENCHANTMENT_SORTER = IndustrialForegoing.INSTANCE.getRegistries().register(Block.class, "enchantment_sorter", () -> new EnchantmentSorterBlock());
-    public static RegistryObject<Block> ENCHANTMENT_APPLICATOR = IndustrialForegoing.INSTANCE.getRegistries().register(Block.class, "enchantment_applicator", () -> new EnchantmentApplicatorBlock());
-    public static RegistryObject<Block> ENCHANTMENT_EXTRACTOR = IndustrialForegoing.INSTANCE.getRegistries().register(Block.class, "enchantment_extractor", () -> new EnchantmentExtractorBlock());
-    public static RegistryObject<Block> ENCHANTMENT_FACTORY = IndustrialForegoing.INSTANCE.getRegistries().register(Block.class, "enchantment_factory", () -> new EnchantmentFactoryBlock());
-    public static RegistryObject<Block> INFINITY_CHARGER = IndustrialForegoing.INSTANCE.getRegistries().register(Block.class, "infinity_charger", () -> new InfinityChargerBlock());
+    public static Pair<RegistryObject<Block>, RegistryObject<BlockEntityType<?>>> STASIS_CHAMBER = IndustrialForegoing.INSTANCE.getRegistries().registerBlockWithTile("stasis_chamber", () -> new StasisChamberBlock());
+    public static Pair<RegistryObject<Block>, RegistryObject<BlockEntityType<?>>> MOB_DETECTOR = IndustrialForegoing.INSTANCE.getRegistries().registerBlockWithTile("mob_detector", () -> new MobDetectorBlock());
+    public static Pair<RegistryObject<Block>, RegistryObject<BlockEntityType<?>>> ENCHANTMENT_SORTER = IndustrialForegoing.INSTANCE.getRegistries().registerBlockWithTile("enchantment_sorter", () -> new EnchantmentSorterBlock());
+    public static Pair<RegistryObject<Block>, RegistryObject<BlockEntityType<?>>> ENCHANTMENT_APPLICATOR = IndustrialForegoing.INSTANCE.getRegistries().registerBlockWithTile("enchantment_applicator", () -> new EnchantmentApplicatorBlock());
+    public static Pair<RegistryObject<Block>, RegistryObject<BlockEntityType<?>>> ENCHANTMENT_EXTRACTOR = IndustrialForegoing.INSTANCE.getRegistries().registerBlockWithTile("enchantment_extractor", () -> new EnchantmentExtractorBlock());
+    public static Pair<RegistryObject<Block>, RegistryObject<BlockEntityType<?>>> ENCHANTMENT_FACTORY = IndustrialForegoing.INSTANCE.getRegistries().registerBlockWithTile("enchantment_factory", () -> new EnchantmentFactoryBlock());
+    public static Pair<RegistryObject<Block>, RegistryObject<BlockEntityType<?>>> INFINITY_CHARGER = IndustrialForegoing.INSTANCE.getRegistries().registerBlockWithTile("infinity_charger", () -> new InfinityChargerBlock());
 
     @Override
     public void generateFeatures(DeferredRegistryHelper helper) {

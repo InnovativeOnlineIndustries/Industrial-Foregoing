@@ -49,7 +49,7 @@ public class ChorusCache {
             if (BlockUtils.isChorus(world, checking)) {
                 Iterable<BlockPos> area = BlockPos.betweenClosed(checking.relative(Direction.DOWN).relative(Direction.SOUTH).relative(Direction.WEST), checking.relative(Direction.UP).relative(Direction.NORTH).relative(Direction.EAST));
                 for (BlockPos blockPos : area) {
-                    if (BlockUtils.isChorus(world, blockPos) && !this.chorus.contains(blockPos) && blockPos.distSqr(current.getX(), current.getY(), current.getZ(), true) <= 1000) {
+                    if (BlockUtils.isChorus(world, blockPos) && !this.chorus.contains(blockPos) && blockPos.distSqr(current) <= 100) {
                         chorus.push(blockPos);
                         this.chorus.add(blockPos);
                     }

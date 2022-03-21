@@ -48,7 +48,7 @@ public class AnimalFeederTile extends IndustrialAreaWorkingTile<AnimalFeederTile
     private SidedInventoryComponent<AnimalFeederTile> input;
 
     public AnimalFeederTile(BlockPos blockPos, BlockState blockState) {
-        super((BasicTileBlock<AnimalFeederTile>) ModuleAgricultureHusbandry.ANIMAL_FEEDER.get(), RangeManager.RangeType.BEHIND, true, AnimalFeederConfig.powerPerOperation, blockPos, blockState);
+        super(ModuleAgricultureHusbandry.ANIMAL_FEEDER, RangeManager.RangeType.BEHIND, true, AnimalFeederConfig.powerPerOperation, blockPos, blockState);
         addInventory(input = (SidedInventoryComponent<AnimalFeederTile>) new SidedInventoryComponent<AnimalFeederTile>("food", 53, 22, 6 * 3, 0)
                 .setColor(DyeColor.BLUE)
                 .setOutputFilter((stack, integer) -> false)

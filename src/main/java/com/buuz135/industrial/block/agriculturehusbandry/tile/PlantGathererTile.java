@@ -62,7 +62,7 @@ public class PlantGathererTile extends IndustrialAreaWorkingTile<PlantGathererTi
     private SidedFluidTankComponent<PlantGathererTile> tank;
 
     public PlantGathererTile(BlockPos blockPos, BlockState blockState) {
-        super((BasicTileBlock<PlantGathererTile>) ModuleAgricultureHusbandry.PLANT_GATHERER.get(), RangeManager.RangeType.BEHIND, true, PlantGathererConfig.powerPerOperation, blockPos, blockState);
+        super(ModuleAgricultureHusbandry.PLANT_GATHERER, RangeManager.RangeType.BEHIND, true, PlantGathererConfig.powerPerOperation, blockPos, blockState);
         addInventory(output = (SidedInventoryComponent<PlantGathererTile>) new SidedInventoryComponent<PlantGathererTile>("output", 70, 22, 3 * 5, 0)
                 .setColor(DyeColor.ORANGE)
                 .setRange(5, 3)
@@ -81,10 +81,10 @@ public class PlantGathererTile extends IndustrialAreaWorkingTile<PlantGathererTi
             for (int i = 0; i < amount; i++) {
                 BlockPos pointed = getPointedBlockPos();
                 if (isLoaded(pointed) && !ItemStackUtils.isInventoryFull(output)) {
-                    Optional<PlantRecollectable> optional = IFRegistries.PLANT_RECOLLECTABLES_REGISTRY.getValues().stream().filter(plantRecollectable -> plantRecollectable.canBeHarvested(this.level, pointed, this.level.getBlockState(pointed))).findFirst();
+                    Optional<PlantRecollectable> optional = IFRegistries.PLANT_RECOLLECTABLES_REGISTRY.get().getValues().stream().filter(plantRecollectable -> plantRecollectable.canBeHarvested(this.level, pointed, this.level.getBlockState(pointed))).findFirst();
                     if (optional.isPresent()) {
                         List<ItemStack> drops = optional.get().doHarvestOperation(this.level, pointed, this.level.getBlockState(pointed));
-                        tank.fill(new FluidStack(ModuleCore.SLUDGE.getSourceFluid(), 10 * drops.size()), IFluidHandler.FluidAction.EXECUTE);
+                        tank.fill(new FluidStack(ModuleCore.SLUDGE.getSourceFluid().get(), 10 * drops.size()), IFluidHandler.FluidAction.EXECUTE);
                         drops.forEach(stack -> ItemHandlerHelper.insertItem(output, stack, false));
                         if (optional.get().shouldCheckNextPlant(this.level, pointed, this.level.getBlockState(pointed))) {
                             increasePointer();

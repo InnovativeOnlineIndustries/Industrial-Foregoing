@@ -71,7 +71,7 @@ public class IndustrialBlockstateProvider extends BlockStateProvider {
                         builder.partialState().addModels(new ConfiguredModel(new ModelFile.UncheckedModelFile(getModel(industrialBlock))));
                     }
                 });
-        simpleBlock(ModuleTransportStorage.TRANSPORTER.get(), new ModelFile.UncheckedModelFile(modLoc("block/" + ModuleTransportStorage.TRANSPORTER.get().getRegistryName().getPath())));
+        simpleBlock(ModuleTransportStorage.TRANSPORTER.getLeft().get(), new ModelFile.UncheckedModelFile(modLoc("block/" + ModuleTransportStorage.TRANSPORTER.getLeft().get().getRegistryName().getPath())));
         //VariantBlockStateBuilder conveyor = getVariantBuilder(ModuleTransport.CONVEYOR);
         //for (ConveyorBlock.EnumType type : ConveyorBlock.TYPE.getAllowedValues()) {
         //    for (Direction direction : ConveyorBlock.FACING.getAllowedValues()) {

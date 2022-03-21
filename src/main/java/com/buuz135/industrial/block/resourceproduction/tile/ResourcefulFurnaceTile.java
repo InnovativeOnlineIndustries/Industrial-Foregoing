@@ -60,7 +60,7 @@ public class ResourcefulFurnaceTile extends IndustrialProcessingTile<Resourceful
     private SmeltingRecipe[] recipes;
 
     public ResourcefulFurnaceTile(BlockPos blockPos, BlockState blockState) {
-        super((BasicTileBlock<ResourcefulFurnaceTile>) ModuleResourceProduction.RESOURCEFUL_FURNACE.get(), 74, 22 + 18, blockPos, blockState);
+        super(ModuleResourceProduction.RESOURCEFUL_FURNACE, 74, 22 + 18, blockPos, blockState);
         addInventory(this.input = (SidedInventoryComponent<ResourcefulFurnaceTile>) new SidedInventoryComponent<ResourcefulFurnaceTile>("input", 44, 22, 3, 0).
                 setColor(DyeColor.BLUE).
                 setSlotLimit(1).
@@ -111,7 +111,7 @@ public class ResourcefulFurnaceTile extends IndustrialProcessingTile<Resourceful
                     if (ItemHandlerHelper.insertItem(output, recipe.getResultItem().copy(), true).isEmpty()) {
                         input.setStackInSlot(i, ItemStack.EMPTY);
                         ItemHandlerHelper.insertItem(output, recipe.getResultItem().copy(), false);
-                        tank.fillForced(new FluidStack(ModuleCore.ESSENCE.getSourceFluid(), (int) (recipe.getExperience() * 20)), IFluidHandler.FluidAction.EXECUTE);
+                        tank.fillForced(new FluidStack(ModuleCore.ESSENCE.getSourceFluid().get(), (int) (recipe.getExperience() * 20)), IFluidHandler.FluidAction.EXECUTE);
                     }
                 }
             }

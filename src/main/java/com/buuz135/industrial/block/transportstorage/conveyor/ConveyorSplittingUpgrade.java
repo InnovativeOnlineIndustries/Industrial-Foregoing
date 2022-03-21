@@ -257,9 +257,9 @@ public class ConveyorSplittingUpgrade extends ConveyorUpgrade {
             TitaniumShapedRecipeBuilder.shapedRecipe(getUpgradeItem())
                     .pattern("IPI").pattern("IDI").pattern("ICI")
                     .define('I', Tags.Items.INGOTS_IRON)
-                    .define('P', ModuleTransportStorage.CONVEYOR.get())
+                    .define('P', ModuleTransportStorage.CONVEYOR.getLeft().get())
                     .define('D', Blocks.HOPPER)
-                    .define('C', ModuleTransportStorage.CONVEYOR.get())
+                    .define('C', ModuleTransportStorage.CONVEYOR.getLeft().get())
                     .save(consumer);
         }
     }

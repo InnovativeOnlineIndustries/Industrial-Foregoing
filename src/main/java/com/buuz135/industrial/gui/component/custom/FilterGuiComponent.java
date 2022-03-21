@@ -25,6 +25,7 @@ import com.buuz135.industrial.api.conveyor.gui.PositionedGuiComponent;
 import com.buuz135.industrial.proxy.block.filter.IFilter;
 import com.buuz135.industrial.utils.Reference;
 import com.hrznstudio.titanium.util.AssetUtil;
+import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
@@ -68,7 +69,7 @@ public abstract class FilterGuiComponent extends PositionedGuiComponent {
             for (int x = 0; x < getXSize(); x++) {
                 int posX = guiX + getXPos() + x * 18;
                 int posY = guiY + getXPos() + i * 18;
-//                Minecraft.getInstance().getTextureManager().bind(BG_TEXTURE);
+                RenderSystem.setShaderTexture(0, BG_TEXTURE);
                 Minecraft.getInstance().screen.blit(stack, posX, posY, 176, 0, 18, 18); //blit
                 if (!getFilter().getFilter()[pos].getStack().isEmpty()) {
                     //RenderSystem.setupGui3DDiffuseLighting();

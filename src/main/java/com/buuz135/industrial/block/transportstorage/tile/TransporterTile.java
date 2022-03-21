@@ -60,7 +60,7 @@ public class TransporterTile extends ActiveTile<TransporterTile> implements IBlo
     private Map<Direction, TransporterType> transporterTypeMap = new HashMap<>();
 
     public TransporterTile(BlockPos blockPos, BlockState blockState) {
-        super((BasicTileBlock<TransporterTile>) ModuleTransportStorage.TRANSPORTER.get(), blockPos, blockState);
+        super((BasicTileBlock<TransporterTile>) ModuleTransportStorage.TRANSPORTER.getLeft().get(), ModuleTransportStorage.TRANSPORTER.getRight().get(), blockPos, blockState);
     }
 
     @Nonnull
@@ -148,7 +148,7 @@ public class TransporterTile extends ActiveTile<TransporterTile> implements IBlo
     @Nullable
     @Override
     public AbstractContainerMenu createMenu(int menu, Inventory inventoryPlayer, Player entityPlayer) {
-        return new ContainerTransporter(menu, this, ((TransporterBlock)ModuleTransportStorage.TRANSPORTER.get()).getFacingUpgradeHit(this.level.getBlockState(this.worldPosition), this.level, this.worldPosition, entityPlayer).getLeft(), inventoryPlayer);
+        return new ContainerTransporter(menu, this, ((TransporterBlock)ModuleTransportStorage.TRANSPORTER.getLeft().get()).getFacingUpgradeHit(this.level.getBlockState(this.worldPosition), this.level, this.worldPosition, entityPlayer).getLeft(), inventoryPlayer);
     }
 
     @Override
@@ -167,8 +167,8 @@ public class TransporterTile extends ActiveTile<TransporterTile> implements IBlo
     }
 
     @Override
-    public CompoundTag save(CompoundTag compound) {
-        compound = super.save(compound);
+    protected void saveAdditional(CompoundTag compoundTag) {
+        super.saveAdditional(compoundTag);
         CompoundTag upgrades = new CompoundTag();
         for (Direction facing : Direction.values()) {
             if (!hasUpgrade(facing)) {
@@ -182,8 +182,7 @@ public class TransporterTile extends ActiveTile<TransporterTile> implements IBlo
                 upgradeTag.put("customNBT", customNBT);
             upgrades.put(facing.getSerializedName(), upgradeTag);
         }
-        compound.put("Transporters", upgrades);
-        return compound;
+        compoundTag.put("Transporters", upgrades);
     }
 
     @Override

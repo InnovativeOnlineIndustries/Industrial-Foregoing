@@ -59,7 +59,7 @@ public class DissolutionChamberTile extends IndustrialProcessingTile<Dissolution
     private DissolutionChamberRecipe currentRecipe;
 
     public DissolutionChamberTile(BlockPos blockPos, BlockState blockState) {
-        super((BasicTileBlock<DissolutionChamberTile>) ModuleCore.DISSOLUTION_CHAMBER.get(), 102, 41, blockPos, blockState);
+        super(ModuleCore.DISSOLUTION_CHAMBER, 102, 41, blockPos, blockState);
         int slotSpacing = 22;
         this.addBundle(this.input = new LockableInventoryBundle<>(this, new SidedInventoryComponent<DissolutionChamberTile>("input", 34, 19, 8, 0).
                 setColor(DyeColor.LIGHT_BLUE).

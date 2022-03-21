@@ -58,7 +58,7 @@ public class MarineFisherTile extends IndustrialAreaWorkingTile<MarineFisherTile
     private SidedInventoryComponent<MarineFisherTile> output;
 
     public MarineFisherTile(BlockPos blockPos, BlockState blockState) {
-        super((BasicTileBlock<MarineFisherTile>) ModuleResourceProduction.MARINE_FISHER.get(), RangeManager.RangeType.BOTTOM, false, MarineFisherConfig.powerPerOperation, blockPos, blockState);
+        super(ModuleResourceProduction.MARINE_FISHER, RangeManager.RangeType.BOTTOM, false, MarineFisherConfig.powerPerOperation, blockPos, blockState);
         addInventory(output = (SidedInventoryComponent<MarineFisherTile>) new SidedInventoryComponent<MarineFisherTile>("output", 50, 22, 3 * 6, 0)
                 .setColor(DyeColor.ORANGE)
                 .setRange(6, 3)

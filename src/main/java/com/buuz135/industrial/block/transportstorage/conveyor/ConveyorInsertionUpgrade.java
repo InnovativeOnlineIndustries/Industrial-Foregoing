@@ -264,7 +264,7 @@ public class ConveyorInsertionUpgrade extends ConveyorUpgrade {
                     .define('I', Tags.Items.INGOTS_IRON)
                     .define('P', IndustrialTags.Items.PLASTIC)
                     .define('D', Blocks.HOPPER)
-                    .define('C', ModuleTransportStorage.CONVEYOR.get())
+                    .define('C', ModuleTransportStorage.CONVEYOR.getLeft().get())
                     .save(consumer);
 
         }

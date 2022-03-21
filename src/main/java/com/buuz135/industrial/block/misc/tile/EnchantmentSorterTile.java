@@ -45,7 +45,7 @@ public class EnchantmentSorterTile extends IndustrialProcessingTile<EnchantmentS
     private SidedInventoryComponent<EnchantmentSorterTile> enchantedItems;
 
     public EnchantmentSorterTile(BlockPos blockPos, BlockState blockState) {
-        super((BasicTileBlock<EnchantmentSorterTile>) ModuleMisc.ENCHANTMENT_SORTER.get(), 57, 40, blockPos, blockState);
+        super(ModuleMisc.ENCHANTMENT_SORTER, 57, 40, blockPos, blockState);
         this.addInventory(input = (SidedInventoryComponent<EnchantmentSorterTile>) new SidedInventoryComponent<EnchantmentSorterTile>("input", 35, 40, 1, 0).
                 setColor(DyeColor.BLUE).
                 setOutputFilter((stack, integer) -> false).

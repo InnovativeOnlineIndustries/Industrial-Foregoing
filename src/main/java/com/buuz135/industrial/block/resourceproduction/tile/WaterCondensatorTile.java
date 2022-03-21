@@ -52,7 +52,7 @@ public class WaterCondensatorTile extends IndustrialWorkingTile<WaterCondensator
     private SidedFluidTankComponent<WaterCondensatorTile> water;
 
     public WaterCondensatorTile(BlockPos blockPos, BlockState blockState) {
-        super((BasicTileBlock<WaterCondensatorTile>) ModuleResourceProduction.WATER_CONDENSATOR.get(), WaterCondensatorConfig.powerPerOperation, blockPos, blockState);
+        super(ModuleResourceProduction.WATER_CONDENSATOR, WaterCondensatorConfig.powerPerOperation, blockPos, blockState);
         this.addTank(water = (SidedFluidTankComponent<WaterCondensatorTile>) new SidedFluidTankComponent<WaterCondensatorTile>("water", WaterCondensatorConfig.maxWaterTankSize, 30 + 13, 20, 0).
                 setColor(DyeColor.BLUE).
                 setComponentHarness(this).

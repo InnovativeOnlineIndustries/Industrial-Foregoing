@@ -32,13 +32,14 @@ import net.minecraft.world.level.Level;
 import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.function.Supplier;
 
 @ParametersAreNonnullByDefault
 public class PotionStrawHandler extends StrawHandlerBase {
     private List<Triple<MobEffect, Integer, Integer>> potions = new ArrayList<>();
 
-    public PotionStrawHandler(Fluid fluid) {
-        super(() -> fluid);
+    public PotionStrawHandler(Supplier<Fluid> fluid) {
+        super(fluid);
     }
 
     public PotionStrawHandler addPotion(MobEffectInstance effect) {

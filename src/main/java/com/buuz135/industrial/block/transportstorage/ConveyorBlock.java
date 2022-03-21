@@ -93,13 +93,8 @@ public class ConveyorBlock extends BasicTileBlock<ConveyorTile> implements Simpl
     public ConveyorBlock(CreativeModeTab group) {
         super("conveyor", Properties.of(Material.HEAVY_METAL, MaterialColor.COLOR_ORANGE).noCollission().strength(2.0f), ConveyorTile.class);
         this.registerDefaultState(this.defaultBlockState().setValue(FACING, Direction.NORTH).setValue(WATERLOGGED, false));
-        this.item = new ConveyorItem(this, group);
+        //this.item = new ConveyorItem(this, group);
         this.setItemGroup(group);
-    }
-
-    @Override
-    public Item asItem() {
-        return item;
     }
 
     @Override

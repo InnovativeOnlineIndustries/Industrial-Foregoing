@@ -44,7 +44,11 @@ import net.minecraft.world.item.Items;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.TextComponent;
 import net.minecraft.ChatFormatting;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraftforge.registries.RegistryObject;
+import org.apache.commons.lang3.tuple.Pair;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -55,8 +59,8 @@ public abstract class BHTile<T extends BHTile<T>> extends ActiveTile<T> {
     @Save
     public boolean display;
 
-    public BHTile(BasicTileBlock<T> base, BlockPos blockPos, BlockState blockState) {
-        super(base,blockPos, blockState);
+    public BHTile(BasicTileBlock<T>  block, BlockEntityType<?> tileType, BlockPos blockPos, BlockState blockState) {
+        super(block, tileType, blockPos, blockState);
         this.display = true;
         addButton(new ButtonComponent(82+ 20 * 3, 64+16, 18, 18) {
             @Override

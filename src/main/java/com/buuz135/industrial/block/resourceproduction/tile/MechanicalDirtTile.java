@@ -56,12 +56,12 @@ public class MechanicalDirtTile extends IndustrialWorkingTile<MechanicalDirtTile
     private SidedFluidTankComponent<MechanicalDirtTile> meat;
 
     public MechanicalDirtTile(BlockPos blockPos, BlockState blockState) {
-        super((BasicTileBlock<MechanicalDirtTile>) ModuleResourceProduction.MECHANICAL_DIRT.get(), MechanicalDirtConfig.powerPerOperation, blockPos, blockState);
+        super(ModuleResourceProduction.MECHANICAL_DIRT, MechanicalDirtConfig.powerPerOperation, blockPos, blockState);
         addTank(meat = (SidedFluidTankComponent<MechanicalDirtTile>) new SidedFluidTankComponent<MechanicalDirtTile>("meat", MechanicalDirtConfig.maxMeatTankSize, 43, 20, 0).
                 setColor(DyeColor.BROWN).
                 setComponentHarness(this).
                 setTankAction(FluidTankComponent.Action.FILL).
-                setValidator(fluidStack -> fluidStack.getFluid().isSame(ModuleCore.MEAT.getSourceFluid()))
+                setValidator(fluidStack -> fluidStack.getFluid().isSame(ModuleCore.MEAT.getSourceFluid().get()))
         );
         this.getPowerPerOperation = MechanicalDirtConfig.powerPerOperation;
     }
@@ -121,7 +121,7 @@ public class MechanicalDirtTile extends IndustrialWorkingTile<MechanicalDirtTile
                         if (difference <= 25) difference = difference / 2;
                         else difference = 25;
                         if (meat.getFluidAmount() >= difference) {
-                            meat.drainForced(((MechanicalDirtTile) tile).getMeat().fill(new FluidStack(ModuleCore.MEAT.getSourceFluid(), meat.drainForced(difference, IFluidHandler.FluidAction.SIMULATE).getAmount()), IFluidHandler.FluidAction.EXECUTE), IFluidHandler.FluidAction.EXECUTE);
+                            meat.drainForced(((MechanicalDirtTile) tile).getMeat().fill(new FluidStack(ModuleCore.MEAT.getSourceFluid().get(), meat.drainForced(difference, IFluidHandler.FluidAction.SIMULATE).getAmount()), IFluidHandler.FluidAction.EXECUTE), IFluidHandler.FluidAction.EXECUTE);
                         }
                     }
                     difference = getEnergyStorage().getEnergyStored() - ((MechanicalDirtTile) tile).getEnergyStorage().getEnergyStored();

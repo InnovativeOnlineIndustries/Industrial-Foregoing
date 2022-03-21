@@ -54,7 +54,7 @@ public class MycelialReactorTile extends IndustrialGeneratorTile<MycelialReactor
     private ProgressBarComponent<MycelialReactorTile> bar;
 
     public MycelialReactorTile(BlockPos blockPos, BlockState blockState) {
-        super((BasicTileBlock<MycelialReactorTile>) ModuleGenerator.MYCELIAL_REACTOR.get(), blockPos, blockState);
+        super(ModuleGenerator.MYCELIAL_REACTOR, blockPos, blockState);
     }
 
     @Nonnull

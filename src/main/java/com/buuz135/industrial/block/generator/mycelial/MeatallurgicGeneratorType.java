@@ -65,7 +65,7 @@ public class MeatallurgicGeneratorType implements IMycelialGeneratorType{
 
     @Override
     public List<Predicate<FluidStack>> getTankInputPredicates() {
-        return Arrays.asList(fluidStack -> fluidStack.getFluid().isSame(ModuleCore.MEAT.getSourceFluid()), null);
+        return Arrays.asList(fluidStack -> fluidStack.getFluid().isSame(ModuleCore.MEAT.getSourceFluid().get()), null);
     }
 
     @Override
@@ -102,13 +102,13 @@ public class MeatallurgicGeneratorType implements IMycelialGeneratorType{
 
     @Override
     public List<MycelialGeneratorRecipe> getRecipes() {
-        return Collections.singletonList(new MycelialGeneratorRecipe(Arrays.asList(new ArrayList<>(), Collections.singletonList(Ingredient.of(Tags.Items.INGOTS))), Arrays.asList(Collections.singletonList(new FluidStack(ModuleCore.MEAT.getSourceFluid(), 250)), Collections.emptyList()), 20*20, 100));
+        return Collections.singletonList(new MycelialGeneratorRecipe(Arrays.asList(new ArrayList<>(), Collections.singletonList(Ingredient.of(Tags.Items.INGOTS))), Arrays.asList(Collections.singletonList(new FluidStack(ModuleCore.MEAT.getSourceFluid().get(), 250)), Collections.emptyList()), 20*20, 100));
     }
 
     @Override
     public ShapedRecipeBuilder addIngredients(ShapedRecipeBuilder recipeBuilder) {
         recipeBuilder = recipeBuilder.define('B', Tags.Items.INGOTS)
-                .define('C', ModuleCore.MEAT.getBucketFluid())
+                .define('C', ModuleCore.MEAT.getBucketFluid().get())
                 .define('M', IndustrialTags.Items.MACHINE_FRAME_SUPREME);
         return recipeBuilder;
     }

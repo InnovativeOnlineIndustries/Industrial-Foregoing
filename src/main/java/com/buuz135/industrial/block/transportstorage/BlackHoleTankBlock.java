@@ -44,6 +44,7 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.TextComponent;
 import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.tags.Tag;
+import net.minecraft.tags.TagKey;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.*;
 import net.minecraft.world.level.BlockGetter;
@@ -72,7 +73,6 @@ import java.util.function.Supplier;
 public class BlackHoleTankBlock extends IndustrialBlock<BlackHoleTankTile> {
 
     private Rarity rarity;
-    private BlockEntityType tileEntityType;
 
     public BlackHoleTankBlock(Rarity rarity) {
         super(rarity.name().toLowerCase() + "_black_hole_tank",  Properties.copy(Blocks.IRON_BLOCK), BlackHoleTankTile.class, ModuleTransportStorage.TAB_TRANSPORT);
@@ -81,16 +81,17 @@ public class BlackHoleTankBlock extends IndustrialBlock<BlackHoleTankTile> {
 
     @Override
     public BlockEntityType.BlockEntitySupplier<BlackHoleTankTile> getTileEntityFactory() {
-        return (p_155268_, p_155269_) -> new BlackHoleTankTile(this, rarity, p_155268_, p_155269_);
+        return (p_155268_, p_155269_) -> new BlackHoleTankTile(this,getRarityType(), rarity, p_155268_, p_155269_);
     }
 
+    /*
     @Override
     public void addAlternatives(DeferredRegistryHelper registry) {
         setItem(registry.register(Item.class,rarity.name().toLowerCase() + "_black_hole_tank", this.getItemBlockFactory()));
         NBTManager.getInstance().scanTileClassForAnnotations(BlackHoleTankTile.class);
         tileEntityType = BlockEntityType.Builder.of(this.getTileEntityFactory()::create, new Block[]{this}).build((Type) null);
         registry.registerBlockEntityType(rarity.name().toLowerCase() + "_black_hole_tank", () -> tileEntityType);
-    }
+    }*/
 
     @Override
     public void appendHoverText(ItemStack stack, @Nullable BlockGetter worldIn, List<Component> tooltip, TooltipFlag flagIn) {
@@ -111,11 +112,6 @@ public class BlackHoleTankBlock extends IndustrialBlock<BlackHoleTankTile> {
     @Override
     public RotationType getRotationType() {
         return RotationType.FOUR_WAY;
-    }
-
-    @Override
-    public BlockEntityType getTileEntityType() {
-        return tileEntityType;
     }
 
     @Override
@@ -147,7 +143,7 @@ public class BlackHoleTankBlock extends IndustrialBlock<BlackHoleTankTile> {
                     .define('M', IndustrialTags.Items.MACHINE_FRAME_PITY)
                     .save(consumer);
         } else {
-            Tag tag = IndustrialTags.Items.MACHINE_FRAME_PITY;
+            TagKey<Item> tag = IndustrialTags.Items.MACHINE_FRAME_PITY;
             if (rarity == ModuleCore.SIMPLE_RARITY) tag = IndustrialTags.Items.MACHINE_FRAME_SIMPLE;
             if (rarity == ModuleCore.ADVANCED_RARITY) tag = IndustrialTags.Items.MACHINE_FRAME_ADVANCED;
             if (rarity == ModuleCore.SUPREME_RARITY) tag = IndustrialTags.Items.MACHINE_FRAME_SUPREME;
@@ -160,6 +156,14 @@ public class BlackHoleTankBlock extends IndustrialBlock<BlackHoleTankTile> {
                     .define('M', tag)
                     .save(consumer);
         }
+    }
+
+    private BlockEntityType getRarityType(){
+        if (rarity == Rarity.COMMON) return ModuleTransportStorage.BLACK_HOLE_TANK_COMMON.getRight().get();
+        if (rarity == ModuleCore.SIMPLE_RARITY) return ModuleTransportStorage.BLACK_HOLE_TANK_SIMPLE.getRight().get();
+        if (rarity == ModuleCore.ADVANCED_RARITY) return ModuleTransportStorage.BLACK_HOLE_TANK_ADVANCED.getRight().get();
+        if (rarity == ModuleCore.SUPREME_RARITY) return ModuleTransportStorage.BLACK_HOLE_TANK_SUPREME.getRight().get();
+        return ModuleTransportStorage.BLACK_HOLE_TANK_PITY.getRight().get();
     }
 
     public class BlackHoleTankItem extends BlockItem{
