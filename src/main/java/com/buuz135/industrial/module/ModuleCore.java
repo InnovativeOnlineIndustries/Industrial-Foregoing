@@ -103,6 +103,10 @@ public class ModuleCore implements IModule {
     public static OreFluidInstance RAW_ORE_MEAT;
     public static OreFluidInstance FERMENTED_ORE_MEAT;
 
+    public static RegistryObject<Item> IRON_GEAR;
+    public static RegistryObject<Item> GOLD_GEAR;
+    public static RegistryObject<Item> DIAMOND_GEAR;
+
 
     @Override
     public void generateFeatures(DeferredRegistryHelper helper) {
@@ -156,6 +160,9 @@ public class ModuleCore implements IModule {
         RAW_ORE_MEAT = new OreFluidInstance(helper, "raw_ore_meat", FluidAttributes.builder(new ResourceLocation(Reference.MOD_ID, "blocks/fluids/raw_ore_meat_still"), new ResourceLocation(Reference.MOD_ID, "blocks/fluids/raw_ore_meat_flow")),  TAB_CORE);
         FERMENTED_ORE_MEAT =new OreFluidInstance(helper, "fermented_ore_meat", FluidAttributes.builder(new ResourceLocation(Reference.MOD_ID, "blocks/fluids/ether_gas_still"), new ResourceLocation(Reference.MOD_ID, "blocks/fluids/ether_gas_flow")),  TAB_CORE);
 
+        IRON_GEAR = helper.registerGeneric(Item.class, "iron_gear", () -> new Item(new Item.Properties().tab(TAB_CORE)));
+        GOLD_GEAR = helper.registerGeneric(Item.class, "gold_gear", () -> new Item(new Item.Properties().tab(TAB_CORE)));
+        DIAMOND_GEAR = helper.registerGeneric(Item.class, "diamond_gear", () -> new Item(new Item.Properties().tab(TAB_CORE)));
     }
 
     @OnlyIn(Dist.CLIENT)
