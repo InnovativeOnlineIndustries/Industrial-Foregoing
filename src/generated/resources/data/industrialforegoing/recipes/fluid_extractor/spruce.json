@@ -3,7 +3,7 @@
     "item": "minecraft:spruce_log"
   },
   "result": "minecraft:stripped_spruce_log",
-  "breakChance": 0.005,
+  "breakChance": 0.010,
   "output": "{FluidName:\"industrialforegoing:latex\",Amount:2}",
   "defaultRecipe": false,
   "type": "industrialforegoing:fluid_extractor"

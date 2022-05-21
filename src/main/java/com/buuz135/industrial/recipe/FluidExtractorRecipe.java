@@ -47,13 +47,13 @@ public class FluidExtractorRecipe extends SerializableRecipe {
     public static List<FluidExtractorRecipe> RECIPES = new ArrayList<>();
 
     static {
-        new FluidExtractorRecipe(new ResourceLocation(Reference.MOD_ID, "acacia"), new Ingredient.ItemValue(new ItemStack(Blocks.ACACIA_LOG)), Blocks.STRIPPED_ACACIA_LOG, 0.005f, new FluidStack(ModuleCore.LATEX.getSourceFluid().get(), 4), false);
-        new FluidExtractorRecipe(new ResourceLocation(Reference.MOD_ID, "dark_oak"), new Ingredient.ItemValue(new ItemStack(Blocks.DARK_OAK_LOG)), Blocks.STRIPPED_DARK_OAK_LOG, 0.005f, new FluidStack(ModuleCore.LATEX.getSourceFluid().get(), 3), false);
-        new FluidExtractorRecipe(new ResourceLocation(Reference.MOD_ID, "oak"), new Ingredient.ItemValue(new ItemStack(Blocks.OAK_LOG)), Blocks.STRIPPED_OAK_LOG, 0.005f, new FluidStack(ModuleCore.LATEX.getSourceFluid().get(), 2), false);
-        new FluidExtractorRecipe(new ResourceLocation(Reference.MOD_ID, "spruce"), new Ingredient.ItemValue(new ItemStack(Blocks.SPRUCE_LOG)), Blocks.STRIPPED_SPRUCE_LOG, 0.005f, new FluidStack(ModuleCore.LATEX.getSourceFluid().get(), 2), false);
-        new FluidExtractorRecipe(new ResourceLocation(Reference.MOD_ID, "birch"), new Ingredient.ItemValue(new ItemStack(Blocks.BIRCH_LOG)), Blocks.STRIPPED_BIRCH_LOG, 0.005f, new FluidStack(ModuleCore.LATEX.getSourceFluid().get(), 2), false);
-        new FluidExtractorRecipe(new ResourceLocation(Reference.MOD_ID, "jungle"), new Ingredient.ItemValue(new ItemStack(Blocks.JUNGLE_LOG)), Blocks.STRIPPED_JUNGLE_LOG, 0.005f, new FluidStack(ModuleCore.LATEX.getSourceFluid().get(), 2), false);
-        new FluidExtractorRecipe(new ResourceLocation(Reference.MOD_ID, "default"), new Ingredient.TagValue(ItemTags.LOGS), Blocks.AIR, 0.005f, new FluidStack(ModuleCore.LATEX.getSourceFluid().get(), 1), true);
+        new FluidExtractorRecipe(new ResourceLocation(Reference.MOD_ID, "acacia"), new Ingredient.ItemValue(new ItemStack(Blocks.ACACIA_LOG)), Blocks.STRIPPED_ACACIA_LOG, 0.010f, new FluidStack(ModuleCore.LATEX.getSourceFluid().get(), 4), false);
+        new FluidExtractorRecipe(new ResourceLocation(Reference.MOD_ID, "dark_oak"), new Ingredient.ItemValue(new ItemStack(Blocks.DARK_OAK_LOG)), Blocks.STRIPPED_DARK_OAK_LOG, 0.010f, new FluidStack(ModuleCore.LATEX.getSourceFluid().get(), 3), false);
+        new FluidExtractorRecipe(new ResourceLocation(Reference.MOD_ID, "oak"), new Ingredient.ItemValue(new ItemStack(Blocks.OAK_LOG)), Blocks.STRIPPED_OAK_LOG, 0.010f, new FluidStack(ModuleCore.LATEX.getSourceFluid().get(), 2), false);
+        new FluidExtractorRecipe(new ResourceLocation(Reference.MOD_ID, "spruce"), new Ingredient.ItemValue(new ItemStack(Blocks.SPRUCE_LOG)), Blocks.STRIPPED_SPRUCE_LOG, 0.010f, new FluidStack(ModuleCore.LATEX.getSourceFluid().get(), 2), false);
+        new FluidExtractorRecipe(new ResourceLocation(Reference.MOD_ID, "birch"), new Ingredient.ItemValue(new ItemStack(Blocks.BIRCH_LOG)), Blocks.STRIPPED_BIRCH_LOG, 0.010f, new FluidStack(ModuleCore.LATEX.getSourceFluid().get(), 2), false);
+        new FluidExtractorRecipe(new ResourceLocation(Reference.MOD_ID, "jungle"), new Ingredient.ItemValue(new ItemStack(Blocks.JUNGLE_LOG)), Blocks.STRIPPED_JUNGLE_LOG, 0.010f, new FluidStack(ModuleCore.LATEX.getSourceFluid().get(), 2), false);
+        new FluidExtractorRecipe(new ResourceLocation(Reference.MOD_ID, "default"), new Ingredient.TagValue(ItemTags.LOGS), Blocks.AIR, 0.010f, new FluidStack(ModuleCore.LATEX.getSourceFluid().get(), 1), true);
     }
 
     public Ingredient.Value input;

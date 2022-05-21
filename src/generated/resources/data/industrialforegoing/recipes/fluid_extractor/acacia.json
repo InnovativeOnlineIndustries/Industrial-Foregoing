@@ -3,7 +3,7 @@
     "item": "minecraft:acacia_log"
   },
   "result": "minecraft:stripped_acacia_log",
-  "breakChance": 0.005,
+  "breakChance": 0.010,
   "output": "{FluidName:\"industrialforegoing:latex\",Amount:4}",
   "defaultRecipe": false,
   "type": "industrialforegoing:fluid_extractor"

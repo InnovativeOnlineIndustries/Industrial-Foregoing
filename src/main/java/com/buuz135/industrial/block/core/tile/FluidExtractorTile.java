@@ -38,6 +38,7 @@ import net.minecraft.world.level.ChunkPos;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.dimension.DimensionType;
+import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.capability.IFluidHandler;
 
 import javax.annotation.Nonnull;
@@ -74,13 +75,20 @@ public class FluidExtractorTile extends IndustrialAreaWorkingTile<FluidExtractor
                 currentRecipe = findRecipe(this.level, pos);
             if (currentRecipe != null) {//GetDimensionType
                 FluidExtractionProgress extractionProgress = EXTRACTION.computeIfAbsent(this.level.dimensionType(), dimensionType -> new HashMap<>()).computeIfAbsent(this.level.getChunkAt(pos).getPos(), chunkPos -> new HashMap<>()).computeIfAbsent(pos, pos1 -> new FluidExtractionProgress(this.level));
-                tank.fillForced(currentRecipe.output.copy(), IFluidHandler.FluidAction.EXECUTE);
+                if (currentRecipe.output.getFluid().isSame(ModuleCore.LATEX.getSourceFluid().get())){
+                    tank.fillForced(new FluidStack(currentRecipe.output.getFluid(), currentRecipe.output.getAmount() * (hasEnergy(powerPerOperation) ? 3 : 1)), IFluidHandler.FluidAction.EXECUTE);
+                } else {
+                    tank.fillForced(currentRecipe.output.copy(), IFluidHandler.FluidAction.EXECUTE);
+                }
                 if (this.level.random.nextDouble() <= currentRecipe.breakChance) {
                     extractionProgress.setProgress(extractionProgress.getProgress() + 1);
                 }
                 if (extractionProgress.getProgress() > 7) {
                     extractionProgress.setProgress(0);
                     this.level.setBlockAndUpdate(pos, currentRecipe.result.defaultBlockState());
+                    if (currentRecipe.output.getFluid().isSame(ModuleCore.LATEX.getSourceFluid().get())){
+                        tank.fillForced(new FluidStack(currentRecipe.output.getFluid(), currentRecipe.output.getAmount() * (hasEnergy(powerPerOperation) ? 200 : 1)), IFluidHandler.FluidAction.EXECUTE);
+                    }
                 }
                 if (hasEnergy(powerPerOperation)) return new WorkAction(0.4f, powerPerOperation);
                 return new WorkAction(1f, 0);

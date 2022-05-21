@@ -3,7 +3,7 @@
     "tag": "minecraft:logs"
   },
   "result": "minecraft:air",
-  "breakChance": 0.005,
+  "breakChance": 0.010,
   "output": "{FluidName:\"industrialforegoing:latex\",Amount:1}",
   "defaultRecipe": true,
   "type": "industrialforegoing:fluid_extractor"
