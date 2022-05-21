@@ -227,6 +227,8 @@ public class ClientProxy extends CommonProxy {
         event.registerEntityRenderer((EntityType<? extends InfinityLauncherProjectileEntity>) ModuleTool.INFINITY_LAUNCHER_PROJECTILE_ENTITY_TYPE.get(), InfinityLauncherProjectileRenderer::new);
 
         event.registerBlockEntityRenderer(((BlockEntityType<? extends TransporterTile>)ModuleTransportStorage.TRANSPORTER.getRight().get()), TransporterTESR::new);
+
+        event.registerBlockEntityRenderer(((BlockEntityType<? extends ConveyorTile>)ModuleTransportStorage.CONVEYOR.getRight().get()), FluidConveyorTESR::new);
     }
 
     private static void registerAreaRender(EntityRenderersEvent.RegisterRenderers event, Pair<RegistryObject<Block>, RegistryObject<BlockEntityType<?>>> pair){

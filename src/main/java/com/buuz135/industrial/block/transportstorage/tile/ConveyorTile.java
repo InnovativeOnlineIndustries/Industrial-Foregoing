@@ -319,14 +319,15 @@ public class ConveyorTile extends ActiveTile<ConveyorTile> implements IBlockCont
             markForUpdate();
             this.needsFluidSync = false;
         }
-    }
-
-    @Override
-    public void clientTick(Level level, BlockPos pos, BlockState state, ConveyorTile blockEntity) {
         if (type.isVertical() && !upgradeMap.isEmpty()) {
             new ArrayList<>(upgradeMap.keySet()).forEach(facing1 -> this.removeUpgrade(facing1, true));
         }
         upgradeMap.values().forEach(ConveyorUpgrade::update);
+    }
+
+    @Override
+    public void clientTick(Level level, BlockPos pos, BlockState state, ConveyorTile blockEntity) {
+
     }
 
 
