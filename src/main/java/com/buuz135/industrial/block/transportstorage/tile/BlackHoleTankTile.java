@@ -40,6 +40,7 @@ import net.minecraft.world.InteractionResult;
 import net.minecraft.core.Direction;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 
@@ -75,10 +76,10 @@ public class BlackHoleTankTile extends BHTile<BlackHoleTankTile> {
     }
 
     @Override
-    public void serverTick(Level level, BlockPos pos, BlockState state, BlackHoleTankTile blockEntity) {
-        super.serverTick(level, pos, state, blockEntity);
+    public void clientTick(Level level, BlockPos pos, BlockState state, BlackHoleTankTile blockEntity) {
+        super.clientTick(level, pos, state, blockEntity);
         if (isEmpty != (tank.getFluidAmount() == 0)){
-            this.level.sendBlockUpdated(this.worldPosition, this.level.getBlockState(this.worldPosition), this.level.getBlockState(this.worldPosition), 3);
+            this.level.sendBlockUpdated(this.worldPosition, this.level.getBlockState(this.worldPosition), this.level.getBlockState(this.worldPosition), Block.UPDATE_ALL);
         }
         isEmpty = tank.getFluidAmount() == 0;
     }
