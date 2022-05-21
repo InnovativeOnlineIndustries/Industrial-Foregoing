@@ -50,6 +50,7 @@ import java.util.Map;
 
 public class TransporterTESR implements BlockEntityRenderer<TransporterTile> {
 
+    public static ResourceLocation TEXTURE = new ResourceLocation("industrialforegoing", "textures/blocks/transporters/particle.png");
 
     public static RenderType TYPE = createRenderType();
 
@@ -58,23 +59,22 @@ public class TransporterTESR implements BlockEntityRenderer<TransporterTile> {
 
     public static RenderType createRenderType() {
         RenderType.CompositeState state = RenderType.CompositeState.builder()
-                .setShaderState(new RenderStateShard.ShaderStateShard(GameRenderer::getPositionTexColorShader))
-                .setTextureState(new RenderStateShard.TextureStateShard(new ResourceLocation("industrialforegoing", "textures/blocks/transporters/particle.png"), false, false))
+                .setShaderState(new RenderStateShard.ShaderStateShard(GameRenderer::getPositionColorTexShader))
+                .setTextureState(new RenderStateShard.TextureStateShard(TEXTURE, false, false))
                 .setTransparencyState(new RenderStateShard.TransparencyStateShard("translucent_transparency", () -> {
-            RenderSystem.depthMask(true);
             RenderSystem.enableBlend();
             RenderSystem.blendFunc(GlStateManager.SourceFactor.ONE, GlStateManager.DestFactor.ONE);
         }, () -> {
             RenderSystem.disableBlend();
             RenderSystem.defaultBlendFunc();
         })).createCompositeState(true);
-        return RenderType.create("transporter_render", DefaultVertexFormat.POSITION_TEX_COLOR, VertexFormat.Mode.QUADS, 262144, false, true, state);
+        return RenderType.create("transporter_render", DefaultVertexFormat.POSITION_COLOR_TEX, VertexFormat.Mode.QUADS, 256, false, false, state);
     }
 
-    public static Vector3f getPath(Direction from, Direction to, double step) {
-        float totalSteps = 6.15f;
+    public static Vector3f getPath(Direction from, Direction to, double step, float partialTicks) {
+        float totalSteps = 5f;
         if (from.getOpposite() == to) {
-            totalSteps = 9f;
+            totalSteps = 7f;
             Vec3 vector3d = new Vec3(to.step().x() / totalSteps * step, to.step().y() / totalSteps * step, to.step().z() / totalSteps * step);
             if (from.getAxis() == Direction.Axis.X) {
                 vector3d = vector3d.add(0, 0.5, 0.5);
@@ -130,9 +130,9 @@ public class TransporterTESR implements BlockEntityRenderer<TransporterTile> {
                         continue;
                     for (int i = -1; i < TransporterItemType.QUEUE_SIZE; ++i) {
                         stack.pushPose();
-                        Vector3f pos = getPath(direction, other, i + (tile.getLevel().getGameTime() % 2) + (tile.getLevel().getGameTime() % 3) / 3D);
+                        Vector3f pos = getPath(direction, other, i  + partialTicks, partialTicks);
                         stack.translate(pos.x(), pos.y(), pos.z());
-                        transporters.get(other).renderTransfer(pos, direction, i + 1, stack, combinedOverlayIn, buffer);
+                        transporters.get(other).renderTransfer(pos, direction, i + 1, stack, combinedOverlayIn, buffer, partialTicks);
                         stack.popPose();
                     }
                 }

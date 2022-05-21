@@ -180,8 +180,8 @@ public class TransporterWorldType extends FilteredTransporterType<ItemStack, IIt
 
     @OnlyIn(Dist.CLIENT)
     @Override
-    public void renderTransfer(Vector3f pos, Direction direction, int step, PoseStack stack, int combinedOverlayIn, MultiBufferSource buffer) {
-        super.renderTransfer(pos, direction, step, stack, combinedOverlayIn, buffer);
+    public void renderTransfer(Vector3f pos, Direction direction, int step, PoseStack stack, int combinedOverlayIn, MultiBufferSource buffer, float frame) {
+        super.renderTransfer(pos, direction, step, stack, combinedOverlayIn, buffer, frame);
 
     }
 

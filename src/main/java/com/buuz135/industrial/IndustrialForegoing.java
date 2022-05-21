@@ -24,6 +24,7 @@ package com.buuz135.industrial;
 import com.buuz135.industrial.module.*;
 import com.buuz135.industrial.proxy.CommonProxy;
 import com.buuz135.industrial.proxy.client.ClientProxy;
+import com.buuz135.industrial.proxy.client.render.TransporterTESR;
 import com.buuz135.industrial.proxy.network.*;
 import com.buuz135.industrial.recipe.*;
 import com.buuz135.industrial.recipe.provider.IndustrialRecipeProvider;
@@ -46,12 +47,17 @@ import com.hrznstudio.titanium.reward.RewardManager;
 import net.minecraft.core.BlockPos;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.sounds.SoundEvent;
+import net.minecraft.world.inventory.InventoryMenu;
 import net.minecraft.world.item.crafting.RecipeSerializer;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.dimension.DimensionType;
 import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
+import net.minecraftforge.client.event.ModelBakeEvent;
 import net.minecraftforge.client.event.ModelRegistryEvent;
+import net.minecraftforge.client.event.TextureStitchEvent;
 import net.minecraftforge.client.model.ForgeModelBakery;
 import net.minecraftforge.common.ForgeMod;
 import net.minecraftforge.common.util.FakePlayer;
@@ -117,6 +123,7 @@ public class IndustrialForegoing extends ModuleController {
         LaserDrillRarity.init();
         PlayerInventoryFinder.init();
         ForgeMod.enableMilkFluid();
+        DistExecutor.unsafeRunWhenOn(Dist.CLIENT, () -> this::initClient);
     }
 
     public static FakePlayer getFakePlayer(Level world) {
@@ -173,8 +180,18 @@ public class IndustrialForegoing extends ModuleController {
         new ModuleAgricultureHusbandry().generateFeatures(getRegistries());
         new ModuleResourceProduction().generateFeatures(getRegistries());
         new ModuleMisc().generateFeatures(getRegistries());
-
     }
 
-
+    @OnlyIn(Dist.CLIENT)
+    private void initClient(){
+        EventManager.mod(TextureStitchEvent.Pre.class).process(pre -> {
+            if (pre.getAtlas().location().equals(InventoryMenu.BLOCK_ATLAS)){
+                pre.addSprite(TransporterTESR.TEXTURE);
+            }
+        }).subscribe();
+        EventManager.mod(ModelBakeEvent.class).process(event -> {
+            ClientProxy.ears_baked = event.getModelRegistry().get(new ResourceLocation(Reference.MOD_ID, "block/catears"));
+        }).subscribe();
+        EventManager.forgeGeneric(RegistryEvent.Register.class, SoundEvent.class).process(registryEvent -> ((RegistryEvent.Register) registryEvent).getRegistry().registerAll(ClientProxy.NUKE_ARMING, ClientProxy.NUKE_EXPLOSION)).subscribe();
+    }
 }

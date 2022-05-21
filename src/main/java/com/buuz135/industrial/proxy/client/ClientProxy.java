@@ -63,6 +63,7 @@ import net.minecraft.network.chat.TextComponent;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.inventory.InventoryMenu;
 import net.minecraft.world.item.SpawnEggItem;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntity;
@@ -71,6 +72,7 @@ import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.client.ClientRegistry;
 import net.minecraftforge.client.event.EntityRenderersEvent;
 import net.minecraftforge.client.event.ModelBakeEvent;
+import net.minecraftforge.client.event.TextureStitchEvent;
 import net.minecraftforge.client.model.obj.OBJModel;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.util.NonNullLazy;
@@ -93,7 +95,6 @@ import java.util.stream.Collectors;
 @Mod.EventBusSubscriber(value = Dist.CLIENT, bus = Mod.EventBusSubscriber.Bus.MOD)
 public class ClientProxy extends CommonProxy {
 
-    public static final ResourceLocation beacon = new ResourceLocation("textures/entity/beacon_beam.png");
     public static ResourceLocation GUI = new ResourceLocation(Reference.MOD_ID, "textures/gui/machines.png");
     public static BakedModel ears_baked;
     public static OBJModel ears_model;
@@ -115,11 +116,6 @@ public class ClientProxy extends CommonProxy {
 
 
         MinecraftForge.EVENT_BUS.register(new IFClientEvents());
-
-        EventManager.mod(ModelBakeEvent.class).process(event -> {
-            ears_baked = event.getModelRegistry().get(new ResourceLocation(Reference.MOD_ID, "block/catears"));
-        }).subscribe();
-        EventManager.forgeGeneric(RegistryEvent.Register.class, SoundEvent.class).process(registryEvent -> ((RegistryEvent.Register) registryEvent).getRegistry().registerAll(NUKE_ARMING, NUKE_EXPLOSION)).subscribe();
 
         //((IReloadableResourceManager) Minecraft.getInstance().getResourceManager()).addReloadListener(resourceManager -> FluidUtils.colorCache.clear());
 

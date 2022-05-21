@@ -281,7 +281,7 @@ public class TransporterType implements INBTSerializable<CompoundTag> {
     }
 
     @OnlyIn(Dist.CLIENT)
-    public void renderTransfer(Vector3f pos, Direction direction, int step, PoseStack stack, int combinedOverlayIn, MultiBufferSource buffer) {
+    public void renderTransfer(Vector3f pos, Direction direction, int step, PoseStack stack, int combinedOverlayIn, MultiBufferSource buffer, float frame) {
 
     }
 }
