@@ -26,6 +26,7 @@ import com.hrznstudio.titanium.datagenerator.loot.block.BasicBlockLootTables;
 import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.world.item.*;
 import net.minecraft.world.item.context.BlockPlaceContext;
+import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.storage.loot.LootTable;
@@ -36,7 +37,6 @@ import java.util.function.Supplier;
 
 public class MachineFrameBlock extends BasicBlock {
 
-    private MachineFrameItem item;
     private Rarity rarity;
 
     public MachineFrameBlock(Rarity rarity, CreativeModeTab group) {
@@ -46,20 +46,14 @@ public class MachineFrameBlock extends BasicBlock {
     }
 
     @Override
-    public Supplier<Item> getItemBlockFactory() {
-        return () -> item = new MachineFrameItem(this, rarity, this.getItemGroup());
-    }
-
-    @Override
     public LootTable.Builder getLootTable(BasicBlockLootTables blockLootTables) {
         return blockLootTables.droppingNothing();
     }
 
-    public class MachineFrameItem extends BlockItem {
+    public static class MachineFrameItem extends BlockItem {
 
-        public MachineFrameItem(BasicBlock blockIn, Rarity rarity, CreativeModeTab group) {
+        public MachineFrameItem(Block blockIn, Rarity rarity, CreativeModeTab group) {
             super(blockIn, new Item.Properties().tab(group).rarity(rarity));
-            //this.setRegistryName(Reference.MOD_ID,"machine_frame_" + rarity.name().toLowerCase(Locale.ROOT));
         }
 
         @Override
