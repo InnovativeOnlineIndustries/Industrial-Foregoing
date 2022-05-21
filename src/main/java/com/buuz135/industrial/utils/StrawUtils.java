@@ -27,16 +27,14 @@ import net.minecraft.world.level.material.Fluid;
 import org.jetbrains.annotations.NotNull;
 
 import javax.annotation.Nonnull;
-import java.util.Collection;
-import java.util.Comparator;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
+import java.util.stream.Collectors;
 
 public class StrawUtils {
 
     @Nonnull
     public static Optional<StrawHandler> getStrawHandler(@Nonnull Fluid stack) {
-        @NotNull List<StrawHandler> current = IFRegistries.STRAW_HANDLER_REGISTRY.get().getValues().stream().toList();
+        @NotNull List<StrawHandler> current = new ArrayList<>(IFRegistries.STRAW_HANDLER_REGISTRY.get().getValues());
         current.sort(Comparator.comparingInt(StrawHandler::getPriority));
         for (StrawHandler handler : current) {
             if (handler.validFluid(stack))
