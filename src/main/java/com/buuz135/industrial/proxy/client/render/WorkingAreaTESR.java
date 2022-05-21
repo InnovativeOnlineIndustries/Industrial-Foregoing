@@ -46,6 +46,8 @@ import net.minecraft.world.phys.shapes.VoxelShape;
 
 public class WorkingAreaTESR implements BlockEntityRenderer<IndustrialAreaWorkingTile> {
 
+
+    private static RenderType AREA_TYPE = createRenderType();
     public static RenderType createRenderType() {
         RenderType.CompositeState state = RenderType.CompositeState.builder()
                 .setShaderState(new RenderStateShard.ShaderStateShard(GameRenderer::getPositionColorShader))
@@ -69,20 +71,16 @@ public class WorkingAreaTESR implements BlockEntityRenderer<IndustrialAreaWorkin
         if (tileEntityIn == null || !tileEntityIn.isShowingArea()) return;
         VoxelShape shape = tileEntityIn.getWorkingArea();
 
-        RenderSystem.enableBlend();
-        RenderSystem.blendFuncSeparate(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA, GlStateManager.SourceFactor.ONE, GlStateManager.DestFactor.ZERO);
+
         RenderSystem.lineWidth(Math.max(2.5F, (float) Minecraft.getInstance().getWindow().getWidth() / 1920.0F * 2.5F));
-        RenderSystem.disableTexture();
+
         BlockPos blockpos = tileEntityIn.getBlockPos();
         Color color = new Color(Math.abs(blockpos.getX() % 255), Math.abs(blockpos.getY() % 255), Math.abs(blockpos.getZ() % 255));
-        RenderSystem.enableDepthTest();
-        RenderSystem.depthFunc(515);
-        RenderSystem.depthMask(true);
+
         VertexConsumer builder = renderTypeBuffer.getBuffer(RenderType.lines());
         LevelRenderer.renderLineBox(stack, builder, shape.bounds().move((double) -blockpos.getX(), (double) -blockpos.getY(), (double) -blockpos.getZ()), (float) color.getRed() / 255f, (float) color.getGreen() / 255f, (float) color.getBlue() / 255f, 0.5F);
         renderFaces(stack, renderTypeBuffer, shape.bounds(), (double) -blockpos.getX(), (double) -blockpos.getY(), (double) -blockpos.getZ(), (float) color.getRed() / 255f, (float) color.getGreen() / 255f, (float) color.getBlue() / 255f, 0.3F);
-        RenderSystem.enableTexture();
-        RenderSystem.disableBlend();
+
     }
 
     @Override
@@ -102,7 +100,7 @@ public class WorkingAreaTESR implements BlockEntityRenderer<IndustrialAreaWorkin
         Matrix4f matrix = stack.last().pose();
         VertexConsumer buffer;
 
-        buffer = renderTypeBuffer.getBuffer(createRenderType());
+        buffer = renderTypeBuffer.getBuffer(AREA_TYPE);
 
         buffer.vertex(matrix, x1, y1, z1).color(red, green, blue, alpha).endVertex();
         buffer.vertex(matrix, x1, y2, z1).color(red, green, blue, alpha).endVertex();

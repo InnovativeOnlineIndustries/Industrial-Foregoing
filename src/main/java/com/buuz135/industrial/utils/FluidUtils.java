@@ -27,12 +27,13 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.fluids.FluidStack;
 
 import java.util.HashMap;
+import java.util.concurrent.ConcurrentHashMap;
 
 public class FluidUtils {
     // TODO
     // should item colors from ItemStackUtils also be cached?
     // invalidate cache on resource reload
-    public static HashMap<ResourceLocation, Integer> colorCache = new HashMap<>();
+    public static ConcurrentHashMap<ResourceLocation, Integer> colorCache = new ConcurrentHashMap<>();
 
     public static int getFluidColor(FluidStack stack) {
         ResourceLocation location = stack.getFluid().getAttributes().getStillTexture(stack);

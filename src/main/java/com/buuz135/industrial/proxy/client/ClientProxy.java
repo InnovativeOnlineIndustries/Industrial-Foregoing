@@ -82,6 +82,8 @@ import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
 import net.minecraftforge.fluids.capability.IFluidHandlerItem;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.registries.ForgeRegistries;
+import net.minecraftforge.registries.RegistryObject;
+import org.apache.commons.lang3.tuple.Pair;
 
 import java.util.Calendar;
 import java.util.List;
@@ -204,17 +206,7 @@ public class ClientProxy extends CommonProxy {
 
     @SubscribeEvent
     public static void onRegisterRenderers(EntityRenderersEvent.RegisterRenderers event) {
-        NonNullLazy<List<Block>> blocksToProcess = NonNullLazy.of(() ->
-                ForgeRegistries.BLOCKS.getValues()
-                        .stream()
-                        .filter(basicBlock -> Optional.ofNullable(basicBlock.getRegistryName())
-                                .map(ResourceLocation::getNamespace)
-                                .filter(Reference.MOD_ID::equalsIgnoreCase)
-                                .isPresent())
-                        .collect(Collectors.toList())
-        );
-        //blocksToProcess.get().stream().filter(blockBase -> blockBase instanceof BasicTileBlock && IndustrialAreaWorkingTile.class.isAssignableFrom(((BasicTileBlock) blockBase).getTileClass())).forEach(blockBase -> event.registerBlockEntityRenderer(((BasicTileBlock) blockBase).getTileEntityType(), WorkingAreaTESR::new));
-        //TODO Machines areas
+        registerAreaRender(event, ModuleCore.FLUID_EXTRACTOR);
 
         event.registerBlockEntityRenderer((BlockEntityType<? extends BHTile>) ModuleTransportStorage.BLACK_HOLE_UNIT_COMMON.getRight().get(), BlackHoleUnitTESR::new);
         event.registerBlockEntityRenderer((BlockEntityType<? extends BHTile>) ModuleTransportStorage.BLACK_HOLE_UNIT_PITY.getRight().get(), BlackHoleUnitTESR::new);
@@ -235,6 +227,10 @@ public class ClientProxy extends CommonProxy {
         event.registerEntityRenderer((EntityType<? extends InfinityLauncherProjectileEntity>) ModuleTool.INFINITY_LAUNCHER_PROJECTILE_ENTITY_TYPE.get(), InfinityLauncherProjectileRenderer::new);
 
         event.registerBlockEntityRenderer(((BlockEntityType<? extends TransporterTile>)ModuleTransportStorage.TRANSPORTER.getRight().get()), TransporterTESR::new);
+    }
+
+    private static void registerAreaRender(EntityRenderersEvent.RegisterRenderers event, Pair<RegistryObject<Block>, RegistryObject<BlockEntityType<?>>> pair){
+        event.registerBlockEntityRenderer((BlockEntityType<? extends IndustrialAreaWorkingTile>)pair.getRight().get(), WorkingAreaTESR::new);
     }
 
     @SubscribeEvent
