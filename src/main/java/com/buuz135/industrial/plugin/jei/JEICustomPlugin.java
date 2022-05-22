@@ -94,7 +94,7 @@ public class JEICustomPlugin implements IModPlugin {
     @Override
     public void registerItemSubtypes(ISubtypeRegistration registration) {
         registration.useNbtForSubtypes(ModuleTool.INFINITY_DRILL.get(), ModuleTool.INFINITY_SAW.get(), ModuleTool.INFINITY_HAMMER.get(), ModuleTool.INFINITY_TRIDENT.get(), ModuleTool.INFINITY_BACKPACK.get(), ModuleTool.INFINITY_LAUNCHER.get(), ModuleTool.INFINITY_NUKE.get(), ModuleCore.EFFICIENCY_ADDON_1.get(), ModuleCore.EFFICIENCY_ADDON_2.get(), ModuleCore.SPEED_ADDON_1.get(), ModuleCore.SPEED_ADDON_2.get(), ModuleCore.PROCESSING_ADDON_1.get());
-        registration.useNbtForSubtypes((Item[]) Arrays.stream(ModuleCore.RANGE_ADDONS).map(itemRegistryObject -> itemRegistryObject.get()).toArray());
+        Arrays.stream(ModuleCore.RANGE_ADDONS).map(RegistryObject::get).forEach(registration::useNbtForSubtypes);
     }
 
     @Override
