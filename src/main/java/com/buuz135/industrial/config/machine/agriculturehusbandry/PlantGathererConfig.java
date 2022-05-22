@@ -39,4 +39,7 @@ public class PlantGathererConfig {
 
     @ConfigVal(comment = "Max Amount of Stored Fluid for 'Sludge Tank' - Default: [8000mB]")
     public static int maxSludgeTankSize = 8000;
+
+    @ConfigVal(comment = "Max Amount of Stored Fluid for 'EtherTank' - Default: [1000mB]")
+    public static int maxEtherTankSize = 1000;
 }

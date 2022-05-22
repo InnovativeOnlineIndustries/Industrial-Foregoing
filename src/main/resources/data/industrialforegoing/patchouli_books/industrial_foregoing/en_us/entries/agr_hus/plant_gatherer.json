@@ -11,7 +11,7 @@
     },
     {
       "type": "text",
-      "text": "The Plant Gatherer will break crops when harvesting, even when the plant may be harvested by right click."
+      "text": "The Plant Gatherer will break crops when harvesting, even when the plant may be harvested by right click. But if its being provided with small amounts of ether it will replant automatically."
     },
     {
       "type": "crafting",

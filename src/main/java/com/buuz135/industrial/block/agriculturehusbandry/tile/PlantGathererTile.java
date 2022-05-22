@@ -34,8 +34,10 @@ import com.buuz135.industrial.utils.ItemStackUtils;
 import com.hrznstudio.titanium.annotation.Save;
 import com.hrznstudio.titanium.block.BasicTileBlock;
 import com.hrznstudio.titanium.component.energy.EnergyStorageComponent;
+import com.hrznstudio.titanium.component.fluid.FluidTankComponent;
 import com.hrznstudio.titanium.component.fluid.SidedFluidTankComponent;
 import com.hrznstudio.titanium.component.inventory.SidedInventoryComponent;
+import com.hrznstudio.titanium.component.progress.ProgressBarComponent;
 import net.minecraft.world.item.DyeColor;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.core.BlockPos;
@@ -60,36 +62,64 @@ public class PlantGathererTile extends IndustrialAreaWorkingTile<PlantGathererTi
     private SidedInventoryComponent<PlantGathererTile> output;
     @Save
     private SidedFluidTankComponent<PlantGathererTile> tank;
+    @Save
+    private SidedFluidTankComponent<PlantGathererTile> ether;
+    @Save
+    private ProgressBarComponent<PlantGathererTile> etherBar;
 
     public PlantGathererTile(BlockPos blockPos, BlockState blockState) {
         super(ModuleAgricultureHusbandry.PLANT_GATHERER, RangeManager.RangeType.BEHIND, true, PlantGathererConfig.powerPerOperation, blockPos, blockState);
-        addInventory(output = (SidedInventoryComponent<PlantGathererTile>) new SidedInventoryComponent<PlantGathererTile>("output", 70, 22, 3 * 5, 0)
+        addInventory(output = (SidedInventoryComponent<PlantGathererTile>) new SidedInventoryComponent<PlantGathererTile>("output", 78, 22, 3 * 5, 0)
                 .setColor(DyeColor.ORANGE)
                 .setRange(5, 3)
                 .setComponentHarness(this));
-        addTank(tank = (SidedFluidTankComponent<PlantGathererTile>) new SidedFluidTankComponent<PlantGathererTile>("sludge", PlantGathererConfig.maxSludgeTankSize, 45, 20, 1)
+        addTank(tank = (SidedFluidTankComponent<PlantGathererTile>) new SidedFluidTankComponent<PlantGathererTile>("sludge", PlantGathererConfig.maxSludgeTankSize, 43, 20, 1)
                 .setColor(DyeColor.MAGENTA)
+                .setTankAction(FluidTankComponent.Action.DRAIN)
+                .setTankType(FluidTankComponent.Type.SMALL)
                 .setComponentHarness(this));
+        addTank(ether = (SidedFluidTankComponent<PlantGathererTile>) new SidedFluidTankComponent<PlantGathererTile>("ether", PlantGathererConfig.maxEtherTankSize, 43, 57, 2)
+                .setColor(DyeColor.CYAN)
+                .setTankAction(FluidTankComponent.Action.FILL)
+                .setTankType(FluidTankComponent.Type.SMALL)
+                .setComponentHarness(this)
+                .setValidator(fluidStack -> fluidStack.getFluid().isSame(ModuleCore.ETHER.getSourceFluid().get()))
+        );
+        addProgressBar(etherBar =  new ProgressBarComponent<PlantGathererTile>(63, 20, 0, 100)
+                .setBarDirection(ProgressBarComponent.BarDirection.VERTICAL_UP)
+                .setColor(DyeColor.CYAN)
+                .setCanReset(hydroponicBedTile -> false)
+        );
         this.maxProgress = PlantGathererConfig.maxProgress;
         this.powerPerOperation = PlantGathererConfig.powerPerOperation;
     }
 
     @Override
     public IndustrialWorkingTile.WorkAction work() {
+        if (this.etherBar.getProgress() == 0 && this.ether.getFluidAmount() > 0){
+            this.etherBar.setProgress(this.etherBar.getMaxProgress());
+            this.ether.drainForced(1, IFluidHandler.FluidAction.EXECUTE);
+        }
         if (hasEnergy(powerPerOperation)) {
-            int amount = Math.max(1, BlockUtils.getBlockPosInAABB(getWorkingArea().bounds()).size() / 4);
+            int amount = Math.max(1, BlockUtils.getBlockPosInAABB(getWorkingArea().bounds()).size() / 30);
             for (int i = 0; i < amount; i++) {
                 BlockPos pointed = getPointedBlockPos();
                 if (isLoaded(pointed) && !ItemStackUtils.isInventoryFull(output)) {
-                    Optional<PlantRecollectable> optional = IFRegistries.PLANT_RECOLLECTABLES_REGISTRY.get().getValues().stream().filter(plantRecollectable -> plantRecollectable.canBeHarvested(this.level, pointed, this.level.getBlockState(pointed))).findFirst();
-                    if (optional.isPresent()) {
-                        List<ItemStack> drops = optional.get().doHarvestOperation(this.level, pointed, this.level.getBlockState(pointed));
-                        tank.fill(new FluidStack(ModuleCore.SLUDGE.getSourceFluid().get(), 10 * drops.size()), IFluidHandler.FluidAction.EXECUTE);
-                        drops.forEach(stack -> ItemHandlerHelper.insertItem(output, stack, false));
-                        if (optional.get().shouldCheckNextPlant(this.level, pointed, this.level.getBlockState(pointed))) {
-                            increasePointer();
+                    if (this.etherBar.getProgress() > 0){
+                        if (HydroponicBedTile.tryToHarvestAndReplant(this.level, pointed, this.level.getBlockState(pointed), this.output, this.etherBar, this)){
+                            return new WorkAction(0.3f, powerPerOperation);
                         }
-                        return new WorkAction(0.3f, powerPerOperation);
+                    }else {
+                        Optional<PlantRecollectable> optional = IFRegistries.PLANT_RECOLLECTABLES_REGISTRY.get().getValues().stream().filter(plantRecollectable -> plantRecollectable.canBeHarvested(this.level, pointed, this.level.getBlockState(pointed))).findFirst();
+                        if (optional.isPresent()) {
+                            List<ItemStack> drops = optional.get().doHarvestOperation(this.level, pointed, this.level.getBlockState(pointed));
+                            tank.fill(new FluidStack(ModuleCore.SLUDGE.getSourceFluid().get(), 10 * drops.size()), IFluidHandler.FluidAction.EXECUTE);
+                            drops.forEach(stack -> ItemHandlerHelper.insertItem(output, stack, false));
+                            if (optional.get().shouldCheckNextPlant(this.level, pointed, this.level.getBlockState(pointed))) {
+                                increasePointer();
+                            }
+                            return new WorkAction(0.3f, powerPerOperation);
+                        }
                     }
                 }
                 increasePointer();

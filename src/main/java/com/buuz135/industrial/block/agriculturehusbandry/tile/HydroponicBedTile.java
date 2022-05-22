@@ -22,6 +22,7 @@
 package com.buuz135.industrial.block.agriculturehusbandry.tile;
 
 import com.buuz135.industrial.api.plant.PlantRecollectable;
+import com.buuz135.industrial.block.tile.IndustrialAreaWorkingTile;
 import com.buuz135.industrial.block.tile.IndustrialWorkingTile;
 import com.buuz135.industrial.config.machine.agriculturehusbandry.AnimalRancherConfig;
 import com.buuz135.industrial.module.ModuleAgricultureHusbandry;
@@ -50,6 +51,7 @@ import net.minecraftforge.common.IPlantable;
 import net.minecraftforge.common.PlantType;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.capability.IFluidHandler;
+import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.ItemHandlerHelper;
 
 import javax.annotation.Nonnull;
@@ -119,11 +121,11 @@ public class HydroponicBedTile extends IndustrialWorkingTile<HydroponicBedTile> 
                         this.water.drainForced(10, IFluidHandler.FluidAction.EXECUTE);
                         return new WorkAction(1, 1000);
                     } else if (this.etherBuffer.getProgress() > 0){
-                        tryToHarvestAndReplant(up, state);
+                        tryToHarvestAndReplant(this.level, up, state, this.output, this.etherBuffer, this);
                         return new WorkAction(1, 1000);
                     }
                 } else {
-                    if (!tryToHarvestAndReplant(up, state)){
+                    if (!tryToHarvestAndReplant(this.level, up, state, this.output, this.etherBuffer, this)){
                         if (this.etherBuffer.getProgress() > 0){
                             for (int i = 0; i < 10; i++) {
                                 this.level.getBlockState(up).randomTick((ServerLevel) this.level,up, this.level.random);
@@ -186,25 +188,28 @@ public class HydroponicBedTile extends IndustrialWorkingTile<HydroponicBedTile> 
         return ether;
     }
 
-    private boolean tryToHarvestAndReplant(BlockPos up, BlockState state){
-        Optional<PlantRecollectable> optional = IFRegistries.PLANT_RECOLLECTABLES_REGISTRY.get().getValues().stream().filter(plantRecollectable -> plantRecollectable.canBeHarvested(this.level, up, state)).findFirst();
+    public static boolean tryToHarvestAndReplant(Level level, BlockPos up, BlockState state, IItemHandler output, ProgressBarComponent<?> etherBuffer, IndustrialWorkingTile tile){
+        Optional<PlantRecollectable> optional = IFRegistries.PLANT_RECOLLECTABLES_REGISTRY.get().getValues().stream().filter(plantRecollectable -> plantRecollectable.canBeHarvested(level, up, state)).findFirst();
         if (optional.isPresent()) {
-            List<ItemStack> drops = optional.get().doHarvestOperation(this.level, up, state);
-            if (this.level.isEmptyBlock(up)){
+            List<ItemStack> drops = optional.get().doHarvestOperation(level, up, state);
+            if (level.isEmptyBlock(up)){
                 for (ItemStack drop : drops) {
                     if (drop.getItem() instanceof IPlantable){
-                        this.level.setBlockAndUpdate(up, ((IPlantable) drop.getItem()).getPlant(this.level, up));
+                        level.setBlockAndUpdate(up, ((IPlantable) drop.getItem()).getPlant(level, up));
                         drop.shrink(1);
                         break;
                     } else if (drop.getItem() instanceof BlockItem && ((BlockItem) drop.getItem()).getBlock() instanceof IPlantable){
-                        this.level.setBlockAndUpdate(up, ((IPlantable) ((BlockItem) drop.getItem()).getBlock()).getPlant(this.level, up));
+                        level.setBlockAndUpdate(up, ((IPlantable) ((BlockItem) drop.getItem()).getBlock()).getPlant(level, up));
                         drop.shrink(1);
                         break;
                     }
                 }
             }
-            drops.forEach(stack -> ItemHandlerHelper.insertItem(this.output, stack, false));
-            this.etherBuffer.setProgress(this.etherBuffer.getProgress() - 1);
+            drops.forEach(stack -> ItemHandlerHelper.insertItem(output, stack, false));
+            if (tile instanceof IndustrialAreaWorkingTile<?> && optional.get().shouldCheckNextPlant(level, up, level.getBlockState(up))) {
+                ((IndustrialAreaWorkingTile<?>) tile).increasePointer();
+            }
+            etherBuffer.setProgress(etherBuffer.getProgress() - 1);
             return true;
         }
         return false;

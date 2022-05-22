@@ -36,10 +36,7 @@ import com.buuz135.industrial.entity.client.*;
 import com.buuz135.industrial.item.MobImprisonmentToolItem;
 import com.buuz135.industrial.item.infinity.InfinityTier;
 import com.buuz135.industrial.item.infinity.ItemInfinity;
-import com.buuz135.industrial.module.ModuleCore;
-import com.buuz135.industrial.module.ModuleGenerator;
-import com.buuz135.industrial.module.ModuleTool;
-import com.buuz135.industrial.module.ModuleTransportStorage;
+import com.buuz135.industrial.module.*;
 import com.buuz135.industrial.proxy.CommonProxy;
 import com.buuz135.industrial.proxy.client.event.IFClientEvents;
 import com.buuz135.industrial.proxy.client.render.*;
@@ -203,6 +200,8 @@ public class ClientProxy extends CommonProxy {
     @SubscribeEvent
     public static void onRegisterRenderers(EntityRenderersEvent.RegisterRenderers event) {
         registerAreaRender(event, ModuleCore.FLUID_EXTRACTOR);
+        registerAreaRender(event, ModuleAgricultureHusbandry.PLANT_GATHERER);
+        registerAreaRender(event, ModuleAgricultureHusbandry.PLANT_SOWER);
 
         event.registerBlockEntityRenderer((BlockEntityType<? extends BHTile>) ModuleTransportStorage.BLACK_HOLE_UNIT_COMMON.getRight().get(), BlackHoleUnitTESR::new);
         event.registerBlockEntityRenderer((BlockEntityType<? extends BHTile>) ModuleTransportStorage.BLACK_HOLE_UNIT_PITY.getRight().get(), BlackHoleUnitTESR::new);
