@@ -38,10 +38,8 @@ import com.hrznstudio.titanium.util.AssetUtil;
 import com.hrznstudio.titanium.util.LangUtil;
 import com.hrznstudio.titanium.util.RayTraceUtils;
 import com.mojang.blaze3d.vertex.PoseStack;
-import com.mojang.blaze3d.systems.RenderSystem;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screens.Screen;
-import com.mojang.blaze3d.platform.Lighting;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.entity.player.Player;
@@ -60,6 +58,8 @@ import net.minecraft.world.phys.HitResult;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.TextComponent;
 import net.minecraft.ChatFormatting;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.items.CapabilityItemHandler;
@@ -103,24 +103,10 @@ public class BlackHoleUnitTile extends BHTile<BlackHoleUnitTile> {
         FilterSlot slot = new FilterSlot<>(79, 60 , 0, ItemStack.EMPTY);
         slot.setColor(DyeColor.CYAN);
         this.filter.setFilter(0, slot);
-        this.addGuiAddonFactory(() -> new BigItemGuiAddon(79, 25) {
-            @Override
-            public ItemStack getItemStack() {
-                return blStack;
-            }
 
-            @Override
-            public int getAmount() {
-                return stored;
-            }
-
-            @Override
-            public String getAmountDisplay() {
-                return getFormatedDisplayAmount();
-            }
-        });
         addButton(new ButtonComponent(82+ 20 * 2, 64+16, 18, 18) {
             @Override
+            @OnlyIn(Dist.CLIENT)
             public List<IFactory<? extends IScreenAddon>> getScreenAddons() {
                 return Collections.singletonList(() -> new BasicButtonAddon(this) {
                     @Override
@@ -145,6 +131,7 @@ public class BlackHoleUnitTile extends BHTile<BlackHoleUnitTile> {
         }));
         addButton(new ButtonComponent(82+ 20, 64+16, 18, 18) {
             @Override
+            @OnlyIn(Dist.CLIENT)
             public List<IFactory<? extends IScreenAddon>> getScreenAddons() {
                 return Collections.singletonList(() -> new BasicButtonAddon(this) {
                     @Override
@@ -167,6 +154,28 @@ public class BlackHoleUnitTile extends BHTile<BlackHoleUnitTile> {
             this.useStackDisplay = !useStackDisplay;
             this.syncObject(this.useStackDisplay);
         }));
+    }
+
+    @Override
+    @OnlyIn(Dist.CLIENT)
+    public void initClient() {
+        super.initClient();
+        this.addGuiAddonFactory(() -> new BigItemGuiAddon(79, 25) {
+            @Override
+            public ItemStack getItemStack() {
+                return blStack;
+            }
+
+            @Override
+            public int getAmount() {
+                return stored;
+            }
+
+            @Override
+            public String getAmountDisplay() {
+                return getFormatedDisplayAmount();
+            }
+        });
     }
 
     @Nonnull

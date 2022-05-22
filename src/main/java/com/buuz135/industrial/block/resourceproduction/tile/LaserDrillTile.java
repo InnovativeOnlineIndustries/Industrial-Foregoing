@@ -37,6 +37,8 @@ import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 
 public class LaserDrillTile extends IndustrialAreaWorkingTile<LaserDrillTile> {
 
@@ -46,6 +48,12 @@ public class LaserDrillTile extends IndustrialAreaWorkingTile<LaserDrillTile> {
     public LaserDrillTile(BlockPos blockPos, BlockState blockState) {
         super(ModuleResourceProduction.LASER_DRILL, RangeManager.RangeType.BEHIND, false, LaserDrillConfig.powerPerOperation, blockPos, blockState);
         this.target = BlockPos.ZERO;
+    }
+
+    @Override
+    @OnlyIn(Dist.CLIENT)
+    public void initClient() {
+        super.initClient();
         addGuiAddonFactory(() -> new TextScreenAddon(ChatFormatting.DARK_GRAY + new TranslatableComponent("text.industrialforegoing.target").getString(), 44 ,26, false));
         addGuiAddonFactory(() -> new TextScreenAddon("Target: ", 44 ,36, false){
                     @Override

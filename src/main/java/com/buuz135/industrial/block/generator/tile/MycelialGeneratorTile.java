@@ -46,6 +46,8 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.TextComponent;
 import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.common.util.INBTSerializable;
 import net.minecraftforge.registries.RegistryObject;
 import org.apache.commons.lang3.tuple.Pair;
@@ -71,7 +73,6 @@ public class MycelialGeneratorTile extends IndustrialGeneratorTile<MycelialGener
         this.type = type;
         this.powerGeneration = 10;
         this.inputs = new INBTSerializable[this.type.getInputs().length];
-        addGuiAddonFactory(() -> new GeneratorBackgroundScreenAddon(128, 39, type));
         for (int i = 0; i < this.type.getInputs().length; i++) {
             if (this.type.getInputs()[i] == IMycelialGeneratorType.Input.SLOT){
                 SidedInventoryComponent<MycelialGeneratorTile> slot = (SidedInventoryComponent<MycelialGeneratorTile>) new SidedInventoryComponent<MycelialGeneratorTile>(this.type.getName() +".input_" + i, 44 + i * 21, 22, 1, i)
@@ -89,6 +90,13 @@ public class MycelialGeneratorTile extends IndustrialGeneratorTile<MycelialGener
                 this.inputs[i] = slot;
             }
         }
+    }
+
+    @Override
+    @OnlyIn(Dist.CLIENT)
+    public void initClient() {
+        super.initClient();
+        addGuiAddonFactory(() -> new GeneratorBackgroundScreenAddon(128, 39, type));
     }
 
     @Override

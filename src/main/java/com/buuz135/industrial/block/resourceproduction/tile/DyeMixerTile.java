@@ -43,6 +43,8 @@ import net.minecraft.world.item.DyeColor;
 import net.minecraft.world.item.DyeItem;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.common.Tags;
 import net.minecraftforge.items.ItemHandlerHelper;
 
@@ -113,6 +115,7 @@ public class DyeMixerTile extends IndustrialProcessingTile<DyeMixerTile> {
         );
         addProgressBar(this.red = new ProgressBarComponent<DyeMixerTile>(33 + 20, 20, 300) {
             @Override
+            @OnlyIn(Dist.CLIENT)
             public List<IFactory<? extends IScreenAddon>> getScreenAddons() {
                 return Collections.singletonList(() -> new ProgressBarScreenAddon<DyeMixerTile>(red.getPosX(), red.getPosY(), this) {
                     @Override
@@ -127,6 +130,7 @@ public class DyeMixerTile extends IndustrialProcessingTile<DyeMixerTile> {
                 .setColor(DyeColor.RED));
         addProgressBar(this.blue = new ProgressBarComponent<DyeMixerTile>(33 + 20 + 13, 20, 300) {
             @Override
+            @OnlyIn(Dist.CLIENT)
             public List<IFactory<? extends IScreenAddon>> getScreenAddons() {
                 return Collections.singletonList(() -> new ProgressBarScreenAddon<DyeMixerTile>(blue.getPosX(), blue.getPosY(), this) {
                     @Override
@@ -141,6 +145,7 @@ public class DyeMixerTile extends IndustrialProcessingTile<DyeMixerTile> {
                 .setColor(DyeColor.BLUE));
         addProgressBar(this.green = new ProgressBarComponent<DyeMixerTile>(33 + 20 + 13 * 2, 20, 300) {
             @Override
+            @OnlyIn(Dist.CLIENT)
             public List<IFactory<? extends IScreenAddon>> getScreenAddons() {
                 return Collections.singletonList(() -> new ProgressBarScreenAddon<DyeMixerTile>(green.getPosX(), green.getPosY(), this) {
                     @Override
@@ -171,13 +176,20 @@ public class DyeMixerTile extends IndustrialProcessingTile<DyeMixerTile> {
                     markForUpdate();
                 })
         );
+
+        this.getPowerPerTick = DyeMixerConfig.powerPerTick;
+    }
+
+    @Override
+    @OnlyIn(Dist.CLIENT)
+    public void initClient() {
+        super.initClient();
         addGuiAddonFactory(() -> new ItemGuiAddon(133, 20) {
             @Override
             public ItemStack getItemStack() {
                 return new ItemStack(DyeItem.byColor(DyeColor.byId(dye)));
             }
         });
-        this.getPowerPerTick = DyeMixerConfig.powerPerTick;
     }
 
     @Override

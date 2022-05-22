@@ -54,6 +54,8 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.capability.IFluidHandler;
 
@@ -79,6 +81,7 @@ public class FluidLaserBaseTile extends IndustrialMachineTile<FluidLaserBaseTile
         this.miningDepth = this.getBlockPos().getY();
         this.addProgressBar(work = new ProgressBarComponent<FluidLaserBaseTile>(74, 24 + 18, 0, FluidLaserBaseConfig.maxProgress){
                     @Override
+                    @OnlyIn(Dist.CLIENT)
                     public List<IFactory<? extends IScreenAddon>> getScreenAddons() {
                         return Collections.singletonList(() -> new ProgressBarScreenAddon<FluidLaserBaseTile>(work.getPosX(), work.getPosY(), this){
                             @Override
@@ -120,7 +123,14 @@ public class FluidLaserBaseTile extends IndustrialMachineTile<FluidLaserBaseTile
             this.miningDepth = Math.min(255, miningDepth + 1);
             markForUpdate();
         }));
-        this.addGuiAddonFactory(() -> new TextScreenAddon("" ,70, y + 3, false){
+
+    }
+
+    @Override
+    @OnlyIn(Dist.CLIENT)
+    public void initClient() {
+        super.initClient();
+        this.addGuiAddonFactory(() -> new TextScreenAddon("" ,70, 84 + 3, false){
             @Override
             public String getText() {
                 return ChatFormatting.DARK_GRAY +  new TranslatableComponent("text.industrialforegoing.depth").getString() + miningDepth;

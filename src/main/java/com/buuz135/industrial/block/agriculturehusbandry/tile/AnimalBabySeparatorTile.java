@@ -40,6 +40,8 @@ import net.minecraft.world.entity.animal.Animal;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 
 import javax.annotation.Nonnull;
 import java.util.Collections;
@@ -58,6 +60,7 @@ public class AnimalBabySeparatorTile extends IndustrialAreaWorkingTile<AnimalBab
         this.movingAdults = false;
         addButton(new ButtonComponent(42, 20, 18, 18) {
             @Override
+            @OnlyIn(Dist.CLIENT)
             public List<IFactory<? extends IScreenAddon>> getScreenAddons() {
                 return Collections.singletonList(() -> new StateButtonAddon(this, new StateButtonInfo(0, AssetTypes.ITEM_BACKGROUND, "Moving babies"), new StateButtonInfo(1, AssetTypes.ITEM_BACKGROUND, "Moving adults")) {
                     @Override
@@ -70,14 +73,20 @@ public class AnimalBabySeparatorTile extends IndustrialAreaWorkingTile<AnimalBab
             movingAdults = !movingAdults;
             markForUpdate();
         }));
+        this.maxProgress = AnimalBabySeparatorConfig.maxProgress;
+        this.powerPerOperation = AnimalBabySeparatorConfig.powerPerOperation;
+    }
+
+    @Override
+    @OnlyIn(Dist.CLIENT)
+    public void initClient() {
+        super.initClient();
         addGuiAddonFactory(() -> new ItemGuiAddon(42, 20) {
             @Override
             public ItemStack getItemStack() {
                 return new ItemStack(movingAdults ? Items.WHEAT : Items.WHEAT_SEEDS);
             }
         }.withoutTooltip());
-        this.maxProgress = AnimalBabySeparatorConfig.maxProgress;
-        this.powerPerOperation = AnimalBabySeparatorConfig.powerPerOperation;
     }
 
     @Override

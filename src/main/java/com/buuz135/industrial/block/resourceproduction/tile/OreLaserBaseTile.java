@@ -54,6 +54,8 @@ import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
 
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.items.ItemHandlerHelper;
 
 import java.text.DecimalFormat;
@@ -79,6 +81,7 @@ public class OreLaserBaseTile extends IndustrialMachineTile<OreLaserBaseTile> im
         this.miningDepth = this.getBlockPos().getY();
         this.addProgressBar(work = new ProgressBarComponent<OreLaserBaseTile>(12, 22, 0, OreLaserBaseConfig.maxProgress){
                     @Override
+                    @OnlyIn(Dist.CLIENT)
                     public List<IFactory<? extends IScreenAddon>> getScreenAddons() {
                         return Collections.singletonList(() -> new ProgressBarScreenAddon<OreLaserBaseTile>(work.getPosX(), work.getPosY(), this){
                             @Override
@@ -121,7 +124,13 @@ public class OreLaserBaseTile extends IndustrialMachineTile<OreLaserBaseTile> im
             this.miningDepth = Math.min(255, miningDepth + 1);
             markForUpdate();
         }));
-        this.addGuiAddonFactory(() -> new TextScreenAddon("" ,70, y + 3, false){
+    }
+
+    @Override
+    @OnlyIn(Dist.CLIENT)
+    public void initClient() {
+        super.initClient();
+        this.addGuiAddonFactory(() -> new TextScreenAddon("" ,70, 84 + 3, false){
             @Override
             public String getText() {
                 return ChatFormatting.DARK_GRAY + new TranslatableComponent("text.industrialforegoing.depth").getString() + miningDepth;
