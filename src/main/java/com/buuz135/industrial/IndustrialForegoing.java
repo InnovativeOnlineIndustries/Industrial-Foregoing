@@ -45,6 +45,7 @@ import com.hrznstudio.titanium.reward.Reward;
 import com.hrznstudio.titanium.reward.RewardGiver;
 import com.hrznstudio.titanium.reward.RewardManager;
 import net.minecraft.core.BlockPos;
+import net.minecraft.network.chat.TextComponent;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvent;
@@ -63,6 +64,7 @@ import net.minecraftforge.common.ForgeMod;
 import net.minecraftforge.common.util.FakePlayer;
 import net.minecraftforge.common.util.NonNullLazy;
 import net.minecraftforge.event.RegistryEvent;
+import net.minecraftforge.event.entity.player.ItemTooltipEvent;
 import net.minecraftforge.event.server.ServerStartingEvent;
 import net.minecraftforge.fml.DistExecutor;
 import net.minecraftforge.fml.common.Mod;
@@ -112,7 +114,10 @@ public class IndustrialForegoing extends ModuleController {
         EventManager.mod(NewRegistryEvent.class).process(IFRegistries::create).subscribe();
         EventManager.modGeneric(RegistryEvent.Register.class, RecipeSerializer.class)
                 .process(register -> ((RegistryEvent.Register) register).getRegistry().registerAll(FluidExtractorRecipe.SERIALIZER, DissolutionChamberRecipe.SERIALIZER, LaserDrillOreRecipe.SERIALIZER, LaserDrillFluidRecipe.SERIALIZER, StoneWorkGenerateRecipe.SERIALIZER, CrusherRecipe.SERIALIZER)).subscribe();
-        //EventManager.forge(ItemTooltipEvent.class).filter(itemTooltipEvent -> itemTooltipEvent.getItemStack().hasTag()).process(itemTooltipEvent -> itemTooltipEvent.getToolTip().add(itemTooltipEvent.getItemStack().getTag().toFormattedComponent())).subscribe();
+        /*
+        EventManager.forge(ItemTooltipEvent.class).process(itemTooltipEvent -> ForgeRegistries.ITEMS.tags().getReverseTag(itemTooltipEvent.getItemStack().getItem()).ifPresent(itemIReverseTag -> {
+            itemIReverseTag.getTagKeys().forEach(itemTagKey -> itemTooltipEvent.getToolTip().add(new TextComponent(itemTagKey.location().toString())));
+        })).subscribe();*/
         RewardGiver giver = RewardManager.get().getGiver(UUID.fromString("d28b7061-fb92-4064-90fb-7e02b95a72a6"), "Buuz135");
         try {
             giver.addReward(new Reward(new ResourceLocation(Reference.MOD_ID, "cat_ears"), new URL("https://raw.githubusercontent.com/Buuz135/Industrial-Foregoing/master/contributors.json"), () -> dist -> {

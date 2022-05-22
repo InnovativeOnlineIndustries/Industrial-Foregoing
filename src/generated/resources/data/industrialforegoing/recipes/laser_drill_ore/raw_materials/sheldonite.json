@@ -5,7 +5,7 @@
       "conditions": [
         {
           "value": {
-            "tag": "forge:ores/draconium",
+            "tag": "forge:ores/raw_materials/sheldonite",
             "type": "forge:tag_empty"
           },
           "type": "forge:not"
@@ -13,7 +13,7 @@
       ],
       "recipe": {
         "output": {
-          "tag": "forge:ores/draconium"
+          "tag": "forge:ores/raw_materials/sheldonite"
         },
         "rarity": [
           {
@@ -29,14 +29,14 @@
               ]
             },
             "blacklist": {},
-            "depth_min": 60,
-            "depth_max": 95,
-            "weight": 10
+            "depth_min": 30,
+            "depth_max": 70,
+            "weight": 6
           }
         ],
         "pointer": 0,
         "catalyst": {
-          "item": "industrialforegoing:laser_lens10"
+          "item": "industrialforegoing:laser_lens0"
         },
         "type": "industrialforegoing:laser_drill_ore"
       }

@@ -5,7 +5,7 @@
       "conditions": [
         {
           "value": {
-            "tag": "forge:ores/pyrite",
+            "tag": "forge:raw_materials/iron",
             "type": "forge:tag_empty"
           },
           "type": "forge:not"
@@ -13,7 +13,7 @@
       ],
       "recipe": {
         "output": {
-          "tag": "forge:ores/pyrite"
+          "tag": "forge:raw_materials/iron"
         },
         "rarity": [
           {
@@ -29,9 +29,9 @@
                 "minecraft:end_midlands"
               ]
             },
-            "depth_min": 30,
-            "depth_max": 70,
-            "weight": 3
+            "depth_min": 5,
+            "depth_max": 68,
+            "weight": 20
           },
           {
             "whitelist": {},
@@ -48,7 +48,7 @@
             },
             "depth_min": 0,
             "depth_max": 255,
-            "weight": 1
+            "weight": 3
           }
         ],
         "pointer": 0,

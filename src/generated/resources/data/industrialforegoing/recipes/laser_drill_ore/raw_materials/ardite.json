@@ -5,7 +5,7 @@
       "conditions": [
         {
           "value": {
-            "tag": "forge:ores/cobalt",
+            "tag": "forge:ores/raw_materials/ardite",
             "type": "forge:tag_empty"
           },
           "type": "forge:not"
@@ -13,7 +13,7 @@
       ],
       "recipe": {
         "output": {
-          "tag": "forge:ores/cobalt"
+          "tag": "forge:ores/raw_materials/ardite"
         },
         "rarity": [
           {
@@ -28,14 +28,14 @@
               ]
             },
             "blacklist": {},
-            "depth_min": 34,
-            "depth_max": 96,
+            "depth_min": 89,
+            "depth_max": 116,
             "weight": 8
           }
         ],
         "pointer": 0,
         "catalyst": {
-          "item": "industrialforegoing:laser_lens11"
+          "item": "industrialforegoing:laser_lens4"
         },
         "type": "industrialforegoing:laser_drill_ore"
       }

@@ -5,7 +5,7 @@
       "conditions": [
         {
           "value": {
-            "tag": "forge:ores/ardite",
+            "tag": "forge:ores/raw_materials/tungsten",
             "type": "forge:tag_empty"
           },
           "type": "forge:not"
@@ -13,29 +13,30 @@
       ],
       "recipe": {
         "output": {
-          "tag": "forge:ores/ardite"
+          "tag": "forge:ores/raw_materials/tungsten"
         },
         "rarity": [
           {
             "whitelist": {
               "type": "minecraft:worldgen/biome",
               "values": [
-                "minecraft:nether_wastes",
-                "minecraft:basalt_deltas",
-                "minecraft:warped_forest",
-                "minecraft:crimson_forest",
-                "minecraft:soul_sand_valley"
+                "minecraft:the_end",
+                "minecraft:the_void",
+                "minecraft:small_end_islands",
+                "minecraft:end_barrens",
+                "minecraft:end_highlands",
+                "minecraft:end_midlands"
               ]
             },
             "blacklist": {},
-            "depth_min": 89,
-            "depth_max": 116,
-            "weight": 8
+            "depth_min": 20,
+            "depth_max": 70,
+            "weight": 4
           }
         ],
         "pointer": 0,
         "catalyst": {
-          "item": "industrialforegoing:laser_lens4"
+          "item": "industrialforegoing:laser_lens15"
         },
         "type": "industrialforegoing:laser_drill_ore"
       }

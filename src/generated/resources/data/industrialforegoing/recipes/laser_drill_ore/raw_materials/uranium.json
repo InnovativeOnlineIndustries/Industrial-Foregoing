@@ -5,7 +5,7 @@
       "conditions": [
         {
           "value": {
-            "tag": "forge:ores/yellorium",
+            "tag": "forge:raw_materials/uranium",
             "type": "forge:tag_empty"
           },
           "type": "forge:not"
@@ -13,25 +13,24 @@
       ],
       "recipe": {
         "output": {
-          "tag": "forge:ores/yellorium"
+          "tag": "forge:raw_materials/uranium"
         },
         "rarity": [
           {
-            "whitelist": {},
-            "blacklist": {
+            "whitelist": {
               "type": "minecraft:worldgen/biome",
               "values": [
-                "minecraft:the_end",
-                "minecraft:the_void",
-                "minecraft:small_end_islands",
-                "minecraft:end_barrens",
-                "minecraft:end_highlands",
-                "minecraft:end_midlands"
+                "minecraft:nether_wastes",
+                "minecraft:basalt_deltas",
+                "minecraft:warped_forest",
+                "minecraft:crimson_forest",
+                "minecraft:soul_sand_valley"
               ]
             },
-            "depth_min": 16,
-            "depth_max": 68,
-            "weight": 3
+            "blacklist": {},
+            "depth_min": 5,
+            "depth_max": 29,
+            "weight": 5
           },
           {
             "whitelist": {},
@@ -53,7 +52,7 @@
         ],
         "pointer": 0,
         "catalyst": {
-          "item": "industrialforegoing:laser_lens4"
+          "item": "industrialforegoing:laser_lens5"
         },
         "type": "industrialforegoing:laser_drill_ore"
       }

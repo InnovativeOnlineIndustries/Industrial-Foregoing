@@ -202,6 +202,14 @@ public class ClientProxy extends CommonProxy {
         registerAreaRender(event, ModuleCore.FLUID_EXTRACTOR);
         registerAreaRender(event, ModuleAgricultureHusbandry.PLANT_GATHERER);
         registerAreaRender(event, ModuleAgricultureHusbandry.PLANT_SOWER);
+        registerAreaRender(event, ModuleAgricultureHusbandry.SEWER);
+        registerAreaRender(event, ModuleAgricultureHusbandry.PLANT_FERTILIZER);
+        registerAreaRender(event, ModuleAgricultureHusbandry.SLAUGHTER_FACTORY);
+        registerAreaRender(event, ModuleAgricultureHusbandry.ANIMAL_RANCHER);
+        registerAreaRender(event, ModuleAgricultureHusbandry.ANIMAL_FEEDER);
+        registerAreaRender(event, ModuleAgricultureHusbandry.ANIMAL_BABY_SEPARATOR);
+        registerAreaRender(event, ModuleAgricultureHusbandry.MOB_CRUSHER);
+        registerAreaRender(event, ModuleAgricultureHusbandry.WITHER_BUILDER);
 
         event.registerBlockEntityRenderer((BlockEntityType<? extends BHTile>) ModuleTransportStorage.BLACK_HOLE_UNIT_COMMON.getRight().get(), BlackHoleUnitTESR::new);
         event.registerBlockEntityRenderer((BlockEntityType<? extends BHTile>) ModuleTransportStorage.BLACK_HOLE_UNIT_PITY.getRight().get(), BlackHoleUnitTESR::new);

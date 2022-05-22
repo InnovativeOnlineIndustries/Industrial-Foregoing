@@ -5,7 +5,7 @@
       "conditions": [
         {
           "value": {
-            "tag": "forge:ores/iridium",
+            "tag": "forge:raw_materials/yellorite",
             "type": "forge:tag_empty"
           },
           "type": "forge:not"
@@ -13,11 +13,12 @@
       ],
       "recipe": {
         "output": {
-          "tag": "forge:ores/iridium"
+          "tag": "forge:raw_materials/yellorite"
         },
         "rarity": [
           {
-            "whitelist": {
+            "whitelist": {},
+            "blacklist": {
               "type": "minecraft:worldgen/biome",
               "values": [
                 "minecraft:the_end",
@@ -28,10 +29,9 @@
                 "minecraft:end_midlands"
               ]
             },
-            "blacklist": {},
-            "depth_min": 5,
-            "depth_max": 68,
-            "weight": 8
+            "depth_min": 15,
+            "depth_max": 50,
+            "weight": 3
           },
           {
             "whitelist": {},
@@ -53,7 +53,7 @@
         ],
         "pointer": 0,
         "catalyst": {
-          "item": "industrialforegoing:laser_lens0"
+          "item": "industrialforegoing:laser_lens4"
         },
         "type": "industrialforegoing:laser_drill_ore"
       }

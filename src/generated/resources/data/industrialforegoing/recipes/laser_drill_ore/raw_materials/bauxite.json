@@ -5,7 +5,7 @@
       "conditions": [
         {
           "value": {
-            "tag": "forge:ores/osmium",
+            "tag": "forge:raw_materials/bauxite",
             "type": "forge:tag_empty"
           },
           "type": "forge:not"
@@ -13,7 +13,7 @@
       ],
       "recipe": {
         "output": {
-          "tag": "forge:ores/osmium"
+          "tag": "forge:raw_materials/bauxite"
         },
         "rarity": [
           {
@@ -29,9 +29,9 @@
                 "minecraft:end_midlands"
               ]
             },
-            "depth_min": 5,
-            "depth_max": 36,
-            "weight": 8
+            "depth_min": 50,
+            "depth_max": 100,
+            "weight": 6
           },
           {
             "whitelist": {},
@@ -48,12 +48,12 @@
             },
             "depth_min": 0,
             "depth_max": 255,
-            "weight": 2
+            "weight": 1
           }
         ],
         "pointer": 0,
         "catalyst": {
-          "item": "industrialforegoing:laser_lens8"
+          "item": "industrialforegoing:laser_lens12"
         },
         "type": "industrialforegoing:laser_drill_ore"
       }

@@ -54,9 +54,9 @@ public class LaserDrillOreRecipe extends SerializableRecipe {
 
     public static void init(){
         createWithDefault("coal", Blocks.COAL_ORE, 15, 5, 132, 10 ,4);
-        createWithDefault("iron", Blocks.IRON_ORE, 12, 5, 68, 20, 3);
+        createWithDefault("raw_materials/iron",  12, 5, 68, 20, 3);
         createWithDefault("redstone", Blocks.REDSTONE_ORE, 14, 5, 16, 28, 4);
-        new LaserDrillOreRecipe("gold", Ingredient.of(Blocks.GOLD_ORE), 4, null,
+        new LaserDrillOreRecipe("raw_materials/gold", Ingredient.of(TagUtil.getItemTag(new ResourceLocation("forge","raw_materials/gold" ))), 4, null,
                 new LaserDrillRarity(new ResourceKey[]{Biomes.BADLANDS, Biomes.ERODED_BADLANDS}, new ResourceKey[0], 32, 80, 16),
                 new LaserDrillRarity(new ResourceKey[0], LaserDrillRarity.END, 5, 32, 6),
                 new LaserDrillRarity(new ResourceKey[0], LaserDrillRarity.END, 0, 255, 1));
@@ -71,42 +71,42 @@ public class LaserDrillOreRecipe extends SerializableRecipe {
         new LaserDrillOreRecipe("glowstone", Ingredient.of(Blocks.GLOWSTONE), 4, null,
                 new LaserDrillRarity(LaserDrillRarity.NETHER, new ResourceKey[0], 7, 117, 8),
                 new LaserDrillRarity(new ResourceKey[0], LaserDrillRarity.END, 0, 255, 1));
-        new LaserDrillOreRecipe("uranium", Ingredient.of(TagUtil.getItemTag(new ResourceLocation("forge", "ores/uranium"))), 5, new ResourceLocation("forge", "ores/uranium"),
+        new LaserDrillOreRecipe("raw_materials/uranium", Ingredient.of(TagUtil.getItemTag(new ResourceLocation("forge", "raw_materials/uranium"))), 5, new ResourceLocation("forge", "raw_materials/uranium"),
                 new LaserDrillRarity(LaserDrillRarity.NETHER, new ResourceKey[0], 5, 29, 5),
                 new LaserDrillRarity(new ResourceKey[0], LaserDrillRarity.END, 0, 255, 1));
-        createWithDefault("sulfur", 4, 5, 10, 6, 1);
-        createWithDefault("galena", 10, 15, 30, 6, 1);
-        new LaserDrillOreRecipe("iridium", Ingredient.of(TagUtil.getItemTag(new ResourceLocation("forge", "ores/iridium"))), 0, new ResourceLocation("forge", "ores/iridium"),
+        createWithDefault("ores/sulfur", 4, 5, 10, 6, 1);
+        createWithDefault("raw_materials/galena", 10, 15, 30, 6, 1);
+        new LaserDrillOreRecipe("raw_materials/iridium", Ingredient.of(TagUtil.getItemTag(new ResourceLocation("forge", "raw_materials/iridium"))), 0, new ResourceLocation("forge", "raw_materials/iridium"),
                 new LaserDrillRarity(LaserDrillRarity.END, new ResourceKey[0], 5, 68, 8),
                 new LaserDrillRarity(new ResourceKey[0], LaserDrillRarity.END, 0, 255, 1));
-        createWithDefault("ruby", 14, 30, 70, 6, 1);
-        createWithDefault("sapphire", 11, 30, 70, 6, 1);
-        createWithDefault("peridot", 13, 30, 70, 6, 1);
-        createWithDefault("sodalite", 11, 30, 70, 6, 1);
-        createWithDefault("bauxite", 12, 50, 100, 6, 1);
-        createWithDefault("pyrite", 12, 30, 70, 3, 1);
-        createWithDefault("cinnabar", 14, 30, 70, 2, 1);
-        createEnd("tungsten", 15, 20, 70, 4);
-        createEnd("sheldonite", 0, 30, 70, 6);
-        createWithDefault("platinum", 3, 5, 16, 3, 1);
-        createWithDefault("tetrahedrite", 14, 60, 90, 4, 1);
-        createWithDefault("tin", 8, 64, 96, 8, 2);
-        createWithDefault("lead", 10, 10, 40, 6, 1);
-        createWithDefault("silver", 7, 10, 40, 5, 1);
-        createWithDefault("copper", 1, 35, 65, 10, 2);
-        createWithDefault("aluminum", 12, 68, 84, 5, 1);
-        createWithDefault("nickel", 12, 5, 68, 4, 1);
-        createEnd("draconium", 10, 60, 95, 10);
-        createWithDefault("yellorium", 4, 16, 68, 3, 1);
-        createNether("cobalt", 11, 34, 96, 8);
-        createNether("ardite", 4, 89, 116, 8);
+        createWithDefault("ores/ruby", 14, 30, 70, 6, 1);
+        createWithDefault("ores/sapphire", 11, 30, 70, 6, 1);
+        createWithDefault("ores/peridot", 13, 30, 70, 6, 1);
+        createWithDefault("ores/sodalite", 11, 30, 70, 6, 1);
+        createWithDefault("raw_materials/bauxite", 12, 50, 100, 6, 1);
+        createWithDefault("raw_materials/pyrite", 12, 30, 70, 3, 1);
+        createWithDefault("raw_materials/cinnabar", 14, 30, 70, 2, 1);
+        createEnd("raw_materials/tungsten", 15, 20, 70, 4);
+        createEnd("raw_materials/sheldonite", 0, 30, 70, 6);
+        createWithDefault("raw_materials/platinum", 3, 5, 16, 3, 1);
+        createWithDefault("raw_materials/tetrahedrite", 14, 60, 90, 4, 1);
+        createWithDefault("raw_materials/tin", 8, 64, 96, 8, 2);
+        createWithDefault("raw_materials/lead", 10, 10, 40, 6, 1);
+        createWithDefault("raw_materials/silver", 7, 10, 40, 5, 1);
+        createWithDefault("raw_materials/copper", 1, 35, 65, 10, 2);
+        createWithDefault("raw_materials/aluminum", 12, 68, 84, 5, 1);
+        createWithDefault("raw_materials/nickel", 12, 5, 68, 4, 1);
+        createEnd("ores/draconium", 10, 60, 95, 10);
+        createWithDefault("raw_materials/yellorium", 4, 16, 68, 3, 1);
+        createNether("raw_materials/cobalt", 11, 34, 96, 8);
+        createNether("raw_materials/ardite", 4, 89, 116, 8);
         new LaserDrillOreRecipe("ancient_debris", Ingredient.of(Blocks.ANCIENT_DEBRIS),  12, null, new LaserDrillRarity(LaserDrillRarity.NETHER,new ResourceKey[0], 1, 20, 1));
-        createWithDefault("niter", 4, 5, 20, 2, 1);
-        createWithDefault("arcane", 2, 45, 60, 3, 1);
-        createWithDefault("bitumen", 15, 50, 60, 2, 1);
-        createWithDefault("fluorite", 8, 15, 30, 6, 1);
-        createWithDefault("osmium", 8, 5, 36, 8, 1);
-        createWithDefault("yellorite", 4, 15, 50, 3, 1);
+        createWithDefault("ores/niter", 4, 5, 20, 2, 1);
+        createWithDefault("ores/arcane", 2, 45, 60, 3, 1);
+        createWithDefault("ores/bitumen", 15, 50, 60, 2, 1);
+        createWithDefault("ores/fluorite", 8, 15, 30, 6, 1);
+        createWithDefault("raw_materials/osmium", 8, 5, 36, 8, 1);
+        createWithDefault("raw_materials/yellorite", 4, 15, 50, 3, 1);
     }
 
     public static LaserDrillOreRecipe createWithDefault(String name, ItemLike output, int color, int min, int max, int weight, int defaultWeight){
@@ -114,7 +114,7 @@ public class LaserDrillOreRecipe extends SerializableRecipe {
     }
 
     public static LaserDrillOreRecipe createWithDefault(String name, int color, int min, int max, int weight, int defaultWeight){
-        ResourceLocation rl = new ResourceLocation("forge", "ores/" + name);
+        ResourceLocation rl = new ResourceLocation("forge",  name);
         return createWithDefault(name, Ingredient.of(TagUtil.getItemTag(rl)), color, min, max, weight, defaultWeight, rl);
     }
 

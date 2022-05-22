@@ -114,7 +114,7 @@ public class OreLaserBaseTile extends IndustrialMachineTile<OreLaserBaseTile> im
         );
         int y = 84;
         this.addButton(new ArrowButtonComponent(53, y, 14, 14, FacingUtil.Sideness.LEFT).setPredicate((playerEntity, compoundNBT) -> {
-            this.miningDepth = Math.max(0, miningDepth -1);
+            this.miningDepth = Math.max(-64, miningDepth -1);
             markForUpdate();
         }));
         this.addButton(new ArrowButtonComponent(126, y, 14, 14, FacingUtil.Sideness.RIGHT).setPredicate((playerEntity, compoundNBT) -> {
@@ -132,7 +132,7 @@ public class OreLaserBaseTile extends IndustrialMachineTile<OreLaserBaseTile> im
     @Override
     public void setChanged() {
         super.setChanged();
-        if (this.miningDepth == 0) this.miningDepth = this.worldPosition.getY();
+        if (this.miningDepth == -100) this.miningDepth = this.worldPosition.getY();
     }
 
     private void onWork(){

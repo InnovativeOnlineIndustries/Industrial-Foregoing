@@ -5,7 +5,7 @@
       "conditions": [
         {
           "value": {
-            "tag": "forge:ores/tetrahedrite",
+            "tag": "forge:raw_materials/iridium",
             "type": "forge:tag_empty"
           },
           "type": "forge:not"
@@ -13,12 +13,11 @@
       ],
       "recipe": {
         "output": {
-          "tag": "forge:ores/tetrahedrite"
+          "tag": "forge:raw_materials/iridium"
         },
         "rarity": [
           {
-            "whitelist": {},
-            "blacklist": {
+            "whitelist": {
               "type": "minecraft:worldgen/biome",
               "values": [
                 "minecraft:the_end",
@@ -29,9 +28,10 @@
                 "minecraft:end_midlands"
               ]
             },
-            "depth_min": 60,
-            "depth_max": 90,
-            "weight": 4
+            "blacklist": {},
+            "depth_min": 5,
+            "depth_max": 68,
+            "weight": 8
           },
           {
             "whitelist": {},
@@ -53,7 +53,7 @@
         ],
         "pointer": 0,
         "catalyst": {
-          "item": "industrialforegoing:laser_lens14"
+          "item": "industrialforegoing:laser_lens0"
         },
         "type": "industrialforegoing:laser_drill_ore"
       }

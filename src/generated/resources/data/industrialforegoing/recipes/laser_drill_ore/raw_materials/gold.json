@@ -1,8 +1,21 @@
 {
   "output": {
-    "item": "minecraft:iron_ore"
+    "tag": "forge:raw_materials/gold"
   },
   "rarity": [
+    {
+      "whitelist": {
+        "type": "minecraft:worldgen/biome",
+        "values": [
+          "minecraft:badlands",
+          "minecraft:eroded_badlands"
+        ]
+      },
+      "blacklist": {},
+      "depth_min": 32,
+      "depth_max": 80,
+      "weight": 16
+    },
     {
       "whitelist": {},
       "blacklist": {
@@ -17,8 +30,8 @@
         ]
       },
       "depth_min": 5,
-      "depth_max": 68,
-      "weight": 20
+      "depth_max": 32,
+      "weight": 6
     },
     {
       "whitelist": {},
@@ -35,12 +48,12 @@
       },
       "depth_min": 0,
       "depth_max": 255,
-      "weight": 3
+      "weight": 1
     }
   ],
   "pointer": 0,
   "catalyst": {
-    "item": "industrialforegoing:laser_lens12"
+    "item": "industrialforegoing:laser_lens4"
   },
   "type": "industrialforegoing:laser_drill_ore"
 }

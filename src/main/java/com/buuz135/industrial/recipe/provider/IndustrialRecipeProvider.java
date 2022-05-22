@@ -54,13 +54,6 @@ import java.util.stream.Collectors;
 
 public class IndustrialRecipeProvider extends TitaniumRecipeProvider {
 
-    @MaterialReference(type = "gear", material = "iron")
-    public static Item IRON_GEAR;
-    @MaterialReference(type = "gear", material = "gold")
-    public static Item GOLD_GEAR;
-    @MaterialReference(type = "gear", material = "diamond")
-    public static Item DIAMOND_GEAR;
-
     private final NonNullLazy<List<Block>> blocks;
 
     public IndustrialRecipeProvider(DataGenerator generatorIn, NonNullLazy<List<Block>> blocks) {
@@ -103,15 +96,15 @@ public class IndustrialRecipeProvider extends TitaniumRecipeProvider {
                 .define('I', Tags.Items.INGOTS_IRON)
                 .define('R', Tags.Items.STORAGE_BLOCKS_REDSTONE)
                 .save(consumer);
-        TitaniumShapedRecipeBuilder.shapedRecipe(IRON_GEAR)
+        TitaniumShapedRecipeBuilder.shapedRecipe(ModuleCore.IRON_GEAR.get())
                 .pattern(" P ").pattern("P P").pattern(" P ")
                 .define('P', Items.IRON_INGOT)
                 .save(consumer);
-        TitaniumShapedRecipeBuilder.shapedRecipe(GOLD_GEAR)
+        TitaniumShapedRecipeBuilder.shapedRecipe(ModuleCore.GOLD_GEAR.get())
                 .pattern(" P ").pattern("P P").pattern(" P ")
                 .define('P', Items.GOLD_INGOT)
                 .save(consumer);
-        TitaniumShapedRecipeBuilder.shapedRecipe(DIAMOND_GEAR)
+        TitaniumShapedRecipeBuilder.shapedRecipe(ModuleCore.DIAMOND_GEAR.get())
                 .pattern(" P ").pattern("P P").pattern(" P ")
                 .define('P', Items.DIAMOND)
                 .save(consumer);

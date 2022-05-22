@@ -7,12 +7,8 @@
       "whitelist": {
         "type": "minecraft:worldgen/biome",
         "values": [
-          "minecraft:mountains",
-          "minecraft:mountain_edge",
-          "minecraft:gravelly_mountains",
-          "minecraft:modified_gravelly_mountains",
-          "minecraft:snowy_mountains",
-          "minecraft:snowy_taiga_mountains"
+          "minecraft:windswept_gravelly_hills",
+          "minecraft:windswept_gravelly_hills"
         ]
       },
       "blacklist": {},

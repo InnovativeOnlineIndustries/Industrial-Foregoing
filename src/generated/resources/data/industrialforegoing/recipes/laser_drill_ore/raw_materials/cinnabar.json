@@ -5,7 +5,7 @@
       "conditions": [
         {
           "value": {
-            "tag": "forge:ores/cinnabar",
+            "tag": "forge:raw_materials/cinnabar",
             "type": "forge:tag_empty"
           },
           "type": "forge:not"
@@ -13,7 +13,7 @@
       ],
       "recipe": {
         "output": {
-          "tag": "forge:ores/cinnabar"
+          "tag": "forge:raw_materials/cinnabar"
         },
         "rarity": [
           {
