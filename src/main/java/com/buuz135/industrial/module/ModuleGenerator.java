@@ -50,7 +50,7 @@ public class ModuleGenerator implements IModule {
     @Override
     public void generateFeatures(DeferredRegistryHelper helper) {
         for (IMycelialGeneratorType type : IMycelialGeneratorType.TYPES) {
-            MYCELIAL_GENERATORS.add(helper.registerBlockWithTile("mycelial_generator_" + type.getName(), () -> new MycelialGeneratorBlock(type)));
+            MYCELIAL_GENERATORS.add(helper.registerBlockWithTile("mycelial_" + type.getName(), () -> new MycelialGeneratorBlock(type)));
         }
         TAB_GENERATOR.addIconStack(() -> new ItemStack(PITIFUL_GENERATOR.getLeft().orElse(Blocks.STONE)));
     }
