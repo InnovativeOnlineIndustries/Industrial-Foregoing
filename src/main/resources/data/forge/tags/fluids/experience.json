@@ -1,7 +1,6 @@
 {
   "replace": false,
   "values": [
-    "industrialforegoing:essence",
-    "industrialforegoing:essence_fluid"
+    "industrialforegoing:essence"
   ]
 }

@@ -1,7 +1,6 @@
 {
   "replace": false,
   "values": [
-    "industrialforegoing:biofuel",
-    "industrialforegoing:biofuel_fluid"
+    "industrialforegoing:biofuel"
   ]
 }

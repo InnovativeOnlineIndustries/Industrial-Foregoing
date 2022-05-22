@@ -1,7 +1,6 @@
 {
   "replace": false,
   "values": [
-    "industrialforegoing:sludge",
-    "industrialforegoing:sludge_fluid"
+    "industrialforegoing:sludge"
   ]
 }

@@ -1,7 +1,6 @@
 {
   "replace": false,
   "values": [
-    "industrialforegoing:latex",
-    "industrialforegoing:latex_fluid"
+    "industrialforegoing:latex"
   ]
 }
