@@ -58,6 +58,8 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.material.Fluids;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.items.ItemHandlerHelper;
 import org.apache.commons.lang3.tuple.Pair;
 
@@ -129,6 +131,7 @@ public class MaterialStoneWorkFactoryTile extends IndustrialProcessingTile<Mater
         this.generatorRecipe = DEFAULT.toString();
         addButton(new ButtonComponent(54, 64, 18, 18) {
             @Override
+            @OnlyIn(Dist.CLIENT)
             public List<IFactory<? extends IScreenAddon>> getScreenAddons() {
                 return Collections.singletonList(() -> new BasicButtonAddon(this) {
                     @Override
@@ -188,6 +191,7 @@ public class MaterialStoneWorkFactoryTile extends IndustrialProcessingTile<Mater
         this.fourthRecipeId = 0;
         addButton(new ButtonComponent(62 + 20 * 1, 64, 18, 18) {
             @Override
+            @OnlyIn(Dist.CLIENT)
             public List<IFactory<? extends IScreenAddon>> getScreenAddons() {
                 return Collections.singletonList(() -> new BasicButtonAddon(this) {
                     @Override
@@ -213,6 +217,7 @@ public class MaterialStoneWorkFactoryTile extends IndustrialProcessingTile<Mater
         }));
         addButton(new ButtonComponent(62 + 20 * 2, 64, 18, 18) {
             @Override
+            @OnlyIn(Dist.CLIENT)
             public List<IFactory<? extends IScreenAddon>> getScreenAddons() {
                 return Collections.singletonList(() -> new BasicButtonAddon(this) {
                     @Override
@@ -238,6 +243,7 @@ public class MaterialStoneWorkFactoryTile extends IndustrialProcessingTile<Mater
         }));
         addButton(new ButtonComponent(62 + 20 * 3, 64, 18, 18) {
             @Override
+            @OnlyIn(Dist.CLIENT)
             public List<IFactory<? extends IScreenAddon>> getScreenAddons() {
                 return Collections.singletonList(() -> new BasicButtonAddon(this) {
                     @Override
@@ -263,6 +269,7 @@ public class MaterialStoneWorkFactoryTile extends IndustrialProcessingTile<Mater
         }));
         addButton(new ButtonComponent(62 + 20 * 4, 64, 18, 18) {
             @Override
+            @OnlyIn(Dist.CLIENT)
             public List<IFactory<? extends IScreenAddon>> getScreenAddons() {
                 return Collections.singletonList(() -> new BasicButtonAddon(this) {
                     @Override

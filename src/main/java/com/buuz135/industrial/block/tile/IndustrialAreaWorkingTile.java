@@ -43,6 +43,8 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.phys.shapes.VoxelShape;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.registries.RegistryObject;
 import org.apache.commons.lang3.tuple.Pair;
 
@@ -65,6 +67,7 @@ public abstract class IndustrialAreaWorkingTile<T extends IndustrialAreaWorkingT
         this.showingArea = false;
         addButton(areaButton = new ButtonComponent(154 - 18, 84, 14, 14) {
             @Override
+            @OnlyIn(Dist.CLIENT)
             public List<IFactory<? extends IScreenAddon>> getScreenAddons() {
                 List<IFactory<? extends IScreenAddon>> addons = new ArrayList<>();
                 addons.add(() -> new StateButtonAddon(areaButton, new StateButtonInfo(0, IndustrialAssetProvider.BUTTON_SHOW_AREA, "text.industrialforegoing.button.show_area"), new StateButtonInfo(1, IndustrialAssetProvider.BUTTON_HIDE_AREA, "text.industrialforegoing.button.hide_area")) {

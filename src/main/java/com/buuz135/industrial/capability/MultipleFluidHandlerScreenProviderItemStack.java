@@ -28,6 +28,8 @@ import com.hrznstudio.titanium.capability.FluidHandlerScreenProviderItemStack;
 import com.hrznstudio.titanium.component.fluid.FluidTankComponent;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.fluids.FluidStack;
 
 import javax.annotation.Nonnull;
@@ -165,6 +167,7 @@ public class MultipleFluidHandlerScreenProviderItemStack  extends FluidHandlerSc
 
     @Nonnull
     @Override
+    @OnlyIn(Dist.CLIENT)
     public List<IFactory<? extends IScreenAddon>> getScreenAddons() {
         List<IFactory<? extends IScreenAddon>> addons = new ArrayList<>();
         for (int i = 0; i < tankDefinitions.length; i++) {

@@ -79,7 +79,6 @@ public class ResourcefulFurnaceTile extends IndustrialProcessingTile<Resourceful
         this.getPowerPerTick = ResourcefulFurnaceConfig.powerPerTick;
     }
 
-    // TODO: 26/07/2021 This maybe right?
     @Override
     public void setChanged() {
         super.setChanged();

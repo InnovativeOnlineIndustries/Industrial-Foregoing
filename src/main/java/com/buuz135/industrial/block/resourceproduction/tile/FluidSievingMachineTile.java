@@ -41,6 +41,8 @@ import net.minecraft.world.item.DyeColor;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.fluids.capability.IFluidHandler;
 import net.minecraftforge.items.ItemHandlerHelper;
 
@@ -66,6 +68,7 @@ public class FluidSievingMachineTile extends IndustrialProcessingTile<FluidSievi
                     }
 
                     @Override
+                    @OnlyIn(Dist.CLIENT)
                     public List<IFactory<? extends IContainerAddon>> getContainerAddons() {
                         return Collections.emptyList();
                     }

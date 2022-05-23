@@ -47,6 +47,8 @@ import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.registries.RegistryObject;
 import org.apache.commons.lang3.tuple.Pair;
 
@@ -64,6 +66,7 @@ public abstract class IndustrialWorkingTile<T extends IndustrialWorkingTile<T>> 
         super(basicTileBlock, blockPos, blockState);
         this.addProgressBar(workingBar = new ProgressBarComponent<T>(30, 20, getMaxProgress(), getMaxProgress()) {
             @Override
+            @OnlyIn(Dist.CLIENT)
             public List<IFactory<? extends IScreenAddon>> getScreenAddons() {
                 return Collections.singletonList(() -> new ProgressBarScreenAddon(30, 20, workingBar) {
                     @Override

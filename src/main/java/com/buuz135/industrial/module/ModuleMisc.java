@@ -28,6 +28,7 @@ import com.hrznstudio.titanium.event.handler.EventManager;
 import com.hrznstudio.titanium.module.DeferredRegistryHelper;
 import com.hrznstudio.titanium.tab.AdvancedTitaniumTab;
 import net.minecraft.world.entity.Mob;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraftforge.event.entity.living.LivingEvent;
@@ -54,5 +55,6 @@ public class ModuleMisc implements IModule {
                 ((Mob) livingUpdateEvent.getEntityLiving()).setNoAi(false);
             }
         }).subscribe();
+        TAB_MISC.addIconStack(() -> new ItemStack(STASIS_CHAMBER.getLeft().get()));
     }
 }

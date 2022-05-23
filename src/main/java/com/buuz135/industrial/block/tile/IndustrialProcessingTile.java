@@ -43,6 +43,8 @@ import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.registries.RegistryObject;
 import org.apache.commons.lang3.tuple.Pair;
 
@@ -61,6 +63,7 @@ public abstract class IndustrialProcessingTile<T extends IndustrialProcessingTil
         //this.addGuiAddonFactory(() -> new EnergyBarScreenAddon(10, 20, getEnergyStorage()));
         this.addProgressBar(progressBar = new ProgressBarComponent<T>(x, y, getMaxProgress()){
                     @Override
+                    @OnlyIn(Dist.CLIENT)
                     public List<IFactory<? extends IScreenAddon>> getScreenAddons() {
                         return Collections.singletonList(() -> new ProgressBarScreenAddon(x, y, progressBar){
                             @Override

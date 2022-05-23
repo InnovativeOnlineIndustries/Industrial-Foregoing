@@ -45,6 +45,8 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.DyeColor;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.capability.IFluidHandler;
 
@@ -79,6 +81,7 @@ public class FermentationStationTile extends IndustrialProcessingTile<Fermentati
                     }
 
                     @Override
+                    @OnlyIn(Dist.CLIENT)
                     public List<IFactory<? extends IContainerAddon>> getContainerAddons() {
                         return Collections.emptyList();
                     }
@@ -94,6 +97,7 @@ public class FermentationStationTile extends IndustrialProcessingTile<Fermentati
                     }
 
                     @Override
+                    @OnlyIn(Dist.CLIENT)
                     public List<IFactory<? extends IContainerAddon>> getContainerAddons() {
                         return Collections.emptyList();
                     }
@@ -112,6 +116,7 @@ public class FermentationStationTile extends IndustrialProcessingTile<Fermentati
         this.isSealed = false;
         addButton(new ButtonComponent(75, 22, 14, 14) {
             @Override
+            @OnlyIn(Dist.CLIENT)
             public List<IFactory<? extends IScreenAddon>> getScreenAddons() {
                 return Collections.singletonList(() ->
                         new StateButtonAddon(this, Arrays.stream(SealType.values()).map(sealType -> sealType.info).toArray(StateButtonInfo[]::new)) {
@@ -127,6 +132,7 @@ public class FermentationStationTile extends IndustrialProcessingTile<Fermentati
         }));
         addButton(new ButtonComponent(110, 22, 14, 14) {
             @Override
+            @OnlyIn(Dist.CLIENT)
             public List<IFactory<? extends IScreenAddon>> getScreenAddons() {
                 return Collections.singletonList(() ->
                         new StateButtonAddon(this, Arrays.stream(ProductionType.values()).map(sealType -> sealType.info).toArray(StateButtonInfo[]::new)) {
@@ -136,6 +142,7 @@ public class FermentationStationTile extends IndustrialProcessingTile<Fermentati
                             }
 
                             @Override
+                            @OnlyIn(Dist.CLIENT)
                             public List<Component> getTooltipLines() {
                                 ProductionType type = ProductionType.values()[production];
                                 List<Component> list = new ArrayList<>(super.getTooltipLines());

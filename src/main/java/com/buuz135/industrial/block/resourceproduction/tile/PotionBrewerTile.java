@@ -51,6 +51,8 @@ import net.minecraft.core.NonNullList;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.TextComponent;
 import net.minecraft.ChatFormatting;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.common.brewing.BrewingRecipeRegistry;
 import net.minecraftforge.event.ForgeEventFactory;
 import net.minecraftforge.items.ItemHandlerHelper;
@@ -93,6 +95,7 @@ public class PotionBrewerTile extends IndustrialProcessingTile<PotionBrewerTile>
         );
         addProgressBar(blaze = new ProgressBarComponent<PotionBrewerTile>(30, 20, 100) {
                     @Override
+                    @OnlyIn(Dist.CLIENT)
                     public List<IFactory<? extends IScreenAddon>> getScreenAddons() {
                         return Collections.singletonList(() -> new ProgressBarScreenAddon<PotionBrewerTile>(30, 20, this) {
                             @Override
