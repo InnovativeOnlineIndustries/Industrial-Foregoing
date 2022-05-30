@@ -119,6 +119,7 @@ public class ItemStackTankScreenAddon extends BasicScreenAddon {
         List<Component> strings = new ArrayList<>();
         strings.add(new TextComponent(ChatFormatting.GOLD + new TranslatableComponent("tooltip.titanium.tank.fluid").getString()).append(tank.getFluidInTank(tankSlot).isEmpty() ? new TranslatableComponent("tooltip.titanium.tank.empty").withStyle(ChatFormatting.WHITE) :  new TranslatableComponent(tank.getFluidInTank(tankSlot).getFluid().getAttributes().getTranslationKey(tank.getFluidInTank(tankSlot)))).withStyle(ChatFormatting.WHITE));
         strings.add(new TranslatableComponent("tooltip.titanium.tank.amount").withStyle(ChatFormatting.GOLD).append(new TextComponent(ChatFormatting.WHITE + new DecimalFormat().format(tank.getFluidInTank(tankSlot).getAmount()) + ChatFormatting.GOLD + "/" + ChatFormatting.WHITE + new DecimalFormat().format(tank.getTankCapacity(tankSlot)) + ChatFormatting.DARK_AQUA + "mb")));
+        /*
         if (!Minecraft.getInstance().player.inventory.getSelected().isEmpty() && Minecraft.getInstance().player.inventory.getSelected().getCapability(CapabilityFluidHandler.FLUID_HANDLER_ITEM_CAPABILITY).isPresent()){
             Minecraft.getInstance().player.inventory.getSelected().getCapability(CapabilityFluidHandler.FLUID_HANDLER_ITEM_CAPABILITY).ifPresent(iFluidHandlerItem -> {
                 boolean isBucket = Minecraft.getInstance().player.inventory.getSelected().getItem() instanceof BucketItem;
@@ -146,7 +147,7 @@ public class ItemStackTankScreenAddon extends BasicScreenAddon {
             });
         } else {
             strings.add(new TranslatableComponent("tooltip.titanium.tank.no_tank").withStyle(ChatFormatting.DARK_GRAY));
-        }
+        }*/
         return strings;
     }
 
@@ -162,6 +163,7 @@ public class ItemStackTankScreenAddon extends BasicScreenAddon {
 
     @Override
     public boolean mouseClicked(double mouseX, double mouseY, int button) {
+        /*
         if (!Minecraft.getInstance().player.inventory.getSelected().isEmpty() && Minecraft.getInstance().player.inventory.getSelected().getCapability(CapabilityFluidHandler.FLUID_HANDLER_ITEM_CAPABILITY).isPresent()){
             Minecraft.getInstance().getSoundManager().play(new SimpleSoundInstance(SoundEvents.UI_BUTTON_CLICK, SoundSource.PLAYERS, 1f, 1f, Minecraft.getInstance().player.blockPosition())); //getPosition
             Screen screen = Minecraft.getInstance().screen;
@@ -191,7 +193,7 @@ public class ItemStackTankScreenAddon extends BasicScreenAddon {
                 Titanium.NETWORK.get().sendToServer(new ButtonClickNetworkMessage(locatable.getLocatorInstance(), -3, compoundNBT));
                 return true;
             }
-        }
+        }*/
         return false;
     }
 }

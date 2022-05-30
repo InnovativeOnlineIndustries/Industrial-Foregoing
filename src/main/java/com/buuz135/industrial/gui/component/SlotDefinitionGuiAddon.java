@@ -90,6 +90,8 @@ public abstract class SlotDefinitionGuiAddon extends BasicButtonAddon {
         //Minecraft.getInstance().getSoundHandler().play(new SimpleSound(SoundEvents.UI_BUTTON_CLICK, SoundCategory.PLAYERS, 1f, 1f, Minecraft.getInstance().player.getPosition())); //getPosition
         Screen screen = Minecraft.getInstance().screen;
         if (screen instanceof AbstractContainerScreen && ((AbstractContainerScreen) screen).getMenu() instanceof ILocatable) {
+            if (!isMouseOver(mouseX - ((AbstractContainerScreen<?>) screen).getGuiLeft(), mouseY - ((AbstractContainerScreen<?>) screen).getGuiTop()))
+                return false;
             ILocatable locatable = (ILocatable) ((AbstractContainerScreen) screen).getMenu();
             CompoundTag compoundNBT = new CompoundTag();
             compoundNBT.putString("Id", getItemStack().getTag().getString("Id"));

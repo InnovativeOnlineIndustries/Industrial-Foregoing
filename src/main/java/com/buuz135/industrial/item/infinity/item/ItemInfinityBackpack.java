@@ -365,7 +365,7 @@ public class ItemInfinityBackpack extends ItemInfinity {
             if (!stack.isEmpty()) {
                 if (id == 4 && playerEntity instanceof ServerPlayer) {
                     String backpackId = compound.getString("Id");
-                    ItemStack cursor = playerEntity.inventory.getSelected();
+                    ItemStack cursor = playerEntity.containerMenu.getCarried();
                     boolean shift = compound.getBoolean("Shift");
                     boolean ctrl = compound.getBoolean("Ctrl");
                     int button = compound.getInt("Button");
@@ -421,8 +421,8 @@ public class ItemInfinityBackpack extends ItemInfinity {
                     }
                     if (hasCursorChanged) {
                         // TODO: 26/07/2021 fix
-                        playerEntity.inventory.setPickedItem(result);
-//                        ((ServerPlayer) playerEntity).broadcastCarriedItem();
+                        playerEntity.containerMenu.setCarried(result);
+                      ((ServerPlayer) playerEntity).containerMenu.broadcastChanges();
                     }
                     sync(playerEntity.level, backpackId, (ServerPlayer) playerEntity);
                 }

@@ -24,7 +24,9 @@ package com.buuz135.industrial.container;
 import com.buuz135.industrial.item.infinity.item.ItemInfinityBackpack;
 import com.buuz135.industrial.worlddata.BackpackDataManager;
 import com.hrznstudio.titanium.container.BasicAddonContainer;
+import com.hrznstudio.titanium.container.impl.DisableableSlot;
 import com.hrznstudio.titanium.network.locator.LocatorInstance;
+import com.hrznstudio.titanium.network.locator.instance.InventoryStackLocatorInstance;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.server.level.ServerPlayer;
@@ -41,6 +43,15 @@ public class BackpackContainer extends BasicAddonContainer {
         super(provider, locatorInstance, worldPosCallable, playerInventory, containerId);
         this.id = id;
         this.instance = locatorInstance;
+        if (this.instance instanceof InventoryStackLocatorInstance stackLocatorInstance){
+            for (Slot slot : this.slots) {
+                if (slot.getSlotIndex() == stackLocatorInstance.getInventorySlot() && slot instanceof DisableableSlot){
+                    ItemStack dd = slot.getItem();
+                    ((DisableableSlot)slot).setIsDisabled(() -> true);
+                }
+            }
+
+        }
     }
 
     @Override
@@ -64,4 +75,6 @@ public class BackpackContainer extends BasicAddonContainer {
         }
         return super.quickMoveStack(player, index);
     }
+
+
 }
