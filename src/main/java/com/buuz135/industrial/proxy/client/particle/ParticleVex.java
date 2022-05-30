@@ -23,16 +23,13 @@ package com.buuz135.industrial.proxy.client.particle;
 
 import com.mojang.blaze3d.platform.GlStateManager;
 import com.mojang.blaze3d.systems.RenderSystem;
-import com.mojang.blaze3d.vertex.VertexConsumer;
+import com.mojang.blaze3d.vertex.*;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.client.particle.ParticleRenderType;
 import net.minecraft.client.particle.Particle;
 import net.minecraft.client.Camera;
-import com.mojang.blaze3d.vertex.BufferBuilder;
-import com.mojang.blaze3d.vertex.Tesselator;
 import net.minecraft.client.renderer.texture.TextureManager;
-import com.mojang.blaze3d.vertex.DefaultVertexFormat;
 import net.minecraft.client.CameraType;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.core.Vec3i;
@@ -56,10 +53,12 @@ public class ParticleVex extends Particle {
             RenderSystem.blendFuncSeparate(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA, GlStateManager.SourceFactor.ONE, GlStateManager.DestFactor.ZERO);
             RenderSystem.lineWidth(1.5F);
             RenderSystem.disableTexture();
+            builder.begin(VertexFormat.Mode.LINES, DefaultVertexFormat.POSITION_COLOR_LIGHTMAP);
         }
 
         @Override
         public void end(Tesselator tessellator) {
+            tessellator.end();
             RenderSystem.disableBlend();
             RenderSystem.enableTexture();
         }
@@ -111,13 +110,11 @@ public class ParticleVex extends Particle {
         double x = entity.xOld + (vector3d.x - entity.xOld);
         double y = entity.yOld + (vector3d.y - entity.yOld);
         double z = entity.zOld + (vector3d.z - entity.zOld);
-        Tesselator tessellator = Tesselator.getInstance();
-        BufferBuilder bufferBuilder = tessellator.getBuilder();
-//        bufferBuilder.begin(3, DefaultVertexFormat.POSITION_COLOR_LIGHTMAP);
+
         for (Vec3 line : lines) {
-            bufferBuilder.vertex(line.x - x, line.y - y, line.z - z).color(1f, 1f, 1f, 1f).uv2(240, 240).endVertex();
+            bufferBad.vertex(line.x - x, line.y - y, line.z - z).color(1f, 1f, 1f, 1f).uv2(240, 240).endVertex();
         }
-        tessellator.end();
+
     }
 
     @Override
