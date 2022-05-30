@@ -69,10 +69,10 @@ public class WashingFactoryTile extends IndustrialProcessingTile<WashingFactoryT
         addInventory(this.input = (SidedInventoryComponent<WashingFactoryTile>) new SidedInventoryComponent<WashingFactoryTile>("input", 40, 40, 1, 0)
                 .setColor(DyeColor.BLUE)
                 .setInputFilter((stack, integer) -> {
-                    if (!stack.is(Tags.Items.ORES)) return false;
+                    if (!stack.is(Tags.Items.RAW_MATERIALS)) return false;
 
                     for (ResourceLocation resourceLocation : ForgeRegistries.ITEMS.tags().getReverseTag(stack.getItem()).map(IReverseTag::getTagKeys).map(tagKeyStream -> tagKeyStream.map(TagKey::location).collect(Collectors.toList())).orElse(new ArrayList<>())) {
-                        if (resourceLocation.toString().startsWith("forge:ores/") && OreTitaniumFluidAttributes.isValid(resourceLocation)){
+                        if ((resourceLocation.toString().startsWith("forge:raw_materials/") || resourceLocation.toString().startsWith("minecraft:raw_materials/")) && OreTitaniumFluidAttributes.isValid(resourceLocation)){
                             return true;
                         }
                     }
