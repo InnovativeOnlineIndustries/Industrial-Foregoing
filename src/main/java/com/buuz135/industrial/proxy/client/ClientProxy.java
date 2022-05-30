@@ -54,12 +54,14 @@ import net.minecraft.client.renderer.ItemBlockRenderTypes;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.entity.EntityRenderDispatcher;
 import net.minecraft.client.renderer.entity.player.PlayerRenderer;
+import net.minecraft.client.renderer.item.ItemProperties;
 import net.minecraft.client.resources.model.BakedModel;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.TextComponent;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.InventoryMenu;
 import net.minecraft.world.item.SpawnEggItem;
 import net.minecraft.world.level.block.Block;
@@ -189,12 +191,13 @@ public class ClientProxy extends CommonProxy {
 
         Minecraft instance = Minecraft.getInstance();
         EntityRenderDispatcher manager = instance.getEntityRenderDispatcher();
-//        ItemProperties.register(ModuleTool.INFINITY_LAUNCHER, new ResourceLocation(Reference.MOD_ID, "cooldown"), (stack, world, entity) -> {
-//            if (entity instanceof Player) {
-//                return ((Player) entity).getCooldowns().isOnCooldown(stack.getItem()) ? 1 : 2;
-//            }
-//            return 2;
-//        });
+        
+        ItemProperties.register(ModuleTool.INFINITY_LAUNCHER.get(), new ResourceLocation(Reference.MOD_ID, "cooldown"), (stack, world, entity, number) -> {
+            if (entity instanceof Player) {
+                return ((Player) entity).getCooldowns().isOnCooldown(stack.getItem()) ? 1 : 2;
+            }
+            return 2f;
+        });
     }
 
     @SubscribeEvent
