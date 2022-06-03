@@ -29,6 +29,7 @@ import com.buuz135.industrial.block.generator.MycelialGeneratorBlock;
 import com.buuz135.industrial.block.generator.mycelial.IMycelialGeneratorType;
 import com.buuz135.industrial.block.generator.tile.BioReactorTile;
 import com.buuz135.industrial.block.resourceproduction.tile.MaterialStoneWorkFactoryTile;
+import com.buuz135.industrial.fluid.OreTitaniumFluidAttributes;
 import com.buuz135.industrial.gui.conveyor.GuiConveyor;
 import com.buuz135.industrial.gui.transporter.GuiTransporter;
 import com.buuz135.industrial.module.*;
@@ -41,6 +42,7 @@ import com.buuz135.industrial.recipe.*;
 import com.buuz135.industrial.utils.IndustrialTags;
 import com.buuz135.industrial.utils.Reference;
 import com.hrznstudio.titanium.util.RecipeUtil;
+import com.hrznstudio.titanium.util.TagUtil;
 import mezz.jei.api.IModPlugin;
 import mezz.jei.api.JeiPlugin;
 import mezz.jei.api.constants.VanillaRecipeCategoryUid;
@@ -51,6 +53,7 @@ import mezz.jei.api.runtime.IRecipesGui;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.Rect2i;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.tags.ItemTags;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
@@ -62,7 +65,9 @@ import net.minecraftforge.common.ForgeMod;
 import net.minecraftforge.common.Tags;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.items.ItemHandlerHelper;
+import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.RegistryObject;
+import net.minecraftforge.registries.tags.ITag;
 import org.apache.commons.lang3.tuple.Pair;
 
 import java.util.*;
@@ -245,16 +250,16 @@ public class JEICustomPlugin implements IModPlugin {
         List<OreFluidEntryRaw> washer = new ArrayList<>();
         List<OreFluidEntryFermenter> fluidEntryFermenters = new ArrayList<>();
         List<OreFluidEntrySieve> fluidSieve = new ArrayList<>();
-        // TODO: 22/08/2021  TagCollectionManager->SerializationTags
-//        TagCollectionManager.getManager().getItemTags().getRegisteredTags().stream()
-//                .filter(resourceLocation -> resourceLocation.toString().startsWith("forge:ores/") && OreTitaniumFluidAttributes.isValid(resourceLocation))
-//                .forEach(resourceLocation -> {
-//                    ITag<Item> tag = TagCollectionManager.getManager().getItemTags().getTagByID(resourceLocation);
-//                    ITag<Item> dust = TagCollectionManager.getManager().getItemTags().getTagByID(new ResourceLocation(resourceLocation.toString().replace("forge:ores/", "forge:dusts/")));
-//                    washer.add(new OreFluidEntryRaw(tag, new FluidStack(ModuleCore.MEAT.getSourceFluid(), 100), OreTitaniumFluidAttributes.getFluidWithTag(ModuleCore.RAW_ORE_MEAT, 100, resourceLocation)));
-//                    fluidEntryFermenters.add(new OreFluidEntryFermenter(OreTitaniumFluidAttributes.getFluidWithTag(ModuleCore.RAW_ORE_MEAT, 100, resourceLocation), OreTitaniumFluidAttributes.getFluidWithTag(ModuleCore.FERMENTED_ORE_MEAT, 200, resourceLocation)));
-//                    fluidSieve.add(new OreFluidEntrySieve(OreTitaniumFluidAttributes.getFluidWithTag(ModuleCore.FERMENTED_ORE_MEAT, 100, resourceLocation), TagUtil.getItemWithPreference(dust), ItemTags.SAND));
-//                });
+
+        ForgeRegistries.ITEMS.tags().getTagNames().map(itemTagKey -> itemTagKey.location())
+                .filter(resourceLocation -> resourceLocation.toString().startsWith("forge:raw_materials/") && OreTitaniumFluidAttributes.isValid(resourceLocation))
+                .forEach(resourceLocation -> {
+                    TagKey<Item> tag = ForgeRegistries.ITEMS.tags().createTagKey(resourceLocation);
+                    TagKey<Item> dust = ForgeRegistries.ITEMS.tags().createTagKey(new ResourceLocation(resourceLocation.toString().replace("forge:raw_materials/", "forge:dusts/")));
+                    washer.add(new OreFluidEntryRaw(tag, new FluidStack(ModuleCore.MEAT.getSourceFluid().get(), 100), OreTitaniumFluidAttributes.getFluidWithTag(ModuleCore.RAW_ORE_MEAT, 100, resourceLocation)));
+                    fluidEntryFermenters.add(new OreFluidEntryFermenter(OreTitaniumFluidAttributes.getFluidWithTag(ModuleCore.RAW_ORE_MEAT, 100, resourceLocation), OreTitaniumFluidAttributes.getFluidWithTag(ModuleCore.FERMENTED_ORE_MEAT, 200, resourceLocation)));
+                    fluidSieve.add(new OreFluidEntrySieve(OreTitaniumFluidAttributes.getFluidWithTag(ModuleCore.FERMENTED_ORE_MEAT, 100, resourceLocation), TagUtil.getItemWithPreference(dust), ItemTags.SAND));
+                });
         registration.addRecipes(washer, oreWasherCategory.getUid());
         registration.addRecipes(fluidEntryFermenters, fermentationStationCategory.getUid());
         registration.addRecipes(fluidSieve, fluidSieveCategory.getUid());

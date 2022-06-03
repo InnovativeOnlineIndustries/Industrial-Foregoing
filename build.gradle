@@ -158,7 +158,7 @@ dependencies {
     if (findProject(':titanium') != null) {
         implementation project(':titanium')
     } else {
-        implementation fg.deobf (project.dependencies.create('com.hrznstudio:titanium:1.18.2-3.5.2-34'))
+        implementation fg.deobf (project.dependencies.create('com.hrznstudio:titanium:1.18.2-3.5.3-35'))
     }
 
     compileOnly fg.deobf("mezz.jei:jei-1.18.2:9.5.3.143:api")
@@ -166,6 +166,7 @@ dependencies {
 
     compileOnly fg.deobf("top.theillusivec4.curios:curios-forge:${curios_mc_version}-${curios_version}:api")
     runtimeOnly fg.deobf("top.theillusivec4.curios:curios-forge:${curios_mc_version}-${curios_version}")
+    runtimeOnly fg.deobf("curse.maven:immersive-engineering-231951:3755665")
 
     // compiled from github
     //compileOnly fg.deobf("vazkii.patchouli:Patchouli:1.17.1-56-SNAPSHOT:api")

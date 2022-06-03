@@ -41,6 +41,7 @@ import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.DyeColor;
 import net.minecraft.world.item.ItemStack;
+import net.minecraftforge.registries.ForgeRegistries;
 import org.apache.commons.lang3.tuple.Pair;
 
 import java.awt.*;
@@ -85,7 +86,7 @@ public class FluidSieveCategory implements IRecipeCategory<OreFluidEntrySieve> {
 
     @Override
     public void setIngredients(OreFluidEntrySieve oreWasherWrapper, IIngredients iIngredients) {
-        iIngredients.setInputs(VanillaTypes.ITEM,  oreWasherWrapper.getSieveItem().getValues().stream().map(ItemStack::new).collect(Collectors.toList()));
+        iIngredients.setInputs(VanillaTypes.ITEM,  ForgeRegistries.ITEMS.tags().getTag(oreWasherWrapper.getSieveItem()).stream().map(ItemStack::new).collect(Collectors.toList()));
         iIngredients.setInput(VanillaTypes.FLUID, oreWasherWrapper.getInput());
         iIngredients.setOutput(VanillaTypes.ITEM, oreWasherWrapper.getOutput());
     }

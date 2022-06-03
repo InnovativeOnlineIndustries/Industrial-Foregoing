@@ -21,10 +21,14 @@
  */
 package com.buuz135.industrial.api.recipe.ore;
 
+import com.hrznstudio.titanium.util.TagUtil;
+import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.tags.Tag;
 import net.minecraftforge.fluids.FluidStack;
+import net.minecraftforge.registries.ForgeRegistries;
+import net.minecraftforge.registries.tags.ITag;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -34,19 +38,19 @@ public class OreFluidEntryRaw {
 
     public static List<OreFluidEntryRaw> ORE_RAW_ENTRIES = new ArrayList<>();
 
-    private Tag<Item> ore;
+    private TagKey<Item> ore;
     private FluidStack input;
     private FluidStack output;
     private Collection<Item> cachedOres;
 
-    public OreFluidEntryRaw(Tag<Item> ore, FluidStack input, FluidStack output) {
+    public OreFluidEntryRaw(TagKey<Item> ore, FluidStack input, FluidStack output) {
         this.ore = ore;
         this.input = input;
         this.output = output;
-        this.cachedOres = ore.getValues();
+        this.cachedOres = TagUtil.getAllEntries(ForgeRegistries.ITEMS, ore);
     }
 
-    public Tag<Item> getOre() {
+    public TagKey<Item> getOre() {
         return ore;
     }
 

@@ -420,7 +420,6 @@ public class ItemInfinityBackpack extends ItemInfinity {
                         }
                     }
                     if (hasCursorChanged) {
-                        // TODO: 26/07/2021 fix
                         playerEntity.containerMenu.setCarried(result);
                       ((ServerPlayer) playerEntity).containerMenu.broadcastChanges();
                     }

@@ -38,6 +38,7 @@ import mezz.jei.api.gui.ingredient.IGuiItemStackGroup;
 import mezz.jei.api.helpers.IGuiHelper;
 import mezz.jei.api.ingredients.IIngredients;
 import mezz.jei.api.recipe.category.IRecipeCategory;
+import net.minecraftforge.registries.ForgeRegistries;
 import org.apache.commons.lang3.tuple.Pair;
 
 import net.minecraft.client.Minecraft;
@@ -86,7 +87,7 @@ public class OreWasherCategory implements IRecipeCategory<OreFluidEntryRaw> {
 
     @Override
     public void setIngredients(OreFluidEntryRaw oreWasherWrapper, IIngredients iIngredients) {
-        iIngredients.setInputs(VanillaTypes.ITEM, oreWasherWrapper.getOre().getValues().stream().map(ItemStack::new).collect(Collectors.toList()));
+        iIngredients.setInputs(VanillaTypes.ITEM, ForgeRegistries.ITEMS.tags().getTag(oreWasherWrapper.getOre()).stream().map(ItemStack::new).collect(Collectors.toList()));
         iIngredients.setInput(VanillaTypes.FLUID, oreWasherWrapper.getInput());
         iIngredients.setOutput(VanillaTypes.FLUID, oreWasherWrapper.getOutput());
     }
@@ -100,7 +101,7 @@ public class OreWasherCategory implements IRecipeCategory<OreFluidEntryRaw> {
         guiFluidStackGroup.init(1, true, 47, 1, 12, 48, 200, false, tankOverlay);
         guiFluidStackGroup.init(2, false, 99, 1, 12, 48, 200, false, tankOverlay);
 
-        guiItemStackGroup.set(0, recipeWrapper.getOre().getValues().stream().map(ItemStack::new).collect(Collectors.toList()));
+        guiItemStackGroup.set(0, ForgeRegistries.ITEMS.tags().getTag(recipeWrapper.getOre()).stream().map(ItemStack::new).collect(Collectors.toList()));
         guiFluidStackGroup.set(1, ingredients.getInputs(VanillaTypes.FLUID).get(0));
         guiFluidStackGroup.set(2, ingredients.getOutputs(VanillaTypes.FLUID).get(0));
     }

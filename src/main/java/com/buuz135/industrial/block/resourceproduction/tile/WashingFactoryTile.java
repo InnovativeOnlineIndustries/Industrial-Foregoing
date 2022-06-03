@@ -72,7 +72,7 @@ public class WashingFactoryTile extends IndustrialProcessingTile<WashingFactoryT
                     if (!stack.is(Tags.Items.RAW_MATERIALS)) return false;
 
                     for (ResourceLocation resourceLocation : ForgeRegistries.ITEMS.tags().getReverseTag(stack.getItem()).map(IReverseTag::getTagKeys).map(tagKeyStream -> tagKeyStream.map(TagKey::location).collect(Collectors.toList())).orElse(new ArrayList<>())) {
-                        if ((resourceLocation.toString().startsWith("forge:raw_materials/") || resourceLocation.toString().startsWith("minecraft:raw_materials/")) && OreTitaniumFluidAttributes.isValid(resourceLocation)){
+                        if (resourceLocation.toString().startsWith("forge:raw_materials/") && OreTitaniumFluidAttributes.isValid(resourceLocation)){
                             return true;
                         }
                     }
@@ -112,11 +112,13 @@ public class WashingFactoryTile extends IndustrialProcessingTile<WashingFactoryT
     @Override
     public Runnable onFinish() {
         return () -> {
-            ResourceLocation resourceLocation = ItemStackUtils.getOreTag(this.input.getStackInSlot(0));
-            this.input.getStackInSlot(0).shrink(1);
-            this.meatInput.drainForced(100, IFluidHandler.FluidAction.EXECUTE);
-            FluidStack output = OreTitaniumFluidAttributes.getFluidWithTag(ModuleCore.RAW_ORE_MEAT, 100, resourceLocation);
-            this.meatOutput.fillForced(output, IFluidHandler.FluidAction.EXECUTE);
+            if (!this.input.getStackInSlot(0).isEmpty()){
+                ResourceLocation resourceLocation = ItemStackUtils.getOreTag(this.input.getStackInSlot(0));
+                this.meatInput.drainForced(100, IFluidHandler.FluidAction.EXECUTE);
+                FluidStack output = OreTitaniumFluidAttributes.getFluidWithTag(ModuleCore.RAW_ORE_MEAT, 100, resourceLocation);
+                this.input.getStackInSlot(0).shrink(1);
+                this.meatOutput.fillForced(output, IFluidHandler.FluidAction.EXECUTE);
+            }
         };
     }
 

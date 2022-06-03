@@ -56,7 +56,7 @@ public class ItemStackUtils {
     public static ResourceLocation getOreTag(ItemStack stack) {
         Item item = stack.getItem();
         for (ResourceLocation resourceLocation : ForgeRegistries.ITEMS.tags().getReverseTag(stack.getItem()).map(IReverseTag::getTagKeys).map(tagKeyStream -> tagKeyStream.map(TagKey::location).collect(Collectors.toList())).orElse(new ArrayList<>())) {
-            if (resourceLocation.toString().startsWith("minecraft:raw_materials/")){
+            if (resourceLocation.toString().startsWith("forge:raw_materials/")){
                 return resourceLocation;
             }
         }
