@@ -203,10 +203,10 @@ public class ItemInfinity extends IFCustomItem implements MenuProvider, IButtonH
     public int getBarWidth(ItemStack stack) {
         if (!Screen.hasShiftDown()) { //hasShiftDown
             int fuel = getFuelFromStack(stack);
-            return (int) Math.round(13.0F - fuel* 13D / 1_000_000D);
+            return (int) Math.round(fuel* 13D / 1_000_000D);
         } else {
             long power = getPowerFromStack(stack);
-            return (int) Math.round(13.0F - power * 13D / (double) InfinityTier.getTierBraquet(power).getRight().getPowerNeeded());
+            return (int) Math.round(power * 13D / (double) InfinityTier.getTierBraquet(power).getRight().getPowerNeeded());
         }
     }
 
@@ -423,7 +423,7 @@ public class ItemInfinity extends IFCustomItem implements MenuProvider, IButtonH
         return () -> new FluidHandlerScreenProviderItemStack(stack, 1_000_000) {
             @Override
             public boolean canFillFluidType(FluidStack fluid) {
-                return fluid != null && fluid.getFluid() != null && fluid.getFluid().equals(ModuleCore.BIOFUEL.getSourceFluid());
+                return fluid != null && fluid.getFluid() != null && fluid.getFluid().equals(ModuleCore.BIOFUEL.getSourceFluid().get());
             }
 
             @Override
