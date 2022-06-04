@@ -13,16 +13,16 @@
       "item": "minecraft:glass_pane"
     },
     {
-      "item": "minecraft:blaze_powder"
+      "item": "minecraft:copper_ingot"
     },
     {
-      "item": "minecraft:blaze_powder"
+      "item": "minecraft:copper_ingot"
     },
     {
-      "item": "minecraft:blaze_powder"
+      "item": "minecraft:copper_ingot"
     },
     {
-      "item": "minecraft:blaze_powder"
+      "item": "minecraft:copper_ingot"
     }
   ],
   "inputFluid": "{FluidName:\"industrialforegoing:latex\",Amount:1000}",

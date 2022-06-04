@@ -24,13 +24,19 @@ package com.buuz135.industrial.plugin.jei.category;
 import java.util.List;
 
 import com.buuz135.industrial.block.resourceproduction.tile.MaterialStoneWorkFactoryTile;
+import com.buuz135.industrial.module.ModuleResourceProduction;
+import com.buuz135.industrial.plugin.jei.IndustrialRecipeTypes;
 import com.buuz135.industrial.utils.Reference;
 import com.mojang.blaze3d.vertex.PoseStack;
 import mezz.jei.api.constants.VanillaTypes;
 import mezz.jei.api.gui.IRecipeLayout;
+import mezz.jei.api.gui.builder.IRecipeLayoutBuilder;
 import mezz.jei.api.gui.drawable.IDrawable;
 import mezz.jei.api.helpers.IGuiHelper;
 import mezz.jei.api.ingredients.IIngredients;
+import mezz.jei.api.recipe.IFocusGroup;
+import mezz.jei.api.recipe.RecipeIngredientRole;
+import mezz.jei.api.recipe.RecipeType;
 import mezz.jei.api.recipe.category.IRecipeCategory;
 
 import net.minecraft.network.chat.Component;
@@ -40,9 +46,6 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
 
 public class StoneWorkCategory implements IRecipeCategory<StoneWorkCategory.Wrapper> {
-
-    public static ResourceLocation ID = new ResourceLocation(Reference.MOD_ID, "stonework");
-
     private final IGuiHelper helper;
 
     public StoneWorkCategory(IGuiHelper helper) {
@@ -51,18 +54,23 @@ public class StoneWorkCategory implements IRecipeCategory<StoneWorkCategory.Wrap
 
     @Override
     public ResourceLocation getUid() {
-        return ID;
+        return IndustrialRecipeTypes.STONE_WORK.getUid();
     }
 
     @Override
     public Class<? extends Wrapper> getRecipeClass() {
-        return Wrapper.class;
+        return IndustrialRecipeTypes.STONE_WORK.getRecipeClass();
+    }
+
+
+    @Override
+    public RecipeType<Wrapper> getRecipeType() {
+        return IndustrialRecipeTypes.STONE_WORK;
     }
 
     @Override
     public Component getTitle() {
-        // TODO: 21/08/2021 Make this translatable.
-        return new TextComponent("Material StoneWork Factory");
+        return new TranslatableComponent(ModuleResourceProduction.MATERIAL_STONEWORK_FACTORY.getLeft().get().getDescriptionId());
     }
 
     @Override
@@ -76,30 +84,12 @@ public class StoneWorkCategory implements IRecipeCategory<StoneWorkCategory.Wrap
     }
 
     @Override
-    public void setIngredients(Wrapper wrapper, IIngredients iIngredients) {
-        iIngredients.setInput(VanillaTypes.ITEM, wrapper.getInput());
-        iIngredients.setOutput(VanillaTypes.ITEM, wrapper.getOutput());
-    }
-
-    @Override
-    public void setRecipe(IRecipeLayout iRecipeLayout, Wrapper wrapper, IIngredients iIngredients) {
-        iRecipeLayout.getItemStacks().init(0, true, 0, 4);
-        iRecipeLayout.getItemStacks().set(0, wrapper.getInput());
-
-        iRecipeLayout.getItemStacks().init(10, false, 138, 4);
-        iRecipeLayout.getItemStacks().set(10, wrapper.getOutput());
-
-        for (int i = 0; i < wrapper.getModes().size(); i++) {
-            iRecipeLayout.getItemStacks().init(i +1, true, 28 + i * 24, 4);
-            iRecipeLayout.getItemStacks().set(1+ i, wrapper.getModes().get(i).getIcon());
-            //ItemStackUtils.renderItemIntoGUI(matrixStack, recipe.getModes().get(i).getIcon(), 29 + i * 24, 5);
+    public void setRecipe(IRecipeLayoutBuilder builder, Wrapper recipe, IFocusGroup focuses) {
+        builder.addSlot(RecipeIngredientRole.INPUT, 1, 5).addIngredient(VanillaTypes.ITEM, recipe.getInput());
+        builder.addSlot(RecipeIngredientRole.OUTPUT, 139, 5).addIngredient(VanillaTypes.ITEM, recipe.getOutput());
+        for (int i = 0; i < recipe.getModes().size(); i++) {
+            builder.addSlot(RecipeIngredientRole.CATALYST,  29 + i * 24, 5).addIngredient(VanillaTypes.ITEM, recipe.getModes().get(i).getIcon());
         }
-    }
-
-    @Override
-    public void draw(Wrapper recipe, PoseStack stack, double mouseX, double mouseY) {
-
-
     }
 
     public static class Wrapper {

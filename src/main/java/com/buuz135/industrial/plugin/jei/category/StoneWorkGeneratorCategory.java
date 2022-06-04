@@ -25,6 +25,7 @@ import java.awt.Color;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.buuz135.industrial.plugin.jei.IndustrialRecipeTypes;
 import com.buuz135.industrial.recipe.StoneWorkGenerateRecipe;
 import com.buuz135.industrial.utils.Reference;
 import com.hrznstudio.titanium.client.screen.addon.SlotsScreenAddon;
@@ -33,9 +34,14 @@ import com.hrznstudio.titanium.util.LangUtil;
 import com.mojang.blaze3d.vertex.PoseStack;
 import mezz.jei.api.constants.VanillaTypes;
 import mezz.jei.api.gui.IRecipeLayout;
+import mezz.jei.api.gui.builder.IRecipeLayoutBuilder;
 import mezz.jei.api.gui.drawable.IDrawable;
+import mezz.jei.api.gui.ingredient.IRecipeSlotsView;
 import mezz.jei.api.helpers.IGuiHelper;
 import mezz.jei.api.ingredients.IIngredients;
+import mezz.jei.api.recipe.IFocusGroup;
+import mezz.jei.api.recipe.RecipeIngredientRole;
+import mezz.jei.api.recipe.RecipeType;
 import mezz.jei.api.recipe.category.IRecipeCategory;
 import org.apache.commons.lang3.tuple.Pair;
 
@@ -49,8 +55,6 @@ import net.minecraft.world.item.ItemStack;
 
 public class StoneWorkGeneratorCategory implements IRecipeCategory<StoneWorkGenerateRecipe> {
 
-    public static ResourceLocation ID = new ResourceLocation(Reference.MOD_ID, "stonework_generate");
-
     private final IGuiHelper helper;
 
     public StoneWorkGeneratorCategory(IGuiHelper helper) {
@@ -59,12 +63,17 @@ public class StoneWorkGeneratorCategory implements IRecipeCategory<StoneWorkGene
 
     @Override
     public ResourceLocation getUid() {
-        return ID;
+        return IndustrialRecipeTypes.STONE_WORK_GENERATOR.getUid();
     }
 
     @Override
     public Class<? extends StoneWorkGenerateRecipe> getRecipeClass() {
-        return StoneWorkGenerateRecipe.class;
+        return IndustrialRecipeTypes.STONE_WORK_GENERATOR.getRecipeClass();
+    }
+
+    @Override
+    public RecipeType<StoneWorkGenerateRecipe> getRecipeType() {
+        return IndustrialRecipeTypes.STONE_WORK_GENERATOR;
     }
 
     @Override
@@ -82,19 +91,14 @@ public class StoneWorkGeneratorCategory implements IRecipeCategory<StoneWorkGene
         return null;
     }
 
+
     @Override
-    public void setIngredients(StoneWorkGenerateRecipe wrapper, IIngredients iIngredients) {
-        iIngredients.setOutput(VanillaTypes.ITEM, wrapper.output);
+    public void setRecipe(IRecipeLayoutBuilder builder, StoneWorkGenerateRecipe recipe, IFocusGroup focuses) {
+        builder.addSlot(RecipeIngredientRole.OUTPUT, 9, 19).addIngredient(VanillaTypes.ITEM, recipe.output);
     }
 
     @Override
-    public void setRecipe(IRecipeLayout iRecipeLayout, StoneWorkGenerateRecipe wrapper, IIngredients iIngredients) {
-        iRecipeLayout.getItemStacks().init(10, false, 8, 9*2);
-        iRecipeLayout.getItemStacks().set(10, wrapper.output);
-    }
-
-    @Override
-    public void draw(StoneWorkGenerateRecipe recipe, PoseStack stack, double mouseX, double mouseY) {
+    public void draw(StoneWorkGenerateRecipe recipe, IRecipeSlotsView recipeSlotsView, PoseStack stack, double mouseX, double mouseY) {
         List<Component> lines = new ArrayList<>();
         SlotsScreenAddon.drawAsset(stack, Minecraft.getInstance().screen, DefaultAssetProvider.DEFAULT_PROVIDER, 8, 9*2, 0, 0, 1, integer -> Pair.of(1,1), integer -> ItemStack.EMPTY, true, integer -> new Color(DyeColor.ORANGE.getFireworkColor()), integer -> true);
         lines.add(new TextComponent(ChatFormatting.GOLD + LangUtil.getString("tooltip.industrialforegoing.needs")));
@@ -109,5 +113,4 @@ public class StoneWorkGeneratorCategory implements IRecipeCategory<StoneWorkGene
             ++y;
         }
     }
-
 }

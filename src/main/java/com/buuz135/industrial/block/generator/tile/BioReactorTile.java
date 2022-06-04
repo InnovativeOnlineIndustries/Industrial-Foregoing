@@ -63,7 +63,7 @@ import java.util.List;
 
 public class BioReactorTile extends IndustrialWorkingTile<BioReactorTile> {
 
-    public static TagKey<Item>[] VALID = new TagKey[]{IndustrialTags.Items.BIOREACTOR_INPUT, Tags.Items.CROPS_CARROT, Tags.Items.CROPS_POTATO, Tags.Items.CROPS_NETHER_WART, Tags.Items.DYES,
+    public static TagKey<Item>[] VALID = new TagKey[]{IndustrialTags.Items.BIOREACTOR_INPUT, Tags.Items.CROPS, Tags.Items.DYES,
             Tags.Items.HEADS, Tags.Items.MUSHROOMS, Tags.Items.SEEDS, ItemTags.SAPLINGS};
 
     private int getMaxProgress;

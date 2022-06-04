@@ -26,16 +26,23 @@ import java.util.stream.Collectors;
 
 import javax.annotation.Nullable;
 
+import com.buuz135.industrial.plugin.jei.IndustrialRecipeTypes;
 import com.buuz135.industrial.utils.Reference;
 import mezz.jei.api.constants.VanillaTypes;
 import mezz.jei.api.gui.IRecipeLayout;
+import mezz.jei.api.gui.builder.IRecipeLayoutBuilder;
 import mezz.jei.api.gui.drawable.IDrawable;
 import mezz.jei.api.gui.ingredient.IGuiFluidStackGroup;
 import mezz.jei.api.gui.ingredient.IGuiItemStackGroup;
 import mezz.jei.api.helpers.IGuiHelper;
 import mezz.jei.api.ingredients.IIngredients;
+import mezz.jei.api.recipe.IFocusGroup;
+import mezz.jei.api.recipe.RecipeIngredientRole;
+import mezz.jei.api.recipe.RecipeType;
 import mezz.jei.api.recipe.category.IRecipeCategory;
 import net.minecraft.tags.TagKey;
+import net.minecraft.world.item.crafting.Ingredient;
+import net.minecraft.world.level.material.Fluids;
 import net.minecraftforge.fluids.FluidStack;
 
 import net.minecraft.network.chat.Component;
@@ -47,8 +54,6 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.registries.ForgeRegistries;
 
 public class BioReactorRecipeCategory implements IRecipeCategory<BioReactorRecipeCategory.ReactorRecipeWrapper> {
-
-    public static ResourceLocation ID = new ResourceLocation(Reference.MOD_ID, "bioreactor");
 
     private IGuiHelper guiHelper;
     private IDrawable tankOverlay;
@@ -62,12 +67,17 @@ public class BioReactorRecipeCategory implements IRecipeCategory<BioReactorRecip
 
     @Override
     public ResourceLocation getUid() {
-        return ID;
+        return IndustrialRecipeTypes.BIOREACTOR.getUid();
     }
 
     @Override
     public Class<? extends ReactorRecipeWrapper> getRecipeClass() {
-        return BioReactorRecipeCategory.ReactorRecipeWrapper.class;
+        return IndustrialRecipeTypes.BIOREACTOR.getRecipeClass();
+    }
+
+    @Override
+    public RecipeType<ReactorRecipeWrapper> getRecipeType() {
+        return IndustrialRecipeTypes.BIOREACTOR;
     }
 
     @Override
@@ -78,7 +88,7 @@ public class BioReactorRecipeCategory implements IRecipeCategory<BioReactorRecip
 
     @Override
     public IDrawable getBackground() {
-        return guiHelper.createDrawable(new ResourceLocation(Reference.MOD_ID, "textures/gui/jei.png"), 0, 27, 82, 50);
+        return guiHelper.createDrawable(new ResourceLocation(Reference.MOD_ID, "textures/gui/jei.png"), 0, 27, 70, 50);
     }
 
     @Nullable
@@ -88,22 +98,9 @@ public class BioReactorRecipeCategory implements IRecipeCategory<BioReactorRecip
     }
 
     @Override
-    public void setIngredients(ReactorRecipeWrapper reactorRecipeWrapper, IIngredients iIngredients) {
-        iIngredients.setInputLists(VanillaTypes.ITEM, Collections.singletonList(ForgeRegistries.ITEMS.tags().getTag(reactorRecipeWrapper.getStack()).stream().map(ItemStack::new).collect(Collectors.toList())));
-        iIngredients.setOutput(VanillaTypes.FLUID, reactorRecipeWrapper.getFluid());
-    }
-
-
-    @Override
-    public void setRecipe(IRecipeLayout recipeLayout, ReactorRecipeWrapper recipeWrapper, IIngredients ingredients) {
-        IGuiItemStackGroup guiItemStackGroup = recipeLayout.getItemStacks();
-        guiItemStackGroup.init(0, true, 0, 16);
-
-        IGuiFluidStackGroup guiFluidStackGroup = recipeLayout.getFluidStacks();
-        guiFluidStackGroup.init(1, false, 57, 1, 12, 48, 200, false, tankOverlay);
-
-        guiItemStackGroup.set(0, ingredients.getInputs(VanillaTypes.ITEM).get(0));
-        guiFluidStackGroup.set(1, ingredients.getOutputs(VanillaTypes.FLUID).get(0));
+    public void setRecipe(IRecipeLayoutBuilder builder, ReactorRecipeWrapper recipe, IFocusGroup focuses) {
+        builder.addSlot(RecipeIngredientRole.INPUT, 1, 17).addIngredients(Ingredient.of(recipe.stack));
+        builder.addSlot(RecipeIngredientRole.OUTPUT, 57, 1).setFluidRenderer(1000, false, 12, 48).setOverlay(tankOverlay, 0, 0).addIngredient(VanillaTypes.FLUID, recipe.getFluid());
     }
 
     public static class ReactorRecipeWrapper {

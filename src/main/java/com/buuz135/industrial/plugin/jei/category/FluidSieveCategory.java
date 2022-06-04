@@ -23,17 +23,23 @@ package com.buuz135.industrial.plugin.jei.category;
 
 import com.buuz135.industrial.api.recipe.ore.OreFluidEntrySieve;
 import com.buuz135.industrial.module.ModuleResourceProduction;
+import com.buuz135.industrial.plugin.jei.IndustrialRecipeTypes;
 import com.buuz135.industrial.utils.Reference;
 import com.hrznstudio.titanium.client.screen.addon.SlotsScreenAddon;
 import com.hrznstudio.titanium.client.screen.asset.DefaultAssetProvider;
 import com.mojang.blaze3d.vertex.PoseStack;
 import mezz.jei.api.constants.VanillaTypes;
 import mezz.jei.api.gui.IRecipeLayout;
+import mezz.jei.api.gui.builder.IRecipeLayoutBuilder;
 import mezz.jei.api.gui.drawable.IDrawable;
 import mezz.jei.api.gui.ingredient.IGuiFluidStackGroup;
 import mezz.jei.api.gui.ingredient.IGuiItemStackGroup;
+import mezz.jei.api.gui.ingredient.IRecipeSlotsView;
 import mezz.jei.api.helpers.IGuiHelper;
 import mezz.jei.api.ingredients.IIngredients;
+import mezz.jei.api.recipe.IFocusGroup;
+import mezz.jei.api.recipe.RecipeIngredientRole;
+import mezz.jei.api.recipe.RecipeType;
 import mezz.jei.api.recipe.category.IRecipeCategory;
 import net.minecraft.client.Minecraft;
 import net.minecraft.network.chat.Component;
@@ -41,6 +47,7 @@ import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.DyeColor;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraftforge.registries.ForgeRegistries;
 import org.apache.commons.lang3.tuple.Pair;
 
@@ -49,7 +56,6 @@ import java.util.stream.Collectors;
 
 public class FluidSieveCategory implements IRecipeCategory<OreFluidEntrySieve> {
 
-    public static ResourceLocation ID = new ResourceLocation(Reference.MOD_ID, "ore_sieve");
 
     private final IGuiHelper helper;
     private IDrawable tankOverlay;
@@ -61,12 +67,17 @@ public class FluidSieveCategory implements IRecipeCategory<OreFluidEntrySieve> {
 
     @Override
     public ResourceLocation getUid() {
-        return ID;
+        return IndustrialRecipeTypes.ORE_SIEVE.getUid();
     }
 
     @Override
     public Class<? extends OreFluidEntrySieve> getRecipeClass() {
-        return OreFluidEntrySieve.class;
+        return IndustrialRecipeTypes.ORE_SIEVE.getRecipeClass();
+    }
+
+    @Override
+    public RecipeType<OreFluidEntrySieve> getRecipeType() {
+        return IndustrialRecipeTypes.ORE_SIEVE;
     }
 
     @Override
@@ -83,7 +94,7 @@ public class FluidSieveCategory implements IRecipeCategory<OreFluidEntrySieve> {
     public IDrawable getIcon() {
         return null;
     }
-
+/*
     @Override
     public void setIngredients(OreFluidEntrySieve oreWasherWrapper, IIngredients iIngredients) {
         iIngredients.setInputs(VanillaTypes.ITEM,  ForgeRegistries.ITEMS.tags().getTag(oreWasherWrapper.getSieveItem()).stream().map(ItemStack::new).collect(Collectors.toList()));
@@ -104,9 +115,17 @@ public class FluidSieveCategory implements IRecipeCategory<OreFluidEntrySieve> {
         guiFluidStackGroup.set(1, ingredients.getInputs(VanillaTypes.FLUID).get(0));
         guiItemStackGroup.set(2, ingredients.getOutputs(VanillaTypes.ITEM).get(0));
     }
+*/
 
     @Override
-    public void draw(OreFluidEntrySieve recipe, PoseStack stack, double mouseX, double mouseY) {
+    public void setRecipe(IRecipeLayoutBuilder builder, OreFluidEntrySieve recipe, IFocusGroup focuses) {
+        builder.addSlot(RecipeIngredientRole.INPUT, 24, 36).addIngredients(Ingredient.of(recipe.getSieveItem()));
+        builder.addSlot(RecipeIngredientRole.INPUT, 1, 1).setFluidRenderer(200, false, 12, 48).setOverlay(tankOverlay, 0, 0).addIngredient(VanillaTypes.FLUID, recipe.getInput());
+        builder.addSlot(RecipeIngredientRole.OUTPUT, 50, 17).addIngredient(VanillaTypes.ITEM, recipe.getOutput());
+    }
+
+    @Override
+    public void draw(OreFluidEntrySieve recipe, IRecipeSlotsView recipeSlotsView, PoseStack stack, double mouseX, double mouseY) {
         SlotsScreenAddon.drawAsset(stack, Minecraft.getInstance().screen, DefaultAssetProvider.DEFAULT_PROVIDER, 24, 36, 0, 0, 1, integer -> Pair.of(18 * (integer % 1), 18 * (integer / 1)), integer -> ItemStack.EMPTY, true, integer -> new Color(DyeColor.BLUE.getFireworkColor()), integer -> true);
         SlotsScreenAddon.drawAsset(stack, Minecraft.getInstance().screen, DefaultAssetProvider.DEFAULT_PROVIDER, 50, 17, 0, 0, 1, integer -> Pair.of(18 * (integer % 1), 18 * (integer / 1)), integer -> ItemStack.EMPTY, true, integer -> new Color(DyeColor.ORANGE.getFireworkColor()), integer -> true);
 

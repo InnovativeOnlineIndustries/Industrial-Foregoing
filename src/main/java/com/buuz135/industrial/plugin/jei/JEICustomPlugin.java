@@ -45,6 +45,7 @@ import com.hrznstudio.titanium.util.RecipeUtil;
 import com.hrznstudio.titanium.util.TagUtil;
 import mezz.jei.api.IModPlugin;
 import mezz.jei.api.JeiPlugin;
+import mezz.jei.api.constants.RecipeTypes;
 import mezz.jei.api.constants.VanillaRecipeCategoryUid;
 import mezz.jei.api.gui.handlers.IGhostIngredientHandler;
 import mezz.jei.api.registration.*;
@@ -196,11 +197,11 @@ public class JEICustomPlugin implements IModPlugin {
 
     @Override
     public void registerRecipes(IRecipeRegistration registration) {
-        registration.addRecipes(RecipeUtil.getRecipes(Minecraft.getInstance().level, FluidExtractorRecipe.SERIALIZER.getRecipeType()), fluidExtractorCategory.getUid());
-        registration.addRecipes(RecipeUtil.getRecipes(Minecraft.getInstance().level, DissolutionChamberRecipe.SERIALIZER.getRecipeType()), dissolutionChamberJEICategory.getUid());
-        registration.addRecipes(generateBioreactorRecipes(), bioReactorRecipeCategory.getUid());
-        registration.addRecipes(RecipeUtil.getRecipes(Minecraft.getInstance().level, LaserDrillOreRecipe.SERIALIZER.getRecipeType()).stream().filter(laserDrillOreRecipe -> !laserDrillOreRecipe.output.isEmpty()).collect(Collectors.toList()), laserRecipeOreCategory.getUid()); // TODO: 21/08/2021 Not sure hasNoMatchingItems=hasNoMatchingItems
-        registration.addRecipes(RecipeUtil.getRecipes(Minecraft.getInstance().level, LaserDrillFluidRecipe.SERIALIZER.getRecipeType()), laserDrillFluidCategory.getUid());
+        registration.addRecipes(IndustrialRecipeTypes.FLUID_EXTRACTOR, RecipeUtil.getRecipes(Minecraft.getInstance().level, FluidExtractorRecipe.SERIALIZER.getRecipeType()));
+        registration.addRecipes(IndustrialRecipeTypes.DISSOLUTION, RecipeUtil.getRecipes(Minecraft.getInstance().level, DissolutionChamberRecipe.SERIALIZER.getRecipeType()));
+        registration.addRecipes(IndustrialRecipeTypes.BIOREACTOR, generateBioreactorRecipes());
+        registration.addRecipes(IndustrialRecipeTypes.LASER_ORE, RecipeUtil.getRecipes(Minecraft.getInstance().level, LaserDrillOreRecipe.SERIALIZER.getRecipeType()).stream().filter(laserDrillOreRecipe -> !laserDrillOreRecipe.output.isEmpty()).collect(Collectors.toList()));
+        registration.addRecipes(IndustrialRecipeTypes.LASER_FLUID, RecipeUtil.getRecipes(Minecraft.getInstance().level, LaserDrillFluidRecipe.SERIALIZER.getRecipeType()));
         for (int i = 0; i < IMycelialGeneratorType.TYPES.size(); i++) {
             registration.addRecipes(IMycelialGeneratorType.TYPES.get(i).getRecipes().stream().sorted(Comparator.comparingInt(value -> ((MycelialGeneratorRecipe)value).getTicks() * ((MycelialGeneratorRecipe)value).getPowerTick()).reversed()).collect(Collectors.toList()), mycelialGeneratorCategories.get(i).getUid());
         }
@@ -227,7 +228,7 @@ public class JEICustomPlugin implements IModPlugin {
                 }
             }
         }
-        registration.addRecipes(perfectStoneWorkWrappers, stoneWorkCategory.getUid());
+        registration.addRecipes(IndustrialRecipeTypes.STONE_WORK, perfectStoneWorkWrappers);
 
         registration.addRecipes(Arrays.asList(
                 new MachineProduceWrapper(ModuleCore.LATEX_PROCESSING.getLeft().get(), new ItemStack(ModuleCore.TINY_DRY_RUBBER.get())),
@@ -245,7 +246,7 @@ public class JEICustomPlugin implements IModPlugin {
                 new MachineProduceWrapper(ModuleResourceProduction.WATER_CONDENSATOR.getLeft().get(), new FluidStack(Fluids.WATER,  1000))
         ), machineProduceCategory.getUid());
 
-        registration.addRecipes(RecipeUtil.getRecipes(Minecraft.getInstance().level, StoneWorkGenerateRecipe.SERIALIZER.getRecipeType()), stoneWorkGeneratorCategory.getUid());
+        registration.addRecipes(IndustrialRecipeTypes.STONE_WORK_GENERATOR, RecipeUtil.getRecipes(Minecraft.getInstance().level, StoneWorkGenerateRecipe.SERIALIZER.getRecipeType()));
 
         List<OreFluidEntryRaw> washer = new ArrayList<>();
         List<OreFluidEntryFermenter> fluidEntryFermenters = new ArrayList<>();
@@ -260,9 +261,9 @@ public class JEICustomPlugin implements IModPlugin {
                     fluidEntryFermenters.add(new OreFluidEntryFermenter(OreTitaniumFluidAttributes.getFluidWithTag(ModuleCore.RAW_ORE_MEAT, 100, resourceLocation), OreTitaniumFluidAttributes.getFluidWithTag(ModuleCore.FERMENTED_ORE_MEAT, 200, resourceLocation)));
                     fluidSieve.add(new OreFluidEntrySieve(OreTitaniumFluidAttributes.getFluidWithTag(ModuleCore.FERMENTED_ORE_MEAT, 100, resourceLocation), TagUtil.getItemWithPreference(dust), ItemTags.SAND));
                 });
-        registration.addRecipes(washer, oreWasherCategory.getUid());
-        registration.addRecipes(fluidEntryFermenters, fermentationStationCategory.getUid());
-        registration.addRecipes(fluidSieve, fluidSieveCategory.getUid());
+        registration.addRecipes(IndustrialRecipeTypes.ORE_WASHER, washer);
+        registration.addRecipes(IndustrialRecipeTypes.FERMENTER, fluidEntryFermenters);
+        registration.addRecipes(IndustrialRecipeTypes.ORE_SIEVE, fluidSieve);
     }
 
     private List<BioReactorRecipeCategory.ReactorRecipeWrapper> generateBioreactorRecipes() {
@@ -303,13 +304,13 @@ public class JEICustomPlugin implements IModPlugin {
 
     @Override
     public void registerRecipeCatalysts(IRecipeCatalystRegistration registration) {
-        registration.addRecipeCatalyst(new ItemStack(ModuleCore.FLUID_EXTRACTOR.getLeft().get()), FluidExtractorCategory.ID);
-        registration.addRecipeCatalyst(new ItemStack(ModuleCore.DISSOLUTION_CHAMBER.getLeft().get()), DissolutionChamberCategory.ID);
-        registration.addRecipeCatalyst(new ItemStack(ModuleGenerator.BIOREACTOR.getLeft().get()), BioReactorRecipeCategory.ID);
-        registration.addRecipeCatalyst(new ItemStack(ModuleResourceProduction.ORE_LASER_BASE.getLeft().get()), LaserDrillOreCategory.ID);
-        registration.addRecipeCatalyst(new ItemStack(ModuleResourceProduction.LASER_DRILL.getLeft().get()), LaserDrillOreCategory.ID);
-        registration.addRecipeCatalyst(new ItemStack(ModuleResourceProduction.FLUID_LASER_BASE.getLeft().get()), LaserDrillFluidCategory.ID);
-        registration.addRecipeCatalyst(new ItemStack(ModuleResourceProduction.LASER_DRILL.getLeft().get()), LaserDrillFluidCategory.ID);
+        registration.addRecipeCatalyst(new ItemStack(ModuleCore.FLUID_EXTRACTOR.getLeft().get()), IndustrialRecipeTypes.FLUID_EXTRACTOR);
+        registration.addRecipeCatalyst(new ItemStack(ModuleCore.DISSOLUTION_CHAMBER.getLeft().get()), IndustrialRecipeTypes.DISSOLUTION);
+        registration.addRecipeCatalyst(new ItemStack(ModuleGenerator.BIOREACTOR.getLeft().get()), IndustrialRecipeTypes.BIOREACTOR);
+        registration.addRecipeCatalyst(new ItemStack(ModuleResourceProduction.ORE_LASER_BASE.getLeft().get()),IndustrialRecipeTypes.LASER_ORE);
+        registration.addRecipeCatalyst(new ItemStack(ModuleResourceProduction.LASER_DRILL.getLeft().get()), IndustrialRecipeTypes.LASER_ORE);
+        registration.addRecipeCatalyst(new ItemStack(ModuleResourceProduction.FLUID_LASER_BASE.getLeft().get()), IndustrialRecipeTypes.LASER_FLUID);
+        registration.addRecipeCatalyst(new ItemStack(ModuleResourceProduction.LASER_DRILL.getLeft().get()), IndustrialRecipeTypes.LASER_FLUID);
         for (Pair<RegistryObject<Block>, RegistryObject<BlockEntityType<?>>> mycelialGenerator : ModuleGenerator.MYCELIAL_GENERATORS) {
             for (MycelialGeneratorCategory mycelialGeneratorCategory : mycelialGeneratorCategories) {
                 if (((MycelialGeneratorBlock)mycelialGenerator.getLeft().get()).getType().equals(mycelialGeneratorCategory.getType())){
@@ -318,12 +319,12 @@ public class JEICustomPlugin implements IModPlugin {
             }
         }
         registration.addRecipeCatalyst(new ItemStack(ModuleResourceProduction.MATERIAL_STONEWORK_FACTORY.getLeft().get()), stoneWorkCategory.getUid(), stoneWorkGeneratorCategory.getUid());
-        registration.addRecipeCatalyst(new ItemStack(ModuleResourceProduction.POTION_BREWER.getLeft().get()), VanillaRecipeCategoryUid.BREWING);
-        registration.addRecipeCatalyst(new ItemStack(ModuleMisc.ENCHANTMENT_APPLICATOR.getLeft().get()), VanillaRecipeCategoryUid.ANVIL);
-        registration.addRecipeCatalyst(new ItemStack(ModuleResourceProduction.RESOURCEFUL_FURNACE.getLeft().get()), VanillaRecipeCategoryUid.FURNACE);
-        registration.addRecipeCatalyst(new ItemStack(ModuleResourceProduction.WASHING_FACTORY.getLeft().get()), OreWasherCategory.ID);
-        registration.addRecipeCatalyst(new ItemStack(ModuleResourceProduction.FERMENTATION_STATION.getLeft().get()), FermentationStationCategory.ID);
-        registration.addRecipeCatalyst(new ItemStack(ModuleResourceProduction.FLUID_SIEVING_MACHINE.getLeft().get()), FluidSieveCategory.ID);
+        registration.addRecipeCatalyst(new ItemStack(ModuleResourceProduction.POTION_BREWER.getLeft().get()), RecipeTypes.BREWING);
+        registration.addRecipeCatalyst(new ItemStack(ModuleMisc.ENCHANTMENT_APPLICATOR.getLeft().get()), RecipeTypes.ANVIL);
+        registration.addRecipeCatalyst(new ItemStack(ModuleResourceProduction.RESOURCEFUL_FURNACE.getLeft().get()), RecipeTypes.SMELTING);
+        registration.addRecipeCatalyst(new ItemStack(ModuleResourceProduction.WASHING_FACTORY.getLeft().get()), IndustrialRecipeTypes.ORE_WASHER);
+        registration.addRecipeCatalyst(new ItemStack(ModuleResourceProduction.FERMENTATION_STATION.getLeft().get()), IndustrialRecipeTypes.FERMENTER);
+        registration.addRecipeCatalyst(new ItemStack(ModuleResourceProduction.FLUID_SIEVING_MACHINE.getLeft().get()), IndustrialRecipeTypes.ORE_SIEVE);
     }
 
     @Override

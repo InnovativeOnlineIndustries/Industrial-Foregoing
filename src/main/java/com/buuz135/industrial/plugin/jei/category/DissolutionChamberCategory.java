@@ -28,6 +28,9 @@ import java.util.List;
 
 import com.buuz135.industrial.block.core.tile.DissolutionChamberTile;
 import com.buuz135.industrial.config.machine.core.DissolutionChamberConfig;
+import com.buuz135.industrial.module.ModuleCore;
+import com.buuz135.industrial.module.ModuleResourceProduction;
+import com.buuz135.industrial.plugin.jei.IndustrialRecipeTypes;
 import com.buuz135.industrial.recipe.DissolutionChamberRecipe;
 import com.hrznstudio.titanium.api.client.AssetTypes;
 import com.hrznstudio.titanium.client.screen.addon.EnergyBarScreenAddon;
@@ -38,10 +41,16 @@ import com.hrznstudio.titanium.util.AssetUtil;
 import com.mojang.blaze3d.vertex.PoseStack;
 import mezz.jei.api.constants.VanillaTypes;
 import mezz.jei.api.gui.IRecipeLayout;
+import mezz.jei.api.gui.builder.IRecipeLayoutBuilder;
 import mezz.jei.api.gui.drawable.IDrawable;
+import mezz.jei.api.gui.ingredient.IRecipeSlotsView;
 import mezz.jei.api.helpers.IGuiHelper;
 import mezz.jei.api.ingredients.IIngredients;
+import mezz.jei.api.recipe.IFocusGroup;
+import mezz.jei.api.recipe.RecipeIngredientRole;
+import mezz.jei.api.recipe.RecipeType;
 import mezz.jei.api.recipe.category.IRecipeCategory;
+import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraftforge.fluids.FluidStack;
 import org.apache.commons.lang3.tuple.Pair;
 
@@ -55,8 +64,6 @@ import net.minecraft.world.item.crafting.Ingredient;
 
 public class DissolutionChamberCategory implements IRecipeCategory<DissolutionChamberRecipe> {
 
-    public static final ResourceLocation ID = new ResourceLocation(DissolutionChamberRecipe.SERIALIZER.getRecipeType().toString());
-
     private final IGuiHelper guiHelper;
     private final IDrawable smallTank;
     private final IDrawable bigTank;
@@ -69,18 +76,22 @@ public class DissolutionChamberCategory implements IRecipeCategory<DissolutionCh
 
     @Override
     public ResourceLocation getUid() {
-        return ID;
+        return IndustrialRecipeTypes.DISSOLUTION.getUid();
     }
 
     @Override
     public Class<? extends DissolutionChamberRecipe> getRecipeClass() {
-        return DissolutionChamberRecipe.class;
+        return IndustrialRecipeTypes.DISSOLUTION.getRecipeClass();
+    }
+
+    @Override
+    public RecipeType<DissolutionChamberRecipe> getRecipeType() {
+        return IndustrialRecipeTypes.DISSOLUTION;
     }
 
     @Override
     public Component getTitle() {
-        // TODO: 21/08/2021 Make translatable
-        return new TextComponent("Dissolution Chamber");
+        return new TranslatableComponent(ModuleCore.DISSOLUTION_CHAMBER.getLeft().get().getDescriptionId());
     }
 
     @Override
@@ -94,41 +105,27 @@ public class DissolutionChamberCategory implements IRecipeCategory<DissolutionCh
     }
 
     @Override
-    public void setIngredients(DissolutionChamberRecipe dissolutionChamberRecipe, IIngredients iIngredients) {
-        List<List<ItemStack>> input = new ArrayList<>();
-        for (Ingredient.Value iItemList : dissolutionChamberRecipe.input) {
-            input.add(new ArrayList<>(iItemList.getItems()));
-        }
-        iIngredients.setInputLists(VanillaTypes.ITEM, input);
-        iIngredients.setInput(VanillaTypes.FLUID, dissolutionChamberRecipe.inputFluid);
-        if (!dissolutionChamberRecipe.output.isEmpty())
-            iIngredients.setOutput(VanillaTypes.ITEM, dissolutionChamberRecipe.output);
-        iIngredients.setOutput(VanillaTypes.FLUID, dissolutionChamberRecipe.outputFluid == null ? FluidStack.EMPTY : dissolutionChamberRecipe.outputFluid);
-    }
-
-    @Override
-    public void setRecipe(IRecipeLayout iRecipeLayout, DissolutionChamberRecipe dissolutionChamberRecipe, IIngredients iIngredients) {
+    public void setRecipe(IRecipeLayoutBuilder builder, DissolutionChamberRecipe recipe, IFocusGroup focuses) {
         for (int i = 0; i < 8; i++) {
-            if (i < iIngredients.getInputs(VanillaTypes.ITEM).size()) {
-                iRecipeLayout.getItemStacks().init(i, true, 23 + DissolutionChamberTile.getSlotPos(i).getLeft(), 10 + DissolutionChamberTile.getSlotPos(i).getRight());
-                iRecipeLayout.getItemStacks().set(i, iIngredients.getInputs(VanillaTypes.ITEM).get(i));
+            if (i < recipe.input.length) {
+                builder.addSlot(RecipeIngredientRole.INPUT,  24 + DissolutionChamberTile.getSlotPos(i).getLeft(), 11 + DissolutionChamberTile.getSlotPos(i).getRight()).addIngredients(VanillaTypes.ITEM, recipe.input[i].getItems().stream().toList());
             }
         }
-        if (!dissolutionChamberRecipe.output.isEmpty()) {
-            iRecipeLayout.getItemStacks().init(9, false, 118, 15);
-            iRecipeLayout.getItemStacks().set(9, iIngredients.getOutputs(VanillaTypes.ITEM).get(0));
+        if (recipe.inputFluid != null && !recipe.inputFluid.isEmpty()){
+            builder.addSlot(RecipeIngredientRole.INPUT, 33 + 12 + 3, 32 + 3).setFluidRenderer(1000, false, 12, 13).setOverlay(smallTank, 0, 0).addIngredient(VanillaTypes.FLUID, recipe.inputFluid);
         }
-
-        iRecipeLayout.getFluidStacks().init(0, true, 33 + 12 + 3, 32 + 3, 12, 13, 8000, false, smallTank);
-        iRecipeLayout.getFluidStacks().set(0, iIngredients.getInputs(VanillaTypes.FLUID).get(0));
-        if (dissolutionChamberRecipe.outputFluid != null && !dissolutionChamberRecipe.outputFluid.isEmpty()){
-            iRecipeLayout.getFluidStacks().init(1, false, 139 + 3, 14 + 3, 12, 50, 8000, false, bigTank);
-            iRecipeLayout.getFluidStacks().set(1, iIngredients.getOutputs(VanillaTypes.FLUID).get(0));
+        if (!recipe.output.isEmpty()) {
+            ItemStack stack = recipe.output;
+            stack.getItem().onCraftedBy(stack, null, null);
+            builder.addSlot(RecipeIngredientRole.OUTPUT, 119, 16).addIngredient(VanillaTypes.ITEM, stack);
+        }
+        if (recipe.outputFluid != null && !recipe.outputFluid.isEmpty()){
+            builder.addSlot(RecipeIngredientRole.OUTPUT, 139 + 3, 14 + 3).setFluidRenderer(1000, false, 12, 50).setOverlay(bigTank, 0, 0).addIngredient(VanillaTypes.FLUID, recipe.inputFluid);
         }
     }
 
     @Override
-    public void draw(DissolutionChamberRecipe recipe, PoseStack stack, double mouseX, double mouseY) {
+    public void draw(DissolutionChamberRecipe recipe, IRecipeSlotsView recipeSlotsView, PoseStack stack, double mouseX, double mouseY) {
         EnergyBarScreenAddon.drawBackground(stack, Minecraft.getInstance().screen, DefaultAssetProvider.DEFAULT_PROVIDER, 0, 12, 0, 0);
         SlotsScreenAddon.drawAsset(stack, Minecraft.getInstance().screen, DefaultAssetProvider.DEFAULT_PROVIDER, 24, 11, 0, 0, 8, DissolutionChamberTile::getSlotPos, integer -> ItemStack.EMPTY, true, integer -> new Color(DyeColor.LIGHT_BLUE.getFireworkColor()), integer -> true);
         SlotsScreenAddon.drawAsset(stack, Minecraft.getInstance().screen, DefaultAssetProvider.DEFAULT_PROVIDER, 119, 16, 0, 0, 3, integer -> Pair.of(18 * (integer % 1), 18 * (integer / 1)), integer -> ItemStack.EMPTY, true, integer -> new Color(DyeColor.ORANGE.getFireworkColor()), integer -> true);
@@ -143,7 +140,7 @@ public class DissolutionChamberCategory implements IRecipeCategory<DissolutionCh
     }
 
     @Override
-    public List<Component> getTooltipStrings(DissolutionChamberRecipe recipe, double mouseX, double mouseY) {
+    public List<Component> getTooltipStrings(DissolutionChamberRecipe recipe, IRecipeSlotsView recipeSlotsView, double mouseX, double mouseY) {
         Rectangle rec = DefaultAssetProvider.DEFAULT_PROVIDER.getAsset(AssetTypes.ENERGY_BACKGROUND).getArea();
         if (new Rectangle(0, 12, rec.width, rec.height).contains(mouseX, mouseY)) {
             int consumed = recipe.processingTime * 60;
