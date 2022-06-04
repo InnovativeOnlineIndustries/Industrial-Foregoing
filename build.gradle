@@ -296,7 +296,7 @@ curseforge {
         changelog = "https://github.com/InnovativeOnlineIndustries/Industrial-Foregoing/blob/changelog/CHANGELOG.md"
         changelogType = 'markdown'
         releaseType = 'beta'
-        addGameVersion '1.17.1'
+        addGameVersion '1.18.2'
 
         mainArtifact(jar){
             relations {
