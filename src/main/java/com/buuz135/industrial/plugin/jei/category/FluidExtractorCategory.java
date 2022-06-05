@@ -135,7 +135,7 @@ public class FluidExtractorCategory implements IRecipeCategory<FluidExtractorRec
     public void draw(FluidExtractorRecipe recipe, IRecipeSlotsView recipeSlotsView, PoseStack stack, double mouseX, double mouseY) {
         Minecraft.getInstance().font.draw(stack, ChatFormatting.DARK_GRAY + "Production: ", 80, 6, 0xFFFFFF);
         Minecraft.getInstance().font.draw(stack, ChatFormatting.DARK_GRAY + "" + recipe.output.getAmount() + "mb/work", 80, 6 + (Minecraft.getInstance().font.lineHeight + 2) * 1, 0xFFFFFF);
-        Minecraft.getInstance().font.draw(stack, ChatFormatting.DARK_GRAY + "" + "Doubled when", 80, 6 + (Minecraft.getInstance().font.lineHeight + 2) * 2, 0xFFFFFF);
+        Minecraft.getInstance().font.draw(stack, ChatFormatting.DARK_GRAY + "" + "Tripled when", 80, 6 + (Minecraft.getInstance().font.lineHeight + 2) * 2, 0xFFFFFF);
         Minecraft.getInstance().font.draw(stack, ChatFormatting.DARK_GRAY + "" +  "powered", 80, 6 + (Minecraft.getInstance().font.lineHeight + 2) * 3, 0xFFFFFF);
     }
 
