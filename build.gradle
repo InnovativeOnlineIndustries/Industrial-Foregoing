@@ -150,7 +150,7 @@ repositories {
 }
 
 dependencies {
-    minecraft 'net.minecraftforge:forge:1.18.2-40.1.0'
+    minecraft 'net.minecraftforge:forge:1.18.2-40.1.18'
 
     // Hacky
     //implementation('cpw.mods:securejarhandler') { version { strictly '0.9.45' } }
@@ -161,8 +161,8 @@ dependencies {
         implementation fg.deobf (project.dependencies.create('com.hrznstudio:titanium:1.18.2-3.5.5-37'))
     }
 
-    compileOnly fg.deobf("mezz.jei:jei-1.18.2:9.5.3.143:api")
-    runtimeOnly fg.deobf("mezz.jei:jei-1.18.2:9.5.3.143")
+    compileOnly fg.deobf("mezz.jei:jei-1.18.2:9.7.0.180:api")
+    runtimeOnly fg.deobf("mezz.jei:jei-1.18.2:9.7.0.180")
 
     compileOnly fg.deobf("top.theillusivec4.curios:curios-forge:${curios_mc_version}-${curios_version}:api")
     runtimeOnly fg.deobf("top.theillusivec4.curios:curios-forge:${curios_mc_version}-${curios_version}")

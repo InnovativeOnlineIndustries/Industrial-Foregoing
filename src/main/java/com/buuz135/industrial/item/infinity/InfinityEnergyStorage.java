@@ -111,14 +111,12 @@ public class InfinityEnergyStorage<T extends IComponentHarness> extends EnergySt
         return nbt;
     }
 
-
     @Override
     public void deserializeNBT(Tag nbt) {
-        if (!(nbt instanceof IntTag intNbt))
-            throw new IllegalArgumentException("Can not deserialize to an instance that isn't the default implementation");
-        this.energy = intNbt.getAsInt();
+        if (nbt instanceof CompoundTag compoundTag){
+            this.energy = compoundTag.getLong("energy");
+        }
     }
-
 
     @Nonnull
     @Override
