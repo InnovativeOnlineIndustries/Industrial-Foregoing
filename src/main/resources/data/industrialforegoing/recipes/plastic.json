@@ -1,9 +1,0 @@
-{
-  "type": "minecraft:smelting",
-  "ingredient": {
-    "item": "industrialforegoing:dryrubber"
-  },
-  "result": "industrialforegoing:plastic",
-  "experience": 0.3,
-  "cookingtime": 200
-}

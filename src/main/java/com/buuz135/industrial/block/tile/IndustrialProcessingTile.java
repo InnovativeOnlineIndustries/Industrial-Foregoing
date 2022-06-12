@@ -19,6 +19,7 @@
  * FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE,
  * ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
+
 package com.buuz135.industrial.block.tile;
 
 import com.buuz135.industrial.item.addon.ProcessingAddonItem;
@@ -94,7 +95,9 @@ public abstract class IndustrialProcessingTile<T extends IndustrialProcessingTil
                 setOnFinishWork(() -> {
                     int operations = (int) (this.hasAugmentInstalled(ProcessingAddonItem.PROCESSING) ? AugmentWrapper.getType(this.getInstalledAugments(ProcessingAddonItem.PROCESSING).get(0), ProcessingAddonItem.PROCESSING) : 1);
                     for (int i = 0; i < operations; i++) {
-                        onFinish().run();
+                        if (canIncrease()){
+                            onFinish().run();
+                        }
                     }
                     this.getRedstoneManager().finish();
                 })

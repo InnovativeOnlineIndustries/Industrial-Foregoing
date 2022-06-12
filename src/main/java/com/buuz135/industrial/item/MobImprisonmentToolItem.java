@@ -92,7 +92,7 @@ public class MobImprisonmentToolItem extends IFCustomItem {
     public boolean release(Player player, BlockPos pos, Direction facing, Level worldIn, ItemStack stack) {
         if (player.getCommandSenderWorld().isClientSide) return false;
         if (!containsEntity(stack)) return false;
-        Entity entity = getEntityFromStack(stack, worldIn, true);
+        Entity entity = getEntityFromStack(stack, worldIn, true, false);
         BlockPos blockPos = pos.relative(facing);
         entity.absMoveTo(blockPos.getX() + 0.5, blockPos.getY(), blockPos.getZ() + 0.5, 0, 0);
         stack.setTag(new CompoundTag());
@@ -125,12 +125,16 @@ public class MobImprisonmentToolItem extends IFCustomItem {
     }
 
     @Nullable
-    public Entity getEntityFromStack(ItemStack stack, Level world, boolean withInfo) {
+    public Entity getEntityFromStack(ItemStack stack, Level world, boolean withInfo, boolean applyDuplicatorFilter) {
         if (stack.hasTag()) {
             EntityType type = EntityType.byString(stack.getTag().getString("entity")).orElse(null);
-            if (type != null) {
+            if (type != null && !(applyDuplicatorFilter && TagUtil.hasTag(ForgeRegistries.ENTITIES, IndustrialTags.EntityTypes.MOB_DUPLICATOR_BLACKLIST, type))) {
                 Entity entity = type.create(world);
-                if (withInfo) entity.load(stack.getTag());
+                if (withInfo) {
+                    entity.load(stack.getTag());
+                } else if (!type.canSummon()) {
+                    return null;
+                }
                 return entity;
             }
         }
