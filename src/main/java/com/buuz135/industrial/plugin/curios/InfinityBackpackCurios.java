@@ -49,7 +49,7 @@ public class InfinityBackpackCurios implements ICurio, ICurioRenderer {
 
     @Override
     public ItemStack getStack() {
-        return null;
+        return new ItemStack(ModuleTool.INFINITY_BACKPACK.get());
     }
 
     @Override

@@ -95,7 +95,7 @@ public class ModuleTool implements IModule {
         INFINITY_NUKE  = registryHelper.registerGeneric(Item.class, "infinity_nuke", () -> new ItemInfinityNuke(TAB_TOOL));
         INFINITY_NUKE_ENTITY_TYPE = registryHelper.registerEntityType("infinity_nuke", () -> EntityType.Builder.<InfinityNukeEntity>of(InfinityNukeEntity::new, MobCategory.MISC).sized(0.5F, 1.5F)
                 .setShouldReceiveVelocityUpdates(true)
-                .setCustomClientFactory((spawnEntity, world) -> new InfinityNukeEntity((EntityType<? extends InfinityNukeEntity>) INFINITY_NUKE_ENTITY_TYPE.get(), world)).fireImmune().clientTrackingRange(8).updateInterval(20).noSummon().build("infinity_nuke"));
+                .setCustomClientFactory((spawnEntity, world) -> new InfinityNukeEntity((EntityType<? extends InfinityNukeEntity>) INFINITY_NUKE_ENTITY_TYPE.get(), world)).fireImmune().clientTrackingRange(8).updateInterval(20).build("infinity_nuke"));
         NUKE_CHARGING = registryHelper.registerGeneric(SoundEvent.class, "nuke_charging", () -> new SoundEvent(new ResourceLocation(Reference.MOD_ID, "nuke_charging")));
         TAB_TOOL.addIconStack(() -> new ItemStack(INFINITY_DRILL.orElse(Items.STONE)));
         ItemStackHarnessRegistry.register(INFINITY_SAW, stack -> new ItemStackHarness(stack, null, (IButtonHandler) stack.getItem(), CapabilityEnergy.ENERGY, CapabilityFluidHandler.FLUID_HANDLER_ITEM_CAPABILITY, CapabilityItemStackHolder.ITEMSTACK_HOLDER_CAPABILITY));

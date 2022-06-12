@@ -92,4 +92,7 @@ public class TickeableSound extends AbstractSoundInstance implements TickableSou
         this.pitch = pitch;
     }
 
+    public void setDistance(int distance) {
+        this.distance = distance;
+    }
 }

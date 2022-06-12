@@ -175,7 +175,7 @@ public class BlackHoleUnitBlock extends IndustrialBlock<BlackHoleUnitTile> {
         return ModuleTransportStorage.BLACK_HOLE_UNIT_PITY.getRight().get();
     }
     
-    public class BlackHoleUnitItem extends BlockItem{
+    public static class BlackHoleUnitItem extends BlockItem{
 
         private Rarity rarity;
 
@@ -197,7 +197,7 @@ public class BlackHoleUnitBlock extends IndustrialBlock<BlackHoleUnitTile> {
         }
     }
 
-    public class BlackHoleUnitCapabilityProvider implements ICapabilityProvider {
+    public static class BlackHoleUnitCapabilityProvider implements ICapabilityProvider {
 
         private final ItemStack stack;
         private LazyOptional<BLHBlockItemHandlerItemStack> optional;

@@ -104,10 +104,6 @@ public class BlackHoleTankBlock extends IndustrialBlock<BlackHoleTankTile> {
         tooltip.add(new TextComponent(ChatFormatting.GOLD + LangUtil.getString("text.industrialforegoing.tooltip.can_hold") + ": " + ChatFormatting.WHITE+ new DecimalFormat().format(BlockUtils.getFluidAmountByRarity(rarity)) + ChatFormatting.DARK_AQUA + LangUtil.getString("text.industrialforegoing.tooltip.mb")));
     }
 
-    @Override
-    public Supplier<Item> getItemBlockFactory() {
-        return () -> (BlockItem) new BlackHoleTankItem(this, new Item.Properties().tab(this.getItemGroup()), rarity);
-    }
 
     @Override
     public RotationType getRotationType() {
@@ -166,7 +162,7 @@ public class BlackHoleTankBlock extends IndustrialBlock<BlackHoleTankTile> {
         return ModuleTransportStorage.BLACK_HOLE_TANK_PITY.getRight().get();
     }
 
-    public class BlackHoleTankItem extends BlockItem{
+    public static class BlackHoleTankItem extends BlockItem{
 
         private Rarity rarity;
 
@@ -188,7 +184,7 @@ public class BlackHoleTankBlock extends IndustrialBlock<BlackHoleTankTile> {
         }
     }
 
-    public class BlackHoleTankCapabilityProvider implements ICapabilityProvider {
+    public static class BlackHoleTankCapabilityProvider implements ICapabilityProvider {
 
         private final ItemStack stack;
         private LazyOptional<FluidHandlerItemStack> iFluidHandlerItemLazyOptional;

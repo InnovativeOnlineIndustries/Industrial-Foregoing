@@ -102,7 +102,7 @@ public class InfinityNukeEntity extends Entity {
         }
         if (exploding) {
             if (level instanceof ServerLevel && explosionHelper == null) {
-                explosionHelper = new ProcessExplosion(this.blockPosition(), ItemInfinityNuke.getRadius(original), (ServerLevel) this.level, 39, placedBy != null ? placedBy.getDisplayName().getString() : "");
+                explosionHelper = new ProcessExplosion(this.blockPosition(), getRadius(), (ServerLevel) this.level, 39, placedBy != null ? placedBy.getDisplayName().getString() : "");
                 ExplosionTickHandler.processExplosionList.add(explosionHelper);
             }
             setTicksExploding(this.getTicksExploding() + 1);
@@ -126,12 +126,13 @@ public class InfinityNukeEntity extends Entity {
     @OnlyIn(Dist.CLIENT)
     private void tickClient() {
         if (chargingSound == null && this.getEntityData().get(EXPLODING)) {
-            Minecraft.getInstance().getSoundManager().play(chargingSound = new TickeableSound(this.level, this.blockPosition(), ModuleTool.NUKE_CHARGING.get(), this.getEntityData().get(RADIUS), 10));
+            Minecraft.getInstance().getSoundManager().play(chargingSound = new TickeableSound(this.level, this.blockPosition(), ModuleTool.NUKE_CHARGING.get(), getRadius(), 10));
         }
         if (chargingSound != null) {
+            chargingSound.setDistance(getRadius());
             chargingSound.increase();
             if (!Minecraft.getInstance().getSoundManager().isActive(chargingSound) && explodingSound == null) {
-                explodingSound = new TickeableSound(this.level, this.blockPosition(), ClientProxy.NUKE_EXPLOSION, this.getEntityData().get(RADIUS), 10);
+                explodingSound = new TickeableSound(this.level, this.blockPosition(), ClientProxy.NUKE_EXPLOSION, getRadius(), 10);
                 explodingSound.setPitch(1);
                 Minecraft.getInstance().getSoundManager().play(explodingSound);
             }
@@ -158,6 +159,7 @@ public class InfinityNukeEntity extends Entity {
         compound.putBoolean("Exploding", this.isExploding());
         compound.putBoolean("Armed", this.isArmed());
         compound.putInt("TicksExploding", this.getTicksExploding());
+        compound.putInt("Radius", this.getRadius());
     }
 
     @Override
@@ -166,6 +168,7 @@ public class InfinityNukeEntity extends Entity {
         this.setExploding(compound.getBoolean("Exploding"));
         this.setOriginal(ItemStack.of(compound.getCompound("Original")));
         this.setTicksExploding(compound.getInt("TicksExploding"));
+        this.setRadius(compound.getInt("Radius"));
     }
 
     @Override
@@ -241,6 +244,14 @@ public class InfinityNukeEntity extends Entity {
     public void setArmed(boolean armed) {
         this.armed = armed;
         this.getEntityData().set(ARMED, armed);
+    }
+
+    public int getRadius() {
+        return this.getEntityData().get(RADIUS);
+    }
+    public void setRadius(int radius) {
+        this.radius = radius;
+        this.getEntityData().set(RADIUS, radius);
     }
 
     public boolean isDataArmed() {
