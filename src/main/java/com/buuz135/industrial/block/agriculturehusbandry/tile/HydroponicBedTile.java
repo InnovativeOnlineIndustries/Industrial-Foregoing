@@ -1,30 +1,10 @@
-/*
- * This file is part of Industrial Foregoing.
- *
- * Copyright 2021, Buuz135
- *
- * Permission is hereby granted, free of charge, to any person obtaining a copy of
- * this software and associated documentation files (the "Software"), to deal in the
- * Software without restriction, including without limitation the rights to use, copy,
- * modify, merge, publish, distribute, sublicense, and/or sell copies of the Software,
- * and to permit persons to whom the Software is furnished to do so, subject to the
- * following conditions:
- *
- * The above copyright notice and this permission notice shall be included in all copies
- * or substantial portions of the Software.
- *
- * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED,
- * INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR
- * PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE
- * FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE,
- * ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
- */
 package com.buuz135.industrial.block.agriculturehusbandry.tile;
 
 import com.buuz135.industrial.api.plant.PlantRecollectable;
 import com.buuz135.industrial.block.tile.IndustrialAreaWorkingTile;
 import com.buuz135.industrial.block.tile.IndustrialWorkingTile;
 import com.buuz135.industrial.config.machine.agriculturehusbandry.AnimalRancherConfig;
+import com.buuz135.industrial.config.machine.resourceproduction.HydroponicBedConfig;
 import com.buuz135.industrial.module.ModuleAgricultureHusbandry;
 import com.buuz135.industrial.module.ModuleCore;
 import com.buuz135.industrial.registry.IFRegistries;
@@ -70,7 +50,7 @@ public class HydroponicBedTile extends IndustrialWorkingTile<HydroponicBedTile> 
     private SidedInventoryComponent<HydroponicBedTile> output;
 
     public HydroponicBedTile(BlockPos blockPos, BlockState blockState) {
-        super(ModuleAgricultureHusbandry.HYDROPONIC_BED, 500, blockPos, blockState);
+        super(ModuleAgricultureHusbandry.HYDROPONIC_BED, HydroponicBedConfig.powerPerOperation, blockPos, blockState);
         addTank(this.water = (SidedFluidTankComponent<HydroponicBedTile>) new SidedFluidTankComponent<HydroponicBedTile>("water", 1000 ,43, 20, 0)
                 .setColor(DyeColor.BLUE)
                 .setTankType(FluidTankComponent.Type.SMALL)
@@ -119,10 +99,10 @@ public class HydroponicBedTile extends IndustrialWorkingTile<HydroponicBedTile> 
                             }
                         }
                         this.water.drainForced(10, IFluidHandler.FluidAction.EXECUTE);
-                        return new WorkAction(1, 1000);
+                        return new WorkAction(1, HydroponicBedConfig.powerPerOperation);
                     } else if (this.etherBuffer.getProgress() > 0){
                         tryToHarvestAndReplant(this.level, up, state, this.output, this.etherBuffer, this);
-                        return new WorkAction(1, 1000);
+                        return new WorkAction(1, HydroponicBedConfig.powerPerOperation);
                     }
                 } else {
                     if (!tryToHarvestAndReplant(this.level, up, state, this.output, this.etherBuffer, this)){
@@ -138,7 +118,7 @@ public class HydroponicBedTile extends IndustrialWorkingTile<HydroponicBedTile> 
                         }
                         this.water.drainForced(10, IFluidHandler.FluidAction.EXECUTE);
                     }
-                    return new WorkAction(1, 1000);
+                    return new WorkAction(1, HydroponicBedConfig.powerPerOperation);
                 }
             }
         }
@@ -215,6 +195,11 @@ public class HydroponicBedTile extends IndustrialWorkingTile<HydroponicBedTile> 
         return false;
     }
 
+    @Override
+    public int getMaxProgress() {
+        return HydroponicBedConfig.maxProgress;
+    }
+
     @Nonnull
     @Override
     public HydroponicBedTile getSelf() {
@@ -223,6 +208,6 @@ public class HydroponicBedTile extends IndustrialWorkingTile<HydroponicBedTile> 
 
     @Override
     protected EnergyStorageComponent<HydroponicBedTile> createEnergyStorage() {
-        return new EnergyStorageComponent<>(AnimalRancherConfig.maxStoredPower, 10, 20);
+        return new EnergyStorageComponent<>(HydroponicBedConfig.maxStoredPower, 10, 20);
     }
 }

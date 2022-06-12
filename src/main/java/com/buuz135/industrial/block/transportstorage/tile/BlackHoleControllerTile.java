@@ -19,6 +19,7 @@
  * FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE,
  * ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
+
 package com.buuz135.industrial.block.transportstorage.tile;
 
 import com.buuz135.industrial.block.transportstorage.BlackHoleTankBlock;
@@ -96,6 +97,10 @@ public class BlackHoleControllerTile extends ActiveTile<BlackHoleControllerTile>
         }
         openGui(playerIn);
         return InteractionResult.SUCCESS;
+    }
+
+    public InventoryComponent<BlackHoleControllerTile> getUnitsStorage() {
+        return units_storage;
     }
 
     private class BlackHoleControllerInventory implements IItemHandler{

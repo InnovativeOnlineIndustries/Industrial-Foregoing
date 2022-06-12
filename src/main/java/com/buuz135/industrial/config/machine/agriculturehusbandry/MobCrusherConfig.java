@@ -19,6 +19,7 @@
  * FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE,
  * ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
+
 package com.buuz135.industrial.config.machine.agriculturehusbandry;
 
 import com.buuz135.industrial.config.MachineAgricultureHusbandryConfig;
@@ -39,5 +40,8 @@ public class MobCrusherConfig {
 
     @ConfigVal(comment = "Max Essence [mb] - Default: [32000 mb]")
     public static int tankSize = 32000;
+
+    @ConfigVal(comment = "Attack Damage for blacklisted entities - Default: [75]")
+    public static int attackDamage = 75;
 
 }

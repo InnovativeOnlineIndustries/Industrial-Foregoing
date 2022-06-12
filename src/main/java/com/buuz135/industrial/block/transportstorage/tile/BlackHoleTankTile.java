@@ -19,6 +19,7 @@
  * FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE,
  * ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
+
 package com.buuz135.industrial.block.transportstorage.tile;
 
 import com.buuz135.industrial.capability.tile.BigSidedFluidTankComponent;
@@ -104,6 +105,7 @@ public class BlackHoleTankTile extends BHTile<BlackHoleTankTile> {
 
     @Override
     public String getFormatedDisplayAmount() {
+        if (tank.getFluidAmount() < 1000) return tank.getFluidAmount() + " mb";
         return NumberUtils.getFormatedBigNumber(tank.getFluidAmount() / 1000) + " b";
     }
 

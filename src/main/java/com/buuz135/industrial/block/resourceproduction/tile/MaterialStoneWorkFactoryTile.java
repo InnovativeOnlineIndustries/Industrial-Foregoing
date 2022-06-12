@@ -19,6 +19,7 @@
  * FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE,
  * ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
+
 package com.buuz135.industrial.block.resourceproduction.tile;
 
 import com.buuz135.industrial.block.tile.IndustrialProcessingTile;
@@ -162,7 +163,11 @@ public class MaterialStoneWorkFactoryTile extends IndustrialProcessingTile<Mater
                 });
             }
         }.setPredicate((playerEntity, compoundNBT) -> {
-            getNextRecipe();
+            int button = 0;
+            if (compoundNBT.contains("Button")){
+                button = compoundNBT.getInt("Button");
+            }
+            getNextRecipe(button == 0);
             markForUpdate();
         }));
         addInventory(inventoryGenerator = (SidedInventoryComponent<MaterialStoneWorkFactoryTile>) new SidedInventoryComponent<MaterialStoneWorkFactoryTile>("inventoryGenerator", 74, 23, 2, 2)
@@ -321,11 +326,19 @@ public class MaterialStoneWorkFactoryTile extends IndustrialProcessingTile<Mater
         return recipes.stream().filter(stoneWorkGenerateRecipe -> stoneWorkGenerateRecipe.getId().equals(DEFAULT)).findFirst();
     }
 
-    public ResourceLocation getNextRecipe(){
+    public ResourceLocation getNextRecipe(boolean next){
         if (generatorRecipe != null){
             List<ResourceLocation> rls = RecipeUtil.getRecipes(this.level, StoneWorkGenerateRecipe.SERIALIZER.getRecipeType()).stream().map(StoneWorkGenerateRecipe::getId).collect(Collectors.toList());
             int currentIndex = rls.indexOf(new ResourceLocation(generatorRecipe));
-            this.generatorRecipe = rls.get((currentIndex + 1) % rls.size()).toString();
+            if (next){
+                this.generatorRecipe = rls.get((currentIndex + 1) % rls.size()).toString();
+            } else {
+                --currentIndex;
+                if (currentIndex < 0){
+                    currentIndex = rls.size() - 1;
+                }
+                this.generatorRecipe = rls.get(currentIndex).toString();
+            }
         }
         return DEFAULT;
     }

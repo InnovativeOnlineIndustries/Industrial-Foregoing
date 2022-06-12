@@ -87,8 +87,9 @@ public class FluidSievingMachineTile extends IndustrialProcessingTile<FluidSievi
                 .setOutputFilter((stack, integer) -> false)
                 .setRange(2,2)
         );
-        addInventory(this.output = new SidedInventoryComponent<FluidSievingMachineTile>("output", 140, 40, 1, 2)
+        addInventory(this.output = (SidedInventoryComponent<FluidSievingMachineTile>) new SidedInventoryComponent<FluidSievingMachineTile>("output", 140, 40, 1, 2)
                 .setColor(DyeColor.ORANGE)
+                .setInputFilter((stack, integer) -> false)
         );
     }
 

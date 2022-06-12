@@ -43,6 +43,7 @@ import com.hrznstudio.titanium.component.fluid.SidedFluidTankComponent;
 import com.hrznstudio.titanium.component.inventory.SidedInventoryComponent;
 import com.hrznstudio.titanium.item.AugmentWrapper;
 import com.hrznstudio.titanium.util.LangUtil;
+import com.hrznstudio.titanium.util.TagUtil;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerLevel;
@@ -76,6 +77,7 @@ import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.capability.IFluidHandler;
 import net.minecraftforge.fml.util.ObfuscationReflectionHelper;
 import net.minecraftforge.items.ItemHandlerHelper;
+import net.minecraftforge.registries.ForgeRegistries;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
@@ -141,57 +143,72 @@ public class MobCrusherTile extends IndustrialAreaWorkingTile<MobCrusherTile> {
             if (mobs.size() > 0) {
                 Mob entity = mobs.get(0);
                 FakePlayer player = IndustrialForegoing.getFakePlayer(this.level);
-                int experience = 0;
-                try {
-                    experience = (int) GET_EXPERIENCE_POINTS.invoke(entity, player);
-                } catch (IllegalAccessException | InvocationTargetException e) {
-                    e.printStackTrace();
+                if (ForgeRegistries.ENTITIES.tags().getTag(IndustrialTags.EntityTypes.MOB_CRUSHER_INSTANT_KILL_BLACKLIST).contains(entity.getType())){
+                    return damage(entity, player);
+                } else {
+                    return instantKill(entity, player);
                 }
-                int looting = 0;
-                if (!dropXP) {
-                    looting = this.level.random.nextInt(4);
-                    ItemStack sword = new ItemStack(Items.DIAMOND_SWORD);
-                    EnchantmentHelper.setEnchantments(Collections.singletonMap(Enchantments.MOB_LOOTING, looting), sword);
-                    player.setItemInHand(InteractionHand.MAIN_HAND, sword);
-                }
-                //Loot from table
-                DamageSource source = DamageSource.playerAttack(player);
-                LootTable table = this.level.getServer().getLootTables().get(entity.getLootTable());
-                LootContext.Builder context = new LootContext.Builder((ServerLevel) this.level)
-                        .withRandom(this.level.random)
-                        .withParameter(LootContextParams.THIS_ENTITY, entity)
-                        .withParameter(LootContextParams.DAMAGE_SOURCE, source)
-                        .withParameter(LootContextParams.ORIGIN, new Vec3(this.worldPosition.getX(), this.worldPosition.getY(), this.worldPosition.getZ()))
-                        .withParameter(LootContextParams.KILLER_ENTITY, player)
-                        .withParameter(LootContextParams.LAST_DAMAGE_PLAYER, player)
-                        .withOptionalParameter(LootContextParams.DIRECT_KILLER_ENTITY, player);
-                table.getRandomItems(context.create(LootContextParamSets.ENTITY)).forEach(stack -> ItemHandlerHelper.insertItem(this.output, stack, false));
-                List<ItemEntity> extra = new ArrayList<>();
-                //Drop special items
-                try {
-                    if (entity.captureDrops() == null) entity.captureDrops(new ArrayList<>());
-                    DROP_SPECIAL_ITEMS.invoke(entity, source, looting, true);
-                    if (entity.captureDrops() != null) {
-                        extra.addAll(entity.captureDrops());
-                    }
-                } catch (IllegalAccessException | InvocationTargetException e) {
-                    e.printStackTrace();
-                }
-                ForgeHooks.onLivingDrops(entity, source, extra, looting, true);
-                extra.forEach(itemEntity -> {
-                    ItemHandlerHelper.insertItem(this.output, itemEntity.getItem(), false);
-                    itemEntity.remove(Entity.RemovalReason.KILLED);
-                });
-                if (dropXP)
-                    this.tank.fillForced(new FluidStack(ModuleCore.ESSENCE.getSourceFluid().get(), experience * 20), IFluidHandler.FluidAction.EXECUTE);
-                entity.setHealth(0);
-                entity.remove(Entity.RemovalReason.KILLED);
-                player.setItemInHand(InteractionHand.MAIN_HAND, ItemStack.EMPTY);
-                return new WorkAction(0.1f, MobCrusherConfig.powerPerOperation);
             }
         }
         return new WorkAction(1, 0);
     }
+
+    private WorkAction instantKill(Mob entity, FakePlayer player){
+        int experience = 0;
+        try {
+            experience = (int) GET_EXPERIENCE_POINTS.invoke(entity, player);
+        } catch (IllegalAccessException | InvocationTargetException e) {
+            e.printStackTrace();
+        }
+        int looting = 0;
+        if (!dropXP) {
+            looting = this.level.random.nextInt(4);
+            ItemStack sword = new ItemStack(Items.DIAMOND_SWORD);
+            EnchantmentHelper.setEnchantments(Collections.singletonMap(Enchantments.MOB_LOOTING, looting), sword);
+            player.setItemInHand(InteractionHand.MAIN_HAND, sword);
+        }
+        //Loot from table
+        DamageSource source = DamageSource.playerAttack(player);
+        LootTable table = this.level.getServer().getLootTables().get(entity.getLootTable());
+        LootContext.Builder context = new LootContext.Builder((ServerLevel) this.level)
+                .withRandom(this.level.random)
+                .withParameter(LootContextParams.THIS_ENTITY, entity)
+                .withParameter(LootContextParams.DAMAGE_SOURCE, source)
+                .withParameter(LootContextParams.ORIGIN, new Vec3(this.worldPosition.getX(), this.worldPosition.getY(), this.worldPosition.getZ()))
+                .withParameter(LootContextParams.KILLER_ENTITY, player)
+                .withParameter(LootContextParams.LAST_DAMAGE_PLAYER, player)
+                .withOptionalParameter(LootContextParams.DIRECT_KILLER_ENTITY, player);
+        table.getRandomItems(context.create(LootContextParamSets.ENTITY)).forEach(stack -> ItemHandlerHelper.insertItem(this.output, stack, false));
+        List<ItemEntity> extra = new ArrayList<>();
+        //Drop special items
+        try {
+            if (entity.captureDrops() == null) entity.captureDrops(new ArrayList<>());
+            DROP_SPECIAL_ITEMS.invoke(entity, source, looting, true);
+            if (entity.captureDrops() != null) {
+                extra.addAll(entity.captureDrops());
+            }
+        } catch (IllegalAccessException | InvocationTargetException e) {
+            e.printStackTrace();
+        }
+        ForgeHooks.onLivingDrops(entity, source, extra, looting, true);
+        extra.forEach(itemEntity -> {
+            ItemHandlerHelper.insertItem(this.output, itemEntity.getItem(), false);
+            itemEntity.remove(Entity.RemovalReason.KILLED);
+        });
+        if (dropXP)
+            this.tank.fillForced(new FluidStack(ModuleCore.ESSENCE.getSourceFluid().get(), experience * 20), IFluidHandler.FluidAction.EXECUTE);
+        entity.setHealth(0);
+        entity.remove(Entity.RemovalReason.KILLED);
+        player.setItemInHand(InteractionHand.MAIN_HAND, ItemStack.EMPTY);
+        return new WorkAction(0.1f, MobCrusherConfig.powerPerOperation);
+    }
+
+    private WorkAction damage(Mob entity, FakePlayer player){
+        entity.hurt((DamageSource.playerAttack(player)).setMagic(), MobCrusherConfig.attackDamage);
+        return new WorkAction(0.1f, MobCrusherConfig.powerPerOperation);
+    }
+
+
 
     public VoxelShape getWorkingArea() {
         return new RangeManager(this.worldPosition, this.getFacingDirection(), RangeManager.RangeType.BEHIND){

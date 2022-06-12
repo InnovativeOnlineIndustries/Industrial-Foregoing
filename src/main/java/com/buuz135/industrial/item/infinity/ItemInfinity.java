@@ -76,6 +76,7 @@ import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.common.capabilities.ICapabilityProvider;
 import net.minecraftforge.fluids.FluidStack;
+import net.minecraftforge.fml.DistExecutor;
 import net.minecraftforge.network.NetworkDirection;
 import net.minecraftforge.network.NetworkHooks;
 import org.apache.commons.lang3.tuple.Pair;
@@ -201,7 +202,7 @@ public class ItemInfinity extends IFCustomItem implements MenuProvider, IButtonH
 
     @Override
     public int getBarWidth(ItemStack stack) {
-        if (!Screen.hasShiftDown()) { //hasShiftDown
+        if (!DistExecutor.safeRunForDist(() ->  Screen::hasShiftDown, () -> Boolean.FALSE::booleanValue)) { //hasShiftDown
             int fuel = getFuelFromStack(stack);
             return (int) Math.round(fuel* 13D / 1_000_000D);
         } else {
@@ -212,7 +213,7 @@ public class ItemInfinity extends IFCustomItem implements MenuProvider, IButtonH
 
     @Override
     public int getBarColor(ItemStack p_150901_) {
-        return !Screen.hasShiftDown() ? 0xcb00ff /*Purple*/ : 0x00d0ff;
+        return !DistExecutor.safeRunForDist(() -> Screen::hasShiftDown, () -> Boolean.FALSE::booleanValue) ? 0xcb00ff /*Purple*/ : 0x00d0ff /*Cyan*/;
     }
 
     @Override
