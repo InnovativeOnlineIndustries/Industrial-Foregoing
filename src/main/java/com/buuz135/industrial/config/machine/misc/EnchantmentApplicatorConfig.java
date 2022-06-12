@@ -40,4 +40,7 @@ public class EnchantmentApplicatorConfig {
     @ConfigVal(comment = "Max Essence [mb] - Default: [64000 mb]")
     public static int tankSize = 64000;
 
+    @ConfigVal(comment = "Ignore max level for enchanting")
+    public static boolean ignoreEnchantMaxLevels = true;
+
 }
