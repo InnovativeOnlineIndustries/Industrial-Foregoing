@@ -44,7 +44,7 @@ public class MeatFeedCurios implements ICurio, ICurioRenderer {
 
     @Override
     public ItemStack getStack() {
-        return  new ItemStack(ModuleTool.INFINITY_BACKPACK.get());
+        return  new ItemStack(ModuleTool.MEAT_FEEDER.get());
     }
 
     @Override
