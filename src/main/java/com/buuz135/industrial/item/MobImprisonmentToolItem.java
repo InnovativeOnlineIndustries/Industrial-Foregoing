@@ -128,7 +128,7 @@ public class MobImprisonmentToolItem extends IFCustomItem {
     public Entity getEntityFromStack(ItemStack stack, Level world, boolean withInfo, boolean applyDuplicatorFilter) {
         if (stack.hasTag()) {
             EntityType type = EntityType.byString(stack.getTag().getString("entity")).orElse(null);
-            if (type != null && !(applyDuplicatorFilter && TagUtil.hasTag(ForgeRegistries.ENTITIES, IndustrialTags.EntityTypes.MOB_DUPLICATOR_BLACKLIST, type))) {
+            if (type != null && !(applyDuplicatorFilter && ForgeRegistries.ENTITIES.tags().getTag(IndustrialTags.EntityTypes.MOB_DUPLICATOR_BLACKLIST).contains(type))) {
                 Entity entity = type.create(world);
                 if (withInfo) {
                     entity.load(stack.getTag());

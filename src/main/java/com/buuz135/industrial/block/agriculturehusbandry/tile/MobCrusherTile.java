@@ -143,7 +143,7 @@ public class MobCrusherTile extends IndustrialAreaWorkingTile<MobCrusherTile> {
             if (mobs.size() > 0) {
                 Mob entity = mobs.get(0);
                 FakePlayer player = IndustrialForegoing.getFakePlayer(this.level);
-                if (TagUtil.hasTag(ForgeRegistries.ENTITIES, IndustrialTags.EntityTypes.MOB_CRUSHER_INSTANT_KILL_BLACKLIST, entity.getType())){
+                if (ForgeRegistries.ENTITIES.tags().getTag(IndustrialTags.EntityTypes.MOB_CRUSHER_INSTANT_KILL_BLACKLIST).contains(entity.getType())){
                     return damage(entity, player);
                 } else {
                     return instantKill(entity, player);
