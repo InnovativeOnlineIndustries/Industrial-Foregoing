@@ -71,12 +71,12 @@ public class ProcessExplosion {
      * Set this to false to disable the laval dropped by the explosion.
      */
     public boolean lava = true;
-    public HashSet<Integer> blocksToUpdate = new HashSet<>();
-    public LinkedList<HashSet<Integer>> destroyedBlocks = new LinkedList<>();
-    public HashSet<Integer> lavaPositions = new HashSet<>();
-    public HashSet<Integer> destroyedCache = new HashSet<>();
-    public HashSet<Integer> scannedCache = new HashSet<>();
-    public ShortPos shortPos;
+    public HashSet<Long> blocksToUpdate = new HashSet<>();
+    public LinkedList<HashSet<Long>> destroyedBlocks = new LinkedList<>();
+    public HashSet<Long> lavaPositions = new HashSet<>();
+    public HashSet<Long> destroyedCache = new HashSet<>();
+    public HashSet<Long> scannedCache = new HashSet<>();
+
     public Consumer<Double> progressMon = null;
     protected boolean calculationComplete = false;
     protected boolean detonated = false;
@@ -98,7 +98,6 @@ public class ProcessExplosion {
      */
     public ProcessExplosion(BlockPos origin, int radius, ServerLevel world, int minimumDelayTime, String owner) {
         this.origin = new Vector3f(origin.getX(), origin.getY(), origin.getZ());
-        this.shortPos = new ShortPos(origin);
         this.world = world;
         this.server = world.getServer();
         this.minimumDelay = minimumDelayTime;
@@ -268,7 +267,7 @@ public class ProcessExplosion {
 
         dist--;
         travel++;
-        Integer iPos = shortPos.getIntPos(posVec);
+        long iPos = new BlockPos(posVec.x(), posVec.y(), posVec.z()).asLong();
 
         if (scannedCache.contains(iPos) || destroyedCache.contains(iPos)) {
             posVec.set(posVec.x(), posVec.y() + traceDir, posVec.z());
@@ -366,7 +365,7 @@ public class ProcessExplosion {
                 }
             }
         }).start();
-        ExplosionHelper removalHelper = new ExplosionHelper(world, new BlockPos(origin.x(), origin.y(), origin.z()), shortPos);
+        ExplosionHelper removalHelper = new ExplosionHelper(world, new BlockPos(origin.x(), origin.y(), origin.z()));
         int i = 0;
 
         removalHelper.setBlocksForRemoval(destroyedBlocks);
@@ -374,8 +373,8 @@ public class ProcessExplosion {
         //LogHelper.stopTimer();
         //LogHelper.startTimer("Adding Lava");
 
-        for (Integer posI : lavaPositions) {
-            world.setBlockAndUpdate(shortPos.getActualPos(posI), lavaState);
+        for (long posI : lavaPositions) {
+            world.setBlockAndUpdate(BlockPos.of(posI), lavaState);
         }
 
         //LogHelper.stopTimer();

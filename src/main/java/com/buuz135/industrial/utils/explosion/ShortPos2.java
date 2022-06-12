@@ -27,11 +27,11 @@ import com.mojang.math.Vector3f;
 /**
  * Class copied and adapted from Draconic Evolution https://github.com/brandon3055/BrandonsCore/blob/master/src/main/java/com/brandon3055/brandonscore/lib/ShortPos.java
  */
-public class ShortPos {
+public class ShortPos2 {
 
     private BlockPos relativeTo;
 
-    public ShortPos(BlockPos relativeTo) {
+    public ShortPos2(BlockPos relativeTo) {
         this.relativeTo = relativeTo;
     }
 
@@ -52,7 +52,7 @@ public class ShortPos {
     public static int getIntPos(BlockPos position, BlockPos relativeTo) {
         if (position.getY() > 255) {
             position = new BlockPos(position.getX(), 255, position.getY());
-        } else if (position.getY() < 0) {
+        } else if (position.getY() < -64) {
             position = new BlockPos(position.getX(), 0, position.getY());
         }
         int xp = (position.getX() - relativeTo.getX()) + 2048;
@@ -65,7 +65,7 @@ public class ShortPos {
     public static int getIntPos(Vector3f position, BlockPos relativeTo) {
         if (position.y() > 255) {
             position.setY(255);
-        } else if (position.y() < 0) {
+        } else if (position.y() < -64) {
             position.setY(0);
         }
         int xp = ((int) position.x() - relativeTo.getX()) + 2048;
