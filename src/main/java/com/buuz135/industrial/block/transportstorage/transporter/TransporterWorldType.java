@@ -103,6 +103,7 @@ public class TransporterWorldType extends FilteredTransporterType<ItemStack, IIt
             IBlockContainer container = getContainer();
             if (getAction() == TransporterTypeFactory.TransporterAction.EXTRACT && container instanceof TransporterTile) {
                 TileUtil.getTileEntity(getWorld(), getPos().relative(this.getSide())).ifPresent(tileEntity -> tileEntity.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, getSide().getOpposite()).ifPresent(origin -> {
+                    if (origin.getSlots() <= 0) return;
                     if (origin.getStackInSlot(extractSlot).isEmpty() || !filter(this.getFilter(), this.isWhitelist(), origin.getStackInSlot(extractSlot), origin, false))
                         findSlot(origin);
                     if (!origin.getStackInSlot(extractSlot).isEmpty() && filter(this.getFilter(), this.isWhitelist(), origin.getStackInSlot(extractSlot), origin, false)) {
