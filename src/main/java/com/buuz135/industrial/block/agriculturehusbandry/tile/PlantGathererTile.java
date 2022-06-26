@@ -108,13 +108,14 @@ public class PlantGathererTile extends IndustrialAreaWorkingTile<PlantGathererTi
                 if (isLoaded(pointed) && !ItemStackUtils.isInventoryFull(output)) {
                     if (this.etherBar.getProgress() > 0){
                         if (HydroponicBedTile.tryToHarvestAndReplant(this.level, pointed, this.level.getBlockState(pointed), this.output, this.etherBar, this)){
+                            tank.fillForced(new FluidStack(ModuleCore.SLUDGE.getSourceFluid().get(), 10), IFluidHandler.FluidAction.EXECUTE);
                             return new WorkAction(0.3f, powerPerOperation);
                         }
                     }else {
                         Optional<PlantRecollectable> optional = IFRegistries.PLANT_RECOLLECTABLES_REGISTRY.get().getValues().stream().filter(plantRecollectable -> plantRecollectable.canBeHarvested(this.level, pointed, this.level.getBlockState(pointed))).findFirst();
                         if (optional.isPresent()) {
                             List<ItemStack> drops = optional.get().doHarvestOperation(this.level, pointed, this.level.getBlockState(pointed));
-                            tank.fill(new FluidStack(ModuleCore.SLUDGE.getSourceFluid().get(), 10 * drops.size()), IFluidHandler.FluidAction.EXECUTE);
+                            tank.fillForced(new FluidStack(ModuleCore.SLUDGE.getSourceFluid().get(), 10 * drops.size()), IFluidHandler.FluidAction.EXECUTE);
                             drops.forEach(stack -> ItemHandlerHelper.insertItem(output, stack, false));
                             if (optional.get().shouldCheckNextPlant(this.level, pointed, this.level.getBlockState(pointed))) {
                                 increasePointer();
