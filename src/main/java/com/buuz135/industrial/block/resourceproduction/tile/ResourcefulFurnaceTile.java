@@ -81,6 +81,14 @@ public class ResourcefulFurnaceTile extends IndustrialProcessingTile<Resourceful
     }
 
     @Override
+    public void onLoad() {
+        super.onLoad();
+        checkForRecipe(0);
+        checkForRecipe(1);
+        checkForRecipe(2);
+    }
+
+    @Override
     public void setChanged() {
         super.setChanged();
         checkForRecipe(0);

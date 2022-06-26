@@ -58,7 +58,7 @@ public class MeatFeederItem extends IFCustomItem {
     @Nullable
     @Override
     public ICapabilityProvider initCapabilities(ItemStack stack, @Nullable CompoundTag nbt) {
-        FluidHandlerItemStack handlerItemStack = new FluidHandlerItemStack(stack, 128000) {
+        FluidHandlerItemStack handlerItemStack = new FluidHandlerItemStack(stack, 512000) {
             @Override
             public boolean canFillFluidType(FluidStack fluid) {
                 return fluid.getFluid().isSame(ModuleCore.MEAT.getSourceFluid().get());
@@ -77,7 +77,7 @@ public class MeatFeederItem extends IFCustomItem {
     public void addTooltipDetails(@Nullable Key key, ItemStack stack, List<Component> tooltip, boolean advanced) {
         super.addTooltipDetails(key, stack, tooltip, advanced);
         if (stack.getTag() != null && key == null) {
-            tooltip.add(new TextComponent(NumberFormat.getNumberInstance(Locale.ROOT).format(stack.getTag().getCompound("Fluid").getInt("Amount")) + ChatFormatting.GOLD + "/" + ChatFormatting.WHITE + NumberFormat.getNumberInstance(Locale.ROOT).format(128000) + ChatFormatting.GOLD + "mb of Meat"));
+            tooltip.add(new TextComponent(NumberFormat.getNumberInstance(Locale.ROOT).format(stack.getTag().getCompound("Fluid").getInt("Amount")) + ChatFormatting.GOLD + "/" + ChatFormatting.WHITE + NumberFormat.getNumberInstance(Locale.ROOT).format(512000) + ChatFormatting.GOLD + "mb of Meat"));
         }
     }
 
@@ -97,7 +97,7 @@ public class MeatFeederItem extends IFCustomItem {
         if (!worldIn.isClientSide && entityIn instanceof Player) {
             Player player = (Player) entityIn;
             if (player.getFoodData().needsFood() || player.getFoodData().getSaturationLevel() < 10) {
-                if (stack.getItem().equals(ModuleTool.MEAT_FEEDER)) {
+                if (stack.getItem().equals(ModuleTool.MEAT_FEEDER.get())) {
                         meatTick(stack, player);
                 }
             }

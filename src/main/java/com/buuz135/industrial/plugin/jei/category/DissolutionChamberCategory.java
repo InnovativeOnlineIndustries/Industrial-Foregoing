@@ -120,7 +120,7 @@ public class DissolutionChamberCategory implements IRecipeCategory<DissolutionCh
             builder.addSlot(RecipeIngredientRole.OUTPUT, 119, 16).addIngredient(VanillaTypes.ITEM, stack);
         }
         if (recipe.outputFluid != null && !recipe.outputFluid.isEmpty()){
-            builder.addSlot(RecipeIngredientRole.OUTPUT, 139 + 3, 14 + 3).setFluidRenderer(1000, false, 12, 50).setOverlay(bigTank, 0, 0).addIngredient(VanillaTypes.FLUID, recipe.inputFluid);
+            builder.addSlot(RecipeIngredientRole.OUTPUT, 139 + 3, 14 + 3).setFluidRenderer(1000, false, 12, 50).setOverlay(bigTank, 0, 0).addIngredient(VanillaTypes.FLUID, recipe.outputFluid);
         }
     }
 
