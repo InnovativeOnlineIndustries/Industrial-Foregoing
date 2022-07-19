@@ -81,7 +81,7 @@ public class BLHBlockItemHandlerItemStack implements IItemHandler {
             ItemStack out = blStack.copy();
             int newAmount = stored;
             if (!simulate) {
-                //setStack(ItemStack.EMPTY);
+                setStack(ItemStack.EMPTY);
                 setAmount(0);
             }
             out.setCount(newAmount);
