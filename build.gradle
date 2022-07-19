@@ -147,8 +147,8 @@ repositories {
 
 dependencies {
     minecraft 'net.minecraftforge:forge:1.16.5-36.2.8'
-    compileOnly fg.deobf ('com.hrznstudio:titanium:1.16.5-3.2.8.2')
-    runtimeOnly fg.deobf ('com.hrznstudio:titanium:1.16.5-3.2.8.2')
+    compileOnly fg.deobf ('curse.maven:titanium-287342:3346366')
+    runtimeOnly fg.deobf ('curse.maven:titanium-287342:3346366')
     //if (findProject(':workspace') == null) {
     compileOnly fg.deobf("mezz.jei:jei-1.16.5:7.7.1.121:api")
     // at runtime, use the full JEI jar

@@ -135,7 +135,7 @@ public class BlackHoleControllerTile extends ActiveTile<BlackHoleControllerTile>
             ItemStack bl = units_storage.getStackInSlot(slot);
             if (!bl.isEmpty() && bl.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY).isPresent()){
                 IItemHandler handler = bl.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY).orElse(null);
-                return handler.extractItem(0, amount, simulate);
+                return handler.extractItem(0, amount, false);
             }
             return ItemStack.EMPTY;
         }
