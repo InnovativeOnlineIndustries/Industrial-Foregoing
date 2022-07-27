@@ -48,6 +48,8 @@ import net.minecraftforge.items.ItemStackHandler;
 import net.ndrei.teslacorelib.inventory.BoundingRectangle;
 import net.ndrei.teslacorelib.inventory.FluidTankType;
 
+import com.infinityraider.agricraft.api.v1.misc.IAgriHarvestable;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -86,7 +88,18 @@ public class PlantInteractorTile extends WorkingAreaElectricMachine {
                 BlockPos tempPos = new BlockPos(pointerPos.getX(), pointerPos.getY() + i, pointerPos.getZ());
                 if (!BlockUtils.canBlockBeBroken(this.world, tempPos)) continue;
                 IBlockState tempState = this.world.getBlockState(tempPos);
-                if (tempState.getBlock() instanceof IPlantable || tempState.getBlock() instanceof IGrowable) {
+                TileEntity te = world.getTileEntity(tempPos);
+                if (te instanceof IAgriHarvestable) {
+                    WORKING_TILES.add(this);
+                    ((IAgriHarvestable)te).onHarvest(stack -> {
+                        if (!stack.isEmpty()) {
+                            ItemHandlerHelper.insertItem(outItems, stack, false);
+                            sludge.fill(new FluidStack(FluidsRegistry.SLUDGE, 10 * stack.getCount()), true);
+                            hasWorked = true;
+                        }
+                    }, null);
+                    WORKING_TILES.remove(this);
+                } else if (tempState.getBlock() instanceof IPlantable || tempState.getBlock() instanceof IGrowable) {
                     FakePlayer player = IndustrialForegoing.getFakePlayer(this.world, tempPos.up());
                     player.inventory.clear();
                     WORKING_TILES.add(this);
