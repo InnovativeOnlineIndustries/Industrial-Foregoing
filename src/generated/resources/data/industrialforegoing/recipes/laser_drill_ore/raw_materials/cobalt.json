@@ -5,7 +5,7 @@
       "conditions": [
         {
           "value": {
-            "tag": "forge:ores/raw_materials/cobalt",
+            "tag": "forge:raw_materials/cobalt",
             "type": "forge:tag_empty"
           },
           "type": "forge:not"
@@ -13,7 +13,7 @@
       ],
       "recipe": {
         "output": {
-          "tag": "forge:ores/raw_materials/cobalt"
+          "tag": "forge:raw_materials/cobalt"
         },
         "rarity": [
           {
