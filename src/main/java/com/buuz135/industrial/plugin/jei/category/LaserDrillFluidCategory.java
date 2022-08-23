@@ -36,16 +36,12 @@ import com.hrznstudio.titanium.util.AssetUtil;
 import com.mojang.blaze3d.platform.InputConstants;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
-import mezz.jei.api.constants.VanillaTypes;
-import mezz.jei.api.gui.IRecipeLayout;
+import mezz.jei.api.forge.ForgeTypes;
 import mezz.jei.api.gui.builder.IRecipeLayoutBuilder;
 import mezz.jei.api.gui.drawable.IDrawable;
 import mezz.jei.api.gui.drawable.IDrawableStatic;
-import mezz.jei.api.gui.ingredient.IGuiFluidStackGroup;
-import mezz.jei.api.gui.ingredient.IGuiItemStackGroup;
 import mezz.jei.api.gui.ingredient.IRecipeSlotsView;
 import mezz.jei.api.helpers.IGuiHelper;
-import mezz.jei.api.ingredients.IIngredients;
 import mezz.jei.api.recipe.IFocusGroup;
 import mezz.jei.api.recipe.RecipeIngredientRole;
 import mezz.jei.api.recipe.RecipeType;
@@ -106,7 +102,7 @@ public class LaserDrillFluidCategory implements IRecipeCategory<LaserDrillFluidR
     @Override
     public void setRecipe(IRecipeLayoutBuilder builder, LaserDrillFluidRecipe recipe, IFocusGroup focuses) {
         builder.addSlot(RecipeIngredientRole.INPUT, 36, 5).addIngredients(recipe.catalyst);
-        builder.addSlot(RecipeIngredientRole.OUTPUT, 60 + 35 + 6, 6).setFluidRenderer(200, false, 12, 13).setOverlay(smallTank, 0, 0).addIngredient(VanillaTypes.FLUID, FluidStack.loadFluidStackFromNBT(recipe.output));
+        builder.addSlot(RecipeIngredientRole.OUTPUT, 60 + 35 + 6, 6).setFluidRenderer(200, false, 12, 13).setOverlay(smallTank, 0, 0).addIngredient(ForgeTypes.FLUID_STACK, FluidStack.loadFluidStackFromNBT(recipe.output));
 
     }
 

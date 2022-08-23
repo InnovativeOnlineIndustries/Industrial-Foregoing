@@ -29,21 +29,16 @@ import javax.annotation.Nullable;
 
 import com.buuz135.industrial.plugin.jei.IndustrialRecipeTypes;
 import com.buuz135.industrial.utils.Reference;
-import mezz.jei.api.constants.VanillaTypes;
-import mezz.jei.api.gui.IRecipeLayout;
+import mezz.jei.api.forge.ForgeTypes;
 import mezz.jei.api.gui.builder.IRecipeLayoutBuilder;
 import mezz.jei.api.gui.drawable.IDrawable;
-import mezz.jei.api.gui.ingredient.IGuiFluidStackGroup;
-import mezz.jei.api.gui.ingredient.IGuiItemStackGroup;
 import mezz.jei.api.helpers.IGuiHelper;
-import mezz.jei.api.ingredients.IIngredients;
 import mezz.jei.api.recipe.IFocusGroup;
 import mezz.jei.api.recipe.RecipeIngredientRole;
 import mezz.jei.api.recipe.RecipeType;
 import mezz.jei.api.recipe.category.IRecipeCategory;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.crafting.Ingredient;
-import net.minecraft.world.level.material.Fluids;
 import net.minecraftforge.fluids.FluidStack;
 
 import net.minecraft.network.chat.Component;
@@ -101,7 +96,7 @@ public class BioReactorRecipeCategory implements IRecipeCategory<BioReactorRecip
     @Override
     public void setRecipe(IRecipeLayoutBuilder builder, ReactorRecipeWrapper recipe, IFocusGroup focuses) {
         builder.addSlot(RecipeIngredientRole.INPUT, 1, 17).addIngredients(Ingredient.of(recipe.stack));
-        builder.addSlot(RecipeIngredientRole.OUTPUT, 57, 1).setFluidRenderer(1000, false, 12, 48).setOverlay(tankOverlay, 0, 0).addIngredient(VanillaTypes.FLUID, recipe.getFluid());
+        builder.addSlot(RecipeIngredientRole.OUTPUT, 57, 1).setFluidRenderer(1000, false, 12, 48).setOverlay(tankOverlay, 0, 0).addIngredient(ForgeTypes.FLUID_STACK, recipe.getFluid());
     }
 
     public static class ReactorRecipeWrapper {

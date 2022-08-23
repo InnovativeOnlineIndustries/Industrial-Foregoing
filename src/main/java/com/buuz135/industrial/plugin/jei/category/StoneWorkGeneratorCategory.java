@@ -27,18 +27,15 @@ import java.util.List;
 
 import com.buuz135.industrial.plugin.jei.IndustrialRecipeTypes;
 import com.buuz135.industrial.recipe.StoneWorkGenerateRecipe;
-import com.buuz135.industrial.utils.Reference;
 import com.hrznstudio.titanium.client.screen.addon.SlotsScreenAddon;
 import com.hrznstudio.titanium.client.screen.asset.DefaultAssetProvider;
 import com.hrznstudio.titanium.util.LangUtil;
 import com.mojang.blaze3d.vertex.PoseStack;
 import mezz.jei.api.constants.VanillaTypes;
-import mezz.jei.api.gui.IRecipeLayout;
 import mezz.jei.api.gui.builder.IRecipeLayoutBuilder;
 import mezz.jei.api.gui.drawable.IDrawable;
 import mezz.jei.api.gui.ingredient.IRecipeSlotsView;
 import mezz.jei.api.helpers.IGuiHelper;
-import mezz.jei.api.ingredients.IIngredients;
 import mezz.jei.api.recipe.IFocusGroup;
 import mezz.jei.api.recipe.RecipeIngredientRole;
 import mezz.jei.api.recipe.RecipeType;
@@ -94,7 +91,7 @@ public class StoneWorkGeneratorCategory implements IRecipeCategory<StoneWorkGene
 
     @Override
     public void setRecipe(IRecipeLayoutBuilder builder, StoneWorkGenerateRecipe recipe, IFocusGroup focuses) {
-        builder.addSlot(RecipeIngredientRole.OUTPUT, 9, 19).addIngredient(VanillaTypes.ITEM, recipe.output);
+        builder.addSlot(RecipeIngredientRole.OUTPUT, 9, 19).addIngredient(VanillaTypes.ITEM_STACK, recipe.output);
     }
 
     @Override

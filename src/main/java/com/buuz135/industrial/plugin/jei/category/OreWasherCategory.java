@@ -32,21 +32,16 @@ import com.buuz135.industrial.utils.Reference;
 import com.hrznstudio.titanium.client.screen.addon.SlotsScreenAddon;
 import com.hrznstudio.titanium.client.screen.asset.DefaultAssetProvider;
 import com.mojang.blaze3d.vertex.PoseStack;
-import mezz.jei.api.constants.VanillaTypes;
-import mezz.jei.api.gui.IRecipeLayout;
+import mezz.jei.api.forge.ForgeTypes;
 import mezz.jei.api.gui.builder.IRecipeLayoutBuilder;
 import mezz.jei.api.gui.drawable.IDrawable;
-import mezz.jei.api.gui.ingredient.IGuiFluidStackGroup;
-import mezz.jei.api.gui.ingredient.IGuiItemStackGroup;
 import mezz.jei.api.gui.ingredient.IRecipeSlotsView;
 import mezz.jei.api.helpers.IGuiHelper;
-import mezz.jei.api.ingredients.IIngredients;
 import mezz.jei.api.recipe.IFocusGroup;
 import mezz.jei.api.recipe.RecipeIngredientRole;
 import mezz.jei.api.recipe.RecipeType;
 import mezz.jei.api.recipe.category.IRecipeCategory;
 import net.minecraft.world.item.crafting.Ingredient;
-import net.minecraftforge.registries.ForgeRegistries;
 import org.apache.commons.lang3.tuple.Pair;
 
 import net.minecraft.client.Minecraft;
@@ -95,34 +90,13 @@ public class OreWasherCategory implements IRecipeCategory<OreFluidEntryRaw> {
     public IDrawable getIcon() {
         return null;
     }
-/*
-    @Override
-    public void setIngredients(OreFluidEntryRaw oreWasherWrapper, IIngredients iIngredients) {
-        iIngredients.setInputs(VanillaTypes.ITEM, ForgeRegistries.ITEMS.tags().getTag(oreWasherWrapper.getOre()).stream().map(ItemStack::new).collect(Collectors.toList()));
-        iIngredients.setInput(VanillaTypes.FLUID, oreWasherWrapper.getInput());
-        iIngredients.setOutput(VanillaTypes.FLUID, oreWasherWrapper.getOutput());
-    }
-
-    @Override
-    public void setRecipe(IRecipeLayout recipeLayout, OreFluidEntryRaw recipeWrapper, IIngredients ingredients) {
-        IGuiItemStackGroup guiItemStackGroup = recipeLayout.getItemStacks();
-        guiItemStackGroup.init(0, true, 0, 15);
-
-        IGuiFluidStackGroup guiFluidStackGroup = recipeLayout.getFluidStacks();
-        guiFluidStackGroup.init(1, true, 47, 1, 12, 48, 200, false, tankOverlay);
-        guiFluidStackGroup.init(2, false, 99, 1, 12, 48, 200, false, tankOverlay);
-
-        guiItemStackGroup.set(0, ForgeRegistries.ITEMS.tags().getTag(recipeWrapper.getOre()).stream().map(ItemStack::new).collect(Collectors.toList()));
-        guiFluidStackGroup.set(1, ingredients.getInputs(VanillaTypes.FLUID).get(0));
-        guiFluidStackGroup.set(2, ingredients.getOutputs(VanillaTypes.FLUID).get(0));
-    }*/
 
     @Override
     public void setRecipe(IRecipeLayoutBuilder builder, OreFluidEntryRaw recipe, IFocusGroup focuses) {
         builder.addSlot(RecipeIngredientRole.INPUT, 1, 16).addIngredients(Ingredient.of(recipe.getOre()));
-        builder.addSlot(RecipeIngredientRole.INPUT, 47, 1).setFluidRenderer(1000, false, 12, 48).setOverlay(tankOverlay, 0, 0).addIngredient(VanillaTypes.FLUID, recipe.getInput());
+        builder.addSlot(RecipeIngredientRole.INPUT, 47, 1).setFluidRenderer(1000, false, 12, 48).setOverlay(tankOverlay, 0, 0).addIngredient(ForgeTypes.FLUID_STACK, recipe.getInput());
 
-        builder.addSlot(RecipeIngredientRole.OUTPUT, 99, 1).setFluidRenderer(1000, false, 12, 48).setOverlay(tankOverlay, 0, 0).addIngredient(VanillaTypes.FLUID, recipe.getOutput());
+        builder.addSlot(RecipeIngredientRole.OUTPUT, 99, 1).setFluidRenderer(1000, false, 12, 48).setOverlay(tankOverlay, 0, 0).addIngredient(ForgeTypes.FLUID_STACK, recipe.getOutput());
     }
 
     @Override

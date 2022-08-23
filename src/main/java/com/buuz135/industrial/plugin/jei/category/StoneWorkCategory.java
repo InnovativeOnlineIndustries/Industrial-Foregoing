@@ -27,20 +27,16 @@ import com.buuz135.industrial.block.resourceproduction.tile.MaterialStoneWorkFac
 import com.buuz135.industrial.module.ModuleResourceProduction;
 import com.buuz135.industrial.plugin.jei.IndustrialRecipeTypes;
 import com.buuz135.industrial.utils.Reference;
-import com.mojang.blaze3d.vertex.PoseStack;
 import mezz.jei.api.constants.VanillaTypes;
-import mezz.jei.api.gui.IRecipeLayout;
 import mezz.jei.api.gui.builder.IRecipeLayoutBuilder;
 import mezz.jei.api.gui.drawable.IDrawable;
 import mezz.jei.api.helpers.IGuiHelper;
-import mezz.jei.api.ingredients.IIngredients;
 import mezz.jei.api.recipe.IFocusGroup;
 import mezz.jei.api.recipe.RecipeIngredientRole;
 import mezz.jei.api.recipe.RecipeType;
 import mezz.jei.api.recipe.category.IRecipeCategory;
 
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.TextComponent;
 import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
@@ -85,10 +81,10 @@ public class StoneWorkCategory implements IRecipeCategory<StoneWorkCategory.Wrap
 
     @Override
     public void setRecipe(IRecipeLayoutBuilder builder, Wrapper recipe, IFocusGroup focuses) {
-        builder.addSlot(RecipeIngredientRole.INPUT, 1, 5).addIngredient(VanillaTypes.ITEM, recipe.getInput());
-        builder.addSlot(RecipeIngredientRole.OUTPUT, 139, 5).addIngredient(VanillaTypes.ITEM, recipe.getOutput());
+        builder.addSlot(RecipeIngredientRole.INPUT, 1, 5).addIngredient(VanillaTypes.ITEM_STACK, recipe.getInput());
+        builder.addSlot(RecipeIngredientRole.OUTPUT, 139, 5).addIngredient(VanillaTypes.ITEM_STACK, recipe.getOutput());
         for (int i = 0; i < recipe.getModes().size(); i++) {
-            builder.addSlot(RecipeIngredientRole.CATALYST,  29 + i * 24, 5).addIngredient(VanillaTypes.ITEM, recipe.getModes().get(i).getIcon());
+            builder.addSlot(RecipeIngredientRole.CATALYST,  29 + i * 24, 5).addIngredient(VanillaTypes.ITEM_STACK, recipe.getModes().get(i).getIcon());
         }
     }
 

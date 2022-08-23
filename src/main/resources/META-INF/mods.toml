@@ -38,3 +38,9 @@ mandatory = true #mandatory
 versionRange = "[37.0.1,)" #mandatory
 ordering = "NONE"
 side = "BOTH"
+[[dependencies.industrialforegoing]] #optional
+modId = "jei" #mandatory
+mandatory = false #mandatory
+versionRange = "[9.7.0,)" #mandatory
+ordering = "NONE"
+side = "BOTH"
