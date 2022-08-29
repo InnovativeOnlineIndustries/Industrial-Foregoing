@@ -148,4 +148,9 @@ public class MechanicalDirtTile extends IndustrialWorkingTile<MechanicalDirtTile
     public MechanicalDirtTile getSelf() {
         return this;
     }
+
+    @Override
+    public int getMaxProgress() {
+        return MechanicalDirtConfig.maxProgress;
+    }
 }

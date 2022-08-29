@@ -27,14 +27,11 @@ import com.buuz135.industrial.module.ModuleResourceProduction;
 import com.buuz135.industrial.plugin.jei.IndustrialRecipeTypes;
 import com.buuz135.industrial.utils.Reference;
 import com.mojang.blaze3d.vertex.PoseStack;
-import mezz.jei.api.constants.VanillaTypes;
-import mezz.jei.api.gui.IRecipeLayout;
+import mezz.jei.api.forge.ForgeTypes;
 import mezz.jei.api.gui.builder.IRecipeLayoutBuilder;
 import mezz.jei.api.gui.drawable.IDrawable;
-import mezz.jei.api.gui.ingredient.IGuiFluidStackGroup;
 import mezz.jei.api.gui.ingredient.IRecipeSlotsView;
 import mezz.jei.api.helpers.IGuiHelper;
-import mezz.jei.api.ingredients.IIngredients;
 import mezz.jei.api.recipe.IFocusGroup;
 import mezz.jei.api.recipe.RecipeIngredientRole;
 import mezz.jei.api.recipe.RecipeType;
@@ -85,27 +82,11 @@ public class FermentationStationCategory implements IRecipeCategory<OreFluidEntr
     public IDrawable getIcon() {
         return null;
     }
-/*
-    @Override
-    public void setIngredients(OreFluidEntryFermenter oreWasherWrapper, IIngredients iIngredients) {
-        iIngredients.setInput(VanillaTypes.FLUID, oreWasherWrapper.getInput());
-        iIngredients.setOutput(VanillaTypes.FLUID, oreWasherWrapper.getOutput());
-    }
-
-    @Override
-    public void setRecipe(IRecipeLayout recipeLayout, OreFluidEntryFermenter recipeWrapper, IIngredients ingredients) {
-        IGuiFluidStackGroup guiFluidStackGroup = recipeLayout.getFluidStacks();
-        guiFluidStackGroup.init(1, true, 47 - 45, 1, 12, 48, 200, false, tankOverlay);
-        guiFluidStackGroup.init(2, false, 99- 45, 1, 12, 48, 200, false, tankOverlay);
-
-        guiFluidStackGroup.set(1, ingredients.getInputs(VanillaTypes.FLUID).get(0));
-        guiFluidStackGroup.set(2, ingredients.getOutputs(VanillaTypes.FLUID).get(0));
-    }*/
 
     @Override
     public void setRecipe(IRecipeLayoutBuilder builder, OreFluidEntryFermenter recipe, IFocusGroup focuses) {
-        builder.addSlot(RecipeIngredientRole.INPUT, 47 - 45, 1).setFluidRenderer(200, false, 12, 48).setOverlay(tankOverlay, 0, 0).addIngredient(VanillaTypes.FLUID, recipe.getInput());
-        builder.addSlot(RecipeIngredientRole.OUTPUT, 99- 45, 1).setFluidRenderer(200, false, 12, 48).setOverlay(tankOverlay, 0, 0).addIngredient(VanillaTypes.FLUID, recipe.getOutput());
+        builder.addSlot(RecipeIngredientRole.INPUT, 47 - 45, 1).setFluidRenderer(200, false, 12, 48).setOverlay(tankOverlay, 0, 0).addIngredient(ForgeTypes.FLUID_STACK, recipe.getInput());
+        builder.addSlot(RecipeIngredientRole.OUTPUT, 99- 45, 1).setFluidRenderer(200, false, 12, 48).setOverlay(tankOverlay, 0, 0).addIngredient(ForgeTypes.FLUID_STACK, recipe.getOutput());
     }
 
     @Override

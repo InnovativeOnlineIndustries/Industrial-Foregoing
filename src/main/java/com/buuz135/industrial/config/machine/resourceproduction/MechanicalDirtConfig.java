@@ -38,4 +38,7 @@ public class MechanicalDirtConfig {
     @ConfigVal(comment = "Max Amount of Stored Fluid [Meat] - Default: [8000mB]")
     public static int maxMeatTankSize = 4000;
 
+    @ConfigVal(comment = "Cooldown Time in Ticks [20 Ticks per Second] - Default: [100 (5s)]")
+    public static int maxProgress = 100;
+
 }

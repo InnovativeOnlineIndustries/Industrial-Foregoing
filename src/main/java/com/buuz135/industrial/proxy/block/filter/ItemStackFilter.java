@@ -53,7 +53,7 @@ public class ItemStackFilter extends AbstractFilter<Entity> {
         for (GhostSlot stack : this.getFilter()) {
             if (entity instanceof ItemEntity && stack.getStack().sameItem(((ItemEntity) entity).getItem()))
                 return true;
-            if (entity instanceof LivingEntity && stack.getStack().getItem().equals(ModuleTool.MOB_IMPRISONMENT_TOOL) && ((MobImprisonmentToolItem)ModuleTool.MOB_IMPRISONMENT_TOOL.get()).containsEntity(stack.getStack())
+            if (entity instanceof LivingEntity && stack.getStack().getItem().getRegistryName().equals(ModuleTool.MOB_IMPRISONMENT_TOOL.get().getRegistryName()) && ((MobImprisonmentToolItem)ModuleTool.MOB_IMPRISONMENT_TOOL.get()).containsEntity(stack.getStack())
                     && entity.getType().getRegistryName().toString().equalsIgnoreCase(((MobImprisonmentToolItem)ModuleTool.MOB_IMPRISONMENT_TOOL.get()).getID(stack.getStack()))) {
                 return true;
             }

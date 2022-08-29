@@ -130,7 +130,7 @@ public class ItemInfinityBackpack extends ItemInfinity {
                                 for (int pos = 0; pos < handler.getSlots(); pos++) {
                                     ItemStack slotStack = handler.getSlotDefinition(pos).getStack().copy();
                                     slotStack.setCount(1);
-                                    if (!slotStack.isEmpty() && slotStack.getContainerItem().sameItem(picked) && ItemStack.tagMatches(slotStack, picked)) {
+                                    if (!slotStack.isEmpty() && slotStack.sameItem(picked) && ItemStack.tagMatches(slotStack, picked)) {
                                         ItemStack returned = handler.insertItem(pos, picked.copy(), false);
                                         picked.setCount(returned.getCount());
                                         entityItemPickupEvent.setResult(Event.Result.ALLOW);

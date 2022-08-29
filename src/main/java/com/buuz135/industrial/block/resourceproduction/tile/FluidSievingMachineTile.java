@@ -68,7 +68,6 @@ public class FluidSievingMachineTile extends IndustrialProcessingTile<FluidSievi
                     }
 
                     @Override
-                    @OnlyIn(Dist.CLIENT)
                     public List<IFactory<? extends IContainerAddon>> getContainerAddons() {
                         return Collections.emptyList();
                     }

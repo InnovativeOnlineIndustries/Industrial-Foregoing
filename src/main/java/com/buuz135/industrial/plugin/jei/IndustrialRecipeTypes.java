@@ -4,8 +4,8 @@ import com.buuz135.industrial.api.recipe.ore.OreFluidEntryFermenter;
 import com.buuz135.industrial.api.recipe.ore.OreFluidEntryRaw;
 import com.buuz135.industrial.api.recipe.ore.OreFluidEntrySieve;
 import com.buuz135.industrial.plugin.jei.category.BioReactorRecipeCategory;
-import com.buuz135.industrial.plugin.jei.category.OreWasherCategory;
 import com.buuz135.industrial.plugin.jei.category.StoneWorkCategory;
+import com.buuz135.industrial.plugin.jei.machineproduce.MachineProduceWrapper;
 import com.buuz135.industrial.recipe.*;
 import com.buuz135.industrial.utils.Reference;
 import mezz.jei.api.recipe.RecipeType;
@@ -31,4 +31,6 @@ public class IndustrialRecipeTypes {
     public static RecipeType<StoneWorkCategory.Wrapper> STONE_WORK = RecipeType.create(Reference.MOD_ID, "stone_work", StoneWorkCategory.Wrapper.class);
 
     public static RecipeType<StoneWorkGenerateRecipe> STONE_WORK_GENERATOR = RecipeType.create(Reference.MOD_ID, "stone_work_generator", StoneWorkGenerateRecipe.class);
+
+    public static RecipeType<MachineProduceWrapper> MACHINE_PRODUCE = RecipeType.create(Reference.MOD_ID, "machine_produce", MachineProduceWrapper.class);
 }

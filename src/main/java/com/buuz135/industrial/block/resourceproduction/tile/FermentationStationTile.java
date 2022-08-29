@@ -81,7 +81,6 @@ public class FermentationStationTile extends IndustrialProcessingTile<Fermentati
                     }
 
                     @Override
-                    @OnlyIn(Dist.CLIENT)
                     public List<IFactory<? extends IContainerAddon>> getContainerAddons() {
                         return Collections.emptyList();
                     }
@@ -97,7 +96,6 @@ public class FermentationStationTile extends IndustrialProcessingTile<Fermentati
                     }
 
                     @Override
-                    @OnlyIn(Dist.CLIENT)
                     public List<IFactory<? extends IContainerAddon>> getContainerAddons() {
                         return Collections.emptyList();
                     }

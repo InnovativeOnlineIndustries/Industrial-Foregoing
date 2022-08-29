@@ -67,7 +67,7 @@ public class BlockBreakerTile extends IndustrialAreaWorkingTile<BlockBreakerTile
             BlockPos pointed = getPointedBlockPos();
             if (isLoaded(pointed) && !level.isEmptyBlock(pointed) && BlockUtils.canBlockBeBroken(this.level, pointed)) {
                 FakePlayer fakePlayer = IndustrialForegoing.getFakePlayer(this.level, pointed);
-                fakePlayer.setItemInHand(InteractionHand.MAIN_HAND, new ItemStack(Items.DIAMOND_PICKAXE));
+                fakePlayer.setItemInHand(InteractionHand.MAIN_HAND, new ItemStack(Items.NETHERITE_PICKAXE));
                 if (this.level.getBlockState(pointed).getDestroySpeed(this.level, pointed) >= 0 && this.level.getBlockState(pointed).canHarvestBlock(this.level, pointed, fakePlayer)) {
                     for (ItemStack blockDrop : BlockUtils.getBlockDrops(this.level, pointed)) {
                         ItemStack result = ItemHandlerHelper.insertItem(output, blockDrop, false);
