@@ -30,14 +30,11 @@ import com.hrznstudio.titanium.client.screen.addon.SlotsScreenAddon;
 import com.hrznstudio.titanium.client.screen.asset.DefaultAssetProvider;
 import com.mojang.blaze3d.vertex.PoseStack;
 import mezz.jei.api.constants.VanillaTypes;
-import mezz.jei.api.gui.IRecipeLayout;
+import mezz.jei.api.forge.ForgeTypes;
 import mezz.jei.api.gui.builder.IRecipeLayoutBuilder;
 import mezz.jei.api.gui.drawable.IDrawable;
-import mezz.jei.api.gui.ingredient.IGuiFluidStackGroup;
-import mezz.jei.api.gui.ingredient.IGuiItemStackGroup;
 import mezz.jei.api.gui.ingredient.IRecipeSlotsView;
 import mezz.jei.api.helpers.IGuiHelper;
-import mezz.jei.api.ingredients.IIngredients;
 import mezz.jei.api.recipe.IFocusGroup;
 import mezz.jei.api.recipe.RecipeIngredientRole;
 import mezz.jei.api.recipe.RecipeType;
@@ -49,11 +46,9 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.DyeColor;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Ingredient;
-import net.minecraftforge.registries.ForgeRegistries;
 import org.apache.commons.lang3.tuple.Pair;
 
 import java.awt.*;
-import java.util.stream.Collectors;
 
 public class FluidSieveCategory implements IRecipeCategory<OreFluidEntrySieve> {
 
@@ -95,34 +90,12 @@ public class FluidSieveCategory implements IRecipeCategory<OreFluidEntrySieve> {
     public IDrawable getIcon() {
         return null;
     }
-/*
-    @Override
-    public void setIngredients(OreFluidEntrySieve oreWasherWrapper, IIngredients iIngredients) {
-        iIngredients.setInputs(VanillaTypes.ITEM,  ForgeRegistries.ITEMS.tags().getTag(oreWasherWrapper.getSieveItem()).stream().map(ItemStack::new).collect(Collectors.toList()));
-        iIngredients.setInput(VanillaTypes.FLUID, oreWasherWrapper.getInput());
-        iIngredients.setOutput(VanillaTypes.ITEM, oreWasherWrapper.getOutput());
-    }
-
-    @Override
-    public void setRecipe(IRecipeLayout recipeLayout, OreFluidEntrySieve recipeWrapper, IIngredients ingredients) {
-        IGuiItemStackGroup guiItemStackGroup = recipeLayout.getItemStacks();
-        guiItemStackGroup.init(0, true, 23, 35);
-        guiItemStackGroup.init(2, false, 49, 16);
-
-        IGuiFluidStackGroup guiFluidStackGroup = recipeLayout.getFluidStacks();
-        guiFluidStackGroup.init(1, true, 1, 1, 12, 48, 200, false, tankOverlay);
-
-        guiItemStackGroup.set(0,  ingredients.getInputs(VanillaTypes.ITEM).get(0));
-        guiFluidStackGroup.set(1, ingredients.getInputs(VanillaTypes.FLUID).get(0));
-        guiItemStackGroup.set(2, ingredients.getOutputs(VanillaTypes.ITEM).get(0));
-    }
-*/
 
     @Override
     public void setRecipe(IRecipeLayoutBuilder builder, OreFluidEntrySieve recipe, IFocusGroup focuses) {
         builder.addSlot(RecipeIngredientRole.INPUT, 24, 36).addIngredients(Ingredient.of(recipe.getSieveItem()));
-        builder.addSlot(RecipeIngredientRole.INPUT, 1, 1).setFluidRenderer(200, false, 12, 48).setOverlay(tankOverlay, 0, 0).addIngredient(VanillaTypes.FLUID, recipe.getInput());
-        builder.addSlot(RecipeIngredientRole.OUTPUT, 50, 17).addIngredient(VanillaTypes.ITEM, recipe.getOutput());
+        builder.addSlot(RecipeIngredientRole.INPUT, 1, 1).setFluidRenderer(200, false, 12, 48).setOverlay(tankOverlay, 0, 0).addIngredient(ForgeTypes.FLUID_STACK, recipe.getInput());
+        builder.addSlot(RecipeIngredientRole.OUTPUT, 50, 17).addIngredient(VanillaTypes.ITEM_STACK, recipe.getOutput());
     }
 
     @Override

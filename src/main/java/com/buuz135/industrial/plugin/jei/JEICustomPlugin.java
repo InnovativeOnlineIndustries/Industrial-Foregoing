@@ -46,7 +46,6 @@ import com.hrznstudio.titanium.util.TagUtil;
 import mezz.jei.api.IModPlugin;
 import mezz.jei.api.JeiPlugin;
 import mezz.jei.api.constants.RecipeTypes;
-import mezz.jei.api.constants.VanillaRecipeCategoryUid;
 import mezz.jei.api.gui.handlers.IGhostIngredientHandler;
 import mezz.jei.api.registration.*;
 import mezz.jei.api.runtime.IJeiRuntime;
@@ -68,7 +67,6 @@ import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.items.ItemHandlerHelper;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.RegistryObject;
-import net.minecraftforge.registries.tags.ITag;
 import org.apache.commons.lang3.tuple.Pair;
 
 import java.util.*;
@@ -110,7 +108,7 @@ public class JEICustomPlugin implements IModPlugin {
 
     @Override
     public void registerGuiHandlers(IGuiHandlerRegistration registration) {
-        registration.addGhostIngredientHandler(GuiConveyor.class, new IGhostIngredientHandler<GuiConveyor>() {
+        registration.addGhostIngredientHandler(GuiConveyor.class, new IGhostIngredientHandler<>() {
             @Override
             public <I> List<Target<I>> getTargets(GuiConveyor guiConveyor, I i, boolean b) {
                 if (i instanceof ItemStack) {
@@ -135,7 +133,7 @@ public class JEICustomPlugin implements IModPlugin {
 
             }
         });
-        registration.addGhostIngredientHandler(GuiTransporter.class, new IGhostIngredientHandler<GuiTransporter>() {
+        registration.addGhostIngredientHandler(GuiTransporter.class, new IGhostIngredientHandler<>() {
             @Override
             public <I> List<Target<I>> getTargets(GuiTransporter guiConveyor, I i, boolean b) {
                 if (i instanceof ItemStack) {
@@ -203,7 +201,7 @@ public class JEICustomPlugin implements IModPlugin {
         registration.addRecipes(IndustrialRecipeTypes.LASER_ORE, RecipeUtil.getRecipes(Minecraft.getInstance().level, LaserDrillOreRecipe.SERIALIZER.getRecipeType()).stream().filter(laserDrillOreRecipe -> !laserDrillOreRecipe.output.isEmpty()).collect(Collectors.toList()));
         registration.addRecipes(IndustrialRecipeTypes.LASER_FLUID, RecipeUtil.getRecipes(Minecraft.getInstance().level, LaserDrillFluidRecipe.SERIALIZER.getRecipeType()));
         for (int i = 0; i < IMycelialGeneratorType.TYPES.size(); i++) {
-            registration.addRecipes(IMycelialGeneratorType.TYPES.get(i).getRecipes().stream().sorted(Comparator.comparingInt(value -> ((MycelialGeneratorRecipe)value).getTicks() * ((MycelialGeneratorRecipe)value).getPowerTick()).reversed()).collect(Collectors.toList()), mycelialGeneratorCategories.get(i).getUid());
+            registration.addRecipes(mycelialGeneratorCategories.get(i).getRecipeType(), IMycelialGeneratorType.TYPES.get(i).getRecipes().stream().sorted(Comparator.comparingInt(value -> ((MycelialGeneratorRecipe)value).getTicks() * ((MycelialGeneratorRecipe)value).getPowerTick()).reversed()).collect(Collectors.toList()));
         }
 
         List<StoneWorkCategory.Wrapper> perfectStoneWorkWrappers = new ArrayList<>();
@@ -230,7 +228,9 @@ public class JEICustomPlugin implements IModPlugin {
         }
         registration.addRecipes(IndustrialRecipeTypes.STONE_WORK, perfectStoneWorkWrappers);
 
-        registration.addRecipes(Arrays.asList(
+        registration.addRecipes(
+            machineProduceCategory.getRecipeType(),
+            Arrays.asList(
                 new MachineProduceWrapper(ModuleCore.LATEX_PROCESSING.getLeft().get(), new ItemStack(ModuleCore.TINY_DRY_RUBBER.get())),
                 new MachineProduceWrapper(ModuleResourceProduction.SLUDGE_REFINER.getLeft().get(), IndustrialTags.Items.SLUDGE_OUTPUT),
                 new MachineProduceWrapper(ModuleAgricultureHusbandry.SEWAGE_COMPOSTER.getLeft().get(), new ItemStack(ModuleCore.FERTILIZER.get())),
@@ -244,7 +244,8 @@ public class JEICustomPlugin implements IModPlugin {
                 new MachineProduceWrapper(ModuleAgricultureHusbandry.SEWER.getLeft().get(), new FluidStack(ModuleCore.SEWAGE.getSourceFluid().get(),  1000)),
                 new MachineProduceWrapper(ModuleAgricultureHusbandry.PLANT_GATHERER.getLeft().get(), new FluidStack(ModuleCore.SLUDGE.getSourceFluid().get(),  1000)),
                 new MachineProduceWrapper(ModuleResourceProduction.WATER_CONDENSATOR.getLeft().get(), new FluidStack(Fluids.WATER,  1000))
-        ), machineProduceCategory.getUid());
+            )
+        );
 
         registration.addRecipes(IndustrialRecipeTypes.STONE_WORK_GENERATOR, RecipeUtil.getRecipes(Minecraft.getInstance().level, StoneWorkGenerateRecipe.SERIALIZER.getRecipeType()));
 
@@ -314,11 +315,11 @@ public class JEICustomPlugin implements IModPlugin {
         for (Pair<RegistryObject<Block>, RegistryObject<BlockEntityType<?>>> mycelialGenerator : ModuleGenerator.MYCELIAL_GENERATORS) {
             for (MycelialGeneratorCategory mycelialGeneratorCategory : mycelialGeneratorCategories) {
                 if (((MycelialGeneratorBlock)mycelialGenerator.getLeft().get()).getType().equals(mycelialGeneratorCategory.getType())){
-                    registration.addRecipeCatalyst(new ItemStack(mycelialGenerator.getLeft().get()), mycelialGeneratorCategory.getUid());
+                    registration.addRecipeCatalyst(new ItemStack(mycelialGenerator.getLeft().get()), mycelialGeneratorCategory.getRecipeType());
                 }
             }
         }
-        registration.addRecipeCatalyst(new ItemStack(ModuleResourceProduction.MATERIAL_STONEWORK_FACTORY.getLeft().get()), stoneWorkCategory.getUid(), stoneWorkGeneratorCategory.getUid());
+        registration.addRecipeCatalyst(new ItemStack(ModuleResourceProduction.MATERIAL_STONEWORK_FACTORY.getLeft().get()), stoneWorkCategory.getRecipeType(), stoneWorkGeneratorCategory.getRecipeType());
         registration.addRecipeCatalyst(new ItemStack(ModuleResourceProduction.POTION_BREWER.getLeft().get()), RecipeTypes.BREWING);
         registration.addRecipeCatalyst(new ItemStack(ModuleMisc.ENCHANTMENT_APPLICATOR.getLeft().get()), RecipeTypes.ANVIL);
         registration.addRecipeCatalyst(new ItemStack(ModuleResourceProduction.RESOURCEFUL_FURNACE.getLeft().get()), RecipeTypes.SMELTING);

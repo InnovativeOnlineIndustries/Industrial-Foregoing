@@ -33,14 +33,11 @@ import com.buuz135.industrial.recipe.FluidExtractorRecipe;
 import com.buuz135.industrial.utils.Reference;
 import com.mojang.blaze3d.vertex.PoseStack;
 import mezz.jei.api.constants.VanillaTypes;
-import mezz.jei.api.gui.IRecipeLayout;
+import mezz.jei.api.forge.ForgeTypes;
 import mezz.jei.api.gui.builder.IRecipeLayoutBuilder;
 import mezz.jei.api.gui.drawable.IDrawable;
-import mezz.jei.api.gui.ingredient.IGuiFluidStackGroup;
-import mezz.jei.api.gui.ingredient.IGuiItemStackGroup;
 import mezz.jei.api.gui.ingredient.IRecipeSlotsView;
 import mezz.jei.api.helpers.IGuiHelper;
-import mezz.jei.api.ingredients.IIngredients;
 import mezz.jei.api.recipe.IFocusGroup;
 import mezz.jei.api.recipe.RecipeIngredientRole;
 import mezz.jei.api.recipe.RecipeType;
@@ -94,41 +91,14 @@ public class FluidExtractorCategory implements IRecipeCategory<FluidExtractorRec
         return null;
     }
 
-    /*
-    @Override
-    public void setIngredients(FluidExtractorRecipe fluidExtractorRecipe, IIngredients ingredients) {
-        ingredients.setInputs(VanillaTypes.ITEM, new ArrayList<>(fluidExtractorRecipe.input.getItems()));
-        ingredients.setOutput(VanillaTypes.FLUID, fluidExtractorRecipe.output);
-        if (!new ItemStack(fluidExtractorRecipe.result).isEmpty())
-            ingredients.setOutput(VanillaTypes.ITEM, new ItemStack(fluidExtractorRecipe.result));
-    }
-
-    @Override
-    public void setRecipe(IRecipeLayout recipeLayout, FluidExtractorRecipe fluidExtractorRecipe, IIngredients ingredients) {
-        IGuiItemStackGroup guiItemStackGroup = recipeLayout.getItemStacks();
-        guiItemStackGroup.init(0, true, 0, 16);
-        if (ingredients.getOutputs(VanillaTypes.ITEM).size() > 0) {
-            guiItemStackGroup.init(1, false, 27, 34);
-            guiItemStackGroup.setBackground(1, guiHelper.getSlotDrawable());
-            guiItemStackGroup.set(1, ingredients.getOutputs(VanillaTypes.ITEM).get(0));
-        }
-
-        IGuiFluidStackGroup guiFluidStackGroup = recipeLayout.getFluidStacks();
-        guiFluidStackGroup.init(1, false, 57, 1, 12, 48, Math.max(50, ingredients.getOutputs(VanillaTypes.FLUID).get(0).get(0).getAmount()), false, tankOverlay);
-
-        guiItemStackGroup.set(0, ingredients.getInputs(VanillaTypes.ITEM).get(0));
-        guiFluidStackGroup.set(1, ingredients.getOutputs(VanillaTypes.FLUID).get(0));
-    }
-    */
-
     @Override
     public void setRecipe(IRecipeLayoutBuilder builder, FluidExtractorRecipe recipe, IFocusGroup focuses) {
-        builder.addSlot(RecipeIngredientRole.INPUT, 1, 17).addIngredients(VanillaTypes.ITEM, new ArrayList<>(recipe.input.getItems()));
+        builder.addSlot(RecipeIngredientRole.INPUT, 1, 17).addIngredients(VanillaTypes.ITEM_STACK, new ArrayList<>(recipe.input.getItems()));
         ItemStack out = new ItemStack(recipe.result);
         if (!out.isEmpty()) {
-            builder.addSlot(RecipeIngredientRole.OUTPUT, 27, 34).addIngredient(VanillaTypes.ITEM, out).setBackground(guiHelper.getSlotDrawable(), -1,-1);
+            builder.addSlot(RecipeIngredientRole.OUTPUT, 27, 34).addIngredient(VanillaTypes.ITEM_STACK, out).setBackground(guiHelper.getSlotDrawable(), -1,-1);
         }
-        builder.addSlot(RecipeIngredientRole.OUTPUT,  57, 1).setFluidRenderer(20, false, 12, 48).setOverlay(tankOverlay, 0, 0).addIngredient(VanillaTypes.FLUID, recipe.output);
+        builder.addSlot(RecipeIngredientRole.OUTPUT,  57, 1).setFluidRenderer(20, false, 12, 48).setOverlay(tankOverlay, 0, 0).addIngredient(ForgeTypes.FLUID_STACK, recipe.output);
 
     }
 
