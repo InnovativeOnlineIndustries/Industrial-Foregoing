@@ -1,4 +1,5 @@
 {
+  "type": "industrialforegoing:dissolution_chamber",
   "input": [
     {
       "item": "minecraft:redstone"
@@ -25,12 +26,11 @@
       "item": "minecraft:diamond"
     }
   ],
-  "inputFluid": "{FluidName:\"industrialforegoing:latex\",Amount:1000}",
-  "processingTime": 200,
+  "inputFluid": "{Amount:1000,FluidName:\"industrialforegoing:latex\"}",
   "output": {
-    "item": "industrialforegoing:range_addon9",
     "count": 1,
+    "item": "industrialforegoing:range_addon9",
     "nbt": "{TitaniumAugment:{Range:9.0f}}"
   },
-  "type": "industrialforegoing:dissolution_chamber"
+  "processingTime": 200
 }

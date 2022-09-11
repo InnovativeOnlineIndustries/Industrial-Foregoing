@@ -4,21 +4,21 @@
     {
       "conditions": [
         {
+          "type": "forge:not",
           "value": {
-            "tag": "forge:silicon",
-            "type": "forge:tag_empty"
-          },
-          "type": "forge:not"
+            "type": "forge:tag_empty",
+            "tag": "forge:silicon"
+          }
         }
       ],
       "recipe": {
+        "type": "industrialforegoing:crusher",
         "input": {
           "tag": "forge:sand"
         },
         "output": {
           "tag": "forge:silicon"
-        },
-        "type": "industrialforegoing:crusher"
+        }
       }
     }
   ]

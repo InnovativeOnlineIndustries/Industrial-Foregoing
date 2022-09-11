@@ -1,4 +1,5 @@
 {
+  "type": "industrialforegoing:dissolution_chamber",
   "input": [
     {
       "item": "minecraft:dirt"
@@ -16,11 +17,10 @@
       "tag": "industrialforegoing:machine_frame/pity"
     }
   ],
-  "inputFluid": "{FluidName:\"industrialforegoing:meat\",Amount:1000}",
-  "processingTime": 100,
+  "inputFluid": "{Amount:1000,FluidName:\"industrialforegoing:meat\"}",
   "output": {
-    "item": "industrialforegoing:mechanical_dirt",
-    "count": 1
+    "count": 1,
+    "item": "industrialforegoing:mechanical_dirt"
   },
-  "type": "industrialforegoing:dissolution_chamber"
+  "processingTime": 100
 }

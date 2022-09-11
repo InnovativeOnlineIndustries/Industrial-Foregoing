@@ -1,5 +1,4 @@
 {
-  "replace": false,
   "values": [
     "industrialforegoing:machine_frame_pity",
     "industrialforegoing:machine_frame_simple",
@@ -8,7 +7,6 @@
     "industrialforegoing:fluid_extractor",
     "industrialforegoing:latex_processing_unit",
     "industrialforegoing:dissolution_chamber",
-    "industrialforegoing:dark_glass",
     "industrialforegoing:latex",
     "industrialforegoing:meat",
     "industrialforegoing:sewage",

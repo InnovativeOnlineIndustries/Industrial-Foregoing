@@ -4,42 +4,42 @@
     {
       "conditions": [
         {
+          "type": "forge:and",
           "values": [
             {
-              "item": "industrialforegoing:mob_crusher",
-              "type": "forge:item_exists"
+              "type": "forge:item_exists",
+              "item": "industrialforegoing:mob_crusher"
             }
-          ],
-          "type": "forge:and"
+          ]
         }
       ],
       "recipe": {
         "type": "minecraft:crafting_shaped",
+        "key": {
+          "B": {
+            "item": "minecraft:book"
+          },
+          "G": {
+            "tag": "forge:gears/gold"
+          },
+          "M": {
+            "tag": "industrialforegoing:machine_frame/advanced"
+          },
+          "P": {
+            "tag": "forge:plastic"
+          },
+          "R": {
+            "item": "minecraft:redstone"
+          },
+          "S": {
+            "item": "minecraft:iron_sword"
+          }
+        },
         "pattern": [
           "PSP",
           "BMB",
           "GRG"
         ],
-        "key": {
-          "P": {
-            "tag": "forge:plastic"
-          },
-          "S": {
-            "item": "minecraft:iron_sword"
-          },
-          "B": {
-            "item": "minecraft:book"
-          },
-          "M": {
-            "tag": "industrialforegoing:machine_frame/advanced"
-          },
-          "R": {
-            "item": "minecraft:redstone"
-          },
-          "G": {
-            "tag": "forge:gears/gold"
-          }
-        },
         "result": {
           "item": "industrialforegoing:mob_crusher"
         }

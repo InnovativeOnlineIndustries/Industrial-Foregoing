@@ -1,23 +1,27 @@
 {
+  "type": "industrialforegoing:laser_drill_ore",
+  "catalyst": {
+    "item": "industrialforegoing:laser_lens4"
+  },
   "output": {
     "tag": "forge:raw_materials/gold"
   },
+  "pointer": 0,
   "rarity": [
     {
+      "blacklist": {},
+      "depth_max": 80,
+      "depth_min": 32,
+      "weight": 16,
       "whitelist": {
         "type": "minecraft:worldgen/biome",
         "values": [
           "minecraft:badlands",
           "minecraft:eroded_badlands"
         ]
-      },
-      "blacklist": {},
-      "depth_min": 32,
-      "depth_max": 80,
-      "weight": 16
+      }
     },
     {
-      "whitelist": {},
       "blacklist": {
         "type": "minecraft:worldgen/biome",
         "values": [
@@ -29,12 +33,12 @@
           "minecraft:end_midlands"
         ]
       },
-      "depth_min": 5,
       "depth_max": 32,
-      "weight": 6
+      "depth_min": 5,
+      "weight": 6,
+      "whitelist": {}
     },
     {
-      "whitelist": {},
       "blacklist": {
         "type": "minecraft:worldgen/biome",
         "values": [
@@ -46,14 +50,10 @@
           "minecraft:end_midlands"
         ]
       },
-      "depth_min": 0,
       "depth_max": 255,
-      "weight": 1
+      "depth_min": 0,
+      "weight": 1,
+      "whitelist": {}
     }
-  ],
-  "pointer": 0,
-  "catalyst": {
-    "item": "industrialforegoing:laser_lens4"
-  },
-  "type": "industrialforegoing:laser_drill_ore"
+  ]
 }

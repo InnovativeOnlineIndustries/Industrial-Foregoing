@@ -4,42 +4,42 @@
     {
       "conditions": [
         {
+          "type": "forge:and",
           "values": [
             {
-              "item": "industrialforegoing:laser_drill",
-              "type": "forge:item_exists"
+              "type": "forge:item_exists",
+              "item": "industrialforegoing:laser_drill"
             }
-          ],
-          "type": "forge:and"
+          ]
         }
       ],
       "recipe": {
         "type": "minecraft:crafting_shaped",
-        "pattern": [
-          "pfp",
-          "bmb",
-          "grg"
-        ],
         "key": {
-          "p": {
-            "tag": "forge:plastic"
+          "b": {
+            "item": "minecraft:piston"
           },
           "f": {
             "tag": "forge:gears/diamond"
           },
-          "b": {
-            "item": "minecraft:piston"
+          "g": {
+            "tag": "forge:gears/gold"
           },
           "m": {
             "tag": "industrialforegoing:machine_frame/simple"
           },
-          "g": {
-            "tag": "forge:gears/gold"
+          "p": {
+            "tag": "forge:plastic"
           },
           "r": {
             "item": "minecraft:redstone"
           }
         },
+        "pattern": [
+          "pfp",
+          "bmb",
+          "grg"
+        ],
         "result": {
           "item": "industrialforegoing:laser_drill"
         }

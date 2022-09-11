@@ -4,42 +4,42 @@
     {
       "conditions": [
         {
+          "type": "forge:and",
           "values": [
             {
-              "item": "industrialforegoing:plant_gatherer",
-              "type": "forge:item_exists"
+              "type": "forge:item_exists",
+              "item": "industrialforegoing:plant_gatherer"
             }
-          ],
-          "type": "forge:and"
+          ]
         }
       ],
       "recipe": {
         "type": "minecraft:crafting_shaped",
-        "pattern": [
-          "PHP",
-          "AMA",
-          "GRG"
-        ],
         "key": {
-          "P": {
-            "tag": "forge:plastic"
+          "A": {
+            "item": "minecraft:iron_axe"
+          },
+          "G": {
+            "tag": "forge:gears/gold"
           },
           "H": {
             "item": "minecraft:iron_hoe"
           },
-          "A": {
-            "item": "minecraft:iron_axe"
-          },
           "M": {
             "tag": "industrialforegoing:machine_frame/pity"
           },
-          "G": {
-            "tag": "forge:gears/gold"
+          "P": {
+            "tag": "forge:plastic"
           },
           "R": {
             "item": "minecraft:redstone"
           }
         },
+        "pattern": [
+          "PHP",
+          "AMA",
+          "GRG"
+        ],
         "result": {
           "item": "industrialforegoing:plant_gatherer"
         }

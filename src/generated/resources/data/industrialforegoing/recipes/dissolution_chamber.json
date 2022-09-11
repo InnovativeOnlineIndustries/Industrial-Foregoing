@@ -4,42 +4,42 @@
     {
       "conditions": [
         {
+          "type": "forge:and",
           "values": [
             {
-              "item": "industrialforegoing:dissolution_chamber",
-              "type": "forge:item_exists"
+              "type": "forge:item_exists",
+              "item": "industrialforegoing:dissolution_chamber"
             }
-          ],
-          "type": "forge:and"
+          ]
         }
       ],
       "recipe": {
         "type": "minecraft:crafting_shaped",
+        "key": {
+          "B": {
+            "item": "minecraft:bucket"
+          },
+          "C": {
+            "tag": "forge:chests"
+          },
+          "D": {
+            "tag": "forge:gears/diamond"
+          },
+          "G": {
+            "tag": "forge:ingots/gold"
+          },
+          "M": {
+            "tag": "industrialforegoing:machine_frame/pity"
+          },
+          "P": {
+            "tag": "forge:plastic"
+          }
+        },
         "pattern": [
           "PCP",
           "BMB",
           "GDG"
         ],
-        "key": {
-          "P": {
-            "tag": "forge:plastic"
-          },
-          "C": {
-            "tag": "forge:chests"
-          },
-          "B": {
-            "item": "minecraft:bucket"
-          },
-          "M": {
-            "tag": "industrialforegoing:machine_frame/pity"
-          },
-          "G": {
-            "tag": "forge:ingots/gold"
-          },
-          "D": {
-            "tag": "forge:gears/diamond"
-          }
-        },
         "result": {
           "item": "industrialforegoing:dissolution_chamber"
         }

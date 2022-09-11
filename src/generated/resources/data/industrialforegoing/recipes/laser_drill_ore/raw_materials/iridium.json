@@ -4,19 +4,28 @@
     {
       "conditions": [
         {
+          "type": "forge:not",
           "value": {
-            "tag": "forge:raw_materials/iridium",
-            "type": "forge:tag_empty"
-          },
-          "type": "forge:not"
+            "type": "forge:tag_empty",
+            "tag": "forge:raw_materials/iridium"
+          }
         }
       ],
       "recipe": {
+        "type": "industrialforegoing:laser_drill_ore",
+        "catalyst": {
+          "item": "industrialforegoing:laser_lens0"
+        },
         "output": {
           "tag": "forge:raw_materials/iridium"
         },
+        "pointer": 0,
         "rarity": [
           {
+            "blacklist": {},
+            "depth_max": 68,
+            "depth_min": 5,
+            "weight": 8,
             "whitelist": {
               "type": "minecraft:worldgen/biome",
               "values": [
@@ -27,14 +36,9 @@
                 "minecraft:end_highlands",
                 "minecraft:end_midlands"
               ]
-            },
-            "blacklist": {},
-            "depth_min": 5,
-            "depth_max": 68,
-            "weight": 8
+            }
           },
           {
-            "whitelist": {},
             "blacklist": {
               "type": "minecraft:worldgen/biome",
               "values": [
@@ -46,16 +50,12 @@
                 "minecraft:end_midlands"
               ]
             },
-            "depth_min": 0,
             "depth_max": 255,
-            "weight": 1
+            "depth_min": 0,
+            "weight": 1,
+            "whitelist": {}
           }
-        ],
-        "pointer": 0,
-        "catalyst": {
-          "item": "industrialforegoing:laser_lens0"
-        },
-        "type": "industrialforegoing:laser_drill_ore"
+        ]
       }
     }
   ]

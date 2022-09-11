@@ -4,28 +4,23 @@
     {
       "conditions": [
         {
+          "type": "forge:and",
           "values": [
             {
-              "item": "industrialforegoing:plant_fertilizer",
-              "type": "forge:item_exists"
+              "type": "forge:item_exists",
+              "item": "industrialforegoing:plant_fertilizer"
             }
-          ],
-          "type": "forge:and"
+          ]
         }
       ],
       "recipe": {
         "type": "minecraft:crafting_shaped",
-        "pattern": [
-          "PBP",
-          "LML",
-          "GRG"
-        ],
         "key": {
-          "P": {
-            "tag": "forge:plastic"
-          },
           "B": {
             "item": "minecraft:glass_bottle"
+          },
+          "G": {
+            "tag": "forge:gears/iron"
           },
           "L": {
             "item": "minecraft:leather"
@@ -33,13 +28,18 @@
           "M": {
             "tag": "industrialforegoing:machine_frame/simple"
           },
+          "P": {
+            "tag": "forge:plastic"
+          },
           "R": {
             "item": "minecraft:redstone"
-          },
-          "G": {
-            "tag": "forge:gears/iron"
           }
         },
+        "pattern": [
+          "PBP",
+          "LML",
+          "GRG"
+        ],
         "result": {
           "item": "industrialforegoing:plant_fertilizer"
         }

@@ -4,36 +4,36 @@
     {
       "conditions": [
         {
+          "type": "forge:and",
           "values": [
             {
-              "item": "industrialforegoing:conveyor_dropping_upgrade",
-              "type": "forge:item_exists"
+              "type": "forge:item_exists",
+              "item": "industrialforegoing:conveyor_dropping_upgrade"
             }
-          ],
-          "type": "forge:and"
+          ]
         }
       ],
       "recipe": {
         "type": "minecraft:crafting_shaped",
-        "pattern": [
-          "IPI",
-          "IDI",
-          "ICI"
-        ],
         "key": {
+          "C": {
+            "item": "industrialforegoing:conveyor"
+          },
+          "D": {
+            "item": "minecraft:dropper"
+          },
           "I": {
             "tag": "forge:ingots/iron"
           },
           "P": {
             "item": "minecraft:iron_bars"
-          },
-          "D": {
-            "item": "minecraft:dropper"
-          },
-          "C": {
-            "item": "industrialforegoing:conveyor"
           }
         },
+        "pattern": [
+          "IPI",
+          "IDI",
+          "ICI"
+        ],
         "result": {
           "item": "industrialforegoing:conveyor_dropping_upgrade"
         }

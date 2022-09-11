@@ -4,30 +4,30 @@
     {
       "conditions": [
         {
+          "type": "forge:and",
           "values": [
             {
-              "item": "industrialforegoing:mob_imprisonment_tool",
-              "type": "forge:item_exists"
+              "type": "forge:item_exists",
+              "item": "industrialforegoing:mob_imprisonment_tool"
             }
-          ],
-          "type": "forge:and"
+          ]
         }
       ],
       "recipe": {
         "type": "minecraft:crafting_shaped",
+        "key": {
+          "G": {
+            "item": "minecraft:ghast_tear"
+          },
+          "P": {
+            "tag": "forge:plastic"
+          }
+        },
         "pattern": [
           " P ",
           "PGP",
           " P "
         ],
-        "key": {
-          "P": {
-            "tag": "forge:plastic"
-          },
-          "G": {
-            "item": "minecraft:ghast_tear"
-          }
-        },
         "result": {
           "item": "industrialforegoing:mob_imprisonment_tool"
         }

@@ -4,36 +4,36 @@
     {
       "conditions": [
         {
+          "type": "forge:and",
           "values": [
             {
-              "item": "industrialforegoing:block_placer",
-              "type": "forge:item_exists"
+              "type": "forge:item_exists",
+              "item": "industrialforegoing:block_placer"
             }
-          ],
-          "type": "forge:and"
+          ]
         }
       ],
       "recipe": {
         "type": "minecraft:crafting_shaped",
-        "pattern": [
-          "PDP",
-          "DMD",
-          "PRP"
-        ],
         "key": {
-          "P": {
-            "tag": "forge:plastic"
-          },
           "D": {
             "item": "minecraft:dropper"
           },
           "M": {
             "tag": "industrialforegoing:machine_frame/pity"
           },
+          "P": {
+            "tag": "forge:plastic"
+          },
           "R": {
             "item": "minecraft:redstone"
           }
         },
+        "pattern": [
+          "PDP",
+          "DMD",
+          "PRP"
+        ],
         "result": {
           "item": "industrialforegoing:block_placer"
         }

@@ -1,10 +1,10 @@
 {
+  "type": "industrialforegoing:dissolution_chamber",
   "input": [],
-  "inputFluid": "{FluidName:\"industrialforegoing:essence\",Amount:250}",
-  "processingTime": 5,
+  "inputFluid": "{Amount:250,FluidName:\"industrialforegoing:essence\"}",
   "output": {
-    "item": "minecraft:experience_bottle",
-    "count": 1
+    "count": 1,
+    "item": "minecraft:experience_bottle"
   },
-  "type": "industrialforegoing:dissolution_chamber"
+  "processingTime": 5
 }

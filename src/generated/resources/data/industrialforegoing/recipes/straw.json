@@ -4,27 +4,27 @@
     {
       "conditions": [
         {
+          "type": "forge:and",
           "values": [
             {
-              "item": "industrialforegoing:straw",
-              "type": "forge:item_exists"
+              "type": "forge:item_exists",
+              "item": "industrialforegoing:straw"
             }
-          ],
-          "type": "forge:and"
+          ]
         }
       ],
       "recipe": {
         "type": "minecraft:crafting_shaped",
-        "pattern": [
-          "PP ",
-          " P ",
-          " P "
-        ],
         "key": {
           "P": {
             "tag": "forge:plastic"
           }
         },
+        "pattern": [
+          "PP ",
+          " P ",
+          " P "
+        ],
         "result": {
           "item": "industrialforegoing:straw"
         }

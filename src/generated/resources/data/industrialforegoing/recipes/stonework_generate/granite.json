@@ -1,11 +1,11 @@
 {
-  "output": {
-    "item": "minecraft:granite",
-    "count": 1
-  },
-  "waterNeed": 200,
-  "lavaNeed": 200,
-  "waterConsume": 200,
+  "type": "industrialforegoing:stonework_generate",
   "lavaConsume": 200,
-  "type": "industrialforegoing:stonework_generate"
+  "lavaNeed": 200,
+  "output": {
+    "count": 1,
+    "item": "minecraft:granite"
+  },
+  "waterConsume": 200,
+  "waterNeed": 200
 }

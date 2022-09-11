@@ -4,42 +4,42 @@
     {
       "conditions": [
         {
+          "type": "forge:and",
           "values": [
             {
-              "item": "industrialforegoing:animal_baby_separator",
-              "type": "forge:item_exists"
+              "type": "forge:item_exists",
+              "item": "industrialforegoing:animal_baby_separator"
             }
-          ],
-          "type": "forge:and"
+          ]
         }
       ],
       "recipe": {
         "type": "minecraft:crafting_shaped",
-        "pattern": [
-          "PAP",
-          "CMC",
-          "DGD"
-        ],
         "key": {
-          "P": {
-            "tag": "forge:plastic"
-          },
           "A": {
             "item": "minecraft:golden_carrot"
           },
           "C": {
             "item": "minecraft:wheat"
           },
-          "G": {
-            "tag": "forge:gears/gold"
-          },
           "D": {
             "tag": "forge:dyes/purple"
           },
+          "G": {
+            "tag": "forge:gears/gold"
+          },
           "M": {
             "tag": "industrialforegoing:machine_frame/pity"
+          },
+          "P": {
+            "tag": "forge:plastic"
           }
         },
+        "pattern": [
+          "PAP",
+          "CMC",
+          "DGD"
+        ],
         "result": {
           "item": "industrialforegoing:animal_baby_separator"
         }

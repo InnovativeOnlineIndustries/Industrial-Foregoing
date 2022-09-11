@@ -1,4 +1,5 @@
 {
+  "type": "industrialforegoing:dissolution_chamber",
   "input": [
     {
       "tag": "forge:plastic"
@@ -25,11 +26,10 @@
       "tag": "forge:ingots/iron"
     }
   ],
-  "inputFluid": "{FluidName:\"industrialforegoing:latex\",Amount:250}",
-  "processingTime": 300,
+  "inputFluid": "{Amount:250,FluidName:\"industrialforegoing:latex\"}",
   "output": {
-    "item": "industrialforegoing:machine_frame_simple",
-    "count": 1
+    "count": 1,
+    "item": "industrialforegoing:machine_frame_simple"
   },
-  "type": "industrialforegoing:dissolution_chamber"
+  "processingTime": 300
 }

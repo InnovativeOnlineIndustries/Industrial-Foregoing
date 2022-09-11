@@ -4,36 +4,36 @@
     {
       "conditions": [
         {
+          "type": "forge:and",
           "values": [
             {
-              "item": "industrialforegoing:common_black_hole_unit",
-              "type": "forge:item_exists"
+              "type": "forge:item_exists",
+              "item": "industrialforegoing:common_black_hole_unit"
             }
-          ],
-          "type": "forge:and"
+          ]
         }
       ],
       "recipe": {
         "type": "minecraft:crafting_shaped",
+        "key": {
+          "C": {
+            "tag": "forge:chests/wooden"
+          },
+          "E": {
+            "tag": "forge:gears/iron"
+          },
+          "M": {
+            "tag": "industrialforegoing:machine_frame/pity"
+          },
+          "P": {
+            "tag": "forge:ingots/iron"
+          }
+        },
         "pattern": [
           "PPP",
           "CEC",
           "CMC"
         ],
-        "key": {
-          "P": {
-            "tag": "forge:ingots/iron"
-          },
-          "E": {
-            "tag": "forge:gears/iron"
-          },
-          "C": {
-            "tag": "forge:chests/wooden"
-          },
-          "M": {
-            "tag": "industrialforegoing:machine_frame/pity"
-          }
-        },
         "result": {
           "item": "industrialforegoing:common_black_hole_unit"
         }

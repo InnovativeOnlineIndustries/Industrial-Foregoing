@@ -4,33 +4,33 @@
     {
       "conditions": [
         {
+          "type": "forge:and",
           "values": [
             {
-              "item": "industrialforegoing:machine_frame_pity",
-              "type": "forge:item_exists"
+              "type": "forge:item_exists",
+              "item": "industrialforegoing:machine_frame_pity"
             }
-          ],
-          "type": "forge:and"
+          ]
         }
       ],
       "recipe": {
         "type": "minecraft:crafting_shaped",
-        "pattern": [
-          "WIW",
-          "IRI",
-          "WIW"
-        ],
         "key": {
-          "W": {
-            "tag": "minecraft:logs"
-          },
           "I": {
             "tag": "forge:ingots/iron"
           },
           "R": {
             "tag": "forge:storage_blocks/redstone"
+          },
+          "W": {
+            "tag": "minecraft:logs"
           }
         },
+        "pattern": [
+          "WIW",
+          "IRI",
+          "WIW"
+        ],
         "result": {
           "item": "industrialforegoing:machine_frame_pity"
         }

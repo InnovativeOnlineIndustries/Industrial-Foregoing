@@ -4,39 +4,39 @@
     {
       "conditions": [
         {
+          "type": "forge:and",
           "values": [
             {
-              "item": "industrialforegoing:infinity_charger",
-              "type": "forge:item_exists"
+              "type": "forge:item_exists",
+              "item": "industrialforegoing:infinity_charger"
             }
-          ],
-          "type": "forge:and"
+          ]
         }
       ],
       "recipe": {
         "type": "minecraft:crafting_shaped",
-        "pattern": [
-          "ppp",
-          "rcr",
-          "omo"
-        ],
         "key": {
+          "c": {
+            "tag": "forge:gears/diamond"
+          },
+          "m": {
+            "tag": "industrialforegoing:machine_frame/advanced"
+          },
+          "o": {
+            "item": "minecraft:redstone_block"
+          },
           "p": {
             "tag": "forge:plastic"
           },
           "r": {
             "item": "minecraft:repeater"
-          },
-          "c": {
-            "tag": "forge:gears/diamond"
-          },
-          "o": {
-            "item": "minecraft:redstone_block"
-          },
-          "m": {
-            "tag": "industrialforegoing:machine_frame/advanced"
           }
         },
+        "pattern": [
+          "ppp",
+          "rcr",
+          "omo"
+        ],
         "result": {
           "item": "industrialforegoing:infinity_charger"
         }

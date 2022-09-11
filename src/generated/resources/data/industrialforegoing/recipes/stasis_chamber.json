@@ -4,39 +4,39 @@
     {
       "conditions": [
         {
+          "type": "forge:and",
           "values": [
             {
-              "item": "industrialforegoing:stasis_chamber",
-              "type": "forge:item_exists"
+              "type": "forge:item_exists",
+              "item": "industrialforegoing:stasis_chamber"
             }
-          ],
-          "type": "forge:and"
+          ]
         }
       ],
       "recipe": {
         "type": "minecraft:crafting_shaped",
+        "key": {
+          "g": {
+            "item": "minecraft:ghast_tear"
+          },
+          "i": {
+            "tag": "forge:gears/gold"
+          },
+          "m": {
+            "tag": "industrialforegoing:machine_frame/advanced"
+          },
+          "p": {
+            "item": "minecraft:piston"
+          },
+          "s": {
+            "item": "minecraft:soul_sand"
+          }
+        },
         "pattern": [
           "sss",
           "gmg",
           "ipi"
         ],
-        "key": {
-          "s": {
-            "item": "minecraft:soul_sand"
-          },
-          "g": {
-            "item": "minecraft:ghast_tear"
-          },
-          "m": {
-            "tag": "industrialforegoing:machine_frame/advanced"
-          },
-          "i": {
-            "tag": "forge:gears/gold"
-          },
-          "p": {
-            "item": "minecraft:piston"
-          }
-        },
         "result": {
           "item": "industrialforegoing:stasis_chamber"
         }

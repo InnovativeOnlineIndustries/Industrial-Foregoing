@@ -4,26 +4,18 @@
     {
       "conditions": [
         {
+          "type": "forge:and",
           "values": [
             {
-              "item": "industrialforegoing:mycelial_potion",
-              "type": "forge:item_exists"
+              "type": "forge:item_exists",
+              "item": "industrialforegoing:mycelial_potion"
             }
-          ],
-          "type": "forge:and"
+          ]
         }
       ],
       "recipe": {
         "type": "minecraft:crafting_shaped",
-        "pattern": [
-          "BBB",
-          "BCB",
-          "RMR"
-        ],
         "key": {
-          "R": {
-            "item": "minecraft:redstone"
-          },
           "B": {
             "item": "minecraft:nether_wart"
           },
@@ -32,8 +24,16 @@
           },
           "M": {
             "tag": "industrialforegoing:machine_frame/advanced"
+          },
+          "R": {
+            "item": "minecraft:redstone"
           }
         },
+        "pattern": [
+          "BBB",
+          "BCB",
+          "RMR"
+        ],
         "result": {
           "item": "industrialforegoing:mycelial_potion"
         }

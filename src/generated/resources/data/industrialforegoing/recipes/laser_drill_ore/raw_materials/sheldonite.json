@@ -4,19 +4,28 @@
     {
       "conditions": [
         {
+          "type": "forge:not",
           "value": {
-            "tag": "forge:ores/raw_materials/sheldonite",
-            "type": "forge:tag_empty"
-          },
-          "type": "forge:not"
+            "type": "forge:tag_empty",
+            "tag": "forge:ores/raw_materials/sheldonite"
+          }
         }
       ],
       "recipe": {
+        "type": "industrialforegoing:laser_drill_ore",
+        "catalyst": {
+          "item": "industrialforegoing:laser_lens0"
+        },
         "output": {
           "tag": "forge:ores/raw_materials/sheldonite"
         },
+        "pointer": 0,
         "rarity": [
           {
+            "blacklist": {},
+            "depth_max": 70,
+            "depth_min": 30,
+            "weight": 6,
             "whitelist": {
               "type": "minecraft:worldgen/biome",
               "values": [
@@ -27,18 +36,9 @@
                 "minecraft:end_highlands",
                 "minecraft:end_midlands"
               ]
-            },
-            "blacklist": {},
-            "depth_min": 30,
-            "depth_max": 70,
-            "weight": 6
+            }
           }
-        ],
-        "pointer": 0,
-        "catalyst": {
-          "item": "industrialforegoing:laser_lens0"
-        },
-        "type": "industrialforegoing:laser_drill_ore"
+        ]
       }
     }
   ]

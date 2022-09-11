@@ -4,26 +4,18 @@
     {
       "conditions": [
         {
+          "type": "forge:and",
           "values": [
             {
-              "item": "industrialforegoing:resourceful_furnace",
-              "type": "forge:item_exists"
+              "type": "forge:item_exists",
+              "item": "industrialforegoing:resourceful_furnace"
             }
-          ],
-          "type": "forge:and"
+          ]
         }
       ],
       "recipe": {
         "type": "minecraft:crafting_shaped",
-        "pattern": [
-          "PBP",
-          "LML",
-          "PRP"
-        ],
         "key": {
-          "P": {
-            "tag": "forge:plastic"
-          },
           "B": {
             "item": "minecraft:bucket"
           },
@@ -33,10 +25,18 @@
           "M": {
             "tag": "industrialforegoing:machine_frame/pity"
           },
+          "P": {
+            "tag": "forge:plastic"
+          },
           "R": {
             "tag": "forge:gears/gold"
           }
         },
+        "pattern": [
+          "PBP",
+          "LML",
+          "PRP"
+        ],
         "result": {
           "item": "industrialforegoing:resourceful_furnace"
         }

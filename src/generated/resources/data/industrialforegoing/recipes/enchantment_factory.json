@@ -4,39 +4,39 @@
     {
       "conditions": [
         {
+          "type": "forge:and",
           "values": [
             {
-              "item": "industrialforegoing:enchantment_factory",
-              "type": "forge:item_exists"
+              "type": "forge:item_exists",
+              "item": "industrialforegoing:enchantment_factory"
             }
-          ],
-          "type": "forge:and"
+          ]
         }
       ],
       "recipe": {
         "type": "minecraft:crafting_shaped",
+        "key": {
+          "B": {
+            "item": "minecraft:book"
+          },
+          "D": {
+            "item": "minecraft:diamond"
+          },
+          "M": {
+            "tag": "industrialforegoing:machine_frame/advanced"
+          },
+          "O": {
+            "item": "minecraft:obsidian"
+          },
+          "P": {
+            "tag": "forge:plastic"
+          }
+        },
         "pattern": [
           "PBP",
           "DMD",
           "OOO"
         ],
-        "key": {
-          "P": {
-            "tag": "forge:plastic"
-          },
-          "D": {
-            "item": "minecraft:diamond"
-          },
-          "B": {
-            "item": "minecraft:book"
-          },
-          "O": {
-            "item": "minecraft:obsidian"
-          },
-          "M": {
-            "tag": "industrialforegoing:machine_frame/advanced"
-          }
-        },
         "result": {
           "item": "industrialforegoing:enchantment_factory"
         }

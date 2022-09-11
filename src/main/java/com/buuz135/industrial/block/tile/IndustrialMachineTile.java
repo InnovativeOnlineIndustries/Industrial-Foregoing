@@ -40,10 +40,13 @@ import com.hrznstudio.titanium.item.AugmentWrapper;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
+import net.minecraftforge.common.capabilities.ForgeCapabilities;
 import net.minecraftforge.registries.RegistryObject;
 import org.apache.commons.lang3.tuple.Pair;
 
@@ -67,7 +70,7 @@ public abstract class IndustrialMachineTile<T extends IndustrialMachineTile<T>> 
     public void addTank(FluidTankComponent<T> tank) {
         super.addTank(tank);
         if (!tankBundleAdded) {
-            this.addBundle(tankBundle = new TankInteractionBundle<>(() -> this.getCapability(CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY), 175, 94, this, 10));
+            this.addBundle(tankBundle = new TankInteractionBundle<>(() -> this.getCapability(ForgeCapabilities.FLUID_HANDLER), 175, 94, this, 10));
             this.tankBundleAdded = true;
         }
     }
@@ -108,6 +111,43 @@ public abstract class IndustrialMachineTile<T extends IndustrialMachineTile<T>> 
     @Override
     public IAssetProvider getAssetProvider() {
         return IndustrialAssetProvider.INSTANCE;
+    }
+
+
+    @OnlyIn(Dist.CLIENT)
+    @Override
+    public void clientTick(Level level, BlockPos pos, BlockState state, T blockEntity) {
+        super.clientTick(level, pos, state, blockEntity);
+        /*
+        if (isSoulPowered() && level.random.nextDouble() < 0.3D){
+            double posX = pos.getX();
+            double posZ = pos.getZ();
+            double offset = 0.1;
+            if (level.random.nextBoolean()){
+                posZ += level.random.nextDouble();
+                if (level.random.nextBoolean()){
+                    posX += 1 + offset;
+                }else {
+                    posX -= offset;
+                }
+            } else {
+                posX += level.random.nextDouble();
+                if (level.random.nextBoolean()){
+                    posZ += 1 + offset;
+                }else {
+                    posZ -= offset;
+                }
+            }
+            this.level.addParticle(ParticleTypes.SCULK_SOUL, posX, pos.getY()+0.1, posZ, 0,0.045,0);
+        }*/
+    }
+
+    public boolean canBeSoulPowered() {
+        return false;
+    }
+
+    public boolean isSoulPowered() {
+        return true;
     }
 
 }

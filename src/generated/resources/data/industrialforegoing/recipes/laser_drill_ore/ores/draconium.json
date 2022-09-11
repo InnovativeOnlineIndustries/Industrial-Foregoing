@@ -4,19 +4,28 @@
     {
       "conditions": [
         {
+          "type": "forge:not",
           "value": {
-            "tag": "forge:ores/ores/draconium",
-            "type": "forge:tag_empty"
-          },
-          "type": "forge:not"
+            "type": "forge:tag_empty",
+            "tag": "forge:ores/ores/draconium"
+          }
         }
       ],
       "recipe": {
+        "type": "industrialforegoing:laser_drill_ore",
+        "catalyst": {
+          "item": "industrialforegoing:laser_lens10"
+        },
         "output": {
           "tag": "forge:ores/ores/draconium"
         },
+        "pointer": 0,
         "rarity": [
           {
+            "blacklist": {},
+            "depth_max": 95,
+            "depth_min": 60,
+            "weight": 10,
             "whitelist": {
               "type": "minecraft:worldgen/biome",
               "values": [
@@ -27,18 +36,9 @@
                 "minecraft:end_highlands",
                 "minecraft:end_midlands"
               ]
-            },
-            "blacklist": {},
-            "depth_min": 60,
-            "depth_max": 95,
-            "weight": 10
+            }
           }
-        ],
-        "pointer": 0,
-        "catalyst": {
-          "item": "industrialforegoing:laser_lens10"
-        },
-        "type": "industrialforegoing:laser_drill_ore"
+        ]
       }
     }
   ]

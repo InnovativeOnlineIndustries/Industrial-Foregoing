@@ -4,28 +4,29 @@
     {
       "conditions": [
         {
+          "type": "forge:and",
           "values": [
             {
-              "item": "industrialforegoing:material_stonework_factory",
-              "type": "forge:item_exists"
+              "type": "forge:item_exists",
+              "item": "industrialforegoing:material_stonework_factory"
             }
-          ],
-          "type": "forge:and"
+          ]
         }
       ],
       "recipe": {
         "type": "minecraft:crafting_shaped",
-        "pattern": [
-          "pcp",
-          "gmf",
-          "aba"
-        ],
         "key": {
-          "p": {
-            "tag": "forge:plastic"
+          "a": {
+            "tag": "forge:gears/gold"
+          },
+          "b": {
+            "item": "industrialforegoing:pink_slime"
           },
           "c": {
             "item": "minecraft:crafting_table"
+          },
+          "f": {
+            "item": "minecraft:furnace"
           },
           "g": {
             "item": "minecraft:diamond_pickaxe"
@@ -33,16 +34,15 @@
           "m": {
             "tag": "industrialforegoing:machine_frame/advanced"
           },
-          "f": {
-            "item": "minecraft:furnace"
-          },
-          "a": {
-            "tag": "forge:gears/gold"
-          },
-          "b": {
-            "item": "industrialforegoing:pink_slime"
+          "p": {
+            "tag": "forge:plastic"
           }
         },
+        "pattern": [
+          "pcp",
+          "gmf",
+          "aba"
+        ],
         "result": {
           "item": "industrialforegoing:material_stonework_factory"
         }

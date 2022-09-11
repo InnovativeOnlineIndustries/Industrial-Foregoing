@@ -4,36 +4,36 @@
     {
       "conditions": [
         {
+          "type": "forge:and",
           "values": [
             {
-              "item": "industrialforegoing:conveyor",
-              "type": "forge:item_exists"
+              "type": "forge:item_exists",
+              "item": "industrialforegoing:conveyor"
             }
-          ],
-          "type": "forge:and"
+          ]
         }
       ],
       "recipe": {
         "type": "minecraft:crafting_shaped",
-        "pattern": [
-          "ppp",
-          "iri",
-          "ppp"
-        ],
         "key": {
-          "p": {
-            "tag": "forge:plastic"
-          },
           "i": {
             "tag": "forge:ingots/iron"
+          },
+          "p": {
+            "tag": "forge:plastic"
           },
           "r": {
             "item": "minecraft:redstone"
           }
         },
+        "pattern": [
+          "ppp",
+          "iri",
+          "ppp"
+        ],
         "result": {
-          "item": "industrialforegoing:conveyor",
-          "count": 6
+          "count": 6,
+          "item": "industrialforegoing:conveyor"
         }
       }
     }

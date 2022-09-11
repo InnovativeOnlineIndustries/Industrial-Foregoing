@@ -4,39 +4,39 @@
     {
       "conditions": [
         {
+          "type": "forge:and",
           "values": [
             {
-              "item": "industrialforegoing:black_hole_controller",
-              "type": "forge:item_exists"
+              "type": "forge:item_exists",
+              "item": "industrialforegoing:black_hole_controller"
             }
-          ],
-          "type": "forge:and"
+          ]
         }
       ],
       "recipe": {
         "type": "minecraft:crafting_shaped",
+        "key": {
+          "E": {
+            "tag": "forge:chests/ender"
+          },
+          "G": {
+            "tag": "forge:gears/diamond"
+          },
+          "M": {
+            "tag": "industrialforegoing:machine_frame/supreme"
+          },
+          "N": {
+            "item": "minecraft:ender_eye"
+          },
+          "P": {
+            "tag": "forge:plastic"
+          }
+        },
         "pattern": [
           "PGP",
           "NEN",
           "PMP"
         ],
-        "key": {
-          "P": {
-            "tag": "forge:plastic"
-          },
-          "G": {
-            "tag": "forge:gears/diamond"
-          },
-          "N": {
-            "item": "minecraft:ender_eye"
-          },
-          "E": {
-            "tag": "forge:chests/ender"
-          },
-          "M": {
-            "tag": "industrialforegoing:machine_frame/supreme"
-          }
-        },
         "result": {
           "item": "industrialforegoing:black_hole_controller"
         }

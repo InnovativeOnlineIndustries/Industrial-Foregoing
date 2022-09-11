@@ -4,39 +4,39 @@
     {
       "conditions": [
         {
+          "type": "forge:and",
           "values": [
             {
-              "item": "industrialforegoing:wither_builder",
-              "type": "forge:item_exists"
+              "type": "forge:item_exists",
+              "item": "industrialforegoing:wither_builder"
             }
-          ],
-          "type": "forge:and"
+          ]
         }
       ],
       "recipe": {
         "type": "minecraft:crafting_shaped",
+        "key": {
+          "C": {
+            "tag": "industrialforegoing:machine_frame/supreme"
+          },
+          "N": {
+            "item": "minecraft:nether_star"
+          },
+          "P": {
+            "tag": "forge:plastic"
+          },
+          "S": {
+            "item": "minecraft:soul_sand"
+          },
+          "W": {
+            "item": "minecraft:wither_skeleton_skull"
+          }
+        },
         "pattern": [
           "PNP",
           "WCW",
           "SSS"
         ],
-        "key": {
-          "P": {
-            "tag": "forge:plastic"
-          },
-          "N": {
-            "item": "minecraft:nether_star"
-          },
-          "W": {
-            "item": "minecraft:wither_skeleton_skull"
-          },
-          "C": {
-            "tag": "industrialforegoing:machine_frame/supreme"
-          },
-          "S": {
-            "item": "minecraft:soul_sand"
-          }
-        },
         "result": {
           "item": "industrialforegoing:wither_builder"
         }

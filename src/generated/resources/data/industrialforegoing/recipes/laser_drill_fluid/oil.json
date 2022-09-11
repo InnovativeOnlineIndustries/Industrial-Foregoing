@@ -4,41 +4,38 @@
     {
       "conditions": [
         {
-          "modid": "pneumaticcraft",
-          "type": "forge:mod_loaded"
+          "type": "forge:mod_loaded",
+          "modid": "pneumaticcraft"
         }
       ],
       "recipe": {
-        "output": "{FluidName:\"pneumaticcraft:oil\",Amount:50}",
+        "type": "industrialforegoing:laser_drill_fluid",
+        "catalyst": {
+          "item": "industrialforegoing:laser_lens15"
+        },
+        "entity": "minecraft:empty",
+        "output": "{Amount:50,FluidName:\"pneumaticcraft:oil\"}",
+        "pointer": 0,
         "rarity": [
           {
+            "blacklist": {},
+            "depth_max": 60,
+            "depth_min": 20,
+            "weight": 8,
             "whitelist": {
               "type": "minecraft:worldgen/biome",
               "values": [
                 "minecraft:desert",
-                "minecraft:desert_hills",
-                "minecraft:desert_lakes",
                 "minecraft:ocean",
                 "minecraft:cold_ocean",
                 "minecraft:deep_cold_ocean",
                 "minecraft:deep_frozen_ocean",
                 "minecraft:deep_lukewarm_ocean",
-                "minecraft:deep_warm_ocean",
                 "minecraft:warm_ocean"
               ]
-            },
-            "blacklist": {},
-            "depth_min": 20,
-            "depth_max": 60,
-            "weight": 8
+            }
           }
-        ],
-        "pointer": 0,
-        "catalyst": {
-          "item": "industrialforegoing:laser_lens15"
-        },
-        "entity": "minecraft:empty",
-        "type": "industrialforegoing:laser_drill_fluid"
+        ]
       }
     }
   ]

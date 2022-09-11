@@ -4,42 +4,42 @@
     {
       "conditions": [
         {
+          "type": "forge:and",
           "values": [
             {
-              "item": "industrialforegoing:enchantment_sorter",
-              "type": "forge:item_exists"
+              "type": "forge:item_exists",
+              "item": "industrialforegoing:enchantment_sorter"
             }
-          ],
-          "type": "forge:and"
+          ]
         }
       ],
       "recipe": {
         "type": "minecraft:crafting_shaped",
-        "pattern": [
-          "PSP",
-          "BME",
-          "PGP"
-        ],
         "key": {
-          "P": {
-            "tag": "forge:plastic"
-          },
-          "S": {
-            "item": "minecraft:ender_pearl"
-          },
           "B": {
             "item": "minecraft:book"
           },
           "E": {
             "item": "minecraft:enchanted_book"
           },
+          "G": {
+            "tag": "forge:gears/diamond"
+          },
           "M": {
             "tag": "industrialforegoing:machine_frame/advanced"
           },
-          "G": {
-            "tag": "forge:gears/diamond"
+          "P": {
+            "tag": "forge:plastic"
+          },
+          "S": {
+            "item": "minecraft:ender_pearl"
           }
         },
+        "pattern": [
+          "PSP",
+          "BME",
+          "PGP"
+        ],
         "result": {
           "item": "industrialforegoing:enchantment_sorter"
         }

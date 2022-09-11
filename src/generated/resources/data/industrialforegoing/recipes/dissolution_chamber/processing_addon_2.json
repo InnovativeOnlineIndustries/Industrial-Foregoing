@@ -1,4 +1,5 @@
 {
+  "type": "industrialforegoing:dissolution_chamber",
   "input": [
     {
       "item": "minecraft:redstone"
@@ -25,12 +26,11 @@
       "item": "minecraft:crafting_table"
     }
   ],
-  "inputFluid": "{FluidName:\"industrialforegoing:latex\",Amount:1000}",
-  "processingTime": 200,
+  "inputFluid": "{Amount:1000,FluidName:\"industrialforegoing:latex\"}",
   "output": {
-    "item": "industrialforegoing:processing_addon_2",
     "count": 1,
+    "item": "industrialforegoing:processing_addon_2",
     "nbt": "{TitaniumAugment:{Processing:3.0f}}"
   },
-  "type": "industrialforegoing:dissolution_chamber"
+  "processingTime": 200
 }

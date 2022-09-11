@@ -4,42 +4,42 @@
     {
       "conditions": [
         {
+          "type": "forge:and",
           "values": [
             {
-              "item": "industrialforegoing:latex_processing_unit",
-              "type": "forge:item_exists"
+              "type": "forge:item_exists",
+              "item": "industrialforegoing:latex_processing_unit"
             }
-          ],
-          "type": "forge:and"
+          ]
         }
       ],
       "recipe": {
         "type": "minecraft:crafting_shaped",
-        "pattern": [
-          "IGI",
-          "BML",
-          "IFI"
-        ],
         "key": {
-          "I": {
-            "tag": "forge:ingots/iron"
+          "B": {
+            "item": "minecraft:water_bucket"
+          },
+          "F": {
+            "item": "minecraft:furnace"
           },
           "G": {
             "tag": "forge:storage_blocks/redstone"
           },
-          "B": {
-            "item": "minecraft:water_bucket"
+          "I": {
+            "tag": "forge:ingots/iron"
           },
           "L": {
             "item": "industrialforegoing:latex_bucket"
           },
           "M": {
             "tag": "industrialforegoing:machine_frame/pity"
-          },
-          "F": {
-            "item": "minecraft:furnace"
           }
         },
+        "pattern": [
+          "IGI",
+          "BML",
+          "IFI"
+        ],
         "result": {
           "item": "industrialforegoing:latex_processing_unit"
         }

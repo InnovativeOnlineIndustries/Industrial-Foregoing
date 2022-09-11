@@ -1,4 +1,5 @@
 {
+  "type": "industrialforegoing:dissolution_chamber",
   "input": [
     {
       "item": "minecraft:redstone"
@@ -25,12 +26,11 @@
       "item": "minecraft:blaze_rod"
     }
   ],
-  "inputFluid": "{FluidName:\"industrialforegoing:latex\",Amount:1000}",
-  "processingTime": 200,
+  "inputFluid": "{Amount:1000,FluidName:\"industrialforegoing:latex\"}",
   "output": {
-    "item": "industrialforegoing:efficiency_addon_2",
     "count": 1,
+    "item": "industrialforegoing:efficiency_addon_2",
     "nbt": "{TitaniumAugment:{Efficiency:0.8f}}"
   },
-  "type": "industrialforegoing:dissolution_chamber"
+  "processingTime": 200
 }

@@ -1,9 +1,18 @@
 {
+  "type": "industrialforegoing:laser_drill_ore",
+  "catalyst": {
+    "item": "industrialforegoing:laser_lens12"
+  },
   "output": {
     "item": "minecraft:ancient_debris"
   },
+  "pointer": 0,
   "rarity": [
     {
+      "blacklist": {},
+      "depth_max": 20,
+      "depth_min": 1,
+      "weight": 1,
       "whitelist": {
         "type": "minecraft:worldgen/biome",
         "values": [
@@ -13,16 +22,7 @@
           "minecraft:crimson_forest",
           "minecraft:soul_sand_valley"
         ]
-      },
-      "blacklist": {},
-      "depth_min": 1,
-      "depth_max": 20,
-      "weight": 1
+      }
     }
-  ],
-  "pointer": 0,
-  "catalyst": {
-    "item": "industrialforegoing:laser_lens12"
-  },
-  "type": "industrialforegoing:laser_drill_ore"
+  ]
 }

@@ -4,42 +4,42 @@
     {
       "conditions": [
         {
+          "type": "forge:and",
           "values": [
             {
-              "item": "industrialforegoing:marine_fisher",
-              "type": "forge:item_exists"
+              "type": "forge:item_exists",
+              "item": "industrialforegoing:marine_fisher"
             }
-          ],
-          "type": "forge:and"
+          ]
         }
       ],
       "recipe": {
         "type": "minecraft:crafting_shaped",
-        "pattern": [
-          "pfp",
-          "bmb",
-          "grg"
-        ],
         "key": {
-          "p": {
-            "tag": "forge:plastic"
+          "b": {
+            "item": "minecraft:bucket"
           },
           "f": {
             "item": "minecraft:fishing_rod"
           },
-          "b": {
-            "item": "minecraft:bucket"
+          "g": {
+            "tag": "forge:gears/iron"
           },
           "m": {
             "tag": "industrialforegoing:machine_frame/simple"
           },
-          "g": {
-            "tag": "forge:gears/iron"
+          "p": {
+            "tag": "forge:plastic"
           },
           "r": {
             "item": "minecraft:redstone"
           }
         },
+        "pattern": [
+          "pfp",
+          "bmb",
+          "grg"
+        ],
         "result": {
           "item": "industrialforegoing:marine_fisher"
         }

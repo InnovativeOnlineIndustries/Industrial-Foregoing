@@ -1,4 +1,5 @@
 {
+  "type": "industrialforegoing:dissolution_chamber",
   "input": [
     {
       "item": "minecraft:tnt"
@@ -25,11 +26,11 @@
       "item": "minecraft:nether_star"
     }
   ],
-  "inputFluid": "{FluidName:\"industrialforegoing:ether_gas\",Amount:2000}",
-  "processingTime": 400,
+  "inputFluid": "{Amount:2000,FluidName:\"industrialforegoing:ether_gas\"}",
   "output": {
+    "count": 1,
     "item": "industrialforegoing:infinity_nuke",
-    "count": 1
+    "nbt": "{CanCharge:1b,Energy:0L,Fluid:{Amount:0,FluidName:\"biofuel\"},Selected:\"POOR\",Special:0b}"
   },
-  "type": "industrialforegoing:dissolution_chamber"
+  "processingTime": 400
 }

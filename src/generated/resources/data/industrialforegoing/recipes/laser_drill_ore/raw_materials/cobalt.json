@@ -4,19 +4,28 @@
     {
       "conditions": [
         {
+          "type": "forge:not",
           "value": {
-            "tag": "forge:raw_materials/cobalt",
-            "type": "forge:tag_empty"
-          },
-          "type": "forge:not"
+            "type": "forge:tag_empty",
+            "tag": "forge:ores/raw_materials/cobalt"
+          }
         }
       ],
       "recipe": {
-        "output": {
-          "tag": "forge:raw_materials/cobalt"
+        "type": "industrialforegoing:laser_drill_ore",
+        "catalyst": {
+          "item": "industrialforegoing:laser_lens11"
         },
+        "output": {
+          "tag": "forge:ores/raw_materials/cobalt"
+        },
+        "pointer": 0,
         "rarity": [
           {
+            "blacklist": {},
+            "depth_max": 96,
+            "depth_min": 34,
+            "weight": 8,
             "whitelist": {
               "type": "minecraft:worldgen/biome",
               "values": [
@@ -26,18 +35,9 @@
                 "minecraft:crimson_forest",
                 "minecraft:soul_sand_valley"
               ]
-            },
-            "blacklist": {},
-            "depth_min": 34,
-            "depth_max": 96,
-            "weight": 8
+            }
           }
-        ],
-        "pointer": 0,
-        "catalyst": {
-          "item": "industrialforegoing:laser_lens11"
-        },
-        "type": "industrialforegoing:laser_drill_ore"
+        ]
       }
     }
   ]

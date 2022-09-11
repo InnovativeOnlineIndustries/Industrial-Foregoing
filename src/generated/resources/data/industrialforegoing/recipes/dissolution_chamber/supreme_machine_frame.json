@@ -1,4 +1,5 @@
 {
+  "type": "industrialforegoing:dissolution_chamber",
   "input": [
     {
       "tag": "forge:plastic"
@@ -25,11 +26,10 @@
       "tag": "forge:gems/diamond"
     }
   ],
-  "inputFluid": "{FluidName:\"industrialforegoing:ether_gas\",Amount:135}",
-  "processingTime": 300,
+  "inputFluid": "{Amount:135,FluidName:\"industrialforegoing:ether_gas\"}",
   "output": {
-    "item": "industrialforegoing:machine_frame_supreme",
-    "count": 1
+    "count": 1,
+    "item": "industrialforegoing:machine_frame_supreme"
   },
-  "type": "industrialforegoing:dissolution_chamber"
+  "processingTime": 300
 }

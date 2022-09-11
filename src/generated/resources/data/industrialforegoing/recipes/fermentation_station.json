@@ -4,36 +4,36 @@
     {
       "conditions": [
         {
+          "type": "forge:and",
           "values": [
             {
-              "item": "industrialforegoing:fermentation_station",
-              "type": "forge:item_exists"
+              "type": "forge:item_exists",
+              "item": "industrialforegoing:fermentation_station"
             }
-          ],
-          "type": "forge:and"
+          ]
         }
       ],
       "recipe": {
         "type": "minecraft:crafting_shaped",
-        "pattern": [
-          "pwp",
-          "wgw",
-          "pbp"
-        ],
         "key": {
+          "b": {
+            "tag": "industrialforegoing:machine_frame/simple"
+          },
+          "g": {
+            "tag": "forge:gears/gold"
+          },
           "p": {
             "tag": "forge:plastic"
           },
           "w": {
             "tag": "minecraft:logs"
-          },
-          "g": {
-            "tag": "forge:gears/gold"
-          },
-          "b": {
-            "tag": "industrialforegoing:machine_frame/simple"
           }
         },
+        "pattern": [
+          "pwp",
+          "wgw",
+          "pbp"
+        ],
         "result": {
           "item": "industrialforegoing:fermentation_station"
         }

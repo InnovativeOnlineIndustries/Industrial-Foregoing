@@ -4,58 +4,58 @@
     {
       "conditions": [
         {
+          "type": "forge:not",
           "value": {
-            "tag": "forge:ores/ruby",
-            "type": "forge:tag_empty"
-          },
-          "type": "forge:not"
+            "type": "forge:tag_empty",
+            "tag": "forge:ores/ruby"
+          }
         }
       ],
       "recipe": {
-        "output": {
-          "tag": "forge:ores/ruby"
-        },
-        "rarity": [
-          {
-            "whitelist": {},
-            "blacklist": {
-              "type": "minecraft:worldgen/biome",
-              "values": [
-                "minecraft:the_end",
-                "minecraft:the_void",
-                "minecraft:small_end_islands",
-                "minecraft:end_barrens",
-                "minecraft:end_highlands",
-                "minecraft:end_midlands"
-              ]
-            },
-            "depth_min": 30,
-            "depth_max": 70,
-            "weight": 6
-          },
-          {
-            "whitelist": {},
-            "blacklist": {
-              "type": "minecraft:worldgen/biome",
-              "values": [
-                "minecraft:the_end",
-                "minecraft:the_void",
-                "minecraft:small_end_islands",
-                "minecraft:end_barrens",
-                "minecraft:end_highlands",
-                "minecraft:end_midlands"
-              ]
-            },
-            "depth_min": 0,
-            "depth_max": 255,
-            "weight": 1
-          }
-        ],
-        "pointer": 0,
+        "type": "industrialforegoing:laser_drill_ore",
         "catalyst": {
           "item": "industrialforegoing:laser_lens14"
         },
-        "type": "industrialforegoing:laser_drill_ore"
+        "output": {
+          "tag": "forge:ores/ruby"
+        },
+        "pointer": 0,
+        "rarity": [
+          {
+            "blacklist": {
+              "type": "minecraft:worldgen/biome",
+              "values": [
+                "minecraft:the_end",
+                "minecraft:the_void",
+                "minecraft:small_end_islands",
+                "minecraft:end_barrens",
+                "minecraft:end_highlands",
+                "minecraft:end_midlands"
+              ]
+            },
+            "depth_max": 70,
+            "depth_min": 30,
+            "weight": 6,
+            "whitelist": {}
+          },
+          {
+            "blacklist": {
+              "type": "minecraft:worldgen/biome",
+              "values": [
+                "minecraft:the_end",
+                "minecraft:the_void",
+                "minecraft:small_end_islands",
+                "minecraft:end_barrens",
+                "minecraft:end_highlands",
+                "minecraft:end_midlands"
+              ]
+            },
+            "depth_max": 255,
+            "depth_min": 0,
+            "weight": 1,
+            "whitelist": {}
+          }
+        ]
       }
     }
   ]

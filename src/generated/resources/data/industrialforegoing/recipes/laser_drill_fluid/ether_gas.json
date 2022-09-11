@@ -1,18 +1,18 @@
 {
-  "output": "{FluidName:\"industrialforegoing:ether_gas\",Amount:10}",
-  "rarity": [
-    {
-      "whitelist": {},
-      "blacklist": {},
-      "depth_min": -64,
-      "depth_max": 256,
-      "weight": 8
-    }
-  ],
-  "pointer": 0,
+  "type": "industrialforegoing:laser_drill_fluid",
   "catalyst": {
     "item": "industrialforegoing:laser_lens10"
   },
   "entity": "minecraft:wither",
-  "type": "industrialforegoing:laser_drill_fluid"
+  "output": "{Amount:10,FluidName:\"industrialforegoing:ether_gas\"}",
+  "pointer": 0,
+  "rarity": [
+    {
+      "blacklist": {},
+      "depth_max": 256,
+      "depth_min": -64,
+      "weight": 8,
+      "whitelist": {}
+    }
+  ]
 }

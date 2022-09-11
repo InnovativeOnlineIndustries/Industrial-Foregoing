@@ -4,42 +4,42 @@
     {
       "conditions": [
         {
+          "type": "forge:and",
           "values": [
             {
-              "item": "industrialforegoing:mob_duplicator",
-              "type": "forge:item_exists"
+              "type": "forge:item_exists",
+              "item": "industrialforegoing:mob_duplicator"
             }
-          ],
-          "type": "forge:and"
+          ]
         }
       ],
       "recipe": {
         "type": "minecraft:crafting_shaped",
+        "key": {
+          "C": {
+            "item": "minecraft:magma_cream"
+          },
+          "E": {
+            "item": "minecraft:emerald"
+          },
+          "M": {
+            "tag": "industrialforegoing:machine_frame/advanced"
+          },
+          "P": {
+            "tag": "forge:plastic"
+          },
+          "R": {
+            "item": "minecraft:redstone"
+          },
+          "W": {
+            "item": "minecraft:nether_wart"
+          }
+        },
         "pattern": [
           "PWP",
           "CMC",
           "ERE"
         ],
-        "key": {
-          "P": {
-            "tag": "forge:plastic"
-          },
-          "W": {
-            "item": "minecraft:nether_wart"
-          },
-          "C": {
-            "item": "minecraft:magma_cream"
-          },
-          "M": {
-            "tag": "industrialforegoing:machine_frame/advanced"
-          },
-          "E": {
-            "item": "minecraft:emerald"
-          },
-          "R": {
-            "item": "minecraft:redstone"
-          }
-        },
         "result": {
           "item": "industrialforegoing:mob_duplicator"
         }

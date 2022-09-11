@@ -4,42 +4,42 @@
     {
       "conditions": [
         {
+          "type": "forge:and",
           "values": [
             {
-              "item": "industrialforegoing:fluid_laser_base",
-              "type": "forge:item_exists"
+              "type": "forge:item_exists",
+              "item": "industrialforegoing:fluid_laser_base"
             }
-          ],
-          "type": "forge:and"
+          ]
         }
       ],
       "recipe": {
         "type": "minecraft:crafting_shaped",
-        "pattern": [
-          "pfp",
-          "bmb",
-          "grg"
-        ],
         "key": {
-          "p": {
-            "tag": "forge:plastic"
+          "b": {
+            "item": "minecraft:bucket"
           },
           "f": {
             "item": "minecraft:diamond_pickaxe"
           },
-          "b": {
-            "item": "minecraft:bucket"
+          "g": {
+            "tag": "forge:gears/diamond"
           },
           "m": {
             "tag": "industrialforegoing:machine_frame/advanced"
           },
-          "g": {
-            "tag": "forge:gears/diamond"
+          "p": {
+            "tag": "forge:plastic"
           },
           "r": {
             "item": "minecraft:redstone"
           }
         },
+        "pattern": [
+          "pfp",
+          "bmb",
+          "grg"
+        ],
         "result": {
           "item": "industrialforegoing:fluid_laser_base"
         }

@@ -4,42 +4,42 @@
     {
       "conditions": [
         {
+          "type": "forge:and",
           "values": [
             {
-              "item": "industrialforegoing:item_transporter_type",
-              "type": "forge:item_exists"
+              "type": "forge:item_exists",
+              "item": "industrialforegoing:item_transporter_type"
             }
-          ],
-          "type": "forge:and"
+          ]
         }
       ],
       "recipe": {
         "type": "minecraft:crafting_shaped",
+        "key": {
+          "C": {
+            "item": "minecraft:piston"
+          },
+          "G": {
+            "tag": "forge:ingots/gold"
+          },
+          "I": {
+            "tag": "forge:dusts/redstone"
+          },
+          "M": {
+            "tag": "industrialforegoing:machine_frame/pity"
+          },
+          "P": {
+            "item": "minecraft:ender_pearl"
+          }
+        },
         "pattern": [
           "IPI",
           "GMG",
           "ICI"
         ],
-        "key": {
-          "I": {
-            "tag": "forge:dusts/redstone"
-          },
-          "P": {
-            "item": "minecraft:ender_pearl"
-          },
-          "G": {
-            "tag": "forge:ingots/gold"
-          },
-          "M": {
-            "tag": "industrialforegoing:machine_frame/pity"
-          },
-          "C": {
-            "item": "minecraft:piston"
-          }
-        },
         "result": {
-          "item": "industrialforegoing:item_transporter_type",
-          "count": 2
+          "count": 2,
+          "item": "industrialforegoing:item_transporter_type"
         }
       }
     }

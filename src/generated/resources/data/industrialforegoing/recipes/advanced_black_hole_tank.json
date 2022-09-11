@@ -4,39 +4,39 @@
     {
       "conditions": [
         {
+          "type": "forge:and",
           "values": [
             {
-              "item": "industrialforegoing:advanced_black_hole_tank",
-              "type": "forge:item_exists"
+              "type": "forge:item_exists",
+              "item": "industrialforegoing:advanced_black_hole_tank"
             }
-          ],
-          "type": "forge:and"
+          ]
         }
       ],
       "recipe": {
         "type": "minecraft:crafting_shaped",
+        "key": {
+          "C": {
+            "item": "minecraft:bucket"
+          },
+          "E": {
+            "item": "minecraft:ender_pearl"
+          },
+          "M": {
+            "tag": "industrialforegoing:machine_frame/advanced"
+          },
+          "N": {
+            "item": "minecraft:ender_eye"
+          },
+          "P": {
+            "tag": "forge:plastic"
+          }
+        },
         "pattern": [
           "PPP",
           "NEN",
           "CMC"
         ],
-        "key": {
-          "P": {
-            "tag": "forge:plastic"
-          },
-          "N": {
-            "item": "minecraft:ender_eye"
-          },
-          "E": {
-            "item": "minecraft:ender_pearl"
-          },
-          "C": {
-            "item": "minecraft:bucket"
-          },
-          "M": {
-            "tag": "industrialforegoing:machine_frame/advanced"
-          }
-        },
         "result": {
           "item": "industrialforegoing:advanced_black_hole_tank"
         }

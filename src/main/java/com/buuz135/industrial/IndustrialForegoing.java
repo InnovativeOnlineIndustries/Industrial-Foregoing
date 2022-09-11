@@ -50,6 +50,7 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.inventory.InventoryMenu;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.LiquidBlock;
 import net.minecraft.world.level.dimension.DimensionType;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
@@ -150,6 +151,7 @@ public class IndustrialForegoing extends ModuleController {
         NonNullLazy<List<Block>> blocksToProcess = NonNullLazy.of(() ->
                 ForgeRegistries.BLOCKS.getValues()
                         .stream()
+                        .filter(block -> !block.getClass().equals(LiquidBlock.class))
                         .filter(basicBlock -> Optional.ofNullable(ForgeRegistries.BLOCKS.getKey(basicBlock))
                                 .map(ResourceLocation::getNamespace)
                                 .filter(Reference.MOD_ID::equalsIgnoreCase)
