@@ -30,15 +30,14 @@ import com.buuz135.industrial.gui.component.custom.ICanSendNetworkMessage;
 import com.buuz135.industrial.proxy.block.filter.IFilter;
 import com.buuz135.industrial.proxy.network.TransporterButtonInteractMessage;
 import com.buuz135.industrial.utils.Reference;
-import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.systems.RenderSystem;
+import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
 import net.minecraft.client.renderer.GameRenderer;
-import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.entity.player.Inventory;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -83,7 +82,7 @@ public class GuiTransporter extends AbstractContainerScreen<ContainerTransporter
         y = (height - imageHeight) / 2;
         blit(stack, x, y, 0, 0, imageWidth, imageHeight);
         if (upgrade != null) {
-            String localized = new TranslatableComponent(upgrade.getFactory().getUpgradeItem().getDescriptionId()).getString();
+            String localized = Component.translatable(upgrade.getFactory().getUpgradeItem().getDescriptionId()).getString();
             getMinecraft().font.draw(stack, localized, x + imageWidth / 2 - getMinecraft().font.width(localized) / 2, y + 6, 0x404040);
         }
         for (IGuiComponent iGuiComponent : componentList) {

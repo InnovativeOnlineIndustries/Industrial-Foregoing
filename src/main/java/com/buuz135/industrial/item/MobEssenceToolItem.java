@@ -22,21 +22,20 @@
 
 package com.buuz135.industrial.item;
 
+import net.minecraft.core.NonNullList;
 import net.minecraft.data.recipes.FinishedRecipe;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.nbt.CompoundTag;
-import net.minecraft.world.InteractionResult;
-import net.minecraft.world.InteractionHand;
-import net.minecraft.core.NonNullList;
 import net.minecraft.world.level.Level;
+import net.minecraftforge.registries.ForgeRegistries;
 
 import java.util.function.Consumer;
-
-import net.minecraft.world.item.Item.Properties;
 
 public class MobEssenceToolItem extends IFCustomItem {
 
@@ -46,7 +45,7 @@ public class MobEssenceToolItem extends IFCustomItem {
 
     @Override
     public void fillItemCategory(CreativeModeTab group, NonNullList<ItemStack> items) {
-        if (allowdedIn(group)) {
+        if (allowedIn(group)) {
             ItemStack stack = new ItemStack(this);
             addNBT(stack);
             items.add(stack);
@@ -69,7 +68,7 @@ public class MobEssenceToolItem extends IFCustomItem {
     public InteractionResult interactLivingEntity(ItemStack stack, Player playerIn, LivingEntity target, InteractionHand hand) {
         if (stack.hasTag() && stack.getTag().getInt("Kills") == 0) {
             CompoundTag compoundNBT = new CompoundTag();
-            compoundNBT.putString("Entity", target.getType().getRegistryName().toString());
+            compoundNBT.putString("Entity", ForgeRegistries.ENTITY_TYPES.getKey(target.getType()).toString());
             compoundNBT.putInt("Kills", 1);
             stack.setTag(compoundNBT);
             playerIn.setItemInHand(hand, stack);

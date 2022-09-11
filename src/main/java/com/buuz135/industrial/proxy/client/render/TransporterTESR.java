@@ -25,26 +25,22 @@ import com.buuz135.industrial.api.transporter.TransporterType;
 import com.buuz135.industrial.api.transporter.TransporterTypeFactory;
 import com.buuz135.industrial.block.transportstorage.tile.TransporterTile;
 import com.buuz135.industrial.block.transportstorage.transporter.TransporterItemType;
-import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.platform.GlStateManager;
 import com.mojang.blaze3d.systems.RenderSystem;
-
+import com.mojang.blaze3d.vertex.DefaultVertexFormat;
+import com.mojang.blaze3d.vertex.PoseStack;
+import com.mojang.blaze3d.vertex.VertexFormat;
+import com.mojang.math.Vector3f;
 import net.minecraft.client.renderer.GameRenderer;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderStateShard;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.blockentity.BlockEntityRenderer;
-import net.minecraft.client.renderer.blockentity.BlockEntityRenderDispatcher;
-import com.mojang.blaze3d.vertex.DefaultVertexFormat;
-
 import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
 import net.minecraft.core.Direction;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
 import net.minecraft.world.phys.Vec3;
-
-import com.mojang.blaze3d.vertex.VertexFormat;
-import com.mojang.math.Vector3f;
 
 import java.util.Map;
 
@@ -62,12 +58,12 @@ public class TransporterTESR implements BlockEntityRenderer<TransporterTile> {
                 .setShaderState(new RenderStateShard.ShaderStateShard(GameRenderer::getPositionColorTexShader))
                 .setTextureState(new RenderStateShard.TextureStateShard(TEXTURE, false, false))
                 .setTransparencyState(new RenderStateShard.TransparencyStateShard("translucent_transparency", () -> {
-            RenderSystem.enableBlend();
-            RenderSystem.blendFunc(GlStateManager.SourceFactor.ONE, GlStateManager.DestFactor.ONE);
-        }, () -> {
-            RenderSystem.disableBlend();
-            RenderSystem.defaultBlendFunc();
-        })).createCompositeState(true);
+                    RenderSystem.enableBlend();
+                    RenderSystem.blendFunc(GlStateManager.SourceFactor.ONE, GlStateManager.DestFactor.ONE);
+                }, () -> {
+                    RenderSystem.disableBlend();
+                    RenderSystem.defaultBlendFunc();
+                })).createCompositeState(true);
         return RenderType.create("transporter_render", DefaultVertexFormat.POSITION_COLOR_TEX, VertexFormat.Mode.QUADS, 256, false, false, state);
     }
 
@@ -126,11 +122,11 @@ public class TransporterTESR implements BlockEntityRenderer<TransporterTile> {
         for (Direction direction : transporters.keySet()) {
             if (transporters.get(direction).getAction() == TransporterTypeFactory.TransporterAction.EXTRACT) {
                 for (Direction other : transporters.keySet()) {
-                    if (direction == other || !transporters.get(direction).getFactory().getRegistryName().equals(transporters.get(other).getFactory().getRegistryName()) || transporters.get(other).getAction() == TransporterTypeFactory.TransporterAction.EXTRACT)
+                    if (direction == other || !transporters.get(direction).getFactory().getName().equals(transporters.get(other).getFactory().getName()) || transporters.get(other).getAction() == TransporterTypeFactory.TransporterAction.EXTRACT)
                         continue;
                     for (int i = -1; i < TransporterItemType.QUEUE_SIZE; ++i) {
                         stack.pushPose();
-                        Vector3f pos = getPath(direction, other, i  + partialTicks, partialTicks);
+                        Vector3f pos = getPath(direction, other, i + partialTicks, partialTicks);
                         stack.translate(pos.x(), pos.y(), pos.z());
                         transporters.get(other).renderTransfer(pos, direction, i + 1, stack, combinedOverlayIn, buffer, partialTicks);
                         stack.popPose();

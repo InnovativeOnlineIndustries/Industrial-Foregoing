@@ -31,11 +31,8 @@ import com.buuz135.industrial.utils.BlockUtils;
 import com.buuz135.industrial.utils.IndustrialTags;
 import com.hrznstudio.titanium.block.RotatableBlock;
 import com.hrznstudio.titanium.datagenerator.loot.block.BasicBlockLootTables;
-import com.hrznstudio.titanium.module.DeferredRegistryHelper;
-import com.hrznstudio.titanium.nbthandler.NBTManager;
 import com.hrznstudio.titanium.recipe.generator.TitaniumShapedRecipeBuilder;
 import com.hrznstudio.titanium.util.LangUtil;
-import com.mojang.datafixers.types.Type;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -43,9 +40,6 @@ import net.minecraft.core.NonNullList;
 import net.minecraft.data.recipes.FinishedRecipe;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.TextComponent;
-import net.minecraft.network.chat.TranslatableComponent;
-import net.minecraft.tags.Tag;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.*;
@@ -76,19 +70,19 @@ public class BlackHoleUnitBlock extends IndustrialBlock<BlackHoleUnitTile> {
     private Rarity rarity;
 
     public BlackHoleUnitBlock(Rarity rarity) {
-        super(rarity.name().toLowerCase() + "_black_hole_unit",  Properties.copy(Blocks.IRON_BLOCK), BlackHoleUnitTile.class, ModuleTransportStorage.TAB_TRANSPORT);
+        super(rarity.name().toLowerCase() + "_black_hole_unit", Properties.copy(Blocks.IRON_BLOCK), BlackHoleUnitTile.class, ModuleTransportStorage.TAB_TRANSPORT);
         this.rarity = rarity;
     }
 
     @Override
     public BlockEntityType.BlockEntitySupplier<BlackHoleUnitTile> getTileEntityFactory() {
-        return (p_155268_, p_155269_) -> new BlackHoleUnitTile(this,getRarityType(), rarity, p_155268_, p_155269_);
+        return (p_155268_, p_155269_) -> new BlackHoleUnitTile(this, getRarityType(), rarity, p_155268_, p_155269_);
     }
 
     /*
     @Override
     public void addAlternatives(DeferredRegistryHelper registry) {
-        setItem(registry.register(Item.class, rarity.name().toLowerCase() + "_black_hole_unit", this.getItemBlockFactory()));
+        setItem(registry.register(ForgeRegistries.ITEMS.getRegistryKey(), rarity.name().toLowerCase() + "_black_hole_unit", this.getItemBlockFactory()));
         NBTManager.getInstance().scanTileClassForAnnotations(BlackHoleUnitTile.class);
         tileEntityType = BlockEntityType.Builder.of(this.getTileEntityFactory()::create, new Block[]{this}).build((Type) null);
         registry.registerBlockEntityType(rarity.name().toLowerCase()  + "_black_hole_unit", () -> tileEntityType);
@@ -98,17 +92,17 @@ public class BlackHoleUnitBlock extends IndustrialBlock<BlackHoleUnitTile> {
     public void appendHoverText(ItemStack stack, @Nullable BlockGetter worldIn, List<Component> tooltip, TooltipFlag flagIn) {
         super.appendHoverText(stack, worldIn, tooltip, flagIn);
         stack.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY).ifPresent(iItemHandler -> {
-            if (iItemHandler instanceof BLHBlockItemHandlerItemStack){
+            if (iItemHandler instanceof BLHBlockItemHandlerItemStack) {
                 ItemStack contain = ((BLHBlockItemHandlerItemStack) iItemHandler).getStack();
-                if (!contain.isEmpty()){
-                    tooltip.add(new TextComponent(ChatFormatting.GOLD + LangUtil.getString("text.industrialforegoing.tooltip.item") + ": " + ChatFormatting.WHITE+ contain.getHoverName().getString()));
-                    tooltip.add(new TextComponent(ChatFormatting.GOLD + LangUtil.getString("text.industrialforegoing.tooltip.contains") +": "  + ChatFormatting.WHITE+ new DecimalFormat().format(((BLHBlockItemHandlerItemStack) iItemHandler).getAmount()) + ChatFormatting.DARK_AQUA + " " + LangUtil.getString("text.industrialforegoing.tooltip.items")));
+                if (!contain.isEmpty()) {
+                    tooltip.add(Component.literal(ChatFormatting.GOLD + LangUtil.getString("text.industrialforegoing.tooltip.item") + ": " + ChatFormatting.WHITE + contain.getHoverName().getString()));
+                    tooltip.add(Component.literal(ChatFormatting.GOLD + LangUtil.getString("text.industrialforegoing.tooltip.contains") + ": " + ChatFormatting.WHITE + new DecimalFormat().format(((BLHBlockItemHandlerItemStack) iItemHandler).getAmount()) + ChatFormatting.DARK_AQUA + " " + LangUtil.getString("text.industrialforegoing.tooltip.items")));
                 }
             }
         });
-        tooltip.add(new TextComponent(ChatFormatting.GOLD +  LangUtil.getString("text.industrialforegoing.tooltip.can_hold") + ": " + ChatFormatting.WHITE+ new DecimalFormat().format(BlockUtils.getStackAmountByRarity(rarity)) + ChatFormatting.DARK_AQUA + " "  +LangUtil.getString("text.industrialforegoing.tooltip.items")));
-        if (stack.hasTag() && stack.getTag().contains("BlockEntityTag") && stack.getTag().getCompound("BlockEntityTag").contains("voidItems") && stack.getTag().getCompound("BlockEntityTag").getBoolean("voidItems")){
-            tooltip.add(new TextComponent(ChatFormatting.GOLD + LangUtil.getString("text.industrialforegoing.tooltip.void_items")));
+        tooltip.add(Component.literal(ChatFormatting.GOLD + LangUtil.getString("text.industrialforegoing.tooltip.can_hold") + ": " + ChatFormatting.WHITE + new DecimalFormat().format(BlockUtils.getStackAmountByRarity(rarity)) + ChatFormatting.DARK_AQUA + " " + LangUtil.getString("text.industrialforegoing.tooltip.items")));
+        if (stack.hasTag() && stack.getTag().contains("BlockEntityTag") && stack.getTag().getCompound("BlockEntityTag").contains("voidItems") && stack.getTag().getCompound("BlockEntityTag").getBoolean("voidItems")) {
+            tooltip.add(Component.literal(ChatFormatting.GOLD + LangUtil.getString("text.industrialforegoing.tooltip.void_items")));
         }
     }
 
@@ -125,10 +119,10 @@ public class BlackHoleUnitBlock extends IndustrialBlock<BlackHoleUnitTile> {
     @Override
     public LootTable.Builder getLootTable(@Nonnull BasicBlockLootTables blockLootTables) {
         CopyNbtFunction.Builder nbtBuilder = CopyNbtFunction.copyData(ContextNbtProvider.BLOCK_ENTITY);
-        nbtBuilder.copy("stored",  "BlockEntityTag.stored");
-        nbtBuilder.copy("blStack",  "BlockEntityTag.blStack");
-        nbtBuilder.copy("voidItems",  "BlockEntityTag.voidItems");
-        nbtBuilder.copy("hasNBT",  "BlockEntityTag.hasNBT");
+        nbtBuilder.copy("stored", "BlockEntityTag.stored");
+        nbtBuilder.copy("blStack", "BlockEntityTag.blStack");
+        nbtBuilder.copy("voidItems", "BlockEntityTag.voidItems");
+        nbtBuilder.copy("hasNBT", "BlockEntityTag.hasNBT");
         return blockLootTables.droppingSelfWithNbt(this, nbtBuilder);
     }
 
@@ -144,7 +138,7 @@ public class BlackHoleUnitBlock extends IndustrialBlock<BlackHoleUnitTile> {
 
     @Override
     public void registerRecipe(Consumer<FinishedRecipe> consumer) {
-        if (rarity == Rarity.COMMON){
+        if (rarity == Rarity.COMMON) {
             TitaniumShapedRecipeBuilder.shapedRecipe(this)
                     .pattern("PPP").pattern("CEC").pattern("CMC")
                     .define('P', Tags.Items.INGOTS_IRON)
@@ -168,15 +162,16 @@ public class BlackHoleUnitBlock extends IndustrialBlock<BlackHoleUnitTile> {
         }
     }
 
-    private BlockEntityType getRarityType(){
+    private BlockEntityType getRarityType() {
         if (rarity == Rarity.COMMON) return ModuleTransportStorage.BLACK_HOLE_UNIT_COMMON.getRight().get();
         if (rarity == ModuleCore.SIMPLE_RARITY) return ModuleTransportStorage.BLACK_HOLE_UNIT_SIMPLE.getRight().get();
-        if (rarity == ModuleCore.ADVANCED_RARITY) return ModuleTransportStorage.BLACK_HOLE_UNIT_ADVANCED.getRight().get();
+        if (rarity == ModuleCore.ADVANCED_RARITY)
+            return ModuleTransportStorage.BLACK_HOLE_UNIT_ADVANCED.getRight().get();
         if (rarity == ModuleCore.SUPREME_RARITY) return ModuleTransportStorage.BLACK_HOLE_UNIT_SUPREME.getRight().get();
         return ModuleTransportStorage.BLACK_HOLE_UNIT_PITY.getRight().get();
     }
-    
-    public static class BlackHoleUnitItem extends BlockItem{
+
+    public static class BlackHoleUnitItem extends BlockItem {
 
         private Rarity rarity;
 
@@ -194,7 +189,7 @@ public class BlackHoleUnitBlock extends IndustrialBlock<BlackHoleUnitTile> {
         @Nullable
         @Override
         public String getCreatorModId(ItemStack itemStack) {
-            return new TranslatableComponent("itemGroup." + this.category.getRecipeFolderName()).getString();
+            return Component.translatable("itemGroup." + this.category.getRecipeFolderName()).getString();
         }
     }
 

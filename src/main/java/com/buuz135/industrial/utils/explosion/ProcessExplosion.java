@@ -22,23 +22,23 @@
 package com.buuz135.industrial.utils.explosion;
 
 import com.buuz135.industrial.IndustrialForegoing;
-import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.level.block.Blocks;
-import net.minecraft.world.level.block.FallingBlock;
-import net.minecraft.world.level.levelgen.LegacyRandomSource;
-import net.minecraft.world.level.material.Material;
+import com.mojang.math.Vector3f;
+import net.minecraft.core.BlockPos;
+import net.minecraft.server.MinecraftServer;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.util.Mth;
+import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.animal.Cat;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.server.MinecraftServer;
-import net.minecraft.world.damagesource.DamageSource;
-import net.minecraft.world.phys.AABB;
-import net.minecraft.core.BlockPos;
-import net.minecraft.util.Mth;
-import com.mojang.math.Vector3f;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.FallingBlock;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.levelgen.LegacyRandomSource;
 import net.minecraft.world.level.levelgen.synth.SimplexNoise;
-import net.minecraft.server.level.ServerLevel;
+import net.minecraft.world.level.material.Material;
+import net.minecraft.world.phys.AABB;
 import net.minecraftforge.fluids.IFluidBlock;
 
 import java.util.Arrays;
@@ -308,7 +308,7 @@ public class ProcessExplosion {
             }
         } else {
             scannedCache.add(iPos);
-     }
+        }
 
         r = (r / radius) / travel;//?
 

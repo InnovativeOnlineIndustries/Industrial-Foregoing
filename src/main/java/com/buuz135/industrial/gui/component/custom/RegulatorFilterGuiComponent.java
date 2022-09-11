@@ -28,14 +28,13 @@ import com.buuz135.industrial.utils.Reference;
 import com.hrznstudio.titanium.util.AssetUtil;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
+import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.TextComponent;
-import net.minecraft.ChatFormatting;
+import net.minecraft.resources.ResourceLocation;
 
 import javax.annotation.Nullable;
 import java.util.List;
@@ -154,7 +153,7 @@ public abstract class RegulatorFilterGuiComponent extends PositionedGuiComponent
                 if (mouseX > posX + 1 && mouseX < posX + 1 + 16 && mouseY > posY + 1 && mouseY < posY + 1 + 16 && !getFilter().getFilter()[pos].getStack().isEmpty()) {
                     List<Component> strings = Minecraft.getInstance().screen.getTooltipFromItem(getFilter().getFilter()[pos].getStack());
                     if (isRegulator())
-                        strings.add(new TextComponent(ChatFormatting.DARK_GRAY + "*Use Scroll Wheel to change*"));
+                        strings.add(Component.literal(ChatFormatting.DARK_GRAY + "*Use Scroll Wheel to change*"));
                     return strings;
                 }
                 ++pos;

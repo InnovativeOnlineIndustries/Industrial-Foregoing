@@ -29,7 +29,6 @@ import com.hrznstudio.titanium.component.IComponentHarness;
 import com.hrznstudio.titanium.component.energy.EnergyStorageComponent;
 import com.hrznstudio.titanium.container.addon.IContainerAddon;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.nbt.IntTag;
 import net.minecraft.nbt.Tag;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
@@ -114,7 +113,7 @@ public class InfinityEnergyStorage<T extends IComponentHarness> extends EnergySt
 
     @Override
     public void deserializeNBT(Tag nbt) {
-        if (nbt instanceof CompoundTag compoundTag){
+        if (nbt instanceof CompoundTag compoundTag) {
             this.energy = compoundTag.getLong("energy");
         }
     }

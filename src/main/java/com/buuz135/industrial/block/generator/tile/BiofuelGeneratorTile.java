@@ -27,7 +27,6 @@ import com.buuz135.industrial.config.machine.generator.BiofuelGeneratorConfig;
 import com.buuz135.industrial.module.ModuleCore;
 import com.buuz135.industrial.module.ModuleGenerator;
 import com.hrznstudio.titanium.annotation.Save;
-import com.hrznstudio.titanium.block.BasicTileBlock;
 import com.hrznstudio.titanium.component.fluid.FluidTankComponent;
 import com.hrznstudio.titanium.component.fluid.SidedFluidTankComponent;
 import com.hrznstudio.titanium.component.progress.ProgressBarComponent;

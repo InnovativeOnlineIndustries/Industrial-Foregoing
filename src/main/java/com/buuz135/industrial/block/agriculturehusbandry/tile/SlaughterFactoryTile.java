@@ -29,12 +29,10 @@ import com.buuz135.industrial.item.addon.RangeAddonItem;
 import com.buuz135.industrial.module.ModuleAgricultureHusbandry;
 import com.buuz135.industrial.module.ModuleCore;
 import com.hrznstudio.titanium.annotation.Save;
-import com.hrznstudio.titanium.block.BasicTileBlock;
 import com.hrznstudio.titanium.component.energy.EnergyStorageComponent;
 import com.hrznstudio.titanium.component.fluid.FluidTankComponent;
 import com.hrznstudio.titanium.component.fluid.SidedFluidTankComponent;
 import com.hrznstudio.titanium.item.AugmentWrapper;
-
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
@@ -50,8 +48,6 @@ import net.minecraftforge.fluids.capability.IFluidHandler;
 import javax.annotation.Nonnull;
 import java.util.List;
 import java.util.stream.Collectors;
-
-import com.buuz135.industrial.block.tile.IndustrialWorkingTile.WorkAction;
 
 public class SlaughterFactoryTile extends IndustrialAreaWorkingTile<SlaughterFactoryTile> {
 
@@ -104,10 +100,10 @@ public class SlaughterFactoryTile extends IndustrialAreaWorkingTile<SlaughterFac
     }
 
     public VoxelShape getWorkingArea() {
-        return new RangeManager(this.worldPosition, this.getFacingDirection(), RangeManager.RangeType.BEHIND){
+        return new RangeManager(this.worldPosition, this.getFacingDirection(), RangeManager.RangeType.BEHIND) {
             @Override
             public AABB getBox() {
-                return super.getBox().expandTowards(0,2, 0);
+                return super.getBox().expandTowards(0, 2, 0);
             }
         }.get(hasAugmentInstalled(RangeAddonItem.RANGE) ? ((int) AugmentWrapper.getType(getInstalledAugments(RangeAddonItem.RANGE).get(0), RangeAddonItem.RANGE) + 1) : 0);
     }

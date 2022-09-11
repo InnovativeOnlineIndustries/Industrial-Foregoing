@@ -37,16 +37,16 @@ import com.hrznstudio.titanium.recipe.generator.TitaniumShapedRecipeBuilder;
 import com.hrznstudio.titanium.util.TileUtil;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.MultiBufferSource;
-import net.minecraft.data.recipes.FinishedRecipe;
-import net.minecraft.world.item.Items;
-import net.minecraft.nbt.CompoundTag;
-import net.minecraft.core.Direction;
-import net.minecraft.resources.ResourceLocation;
-import net.minecraft.core.BlockPos;
 import com.mojang.math.Matrix4f;
 import com.mojang.math.Vector3f;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.renderer.MultiBufferSource;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.data.recipes.FinishedRecipe;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.item.Items;
 import net.minecraft.world.level.Level;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
@@ -63,8 +63,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Set;
 import java.util.function.Consumer;
-
-import com.buuz135.industrial.api.transporter.TransporterTypeFactory.TransporterAction;
 
 public class TransporterFluidType extends FilteredTransporterType<FluidStack, IFluidHandler> {
 
@@ -116,14 +114,14 @@ public class TransporterFluidType extends FilteredTransporterType<FluidStack, IF
     public void update() {
         super.update();
         float speed = getSpeed();
-        if (!getWorld().isClientSide && getWorld().getGameTime() % (Math.max(1, 4 - speed)) == 0) {
+        if (!getLevel().isClientSide && getLevel().getGameTime() % (Math.max(1, 4 - speed)) == 0) {
             IBlockContainer container = getContainer();
             if (getAction() == TransporterTypeFactory.TransporterAction.EXTRACT && container instanceof TransporterTile) {
                 for (Direction direction : ((TransporterTile) container).getTransporterTypeMap().keySet()) {
                     TransporterType transporterType = ((TransporterTile) container).getTransporterTypeMap().get(direction);
                     if (transporterType instanceof TransporterFluidType && transporterType.getAction() == TransporterTypeFactory.TransporterAction.INSERT) {
-                        TileUtil.getTileEntity(getWorld(), getPos().relative(this.getSide())).ifPresent(tileEntity -> tileEntity.getCapability(CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY, getSide().getOpposite()).ifPresent(origin -> {
-                            TileUtil.getTileEntity(getWorld(), getPos().relative(direction)).ifPresent(otherTile -> otherTile.getCapability(CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY, direction.getOpposite()).ifPresent(destination -> {
+                        TileUtil.getTileEntity(getLevel(), getPos().relative(this.getSide())).ifPresent(tileEntity -> tileEntity.getCapability(CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY, getSide().getOpposite()).ifPresent(origin -> {
+                            TileUtil.getTileEntity(getLevel(), getPos().relative(direction)).ifPresent(otherTile -> otherTile.getCapability(CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY, direction.getOpposite()).ifPresent(destination -> {
                                 int amount = (int) (50 * getEfficiency());
                                 FluidStack simulatedStack = origin.drain(amount, IFluidHandler.FluidAction.SIMULATE);
                                 int filteredAmount = ((TransporterFluidType) transporterType).getFilter().matches(simulatedStack, destination, ((TransporterFluidType) transporterType).isRegulated());
@@ -202,9 +200,9 @@ public class TransporterFluidType extends FilteredTransporterType<FluidStack, IF
                 Color CLOSE = Color.CYAN;
                 Color FAR = new Color(0x6800FF);
                 double ratio = (step + 2.5) / (double) QUEUE_SIZE;
-                red = (int) Math.abs((ratio * FAR.getRed()) + ((1 - ratio) * CLOSE.getRed()))/ 256F;
-                green = (int) Math.abs((ratio * FAR.getGreen()) + ((1 - ratio) * CLOSE.getGreen()))/ 256F;
-                blue = (int) Math.abs((ratio * FAR.getBlue()) + ((1 - ratio) * CLOSE.getBlue()))/ 256F;
+                red = (int) Math.abs((ratio * FAR.getRed()) + ((1 - ratio) * CLOSE.getRed())) / 256F;
+                green = (int) Math.abs((ratio * FAR.getGreen()) + ((1 - ratio) * CLOSE.getGreen())) / 256F;
+                blue = (int) Math.abs((ratio * FAR.getBlue()) + ((1 - ratio) * CLOSE.getBlue())) / 256F;
                 stack.scale(0.25f, 0.25f, 0.25f);
             } else {
                 Color color = new Color(FluidUtils.getFluidColor(fluidStack));
@@ -225,7 +223,7 @@ public class TransporterFluidType extends FilteredTransporterType<FluidStack, IF
     public static class Factory extends TransporterTypeFactory {
 
         public Factory() {
-            setRegistryName("fluid");
+            super("fluid");
         }
 
         @Override

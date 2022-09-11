@@ -26,25 +26,19 @@ import com.buuz135.industrial.block.IndustrialBlock;
 import com.buuz135.industrial.block.misc.tile.MobDetectorTile;
 import com.buuz135.industrial.module.ModuleMisc;
 import com.buuz135.industrial.utils.IndustrialTags;
-import com.hrznstudio.titanium.api.IFactory;
 import com.hrznstudio.titanium.block.RotatableBlock;
 import com.hrznstudio.titanium.recipe.generator.TitaniumShapedRecipeBuilder;
-
-import net.minecraft.world.level.block.entity.BlockEntityType;
-import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.level.block.Blocks;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
 import net.minecraft.data.recipes.FinishedRecipe;
 import net.minecraft.world.item.Items;
-import net.minecraft.core.Direction;
-import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.BlockGetter;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.entity.BlockEntityType;
+import net.minecraft.world.level.block.state.BlockState;
 
 import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
 import java.util.function.Consumer;
-
-import com.hrznstudio.titanium.block.RotatableBlock.RotationType;
-import net.minecraft.world.level.block.state.BlockBehaviour.Properties;
 
 public class MobDetectorBlock extends IndustrialBlock<MobDetectorTile> {
 
@@ -80,13 +74,13 @@ public class MobDetectorBlock extends IndustrialBlock<MobDetectorTile> {
     @Override
     public void registerRecipe(Consumer<FinishedRecipe> consumer) {
         TitaniumShapedRecipeBuilder.shapedRecipe(this)
-            .pattern("ppp").pattern("rcr").pattern("omo")
-            .define('p', IndustrialTags.Items.PLASTIC)
-            .define('r', Items.REPEATER)
-            .define('c', Items.COMPARATOR)
-            .define('o', Items.OBSERVER)
-            .define('m', IndustrialTags.Items.MACHINE_FRAME_SIMPLE)
-            .save(consumer);
+                .pattern("ppp").pattern("rcr").pattern("omo")
+                .define('p', IndustrialTags.Items.PLASTIC)
+                .define('r', Items.REPEATER)
+                .define('c', Items.COMPARATOR)
+                .define('o', Items.OBSERVER)
+                .define('m', IndustrialTags.Items.MACHINE_FRAME_SIMPLE)
+                .save(consumer);
     }
 
 }

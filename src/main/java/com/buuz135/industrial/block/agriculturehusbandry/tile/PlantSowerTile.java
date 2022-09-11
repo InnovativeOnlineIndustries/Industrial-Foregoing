@@ -29,26 +29,22 @@ import com.buuz135.industrial.item.addon.RangeAddonItem;
 import com.buuz135.industrial.module.ModuleAgricultureHusbandry;
 import com.hrznstudio.titanium.annotation.Save;
 import com.hrznstudio.titanium.api.filter.FilterSlot;
-import com.hrznstudio.titanium.block.BasicTileBlock;
 import com.hrznstudio.titanium.component.bundle.LockableInventoryBundle;
 import com.hrznstudio.titanium.component.energy.EnergyStorageComponent;
 import com.hrznstudio.titanium.component.inventory.SidedInventoryComponent;
 import com.hrznstudio.titanium.filter.ItemStackFilter;
 import com.hrznstudio.titanium.item.AugmentWrapper;
-import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.Blocks;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.DyeColor;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.core.Direction;
-import net.minecraft.core.BlockPos;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
-
 import net.minecraftforge.common.IPlantable;
 
 import javax.annotation.Nonnull;
-
-import com.buuz135.industrial.block.tile.IndustrialWorkingTile.WorkAction;
 
 public class PlantSowerTile extends IndustrialAreaWorkingTile<PlantSowerTile> {
 

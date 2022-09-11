@@ -26,19 +26,14 @@ import com.buuz135.industrial.block.IndustrialBlock;
 import com.buuz135.industrial.block.agriculturehusbandry.tile.AnimalRancherTile;
 import com.buuz135.industrial.module.ModuleAgricultureHusbandry;
 import com.buuz135.industrial.utils.IndustrialTags;
-import com.hrznstudio.titanium.api.IFactory;
 import com.hrznstudio.titanium.recipe.generator.TitaniumShapedRecipeBuilder;
-import net.minecraft.world.level.block.Blocks;
 import net.minecraft.data.recipes.FinishedRecipe;
 import net.minecraft.world.item.Items;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.entity.BlockEntityType;
 
 import javax.annotation.Nonnull;
 import java.util.function.Consumer;
-
-import com.hrznstudio.titanium.block.RotatableBlock.RotationType;
-
-import net.minecraft.world.level.block.entity.BlockEntityType;
-import net.minecraft.world.level.block.state.BlockBehaviour.Properties;
 
 public class AnimalRancherBlock extends IndustrialBlock<AnimalRancherTile> {
 

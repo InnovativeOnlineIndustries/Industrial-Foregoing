@@ -27,20 +27,16 @@ import com.hrznstudio.titanium.annotation.Save;
 import com.hrznstudio.titanium.api.IFactory;
 import com.hrznstudio.titanium.api.augment.AugmentTypes;
 import com.hrznstudio.titanium.api.client.IScreenAddon;
-import com.hrznstudio.titanium.block.BasicTileBlock;
 import com.hrznstudio.titanium.client.screen.addon.ProgressBarScreenAddon;
 import com.hrznstudio.titanium.component.progress.ProgressBarComponent;
 import com.hrznstudio.titanium.item.AugmentWrapper;
-
-import net.minecraft.core.BlockPos;
-import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.InteractionResult;
-import net.minecraft.core.Direction;
-import net.minecraft.world.InteractionHand;
-import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.TextComponent;
 import net.minecraft.ChatFormatting;
-import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.network.chat.Component;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.InteractionResult;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
@@ -62,19 +58,19 @@ public abstract class IndustrialProcessingTile<T extends IndustrialProcessingTil
     public IndustrialProcessingTile(Pair<RegistryObject<Block>, RegistryObject<BlockEntityType<?>>> basicTileBlock, int x, int y, BlockPos blockPos, BlockState blockState) {
         super(basicTileBlock, blockPos, blockState);
         //this.addGuiAddonFactory(() -> new EnergyBarScreenAddon(10, 20, getEnergyStorage()));
-        this.addProgressBar(progressBar = new ProgressBarComponent<T>(x, y, getMaxProgress()){
+        this.addProgressBar(progressBar = new ProgressBarComponent<T>(x, y, getMaxProgress()) {
                     @Override
                     @OnlyIn(Dist.CLIENT)
                     public List<IFactory<? extends IScreenAddon>> getScreenAddons() {
-                        return Collections.singletonList(() -> new ProgressBarScreenAddon(x, y, progressBar){
+                        return Collections.singletonList(() -> new ProgressBarScreenAddon(x, y, progressBar) {
                             @Override
                             public List<Component> getTooltipLines() {
                                 List<Component> tooltip = new ArrayList<>();
-                                tooltip.add(new TextComponent(ChatFormatting.GOLD + new TranslatableComponent("tooltip.titanium.progressbar.progress").getString() +  ChatFormatting.WHITE + new DecimalFormat().format(progressBar.getProgress()) + ChatFormatting.GOLD + "/" + ChatFormatting.WHITE + new DecimalFormat().format(progressBar.getMaxProgress())));
+                                tooltip.add(Component.literal(ChatFormatting.GOLD + Component.translatable("tooltip.titanium.progressbar.progress").getString() + ChatFormatting.WHITE + new DecimalFormat().format(progressBar.getProgress()) + ChatFormatting.GOLD + "/" + ChatFormatting.WHITE + new DecimalFormat().format(progressBar.getMaxProgress())));
                                 int progress = (progressBar.getMaxProgress() - progressBar.getProgress());
                                 if (!progressBar.getIncreaseType()) progress = progressBar.getMaxProgress() - progress;
-                                tooltip.add(new TextComponent(ChatFormatting.GOLD + "ETA: " + ChatFormatting.WHITE + new DecimalFormat().format(Math.ceil(progress * progressBar.getTickingTime() / 20D / progressBar.getProgressIncrease())) + ChatFormatting.DARK_AQUA + "s"));
-                                tooltip.add(new TextComponent(ChatFormatting.GOLD + new TranslatableComponent("tooltip.industrialforegoing.usage").getString() +  ChatFormatting.WHITE + getTickPower() + ChatFormatting.DARK_AQUA+ " FE" + ChatFormatting.GOLD + "/" + ChatFormatting.WHITE +ChatFormatting.DARK_AQUA+ "t"));
+                                tooltip.add(Component.literal(ChatFormatting.GOLD + "ETA: " + ChatFormatting.WHITE + new DecimalFormat().format(Math.ceil(progress * progressBar.getTickingTime() / 20D / progressBar.getProgressIncrease())) + ChatFormatting.DARK_AQUA + "s"));
+                                tooltip.add(Component.literal(ChatFormatting.GOLD + Component.translatable("tooltip.industrialforegoing.usage").getString() + ChatFormatting.WHITE + getTickPower() + ChatFormatting.DARK_AQUA + " FE" + ChatFormatting.GOLD + "/" + ChatFormatting.WHITE + ChatFormatting.DARK_AQUA + "t"));
                                 return tooltip;
                             }
                         });
@@ -89,18 +85,18 @@ public abstract class IndustrialProcessingTile<T extends IndustrialProcessingTil
                         }).
                         setCanIncrease(tileEntity -> getEnergyStorage().getEnergyStored() >= getTickPower() && canIncrease() && this.getRedstoneManager().getAction().canRun(tileEntity.getEnvironmentValue(false, null)) && this.getRedstoneManager().shouldWork()).
                         setOnTickWork(() -> {
-                    getEnergyStorage().extractEnergy(getTickPower(), false);
-                    progressBar.setProgressIncrease(this.hasAugmentInstalled(AugmentTypes.SPEED) ? (int) AugmentWrapper.getType(this.getInstalledAugments(AugmentTypes.SPEED).get(0), AugmentTypes.SPEED) : 1);
-                }).
-                setOnFinishWork(() -> {
-                    int operations = (int) (this.hasAugmentInstalled(ProcessingAddonItem.PROCESSING) ? AugmentWrapper.getType(this.getInstalledAugments(ProcessingAddonItem.PROCESSING).get(0), ProcessingAddonItem.PROCESSING) : 1);
-                    for (int i = 0; i < operations; i++) {
-                        if (canIncrease()){
-                            onFinish().run();
-                        }
-                    }
-                    this.getRedstoneManager().finish();
-                })
+                            getEnergyStorage().extractEnergy(getTickPower(), false);
+                            progressBar.setProgressIncrease(this.hasAugmentInstalled(AugmentTypes.SPEED) ? (int) AugmentWrapper.getType(this.getInstalledAugments(AugmentTypes.SPEED).get(0), AugmentTypes.SPEED) : 1);
+                        }).
+                        setOnFinishWork(() -> {
+                            int operations = (int) (this.hasAugmentInstalled(ProcessingAddonItem.PROCESSING) ? AugmentWrapper.getType(this.getInstalledAugments(ProcessingAddonItem.PROCESSING).get(0), ProcessingAddonItem.PROCESSING) : 1);
+                            for (int i = 0; i < operations; i++) {
+                                if (canIncrease()) {
+                                    onFinish().run();
+                                }
+                            }
+                            this.getRedstoneManager().finish();
+                        })
         );
     }
 

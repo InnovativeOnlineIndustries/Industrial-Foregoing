@@ -25,15 +25,16 @@ package com.buuz135.industrial.block.generator.mycelial;
 import com.buuz135.industrial.plugin.jei.generator.MycelialGeneratorRecipe;
 import com.buuz135.industrial.utils.IndustrialTags;
 import com.hrznstudio.titanium.component.inventory.SidedInventoryComponent;
+import net.minecraft.core.BlockPos;
 import net.minecraft.data.recipes.ShapedRecipeBuilder;
-import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
-import net.minecraft.world.phys.AABB;
-import net.minecraft.core.BlockPos;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.item.*;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.phys.AABB;
 import net.minecraftforge.common.util.INBTSerializable;
 import net.minecraftforge.fluids.FluidStack;
 import org.apache.commons.lang3.tuple.Pair;
@@ -44,13 +45,7 @@ import java.util.List;
 import java.util.function.BiPredicate;
 import java.util.function.Predicate;
 
-import net.minecraft.world.item.DyeColor;
-import net.minecraft.world.item.FireworkRocketItem;
-import net.minecraft.world.item.Item;
-import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.Items;
-
-public class FireworkGeneratorType implements IMycelialGeneratorType{
+public class FireworkGeneratorType implements IMycelialGeneratorType {
 
 
     @Override
@@ -80,12 +75,12 @@ public class FireworkGeneratorType implements IMycelialGeneratorType{
 
     @Override
     public Pair<Integer, Integer> getTimeAndPowerGeneration(INBTSerializable<CompoundTag>[] inputs) {
-        if (inputs.length > 0 && inputs[0] instanceof SidedInventoryComponent && ((SidedInventoryComponent<?>) inputs[0]).getStackInSlot(0).getCount() > 0){
+        if (inputs.length > 0 && inputs[0] instanceof SidedInventoryComponent && ((SidedInventoryComponent<?>) inputs[0]).getStackInSlot(0).getCount() > 0) {
             ItemStack stack = ((SidedInventoryComponent<?>) inputs[0]).getStackInSlot(0);
             stack.shrink(1);
             return calculate(stack);
         }
-        return Pair.of(0,80);
+        return Pair.of(0, 80);
     }
 
     @Override
@@ -134,16 +129,21 @@ public class FireworkGeneratorType implements IMycelialGeneratorType{
                 }
             }
         }
-        return Pair.of((int)(80 * power),  60 * flight);
+        return Pair.of((int) (80 * power), 60 * flight);
     }
 
-    private double getShapeModifier(FireworkRocketItem.Shape shape){
-        switch (shape){
-            case STAR: return 1.2;
-            case BURST: return 1.05;
-            case CREEPER: return 1.5;
-            case LARGE_BALL: return 1.1;
-            default: return 1.01;
+    private double getShapeModifier(FireworkRocketItem.Shape shape) {
+        switch (shape) {
+            case STAR:
+                return 1.2;
+            case BURST:
+                return 1.05;
+            case CREEPER:
+                return 1.5;
+            case LARGE_BALL:
+                return 1.1;
+            default:
+                return 1.01;
         }
     }
 

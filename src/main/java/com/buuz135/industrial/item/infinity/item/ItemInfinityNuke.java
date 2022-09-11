@@ -37,6 +37,7 @@ import net.minecraft.world.item.Items;
 import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraftforge.fluids.FluidStack;
+import net.minecraftforge.registries.ForgeRegistries;
 
 import java.util.function.Consumer;
 
@@ -51,7 +52,7 @@ public class ItemInfinityNuke extends ItemInfinity {
 
     public static int getRadius(ItemStack stack) {
         int tier = getSelectedTier(stack).getRadius() + 1;
-        double fluidAmount = 1 + ((ItemInfinityNuke)ModuleTool.INFINITY_NUKE.get()).getFuelFromStack(stack) / 1_000_000D * 0.5;
+        double fluidAmount = 1 + ((ItemInfinityNuke) ModuleTool.INFINITY_NUKE.get()).getFuelFromStack(stack) / 1_000_000D * 0.5;
         return (int) ((1 + Math.ceil((tier * tier * tier) / 2D)) * fluidAmount);
     }
 
@@ -73,7 +74,7 @@ public class ItemInfinityNuke extends ItemInfinity {
 
     @Override
     public void registerRecipe(Consumer<FinishedRecipe> consumer) {
-        new DissolutionChamberRecipe(this.getRegistryName(),
+        new DissolutionChamberRecipe(ForgeRegistries.ITEMS.getKey(this),
                 new Ingredient.Value[]{
                         new Ingredient.ItemValue(new ItemStack(Items.TNT)),
                         new Ingredient.ItemValue(new ItemStack(Items.TNT)),

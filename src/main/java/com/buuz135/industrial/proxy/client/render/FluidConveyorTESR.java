@@ -24,27 +24,26 @@ package com.buuz135.industrial.proxy.client.render;
 
 import com.buuz135.industrial.block.transportstorage.ConveyorBlock;
 import com.buuz135.industrial.block.transportstorage.tile.ConveyorTile;
-import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.systems.RenderSystem;
+import com.mojang.blaze3d.vertex.DefaultVertexFormat;
+import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.mojang.blaze3d.vertex.VertexFormat;
+import com.mojang.math.Matrix4f;
+import com.mojang.math.Vector3f;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.GameRenderer;
 import net.minecraft.client.renderer.MultiBufferSource;
-import com.mojang.blaze3d.platform.Lighting;
 import net.minecraft.client.renderer.RenderStateShard;
 import net.minecraft.client.renderer.RenderType;
-import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
-import net.minecraft.client.renderer.texture.TextureAtlas;
-import net.minecraft.client.renderer.texture.AbstractTexture;
-import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.client.renderer.blockentity.BlockEntityRenderer;
-import net.minecraft.client.renderer.blockentity.BlockEntityRenderDispatcher;
-import com.mojang.blaze3d.vertex.DefaultVertexFormat;
+import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
+import net.minecraft.client.renderer.texture.AbstractTexture;
+import net.minecraft.client.renderer.texture.TextureAtlas;
+import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.core.Direction;
 import net.minecraft.resources.ResourceLocation;
-import com.mojang.math.Matrix4f;
-import com.mojang.math.Vector3f;
+import net.minecraftforge.client.extensions.common.IClientFluidTypeExtensions;
 import net.minecraftforge.fluids.FluidStack;
 import org.lwjgl.opengl.GL11;
 
@@ -57,13 +56,13 @@ public class FluidConveyorTESR implements BlockEntityRenderer<ConveyorTile> {
                 .setShaderState(new RenderStateShard.ShaderStateShard(GameRenderer::getPositionColorTexShader))
                 .setTextureState(new RenderStateShard.TextureStateShard(texture, false, false))
                 .setTransparencyState(new RenderStateShard.TransparencyStateShard("translucent_transparency", () -> {
-            RenderSystem.enableBlend();
-            RenderSystem.blendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
+                    RenderSystem.enableBlend();
+                    RenderSystem.blendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
 
-            RenderSystem.disableCull();
-        }, () -> {
-            RenderSystem.disableBlend();
-        })).createCompositeState(true);
+                    RenderSystem.disableCull();
+                }, () -> {
+                    RenderSystem.disableBlend();
+                })).createCompositeState(true);
         return RenderType.create("conveyor_fluid", DefaultVertexFormat.POSITION_COLOR_TEX, VertexFormat.Mode.QUADS, 32, false, true, state);
     }
 
@@ -96,8 +95,9 @@ public class FluidConveyorTESR implements BlockEntityRenderer<ConveyorTile> {
             AbstractTexture texture = Minecraft.getInstance().getTextureManager().getTexture(TextureAtlas.LOCATION_BLOCKS);
             if (texture instanceof TextureAtlas) {
                 FluidStack fluid = te.getTank().getFluid();
-                TextureAtlasSprite flow = ((TextureAtlas) texture).getSprite(fluid.getFluid().getAttributes().getFlowingTexture(fluid));
-                TextureAtlasSprite still = ((TextureAtlas) texture).getSprite(fluid.getFluid().getAttributes().getStillTexture(fluid));
+                IClientFluidTypeExtensions renderProperties = IClientFluidTypeExtensions.of(fluid.getFluid());
+                TextureAtlasSprite flow = ((TextureAtlas) texture).getSprite(renderProperties.getFlowingTexture(fluid));
+                TextureAtlasSprite still = ((TextureAtlas) texture).getSprite(renderProperties.getStillTexture(fluid));
                 float posY = 2 / 16f - 1 / 32f;
                 float right = 1 / 16f;
                 float left = 15 / 16f;
@@ -106,7 +106,7 @@ public class FluidConveyorTESR implements BlockEntityRenderer<ConveyorTile> {
                 ConveyorBlock.EnumSides sides = ConveyorBlock.EnumSides.NONE;
                 if (sides == ConveyorBlock.EnumSides.BOTH || sides == ConveyorBlock.EnumSides.RIGHT) right = 0;
                 if (sides == ConveyorBlock.EnumSides.BOTH || sides == ConveyorBlock.EnumSides.LEFT) left = 1;
-                Color color = new Color(fluid.getFluid().getAttributes().getColor(te.getTank().getFluid()));
+                Color color = new Color(renderProperties.getTintColor(te.getTank().getFluid()));
                 matrixStack.pushPose();
                 Matrix4f matrix = matrixStack.last().pose();
                 float animation = 16 * flow.uvShrinkRatio() * (te.getLevel().getGameTime() % flow.getFrameCount());

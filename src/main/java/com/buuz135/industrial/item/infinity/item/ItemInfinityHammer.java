@@ -42,7 +42,6 @@ import net.minecraft.core.Direction;
 import net.minecraft.data.recipes.FinishedRecipe;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.util.Mth;
 import net.minecraft.world.InteractionHand;
@@ -77,6 +76,7 @@ import net.minecraft.world.phys.shapes.VoxelShape;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.fluids.FluidStack;
+import net.minecraftforge.registries.ForgeRegistries;
 
 import java.util.HashMap;
 import java.util.List;
@@ -122,7 +122,7 @@ public class ItemInfinityHammer extends ItemInfinity {
 
     @Override
     public boolean canApplyAtEnchantingTable(ItemStack stack, Enchantment enchantment) {
-        return Items.DIAMOND_SWORD.canApplyAtEnchantingTable(new ItemStack(Items.DIAMOND_SWORD), enchantment) ;
+        return Items.DIAMOND_SWORD.canApplyAtEnchantingTable(new ItemStack(Items.DIAMOND_SWORD), enchantment);
     }
 
     @Override
@@ -273,7 +273,7 @@ public class ItemInfinityHammer extends ItemInfinity {
                 level = "III";
                 break;
         }
-        tooltip.add(new TranslatableComponent("text.industrialforegoing.display.beheading").append(" " + level).withStyle(ChatFormatting.GRAY));
+        tooltip.add(Component.translatable("text.industrialforegoing.display.beheading").append(" " + level).withStyle(ChatFormatting.GRAY));
     }
 
     @OnlyIn(Dist.CLIENT)
@@ -285,7 +285,7 @@ public class ItemInfinityHammer extends ItemInfinity {
         factory.add(() -> new TextScreenAddon("", 54 + 14 + 4, 24 + 16 * 2, false) {
             @Override
             public String getText() {
-                return ChatFormatting.DARK_GRAY + new TranslatableComponent("text.industrialforegoing.display.beheading").append(": ").append(getCurrentBeheading(stack.get()) + "/" + getMaxBeheading(stack.get())).getString();
+                return ChatFormatting.DARK_GRAY + Component.translatable("text.industrialforegoing.display.beheading").append(": ").append(getCurrentBeheading(stack.get()) + "/" + getMaxBeheading(stack.get())).getString();
             }
         });
         return factory;
@@ -307,7 +307,7 @@ public class ItemInfinityHammer extends ItemInfinity {
 
     @Override
     public void registerRecipe(Consumer<FinishedRecipe> consumer) {
-        new DissolutionChamberRecipe(this.getRegistryName(),
+        new DissolutionChamberRecipe(ForgeRegistries.ITEMS.getKey(this),
                 new Ingredient.Value[]{
                         new Ingredient.ItemValue(new ItemStack(Items.DIAMOND_BLOCK)),
                         new Ingredient.ItemValue(new ItemStack(Items.DIAMOND_SWORD)),

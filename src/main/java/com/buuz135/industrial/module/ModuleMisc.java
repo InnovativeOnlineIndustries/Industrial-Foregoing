@@ -50,10 +50,10 @@ public class ModuleMisc implements IModule {
 
     @Override
     public void generateFeatures(DeferredRegistryHelper helper) {
-        EventManager.forge(LivingEvent.LivingUpdateEvent.class).filter(livingUpdateEvent -> livingUpdateEvent.getEntityLiving() instanceof Mob && livingUpdateEvent.getEntityLiving().getPersistentData().contains("StasisChamberTime")).process(livingUpdateEvent -> {
-            long time = livingUpdateEvent.getEntityLiving().getPersistentData().getLong("StasisChamberTime");
-            if (time + 50 <= livingUpdateEvent.getEntityLiving().level.getGameTime()) {
-                ((Mob) livingUpdateEvent.getEntityLiving()).setNoAi(false);
+        EventManager.forge(LivingEvent.LivingTickEvent.class).filter(livingUpdateEvent -> livingUpdateEvent.getEntity() instanceof Mob && livingUpdateEvent.getEntity().getPersistentData().contains("StasisChamberTime")).process(livingUpdateEvent -> {
+            long time = livingUpdateEvent.getEntity().getPersistentData().getLong("StasisChamberTime");
+            if (time + 50 <= livingUpdateEvent.getEntity().level.getGameTime()) {
+                ((Mob) livingUpdateEvent.getEntity()).setNoAi(false);
             }
         }).subscribe();
         TAB_MISC.addIconStack(() -> new ItemStack(STASIS_CHAMBER.getLeft().get()));

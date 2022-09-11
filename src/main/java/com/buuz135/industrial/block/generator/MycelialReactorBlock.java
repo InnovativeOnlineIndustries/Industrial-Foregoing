@@ -27,30 +27,24 @@ import com.buuz135.industrial.block.generator.mycelial.IMycelialGeneratorType;
 import com.buuz135.industrial.block.generator.tile.MycelialReactorTile;
 import com.buuz135.industrial.module.ModuleGenerator;
 import com.buuz135.industrial.worlddata.MycelialDataManager;
-import com.hrznstudio.titanium.api.IFactory;
-
-import net.minecraft.world.level.block.entity.BlockEntityType;
-import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.level.block.Blocks;
+import net.minecraft.ChatFormatting;
+import net.minecraft.core.BlockPos;
+import net.minecraft.network.chat.Component;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.level.block.entity.BlockEntity;
-import net.minecraft.world.InteractionResult;
-import net.minecraft.world.InteractionHand;
-import net.minecraft.core.BlockPos;
-import net.minecraft.world.phys.BlockHitResult;
-import net.minecraft.network.chat.TextComponent;
-import net.minecraft.ChatFormatting;
-import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.entity.BlockEntityType;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.phys.BlockHitResult;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.List;
-
-import com.hrznstudio.titanium.block.RotatableBlock.RotationType;
-import net.minecraft.world.level.block.state.BlockBehaviour.Properties;
 
 public class MycelialReactorBlock extends IndustrialBlock<MycelialReactorTile> {
 
@@ -73,7 +67,7 @@ public class MycelialReactorBlock extends IndustrialBlock<MycelialReactorTile> {
     public void setPlacedBy(Level worldIn, BlockPos pos, BlockState state, @Nullable LivingEntity placer, ItemStack stack) {
         super.setPlacedBy(worldIn, pos, state, placer, stack);
         BlockEntity entity = worldIn.getBlockEntity(pos);
-        if (entity instanceof MycelialReactorTile && placer != null){
+        if (entity instanceof MycelialReactorTile && placer != null) {
             ((MycelialReactorTile) entity).setOwner(placer.getUUID().toString());
         }
     }
@@ -81,14 +75,14 @@ public class MycelialReactorBlock extends IndustrialBlock<MycelialReactorTile> {
     @Override
     public InteractionResult use(BlockState state, Level worldIn, BlockPos pos, Player player, InteractionHand hand, BlockHitResult ray) {
         BlockEntity tileEntity = worldIn.getBlockEntity(pos);
-        if (player.isShiftKeyDown() && !worldIn.isClientSide && tileEntity instanceof MycelialReactorTile){
+        if (player.isShiftKeyDown() && !worldIn.isClientSide && tileEntity instanceof MycelialReactorTile) {
             List<String> available = MycelialDataManager.getReactorAvailable(((MycelialReactorTile) tileEntity).getOwner(), worldIn, false);
-            if (available.size() != IMycelialGeneratorType.TYPES.size()){
-                player.sendMessage(new TextComponent("Generators not running:").withStyle(ChatFormatting.RED), player.getUUID());
+            if (available.size() != IMycelialGeneratorType.TYPES.size()) {
+                player.sendSystemMessage(Component.literal("Generators not running:").withStyle(ChatFormatting.RED));
             }
             for (IMycelialGeneratorType type : IMycelialGeneratorType.TYPES) {
-                if (!available.contains(type.getName())){
-                    player.sendMessage(new TranslatableComponent("block.industrialforegoing.mycelial_" + type.getName()).withStyle(ChatFormatting.RED), player.getUUID());
+                if (!available.contains(type.getName())) {
+                    player.sendSystemMessage(Component.translatable("block.industrialforegoing.mycelial_" + type.getName()).withStyle(ChatFormatting.RED));
                 }
             }
         }

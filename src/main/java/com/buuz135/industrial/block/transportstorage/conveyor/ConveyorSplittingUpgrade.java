@@ -233,7 +233,7 @@ public class ConveyorSplittingUpgrade extends ConveyorUpgrade {
     public static class Factory extends ConveyorUpgradeFactory {
 
         public Factory() {
-            setRegistryName("splitting");
+            super("splitting");
         }
 
         @Override

@@ -72,7 +72,7 @@ public class IndustrialAssetProvider implements IAssetProvider {
             return ASSET_LOCATION;
         }
     };
-    private final IAsset FERM_TANK_FULL = new IAsset(){
+    private final IAsset FERM_TANK_FULL = new IAsset() {
         @Override
         public Rectangle getArea() {
             return new Rectangle(0, 0, 14, 14);
@@ -83,7 +83,7 @@ public class IndustrialAssetProvider implements IAssetProvider {
             return ASSET_EXTRA_LOCATION;
         }
     };
-    private final IAsset FERM_TANK_HALF = new IAsset(){
+    private final IAsset FERM_TANK_HALF = new IAsset() {
         @Override
         public Rectangle getArea() {
             return new Rectangle(0, 15, 14, 14);
@@ -94,7 +94,7 @@ public class IndustrialAssetProvider implements IAssetProvider {
             return ASSET_EXTRA_LOCATION;
         }
     };
-    private final IAsset FERM_TANK_ONE = new IAsset(){
+    private final IAsset FERM_TANK_ONE = new IAsset() {
         @Override
         public Rectangle getArea() {
             return new Rectangle(0, 30, 14, 14);
@@ -105,7 +105,7 @@ public class IndustrialAssetProvider implements IAssetProvider {
             return ASSET_EXTRA_LOCATION;
         }
     };
-    private final IAsset FERM_PROCESSING_TWO = new IAsset(){
+    private final IAsset FERM_PROCESSING_TWO = new IAsset() {
         @Override
         public Rectangle getArea() {
             return new Rectangle(15, 45, 14, 14);
@@ -116,7 +116,7 @@ public class IndustrialAssetProvider implements IAssetProvider {
             return ASSET_EXTRA_LOCATION;
         }
     };
-    private final IAsset FERM_PROCESSING_THREE = new IAsset(){
+    private final IAsset FERM_PROCESSING_THREE = new IAsset() {
         @Override
         public Rectangle getArea() {
             return new Rectangle(15, 30, 14, 14);
@@ -127,7 +127,7 @@ public class IndustrialAssetProvider implements IAssetProvider {
             return ASSET_EXTRA_LOCATION;
         }
     };
-    private final IAsset FERM_PROCESSING_FOUR = new IAsset(){
+    private final IAsset FERM_PROCESSING_FOUR = new IAsset() {
         @Override
         public Rectangle getArea() {
             return new Rectangle(15, 15, 14, 14);
@@ -138,7 +138,7 @@ public class IndustrialAssetProvider implements IAssetProvider {
             return ASSET_EXTRA_LOCATION;
         }
     };
-    private final IAsset FERM_PROCESSING_FIVE = new IAsset(){
+    private final IAsset FERM_PROCESSING_FIVE = new IAsset() {
         @Override
         public Rectangle getArea() {
             return new Rectangle(15, 0, 14, 14);

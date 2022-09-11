@@ -23,15 +23,13 @@
 package com.buuz135.industrial.utils;
 
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.texture.TextureAtlas;
 import net.minecraft.client.renderer.texture.AbstractTexture;
+import net.minecraft.client.renderer.texture.TextureAtlas;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
-import net.minecraft.util.FastColor;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.util.FastColor;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
-
-import java.awt.*;
 
 @OnlyIn(Dist.CLIENT)
 public class ColorUtils {
@@ -60,7 +58,8 @@ public class ColorUtils {
             }
         }
 
-        if (total > 0) return FastColor.ARGB32.color( 255, (int)(red / total), (int) (green / total), (int) (blue / total));
+        if (total > 0)
+            return FastColor.ARGB32.color(255, (int) (red / total), (int) (green / total), (int) (blue / total));
         return -1;
     }
 }

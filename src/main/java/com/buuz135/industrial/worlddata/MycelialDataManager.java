@@ -22,15 +22,7 @@
 
 package com.buuz135.industrial.worlddata;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-
-import javax.annotation.Nullable;
-
 import com.buuz135.industrial.block.generator.mycelial.IMycelialGeneratorType;
-import net.minecraftforge.common.util.INBTSerializable;
-
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Registry;
 import net.minecraft.nbt.CompoundTag;
@@ -40,6 +32,12 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.saveddata.SavedData;
+import net.minecraftforge.common.util.INBTSerializable;
+
+import javax.annotation.Nullable;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
 
 public class MycelialDataManager extends SavedData {
 
@@ -49,39 +47,39 @@ public class MycelialDataManager extends SavedData {
     public MycelialDataManager() {
     }
 
-    public static void setGeneratorInfo(String uuid, Level world, BlockPos pos, IMycelialGeneratorType type){
-        if (world instanceof ServerLevel){
+    public static void setGeneratorInfo(String uuid, Level world, BlockPos pos, IMycelialGeneratorType type) {
+        if (world instanceof ServerLevel) {
             MycelialDataManager dataManager = getData(world);
             List<GeneratorInfo> generatorInfos = dataManager.getInfos().computeIfAbsent(uuid, s -> new HashMap<>()).computeIfAbsent(type.getName(), s -> new ArrayList<>());
             boolean updated = false;
             for (GeneratorInfo generatorInfo : generatorInfos) {
-                if (generatorInfo.pos.equals(pos) && generatorInfo.world.equals(world.dimension())){
+                if (generatorInfo.pos.equals(pos) && generatorInfo.world.equals(world.dimension())) {
                     updated = true;
                     generatorInfo.lastRun = world.getGameTime();
                 }
             }
-            if (!updated){
-                generatorInfos.add(new GeneratorInfo(world.getGameTime(), 0 , pos, world.dimension()));
+            if (!updated) {
+                generatorInfos.add(new GeneratorInfo(world.getGameTime(), 0, pos, world.dimension()));
             }
             dataManager.setDirty();
         }
     }
 
-    public static void removeGeneratorInfo(String uuid, Level world, BlockPos pos, IMycelialGeneratorType type){
+    public static void removeGeneratorInfo(String uuid, Level world, BlockPos pos, IMycelialGeneratorType type) {
         MycelialDataManager dataManager = getData(world);
         List<GeneratorInfo> generatorInfos = dataManager.getInfos().computeIfAbsent(uuid, s -> new HashMap<>()).computeIfAbsent(type.getName(), s -> new ArrayList<>());
         generatorInfos.removeIf(generatorInfo -> generatorInfo.world.equals(world.dimension()) && generatorInfo.pos.equals(pos));
         dataManager.setDirty();
     }
 
-    public static List<String> getReactorAvailable(String uuid, Level world, boolean execute){
+    public static List<String> getReactorAvailable(String uuid, Level world, boolean execute) {
         List<String> names = new ArrayList<>();
-        if (world instanceof ServerLevel){
+        if (world instanceof ServerLevel) {
             MycelialDataManager dataManager = getData(world);
             HashMap<String, List<GeneratorInfo>> generators = dataManager.getInfos().computeIfAbsent(uuid, s -> new HashMap<>());
             for (IMycelialGeneratorType type : IMycelialGeneratorType.TYPES) {
-                for (GeneratorInfo generatorInfo : generators.computeIfAbsent(type.getName() , s -> new ArrayList<>())) {
-                    if (generatorInfo.lastTracked + 5 <= world.getGameTime()  && generatorInfo.lastRun + 5 >= world.getGameTime()){
+                for (GeneratorInfo generatorInfo : generators.computeIfAbsent(type.getName(), s -> new ArrayList<>())) {
+                    if (generatorInfo.lastTracked + 5 <= world.getGameTime() && generatorInfo.lastRun + 5 >= world.getGameTime()) {
                         names.add(type.getName());
                         if (execute) generatorInfo.lastTracked = world.getGameTime();
                         dataManager.setDirty();
@@ -124,7 +122,7 @@ public class MycelialDataManager extends SavedData {
                 int i = 0;
                 CompoundTag genNbt = new CompoundTag();
                 for (GeneratorInfo generatorInfo : infos.get(uuid).get(genName)) {
-                    genNbt.put(i +"", generatorInfo.serializeNBT());
+                    genNbt.put(i + "", generatorInfo.serializeNBT());
                     ++i;
                 }
                 uuidNbt.put(genName, genNbt);
@@ -139,7 +137,7 @@ public class MycelialDataManager extends SavedData {
     public static MycelialDataManager getData(LevelAccessor world) {
         if (world instanceof ServerLevel) {
             ServerLevel serverWorld = ((ServerLevel) world).getServer().getLevel(Level.OVERWORLD);
-            MycelialDataManager data = serverWorld.getDataStorage().computeIfAbsent(MycelialDataManager::load,MycelialDataManager::new, NAME);
+            MycelialDataManager data = serverWorld.getDataStorage().computeIfAbsent(MycelialDataManager::load, MycelialDataManager::new, NAME);
             return data;
         }
         return null;

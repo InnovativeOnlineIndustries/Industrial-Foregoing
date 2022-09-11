@@ -29,7 +29,6 @@ import net.minecraft.ChatFormatting;
 import net.minecraft.data.recipes.FinishedRecipe;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.TextComponent;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.CreativeModeTab;
@@ -37,9 +36,9 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.Level;
 import net.minecraftforge.common.Tags;
+import net.minecraftforge.common.capabilities.ForgeCapabilities;
 import net.minecraftforge.common.capabilities.ICapabilityProvider;
 import net.minecraftforge.fluids.FluidStack;
-import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
 import net.minecraftforge.fluids.capability.IFluidHandler;
 import net.minecraftforge.fluids.capability.templates.FluidHandlerItemStack;
 
@@ -77,17 +76,17 @@ public class MeatFeederItem extends IFCustomItem {
     public void addTooltipDetails(@Nullable Key key, ItemStack stack, List<Component> tooltip, boolean advanced) {
         super.addTooltipDetails(key, stack, tooltip, advanced);
         if (stack.getTag() != null && key == null) {
-            tooltip.add(new TextComponent(NumberFormat.getNumberInstance(Locale.ROOT).format(stack.getTag().getCompound("Fluid").getInt("Amount")) + ChatFormatting.GOLD + "/" + ChatFormatting.WHITE + NumberFormat.getNumberInstance(Locale.ROOT).format(512000) + ChatFormatting.GOLD + "mb of Meat"));
+            tooltip.add(Component.literal(NumberFormat.getNumberInstance(Locale.ROOT).format(stack.getTag().getCompound("Fluid").getInt("Amount")) + ChatFormatting.GOLD + "/" + ChatFormatting.WHITE + NumberFormat.getNumberInstance(Locale.ROOT).format(512000) + ChatFormatting.GOLD + "mb of Meat"));
         }
     }
 
     public int getFilledAmount(ItemStack stack) {
-        FluidHandlerItemStack handlerItemStack = (FluidHandlerItemStack) stack.getCapability(CapabilityFluidHandler.FLUID_HANDLER_ITEM_CAPABILITY).orElseThrow(RuntimeException::new);
+        FluidHandlerItemStack handlerItemStack = (FluidHandlerItemStack) stack.getCapability(ForgeCapabilities.FLUID_HANDLER_ITEM).orElseThrow(RuntimeException::new);
         return (handlerItemStack.getFluid() == null ? 0 : handlerItemStack.getFluid().getAmount());
     }
 
     public void drain(ItemStack stack, int amount) {
-        FluidHandlerItemStack handlerItemStack = (FluidHandlerItemStack) stack.getCapability(CapabilityFluidHandler.FLUID_HANDLER_ITEM_CAPABILITY).orElseThrow(RuntimeException::new);
+        FluidHandlerItemStack handlerItemStack = (FluidHandlerItemStack) stack.getCapability(ForgeCapabilities.FLUID_HANDLER_ITEM).orElseThrow(RuntimeException::new);
         handlerItemStack.drain(new FluidStack(ModuleCore.MEAT.getSourceFluid().get(), amount), IFluidHandler.FluidAction.EXECUTE);
     }
 
@@ -98,7 +97,7 @@ public class MeatFeederItem extends IFCustomItem {
             Player player = (Player) entityIn;
             if (player.getFoodData().needsFood() || player.getFoodData().getSaturationLevel() < 10) {
                 if (stack.getItem().equals(ModuleTool.MEAT_FEEDER.get())) {
-                        meatTick(stack, player);
+                    meatTick(stack, player);
                 }
             }
         }

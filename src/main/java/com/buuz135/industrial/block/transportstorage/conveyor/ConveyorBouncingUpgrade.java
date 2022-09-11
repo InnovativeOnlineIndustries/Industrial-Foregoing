@@ -227,7 +227,7 @@ public class ConveyorBouncingUpgrade extends ConveyorUpgrade {
     public static class Factory extends ConveyorUpgradeFactory {
 
         public Factory() {
-            setRegistryName("bouncing");
+            super("bouncing");
         }
 
         @Override

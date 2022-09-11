@@ -27,7 +27,6 @@ import com.buuz135.industrial.api.transporter.TransporterTypeFactory;
 import com.buuz135.industrial.module.ModuleCore;
 import com.buuz135.industrial.module.ModuleTool;
 import com.buuz135.industrial.utils.Reference;
-import com.hrznstudio.titanium.annotation.MaterialReference;
 import com.hrznstudio.titanium.api.IRecipeProvider;
 import com.hrznstudio.titanium.block.BasicBlock;
 import com.hrznstudio.titanium.recipe.generator.TitaniumRecipeProvider;
@@ -69,7 +68,7 @@ public class IndustrialRecipeProvider extends TitaniumRecipeProvider {
         ConveyorUpgradeFactory.FACTORIES.forEach(conveyorUpgradeFactory -> conveyorUpgradeFactory.registerRecipe(consumer));
         TransporterTypeFactory.FACTORIES.forEach(typeFactory -> typeFactory.registerRecipe(consumer));
         //TOOL
-        ((IRecipeProvider)ModuleTool.MOB_IMPRISONMENT_TOOL.get()).registerRecipe(consumer);
+        ((IRecipeProvider) ModuleTool.MOB_IMPRISONMENT_TOOL.get()).registerRecipe(consumer);
         ((IRecipeProvider) ModuleTool.MEAT_FEEDER.get()).registerRecipe(consumer);
         ((IRecipeProvider) ModuleTool.INFINITY_DRILL.get()).registerRecipe(consumer);
         ((IRecipeProvider) ModuleTool.INFINITY_SAW.get()).registerRecipe(consumer);
@@ -79,7 +78,7 @@ public class IndustrialRecipeProvider extends TitaniumRecipeProvider {
         ((IRecipeProvider) ModuleTool.INFINITY_LAUNCHER.get()).registerRecipe(consumer);
         ((IRecipeProvider) ModuleTool.INFINITY_NUKE.get()).registerRecipe(consumer);
         //CORE
-        ((IRecipeProvider)ModuleCore.STRAW.get()).registerRecipe(consumer);
+        ((IRecipeProvider) ModuleCore.STRAW.get()).registerRecipe(consumer);
         for (RegistryObject<Item> rangeAddon : ModuleCore.RANGE_ADDONS) {
             ((IRecipeProvider) rangeAddon.get()).registerRecipe(consumer);
         }
@@ -110,13 +109,13 @@ public class IndustrialRecipeProvider extends TitaniumRecipeProvider {
                 .define('P', Items.DIAMOND)
                 .save(consumer);
         for (RegistryObject<Item> laserLen : ModuleCore.LASER_LENS) {
-            ((IRecipeProvider)laserLen.get()).registerRecipe(consumer);
+            ((IRecipeProvider) laserLen.get()).registerRecipe(consumer);
         }
         for (DyeColor value : DyeColor.values()) {
             TitaniumShapelessRecipeBuilder.shapelessRecipe(ModuleCore.LASER_LENS[value.getId()].get())
                     .requires(Ingredient.of(Arrays.stream(ModuleCore.LASER_LENS).map(itemRegistryObject -> new ItemStack(itemRegistryObject.get())).collect(Collectors.toList()).stream()))
                     .requires(value.getTag())
-                    .save(consumer, new ResourceLocation(Reference.MOD_ID, "laser_lens_"+value.getSerializedName()+ "_recolor"));
+                    .save(consumer, new ResourceLocation(Reference.MOD_ID, "laser_lens_" + value.getSerializedName() + "_recolor"));
         }
     }
 }

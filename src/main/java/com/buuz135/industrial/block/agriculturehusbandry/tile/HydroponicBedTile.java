@@ -3,13 +3,11 @@ package com.buuz135.industrial.block.agriculturehusbandry.tile;
 import com.buuz135.industrial.api.plant.PlantRecollectable;
 import com.buuz135.industrial.block.tile.IndustrialAreaWorkingTile;
 import com.buuz135.industrial.block.tile.IndustrialWorkingTile;
-import com.buuz135.industrial.config.machine.agriculturehusbandry.AnimalRancherConfig;
 import com.buuz135.industrial.config.machine.resourceproduction.HydroponicBedConfig;
 import com.buuz135.industrial.module.ModuleAgricultureHusbandry;
 import com.buuz135.industrial.module.ModuleCore;
 import com.buuz135.industrial.registry.IFRegistries;
 import com.hrznstudio.titanium.annotation.Save;
-import com.hrznstudio.titanium.block.BasicTileBlock;
 import com.hrznstudio.titanium.component.energy.EnergyStorageComponent;
 import com.hrznstudio.titanium.component.fluid.FluidTankComponent;
 import com.hrznstudio.titanium.component.fluid.SidedFluidTankComponent;
@@ -51,13 +49,13 @@ public class HydroponicBedTile extends IndustrialWorkingTile<HydroponicBedTile> 
 
     public HydroponicBedTile(BlockPos blockPos, BlockState blockState) {
         super(ModuleAgricultureHusbandry.HYDROPONIC_BED, HydroponicBedConfig.powerPerOperation, blockPos, blockState);
-        addTank(this.water = (SidedFluidTankComponent<HydroponicBedTile>) new SidedFluidTankComponent<HydroponicBedTile>("water", 1000 ,43, 20, 0)
+        addTank(this.water = (SidedFluidTankComponent<HydroponicBedTile>) new SidedFluidTankComponent<HydroponicBedTile>("water", 1000, 43, 20, 0)
                 .setColor(DyeColor.BLUE)
                 .setTankType(FluidTankComponent.Type.SMALL)
                 .setTankAction(FluidTankComponent.Action.FILL)
-                .setValidator(fluidStack -> fluidStack.getFluid().isSame(Fluids.WATER) ||  fluidStack.getFluid().isSame(Fluids.LAVA))
+                .setValidator(fluidStack -> fluidStack.getFluid().isSame(Fluids.WATER) || fluidStack.getFluid().isSame(Fluids.LAVA))
         );
-        addTank(this.ether = (SidedFluidTankComponent<HydroponicBedTile>) new SidedFluidTankComponent<HydroponicBedTile>("ether", 10,43, 57, 1)
+        addTank(this.ether = (SidedFluidTankComponent<HydroponicBedTile>) new SidedFluidTankComponent<HydroponicBedTile>("ether", 10, 43, 57, 1)
                 .setColor(DyeColor.CYAN)
                 .setTankType(FluidTankComponent.Type.SMALL)
                 .setTankAction(FluidTankComponent.Action.FILL)
@@ -67,7 +65,7 @@ public class HydroponicBedTile extends IndustrialWorkingTile<HydroponicBedTile> 
                 .setColor(DyeColor.CYAN)
                 .setCanReset(hydroponicBedTile -> false)
         );
-        addInventory(this.output = (SidedInventoryComponent<HydroponicBedTile>) new SidedInventoryComponent<HydroponicBedTile>("output",79,22, 5*3, 2)
+        addInventory(this.output = (SidedInventoryComponent<HydroponicBedTile>) new SidedInventoryComponent<HydroponicBedTile>("output", 79, 22, 5 * 3, 2)
                 .setColor(DyeColor.ORANGE)
                 .setRange(5, 3)
                 .setInputFilter((stack, integer) -> false)
@@ -76,44 +74,44 @@ public class HydroponicBedTile extends IndustrialWorkingTile<HydroponicBedTile> 
 
     @Override
     public WorkAction work() {
-        if (this.etherBuffer.getProgress() <= 0 && this.ether.getFluidAmount() > 0){
+        if (this.etherBuffer.getProgress() <= 0 && this.ether.getFluidAmount() > 0) {
             this.ether.drainForced(1, IFluidHandler.FluidAction.EXECUTE);
             this.etherBuffer.setProgress(this.etherBuffer.getMaxProgress());
         }
-        if (hasEnergy(1000)){
+        if (hasEnergy(1000)) {
             BlockPos up = this.worldPosition.above();
             BlockState state = this.level.getBlockState(up);
             Block block = state.getBlock();
-            if (!this.level.isEmptyBlock(up) && this.water.getFluidAmount() >= 10){
+            if (!this.level.isEmptyBlock(up) && this.water.getFluidAmount() >= 10) {
                 if (block instanceof IPlantable && ((IPlantable) block).getPlantType(this.level, up) == PlantType.NETHER && !this.water.getFluid().getFluid().isSame(Fluids.LAVA))
                     return new WorkAction(1, 0);
-                if (state.getBlock() instanceof BonemealableBlock){
+                if (state.getBlock() instanceof BonemealableBlock) {
                     BonemealableBlock growable = (BonemealableBlock) this.level.getBlockState(up).getBlock();
-                    if (growable.isValidBonemealTarget(this.level, up, this.level.getBlockState(up), false)){
-                        if (this.etherBuffer.getProgress() > 0){
+                    if (growable.isValidBonemealTarget(this.level, up, this.level.getBlockState(up), false)) {
+                        if (this.etherBuffer.getProgress() > 0) {
                             growable.performBonemeal((ServerLevel) this.level, this.level.random, up, this.level.getBlockState(up));
                             this.etherBuffer.setProgress(this.etherBuffer.getProgress() - 1);
                         } else {
                             for (int i = 0; i < 4; i++) {
-                                this.level.getBlockState(up).randomTick((ServerLevel) this.level,up, this.level.random);
+                                this.level.getBlockState(up).randomTick((ServerLevel) this.level, up, this.level.random);
                             }
                         }
                         this.water.drainForced(10, IFluidHandler.FluidAction.EXECUTE);
                         return new WorkAction(1, HydroponicBedConfig.powerPerOperation);
-                    } else if (this.etherBuffer.getProgress() > 0){
+                    } else if (this.etherBuffer.getProgress() > 0) {
                         tryToHarvestAndReplant(this.level, up, state, this.output, this.etherBuffer, this);
                         return new WorkAction(1, HydroponicBedConfig.powerPerOperation);
                     }
                 } else {
-                    if (!tryToHarvestAndReplant(this.level, up, state, this.output, this.etherBuffer, this)){
-                        if (this.etherBuffer.getProgress() > 0){
+                    if (!tryToHarvestAndReplant(this.level, up, state, this.output, this.etherBuffer, this)) {
+                        if (this.etherBuffer.getProgress() > 0) {
                             for (int i = 0; i < 10; i++) {
-                                this.level.getBlockState(up).randomTick((ServerLevel) this.level,up, this.level.random);
+                                this.level.getBlockState(up).randomTick((ServerLevel) this.level, up, this.level.random);
                             }
                             this.etherBuffer.setProgress(this.etherBuffer.getProgress() - 1);
                         } else {
                             for (int i = 0; i < 4; i++) {
-                                this.level.getBlockState(up).randomTick((ServerLevel) this.level,up, this.level.random);
+                                this.level.getBlockState(up).randomTick((ServerLevel) this.level, up, this.level.random);
                             }
                         }
                         this.water.drainForced(10, IFluidHandler.FluidAction.EXECUTE);
@@ -122,7 +120,7 @@ public class HydroponicBedTile extends IndustrialWorkingTile<HydroponicBedTile> 
                 }
             }
         }
-        return new WorkAction(1,0);
+        return new WorkAction(1, 0);
     }
 
     @Override
@@ -168,17 +166,17 @@ public class HydroponicBedTile extends IndustrialWorkingTile<HydroponicBedTile> 
         return ether;
     }
 
-    public static boolean tryToHarvestAndReplant(Level level, BlockPos up, BlockState state, IItemHandler output, ProgressBarComponent<?> etherBuffer, IndustrialWorkingTile tile){
+    public static boolean tryToHarvestAndReplant(Level level, BlockPos up, BlockState state, IItemHandler output, ProgressBarComponent<?> etherBuffer, IndustrialWorkingTile tile) {
         Optional<PlantRecollectable> optional = IFRegistries.PLANT_RECOLLECTABLES_REGISTRY.get().getValues().stream().filter(plantRecollectable -> plantRecollectable.canBeHarvested(level, up, state)).findFirst();
         if (optional.isPresent()) {
             List<ItemStack> drops = optional.get().doHarvestOperation(level, up, state);
-            if (level.isEmptyBlock(up)){
+            if (level.isEmptyBlock(up)) {
                 for (ItemStack drop : drops) {
-                    if (drop.getItem() instanceof IPlantable){
+                    if (drop.getItem() instanceof IPlantable) {
                         level.setBlockAndUpdate(up, ((IPlantable) drop.getItem()).getPlant(level, up));
                         drop.shrink(1);
                         break;
-                    } else if (drop.getItem() instanceof BlockItem && ((BlockItem) drop.getItem()).getBlock() instanceof IPlantable){
+                    } else if (drop.getItem() instanceof BlockItem && ((BlockItem) drop.getItem()).getBlock() instanceof IPlantable) {
                         level.setBlockAndUpdate(up, ((IPlantable) ((BlockItem) drop.getItem()).getBlock()).getPlant(level, up));
                         drop.shrink(1);
                         break;

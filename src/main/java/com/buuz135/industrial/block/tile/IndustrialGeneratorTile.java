@@ -23,13 +23,10 @@
 package com.buuz135.industrial.block.tile;
 
 
-import javax.annotation.Nonnull;
-
 import com.buuz135.industrial.capability.tile.BigEnergyHandler;
 import com.hrznstudio.titanium.block.BasicTileBlock;
 import com.hrznstudio.titanium.block.tile.GeneratorTile;
 import com.hrznstudio.titanium.component.energy.EnergyStorageComponent;
-
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.world.InteractionHand;
@@ -40,6 +37,8 @@ import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.registries.RegistryObject;
 import org.apache.commons.lang3.tuple.Pair;
+
+import javax.annotation.Nonnull;
 
 public abstract class IndustrialGeneratorTile<T extends IndustrialGeneratorTile<T>> extends GeneratorTile<T> {
 

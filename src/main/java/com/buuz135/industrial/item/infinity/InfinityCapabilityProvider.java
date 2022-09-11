@@ -27,14 +27,13 @@ import com.hrznstudio.titanium.api.capability.IStackHolder;
 import com.hrznstudio.titanium.capability.CapabilityItemStackHolder;
 import com.hrznstudio.titanium.capability.FluidHandlerScreenProviderItemStack;
 import com.hrznstudio.titanium.capability.ItemStackHolderCapability;
-import net.minecraft.world.item.ItemStack;
 import net.minecraft.core.Direction;
+import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.common.capabilities.Capability;
+import net.minecraftforge.common.capabilities.ForgeCapabilities;
 import net.minecraftforge.common.capabilities.ICapabilityProvider;
 import net.minecraftforge.common.util.LazyOptional;
-import net.minecraftforge.energy.CapabilityEnergy;
 import net.minecraftforge.energy.IEnergyStorage;
-import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
 import net.minecraftforge.fluids.capability.IFluidHandlerItem;
 
 import javax.annotation.Nonnull;
@@ -64,8 +63,8 @@ public class InfinityCapabilityProvider implements ICapabilityProvider {
     @Nullable
     @Override
     public <T> LazyOptional<T> getCapability(@Nonnull Capability<T> capability, @Nullable Direction facing) {
-        if (capability == CapabilityFluidHandler.FLUID_HANDLER_ITEM_CAPABILITY) return tankCap.cast();
-        if (capability == CapabilityEnergy.ENERGY) return energyStorageCap.cast();
+        if (capability == ForgeCapabilities.FLUID_HANDLER_ITEM) return tankCap.cast();
+        if (capability == ForgeCapabilities.ENERGY) return energyStorageCap.cast();
         if (capability == CapabilityItemStackHolder.ITEMSTACK_HOLDER_CAPABILITY) return stackCap.cast();
         return LazyOptional.empty();
     }

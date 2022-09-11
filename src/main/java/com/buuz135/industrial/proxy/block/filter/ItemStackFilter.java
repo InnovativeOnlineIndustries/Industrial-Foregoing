@@ -31,6 +31,7 @@ import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidUtil;
+import net.minecraftforge.registries.ForgeRegistries;
 
 public class ItemStackFilter extends AbstractFilter<Entity> {
 
@@ -53,8 +54,8 @@ public class ItemStackFilter extends AbstractFilter<Entity> {
         for (GhostSlot stack : this.getFilter()) {
             if (entity instanceof ItemEntity && stack.getStack().sameItem(((ItemEntity) entity).getItem()))
                 return true;
-            if (entity instanceof LivingEntity && stack.getStack().getItem().getRegistryName().equals(ModuleTool.MOB_IMPRISONMENT_TOOL.get().getRegistryName()) && ((MobImprisonmentToolItem)ModuleTool.MOB_IMPRISONMENT_TOOL.get()).containsEntity(stack.getStack())
-                    && entity.getType().getRegistryName().toString().equalsIgnoreCase(((MobImprisonmentToolItem)ModuleTool.MOB_IMPRISONMENT_TOOL.get()).getID(stack.getStack()))) {
+            if (entity instanceof LivingEntity && ForgeRegistries.ITEMS.getKey(stack.getStack().getItem()).equals(ForgeRegistries.ITEMS.getKey(ModuleTool.MOB_IMPRISONMENT_TOOL.get())) && ((MobImprisonmentToolItem) ModuleTool.MOB_IMPRISONMENT_TOOL.get()).containsEntity(stack.getStack())
+                    && ForgeRegistries.ENTITY_TYPES.getKey(entity.getType()).toString().equalsIgnoreCase(((MobImprisonmentToolItem) ModuleTool.MOB_IMPRISONMENT_TOOL.get()).getID(stack.getStack()))) {
                 return true;
             }
         }

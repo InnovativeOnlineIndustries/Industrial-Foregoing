@@ -23,7 +23,6 @@ package com.buuz135.industrial.entity;
 
 import com.buuz135.industrial.item.infinity.item.ItemInfinityNuke;
 import com.buuz135.industrial.module.ModuleTool;
-import com.buuz135.industrial.proxy.client.ClientProxy;
 import com.buuz135.industrial.proxy.client.sound.TickeableSound;
 import com.buuz135.industrial.utils.explosion.ExplosionTickHandler;
 import com.buuz135.industrial.utils.explosion.ProcessExplosion;
@@ -126,13 +125,13 @@ public class InfinityNukeEntity extends Entity {
     @OnlyIn(Dist.CLIENT)
     private void tickClient() {
         if (chargingSound == null && this.getEntityData().get(EXPLODING)) {
-            Minecraft.getInstance().getSoundManager().play(chargingSound = new TickeableSound(this.level, this.blockPosition(), ModuleTool.NUKE_CHARGING.get(), getRadius(), 10));
+            Minecraft.getInstance().getSoundManager().play(chargingSound = new TickeableSound(this.level, this.blockPosition(), ModuleTool.NUKE_CHARGING.get(), getRadius(), 10, this.level.random));
         }
         if (chargingSound != null) {
             chargingSound.setDistance(getRadius());
             chargingSound.increase();
             if (!Minecraft.getInstance().getSoundManager().isActive(chargingSound) && explodingSound == null) {
-                explodingSound = new TickeableSound(this.level, this.blockPosition(), ClientProxy.NUKE_EXPLOSION, getRadius(), 10);
+                explodingSound = new TickeableSound(this.level, this.blockPosition(), ModuleTool.NUKE_EXPLOSION.get(), getRadius(), 10, this.level.random);
                 explodingSound.setPitch(1);
                 Minecraft.getInstance().getSoundManager().play(explodingSound);
             }
@@ -207,7 +206,7 @@ public class InfinityNukeEntity extends Entity {
 
     @OnlyIn(Dist.CLIENT)
     private void arm() {
-        Minecraft.getInstance().getSoundManager().play(new SimpleSoundInstance(ClientProxy.NUKE_ARMING, SoundSource.BLOCKS, 1, 1, this.blockPosition()));
+        Minecraft.getInstance().getSoundManager().play(new SimpleSoundInstance(ModuleTool.NUKE_ARMING.get(), SoundSource.BLOCKS, 1, 1, Minecraft.getInstance().level.random, this.blockPosition()));
     }
 
     @Override
@@ -249,6 +248,7 @@ public class InfinityNukeEntity extends Entity {
     public int getRadius() {
         return this.getEntityData().get(RADIUS);
     }
+
     public void setRadius(int radius) {
         this.radius = radius;
         this.getEntityData().set(RADIUS, radius);

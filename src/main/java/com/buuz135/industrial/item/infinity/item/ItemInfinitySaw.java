@@ -45,6 +45,7 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.items.ItemHandlerHelper;
+import net.minecraftforge.registries.ForgeRegistries;
 import org.apache.commons.lang3.tuple.Pair;
 
 import java.util.ArrayList;
@@ -74,7 +75,7 @@ public class ItemInfinitySaw extends ItemInfinity {
 
     @Override
     public boolean canApplyAtEnchantingTable(ItemStack stack, Enchantment enchantment) {
-        return Items.DIAMOND_AXE.canApplyAtEnchantingTable(new ItemStack(Items.DIAMOND_AXE), enchantment) ;
+        return Items.DIAMOND_AXE.canApplyAtEnchantingTable(new ItemStack(Items.DIAMOND_AXE), enchantment);
     }
 
     @Override
@@ -122,7 +123,7 @@ public class ItemInfinitySaw extends ItemInfinity {
 
     @Override
     public void registerRecipe(Consumer<FinishedRecipe> consumer) {
-        new DissolutionChamberRecipe(this.getRegistryName(),
+        new DissolutionChamberRecipe(ForgeRegistries.ITEMS.getKey(this),
                 new Ingredient.Value[]{
                         new Ingredient.ItemValue(new ItemStack(Items.DIAMOND_BLOCK)),
                         new Ingredient.ItemValue(new ItemStack(Items.DIAMOND_PICKAXE)),

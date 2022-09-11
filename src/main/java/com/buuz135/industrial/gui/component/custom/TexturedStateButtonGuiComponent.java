@@ -24,16 +24,16 @@ package com.buuz135.industrial.gui.component.custom;
 
 import com.buuz135.industrial.api.conveyor.gui.PositionedGuiComponent;
 import com.buuz135.industrial.gui.component.StateButtonInfo;
-import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.systems.RenderSystem;
+import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.resources.sounds.SimpleSoundInstance;
 import net.minecraft.client.gui.GuiComponent;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
+import net.minecraft.client.resources.sounds.SimpleSoundInstance;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.sounds.SoundSource;
-import net.minecraft.sounds.SoundEvents;
 import net.minecraft.network.chat.Component;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.sounds.SoundSource;
 
 import javax.annotation.Nullable;
 import java.util.Arrays;
@@ -56,7 +56,7 @@ public abstract class TexturedStateButtonGuiComponent extends PositionedGuiCompo
         if (conveyor instanceof ICanSendNetworkMessage) {
             ((ICanSendNetworkMessage) conveyor).sendMessage(id, new CompoundTag());
         }
-        Minecraft.getInstance().getSoundManager().play(new SimpleSoundInstance(SoundEvents.UI_BUTTON_CLICK, SoundSource.PLAYERS, 1.0F, 1.0F, Minecraft.getInstance().player.blockPosition()));//getPos
+        Minecraft.getInstance().getSoundManager().play(new SimpleSoundInstance(SoundEvents.UI_BUTTON_CLICK, SoundSource.PLAYERS, 1.0F, 0.5F, Minecraft.getInstance().level.random, Minecraft.getInstance().player.blockPosition()));//getPos
         return true;
     }
 

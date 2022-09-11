@@ -29,7 +29,6 @@ import com.buuz135.industrial.config.machine.agriculturehusbandry.AnimalRancherC
 import com.buuz135.industrial.module.ModuleAgricultureHusbandry;
 import com.buuz135.industrial.utils.ItemStackUtils;
 import com.hrznstudio.titanium.annotation.Save;
-import com.hrznstudio.titanium.block.BasicTileBlock;
 import com.hrznstudio.titanium.component.energy.EnergyStorageComponent;
 import com.hrznstudio.titanium.component.fluid.SidedFluidTankComponent;
 import com.hrznstudio.titanium.component.inventory.SidedInventoryComponent;
@@ -43,8 +42,8 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.common.IForgeShearable;
+import net.minecraftforge.common.capabilities.ForgeCapabilities;
 import net.minecraftforge.common.util.FakePlayer;
-import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
 import net.minecraftforge.fluids.capability.IFluidHandler;
 import net.minecraftforge.fluids.capability.IFluidHandlerItem;
 import net.minecraftforge.items.ItemHandlerHelper;
@@ -102,7 +101,7 @@ public class AnimalRancherTile extends IndustrialAreaWorkingTile<AnimalRancherTi
                         player.setItemInHand(InteractionHand.MAIN_HAND, new ItemStack(Items.BUCKET));
                         if (((Animal) mob).mobInteract(player, InteractionHand.MAIN_HAND).consumesAction()) { //ProcessInteract
                             ItemStack stack = player.getItemInHand(InteractionHand.MAIN_HAND);
-                            IFluidHandlerItem fluidHandlerItem = stack.getCapability(CapabilityFluidHandler.FLUID_HANDLER_ITEM_CAPABILITY).orElse(null);
+                            IFluidHandlerItem fluidHandlerItem = stack.getCapability(ForgeCapabilities.FLUID_HANDLER_ITEM).orElse(null);
                             if (fluidHandlerItem != null) {
                                 tank.fillForced(fluidHandlerItem.drain(Integer.MAX_VALUE, IFluidHandler.FluidAction.EXECUTE), IFluidHandler.FluidAction.EXECUTE);
                                 player.setItemInHand(InteractionHand.MAIN_HAND, ItemStack.EMPTY);

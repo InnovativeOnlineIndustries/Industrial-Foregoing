@@ -22,19 +22,17 @@
 
 package com.buuz135.industrial.api.straw;
 
-import javax.annotation.ParametersAreNonnullByDefault;
-
-import net.minecraftforge.registries.ForgeRegistryEntry;
-
 import net.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.material.Fluid;
 
+import javax.annotation.ParametersAreNonnullByDefault;
+
 @ParametersAreNonnullByDefault
 @MethodsReturnNonnullByDefault
-public abstract class StrawHandler extends ForgeRegistryEntry<StrawHandler> {
+public abstract class StrawHandler {
     public abstract boolean validFluid(Fluid stack);
 
     public abstract void onDrink(Level world, BlockPos pos, Fluid stack, Player player, boolean fromFluidContainer);

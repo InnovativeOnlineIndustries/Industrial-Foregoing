@@ -51,21 +51,21 @@ public class BackpackCapabilityProvider extends InfinityCapabilityProvider {
     @Override
     public <T> LazyOptional<T> getCapability(@Nonnull Capability<T> capability, @Nullable Direction facing) {
         if (CapabilityItemHandler.ITEM_HANDLER_CAPABILITY == capability) {
-            if (itemHandlerLazyOptional == null && this.getStack().hasTag()){
+            if (itemHandlerLazyOptional == null && this.getStack().hasTag()) {
                 String id = this.getStack().getTag().getString("Id");
-                if (BackpackDataManager.CLIENT_SIDE_BACKPACKS.containsKey(id)){
+                if (BackpackDataManager.CLIENT_SIDE_BACKPACKS.containsKey(id)) {
                     itemHandlerLazyOptional = LazyOptional.of(() -> BackpackDataManager.CLIENT_SIDE_BACKPACKS.get(id));
-                } else if (ServerLifecycleHooks.getCurrentServer() != null){
+                } else if (ServerLifecycleHooks.getCurrentServer() != null) {
                     BackpackDataManager manager = BackpackDataManager.getData(ServerLifecycleHooks.getCurrentServer().getLevel(Level.OVERWORLD));
-                    if (manager != null){
+                    if (manager != null) {
                         BackpackDataManager.BackpackItemHandler backpack = manager.getBackpack(id);
-                        if (backpack != null){
+                        if (backpack != null) {
                             itemHandlerLazyOptional = LazyOptional.of(() -> backpack);
                         }
                     }
                 }
             }
-            if (itemHandlerLazyOptional != null){
+            if (itemHandlerLazyOptional != null) {
                 return itemHandlerLazyOptional.cast();
             }
         }

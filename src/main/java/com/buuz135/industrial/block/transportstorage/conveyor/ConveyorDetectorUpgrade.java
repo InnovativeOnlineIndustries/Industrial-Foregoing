@@ -177,7 +177,7 @@ public class ConveyorDetectorUpgrade extends ConveyorUpgrade {
 
     public static class Factory extends ConveyorUpgradeFactory {
         public Factory() {
-            setRegistryName("detection");
+            super("detection");
         }
 
         @Override

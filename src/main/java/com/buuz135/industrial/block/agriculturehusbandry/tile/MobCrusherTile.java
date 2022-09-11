@@ -33,7 +33,6 @@ import com.hrznstudio.titanium.annotation.Save;
 import com.hrznstudio.titanium.api.IFactory;
 import com.hrznstudio.titanium.api.client.AssetTypes;
 import com.hrznstudio.titanium.api.client.IScreenAddon;
-import com.hrznstudio.titanium.block.BasicTileBlock;
 import com.hrznstudio.titanium.client.screen.addon.StateButtonAddon;
 import com.hrznstudio.titanium.client.screen.addon.StateButtonInfo;
 import com.hrznstudio.titanium.component.button.ButtonComponent;
@@ -43,7 +42,6 @@ import com.hrznstudio.titanium.component.fluid.SidedFluidTankComponent;
 import com.hrznstudio.titanium.component.inventory.SidedInventoryComponent;
 import com.hrznstudio.titanium.item.AugmentWrapper;
 import com.hrznstudio.titanium.util.LangUtil;
-import com.hrznstudio.titanium.util.TagUtil;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerLevel;
@@ -139,11 +137,11 @@ public class MobCrusherTile extends IndustrialAreaWorkingTile<MobCrusherTile> {
     public WorkAction work() {
         if (hasEnergy(MobCrusherConfig.powerPerOperation)) {
             List<Mob> mobs = this.level.getEntitiesOfClass(Mob.class, getWorkingArea().bounds()).stream().filter(mobEntity -> !(mobEntity instanceof Animal &&
-            mobEntity.isBaby()) && !mobEntity.isInvulnerable() && !(mobEntity instanceof WitherBoss && ((WitherBoss) mobEntity).getInvulnerableTicks() > 0)).filter(LivingEntity::isAlive).collect(Collectors.toList());
+                    mobEntity.isBaby()) && !mobEntity.isInvulnerable() && !(mobEntity instanceof WitherBoss && ((WitherBoss) mobEntity).getInvulnerableTicks() > 0)).filter(LivingEntity::isAlive).collect(Collectors.toList());
             if (mobs.size() > 0) {
                 Mob entity = mobs.get(0);
                 FakePlayer player = IndustrialForegoing.getFakePlayer(this.level);
-                if (ForgeRegistries.ENTITIES.tags().getTag(IndustrialTags.EntityTypes.MOB_CRUSHER_INSTANT_KILL_BLACKLIST).contains(entity.getType())){
+                if (ForgeRegistries.ENTITY_TYPES.tags().getTag(IndustrialTags.EntityTypes.MOB_CRUSHER_INSTANT_KILL_BLACKLIST).contains(entity.getType())) {
                     return damage(entity, player);
                 } else {
                     return instantKill(entity, player);
@@ -153,7 +151,7 @@ public class MobCrusherTile extends IndustrialAreaWorkingTile<MobCrusherTile> {
         return new WorkAction(1, 0);
     }
 
-    private WorkAction instantKill(Mob entity, FakePlayer player){
+    private WorkAction instantKill(Mob entity, FakePlayer player) {
         int experience = 0;
         try {
             experience = (int) GET_EXPERIENCE_POINTS.invoke(entity, player);
@@ -203,18 +201,17 @@ public class MobCrusherTile extends IndustrialAreaWorkingTile<MobCrusherTile> {
         return new WorkAction(0.1f, MobCrusherConfig.powerPerOperation);
     }
 
-    private WorkAction damage(Mob entity, FakePlayer player){
+    private WorkAction damage(Mob entity, FakePlayer player) {
         entity.hurt((DamageSource.playerAttack(player)).setMagic(), MobCrusherConfig.attackDamage);
         return new WorkAction(0.1f, MobCrusherConfig.powerPerOperation);
     }
 
 
-
     public VoxelShape getWorkingArea() {
-        return new RangeManager(this.worldPosition, this.getFacingDirection(), RangeManager.RangeType.BEHIND){
+        return new RangeManager(this.worldPosition, this.getFacingDirection(), RangeManager.RangeType.BEHIND) {
             @Override
             public AABB getBox() {
-                return super.getBox().expandTowards(0,2, 0);
+                return super.getBox().expandTowards(0, 2, 0);
             }
         }.get(hasAugmentInstalled(RangeAddonItem.RANGE) ? ((int) AugmentWrapper.getType(getInstalledAugments(RangeAddonItem.RANGE).get(0), RangeAddonItem.RANGE) + 1) : 0);
     }

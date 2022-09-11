@@ -25,8 +25,6 @@ import com.buuz135.industrial.IndustrialForegoing;
 import com.buuz135.industrial.utils.BlockUtils;
 import net.minecraft.Util;
 import net.minecraft.core.BlockPos;
-import net.minecraft.network.protocol.Packet;
-import net.minecraft.network.protocol.game.ClientboundLevelChunkPacketData;
 import net.minecraft.network.protocol.game.ClientboundLevelChunkWithLightPacket;
 import net.minecraft.network.protocol.game.ClientboundLightUpdatePacket;
 import net.minecraft.server.MinecraftServer;
@@ -39,7 +37,6 @@ import net.minecraft.world.level.block.FallingBlock;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.chunk.LevelChunk;
 import net.minecraft.world.level.chunk.LevelChunkSection;
-import net.minecraft.world.level.lighting.LevelLightEngine;
 
 import java.util.*;
 
@@ -75,7 +72,7 @@ public class ExplosionHelper {
     private LevelChunk removeBlock(BlockPos pos) {
         LevelChunk chunk = getChunk(pos);
         BlockState oldState = chunk.getBlockState(pos);
-        
+
         if (oldState.getBlock() instanceof EntityBlock) {
             serverWorld.removeBlock(pos, false);
             serverWorld.getLightEngine().checkBlock(pos);
@@ -189,10 +186,10 @@ public class ExplosionHelper {
                 ThreadedLevelLightEngine lightManager = (ThreadedLevelLightEngine) helper.serverWorld.getLightEngine();
                 lightManager.lightChunk(chunk, false)
                         .thenRun(() -> helper.serverWorld.getChunkSource().chunkMap.getPlayers(chunk.getPos(), false)
-                                .forEach(e -> e.connection.send(new ClientboundLightUpdatePacket(chunk.getPos(), helper.serverWorld.getLightEngine(), null , null, true))));
+                                .forEach(e -> e.connection.send(new ClientboundLightUpdatePacket(chunk.getPos(), helper.serverWorld.getLightEngine(), null, null, true))));
                 //LevelLightEngine lightManager = helper.serverWorld.getLightEngine();
                 helper.serverWorld.getChunkSource().chunkMap.getPlayers(chunk.getPos(), false)
-                        .forEach(e -> e.connection.send(new ClientboundLevelChunkWithLightPacket(chunk, lightManager,null  , null , true)));
+                        .forEach(e -> e.connection.send(new ClientboundLevelChunkWithLightPacket(chunk, lightManager, null, null, true)));
                 //ClientboundLevelChunkPacketData packet = new ClientboundLevelChunkPacketData(chunk);
                 //helper.serverWorld.getChunkSource().chunkMap.getPlayers(chunk.getPos(), false).forEach(e -> e.connection.send((Packet<?>) packet));
             }

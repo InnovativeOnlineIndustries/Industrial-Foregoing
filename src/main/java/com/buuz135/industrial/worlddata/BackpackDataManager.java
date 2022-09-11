@@ -22,11 +22,11 @@
 
 package com.buuz135.industrial.worlddata;
 
-import net.minecraft.world.item.ItemStack;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.world.level.LevelAccessor;
-import net.minecraft.world.level.Level;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.saveddata.SavedData;
 import net.minecraftforge.common.util.INBTSerializable;
 import net.minecraftforge.items.IItemHandler;
@@ -43,7 +43,7 @@ public class BackpackDataManager extends SavedData {
     public static HashMap<String, BackpackItemHandler> CLIENT_SIDE_BACKPACKS = new HashMap<>();
 
     public static final String NAME = "IFBackpack";
-    public static final int SLOT_AMOUNT = 4*8;
+    public static final int SLOT_AMOUNT = 4 * 8;
     public HashMap<String, BackpackItemHandler> itemHandlers;
 
     public BackpackDataManager(String name) {
@@ -54,12 +54,12 @@ public class BackpackDataManager extends SavedData {
         itemHandlers = new HashMap<>();
     }
 
-    public void createBackPack(UUID uuid){
+    public void createBackPack(UUID uuid) {
         this.itemHandlers.put(uuid.toString(), new BackpackItemHandler(this));
         setDirty();
     }
 
-    public BackpackItemHandler getBackpack(String id){
+    public BackpackItemHandler getBackpack(String id) {
         return itemHandlers.get(id);
     }
 
@@ -100,7 +100,7 @@ public class BackpackDataManager extends SavedData {
         private int maxAmount;
         private BackpackDataManager dataManager;
 
-        public BackpackItemHandler(BackpackDataManager manager){
+        public BackpackItemHandler(BackpackDataManager manager) {
             definitionList = new ArrayList<>();
             for (int i = 0; i < SLOT_AMOUNT; i++) {
                 definitionList.add(new SlotDefinition(this));
@@ -148,7 +148,7 @@ public class BackpackDataManager extends SavedData {
                 SlotDefinition definition = definitionList.get(slot);
                 int inserted = Math.min(maxAmount - definition.getAmount(), stack.getCount());
                 if (definition.isVoidItems()) inserted = stack.getCount(); //Void
-                if (!simulate){
+                if (!simulate) {
                     definition.setStack(stack);
                     definition.setAmount(Math.min(definition.getAmount() + inserted, maxAmount));
                     markDirty();
@@ -199,16 +199,16 @@ public class BackpackDataManager extends SavedData {
             markDirty();
         }
 
-        public void markDirty(){
-            if (dataManager != null)dataManager.setDirty();
+        public void markDirty() {
+            if (dataManager != null) dataManager.setDirty();
         }
 
-        public SlotDefinition getSlotDefinition(int slot){
+        public SlotDefinition getSlotDefinition(int slot) {
             return definitionList.get(slot);
         }
     }
 
-    public static class SlotDefinition implements INBTSerializable<CompoundTag>{
+    public static class SlotDefinition implements INBTSerializable<CompoundTag> {
 
         private ItemStack stack;
         private int amount;
@@ -216,9 +216,9 @@ public class BackpackDataManager extends SavedData {
         private boolean refillItems;
         private BackpackItemHandler parent;
 
-        public SlotDefinition(BackpackItemHandler parent){
+        public SlotDefinition(BackpackItemHandler parent) {
             this.stack = ItemStack.EMPTY;
-            this.amount =0;
+            this.amount = 0;
             this.voidItems = true;
             this.refillItems = false;
             this.parent = parent;

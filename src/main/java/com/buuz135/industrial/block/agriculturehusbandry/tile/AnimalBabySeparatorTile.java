@@ -31,7 +31,6 @@ import com.hrznstudio.titanium.annotation.Save;
 import com.hrznstudio.titanium.api.IFactory;
 import com.hrznstudio.titanium.api.client.AssetTypes;
 import com.hrznstudio.titanium.api.client.IScreenAddon;
-import com.hrznstudio.titanium.block.BasicTileBlock;
 import com.hrznstudio.titanium.client.screen.addon.StateButtonAddon;
 import com.hrznstudio.titanium.client.screen.addon.StateButtonInfo;
 import com.hrznstudio.titanium.component.button.ButtonComponent;
@@ -57,7 +56,7 @@ public class AnimalBabySeparatorTile extends IndustrialAreaWorkingTile<AnimalBab
     private boolean movingAdults;
 
     public AnimalBabySeparatorTile(BlockPos blockPos, BlockState blockState) {
-        super( ModuleAgricultureHusbandry.ANIMAL_BABY_SEPARATOR, RangeManager.RangeType.BEHIND, true, AnimalBabySeparatorConfig.powerPerOperation,blockPos, blockState);
+        super(ModuleAgricultureHusbandry.ANIMAL_BABY_SEPARATOR, RangeManager.RangeType.BEHIND, true, AnimalBabySeparatorConfig.powerPerOperation, blockPos, blockState);
         this.movingAdults = false;
         addButton(new ButtonComponent(42, 20, 18, 18) {
             @Override

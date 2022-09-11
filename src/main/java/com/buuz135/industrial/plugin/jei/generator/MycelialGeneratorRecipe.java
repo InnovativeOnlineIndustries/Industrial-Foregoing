@@ -23,7 +23,6 @@
 package com.buuz135.industrial.plugin.jei.generator;
 
 import net.minecraft.world.item.crafting.Ingredient;
-
 import net.minecraftforge.fluids.FluidStack;
 
 import java.util.List;
@@ -35,7 +34,7 @@ public class MycelialGeneratorRecipe {
     private final int powerTick;
     private final int ticks;
 
-    public MycelialGeneratorRecipe(List<List<Ingredient>> inputItems, List<List<FluidStack>> fluidItems,int ticks, int powerTick) {
+    public MycelialGeneratorRecipe(List<List<Ingredient>> inputItems, List<List<FluidStack>> fluidItems, int ticks, int powerTick) {
         this.inputItems = inputItems;
         this.fluidItems = fluidItems;
         this.powerTick = powerTick;

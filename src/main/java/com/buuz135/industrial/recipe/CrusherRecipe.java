@@ -21,16 +21,17 @@
  */
 package com.buuz135.industrial.recipe;
 
+import com.buuz135.industrial.module.ModuleCore;
 import com.buuz135.industrial.utils.Reference;
 import com.hrznstudio.titanium.recipe.serializer.GenericSerializer;
 import com.hrznstudio.titanium.recipe.serializer.SerializableRecipe;
 import com.hrznstudio.titanium.util.TagUtil;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.Container;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
-import net.minecraft.world.item.crafting.RecipeType;
 import net.minecraft.world.item.crafting.Ingredient;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.item.crafting.RecipeType;
 import net.minecraft.world.level.Level;
 import net.minecraftforge.common.crafting.conditions.ICondition;
 import net.minecraftforge.common.crafting.conditions.IConditionSerializer;
@@ -42,8 +43,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class CrusherRecipe extends SerializableRecipe {
-
-    public static GenericSerializer<CrusherRecipe> SERIALIZER = new GenericSerializer<>(new ResourceLocation(Reference.MOD_ID, "crusher"), CrusherRecipe.class);
     public static List<CrusherRecipe> RECIPES = new ArrayList<>();
 
     public static void init() {
@@ -57,7 +56,7 @@ public class CrusherRecipe extends SerializableRecipe {
     private ResourceLocation isTag;
 
     public CrusherRecipe(ResourceLocation resourceLocation, Ingredient input, Ingredient output) {
-       this(resourceLocation, input,output, null);
+        this(resourceLocation, input, output, null);
     }
 
     public CrusherRecipe(ResourceLocation resourceLocation, Ingredient input, Ingredient output, ResourceLocation isTag) {
@@ -94,17 +93,17 @@ public class CrusherRecipe extends SerializableRecipe {
 
     @Override
     public GenericSerializer<? extends SerializableRecipe> getSerializer() {
-        return SERIALIZER;
+        return (GenericSerializer<? extends SerializableRecipe>) ModuleCore.CRUSHER_SERIALIZER.get();
     }
 
     @Override
     public RecipeType<?> getType() {
-        return SERIALIZER.getRecipeType();
+        return ModuleCore.CRUSHER_TYPE.get();
     }
 
     @Override
     public Pair<ICondition, IConditionSerializer> getOutputCondition() {
-        if (isTag != null){
+        if (isTag != null) {
             return Pair.of(new NotCondition(new TagEmptyCondition(isTag)), NotCondition.Serializer.INSTANCE);
         }
         return null;

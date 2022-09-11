@@ -24,32 +24,27 @@ package com.buuz135.industrial.item;
 import com.buuz135.industrial.utils.IndustrialTags;
 import com.hrznstudio.titanium.recipe.generator.TitaniumShapedRecipeBuilder;
 import com.hrznstudio.titanium.util.TagUtil;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
 import net.minecraft.data.recipes.FinishedRecipe;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.chat.Component;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.item.Items;
-import net.minecraft.nbt.CompoundTag;
-import net.minecraft.world.InteractionResult;
-import net.minecraft.core.Direction;
-import net.minecraft.world.InteractionHand;
-import net.minecraft.core.BlockPos;
-import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.TextComponent;
-import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.level.Level;
+import net.minecraftforge.registries.ForgeRegistries;
 
 import javax.annotation.Nullable;
 import java.util.List;
 import java.util.function.Consumer;
-
-import com.hrznstudio.titanium.item.BasicItem.Key;
-import net.minecraft.world.item.Item.Properties;
-import net.minecraftforge.registries.ForgeRegistries;
 
 public class MobImprisonmentToolItem extends IFCustomItem {
 
@@ -101,7 +96,7 @@ public class MobImprisonmentToolItem extends IFCustomItem {
     }
 
     public boolean isBlacklisted(EntityType<?> entity) {
-        return TagUtil.hasTag(ForgeRegistries.ENTITIES, entity, IndustrialTags.EntityTypes.MOB_IMPRISONMENT_TOOL_BLACKLIST);
+        return TagUtil.hasTag(ForgeRegistries.ENTITY_TYPES, entity, IndustrialTags.EntityTypes.MOB_IMPRISONMENT_TOOL_BLACKLIST);
     }
 
     public boolean containsEntity(ItemStack stack) {
@@ -117,10 +112,10 @@ public class MobImprisonmentToolItem extends IFCustomItem {
     public void addTooltipDetails(@Nullable Key key, ItemStack stack, List<Component> tooltip, boolean advanced) {
         super.addTooltipDetails(key, stack, tooltip, advanced);
         if (containsEntity(stack)) {
-            tooltip.add(new TextComponent("Mob: " + getID(stack)));//new TranslationTextComponent(EntityList.getTranslationName(new ResourceLocation(getID(stack)))).getUnformattedComponentText());
-            tooltip.add(new TextComponent("Health: " + stack.getTag().getDouble("Health")));
+            tooltip.add(Component.literal("Mob: " + getID(stack)));//new TranslationTextComponent(EntityList.getTranslationName(new ResourceLocation(getID(stack)))).getUnformattedComponentText());
+            tooltip.add(Component.literal("Health: " + stack.getTag().getDouble("Health")));
             //if (BlockRegistry.mobDuplicatorBlock.blacklistedEntities.contains(stack.getTag().getString("entity")))
-            //    tooltip.add(new TextComponentString(TextFormatting.RED + "Entity blacklisted in the Mob Duplicator"));
+            //    tooltip.add(Component.literalString(TextFormatting.RED + "Entity blacklisted in the Mob Duplicator"));
         }
     }
 
@@ -128,7 +123,7 @@ public class MobImprisonmentToolItem extends IFCustomItem {
     public Entity getEntityFromStack(ItemStack stack, Level world, boolean withInfo, boolean applyDuplicatorFilter) {
         if (stack.hasTag()) {
             EntityType type = EntityType.byString(stack.getTag().getString("entity")).orElse(null);
-            if (type != null && !(applyDuplicatorFilter && ForgeRegistries.ENTITIES.tags().getTag(IndustrialTags.EntityTypes.MOB_DUPLICATOR_BLACKLIST).contains(type))) {
+            if (type != null && !(applyDuplicatorFilter && ForgeRegistries.ENTITY_TYPES.tags().getTag(IndustrialTags.EntityTypes.MOB_DUPLICATOR_BLACKLIST).contains(type))) {
                 Entity entity = type.create(world);
                 if (withInfo) {
                     entity.load(stack.getTag());
@@ -148,8 +143,8 @@ public class MobImprisonmentToolItem extends IFCustomItem {
     @Override
     public Component getName(ItemStack stack) {
         if (!containsEntity(stack))
-            return new TranslatableComponent(super.getDescriptionId(stack));
-        return new TranslatableComponent(super.getDescriptionId(stack)).append(" (" + getID(stack) + ")");
+            return Component.translatable(super.getDescriptionId(stack));
+        return Component.translatable(super.getDescriptionId(stack)).append(" (" + getID(stack) + ")");
     }
 
     @Override

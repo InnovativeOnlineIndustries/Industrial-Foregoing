@@ -24,7 +24,7 @@ package com.buuz135.industrial.block;
 
 import com.hrznstudio.titanium.block.RotatableBlock;
 import com.hrznstudio.titanium.block.tile.BasicTile;
-import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.Item;
@@ -42,7 +42,7 @@ public abstract class IndustrialBlock<T extends BasicTile<T>> extends RotatableB
         //setRegistryName(Reference.MOD_ID, name);
     }
 
-     @Override
+    @Override
     public Supplier<Item> getItemBlockFactory() {
         return () -> new IndustrialBlockItem(this, this.getItemGroup());
     }
@@ -57,7 +57,7 @@ public abstract class IndustrialBlock<T extends BasicTile<T>> extends RotatableB
         @Nullable
         @Override
         public String getCreatorModId(ItemStack itemStack) {
-            return new TranslatableComponent("itemGroup." + this.category.getRecipeFolderName()).getString();
+            return Component.translatable("itemGroup." + this.category.getRecipeFolderName()).getString();
         }
 
     }

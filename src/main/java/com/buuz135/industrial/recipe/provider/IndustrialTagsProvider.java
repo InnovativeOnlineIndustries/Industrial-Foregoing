@@ -29,8 +29,6 @@ import net.minecraft.data.DataGenerator;
 import net.minecraft.data.tags.BlockTagsProvider;
 import net.minecraft.data.tags.ItemTagsProvider;
 import net.minecraft.tags.BlockTags;
-import net.minecraft.tags.Tag;
-import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.Block;
 import net.minecraftforge.common.Tags;
 import net.minecraftforge.common.data.ExistingFileHelper;
@@ -53,7 +51,7 @@ public class IndustrialTagsProvider {
 
             TagAppender<Block> tTagAppender = this.tag(BlockTags.MINEABLE_WITH_PICKAXE);
 
-            ForgeRegistries.BLOCKS.getValues().stream().filter(block -> block.getRegistryName().getNamespace().equals(Reference.MOD_ID)).forEach(tTagAppender::add);
+            ForgeRegistries.BLOCKS.getValues().stream().filter(block -> ForgeRegistries.BLOCKS.getKey(block).getNamespace().equals(Reference.MOD_ID)).forEach(tTagAppender::add);
         }
     }
 
@@ -65,9 +63,9 @@ public class IndustrialTagsProvider {
 
         @Override
         protected void addTags() {
-            this.copy(IndustrialTags.Blocks.MACHINE_FRAME_PITY,  IndustrialTags.Items.MACHINE_FRAME_PITY);
-            this.copy(IndustrialTags.Blocks.MACHINE_FRAME_SIMPLE,  IndustrialTags.Items.MACHINE_FRAME_SIMPLE);
-            this.copy(IndustrialTags.Blocks.MACHINE_FRAME_ADVANCED,  IndustrialTags.Items.MACHINE_FRAME_ADVANCED);
+            this.copy(IndustrialTags.Blocks.MACHINE_FRAME_PITY, IndustrialTags.Items.MACHINE_FRAME_PITY);
+            this.copy(IndustrialTags.Blocks.MACHINE_FRAME_SIMPLE, IndustrialTags.Items.MACHINE_FRAME_SIMPLE);
+            this.copy(IndustrialTags.Blocks.MACHINE_FRAME_ADVANCED, IndustrialTags.Items.MACHINE_FRAME_ADVANCED);
             this.copy(IndustrialTags.Blocks.MACHINE_FRAME_SUPREME, IndustrialTags.Items.MACHINE_FRAME_SUPREME);
 
             tag(IndustrialTags.Items.PLASTIC).add(ModuleCore.PLASTIC.get());

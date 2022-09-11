@@ -22,11 +22,6 @@
 
 package com.buuz135.industrial.plugin.jei.category;
 
-import java.util.Collections;
-import java.util.stream.Collectors;
-
-import javax.annotation.Nullable;
-
 import com.buuz135.industrial.plugin.jei.IndustrialRecipeTypes;
 import com.buuz135.industrial.utils.Reference;
 import mezz.jei.api.forge.ForgeTypes;
@@ -37,17 +32,14 @@ import mezz.jei.api.recipe.IFocusGroup;
 import mezz.jei.api.recipe.RecipeIngredientRole;
 import mezz.jei.api.recipe.RecipeType;
 import mezz.jei.api.recipe.category.IRecipeCategory;
+import net.minecraft.network.chat.Component;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.TagKey;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraftforge.fluids.FluidStack;
 
-import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.TranslatableComponent;
-import net.minecraft.resources.ResourceLocation;
-import net.minecraft.tags.Tag;
-import net.minecraft.world.item.Item;
-import net.minecraft.world.item.ItemStack;
-import net.minecraftforge.registries.ForgeRegistries;
+import javax.annotation.Nullable;
 
 public class BioReactorRecipeCategory implements IRecipeCategory<BioReactorRecipeCategory.ReactorRecipeWrapper> {
 
@@ -58,17 +50,7 @@ public class BioReactorRecipeCategory implements IRecipeCategory<BioReactorRecip
     public BioReactorRecipeCategory(IGuiHelper guiHelper, String title) {
         this.guiHelper = guiHelper;
         tankOverlay = guiHelper.createDrawable(new ResourceLocation(Reference.MOD_ID, "textures/gui/jei.png"), 1, 207, 12, 48);
-        this.title = new TranslatableComponent(title);
-    }
-
-    @Override
-    public ResourceLocation getUid() {
-        return IndustrialRecipeTypes.BIOREACTOR.getUid();
-    }
-
-    @Override
-    public Class<? extends ReactorRecipeWrapper> getRecipeClass() {
-        return IndustrialRecipeTypes.BIOREACTOR.getRecipeClass();
+        this.title = Component.translatable(title);
     }
 
     @Override

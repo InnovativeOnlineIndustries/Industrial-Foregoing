@@ -25,14 +25,14 @@ package com.buuz135.industrial.block.generator.mycelial;
 import com.buuz135.industrial.plugin.jei.generator.MycelialGeneratorRecipe;
 import com.buuz135.industrial.utils.IndustrialTags;
 import com.hrznstudio.titanium.component.inventory.SidedInventoryComponent;
-import net.minecraft.world.level.block.Blocks;
 import net.minecraft.data.recipes.ShapedRecipeBuilder;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.item.DyeColor;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.crafting.Ingredient;
-import net.minecraft.nbt.CompoundTag;
+import net.minecraft.world.level.block.Blocks;
 import net.minecraftforge.common.util.INBTSerializable;
 import net.minecraftforge.fluids.FluidStack;
 import org.apache.commons.lang3.tuple.Pair;
@@ -44,7 +44,7 @@ import java.util.List;
 import java.util.function.BiPredicate;
 import java.util.function.Predicate;
 
-public class HalitosisGeneratorType implements IMycelialGeneratorType{
+public class HalitosisGeneratorType implements IMycelialGeneratorType {
     @Override
     public String getName() {
         return "halitosis";
@@ -72,12 +72,12 @@ public class HalitosisGeneratorType implements IMycelialGeneratorType{
 
     @Override
     public Pair<Integer, Integer> getTimeAndPowerGeneration(INBTSerializable<CompoundTag>[] inputs) {
-        if (inputs.length > 0 && inputs[0] instanceof SidedInventoryComponent && ((SidedInventoryComponent<?>) inputs[0]).getStackInSlot(0).getCount() > 0){
+        if (inputs.length > 0 && inputs[0] instanceof SidedInventoryComponent && ((SidedInventoryComponent<?>) inputs[0]).getStackInSlot(0).getCount() > 0) {
             ItemStack stack = ((SidedInventoryComponent<?>) inputs[0]).getStackInSlot(0).copy();
             ((SidedInventoryComponent<?>) inputs[0]).getStackInSlot(0).shrink(1);
             return calculate(stack);
         }
-        return Pair.of(0,80);
+        return Pair.of(0, 80);
     }
 
     @Override
@@ -106,8 +106,8 @@ public class HalitosisGeneratorType implements IMycelialGeneratorType{
         return recipes;
     }
 
-    private Pair<Integer, Integer> calculate(ItemStack stack){
-        return Pair.of(10*60*20, 40);
+    private Pair<Integer, Integer> calculate(ItemStack stack) {
+        return Pair.of(10 * 60 * 20, 40);
     }
 
     @Override

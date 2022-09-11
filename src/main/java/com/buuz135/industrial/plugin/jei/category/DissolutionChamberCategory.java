@@ -21,15 +21,9 @@
  */
 package com.buuz135.industrial.plugin.jei.category;
 
-import java.awt.Color;
-import java.awt.Rectangle;
-import java.util.ArrayList;
-import java.util.List;
-
 import com.buuz135.industrial.block.core.tile.DissolutionChamberTile;
 import com.buuz135.industrial.config.machine.core.DissolutionChamberConfig;
 import com.buuz135.industrial.module.ModuleCore;
-import com.buuz135.industrial.module.ModuleResourceProduction;
 import com.buuz135.industrial.plugin.jei.IndustrialRecipeTypes;
 import com.buuz135.industrial.recipe.DissolutionChamberRecipe;
 import com.hrznstudio.titanium.api.client.AssetTypes;
@@ -49,16 +43,15 @@ import mezz.jei.api.recipe.IFocusGroup;
 import mezz.jei.api.recipe.RecipeIngredientRole;
 import mezz.jei.api.recipe.RecipeType;
 import mezz.jei.api.recipe.category.IRecipeCategory;
-import net.minecraft.network.chat.TranslatableComponent;
-import org.apache.commons.lang3.tuple.Pair;
-
 import net.minecraft.client.Minecraft;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.TextComponent;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.DyeColor;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.crafting.Ingredient;
+import org.apache.commons.lang3.tuple.Pair;
+
+import java.awt.*;
+import java.util.ArrayList;
+import java.util.List;
 
 public class DissolutionChamberCategory implements IRecipeCategory<DissolutionChamberRecipe> {
 
@@ -73,23 +66,13 @@ public class DissolutionChamberCategory implements IRecipeCategory<DissolutionCh
     }
 
     @Override
-    public ResourceLocation getUid() {
-        return IndustrialRecipeTypes.DISSOLUTION.getUid();
-    }
-
-    @Override
-    public Class<? extends DissolutionChamberRecipe> getRecipeClass() {
-        return IndustrialRecipeTypes.DISSOLUTION.getRecipeClass();
-    }
-
-    @Override
     public RecipeType<DissolutionChamberRecipe> getRecipeType() {
         return IndustrialRecipeTypes.DISSOLUTION;
     }
 
     @Override
     public Component getTitle() {
-        return new TranslatableComponent(ModuleCore.DISSOLUTION_CHAMBER.getLeft().get().getDescriptionId());
+        return Component.translatable(ModuleCore.DISSOLUTION_CHAMBER.getLeft().get().getDescriptionId());
     }
 
     @Override
@@ -106,10 +89,10 @@ public class DissolutionChamberCategory implements IRecipeCategory<DissolutionCh
     public void setRecipe(IRecipeLayoutBuilder builder, DissolutionChamberRecipe recipe, IFocusGroup focuses) {
         for (int i = 0; i < 8; i++) {
             if (i < recipe.input.length) {
-                builder.addSlot(RecipeIngredientRole.INPUT,  24 + DissolutionChamberTile.getSlotPos(i).getLeft(), 11 + DissolutionChamberTile.getSlotPos(i).getRight()).addIngredients(VanillaTypes.ITEM_STACK, recipe.input[i].getItems().stream().toList());
+                builder.addSlot(RecipeIngredientRole.INPUT, 24 + DissolutionChamberTile.getSlotPos(i).getLeft(), 11 + DissolutionChamberTile.getSlotPos(i).getRight()).addIngredients(VanillaTypes.ITEM_STACK, recipe.input[i].getItems().stream().toList());
             }
         }
-        if (recipe.inputFluid != null && !recipe.inputFluid.isEmpty()){
+        if (recipe.inputFluid != null && !recipe.inputFluid.isEmpty()) {
             builder.addSlot(RecipeIngredientRole.INPUT, 33 + 12 + 3, 32 + 3).setFluidRenderer(1000, false, 12, 13).setOverlay(smallTank, 0, 0).addIngredient(ForgeTypes.FLUID_STACK, recipe.inputFluid);
         }
         if (!recipe.output.isEmpty()) {
@@ -117,7 +100,7 @@ public class DissolutionChamberCategory implements IRecipeCategory<DissolutionCh
             stack.getItem().onCraftedBy(stack, null, null);
             builder.addSlot(RecipeIngredientRole.OUTPUT, 119, 16).addIngredient(VanillaTypes.ITEM_STACK, stack);
         }
-        if (recipe.outputFluid != null && !recipe.outputFluid.isEmpty()){
+        if (recipe.outputFluid != null && !recipe.outputFluid.isEmpty()) {
             builder.addSlot(RecipeIngredientRole.OUTPUT, 139 + 3, 14 + 3).setFluidRenderer(1000, false, 12, 50).setOverlay(bigTank, 0, 0).addIngredient(ForgeTypes.FLUID_STACK, recipe.outputFluid);
         }
     }

@@ -28,13 +28,12 @@ import com.buuz135.industrial.config.machine.resourceproduction.LaserDrillConfig
 import com.buuz135.industrial.module.ModuleResourceProduction;
 import com.buuz135.industrial.utils.BlockUtils;
 import com.hrznstudio.titanium.annotation.Save;
-import com.hrznstudio.titanium.block.BasicTileBlock;
 import com.hrznstudio.titanium.client.screen.addon.TextScreenAddon;
 import com.hrznstudio.titanium.component.energy.EnergyStorageComponent;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Vec3i;
-import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.network.chat.Component;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
@@ -55,12 +54,13 @@ public class LaserDrillTile extends IndustrialAreaWorkingTile<LaserDrillTile> {
     @OnlyIn(Dist.CLIENT)
     public void initClient() {
         super.initClient();
-        addGuiAddonFactory(() -> new TextScreenAddon(ChatFormatting.DARK_GRAY + new TranslatableComponent("text.industrialforegoing.target").getString(), 44 ,26, false));
-        addGuiAddonFactory(() -> new TextScreenAddon("Target: ", 44 ,36, false){
+        addGuiAddonFactory(() -> new TextScreenAddon(ChatFormatting.DARK_GRAY + Component.translatable("text.industrialforegoing.target").getString(), 44, 26, false));
+        addGuiAddonFactory(() -> new TextScreenAddon("Target: ", 44, 36, false) {
                     @Override
                     public String getText() {
-                        if (target.equals(BlockPos.ZERO) || target == null) return ChatFormatting.DARK_GRAY + new TranslatableComponent("text.industrialforegoing.target_not_found").getString();
-                        return  ChatFormatting.DARK_GRAY + "X: " + target.getX() + " Y: " + target.getY() + " Z: " + target.getZ();
+                        if (target.equals(BlockPos.ZERO) || target == null)
+                            return ChatFormatting.DARK_GRAY + Component.translatable("text.industrialforegoing.target_not_found").getString();
+                        return ChatFormatting.DARK_GRAY + "X: " + target.getX() + " Y: " + target.getY() + " Z: " + target.getZ();
                     }
                 }
         );
@@ -68,15 +68,15 @@ public class LaserDrillTile extends IndustrialAreaWorkingTile<LaserDrillTile> {
 
     @Override
     public WorkAction work() {
-        if (!target.equals(BlockPos.ZERO) && !isValidTarget(target)){
+        if (!target.equals(BlockPos.ZERO) && !isValidTarget(target)) {
             target = BlockPos.ZERO;
             markForUpdate();
         }
-        if (target.equals(BlockPos.ZERO)){
+        if (target.equals(BlockPos.ZERO)) {
             findTarget();
         }
-        if (!target.equals(BlockPos.ZERO) && hasEnergy(LaserDrillConfig.powerPerOperation)){
-            if (this.level.getBlockEntity(target) instanceof ILaserBase){
+        if (!target.equals(BlockPos.ZERO) && hasEnergy(LaserDrillConfig.powerPerOperation)) {
+            if (this.level.getBlockEntity(target) instanceof ILaserBase) {
                 ILaserBase laserBase = ((ILaserBase<?>) this.level.getBlockEntity(target));
                 laserBase.getBar().setProgress(laserBase.getBar().getProgress() + 1);
                 return new WorkAction(1, LaserDrillConfig.powerPerOperation);
@@ -87,13 +87,13 @@ public class LaserDrillTile extends IndustrialAreaWorkingTile<LaserDrillTile> {
 
     @Override
     public VoxelShape getWorkingArea() {
-        Vec3i vector =  this.getFacingDirection().getOpposite().getNormal();
-        return Shapes.box(-1, 0, -1, 2, 3, 2).move(this.worldPosition.getX() + vector.getX() * 2, this.worldPosition.getY() + vector.getY() * 2 -1, this.worldPosition.getZ() + vector.getZ() * 2);
+        Vec3i vector = this.getFacingDirection().getOpposite().getNormal();
+        return Shapes.box(-1, 0, -1, 2, 3, 2).move(this.worldPosition.getX() + vector.getX() * 2, this.worldPosition.getY() + vector.getY() * 2 - 1, this.worldPosition.getZ() + vector.getZ() * 2);
     }
 
-    public void findTarget(){
+    public void findTarget() {
         for (BlockPos blockPos : BlockUtils.getBlockPosInAABB(getWorkingArea().bounds())) {
-            if (isValidTarget(blockPos)){
+            if (isValidTarget(blockPos)) {
                 this.target = blockPos;
                 markForUpdate();
                 return;
@@ -101,7 +101,7 @@ public class LaserDrillTile extends IndustrialAreaWorkingTile<LaserDrillTile> {
         }
     }
 
-    public boolean isValidTarget(BlockPos pos){
+    public boolean isValidTarget(BlockPos pos) {
         if (pos.equals(BlockPos.ZERO)) return false;
         return this.level.getBlockEntity(pos) instanceof ILaserBase;
     }

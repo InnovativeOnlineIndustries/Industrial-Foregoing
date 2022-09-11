@@ -21,8 +21,6 @@
  */
 package com.buuz135.industrial.plugin.jei.category;
 
-import java.util.List;
-
 import com.buuz135.industrial.block.resourceproduction.tile.MaterialStoneWorkFactoryTile;
 import com.buuz135.industrial.module.ModuleResourceProduction;
 import com.buuz135.industrial.plugin.jei.IndustrialRecipeTypes;
@@ -35,11 +33,11 @@ import mezz.jei.api.recipe.IFocusGroup;
 import mezz.jei.api.recipe.RecipeIngredientRole;
 import mezz.jei.api.recipe.RecipeType;
 import mezz.jei.api.recipe.category.IRecipeCategory;
-
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
+
+import java.util.List;
 
 public class StoneWorkCategory implements IRecipeCategory<StoneWorkCategory.Wrapper> {
     private final IGuiHelper helper;
@@ -49,24 +47,13 @@ public class StoneWorkCategory implements IRecipeCategory<StoneWorkCategory.Wrap
     }
 
     @Override
-    public ResourceLocation getUid() {
-        return IndustrialRecipeTypes.STONE_WORK.getUid();
-    }
-
-    @Override
-    public Class<? extends Wrapper> getRecipeClass() {
-        return IndustrialRecipeTypes.STONE_WORK.getRecipeClass();
-    }
-
-
-    @Override
     public RecipeType<Wrapper> getRecipeType() {
         return IndustrialRecipeTypes.STONE_WORK;
     }
 
     @Override
     public Component getTitle() {
-        return new TranslatableComponent(ModuleResourceProduction.MATERIAL_STONEWORK_FACTORY.getLeft().get().getDescriptionId());
+        return Component.translatable(ModuleResourceProduction.MATERIAL_STONEWORK_FACTORY.getLeft().get().getDescriptionId());
     }
 
     @Override
@@ -84,7 +71,7 @@ public class StoneWorkCategory implements IRecipeCategory<StoneWorkCategory.Wrap
         builder.addSlot(RecipeIngredientRole.INPUT, 1, 5).addIngredient(VanillaTypes.ITEM_STACK, recipe.getInput());
         builder.addSlot(RecipeIngredientRole.OUTPUT, 139, 5).addIngredient(VanillaTypes.ITEM_STACK, recipe.getOutput());
         for (int i = 0; i < recipe.getModes().size(); i++) {
-            builder.addSlot(RecipeIngredientRole.CATALYST,  29 + i * 24, 5).addIngredient(VanillaTypes.ITEM_STACK, recipe.getModes().get(i).getIcon());
+            builder.addSlot(RecipeIngredientRole.CATALYST, 29 + i * 24, 5).addIngredient(VanillaTypes.ITEM_STACK, recipe.getModes().get(i).getIcon());
         }
     }
 

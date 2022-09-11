@@ -34,24 +34,17 @@ import com.hrznstudio.titanium.component.button.ButtonComponent;
 import com.hrznstudio.titanium.util.AssetUtil;
 import com.hrznstudio.titanium.util.LangUtil;
 import com.mojang.blaze3d.vertex.PoseStack;
-import com.mojang.blaze3d.systems.RenderSystem;
+import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screens.Screen;
-import com.mojang.blaze3d.platform.Lighting;
-
 import net.minecraft.core.BlockPos;
+import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
-import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.TextComponent;
-import net.minecraft.ChatFormatting;
-import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
-import net.minecraftforge.registries.RegistryObject;
-import org.apache.commons.lang3.tuple.Pair;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -62,10 +55,10 @@ public abstract class BHTile<T extends BHTile<T>> extends ActiveTile<T> {
     @Save
     public boolean display;
 
-    public BHTile(BasicTileBlock<T>  block, BlockEntityType<?> tileType, BlockPos blockPos, BlockState blockState) {
+    public BHTile(BasicTileBlock<T> block, BlockEntityType<?> tileType, BlockPos blockPos, BlockState blockState) {
         super(block, tileType, blockPos, blockState);
         this.display = true;
-        addButton(new ButtonComponent(82+ 20 * 3, 64+16, 18, 18) {
+        addButton(new ButtonComponent(82 + 20 * 3, 64 + 16, 18, 18) {
             @Override
             @OnlyIn(Dist.CLIENT)
             public List<IFactory<? extends IScreenAddon>> getScreenAddons() {
@@ -73,7 +66,7 @@ public abstract class BHTile<T extends BHTile<T>> extends ActiveTile<T> {
                     @Override
                     public void drawBackgroundLayer(PoseStack stack, Screen screen, IAssetProvider provider, int guiX, int guiY, int mouseX, int mouseY, float partialTicks) {
                         AssetUtil.drawAsset(stack, screen, provider.getAsset(AssetTypes.ITEM_BACKGROUND), guiX + getPosX(), guiY + getPosY());
-                        Minecraft.getInstance().getItemRenderer().renderGuiItem(new ItemStack(display ? Items.ENDER_EYE: Items.ENDER_PEARL), guiX + getPosX() + 1, guiY + getPosY() + 1);
+                        Minecraft.getInstance().getItemRenderer().renderGuiItem(new ItemStack(display ? Items.ENDER_EYE : Items.ENDER_PEARL), guiX + getPosX() + 1, guiY + getPosY() + 1);
 //                        Lighting.turnOff();
 //                        RenderSystem.enableAlphaTest();
                     }
@@ -81,7 +74,7 @@ public abstract class BHTile<T extends BHTile<T>> extends ActiveTile<T> {
                     @Override
                     public List<Component> getTooltipLines() {
                         List<Component> lines = new ArrayList<>();
-                        lines.add(new TextComponent(ChatFormatting.GOLD + LangUtil.getString("tooltip.industrialforegoing.bl." + ( display ? "show_unit_display" : "hide_unit_display"))));
+                        lines.add(Component.literal(ChatFormatting.GOLD + LangUtil.getString("tooltip.industrialforegoing.bl." + (display ? "show_unit_display" : "hide_unit_display"))));
                         return lines;
                     }
                 });

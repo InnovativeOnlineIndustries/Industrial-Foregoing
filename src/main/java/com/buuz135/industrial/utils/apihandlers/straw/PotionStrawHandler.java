@@ -23,12 +23,12 @@
 package com.buuz135.industrial.utils.apihandlers.straw;
 
 import com.buuz135.industrial.utils.Triple;
-import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.level.material.Fluid;
+import net.minecraft.core.BlockPos;
 import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.effect.MobEffectInstance;
-import net.minecraft.core.BlockPos;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.material.Fluid;
 
 import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.ArrayList;

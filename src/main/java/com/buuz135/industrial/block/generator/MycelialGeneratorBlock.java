@@ -22,39 +22,26 @@
 
 package com.buuz135.industrial.block.generator;
 
-import java.util.function.Consumer;
-
-import javax.annotation.Nullable;
-
 import com.buuz135.industrial.block.IndustrialBlock;
 import com.buuz135.industrial.block.generator.mycelial.IMycelialGeneratorType;
 import com.buuz135.industrial.block.generator.tile.MycelialGeneratorTile;
 import com.buuz135.industrial.module.ModuleGenerator;
-import com.buuz135.industrial.utils.Reference;
 import com.buuz135.industrial.worlddata.MycelialDataManager;
-import com.hrznstudio.titanium.module.DeferredRegistryHelper;
-import com.hrznstudio.titanium.module.api.RegistryManager;
-import com.hrznstudio.titanium.nbthandler.NBTManager;
 import com.hrznstudio.titanium.recipe.generator.TitaniumShapedRecipeBuilder;
-import com.mojang.datafixers.types.Type;
-
-
 import net.minecraft.core.BlockPos;
 import net.minecraft.data.recipes.FinishedRecipe;
 import net.minecraft.data.recipes.ShapedRecipeBuilder;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.item.BlockItem;
-import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
-import org.apache.commons.lang3.tuple.Pair;
+
+import javax.annotation.Nullable;
+import java.util.function.Consumer;
 
 public class MycelialGeneratorBlock extends IndustrialBlock<MycelialGeneratorTile> {
 
@@ -75,7 +62,7 @@ public class MycelialGeneratorBlock extends IndustrialBlock<MycelialGeneratorTil
 
     @Override
     public BlockEntityType.BlockEntitySupplier<MycelialGeneratorTile> getTileEntityFactory() {
-        return (p_155268_, p_155269_) -> new MycelialGeneratorTile(ModuleGenerator.MYCELIAL_GENERATORS.stream().filter(registryObjectRegistryObjectPair -> ((MycelialGeneratorBlock)registryObjectRegistryObjectPair.getLeft().get()).type == type).findFirst().get() ,type, p_155268_, p_155269_);
+        return (p_155268_, p_155269_) -> new MycelialGeneratorTile(ModuleGenerator.MYCELIAL_GENERATORS.stream().filter(registryObjectRegistryObjectPair -> ((MycelialGeneratorBlock) registryObjectRegistryObjectPair.getLeft().get()).type == type).findFirst().get(), type, p_155268_, p_155269_);
     }
 
     @Override
@@ -91,7 +78,7 @@ public class MycelialGeneratorBlock extends IndustrialBlock<MycelialGeneratorTil
     public void setPlacedBy(Level worldIn, BlockPos pos, BlockState state, @Nullable LivingEntity placer, ItemStack stack) {
         super.setPlacedBy(worldIn, pos, state, placer, stack);
         BlockEntity entity = worldIn.getBlockEntity(pos);
-        if (entity instanceof MycelialGeneratorTile && placer != null){
+        if (entity instanceof MycelialGeneratorTile && placer != null) {
             ((MycelialGeneratorTile) entity).setOwner(placer.getUUID().toString());
         }
     }
@@ -99,7 +86,7 @@ public class MycelialGeneratorBlock extends IndustrialBlock<MycelialGeneratorTil
     @Override
     public void onRemove(BlockState state, Level worldIn, BlockPos pos, BlockState newState, boolean isMoving) {
         BlockEntity entity = worldIn.getBlockEntity(pos);
-        if (entity instanceof  MycelialGeneratorTile){
+        if (entity instanceof MycelialGeneratorTile) {
             MycelialDataManager.removeGeneratorInfo(((MycelialGeneratorTile) entity).getOwner(), worldIn, pos, type);
         }
         super.onRemove(state, worldIn, pos, newState, isMoving);

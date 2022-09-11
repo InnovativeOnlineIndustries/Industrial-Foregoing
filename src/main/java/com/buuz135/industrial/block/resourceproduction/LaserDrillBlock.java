@@ -26,27 +26,22 @@ import com.buuz135.industrial.block.IndustrialBlock;
 import com.buuz135.industrial.block.resourceproduction.tile.LaserDrillTile;
 import com.buuz135.industrial.module.ModuleResourceProduction;
 import com.buuz135.industrial.utils.IndustrialTags;
-import com.hrznstudio.titanium.api.IFactory;
 import com.hrznstudio.titanium.recipe.generator.TitaniumShapedRecipeBuilder;
-
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Vec3i;
+import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.data.recipes.FinishedRecipe;
+import net.minecraft.util.RandomSource;
+import net.minecraft.world.item.Items;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.level.block.Blocks;
-import net.minecraft.data.recipes.FinishedRecipe;
-import net.minecraft.world.item.Items;
-import net.minecraft.core.particles.ParticleTypes;
-import net.minecraft.core.BlockPos;
 import net.minecraft.world.phys.Vec3;
-import net.minecraft.core.Vec3i;
-import net.minecraft.world.level.Level;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
-import java.util.Random;
 import java.util.function.Consumer;
-
-import com.hrznstudio.titanium.block.RotatableBlock.RotationType;
-import net.minecraft.world.level.block.state.BlockBehaviour.Properties;
 
 public class LaserDrillBlock extends IndustrialBlock<LaserDrillTile> {
 
@@ -66,17 +61,17 @@ public class LaserDrillBlock extends IndustrialBlock<LaserDrillTile> {
 
     @OnlyIn(Dist.CLIENT)
     @Override
-    public void animateTick(BlockState stateIn, Level world, BlockPos pos, Random rand) {
-        if (world.getBlockEntity(pos) instanceof LaserDrillTile){
+    public void animateTick(BlockState stateIn, Level world, BlockPos pos, RandomSource rand) {
+        if (world.getBlockEntity(pos) instanceof LaserDrillTile) {
             LaserDrillTile tile = (LaserDrillTile) world.getBlockEntity(pos);
-            if (!tile.getTarget().equals(BlockPos.ZERO)){
+            if (!tile.getTarget().equals(BlockPos.ZERO)) {
                 BlockPos target = tile.getTarget();
-                Vec3i vector =  tile.getFacingDirection().getOpposite().getNormal();
+                Vec3i vector = tile.getFacingDirection().getOpposite().getNormal();
                 Vec3 vec = new Vec3(pos.getX(), pos.getY(), pos.getZ());
-                vec = vec.add(0.5, 0.5, 0.5).add(vector.getX() /2D, vector.getY()/2D, vector.getZ() / 2D);
+                vec = vec.add(0.5, 0.5, 0.5).add(vector.getX() / 2D, vector.getY() / 2D, vector.getZ() / 2D);
                 Vec3 velocity = vec.vectorTo(new Vec3(target.getX(), target.getY(), target.getZ()).add(0.5, 0.5, 0.5));
                 double vel = 10;
-                world.addParticle(ParticleTypes.END_ROD, vec.x(), vec.y(), vec.z(), velocity.x /vel ,velocity.y/vel,velocity.z /vel);
+                world.addParticle(ParticleTypes.END_ROD, vec.x(), vec.y(), vec.z(), velocity.x / vel, velocity.y / vel, velocity.z / vel);
             }
         }
     }

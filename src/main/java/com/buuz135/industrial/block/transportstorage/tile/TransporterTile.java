@@ -30,23 +30,22 @@ import com.buuz135.industrial.module.ModuleTransportStorage;
 import com.buuz135.industrial.proxy.client.model.TransporterModelData;
 import com.hrznstudio.titanium.block.BasicTileBlock;
 import com.hrznstudio.titanium.block.tile.ActiveTile;
-import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.level.block.Blocks;
-import net.minecraft.world.entity.item.ItemEntity;
-import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.entity.item.ItemEntity;
+import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.nbt.CompoundTag;
-import net.minecraft.core.Direction;
-import net.minecraft.resources.ResourceLocation;
-import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.Level;
-import net.minecraftforge.client.model.ModelDataManager;
-import net.minecraftforge.client.model.data.IModelData;
-import net.minecraftforge.client.model.data.ModelDataMap;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraftforge.client.model.data.ModelData;
 import net.minecraftforge.network.NetworkHooks;
+import net.minecraftforge.registries.ForgeRegistries;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -111,7 +110,7 @@ public class TransporterTile extends ActiveTile<TransporterTile> implements IBlo
         if (!hasUpgrade(facing)) {
             transporterTypeMap.put(facing, factory.create(this, facing, TransporterTypeFactory.TransporterAction.EXTRACT));
             requestSync();
-            if (level.isClientSide) ModelDataManager.requestModelDataRefresh(this);
+            if (level.isClientSide) this.getLevel().getModelDataManager().requestRefresh(this);
         }
     }
 
@@ -129,7 +128,7 @@ public class TransporterTile extends ActiveTile<TransporterTile> implements IBlo
             transporterTypeMap.get(facing).onUpgradeRemoved();
             transporterTypeMap.remove(facing);
             requestSync();
-            if (level.isClientSide) ModelDataManager.requestModelDataRefresh(this);
+            if (level.isClientSide) this.getLevel().getModelDataManager().requestRefresh(this);
         }
         if (transporterTypeMap.isEmpty()) {
             this.level.setBlockAndUpdate(this.worldPosition, Blocks.AIR.defaultBlockState());
@@ -138,7 +137,7 @@ public class TransporterTile extends ActiveTile<TransporterTile> implements IBlo
 
     public void openGui(Player player, Direction facing) {
         if (player instanceof ServerPlayer) {
-            NetworkHooks.openGui((ServerPlayer) player, this, packetBuffer -> {
+            NetworkHooks.openScreen((ServerPlayer) player, this, packetBuffer -> {
                 packetBuffer.writeBlockPos(worldPosition);
                 packetBuffer.writeEnum(facing);
             });
@@ -148,7 +147,7 @@ public class TransporterTile extends ActiveTile<TransporterTile> implements IBlo
     @Nullable
     @Override
     public AbstractContainerMenu createMenu(int menu, Inventory inventoryPlayer, Player entityPlayer) {
-        return new ContainerTransporter(menu, this, ((TransporterBlock)ModuleTransportStorage.TRANSPORTER.getLeft().get()).getFacingUpgradeHit(this.level.getBlockState(this.worldPosition), this.level, this.worldPosition, entityPlayer).getLeft(), inventoryPlayer);
+        return new ContainerTransporter(menu, this, ((TransporterBlock) ModuleTransportStorage.TRANSPORTER.getLeft().get()).getFacingUpgradeHit(this.level.getBlockState(this.worldPosition), this.level, this.worldPosition, entityPlayer).getLeft(), inventoryPlayer);
     }
 
     @Override
@@ -158,8 +157,8 @@ public class TransporterTile extends ActiveTile<TransporterTile> implements IBlo
 
     @Nonnull
     @Override
-    public IModelData getModelData() {
-        return new ModelDataMap.Builder().withInitial(TransporterModelData.UPGRADE_PROPERTY, new TransporterModelData(new HashMap<>(transporterTypeMap))).build();
+    public ModelData getModelData() {
+        return ModelData.builder().with(TransporterModelData.UPGRADE_PROPERTY, new TransporterModelData(new HashMap<>(transporterTypeMap))).build();
     }
 
     public Map<Direction, TransporterType> getTransporterTypeMap() {
@@ -176,7 +175,7 @@ public class TransporterTile extends ActiveTile<TransporterTile> implements IBlo
             }
             CompoundTag upgradeTag = new CompoundTag();
             TransporterType upgrade = getTransporterTypeMap().get(facing);
-            upgradeTag.putString("factory", upgrade.getFactory().getRegistryName().toString());
+            upgradeTag.putString("factory", ForgeRegistries.ITEMS.getKey(upgrade.getFactory().getUpgradeItem()).toString());
             CompoundTag customNBT = upgrade.serializeNBT();
             if (customNBT != null)
                 upgradeTag.put("customNBT", customNBT);
@@ -197,7 +196,7 @@ public class TransporterTile extends ActiveTile<TransporterTile> implements IBlo
                 CompoundTag upgradeTag = upgradesTag.getCompound(facing.getSerializedName());
                 TransporterTypeFactory factory = null;
                 for (TransporterTypeFactory transporterTypeFactory : TransporterTypeFactory.FACTORIES) {
-                    if (transporterTypeFactory.getRegistryName().equals(new ResourceLocation(upgradeTag.getString("factory")))) {
+                    if (ForgeRegistries.ITEMS.getKey(transporterTypeFactory.getUpgradeItem()).equals(new ResourceLocation(upgradeTag.getString("factory")))) {
                         factory = transporterTypeFactory;
                         break;
                     }

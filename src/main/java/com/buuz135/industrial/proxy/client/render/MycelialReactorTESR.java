@@ -22,8 +22,6 @@
 
 package com.buuz135.industrial.proxy.client.render;
 
-import java.awt.Color;
-
 import com.buuz135.industrial.block.generator.tile.MycelialReactorTile;
 import com.mojang.blaze3d.platform.GlStateManager;
 import com.mojang.blaze3d.systems.RenderSystem;
@@ -33,7 +31,6 @@ import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.mojang.blaze3d.vertex.VertexFormat;
 import com.mojang.math.Matrix4f;
 import com.mojang.math.Vector3f;
-
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.GameRenderer;
 import net.minecraft.client.renderer.MultiBufferSource;
@@ -43,6 +40,8 @@ import net.minecraft.client.renderer.blockentity.BlockEntityRenderer;
 import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.FastColor;
+
+import java.awt.*;
 
 public class MycelialReactorTESR implements BlockEntityRenderer<MycelialReactorTile> {
 

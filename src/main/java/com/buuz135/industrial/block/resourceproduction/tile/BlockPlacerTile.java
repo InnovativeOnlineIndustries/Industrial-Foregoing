@@ -30,7 +30,6 @@ import com.buuz135.industrial.module.ModuleResourceProduction;
 import com.buuz135.industrial.utils.BlockUtils;
 import com.buuz135.industrial.utils.IFFakePlayer;
 import com.hrznstudio.titanium.annotation.Save;
-import com.hrznstudio.titanium.block.BasicTileBlock;
 import com.hrznstudio.titanium.component.energy.EnergyStorageComponent;
 import com.hrznstudio.titanium.component.inventory.SidedInventoryComponent;
 import net.minecraft.core.BlockPos;

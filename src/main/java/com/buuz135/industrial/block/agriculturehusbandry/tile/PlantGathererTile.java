@@ -33,17 +33,15 @@ import com.buuz135.industrial.registry.IFRegistries;
 import com.buuz135.industrial.utils.BlockUtils;
 import com.buuz135.industrial.utils.ItemStackUtils;
 import com.hrznstudio.titanium.annotation.Save;
-import com.hrznstudio.titanium.block.BasicTileBlock;
 import com.hrznstudio.titanium.component.energy.EnergyStorageComponent;
 import com.hrznstudio.titanium.component.fluid.FluidTankComponent;
 import com.hrznstudio.titanium.component.fluid.SidedFluidTankComponent;
 import com.hrznstudio.titanium.component.inventory.SidedInventoryComponent;
 import com.hrznstudio.titanium.component.progress.ProgressBarComponent;
+import net.minecraft.core.BlockPos;
 import net.minecraft.world.item.DyeColor;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.block.state.BlockState;
-
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.capability.IFluidHandler;
 import net.minecraftforge.items.ItemHandlerHelper;
@@ -51,8 +49,6 @@ import net.minecraftforge.items.ItemHandlerHelper;
 import javax.annotation.Nonnull;
 import java.util.List;
 import java.util.Optional;
-
-import com.buuz135.industrial.block.tile.IndustrialWorkingTile.WorkAction;
 
 public class PlantGathererTile extends IndustrialAreaWorkingTile<PlantGathererTile> {
 
@@ -86,7 +82,7 @@ public class PlantGathererTile extends IndustrialAreaWorkingTile<PlantGathererTi
                 .setComponentHarness(this)
                 .setValidator(fluidStack -> fluidStack.getFluid().isSame(ModuleCore.ETHER.getSourceFluid().get()))
         );
-        addProgressBar(etherBar =  new ProgressBarComponent<PlantGathererTile>(63, 20, 0, 100)
+        addProgressBar(etherBar = new ProgressBarComponent<PlantGathererTile>(63, 20, 0, 100)
                 .setBarDirection(ProgressBarComponent.BarDirection.VERTICAL_UP)
                 .setColor(DyeColor.CYAN)
                 .setCanReset(hydroponicBedTile -> false)
@@ -97,7 +93,7 @@ public class PlantGathererTile extends IndustrialAreaWorkingTile<PlantGathererTi
 
     @Override
     public IndustrialWorkingTile.WorkAction work() {
-        if (this.etherBar.getProgress() == 0 && this.ether.getFluidAmount() > 0){
+        if (this.etherBar.getProgress() == 0 && this.ether.getFluidAmount() > 0) {
             this.etherBar.setProgress(this.etherBar.getMaxProgress());
             this.ether.drainForced(1, IFluidHandler.FluidAction.EXECUTE);
         }
@@ -106,12 +102,12 @@ public class PlantGathererTile extends IndustrialAreaWorkingTile<PlantGathererTi
             for (int i = 0; i < amount; i++) {
                 BlockPos pointed = getPointedBlockPos();
                 if (isLoaded(pointed) && !ItemStackUtils.isInventoryFull(output)) {
-                    if (this.etherBar.getProgress() > 0){
-                        if (HydroponicBedTile.tryToHarvestAndReplant(this.level, pointed, this.level.getBlockState(pointed), this.output, this.etherBar, this)){
+                    if (this.etherBar.getProgress() > 0) {
+                        if (HydroponicBedTile.tryToHarvestAndReplant(this.level, pointed, this.level.getBlockState(pointed), this.output, this.etherBar, this)) {
                             tank.fillForced(new FluidStack(ModuleCore.SLUDGE.getSourceFluid().get(), 10), IFluidHandler.FluidAction.EXECUTE);
                             return new WorkAction(0.3f, powerPerOperation);
                         }
-                    }else {
+                    } else {
                         Optional<PlantRecollectable> optional = IFRegistries.PLANT_RECOLLECTABLES_REGISTRY.get().getValues().stream().filter(plantRecollectable -> plantRecollectable.canBeHarvested(this.level, pointed, this.level.getBlockState(pointed))).findFirst();
                         if (optional.isPresent()) {
                             List<ItemStack> drops = optional.get().doHarvestOperation(this.level, pointed, this.level.getBlockState(pointed));

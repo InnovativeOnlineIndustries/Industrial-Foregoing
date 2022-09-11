@@ -24,13 +24,11 @@ package com.buuz135.industrial.item;
 
 import com.hrznstudio.titanium.api.IRecipeProvider;
 import com.hrznstudio.titanium.item.BasicItem;
+import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.network.chat.TranslatableComponent;
 
 import javax.annotation.Nullable;
-
-import net.minecraft.world.item.Item.Properties;
 
 public abstract class IFCustomItem extends BasicItem implements IRecipeProvider {
 
@@ -45,6 +43,6 @@ public abstract class IFCustomItem extends BasicItem implements IRecipeProvider 
     @Nullable
     @Override
     public String getCreatorModId(ItemStack itemStack) {
-        return new TranslatableComponent("itemGroup." + this.category.getRecipeFolderName()).getString();
+        return Component.translatable("itemGroup." + this.category.getRecipeFolderName()).getString();
     }
 }

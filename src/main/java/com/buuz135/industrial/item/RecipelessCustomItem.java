@@ -27,8 +27,6 @@ import net.minecraft.world.item.CreativeModeTab;
 
 import java.util.function.Consumer;
 
-import net.minecraft.world.item.Item.Properties;
-
 public class RecipelessCustomItem extends IFCustomItem {
 
     public RecipelessCustomItem(String name, CreativeModeTab group, Properties builder) {

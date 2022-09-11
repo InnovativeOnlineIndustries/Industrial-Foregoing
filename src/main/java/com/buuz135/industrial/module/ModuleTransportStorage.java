@@ -39,32 +39,33 @@ import com.buuz135.industrial.item.ItemTransporterType;
 import com.buuz135.industrial.proxy.client.model.ConveyorBlockModel;
 import com.buuz135.industrial.proxy.client.model.TransporterBlockModel;
 import com.buuz135.industrial.utils.Reference;
-import com.google.common.collect.ImmutableMap;
 import com.hrznstudio.titanium.event.handler.EventManager;
 import com.hrznstudio.titanium.module.DeferredRegistryHelper;
 import com.hrznstudio.titanium.tab.AdvancedTitaniumTab;
-import net.minecraft.world.level.block.Block;
+import com.mojang.math.Transformation;
 import net.minecraft.client.gui.screens.MenuScreens;
-import net.minecraft.client.resources.model.BakedModel;
-import net.minecraft.client.resources.model.UnbakedModel;
 import net.minecraft.client.renderer.texture.TextureAtlas;
+import net.minecraft.client.resources.model.BakedModel;
+import net.minecraft.client.resources.model.Material;
+import net.minecraft.client.resources.model.UnbakedModel;
+import net.minecraft.core.Direction;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.inventory.MenuType;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Rarity;
-import net.minecraft.core.Direction;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
-import net.minecraftforge.client.event.ModelBakeEvent;
+import net.minecraftforge.client.event.ModelEvent;
 import net.minecraftforge.client.event.TextureStitchEvent;
-import net.minecraftforge.client.model.ForgeModelBakery;
 import net.minecraftforge.client.model.SimpleModelState;
 import net.minecraftforge.common.extensions.IForgeMenuType;
 import net.minecraftforge.fml.DistExecutor;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
+import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.RegistryObject;
 import org.apache.commons.lang3.tuple.Pair;
 
@@ -91,7 +92,7 @@ public class ModuleTransportStorage implements IModule {
     public static Pair<RegistryObject<Block>, RegistryObject<BlockEntityType<?>>> BLACK_HOLE_UNIT_ADVANCED = IndustrialForegoing.INSTANCE.getRegistries().registerBlockWithTileItem(ModuleCore.ADVANCED_RARITY.name().toLowerCase() + "_black_hole_unit", () -> new BlackHoleUnitBlock(ModuleCore.ADVANCED_RARITY), blockRegistryObject -> () -> new BlackHoleUnitBlock.BlackHoleUnitItem(blockRegistryObject.get(), new Item.Properties().tab(TAB_TRANSPORT), ModuleCore.ADVANCED_RARITY));
     public static Pair<RegistryObject<Block>, RegistryObject<BlockEntityType<?>>> BLACK_HOLE_UNIT_SUPREME = IndustrialForegoing.INSTANCE.getRegistries().registerBlockWithTileItem(ModuleCore.SUPREME_RARITY.name().toLowerCase() + "_black_hole_unit", () -> new BlackHoleUnitBlock(ModuleCore.SUPREME_RARITY), blockRegistryObject -> () -> new BlackHoleUnitBlock.BlackHoleUnitItem(blockRegistryObject.get(), new Item.Properties().tab(TAB_TRANSPORT), ModuleCore.SUPREME_RARITY));
 
-    public static Pair<RegistryObject<Block>, RegistryObject<BlockEntityType<?>>> BLACK_HOLE_TANK_COMMON = IndustrialForegoing.INSTANCE.getRegistries().registerBlockWithTileItem(Rarity.COMMON.name().toLowerCase() + "_black_hole_tank", () -> new BlackHoleTankBlock(Rarity.COMMON), blockRegistryObject -> () -> new BlackHoleTankBlock.BlackHoleTankItem(blockRegistryObject.get(), new Item.Properties().tab(TAB_TRANSPORT),  Rarity.COMMON));
+    public static Pair<RegistryObject<Block>, RegistryObject<BlockEntityType<?>>> BLACK_HOLE_TANK_COMMON = IndustrialForegoing.INSTANCE.getRegistries().registerBlockWithTileItem(Rarity.COMMON.name().toLowerCase() + "_black_hole_tank", () -> new BlackHoleTankBlock(Rarity.COMMON), blockRegistryObject -> () -> new BlackHoleTankBlock.BlackHoleTankItem(blockRegistryObject.get(), new Item.Properties().tab(TAB_TRANSPORT), Rarity.COMMON));
     public static Pair<RegistryObject<Block>, RegistryObject<BlockEntityType<?>>> BLACK_HOLE_TANK_PITY = IndustrialForegoing.INSTANCE.getRegistries().registerBlockWithTileItem(ModuleCore.PITY_RARITY.name().toLowerCase() + "_black_hole_tank", () -> new BlackHoleTankBlock(ModuleCore.PITY_RARITY), blockRegistryObject -> () -> new BlackHoleTankBlock.BlackHoleTankItem(blockRegistryObject.get(), new Item.Properties().tab(TAB_TRANSPORT), ModuleCore.PITY_RARITY));
     public static Pair<RegistryObject<Block>, RegistryObject<BlockEntityType<?>>> BLACK_HOLE_TANK_SIMPLE = IndustrialForegoing.INSTANCE.getRegistries().registerBlockWithTileItem(ModuleCore.SIMPLE_RARITY.name().toLowerCase() + "_black_hole_tank", () -> new BlackHoleTankBlock(ModuleCore.SIMPLE_RARITY), blockRegistryObject -> () -> new BlackHoleTankBlock.BlackHoleTankItem(blockRegistryObject.get(), new Item.Properties().tab(TAB_TRANSPORT), ModuleCore.SIMPLE_RARITY));
     public static Pair<RegistryObject<Block>, RegistryObject<BlockEntityType<?>>> BLACK_HOLE_TANK_ADVANCED = IndustrialForegoing.INSTANCE.getRegistries().registerBlockWithTileItem(ModuleCore.ADVANCED_RARITY.name().toLowerCase() + "_black_hole_tank", () -> new BlackHoleTankBlock(ModuleCore.ADVANCED_RARITY), blockRegistryObject -> () -> new BlackHoleTankBlock.BlackHoleTankItem(blockRegistryObject.get(), new Item.Properties().tab(TAB_TRANSPORT), ModuleCore.ADVANCED_RARITY));
@@ -104,26 +105,26 @@ public class ModuleTransportStorage implements IModule {
     public static TransporterTypeFactory FLUID_TRANSPORTER = new TransporterFluidType.Factory();
     public static TransporterTypeFactory WORLD_TRANSPORTER = new TransporterWorldType.Factory();
 
-    public static Pair<RegistryObject<Block>, RegistryObject<BlockEntityType<?>>> TRANSPORTER =  IndustrialForegoing.INSTANCE.getRegistries().registerBlockWithTile("transporter", () -> new TransporterBlock(TAB_TRANSPORT));
+    public static Pair<RegistryObject<Block>, RegistryObject<BlockEntityType<?>>> TRANSPORTER = IndustrialForegoing.INSTANCE.getRegistries().registerBlockWithTile("transporter", () -> new TransporterBlock(TAB_TRANSPORT));
     public static HashMap<ResourceLocation, BakedModel> TRANSPORTER_CACHE = new HashMap<>();
 
     @Override
     public void generateFeatures(DeferredRegistryHelper registryHelper) {
         TAB_TRANSPORT.addIconStack(() -> new ItemStack(CONVEYOR.getLeft().orElse(Blocks.STONE)));
-        registryHelper.registerGeneric(MenuType.class, "conveyor", () ->  (MenuType) IForgeMenuType.create(ContainerConveyor::new));
-        ConveyorUpgradeFactory.FACTORIES.forEach(conveyorUpgradeFactory -> registryHelper.registerGeneric(Item.class,"conveyor_" + conveyorUpgradeFactory.getRegistryName().getPath() + "_upgrade", () -> new ItemConveyorUpgrade(conveyorUpgradeFactory, TAB_TRANSPORT)));
-        registryHelper.registerGeneric(MenuType.class, "transporter", () -> (MenuType) IForgeMenuType.create(ContainerTransporter::new));
-        TransporterTypeFactory.FACTORIES.forEach(transporterTypeFactory -> registryHelper.registerGeneric(Item.class, transporterTypeFactory.getRegistryName().getPath() + "_transporter_type", () ->  new ItemTransporterType(transporterTypeFactory, TAB_TRANSPORT)));
+        registryHelper.registerGeneric(ForgeRegistries.MENU_TYPES.getRegistryKey(), "conveyor", () -> (MenuType) IForgeMenuType.create(ContainerConveyor::new));
+        ConveyorUpgradeFactory.FACTORIES.forEach(conveyorUpgradeFactory -> registryHelper.registerGeneric(ForgeRegistries.ITEMS.getRegistryKey(), "conveyor_" + conveyorUpgradeFactory.getName() + "_upgrade", () -> new ItemConveyorUpgrade(conveyorUpgradeFactory, TAB_TRANSPORT)));
+        registryHelper.registerGeneric(ForgeRegistries.MENU_TYPES.getRegistryKey(), "transporter", () -> (MenuType) IForgeMenuType.create(ContainerTransporter::new));
+        TransporterTypeFactory.FACTORIES.forEach(transporterTypeFactory -> registryHelper.registerGeneric(ForgeRegistries.ITEMS.getRegistryKey(), transporterTypeFactory.getName() + "_transporter_type", () -> new ItemTransporterType(transporterTypeFactory, TAB_TRANSPORT)));
         DistExecutor.unsafeRunWhenOn(Dist.CLIENT, () -> this::onClient);
 
     }
 
     @OnlyIn(Dist.CLIENT)
-    private void conveyorBake(ModelBakeEvent event) {
-        for (ResourceLocation resourceLocation : event.getModelRegistry().keySet()) {
+    private void conveyorBake(ModelEvent.BakingCompleted event) {
+        for (ResourceLocation resourceLocation : event.getModels().keySet()) {
             if (resourceLocation.getNamespace().equals(Reference.MOD_ID)) {
                 if (resourceLocation.getPath().contains("conveyor") && !resourceLocation.getPath().contains("upgrade"))
-                    event.getModelRegistry().put(resourceLocation, new ConveyorBlockModel(event.getModelRegistry().get(resourceLocation)));
+                    event.getModels().put(resourceLocation, new ConveyorBlockModel(event.getModels().get(resourceLocation)));
             }
         }
         for (ConveyorUpgradeFactory conveyorUpgradeFactory : ConveyorUpgradeFactory.FACTORIES) {
@@ -131,8 +132,8 @@ public class ModuleTransportStorage implements IModule {
                 for (Direction conveyorFacing : ConveyorBlock.FACING.getPossibleValues()) {
                     try {
                         ResourceLocation resourceLocation = conveyorUpgradeFactory.getModel(upgradeFacing, conveyorFacing);
-                        UnbakedModel unbakedModel = event.getModelLoader().getModel(resourceLocation);
-                        CONVEYOR_UPGRADES_CACHE.put(resourceLocation, unbakedModel.bake(event.getModelLoader(), ForgeModelBakery.defaultTextureGetter(), new SimpleModelState(ImmutableMap.of()), resourceLocation));
+                        UnbakedModel unbakedModel = event.getModelBakery().getModel(resourceLocation);
+                        CONVEYOR_UPGRADES_CACHE.put(resourceLocation, unbakedModel.bake(event.getModelBakery(), Material::sprite, new SimpleModelState(Transformation.identity()), resourceLocation));
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
@@ -148,30 +149,30 @@ public class ModuleTransportStorage implements IModule {
     }
 
     @OnlyIn(Dist.CLIENT)
-    private void transporterBake(ModelBakeEvent event) {
-        for (ResourceLocation resourceLocation : event.getModelRegistry().keySet()) {
+    private void transporterBake(ModelEvent.BakingCompleted event) {
+        for (ResourceLocation resourceLocation : event.getModels().keySet()) {
             if (resourceLocation.getNamespace().equals(Reference.MOD_ID)) {
                 if (resourceLocation.getPath().contains("transporter") && !resourceLocation.getPath().contains("transporters/") && !resourceLocation.getPath().contains("type"))
-                    event.getModelRegistry().put(resourceLocation, new TransporterBlockModel(event.getModelRegistry().get(resourceLocation)));
+                    event.getModels().put(resourceLocation, new TransporterBlockModel(event.getModels().get(resourceLocation)));
             }
         }
         for (TransporterTypeFactory transporterTypeFactory : TransporterTypeFactory.FACTORIES) {
-            String itemRL = Reference.MOD_ID + ":" + transporterTypeFactory.getRegistryName().getPath() + "_transporter_type#inventory";
+            String itemRL = Reference.MOD_ID + ":" + transporterTypeFactory.getName() + "_transporter_type#inventory";
             for (Direction upgradeFacing : transporterTypeFactory.getValidFacings()) {
                 for (TransporterTypeFactory.TransporterAction actions : TransporterTypeFactory.TransporterAction.values()) {
                     try {
                         ResourceLocation resourceLocation = transporterTypeFactory.getModel(upgradeFacing, actions);
-                        UnbakedModel unbakedModel = event.getModelLoader().getModel(resourceLocation);
-                        TRANSPORTER_CACHE.put(resourceLocation, unbakedModel.bake(event.getModelLoader(), ForgeModelBakery.defaultTextureGetter(), new SimpleModelState(ImmutableMap.of()), resourceLocation));
+                        UnbakedModel unbakedModel = event.getModelBakery().getModel(resourceLocation);
+                        TRANSPORTER_CACHE.put(resourceLocation, unbakedModel.bake(event.getModelBakery(), Material::sprite, new SimpleModelState(Transformation.identity()), resourceLocation));
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
                 }
             }
-            for (ResourceLocation resourceLocation : event.getModelRegistry().keySet()) {
+            for (ResourceLocation resourceLocation : event.getModels().keySet()) {
                 if (resourceLocation.getNamespace().equals(Reference.MOD_ID)) {
                     if (resourceLocation.toString().equals(itemRL))
-                        event.getModelRegistry().put(resourceLocation, TRANSPORTER_CACHE.get(transporterTypeFactory.getItemModel()));
+                        event.getModels().put(resourceLocation, TRANSPORTER_CACHE.get(transporterTypeFactory.getItemModel()));
                 }
             }
         }
@@ -194,11 +195,11 @@ public class ModuleTransportStorage implements IModule {
     }
 
     @OnlyIn(Dist.CLIENT)
-    private void onClient(){
+    private void onClient() {
         EventManager.mod(FMLClientSetupEvent.class).process(this::onClientSetupConveyor).subscribe();
-        EventManager.mod(ModelBakeEvent.class).process(this::conveyorBake).subscribe();
+        EventManager.mod(ModelEvent.BakingCompleted.class).process(this::conveyorBake).subscribe();
         EventManager.mod(TextureStitchEvent.Pre.class).process(this::textureStitch).subscribe();
-        EventManager.mod(ModelBakeEvent.class).process(this::transporterBake).subscribe();
+        EventManager.mod(ModelEvent.BakingCompleted.class).process(this::transporterBake).subscribe();
         EventManager.mod(TextureStitchEvent.Pre.class).process(this::transporterTextureStitch).subscribe();
         EventManager.mod(FMLClientSetupEvent.class).process(this::onClientSetupTransporter).subscribe();
     }

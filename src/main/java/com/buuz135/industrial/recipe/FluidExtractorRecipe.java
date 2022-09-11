@@ -44,7 +44,6 @@ import java.util.stream.Stream;
 
 public class FluidExtractorRecipe extends SerializableRecipe {
 
-    public static GenericSerializer<FluidExtractorRecipe> SERIALIZER = new GenericSerializer<>(new ResourceLocation(Reference.MOD_ID, "fluid_extractor"), FluidExtractorRecipe.class);
     public static List<FluidExtractorRecipe> RECIPES = new ArrayList<>();
 
     static {
@@ -106,24 +105,24 @@ public class FluidExtractorRecipe extends SerializableRecipe {
 
     @Override
     public GenericSerializer<? extends SerializableRecipe> getSerializer() {
-        return SERIALIZER;
+        return (GenericSerializer<? extends SerializableRecipe>) ModuleCore.FLUID_EXTRACTOR_SERIALIZER.get();
     }
 
     @Override
     public RecipeType<?> getType() {
-        return SERIALIZER.getRecipeType();
+        return ModuleCore.FLUID_EXTRACTOR_TYPE.get();
     }
 
     /**
      * This is used to cache the ingredient used in {@link #matches(Level, BlockPos)} in order to
      * avoid creating the same Ingredient each work tick, which could cause a massive performance hit.
-     *
+     * <p>
      * Note that this is not an optimal solution, as ideally, the recipe itself would use {@link Ingredient} directly,
      * however due to the way recipes are currently being created at static init, this would cause crashes with unbound
      * tags during Ingredient construction (specifically during Forge's isSimple check)
      */
     private Ingredient getOrCacheInput() {
-        if(ingredient == null) {
+        if (ingredient == null) {
             ingredient = Ingredient.fromValues(Stream.of(this.input));
         }
         return ingredient;

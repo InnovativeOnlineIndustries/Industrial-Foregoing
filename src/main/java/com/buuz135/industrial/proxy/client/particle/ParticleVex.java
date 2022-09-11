@@ -25,24 +25,24 @@ package com.buuz135.industrial.proxy.client.particle;
 import com.mojang.blaze3d.platform.GlStateManager;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.*;
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.player.LocalPlayer;
-import net.minecraft.client.particle.ParticleRenderType;
-import net.minecraft.client.particle.Particle;
 import net.minecraft.client.Camera;
-import net.minecraft.client.renderer.texture.TextureManager;
 import net.minecraft.client.CameraType;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.ClientLevel;
-import net.minecraft.core.Vec3i;
-import net.minecraft.world.entity.Entity;
+import net.minecraft.client.particle.Particle;
+import net.minecraft.client.particle.ParticleRenderType;
+import net.minecraft.client.player.LocalPlayer;
+import net.minecraft.client.renderer.texture.TextureManager;
 import net.minecraft.core.Direction;
+import net.minecraft.core.Vec3i;
+import net.minecraft.util.RandomSource;
+import net.minecraft.world.entity.Entity;
 import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Random;
 
 @OnlyIn(Dist.CLIENT)
 public class ParticleVex extends Particle {
@@ -123,7 +123,7 @@ public class ParticleVex extends Particle {
         return RENDER;
     }
 
-    private Direction getRandomFacing(Random random, Direction opposite) {
+    private Direction getRandomFacing(RandomSource random, Direction opposite) {
         Direction facing = Direction.getRandom(random); //random
         while (facing.getOpposite().equals(opposite)) facing = Direction.getRandom(random);
         return facing;

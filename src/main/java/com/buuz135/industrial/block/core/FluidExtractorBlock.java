@@ -26,28 +26,22 @@ import com.buuz135.industrial.block.IndustrialBlock;
 import com.buuz135.industrial.block.core.tile.FluidExtractorTile;
 import com.buuz135.industrial.module.ModuleCore;
 import com.buuz135.industrial.utils.IndustrialTags;
-import com.hrznstudio.titanium.api.IFactory;
 import com.hrznstudio.titanium.recipe.generator.TitaniumShapedRecipeBuilder;
-import net.minecraft.world.level.block.Blocks;
-import net.minecraft.world.item.TooltipFlag;
+import net.minecraft.ChatFormatting;
 import net.minecraft.data.recipes.FinishedRecipe;
+import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
-import net.minecraft.network.chat.Component;
-import net.minecraft.ChatFormatting;
-import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.level.BlockGetter;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraftforge.common.Tags;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.List;
 import java.util.function.Consumer;
-
-import com.hrznstudio.titanium.block.RotatableBlock.RotationType;
-
-import net.minecraft.world.level.block.entity.BlockEntityType;
-import net.minecraft.world.level.block.state.BlockBehaviour.Properties;
 
 public class FluidExtractorBlock extends IndustrialBlock<FluidExtractorTile> {
 
@@ -80,6 +74,6 @@ public class FluidExtractorBlock extends IndustrialBlock<FluidExtractorTile> {
 
     @Override
     public void appendHoverText(ItemStack stack, @Nullable BlockGetter worldIn, List<Component> tooltip, TooltipFlag flagIn) {
-        tooltip.add(new TranslatableComponent("text.industrialforegoing.tooltip.power_optional").withStyle(ChatFormatting.GOLD));
+        tooltip.add(Component.translatable("text.industrialforegoing.tooltip.power_optional").withStyle(ChatFormatting.GOLD));
     }
 }

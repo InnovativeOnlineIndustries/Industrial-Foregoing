@@ -43,7 +43,6 @@ import net.minecraft.ChatFormatting;
 import net.minecraft.data.recipes.FinishedRecipe;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
@@ -68,6 +67,7 @@ import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.fluids.FluidStack;
+import net.minecraftforge.registries.ForgeRegistries;
 
 import java.util.List;
 import java.util.function.Consumer;
@@ -125,8 +125,9 @@ public class ItemInfinityTrident extends ItemInfinity {
 
     @Override
     public boolean canApplyAtEnchantingTable(ItemStack stack, Enchantment enchantment) {
-        if (enchantment.equals(Enchantments.LOYALTY) || enchantment.equals(Enchantments.RIPTIDE) || enchantment.equals(Enchantments.CHANNELING)) return false;
-        return Items.TRIDENT.canApplyAtEnchantingTable(new ItemStack(Items.TRIDENT), enchantment) ;
+        if (enchantment.equals(Enchantments.LOYALTY) || enchantment.equals(Enchantments.RIPTIDE) || enchantment.equals(Enchantments.CHANNELING))
+            return false;
+        return Items.TRIDENT.canApplyAtEnchantingTable(new ItemStack(Items.TRIDENT), enchantment);
     }
 
     @Override
@@ -240,16 +241,16 @@ public class ItemInfinityTrident extends ItemInfinity {
         factory.add(() -> new TextScreenAddon("", 54 + 14 + 4, 24 + 16 * 2, false) {
             @Override
             public String getText() {
-                return ChatFormatting.DARK_GRAY + new TranslatableComponent("enchantment.minecraft.loyalty").append(": ").append(getCurrentLoyalty(stack.get()) + "/" + getMaxLoyalty(stack.get())).getString();
+                return ChatFormatting.DARK_GRAY + Component.translatable("enchantment.minecraft.loyalty").append(": ").append(getCurrentLoyalty(stack.get()) + "/" + getMaxLoyalty(stack.get())).getString();
             }
         });
         int y = 16;
-        factory.add(() -> new ArrowButtonScreenAddon((ArrowButtonComponent) new ArrowButtonComponent(154, 20 + 16 * 2 + y , 14, 14, FacingUtil.Sideness.RIGHT).setId(6)));
+        factory.add(() -> new ArrowButtonScreenAddon((ArrowButtonComponent) new ArrowButtonComponent(154, 20 + 16 * 2 + y, 14, 14, FacingUtil.Sideness.RIGHT).setId(6)));
         factory.add(() -> new ArrowButtonScreenAddon((ArrowButtonComponent) new ArrowButtonComponent(54, 20 + 16 * 2 + y, 14, 14, FacingUtil.Sideness.LEFT).setId(7)));
         factory.add(() -> new TextScreenAddon("", 54 + 14 + 4, 24 + 16 * 2 + y, false) {
             @Override
             public String getText() {
-                return ChatFormatting.DARK_GRAY + new TranslatableComponent("enchantment.minecraft.riptide").append(": ").append(getCurrentRiptide(stack.get()) + "/" + getMaxRiptide(stack.get())).getString();
+                return ChatFormatting.DARK_GRAY + Component.translatable("enchantment.minecraft.riptide").append(": ").append(getCurrentRiptide(stack.get()) + "/" + getMaxRiptide(stack.get())).getString();
             }
         });
         factory.add(() -> new StateButtonAddon(new ButtonComponent(54, 20 + 16 * 2 + y * 2, 14, 14).setId(8), new StateButtonInfo(0, AssetTypes.BUTTON_SIDENESS_ENABLED), new StateButtonInfo(1, AssetTypes.BUTTON_SIDENESS_DISABLED)) {
@@ -258,7 +259,7 @@ public class ItemInfinityTrident extends ItemInfinity {
                 return getCurrentChanneling(stack.get()) ? 0 : 1;
             }
         });
-        factory.add(() -> new TextScreenAddon(ChatFormatting.DARK_GRAY + new TranslatableComponent("enchantment.minecraft.channeling").getString(), 54 + 14 + 4, 24 + 16 * 2 + y * 2, false));
+        factory.add(() -> new TextScreenAddon(ChatFormatting.DARK_GRAY + Component.translatable("enchantment.minecraft.channeling").getString(), 54 + 14 + 4, 24 + 16 * 2 + y * 2, false));
         return factory;
     }
 
@@ -291,7 +292,7 @@ public class ItemInfinityTrident extends ItemInfinity {
 
     @Override
     public void registerRecipe(Consumer<FinishedRecipe> consumer) {
-        new DissolutionChamberRecipe(this.getRegistryName(),
+        new DissolutionChamberRecipe(ForgeRegistries.ITEMS.getKey(this),
                 new Ingredient.Value[]{
                         new Ingredient.ItemValue(new ItemStack(Items.DIAMOND_BLOCK)),
                         new Ingredient.ItemValue(new ItemStack(Items.TRIDENT)),
@@ -313,8 +314,8 @@ public class ItemInfinityTrident extends ItemInfinity {
         addTooltip(tooltip, "enchantment.minecraft.channeling", getCurrentChanneling(stack) ? 1 : 0);
     }
 
-    private void addTooltip(List<Component> tooltip, String type, int value){
-        if (value > 0){
+    private void addTooltip(List<Component> tooltip, String type, int value) {
+        if (value > 0) {
             String level = "0";
             switch (value) {
                 case 1:
@@ -333,7 +334,7 @@ public class ItemInfinityTrident extends ItemInfinity {
                     level = "V";
                     break;
             }
-            tooltip.add(new TranslatableComponent(type).append(" " + level).withStyle(ChatFormatting.GRAY));
+            tooltip.add(Component.translatable(type).append(" " + level).withStyle(ChatFormatting.GRAY));
         }
 
     }

@@ -24,12 +24,11 @@ package com.buuz135.industrial.proxy.network;
 import com.buuz135.industrial.block.transportstorage.tile.TransporterTile;
 import com.hrznstudio.titanium.network.Message;
 import com.hrznstudio.titanium.util.TileUtil;
-import net.minecraftforge.network.NetworkEvent;
-
 import net.minecraft.client.Minecraft;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraftforge.network.NetworkEvent;
 
 public class TransporterSyncMessage extends Message {
 

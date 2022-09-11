@@ -25,15 +25,10 @@ package com.buuz135.industrial.block.resourceproduction;
 import com.buuz135.industrial.block.IndustrialBlock;
 import com.buuz135.industrial.block.resourceproduction.tile.MechanicalDirtTile;
 import com.buuz135.industrial.module.ModuleResourceProduction;
-import com.hrznstudio.titanium.api.IFactory;
 import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.entity.BlockEntityType;
 
 import javax.annotation.Nonnull;
-
-import com.hrznstudio.titanium.block.RotatableBlock.RotationType;
-
-import net.minecraft.world.level.block.entity.BlockEntityType;
-import net.minecraft.world.level.block.state.BlockBehaviour.Properties;
 
 public class MechanicalDirtBlock extends IndustrialBlock<MechanicalDirtTile> {
 

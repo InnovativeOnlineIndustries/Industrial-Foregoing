@@ -24,7 +24,7 @@ package com.buuz135.industrial.block;
 
 import com.hrznstudio.titanium.block.BasicBlock;
 import com.hrznstudio.titanium.datagenerator.loot.block.BasicBlockLootTables;
-import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.*;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.block.Block;
@@ -34,7 +34,6 @@ import net.minecraft.world.level.storage.loot.LootTable;
 
 import javax.annotation.Nullable;
 import java.util.Locale;
-import java.util.function.Supplier;
 
 public class MachineFrameBlock extends BasicBlock {
 
@@ -65,7 +64,7 @@ public class MachineFrameBlock extends BasicBlock {
         @Nullable
         @Override
         public String getCreatorModId(ItemStack itemStack) {
-            return new TranslatableComponent("itemGroup." + this.category.getRecipeFolderName()).getString();
+            return Component.translatable("itemGroup." + this.category.getRecipeFolderName()).getString();
         }
 
     }

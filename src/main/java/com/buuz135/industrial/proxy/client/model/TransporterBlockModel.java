@@ -27,62 +27,59 @@ import com.buuz135.industrial.api.transporter.TransporterTypeFactory;
 import com.buuz135.industrial.module.ModuleTransportStorage;
 import com.google.common.cache.Cache;
 import com.google.common.cache.CacheBuilder;
-import com.mojang.blaze3d.vertex.PoseStack;
-import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.block.model.BakedQuad;
 import net.minecraft.client.resources.model.BakedModel;
-import net.minecraft.client.renderer.block.model.ItemTransforms;
-import net.minecraft.client.renderer.block.model.ItemOverrides;
-import net.minecraft.client.renderer.texture.TextureAtlasSprite;
-import com.mojang.blaze3d.vertex.DefaultVertexFormat;
-import com.mojang.blaze3d.vertex.VertexFormat;
 import net.minecraft.core.Direction;
-import net.minecraftforge.client.model.data.IDynamicBakedModel;
-import net.minecraftforge.client.model.data.IModelData;
+import net.minecraft.util.RandomSource;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraftforge.client.model.BakedModelWrapper;
+import net.minecraftforge.client.model.data.ModelData;
 import org.apache.commons.lang3.tuple.Pair;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
-public class TransporterBlockModel implements IDynamicBakedModel {
+public class TransporterBlockModel extends BakedModelWrapper<BakedModel> {
 
     public static Cache<Pair<Pair<String, Pair<Direction, TransporterTypeFactory.TransporterAction>>, Direction>, List<BakedQuad>> CACHE = CacheBuilder.newBuilder().build();
-    private VertexFormat format;
-    private BakedModel previousModel;
+
     private Map<Direction, List<BakedQuad>> prevQuads = new HashMap<>();
 
     public TransporterBlockModel(BakedModel previousConveyor) {
-        this.previousModel = previousConveyor;
-        this.format = DefaultVertexFormat.BLOCK;
+        super(previousConveyor);
     }
 
     @Nonnull
     @Override
-    public List<BakedQuad> getQuads(@Nullable BlockState state, @Nullable Direction side, @Nonnull Random rand, @Nonnull IModelData extraData) {
+    public List<BakedQuad> getQuads(@Nullable BlockState state, @Nullable Direction side, @Nonnull RandomSource rand, @Nonnull ModelData extraData, RenderType renderType) {
         CACHE.invalidateAll();
         if (state == null) {
             if (!prevQuads.containsKey(side))
-                prevQuads.put(side, previousModel.getQuads(state, side, rand));
+                prevQuads.put(side, originalModel.getQuads(state, side, rand));
             return prevQuads.get(side);
         }
         if (!prevQuads.containsKey(side))
-            prevQuads.put(side, previousModel.getQuads(state, side, rand));
+            prevQuads.put(side, originalModel.getQuads(state, side, rand));
         List<BakedQuad> quads = new ArrayList<>(prevQuads.get(side));
-        if (extraData.hasProperty(TransporterModelData.UPGRADE_PROPERTY)) {
-            for (TransporterType upgrade : extraData.getData(TransporterModelData.UPGRADE_PROPERTY).getUpgrades().values()) {
+        if (extraData.has(TransporterModelData.UPGRADE_PROPERTY)) {
+            for (TransporterType upgrade : extraData.get(TransporterModelData.UPGRADE_PROPERTY).getUpgrades().values()) {
                 if (upgrade == null)
                     continue;
-                List<BakedQuad> upgradeQuads = CACHE.getIfPresent(Pair.of(Pair.of(upgrade.getFactory().getRegistryName().toString(), Pair.of(upgrade.getSide(), upgrade.getAction())), side));
+                List<BakedQuad> upgradeQuads = CACHE.getIfPresent(Pair.of(Pair.of(upgrade.getFactory().getName(), Pair.of(upgrade.getSide(), upgrade.getAction())), side));
                 if (upgradeQuads == null) {
                     try {
                         BakedModel model = ModuleTransportStorage.TRANSPORTER_CACHE.get(upgrade.getFactory().getModel(upgrade.getSide(), upgrade.getAction()));
-                        upgradeQuads = model.getQuads(state, side, rand, extraData);
+                        upgradeQuads = model.getQuads(state, side, rand, extraData, renderType);
                     } catch (Exception e) {
                         e.printStackTrace();
                         continue;
                     }
-                    CACHE.put(Pair.of(Pair.of(upgrade.getFactory().getRegistryName().toString(), Pair.of(upgrade.getSide(), upgrade.getAction())), side), upgradeQuads);
+                    CACHE.put(Pair.of(Pair.of(upgrade.getFactory().getName(), Pair.of(upgrade.getSide(), upgrade.getAction())), side), upgradeQuads);
                 }
                 if (!upgradeQuads.isEmpty()) {
                     quads.addAll(upgradeQuads);
@@ -92,45 +89,4 @@ public class TransporterBlockModel implements IDynamicBakedModel {
         return quads;
     }
 
-    @Override
-    public boolean useAmbientOcclusion() {
-        return previousModel.useAmbientOcclusion();
-    }
-
-    @Override
-    public boolean isGui3d() {
-        return previousModel.isGui3d();
-    }
-
-    @Override
-    public boolean usesBlockLight() {
-        return previousModel.usesBlockLight();
-    }
-
-    @Override
-    public boolean isCustomRenderer() {
-        return previousModel.isCustomRenderer();
-    }
-
-    @Nonnull
-    @Override
-    public TextureAtlasSprite getParticleIcon() {
-        return previousModel.getParticleIcon();
-    }
-
-    @Nonnull
-    @Override
-    public ItemOverrides getOverrides() {
-        return previousModel.getOverrides();
-    }
-
-    @Override
-    public BakedModel handlePerspective(ItemTransforms.TransformType cameraTransformType, PoseStack mat) {
-        return previousModel.handlePerspective(cameraTransformType, mat);
-    }
-
-    @Override
-    public ItemTransforms getTransforms() {
-        return previousModel.getTransforms();
-    }
 }

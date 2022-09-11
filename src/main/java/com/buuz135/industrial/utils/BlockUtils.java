@@ -24,31 +24,24 @@ package com.buuz135.industrial.utils;
 
 import com.buuz135.industrial.IndustrialForegoing;
 import com.buuz135.industrial.module.ModuleCore;
-import com.mojang.blaze3d.systems.RenderSystem;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.core.NonNullList;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.tags.BlockTags;
 import net.minecraft.tags.TagKey;
-import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.level.block.Blocks;
-import net.minecraft.world.level.material.Material;
-import com.mojang.blaze3d.vertex.BufferBuilder;
-import com.mojang.blaze3d.platform.Lighting;
-import com.mojang.blaze3d.vertex.Tesselator;
-import com.mojang.blaze3d.vertex.DefaultVertexFormat;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Rarity;
-import net.minecraft.tags.BlockTags;
-import net.minecraft.tags.Tag;
-import net.minecraft.world.level.block.entity.BlockEntity;
-import net.minecraft.core.Direction;
-import net.minecraft.core.NonNullList;
-import net.minecraft.world.phys.AABB;
-import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.Level;
-import net.minecraft.server.level.ServerLevel;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.material.Material;
+import net.minecraft.world.phys.AABB;
 import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.event.world.BlockEvent;
-import org.lwjgl.opengl.GL11;
+import net.minecraftforge.event.level.BlockEvent;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -99,7 +92,6 @@ public class BlockUtils {
     }
 
     public static boolean canBlockBeBroken(Level world, BlockPos pos) {
-        //if (world.isAirBlock(pos)) return false;
         BlockEvent.BreakEvent event = new BlockEvent.BreakEvent(world, pos, world.getBlockState(pos), IndustrialForegoing.getFakePlayer(world));
         MinecraftForge.EVENT_BUS.post(event);
         return !event.isCanceled();
@@ -128,19 +120,19 @@ public class BlockUtils {
         return world.addFreshEntity(item);
     }
 
-    public static int getStackAmountByRarity(Rarity rarity){
-        if (rarity.equals(Rarity.COMMON)) return 64*32;
-        if (rarity.equals(ModuleCore.PITY_RARITY)) return 64*32*8;
-        if (rarity.equals(ModuleCore.SIMPLE_RARITY)) return 64*32*16*16;
-        if (rarity.equals(ModuleCore.ADVANCED_RARITY)) return 64*32*32*32*32;
+    public static int getStackAmountByRarity(Rarity rarity) {
+        if (rarity.equals(Rarity.COMMON)) return 64 * 32;
+        if (rarity.equals(ModuleCore.PITY_RARITY)) return 64 * 32 * 8;
+        if (rarity.equals(ModuleCore.SIMPLE_RARITY)) return 64 * 32 * 16 * 16;
+        if (rarity.equals(ModuleCore.ADVANCED_RARITY)) return 64 * 32 * 32 * 32 * 32;
         return Integer.MAX_VALUE;
     }
 
-    public static int getFluidAmountByRarity(Rarity rarity){
-        if (rarity.equals(Rarity.COMMON)) return 16*1000;
-        if (rarity.equals(ModuleCore.PITY_RARITY)) return 16*1000*4;
-        if (rarity.equals(ModuleCore.SIMPLE_RARITY)) return 16*1000*8*8;
-        if (rarity.equals(ModuleCore.ADVANCED_RARITY)) return 16*1000*16*16*16;
+    public static int getFluidAmountByRarity(Rarity rarity) {
+        if (rarity.equals(Rarity.COMMON)) return 16 * 1000;
+        if (rarity.equals(ModuleCore.PITY_RARITY)) return 16 * 1000 * 4;
+        if (rarity.equals(ModuleCore.SIMPLE_RARITY)) return 16 * 1000 * 8 * 8;
+        if (rarity.equals(ModuleCore.ADVANCED_RARITY)) return 16 * 1000 * 16 * 16 * 16;
         return Integer.MAX_VALUE;
     }
 

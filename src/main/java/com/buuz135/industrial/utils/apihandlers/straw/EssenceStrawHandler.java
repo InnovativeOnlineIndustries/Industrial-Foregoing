@@ -23,11 +23,11 @@
 package com.buuz135.industrial.utils.apihandlers.straw;
 
 import com.buuz135.industrial.module.ModuleCore;
+import net.minecraft.core.BlockPos;
 import net.minecraft.world.entity.ExperienceOrb;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.level.material.Fluid;
-import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.material.Fluid;
 
 import javax.annotation.ParametersAreNonnullByDefault;
 
@@ -35,7 +35,6 @@ import javax.annotation.ParametersAreNonnullByDefault;
 public class EssenceStrawHandler extends StrawHandlerBase {
     public EssenceStrawHandler() {
         super(ModuleCore.ESSENCE.getSourceFluid());
-        setRegistryName("essence");
     }
 
     @Override

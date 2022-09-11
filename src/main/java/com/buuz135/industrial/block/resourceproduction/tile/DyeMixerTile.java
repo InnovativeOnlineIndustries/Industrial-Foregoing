@@ -29,7 +29,6 @@ import com.buuz135.industrial.module.ModuleResourceProduction;
 import com.hrznstudio.titanium.annotation.Save;
 import com.hrznstudio.titanium.api.IFactory;
 import com.hrznstudio.titanium.api.client.IScreenAddon;
-import com.hrznstudio.titanium.block.BasicTileBlock;
 import com.hrznstudio.titanium.client.screen.addon.ProgressBarScreenAddon;
 import com.hrznstudio.titanium.component.button.ArrowButtonComponent;
 import com.hrznstudio.titanium.component.energy.EnergyStorageComponent;
@@ -39,7 +38,6 @@ import com.hrznstudio.titanium.util.FacingUtil;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.TextComponent;
 import net.minecraft.world.item.DyeColor;
 import net.minecraft.world.item.DyeItem;
 import net.minecraft.world.item.ItemStack;
@@ -95,7 +93,7 @@ public class DyeMixerTile extends IndustrialProcessingTile<DyeMixerTile> {
     private int dye;
 
     public DyeMixerTile(BlockPos blockPos, BlockState blockState) {
-        super(ModuleResourceProduction.DYE_MIXER, 96, 40, blockPos,blockState);
+        super(ModuleResourceProduction.DYE_MIXER, 96, 40, blockPos, blockState);
         addInventory(this.inputRed = (SidedInventoryComponent<DyeMixerTile>) new SidedInventoryComponent<DyeMixerTile>("input_red", 33, 21, 1, 0)
                 .setColor(DyeColor.RED)
                 .setInputFilter((stack, integer) -> stack.is(Tags.Items.DYES_RED))
@@ -121,7 +119,7 @@ public class DyeMixerTile extends IndustrialProcessingTile<DyeMixerTile> {
                 return Collections.singletonList(() -> new ProgressBarScreenAddon<DyeMixerTile>(red.getPosX(), red.getPosY(), this) {
                     @Override
                     public List<Component> getTooltipLines() {
-                        return Arrays.asList(new TextComponent(ChatFormatting.GOLD + "Amount: " + ChatFormatting.WHITE + NumberFormat.getNumberInstance(Locale.ROOT).format(red.getProgress()) + ChatFormatting.GOLD + "/" + ChatFormatting.WHITE + NumberFormat.getNumberInstance(Locale.ROOT).format(red.getMaxProgress())));
+                        return Arrays.asList(Component.literal(ChatFormatting.GOLD + "Amount: " + ChatFormatting.WHITE + NumberFormat.getNumberInstance(Locale.ROOT).format(red.getProgress()) + ChatFormatting.GOLD + "/" + ChatFormatting.WHITE + NumberFormat.getNumberInstance(Locale.ROOT).format(red.getMaxProgress())));
                     }
                 });
             }
@@ -136,7 +134,7 @@ public class DyeMixerTile extends IndustrialProcessingTile<DyeMixerTile> {
                 return Collections.singletonList(() -> new ProgressBarScreenAddon<DyeMixerTile>(blue.getPosX(), blue.getPosY(), this) {
                     @Override
                     public List<Component> getTooltipLines() {
-                        return Arrays.asList(new TextComponent(ChatFormatting.GOLD + "Amount: " + ChatFormatting.WHITE + NumberFormat.getNumberInstance(Locale.ROOT).format(blue.getProgress()) + ChatFormatting.GOLD + "/" + ChatFormatting.WHITE + NumberFormat.getNumberInstance(Locale.ROOT).format(blue.getMaxProgress())));
+                        return Arrays.asList(Component.literal(ChatFormatting.GOLD + "Amount: " + ChatFormatting.WHITE + NumberFormat.getNumberInstance(Locale.ROOT).format(blue.getProgress()) + ChatFormatting.GOLD + "/" + ChatFormatting.WHITE + NumberFormat.getNumberInstance(Locale.ROOT).format(blue.getMaxProgress())));
                     }
                 });
             }
@@ -151,7 +149,7 @@ public class DyeMixerTile extends IndustrialProcessingTile<DyeMixerTile> {
                 return Collections.singletonList(() -> new ProgressBarScreenAddon<DyeMixerTile>(green.getPosX(), green.getPosY(), this) {
                     @Override
                     public List<Component> getTooltipLines() {
-                        return Arrays.asList(new TextComponent(ChatFormatting.GOLD + "Amount: " + ChatFormatting.WHITE + NumberFormat.getNumberInstance(Locale.ROOT).format(green.getProgress()) + ChatFormatting.GOLD + "/" + ChatFormatting.WHITE + NumberFormat.getNumberInstance(Locale.ROOT).format(green.getMaxProgress())));
+                        return Arrays.asList(Component.literal(ChatFormatting.GOLD + "Amount: " + ChatFormatting.WHITE + NumberFormat.getNumberInstance(Locale.ROOT).format(green.getProgress()) + ChatFormatting.GOLD + "/" + ChatFormatting.WHITE + NumberFormat.getNumberInstance(Locale.ROOT).format(green.getMaxProgress())));
                     }
                 });
             }

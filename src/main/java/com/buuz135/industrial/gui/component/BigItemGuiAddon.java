@@ -31,7 +31,6 @@ import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.TextComponent;
 import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.items.ItemHandlerHelper;
 
@@ -67,10 +66,10 @@ public abstract class BigItemGuiAddon extends BasicScreenAddon {
 //        Lighting.turnOff();
 //        RenderSystem.enableAlphaTest();
         stack.pushPose();
-        stack.translate(0,0, 260);
+        stack.translate(0, 0, 260);
         stack.scale(0.5f, 0.5f, 0.5f);
         String amount = getAmountDisplay();
-        Minecraft.getInstance().font.draw(stack, ChatFormatting.DARK_GRAY + amount , (guiX + getPosX() + 16 - Minecraft.getInstance().font.width(amount) / 2f)*2, (guiY + getPosY() + 19)*2, 0xFFFFFF);
+        Minecraft.getInstance().font.draw(stack, ChatFormatting.DARK_GRAY + amount, (guiX + getPosX() + 16 - Minecraft.getInstance().font.width(amount) / 2f) * 2, (guiY + getPosY() + 19) * 2, 0xFFFFFF);
         stack.popPose();
     }
 
@@ -86,9 +85,9 @@ public abstract class BigItemGuiAddon extends BasicScreenAddon {
 
     @Override
     public List<Component> getTooltipLines() {
-        if (this.tooltip && !getItemStack().isEmpty()){
+        if (this.tooltip && !getItemStack().isEmpty()) {
             List<Component> tp = Minecraft.getInstance().screen.getTooltipFromItem(getItemStack());
-            tp.add(new TextComponent(ChatFormatting.GOLD + new DecimalFormat().format(getAmount())));
+            tp.add(Component.literal(ChatFormatting.GOLD + new DecimalFormat().format(getAmount())));
             return tp;
         }
         return new ArrayList<>();

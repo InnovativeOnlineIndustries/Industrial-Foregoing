@@ -22,10 +22,6 @@
 
 package com.buuz135.industrial.plugin.jei.machineproduce;
 
-import java.awt.Color;
-import java.util.Arrays;
-import java.util.List;
-
 import com.buuz135.industrial.module.ModuleCore;
 import com.buuz135.industrial.plugin.jei.IndustrialRecipeTypes;
 import com.buuz135.industrial.utils.Reference;
@@ -45,15 +41,17 @@ import mezz.jei.api.recipe.IFocusGroup;
 import mezz.jei.api.recipe.RecipeIngredientRole;
 import mezz.jei.api.recipe.RecipeType;
 import mezz.jei.api.recipe.category.IRecipeCategory;
-import net.minecraft.world.item.crafting.Ingredient;
-import org.apache.commons.lang3.tuple.Pair;
-
 import net.minecraft.client.Minecraft;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.TextComponent;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.DyeColor;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.crafting.Ingredient;
+import org.apache.commons.lang3.tuple.Pair;
+
+import java.awt.*;
+import java.util.Arrays;
+import java.util.List;
 
 public class MachineProduceCategory implements IRecipeCategory<MachineProduceWrapper> {
     private IGuiHelper guiHelper;
@@ -69,23 +67,13 @@ public class MachineProduceCategory implements IRecipeCategory<MachineProduceWra
     }
 
     @Override
-    public ResourceLocation getUid() {
-        return IndustrialRecipeTypes.MACHINE_PRODUCE.getUid();
-    }
-
-    @Override
-    public Class<? extends MachineProduceWrapper> getRecipeClass() {
-        return IndustrialRecipeTypes.MACHINE_PRODUCE.getRecipeClass();
-    }
-
-    @Override
     public RecipeType<MachineProduceWrapper> getRecipeType() {
         return IndustrialRecipeTypes.MACHINE_PRODUCE;
     }
 
     @Override
     public Component getTitle() {
-        return new TextComponent( "Machine Outputs");
+        return Component.literal("Machine Outputs");
     }
 
     @Override
@@ -107,9 +95,9 @@ public class MachineProduceCategory implements IRecipeCategory<MachineProduceWra
         Ingredient outputItem = recipe.getOutputItem();
         if (outputItem == null) {
             builder.addSlot(RecipeIngredientRole.OUTPUT, 57 + 2, 5 + 2)
-                .setFluidRenderer(1000, false, 12, 13)
-                .setOverlay(smallTank, 0, 0)
-                .addIngredient(ForgeTypes.FLUID_STACK, recipe.getOutputFluid());
+                    .setFluidRenderer(1000, false, 12, 13)
+                    .setOverlay(smallTank, 0, 0)
+                    .addIngredient(ForgeTypes.FLUID_STACK, recipe.getOutputFluid());
         } else {
             List<ItemStack> output = Arrays.asList(outputItem.getItems().clone());
             builder.addSlot(RecipeIngredientRole.OUTPUT, 57, 5)
@@ -119,10 +107,10 @@ public class MachineProduceCategory implements IRecipeCategory<MachineProduceWra
 
     @Override
     public void draw(MachineProduceWrapper recipe, IRecipeSlotsView recipeSlotsView, PoseStack stack, double mouseX, double mouseY) {
-        if (recipe.getOutputItem() == null){
-            AssetUtil.drawAsset(stack, Minecraft.getInstance().screen, DefaultAssetProvider.DEFAULT_PROVIDER.getAsset(AssetTypes.TANK_SMALL), 56 , Minecraft.getInstance().font.lineHeight / 2);
+        if (recipe.getOutputItem() == null) {
+            AssetUtil.drawAsset(stack, Minecraft.getInstance().screen, DefaultAssetProvider.DEFAULT_PROVIDER.getAsset(AssetTypes.TANK_SMALL), 56, Minecraft.getInstance().font.lineHeight / 2);
         } else {
-            SlotsScreenAddon.drawAsset(stack, Minecraft.getInstance().screen, DefaultAssetProvider.DEFAULT_PROVIDER, 56 , Minecraft.getInstance().font.lineHeight / 2, 0, 0, 1, integer -> Pair.of(1,1), integer -> ItemStack.EMPTY, true, integer -> new Color(DyeColor.ORANGE.getFireworkColor()), integer -> true);
+            SlotsScreenAddon.drawAsset(stack, Minecraft.getInstance().screen, DefaultAssetProvider.DEFAULT_PROVIDER, 56, Minecraft.getInstance().font.lineHeight / 2, 0, 0, 1, integer -> Pair.of(1, 1), integer -> ItemStack.EMPTY, true, integer -> new Color(DyeColor.ORANGE.getFireworkColor()), integer -> true);
         }
     }
 }

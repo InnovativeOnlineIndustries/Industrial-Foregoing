@@ -30,7 +30,6 @@ import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.TextComponent;
 
 import java.text.DecimalFormat;
 import java.util.Arrays;
@@ -52,7 +51,7 @@ public class InfinityEnergyScreenAddon extends BasicScreenAddon {
     }
 
     public static java.util.List<Component> getTooltip(long stored, long capacity) {
-        return Arrays.asList(new TextComponent(ChatFormatting.GOLD + "Power:"), new TextComponent(new DecimalFormat().format(stored) + ChatFormatting.GOLD + "/" + ChatFormatting.WHITE + new DecimalFormat().format(capacity) + ChatFormatting.DARK_AQUA + " FE"));
+        return Arrays.asList(Component.literal(ChatFormatting.GOLD + "Power:"), Component.literal(new DecimalFormat().format(stored) + ChatFormatting.GOLD + "/" + ChatFormatting.WHITE + new DecimalFormat().format(capacity) + ChatFormatting.DARK_AQUA + " FE"));
     }
 
     @Override

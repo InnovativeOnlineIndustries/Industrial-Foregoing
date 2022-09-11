@@ -22,13 +22,12 @@
 package com.buuz135.industrial.utils;
 
 import com.hrznstudio.titanium.util.TagUtil;
-import net.minecraft.tags.TagKey;
-import net.minecraft.world.level.block.Block;
-import net.minecraft.world.entity.EntityType;
-import net.minecraft.world.level.material.Fluid;
-import net.minecraft.world.item.Item;
-import net.minecraft.tags.Tag;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.tags.TagKey;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.material.Fluid;
 
 public class IndustrialTags {
 

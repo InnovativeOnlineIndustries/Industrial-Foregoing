@@ -26,8 +26,13 @@ import com.buuz135.industrial.plugin.jei.generator.MycelialGeneratorRecipe;
 import com.buuz135.industrial.utils.IndustrialTags;
 import com.hrznstudio.titanium.component.inventory.SidedInventoryComponent;
 import net.minecraft.data.recipes.ShapedRecipeBuilder;
-import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.world.food.FoodProperties;
+import net.minecraft.world.item.DyeColor;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
+import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraftforge.common.Tags;
 import net.minecraftforge.common.util.INBTSerializable;
 import net.minecraftforge.fluids.FluidStack;
@@ -42,13 +47,7 @@ import java.util.function.BiPredicate;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
-import net.minecraft.world.food.FoodProperties;
-import net.minecraft.world.item.DyeColor;
-import net.minecraft.world.item.Item;
-import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.Items;
-
-public class CulinaryGeneratorType implements IMycelialGeneratorType{
+public class CulinaryGeneratorType implements IMycelialGeneratorType {
 
 
     @Override
@@ -78,12 +77,12 @@ public class CulinaryGeneratorType implements IMycelialGeneratorType{
 
     @Override
     public Pair<Integer, Integer> getTimeAndPowerGeneration(INBTSerializable<CompoundTag>[] inputs) {
-        if (inputs.length > 0 && inputs[0] instanceof SidedInventoryComponent && ((SidedInventoryComponent<?>) inputs[0]).getStackInSlot(0).getCount() > 0){
+        if (inputs.length > 0 && inputs[0] instanceof SidedInventoryComponent && ((SidedInventoryComponent<?>) inputs[0]).getStackInSlot(0).getCount() > 0) {
             ItemStack food = ((SidedInventoryComponent<?>) inputs[0]).getStackInSlot(0).copy();
             ((SidedInventoryComponent<?>) inputs[0]).getStackInSlot(0).shrink(1);
             return calculate(food);
         }
-        return Pair.of(0,80);
+        return Pair.of(0, 80);
     }
 
     @Override
@@ -106,9 +105,9 @@ public class CulinaryGeneratorType implements IMycelialGeneratorType{
         return ForgeRegistries.ITEMS.getValues().stream().filter(Item::isEdible).map(ItemStack::new).map(item -> new MycelialGeneratorRecipe(Collections.singletonList(Collections.singletonList(Ingredient.of(item))), new ArrayList<>(), calculate(item).getLeft(), calculate(item).getRight())).collect(Collectors.toList());
     }
 
-    private Pair<Integer,Integer> calculate(ItemStack stack){
+    private Pair<Integer, Integer> calculate(ItemStack stack) {
         FoodProperties food = stack.getItem().getFoodProperties();
-        return Pair.of(food.getNutrition() * 160,  (int) (food.getSaturationModifier() * 80));
+        return Pair.of(food.getNutrition() * 160, (int) (food.getSaturationModifier() * 80));
     }
 
     @Override

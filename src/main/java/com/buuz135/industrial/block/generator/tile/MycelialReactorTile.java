@@ -22,13 +22,6 @@
 
 package com.buuz135.industrial.block.generator.tile;
 
-import java.text.DecimalFormat;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-
-import javax.annotation.Nonnull;
-
 import com.buuz135.industrial.block.generator.mycelial.IMycelialGeneratorType;
 import com.buuz135.industrial.block.tile.IndustrialGeneratorTile;
 import com.buuz135.industrial.module.ModuleGenerator;
@@ -36,19 +29,21 @@ import com.buuz135.industrial.worlddata.MycelialDataManager;
 import com.hrznstudio.titanium.annotation.Save;
 import com.hrznstudio.titanium.api.IFactory;
 import com.hrznstudio.titanium.api.client.IScreenAddon;
-import com.hrznstudio.titanium.block.BasicTileBlock;
 import com.hrznstudio.titanium.client.screen.addon.ProgressBarScreenAddon;
 import com.hrznstudio.titanium.component.progress.ProgressBarComponent;
-
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.TextComponent;
-import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.world.item.DyeColor;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
+
+import javax.annotation.Nonnull;
+import java.text.DecimalFormat;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
 public class MycelialReactorTile extends IndustrialGeneratorTile<MycelialReactorTile> {
 
@@ -75,7 +70,7 @@ public class MycelialReactorTile extends IndustrialGeneratorTile<MycelialReactor
     @Override
     public boolean canStart() {
         int amount = MycelialDataManager.getReactorAvailable(owner, this.level, false).size();
-        if (amount == IMycelialGeneratorType.TYPES.size()){
+        if (amount == IMycelialGeneratorType.TYPES.size()) {
             MycelialDataManager.getReactorAvailable(owner, this.level, true);
             return true;
         }
@@ -90,20 +85,20 @@ public class MycelialReactorTile extends IndustrialGeneratorTile<MycelialReactor
 
     @Override
     public ProgressBarComponent<MycelialReactorTile> getProgressBar() {
-        bar = new ProgressBarComponent<MycelialReactorTile>(30, 20, 0, 100){
+        bar = new ProgressBarComponent<MycelialReactorTile>(30, 20, 0, 100) {
             @Override
             @OnlyIn(Dist.CLIENT)
             public List<IFactory<? extends IScreenAddon>> getScreenAddons() {
-                return Collections.singletonList(() -> new ProgressBarScreenAddon(30, 20, bar){
+                return Collections.singletonList(() -> new ProgressBarScreenAddon(30, 20, bar) {
                     @Override
                     @OnlyIn(Dist.CLIENT)
                     public List<Component> getTooltipLines() {
                         List<Component> tooltip = new ArrayList<>();
-                        tooltip.add(new TextComponent(ChatFormatting.GOLD + new TranslatableComponent("tooltip.titanium.progressbar.progress").getString() +  ChatFormatting.WHITE + new DecimalFormat().format(bar.getProgress()) + ChatFormatting.GOLD + "/" + ChatFormatting.WHITE + new DecimalFormat().format(bar.getMaxProgress())));
+                        tooltip.add(Component.literal(ChatFormatting.GOLD + Component.translatable("tooltip.titanium.progressbar.progress").getString() + ChatFormatting.WHITE + new DecimalFormat().format(bar.getProgress()) + ChatFormatting.GOLD + "/" + ChatFormatting.WHITE + new DecimalFormat().format(bar.getMaxProgress())));
                         int progress = (bar.getMaxProgress() - bar.getProgress());
                         if (!bar.getIncreaseType()) progress = bar.getMaxProgress() - progress;
-                        tooltip.add(new TextComponent(ChatFormatting.GOLD + "ETA: " + ChatFormatting.WHITE + new DecimalFormat().format(Math.ceil(progress * bar.getTickingTime() / 20D / bar.getProgressIncrease())) + ChatFormatting.DARK_AQUA + "s"));
-                        tooltip.add(new TextComponent(ChatFormatting.GOLD + new TranslatableComponent("tooltip.industrialforegoing.generating").getString() +  ChatFormatting.WHITE + new DecimalFormat().format(getEnergyProducedEveryTick()) + ChatFormatting.DARK_AQUA+ " FE" + ChatFormatting.GOLD + "/" + ChatFormatting.WHITE +ChatFormatting.DARK_AQUA+ "t"));
+                        tooltip.add(Component.literal(ChatFormatting.GOLD + "ETA: " + ChatFormatting.WHITE + new DecimalFormat().format(Math.ceil(progress * bar.getTickingTime() / 20D / bar.getProgressIncrease())) + ChatFormatting.DARK_AQUA + "s"));
+                        tooltip.add(Component.literal(ChatFormatting.GOLD + Component.translatable("tooltip.industrialforegoing.generating").getString() + ChatFormatting.WHITE + new DecimalFormat().format(getEnergyProducedEveryTick()) + ChatFormatting.DARK_AQUA + " FE" + ChatFormatting.GOLD + "/" + ChatFormatting.WHITE + ChatFormatting.DARK_AQUA + "t"));
                         return tooltip;
                     }
                 });

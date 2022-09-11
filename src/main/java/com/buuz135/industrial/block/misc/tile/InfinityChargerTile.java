@@ -25,14 +25,13 @@ import com.buuz135.industrial.block.tile.IndustrialMachineTile;
 import com.buuz135.industrial.item.infinity.InfinityEnergyStorage;
 import com.buuz135.industrial.module.ModuleMisc;
 import com.hrznstudio.titanium.annotation.Save;
-import com.hrznstudio.titanium.block.BasicTileBlock;
 import com.hrznstudio.titanium.component.energy.EnergyStorageComponent;
 import com.hrznstudio.titanium.component.inventory.SidedInventoryComponent;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.item.DyeColor;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraftforge.energy.CapabilityEnergy;
+import net.minecraftforge.common.capabilities.ForgeCapabilities;
 
 public class InfinityChargerTile extends IndustrialMachineTile<InfinityChargerTile> {
 
@@ -40,18 +39,18 @@ public class InfinityChargerTile extends IndustrialMachineTile<InfinityChargerTi
     private SidedInventoryComponent<InfinityChargerTile> chargingSlot;
 
     public InfinityChargerTile(BlockPos blockPos, BlockState blockState) {
-        super(ModuleMisc.INFINITY_CHARGER,blockPos, blockState);
+        super(ModuleMisc.INFINITY_CHARGER, blockPos, blockState);
         addInventory(chargingSlot = (SidedInventoryComponent<InfinityChargerTile>) new SidedInventoryComponent<InfinityChargerTile>("charging", 80, 40, 1, 0)
                 .setColor(DyeColor.BLUE)
                 .setSlotLimit(1)
-                .setInputFilter((stack, integer) -> stack.getCapability(CapabilityEnergy.ENERGY).isPresent())
+                .setInputFilter((stack, integer) -> stack.getCapability(ForgeCapabilities.ENERGY).isPresent())
         );
     }
 
     @Override
     public void serverTick(Level level, BlockPos pos, BlockState state, InfinityChargerTile blockEntity) {
-        if (!chargingSlot.getStackInSlot(0).isEmpty()  && this.getRedstoneManager().getAction().canRun(this.getEnvironmentValue(false, null)) && this.getRedstoneManager().shouldWork()) {
-            chargingSlot.getStackInSlot(0).getCapability(CapabilityEnergy.ENERGY).ifPresent(iEnergyStorage -> {
+        if (!chargingSlot.getStackInSlot(0).isEmpty() && this.getRedstoneManager().getAction().canRun(this.getEnvironmentValue(false, null)) && this.getRedstoneManager().shouldWork()) {
+            chargingSlot.getStackInSlot(0).getCapability(ForgeCapabilities.ENERGY).ifPresent(iEnergyStorage -> {
                 if (this.getEnergyStorage() instanceof InfinityEnergyStorage) {
                     if (iEnergyStorage instanceof InfinityEnergyStorage) {
                         long added = Math.min(Long.MAX_VALUE - ((InfinityEnergyStorage) iEnergyStorage).getLongEnergyStored(), Math.min(((InfinityEnergyStorage<InfinityChargerTile>) this.getEnergyStorage()).getLongCapacity(), ((InfinityEnergyStorage<InfinityChargerTile>) this.getEnergyStorage()).getLongEnergyStored()));

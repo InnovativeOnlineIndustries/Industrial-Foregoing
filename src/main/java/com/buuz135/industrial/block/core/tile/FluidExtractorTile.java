@@ -28,13 +28,13 @@ import com.buuz135.industrial.config.machine.core.FluidExtractorConfig;
 import com.buuz135.industrial.module.ModuleCore;
 import com.buuz135.industrial.recipe.FluidExtractorRecipe;
 import com.hrznstudio.titanium.annotation.Save;
-import com.hrznstudio.titanium.block.BasicTileBlock;
 import com.hrznstudio.titanium.component.energy.EnergyStorageComponent;
 import com.hrznstudio.titanium.component.fluid.FluidTankComponent;
 import com.hrznstudio.titanium.component.fluid.SidedFluidTankComponent;
 import com.hrznstudio.titanium.util.RecipeUtil;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.item.DyeColor;
+import net.minecraft.world.item.crafting.RecipeType;
 import net.minecraft.world.level.ChunkPos;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
@@ -76,7 +76,7 @@ public class FluidExtractorTile extends IndustrialAreaWorkingTile<FluidExtractor
                 currentRecipe = findRecipe(this.level, pos);
             if (currentRecipe != null) {//GetDimensionType
                 FluidExtractionProgress extractionProgress = EXTRACTION.computeIfAbsent(this.level.dimensionType(), dimensionType -> new HashMap<>()).computeIfAbsent(this.level.getChunkAt(pos).getPos(), chunkPos -> new HashMap<>()).computeIfAbsent(pos, pos1 -> new FluidExtractionProgress(this.level));
-                if (currentRecipe.output.getFluid().isSame(ModuleCore.LATEX.getSourceFluid().get())){
+                if (currentRecipe.output.getFluid().isSame(ModuleCore.LATEX.getSourceFluid().get())) {
                     tank.fillForced(new FluidStack(currentRecipe.output.getFluid(), currentRecipe.output.getAmount() * (hasEnergy(powerPerOperation) ? 3 : 1)), IFluidHandler.FluidAction.EXECUTE);
                 } else {
                     tank.fillForced(currentRecipe.output.copy(), IFluidHandler.FluidAction.EXECUTE);
@@ -87,7 +87,7 @@ public class FluidExtractorTile extends IndustrialAreaWorkingTile<FluidExtractor
                 if (extractionProgress.getProgress() > 7) {
                     extractionProgress.setProgress(0);
                     this.level.setBlockAndUpdate(pos, currentRecipe.result.defaultBlockState());
-                    if (currentRecipe.output.getFluid().isSame(ModuleCore.LATEX.getSourceFluid().get())){
+                    if (currentRecipe.output.getFluid().isSame(ModuleCore.LATEX.getSourceFluid().get())) {
                         tank.fillForced(new FluidStack(currentRecipe.output.getFluid(), currentRecipe.output.getAmount() * (hasEnergy(powerPerOperation) ? 200 : 1)), IFluidHandler.FluidAction.EXECUTE);
                     }
                 }
@@ -110,7 +110,7 @@ public class FluidExtractorTile extends IndustrialAreaWorkingTile<FluidExtractor
 
     @Nullable
     public FluidExtractorRecipe findRecipe(Level world, BlockPos pos) {
-        Collection<FluidExtractorRecipe> recipeList = RecipeUtil.getRecipes(world, FluidExtractorRecipe.SERIALIZER.getRecipeType());
+        Collection<FluidExtractorRecipe> recipeList = RecipeUtil.getRecipes(world, (RecipeType<FluidExtractorRecipe>) ModuleCore.FLUID_EXTRACTOR_TYPE.get());
         for (FluidExtractorRecipe recipe : recipeList) {
             if (!recipe.defaultRecipe && recipe.matches(world, pos)) return recipe;
         }

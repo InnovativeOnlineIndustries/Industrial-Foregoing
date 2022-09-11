@@ -36,6 +36,7 @@ import net.minecraftforge.client.model.generators.ModelFile;
 import net.minecraftforge.client.model.generators.VariantBlockStateBuilder;
 import net.minecraftforge.common.data.ExistingFileHelper;
 import net.minecraftforge.common.util.NonNullLazy;
+import net.minecraftforge.registries.ForgeRegistries;
 
 import java.util.List;
 
@@ -51,7 +52,7 @@ public class IndustrialBlockstateProvider extends BlockStateProvider {
     }
 
     public static ResourceLocation getModel(Block block) {
-        return new ResourceLocation(block.getRegistryName().getNamespace(), "block/" + block.getRegistryName().getPath());
+        return new ResourceLocation(ForgeRegistries.BLOCKS.getKey(block).getNamespace(), "block/" + ForgeRegistries.BLOCKS.getKey(block).getPath());
     }
 
     @Override
@@ -72,7 +73,7 @@ public class IndustrialBlockstateProvider extends BlockStateProvider {
                         builder.partialState().addModels(new ConfiguredModel(new ModelFile.UncheckedModelFile(getModel(industrialBlock))));
                     }
                 });
-        simpleBlock(ModuleTransportStorage.TRANSPORTER.getLeft().get(), new ModelFile.UncheckedModelFile(modLoc("block/" + ModuleTransportStorage.TRANSPORTER.getLeft().get().getRegistryName().getPath())));
+        simpleBlock(ModuleTransportStorage.TRANSPORTER.getLeft().get(), new ModelFile.UncheckedModelFile(modLoc("block/" + ForgeRegistries.BLOCKS.getKey(ModuleTransportStorage.TRANSPORTER.getLeft().get()).getPath())));
         //VariantBlockStateBuilder conveyor = getVariantBuilder(ModuleTransport.CONVEYOR);
         //for (ConveyorBlock.EnumType type : ConveyorBlock.TYPE.getAllowedValues()) {
         //    for (Direction direction : ConveyorBlock.FACING.getAllowedValues()) {

@@ -25,18 +25,15 @@ package com.buuz135.industrial.item;
 import com.buuz135.industrial.module.ModuleCore;
 import com.buuz135.industrial.recipe.DissolutionChamberRecipe;
 import net.minecraft.data.recipes.FinishedRecipe;
+import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.DyeColor;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Ingredient;
-import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.TextComponent;
-import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraftforge.common.Tags;
 import net.minecraftforge.fluids.FluidStack;
+import net.minecraftforge.registries.ForgeRegistries;
 
 import java.util.function.Consumer;
-
-import net.minecraft.world.item.Item.Properties;
 
 public class LaserLensItem extends IFCustomItem {
 
@@ -49,7 +46,7 @@ public class LaserLensItem extends IFCustomItem {
 
     @Override
     public void registerRecipe(Consumer<FinishedRecipe> consumer) {
-        new DissolutionChamberRecipe(this.getRegistryName(),
+        new DissolutionChamberRecipe(ForgeRegistries.ITEMS.getKey(this),
                 new Ingredient.Value[]{
                         new Ingredient.TagValue(Tags.Items.GLASS_PANES),
                         new Ingredient.TagValue(Tags.Items.GLASS_PANES),
@@ -62,7 +59,7 @@ public class LaserLensItem extends IFCustomItem {
 
     @Override
     public Component getName(ItemStack stack) {
-        return new TextComponent(new TranslatableComponent("color.minecraft." + DyeColor.byId(color).getName()).getString() +
-                " " + new TranslatableComponent("item.industrialforegoing.laser_lens").getString());
+        return Component.literal(Component.translatable("color.minecraft." + DyeColor.byId(color).getName()).getString() +
+                " " + Component.translatable("item.industrialforegoing.laser_lens").getString());
     }
 }

@@ -24,6 +24,7 @@ package com.buuz135.industrial.block.resourceproduction.tile;
 
 import com.buuz135.industrial.block.tile.IndustrialProcessingTile;
 import com.buuz135.industrial.config.machine.resourceproduction.MaterialStoneWorkFactoryConfig;
+import com.buuz135.industrial.module.ModuleCore;
 import com.buuz135.industrial.module.ModuleResourceProduction;
 import com.buuz135.industrial.recipe.StoneWorkGenerateRecipe;
 import com.buuz135.industrial.utils.CraftingUtils;
@@ -32,7 +33,6 @@ import com.hrznstudio.titanium.annotation.Save;
 import com.hrznstudio.titanium.api.IFactory;
 import com.hrznstudio.titanium.api.client.AssetTypes;
 import com.hrznstudio.titanium.api.client.IScreenAddon;
-import com.hrznstudio.titanium.block.BasicTileBlock;
 import com.hrznstudio.titanium.client.screen.addon.BasicButtonAddon;
 import com.hrznstudio.titanium.client.screen.asset.IAssetProvider;
 import com.hrznstudio.titanium.component.button.ButtonComponent;
@@ -49,11 +49,11 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.TextComponent;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.DyeColor;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
+import net.minecraft.world.item.crafting.RecipeType;
 import net.minecraft.world.item.crafting.SmeltingRecipe;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Blocks;
@@ -150,13 +150,13 @@ public class MaterialStoneWorkFactoryTile extends IndustrialProcessingTile<Mater
                     public List<Component> getTooltipLines() {
                         List<Component> lines = new ArrayList<>();
                         getRecipe().ifPresent(recipe -> {
-                            lines.add(new TextComponent(ChatFormatting.GOLD + LangUtil.getString("tooltip.industrialforegoing.generating") + ChatFormatting.WHITE + recipe.output.getHoverName().getString()));
-                            lines.add(new TextComponent(ChatFormatting.GOLD + LangUtil.getString("tooltip.industrialforegoing.needs")));
-                            lines.add(new TextComponent(ChatFormatting.YELLOW + " - " + ChatFormatting.WHITE + recipe.waterNeed + ChatFormatting.DARK_AQUA + LangUtil.getString("tooltip.industrialforegoing.mb_of", LangUtil.getString("block.minecraft.water"))));
-                            lines.add(new TextComponent(ChatFormatting.YELLOW + " - " + ChatFormatting.WHITE + recipe.lavaNeed + ChatFormatting.DARK_AQUA + LangUtil.getString("tooltip.industrialforegoing.mb_of", LangUtil.getString("block.minecraft.lava"))));
-                            lines.add(new TextComponent(ChatFormatting.GOLD + LangUtil.getString("tooltip.industrialforegoing.consumes")));
-                            lines.add(new TextComponent(ChatFormatting.YELLOW + " - " + ChatFormatting.WHITE + recipe.waterConsume + ChatFormatting.DARK_AQUA + LangUtil.getString("tooltip.industrialforegoing.mb_of", LangUtil.getString("block.minecraft.water"))));
-                            lines.add(new TextComponent(ChatFormatting.YELLOW + " - " + ChatFormatting.WHITE + recipe.lavaConsume + ChatFormatting.DARK_AQUA + LangUtil.getString("tooltip.industrialforegoing.mb_of", LangUtil.getString("block.minecraft.lava"))));
+                            lines.add(Component.literal(ChatFormatting.GOLD + LangUtil.getString("tooltip.industrialforegoing.generating") + ChatFormatting.WHITE + recipe.output.getHoverName().getString()));
+                            lines.add(Component.literal(ChatFormatting.GOLD + LangUtil.getString("tooltip.industrialforegoing.needs")));
+                            lines.add(Component.literal(ChatFormatting.YELLOW + " - " + ChatFormatting.WHITE + recipe.waterNeed + ChatFormatting.DARK_AQUA + LangUtil.getString("tooltip.industrialforegoing.mb_of", LangUtil.getString("block.minecraft.water"))));
+                            lines.add(Component.literal(ChatFormatting.YELLOW + " - " + ChatFormatting.WHITE + recipe.lavaNeed + ChatFormatting.DARK_AQUA + LangUtil.getString("tooltip.industrialforegoing.mb_of", LangUtil.getString("block.minecraft.lava"))));
+                            lines.add(Component.literal(ChatFormatting.GOLD + LangUtil.getString("tooltip.industrialforegoing.consumes")));
+                            lines.add(Component.literal(ChatFormatting.YELLOW + " - " + ChatFormatting.WHITE + recipe.waterConsume + ChatFormatting.DARK_AQUA + LangUtil.getString("tooltip.industrialforegoing.mb_of", LangUtil.getString("block.minecraft.water"))));
+                            lines.add(Component.literal(ChatFormatting.YELLOW + " - " + ChatFormatting.WHITE + recipe.lavaConsume + ChatFormatting.DARK_AQUA + LangUtil.getString("tooltip.industrialforegoing.mb_of", LangUtil.getString("block.minecraft.lava"))));
                         });
                         return lines;
                     }
@@ -164,7 +164,7 @@ public class MaterialStoneWorkFactoryTile extends IndustrialProcessingTile<Mater
             }
         }.setPredicate((playerEntity, compoundNBT) -> {
             int button = 0;
-            if (compoundNBT.contains("Button")){
+            if (compoundNBT.contains("Button")) {
                 button = compoundNBT.getInt("Button");
             }
             getNextRecipe(button == 0);
@@ -178,15 +178,15 @@ public class MaterialStoneWorkFactoryTile extends IndustrialProcessingTile<Mater
                 .setColor(DyeColor.CYAN)
                 .setSlotPosition(integer -> integer == 0 ? Pair.of(0, 0) : Pair.of(0, 18))
                 .setComponentHarness(this));
-        addInventory(inventorySecond = (SidedInventoryComponent<MaterialStoneWorkFactoryTile>) new SidedInventoryComponent<MaterialStoneWorkFactoryTile>("inventorySecond", 74 + 20  * 2, 23, 2, 4)
+        addInventory(inventorySecond = (SidedInventoryComponent<MaterialStoneWorkFactoryTile>) new SidedInventoryComponent<MaterialStoneWorkFactoryTile>("inventorySecond", 74 + 20 * 2, 23, 2, 4)
                 .setColor(DyeColor.YELLOW)
                 .setSlotPosition(integer -> integer == 0 ? Pair.of(0, 0) : Pair.of(0, 18))
                 .setComponentHarness(this));
-        addInventory(inventoryThird = (SidedInventoryComponent<MaterialStoneWorkFactoryTile>) new SidedInventoryComponent<MaterialStoneWorkFactoryTile>("inventoryThird", 74 + 20  * 3, 23, 2, 5)
+        addInventory(inventoryThird = (SidedInventoryComponent<MaterialStoneWorkFactoryTile>) new SidedInventoryComponent<MaterialStoneWorkFactoryTile>("inventoryThird", 74 + 20 * 3, 23, 2, 5)
                 .setColor(DyeColor.RED)
                 .setSlotPosition(integer -> integer == 0 ? Pair.of(0, 0) : Pair.of(0, 18))
                 .setComponentHarness(this));
-        addInventory(inventoryFourth = (SidedInventoryComponent<MaterialStoneWorkFactoryTile>) new SidedInventoryComponent<MaterialStoneWorkFactoryTile>("inventoryFour", 74 + 20  * 4, 23, 2, 6)
+        addInventory(inventoryFourth = (SidedInventoryComponent<MaterialStoneWorkFactoryTile>) new SidedInventoryComponent<MaterialStoneWorkFactoryTile>("inventoryFour", 74 + 20 * 4, 23, 2, 6)
                 .setColor(DyeColor.GREEN)
                 .setSlotPosition(integer -> integer == 0 ? Pair.of(0, 0) : Pair.of(0, 18))
                 .setComponentHarness(this));
@@ -211,7 +211,7 @@ public class MaterialStoneWorkFactoryTile extends IndustrialProcessingTile<Mater
                     @Override
                     public List<Component> getTooltipLines() {
                         List<Component> lines = new ArrayList<>();
-                        lines.add(new TextComponent(ChatFormatting.GOLD + LangUtil.getString("tooltip.industrialforegoing.action") + ChatFormatting.WHITE + LangUtil.getString("tooltip.industrialforegoing.stonework." + ACTION_RECIPES[firstRecipeId].getAction())));
+                        lines.add(Component.literal(ChatFormatting.GOLD + LangUtil.getString("tooltip.industrialforegoing.action") + ChatFormatting.WHITE + LangUtil.getString("tooltip.industrialforegoing.stonework." + ACTION_RECIPES[firstRecipeId].getAction())));
                         return lines;
                     }
                 });
@@ -237,7 +237,7 @@ public class MaterialStoneWorkFactoryTile extends IndustrialProcessingTile<Mater
                     @Override
                     public List<Component> getTooltipLines() {
                         List<Component> lines = new ArrayList<>();
-                        lines.add(new TextComponent(ChatFormatting.GOLD + LangUtil.getString("tooltip.industrialforegoing.action") + ChatFormatting.WHITE + LangUtil.getString("tooltip.industrialforegoing.stonework." + ACTION_RECIPES[secondRecipeId].getAction())));
+                        lines.add(Component.literal(ChatFormatting.GOLD + LangUtil.getString("tooltip.industrialforegoing.action") + ChatFormatting.WHITE + LangUtil.getString("tooltip.industrialforegoing.stonework." + ACTION_RECIPES[secondRecipeId].getAction())));
                         return lines;
                     }
                 });
@@ -263,7 +263,7 @@ public class MaterialStoneWorkFactoryTile extends IndustrialProcessingTile<Mater
                     @Override
                     public List<Component> getTooltipLines() {
                         List<Component> lines = new ArrayList<>();
-                        lines.add(new TextComponent(ChatFormatting.GOLD + LangUtil.getString("tooltip.industrialforegoing.action") + ChatFormatting.WHITE + LangUtil.getString("tooltip.industrialforegoing.stonework." + ACTION_RECIPES[thirdRecipeId].getAction())));
+                        lines.add(Component.literal(ChatFormatting.GOLD + LangUtil.getString("tooltip.industrialforegoing.action") + ChatFormatting.WHITE + LangUtil.getString("tooltip.industrialforegoing.stonework." + ACTION_RECIPES[thirdRecipeId].getAction())));
                         return lines;
                     }
                 });
@@ -289,7 +289,7 @@ public class MaterialStoneWorkFactoryTile extends IndustrialProcessingTile<Mater
                     @Override
                     public List<Component> getTooltipLines() {
                         List<Component> lines = new ArrayList<>();
-                        lines.add(new TextComponent(ChatFormatting.GOLD + LangUtil.getString("tooltip.industrialforegoing.action") + ChatFormatting.WHITE + LangUtil.getString("tooltip.industrialforegoing.stonework." + ACTION_RECIPES[fourthRecipeId].getAction())));
+                        lines.add(Component.literal(ChatFormatting.GOLD + LangUtil.getString("tooltip.industrialforegoing.action") + ChatFormatting.WHITE + LangUtil.getString("tooltip.industrialforegoing.stonework." + ACTION_RECIPES[fourthRecipeId].getAction())));
                         return lines;
                     }
                 });
@@ -316,25 +316,25 @@ public class MaterialStoneWorkFactoryTile extends IndustrialProcessingTile<Mater
                 || process(inventoryGenerator, inventoryFirst, ACTION_RECIPES[firstRecipeId], true);
     }
 
-    public Optional<StoneWorkGenerateRecipe> getRecipe(){
-        Collection<StoneWorkGenerateRecipe> recipes =  RecipeUtil.getRecipes(this.level, StoneWorkGenerateRecipe.SERIALIZER.getRecipeType());
+    public Optional<StoneWorkGenerateRecipe> getRecipe() {
+        Collection<StoneWorkGenerateRecipe> recipes = RecipeUtil.getRecipes(this.level, (RecipeType<StoneWorkGenerateRecipe>) ModuleCore.STONEWORK_GENERATE_TYPE.get());
         for (StoneWorkGenerateRecipe recipe : recipes) {
-            if (recipe.getId().equals(new ResourceLocation(generatorRecipe))){
+            if (recipe.getId().equals(new ResourceLocation(generatorRecipe))) {
                 return Optional.of(recipe);
             }
         }
         return recipes.stream().filter(stoneWorkGenerateRecipe -> stoneWorkGenerateRecipe.getId().equals(DEFAULT)).findFirst();
     }
 
-    public ResourceLocation getNextRecipe(boolean next){
-        if (generatorRecipe != null){
-            List<ResourceLocation> rls = RecipeUtil.getRecipes(this.level, StoneWorkGenerateRecipe.SERIALIZER.getRecipeType()).stream().map(StoneWorkGenerateRecipe::getId).collect(Collectors.toList());
+    public ResourceLocation getNextRecipe(boolean next) {
+        if (generatorRecipe != null) {
+            List<ResourceLocation> rls = RecipeUtil.getRecipes(this.level, (RecipeType<StoneWorkGenerateRecipe>) ModuleCore.STONEWORK_GENERATE_TYPE.get()).stream().map(StoneWorkGenerateRecipe::getId).collect(Collectors.toList());
             int currentIndex = rls.indexOf(new ResourceLocation(generatorRecipe));
-            if (next){
+            if (next) {
                 this.generatorRecipe = rls.get((currentIndex + 1) % rls.size()).toString();
             } else {
                 --currentIndex;
-                if (currentIndex < 0){
+                if (currentIndex < 0) {
                     currentIndex = rls.size() - 1;
                 }
                 this.generatorRecipe = rls.get(currentIndex).toString();
@@ -375,7 +375,7 @@ public class MaterialStoneWorkFactoryTile extends IndustrialProcessingTile<Mater
             ItemStack outputStack = action.work.apply(this.level, inputStack.copy()).copy();
             if (outputStack.isEmpty()) continue;
             if (ItemHandlerHelper.insertItem(output, outputStack, true).isEmpty()) {
-                if (!simulate){
+                if (!simulate) {
                     ItemHandlerHelper.insertItem(output, outputStack, false);
                     inputStack.shrink(action.getShrinkAmount());
                 }

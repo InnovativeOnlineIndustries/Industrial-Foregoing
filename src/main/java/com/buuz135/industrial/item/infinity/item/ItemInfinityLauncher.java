@@ -38,7 +38,6 @@ import net.minecraft.ChatFormatting;
 import net.minecraft.data.recipes.FinishedRecipe;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.stats.Stats;
@@ -59,6 +58,7 @@ import net.minecraft.world.level.Level;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.fluids.FluidStack;
+import net.minecraftforge.registries.ForgeRegistries;
 
 import java.util.List;
 import java.util.Locale;
@@ -99,7 +99,7 @@ public class ItemInfinityLauncher extends ItemInfinity {
     public void addTooltipDetails(BasicItem.Key key, ItemStack stack, List<Component> tooltip, boolean advanced) {
         super.addTooltipDetails(key, stack, tooltip, advanced);
         PlungerAction action = getPlungerAction(stack);
-        tooltip.add(new TranslatableComponent("text.industrialforegoing.action").withStyle(ChatFormatting.GRAY).append(new TranslatableComponent("text.industrialforegoing.launcher." + action.name().toLowerCase(Locale.ROOT)).withStyle(action.getColor())));
+        tooltip.add(Component.translatable("text.industrialforegoing.action").withStyle(ChatFormatting.GRAY).append(Component.translatable("text.industrialforegoing.launcher." + action.name().toLowerCase(Locale.ROOT)).withStyle(action.getColor())));
     }
 
     public PlungerAction getPlungerAction(ItemStack stack) {
@@ -180,7 +180,7 @@ public class ItemInfinityLauncher extends ItemInfinity {
             @Override
             public String getText() {
                 PlungerAction action = getPlungerAction(stack.get());
-                return ChatFormatting.DARK_GRAY + new TranslatableComponent("text.industrialforegoing.action").withStyle(ChatFormatting.GRAY).getString() + action.getColor() + new TranslatableComponent("text.industrialforegoing.launcher." + action.name().toLowerCase(Locale.ROOT)).withStyle(action.getColor()).getString();
+                return ChatFormatting.DARK_GRAY + Component.translatable("text.industrialforegoing.action").withStyle(ChatFormatting.GRAY).getString() + action.getColor() + Component.translatable("text.industrialforegoing.launcher." + action.name().toLowerCase(Locale.ROOT)).withStyle(action.getColor()).getString();
             }
         });
         return factory;
@@ -202,7 +202,7 @@ public class ItemInfinityLauncher extends ItemInfinity {
 
     @Override
     public void registerRecipe(Consumer<FinishedRecipe> consumer) {
-        new DissolutionChamberRecipe(this.getRegistryName(),
+        new DissolutionChamberRecipe(ForgeRegistries.ITEMS.getKey(this),
                 new Ingredient.Value[]{
                         new Ingredient.ItemValue(new ItemStack(Items.DIAMOND_BLOCK)),
                         new Ingredient.ItemValue(new ItemStack(Items.BOW)),

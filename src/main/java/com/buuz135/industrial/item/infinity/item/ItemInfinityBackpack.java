@@ -62,8 +62,6 @@ import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.data.recipes.FinishedRecipe;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.TextComponent;
-import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResultHolder;
@@ -87,17 +85,18 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.AABB;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
+import net.minecraftforge.common.capabilities.ForgeCapabilities;
 import net.minecraftforge.common.capabilities.ICapabilityProvider;
 import net.minecraftforge.event.entity.player.EntityItemPickupEvent;
 import net.minecraftforge.event.entity.player.PlayerXpEvent;
 import net.minecraftforge.eventbus.api.Event;
 import net.minecraftforge.fluids.FluidStack;
-import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
 import net.minecraftforge.fluids.capability.IFluidHandler;
 import net.minecraftforge.fluids.capability.IFluidHandlerItem;
 import net.minecraftforge.items.ItemHandlerHelper;
 import net.minecraftforge.network.NetworkDirection;
 import net.minecraftforge.network.NetworkHooks;
+import net.minecraftforge.registries.ForgeRegistries;
 
 import javax.annotation.Nullable;
 import java.text.NumberFormat;
@@ -118,8 +117,8 @@ public class ItemInfinityBackpack extends ItemInfinity {
         super("infinity_backpack", ModuleTool.TAB_TOOL, new Properties().stacksTo(1), POWER_CONSUMPTION, FUEL_CONSUMPTION, false);
         this.disableArea();
         EventManager.forge(EntityItemPickupEvent.class).filter(entityItemPickupEvent -> !entityItemPickupEvent.getItem().getItem().isEmpty()).process(entityItemPickupEvent -> {
-            for (PlayerInventoryFinder.Target target : findAllBackpacks(entityItemPickupEvent.getPlayer())) {
-                ItemStack stack = target.getFinder().getStackGetter().apply(entityItemPickupEvent.getPlayer(), target.getSlot());
+            for (PlayerInventoryFinder.Target target : findAllBackpacks(entityItemPickupEvent.getEntity())) {
+                ItemStack stack = target.getFinder().getStackGetter().apply(entityItemPickupEvent.getEntity(), target.getSlot());
                 if (!stack.isEmpty()) {
                     if (stack.getItem() instanceof ItemInfinityBackpack && (getPickUpMode(stack) == 1 || getPickUpMode(stack) == 0)) {
                         BackpackDataManager manager = BackpackDataManager.getData(entityItemPickupEvent.getItem().level);
@@ -134,8 +133,8 @@ public class ItemInfinityBackpack extends ItemInfinity {
                                         ItemStack returned = handler.insertItem(pos, picked.copy(), false);
                                         picked.setCount(returned.getCount());
                                         entityItemPickupEvent.setResult(Event.Result.ALLOW);
-                                        if (entityItemPickupEvent.getPlayer() instanceof ServerPlayer) {
-                                            sync(entityItemPickupEvent.getPlayer().level, stack.getOrCreateTag().getString("Id"), (ServerPlayer) entityItemPickupEvent.getPlayer());
+                                        if (entityItemPickupEvent.getEntity() instanceof ServerPlayer) {
+                                            sync(entityItemPickupEvent.getEntity().level, stack.getOrCreateTag().getString("Id"), (ServerPlayer) entityItemPickupEvent.getEntity());
                                         }
                                         return;
                                     }
@@ -147,15 +146,15 @@ public class ItemInfinityBackpack extends ItemInfinity {
             }
         }).subscribe();
         EventManager.forge(PlayerXpEvent.PickupXp.class).filter(pickupXp -> pickupXp.getOrb().isAlive()).process(pickupXp -> {
-            findFirstBackpack(pickupXp.getPlayer()).ifPresent(target -> {
-                ItemStack stack = target.getFinder().getStackGetter().apply(pickupXp.getPlayer(), target.getSlot());
+            findFirstBackpack(pickupXp.getEntity()).ifPresent(target -> {
+                ItemStack stack = target.getFinder().getStackGetter().apply(pickupXp.getEntity(), target.getSlot());
                 if (!stack.isEmpty()) {
                     if (stack.getItem() instanceof ItemInfinityBackpack && (getPickUpMode(stack) == 2 || getPickUpMode(stack) == 0)) {
-                        if (stack.getCapability(CapabilityFluidHandler.FLUID_HANDLER_ITEM_CAPABILITY).isPresent()) {
+                        if (stack.getCapability(ForgeCapabilities.FLUID_HANDLER_ITEM).isPresent()) {
                             ExperienceOrb entity = pickupXp.getOrb();
-                            IFluidHandlerItem handlerItem = stack.getCapability(CapabilityFluidHandler.FLUID_HANDLER_ITEM_CAPABILITY).orElse(null);
+                            IFluidHandlerItem handlerItem = stack.getCapability(ForgeCapabilities.FLUID_HANDLER_ITEM).orElse(null);
                             if (handlerItem != null) {
-                                if (handlerItem.fill(new FluidStack(ModuleCore.ESSENCE.getSourceFluid().get(), entity.getValue() * 20), IFluidHandler.FluidAction.SIMULATE) > 0){
+                                if (handlerItem.fill(new FluidStack(ModuleCore.ESSENCE.getSourceFluid().get(), entity.getValue() * 20), IFluidHandler.FluidAction.SIMULATE) > 0) {
                                     handlerItem.fill(new FluidStack(ModuleCore.ESSENCE.getSourceFluid().get(), entity.getValue() * 20), IFluidHandler.FluidAction.EXECUTE);
                                     entity.onClientRemoval();
                                     pickupXp.setCanceled(true);
@@ -228,7 +227,6 @@ public class ItemInfinityBackpack extends ItemInfinity {
     }
 
 
-
     @Nullable
     @Override
     public ICapabilityProvider initCapabilities(ItemStack stack, @Nullable CompoundTag nbt) {
@@ -249,7 +247,7 @@ public class ItemInfinityBackpack extends ItemInfinity {
             String id = stack.getTag().getString("Id");
             IndustrialForegoing.NETWORK.get().sendTo(new BackpackOpenedMessage(player.inventory.selected, PlayerInventoryFinder.MAIN), ((ServerPlayer) player).connection.getConnection(), NetworkDirection.PLAY_TO_CLIENT);
             sync(worldIn, id, (ServerPlayer) player);
-            NetworkHooks.openGui((ServerPlayer) player, this, buffer ->
+            NetworkHooks.openScreen((ServerPlayer) player, this, buffer ->
                     LocatorFactory.writePacketBuffer(buffer, new HeldStackLocatorInstance(handIn == InteractionHand.MAIN_HAND)));
             return InteractionResultHolder.success(player.getItemInHand(handIn));
         }
@@ -276,8 +274,8 @@ public class ItemInfinityBackpack extends ItemInfinity {
         }
         if (!entityIn.level.isClientSide && entityIn instanceof Player) {
             if (enoughFuel(stack)) {
-                if ((((Player) entityIn).getFoodData().needsFood() || ((Player) entityIn).getFoodData().getSaturationLevel() < 10) && stack.getCapability(CapabilityFluidHandler.FLUID_HANDLER_ITEM_CAPABILITY).isPresent()) {
-                    IFluidHandlerItem handlerItem = stack.getCapability(CapabilityFluidHandler.FLUID_HANDLER_ITEM_CAPABILITY).orElseGet(null);
+                if ((((Player) entityIn).getFoodData().needsFood() || ((Player) entityIn).getFoodData().getSaturationLevel() < 10) && stack.getCapability(ForgeCapabilities.FLUID_HANDLER_ITEM).isPresent()) {
+                    IFluidHandlerItem handlerItem = stack.getCapability(ForgeCapabilities.FLUID_HANDLER_ITEM).orElseGet(null);
                     if (handlerItem instanceof MultipleFluidHandlerScreenProviderItemStack) {
                         FluidStack fluidStack = handlerItem.getFluidInTank(2);
                         if (!fluidStack.isEmpty() && fluidStack.getAmount() >= 400) {
@@ -422,7 +420,7 @@ public class ItemInfinityBackpack extends ItemInfinity {
                     }
                     if (hasCursorChanged) {
                         playerEntity.containerMenu.setCarried(result);
-                      ((ServerPlayer) playerEntity).containerMenu.broadcastChanges();
+                        ((ServerPlayer) playerEntity).containerMenu.broadcastChanges();
                     }
                     sync(playerEntity.level, backpackId, (ServerPlayer) playerEntity);
                 }
@@ -454,7 +452,7 @@ public class ItemInfinityBackpack extends ItemInfinity {
     @Override
     public void addTooltipDetails(@Nullable Key key, ItemStack stack, List<Component> tooltip, boolean advanced) {
         //tooltip.add(stack.getOrCreateTag().toFormattedComponent());
-        tooltip.add(new TextComponent(ChatFormatting.GRAY + new TranslatableComponent("text.industrialforegoing.tooltip.can_hold").getString() + ": " + ChatFormatting.DARK_AQUA + NumberFormat.getInstance(Locale.ROOT).format(getSlotSize(stack)) + ChatFormatting.GRAY + " " + new TranslatableComponent("text.industrialforegoing.tooltip.items").getString()));
+        tooltip.add(Component.literal(ChatFormatting.GRAY + Component.translatable("text.industrialforegoing.tooltip.can_hold").getString() + ": " + ChatFormatting.DARK_AQUA + NumberFormat.getInstance(Locale.ROOT).format(getSlotSize(stack)) + ChatFormatting.GRAY + " " + Component.translatable("text.industrialforegoing.tooltip.items").getString()));
         super.addTooltipDetails(key, stack, tooltip, advanced);
     }
 
@@ -470,14 +468,14 @@ public class ItemInfinityBackpack extends ItemInfinity {
     @Override
     public boolean enoughFuel(ItemStack stack) {
         int i = EnchantmentHelper.getItemEnchantmentLevel(Enchantments.UNBREAKING, stack);
-        return getFuelFromStack(stack) >= FUEL_CONSUMPTION  * ( 1 / (i + 1)) ;
+        return getFuelFromStack(stack) >= FUEL_CONSUMPTION * (1 / (i + 1));
     }
 
     @Override
     public void consumeFuel(ItemStack stack) {
         int i = EnchantmentHelper.getItemEnchantmentLevel(Enchantments.UNBREAKING, stack);
-        if (getFuelFromStack(stack) >= FUEL_CONSUMPTION  * ( 1 / (i + 1)) ) {
-            stack.getTag().getCompound("Tanks").getCompound("biofuel").putInt("Amount", Math.max(0, getFuelFromStack(stack) - FUEL_CONSUMPTION  * ( 1 / (i + 1)) ));
+        if (getFuelFromStack(stack) >= FUEL_CONSUMPTION * (1 / (i + 1))) {
+            stack.getTag().getCompound("Tanks").getCompound("biofuel").putInt("Amount", Math.max(0, getFuelFromStack(stack) - FUEL_CONSUMPTION * (1 / (i + 1))));
         }
     }
 
@@ -546,7 +544,7 @@ public class ItemInfinityBackpack extends ItemInfinity {
         factory.add(() -> new AssetScreenAddon(AssetTypes.AUGMENT_BACKGROUND, 175, 10, true));
         int x = 181;
         int y = 19;
-        factory.add(() -> new StateButtonAddon(new ButtonComponent(x, 16 + y * 0, 14, 14).setId(10), new StateButtonInfo(0, AssetTypes.BUTTON_SIDENESS_ENABLED, ChatFormatting.GREEN + new TranslatableComponent("tooltip.industrialforegoing.backpack.magnet_enabled").getString()), new StateButtonInfo(1, AssetTypes.BUTTON_SIDENESS_DISABLED, ChatFormatting.RED + new TranslatableComponent("tooltip.industrialforegoing.backpack.magnet_disabled").getString())) {
+        factory.add(() -> new StateButtonAddon(new ButtonComponent(x, 16 + y * 0, 14, 14).setId(10), new StateButtonInfo(0, AssetTypes.BUTTON_SIDENESS_ENABLED, ChatFormatting.GREEN + Component.translatable("tooltip.industrialforegoing.backpack.magnet_enabled").getString()), new StateButtonInfo(1, AssetTypes.BUTTON_SIDENESS_DISABLED, ChatFormatting.RED + Component.translatable("tooltip.industrialforegoing.backpack.magnet_disabled").getString())) {
             @Override
             public int getState() {
                 return isMagnetEnabled(stack.get()) ? 0 : 1;
@@ -554,37 +552,37 @@ public class ItemInfinityBackpack extends ItemInfinity {
         });
         factory.add(() -> new StateButtonAddon(new ButtonComponent(x, 16 + y * 1, 14, 14).setId(11),
                 new StateButtonInfo(0, AssetTypes.BUTTON_SIDENESS_ENABLED,
-                        ChatFormatting.GREEN + new TranslatableComponent("tooltip.industrialforegoing.backpack.pickup_all").getString(),
-                        ChatFormatting.GRAY + new TranslatableComponent("tooltip.industrialforegoing.backpack.pickup_extra").getString(),
-                        ChatFormatting.GRAY + new TranslatableComponent("tooltip.industrialforegoing.backpack.pickup_extra_1").getString()),
+                        ChatFormatting.GREEN + Component.translatable("tooltip.industrialforegoing.backpack.pickup_all").getString(),
+                        ChatFormatting.GRAY + Component.translatable("tooltip.industrialforegoing.backpack.pickup_extra").getString(),
+                        ChatFormatting.GRAY + Component.translatable("tooltip.industrialforegoing.backpack.pickup_extra_1").getString()),
                 new StateButtonInfo(1, AssetTypes.BUTTON_SIDENESS_PULL,
-                        ChatFormatting.GREEN + new TranslatableComponent("tooltip.industrialforegoing.backpack.item_pickup_enabled").getString(),
-                        ChatFormatting.GRAY + new TranslatableComponent("tooltip.industrialforegoing.backpack.pickup_extra").getString(),
-                        ChatFormatting.GRAY + new TranslatableComponent("tooltip.industrialforegoing.backpack.pickup_extra_1").getString()),
+                        ChatFormatting.GREEN + Component.translatable("tooltip.industrialforegoing.backpack.item_pickup_enabled").getString(),
+                        ChatFormatting.GRAY + Component.translatable("tooltip.industrialforegoing.backpack.pickup_extra").getString(),
+                        ChatFormatting.GRAY + Component.translatable("tooltip.industrialforegoing.backpack.pickup_extra_1").getString()),
                 new StateButtonInfo(2, AssetTypes.BUTTON_SIDENESS_PUSH,
-                        ChatFormatting.GREEN + new TranslatableComponent("tooltip.industrialforegoing.backpack.xp_pickup_enabled").getString(),
-                        ChatFormatting.GRAY + new TranslatableComponent("tooltip.industrialforegoing.backpack.pickup_extra").getString(),
-                        ChatFormatting.GRAY + new TranslatableComponent("tooltip.industrialforegoing.backpack.pickup_extra_1").getString()),
+                        ChatFormatting.GREEN + Component.translatable("tooltip.industrialforegoing.backpack.xp_pickup_enabled").getString(),
+                        ChatFormatting.GRAY + Component.translatable("tooltip.industrialforegoing.backpack.pickup_extra").getString(),
+                        ChatFormatting.GRAY + Component.translatable("tooltip.industrialforegoing.backpack.pickup_extra_1").getString()),
                 new StateButtonInfo(3, AssetTypes.BUTTON_SIDENESS_DISABLED,
-                        ChatFormatting.RED + new TranslatableComponent("tooltip.industrialforegoing.backpack.pickup_disabled").getString(),
-                        ChatFormatting.GRAY + new TranslatableComponent("tooltip.industrialforegoing.backpack.pickup_extra").getString(),
-                        ChatFormatting.GRAY + new TranslatableComponent("tooltip.industrialforegoing.backpack.pickup_extra_1").getString())) {
+                        ChatFormatting.RED + Component.translatable("tooltip.industrialforegoing.backpack.pickup_disabled").getString(),
+                        ChatFormatting.GRAY + Component.translatable("tooltip.industrialforegoing.backpack.pickup_extra").getString(),
+                        ChatFormatting.GRAY + Component.translatable("tooltip.industrialforegoing.backpack.pickup_extra_1").getString())) {
             @Override
             public int getState() {
                 return getPickUpMode(stack.get());
             }
         });
-        factory.add(() -> new StateButtonAddon(new ButtonComponent(x, 16 + y * 2, 14, 14).setId(3), new StateButtonInfo(0, AssetTypes.BUTTON_SIDENESS_ENABLED, ChatFormatting.GREEN + new TranslatableComponent("text.industrialforegoing.display.charging").getString() + new TranslatableComponent("text.industrialforegoing.display.enabled").getString()), new StateButtonInfo(1, AssetTypes.BUTTON_SIDENESS_DISABLED, ChatFormatting.RED + new TranslatableComponent("text.industrialforegoing.display.charging").getString() + new TranslatableComponent("text.industrialforegoing.display.disabled").getString())) {
+        factory.add(() -> new StateButtonAddon(new ButtonComponent(x, 16 + y * 2, 14, 14).setId(3), new StateButtonInfo(0, AssetTypes.BUTTON_SIDENESS_ENABLED, ChatFormatting.GREEN + Component.translatable("text.industrialforegoing.display.charging").getString() + Component.translatable("text.industrialforegoing.display.enabled").getString()), new StateButtonInfo(1, AssetTypes.BUTTON_SIDENESS_DISABLED, ChatFormatting.RED + Component.translatable("text.industrialforegoing.display.charging").getString() + Component.translatable("text.industrialforegoing.display.disabled").getString())) {
             @Override
             public int getState() {
                 return ItemInfinity.canCharge(stack.get()) ? 0 : 1;
             }
         });
         if (isSpecial(stack.get())) {
-            factory.add(() -> new StateButtonAddon(new ButtonComponent(x, 16 + y * 3, 14, 14).setId(-10), new StateButtonInfo(0, AssetTypes.BUTTON_SIDENESS_ENABLED, ChatFormatting.GOLD + new TranslatableComponent("text.industrialforegoing.display.special").getString()), new StateButtonInfo(1, AssetTypes.BUTTON_SIDENESS_DISABLED, ChatFormatting.GOLD + new TranslatableComponent("text.industrialforegoing.display.special").getString())) {
+            factory.add(() -> new StateButtonAddon(new ButtonComponent(x, 16 + y * 3, 14, 14).setId(-10), new StateButtonInfo(0, AssetTypes.BUTTON_SIDENESS_ENABLED, ChatFormatting.GOLD + Component.translatable("text.industrialforegoing.display.special").getString()), new StateButtonInfo(1, AssetTypes.BUTTON_SIDENESS_DISABLED, ChatFormatting.GOLD + Component.translatable("text.industrialforegoing.display.special").getString())) {
                 @Override
                 public int getState() {
-                    return ((ItemInfinityBackpack)ModuleTool.INFINITY_BACKPACK.get()).isSpecialEnabled(stack.get()) ? 0 : 1;
+                    return ((ItemInfinityBackpack) ModuleTool.INFINITY_BACKPACK.get()).isSpecialEnabled(stack.get()) ? 0 : 1;
                 }
             });
         }
@@ -593,7 +591,7 @@ public class ItemInfinityBackpack extends ItemInfinity {
 
     @Override
     public void registerRecipe(Consumer<FinishedRecipe> consumer) {
-        new DissolutionChamberRecipe(this.getRegistryName(),
+        new DissolutionChamberRecipe(ForgeRegistries.ITEMS.getKey(this),
                 new Ingredient.Value[]{
                         new Ingredient.ItemValue(new ItemStack(ModuleTransportStorage.BLACK_HOLE_UNIT_COMMON.getLeft().get())),
                         new Ingredient.TagValue(IndustrialTags.Items.GEAR_DIAMOND),

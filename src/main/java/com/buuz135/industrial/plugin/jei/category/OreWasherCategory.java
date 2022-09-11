@@ -22,9 +22,6 @@
 
 package com.buuz135.industrial.plugin.jei.category;
 
-import java.awt.Color;
-import java.util.stream.Collectors;
-
 import com.buuz135.industrial.api.recipe.ore.OreFluidEntryRaw;
 import com.buuz135.industrial.module.ModuleResourceProduction;
 import com.buuz135.industrial.plugin.jei.IndustrialRecipeTypes;
@@ -41,15 +38,15 @@ import mezz.jei.api.recipe.IFocusGroup;
 import mezz.jei.api.recipe.RecipeIngredientRole;
 import mezz.jei.api.recipe.RecipeType;
 import mezz.jei.api.recipe.category.IRecipeCategory;
-import net.minecraft.world.item.crafting.Ingredient;
-import org.apache.commons.lang3.tuple.Pair;
-
 import net.minecraft.client.Minecraft;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.DyeColor;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.crafting.Ingredient;
+import org.apache.commons.lang3.tuple.Pair;
+
+import java.awt.*;
 
 public class OreWasherCategory implements IRecipeCategory<OreFluidEntryRaw> {
 
@@ -62,23 +59,13 @@ public class OreWasherCategory implements IRecipeCategory<OreFluidEntryRaw> {
     }
 
     @Override
-    public ResourceLocation getUid() {
-        return IndustrialRecipeTypes.ORE_WASHER.getUid();
-    }
-
-    @Override
-    public Class<? extends OreFluidEntryRaw> getRecipeClass() {
-        return IndustrialRecipeTypes.ORE_WASHER.getRecipeClass();
-    }
-
-    @Override
     public RecipeType<OreFluidEntryRaw> getRecipeType() {
         return IndustrialRecipeTypes.ORE_WASHER;
     }
 
     @Override
     public Component getTitle() {
-        return new TranslatableComponent(ModuleResourceProduction.WASHING_FACTORY.getLeft().get().getDescriptionId());
+        return Component.translatable(ModuleResourceProduction.WASHING_FACTORY.getLeft().get().getDescriptionId());
     }
 
     @Override
@@ -101,6 +88,6 @@ public class OreWasherCategory implements IRecipeCategory<OreFluidEntryRaw> {
 
     @Override
     public void draw(OreFluidEntryRaw recipe, IRecipeSlotsView recipeSlotsView, PoseStack stack, double mouseX, double mouseY) {
-        SlotsScreenAddon.drawAsset(stack, Minecraft.getInstance().screen, DefaultAssetProvider.DEFAULT_PROVIDER, 1,16, 0, 0, 1, integer -> Pair.of(18 * (integer % 1), 18 * (integer / 1)), integer -> ItemStack.EMPTY, true, integer -> new Color(DyeColor.BLUE.getFireworkColor()), integer -> true);
+        SlotsScreenAddon.drawAsset(stack, Minecraft.getInstance().screen, DefaultAssetProvider.DEFAULT_PROVIDER, 1, 16, 0, 0, 1, integer -> Pair.of(18 * (integer % 1), 18 * (integer / 1)), integer -> ItemStack.EMPTY, true, integer -> new Color(DyeColor.BLUE.getFireworkColor()), integer -> true);
     }
 }

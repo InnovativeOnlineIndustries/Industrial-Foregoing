@@ -38,26 +38,24 @@ import com.hrznstudio.titanium.util.AssetUtil;
 import com.hrznstudio.titanium.util.LangUtil;
 import com.hrznstudio.titanium.util.RayTraceUtils;
 import com.mojang.blaze3d.vertex.PoseStack;
+import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screens.Screen;
-
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.network.chat.Component;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.DyeColor;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.Rarity;
-import net.minecraft.world.InteractionResult;
-import net.minecraft.core.Direction;
-import net.minecraft.world.InteractionHand;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.HitResult;
-import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.TextComponent;
-import net.minecraft.ChatFormatting;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.common.capabilities.Capability;
@@ -99,12 +97,12 @@ public class BlackHoleUnitTile extends BHTile<BlackHoleUnitTile> {
         this.hasNBT = false;
         this.handler = new BlackHoleHandler(BlockUtils.getStackAmountByRarity(rarity));
         this.lazyStorage = LazyOptional.of(() -> handler);
-        this.addFilter(filter = new ItemStackFilter("filter" , 1));
-        FilterSlot slot = new FilterSlot<>(79, 60 , 0, ItemStack.EMPTY);
+        this.addFilter(filter = new ItemStackFilter("filter", 1));
+        FilterSlot slot = new FilterSlot<>(79, 60, 0, ItemStack.EMPTY);
         slot.setColor(DyeColor.CYAN);
         this.filter.setFilter(0, slot);
 
-        addButton(new ButtonComponent(82+ 20 * 2, 64+16, 18, 18) {
+        addButton(new ButtonComponent(82 + 20 * 2, 64 + 16, 18, 18) {
             @Override
             @OnlyIn(Dist.CLIENT)
             public List<IFactory<? extends IScreenAddon>> getScreenAddons() {
@@ -112,7 +110,7 @@ public class BlackHoleUnitTile extends BHTile<BlackHoleUnitTile> {
                     @Override
                     public void drawBackgroundLayer(PoseStack stack, Screen screen, IAssetProvider provider, int guiX, int guiY, int mouseX, int mouseY, float partialTicks) {
                         AssetUtil.drawAsset(stack, screen, provider.getAsset(AssetTypes.ITEM_BACKGROUND), guiX + getPosX(), guiY + getPosY());
-                        Minecraft.getInstance().getItemRenderer().renderGuiItem(new ItemStack(voidItems ? Items.MAGMA_CREAM: Items.SLIME_BALL), guiX + getPosX() + 1, guiY + getPosY() + 1);
+                        Minecraft.getInstance().getItemRenderer().renderGuiItem(new ItemStack(voidItems ? Items.MAGMA_CREAM : Items.SLIME_BALL), guiX + getPosX() + 1, guiY + getPosY() + 1);
 //                        Lighting.turnOff();
 //                        RenderSystem.enableAlphaTest();
                     }
@@ -120,7 +118,7 @@ public class BlackHoleUnitTile extends BHTile<BlackHoleUnitTile> {
                     @Override
                     public List<Component> getTooltipLines() {
                         List<Component> lines = new ArrayList<>();
-                        lines.add(new TextComponent(ChatFormatting.GOLD + LangUtil.getString("tooltip.industrialforegoing.bl." + ( voidItems ? "void_unit" : "no_void_unit"))));
+                        lines.add(Component.literal(ChatFormatting.GOLD + LangUtil.getString("tooltip.industrialforegoing.bl." + (voidItems ? "void_unit" : "no_void_unit"))));
                         return lines;
                     }
                 });
@@ -129,7 +127,7 @@ public class BlackHoleUnitTile extends BHTile<BlackHoleUnitTile> {
             this.voidItems = !this.voidItems;
             this.syncObject(this.voidItems);
         }));
-        addButton(new ButtonComponent(82+ 20, 64+16, 18, 18) {
+        addButton(new ButtonComponent(82 + 20, 64 + 16, 18, 18) {
             @Override
             @OnlyIn(Dist.CLIENT)
             public List<IFactory<? extends IScreenAddon>> getScreenAddons() {
@@ -137,7 +135,7 @@ public class BlackHoleUnitTile extends BHTile<BlackHoleUnitTile> {
                     @Override
                     public void drawBackgroundLayer(PoseStack stack, Screen screen, IAssetProvider provider, int guiX, int guiY, int mouseX, int mouseY, float partialTicks) {
                         AssetUtil.drawAsset(stack, screen, provider.getAsset(AssetTypes.ITEM_BACKGROUND), guiX + getPosX(), guiY + getPosY());
-                        Minecraft.getInstance().getItemRenderer().renderGuiItem(new ItemStack(useStackDisplay ? Items.IRON_BLOCK: Items.IRON_INGOT), guiX + getPosX() + 1, guiY + getPosY() + 1);
+                        Minecraft.getInstance().getItemRenderer().renderGuiItem(new ItemStack(useStackDisplay ? Items.IRON_BLOCK : Items.IRON_INGOT), guiX + getPosX() + 1, guiY + getPosY() + 1);
 //                        Lighting.turnOff();
 //                        RenderSystem.enableAlphaTest();
                     }
@@ -145,7 +143,7 @@ public class BlackHoleUnitTile extends BHTile<BlackHoleUnitTile> {
                     @Override
                     public List<Component> getTooltipLines() {
                         List<Component> lines = new ArrayList<>();
-                        lines.add(new TextComponent(ChatFormatting.GOLD + LangUtil.getString("tooltip.industrialforegoing.bl." + ( useStackDisplay ? "stack_unit" : "compact_unit"))));
+                        lines.add(Component.literal(ChatFormatting.GOLD + LangUtil.getString("tooltip.industrialforegoing.bl." + (useStackDisplay ? "stack_unit" : "compact_unit"))));
                         return lines;
                     }
                 });
@@ -189,9 +187,9 @@ public class BlackHoleUnitTile extends BHTile<BlackHoleUnitTile> {
         if (super.onActivated(playerIn, hand, facing, hitX, hitY, hitZ) == InteractionResult.SUCCESS) {
             return InteractionResult.SUCCESS;
         }
-        if (playerIn.isShiftKeyDown()){
+        if (playerIn.isShiftKeyDown()) {
             openGui(playerIn);
-        } else if (facing.equals(this.getFacingDirection())){
+        } else if (facing.equals(this.getFacingDirection())) {
             ItemStack stack = playerIn.getItemInHand(hand);
             if (!stack.isEmpty() && handler.isItemValid(0, stack)) {
                 playerIn.setItemInHand(hand, handler.insertItem(0, stack, false));
@@ -209,12 +207,12 @@ public class BlackHoleUnitTile extends BHTile<BlackHoleUnitTile> {
     }
 
     public void onClicked(Player playerIn) {
-        if (isServer()){
+        if (isServer()) {
             HitResult rayTraceResult = RayTraceUtils.rayTraceSimple(this.level, playerIn, 16, 0);
             if (rayTraceResult.getType() == HitResult.Type.BLOCK) {
                 BlockHitResult blockResult = (BlockHitResult) rayTraceResult;
                 Direction facing = blockResult.getDirection();
-                if (facing.equals(this.getFacingDirection())){
+                if (facing.equals(this.getFacingDirection())) {
                     ItemHandlerHelper.giveItemToPlayer(playerIn, handler.extractItem(0, playerIn.isShiftKeyDown() ? 64 : 1, false));
                 }
             }
@@ -224,8 +222,8 @@ public class BlackHoleUnitTile extends BHTile<BlackHoleUnitTile> {
     @Override
     public void serverTick(Level level, BlockPos pos, BlockState state, BlackHoleUnitTile blockEntity) {
         super.serverTick(level, pos, state, blockEntity);
-        if (isServer()){
-            if (!this.hasNBT && this.blStack.hasTag()){
+        if (isServer()) {
+            if (!this.hasNBT && this.blStack.hasTag()) {
                 ItemStack stack = this.blStack.copy();
                 stack.setTag(null);
                 this.setStack(stack);
@@ -233,13 +231,13 @@ public class BlackHoleUnitTile extends BHTile<BlackHoleUnitTile> {
         }
     }
 
-    public void setAmount(int amount){
+    public void setAmount(int amount) {
         boolean equal = amount == stored;
         this.stored = amount;
         if (!equal) syncObject(this.stored);
     }
 
-    public void setStack(ItemStack stack){
+    public void setStack(ItemStack stack) {
         boolean equal = blStack.sameItem(stack) && ItemStack.tagMatches(blStack, stack);
         this.blStack = stack;
         this.hasNBT = this.blStack.hasTag();
@@ -262,7 +260,8 @@ public class BlackHoleUnitTile extends BHTile<BlackHoleUnitTile> {
 
     @Override
     public String getFormatedDisplayAmount() {
-        if (this.useStackDisplay) return stored == 0 ? "0" : (stored >= 64 ? NumberUtils.getFormatedBigNumber(stored / 64) + " x64" : "") + (stored >= 64 && stored % 64 != 0 ? " + " : "") + (stored % 64 != 0 ? stored % 64 : "");
+        if (this.useStackDisplay)
+            return stored == 0 ? "0" : (stored >= 64 ? NumberUtils.getFormatedBigNumber(stored / 64) + " x64" : "") + (stored >= 64 && stored % 64 != 0 ? " + " : "") + (stored % 64 != 0 ? stored % 64 : "");
         return NumberUtils.getFormatedBigNumber(stored);
     }
 
@@ -274,7 +273,7 @@ public class BlackHoleUnitTile extends BHTile<BlackHoleUnitTile> {
 
         private int amount;
 
-        public BlackHoleHandler(int amount){
+        public BlackHoleHandler(int amount) {
             this.amount = amount;
         }
 
@@ -296,7 +295,7 @@ public class BlackHoleUnitTile extends BHTile<BlackHoleUnitTile> {
         public ItemStack insertItem(int slot, @Nonnull ItemStack stack, boolean simulate) {
             if (isItemValid(slot, stack)) {
                 int inserted = Math.min(this.amount - stored, stack.getCount());
-                if (!simulate){
+                if (!simulate) {
                     setStack(stack);
                     setAmount(Math.min(stored + inserted, amount));
                 }
@@ -335,7 +334,7 @@ public class BlackHoleUnitTile extends BHTile<BlackHoleUnitTile> {
 
         @Override
         public boolean isItemValid(int slot, @Nonnull ItemStack stack) {
-            if (slot == 0){
+            if (slot == 0) {
                 ItemStack fl = blStack;
                 if (!filter.getFilterSlots()[slot].getFilter().isEmpty() && fl.isEmpty()) {
                     fl = filter.getFilterSlots()[slot].getFilter();

@@ -25,16 +25,15 @@ package com.buuz135.industrial.block.generator.mycelial;
 import com.buuz135.industrial.plugin.jei.generator.MycelialGeneratorRecipe;
 import com.buuz135.industrial.utils.IndustrialTags;
 import com.hrznstudio.titanium.component.inventory.SidedInventoryComponent;
-
-import net.minecraft.world.item.crafting.RecipeType;
-import net.minecraft.world.level.block.Blocks;
 import net.minecraft.data.recipes.ShapedRecipeBuilder;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.item.DyeColor;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.crafting.Ingredient;
-import net.minecraft.nbt.CompoundTag;
+import net.minecraft.world.item.crafting.RecipeType;
+import net.minecraft.world.level.block.Blocks;
 import net.minecraftforge.common.ForgeHooks;
 import net.minecraftforge.common.Tags;
 import net.minecraftforge.common.util.INBTSerializable;
@@ -81,12 +80,12 @@ public class FurnaceGeneratorType implements IMycelialGeneratorType {
         if (inputs.length > 0 && inputs[0] instanceof SidedInventoryComponent && ((SidedInventoryComponent<?>) inputs[0]).getStackInSlot(0).getCount() > 0) {
             ItemStack itemstack = ((SidedInventoryComponent) inputs[0]).getStackInSlot(0);
             int burnTime = ForgeHooks.getBurnTime(itemstack, RecipeType.SMELTING);
-            if (itemstack.hasContainerItem())
-                ((SidedInventoryComponent) inputs[0]).setStackInSlot(0, itemstack.getContainerItem());
+            if (itemstack.hasCraftingRemainingItem())
+                ((SidedInventoryComponent) inputs[0]).setStackInSlot(0, itemstack.getCraftingRemainingItem());
             else if (!itemstack.isEmpty()) {
                 itemstack.shrink(1);
                 if (itemstack.isEmpty()) {
-                    ((SidedInventoryComponent) inputs[0]).setStackInSlot(0, itemstack.getContainerItem());
+                    ((SidedInventoryComponent) inputs[0]).setStackInSlot(0, itemstack.getCraftingRemainingItem());
                 }
             }
             return Pair.of(burnTime, 80);
@@ -111,7 +110,7 @@ public class FurnaceGeneratorType implements IMycelialGeneratorType {
 
     @Override
     public List<MycelialGeneratorRecipe> getRecipes() {
-        return ForgeRegistries.ITEMS.getValues().stream().map(ItemStack::new).filter(stack -> ForgeHooks.getBurnTime(stack,RecipeType.SMELTING) > 0).map(item -> new MycelialGeneratorRecipe(Collections.singletonList(Collections.singletonList(Ingredient.of(item))), new ArrayList<>(), ForgeHooks.getBurnTime(item, RecipeType.SMELTING), 80)).collect(Collectors.toList());
+        return ForgeRegistries.ITEMS.getValues().stream().map(ItemStack::new).filter(stack -> ForgeHooks.getBurnTime(stack, RecipeType.SMELTING) > 0).map(item -> new MycelialGeneratorRecipe(Collections.singletonList(Collections.singletonList(Ingredient.of(item))), new ArrayList<>(), ForgeHooks.getBurnTime(item, RecipeType.SMELTING), 80)).collect(Collectors.toList());
     }
 
     @Override

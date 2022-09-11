@@ -21,8 +21,8 @@
  */
 package com.buuz135.industrial.proxy.block.filter;
 
-import net.minecraft.world.item.ItemStack;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.world.item.ItemStack;
 
 public abstract class RegulatorFilter<TYPE, CAP> {
 

@@ -219,7 +219,7 @@ public class ConveyorBlinkingUpgrade extends ConveyorUpgrade {
     public static class Factory extends ConveyorUpgradeFactory {
 
         public Factory() {
-            setRegistryName("blinking");
+            super("blinking");
         }
 
         @Override

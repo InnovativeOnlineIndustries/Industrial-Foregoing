@@ -26,17 +26,14 @@ import com.buuz135.industrial.block.IndustrialBlock;
 import com.buuz135.industrial.block.transportstorage.tile.BlackHoleControllerTile;
 import com.buuz135.industrial.module.ModuleTransportStorage;
 import com.buuz135.industrial.utils.IndustrialTags;
-import com.hrznstudio.titanium.api.IFactory;
 import com.hrznstudio.titanium.recipe.generator.TitaniumShapedRecipeBuilder;
-import net.minecraft.world.level.block.Blocks;
 import net.minecraft.data.recipes.FinishedRecipe;
 import net.minecraft.world.item.Items;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraftforge.common.Tags;
 
 import java.util.function.Consumer;
-
-import net.minecraft.world.level.block.entity.BlockEntityType;
-import net.minecraft.world.level.block.state.BlockBehaviour.Properties;
 
 public class BlackHoleControllerBlock extends IndustrialBlock<BlackHoleControllerTile> {
 

@@ -22,12 +22,6 @@
 
 package com.buuz135.industrial.plugin.jei.generator;
 
-import java.awt.Color;
-import java.text.DecimalFormat;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.stream.Collectors;
-
 import com.buuz135.industrial.block.generator.mycelial.IMycelialGeneratorType;
 import com.buuz135.industrial.utils.Reference;
 import com.hrznstudio.titanium.api.client.AssetTypes;
@@ -44,14 +38,17 @@ import mezz.jei.api.recipe.IFocusGroup;
 import mezz.jei.api.recipe.RecipeIngredientRole;
 import mezz.jei.api.recipe.RecipeType;
 import mezz.jei.api.recipe.category.IRecipeCategory;
-import org.apache.commons.lang3.tuple.Pair;
-
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.TranslatableComponent;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
+import org.apache.commons.lang3.tuple.Pair;
+
+import java.awt.*;
+import java.text.DecimalFormat;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.stream.Collectors;
 
 public class MycelialGeneratorCategory implements IRecipeCategory<MycelialGeneratorRecipe> {
 
@@ -68,28 +65,18 @@ public class MycelialGeneratorCategory implements IRecipeCategory<MycelialGenera
     }
 
     @Override
-    public ResourceLocation getUid() {
-        return recipeType.getUid();
-    }
-
-    @Override
-    public Class<? extends MycelialGeneratorRecipe> getRecipeClass() {
-        return recipeType.getRecipeClass();
-    }
-
-    @Override
     public RecipeType<MycelialGeneratorRecipe> getRecipeType() {
         return recipeType;
     }
 
     @Override
     public Component getTitle() {
-        return new TranslatableComponent("industrialforegoing.jei.category." + type.getName());
+        return Component.translatable("industrialforegoing.jei.category." + type.getName());
     }
 
     @Override
     public IDrawable getBackground() {
-        return guiHelper.createBlankDrawable(20*type.getInputs().length + 110,  Minecraft.getInstance().font.lineHeight * 3);
+        return guiHelper.createBlankDrawable(20 * type.getInputs().length + 110, Minecraft.getInstance().font.lineHeight * 3);
     }
 
     @Override
@@ -105,14 +92,14 @@ public class MycelialGeneratorCategory implements IRecipeCategory<MycelialGenera
     public void setRecipe(IRecipeLayoutBuilder builder, MycelialGeneratorRecipe recipe, IFocusGroup focuses) {
         for (int i = 0; i < type.getInputs().length; i++) {
             IMycelialGeneratorType.Input input = type.getInputs()[i];
-            if (input == IMycelialGeneratorType.Input.SLOT){
-                builder.addSlot(RecipeIngredientRole.INPUT, 20*i + 1, Minecraft.getInstance().font.lineHeight / 2 + 1)
-                    .addItemStacks(recipe.getInputItems().get(i).stream().map(ingredient ->Arrays.asList(ingredient.getItems())).flatMap(Collection::stream).collect(Collectors.toList()));
-            } else if (input == IMycelialGeneratorType.Input.TANK){
-                builder.addSlot(RecipeIngredientRole.INPUT, 20*i +3, 3 + Minecraft.getInstance().font.lineHeight / 2)
-                    .setFluidRenderer(1000, false, 12, 13)
-                    .setOverlay(smallTank, 0, 0)
-                    .addIngredients(ForgeTypes.FLUID_STACK, recipe.getFluidItems().get(i));
+            if (input == IMycelialGeneratorType.Input.SLOT) {
+                builder.addSlot(RecipeIngredientRole.INPUT, 20 * i + 1, Minecraft.getInstance().font.lineHeight / 2 + 1)
+                        .addItemStacks(recipe.getInputItems().get(i).stream().map(ingredient -> Arrays.asList(ingredient.getItems())).flatMap(Collection::stream).collect(Collectors.toList()));
+            } else if (input == IMycelialGeneratorType.Input.TANK) {
+                builder.addSlot(RecipeIngredientRole.INPUT, 20 * i + 3, 3 + Minecraft.getInstance().font.lineHeight / 2)
+                        .setFluidRenderer(1000, false, 12, 13)
+                        .setOverlay(smallTank, 0, 0)
+                        .addIngredients(ForgeTypes.FLUID_STACK, recipe.getFluidItems().get(i));
             }
         }
     }
@@ -120,16 +107,16 @@ public class MycelialGeneratorCategory implements IRecipeCategory<MycelialGenera
     @Override
     public void draw(MycelialGeneratorRecipe recipe, IRecipeSlotsView recipeSlotsView, PoseStack stack, double mouseX, double mouseY) {
         for (int i = 0; i < type.getInputs().length; i++) {
-            if (type.getInputs()[i] == IMycelialGeneratorType.Input.SLOT){
+            if (type.getInputs()[i] == IMycelialGeneratorType.Input.SLOT) {
                 int finalI = i;
-                SlotsScreenAddon.drawAsset(stack, Minecraft.getInstance().screen, DefaultAssetProvider.DEFAULT_PROVIDER, 20*i , Minecraft.getInstance().font.lineHeight / 2, 0, 0, 1, integer -> Pair.of(1,1), integer -> ItemStack.EMPTY, true, integer -> new Color(type.getInputColors()[finalI].getFireworkColor()), integer -> true);
-            } else if (type.getInputs()[i] == IMycelialGeneratorType.Input.TANK){
-                AssetUtil.drawAsset(stack, Minecraft.getInstance().screen, DefaultAssetProvider.DEFAULT_PROVIDER.getAsset(AssetTypes.TANK_SMALL), 20*i , Minecraft.getInstance().font.lineHeight / 2);
+                SlotsScreenAddon.drawAsset(stack, Minecraft.getInstance().screen, DefaultAssetProvider.DEFAULT_PROVIDER, 20 * i, Minecraft.getInstance().font.lineHeight / 2, 0, 0, 1, integer -> Pair.of(1, 1), integer -> ItemStack.EMPTY, true, integer -> new Color(type.getInputColors()[finalI].getFireworkColor()), integer -> true);
+            } else if (type.getInputs()[i] == IMycelialGeneratorType.Input.TANK) {
+                AssetUtil.drawAsset(stack, Minecraft.getInstance().screen, DefaultAssetProvider.DEFAULT_PROVIDER.getAsset(AssetTypes.TANK_SMALL), 20 * i, Minecraft.getInstance().font.lineHeight / 2);
             }
         }
-        int x = 20*type.getInputs().length + 3;
-        Minecraft.getInstance().font.draw(stack, ChatFormatting.DARK_GRAY + "Time: " + ChatFormatting.DARK_AQUA+ new DecimalFormat( ).format(recipe.getTicks() / 20D) +ChatFormatting.DARK_GRAY + " s", x, Minecraft.getInstance().font.lineHeight * 0, 0xFFFFFFFF);
-        Minecraft.getInstance().font.draw(stack, ChatFormatting.DARK_GRAY + "Production: " + ChatFormatting.DARK_AQUA+ recipe.getPowerTick() +ChatFormatting.DARK_GRAY + " FE/t", x, Minecraft.getInstance().font.lineHeight * 1, 0xFFFFFFFF);
-        Minecraft.getInstance().font.draw(stack, ChatFormatting.DARK_GRAY + "Total: " + ChatFormatting.DARK_AQUA+ new DecimalFormat( ).format(recipe.getTicks() * recipe.getPowerTick())+ ChatFormatting.DARK_GRAY + " FE", x, Minecraft.getInstance().font.lineHeight * 2, 0xFFFFFFFF);
+        int x = 20 * type.getInputs().length + 3;
+        Minecraft.getInstance().font.draw(stack, ChatFormatting.DARK_GRAY + "Time: " + ChatFormatting.DARK_AQUA + new DecimalFormat().format(recipe.getTicks() / 20D) + ChatFormatting.DARK_GRAY + " s", x, Minecraft.getInstance().font.lineHeight * 0, 0xFFFFFFFF);
+        Minecraft.getInstance().font.draw(stack, ChatFormatting.DARK_GRAY + "Production: " + ChatFormatting.DARK_AQUA + recipe.getPowerTick() + ChatFormatting.DARK_GRAY + " FE/t", x, Minecraft.getInstance().font.lineHeight * 1, 0xFFFFFFFF);
+        Minecraft.getInstance().font.draw(stack, ChatFormatting.DARK_GRAY + "Total: " + ChatFormatting.DARK_AQUA + new DecimalFormat().format(recipe.getTicks() * recipe.getPowerTick()) + ChatFormatting.DARK_GRAY + " FE", x, Minecraft.getInstance().font.lineHeight * 2, 0xFFFFFFFF);
     }
 }

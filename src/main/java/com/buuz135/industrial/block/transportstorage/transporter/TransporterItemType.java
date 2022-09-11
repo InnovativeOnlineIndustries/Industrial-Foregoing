@@ -36,18 +36,18 @@ import com.hrznstudio.titanium.recipe.generator.TitaniumShapedRecipeBuilder;
 import com.hrznstudio.titanium.util.TileUtil;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
+import com.mojang.math.Matrix4f;
+import com.mojang.math.Vector3f;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.block.model.ItemTransforms;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
 import net.minecraft.data.recipes.FinishedRecipe;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
-import net.minecraft.nbt.CompoundTag;
-import net.minecraft.core.Direction;
-import net.minecraft.resources.ResourceLocation;
-import net.minecraft.core.BlockPos;
-import com.mojang.math.Matrix4f;
-import com.mojang.math.Vector3f;
 import net.minecraft.world.level.Level;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
@@ -63,8 +63,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Set;
 import java.util.function.Consumer;
-
-import com.buuz135.industrial.api.transporter.TransporterTypeFactory.TransporterAction;
 
 public class TransporterItemType extends FilteredTransporterType<ItemStack, IItemHandler> {
 
@@ -118,14 +116,14 @@ public class TransporterItemType extends FilteredTransporterType<ItemStack, IIte
     public void update() {
         super.update();
         float speed = getSpeed();
-        if (!getWorld().isClientSide && getWorld().getGameTime() % (Math.max(1, 4 - speed)) == 0) {
+        if (!getLevel().isClientSide && getLevel().getGameTime() % (Math.max(1, 4 - speed)) == 0) {
             IBlockContainer container = getContainer();
             if (getAction() == TransporterTypeFactory.TransporterAction.EXTRACT && container instanceof TransporterTile) {
                 for (Direction direction : ((TransporterTile) container).getTransporterTypeMap().keySet()) {
                     TransporterType transporterType = ((TransporterTile) container).getTransporterTypeMap().get(direction);
                     if (transporterType instanceof TransporterItemType && transporterType.getAction() == TransporterTypeFactory.TransporterAction.INSERT) {
-                        TileUtil.getTileEntity(getWorld(), getPos().relative(this.getSide())).ifPresent(tileEntity -> tileEntity.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, getSide().getOpposite()).ifPresent(origin -> {
-                            TileUtil.getTileEntity(getWorld(), getPos().relative(direction)).ifPresent(otherTile -> otherTile.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, direction.getOpposite()).ifPresent(destination -> {
+                        TileUtil.getTileEntity(getLevel(), getPos().relative(this.getSide())).ifPresent(tileEntity -> tileEntity.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, getSide().getOpposite()).ifPresent(origin -> {
+                            TileUtil.getTileEntity(getLevel(), getPos().relative(direction)).ifPresent(otherTile -> otherTile.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, direction.getOpposite()).ifPresent(destination -> {
                                 if (extractSlot >= origin.getSlots() || origin.getStackInSlot(extractSlot).isEmpty()
                                         || !filter(this.getFilter(), this.isWhitelist(), origin.getStackInSlot(extractSlot), origin, false)
                                         || !filter(((TransporterItemType) transporterType).getFilter(), ((TransporterItemType) transporterType).isWhitelist(), origin.getStackInSlot(extractSlot), destination, ((TransporterItemType) transporterType).isRegulated()))
@@ -226,8 +224,8 @@ public class TransporterItemType extends FilteredTransporterType<ItemStack, IIte
                 float zOffset = -0.75f;
                 int alpha = 1;
                 stack.scale(0.25f, 0.25f, 0.25f);
-                float red = (int) Math.abs((ratio * FAR.getRed()) + ((1 - ratio) * CLOSE.getRed()))  / 256F;
-                float green = (int) Math.abs((ratio * FAR.getGreen()) + ((1 - ratio) * CLOSE.getGreen()))  / 256F;
+                float red = (int) Math.abs((ratio * FAR.getRed()) + ((1 - ratio) * CLOSE.getRed())) / 256F;
+                float green = (int) Math.abs((ratio * FAR.getGreen()) + ((1 - ratio) * CLOSE.getGreen())) / 256F;
                 float blue = (int) Math.abs((ratio * FAR.getBlue()) + ((1 - ratio) * CLOSE.getBlue())) / 256F;
                 Matrix4f matrix = stack.last().pose();
                 buffer1.vertex(matrix, pX2 + xOffset, yOffset, 0 + zOffset).color(red, green, blue, alpha).uv(u2, 0).endVertex();
@@ -242,7 +240,7 @@ public class TransporterItemType extends FilteredTransporterType<ItemStack, IIte
     public static class Factory extends TransporterTypeFactory {
 
         public Factory() {
-            setRegistryName("item");
+            super("item");
         }
 
         @Override

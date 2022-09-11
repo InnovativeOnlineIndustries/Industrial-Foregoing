@@ -26,19 +26,17 @@ import com.buuz135.industrial.block.tile.IndustrialProcessingTile;
 import com.buuz135.industrial.config.machine.resourceproduction.SporeRecreatorConfig;
 import com.buuz135.industrial.module.ModuleResourceProduction;
 import com.hrznstudio.titanium.annotation.Save;
-import com.hrznstudio.titanium.block.BasicTileBlock;
 import com.hrznstudio.titanium.component.energy.EnergyStorageComponent;
 import com.hrznstudio.titanium.component.fluid.FluidTankComponent;
 import com.hrznstudio.titanium.component.fluid.SidedFluidTankComponent;
 import com.hrznstudio.titanium.component.inventory.SidedInventoryComponent;
 import com.hrznstudio.titanium.util.ItemHandlerUtil;
-
 import net.minecraft.core.BlockPos;
-import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.level.material.Fluids;
 import net.minecraft.world.item.DyeColor;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.material.Fluids;
 import net.minecraftforge.common.Tags;
 import net.minecraftforge.fluids.capability.IFluidHandler;
 import net.minecraftforge.items.ItemHandlerHelper;
@@ -83,8 +81,8 @@ public class SporesRecreatorTile extends IndustrialProcessingTile<SporesRecreato
     @Override
     public boolean canIncrease() {
         return !ItemHandlerUtil.getFirstItem(input).isEmpty() && tank.getFluidAmount() >= 100
-                && (ItemHandlerUtil.getFirstItem(input).is(Tags.Items.MUSHROOMS) ?  tank.getFluid().getFluid().isSame(Fluids.WATER) : tank.getFluid().getFluid().isSame(Fluids.LAVA))
-        && ItemHandlerHelper.insertItem(output, new ItemStack(ItemHandlerUtil.getFirstItem(input).getItem(), 2), true).isEmpty();
+                && (ItemHandlerUtil.getFirstItem(input).is(Tags.Items.MUSHROOMS) ? tank.getFluid().getFluid().isSame(Fluids.WATER) : tank.getFluid().getFluid().isSame(Fluids.LAVA))
+                && ItemHandlerHelper.insertItem(output, new ItemStack(ItemHandlerUtil.getFirstItem(input).getItem(), 2), true).isEmpty();
     }
 
     @Override

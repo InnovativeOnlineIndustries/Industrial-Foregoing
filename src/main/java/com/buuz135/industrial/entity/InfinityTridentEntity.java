@@ -73,8 +73,8 @@ public class InfinityTridentEntity extends AbstractArrow {
         super((EntityType<? extends AbstractArrow>) ModuleTool.TRIDENT_ENTITY_TYPE.get(), thrower, worldIn);
         this.thrownStack = new ItemStack(ModuleTool.INFINITY_TRIDENT.get());
         this.thrownStack = thrownStackIn.copy();
-        this.entityData.set(LOYALTY_LEVEL, ((ItemInfinityTrident)ModuleTool.INFINITY_TRIDENT.get()).getCurrentLoyalty(thrownStack));
-        this.entityData.set(CHANNELING, ((ItemInfinityTrident)ModuleTool.INFINITY_TRIDENT.get()).getCurrentChanneling(thrownStack));
+        this.entityData.set(LOYALTY_LEVEL, ((ItemInfinityTrident) ModuleTool.INFINITY_TRIDENT.get()).getCurrentLoyalty(thrownStack));
+        this.entityData.set(CHANNELING, ((ItemInfinityTrident) ModuleTool.INFINITY_TRIDENT.get()).getCurrentChanneling(thrownStack));
         this.entityData.set(TIER, ItemInfinity.getSelectedTier(thrownStack).getRadius());
     }
 
@@ -106,15 +106,15 @@ public class InfinityTridentEntity extends AbstractArrow {
                     this.spawnAtLocation(this.getPickupItem(), 0.1F);
                 }
                 this.onClientRemoval();
-            } else if (loyaltyLevel > 0){
+            } else if (loyaltyLevel > 0) {
                 this.setNoPhysics(true);
                 Vec3 vector3d = new Vec3(entity.getX() - this.getX(), entity.getEyeY() - this.getY(), entity.getZ() - this.getZ());
-                this.setPosRaw(this.getX(), this.getY() + vector3d.y * 0.015D * (double)loyaltyLevel, this.getZ());
+                this.setPosRaw(this.getX(), this.getY() + vector3d.y * 0.015D * (double) loyaltyLevel, this.getZ());
                 if (this.level.isClientSide) {
                     this.yOld = this.getY();
                 }
 
-                double d0 = 0.05D * (double)loyaltyLevel;
+                double d0 = 0.05D * (double) loyaltyLevel;
                 this.setDeltaMovement(this.getDeltaMovement().scale(0.95D).add(vector3d.normalize().scale(d0)));
                 if (this.returningTicks == 0) {
                     this.playSound(SoundEvents.TRIDENT_RETURN, 10.0F, 1.0F);
@@ -131,11 +131,11 @@ public class InfinityTridentEntity extends AbstractArrow {
         Entity target = p_213868_1_.getEntity();
         float damageHit = (float) (DAMAGE + Math.pow(2, this.entityData.get(TIER))) * 0.5f;
         if (target instanceof LivingEntity) {
-            LivingEntity livingentity = (LivingEntity)target;
+            LivingEntity livingentity = (LivingEntity) target;
             damageHit += EnchantmentHelper.getDamageBonus(this.thrownStack, livingentity.getMobType());
         }
         Entity entity1 = this.getOwner();
-        DamageSource damagesource = DamageSource.trident(this, (Entity)(entity1 == null ? this : entity1));
+        DamageSource damagesource = DamageSource.trident(this, (Entity) (entity1 == null ? this : entity1));
         this.dealtDamage = true;
         SoundEvent soundevent = SoundEvents.TRIDENT_HIT;
         if (target.hurt(damagesource, damageHit)) {
@@ -144,10 +144,10 @@ public class InfinityTridentEntity extends AbstractArrow {
             }
 
             if (target instanceof LivingEntity) {
-                LivingEntity livingentity1 = (LivingEntity)target;
+                LivingEntity livingentity1 = (LivingEntity) target;
                 if (entity1 instanceof LivingEntity) {
                     EnchantmentHelper.doPostHurtEffects(livingentity1, entity1);
-                    EnchantmentHelper.doPostDamageEffects((LivingEntity)entity1, livingentity1);
+                    EnchantmentHelper.doPostDamageEffects((LivingEntity) entity1, livingentity1);
                 }
 
                 this.doPostHurtEffects(livingentity1);
@@ -158,11 +158,11 @@ public class InfinityTridentEntity extends AbstractArrow {
         float f1 = 1.0F;
         AABB area = new AABB(target.getX(), target.getY(), target.getZ(), target.getX(), target.getY(), target.getZ()).inflate(this.entityData.get(TIER));
         List<Mob> mobs = this.getCommandSenderWorld().getEntitiesOfClass(Mob.class, area);
-        if (entity1 instanceof Player){
+        if (entity1 instanceof Player) {
             mobs.forEach(mobEntity -> {
                 float damage = (float) (DAMAGE + Math.pow(2, this.entityData.get(TIER))) * 0.5f;
                 if (target instanceof LivingEntity) {
-                    LivingEntity livingentity = (LivingEntity)target;
+                    LivingEntity livingentity = (LivingEntity) target;
                     damage += EnchantmentHelper.getDamageBonus(this.thrownStack, livingentity.getMobType());
                 }
                 mobEntity.hurt(DamageSource.playerAttack((Player) entity1), damage);
@@ -178,7 +178,7 @@ public class InfinityTridentEntity extends AbstractArrow {
             if (this.level.canSeeSky(blockpos)) {
                 LightningBolt lightningboltentity = EntityType.LIGHTNING_BOLT.create(this.level);
                 lightningboltentity.moveTo(Vec3.atBottomCenterOf(blockpos));
-                lightningboltentity.setCause(entity1 instanceof ServerPlayer ? (ServerPlayer)entity1 : null);
+                lightningboltentity.setCause(entity1 instanceof ServerPlayer ? (ServerPlayer) entity1 : null);
                 this.level.addFreshEntity(lightningboltentity);
                 soundevent = SoundEvents.TRIDENT_THUNDER;
                 f1 = 5.0F;
@@ -186,7 +186,7 @@ public class InfinityTridentEntity extends AbstractArrow {
                     if (this.level.canSeeSky(mobEntity.blockPosition())) {
                         LightningBolt lightningboltentity1 = EntityType.LIGHTNING_BOLT.create(this.level);
                         lightningboltentity1.moveTo(Vec3.atBottomCenterOf(mobEntity.blockPosition()));
-                        lightningboltentity1.setCause(entity1 instanceof ServerPlayer ? (ServerPlayer)entity1 : null);
+                        lightningboltentity1.setCause(entity1 instanceof ServerPlayer ? (ServerPlayer) entity1 : null);
                         this.level.addFreshEntity(lightningboltentity1);
                     }
                 });
@@ -210,7 +210,7 @@ public class InfinityTridentEntity extends AbstractArrow {
     }
 
     @OnlyIn(Dist.CLIENT)
-    public boolean isEnchanted(){
+    public boolean isEnchanted() {
         return false;
     }
 
@@ -247,8 +247,8 @@ public class InfinityTridentEntity extends AbstractArrow {
         }
 
         this.dealtDamage = compound.getBoolean("DealtDamage");
-        this.entityData.set(LOYALTY_LEVEL, ((ItemInfinityTrident)ModuleTool.INFINITY_TRIDENT.get()).getCurrentLoyalty(thrownStack));
-        this.entityData.set(CHANNELING, ((ItemInfinityTrident)ModuleTool.INFINITY_TRIDENT.get()).getCurrentChanneling(thrownStack));
+        this.entityData.set(LOYALTY_LEVEL, ((ItemInfinityTrident) ModuleTool.INFINITY_TRIDENT.get()).getCurrentLoyalty(thrownStack));
+        this.entityData.set(CHANNELING, ((ItemInfinityTrident) ModuleTool.INFINITY_TRIDENT.get()).getCurrentChanneling(thrownStack));
         this.entityData.set(TIER, ItemInfinity.getSelectedTier(thrownStack).getRadius());
     }
 

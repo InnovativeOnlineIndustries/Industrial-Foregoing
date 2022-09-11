@@ -23,12 +23,12 @@
 package com.buuz135.industrial.block.generator.mycelial;
 
 import com.buuz135.industrial.plugin.jei.generator.MycelialGeneratorRecipe;
+import net.minecraft.core.BlockPos;
 import net.minecraft.data.recipes.ShapedRecipeBuilder;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.item.DyeColor;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.nbt.CompoundTag;
-import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.Level;
 import net.minecraftforge.common.util.INBTSerializable;
 import net.minecraftforge.fluids.FluidStack;
@@ -67,7 +67,7 @@ public interface IMycelialGeneratorType {
 
     ShapedRecipeBuilder addIngredients(ShapedRecipeBuilder recipeBuilder);
 
-    default void onTick(Level world, BlockPos pos){
+    default void onTick(Level world, BlockPos pos) {
 
     }
 

@@ -26,30 +26,30 @@ import com.buuz135.industrial.api.straw.StrawHandler;
 import com.buuz135.industrial.utils.IndustrialTags;
 import com.buuz135.industrial.utils.StrawUtils;
 import com.hrznstudio.titanium.recipe.generator.TitaniumShapedRecipeBuilder;
-import net.minecraft.world.InteractionResult;
-import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.entity.BlockEntity;
-import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.level.block.BucketPickup;
+import net.minecraft.ChatFormatting;
+import net.minecraft.core.BlockPos;
 import net.minecraft.data.recipes.FinishedRecipe;
+import net.minecraft.network.chat.Component;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.InteractionResult;
+import net.minecraft.world.InteractionResultHolder;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.level.material.Fluid;
-import net.minecraft.world.level.material.FluidState;
-import net.minecraft.world.level.material.Fluids;
 import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.UseAnim;
-import net.minecraft.world.InteractionResultHolder;
-import net.minecraft.world.InteractionHand;
-import net.minecraft.core.BlockPos;
-import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.level.ClipContext;
-import net.minecraft.world.phys.HitResult;
-import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.TextComponent;
-import net.minecraft.ChatFormatting;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.BucketPickup;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.material.Fluid;
+import net.minecraft.world.level.material.FluidState;
+import net.minecraft.world.level.material.Fluids;
+import net.minecraft.world.phys.BlockHitResult;
+import net.minecraft.world.phys.HitResult;
+import net.minecraftforge.common.capabilities.ForgeCapabilities;
 import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
@@ -84,8 +84,8 @@ public class ItemStraw extends IFCustomItem {
                 if (fluidState != Fluids.EMPTY.defaultFluidState() && block instanceof BucketPickup && fluidState.isSource()) {
                     StrawUtils.getStrawHandler(fluidState.getType()).ifPresent(handler -> {
                         ItemStack stack = ((BucketPickup) block).pickupBlock(world, pos, state);
-                        stack.getCapability(CapabilityFluidHandler.FLUID_HANDLER_ITEM_CAPABILITY).ifPresent(iFluidHandlerItem -> {
-                            if (!iFluidHandlerItem.getFluidInTank(0).isEmpty()){
+                        stack.getCapability(ForgeCapabilities.FLUID_HANDLER_ITEM).ifPresent(iFluidHandlerItem -> {
+                            if (!iFluidHandlerItem.getFluidInTank(0).isEmpty()) {
                                 handler.onDrink(world, pos, iFluidHandlerItem.getFluidInTank(0).getFluid(), player, false);
                             }
                         });
@@ -181,7 +181,7 @@ public class ItemStraw extends IFCustomItem {
     @Override
     public void addTooltipDetails(@Nullable Key key, ItemStack stack, List<Component> tooltip, boolean advanced) {
         super.addTooltipDetails(key, stack, tooltip, advanced);
-        tooltip.add(new TextComponent(ChatFormatting.GRAY + "\"The One Who Codes\""));
+        tooltip.add(Component.literal(ChatFormatting.GRAY + "\"The One Who Codes\""));
     }
 
     @Override

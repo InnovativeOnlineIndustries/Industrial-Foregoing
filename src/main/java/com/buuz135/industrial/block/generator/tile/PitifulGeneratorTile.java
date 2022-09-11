@@ -26,15 +26,12 @@ import com.buuz135.industrial.block.tile.IndustrialGeneratorTile;
 import com.buuz135.industrial.config.machine.generator.PitifulGeneratorConfig;
 import com.buuz135.industrial.module.ModuleGenerator;
 import com.hrznstudio.titanium.annotation.Save;
-import com.hrznstudio.titanium.block.BasicTileBlock;
 import com.hrznstudio.titanium.component.inventory.SidedInventoryComponent;
 import com.hrznstudio.titanium.component.progress.ProgressBarComponent;
-
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.item.DyeColor;
 import net.minecraft.world.item.crafting.RecipeType;
 import net.minecraft.world.level.block.state.BlockState;
-
 import net.minecraftforge.common.ForgeHooks;
 
 import javax.annotation.Nonnull;
@@ -66,7 +63,7 @@ public class PitifulGeneratorTile extends IndustrialGeneratorTile<PitifulGenerat
     @Override
     public boolean canStart() {
         return !fuel.getStackInSlot(0).isEmpty() && ForgeHooks.getBurnTime(fuel.getStackInSlot(0), RecipeType.SMELTING) != 0;
-}
+    }
 
     @Override
     public int getEnergyProducedEveryTick() {

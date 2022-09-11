@@ -238,7 +238,7 @@ public class ConveyorInsertionUpgrade extends ConveyorUpgrade {
     public static class Factory extends ConveyorUpgradeFactory {
 
         public Factory() {
-            setRegistryName("insertion");
+            super("insertion");
         }
 
         @Override

@@ -23,8 +23,8 @@
 package com.buuz135.industrial.api;
 
 import com.buuz135.industrial.api.conveyor.ConveyorUpgradeFactory;
-import net.minecraft.core.Direction;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
 import net.minecraft.world.level.Level;
 
 import java.util.ArrayList;

@@ -22,8 +22,6 @@
 
 package com.buuz135.industrial.plugin;
 
-import javax.annotation.Nullable;
-
 import com.buuz135.industrial.item.MeatFeederItem;
 import com.buuz135.industrial.item.infinity.item.ItemInfinityBackpack;
 import com.buuz135.industrial.plugin.curios.InfinityBackpackCurios;
@@ -34,21 +32,23 @@ import com.hrznstudio.titanium.event.handler.EventManager;
 import com.hrznstudio.titanium.network.locator.PlayerInventoryFinder;
 import com.hrznstudio.titanium.plugin.FeaturePluginInstance;
 import com.hrznstudio.titanium.plugin.PluginPhase;
+import net.minecraft.core.Direction;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.ICapabilityProvider;
 import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.event.AttachCapabilitiesEvent;
 import net.minecraftforge.fml.InterModComms;
 import net.minecraftforge.fml.event.lifecycle.InterModEnqueueEvent;
+import net.minecraftforge.registries.ForgeRegistries;
 import top.theillusivec4.curios.api.CuriosApi;
 import top.theillusivec4.curios.api.CuriosCapability;
 import top.theillusivec4.curios.api.SlotTypeMessage;
 import top.theillusivec4.curios.api.SlotTypePreset;
 
-import net.minecraft.core.Direction;
-import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.item.ItemStack;
+import javax.annotation.Nullable;
 
 @FeaturePlugin(value = "curios", type = FeaturePlugin.FeaturePluginType.MOD)
 public class CuriosPlugin implements FeaturePluginInstance {
@@ -60,9 +60,9 @@ public class CuriosPlugin implements FeaturePluginInstance {
         if (phase == PluginPhase.CONSTRUCTION) {
             EventManager.forgeGeneric(AttachCapabilitiesEvent.class, ItemStack.class).process(event -> {
                 AttachCapabilitiesEvent<ItemStack> stackEvent = (AttachCapabilitiesEvent<ItemStack>) event;
-                ItemStack stack =  stackEvent.getObject();
-                if (stack.getItem() instanceof MeatFeederItem){
-                    stackEvent.addCapability(new ResourceLocation(Reference.MOD_ID, stack.getItem().getRegistryName().getPath() + "_curios"), new ICapabilityProvider() {
+                ItemStack stack = stackEvent.getObject();
+                if (stack.getItem() instanceof MeatFeederItem) {
+                    stackEvent.addCapability(new ResourceLocation(Reference.MOD_ID, ForgeRegistries.ITEMS.getKey(stack.getItem()).getPath() + "_curios"), new ICapabilityProvider() {
                         @Override
                         public <T> LazyOptional<T> getCapability(Capability<T> cap, @Nullable Direction side) {
                             if (cap == CuriosCapability.ITEM) return LazyOptional.of(MeatFeedCurios::new).cast();
@@ -70,11 +70,12 @@ public class CuriosPlugin implements FeaturePluginInstance {
                         }
                     });
                 }
-                if (stack.getItem() instanceof ItemInfinityBackpack){
-                    stackEvent.addCapability(new ResourceLocation(Reference.MOD_ID, stack.getItem().getRegistryName().getPath() + "_curios"), new ICapabilityProvider() {
+                if (stack.getItem() instanceof ItemInfinityBackpack) {
+                    stackEvent.addCapability(new ResourceLocation(Reference.MOD_ID, ForgeRegistries.ITEMS.getKey(stack.getItem()).getPath() + "_curios"), new ICapabilityProvider() {
                         @Override
                         public <T> LazyOptional<T> getCapability(Capability<T> cap, @Nullable Direction side) {
-                            if (cap == CuriosCapability.ITEM) return LazyOptional.of(InfinityBackpackCurios::new).cast();
+                            if (cap == CuriosCapability.ITEM)
+                                return LazyOptional.of(InfinityBackpackCurios::new).cast();
                             return LazyOptional.empty();
                         }
                     });
@@ -88,11 +89,11 @@ public class CuriosPlugin implements FeaturePluginInstance {
         }
     }
 
-    public static ItemStack getStack(LivingEntity entity, SlotTypePreset preset, int index){
+    public static ItemStack getStack(LivingEntity entity, SlotTypePreset preset, int index) {
         return CuriosApi.getCuriosHelper().getCuriosHandler(entity).map(iCuriosItemHandler -> iCuriosItemHandler.getStacksHandler(preset.getIdentifier())).map(iCurioStacksHandler -> iCurioStacksHandler.get().getStacks().getStackInSlot(index)).orElse(ItemStack.EMPTY);
     }
 
-    public static void setStack(LivingEntity entity, SlotTypePreset preset, int index, ItemStack stack){
+    public static void setStack(LivingEntity entity, SlotTypePreset preset, int index, ItemStack stack) {
         CuriosApi.getCuriosHelper().getCuriosHandler(entity).map(iCuriosItemHandler -> iCuriosItemHandler.getStacksHandler(preset.getIdentifier())).ifPresent(iCurioStacksHandler -> iCurioStacksHandler.get().getStacks().setStackInSlot(index, stack));
     }
 

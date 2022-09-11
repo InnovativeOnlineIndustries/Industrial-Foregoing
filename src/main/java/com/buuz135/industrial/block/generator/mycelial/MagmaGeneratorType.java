@@ -27,13 +27,13 @@ import com.buuz135.industrial.utils.IndustrialTags;
 import com.hrznstudio.titanium.component.fluid.SidedFluidTankComponent;
 import com.hrznstudio.titanium.component.inventory.SidedInventoryComponent;
 import net.minecraft.data.recipes.ShapedRecipeBuilder;
-import net.minecraft.world.level.material.Fluids;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.item.DyeColor;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.crafting.Ingredient;
-import net.minecraft.nbt.CompoundTag;
+import net.minecraft.world.level.material.Fluids;
 import net.minecraftforge.common.Tags;
 import net.minecraftforge.common.util.INBTSerializable;
 import net.minecraftforge.fluids.FluidStack;
@@ -46,7 +46,7 @@ import java.util.List;
 import java.util.function.BiPredicate;
 import java.util.function.Predicate;
 
-public class MagmaGeneratorType implements IMycelialGeneratorType{
+public class MagmaGeneratorType implements IMycelialGeneratorType {
 
     @Override
     public String getName() {
@@ -75,18 +75,18 @@ public class MagmaGeneratorType implements IMycelialGeneratorType{
 
     @Override
     public Pair<Integer, Integer> getTimeAndPowerGeneration(INBTSerializable<CompoundTag>[] inputs) {
-        if (inputs.length >= 2 && inputs[0] instanceof SidedFluidTankComponent && inputs[1] instanceof SidedInventoryComponent){
-            if (((SidedFluidTankComponent<?>) inputs[0]).getFluidAmount() >= 250){
+        if (inputs.length >= 2 && inputs[0] instanceof SidedFluidTankComponent && inputs[1] instanceof SidedInventoryComponent) {
+            if (((SidedFluidTankComponent<?>) inputs[0]).getFluidAmount() >= 250) {
                 ((SidedFluidTankComponent<?>) inputs[0]).drainForced(250, IFluidHandler.FluidAction.EXECUTE);
                 boolean hasRedstone = false;
-                if (((SidedInventoryComponent<?>) inputs[1]).getStackInSlot(0).getCount() > 0){
+                if (((SidedInventoryComponent<?>) inputs[1]).getStackInSlot(0).getCount() > 0) {
                     ((SidedInventoryComponent<?>) inputs[1]).getStackInSlot(0).shrink(1);
                     hasRedstone = true;
                 }
                 return Pair.of(2 * 250, hasRedstone ? 100 : 50);
             }
         }
-        return Pair.of(0,80);
+        return Pair.of(0, 80);
     }
 
     @Override

@@ -30,7 +30,6 @@ import com.buuz135.industrial.utils.IndustrialTags;
 import com.hrznstudio.titanium.annotation.Save;
 import com.hrznstudio.titanium.api.IFactory;
 import com.hrznstudio.titanium.api.client.IScreenAddon;
-import com.hrznstudio.titanium.block.BasicTileBlock;
 import com.hrznstudio.titanium.client.screen.addon.ProgressBarScreenAddon;
 import com.hrznstudio.titanium.component.bundle.LockableInventoryBundle;
 import com.hrznstudio.titanium.component.energy.EnergyStorageComponent;
@@ -41,9 +40,7 @@ import com.hrznstudio.titanium.component.progress.ProgressBarComponent;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.TextComponent;
 import net.minecraft.tags.ItemTags;
-import net.minecraft.tags.Tag;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.DyeColor;
 import net.minecraft.world.item.Item;
@@ -93,7 +90,7 @@ public class BioReactorTile extends IndustrialWorkingTile<BioReactorTile> {
                 setInputFilter((stack, integer) -> canInsert(integer - 2, stack)).
                 setOutputFilter((stack, integer) -> false).
                 setComponentHarness(this)
-        , 136, 84, false));
+                , 136, 84, false));
         addTank(biofuel = (SidedFluidTankComponent<BioReactorTile>) new SidedFluidTankComponent<BioReactorTile>("biofuel", BioReactorConfig.maxBioFuelTankStorage, 74 + 18 * 3, 20, 2).
                 setColor(DyeColor.PURPLE).
                 setComponentHarness(this).
@@ -107,7 +104,7 @@ public class BioReactorTile extends IndustrialWorkingTile<BioReactorTile> {
                         return Collections.singletonList(() -> new ProgressBarScreenAddon<BioReactorTile>(bar.getPosX(), bar.getPosY(), this) {
                             @Override
                             public List<Component> getTooltipLines() {
-                                return Arrays.asList(new TextComponent(ChatFormatting.GOLD + "Efficiency: " + ChatFormatting.WHITE + (int) ((getEfficiency() / 9D) * 100) + ChatFormatting.DARK_AQUA + "%"));
+                                return Arrays.asList(Component.literal(ChatFormatting.GOLD + "Efficiency: " + ChatFormatting.WHITE + (int) ((getEfficiency() / 9D) * 100) + ChatFormatting.DARK_AQUA + "%"));
                             }
                         });
                     }

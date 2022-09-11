@@ -57,7 +57,7 @@ public class InfinityBackpackCurios implements ICurio, ICurioRenderer {
     public void curioTick(SlotContext slotContext) {
         LivingEntity livingEntity = slotContext.entity();
         ItemStack stack = CuriosPlugin.getStack(livingEntity, SlotTypePreset.BACK, 0);
-        if (stack.getItem() instanceof ItemInfinityBackpack){
+        if (stack.getItem() instanceof ItemInfinityBackpack) {
             ModuleTool.INFINITY_BACKPACK.get().inventoryTick(stack, livingEntity.level, livingEntity, 0, false);
         }
     }

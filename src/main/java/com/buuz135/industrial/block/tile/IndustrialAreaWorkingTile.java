@@ -28,12 +28,12 @@ import com.buuz135.industrial.utils.BlockUtils;
 import com.hrznstudio.titanium.annotation.Save;
 import com.hrznstudio.titanium.api.IFactory;
 import com.hrznstudio.titanium.api.client.IScreenAddon;
-import com.hrznstudio.titanium.block.BasicTileBlock;
 import com.hrznstudio.titanium.client.screen.addon.StateButtonAddon;
 import com.hrznstudio.titanium.client.screen.addon.StateButtonInfo;
 import com.hrznstudio.titanium.component.button.ButtonComponent;
 import com.hrznstudio.titanium.item.AugmentWrapper;
 import com.mojang.math.Vector3f;
+import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.DustParticleOptions;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.item.ItemStack;
@@ -42,7 +42,6 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.AABB;
-import net.minecraft.core.BlockPos;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
@@ -103,8 +102,8 @@ public abstract class IndustrialAreaWorkingTile<T extends IndustrialAreaWorkingT
 
     public void increasePointer() {
         BlockPos pointed = getPointedBlockPos();
-        if (this.level instanceof ServerLevel){
-            ((ServerLevel) this.level).sendParticles(new DustParticleOptions(new Vector3f(Math.abs(this.worldPosition.getX() % 255) / 256f, Math.abs(this.worldPosition.getY() % 255)/ 256f, Math.abs(this.worldPosition.getZ() % 255)/ 256f), 1f), pointed.getX() + 0.5, pointed.getY() +1, pointed.getZ()+0.5, 1,0,0,0,0);
+        if (this.level instanceof ServerLevel) {
+            ((ServerLevel) this.level).sendParticles(new DustParticleOptions(new Vector3f(Math.abs(this.worldPosition.getX() % 255) / 256f, Math.abs(this.worldPosition.getY() % 255) / 256f, Math.abs(this.worldPosition.getZ() % 255) / 256f), 1f), pointed.getX() + 0.5, pointed.getY() + 1, pointed.getZ() + 0.5, 1, 0, 0, 0, 0);
         }
         ++pointer;
     }
@@ -133,8 +132,8 @@ public abstract class IndustrialAreaWorkingTile<T extends IndustrialAreaWorkingT
     public void serverTick(Level level, BlockPos pos, BlockState state, T blockEntity) {
         super.serverTick(level, pos, state, blockEntity);
         BlockPos pointed = getPointedBlockPos();
-        if (level instanceof ServerLevel && level.getGameTime() % 5 == 0 && false){
-            ((ServerLevel) level).sendParticles(new DustParticleOptions(new Vector3f(Math.abs(pos.getX() % 255) / 256f, Math.abs(pos.getY() % 255)/ 256f, Math.abs(pos.getZ() % 255)/ 256f), 1f), pointed.getX() + 0.5, pointed.getY() +1, pointed.getZ()+0.5, 1,0,0,0,0);
+        if (level instanceof ServerLevel && level.getGameTime() % 5 == 0 && false) {
+            ((ServerLevel) level).sendParticles(new DustParticleOptions(new Vector3f(Math.abs(pos.getX() % 255) / 256f, Math.abs(pos.getY() % 255) / 256f, Math.abs(pos.getZ() % 255) / 256f), 1f), pointed.getX() + 0.5, pointed.getY() + 1, pointed.getZ() + 0.5, 1, 0, 0, 0, 0);
         }
     }
 }

@@ -23,7 +23,7 @@
 package com.buuz135.industrial.item.infinity;
 
 import net.minecraft.ChatFormatting;
-import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.network.chat.Component;
 import org.apache.commons.lang3.tuple.Pair;
 
 public enum InfinityTier {
@@ -60,7 +60,7 @@ public enum InfinityTier {
     }
 
     public String getLocalizedName() {
-        return new TranslatableComponent("text.industrialforegoing.tooltip.infinitydrill." + name).getString();
+        return Component.translatable("text.industrialforegoing.tooltip.infinitydrill." + name).getString();
     }
 
     public String getName() {

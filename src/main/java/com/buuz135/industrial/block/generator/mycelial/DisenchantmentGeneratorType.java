@@ -24,12 +24,13 @@ package com.buuz135.industrial.block.generator.mycelial;
 import com.buuz135.industrial.plugin.jei.generator.MycelialGeneratorRecipe;
 import com.buuz135.industrial.utils.IndustrialTags;
 import com.hrznstudio.titanium.component.inventory.SidedInventoryComponent;
-import net.minecraft.world.level.block.Blocks;
 import net.minecraft.data.recipes.ShapedRecipeBuilder;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.world.item.*;
+import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraft.world.item.enchantment.EnchantmentHelper;
-import net.minecraft.world.item.crafting.Ingredient;
-import net.minecraft.nbt.CompoundTag;
+import net.minecraft.world.level.block.Blocks;
 import net.minecraftforge.common.util.INBTSerializable;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.registries.ForgeRegistries;
@@ -39,13 +40,7 @@ import java.util.*;
 import java.util.function.BiPredicate;
 import java.util.function.Predicate;
 
-import net.minecraft.world.item.DyeColor;
-import net.minecraft.world.item.EnchantedBookItem;
-import net.minecraft.world.item.Item;
-import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.Items;
-
-public class DisenchantmentGeneratorType implements IMycelialGeneratorType{
+public class DisenchantmentGeneratorType implements IMycelialGeneratorType {
 
     @Override
     public String getName() {
@@ -77,7 +72,7 @@ public class DisenchantmentGeneratorType implements IMycelialGeneratorType{
         if (inputs.length > 0 && inputs[0] instanceof SidedInventoryComponent && ((SidedInventoryComponent<?>) inputs[0]).getStackInSlot(0).getCount() > 0) {
             ItemStack itemstack = ((SidedInventoryComponent) inputs[0]).getStackInSlot(0).copy();
             ((SidedInventoryComponent) inputs[0]).setStackInSlot(0, ItemStack.EMPTY);
-            if (itemstack.getItem().equals(Items.ENCHANTED_BOOK)){
+            if (itemstack.getItem().equals(Items.ENCHANTED_BOOK)) {
                 ((SidedInventoryComponent) inputs[1]).setStackInSlot(0, new ItemStack(Items.BOOK));
             } else {
                 ((SidedInventoryComponent) inputs[1]).setStackInSlot(0, new ItemStack(itemstack.getItem()));
@@ -112,14 +107,14 @@ public class DisenchantmentGeneratorType implements IMycelialGeneratorType{
                 ItemStack book = new ItemStack(Items.ENCHANTED_BOOK);
                 EnchantmentHelper.setEnchantments(map, book);
                 Pair<Integer, Integer> power = calculate(book);
-                recipes.add(new MycelialGeneratorRecipe(Arrays.asList(Collections.singletonList(Ingredient.of(book)),Collections.singletonList(Ingredient.of(ItemStack.EMPTY))), new ArrayList<>(), power.getLeft(), power.getRight()));
+                recipes.add(new MycelialGeneratorRecipe(Arrays.asList(Collections.singletonList(Ingredient.of(book)), Collections.singletonList(Ingredient.of(ItemStack.EMPTY))), new ArrayList<>(), power.getLeft(), power.getRight()));
             }
         }
         return recipes;
     }
 
-    private Pair<Integer,Integer> calculate(ItemStack stack){
-        Map<Enchantment, Integer> ench =  EnchantmentHelper.getEnchantments(stack);
+    private Pair<Integer, Integer> calculate(ItemStack stack) {
+        Map<Enchantment, Integer> ench = EnchantmentHelper.getEnchantments(stack);
         int rarity = 0;
         double level = 0;
         for (Map.Entry<Enchantment, Integer> enchEntry : ench.entrySet()) {

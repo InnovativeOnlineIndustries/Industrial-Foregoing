@@ -91,18 +91,6 @@ public class IndustrialSerializableProvider extends TitaniumSerializableProvider
                         new Ingredient.TagValue(Tags.Items.INGOTS_GOLD)
                 },
                 new FluidStack(ModuleCore.PINK_SLIME.getSourceFluid().get(), 500), 300, new ItemStack(ModuleCore.ADVANCED.get()), FluidStack.EMPTY);
-        new DissolutionChamberRecipe(new ResourceLocation(Reference.MOD_ID, "dark_glass"),
-                new Ingredient.Value[]{
-                        new Ingredient.ItemValue(new ItemStack(Blocks.SOUL_SAND)),
-                        new Ingredient.ItemValue(new ItemStack(Blocks.SOUL_SAND)),
-                        new Ingredient.ItemValue(new ItemStack(Blocks.SOUL_SAND)),
-                        new Ingredient.ItemValue(new ItemStack(Blocks.SOUL_SAND)),
-                        new Ingredient.ItemValue(new ItemStack(Blocks.SOUL_SAND)),
-                        new Ingredient.ItemValue(new ItemStack(Blocks.SOUL_SAND)),
-                        new Ingredient.ItemValue(new ItemStack(Blocks.SOUL_SAND)),
-                        new Ingredient.ItemValue(new ItemStack(Blocks.SOUL_SAND)),
-                },
-                new FluidStack(ModuleCore.LATEX.getSourceFluid().get(), 100), 100, new ItemStack(ModuleCore.DARK_GLASS.get(), 8), FluidStack.EMPTY);
         new DissolutionChamberRecipe(new ResourceLocation(Reference.MOD_ID, "supreme_machine_frame"),
                 new Ingredient.Value[]{
                         new Ingredient.TagValue(IndustrialTags.Items.PLASTIC),

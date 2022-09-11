@@ -48,13 +48,12 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.AABB;
-import net.minecraftforge.client.model.ModelDataManager;
-import net.minecraftforge.client.model.data.IModelData;
-import net.minecraftforge.client.model.data.ModelDataMap;
+import net.minecraftforge.client.model.data.ModelData;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.capability.IFluidHandler;
 import net.minecraftforge.fluids.capability.templates.FluidTank;
 import net.minecraftforge.network.NetworkHooks;
+import net.minecraftforge.registries.ForgeRegistries;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -128,7 +127,7 @@ public class ConveyorTile extends ActiveTile<ConveyorTile> implements IBlockCont
         if (!hasUpgrade(facing)) {
             upgradeMap.put(facing, upgrade.create(this, facing));
             requestSync();
-            if (level.isClientSide) ModelDataManager.requestModelDataRefresh(this);
+            if (level.isClientSide) this.getLevel().getModelDataManager().requestRefresh(this);
         }
     }
 
@@ -146,7 +145,7 @@ public class ConveyorTile extends ActiveTile<ConveyorTile> implements IBlockCont
             upgradeMap.get(facing).onUpgradeRemoved();
             upgradeMap.remove(facing);
             requestSync();
-            if (level.isClientSide) ModelDataManager.requestModelDataRefresh(this);
+            if (level.isClientSide) this.getLevel().getModelDataManager().requestRefresh(this);
         }
     }
 
@@ -210,7 +209,7 @@ public class ConveyorTile extends ActiveTile<ConveyorTile> implements IBlockCont
             }
             CompoundTag upgradeTag = new CompoundTag();
             ConveyorUpgrade upgrade = upgradeMap.get(facing);
-            upgradeTag.putString("factory", upgrade.getFactory().getRegistryName().toString());
+            upgradeTag.putString("factory", ForgeRegistries.ITEMS.getKey(upgrade.getFactory().getUpgradeItem()).toString());
             CompoundTag customNBT = upgrade.serializeNBT();
             if (customNBT != null)
                 upgradeTag.put("customNBT", customNBT);
@@ -236,7 +235,7 @@ public class ConveyorTile extends ActiveTile<ConveyorTile> implements IBlockCont
                 CompoundTag upgradeTag = upgradesTag.getCompound(facing.getSerializedName());
                 ConveyorUpgradeFactory factory = null;
                 for (ConveyorUpgradeFactory conveyorUpgradeFactory : ConveyorUpgradeFactory.FACTORIES) {
-                    if (conveyorUpgradeFactory.getRegistryName().equals(new ResourceLocation(upgradeTag.getString("factory")))) {
+                    if (ForgeRegistries.ITEMS.getKey(conveyorUpgradeFactory.getUpgradeItem()).equals(new ResourceLocation(upgradeTag.getString("factory")))) {
                         factory = conveyorUpgradeFactory;
                         break;
                     }
@@ -341,12 +340,12 @@ public class ConveyorTile extends ActiveTile<ConveyorTile> implements IBlockCont
     @Nullable
     @Override
     public AbstractContainerMenu createMenu(int menu, Inventory inventoryPlayer, Player entityPlayer) {
-        return new ContainerConveyor(menu, this, ((ConveyorBlock)ModuleTransportStorage.CONVEYOR.getLeft().get()).getFacingUpgradeHit(this.level.getBlockState(this.worldPosition), this.level, this.worldPosition, entityPlayer), inventoryPlayer);
+        return new ContainerConveyor(menu, this, ((ConveyorBlock) ModuleTransportStorage.CONVEYOR.getLeft().get()).getFacingUpgradeHit(this.level.getBlockState(this.worldPosition), this.level, this.worldPosition, entityPlayer), inventoryPlayer);
     }
 
     public void openGui(Player player, Direction facing) {
         if (player instanceof ServerPlayer) {
-            NetworkHooks.openGui((ServerPlayer) player, this, packetBuffer -> {
+            NetworkHooks.openScreen((ServerPlayer) player, this, packetBuffer -> {
                 packetBuffer.writeBlockPos(worldPosition);
                 packetBuffer.writeEnum(facing);
             });
@@ -355,8 +354,8 @@ public class ConveyorTile extends ActiveTile<ConveyorTile> implements IBlockCont
 
     @Nonnull
     @Override
-    public IModelData getModelData() {
-        return new ModelDataMap.Builder().withInitial(ConveyorModelData.UPGRADE_PROPERTY, new ConveyorModelData(new HashMap<>(upgradeMap))).build();
+    public ModelData getModelData() {
+        return ModelData.builder().with(ConveyorModelData.UPGRADE_PROPERTY, new ConveyorModelData(new HashMap<>(upgradeMap))).build();
     }
 
 }

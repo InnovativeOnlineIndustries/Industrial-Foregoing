@@ -28,12 +28,12 @@ import com.hrznstudio.titanium.container.BasicAddonContainer;
 import com.hrznstudio.titanium.container.impl.DisableableSlot;
 import com.hrznstudio.titanium.network.locator.LocatorInstance;
 import com.hrznstudio.titanium.network.locator.instance.InventoryStackLocatorInstance;
-import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.inventory.ContainerLevelAccess;
 import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.inventory.ContainerLevelAccess;
 
 public class BackpackContainer extends BasicAddonContainer {
 
@@ -44,11 +44,11 @@ public class BackpackContainer extends BasicAddonContainer {
         super(provider, locatorInstance, worldPosCallable, playerInventory, containerId);
         this.id = id;
         this.instance = locatorInstance;
-        if (this.instance instanceof InventoryStackLocatorInstance stackLocatorInstance){
+        if (this.instance instanceof InventoryStackLocatorInstance stackLocatorInstance) {
             for (Slot slot : this.slots) {
-                if (slot.getSlotIndex() == stackLocatorInstance.getInventorySlot() && slot instanceof DisableableSlot){
+                if (slot.getSlotIndex() == stackLocatorInstance.getInventorySlot() && slot instanceof DisableableSlot) {
                     ItemStack dd = slot.getItem();
-                    ((DisableableSlot)slot).setIsDisabled(() -> true);
+                    ((DisableableSlot) slot).setIsDisabled(() -> true);
                 }
             }
 
@@ -64,10 +64,11 @@ public class BackpackContainer extends BasicAddonContainer {
             ItemStack itemstack1 = slot.getItem();
             itemstack = itemstack1.copy();
             for (int pos = 0; pos < handler.getSlots(); pos++) {
-                if (!handler.getStackInSlot(pos).isEmpty() && handler.isItemValid(pos, itemstack1)){
+                if (!handler.getStackInSlot(pos).isEmpty() && handler.isItemValid(pos, itemstack1)) {
                     ItemStack result = handler.insertItem(pos, itemstack1, false);
                     slot.set(result);
-                    if (player instanceof ServerPlayer) ItemInfinityBackpack.sync(player.level, id , (ServerPlayer) player);
+                    if (player instanceof ServerPlayer)
+                        ItemInfinityBackpack.sync(player.level, id, (ServerPlayer) player);
                     broadcastChanges();
                     break;
                     //return itemstack;

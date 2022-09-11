@@ -22,34 +22,44 @@
 
 package com.buuz135.industrial.fluid;
 
-import com.buuz135.industrial.item.OreBucketItem;
 import com.hrznstudio.titanium.module.DeferredRegistryHelper;
 import net.minecraft.world.item.BucketItem;
+import net.minecraft.world.item.CreativeModeTab;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.Items;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.LiquidBlock;
 import net.minecraft.world.level.material.FlowingFluid;
-import net.minecraft.world.level.material.Material;
 import net.minecraft.world.level.material.Fluid;
-import net.minecraft.world.item.Item;
-import net.minecraft.world.item.CreativeModeTab;
-import net.minecraft.world.item.Items;
-import net.minecraftforge.fluids.FluidAttributes;
+import net.minecraft.world.level.material.Material;
+import net.minecraftforge.client.extensions.common.IClientFluidTypeExtensions;
+import net.minecraftforge.fluids.FluidType;
+import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.RegistryObject;
 
-public class OreFluidInstance extends net.minecraftforge.registries.ForgeRegistryEntry<OreFluidInstance> {
+import java.util.function.Consumer;
 
+public class OreFluidInstance {
+
+    private RegistryObject<FluidType> fluidType;
     private RegistryObject<Fluid> flowingFluid;
     private RegistryObject<Fluid> sourceFluid;
     private RegistryObject<Item> bucketFluid;
     private RegistryObject<Block> blockFluid;
     private String fluid;
 
-    public OreFluidInstance(DeferredRegistryHelper helper, String fluid, FluidAttributes.Builder attributes, CreativeModeTab group) {
+    public OreFluidInstance(DeferredRegistryHelper helper, String fluid, FluidType.Properties properties, IClientFluidTypeExtensions renderProperties, CreativeModeTab group) {
         this.fluid = fluid;
-        this.sourceFluid = helper.registerGeneric(Fluid.class, fluid, () -> new OreFluid.Source(attributes, this));
-        this.flowingFluid = helper.registerGeneric(Fluid.class, fluid + "_flowing", () ->  new OreFluid.Flowing(attributes, this));
-        this.bucketFluid = helper.registerGeneric(Item.class, fluid + "_bucket", () -> new BucketItem(this.sourceFluid, new Item.Properties().craftRemainder(Items.BUCKET).stacksTo(1).tab(group)));
-        this.blockFluid = helper.registerGeneric(Block.class, fluid, () -> new LiquidBlock(() -> (FlowingFluid) sourceFluid.get(), Block.Properties.of(Material.WATER).noCollission().strength(100.0F).noDrops()));
+        this.sourceFluid = helper.registerGeneric(ForgeRegistries.FLUIDS.getRegistryKey(), fluid, () -> new OreFluid.Source(this));
+        this.flowingFluid = helper.registerGeneric(ForgeRegistries.FLUIDS.getRegistryKey(), fluid + "_flowing", () -> new OreFluid.Flowing(this));
+        this.bucketFluid = helper.registerGeneric(ForgeRegistries.ITEMS.getRegistryKey(), fluid + "_bucket", () -> new BucketItem(this.sourceFluid, new Item.Properties().craftRemainder(Items.BUCKET).stacksTo(1).tab(group)));
+        this.blockFluid = helper.registerGeneric(ForgeRegistries.BLOCKS.getRegistryKey(), fluid, () -> new LiquidBlock(() -> (FlowingFluid) sourceFluid.get(), Block.Properties.of(Material.WATER).noCollission().strength(100.0F)));
+        this.fluidType = helper.registerGeneric(ForgeRegistries.Keys.FLUID_TYPES, fluid, () -> new OreTitaniumFluidType(properties) {
+            @Override
+            public void initializeClient(Consumer<IClientFluidTypeExtensions> consumer) {
+                consumer.accept(renderProperties);
+            }
+        });
     }
 
     public Fluid getFlowingFluid() {
@@ -70,5 +80,9 @@ public class OreFluidInstance extends net.minecraftforge.registries.ForgeRegistr
 
     public String getFluid() {
         return fluid;
+    }
+
+    public RegistryObject<FluidType> getFluidType() {
+        return fluidType;
     }
 }

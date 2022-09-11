@@ -22,12 +22,12 @@
 
 package com.buuz135.industrial.utils;
 
-import net.minecraft.world.level.material.Fluid;
-import net.minecraft.util.FastColor;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.util.FastColor;
+import net.minecraft.world.level.material.Fluid;
+import net.minecraftforge.client.extensions.common.IClientFluidTypeExtensions;
 import net.minecraftforge.fluids.FluidStack;
 
-import java.util.HashMap;
 import java.util.concurrent.ConcurrentHashMap;
 
 public class FluidUtils {
@@ -37,15 +37,17 @@ public class FluidUtils {
     public static ConcurrentHashMap<ResourceLocation, Integer> colorCache = new ConcurrentHashMap<>();
 
     public static int getFluidColor(FluidStack stack) {
-        ResourceLocation location = stack.getFluid().getAttributes().getStillTexture(stack);
-        int tint = stack.getFluid().getAttributes().getColor(stack);
+        IClientFluidTypeExtensions renderProperties = IClientFluidTypeExtensions.of(stack.getFluid());
+        ResourceLocation location = renderProperties.getStillTexture(stack);
+        int tint = renderProperties.getTintColor(stack);
         int textureColor = colorCache.computeIfAbsent(location, ColorUtils::getColorFrom);
         return FastColor.ARGB32.multiply(textureColor, tint);
     }
 
     public static int getFluidColor(Fluid fluid) {
-        ResourceLocation location = fluid.getAttributes().getStillTexture();
-        int tint = fluid.getAttributes().getColor();
+        IClientFluidTypeExtensions renderProperties = IClientFluidTypeExtensions.of(fluid);
+        ResourceLocation location = renderProperties.getStillTexture();
+        int tint = renderProperties.getTintColor();
         int textureColor = colorCache.computeIfAbsent(location, ColorUtils::getColorFrom);
         return FastColor.ARGB32.multiply(textureColor, tint);
     }

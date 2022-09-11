@@ -36,7 +36,7 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.NonNullList;
 import net.minecraft.data.recipes.FinishedRecipe;
-import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.network.chat.Component;
 import net.minecraft.util.StringRepresentable;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
@@ -180,7 +180,7 @@ public class ConveyorBlock extends BasicTileBlock<ConveyorTile> implements Simpl
         return getShapes(state, source, pos, conveyorUpgrade -> true);
     }
 
-    private static List<VoxelShape> getShapes(BlockState state, BlockGetter source, BlockPos pos, Predicate<ConveyorUpgrade> filter){
+    private static List<VoxelShape> getShapes(BlockState state, BlockGetter source, BlockPos pos, Predicate<ConveyorUpgrade> filter) {
         List<VoxelShape> boxes = new ArrayList<>();
         if (state.getValue(TYPE).isVertical()) {
             boxes.add(Shapes.box(0, 0, 0, 1, 1 / 16D, 1));
@@ -395,7 +395,7 @@ public class ConveyorBlock extends BasicTileBlock<ConveyorTile> implements Simpl
         });
         return drops;
     }
-    
+
     @Override
     public boolean isValidSpawn(BlockState state, BlockGetter world, BlockPos pos, SpawnPlacements.Type type, EntityType<?> entityType) {
         return true;
@@ -547,7 +547,7 @@ public class ConveyorBlock extends BasicTileBlock<ConveyorTile> implements Simpl
         @Nullable
         @Override
         public String getCreatorModId(ItemStack itemStack) {
-            return new TranslatableComponent("itemGroup." + this.category.getRecipeFolderName()).getString();
+            return Component.translatable("itemGroup." + this.category.getRecipeFolderName()).getString();
         }
     }
 

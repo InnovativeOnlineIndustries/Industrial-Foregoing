@@ -41,7 +41,7 @@ import net.minecraft.world.level.block.LiquidBlock;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.shapes.VoxelShape;
-import net.minecraftforge.client.event.DrawSelectionEvent;
+import net.minecraftforge.client.event.RenderHighlightEvent;
 import net.minecraftforge.client.event.RenderPlayerEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fluids.IFluidBlock;
@@ -50,15 +50,15 @@ import org.apache.commons.lang3.tuple.Pair;
 public class IFClientEvents {
 
     @SubscribeEvent
-    public void blockOverlayEvent(DrawSelectionEvent event) {
+    public void blockOverlayEvent(RenderHighlightEvent.Block event) {
         HitResult hit = event.getTarget();
         if (hit.getType() == HitResult.Type.BLOCK && Minecraft.getInstance().player.getMainHandItem().getItem().equals(ModuleTool.INFINITY_DRILL)) {
             BlockHitResult blockRayTraceResult = (BlockHitResult) hit;
             event.setCanceled(true);
             ItemStack hand = Minecraft.getInstance().player.getMainHandItem();
-            InfinityTier tier = ((ItemInfinityDrill)ModuleTool.INFINITY_DRILL.get()).getSelectedTier(hand);
+            InfinityTier tier = ((ItemInfinityDrill) ModuleTool.INFINITY_DRILL.get()).getSelectedTier(hand);
             Level world = Minecraft.getInstance().player.level;
-            Pair<BlockPos, BlockPos> area = ((ItemInfinityDrill)ModuleTool.INFINITY_DRILL.get()).getArea(blockRayTraceResult.getBlockPos(), blockRayTraceResult.getDirection(), tier, false);
+            Pair<BlockPos, BlockPos> area = ((ItemInfinityDrill) ModuleTool.INFINITY_DRILL.get()).getArea(blockRayTraceResult.getBlockPos(), blockRayTraceResult.getDirection(), tier, false);
             PoseStack stack = new PoseStack();
             stack.pushPose();
             Camera info = event.getCamera();
@@ -83,11 +83,11 @@ public class IFClientEvents {
         // todo: test if rewards are rendering.
         //event.getRenderer().addLayer(new ContributorsCatEarsRender(event.getRenderer()));
 
-        if (event.getPlayer().getUUID().equals(Minecraft.getInstance().player.getUUID()) && Minecraft.getInstance().options.getCameraType() == CameraType.FIRST_PERSON)
+        if (event.getEntity().getUUID().equals(Minecraft.getInstance().player.getUUID()) && Minecraft.getInstance().options.getCameraType() == CameraType.FIRST_PERSON)
             return;
-        if (event.getPlayer().getItemInHand(InteractionHand.MAIN_HAND).getItem().equals(ModuleTool.INFINITY_DRILL))
-            event.getPlayer().startUsingItem(InteractionHand.MAIN_HAND);
-        else if (event.getPlayer().getItemInHand(InteractionHand.OFF_HAND).getItem().equals(ModuleTool.INFINITY_DRILL))
-            event.getPlayer().startUsingItem(InteractionHand.OFF_HAND);
+        if (event.getEntity().getItemInHand(InteractionHand.MAIN_HAND).getItem().equals(ModuleTool.INFINITY_DRILL))
+            event.getEntity().startUsingItem(InteractionHand.MAIN_HAND);
+        else if (event.getEntity().getItemInHand(InteractionHand.OFF_HAND).getItem().equals(ModuleTool.INFINITY_DRILL))
+            event.getEntity().startUsingItem(InteractionHand.OFF_HAND);
     }
 }

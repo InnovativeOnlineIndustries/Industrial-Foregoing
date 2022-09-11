@@ -27,7 +27,6 @@ import com.buuz135.industrial.config.machine.resourceproduction.MarineFisherConf
 import com.buuz135.industrial.module.ModuleResourceProduction;
 import com.buuz135.industrial.utils.BlockUtils;
 import com.hrznstudio.titanium.annotation.Save;
-import com.hrznstudio.titanium.block.BasicTileBlock;
 import com.hrznstudio.titanium.component.energy.EnergyStorageComponent;
 import com.hrznstudio.titanium.component.inventory.SidedInventoryComponent;
 import net.minecraft.core.BlockPos;

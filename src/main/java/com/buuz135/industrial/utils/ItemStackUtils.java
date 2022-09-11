@@ -22,33 +22,20 @@
 
 package com.buuz135.industrial.utils;
 
-import com.buuz135.industrial.fluid.OreTitaniumFluidAttributes;
-import com.mojang.blaze3d.vertex.PoseStack;
-import com.mojang.blaze3d.platform.GlStateManager;
-import com.mojang.blaze3d.systems.RenderSystem;
-import net.minecraft.tags.TagKey;
-import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.Blocks;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.MultiBufferSource;
-import com.mojang.blaze3d.platform.Lighting;
-import net.minecraft.client.resources.model.BakedModel;
-import net.minecraft.client.renderer.block.model.ItemTransforms;
-import net.minecraft.client.renderer.texture.TextureAtlas;
-import net.minecraft.client.renderer.texture.OverlayTexture;
-import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.Blocks;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
-import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
+import net.minecraftforge.common.capabilities.ForgeCapabilities;
 import net.minecraftforge.items.ItemStackHandler;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.tags.IReverseTag;
 
-import java.awt.*;
 import java.util.ArrayList;
 import java.util.stream.Collectors;
 
@@ -57,7 +44,7 @@ public class ItemStackUtils {
     public static ResourceLocation getOreTag(ItemStack stack) {
         Item item = stack.getItem();
         for (ResourceLocation resourceLocation : ForgeRegistries.ITEMS.tags().getReverseTag(stack.getItem()).map(IReverseTag::getTagKeys).map(tagKeyStream -> tagKeyStream.map(TagKey::location).collect(Collectors.toList())).orElse(new ArrayList<>())) {
-            if (resourceLocation.toString().startsWith("forge:raw_materials/")){
+            if (resourceLocation.toString().startsWith("forge:raw_materials/")) {
                 return resourceLocation;
             }
         }
@@ -76,7 +63,7 @@ public class ItemStackUtils {
     }
 
     public static boolean acceptsFluidItem(ItemStack stack) {
-        return stack.getCapability(CapabilityFluidHandler.FLUID_HANDLER_ITEM_CAPABILITY).isPresent();// && !stack.getItem().equals(ForgeModContainer.getInstance().universalBucket);
+        return stack.getCapability(ForgeCapabilities.FLUID_HANDLER_ITEM).isPresent();// && !stack.getItem().equals(ForgeModContainer.getInstance().universalBucket);
     }
 
 

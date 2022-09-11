@@ -21,8 +21,8 @@
  */
 package com.buuz135.industrial.utils.explosion;
 
-import net.minecraft.core.BlockPos;
 import com.mojang.math.Vector3f;
+import net.minecraft.core.BlockPos;
 
 /**
  * Class copied and adapted from Draconic Evolution https://github.com/brandon3055/BrandonsCore/blob/master/src/main/java/com/brandon3055/brandonscore/lib/ShortPos.java

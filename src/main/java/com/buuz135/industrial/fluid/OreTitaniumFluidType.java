@@ -22,97 +22,103 @@
 package com.buuz135.industrial.fluid;
 
 import com.buuz135.industrial.utils.ItemStackUtils;
+import com.hrznstudio.titanium.fluid.ClientFluidTypeExtensions;
 import com.hrznstudio.titanium.util.TagUtil;
 import net.minecraft.client.Minecraft;
-import net.minecraft.core.Registry;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.TextComponent;
-import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.level.material.Fluid;
-import net.minecraftforge.fluids.FluidAttributes;
 import net.minecraftforge.fluids.FluidStack;
+import net.minecraftforge.fluids.FluidType;
 import net.minecraftforge.registries.ForgeRegistries;
 
-import java.util.Collection;
 import java.util.List;
 
-public class OreTitaniumFluidAttributes extends FluidAttributes {
+public class OreTitaniumFluidType extends FluidType {
 
     public static final String NBT_TAG = "Tag";
 
-    public OreTitaniumFluidAttributes(Builder builder, Fluid fluid) {
-        super(builder, fluid);
+    public OreTitaniumFluidType(final Properties properties) {
+        super(properties);
     }
 
     @Override
-    public int getColor(FluidStack stack) {
-        if (Minecraft.getInstance().level != null && stack.hasTag() && stack.getTag().contains(NBT_TAG)){
-            String tag = stack.getTag().getString(NBT_TAG);
-            List<Item> items = TagUtil.getAllEntries(ForgeRegistries.ITEMS, TagUtil.getItemTag(new ResourceLocation(tag.replace("forge:raw_materials/", "forge:dusts/")))).stream().toList();
-            if (items.size() > 0){
-                return ItemStackUtils.getColor(new ItemStack(items.get(0)));
-            }
-        }
-        return super.getColor(stack);
-    }
-
-    @Override
-    public String getTranslationKey(FluidStack stack) {
+    public Component getDescription(FluidStack stack) {
         String extra = "";
-        if (stack.hasTag() && stack.getTag().contains(NBT_TAG)){
+        if (stack.hasTag() && stack.getTag().contains(NBT_TAG)) {
             String tag = stack.getTag().getString(NBT_TAG);
             List<Item> items = TagUtil.getAllEntries(ForgeRegistries.ITEMS, TagUtil.getItemTag(new ResourceLocation(tag.replace("forge:raw_materials/", "forge:dusts/")))).stream().toList();
-            if (items.size() > 0){
-                extra = " (" + new TranslatableComponent(items.get(0).getDescriptionId()).getString() + ")";
+            if (items.size() > 0) {
+                extra = " (" + Component.translatable(items.get(0).getDescriptionId()).getString() + ")";
             }
         }
-        return new TranslatableComponent(super.getTranslationKey(stack)).getString() + extra;
+        return Component.literal(super.getDescription(stack).getString() + extra);
     }
 
     @Override
-    public Component getDisplayName(FluidStack stack) {
+    public String getDescriptionId(FluidStack stack) {
         String extra = "";
-        if (stack.hasTag() && stack.getTag().contains(NBT_TAG)){
+        if (stack.hasTag() && stack.getTag().contains(NBT_TAG)) {
             String tag = stack.getTag().getString(NBT_TAG);
             List<Item> items = TagUtil.getAllEntries(ForgeRegistries.ITEMS, TagUtil.getItemTag(new ResourceLocation(tag.replace("forge:raw_materials/", "forge:dusts/")))).stream().toList();
-            if (items.size() > 0){
-                extra = " (" + new TranslatableComponent(items.get(0).getDescriptionId()).getString() + ")";
+            if (items.size() > 0) {
+                extra = " (" + Component.translatable(items.get(0).getDescriptionId()).getString() + ")";
             }
         }
-        return new TextComponent(super.getDisplayName(stack).getString() + extra);
+        return Component.translatable(super.getDescriptionId(stack)).getString() + extra;
     }
 
-    public static FluidStack getFluidWithTag(OreFluidInstance fluidInstance, int amount, ResourceLocation itemITag){
+
+    @Override
+    public ItemStack getBucket(FluidStack stack) {
+        ItemStack bucket = super.getBucket(stack);
+        if (stack.hasTag() && stack.getTag().contains(NBT_TAG)) {
+            String tag = stack.getTag().getString(NBT_TAG);
+            bucket.getOrCreateTag().putString(NBT_TAG, tag);
+        }
+        return bucket;
+    }
+
+    public static FluidStack getFluidWithTag(OreFluidInstance fluidInstance, int amount, ResourceLocation itemITag) {
         FluidStack stack = new FluidStack(fluidInstance.getSourceFluid(), amount);
         stack.getOrCreateTag().putString(NBT_TAG, itemITag.toString());
         return stack;
     }
 
-    public static String getFluidTag(FluidStack stack){
+    public static String getFluidTag(FluidStack stack) {
         return stack.getOrCreateTag().getString(NBT_TAG);
     }
 
-    public static boolean isValid(ResourceLocation resourceLocation){
+    public static boolean isValid(ResourceLocation resourceLocation) {
         TagKey<Item> key = TagUtil.getItemTag(new ResourceLocation("forge:dusts/" + resourceLocation.toString().replace("forge:raw_materials/", "")));
-        return  ForgeRegistries.ITEMS.tags().isKnownTagName(key) && !TagUtil.getAllEntries(ForgeRegistries.ITEMS, key).isEmpty();
+        return ForgeRegistries.ITEMS.tags().isKnownTagName(key) && !TagUtil.getAllEntries(ForgeRegistries.ITEMS, key).isEmpty();
     }
 
-    public static ItemStack getOutputDust(FluidStack stack){
+    public static ItemStack getOutputDust(FluidStack stack) {
         String tag = getFluidTag(stack);
         return TagUtil.getItemWithPreference(TagUtil.getItemTag(new ResourceLocation(tag.replace("forge:raw_materials/", "forge:dusts/"))));
     }
 
-    @Override
-    public ItemStack getBucket(FluidStack stack) {
-        ItemStack bucket = super.getBucket(stack);
-        if(stack.hasTag() && stack.getTag().contains(NBT_TAG)) {
-            String tag = stack.getTag().getString(NBT_TAG);
-            bucket.getOrCreateTag().putString(NBT_TAG, tag);
+
+    public static class Client extends ClientFluidTypeExtensions {
+
+        public Client(ResourceLocation still, ResourceLocation flow) {
+            super(still, flow);
         }
-        return bucket;
+
+        @Override
+        public int getTintColor(FluidStack stack) {
+            if (Minecraft.getInstance().level != null && stack.hasTag() && stack.getTag().contains(NBT_TAG)) {
+                String tag = stack.getTag().getString(NBT_TAG);
+                List<Item> items = TagUtil.getAllEntries(ForgeRegistries.ITEMS, TagUtil.getItemTag(new ResourceLocation(tag.replace("forge:raw_materials/", "forge:dusts/")))).stream().toList();
+                if (items.size() > 0) {
+                    return ItemStackUtils.getColor(new ItemStack(items.get(0)));
+                }
+            }
+            return 0xFFFFFFFF;
+        }
+
     }
 }

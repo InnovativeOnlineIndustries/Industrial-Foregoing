@@ -39,7 +39,7 @@ public class ItemTransporterType extends IFCustomItem {
     public TransporterTypeFactory factory;
 
     public ItemTransporterType(TransporterTypeFactory transporterTypeFactory, CreativeModeTab group) {
-        super(transporterTypeFactory.getRegistryName().getPath() + "_transporter_type", group);
+        super(transporterTypeFactory.getName() + "_transporter_type", group);
         this.factory = transporterTypeFactory;
         this.factory.setUpgradeItem(this);
     }

@@ -41,7 +41,6 @@ import mezz.jei.api.recipe.RecipeType;
 import mezz.jei.api.recipe.category.IRecipeCategory;
 import net.minecraft.client.Minecraft;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.DyeColor;
 import net.minecraft.world.item.ItemStack;
@@ -62,28 +61,18 @@ public class FluidSieveCategory implements IRecipeCategory<OreFluidEntrySieve> {
     }
 
     @Override
-    public ResourceLocation getUid() {
-        return IndustrialRecipeTypes.ORE_SIEVE.getUid();
-    }
-
-    @Override
-    public Class<? extends OreFluidEntrySieve> getRecipeClass() {
-        return IndustrialRecipeTypes.ORE_SIEVE.getRecipeClass();
-    }
-
-    @Override
     public RecipeType<OreFluidEntrySieve> getRecipeType() {
         return IndustrialRecipeTypes.ORE_SIEVE;
     }
 
     @Override
     public Component getTitle() {
-        return new TranslatableComponent(ModuleResourceProduction.FLUID_SIEVING_MACHINE.getLeft().get().getDescriptionId());
+        return Component.translatable(ModuleResourceProduction.FLUID_SIEVING_MACHINE.getLeft().get().getDescriptionId());
     }
 
     @Override
     public IDrawable getBackground() {
-        return helper.drawableBuilder(new ResourceLocation(Reference.MOD_ID, "textures/gui/jei.png"), 4, 78, 47, 50).addPadding(0,4,0,20).build();
+        return helper.drawableBuilder(new ResourceLocation(Reference.MOD_ID, "textures/gui/jei.png"), 4, 78, 47, 50).addPadding(0, 4, 0, 20).build();
     }
 
     @Override

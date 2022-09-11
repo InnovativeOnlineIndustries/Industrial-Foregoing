@@ -22,33 +22,31 @@
 
 package com.buuz135.industrial.fluid;
 
-import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.level.block.LiquidBlock;
-import net.minecraft.world.level.material.FlowingFluid;
-import net.minecraft.world.level.material.Fluid;
-import net.minecraft.world.level.material.FluidState;
-import net.minecraft.world.item.Item;
-import net.minecraft.world.level.block.state.StateDefinition;
-import net.minecraft.tags.FluidTags;
-import net.minecraft.world.level.block.entity.BlockEntity;
-import net.minecraft.core.Direction;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.tags.FluidTags;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.LevelReader;
-import net.minecraftforge.fluids.FluidAttributes;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.LiquidBlock;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.state.StateDefinition;
+import net.minecraft.world.level.material.FlowingFluid;
+import net.minecraft.world.level.material.Fluid;
+import net.minecraft.world.level.material.FluidState;
+import net.minecraftforge.fluids.FluidType;
 
 import javax.annotation.Nonnull;
 import javax.annotation.ParametersAreNonnullByDefault;
 
 public class OreFluid extends FlowingFluid {
 
-    private final FluidAttributes.Builder fluidAttributes;
     private OreFluidInstance instance;
 
-    public OreFluid(FluidAttributes.Builder fluidAttributes, OreFluidInstance instance) {
-        this.fluidAttributes = fluidAttributes;
+    public OreFluid(OreFluidInstance instance) {
         this.instance = instance;
     }
 
@@ -131,9 +129,8 @@ public class OreFluid extends FlowingFluid {
     }
 
     @Override
-    @Nonnull
-    protected FluidAttributes createAttributes() {
-        return new OreTitaniumFluidAttributes(fluidAttributes, this);
+    public FluidType getFluidType() {
+        return instance.getFluidType().get();
     }
 
     public static class Flowing extends OreFluid {
@@ -141,8 +138,8 @@ public class OreFluid extends FlowingFluid {
             registerDefaultState(getStateDefinition().any().setValue(LEVEL, 7));
         }
 
-        public Flowing(FluidAttributes.Builder fluidAttributes, OreFluidInstance instance) {
-            super(fluidAttributes, instance);
+        public Flowing(OreFluidInstance instance) {
+            super(instance);
         }
 
         @Override
@@ -164,8 +161,8 @@ public class OreFluid extends FlowingFluid {
 
     public static class Source extends OreFluid {
 
-        public Source(FluidAttributes.Builder fluidAttributes, OreFluidInstance instance) {
-            super(fluidAttributes, instance);
+        public Source(OreFluidInstance instance) {
+            super(instance);
         }
 
         @Override

@@ -31,7 +31,7 @@ import com.hrznstudio.titanium.network.locator.LocatorFactory;
 import com.hrznstudio.titanium.network.locator.instance.InventoryStackLocatorInstance;
 import net.minecraft.ChatFormatting;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.network.NetworkDirection;
@@ -55,45 +55,45 @@ public class BackpackOpenMessage extends Message {
     protected void handleMessage(NetworkEvent.Context context) {
         context.enqueueWork(() -> {
             ServerPlayer entity = context.getSender();
-                ItemInfinityBackpack.findFirstBackpack(entity).ifPresent(target -> {
-                    ItemStack stack = target.getFinder().getStackGetter().apply(entity, target.getSlot());
-                    if (stack.getItem() instanceof ItemInfinityBackpack) {
-                        if (!stack.hasTag() || !stack.getTag().contains("Id")){
-                            UUID id = UUID.randomUUID();
-                            CompoundTag nbt = stack.getOrCreateTag();
-                            nbt.putString("Id", id.toString());
-                            BackpackDataManager.getData(entity.level).createBackPack(id);
-                            stack.setTag(nbt);
-                        }
-                        String id = stack.getTag().getString("Id");
-                        if (forceDisable) {
-                            ItemInfinityBackpack.setPickUpMode(stack, 3);
-                            entity.displayClientMessage(new TranslatableComponent("tooltip.industrialforegoing.backpack.pickup_disabled").withStyle(ChatFormatting.RED), true);
-                        } else if (entity.isShiftKeyDown()){
-                            int mode = (ItemInfinityBackpack.getPickUpMode(stack) + 1) % 4;
-                            ItemInfinityBackpack.setPickUpMode(stack, mode);
-                            switch (mode){
-                                case 0:
-                                    entity.displayClientMessage(new TranslatableComponent("tooltip.industrialforegoing.backpack.pickup_all").withStyle(ChatFormatting.GREEN), true);
-                                    return;
-                                case 1:
-                                    entity.displayClientMessage(new TranslatableComponent("tooltip.industrialforegoing.backpack.item_pickup_enabled").withStyle(ChatFormatting.GREEN), true);
-                                    return;
-                                case 2:
-                                    entity.displayClientMessage(new TranslatableComponent("tooltip.industrialforegoing.backpack.xp_pickup_enabled").withStyle(ChatFormatting.GREEN), true);
-                                    return;
-                                default:
-                                    entity.displayClientMessage(new TranslatableComponent("tooltip.industrialforegoing.backpack.pickup_disabled").withStyle(ChatFormatting.RED), true);
-                            }
-                        } else {
-                            ItemInfinityBackpack.sync(entity.level, id, entity);
-                            IndustrialForegoing.NETWORK.get().sendTo(new BackpackOpenedMessage(target.getSlot(), target.getName()), entity.connection.getConnection(), NetworkDirection.PLAY_TO_CLIENT);
-                            NetworkHooks.openGui(entity, ((ItemInfinityBackpack)ModuleTool.INFINITY_BACKPACK.get()), buffer ->
-                                    LocatorFactory.writePacketBuffer(buffer, new InventoryStackLocatorInstance(target.getName(), target.getSlot())));
-                            return;
-                        }
+            ItemInfinityBackpack.findFirstBackpack(entity).ifPresent(target -> {
+                ItemStack stack = target.getFinder().getStackGetter().apply(entity, target.getSlot());
+                if (stack.getItem() instanceof ItemInfinityBackpack) {
+                    if (!stack.hasTag() || !stack.getTag().contains("Id")) {
+                        UUID id = UUID.randomUUID();
+                        CompoundTag nbt = stack.getOrCreateTag();
+                        nbt.putString("Id", id.toString());
+                        BackpackDataManager.getData(entity.level).createBackPack(id);
+                        stack.setTag(nbt);
                     }
-                });
+                    String id = stack.getTag().getString("Id");
+                    if (forceDisable) {
+                        ItemInfinityBackpack.setPickUpMode(stack, 3);
+                        entity.displayClientMessage(Component.translatable("tooltip.industrialforegoing.backpack.pickup_disabled").withStyle(ChatFormatting.RED), true);
+                    } else if (entity.isShiftKeyDown()) {
+                        int mode = (ItemInfinityBackpack.getPickUpMode(stack) + 1) % 4;
+                        ItemInfinityBackpack.setPickUpMode(stack, mode);
+                        switch (mode) {
+                            case 0:
+                                entity.displayClientMessage(Component.translatable("tooltip.industrialforegoing.backpack.pickup_all").withStyle(ChatFormatting.GREEN), true);
+                                return;
+                            case 1:
+                                entity.displayClientMessage(Component.translatable("tooltip.industrialforegoing.backpack.item_pickup_enabled").withStyle(ChatFormatting.GREEN), true);
+                                return;
+                            case 2:
+                                entity.displayClientMessage(Component.translatable("tooltip.industrialforegoing.backpack.xp_pickup_enabled").withStyle(ChatFormatting.GREEN), true);
+                                return;
+                            default:
+                                entity.displayClientMessage(Component.translatable("tooltip.industrialforegoing.backpack.pickup_disabled").withStyle(ChatFormatting.RED), true);
+                        }
+                    } else {
+                        ItemInfinityBackpack.sync(entity.level, id, entity);
+                        IndustrialForegoing.NETWORK.get().sendTo(new BackpackOpenedMessage(target.getSlot(), target.getName()), entity.connection.getConnection(), NetworkDirection.PLAY_TO_CLIENT);
+                        NetworkHooks.openScreen(entity, ((ItemInfinityBackpack) ModuleTool.INFINITY_BACKPACK.get()), buffer ->
+                                LocatorFactory.writePacketBuffer(buffer, new InventoryStackLocatorInstance(target.getName(), target.getSlot())));
+                        return;
+                    }
+                }
+            });
         });
     }
 }

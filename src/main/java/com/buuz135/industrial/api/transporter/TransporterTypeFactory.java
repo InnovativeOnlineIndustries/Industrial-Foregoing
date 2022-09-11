@@ -25,12 +25,11 @@ package com.buuz135.industrial.api.transporter;
 import com.buuz135.industrial.api.IBlockContainer;
 import com.google.common.collect.ImmutableSet;
 import com.hrznstudio.titanium.api.IRecipeProvider;
-import net.minecraft.world.item.Item;
+import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.core.BlockPos;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.level.Level;
-import net.minecraftforge.registries.ForgeRegistryEntry;
 
 import javax.annotation.Nonnull;
 import java.util.ArrayList;
@@ -38,7 +37,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Set;
 
-public abstract class TransporterTypeFactory extends ForgeRegistryEntry<TransporterTypeFactory> implements IRecipeProvider {
+public abstract class TransporterTypeFactory implements IRecipeProvider {
 
     public static final ImmutableSet<Direction> ALL = ImmutableSet.copyOf(Direction.values());
     public static final ImmutableSet<Direction> HORIZONTAL = ImmutableSet.copyOf(Direction.Plane.HORIZONTAL.iterator());
@@ -46,8 +45,10 @@ public abstract class TransporterTypeFactory extends ForgeRegistryEntry<Transpor
     public static final List<TransporterTypeFactory> FACTORIES = new ArrayList<>();
 
     private Item upgradeItem;
+    private final String name;
 
-    public TransporterTypeFactory() {
+    public TransporterTypeFactory(String name) {
+        this.name = name;
         FACTORIES.add(this);
     }
 
@@ -77,6 +78,10 @@ public abstract class TransporterTypeFactory extends ForgeRegistryEntry<Transpor
     }
 
     public abstract boolean canBeAttachedAgainst(Level world, BlockPos pos, Direction face);
+
+    public String getName() {
+        return name;
+    }
 
     public enum TransporterAction {
         INSERT,

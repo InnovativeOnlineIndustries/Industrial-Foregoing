@@ -27,7 +27,6 @@ import com.buuz135.industrial.config.machine.core.DissolutionChamberConfig;
 import com.buuz135.industrial.module.ModuleCore;
 import com.buuz135.industrial.recipe.DissolutionChamberRecipe;
 import com.hrznstudio.titanium.annotation.Save;
-import com.hrznstudio.titanium.block.BasicTileBlock;
 import com.hrznstudio.titanium.component.bundle.LockableInventoryBundle;
 import com.hrznstudio.titanium.component.energy.EnergyStorageComponent;
 import com.hrznstudio.titanium.component.fluid.FluidTankComponent;
@@ -37,6 +36,7 @@ import com.hrznstudio.titanium.util.RecipeUtil;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.item.DyeColor;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.crafting.RecipeType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.fluids.capability.IFluidHandler;
 import net.minecraftforge.items.ItemHandlerHelper;
@@ -94,7 +94,7 @@ public class DissolutionChamberTile extends IndustrialProcessingTile<Dissolution
             if (currentRecipe != null && currentRecipe.matches(input.getInventory(), inputFluid)) {
                 return;
             }
-            currentRecipe = RecipeUtil.getRecipes(this.level, DissolutionChamberRecipe.SERIALIZER.getRecipeType()).stream().filter(dissolutionChamberRecipe -> dissolutionChamberRecipe.matches(input.getInventory(), inputFluid)).findFirst().orElse(null);
+            currentRecipe = RecipeUtil.getRecipes(this.level, (RecipeType<DissolutionChamberRecipe>) ModuleCore.DISSOLUTION_TYPE.get()).stream().filter(dissolutionChamberRecipe -> dissolutionChamberRecipe.matches(input.getInventory(), inputFluid)).findFirst().orElse(null);
         }
     }
 

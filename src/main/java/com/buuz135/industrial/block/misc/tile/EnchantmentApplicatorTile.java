@@ -27,7 +27,6 @@ import com.buuz135.industrial.module.ModuleCore;
 import com.buuz135.industrial.module.ModuleMisc;
 import com.buuz135.industrial.utils.IndustrialTags;
 import com.hrznstudio.titanium.annotation.Save;
-import com.hrznstudio.titanium.block.BasicTileBlock;
 import com.hrznstudio.titanium.component.energy.EnergyStorageComponent;
 import com.hrznstudio.titanium.component.fluid.SidedFluidTankComponent;
 import com.hrznstudio.titanium.component.inventory.SidedInventoryComponent;
@@ -90,7 +89,7 @@ public class EnchantmentApplicatorTile extends IndustrialProcessingTile<Enchantm
         Pair<ItemStack, Integer> output = updateRepairOutput();
         long amount = this.tank.getFluidAmount();
         BlockEntity tileEntity = this.level.getBlockEntity(this.worldPosition.above());
-        if (tileEntity != null && tileEntity.getCapability(CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY).isPresent()){
+        if (tileEntity != null && tileEntity.getCapability(CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY).isPresent()) {
             amount += tileEntity.getCapability(CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY).map(iFluidHandler -> iFluidHandler.drain(new FluidStack(ModuleCore.ESSENCE.getSourceFluid().get(), Integer.MAX_VALUE), IFluidHandler.FluidAction.SIMULATE).getAmount()).orElse(0);
         }
         return !output.getLeft().isEmpty() && amount >= getEssenceConsumed(output.getRight()) && this.output.getStackInSlot(0).isEmpty();
@@ -116,7 +115,7 @@ public class EnchantmentApplicatorTile extends IndustrialProcessingTile<Enchantm
             this.output.setStackInSlot(0, output.getLeft());
             AtomicInteger amount = new AtomicInteger(getEssenceConsumed(output.getRight()));
             BlockEntity tileEntity = this.level.getBlockEntity(this.worldPosition.above());
-            if (tileEntity != null){
+            if (tileEntity != null) {
                 tileEntity.getCapability(CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY).ifPresent(iFluidHandler -> amount.addAndGet(-iFluidHandler.drain(new FluidStack(ModuleCore.ESSENCE.getSourceFluid().get(), amount.get()), IFluidHandler.FluidAction.EXECUTE).getAmount()));
             }
             if (amount.get() > 0) this.tank.drainForced(amount.get(), IFluidHandler.FluidAction.EXECUTE);

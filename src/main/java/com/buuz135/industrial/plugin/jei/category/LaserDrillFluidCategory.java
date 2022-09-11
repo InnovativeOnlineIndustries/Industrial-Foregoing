@@ -22,11 +22,6 @@
 
 package com.buuz135.industrial.plugin.jei.category;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
-
 import com.buuz135.industrial.plugin.jei.IndustrialRecipeTypes;
 import com.buuz135.industrial.recipe.LaserDrillFluidRecipe;
 import com.buuz135.industrial.utils.Reference;
@@ -46,18 +41,19 @@ import mezz.jei.api.recipe.IFocusGroup;
 import mezz.jei.api.recipe.RecipeIngredientRole;
 import mezz.jei.api.recipe.RecipeType;
 import mezz.jei.api.recipe.category.IRecipeCategory;
-import net.minecraftforge.fluids.FluidStack;
-
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.resources.sounds.SimpleSoundInstance;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.TextComponent;
-import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.level.biome.Biome;
+import net.minecraftforge.fluids.FluidStack;
+
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
 public class LaserDrillFluidCategory implements IRecipeCategory<LaserDrillFluidRecipe> {
 
@@ -69,15 +65,6 @@ public class LaserDrillFluidCategory implements IRecipeCategory<LaserDrillFluidR
         this.smallTank = guiHelper.createDrawable(DefaultAssetProvider.DEFAULT_LOCATION, 235 + 3, 1 + 3, 12, 13);
     }
 
-    @Override
-    public ResourceLocation getUid() {
-        return IndustrialRecipeTypes.LASER_FLUID.getUid();
-    }
-
-    @Override
-    public Class<? extends LaserDrillFluidRecipe> getRecipeClass() {
-        return IndustrialRecipeTypes.LASER_FLUID.getRecipeClass();
-    }
 
     @Override
     public RecipeType<LaserDrillFluidRecipe> getRecipeType() {
@@ -86,7 +73,7 @@ public class LaserDrillFluidCategory implements IRecipeCategory<LaserDrillFluidR
 
     @Override
     public Component getTitle() {
-        return new TextComponent("Laser Drill Fluids");
+        return Component.literal("Laser Drill Fluids");
     }
 
     @Override
@@ -120,12 +107,12 @@ public class LaserDrillFluidCategory implements IRecipeCategory<LaserDrillFluidR
         RenderSystem.setShaderTexture(0, new ResourceLocation("forge", "textures/gui/icons.png"));
         Minecraft.getInstance().screen.blit(stack, recipeWidth / 10 * 7 + 1, 30 + (Minecraft.getInstance().font.lineHeight + 2) * 3 + 3, 0, 16, 16, 16);
 
-        String minY = new TranslatableComponent("text.industrialforegoing.miny").getString() + " " + recipe.rarity[recipe.pointer].depth_min;
-        String maxY = new TranslatableComponent("text.industrialforegoing.maxy").getString() + " " + recipe.rarity[recipe.pointer].depth_max;
-        String biomes = new TranslatableComponent("text.industrialforegoing.biomes").getString();
+        String minY = Component.translatable("text.industrialforegoing.miny").getString() + " " + recipe.rarity[recipe.pointer].depth_min;
+        String maxY = Component.translatable("text.industrialforegoing.maxy").getString() + " " + recipe.rarity[recipe.pointer].depth_max;
+        String biomes = Component.translatable("text.industrialforegoing.biomes").getString();
         Minecraft.getInstance().font.draw(stack, ChatFormatting.DARK_GRAY + minY, recipeWidth / 10, 30, 0);
-        if (!LaserDrillFluidRecipe.EMPTY.equals(recipe.entity)){
-            String wight = "Over: " + new TranslatableComponent("entity." + recipe.entity.toString().replace(":", ".")).getString();
+        if (!LaserDrillFluidRecipe.EMPTY.equals(recipe.entity)) {
+            String wight = "Over: " + Component.translatable("entity." + recipe.entity.toString().replace(":", ".")).getString();
             Minecraft.getInstance().font.draw(stack, ChatFormatting.DARK_GRAY + wight, recipeWidth / 10, 30 + (Minecraft.getInstance().font.lineHeight + 2), 0);
         }
         Minecraft.getInstance().font.draw(stack, ChatFormatting.DARK_GRAY + maxY, recipeWidth / 10 * 6, 30, 0);
@@ -136,29 +123,29 @@ public class LaserDrillFluidCategory implements IRecipeCategory<LaserDrillFluidR
     @Override
     public List<Component> getTooltipStrings(LaserDrillFluidRecipe recipe, IRecipeSlotsView recipeSlotsView, double mouseX, double mouseY) {
         if (mouseX > 0 && mouseX < 15 && mouseY > 70 && mouseY < 85 && recipe.pointer > 0) { // Inside the back button
-            return Collections.singletonList(new TranslatableComponent("text.industrialforegoing.button.jei.prev_rarity"));
+            return Collections.singletonList(Component.translatable("text.industrialforegoing.button.jei.prev_rarity"));
         }
         if (mouseX > 137 && mouseX < (137 + 15) && mouseY > 70 && mouseY < 85 && recipe.pointer < recipe.rarity.length - 1) { //Inside the next button
-            return Collections.singletonList(new TranslatableComponent("text.industrialforegoing.button.jei.next_rarity"));
+            return Collections.singletonList(Component.translatable("text.industrialforegoing.button.jei.next_rarity"));
         }
         if (mouseX > 13 * 2 && mouseX < 13 * 2 + 20 && mouseY > 30 + (Minecraft.getInstance().font.lineHeight + 2) * 3 && mouseY < 30 + (Minecraft.getInstance().font.lineHeight + 2) * 3 + 20) { //Inside the whitelisted biomes
             List<Component> biomes = new ArrayList<>();
-            biomes.add(new TranslatableComponent("text.industrialforegoing.tooltip.whitelisted_biomes").withStyle(ChatFormatting.UNDERLINE).withStyle(ChatFormatting.GOLD));
-            if (recipe.rarity[recipe.pointer].whitelist.length == 0) biomes.add(new TextComponent("- Any"));
+            biomes.add(Component.translatable("text.industrialforegoing.tooltip.whitelisted_biomes").withStyle(ChatFormatting.UNDERLINE).withStyle(ChatFormatting.GOLD));
+            if (recipe.rarity[recipe.pointer].whitelist.length == 0) biomes.add(Component.literal("- Any"));
             else {
                 for (ResourceKey<Biome> registryKey : recipe.rarity[recipe.pointer].whitelist) {
-                    biomes.add(new TextComponent("- ").append(new TranslatableComponent("biome." + registryKey.location().getNamespace() + "." + registryKey.location().getPath())));
+                    biomes.add(Component.literal("- ").append(Component.translatable("biome." + registryKey.location().getNamespace() + "." + registryKey.location().getPath())));
                 }
             }
             return biomes;
         }
         if (mouseX > 13 * 8 && mouseX < 13 * 8 + 20 && mouseY > 30 + (Minecraft.getInstance().font.lineHeight + 2) * 3 && mouseY < 30 + (Minecraft.getInstance().font.lineHeight + 2) * 3 + 20) { //Inside the whitelisted biomes
             List<Component> biomes = new ArrayList<>();
-            biomes.add(new TranslatableComponent("text.industrialforegoing.tooltip.blacklisted_biomes").withStyle(ChatFormatting.UNDERLINE).withStyle(ChatFormatting.GOLD));
-            if (recipe.rarity[recipe.pointer].blacklist.length == 0) biomes.add(new TextComponent("- None"));
+            biomes.add(Component.translatable("text.industrialforegoing.tooltip.blacklisted_biomes").withStyle(ChatFormatting.UNDERLINE).withStyle(ChatFormatting.GOLD));
+            if (recipe.rarity[recipe.pointer].blacklist.length == 0) biomes.add(Component.literal("- None"));
             else {
                 for (ResourceKey<Biome> registryKey : recipe.rarity[recipe.pointer].blacklist) {
-                    biomes.add(new TextComponent("- ").append(new TranslatableComponent("biome." + registryKey.location().getNamespace() + "." + registryKey.location().getPath())));
+                    biomes.add(Component.literal("- ").append(Component.translatable("biome." + registryKey.location().getNamespace() + "." + registryKey.location().getPath())));
                 }
             }
             return biomes;

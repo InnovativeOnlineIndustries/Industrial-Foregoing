@@ -24,29 +24,18 @@ package com.buuz135.industrial.proxy.client.render;
 
 import com.buuz135.industrial.block.transportstorage.tile.BHTile;
 import com.mojang.blaze3d.vertex.PoseStack;
-import com.mojang.blaze3d.platform.GlStateManager;
-import com.mojang.blaze3d.systems.RenderSystem;
+import com.mojang.math.Vector3f;
+import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.renderer.MultiBufferSource;
-import com.mojang.blaze3d.platform.Lighting;
-import net.minecraft.client.renderer.RenderStateShard;
-import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.block.model.ItemTransforms;
 import net.minecraft.client.renderer.blockentity.BlockEntityRenderer;
-import net.minecraft.client.renderer.blockentity.BlockEntityRenderDispatcher;
-import com.mojang.blaze3d.vertex.DefaultVertexFormat;
-
 import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
+import net.minecraft.core.Direction;
+import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.core.Direction;
-import net.minecraft.resources.ResourceLocation;
-import com.mojang.math.Vector3f;
-import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.TextComponent;
-import net.minecraft.ChatFormatting;
-import org.lwjgl.opengl.GL11;
 
 public class BlackHoleUnitTESR implements BlockEntityRenderer<BHTile> {
 
@@ -55,7 +44,7 @@ public class BlackHoleUnitTESR implements BlockEntityRenderer<BHTile> {
 
     @Override
     public void render(BHTile tile, float partialTicks, PoseStack matrixStack, MultiBufferSource bufferIn, int combinedLightIn, int combinedOverlayIn) {
-        if (!tile.getDisplayStack().isEmpty() && tile.shouldDisplay()){
+        if (!tile.getDisplayStack().isEmpty() && tile.shouldDisplay()) {
             ItemStack stack = tile.getDisplayStack();
             matrixStack.pushPose();
             Direction facing = tile.getFacingDirection();
@@ -69,14 +58,14 @@ public class BlackHoleUnitTESR implements BlockEntityRenderer<BHTile> {
                 matrixStack.mulPose(Vector3f.YP.rotationDegrees(-90));
             }
             if (facing == Direction.SOUTH) {
-                matrixStack.translate(0, 0,-1);
+                matrixStack.translate(0, 0, -1);
                 matrixStack.mulPose(Vector3f.YP.rotationDegrees(-180));
             }
             if (facing == Direction.WEST) {
                 matrixStack.mulPose(Vector3f.YP.rotationDegrees(90));
             }
             matrixStack.translate(0.5, 0.6, 0);
-            if (stack.getItem() instanceof BlockItem){
+            if (stack.getItem() instanceof BlockItem) {
                 matrixStack.scale(0.35f, 0.35f, 0.35f);
             } else {
                 matrixStack.scale(0.4f, 0.4f, 0.4f);
@@ -84,9 +73,10 @@ public class BlackHoleUnitTESR implements BlockEntityRenderer<BHTile> {
 
             Minecraft.getInstance().getItemRenderer().renderStatic(stack, ItemTransforms.TransformType.NONE, 0xF000F0, combinedOverlayIn, matrixStack, bufferIn, 0);
             matrixStack.popPose();
-            renderText(matrixStack, bufferIn, combinedOverlayIn, new TextComponent(ChatFormatting.WHITE + tile.getFormatedDisplayAmount()), facing, 0.015f);
+            renderText(matrixStack, bufferIn, combinedOverlayIn, Component.literal(ChatFormatting.WHITE + tile.getFormatedDisplayAmount()), facing, 0.015f);
         }
     }
+
     /* Thanks Mekanism */
     private void renderText(PoseStack matrix, MultiBufferSource renderer, int overlayLight, Component text, Direction side, float maxScale) {
         matrix.pushPose();

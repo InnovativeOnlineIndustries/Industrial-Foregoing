@@ -33,25 +33,23 @@ import com.buuz135.industrial.utils.Reference;
 import com.hrznstudio.titanium.api.augment.AugmentTypes;
 import com.hrznstudio.titanium.item.AugmentWrapper;
 import com.mojang.blaze3d.vertex.PoseStack;
+import com.mojang.math.Vector3f;
 import net.minecraft.client.renderer.MultiBufferSource;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.chat.Component;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.nbt.CompoundTag;
-import net.minecraft.world.level.block.entity.BlockEntity;
-import net.minecraft.core.Direction;
-import net.minecraft.world.InteractionHand;
-import net.minecraft.resources.ResourceLocation;
-import net.minecraft.core.BlockPos;
-import net.minecraft.world.phys.shapes.VoxelShape;
-import net.minecraft.world.phys.shapes.Shapes;
-import com.mojang.math.Vector3f;
-import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.TextComponent;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.phys.shapes.Shapes;
+import net.minecraft.world.phys.shapes.VoxelShape;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
-import net.minecraftforge.client.model.ModelDataManager;
 import net.minecraftforge.common.util.INBTSerializable;
 import net.minecraftforge.items.ItemHandlerHelper;
 
@@ -111,7 +109,7 @@ public class TransporterType implements INBTSerializable<CompoundTag> {
         return container;
     }
 
-    public Level getWorld() {
+    public Level getLevel() {
         return getContainer().getBlockWorld();
     }
 
@@ -217,7 +215,7 @@ public class TransporterType implements INBTSerializable<CompoundTag> {
     }
 
     public void syncRender(Direction origin, CompoundTag compoundNBT) {
-        IndustrialForegoing.NETWORK.sendToNearby(getWorld(), getPos(), 32, new TransporterSyncMessage(getPos(), compoundNBT, getSide().get3DDataValue(), origin.get3DDataValue()));
+        IndustrialForegoing.NETWORK.sendToNearby(getLevel(), getPos(), 32, new TransporterSyncMessage(getPos(), compoundNBT, getSide().get3DDataValue(), origin.get3DDataValue()));
     }
 
     public void addComponentsToGui(List<IGuiComponent> componentList) {
@@ -234,7 +232,7 @@ public class TransporterType implements INBTSerializable<CompoundTag> {
                     components.add(efficiency.getHoverName());
                 }
                 if (components.isEmpty()) {
-                    components.add(new TextComponent("No Addons"));
+                    components.add(Component.literal("No Addons"));
                 }
                 return components;
             }
@@ -252,8 +250,8 @@ public class TransporterType implements INBTSerializable<CompoundTag> {
             action = TransporterTypeFactory.TransporterAction.EXTRACT;
         }
         this.getContainer().requestSync();
-        if (this.getWorld().isClientSide && getContainer() instanceof BlockEntity)
-            ModelDataManager.requestModelDataRefresh((BlockEntity) getContainer());
+        if (this.getLevel().isClientSide && getContainer() instanceof BlockEntity)
+            this.getLevel().getModelDataManager().requestRefresh((BlockEntity) getContainer());
     }
 
     @Override

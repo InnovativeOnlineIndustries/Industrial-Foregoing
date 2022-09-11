@@ -39,7 +39,6 @@ import mezz.jei.api.recipe.category.IRecipeCategory;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.resources.ResourceLocation;
 
 public class FermentationStationCategory implements IRecipeCategory<OreFluidEntryFermenter> {
@@ -53,23 +52,13 @@ public class FermentationStationCategory implements IRecipeCategory<OreFluidEntr
     }
 
     @Override
-    public ResourceLocation getUid() {
-        return IndustrialRecipeTypes.FERMENTER.getUid();
-    }
-
-    @Override
-    public Class<? extends OreFluidEntryFermenter> getRecipeClass() {
-        return IndustrialRecipeTypes.FERMENTER.getRecipeClass();
-    }
-
-    @Override
     public RecipeType<OreFluidEntryFermenter> getRecipeType() {
         return IndustrialRecipeTypes.FERMENTER;
     }
 
     @Override
     public Component getTitle() {
-        return new TranslatableComponent(ModuleResourceProduction.FERMENTATION_STATION.getLeft().get().getDescriptionId());
+        return Component.translatable(ModuleResourceProduction.FERMENTATION_STATION.getLeft().get().getDescriptionId());
     }
 
     @Override
@@ -86,7 +75,7 @@ public class FermentationStationCategory implements IRecipeCategory<OreFluidEntr
     @Override
     public void setRecipe(IRecipeLayoutBuilder builder, OreFluidEntryFermenter recipe, IFocusGroup focuses) {
         builder.addSlot(RecipeIngredientRole.INPUT, 47 - 45, 1).setFluidRenderer(200, false, 12, 48).setOverlay(tankOverlay, 0, 0).addIngredient(ForgeTypes.FLUID_STACK, recipe.getInput());
-        builder.addSlot(RecipeIngredientRole.OUTPUT, 99- 45, 1).setFluidRenderer(200, false, 12, 48).setOverlay(tankOverlay, 0, 0).addIngredient(ForgeTypes.FLUID_STACK, recipe.getOutput());
+        builder.addSlot(RecipeIngredientRole.OUTPUT, 99 - 45, 1).setFluidRenderer(200, false, 12, 48).setOverlay(tankOverlay, 0, 0).addIngredient(ForgeTypes.FLUID_STACK, recipe.getOutput());
     }
 
     @Override

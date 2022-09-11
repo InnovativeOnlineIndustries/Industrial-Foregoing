@@ -30,10 +30,10 @@ import com.buuz135.industrial.gui.component.custom.TexturedStateButtonGuiCompone
 import com.buuz135.industrial.proxy.block.filter.RegulatorFilter;
 import com.buuz135.industrial.proxy.network.TransporterSyncMessage;
 import com.buuz135.industrial.utils.Reference;
-import net.minecraft.world.item.ItemStack;
-import net.minecraft.nbt.CompoundTag;
 import net.minecraft.core.Direction;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.item.ItemStack;
 
 import java.util.List;
 
@@ -80,7 +80,7 @@ public abstract class FilteredTransporterType<TYPE, CAP> extends TransporterType
     }
 
     public void syncRender(Direction origin, CompoundTag compoundNBT) {
-        IndustrialForegoing.NETWORK.sendToNearby(getWorld(), getPos(), 32, new TransporterSyncMessage(getPos(), compoundNBT, getSide().get3DDataValue(), origin.get3DDataValue()));
+        IndustrialForegoing.NETWORK.sendToNearby(getLevel(), getPos(), 32, new TransporterSyncMessage(getPos(), compoundNBT, getSide().get3DDataValue(), origin.get3DDataValue()));
     }
 
     public void addComponentsToGui(List<IGuiComponent> componentList) {

@@ -25,13 +25,14 @@ package com.buuz135.industrial.item;
 import com.buuz135.industrial.api.IBlockContainer;
 import com.buuz135.industrial.api.conveyor.ConveyorUpgradeFactory;
 import com.buuz135.industrial.block.transportstorage.tile.ConveyorTile;
+import net.minecraft.core.Direction;
 import net.minecraft.data.recipes.FinishedRecipe;
+import net.minecraft.world.InteractionResult;
 import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.level.block.entity.BlockEntity;
-import net.minecraft.world.InteractionResult;
-import net.minecraft.core.Direction;
+import net.minecraftforge.registries.ForgeRegistries;
 
 import java.util.function.Consumer;
 
@@ -40,7 +41,7 @@ public class ItemConveyorUpgrade extends IFCustomItem {
     private final ConveyorUpgradeFactory factory;
 
     public ItemConveyorUpgrade(ConveyorUpgradeFactory upgradeFactory, CreativeModeTab group) {
-        super("conveyor_" + upgradeFactory.getRegistryName().getPath() + "_upgrade", group);
+        super("conveyor_" + upgradeFactory.getName() + "_upgrade", group);
         this.factory = upgradeFactory;
         this.factory.setUpgradeItem(this);
     }
@@ -67,7 +68,7 @@ public class ItemConveyorUpgrade extends IFCustomItem {
     public String getDescriptionId(ItemStack stack) {
         if (factory == null)
             return "conveyor.upgrade.error";
-        return String.format("conveyor.upgrade.%s.%s", factory.getRegistryName().getNamespace(), factory.getRegistryName().getPath());
+        return String.format("conveyor.upgrade.%s.%s", ForgeRegistries.ITEMS.getKey(factory.getUpgradeItem()).getNamespace(), ForgeRegistries.ITEMS.getKey(factory.getUpgradeItem()).getPath());
     }
 
 

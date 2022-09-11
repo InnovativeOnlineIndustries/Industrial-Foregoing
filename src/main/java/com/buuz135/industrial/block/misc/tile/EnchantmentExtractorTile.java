@@ -32,7 +32,6 @@ import com.hrznstudio.titanium.annotation.Save;
 import com.hrznstudio.titanium.api.IFactory;
 import com.hrznstudio.titanium.api.client.AssetTypes;
 import com.hrznstudio.titanium.api.client.IScreenAddon;
-import com.hrznstudio.titanium.block.BasicTileBlock;
 import com.hrznstudio.titanium.client.screen.addon.StateButtonAddon;
 import com.hrznstudio.titanium.client.screen.addon.StateButtonInfo;
 import com.hrznstudio.titanium.component.button.ButtonComponent;
@@ -78,7 +77,7 @@ public class EnchantmentExtractorTile extends IndustrialProcessingTile<Enchantme
     private ButtonComponent buttonComponent;
 
     public EnchantmentExtractorTile(BlockPos blockPos, BlockState blockState) {
-        super(ModuleMisc.ENCHANTMENT_EXTRACTOR, 62, 40, blockPos,blockState);
+        super(ModuleMisc.ENCHANTMENT_EXTRACTOR, 62, 40, blockPos, blockState);
         this.extractEnchants = true;
         this.addInventory(inputEnchantedItem = (SidedInventoryComponent<EnchantmentExtractorTile>) new SidedInventoryComponent<EnchantmentExtractorTile>("inputEnchantedItem", 40, 22, 1, 0).
                 setColor(DyeColor.BLUE).
@@ -144,7 +143,7 @@ public class EnchantmentExtractorTile extends IndustrialProcessingTile<Enchantme
                     Enchantment selected = map.keySet().iterator().next();
                     ItemStack book = new ItemStack(Items.ENCHANTED_BOOK);
                     EnchantmentHelper.setEnchantments(Collections.singletonMap(selected, map.get(selected)), book);
-                    if (map.keySet().stream().allMatch(Enchantment::isCurse)){
+                    if (map.keySet().stream().allMatch(Enchantment::isCurse)) {
                         ItemStack output = input.copy();
                         input.shrink(1);
                         ItemHandlerHelper.insertItem(this.outputNoEnchantedItem, output, false);

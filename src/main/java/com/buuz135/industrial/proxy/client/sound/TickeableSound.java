@@ -46,11 +46,12 @@
 package com.buuz135.industrial.proxy.client.sound;
 
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.resources.sounds.TickableSoundInstance;
 import net.minecraft.client.resources.sounds.AbstractSoundInstance;
-import net.minecraft.sounds.SoundSource;
-import net.minecraft.sounds.SoundEvent;
+import net.minecraft.client.resources.sounds.TickableSoundInstance;
 import net.minecraft.core.BlockPos;
+import net.minecraft.sounds.SoundEvent;
+import net.minecraft.sounds.SoundSource;
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.Level;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
@@ -63,8 +64,8 @@ public class TickeableSound extends AbstractSoundInstance implements TickableSou
     private int distance;
     private float tickIncrease;
 
-    public TickeableSound(Level world, BlockPos pos, SoundEvent soundIn, int distance, int soundTime) {
-        super(soundIn, SoundSource.BLOCKS);
+    public TickeableSound(Level world, BlockPos pos, SoundEvent soundIn, int distance, int soundTime, RandomSource randomSource) {
+        super(soundIn, SoundSource.BLOCKS, randomSource);
         this.world = world;
         this.x = pos.getX();
         this.y = pos.getY();

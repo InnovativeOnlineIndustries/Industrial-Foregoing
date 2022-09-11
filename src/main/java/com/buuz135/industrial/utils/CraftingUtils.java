@@ -22,11 +22,12 @@
 
 package com.buuz135.industrial.utils;
 
+import com.buuz135.industrial.module.ModuleCore;
 import com.buuz135.industrial.recipe.CrusherRecipe;
 import com.hrznstudio.titanium.util.RecipeUtil;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.inventory.CraftingContainer;
 import net.minecraft.world.inventory.AbstractContainerMenu;
+import net.minecraft.world.inventory.CraftingContainer;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.CraftingRecipe;
 import net.minecraft.world.item.crafting.Recipe;
@@ -54,6 +55,11 @@ public class CraftingUtils {
         }
         CraftingContainer inventoryCrafting = new CraftingContainer(new AbstractContainerMenu(null, 0) {
             @Override
+            public ItemStack quickMoveStack(Player p_38941_, int p_38942_) {
+                return ItemStack.EMPTY;
+            }
+
+            @Override
             public boolean stillValid(Player playerIn) {
                 return false;
             }
@@ -75,6 +81,11 @@ public class CraftingUtils {
             @Override
             public boolean stillValid(Player playerIn) {
                 return false;
+            }
+
+            @Override
+            public ItemStack quickMoveStack(Player p_38941_, int p_38942_) {
+                return ItemStack.EMPTY;
             }
         }, 3, 3);
         for (int i = 0; i < 9; ++i) {
@@ -102,7 +113,7 @@ public class CraftingUtils {
     }
 
     public static ItemStack getCrushOutput(Level world, ItemStack stack) {
-        for (CrusherRecipe recipe : RecipeUtil.getRecipes(world, CrusherRecipe.SERIALIZER.getRecipeType())) {
+        for (CrusherRecipe recipe : RecipeUtil.getRecipes(world, (RecipeType<CrusherRecipe>)ModuleCore.CRUSHER_TYPE.get())) {
             if (recipe.input.test(stack)) return recipe.output.getItems()[0];
         }
         return ItemStack.EMPTY;

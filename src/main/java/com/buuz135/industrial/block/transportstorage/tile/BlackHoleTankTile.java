@@ -30,23 +30,21 @@ import com.hrznstudio.titanium.api.filter.FilterSlot;
 import com.hrznstudio.titanium.block.BasicTileBlock;
 import com.hrznstudio.titanium.component.fluid.SidedFluidTankComponent;
 import com.hrznstudio.titanium.filter.ItemStackFilter;
-
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.DyeColor;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.Rarity;
-import net.minecraft.world.InteractionResult;
-import net.minecraft.core.Direction;
-import net.minecraft.world.InteractionHand;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
-
+import net.minecraftforge.common.capabilities.ForgeCapabilities;
 import net.minecraftforge.fluids.FluidUtil;
-import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
 
 import javax.annotation.Nonnull;
 
@@ -58,7 +56,7 @@ public class BlackHoleTankTile extends BHTile<BlackHoleTankTile> {
     private ItemStackFilter filter;
     private boolean isEmpty;
 
-    public BlackHoleTankTile(BasicTileBlock<BlackHoleTankTile> base, BlockEntityType<?> type,  Rarity rarity, BlockPos blockPos, BlockState blockState) {
+    public BlackHoleTankTile(BasicTileBlock<BlackHoleTankTile> base, BlockEntityType<?> type, Rarity rarity, BlockPos blockPos, BlockState blockState) {
         super(base, type, blockPos, blockState);
         this.addTank(this.tank = (BigSidedFluidTankComponent<BlackHoleTankTile>) new BigSidedFluidTankComponent<BlackHoleTankTile>("tank", BlockUtils.getFluidAmountByRarity(rarity), 20, 20, 0) {
             @Override
@@ -67,10 +65,10 @@ public class BlackHoleTankTile extends BHTile<BlackHoleTankTile> {
             }
         }
                 .setColor(DyeColor.BLUE)
-                .setValidator(fluidStack ->  filter.getFilterSlots()[0].getFilter().isEmpty() ? true : filter.getFilterSlots()[0].getFilter().getCapability(CapabilityFluidHandler.FLUID_HANDLER_ITEM_CAPABILITY).map(iFluidHandlerItem -> iFluidHandlerItem.getFluidInTank(0).isFluidEqual(fluidStack)).orElse(false)
-        ));
-        this.addFilter(filter = new ItemStackFilter("filter" , 1));
-        FilterSlot slot = new FilterSlot<>(79, 60 , 0, ItemStack.EMPTY);
+                .setValidator(fluidStack -> filter.getFilterSlots()[0].getFilter().isEmpty() ? true : filter.getFilterSlots()[0].getFilter().getCapability(ForgeCapabilities.FLUID_HANDLER_ITEM).map(iFluidHandlerItem -> iFluidHandlerItem.getFluidInTank(0).isFluidEqual(fluidStack)).orElse(false)
+                ));
+        this.addFilter(filter = new ItemStackFilter("filter", 1));
+        FilterSlot slot = new FilterSlot<>(79, 60, 0, ItemStack.EMPTY);
         slot.setColor(DyeColor.CYAN);
         this.filter.setFilter(0, slot);
         this.isEmpty = true;
@@ -79,7 +77,7 @@ public class BlackHoleTankTile extends BHTile<BlackHoleTankTile> {
     @Override
     public void clientTick(Level level, BlockPos pos, BlockState state, BlackHoleTankTile blockEntity) {
         super.clientTick(level, pos, state, blockEntity);
-        if (isEmpty != (tank.getFluidAmount() == 0)){
+        if (isEmpty != (tank.getFluidAmount() == 0)) {
             this.level.sendBlockUpdated(this.worldPosition, this.level.getBlockState(this.worldPosition), this.level.getBlockState(this.worldPosition), Block.UPDATE_ALL);
         }
         isEmpty = tank.getFluidAmount() == 0;
@@ -98,7 +96,7 @@ public class BlackHoleTankTile extends BHTile<BlackHoleTankTile> {
     public ItemStack getDisplayStack() {
         if (tank.getFluidAmount() > 0) {
             ItemStack filledBucket = FluidUtil.getFilledBucket(tank.getFluid());
-            if(!filledBucket.isEmpty()) return filledBucket;
+            if (!filledBucket.isEmpty()) return filledBucket;
         }
         return new ItemStack(Items.BUCKET);
     }

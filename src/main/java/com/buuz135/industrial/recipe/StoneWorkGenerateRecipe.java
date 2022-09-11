@@ -21,16 +21,17 @@
  */
 package com.buuz135.industrial.recipe;
 
+import com.buuz135.industrial.module.ModuleCore;
 import com.buuz135.industrial.utils.Reference;
 import com.hrznstudio.titanium.component.fluid.FluidTankComponent;
 import com.hrznstudio.titanium.recipe.serializer.GenericSerializer;
 import com.hrznstudio.titanium.recipe.serializer.SerializableRecipe;
-import net.minecraft.world.level.block.Blocks;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.Container;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.RecipeType;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.Blocks;
 import net.minecraftforge.fluids.capability.IFluidHandler;
 import net.minecraftforge.fluids.capability.templates.FluidTank;
 
@@ -39,16 +40,15 @@ import java.util.List;
 
 public class StoneWorkGenerateRecipe extends SerializableRecipe {
 
-    public static GenericSerializer<StoneWorkGenerateRecipe> SERIALIZER = new GenericSerializer<>(new ResourceLocation(Reference.MOD_ID, "stonework_generate"), StoneWorkGenerateRecipe.class);
     public static List<StoneWorkGenerateRecipe> RECIPES = new ArrayList<>();
 
     static {
-        new StoneWorkGenerateRecipe(new ResourceLocation(Reference.MOD_ID, "cobblestone"),new ItemStack(Blocks.COBBLESTONE), 1000, 1000, 0, 0);
-        new StoneWorkGenerateRecipe(new ResourceLocation(Reference.MOD_ID, "netherrack"),new ItemStack(Blocks.NETHERRACK), 250, 400, 250, 200);
-        new StoneWorkGenerateRecipe(new ResourceLocation(Reference.MOD_ID, "obsidian"),new ItemStack(Blocks.OBSIDIAN), 1000, 1000, 0, 1000);
-        new StoneWorkGenerateRecipe(new ResourceLocation(Reference.MOD_ID, "granite"),new ItemStack(Blocks.GRANITE), 200, 200, 200, 200);
-        new StoneWorkGenerateRecipe(new ResourceLocation(Reference.MOD_ID, "diorite"),new ItemStack(Blocks.DIORITE), 200, 250, 200, 250);
-        new StoneWorkGenerateRecipe(new ResourceLocation(Reference.MOD_ID, "andesite"),new ItemStack(Blocks.ANDESITE), 300, 300, 300, 300);
+        new StoneWorkGenerateRecipe(new ResourceLocation(Reference.MOD_ID, "cobblestone"), new ItemStack(Blocks.COBBLESTONE), 1000, 1000, 0, 0);
+        new StoneWorkGenerateRecipe(new ResourceLocation(Reference.MOD_ID, "netherrack"), new ItemStack(Blocks.NETHERRACK), 250, 400, 250, 200);
+        new StoneWorkGenerateRecipe(new ResourceLocation(Reference.MOD_ID, "obsidian"), new ItemStack(Blocks.OBSIDIAN), 1000, 1000, 0, 1000);
+        new StoneWorkGenerateRecipe(new ResourceLocation(Reference.MOD_ID, "granite"), new ItemStack(Blocks.GRANITE), 200, 200, 200, 200);
+        new StoneWorkGenerateRecipe(new ResourceLocation(Reference.MOD_ID, "diorite"), new ItemStack(Blocks.DIORITE), 200, 250, 200, 250);
+        new StoneWorkGenerateRecipe(new ResourceLocation(Reference.MOD_ID, "andesite"), new ItemStack(Blocks.ANDESITE), 300, 300, 300, 300);
     }
 
     public ItemStack output;
@@ -93,19 +93,19 @@ public class StoneWorkGenerateRecipe extends SerializableRecipe {
 
     @Override
     public GenericSerializer<? extends SerializableRecipe> getSerializer() {
-        return SERIALIZER;
+        return (GenericSerializer<? extends SerializableRecipe>) ModuleCore.STONEWORK_GENERATE_SERIALIZER.get();
     }
 
     @Override
     public RecipeType<?> getType() {
-        return SERIALIZER.getRecipeType();
+        return ModuleCore.STONEWORK_GENERATE_TYPE.get();
     }
 
-    public boolean canIncrease(FluidTank fluidTank, FluidTank fluidTank2){
+    public boolean canIncrease(FluidTank fluidTank, FluidTank fluidTank2) {
         return fluidTank.getFluidAmount() >= waterNeed && fluidTank2.getFluidAmount() >= lavaNeed;
     }
 
-    public void consume(FluidTankComponent fluidTank, FluidTankComponent fluidTank2){
+    public void consume(FluidTankComponent fluidTank, FluidTankComponent fluidTank2) {
         fluidTank.drainForced(waterConsume, IFluidHandler.FluidAction.EXECUTE);
         fluidTank2.drainForced(lavaConsume, IFluidHandler.FluidAction.EXECUTE);
     }

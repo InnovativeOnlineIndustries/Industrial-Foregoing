@@ -51,7 +51,6 @@ import net.minecraft.core.NonNullList;
 import net.minecraft.data.recipes.FinishedRecipe;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResultHolder;
@@ -112,7 +111,7 @@ public class ItemInfinity extends IFCustomItem implements MenuProvider, IButtonH
         return power;
     }
 
-    public void disableArea(){
+    public void disableArea() {
         this.usesArea = false;
     }
 
@@ -151,7 +150,7 @@ public class ItemInfinity extends IFCustomItem implements MenuProvider, IButtonH
 
     @Override
     public void fillItemCategory(CreativeModeTab group, NonNullList<ItemStack> items) {
-        if (allowdedIn(group)) {
+        if (allowedIn(group)) {
             for (InfinityTier value : InfinityTier.values()) {
                 items.add(createStack(value.getPowerNeeded(), 0, false));
             }
@@ -202,9 +201,9 @@ public class ItemInfinity extends IFCustomItem implements MenuProvider, IButtonH
 
     @Override
     public int getBarWidth(ItemStack stack) {
-        if (!DistExecutor.safeRunForDist(() ->  Screen::hasShiftDown, () -> Boolean.FALSE::booleanValue)) { //hasShiftDown
+        if (!DistExecutor.safeRunForDist(() -> Screen::hasShiftDown, () -> Boolean.FALSE::booleanValue)) { //hasShiftDown
             int fuel = getFuelFromStack(stack);
-            return (int) Math.round(fuel* 13D / 1_000_000D);
+            return (int) Math.round(fuel * 13D / 1_000_000D);
         } else {
             long power = getPowerFromStack(stack);
             return (int) Math.round(power * 13D / (double) InfinityTier.getTierBraquet(power).getRight().getPowerNeeded());
@@ -243,12 +242,12 @@ public class ItemInfinity extends IFCustomItem implements MenuProvider, IButtonH
 
     public boolean enoughFuel(ItemStack stack) {
         int i = EnchantmentHelper.getItemEnchantmentLevel(Enchantments.UNBREAKING, stack);
-        return getFuelFromStack(stack) >= biofuelConsumption * ( 1 / (i + 1)) || getPowerFromStack(stack) >= powerConsumption * ( 1 / (i + 1));
+        return getFuelFromStack(stack) >= biofuelConsumption * (1 / (i + 1)) || getPowerFromStack(stack) >= powerConsumption * (1 / (i + 1));
     }
 
     public void consumeFuel(ItemStack stack) {
         double i = EnchantmentHelper.getItemEnchantmentLevel(Enchantments.UNBREAKING, stack);
-        if (getFuelFromStack(stack) >= biofuelConsumption * ( 1 / (i + 1))) {
+        if (getFuelFromStack(stack) >= biofuelConsumption * (1 / (i + 1))) {
             stack.getTag().getCompound("Fluid").putInt("Amount", (int) Math.max(0, stack.getTag().getCompound("Fluid").getInt("Amount") - biofuelConsumption * (1 / (i + 1))));
         } else {
             stack.getTag().putLong("Energy", (long) (stack.getTag().getLong("Energy") - powerConsumption * (1 / (i + 1))));
@@ -269,20 +268,20 @@ public class ItemInfinity extends IFCustomItem implements MenuProvider, IButtonH
         Pair<InfinityTier, InfinityTier> braquet = InfinityTier.getTierBraquet(power);
         InfinityTier current = getSelectedTier(stack);
         if (usesArea)
-            tooltip.add(new TranslatableComponent("text.industrialforegoing.display.current_area").append(" ").append(getFormattedArea(stack, current, current.getRadius(), this.usesDepth)).withStyle(ChatFormatting.GRAY));
-        tooltip.add(new TranslatableComponent("text.industrialforegoing.display.tier").append(" " + braquet.getLeft().getColor() + braquet.getLeft().getLocalizedName()).withStyle(ChatFormatting.GRAY));
-        tooltip.add(new TranslatableComponent("text.industrialforegoing.display.power").append(" ").append(ChatFormatting.RED + NumberFormat.getNumberInstance(Locale.ROOT).format(power) + ChatFormatting.GREEN).append("/").append(NumberFormat.getNumberInstance(Locale.ROOT).format(braquet.getRight().getPowerNeeded())).append("RF ").append(new TranslatableComponent("text.industrialforegoing.display.next_tier")).withStyle(ChatFormatting.GRAY));
+            tooltip.add(Component.translatable("text.industrialforegoing.display.current_area").append(" ").append(getFormattedArea(stack, current, current.getRadius(), this.usesDepth)).withStyle(ChatFormatting.GRAY));
+        tooltip.add(Component.translatable("text.industrialforegoing.display.tier").append(" " + braquet.getLeft().getColor() + braquet.getLeft().getLocalizedName()).withStyle(ChatFormatting.GRAY));
+        tooltip.add(Component.translatable("text.industrialforegoing.display.power").append(" ").append(ChatFormatting.RED + NumberFormat.getNumberInstance(Locale.ROOT).format(power) + ChatFormatting.GREEN).append("/").append(NumberFormat.getNumberInstance(Locale.ROOT).format(braquet.getRight().getPowerNeeded())).append("RF ").append(Component.translatable("text.industrialforegoing.display.next_tier")).withStyle(ChatFormatting.GRAY));
         int fuelAmount = getFuelFromStack(stack);
-        tooltip.add(new TranslatableComponent("text.industrialforegoing.display.fluid").append(" ").append(ChatFormatting.LIGHT_PURPLE + NumberFormat.getNumberInstance(Locale.ROOT).format(fuelAmount) + ChatFormatting.GRAY).append("/").append(NumberFormat.getNumberInstance(Locale.ROOT).format(1000000)).append(" mb of Biofuel").withStyle(ChatFormatting.GRAY));
+        tooltip.add(Component.translatable("text.industrialforegoing.display.fluid").append(" ").append(ChatFormatting.LIGHT_PURPLE + NumberFormat.getNumberInstance(Locale.ROOT).format(fuelAmount) + ChatFormatting.GRAY).append("/").append(NumberFormat.getNumberInstance(Locale.ROOT).format(1000000)).append(" mb of Biofuel").withStyle(ChatFormatting.GRAY));
         if (usesArea)
-            tooltip.add(new TranslatableComponent("text.industrialforegoing.display.max_area").append(" ").append(getFormattedArea(stack, braquet.getLeft(), braquet.getLeft().getRadius(), this.usesDepth)).withStyle(ChatFormatting.GRAY));
+            tooltip.add(Component.translatable("text.industrialforegoing.display.max_area").append(" ").append(getFormattedArea(stack, braquet.getLeft(), braquet.getLeft().getRadius(), this.usesDepth)).withStyle(ChatFormatting.GRAY));
         if (canCharge(stack)) {
-            tooltip.add(new TranslatableComponent("text.industrialforegoing.display.charging").withStyle(ChatFormatting.GRAY).append(new TranslatableComponent("text.industrialforegoing.display.enabled").withStyle(ChatFormatting.GREEN)));
+            tooltip.add(Component.translatable("text.industrialforegoing.display.charging").withStyle(ChatFormatting.GRAY).append(Component.translatable("text.industrialforegoing.display.enabled").withStyle(ChatFormatting.GREEN)));
         } else {
-            tooltip.add(new TranslatableComponent("text.industrialforegoing.display.charging").withStyle(ChatFormatting.GRAY).append(new TranslatableComponent("text.industrialforegoing.display.disabled").withStyle(ChatFormatting.RED)));
+            tooltip.add(Component.translatable("text.industrialforegoing.display.charging").withStyle(ChatFormatting.GRAY).append(Component.translatable("text.industrialforegoing.display.disabled").withStyle(ChatFormatting.RED)));
         }
         if (isSpecial(stack))
-            tooltip.add(new TranslatableComponent("text.industrialforegoing.display.special").withStyle(ChatFormatting.GOLD));
+            tooltip.add(Component.translatable("text.industrialforegoing.display.special").withStyle(ChatFormatting.GOLD));
     }
 
     public Pair<BlockPos, BlockPos> getArea(BlockPos pos, Direction facing, InfinityTier currentTier, boolean withDepth) {
@@ -311,7 +310,7 @@ public class ItemInfinity extends IFCustomItem implements MenuProvider, IButtonH
 
     @Override
     public Component getDisplayName() {
-        return new TranslatableComponent(this.getDescriptionId()).withStyle(ChatFormatting.DARK_GRAY);
+        return Component.translatable(this.getDescriptionId()).withStyle(ChatFormatting.DARK_GRAY);
     }
 
     @Nullable
@@ -330,7 +329,7 @@ public class ItemInfinity extends IFCustomItem implements MenuProvider, IButtonH
         if (player.isCrouching()) {
             if (player instanceof ServerPlayer) {
                 IndustrialForegoing.NETWORK.get().sendTo(new BackpackOpenedMessage(player.inventory.selected, PlayerInventoryFinder.MAIN), ((ServerPlayer) player).connection.getConnection(), NetworkDirection.PLAY_TO_CLIENT);
-                NetworkHooks.openGui((ServerPlayer) player, this, buffer ->
+                NetworkHooks.openScreen((ServerPlayer) player, this, buffer ->
                         LocatorFactory.writePacketBuffer(buffer, new HeldStackLocatorInstance(handIn == InteractionHand.MAIN_HAND)));
             }
             return InteractionResultHolder.success(player.getItemInHand(handIn));
@@ -402,9 +401,9 @@ public class ItemInfinity extends IFCustomItem implements MenuProvider, IButtonH
             @Override
             public String getText() {
                 if (ItemInfinity.canCharge(stack.get())) {//setStyle
-                    return ChatFormatting.DARK_GRAY + new TranslatableComponent("text.industrialforegoing.display.charging").getString() + ChatFormatting.GREEN + new TranslatableComponent("text.industrialforegoing.display.enabled").getString();
+                    return ChatFormatting.DARK_GRAY + Component.translatable("text.industrialforegoing.display.charging").getString() + ChatFormatting.GREEN + Component.translatable("text.industrialforegoing.display.enabled").getString();
                 } else {
-                    return ChatFormatting.DARK_GRAY + new TranslatableComponent("text.industrialforegoing.display.charging").getString() + ChatFormatting.RED + new TranslatableComponent("text.industrialforegoing.display.disabled").getString();
+                    return ChatFormatting.DARK_GRAY + Component.translatable("text.industrialforegoing.display.charging").getString() + ChatFormatting.RED + Component.translatable("text.industrialforegoing.display.disabled").getString();
                 }
             }
         });
@@ -415,12 +414,12 @@ public class ItemInfinity extends IFCustomItem implements MenuProvider, IButtonH
                     return ItemInfinity.this.isSpecialEnabled(stack.get()) ? 0 : 1;
                 }
             });
-            factory.add(() -> new TextScreenAddon(ChatFormatting.GOLD + new TranslatableComponent("text.industrialforegoing.display.special").getString(), 12 + 14 + 4, 84, false));
+            factory.add(() -> new TextScreenAddon(ChatFormatting.GOLD + Component.translatable("text.industrialforegoing.display.special").getString(), 12 + 14 + 4, 84, false));
         }
         return factory;
     }
 
-    public IFactory<? extends FluidHandlerScreenProviderItemStack> getTankConstructor(ItemStack stack){
+    public IFactory<? extends FluidHandlerScreenProviderItemStack> getTankConstructor(ItemStack stack) {
         return () -> new FluidHandlerScreenProviderItemStack(stack, 1_000_000) {
             @Override
             public boolean canFillFluidType(FluidStack fluid) {
@@ -441,8 +440,8 @@ public class ItemInfinity extends IFCustomItem implements MenuProvider, IButtonH
         };
     }
 
-    public IFactory<InfinityEnergyStorage> getEnergyConstructor(ItemStack stack){
-        return () ->  new InfinityEnergyStorage(InfinityTier.ARTIFACT.getPowerNeeded(), 10, 20) {
+    public IFactory<InfinityEnergyStorage> getEnergyConstructor(ItemStack stack) {
+        return () -> new InfinityEnergyStorage(InfinityTier.ARTIFACT.getPowerNeeded(), 10, 20) {
             @Override
             public long getLongEnergyStored() {
                 if (stack.hasTag()) {

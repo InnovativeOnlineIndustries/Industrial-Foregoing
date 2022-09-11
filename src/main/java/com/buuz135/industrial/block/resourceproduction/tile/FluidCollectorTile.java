@@ -28,7 +28,6 @@ import com.buuz135.industrial.config.machine.resourceproduction.FluidCollectorCo
 import com.buuz135.industrial.module.ModuleResourceProduction;
 import com.buuz135.industrial.utils.BlockUtils;
 import com.hrznstudio.titanium.annotation.Save;
-import com.hrznstudio.titanium.block.BasicTileBlock;
 import com.hrznstudio.titanium.component.energy.EnergyStorageComponent;
 import com.hrznstudio.titanium.component.fluid.FluidTankComponent;
 import com.hrznstudio.titanium.component.fluid.SidedFluidTankComponent;
@@ -38,8 +37,8 @@ import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.material.Fluid;
-import net.minecraftforge.fluids.FluidAttributes;
 import net.minecraftforge.fluids.FluidStack;
+import net.minecraftforge.fluids.FluidType;
 import net.minecraftforge.fluids.capability.IFluidHandler;
 
 import javax.annotation.Nonnull;
@@ -53,7 +52,7 @@ public class FluidCollectorTile extends IndustrialAreaWorkingTile<FluidCollector
     private SidedFluidTankComponent<FluidCollectorTile> tank;
 
     public FluidCollectorTile(BlockPos blockPos, BlockState blockState) {
-        super(ModuleResourceProduction.FLUID_COLLECTOR, RangeManager.RangeType.BEHIND, false,FluidCollectorConfig.powerPerOperation, blockPos, blockState);
+        super(ModuleResourceProduction.FLUID_COLLECTOR, RangeManager.RangeType.BEHIND, false, FluidCollectorConfig.powerPerOperation, blockPos, blockState);
         this.addTank(this.tank = (SidedFluidTankComponent<FluidCollectorTile>) new SidedFluidTankComponent<FluidCollectorTile>("output", FluidCollectorConfig.maxOutputTankSize, 43, 20, 0)
                 .setColor(DyeColor.ORANGE)
                 .setTankAction(FluidTankComponent.Action.DRAIN)
@@ -69,13 +68,13 @@ public class FluidCollectorTile extends IndustrialAreaWorkingTile<FluidCollector
             BlockPos pointed = getPointedBlockPos();
             if (isLoaded(pointed) && !level.isEmptyBlock(pointed) && BlockUtils.canBlockBeBroken(this.level, pointed) && level.getFluidState(pointed).isSource()) {
                 Fluid fluid = level.getFluidState(pointed).getType();
-                if (tank.isEmpty() || (tank.getFluid().getFluid().isSame(fluid) && tank.getFluidAmount() + FluidAttributes.BUCKET_VOLUME <= tank.getCapacity())) {
+                if (tank.isEmpty() || (tank.getFluid().getFluid().isSame(fluid) && tank.getFluidAmount() + FluidType.BUCKET_VOLUME <= tank.getCapacity())) {
                     if (level.getBlockState(pointed).hasProperty(BlockStateProperties.WATERLOGGED)) { //has
                         level.setBlockAndUpdate(pointed, level.getBlockState(pointed).setValue(BlockStateProperties.WATERLOGGED, false));
                     } else {
                         level.setBlockAndUpdate(pointed, Blocks.AIR.defaultBlockState());
                     }
-                    tank.fillForced(new FluidStack(fluid, FluidAttributes.BUCKET_VOLUME), IFluidHandler.FluidAction.EXECUTE);
+                    tank.fillForced(new FluidStack(fluid, FluidType.BUCKET_VOLUME), IFluidHandler.FluidAction.EXECUTE);
                     increasePointer();
                     return new WorkAction(1, getPowerPerOperation);
                 }

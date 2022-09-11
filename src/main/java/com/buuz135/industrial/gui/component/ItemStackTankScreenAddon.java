@@ -22,36 +22,24 @@
 
 package com.buuz135.industrial.gui.component;
 
-import com.hrznstudio.titanium.Titanium;
 import com.hrznstudio.titanium.api.client.assets.types.ITankAsset;
 import com.hrznstudio.titanium.client.screen.addon.BasicScreenAddon;
 import com.hrznstudio.titanium.client.screen.asset.IAssetProvider;
 import com.hrznstudio.titanium.component.fluid.FluidTankComponent;
-import com.hrznstudio.titanium.network.locator.ILocatable;
-import com.hrznstudio.titanium.network.messages.ButtonClickNetworkMessage;
 import com.hrznstudio.titanium.util.AssetUtil;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.ChatFormatting;
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screens.Screen;
-import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
 import net.minecraft.client.renderer.texture.AbstractTexture;
 import net.minecraft.client.renderer.texture.TextureAtlas;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
-import net.minecraft.client.resources.sounds.SimpleSoundInstance;
 import net.minecraft.core.Direction;
-import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.TextComponent;
-import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.sounds.SoundEvents;
-import net.minecraft.sounds.SoundSource;
-import net.minecraft.world.item.BucketItem;
-import net.minecraftforge.fluids.FluidAttributes;
+import net.minecraftforge.client.extensions.common.IClientFluidTypeExtensions;
+import net.minecraftforge.common.Tags;
 import net.minecraftforge.fluids.FluidStack;
-import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
 import net.minecraftforge.fluids.capability.IFluidHandler;
 
 import java.awt.*;
@@ -83,22 +71,23 @@ public class ItemStackTankScreenAddon extends BasicScreenAddon {
             int capacity = tank.getTankCapacity(tankSlot);
             int topBottomPadding = asset.getFluidRenderPadding(Direction.UP) + asset.getFluidRenderPadding(Direction.DOWN);
             int offset = (stored * (area.height - topBottomPadding) / capacity);
-            ResourceLocation flowing = fluidStack.getFluid().getAttributes().getStillTexture(fluidStack);
+            IClientFluidTypeExtensions renderProperties = IClientFluidTypeExtensions.of(fluidStack.getFluid());
+            ResourceLocation flowing = renderProperties.getStillTexture(fluidStack);
             if (flowing != null) {
                 AbstractTexture texture = screen.getMinecraft().getTextureManager().getTexture(TextureAtlas.LOCATION_BLOCKS); //getAtlasSprite
                 if (texture instanceof TextureAtlas) {
                     TextureAtlasSprite sprite = ((TextureAtlas) texture).getSprite(flowing);
                     if (sprite != null) {
-                        RenderSystem.setShaderTexture(0,TextureAtlas.LOCATION_BLOCKS);
-                        Color color = new Color(fluidStack.getFluid().getAttributes().getColor());
+                        RenderSystem.setShaderTexture(0, TextureAtlas.LOCATION_BLOCKS);
+                        Color color = new Color(renderProperties.getTintColor());
                         RenderSystem.setShaderColor(color.getRed() / 255f, color.getGreen() / 255f, color.getBlue() / 255f, color.getAlpha() / 255f);
                         RenderSystem.enableBlend();
                         Screen.blit(stack, this.getPosX() + guiX + asset.getFluidRenderPadding(Direction.WEST),
-                            this.getPosY() + guiY + asset.getFluidRenderPadding(Direction.UP) + (fluidStack.getFluid().getAttributes().isGaseous() ? 0 : (area.height - topBottomPadding) - offset),
-                            0,
-                            (int) (area.getWidth() - asset.getFluidRenderPadding(Direction.EAST) - asset.getFluidRenderPadding(Direction.WEST)),
-                            offset,
-                            sprite);
+                                this.getPosY() + guiY + asset.getFluidRenderPadding(Direction.UP) + (fluidStack.getFluid().is(Tags.Fluids.GASEOUS) ? 0 : (area.height - topBottomPadding) - offset),
+                                0,
+                                (int) (area.getWidth() - asset.getFluidRenderPadding(Direction.EAST) - asset.getFluidRenderPadding(Direction.WEST)),
+                                offset,
+                                sprite);
                         RenderSystem.disableBlend();
                         RenderSystem.setShaderColor(1, 1, 1, 1);
                     }
@@ -112,42 +101,42 @@ public class ItemStackTankScreenAddon extends BasicScreenAddon {
 
     @Override
     public void drawForegroundLayer(PoseStack stack, Screen screen, IAssetProvider provider, int guiX, int guiY, int mouseX, int mouseY, float partialTicks) {
-        
+
     }
 
     @Override
     public List<Component> getTooltipLines() {
         List<Component> strings = new ArrayList<>();
-        strings.add(new TextComponent(ChatFormatting.GOLD + new TranslatableComponent("tooltip.titanium.tank.fluid").getString()).append(tank.getFluidInTank(tankSlot).isEmpty() ? new TranslatableComponent("tooltip.titanium.tank.empty").withStyle(ChatFormatting.WHITE) :  new TranslatableComponent(tank.getFluidInTank(tankSlot).getFluid().getAttributes().getTranslationKey(tank.getFluidInTank(tankSlot)))).withStyle(ChatFormatting.WHITE));
-        strings.add(new TranslatableComponent("tooltip.titanium.tank.amount").withStyle(ChatFormatting.GOLD).append(new TextComponent(ChatFormatting.WHITE + new DecimalFormat().format(tank.getFluidInTank(tankSlot).getAmount()) + ChatFormatting.GOLD + "/" + ChatFormatting.WHITE + new DecimalFormat().format(tank.getTankCapacity(tankSlot)) + ChatFormatting.DARK_AQUA + "mb")));
+        strings.add(Component.literal(ChatFormatting.GOLD + Component.translatable("tooltip.titanium.tank.fluid").getString()).append(tank.getFluidInTank(tankSlot).isEmpty() ? Component.translatable("tooltip.titanium.tank.empty").withStyle(ChatFormatting.WHITE) : Component.translatable(tank.getFluidInTank(tankSlot).getFluid().getFluidType().getDescriptionId())).withStyle(ChatFormatting.WHITE));
+        strings.add(Component.translatable("tooltip.titanium.tank.amount").withStyle(ChatFormatting.GOLD).append(Component.literal(ChatFormatting.WHITE + new DecimalFormat().format(tank.getFluidInTank(tankSlot).getAmount()) + ChatFormatting.GOLD + "/" + ChatFormatting.WHITE + new DecimalFormat().format(tank.getTankCapacity(tankSlot)) + ChatFormatting.DARK_AQUA + "mb")));
         /*
-        if (!Minecraft.getInstance().player.inventory.getSelected().isEmpty() && Minecraft.getInstance().player.inventory.getSelected().getCapability(CapabilityFluidHandler.FLUID_HANDLER_ITEM_CAPABILITY).isPresent()){
-            Minecraft.getInstance().player.inventory.getSelected().getCapability(CapabilityFluidHandler.FLUID_HANDLER_ITEM_CAPABILITY).ifPresent(iFluidHandlerItem -> {
+        if (!Minecraft.getInstance().player.inventory.getSelected().isEmpty() && Minecraft.getInstance().player.inventory.getSelected().getCapability(ForgeCapabilities.FLUID_HANDLER_ITEM).isPresent()){
+            Minecraft.getInstance().player.inventory.getSelected().getCapability(ForgeCapabilities.FLUID_HANDLER_ITEM).ifPresent(iFluidHandlerItem -> {
                 boolean isBucket = Minecraft.getInstance().player.inventory.getSelected().getItem() instanceof BucketItem;
-                int amount = isBucket ? FluidAttributes.BUCKET_VOLUME : Integer.MAX_VALUE;
+                int amount = isBucket ? FluidType.BUCKET_VOLUME : Integer.MAX_VALUE;
                 boolean canFillFromItem = false;
                 boolean canDrainFromItem = false;
                 if (isBucket) {
-                    canFillFromItem = tank.fill(iFluidHandlerItem.drain(amount, IFluidHandler.FluidAction.SIMULATE), IFluidHandler.FluidAction.SIMULATE) == FluidAttributes.BUCKET_VOLUME;
-                    canDrainFromItem = iFluidHandlerItem.fill(tank.drain(amount, IFluidHandler.FluidAction.SIMULATE), IFluidHandler.FluidAction.SIMULATE) == FluidAttributes.BUCKET_VOLUME;
+                    canFillFromItem = tank.fill(iFluidHandlerItem.drain(amount, IFluidHandler.FluidAction.SIMULATE), IFluidHandler.FluidAction.SIMULATE) == FluidType.BUCKET_VOLUME;
+                    canDrainFromItem = iFluidHandlerItem.fill(tank.drain(amount, IFluidHandler.FluidAction.SIMULATE), IFluidHandler.FluidAction.SIMULATE) == FluidType.BUCKET_VOLUME;
                 } else {
                     canFillFromItem = tank.fill(iFluidHandlerItem.drain(amount, IFluidHandler.FluidAction.SIMULATE), IFluidHandler.FluidAction.SIMULATE) > 0;
                     canDrainFromItem = iFluidHandlerItem.fill(tank.drain(amount, IFluidHandler.FluidAction.SIMULATE), IFluidHandler.FluidAction.SIMULATE) > 0;
                 }
                 if (canFillFromItem)
-                    strings.add(new TranslatableComponent("tooltip.titanium.tank.can_fill_from_item").withStyle(ChatFormatting.BLUE));
+                    strings.add(Component.translatable("tooltip.titanium.tank.can_fill_from_item").withStyle(ChatFormatting.BLUE));
                 if (canDrainFromItem)
-                    strings.add(new TranslatableComponent("tooltip.titanium.tank.can_drain_from_item").withStyle(ChatFormatting.GOLD));
+                    strings.add(Component.translatable("tooltip.titanium.tank.can_drain_from_item").withStyle(ChatFormatting.GOLD));
                 if (canFillFromItem)
-                    strings.add(new TranslatableComponent("tooltip.titanium.tank.action_fill").withStyle(ChatFormatting.DARK_GRAY));
+                    strings.add(Component.translatable("tooltip.titanium.tank.action_fill").withStyle(ChatFormatting.DARK_GRAY));
                 if (canDrainFromItem)
-                    strings.add(new TranslatableComponent("tooltip.titanium.tank.action_drain").withStyle(ChatFormatting.DARK_GRAY));
+                    strings.add(Component.translatable("tooltip.titanium.tank.action_drain").withStyle(ChatFormatting.DARK_GRAY));
                 if (!canDrainFromItem && !canFillFromItem) {
-                    strings.add(new TranslatableComponent("tooltip.titanium.tank.no_action").withStyle(ChatFormatting.RED));
+                    strings.add(Component.translatable("tooltip.titanium.tank.no_action").withStyle(ChatFormatting.RED));
                 }
             });
         } else {
-            strings.add(new TranslatableComponent("tooltip.titanium.tank.no_tank").withStyle(ChatFormatting.DARK_GRAY));
+            strings.add(Component.translatable("tooltip.titanium.tank.no_tank").withStyle(ChatFormatting.DARK_GRAY));
         }*/
         return strings;
     }
@@ -165,7 +154,7 @@ public class ItemStackTankScreenAddon extends BasicScreenAddon {
     @Override
     public boolean mouseClicked(double mouseX, double mouseY, int button) {
         /*
-        if (!Minecraft.getInstance().player.inventory.getSelected().isEmpty() && Minecraft.getInstance().player.inventory.getSelected().getCapability(CapabilityFluidHandler.FLUID_HANDLER_ITEM_CAPABILITY).isPresent()){
+        if (!Minecraft.getInstance().player.inventory.getSelected().isEmpty() && Minecraft.getInstance().player.inventory.getSelected().getCapability(ForgeCapabilities.FLUID_HANDLER_ITEM).isPresent()){
             Minecraft.getInstance().getSoundManager().play(new SimpleSoundInstance(SoundEvents.UI_BUTTON_CLICK, SoundSource.PLAYERS, 1f, 1f, Minecraft.getInstance().player.blockPosition())); //getPosition
             Screen screen = Minecraft.getInstance().screen;
             if (screen instanceof AbstractContainerScreen && ((AbstractContainerScreen) screen).getMenu() instanceof ILocatable) {
@@ -176,14 +165,14 @@ public class ItemStackTankScreenAddon extends BasicScreenAddon {
                 } else {
                     compoundNBT.putBoolean("Invalid", true);
                 }
-                Minecraft.getInstance().player.inventory.getSelected().getCapability(CapabilityFluidHandler.FLUID_HANDLER_ITEM_CAPABILITY).ifPresent(iFluidHandlerItem -> {
+                Minecraft.getInstance().player.inventory.getSelected().getCapability(ForgeCapabilities.FLUID_HANDLER_ITEM).ifPresent(iFluidHandlerItem -> {
                     boolean isBucket = Minecraft.getInstance().player.inventory.getSelected().getItem() instanceof BucketItem;
-                    int amount = isBucket ? FluidAttributes.BUCKET_VOLUME : Integer.MAX_VALUE;
+                    int amount = isBucket ? FluidType.BUCKET_VOLUME : Integer.MAX_VALUE;
                     boolean canFillFromItem = false;
                     boolean canDrainFromItem = false;
                     if (isBucket) {
-                        canFillFromItem = tank.fill(iFluidHandlerItem.drain(amount, IFluidHandler.FluidAction.SIMULATE), IFluidHandler.FluidAction.SIMULATE) == FluidAttributes.BUCKET_VOLUME;
-                        canDrainFromItem = iFluidHandlerItem.fill(tank.drain(amount, IFluidHandler.FluidAction.SIMULATE), IFluidHandler.FluidAction.SIMULATE) == FluidAttributes.BUCKET_VOLUME;
+                        canFillFromItem = tank.fill(iFluidHandlerItem.drain(amount, IFluidHandler.FluidAction.SIMULATE), IFluidHandler.FluidAction.SIMULATE) == FluidType.BUCKET_VOLUME;
+                        canDrainFromItem = iFluidHandlerItem.fill(tank.drain(amount, IFluidHandler.FluidAction.SIMULATE), IFluidHandler.FluidAction.SIMULATE) == FluidType.BUCKET_VOLUME;
                     } else {
                         canFillFromItem = tank.fill(iFluidHandlerItem.drain(amount, IFluidHandler.FluidAction.SIMULATE), IFluidHandler.FluidAction.SIMULATE) > 0;
                         canDrainFromItem = iFluidHandlerItem.fill(tank.drain(amount, IFluidHandler.FluidAction.SIMULATE), IFluidHandler.FluidAction.SIMULATE) > 0;

@@ -25,13 +25,12 @@ package com.buuz135.industrial.api.conveyor;
 import com.buuz135.industrial.api.IBlockContainer;
 import com.google.common.collect.ImmutableSet;
 import com.hrznstudio.titanium.api.IRecipeProvider;
-import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.item.Item;
+import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.core.BlockPos;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.level.Level;
-import net.minecraftforge.registries.ForgeRegistryEntry;
 
 import javax.annotation.Nonnull;
 import java.util.ArrayList;
@@ -39,15 +38,17 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Set;
 
-public abstract class ConveyorUpgradeFactory extends ForgeRegistryEntry<ConveyorUpgradeFactory> implements IRecipeProvider {
+public abstract class ConveyorUpgradeFactory implements IRecipeProvider {
 
     public static final ImmutableSet<Direction> HORIZONTAL = ImmutableSet.copyOf(Direction.Plane.HORIZONTAL.iterator());
     public static final ImmutableSet<Direction> DOWN = ImmutableSet.of(Direction.DOWN);
     public static final List<ConveyorUpgradeFactory> FACTORIES = new ArrayList<>();
 
     private Item upgradeItem;
+    private final String name;
 
-    public ConveyorUpgradeFactory() {
+    public ConveyorUpgradeFactory(String name) {
+        this.name = name;
         FACTORIES.add(this);
     }
 
@@ -78,5 +79,9 @@ public abstract class ConveyorUpgradeFactory extends ForgeRegistryEntry<Conveyor
 
     public void setUpgradeItem(Item upgradeItem) {
         this.upgradeItem = upgradeItem;
+    }
+
+    public String getName() {
+        return name;
     }
 }

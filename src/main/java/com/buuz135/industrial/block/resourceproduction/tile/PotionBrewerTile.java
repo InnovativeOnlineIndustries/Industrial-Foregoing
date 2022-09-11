@@ -28,7 +28,6 @@ import com.buuz135.industrial.module.ModuleResourceProduction;
 import com.hrznstudio.titanium.annotation.Save;
 import com.hrznstudio.titanium.api.IFactory;
 import com.hrznstudio.titanium.api.client.IScreenAddon;
-import com.hrznstudio.titanium.block.BasicTileBlock;
 import com.hrznstudio.titanium.client.screen.addon.ProgressBarScreenAddon;
 import com.hrznstudio.titanium.component.bundle.LockableInventoryBundle;
 import com.hrznstudio.titanium.component.energy.EnergyStorageComponent;
@@ -38,20 +37,18 @@ import com.hrznstudio.titanium.component.inventory.SidedInventoryComponent;
 import com.hrznstudio.titanium.component.progress.ProgressBarComponent;
 import com.hrznstudio.titanium.util.InventoryUtil;
 import com.hrznstudio.titanium.util.ItemHandlerUtil;
-
+import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
-import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.level.material.Fluids;
+import net.minecraft.core.NonNullList;
+import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.DyeColor;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.alchemy.PotionBrewing;
 import net.minecraft.world.item.alchemy.PotionUtils;
 import net.minecraft.world.item.alchemy.Potions;
-import net.minecraft.core.NonNullList;
-import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.TextComponent;
-import net.minecraft.ChatFormatting;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.material.Fluids;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.common.brewing.BrewingRecipeRegistry;
@@ -81,7 +78,7 @@ public class PotionBrewerTile extends IndustrialProcessingTile<PotionBrewerTile>
     private int state;
 
     public PotionBrewerTile(BlockPos blockPos, BlockState blockState) {
-        super(ModuleResourceProduction.POTION_BREWER, 100, 38, blockPos,blockState);
+        super(ModuleResourceProduction.POTION_BREWER, 100, 38, blockPos, blockState);
         this.state = 0;
         addBundle(brewingItems = new LockableInventoryBundle<>(this, new SidedInventoryComponent<PotionBrewerTile>("brewingInput", 55, 19, 6, 3)
                 .setColor(DyeColor.BLUE)
@@ -102,7 +99,7 @@ public class PotionBrewerTile extends IndustrialProcessingTile<PotionBrewerTile>
                             @Override
                             public List<Component> getTooltipLines() {
                                 List<Component> tooltip = new ArrayList<>();
-                                tooltip.add(new TextComponent(ChatFormatting.GOLD + "Blaze Fuel: " + ChatFormatting.WHITE + new DecimalFormat().format(blaze.getProgress()) + ChatFormatting.GOLD + "/" + ChatFormatting.WHITE + new DecimalFormat().format(blaze.getMaxProgress())));
+                                tooltip.add(Component.literal(ChatFormatting.GOLD + "Blaze Fuel: " + ChatFormatting.WHITE + new DecimalFormat().format(blaze.getProgress()) + ChatFormatting.GOLD + "/" + ChatFormatting.WHITE + new DecimalFormat().format(blaze.getMaxProgress())));
                                 return tooltip;
                             }
                         });

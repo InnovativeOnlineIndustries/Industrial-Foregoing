@@ -26,7 +26,6 @@ import com.buuz135.industrial.block.misc.MobDetectorBlock;
 import com.buuz135.industrial.block.tile.IndustrialAreaWorkingTile;
 import com.buuz135.industrial.block.tile.RangeManager;
 import com.buuz135.industrial.module.ModuleMisc;
-import com.hrznstudio.titanium.block.BasicTileBlock;
 import com.hrznstudio.titanium.component.energy.EnergyStorageComponent;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.entity.LivingEntity;

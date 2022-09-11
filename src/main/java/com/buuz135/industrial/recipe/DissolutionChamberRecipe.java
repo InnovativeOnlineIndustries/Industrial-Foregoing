@@ -22,7 +22,7 @@
 
 package com.buuz135.industrial.recipe;
 
-import com.buuz135.industrial.utils.Reference;
+import com.buuz135.industrial.module.ModuleCore;
 import com.hrznstudio.titanium.component.fluid.FluidTankComponent;
 import com.hrznstudio.titanium.recipe.serializer.GenericSerializer;
 import com.hrznstudio.titanium.recipe.serializer.SerializableRecipe;
@@ -41,7 +41,6 @@ import java.util.List;
 
 public class DissolutionChamberRecipe extends SerializableRecipe {
 
-    public static GenericSerializer<DissolutionChamberRecipe> SERIALIZER = new GenericSerializer<>(new ResourceLocation(Reference.MOD_ID, "dissolution_chamber"), DissolutionChamberRecipe.class);
     public static List<DissolutionChamberRecipe> RECIPES = new ArrayList<>();
 
 
@@ -114,11 +113,11 @@ public class DissolutionChamberRecipe extends SerializableRecipe {
 
     @Override
     public GenericSerializer<? extends SerializableRecipe> getSerializer() {
-        return SERIALIZER;
+        return (GenericSerializer<? extends SerializableRecipe>) ModuleCore.DISSOLUTION_SERIALIZER.get();
     }
 
     @Override
     public RecipeType<?> getType() {
-        return SERIALIZER.getRecipeType();
+        return ModuleCore.DISSOLUTION_TYPE.get();
     }
 }

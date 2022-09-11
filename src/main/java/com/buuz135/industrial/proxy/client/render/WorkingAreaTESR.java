@@ -22,8 +22,6 @@
 
 package com.buuz135.industrial.proxy.client.render;
 
-import java.awt.Color;
-
 import com.buuz135.industrial.block.tile.IndustrialAreaWorkingTile;
 import com.mojang.blaze3d.platform.GlStateManager;
 import com.mojang.blaze3d.systems.RenderSystem;
@@ -32,23 +30,21 @@ import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.mojang.blaze3d.vertex.VertexFormat;
 import com.mojang.math.Matrix4f;
-
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.GameRenderer;
-import net.minecraft.client.renderer.LevelRenderer;
-import net.minecraft.client.renderer.MultiBufferSource;
-import net.minecraft.client.renderer.RenderStateShard;
-import net.minecraft.client.renderer.RenderType;
+import net.minecraft.client.renderer.*;
 import net.minecraft.client.renderer.blockentity.BlockEntityRenderer;
 import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.shapes.VoxelShape;
 
+import java.awt.*;
+
 public class WorkingAreaTESR implements BlockEntityRenderer<IndustrialAreaWorkingTile> {
 
 
     private static RenderType AREA_TYPE = createRenderType();
+
     public static RenderType createRenderType() {
         RenderType.CompositeState state = RenderType.CompositeState.builder()
                 .setShaderState(new RenderStateShard.ShaderStateShard(GameRenderer::getPositionColorShader))

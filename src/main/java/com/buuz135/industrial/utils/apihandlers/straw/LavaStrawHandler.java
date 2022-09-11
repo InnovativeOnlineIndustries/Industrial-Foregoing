@@ -22,13 +22,13 @@
 
 package com.buuz135.industrial.utils.apihandlers.straw;
 
-import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.level.material.Fluid;
-import net.minecraft.world.level.material.Fluids;
+import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.damagesource.DamageSource;
-import net.minecraft.core.BlockPos;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.material.Fluid;
+import net.minecraft.world.level.material.Fluids;
 
 import javax.annotation.ParametersAreNonnullByDefault;
 
@@ -36,7 +36,6 @@ import javax.annotation.ParametersAreNonnullByDefault;
 public class LavaStrawHandler extends StrawHandlerBase {
     public LavaStrawHandler() {
         super(() -> Fluids.LAVA);
-        setRegistryName("lava");
     }
 
     @Override

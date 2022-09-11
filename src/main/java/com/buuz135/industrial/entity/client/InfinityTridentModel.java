@@ -25,7 +25,6 @@ package com.buuz135.industrial.entity.client;
 import com.buuz135.industrial.entity.InfinityTridentEntity;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
-
 import net.minecraft.client.model.EntityModel;
 import net.minecraft.client.model.geom.ModelPart;
 import net.minecraft.client.model.geom.PartPose;
@@ -36,43 +35,43 @@ import net.minecraft.client.model.geom.builders.PartDefinition;
 
 public class InfinityTridentModel extends EntityModel<InfinityTridentEntity> {
 
-	private final ModelPart main;
+    private final ModelPart main;
 
-	public InfinityTridentModel(ModelPart model) {
-		this.main = model;
-	}
+    public InfinityTridentModel(ModelPart model) {
+        this.main = model;
+    }
 
-	public static LayerDefinition createBodyLayer() {
-		MeshDefinition meshDefinition = new MeshDefinition();
-		PartDefinition partDefinition = meshDefinition.getRoot();
+    public static LayerDefinition createBodyLayer() {
+        MeshDefinition meshDefinition = new MeshDefinition();
+        PartDefinition partDefinition = meshDefinition.getRoot();
 
-		partDefinition.addOrReplaceChild("main", CubeListBuilder.create()
-						.texOffs(28, 42).addBox(-9.0f, 8.0f, 7.0f, 2.0f, 6.0f, 2.0f)
-						.texOffs(20, 42).addBox(-9.0f, 0.0f, 7.0f, 2.0f, 6.0f, 2.0f)
-						.texOffs(0, 29).addBox(-10.0f, 14.0f, 6.0f, 4.0f, 2.0f, 4.0f)
-						.texOffs(16, 12).addBox(-10.0f, 6.0f, 6.0f, 4.0f, 2.0f, 4.0f)
-						.texOffs(12, 42).addBox(-9.0f, -14.0f, 7.0f, 2.0f, 8.0f, 2.0f)
-						.texOffs(8, 12).addBox(-4.5f, -28.0f, 7.0f, 2.0f, 15.0f, 2.0f)
-						.texOffs(16, 29).addBox(-9.0f, -32.0f, 7.0f, 2.0f, 11.0f, 2.0f)
-						.texOffs(0, 42).addBox(-9.5f, -28.0f, 6.5f, 3.0f, 4.0f, 3.0f)
-						.texOffs(0, 12).addBox(-13.5f, -28.0f, 7.0f, 2.0f, 15.0f, 2.0f)
-						.texOffs(0, 0).addBox(-12.5f, -21.0f, 5.5f, 9.0f, 7.0f, 5.0f)
-						.texOffs(24, 29).addBox(-9.5f, -6.0f, 6.5f, 3.0f, 6.0f, 3.0f)
-						.texOffs(28, 0).addBox(-10.0f, 8.0f, 6.0f, 4.0f, 6.0f, 4.0f),
-				PartPose.offsetAndRotation(0.0f, 24.0f, 0.0f, 0.0f, 0.0f, 0.0f));
+        partDefinition.addOrReplaceChild("main", CubeListBuilder.create()
+                        .texOffs(28, 42).addBox(-9.0f, 8.0f, 7.0f, 2.0f, 6.0f, 2.0f)
+                        .texOffs(20, 42).addBox(-9.0f, 0.0f, 7.0f, 2.0f, 6.0f, 2.0f)
+                        .texOffs(0, 29).addBox(-10.0f, 14.0f, 6.0f, 4.0f, 2.0f, 4.0f)
+                        .texOffs(16, 12).addBox(-10.0f, 6.0f, 6.0f, 4.0f, 2.0f, 4.0f)
+                        .texOffs(12, 42).addBox(-9.0f, -14.0f, 7.0f, 2.0f, 8.0f, 2.0f)
+                        .texOffs(8, 12).addBox(-4.5f, -28.0f, 7.0f, 2.0f, 15.0f, 2.0f)
+                        .texOffs(16, 29).addBox(-9.0f, -32.0f, 7.0f, 2.0f, 11.0f, 2.0f)
+                        .texOffs(0, 42).addBox(-9.5f, -28.0f, 6.5f, 3.0f, 4.0f, 3.0f)
+                        .texOffs(0, 12).addBox(-13.5f, -28.0f, 7.0f, 2.0f, 15.0f, 2.0f)
+                        .texOffs(0, 0).addBox(-12.5f, -21.0f, 5.5f, 9.0f, 7.0f, 5.0f)
+                        .texOffs(24, 29).addBox(-9.5f, -6.0f, 6.5f, 3.0f, 6.0f, 3.0f)
+                        .texOffs(28, 0).addBox(-10.0f, 8.0f, 6.0f, 4.0f, 6.0f, 4.0f),
+                PartPose.offsetAndRotation(0.0f, 24.0f, 0.0f, 0.0f, 0.0f, 0.0f));
 
-		return LayerDefinition.create(meshDefinition, 64, 64);
-	}
+        return LayerDefinition.create(meshDefinition, 64, 64);
+    }
 
-	@Override
-	public void setupAnim(InfinityTridentEntity p_102618_, float p_102619_, float p_102620_, float p_102621_, float p_102622_, float p_102623_) {
+    @Override
+    public void setupAnim(InfinityTridentEntity p_102618_, float p_102619_, float p_102620_, float p_102621_, float p_102622_, float p_102623_) {
 
-	}
+    }
 
-	@Override
-	public void renderToBuffer(PoseStack poseStack, VertexConsumer buffer, int packedLight, int packedOverlay, float red, float green, float blue, float alpha) {
-		main.render(poseStack, buffer, packedLight, packedOverlay);
-	}
+    @Override
+    public void renderToBuffer(PoseStack poseStack, VertexConsumer buffer, int packedLight, int packedOverlay, float red, float green, float blue, float alpha) {
+        main.render(poseStack, buffer, packedLight, packedOverlay);
+    }
 
 
 }

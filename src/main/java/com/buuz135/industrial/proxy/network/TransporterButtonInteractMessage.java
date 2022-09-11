@@ -24,12 +24,11 @@ package com.buuz135.industrial.proxy.network;
 
 import com.buuz135.industrial.block.transportstorage.tile.TransporterTile;
 import com.hrznstudio.titanium.network.Message;
-import net.minecraftforge.network.NetworkEvent;
-
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraftforge.network.NetworkEvent;
 
 public class TransporterButtonInteractMessage extends Message {
 

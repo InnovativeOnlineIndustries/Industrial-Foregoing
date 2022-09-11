@@ -25,18 +25,18 @@ package com.buuz135.industrial.block.generator.mycelial;
 import com.buuz135.industrial.plugin.jei.generator.MycelialGeneratorRecipe;
 import com.buuz135.industrial.utils.IndustrialTags;
 import com.hrznstudio.titanium.component.inventory.SidedInventoryComponent;
+import net.minecraft.core.BlockPos;
 import net.minecraft.data.recipes.ShapedRecipeBuilder;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.DyeColor;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.crafting.Ingredient;
-import net.minecraft.nbt.CompoundTag;
-import net.minecraft.world.damagesource.DamageSource;
-import net.minecraft.world.phys.AABB;
-import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.phys.AABB;
 import net.minecraftforge.common.util.INBTSerializable;
 import net.minecraftforge.fluids.FluidStack;
 import org.apache.commons.lang3.tuple.Pair;
@@ -48,7 +48,7 @@ import java.util.List;
 import java.util.function.BiPredicate;
 import java.util.function.Predicate;
 
-public class DeathGeneratorType implements IMycelialGeneratorType{
+public class DeathGeneratorType implements IMycelialGeneratorType {
     @Override
     public String getName() {
         return "death";
@@ -76,12 +76,12 @@ public class DeathGeneratorType implements IMycelialGeneratorType{
 
     @Override
     public Pair<Integer, Integer> getTimeAndPowerGeneration(INBTSerializable<CompoundTag>[] inputs) {
-        if (inputs.length > 0 && inputs[0] instanceof SidedInventoryComponent && ((SidedInventoryComponent<?>) inputs[0]).getStackInSlot(0).getCount() > 0){
+        if (inputs.length > 0 && inputs[0] instanceof SidedInventoryComponent && ((SidedInventoryComponent<?>) inputs[0]).getStackInSlot(0).getCount() > 0) {
             ItemStack stack = ((SidedInventoryComponent<?>) inputs[0]).getStackInSlot(0).copy();
             ((SidedInventoryComponent<?>) inputs[0]).getStackInSlot(0).shrink(1);
             return calculate(stack);
         }
-        return Pair.of(0,80);
+        return Pair.of(0, 80);
     }
 
     @Override
@@ -118,8 +118,9 @@ public class DeathGeneratorType implements IMycelialGeneratorType{
         return recipeBuilder;
     }
 
-    private Pair<Integer, Integer> calculate(ItemStack stack){
-        if (stack.getItem() == Items.ROTTEN_FLESH || stack.getItem() == Items.BONE || stack.getItem() == Items.BONE_BLOCK ||stack.getItem() == Items.WITHER_SKELETON_SKULL) return Pair.of(10*20, 20);
+    private Pair<Integer, Integer> calculate(ItemStack stack) {
+        if (stack.getItem() == Items.ROTTEN_FLESH || stack.getItem() == Items.BONE || stack.getItem() == Items.BONE_BLOCK || stack.getItem() == Items.WITHER_SKELETON_SKULL)
+            return Pair.of(10 * 20, 20);
         return Pair.of(0, 80);
     }
 

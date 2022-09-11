@@ -25,21 +25,21 @@ package com.buuz135.industrial.block.generator.mycelial;
 import com.buuz135.industrial.plugin.jei.generator.MycelialGeneratorRecipe;
 import com.buuz135.industrial.utils.IndustrialTags;
 import com.hrznstudio.titanium.component.inventory.SidedInventoryComponent;
-import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.level.block.Blocks;
+import net.minecraft.core.BlockPos;
 import net.minecraft.data.recipes.ShapedRecipeBuilder;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.item.DyeColor;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.crafting.Ingredient;
-import net.minecraft.nbt.CompoundTag;
-import net.minecraft.world.damagesource.DamageSource;
-import net.minecraft.core.BlockPos;
+import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Explosion;
 import net.minecraft.world.level.ExplosionDamageCalculator;
-import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.common.util.INBTSerializable;
 import net.minecraftforge.fluids.FluidStack;
 import org.apache.commons.lang3.tuple.Pair;
@@ -51,7 +51,7 @@ import java.util.List;
 import java.util.function.BiPredicate;
 import java.util.function.Predicate;
 
-public class ExplosiveGeneratorType implements IMycelialGeneratorType{
+public class ExplosiveGeneratorType implements IMycelialGeneratorType {
     @Override
     public String getName() {
         return "explosive";
@@ -79,12 +79,12 @@ public class ExplosiveGeneratorType implements IMycelialGeneratorType{
 
     @Override
     public Pair<Integer, Integer> getTimeAndPowerGeneration(INBTSerializable<CompoundTag>[] inputs) {
-        if (inputs.length > 0 && inputs[0] instanceof SidedInventoryComponent && ((SidedInventoryComponent<?>) inputs[0]).getStackInSlot(0).getCount() > 0){
+        if (inputs.length > 0 && inputs[0] instanceof SidedInventoryComponent && ((SidedInventoryComponent<?>) inputs[0]).getStackInSlot(0).getCount() > 0) {
             ItemStack stack = ((SidedInventoryComponent<?>) inputs[0]).getStackInSlot(0).copy();
             ((SidedInventoryComponent<?>) inputs[0]).getStackInSlot(0).shrink(1);
             return calculate(stack);
         }
-        return Pair.of(0,80);
+        return Pair.of(0, 80);
     }
 
     @Override
@@ -113,9 +113,9 @@ public class ExplosiveGeneratorType implements IMycelialGeneratorType{
         return recipes;
     }
 
-    private Pair<Integer, Integer> calculate(ItemStack stack){
-        if (stack.getItem() == Items.TNT) return Pair.of(160*20, 160);
-        return Pair.of(20*20, 160);
+    private Pair<Integer, Integer> calculate(ItemStack stack) {
+        if (stack.getItem() == Items.TNT) return Pair.of(160 * 20, 160);
+        return Pair.of(20 * 20, 160);
     }
 
     @Override
@@ -128,8 +128,8 @@ public class ExplosiveGeneratorType implements IMycelialGeneratorType{
 
     @Override
     public void onTick(Level world, BlockPos pos) {
-        if (world.random.nextBoolean()){
-            world.explode(null, DamageSource.GENERIC , new ExplosionDamageCalculator(){
+        if (world.random.nextBoolean()) {
+            world.explode(null, DamageSource.GENERIC, new ExplosionDamageCalculator() {
                 @Override
                 public boolean shouldBlockExplode(Explosion explosion, BlockGetter reader, BlockPos pos, BlockState state, float power) {
                     return false;

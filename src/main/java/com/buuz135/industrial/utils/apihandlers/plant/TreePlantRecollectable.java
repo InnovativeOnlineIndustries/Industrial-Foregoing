@@ -24,17 +24,15 @@ package com.buuz135.industrial.utils.apihandlers.plant;
 
 import com.buuz135.industrial.api.plant.PlantRecollectable;
 import com.buuz135.industrial.utils.BlockUtils;
-import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.item.ItemStack;
 import net.minecraft.core.BlockPos;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.state.BlockState;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
-
-import com.buuz135.industrial.api.plant.PlantRecollectable.Type;
 
 public class TreePlantRecollectable extends PlantRecollectable {
 

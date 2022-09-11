@@ -53,6 +53,7 @@ import net.minecraft.world.phys.HitResult;
 import net.minecraftforge.common.ForgeHooks;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.items.ItemHandlerHelper;
+import net.minecraftforge.registries.ForgeRegistries;
 import org.apache.commons.lang3.tuple.Pair;
 
 import java.util.ArrayList;
@@ -72,7 +73,7 @@ public class ItemInfinityDrill extends ItemInfinity {
 
     @Override
     public boolean canApplyAtEnchantingTable(ItemStack stack, Enchantment enchantment) {
-        return Items.DIAMOND_PICKAXE.canApplyAtEnchantingTable(new ItemStack(Items.DIAMOND_PICKAXE), enchantment) || Items.DIAMOND_SHOVEL.canApplyAtEnchantingTable(new ItemStack(Items.DIAMOND_SHOVEL), enchantment) ;
+        return Items.DIAMOND_PICKAXE.canApplyAtEnchantingTable(new ItemStack(Items.DIAMOND_PICKAXE), enchantment) || Items.DIAMOND_SHOVEL.canApplyAtEnchantingTable(new ItemStack(Items.DIAMOND_SHOVEL), enchantment);
     }
 
     @Override
@@ -129,7 +130,7 @@ public class ItemInfinityDrill extends ItemInfinity {
 
     @Override
     public void registerRecipe(Consumer<FinishedRecipe> consumer) {
-        new DissolutionChamberRecipe(this.getRegistryName(),
+        new DissolutionChamberRecipe(ForgeRegistries.ITEMS.getKey(this),
                 new Ingredient.Value[]{
                         new Ingredient.ItemValue(new ItemStack(Items.DIAMOND_BLOCK)),
                         new Ingredient.ItemValue(new ItemStack(Items.DIAMOND_SHOVEL)),

@@ -28,23 +28,19 @@ import com.hrznstudio.titanium.annotation.Save;
 import com.hrznstudio.titanium.api.IFactory;
 import com.hrznstudio.titanium.api.augment.AugmentTypes;
 import com.hrznstudio.titanium.api.client.IScreenAddon;
-import com.hrznstudio.titanium.block.BasicTileBlock;
 import com.hrznstudio.titanium.client.screen.addon.ProgressBarScreenAddon;
 import com.hrznstudio.titanium.client.screen.asset.IAssetProvider;
 import com.hrznstudio.titanium.component.progress.ProgressBarComponent;
 import com.hrznstudio.titanium.item.AugmentWrapper;
-
+import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.network.chat.Component;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.DyeColor;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.InteractionResult;
-import net.minecraft.core.Direction;
-import net.minecraft.world.InteractionHand;
-import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.TextComponent;
-import net.minecraft.ChatFormatting;
-import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
@@ -73,11 +69,12 @@ public abstract class IndustrialWorkingTile<T extends IndustrialWorkingTile<T>> 
                     @Override
                     public List<Component> getTooltipLines() {
                         List<Component> tooltip = new ArrayList<>();
-                        tooltip.add(new TextComponent(ChatFormatting.GOLD + new TranslatableComponent("tooltip.titanium.progressbar.progress").getString() + ChatFormatting.WHITE + new DecimalFormat().format(workingBar.getProgress()) + ChatFormatting.GOLD + "/" + ChatFormatting.WHITE + new DecimalFormat().format(workingBar.getMaxProgress())));
+                        tooltip.add(Component.literal(ChatFormatting.GOLD + Component.translatable("tooltip.titanium.progressbar.progress").getString() + ChatFormatting.WHITE + new DecimalFormat().format(workingBar.getProgress()) + ChatFormatting.GOLD + "/" + ChatFormatting.WHITE + new DecimalFormat().format(workingBar.getMaxProgress())));
                         int progress = (workingBar.getMaxProgress() - workingBar.getProgress());
                         if (!workingBar.getIncreaseType()) progress = workingBar.getMaxProgress() - progress;
-                        tooltip.add(new TextComponent(ChatFormatting.GOLD + "ETA: " + ChatFormatting.WHITE + new DecimalFormat().format(Math.ceil(progress * workingBar.getTickingTime() / 20D / workingBar.getProgressIncrease())) + ChatFormatting.DARK_AQUA + "s"));
-                        if (estimatedPower > 0) tooltip.add(new TextComponent(ChatFormatting.GOLD + new TranslatableComponent("tooltip.industrialforegoing.usage").getString() + ChatFormatting.WHITE + estimatedPower + ChatFormatting.DARK_AQUA + " FE"));
+                        tooltip.add(Component.literal(ChatFormatting.GOLD + "ETA: " + ChatFormatting.WHITE + new DecimalFormat().format(Math.ceil(progress * workingBar.getTickingTime() / 20D / workingBar.getProgressIncrease())) + ChatFormatting.DARK_AQUA + "s"));
+                        if (estimatedPower > 0)
+                            tooltip.add(Component.literal(ChatFormatting.GOLD + Component.translatable("tooltip.industrialforegoing.usage").getString() + ChatFormatting.WHITE + estimatedPower + ChatFormatting.DARK_AQUA + " FE"));
                         return tooltip;
                     }
                 });

@@ -23,14 +23,13 @@ package com.buuz135.industrial.block.resourceproduction.tile;
 
 import com.buuz135.industrial.block.tile.IndustrialProcessingTile;
 import com.buuz135.industrial.config.machine.resourceproduction.FermentationStationConfig;
-import com.buuz135.industrial.fluid.OreTitaniumFluidAttributes;
+import com.buuz135.industrial.fluid.OreTitaniumFluidType;
 import com.buuz135.industrial.module.ModuleCore;
 import com.buuz135.industrial.module.ModuleResourceProduction;
 import com.buuz135.industrial.proxy.client.IndustrialAssetProvider;
 import com.hrznstudio.titanium.annotation.Save;
 import com.hrznstudio.titanium.api.IFactory;
 import com.hrznstudio.titanium.api.client.IScreenAddon;
-import com.hrznstudio.titanium.block.BasicTileBlock;
 import com.hrznstudio.titanium.client.screen.addon.StateButtonAddon;
 import com.hrznstudio.titanium.client.screen.addon.StateButtonInfo;
 import com.hrznstudio.titanium.component.button.ButtonComponent;
@@ -40,7 +39,6 @@ import com.hrznstudio.titanium.component.fluid.SidedFluidTankComponent;
 import com.hrznstudio.titanium.container.addon.IContainerAddon;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.DyeColor;
 import net.minecraft.world.level.Level;
@@ -125,7 +123,7 @@ public class FermentationStationTile extends IndustrialProcessingTile<Fermentati
                         });
             }
         }.setPredicate((playerEntity, compoundNBT) -> {
-            this.seal = (++this.seal)%SealType.values().length;
+            this.seal = (++this.seal) % SealType.values().length;
             syncObject(this.seal);
         }));
         addButton(new ButtonComponent(110, 22, 14, 14) {
@@ -144,15 +142,15 @@ public class FermentationStationTile extends IndustrialProcessingTile<Fermentati
                             public List<Component> getTooltipLines() {
                                 ProductionType type = ProductionType.values()[production];
                                 List<Component> list = new ArrayList<>(super.getTooltipLines());
-                                list.add(new TranslatableComponent("text.industrialforegoing.tooltip.fermentation_station.time").append(type.getTicks() / 20 + "s"));
-                                list.add(new TranslatableComponent("text.industrialforegoing.tooltip.fermentation_station.catalyst").append(type.getNeededFluid().isEmpty() ? "None" : new TranslatableComponent(type.getNeededFluid().getTranslationKey()).getString()));
+                                list.add(Component.translatable("text.industrialforegoing.tooltip.fermentation_station.time").append(type.getTicks() / 20 + "s"));
+                                list.add(Component.translatable("text.industrialforegoing.tooltip.fermentation_station.catalyst").append(type.getNeededFluid().isEmpty() ? "None" : Component.translatable(type.getNeededFluid().getTranslationKey()).getString()));
 
                                 return list;
                             }
                         });
             }
         }.setPredicate((playerEntity, compoundNBT) -> {
-            this.production= (++this.production)%ProductionType.values().length;
+            this.production = (++this.production) % ProductionType.values().length;
             this.getProgressBar().setMaxProgress(ProductionType.values()[this.production].getTicks());
             syncObject(this.production);
         }));
@@ -174,7 +172,7 @@ public class FermentationStationTile extends IndustrialProcessingTile<Fermentati
     public boolean canIncrease() {
         ProductionType productionType = ProductionType.values()[this.production];
         int multipliedAmount = productionType.amount * this.input.getFluidAmount();
-        return isSealed && this.output.getFluidAmount() + multipliedAmount <= this.output.getCapacity() && (productionType.neededFluid.isEmpty() || (!this.catalyst.isEmpty() && productionType.neededFluid.getFluid().isSame(this.catalyst.getFluid().getFluid()) && this.catalyst.getFluidAmount() >= (productionType.neededFluid.getAmount()  * this.input.getFluidAmount() / 100)));
+        return isSealed && this.output.getFluidAmount() + multipliedAmount <= this.output.getCapacity() && (productionType.neededFluid.isEmpty() || (!this.catalyst.isEmpty() && productionType.neededFluid.getFluid().isSame(this.catalyst.getFluid().getFluid()) && this.catalyst.getFluidAmount() >= (productionType.neededFluid.getAmount() * this.input.getFluidAmount() / 100)));
     }
 
     @Override
@@ -182,13 +180,12 @@ public class FermentationStationTile extends IndustrialProcessingTile<Fermentati
         return () -> {
             ProductionType productionType = ProductionType.values()[this.production];
             int multipliedAmount = productionType.amount * this.input.getFluidAmount();
-            FluidStack stack = OreTitaniumFluidAttributes.getFluidWithTag(ModuleCore.FERMENTED_ORE_MEAT, multipliedAmount, new ResourceLocation(OreTitaniumFluidAttributes.getFluidTag(this.input.getFluid())));
+            FluidStack stack = OreTitaniumFluidType.getFluidWithTag(ModuleCore.FERMENTED_ORE_MEAT, multipliedAmount, new ResourceLocation(OreTitaniumFluidType.getFluidTag(this.input.getFluid())));
             this.output.fillForced(stack, IFluidHandler.FluidAction.EXECUTE);
             this.catalyst.drainForced(productionType.neededFluid.getAmount() * this.input.getFluidAmount() / 100, IFluidHandler.FluidAction.EXECUTE);
             this.input.drainForced(this.input.getFluidAmount(), IFluidHandler.FluidAction.EXECUTE);
         };
     }
-
 
 
     @Override
@@ -214,10 +211,10 @@ public class FermentationStationTile extends IndustrialProcessingTile<Fermentati
 
     public enum ProductionType {
 
-        X_2(2,FermentationStationConfig.ticksFor2XProduction, FluidStack.EMPTY, new StateButtonInfo(0, IndustrialAssetProvider.FERMENTATION_PROCESSING_TWO, "text.industrialforegoing.tooltip.fermentation_station.processing_two")), //10 Seg
-        X_3(3,FermentationStationConfig.ticksFor3XProduction, FluidStack.EMPTY, new StateButtonInfo(1, IndustrialAssetProvider.FERMENTATION_PROCESSING_THREE, "text.industrialforegoing.tooltip.fermentation_station.processing_three")), //45 seg
-        X_4(4,FermentationStationConfig.ticksFor4XProduction, new FluidStack(ModuleCore.PINK_SLIME.getSourceFluid().get(), 2), new StateButtonInfo(2, IndustrialAssetProvider.FERMENTATION_PROCESSING_FOUR, "text.industrialforegoing.tooltip.fermentation_station.processing_four")), //2 min
-        X_5(5,FermentationStationConfig.ticksFor5XProduction, new FluidStack(ModuleCore.ETHER.getSourceFluid().get(), 1), new StateButtonInfo(3, IndustrialAssetProvider.FERMENTATION_PROCESSING_FIVE, "text.industrialforegoing.tooltip.fermentation_station.processing_five")) //5 min
+        X_2(2, FermentationStationConfig.ticksFor2XProduction, FluidStack.EMPTY, new StateButtonInfo(0, IndustrialAssetProvider.FERMENTATION_PROCESSING_TWO, "text.industrialforegoing.tooltip.fermentation_station.processing_two")), //10 Seg
+        X_3(3, FermentationStationConfig.ticksFor3XProduction, FluidStack.EMPTY, new StateButtonInfo(1, IndustrialAssetProvider.FERMENTATION_PROCESSING_THREE, "text.industrialforegoing.tooltip.fermentation_station.processing_three")), //45 seg
+        X_4(4, FermentationStationConfig.ticksFor4XProduction, new FluidStack(ModuleCore.PINK_SLIME.getSourceFluid().get(), 2), new StateButtonInfo(2, IndustrialAssetProvider.FERMENTATION_PROCESSING_FOUR, "text.industrialforegoing.tooltip.fermentation_station.processing_four")), //2 min
+        X_5(5, FermentationStationConfig.ticksFor5XProduction, new FluidStack(ModuleCore.ETHER.getSourceFluid().get(), 1), new StateButtonInfo(3, IndustrialAssetProvider.FERMENTATION_PROCESSING_FIVE, "text.industrialforegoing.tooltip.fermentation_station.processing_five")) //5 min
         ;
 
         private final int amount;

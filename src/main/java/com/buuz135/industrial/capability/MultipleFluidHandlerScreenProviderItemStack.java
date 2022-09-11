@@ -27,8 +27,8 @@ import com.hrznstudio.titanium.api.IFactory;
 import com.hrznstudio.titanium.api.client.IScreenAddon;
 import com.hrznstudio.titanium.capability.FluidHandlerScreenProviderItemStack;
 import com.hrznstudio.titanium.component.fluid.FluidTankComponent;
-import net.minecraft.world.item.ItemStack;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.fluids.FluidStack;
@@ -39,9 +39,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.function.Predicate;
 
-import net.minecraftforge.fluids.capability.IFluidHandler.FluidAction;
-
-public class MultipleFluidHandlerScreenProviderItemStack  extends FluidHandlerScreenProviderItemStack {
+public class MultipleFluidHandlerScreenProviderItemStack extends FluidHandlerScreenProviderItemStack {
 
     private static String NBT_TANKS = "Tanks";
 
@@ -78,15 +76,15 @@ public class MultipleFluidHandlerScreenProviderItemStack  extends FluidHandlerSc
     @Override
     public FluidStack getFluidInTank(int tank) {
         CompoundTag compoundNBT = getContainer().getOrCreateTagElement(NBT_TANKS);
-        if (!compoundNBT.contains(tankDefinitions[tank].name)){
+        if (!compoundNBT.contains(tankDefinitions[tank].name)) {
             return FluidStack.EMPTY;
         }
         return FluidStack.loadFluidStackFromNBT(compoundNBT.getCompound(tankDefinitions[tank].name));
     }
 
-    public void setFluidInTank(int tank, FluidStack fluidStack){
+    public void setFluidInTank(int tank, FluidStack fluidStack) {
         CompoundTag compoundNBT = getContainer().getOrCreateTagElement(NBT_TANKS);
-        compoundNBT.put(tankDefinitions[tank].name,fluidStack.writeToNBT(new CompoundTag()));
+        compoundNBT.put(tankDefinitions[tank].name, fluidStack.writeToNBT(new CompoundTag()));
     }
 
     @Override
@@ -100,7 +98,7 @@ public class MultipleFluidHandlerScreenProviderItemStack  extends FluidHandlerSc
             return 0;
         }
         for (int i = 0; i < tankDefinitions.length; i++) {
-            if (tankDefinitions[i].canFill && tankDefinitions[i].validator.test(resource)){
+            if (tankDefinitions[i].canFill && tankDefinitions[i].validator.test(resource)) {
                 FluidStack contained = getFluidInTank(i);
                 if (contained.isEmpty()) {
                     int fillAmount = Math.min(capacity, resource.getAmount());
@@ -110,8 +108,7 @@ public class MultipleFluidHandlerScreenProviderItemStack  extends FluidHandlerSc
                         setFluidInTank(i, filled);
                     }
                     return fillAmount;
-                }
-                else {
+                } else {
                     if (contained.isFluidEqual(resource)) {
                         int fillAmount = Math.min(capacity - contained.getAmount(), resource.getAmount());
                         if (doFill.execute() && fillAmount > 0) {
@@ -130,8 +127,7 @@ public class MultipleFluidHandlerScreenProviderItemStack  extends FluidHandlerSc
     @Nonnull
     @Override
     public FluidStack drain(FluidStack resource, FluidAction action) {
-        if (container.getCount() != 1 || resource.isEmpty() || !resource.isFluidEqual(getFluid()))
-        {
+        if (container.getCount() != 1 || resource.isEmpty() || !resource.isFluidEqual(getFluid())) {
             return FluidStack.EMPTY;
         }
         return this.drain(resource.getAmount(), action);
@@ -144,7 +140,7 @@ public class MultipleFluidHandlerScreenProviderItemStack  extends FluidHandlerSc
             return FluidStack.EMPTY;
         }
         for (int i = 0; i < tankDefinitions.length; i++) {
-            if (tankDefinitions[i].canDrain){
+            if (tankDefinitions[i].canDrain) {
                 FluidStack contained = getFluidInTank(i);
                 if (contained.isEmpty()) {
                     return FluidStack.EMPTY;
@@ -178,7 +174,7 @@ public class MultipleFluidHandlerScreenProviderItemStack  extends FluidHandlerSc
         return addons;
     }
 
-    public static class TankDefinition{
+    public static class TankDefinition {
 
         private final String name;
         private final int x;
