@@ -148,7 +148,7 @@ public class FluidLaserBaseTile extends IndustrialMachineTile<FluidLaserBaseTile
     private void onWork() {
         if (!catalyst.getStackInSlot(0).isEmpty()) {
             VoxelShape box = Shapes.box(-1, 0, -1, 2, 3, 2).move(this.worldPosition.getX(), this.worldPosition.getY() - 1, this.worldPosition.getZ());
-            RecipeUtil.getRecipes(this.level, (RecipeType<LaserDrillFluidRecipe>) ModuleCore.LASER_DRILL_TYPE.get())
+            RecipeUtil.getRecipes(this.level, (RecipeType<LaserDrillFluidRecipe>) ModuleCore.LASER_DRILL_FLUID_TYPE.get())
                     .stream()
                     .filter(laserDrillFluidRecipe -> laserDrillFluidRecipe.catalyst.test(catalyst.getStackInSlot(0)))
                     .filter(laserDrillFluidRecipe -> laserDrillFluidRecipe.getValidRarity(ForgeRegistries.BIOMES.getKey(this.level.getBiome(this.worldPosition).value()), this.miningDepth) != null)
