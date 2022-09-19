@@ -53,7 +53,6 @@ import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.animal.Animal;
 import net.minecraft.world.entity.boss.wither.WitherBoss;
 import net.minecraft.world.entity.item.ItemEntity;
-import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.DyeColor;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
@@ -86,7 +85,6 @@ import java.util.stream.Collectors;
 
 public class MobCrusherTile extends IndustrialAreaWorkingTile<MobCrusherTile> {
 
-    private final Method GET_EXPERIENCE_POINTS = ObfuscationReflectionHelper.findMethod(LivingEntity.class, "m_6552_", Player.class);
     private final Method DROP_SPECIAL_ITEMS = ObfuscationReflectionHelper.findMethod(Mob.class, "m_7472_", DamageSource.class, int.class, boolean.class);
 
     @Save
@@ -99,7 +97,6 @@ public class MobCrusherTile extends IndustrialAreaWorkingTile<MobCrusherTile> {
 
     public MobCrusherTile(BlockPos blockPos, BlockState blockState) {
         super(ModuleAgricultureHusbandry.MOB_CRUSHER, RangeManager.RangeType.BEHIND, true, MobCrusherConfig.powerPerOperation, blockPos, blockState);
-        if (!GET_EXPERIENCE_POINTS.isAccessible()) GET_EXPERIENCE_POINTS.setAccessible(true);
         if (!DROP_SPECIAL_ITEMS.isAccessible()) DROP_SPECIAL_ITEMS.setAccessible(true);
         this.dropXP = true;
         this.addTank(tank = (SidedFluidTankComponent<MobCrusherTile>) new SidedFluidTankComponent<MobCrusherTile>("essence", MobCrusherConfig.tankSize, 43, 20, 0).
@@ -152,12 +149,7 @@ public class MobCrusherTile extends IndustrialAreaWorkingTile<MobCrusherTile> {
     }
 
     private WorkAction instantKill(Mob entity, FakePlayer player) {
-        int experience = 0;
-        try {
-            experience = (int) GET_EXPERIENCE_POINTS.invoke(entity, player);
-        } catch (IllegalAccessException | InvocationTargetException e) {
-            e.printStackTrace();
-        }
+        int experience = entity.getExperienceReward();
         int looting = 0;
         if (!dropXP) {
             looting = this.level.random.nextInt(4);
