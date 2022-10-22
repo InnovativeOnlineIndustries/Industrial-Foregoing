@@ -196,7 +196,7 @@ afterEvaluate {
 processResources {
     // this will ensure that this task is redone when the versions change.
     inputs.property 'version', project.version
-    inputs.property 'mcversion', '1.17.1'
+    inputs.property 'mcversion', '1.19.2'
     duplicatesStrategy = DuplicatesStrategy.WARN
 
     // replace stuff in mcmod.info, nothing else
@@ -288,10 +288,10 @@ curseforge {
     }
     project {
         id = '266515'
-        changelog = "https://github.com/InnovativeOnlineIndustries/Industrial-Foregoing/blob/changelog/CHANGELOG.md"
+        changelog = "https://github.com/InnovativeOnlineIndustries/Industrial-Foregoing/commits/release-1.19"
         changelogType = 'markdown'
         releaseType = 'beta'
-        addGameVersion '1.18.2'
+        addGameVersion '1.19.2'
 
         mainArtifact(jar){
             relations {

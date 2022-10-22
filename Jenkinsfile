@@ -1,5 +1,5 @@
 #!/usr/bin/env groovy
-def releaseBranch = "release-1.18";
+def releaseBranch = "release-1.19";
 
 pipeline {
     agent any
