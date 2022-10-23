@@ -106,7 +106,7 @@ public class CulinaryGeneratorType implements IMycelialGeneratorType {
     }
 
     private Pair<Integer, Integer> calculate(ItemStack stack) {
-        FoodProperties food = stack.getItem().getFoodProperties();
+        FoodProperties food = stack.getItem().getFoodProperties(stack, null);
         return Pair.of(food.getNutrition() * 160, (int) (food.getSaturationModifier() * 80));
     }
 
