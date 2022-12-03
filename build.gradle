@@ -150,7 +150,7 @@ repositories {
 }
 
 dependencies {
-    minecraft 'net.minecraftforge:forge:1.19.2-43.1.13'
+    minecraft 'net.minecraftforge:forge:1.19.2-43.1.43'
     //compileOnly fg.deobf("mezz.jei:jei-1.18.2:9.5.5.174")
     // at runtime, use the full JEI jar
     compileOnly fg.deobf("mezz.jei:jei-1.19.1-common-api:11.2.0.241")
@@ -162,6 +162,7 @@ dependencies {
     compileOnly fg.deobf("top.theillusivec4.curios:curios-forge:${curios_mc_version}-${curios_version}:api")
     runtimeOnly fg.deobf("top.theillusivec4.curios:curios-forge:${curios_mc_version}-${curios_version}")
     //runtimeOnly fg.deobf("curse.maven:immersive-engineering-231951:3755665")
+    runtimeOnly fg.deobf("mekanism:Mekanism:${mekanism_version}")// core
 
     // compiled from github
     //compileOnly fg.deobf("vazkii.patchouli:Patchouli:1.17.1-56-SNAPSHOT:api")

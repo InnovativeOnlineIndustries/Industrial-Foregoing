@@ -44,6 +44,7 @@ import com.hrznstudio.titanium.component.sideness.IFacingComponent;
 import com.hrznstudio.titanium.item.AugmentWrapper;
 import com.hrznstudio.titanium.util.FacingUtil;
 import com.hrznstudio.titanium.util.RecipeUtil;
+import it.unimi.dsi.fastutil.objects.ObjectIntPair;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
@@ -61,7 +62,7 @@ import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import java.util.stream.Collectors;
+import java.util.Objects;
 
 public class OreLaserBaseTile extends IndustrialMachineTile<OreLaserBaseTile> implements ILaserBase<OreLaserBaseTile> {
 
@@ -146,9 +147,20 @@ public class OreLaserBaseTile extends IndustrialMachineTile<OreLaserBaseTile> im
     private void onWork() {
         if (!ItemStackUtils.isInventoryFull(this.output)) {
             List<ItemStackWeightedItem> items = RecipeUtil.getRecipes(this.level, (RecipeType<LaserDrillOreRecipe>) ModuleCore.LASER_DRILL_TYPE.get()).stream()
-                    .filter(laserDrillOreRecipe -> laserDrillOreRecipe.getValidRarity(ForgeRegistries.BIOMES.getKey(this.level.getBiome(this.worldPosition).value()), this.miningDepth) != null)
-                    .map(laserDrillOreRecipe -> {
-                        int weight = laserDrillOreRecipe.getValidRarity(ForgeRegistries.BIOMES.getKey(this.level.getBiome(this.worldPosition).value()), this.miningDepth).weight;
+                    .map(laserDrillOreRecipe -> this.level.getBiome(this.worldPosition).unwrapKey()
+                            .map(biomeResourceKey -> {
+                                var biomeResourceLocation = biomeResourceKey.location();
+                                var recipeRarity = laserDrillOreRecipe.getValidRarity(biomeResourceLocation, this.miningDepth);
+                                if (recipeRarity == null) {
+                                    return null;
+                                }
+                                return ObjectIntPair.of(laserDrillOreRecipe, recipeRarity.weight);
+                            })
+                            .orElse(null))
+                    .filter(Objects::nonNull)
+                    .map(recipeWeightPair -> {
+                        var laserDrillOreRecipe = recipeWeightPair.left();
+                        int weight = recipeWeightPair.rightInt();
                         for (int i = 0; i < lens.getSlots(); i++) {
                             if (laserDrillOreRecipe.catalyst.test(lens.getStackInSlot(i)))
                                 weight += OreLaserBaseConfig.catalystModifier;
@@ -165,7 +177,7 @@ public class OreLaserBaseTile extends IndustrialMachineTile<OreLaserBaseTile> im
                         }
                         if (stack.isEmpty()) stack = laserDrillOreRecipe.output.getItems()[0];
                         return new ItemStackWeightedItem(stack.copy(), weight);
-                    }).collect(Collectors.toList());
+                    }).toList();
             if (!items.isEmpty()) {
                 ItemStack stack = WeightedRandom.getRandomItem(this.level.getRandom(), items).get().getStack();
                 ItemHandlerHelper.insertItem(output, stack, false);
