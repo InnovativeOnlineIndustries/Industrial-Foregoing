@@ -83,6 +83,7 @@ public class LaserDrillOreRecipe extends SerializableRecipe {
         createWithDefault("ores/sapphire", 11, 30, 70, 6, 1);
         createWithDefault("ores/peridot", 13, 30, 70, 6, 1);
         createWithDefault("ores/sodalite", 11, 30, 70, 6, 1);
+        createWithDefault("ores/yellorite", 4, 16, 68, 3, 1);
         createWithDefault("raw_materials/bauxite", 12, 50, 100, 6, 1);
         createWithDefault("raw_materials/pyrite", 12, 30, 70, 3, 1);
         createWithDefault("raw_materials/cinnabar", 14, 30, 70, 2, 1);
