@@ -88,7 +88,7 @@ import java.util.stream.Collectors;
 public class IndustrialForegoing extends ModuleController {
 
     private static CommonProxy proxy;
-    private static HashMap<DimensionType, IFFakePlayer> worldFakePlayer = new HashMap<>();
+    private static HashMap<Integer, IFFakePlayer> worldFakePlayer = new HashMap<>();
     public static NetworkHandler NETWORK = new NetworkHandler(Reference.MOD_ID);
     public static Logger LOGGER = LogManager.getLogger(Reference.MOD_ID);
     public static IndustrialForegoing INSTANCE;
@@ -132,11 +132,11 @@ public class IndustrialForegoing extends ModuleController {
     }
 
     public static FakePlayer getFakePlayer(Level world) {
-        if (worldFakePlayer.containsKey(world.dimensionType()))
-            return worldFakePlayer.get(world.dimensionType());
+        if (worldFakePlayer.containsKey(world.hashCode()))
+            return worldFakePlayer.get(world.hashCode());
         if (world instanceof ServerLevel) {
             IFFakePlayer fakePlayer = new IFFakePlayer((ServerLevel) world);
-            worldFakePlayer.put(world.dimensionType(), fakePlayer);
+            worldFakePlayer.put(world.hashCode(), fakePlayer);
             return fakePlayer;
         }
         return null;
