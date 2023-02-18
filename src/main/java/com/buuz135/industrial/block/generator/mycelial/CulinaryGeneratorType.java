@@ -26,8 +26,13 @@ import com.buuz135.industrial.plugin.jei.generator.MycelialGeneratorRecipe;
 import com.buuz135.industrial.utils.IndustrialTags;
 import com.hrznstudio.titanium.component.inventory.SidedInventoryComponent;
 import net.minecraft.data.recipes.ShapedRecipeBuilder;
-import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.world.food.FoodProperties;
+import net.minecraft.world.item.DyeColor;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
+import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraftforge.common.Tags;
 import net.minecraftforge.common.util.INBTSerializable;
 import net.minecraftforge.fluids.FluidStack;
@@ -41,12 +46,6 @@ import java.util.List;
 import java.util.function.BiPredicate;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
-
-import net.minecraft.world.food.FoodProperties;
-import net.minecraft.world.item.DyeColor;
-import net.minecraft.world.item.Item;
-import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.Items;
 
 public class CulinaryGeneratorType implements IMycelialGeneratorType{
 
@@ -107,7 +106,7 @@ public class CulinaryGeneratorType implements IMycelialGeneratorType{
     }
 
     private Pair<Integer,Integer> calculate(ItemStack stack){
-        FoodProperties food = stack.getItem().getFoodProperties();
+        FoodProperties food = stack.getItem().getFoodProperties(stack, null);
         return Pair.of(food.getNutrition() * 160,  (int) (food.getSaturationModifier() * 80));
     }
 
