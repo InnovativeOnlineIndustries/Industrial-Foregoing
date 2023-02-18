@@ -27,7 +27,6 @@ import com.buuz135.industrial.config.machine.misc.EnchantmentFactoryConfig;
 import com.buuz135.industrial.module.ModuleMisc;
 import com.buuz135.industrial.utils.IndustrialTags;
 import com.hrznstudio.titanium.annotation.Save;
-import com.hrznstudio.titanium.block.BasicTileBlock;
 import com.hrznstudio.titanium.component.energy.EnergyStorageComponent;
 import com.hrznstudio.titanium.component.fluid.FluidTankComponent;
 import com.hrznstudio.titanium.component.fluid.SidedFluidTankComponent;
@@ -82,7 +81,7 @@ public class EnchantmentFactoryTile extends IndustrialProcessingTile<Enchantment
     @Override
     public Runnable onFinish() {
         return () -> {
-            ItemStack output = EnchantmentHelper.enchantItem(this.level.random, this.inputFirst.getStackInSlot(0).copy(), 50, true);
+            ItemStack output = EnchantmentHelper.enchantItem(this.level.random, this.inputFirst.getStackInSlot(0).copy(), 50, false);
             this.inputFirst.setStackInSlot(0, ItemStack.EMPTY);
             this.output.setStackInSlot(0, output);
             this.tank.drainForced(XP_30 * 20, IFluidHandler.FluidAction.EXECUTE);
