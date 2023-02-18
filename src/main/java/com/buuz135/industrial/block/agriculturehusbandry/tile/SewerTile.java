@@ -28,25 +28,20 @@ import com.buuz135.industrial.config.machine.agriculturehusbandry.SewerConfig;
 import com.buuz135.industrial.module.ModuleAgricultureHusbandry;
 import com.buuz135.industrial.module.ModuleCore;
 import com.hrznstudio.titanium.annotation.Save;
-import com.hrznstudio.titanium.block.BasicTileBlock;
 import com.hrznstudio.titanium.component.energy.EnergyStorageComponent;
 import com.hrznstudio.titanium.component.fluid.FluidTankComponent;
 import com.hrznstudio.titanium.component.fluid.SidedFluidTankComponent;
-
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.ExperienceOrb;
 import net.minecraft.world.entity.animal.Animal;
 import net.minecraft.world.item.DyeColor;
 import net.minecraft.world.level.block.state.BlockState;
-
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.capability.IFluidHandler;
 
 import javax.annotation.Nonnull;
 import java.util.List;
-
-import com.buuz135.industrial.block.tile.IndustrialWorkingTile.WorkAction;
 
 public class SewerTile extends IndustrialAreaWorkingTile<SewerTile> {
 
@@ -84,7 +79,7 @@ public class SewerTile extends IndustrialAreaWorkingTile<SewerTile> {
         for (ExperienceOrb experienceOrbEntity : orb) {
             if (experienceOrbEntity.isAlive() && essence.getFluidAmount() + experienceOrbEntity.value * 20 <= essence.getCapacity()) {
                 essence.fillForced(new FluidStack(ModuleCore.ESSENCE.getSourceFluid().get(), experienceOrbEntity.value * 20), IFluidHandler.FluidAction.EXECUTE);
-                experienceOrbEntity.onClientRemoval();
+                experienceOrbEntity.remove(Entity.RemovalReason.KILLED);
             }
         }
         return new WorkAction(1, powerPerOperation * amount);
