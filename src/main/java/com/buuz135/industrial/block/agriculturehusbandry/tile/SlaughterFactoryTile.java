@@ -47,7 +47,6 @@ import net.minecraftforge.fluids.capability.IFluidHandler;
 
 import javax.annotation.Nonnull;
 import java.util.List;
-import java.util.stream.Collectors;
 
 public class SlaughterFactoryTile extends IndustrialAreaWorkingTile<SlaughterFactoryTile> {
 
@@ -79,7 +78,7 @@ public class SlaughterFactoryTile extends IndustrialAreaWorkingTile<SlaughterFac
     @Override
     public WorkAction work() {
         if (hasEnergy(powerPerOperation)) {
-            List<Mob> mobs = this.level.getEntitiesOfClass(Mob.class, getWorkingArea().bounds()).stream().filter(LivingEntity::isAlive).collect(Collectors.toList());
+            List<Mob> mobs = this.level.getEntitiesOfClass(Mob.class, getWorkingArea().bounds()).stream().filter(LivingEntity::isAlive).filter(mob -> !mob.isInvulnerable()).toList();
             if (mobs.size() > 0) {
                 Mob entity = mobs.get(0);
                 float currentHealth = entity.getHealth();
