@@ -33,7 +33,6 @@ import com.hrznstudio.titanium.annotation.Save;
 import com.hrznstudio.titanium.api.IFactory;
 import com.hrznstudio.titanium.api.client.AssetTypes;
 import com.hrznstudio.titanium.api.client.IScreenAddon;
-import com.hrznstudio.titanium.block.BasicTileBlock;
 import com.hrznstudio.titanium.client.screen.addon.StateButtonAddon;
 import com.hrznstudio.titanium.client.screen.addon.StateButtonInfo;
 import com.hrznstudio.titanium.component.button.ButtonComponent;
@@ -43,7 +42,6 @@ import com.hrznstudio.titanium.component.fluid.SidedFluidTankComponent;
 import com.hrznstudio.titanium.component.inventory.SidedInventoryComponent;
 import com.hrznstudio.titanium.item.AugmentWrapper;
 import com.hrznstudio.titanium.util.LangUtil;
-import com.hrznstudio.titanium.util.TagUtil;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerLevel;
@@ -154,6 +152,8 @@ public class MobCrusherTile extends IndustrialAreaWorkingTile<MobCrusherTile> {
     }
 
     private WorkAction instantKill(Mob entity, FakePlayer player){
+        DamageSource source = DamageSource.playerAttack(player);
+        if (entity.isInvulnerableTo(source)) return new WorkAction(0.1f, 0);
         int experience = 0;
         try {
             experience = (int) GET_EXPERIENCE_POINTS.invoke(entity, player);
@@ -168,7 +168,7 @@ public class MobCrusherTile extends IndustrialAreaWorkingTile<MobCrusherTile> {
             player.setItemInHand(InteractionHand.MAIN_HAND, sword);
         }
         //Loot from table
-        DamageSource source = DamageSource.playerAttack(player);
+
         LootTable table = this.level.getServer().getLootTables().get(entity.getLootTable());
         LootContext.Builder context = new LootContext.Builder((ServerLevel) this.level)
                 .withRandom(this.level.random)
