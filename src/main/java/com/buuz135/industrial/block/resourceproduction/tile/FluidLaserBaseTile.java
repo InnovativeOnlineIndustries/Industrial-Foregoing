@@ -151,7 +151,7 @@ public class FluidLaserBaseTile extends IndustrialMachineTile<FluidLaserBaseTile
             RecipeUtil.getRecipes(this.level, (RecipeType<LaserDrillFluidRecipe>) ModuleCore.LASER_DRILL_FLUID_TYPE.get())
                     .stream()
                     .filter(laserDrillFluidRecipe -> laserDrillFluidRecipe.catalyst.test(catalyst.getStackInSlot(0)))
-                    .filter(laserDrillFluidRecipe -> laserDrillFluidRecipe.getValidRarity(ForgeRegistries.BIOMES.getKey(this.level.getBiome(this.worldPosition).value()), this.miningDepth) != null)
+                    .filter(laserDrillFluidRecipe -> laserDrillFluidRecipe.getValidRarity(this.level.getBiome(this.worldPosition).unwrapKey().get().location(), this.miningDepth) != null)
                     .findFirst()
                     .ifPresent(laserDrillFluidRecipe -> {
                         if (!LaserDrillFluidRecipe.EMPTY.equals(laserDrillFluidRecipe.entity)) {
