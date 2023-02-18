@@ -81,7 +81,7 @@ public class EnchantmentFactoryTile extends IndustrialProcessingTile<Enchantment
     @Override
     public Runnable onFinish() {
         return () -> {
-            ItemStack output = EnchantmentHelper.enchantItem(this.level.random, this.inputFirst.getStackInSlot(0).copy(), 50, true);
+            ItemStack output = EnchantmentHelper.enchantItem(this.level.random, this.inputFirst.getStackInSlot(0).copy(), 50, false);
             this.inputFirst.setStackInSlot(0, ItemStack.EMPTY);
             this.output.setStackInSlot(0, output);
             this.tank.drainForced(XP_30 * 20, IFluidHandler.FluidAction.EXECUTE);

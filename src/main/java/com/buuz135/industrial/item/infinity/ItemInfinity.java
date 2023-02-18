@@ -242,15 +242,15 @@ public class ItemInfinity extends IFCustomItem implements MenuProvider, IButtonH
 
     public boolean enoughFuel(ItemStack stack) {
         int i = EnchantmentHelper.getItemEnchantmentLevel(Enchantments.UNBREAKING, stack);
-        return getFuelFromStack(stack) >= biofuelConsumption * (1 / (i + 1)) || getPowerFromStack(stack) >= powerConsumption * (1 / (i + 1));
+        return getFuelFromStack(stack) >= biofuelConsumption * (1D / (i + 1)) || getPowerFromStack(stack) >= powerConsumption * (1D / (i + 1));
     }
 
     public void consumeFuel(ItemStack stack) {
         double i = EnchantmentHelper.getItemEnchantmentLevel(Enchantments.UNBREAKING, stack);
-        if (getFuelFromStack(stack) >= biofuelConsumption * (1 / (i + 1))) {
-            stack.getTag().getCompound("Fluid").putInt("Amount", (int) Math.max(0, stack.getTag().getCompound("Fluid").getInt("Amount") - biofuelConsumption * (1 / (i + 1))));
+        if (getFuelFromStack(stack) >= biofuelConsumption * (1D / (i + 1))) {
+            stack.getTag().getCompound("Fluid").putInt("Amount", (int) Math.max(0, stack.getTag().getCompound("Fluid").getInt("Amount") - biofuelConsumption * (1D / (i + 1))));
         } else {
-            stack.getTag().putLong("Energy", (long) (stack.getTag().getLong("Energy") - powerConsumption * (1 / (i + 1))));
+            stack.getTag().putLong("Energy", (long) (stack.getTag().getLong("Energy") - powerConsumption * (1D / (i + 1))));
         }
     }
 

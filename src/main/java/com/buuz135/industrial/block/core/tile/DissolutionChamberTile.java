@@ -37,6 +37,7 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.world.item.DyeColor;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.RecipeType;
+import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.fluids.capability.IFluidHandler;
 import net.minecraftforge.items.ItemHandlerHelper;
@@ -101,6 +102,12 @@ public class DissolutionChamberTile extends IndustrialProcessingTile<Dissolution
     @Override
     public void setChanged() {
         super.setChanged();
+        checkForRecipe();
+    }
+
+    @Override
+    public void setLevel(Level p_155231_) {
+        super.setLevel(p_155231_);
         checkForRecipe();
     }
 

@@ -68,10 +68,10 @@ import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.client.event.EntityRenderersEvent;
 import net.minecraftforge.client.event.RegisterKeyMappingsEvent;
 import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.common.capabilities.ForgeCapabilities;
 import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.event.entity.player.ItemTooltipEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
+import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
 import net.minecraftforge.fluids.capability.IFluidHandlerItem;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.registries.ForgeRegistries;
@@ -149,8 +149,8 @@ public class ClientProxy extends CommonProxy {
             return 0xFFFFFF;
         }, ModuleTransportStorage.BLACK_HOLE_TANK_COMMON.getLeft().get(), ModuleTransportStorage.BLACK_HOLE_TANK_PITY.getLeft().get(), ModuleTransportStorage.BLACK_HOLE_TANK_SIMPLE.getLeft().get(), ModuleTransportStorage.BLACK_HOLE_TANK_ADVANCED.getLeft().get(), ModuleTransportStorage.BLACK_HOLE_TANK_SUPREME.getLeft().get());
         Minecraft.getInstance().getItemColors().register((stack, tintIndex) -> {
-            if (tintIndex == 0 && stack.getCapability(ForgeCapabilities.FLUID_HANDLER_ITEM).isPresent()) {
-                IFluidHandlerItem fluidHandlerItem = stack.getCapability(ForgeCapabilities.FLUID_HANDLER_ITEM).orElseGet(null);
+            if (tintIndex == 0 && stack.getCapability(CapabilityFluidHandler.FLUID_HANDLER_ITEM_CAPABILITY).isPresent()) {
+                IFluidHandlerItem fluidHandlerItem = stack.getCapability(CapabilityFluidHandler.FLUID_HANDLER_ITEM_CAPABILITY).orElseGet(null);
                 if (fluidHandlerItem.getFluidInTank(0).getAmount() > 0) {
                     int color = FluidUtils.getFluidColor(fluidHandlerItem.getFluidInTank(0));
                     if (color != -1) return color;
@@ -159,8 +159,8 @@ public class ClientProxy extends CommonProxy {
             return 0xFFFFFF;
         }, ModuleTransportStorage.BLACK_HOLE_TANK_COMMON.getLeft().get(), ModuleTransportStorage.BLACK_HOLE_TANK_PITY.getLeft().get(), ModuleTransportStorage.BLACK_HOLE_TANK_SIMPLE.getLeft().get(), ModuleTransportStorage.BLACK_HOLE_TANK_ADVANCED.getLeft().get(), ModuleTransportStorage.BLACK_HOLE_TANK_SUPREME.getLeft().get());
         Minecraft.getInstance().getItemColors().register((stack, tintIndex) -> {
-            if (tintIndex == 1 && stack.getCapability(ForgeCapabilities.FLUID_HANDLER_ITEM).isPresent()) {
-                IFluidHandlerItem fluidHandlerItem = stack.getCapability(ForgeCapabilities.FLUID_HANDLER_ITEM).orElseGet(null);
+            if (tintIndex == 1 && stack.getCapability(CapabilityFluidHandler.FLUID_HANDLER_ITEM_CAPABILITY).isPresent()) {
+                IFluidHandlerItem fluidHandlerItem = stack.getCapability(CapabilityFluidHandler.FLUID_HANDLER_ITEM_CAPABILITY).orElseGet(null);
                 if (fluidHandlerItem.getFluidInTank(0).getAmount() > 0) {
                     int color = FluidUtils.getFluidColor(fluidHandlerItem.getFluidInTank(0));
                     if (color != -1) return color;

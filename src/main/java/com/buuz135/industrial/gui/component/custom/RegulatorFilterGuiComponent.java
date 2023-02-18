@@ -56,7 +56,7 @@ public abstract class RegulatorFilterGuiComponent extends PositionedGuiComponent
                 int posY = guiY + getXPos() + i * 18;
                 if (mouseX > posX + 1 && mouseX < posX + 1 + 16 && mouseY > posY + 1 && mouseY < posY + 1 + 16) {
                     if (conveyor instanceof ICanSendNetworkMessage) {
-                        ((ICanSendNetworkMessage) conveyor).sendMessage(pos, Minecraft.getInstance().player.inventory.getSelected().serializeNBT());
+                        ((ICanSendNetworkMessage) conveyor).sendMessage(pos, Minecraft.getInstance().player.containerMenu.getCarried().serializeNBT());
                     }
                     return true;
                 }

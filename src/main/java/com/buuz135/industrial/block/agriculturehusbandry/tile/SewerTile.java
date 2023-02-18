@@ -32,6 +32,7 @@ import com.hrznstudio.titanium.component.energy.EnergyStorageComponent;
 import com.hrznstudio.titanium.component.fluid.FluidTankComponent;
 import com.hrznstudio.titanium.component.fluid.SidedFluidTankComponent;
 import net.minecraft.core.BlockPos;
+import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.ExperienceOrb;
 import net.minecraft.world.entity.animal.Animal;
 import net.minecraft.world.item.DyeColor;
@@ -78,7 +79,7 @@ public class SewerTile extends IndustrialAreaWorkingTile<SewerTile> {
         for (ExperienceOrb experienceOrbEntity : orb) {
             if (experienceOrbEntity.isAlive() && essence.getFluidAmount() + experienceOrbEntity.value * 20 <= essence.getCapacity()) {
                 essence.fillForced(new FluidStack(ModuleCore.ESSENCE.getSourceFluid().get(), experienceOrbEntity.value * 20), IFluidHandler.FluidAction.EXECUTE);
-                experienceOrbEntity.onClientRemoval();
+                experienceOrbEntity.remove(Entity.RemovalReason.KILLED);
             }
         }
         return new WorkAction(1, powerPerOperation * amount);
