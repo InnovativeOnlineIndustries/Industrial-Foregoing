@@ -53,7 +53,9 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
+import java.util.function.Function;
 import java.util.function.Predicate;
+import java.util.function.Supplier;
 
 public class FermentationStationTile extends IndustrialProcessingTile<FermentationStationTile> {
 
@@ -179,11 +181,12 @@ public class FermentationStationTile extends IndustrialProcessingTile<Fermentati
     public Runnable onFinish() {
         return () -> {
             ProductionType productionType = ProductionType.values()[this.production];
-            int multipliedAmount = productionType.amount * this.input.getFluidAmount();
+            var toDrain = SealType.values()[this.seal].sealAmount.apply(this.input);
+            int multipliedAmount = productionType.amount * toDrain;
             FluidStack stack = OreTitaniumFluidType.getFluidWithTag(ModuleCore.FERMENTED_ORE_MEAT, multipliedAmount, new ResourceLocation(OreTitaniumFluidType.getFluidTag(this.input.getFluid())));
             this.output.fillForced(stack, IFluidHandler.FluidAction.EXECUTE);
-            this.catalyst.drainForced(productionType.neededFluid.getAmount() * this.input.getFluidAmount() / 100, IFluidHandler.FluidAction.EXECUTE);
-            this.input.drainForced(this.input.getFluidAmount(), IFluidHandler.FluidAction.EXECUTE);
+            this.catalyst.drainForced(productionType.neededFluid.getAmount() * toDrain / 100, IFluidHandler.FluidAction.EXECUTE);
+            this.input.drainForced(toDrain, IFluidHandler.FluidAction.EXECUTE);
         };
     }
 
@@ -240,16 +243,18 @@ public class FermentationStationTile extends IndustrialProcessingTile<Fermentati
 
     public enum SealType {
 
-        FULL(sidedFluidTankComponent -> sidedFluidTankComponent.getFluidAmount() == sidedFluidTankComponent.getCapacity(), new StateButtonInfo(0, IndustrialAssetProvider.FERMENTATION_TANK_FULL, "text.industrialforegoing.tooltip.fermentation_station.tank_full")),
-        HALF(sidedFluidTankComponent -> sidedFluidTankComponent.getFluidAmount() >= sidedFluidTankComponent.getCapacity() / 2, new StateButtonInfo(1, IndustrialAssetProvider.FERMENTATION_TANK_HALF, "text.industrialforegoing.tooltip.fermentation_station.tank_half")),
-        ONE(sidedFluidTankComponent -> sidedFluidTankComponent.getFluidAmount() >= 1000, new StateButtonInfo(2, IndustrialAssetProvider.FERMENTATION_TANK_ONE, "text.industrialforegoing.tooltip.fermentation_station.tank_one"));
+        FULL(sidedFluidTankComponent -> sidedFluidTankComponent.getFluidAmount() == sidedFluidTankComponent.getCapacity(), new StateButtonInfo(0, IndustrialAssetProvider.FERMENTATION_TANK_FULL, "text.industrialforegoing.tooltip.fermentation_station.tank_full"), sidedFluidTankComponent -> sidedFluidTankComponent.getCapacity()),
+        HALF(sidedFluidTankComponent -> sidedFluidTankComponent.getFluidAmount() >= sidedFluidTankComponent.getCapacity() / 2, new StateButtonInfo(1, IndustrialAssetProvider.FERMENTATION_TANK_HALF, "text.industrialforegoing.tooltip.fermentation_station.tank_half"), (sidedFluidTankComponent) -> sidedFluidTankComponent.getCapacity() / 2),
+        ONE(sidedFluidTankComponent -> sidedFluidTankComponent.getFluidAmount() >= 1000, new StateButtonInfo(2, IndustrialAssetProvider.FERMENTATION_TANK_ONE, "text.industrialforegoing.tooltip.fermentation_station.tank_one"), (sidedFluidTankComponent) -> 1000);
 
         private final Predicate<SidedFluidTankComponent> canSeal;
         private final StateButtonInfo info;
+        private final Function<SidedFluidTankComponent, Integer> sealAmount;
 
-        SealType(Predicate<SidedFluidTankComponent> canSeal, StateButtonInfo info) {
+        SealType(Predicate<SidedFluidTankComponent> canSeal, StateButtonInfo info, Function<SidedFluidTankComponent, Integer> sealAmount) {
             this.canSeal = canSeal;
             this.info = info;
+            this.sealAmount = sealAmount;
         }
     }
 }
