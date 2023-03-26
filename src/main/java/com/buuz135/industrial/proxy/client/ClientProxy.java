@@ -201,6 +201,7 @@ public class ClientProxy extends CommonProxy {
         registerAreaRender(event, ModuleAgricultureHusbandry.WITHER_BUILDER);
         registerAreaRender(event, ModuleMisc.STASIS_CHAMBER);
         registerAreaRender(event, ModuleResourceProduction.LASER_DRILL);
+        registerAreaRender(event, ModuleAgricultureHusbandry.MOB_DUPLICATOR);
 
 
         event.registerBlockEntityRenderer((BlockEntityType<? extends BHTile>) ModuleTransportStorage.BLACK_HOLE_UNIT_COMMON.getRight().get(), BlackHoleUnitTESR::new);
