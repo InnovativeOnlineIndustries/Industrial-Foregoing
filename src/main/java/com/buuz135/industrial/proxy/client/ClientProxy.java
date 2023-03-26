@@ -86,20 +86,11 @@ public class ClientProxy extends CommonProxy {
     public static ResourceLocation GUI = new ResourceLocation(Reference.MOD_ID, "textures/gui/machines.png");
     public static BakedModel ears_baked;
 
-    public KeyMapping OPEN_BACKPACK;
+    public static KeyMapping OPEN_BACKPACK;
+
 
     @Override
     public void run() {
-        OPEN_BACKPACK = new KeyMapping("key.industrialforegoing.backpack.desc", -1, "key.industrialforegoing.category");
-        EventManager.forge(RegisterKeyMappingsEvent.class).process(event -> {
-            event.register(OPEN_BACKPACK);
-        }).subscribe();
-        EventManager.forge(TickEvent.ClientTickEvent.class).process(event -> {
-            if (OPEN_BACKPACK.consumeClick()) {
-                IndustrialForegoing.NETWORK.get().sendToServer(new BackpackOpenMessage(Screen.hasControlDown()));
-            }
-        }).subscribe();
-
 
         MinecraftForge.EVENT_BUS.register(new IFClientEvents());
 
