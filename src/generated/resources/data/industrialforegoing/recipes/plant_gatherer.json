@@ -15,6 +15,7 @@
       ],
       "recipe": {
         "type": "minecraft:crafting_shaped",
+        "category": "misc",
         "key": {
           "A": {
             "item": "minecraft:iron_axe"
@@ -42,7 +43,8 @@
         ],
         "result": {
           "item": "industrialforegoing:plant_gatherer"
-        }
+        },
+        "show_notification": true
       }
     }
   ]

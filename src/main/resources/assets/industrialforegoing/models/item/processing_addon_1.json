@@ -1,6 +1,6 @@
 {
   "parent": "industrialforegoing:item/item",
   "textures": {
-    "layer0": "industrialforegoing:items/processing_addon_1"
+    "layer0": "industrialforegoing:item/processing_addon_1"
   }
 }

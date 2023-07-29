@@ -1,5 +1,9 @@
 {
   "variants": {
+    "subfacing=east": {
+      "model": "industrialforegoing:block/enchantment_factory",
+      "y": 90
+    },
     "subfacing=north": {
       "model": "industrialforegoing:block/enchantment_factory"
     },
@@ -10,10 +14,6 @@
     "subfacing=west": {
       "model": "industrialforegoing:block/enchantment_factory",
       "y": 270
-    },
-    "subfacing=east": {
-      "model": "industrialforegoing:block/enchantment_factory",
-      "y": 90
     }
   }
 }

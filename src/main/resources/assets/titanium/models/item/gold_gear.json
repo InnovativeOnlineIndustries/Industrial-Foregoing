@@ -1,6 +1,6 @@
 {
   "parent": "item/generated",
   "textures": {
-    "layer0": "titanium:items/resource/gear"
+    "layer0": "titanium:item/resource/gear"
   }
 }

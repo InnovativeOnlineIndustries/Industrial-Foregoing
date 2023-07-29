@@ -1,5 +1,9 @@
 {
   "variants": {
+    "subfacing=east": {
+      "model": "industrialforegoing:block/animal_baby_separator",
+      "y": 90
+    },
     "subfacing=north": {
       "model": "industrialforegoing:block/animal_baby_separator"
     },
@@ -10,10 +14,6 @@
     "subfacing=west": {
       "model": "industrialforegoing:block/animal_baby_separator",
       "y": 270
-    },
-    "subfacing=east": {
-      "model": "industrialforegoing:block/animal_baby_separator",
-      "y": 90
     }
   }
 }

@@ -121,7 +121,7 @@ public class ItemInfinityBackpack extends ItemInfinity {
                 ItemStack stack = target.getFinder().getStackGetter().apply(entityItemPickupEvent.getEntity(), target.getSlot());
                 if (!stack.isEmpty()) {
                     if (stack.getItem() instanceof ItemInfinityBackpack && (getPickUpMode(stack) == 1 || getPickUpMode(stack) == 0)) {
-                        BackpackDataManager manager = BackpackDataManager.getData(entityItemPickupEvent.getItem().level);
+                        BackpackDataManager manager = BackpackDataManager.getData(entityItemPickupEvent.getItem().level());
                         if (manager != null && stack.getOrCreateTag().contains("Id")) {
                             BackpackDataManager.BackpackItemHandler handler = manager.getBackpack(stack.getOrCreateTag().getString("Id"));
                             if (handler != null) {
@@ -129,12 +129,12 @@ public class ItemInfinityBackpack extends ItemInfinity {
                                 for (int pos = 0; pos < handler.getSlots(); pos++) {
                                     ItemStack slotStack = handler.getSlotDefinition(pos).getStack().copy();
                                     slotStack.setCount(1);
-                                    if (!slotStack.isEmpty() && slotStack.sameItem(picked) && ItemStack.tagMatches(slotStack, picked)) {
+                                    if (!slotStack.isEmpty() && ItemStack.isSameItemSameTags(picked, slotStack)) {
                                         ItemStack returned = handler.insertItem(pos, picked.copy(), false);
                                         picked.setCount(returned.getCount());
                                         entityItemPickupEvent.setResult(Event.Result.ALLOW);
                                         if (entityItemPickupEvent.getEntity() instanceof ServerPlayer) {
-                                            sync(entityItemPickupEvent.getEntity().level, stack.getOrCreateTag().getString("Id"), (ServerPlayer) entityItemPickupEvent.getEntity());
+                                            sync(entityItemPickupEvent.getEntity().level(), stack.getOrCreateTag().getString("Id"), (ServerPlayer) entityItemPickupEvent.getEntity());
                                         }
                                         return;
                                     }
@@ -174,7 +174,7 @@ public class ItemInfinityBackpack extends ItemInfinity {
     }
 
     public static void sync(Level world, String id, ServerPlayer player) {
-        IndustrialForegoing.NETWORK.get().sendTo(new BackpackSyncMessage(id, BackpackDataManager.getData(world).getBackpack(id).serializeNBT()), player.connection.getConnection(), NetworkDirection.PLAY_TO_CLIENT);
+        IndustrialForegoing.NETWORK.get().sendTo(new BackpackSyncMessage(id, BackpackDataManager.getData(world).getBackpack(id).serializeNBT()), player.connection.connection, NetworkDirection.PLAY_TO_CLIENT);
     }
 
     public static boolean isMagnetEnabled(ItemStack stack) {
@@ -245,7 +245,7 @@ public class ItemInfinityBackpack extends ItemInfinity {
                 stack.setTag(nbt);
             }
             String id = stack.getTag().getString("Id");
-            IndustrialForegoing.NETWORK.get().sendTo(new BackpackOpenedMessage(player.inventory.selected, PlayerInventoryFinder.MAIN), ((ServerPlayer) player).connection.getConnection(), NetworkDirection.PLAY_TO_CLIENT);
+            IndustrialForegoing.NETWORK.get().sendTo(new BackpackOpenedMessage(player.inventory.selected, PlayerInventoryFinder.MAIN), ((ServerPlayer) player).connection.connection, NetworkDirection.PLAY_TO_CLIENT);
             sync(worldIn, id, (ServerPlayer) player);
             NetworkHooks.openScreen((ServerPlayer) player, this, buffer ->
                     LocatorFactory.writePacketBuffer(buffer, new HeldStackLocatorInstance(handIn == InteractionHand.MAIN_HAND)));
@@ -260,10 +260,10 @@ public class ItemInfinityBackpack extends ItemInfinity {
     @Override
     public void inventoryTick(ItemStack stack, Level worldIn, Entity entityIn, int itemSlot, boolean isSelected) {
         if (isMagnetEnabled(stack)) {
-            for (ItemEntity itemEntity : entityIn.level.getEntitiesOfClass(ItemEntity.class, new AABB(entityIn.getX(), entityIn.getY(), entityIn.getY(), entityIn.getX(), entityIn.getY(), entityIn.getZ()).inflate(5))) {
-                if (entityIn.level.isClientSide) {
-                    if (itemEntity.isOnGround() && worldIn.random.nextInt(5) < 1)
-                        itemEntity.level.addParticle(ParticleTypes.PORTAL, itemEntity.getX(), itemEntity.getY() + 0.5, itemEntity.getZ(), 0, -0.5, 0);
+            for (ItemEntity itemEntity : entityIn.level().getEntitiesOfClass(ItemEntity.class, new AABB(entityIn.getX(), entityIn.getY(), entityIn.getY(), entityIn.getX(), entityIn.getY(), entityIn.getZ()).inflate(5))) {
+                if (entityIn.level().isClientSide) {
+                    if (itemEntity.onGround() && worldIn.random.nextInt(5) < 1)
+                        itemEntity.level().addParticle(ParticleTypes.PORTAL, itemEntity.getX(), itemEntity.getY() + 0.5, itemEntity.getZ(), 0, -0.5, 0);
                 } else {
                     if (!itemEntity.hasPickUpDelay() && enoughFuel(stack)) {
                         itemEntity.teleportTo(entityIn.getX(), entityIn.getY(), entityIn.getZ());
@@ -272,7 +272,7 @@ public class ItemInfinityBackpack extends ItemInfinity {
                 }
             }
         }
-        if (!entityIn.level.isClientSide && entityIn instanceof Player) {
+        if (!entityIn.level().isClientSide && entityIn instanceof Player) {
             if (enoughFuel(stack)) {
                 if ((((Player) entityIn).getFoodData().needsFood() || ((Player) entityIn).getFoodData().getSaturationLevel() < 10) && stack.getCapability(ForgeCapabilities.FLUID_HANDLER_ITEM).isPresent()) {
                     IFluidHandlerItem handlerItem = stack.getCapability(ForgeCapabilities.FLUID_HANDLER_ITEM).orElseGet(null);
@@ -286,8 +286,8 @@ public class ItemInfinityBackpack extends ItemInfinity {
                     }
                 }
             }
-            if (entityIn.level.getGameTime() % 10 == 0) {
-                BackpackDataManager manager = BackpackDataManager.getData(entityIn.level);
+            if (entityIn.level().getGameTime() % 10 == 0) {
+                BackpackDataManager manager = BackpackDataManager.getData(entityIn.level());
                 if (manager != null && stack.getOrCreateTag().contains("Id")) {
                     BackpackDataManager.BackpackItemHandler handler = manager.getBackpack(stack.getOrCreateTag().getString("Id"));
                     if (handler != null) {
@@ -305,7 +305,7 @@ public class ItemInfinityBackpack extends ItemInfinity {
                                             ItemStack extractedSLot = handler.extractItem(i, extracting, false);
                                             inventoryStack.setCount(inventoryStack.getCount() + extractedSLot.getCount());
                                             if (entityIn instanceof ServerPlayer)
-                                                sync(entityIn.level, stack.getOrCreateTag().getString("Id"), (ServerPlayer) entityIn);
+                                                sync(entityIn.level(), stack.getOrCreateTag().getString("Id"), (ServerPlayer) entityIn);
                                             consumeFuel(stack);
                                             return;
                                         }
@@ -369,7 +369,7 @@ public class ItemInfinityBackpack extends ItemInfinity {
                     boolean ctrl = compound.getBoolean("Ctrl");
                     int button = compound.getInt("Button");
                     int slot = compound.getInt("Slot");
-                    BackpackDataManager dataManager = BackpackDataManager.getData(playerEntity.level);
+                    BackpackDataManager dataManager = BackpackDataManager.getData(playerEntity.level());
                     BackpackDataManager.BackpackItemHandler handler = dataManager.getBackpack(backpackId);
                     ItemStack result = ItemStack.EMPTY;
                     boolean hasCursorChanged = false;
@@ -422,7 +422,7 @@ public class ItemInfinityBackpack extends ItemInfinity {
                         playerEntity.containerMenu.setCarried(result);
                         ((ServerPlayer) playerEntity).containerMenu.broadcastChanges();
                     }
-                    sync(playerEntity.level, backpackId, (ServerPlayer) playerEntity);
+                    sync(playerEntity.level(), backpackId, (ServerPlayer) playerEntity);
                 }
                 if (id == 10) {
                     setMagnet(stack, !isMagnetEnabled(stack));
@@ -510,7 +510,7 @@ public class ItemInfinityBackpack extends ItemInfinity {
                     UUID id = UUID.randomUUID();
                     CompoundTag nbt = stack.getOrCreateTag();
                     nbt.putString("Id", id.toString());
-                    BackpackDataManager.getData(playerEntity.level).createBackPack(id);
+                    BackpackDataManager.getData(playerEntity.level()).createBackPack(id);
                     stack.setTag(nbt);
                 }
                 String id = stack.getTag().getString("Id");

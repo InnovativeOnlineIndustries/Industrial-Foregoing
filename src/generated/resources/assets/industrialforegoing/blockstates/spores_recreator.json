@@ -1,5 +1,9 @@
 {
   "variants": {
+    "subfacing=east": {
+      "model": "industrialforegoing:block/spores_recreator",
+      "y": 90
+    },
     "subfacing=north": {
       "model": "industrialforegoing:block/spores_recreator"
     },
@@ -10,10 +14,6 @@
     "subfacing=west": {
       "model": "industrialforegoing:block/spores_recreator",
       "y": 270
-    },
-    "subfacing=east": {
-      "model": "industrialforegoing:block/spores_recreator",
-      "y": 90
     }
   }
 }

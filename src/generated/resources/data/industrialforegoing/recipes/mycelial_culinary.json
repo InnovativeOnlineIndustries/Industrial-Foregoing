@@ -15,6 +15,7 @@
       ],
       "recipe": {
         "type": "minecraft:crafting_shaped",
+        "category": "misc",
         "key": {
           "B": {
             "tag": "forge:crops"
@@ -36,7 +37,8 @@
         ],
         "result": {
           "item": "industrialforegoing:mycelial_culinary"
-        }
+        },
+        "show_notification": true
       }
     }
   ]

@@ -1,8 +1,8 @@
 {
   "parent": "industrialforegoing:block/base_block",
   "textures": {
-    "south": "industrialforegoing:blocks/fluid_collector_front",
-    "east": "industrialforegoing:blocks/fluid_collector_side",
-    "west": "industrialforegoing:blocks/fluid_collector_side"
+    "south": "industrialforegoing:block/fluid_collector_front",
+    "east": "industrialforegoing:block/fluid_collector_side",
+    "west": "industrialforegoing:block/fluid_collector_side"
   }
 }

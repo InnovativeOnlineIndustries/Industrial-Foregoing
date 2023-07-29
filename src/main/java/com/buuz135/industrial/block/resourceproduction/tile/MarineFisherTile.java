@@ -39,6 +39,7 @@ import net.minecraft.world.level.material.FluidState;
 import net.minecraft.world.level.material.Fluids;
 import net.minecraft.world.level.storage.loot.BuiltInLootTables;
 import net.minecraft.world.level.storage.loot.LootContext;
+import net.minecraft.world.level.storage.loot.LootParams;
 import net.minecraft.world.level.storage.loot.LootTable;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParamSets;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParams;
@@ -70,12 +71,12 @@ public class MarineFisherTile extends IndustrialAreaWorkingTile<MarineFisherTile
     public WorkAction work() {
         if (hasEnergy(powerPerOperation)) {
             if (getWaterSources() < 9) return new WorkAction(1, 0);
-            LootTable fishingTable = this.level.getServer().getLootTables().get(BuiltInLootTables.FISHING);
+            LootTable fishingTable = this.level.getServer().getLootData().getLootTable(BuiltInLootTables.FISHING);
             if (this.level.random.nextDouble() <= 0.02) {
-                fishingTable = this.level.getServer().getLootTables().get(BuiltInLootTables.FISHING_TREASURE);
+                fishingTable = this.level.getServer().getLootData().getLootTable(BuiltInLootTables.FISHING_TREASURE);
             }
-            LootContext.Builder context = new LootContext.Builder((ServerLevel) this.level).withParameter(LootContextParams.ORIGIN, new Vec3(this.worldPosition.getX(), this.worldPosition.getY(), this.worldPosition.getZ())).withParameter(LootContextParams.TOOL, new ItemStack(Items.FISHING_ROD));
-            fishingTable.getRandomItems(context.create(LootContextParamSets.FISHING)).forEach(stack -> ItemHandlerHelper.insertItem(output, stack, false));
+            var lootParams = new LootParams.Builder((ServerLevel) this.level).withParameter(LootContextParams.ORIGIN, new Vec3(this.worldPosition.getX(), this.worldPosition.getY(), this.worldPosition.getZ())).withParameter(LootContextParams.TOOL, new ItemStack(Items.FISHING_ROD)).create(LootContextParamSets.FISHING);
+            fishingTable.getRandomItems(lootParams).forEach(stack -> ItemHandlerHelper.insertItem(output, stack, false));
             return new WorkAction(1f, powerPerOperation);
         }
         return new WorkAction(1f, 0);

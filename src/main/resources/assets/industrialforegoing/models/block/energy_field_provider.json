@@ -1,9 +1,9 @@
 {
   "parent": "industrialforegoing:block/base_block",
   "textures": {
-    "north": "industrialforegoing:blocks/energy_field_provider_side",
-    "south": "industrialforegoing:blocks/energy_field_provider_side",
-    "west": "industrialforegoing:blocks/energy_field_provider_side",
-    "east": "industrialforegoing:blocks/energy_field_provider_side"
+    "north": "industrialforegoing:block/energy_field_provider_side",
+    "south": "industrialforegoing:block/energy_field_provider_side",
+    "west": "industrialforegoing:block/energy_field_provider_side",
+    "east": "industrialforegoing:block/energy_field_provider_side"
   }
 }

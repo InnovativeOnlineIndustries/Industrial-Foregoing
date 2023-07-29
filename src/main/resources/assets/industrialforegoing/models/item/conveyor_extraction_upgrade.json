@@ -1,6 +1,6 @@
 {
   "parent": "industrialforegoing:item/item",
   "textures": {
-    "layer0": "industrialforegoing:items/conveyor_extraction_upgrade"
+    "layer0": "industrialforegoing:item/conveyor_extraction_upgrade"
   }
 }

@@ -54,9 +54,9 @@ import net.minecraft.world.level.storage.loot.functions.CopyNbtFunction;
 import net.minecraft.world.level.storage.loot.providers.nbt.ContextNbtProvider;
 import net.minecraftforge.common.Tags;
 import net.minecraftforge.common.capabilities.Capability;
+import net.minecraftforge.common.capabilities.ForgeCapabilities;
 import net.minecraftforge.common.capabilities.ICapabilityProvider;
 import net.minecraftforge.common.util.LazyOptional;
-import net.minecraftforge.items.CapabilityItemHandler;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -91,7 +91,7 @@ public class BlackHoleUnitBlock extends IndustrialBlock<BlackHoleUnitTile> {
     @Override
     public void appendHoverText(ItemStack stack, @Nullable BlockGetter worldIn, List<Component> tooltip, TooltipFlag flagIn) {
         super.appendHoverText(stack, worldIn, tooltip, flagIn);
-        stack.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY).ifPresent(iItemHandler -> {
+        stack.getCapability(ForgeCapabilities.ITEM_HANDLER).ifPresent(iItemHandler -> {
             if (iItemHandler instanceof BLHBlockItemHandlerItemStack) {
                 ItemStack contain = ((BLHBlockItemHandlerItemStack) iItemHandler).getStack();
                 if (!contain.isEmpty()) {
@@ -129,11 +129,6 @@ public class BlackHoleUnitBlock extends IndustrialBlock<BlackHoleUnitTile> {
     @Override
     public NonNullList<ItemStack> getDynamicDrops(BlockState state, Level worldIn, BlockPos pos, BlockState newState, boolean isMoving) {
         return NonNullList.create();
-    }
-
-    @Override
-    public Supplier<Item> getItemBlockFactory() {
-        return () -> (BlockItem) new BlackHoleUnitItem(this, new Item.Properties().tab(this.getItemGroup()), rarity);
     }
 
     @Override
@@ -189,7 +184,7 @@ public class BlackHoleUnitBlock extends IndustrialBlock<BlackHoleUnitTile> {
         @Nullable
         @Override
         public String getCreatorModId(ItemStack itemStack) {
-            return Component.translatable("itemGroup." + this.category.getRecipeFolderName()).getString();
+            return Component.translatable("itemGroup.industrialforegoing_" + ModuleTransportStorage.TAB_TRANSPORT.getResourceLocation().getPath()).getString();
         }
     }
 
@@ -206,7 +201,7 @@ public class BlackHoleUnitBlock extends IndustrialBlock<BlackHoleUnitTile> {
         @Nonnull
         @Override
         public <T> LazyOptional<T> getCapability(@Nonnull Capability<T> cap, @Nullable Direction side) {
-            if (cap != null && cap.equals(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY)) return optional.cast();
+            if (cap != null && cap.equals(ForgeCapabilities.ITEM_HANDLER)) return optional.cast();
             return LazyOptional.empty();
         }
     }

@@ -1,8 +1,8 @@
 {
   "credit": "Made by Coded hahayes",
   "textures": {
-    "0": "industrialforegoing:blocks/conveyor_black",
-    "particle": "industrialforegoing:blocks/conveyor_black"
+    "0": "industrialforegoing:block/conveyor_black",
+    "particle": "industrialforegoing:block/conveyor_black"
   },
   "elements": [
     {

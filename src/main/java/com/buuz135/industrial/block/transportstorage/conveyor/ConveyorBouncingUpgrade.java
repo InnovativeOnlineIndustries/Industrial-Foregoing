@@ -237,10 +237,10 @@ public class ConveyorBouncingUpgrade extends ConveyorUpgrade {
 
         @Override
         public Set<ResourceLocation> getTextures() {
-            return ImmutableSet.of(new ResourceLocation(Reference.MOD_ID, "blocks/conveyor_bouncing_upgrade_north"),
-                    new ResourceLocation(Reference.MOD_ID, "blocks/conveyor_bouncing_upgrade_east"),
-                    new ResourceLocation(Reference.MOD_ID, "blocks/conveyor_bouncing_upgrade_west"),
-                    new ResourceLocation(Reference.MOD_ID, "blocks/conveyor_bouncing_upgrade_south"));
+            return ImmutableSet.of(new ResourceLocation(Reference.MOD_ID, "block/conveyor_bouncing_upgrade_north"),
+                    new ResourceLocation(Reference.MOD_ID, "block/conveyor_bouncing_upgrade_east"),
+                    new ResourceLocation(Reference.MOD_ID, "block/conveyor_bouncing_upgrade_west"),
+                    new ResourceLocation(Reference.MOD_ID, "block/conveyor_bouncing_upgrade_south"));
         }
 
         @Override

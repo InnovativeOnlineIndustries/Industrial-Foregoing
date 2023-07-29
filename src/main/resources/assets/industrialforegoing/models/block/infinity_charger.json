@@ -1,6 +1,6 @@
 {
   "parent": "industrialforegoing:block/base_block",
   "textures": {
-    "north": "industrialforegoing:blocks/infinity_charger_side"
+    "north": "industrialforegoing:block/infinity_charger_side"
   }
 }

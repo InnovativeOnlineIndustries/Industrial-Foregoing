@@ -22,6 +22,7 @@
 
 package com.buuz135.industrial.module;
 
+import com.buuz135.industrial.block.IndustrialBlockItem;
 import com.buuz135.industrial.block.MachineFrameBlock;
 import com.buuz135.industrial.block.core.DissolutionChamberBlock;
 import com.buuz135.industrial.block.core.FluidExtractorBlock;
@@ -46,7 +47,7 @@ import com.hrznstudio.titanium.fluid.ClientFluidTypeExtensions;
 import com.hrznstudio.titanium.fluid.TitaniumFluidInstance;
 import com.hrznstudio.titanium.module.DeferredRegistryHelper;
 import com.hrznstudio.titanium.recipe.serializer.GenericSerializer;
-import com.hrznstudio.titanium.tab.AdvancedTitaniumTab;
+import com.hrznstudio.titanium.tab.TitaniumTab;
 import net.minecraft.ChatFormatting;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.effect.MobEffects;
@@ -72,7 +73,7 @@ public class ModuleCore implements IModule {
     public static Rarity ADVANCED_RARITY;
     public static Rarity SUPREME_RARITY;
 
-    public static AdvancedTitaniumTab TAB_CORE = new AdvancedTitaniumTab(Reference.MOD_ID + "_core", true);
+    public static TitaniumTab TAB_CORE = new TitaniumTab(new ResourceLocation(Reference.MOD_ID, "core"));
 
     public static RegistryObject<Item> TINY_DRY_RUBBER;
     public static RegistryObject<Item> DRY_RUBBER;
@@ -132,11 +133,11 @@ public class ModuleCore implements IModule {
         SIMPLE_RARITY = Rarity.create("simple", ChatFormatting.AQUA);
         ADVANCED_RARITY = Rarity.create("advanced", ChatFormatting.LIGHT_PURPLE);
         SUPREME_RARITY = Rarity.create("supreme", ChatFormatting.GOLD);
-        PITY = helper.registerBlockWithItem("machine_frame_pity", () -> new MachineFrameBlock(PITY_RARITY, TAB_CORE), (block) -> () -> new MachineFrameBlock.MachineFrameItem(block.get(), PITY_RARITY, TAB_CORE));
-        SIMPLE = helper.registerBlockWithItem("machine_frame_simple", () -> new MachineFrameBlock(SIMPLE_RARITY, TAB_CORE), (block) -> () -> new MachineFrameBlock.MachineFrameItem(block.get(), SIMPLE_RARITY, TAB_CORE));
-        ADVANCED = helper.registerBlockWithItem("machine_frame_advanced", () -> new MachineFrameBlock(ADVANCED_RARITY, TAB_CORE), (block) -> () -> new MachineFrameBlock.MachineFrameItem(block.get(), ADVANCED_RARITY, TAB_CORE));
-        SUPREME = helper.registerBlockWithItem("machine_frame_supreme", () -> new MachineFrameBlock(SUPREME_RARITY, TAB_CORE), (block) -> () -> new MachineFrameBlock.MachineFrameItem(block.get(), SUPREME_RARITY, TAB_CORE));
-        DistExecutor.unsafeRunWhenOn(Dist.CLIENT, () -> this::onClient);
+        PITY = helper.registerBlockWithItem("machine_frame_pity", () -> new MachineFrameBlock(PITY_RARITY, TAB_CORE), (block) -> () -> new MachineFrameBlock.MachineFrameItem(block.get(), PITY_RARITY, TAB_CORE), TAB_CORE);
+        SIMPLE = helper.registerBlockWithItem("machine_frame_simple", () -> new MachineFrameBlock(SIMPLE_RARITY, TAB_CORE), (block) -> () -> new MachineFrameBlock.MachineFrameItem(block.get(), SIMPLE_RARITY, TAB_CORE), TAB_CORE);
+        ADVANCED = helper.registerBlockWithItem("machine_frame_advanced", () -> new MachineFrameBlock(ADVANCED_RARITY, TAB_CORE), (block) -> () -> new MachineFrameBlock.MachineFrameItem(block.get(), ADVANCED_RARITY, TAB_CORE), TAB_CORE);
+        SUPREME = helper.registerBlockWithItem("machine_frame_supreme", () -> new MachineFrameBlock(SUPREME_RARITY, TAB_CORE), (block) -> () -> new MachineFrameBlock.MachineFrameItem(block.get(), SUPREME_RARITY, TAB_CORE), TAB_CORE);
+        //DistExecutor.unsafeRunWhenOn(Dist.CLIENT, () -> this::onClient);
         EventManager.forge(TickEvent.LevelTickEvent.class).
                 filter(worldTickEvent -> worldTickEvent.phase == TickEvent.Phase.END && worldTickEvent.type == TickEvent.Type.LEVEL && worldTickEvent.level.getGameTime() % 40 == 0 && FluidExtractorTile.EXTRACTION.containsKey(worldTickEvent.level.dimensionType())).
                 process(worldTickEvent -> FluidExtractorTile.EXTRACTION.get(worldTickEvent.level.dimensionType()).values().forEach(blockPosFluidExtractionProgressHashMap -> blockPosFluidExtractionProgressHashMap.keySet().forEach(pos -> worldTickEvent.level.destroyBlockProgress(blockPosFluidExtractionProgressHashMap.get(pos).getBreakID(), pos, blockPosFluidExtractionProgressHashMap.get(pos).getProgress())))).subscribe();
@@ -144,7 +145,6 @@ public class ModuleCore implements IModule {
             int finalI = i;
             RANGE_ADDONS[i] = helper.registerGeneric(ForgeRegistries.ITEMS.getRegistryKey(), "range_addon" + i, () -> new RangeAddonItem(finalI, TAB_CORE));
         }
-        TAB_CORE.addIconStack(() -> new ItemStack(PLASTIC.orElse(Items.STONE)));
         for (DyeColor value : DyeColor.values()) {
             LASER_LENS[value.getId()] = helper.registerGeneric(ForgeRegistries.ITEMS.getRegistryKey(), "laser_lens" + value.getId(), () -> new LaserLensItem(value.getId()));
         }
@@ -155,9 +155,9 @@ public class ModuleCore implements IModule {
         PINK_SLIME_ITEM = helper.registerGeneric(ForgeRegistries.ITEMS.getRegistryKey(), "pink_slime", () -> new RecipelessCustomItem("pink_slime", TAB_CORE));
         PINK_SLIME_INGOT = helper.registerGeneric(ForgeRegistries.ITEMS.getRegistryKey(), "pink_slime_ingot", () -> new RecipelessCustomItem("pink_slime_ingot", TAB_CORE));
         STRAW = helper.registerGeneric(ForgeRegistries.ITEMS.getRegistryKey(), "straw", () -> new ItemStraw(TAB_CORE));
-        FLUID_EXTRACTOR = helper.registerBlockWithTile("fluid_extractor", FluidExtractorBlock::new);
-        LATEX_PROCESSING = helper.registerBlockWithTile("latex_processing_unit", LatexProcessingUnitBlock::new);
-        DISSOLUTION_CHAMBER = helper.registerBlockWithTile("dissolution_chamber", DissolutionChamberBlock::new);
+        FLUID_EXTRACTOR = helper.registerBlockWithTileItem("fluid_extractor", FluidExtractorBlock::new, blockRegistryObject -> () -> new IndustrialBlockItem(blockRegistryObject.get(), TAB_CORE), TAB_CORE);
+        LATEX_PROCESSING = helper.registerBlockWithTileItem("latex_processing_unit", LatexProcessingUnitBlock::new, blockRegistryObject -> () -> new IndustrialBlockItem(blockRegistryObject.get(), TAB_CORE), TAB_CORE);
+        DISSOLUTION_CHAMBER = helper.registerBlockWithTileItem("dissolution_chamber", DissolutionChamberBlock::new, blockRegistryObject -> () -> new IndustrialBlockItem(blockRegistryObject.get(), TAB_CORE), TAB_CORE);
         SPEED_ADDON_1 = helper.registerGeneric(ForgeRegistries.ITEMS.getRegistryKey(), "speed_addon_1", () -> new SpeedAddonItem(1, TAB_CORE));
         SPEED_ADDON_2 = helper.registerGeneric(ForgeRegistries.ITEMS.getRegistryKey(), "speed_addon_2", () -> new SpeedAddonItem(2, TAB_CORE));
         EFFICIENCY_ADDON_1 = helper.registerGeneric(ForgeRegistries.ITEMS.getRegistryKey(), "efficiency_addon_1", () -> new EfficiencyAddonItem(1, TAB_CORE));
@@ -165,20 +165,20 @@ public class ModuleCore implements IModule {
         PROCESSING_ADDON_1 = helper.registerGeneric(ForgeRegistries.ITEMS.getRegistryKey(), "processing_addon_1", () -> new ProcessingAddonItem(1, TAB_CORE));
         PROCESSING_ADDON_2 = helper.registerGeneric(ForgeRegistries.ITEMS.getRegistryKey(), "processing_addon_2", () -> new ProcessingAddonItem(2, TAB_CORE));
 
-        LATEX = new TitaniumFluidInstance(helper, "latex", FluidType.Properties.create().density(1000), new ClientFluidTypeExtensions(new ResourceLocation(Reference.MOD_ID, "blocks/fluids/latex_still"), new ResourceLocation(Reference.MOD_ID, "blocks/fluids/latex_flow")), TAB_CORE);
-        MEAT = new TitaniumFluidInstance(helper, "meat", FluidType.Properties.create().density(1000), new ClientFluidTypeExtensions(new ResourceLocation(Reference.MOD_ID, "blocks/fluids/meat_still"), new ResourceLocation(Reference.MOD_ID, "blocks/fluids/meat_flow")), TAB_CORE);
-        SEWAGE = new TitaniumFluidInstance(helper, "sewage", FluidType.Properties.create().density(1000), new ClientFluidTypeExtensions(new ResourceLocation(Reference.MOD_ID, "blocks/fluids/sewage_still"), new ResourceLocation(Reference.MOD_ID, "blocks/fluids/sewage_flow")), TAB_CORE);
-        ESSENCE = new TitaniumFluidInstance(helper, "essence", FluidType.Properties.create().density(1000), new ClientFluidTypeExtensions(new ResourceLocation(Reference.MOD_ID, "blocks/fluids/essence_still"), new ResourceLocation(Reference.MOD_ID, "blocks/fluids/essence_flow")), TAB_CORE);
-        SLUDGE = new TitaniumFluidInstance(helper, "sludge",  FluidType.Properties.create().density(1000), new ClientFluidTypeExtensions(new ResourceLocation(Reference.MOD_ID, "blocks/fluids/sludge_still"), new ResourceLocation(Reference.MOD_ID, "blocks/fluids/sludge_flow")), TAB_CORE);
-        PINK_SLIME = new TitaniumFluidInstance(helper, "pink_slime",  FluidType.Properties.create().density(1000), new ClientFluidTypeExtensions(new ResourceLocation(Reference.MOD_ID, "blocks/fluids/pink_slime_still"), new ResourceLocation(Reference.MOD_ID, "blocks/fluids/pink_slime_flow")), TAB_CORE);
-        BIOFUEL = new TitaniumFluidInstance(helper, "biofuel",  FluidType.Properties.create().density(1000), new ClientFluidTypeExtensions(new ResourceLocation(Reference.MOD_ID, "blocks/fluids/biofuel_still"), new ResourceLocation(Reference.MOD_ID, "blocks/fluids/biofuel_flow")), TAB_CORE);
-        ETHER = new TitaniumFluidInstance(helper, "ether_gas",  FluidType.Properties.create().density(0), new ClientFluidTypeExtensions(new ResourceLocation(Reference.MOD_ID, "blocks/fluids/ether_gas_still"), new ResourceLocation(Reference.MOD_ID, "blocks/fluids/ether_gas_flow")), TAB_CORE);
-        RAW_ORE_MEAT = new OreFluidInstance(helper, "raw_ore_meat",  FluidType.Properties.create().density(1000), new OreTitaniumFluidType.Client(new ResourceLocation(Reference.MOD_ID, "blocks/fluids/raw_ore_meat_still"), new ResourceLocation(Reference.MOD_ID, "blocks/fluids/raw_ore_meat_flow")), TAB_CORE);
-        FERMENTED_ORE_MEAT = new OreFluidInstance(helper, "fermented_ore_meat",  FluidType.Properties.create().density(1000), new OreTitaniumFluidType.Client(new ResourceLocation(Reference.MOD_ID, "blocks/fluids/ether_gas_still"), new ResourceLocation(Reference.MOD_ID, "blocks/fluids/ether_gas_flow")), TAB_CORE);
+        LATEX = new TitaniumFluidInstance(helper, "latex", FluidType.Properties.create().density(1000), new ClientFluidTypeExtensions(new ResourceLocation(Reference.MOD_ID, "block/fluids/latex_still"), new ResourceLocation(Reference.MOD_ID, "block/fluids/latex_flow")), TAB_CORE);
+        MEAT = new TitaniumFluidInstance(helper, "meat", FluidType.Properties.create().density(1000), new ClientFluidTypeExtensions(new ResourceLocation(Reference.MOD_ID, "block/fluids/meat_still"), new ResourceLocation(Reference.MOD_ID, "block/fluids/meat_flow")), TAB_CORE);
+        SEWAGE = new TitaniumFluidInstance(helper, "sewage", FluidType.Properties.create().density(1000), new ClientFluidTypeExtensions(new ResourceLocation(Reference.MOD_ID, "block/fluids/sewage_still"), new ResourceLocation(Reference.MOD_ID, "block/fluids/sewage_flow")), TAB_CORE);
+        ESSENCE = new TitaniumFluidInstance(helper, "essence", FluidType.Properties.create().density(1000), new ClientFluidTypeExtensions(new ResourceLocation(Reference.MOD_ID, "block/fluids/essence_still"), new ResourceLocation(Reference.MOD_ID, "block/fluids/essence_flow")), TAB_CORE);
+        SLUDGE = new TitaniumFluidInstance(helper, "sludge",  FluidType.Properties.create().density(1000), new ClientFluidTypeExtensions(new ResourceLocation(Reference.MOD_ID, "block/fluids/sludge_still"), new ResourceLocation(Reference.MOD_ID, "block/fluids/sludge_flow")), TAB_CORE);
+        PINK_SLIME = new TitaniumFluidInstance(helper, "pink_slime",  FluidType.Properties.create().density(1000), new ClientFluidTypeExtensions(new ResourceLocation(Reference.MOD_ID, "block/fluids/pink_slime_still"), new ResourceLocation(Reference.MOD_ID, "block/fluids/pink_slime_flow")), TAB_CORE);
+        BIOFUEL = new TitaniumFluidInstance(helper, "biofuel",  FluidType.Properties.create().density(1000), new ClientFluidTypeExtensions(new ResourceLocation(Reference.MOD_ID, "block/fluids/biofuel_still"), new ResourceLocation(Reference.MOD_ID, "block/fluids/biofuel_flow")), TAB_CORE);
+        ETHER = new TitaniumFluidInstance(helper, "ether_gas",  FluidType.Properties.create().density(0), new ClientFluidTypeExtensions(new ResourceLocation(Reference.MOD_ID, "block/fluids/ether_gas_still"), new ResourceLocation(Reference.MOD_ID, "block/fluids/ether_gas_flow")), TAB_CORE);
+        RAW_ORE_MEAT = new OreFluidInstance(helper, "raw_ore_meat",  FluidType.Properties.create().density(1000), new OreTitaniumFluidType.Client(new ResourceLocation(Reference.MOD_ID, "block/fluids/raw_ore_meat_still"), new ResourceLocation(Reference.MOD_ID, "block/fluids/raw_ore_meat_flow")), TAB_CORE);
+        FERMENTED_ORE_MEAT = new OreFluidInstance(helper, "fermented_ore_meat",  FluidType.Properties.create().density(1000), new OreTitaniumFluidType.Client(new ResourceLocation(Reference.MOD_ID, "block/fluids/ether_gas_still"), new ResourceLocation(Reference.MOD_ID, "block/fluids/ether_gas_flow")), TAB_CORE);
 
-        IRON_GEAR = helper.registerGeneric(ForgeRegistries.ITEMS.getRegistryKey(), "iron_gear", () -> new Item(new Item.Properties().tab(TAB_CORE)));
-        GOLD_GEAR = helper.registerGeneric(ForgeRegistries.ITEMS.getRegistryKey(), "gold_gear", () -> new Item(new Item.Properties().tab(TAB_CORE)));
-        DIAMOND_GEAR = helper.registerGeneric(ForgeRegistries.ITEMS.getRegistryKey(), "diamond_gear", () -> new Item(new Item.Properties().tab(TAB_CORE)));
+        IRON_GEAR = helper.registerGeneric(ForgeRegistries.ITEMS.getRegistryKey(), "iron_gear", () -> new RecipelessCustomItem("iron_gear", TAB_CORE));
+        GOLD_GEAR = helper.registerGeneric(ForgeRegistries.ITEMS.getRegistryKey(), "gold_gear", () -> new RecipelessCustomItem("gold_gear", TAB_CORE));
+        DIAMOND_GEAR = helper.registerGeneric(ForgeRegistries.ITEMS.getRegistryKey(), "diamond_gear", () -> new RecipelessCustomItem("diamond", TAB_CORE));
 
         helper.registerGeneric(IFRegistries.STRAW_HANDLER_REGISTRY_KEY, "water", WaterStrawHandler::new);
         helper.registerGeneric(IFRegistries.STRAW_HANDLER_REGISTRY_KEY, "lava", LavaStrawHandler::new);
@@ -215,14 +215,4 @@ public class ModuleCore implements IModule {
         CRUSHER_TYPE = helper.registerGeneric(ForgeRegistries.RECIPE_TYPES.getRegistryKey(), "crusher", () -> RecipeType.simple(new ResourceLocation(Reference.MOD_ID, "crusher")));
     }
 
-    @OnlyIn(Dist.CLIENT)
-    public void textureStitch(TextureStitchEvent.Pre event) {
-        //event.addSprite(LATEX.getSourceFluid().getAttributes().getFlowingTexture()); ??
-        //event.addSprite(LATEX.getSourceFluid().getAttributes().getStillTexture()); TODO Add ether as Tags.Fluids.GASEOUS 1.19
-    }
-
-    @OnlyIn(Dist.CLIENT)
-    public void onClient() {
-        EventManager.mod(TextureStitchEvent.Pre.class).process(this::textureStitch).subscribe();
-    }
 }

@@ -25,8 +25,10 @@ package com.buuz135.industrial.item.addon;
 import com.buuz135.industrial.item.IFCustomItem;
 import com.buuz135.industrial.module.ModuleCore;
 import com.buuz135.industrial.recipe.DissolutionChamberRecipe;
+import com.hrznstudio.titanium.api.ISpecialCreativeTabItem;
 import com.hrznstudio.titanium.api.augment.IAugmentType;
 import com.hrznstudio.titanium.item.AugmentWrapper;
+import com.hrznstudio.titanium.tab.TitaniumTab;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.NonNullList;
 import net.minecraft.data.recipes.FinishedRecipe;
@@ -38,6 +40,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.level.Level;
+import net.minecraftforge.event.BuildCreativeModeTabContentsEvent;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.registries.ForgeRegistries;
 
@@ -45,7 +48,7 @@ import javax.annotation.Nullable;
 import java.util.List;
 import java.util.function.Consumer;
 
-public class RangeAddonItem extends IFCustomItem {
+public class RangeAddonItem extends IFCustomItem implements ISpecialCreativeTabItem {
 
     private static Item[] MATERIALS = new Item[]{Items.COBBLESTONE, Items.LAPIS_LAZULI, Items.BONE_MEAL, Items.IRON_NUGGET, Items.COPPER_INGOT, Items.GOLD_NUGGET, Items.IRON_INGOT, Items.GOLD_INGOT, Items.QUARTZ, Items.DIAMOND, Items.POPPED_CHORUS_FRUIT, Items.EMERALD};
 
@@ -53,7 +56,7 @@ public class RangeAddonItem extends IFCustomItem {
 
     private int tier;
 
-    public RangeAddonItem(int tier, CreativeModeTab group) {
+    public RangeAddonItem(int tier, TitaniumTab group) {
         super("range_addon" + tier, group, new Properties().stacksTo(16));
         this.tier = tier;
     }
@@ -94,12 +97,10 @@ public class RangeAddonItem extends IFCustomItem {
     }
 
     @Override
-    public void fillItemCategory(CreativeModeTab group, NonNullList<ItemStack> items) {
-        if (allowedIn(group)) {
-            ItemStack stack = new ItemStack(this);
-            AugmentWrapper.setType(stack, RANGE, tier);
-            items.add(stack);
-        }
+    public void addToTab(BuildCreativeModeTabContentsEvent event) {
+        var stack = new ItemStack(this);
+        AugmentWrapper.setType(stack, RANGE, tier);
+        event.accept(stack);
     }
 
 }

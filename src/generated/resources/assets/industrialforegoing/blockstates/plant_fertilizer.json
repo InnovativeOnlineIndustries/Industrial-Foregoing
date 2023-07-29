@@ -1,5 +1,9 @@
 {
   "variants": {
+    "subfacing=east": {
+      "model": "industrialforegoing:block/plant_fertilizer",
+      "y": 90
+    },
     "subfacing=north": {
       "model": "industrialforegoing:block/plant_fertilizer"
     },
@@ -10,10 +14,6 @@
     "subfacing=west": {
       "model": "industrialforegoing:block/plant_fertilizer",
       "y": 270
-    },
-    "subfacing=east": {
-      "model": "industrialforegoing:block/plant_fertilizer",
-      "y": 90
     }
   }
 }

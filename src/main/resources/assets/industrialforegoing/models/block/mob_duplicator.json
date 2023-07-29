@@ -1,10 +1,10 @@
 {
   "parent": "industrialforegoing:block/base_block",
   "textures": {
-    "south": "industrialforegoing:blocks/mob_duplicator_side",
-    "west": "industrialforegoing:blocks/mob_duplicator_side",
-    "east": "industrialforegoing:blocks/mob_duplicator_side",
-    "north": "industrialforegoing:blocks/mob_duplicator_side",
-    "up": "industrialforegoing:blocks/mob_duplicator_top"
+    "south": "industrialforegoing:block/mob_duplicator_side",
+    "west": "industrialforegoing:block/mob_duplicator_side",
+    "east": "industrialforegoing:block/mob_duplicator_side",
+    "north": "industrialforegoing:block/mob_duplicator_side",
+    "up": "industrialforegoing:block/mob_duplicator_top"
   }
 }

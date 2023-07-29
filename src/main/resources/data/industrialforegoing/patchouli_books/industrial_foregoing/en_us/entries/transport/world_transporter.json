@@ -11,7 +11,7 @@
     },
     {
       "type": "text",
-      "text": "You can filter things interacting in the GUI with blacklist and whitelist modes. $(br2)To remove upgrades or a transporter you can Sneak + Right + Clicking one of the transporters. $(br2)In regulator mode when a transporter is in insertion mode you can specify how many items/fluid an inventory can have."
+      "text": "You can filter things interacting in the GUI with blacklist and whitelist modes. $(br2)To remove upgrades or a transporter you can Sneak + Right + Clicking one of the transporters. $(br2)In regulator mode when a transporter is in insertion mode you can specify how many item/fluid an inventory can have."
     },
     {
       "type": "text",

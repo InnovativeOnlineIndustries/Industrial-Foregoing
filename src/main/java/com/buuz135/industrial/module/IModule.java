@@ -28,4 +28,5 @@ public interface IModule {
 
     void generateFeatures(DeferredRegistryHelper helper);
 
+
 }

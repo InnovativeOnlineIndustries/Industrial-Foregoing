@@ -24,6 +24,7 @@ package com.buuz135.industrial.item;
 import com.buuz135.industrial.api.IBlockContainer;
 import com.buuz135.industrial.api.transporter.TransporterTypeFactory;
 import com.buuz135.industrial.module.ModuleTransportStorage;
+import com.hrznstudio.titanium.tab.TitaniumTab;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.data.recipes.FinishedRecipe;
@@ -38,7 +39,7 @@ public class ItemTransporterType extends IFCustomItem {
 
     public TransporterTypeFactory factory;
 
-    public ItemTransporterType(TransporterTypeFactory transporterTypeFactory, CreativeModeTab group) {
+    public ItemTransporterType(TransporterTypeFactory transporterTypeFactory, TitaniumTab group) {
         super(transporterTypeFactory.getName() + "_transporter_type", group);
         this.factory = transporterTypeFactory;
         this.factory.setUpgradeItem(this);

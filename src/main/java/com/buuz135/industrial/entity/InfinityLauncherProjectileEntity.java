@@ -27,6 +27,7 @@ import com.buuz135.industrial.item.infinity.item.ItemInfinityLauncher;
 import com.buuz135.industrial.module.ModuleTool;
 import com.buuz135.industrial.proxy.network.PlungerPlayerHitMessage;
 import net.minecraft.network.protocol.Packet;
+import net.minecraft.network.protocol.game.ClientGamePacketListener;
 import net.minecraft.network.protocol.game.ClientboundGameEventPacket;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
@@ -85,7 +86,7 @@ public class InfinityLauncherProjectileEntity extends AbstractArrow {
             for (ItemStack itemStack : ((Player) player).inventory.items) {
                 if (itemStack.getItem() instanceof MobImprisonmentToolItem && itemStack.hasTag()) {
                     ItemStack copy = itemStack.copy();
-                    if (((MobImprisonmentToolItem) itemStack.getItem()).release((Player) player, result.getBlockPos(), result.getDirection(), this.level, copy)) {
+                    if (((MobImprisonmentToolItem) itemStack.getItem()).release((Player) player, result.getBlockPos(), result.getDirection(), this.level(), copy)) {
                         ((Player) player).inventory.removeItem(itemStack);
                         ((Player) player).inventory.add(copy);
                         break;
@@ -127,9 +128,11 @@ public class InfinityLauncherProjectileEntity extends AbstractArrow {
 
 
     @Override
-    public Packet<?> getAddEntityPacket() {
+    public Packet<ClientGamePacketListener> getAddEntityPacket() {
         return NetworkHooks.getEntitySpawningPacket(this);
     }
+
+
 
     @Override
     protected void onHitEntity(EntityHitResult p_213868_1_) {
@@ -146,9 +149,9 @@ public class InfinityLauncherProjectileEntity extends AbstractArrow {
             Entity entity1 = this.getOwner();
             DamageSource damagesource;
             if (entity1 == null) {
-                damagesource = DamageSource.arrow(this, this);
+                damagesource = level().damageSources().arrow(this, this);
             } else {
-                damagesource = DamageSource.arrow(this, entity1);
+                damagesource = level().damageSources().arrow(this, entity1);
                 if (entity1 instanceof LivingEntity) {
                     ((LivingEntity) entity1).setLastHurtMob(entity);
                 }
@@ -164,8 +167,8 @@ public class InfinityLauncherProjectileEntity extends AbstractArrow {
                 }
                 if (entity instanceof LivingEntity) {
                     LivingEntity livingentity = (LivingEntity) entity;
-                    if (!this.level.isClientSide && livingentity instanceof Player) {
-                        IndustrialForegoing.NETWORK.sendToNearby(this.level, this.blockPosition(), 256, new PlungerPlayerHitMessage(livingentity.getUUID()));
+                    if (!this.level().isClientSide && livingentity instanceof Player) {
+                        IndustrialForegoing.NETWORK.sendToNearby(this.level(), this.blockPosition(), 256, new PlungerPlayerHitMessage(livingentity.getUUID()));
                     }
                     if (1 > 0) {
                         Vec3 vector3d = this.getDeltaMovement().multiply(1.0D, 0.0D, 1.0D).normalize().scale((double) 1 * 0.6D);
@@ -173,7 +176,7 @@ public class InfinityLauncherProjectileEntity extends AbstractArrow {
                             livingentity.push(vector3d.x, 0.1D, vector3d.z);
                         }
                     }
-                    if (!this.level.isClientSide && entity1 instanceof LivingEntity) {
+                    if (!this.level().isClientSide && entity1 instanceof LivingEntity) {
                         EnchantmentHelper.doPostHurtEffects(livingentity, entity1);
                         EnchantmentHelper.doPostDamageEffects((LivingEntity) entity1, livingentity);
                     }
@@ -191,7 +194,7 @@ public class InfinityLauncherProjectileEntity extends AbstractArrow {
                 this.setDeltaMovement(this.getDeltaMovement().scale(-0.1D));
                 this.yRot += 180.0F;
                 this.yRotO += 180.0F;
-                if (!this.level.isClientSide && this.getDeltaMovement().lengthSqr() < 1.0E-7D) {
+                if (!this.level().isClientSide && this.getDeltaMovement().lengthSqr() < 1.0E-7D) {
                     if (this.pickup == AbstractArrow.Pickup.ALLOWED) {
                         this.spawnAtLocation(this.getPickupItem(), 0.1F);
                     }

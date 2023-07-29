@@ -5,10 +5,9 @@
       "x": 90,
       "y": 270
     },
-    "facing=up": {
+    "facing=east": {
       "model": "industrialforegoing:block/block_placer",
-      "x": -90,
-      "y": 270
+      "y": 90
     },
     "facing=north": {
       "model": "industrialforegoing:block/block_placer"
@@ -17,13 +16,14 @@
       "model": "industrialforegoing:block/block_placer",
       "y": 180
     },
+    "facing=up": {
+      "model": "industrialforegoing:block/block_placer",
+      "x": -90,
+      "y": 270
+    },
     "facing=west": {
       "model": "industrialforegoing:block/block_placer",
       "y": 270
-    },
-    "facing=east": {
-      "model": "industrialforegoing:block/block_placer",
-      "y": 90
     }
   }
 }

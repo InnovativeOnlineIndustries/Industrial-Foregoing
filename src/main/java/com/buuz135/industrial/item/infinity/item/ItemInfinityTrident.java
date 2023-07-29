@@ -38,6 +38,7 @@ import com.hrznstudio.titanium.client.screen.addon.TextScreenAddon;
 import com.hrznstudio.titanium.component.button.ArrowButtonComponent;
 import com.hrznstudio.titanium.component.button.ButtonComponent;
 import com.hrznstudio.titanium.item.BasicItem;
+import com.hrznstudio.titanium.tab.TitaniumTab;
 import com.hrznstudio.titanium.util.FacingUtil;
 import net.minecraft.ChatFormatting;
 import net.minecraft.data.recipes.FinishedRecipe;
@@ -86,7 +87,7 @@ public class ItemInfinityTrident extends ItemInfinity {
     public static int POWER_CONSUMPTION = 100000;
     public static int FUEL_CONSUMPTION = 30;
 
-    public ItemInfinityTrident(CreativeModeTab group) {
+    public ItemInfinityTrident(TitaniumTab group) {
         super("infinity_trident", group, new Properties().stacksTo(1), POWER_CONSUMPTION, FUEL_CONSUMPTION, true);
     }
 
@@ -172,7 +173,7 @@ public class ItemInfinityTrident extends ItemInfinity {
                     f3 = f3 * (f5 / f4);
                     playerentity.push((double) f1, (double) f2, (double) f3);
                     playerentity.startAutoSpinAttack(20);
-                    if (playerentity.isOnGround()) {
+                    if (playerentity.onGround()) {
                         playerentity.move(MoverType.SELF, new Vec3(0.0D, (double) 1.1999999F, 0.0D));
                     }
 

@@ -38,6 +38,7 @@ import mezz.jei.api.recipe.RecipeType;
 import mezz.jei.api.recipe.category.IRecipeCategory;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 
@@ -79,7 +80,7 @@ public class FermentationStationCategory implements IRecipeCategory<OreFluidEntr
     }
 
     @Override
-    public void draw(OreFluidEntryFermenter recipe, IRecipeSlotsView recipeSlotsView, PoseStack stack, double mouseX, double mouseY) {
-        Minecraft.getInstance().font.draw(stack, ChatFormatting.DARK_AQUA + "Up to 500mb", 3, 52, 0xFFFFFF);
+    public void draw(OreFluidEntryFermenter recipe, IRecipeSlotsView recipeSlotsView, GuiGraphics guiGraphics, double mouseX, double mouseY) {
+        guiGraphics.drawString(Minecraft.getInstance().font, ChatFormatting.DARK_AQUA + "Up to 500mb", 3, 52, 0xFFFFFF);
     }
 }

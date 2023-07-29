@@ -50,7 +50,7 @@ public class ConveyorSplittingSyncEntityMessage extends Message {
     @Override
     protected void handleMessage(NetworkEvent.Context context) {
         context.enqueueWork(() -> {
-            BlockEntity entity = Minecraft.getInstance().player.level.getBlockEntity(pos);
+            BlockEntity entity = Minecraft.getInstance().player.level().getBlockEntity(pos);
             Direction facingDirection = Direction.byName(facingCurrent);
             if (entity instanceof ConveyorTile) {
                 if (((ConveyorTile) entity).hasUpgrade(facingDirection)) {

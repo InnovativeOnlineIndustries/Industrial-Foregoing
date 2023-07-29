@@ -26,6 +26,7 @@ import com.buuz135.industrial.api.conveyor.gui.PositionedGuiComponent;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
@@ -60,13 +61,12 @@ public class TextureGuiComponent extends PositionedGuiComponent {
     }
 
     @Override
-    public void drawGuiBackgroundLayer(PoseStack stack, int guiX, int guiY, double mouseX, double mouseY) {
-        RenderSystem.setShaderTexture(0, resourceLocation);
-        Minecraft.getInstance().screen.blit(stack, guiX + getXPos(), guiY + getYPos(), textureX, textureY, getXSize(), getYSize());
+    public void drawGuiBackgroundLayer(GuiGraphics guiGraphics, int guiX, int guiY, double mouseX, double mouseY) {
+        guiGraphics.blit(resourceLocation, guiX + getXPos(), guiY + getYPos(), textureX, textureY, getXSize(), getYSize());
     }
 
     @Override
-    public void drawGuiForegroundLayer(PoseStack stack, int guiX, int guiY, double mouseX, double mouseY) {
+    public void drawGuiForegroundLayer(GuiGraphics stack, int guiX, int guiY, double mouseX, double mouseY) {
 
     }
 

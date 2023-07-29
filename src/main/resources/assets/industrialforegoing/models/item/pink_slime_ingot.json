@@ -1,6 +1,6 @@
 {
   "parent": "industrialforegoing:item/item",
   "textures": {
-    "layer0": "industrialforegoing:items/pink_slime_ingot"
+    "layer0": "industrialforegoing:item/pink_slime_ingot"
   }
 }

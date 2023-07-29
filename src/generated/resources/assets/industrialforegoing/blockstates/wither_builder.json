@@ -1,5 +1,9 @@
 {
   "variants": {
+    "subfacing=east": {
+      "model": "industrialforegoing:block/wither_builder",
+      "y": 90
+    },
     "subfacing=north": {
       "model": "industrialforegoing:block/wither_builder"
     },
@@ -10,10 +14,6 @@
     "subfacing=west": {
       "model": "industrialforegoing:block/wither_builder",
       "y": 270
-    },
-    "subfacing=east": {
-      "model": "industrialforegoing:block/wither_builder",
-      "y": 90
     }
   }
 }

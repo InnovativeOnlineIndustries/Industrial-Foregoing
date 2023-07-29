@@ -32,6 +32,8 @@ import com.buuz135.industrial.proxy.network.ConveyorButtonInteractMessage;
 import com.buuz135.industrial.utils.Reference;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
 import net.minecraft.client.renderer.GameRenderer;
 import net.minecraft.nbt.CompoundTag;
@@ -74,35 +76,34 @@ public class GuiConveyor extends AbstractContainerScreen<ContainerConveyor> impl
     }
 
     @Override
-    protected void renderBg(PoseStack stack, float partialTicks, int mouseX, int mouseY) { //background
-        this.renderBackground(stack);
+    protected void renderBg(GuiGraphics guiGraphics, float partialTicks, int mouseX, int mouseY) { //background
+        this.renderBackground(guiGraphics);
         RenderSystem.setShader(GameRenderer::getPositionTexShader);
         RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
-        RenderSystem.setShaderTexture(0, BG_TEXTURE);
         x = (width - imageWidth) / 2;
         y = (height - imageHeight) / 2;
-        blit(stack, x, y, 0, 0, imageWidth, imageHeight);
+        guiGraphics.blit(BG_TEXTURE, x, y, 0, 0, imageWidth, imageHeight);
         if (upgrade != null) {
             String localized = Component.translatable(String.format("conveyor.upgrade.%s.%s", ForgeRegistries.ITEMS.getKey(upgrade.getFactory().getUpgradeItem()).getNamespace(), ForgeRegistries.ITEMS.getKey(upgrade.getFactory().getUpgradeItem()).getPath())).getString();
-            getMinecraft().font.draw(stack, localized, x + imageWidth / 2 - getMinecraft().font.width(localized) / 2, y + 6, 0x404040);
+            guiGraphics.drawString(Minecraft.getInstance().font, localized, x + imageWidth / 2 - getMinecraft().font.width(localized) / 2, y + 6, 0x404040);
         }
         for (IGuiComponent iGuiComponent : componentList) {
-            iGuiComponent.drawGuiBackgroundLayer(stack, x, y, mouseX, mouseY);
+            iGuiComponent.drawGuiBackgroundLayer(guiGraphics, x, y, mouseX, mouseY);
         }
     }
 
     @Override
-    protected void renderLabels(PoseStack stack, int mouseX, int mouseY) { //foreground
+    protected void renderLabels(GuiGraphics guiGraphics, int mouseX, int mouseY) { //foreground
         x = (width - imageWidth) / 2;
         y = (height - imageHeight) / 2;
         for (IGuiComponent iGuiComponent : componentList) {
-            iGuiComponent.drawGuiForegroundLayer(stack, x, y, mouseX, mouseY);
+            iGuiComponent.drawGuiForegroundLayer(guiGraphics, x, y, mouseX, mouseY);
         }
-        renderTooltip(stack, mouseX - x, mouseY - y);
+        renderTooltip(guiGraphics, mouseX - x, mouseY - y);
         for (IGuiComponent iGuiComponent : componentList) {
             if (iGuiComponent.isInside(mouseX - x, mouseY - y)) {
                 List<Component> tooltips = iGuiComponent.getTooltip(x, y, mouseX, mouseY);
-                if (tooltips != null) renderComponentTooltip(stack, tooltips, mouseX - x, mouseY - y);
+                if (tooltips != null) guiGraphics.renderComponentTooltip(Minecraft.getInstance().font, tooltips, mouseX - x, mouseY - y);
             }
         }
     }

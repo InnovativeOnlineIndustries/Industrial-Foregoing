@@ -29,12 +29,14 @@ import com.buuz135.industrial.module.ModuleCore;
 import com.buuz135.industrial.recipe.DissolutionChamberRecipe;
 import com.buuz135.industrial.utils.BlockUtils;
 import com.buuz135.industrial.utils.IndustrialTags;
+import com.hrznstudio.titanium.tab.TitaniumTab;
 import com.hrznstudio.titanium.util.RayTraceUtils;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.data.recipes.FinishedRecipe;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.tags.BlockTags;
 import net.minecraft.world.entity.ExperienceOrb;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
@@ -46,11 +48,11 @@ import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.level.material.Material;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.HitResult;
 import net.minecraftforge.common.ForgeHooks;
+import net.minecraftforge.common.Tags;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.items.ItemHandlerHelper;
 import net.minecraftforge.registries.ForgeRegistries;
@@ -62,11 +64,10 @@ import java.util.function.Consumer;
 
 public class ItemInfinityDrill extends ItemInfinity {
 
-    public static Material[] mineableMaterials = {Material.GRASS, Material.DIRT, Material.HEAVY_METAL, Material.CLAY, Material.GLASS, Material.ICE, Material.METAL, Material.ICE_SOLID, Material.PISTON, Material.STONE, Material.SAND, Material.TOP_SNOW};
     public static int POWER_CONSUMPTION = 10000;
     public static int FUEL_CONSUMPTION = 30;
 
-    public ItemInfinityDrill(CreativeModeTab group) {
+    public ItemInfinityDrill(TitaniumTab group) {
         //.addToolType(ToolType.PICKAXE, 6).addToolType(ToolType.SHOVEL, 6)
         super("infinity_drill", group, new Properties().stacksTo(1), POWER_CONSUMPTION, FUEL_CONSUMPTION, false);
     }
@@ -95,7 +96,7 @@ public class ItemInfinityDrill extends ItemInfinity {
                     if (enoughFuel(stack) && worldIn.getBlockEntity(blockPos) == null && worldIn instanceof ServerLevel && entityLiving instanceof ServerPlayer && !worldIn.isEmptyBlock(blockPos)) {
                         BlockState tempState = worldIn.getBlockState(blockPos);
                         Block block = tempState.getBlock();
-                        if (!BlockUtils.isBlockstateInMaterial(tempState, mineableMaterials)) return;
+                        if (!tempState.is(BlockTags.MINEABLE_WITH_PICKAXE)) return;
                         if (tempState.getDestroySpeed(worldIn, blockPos) < 0) return;
                         int xp = ForgeHooks.onBlockBreakEvent(worldIn, ((ServerPlayer) entityLiving).gameMode.getGameModeForPlayer(), (ServerPlayer) entityLiving, blockPos);
                         if (xp >= 0 && block.onDestroyedByPlayer(tempState, worldIn, blockPos, (Player) entityLiving, true, tempState.getFluidState())) {

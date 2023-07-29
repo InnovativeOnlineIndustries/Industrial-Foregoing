@@ -15,6 +15,7 @@
       ],
       "recipe": {
         "type": "minecraft:crafting_shaped",
+        "category": "misc",
         "key": {
           "B": {
             "item": "minecraft:book"
@@ -42,7 +43,8 @@
         ],
         "result": {
           "item": "industrialforegoing:mob_crusher"
-        }
+        },
+        "show_notification": true
       }
     }
   ]

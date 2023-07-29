@@ -22,6 +22,7 @@
 
 package com.buuz135.industrial.item;
 
+import com.hrznstudio.titanium.tab.TitaniumTab;
 import net.minecraft.data.recipes.FinishedRecipe;
 import net.minecraft.world.item.CreativeModeTab;
 
@@ -29,11 +30,11 @@ import java.util.function.Consumer;
 
 public class RecipelessCustomItem extends IFCustomItem {
 
-    public RecipelessCustomItem(String name, CreativeModeTab group, Properties builder) {
+    public RecipelessCustomItem(String name, TitaniumTab group, Properties builder) {
         super(name, group, builder);
     }
 
-    public RecipelessCustomItem(String name, CreativeModeTab group) {
+    public RecipelessCustomItem(String name, TitaniumTab group) {
         super(name, group);
     }
 

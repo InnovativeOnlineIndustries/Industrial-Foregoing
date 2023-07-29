@@ -1,10 +1,10 @@
 {
   "parent": "industrialforegoing:block/base_block",
   "textures": {
-    "north": "industrialforegoing:blocks/fluid_pump_side",
-    "south": "industrialforegoing:blocks/fluid_pump_side",
-    "west": "industrialforegoing:blocks/fluid_pump_side",
-    "east": "industrialforegoing:blocks/fluid_pump_side",
-    "down": "industrialforegoing:blocks/fluid_pump_bottom"
+    "north": "industrialforegoing:block/fluid_pump_side",
+    "south": "industrialforegoing:block/fluid_pump_side",
+    "west": "industrialforegoing:block/fluid_pump_side",
+    "east": "industrialforegoing:block/fluid_pump_side",
+    "down": "industrialforegoing:block/fluid_pump_bottom"
   }
 }

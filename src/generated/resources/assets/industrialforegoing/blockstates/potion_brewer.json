@@ -1,5 +1,9 @@
 {
   "variants": {
+    "subfacing=east": {
+      "model": "industrialforegoing:block/potion_brewer",
+      "y": 90
+    },
     "subfacing=north": {
       "model": "industrialforegoing:block/potion_brewer"
     },
@@ -10,10 +14,6 @@
     "subfacing=west": {
       "model": "industrialforegoing:block/potion_brewer",
       "y": 270
-    },
-    "subfacing=east": {
-      "model": "industrialforegoing:block/potion_brewer",
-      "y": 90
     }
   }
 }

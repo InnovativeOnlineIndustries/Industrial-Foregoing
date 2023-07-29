@@ -28,6 +28,7 @@ import com.buuz135.industrial.item.infinity.ItemInfinity;
 import com.buuz135.industrial.module.ModuleCore;
 import com.buuz135.industrial.module.ModuleTool;
 import com.buuz135.industrial.recipe.DissolutionChamberRecipe;
+import com.hrznstudio.titanium.tab.TitaniumTab;
 import net.minecraft.core.BlockPos;
 import net.minecraft.data.recipes.FinishedRecipe;
 import net.minecraft.world.InteractionResult;
@@ -46,7 +47,7 @@ public class ItemInfinityNuke extends ItemInfinity {
     public static int POWER_CONSUMPTION = 100000;
     public static int FUEL_CONSUMPTION = 30;
 
-    public ItemInfinityNuke(CreativeModeTab group) {
+    public ItemInfinityNuke(TitaniumTab group) {
         super("infinity_nuke", group, new Properties().stacksTo(1), POWER_CONSUMPTION, FUEL_CONSUMPTION, true);
     }
 

@@ -40,6 +40,7 @@ import com.hrznstudio.titanium.util.RayTraceUtils;
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -59,8 +60,8 @@ import net.minecraft.world.phys.HitResult;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.common.capabilities.Capability;
+import net.minecraftforge.common.capabilities.ForgeCapabilities;
 import net.minecraftforge.common.util.LazyOptional;
-import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.ItemHandlerHelper;
 
@@ -108,9 +109,9 @@ public class BlackHoleUnitTile extends BHTile<BlackHoleUnitTile> {
             public List<IFactory<? extends IScreenAddon>> getScreenAddons() {
                 return Collections.singletonList(() -> new BasicButtonAddon(this) {
                     @Override
-                    public void drawBackgroundLayer(PoseStack stack, Screen screen, IAssetProvider provider, int guiX, int guiY, int mouseX, int mouseY, float partialTicks) {
-                        AssetUtil.drawAsset(stack, screen, provider.getAsset(AssetTypes.ITEM_BACKGROUND), guiX + getPosX(), guiY + getPosY());
-                        Minecraft.getInstance().getItemRenderer().renderGuiItem(new ItemStack(voidItems ? Items.MAGMA_CREAM : Items.SLIME_BALL), guiX + getPosX() + 1, guiY + getPosY() + 1);
+                    public void drawBackgroundLayer(GuiGraphics guiGraphics, Screen screen, IAssetProvider provider, int guiX, int guiY, int mouseX, int mouseY, float partialTicks) {
+                        AssetUtil.drawAsset(guiGraphics, screen, provider.getAsset(AssetTypes.ITEM_BACKGROUND), guiX + getPosX(), guiY + getPosY());
+                        guiGraphics.renderItem(new ItemStack(voidItems ? Items.MAGMA_CREAM : Items.SLIME_BALL), guiX + getPosX() + 1, guiY + getPosY() + 1);
 //                        Lighting.turnOff();
 //                        RenderSystem.enableAlphaTest();
                     }
@@ -133,9 +134,9 @@ public class BlackHoleUnitTile extends BHTile<BlackHoleUnitTile> {
             public List<IFactory<? extends IScreenAddon>> getScreenAddons() {
                 return Collections.singletonList(() -> new BasicButtonAddon(this) {
                     @Override
-                    public void drawBackgroundLayer(PoseStack stack, Screen screen, IAssetProvider provider, int guiX, int guiY, int mouseX, int mouseY, float partialTicks) {
-                        AssetUtil.drawAsset(stack, screen, provider.getAsset(AssetTypes.ITEM_BACKGROUND), guiX + getPosX(), guiY + getPosY());
-                        Minecraft.getInstance().getItemRenderer().renderGuiItem(new ItemStack(useStackDisplay ? Items.IRON_BLOCK : Items.IRON_INGOT), guiX + getPosX() + 1, guiY + getPosY() + 1);
+                    public void drawBackgroundLayer(GuiGraphics guiGraphics, Screen screen, IAssetProvider provider, int guiX, int guiY, int mouseX, int mouseY, float partialTicks) {
+                        AssetUtil.drawAsset(guiGraphics, screen, provider.getAsset(AssetTypes.ITEM_BACKGROUND), guiX + getPosX(), guiY + getPosY());
+                        guiGraphics.renderItem(new ItemStack(useStackDisplay ? Items.IRON_BLOCK : Items.IRON_INGOT), guiX + getPosX() + 1, guiY + getPosY() + 1);
 //                        Lighting.turnOff();
 //                        RenderSystem.enableAlphaTest();
                     }
@@ -238,7 +239,7 @@ public class BlackHoleUnitTile extends BHTile<BlackHoleUnitTile> {
     }
 
     public void setStack(ItemStack stack) {
-        boolean equal = blStack.sameItem(stack) && ItemStack.tagMatches(blStack, stack);
+        boolean equal = ItemStack.isSameItemSameTags(stack, blStack);
         this.blStack = stack;
         this.hasNBT = this.blStack.hasTag();
         if (!equal) syncObject(this.blStack);
@@ -247,7 +248,7 @@ public class BlackHoleUnitTile extends BHTile<BlackHoleUnitTile> {
     @Nonnull
     @Override
     public <U> LazyOptional<U> getCapability(@Nonnull Capability<U> cap, @Nullable Direction side) {
-        if (cap == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY) {
+        if (cap == ForgeCapabilities.ITEM_HANDLER) {
             return lazyStorage.cast();
         }
         return super.getCapability(cap, side);
@@ -339,7 +340,7 @@ public class BlackHoleUnitTile extends BHTile<BlackHoleUnitTile> {
                 if (!filter.getFilterSlots()[slot].getFilter().isEmpty() && fl.isEmpty()) {
                     fl = filter.getFilterSlots()[slot].getFilter();
                 }
-                return fl.isEmpty() || (fl.sameItem(stack) && ItemStack.tagMatches(fl, stack));
+                return fl.isEmpty() || (ItemStack.isSameItemSameTags(fl, stack));
             }
             return false;
         }

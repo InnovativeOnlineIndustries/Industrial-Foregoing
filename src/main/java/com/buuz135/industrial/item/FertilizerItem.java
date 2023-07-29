@@ -22,6 +22,7 @@
 
 package com.buuz135.industrial.item;
 
+import com.hrznstudio.titanium.tab.TitaniumTab;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.data.recipes.FinishedRecipe;
@@ -37,7 +38,7 @@ import java.util.function.Consumer;
 
 public class FertilizerItem extends IFCustomItem {
 
-    public FertilizerItem(CreativeModeTab group) {
+    public FertilizerItem(TitaniumTab group) {
         super("fertilizer", group, new Properties());
     }
 

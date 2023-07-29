@@ -60,7 +60,7 @@ public class BackpackContainer extends BasicAddonContainer {
         ItemStack itemstack = ItemStack.EMPTY;
         Slot slot = slots.get(index);
         if (slot != null && slot.hasItem()) {
-            BackpackDataManager.BackpackItemHandler handler = BackpackDataManager.getData(player.level).getBackpack(id);
+            BackpackDataManager.BackpackItemHandler handler = BackpackDataManager.getData(player.level()).getBackpack(id);
             ItemStack itemstack1 = slot.getItem();
             itemstack = itemstack1.copy();
             for (int pos = 0; pos < handler.getSlots(); pos++) {
@@ -68,7 +68,7 @@ public class BackpackContainer extends BasicAddonContainer {
                     ItemStack result = handler.insertItem(pos, itemstack1, false);
                     slot.set(result);
                     if (player instanceof ServerPlayer)
-                        ItemInfinityBackpack.sync(player.level, id, (ServerPlayer) player);
+                        ItemInfinityBackpack.sync(player.level(), id, (ServerPlayer) player);
                     broadcastChanges();
                     break;
                     //return itemstack;

@@ -15,6 +15,7 @@
       ],
       "recipe": {
         "type": "minecraft:crafting_shaped",
+        "category": "misc",
         "key": {
           "C": {
             "tag": "industrialforegoing:machine_frame/supreme"
@@ -39,7 +40,8 @@
         ],
         "result": {
           "item": "industrialforegoing:wither_builder"
-        }
+        },
+        "show_notification": true
       }
     }
   ]

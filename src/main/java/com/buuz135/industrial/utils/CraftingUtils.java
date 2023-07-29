@@ -28,6 +28,7 @@ import com.hrznstudio.titanium.util.RecipeUtil;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.inventory.CraftingContainer;
+import net.minecraft.world.inventory.TransientCraftingContainer;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.CraftingRecipe;
 import net.minecraft.world.item.crafting.Recipe;
@@ -49,11 +50,11 @@ public class CraftingUtils {
         ItemStack cachedStack = input.copy();
         cachedStack.setCount(size * size);
         for (Map.Entry<ItemStack, ItemStack> entry : cachedRecipes.entrySet()) {
-            if (entry.getKey().sameItem(cachedStack) && entry.getKey().getCount() == cachedStack.getCount()) {
+            if (ItemStack.isSameItem(entry.getValue(), cachedStack) && entry.getKey().getCount() == cachedStack.getCount()) {
                 return entry.getValue().copy();
             }
         }
-        CraftingContainer inventoryCrafting = new CraftingContainer(new AbstractContainerMenu(null, 0) {
+        CraftingContainer inventoryCrafting = new TransientCraftingContainer(new AbstractContainerMenu(null, 0) {
             @Override
             public ItemStack quickMoveStack(Player p_38941_, int p_38942_) {
                 return ItemStack.EMPTY;
@@ -69,7 +70,7 @@ public class CraftingUtils {
         }
         CraftingRecipe recipe = world.getRecipeManager().getRecipeFor(RecipeType.CRAFTING, inventoryCrafting, world).orElse(null);
         if (recipe != null) {
-            ItemStack output = recipe.getResultItem();
+            ItemStack output = recipe.getResultItem(world.registryAccess());
             cachedRecipes.put(cachedStack, output.copy());
             return output.copy();
         }
@@ -77,7 +78,7 @@ public class CraftingUtils {
     }
 
     public static CraftingContainer genCraftingInventory(Level world, ItemStack... inputs) {
-        CraftingContainer inventoryCrafting = new CraftingContainer(new AbstractContainerMenu(null, 0) {
+        CraftingContainer inventoryCrafting = new TransientCraftingContainer(new AbstractContainerMenu(null, 0) {
             @Override
             public boolean stillValid(Player playerIn) {
                 return false;
@@ -107,7 +108,7 @@ public class CraftingUtils {
         if (original.length != compare.length) return false;
         for (int i = 0; i < original.length; i++) {
             if (original[i].isEmpty() && compare[i].isEmpty()) continue;
-            if (!original[i].sameItem(compare[i])) return false;
+            if (!ItemStack.isSameItem(original[i], compare[i])) return false;
         }
         return true;
     }

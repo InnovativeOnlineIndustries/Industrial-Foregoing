@@ -1,9 +1,9 @@
 {
   "credit": "Made with Blockbench",
   "textures": {
-    "1": "industrialforegoing:items/infinity_sword_bld",
-    "2": "industrialforegoing:items/infinity_sword",
-    "particle": "industrialforegoing:items/infinity_sword"
+    "1": "industrialforegoing:item/infinity_sword_bld",
+    "2": "industrialforegoing:item/infinity_sword",
+    "particle": "industrialforegoing:item/infinity_sword"
   },
   "elements": [
     {

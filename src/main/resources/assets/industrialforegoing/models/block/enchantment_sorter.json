@@ -1,6 +1,6 @@
 {
   "parent": "industrialforegoing:block/base_block",
   "textures": {
-    "up": "industrialforegoing:blocks/enchantment_refiner_top"
+    "up": "industrialforegoing:block/enchantment_refiner_top"
   }
 }

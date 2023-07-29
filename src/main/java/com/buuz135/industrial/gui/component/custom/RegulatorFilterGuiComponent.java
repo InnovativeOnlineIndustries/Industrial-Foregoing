@@ -30,6 +30,7 @@ import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
 import net.minecraft.nbt.CompoundTag;
@@ -95,23 +96,22 @@ public abstract class RegulatorFilterGuiComponent extends PositionedGuiComponent
     }
 
     @Override
-    public void drawGuiBackgroundLayer(PoseStack stack, int guiX, int guiY, double mouseX, double mouseY) {
+    public void drawGuiBackgroundLayer(GuiGraphics guiGraphics, int guiX, int guiY, double mouseX, double mouseY) {
         int pos = 0;
         for (int i = 0; i < getYSize(); i++) {
             for (int x = 0; x < getXSize(); x++) {
                 int posX = guiX + getXPos() + x * 18;
                 int posY = guiY + getXPos() + i * 18;
-                RenderSystem.setShaderTexture(0, BG_TEXTURE);
-                Minecraft.getInstance().screen.blit(stack, posX, posY, 176, 0, 18, 18); //blit
+                guiGraphics.blit(BG_TEXTURE, posX, posY, 176, 0, 18, 18); //blit
                 if (!getFilter().getFilter()[pos].getStack().isEmpty()) {
-                    Minecraft.getInstance().getItemRenderer().renderGuiItem(getFilter().getFilter()[pos].getStack(), posX + 1, posY + 1);
+                    guiGraphics.renderItem(getFilter().getFilter()[pos].getStack(), posX + 1, posY + 1);
                     if (isRegulator()) {
-                        stack.pushPose();
-                        stack.translate(0, 0, 260);
-                        stack.scale(0.5f, 0.5f, 0.5f);
+                        guiGraphics.pose().pushPose();
+                        guiGraphics.pose().translate(0, 0, 260);
+                        guiGraphics.pose().scale(0.5f, 0.5f, 0.5f);
                         String amount = getFilter().getFilter()[pos].getAmount() + "";
-                        Minecraft.getInstance().font.draw(stack, ChatFormatting.WHITE + amount, (posX + 17 - Minecraft.getInstance().font.width(amount) / 2f) * 2, (posY + 13) * 2, 0xFFFFFF);
-                        stack.popPose();
+                        guiGraphics.drawString(Minecraft.getInstance().font, ChatFormatting.WHITE + amount, (int) ((posX + 17 - Minecraft.getInstance().font.width(amount) / 2f) * 2), (posY + 13) * 2, 0xFFFFFF);
+                        guiGraphics.pose().popPose();
                     }
                 }
                 ++pos;
@@ -120,13 +120,13 @@ public abstract class RegulatorFilterGuiComponent extends PositionedGuiComponent
     }
 
     @Override
-    public void drawGuiForegroundLayer(PoseStack stack, int guiX, int guiY, double mouseX, double mouseY) {
+    public void drawGuiForegroundLayer(GuiGraphics guiGraphics, int guiX, int guiY, double mouseX, double mouseY) {
         for (int i = 0; i < getYSize(); i++) {
             for (int x = 0; x < getXSize(); x++) {
                 int posX = guiX + getXPos() + x * 18;
                 int posY = guiY + getXPos() + i * 18;
                 if (mouseX > posX + 1 && mouseX < posX + 1 + 16 && mouseY > posY + 1 && mouseY < posY + 1 + 16) {
-                    AssetUtil.drawSelectingOverlay(stack, posX + 1 - guiX, posY + 1 - guiY, posX + 17 - guiX, posY + 17 - guiY); //fill
+                    AssetUtil.drawSelectingOverlay(guiGraphics, posX + 1 - guiX, posY + 1 - guiY, posX + 17 - guiX, posY + 17 - guiY); //fill
                     return;
                 }
             }
@@ -151,7 +151,7 @@ public abstract class RegulatorFilterGuiComponent extends PositionedGuiComponent
                 int posX = guiX + getXPos() + x * 18;
                 int posY = guiY + getXPos() + i * 18;
                 if (mouseX > posX + 1 && mouseX < posX + 1 + 16 && mouseY > posY + 1 && mouseY < posY + 1 + 16 && !getFilter().getFilter()[pos].getStack().isEmpty()) {
-                    List<Component> strings = Minecraft.getInstance().screen.getTooltipFromItem(getFilter().getFilter()[pos].getStack());
+                    List<Component> strings = Minecraft.getInstance().screen.getTooltipFromItem(Minecraft.getInstance(), getFilter().getFilter()[pos].getStack());
                     if (isRegulator())
                         strings.add(Component.literal(ChatFormatting.DARK_GRAY + "*Use Scroll Wheel to change*"));
                     return strings;

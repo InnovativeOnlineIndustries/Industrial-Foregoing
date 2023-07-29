@@ -159,7 +159,7 @@ public class FluidLaserBaseTile extends IndustrialMachineTile<FluidLaserBaseTile
                             if (entities.size() > 0) {
                                 LivingEntity first = entities.get(0);
                                 if (first.getHealth() > 5) {
-                                    first.hurt(DamageSource.GENERIC, 5);
+                                    first.hurt(first.damageSources().generic(), 5);
                                     output.fillForced(FluidStack.loadFluidStackFromNBT(laserDrillFluidRecipe.output), IFluidHandler.FluidAction.EXECUTE);
                                 }
                             }

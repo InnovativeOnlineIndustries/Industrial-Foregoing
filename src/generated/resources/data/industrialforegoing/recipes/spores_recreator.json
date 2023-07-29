@@ -15,6 +15,7 @@
       ],
       "recipe": {
         "type": "minecraft:crafting_shaped",
+        "category": "misc",
         "key": {
           "I": {
             "tag": "forge:mushrooms"
@@ -36,7 +37,8 @@
         ],
         "result": {
           "item": "industrialforegoing:spores_recreator"
-        }
+        },
+        "show_notification": true
       }
     }
   ]

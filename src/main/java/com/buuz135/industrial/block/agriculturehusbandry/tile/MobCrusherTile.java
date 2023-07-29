@@ -60,6 +60,7 @@ import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.item.enchantment.Enchantments;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.storage.loot.LootContext;
+import net.minecraft.world.level.storage.loot.LootParams;
 import net.minecraft.world.level.storage.loot.LootTable;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParamSets;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParams;
@@ -85,7 +86,7 @@ import java.util.stream.Collectors;
 
 public class MobCrusherTile extends IndustrialAreaWorkingTile<MobCrusherTile> {
 
-    private final Method DROP_SPECIAL_ITEMS = ObfuscationReflectionHelper.findMethod(Mob.class, "m_7472_", DamageSource.class, int.class, boolean.class);
+    private final Method DROP_CUSTOM_DEATH_LOOT = ObfuscationReflectionHelper.findMethod(Mob.class, "m_7472_", DamageSource.class, int.class, boolean.class);
 
     @Save
     private SidedInventoryComponent<MobCrusherTile> output;
@@ -97,7 +98,7 @@ public class MobCrusherTile extends IndustrialAreaWorkingTile<MobCrusherTile> {
 
     public MobCrusherTile(BlockPos blockPos, BlockState blockState) {
         super(ModuleAgricultureHusbandry.MOB_CRUSHER, RangeManager.RangeType.BEHIND, true, MobCrusherConfig.powerPerOperation, blockPos, blockState);
-        if (!DROP_SPECIAL_ITEMS.isAccessible()) DROP_SPECIAL_ITEMS.setAccessible(true);
+        if (!DROP_CUSTOM_DEATH_LOOT.isAccessible()) DROP_CUSTOM_DEATH_LOOT.setAccessible(true);
         this.dropXP = true;
         this.addTank(tank = (SidedFluidTankComponent<MobCrusherTile>) new SidedFluidTankComponent<MobCrusherTile>("essence", MobCrusherConfig.tankSize, 43, 20, 0).
                 setColor(DyeColor.LIME).
@@ -158,10 +159,9 @@ public class MobCrusherTile extends IndustrialAreaWorkingTile<MobCrusherTile> {
             player.setItemInHand(InteractionHand.MAIN_HAND, sword);
         }
         //Loot from table
-        DamageSource source = DamageSource.playerAttack(player);
-        LootTable table = this.level.getServer().getLootTables().get(entity.getLootTable());
-        LootContext.Builder context = new LootContext.Builder((ServerLevel) this.level)
-                .withRandom(this.level.random)
+        DamageSource source = player.damageSources().playerAttack(player);
+        LootTable table = this.level.getServer().getLootData().getLootTable(entity.getLootTable());
+        LootParams.Builder context = new LootParams.Builder((ServerLevel) this.level)
                 .withParameter(LootContextParams.THIS_ENTITY, entity)
                 .withParameter(LootContextParams.DAMAGE_SOURCE, source)
                 .withParameter(LootContextParams.ORIGIN, new Vec3(this.worldPosition.getX(), this.worldPosition.getY(), this.worldPosition.getZ()))
@@ -173,7 +173,7 @@ public class MobCrusherTile extends IndustrialAreaWorkingTile<MobCrusherTile> {
         //Drop special items
         try {
             if (entity.captureDrops() == null) entity.captureDrops(new ArrayList<>());
-            DROP_SPECIAL_ITEMS.invoke(entity, source, looting, true);
+            DROP_CUSTOM_DEATH_LOOT.invoke(entity, source, looting, true);
             if (entity.captureDrops() != null) {
                 extra.addAll(entity.captureDrops());
             }
@@ -194,7 +194,7 @@ public class MobCrusherTile extends IndustrialAreaWorkingTile<MobCrusherTile> {
     }
 
     private WorkAction damage(Mob entity, FakePlayer player) {
-        entity.hurt((DamageSource.playerAttack(player)).setMagic(), MobCrusherConfig.attackDamage);
+        entity.hurt((entity.damageSources().playerAttack(player)), MobCrusherConfig.attackDamage);
         return new WorkAction(0.1f, MobCrusherConfig.powerPerOperation);
     }
 

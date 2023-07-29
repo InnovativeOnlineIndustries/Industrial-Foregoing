@@ -30,7 +30,6 @@ import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.DefaultVertexFormat;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexFormat;
-import com.mojang.math.Vector3f;
 import net.minecraft.client.renderer.GameRenderer;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderStateShard;
@@ -41,12 +40,13 @@ import net.minecraft.core.Direction;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
 import net.minecraft.world.phys.Vec3;
+import org.joml.Vector3f;
 
 import java.util.Map;
 
 public class TransporterTESR implements BlockEntityRenderer<TransporterTile> {
 
-    public static ResourceLocation TEXTURE = new ResourceLocation("industrialforegoing", "textures/blocks/transporters/particle.png");
+    public static ResourceLocation TEXTURE = new ResourceLocation("industrialforegoing", "textures/block/transporters/particle.png");
 
     public static RenderType TYPE = createRenderType();
 
@@ -92,15 +92,15 @@ public class TransporterTESR implements BlockEntityRenderer<TransporterTile> {
             }
             float divideSecond = -0.22f;
             vector3d = vector3d.add(from.step().x() * divideSecond, from.step().y() * divideSecond, from.step().z() * divideSecond);
-            return new Vector3f(vector3d);
+            return new Vector3f((float) vector3d.x, (float) vector3d.y, (float) vector3d.z);
         }
         Vector3f vsrc = from.step();
         Vector3f vdst = to.step();
-        Vector3f a = vsrc.copy();
+        Vector3f a = new Vector3f(vsrc);
         a.mul(5 / 16f);
-        Vector3f b = vdst.copy();
+        Vector3f b = new Vector3f(vdst);
         b.mul(6 / 16f);
-        Vector3f c = vsrc.copy();
+        Vector3f c = new Vector3f(vsrc);
         c.mul(3 / 16f);
         float sind = -Mth.sin((float) ((step / totalSteps) * Math.PI / 2f));
         float cosd = -Mth.cos((float) ((step / totalSteps) * Math.PI / 2f));
@@ -128,7 +128,7 @@ public class TransporterTESR implements BlockEntityRenderer<TransporterTile> {
                         stack.pushPose();
                         Vector3f pos = getPath(direction, other, i + partialTicks, partialTicks);
                         stack.translate(pos.x(), pos.y(), pos.z());
-                        transporters.get(other).renderTransfer(pos, direction, i + 1, stack, combinedOverlayIn, buffer, partialTicks);
+                        transporters.get(other).renderTransfer(pos, direction, i + 1, stack, combinedOverlayIn, buffer, partialTicks, tile.getLevel());
                         stack.popPose();
                     }
                 }

@@ -24,7 +24,9 @@ package com.buuz135.industrial.item;
 
 import com.buuz135.industrial.module.ModuleCore;
 import com.buuz135.industrial.module.ModuleTool;
+import com.hrznstudio.titanium.Titanium;
 import com.hrznstudio.titanium.recipe.generator.TitaniumShapedRecipeBuilder;
+import com.hrznstudio.titanium.tab.TitaniumTab;
 import net.minecraft.ChatFormatting;
 import net.minecraft.data.recipes.FinishedRecipe;
 import net.minecraft.nbt.CompoundTag;
@@ -50,7 +52,7 @@ import java.util.function.Consumer;
 
 public class MeatFeederItem extends IFCustomItem {
 
-    public MeatFeederItem(CreativeModeTab group) {
+    public MeatFeederItem(TitaniumTab group) {
         super("meat_feeder", group, new Properties().stacksTo(1));
     }
 

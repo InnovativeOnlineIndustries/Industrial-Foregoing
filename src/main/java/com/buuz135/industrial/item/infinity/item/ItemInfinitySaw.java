@@ -32,6 +32,7 @@ import com.buuz135.industrial.utils.apihandlers.plant.TreeCache;
 import com.google.common.cache.CacheBuilder;
 import com.google.common.cache.CacheLoader;
 import com.google.common.cache.LoadingCache;
+import com.hrznstudio.titanium.tab.TitaniumTab;
 import net.minecraft.core.BlockPos;
 import net.minecraft.data.recipes.FinishedRecipe;
 import net.minecraft.world.entity.LivingEntity;
@@ -68,7 +69,7 @@ public class ItemInfinitySaw extends ItemInfinity {
     public static int POWER_CONSUMPTION = 10000;
     public static int FUEL_CONSUMPTION = 3;
 
-    public ItemInfinitySaw(CreativeModeTab group) {
+    public ItemInfinitySaw(TitaniumTab group) {
 //        .addToolType(ToolAction.AXE, 3)
         super("infinity_saw", group, new Properties().stacksTo(1), POWER_CONSUMPTION, FUEL_CONSUMPTION, false);
     }

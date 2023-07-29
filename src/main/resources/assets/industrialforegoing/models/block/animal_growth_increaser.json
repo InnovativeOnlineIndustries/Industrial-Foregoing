@@ -1,9 +1,9 @@
 {
   "parent": "industrialforegoing:block/base_block",
   "textures": {
-    "south": "industrialforegoing:blocks/animal_growth_increaser_front",
-    "north": "industrialforegoing:blocks/animal_independence_selector_side",
-    "west": "industrialforegoing:blocks/animal_independence_selector_side",
-    "east": "industrialforegoing:blocks/animal_independence_selector_side"
+    "south": "industrialforegoing:block/animal_growth_increaser_front",
+    "north": "industrialforegoing:block/animal_independence_selector_side",
+    "west": "industrialforegoing:block/animal_independence_selector_side",
+    "east": "industrialforegoing:block/animal_independence_selector_side"
   }
 }

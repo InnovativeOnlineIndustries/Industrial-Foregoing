@@ -40,7 +40,7 @@ public class LavaStrawHandler extends StrawHandlerBase {
 
     @Override
     public void onDrink(Level world, BlockPos pos, Fluid stack, Player player, boolean fromFluidContainer) {
-        player.hurt(DamageSource.LAVA, 7);
+        player.hurt(world.damageSources().lava(), 7);
         player.setSecondsOnFire(30);
         CompoundTag tag = player.getPersistentData();
         tag.putLong("lavaDrink", world.getGameTime());

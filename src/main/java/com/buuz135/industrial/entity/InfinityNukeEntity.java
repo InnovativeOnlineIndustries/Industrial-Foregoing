@@ -32,6 +32,7 @@ import net.minecraft.core.particles.BlockParticleOption;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.protocol.Packet;
+import net.minecraft.network.protocol.game.ClientGamePacketListener;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
@@ -96,28 +97,28 @@ public class InfinityNukeEntity extends Entity {
         }
         this.move(MoverType.SELF, this.getDeltaMovement());
         this.setDeltaMovement(this.getDeltaMovement().scale(0.98D));
-        if (this.onGround) {
+        if (this.onGround()) {
             this.setDeltaMovement(this.getDeltaMovement().multiply(0.7D, -0.5D, 0.7D));
         }
         if (exploding) {
-            if (level instanceof ServerLevel && explosionHelper == null) {
-                explosionHelper = new ProcessExplosion(this.blockPosition(), getRadius(), (ServerLevel) this.level, 39, placedBy != null ? placedBy.getDisplayName().getString() : "");
+            if (level() instanceof ServerLevel && explosionHelper == null) {
+                explosionHelper = new ProcessExplosion(this.blockPosition(), getRadius(), (ServerLevel) this.level(), 39, placedBy != null ? placedBy.getDisplayName().getString() : "");
                 ExplosionTickHandler.processExplosionList.add(explosionHelper);
             }
             setTicksExploding(this.getTicksExploding() + 1);
             this.updateInWaterStateAndDoFluidPushing();
         }
-        if (this.level.isClientSide && this.getEntityData().get(EXPLODING)) {
-            if (this.level.isClientSide) {
-                this.level.addParticle(ParticleTypes.SMOKE, this.getX(), this.getY() + 1.1D, this.getZ(), 0.0D, 0.0D, 0.0D);
-                this.level.addParticle(new BlockParticleOption(ParticleTypes.BLOCK, this.level.getBlockState(this.blockPosition().below())), this.getX() + this.level.getRandom().nextDouble() - 0.5, this.getY(), this.getZ() + this.level.getRandom().nextDouble() - 0.5, 0.0D, 0.0D, 0.0D);
+        if (this.level().isClientSide && this.getEntityData().get(EXPLODING)) {
+            if (this.level().isClientSide) {
+                this.level().addParticle(ParticleTypes.SMOKE, this.getX(), this.getY() + 1.1D, this.getZ(), 0.0D, 0.0D, 0.0D);
+                this.level().addParticle(new BlockParticleOption(ParticleTypes.BLOCK, this.level().getBlockState(this.blockPosition().below())), this.getX() + this.level().getRandom().nextDouble() - 0.5, this.getY(), this.getZ() + this.level().getRandom().nextDouble() - 0.5, 0.0D, 0.0D, 0.0D);
             }
         }
         if (explosionHelper != null && explosionHelper.isDead) {
             this.remove(RemovalReason.KILLED);
             this.onClientRemoval();
         }
-        if (level.isClientSide) {
+        if (level().isClientSide) {
             tickClient();
         }
     }
@@ -125,13 +126,13 @@ public class InfinityNukeEntity extends Entity {
     @OnlyIn(Dist.CLIENT)
     private void tickClient() {
         if (chargingSound == null && this.getEntityData().get(EXPLODING)) {
-            Minecraft.getInstance().getSoundManager().play(chargingSound = new TickeableSound(this.level, this.blockPosition(), ModuleTool.NUKE_CHARGING.get(), getRadius(), 10, this.level.random));
+            Minecraft.getInstance().getSoundManager().play(chargingSound = new TickeableSound(this.level(), this.blockPosition(), ModuleTool.NUKE_CHARGING.get(), getRadius(), 10, this.level().random));
         }
         if (chargingSound != null) {
             chargingSound.setDistance(getRadius());
             chargingSound.increase();
             if (!Minecraft.getInstance().getSoundManager().isActive(chargingSound) && explodingSound == null) {
-                explodingSound = new TickeableSound(this.level, this.blockPosition(), ModuleTool.NUKE_EXPLOSION.get(), getRadius(), 10, this.level.random);
+                explodingSound = new TickeableSound(this.level(), this.blockPosition(), ModuleTool.NUKE_EXPLOSION.get(), getRadius(), 10, this.level().random);
                 explodingSound.setPitch(1);
                 Minecraft.getInstance().getSoundManager().play(explodingSound);
             }
@@ -171,17 +172,17 @@ public class InfinityNukeEntity extends Entity {
     }
 
     @Override
-    public Packet<?> getAddEntityPacket() {
+    public Packet<ClientGamePacketListener> getAddEntityPacket() {
         return NetworkHooks.getEntitySpawningPacket(this);
     }
 
     @Override
     public InteractionResult interact(Player player, InteractionHand hand) {
         if (this.isExploding()) return InteractionResult.SUCCESS;
-        if (player.level.isClientSide && hand == InteractionHand.MAIN_HAND && player.getItemInHand(hand).isEmpty()) {
+        if (player.level().isClientSide && hand == InteractionHand.MAIN_HAND && player.getItemInHand(hand).isEmpty()) {
             arm();
         }
-        if (!player.level.isClientSide && hand == InteractionHand.MAIN_HAND) {
+        if (!player.level().isClientSide && hand == InteractionHand.MAIN_HAND) {
             if (player.getItemInHand(hand).isEmpty()) {
                 if (player.isShiftKeyDown()) {
                     ItemHandlerHelper.giveItemToPlayer(player, this.original);

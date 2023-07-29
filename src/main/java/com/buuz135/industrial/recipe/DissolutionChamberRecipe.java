@@ -26,6 +26,7 @@ import com.buuz135.industrial.module.ModuleCore;
 import com.hrznstudio.titanium.component.fluid.FluidTankComponent;
 import com.hrznstudio.titanium.recipe.serializer.GenericSerializer;
 import com.hrznstudio.titanium.recipe.serializer.SerializableRecipe;
+import net.minecraft.core.RegistryAccess;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.Container;
 import net.minecraft.world.item.ItemStack;
@@ -81,7 +82,7 @@ public class DissolutionChamberRecipe extends SerializableRecipe {
             for (ItemStack stack : iItemList.getItems()) {
                 int i = 0;
                 for (; i < handlerItems.size(); i++) {
-                    if (handlerItems.get(i).sameItem(stack)) {
+                    if (ItemStack.isSameItem(handlerItems.get(i), stack)) {
                         found = true;
                         break;
                     }
@@ -97,7 +98,7 @@ public class DissolutionChamberRecipe extends SerializableRecipe {
     }
 
     @Override
-    public ItemStack assemble(Container inv) {
+    public ItemStack assemble(Container inv, RegistryAccess access) {
         return ItemStack.EMPTY;
     }
 
@@ -107,7 +108,7 @@ public class DissolutionChamberRecipe extends SerializableRecipe {
     }
 
     @Override
-    public ItemStack getResultItem() {
+    public ItemStack getResultItem(RegistryAccess access) {
         return output;
     }
 

@@ -15,6 +15,7 @@
       ],
       "recipe": {
         "type": "minecraft:crafting_shaped",
+        "category": "misc",
         "key": {
           "G": {
             "item": "minecraft:ghast_tear"
@@ -30,7 +31,8 @@
         ],
         "result": {
           "item": "industrialforegoing:mob_imprisonment_tool"
-        }
+        },
+        "show_notification": true
       }
     }
   ]

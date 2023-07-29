@@ -1,8 +1,8 @@
 {
   "credit": "Made by WBgroup with Blockbench",
   "textures": {
-    "2": "industrialforegoing:items/drill",
-    "main": "industrialforegoing:items/drillhead1"
+    "2": "industrialforegoing:item/drill",
+    "main": "industrialforegoing:item/drillhead1"
   },
   "elements": [
     {

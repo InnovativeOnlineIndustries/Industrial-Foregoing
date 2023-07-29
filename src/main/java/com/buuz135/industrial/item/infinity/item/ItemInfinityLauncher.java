@@ -33,6 +33,7 @@ import com.hrznstudio.titanium.client.screen.addon.ArrowButtonScreenAddon;
 import com.hrznstudio.titanium.client.screen.addon.TextScreenAddon;
 import com.hrznstudio.titanium.component.button.ArrowButtonComponent;
 import com.hrznstudio.titanium.item.BasicItem;
+import com.hrznstudio.titanium.tab.TitaniumTab;
 import com.hrznstudio.titanium.util.FacingUtil;
 import net.minecraft.ChatFormatting;
 import net.minecraft.data.recipes.FinishedRecipe;
@@ -72,7 +73,7 @@ public class ItemInfinityLauncher extends ItemInfinity {
 
     public static String PLUNGER_NBT = "Plunger";
 
-    public ItemInfinityLauncher(CreativeModeTab group) {
+    public ItemInfinityLauncher(TitaniumTab group) {
         super("infinity_launcher", group, new Properties().stacksTo(1), POWER_CONSUMPTION, FUEL_CONSUMPTION, false);
         this.disableArea();
     }

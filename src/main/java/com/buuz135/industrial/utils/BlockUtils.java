@@ -38,7 +38,6 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.level.material.Material;
 import net.minecraft.world.phys.AABB;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.level.BlockEvent;
@@ -56,19 +55,11 @@ public class BlockUtils {
         for (double y = axisAlignedBB.minY; y < axisAlignedBB.maxY; ++y) {
             for (double x = axisAlignedBB.minX; x < axisAlignedBB.maxX; ++x) {
                 for (double z = axisAlignedBB.minZ; z < axisAlignedBB.maxZ; ++z) {
-                    blocks.add(new BlockPos(x, y, z));
+                    blocks.add(new BlockPos((int) x, (int) y, (int) z));
                 }
             }
         }
         return blocks;
-    }
-
-    public static boolean isBlockstateInMaterial(BlockState state, Material[] materials) {
-        for (Material material : materials) {
-            if (state.getMaterial() == material) return true;
-        }
-
-        return false;
     }
 
     public static boolean isBlockTag(Level world, BlockPos pos, TagKey<Block> tag) {
@@ -84,7 +75,7 @@ public class BlockUtils {
     }
 
     public static boolean isLeaves(Level world, BlockPos pos) {
-        return world.getBlockState(pos).getMaterial() == Material.LEAVES || world.getBlockState(pos).is(BlockTags.WART_BLOCKS) || world.getBlockState(pos).is(BlockTags.LEAVES) || world.getBlockState(pos).getBlock().equals(Blocks.SHROOMLIGHT);
+        return world.getBlockState(pos).is(BlockTags.WART_BLOCKS) || world.getBlockState(pos).is(BlockTags.LEAVES) || world.getBlockState(pos).getBlock().equals(Blocks.SHROOMLIGHT);
     }
 
     public static boolean isChorus(Level world, BlockPos pos) {

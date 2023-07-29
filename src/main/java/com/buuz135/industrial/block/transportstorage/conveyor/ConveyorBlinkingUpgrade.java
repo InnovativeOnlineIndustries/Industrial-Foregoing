@@ -85,7 +85,7 @@ public class ConveyorBlinkingUpgrade extends ConveyorUpgrade {
         if (whitelist != filter.matches(entity)) return;
         Direction direction = this.getContainer().getBlockWorld().getBlockState(this.getContainer().getBlockPosition()).getValue(ConveyorBlock.FACING);
         Vec3 vec3d = new Vec3(horizontalDisplacement * direction.getNormal().getX(), verticalDisplacement, horizontalDisplacement * direction.getNormal().getZ());
-        BlockPos pos = this.getPos().offset(vec3d.x, vec3d.y, vec3d.z);
+        BlockPos pos = this.getPos().offset((int) vec3d.x, (int) vec3d.y, (int) vec3d.z);
         entity.setPos(pos.getX() + 0.5, pos.getY() + 0.25, pos.getZ() + 0.5);
         this.getWorld().playSound(null, pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5, SoundEvents.CHORUS_FRUIT_TELEPORT, SoundSource.AMBIENT, 0.5f, 1f);
     }
@@ -229,7 +229,7 @@ public class ConveyorBlinkingUpgrade extends ConveyorUpgrade {
 
         @Override
         public Set<ResourceLocation> getTextures() {
-            return Collections.singleton(new ResourceLocation(Reference.MOD_ID, "blocks/conveyor_blinking_upgrade"));
+            return Collections.singleton(new ResourceLocation(Reference.MOD_ID, "block/conveyor_blinking_upgrade"));
         }
 
         @Nonnull

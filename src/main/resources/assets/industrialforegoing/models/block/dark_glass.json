@@ -1,6 +1,6 @@
 {
   "parent": "minecraft:block/cube_all",
   "textures": {
-    "all": "industrialforegoing:blocks/dark_glass"
+    "all": "industrialforegoing:block/dark_glass"
   }
 }

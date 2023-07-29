@@ -37,8 +37,7 @@ import com.hrznstudio.titanium.recipe.generator.TitaniumShapedRecipeBuilder;
 import com.hrznstudio.titanium.util.TileUtil;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
-import com.mojang.math.Matrix4f;
-import com.mojang.math.Vector3f;
+import com.mojang.math.Axis;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.core.BlockPos;
@@ -51,10 +50,12 @@ import net.minecraft.world.level.Level;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.common.Tags;
+import net.minecraftforge.common.capabilities.ForgeCapabilities;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidUtil;
-import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
 import net.minecraftforge.fluids.capability.IFluidHandler;
+import org.joml.Matrix4f;
+import org.joml.Vector3f;
 
 import javax.annotation.Nonnull;
 import java.awt.*;
@@ -120,8 +121,8 @@ public class TransporterFluidType extends FilteredTransporterType<FluidStack, IF
                 for (Direction direction : ((TransporterTile) container).getTransporterTypeMap().keySet()) {
                     TransporterType transporterType = ((TransporterTile) container).getTransporterTypeMap().get(direction);
                     if (transporterType instanceof TransporterFluidType && transporterType.getAction() == TransporterTypeFactory.TransporterAction.INSERT) {
-                        TileUtil.getTileEntity(getLevel(), getPos().relative(this.getSide())).ifPresent(tileEntity -> tileEntity.getCapability(CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY, getSide().getOpposite()).ifPresent(origin -> {
-                            TileUtil.getTileEntity(getLevel(), getPos().relative(direction)).ifPresent(otherTile -> otherTile.getCapability(CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY, direction.getOpposite()).ifPresent(destination -> {
+                        TileUtil.getTileEntity(getLevel(), getPos().relative(this.getSide())).ifPresent(tileEntity -> tileEntity.getCapability(ForgeCapabilities.FLUID_HANDLER, getSide().getOpposite()).ifPresent(origin -> {
+                            TileUtil.getTileEntity(getLevel(), getPos().relative(direction)).ifPresent(otherTile -> otherTile.getCapability(ForgeCapabilities.FLUID_HANDLER, direction.getOpposite()).ifPresent(destination -> {
                                 int amount = (int) (50 * getEfficiency());
                                 FluidStack simulatedStack = origin.drain(amount, IFluidHandler.FluidAction.SIMULATE);
                                 int filteredAmount = ((TransporterFluidType) transporterType).getFilter().matches(simulatedStack, destination, ((TransporterFluidType) transporterType).isRegulated());
@@ -173,16 +174,16 @@ public class TransporterFluidType extends FilteredTransporterType<FluidStack, IF
 
     @OnlyIn(Dist.CLIENT)
     @Override
-    public void renderTransfer(Vector3f pos, Direction direction, int step, PoseStack stack, int combinedOverlayIn, MultiBufferSource buffer, float frame) {
-        super.renderTransfer(pos, direction, step, stack, combinedOverlayIn, buffer, frame);
+    public void renderTransfer(Vector3f pos, Direction direction, int step, PoseStack stack, int combinedOverlayIn, MultiBufferSource buffer, float frame, Level level) {
+        super.renderTransfer(pos, direction, step, stack, combinedOverlayIn, buffer, frame, level);
         if (step < queue.computeIfAbsent(direction, v -> new ArrayList<>()).size()) {
             float scale = 0.10f;
             stack.scale(scale, scale, scale);
             FluidStack fluidStack = queue.get(direction).get(step);
             stack.pushPose();
             stack.mulPose(Minecraft.getInstance().getEntityRenderDispatcher().cameraOrientation());
-            stack.mulPose(Vector3f.ZP.rotationDegrees(90f));
-            stack.mulPose(Vector3f.XP.rotationDegrees(90f));
+            stack.mulPose(Axis.ZP.rotationDegrees(90f));
+            stack.mulPose(Axis.XP.rotationDegrees(90f));
             VertexConsumer buffer1 = buffer.getBuffer(TransporterTESR.TYPE);
             Matrix4f matrix = stack.last().pose();
             float pX1 = 1;
@@ -239,12 +240,12 @@ public class TransporterFluidType extends FilteredTransporterType<FluidStack, IF
 
         @Override
         public Set<ResourceLocation> getTextures() {
-            return Sets.newHashSet(new ResourceLocation("industrialforegoing:blocks/transporters/fluid"), new ResourceLocation("industrialforegoing:blocks/base/bottom"));
+            return Sets.newHashSet(new ResourceLocation("industrialforegoing:block/transporters/fluid"), new ResourceLocation("industrialforegoing:block/base/bottom"));
         }
 
         @Override
         public boolean canBeAttachedAgainst(Level world, BlockPos pos, Direction face) {
-            return TileUtil.getTileEntity(world, pos).map(tileEntity -> tileEntity.getCapability(CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY, face).isPresent()).orElse(false);
+            return TileUtil.getTileEntity(world, pos).map(tileEntity -> tileEntity.getCapability(ForgeCapabilities.FLUID_HANDLER, face).isPresent()).orElse(false);
         }
 
         @Nonnull

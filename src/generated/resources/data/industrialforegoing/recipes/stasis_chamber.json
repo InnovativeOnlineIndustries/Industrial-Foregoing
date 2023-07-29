@@ -15,6 +15,7 @@
       ],
       "recipe": {
         "type": "minecraft:crafting_shaped",
+        "category": "misc",
         "key": {
           "g": {
             "item": "minecraft:ghast_tear"
@@ -39,7 +40,8 @@
         ],
         "result": {
           "item": "industrialforegoing:stasis_chamber"
-        }
+        },
+        "show_notification": true
       }
     }
   ]

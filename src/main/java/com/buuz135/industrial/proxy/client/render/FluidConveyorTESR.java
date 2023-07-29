@@ -29,8 +29,7 @@ import com.mojang.blaze3d.vertex.DefaultVertexFormat;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.mojang.blaze3d.vertex.VertexFormat;
-import com.mojang.math.Matrix4f;
-import com.mojang.math.Vector3f;
+import com.mojang.math.Axis;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.GameRenderer;
 import net.minecraft.client.renderer.MultiBufferSource;
@@ -45,6 +44,7 @@ import net.minecraft.core.Direction;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.client.extensions.common.IClientFluidTypeExtensions;
 import net.minecraftforge.fluids.FluidStack;
+import org.joml.Matrix4f;
 import org.lwjgl.opengl.GL11;
 
 import java.awt.*;
@@ -80,17 +80,17 @@ public class FluidConveyorTESR implements BlockEntityRenderer<ConveyorTile> {
             if (facing == Direction.NORTH) {
                 matrixStack.translate(1, 0, 1);
                 //RenderSystem.rotatef(180, 0, 1, 0);
-                matrixStack.mulPose(Vector3f.YP.rotationDegrees(180));
+                matrixStack.mulPose(Axis.YP.rotationDegrees(180));
             }
             if (facing == Direction.EAST) {
                 matrixStack.translate(0, 0, 1);
                 //RenderSystem.rotatef(90, 0, 1, 0);
-                matrixStack.mulPose(Vector3f.YP.rotationDegrees(90));
+                matrixStack.mulPose(Axis.YP.rotationDegrees(90));
             }
             if (facing == Direction.WEST) {
                 matrixStack.translate(1, 0, 0);
                 //RenderSystem.rotatef(-90, 0, 1, 0);
-                matrixStack.mulPose(Vector3f.YN.rotationDegrees(90));
+                matrixStack.mulPose(Axis.YN.rotationDegrees(90));
             }
             AbstractTexture texture = Minecraft.getInstance().getTextureManager().getTexture(TextureAtlas.LOCATION_BLOCKS);
             if (texture instanceof TextureAtlas) {
@@ -101,7 +101,7 @@ public class FluidConveyorTESR implements BlockEntityRenderer<ConveyorTile> {
                 float posY = 2 / 16f - 1 / 32f;
                 float right = 1 / 16f;
                 float left = 15 / 16f;
-                VertexConsumer buffer = typeBuffer.getBuffer(createRenderType(new ResourceLocation(flow.getName().getNamespace(), "textures/" + flow.getName().getPath() + ".png")));
+                VertexConsumer buffer = typeBuffer.getBuffer(createRenderType(new ResourceLocation(flow.contents().name().getNamespace(), "textures/" + flow.contents().name().getPath() + ".png")));
                 //ConveyorBlock.EnumSides sides = te.getWorld().getBlockState(te.getPos()).getBlock().getExtendedState(te.getWorld().getBlockState(te.getPos()), te.getWorld(), te.getPos()).get(ConveyorBlock.SIDES);
                 ConveyorBlock.EnumSides sides = ConveyorBlock.EnumSides.NONE;
                 if (sides == ConveyorBlock.EnumSides.BOTH || sides == ConveyorBlock.EnumSides.RIGHT) right = 0;
@@ -109,27 +109,27 @@ public class FluidConveyorTESR implements BlockEntityRenderer<ConveyorTile> {
                 Color color = new Color(renderProperties.getTintColor(te.getTank().getFluid()));
                 matrixStack.pushPose();
                 Matrix4f matrix = matrixStack.last().pose();
-                float animation = 16 * flow.uvShrinkRatio() * (te.getLevel().getGameTime() % flow.getFrameCount());
+                float animation = 16 * flow.uvShrinkRatio() * (te.getLevel().getGameTime() % flow.contents().getUniqueFrames().count());
 
                 buffer.vertex(matrix, left, posY, 0).color(color.getRed(), color.getGreen(), color.getBlue(), color.getAlpha()).uv(0, 0 + animation).endVertex();
                 buffer.vertex(matrix, right, posY, 0).color(color.getRed(), color.getGreen(), color.getBlue(), color.getAlpha()).uv(0.5f, 0 + animation).endVertex();
-                buffer.vertex(matrix, right, posY, 1).color(color.getRed(), color.getGreen(), color.getBlue(), color.getAlpha()).uv(0.5f, 16f / (flow.getHeight() * flow.getFrameCount()) + animation).endVertex();
-                buffer.vertex(matrix, left, posY, 1).color(color.getRed(), color.getGreen(), color.getBlue(), color.getAlpha()).uv(0, 16f / (flow.getHeight() * flow.getFrameCount()) + animation).endVertex();
+                buffer.vertex(matrix, right, posY, 1).color(color.getRed(), color.getGreen(), color.getBlue(), color.getAlpha()).uv(0.5f, 16f / (flow.contents().height() * flow.contents().getUniqueFrames().count()) + animation).endVertex();
+                buffer.vertex(matrix, left, posY, 1).color(color.getRed(), color.getGreen(), color.getBlue(), color.getAlpha()).uv(0, 16f / (flow.contents().height() * flow.contents().getUniqueFrames().count()) + animation).endVertex();
 
-                buffer = typeBuffer.getBuffer(createRenderType(new ResourceLocation(still.getName().getNamespace(), "textures/" + still.getName().getPath() + ".png")));
-                animation = still.uvShrinkRatio() * (te.getLevel().getGameTime() % (still.getFrameCount() * 16));
+                buffer = typeBuffer.getBuffer(createRenderType(new ResourceLocation(still.contents().name().getNamespace(), "textures/" + still.contents().name().getPath() + ".png")));
+                animation = still.uvShrinkRatio() * (te.getLevel().getGameTime() % (still.contents().getUniqueFrames().count() * 16));
                 boolean shouldRenderPrev = !(te.getLevel().getBlockEntity(te.getBlockPos().relative(facing.getOpposite())) instanceof ConveyorTile) || ((ConveyorTile) te.getLevel().getBlockEntity(te.getBlockPos().relative(facing.getOpposite()))).getTank().getFluidAmount() <= 0;
                 if (shouldRenderPrev) {
-                    buffer.vertex(matrix, right, posY, 0).color(color.getRed(), color.getGreen(), color.getBlue(), color.getAlpha()).uv(0, 1 - 1f / (still.getHeight() * still.getFrameCount()) - animation).endVertex();
-                    buffer.vertex(matrix, left, posY, 0).color(color.getRed(), color.getGreen(), color.getBlue(), color.getAlpha()).uv(1f, 1 - 1f / (still.getHeight() * still.getFrameCount()) - animation).endVertex();
+                    buffer.vertex(matrix, right, posY, 0).color(color.getRed(), color.getGreen(), color.getBlue(), color.getAlpha()).uv(0, 1 - 1f / (still.contents().height() * still.contents().getUniqueFrames().count()) - animation).endVertex();
+                    buffer.vertex(matrix, left, posY, 0).color(color.getRed(), color.getGreen(), color.getBlue(), color.getAlpha()).uv(1f, 1 - 1f / (still.contents().height() * still.contents().getUniqueFrames().count()) - animation).endVertex();
                     buffer.vertex(matrix, left, 1 / 16f, 0).color(color.getRed(), color.getGreen(), color.getBlue(), color.getAlpha()).uv(1f, 1 - animation).endVertex();
                     buffer.vertex(matrix, right, 1 / 16f, 0).color(color.getRed(), color.getGreen(), color.getBlue(), color.getAlpha()).uv(0, 1 - animation).endVertex();
                 }
                 boolean shouldRenderNext = !(te.getLevel().getBlockEntity(te.getBlockPos().relative(facing)) instanceof ConveyorTile) || ((ConveyorTile) te.getLevel().getBlockEntity(te.getBlockPos().relative(facing))).getTank().getFluidAmount() <= 0;
                 if (shouldRenderNext) {
 
-                    buffer.vertex(matrix, left, posY, 1).color(color.getRed(), color.getGreen(), color.getBlue(), color.getAlpha()).uv(1f, 1 - 1f / (still.getHeight() * still.getFrameCount()) - animation).endVertex();
-                    buffer.vertex(matrix, right, posY, 1).color(color.getRed(), color.getGreen(), color.getBlue(), color.getAlpha()).uv(0, 1 - 1f / (still.getHeight() * still.getFrameCount()) - animation).endVertex();
+                    buffer.vertex(matrix, left, posY, 1).color(color.getRed(), color.getGreen(), color.getBlue(), color.getAlpha()).uv(1f, 1 - 1f / (still.contents().height() * still.contents().getUniqueFrames().count()) - animation).endVertex();
+                    buffer.vertex(matrix, right, posY, 1).color(color.getRed(), color.getGreen(), color.getBlue(), color.getAlpha()).uv(0, 1 - 1f / (still.contents().height() * still.contents().getUniqueFrames().count()) - animation).endVertex();
                     buffer.vertex(matrix, right, 1 / 16f, 1).color(color.getRed(), color.getGreen(), color.getBlue(), color.getAlpha()).uv(0, 1 - animation).endVertex();
                     buffer.vertex(matrix, left, 1 / 16f, 1).color(color.getRed(), color.getGreen(), color.getBlue(), color.getAlpha()).uv(1f, 1 - animation).endVertex();
                 }

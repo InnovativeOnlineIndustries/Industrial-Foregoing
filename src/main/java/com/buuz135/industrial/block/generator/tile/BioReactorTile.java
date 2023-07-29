@@ -140,7 +140,7 @@ public class BioReactorTile extends IndustrialWorkingTile<BioReactorTile> {
     private boolean canInsert(int slot, ItemStack stack) {
         int foundSlot = -1;
         for (int i = 0; i < input.getInventory().getSlots(); i++) {
-            if (input.getInventory().getStackInSlot(i).sameItem(stack)) {
+            if (ItemStack.isSameItem(input.getInventory().getStackInSlot(i), stack)) {
                 foundSlot = i;
             }
         }

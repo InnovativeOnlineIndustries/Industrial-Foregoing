@@ -30,6 +30,7 @@ import com.hrznstudio.titanium.api.IRecipeProvider;
 import com.hrznstudio.titanium.api.raytrace.DistanceRayTraceResult;
 import com.hrznstudio.titanium.block.BasicTileBlock;
 import com.hrznstudio.titanium.recipe.generator.TitaniumShapedRecipeBuilder;
+import com.hrznstudio.titanium.tab.TitaniumTab;
 import com.hrznstudio.titanium.util.RayTraceUtils;
 import com.hrznstudio.titanium.util.TileUtil;
 import net.minecraft.core.BlockPos;
@@ -49,10 +50,7 @@ import net.minecraft.world.item.*;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.HorizontalDirectionalBlock;
-import net.minecraft.world.level.block.RenderShape;
-import net.minecraft.world.level.block.SimpleWaterloggedBlock;
+import net.minecraft.world.level.block.*;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
@@ -63,8 +61,6 @@ import net.minecraft.world.level.block.state.properties.DirectionProperty;
 import net.minecraft.world.level.block.state.properties.EnumProperty;
 import net.minecraft.world.level.material.FluidState;
 import net.minecraft.world.level.material.Fluids;
-import net.minecraft.world.level.material.Material;
-import net.minecraft.world.level.material.MaterialColor;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.Vec3;
@@ -91,17 +87,13 @@ public class ConveyorBlock extends BasicTileBlock<ConveyorTile> implements Simpl
     //public static final EnumProperty<EnumSides> SIDES = EnumProperty.create("sides", EnumSides.class);
     private ConveyorItem item;
 
-    public ConveyorBlock(CreativeModeTab group) {
-        super("conveyor", Properties.of(Material.HEAVY_METAL, MaterialColor.COLOR_ORANGE).noCollission().strength(2.0f), ConveyorTile.class);
+    public ConveyorBlock(TitaniumTab group) {
+        super("conveyor", Properties.copy(Blocks.IRON_BLOCK).noCollission().strength(2.0f), ConveyorTile.class);
         this.registerDefaultState(this.defaultBlockState().setValue(FACING, Direction.NORTH).setValue(WATERLOGGED, false));
         //this.item = new ConveyorItem(this, group);
         this.setItemGroup(group);
     }
 
-    @Override
-    public Supplier<Item> getItemBlockFactory() {
-        return this::getItem;
-    }
 
     @Override
     public int getSignal(BlockState blockState, BlockGetter world, BlockPos pos, Direction side) {
@@ -126,7 +118,7 @@ public class ConveyorBlock extends BasicTileBlock<ConveyorTile> implements Simpl
         BlockEntity tileEntity = world.getBlockEntity(pos);
         if (tileEntity instanceof ConveyorTile) {
             if (target instanceof DistanceRayTraceResult) {
-                ConveyorUpgrade upgrade = ((ConveyorTile) tileEntity).getUpgradeMap().get(getFacingUpgradeHit(state, player.level, pos, player));
+                ConveyorUpgrade upgrade = ((ConveyorTile) tileEntity).getUpgradeMap().get(getFacingUpgradeHit(state, player.getCommandSenderWorld(), pos, player));
                 if (upgrade != null) {
                     return new ItemStack(upgrade.getFactory().getUpgradeItem(), 1);
                 }
@@ -402,7 +394,7 @@ public class ConveyorBlock extends BasicTileBlock<ConveyorTile> implements Simpl
     }
 
     @Override
-    public boolean isPossibleToRespawnInThis() {
+    public boolean isPossibleToRespawnInThis(BlockState p_279289_) {
         return true;
     }
 
@@ -423,18 +415,18 @@ public class ConveyorBlock extends BasicTileBlock<ConveyorTile> implements Simpl
     public enum EnumType implements StringRepresentable {
 
         FLAT(false, "industrialforegoing:block/conveyor"),
-        UP(false, "industrialforegoing:block/conveyor_ramp_inverted", "industrialforegoing:blocks/conveyor_color_inverted"),
+        UP(false, "industrialforegoing:block/conveyor_ramp_inverted", "industrialforegoing:block/conveyor_color_inverted"),
         DOWN(false, "industrialforegoing:block/conveyor_ramp"),
-        FLAT_FAST(true, "industrialforegoing:block/conveyor", "industrialforegoing:blocks/conveyor_color_fast"),
-        UP_FAST(true, "industrialforegoing:block/conveyor_ramp_inverted", "industrialforegoing:blocks/conveyor_color_inverted_fast"),
-        DOWN_FAST(true, "industrialforegoing:block/conveyor_ramp", "industrialforegoing:blocks/conveyor_color_fast");
+        FLAT_FAST(true, "industrialforegoing:block/conveyor", "industrialforegoing:block/conveyor_color_fast"),
+        UP_FAST(true, "industrialforegoing:block/conveyor_ramp_inverted", "industrialforegoing:block/conveyor_color_inverted_fast"),
+        DOWN_FAST(true, "industrialforegoing:block/conveyor_ramp", "industrialforegoing:block/conveyor_color_fast");
 
         private boolean fast;
         private String model;
         private String texture;
 
         EnumType(boolean fast, String model) {
-            this(false, model, "industrialforegoing:blocks/conveyor_color");
+            this(false, model, "industrialforegoing:block/conveyor_color");
         }
 
         EnumType(boolean fast, String model, String texture) {
@@ -539,15 +531,18 @@ public class ConveyorBlock extends BasicTileBlock<ConveyorTile> implements Simpl
 
     private class ConveyorItem extends BlockItem {
 
-        public ConveyorItem(Block block, CreativeModeTab group) {
-            super(block, new Item.Properties().tab(group));
+        private TitaniumTab group;
+
+        public ConveyorItem(Block block, TitaniumTab group) {
+            super(block, new Item.Properties());
             //this.setRegistryName(Reference.MOD_ID, "conveyor");
+            this.group = group;
         }
 
         @Nullable
         @Override
         public String getCreatorModId(ItemStack itemStack) {
-            return Component.translatable("itemGroup." + this.category.getRecipeFolderName()).getString();
+            return Component.translatable("itemGroup.industrialforegoing_" + this.group.getResourceLocation().getPath()).getString();
         }
     }
 

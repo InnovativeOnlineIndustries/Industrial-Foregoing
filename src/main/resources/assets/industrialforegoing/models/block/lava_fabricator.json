@@ -1,10 +1,10 @@
 {
   "parent": "industrialforegoing:block/base_block",
   "textures": {
-    "north": "industrialforegoing:blocks/lava_fabricator_side",
-    "south": "industrialforegoing:blocks/lava_fabricator_side",
-    "west": "industrialforegoing:blocks/lava_fabricator_side",
-    "east": "industrialforegoing:blocks/lava_fabricator_side",
-    "up": "industrialforegoing:blocks/lava_fabricator_top"
+    "north": "industrialforegoing:block/lava_fabricator_side",
+    "south": "industrialforegoing:block/lava_fabricator_side",
+    "west": "industrialforegoing:block/lava_fabricator_side",
+    "east": "industrialforegoing:block/lava_fabricator_side",
+    "up": "industrialforegoing:block/lava_fabricator_top"
   }
 }

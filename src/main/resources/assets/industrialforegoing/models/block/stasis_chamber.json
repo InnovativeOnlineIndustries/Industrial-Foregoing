@@ -1,6 +1,6 @@
 {
   "parent": "industrialforegoing:block/base_block",
   "textures": {
-    "north": "industrialforegoing:blocks/stasis_chamber_side"
+    "north": "industrialforegoing:block/stasis_chamber_side"
   }
 }

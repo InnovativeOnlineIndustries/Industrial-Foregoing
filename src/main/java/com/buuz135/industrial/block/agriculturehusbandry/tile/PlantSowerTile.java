@@ -93,7 +93,7 @@ public class PlantSowerTile extends IndustrialAreaWorkingTile<PlantSowerTile> {
             ItemStack stack = ItemStack.EMPTY;
             for (int i = 0; i < input.getInventory().getSlots(); i++) {
                 if (input.getInventory().getStackInSlot(i).isEmpty()) continue;
-                if (filter.getFilterSlots()[slot].getFilter().isEmpty() || filter.getFilterSlots()[slot].getFilter().sameItem(input.getInventory().getStackInSlot(i))) {
+                if (filter.getFilterSlots()[slot].getFilter().isEmpty() || ItemStack.isSameItem(filter.getFilterSlots()[slot].getFilter(), input.getInventory().getStackInSlot(i))) {
                     stack = input.getInventory().getStackInSlot(i);
                     break;
                 }

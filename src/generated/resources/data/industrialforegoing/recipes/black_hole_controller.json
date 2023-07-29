@@ -15,6 +15,7 @@
       ],
       "recipe": {
         "type": "minecraft:crafting_shaped",
+        "category": "misc",
         "key": {
           "E": {
             "tag": "forge:chests/ender"
@@ -39,7 +40,8 @@
         ],
         "result": {
           "item": "industrialforegoing:black_hole_controller"
-        }
+        },
+        "show_notification": true
       }
     }
   ]

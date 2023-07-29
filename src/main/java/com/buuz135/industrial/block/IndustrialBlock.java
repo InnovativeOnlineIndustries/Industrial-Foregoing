@@ -24,6 +24,7 @@ package com.buuz135.industrial.block;
 
 import com.hrznstudio.titanium.block.RotatableBlock;
 import com.hrznstudio.titanium.block.tile.BasicTile;
+import com.hrznstudio.titanium.tab.TitaniumTab;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.CreativeModeTab;
@@ -36,29 +37,9 @@ import java.util.function.Supplier;
 
 public abstract class IndustrialBlock<T extends BasicTile<T>> extends RotatableBlock<T> {
 
-    public IndustrialBlock(String name, Properties properties, Class<T> tileClass, CreativeModeTab group) {
+    public IndustrialBlock(String name, Properties properties, Class<T> tileClass, TitaniumTab group) {
         super(name, properties, tileClass);
         setItemGroup(group);
         //setRegistryName(Reference.MOD_ID, name);
-    }
-
-    @Override
-    public Supplier<Item> getItemBlockFactory() {
-        return () -> new IndustrialBlockItem(this, this.getItemGroup());
-    }
-
-    public class IndustrialBlockItem extends BlockItem {
-
-        public IndustrialBlockItem(Block blockIn, CreativeModeTab group) {
-            super(blockIn, new Properties().tab(group));
-            //this.setRegistryName(blockIn.getRegistryName());
-        }
-
-        @Nullable
-        @Override
-        public String getCreatorModId(ItemStack itemStack) {
-            return Component.translatable("itemGroup." + this.category.getRecipeFolderName()).getString();
-        }
-
     }
 }

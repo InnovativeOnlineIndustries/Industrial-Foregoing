@@ -1,5 +1,9 @@
 {
   "variants": {
+    "subfacing=east": {
+      "model": "industrialforegoing:block/fluid_extractor",
+      "y": 90
+    },
     "subfacing=north": {
       "model": "industrialforegoing:block/fluid_extractor"
     },
@@ -10,10 +14,6 @@
     "subfacing=west": {
       "model": "industrialforegoing:block/fluid_extractor",
       "y": 270
-    },
-    "subfacing=east": {
-      "model": "industrialforegoing:block/fluid_extractor",
-      "y": 90
     }
   }
 }

@@ -29,6 +29,7 @@ import com.hrznstudio.titanium.util.AssetUtil;
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.ItemStack;
@@ -59,22 +60,22 @@ public abstract class BigItemGuiAddon extends BasicScreenAddon {
 
 
     @Override
-    public void drawBackgroundLayer(PoseStack stack, Screen screen, IAssetProvider provider, int guiX, int guiY, int mouseX, int mouseY, float partialTicks) {
-        AssetUtil.drawAsset(stack, screen, provider.getAsset(AssetTypes.ITEM_BACKGROUND), guiX + getPosX(), guiY + getPosY());
+    public void drawBackgroundLayer(GuiGraphics guiGraphics, Screen screen, IAssetProvider provider, int guiX, int guiY, int mouseX, int mouseY, float partialTicks) {
+        AssetUtil.drawAsset(guiGraphics, screen, provider.getAsset(AssetTypes.ITEM_BACKGROUND), guiX + getPosX(), guiY + getPosY());
         //RenderSystem.setupGui3DDiffuseLighting();
-        Minecraft.getInstance().getItemRenderer().renderGuiItem(ItemHandlerHelper.copyStackWithSize(getItemStack(), 1), guiX + getPosX() + 1, guiY + getPosY() + 1);
+        guiGraphics.renderItem(ItemHandlerHelper.copyStackWithSize(getItemStack(), 1), guiX + getPosX() + 1, guiY + getPosY() + 1);
 //        Lighting.turnOff();
 //        RenderSystem.enableAlphaTest();
-        stack.pushPose();
-        stack.translate(0, 0, 260);
-        stack.scale(0.5f, 0.5f, 0.5f);
+        guiGraphics.pose().pushPose();
+        guiGraphics.pose().translate(0, 0, 260);
+        guiGraphics.pose().scale(0.5f, 0.5f, 0.5f);
         String amount = getAmountDisplay();
-        Minecraft.getInstance().font.draw(stack, ChatFormatting.DARK_GRAY + amount, (guiX + getPosX() + 16 - Minecraft.getInstance().font.width(amount) / 2f) * 2, (guiY + getPosY() + 19) * 2, 0xFFFFFF);
-        stack.popPose();
+        guiGraphics.drawString(Minecraft.getInstance().font, ChatFormatting.DARK_GRAY + amount, (int) ((guiX + getPosX() + 16 - Minecraft.getInstance().font.width(amount) / 2f) * 2), (guiY + getPosY() + 19) * 2, 0xFFFFFF);
+        guiGraphics.pose().popPose();
     }
 
     @Override
-    public void drawForegroundLayer(PoseStack stack, Screen screen, IAssetProvider provider, int guiX, int guiY, int mouseX, int mouseY, float partialTicks) {
+    public void drawForegroundLayer(GuiGraphics stack, Screen screen, IAssetProvider provider, int guiX, int guiY, int mouseX, int mouseY, float partialTicks) {
 
     }
 
@@ -86,7 +87,7 @@ public abstract class BigItemGuiAddon extends BasicScreenAddon {
     @Override
     public List<Component> getTooltipLines() {
         if (this.tooltip && !getItemStack().isEmpty()) {
-            List<Component> tp = Minecraft.getInstance().screen.getTooltipFromItem(getItemStack());
+            List<Component> tp = Minecraft.getInstance().screen.getTooltipFromItem(Minecraft.getInstance(), getItemStack());
             tp.add(Component.literal(ChatFormatting.GOLD + new DecimalFormat().format(getAmount())));
             return tp;
         }

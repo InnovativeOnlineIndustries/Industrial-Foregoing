@@ -15,6 +15,7 @@
       ],
       "recipe": {
         "type": "minecraft:crafting_shaped",
+        "category": "misc",
         "key": {
           "C": {
             "item": "minecraft:piston"
@@ -40,7 +41,8 @@
         "result": {
           "count": 2,
           "item": "industrialforegoing:item_transporter_type"
-        }
+        },
+        "show_notification": true
       }
     }
   ]

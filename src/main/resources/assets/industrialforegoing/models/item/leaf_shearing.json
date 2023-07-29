@@ -1,6 +1,6 @@
 {
   "parent": "industrialforegoing:item/item",
   "textures": {
-    "layer0": "industrialforegoing:items/leaf_shearing"
+    "layer0": "industrialforegoing:item/leaf_shearing"
   }
 }

@@ -21,8 +21,8 @@
  */
 package com.buuz135.industrial.utils.explosion;
 
-import com.mojang.math.Vector3f;
 import net.minecraft.core.BlockPos;
+import org.joml.Vector3f;
 
 /**
  * Class copied and adapted from Draconic Evolution https://github.com/brandon3055/BrandonsCore/blob/master/src/main/java/com/brandon3055/brandonscore/lib/ShortPos.java
@@ -64,9 +64,9 @@ public class ShortPos2 {
 
     public static int getIntPos(Vector3f position, BlockPos relativeTo) {
         if (position.y() > 255) {
-            position.setY(255);
+            position.setComponent(1,255);
         } else if (position.y() < -64) {
-            position.setY(0);
+            position.setComponent(1,0);
         }
         int xp = ((int) position.x() - relativeTo.getX()) + 2048;
         int yp = (int) position.y();

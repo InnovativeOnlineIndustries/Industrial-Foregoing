@@ -52,7 +52,7 @@ public class ItemStackFilter extends AbstractFilter<Entity> {
         }
         if (isEmpty) return false;
         for (GhostSlot stack : this.getFilter()) {
-            if (entity instanceof ItemEntity && stack.getStack().sameItem(((ItemEntity) entity).getItem()))
+            if (entity instanceof ItemEntity && ItemStack.isSameItem(stack.getStack(), ((ItemEntity) entity).getItem()))
                 return true;
             if (entity instanceof LivingEntity && ForgeRegistries.ITEMS.getKey(stack.getStack().getItem()).equals(ForgeRegistries.ITEMS.getKey(ModuleTool.MOB_IMPRISONMENT_TOOL.get())) && ((MobImprisonmentToolItem) ModuleTool.MOB_IMPRISONMENT_TOOL.get()).containsEntity(stack.getStack())
                     && ForgeRegistries.ENTITY_TYPES.getKey(entity.getType()).toString().equalsIgnoreCase(((MobImprisonmentToolItem) ModuleTool.MOB_IMPRISONMENT_TOOL.get()).getID(stack.getStack()))) {
@@ -70,7 +70,7 @@ public class ItemStackFilter extends AbstractFilter<Entity> {
         }
         if (isEmpty) return false;
         for (GhostSlot stack : this.getFilter()) {
-            if (itemStack.sameItem(stack.getStack())) return true;
+            if (ItemStack.isSameItem(itemStack, stack.getStack())) return true;
         }
         return false;
     }

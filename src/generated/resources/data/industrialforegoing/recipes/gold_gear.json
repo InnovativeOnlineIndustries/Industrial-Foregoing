@@ -15,6 +15,7 @@
       ],
       "recipe": {
         "type": "minecraft:crafting_shaped",
+        "category": "misc",
         "key": {
           "P": {
             "item": "minecraft:gold_ingot"
@@ -27,7 +28,8 @@
         ],
         "result": {
           "item": "industrialforegoing:gold_gear"
-        }
+        },
+        "show_notification": true
       }
     }
   ]

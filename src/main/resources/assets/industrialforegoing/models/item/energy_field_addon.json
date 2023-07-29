@@ -1,6 +1,6 @@
 {
   "parent": "industrialforegoing:item/item",
   "textures": {
-    "layer0": "industrialforegoing:items/energy_field_addon"
+    "layer0": "industrialforegoing:item/energy_field_addon"
   }
 }

@@ -23,12 +23,14 @@
 package com.buuz135.industrial.module;
 
 import com.buuz135.industrial.IndustrialForegoing;
+import com.buuz135.industrial.block.IndustrialBlockItem;
 import com.buuz135.industrial.block.agriculturehusbandry.*;
 import com.buuz135.industrial.registry.IFRegistries;
 import com.buuz135.industrial.utils.Reference;
 import com.buuz135.industrial.utils.apihandlers.plant.*;
 import com.hrznstudio.titanium.module.DeferredRegistryHelper;
-import com.hrznstudio.titanium.tab.AdvancedTitaniumTab;
+import com.hrznstudio.titanium.tab.TitaniumTab;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
@@ -38,21 +40,21 @@ import org.apache.commons.lang3.tuple.Pair;
 
 public class ModuleAgricultureHusbandry implements IModule {
 
-    public static AdvancedTitaniumTab TAB_AG_HUS = new AdvancedTitaniumTab(Reference.MOD_ID + "_ag_hus", true);
+    public static TitaniumTab TAB_AG_HUS = new TitaniumTab(new ResourceLocation(Reference.MOD_ID, "ag_hus"));
 
-    public static Pair<RegistryObject<Block>, RegistryObject<BlockEntityType<?>>> PLANT_GATHERER = IndustrialForegoing.INSTANCE.getRegistries().registerBlockWithTile("plant_gatherer", () -> new PlantGathererBlock());
-    public static Pair<RegistryObject<Block>, RegistryObject<BlockEntityType<?>>> SEWER = IndustrialForegoing.INSTANCE.getRegistries().registerBlockWithTile("sewer", () -> new SewerBlock());
-    public static Pair<RegistryObject<Block>, RegistryObject<BlockEntityType<?>>> SEWAGE_COMPOSTER = IndustrialForegoing.INSTANCE.getRegistries().registerBlockWithTile("sewage_composter", () -> new SewageComposterBlock());
-    public static Pair<RegistryObject<Block>, RegistryObject<BlockEntityType<?>>> PLANT_FERTILIZER = IndustrialForegoing.INSTANCE.getRegistries().registerBlockWithTile("plant_fertilizer", () -> new PlantFertilizerBlock());
-    public static Pair<RegistryObject<Block>, RegistryObject<BlockEntityType<?>>> PLANT_SOWER = IndustrialForegoing.INSTANCE.getRegistries().registerBlockWithTile("plant_sower", () -> new PlantSowerBlock());
-    public static Pair<RegistryObject<Block>, RegistryObject<BlockEntityType<?>>> SLAUGHTER_FACTORY = IndustrialForegoing.INSTANCE.getRegistries().registerBlockWithTile("mob_slaughter_factory", () -> new SlaughterFactoryBlock());
-    public static Pair<RegistryObject<Block>, RegistryObject<BlockEntityType<?>>> ANIMAL_RANCHER = IndustrialForegoing.INSTANCE.getRegistries().registerBlockWithTile("animal_rancher", () -> new AnimalRancherBlock());
-    public static Pair<RegistryObject<Block>, RegistryObject<BlockEntityType<?>>> ANIMAL_FEEDER = IndustrialForegoing.INSTANCE.getRegistries().registerBlockWithTile("animal_feeder", () -> new AnimalFeederBlock());
-    public static Pair<RegistryObject<Block>, RegistryObject<BlockEntityType<?>>> ANIMAL_BABY_SEPARATOR = IndustrialForegoing.INSTANCE.getRegistries().registerBlockWithTile("animal_baby_separator", () -> new AnimalBabySeparatorBlock());
-    public static Pair<RegistryObject<Block>, RegistryObject<BlockEntityType<?>>> MOB_CRUSHER = IndustrialForegoing.INSTANCE.getRegistries().registerBlockWithTile("mob_crusher", () -> new MobCrusherBlock());
-    public static Pair<RegistryObject<Block>, RegistryObject<BlockEntityType<?>>> HYDROPONIC_BED = IndustrialForegoing.INSTANCE.getRegistries().registerBlockWithTile("hydroponic_bed", () -> new HydroponicBedBlock());
-    public static Pair<RegistryObject<Block>, RegistryObject<BlockEntityType<?>>> MOB_DUPLICATOR = IndustrialForegoing.INSTANCE.getRegistries().registerBlockWithTile("mob_duplicator", () -> new MobDuplicatorBlock());
-    public static Pair<RegistryObject<Block>, RegistryObject<BlockEntityType<?>>> WITHER_BUILDER = IndustrialForegoing.INSTANCE.getRegistries().registerBlockWithTile("wither_builder", () -> new WitherBuilderBlock());
+    public static Pair<RegistryObject<Block>, RegistryObject<BlockEntityType<?>>> PLANT_GATHERER = IndustrialForegoing.INSTANCE.getRegistries().registerBlockWithTileItem("plant_gatherer", () -> new PlantGathererBlock(), blockRegistryObject -> () -> new IndustrialBlockItem(blockRegistryObject.get(), TAB_AG_HUS), TAB_AG_HUS);
+    public static Pair<RegistryObject<Block>, RegistryObject<BlockEntityType<?>>> SEWER = IndustrialForegoing.INSTANCE.getRegistries().registerBlockWithTileItem("sewer", () -> new SewerBlock(), blockRegistryObject -> () -> new IndustrialBlockItem(blockRegistryObject.get(), TAB_AG_HUS), TAB_AG_HUS);
+    public static Pair<RegistryObject<Block>, RegistryObject<BlockEntityType<?>>> SEWAGE_COMPOSTER = IndustrialForegoing.INSTANCE.getRegistries().registerBlockWithTileItem("sewage_composter", () -> new SewageComposterBlock(), blockRegistryObject -> () -> new IndustrialBlockItem(blockRegistryObject.get(), TAB_AG_HUS), TAB_AG_HUS);
+    public static Pair<RegistryObject<Block>, RegistryObject<BlockEntityType<?>>> PLANT_FERTILIZER = IndustrialForegoing.INSTANCE.getRegistries().registerBlockWithTileItem("plant_fertilizer", () -> new PlantFertilizerBlock(), blockRegistryObject -> () -> new IndustrialBlockItem(blockRegistryObject.get(), TAB_AG_HUS), TAB_AG_HUS);
+    public static Pair<RegistryObject<Block>, RegistryObject<BlockEntityType<?>>> PLANT_SOWER = IndustrialForegoing.INSTANCE.getRegistries().registerBlockWithTileItem("plant_sower", () -> new PlantSowerBlock(), blockRegistryObject -> () -> new IndustrialBlockItem(blockRegistryObject.get(), TAB_AG_HUS), TAB_AG_HUS);
+    public static Pair<RegistryObject<Block>, RegistryObject<BlockEntityType<?>>> SLAUGHTER_FACTORY = IndustrialForegoing.INSTANCE.getRegistries().registerBlockWithTileItem("mob_slaughter_factory", () -> new SlaughterFactoryBlock(), blockRegistryObject -> () -> new IndustrialBlockItem(blockRegistryObject.get(), TAB_AG_HUS), TAB_AG_HUS);
+    public static Pair<RegistryObject<Block>, RegistryObject<BlockEntityType<?>>> ANIMAL_RANCHER = IndustrialForegoing.INSTANCE.getRegistries().registerBlockWithTileItem("animal_rancher", () -> new AnimalRancherBlock(), blockRegistryObject -> () -> new IndustrialBlockItem(blockRegistryObject.get(), TAB_AG_HUS), TAB_AG_HUS);
+    public static Pair<RegistryObject<Block>, RegistryObject<BlockEntityType<?>>> ANIMAL_FEEDER = IndustrialForegoing.INSTANCE.getRegistries().registerBlockWithTileItem("animal_feeder", () -> new AnimalFeederBlock(), blockRegistryObject -> () -> new IndustrialBlockItem(blockRegistryObject.get(), TAB_AG_HUS), TAB_AG_HUS);
+    public static Pair<RegistryObject<Block>, RegistryObject<BlockEntityType<?>>> ANIMAL_BABY_SEPARATOR = IndustrialForegoing.INSTANCE.getRegistries().registerBlockWithTileItem("animal_baby_separator", () -> new AnimalBabySeparatorBlock(), blockRegistryObject -> () -> new IndustrialBlockItem(blockRegistryObject.get(), TAB_AG_HUS), TAB_AG_HUS);
+    public static Pair<RegistryObject<Block>, RegistryObject<BlockEntityType<?>>> MOB_CRUSHER = IndustrialForegoing.INSTANCE.getRegistries().registerBlockWithTileItem("mob_crusher", () -> new MobCrusherBlock(), blockRegistryObject -> () -> new IndustrialBlockItem(blockRegistryObject.get(), TAB_AG_HUS), TAB_AG_HUS);
+    public static Pair<RegistryObject<Block>, RegistryObject<BlockEntityType<?>>> HYDROPONIC_BED = IndustrialForegoing.INSTANCE.getRegistries().registerBlockWithTileItem("hydroponic_bed", () -> new HydroponicBedBlock(), blockRegistryObject -> () -> new IndustrialBlockItem(blockRegistryObject.get(), TAB_AG_HUS), TAB_AG_HUS);
+    public static Pair<RegistryObject<Block>, RegistryObject<BlockEntityType<?>>> MOB_DUPLICATOR = IndustrialForegoing.INSTANCE.getRegistries().registerBlockWithTileItem("mob_duplicator", () -> new MobDuplicatorBlock(), blockRegistryObject -> () -> new IndustrialBlockItem(blockRegistryObject.get(), TAB_AG_HUS), TAB_AG_HUS);
+    public static Pair<RegistryObject<Block>, RegistryObject<BlockEntityType<?>>> WITHER_BUILDER = IndustrialForegoing.INSTANCE.getRegistries().registerBlockWithTileItem("wither_builder", () -> new WitherBuilderBlock(), blockRegistryObject -> () -> new IndustrialBlockItem(blockRegistryObject.get(), TAB_AG_HUS), TAB_AG_HUS);
 
     @Override
     public void generateFeatures(DeferredRegistryHelper registryHelper) {
@@ -65,6 +67,5 @@ public class ModuleAgricultureHusbandry implements IModule {
         registryHelper.registerGeneric(IFRegistries.PLANT_RECOLLECTABLES_REGISTRY_KEY, "bamboo", BambooPlantRecollectable::new);
         registryHelper.registerGeneric(IFRegistries.PLANT_RECOLLECTABLES_REGISTRY_KEY, "kelp", KelpPlantRecollectable::new);
         registryHelper.registerGeneric(IFRegistries.PLANT_RECOLLECTABLES_REGISTRY_KEY, "sweetberries", SweetBerriesPlantRecollectable::new);
-        TAB_AG_HUS.addIconStack(() -> new ItemStack(PLANT_SOWER.getLeft().orElse(Blocks.STONE)));
     }
 }

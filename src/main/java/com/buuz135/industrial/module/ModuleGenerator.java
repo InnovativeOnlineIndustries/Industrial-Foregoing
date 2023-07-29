@@ -23,11 +23,13 @@
 package com.buuz135.industrial.module;
 
 import com.buuz135.industrial.IndustrialForegoing;
+import com.buuz135.industrial.block.IndustrialBlockItem;
 import com.buuz135.industrial.block.generator.*;
 import com.buuz135.industrial.block.generator.mycelial.IMycelialGeneratorType;
 import com.buuz135.industrial.utils.Reference;
 import com.hrznstudio.titanium.module.DeferredRegistryHelper;
-import com.hrznstudio.titanium.tab.AdvancedTitaniumTab;
+import com.hrznstudio.titanium.tab.TitaniumTab;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
@@ -40,19 +42,18 @@ import java.util.List;
 
 public class ModuleGenerator implements IModule {
 
-    public static AdvancedTitaniumTab TAB_GENERATOR = new AdvancedTitaniumTab(Reference.MOD_ID + "_generator", true);
+    public static TitaniumTab TAB_GENERATOR = new TitaniumTab(new ResourceLocation(Reference.MOD_ID , "generator"));
 
-    public static Pair<RegistryObject<Block>, RegistryObject<BlockEntityType<?>>> PITIFUL_GENERATOR = IndustrialForegoing.INSTANCE.getRegistries().registerBlockWithTile("pitiful_generator", () -> new PitifulGeneratorBlock());
-    public static Pair<RegistryObject<Block>, RegistryObject<BlockEntityType<?>>> BIOREACTOR = IndustrialForegoing.INSTANCE.getRegistries().registerBlockWithTile("bioreactor", () -> new BioReactorBlock());
-    public static Pair<RegistryObject<Block>, RegistryObject<BlockEntityType<?>>> BIOFUEL_GENERATOR = IndustrialForegoing.INSTANCE.getRegistries().registerBlockWithTile("biofuel_generator", () -> new BiofuelGeneratorBlock());
+    public static Pair<RegistryObject<Block>, RegistryObject<BlockEntityType<?>>> PITIFUL_GENERATOR = IndustrialForegoing.INSTANCE.getRegistries().registerBlockWithTileItem("pitiful_generator", () -> new PitifulGeneratorBlock(), blockRegistryObject -> () -> new IndustrialBlockItem(blockRegistryObject.get(), TAB_GENERATOR), TAB_GENERATOR);
+    public static Pair<RegistryObject<Block>, RegistryObject<BlockEntityType<?>>> BIOREACTOR = IndustrialForegoing.INSTANCE.getRegistries().registerBlockWithTileItem("bioreactor", () -> new BioReactorBlock(), blockRegistryObject -> () -> new IndustrialBlockItem(blockRegistryObject.get(), TAB_GENERATOR), TAB_GENERATOR);
+    public static Pair<RegistryObject<Block>, RegistryObject<BlockEntityType<?>>> BIOFUEL_GENERATOR = IndustrialForegoing.INSTANCE.getRegistries().registerBlockWithTileItem("biofuel_generator", () -> new BiofuelGeneratorBlock(), blockRegistryObject -> () -> new IndustrialBlockItem(blockRegistryObject.get(), TAB_GENERATOR), TAB_GENERATOR);
     public static List<Pair<RegistryObject<Block>, RegistryObject<BlockEntityType<?>>>> MYCELIAL_GENERATORS = new ArrayList<Pair<RegistryObject<Block>, RegistryObject<BlockEntityType<?>>>>();
-    public static Pair<RegistryObject<Block>, RegistryObject<BlockEntityType<?>>> MYCELIAL_REACTOR = IndustrialForegoing.INSTANCE.getRegistries().registerBlockWithTile("mycelial_reactor", () -> new MycelialReactorBlock());
+    public static Pair<RegistryObject<Block>, RegistryObject<BlockEntityType<?>>> MYCELIAL_REACTOR = IndustrialForegoing.INSTANCE.getRegistries().registerBlockWithTileItem("mycelial_reactor", () -> new MycelialReactorBlock(), blockRegistryObject -> () -> new IndustrialBlockItem(blockRegistryObject.get(), TAB_GENERATOR), TAB_GENERATOR);
 
     @Override
     public void generateFeatures(DeferredRegistryHelper helper) {
         for (IMycelialGeneratorType type : IMycelialGeneratorType.TYPES) {
-            MYCELIAL_GENERATORS.add(helper.registerBlockWithTile("mycelial_" + type.getName(), () -> new MycelialGeneratorBlock(type)));
+            MYCELIAL_GENERATORS.add(helper.registerBlockWithTileItem("mycelial_" + type.getName(), () -> new MycelialGeneratorBlock(type), blockRegistryObject -> () -> new IndustrialBlockItem(blockRegistryObject.get(), TAB_GENERATOR), TAB_GENERATOR));
         }
-        TAB_GENERATOR.addIconStack(() -> new ItemStack(PITIFUL_GENERATOR.getLeft().orElse(Blocks.STONE)));
     }
 }

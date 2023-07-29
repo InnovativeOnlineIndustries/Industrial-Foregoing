@@ -1,6 +1,6 @@
 {
   "parent": "industrialforegoing:item/item",
   "textures": {
-    "layer0": "industrialforegoing:items/machine_hull"
+    "layer0": "industrialforegoing:item/machine_hull"
   }
 }

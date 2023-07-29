@@ -1,5 +1,9 @@
 {
   "variants": {
+    "subfacing=east": {
+      "model": "industrialforegoing:block/sludge_refiner",
+      "y": 90
+    },
     "subfacing=north": {
       "model": "industrialforegoing:block/sludge_refiner"
     },
@@ -10,10 +14,6 @@
     "subfacing=west": {
       "model": "industrialforegoing:block/sludge_refiner",
       "y": 270
-    },
-    "subfacing=east": {
-      "model": "industrialforegoing:block/sludge_refiner",
-      "y": 90
     }
   }
 }

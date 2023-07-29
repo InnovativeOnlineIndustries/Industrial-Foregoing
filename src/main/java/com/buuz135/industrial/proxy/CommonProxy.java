@@ -42,12 +42,12 @@ public class CommonProxy {
     public static final String CONTRIBUTORS_FILE = "https://raw.githubusercontent.com/Buuz135/Industrial-Foregoing/master/contributors.json";
     public static List<String> CONTRIBUTORS = new ArrayList<>();
 
-    public static DamageSource custom = new DamageSource("if_custom") {
+    public static DamageSource custom = null; /*new DamageSource("if_custom") { TODO 1.20 Create custom damagesource
         @Override
         public Component getLocalizedDeathMessage(LivingEntity entityLivingBaseIn) {
             return Component.translatable("text.industrialforegoing.chat.slaughter_kill", entityLivingBaseIn.getDisplayName(), ChatFormatting.RESET);
         }
-    };
+    };*/
 
     public void run() {
         MinecraftForge.EVENT_BUS.register(new MobDeathHandler());

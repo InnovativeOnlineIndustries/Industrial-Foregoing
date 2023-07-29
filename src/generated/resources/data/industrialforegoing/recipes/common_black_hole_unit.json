@@ -15,6 +15,7 @@
       ],
       "recipe": {
         "type": "minecraft:crafting_shaped",
+        "category": "misc",
         "key": {
           "C": {
             "tag": "forge:chests/wooden"
@@ -36,7 +37,8 @@
         ],
         "result": {
           "item": "industrialforegoing:common_black_hole_unit"
-        }
+        },
+        "show_notification": true
       }
     }
   ]

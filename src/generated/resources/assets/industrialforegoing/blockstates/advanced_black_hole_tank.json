@@ -1,5 +1,9 @@
 {
   "variants": {
+    "subfacing=east": {
+      "model": "industrialforegoing:block/advanced_black_hole_tank",
+      "y": 90
+    },
     "subfacing=north": {
       "model": "industrialforegoing:block/advanced_black_hole_tank"
     },
@@ -10,10 +14,6 @@
     "subfacing=west": {
       "model": "industrialforegoing:block/advanced_black_hole_tank",
       "y": 270
-    },
-    "subfacing=east": {
-      "model": "industrialforegoing:block/advanced_black_hole_tank",
-      "y": 90
     }
   }
 }

@@ -52,12 +52,11 @@ import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import net.minecraftforge.common.Tags;
 import net.minecraftforge.common.capabilities.Capability;
+import net.minecraftforge.common.capabilities.ForgeCapabilities;
 import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.IFluidTank;
-import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
 import net.minecraftforge.fluids.capability.IFluidHandler;
-import net.minecraftforge.items.CapabilityItemHandler;
 
 import javax.annotation.Nonnull;
 import java.util.List;
@@ -91,7 +90,7 @@ public class ConveyorInsertionUpgrade extends ConveyorUpgrade {
         if (getWorld().isClientSide)
             return;
         if (entity instanceof ItemEntity) {
-            getHandlerCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY).ifPresent(handler -> {
+            getHandlerCapability(ForgeCapabilities.ITEM_HANDLER).ifPresent(handler -> {
                 if (getWorkingBox().bounds().move(getPos()).inflate(0.01).intersects(entity.getBoundingBox())) {
                     if (whitelist != filter.matches((ItemEntity) entity)) return;
                     ItemStack stack = ((ItemEntity) entity).getItem();
@@ -117,7 +116,7 @@ public class ConveyorInsertionUpgrade extends ConveyorUpgrade {
             return;
         if (getWorld().getGameTime() % 2 == 0 && getContainer() instanceof ConveyorTile) {
             IFluidTank tank = ((ConveyorTile) getContainer()).getTank();
-            getHandlerCapability(CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY).ifPresent(fluidHandler -> {
+            getHandlerCapability(ForgeCapabilities.FLUID_HANDLER).ifPresent(fluidHandler -> {
                 if (!tank.drain(50, IFluidHandler.FluidAction.SIMULATE).isEmpty() && fluidHandler.fill(tank.drain(50, IFluidHandler.FluidAction.SIMULATE), IFluidHandler.FluidAction.SIMULATE) > 0 && whitelist == filter.matches(tank.drain(50, IFluidHandler.FluidAction.SIMULATE))) {
                     FluidStack drain = tank.drain(fluidHandler.fill(tank.drain(50, IFluidHandler.FluidAction.SIMULATE), IFluidHandler.FluidAction.EXECUTE), IFluidHandler.FluidAction.EXECUTE);
                     if (!drain.isEmpty() && drain.getAmount() > 0) getContainer().requestFluidSync();

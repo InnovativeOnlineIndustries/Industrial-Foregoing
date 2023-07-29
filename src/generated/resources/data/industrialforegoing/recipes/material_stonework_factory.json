@@ -15,6 +15,7 @@
       ],
       "recipe": {
         "type": "minecraft:crafting_shaped",
+        "category": "misc",
         "key": {
           "a": {
             "tag": "forge:gears/gold"
@@ -45,7 +46,8 @@
         ],
         "result": {
           "item": "industrialforegoing:material_stonework_factory"
-        }
+        },
+        "show_notification": true
       }
     }
   ]

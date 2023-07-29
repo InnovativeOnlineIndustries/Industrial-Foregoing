@@ -15,6 +15,7 @@
       ],
       "recipe": {
         "type": "minecraft:crafting_shaped",
+        "category": "misc",
         "key": {
           "A": {
             "item": "minecraft:golden_apple"
@@ -42,7 +43,8 @@
         ],
         "result": {
           "item": "industrialforegoing:animal_feeder"
-        }
+        },
+        "show_notification": true
       }
     }
   ]

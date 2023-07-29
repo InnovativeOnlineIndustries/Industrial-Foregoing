@@ -15,6 +15,7 @@
       ],
       "recipe": {
         "type": "minecraft:crafting_shaped",
+        "category": "misc",
         "key": {
           "A": {
             "tag": "forge:gears/gold"
@@ -39,7 +40,8 @@
         ],
         "result": {
           "item": "industrialforegoing:biofuel_generator"
-        }
+        },
+        "show_notification": true
       }
     }
   ]

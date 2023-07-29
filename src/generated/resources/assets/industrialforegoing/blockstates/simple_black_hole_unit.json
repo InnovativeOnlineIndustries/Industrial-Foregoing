@@ -1,5 +1,9 @@
 {
   "variants": {
+    "subfacing=east": {
+      "model": "industrialforegoing:block/simple_black_hole_unit",
+      "y": 90
+    },
     "subfacing=north": {
       "model": "industrialforegoing:block/simple_black_hole_unit"
     },
@@ -10,10 +14,6 @@
     "subfacing=west": {
       "model": "industrialforegoing:block/simple_black_hole_unit",
       "y": 270
-    },
-    "subfacing=east": {
-      "model": "industrialforegoing:block/simple_black_hole_unit",
-      "y": 90
     }
   }
 }

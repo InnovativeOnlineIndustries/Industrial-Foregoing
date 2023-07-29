@@ -44,10 +44,10 @@ public class ColorUtils {
 
     public static int getColorFrom(TextureAtlasSprite sprite) {
         if (sprite == null) return -1;
-        if (sprite.getFrameCount() == 0) return -1;
+        if (sprite.contents().getUniqueFrames().count() == 0) return -1;
         float total = 0, red = 0, blue = 0, green = 0;
-        for (int x = 0; x < sprite.getWidth(); x++) {
-            for (int y = 0; y < sprite.getHeight(); y++) {
+        for (int x = 0; x < sprite.contents().width(); x++) {
+            for (int y = 0; y < sprite.contents().height(); y++) {
                 int color = sprite.getPixelRGBA(0, x, y);
                 int alpha = color >> 24 & 0xFF;
                 // if (alpha != 255) continue; // this creates problems for translucent textures

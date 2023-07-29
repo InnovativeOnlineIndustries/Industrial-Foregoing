@@ -15,6 +15,7 @@
       ],
       "recipe": {
         "type": "minecraft:crafting_shaped",
+        "category": "misc",
         "key": {
           "c": {
             "item": "minecraft:comparator"
@@ -39,7 +40,8 @@
         ],
         "result": {
           "item": "industrialforegoing:mob_detector"
-        }
+        },
+        "show_notification": true
       }
     }
   ]

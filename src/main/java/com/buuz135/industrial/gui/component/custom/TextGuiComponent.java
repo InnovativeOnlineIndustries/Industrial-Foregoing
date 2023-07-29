@@ -26,6 +26,7 @@ package com.buuz135.industrial.gui.component.custom;
 import com.buuz135.industrial.api.conveyor.gui.PositionedGuiComponent;
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
 import net.minecraft.network.chat.Component;
 
@@ -44,12 +45,12 @@ public abstract class TextGuiComponent extends PositionedGuiComponent {
     }
 
     @Override
-    public void drawGuiBackgroundLayer(PoseStack stack, int guiX, int guiY, double mouseX, double mouseY) {
-        Minecraft.getInstance().font.draw(stack, getText(), guiX + getXPos(), guiY + getYPos(), 0xffffff);
+    public void drawGuiBackgroundLayer(GuiGraphics stack, int guiX, int guiY, double mouseX, double mouseY) {
+        stack.drawString(Minecraft.getInstance().font, getText(), guiX + getXPos(), guiY + getYPos(), 0xffffff);
     }
 
     @Override
-    public void drawGuiForegroundLayer(PoseStack stack, int guiX, int guiY, double mouseX, double mouseY) {
+    public void drawGuiForegroundLayer(GuiGraphics guiGraphics, int guiX, int guiY, double mouseX, double mouseY) {
 
     }
 

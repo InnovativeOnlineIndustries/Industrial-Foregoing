@@ -1,6 +1,6 @@
 {
   "parent": "industrialforegoing:item/item",
   "textures": {
-    "layer0": "industrialforegoing:items/laser_lens10"
+    "layer0": "industrialforegoing:item/laser_lens10"
   }
 }

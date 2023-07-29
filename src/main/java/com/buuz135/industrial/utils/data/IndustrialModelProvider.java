@@ -31,7 +31,7 @@ import net.minecraftforge.common.data.ExistingFileHelper;
 public class IndustrialModelProvider extends ModelProvider<BlockModelBuilder> {
 
     public IndustrialModelProvider(DataGenerator generator, ExistingFileHelper existingFileHelper) {
-        super(generator, Reference.MOD_ID, "block", BlockModelBuilder::new, existingFileHelper);
+        super(generator.getPackOutput(), Reference.MOD_ID, "block", BlockModelBuilder::new, existingFileHelper);
     }
 
     @Override

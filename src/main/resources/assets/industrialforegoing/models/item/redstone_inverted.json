@@ -1,6 +1,6 @@
 {
   "parent": "industrialforegoing:item/item",
   "textures": {
-    "layer0": "industrialforegoing:items/redstone_inverted"
+    "layer0": "industrialforegoing:item/redstone_inverted"
   }
 }

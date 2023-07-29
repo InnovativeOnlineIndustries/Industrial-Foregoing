@@ -31,6 +31,7 @@ import com.buuz135.industrial.utils.BlockUtils;
 import com.buuz135.industrial.utils.IndustrialTags;
 import com.hrznstudio.titanium.datagenerator.loot.block.BasicBlockLootTables;
 import com.hrznstudio.titanium.recipe.generator.TitaniumShapedRecipeBuilder;
+import com.hrznstudio.titanium.tab.TitaniumTab;
 import com.hrznstudio.titanium.util.LangUtil;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
@@ -160,10 +161,12 @@ public class BlackHoleTankBlock extends IndustrialBlock<BlackHoleTankTile> {
     public static class BlackHoleTankItem extends BlockItem {
 
         private Rarity rarity;
+        private TitaniumTab tab;
 
-        public BlackHoleTankItem(Block blockIn, Properties builder, Rarity rarity) {
+        public BlackHoleTankItem(Block blockIn, Properties builder, Rarity rarity, TitaniumTab tab) {
             super(blockIn, builder);
             this.rarity = rarity;
+            this.tab = tab;
         }
 
         @Nullable
@@ -175,7 +178,7 @@ public class BlackHoleTankBlock extends IndustrialBlock<BlackHoleTankTile> {
         @Nullable
         @Override
         public String getCreatorModId(ItemStack itemStack) {
-            return Component.translatable("itemGroup." + this.category.getRecipeFolderName()).getString();
+            return Component.translatable("itemGroup.industrialforegoing_" + tab.getResourceLocation().getPath()).getString();
         }
     }
 

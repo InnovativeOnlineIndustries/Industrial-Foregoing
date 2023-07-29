@@ -35,6 +35,7 @@ import com.hrznstudio.titanium.client.screen.addon.ArrowButtonScreenAddon;
 import com.hrznstudio.titanium.client.screen.addon.TextScreenAddon;
 import com.hrznstudio.titanium.component.button.ArrowButtonComponent;
 import com.hrznstudio.titanium.item.BasicItem;
+import com.hrznstudio.titanium.tab.TitaniumTab;
 import com.hrznstudio.titanium.util.FacingUtil;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
@@ -69,7 +70,6 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.level.material.Material;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 import net.minecraft.world.phys.shapes.VoxelShape;
@@ -101,7 +101,7 @@ public class ItemInfinityHammer extends ItemInfinity {
         HEADS.put(EnderDragon.class, (entity) -> new ItemStack(Blocks.DRAGON_HEAD));
     }
 
-    public ItemInfinityHammer(CreativeModeTab group) {
+    public ItemInfinityHammer(TitaniumTab group) {
         //.addToolType(ToolType.get("sword"), 1)
         super("infinity_hammer", group, new Properties().stacksTo(1), POWER_CONSUMPTION, FUEL_CONSUMPTION, true);
     }
@@ -140,8 +140,7 @@ public class ItemInfinityHammer extends ItemInfinity {
         if (state.is(Blocks.COBWEB)) {
             return 15.0F;
         } else {
-            Material material = state.getMaterial();
-            return material != Material.PLANT && material != Material.REPLACEABLE_PLANT && !state.is(BlockTags.LEAVES) && material != Material.VEGETABLE ? 1.0F : 1.5F;
+            return 1.25f;
         }
     }
 
@@ -153,11 +152,11 @@ public class ItemInfinityHammer extends ItemInfinity {
             List<Mob> mobs = attacker.getCommandSenderWorld().getEntitiesOfClass(Mob.class, new AABB(target.getX(), target.getY(), target.getZ(), target.getX(), target.getY(), target.getZ()).inflate(infinityTier.getRadius()));
             mobs.forEach(mobEntity -> {
                 if (enoughFuel(stack)) {
-                    mobEntity.hurt(DamageSource.playerAttack((Player) attacker), (float) (DAMAGE + Math.pow(2, infinityTier.getRadius())) * 0.8f);
+                    mobEntity.hurt(target.damageSources().playerAttack((Player) attacker), (float) (DAMAGE + Math.pow(2, infinityTier.getRadius())) * 0.8f);
                     consumeFuel(stack);
                     if (mobEntity.getHealth() <= 0 && attacker.getCommandSenderWorld().random.nextDouble() <= getCurrentBeheading(stack) * 0.15) {
                         ItemStack head = HEADS.getOrDefault(mobEntity.getClass(), (entity) -> ItemStack.EMPTY).apply(mobEntity);
-                        Block.popResource(attacker.level, attacker.blockPosition(), head);
+                        Block.popResource(attacker.level(), attacker.blockPosition(), head);
                     }
                 }
             });
@@ -168,7 +167,7 @@ public class ItemInfinityHammer extends ItemInfinity {
             attacker.getCommandSenderWorld().getEntitiesOfClass(ExperienceOrb.class, area.inflate(1)).forEach(entityXPOrb -> entityXPOrb.teleportTo(attacker.blockPosition().getX(), attacker.blockPosition().getY(), attacker.blockPosition().getZ()));
         }
         if (target.getHealth() <= 0 && target instanceof Player) {
-            Block.popResource(attacker.level, attacker.blockPosition(), createHead(target.getDisplayName().getString()));
+            Block.popResource(attacker.level(), attacker.blockPosition(), createHead(target.getDisplayName().getString()));
         }
         return true;
     }
@@ -197,16 +196,16 @@ public class ItemInfinityHammer extends ItemInfinity {
     }
 
     private void spawnFangs(LivingEntity caster, double x, double z, double minY, double maxY, float rotation, int delay) {
-        BlockPos blockpos = new BlockPos(x, maxY, z);
+        BlockPos blockpos = new BlockPos((int) x, (int) maxY, (int) z);
         boolean flag = false;
         double d0 = 0.0D;
         do {
             BlockPos blockpos1 = blockpos.below();
-            BlockState blockstate = caster.level.getBlockState(blockpos1);
-            if (blockstate.isFaceSturdy(caster.level, blockpos1, Direction.UP)) {
-                if (!caster.level.isEmptyBlock(blockpos)) {
-                    BlockState blockstate1 = caster.level.getBlockState(blockpos);
-                    VoxelShape voxelshape = blockstate1.getCollisionShape(caster.level, blockpos);
+            BlockState blockstate = caster.level().getBlockState(blockpos1);
+            if (blockstate.isFaceSturdy(caster.level(), blockpos1, Direction.UP)) {
+                if (!caster.level().isEmptyBlock(blockpos)) {
+                    BlockState blockstate1 = caster.level().getBlockState(blockpos);
+                    VoxelShape voxelshape = blockstate1.getCollisionShape(caster.level(), blockpos);
                     if (!voxelshape.isEmpty()) {
                         d0 = voxelshape.max(Direction.Axis.Y);
                     }
@@ -217,7 +216,7 @@ public class ItemInfinityHammer extends ItemInfinity {
             blockpos = blockpos.below();
         } while (blockpos.getY() >= Mth.floor(minY) - 1);
         if (flag) {
-            caster.level.addFreshEntity(new EvokerFangs(caster.level, x, (double) blockpos.getY() + d0, z, rotation, delay, caster));
+            caster.level().addFreshEntity(new EvokerFangs(caster.level(), x, (double) blockpos.getY() + d0, z, rotation, delay, caster));
         }
     }
 

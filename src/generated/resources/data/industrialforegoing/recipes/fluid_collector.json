@@ -15,6 +15,7 @@
       ],
       "recipe": {
         "type": "minecraft:crafting_shaped",
+        "category": "misc",
         "key": {
           "B": {
             "item": "minecraft:bucket"
@@ -39,7 +40,8 @@
         ],
         "result": {
           "item": "industrialforegoing:fluid_collector"
-        }
+        },
+        "show_notification": true
       }
     }
   ]

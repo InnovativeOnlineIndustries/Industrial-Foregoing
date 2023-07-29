@@ -30,6 +30,7 @@ import com.hrznstudio.titanium.util.AssetUtil;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.ChatFormatting;
+import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.renderer.texture.AbstractTexture;
 import net.minecraft.client.renderer.texture.TextureAtlas;
@@ -62,7 +63,7 @@ public class ItemStackTankScreenAddon extends BasicScreenAddon {
     }
 
     @Override
-    public void drawBackgroundLayer(PoseStack stack, Screen screen, IAssetProvider provider, int guiX, int guiY, int mouseX, int mouseY, float partialTicks) {
+    public void drawBackgroundLayer(GuiGraphics guiGraphics, Screen screen, IAssetProvider provider, int guiX, int guiY, int mouseX, int mouseY, float partialTicks) {
         asset = IAssetProvider.getAsset(provider, type.getAssetType());
         Rectangle area = asset.getArea();
         if (!tank.getFluidInTank(tankSlot).isEmpty()) {
@@ -82,7 +83,8 @@ public class ItemStackTankScreenAddon extends BasicScreenAddon {
                         Color color = new Color(renderProperties.getTintColor());
                         RenderSystem.setShaderColor(color.getRed() / 255f, color.getGreen() / 255f, color.getBlue() / 255f, color.getAlpha() / 255f);
                         RenderSystem.enableBlend();
-                        Screen.blit(stack, this.getPosX() + guiX + asset.getFluidRenderPadding(Direction.WEST),
+                        guiGraphics.blit(
+                                this.getPosX() + guiX + asset.getFluidRenderPadding(Direction.WEST),
                                 this.getPosY() + guiY + asset.getFluidRenderPadding(Direction.UP) + (fluidStack.getFluid().is(Tags.Fluids.GASEOUS) ? 0 : (area.height - topBottomPadding) - offset),
                                 0,
                                 (int) (area.getWidth() - asset.getFluidRenderPadding(Direction.EAST) - asset.getFluidRenderPadding(Direction.WEST)),
@@ -96,11 +98,11 @@ public class ItemStackTankScreenAddon extends BasicScreenAddon {
         }
         RenderSystem.setShaderColor(1, 1, 1, 1);
         ITankAsset asset = IAssetProvider.getAsset(provider, type.getAssetType());
-        AssetUtil.drawAsset(stack, screen, asset, guiX + getPosX(), guiY + getPosY());
+        AssetUtil.drawAsset(guiGraphics, screen, asset, guiX + getPosX(), guiY + getPosY());
     }
 
     @Override
-    public void drawForegroundLayer(PoseStack stack, Screen screen, IAssetProvider provider, int guiX, int guiY, int mouseX, int mouseY, float partialTicks) {
+    public void drawForegroundLayer(GuiGraphics stack, Screen screen, IAssetProvider provider, int guiX, int guiY, int mouseX, int mouseY, float partialTicks) {
 
     }
 

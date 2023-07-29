@@ -33,8 +33,8 @@
                 "minecraft:end_midlands"
               ]
             },
-            "depth_max": 50,
-            "depth_min": 15,
+            "depth_max": 68,
+            "depth_min": 16,
             "weight": 3,
             "whitelist": {}
           },

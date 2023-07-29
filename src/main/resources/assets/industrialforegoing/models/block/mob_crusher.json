@@ -1,6 +1,6 @@
 {
   "parent": "industrialforegoing:block/base_block",
   "textures": {
-    "south": "industrialforegoing:blocks/mob_relocator_back"
+    "south": "industrialforegoing:block/mob_relocator_back"
   }
 }

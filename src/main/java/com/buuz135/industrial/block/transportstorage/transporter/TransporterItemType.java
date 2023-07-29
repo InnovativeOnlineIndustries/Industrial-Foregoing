@@ -36,8 +36,7 @@ import com.hrznstudio.titanium.recipe.generator.TitaniumShapedRecipeBuilder;
 import com.hrznstudio.titanium.util.TileUtil;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
-import com.mojang.math.Matrix4f;
-import com.mojang.math.Vector3f;
+import com.mojang.math.Axis;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.block.model.ItemTransforms;
@@ -46,15 +45,18 @@ import net.minecraft.core.Direction;
 import net.minecraft.data.recipes.FinishedRecipe;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.item.ItemDisplayContext;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.Level;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.common.Tags;
-import net.minecraftforge.items.CapabilityItemHandler;
+import net.minecraftforge.common.capabilities.ForgeCapabilities;
 import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.ItemHandlerHelper;
+import org.joml.Matrix4f;
+import org.joml.Vector3f;
 
 import javax.annotation.Nonnull;
 import java.awt.*;
@@ -94,14 +96,14 @@ public class TransporterItemType extends FilteredTransporterType<ItemStack, IIte
                 int amount = 0;
                 if (isRegulated) {
                     for (int i = 0; i < itemHandler.getSlots(); i++) {
-                        if (itemHandler.getStackInSlot(i).sameItem(stack)) {
+                        if (ItemStack.isSameItem(itemHandler.getStackInSlot(i), stack)) {
                             amount += itemHandler.getStackInSlot(i).getCount();
                         }
                     }
                 }
 
                 for (IFilter.GhostSlot slot : this.getFilter()) {
-                    if (stack.sameItem(slot.getStack())) {
+                    if (ItemStack.isSameItem(slot.getStack(), stack)) {
                         int maxAmount = isRegulated ? slot.getAmount() : Integer.MAX_VALUE;
                         int returnAmount = Math.min(stack.getCount(), maxAmount - amount);
                         if (returnAmount > 0) return returnAmount;
@@ -122,8 +124,8 @@ public class TransporterItemType extends FilteredTransporterType<ItemStack, IIte
                 for (Direction direction : ((TransporterTile) container).getTransporterTypeMap().keySet()) {
                     TransporterType transporterType = ((TransporterTile) container).getTransporterTypeMap().get(direction);
                     if (transporterType instanceof TransporterItemType && transporterType.getAction() == TransporterTypeFactory.TransporterAction.INSERT) {
-                        TileUtil.getTileEntity(getLevel(), getPos().relative(this.getSide())).ifPresent(tileEntity -> tileEntity.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, getSide().getOpposite()).ifPresent(origin -> {
-                            TileUtil.getTileEntity(getLevel(), getPos().relative(direction)).ifPresent(otherTile -> otherTile.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, direction.getOpposite()).ifPresent(destination -> {
+                        TileUtil.getTileEntity(getLevel(), getPos().relative(this.getSide())).ifPresent(tileEntity -> tileEntity.getCapability(ForgeCapabilities.ITEM_HANDLER, getSide().getOpposite()).ifPresent(origin -> {
+                            TileUtil.getTileEntity(getLevel(), getPos().relative(direction)).ifPresent(otherTile -> otherTile.getCapability(ForgeCapabilities.ITEM_HANDLER, direction.getOpposite()).ifPresent(destination -> {
                                 if (extractSlot >= origin.getSlots() || origin.getStackInSlot(extractSlot).isEmpty()
                                         || !filter(this.getFilter(), this.isWhitelist(), origin.getStackInSlot(extractSlot), origin, false)
                                         || !filter(((TransporterItemType) transporterType).getFilter(), ((TransporterItemType) transporterType).isWhitelist(), origin.getStackInSlot(extractSlot), destination, ((TransporterItemType) transporterType).isRegulated()))
@@ -197,19 +199,19 @@ public class TransporterItemType extends FilteredTransporterType<ItemStack, IIte
 
     @OnlyIn(Dist.CLIENT)
     @Override
-    public void renderTransfer(Vector3f pos, Direction direction, int step, PoseStack stack, int combinedOverlayIn, MultiBufferSource buffer, float frame) {
-        super.renderTransfer(pos, direction, step, stack, combinedOverlayIn, buffer, frame);
+    public void renderTransfer(Vector3f pos, Direction direction, int step, PoseStack stack, int combinedOverlayIn, MultiBufferSource buffer, float frame, Level level) {
+        super.renderTransfer(pos, direction, step, stack, combinedOverlayIn, buffer, frame, level);
         if (step < queue.computeIfAbsent(direction, v -> new ArrayList<>()).size()) {
             float scale = 0.10f;
             stack.scale(scale, scale, scale);
             ItemStack itemStack = queue.get(direction).get(step);
             if (!itemStack.isEmpty()) {
-                Minecraft.getInstance().getItemRenderer().renderStatic(itemStack, ItemTransforms.TransformType.NONE, 0xF000F0, combinedOverlayIn, stack, buffer, 0);
+                Minecraft.getInstance().getItemRenderer().renderStatic(itemStack, ItemDisplayContext.NONE, 0xF000F0, combinedOverlayIn, stack, buffer, level,0);
             } else {
                 stack.pushPose();
                 stack.mulPose(Minecraft.getInstance().getEntityRenderDispatcher().cameraOrientation());
-                stack.mulPose(Vector3f.ZP.rotationDegrees(90f));
-                stack.mulPose(Vector3f.XP.rotationDegrees(90f));
+                stack.mulPose(Axis.ZP.rotationDegrees(90f));
+                stack.mulPose(Axis.XP.rotationDegrees(90f));
                 VertexConsumer buffer1 = buffer.getBuffer(TransporterTESR.TYPE);
 
                 float pX1 = 1;
@@ -256,12 +258,12 @@ public class TransporterItemType extends FilteredTransporterType<ItemStack, IIte
 
         @Override
         public Set<ResourceLocation> getTextures() {
-            return Sets.newHashSet(new ResourceLocation("industrialforegoing:blocks/transporters/item"), new ResourceLocation("industrialforegoing:blocks/base/bottom"));
+            return Sets.newHashSet(new ResourceLocation("industrialforegoing:block/transporters/item"), new ResourceLocation("industrialforegoing:block/base/bottom"));
         }
 
         @Override
         public boolean canBeAttachedAgainst(Level world, BlockPos pos, Direction face) {
-            return TileUtil.getTileEntity(world, pos).map(tileEntity -> tileEntity.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, face).isPresent()).orElse(false);
+            return TileUtil.getTileEntity(world, pos).map(tileEntity -> tileEntity.getCapability(ForgeCapabilities.ITEM_HANDLER, face).isPresent()).orElse(false);
         }
 
         @Nonnull

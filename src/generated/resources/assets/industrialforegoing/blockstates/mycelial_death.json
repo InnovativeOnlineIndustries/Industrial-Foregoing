@@ -1,5 +1,9 @@
 {
   "variants": {
+    "subfacing=east": {
+      "model": "industrialforegoing:block/mycelial_death",
+      "y": 90
+    },
     "subfacing=north": {
       "model": "industrialforegoing:block/mycelial_death"
     },
@@ -10,10 +14,6 @@
     "subfacing=west": {
       "model": "industrialforegoing:block/mycelial_death",
       "y": 270
-    },
-    "subfacing=east": {
-      "model": "industrialforegoing:block/mycelial_death",
-      "y": 90
     }
   }
 }

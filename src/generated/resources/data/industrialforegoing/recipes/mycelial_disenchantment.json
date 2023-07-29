@@ -15,6 +15,7 @@
       ],
       "recipe": {
         "type": "minecraft:crafting_shaped",
+        "category": "misc",
         "key": {
           "B": {
             "item": "minecraft:book"
@@ -36,7 +37,8 @@
         ],
         "result": {
           "item": "industrialforegoing:mycelial_disenchantment"
-        }
+        },
+        "show_notification": true
       }
     }
   ]

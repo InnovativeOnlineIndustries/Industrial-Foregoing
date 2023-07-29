@@ -39,7 +39,7 @@ public class MovementUtils {
         if (entity instanceof Player && entity.isCrouching()) return;
         if (entity.blockPosition().getY() - pos.getY() > 0.3 && !type.isVertical()) return;
 
-        VoxelShape collision = entity.level.getBlockState(pos).getBlock().getCollisionShape(entity.level.getBlockState(pos), entity.level, pos, CollisionContext.empty()).move(pos.getX(), pos.getY(), pos.getZ());
+        VoxelShape collision = entity.level().getBlockState(pos).getBlock().getCollisionShape(entity.level().getBlockState(pos), entity.level(), pos, CollisionContext.empty()).move(pos.getX(), pos.getY(), pos.getZ());
 //        if (direction == Direction.NORTH || direction == Direction.SOUTH){
 //            collision = collision.contract(-0.1,0,0);
 //            collision = collision.contract(0.1,0,0);

@@ -52,7 +52,7 @@ public class MeatFeedCurios implements ICurio, ICurioRenderer {
     public void curioTick(String identifier, int index, LivingEntity livingEntity) {
         ItemStack stack = CuriosPlugin.getStack(livingEntity, SlotTypePreset.HEAD, 0);
         if (stack.getItem() instanceof MeatFeederItem) {
-            ModuleTool.MEAT_FEEDER.get().inventoryTick(stack, livingEntity.level, livingEntity, 0, false);
+            ModuleTool.MEAT_FEEDER.get().inventoryTick(stack, livingEntity.level(), livingEntity, 0, false);
         }
     }
 

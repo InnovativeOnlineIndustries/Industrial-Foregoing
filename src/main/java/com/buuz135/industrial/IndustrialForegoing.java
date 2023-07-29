@@ -50,8 +50,10 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.inventory.InventoryMenu;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.LiquidBlock;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
@@ -161,8 +163,9 @@ public class IndustrialForegoing extends ModuleController {
                                 .isPresent())
                         .collect(Collectors.toList())
         );
-        event.getGenerator().addProvider(true, new IndustrialTagsProvider.Blocks(event.getGenerator(), Reference.MOD_ID, event.getExistingFileHelper()));
-        event.getGenerator().addProvider(true, new IndustrialTagsProvider.Items(event.getGenerator(), Reference.MOD_ID, event.getExistingFileHelper()));
+        var blockProvider = new IndustrialTagsProvider.Blocks(event.getGenerator(),event.getLookupProvider() ,Reference.MOD_ID, event.getExistingFileHelper());
+        event.getGenerator().addProvider(true, blockProvider);
+        event.getGenerator().addProvider(true, new IndustrialTagsProvider.Items(event.getGenerator(),event.getLookupProvider(), blockProvider.contentsGetter(), Reference.MOD_ID, event.getExistingFileHelper()));
         event.getGenerator().addProvider(true, new IndustrialRecipeProvider(event.getGenerator(), blocksToProcess));
         event.getGenerator().addProvider(true, new IndustrialSerializableProvider(event.getGenerator(), Reference.MOD_ID));
         event.getGenerator().addProvider(true, new TitaniumLootTableProvider(event.getGenerator(), blocksToProcess));
@@ -174,6 +177,8 @@ public class IndustrialForegoing extends ModuleController {
     @Override
     protected void initModules() {
         INSTANCE = this;
+
+
         new ModuleCore().generateFeatures(getRegistries());
         new ModuleTool().generateFeatures(getRegistries());
         new ModuleTransportStorage().generateFeatures(getRegistries());
@@ -181,15 +186,22 @@ public class IndustrialForegoing extends ModuleController {
         new ModuleAgricultureHusbandry().generateFeatures(getRegistries());
         new ModuleResourceProduction().generateFeatures(getRegistries());
         new ModuleMisc().generateFeatures(getRegistries());
+
+        this.addCreativeTab("core", () ->  new ItemStack(ModuleCore.DISSOLUTION_CHAMBER.getLeft().orElse(Blocks.STONE)), Reference.MOD_ID + "_core", ModuleCore.TAB_CORE);        this.addCreativeTab("ag_hus", () ->  new ItemStack(ModuleAgricultureHusbandry.PLANT_SOWER.getLeft().orElse(Blocks.STONE)), Reference.MOD_ID + "_ag_hus", ModuleAgricultureHusbandry.TAB_AG_HUS);
+        this.addCreativeTab("transport", () -> new ItemStack(ModuleTransportStorage.CONVEYOR.getLeft().orElse(Blocks.STONE)), Reference.MOD_ID + "_transport", ModuleTransportStorage.TAB_TRANSPORT);
+        this.addCreativeTab("resource_production", () ->  new ItemStack(ModuleResourceProduction.WATER_CONDENSATOR.getLeft().orElse(Blocks.STONE)), Reference.MOD_ID + "_resource_production", ModuleResourceProduction.TAB_RESOURCE);
+        this.addCreativeTab("generator", () ->  new ItemStack(ModuleGenerator.PITIFUL_GENERATOR.getLeft().orElse(Blocks.STONE)), Reference.MOD_ID + "_generator", ModuleGenerator.TAB_GENERATOR);
+        this.addCreativeTab("misc", () ->  new ItemStack(ModuleMisc.ENCHANTMENT_FACTORY.getLeft().orElse(Blocks.STONE)), Reference.MOD_ID + "_misc", ModuleMisc.TAB_MISC);
+        this.addCreativeTab("tool", () ->  new ItemStack(ModuleTool.INFINITY_DRILL.get()), Reference.MOD_ID + "_tool", ModuleTool.TAB_TOOL);
     }
 
     @OnlyIn(Dist.CLIENT)
     private void initClient() {
-        EventManager.mod(TextureStitchEvent.Pre.class).process(pre -> {
+        /*EventManager.mod(TextureStitchEvent.Pre.class).process(pre -> {
             if (pre.getAtlas().location().equals(InventoryMenu.BLOCK_ATLAS)) {
                 pre.addSprite(TransporterTESR.TEXTURE);
             }
-        }).subscribe();
+        }).subscribe();TODO 1.20*/
         EventManager.mod(ModelEvent.BakingCompleted.class).process(event -> {
             ClientProxy.ears_baked = event.getModels().get(new ResourceLocation(Reference.MOD_ID, "block/catears"));
         }).subscribe();

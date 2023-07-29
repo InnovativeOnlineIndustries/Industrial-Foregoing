@@ -15,6 +15,7 @@
       ],
       "recipe": {
         "type": "minecraft:crafting_shaped",
+        "category": "misc",
         "key": {
           "B": {
             "item": "minecraft:water_bucket"
@@ -23,7 +24,7 @@
             "item": "minecraft:furnace"
           },
           "G": {
-            "tag": "forge:storage_blocks/redstone"
+            "tag": "forge:storage_block/redstone"
           },
           "I": {
             "tag": "forge:ingots/iron"
@@ -42,7 +43,8 @@
         ],
         "result": {
           "item": "industrialforegoing:latex_processing_unit"
-        }
+        },
+        "show_notification": true
       }
     }
   ]

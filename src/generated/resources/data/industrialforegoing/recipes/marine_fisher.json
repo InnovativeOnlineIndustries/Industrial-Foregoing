@@ -15,6 +15,7 @@
       ],
       "recipe": {
         "type": "minecraft:crafting_shaped",
+        "category": "misc",
         "key": {
           "b": {
             "item": "minecraft:bucket"
@@ -42,7 +43,8 @@
         ],
         "result": {
           "item": "industrialforegoing:marine_fisher"
-        }
+        },
+        "show_notification": true
       }
     }
   ]

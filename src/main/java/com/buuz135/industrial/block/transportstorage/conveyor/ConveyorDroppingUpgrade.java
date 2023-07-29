@@ -49,7 +49,7 @@ import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import net.minecraftforge.common.Tags;
-import net.minecraftforge.items.CapabilityItemHandler;
+import net.minecraftforge.common.capabilities.ForgeCapabilities;
 
 import javax.annotation.Nonnull;
 import java.util.Collections;
@@ -78,7 +78,7 @@ public class ConveyorDroppingUpgrade extends ConveyorUpgrade {
         if (entity instanceof ItemEntity) {
             BlockEntity tile = getWorld().getBlockEntity(getPos().relative(Direction.DOWN));
             if (tile != null) {
-                tile.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, Direction.UP).ifPresent(handler -> {
+                tile.getCapability(ForgeCapabilities.ITEM_HANDLER, Direction.UP).ifPresent(handler -> {
                     if (getBoundingBox().bounds().move(getPos()).inflate(0.01).intersects(entity.getBoundingBox())) {
                         ItemStack stack = ((ItemEntity) entity).getItem();
                         for (int i = 0; i < handler.getSlots(); i++) {
@@ -187,7 +187,7 @@ public class ConveyorDroppingUpgrade extends ConveyorUpgrade {
 
         @Override
         public Set<ResourceLocation> getTextures() {
-            return Collections.singleton(new ResourceLocation(Reference.MOD_ID, "blocks/conveyor_dropping_upgrade"));
+            return Collections.singleton(new ResourceLocation(Reference.MOD_ID, "block/conveyor_dropping_upgrade"));
         }
 
         @Nonnull

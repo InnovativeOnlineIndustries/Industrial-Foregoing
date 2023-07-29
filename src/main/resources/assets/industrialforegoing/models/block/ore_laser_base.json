@@ -1,10 +1,10 @@
 {
   "parent": "industrialforegoing:block/base_block",
   "textures": {
-    "south": "industrialforegoing:blocks/laser_base_side",
-    "west": "industrialforegoing:blocks/laser_base_side",
-    "east": "industrialforegoing:blocks/laser_base_side",
-    "north": "industrialforegoing:blocks/laser_base_side",
-    "down": "industrialforegoing:blocks/laser_base_bottom"
+    "south": "industrialforegoing:block/laser_base_side",
+    "west": "industrialforegoing:block/laser_base_side",
+    "east": "industrialforegoing:block/laser_base_side",
+    "north": "industrialforegoing:block/laser_base_side",
+    "down": "industrialforegoing:block/laser_base_bottom"
   }
 }

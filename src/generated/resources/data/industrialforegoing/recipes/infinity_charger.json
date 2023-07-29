@@ -15,6 +15,7 @@
       ],
       "recipe": {
         "type": "minecraft:crafting_shaped",
+        "category": "misc",
         "key": {
           "c": {
             "tag": "forge:gears/diamond"
@@ -39,7 +40,8 @@
         ],
         "result": {
           "item": "industrialforegoing:infinity_charger"
-        }
+        },
+        "show_notification": true
       }
     }
   ]

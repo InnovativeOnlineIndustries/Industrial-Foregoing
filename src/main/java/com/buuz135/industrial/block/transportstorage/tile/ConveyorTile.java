@@ -80,7 +80,7 @@ public class ConveyorTile extends ActiveTile<ConveyorTile> implements IBlockCont
         super((BasicTileBlock<ConveyorTile>) ModuleTransportStorage.CONVEYOR.getLeft().get(), ModuleTransportStorage.CONVEYOR.getRight().get(), blockPos, blockState);
         this.facing = Direction.NORTH;
         this.type = ConveyorBlock.EnumType.FLAT;
-        this.color = DyeColor.WHITE.getMaterialColor().col;
+        this.color = DyeColor.WHITE.getMapColor().col;
         this.filter = new ArrayList<>();
         this.sticky = false;
         this.tank = new FluidTank(250);
@@ -182,7 +182,7 @@ public class ConveyorTile extends ActiveTile<ConveyorTile> implements IBlockCont
     }
 
     public void setColor(DyeColor color) {
-        this.color = color.getMaterialColor().col;
+        this.color = color.getMapColor().col;
         markForUpdate();
     }
 

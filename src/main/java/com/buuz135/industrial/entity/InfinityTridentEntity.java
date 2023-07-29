@@ -28,6 +28,7 @@ import com.buuz135.industrial.module.ModuleTool;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.protocol.Packet;
+import net.minecraft.network.protocol.game.ClientGamePacketListener;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
@@ -102,7 +103,7 @@ public class InfinityTridentEntity extends AbstractArrow {
         if ((this.dealtDamage || this.isNoPhysics()) && entity != null) {
             int loyaltyLevel = this.entityData.get(LOYALTY_LEVEL);
             if (!this.shouldReturnToThrower()) {
-                if (!this.level.isClientSide && this.pickup == AbstractArrow.Pickup.ALLOWED) {
+                if (!this.level().isClientSide && this.pickup == AbstractArrow.Pickup.ALLOWED) {
                     this.spawnAtLocation(this.getPickupItem(), 0.1F);
                 }
                 this.onClientRemoval();
@@ -110,7 +111,7 @@ public class InfinityTridentEntity extends AbstractArrow {
                 this.setNoPhysics(true);
                 Vec3 vector3d = new Vec3(entity.getX() - this.getX(), entity.getEyeY() - this.getY(), entity.getZ() - this.getZ());
                 this.setPosRaw(this.getX(), this.getY() + vector3d.y * 0.015D * (double) loyaltyLevel, this.getZ());
-                if (this.level.isClientSide) {
+                if (this.level().isClientSide) {
                     this.yOld = this.getY();
                 }
 
@@ -135,7 +136,7 @@ public class InfinityTridentEntity extends AbstractArrow {
             damageHit += EnchantmentHelper.getDamageBonus(this.thrownStack, livingentity.getMobType());
         }
         Entity entity1 = this.getOwner();
-        DamageSource damagesource = DamageSource.trident(this, (Entity) (entity1 == null ? this : entity1));
+        DamageSource damagesource = target.level().damageSources().trident(this, (Entity) (entity1 == null ? this : entity1));
         this.dealtDamage = true;
         SoundEvent soundevent = SoundEvents.TRIDENT_HIT;
         if (target.hurt(damagesource, damageHit)) {
@@ -165,7 +166,7 @@ public class InfinityTridentEntity extends AbstractArrow {
                     LivingEntity livingentity = (LivingEntity) target;
                     damage += EnchantmentHelper.getDamageBonus(this.thrownStack, livingentity.getMobType());
                 }
-                mobEntity.hurt(DamageSource.playerAttack((Player) entity1), damage);
+                mobEntity.hurt(mobEntity.damageSources().playerAttack((Player) entity1), damage);
             });
             this.getCommandSenderWorld().getEntitiesOfClass(ItemEntity.class, area.inflate(1)).forEach(itemEntity -> {
                 itemEntity.setNoPickUpDelay();
@@ -173,21 +174,21 @@ public class InfinityTridentEntity extends AbstractArrow {
             });
             this.getCommandSenderWorld().getEntitiesOfClass(ExperienceOrb.class, area.inflate(1)).forEach(entityXPOrb -> entityXPOrb.teleportTo(entity1.blockPosition().getX(), entity1.blockPosition().getY(), entity1.blockPosition().getZ()));
         }
-        if (this.level instanceof ServerLevel && this.entityData.get(CHANNELING)) {
+        if (this.level() instanceof ServerLevel && this.entityData.get(CHANNELING)) {
             BlockPos blockpos = target.blockPosition();
-            if (this.level.canSeeSky(blockpos)) {
-                LightningBolt lightningboltentity = EntityType.LIGHTNING_BOLT.create(this.level);
+            if (this.level().canSeeSky(blockpos)) {
+                LightningBolt lightningboltentity = EntityType.LIGHTNING_BOLT.create(this.level());
                 lightningboltentity.moveTo(Vec3.atBottomCenterOf(blockpos));
                 lightningboltentity.setCause(entity1 instanceof ServerPlayer ? (ServerPlayer) entity1 : null);
-                this.level.addFreshEntity(lightningboltentity);
+                this.level().addFreshEntity(lightningboltentity);
                 soundevent = SoundEvents.TRIDENT_THUNDER;
                 f1 = 5.0F;
                 mobs.forEach(mobEntity -> {
-                    if (this.level.canSeeSky(mobEntity.blockPosition())) {
-                        LightningBolt lightningboltentity1 = EntityType.LIGHTNING_BOLT.create(this.level);
+                    if (this.level().canSeeSky(mobEntity.blockPosition())) {
+                        LightningBolt lightningboltentity1 = EntityType.LIGHTNING_BOLT.create(this.level());
                         lightningboltentity1.moveTo(Vec3.atBottomCenterOf(mobEntity.blockPosition()));
                         lightningboltentity1.setCause(entity1 instanceof ServerPlayer ? (ServerPlayer) entity1 : null);
-                        this.level.addFreshEntity(lightningboltentity1);
+                        this.level().addFreshEntity(lightningboltentity1);
                     }
                 });
             }
@@ -226,7 +227,7 @@ public class InfinityTridentEntity extends AbstractArrow {
     }
 
     @Override
-    public Packet<?> getAddEntityPacket() {
+    public Packet<ClientGamePacketListener> getAddEntityPacket() {
         return NetworkHooks.getEntitySpawningPacket(this);
     }
 

@@ -1,9 +1,9 @@
 {
   "parent": "industrialforegoing:block/base_block",
   "textures": {
-    "north": "industrialforegoing:blocks/potion_enervator_front",
-    "south": "industrialforegoing:blocks/potion_enervator_back",
-    "west": "industrialforegoing:blocks/potion_enervator_side",
-    "east": "industrialforegoing:blocks/potion_enervator_side"
+    "north": "industrialforegoing:block/potion_enervator_front",
+    "south": "industrialforegoing:block/potion_enervator_back",
+    "west": "industrialforegoing:block/potion_enervator_side",
+    "east": "industrialforegoing:block/potion_enervator_side"
   }
 }

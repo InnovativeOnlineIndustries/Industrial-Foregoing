@@ -36,7 +36,7 @@ import com.hrznstudio.titanium.itemstack.ItemStackHarness;
 import com.hrznstudio.titanium.itemstack.ItemStackHarnessRegistry;
 import com.hrznstudio.titanium.module.DeferredRegistryHelper;
 import com.hrznstudio.titanium.network.IButtonHandler;
-import com.hrznstudio.titanium.tab.AdvancedTitaniumTab;
+import com.hrznstudio.titanium.tab.TitaniumTab;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.world.entity.EntityType;
@@ -52,7 +52,7 @@ import net.minecraftforge.registries.RegistryObject;
 
 public class ModuleTool implements IModule {
 
-    public static AdvancedTitaniumTab TAB_TOOL = new AdvancedTitaniumTab(Reference.MOD_ID + "_tool", true);
+    public static TitaniumTab TAB_TOOL = new TitaniumTab(new ResourceLocation(Reference.MOD_ID , "tool"));
 
     public static RegistryObject<Item> MEAT_FEEDER;
     public static RegistryObject<Item> MOB_IMPRISONMENT_TOOL;
@@ -94,11 +94,10 @@ public class ModuleTool implements IModule {
         INFINITY_NUKE_ENTITY_TYPE = registryHelper.registerEntityType("infinity_nuke", () -> EntityType.Builder.<InfinityNukeEntity>of(InfinityNukeEntity::new, MobCategory.MISC).sized(0.5F, 1.5F)
                 .setShouldReceiveVelocityUpdates(true)
                 .setCustomClientFactory((spawnEntity, world) -> new InfinityNukeEntity((EntityType<? extends InfinityNukeEntity>) INFINITY_NUKE_ENTITY_TYPE.get(), world)).fireImmune().clientTrackingRange(8).updateInterval(20).build("infinity_nuke"));
-        NUKE_CHARGING = registryHelper.registerGeneric(ForgeRegistries.SOUND_EVENTS.getRegistryKey(), "nuke_charging", () -> new SoundEvent(new ResourceLocation(Reference.MOD_ID, "nuke_charging")));
-        NUKE_ARMING = registryHelper.registerGeneric(ForgeRegistries.SOUND_EVENTS.getRegistryKey(), "nuke_arming", () -> new SoundEvent(new ResourceLocation(Reference.MOD_ID, "nuke_arming")));
-        NUKE_EXPLOSION = registryHelper.registerGeneric(ForgeRegistries.SOUND_EVENTS.getRegistryKey(), "nuke_explosion", () -> new SoundEvent(new ResourceLocation(Reference.MOD_ID, "nuke_explosion")));
+        NUKE_CHARGING = registryHelper.registerGeneric(ForgeRegistries.SOUND_EVENTS.getRegistryKey(), "nuke_charging", () -> SoundEvent.createFixedRangeEvent(new ResourceLocation(Reference.MOD_ID, "nuke_charging"), 128));
+        NUKE_ARMING = registryHelper.registerGeneric(ForgeRegistries.SOUND_EVENTS.getRegistryKey(), "nuke_arming", () -> SoundEvent.createFixedRangeEvent(new ResourceLocation(Reference.MOD_ID, "nuke_arming"), 16));
+        NUKE_EXPLOSION = registryHelper.registerGeneric(ForgeRegistries.SOUND_EVENTS.getRegistryKey(), "nuke_explosion", () -> SoundEvent.createFixedRangeEvent(new ResourceLocation(Reference.MOD_ID, "nuke_explosion"), 128));
 
-        TAB_TOOL.addIconStack(() -> new ItemStack(INFINITY_DRILL.orElse(Items.STONE)));
         ItemStackHarnessRegistry.register(INFINITY_SAW, stack -> new ItemStackHarness(stack, null, (IButtonHandler) stack.getItem(), ForgeCapabilities.ENERGY, ForgeCapabilities.FLUID_HANDLER_ITEM, CapabilityItemStackHolder.ITEMSTACK_HOLDER_CAPABILITY));
         ItemStackHarnessRegistry.register(INFINITY_DRILL, stack -> new ItemStackHarness(stack, null, (IButtonHandler) stack.getItem(), ForgeCapabilities.ENERGY, ForgeCapabilities.FLUID_HANDLER_ITEM, CapabilityItemStackHolder.ITEMSTACK_HOLDER_CAPABILITY));
         ItemStackHarnessRegistry.register(INFINITY_HAMMER, stack -> new ItemStackHarness(stack, null, (IButtonHandler) stack.getItem(), ForgeCapabilities.ENERGY, ForgeCapabilities.FLUID_HANDLER_ITEM, CapabilityItemStackHolder.ITEMSTACK_HOLDER_CAPABILITY));

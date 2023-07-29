@@ -15,6 +15,7 @@
       ],
       "recipe": {
         "type": "minecraft:crafting_shaped",
+        "category": "misc",
         "key": {
           "b": {
             "item": "minecraft:bucket"
@@ -42,7 +43,8 @@
         ],
         "result": {
           "item": "industrialforegoing:fluid_laser_base"
-        }
+        },
+        "show_notification": true
       }
     }
   ]

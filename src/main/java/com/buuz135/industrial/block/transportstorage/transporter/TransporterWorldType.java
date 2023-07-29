@@ -34,7 +34,6 @@ import com.google.common.collect.Sets;
 import com.hrznstudio.titanium.recipe.generator.TitaniumShapedRecipeBuilder;
 import com.hrznstudio.titanium.util.TileUtil;
 import com.mojang.blaze3d.vertex.PoseStack;
-import com.mojang.math.Vector3f;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -50,8 +49,9 @@ import net.minecraft.world.phys.AABB;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.common.Tags;
-import net.minecraftforge.items.CapabilityItemHandler;
+import net.minecraftforge.common.capabilities.ForgeCapabilities;
 import net.minecraftforge.items.IItemHandler;
+import org.joml.Vector3f;
 
 import javax.annotation.Nonnull;
 import java.util.Set;
@@ -75,14 +75,14 @@ public class TransporterWorldType extends FilteredTransporterType<ItemStack, IIt
                 int amount = 0;
                 if (isRegulated) {
                     for (int i = 0; i < itemHandler.getSlots(); i++) {
-                        if (itemHandler.getStackInSlot(i).sameItem(stack)) {
+                        if (ItemStack.isSameItem(itemHandler.getStackInSlot(i), stack)) {
                             amount += itemHandler.getStackInSlot(i).getCount();
                         }
                     }
                 }
 
                 for (IFilter.GhostSlot slot : this.getFilter()) {
-                    if (stack.sameItem(slot.getStack())) {
+                    if (ItemStack.isSameItem(stack, slot.getStack())) {
                         int maxAmount = isRegulated ? slot.getAmount() : Integer.MAX_VALUE;
                         int returnAmount = Math.min(stack.getCount(), maxAmount - amount);
                         if (returnAmount > 0) return returnAmount;
@@ -100,7 +100,7 @@ public class TransporterWorldType extends FilteredTransporterType<ItemStack, IIt
         if (!getLevel().isClientSide && getLevel().getGameTime() % (Math.max(1, 4 - speed)) == 0) {
             IBlockContainer container = getContainer();
             if (getAction() == TransporterTypeFactory.TransporterAction.EXTRACT && container instanceof TransporterTile) {
-                TileUtil.getTileEntity(getLevel(), getPos().relative(this.getSide())).ifPresent(tileEntity -> tileEntity.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, getSide().getOpposite()).ifPresent(origin -> {
+                TileUtil.getTileEntity(getLevel(), getPos().relative(this.getSide())).ifPresent(tileEntity -> tileEntity.getCapability(ForgeCapabilities.ITEM_HANDLER, getSide().getOpposite()).ifPresent(origin -> {
                     if (origin.getSlots() <= 0) return;
                     if (origin.getStackInSlot(extractSlot).isEmpty() || !filter(this.getFilter(), this.isWhitelist(), origin.getStackInSlot(extractSlot), origin, false))
                         findSlot(origin);
@@ -117,7 +117,7 @@ public class TransporterWorldType extends FilteredTransporterType<ItemStack, IIt
                 }));
             }
             if (getAction() == TransporterTypeFactory.TransporterAction.INSERT && container instanceof TransporterTile) {
-                TileUtil.getTileEntity(getLevel(), getPos().relative(this.getSide())).ifPresent(tileEntity -> tileEntity.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, getSide().getOpposite()).ifPresent(origin -> {
+                TileUtil.getTileEntity(getLevel(), getPos().relative(this.getSide())).ifPresent(tileEntity -> tileEntity.getCapability(ForgeCapabilities.ITEM_HANDLER, getSide().getOpposite()).ifPresent(origin -> {
                     for (ItemEntity item : this.getLevel().getEntitiesOfClass(ItemEntity.class, new AABB(this.getPos().getX(), this.getPos().getY(), this.getPos().getZ(), this.getPos().getX() + 1, this.getPos().getY() + 1, this.getPos().getZ() + 1))) {
                         if (item.isAlive()) {
                             ItemStack stack = item.getItem().copy();
@@ -179,8 +179,8 @@ public class TransporterWorldType extends FilteredTransporterType<ItemStack, IIt
 
     @OnlyIn(Dist.CLIENT)
     @Override
-    public void renderTransfer(Vector3f pos, Direction direction, int step, PoseStack stack, int combinedOverlayIn, MultiBufferSource buffer, float frame) {
-        super.renderTransfer(pos, direction, step, stack, combinedOverlayIn, buffer, frame);
+    public void renderTransfer(Vector3f pos, Direction direction, int step, PoseStack stack, int combinedOverlayIn, MultiBufferSource buffer, float frame, Level level) {
+        super.renderTransfer(pos, direction, step, stack, combinedOverlayIn, buffer, frame, level);
 
     }
 
@@ -203,12 +203,12 @@ public class TransporterWorldType extends FilteredTransporterType<ItemStack, IIt
 
         @Override
         public Set<ResourceLocation> getTextures() {
-            return Sets.newHashSet(new ResourceLocation("industrialforegoing:blocks/transporters/world"), new ResourceLocation("industrialforegoing:blocks/base/bottom"));
+            return Sets.newHashSet(new ResourceLocation("industrialforegoing:block/transporters/world"), new ResourceLocation("industrialforegoing:block/base/bottom"));
         }
 
         @Override
         public boolean canBeAttachedAgainst(Level world, BlockPos pos, Direction face) {
-            return TileUtil.getTileEntity(world, pos).map(tileEntity -> tileEntity.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, face).isPresent()).orElse(false);
+            return TileUtil.getTileEntity(world, pos).map(tileEntity -> tileEntity.getCapability(ForgeCapabilities.ITEM_HANDLER, face).isPresent()).orElse(false);
         }
 
         @Nonnull

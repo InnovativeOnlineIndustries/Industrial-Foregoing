@@ -15,6 +15,7 @@
       ],
       "recipe": {
         "type": "minecraft:crafting_shaped",
+        "category": "misc",
         "key": {
           "B": {
             "item": "minecraft:bucket"
@@ -42,7 +43,8 @@
         ],
         "result": {
           "item": "industrialforegoing:dissolution_chamber"
-        }
+        },
+        "show_notification": true
       }
     }
   ]

@@ -55,12 +55,12 @@ public class OneThreeFiveHandler {
     @OnlyIn(Dist.CLIENT)
     @SubscribeEvent
     public static void onClientTick(TickEvent.ClientTickEvent event) {
-        if (Minecraft.getInstance().player != null && Minecraft.getInstance().player.level != null && !Minecraft.getInstance().isPaused() && Minecraft.getInstance().player.level.getGameTime() % 5 == 0) {
+        if (Minecraft.getInstance().player != null && Minecraft.getInstance().player.level() != null && !Minecraft.getInstance().isPaused() && Minecraft.getInstance().player.level().getGameTime() % 5 == 0) {
             BlockPos pos = new BlockPos(Minecraft.getInstance().player.blockPosition().getX(), Minecraft.getInstance().player.blockPosition().getY(), Minecraft.getInstance().player.blockPosition().getZ());
-            Minecraft.getInstance().player.level.getEntitiesOfClass(LivingEntity.class, new AABB(pos.offset(32, 32, 32), pos.offset(-32, -32, -32)),
+            Minecraft.getInstance().player.level().getEntitiesOfClass(LivingEntity.class, new AABB(pos.offset(32, 32, 32), pos.offset(-32, -32, -32)),
                             input -> input.getUUID().toString().contains(SPECIAL)).
                     forEach(living -> Minecraft.getInstance().particleEngine.add(new ParticleVex(living)));
-            Minecraft.getInstance().player.level.getEntitiesOfClass(Player.class, new AABB(pos.offset(32, 32, 32), pos.offset(-32, -32, -32)),
+            Minecraft.getInstance().player.level().getEntitiesOfClass(Player.class, new AABB(pos.offset(32, 32, 32), pos.offset(-32, -32, -32)),
                             input -> SPECIAL_ENTITIES.containsKey(input.getUUID())).
                     forEach(living -> Minecraft.getInstance().particleEngine.add(new ParticleVex(living)));
         }
@@ -76,10 +76,10 @@ public class OneThreeFiveHandler {
     @SubscribeEvent
     public static void onPlayerTick(TickEvent.PlayerTickEvent event) {
         if (event.phase == TickEvent.Phase.END) return;
-        if (event.player.level.getGameTime() % 20 == 0) {
+        if (event.player.level().getGameTime() % 20 == 0) {
             for (ItemStack stack : event.player.inventory.items) {
                 if (stack.getItem() instanceof ItemInfinity && ((ItemInfinity) stack.getItem()).isSpecial(stack) && ((ItemInfinity) stack.getItem()).isSpecialEnabled(stack)) {
-                    IndustrialForegoing.NETWORK.sendToNearby(event.player.level, new BlockPos(event.player.blockPosition().getX(), event.player.blockPosition().getY(), event.player.blockPosition().getZ()), 64, new SpecialParticleMessage(event.player.getUUID()));
+                    IndustrialForegoing.NETWORK.sendToNearby(event.player.level(), new BlockPos(event.player.blockPosition().getX(), event.player.blockPosition().getY(), event.player.blockPosition().getZ()), 64, new SpecialParticleMessage(event.player.getUUID()));
                     return;
                 }
             }

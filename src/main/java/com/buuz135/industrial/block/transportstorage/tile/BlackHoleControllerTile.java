@@ -40,11 +40,9 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.ForgeCapabilities;
 import net.minecraftforge.common.util.LazyOptional;
-import net.minecraftforge.fluids.FluidStack;
-import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
+import net.minecraftforge.fluids.FluidStack;;
 import net.minecraftforge.fluids.capability.IFluidHandler;
 import net.minecraftforge.fluids.capability.IFluidHandlerItem;
-import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.IItemHandler;
 
 import javax.annotation.Nonnull;
@@ -86,8 +84,8 @@ public class BlackHoleControllerTile extends ActiveTile<BlackHoleControllerTile>
     @Nonnull
     @Override
     public <U> LazyOptional<U> getCapability(@Nonnull Capability<U> cap, @Nullable Direction side) {
-        if (cap == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY) return lazyInventory.cast();
-        if (cap == CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY) return lazyTank.cast();
+        if (cap == ForgeCapabilities.ITEM_HANDLER) return lazyInventory.cast();
+        if (cap == ForgeCapabilities.FLUID_HANDLER_ITEM) return lazyTank.cast();
         return super.getCapability(cap, side);
     }
 
@@ -115,8 +113,8 @@ public class BlackHoleControllerTile extends ActiveTile<BlackHoleControllerTile>
         @Override
         public ItemStack getStackInSlot(int slot) {
             ItemStack bl = units_storage.getStackInSlot(slot);
-            if (!bl.isEmpty() && bl.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY).isPresent()) {
-                IItemHandler handler = bl.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY).orElse(null);
+            if (!bl.isEmpty() && bl.getCapability(ForgeCapabilities.ITEM_HANDLER).isPresent()) {
+                IItemHandler handler = bl.getCapability(ForgeCapabilities.ITEM_HANDLER).orElse(null);
                 return handler.getStackInSlot(0);
             }
             return ItemStack.EMPTY;
@@ -126,8 +124,8 @@ public class BlackHoleControllerTile extends ActiveTile<BlackHoleControllerTile>
         @Override
         public ItemStack insertItem(int slot, @Nonnull ItemStack stack, boolean simulate) {
             ItemStack bl = units_storage.getStackInSlot(slot);
-            if (!bl.isEmpty() && bl.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY).isPresent()) {
-                IItemHandler handler = bl.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY).orElse(null);
+            if (!bl.isEmpty() && bl.getCapability(ForgeCapabilities.ITEM_HANDLER).isPresent()) {
+                IItemHandler handler = bl.getCapability(ForgeCapabilities.ITEM_HANDLER).orElse(null);
                 return handler.insertItem(0, stack, simulate);
             }
             return stack;
@@ -137,8 +135,8 @@ public class BlackHoleControllerTile extends ActiveTile<BlackHoleControllerTile>
         @Override
         public ItemStack extractItem(int slot, int amount, boolean simulate) {
             ItemStack bl = units_storage.getStackInSlot(slot);
-            if (!bl.isEmpty() && bl.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY).isPresent()) {
-                IItemHandler handler = bl.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY).orElse(null);
+            if (!bl.isEmpty() && bl.getCapability(ForgeCapabilities.ITEM_HANDLER).isPresent()) {
+                IItemHandler handler = bl.getCapability(ForgeCapabilities.ITEM_HANDLER).orElse(null);
                 return handler.extractItem(0, amount, simulate);
             }
             return ItemStack.EMPTY;
@@ -147,8 +145,8 @@ public class BlackHoleControllerTile extends ActiveTile<BlackHoleControllerTile>
         @Override
         public int getSlotLimit(int slot) {
             ItemStack bl = units_storage.getStackInSlot(slot);
-            if (!bl.isEmpty() && bl.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY).isPresent()) {
-                IItemHandler handler = bl.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY).orElse(null);
+            if (!bl.isEmpty() && bl.getCapability(ForgeCapabilities.ITEM_HANDLER).isPresent()) {
+                IItemHandler handler = bl.getCapability(ForgeCapabilities.ITEM_HANDLER).orElse(null);
                 return handler.getSlotLimit(0);
             }
             return 0;
@@ -157,8 +155,8 @@ public class BlackHoleControllerTile extends ActiveTile<BlackHoleControllerTile>
         @Override
         public boolean isItemValid(int slot, @Nonnull ItemStack stack) {
             ItemStack bl = units_storage.getStackInSlot(slot);
-            if (!bl.isEmpty() && bl.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY).isPresent()) {
-                IItemHandler handler = bl.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY).orElse(null);
+            if (!bl.isEmpty() && bl.getCapability(ForgeCapabilities.ITEM_HANDLER).isPresent()) {
+                IItemHandler handler = bl.getCapability(ForgeCapabilities.ITEM_HANDLER).orElse(null);
                 return handler.isItemValid(0, stack);
             }
             return false;

@@ -1,8 +1,8 @@
 {
   "credit": "Made with Blockbench",
   "textures": {
-    "0": "industrialforegoing:blocks/black_hole_unit_label",
-    "particle": "industrialforegoing:blocks/black_hole_unit_label"
+    "0": "industrialforegoing:block/black_hole_unit_label",
+    "particle": "industrialforegoing:block/black_hole_unit_label"
   },
   "elements": [
     {

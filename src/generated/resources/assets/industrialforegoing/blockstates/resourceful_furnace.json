@@ -1,5 +1,9 @@
 {
   "variants": {
+    "subfacing=east": {
+      "model": "industrialforegoing:block/resourceful_furnace",
+      "y": 90
+    },
     "subfacing=north": {
       "model": "industrialforegoing:block/resourceful_furnace"
     },
@@ -10,10 +14,6 @@
     "subfacing=west": {
       "model": "industrialforegoing:block/resourceful_furnace",
       "y": 270
-    },
-    "subfacing=east": {
-      "model": "industrialforegoing:block/resourceful_furnace",
-      "y": 90
     }
   }
 }

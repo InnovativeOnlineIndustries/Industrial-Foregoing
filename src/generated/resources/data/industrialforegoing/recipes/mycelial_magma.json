@@ -15,9 +15,10 @@
       ],
       "recipe": {
         "type": "minecraft:crafting_shaped",
+        "category": "misc",
         "key": {
           "B": {
-            "tag": "forge:storage_blocks/redstone"
+            "tag": "forge:storage_block/redstone"
           },
           "C": {
             "item": "minecraft:lava_bucket"
@@ -36,7 +37,8 @@
         ],
         "result": {
           "item": "industrialforegoing:mycelial_magma"
-        }
+        },
+        "show_notification": true
       }
     }
   ]

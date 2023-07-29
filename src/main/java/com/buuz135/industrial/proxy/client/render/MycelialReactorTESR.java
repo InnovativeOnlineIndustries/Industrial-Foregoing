@@ -29,8 +29,7 @@ import com.mojang.blaze3d.vertex.DefaultVertexFormat;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.mojang.blaze3d.vertex.VertexFormat;
-import com.mojang.math.Matrix4f;
-import com.mojang.math.Vector3f;
+import com.mojang.math.Axis;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.GameRenderer;
 import net.minecraft.client.renderer.MultiBufferSource;
@@ -40,6 +39,7 @@ import net.minecraft.client.renderer.blockentity.BlockEntityRenderer;
 import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.FastColor;
+import org.joml.Matrix4f;
 
 import java.awt.*;
 
@@ -50,7 +50,7 @@ public class MycelialReactorTESR implements BlockEntityRenderer<MycelialReactorT
     public static RenderType createRenderType() {
         RenderType.CompositeState state = RenderType.CompositeState.builder()
                 .setShaderState(new RenderStateShard.ShaderStateShard(GameRenderer::getPositionTexColorShader))
-                .setTextureState(new RenderStateShard.TextureStateShard(new ResourceLocation("industrialforegoing", "textures/blocks/mycelial.png"), false, false))
+                .setTextureState(new RenderStateShard.TextureStateShard(new ResourceLocation("industrialforegoing", "textures/block/mycelial.png"), false, false))
                 .setTransparencyState(new RenderStateShard.TransparencyStateShard("translucent_transparency", () -> {
                     RenderSystem.enableBlend();
                     RenderSystem.blendFunc(GlStateManager.SourceFactor.ONE, GlStateManager.DestFactor.ONE);
@@ -71,8 +71,8 @@ public class MycelialReactorTESR implements BlockEntityRenderer<MycelialReactorT
         stack.pushPose();
         stack.translate(0.5, 1.75, 0.5D);
         stack.mulPose(Minecraft.getInstance().getEntityRenderDispatcher().cameraOrientation());
-        stack.mulPose(Vector3f.ZP.rotationDegrees(90f));
-        stack.mulPose(Vector3f.XP.rotationDegrees(90f));
+        stack.mulPose(Axis.ZP.rotationDegrees(90f));
+        stack.mulPose(Axis.XP.rotationDegrees(90f));
         double speed = 60;
         //if (true) speed = 20;
         float sin = ((float) Math.sin(te.getLevel().getGameTime() / speed)) * 0.05f;

@@ -179,10 +179,10 @@ public class WitherBuilderTile extends IndustrialAreaWorkingTile<WitherBuilderTi
 
 
     public ItemStack getDefaultOrFind(int i, ItemStackHandler handler, ItemStack filter) {
-        if (handler.getStackInSlot(i).sameItem(filter)) return handler.getStackInSlot(i);
+        if (ItemStack.isSameItem(handler.getStackInSlot(i), filter)) return handler.getStackInSlot(i);
         for (ItemStackHandler h : new ItemStackHandler[]{top, middle, bottom}) {
             for (int s = 0; s < h.getSlots(); ++s) {
-                if (h.getStackInSlot(s).sameItem(filter)) return h.getStackInSlot(s);
+                if (ItemStack.isSameItem(h.getStackInSlot(s), filter)) return h.getStackInSlot(s);
             }
         }
         return ItemStack.EMPTY;

@@ -15,6 +15,7 @@
       ],
       "recipe": {
         "type": "minecraft:crafting_shaped",
+        "category": "misc",
         "key": {
           "i": {
             "tag": "forge:ingots/iron"
@@ -34,7 +35,8 @@
         "result": {
           "count": 6,
           "item": "industrialforegoing:conveyor"
-        }
+        },
+        "show_notification": true
       }
     }
   ]

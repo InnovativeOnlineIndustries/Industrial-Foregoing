@@ -47,6 +47,7 @@ import mezz.jei.api.IModPlugin;
 import mezz.jei.api.JeiPlugin;
 import mezz.jei.api.constants.RecipeTypes;
 import mezz.jei.api.gui.handlers.IGhostIngredientHandler;
+import mezz.jei.api.ingredients.ITypedIngredient;
 import mezz.jei.api.registration.*;
 import mezz.jei.api.runtime.IJeiRuntime;
 import mezz.jei.api.runtime.IRecipesGui;
@@ -111,8 +112,8 @@ public class JEICustomPlugin implements IModPlugin {
     public void registerGuiHandlers(IGuiHandlerRegistration registration) {
         registration.addGhostIngredientHandler(GuiConveyor.class, new IGhostIngredientHandler<>() {
             @Override
-            public <I> List<Target<I>> getTargets(GuiConveyor guiConveyor, I i, boolean b) {
-                if (i instanceof ItemStack) {
+            public <I> List<Target<I>> getTargetsTyped(GuiConveyor guiConveyor, ITypedIngredient<I> i, boolean b) {
+                if (i.getIngredient() instanceof ItemStack) {
                     return guiConveyor.getGhostSlots().stream().map(ghostSlot -> new Target<I>() {
 
                         @Override
@@ -136,8 +137,8 @@ public class JEICustomPlugin implements IModPlugin {
         });
         registration.addGhostIngredientHandler(GuiTransporter.class, new IGhostIngredientHandler<>() {
             @Override
-            public <I> List<Target<I>> getTargets(GuiTransporter guiConveyor, I i, boolean b) {
-                if (i instanceof ItemStack) {
+            public <I> List<Target<I>> getTargetsTyped(GuiTransporter guiConveyor, ITypedIngredient<I> i, boolean b) {
+                if (i.getIngredient() instanceof ItemStack) {
                     return guiConveyor.getGhostSlots().stream().map(ghostSlot -> new Target<I>() {
 
                         @Override
@@ -209,10 +210,10 @@ public class JEICustomPlugin implements IModPlugin {
         for (StoneWorkGenerateRecipe generatorRecipe : RecipeUtil.getRecipes(Minecraft.getInstance().level, (RecipeType<StoneWorkGenerateRecipe>) ModuleCore.STONEWORK_GENERATE_TYPE.get())) {
             List<StoneWorkCategory.Wrapper> wrappers = findAllStoneWorkOutputs(generatorRecipe.output, new ArrayList<>());
             for (StoneWorkCategory.Wrapper workWrapper : new ArrayList<>(wrappers)) {
-                if (perfectStoneWorkWrappers.stream().noneMatch(stoneWorkWrapper -> workWrapper.getOutput().sameItem(stoneWorkWrapper.getOutput()))) {
+                if (perfectStoneWorkWrappers.stream().noneMatch(stoneWorkWrapper -> ItemStack.isSameItem(workWrapper.getOutput(), stoneWorkWrapper.getOutput()))) {
                     boolean isSomoneShorter = false;
                     for (StoneWorkCategory.Wrapper workWrapperCompare : new ArrayList<>(wrappers)) {
-                        if (workWrapper.getOutput().sameItem(workWrapperCompare.getOutput())) {
+                        if (ItemStack.isSameItem(workWrapper.getOutput(), workWrapperCompare.getOutput())) {
                             List<MaterialStoneWorkFactoryTile.StoneWorkAction> workWrapperCompareModes = new ArrayList<>(workWrapperCompare.getModes());
                             workWrapperCompareModes.removeIf(mode -> mode.getAction().equalsIgnoreCase("none"));
                             List<MaterialStoneWorkFactoryTile.StoneWorkAction> workWrapperModes = new ArrayList<>(workWrapper.getModes());

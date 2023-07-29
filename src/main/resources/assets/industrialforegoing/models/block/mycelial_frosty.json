@@ -1,9 +1,9 @@
 {
   "parent": "industrialforegoing:block/mycelial_generator",
   "textures": {
-    "north": "industrialforegoing:blocks/generators/generator_front_frosty",
-    "south": "industrialforegoing:blocks/generators/generator_side_frosty",
-    "east": "industrialforegoing:blocks/generators/generator_side_frosty",
-    "west": "industrialforegoing:blocks/generators/generator_side_frosty"
+    "north": "industrialforegoing:block/generators/generator_front_frosty",
+    "south": "industrialforegoing:block/generators/generator_side_frosty",
+    "east": "industrialforegoing:block/generators/generator_side_frosty",
+    "west": "industrialforegoing:block/generators/generator_side_frosty"
   }
 }

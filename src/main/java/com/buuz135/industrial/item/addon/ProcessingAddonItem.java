@@ -26,8 +26,11 @@ import com.buuz135.industrial.item.IFCustomItem;
 import com.buuz135.industrial.module.ModuleCore;
 import com.buuz135.industrial.recipe.DissolutionChamberRecipe;
 import com.buuz135.industrial.utils.IndustrialTags;
+import com.hrznstudio.titanium.api.ISpecialCreativeTabItem;
+import com.hrznstudio.titanium.api.augment.AugmentTypes;
 import com.hrznstudio.titanium.api.augment.IAugmentType;
 import com.hrznstudio.titanium.item.AugmentWrapper;
+import com.hrznstudio.titanium.tab.TitaniumTab;
 import net.minecraft.core.NonNullList;
 import net.minecraft.data.recipes.FinishedRecipe;
 import net.minecraft.network.chat.Component;
@@ -39,18 +42,19 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.level.Level;
+import net.minecraftforge.event.BuildCreativeModeTabContentsEvent;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.registries.ForgeRegistries;
 
 import java.util.function.Consumer;
 
-public class ProcessingAddonItem extends IFCustomItem {
+public class ProcessingAddonItem extends IFCustomItem implements ISpecialCreativeTabItem {
 
     public static final IAugmentType PROCESSING = () -> "Processing";
 
     private int tier;
 
-    public ProcessingAddonItem(int tier, CreativeModeTab group) {
+    public ProcessingAddonItem(int tier, TitaniumTab group) {
         super("processing_addon_" + tier, group, new Properties().stacksTo(16));
         this.tier = tier;
     }
@@ -82,11 +86,9 @@ public class ProcessingAddonItem extends IFCustomItem {
     }
 
     @Override
-    public void fillItemCategory(CreativeModeTab group, NonNullList<ItemStack> items) {
-        if (allowedIn(group)) {
-            ItemStack stack = new ItemStack(this);
-            AugmentWrapper.setType(stack, PROCESSING, 1 + tier);
-            items.add(stack);
-        }
+    public void addToTab(BuildCreativeModeTabContentsEvent event) {
+        var stack = new ItemStack(this);
+        AugmentWrapper.setType(stack, PROCESSING, 1 + tier);
+        event.accept(stack);
     }
 }

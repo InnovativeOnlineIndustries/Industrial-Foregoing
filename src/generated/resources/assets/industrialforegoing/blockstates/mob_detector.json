@@ -1,5 +1,9 @@
 {
   "variants": {
+    "subfacing=east": {
+      "model": "industrialforegoing:block/mob_detector",
+      "y": 90
+    },
     "subfacing=north": {
       "model": "industrialforegoing:block/mob_detector"
     },
@@ -10,10 +14,6 @@
     "subfacing=west": {
       "model": "industrialforegoing:block/mob_detector",
       "y": 270
-    },
-    "subfacing=east": {
-      "model": "industrialforegoing:block/mob_detector",
-      "y": 90
     }
   }
 }

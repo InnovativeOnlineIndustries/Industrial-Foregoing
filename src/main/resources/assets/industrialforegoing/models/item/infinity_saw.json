@@ -1,10 +1,10 @@
 {
   "credit": "Made with Blockbench",
   "textures": {
-    "0": "industrialforegoing:items/sawhead_thing_test",
-    "1": "industrialforegoing:items/saw_if",
-    "2": "industrialforegoing:items/saw_if2",
-    "particle": "industrialforegoing:items/sawhead_thing_test"
+    "0": "industrialforegoing:item/sawhead_thing_test",
+    "1": "industrialforegoing:item/saw_if",
+    "2": "industrialforegoing:item/saw_if2",
+    "particle": "industrialforegoing:item/sawhead_thing_test"
   },
   "elements": [
     {

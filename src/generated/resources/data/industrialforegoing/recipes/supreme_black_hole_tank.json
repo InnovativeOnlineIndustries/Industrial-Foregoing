@@ -15,6 +15,7 @@
       ],
       "recipe": {
         "type": "minecraft:crafting_shaped",
+        "category": "misc",
         "key": {
           "C": {
             "item": "minecraft:bucket"
@@ -39,7 +40,8 @@
         ],
         "result": {
           "item": "industrialforegoing:supreme_black_hole_tank"
-        }
+        },
+        "show_notification": true
       }
     }
   ]

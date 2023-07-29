@@ -5,8 +5,8 @@
     64
   ],
   "textures": {
-    "0": "industrialforegoing:items/infinity_nuke",
-    "particle": "industrialforegoing:items/infinity_nuke"
+    "0": "industrialforegoing:item/infinity_nuke",
+    "particle": "industrialforegoing:item/infinity_nuke"
   },
   "elements": [
     {

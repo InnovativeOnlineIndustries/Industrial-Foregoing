@@ -1,5 +1,9 @@
 {
   "variants": {
+    "subfacing=east": {
+      "model": "industrialforegoing:block/mechanical_dirt",
+      "y": 90
+    },
     "subfacing=north": {
       "model": "industrialforegoing:block/mechanical_dirt"
     },
@@ -10,10 +14,6 @@
     "subfacing=west": {
       "model": "industrialforegoing:block/mechanical_dirt",
       "y": 270
-    },
-    "subfacing=east": {
-      "model": "industrialforegoing:block/mechanical_dirt",
-      "y": 90
     }
   }
 }

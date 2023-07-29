@@ -1,5 +1,5 @@
 {
   "parent": "forge:item/bucket",
-  "loader": "forge:bucket",
+  "loader": "forge:fluid_container",
   "fluid": "industrialforegoing:meat"
 }

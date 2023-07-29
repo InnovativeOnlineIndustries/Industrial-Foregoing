@@ -23,6 +23,7 @@ package com.buuz135.industrial.item;
 
 import com.buuz135.industrial.utils.IndustrialTags;
 import com.hrznstudio.titanium.recipe.generator.TitaniumShapedRecipeBuilder;
+import com.hrznstudio.titanium.tab.TitaniumTab;
 import com.hrznstudio.titanium.util.TagUtil;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -48,7 +49,7 @@ import java.util.function.Consumer;
 
 public class MobImprisonmentToolItem extends IFCustomItem {
 
-    public MobImprisonmentToolItem(CreativeModeTab group) {
+    public MobImprisonmentToolItem(TitaniumTab group) {
         super("mob_imprisonment_tool", group, new Properties().stacksTo(1));
     }
 

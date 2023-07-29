@@ -1,8 +1,8 @@
 {
   "credit": "Made by Coded hahayes",
   "textures": {
-    "0": "industrialforegoing:blocks/conveyor_bouncing_upgrade_west",
-    "particle": "industrialforegoing:blocks/conveyor_bouncing_upgrade_west"
+    "0": "industrialforegoing:block/conveyor_bouncing_upgrade_west",
+    "particle": "industrialforegoing:block/conveyor_bouncing_upgrade_west"
   },
   "elements": [
     {

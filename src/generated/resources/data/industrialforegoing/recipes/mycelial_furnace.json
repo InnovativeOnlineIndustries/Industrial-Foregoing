@@ -15,9 +15,10 @@
       ],
       "recipe": {
         "type": "minecraft:crafting_shaped",
+        "category": "misc",
         "key": {
           "B": {
-            "tag": "forge:storage_blocks/coal"
+            "tag": "forge:storage_block/coal"
           },
           "C": {
             "item": "minecraft:furnace"
@@ -36,7 +37,8 @@
         ],
         "result": {
           "item": "industrialforegoing:mycelial_furnace"
-        }
+        },
+        "show_notification": true
       }
     }
   ]

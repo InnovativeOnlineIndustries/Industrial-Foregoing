@@ -53,7 +53,7 @@ public class ParticleVex extends Particle {
             RenderSystem.enableBlend();
             RenderSystem.blendFuncSeparate(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA, GlStateManager.SourceFactor.ONE, GlStateManager.DestFactor.ZERO);
             RenderSystem.lineWidth(1.5F);
-            RenderSystem.disableTexture();
+            //RenderSystem.disableTexture();
             builder.begin(VertexFormat.Mode.LINES, DefaultVertexFormat.POSITION_COLOR_LIGHTMAP);
         }
 
@@ -61,7 +61,7 @@ public class ParticleVex extends Particle {
         public void end(Tesselator tessellator) {
             tessellator.end();
             RenderSystem.disableBlend();
-            RenderSystem.enableTexture();
+            //RenderSystem.enableTexture();
         }
     };
 
@@ -71,7 +71,7 @@ public class ParticleVex extends Particle {
     private boolean isDying = false;
 
     public ParticleVex(Entity entity) { //getPosition
-        super((ClientLevel) entity.level, entity.getX() + entity.level.random.nextDouble() - 0.5, entity.getY() + 1 + entity.level.random.nextDouble() - 0.5, entity.getZ() + entity.level.random.nextDouble() - 0.5);
+        super((ClientLevel) entity.level(), entity.getX() + entity.level().random.nextDouble() - 0.5, entity.getY() + 1 + entity.level().random.nextDouble() - 0.5, entity.getZ() + entity.level().random.nextDouble() - 0.5);
         this.entity = entity;
         directions = new ArrayList<>();
         Direction prev = Direction.NORTH;
@@ -87,7 +87,7 @@ public class ParticleVex extends Particle {
     @Override
     public void tick() {
         super.tick();
-        if (this.entity.blockPosition().distSqr(new Vec3i(x, y, z)) > 2) {
+        if (this.entity.position().distanceToSqr(new Vec3(x, y, z)) > 2) {
             isDying = true;
         }
         if (!isDying && !this.removed) {
@@ -105,7 +105,7 @@ public class ParticleVex extends Particle {
 
     @Override
     public void render(VertexConsumer bufferBad, Camera activeRenderInfo, float v) {
-        if (entity instanceof LocalPlayer && Minecraft.getInstance().player.getUUID().equals(entity.getUUID()) && Minecraft.getInstance().options.getCameraType() == CameraType.FIRST_PERSON && this.entity.blockPosition().offset(0, 1, 0).distSqr(new Vec3i(x, y, z)) < 3)
+        if (entity instanceof LocalPlayer && Minecraft.getInstance().player.getUUID().equals(entity.getUUID()) && Minecraft.getInstance().options.getCameraType() == CameraType.FIRST_PERSON && this.entity.position().add(0, 1, 0).distanceToSqr(new Vec3(x, y, z)) < 3)
             return;
         Vec3 vector3d = activeRenderInfo.getPosition();
         double x = entity.xOld + (vector3d.x - entity.xOld);

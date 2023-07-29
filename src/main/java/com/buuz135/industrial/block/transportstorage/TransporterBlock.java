@@ -37,6 +37,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.RenderShape;
 import net.minecraft.world.level.block.SimpleWaterloggedBlock;
 import net.minecraft.world.level.block.entity.BlockEntity;
@@ -45,8 +46,6 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.material.FluidState;
 import net.minecraft.world.level.material.Fluids;
-import net.minecraft.world.level.material.Material;
-import net.minecraft.world.level.material.MaterialColor;
 import net.minecraft.world.level.storage.loot.LootTable;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.HitResult;
@@ -65,17 +64,12 @@ import static net.minecraft.world.level.block.state.properties.BlockStatePropert
 
 public class TransporterBlock extends BasicTileBlock<TransporterTile> implements SimpleWaterloggedBlock {
 
-    public TransporterBlock(CreativeModeTab group) {
-        super("transporter", Properties.of(Material.HEAVY_METAL, MaterialColor.COLOR_ORANGE).noCollission().strength(2.0f), TransporterTile.class);
+    public TransporterBlock() {
+        super("transporter", Properties.copy(Blocks.IRON_BLOCK).noCollission().strength(2.0f), TransporterTile.class);
         //this.setRegistryName(Reference.MOD_ID, "transporter");
-        this.setItemGroup(group);
         this.registerDefaultState(this.defaultBlockState().setValue(WATERLOGGED, false));
     }
 
-    @Override
-    public void fillItemCategory(CreativeModeTab group, NonNullList<ItemStack> items) {
-        //super.fillItemGroup(group, items);
-    }
 
     private static List<VoxelShape> getShapes(BlockState state, BlockGetter source, BlockPos pos, Predicate<TransporterType> filter) {
         List<VoxelShape> boxes = new ArrayList<>();
@@ -100,7 +94,7 @@ public class TransporterBlock extends BasicTileBlock<TransporterTile> implements
         BlockEntity tileEntity = world.getBlockEntity(pos);
         if (tileEntity instanceof TransporterTile) {
             if (target instanceof BlockHitResult) {
-                Pair<Direction, Boolean> upgradePair = getFacingUpgradeHit(state, player.level, pos, player);
+                Pair<Direction, Boolean> upgradePair = getFacingUpgradeHit(state, player.level(), pos, player);
                 if (upgradePair != null) {
                     TransporterType upgrade = ((TransporterTile) tileEntity).getTransporterTypeMap().get(upgradePair.getKey());
                     if (upgrade != null) {

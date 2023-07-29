@@ -1,9 +1,9 @@
 {
   "parent": "industrialforegoing:block/base_block",
   "textures": {
-    "east": "industrialforegoing:blocks/plant_interactor_side",
-    "west": "industrialforegoing:blocks/plant_interactor_side",
-    "north": "industrialforegoing:blocks/plant_interactor_side",
-    "south": "industrialforegoing:blocks/plant_interactor_front"
+    "east": "industrialforegoing:block/plant_interactor_side",
+    "west": "industrialforegoing:block/plant_interactor_side",
+    "north": "industrialforegoing:block/plant_interactor_side",
+    "south": "industrialforegoing:block/plant_interactor_front"
   }
 }

@@ -101,7 +101,7 @@ public class ResourcefulFurnaceTile extends IndustrialProcessingTile<Resourceful
     @Override
     public boolean canIncrease() {
         for (SmeltingRecipe recipe : this.recipes) {
-            if (recipe != null && ItemHandlerHelper.insertItem(output, recipe.getResultItem().copy(), true).isEmpty())
+            if (recipe != null && ItemHandlerHelper.insertItem(output, recipe.getResultItem(this.level.registryAccess()).copy(), true).isEmpty())
                 return true;
         }
         return false;
@@ -112,10 +112,10 @@ public class ResourcefulFurnaceTile extends IndustrialProcessingTile<Resourceful
         return () -> {
             for (int i = 0; i < this.recipes.length; i++) {
                 SmeltingRecipe recipe = this.recipes[i];
-                if (recipe != null && ItemHandlerHelper.insertItem(output, recipe.getResultItem().copy(), true).isEmpty()) {
-                    if (ItemHandlerHelper.insertItem(output, recipe.getResultItem().copy(), true).isEmpty()) {
+                if (recipe != null && ItemHandlerHelper.insertItem(output, recipe.getResultItem(this.level.registryAccess()).copy(), true).isEmpty()) {
+                    if (ItemHandlerHelper.insertItem(output, recipe.getResultItem(this.level.registryAccess()).copy(), true).isEmpty()) {
                         input.setStackInSlot(i, ItemStack.EMPTY);
-                        ItemHandlerHelper.insertItem(output, recipe.getResultItem().copy(), false);
+                        ItemHandlerHelper.insertItem(output, recipe.getResultItem(this.level.registryAccess()).copy(), false);
                         tank.fillForced(new FluidStack(ModuleCore.ESSENCE.getSourceFluid().get(), (int) (recipe.getExperience() * 20)), IFluidHandler.FluidAction.EXECUTE);
                     }
                 }

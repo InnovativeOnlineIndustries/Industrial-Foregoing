@@ -31,8 +31,8 @@ import net.minecraft.core.Direction;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraftforge.common.capabilities.Capability;
+import net.minecraftforge.common.capabilities.ForgeCapabilities;
 import net.minecraftforge.common.util.LazyOptional;
-import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.server.ServerLifecycleHooks;
 
@@ -50,7 +50,7 @@ public class BackpackCapabilityProvider extends InfinityCapabilityProvider {
     @Nullable
     @Override
     public <T> LazyOptional<T> getCapability(@Nonnull Capability<T> capability, @Nullable Direction facing) {
-        if (CapabilityItemHandler.ITEM_HANDLER_CAPABILITY == capability) {
+        if (ForgeCapabilities.ITEM_HANDLER == capability) {
             if (itemHandlerLazyOptional == null && this.getStack().hasTag()) {
                 String id = this.getStack().getTag().getString("Id");
                 if (BackpackDataManager.CLIENT_SIDE_BACKPACKS.containsKey(id)) {

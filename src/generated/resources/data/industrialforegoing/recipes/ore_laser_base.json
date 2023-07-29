@@ -15,6 +15,7 @@
       ],
       "recipe": {
         "type": "minecraft:crafting_shaped",
+        "category": "misc",
         "key": {
           "b": {
             "tag": "forge:ores/iron"
@@ -42,7 +43,8 @@
         ],
         "result": {
           "item": "industrialforegoing:ore_laser_base"
-        }
+        },
+        "show_notification": true
       }
     }
   ]

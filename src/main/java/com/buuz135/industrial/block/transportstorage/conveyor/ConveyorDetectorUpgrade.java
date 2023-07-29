@@ -187,7 +187,7 @@ public class ConveyorDetectorUpgrade extends ConveyorUpgrade {
 
         @Override
         public Set<ResourceLocation> getTextures() {
-            return Collections.singleton(new ResourceLocation(Reference.MOD_ID, "blocks/conveyor_detection_upgrade"));
+            return Collections.singleton(new ResourceLocation(Reference.MOD_ID, "block/conveyor_detection_upgrade"));
         }
 
         @Nonnull

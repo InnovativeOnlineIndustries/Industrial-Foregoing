@@ -22,12 +22,12 @@
 package com.buuz135.industrial.utils.explosion;
 
 import com.buuz135.industrial.IndustrialForegoing;
-import com.mojang.math.Vector3f;
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.Mth;
 import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.damagesource.DamageSources;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.animal.Cat;
 import net.minecraft.world.entity.player.Player;
@@ -37,9 +37,9 @@ import net.minecraft.world.level.block.FallingBlock;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.levelgen.LegacyRandomSource;
 import net.minecraft.world.level.levelgen.synth.SimplexNoise;
-import net.minecraft.world.level.material.Material;
 import net.minecraft.world.phys.AABB;
 import net.minecraftforge.fluids.IFluidBlock;
+import org.joml.Vector3f;
 
 import java.util.Arrays;
 import java.util.HashSet;
@@ -48,11 +48,11 @@ import java.util.List;
 import java.util.function.Consumer;
 
 /**
- * Class copied and adapted from Draconic Evolution https://github.com/brandon3055/Draconic-Evolution/blob/master/src/main/java/com/brandon3055/draconicevolution/blocks/reactor/ProcessExplosion.java
+ * Class copied and adapted from Draconic Evolution https://github.com/brandon3055/Draconic-Evolution/blob/master/src/main/java/com/brandon3055/draconicevolution/block/reactor/ProcessExplosion.java
  */
 public class ProcessExplosion {
 
-    public static DamageSource fusionExplosion = new DamageSource("damage.if.nuke").setExplosion().bypassArmor().setIsFire();
+    //public static DamageSource fusionExplosion = new DamageSource("damage.if.nuke").setExplosion().bypassArmor().setIsFire();
 
     /**
      * The origin of the explosion.
@@ -141,7 +141,7 @@ public class ProcessExplosion {
     }
 
     public void updateCalculation() {
-        BlockPos originPos = new BlockPos(origin.x(), origin.y(), origin.z());
+        BlockPos originPos = new BlockPos((int) origin.x(), (int) origin.y(), (int) origin.z());
 
         double maxCoreHeight = 20D * (maxRadius / 150D);
 
@@ -267,14 +267,14 @@ public class ProcessExplosion {
 
         dist--;
         travel++;
-        long iPos = new BlockPos(posVec.x(), posVec.y(), posVec.z()).asLong();
+        long iPos = new BlockPos((int) posVec.x(), (int) posVec.y(), (int) posVec.z()).asLong();
 
         if (scannedCache.contains(iPos) || destroyedCache.contains(iPos)) {
             posVec.set(posVec.x(), posVec.y() + traceDir, posVec.z());
             return trace(posVec, power, dist, traceDir, totalResist, travel);
         }
 
-        BlockPos pos = new BlockPos(posVec.x(), posVec.y(), posVec.z());
+        BlockPos pos = new BlockPos((int) posVec.x(), (int) posVec.y(), (int) posVec.z());
 
         double r = 1;
 
@@ -282,14 +282,13 @@ public class ProcessExplosion {
         Block block = state.getBlock();
 
         if (!state.isAir()) {
-            Material mat = state.getMaterial();
             double effectivePower = (power / 10) * ((double) dist / (dist + travel));
 
             r = block.getExplosionResistance();
 
             if (effectivePower >= r) {
                 destroyedCache.add(iPos);
-            } else if (mat == Material.WATER || mat == Material.LAVA) {
+            } else if (block.equals(Blocks.WATER) || block.equals(Blocks.LAVA)) {
                 if (effectivePower > 5) {
                     destroyedCache.add(iPos);
                 } else {
@@ -350,7 +349,7 @@ public class ProcessExplosion {
 
         IndustrialForegoing.LOGGER.debug("Removing Blocks!");
         //LogHelper.startTimer("Adding Blocks For Removal");
-        final BlockPos pos = new BlockPos(origin.x(), origin.y(), origin.z());
+        final BlockPos pos = new BlockPos((int) origin.x(), (int) origin.y(), (int) origin.z());
         new Thread(() -> {
             List<Entity> list = world.getEntitiesOfClass(Entity.class, new AABB(pos, pos.offset(1, 1, 1)).inflate(radius * 2.5, radius * 2.5, radius * 2.5));
             for (Entity e : list) {
@@ -358,14 +357,14 @@ public class ProcessExplosion {
                 float dmg = 10000F;
                 if (e instanceof Player) {
                     for (int i = 0; i < 100; i++) {
-                        e.hurt(fusionExplosion, 100f);
+                        e.hurt(e.level().damageSources().genericKill(), 100f);
                     }
                 } else {
-                    e.hurt(fusionExplosion, dmg);
+                    e.hurt(e.level().damageSources().genericKill(), dmg);
                 }
             }
         }).start();
-        ExplosionHelper removalHelper = new ExplosionHelper(world, new BlockPos(origin.x(), origin.y(), origin.z()));
+        ExplosionHelper removalHelper = new ExplosionHelper(world, new BlockPos((int) origin.x(), (int) origin.y(), (int) origin.z()));
         int i = 0;
 
         removalHelper.setBlocksForRemoval(destroyedBlocks);

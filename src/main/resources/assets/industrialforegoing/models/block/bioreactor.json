@@ -1,10 +1,10 @@
 {
   "parent": "industrialforegoing:block/base_block",
   "textures": {
-    "south": "industrialforegoing:blocks/bioreactor_side",
-    "west": "industrialforegoing:blocks/bioreactor_side",
-    "east": "industrialforegoing:blocks/bioreactor_side",
-    "north": "industrialforegoing:blocks/bioreactor_side",
-    "up": "industrialforegoing:blocks/bioreactor_top"
+    "south": "industrialforegoing:block/bioreactor_side",
+    "west": "industrialforegoing:block/bioreactor_side",
+    "east": "industrialforegoing:block/bioreactor_side",
+    "north": "industrialforegoing:block/bioreactor_side",
+    "up": "industrialforegoing:block/bioreactor_top"
   }
 }

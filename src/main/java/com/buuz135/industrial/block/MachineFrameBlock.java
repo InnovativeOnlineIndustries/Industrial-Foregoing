@@ -24,6 +24,7 @@ package com.buuz135.industrial.block;
 
 import com.hrznstudio.titanium.block.BasicBlock;
 import com.hrznstudio.titanium.datagenerator.loot.block.BasicBlockLootTables;
+import com.hrznstudio.titanium.tab.TitaniumTab;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.*;
 import net.minecraft.world.item.context.BlockPlaceContext;
@@ -39,7 +40,7 @@ public class MachineFrameBlock extends BasicBlock {
 
     private Rarity rarity;
 
-    public MachineFrameBlock(Rarity rarity, CreativeModeTab group) {
+    public MachineFrameBlock(Rarity rarity, TitaniumTab group) {
         super("machine_frame_" + rarity.name().toLowerCase(Locale.ROOT), Properties.copy(Blocks.IRON_BLOCK));
         this.setItemGroup(group);
         this.rarity = rarity;
@@ -52,8 +53,11 @@ public class MachineFrameBlock extends BasicBlock {
 
     public static class MachineFrameItem extends BlockItem {
 
-        public MachineFrameItem(Block blockIn, Rarity rarity, CreativeModeTab group) {
-            super(blockIn, new Item.Properties().tab(group).rarity(rarity));
+        private TitaniumTab group;
+
+        public MachineFrameItem(Block blockIn, Rarity rarity, TitaniumTab group) {
+            super(blockIn, new Item.Properties().rarity(rarity));
+            this.group = group;
         }
 
         @Override
@@ -64,7 +68,7 @@ public class MachineFrameBlock extends BasicBlock {
         @Nullable
         @Override
         public String getCreatorModId(ItemStack itemStack) {
-            return Component.translatable("itemGroup." + this.category.getRecipeFolderName()).getString();
+            return Component.translatable("itemGroup.industrialforegoing_" + this.group.getResourceLocation().getPath()).getString();
         }
 
     }

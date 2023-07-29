@@ -1,5 +1,9 @@
 {
   "variants": {
+    "subfacing=east": {
+      "model": "industrialforegoing:block/animal_feeder",
+      "y": 90
+    },
     "subfacing=north": {
       "model": "industrialforegoing:block/animal_feeder"
     },
@@ -10,10 +14,6 @@
     "subfacing=west": {
       "model": "industrialforegoing:block/animal_feeder",
       "y": 270
-    },
-    "subfacing=east": {
-      "model": "industrialforegoing:block/animal_feeder",
-      "y": 90
     }
   }
 }

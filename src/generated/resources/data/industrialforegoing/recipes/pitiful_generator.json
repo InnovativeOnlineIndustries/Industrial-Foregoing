@@ -15,6 +15,7 @@
       ],
       "recipe": {
         "type": "minecraft:crafting_shaped",
+        "category": "misc",
         "key": {
           "d": {
             "tag": "forge:ingots/gold"
@@ -39,7 +40,8 @@
         ],
         "result": {
           "item": "industrialforegoing:pitiful_generator"
-        }
+        },
+        "show_notification": true
       }
     }
   ]

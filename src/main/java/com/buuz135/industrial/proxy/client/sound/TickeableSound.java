@@ -102,7 +102,7 @@ public class TickeableSound extends AbstractSoundInstance implements TickableSou
 
     @Override
     public void tick() {
-        double distance = Minecraft.getInstance().player.blockPosition().distManhattan(new BlockPos(this.x, this.y, this.z));
+        double distance = Minecraft.getInstance().player.blockPosition().distManhattan(new BlockPos((int) this.x, (int) this.y, (int) this.z));
         if (distance > this.distance) {
             this.volume = 0;
         } else {

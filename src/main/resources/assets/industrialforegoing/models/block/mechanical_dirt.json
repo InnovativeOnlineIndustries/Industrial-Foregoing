@@ -1,10 +1,10 @@
 {
   "parent": "industrialforegoing:block/base_block",
   "textures": {
-    "south": "industrialforegoing:blocks/mechanical_dirt_side",
-    "north": "industrialforegoing:blocks/mechanical_dirt_side",
-    "west": "industrialforegoing:blocks/mechanical_dirt_side",
-    "east": "industrialforegoing:blocks/mechanical_dirt_side",
-    "up": "industrialforegoing:blocks/mechanical_dirt_top"
+    "south": "industrialforegoing:block/mechanical_dirt_side",
+    "north": "industrialforegoing:block/mechanical_dirt_side",
+    "west": "industrialforegoing:block/mechanical_dirt_side",
+    "east": "industrialforegoing:block/mechanical_dirt_side",
+    "up": "industrialforegoing:block/mechanical_dirt_top"
   }
 }

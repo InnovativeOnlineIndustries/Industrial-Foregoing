@@ -51,7 +51,7 @@ public class TransporterButtonInteractMessage extends Message {
     @Override
     protected void handleMessage(NetworkEvent.Context context) {
         context.enqueueWork(() -> {
-            BlockEntity entity = context.getSender().getLevel().getBlockEntity(pos);
+            BlockEntity entity = context.getSender().level().getBlockEntity(pos);
             Direction facing = Direction.from3DDataValue(this.facing);
             if (entity instanceof TransporterTile) {
                 if (((TransporterTile) entity).hasUpgrade(facing)) {

@@ -15,6 +15,7 @@
       ],
       "recipe": {
         "type": "minecraft:crafting_shaped",
+        "category": "misc",
         "key": {
           "b": {
             "item": "minecraft:piston"
@@ -42,7 +43,8 @@
         ],
         "result": {
           "item": "industrialforegoing:laser_drill"
-        }
+        },
+        "show_notification": true
       }
     }
   ]

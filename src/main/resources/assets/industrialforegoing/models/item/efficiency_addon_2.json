@@ -1,6 +1,6 @@
 {
   "parent": "industrialforegoing:item/item",
   "textures": {
-    "layer0": "industrialforegoing:items/efficiency_addon_2"
+    "layer0": "industrialforegoing:item/efficiency_addon_2"
   }
 }

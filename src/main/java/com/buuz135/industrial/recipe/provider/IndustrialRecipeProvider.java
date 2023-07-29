@@ -34,6 +34,7 @@ import com.hrznstudio.titanium.recipe.generator.TitaniumShapedRecipeBuilder;
 import com.hrznstudio.titanium.recipe.generator.TitaniumShapelessRecipeBuilder;
 import net.minecraft.data.DataGenerator;
 import net.minecraft.data.recipes.FinishedRecipe;
+import net.minecraft.data.recipes.RecipeCategory;
 import net.minecraft.data.recipes.SimpleCookingRecipeBuilder;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.ItemTags;
@@ -89,7 +90,7 @@ public class IndustrialRecipeProvider extends TitaniumRecipeProvider {
         ((IRecipeProvider) ModuleCore.PROCESSING_ADDON_1.get()).registerRecipe(consumer);
         ((IRecipeProvider) ModuleCore.PROCESSING_ADDON_2.get()).registerRecipe(consumer);
         TitaniumShapelessRecipeBuilder.shapelessRecipe(ModuleCore.DRY_RUBBER.get()).requires(ModuleCore.TINY_DRY_RUBBER.get(), 9).save(consumer);
-        SimpleCookingRecipeBuilder.smelting(Ingredient.of(ModuleCore.DRY_RUBBER.get()), ModuleCore.PLASTIC.get(), 0.3f, 200).unlockedBy("has_plastic", this.has(ModuleCore.DRY_RUBBER.get())).save(consumer);
+        SimpleCookingRecipeBuilder.smelting(Ingredient.of(ModuleCore.DRY_RUBBER.get()), RecipeCategory.MISC, ModuleCore.PLASTIC.get(), 0.3f, 200).unlockedBy("has_plastic", this.has(ModuleCore.DRY_RUBBER.get())).save(consumer);
         TitaniumShapedRecipeBuilder.shapedRecipe(ModuleCore.PITY.get())
                 .pattern("WIW").pattern("IRI").pattern("WIW")
                 .define('W', ItemTags.LOGS)

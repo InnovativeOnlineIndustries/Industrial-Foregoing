@@ -43,6 +43,7 @@ import mezz.jei.api.recipe.RecipeType;
 import mezz.jei.api.recipe.category.IRecipeCategory;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.resources.sounds.SimpleSoundInstance;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceKey;
@@ -94,29 +95,29 @@ public class LaserDrillFluidCategory implements IRecipeCategory<LaserDrillFluidR
     }
 
     @Override
-    public void draw(LaserDrillFluidRecipe recipe, IRecipeSlotsView recipeSlotsView, PoseStack stack, double mouseX, double mouseY) {
+    public void draw(LaserDrillFluidRecipe recipe, IRecipeSlotsView recipeSlotsView, GuiGraphics guiGraphics, double mouseX, double mouseY) {
         int recipeWidth = 82 + 35 + 35;
         if (recipe.pointer > 0)
-            AssetUtil.drawAsset(stack, Minecraft.getInstance().screen, DefaultAssetProvider.DEFAULT_PROVIDER.getAsset(AssetTypes.BUTTON_ARROW_LEFT), 0, 70);
+            AssetUtil.drawAsset(guiGraphics, Minecraft.getInstance().screen, DefaultAssetProvider.DEFAULT_PROVIDER.getAsset(AssetTypes.BUTTON_ARROW_LEFT), 0, 70);
         if (recipe.pointer < recipe.rarity.length - 1)
-            AssetUtil.drawAsset(stack, Minecraft.getInstance().screen, DefaultAssetProvider.DEFAULT_PROVIDER.getAsset(AssetTypes.BUTTON_ARROW_RIGHT), 137, 70);
-        AssetUtil.drawAsset(stack, Minecraft.getInstance().screen, DefaultAssetProvider.DEFAULT_PROVIDER.getAsset(AssetTypes.TANK_SMALL), 60 + 35 + 3, 3);
-        RenderSystem.setShaderTexture(0, new ResourceLocation("textures/gui/toasts.png"));
-        Minecraft.getInstance().screen.blit(stack, recipeWidth / 10 * 2, 30 + (Minecraft.getInstance().font.lineHeight + 2) * 3, 216, 0, 20, 20, 256, 256);
-        Minecraft.getInstance().screen.blit(stack, recipeWidth / 10 * 7, 30 + (Minecraft.getInstance().font.lineHeight + 2) * 3, 216, 0, 20, 20, 256, 256);
-        RenderSystem.setShaderTexture(0, new ResourceLocation("forge", "textures/gui/icons.png"));
-        Minecraft.getInstance().screen.blit(stack, recipeWidth / 10 * 7 + 1, 30 + (Minecraft.getInstance().font.lineHeight + 2) * 3 + 3, 0, 16, 16, 16);
+            AssetUtil.drawAsset(guiGraphics, Minecraft.getInstance().screen, DefaultAssetProvider.DEFAULT_PROVIDER.getAsset(AssetTypes.BUTTON_ARROW_RIGHT), 137, 70);
+        AssetUtil.drawAsset(guiGraphics, Minecraft.getInstance().screen, DefaultAssetProvider.DEFAULT_PROVIDER.getAsset(AssetTypes.TANK_SMALL), 60 + 35 + 3, 3);
+        var toasts = new ResourceLocation("textures/gui/toasts.png");
+        guiGraphics.blit(toasts, recipeWidth / 10 * 2, 30 + (Minecraft.getInstance().font.lineHeight + 2) * 3, 216, 0, 20, 20, 256, 256);
+        guiGraphics.blit(toasts, recipeWidth / 10 * 7, 30 + (Minecraft.getInstance().font.lineHeight + 2) * 3, 216, 0, 20, 20, 256, 256);
+        var icons =  new ResourceLocation("forge", "textures/gui/icons.png");
+        guiGraphics.blit(icons, recipeWidth / 10 * 7 + 1, 30 + (Minecraft.getInstance().font.lineHeight + 2) * 3 + 3, 0, 16, 16, 16);
 
         String minY = Component.translatable("text.industrialforegoing.miny").getString() + " " + recipe.rarity[recipe.pointer].depth_min;
         String maxY = Component.translatable("text.industrialforegoing.maxy").getString() + " " + recipe.rarity[recipe.pointer].depth_max;
         String biomes = Component.translatable("text.industrialforegoing.biomes").getString();
-        Minecraft.getInstance().font.draw(stack, ChatFormatting.DARK_GRAY + minY, recipeWidth / 10, 30, 0);
+        guiGraphics.drawString(Minecraft.getInstance().font, ChatFormatting.DARK_GRAY + minY, recipeWidth / 10, 30, 0);
         if (!LaserDrillFluidRecipe.EMPTY.equals(recipe.entity)) {
             String wight = "Over: " + Component.translatable("entity." + recipe.entity.toString().replace(":", ".")).getString();
-            Minecraft.getInstance().font.draw(stack, ChatFormatting.DARK_GRAY + wight, recipeWidth / 10, 30 + (Minecraft.getInstance().font.lineHeight + 2), 0);
+            guiGraphics.drawString(Minecraft.getInstance().font, ChatFormatting.DARK_GRAY + wight, recipeWidth / 10, 30 + (Minecraft.getInstance().font.lineHeight + 2), 0);
         }
-        Minecraft.getInstance().font.draw(stack, ChatFormatting.DARK_GRAY + maxY, recipeWidth / 10 * 6, 30, 0);
-        Minecraft.getInstance().font.draw(stack, ChatFormatting.DARK_GRAY + "" + ChatFormatting.UNDERLINE + biomes, recipeWidth / 2 - Minecraft.getInstance().font.width(biomes) / 2, 30 + (Minecraft.getInstance().font.lineHeight + 2) * 2, 0);
+        guiGraphics.drawString(Minecraft.getInstance().font, ChatFormatting.DARK_GRAY + maxY, recipeWidth / 10 * 6, 30, 0);
+        guiGraphics.drawString(Minecraft.getInstance().font, ChatFormatting.DARK_GRAY + "" + ChatFormatting.UNDERLINE + biomes, recipeWidth / 2 - Minecraft.getInstance().font.width(biomes) / 2, 30 + (Minecraft.getInstance().font.lineHeight + 2) * 2, 0);
 
     }
 

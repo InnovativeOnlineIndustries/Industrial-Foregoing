@@ -1,9 +1,9 @@
 {
   "parent": "industrialforegoing:block/base_block",
   "textures": {
-    "south": "industrialforegoing:blocks/block_placer_back",
-    "west": "industrialforegoing:blocks/block_placer_side",
-    "east": "industrialforegoing:blocks/block_placer_side",
-    "north": "industrialforegoing:blocks/block_placer_side"
+    "south": "industrialforegoing:block/block_placer_back",
+    "west": "industrialforegoing:block/block_placer_side",
+    "east": "industrialforegoing:block/block_placer_side",
+    "north": "industrialforegoing:block/block_placer_side"
   }
 }

@@ -22,6 +22,8 @@
 
 package com.buuz135.industrial.item;
 
+import com.hrznstudio.titanium.Titanium;
+import com.hrznstudio.titanium.tab.TitaniumTab;
 import net.minecraft.core.NonNullList;
 import net.minecraft.data.recipes.FinishedRecipe;
 import net.minecraft.nbt.CompoundTag;
@@ -39,18 +41,10 @@ import java.util.function.Consumer;
 
 public class MobEssenceToolItem extends IFCustomItem {
 
-    public MobEssenceToolItem(CreativeModeTab group) {
+    public MobEssenceToolItem(TitaniumTab group) {
         super("mob_essence_tool", group, new Properties().stacksTo(1));
     }
 
-    @Override
-    public void fillItemCategory(CreativeModeTab group, NonNullList<ItemStack> items) {
-        if (allowedIn(group)) {
-            ItemStack stack = new ItemStack(this);
-            addNBT(stack);
-            items.add(stack);
-        }
-    }
 
     @Override
     public void onCraftedBy(ItemStack stack, Level worldIn, Player playerIn) {

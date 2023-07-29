@@ -35,6 +35,7 @@ import com.hrznstudio.titanium.util.AssetUtil;
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
 import net.minecraft.nbt.CompoundTag;
@@ -55,32 +56,32 @@ public abstract class SlotDefinitionGuiAddon extends BasicButtonAddon {
     }
 
     @Override
-    public void drawBackgroundLayer(PoseStack stack, Screen screen, IAssetProvider provider, int guiX, int guiY, int mouseX, int mouseY, float partialTicks) {
+    public void drawBackgroundLayer(GuiGraphics guiGraphics, Screen screen, IAssetProvider provider, int guiX, int guiY, int mouseX, int mouseY, float partialTicks) {
         if (!getItemStack().isEmpty() && getItemStack().hasTag()) {
             BackpackDataManager.BackpackItemHandler handler = BackpackDataManager.CLIENT_SIDE_BACKPACKS.getOrDefault(getItemStack().getTag().getString("Id"), null);
-            AssetUtil.drawAsset(stack, screen, provider.getAsset(AssetTypes.SLOT), guiX + getPosX(), guiY + getPosY());
+            AssetUtil.drawAsset(guiGraphics, screen, provider.getAsset(AssetTypes.SLOT), guiX + getPosX(), guiY + getPosY());
             if (handler != null) {
                 BackpackDataManager.SlotDefinition display = handler.getSlotDefinition(slotId);
                 if (!display.getStack().isEmpty()) {
-                    Minecraft.getInstance().getItemRenderer().renderGuiItem(display.getStack(), guiX + getPosX() + 1, guiY + getPosY() + 1);
-                    stack.pushPose();
-                    stack.translate(0, 0, 260);
-                    stack.scale(0.5f, 0.5f, 0.5f);
+                    guiGraphics.renderItem(display.getStack(), guiX + getPosX() + 1, guiY + getPosY() + 1);
+                    guiGraphics.pose().pushPose();
+                    guiGraphics.pose().translate(0, 0, 260);
+                    guiGraphics.pose().scale(0.5f, 0.5f, 0.5f);
                     String amount = NumberUtils.getFormatedBigNumber(display.getAmount());
-                    Minecraft.getInstance().font.drawShadow(stack, amount, (guiX + getPosX() + 17 - Minecraft.getInstance().font.width(amount) / 2f) * 2, (guiY + getPosY() + 13) * 2, 0xFFFFFF);
-                    stack.popPose();
+                    guiGraphics.drawString(Minecraft.getInstance().font, amount, (int) ((guiX + getPosX() + 17 - Minecraft.getInstance().font.width(amount) / 2f) * 2), (guiY + getPosY() + 13) * 2, 0xFFFFFF, true);
+                    guiGraphics.pose().popPose();
                 }
             }
         }
     }
 
     @Override
-    public void drawForegroundLayer(PoseStack stack, Screen screen, IAssetProvider provider, int guiX, int guiY, int mouseX, int mouseY, float partialTicks) {
+    public void drawForegroundLayer(GuiGraphics guiGraphics, Screen screen, IAssetProvider provider, int guiX, int guiY, int mouseX, int mouseY, float partialTicks) {
         if (isMouseOver(mouseX - guiX, mouseY - guiY)) {
-            stack.pushPose();
-            stack.translate(0, 0, 256);
-            AssetUtil.drawSelectingOverlay(stack, getPosX() + 1, getPosY() + 1, getPosX() + getXSize() - 1, getPosY() + getYSize() - 1);
-            stack.popPose();
+            guiGraphics.pose().pushPose();
+            guiGraphics.pose().translate(0, 0, 256);
+            AssetUtil.drawSelectingOverlay(guiGraphics, getPosX() + 1, getPosY() + 1, getPosX() + getXSize() - 1, getPosY() + getYSize() - 1);
+            guiGraphics.pose().popPose();
         }
     }
 
@@ -113,7 +114,7 @@ public abstract class SlotDefinitionGuiAddon extends BasicButtonAddon {
         if (handler != null) {
             BackpackDataManager.SlotDefinition display = handler.getSlotDefinition(slotId);
             if (!display.getStack().isEmpty()) {
-                lines.addAll(Minecraft.getInstance().screen.getTooltipFromItem(display.getStack()));
+                lines.addAll(Minecraft.getInstance().screen.getTooltipFromItem(Minecraft.getInstance(), display.getStack()));
                 lines.add(Component.literal(ChatFormatting.GOLD + new DecimalFormat().format(display.getAmount())));
             }
             String changeVoid = ChatFormatting.DARK_GRAY + Component.translatable("text.industrialforegoing.tooltip.ctrl_left").getString();

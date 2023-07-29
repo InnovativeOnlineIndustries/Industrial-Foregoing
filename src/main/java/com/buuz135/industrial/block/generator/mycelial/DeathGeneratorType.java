@@ -128,7 +128,7 @@ public class DeathGeneratorType implements IMycelialGeneratorType {
     public void onTick(Level world, BlockPos pos) {
         AABB area = new AABB(pos.getX() - 3, pos.getY() - 3, pos.getZ() - 3, pos.getX() + 3, pos.getY() + 3, pos.getZ() + 3);
         for (LivingEntity livingEntity : world.getEntitiesOfClass(LivingEntity.class, area)) {
-            livingEntity.hurt(DamageSource.GENERIC, 0.5f);
+            livingEntity.hurt(world.damageSources().generic(), 0.5f);
         }
     }
 }

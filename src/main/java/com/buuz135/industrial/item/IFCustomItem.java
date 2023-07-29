@@ -24,6 +24,7 @@ package com.buuz135.industrial.item;
 
 import com.hrznstudio.titanium.api.IRecipeProvider;
 import com.hrznstudio.titanium.item.BasicItem;
+import com.hrznstudio.titanium.tab.TitaniumTab;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.ItemStack;
@@ -32,17 +33,21 @@ import javax.annotation.Nullable;
 
 public abstract class IFCustomItem extends BasicItem implements IRecipeProvider {
 
-    public IFCustomItem(String name, CreativeModeTab group, Properties builder) {
-        super(name, builder.tab(group));
+    private TitaniumTab tab;
+    public IFCustomItem(String name, TitaniumTab tab, Properties builder) {
+        super(name, builder);
+        this.tab = tab;
+        tab.getTabList().add(this);
     }
 
-    public IFCustomItem(String name, CreativeModeTab group) {
-        this(name, group, new Properties());
+
+    public IFCustomItem(String name, TitaniumTab tab) {
+        this(name, tab, new Properties());
     }
 
     @Nullable
     @Override
     public String getCreatorModId(ItemStack itemStack) {
-        return Component.translatable("itemGroup." + this.category.getRecipeFolderName()).getString();
+        return Component.translatable("itemGroup.industrialforegoing_" + this.tab.getResourceLocation().getPath()).getString();
     }
 }

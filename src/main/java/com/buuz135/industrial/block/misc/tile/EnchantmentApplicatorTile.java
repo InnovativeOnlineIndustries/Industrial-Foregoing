@@ -41,8 +41,8 @@ import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraftforge.common.capabilities.ForgeCapabilities;
 import net.minecraftforge.fluids.FluidStack;
-import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
 import net.minecraftforge.fluids.capability.IFluidHandler;
 import net.minecraftforge.registries.ForgeRegistries;
 import org.apache.commons.lang3.tuple.Pair;
@@ -92,8 +92,8 @@ public class EnchantmentApplicatorTile extends IndustrialProcessingTile<Enchantm
         Pair<ItemStack, Integer> output = updateRepairOutput();
         long amount = this.tank.getFluidAmount();
         BlockEntity tileEntity = this.level.getBlockEntity(this.worldPosition.above());
-        if (tileEntity != null && tileEntity.getCapability(CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY).isPresent()) {
-            amount += tileEntity.getCapability(CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY)
+        if (tileEntity != null && tileEntity.getCapability(ForgeCapabilities.FLUID_HANDLER).isPresent()) {
+            amount += tileEntity.getCapability(ForgeCapabilities.FLUID_HANDLER)
                     .filter(iFluidHandler -> iFluidHandler.getTanks() > 0 && TagUtil.hasTag(ForgeRegistries.FLUIDS, iFluidHandler.getFluidInTank(0).getFluid(), IndustrialTags.Fluids.EXPERIENCE))
                     .map(iFluidHandler -> iFluidHandler.getFluidInTank(0).getAmount()).orElse(0);
         }
@@ -121,7 +121,7 @@ public class EnchantmentApplicatorTile extends IndustrialProcessingTile<Enchantm
             AtomicInteger amount = new AtomicInteger(getEssenceConsumed(output.getRight()));
             BlockEntity tileEntity = this.level.getBlockEntity(this.worldPosition.above());
             if (tileEntity != null) {
-                tileEntity.getCapability(CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY).ifPresent(iFluidHandler -> amount.addAndGet(-iFluidHandler.drain(new FluidStack(ModuleCore.ESSENCE.getSourceFluid().get(), amount.get()), IFluidHandler.FluidAction.EXECUTE).getAmount()));
+                tileEntity.getCapability(ForgeCapabilities.FLUID_HANDLER).ifPresent(iFluidHandler -> amount.addAndGet(-iFluidHandler.drain(new FluidStack(ModuleCore.ESSENCE.getSourceFluid().get(), amount.get()), IFluidHandler.FluidAction.EXECUTE).getAmount()));
             }
             if (amount.get() > 0) this.tank.drainForced(amount.get(), IFluidHandler.FluidAction.EXECUTE);
         };

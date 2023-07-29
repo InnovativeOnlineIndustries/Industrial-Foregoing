@@ -1,12 +1,12 @@
 {
   "parent": "block/cube",
   "textures": {
-    "particle": "industrialforegoing:blocks/base/side",
-    "north": "industrialforegoing:blocks/base/side",
-    "west": "industrialforegoing:blocks/base/side",
-    "east": "industrialforegoing:blocks/base/side",
-    "south": "industrialforegoing:blocks/base/side",
-    "up": "industrialforegoing:blocks/base/top",
-    "down": "industrialforegoing:blocks/base/bottom"
+    "particle": "industrialforegoing:block/base/side",
+    "north": "industrialforegoing:block/base/side",
+    "west": "industrialforegoing:block/base/side",
+    "east": "industrialforegoing:block/base/side",
+    "south": "industrialforegoing:block/base/side",
+    "up": "industrialforegoing:block/base/top",
+    "down": "industrialforegoing:block/base/bottom"
   }
 }

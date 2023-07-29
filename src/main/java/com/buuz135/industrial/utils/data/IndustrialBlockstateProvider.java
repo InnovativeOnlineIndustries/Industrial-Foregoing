@@ -46,7 +46,7 @@ public class IndustrialBlockstateProvider extends BlockStateProvider {
     private final NonNullLazy<List<Block>> blocks;
 
     public IndustrialBlockstateProvider(DataGenerator gen, ExistingFileHelper exFileHelper, NonNullLazy<List<Block>> blocks) {
-        super(gen, "industrialforegoing", exFileHelper);
+        super(gen.getPackOutput(), "industrialforegoing", exFileHelper);
         this.helper = exFileHelper;
         this.blocks = blocks;
     }

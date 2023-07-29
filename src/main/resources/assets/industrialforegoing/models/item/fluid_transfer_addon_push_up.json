@@ -1,6 +1,6 @@
 {
   "parent": "industrialforegoing:item/item",
   "textures": {
-    "layer0": "industrialforegoing:items/transfer/fluid_addon_push_up"
+    "layer0": "industrialforegoing:item/transfer/fluid_addon_push_up"
   }
 }

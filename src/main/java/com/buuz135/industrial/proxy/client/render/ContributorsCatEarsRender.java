@@ -26,7 +26,7 @@ import com.buuz135.industrial.proxy.client.ClientProxy;
 import com.buuz135.industrial.utils.Reference;
 import com.hrznstudio.titanium.reward.storage.ClientRewardStorage;
 import com.mojang.blaze3d.vertex.PoseStack;
-import com.mojang.math.Vector3f;
+import com.mojang.math.Axis;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.model.PlayerModel;
 import net.minecraft.client.player.AbstractClientPlayer;
@@ -59,10 +59,10 @@ public class ContributorsCatEarsRender extends RenderLayer<AbstractClientPlayer,
         if (!entitylivingbaseIn.inventory.armor.get(3).isEmpty()) stack.translate(0, -0.02f, 0);
         if (entitylivingbaseIn.isCrouching()) stack.translate(0, 0.27f, 0);
         String type = ClientRewardStorage.REWARD_STORAGE.getRewards().get(entitylivingbaseIn.getUUID()).getEnabled().get(new ResourceLocation(Reference.MOD_ID, "cat_ears"));
-        stack.mulPose(Vector3f.YP.rotationDegrees(90));
-        stack.mulPose(Vector3f.XP.rotationDegrees(180));
-        stack.mulPose(Vector3f.YN.rotationDegrees(netHeadYaw));
-        stack.mulPose(Vector3f.ZN.rotationDegrees(headPitch));
+        stack.mulPose(Axis.YP.rotationDegrees(90));
+        stack.mulPose(Axis.XP.rotationDegrees(180));
+        stack.mulPose(Axis.YN.rotationDegrees(netHeadYaw));
+        stack.mulPose(Axis.ZN.rotationDegrees(headPitch));
         Calendar calendar = Calendar.getInstance();
         if ((calendar.get(Calendar.MONTH) == Calendar.OCTOBER && type.equalsIgnoreCase("normal")) || type.equalsIgnoreCase("spooky")) {
             spookyScarySkeletons(stack, buffer);
@@ -77,7 +77,7 @@ public class ContributorsCatEarsRender extends RenderLayer<AbstractClientPlayer,
     @OnlyIn(Dist.CLIENT)
     public void spookyScarySkeletons(PoseStack stack, MultiBufferSource buffer) {
         BakedModel pumpkin = Minecraft.getInstance().getBlockRenderer().getBlockModel(Minecraft.getInstance().level.getGameTime() % 200 < 100 ? Blocks.CARVED_PUMPKIN.defaultBlockState() : Blocks.JACK_O_LANTERN.defaultBlockState());
-        stack.mulPose(Vector3f.YN.rotationDegrees(90f));
+        stack.mulPose(Axis.YN.rotationDegrees(90f));
         stack.translate(0.08f, 0.485f, -0.1f);
         stack.scale(2 / 16f, 2 / 16f, 2 / 16f);
 
@@ -89,7 +89,7 @@ public class ContributorsCatEarsRender extends RenderLayer<AbstractClientPlayer,
     @OnlyIn(Dist.CLIENT)
     public void itsSnowyHere(PoseStack stack, MultiBufferSource buffer) {
         BakedModel pumpkin = Minecraft.getInstance().getBlockRenderer().getBlockModel(Blocks.CAKE.defaultBlockState());
-        stack.mulPose(Vector3f.YN.rotationDegrees(90f));
+        stack.mulPose(Axis.YN.rotationDegrees(90f));
         stack.translate(0.08f, 0.485f, -0.1f);
         stack.scale(2 / 16f, 2 / 16f, 2 / 16f);
 

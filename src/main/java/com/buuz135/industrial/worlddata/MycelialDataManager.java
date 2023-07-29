@@ -25,6 +25,7 @@ package com.buuz135.industrial.worlddata;
 import com.buuz135.industrial.block.generator.mycelial.IMycelialGeneratorType;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Registry;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
@@ -175,7 +176,7 @@ public class MycelialDataManager extends SavedData {
             lastRun = nbt.getLong("Run");
             lastTracked = nbt.getLong("Track");
             pos = BlockPos.of(nbt.getLong("Pos"));
-            this.world = ResourceKey.create(Registry.DIMENSION_REGISTRY, new ResourceLocation(nbt.getString("RKValue")));
+            this.world = ResourceKey.create(Registries.DIMENSION, new ResourceLocation(nbt.getString("RKValue")));
         }
     }
 }

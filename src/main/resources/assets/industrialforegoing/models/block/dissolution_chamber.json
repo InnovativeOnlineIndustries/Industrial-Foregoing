@@ -1,6 +1,6 @@
 {
   "parent": "industrialforegoing:block/base_block",
   "textures": {
-    "north": "industrialforegoing:blocks/dissolution_chamber_front"
+    "north": "industrialforegoing:block/dissolution_chamber_front"
   }
 }

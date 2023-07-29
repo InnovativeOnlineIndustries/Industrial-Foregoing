@@ -1,9 +1,9 @@
 {
   "parent": "industrialforegoing:block/mycelial_generator",
   "textures": {
-    "north": "industrialforegoing:blocks/generators/generator_front_slimey",
-    "south": "industrialforegoing:blocks/generators/generator_side_slimey",
-    "east": "industrialforegoing:blocks/generators/generator_side_slimey",
-    "west": "industrialforegoing:blocks/generators/generator_side_slimey"
+    "north": "industrialforegoing:block/generators/generator_front_slimey",
+    "south": "industrialforegoing:block/generators/generator_side_slimey",
+    "east": "industrialforegoing:block/generators/generator_side_slimey",
+    "west": "industrialforegoing:block/generators/generator_side_slimey"
   }
 }

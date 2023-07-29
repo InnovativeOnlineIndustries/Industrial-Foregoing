@@ -15,6 +15,7 @@
       ],
       "recipe": {
         "type": "minecraft:crafting_shaped",
+        "category": "misc",
         "key": {
           "B": {
             "item": "minecraft:flower_pot"
@@ -42,7 +43,8 @@
         ],
         "result": {
           "item": "industrialforegoing:plant_sower"
-        }
+        },
+        "show_notification": true
       }
     }
   ]

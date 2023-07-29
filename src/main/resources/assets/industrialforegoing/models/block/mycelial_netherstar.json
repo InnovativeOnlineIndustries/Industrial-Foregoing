@@ -1,9 +1,9 @@
 {
   "parent": "industrialforegoing:block/mycelial_generator",
   "textures": {
-    "north": "industrialforegoing:blocks/generators/generator_front_netherstar",
-    "south": "industrialforegoing:blocks/generators/generator_side_netherstar",
-    "east": "industrialforegoing:blocks/generators/generator_side_netherstar",
-    "west": "industrialforegoing:blocks/generators/generator_side_netherstar"
+    "north": "industrialforegoing:block/generators/generator_front_netherstar",
+    "south": "industrialforegoing:block/generators/generator_side_netherstar",
+    "east": "industrialforegoing:block/generators/generator_side_netherstar",
+    "west": "industrialforegoing:block/generators/generator_side_netherstar"
   }
 }

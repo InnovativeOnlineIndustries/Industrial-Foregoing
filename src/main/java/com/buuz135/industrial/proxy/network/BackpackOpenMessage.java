@@ -62,7 +62,7 @@ public class BackpackOpenMessage extends Message {
                         UUID id = UUID.randomUUID();
                         CompoundTag nbt = stack.getOrCreateTag();
                         nbt.putString("Id", id.toString());
-                        BackpackDataManager.getData(entity.level).createBackPack(id);
+                        BackpackDataManager.getData(entity.level()).createBackPack(id);
                         stack.setTag(nbt);
                     }
                     String id = stack.getTag().getString("Id");
@@ -86,8 +86,8 @@ public class BackpackOpenMessage extends Message {
                                 entity.displayClientMessage(Component.translatable("tooltip.industrialforegoing.backpack.pickup_disabled").withStyle(ChatFormatting.RED), true);
                         }
                     } else {
-                        ItemInfinityBackpack.sync(entity.level, id, entity);
-                        IndustrialForegoing.NETWORK.get().sendTo(new BackpackOpenedMessage(target.getSlot(), target.getName()), entity.connection.getConnection(), NetworkDirection.PLAY_TO_CLIENT);
+                        ItemInfinityBackpack.sync(entity.level(), id, entity);
+                        IndustrialForegoing.NETWORK.get().sendTo(new BackpackOpenedMessage(target.getSlot(), target.getName()), entity.connection.connection, NetworkDirection.PLAY_TO_CLIENT);
                         NetworkHooks.openScreen(entity, ((ItemInfinityBackpack) ModuleTool.INFINITY_BACKPACK.get()), buffer ->
                                 LocatorFactory.writePacketBuffer(buffer, new InventoryStackLocatorInstance(target.getName(), target.getSlot())));
                         return;

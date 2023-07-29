@@ -1,5 +1,9 @@
 {
   "variants": {
+    "subfacing=east": {
+      "model": "industrialforegoing:block/dye_mixer",
+      "y": 90
+    },
     "subfacing=north": {
       "model": "industrialforegoing:block/dye_mixer"
     },
@@ -10,10 +14,6 @@
     "subfacing=west": {
       "model": "industrialforegoing:block/dye_mixer",
       "y": 270
-    },
-    "subfacing=east": {
-      "model": "industrialforegoing:block/dye_mixer",
-      "y": 90
     }
   }
 }

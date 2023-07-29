@@ -15,6 +15,7 @@
       ],
       "recipe": {
         "type": "minecraft:crafting_shaped",
+        "category": "misc",
         "key": {
           "B": {
             "item": "minecraft:water_bucket"
@@ -42,7 +43,8 @@
         ],
         "result": {
           "item": "industrialforegoing:water_condensator"
-        }
+        },
+        "show_notification": true
       }
     }
   ]

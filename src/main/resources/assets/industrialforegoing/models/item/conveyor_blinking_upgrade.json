@@ -1,6 +1,6 @@
 {
   "parent": "industrialforegoing:item/item",
   "textures": {
-    "layer0": "industrialforegoing:items/conveyor_blinking_upgrade"
+    "layer0": "industrialforegoing:item/conveyor_blinking_upgrade"
   }
 }

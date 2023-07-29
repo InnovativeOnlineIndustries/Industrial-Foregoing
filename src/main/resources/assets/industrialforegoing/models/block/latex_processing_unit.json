@@ -1,6 +1,6 @@
 {
   "parent": "industrialforegoing:block/base_block",
   "textures": {
-    "north": "industrialforegoing:blocks/latex_processing_unit_front"
+    "north": "industrialforegoing:block/latex_processing_unit_front"
   }
 }

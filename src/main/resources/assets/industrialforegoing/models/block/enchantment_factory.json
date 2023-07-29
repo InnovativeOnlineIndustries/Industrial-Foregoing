@@ -1,10 +1,10 @@
 {
   "parent": "industrialforegoing:block/base_block",
   "textures": {
-    "north": "industrialforegoing:blocks/enchantment_invoker_front",
-    "south": "industrialforegoing:blocks/enchantment_invoker_front",
-    "west": "industrialforegoing:blocks/enchantment_invoker_side",
-    "east": "industrialforegoing:blocks/enchantment_invoker_side",
-    "up": "industrialforegoing:blocks/enchantment_invoker_top"
+    "north": "industrialforegoing:block/enchantment_invoker_front",
+    "south": "industrialforegoing:block/enchantment_invoker_front",
+    "west": "industrialforegoing:block/enchantment_invoker_side",
+    "east": "industrialforegoing:block/enchantment_invoker_side",
+    "up": "industrialforegoing:block/enchantment_invoker_top"
   }
 }

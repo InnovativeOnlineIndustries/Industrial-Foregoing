@@ -1,16 +1,19 @@
 {
   "variants": {
+    "subfacing=east": {
+      "model": "industrialforegoing:block/plant_sower",
+      "y": 90
+    },
     "subfacing=north": {
       "model": "industrialforegoing:block/plant_sower"
     },
     "subfacing=south": {
-      "model": "industrialforegoing:block/plant_sower"
+      "model": "industrialforegoing:block/plant_sower",
+      "y": 180
     },
     "subfacing=west": {
-      "model": "industrialforegoing:block/plant_sower"
-    },
-    "subfacing=east": {
-      "model": "industrialforegoing:block/plant_sower"
+      "model": "industrialforegoing:block/plant_sower",
+      "y": 270
     }
   }
 }

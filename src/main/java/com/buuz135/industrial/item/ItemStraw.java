@@ -26,6 +26,7 @@ import com.buuz135.industrial.api.straw.StrawHandler;
 import com.buuz135.industrial.utils.IndustrialTags;
 import com.buuz135.industrial.utils.StrawUtils;
 import com.hrznstudio.titanium.recipe.generator.TitaniumShapedRecipeBuilder;
+import com.hrznstudio.titanium.tab.TitaniumTab;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
 import net.minecraft.data.recipes.FinishedRecipe;
@@ -52,7 +53,6 @@ import net.minecraft.world.phys.HitResult;
 import net.minecraftforge.common.capabilities.ForgeCapabilities;
 import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.fluids.FluidStack;
-import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
 import net.minecraftforge.fluids.capability.IFluidHandler;
 
 import javax.annotation.Nonnull;
@@ -65,7 +65,7 @@ import java.util.function.Consumer;
 
 public class ItemStraw extends IFCustomItem {
 
-    public ItemStraw(CreativeModeTab group) {
+    public ItemStraw(TitaniumTab group) {
         super("straw", group, new Properties().stacksTo(1));
     }
 
@@ -95,7 +95,7 @@ public class ItemStraw extends IFCustomItem {
                 }
                 BlockEntity tile = world.getBlockEntity(pos);
                 if (tile != null) {
-                    LazyOptional<IFluidHandler> fluidhandlercap = tile.getCapability(CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY);
+                    LazyOptional<IFluidHandler> fluidhandlercap = tile.getCapability(ForgeCapabilities.FLUID_HANDLER);
                     if (fluidhandlercap.isPresent()) {
                         IFluidHandler handler = fluidhandlercap.orElseThrow(RuntimeException::new);
                         int tanks = handler.getTanks();
@@ -139,7 +139,7 @@ public class ItemStraw extends IFCustomItem {
             }
             BlockEntity tile = worldIn.getBlockEntity(pos);
             if (tile != null) {
-                LazyOptional<IFluidHandler> fluidhandlercap = tile.getCapability(CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY);
+                LazyOptional<IFluidHandler> fluidhandlercap = tile.getCapability(ForgeCapabilities.FLUID_HANDLER);
                 if (fluidhandlercap.isPresent()) {
                     IFluidHandler handler = fluidhandlercap.orElseThrow(RuntimeException::new);
                     int tanks = handler.getTanks();

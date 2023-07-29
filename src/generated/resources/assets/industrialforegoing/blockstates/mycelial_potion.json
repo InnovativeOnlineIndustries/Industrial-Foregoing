@@ -1,5 +1,9 @@
 {
   "variants": {
+    "subfacing=east": {
+      "model": "industrialforegoing:block/mycelial_potion",
+      "y": 90
+    },
     "subfacing=north": {
       "model": "industrialforegoing:block/mycelial_potion"
     },
@@ -10,10 +14,6 @@
     "subfacing=west": {
       "model": "industrialforegoing:block/mycelial_potion",
       "y": 270
-    },
-    "subfacing=east": {
-      "model": "industrialforegoing:block/mycelial_potion",
-      "y": 90
     }
   }
 }

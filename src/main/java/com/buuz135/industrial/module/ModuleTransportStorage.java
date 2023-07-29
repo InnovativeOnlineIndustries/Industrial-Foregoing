@@ -25,6 +25,7 @@ package com.buuz135.industrial.module;
 import com.buuz135.industrial.IndustrialForegoing;
 import com.buuz135.industrial.api.conveyor.ConveyorUpgradeFactory;
 import com.buuz135.industrial.api.transporter.TransporterTypeFactory;
+import com.buuz135.industrial.block.IndustrialBlockItem;
 import com.buuz135.industrial.block.transportstorage.*;
 import com.buuz135.industrial.block.transportstorage.conveyor.*;
 import com.buuz135.industrial.block.transportstorage.transporter.TransporterFluidType;
@@ -41,7 +42,8 @@ import com.buuz135.industrial.proxy.client.model.TransporterBlockModel;
 import com.buuz135.industrial.utils.Reference;
 import com.hrznstudio.titanium.event.handler.EventManager;
 import com.hrznstudio.titanium.module.DeferredRegistryHelper;
-import com.hrznstudio.titanium.tab.AdvancedTitaniumTab;
+import com.hrznstudio.titanium.module.ModuleController;
+import com.hrznstudio.titanium.tab.TitaniumTab;
 import com.mojang.math.Transformation;
 import net.minecraft.client.gui.screens.MenuScreens;
 import net.minecraft.client.renderer.texture.TextureAtlas;
@@ -73,7 +75,7 @@ import java.util.HashMap;
 
 public class ModuleTransportStorage implements IModule {
 
-    public static AdvancedTitaniumTab TAB_TRANSPORT = new AdvancedTitaniumTab(Reference.MOD_ID + "_transport", true);
+    public static TitaniumTab TAB_TRANSPORT = new TitaniumTab(new ResourceLocation(Reference.MOD_ID,  "transport"));
 
     public static ConveyorUpgradeFactory upgrade_extraction = new ConveyorExtractionUpgrade.Factory();
     public static ConveyorUpgradeFactory upgrade_insertion = new ConveyorInsertionUpgrade.Factory();
@@ -83,34 +85,33 @@ public class ModuleTransportStorage implements IModule {
     public static ConveyorUpgradeFactory upgrade_blinking = new ConveyorBlinkingUpgrade.Factory();
     public static ConveyorUpgradeFactory upgrade_splitting = new ConveyorSplittingUpgrade.Factory();
 
-    public static Pair<RegistryObject<Block>, RegistryObject<BlockEntityType<?>>> CONVEYOR = IndustrialForegoing.INSTANCE.getRegistries().registerBlockWithTile("conveyor", () -> new ConveyorBlock(TAB_TRANSPORT));
+    public static Pair<RegistryObject<Block>, RegistryObject<BlockEntityType<?>>> CONVEYOR = IndustrialForegoing.INSTANCE.getRegistries().registerBlockWithTileItem("conveyor", () -> new ConveyorBlock(TAB_TRANSPORT), blockRegistryObject -> () -> new IndustrialBlockItem(blockRegistryObject.get(), TAB_TRANSPORT), TAB_TRANSPORT);
     public static HashMap<ResourceLocation, BakedModel> CONVEYOR_UPGRADES_CACHE = new HashMap<>();
 
-    public static Pair<RegistryObject<Block>, RegistryObject<BlockEntityType<?>>> BLACK_HOLE_UNIT_COMMON = IndustrialForegoing.INSTANCE.getRegistries().registerBlockWithTileItem(Rarity.COMMON.name().toLowerCase() + "_black_hole_unit", () -> new BlackHoleUnitBlock(Rarity.COMMON), blockRegistryObject -> () -> new BlackHoleUnitBlock.BlackHoleUnitItem(blockRegistryObject.get(), new Item.Properties().tab(TAB_TRANSPORT), Rarity.COMMON));
-    public static Pair<RegistryObject<Block>, RegistryObject<BlockEntityType<?>>> BLACK_HOLE_UNIT_PITY = IndustrialForegoing.INSTANCE.getRegistries().registerBlockWithTileItem(ModuleCore.PITY_RARITY.name().toLowerCase() + "_black_hole_unit", () -> new BlackHoleUnitBlock(ModuleCore.PITY_RARITY), blockRegistryObject -> () -> new BlackHoleUnitBlock.BlackHoleUnitItem(blockRegistryObject.get(), new Item.Properties().tab(TAB_TRANSPORT), ModuleCore.PITY_RARITY));
-    public static Pair<RegistryObject<Block>, RegistryObject<BlockEntityType<?>>> BLACK_HOLE_UNIT_SIMPLE = IndustrialForegoing.INSTANCE.getRegistries().registerBlockWithTileItem(ModuleCore.SIMPLE_RARITY.name().toLowerCase() + "_black_hole_unit", () -> new BlackHoleUnitBlock(ModuleCore.SIMPLE_RARITY), blockRegistryObject -> () -> new BlackHoleUnitBlock.BlackHoleUnitItem(blockRegistryObject.get(), new Item.Properties().tab(TAB_TRANSPORT), ModuleCore.SIMPLE_RARITY));
-    public static Pair<RegistryObject<Block>, RegistryObject<BlockEntityType<?>>> BLACK_HOLE_UNIT_ADVANCED = IndustrialForegoing.INSTANCE.getRegistries().registerBlockWithTileItem(ModuleCore.ADVANCED_RARITY.name().toLowerCase() + "_black_hole_unit", () -> new BlackHoleUnitBlock(ModuleCore.ADVANCED_RARITY), blockRegistryObject -> () -> new BlackHoleUnitBlock.BlackHoleUnitItem(blockRegistryObject.get(), new Item.Properties().tab(TAB_TRANSPORT), ModuleCore.ADVANCED_RARITY));
-    public static Pair<RegistryObject<Block>, RegistryObject<BlockEntityType<?>>> BLACK_HOLE_UNIT_SUPREME = IndustrialForegoing.INSTANCE.getRegistries().registerBlockWithTileItem(ModuleCore.SUPREME_RARITY.name().toLowerCase() + "_black_hole_unit", () -> new BlackHoleUnitBlock(ModuleCore.SUPREME_RARITY), blockRegistryObject -> () -> new BlackHoleUnitBlock.BlackHoleUnitItem(blockRegistryObject.get(), new Item.Properties().tab(TAB_TRANSPORT), ModuleCore.SUPREME_RARITY));
+    public static Pair<RegistryObject<Block>, RegistryObject<BlockEntityType<?>>> BLACK_HOLE_UNIT_COMMON = IndustrialForegoing.INSTANCE.getRegistries().registerBlockWithTileItem(Rarity.COMMON.name().toLowerCase() + "_black_hole_unit", () -> new BlackHoleUnitBlock(Rarity.COMMON), blockRegistryObject -> () -> new BlackHoleUnitBlock.BlackHoleUnitItem(blockRegistryObject.get(), new Item.Properties(), Rarity.COMMON), TAB_TRANSPORT);
+    public static Pair<RegistryObject<Block>, RegistryObject<BlockEntityType<?>>> BLACK_HOLE_UNIT_PITY = IndustrialForegoing.INSTANCE.getRegistries().registerBlockWithTileItem(ModuleCore.PITY_RARITY.name().toLowerCase() + "_black_hole_unit", () -> new BlackHoleUnitBlock(ModuleCore.PITY_RARITY), blockRegistryObject -> () -> new BlackHoleUnitBlock.BlackHoleUnitItem(blockRegistryObject.get(), new Item.Properties(), ModuleCore.PITY_RARITY), TAB_TRANSPORT);
+    public static Pair<RegistryObject<Block>, RegistryObject<BlockEntityType<?>>> BLACK_HOLE_UNIT_SIMPLE = IndustrialForegoing.INSTANCE.getRegistries().registerBlockWithTileItem(ModuleCore.SIMPLE_RARITY.name().toLowerCase() + "_black_hole_unit", () -> new BlackHoleUnitBlock(ModuleCore.SIMPLE_RARITY), blockRegistryObject -> () -> new BlackHoleUnitBlock.BlackHoleUnitItem(blockRegistryObject.get(), new Item.Properties(), ModuleCore.SIMPLE_RARITY), TAB_TRANSPORT);
+    public static Pair<RegistryObject<Block>, RegistryObject<BlockEntityType<?>>> BLACK_HOLE_UNIT_ADVANCED = IndustrialForegoing.INSTANCE.getRegistries().registerBlockWithTileItem(ModuleCore.ADVANCED_RARITY.name().toLowerCase() + "_black_hole_unit", () -> new BlackHoleUnitBlock(ModuleCore.ADVANCED_RARITY), blockRegistryObject -> () -> new BlackHoleUnitBlock.BlackHoleUnitItem(blockRegistryObject.get(), new Item.Properties(), ModuleCore.ADVANCED_RARITY), TAB_TRANSPORT);
+    public static Pair<RegistryObject<Block>, RegistryObject<BlockEntityType<?>>> BLACK_HOLE_UNIT_SUPREME = IndustrialForegoing.INSTANCE.getRegistries().registerBlockWithTileItem(ModuleCore.SUPREME_RARITY.name().toLowerCase() + "_black_hole_unit", () -> new BlackHoleUnitBlock(ModuleCore.SUPREME_RARITY), blockRegistryObject -> () -> new BlackHoleUnitBlock.BlackHoleUnitItem(blockRegistryObject.get(), new Item.Properties(), ModuleCore.SUPREME_RARITY), TAB_TRANSPORT);
 
-    public static Pair<RegistryObject<Block>, RegistryObject<BlockEntityType<?>>> BLACK_HOLE_TANK_COMMON = IndustrialForegoing.INSTANCE.getRegistries().registerBlockWithTileItem(Rarity.COMMON.name().toLowerCase() + "_black_hole_tank", () -> new BlackHoleTankBlock(Rarity.COMMON), blockRegistryObject -> () -> new BlackHoleTankBlock.BlackHoleTankItem(blockRegistryObject.get(), new Item.Properties().tab(TAB_TRANSPORT), Rarity.COMMON));
-    public static Pair<RegistryObject<Block>, RegistryObject<BlockEntityType<?>>> BLACK_HOLE_TANK_PITY = IndustrialForegoing.INSTANCE.getRegistries().registerBlockWithTileItem(ModuleCore.PITY_RARITY.name().toLowerCase() + "_black_hole_tank", () -> new BlackHoleTankBlock(ModuleCore.PITY_RARITY), blockRegistryObject -> () -> new BlackHoleTankBlock.BlackHoleTankItem(blockRegistryObject.get(), new Item.Properties().tab(TAB_TRANSPORT), ModuleCore.PITY_RARITY));
-    public static Pair<RegistryObject<Block>, RegistryObject<BlockEntityType<?>>> BLACK_HOLE_TANK_SIMPLE = IndustrialForegoing.INSTANCE.getRegistries().registerBlockWithTileItem(ModuleCore.SIMPLE_RARITY.name().toLowerCase() + "_black_hole_tank", () -> new BlackHoleTankBlock(ModuleCore.SIMPLE_RARITY), blockRegistryObject -> () -> new BlackHoleTankBlock.BlackHoleTankItem(blockRegistryObject.get(), new Item.Properties().tab(TAB_TRANSPORT), ModuleCore.SIMPLE_RARITY));
-    public static Pair<RegistryObject<Block>, RegistryObject<BlockEntityType<?>>> BLACK_HOLE_TANK_ADVANCED = IndustrialForegoing.INSTANCE.getRegistries().registerBlockWithTileItem(ModuleCore.ADVANCED_RARITY.name().toLowerCase() + "_black_hole_tank", () -> new BlackHoleTankBlock(ModuleCore.ADVANCED_RARITY), blockRegistryObject -> () -> new BlackHoleTankBlock.BlackHoleTankItem(blockRegistryObject.get(), new Item.Properties().tab(TAB_TRANSPORT), ModuleCore.ADVANCED_RARITY));
-    public static Pair<RegistryObject<Block>, RegistryObject<BlockEntityType<?>>> BLACK_HOLE_TANK_SUPREME = IndustrialForegoing.INSTANCE.getRegistries().registerBlockWithTileItem(ModuleCore.SUPREME_RARITY.name().toLowerCase() + "_black_hole_tank", () -> new BlackHoleTankBlock(ModuleCore.SUPREME_RARITY), blockRegistryObject -> () -> new BlackHoleTankBlock.BlackHoleTankItem(blockRegistryObject.get(), new Item.Properties().tab(TAB_TRANSPORT), ModuleCore.SUPREME_RARITY));
+    public static Pair<RegistryObject<Block>, RegistryObject<BlockEntityType<?>>> BLACK_HOLE_TANK_COMMON = IndustrialForegoing.INSTANCE.getRegistries().registerBlockWithTileItem(Rarity.COMMON.name().toLowerCase() + "_black_hole_tank", () -> new BlackHoleTankBlock(Rarity.COMMON), blockRegistryObject -> () -> new BlackHoleTankBlock.BlackHoleTankItem(blockRegistryObject.get(), new Item.Properties(), Rarity.COMMON, TAB_TRANSPORT), TAB_TRANSPORT);
+    public static Pair<RegistryObject<Block>, RegistryObject<BlockEntityType<?>>> BLACK_HOLE_TANK_PITY = IndustrialForegoing.INSTANCE.getRegistries().registerBlockWithTileItem(ModuleCore.PITY_RARITY.name().toLowerCase() + "_black_hole_tank", () -> new BlackHoleTankBlock(ModuleCore.PITY_RARITY), blockRegistryObject -> () -> new BlackHoleTankBlock.BlackHoleTankItem(blockRegistryObject.get(), new Item.Properties(), ModuleCore.PITY_RARITY, TAB_TRANSPORT), TAB_TRANSPORT);
+    public static Pair<RegistryObject<Block>, RegistryObject<BlockEntityType<?>>> BLACK_HOLE_TANK_SIMPLE = IndustrialForegoing.INSTANCE.getRegistries().registerBlockWithTileItem(ModuleCore.SIMPLE_RARITY.name().toLowerCase() + "_black_hole_tank", () -> new BlackHoleTankBlock(ModuleCore.SIMPLE_RARITY), blockRegistryObject -> () -> new BlackHoleTankBlock.BlackHoleTankItem(blockRegistryObject.get(), new Item.Properties(), ModuleCore.SIMPLE_RARITY, TAB_TRANSPORT), TAB_TRANSPORT);
+    public static Pair<RegistryObject<Block>, RegistryObject<BlockEntityType<?>>> BLACK_HOLE_TANK_ADVANCED = IndustrialForegoing.INSTANCE.getRegistries().registerBlockWithTileItem(ModuleCore.ADVANCED_RARITY.name().toLowerCase() + "_black_hole_tank", () -> new BlackHoleTankBlock(ModuleCore.ADVANCED_RARITY), blockRegistryObject -> () -> new BlackHoleTankBlock.BlackHoleTankItem(blockRegistryObject.get(), new Item.Properties(), ModuleCore.ADVANCED_RARITY, TAB_TRANSPORT), TAB_TRANSPORT);
+    public static Pair<RegistryObject<Block>, RegistryObject<BlockEntityType<?>>> BLACK_HOLE_TANK_SUPREME = IndustrialForegoing.INSTANCE.getRegistries().registerBlockWithTileItem(ModuleCore.SUPREME_RARITY.name().toLowerCase() + "_black_hole_tank", () -> new BlackHoleTankBlock(ModuleCore.SUPREME_RARITY), blockRegistryObject -> () -> new BlackHoleTankBlock.BlackHoleTankItem(blockRegistryObject.get(), new Item.Properties(), ModuleCore.SUPREME_RARITY, TAB_TRANSPORT), TAB_TRANSPORT);
 
-    public static Pair<RegistryObject<Block>, RegistryObject<BlockEntityType<?>>> BLACK_HOLE_CONTROLLER = IndustrialForegoing.INSTANCE.getRegistries().registerBlockWithTile("black_hole_controller", () -> new BlackHoleControllerBlock());
+    public static Pair<RegistryObject<Block>, RegistryObject<BlockEntityType<?>>> BLACK_HOLE_CONTROLLER = IndustrialForegoing.INSTANCE.getRegistries().registerBlockWithTileItem("black_hole_controller", () -> new BlackHoleControllerBlock(), blockRegistryObject -> () -> new IndustrialBlockItem(blockRegistryObject.get(), TAB_TRANSPORT), TAB_TRANSPORT);
 
 
     public static TransporterTypeFactory ITEM_TRANSPORTER = new TransporterItemType.Factory();
     public static TransporterTypeFactory FLUID_TRANSPORTER = new TransporterFluidType.Factory();
     public static TransporterTypeFactory WORLD_TRANSPORTER = new TransporterWorldType.Factory();
 
-    public static Pair<RegistryObject<Block>, RegistryObject<BlockEntityType<?>>> TRANSPORTER = IndustrialForegoing.INSTANCE.getRegistries().registerBlockWithTile("transporter", () -> new TransporterBlock(TAB_TRANSPORT));
+    public static Pair<RegistryObject<Block>, RegistryObject<BlockEntityType<?>>> TRANSPORTER = IndustrialForegoing.INSTANCE.getRegistries().registerBlockWithTileItem("transporter", () -> new TransporterBlock(), blockRegistryObject -> () -> new IndustrialBlockItem(blockRegistryObject.get(), TAB_TRANSPORT), TAB_TRANSPORT);
     public static HashMap<ResourceLocation, BakedModel> TRANSPORTER_CACHE = new HashMap<>();
 
     @Override
     public void generateFeatures(DeferredRegistryHelper registryHelper) {
-        TAB_TRANSPORT.addIconStack(() -> new ItemStack(CONVEYOR.getLeft().orElse(Blocks.STONE)));
         registryHelper.registerGeneric(ForgeRegistries.MENU_TYPES.getRegistryKey(), "conveyor", () -> (MenuType) IForgeMenuType.create(ContainerConveyor::new));
         ConveyorUpgradeFactory.FACTORIES.forEach(conveyorUpgradeFactory -> registryHelper.registerGeneric(ForgeRegistries.ITEMS.getRegistryKey(), "conveyor_" + conveyorUpgradeFactory.getName() + "_upgrade", () -> new ItemConveyorUpgrade(conveyorUpgradeFactory, TAB_TRANSPORT)));
         registryHelper.registerGeneric(ForgeRegistries.MENU_TYPES.getRegistryKey(), "transporter", () -> (MenuType) IForgeMenuType.create(ContainerTransporter::new));
@@ -123,8 +124,8 @@ public class ModuleTransportStorage implements IModule {
     private void conveyorBake(ModelEvent.BakingCompleted event) {
         for (ResourceLocation resourceLocation : event.getModels().keySet()) {
             if (resourceLocation.getNamespace().equals(Reference.MOD_ID)) {
-                if (resourceLocation.getPath().contains("conveyor") && !resourceLocation.getPath().contains("upgrade"))
-                    event.getModels().put(resourceLocation, new ConveyorBlockModel(event.getModels().get(resourceLocation)));
+                if (resourceLocation.getPath().contains("conveyor") && !resourceLocation.getPath().contains("upgrade")){}
+                    //event.getModels().put(resourceLocation, new ConveyorBlockModel(event.getModels().get(resourceLocation)));
             }
         }
         for (ConveyorUpgradeFactory conveyorUpgradeFactory : ConveyorUpgradeFactory.FACTORIES) {
@@ -133,7 +134,7 @@ public class ModuleTransportStorage implements IModule {
                     try {
                         ResourceLocation resourceLocation = conveyorUpgradeFactory.getModel(upgradeFacing, conveyorFacing);
                         UnbakedModel unbakedModel = event.getModelBakery().getModel(resourceLocation);
-                        CONVEYOR_UPGRADES_CACHE.put(resourceLocation, unbakedModel.bake(event.getModelBakery(), Material::sprite, new SimpleModelState(Transformation.identity()), resourceLocation));
+                        //TODO CONVEYOR_UPGRADES_CACHE.put(resourceLocation, unbakedModel.bake(event.getModelBakery(), Material::sprite, new SimpleModelState(Transformation.identity()), resourceLocation));
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
@@ -142,18 +143,18 @@ public class ModuleTransportStorage implements IModule {
         }
     }
 
-    @OnlyIn(Dist.CLIENT)
+    /*@OnlyIn(Dist.CLIENT) TODO 1.20
     private void textureStitch(TextureStitchEvent.Pre pre) {
         if (pre.getAtlas().location().equals(TextureAtlas.LOCATION_BLOCKS))
             ConveyorUpgradeFactory.FACTORIES.forEach(conveyorUpgradeFactory -> conveyorUpgradeFactory.getTextures().forEach(pre::addSprite));
-    }
+    }*/
 
     @OnlyIn(Dist.CLIENT)
     private void transporterBake(ModelEvent.BakingCompleted event) {
         for (ResourceLocation resourceLocation : event.getModels().keySet()) {
             if (resourceLocation.getNamespace().equals(Reference.MOD_ID)) {
-                if (resourceLocation.getPath().contains("transporter") && !resourceLocation.getPath().contains("transporters/") && !resourceLocation.getPath().contains("type"))
-                    event.getModels().put(resourceLocation, new TransporterBlockModel(event.getModels().get(resourceLocation)));
+                if (resourceLocation.getPath().contains("transporter") && !resourceLocation.getPath().contains("transporters/") && !resourceLocation.getPath().contains("type")){}
+                    //event.getModels().put(resourceLocation, new TransporterBlockModel(event.getModels().get(resourceLocation)));
             }
         }
         for (TransporterTypeFactory transporterTypeFactory : TransporterTypeFactory.FACTORIES) {
@@ -163,7 +164,7 @@ public class ModuleTransportStorage implements IModule {
                     try {
                         ResourceLocation resourceLocation = transporterTypeFactory.getModel(upgradeFacing, actions);
                         UnbakedModel unbakedModel = event.getModelBakery().getModel(resourceLocation);
-                        TRANSPORTER_CACHE.put(resourceLocation, unbakedModel.bake(event.getModelBakery(), Material::sprite, new SimpleModelState(Transformation.identity()), resourceLocation));
+                        //TODO 1.20 TRANSPORTER_CACHE.put(resourceLocation, unbakedModel.bake(event.getModelBakery(), Material::sprite, new SimpleModelState(Transformation.identity()), resourceLocation));
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
@@ -171,18 +172,18 @@ public class ModuleTransportStorage implements IModule {
             }
             for (ResourceLocation resourceLocation : event.getModels().keySet()) {
                 if (resourceLocation.getNamespace().equals(Reference.MOD_ID)) {
-                    if (resourceLocation.toString().equals(itemRL))
-                        event.getModels().put(resourceLocation, TRANSPORTER_CACHE.get(transporterTypeFactory.getItemModel()));
+                    if (resourceLocation.toString().equals(itemRL)){}
+                        //event.getModels().put(resourceLocation, TRANSPORTER_CACHE.get(transporterTypeFactory.getItemModel()));
                 }
             }
         }
     }
 
-    @OnlyIn(Dist.CLIENT)
+    /*@OnlyIn(Dist.CLIENT)TODO 1.20
     private void transporterTextureStitch(TextureStitchEvent.Pre pre) {
         if (pre.getAtlas().location().equals(TextureAtlas.LOCATION_BLOCKS))
             TransporterTypeFactory.FACTORIES.forEach(transporterTypeFactory -> transporterTypeFactory.getTextures().forEach(pre::addSprite));
-    }
+    }*/
 
     @OnlyIn(Dist.CLIENT)
     private void onClientSetupConveyor(FMLClientSetupEvent event) {
@@ -198,9 +199,9 @@ public class ModuleTransportStorage implements IModule {
     private void onClient() {
         EventManager.mod(FMLClientSetupEvent.class).process(this::onClientSetupConveyor).subscribe();
         EventManager.mod(ModelEvent.BakingCompleted.class).process(this::conveyorBake).subscribe();
-        EventManager.mod(TextureStitchEvent.Pre.class).process(this::textureStitch).subscribe();
+        //EventManager.mod(TextureStitchEvent.Pre.class).process(this::textureStitch).subscribe();
         EventManager.mod(ModelEvent.BakingCompleted.class).process(this::transporterBake).subscribe();
-        EventManager.mod(TextureStitchEvent.Pre.class).process(this::transporterTextureStitch).subscribe();
+        //EventManager.mod(TextureStitchEvent.Pre.class).process(this::transporterTextureStitch).subscribe();
         EventManager.mod(FMLClientSetupEvent.class).process(this::onClientSetupTransporter).subscribe();
     }
 }

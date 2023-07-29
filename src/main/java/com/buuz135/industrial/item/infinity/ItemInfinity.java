@@ -28,7 +28,9 @@ import com.buuz135.industrial.proxy.CommonProxy;
 import com.buuz135.industrial.proxy.network.BackpackOpenedMessage;
 import com.google.common.collect.Multimap;
 import com.google.common.collect.MultimapBuilder;
+import com.hrznstudio.titanium.Titanium;
 import com.hrznstudio.titanium.api.IFactory;
+import com.hrznstudio.titanium.api.ISpecialCreativeTabItem;
 import com.hrznstudio.titanium.api.client.AssetTypes;
 import com.hrznstudio.titanium.api.client.IScreenAddon;
 import com.hrznstudio.titanium.capability.FluidHandlerScreenProviderItemStack;
@@ -42,6 +44,7 @@ import com.hrznstudio.titanium.network.IButtonHandler;
 import com.hrznstudio.titanium.network.locator.LocatorFactory;
 import com.hrznstudio.titanium.network.locator.PlayerInventoryFinder;
 import com.hrznstudio.titanium.network.locator.instance.HeldStackLocatorInstance;
+import com.hrznstudio.titanium.tab.TitaniumTab;
 import com.hrznstudio.titanium.util.FacingUtil;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.gui.screens.Screen;
@@ -74,6 +77,7 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.common.capabilities.ICapabilityProvider;
+import net.minecraftforge.event.BuildCreativeModeTabContentsEvent;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fml.DistExecutor;
 import net.minecraftforge.network.NetworkDirection;
@@ -88,14 +92,14 @@ import java.util.function.BiFunction;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
 
-public class ItemInfinity extends IFCustomItem implements MenuProvider, IButtonHandler, IInfinityDrillScreenAddons {
+public class ItemInfinity extends IFCustomItem implements MenuProvider, IButtonHandler, IInfinityDrillScreenAddons, ISpecialCreativeTabItem {
 
     private final int powerConsumption;
     private final int biofuelConsumption;
     private final boolean usesDepth;
     private boolean usesArea;
 
-    public ItemInfinity(String name, CreativeModeTab group, Properties builder, int powerConsumption, int biofuelConsumption, boolean usesDepth) {
+    public ItemInfinity(String name, TitaniumTab group, Properties builder, int powerConsumption, int biofuelConsumption, boolean usesDepth) {
         super(name, group, builder);
         this.powerConsumption = powerConsumption;
         this.biofuelConsumption = biofuelConsumption;
@@ -149,13 +153,11 @@ public class ItemInfinity extends IFCustomItem implements MenuProvider, IButtonH
     }
 
     @Override
-    public void fillItemCategory(CreativeModeTab group, NonNullList<ItemStack> items) {
-        if (allowedIn(group)) {
-            for (InfinityTier value : InfinityTier.values()) {
-                items.add(createStack(value.getPowerNeeded(), 0, false));
-            }
-            items.add(createStack(InfinityTier.ARTIFACT.getPowerNeeded(), 1_000_000, true));
+    public void addToTab(BuildCreativeModeTabContentsEvent event) {
+        for (InfinityTier value : InfinityTier.values()) {
+            event.accept(createStack(value.getPowerNeeded(), 0, false));
         }
+        event.accept(createStack(InfinityTier.ARTIFACT.getPowerNeeded(), 1_000_000, true));
     }
 
     public ItemStack createStack(long power, int fuel, boolean special) {
@@ -328,7 +330,7 @@ public class ItemInfinity extends IFCustomItem implements MenuProvider, IButtonH
     public InteractionResultHolder<ItemStack> use(Level worldIn, Player player, InteractionHand handIn) {
         if (player.isCrouching()) {
             if (player instanceof ServerPlayer) {
-                IndustrialForegoing.NETWORK.get().sendTo(new BackpackOpenedMessage(player.inventory.selected, PlayerInventoryFinder.MAIN), ((ServerPlayer) player).connection.getConnection(), NetworkDirection.PLAY_TO_CLIENT);
+                IndustrialForegoing.NETWORK.get().sendTo(new BackpackOpenedMessage(player.inventory.selected, PlayerInventoryFinder.MAIN), ((ServerPlayer) player).connection.connection, NetworkDirection.PLAY_TO_CLIENT);
                 NetworkHooks.openScreen((ServerPlayer) player, this, buffer ->
                         LocatorFactory.writePacketBuffer(buffer, new HeldStackLocatorInstance(handIn == InteractionHand.MAIN_HAND)));
             }

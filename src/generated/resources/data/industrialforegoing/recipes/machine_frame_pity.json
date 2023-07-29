@@ -15,12 +15,13 @@
       ],
       "recipe": {
         "type": "minecraft:crafting_shaped",
+        "category": "misc",
         "key": {
           "I": {
             "tag": "forge:ingots/iron"
           },
           "R": {
-            "tag": "forge:storage_blocks/redstone"
+            "tag": "forge:storage_block/redstone"
           },
           "W": {
             "tag": "minecraft:logs"
@@ -33,7 +34,8 @@
         ],
         "result": {
           "item": "industrialforegoing:machine_frame_pity"
-        }
+        },
+        "show_notification": true
       }
     }
   ]

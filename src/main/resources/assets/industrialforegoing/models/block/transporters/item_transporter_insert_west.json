@@ -1,9 +1,9 @@
 {
   "credit": "Made with Blockbench",
   "textures": {
-    "0": "industrialforegoing:blocks/transporters/item",
-    "1": "industrialforegoing:blocks/base/bottom",
-    "particle": "industrialforegoing:blocks/transporters/item"
+    "0": "industrialforegoing:block/transporters/item",
+    "1": "industrialforegoing:block/base/bottom",
+    "particle": "industrialforegoing:block/transporters/item"
   },
   "elements": [
     {

@@ -1,9 +1,9 @@
 {
   "parent": "industrialforegoing:block/base_block",
   "textures": {
-    "north": "industrialforegoing:blocks/enchantment_extractor_front",
-    "west": "industrialforegoing:blocks/enchantment_extractor_side",
-    "east": "industrialforegoing:blocks/enchantment_extractor_side",
-    "up": "industrialforegoing:blocks/enchantment_extractor_top"
+    "north": "industrialforegoing:block/enchantment_extractor_front",
+    "west": "industrialforegoing:block/enchantment_extractor_side",
+    "east": "industrialforegoing:block/enchantment_extractor_side",
+    "up": "industrialforegoing:block/enchantment_extractor_top"
   }
 }

@@ -15,6 +15,7 @@
       ],
       "recipe": {
         "type": "minecraft:crafting_shaped",
+        "category": "misc",
         "key": {
           "B": {
             "item": "industrialforegoing:fertilizer"
@@ -42,7 +43,8 @@
         ],
         "result": {
           "item": "industrialforegoing:hydroponic_bed"
-        }
+        },
+        "show_notification": true
       }
     }
   ]

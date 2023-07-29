@@ -1,5 +1,9 @@
 {
   "variants": {
+    "subfacing=east": {
+      "model": "industrialforegoing:block/pitiful_generator",
+      "y": 90
+    },
     "subfacing=north": {
       "model": "industrialforegoing:block/pitiful_generator"
     },
@@ -10,10 +14,6 @@
     "subfacing=west": {
       "model": "industrialforegoing:block/pitiful_generator",
       "y": 270
-    },
-    "subfacing=east": {
-      "model": "industrialforegoing:block/pitiful_generator",
-      "y": 90
     }
   }
 }

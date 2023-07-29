@@ -1,6 +1,6 @@
 {
   "parent": "industrialforegoing:block/base_block",
   "textures": {
-    "south": "industrialforegoing:blocks/tree_fluid_extractor_back"
+    "south": "industrialforegoing:block/tree_fluid_extractor_back"
   }
 }

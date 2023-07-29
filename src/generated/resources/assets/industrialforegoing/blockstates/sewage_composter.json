@@ -1,5 +1,9 @@
 {
   "variants": {
+    "subfacing=east": {
+      "model": "industrialforegoing:block/sewage_composter",
+      "y": 90
+    },
     "subfacing=north": {
       "model": "industrialforegoing:block/sewage_composter"
     },
@@ -10,10 +14,6 @@
     "subfacing=west": {
       "model": "industrialforegoing:block/sewage_composter",
       "y": 270
-    },
-    "subfacing=east": {
-      "model": "industrialforegoing:block/sewage_composter",
-      "y": 90
     }
   }
 }

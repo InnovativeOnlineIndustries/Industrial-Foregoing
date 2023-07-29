@@ -191,7 +191,7 @@ public class BackpackDataManager extends SavedData {
         @Override
         public boolean isItemValid(int slot, @Nonnull ItemStack stack) {
             SlotDefinition def = definitionList.get(slot);
-            return def.getStack().isEmpty() || (def.getStack().sameItem(stack) && ItemStack.tagMatches(def.getStack(), stack));
+            return def.getStack().isEmpty() || ItemStack.isSameItemSameTags(def.getStack(), stack);
         }
 
         public void setMaxAmount(int maxAmount) {

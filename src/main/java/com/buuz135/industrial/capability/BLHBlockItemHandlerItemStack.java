@@ -102,7 +102,7 @@ public class BLHBlockItemHandlerItemStack implements IItemHandler {
     @Override
     public boolean isItemValid(int slot, @Nonnull ItemStack stack) {
         ItemStack current = getStack();
-        return current.isEmpty() || (current.sameItem(stack) && ItemStack.tagMatches(current, stack));
+        return current.isEmpty() || ItemStack.isSameItemSameTags(current, stack);
     }
 
     public int getAmount() {

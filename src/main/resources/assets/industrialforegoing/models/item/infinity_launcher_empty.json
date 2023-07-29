@@ -5,8 +5,8 @@
     64
   ],
   "textures": {
-    "0": "industrialforegoing:items/infinity_launcher",
-    "particle": "industrialforegoing:items/infinity_launcher"
+    "0": "industrialforegoing:item/infinity_launcher",
+    "particle": "industrialforegoing:item/infinity_launcher"
   },
   "elements": [
     {

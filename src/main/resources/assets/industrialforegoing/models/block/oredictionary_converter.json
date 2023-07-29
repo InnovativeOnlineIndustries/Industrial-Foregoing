@@ -1,10 +1,10 @@
 {
   "parent": "industrialforegoing:block/base_block",
   "textures": {
-    "north": "industrialforegoing:blocks/oredictionary_converter_side",
-    "south": "industrialforegoing:blocks/oredictionary_converter_side",
-    "west": "industrialforegoing:blocks/oredictionary_converter_side",
-    "east": "industrialforegoing:blocks/oredictionary_converter_side",
-    "up": "industrialforegoing:blocks/oredictionary_converter_top"
+    "north": "industrialforegoing:block/oredictionary_converter_side",
+    "south": "industrialforegoing:block/oredictionary_converter_side",
+    "west": "industrialforegoing:block/oredictionary_converter_side",
+    "east": "industrialforegoing:block/oredictionary_converter_side",
+    "up": "industrialforegoing:block/oredictionary_converter_top"
   }
 }

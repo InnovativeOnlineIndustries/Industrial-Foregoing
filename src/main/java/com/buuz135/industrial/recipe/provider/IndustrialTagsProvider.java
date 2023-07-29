@@ -25,25 +25,31 @@ package com.buuz135.industrial.recipe.provider;
 import com.buuz135.industrial.module.ModuleCore;
 import com.buuz135.industrial.utils.IndustrialTags;
 import com.buuz135.industrial.utils.Reference;
+import com.hrznstudio.titanium.datagenerator.loot.block.BasicBlockLootTables;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.data.DataGenerator;
-import net.minecraft.data.tags.BlockTagsProvider;
+import net.minecraft.data.PackOutput;
 import net.minecraft.data.tags.ItemTagsProvider;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.world.level.block.Block;
 import net.minecraftforge.common.Tags;
+import net.minecraftforge.common.data.BlockTagsProvider;
 import net.minecraftforge.common.data.ExistingFileHelper;
 import net.minecraftforge.registries.ForgeRegistries;
+
+import javax.annotation.Nullable;
+import java.util.concurrent.CompletableFuture;
 
 public class IndustrialTagsProvider {
 
     public static class Blocks extends BlockTagsProvider {
 
-        public Blocks(DataGenerator generatorIn, String modid, ExistingFileHelper helper) {
-            super(generatorIn, modid, helper);
+        public Blocks(DataGenerator dataGenerator, CompletableFuture<HolderLookup.Provider> lookupProvider, String modId, @Nullable ExistingFileHelper existingFileHelper) {
+            super(dataGenerator.getPackOutput(), lookupProvider, modId, existingFileHelper);
         }
 
         @Override
-        protected void addTags() {
+        protected void addTags(HolderLookup.Provider p_256380_) {
             tag(IndustrialTags.Blocks.MACHINE_FRAME_PITY).add(ModuleCore.PITY.get());
             tag(IndustrialTags.Blocks.MACHINE_FRAME_SIMPLE).add(ModuleCore.SIMPLE.get());
             tag(IndustrialTags.Blocks.MACHINE_FRAME_ADVANCED).add(ModuleCore.ADVANCED.get());
@@ -51,18 +57,18 @@ public class IndustrialTagsProvider {
 
             TagAppender<Block> tTagAppender = this.tag(BlockTags.MINEABLE_WITH_PICKAXE);
 
-            ForgeRegistries.BLOCKS.getValues().stream().filter(block -> ForgeRegistries.BLOCKS.getKey(block).getNamespace().equals(Reference.MOD_ID)).forEach(tTagAppender::add);
+            ForgeRegistries.BLOCKS.getValues().stream().filter(block -> ForgeRegistries.BLOCKS.getKey(block).getNamespace().equals(Reference.MOD_ID)).forEach(block -> tTagAppender.add(ForgeRegistries.BLOCKS.getResourceKey(block).get()));
         }
     }
 
     public static class Items extends ItemTagsProvider {
 
-        public Items(DataGenerator generatorIn, String modid, ExistingFileHelper helper) {
-            super(generatorIn, new Blocks(generatorIn, modid, helper), modid, helper);
+        public Items(DataGenerator dataGenerator, CompletableFuture<HolderLookup.Provider> completableFuture, CompletableFuture<TagLookup<Block>> lookupCompletableFuture, String modId, @Nullable ExistingFileHelper existingFileHelper) {
+            super(dataGenerator.getPackOutput(), completableFuture, lookupCompletableFuture, modId, existingFileHelper);
         }
 
         @Override
-        protected void addTags() {
+        protected void addTags(HolderLookup.Provider provider) {
             this.copy(IndustrialTags.Blocks.MACHINE_FRAME_PITY, IndustrialTags.Items.MACHINE_FRAME_PITY);
             this.copy(IndustrialTags.Blocks.MACHINE_FRAME_SIMPLE, IndustrialTags.Items.MACHINE_FRAME_SIMPLE);
             this.copy(IndustrialTags.Blocks.MACHINE_FRAME_ADVANCED, IndustrialTags.Items.MACHINE_FRAME_ADVANCED);

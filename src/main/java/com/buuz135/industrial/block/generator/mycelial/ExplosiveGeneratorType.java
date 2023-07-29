@@ -129,12 +129,12 @@ public class ExplosiveGeneratorType implements IMycelialGeneratorType {
     @Override
     public void onTick(Level world, BlockPos pos) {
         if (world.random.nextBoolean()) {
-            world.explode(null, DamageSource.GENERIC, new ExplosionDamageCalculator() {
+            world.explode(null, world.damageSources().generic(), new ExplosionDamageCalculator() {
                 @Override
                 public boolean shouldBlockExplode(Explosion explosion, BlockGetter reader, BlockPos pos, BlockState state, float power) {
                     return false;
                 }
-            }, pos.getX(), pos.getY(), pos.getZ(), 3, false, Explosion.BlockInteraction.NONE);
+            }, pos.getX(), pos.getY(), pos.getZ(), 3, false, Level.ExplosionInteraction.NONE);
         }
     }
 
