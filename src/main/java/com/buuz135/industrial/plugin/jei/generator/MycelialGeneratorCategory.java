@@ -110,14 +110,14 @@ public class MycelialGeneratorCategory implements IRecipeCategory<MycelialGenera
         for (int i = 0; i < type.getInputs().length; i++) {
             if (type.getInputs()[i] == IMycelialGeneratorType.Input.SLOT) {
                 int finalI = i;
-                SlotsScreenAddon.drawAsset(guiGraphics, Minecraft.getInstance().screen, DefaultAssetProvider.DEFAULT_PROVIDER, 20 * i, Minecraft.getInstance().font.lineHeight / 2, 0, 0, 1, integer -> Pair.of(1, 1), integer -> ItemStack.EMPTY, true, integer -> new Color(type.getInputColors()[finalI].getFireworkColor()), integer -> true);
+                SlotsScreenAddon.drawAsset(guiGraphics, Minecraft.getInstance().screen, DefaultAssetProvider.DEFAULT_PROVIDER, 20 * i, Minecraft.getInstance().font.lineHeight / 2, 0, 0, 1, integer -> Pair.of(1, 1), integer -> ItemStack.EMPTY, true, integer -> new Color(type.getInputColors()[finalI].getFireworkColor()), integer -> true, 1);
             } else if (type.getInputs()[i] == IMycelialGeneratorType.Input.TANK) {
                 AssetUtil.drawAsset(guiGraphics, Minecraft.getInstance().screen, DefaultAssetProvider.DEFAULT_PROVIDER.getAsset(AssetTypes.TANK_SMALL), 20 * i, Minecraft.getInstance().font.lineHeight / 2);
             }
         }
         int x = 20 * type.getInputs().length + 3;
-        guiGraphics.drawString(Minecraft.getInstance().font, ChatFormatting.DARK_GRAY + "Time: " + ChatFormatting.DARK_AQUA + new DecimalFormat().format(recipe.getTicks() / 20D) + ChatFormatting.DARK_GRAY + " s", x, Minecraft.getInstance().font.lineHeight * 0, 0xFFFFFFFF);
-        guiGraphics.drawString(Minecraft.getInstance().font, ChatFormatting.DARK_GRAY + "Production: " + ChatFormatting.DARK_AQUA + recipe.getPowerTick() + ChatFormatting.DARK_GRAY + " FE/t", x, Minecraft.getInstance().font.lineHeight * 1, 0xFFFFFFFF);
-        guiGraphics.drawString(Minecraft.getInstance().font, ChatFormatting.DARK_GRAY + "Total: " + ChatFormatting.DARK_AQUA + new DecimalFormat().format(recipe.getTicks() * recipe.getPowerTick()) + ChatFormatting.DARK_GRAY + " FE", x, Minecraft.getInstance().font.lineHeight * 2, 0xFFFFFFFF);
+        guiGraphics.drawString(Minecraft.getInstance().font, ChatFormatting.DARK_GRAY + "Time: " + ChatFormatting.DARK_AQUA + new DecimalFormat().format(recipe.getTicks() / 20D) + ChatFormatting.DARK_GRAY + " s", x, Minecraft.getInstance().font.lineHeight * 0, 0xFFFFFFFF, false);
+        guiGraphics.drawString(Minecraft.getInstance().font, ChatFormatting.DARK_GRAY + "Production: " + ChatFormatting.DARK_AQUA + recipe.getPowerTick() + ChatFormatting.DARK_GRAY + " FE/t", x, Minecraft.getInstance().font.lineHeight * 1, 0xFFFFFFFF, false);
+        guiGraphics.drawString(Minecraft.getInstance().font, ChatFormatting.DARK_GRAY + "Total: " + ChatFormatting.DARK_AQUA + new DecimalFormat().format(recipe.getTicks() * recipe.getPowerTick()) + ChatFormatting.DARK_GRAY + " FE", x, Minecraft.getInstance().font.lineHeight * 2, 0xFFFFFFFF, false);
     }
 }

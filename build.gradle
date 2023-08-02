@@ -31,7 +31,7 @@ plugins {
 apply plugin: 'net.minecraftforge.gradle'
 apply plugin: 'eclipse'
 
-def isReleaseBranch = System.getenv("BRANCH") == "release-1.15" || System.getenv("BRANCH") == "release-1.16" || System.getenv("BRANCH") == "release-1.17";
+def isReleaseBranch = System.getenv("BRANCH") == "release-1.20";
 
 
 group = "com.buuz135"
@@ -196,7 +196,7 @@ afterEvaluate {
 processResources {
     // this will ensure that this task is redone when the versions change.
     inputs.property 'version', project.version
-    inputs.property 'mcversion', '1.19.2'
+    inputs.property 'mcversion', '1.20.1'
     duplicatesStrategy = DuplicatesStrategy.WARN
 
     // replace stuff in mcmod.info, nothing else
@@ -288,10 +288,10 @@ curseforge {
     }
     project {
         id = '266515'
-        changelog = "https://github.com/InnovativeOnlineIndustries/Industrial-Foregoing/commits/release-1.19"
+        changelog = "https://github.com/InnovativeOnlineIndustries/Industrial-Foregoing/blob/changelog/CHANGELOG.md"
         changelogType = 'markdown'
         releaseType = 'beta'
-        addGameVersion '1.19.2'
+        addGameVersion '1.20.1'
 
         mainArtifact(jar){
             relations {

@@ -91,10 +91,10 @@ public class FluidExtractorCategory implements IRecipeCategory<FluidExtractorRec
 
     @Override
     public void draw(FluidExtractorRecipe recipe, IRecipeSlotsView recipeSlotsView, GuiGraphics guiGraphics, double mouseX, double mouseY) {
-        guiGraphics.drawString(Minecraft.getInstance().font, ChatFormatting.DARK_GRAY + "Production: ", 80, 6, 0xFFFFFF);
-        guiGraphics.drawString(Minecraft.getInstance().font, ChatFormatting.DARK_GRAY + "" + recipe.output.getAmount() + "mb/work", 80, 6 + (Minecraft.getInstance().font.lineHeight + 2) * 1, 0xFFFFFF);
-        guiGraphics.drawString(Minecraft.getInstance().font, ChatFormatting.DARK_GRAY + "" + "Tripled when", 80, 6 + (Minecraft.getInstance().font.lineHeight + 2) * 2, 0xFFFFFF);
-        guiGraphics.drawString(Minecraft.getInstance().font, ChatFormatting.DARK_GRAY + "" + "powered", 80, 6 + (Minecraft.getInstance().font.lineHeight + 2) * 3, 0xFFFFFF);
+        guiGraphics.drawString(Minecraft.getInstance().font, ChatFormatting.DARK_GRAY + "Production: ", 80, 6, 0xFFFFFF, false);
+        guiGraphics.drawString(Minecraft.getInstance().font, ChatFormatting.DARK_GRAY + "" + recipe.output.getAmount() + "mb/work", 80, 6 + (Minecraft.getInstance().font.lineHeight + 2) * 1, 0xFFFFFF, false);
+        guiGraphics.drawString(Minecraft.getInstance().font, ChatFormatting.DARK_AQUA + "" + "Tripled when", 80, 6 + (Minecraft.getInstance().font.lineHeight + 2) * 2, 0xFFFFFF, false);
+        guiGraphics.drawString(Minecraft.getInstance().font, ChatFormatting.DARK_AQUA + "" + "powered", 80, 6 + (Minecraft.getInstance().font.lineHeight + 2) * 3, 0xFFFFFF, false);
     }
 
     @Override
