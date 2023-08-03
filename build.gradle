@@ -39,7 +39,7 @@ group = "com.buuz135"
 archivesBaseName = "industrial-foregoing"
 version = "${minecraftVersion}-${project.api_version}"
 if (System.getenv('BUILD_NUMBER') != null) {
-    version += "-" + System.getenv('BUILD_NUMBER')
+    version += "." + System.getenv('BUILD_NUMBER')
 }
 
 java.toolchain.languageVersion = JavaLanguageVersion.of(17)
@@ -274,7 +274,7 @@ jar {
                 "Specification-Vendor": "Buuz135",
                 "Specification-Version": "2.0", // We are version 1 of ourselves
                 "Implementation-Title": project.name,
-                "Implementation-Version": "${project.api_version}",
+                "Implementation-Version": "${project.api_version + "." + System.getenv('BUILD_NUMBER')}",
                 "Implementation-Vendor" :"Buuz135",
                 "Implementation-Timestamp": new Date().format("yyyy-MM-dd'T'HH:mm:ssZ")
         ])
@@ -319,7 +319,7 @@ modrinth {
     gameVersions = ["1.20.1"] // Must be an array, even with only one version
     loaders = ["forge"] // Must also be an array - no need to specify this if you're using Loom or ForgeGradle
     dependencies { // A special DSL for creating dependencies
-        required.project "fabric-api"
+        required.project "titanium"
     }
     changelog = "https://github.com/InnovativeOnlineIndustries/Industrial-Foregoing/commits/release-1.20"
 }
