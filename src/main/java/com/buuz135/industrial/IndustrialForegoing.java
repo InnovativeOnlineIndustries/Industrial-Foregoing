@@ -197,11 +197,6 @@ public class IndustrialForegoing extends ModuleController {
 
     @OnlyIn(Dist.CLIENT)
     private void initClient() {
-        /*EventManager.mod(TextureStitchEvent.Pre.class).process(pre -> {
-            if (pre.getAtlas().location().equals(InventoryMenu.BLOCK_ATLAS)) {
-                pre.addSprite(TransporterTESR.TEXTURE);
-            }
-        }).subscribe();TODO 1.20*/
         EventManager.mod(ModelEvent.BakingCompleted.class).process(event -> {
             ClientProxy.ears_baked = event.getModels().get(new ResourceLocation(Reference.MOD_ID, "block/catears"));
         }).subscribe();

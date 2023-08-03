@@ -149,12 +149,6 @@ public class ModuleTransportStorage implements IModule {
         }
     }
 
-    /*@OnlyIn(Dist.CLIENT) TODO 1.20
-    private void textureStitch(TextureStitchEvent.Pre pre) {
-        if (pre.getAtlas().location().equals(TextureAtlas.LOCATION_BLOCKS))
-            ConveyorUpgradeFactory.FACTORIES.forEach(conveyorUpgradeFactory -> conveyorUpgradeFactory.getTextures().forEach(pre::addSprite));
-    }*/
-
     @OnlyIn(Dist.CLIENT)
     private void modifyBakingResult(ModelEvent.ModifyBakingResult event) {
         for (ResourceLocation resourceLocation : event.getModels().keySet()) {
@@ -168,12 +162,6 @@ public class ModuleTransportStorage implements IModule {
             }
         }
     }
-
-    /*@OnlyIn(Dist.CLIENT)TODO 1.20
-    private void transporterTextureStitch(TextureStitchEvent.Pre pre) {
-        if (pre.getAtlas().location().equals(TextureAtlas.LOCATION_BLOCKS))
-            TransporterTypeFactory.FACTORIES.forEach(transporterTypeFactory -> transporterTypeFactory.getTextures().forEach(pre::addSprite));
-    }*/
 
     @OnlyIn(Dist.CLIENT)
     private void onClientSetupConveyor(FMLClientSetupEvent event) {
