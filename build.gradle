@@ -39,7 +39,7 @@ group = "com.buuz135"
 archivesBaseName = "industrial-foregoing"
 version = "${minecraftVersion}-${project.api_version}"
 if (System.getenv('BUILD_NUMBER') != null) {
-    version += "-" + System.getenv('BUILD_NUMBER')
+    version += "." + System.getenv('BUILD_NUMBER')
 }
 
 java.toolchain.languageVersion = JavaLanguageVersion.of(17)
