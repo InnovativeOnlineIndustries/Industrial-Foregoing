@@ -23,14 +23,9 @@
 package com.buuz135.industrial.proxy;
 
 import com.buuz135.industrial.proxy.event.FakePlayerRideEntityHandler;
-import com.buuz135.industrial.proxy.event.MobDeathHandler;
 import com.buuz135.industrial.proxy.event.SkullHandler;
 import com.buuz135.industrial.utils.explosion.ExplosionTickHandler;
 import com.hrznstudio.titanium.event.handler.EventManager;
-import net.minecraft.ChatFormatting;
-import net.minecraft.network.chat.Component;
-import net.minecraft.world.damagesource.DamageSource;
-import net.minecraft.world.entity.LivingEntity;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.TickEvent;
 
@@ -39,18 +34,9 @@ import java.util.List;
 
 public class CommonProxy {
 
-    public static final String CONTRIBUTORS_FILE = "https://raw.githubusercontent.com/Buuz135/Industrial-Foregoing/master/contributors.json";
     public static List<String> CONTRIBUTORS = new ArrayList<>();
 
-    public static DamageSource custom = null; /*new DamageSource("if_custom") { TODO 1.20 Create custom damagesource
-        @Override
-        public Component getLocalizedDeathMessage(LivingEntity entityLivingBaseIn) {
-            return Component.translatable("text.industrialforegoing.chat.slaughter_kill", entityLivingBaseIn.getDisplayName(), ChatFormatting.RESET);
-        }
-    };*/
-
     public void run() {
-        MinecraftForge.EVENT_BUS.register(new MobDeathHandler());
         MinecraftForge.EVENT_BUS.register(new FakePlayerRideEntityHandler());
         MinecraftForge.EVENT_BUS.register(new SkullHandler());
 
