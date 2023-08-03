@@ -96,7 +96,7 @@ public class ItemInfinityDrill extends ItemInfinity {
                     if (enoughFuel(stack) && worldIn.getBlockEntity(blockPos) == null && worldIn instanceof ServerLevel && entityLiving instanceof ServerPlayer && !worldIn.isEmptyBlock(blockPos)) {
                         BlockState tempState = worldIn.getBlockState(blockPos);
                         Block block = tempState.getBlock();
-                        if (!tempState.is(BlockTags.MINEABLE_WITH_PICKAXE)) return;
+                        if (!tempState.is(BlockTags.MINEABLE_WITH_PICKAXE) && !tempState.is(BlockTags.MINEABLE_WITH_SHOVEL)) return;
                         if (tempState.getDestroySpeed(worldIn, blockPos) < 0) return;
                         int xp = ForgeHooks.onBlockBreakEvent(worldIn, ((ServerPlayer) entityLiving).gameMode.getGameModeForPlayer(), (ServerPlayer) entityLiving, blockPos);
                         if (xp >= 0 && block.onDestroyedByPlayer(tempState, worldIn, blockPos, (Player) entityLiving, true, tempState.getFluidState())) {
