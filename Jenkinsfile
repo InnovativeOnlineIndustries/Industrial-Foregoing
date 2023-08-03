@@ -1,5 +1,5 @@
 #!/usr/bin/env groovy
-def releaseBranch = "release-1.19";
+def releaseBranch = "release-1.20";
 
 pipeline {
     agent any
@@ -8,6 +8,7 @@ pipeline {
     }
     environment {
         CURSE_API = credentials('curseforge_api_key')
+        MODRINTH_TOKEN = credentials('modrinth_api_key')
     }
     stages {
         stage('Clean') {
@@ -33,7 +34,7 @@ pipeline {
                 sh './gradlew publish'
 
                 echo 'Deploying to CurseForge'
-                sh './gradlew curseforge'
+                sh './gradlew curseforge modrinth'
             }
         }
     }
