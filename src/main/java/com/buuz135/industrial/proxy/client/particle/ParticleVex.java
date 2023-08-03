@@ -32,6 +32,8 @@ import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.particle.Particle;
 import net.minecraft.client.particle.ParticleRenderType;
 import net.minecraft.client.player.LocalPlayer;
+import net.minecraft.client.renderer.GameRenderer;
+import net.minecraft.client.renderer.texture.TextureAtlas;
 import net.minecraft.client.renderer.texture.TextureManager;
 import net.minecraft.core.Direction;
 import net.minecraft.core.Vec3i;
@@ -50,18 +52,18 @@ public class ParticleVex extends Particle {
     public static ParticleRenderType RENDER = new ParticleRenderType() {
         @Override
         public void begin(BufferBuilder builder, TextureManager manager) {
+            RenderSystem.setShader(GameRenderer::getPositionColorLightmapShader);
             RenderSystem.enableBlend();
             RenderSystem.blendFuncSeparate(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA, GlStateManager.SourceFactor.ONE, GlStateManager.DestFactor.ZERO);
             RenderSystem.lineWidth(1.5F);
-            //RenderSystem.disableTexture();
-            builder.begin(VertexFormat.Mode.LINES, DefaultVertexFormat.POSITION_COLOR_LIGHTMAP);
+            //RenderSystem.activeTexture(0);
+
         }
 
         @Override
         public void end(Tesselator tessellator) {
-            tessellator.end();
             RenderSystem.disableBlend();
-            //RenderSystem.enableTexture();
+            RenderSystem.setShader(GameRenderer::getParticleShader);
         }
     };
 
@@ -87,7 +89,7 @@ public class ParticleVex extends Particle {
     @Override
     public void tick() {
         super.tick();
-        if (this.entity.position().distanceToSqr(new Vec3(x, y, z)) > 2) {
+        if (this.entity.position().distanceToSqr(new Vec3(x, y, z)) > 10) {
             isDying = true;
         }
         if (!isDying && !this.removed) {
@@ -112,16 +114,19 @@ public class ParticleVex extends Particle {
         double y = entity.yOld + (vector3d.y - entity.yOld);
         double z = entity.zOld + (vector3d.z - entity.zOld);
 
+        Tesselator.getInstance().getBuilder().begin(VertexFormat.Mode.DEBUG_LINE_STRIP, DefaultVertexFormat.POSITION_COLOR_LIGHTMAP);
         for (Vec3 line : lines) {
             bufferBad.vertex(line.x - x, line.y - y, line.z - z).color(1f, 1f, 1f, 1f).uv2(240, 240).endVertex();
         }
-
+        Tesselator.getInstance().end();
     }
 
     @Override
     public ParticleRenderType getRenderType() {
         return RENDER;
     }
+
+
 
     private Direction getRandomFacing(RandomSource random, Direction opposite) {
         Direction facing = Direction.getRandom(random); //random
