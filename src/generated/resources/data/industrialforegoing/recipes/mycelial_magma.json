@@ -18,7 +18,7 @@
         "category": "misc",
         "key": {
           "B": {
-            "tag": "forge:storage_block/redstone"
+            "tag": "forge:storage_blocks/redstone"
           },
           "C": {
             "item": "minecraft:lava_bucket"

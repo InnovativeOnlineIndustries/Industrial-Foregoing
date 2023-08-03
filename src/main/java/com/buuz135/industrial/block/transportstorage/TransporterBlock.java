@@ -22,9 +22,12 @@
 package com.buuz135.industrial.block.transportstorage;
 
 import com.buuz135.industrial.api.transporter.TransporterType;
+import com.buuz135.industrial.block.IndustrialBlockItem;
 import com.buuz135.industrial.block.transportstorage.tile.TransporterTile;
+import com.hrznstudio.titanium.api.ISpecialCreativeTabItem;
 import com.hrznstudio.titanium.block.BasicTileBlock;
 import com.hrznstudio.titanium.datagenerator.loot.block.BasicBlockLootTables;
+import com.hrznstudio.titanium.tab.TitaniumTab;
 import com.hrznstudio.titanium.util.RayTraceUtils;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -53,6 +56,7 @@ import net.minecraft.world.phys.shapes.BooleanOp;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
+import net.minecraftforge.event.BuildCreativeModeTabContentsEvent;
 import org.apache.commons.lang3.tuple.Pair;
 
 import javax.annotation.Nonnull;
@@ -217,4 +221,17 @@ public class TransporterBlock extends BasicTileBlock<TransporterTile> implements
     public LootTable.Builder getLootTable(@Nonnull BasicBlockLootTables blockLootTables) {
         return blockLootTables.droppingNothing();
     }
+
+    public static class Item extends IndustrialBlockItem implements ISpecialCreativeTabItem{
+
+        public Item(Block blockIn, TitaniumTab group) {
+            super(blockIn, group);
+        }
+
+        @Override
+        public void addToTab(BuildCreativeModeTabContentsEvent event) {
+
+        }
+    }
+
 }

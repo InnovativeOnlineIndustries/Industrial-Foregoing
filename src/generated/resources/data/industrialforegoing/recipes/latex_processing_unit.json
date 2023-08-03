@@ -24,7 +24,7 @@
             "item": "minecraft:furnace"
           },
           "G": {
-            "tag": "forge:storage_block/redstone"
+            "tag": "forge:storage_blocks/redstone"
           },
           "I": {
             "tag": "forge:ingots/iron"

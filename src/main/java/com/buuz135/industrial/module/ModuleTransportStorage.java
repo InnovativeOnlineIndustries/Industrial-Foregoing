@@ -100,7 +100,7 @@ public class ModuleTransportStorage implements IModule {
     public static TransporterTypeFactory FLUID_TRANSPORTER = new TransporterFluidType.Factory();
     public static TransporterTypeFactory WORLD_TRANSPORTER = new TransporterWorldType.Factory();
 
-    public static Pair<RegistryObject<Block>, RegistryObject<BlockEntityType<?>>> TRANSPORTER = IndustrialForegoing.INSTANCE.getRegistries().registerBlockWithTileItem("transporter", () -> new TransporterBlock(), blockRegistryObject -> () -> new IndustrialBlockItem(blockRegistryObject.get(), TAB_TRANSPORT), TAB_TRANSPORT);
+    public static Pair<RegistryObject<Block>, RegistryObject<BlockEntityType<?>>> TRANSPORTER = IndustrialForegoing.INSTANCE.getRegistries().registerBlockWithTileItem("transporter", () -> new TransporterBlock(), blockRegistryObject -> () -> new TransporterBlock.Item(blockRegistryObject.get(), TAB_TRANSPORT), TAB_TRANSPORT);
     public static HashMap<ResourceLocation, BakedModel> TRANSPORTER_CACHE = new HashMap<>();
 
     @Override
