@@ -1,6 +1,6 @@
 {
   "parent": "industrialforegoing:block/conveyor_ramp_inverted",
   "textures": {
-    "2": "industrialforegoing:blocks/conveyor_color_inverted"
+    "2": "industrialforegoing:block/conveyor_color_inverted"
   }
 }

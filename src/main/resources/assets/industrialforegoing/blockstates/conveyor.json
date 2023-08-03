@@ -1,62 +1,94 @@
 {
-  "forge_marker": 1,
-  "defaults": {
-    "model": "industrialforegoing:block/conveyor"
-  },
   "variants": {
-    "facing": {
-      "north": {},
-      "south": {
-        "y": 180
-      },
-      "west": {
-        "y": 270
-      },
-      "east": {
-        "y": 90
-      }
+    "facing=north,type=flat": {
+      "model": "industrialforegoing:block/conveyor_flat_north"
     },
-    "type": {
-      "flat": {},
-      "flat_fast": {
-        "textures": {
-          "2": "industrialforegoing:block/conveyor_color_fast"
-        }
-      },
-      "down": {
-        "model": "industrialforegoing:block/conveyor_ramp"
-      },
-      "down_fast": {
-        "model": "industrialforegoing:block/conveyor_ramp",
-        "textures": {
-          "2": "industrialforegoing:block/conveyor_color_fast"
-        }
-      },
-      "up": {
-        "model": "industrialforegoing:block/conveyor_ramp_inverted",
-        "textures": {
-          "2": "industrialforegoing:block/conveyor_color_inverted"
-        }
-      },
-      "up_fast": {
-        "model": "industrialforegoing:block/conveyor_ramp_inverted",
-        "textures": {
-          "2": "industrialforegoing:block/conveyor_color_inverted_fast"
-        }
-      }
+    "facing=south,type=flat": {
+      "model": "industrialforegoing:block/conveyor_flat_south",
+      "y": 180
     },
-    "sides": {
-      "none": {
-      },
-      "left": {
-        "model": "industrialforegoing:block/conveyornol"
-      },
-      "right": {
-        "model": "industrialforegoing:block/conveyornor"
-      },
-      "both": {
-        "model": "industrialforegoing:block/conveyornos"
-      }
+    "facing=west,type=flat": {
+      "model": "industrialforegoing:block/conveyor_flat_west",
+      "y": 270
+    },
+    "facing=east,type=flat": {
+      "model": "industrialforegoing:block/conveyor_flat_east",
+      "y": 90
+    },
+    "facing=north,type=up": {
+      "model": "industrialforegoing:block/conveyor_up_north"
+    },
+    "facing=south,type=up": {
+      "model": "industrialforegoing:block/conveyor_up_south",
+      "y": 180
+    },
+    "facing=west,type=up": {
+      "model": "industrialforegoing:block/conveyor_up_west",
+      "y": 270
+    },
+    "facing=east,type=up": {
+      "model": "industrialforegoing:block/conveyor_up_east",
+      "y": 90
+    },
+    "facing=north,type=down": {
+      "model": "industrialforegoing:block/conveyor_down_north"
+    },
+    "facing=south,type=down": {
+      "model": "industrialforegoing:block/conveyor_down_south",
+      "y": 180
+    },
+    "facing=west,type=down": {
+      "model": "industrialforegoing:block/conveyor_down_west",
+      "y": 270
+    },
+    "facing=east,type=down": {
+      "model": "industrialforegoing:block/conveyor_down_east",
+      "y": 90
+    },
+    "facing=north,type=flat_fast": {
+      "model": "industrialforegoing:block/conveyor_flat_fast_north"
+    },
+    "facing=south,type=flat_fast": {
+      "model": "industrialforegoing:block/conveyor_flat_fast_south",
+      "y": 180
+    },
+    "facing=west,type=flat_fast": {
+      "model": "industrialforegoing:block/conveyor_flat_fast_west",
+      "y": 270
+    },
+    "facing=east,type=flat_fast": {
+      "model": "industrialforegoing:block/conveyor_flat_fast_east",
+      "y": 90
+    },
+    "facing=north,type=up_fast": {
+      "model": "industrialforegoing:block/conveyor_up_fast_north"
+    },
+    "facing=south,type=up_fast": {
+      "model": "industrialforegoing:block/conveyor_up_fast_south",
+      "y": 180
+    },
+    "facing=west,type=up_fast": {
+      "model": "industrialforegoing:block/conveyor_up_fast_west",
+      "y": 270
+    },
+    "facing=east,type=up_fast": {
+      "model": "industrialforegoing:block/conveyor_up_fast_east",
+      "y": 90
+    },
+    "facing=north,type=down_fast": {
+      "model": "industrialforegoing:block/conveyor_down_fast_north"
+    },
+    "facing=south,type=down_fast": {
+      "model": "industrialforegoing:block/conveyor_down_fast_south",
+      "y": 180
+    },
+    "facing=west,type=down_fast": {
+      "model": "industrialforegoing:block/conveyor_down_fast_west",
+      "y": 270
+    },
+    "facing=east,type=down_fast": {
+      "model": "industrialforegoing:block/conveyor_down_fast_east",
+      "y": 90
     }
   }
 }

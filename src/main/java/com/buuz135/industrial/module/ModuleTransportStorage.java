@@ -42,27 +42,20 @@ import com.buuz135.industrial.proxy.client.model.TransporterBlockModel;
 import com.buuz135.industrial.utils.Reference;
 import com.hrznstudio.titanium.event.handler.EventManager;
 import com.hrznstudio.titanium.module.DeferredRegistryHelper;
-import com.hrznstudio.titanium.module.ModuleController;
 import com.hrznstudio.titanium.tab.TitaniumTab;
 import com.mojang.math.Transformation;
 import net.minecraft.client.gui.screens.MenuScreens;
-import net.minecraft.client.renderer.texture.TextureAtlas;
-import net.minecraft.client.resources.model.BakedModel;
-import net.minecraft.client.resources.model.Material;
-import net.minecraft.client.resources.model.UnbakedModel;
+import net.minecraft.client.resources.model.*;
 import net.minecraft.core.Direction;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.inventory.MenuType;
 import net.minecraft.world.item.Item;
-import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Rarity;
 import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.client.event.ModelEvent;
-import net.minecraftforge.client.event.TextureStitchEvent;
 import net.minecraftforge.client.model.SimpleModelState;
 import net.minecraftforge.common.extensions.IForgeMenuType;
 import net.minecraftforge.fml.DistExecutor;
@@ -121,12 +114,24 @@ public class ModuleTransportStorage implements IModule {
     }
 
     @OnlyIn(Dist.CLIENT)
-    private void conveyorBake(ModelEvent.BakingCompleted event) {
-        for (ResourceLocation resourceLocation : event.getModels().keySet()) {
-            if (resourceLocation.getNamespace().equals(Reference.MOD_ID)) {
-                if (resourceLocation.getPath().contains("conveyor") && !resourceLocation.getPath().contains("upgrade")){}
-                    //event.getModels().put(resourceLocation, new ConveyorBlockModel(event.getModels().get(resourceLocation)));
+    private void bakingCompleted(ModelEvent.BakingCompleted event) {
+        var models = event.getModels();
+        var modelBakery = event.getModelBakery();
+        for (TransporterTypeFactory transporterTypeFactory : TransporterTypeFactory.FACTORIES) {
+            for (Direction upgradeFacing : transporterTypeFactory.getValidFacings()) {
+                for (TransporterTypeFactory.TransporterAction actions : TransporterTypeFactory.TransporterAction.values()) {
+                    try {
+                        ResourceLocation resourceLocation = transporterTypeFactory.getModel(upgradeFacing, actions);
+                        UnbakedModel unbakedModel = event.getModelBakery().getModel(resourceLocation);
+                        ModelBaker baker = modelBakery.new ModelBakerImpl((modelLoc, material) -> material.sprite(), resourceLocation);
+                        BakedModel bakedModel = unbakedModel.bake(baker, Material::sprite, new SimpleModelState(Transformation.identity()), resourceLocation);
+                        TRANSPORTER_CACHE.put(resourceLocation, bakedModel);
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                }
             }
+
         }
         for (ConveyorUpgradeFactory conveyorUpgradeFactory : ConveyorUpgradeFactory.FACTORIES) {
             for (Direction upgradeFacing : conveyorUpgradeFactory.getValidFacings()) {
@@ -134,7 +139,8 @@ public class ModuleTransportStorage implements IModule {
                     try {
                         ResourceLocation resourceLocation = conveyorUpgradeFactory.getModel(upgradeFacing, conveyorFacing);
                         UnbakedModel unbakedModel = event.getModelBakery().getModel(resourceLocation);
-                        //TODO CONVEYOR_UPGRADES_CACHE.put(resourceLocation, unbakedModel.bake(event.getModelBakery(), Material::sprite, new SimpleModelState(Transformation.identity()), resourceLocation));
+                        ModelBaker baker = modelBakery.new ModelBakerImpl((modelLoc, material) -> material.sprite(), resourceLocation);
+                        CONVEYOR_UPGRADES_CACHE.put(resourceLocation, unbakedModel.bake(baker, Material::sprite, new SimpleModelState(Transformation.identity()), resourceLocation));
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
@@ -150,30 +156,14 @@ public class ModuleTransportStorage implements IModule {
     }*/
 
     @OnlyIn(Dist.CLIENT)
-    private void transporterBake(ModelEvent.BakingCompleted event) {
+    private void modifyBakingResult(ModelEvent.ModifyBakingResult event) {
         for (ResourceLocation resourceLocation : event.getModels().keySet()) {
             if (resourceLocation.getNamespace().equals(Reference.MOD_ID)) {
-                if (resourceLocation.getPath().contains("transporter") && !resourceLocation.getPath().contains("transporters/") && !resourceLocation.getPath().contains("type")){}
-                    //event.getModels().put(resourceLocation, new TransporterBlockModel(event.getModels().get(resourceLocation)));
-            }
-        }
-        for (TransporterTypeFactory transporterTypeFactory : TransporterTypeFactory.FACTORIES) {
-            String itemRL = Reference.MOD_ID + ":" + transporterTypeFactory.getName() + "_transporter_type#inventory";
-            for (Direction upgradeFacing : transporterTypeFactory.getValidFacings()) {
-                for (TransporterTypeFactory.TransporterAction actions : TransporterTypeFactory.TransporterAction.values()) {
-                    try {
-                        ResourceLocation resourceLocation = transporterTypeFactory.getModel(upgradeFacing, actions);
-                        UnbakedModel unbakedModel = event.getModelBakery().getModel(resourceLocation);
-                        //TODO 1.20 TRANSPORTER_CACHE.put(resourceLocation, unbakedModel.bake(event.getModelBakery(), Material::sprite, new SimpleModelState(Transformation.identity()), resourceLocation));
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }
+                if (resourceLocation.getPath().contains("transporter") && !resourceLocation.getPath().contains("transporters/") && !resourceLocation.getPath().contains("type")) {
+                    event.getModels().put(resourceLocation, new TransporterBlockModel(event.getModels().get(resourceLocation)));
                 }
-            }
-            for (ResourceLocation resourceLocation : event.getModels().keySet()) {
-                if (resourceLocation.getNamespace().equals(Reference.MOD_ID)) {
-                    if (resourceLocation.toString().equals(itemRL)){}
-                        //event.getModels().put(resourceLocation, TRANSPORTER_CACHE.get(transporterTypeFactory.getItemModel()));
+                if (resourceLocation.getPath().contains("conveyor") && !resourceLocation.getPath().contains("upgrade")){
+                    event.getModels().put(resourceLocation, new ConveyorBlockModel(event.getModels().get(resourceLocation)));
                 }
             }
         }
@@ -198,9 +188,9 @@ public class ModuleTransportStorage implements IModule {
     @OnlyIn(Dist.CLIENT)
     private void onClient() {
         EventManager.mod(FMLClientSetupEvent.class).process(this::onClientSetupConveyor).subscribe();
-        EventManager.mod(ModelEvent.BakingCompleted.class).process(this::conveyorBake).subscribe();
+        EventManager.mod(ModelEvent.BakingCompleted.class).process(this::bakingCompleted).subscribe();
         //EventManager.mod(TextureStitchEvent.Pre.class).process(this::textureStitch).subscribe();
-        EventManager.mod(ModelEvent.BakingCompleted.class).process(this::transporterBake).subscribe();
+        EventManager.mod(ModelEvent.ModifyBakingResult.class).process(this::modifyBakingResult).subscribe();
         //EventManager.mod(TextureStitchEvent.Pre.class).process(this::transporterTextureStitch).subscribe();
         EventManager.mod(FMLClientSetupEvent.class).process(this::onClientSetupTransporter).subscribe();
     }
