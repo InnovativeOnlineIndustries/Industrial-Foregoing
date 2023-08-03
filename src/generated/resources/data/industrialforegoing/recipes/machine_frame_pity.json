@@ -21,7 +21,7 @@
             "tag": "forge:ingots/iron"
           },
           "R": {
-            "tag": "forge:storage_block/redstone"
+            "tag": "forge:storage_blocks/redstone"
           },
           "W": {
             "tag": "minecraft:logs"
