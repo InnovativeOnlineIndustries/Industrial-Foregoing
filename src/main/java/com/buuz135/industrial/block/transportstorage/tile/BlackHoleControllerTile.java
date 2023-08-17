@@ -85,7 +85,7 @@ public class BlackHoleControllerTile extends ActiveTile<BlackHoleControllerTile>
     @Override
     public <U> LazyOptional<U> getCapability(@Nonnull Capability<U> cap, @Nullable Direction side) {
         if (cap == ForgeCapabilities.ITEM_HANDLER) return lazyInventory.cast();
-        if (cap == ForgeCapabilities.FLUID_HANDLER_ITEM) return lazyTank.cast();
+        if (cap == ForgeCapabilities.FLUID_HANDLER) return lazyTank.cast();
         return super.getCapability(cap, side);
     }
 
