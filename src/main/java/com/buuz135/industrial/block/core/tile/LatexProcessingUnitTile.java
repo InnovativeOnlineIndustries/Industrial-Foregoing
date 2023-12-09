@@ -41,7 +41,7 @@ import javax.annotation.Nonnull;
 
 public class LatexProcessingUnitTile extends IndustrialProcessingTile<LatexProcessingUnitTile> {
 
-    private static int AMOUNT_LATEX = 100;
+    private static int AMOUNT_LATEX = 750;
     private static int AMOUNT_WATER = 500;
 
     @Save
@@ -69,7 +69,7 @@ public class LatexProcessingUnitTile extends IndustrialProcessingTile<LatexProce
 
     @Override
     public boolean canIncrease() {
-        return latex.getFluidAmount() >= AMOUNT_LATEX && water.getFluidAmount() >= AMOUNT_WATER && ItemHandlerHelper.insertItem(output, new ItemStack(ModuleCore.TINY_DRY_RUBBER.get()), true).isEmpty();
+        return latex.getFluidAmount() >= AMOUNT_LATEX && water.getFluidAmount() >= AMOUNT_WATER && ItemHandlerHelper.insertItem(output, new ItemStack(ModuleCore.DRY_RUBBER.get()), true).isEmpty();
     }
 
     @Override
@@ -77,7 +77,7 @@ public class LatexProcessingUnitTile extends IndustrialProcessingTile<LatexProce
         return () -> {
             latex.drain(AMOUNT_LATEX, IFluidHandler.FluidAction.EXECUTE);
             water.drain(AMOUNT_WATER, IFluidHandler.FluidAction.EXECUTE);
-            ItemHandlerHelper.insertItem(output, new ItemStack(ModuleCore.TINY_DRY_RUBBER.get()), false);
+            ItemHandlerHelper.insertItem(output, new ItemStack(ModuleCore.DRY_RUBBER.get()), false);
         };
     }
 
