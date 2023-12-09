@@ -18,7 +18,7 @@
         "category": "misc",
         "key": {
           "B": {
-            "item": "minecraft:water_bucket"
+            "item": "minecraft:bucket"
           },
           "F": {
             "item": "minecraft:furnace"
@@ -29,16 +29,13 @@
           "I": {
             "tag": "forge:ingots/iron"
           },
-          "L": {
-            "item": "industrialforegoing:latex_bucket"
-          },
           "M": {
             "tag": "industrialforegoing:machine_frame/pity"
           }
         },
         "pattern": [
           "IGI",
-          "BML",
+          "BMB",
           "IFI"
         ],
         "result": {
