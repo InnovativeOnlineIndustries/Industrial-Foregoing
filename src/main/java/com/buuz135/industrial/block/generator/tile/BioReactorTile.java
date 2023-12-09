@@ -112,7 +112,7 @@ public class BioReactorTile extends IndustrialWorkingTile<BioReactorTile> {
                         setColor(DyeColor.YELLOW).
                         setCanIncrease(tileEntity -> true).
                         setOnTickWork(() -> bar.setProgress((int) ((getEfficiency() / 9D) * 100))).
-                        setCanReset(tileEntity -> false).
+                setCanReset(tileEntity -> getEfficiency() != 9).
                         setComponentHarness(this)
         );
         this.getMaxProgress = BioReactorConfig.maxProgress;
@@ -124,7 +124,7 @@ public class BioReactorTile extends IndustrialWorkingTile<BioReactorTile> {
         if (hasEnergy(getPowerPerOperation)) {
             int efficiency = getEfficiency();
             if (efficiency <= 0) return new WorkAction(1, 0);
-            int fluidAmount = ((efficiency - 1) * 10 + 80) * efficiency;
+            int fluidAmount = ((efficiency - 1) * 18 + 93) * efficiency + 2;
             if (water.getFluidAmount() >= fluidAmount && biofuel.getCapacity() - biofuel.getFluidAmount() >= fluidAmount) {
                 water.drainForced(fluidAmount, IFluidHandler.FluidAction.EXECUTE);
                 biofuel.fillForced(new FluidStack(ModuleCore.BIOFUEL.getSourceFluid().get(), fluidAmount), IFluidHandler.FluidAction.EXECUTE);
