@@ -1,2 +1,6 @@
-### Version 1.15.2-2.3.0
-- Updated forge to recommended (by Buuz135) [[b3575a2e90aff88](https://github.com/InnovativeOnlineIndustries/Titanium/commit/b3575a2e90aff88d96754b572bff17066017b4f6")]
+# Version 3.5.10
+
+* Added Manual Changelog
+* Changed Latex Processing Unit to make crafted dry rubber instead of tiny ones with increased fluid latex req
+* Changed Latex Processing Unit recipe to not use Latex Bucket
+* Fixed Bioreactor efficiency bar not resetting and buffed biofuel production rates

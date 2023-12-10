@@ -233,7 +233,7 @@ public class JEICustomPlugin implements IModPlugin {
         registration.addRecipes(
                 machineProduceCategory.getRecipeType(),
                 Arrays.asList(
-                        new MachineProduceWrapper(ModuleCore.LATEX_PROCESSING.getLeft().get(), new ItemStack(ModuleCore.TINY_DRY_RUBBER.get())),
+                        new MachineProduceWrapper(ModuleCore.LATEX_PROCESSING.getLeft().get(), new ItemStack(ModuleCore.DRY_RUBBER.get())),
                         new MachineProduceWrapper(ModuleResourceProduction.SLUDGE_REFINER.getLeft().get(), IndustrialTags.Items.SLUDGE_OUTPUT),
                         new MachineProduceWrapper(ModuleAgricultureHusbandry.SEWAGE_COMPOSTER.getLeft().get(), new ItemStack(ModuleCore.FERTILIZER.get())),
                         new MachineProduceWrapper(ModuleResourceProduction.DYE_MIXER.getLeft().get(), Tags.Items.DYES),

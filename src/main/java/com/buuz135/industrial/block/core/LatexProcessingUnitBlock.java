@@ -57,11 +57,10 @@ public class LatexProcessingUnitBlock extends IndustrialBlock<LatexProcessingUni
     @Override
     public void registerRecipe(Consumer<FinishedRecipe> consumer) {
         TitaniumShapedRecipeBuilder.shapedRecipe(this)
-                .pattern("IGI").pattern("BML").pattern("IFI")
+                .pattern("IGI").pattern("BMB").pattern("IFI")
                 .define('I', Tags.Items.INGOTS_IRON)
                 .define('G', Tags.Items.STORAGE_BLOCKS_REDSTONE)
-                .define('B', Items.WATER_BUCKET)
-                .define('L', ModuleCore.LATEX.getBucketFluid().get())
+                .define('B', Items.BUCKET)
                 .define('M', IndustrialTags.Items.MACHINE_FRAME_PITY)
                 .define('F', Blocks.FURNACE)
                 .save(consumer);

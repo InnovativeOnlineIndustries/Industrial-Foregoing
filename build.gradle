@@ -117,11 +117,7 @@ repositories {
     mavenLocal()
     mavenCentral()
     jcenter()
-    maven {
-        // location of the maven that hosts JEI files
-        name = "Progwml6 maven"
-        url = "https://dvs1.progwml6.com/files/maven/"
-    }
+
     maven {
         url "https://maven.tterrag.com/"
     }
@@ -290,7 +286,7 @@ curseforge {
     }
     project {
         id = '266515'
-        changelog = "https://github.com/InnovativeOnlineIndustries/Industrial-Foregoing/blob/changelog/CHANGELOG.md"
+        changelog = "https://github.com/InnovativeOnlineIndustries/Industrial-Foregoing/blob/release-1.20/CHANGELOG.md"
         changelogType = 'markdown'
         releaseType = 'beta'
         addGameVersion '1.20.1'
@@ -322,7 +318,7 @@ modrinth {
     dependencies { // A special DSL for creating dependencies
         required.project "titanium"
     }
-    changelog = "https://github.com/InnovativeOnlineIndustries/Industrial-Foregoing/commits/release-1.20"
+    changelog = "https://github.com/InnovativeOnlineIndustries/Industrial-Foregoing/blob/release-1.20/CHANGELOG.md"
 }
 
 task makeChangelog(type: GitChangelogTask) {
