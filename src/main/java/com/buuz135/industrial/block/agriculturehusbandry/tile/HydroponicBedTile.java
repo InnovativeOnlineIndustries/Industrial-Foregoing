@@ -7,6 +7,7 @@ import com.buuz135.industrial.config.machine.resourceproduction.HydroponicBedCon
 import com.buuz135.industrial.module.ModuleAgricultureHusbandry;
 import com.buuz135.industrial.module.ModuleCore;
 import com.buuz135.industrial.registry.IFRegistries;
+import com.buuz135.industrial.utils.apihandlers.plant.TreePlantRecollectable;
 import com.hrznstudio.titanium.annotation.Save;
 import com.hrznstudio.titanium.component.energy.EnergyStorageComponent;
 import com.hrznstudio.titanium.component.fluid.FluidTankComponent;
@@ -33,6 +34,7 @@ import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.ItemHandlerHelper;
 
 import javax.annotation.Nonnull;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -169,7 +171,14 @@ public class HydroponicBedTile extends IndustrialWorkingTile<HydroponicBedTile> 
     public static boolean tryToHarvestAndReplant(Level level, BlockPos up, BlockState state, IItemHandler output, ProgressBarComponent<?> etherBuffer, IndustrialWorkingTile tile) {
         Optional<PlantRecollectable> optional = IFRegistries.PLANT_RECOLLECTABLES_REGISTRY.get().getValues().stream().filter(plantRecollectable -> plantRecollectable.canBeHarvested(level, up, state)).findFirst();
         if (optional.isPresent()) {
-            List<ItemStack> drops = optional.get().doHarvestOperation(level, up, state);
+            List<ItemStack> drops = new ArrayList<>();
+            if (optional.get() instanceof TreePlantRecollectable) {
+                while (optional.get().canBeHarvested(level, up, state)) {
+                    drops.addAll(optional.get().doHarvestOperation(level, up, state));
+                }
+            } else {
+                drops.addAll(optional.get().doHarvestOperation(level, up, state));
+            }
             if (level.isEmptyBlock(up)) {
                 for (ItemStack drop : drops) {
                     if (drop.getItem() instanceof IPlantable) {

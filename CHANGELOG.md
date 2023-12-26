@@ -3,6 +3,7 @@
 * Sewer can now extract essence from players
 * Fixed Plant Sower rotating when it's not supposed to
 * Addons can now be inserted into machines when shift + right click into machines
+* Added support for trees and more stuff in the Hydroponic Bed
 
 # Version 3.5.10
 

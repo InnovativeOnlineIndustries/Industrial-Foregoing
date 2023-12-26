@@ -54,7 +54,7 @@ public class HydroponicBedBlock extends IndustrialBlock<HydroponicBedTile> {
     @Override
     public boolean canSustainPlant(BlockState state, BlockGetter world, BlockPos pos, Direction facing, IPlantable plantable) {
         PlantType type = plantable.getPlantType(world, pos);
-        return type == PlantType.CROP || type == PlantType.NETHER || type == PlantType.BEACH || type == PlantType.DESERT;
+        return type == PlantType.CROP || type == PlantType.NETHER || type == PlantType.BEACH || type == PlantType.DESERT || type == PlantType.PLAINS;
     }
 
     @Override
