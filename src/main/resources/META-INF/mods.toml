@@ -29,7 +29,7 @@ IF: You need to automate all the things
 [[dependencies.industrialforegoing]] #optional
 modId = "titanium" #mandatory
 mandatory = true #mandatory
-versionRange = "[3.5.8,)" #mandatory
+versionRange = "[3.8.25,)" #mandatory
 ordering = "NONE"
 side = "BOTH"
 [[dependencies.industrialforegoing]] #optional

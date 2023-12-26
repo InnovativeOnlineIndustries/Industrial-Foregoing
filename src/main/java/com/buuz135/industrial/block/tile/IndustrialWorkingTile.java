@@ -131,8 +131,6 @@ public abstract class IndustrialWorkingTile<T extends IndustrialWorkingTile<T>> 
 
     @Override
     public boolean canAcceptAugment(ItemStack augment) {
-        if (AugmentWrapper.hasType(augment, ProcessingAddonItem.PROCESSING))
-            return !hasAugmentInstalled(ProcessingAddonItem.PROCESSING);
         return super.canAcceptAugment(augment);
     }
 

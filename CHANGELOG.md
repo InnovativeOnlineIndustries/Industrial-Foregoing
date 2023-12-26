@@ -2,6 +2,7 @@
 
 * Sewer can now extract essence from players
 * Fixed Plant Sower rotating when it's not supposed to
+* Addons can now be inserted into machines when shift + right click into machines
 
 # Version 3.5.10
 
