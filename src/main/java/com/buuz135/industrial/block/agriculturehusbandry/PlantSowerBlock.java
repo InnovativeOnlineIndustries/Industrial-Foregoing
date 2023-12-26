@@ -26,13 +26,18 @@ import com.buuz135.industrial.block.IndustrialBlock;
 import com.buuz135.industrial.block.agriculturehusbandry.tile.PlantSowerTile;
 import com.buuz135.industrial.module.ModuleAgricultureHusbandry;
 import com.buuz135.industrial.utils.IndustrialTags;
+import com.hrznstudio.titanium.block.RotatableBlock;
 import com.hrznstudio.titanium.recipe.generator.TitaniumShapedRecipeBuilder;
 import com.hrznstudio.titanium.util.TagUtil;
+import net.minecraft.core.Direction;
 import net.minecraft.data.recipes.FinishedRecipe;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.Items;
+import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.entity.BlockEntityType;
+import net.minecraft.world.level.block.state.BlockState;
+import org.jetbrains.annotations.Nullable;
 
 import javax.annotation.Nonnull;
 import java.util.function.Consumer;
@@ -52,6 +57,12 @@ public class PlantSowerBlock extends IndustrialBlock<PlantSowerTile> {
     @Override
     public RotationType getRotationType() {
         return RotationType.FOUR_WAY;
+    }
+
+    @Nullable
+    @Override
+    public BlockState getStateForPlacement(BlockPlaceContext p_196258_1_) {
+        return this.defaultBlockState().setValue(RotatableBlock.FACING_HORIZONTAL, Direction.NORTH);
     }
 
     @Override

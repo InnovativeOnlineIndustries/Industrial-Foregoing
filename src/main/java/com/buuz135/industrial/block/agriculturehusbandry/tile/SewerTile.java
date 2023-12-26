@@ -35,6 +35,7 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.ExperienceOrb;
 import net.minecraft.world.entity.animal.Animal;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.DyeColor;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.fluids.FluidStack;
@@ -81,6 +82,13 @@ public class SewerTile extends IndustrialAreaWorkingTile<SewerTile> {
                 essence.fillForced(new FluidStack(ModuleCore.ESSENCE.getSourceFluid().get(), experienceOrbEntity.value * 20), IFluidHandler.FluidAction.EXECUTE);
                 experienceOrbEntity.remove(Entity.RemovalReason.KILLED);
             }
+        }
+        List<Player> playerList = this.level.getEntitiesOfClass(Player.class, getWorkingArea().bounds());
+        for (Player player : playerList) {
+            var fluidSpace = (this.essence.getCapacity() - this.essence.getFluidAmount());
+            var toExtractEssence = Math.min(fluidSpace, player.totalExperience * 20);
+            player.giveExperiencePoints(toExtractEssence / -20);
+            this.essence.fillForced(new FluidStack(ModuleCore.ESSENCE.getSourceFluid().get(), toExtractEssence), IFluidHandler.FluidAction.EXECUTE);
         }
         return new WorkAction(1, powerPerOperation * amount);
     }

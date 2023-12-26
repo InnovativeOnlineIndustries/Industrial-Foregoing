@@ -22,21 +22,17 @@
 
 package com.buuz135.industrial.item.addon;
 
-import com.buuz135.industrial.item.IFCustomItem;
 import com.buuz135.industrial.module.ModuleCore;
 import com.buuz135.industrial.recipe.DissolutionChamberRecipe;
 import com.buuz135.industrial.utils.IndustrialTags;
 import com.hrznstudio.titanium.api.ISpecialCreativeTabItem;
-import com.hrznstudio.titanium.api.augment.AugmentTypes;
 import com.hrznstudio.titanium.api.augment.IAugmentType;
 import com.hrznstudio.titanium.item.AugmentWrapper;
 import com.hrznstudio.titanium.tab.TitaniumTab;
-import net.minecraft.core.NonNullList;
 import net.minecraft.data.recipes.FinishedRecipe;
 import net.minecraft.network.chat.Component;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
@@ -48,7 +44,7 @@ import net.minecraftforge.registries.ForgeRegistries;
 
 import java.util.function.Consumer;
 
-public class ProcessingAddonItem extends IFCustomItem implements ISpecialCreativeTabItem {
+public class ProcessingAddonItem extends AddonItem implements ISpecialCreativeTabItem {
 
     public static final IAugmentType PROCESSING = () -> "Processing";
 

@@ -22,6 +22,8 @@
 
 package com.buuz135.industrial.block.tile;
 
+import com.buuz135.industrial.item.addon.ProcessingAddonItem;
+import com.buuz135.industrial.item.addon.RangeAddonItem;
 import com.buuz135.industrial.proxy.client.IndustrialAssetProvider;
 import com.hrznstudio.titanium.annotation.Save;
 import com.hrznstudio.titanium.api.augment.AugmentTypes;
@@ -82,6 +84,12 @@ public abstract class IndustrialMachineTile<T extends IndustrialMachineTile<T>> 
         }
         if (AugmentWrapper.hasType(augment, AugmentTypes.EFFICIENCY)) {
             return !hasAugmentInstalled(AugmentTypes.EFFICIENCY);
+        }
+        if (AugmentWrapper.hasType(augment, ProcessingAddonItem.PROCESSING)) {
+            return !hasAugmentInstalled(ProcessingAddonItem.PROCESSING);
+        }
+        if (AugmentWrapper.hasType(augment, RangeAddonItem.RANGE)) {
+            return !hasAugmentInstalled(RangeAddonItem.RANGE);
         }
         return super.canAcceptAugment(augment);
     }
