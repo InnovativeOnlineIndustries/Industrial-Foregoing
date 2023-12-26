@@ -1,6 +1,7 @@
 # Version 3.5.11
 
 * Sewer can now extract essence from players
+* Fixed Plant Sower rotating when it's not supposed to
 
 # Version 3.5.10
 
