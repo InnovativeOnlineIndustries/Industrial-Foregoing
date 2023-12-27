@@ -132,7 +132,7 @@ public class ItemInfinity extends IFCustomItem implements MenuProvider, IButtonH
     @Override
     public void onCraftedBy(ItemStack stack, Level worldIn, Player playerIn) {
         super.onCraftedBy(stack, worldIn, playerIn);
-        addNbt(stack, 0, 0, false);
+        if (!stack.hasTag()) addNbt(stack, 0, 0, false);
     }
 
     public void addNbt(ItemStack stack, long power, int fuel, boolean special) {
