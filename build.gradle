@@ -158,6 +158,10 @@ dependencies {
 
     implementation fg.deobf("curse.maven:curios-309927:4583413")
     implementation fg.deobf("curse.maven:patchouli-306770:4636277")
+
+    implementation fg.deobf("curse.maven:placebo-283644:4913663")
+    implementation fg.deobf("curse.maven:apothic-attributes-898963:4954000")
+    implementation fg.deobf("curse.maven:apotheosis-313970:4960128")
     //runtimeOnly fg.deobf("curse.maven:immersive-engineering-231951:3755665")
     //runtimeOnly fg.deobf("mekanism:Mekanism:${mekanism_version}")// core
 

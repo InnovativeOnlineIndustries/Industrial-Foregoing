@@ -28,7 +28,6 @@ import com.buuz135.industrial.proxy.CommonProxy;
 import com.buuz135.industrial.proxy.network.BackpackOpenedMessage;
 import com.google.common.collect.Multimap;
 import com.google.common.collect.MultimapBuilder;
-import com.hrznstudio.titanium.Titanium;
 import com.hrznstudio.titanium.api.IFactory;
 import com.hrznstudio.titanium.api.ISpecialCreativeTabItem;
 import com.hrznstudio.titanium.api.client.AssetTypes;
@@ -50,7 +49,6 @@ import net.minecraft.ChatFormatting;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
-import net.minecraft.core.NonNullList;
 import net.minecraft.data.recipes.FinishedRecipe;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
@@ -67,7 +65,6 @@ import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.inventory.ContainerLevelAccess;
-import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.UseAnim;
 import net.minecraft.world.item.enchantment.EnchantmentHelper;
@@ -136,7 +133,7 @@ public class ItemInfinity extends IFCustomItem implements MenuProvider, IButtonH
     @Override
     public void onCraftedBy(ItemStack stack, Level worldIn, Player playerIn) {
         super.onCraftedBy(stack, worldIn, playerIn);
-        addNbt(stack, 0, 0, false);
+        if (!stack.hasTag()) addNbt(stack, 0, 0, false);
     }
 
     public void addNbt(ItemStack stack, long power, int fuel, boolean special) {
