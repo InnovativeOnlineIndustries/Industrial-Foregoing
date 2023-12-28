@@ -1,3 +1,7 @@
+# Version 3.5.13
+
+* Fixed Plant Gatherer skipping blocks
+
 # Version 3.5.12
 
 * Fixed Infinity Tools resetting when being used in the Smithing table, closes #1311
