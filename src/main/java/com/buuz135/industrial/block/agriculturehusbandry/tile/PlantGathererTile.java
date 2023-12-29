@@ -90,8 +90,9 @@ public class PlantGathererTile extends IndustrialAreaWorkingTile<PlantGathererTi
                 }
                 increasePointer();
             }
+        } else {
+            increasePointer();
         }
-        increasePointer();
         return new WorkAction(1f, 0);
     }
 
