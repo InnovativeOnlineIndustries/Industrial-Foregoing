@@ -15,14 +15,14 @@ buildscript {
         }
     }
     dependencies {
-        classpath group: 'net.minecraftforge.gradle', name: 'ForgeGradle', version: '5.1.+', changing: true
+        classpath group: 'net.minecraftforge.gradle', name: 'ForgeGradle', version: '3.+', changing: true
         classpath "gradle.plugin.com.matthewprenger:CurseGradle:1.4.0"
     }
 }
 
 plugins {
     id 'maven-publish'
-    id 'org.cadixdev.licenser' version '0.6.1'
+    //id 'org.cadixdev.licenser' version '0.6.1'
     id "com.matthewprenger.cursegradle" version "1.4.0"
     id "se.bjurr.gitchangelog.git-changelog-gradle-plugin" version "1.71.4"
 }
@@ -121,9 +121,6 @@ repositories {
         url "https://maven.tterrag.com/"
     }
     maven {
-        url 'https://cdn.hrzn.studio/maven/'
-    }
-    maven {
         name 'jared maven'
         url "https://maven.blamejared.com/"
     }
@@ -147,8 +144,8 @@ repositories {
 
 dependencies {
     minecraft 'net.minecraftforge:forge:1.16.5-36.2.8'
-    compileOnly fg.deobf ('com.hrznstudio:titanium:1.16.5-3.2.8.2')
-    runtimeOnly fg.deobf ('com.hrznstudio:titanium:1.16.5-3.2.8.2')
+    compileOnly fg.deobf('com.hrznstudio:titanium:1.16.5-3.2.8.8-24')
+    runtimeOnly fg.deobf('com.hrznstudio:titanium:1.16.5-3.2.8.8-24')
     //if (findProject(':workspace') == null) {
     compileOnly fg.deobf("mezz.jei:jei-1.16.5:7.7.1.121:api")
     // at runtime, use the full JEI jar
@@ -218,14 +215,14 @@ publishing {
     }
 }
 
-license {
+/*license {
     header = project.file('HEADER')
     ext {
         year = Calendar.getInstance().get(Calendar.YEAR)
         name = 'Buuz135'
         mod = 'Industrial foregoing'
     }
-}
+}*/
 
 
 jar {
