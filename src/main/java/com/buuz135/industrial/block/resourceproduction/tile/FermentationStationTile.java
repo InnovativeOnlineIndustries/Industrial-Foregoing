@@ -55,7 +55,6 @@ import java.util.Collections;
 import java.util.List;
 import java.util.function.Function;
 import java.util.function.Predicate;
-import java.util.function.Supplier;
 
 public class FermentationStationTile extends IndustrialProcessingTile<FermentationStationTile> {
 
@@ -181,12 +180,14 @@ public class FermentationStationTile extends IndustrialProcessingTile<Fermentati
     public Runnable onFinish() {
         return () -> {
             ProductionType productionType = ProductionType.values()[this.production];
-            var toDrain = SealType.values()[this.seal].sealAmount.apply(this.input);
-            int multipliedAmount = productionType.amount * toDrain;
-            FluidStack stack = OreTitaniumFluidType.getFluidWithTag(ModuleCore.FERMENTED_ORE_MEAT, multipliedAmount, new ResourceLocation(OreTitaniumFluidType.getFluidTag(this.input.getFluid())));
-            this.output.fillForced(stack, IFluidHandler.FluidAction.EXECUTE);
-            this.catalyst.drainForced(productionType.neededFluid.getAmount() * toDrain / 100, IFluidHandler.FluidAction.EXECUTE);
-            this.input.drainForced(toDrain, IFluidHandler.FluidAction.EXECUTE);
+            var toDrain = Math.min(SealType.values()[this.seal].sealAmount.apply(this.input), this.input.getFluidAmount());
+            if (toDrain > 0) {
+                int multipliedAmount = productionType.amount * toDrain;
+                FluidStack stack = OreTitaniumFluidType.getFluidWithTag(ModuleCore.FERMENTED_ORE_MEAT, multipliedAmount, new ResourceLocation(OreTitaniumFluidType.getFluidTag(this.input.getFluid())));
+                this.output.fillForced(stack, IFluidHandler.FluidAction.EXECUTE);
+                this.catalyst.drainForced(productionType.neededFluid.getAmount() * toDrain / 100, IFluidHandler.FluidAction.EXECUTE);
+                this.input.drainForced(toDrain, IFluidHandler.FluidAction.EXECUTE);
+            }
         };
     }
 
