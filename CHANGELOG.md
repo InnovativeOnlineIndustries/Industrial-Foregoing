@@ -6,6 +6,7 @@
 * Changed Potion Brewer slot to limit to 1 so bottle don't stack when a mod changes that, closes #1413
 * Added support for mangrove trees in the plant gatherer, closes #1412
 * Fixed Cast Exception on player renderer, closes #1407
+* Added a tag cache for ore fluid, closes #1405
 
 # Version 3.5.13
 
