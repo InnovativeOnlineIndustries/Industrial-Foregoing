@@ -125,6 +125,7 @@ public class PotionBrewerTile extends IndustrialProcessingTile<PotionBrewerTile>
         addInventory(output = (SidedInventoryComponent<PotionBrewerTile>) new SidedInventoryComponent<PotionBrewerTile>("output", 82, 64, 3, 4)
                 .setColor(DyeColor.MAGENTA)
                 //.setRange(1,3)
+                .setSlotLimit(1)
                 .setInputFilter((stack, integer) -> false)
                 .setOutputFilter((stack, integer) -> true)
         );
