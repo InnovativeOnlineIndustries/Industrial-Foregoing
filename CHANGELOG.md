@@ -1,3 +1,7 @@
+# Version 3.5.14
+
+* Fixed Shiny versions of tools not being added to Infinity Tools
+
 # Version 3.5.13
 
 * Fixed Plant Gatherer skipping blocks
