@@ -29,12 +29,7 @@ import com.hrznstudio.titanium.event.handler.EventManager;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.TickEvent;
 
-import java.util.ArrayList;
-import java.util.List;
-
 public class CommonProxy {
-
-    public static List<String> CONTRIBUTORS = new ArrayList<>();
 
     public void run() {
         MinecraftForge.EVENT_BUS.register(new FakePlayerRideEntityHandler());

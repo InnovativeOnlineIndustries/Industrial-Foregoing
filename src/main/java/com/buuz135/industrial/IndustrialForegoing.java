@@ -24,7 +24,6 @@ package com.buuz135.industrial;
 import com.buuz135.industrial.module.*;
 import com.buuz135.industrial.proxy.CommonProxy;
 import com.buuz135.industrial.proxy.client.ClientProxy;
-import com.buuz135.industrial.proxy.client.render.TransporterTESR;
 import com.buuz135.industrial.proxy.network.*;
 import com.buuz135.industrial.recipe.LaserDrillRarity;
 import com.buuz135.industrial.recipe.provider.IndustrialRecipeProvider;
@@ -49,7 +48,6 @@ import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.core.BlockPos;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
-import net.minecraft.world.inventory.InventoryMenu;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
@@ -59,7 +57,6 @@ import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.client.event.ModelEvent;
 import net.minecraftforge.client.event.RegisterKeyMappingsEvent;
-import net.minecraftforge.client.event.TextureStitchEvent;
 import net.minecraftforge.common.ForgeMod;
 import net.minecraftforge.common.util.FakePlayer;
 import net.minecraftforge.common.util.NonNullLazy;
@@ -67,7 +64,6 @@ import net.minecraftforge.data.event.GatherDataEvent;
 import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.event.server.ServerStartingEvent;
 import net.minecraftforge.fml.DistExecutor;
-import net.minecraftforge.fml.ModLoader;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
@@ -92,6 +88,7 @@ public class IndustrialForegoing extends ModuleController {
     public static NetworkHandler NETWORK = new NetworkHandler(Reference.MOD_ID);
     public static Logger LOGGER = LogManager.getLogger(Reference.MOD_ID);
     public static IndustrialForegoing INSTANCE;
+    public static Reward CAT_EARS;
 
     static {
         NETWORK.registerMessage(ConveyorButtonInteractMessage.class);
@@ -118,11 +115,13 @@ public class IndustrialForegoing extends ModuleController {
         })).subscribe();*/
         RewardGiver giver = RewardManager.get().getGiver(UUID.fromString("d28b7061-fb92-4064-90fb-7e02b95a72a6"), "Buuz135");
         try {
-            giver.addReward(new Reward(new ResourceLocation(Reference.MOD_ID, "cat_ears"), new URL("https://raw.githubusercontent.com/Buuz135/Industrial-Foregoing/master/contributors.json"), () -> dist -> {
-            }, new String[]{"normal", "cat", "spooky", "snowy"}));
+            CAT_EARS = new Reward(new ResourceLocation(Reference.MOD_ID, "cat_ears"), new URL("https://raw.githubusercontent.com/Buuz135/Industrial-Foregoing/master/contributors.json"), () -> dist -> {
+            }, new String[]{"normal", "cat", "spooky", "snowy"});
+            giver.addReward(CAT_EARS);
         } catch (MalformedURLException e) {
             LOGGER.catching(e);
         }
+
         LaserDrillRarity.init();
         PlayerInventoryFinder.init();
         ForgeMod.enableMilkFluid();

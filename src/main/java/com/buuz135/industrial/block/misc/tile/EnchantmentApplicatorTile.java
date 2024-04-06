@@ -72,11 +72,13 @@ public class EnchantmentApplicatorTile extends IndustrialProcessingTile<Enchantm
         this.addInventory(inputFirst = (SidedInventoryComponent<EnchantmentApplicatorTile>) new SidedInventoryComponent<EnchantmentApplicatorTile>("inputFirst", 60, 40, 1, 1).
                 setColor(DyeColor.BLUE).
                 setInputFilter((stack, integer) -> !stack.getItem().equals(Items.ENCHANTED_BOOK)).
+                setSlotLimit(1).
                 setOutputFilter((stack, integer) -> false).
                 setComponentHarness(this)
         );
         this.addInventory(inputSecond = (SidedInventoryComponent<EnchantmentApplicatorTile>) new SidedInventoryComponent<EnchantmentApplicatorTile>("inputSecond", 85, 40, 1, 2).
                 setColor(DyeColor.MAGENTA).
+                setSlotLimit(1).
                 setOutputFilter((stack, integer) -> false).
                 setComponentHarness(this)
         );

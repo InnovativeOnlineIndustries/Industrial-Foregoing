@@ -34,6 +34,7 @@ import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidType;
 import net.minecraftforge.registries.ForgeRegistries;
 
+import java.util.HashMap;
 import java.util.List;
 
 public class OreTitaniumFluidType extends FluidType {
@@ -96,9 +97,16 @@ public class OreTitaniumFluidType extends FluidType {
         return ForgeRegistries.ITEMS.tags().isKnownTagName(key) && !TagUtil.getAllEntries(ForgeRegistries.ITEMS, key).isEmpty();
     }
 
+    public static HashMap<String, TagKey<Item>> TAG_CACHE = new HashMap<>();
+
     public static ItemStack getOutputDust(FluidStack stack) {
         String tag = getFluidTag(stack);
-        return TagUtil.getItemWithPreference(TagUtil.getItemTag(new ResourceLocation(tag.replace("forge:raw_materials/", "forge:dusts/"))));
+        if (TAG_CACHE.containsKey(tag)) {
+            return TagUtil.getItemWithPreference(TAG_CACHE.get(tag));
+        }
+        var itemTag = TagUtil.getItemTag(new ResourceLocation(tag.replace("forge:raw_materials/", "forge:dusts/")));
+        TAG_CACHE.put(tag, itemTag);
+        return TagUtil.getItemWithPreference(itemTag);
     }
 
 

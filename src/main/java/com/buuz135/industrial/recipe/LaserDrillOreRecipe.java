@@ -128,7 +128,7 @@ public class LaserDrillOreRecipe extends SerializableRecipe {
     }
 
     public static LaserDrillOreRecipe createEnd(String name, int color, int min, int max, int weight) {
-        ResourceLocation rl = new ResourceLocation("forge", "ores/" + name);
+        ResourceLocation rl = new ResourceLocation("forge", name);
         return createEnd(name, Ingredient.of(TagUtil.getItemTag(rl)), color, min, max, weight, rl);
     }
 

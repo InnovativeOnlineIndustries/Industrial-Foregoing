@@ -24,7 +24,6 @@ package com.buuz135.industrial.item.infinity;
 import com.buuz135.industrial.IndustrialForegoing;
 import com.buuz135.industrial.item.IFCustomItem;
 import com.buuz135.industrial.module.ModuleCore;
-import com.buuz135.industrial.proxy.CommonProxy;
 import com.buuz135.industrial.proxy.network.BackpackOpenedMessage;
 import com.google.common.collect.Multimap;
 import com.google.common.collect.MultimapBuilder;
@@ -333,7 +332,7 @@ public class ItemInfinity extends IFCustomItem implements MenuProvider, IButtonH
             }
             return InteractionResultHolder.success(player.getItemInHand(handIn));
         }
-        if (CommonProxy.CONTRIBUTORS.contains(player.getUUID().toString())) {
+        if (IndustrialForegoing.CAT_EARS.getPlayers().contains(player.getUUID())) {
             player.getItemInHand(handIn).getOrCreateTag().putBoolean("Special", true);
         }
         return super.use(worldIn, player, handIn);
