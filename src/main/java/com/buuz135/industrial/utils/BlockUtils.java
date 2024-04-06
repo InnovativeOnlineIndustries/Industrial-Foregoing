@@ -36,6 +36,7 @@ import net.minecraft.world.item.Rarity;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.MangrovePropaguleBlock;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.AABB;
@@ -71,11 +72,15 @@ public class BlockUtils {
     }
 
     public static boolean isLog(Level world, BlockPos pos) {
-        return isBlockTag(world, pos, BlockTags.LOGS);
+        return isBlockTag(world, pos, BlockTags.LOGS) || world.getBlockState(pos).is(Blocks.MANGROVE_ROOTS);
     }
 
     public static boolean isLeaves(Level world, BlockPos pos) {
-        return world.getBlockState(pos).is(BlockTags.WART_BLOCKS) || world.getBlockState(pos).is(BlockTags.LEAVES) || world.getBlockState(pos).getBlock().equals(Blocks.SHROOMLIGHT);
+        return world.getBlockState(pos).is(BlockTags.WART_BLOCKS)
+                || world.getBlockState(pos).is(BlockTags.LEAVES)
+                || world.getBlockState(pos).getBlock().equals(Blocks.SHROOMLIGHT)
+                || world.getBlockState(pos).getBlock().equals(Blocks.MOSS_CARPET)
+                || (world.getBlockState(pos).getBlock().equals(Blocks.MANGROVE_PROPAGULE) && world.getBlockState(pos).getValue(MangrovePropaguleBlock.HANGING));
     }
 
     public static boolean isChorus(Level world, BlockPos pos) {
