@@ -22,7 +22,6 @@
 
 package com.buuz135.industrial.proxy.client;
 
-import com.buuz135.industrial.IndustrialForegoing;
 import com.buuz135.industrial.block.generator.tile.MycelialReactorTile;
 import com.buuz135.industrial.block.tile.IndustrialAreaWorkingTile;
 import com.buuz135.industrial.block.transportstorage.tile.BHTile;
@@ -40,14 +39,12 @@ import com.buuz135.industrial.module.*;
 import com.buuz135.industrial.proxy.CommonProxy;
 import com.buuz135.industrial.proxy.client.event.IFClientEvents;
 import com.buuz135.industrial.proxy.client.render.*;
-import com.buuz135.industrial.proxy.network.BackpackOpenMessage;
 import com.buuz135.industrial.utils.FluidUtils;
 import com.buuz135.industrial.utils.Reference;
 import com.hrznstudio.titanium.event.handler.EventManager;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.KeyMapping;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.model.geom.builders.CubeDeformation;
 import net.minecraft.client.renderer.ItemBlockRenderTypes;
 import net.minecraft.client.renderer.RenderType;
@@ -232,9 +229,11 @@ public class ClientProxy extends CommonProxy {
     @SubscribeEvent
     public static void addLayers(EntityRenderersEvent.AddLayers event) {
         for (String skin : event.getSkins()) {
-            PlayerRenderer renderer = event.getSkin(skin);
-            renderer.addLayer(new ContributorsCatEarsRender(renderer));
-            renderer.addLayer(new InfinityLauncherProjectileArmorLayer(renderer));
+            var renderer = event.getSkin(skin);
+            if (renderer instanceof PlayerRenderer playerRenderer) {
+                playerRenderer.addLayer(new ContributorsCatEarsRender(playerRenderer));
+                playerRenderer.addLayer(new InfinityLauncherProjectileArmorLayer(playerRenderer));
+            }
         }
     }
 

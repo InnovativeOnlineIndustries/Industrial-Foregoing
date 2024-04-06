@@ -5,6 +5,7 @@
 * Fixed end version of ores in the Laser Ore Drill having an extra tag, closes #1417
 * Changed Potion Brewer slot to limit to 1 so bottle don't stack when a mod changes that, closes #1413
 * Added support for mangrove trees in the plant gatherer, closes #1412
+* Fixed Cast Exception on player renderer, closes #1407
 
 # Version 3.5.13
 
