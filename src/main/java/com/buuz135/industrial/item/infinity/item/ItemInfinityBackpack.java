@@ -33,7 +33,6 @@ import com.buuz135.industrial.item.infinity.ItemInfinity;
 import com.buuz135.industrial.module.ModuleCore;
 import com.buuz135.industrial.module.ModuleTool;
 import com.buuz135.industrial.module.ModuleTransportStorage;
-import com.buuz135.industrial.proxy.CommonProxy;
 import com.buuz135.industrial.proxy.network.BackpackOpenedMessage;
 import com.buuz135.industrial.proxy.network.BackpackSyncMessage;
 import com.buuz135.industrial.recipe.DissolutionChamberRecipe;
@@ -251,7 +250,7 @@ public class ItemInfinityBackpack extends ItemInfinity {
                     LocatorFactory.writePacketBuffer(buffer, new HeldStackLocatorInstance(handIn == InteractionHand.MAIN_HAND)));
             return InteractionResultHolder.success(player.getItemInHand(handIn));
         }
-        if (CommonProxy.CONTRIBUTORS.contains(player.getUUID().toString())) {
+        if (IndustrialForegoing.CAT_EARS.getPlayers().contains(player.getUUID())) {
             player.getItemInHand(handIn).getOrCreateTag().putBoolean("Special", true);
         }
         return super.use(worldIn, player, handIn);
