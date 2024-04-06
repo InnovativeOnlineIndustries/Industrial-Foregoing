@@ -1,6 +1,8 @@
 # Version 3.5.14
 
 * Fixed Shiny versions of tools not being added to Infinity Tools
+* Changed Enchantment Applicator slot to limit to 1, closes #1419
+* Fixed end version of ores in the Laser Ore Drill having an extra tag, closes #1417
 
 # Version 3.5.13
 

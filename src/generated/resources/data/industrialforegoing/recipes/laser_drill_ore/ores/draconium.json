@@ -7,7 +7,7 @@
           "type": "forge:not",
           "value": {
             "type": "forge:tag_empty",
-            "tag": "forge:ores/ores/draconium"
+            "tag": "forge:ores/draconium"
           }
         }
       ],

@@ -7,7 +7,7 @@
           "type": "forge:not",
           "value": {
             "type": "forge:tag_empty",
-            "tag": "forge:ores/raw_materials/tungsten"
+            "tag": "forge:raw_materials/tungsten"
           }
         }
       ],
