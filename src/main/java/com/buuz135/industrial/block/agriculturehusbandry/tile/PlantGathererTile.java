@@ -98,7 +98,7 @@ public class PlantGathererTile extends IndustrialAreaWorkingTile<PlantGathererTi
             this.ether.drainForced(1, IFluidHandler.FluidAction.EXECUTE);
         }
         if (hasEnergy(powerPerOperation)) {
-            int amount = Math.max(1, BlockUtils.getBlockPosInAABB(getWorkingArea().bounds()).size() / 30);
+            int amount = Math.max(1, BlockUtils.getBlockPosInAABB(getWorkingArea().bounds()).size() / 20);
             for (int i = 0; i < amount; i++) {
                 BlockPos pointed = getPointedBlockPos();
                 if (isLoaded(pointed) && !ItemStackUtils.isInventoryFull(output)) {
@@ -122,8 +122,9 @@ public class PlantGathererTile extends IndustrialAreaWorkingTile<PlantGathererTi
                 }
                 increasePointer();
             }
+        } else {
+            increasePointer();
         }
-        increasePointer();
         return new WorkAction(1f, 0);
     }
 

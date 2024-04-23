@@ -90,7 +90,7 @@ public class MobImprisonmentToolItem extends IFCustomItem {
         Entity entity = getEntityFromStack(stack, worldIn, true, false);
         BlockPos blockPos = pos.relative(facing);
         entity.absMoveTo(blockPos.getX() + 0.5, blockPos.getY(), blockPos.getZ() + 0.5, 0, 0);
-        stack.setTag(new CompoundTag());
+        stack.setTag(null);
         worldIn.addFreshEntity(entity);
         return true;
     }

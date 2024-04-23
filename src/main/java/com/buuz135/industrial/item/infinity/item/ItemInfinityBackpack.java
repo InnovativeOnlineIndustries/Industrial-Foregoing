@@ -156,7 +156,7 @@ public class ItemInfinityBackpack extends ItemInfinity {
                             if (handlerItem != null) {
                                 if (handlerItem.fill(new FluidStack(ModuleCore.ESSENCE.getSourceFluid().get(), entity.getValue() * 20), IFluidHandler.FluidAction.SIMULATE) > 0) {
                                     handlerItem.fill(new FluidStack(ModuleCore.ESSENCE.getSourceFluid().get(), entity.getValue() * 20), IFluidHandler.FluidAction.EXECUTE);
-                                    entity.onClientRemoval();
+                                    entity.remove(Entity.RemovalReason.KILLED);
                                     pickupXp.setCanceled(true);
                                 }
 

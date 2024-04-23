@@ -44,6 +44,8 @@ import com.hrznstudio.titanium.network.locator.PlayerInventoryFinder;
 import com.hrznstudio.titanium.reward.Reward;
 import com.hrznstudio.titanium.reward.RewardGiver;
 import com.hrznstudio.titanium.reward.RewardManager;
+import net.minecraft.client.KeyMapping;
+import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.core.BlockPos;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
@@ -51,15 +53,16 @@ import net.minecraft.world.inventory.InventoryMenu;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.LiquidBlock;
-import net.minecraft.world.level.dimension.DimensionType;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.client.event.ModelEvent;
+import net.minecraftforge.client.event.RegisterKeyMappingsEvent;
 import net.minecraftforge.client.event.TextureStitchEvent;
 import net.minecraftforge.common.ForgeMod;
 import net.minecraftforge.common.util.FakePlayer;
 import net.minecraftforge.common.util.NonNullLazy;
 import net.minecraftforge.data.event.GatherDataEvent;
+import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.event.server.ServerStartingEvent;
 import net.minecraftforge.fml.DistExecutor;
 import net.minecraftforge.fml.common.Mod;
@@ -82,7 +85,7 @@ import java.util.stream.Collectors;
 public class IndustrialForegoing extends ModuleController {
 
     private static CommonProxy proxy;
-    private static HashMap<DimensionType, IFFakePlayer> worldFakePlayer = new HashMap<>();
+    private static HashMap<Integer, IFFakePlayer> worldFakePlayer = new HashMap<>();
     public static NetworkHandler NETWORK = new NetworkHandler(Reference.MOD_ID);
     public static Logger LOGGER = LogManager.getLogger(Reference.MOD_ID);
     public static IndustrialForegoing INSTANCE;
@@ -124,11 +127,11 @@ public class IndustrialForegoing extends ModuleController {
     }
 
     public static FakePlayer getFakePlayer(Level world) {
-        if (worldFakePlayer.containsKey(world.dimensionType()))
-            return worldFakePlayer.get(world.dimensionType());
+        if (worldFakePlayer.containsKey(world.hashCode()))
+            return worldFakePlayer.get(world.hashCode());
         if (world instanceof ServerLevel) {
             IFFakePlayer fakePlayer = new IFFakePlayer((ServerLevel) world);
-            worldFakePlayer.put(world.dimensionType(), fakePlayer);
+            worldFakePlayer.put(world.hashCode(), fakePlayer);
             return fakePlayer;
         }
         return null;
@@ -189,6 +192,15 @@ public class IndustrialForegoing extends ModuleController {
         }).subscribe();
         EventManager.mod(ModelEvent.BakingCompleted.class).process(event -> {
             ClientProxy.ears_baked = event.getModels().get(new ResourceLocation(Reference.MOD_ID, "block/catears"));
+        }).subscribe();
+        ClientProxy.OPEN_BACKPACK = new KeyMapping("key.industrialforegoing.backpack.desc", -1, "key.industrialforegoing.category");
+        EventManager.mod(RegisterKeyMappingsEvent.class).process(event -> {
+            event.register(ClientProxy.OPEN_BACKPACK);
+        }).subscribe();
+        EventManager.forge(TickEvent.ClientTickEvent.class).process(event -> {
+            if (ClientProxy.OPEN_BACKPACK.consumeClick()) {
+                IndustrialForegoing.NETWORK.get().sendToServer(new BackpackOpenMessage(Screen.hasControlDown()));
+            }
         }).subscribe();
     }
 }

@@ -30,6 +30,7 @@ import com.hrznstudio.titanium.annotation.Save;
 import com.hrznstudio.titanium.component.energy.EnergyStorageComponent;
 import com.hrznstudio.titanium.component.fluid.SidedFluidTankComponent;
 import com.hrznstudio.titanium.component.inventory.SidedInventoryComponent;
+import com.hrznstudio.titanium.util.TagUtil;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.inventory.AnvilMenu;
 import net.minecraft.world.item.DyeColor;
@@ -43,6 +44,7 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
 import net.minecraftforge.fluids.capability.IFluidHandler;
+import net.minecraftforge.registries.ForgeRegistries;
 import org.apache.commons.lang3.tuple.Pair;
 
 import java.util.Map;
@@ -64,7 +66,8 @@ public class EnchantmentApplicatorTile extends IndustrialProcessingTile<Enchantm
         this.addTank(tank = (SidedFluidTankComponent<EnchantmentApplicatorTile>) new SidedFluidTankComponent<EnchantmentApplicatorTile>("essence", EnchantmentApplicatorConfig.tankSize, 34, 20, 0).
                 setColor(DyeColor.LIME).
                 setComponentHarness(this).
-                setValidator(fluidStack -> fluidStack.getFluid().is(IndustrialTags.Fluids.EXPERIENCE))
+                setOnContentChange(() -> syncObject(this.tank)).
+                setValidator(fluidStack -> TagUtil.hasTag(ForgeRegistries.FLUIDS, fluidStack.getFluid(), IndustrialTags.Fluids.EXPERIENCE))
         );
         this.addInventory(inputFirst = (SidedInventoryComponent<EnchantmentApplicatorTile>) new SidedInventoryComponent<EnchantmentApplicatorTile>("inputFirst", 60, 40, 1, 1).
                 setColor(DyeColor.BLUE).
@@ -90,7 +93,9 @@ public class EnchantmentApplicatorTile extends IndustrialProcessingTile<Enchantm
         long amount = this.tank.getFluidAmount();
         BlockEntity tileEntity = this.level.getBlockEntity(this.worldPosition.above());
         if (tileEntity != null && tileEntity.getCapability(CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY).isPresent()) {
-            amount += tileEntity.getCapability(CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY).map(iFluidHandler -> iFluidHandler.drain(new FluidStack(ModuleCore.ESSENCE.getSourceFluid().get(), Integer.MAX_VALUE), IFluidHandler.FluidAction.SIMULATE).getAmount()).orElse(0);
+            amount += tileEntity.getCapability(CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY)
+                    .filter(iFluidHandler -> iFluidHandler.getTanks() > 0 && TagUtil.hasTag(ForgeRegistries.FLUIDS, iFluidHandler.getFluidInTank(0).getFluid(), IndustrialTags.Fluids.EXPERIENCE))
+                    .map(iFluidHandler -> iFluidHandler.getFluidInTank(0).getAmount()).orElse(0);
         }
         return !output.getLeft().isEmpty() && amount >= getEssenceConsumed(output.getRight()) && this.output.getStackInSlot(0).isEmpty();
     }
