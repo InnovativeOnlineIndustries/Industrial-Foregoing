@@ -98,7 +98,7 @@ public class CulinaryGeneratorType implements IMycelialGeneratorType{
 
     @Override
     public List<MycelialGeneratorRecipe> getRecipes() {
-        return ForgeRegistries.ITEMS.getValues().stream().filter(Item::isFood).map(ItemStack::new).map(item -> new MycelialGeneratorRecipe(Collections.singletonList(Collections.singletonList(Ingredient.fromStacks(item))), new ArrayList<>(), calculate(item).getLeft(), calculate(item).getRight())).collect(Collectors.toList());
+        return ForgeRegistries.ITEMS.getValues().stream().filter(item -> item.isFood() && item.getFood() != null).map(ItemStack::new).map(item -> new MycelialGeneratorRecipe(Collections.singletonList(Collections.singletonList(Ingredient.fromStacks(item))), new ArrayList<>(), calculate(item).getLeft(), calculate(item).getRight())).collect(Collectors.toList());
     }
 
     private Pair<Integer,Integer> calculate(ItemStack stack){
