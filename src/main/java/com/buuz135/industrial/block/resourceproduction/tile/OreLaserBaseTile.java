@@ -143,10 +143,13 @@ public class OreLaserBaseTile extends IndustrialMachineTile<OreLaserBaseTile> im
                             if (laserDrillOreRecipe.catalyst.test(lens.getStackInSlot(i))) weight += OreLaserBaseConfig.catalystModifier;
                         }
                         ItemStack stack = laserDrillOreRecipe.output.getMatchingStacks()[0];
+                        boolean hasFound = false;
                         for (String modid : TagConfig.ITEM_PREFERENCE) {
+                            if (hasFound) break;
                             for (ItemStack matchingStack : laserDrillOreRecipe.output.getMatchingStacks()) {
                                 if (matchingStack.getItem().getRegistryName().getNamespace().equals(modid)){
                                     stack = matchingStack;
+                                    hasFound = true;
                                     break;
                                 }
                             }

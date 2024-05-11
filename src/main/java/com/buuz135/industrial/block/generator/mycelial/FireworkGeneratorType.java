@@ -109,6 +109,7 @@ public class FireworkGeneratorType implements IMycelialGeneratorType{
 
     private Pair<Integer, Integer> calculate(ItemStack stack) {
         CompoundNBT nbt = stack.getChildTag("Fireworks");
+        if (nbt == null || !nbt.contains("Flight")) return Pair.of(0, 0);
         int flight = nbt.getInt("Flight");
         double power = 1;
         ListNBT listnbt = nbt.getList("Explosions", 10);
