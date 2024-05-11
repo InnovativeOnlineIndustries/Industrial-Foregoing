@@ -364,7 +364,7 @@ public class ConveyorBlock extends BasicTileBlock<ConveyorTile> implements IWate
     @Override
     public BlockState getStateForPlacement(BlockItemUseContext context) {
         FluidState ifluidstate = context.getWorld().getFluidState(context.getPos());
-        return this.getDefaultState().with(FACING, context.getPlayer().getHorizontalFacing()).with(WATERLOGGED, Boolean.valueOf(ifluidstate.getFluid() == Fluids.WATER));
+        return this.getDefaultState().with(FACING, context.getPlayer() == null ? Direction.NORTH : context.getPlayer().getHorizontalFacing()).with(WATERLOGGED, Boolean.valueOf(ifluidstate.getFluid() == Fluids.WATER));
     }
 
     @Override
