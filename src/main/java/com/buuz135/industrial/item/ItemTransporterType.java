@@ -23,6 +23,7 @@ package com.buuz135.industrial.item;
 
 import com.buuz135.industrial.api.IBlockContainer;
 import com.buuz135.industrial.api.transporter.TransporterTypeFactory;
+import com.buuz135.industrial.block.transportstorage.tile.TransporterTile;
 import com.buuz135.industrial.module.ModuleTransportStorage;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -54,7 +55,7 @@ public class ItemTransporterType extends IFCustomItem {
                 pos = context.getClickedPos().relative(context.getClickedFace());
             }
             BlockEntity tile = context.getLevel().getBlockEntity(pos);
-            if (tile instanceof IBlockContainer) {
+            if (tile instanceof IBlockContainer && tile instanceof TransporterTile) {
                 if (!((IBlockContainer) tile).hasUpgrade(side) && factory.canBeAttachedAgainst(context.getLevel(), context.getClickedPos(), side.getOpposite())) {
                     ((IBlockContainer) tile).addUpgrade(side, factory);
                     if (!context.getPlayer().isCreative()) context.getItemInHand().shrink(1);

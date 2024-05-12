@@ -28,6 +28,7 @@ import com.buuz135.industrial.config.machine.agriculturehusbandry.SlaughterFacto
 import com.buuz135.industrial.item.addon.RangeAddonItem;
 import com.buuz135.industrial.module.ModuleAgricultureHusbandry;
 import com.buuz135.industrial.module.ModuleCore;
+import com.buuz135.industrial.utils.IndustrialTags;
 import com.hrznstudio.titanium.annotation.Save;
 import com.hrznstudio.titanium.component.energy.EnergyStorageComponent;
 import com.hrznstudio.titanium.component.fluid.FluidTankComponent;
@@ -78,7 +79,7 @@ public class SlaughterFactoryTile extends IndustrialAreaWorkingTile<SlaughterFac
     @Override
     public WorkAction work() {
         if (hasEnergy(powerPerOperation)) {
-            List<Mob> mobs = this.level.getEntitiesOfClass(Mob.class, getWorkingArea().bounds()).stream().filter(LivingEntity::isAlive).filter(mob -> !mob.isInvulnerable()).toList();
+            List<Mob> mobs = this.level.getEntitiesOfClass(Mob.class, getWorkingArea().bounds()).stream().filter(LivingEntity::isAlive).filter(mob -> !mob.isInvulnerable() && !mob.getType().is(IndustrialTags.EntityTypes.SLAUGHTER_FACTORY_BLACKLIST)).toList();
             if (mobs.size() > 0) {
                 Mob entity = mobs.get(0);
                 float currentHealth = entity.getHealth();

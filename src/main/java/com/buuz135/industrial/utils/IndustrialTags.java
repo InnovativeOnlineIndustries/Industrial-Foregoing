@@ -63,6 +63,8 @@ public class IndustrialTags {
         public static final TagKey<EntityType<?>> MOB_IMPRISONMENT_TOOL_BLACKLIST = TagUtil.getEntityTypeTag(new ResourceLocation(Reference.MOD_ID + ":" + "mob_imprisonment_tool_blacklist"));
         public static final TagKey<EntityType<?>> MOB_DUPLICATOR_BLACKLIST = TagUtil.getEntityTypeTag(new ResourceLocation(Reference.MOD_ID + ":" + "mob_duplicator_blacklist"));
         public static final TagKey<EntityType<?>> MOB_CRUSHER_INSTANT_KILL_BLACKLIST = TagUtil.getEntityTypeTag(new ResourceLocation(Reference.MOD_ID + ":" + "mob_crusher_blacklist"));
+        public static final TagKey<EntityType<?>> SLAUGHTER_FACTORY_BLACKLIST = TagUtil.getEntityTypeTag(new ResourceLocation(Reference.MOD_ID + ":" + "slaughter_factory_blacklist"));
+
 
     }
 
