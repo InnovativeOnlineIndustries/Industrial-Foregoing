@@ -52,7 +52,7 @@ public class ItemConveyorUpgrade extends IFCustomItem {
             BlockEntity tile = context.getLevel().getBlockEntity(context.getClickedPos());
             if (tile instanceof ConveyorTile && ((ConveyorTile) tile).getConveyorType().isVertical())
                 return InteractionResult.PASS;
-            if (tile instanceof IBlockContainer) {
+            if (tile instanceof IBlockContainer && tile instanceof ConveyorTile) {
                 Direction side = factory.getSideForPlacement(context.getLevel(), context.getClickedPos(), context.getPlayer());
                 if (!((IBlockContainer) tile).hasUpgrade(side)) {
                     ((IBlockContainer) tile).addUpgrade(side, factory);
