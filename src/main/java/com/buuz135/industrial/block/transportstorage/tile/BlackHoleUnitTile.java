@@ -240,6 +240,11 @@ public class BlackHoleUnitTile extends BHTile<BlackHoleUnitTile> {
 
     public void setStack(ItemStack stack) {
         boolean equal = ItemStack.isSameItemSameTags(stack, blStack);
+        if (!stack.isEmpty()) {
+            // Normalize the stack size, otherwise stacks larger than 127 can become empty when
+            // serialized.
+            stack = ItemHandlerHelper.copyStackWithSize(stack, 1);
+        }
         this.blStack = stack;
         this.hasNBT = this.blStack.hasTag();
         if (!equal) syncObject(this.blStack);
