@@ -1,3 +1,9 @@
+# Version 3.5.17
+
+* Fix bug where Black Hole Units could transmute items (by notcake)
+* Fix FireworkGeneratorCategory not showing up in JEI (by Christofmeg)
+* Fixed black hole units losing the nbt of items when stored in controllers, closes #1435
+
 # Version 3.5.16
 
 * Fixed Shiny versions of tools not being added to Infinity Tools

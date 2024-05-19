@@ -152,6 +152,7 @@ public class BLHBlockItemHandlerItemStack implements IItemHandler {
             stack = ItemHandlerHelper.copyStackWithSize(stack, 1);
         }
         this.stack.getTag().getCompound("BlockEntityTag").put("blStack", stack.serializeNBT());
+        this.stack.getTag().getCompound("BlockEntityTag").putBoolean("hasNBT", stack.hasTag());
     }
 
     private CompoundTag getTag() {
