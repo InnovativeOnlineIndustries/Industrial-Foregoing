@@ -146,7 +146,13 @@ public class BLHBlockItemHandlerItemStack implements IItemHandler {
             compoundNBT.put("BlockEntityTag", new CompoundTag());
             this.stack.setTag(compoundNBT);
         }
+        if (!stack.isEmpty()) {
+            // Normalize the stack size, otherwise stacks larger than 127 can become empty when
+            // serialized.
+            stack = ItemHandlerHelper.copyStackWithSize(stack, 1);
+        }
         this.stack.getTag().getCompound("BlockEntityTag").put("blStack", stack.serializeNBT());
+        this.stack.getTag().getCompound("BlockEntityTag").putBoolean("hasNBT", stack.hasTag());
     }
 
     private CompoundTag getTag() {
