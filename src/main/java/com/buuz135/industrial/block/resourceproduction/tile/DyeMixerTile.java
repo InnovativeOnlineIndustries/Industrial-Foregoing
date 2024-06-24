@@ -37,7 +37,9 @@ import com.hrznstudio.titanium.component.progress.ProgressBarComponent;
 import com.hrznstudio.titanium.util.FacingUtil;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.DyeColor;
 import net.minecraft.world.item.DyeItem;
 import net.minecraft.world.item.ItemStack;
@@ -238,6 +240,20 @@ public class DyeMixerTile extends IndustrialProcessingTile<DyeMixerTile> {
     @Override
     public DyeMixerTile getSelf() {
         return this;
+    }
+
+    @Override
+    public void loadSettings(Player player, CompoundTag tag) {
+        if (tag.contains("DM_dye")) {
+            dye = tag.getInt("DM_dye");
+        }
+        super.loadSettings(player, tag);
+    }
+
+    @Override
+    public void saveSettings(Player player, CompoundTag tag) {
+        tag.putInt("DM_dye", dye);
+        super.saveSettings(player, tag);
     }
 
     private static class ColorUsage {

@@ -17,9 +17,11 @@ import com.hrznstudio.titanium.component.fluid.SidedFluidTankComponent;
 import com.hrznstudio.titanium.component.inventory.SidedInventoryComponent;
 import com.hrznstudio.titanium.item.AugmentWrapper;
 import net.minecraft.core.BlockPos;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.MobSpawnType;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.DyeColor;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.ServerLevelAccessor;
@@ -160,5 +162,19 @@ public class MobDuplicatorTile extends IndustrialAreaWorkingTile<MobDuplicatorTi
     @Override
     public int getMaxProgress() {
         return MobDuplicatorConfig.maxProgress;
+    }
+
+    @Override
+    public void saveSettings(Player player, CompoundTag tag) {
+        tag.putBoolean("MC_exactCopy", exactCopy);
+        super.saveSettings(player, tag);
+    }
+
+    @Override
+    public void loadSettings(Player player, CompoundTag tag) {
+        if (tag.contains("MC_exactCopy")) {
+            exactCopy = tag.getBoolean("MC_exactCopy");
+        }
+        super.loadSettings(player, tag);
     }
 }

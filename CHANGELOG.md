@@ -1,3 +1,7 @@
+# Version 3.5.18
+
+* Added Machine Settings Copier
+
 # Version 3.5.17
 
 * Fix bug where Black Hole Units could transmute items (by notcake)

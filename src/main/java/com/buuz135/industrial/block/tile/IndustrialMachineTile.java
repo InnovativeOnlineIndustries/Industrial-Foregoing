@@ -22,11 +22,13 @@
 
 package com.buuz135.industrial.block.tile;
 
+import com.buuz135.industrial.api.IMachineSettings;
 import com.buuz135.industrial.item.addon.ProcessingAddonItem;
 import com.buuz135.industrial.item.addon.RangeAddonItem;
 import com.buuz135.industrial.proxy.client.IndustrialAssetProvider;
 import com.hrznstudio.titanium.annotation.Save;
 import com.hrznstudio.titanium.api.augment.AugmentTypes;
+import com.hrznstudio.titanium.api.filter.IFilter;
 import com.hrznstudio.titanium.api.redstone.IRedstoneReader;
 import com.hrznstudio.titanium.api.redstone.IRedstoneState;
 import com.hrznstudio.titanium.block.BasicTileBlock;
@@ -38,9 +40,17 @@ import com.hrznstudio.titanium.client.screen.asset.IAssetProvider;
 import com.hrznstudio.titanium.component.bundle.TankInteractionBundle;
 import com.hrznstudio.titanium.component.button.RedstoneControlButtonComponent;
 import com.hrznstudio.titanium.component.fluid.FluidTankComponent;
+import com.hrznstudio.titanium.component.fluid.SidedFluidTankComponent;
+import com.hrznstudio.titanium.component.inventory.InventoryComponent;
+import com.hrznstudio.titanium.component.inventory.SidedInventoryComponent;
+import com.hrznstudio.titanium.component.sideness.IFacingComponent;
 import com.hrznstudio.titanium.item.AugmentWrapper;
+import com.hrznstudio.titanium.nbthandler.NBTManager;
+import com.hrznstudio.titanium.util.FacingUtil;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
@@ -49,10 +59,17 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.common.capabilities.ForgeCapabilities;
+import net.minecraftforge.items.ItemHandlerHelper;
 import net.minecraftforge.registries.RegistryObject;
 import org.apache.commons.lang3.tuple.Pair;
 
-public abstract class IndustrialMachineTile<T extends IndustrialMachineTile<T>> extends MachineTile<T> implements IRedstoneReader {
+public abstract class IndustrialMachineTile<T extends IndustrialMachineTile<T>> extends MachineTile<T> implements IRedstoneReader, IMachineSettings {
+
+    private static String settingsAddons = "MACHINE_ADDONS";
+    private static String redstoneMode = "REDSTONE_MODE";
+    private static String sidenessTank = "SIDENESS_TANK";
+    private static String sidenessInventory = "SIDENESS_INVENTORY";
+    private static String filter = "FILTER";
 
     @Save
     private TankInteractionBundle<IndustrialMachineTile> tankBundle;
@@ -91,7 +108,7 @@ public abstract class IndustrialMachineTile<T extends IndustrialMachineTile<T>> 
         if (AugmentWrapper.hasType(augment, RangeAddonItem.RANGE)) {
             return !hasAugmentInstalled(RangeAddonItem.RANGE);
         }
-        return super.canAcceptAugment(augment);
+        return false;
     }
 
     public RedstoneManager<RedstoneAction> getRedstoneManager() {
@@ -126,36 +143,93 @@ public abstract class IndustrialMachineTile<T extends IndustrialMachineTile<T>> 
     @Override
     public void clientTick(Level level, BlockPos pos, BlockState state, T blockEntity) {
         super.clientTick(level, pos, state, blockEntity);
-        /*
-        if (isSoulPowered() && level.random.nextDouble() < 0.3D){
-            double posX = pos.getX();
-            double posZ = pos.getZ();
-            double offset = 0.1;
-            if (level.random.nextBoolean()){
-                posZ += level.random.nextDouble();
-                if (level.random.nextBoolean()){
-                    posX += 1 + offset;
-                }else {
-                    posX -= offset;
-                }
-            } else {
-                posX += level.random.nextDouble();
-                if (level.random.nextBoolean()){
-                    posZ += 1 + offset;
-                }else {
-                    posZ -= offset;
+    }
+
+    @Override
+    public void loadSettings(Player player, CompoundTag tag) {
+        if (tag.contains(settingsAddons)) {
+            var stacks = IMachineSettings.readInventory(tag.getCompound(settingsAddons));
+            for (var stack : stacks) {
+                if (this.canAcceptAugment(stack)) {
+                    for (ItemStack stackPlayer : player.inventory.items) {
+                        if (ItemStack.isSameItem(stack, stackPlayer)) {
+                            var copiedStack = ItemHandlerHelper.copyStackWithSize(stackPlayer, 1);
+                            if (ItemHandlerHelper.insertItem(this.getAugmentInventory(), copiedStack, false).isEmpty()) {
+                                stackPlayer.shrink(1);
+                            }
+                            break;
+                        }
+                    }
                 }
             }
-            this.level.addParticle(ParticleTypes.SCULK_SOUL, posX, pos.getY()+0.1, posZ, 0,0.045,0);
-        }*/
+        }
+        if (tag.contains(redstoneMode)) {
+            NBTManager.getInstance().readTileEntity(this, tag.getCompound(redstoneMode));
+        }
+        if (tag.contains(sidenessInventory)) {
+            for (InventoryComponent<T> inventoryHandler : this.getMultiInventoryComponent().getInventoryHandlers()) {
+                if (inventoryHandler instanceof SidedInventoryComponent<T> sided) {
+                    if (tag.getCompound(sidenessInventory).contains(sided.getName())) {
+                        CompoundTag intermediateTag = tag.getCompound(sidenessInventory).getCompound(sided.getName());
+                        for (String allKey : intermediateTag.getAllKeys()) {
+                            sided.getFacingModes().put(FacingUtil.Sideness.valueOf(allKey), IFacingComponent.FaceMode.valueOf(intermediateTag.getString(allKey)));
+                        }
+                    }
+                }
+            }
+        }
+        if (tag.contains(sidenessTank)) {
+            for (FluidTankComponent<T> fluidTankComponent : this.getMultiTankComponent().getTanks()) {
+                if (fluidTankComponent instanceof SidedFluidTankComponent<T> sided) {
+                    if (tag.getCompound(sidenessTank).contains(sided.getName())) {
+                        CompoundTag intermediateTag = tag.getCompound(sidenessTank).getCompound(sided.getName());
+                        for (String allKey : intermediateTag.getAllKeys()) {
+                            sided.getFacingModes().put(FacingUtil.Sideness.valueOf(allKey), IFacingComponent.FaceMode.valueOf(intermediateTag.getString(allKey)));
+                        }
+                    }
+                }
+            }
+        }
+        if (tag.contains(filter)) {
+            for (IFilter iFilter : this.getMultiFilterComponent().getFilters()) {
+                if (tag.getCompound(filter).contains(iFilter.getName())) {
+                    iFilter.deserializeNBT(tag.getCompound(filter).getCompound(iFilter.getName()));
+                }
+            }
+        }
+        markForUpdate();
     }
 
-    public boolean canBeSoulPowered() {
-        return false;
+    @Override
+    public void saveSettings(Player player, CompoundTag tag) {
+        tag.put(settingsAddons, IMachineSettings.writeInventory(this.getAugmentInventory()));
+        tag.put(redstoneMode, NBTManager.getInstance().writeTileEntityObject(this, redstoneManager, new CompoundTag()));
+        CompoundTag sideInvTag = new CompoundTag();
+        for (InventoryComponent<T> inventoryHandler : this.getMultiInventoryComponent().getInventoryHandlers()) {
+            if (inventoryHandler instanceof SidedInventoryComponent<T> sided) {
+                CompoundTag intermediateTag = new CompoundTag();
+                for (FacingUtil.Sideness facing : sided.getFacingModes().keySet()) {
+                    intermediateTag.putString(facing.name(), sided.getFacingModes().get(facing).name());
+                }
+                sideInvTag.put(sided.getName(), intermediateTag);
+            }
+        }
+        tag.put(sidenessInventory, sideInvTag);
+        CompoundTag sideTankTag = new CompoundTag();
+        for (FluidTankComponent<T> fluidTankComponent : this.getMultiTankComponent().getTanks()) {
+            if (fluidTankComponent instanceof SidedFluidTankComponent<T> sided) {
+                CompoundTag intermediateTag = new CompoundTag();
+                for (FacingUtil.Sideness facing : sided.getFacingModes().keySet()) {
+                    intermediateTag.putString(facing.name(), sided.getFacingModes().get(facing).name());
+                }
+                sideTankTag.put(sided.getName(), intermediateTag);
+            }
+        }
+        tag.put(sidenessTank, sideTankTag);
+        CompoundTag filterTag = new CompoundTag();
+        for (IFilter iFilter : this.getMultiFilterComponent().getFilters()) {
+            filterTag.put(iFilter.getName(), iFilter.serializeNBT());
+        }
+        tag.put(filter, filterTag);
     }
-
-    public boolean isSoulPowered() {
-        return true;
-    }
-
 }

@@ -47,8 +47,10 @@ import com.hrznstudio.titanium.util.RecipeUtil;
 import it.unimi.dsi.fastutil.objects.ObjectIntPair;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.util.random.WeightedRandom;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.DyeColor;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.RecipeType;
@@ -206,6 +208,20 @@ public class OreLaserBaseTile extends IndustrialMachineTile<OreLaserBaseTile> im
             return false;
         }
         return super.canAcceptAugment(augment);
+    }
+
+    @Override
+    public void saveSettings(Player player, CompoundTag tag) {
+        tag.putInt("OL_miningDepth", miningDepth);
+        super.saveSettings(player, tag);
+    }
+
+    @Override
+    public void loadSettings(Player player, CompoundTag tag) {
+        if (tag.contains("OL_miningDepth")) {
+            this.miningDepth = tag.getInt("OL_miningDepth");
+        }
+        super.loadSettings(player, tag);
     }
 
 }

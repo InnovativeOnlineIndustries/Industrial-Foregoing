@@ -39,9 +39,11 @@ import com.hrznstudio.titanium.component.inventory.SidedInventoryComponent;
 import com.hrznstudio.titanium.component.progress.ProgressBarComponent;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.tags.ItemTags;
 import net.minecraft.tags.TagKey;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.DyeColor;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
@@ -175,5 +177,29 @@ public class BioReactorTile extends IndustrialWorkingTile<BioReactorTile> {
     @Override
     public BioReactorTile getSelf() {
         return this;
+    }
+
+    @Override
+    public void loadSettings(Player player, CompoundTag tag) {
+        if (tag.contains("BR_locked")) {
+            input.setLocked(tag.getBoolean("BR_locked"));
+        }
+        if (tag.contains("BR_filter")) {
+            for (String psFilter : tag.getCompound("BR_filter").getAllKeys()) {
+                input.getFilter()[Integer.parseInt(psFilter)] = ItemStack.of(tag.getCompound("BR_filter").getCompound(psFilter));
+            }
+        }
+        super.loadSettings(player, tag);
+    }
+
+    @Override
+    public void saveSettings(Player player, CompoundTag tag) {
+        tag.putBoolean("BR_locked", input.isLocked());
+        CompoundTag filterTag = new CompoundTag();
+        for (int i = 0; i < input.getFilter().length; i++) {
+            filterTag.put(i + "", input.getFilter()[i].serializeNBT());
+        }
+        tag.put("BR_filter", filterTag);
+        super.saveSettings(player, tag);
     }
 }

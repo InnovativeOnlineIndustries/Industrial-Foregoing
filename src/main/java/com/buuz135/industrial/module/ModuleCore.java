@@ -30,10 +30,7 @@ import com.buuz135.industrial.block.core.LatexProcessingUnitBlock;
 import com.buuz135.industrial.block.core.tile.FluidExtractorTile;
 import com.buuz135.industrial.fluid.OreFluidInstance;
 import com.buuz135.industrial.fluid.OreTitaniumFluidType;
-import com.buuz135.industrial.item.FertilizerItem;
-import com.buuz135.industrial.item.ItemStraw;
-import com.buuz135.industrial.item.LaserLensItem;
-import com.buuz135.industrial.item.RecipelessCustomItem;
+import com.buuz135.industrial.item.*;
 import com.buuz135.industrial.item.addon.EfficiencyAddonItem;
 import com.buuz135.industrial.item.addon.ProcessingAddonItem;
 import com.buuz135.industrial.item.addon.RangeAddonItem;
@@ -51,17 +48,15 @@ import com.hrznstudio.titanium.tab.TitaniumTab;
 import net.minecraft.ChatFormatting;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.effect.MobEffects;
-import net.minecraft.world.item.*;
+import net.minecraft.world.item.DyeColor;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.Rarity;
 import net.minecraft.world.item.crafting.RecipeSerializer;
 import net.minecraft.world.item.crafting.RecipeType;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntityType;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
-import net.minecraftforge.client.event.TextureStitchEvent;
 import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.fluids.FluidType;
-import net.minecraftforge.fml.DistExecutor;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.RegistryObject;
 import org.apache.commons.lang3.tuple.Pair;
@@ -97,6 +92,7 @@ public class ModuleCore implements IModule {
     public static RegistryObject<Item> EFFICIENCY_ADDON_2;
     public static RegistryObject<Item> PROCESSING_ADDON_1;
     public static RegistryObject<Item> PROCESSING_ADDON_2;
+    public static RegistryObject<Item> MACHINE_SETTINGS_COPIER;
 
     public static TitaniumFluidInstance LATEX;
     public static TitaniumFluidInstance MEAT;
@@ -164,6 +160,7 @@ public class ModuleCore implements IModule {
         EFFICIENCY_ADDON_2 = helper.registerGeneric(ForgeRegistries.ITEMS.getRegistryKey(), "efficiency_addon_2", () -> new EfficiencyAddonItem(2, TAB_CORE));
         PROCESSING_ADDON_1 = helper.registerGeneric(ForgeRegistries.ITEMS.getRegistryKey(), "processing_addon_1", () -> new ProcessingAddonItem(1, TAB_CORE));
         PROCESSING_ADDON_2 = helper.registerGeneric(ForgeRegistries.ITEMS.getRegistryKey(), "processing_addon_2", () -> new ProcessingAddonItem(2, TAB_CORE));
+        MACHINE_SETTINGS_COPIER = helper.registerGeneric(ForgeRegistries.ITEMS.getRegistryKey(), "machine_settings_copier", () -> new MachineSettingCopier(TAB_CORE));
 
         LATEX = new TitaniumFluidInstance(helper, "latex", FluidType.Properties.create().density(1000), new ClientFluidTypeExtensions(new ResourceLocation(Reference.MOD_ID, "block/fluids/latex_still"), new ResourceLocation(Reference.MOD_ID, "block/fluids/latex_flow")), TAB_CORE);
         MEAT = new TitaniumFluidInstance(helper, "meat", FluidType.Properties.create().density(1000), new ClientFluidTypeExtensions(new ResourceLocation(Reference.MOD_ID, "block/fluids/meat_still"), new ResourceLocation(Reference.MOD_ID, "block/fluids/meat_flow")), TAB_CORE);

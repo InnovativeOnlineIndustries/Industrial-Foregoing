@@ -43,14 +43,14 @@ import com.hrznstudio.titanium.component.inventory.SidedInventoryComponent;
 import com.hrznstudio.titanium.util.AssetUtil;
 import com.hrznstudio.titanium.util.LangUtil;
 import com.hrznstudio.titanium.util.RecipeUtil;
-import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.ChatFormatting;
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.core.BlockPos;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.DyeColor;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
@@ -395,6 +395,36 @@ public class MaterialStoneWorkFactoryTile extends IndustrialProcessingTile<Mater
     @Override
     public int getMaxProgress() {
         return maxProgress;
+    }
+
+    @Override
+    public void saveSettings(Player player, CompoundTag tag) {
+        tag.putString("MSWF_generatorRecipe", this.generatorRecipe);
+        tag.putInt("MSWF_firstRecipeId", firstRecipeId);
+        tag.putInt("MSWF_secondRecipeId", secondRecipeId);
+        tag.putInt("MSWF_thirdRecipeId", thirdRecipeId);
+        tag.putInt("MSWF_fourthRecipeId", fourthRecipeId);
+        super.saveSettings(player, tag);
+    }
+
+    @Override
+    public void loadSettings(Player player, CompoundTag tag) {
+        if (tag.contains("MSWF_generatorRecipe")) {
+            this.generatorRecipe = tag.getString("MSWF_generatorRecipe");
+        }
+        if (tag.contains("MSWF_firstRecipeId")) {
+            this.firstRecipeId = tag.getInt("MSWF_firstRecipeId");
+        }
+        if (tag.contains("MSWF_secondRecipeId")) {
+            this.secondRecipeId = tag.getInt("MSWF_secondRecipeId");
+        }
+        if (tag.contains("MSWF_thirdRecipeId")) {
+            this.thirdRecipeId = tag.getInt("MSWF_thirdRecipeId");
+        }
+        if (tag.contains("MSWF_fourthRecipeId")) {
+            this.fourthRecipeId = tag.getInt("MSWF_fourthRecipeId");
+        }
+        super.loadSettings(player, tag);
     }
 
     public static class StoneWorkAction {

@@ -170,6 +170,9 @@ public class ClientProxy extends CommonProxy {
             }
             return 2f;
         });
+        ItemProperties.register(ModuleCore.MACHINE_SETTINGS_COPIER.get(), new ResourceLocation(Reference.MOD_ID, "stored"), (stack, world, entity, number) -> {
+            return stack.hasTag() ? 1 : 0;
+        });
     }
 
     @SubscribeEvent

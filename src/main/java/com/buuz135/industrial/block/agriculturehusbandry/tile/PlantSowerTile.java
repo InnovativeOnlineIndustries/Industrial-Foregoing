@@ -36,6 +36,8 @@ import com.hrznstudio.titanium.filter.ItemStackFilter;
 import com.hrznstudio.titanium.item.AugmentWrapper;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.DyeColor;
 import net.minecraft.world.item.ItemStack;
@@ -142,5 +144,29 @@ public class PlantSowerTile extends IndustrialAreaWorkingTile<PlantSowerTile> {
     @Override
     public PlantSowerTile getSelf() {
         return this;
+    }
+
+    @Override
+    public void loadSettings(Player player, CompoundTag tag) {
+        if (tag.contains("PS_locked")) {
+            input.setLocked(tag.getBoolean("PS_locked"));
+        }
+        if (tag.contains("PS_filter")) {
+            for (String psFilter : tag.getCompound("PS_filter").getAllKeys()) {
+                input.getFilter()[Integer.parseInt(psFilter)] = ItemStack.of(tag.getCompound("PS_filter").getCompound(psFilter));
+            }
+        }
+        super.loadSettings(player, tag);
+    }
+
+    @Override
+    public void saveSettings(Player player, CompoundTag tag) {
+        tag.putBoolean("PS_locked", input.isLocked());
+        CompoundTag filterTag = new CompoundTag();
+        for (int i = 0; i < input.getFilter().length; i++) {
+            filterTag.put(i + "", input.getFilter()[i].serializeNBT());
+        }
+        tag.put("PS_filter", filterTag);
+        super.saveSettings(player, tag);
     }
 }

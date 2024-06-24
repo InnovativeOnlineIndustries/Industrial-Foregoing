@@ -395,6 +395,7 @@
   "item.industrialforegoing.item_transporter_type": "Item Transporter",
   "item.industrialforegoing.fluid_transporter_type": "Fluid Transporter",
   "item.industrialforegoing.world_transporter_type": "World Transporter",
+  "item.industrialforegoing.machine_settings_copier": "Machine Settings Copier",
   "tooltip.titanium.facing_handler.lens": "Laser Lens",
   "tooltip.titanium.facing_handler.fuel_input": "Fuel Input",
   "tooltip.titanium.facing_handler.input_fluid": "Fluid Input",
@@ -581,5 +582,9 @@
   "industrialforegoing.subtitle.nuke_arming": "Infinity Nuke being armed",
   "industrialforegoing.subtitle.nuke_charging": "Infinity Nuke is charging",
   "industrialforegoing.subtitle.nuke_explosion": "Embrace Infinity Nuke's death and destruction",
-  "entity.industrialforegoing.infinity_nuke": "Infinity Nuke"
+  "entity.industrialforegoing.infinity_nuke": "Infinity Nuke",
+  "text.industrialforegoing.machine_settings_copier.settings_stored": "Settings Stored",
+  "text.industrialforegoing.machine_settings_copier.settings_copied": "Settings Copied",
+  "text.industrialforegoing.machine_settings_copier.settings_clear": "* Sneak Right Click to clear the copied settings",
+  "text.industrialforegoing.machine_settings_copier.settings_can_copy": "* Sneak Right Click a machine to copy the machine settings"
 }
