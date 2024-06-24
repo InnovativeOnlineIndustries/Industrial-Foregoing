@@ -1,0 +1,6 @@
+{
+  "parent": "industrialforegoing:item/item",
+  "textures": {
+    "layer0": "industrialforegoing:item/machine_setting_copier_stored"
+  }
+}

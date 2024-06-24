@@ -36,7 +36,9 @@ import com.hrznstudio.titanium.client.screen.addon.StateButtonInfo;
 import com.hrznstudio.titanium.component.button.ButtonComponent;
 import com.hrznstudio.titanium.component.energy.EnergyStorageComponent;
 import net.minecraft.core.BlockPos;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.entity.animal.Animal;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.block.state.BlockState;
@@ -118,4 +120,15 @@ public class AnimalBabySeparatorTile extends IndustrialAreaWorkingTile<AnimalBab
         return this;
     }
 
+    @Override
+    public void saveSettings(Player player, CompoundTag tag) {
+        tag.putBoolean("ABS_movingAdults", movingAdults);
+        super.saveSettings(player, tag);
+    }
+
+    @Override
+    public void loadSettings(Player player, CompoundTag tag) {
+        if (tag.contains("ABS_movingAdults")) this.movingAdults = tag.getBoolean("ABS_movingAdults");
+        super.loadSettings(player, tag);
+    }
 }

@@ -17,7 +17,7 @@
           "item": "industrialforegoing:laser_lens15"
         },
         "output": {
-          "tag": "forge:ores/raw_materials/tungsten"
+          "tag": "forge:raw_materials/tungsten"
         },
         "pointer": 0,
         "rarity": [

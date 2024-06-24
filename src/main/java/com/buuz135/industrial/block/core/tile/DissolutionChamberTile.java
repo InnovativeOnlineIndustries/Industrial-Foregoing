@@ -34,6 +34,8 @@ import com.hrznstudio.titanium.component.fluid.SidedFluidTankComponent;
 import com.hrznstudio.titanium.component.inventory.SidedInventoryComponent;
 import com.hrznstudio.titanium.util.RecipeUtil;
 import net.minecraft.core.BlockPos;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.DyeColor;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.RecipeType;
@@ -177,5 +179,29 @@ public class DissolutionChamberTile extends IndustrialProcessingTile<Dissolution
     @Override
     public DissolutionChamberTile getSelf() {
         return this;
+    }
+
+    @Override
+    public void loadSettings(Player player, CompoundTag tag) {
+        if (tag.contains("DC_locked")) {
+            input.setLocked(tag.getBoolean("DC_locked"));
+        }
+        if (tag.contains("DC_filter")) {
+            for (String psFilter : tag.getCompound("DC_filter").getAllKeys()) {
+                input.getFilter()[Integer.parseInt(psFilter)] = ItemStack.of(tag.getCompound("DC_filter").getCompound(psFilter));
+            }
+        }
+        super.loadSettings(player, tag);
+    }
+
+    @Override
+    public void saveSettings(Player player, CompoundTag tag) {
+        tag.putBoolean("DC_locked", input.isLocked());
+        CompoundTag filterTag = new CompoundTag();
+        for (int i = 0; i < input.getFilter().length; i++) {
+            filterTag.put(i + "", input.getFilter()[i].serializeNBT());
+        }
+        tag.put("DC_filter", filterTag);
+        super.saveSettings(player, tag);
     }
 }

@@ -1,0 +1,20 @@
+{
+  "parent": "industrialforegoing:item/item",
+  "textures": {
+    "layer0": "industrialforegoing:item/machine_setting_copier"
+  },
+  "overrides": [
+    {
+      "predicate": {
+        "industrialforegoing:stored": 0
+      },
+      "model": "industrialforegoing:item/machine_settings_copier_empty"
+    },
+    {
+      "predicate": {
+        "industrialforegoing:stored": 1
+      },
+      "model": "industrialforegoing:item/machine_settings_copier_stored"
+    }
+  ]
+}

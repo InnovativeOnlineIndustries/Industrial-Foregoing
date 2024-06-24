@@ -42,6 +42,8 @@ import com.hrznstudio.titanium.component.inventory.SidedInventoryComponent;
 import com.hrznstudio.titanium.util.LangUtil;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AnvilMenu;
 import net.minecraft.world.item.DyeColor;
 import net.minecraft.world.item.ItemStack;
@@ -234,4 +236,15 @@ public class EnchantmentExtractorTile extends IndustrialProcessingTile<Enchantme
         return itemstack;
     }
 
+    @Override
+    public void loadSettings(Player player, CompoundTag tag) {
+        if (tag.contains("EE_extractEnchants")) extractEnchants = tag.getBoolean("EE_extractEnchants");
+        super.loadSettings(player, tag);
+    }
+
+    @Override
+    public void saveSettings(Player player, CompoundTag tag) {
+        tag.putBoolean("EE_extractEnchants", extractEnchants);
+        super.saveSettings(player, tag);
+    }
 }

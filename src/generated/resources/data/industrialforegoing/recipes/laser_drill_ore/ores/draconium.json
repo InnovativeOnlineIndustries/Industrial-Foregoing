@@ -17,7 +17,7 @@
           "item": "industrialforegoing:laser_lens10"
         },
         "output": {
-          "tag": "forge:ores/ores/draconium"
+          "tag": "forge:ores/draconium"
         },
         "pointer": 0,
         "rarity": [

@@ -40,7 +40,9 @@ import com.hrznstudio.titanium.util.ItemHandlerUtil;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.NonNullList;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.DyeColor;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
@@ -226,5 +228,28 @@ public class PotionBrewerTile extends IndustrialProcessingTile<PotionBrewerTile>
         }
     }
 
+    @Override
+    public void loadSettings(Player player, CompoundTag tag) {
+        if (tag.contains("BR_locked")) {
+            brewingItems.setLocked(tag.getBoolean("BR_locked"));
+        }
+        if (tag.contains("BR_filter")) {
+            for (String psFilter : tag.getCompound("BR_filter").getAllKeys()) {
+                brewingItems.getFilter()[Integer.parseInt(psFilter)] = ItemStack.of(tag.getCompound("BR_filter").getCompound(psFilter));
+            }
+        }
+        super.loadSettings(player, tag);
+    }
+
+    @Override
+    public void saveSettings(Player player, CompoundTag tag) {
+        tag.putBoolean("BR_locked", brewingItems.isLocked());
+        CompoundTag filterTag = new CompoundTag();
+        for (int i = 0; i < brewingItems.getFilter().length; i++) {
+            filterTag.put(i + "", brewingItems.getFilter()[i].serializeNBT());
+        }
+        tag.put("BR_filter", filterTag);
+        super.saveSettings(player, tag);
+    }
 
 }

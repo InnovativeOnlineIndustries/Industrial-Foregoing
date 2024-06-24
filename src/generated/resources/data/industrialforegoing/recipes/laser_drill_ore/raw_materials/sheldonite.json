@@ -17,7 +17,7 @@
           "item": "industrialforegoing:laser_lens0"
         },
         "output": {
-          "tag": "forge:ores/raw_materials/sheldonite"
+          "tag": "forge:raw_materials/sheldonite"
         },
         "pointer": 0,
         "rarity": [

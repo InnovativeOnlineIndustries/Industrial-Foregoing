@@ -38,8 +38,10 @@ import com.hrznstudio.titanium.component.fluid.FluidTankComponent;
 import com.hrznstudio.titanium.component.fluid.SidedFluidTankComponent;
 import com.hrznstudio.titanium.container.addon.IContainerAddon;
 import net.minecraft.core.BlockPos;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.DyeColor;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
@@ -211,6 +213,24 @@ public class FermentationStationTile extends IndustrialProcessingTile<Fermentati
     @Override
     public FermentationStationTile getSelf() {
         return this;
+    }
+
+    @Override
+    public void saveSettings(Player player, CompoundTag tag) {
+        tag.putInt("FS_production", this.production);
+        tag.putInt("FS_seal", this.seal);
+        super.saveSettings(player, tag);
+    }
+
+    @Override
+    public void loadSettings(Player player, CompoundTag tag) {
+        if (tag.contains("FS_production")) {
+            this.production = tag.getInt("FS_production");
+        }
+        if (tag.contains("FS_seal")) {
+            this.seal = tag.getInt("FS_seal");
+        }
+        super.loadSettings(player, tag);
     }
 
     public enum ProductionType {

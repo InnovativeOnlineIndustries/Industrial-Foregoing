@@ -89,6 +89,7 @@ public class IndustrialRecipeProvider extends TitaniumRecipeProvider {
         ((IRecipeProvider) ModuleCore.EFFICIENCY_ADDON_2.get()).registerRecipe(consumer);
         ((IRecipeProvider) ModuleCore.PROCESSING_ADDON_1.get()).registerRecipe(consumer);
         ((IRecipeProvider) ModuleCore.PROCESSING_ADDON_2.get()).registerRecipe(consumer);
+        ((IRecipeProvider) ModuleCore.MACHINE_SETTINGS_COPIER.get()).registerRecipe(consumer);
         TitaniumShapelessRecipeBuilder.shapelessRecipe(ModuleCore.DRY_RUBBER.get()).requires(ModuleCore.TINY_DRY_RUBBER.get(), 9).save(consumer);
         SimpleCookingRecipeBuilder.smelting(Ingredient.of(ModuleCore.DRY_RUBBER.get()), RecipeCategory.MISC, ModuleCore.PLASTIC.get(), 0.3f, 200).unlockedBy("has_plastic", this.has(ModuleCore.DRY_RUBBER.get())).save(consumer);
         TitaniumShapedRecipeBuilder.shapedRecipe(ModuleCore.PITY.get())

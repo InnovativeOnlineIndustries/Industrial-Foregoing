@@ -45,9 +45,10 @@ import com.hrznstudio.titanium.util.FacingUtil;
 import com.hrznstudio.titanium.util.RecipeUtil;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
-import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.DyeColor;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.RecipeType;
@@ -193,4 +194,17 @@ public class FluidLaserBaseTile extends IndustrialMachineTile<FluidLaserBaseTile
         return super.canAcceptAugment(augment);
     }
 
+    @Override
+    public void saveSettings(Player player, CompoundTag tag) {
+        tag.putInt("FL_miningDepth", miningDepth);
+        super.saveSettings(player, tag);
+    }
+
+    @Override
+    public void loadSettings(Player player, CompoundTag tag) {
+        if (tag.contains("FL_miningDepth")) {
+            this.miningDepth = tag.getInt("FL_miningDepth");
+        }
+        super.loadSettings(player, tag);
+    }
 }

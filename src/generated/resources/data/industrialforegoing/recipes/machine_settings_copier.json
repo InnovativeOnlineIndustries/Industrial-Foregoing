@@ -1,0 +1,42 @@
+{
+  "type": "forge:conditional",
+  "recipes": [
+    {
+      "conditions": [
+        {
+          "type": "forge:and",
+          "values": [
+            {
+              "type": "forge:item_exists",
+              "item": "industrialforegoing:machine_settings_copier"
+            }
+          ]
+        }
+      ],
+      "recipe": {
+        "type": "minecraft:crafting_shaped",
+        "category": "misc",
+        "key": {
+          "L": {
+            "tag": "forge:plastic"
+          },
+          "P": {
+            "item": "minecraft:paper"
+          },
+          "R": {
+            "item": "minecraft:redstone"
+          }
+        },
+        "pattern": [
+          "PLP",
+          "LRL",
+          "PRP"
+        ],
+        "result": {
+          "item": "industrialforegoing:machine_settings_copier"
+        },
+        "show_notification": true
+      }
+    }
+  ]
+}
