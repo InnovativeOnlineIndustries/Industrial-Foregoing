@@ -204,32 +204,39 @@ public abstract class IndustrialMachineTile<T extends IndustrialMachineTile<T>> 
     public void saveSettings(Player player, CompoundTag tag) {
         tag.put(settingsAddons, IMachineSettings.writeInventory(this.getAugmentInventory()));
         tag.put(redstoneMode, NBTManager.getInstance().writeTileEntityObject(this, redstoneManager, new CompoundTag()));
-        CompoundTag sideInvTag = new CompoundTag();
-        for (InventoryComponent<T> inventoryHandler : this.getMultiInventoryComponent().getInventoryHandlers()) {
-            if (inventoryHandler instanceof SidedInventoryComponent<T> sided) {
-                CompoundTag intermediateTag = new CompoundTag();
-                for (FacingUtil.Sideness facing : sided.getFacingModes().keySet()) {
-                    intermediateTag.putString(facing.name(), sided.getFacingModes().get(facing).name());
+        if (this.getMultiInventoryComponent() != null) {
+            CompoundTag sideInvTag = new CompoundTag();
+            for (InventoryComponent<T> inventoryHandler : this.getMultiInventoryComponent().getInventoryHandlers()) {
+                if (inventoryHandler instanceof SidedInventoryComponent<T> sided) {
+                    CompoundTag intermediateTag = new CompoundTag();
+                    for (FacingUtil.Sideness facing : sided.getFacingModes().keySet()) {
+                        intermediateTag.putString(facing.name(), sided.getFacingModes().get(facing).name());
+                    }
+                    sideInvTag.put(sided.getName(), intermediateTag);
                 }
-                sideInvTag.put(sided.getName(), intermediateTag);
             }
+            tag.put(sidenessInventory, sideInvTag);
         }
-        tag.put(sidenessInventory, sideInvTag);
-        CompoundTag sideTankTag = new CompoundTag();
-        for (FluidTankComponent<T> fluidTankComponent : this.getMultiTankComponent().getTanks()) {
-            if (fluidTankComponent instanceof SidedFluidTankComponent<T> sided) {
-                CompoundTag intermediateTag = new CompoundTag();
-                for (FacingUtil.Sideness facing : sided.getFacingModes().keySet()) {
-                    intermediateTag.putString(facing.name(), sided.getFacingModes().get(facing).name());
+        if (this.getMultiTankComponent() != null) {
+            CompoundTag sideTankTag = new CompoundTag();
+            for (FluidTankComponent<T> fluidTankComponent : this.getMultiTankComponent().getTanks()) {
+                if (fluidTankComponent instanceof SidedFluidTankComponent<T> sided) {
+                    CompoundTag intermediateTag = new CompoundTag();
+                    for (FacingUtil.Sideness facing : sided.getFacingModes().keySet()) {
+                        intermediateTag.putString(facing.name(), sided.getFacingModes().get(facing).name());
+                    }
+                    sideTankTag.put(sided.getName(), intermediateTag);
                 }
-                sideTankTag.put(sided.getName(), intermediateTag);
             }
+            tag.put(sidenessTank, sideTankTag);
         }
-        tag.put(sidenessTank, sideTankTag);
-        CompoundTag filterTag = new CompoundTag();
-        for (IFilter iFilter : this.getMultiFilterComponent().getFilters()) {
-            filterTag.put(iFilter.getName(), iFilter.serializeNBT());
+        if (this.getMultiFilterComponent() != null) {
+            CompoundTag filterTag = new CompoundTag();
+            for (IFilter iFilter : this.getMultiFilterComponent().getFilters()) {
+                filterTag.put(iFilter.getName(), iFilter.serializeNBT());
+            }
+            tag.put(filter, filterTag);
         }
-        tag.put(filter, filterTag);
+
     }
 }

@@ -1,3 +1,7 @@
+# Version 3.5.19
+
+* Fixed Machine Settings Copier not working properly in some machines
+
 # Version 3.5.18
 
 * Added Machine Settings Copier
