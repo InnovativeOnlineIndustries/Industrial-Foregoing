@@ -128,7 +128,7 @@
   "__comment2": "@PAGE@\" -> Will create a new page and the following text will be in a new page",
   "__comment3": "{\" -> Will start a bold/colored string to be highlighted",
   "__comment4": "}\" -> Will stop the highlight -->",
-  "text.industrialforegoing.book.title": "Брошюра по моду Industrial Foregoing",
+  "text.industrialforegoing.book.title": "Industrial Foregoing",
   "text.industrialforegoing.book.landing": "Тебе нужно автоматизировать это всё!",
   "text.industrialforegoing.book.category.getting_started": "Начало",
   "text.industrialforegoing.book.category.generators": "Генераторы",
