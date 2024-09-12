@@ -82,7 +82,7 @@ public class DissolutionChamberRecipe extends SerializableRecipe {
             for (ItemStack stack : iItemList.getItems()) {
                 int i = 0;
                 for (; i < handlerItems.size(); i++) {
-                    if (ItemStack.isSameItem(handlerItems.get(i), stack)) {
+                    if (ItemStack.isSameItemSameTags(handlerItems.get(i), stack)) {
                         found = true;
                         break;
                     }
