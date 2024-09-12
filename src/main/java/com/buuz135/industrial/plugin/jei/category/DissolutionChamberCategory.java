@@ -21,15 +21,9 @@
  */
 package com.buuz135.industrial.plugin.jei.category;
 
-import java.awt.Color;
-import java.awt.Rectangle;
-import java.util.ArrayList;
-import java.util.List;
-
 import com.buuz135.industrial.block.core.tile.DissolutionChamberTile;
 import com.buuz135.industrial.config.machine.core.DissolutionChamberConfig;
 import com.buuz135.industrial.module.ModuleCore;
-import com.buuz135.industrial.module.ModuleResourceProduction;
 import com.buuz135.industrial.plugin.jei.IndustrialRecipeTypes;
 import com.buuz135.industrial.recipe.DissolutionChamberRecipe;
 import com.hrznstudio.titanium.api.client.AssetTypes;
@@ -49,16 +43,18 @@ import mezz.jei.api.recipe.IFocusGroup;
 import mezz.jei.api.recipe.RecipeIngredientRole;
 import mezz.jei.api.recipe.RecipeType;
 import mezz.jei.api.recipe.category.IRecipeCategory;
-import net.minecraft.network.chat.TranslatableComponent;
-import org.apache.commons.lang3.tuple.Pair;
-
 import net.minecraft.client.Minecraft;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.TextComponent;
+import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.DyeColor;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Ingredient;
+import org.apache.commons.lang3.tuple.Pair;
+
+import java.awt.*;
+import java.util.ArrayList;
+import java.util.List;
 
 public class DissolutionChamberCategory implements IRecipeCategory<DissolutionChamberRecipe> {
 
@@ -106,7 +102,9 @@ public class DissolutionChamberCategory implements IRecipeCategory<DissolutionCh
     public void setRecipe(IRecipeLayoutBuilder builder, DissolutionChamberRecipe recipe, IFocusGroup focuses) {
         for (int i = 0; i < 8; i++) {
             if (i < recipe.input.length) {
-                builder.addSlot(RecipeIngredientRole.INPUT,  24 + DissolutionChamberTile.getSlotPos(i).getLeft(), 11 + DissolutionChamberTile.getSlotPos(i).getRight()).addIngredients(VanillaTypes.ITEM_STACK, recipe.input[i].getItems().stream().toList());
+                ItemStack stack = recipe.input[i].getItems().stream().toList().get(0);
+                stack.getItem().onCraftedBy(stack, null, null);
+                builder.addSlot(RecipeIngredientRole.INPUT, 24 + DissolutionChamberTile.getSlotPos(i).getLeft(), 11 + DissolutionChamberTile.getSlotPos(i).getRight()).addIngredients(Ingredient.of(stack));
             }
         }
         if (recipe.inputFluid != null && !recipe.inputFluid.isEmpty()){
