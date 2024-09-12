@@ -47,6 +47,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.DyeColor;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.crafting.Ingredient;
 import org.apache.commons.lang3.tuple.Pair;
 
 import java.awt.*;
@@ -89,7 +90,9 @@ public class DissolutionChamberCategory implements IRecipeCategory<DissolutionCh
     public void setRecipe(IRecipeLayoutBuilder builder, DissolutionChamberRecipe recipe, IFocusGroup focuses) {
         for (int i = 0; i < 8; i++) {
             if (i < recipe.input.length) {
-                builder.addSlot(RecipeIngredientRole.INPUT, 24 + DissolutionChamberTile.getSlotPos(i).getLeft(), 11 + DissolutionChamberTile.getSlotPos(i).getRight()).addIngredients(VanillaTypes.ITEM_STACK, recipe.input[i].getItems().stream().toList());
+                ItemStack stack = recipe.input[i].getItems().stream().toList().get(0);
+                stack.getItem().onCraftedBy(stack, null, null);
+                builder.addSlot(RecipeIngredientRole.INPUT, 24 + DissolutionChamberTile.getSlotPos(i).getLeft(), 11 + DissolutionChamberTile.getSlotPos(i).getRight()).addIngredients(Ingredient.of(stack));
             }
         }
         if (recipe.inputFluid != null && !recipe.inputFluid.isEmpty()) {
