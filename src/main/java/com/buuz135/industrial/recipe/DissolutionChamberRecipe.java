@@ -171,7 +171,7 @@ public class DissolutionChamberRecipe extends SerializableRecipe {
             for (ItemStack stack : iItemList.getStacks()) {
                 int i = 0;
                 for (; i < handlerItems.size(); i++) {
-                    if (handlerItems.get(i).isItemEqual(stack)) {
+                    if (ItemStack.areItemStacksEqual(handlerItems.get(i), stack)) {
                         found = true;
                         break;
                     }
