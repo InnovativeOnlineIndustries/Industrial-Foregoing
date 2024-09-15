@@ -1,6 +1,7 @@
 # Version 3.6.5
 
 * Fixed Meat Feeder not showing in JEI
+* Maybe fixed curios integration?
 
 # Version 3.6.4
 

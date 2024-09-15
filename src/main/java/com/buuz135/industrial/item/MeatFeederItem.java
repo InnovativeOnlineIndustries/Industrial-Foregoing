@@ -24,7 +24,6 @@ package com.buuz135.industrial.item;
 
 import com.buuz135.industrial.module.ModuleCore;
 import com.buuz135.industrial.module.ModuleTool;
-import com.hrznstudio.titanium.api.ISpecialCreativeTabItem;
 import com.hrznstudio.titanium.recipe.generator.TitaniumShapedRecipeBuilder;
 import com.hrznstudio.titanium.tab.TitaniumTab;
 import net.minecraft.ChatFormatting;
@@ -37,7 +36,6 @@ import net.minecraft.world.item.Items;
 import net.minecraft.world.level.Level;
 import net.neoforged.neoforge.capabilities.Capabilities;
 import net.neoforged.neoforge.common.Tags;
-import net.neoforged.neoforge.event.BuildCreativeModeTabContentsEvent;
 import net.neoforged.neoforge.fluids.FluidStack;
 import net.neoforged.neoforge.fluids.capability.IFluidHandler;
 
@@ -46,11 +44,10 @@ import java.text.NumberFormat;
 import java.util.List;
 import java.util.Locale;
 
-public class MeatFeederItem extends IFCustomItem implements ISpecialCreativeTabItem {
+public class MeatFeederItem extends IFCustomItem {
 
     public MeatFeederItem(TitaniumTab group) {
         super("meat_feeder", group, new Properties().stacksTo(1));
-        group.getTabList().add(this);
     }
 
     @Override
@@ -116,8 +113,4 @@ public class MeatFeederItem extends IFCustomItem implements ISpecialCreativeTabI
                 .save(consumer);
     }
 
-    @Override
-    public void addToTab(BuildCreativeModeTabContentsEvent buildCreativeModeTabContentsEvent) {
-
-    }
 }
