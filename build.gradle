@@ -4,10 +4,17 @@ plugins {
     id 'idea'
     id 'maven-publish'
     id 'net.neoforged.moddev' version '0.1.112'
+    id "com.modrinth.minotaur" version "2.+"
+    id 'net.darkhax.curseforgegradle' version '1.1.15'
 }
 
 version = minecraft_version + "-" + mod_version
 group = mod_group_id
+
+if (System.getenv('BUILD_NUMBER') != null) {
+    version += "." + System.getenv('BUILD_NUMBER')
+}
+
 
 repositories {
     mavenLocal()
@@ -103,24 +110,62 @@ tasks.withType(ProcessResources).configureEach {
     }
 }
 
-// Example configuration to allow publishing using the maven-publish plugin
-publishing {
-    publications {
-        register('mavenJava', MavenPublication) {
-            from components.java
-        }
-    }
-    repositories {
-        maven {
-            url "file://${project.projectDir}/repo"
-        }
-    }
-}
-
 // IDEA no longer automatically downloads sources/javadoc jars for dependencies, so we need to explicitly enable the behavior.
 idea {
     module {
         downloadSources = true
         downloadJavadoc = true
     }
+}
+
+tasks.withType(JavaCompile).configureEach {
+    options.encoding = 'UTF-8' // Use the UTF-8 charset for Java compilation
+}
+
+publishing {
+    publications {
+        mavenJava(MavenPublication) {
+            artifactId = modBaseName
+            from components.java
+        }
+    }
+    repositories {
+        maven {
+            url "file://" + System.getenv("local_maven")
+        }
+    }
+}
+
+
+//tasks.publishCurseForge.enabled = System.env["CURSE_API"] != null
+
+task publishCurseForge(type: net.darkhax.curseforgegradle.TaskPublishCurseForge) {
+
+    apiToken = System.env["CURSE_API"]
+
+    // The main file to upload
+    def mainFile = upload(266515, jar)
+
+    mainFile.releaseType = 'beta'
+    mainFile.changelog = 'https://github.com/InnovativeOnlineIndustries/Industrial-Foregoing/blob/1.21/CHANGELOG.md'
+    mainFile.changelogType = 'markdown'
+    mainFile.addModLoader("NeoForge")
+    mainFile.addGameVersion("1.21")
+    mainFile.addGameVersion("1.21.1")
+}
+
+tasks.modrinth.enabled = System.env["MODRINTH_TOKEN"] != null
+
+modrinth {
+    token = System.getenv("MODRINTH_TOKEN")
+    // This is the default. Remember to have the MODRINTH_TOKEN environment variable set or else this will fail, or set it to whatever you want - just make sure it stays private!
+    projectId = "lWxpUd04" // This can be the project ID or the slug. Either will work!
+    versionType = "beta" // This is the default -- can also be `beta` or `alpha`
+    uploadFile = jar // With Loom, this MUST be set to `remapJar` instead of `jar`!
+    gameVersions = ["1.21", "1.21.1"] // Must be an array, even with only one version
+    loaders = ["neoforge"] // Must also be an array - no need to specify this if you're using Loom or ForgeGradle
+    dependencies { // A special DSL for creating dependencies
+
+    }
+    changelog = "https://github.com/InnovativeOnlineIndustries/Industrial-Foregoing/blob/1.21/CHANGELOG.md"
 }
