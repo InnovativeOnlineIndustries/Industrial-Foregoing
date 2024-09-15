@@ -1,4 +1,4 @@
-# Version 3.6.0
+# Version 3.6.2
 
 * Working area renders shouldn't have z fighting anymore
 * Machine Frames can now be placed

@@ -34,7 +34,7 @@ pipeline {
                 sh './gradlew publish'
 
                 echo 'Deploying to CurseForge'
-                sh './gradlew curseforge modrinth'
+                sh './gradlew publishCurseForge modrinth'
             }
         }
     }
