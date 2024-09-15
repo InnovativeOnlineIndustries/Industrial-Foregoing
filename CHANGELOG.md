@@ -6,7 +6,7 @@
 
 * Working area renders shouldn't have z fighting anymore
 * Machine Frames can now be placed
-* Removed Black Hole Units and Tanks & Controller
+* Removed Black Hole Units and Tanks & Controller (use Functional Storage)
 * Infinity Backpacks can now be placed so contents can be extracted easily
 * Laser recipes now use biome tags and dimensions
 * Infinity trident now has increased launch speed based on tier and increased max loyalty and riptide (no longer needs
