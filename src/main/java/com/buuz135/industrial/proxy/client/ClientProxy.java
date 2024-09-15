@@ -149,7 +149,7 @@ public class ClientProxy extends CommonProxy {
                     return ((ConveyorTile) entity).getColor();
                 }
             }
-            return 0xFFFFFFF;
+            return 0xFFFFFFFF;
         }, ModuleTransportStorage.CONVEYOR.getBlock());
         Minecraft.getInstance().getItemColors().register((stack, tintIndex) -> {
             if (tintIndex == 1 || tintIndex == 2 || tintIndex == 3) {
@@ -168,19 +168,19 @@ public class ClientProxy extends CommonProxy {
         }, ModuleTool.MOB_IMPRISONMENT_TOOL.get());
         Minecraft.getInstance().getItemColors().register((stack, tintIndex) -> {
             if (tintIndex == 0) {
-                return InfinityTier.getTierBraquet(ItemInfinity.getPowerFromStack(stack)).getLeft().getTextureColor();
+                return FastColor.ARGB32.opaque(InfinityTier.getTierBraquet(ItemInfinity.getPowerFromStack(stack)).getLeft().getTextureColor());
             }
-            return 0xFFFFFF;
+            return 0xFFFFFFFF;
         }, ModuleTool.INFINITY_BACKPACK.get(), ModuleTool.INFINITY_LAUNCHER.get(), ModuleTool.INFINITY_NUKE.get(), ModuleTool.INFINITY_TRIDENT.get(), ModuleTool.INFINITY_HAMMER.get(), ModuleTool.INFINITY_SAW.get(), ModuleTool.INFINITY_DRILL.get());
         Minecraft.getInstance().getItemColors().register((stack, tintIndex) -> {
             var fluidHandlerItem = stack.getCapability(Capabilities.FluidHandler.ITEM);
             if (tintIndex == 1 && fluidHandlerItem != null) {
                 if (fluidHandlerItem.getFluidInTank(0).getAmount() > 0) {
                     int color = FluidUtils.getFluidColor(fluidHandlerItem.getFluidInTank(0));
-                    if (color != -1) return color;
+                    if (color != -1) return FastColor.ARGB32.opaque(color);
                 }
             }
-            return 0xFFFFFF;
+            return 0xFFFFFFFF;
         }, ModuleCore.RAW_ORE_MEAT.getBucketFluid(), ModuleCore.FERMENTED_ORE_MEAT.getBucketFluid());
 
         EventManager.forge(ItemTooltipEvent.class).filter(event -> BuiltInRegistries.ITEM.getKey(event.getItemStack().getItem()).getNamespace().equals(Reference.MOD_ID)).process(event -> {

@@ -82,7 +82,7 @@ dependencies {
     compileOnly "vazkii.patchouli:Patchouli:${patchouli_version}"
     //runtimeOnly "vazkii.patchouli:Patchouli:${patchouli_version}"
     implementation "curse.maven:pneumaticcraft-repressurized-281849:5698172"
-    compileOnly "curse.maven:curios-continuation-1037991:5657610"
+    implementation "curse.maven:curios-continuation-1037991:5690713"
 }
 
 // This block of code expands all declared replace properties in the specified resource targets.
@@ -152,6 +152,7 @@ task publishCurseForge(type: net.darkhax.curseforgegradle.TaskPublishCurseForge)
     mainFile.addModLoader("NeoForge")
     mainFile.addGameVersion("1.21")
     mainFile.addGameVersion("1.21.1")
+    mainFile.addRequirement("titanium")
 }
 
 tasks.modrinth.enabled = System.env["MODRINTH_TOKEN"] != null
@@ -165,7 +166,7 @@ modrinth {
     gameVersions = ["1.21", "1.21.1"] // Must be an array, even with only one version
     loaders = ["neoforge"] // Must also be an array - no need to specify this if you're using Loom or ForgeGradle
     dependencies { // A special DSL for creating dependencies
-
+        required.project "titanium"
     }
     changelog = "https://github.com/InnovativeOnlineIndustries/Industrial-Foregoing/blob/1.21/CHANGELOG.md"
 }

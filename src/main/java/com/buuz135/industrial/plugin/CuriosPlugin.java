@@ -22,27 +22,43 @@
 
 package com.buuz135.industrial.plugin;
 
+import com.buuz135.industrial.module.ModuleTool;
 import com.hrznstudio.titanium.annotation.plugin.FeaturePlugin;
-import com.hrznstudio.titanium.event.handler.EventManager;
 import com.hrznstudio.titanium.network.locator.PlayerInventoryFinder;
 import com.hrznstudio.titanium.plugin.FeaturePluginInstance;
 import com.hrznstudio.titanium.plugin.PluginPhase;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.ItemStack;
-import net.neoforged.fml.event.lifecycle.InterModEnqueueEvent;
 import top.theillusivec4.curios.api.CuriosApi;
+import top.theillusivec4.curios.api.type.capability.ICuriosItemHandler;
+import top.theillusivec4.curios.api.type.inventory.ICurioStacksHandler;
+
+import java.util.Optional;
 
 @FeaturePlugin(value = "curios", type = FeaturePlugin.FeaturePluginType.MOD)
 public class CuriosPlugin implements FeaturePluginInstance {
 
     public static final String CURIOS = "curios";
 
+
     public static ItemStack getStack(LivingEntity entity, String preset, int index) {
-        return CuriosApi.getCuriosHelper().getCuriosHandler(entity).map(iCuriosItemHandler -> iCuriosItemHandler.getStacksHandler(preset)).map(iCurioStacksHandler -> iCurioStacksHandler.get().getStacks().getStackInSlot(index)).orElse(ItemStack.EMPTY);
+        Optional<ICuriosItemHandler> maybeCuriosInventory = CuriosApi.getCuriosInventory(entity);
+        return maybeCuriosInventory.map(iCuriosItemHandler -> {
+            for (ICurioStacksHandler value : iCuriosItemHandler.getCurios().values()) {
+                if (value != null) {
+                    for (int i = 0; i < value.getStacks().getSlots(); i++) {
+                        if (value.getStacks().getStackInSlot(i).is(ModuleTool.INFINITY_BACKPACK)) {
+                            return value.getStacks().getStackInSlot(i);
+                        }
+                    }
+                }
+            }
+            return ItemStack.EMPTY;
+        }).orElse(ItemStack.EMPTY);
     }
 
     public static void setStack(LivingEntity entity, String preset, int index, ItemStack stack) {
-        CuriosApi.getCuriosHelper().getCuriosHandler(entity).map(iCuriosItemHandler -> iCuriosItemHandler.getStacksHandler(preset)).ifPresent(iCurioStacksHandler -> iCurioStacksHandler.get().getStacks().setStackInSlot(index, stack));
+        CuriosApi.getCuriosInventory(entity).map(iCuriosItemHandler -> iCuriosItemHandler.getStacksHandler(preset)).ifPresent(iCurioStacksHandler -> iCurioStacksHandler.get().getStacks().setStackInSlot(index, stack));
     }
 
     @Override
@@ -71,10 +87,6 @@ public class CuriosPlugin implements FeaturePluginInstance {
                     });
                 }
             }).subscribe();*/
-            EventManager.mod(InterModEnqueueEvent.class).process(event -> {
-                //InterModComms.sendTo("curios", SlotTypeMessage.REGISTER_TYPE, () -> SlotType.HEAD.getMessageBuilder().build());
-                //InterModComms.sendTo("curios", SlotTypeMessage.REGISTER_TYPE, () -> "back".getMessageBuilder().build());
-            }).subscribe();
             PlayerInventoryFinder.FINDERS.put(CURIOS, new PlayerInventoryFinder(playerEntity -> 1, (playerEntity, integer) -> getStack(playerEntity, "back", 0), (playerEntity, slot, stack) -> setStack(playerEntity, "back", slot, stack)));
         }
     }
