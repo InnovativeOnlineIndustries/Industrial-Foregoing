@@ -25,6 +25,7 @@ package com.buuz135.industrial.block.generator.mycelial;
 import com.buuz135.industrial.plugin.jei.generator.MycelialGeneratorRecipe;
 import com.buuz135.industrial.utils.IndustrialTags;
 import com.hrznstudio.titanium.component.inventory.SidedInventoryComponent;
+import net.minecraft.core.RegistryAccess;
 import net.minecraft.data.recipes.ShapedRecipeBuilder;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.item.DyeColor;
@@ -33,8 +34,8 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.level.block.Blocks;
-import net.minecraftforge.common.util.INBTSerializable;
-import net.minecraftforge.fluids.FluidStack;
+import net.neoforged.neoforge.common.util.INBTSerializable;
+import net.neoforged.neoforge.fluids.FluidStack;
 import org.apache.commons.lang3.tuple.Pair;
 
 import java.util.ArrayList;
@@ -96,7 +97,7 @@ public class HalitosisGeneratorType implements IMycelialGeneratorType {
     }
 
     @Override
-    public List<MycelialGeneratorRecipe> getRecipes() {
+    public List<MycelialGeneratorRecipe> getRecipes(RegistryAccess registryAccess) {
         List<MycelialGeneratorRecipe> recipes = new ArrayList<>();
         for (Item item : new Item[]{Items.DRAGON_BREATH}) {
             ItemStack stack = new ItemStack(item);

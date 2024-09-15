@@ -27,18 +27,16 @@ import com.buuz135.industrial.block.resourceproduction.tile.OreLaserBaseTile;
 import com.buuz135.industrial.module.ModuleResourceProduction;
 import com.buuz135.industrial.utils.IndustrialTags;
 import com.hrznstudio.titanium.recipe.generator.TitaniumShapedRecipeBuilder;
-import net.minecraft.data.recipes.FinishedRecipe;
+import net.minecraft.data.recipes.RecipeOutput;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.entity.BlockEntityType;
-import net.minecraftforge.common.Tags;
-
-import java.util.function.Consumer;
+import net.neoforged.neoforge.common.Tags;
 
 public class OreLaserBaseBlock extends IndustrialBlock<OreLaserBaseTile> {
 
     public OreLaserBaseBlock() {
-        super("ore_laser_base", Properties.copy(Blocks.IRON_BLOCK), OreLaserBaseTile.class, ModuleResourceProduction.TAB_RESOURCE);
+        super("ore_laser_base", Properties.ofFullCopy(Blocks.IRON_BLOCK), OreLaserBaseTile.class, ModuleResourceProduction.TAB_RESOURCE);
     }
 
     @Override
@@ -47,7 +45,7 @@ public class OreLaserBaseBlock extends IndustrialBlock<OreLaserBaseTile> {
     }
 
     @Override
-    public void registerRecipe(Consumer<FinishedRecipe> consumer) {
+    public void registerRecipe(RecipeOutput consumer) {
         TitaniumShapedRecipeBuilder.shapedRecipe(this).pattern("pfp").pattern("bmb").pattern("grg")
                 .define('p', IndustrialTags.Items.PLASTIC)
                 .define('f', Items.DIAMOND_PICKAXE)

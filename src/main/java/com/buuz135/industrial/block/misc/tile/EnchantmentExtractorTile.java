@@ -40,9 +40,13 @@ import com.hrznstudio.titanium.component.fluid.FluidTankComponent;
 import com.hrznstudio.titanium.component.fluid.SidedFluidTankComponent;
 import com.hrznstudio.titanium.component.inventory.SidedInventoryComponent;
 import com.hrznstudio.titanium.util.LangUtil;
+import it.unimi.dsi.fastutil.objects.Object2IntMap;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Holder;
+import net.minecraft.core.component.DataComponents;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.tags.EnchantmentTags;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AnvilMenu;
 import net.minecraft.world.item.DyeColor;
@@ -50,17 +54,16 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraft.world.item.enchantment.EnchantmentHelper;
+import net.minecraft.world.item.enchantment.ItemEnchantments;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
-import net.minecraftforge.fluids.FluidStack;
-import net.minecraftforge.fluids.capability.IFluidHandler;
-import net.minecraftforge.items.ItemHandlerHelper;
+import net.neoforged.api.distmarker.Dist;
+import net.neoforged.api.distmarker.OnlyIn;
+import net.neoforged.neoforge.fluids.FluidStack;
+import net.neoforged.neoforge.fluids.capability.IFluidHandler;
+import net.neoforged.neoforge.items.ItemHandlerHelper;
 
 import java.util.Collections;
 import java.util.List;
-import java.util.Map;
-import java.util.stream.Collectors;
 
 public class EnchantmentExtractorTile extends IndustrialProcessingTile<EnchantmentExtractorTile> {
 
@@ -140,28 +143,31 @@ public class EnchantmentExtractorTile extends IndustrialProcessingTile<Enchantme
         return () -> {
             ItemStack input = this.inputEnchantedItem.getStackInSlot(0);
             if (extractEnchants) {
-                Map<Enchantment, Integer> map = EnchantmentHelper.getEnchantments(input).entrySet().stream().collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
-                if (map.size() > 0) {
-                    Enchantment selected = map.keySet().iterator().next();
+                ItemEnchantments.Mutable map = new ItemEnchantments.Mutable(EnchantmentHelper.getEnchantmentsForCrafting(input));
+                if (map.keySet().size() > 0) {
+                    Holder<Enchantment> selected = map.keySet().iterator().next();
                     ItemStack book = new ItemStack(Items.ENCHANTED_BOOK);
-                    EnchantmentHelper.setEnchantments(Collections.singletonMap(selected, map.get(selected)), book);
-                    if (map.keySet().stream().allMatch(Enchantment::isCurse)) {
+                    ItemEnchantments.Mutable bookEnchantments = new ItemEnchantments.Mutable(ItemEnchantments.EMPTY);
+                    bookEnchantments.set(selected, map.getLevel(selected));
+                    EnchantmentHelper.setEnchantments(book, bookEnchantments.toImmutable());
+                    if (map.keySet().stream().allMatch(enchantmentHolder -> enchantmentHolder.is(EnchantmentTags.CURSE))) {
                         ItemStack output = input.copy();
                         input.shrink(1);
                         ItemHandlerHelper.insertItem(this.outputNoEnchantedItem, output, false);
-                    } else if (map.size() == 1) {
+                    } else if (map.keySet().size() == 1) {
                         ItemStack output = removeEnchantments(input, input.getDamageValue(), input.getCount());
                         input.shrink(1);
                         ItemHandlerHelper.insertItem(this.outputNoEnchantedItem, output, false);
                         ItemHandlerHelper.insertItem(this.outputEnchantedBook, book, false);
                         this.inputBook.getStackInSlot(0).shrink(1);
                     } else {
-                        Map<Enchantment, Integer> cleanMap = EnchantmentHelper.getEnchantments(input).entrySet().stream().filter((enchantmentPair) -> !enchantmentPair.getKey().equals(selected)).collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
+                        ItemEnchantments.Mutable cleanMap = new ItemEnchantments.Mutable(EnchantmentHelper.getEnchantmentsForCrafting(input));
+                        cleanMap.removeIf(enchantmentHolder -> enchantmentHolder.equals(selected));
                         if (input.getItem() == Items.ENCHANTED_BOOK) {
-                            input.removeTagKey("Enchantments");
-                            input.removeTagKey("StoredEnchantments");
+                            input.remove(DataComponents.ENCHANTMENTS);
+                            input.remove(DataComponents.STORED_ENCHANTMENTS);
                         }
-                        EnchantmentHelper.setEnchantments(cleanMap, input);
+                        EnchantmentHelper.setEnchantments(input, cleanMap.toImmutable());
                         ItemHandlerHelper.insertItem(this.outputEnchantedBook, book, false);
                         this.inputBook.getStackInSlot(0).shrink(1);
                     }
@@ -198,12 +204,12 @@ public class EnchantmentExtractorTile extends IndustrialProcessingTile<Enchantme
 
     private int getEnchantmentXp(ItemStack stack) {
         int xp = 0;
-        Map<Enchantment, Integer> map = EnchantmentHelper.getEnchantments(stack);
-        for (Map.Entry<Enchantment, Integer> entry : map.entrySet()) {
-            Enchantment enchantment = entry.getKey();
+        ItemEnchantments map = EnchantmentHelper.getEnchantmentsForCrafting(stack);
+        for (Object2IntMap.Entry<Holder<Enchantment>> entry : map.entrySet()) {
+            Holder<Enchantment> enchantment = entry.getKey();
             Integer integer = entry.getValue();
-            if (!enchantment.isCurse()) {
-                xp += enchantment.getMinCost(integer);
+            if (!enchantment.is(EnchantmentTags.CURSE)) {
+                xp += enchantment.value().getMinCost(integer);
             }
         }
         return xp;
@@ -211,26 +217,27 @@ public class EnchantmentExtractorTile extends IndustrialProcessingTile<Enchantme
 
     private ItemStack removeEnchantments(ItemStack stack, int damage, int count) {
         ItemStack itemstack = stack.copy();
-        itemstack.removeTagKey("Enchantments");
-        itemstack.removeTagKey("StoredEnchantments");
+        itemstack.remove(DataComponents.ENCHANTMENTS);
+        itemstack.remove(DataComponents.STORED_ENCHANTMENTS);
         if (damage > 0) {
             itemstack.setDamageValue(damage);
         } else {
-            itemstack.removeTagKey("Damage");
+            itemstack.remove(DataComponents.DAMAGE);
         }
         itemstack.setCount(count);
-        Map<Enchantment, Integer> map = EnchantmentHelper.getEnchantments(stack).entrySet().stream().filter((enchantmentPair) -> enchantmentPair.getKey().isCurse()).collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
-        EnchantmentHelper.setEnchantments(map, itemstack);
-        itemstack.setRepairCost(0);
-        if (itemstack.getItem() == Items.ENCHANTED_BOOK && map.size() == 0) {
+        ItemEnchantments.Mutable map = new ItemEnchantments.Mutable(EnchantmentHelper.getEnchantmentsForCrafting(itemstack));
+        map.removeIf(enchantmentHolder -> !enchantmentHolder.is(EnchantmentTags.CURSE));
+        EnchantmentHelper.setEnchantments(itemstack, map.toImmutable());
+        itemstack.set(DataComponents.REPAIR_COST, 0);
+        if (itemstack.getItem() == Items.ENCHANTED_BOOK && map.keySet().size() == 0) {
             itemstack = new ItemStack(Items.BOOK);
-            if (stack.hasCustomHoverName()) {
-                itemstack.setHoverName(stack.getHoverName());
+            if (stack.has(DataComponents.CUSTOM_NAME)) {
+                itemstack.set(DataComponents.CUSTOM_NAME, stack.getHoverName());
             }
         }
 
-        for (int i = 0; i < map.size(); ++i) {
-            itemstack.setRepairCost(AnvilMenu.calculateIncreasedRepairCost(itemstack.getBaseRepairCost()));
+        for (int i = 0; i < map.keySet().size(); ++i) {
+            itemstack.set(DataComponents.REPAIR_COST, AnvilMenu.calculateIncreasedRepairCost(itemstack.get(DataComponents.REPAIR_COST)));
         }
 
         return itemstack;

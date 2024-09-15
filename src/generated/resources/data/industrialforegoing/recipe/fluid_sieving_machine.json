@@ -1,0 +1,36 @@
+{
+  "neoforge:conditions": [
+    {
+      "type": "neoforge:item_exists",
+      "item": "industrialforegoing:fluid_sieving_machine"
+    }
+  ],
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "a": {
+      "tag": "c:gears/gold"
+    },
+    "b": {
+      "tag": "industrialforegoing:machine_frame/advanced"
+    },
+    "c": {
+      "item": "industrialforegoing:pink_slime"
+    },
+    "g": {
+      "item": "minecraft:iron_bars"
+    },
+    "p": {
+      "tag": "c:plastic"
+    }
+  },
+  "pattern": [
+    "pcp",
+    "ggg",
+    "aba"
+  ],
+  "result": {
+    "count": 1,
+    "id": "industrialforegoing:fluid_sieving_machine"
+  }
+}

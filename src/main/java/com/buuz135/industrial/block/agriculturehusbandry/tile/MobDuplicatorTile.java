@@ -29,8 +29,7 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 import net.minecraft.world.phys.shapes.VoxelShape;
-import net.minecraftforge.fluids.capability.IFluidHandler;
-import net.minecraftforge.registries.ForgeRegistries;
+import net.neoforged.neoforge.fluids.capability.IFluidHandler;
 
 import javax.annotation.Nonnull;
 import java.util.List;
@@ -54,7 +53,7 @@ public class MobDuplicatorTile extends IndustrialAreaWorkingTile<MobDuplicatorTi
                 .setColor(DyeColor.LIME)
                 .setTankAction(FluidTankComponent.Action.FILL)
                 .setComponentHarness(this)
-                .setValidator(fluidStack -> ForgeRegistries.FLUIDS.tags().getTag(IndustrialTags.Fluids.EXPERIENCE).contains(fluidStack.getFluid()))
+                .setValidator(fluidStack -> fluidStack.is(IndustrialTags.Fluids.EXPERIENCE))
         );
 
         this.addInventory(input = (SidedInventoryComponent<MobDuplicatorTile>) new SidedInventoryComponent<MobDuplicatorTile>("mob_imprisonment_tool", 64, 22, 1, 1)
@@ -98,7 +97,7 @@ public class MobDuplicatorTile extends IndustrialAreaWorkingTile<MobDuplicatorTi
                 entity.moveTo(random.x, random.y, random.z, level.random.nextFloat() * 360F, 0);
                 entity.setUUID(UUID.randomUUID());
                 if (entity instanceof Mob) {
-                    ((Mob) entity).finalizeSpawn((ServerLevelAccessor) this.level, this.level.getCurrentDifficultyAt(this.worldPosition), MobSpawnType.MOB_SUMMONED, null, null);
+                    ((Mob) entity).finalizeSpawn((ServerLevelAccessor) this.level, this.level.getCurrentDifficultyAt(this.worldPosition), MobSpawnType.MOB_SUMMONED, null);
                 }
                 while (tries > 0 && !canEntitySpawn(entity)) {
                     random = blockPosToVec3d(blocks.get(this.level.random.nextInt(blocks.size())));

@@ -24,7 +24,6 @@ package com.buuz135.industrial.utils.apihandlers.straw;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.material.Fluid;
@@ -41,7 +40,7 @@ public class LavaStrawHandler extends StrawHandlerBase {
     @Override
     public void onDrink(Level world, BlockPos pos, Fluid stack, Player player, boolean fromFluidContainer) {
         player.hurt(world.damageSources().lava(), 7);
-        player.setSecondsOnFire(30);
+        player.setRemainingFireTicks(30 * 20);
         CompoundTag tag = player.getPersistentData();
         tag.putLong("lavaDrink", world.getGameTime());
     }

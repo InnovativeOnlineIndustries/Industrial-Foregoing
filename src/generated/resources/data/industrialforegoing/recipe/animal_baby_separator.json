@@ -1,0 +1,39 @@
+{
+  "neoforge:conditions": [
+    {
+      "type": "neoforge:item_exists",
+      "item": "industrialforegoing:animal_baby_separator"
+    }
+  ],
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "A": {
+      "item": "minecraft:golden_carrot"
+    },
+    "C": {
+      "item": "minecraft:wheat"
+    },
+    "D": {
+      "tag": "c:dyes/purple"
+    },
+    "G": {
+      "tag": "c:gears/gold"
+    },
+    "M": {
+      "tag": "industrialforegoing:machine_frame/pity"
+    },
+    "P": {
+      "tag": "c:plastic"
+    }
+  },
+  "pattern": [
+    "PAP",
+    "CMC",
+    "DGD"
+  ],
+  "result": {
+    "count": 1,
+    "id": "industrialforegoing:animal_baby_separator"
+  }
+}

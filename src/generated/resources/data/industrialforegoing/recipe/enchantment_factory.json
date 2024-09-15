@@ -1,0 +1,36 @@
+{
+  "neoforge:conditions": [
+    {
+      "type": "neoforge:item_exists",
+      "item": "industrialforegoing:enchantment_factory"
+    }
+  ],
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "B": {
+      "item": "minecraft:book"
+    },
+    "D": {
+      "item": "minecraft:diamond"
+    },
+    "M": {
+      "tag": "industrialforegoing:machine_frame/advanced"
+    },
+    "O": {
+      "item": "minecraft:obsidian"
+    },
+    "P": {
+      "tag": "c:plastic"
+    }
+  },
+  "pattern": [
+    "PBP",
+    "DMD",
+    "OOO"
+  ],
+  "result": {
+    "count": 1,
+    "id": "industrialforegoing:enchantment_factory"
+  }
+}

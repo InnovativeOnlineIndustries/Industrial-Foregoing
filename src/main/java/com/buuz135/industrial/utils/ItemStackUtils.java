@@ -29,22 +29,17 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
-import net.minecraftforge.common.capabilities.ForgeCapabilities;
-import net.minecraftforge.items.ItemStackHandler;
-import net.minecraftforge.registries.ForgeRegistries;
-import net.minecraftforge.registries.tags.IReverseTag;
-
-import java.util.ArrayList;
-import java.util.stream.Collectors;
+import net.neoforged.api.distmarker.Dist;
+import net.neoforged.api.distmarker.OnlyIn;
+import net.neoforged.neoforge.capabilities.Capabilities;
+import net.neoforged.neoforge.items.ItemStackHandler;
 
 public class ItemStackUtils {
 
     public static ResourceLocation getOreTag(ItemStack stack) {
         Item item = stack.getItem();
-        for (ResourceLocation resourceLocation : ForgeRegistries.ITEMS.tags().getReverseTag(stack.getItem()).map(IReverseTag::getTagKeys).map(tagKeyStream -> tagKeyStream.map(TagKey::location).collect(Collectors.toList())).orElse(new ArrayList<>())) {
-            if (resourceLocation.toString().startsWith("forge:raw_materials/")) {
+        for (ResourceLocation resourceLocation : stack.getTags().map(TagKey::location).toList()) {
+            if (resourceLocation.toString().startsWith("c:raw_materials/")) {
                 return resourceLocation;
             }
         }
@@ -63,7 +58,7 @@ public class ItemStackUtils {
     }
 
     public static boolean acceptsFluidItem(ItemStack stack) {
-        return stack.getCapability(ForgeCapabilities.FLUID_HANDLER_ITEM).isPresent();// && !stack.getItem().equals(ForgeModContainer.getInstance().universalBucket);
+        return stack.getCapability(Capabilities.FluidHandler.ITEM) != null;// && !stack.getItem().equals(ForgeModContainer.getInstance().universalBucket);
     }
 
 

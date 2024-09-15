@@ -21,15 +21,19 @@
  */
 package com.buuz135.industrial;
 
+import com.buuz135.industrial.gui.conveyor.ContainerConveyor;
+import com.buuz135.industrial.gui.conveyor.GuiConveyor;
+import com.buuz135.industrial.gui.transporter.ContainerTransporter;
+import com.buuz135.industrial.gui.transporter.GuiTransporter;
 import com.buuz135.industrial.module.*;
 import com.buuz135.industrial.proxy.CommonProxy;
 import com.buuz135.industrial.proxy.client.ClientProxy;
 import com.buuz135.industrial.proxy.network.*;
 import com.buuz135.industrial.recipe.LaserDrillRarity;
 import com.buuz135.industrial.recipe.provider.IndustrialRecipeProvider;
-import com.buuz135.industrial.recipe.provider.IndustrialSerializableProvider;
 import com.buuz135.industrial.recipe.provider.IndustrialTagsProvider;
 import com.buuz135.industrial.registry.IFRegistries;
+import com.buuz135.industrial.utils.IFAttachments;
 import com.buuz135.industrial.utils.IFFakePlayer;
 import com.buuz135.industrial.utils.Reference;
 import com.buuz135.industrial.utils.data.IndustrialBlockstateProvider;
@@ -45,30 +49,33 @@ import com.hrznstudio.titanium.reward.RewardGiver;
 import com.hrznstudio.titanium.reward.RewardManager;
 import net.minecraft.client.KeyMapping;
 import net.minecraft.client.gui.screens.Screen;
+import net.minecraft.client.resources.model.ModelResourceLocation;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.world.inventory.MenuType;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.LiquidBlock;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
-import net.minecraftforge.client.event.ModelEvent;
-import net.minecraftforge.client.event.RegisterKeyMappingsEvent;
-import net.minecraftforge.common.ForgeMod;
-import net.minecraftforge.common.util.FakePlayer;
-import net.minecraftforge.common.util.NonNullLazy;
-import net.minecraftforge.data.event.GatherDataEvent;
-import net.minecraftforge.event.TickEvent;
-import net.minecraftforge.event.server.ServerStartingEvent;
-import net.minecraftforge.fml.DistExecutor;
-import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
-import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
-import net.minecraftforge.registries.ForgeRegistries;
-import net.minecraftforge.registries.NewRegistryEvent;
+import net.neoforged.api.distmarker.Dist;
+import net.neoforged.api.distmarker.OnlyIn;
+import net.neoforged.bus.api.IEventBus;
+import net.neoforged.fml.ModContainer;
+import net.neoforged.fml.common.Mod;
+import net.neoforged.fml.event.lifecycle.FMLClientSetupEvent;
+import net.neoforged.fml.event.lifecycle.FMLCommonSetupEvent;
+import net.neoforged.neoforge.client.event.ClientTickEvent;
+import net.neoforged.neoforge.client.event.ModelEvent;
+import net.neoforged.neoforge.client.event.RegisterKeyMappingsEvent;
+import net.neoforged.neoforge.client.event.RegisterMenuScreensEvent;
+import net.neoforged.neoforge.common.NeoForgeMod;
+import net.neoforged.neoforge.common.util.FakePlayer;
+import net.neoforged.neoforge.common.util.Lazy;
+import net.neoforged.neoforge.data.event.GatherDataEvent;
+import net.neoforged.neoforge.event.server.ServerStartingEvent;
+import net.neoforged.neoforge.registries.NewRegistryEvent;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -84,38 +91,40 @@ import java.util.stream.Collectors;
 public class IndustrialForegoing extends ModuleController {
 
     private static CommonProxy proxy;
-    private static HashMap<Integer, IFFakePlayer> worldFakePlayer = new HashMap<>();
+    private static HashMap<String, IFFakePlayer> worldFakePlayer = new HashMap<>();
     public static NetworkHandler NETWORK = new NetworkHandler(Reference.MOD_ID);
     public static Logger LOGGER = LogManager.getLogger(Reference.MOD_ID);
     public static IndustrialForegoing INSTANCE;
     public static Reward CAT_EARS;
 
-    static {
-        NETWORK.registerMessage(ConveyorButtonInteractMessage.class);
-        NETWORK.registerMessage(ConveyorSplittingSyncEntityMessage.class);
-        NETWORK.registerMessage(SpecialParticleMessage.class);
-        NETWORK.registerMessage(BackpackSyncMessage.class);
-        NETWORK.registerMessage(BackpackOpenMessage.class);
-        NETWORK.registerMessage(BackpackOpenedMessage.class);
-        NETWORK.registerMessage(TransporterSyncMessage.class);
-        NETWORK.registerMessage(TransporterButtonInteractMessage.class);
-        NETWORK.registerMessage(PlungerPlayerHitMessage.class);
-    }
-
-    public IndustrialForegoing() {
+    public IndustrialForegoing(Dist dist, IEventBus modBus, ModContainer container) {
+        super(container);
+        NETWORK.registerMessage("conveyor_button_interact", ConveyorButtonInteractMessage.class);
+        NETWORK.registerMessage("conveyor_splitting_sync_entity", ConveyorSplittingSyncEntityMessage.class);
+        NETWORK.registerMessage("special_particle", SpecialParticleMessage.class);
+        NETWORK.registerMessage("backpack_sync", BackpackSyncMessage.class);
+        NETWORK.registerMessage("backpack_open", BackpackOpenMessage.class);
+        NETWORK.registerMessage("backpack_opened", BackpackOpenedMessage.class);
+        NETWORK.registerMessage("transporter_sync", TransporterSyncMessage.class);
+        NETWORK.registerMessage("transporter_button_interact", TransporterButtonInteractMessage.class);
+        NETWORK.registerMessage("plunger_player_hit", PlungerPlayerHitMessage.class);
         proxy = new CommonProxy();
-        DistExecutor.unsafeRunWhenOn(Dist.CLIENT, () -> () -> EventManager.mod(FMLClientSetupEvent.class).process(fmlClientSetupEvent -> new ClientProxy().run()).subscribe());
-        DistExecutor.unsafeRunWhenOn(Dist.CLIENT, () -> () -> EventManager.mod(ModelEvent.RegisterAdditional.class).process(modelRegistryEvent -> modelRegistryEvent.register(new ResourceLocation(Reference.MOD_ID, "block/catears"))).subscribe());
+        if (dist.isClient()) {
+            EventManager.mod(FMLClientSetupEvent.class).process(fmlClientSetupEvent -> new ClientProxy().run()).subscribe();
+            EventManager.mod(ModelEvent.RegisterAdditional.class).process(modelRegistryEvent -> modelRegistryEvent.register(new ModelResourceLocation(ResourceLocation.fromNamespaceAndPath(Reference.MOD_ID, "block/catears"), "standalone"))).subscribe();
+            this.initClient();
+        }
+
         EventManager.mod(FMLCommonSetupEvent.class).process(fmlCommonSetupEvent -> proxy.run()).subscribe();
         EventManager.forge(ServerStartingEvent.class).process(fmlServerStartingEvent -> worldFakePlayer.clear()).subscribe();
         EventManager.mod(NewRegistryEvent.class).process(IFRegistries::create).subscribe();
         /*
-        EventManager.forge(ItemTooltipEvent.class).process(itemTooltipEvent -> ForgeRegistries.ITEMS.tags().getReverseTag(itemTooltipEvent.getItemStack().getItem()).ifPresent(itemIReverseTag -> {
+        EventManager.forge(ItemTooltipEvent.class).process(itemTooltipEvent -> BuiltInRegistries.ITEM.tags().getReverseTag(itemTooltipEvent.getItemStack().getItem()).ifPresent(itemIReverseTag -> {
             itemIReverseTag.getTagKeys().forEach(itemTagKey -> itemTooltipEvent.getToolTip().add(Component.literal(itemTagKey.location().toString())));
         })).subscribe();*/
         RewardGiver giver = RewardManager.get().getGiver(UUID.fromString("d28b7061-fb92-4064-90fb-7e02b95a72a6"), "Buuz135");
         try {
-            CAT_EARS = new Reward(new ResourceLocation(Reference.MOD_ID, "cat_ears"), new URL("https://raw.githubusercontent.com/Buuz135/Industrial-Foregoing/master/contributors.json"), () -> dist -> {
+            CAT_EARS = new Reward(ResourceLocation.fromNamespaceAndPath(Reference.MOD_ID, "cat_ears"), new URL("https://raw.githubusercontent.com/Buuz135/Industrial-Foregoing/master/contributors.json"), () -> iDist -> {
             }, new String[]{"normal", "cat", "spooky", "snowy"});
             giver.addReward(CAT_EARS);
         } catch (MalformedURLException e) {
@@ -124,23 +133,26 @@ public class IndustrialForegoing extends ModuleController {
 
         LaserDrillRarity.init();
         PlayerInventoryFinder.init();
-        ForgeMod.enableMilkFluid();
-        DistExecutor.unsafeRunWhenOn(Dist.CLIENT, () -> this::initClient);
+        NeoForgeMod.enableMilkFluid();
+
+        IFAttachments.DR.register(modBus);
+
+
     }
 
-    public static FakePlayer getFakePlayer(Level world) {
-        if (worldFakePlayer.containsKey(world.hashCode()))
-            return worldFakePlayer.get(world.hashCode());
-        if (world instanceof ServerLevel) {
-            IFFakePlayer fakePlayer = new IFFakePlayer((ServerLevel) world);
-            worldFakePlayer.put(world.hashCode(), fakePlayer);
+    private static FakePlayer getFakePlayer(Level world, String uuid) {
+        if (worldFakePlayer.containsKey(uuid))
+            return worldFakePlayer.get(uuid);
+        if (world instanceof ServerLevel serverLevel) {
+            IFFakePlayer fakePlayer = new IFFakePlayer(serverLevel, uuid);
+            worldFakePlayer.put(uuid, fakePlayer);
             return fakePlayer;
         }
         return null;
     }
 
-    public static FakePlayer getFakePlayer(Level world, BlockPos pos) {
-        FakePlayer player = getFakePlayer(world);
+    public static FakePlayer getFakePlayer(Level world, BlockPos pos, String uuid) {
+        FakePlayer player = getFakePlayer(world, uuid);
         if (player != null) player.absMoveTo(pos.getX(), pos.getY(), pos.getZ(), 90, 90);
         return player;
     }
@@ -153,11 +165,11 @@ public class IndustrialForegoing extends ModuleController {
     @Override
     public void addDataProvider(GatherDataEvent event) {
         super.addDataProvider(event);
-        NonNullLazy<List<Block>> blocksToProcess = NonNullLazy.of(() ->
-                ForgeRegistries.BLOCKS.getValues()
+        Lazy<List<Block>> blocksToProcess = Lazy.of(() ->
+                BuiltInRegistries.BLOCK
                         .stream()
                         .filter(block -> !block.getClass().equals(LiquidBlock.class))
-                        .filter(basicBlock -> Optional.ofNullable(ForgeRegistries.BLOCKS.getKey(basicBlock))
+                        .filter(basicBlock -> Optional.ofNullable(BuiltInRegistries.BLOCK.getKey(basicBlock))
                                 .map(ResourceLocation::getNamespace)
                                 .filter(Reference.MOD_ID::equalsIgnoreCase)
                                 .isPresent())
@@ -166,9 +178,9 @@ public class IndustrialForegoing extends ModuleController {
         var blockProvider = new IndustrialTagsProvider.Blocks(event.getGenerator(),event.getLookupProvider() ,Reference.MOD_ID, event.getExistingFileHelper());
         event.getGenerator().addProvider(true, blockProvider);
         event.getGenerator().addProvider(true, new IndustrialTagsProvider.Items(event.getGenerator(),event.getLookupProvider(), blockProvider.contentsGetter(), Reference.MOD_ID, event.getExistingFileHelper()));
-        event.getGenerator().addProvider(true, new IndustrialRecipeProvider(event.getGenerator(), blocksToProcess));
-        event.getGenerator().addProvider(true, new IndustrialSerializableProvider(event.getGenerator(), Reference.MOD_ID));
-        event.getGenerator().addProvider(true, new TitaniumLootTableProvider(event.getGenerator(), blocksToProcess));
+        event.getGenerator().addProvider(true, new IndustrialRecipeProvider(event.getGenerator(), blocksToProcess, event.getLookupProvider()));
+        //event.getGenerator().addProvider(true, new IndustrialSerializableProvider(event.getGenerator(), Reference.MOD_ID));
+        event.getGenerator().addProvider(true, new TitaniumLootTableProvider(event.getGenerator(), blocksToProcess, event.getLookupProvider()));
         event.getGenerator().addProvider(true, new BlockItemModelGeneratorProvider(event.getGenerator(), Reference.MOD_ID, blocksToProcess));
         event.getGenerator().addProvider(true, new IndustrialBlockstateProvider(event.getGenerator(), event.getExistingFileHelper(), blocksToProcess));
         event.getGenerator().addProvider(true, new IndustrialModelProvider(event.getGenerator(), event.getExistingFileHelper()));
@@ -187,26 +199,31 @@ public class IndustrialForegoing extends ModuleController {
         new ModuleResourceProduction().generateFeatures(getRegistries());
         new ModuleMisc().generateFeatures(getRegistries());
 
-        this.addCreativeTab("core", () ->  new ItemStack(ModuleCore.DISSOLUTION_CHAMBER.getLeft().orElse(Blocks.STONE)), Reference.MOD_ID + "_core", ModuleCore.TAB_CORE);        this.addCreativeTab("ag_hus", () ->  new ItemStack(ModuleAgricultureHusbandry.PLANT_SOWER.getLeft().orElse(Blocks.STONE)), Reference.MOD_ID + "_ag_hus", ModuleAgricultureHusbandry.TAB_AG_HUS);
-        this.addCreativeTab("transport", () -> new ItemStack(ModuleTransportStorage.CONVEYOR.getLeft().orElse(Blocks.STONE)), Reference.MOD_ID + "_transport", ModuleTransportStorage.TAB_TRANSPORT);
-        this.addCreativeTab("resource_production", () ->  new ItemStack(ModuleResourceProduction.WATER_CONDENSATOR.getLeft().orElse(Blocks.STONE)), Reference.MOD_ID + "_resource_production", ModuleResourceProduction.TAB_RESOURCE);
-        this.addCreativeTab("generator", () ->  new ItemStack(ModuleGenerator.PITIFUL_GENERATOR.getLeft().orElse(Blocks.STONE)), Reference.MOD_ID + "_generator", ModuleGenerator.TAB_GENERATOR);
-        this.addCreativeTab("misc", () ->  new ItemStack(ModuleMisc.ENCHANTMENT_FACTORY.getLeft().orElse(Blocks.STONE)), Reference.MOD_ID + "_misc", ModuleMisc.TAB_MISC);
+        this.addCreativeTab("core", () -> new ItemStack(ModuleCore.DISSOLUTION_CHAMBER.getBlock()), Reference.MOD_ID + "_core", ModuleCore.TAB_CORE);
+        this.addCreativeTab("ag_hus", () -> new ItemStack(ModuleAgricultureHusbandry.PLANT_SOWER.getBlock()), Reference.MOD_ID + "_ag_hus", ModuleAgricultureHusbandry.TAB_AG_HUS);
+        this.addCreativeTab("transport", () -> new ItemStack(ModuleTransportStorage.CONVEYOR.getBlock()), Reference.MOD_ID + "_transport", ModuleTransportStorage.TAB_TRANSPORT);
+        this.addCreativeTab("resource_production", () -> new ItemStack(ModuleResourceProduction.WATER_CONDENSATOR.getBlock()), Reference.MOD_ID + "_resource_production", ModuleResourceProduction.TAB_RESOURCE);
+        this.addCreativeTab("generator", () -> new ItemStack(ModuleGenerator.PITIFUL_GENERATOR.getBlock()), Reference.MOD_ID + "_generator", ModuleGenerator.TAB_GENERATOR);
+        this.addCreativeTab("misc", () -> new ItemStack(ModuleMisc.ENCHANTMENT_FACTORY.getBlock()), Reference.MOD_ID + "_misc", ModuleMisc.TAB_MISC);
         this.addCreativeTab("tool", () ->  new ItemStack(ModuleTool.INFINITY_DRILL.get()), Reference.MOD_ID + "_tool", ModuleTool.TAB_TOOL);
     }
 
     @OnlyIn(Dist.CLIENT)
     private void initClient() {
+        EventManager.mod(RegisterMenuScreensEvent.class).process(registerMenuScreensEvent -> {
+            registerMenuScreensEvent.register((MenuType<? extends ContainerTransporter>) ContainerTransporter.TYPE.get(), GuiTransporter::new);
+            registerMenuScreensEvent.register((MenuType<? extends ContainerConveyor>) ContainerConveyor.TYPE.get(), GuiConveyor::new);
+        }).subscribe();
         EventManager.mod(ModelEvent.BakingCompleted.class).process(event -> {
-            ClientProxy.ears_baked = event.getModels().get(new ResourceLocation(Reference.MOD_ID, "block/catears"));
+            ClientProxy.ears_baked = event.getModels().get(new ModelResourceLocation(ResourceLocation.fromNamespaceAndPath(Reference.MOD_ID, "block/catears"), "standalone"));
         }).subscribe();
         ClientProxy.OPEN_BACKPACK = new KeyMapping("key.industrialforegoing.backpack.desc", -1, "key.industrialforegoing.category");
         EventManager.mod(RegisterKeyMappingsEvent.class).process(event -> {
             event.register(ClientProxy.OPEN_BACKPACK);
         }).subscribe();
-        EventManager.forge(TickEvent.ClientTickEvent.class).process(event -> {
+        EventManager.forge(ClientTickEvent.Post.class).process(event -> {
             if (ClientProxy.OPEN_BACKPACK.consumeClick()) {
-                IndustrialForegoing.NETWORK.get().sendToServer(new BackpackOpenMessage(Screen.hasControlDown()));
+                IndustrialForegoing.NETWORK.sendToServer(new BackpackOpenMessage(Screen.hasControlDown()));
             }
         }).subscribe();
     }

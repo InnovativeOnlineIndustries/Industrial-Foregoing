@@ -28,12 +28,11 @@ import com.hrznstudio.titanium.api.client.AssetTypes;
 import com.hrznstudio.titanium.client.screen.addon.SlotsScreenAddon;
 import com.hrznstudio.titanium.client.screen.asset.DefaultAssetProvider;
 import com.hrznstudio.titanium.util.AssetUtil;
-import com.mojang.blaze3d.vertex.PoseStack;
-import mezz.jei.api.forge.ForgeTypes;
 import mezz.jei.api.gui.builder.IRecipeLayoutBuilder;
 import mezz.jei.api.gui.drawable.IDrawable;
 import mezz.jei.api.gui.ingredient.IRecipeSlotsView;
 import mezz.jei.api.helpers.IGuiHelper;
+import mezz.jei.api.neoforge.NeoForgeTypes;
 import mezz.jei.api.recipe.IFocusGroup;
 import mezz.jei.api.recipe.RecipeIngredientRole;
 import mezz.jei.api.recipe.RecipeType;
@@ -100,7 +99,7 @@ public class MycelialGeneratorCategory implements IRecipeCategory<MycelialGenera
                 builder.addSlot(RecipeIngredientRole.INPUT, 20 * i + 3, 3 + Minecraft.getInstance().font.lineHeight / 2)
                         .setFluidRenderer(1000, false, 12, 13)
                         .setOverlay(smallTank, 0, 0)
-                        .addIngredients(ForgeTypes.FLUID_STACK, recipe.getFluidItems().get(i));
+                        .addIngredients(NeoForgeTypes.FLUID_STACK, recipe.getFluidItems().get(i));
             }
         }
     }

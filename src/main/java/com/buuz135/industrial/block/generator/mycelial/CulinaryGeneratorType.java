@@ -25,6 +25,8 @@ package com.buuz135.industrial.block.generator.mycelial;
 import com.buuz135.industrial.plugin.jei.generator.MycelialGeneratorRecipe;
 import com.buuz135.industrial.utils.IndustrialTags;
 import com.hrznstudio.titanium.component.inventory.SidedInventoryComponent;
+import net.minecraft.core.RegistryAccess;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.data.recipes.ShapedRecipeBuilder;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.food.FoodProperties;
@@ -33,10 +35,9 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.crafting.Ingredient;
-import net.minecraftforge.common.Tags;
-import net.minecraftforge.common.util.INBTSerializable;
-import net.minecraftforge.fluids.FluidStack;
-import net.minecraftforge.registries.ForgeRegistries;
+import net.neoforged.neoforge.common.Tags;
+import net.neoforged.neoforge.common.util.INBTSerializable;
+import net.neoforged.neoforge.fluids.FluidStack;
 import org.apache.commons.lang3.tuple.Pair;
 
 import java.util.ArrayList;
@@ -62,7 +63,7 @@ public class CulinaryGeneratorType implements IMycelialGeneratorType {
 
     @Override
     public List<BiPredicate<ItemStack, Integer>> getSlotInputPredicates() {
-        return Arrays.asList((stack, slot) -> stack.getItem().isEdible());
+        return Arrays.asList((stack, slot) -> stack.getFoodProperties(null) != null);
     }
 
     @Override
@@ -101,13 +102,14 @@ public class CulinaryGeneratorType implements IMycelialGeneratorType {
     }
 
     @Override
-    public List<MycelialGeneratorRecipe> getRecipes() {
-        return ForgeRegistries.ITEMS.getValues().stream().filter(Item::isEdible).map(ItemStack::new).map(item -> new MycelialGeneratorRecipe(Collections.singletonList(Collections.singletonList(Ingredient.of(item))), new ArrayList<>(), calculate(item).getLeft(), calculate(item).getRight())).collect(Collectors.toList());
+    public List<MycelialGeneratorRecipe> getRecipes(RegistryAccess registryAccess) {
+        return BuiltInRegistries.ITEM.stream().map(ItemStack::new).filter(itemStack -> itemStack.getFoodProperties(null) != null).map(item -> new MycelialGeneratorRecipe(Collections.singletonList(Collections.singletonList(Ingredient.of(item))), new ArrayList<>(), calculate(item).getLeft(), calculate(item).getRight())).collect(Collectors.toList());
     }
 
     private Pair<Integer, Integer> calculate(ItemStack stack) {
         FoodProperties food = stack.getItem().getFoodProperties(stack, null);
-        return Pair.of(food.getNutrition() * 160, (int) (food.getSaturationModifier() * 80));
+        if (food != null) return Pair.of(food.nutrition() * 160, (int) (food.saturation() * 80));
+        return Pair.of(0, 0);
     }
 
     @Override

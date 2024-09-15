@@ -28,18 +28,17 @@ import com.buuz135.industrial.module.ModuleGenerator;
 import com.buuz135.industrial.utils.IndustrialTags;
 import com.hrznstudio.titanium.recipe.generator.TitaniumShapedRecipeBuilder;
 import com.hrznstudio.titanium.util.TagUtil;
-import net.minecraft.data.recipes.FinishedRecipe;
+import net.minecraft.data.recipes.RecipeOutput;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 
 import javax.annotation.Nonnull;
-import java.util.function.Consumer;
 
 public class BiofuelGeneratorBlock extends IndustrialBlock<BiofuelGeneratorTile> {
 
     public BiofuelGeneratorBlock() {
-        super("biofuel_generator", Properties.copy(Blocks.IRON_BLOCK), BiofuelGeneratorTile.class, ModuleGenerator.TAB_GENERATOR);
+        super("biofuel_generator", Properties.ofFullCopy(Blocks.IRON_BLOCK), BiofuelGeneratorTile.class, ModuleGenerator.TAB_GENERATOR);
     }
 
     @Override
@@ -54,13 +53,13 @@ public class BiofuelGeneratorBlock extends IndustrialBlock<BiofuelGeneratorTile>
     }
 
     @Override
-    public void registerRecipe(Consumer<FinishedRecipe> consumer) {
+    public void registerRecipe(RecipeOutput consumer) {
         TitaniumShapedRecipeBuilder.shapedRecipe(this)
                 .pattern("PDP").pattern("SMS").pattern("ASA")
                 .define('P', IndustrialTags.Items.PLASTIC)
                 .define('D', Blocks.FURNACE)
                 .define('S', Blocks.PISTON)
-                .define('A', TagUtil.getItemTag(new ResourceLocation("forge:gears/gold")))
+                .define('A', TagUtil.getItemTag(ResourceLocation.fromNamespaceAndPath("c", "gears/gold")))
                 .define('M', IndustrialTags.Items.MACHINE_FRAME_PITY)
                 .save(consumer);
     }

@@ -1,0 +1,36 @@
+{
+  "neoforge:conditions": [
+    {
+      "type": "neoforge:item_exists",
+      "item": "industrialforegoing:infinity_charger"
+    }
+  ],
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "c": {
+      "tag": "c:gears/diamond"
+    },
+    "m": {
+      "tag": "industrialforegoing:machine_frame/advanced"
+    },
+    "o": {
+      "item": "minecraft:redstone_block"
+    },
+    "p": {
+      "tag": "c:plastic"
+    },
+    "r": {
+      "item": "minecraft:repeater"
+    }
+  },
+  "pattern": [
+    "ppp",
+    "rcr",
+    "omo"
+  ],
+  "result": {
+    "count": 1,
+    "id": "industrialforegoing:infinity_charger"
+  }
+}

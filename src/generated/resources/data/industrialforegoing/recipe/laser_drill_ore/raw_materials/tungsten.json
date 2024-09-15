@@ -1,0 +1,35 @@
+{
+  "neoforge:conditions": [
+    {
+      "type": "neoforge:not",
+      "value": {
+        "type": "neoforge:tag_empty",
+        "tag": "c:raw_materials/tungsten"
+      }
+    }
+  ],
+  "type": "industrialforegoing:laser_drill_ore",
+  "catalyst": {
+    "item": "industrialforegoing:black_laser_lens"
+  },
+  "output": {
+    "tag": "c:raw_materials/tungsten"
+  },
+  "rarity": [
+    {
+      "biome_filter": {
+        "blacklist": [],
+        "whitelist": []
+      },
+      "depth_max": 70,
+      "depth_min": 20,
+      "dimension_filter": {
+        "blacklist": [],
+        "whitelist": [
+          "minecraft:the_end"
+        ]
+      },
+      "weight": 4
+    }
+  ]
+}

@@ -26,22 +26,21 @@ import com.buuz135.industrial.plugin.jei.generator.MycelialGeneratorRecipe;
 import com.buuz135.industrial.utils.IndustrialTags;
 import com.hrznstudio.titanium.component.inventory.SidedInventoryComponent;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.RegistryAccess;
+import net.minecraft.core.component.DataComponents;
 import net.minecraft.data.recipes.ShapedRecipeBuilder;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.nbt.ListTag;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.item.DyeColor;
-import net.minecraft.world.item.FireworkRocketItem;
-import net.minecraft.world.item.Item;
-import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.Items;
+import net.minecraft.world.item.*;
+import net.minecraft.world.item.component.FireworkExplosion;
+import net.minecraft.world.item.component.Fireworks;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.AABB;
-import net.minecraftforge.common.util.INBTSerializable;
-import net.minecraftforge.fluids.FluidStack;
+import net.neoforged.neoforge.common.util.INBTSerializable;
+import net.neoforged.neoforge.fluids.FluidStack;
 import org.apache.commons.lang3.tuple.Pair;
 
 import java.util.ArrayList;
@@ -64,9 +63,8 @@ public class FireworkGeneratorType implements IMycelialGeneratorType {
         return new Input[]{Input.SLOT};
     }
 
-    @Override
-    public List<BiPredicate<ItemStack, Integer>> getSlotInputPredicates() {
-        return Arrays.asList((stack, slot) -> stack.getItem() instanceof FireworkRocketItem && stack.hasTag());
+    public static FireworkExplosion.Shape get(int indexIn) {
+        return indexIn >= 0 && indexIn < FireworkExplosion.Shape.values().length ? FireworkExplosion.Shape.values()[indexIn] : FireworkExplosion.Shape.SMALL_BALL;
     }
 
     @Override
@@ -106,16 +104,18 @@ public class FireworkGeneratorType implements IMycelialGeneratorType {
     }
 
     @Override
-    public List<MycelialGeneratorRecipe> getRecipes() {
+    public List<BiPredicate<ItemStack, Integer>> getSlotInputPredicates() {
+        return Arrays.asList((stack, slot) -> stack.getItem() instanceof FireworkRocketItem && stack.has(DataComponents.FIREWORKS));
+    }
+
+    @Override
+    public List<MycelialGeneratorRecipe> getRecipes(RegistryAccess registryAccess) {
         List<MycelialGeneratorRecipe> recipes = new ArrayList<>();
         for (Item item : new Item[]{Items.FIREWORK_ROCKET}) {
             for (int flight = 1; flight < 4; flight++) {
                 ItemStack stack = new ItemStack(item);
-                CompoundTag tag = stack.getOrCreateTag();
-                    CompoundTag flightTag = new CompoundTag();
-                    flightTag.putInt("Flight", flight);
-                tag.put("Fireworks", flightTag);
-                stack.setTag(tag);
+                Fireworks fireworks = new Fireworks(flight, new ArrayList<>());
+                stack.set(DataComponents.FIREWORKS, fireworks);
                 Pair<Integer, Integer> power = calculate(stack);
                 recipes.add(new MycelialGeneratorRecipe(Collections.singletonList(Collections.singletonList(Ingredient.of(stack))), new ArrayList<>(), power.getLeft(), power.getRight()));
             }
@@ -123,30 +123,25 @@ public class FireworkGeneratorType implements IMycelialGeneratorType {
         return recipes;
     }
 
-    public static FireworkRocketItem.Shape get(int indexIn) {
-        return indexIn >= 0 && indexIn < FireworkRocketItem.Shape.values().length ? FireworkRocketItem.Shape.values()[indexIn] : FireworkRocketItem.Shape.SMALL_BALL;
-    }
-
     private Pair<Integer, Integer> calculate(ItemStack stack) {
-        if (stack.getItem() instanceof FireworkRocketItem && stack.hasTag()) {
-            CompoundTag nbt = stack.getTagElement("Fireworks");
-            if (nbt != null) {
-                int flight = nbt.getInt("Flight");
+        if (stack.getItem() instanceof FireworkRocketItem && stack.has(DataComponents.FIREWORKS)) {
+            Fireworks fireworksData = stack.get(DataComponents.FIREWORKS);
+            if (fireworksData != null) {
+                int flight = fireworksData.flightDuration();
                 double power = 1;
-                ListTag listnbt = nbt.getList("Explosions", 10);
-                if (!listnbt.isEmpty()) {
-                    for (int i = 0; i < listnbt.size(); ++i) {
-                        CompoundTag compound = listnbt.getCompound(i);
-                        FireworkRocketItem.Shape shape = get(compound.getByte("Type"));
+                List<FireworkExplosion> explosions = fireworksData.explosions();
+                if (!explosions.isEmpty()) {
+                    for (FireworkExplosion explosion : explosions) {
+                        var shape = explosion.shape();
                         power *= getShapeModifier(shape);
-                        int[] colors = compound.getIntArray("Colors");
-                        power *= (1 + colors.length / 100D);
-                        int[] fadeColors = compound.getIntArray("FadeColors");
-                        power *= (1 + fadeColors.length / 90D);
-                        if (compound.getBoolean("Trail")) {
+                        var colors = explosion.colors();
+                        power *= (1 + colors.size() / 100D);
+                        var fadeColors = explosion.fadeColors();
+                        power *= (1 + fadeColors.size() / 90D);
+                        if (explosion.hasTrail()) {
                             power *= 1.6;
                         }
-                        if (compound.getBoolean("Flicker")) {
+                        if (explosion.hasTwinkle()) {
                             power *= 1.4;
                         }
                     }
@@ -157,7 +152,7 @@ public class FireworkGeneratorType implements IMycelialGeneratorType {
         return Pair.of(0, 0);
     }
 
-    private double getShapeModifier(FireworkRocketItem.Shape shape) {
+    private double getShapeModifier(FireworkExplosion.Shape shape) {
         switch (shape) {
             case STAR:
                 return 1.2;

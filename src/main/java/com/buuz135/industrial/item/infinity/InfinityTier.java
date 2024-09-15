@@ -22,11 +22,13 @@
 
 package com.buuz135.industrial.item.infinity;
 
+import com.mojang.serialization.Codec;
 import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.Component;
+import net.minecraft.util.StringRepresentable;
 import org.apache.commons.lang3.tuple.Pair;
 
-public enum InfinityTier {
+public enum InfinityTier implements StringRepresentable {
     POOR("poor", 0, 0, ChatFormatting.GRAY, 0x7c7c7a),//1x1
     COMMON("common", 4_000_000, 1, ChatFormatting.WHITE, 0xFFFFFF), //3x3
     UNCOMMON("uncommon", 16_000_000, 2, ChatFormatting.GREEN, 0x1ce819), //5x5
@@ -34,6 +36,9 @@ public enum InfinityTier {
     EPIC("epic", 480_000_000, 4, ChatFormatting.DARK_PURPLE, 0xe100ff), //9x9
     LEGENDARY("legendary", 3_360_000_000L, 5, ChatFormatting.GOLD, 0xffaa00), //11x11
     ARTIFACT("artifact", Long.MAX_VALUE, 6, ChatFormatting.YELLOW, 0xfff887); //13x13
+
+    public static final Codec<InfinityTier> CODEC = StringRepresentable.fromValues(InfinityTier::values);
+
 
     private final String name;
     private final ChatFormatting color;
@@ -112,6 +117,11 @@ public enum InfinityTier {
             lastTier = infinityTier;
         }
         return maxTier;
+    }
+
+    @Override
+    public String getSerializedName() {
+        return this.name;
     }
 }
 

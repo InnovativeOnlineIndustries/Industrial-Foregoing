@@ -1,0 +1,39 @@
+{
+  "neoforge:conditions": [
+    {
+      "type": "neoforge:item_exists",
+      "item": "industrialforegoing:sludge_refiner"
+    }
+  ],
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "B": {
+      "item": "minecraft:bucket"
+    },
+    "G": {
+      "tag": "c:gears/iron"
+    },
+    "L": {
+      "item": "minecraft:furnace"
+    },
+    "M": {
+      "tag": "industrialforegoing:machine_frame/pity"
+    },
+    "P": {
+      "tag": "c:plastic"
+    },
+    "R": {
+      "tag": "c:gears/gold"
+    }
+  },
+  "pattern": [
+    "PBP",
+    "LML",
+    "GRG"
+  ],
+  "result": {
+    "count": 1,
+    "id": "industrialforegoing:sludge_refiner"
+  }
+}

@@ -28,20 +28,19 @@ import com.buuz135.industrial.module.ModuleAgricultureHusbandry;
 import com.buuz135.industrial.utils.IndustrialTags;
 import com.hrznstudio.titanium.recipe.generator.TitaniumShapedRecipeBuilder;
 import com.hrznstudio.titanium.util.TagUtil;
-import net.minecraft.data.recipes.FinishedRecipe;
+import net.minecraft.data.recipes.RecipeOutput;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.entity.BlockEntityType;
-import net.minecraftforge.common.Tags;
+import net.neoforged.neoforge.common.Tags;
 
 import javax.annotation.Nonnull;
-import java.util.function.Consumer;
 
 public class AnimalBabySeparatorBlock extends IndustrialBlock<AnimalBabySeparatorTile> {
 
     public AnimalBabySeparatorBlock() {
-        super("animal_baby_separator", Properties.copy(Blocks.IRON_BLOCK), AnimalBabySeparatorTile.class, ModuleAgricultureHusbandry.TAB_AG_HUS);
+        super("animal_baby_separator", Properties.ofFullCopy(Blocks.IRON_BLOCK), AnimalBabySeparatorTile.class, ModuleAgricultureHusbandry.TAB_AG_HUS);
     }
 
     @Override
@@ -55,16 +54,17 @@ public class AnimalBabySeparatorBlock extends IndustrialBlock<AnimalBabySeparato
         return RotationType.FOUR_WAY;
     }
 
+
     @Override
-    public void registerRecipe(Consumer<FinishedRecipe> consumer) {
+    public void registerRecipe(RecipeOutput recipeOutput) {
         TitaniumShapedRecipeBuilder.shapedRecipe(this)
                 .pattern("PAP").pattern("CMC").pattern("DGD")
                 .define('P', IndustrialTags.Items.PLASTIC)
                 .define('A', Items.GOLDEN_CARROT)
                 .define('C', Items.WHEAT)
-                .define('G', TagUtil.getItemTag(new ResourceLocation("forge:gears/gold")))
+                .define('G', TagUtil.getItemTag(ResourceLocation.fromNamespaceAndPath("c", "gears/gold")))
                 .define('D', Tags.Items.DYES_PURPLE)
                 .define('M', IndustrialTags.Items.MACHINE_FRAME_PITY)
-                .save(consumer);
+                .save(recipeOutput);
     }
 }

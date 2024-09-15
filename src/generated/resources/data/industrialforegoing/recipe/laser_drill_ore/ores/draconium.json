@@ -1,0 +1,35 @@
+{
+  "neoforge:conditions": [
+    {
+      "type": "neoforge:not",
+      "value": {
+        "type": "neoforge:tag_empty",
+        "tag": "c:ores/draconium"
+      }
+    }
+  ],
+  "type": "industrialforegoing:laser_drill_ore",
+  "catalyst": {
+    "item": "industrialforegoing:purple_laser_lens"
+  },
+  "output": {
+    "tag": "c:ores/draconium"
+  },
+  "rarity": [
+    {
+      "biome_filter": {
+        "blacklist": [],
+        "whitelist": []
+      },
+      "depth_max": 95,
+      "depth_min": 60,
+      "dimension_filter": {
+        "blacklist": [],
+        "whitelist": [
+          "minecraft:the_end"
+        ]
+      },
+      "weight": 10
+    }
+  ]
+}

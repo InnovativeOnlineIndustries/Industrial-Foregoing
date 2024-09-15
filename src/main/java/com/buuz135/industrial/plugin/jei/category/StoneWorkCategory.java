@@ -53,12 +53,12 @@ public class StoneWorkCategory implements IRecipeCategory<StoneWorkCategory.Wrap
 
     @Override
     public Component getTitle() {
-        return Component.translatable(ModuleResourceProduction.MATERIAL_STONEWORK_FACTORY.getLeft().get().getDescriptionId());
+        return Component.translatable(ModuleResourceProduction.MATERIAL_STONEWORK_FACTORY.getBlock().getDescriptionId());
     }
 
     @Override
     public IDrawable getBackground() {
-        return helper.createDrawable(new ResourceLocation(Reference.MOD_ID, "textures/gui/jei.png"), 94, 0, 160, 26);
+        return helper.createDrawable(ResourceLocation.fromNamespaceAndPath(Reference.MOD_ID, "textures/gui/jei.png"), 94, 0, 160, 26);
     }
 
     @Override

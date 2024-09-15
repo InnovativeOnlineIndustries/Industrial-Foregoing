@@ -38,7 +38,7 @@ public class EnchantmentFactoryConfig {
     @ConfigVal(comment = "Max Stored Power [FE] - Default: [10000 FE]")
     public static int maxStoredPower = 10000;
 
-    @ConfigVal(comment = "Max Essence [mb] - Default: [32000 mb]")
-    public static int tankSize = 32000;
+    @ConfigVal(comment = "Max Essence [mb] - Default: [64000 mb]")
+    public static int tankSize = 64000;
 
 }

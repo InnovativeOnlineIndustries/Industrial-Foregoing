@@ -28,20 +28,19 @@ import com.buuz135.industrial.module.ModuleGenerator;
 import com.buuz135.industrial.utils.IndustrialTags;
 import com.hrznstudio.titanium.recipe.generator.TitaniumShapedRecipeBuilder;
 import com.hrznstudio.titanium.util.TagUtil;
-import net.minecraft.data.recipes.FinishedRecipe;
+import net.minecraft.data.recipes.RecipeOutput;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.entity.BlockEntityType;
-import net.minecraftforge.common.Tags;
+import net.neoforged.neoforge.common.Tags;
 
 import javax.annotation.Nonnull;
-import java.util.function.Consumer;
 
 public class BioReactorBlock extends IndustrialBlock<BioReactorTile> {
 
     public BioReactorBlock() {
-        super("bioreactor", Properties.copy(Blocks.IRON_BLOCK), BioReactorTile.class, ModuleGenerator.TAB_GENERATOR);
+        super("bioreactor", Properties.ofFullCopy(Blocks.IRON_BLOCK), BioReactorTile.class, ModuleGenerator.TAB_GENERATOR);
     }
 
     @Override
@@ -56,11 +55,11 @@ public class BioReactorBlock extends IndustrialBlock<BioReactorTile> {
     }
 
     @Override
-    public void registerRecipe(Consumer<FinishedRecipe> consumer) {
+    public void registerRecipe(RecipeOutput consumer) {
         TitaniumShapedRecipeBuilder.shapedRecipe(this)
                 .pattern("PDP").pattern("SMS").pattern("ARA")
                 .define('P', IndustrialTags.Items.PLASTIC)
-                .define('D', TagUtil.getItemTag(new ResourceLocation("forge:gears/diamond")))
+                .define('D', TagUtil.getItemTag(ResourceLocation.fromNamespaceAndPath("c", "gears/diamond")))
                 .define('S', Tags.Items.SLIMEBALLS)
                 .define('A', Items.BRICK)
                 .define('M', IndustrialTags.Items.MACHINE_FRAME_PITY)

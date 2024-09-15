@@ -27,18 +27,17 @@ import com.buuz135.industrial.block.misc.tile.StasisChamberTile;
 import com.buuz135.industrial.module.ModuleMisc;
 import com.buuz135.industrial.utils.IndustrialTags;
 import com.hrznstudio.titanium.recipe.generator.TitaniumShapedRecipeBuilder;
-import net.minecraft.data.recipes.FinishedRecipe;
+import net.minecraft.data.recipes.RecipeOutput;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 
 import javax.annotation.Nonnull;
-import java.util.function.Consumer;
 
 public class StasisChamberBlock extends IndustrialBlock<StasisChamberTile> {
 
     public StasisChamberBlock() {
-        super("stasis_chamber", Properties.copy(Blocks.IRON_BLOCK), StasisChamberTile.class, ModuleMisc.TAB_MISC);
+        super("stasis_chamber", Properties.ofFullCopy(Blocks.IRON_BLOCK), StasisChamberTile.class, ModuleMisc.TAB_MISC);
     }
 
     @Override
@@ -53,7 +52,7 @@ public class StasisChamberBlock extends IndustrialBlock<StasisChamberTile> {
     }
 
     @Override
-    public void registerRecipe(Consumer<FinishedRecipe> consumer) {
+    public void registerRecipe(RecipeOutput consumer) {
         TitaniumShapedRecipeBuilder.shapedRecipe(this).pattern("sss").pattern("gmg").pattern("ipi")
                 .define('s', Blocks.SOUL_SAND)
                 .define('g', Items.GHAST_TEAR)

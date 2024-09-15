@@ -24,42 +24,41 @@ package com.buuz135.industrial.item;
 
 import com.buuz135.industrial.module.ModuleCore;
 import com.buuz135.industrial.recipe.DissolutionChamberRecipe;
-import net.minecraft.data.recipes.FinishedRecipe;
+import net.minecraft.data.recipes.RecipeOutput;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.DyeColor;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Ingredient;
-import net.minecraftforge.common.Tags;
-import net.minecraftforge.fluids.FluidStack;
-import net.minecraftforge.registries.ForgeRegistries;
+import net.neoforged.neoforge.common.Tags;
+import net.neoforged.neoforge.fluids.FluidStack;
 
-import java.util.function.Consumer;
+import java.util.List;
+import java.util.Optional;
 
 public class LaserLensItem extends IFCustomItem {
 
-    private int color;
+    private DyeColor color;
 
-    public LaserLensItem(int color) {
-        super("laser_lens" + color, ModuleCore.TAB_CORE, new Properties().stacksTo(1));
+    public LaserLensItem(DyeColor color) {
+        super(color.getName() + "_laser_lens", ModuleCore.TAB_CORE, new Properties().stacksTo(1));
         this.color = color;
     }
 
     @Override
-    public void registerRecipe(Consumer<FinishedRecipe> consumer) {
-        new DissolutionChamberRecipe(ForgeRegistries.ITEMS.getKey(this),
-                new Ingredient.Value[]{
-                        new Ingredient.TagValue(Tags.Items.GLASS_PANES),
-                        new Ingredient.TagValue(Tags.Items.GLASS_PANES),
-                        new Ingredient.TagValue(Tags.Items.GLASS_PANES),
-                        new Ingredient.TagValue(Tags.Items.GLASS_PANES),
-                        new Ingredient.TagValue(DyeColor.byId(color).getTag()),
-                },
-                new FluidStack(ModuleCore.LATEX.getSourceFluid().get(), 250), 100, new ItemStack(this), FluidStack.EMPTY);
+    public void registerRecipe(RecipeOutput consumer) {
+        DissolutionChamberRecipe.createRecipe(consumer, color.getName() + "_laser_lens", new DissolutionChamberRecipe(List.of(
+                Ingredient.of(Tags.Items.GLASS_PANES),
+                Ingredient.of(Tags.Items.GLASS_PANES),
+                Ingredient.of(Tags.Items.GLASS_PANES),
+                Ingredient.of(Tags.Items.GLASS_PANES),
+                Ingredient.of(color.getTag())
+        ), new FluidStack(ModuleCore.LATEX.getSourceFluid().get(), 250), 100, Optional.of(new ItemStack(this)), Optional.empty()));
+
     }
 
     @Override
     public Component getName(ItemStack stack) {
-        return Component.literal(Component.translatable("color.minecraft." + DyeColor.byId(color).getName()).getString() +
+        return Component.literal(Component.translatable("color.minecraft." + color.getName()).getString() +
                 " " + Component.translatable("item.industrialforegoing.laser_lens").getString());
     }
 }

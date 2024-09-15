@@ -28,20 +28,19 @@ import com.buuz135.industrial.module.ModuleCore;
 import com.buuz135.industrial.utils.IndustrialTags;
 import com.hrznstudio.titanium.recipe.generator.TitaniumShapedRecipeBuilder;
 import com.hrznstudio.titanium.util.TagUtil;
-import net.minecraft.data.recipes.FinishedRecipe;
+import net.minecraft.data.recipes.RecipeOutput;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.entity.BlockEntityType;
-import net.minecraftforge.common.Tags;
+import net.neoforged.neoforge.common.Tags;
 
 import javax.annotation.Nonnull;
-import java.util.function.Consumer;
 
 public class DissolutionChamberBlock extends IndustrialBlock<DissolutionChamberTile> {
 
     public DissolutionChamberBlock() {
-        super("dissolution_chamber", Properties.copy(Blocks.IRON_BLOCK), DissolutionChamberTile.class, ModuleCore.TAB_CORE);
+        super("dissolution_chamber", Properties.ofFullCopy(Blocks.IRON_BLOCK), DissolutionChamberTile.class, ModuleCore.TAB_CORE);
     }
 
     @Override
@@ -56,7 +55,7 @@ public class DissolutionChamberBlock extends IndustrialBlock<DissolutionChamberT
     }
 
     @Override
-    public void registerRecipe(Consumer<FinishedRecipe> consumer) {
+    public void registerRecipe(RecipeOutput consumer) {
         TitaniumShapedRecipeBuilder.shapedRecipe(this)
                 .pattern("PCP").pattern("BMB").pattern("GDG")
                 .define('P', IndustrialTags.Items.PLASTIC)
@@ -64,7 +63,7 @@ public class DissolutionChamberBlock extends IndustrialBlock<DissolutionChamberT
                 .define('B', Items.BUCKET)
                 .define('M', IndustrialTags.Items.MACHINE_FRAME_PITY)
                 .define('G', Tags.Items.INGOTS_GOLD)
-                .define('D', TagUtil.getItemTag(new ResourceLocation("forge:gears/diamond")))
+                .define('D', TagUtil.getItemTag(ResourceLocation.fromNamespaceAndPath("c", "gears/diamond")))
                 .save(consumer);
     }
 }

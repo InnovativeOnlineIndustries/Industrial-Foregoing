@@ -31,12 +31,11 @@ import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.inventory.MenuType;
 import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.ItemStack;
-import net.minecraftforge.registries.ObjectHolder;
+import net.neoforged.neoforge.registries.DeferredHolder;
 
 public class ContainerConveyor extends AbstractContainerMenu {
 
-    @ObjectHolder( value = "industrialforegoing:conveyor", registryName = "minecraft:menu")
-    public static MenuType<ContainerConveyor> TYPE;
+    public static DeferredHolder<MenuType<?>, MenuType<?>> TYPE;
 
     private final ConveyorTile conveyor;
     private Direction facing;
@@ -46,7 +45,7 @@ public class ContainerConveyor extends AbstractContainerMenu {
     }
 
     public ContainerConveyor(int id, ConveyorTile conveyor, Direction facing, Inventory player) {
-        super(TYPE, id);
+        super(TYPE.get(), id);
         this.conveyor = conveyor;
         this.facing = facing;
         if (!conveyor.hasUpgrade(facing) && conveyor.getUpgradeMap().size() > 0) {

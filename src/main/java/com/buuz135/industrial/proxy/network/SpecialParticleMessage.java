@@ -24,7 +24,7 @@ package com.buuz135.industrial.proxy.network;
 
 import com.buuz135.industrial.item.infinity.OneThreeFiveHandler;
 import com.hrznstudio.titanium.network.Message;
-import net.minecraftforge.network.NetworkEvent;
+import net.neoforged.neoforge.network.handling.IPayloadContext;
 
 import java.util.UUID;
 
@@ -40,7 +40,7 @@ public class SpecialParticleMessage extends Message {
     }
 
     @Override
-    protected void handleMessage(NetworkEvent.Context context) {
+    protected void handleMessage(IPayloadContext context) {
         OneThreeFiveHandler.SPECIAL_ENTITIES.put(uuid, System.currentTimeMillis());
     }
 

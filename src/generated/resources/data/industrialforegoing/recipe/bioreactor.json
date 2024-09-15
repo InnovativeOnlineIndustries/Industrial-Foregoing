@@ -1,0 +1,39 @@
+{
+  "neoforge:conditions": [
+    {
+      "type": "neoforge:item_exists",
+      "item": "industrialforegoing:bioreactor"
+    }
+  ],
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "A": {
+      "item": "minecraft:brick"
+    },
+    "D": {
+      "tag": "c:gears/diamond"
+    },
+    "M": {
+      "tag": "industrialforegoing:machine_frame/pity"
+    },
+    "P": {
+      "tag": "c:plastic"
+    },
+    "R": {
+      "item": "minecraft:sugar"
+    },
+    "S": {
+      "tag": "c:slimeballs"
+    }
+  },
+  "pattern": [
+    "PDP",
+    "SMS",
+    "ARA"
+  ],
+  "result": {
+    "count": 1,
+    "id": "industrialforegoing:bioreactor"
+  }
+}

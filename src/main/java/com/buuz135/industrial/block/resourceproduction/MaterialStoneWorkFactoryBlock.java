@@ -28,18 +28,17 @@ import com.buuz135.industrial.module.ModuleCore;
 import com.buuz135.industrial.module.ModuleResourceProduction;
 import com.buuz135.industrial.utils.IndustrialTags;
 import com.hrznstudio.titanium.recipe.generator.TitaniumShapedRecipeBuilder;
-import net.minecraft.data.recipes.FinishedRecipe;
+import net.minecraft.data.recipes.RecipeOutput;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 
 import javax.annotation.Nonnull;
-import java.util.function.Consumer;
 
 public class MaterialStoneWorkFactoryBlock extends IndustrialBlock<MaterialStoneWorkFactoryTile> {
 
     public MaterialStoneWorkFactoryBlock() {
-        super("material_stonework_factory", Properties.copy(Blocks.IRON_BLOCK), MaterialStoneWorkFactoryTile.class, ModuleResourceProduction.TAB_RESOURCE);
+        super("material_stonework_factory", Properties.ofFullCopy(Blocks.IRON_BLOCK), MaterialStoneWorkFactoryTile.class, ModuleResourceProduction.TAB_RESOURCE);
     }
 
     @Override
@@ -54,7 +53,7 @@ public class MaterialStoneWorkFactoryBlock extends IndustrialBlock<MaterialStone
     }
 
     @Override
-    public void registerRecipe(Consumer<FinishedRecipe> consumer) {
+    public void registerRecipe(RecipeOutput consumer) {
         TitaniumShapedRecipeBuilder.shapedRecipe(this).pattern("pcp").pattern("gmf").pattern("aba")
                 .define('p', IndustrialTags.Items.PLASTIC)
                 .define('c', Blocks.CRAFTING_TABLE)

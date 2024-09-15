@@ -1,0 +1,39 @@
+{
+  "neoforge:conditions": [
+    {
+      "type": "neoforge:item_exists",
+      "item": "industrialforegoing:plant_gatherer"
+    }
+  ],
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "A": {
+      "item": "minecraft:iron_axe"
+    },
+    "G": {
+      "tag": "c:gears/gold"
+    },
+    "H": {
+      "item": "minecraft:iron_hoe"
+    },
+    "M": {
+      "tag": "industrialforegoing:machine_frame/pity"
+    },
+    "P": {
+      "tag": "c:plastic"
+    },
+    "R": {
+      "item": "minecraft:redstone"
+    }
+  },
+  "pattern": [
+    "PHP",
+    "AMA",
+    "GRG"
+  ],
+  "result": {
+    "count": 1,
+    "id": "industrialforegoing:plant_gatherer"
+  }
+}

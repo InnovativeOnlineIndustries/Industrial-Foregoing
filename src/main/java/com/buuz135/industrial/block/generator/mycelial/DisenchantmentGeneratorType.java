@@ -24,19 +24,25 @@ package com.buuz135.industrial.block.generator.mycelial;
 import com.buuz135.industrial.plugin.jei.generator.MycelialGeneratorRecipe;
 import com.buuz135.industrial.utils.IndustrialTags;
 import com.hrznstudio.titanium.component.inventory.SidedInventoryComponent;
+import net.minecraft.core.Holder;
+import net.minecraft.core.RegistryAccess;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.data.recipes.ShapedRecipeBuilder;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.item.*;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraft.world.item.enchantment.EnchantmentHelper;
+import net.minecraft.world.item.enchantment.ItemEnchantments;
 import net.minecraft.world.level.block.Blocks;
-import net.minecraftforge.common.util.INBTSerializable;
-import net.minecraftforge.fluids.FluidStack;
-import net.minecraftforge.registries.ForgeRegistries;
+import net.neoforged.neoforge.common.util.INBTSerializable;
+import net.neoforged.neoforge.fluids.FluidStack;
 import org.apache.commons.lang3.tuple.Pair;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
 import java.util.function.BiPredicate;
 import java.util.function.Predicate;
 
@@ -98,14 +104,14 @@ public class DisenchantmentGeneratorType implements IMycelialGeneratorType {
     }
 
     @Override
-    public List<MycelialGeneratorRecipe> getRecipes() {
+    public List<MycelialGeneratorRecipe> getRecipes(RegistryAccess registryAccess) {
         List<MycelialGeneratorRecipe> recipes = new ArrayList<>();
-        for (Enchantment value : ForgeRegistries.ENCHANTMENTS.getValues()) {
+        for (Enchantment value : registryAccess.registryOrThrow(Registries.ENCHANTMENT)) {
             for (int i = value.getMinLevel(); i <= value.getMaxLevel(); i++) {
-                HashMap<Enchantment, Integer> map = new HashMap<>();
-                map.put(value, i);
+                var enchantments = new ItemEnchantments.Mutable(ItemEnchantments.EMPTY);
+                enchantments.set(Holder.direct(value), i);
                 ItemStack book = new ItemStack(Items.ENCHANTED_BOOK);
-                EnchantmentHelper.setEnchantments(map, book);
+                EnchantmentHelper.setEnchantments(book, enchantments.toImmutable());
                 Pair<Integer, Integer> power = calculate(book);
                 recipes.add(new MycelialGeneratorRecipe(Arrays.asList(Collections.singletonList(Ingredient.of(book)), Collections.singletonList(Ingredient.of(ItemStack.EMPTY))), new ArrayList<>(), power.getLeft(), power.getRight()));
             }
@@ -114,12 +120,14 @@ public class DisenchantmentGeneratorType implements IMycelialGeneratorType {
     }
 
     private Pair<Integer, Integer> calculate(ItemStack stack) {
-        Map<Enchantment, Integer> ench = EnchantmentHelper.getEnchantments(stack);
+        var enchantmentsDataComponentType = EnchantmentHelper.getComponentType(stack);
+        var data = stack.get(enchantmentsDataComponentType);
+
         int rarity = 0;
         double level = 0;
-        for (Map.Entry<Enchantment, Integer> enchEntry : ench.entrySet()) {
-            rarity += (14 - enchEntry.getKey().getRarity().getWeight());
-            level += (enchEntry.getValue() / (double) enchEntry.getKey().getMaxLevel());
+        for (Holder<Enchantment> holderEntry : data.keySet()) {
+            rarity += (14 - holderEntry.value().definition().weight());
+            level += (data.getLevel(holderEntry) / (double) holderEntry.value().getMaxLevel());
         }
         return Pair.of(rarity * 80, (int) (160 * level));
     }

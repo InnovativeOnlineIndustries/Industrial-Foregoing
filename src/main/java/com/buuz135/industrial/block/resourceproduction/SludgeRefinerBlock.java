@@ -28,19 +28,18 @@ import com.buuz135.industrial.module.ModuleResourceProduction;
 import com.buuz135.industrial.utils.IndustrialTags;
 import com.hrznstudio.titanium.recipe.generator.TitaniumShapedRecipeBuilder;
 import com.hrznstudio.titanium.util.TagUtil;
-import net.minecraft.data.recipes.FinishedRecipe;
+import net.minecraft.data.recipes.RecipeOutput;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 
 import javax.annotation.Nonnull;
-import java.util.function.Consumer;
 
 public class SludgeRefinerBlock extends IndustrialBlock<SludgeRefinerTile> {
 
     public SludgeRefinerBlock() {
-        super("sludge_refiner", Properties.copy(Blocks.IRON_BLOCK), SludgeRefinerTile.class, ModuleResourceProduction.TAB_RESOURCE);
+        super("sludge_refiner", Properties.ofFullCopy(Blocks.IRON_BLOCK), SludgeRefinerTile.class, ModuleResourceProduction.TAB_RESOURCE);
     }
 
     @Override
@@ -55,15 +54,15 @@ public class SludgeRefinerBlock extends IndustrialBlock<SludgeRefinerTile> {
     }
 
     @Override
-    public void registerRecipe(Consumer<FinishedRecipe> consumer) {
+    public void registerRecipe(RecipeOutput consumer) {
         TitaniumShapedRecipeBuilder.shapedRecipe(this)
                 .pattern("PBP").pattern("LML").pattern("GRG")
                 .define('P', IndustrialTags.Items.PLASTIC)
                 .define('B', Items.BUCKET)
                 .define('L', Items.FURNACE)
                 .define('M', IndustrialTags.Items.MACHINE_FRAME_PITY)
-                .define('R', TagUtil.getItemTag(new ResourceLocation("forge:gears/gold")))
-                .define('G', TagUtil.getItemTag(new ResourceLocation("forge:gears/iron")))
+                .define('R', TagUtil.getItemTag(ResourceLocation.fromNamespaceAndPath("c", "gears/gold")))
+                .define('G', TagUtil.getItemTag(ResourceLocation.fromNamespaceAndPath("c", "gears/iron")))
                 .save(consumer);
     }
 }

@@ -1,0 +1,39 @@
+{
+  "neoforge:conditions": [
+    {
+      "type": "neoforge:item_exists",
+      "item": "industrialforegoing:animal_feeder"
+    }
+  ],
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "A": {
+      "item": "minecraft:golden_apple"
+    },
+    "C": {
+      "item": "minecraft:golden_carrot"
+    },
+    "D": {
+      "tag": "c:dyes/purple"
+    },
+    "G": {
+      "tag": "c:gears/iron"
+    },
+    "M": {
+      "tag": "industrialforegoing:machine_frame/pity"
+    },
+    "P": {
+      "tag": "c:plastic"
+    }
+  },
+  "pattern": [
+    "PAP",
+    "CMC",
+    "DGD"
+  ],
+  "result": {
+    "count": 1,
+    "id": "industrialforegoing:animal_feeder"
+  }
+}

@@ -26,18 +26,17 @@ import com.buuz135.industrial.block.agriculturehusbandry.tile.WitherBuilderTile;
 import com.buuz135.industrial.module.ModuleAgricultureHusbandry;
 import com.buuz135.industrial.utils.IndustrialTags;
 import com.hrznstudio.titanium.recipe.generator.TitaniumShapedRecipeBuilder;
-import net.minecraft.data.recipes.FinishedRecipe;
+import net.minecraft.data.recipes.RecipeOutput;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 
 import javax.annotation.Nonnull;
-import java.util.function.Consumer;
 
 public class WitherBuilderBlock extends IndustrialBlock<WitherBuilderTile> {
 
     public WitherBuilderBlock() {
-        super("wither_builder", Properties.copy(Blocks.IRON_BLOCK), WitherBuilderTile.class, ModuleAgricultureHusbandry.TAB_AG_HUS);
+        super("wither_builder", Properties.ofFullCopy(Blocks.IRON_BLOCK), WitherBuilderTile.class, ModuleAgricultureHusbandry.TAB_AG_HUS);
     }
 
     @Override
@@ -52,7 +51,7 @@ public class WitherBuilderBlock extends IndustrialBlock<WitherBuilderTile> {
     }
 
     @Override
-    public void registerRecipe(Consumer<FinishedRecipe> consumer) {
+    public void registerRecipe(RecipeOutput consumer) {
         TitaniumShapedRecipeBuilder.shapedRecipe(this)
                 .pattern("PNP").pattern("WCW").pattern("SSS")
                 .define('P', IndustrialTags.Items.PLASTIC)

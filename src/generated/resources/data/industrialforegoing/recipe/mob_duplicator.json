@@ -1,0 +1,39 @@
+{
+  "neoforge:conditions": [
+    {
+      "type": "neoforge:item_exists",
+      "item": "industrialforegoing:mob_duplicator"
+    }
+  ],
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "C": {
+      "item": "minecraft:magma_cream"
+    },
+    "E": {
+      "item": "minecraft:emerald"
+    },
+    "M": {
+      "tag": "industrialforegoing:machine_frame/advanced"
+    },
+    "P": {
+      "tag": "c:plastic"
+    },
+    "R": {
+      "item": "minecraft:redstone"
+    },
+    "W": {
+      "item": "minecraft:nether_wart"
+    }
+  },
+  "pattern": [
+    "PWP",
+    "CMC",
+    "ERE"
+  ],
+  "result": {
+    "count": 1,
+    "id": "industrialforegoing:mob_duplicator"
+  }
+}

@@ -1,12 +1,13 @@
 package com.buuz135.industrial.item;
 
 import com.buuz135.industrial.api.IMachineSettings;
+import com.buuz135.industrial.utils.IFAttachments;
 import com.buuz135.industrial.utils.IndustrialTags;
 import com.hrznstudio.titanium.item.BasicItem;
 import com.hrznstudio.titanium.recipe.generator.TitaniumShapedRecipeBuilder;
 import com.hrznstudio.titanium.tab.TitaniumTab;
 import net.minecraft.ChatFormatting;
-import net.minecraft.data.recipes.FinishedRecipe;
+import net.minecraft.data.recipes.RecipeOutput;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.sounds.SoundEvents;
@@ -21,7 +22,6 @@ import net.minecraft.world.level.Level;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
-import java.util.function.Consumer;
 
 public class MachineSettingCopier extends IFCustomItem {
 
@@ -30,7 +30,7 @@ public class MachineSettingCopier extends IFCustomItem {
     }
 
     @Override
-    public void registerRecipe(Consumer<FinishedRecipe> consumer) {
+    public void registerRecipe(RecipeOutput consumer) {
         TitaniumShapedRecipeBuilder.shapedRecipe(this)
                 .pattern("PLP").pattern("LRL").pattern("PRP")
                 .define('P', Items.PAPER)
@@ -47,7 +47,7 @@ public class MachineSettingCopier extends IFCustomItem {
     @Override
     public void addTooltipDetails(@Nullable BasicItem.Key key, ItemStack stack, List<Component> tooltip, boolean advanced) {
         super.addTooltipDetails(key, stack, tooltip, advanced);
-        if (stack.hasTag()) {
+        if (stack.has(IFAttachments.SETTINGS_COPIER)) {
             tooltip.add(Component.translatable("text.industrialforegoing.machine_settings_copier.settings_stored").withStyle(ChatFormatting.GOLD));
             tooltip.add(Component.translatable("text.industrialforegoing.machine_settings_copier.settings_clear").withStyle(ChatFormatting.GRAY));
         } else {
@@ -61,8 +61,9 @@ public class MachineSettingCopier extends IFCustomItem {
         var player = context.getPlayer();
         var stack = context.getItemInHand();
         if (tile instanceof IMachineSettings machineSettings) {
-            if (stack.hasTag()) {
-                if (!context.getLevel().isClientSide()) machineSettings.loadSettings(player, stack.getTag());
+            if (stack.has(IFAttachments.SETTINGS_COPIER)) {
+                if (!context.getLevel().isClientSide())
+                    machineSettings.loadSettings(player, stack.get(IFAttachments.SETTINGS_COPIER));
                 player.playSound(SoundEvents.ANVIL_USE, 0.1F, 1.0F);
                 player.displayClientMessage(Component.translatable("text.industrialforegoing.machine_settings_copier.settings_stored"), true);
                 return InteractionResult.SUCCESS;
@@ -70,7 +71,7 @@ public class MachineSettingCopier extends IFCustomItem {
                 if (!context.getLevel().isClientSide()) {
                     CompoundTag tag = new CompoundTag();
                     machineSettings.saveSettings(player, tag);
-                    stack.setTag(tag);
+                    stack.set(IFAttachments.SETTINGS_COPIER, tag);
                 }
                 player.playSound(SoundEvents.ARROW_HIT_PLAYER, 0.5F, 1.0F);
                 player.displayClientMessage(Component.translatable("text.industrialforegoing.machine_settings_copier.settings_copied"), true);
@@ -82,8 +83,8 @@ public class MachineSettingCopier extends IFCustomItem {
 
     @Override
     public InteractionResultHolder<ItemStack> use(Level p_41432_, Player player, InteractionHand hand) {
-        if (player.isShiftKeyDown() && player.getItemInHand(hand).hasTag()) {
-            player.getItemInHand(hand).setTag(null);
+        if (player.isShiftKeyDown() && player.getItemInHand(hand).has(IFAttachments.SETTINGS_COPIER)) {
+            player.getItemInHand(hand).remove(IFAttachments.SETTINGS_COPIER);
             player.playSound(SoundEvents.FIRE_EXTINGUISH, 0.5F, 1.0F);
             return InteractionResultHolder.pass(player.getItemInHand(hand));
         }

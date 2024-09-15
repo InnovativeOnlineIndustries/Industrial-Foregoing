@@ -30,7 +30,7 @@ import com.hrznstudio.titanium.block.RotatableBlock;
 import com.hrznstudio.titanium.recipe.generator.TitaniumShapedRecipeBuilder;
 import com.hrznstudio.titanium.util.TagUtil;
 import net.minecraft.core.Direction;
-import net.minecraft.data.recipes.FinishedRecipe;
+import net.minecraft.data.recipes.RecipeOutput;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.context.BlockPlaceContext;
@@ -40,12 +40,11 @@ import net.minecraft.world.level.block.state.BlockState;
 import org.jetbrains.annotations.Nullable;
 
 import javax.annotation.Nonnull;
-import java.util.function.Consumer;
 
 public class PlantSowerBlock extends IndustrialBlock<PlantSowerTile> {
 
     public PlantSowerBlock() {
-        super("plant_sower", Properties.copy(Blocks.IRON_BLOCK), PlantSowerTile.class, ModuleAgricultureHusbandry.TAB_AG_HUS);
+        super("plant_sower", Properties.ofFullCopy(Blocks.IRON_BLOCK), PlantSowerTile.class, ModuleAgricultureHusbandry.TAB_AG_HUS);
     }
 
     @Override
@@ -66,7 +65,7 @@ public class PlantSowerBlock extends IndustrialBlock<PlantSowerTile> {
     }
 
     @Override
-    public void registerRecipe(Consumer<FinishedRecipe> consumer) {
+    public void registerRecipe(RecipeOutput consumer) {
         TitaniumShapedRecipeBuilder.shapedRecipe(this)
                 .pattern("PBP").pattern("LML").pattern("GRG")
                 .define('P', IndustrialTags.Items.PLASTIC)
@@ -74,7 +73,7 @@ public class PlantSowerBlock extends IndustrialBlock<PlantSowerTile> {
                 .define('L', Items.PISTON)
                 .define('M', IndustrialTags.Items.MACHINE_FRAME_PITY)
                 .define('R', Items.REDSTONE)
-                .define('G', TagUtil.getItemTag(new ResourceLocation("forge:gears/iron")))
+                .define('G', TagUtil.getItemTag(ResourceLocation.fromNamespaceAndPath("c", "gears/iron")))
                 .save(consumer);
     }
 }

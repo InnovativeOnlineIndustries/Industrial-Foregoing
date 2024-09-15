@@ -26,19 +26,17 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.Mth;
-import net.minecraft.world.damagesource.DamageSource;
-import net.minecraft.world.damagesource.DamageSources;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.animal.Cat;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.FallingBlock;
+import net.minecraft.world.level.block.LiquidBlock;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.levelgen.LegacyRandomSource;
 import net.minecraft.world.level.levelgen.synth.SimplexNoise;
 import net.minecraft.world.phys.AABB;
-import net.minecraftforge.fluids.IFluidBlock;
 import org.joml.Vector3f;
 
 import java.util.Arrays;
@@ -296,7 +294,7 @@ public class ProcessExplosion {
                 }
                 r = 10;
             } else {
-                if (block instanceof IFluidBlock || block instanceof FallingBlock) {
+                if (block instanceof LiquidBlock || block instanceof FallingBlock) {
                     blocksToUpdate.add(iPos);
                 }
                 scannedCache.add(iPos);
@@ -351,7 +349,7 @@ public class ProcessExplosion {
         //LogHelper.startTimer("Adding Blocks For Removal");
         final BlockPos pos = new BlockPos((int) origin.x(), (int) origin.y(), (int) origin.z());
         new Thread(() -> {
-            List<Entity> list = world.getEntitiesOfClass(Entity.class, new AABB(pos, pos.offset(1, 1, 1)).inflate(radius * 2.5, radius * 2.5, radius * 2.5));
+            List<Entity> list = world.getEntitiesOfClass(Entity.class, new AABB(pos.getCenter(), pos.offset(1, 1, 1).getCenter()).inflate(radius * 2.5, radius * 2.5, radius * 2.5));
             for (Entity e : list) {
                 if (e instanceof Cat) continue;
                 float dmg = 10000F;

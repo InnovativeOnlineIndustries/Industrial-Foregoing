@@ -24,10 +24,9 @@ package com.buuz135.industrial.gui.component.custom;
 
 import com.buuz135.industrial.api.conveyor.gui.PositionedGuiComponent;
 import com.buuz135.industrial.proxy.block.filter.RegulatorFilter;
+import com.buuz135.industrial.utils.IFAttachments;
 import com.buuz135.industrial.utils.Reference;
 import com.hrznstudio.titanium.util.AssetUtil;
-import com.mojang.blaze3d.systems.RenderSystem;
-import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
@@ -42,7 +41,7 @@ import java.util.List;
 
 public abstract class RegulatorFilterGuiComponent extends PositionedGuiComponent {
 
-    public static final ResourceLocation BG_TEXTURE = new ResourceLocation(Reference.MOD_ID, "textures/gui/conveyor.png");
+    public static final ResourceLocation BG_TEXTURE = ResourceLocation.fromNamespaceAndPath(Reference.MOD_ID, "textures/gui/conveyor.png");
 
     public RegulatorFilterGuiComponent(int x, int y, int xSize, int ySize) {
         super(x, y, xSize, ySize);
@@ -57,7 +56,7 @@ public abstract class RegulatorFilterGuiComponent extends PositionedGuiComponent
                 int posY = guiY + getXPos() + i * 18;
                 if (mouseX > posX + 1 && mouseX < posX + 1 + 16 && mouseY > posY + 1 && mouseY < posY + 1 + 16) {
                     if (conveyor instanceof ICanSendNetworkMessage) {
-                        ((ICanSendNetworkMessage) conveyor).sendMessage(pos, Minecraft.getInstance().player.containerMenu.getCarried().serializeNBT());
+                        ((ICanSendNetworkMessage) conveyor).sendMessage(pos, (CompoundTag) Minecraft.getInstance().player.containerMenu.getCarried().saveOptional(IFAttachments.registryAccess()));
                     }
                     return true;
                 }
@@ -68,7 +67,7 @@ public abstract class RegulatorFilterGuiComponent extends PositionedGuiComponent
     }
 
     @Override
-    public boolean onScrolled(AbstractContainerScreen conveyor, int guiX, int guiY, double mouseX, double mouseY, double delta) {
+    public boolean onScrolled(AbstractContainerScreen conveyor, int guiX, int guiY, double mouseX, double mouseY, double scrollX, double scrollY) {
         int pos = 0;
         for (int i = 0; i < getYSize(); i++) {
             for (int x = 0; x < getXSize(); x++) {
@@ -77,7 +76,7 @@ public abstract class RegulatorFilterGuiComponent extends PositionedGuiComponent
                 if (mouseX > posX + 1 && mouseX < posX + 1 + 16 && mouseY > posY + 1 && mouseY < posY + 1 + 16) {
                     if (conveyor instanceof ICanSendNetworkMessage) {
                         CompoundTag compoundNBT = new CompoundTag();
-                        int amount = (int) delta;
+                        int amount = (int) scrollY;
                         if (Screen.hasShiftDown()) {
                             amount *= getFilter().getSmallMultiplier();
                         }

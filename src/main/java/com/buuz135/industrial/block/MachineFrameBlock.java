@@ -26,29 +26,29 @@ import com.hrznstudio.titanium.block.BasicBlock;
 import com.hrznstudio.titanium.datagenerator.loot.block.BasicBlockLootTables;
 import com.hrznstudio.titanium.tab.TitaniumTab;
 import net.minecraft.network.chat.Component;
-import net.minecraft.world.item.*;
-import net.minecraft.world.item.context.BlockPlaceContext;
+import net.minecraft.world.item.BlockItem;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Rarity;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
-import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.storage.loot.LootTable;
 
 import javax.annotation.Nullable;
-import java.util.Locale;
 
 public class MachineFrameBlock extends BasicBlock {
 
     private Rarity rarity;
 
     public MachineFrameBlock(Rarity rarity, TitaniumTab group) {
-        super("machine_frame_" + rarity.name().toLowerCase(Locale.ROOT), Properties.copy(Blocks.IRON_BLOCK));
+        super(Properties.ofFullCopy(Blocks.IRON_BLOCK));
         this.setItemGroup(group);
         this.rarity = rarity;
     }
 
     @Override
     public LootTable.Builder getLootTable(BasicBlockLootTables blockLootTables) {
-        return blockLootTables.droppingNothing();
+        return blockLootTables.droppingSelf(this);
     }
 
     public static class MachineFrameItem extends BlockItem {
@@ -58,11 +58,6 @@ public class MachineFrameBlock extends BasicBlock {
         public MachineFrameItem(Block blockIn, Rarity rarity, TitaniumTab group) {
             super(blockIn, new Item.Properties().rarity(rarity));
             this.group = group;
-        }
-
-        @Override
-        protected boolean canPlace(BlockPlaceContext p_195944_1_, BlockState p_195944_2_) {
-            return false;
         }
 
         @Nullable

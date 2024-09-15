@@ -23,7 +23,6 @@
 package com.buuz135.industrial.utils;
 
 import com.buuz135.industrial.IndustrialForegoing;
-import com.buuz135.industrial.module.ModuleCore;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.NonNullList;
@@ -32,7 +31,6 @@ import net.minecraft.tags.BlockTags;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.Rarity;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
@@ -40,8 +38,8 @@ import net.minecraft.world.level.block.MangrovePropaguleBlock;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.AABB;
-import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.event.level.BlockEvent;
+import net.neoforged.neoforge.common.NeoForge;
+import net.neoforged.neoforge.event.level.BlockEvent;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -87,9 +85,9 @@ public class BlockUtils {
         return world.getBlockState(pos).getBlock().equals(Blocks.CHORUS_PLANT) || world.getBlockState(pos).getBlock().equals(Blocks.CHORUS_FLOWER);
     }
 
-    public static boolean canBlockBeBroken(Level world, BlockPos pos) {
-        BlockEvent.BreakEvent event = new BlockEvent.BreakEvent(world, pos, world.getBlockState(pos), IndustrialForegoing.getFakePlayer(world));
-        MinecraftForge.EVENT_BUS.post(event);
+    public static boolean canBlockBeBroken(Level world, BlockPos pos, String uuid) {
+        BlockEvent.BreakEvent event = new BlockEvent.BreakEvent(world, pos, world.getBlockState(pos), IndustrialForegoing.getFakePlayer(world, pos, uuid));
+        NeoForge.EVENT_BUS.post(event);
         return !event.isCanceled();
     }
 
@@ -114,22 +112,6 @@ public class BlockUtils {
         item.setPickUpDelay(40);
         item.setItem(stack);
         return world.addFreshEntity(item);
-    }
-
-    public static int getStackAmountByRarity(Rarity rarity) {
-        if (rarity.equals(Rarity.COMMON)) return 64 * 32;
-        if (rarity.equals(ModuleCore.PITY_RARITY)) return 64 * 32 * 8;
-        if (rarity.equals(ModuleCore.SIMPLE_RARITY)) return 64 * 32 * 16 * 16;
-        if (rarity.equals(ModuleCore.ADVANCED_RARITY)) return 64 * 32 * 32 * 32 * 32;
-        return Integer.MAX_VALUE;
-    }
-
-    public static int getFluidAmountByRarity(Rarity rarity) {
-        if (rarity.equals(Rarity.COMMON)) return 16 * 1000;
-        if (rarity.equals(ModuleCore.PITY_RARITY)) return 16 * 1000 * 4;
-        if (rarity.equals(ModuleCore.SIMPLE_RARITY)) return 16 * 1000 * 8 * 8;
-        if (rarity.equals(ModuleCore.ADVANCED_RARITY)) return 16 * 1000 * 16 * 16 * 16;
-        return Integer.MAX_VALUE;
     }
 
     public static void renderLaserBeam(BlockEntity tile, double x, double y, double z, Direction direction, float partialTicks, int length) {
@@ -181,22 +163,22 @@ public class BlockUtils {
 //        float uEnd = 1.0f;
 //        float vStart = -1.0F + d1;
 //        float vEnd = (length * 2) + vStart;
-//        buffer.vertex(tempX + pointA, tempY + length, tempZ + pointA).uv(uEnd, vEnd).endVertex();
-//        buffer.vertex(tempX + pointA, tempY, tempZ + pointA).uv(uEnd, vStart).endVertex();
-//        buffer.vertex(tempX + pointB, tempY, tempZ + pointA).uv(uStart, vStart).endVertex();
-//        buffer.vertex(tempX + pointB, tempY + length, tempZ + pointA).uv(uStart, vEnd).endVertex();
-//        buffer.vertex(tempX + pointB, tempY + length, tempZ + pointB).uv(uEnd, vEnd).endVertex();
-//        buffer.vertex(tempX + pointB, tempY, tempZ + pointB).uv(uEnd, vStart).endVertex();
-//        buffer.vertex(tempX + pointA, tempY, tempZ + pointB).uv(uStart, vStart).endVertex();
-//        buffer.vertex(tempX + pointA, tempY + length, tempZ + pointB).uv(uStart, vEnd).endVertex();
-//        buffer.vertex(tempX + pointB, tempY + length, tempZ + pointA).uv(uEnd, vEnd).endVertex();
-//        buffer.vertex(tempX + pointB, tempY, tempZ + pointA).uv(uEnd, vStart).endVertex();
-//        buffer.vertex(tempX + pointB, tempY, tempZ + pointB).uv(uStart, vStart).endVertex();
-//        buffer.vertex(tempX + pointB, tempY + length, tempZ + pointB).uv(uStart, vEnd).endVertex();
-//        buffer.vertex(tempX + pointA, tempY + length, tempZ + pointB).uv(uEnd, vEnd).endVertex();
-//        buffer.vertex(tempX + pointA, tempY, tempZ + pointB).uv(uEnd, vStart).endVertex();
-//        buffer.vertex(tempX + pointA, tempY, tempZ + pointA).uv(uStart, vStart).endVertex();
-//        buffer.vertex(tempX + pointA, tempY + length, tempZ + pointA).uv(uStart, vEnd).endVertex();
+//        buffer.addVertex(tempX + pointA, tempY + length, tempZ + pointA).setUv(uEnd, vEnd);
+//        buffer.addVertex(tempX + pointA, tempY, tempZ + pointA).setUv(uEnd, vStart);
+//        buffer.addVertex(tempX + pointB, tempY, tempZ + pointA).setUv(uStart, vStart);
+//        buffer.addVertex(tempX + pointB, tempY + length, tempZ + pointA).setUv(uStart, vEnd);
+//        buffer.addVertex(tempX + pointB, tempY + length, tempZ + pointB).setUv(uEnd, vEnd);
+//        buffer.addVertex(tempX + pointB, tempY, tempZ + pointB).setUv(uEnd, vStart);
+//        buffer.addVertex(tempX + pointA, tempY, tempZ + pointB).setUv(uStart, vStart);
+//        buffer.addVertex(tempX + pointA, tempY + length, tempZ + pointB).setUv(uStart, vEnd);
+//        buffer.addVertex(tempX + pointB, tempY + length, tempZ + pointA).setUv(uEnd, vEnd);
+//        buffer.addVertex(tempX + pointB, tempY, tempZ + pointA).setUv(uEnd, vStart);
+//        buffer.addVertex(tempX + pointB, tempY, tempZ + pointB).setUv(uStart, vStart);
+//        buffer.addVertex(tempX + pointB, tempY + length, tempZ + pointB).setUv(uStart, vEnd);
+//        buffer.addVertex(tempX + pointA, tempY + length, tempZ + pointB).setUv(uEnd, vEnd);
+//        buffer.addVertex(tempX + pointA, tempY, tempZ + pointB).setUv(uEnd, vStart);
+//        buffer.addVertex(tempX + pointA, tempY, tempZ + pointA).setUv(uStart, vStart);
+//        buffer.addVertex(tempX + pointA, tempY + length, tempZ + pointA).setUv(uStart, vEnd);
 //        tess.end();
 //        //RenderSystem.setupGui3DDiffuseLighting();
 //        GL11.glEnable(GL11.GL_CULL_FACE);

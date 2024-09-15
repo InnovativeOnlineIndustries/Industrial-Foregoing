@@ -29,14 +29,13 @@ import com.hrznstudio.titanium.api.client.AssetTypes;
 import com.hrznstudio.titanium.client.screen.addon.SlotsScreenAddon;
 import com.hrznstudio.titanium.client.screen.asset.DefaultAssetProvider;
 import com.hrznstudio.titanium.util.AssetUtil;
-import com.mojang.blaze3d.vertex.PoseStack;
 import mezz.jei.api.constants.VanillaTypes;
-import mezz.jei.api.forge.ForgeTypes;
 import mezz.jei.api.gui.builder.IRecipeLayoutBuilder;
 import mezz.jei.api.gui.drawable.IDrawable;
 import mezz.jei.api.gui.drawable.IDrawableStatic;
 import mezz.jei.api.gui.ingredient.IRecipeSlotsView;
 import mezz.jei.api.helpers.IGuiHelper;
+import mezz.jei.api.neoforge.NeoForgeTypes;
 import mezz.jei.api.recipe.IFocusGroup;
 import mezz.jei.api.recipe.RecipeIngredientRole;
 import mezz.jei.api.recipe.RecipeType;
@@ -63,8 +62,8 @@ public class MachineProduceCategory implements IRecipeCategory<MachineProduceWra
     public MachineProduceCategory(IGuiHelper guiHelper) {
         this.guiHelper = guiHelper;
         this.smallTank = guiHelper.createDrawable(DefaultAssetProvider.DEFAULT_LOCATION, 235 + 3, 1 + 3, 12, 13);
-        this.icon = guiHelper.createDrawableIngredient(VanillaTypes.ITEM_STACK, new ItemStack(ModuleCore.LATEX_PROCESSING.getKey().get()));
-        this.background = guiHelper.drawableBuilder(new ResourceLocation(Reference.MOD_ID, "textures/gui/jei.png"), 0, 0, 54, 26).addPadding(0, 0, 0, 26).build();
+        this.icon = guiHelper.createDrawableIngredient(VanillaTypes.ITEM_STACK, new ItemStack(ModuleCore.LATEX_PROCESSING.getBlock()));
+        this.background = guiHelper.drawableBuilder(ResourceLocation.fromNamespaceAndPath(Reference.MOD_ID, "textures/gui/jei.png"), 0, 0, 54, 26).addPadding(0, 0, 0, 26).build();
     }
 
     @Override
@@ -98,7 +97,7 @@ public class MachineProduceCategory implements IRecipeCategory<MachineProduceWra
             builder.addSlot(RecipeIngredientRole.OUTPUT, 57 + 2, 5 + 2)
                     .setFluidRenderer(1000, false, 12, 13)
                     .setOverlay(smallTank, 0, 0)
-                    .addIngredient(ForgeTypes.FLUID_STACK, recipe.getOutputFluid());
+                    .addIngredient(NeoForgeTypes.FLUID_STACK, recipe.getOutputFluid());
         } else {
             List<ItemStack> output = Arrays.asList(outputItem.getItems().clone());
             builder.addSlot(RecipeIngredientRole.OUTPUT, 57, 5)

@@ -1,0 +1,36 @@
+{
+  "neoforge:conditions": [
+    {
+      "type": "neoforge:item_exists",
+      "item": "industrialforegoing:biofuel_generator"
+    }
+  ],
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "A": {
+      "tag": "c:gears/gold"
+    },
+    "D": {
+      "item": "minecraft:furnace"
+    },
+    "M": {
+      "tag": "industrialforegoing:machine_frame/pity"
+    },
+    "P": {
+      "tag": "c:plastic"
+    },
+    "S": {
+      "item": "minecraft:piston"
+    }
+  },
+  "pattern": [
+    "PDP",
+    "SMS",
+    "ASA"
+  ],
+  "result": {
+    "count": 1,
+    "id": "industrialforegoing:biofuel_generator"
+  }
+}

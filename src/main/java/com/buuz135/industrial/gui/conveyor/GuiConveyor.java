@@ -31,16 +31,15 @@ import com.buuz135.industrial.proxy.block.filter.IFilter;
 import com.buuz135.industrial.proxy.network.ConveyorButtonInteractMessage;
 import com.buuz135.industrial.utils.Reference;
 import com.mojang.blaze3d.systems.RenderSystem;
-import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
 import net.minecraft.client.renderer.GameRenderer;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Inventory;
-import net.minecraftforge.registries.ForgeRegistries;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -48,7 +47,7 @@ import java.util.List;
 
 public class GuiConveyor extends AbstractContainerScreen<ContainerConveyor> implements ICanSendNetworkMessage {
 
-    public static final ResourceLocation BG_TEXTURE = new ResourceLocation(Reference.MOD_ID, "textures/gui/conveyor.png");
+    public static final ResourceLocation BG_TEXTURE = ResourceLocation.fromNamespaceAndPath(Reference.MOD_ID, "textures/gui/conveyor.png");
 
     private ConveyorUpgrade upgrade;
     private List<IGuiComponent> componentList;
@@ -77,15 +76,14 @@ public class GuiConveyor extends AbstractContainerScreen<ContainerConveyor> impl
 
     @Override
     protected void renderBg(GuiGraphics guiGraphics, float partialTicks, int mouseX, int mouseY) { //background
-        this.renderBackground(guiGraphics);
         RenderSystem.setShader(GameRenderer::getPositionTexShader);
         RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
         x = (width - imageWidth) / 2;
         y = (height - imageHeight) / 2;
         guiGraphics.blit(BG_TEXTURE, x, y, 0, 0, imageWidth, imageHeight);
         if (upgrade != null) {
-            String localized = Component.translatable(String.format("conveyor.upgrade.%s.%s", ForgeRegistries.ITEMS.getKey(upgrade.getFactory().getUpgradeItem()).getNamespace(), ForgeRegistries.ITEMS.getKey(upgrade.getFactory().getUpgradeItem()).getPath())).getString();
-            guiGraphics.drawString(Minecraft.getInstance().font, localized, x + imageWidth / 2 - getMinecraft().font.width(localized) / 2, y + 6, 0x404040);
+            String localized = Component.translatable(String.format("conveyor.upgrade.%s.%s", BuiltInRegistries.ITEM.getKey(upgrade.getFactory().getUpgradeItem()).getNamespace(), BuiltInRegistries.ITEM.getKey(upgrade.getFactory().getUpgradeItem()).getPath())).getString();
+            guiGraphics.drawString(Minecraft.getInstance().font, localized, x + imageWidth / 2 - getMinecraft().font.width(localized) / 2, y + 6, 0x404040, false);
         }
         for (IGuiComponent iGuiComponent : componentList) {
             iGuiComponent.drawGuiBackgroundLayer(guiGraphics, x, y, mouseX, mouseY);
@@ -126,7 +124,7 @@ public class GuiConveyor extends AbstractContainerScreen<ContainerConveyor> impl
 
     @Override
     public void sendMessage(int id, CompoundTag compound) {
-        IndustrialForegoing.NETWORK.get().sendToServer(new ConveyorButtonInteractMessage(upgrade.getPos(), id, upgrade.getSide(), compound));
+        IndustrialForegoing.NETWORK.sendToServer(new ConveyorButtonInteractMessage(upgrade.getPos(), id, upgrade.getSide(), compound));
     }
 
     public List<IFilter.GhostSlot> getGhostSlots() {

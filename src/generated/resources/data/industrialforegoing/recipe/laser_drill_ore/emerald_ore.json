@@ -1,0 +1,41 @@
+{
+  "type": "industrialforegoing:laser_drill_ore",
+  "catalyst": {
+    "item": "industrialforegoing:lime_laser_lens"
+  },
+  "output": {
+    "item": "minecraft:emerald_ore"
+  },
+  "rarity": [
+    {
+      "biome_filter": {
+        "blacklist": [],
+        "whitelist": [
+          "minecraft:is_mountain"
+        ]
+      },
+      "depth_max": 29,
+      "depth_min": 5,
+      "dimension_filter": {
+        "blacklist": [],
+        "whitelist": []
+      },
+      "weight": 8
+    },
+    {
+      "biome_filter": {
+        "blacklist": [],
+        "whitelist": [
+          "minecraft:is_mountain"
+        ]
+      },
+      "depth_max": 255,
+      "depth_min": 0,
+      "dimension_filter": {
+        "blacklist": [],
+        "whitelist": []
+      },
+      "weight": 1
+    }
+  ]
+}

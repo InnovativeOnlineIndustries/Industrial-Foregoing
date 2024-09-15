@@ -34,26 +34,25 @@ import com.google.common.cache.CacheLoader;
 import com.google.common.cache.LoadingCache;
 import com.hrznstudio.titanium.tab.TitaniumTab;
 import net.minecraft.core.BlockPos;
-import net.minecraft.data.recipes.FinishedRecipe;
+import net.minecraft.core.Holder;
+import net.minecraft.data.recipes.RecipeOutput;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraftforge.fluids.FluidStack;
-import net.minecraftforge.items.ItemHandlerHelper;
-import net.minecraftforge.registries.ForgeRegistries;
+import net.neoforged.neoforge.fluids.FluidStack;
+import net.neoforged.neoforge.items.ItemHandlerHelper;
 import org.apache.commons.lang3.tuple.Pair;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
-import java.util.function.Consumer;
 
 public class ItemInfinitySaw extends ItemInfinity {
 
@@ -75,13 +74,13 @@ public class ItemInfinitySaw extends ItemInfinity {
     }
 
     @Override
-    public boolean canApplyAtEnchantingTable(ItemStack stack, Enchantment enchantment) {
-        return Items.DIAMOND_AXE.canApplyAtEnchantingTable(new ItemStack(Items.DIAMOND_AXE), enchantment);
+    public boolean supportsEnchantment(ItemStack stack, Holder<Enchantment> enchantment) {
+        return Items.DIAMOND_AXE.supportsEnchantment(new ItemStack(Items.DIAMOND_AXE), enchantment);
     }
 
     @Override
-    public boolean isCorrectToolForDrops(BlockState blockIn) {
-        return Items.DIAMOND_AXE.isCorrectToolForDrops(blockIn);
+    public boolean isCorrectToolForDrops(ItemStack stack, BlockState blockIn) {
+        return Items.DIAMOND_AXE.isCorrectToolForDrops(stack, blockIn);
     }
 
     @Override
@@ -123,18 +122,17 @@ public class ItemInfinitySaw extends ItemInfinity {
     }
 
     @Override
-    public void registerRecipe(Consumer<FinishedRecipe> consumer) {
-        new DissolutionChamberRecipe(ForgeRegistries.ITEMS.getKey(this),
-                new Ingredient.Value[]{
-                        new Ingredient.ItemValue(new ItemStack(Items.DIAMOND_BLOCK)),
-                        new Ingredient.ItemValue(new ItemStack(Items.DIAMOND_PICKAXE)),
-                        new Ingredient.ItemValue(new ItemStack(Items.DIAMOND_AXE)),
-                        new Ingredient.ItemValue(new ItemStack(Items.DIAMOND_AXE)),
-                        new Ingredient.ItemValue(new ItemStack(ModuleCore.RANGE_ADDONS[11].get())),
-                        new Ingredient.TagValue(IndustrialTags.Items.GEAR_GOLD),
-                        new Ingredient.TagValue(IndustrialTags.Items.GEAR_GOLD),
-                        new Ingredient.TagValue(IndustrialTags.Items.GEAR_GOLD),
-                },
-                new FluidStack(ModuleCore.PINK_SLIME.getSourceFluid().get(), 2000), 400, new ItemStack(this), FluidStack.EMPTY);
+    public void registerRecipe(RecipeOutput consumer) {
+        DissolutionChamberRecipe.createRecipe(consumer, "infinity_saw", new DissolutionChamberRecipe(List.of(
+                Ingredient.of(new ItemStack(Items.DIAMOND_BLOCK)),
+                Ingredient.of(new ItemStack(Items.DIAMOND_PICKAXE)),
+                Ingredient.of(new ItemStack(Items.DIAMOND_AXE)),
+                Ingredient.of(new ItemStack(Items.DIAMOND_AXE)),
+                Ingredient.of(new ItemStack(ModuleCore.RANGE_ADDONS[11].get())),
+                Ingredient.of(IndustrialTags.Items.GEAR_GOLD),
+                Ingredient.of(IndustrialTags.Items.GEAR_GOLD),
+                Ingredient.of(IndustrialTags.Items.GEAR_GOLD)
+        ), new FluidStack(ModuleCore.PINK_SLIME.getSourceFluid().get(), 2000), 400, Optional.of(new ItemStack(this)), Optional.empty()));
+
     }
 }

@@ -45,10 +45,10 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.DyeColor;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
-import net.minecraftforge.fluids.FluidStack;
-import net.minecraftforge.fluids.capability.IFluidHandler;
+import net.neoforged.api.distmarker.Dist;
+import net.neoforged.api.distmarker.OnlyIn;
+import net.neoforged.neoforge.fluids.FluidStack;
+import net.neoforged.neoforge.fluids.capability.IFluidHandler;
 
 import javax.annotation.Nonnull;
 import java.util.ArrayList;
@@ -146,7 +146,7 @@ public class FermentationStationTile extends IndustrialProcessingTile<Fermentati
                                 ProductionType type = ProductionType.values()[production];
                                 List<Component> list = new ArrayList<>(super.getTooltipLines());
                                 list.add(Component.translatable("text.industrialforegoing.tooltip.fermentation_station.time").append(type.getTicks() / 20 + "s"));
-                                list.add(Component.translatable("text.industrialforegoing.tooltip.fermentation_station.catalyst").append(type.getNeededFluid().isEmpty() ? "None" : Component.translatable(type.getNeededFluid().getTranslationKey()).getString()));
+                                list.add(Component.translatable("text.industrialforegoing.tooltip.fermentation_station.catalyst").append(type.getNeededFluid().isEmpty() ? "None" : type.getNeededFluid().getHoverName().getString()));
 
                                 return list;
                             }
@@ -185,7 +185,7 @@ public class FermentationStationTile extends IndustrialProcessingTile<Fermentati
             var toDrain = Math.min(SealType.values()[this.seal].sealAmount.apply(this.input), this.input.getFluidAmount());
             if (toDrain > 0) {
                 int multipliedAmount = productionType.amount * toDrain;
-                FluidStack stack = OreTitaniumFluidType.getFluidWithTag(ModuleCore.FERMENTED_ORE_MEAT, multipliedAmount, new ResourceLocation(OreTitaniumFluidType.getFluidTag(this.input.getFluid())));
+                FluidStack stack = OreTitaniumFluidType.getFluidWithTag(ModuleCore.FERMENTED_ORE_MEAT, multipliedAmount, ResourceLocation.parse(OreTitaniumFluidType.getFluidTag(this.input.getFluid())));
                 this.output.fillForced(stack, IFluidHandler.FluidAction.EXECUTE);
                 this.catalyst.drainForced(productionType.neededFluid.getAmount() * toDrain / 100, IFluidHandler.FluidAction.EXECUTE);
                 this.input.drainForced(toDrain, IFluidHandler.FluidAction.EXECUTE);

@@ -1,0 +1,44 @@
+{
+  "neoforge:conditions": [
+    {
+      "type": "neoforge:item_exists",
+      "item": "industrialforegoing:infinity_drill"
+    }
+  ],
+  "type": "industrialforegoing:dissolution_chamber",
+  "input": [
+    {
+      "item": "minecraft:diamond_block"
+    },
+    {
+      "item": "minecraft:diamond_shovel"
+    },
+    {
+      "item": "minecraft:diamond_block"
+    },
+    {
+      "item": "minecraft:diamond_block"
+    },
+    {
+      "item": "industrialforegoing:range_addon_tier_11"
+    },
+    {
+      "tag": "c:gears/gold"
+    },
+    {
+      "tag": "c:gears/gold"
+    },
+    {
+      "tag": "c:gears/gold"
+    }
+  ],
+  "inputFluid": {
+    "amount": 2000,
+    "id": "industrialforegoing:pink_slime"
+  },
+  "output": {
+    "count": 1,
+    "id": "industrialforegoing:infinity_drill"
+  },
+  "processingTime": 400
+}

@@ -1,9 +1,0 @@
-{
-  "replace": false,
-  "values": [
-    {
-      "id": "industrialforegoing:gold_gear",
-      "required": false
-    }
-  ]
-}

@@ -33,15 +33,15 @@ import net.minecraft.client.particle.Particle;
 import net.minecraft.client.particle.ParticleRenderType;
 import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.client.renderer.GameRenderer;
-import net.minecraft.client.renderer.texture.TextureAtlas;
 import net.minecraft.client.renderer.texture.TextureManager;
 import net.minecraft.core.Direction;
-import net.minecraft.core.Vec3i;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.phys.Vec3;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
+import net.neoforged.api.distmarker.Dist;
+import net.neoforged.api.distmarker.OnlyIn;
+import org.jetbrains.annotations.Nullable;
+import org.joml.Vector3f;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -51,25 +51,18 @@ public class ParticleVex extends Particle {
 
     public static ParticleRenderType RENDER = new ParticleRenderType() {
         @Override
-        public void begin(BufferBuilder builder, TextureManager manager) {
+        public @Nullable BufferBuilder begin(Tesselator tesselator, TextureManager textureManager) {
             RenderSystem.setShader(GameRenderer::getPositionColorLightmapShader);
             RenderSystem.enableBlend();
             RenderSystem.blendFuncSeparate(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA, GlStateManager.SourceFactor.ONE, GlStateManager.DestFactor.ZERO);
             RenderSystem.lineWidth(1.5F);
-            //RenderSystem.activeTexture(0);
-
-        }
-
-        @Override
-        public void end(Tesselator tessellator) {
-            RenderSystem.disableBlend();
-            RenderSystem.setShader(GameRenderer::getParticleShader);
+            return tesselator.begin(VertexFormat.Mode.DEBUG_LINE_STRIP, DefaultVertexFormat.POSITION_COLOR_LIGHTMAP);
         }
     };
 
     private final Entity entity;
     private List<Direction> directions;
-    private List<Vec3> lines;
+    private List<Vector3f> lines;
     private boolean isDying = false;
 
     public ParticleVex(Entity entity) { //getPosition
@@ -110,15 +103,15 @@ public class ParticleVex extends Particle {
         if (entity instanceof LocalPlayer && Minecraft.getInstance().player.getUUID().equals(entity.getUUID()) && Minecraft.getInstance().options.getCameraType() == CameraType.FIRST_PERSON && this.entity.position().add(0, 1, 0).distanceToSqr(new Vec3(x, y, z)) < 3)
             return;
         Vec3 vector3d = activeRenderInfo.getPosition();
-        double x = entity.xOld + (vector3d.x - entity.xOld);
-        double y = entity.yOld + (vector3d.y - entity.yOld);
-        double z = entity.zOld + (vector3d.z - entity.zOld);
+        float x = (float) (entity.xOld + (vector3d.x - entity.xOld));
+        float y = (float) (entity.yOld + (vector3d.y - entity.yOld));
+        float z = (float) (entity.zOld + (vector3d.z - entity.zOld));
 
-        Tesselator.getInstance().getBuilder().begin(VertexFormat.Mode.DEBUG_LINE_STRIP, DefaultVertexFormat.POSITION_COLOR_LIGHTMAP);
-        for (Vec3 line : lines) {
-            bufferBad.vertex(line.x - x, line.y - y, line.z - z).color(1f, 1f, 1f, 1f).uv2(240, 240).endVertex();
+
+        for (Vector3f line : lines) {
+            bufferBad.addVertex(line.x - x, line.y - y, line.z - z).setColor(1f, 1f, 1f, 1f).setUv2(240, 240);
         }
-        Tesselator.getInstance().end();
+
     }
 
     @Override
@@ -139,12 +132,12 @@ public class ParticleVex extends Particle {
         if (directions.size() == 0) return;
         Direction prev = directions.get(0);
         int currentPosition = 0;
-        Vec3 prevBlockPos = new Vec3(x, y, z);
+        Vector3f prevBlockPos = new Vector3f((float) x, (float) y, (float) z);
         lines.add(prevBlockPos);
         for (int i = 1; i < directions.size(); i++) {
             if (!directions.get(i).equals(prev) || i == directions.size() - 1) {
                 Vec3 directionVector = new Vec3(prev.getNormal().getX(), prev.getNormal().getY(), prev.getNormal().getZ()).scale(0.01);
-                Vec3 endBlockPos = new Vec3(prevBlockPos.x + directionVector.x * (i - currentPosition), prevBlockPos.y + directionVector.y * (i - currentPosition), prevBlockPos.z + directionVector.z * (i - currentPosition));
+                Vector3f endBlockPos = new Vector3f((float) (prevBlockPos.x + directionVector.x * (i - currentPosition)), (float) (prevBlockPos.y + directionVector.y * (i - currentPosition)), (float) (prevBlockPos.z + directionVector.z * (i - currentPosition)));
                 lines.add(endBlockPos);
                 prev = directions.get(i);
                 currentPosition = i;

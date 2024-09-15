@@ -1,9 +1,0 @@
-{
-  "type": "industrialforegoing:crusher",
-  "input": {
-    "tag": "forge:cobblestone"
-  },
-  "output": {
-    "item": "minecraft:gravel"
-  }
-}

@@ -39,7 +39,8 @@ import com.buuz135.industrial.utils.Reference;
 import com.hrznstudio.titanium.recipe.generator.TitaniumShapedRecipeBuilder;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.Direction;
-import net.minecraft.data.recipes.FinishedRecipe;
+import net.minecraft.core.HolderLookup;
+import net.minecraft.data.recipes.RecipeOutput;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.Entity;
@@ -47,12 +48,11 @@ import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
-import net.minecraftforge.common.Tags;
+import net.neoforged.neoforge.common.Tags;
 
 import javax.annotation.Nonnull;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.function.Consumer;
 
 public class ConveyorSplittingUpgrade extends ConveyorUpgrade {
 
@@ -159,8 +159,8 @@ public class ConveyorSplittingUpgrade extends ConveyorUpgrade {
     }
 
     @Override
-    public CompoundTag serializeNBT() {
-        CompoundTag compound = super.serializeNBT() == null ? new CompoundTag() : super.serializeNBT();
+    public CompoundTag serializeNBT(HolderLookup.Provider provider) {
+        CompoundTag compound = super.serializeNBT(provider) == null ? new CompoundTag() : super.serializeNBT(provider);
         compound.putString("NextFacing", nextFacing.getSerializedName());
         compound.putInt("Ratio", ratio);
         compound.putInt("CurrentRatio", currentRatio);
@@ -168,8 +168,8 @@ public class ConveyorSplittingUpgrade extends ConveyorUpgrade {
     }
 
     @Override
-    public void deserializeNBT(CompoundTag nbt) {
-        super.deserializeNBT(nbt);
+    public void deserializeNBT(HolderLookup.Provider provider, CompoundTag nbt) {
+        super.deserializeNBT(provider, nbt);
         nextFacing = Direction.byName(nbt.getString("NextFacing"));
         ratio = nbt.getInt("Ratio");
         currentRatio = nbt.getInt("CurrentRatio");
@@ -191,7 +191,7 @@ public class ConveyorSplittingUpgrade extends ConveyorUpgrade {
     @Override
     public void addComponentsToGui(List<IGuiComponent> componentList) {
         super.addComponentsToGui(componentList);
-        ResourceLocation res = new ResourceLocation(Reference.MOD_ID, "textures/gui/machines.png");
+        ResourceLocation res = ResourceLocation.fromNamespaceAndPath(Reference.MOD_ID, "textures/gui/machines.png");
         componentList.add(new TextureGuiComponent(20, 26, 16, 16, res, 40, 234, "splitting_ratio"));
         componentList.add(new TextGuiComponent(40, 31) {
             @Override
@@ -244,23 +244,23 @@ public class ConveyorSplittingUpgrade extends ConveyorUpgrade {
         @Override
         @Nonnull
         public ResourceLocation getModel(Direction upgradeSide, Direction conveyorFacing) {
-            return new ResourceLocation(Reference.MOD_ID, "block/conveyor_upgrade_splitting_" + upgradeSide.getSerializedName().toLowerCase());
+            return ResourceLocation.fromNamespaceAndPath(Reference.MOD_ID, "block/conveyor_upgrade_splitting_" + upgradeSide.getSerializedName().toLowerCase());
         }
 
         @Nonnull
         @Override
         public ResourceLocation getItemModel() {
-            return new ResourceLocation(Reference.MOD_ID, "conveyor_splitting_upgrade");
+            return ResourceLocation.fromNamespaceAndPath(Reference.MOD_ID, "conveyor_splitting_upgrade");
         }
 
         @Override
-        public void registerRecipe(Consumer<FinishedRecipe> consumer) {
+        public void registerRecipe(RecipeOutput consumer) {
             TitaniumShapedRecipeBuilder.shapedRecipe(getUpgradeItem())
                     .pattern("IPI").pattern("IDI").pattern("ICI")
                     .define('I', Tags.Items.INGOTS_IRON)
-                    .define('P', ModuleTransportStorage.CONVEYOR.getLeft().get())
+                    .define('P', ModuleTransportStorage.CONVEYOR.getBlock())
                     .define('D', Blocks.HOPPER)
-                    .define('C', ModuleTransportStorage.CONVEYOR.getLeft().get())
+                    .define('C', ModuleTransportStorage.CONVEYOR.getBlock())
                     .save(consumer);
         }
     }

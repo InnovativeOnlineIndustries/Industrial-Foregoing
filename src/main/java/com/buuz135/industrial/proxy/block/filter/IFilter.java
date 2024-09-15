@@ -28,10 +28,11 @@ import com.buuz135.industrial.gui.transporter.GuiTransporter;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.renderer.Rect2i;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.item.ItemStack;
-import net.minecraftforge.fluids.FluidStack;
+import net.neoforged.neoforge.fluids.FluidStack;
 
 
 public interface IFilter<T extends Entity> {
@@ -48,9 +49,9 @@ public interface IFilter<T extends Entity> {
 
     GhostSlot[] getFilter();
 
-    CompoundTag serializeNBT();
+    CompoundTag serializeNBT(HolderLookup.Provider provider);
 
-    void deserializeNBT(CompoundTag nbt);
+    void deserializeNBT(HolderLookup.Provider provider, CompoundTag nbt);
 
     public static class GhostSlot {
 
@@ -116,7 +117,7 @@ public interface IFilter<T extends Entity> {
 
         public void accept(ItemStack ingredient) {
             if (Minecraft.getInstance().screen instanceof ICanSendNetworkMessage) {
-                ((ICanSendNetworkMessage) Minecraft.getInstance().screen).sendMessage(id, ingredient.serializeNBT());
+                ((ICanSendNetworkMessage) Minecraft.getInstance().screen).sendMessage(id, (CompoundTag) ingredient.saveOptional(Minecraft.getInstance().level.registryAccess()));
             }
         }
     }

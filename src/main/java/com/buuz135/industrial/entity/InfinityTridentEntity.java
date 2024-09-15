@@ -27,8 +27,6 @@ import com.buuz135.industrial.item.infinity.item.ItemInfinityTrident;
 import com.buuz135.industrial.module.ModuleTool;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.network.protocol.Packet;
-import net.minecraft.network.protocol.game.ClientGamePacketListener;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
@@ -47,9 +45,8 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.EntityHitResult;
 import net.minecraft.world.phys.Vec3;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
-import net.minecraftforge.network.NetworkHooks;
+import net.neoforged.api.distmarker.Dist;
+import net.neoforged.api.distmarker.OnlyIn;
 
 import java.util.List;
 
@@ -71,7 +68,7 @@ public class InfinityTridentEntity extends AbstractArrow {
     }
 
     public InfinityTridentEntity(Level worldIn, LivingEntity thrower, ItemStack thrownStackIn) {
-        super((EntityType<? extends AbstractArrow>) ModuleTool.TRIDENT_ENTITY_TYPE.get(), thrower, worldIn);
+        super((EntityType<? extends AbstractArrow>) ModuleTool.TRIDENT_ENTITY_TYPE.value(), thrower, worldIn, new ItemStack(ModuleTool.INFINITY_TRIDENT.get()), thrownStackIn);
         this.thrownStack = new ItemStack(ModuleTool.INFINITY_TRIDENT.get());
         this.thrownStack = thrownStackIn.copy();
         this.entityData.set(LOYALTY_LEVEL, ((ItemInfinityTrident) ModuleTool.INFINITY_TRIDENT.get()).getCurrentLoyalty(thrownStack));
@@ -79,18 +76,12 @@ public class InfinityTridentEntity extends AbstractArrow {
         this.entityData.set(TIER, ItemInfinity.getSelectedTier(thrownStack).getRadius());
     }
 
-    @OnlyIn(Dist.CLIENT)
-    public InfinityTridentEntity(Level worldIn, double x, double y, double z) {
-        super((EntityType<? extends AbstractArrow>) ModuleTool.TRIDENT_ENTITY_TYPE.get(), x, y, z, worldIn);
-        this.thrownStack = new ItemStack(ModuleTool.INFINITY_TRIDENT.get());
-    }
-
     @Override
-    protected void defineSynchedData() {
-        super.defineSynchedData();
-        this.entityData.define(LOYALTY_LEVEL, 0);
-        this.entityData.define(CHANNELING, false);
-        this.entityData.define(TIER, 1);
+    protected void defineSynchedData(SynchedEntityData.Builder builder) {
+        super.defineSynchedData(builder);
+        builder.define(LOYALTY_LEVEL, 0);
+        builder.define(CHANNELING, false);
+        builder.define(TIER, 1);
     }
 
     @Override
@@ -130,28 +121,28 @@ public class InfinityTridentEntity extends AbstractArrow {
 
     protected void onHitEntity(EntityHitResult p_213868_1_) {
         Entity target = p_213868_1_.getEntity();
-        float damageHit = (float) (DAMAGE + Math.pow(2, this.entityData.get(TIER))) * 0.5f;
-        if (target instanceof LivingEntity) {
-            LivingEntity livingentity = (LivingEntity) target;
-            damageHit += EnchantmentHelper.getDamageBonus(this.thrownStack, livingentity.getMobType());
-        }
-        Entity entity1 = this.getOwner();
-        DamageSource damagesource = target.level().damageSources().trident(this, (Entity) (entity1 == null ? this : entity1));
+        Entity owner = this.getOwner();
+        DamageSource damagesource = target.level().damageSources().trident(this, (Entity) (owner == null ? this : owner));
         this.dealtDamage = true;
+        float damageHit = (float) (DAMAGE + Math.pow(2, this.entityData.get(TIER))) * 0.5f;
+        if (target instanceof LivingEntity && level() instanceof ServerLevel serverLevel) {
+            LivingEntity livingentity = (LivingEntity) target;
+            damageHit = EnchantmentHelper.modifyDamage(serverLevel, this.thrownStack, livingentity, damagesource, damageHit);
+        }
+
+
         SoundEvent soundevent = SoundEvents.TRIDENT_HIT;
         if (target.hurt(damagesource, damageHit)) {
             if (target.getType() == EntityType.ENDERMAN) {
                 return;
             }
 
-            if (target instanceof LivingEntity) {
-                LivingEntity livingentity1 = (LivingEntity) target;
-                if (entity1 instanceof LivingEntity) {
-                    EnchantmentHelper.doPostHurtEffects(livingentity1, entity1);
-                    EnchantmentHelper.doPostDamageEffects((LivingEntity) entity1, livingentity1);
+            if (target instanceof LivingEntity targetLiving) {
+                if (level() instanceof ServerLevel serverLevel && owner instanceof LivingEntity) {
+                    EnchantmentHelper.doPostAttackEffects(serverLevel, targetLiving, damagesource);
                 }
 
-                this.doPostHurtEffects(livingentity1);
+                this.doPostHurtEffects(targetLiving);
             }
         }
 
@@ -159,35 +150,35 @@ public class InfinityTridentEntity extends AbstractArrow {
         float f1 = 1.0F;
         AABB area = new AABB(target.getX(), target.getY(), target.getZ(), target.getX(), target.getY(), target.getZ()).inflate(this.entityData.get(TIER));
         List<Mob> mobs = this.getCommandSenderWorld().getEntitiesOfClass(Mob.class, area);
-        if (entity1 instanceof Player) {
+        if (owner instanceof Player) {
             mobs.forEach(mobEntity -> {
                 float damage = (float) (DAMAGE + Math.pow(2, this.entityData.get(TIER))) * 0.5f;
-                if (target instanceof LivingEntity) {
+                if (target instanceof LivingEntity && level() instanceof ServerLevel serverLevel) {
                     LivingEntity livingentity = (LivingEntity) target;
-                    damage += EnchantmentHelper.getDamageBonus(this.thrownStack, livingentity.getMobType());
+                    damage = EnchantmentHelper.modifyDamage(serverLevel, this.thrownStack, livingentity, damagesource, damage);
                 }
-                mobEntity.hurt(mobEntity.damageSources().playerAttack((Player) entity1), damage);
+                mobEntity.hurt(mobEntity.damageSources().playerAttack((Player) owner), damage);
             });
             this.getCommandSenderWorld().getEntitiesOfClass(ItemEntity.class, area.inflate(1)).forEach(itemEntity -> {
                 itemEntity.setNoPickUpDelay();
-                itemEntity.teleportTo(entity1.blockPosition().getX(), entity1.blockPosition().getY() + 1, entity1.blockPosition().getZ());
+                itemEntity.teleportTo(owner.blockPosition().getX(), owner.blockPosition().getY() + 1, owner.blockPosition().getZ());
             });
-            this.getCommandSenderWorld().getEntitiesOfClass(ExperienceOrb.class, area.inflate(1)).forEach(entityXPOrb -> entityXPOrb.teleportTo(entity1.blockPosition().getX(), entity1.blockPosition().getY(), entity1.blockPosition().getZ()));
+            this.getCommandSenderWorld().getEntitiesOfClass(ExperienceOrb.class, area.inflate(1)).forEach(entityXPOrb -> entityXPOrb.teleportTo(owner.blockPosition().getX(), owner.blockPosition().getY(), owner.blockPosition().getZ()));
         }
         if (this.level() instanceof ServerLevel && this.entityData.get(CHANNELING)) {
             BlockPos blockpos = target.blockPosition();
             if (this.level().canSeeSky(blockpos)) {
                 LightningBolt lightningboltentity = EntityType.LIGHTNING_BOLT.create(this.level());
                 lightningboltentity.moveTo(Vec3.atBottomCenterOf(blockpos));
-                lightningboltentity.setCause(entity1 instanceof ServerPlayer ? (ServerPlayer) entity1 : null);
+                lightningboltentity.setCause(owner instanceof ServerPlayer ? (ServerPlayer) owner : null);
                 this.level().addFreshEntity(lightningboltentity);
-                soundevent = SoundEvents.TRIDENT_THUNDER;
+                soundevent = SoundEvents.TRIDENT_THUNDER.value();
                 f1 = 5.0F;
                 mobs.forEach(mobEntity -> {
                     if (this.level().canSeeSky(mobEntity.blockPosition())) {
                         LightningBolt lightningboltentity1 = EntityType.LIGHTNING_BOLT.create(this.level());
                         lightningboltentity1.moveTo(Vec3.atBottomCenterOf(mobEntity.blockPosition()));
-                        lightningboltentity1.setCause(entity1 instanceof ServerPlayer ? (ServerPlayer) entity1 : null);
+                        lightningboltentity1.setCause(owner instanceof ServerPlayer ? (ServerPlayer) owner : null);
                         this.level().addFreshEntity(lightningboltentity1);
                     }
                 });
@@ -210,6 +201,11 @@ public class InfinityTridentEntity extends AbstractArrow {
         return this.thrownStack.copy();
     }
 
+    @Override
+    protected ItemStack getDefaultPickupItem() {
+        return new ItemStack(ModuleTool.INFINITY_TRIDENT.get());
+    }
+
     @OnlyIn(Dist.CLIENT)
     public boolean isEnchanted() {
         return false;
@@ -226,10 +222,7 @@ public class InfinityTridentEntity extends AbstractArrow {
         return dist <= 64;
     }
 
-    @Override
-    public Packet<ClientGamePacketListener> getAddEntityPacket() {
-        return NetworkHooks.getEntitySpawningPacket(this);
-    }
+
 
     @Override
     protected void tickDespawn() {
@@ -244,7 +237,7 @@ public class InfinityTridentEntity extends AbstractArrow {
     public void readAdditionalSaveData(CompoundTag compound) {
         super.readAdditionalSaveData(compound);
         if (compound.contains("Trident", 10)) {
-            this.thrownStack = ItemStack.of(compound.getCompound("Trident"));
+            this.thrownStack = ItemStack.parseOptional(this.level().registryAccess(), compound.getCompound("Trident"));
         }
 
         this.dealtDamage = compound.getBoolean("DealtDamage");
@@ -255,7 +248,7 @@ public class InfinityTridentEntity extends AbstractArrow {
 
     public void addAdditionalSaveData(CompoundTag compound) {
         super.addAdditionalSaveData(compound);
-        compound.put("Trident", this.thrownStack.save(new CompoundTag()));
+        compound.put("Trident", this.thrownStack.saveOptional(this.level().registryAccess()));
         compound.putBoolean("DealtDamage", this.dealtDamage);
     }
 

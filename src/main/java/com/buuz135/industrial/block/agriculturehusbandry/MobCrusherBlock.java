@@ -28,18 +28,16 @@ import com.buuz135.industrial.module.ModuleAgricultureHusbandry;
 import com.buuz135.industrial.utils.IndustrialTags;
 import com.hrznstudio.titanium.recipe.generator.TitaniumShapedRecipeBuilder;
 import com.hrznstudio.titanium.util.TagUtil;
-import net.minecraft.data.recipes.FinishedRecipe;
+import net.minecraft.data.recipes.RecipeOutput;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 
-import java.util.function.Consumer;
-
 public class MobCrusherBlock extends IndustrialBlock<MobCrusherTile> {
 
     public MobCrusherBlock() {
-        super("mob_crusher", Properties.copy(Blocks.IRON_BLOCK), MobCrusherTile.class, ModuleAgricultureHusbandry.TAB_AG_HUS);
+        super("mob_crusher", Properties.ofFullCopy(Blocks.IRON_BLOCK), MobCrusherTile.class, ModuleAgricultureHusbandry.TAB_AG_HUS);
     }
 
     @Override
@@ -53,7 +51,7 @@ public class MobCrusherBlock extends IndustrialBlock<MobCrusherTile> {
     }
 
     @Override
-    public void registerRecipe(Consumer<FinishedRecipe> consumer) {
+    public void registerRecipe(RecipeOutput consumer) {
         TitaniumShapedRecipeBuilder.shapedRecipe(this)
                 .pattern("PSP").pattern("BMB").pattern("GRG")
                 .define('P', IndustrialTags.Items.PLASTIC)
@@ -61,7 +59,7 @@ public class MobCrusherBlock extends IndustrialBlock<MobCrusherTile> {
                 .define('B', Items.BOOK)
                 .define('M', IndustrialTags.Items.MACHINE_FRAME_ADVANCED)
                 .define('R', Items.REDSTONE)
-                .define('G', TagUtil.getItemTag(new ResourceLocation("forge:gears/gold")))
+                .define('G', TagUtil.getItemTag(ResourceLocation.fromNamespaceAndPath("c", "gears/gold")))
                 .save(consumer);
     }
 }

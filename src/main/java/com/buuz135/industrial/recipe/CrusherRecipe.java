@@ -23,62 +23,81 @@ package com.buuz135.industrial.recipe;
 
 import com.buuz135.industrial.module.ModuleCore;
 import com.buuz135.industrial.utils.Reference;
-import com.hrznstudio.titanium.recipe.serializer.GenericSerializer;
-import com.hrznstudio.titanium.recipe.serializer.SerializableRecipe;
 import com.hrznstudio.titanium.util.TagUtil;
-import net.minecraft.core.RegistryAccess;
+import com.mojang.serialization.MapCodec;
+import com.mojang.serialization.codecs.RecordCodecBuilder;
+import net.minecraft.advancements.AdvancementRequirements;
+import net.minecraft.advancements.AdvancementRewards;
+import net.minecraft.advancements.critereon.RecipeUnlockedTrigger;
+import net.minecraft.core.HolderLookup;
+import net.minecraft.data.recipes.RecipeOutput;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.Container;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
-import net.minecraft.world.item.crafting.Ingredient;
-import net.minecraft.world.item.crafting.RecipeType;
+import net.minecraft.world.item.crafting.*;
 import net.minecraft.world.level.Level;
-import net.minecraftforge.common.crafting.conditions.ICondition;
-import net.minecraftforge.common.crafting.conditions.IConditionSerializer;
-import net.minecraftforge.common.crafting.conditions.NotCondition;
-import net.minecraftforge.common.crafting.conditions.TagEmptyCondition;
-import org.apache.commons.lang3.tuple.Pair;
+import net.neoforged.neoforge.common.conditions.ICondition;
+import net.neoforged.neoforge.common.conditions.NotCondition;
+import net.neoforged.neoforge.common.conditions.TagEmptyCondition;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class CrusherRecipe extends SerializableRecipe {
-    public static List<CrusherRecipe> RECIPES = new ArrayList<>();
+public class CrusherRecipe implements Recipe<CraftingInput> {
 
-    public static void init() {
-        new CrusherRecipe(new ResourceLocation(Reference.MOD_ID, "cobble_gravel"), Ingredient.of(TagUtil.getItemTag(new ResourceLocation("forge:cobblestone"))), Ingredient.of(Items.GRAVEL));
-        new CrusherRecipe(new ResourceLocation(Reference.MOD_ID, "gravel_sand"), Ingredient.of(TagUtil.getItemTag(new ResourceLocation("forge:gravel"))), Ingredient.of(Items.SAND));
-        new CrusherRecipe(new ResourceLocation(Reference.MOD_ID, "sand_silicon"), Ingredient.of(TagUtil.getItemTag(new ResourceLocation("forge:sand"))), Ingredient.of(TagUtil.getItemTag(new ResourceLocation("forge:silicon"))), new ResourceLocation("forge:silicon"));
+    public static final MapCodec<CrusherRecipe> CODEC = RecordCodecBuilder.mapCodec(in -> in.group(
+            Ingredient.CODEC.fieldOf("input").forGetter(crusherRecipe -> crusherRecipe.input),
+            Ingredient.CODEC.fieldOf("output").forGetter(crusherRecipe -> crusherRecipe.input)
+    ).apply(in, CrusherRecipe::new));
+
+
+    public CrusherRecipe(Ingredient input, Ingredient output) {
+        this(input, output, null);
+    }
+
+    public CrusherRecipe(Ingredient input, Ingredient output, ResourceLocation isTag) {
+        this.input = input;
+        this.output = output;
+        this.isTag = isTag;
+    }
+
+    public CrusherRecipe() {
     }
 
     public Ingredient input;
     public Ingredient output;
     private ResourceLocation isTag;
 
-    public CrusherRecipe(ResourceLocation resourceLocation, Ingredient input, Ingredient output) {
-        this(resourceLocation, input, output, null);
+    public static void init(RecipeOutput output) {
+        createRecipe(output, "cobblestone", new CrusherRecipe(Ingredient.of(TagUtil.getItemTag(ResourceLocation.fromNamespaceAndPath("c", "cobblestone"))), Ingredient.of(Items.GRAVEL)));
+        createRecipe(output, "gravel", new CrusherRecipe(Ingredient.of(TagUtil.getItemTag(ResourceLocation.fromNamespaceAndPath("c", "gravel"))), Ingredient.of(Items.SAND)));
+        createRecipe(output, "sand", new CrusherRecipe(Ingredient.of(TagUtil.getItemTag(ResourceLocation.fromNamespaceAndPath("c", "sand"))), Ingredient.of(TagUtil.getItemTag(ResourceLocation.fromNamespaceAndPath("c", "silicon"))), ResourceLocation.fromNamespaceAndPath("c", "silicon")));
     }
 
-    public CrusherRecipe(ResourceLocation resourceLocation, Ingredient input, Ingredient output, ResourceLocation isTag) {
-        super(resourceLocation);
-        this.input = input;
-        this.output = output;
-        this.isTag = isTag;
-        RECIPES.add(this);
+    public static void createRecipe(RecipeOutput recipeOutput, String name, CrusherRecipe recipe) {
+        var rl = generateRL(name);
+        var advancementHolder = recipeOutput.advancement()
+                .addCriterion("has_the_recipe", RecipeUnlockedTrigger.unlocked(rl))
+                .rewards(AdvancementRewards.Builder.recipe(rl))
+                .requirements(AdvancementRequirements.Strategy.OR).build(rl);
+        List<ICondition> conditions = new ArrayList<>();
+        if (recipe.isTag != null) {
+            conditions.add(new NotCondition(new TagEmptyCondition(recipe.isTag)));
+        }
+        recipeOutput.accept(rl, recipe, advancementHolder, conditions.toArray(new ICondition[conditions.size()]));
     }
 
-    public CrusherRecipe(ResourceLocation resourceLocation) {
-        super(resourceLocation);
+    public static ResourceLocation generateRL(String key) {
+        return ResourceLocation.fromNamespaceAndPath(Reference.MOD_ID, "crusher/" + key);
     }
 
     @Override
-    public boolean matches(Container inv, Level worldIn) {
+    public boolean matches(CraftingInput craftingInput, Level level) {
         return false;
     }
 
     @Override
-    public ItemStack assemble(Container inv, RegistryAccess access) {
+    public ItemStack assemble(CraftingInput craftingInput, HolderLookup.Provider provider) {
         return ItemStack.EMPTY;
     }
 
@@ -88,13 +107,13 @@ public class CrusherRecipe extends SerializableRecipe {
     }
 
     @Override
-    public ItemStack getResultItem(RegistryAccess access) {
+    public ItemStack getResultItem(HolderLookup.Provider provider) {
         return ItemStack.EMPTY;
     }
 
     @Override
-    public GenericSerializer<? extends SerializableRecipe> getSerializer() {
-        return (GenericSerializer<? extends SerializableRecipe>) ModuleCore.CRUSHER_SERIALIZER.get();
+    public RecipeSerializer<?> getSerializer() {
+        return ModuleCore.CRUSHER_SERIALIZER.get();
     }
 
     @Override
@@ -102,12 +121,5 @@ public class CrusherRecipe extends SerializableRecipe {
         return ModuleCore.CRUSHER_TYPE.get();
     }
 
-    @Override
-    public Pair<ICondition, IConditionSerializer> getOutputCondition() {
-        if (isTag != null) {
-            return Pair.of(new NotCondition(new TagEmptyCondition(isTag)), NotCondition.Serializer.INSTANCE);
-        }
-        return null;
-    }
 
 }

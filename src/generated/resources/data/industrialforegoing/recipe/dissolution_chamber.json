@@ -1,0 +1,39 @@
+{
+  "neoforge:conditions": [
+    {
+      "type": "neoforge:item_exists",
+      "item": "industrialforegoing:dissolution_chamber"
+    }
+  ],
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "B": {
+      "item": "minecraft:bucket"
+    },
+    "C": {
+      "tag": "c:chests"
+    },
+    "D": {
+      "tag": "c:gears/diamond"
+    },
+    "G": {
+      "tag": "c:ingots/gold"
+    },
+    "M": {
+      "tag": "industrialforegoing:machine_frame/pity"
+    },
+    "P": {
+      "tag": "c:plastic"
+    }
+  },
+  "pattern": [
+    "PCP",
+    "BMB",
+    "GDG"
+  ],
+  "result": {
+    "count": 1,
+    "id": "industrialforegoing:dissolution_chamber"
+  }
+}

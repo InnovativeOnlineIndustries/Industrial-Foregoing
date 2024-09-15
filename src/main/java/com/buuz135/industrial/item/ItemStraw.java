@@ -27,16 +27,13 @@ import com.buuz135.industrial.utils.IndustrialTags;
 import com.buuz135.industrial.utils.StrawUtils;
 import com.hrznstudio.titanium.recipe.generator.TitaniumShapedRecipeBuilder;
 import com.hrznstudio.titanium.tab.TitaniumTab;
-import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
-import net.minecraft.data.recipes.FinishedRecipe;
-import net.minecraft.network.chat.Component;
+import net.minecraft.data.recipes.RecipeOutput;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.InteractionResultHolder;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.UseAnim;
 import net.minecraft.world.level.ClipContext;
@@ -50,16 +47,12 @@ import net.minecraft.world.level.material.FluidState;
 import net.minecraft.world.level.material.Fluids;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.HitResult;
-import net.minecraftforge.common.capabilities.ForgeCapabilities;
-import net.minecraftforge.common.util.LazyOptional;
-import net.minecraftforge.fluids.FluidStack;
-import net.minecraftforge.fluids.capability.IFluidHandler;
+import net.neoforged.neoforge.capabilities.Capabilities;
+import net.neoforged.neoforge.fluids.FluidStack;
+import net.neoforged.neoforge.fluids.capability.IFluidHandler;
 
 import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-import java.util.List;
 import java.util.Optional;
-import java.util.function.Consumer;
 
 ;
 
@@ -83,21 +76,16 @@ public class ItemStraw extends IFCustomItem {
                 FluidState fluidState = state.getFluidState();
                 if (fluidState != Fluids.EMPTY.defaultFluidState() && block instanceof BucketPickup && fluidState.isSource()) {
                     StrawUtils.getStrawHandler(fluidState.getType()).ifPresent(handler -> {
-                        ItemStack stack = ((BucketPickup) block).pickupBlock(world, pos, state);
-                        stack.getCapability(ForgeCapabilities.FLUID_HANDLER_ITEM).ifPresent(iFluidHandlerItem -> {
-                            if (!iFluidHandlerItem.getFluidInTank(0).isEmpty()) {
-                                handler.onDrink(world, pos, iFluidHandlerItem.getFluidInTank(0).getFluid(), player, false);
-                            }
-                        });
-
+                        ItemStack stack = ((BucketPickup) block).pickupBlock(player, world, pos, state);
+                        var iFluidHandlerItem = stack.getCapability(Capabilities.FluidHandler.ITEM);
+                        if (iFluidHandlerItem != null && !iFluidHandlerItem.getFluidInTank(0).isEmpty()) {
+                            handler.onDrink(world, pos, iFluidHandlerItem.getFluidInTank(0).getFluid(), player, false);
+                        }
                     });
                     return heldStack;
                 }
-                BlockEntity tile = world.getBlockEntity(pos);
-                if (tile != null) {
-                    LazyOptional<IFluidHandler> fluidhandlercap = tile.getCapability(ForgeCapabilities.FLUID_HANDLER);
-                    if (fluidhandlercap.isPresent()) {
-                        IFluidHandler handler = fluidhandlercap.orElseThrow(RuntimeException::new);
+                var handler = world.getCapability(Capabilities.FluidHandler.BLOCK, pos, null);
+                if (handler != null) {
                         int tanks = handler.getTanks();
                         for (int i = 0; i < tanks; i++) {
                             FluidStack stack = handler.getFluidInTank(i);
@@ -113,7 +101,7 @@ public class ItemStraw extends IFCustomItem {
                                 }
                             }
                         }
-                    }
+
                 }
             }
         }
@@ -139,9 +127,8 @@ public class ItemStraw extends IFCustomItem {
             }
             BlockEntity tile = worldIn.getBlockEntity(pos);
             if (tile != null) {
-                LazyOptional<IFluidHandler> fluidhandlercap = tile.getCapability(ForgeCapabilities.FLUID_HANDLER);
-                if (fluidhandlercap.isPresent()) {
-                    IFluidHandler handler = fluidhandlercap.orElseThrow(RuntimeException::new);
+                var handler = worldIn.getCapability(Capabilities.FluidHandler.BLOCK, pos, null);
+                if (handler != null) {
                     int tanks = handler.getTanks();
                     for (int i = 0; i < tanks; i++) {
                         FluidStack stack = handler.getFluidInTank(i);
@@ -164,7 +151,7 @@ public class ItemStraw extends IFCustomItem {
     }
 
     @Override
-    public int getUseDuration(ItemStack p_77626_1_) {
+    public int getUseDuration(ItemStack p_77626_1_, LivingEntity entity) {
         return 30;
     }
 
@@ -174,18 +161,7 @@ public class ItemStraw extends IFCustomItem {
     }
 
     @Override
-    public boolean hasTooltipDetails(@Nullable Key key) {
-        return key == null;
-    }
-
-    @Override
-    public void addTooltipDetails(@Nullable Key key, ItemStack stack, List<Component> tooltip, boolean advanced) {
-        super.addTooltipDetails(key, stack, tooltip, advanced);
-        tooltip.add(Component.literal(ChatFormatting.GRAY + "\"The One Who Codes\""));
-    }
-
-    @Override
-    public void registerRecipe(Consumer<FinishedRecipe> consumer) {
+    public void registerRecipe(RecipeOutput consumer) {
         TitaniumShapedRecipeBuilder.shapedRecipe(this)
                 .pattern("PP ").pattern(" P ").pattern(" P ")
                 .define('P', IndustrialTags.Items.PLASTIC)

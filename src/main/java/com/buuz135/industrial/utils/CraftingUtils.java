@@ -25,20 +25,11 @@ package com.buuz135.industrial.utils;
 import com.buuz135.industrial.module.ModuleCore;
 import com.buuz135.industrial.recipe.CrusherRecipe;
 import com.hrznstudio.titanium.util.RecipeUtil;
-import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.inventory.AbstractContainerMenu;
-import net.minecraft.world.inventory.CraftingContainer;
-import net.minecraft.world.inventory.TransientCraftingContainer;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.crafting.CraftingRecipe;
-import net.minecraft.world.item.crafting.Recipe;
-import net.minecraft.world.item.crafting.RecipeType;
+import net.minecraft.world.item.crafting.*;
 import net.minecraft.world.level.Level;
 
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 public class CraftingUtils {
 
@@ -54,54 +45,30 @@ public class CraftingUtils {
                 return entry.getValue().copy();
             }
         }
-        CraftingContainer inventoryCrafting = new TransientCraftingContainer(new AbstractContainerMenu(null, 0) {
-            @Override
-            public ItemStack quickMoveStack(Player p_38941_, int p_38942_) {
-                return ItemStack.EMPTY;
-            }
-
-            @Override
-            public boolean stillValid(Player playerIn) {
-                return false;
-            }
-        }, size, size);
+        List<ItemStack> inputs = new ArrayList<>();
         for (int i = 0; i < size * size; i++) {
-            inventoryCrafting.setItem(i, input.copy());
+            inputs.add(input.copy());
         }
-        CraftingRecipe recipe = world.getRecipeManager().getRecipeFor(RecipeType.CRAFTING, inventoryCrafting, world).orElse(null);
+        var recipe = world.getRecipeManager().getRecipeFor(RecipeType.CRAFTING, CraftingInput.of(size, size, inputs), world).orElse(null);
         if (recipe != null) {
-            ItemStack output = recipe.getResultItem(world.registryAccess());
+            ItemStack output = recipe.value().getResultItem(world.registryAccess());
             cachedRecipes.put(cachedStack, output.copy());
             return output.copy();
         }
         return ItemStack.EMPTY;
     }
 
-    public static CraftingContainer genCraftingInventory(Level world, ItemStack... inputs) {
-        CraftingContainer inventoryCrafting = new TransientCraftingContainer(new AbstractContainerMenu(null, 0) {
-            @Override
-            public boolean stillValid(Player playerIn) {
-                return false;
-            }
-
-            @Override
-            public ItemStack quickMoveStack(Player p_38941_, int p_38942_) {
-                return ItemStack.EMPTY;
-            }
-        }, 3, 3);
-        for (int i = 0; i < 9; ++i) {
-            inventoryCrafting.setItem(i, inputs[i]);
-        }
-        return inventoryCrafting;
+    public static CraftingInput genCraftingInventory(Level world, ItemStack... inputs) {
+        return CraftingInput.of(3, 3, Arrays.stream(inputs).toList());
     }
 
     public static Recipe findRecipe(Level world, ItemStack... inputs) {
         for (ItemStack[] missingRecipe : missingRecipes) {
             if (doesStackArrayEquals(missingRecipe, inputs)) return null;
         }
-        Recipe recipe = world.getRecipeManager().getRecipeFor(RecipeType.CRAFTING, genCraftingInventory(world, inputs), world).orElseGet(null);
+        RecipeHolder<CraftingRecipe> recipe = world.getRecipeManager().getRecipeFor(RecipeType.CRAFTING, genCraftingInventory(world, inputs), world).orElseGet(null);
         if (recipe == null) missingRecipes.add(inputs);
-        return recipe;
+        return recipe.value();
     }
 
     public static boolean doesStackArrayEquals(ItemStack[] original, ItemStack[] compare) {

@@ -31,7 +31,7 @@ import net.minecraft.world.item.Items;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraftforge.common.IForgeShearable;
+import net.neoforged.neoforge.common.IShearable;
 
 import java.util.*;
 
@@ -54,8 +54,8 @@ public class TreeCache {
         NonNullList<ItemStack> stacks = NonNullList.create();
         if (BlockUtils.isLeaves(world, p) || BlockUtils.isLog(world, p)) {
             BlockState s = world.getBlockState(p);
-            if (s.getBlock() instanceof IForgeShearable && shear) {
-                stacks.addAll(((IForgeShearable) s.getBlock()).onSheared(null, new ItemStack(Items.SHEARS), world, p, 0));
+            if (s.getBlock() instanceof IShearable shearable && shear) {
+                stacks.addAll(shearable.onSheared(null, new ItemStack(Items.SHEARS), world, p));
             } else {
                 stacks.addAll(BlockUtils.getBlockDrops(world, p));
             }

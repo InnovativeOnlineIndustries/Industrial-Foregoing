@@ -23,8 +23,9 @@
 package com.buuz135.industrial.proxy.event;
 
 import com.buuz135.industrial.utils.IFFakePlayer;
-import net.minecraftforge.event.entity.EntityMountEvent;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
+import net.neoforged.bus.api.SubscribeEvent;
+import net.neoforged.neoforge.event.entity.EntityMountEvent;
+
 
 public class FakePlayerRideEntityHandler {
 

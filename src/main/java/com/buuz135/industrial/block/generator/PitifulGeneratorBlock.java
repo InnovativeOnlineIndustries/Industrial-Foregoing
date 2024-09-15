@@ -27,18 +27,17 @@ import com.buuz135.industrial.block.generator.tile.PitifulGeneratorTile;
 import com.buuz135.industrial.module.ModuleGenerator;
 import com.buuz135.industrial.utils.IndustrialTags;
 import com.hrznstudio.titanium.recipe.generator.TitaniumShapedRecipeBuilder;
-import net.minecraft.data.recipes.FinishedRecipe;
+import net.minecraft.data.recipes.RecipeOutput;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.entity.BlockEntityType;
-import net.minecraftforge.common.Tags;
+import net.neoforged.neoforge.common.Tags;
 
 import javax.annotation.Nonnull;
-import java.util.function.Consumer;
 
 public class PitifulGeneratorBlock extends IndustrialBlock<PitifulGeneratorTile> {
 
     public PitifulGeneratorBlock() {
-        super("pitiful_generator", Properties.copy(Blocks.COBBLESTONE), PitifulGeneratorTile.class, ModuleGenerator.TAB_GENERATOR);
+        super("pitiful_generator", Properties.ofFullCopy(Blocks.COBBLESTONE), PitifulGeneratorTile.class, ModuleGenerator.TAB_GENERATOR);
     }
 
     @Nonnull
@@ -53,7 +52,7 @@ public class PitifulGeneratorBlock extends IndustrialBlock<PitifulGeneratorTile>
     }
 
     @Override
-    public void registerRecipe(Consumer<FinishedRecipe> consumer) {
+    public void registerRecipe(RecipeOutput consumer) {
         TitaniumShapedRecipeBuilder.shapedRecipe(this).pattern("pdp").pattern("gmg").pattern("pfp")
                 .define('p', Blocks.COBBLESTONE)
                 .define('d', Tags.Items.INGOTS_GOLD)

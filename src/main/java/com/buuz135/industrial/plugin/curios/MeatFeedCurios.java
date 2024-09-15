@@ -32,15 +32,14 @@ import net.minecraft.client.renderer.entity.RenderLayerParent;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.ItemStack;
 import top.theillusivec4.curios.api.SlotContext;
-import top.theillusivec4.curios.api.SlotTypePreset;
 import top.theillusivec4.curios.api.client.ICurioRenderer;
 import top.theillusivec4.curios.api.type.capability.ICurio;
 
 public class MeatFeedCurios implements ICurio, ICurioRenderer {
 
     @Override
-    public boolean canEquip(String identifier, LivingEntity livingEntity) {
-        return identifier.equals(SlotTypePreset.HEAD.getIdentifier());
+    public boolean canEquip(SlotContext identifier) {
+        return identifier.identifier().equals("head");
     }
 
     @Override
@@ -49,17 +48,17 @@ public class MeatFeedCurios implements ICurio, ICurioRenderer {
     }
 
     @Override
-    public void curioTick(String identifier, int index, LivingEntity livingEntity) {
-        ItemStack stack = CuriosPlugin.getStack(livingEntity, SlotTypePreset.HEAD, 0);
+    public void curioTick(SlotContext slotContext) {
+        ItemStack stack = CuriosPlugin.getStack(slotContext.entity(), "head", 0);
         if (stack.getItem() instanceof MeatFeederItem) {
-            ModuleTool.MEAT_FEEDER.get().inventoryTick(stack, livingEntity.level(), livingEntity, 0, false);
+            ModuleTool.MEAT_FEEDER.get().inventoryTick(stack, slotContext.entity().level(), slotContext.entity(), 0, false);
         }
     }
 
     @Override
     public <T extends LivingEntity, M extends EntityModel<T>> void render(ItemStack stack, SlotContext slotContext, PoseStack matrixStack, RenderLayerParent<T, M> renderLayerParent, MultiBufferSource renderTypeBuffer, int light, float limbSwing, float limbSwingAmount, float partialTicks, float ageInTicks, float netHeadYaw, float headPitch) {
         LivingEntity entity = slotContext.entity();
-        ItemStack itemStack = CuriosPlugin.getStack(entity, SlotTypePreset.HEAD, 0);
+        ItemStack itemStack = CuriosPlugin.getStack(entity, "head", 0);
         // TODO: 22/08/2021 Render system.
 //        if (itemStack.getItem() instanceof MeatFeederItem){
 //            matrixStack.push();

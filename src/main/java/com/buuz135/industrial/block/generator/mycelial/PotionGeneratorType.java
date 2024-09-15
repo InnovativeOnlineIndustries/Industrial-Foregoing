@@ -25,18 +25,20 @@ package com.buuz135.industrial.block.generator.mycelial;
 import com.buuz135.industrial.plugin.jei.generator.MycelialGeneratorRecipe;
 import com.buuz135.industrial.utils.IndustrialTags;
 import com.hrznstudio.titanium.component.inventory.SidedInventoryComponent;
+import net.minecraft.core.Holder;
+import net.minecraft.core.RegistryAccess;
+import net.minecraft.core.component.DataComponents;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.data.recipes.ShapedRecipeBuilder;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.item.*;
-import net.minecraft.world.item.alchemy.Potion;
-import net.minecraft.world.item.alchemy.PotionUtils;
+import net.minecraft.world.item.alchemy.PotionContents;
 import net.minecraft.world.item.alchemy.Potions;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.level.block.Blocks;
-import net.minecraftforge.common.util.INBTSerializable;
-import net.minecraftforge.fluids.FluidStack;
-import net.minecraftforge.registries.ForgeRegistries;
+import net.neoforged.neoforge.common.util.INBTSerializable;
+import net.neoforged.neoforge.fluids.FluidStack;
 import org.apache.commons.lang3.tuple.Pair;
 
 import java.util.*;
@@ -102,21 +104,21 @@ public class PotionGeneratorType implements IMycelialGeneratorType {
     }
 
     @Override
-    public List<MycelialGeneratorRecipe> getRecipes() {
-        return ForgeRegistries.POTIONS.getValues().stream().filter(potion -> potion != Potions.EMPTY).map(effect -> Arrays.asList(
-                        PotionUtils.setPotion(new ItemStack(Items.POTION), effect),
-                        PotionUtils.setPotion(new ItemStack(Items.SPLASH_POTION), effect),
-                        PotionUtils.setPotion(new ItemStack(Items.LINGERING_POTION), effect)
+    public List<MycelialGeneratorRecipe> getRecipes(RegistryAccess registryAccess) {
+        return registryAccess.registryOrThrow(Registries.POTION).stream().filter(potion -> potion != Potions.WATER).map(effect -> Arrays.asList(
+                        PotionContents.createItemStack(Items.POTION, Holder.direct(effect)),
+                        PotionContents.createItemStack(Items.SPLASH_POTION, Holder.direct(effect)),
+                        PotionContents.createItemStack(Items.LINGERING_POTION, Holder.direct(effect))
                 ))
                 .flatMap(Collection::stream)
                 .map(stack -> new MycelialGeneratorRecipe(Collections.singletonList(Collections.singletonList(Ingredient.of(stack))), new ArrayList<>(), calculate(stack).getLeft(), calculate(stack).getRight())).collect(Collectors.toList());
     }
 
     private Pair<Integer, Integer> calculate(ItemStack stack) {
-        Potion potion = PotionUtils.getPotion(stack);
+        PotionContents potion = stack.get(DataComponents.POTION_CONTENTS);
         int duration = 80;
         int amplifier = 1;
-        for (MobEffectInstance potionEffect : potion.getEffects()) {
+        for (MobEffectInstance potionEffect : potion.getAllEffects()) {
             duration += potionEffect.getDuration();
             amplifier += potionEffect.getAmplifier();
         }

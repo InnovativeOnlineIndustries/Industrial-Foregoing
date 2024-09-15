@@ -1,0 +1,9 @@
+{
+  "type": "industrialforegoing:crusher",
+  "input": {
+    "tag": "c:cobblestone"
+  },
+  "output": {
+    "tag": "c:cobblestone"
+  }
+}

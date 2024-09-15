@@ -24,7 +24,7 @@ package com.buuz135.industrial.worlddata;
 
 import com.buuz135.industrial.block.generator.mycelial.IMycelialGeneratorType;
 import net.minecraft.core.BlockPos;
-import net.minecraft.core.Registry;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.ResourceKey;
@@ -33,7 +33,7 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.saveddata.SavedData;
-import net.minecraftforge.common.util.INBTSerializable;
+import net.neoforged.neoforge.common.util.INBTSerializable;
 
 import javax.annotation.Nullable;
 import java.util.ArrayList;
@@ -96,7 +96,7 @@ public class MycelialDataManager extends SavedData {
         return infos;
     }
 
-    public static MycelialDataManager load(CompoundTag nbt) {
+    public static MycelialDataManager load(HolderLookup.Provider provider, CompoundTag nbt) {
         MycelialDataManager mycelialDataManager = new MycelialDataManager();
         for (String uuid : nbt.getCompound("values").getAllKeys()) {
             CompoundTag uuidNbt = nbt.getCompound("values").getCompound(uuid);
@@ -105,7 +105,7 @@ public class MycelialDataManager extends SavedData {
                 CompoundTag genNbt = uuidNbt.getCompound(genName);
                 for (String s : genNbt.getAllKeys()) {
                     GeneratorInfo generatorInfo = new GeneratorInfo();
-                    generatorInfo.deserializeNBT(genNbt.getCompound(s));
+                    generatorInfo.deserializeNBT(provider, genNbt.getCompound(s));
                     generators.computeIfAbsent(genName, s1 -> new ArrayList<>()).add(generatorInfo);
                 }
             }
@@ -114,8 +114,18 @@ public class MycelialDataManager extends SavedData {
         return mycelialDataManager;
     }
 
+    @Nullable
+    public static MycelialDataManager getData(LevelAccessor world) {
+        if (world instanceof ServerLevel) {
+            ServerLevel serverWorld = ((ServerLevel) world).getServer().getLevel(Level.OVERWORLD);
+            MycelialDataManager data = serverWorld.getDataStorage().computeIfAbsent(new Factory<MycelialDataManager>(MycelialDataManager::new, (compoundTag, provider) -> MycelialDataManager.load(provider, compoundTag)), NAME);
+            return data;
+        }
+        return null;
+    }
+
     @Override
-    public CompoundTag save(CompoundTag compound) {
+    public CompoundTag save(CompoundTag compound, HolderLookup.Provider provider) {
         CompoundTag values = new CompoundTag();
         for (String uuid : infos.keySet()) {
             CompoundTag uuidNbt = new CompoundTag();
@@ -123,7 +133,7 @@ public class MycelialDataManager extends SavedData {
                 int i = 0;
                 CompoundTag genNbt = new CompoundTag();
                 for (GeneratorInfo generatorInfo : infos.get(uuid).get(genName)) {
-                    genNbt.put(i + "", generatorInfo.serializeNBT());
+                    genNbt.put(i + "", generatorInfo.serializeNBT(provider));
                     ++i;
                 }
                 uuidNbt.put(genName, genNbt);
@@ -132,16 +142,6 @@ public class MycelialDataManager extends SavedData {
         }
         compound.put("values", values);
         return compound;
-    }
-
-    @Nullable
-    public static MycelialDataManager getData(LevelAccessor world) {
-        if (world instanceof ServerLevel) {
-            ServerLevel serverWorld = ((ServerLevel) world).getServer().getLevel(Level.OVERWORLD);
-            MycelialDataManager data = serverWorld.getDataStorage().computeIfAbsent(MycelialDataManager::load, MycelialDataManager::new, NAME);
-            return data;
-        }
-        return null;
     }
 
     public static class GeneratorInfo implements INBTSerializable<CompoundTag> {
@@ -162,7 +162,7 @@ public class MycelialDataManager extends SavedData {
         }
 
         @Override
-        public CompoundTag serializeNBT() {
+        public CompoundTag serializeNBT(HolderLookup.Provider provider) {
             CompoundTag compoundNBT = new CompoundTag();
             compoundNBT.putLong("Run", lastRun);
             compoundNBT.putLong("Track", lastTracked);
@@ -172,11 +172,11 @@ public class MycelialDataManager extends SavedData {
         }
 
         @Override
-        public void deserializeNBT(CompoundTag nbt) {
+        public void deserializeNBT(HolderLookup.Provider provider, CompoundTag nbt) {
             lastRun = nbt.getLong("Run");
             lastTracked = nbt.getLong("Track");
             pos = BlockPos.of(nbt.getLong("Pos"));
-            this.world = ResourceKey.create(Registries.DIMENSION, new ResourceLocation(nbt.getString("RKValue")));
+            this.world = ResourceKey.create(Registries.DIMENSION, ResourceLocation.parse(nbt.getString("RKValue")));
         }
     }
 }

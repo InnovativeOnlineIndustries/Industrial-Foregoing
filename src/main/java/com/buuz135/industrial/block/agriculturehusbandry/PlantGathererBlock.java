@@ -28,19 +28,18 @@ import com.buuz135.industrial.module.ModuleAgricultureHusbandry;
 import com.buuz135.industrial.utils.IndustrialTags;
 import com.hrznstudio.titanium.recipe.generator.TitaniumShapedRecipeBuilder;
 import com.hrznstudio.titanium.util.TagUtil;
-import net.minecraft.data.recipes.FinishedRecipe;
+import net.minecraft.data.recipes.RecipeOutput;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 
 import javax.annotation.Nonnull;
-import java.util.function.Consumer;
 
 public class PlantGathererBlock extends IndustrialBlock<PlantGathererTile> {
 
     public PlantGathererBlock() {
-        super("plant_gatherer", Properties.copy(Blocks.IRON_BLOCK), PlantGathererTile.class, ModuleAgricultureHusbandry.TAB_AG_HUS);
+        super("plant_gatherer", Properties.ofFullCopy(Blocks.IRON_BLOCK), PlantGathererTile.class, ModuleAgricultureHusbandry.TAB_AG_HUS);
     }
 
     @Nonnull
@@ -55,14 +54,14 @@ public class PlantGathererBlock extends IndustrialBlock<PlantGathererTile> {
     }
 
     @Override
-    public void registerRecipe(Consumer<FinishedRecipe> consumer) {
+    public void registerRecipe(RecipeOutput consumer) {
         TitaniumShapedRecipeBuilder.shapedRecipe(this)
                 .pattern("PHP").pattern("AMA").pattern("GRG")
                 .define('P', IndustrialTags.Items.PLASTIC)
                 .define('H', Items.IRON_HOE)
                 .define('A', Items.IRON_AXE)
                 .define('M', IndustrialTags.Items.MACHINE_FRAME_PITY)
-                .define('G', TagUtil.getItemTag(new ResourceLocation("forge:gears/gold")))
+                .define('G', TagUtil.getItemTag(ResourceLocation.fromNamespaceAndPath("c", "gears/gold")))
                 .define('R', Items.REDSTONE)
                 .save(consumer);
 

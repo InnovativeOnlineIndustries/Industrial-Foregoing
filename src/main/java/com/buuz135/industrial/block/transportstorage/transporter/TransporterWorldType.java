@@ -32,12 +32,11 @@ import com.buuz135.industrial.utils.IndustrialTags;
 import com.buuz135.industrial.utils.Reference;
 import com.google.common.collect.Sets;
 import com.hrznstudio.titanium.recipe.generator.TitaniumShapedRecipeBuilder;
-import com.hrznstudio.titanium.util.TileUtil;
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
-import net.minecraft.data.recipes.FinishedRecipe;
+import net.minecraft.data.recipes.RecipeOutput;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.Entity;
@@ -46,16 +45,15 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.AABB;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
-import net.minecraftforge.common.Tags;
-import net.minecraftforge.common.capabilities.ForgeCapabilities;
-import net.minecraftforge.items.IItemHandler;
+import net.neoforged.api.distmarker.Dist;
+import net.neoforged.api.distmarker.OnlyIn;
+import net.neoforged.neoforge.capabilities.Capabilities;
+import net.neoforged.neoforge.common.Tags;
+import net.neoforged.neoforge.items.IItemHandler;
 import org.joml.Vector3f;
 
 import javax.annotation.Nonnull;
 import java.util.Set;
-import java.util.function.Consumer;
 
 public class TransporterWorldType extends FilteredTransporterType<ItemStack, IItemHandler> {
 
@@ -100,7 +98,8 @@ public class TransporterWorldType extends FilteredTransporterType<ItemStack, IIt
         if (!getLevel().isClientSide && getLevel().getGameTime() % (Math.max(1, 4 - speed)) == 0) {
             IBlockContainer container = getContainer();
             if (getAction() == TransporterTypeFactory.TransporterAction.EXTRACT && container instanceof TransporterTile) {
-                TileUtil.getTileEntity(getLevel(), getPos().relative(this.getSide())).ifPresent(tileEntity -> tileEntity.getCapability(ForgeCapabilities.ITEM_HANDLER, getSide().getOpposite()).ifPresent(origin -> {
+                var origin = getLevel().getCapability(Capabilities.ItemHandler.BLOCK, getPos().relative(this.getSide()), getSide().getOpposite());
+                if (origin != null) {
                     if (origin.getSlots() <= 0) return;
                     if (origin.getStackInSlot(extractSlot).isEmpty() || !filter(this.getFilter(), this.isWhitelist(), origin.getStackInSlot(extractSlot), origin, false))
                         findSlot(origin);
@@ -114,10 +113,11 @@ public class TransporterWorldType extends FilteredTransporterType<ItemStack, IIt
                         item.setItem(extracted);
                         getLevel().addFreshEntity(item);
                     }
-                }));
+                }
             }
             if (getAction() == TransporterTypeFactory.TransporterAction.INSERT && container instanceof TransporterTile) {
-                TileUtil.getTileEntity(getLevel(), getPos().relative(this.getSide())).ifPresent(tileEntity -> tileEntity.getCapability(ForgeCapabilities.ITEM_HANDLER, getSide().getOpposite()).ifPresent(origin -> {
+                var origin = getLevel().getCapability(Capabilities.ItemHandler.BLOCK, getPos().relative(this.getSide()), getSide().getOpposite());
+                if (origin != null) {
                     for (ItemEntity item : this.getLevel().getEntitiesOfClass(ItemEntity.class, new AABB(this.getPos().getX(), this.getPos().getY(), this.getPos().getZ(), this.getPos().getX() + 1, this.getPos().getY() + 1, this.getPos().getZ() + 1))) {
                         if (item.isAlive()) {
                             ItemStack stack = item.getItem().copy();
@@ -144,7 +144,8 @@ public class TransporterWorldType extends FilteredTransporterType<ItemStack, IIt
                             }
                         }
                     }
-                }));
+                }
+
             }
         }
     }
@@ -198,27 +199,27 @@ public class TransporterWorldType extends FilteredTransporterType<ItemStack, IIt
         @Override
         @Nonnull
         public ResourceLocation getModel(Direction upgradeSide, TransporterAction action) {
-            return new ResourceLocation(Reference.MOD_ID, "block/transporters/world_transporter_" + action.name().toLowerCase() + "_" + upgradeSide.getSerializedName().toLowerCase());
+            return ResourceLocation.fromNamespaceAndPath(Reference.MOD_ID, "block/transporters/world_transporter_" + action.name().toLowerCase() + "_" + upgradeSide.getSerializedName().toLowerCase());
         }
 
         @Override
         public Set<ResourceLocation> getTextures() {
-            return Sets.newHashSet(new ResourceLocation("industrialforegoing:block/transporters/world"), new ResourceLocation("industrialforegoing:block/base/bottom"));
+            return Sets.newHashSet(ResourceLocation.parse("industrialforegoing:block/transporters/world"), ResourceLocation.parse("industrialforegoing:block/base/bottom"));
         }
 
         @Override
         public boolean canBeAttachedAgainst(Level world, BlockPos pos, Direction face) {
-            return TileUtil.getTileEntity(world, pos).map(tileEntity -> tileEntity.getCapability(ForgeCapabilities.ITEM_HANDLER, face).isPresent()).orElse(false);
+            return world.getCapability(Capabilities.ItemHandler.BLOCK, pos, face) != null;
         }
 
         @Nonnull
         @Override
         public ResourceLocation getItemModel() {
-            return new ResourceLocation(Reference.MOD_ID, "block/transporters/world_transporter_" + TransporterAction.EXTRACT.name().toLowerCase() + "_" + Direction.NORTH.getSerializedName().toLowerCase());
+            return ResourceLocation.fromNamespaceAndPath(Reference.MOD_ID, "block/transporters/world_transporter_" + TransporterAction.EXTRACT.name().toLowerCase() + "_" + Direction.NORTH.getSerializedName().toLowerCase());
         }
 
         @Override
-        public void registerRecipe(Consumer<FinishedRecipe> consumer) {
+        public void registerRecipe(RecipeOutput consumer) {
             TitaniumShapedRecipeBuilder.shapedRecipe(getUpgradeItem(), 2)
                     .pattern("IPI").pattern("GMG").pattern("ICI")
                     .define('I', Tags.Items.DUSTS_REDSTONE)

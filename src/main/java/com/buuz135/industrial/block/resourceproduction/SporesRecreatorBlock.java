@@ -28,19 +28,18 @@ import com.buuz135.industrial.module.ModuleResourceProduction;
 import com.buuz135.industrial.utils.IndustrialTags;
 import com.hrznstudio.titanium.recipe.generator.TitaniumShapedRecipeBuilder;
 import com.hrznstudio.titanium.util.TagUtil;
-import net.minecraft.data.recipes.FinishedRecipe;
+import net.minecraft.data.recipes.RecipeOutput;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.entity.BlockEntityType;
-import net.minecraftforge.common.Tags;
+import net.neoforged.neoforge.common.Tags;
 
 import javax.annotation.Nonnull;
-import java.util.function.Consumer;
 
 public class SporesRecreatorBlock extends IndustrialBlock<SporesRecreatorTile> {
 
     public SporesRecreatorBlock() {
-        super("spores_recreator", Properties.copy(Blocks.IRON_BLOCK), SporesRecreatorTile.class, ModuleResourceProduction.TAB_RESOURCE);
+        super("spores_recreator", Properties.ofFullCopy(Blocks.IRON_BLOCK), SporesRecreatorTile.class, ModuleResourceProduction.TAB_RESOURCE);
     }
 
     @Override
@@ -55,13 +54,13 @@ public class SporesRecreatorBlock extends IndustrialBlock<SporesRecreatorTile> {
     }
 
     @Override
-    public void registerRecipe(Consumer<FinishedRecipe> consumer) {
+    public void registerRecipe(RecipeOutput consumer) {
         TitaniumShapedRecipeBuilder.shapedRecipe(this)
                 .pattern("PSP").pattern("IMI").pattern("PSP")
                 .define('P', IndustrialTags.Items.PLASTIC)
                 .define('I', Tags.Items.MUSHROOMS)
                 .define('M', IndustrialTags.Items.MACHINE_FRAME_PITY)
-                .define('S', TagUtil.getItemTag(new ResourceLocation("forge:gears/iron")))
+                .define('S', TagUtil.getItemTag(ResourceLocation.fromNamespaceAndPath("c", "gears/iron")))
                 .save(consumer);
     }
 }

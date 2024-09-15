@@ -27,20 +27,19 @@ import com.buuz135.industrial.block.core.tile.LatexProcessingUnitTile;
 import com.buuz135.industrial.module.ModuleCore;
 import com.buuz135.industrial.utils.IndustrialTags;
 import com.hrznstudio.titanium.recipe.generator.TitaniumShapedRecipeBuilder;
-import net.minecraft.data.recipes.FinishedRecipe;
+import net.minecraft.data.recipes.RecipeOutput;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.entity.BlockEntityType;
-import net.minecraftforge.common.Tags;
+import net.neoforged.neoforge.common.Tags;
 
 import javax.annotation.Nonnull;
-import java.util.function.Consumer;
 
 public class LatexProcessingUnitBlock extends IndustrialBlock<LatexProcessingUnitTile> {
 
     public LatexProcessingUnitBlock() {
-        super("latex_processing_unit", Block.Properties.copy(Blocks.STONE), LatexProcessingUnitTile.class, ModuleCore.TAB_CORE);
+        super("latex_processing_unit", Block.Properties.ofFullCopy(Blocks.STONE), LatexProcessingUnitTile.class, ModuleCore.TAB_CORE);
     }
 
     @Override
@@ -55,7 +54,7 @@ public class LatexProcessingUnitBlock extends IndustrialBlock<LatexProcessingUni
     }
 
     @Override
-    public void registerRecipe(Consumer<FinishedRecipe> consumer) {
+    public void registerRecipe(RecipeOutput consumer) {
         TitaniumShapedRecipeBuilder.shapedRecipe(this)
                 .pattern("IGI").pattern("BMB").pattern("IFI")
                 .define('I', Tags.Items.INGOTS_IRON)

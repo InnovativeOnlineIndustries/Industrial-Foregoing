@@ -23,7 +23,7 @@
 package com.buuz135.industrial.plugin.jei.generator;
 
 import net.minecraft.world.item.crafting.Ingredient;
-import net.minecraftforge.fluids.FluidStack;
+import net.neoforged.neoforge.fluids.FluidStack;
 
 import java.util.List;
 

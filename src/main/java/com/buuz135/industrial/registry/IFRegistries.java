@@ -28,34 +28,23 @@ import com.buuz135.industrial.utils.Reference;
 import net.minecraft.core.Registry;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraftforge.registries.IForgeRegistry;
-import net.minecraftforge.registries.NewRegistryEvent;
-import net.minecraftforge.registries.RegistryBuilder;
-
-import java.util.function.Supplier;
+import net.neoforged.neoforge.registries.NewRegistryEvent;
+import net.neoforged.neoforge.registries.RegistryBuilder;
 
 public class IFRegistries {
 
-    public static Supplier<IForgeRegistry<StrawHandler>> STRAW_HANDLER_REGISTRY;
-
-    public static Supplier<IForgeRegistry<PlantRecollectable>> PLANT_RECOLLECTABLES_REGISTRY;
-
-    public static final ResourceKey<Registry<StrawHandler>> STRAW_HANDLER_REGISTRY_KEY = key(Reference.MOD_ID + ":straw");
-    public static final ResourceKey<Registry<PlantRecollectable>> PLANT_RECOLLECTABLES_REGISTRY_KEY = key(Reference.MOD_ID + ":plant_recollectable");
+    public static final ResourceKey<Registry<StrawHandler>> STRAW_HANDLER_REGISTRY_KEY = key("straw");
+    public static final ResourceKey<Registry<PlantRecollectable>> PLANT_RECOLLECTABLES_REGISTRY_KEY = key("plant_recollectable");
+    public static Registry<StrawHandler> STRAW_HANDLER_REGISTRY;
+    public static Registry<PlantRecollectable> PLANT_RECOLLECTABLES_REGISTRY;
 
     public static void create(NewRegistryEvent newRegistryEvent) {
-        STRAW_HANDLER_REGISTRY = newRegistryEvent.create(new RegistryBuilder<StrawHandler>()
-                .setName(new ResourceLocation(Reference.MOD_ID, "straw"))
-                .setIDRange(1, Integer.MAX_VALUE - 1)
-                .disableSaving());
-        PLANT_RECOLLECTABLES_REGISTRY = newRegistryEvent.create(new RegistryBuilder<PlantRecollectable>()
-                .setName(new ResourceLocation(Reference.MOD_ID, "plant_recollectable"))
-                .setIDRange(1, Integer.MAX_VALUE - 1)
-                .disableSaving());
+        STRAW_HANDLER_REGISTRY = newRegistryEvent.create(new RegistryBuilder<StrawHandler>(STRAW_HANDLER_REGISTRY_KEY));
+        PLANT_RECOLLECTABLES_REGISTRY = newRegistryEvent.create(new RegistryBuilder<PlantRecollectable>(PLANT_RECOLLECTABLES_REGISTRY_KEY));
     }
 
     private static <T> ResourceKey<Registry<T>> key(String name)
     {
-        return ResourceKey.createRegistryKey(new ResourceLocation(name));
+        return ResourceKey.createRegistryKey(ResourceLocation.fromNamespaceAndPath(Reference.MOD_ID, name));
     }
 }

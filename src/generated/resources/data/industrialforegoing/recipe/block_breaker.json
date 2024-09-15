@@ -1,0 +1,42 @@
+{
+  "neoforge:conditions": [
+    {
+      "type": "neoforge:item_exists",
+      "item": "industrialforegoing:block_breaker"
+    }
+  ],
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "D": {
+      "item": "minecraft:iron_shovel"
+    },
+    "G": {
+      "tag": "c:gears/gold"
+    },
+    "I": {
+      "item": "minecraft:iron_pickaxe"
+    },
+    "M": {
+      "tag": "industrialforegoing:machine_frame/pity"
+    },
+    "P": {
+      "tag": "c:plastic"
+    },
+    "R": {
+      "item": "minecraft:redstone"
+    },
+    "S": {
+      "tag": "c:gears/iron"
+    }
+  },
+  "pattern": [
+    "PGP",
+    "IMD",
+    "SRS"
+  ],
+  "result": {
+    "count": 1,
+    "id": "industrialforegoing:block_breaker"
+  }
+}

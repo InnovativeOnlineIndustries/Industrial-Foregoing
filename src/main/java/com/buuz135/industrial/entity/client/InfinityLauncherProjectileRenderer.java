@@ -38,8 +38,8 @@ import net.minecraft.util.Mth;
 
 public class InfinityLauncherProjectileRenderer extends EntityRenderer<InfinityLauncherProjectileEntity> {
 
-    public static final ModelLayerLocation PROJECTILE_LAYER = new ModelLayerLocation(new ResourceLocation(Reference.MOD_ID, "infinity_launcher_projectile"), "main");
-    public static final ResourceLocation PROJECTILE = new ResourceLocation(Reference.MOD_ID, "textures/item/infinity_launcher_projectile.png");
+    public static final ModelLayerLocation PROJECTILE_LAYER = new ModelLayerLocation(ResourceLocation.fromNamespaceAndPath(Reference.MOD_ID, "infinity_launcher_projectile"), "main");
+    public static final ResourceLocation PROJECTILE = ResourceLocation.fromNamespaceAndPath(Reference.MOD_ID, "textures/item/infinity_launcher_projectile.png");
     private final InfinityLauncherProjectileModel projectileModel;
 
     public InfinityLauncherProjectileRenderer(EntityRendererProvider.Context p_174008_) {
@@ -50,11 +50,11 @@ public class InfinityLauncherProjectileRenderer extends EntityRenderer<InfinityL
     @Override
     public void render(InfinityLauncherProjectileEntity entityIn, float entityYaw, float partialTicks, PoseStack matrixStackIn, MultiBufferSource bufferIn, int packedLightIn) {
         matrixStackIn.pushPose();
-        matrixStackIn.mulPose(Axis.YP.rotationDegrees(Mth.lerp(partialTicks, entityIn.yRotO, entityIn.yRot) - 90.0F));
-        matrixStackIn.mulPose(Axis.ZP.rotationDegrees(Mth.lerp(partialTicks, entityIn.xRotO, entityIn.xRot) + 90.0F));
+        matrixStackIn.mulPose(Axis.YP.rotationDegrees(Mth.lerp(partialTicks, entityIn.yRotO, entityIn.getYRot()) - 90.0F));
+        matrixStackIn.mulPose(Axis.ZP.rotationDegrees(Mth.lerp(partialTicks, entityIn.xRotO, entityIn.getXRot()) + 90.0F));
         matrixStackIn.translate(0, -0.8, 0);
         VertexConsumer ivertexbuilder = bufferIn.getBuffer(RenderType.entityCutout(this.getTextureLocation(entityIn)));
-        this.projectileModel.renderToBuffer(matrixStackIn, ivertexbuilder, packedLightIn, OverlayTexture.NO_OVERLAY, 1.0F, 1.0F, 1.0F, 1.0F);
+        this.projectileModel.renderToBuffer(matrixStackIn, ivertexbuilder, packedLightIn, OverlayTexture.NO_OVERLAY, 0xFFFFFF);
         matrixStackIn.popPose();
         super.render(entityIn, entityYaw, partialTicks, matrixStackIn, bufferIn, packedLightIn);
     }

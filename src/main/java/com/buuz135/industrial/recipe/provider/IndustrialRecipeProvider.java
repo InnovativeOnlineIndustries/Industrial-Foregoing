@@ -29,12 +29,13 @@ import com.buuz135.industrial.module.ModuleTool;
 import com.buuz135.industrial.utils.Reference;
 import com.hrznstudio.titanium.api.IRecipeProvider;
 import com.hrznstudio.titanium.block.BasicBlock;
-import com.hrznstudio.titanium.recipe.generator.TitaniumRecipeProvider;
 import com.hrznstudio.titanium.recipe.generator.TitaniumShapedRecipeBuilder;
 import com.hrznstudio.titanium.recipe.generator.TitaniumShapelessRecipeBuilder;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.data.DataGenerator;
-import net.minecraft.data.recipes.FinishedRecipe;
 import net.minecraft.data.recipes.RecipeCategory;
+import net.minecraft.data.recipes.RecipeOutput;
+import net.minecraft.data.recipes.RecipeProvider;
 import net.minecraft.data.recipes.SimpleCookingRecipeBuilder;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.ItemTags;
@@ -44,26 +45,26 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.level.block.Block;
-import net.minecraftforge.common.Tags;
-import net.minecraftforge.common.util.NonNullLazy;
-import net.minecraftforge.registries.RegistryObject;
+import net.neoforged.neoforge.common.Tags;
+import net.neoforged.neoforge.common.util.Lazy;
+import net.neoforged.neoforge.registries.DeferredHolder;
 
 import java.util.Arrays;
 import java.util.List;
-import java.util.function.Consumer;
+import java.util.concurrent.CompletableFuture;
 import java.util.stream.Collectors;
 
-public class IndustrialRecipeProvider extends TitaniumRecipeProvider {
+public class IndustrialRecipeProvider extends RecipeProvider {
 
-    private final NonNullLazy<List<Block>> blocks;
+    private final Lazy<List<Block>> blocks;
 
-    public IndustrialRecipeProvider(DataGenerator generatorIn, NonNullLazy<List<Block>> blocks) {
-        super(generatorIn);
-        this.blocks = blocks;
+    public IndustrialRecipeProvider(DataGenerator generator, Lazy<List<Block>> blocksToProcess, CompletableFuture<HolderLookup.Provider> prov) {
+        super(generator.getPackOutput(), prov);
+        this.blocks = blocksToProcess;
     }
 
     @Override
-    public void register(Consumer<FinishedRecipe> consumer) {
+    public void buildRecipes(RecipeOutput consumer) {
         this.blocks.get().stream().filter(block -> block instanceof BasicBlock).map(block -> (BasicBlock) block).forEach(blockBase -> blockBase.registerRecipe(consumer));
         //TRANSPORT
         ConveyorUpgradeFactory.FACTORIES.forEach(conveyorUpgradeFactory -> conveyorUpgradeFactory.registerRecipe(consumer));
@@ -80,7 +81,7 @@ public class IndustrialRecipeProvider extends TitaniumRecipeProvider {
         ((IRecipeProvider) ModuleTool.INFINITY_NUKE.get()).registerRecipe(consumer);
         //CORE
         ((IRecipeProvider) ModuleCore.STRAW.get()).registerRecipe(consumer);
-        for (RegistryObject<Item> rangeAddon : ModuleCore.RANGE_ADDONS) {
+        for (DeferredHolder<Item, Item> rangeAddon : ModuleCore.RANGE_ADDONS) {
             ((IRecipeProvider) rangeAddon.get()).registerRecipe(consumer);
         }
         ((IRecipeProvider) ModuleCore.SPEED_ADDON_1.get()).registerRecipe(consumer);
@@ -90,7 +91,6 @@ public class IndustrialRecipeProvider extends TitaniumRecipeProvider {
         ((IRecipeProvider) ModuleCore.PROCESSING_ADDON_1.get()).registerRecipe(consumer);
         ((IRecipeProvider) ModuleCore.PROCESSING_ADDON_2.get()).registerRecipe(consumer);
         ((IRecipeProvider) ModuleCore.MACHINE_SETTINGS_COPIER.get()).registerRecipe(consumer);
-        TitaniumShapelessRecipeBuilder.shapelessRecipe(ModuleCore.DRY_RUBBER.get()).requires(ModuleCore.TINY_DRY_RUBBER.get(), 9).save(consumer);
         SimpleCookingRecipeBuilder.smelting(Ingredient.of(ModuleCore.DRY_RUBBER.get()), RecipeCategory.MISC, ModuleCore.PLASTIC.get(), 0.3f, 200).unlockedBy("has_plastic", this.has(ModuleCore.DRY_RUBBER.get())).save(consumer);
         TitaniumShapedRecipeBuilder.shapedRecipe(ModuleCore.PITY.get())
                 .pattern("WIW").pattern("IRI").pattern("WIW")
@@ -110,14 +110,15 @@ public class IndustrialRecipeProvider extends TitaniumRecipeProvider {
                 .pattern(" P ").pattern("P P").pattern(" P ")
                 .define('P', Items.DIAMOND)
                 .save(consumer);
-        for (RegistryObject<Item> laserLen : ModuleCore.LASER_LENS) {
+        for (DeferredHolder<Item, Item> laserLen : ModuleCore.LASER_LENS) {
             ((IRecipeProvider) laserLen.get()).registerRecipe(consumer);
         }
         for (DyeColor value : DyeColor.values()) {
             TitaniumShapelessRecipeBuilder.shapelessRecipe(ModuleCore.LASER_LENS[value.getId()].get())
                     .requires(Ingredient.of(Arrays.stream(ModuleCore.LASER_LENS).map(itemRegistryObject -> new ItemStack(itemRegistryObject.get())).collect(Collectors.toList()).stream()))
                     .requires(value.getTag())
-                    .save(consumer, new ResourceLocation(Reference.MOD_ID, "laser_lens_" + value.getSerializedName() + "_recolor"));
+                    .save(consumer, ResourceLocation.fromNamespaceAndPath(Reference.MOD_ID, "laser_lens_" + value.getSerializedName() + "_recolor"));
         }
+        IndustrialSerializableProvider.init(consumer);
     }
 }

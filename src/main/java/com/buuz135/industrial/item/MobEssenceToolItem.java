@@ -22,22 +22,14 @@
 
 package com.buuz135.industrial.item;
 
-import com.hrznstudio.titanium.Titanium;
 import com.hrznstudio.titanium.tab.TitaniumTab;
-import net.minecraft.core.NonNullList;
-import net.minecraft.data.recipes.FinishedRecipe;
-import net.minecraft.nbt.CompoundTag;
+import net.minecraft.data.recipes.RecipeOutput;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
-import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
-import net.minecraftforge.registries.ForgeRegistries;
-
-import java.util.function.Consumer;
 
 public class MobEssenceToolItem extends IFCustomItem {
 
@@ -53,14 +45,14 @@ public class MobEssenceToolItem extends IFCustomItem {
     }
 
     private void addNBT(ItemStack stack) {
-        CompoundTag compoundNBT = new CompoundTag();
+        /*CompoundTag compoundNBT = new CompoundTag();
         compoundNBT.putInt("Kills", 0);
-        stack.setTag(compoundNBT);
+        stack.setTag(compoundNBT);*/
     }
 
     @Override
     public InteractionResult interactLivingEntity(ItemStack stack, Player playerIn, LivingEntity target, InteractionHand hand) {
-        if (stack.hasTag() && stack.getTag().getInt("Kills") == 0) {
+        /*if (stack.hasTag() && stack.getTag().getInt("Kills") == 0) {
             CompoundTag compoundNBT = new CompoundTag();
             compoundNBT.putString("Entity", ForgeRegistries.ENTITY_TYPES.getKey(target.getType()).toString());
             compoundNBT.putInt("Kills", 1);
@@ -68,12 +60,12 @@ public class MobEssenceToolItem extends IFCustomItem {
             playerIn.setItemInHand(hand, stack);
             target.remove(Entity.RemovalReason.KILLED);
             return InteractionResult.SUCCESS;
-        }
+        }*/
         return super.interactLivingEntity(stack, playerIn, target, hand);
     }
 
     @Override
-    public void registerRecipe(Consumer<FinishedRecipe> consumer) {
+    public void registerRecipe(RecipeOutput consumer) {
 
     }
 }

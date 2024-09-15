@@ -1,0 +1,39 @@
+{
+  "neoforge:conditions": [
+    {
+      "type": "neoforge:item_exists",
+      "item": "industrialforegoing:hydroponic_bed"
+    }
+  ],
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "B": {
+      "item": "industrialforegoing:fertilizer"
+    },
+    "D": {
+      "item": "minecraft:dirt"
+    },
+    "G": {
+      "tag": "c:gears/gold"
+    },
+    "M": {
+      "tag": "industrialforegoing:machine_frame/simple"
+    },
+    "P": {
+      "tag": "c:plastic"
+    },
+    "S": {
+      "item": "minecraft:iron_hoe"
+    }
+  },
+  "pattern": [
+    "PDP",
+    "SBS",
+    "GMG"
+  ],
+  "result": {
+    "count": 1,
+    "id": "industrialforegoing:hydroponic_bed"
+  }
+}

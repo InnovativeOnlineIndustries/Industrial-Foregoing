@@ -1,0 +1,63 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "ingredients": [
+    [
+      {
+        "item": "industrialforegoing:white_laser_lens"
+      },
+      {
+        "item": "industrialforegoing:orange_laser_lens"
+      },
+      {
+        "item": "industrialforegoing:magenta_laser_lens"
+      },
+      {
+        "item": "industrialforegoing:light_blue_laser_lens"
+      },
+      {
+        "item": "industrialforegoing:yellow_laser_lens"
+      },
+      {
+        "item": "industrialforegoing:lime_laser_lens"
+      },
+      {
+        "item": "industrialforegoing:pink_laser_lens"
+      },
+      {
+        "item": "industrialforegoing:gray_laser_lens"
+      },
+      {
+        "item": "industrialforegoing:light_gray_laser_lens"
+      },
+      {
+        "item": "industrialforegoing:cyan_laser_lens"
+      },
+      {
+        "item": "industrialforegoing:purple_laser_lens"
+      },
+      {
+        "item": "industrialforegoing:blue_laser_lens"
+      },
+      {
+        "item": "industrialforegoing:brown_laser_lens"
+      },
+      {
+        "item": "industrialforegoing:green_laser_lens"
+      },
+      {
+        "item": "industrialforegoing:red_laser_lens"
+      },
+      {
+        "item": "industrialforegoing:black_laser_lens"
+      }
+    ],
+    {
+      "tag": "c:dyes/gray"
+    }
+  ],
+  "result": {
+    "count": 1,
+    "id": "industrialforegoing:gray_laser_lens"
+  }
+}

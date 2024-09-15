@@ -45,6 +45,7 @@ import com.hrznstudio.titanium.component.inventory.InventoryComponent;
 import com.hrznstudio.titanium.component.inventory.SidedInventoryComponent;
 import com.hrznstudio.titanium.component.sideness.IFacingComponent;
 import com.hrznstudio.titanium.item.AugmentWrapper;
+import com.hrznstudio.titanium.module.BlockWithTile;
 import com.hrznstudio.titanium.nbthandler.NBTManager;
 import com.hrznstudio.titanium.util.FacingUtil;
 import net.minecraft.core.BlockPos;
@@ -54,14 +55,12 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
-import net.minecraftforge.common.capabilities.ForgeCapabilities;
-import net.minecraftforge.items.ItemHandlerHelper;
-import net.minecraftforge.registries.RegistryObject;
-import org.apache.commons.lang3.tuple.Pair;
+import net.neoforged.api.distmarker.Dist;
+import net.neoforged.api.distmarker.OnlyIn;
+import net.neoforged.neoforge.items.ItemHandlerHelper;
+
+import java.util.Optional;
 
 public abstract class IndustrialMachineTile<T extends IndustrialMachineTile<T>> extends MachineTile<T> implements IRedstoneReader, IMachineSettings {
 
@@ -75,11 +74,13 @@ public abstract class IndustrialMachineTile<T extends IndustrialMachineTile<T>> 
     private TankInteractionBundle<IndustrialMachineTile> tankBundle;
     @Save
     private RedstoneManager<RedstoneAction> redstoneManager;
+    @Save
+    private String uuid = "d28b7061-fb92-4064-90fb-7e02b95a72a5";
     private RedstoneControlButtonComponent<RedstoneAction> redstoneButton;
     private boolean tankBundleAdded;
 
-    public IndustrialMachineTile(Pair<RegistryObject<Block>, RegistryObject<BlockEntityType<?>>> basicTileBlock, BlockPos blockPos, BlockState blockState) {
-        super((BasicTileBlock<T>) basicTileBlock.getLeft().get(), basicTileBlock.getRight().get(), blockPos, blockState);
+    public IndustrialMachineTile(BlockWithTile basicTileBlock, BlockPos blockPos, BlockState blockState) {
+        super((BasicTileBlock<T>) basicTileBlock.getBlock(), basicTileBlock.type().get(), blockPos, blockState);
         this.redstoneManager = new RedstoneManager<>(RedstoneAction.IGNORE, false);
         this.tankBundleAdded = false;
         this.addButton(redstoneButton = new RedstoneControlButtonComponent<>(154, 84, 14, 14, () -> this.redstoneManager, () -> this));
@@ -89,7 +90,7 @@ public abstract class IndustrialMachineTile<T extends IndustrialMachineTile<T>> 
     public void addTank(FluidTankComponent<T> tank) {
         super.addTank(tank);
         if (!tankBundleAdded) {
-            this.addBundle(tankBundle = new TankInteractionBundle<>(() -> this.getCapability(ForgeCapabilities.FLUID_HANDLER), 175, 94, this, 10));
+            this.addBundle(tankBundle = new TankInteractionBundle<>(() -> Optional.of(this.getFluidHandler(null)), 175, 94, this, 10));
             this.tankBundleAdded = true;
         }
     }
@@ -148,12 +149,12 @@ public abstract class IndustrialMachineTile<T extends IndustrialMachineTile<T>> 
     @Override
     public void loadSettings(Player player, CompoundTag tag) {
         if (tag.contains(settingsAddons)) {
-            var stacks = IMachineSettings.readInventory(tag.getCompound(settingsAddons));
+            var stacks = IMachineSettings.readInventory(this.level.registryAccess(), tag.getCompound(settingsAddons));
             for (var stack : stacks) {
                 if (this.canAcceptAugment(stack)) {
-                    for (ItemStack stackPlayer : player.inventory.items) {
+                    for (ItemStack stackPlayer : player.inventoryMenu.getItems()) {
                         if (ItemStack.isSameItem(stack, stackPlayer)) {
-                            var copiedStack = ItemHandlerHelper.copyStackWithSize(stackPlayer, 1);
+                            var copiedStack = stackPlayer.copyWithCount(1);
                             if (ItemHandlerHelper.insertItem(this.getAugmentInventory(), copiedStack, false).isEmpty()) {
                                 stackPlayer.shrink(1);
                             }
@@ -164,7 +165,7 @@ public abstract class IndustrialMachineTile<T extends IndustrialMachineTile<T>> 
             }
         }
         if (tag.contains(redstoneMode)) {
-            NBTManager.getInstance().readTileEntity(this, tag.getCompound(redstoneMode));
+            NBTManager.getInstance().readTileEntity(this, this.level.registryAccess(), tag.getCompound(redstoneMode));
         }
         if (tag.contains(sidenessInventory)) {
             for (InventoryComponent<T> inventoryHandler : this.getMultiInventoryComponent().getInventoryHandlers()) {
@@ -193,7 +194,7 @@ public abstract class IndustrialMachineTile<T extends IndustrialMachineTile<T>> 
         if (tag.contains(filter)) {
             for (IFilter iFilter : this.getMultiFilterComponent().getFilters()) {
                 if (tag.getCompound(filter).contains(iFilter.getName())) {
-                    iFilter.deserializeNBT(tag.getCompound(filter).getCompound(iFilter.getName()));
+                    iFilter.deserializeNBT(this.level.registryAccess(), tag.getCompound(filter).getCompound(iFilter.getName()));
                 }
             }
         }
@@ -202,7 +203,7 @@ public abstract class IndustrialMachineTile<T extends IndustrialMachineTile<T>> 
 
     @Override
     public void saveSettings(Player player, CompoundTag tag) {
-        tag.put(settingsAddons, IMachineSettings.writeInventory(this.getAugmentInventory()));
+        tag.put(settingsAddons, IMachineSettings.writeInventory(this.level.registryAccess(), this.getAugmentInventory()));
         tag.put(redstoneMode, NBTManager.getInstance().writeTileEntityObject(this, redstoneManager, new CompoundTag()));
         if (this.getMultiInventoryComponent() != null) {
             CompoundTag sideInvTag = new CompoundTag();
@@ -233,10 +234,18 @@ public abstract class IndustrialMachineTile<T extends IndustrialMachineTile<T>> 
         if (this.getMultiFilterComponent() != null) {
             CompoundTag filterTag = new CompoundTag();
             for (IFilter iFilter : this.getMultiFilterComponent().getFilters()) {
-                filterTag.put(iFilter.getName(), iFilter.serializeNBT());
+                filterTag.put(iFilter.getName(), iFilter.serializeNBT(this.level.registryAccess()));
             }
             tag.put(filter, filterTag);
         }
 
+    }
+
+    public String getUuid() {
+        return uuid;
+    }
+
+    public void setUuid(String uuid) {
+        this.uuid = uuid;
     }
 }

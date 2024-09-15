@@ -38,14 +38,14 @@ import net.minecraft.util.Mth;
 
 public class InfinityNukeRenderer extends EntityRenderer<InfinityNukeEntity> {
 
-    public static final ResourceLocation NUKE = new ResourceLocation(Reference.MOD_ID, "textures/entity/infinity_nuke_entity.png");
+    public static final ResourceLocation NUKE = ResourceLocation.fromNamespaceAndPath(Reference.MOD_ID, "textures/entity/infinity_nuke_entity.png");
     private final InfinityNukeModel nukeModel;
     private final InfinityNukeModelArmed nukeModelArmed;
     private final InfinityNukeModelArmed nukeModelArmedBig;
 
-    public static final ModelLayerLocation NUKE_LAYER = new ModelLayerLocation(new ResourceLocation(Reference.MOD_ID, "infinity_nuke_entity"), "main");
-    public static final ModelLayerLocation NUKE_ARMED_LAYER = new ModelLayerLocation(new ResourceLocation(Reference.MOD_ID, "infinity_nuke_entity"), "armed");
-    public static final ModelLayerLocation NUKE_ARMED_BIG_LAYER = new ModelLayerLocation(new ResourceLocation(Reference.MOD_ID, "infinity_nuke_entity"), "armed_big");
+    public static final ModelLayerLocation NUKE_LAYER = new ModelLayerLocation(ResourceLocation.fromNamespaceAndPath(Reference.MOD_ID, "infinity_nuke_entity"), "main");
+    public static final ModelLayerLocation NUKE_ARMED_LAYER = new ModelLayerLocation(ResourceLocation.fromNamespaceAndPath(Reference.MOD_ID, "infinity_nuke_entity"), "armed");
+    public static final ModelLayerLocation NUKE_ARMED_BIG_LAYER = new ModelLayerLocation(ResourceLocation.fromNamespaceAndPath(Reference.MOD_ID, "infinity_nuke_entity"), "armed_big");
 
 
     public InfinityNukeRenderer(EntityRendererProvider.Context p_174008_) {
@@ -59,7 +59,7 @@ public class InfinityNukeRenderer extends EntityRenderer<InfinityNukeEntity> {
     public void render(InfinityNukeEntity entityIn, float entityYaw, float partialTicks, PoseStack matrixStackIn, MultiBufferSource bufferIn, int packedLightIn) {
         matrixStackIn.pushPose();
         //matrixStackIn.rotate(Vector3f.YP.rotationDegrees(MathHelper.lerp(partialTicks, entityIn.prevRotationYaw, entityIn.rotationYaw) - 90.0F));
-        matrixStackIn.mulPose(Axis.ZP.rotationDegrees(Mth.lerp(partialTicks, entityIn.xRotO, entityIn.xRot) - 180.0F));
+        matrixStackIn.mulPose(Axis.ZP.rotationDegrees(Mth.lerp(partialTicks, entityIn.xRotO, entityIn.getXRot()) - 180.0F));
         matrixStackIn.translate(0, -1.35, 0.05);
         VertexConsumer ivertexbuilder = net.minecraft.client.renderer.entity.ItemRenderer.getFoilBufferDirect(bufferIn, RenderType.entityTranslucent(this.getTextureLocation(entityIn)), false, false);
         if (entityIn.isDataArmed()) {
@@ -68,15 +68,15 @@ public class InfinityNukeRenderer extends EntityRenderer<InfinityNukeEntity> {
                 matrixStackIn.translate((entityIn.getCommandSenderWorld().getRandom().nextDouble() - 0.5) / time, 0, (entityIn.getCommandSenderWorld().getRandom().nextDouble() - 0.5) / time);
 
             }
-            this.nukeModelArmed.renderToBuffer(matrixStackIn, ivertexbuilder, packedLightIn, OverlayTexture.NO_OVERLAY, 1.0F, 1.0F, 1.0F, 1.0F);
+            this.nukeModelArmed.renderToBuffer(matrixStackIn, ivertexbuilder, packedLightIn, OverlayTexture.NO_OVERLAY, 0xFFFFFF);
             if (entityIn.isDataExploding() && entityIn.level().getRandom().nextDouble() < 0.96) {
                 float f = partialTicks + entityIn.getDataTicksExploding() + 10;
-                ivertexbuilder = net.minecraft.client.renderer.entity.ItemRenderer.getFoilBufferDirect(bufferIn, RenderType.energySwirl(new ResourceLocation(Reference.MOD_ID, "textures/block/mycelial_clean.png"), f * (entityIn.getDataTicksExploding() / 50000f), f * (entityIn.getDataTicksExploding() / 50000f)), false, false);
+                ivertexbuilder = net.minecraft.client.renderer.entity.ItemRenderer.getFoilBufferDirect(bufferIn, RenderType.energySwirl(ResourceLocation.fromNamespaceAndPath(Reference.MOD_ID, "textures/block/mycelial_clean.png"), f * (entityIn.getDataTicksExploding() / 50000f), f * (entityIn.getDataTicksExploding() / 50000f)), false, false);
                 //matrixStackIn.scale(1.1f,1.1f,1.1f);
-                nukeModelArmedBig.renderToBuffer(matrixStackIn, ivertexbuilder, packedLightIn, OverlayTexture.NO_OVERLAY, 1.0F, 1.0F, 1.0F, 0.1F);
+                nukeModelArmedBig.renderToBuffer(matrixStackIn, ivertexbuilder, packedLightIn, OverlayTexture.NO_OVERLAY, 0xFFFFFF);
             }
         } else {
-            this.nukeModel.renderToBuffer(matrixStackIn, ivertexbuilder, packedLightIn, OverlayTexture.NO_OVERLAY, 1.0F, 1.0F, 1.0F, 1.0F);
+            this.nukeModel.renderToBuffer(matrixStackIn, ivertexbuilder, packedLightIn, OverlayTexture.NO_OVERLAY, 0xFFFFFF);
         }
 
         matrixStackIn.popPose();

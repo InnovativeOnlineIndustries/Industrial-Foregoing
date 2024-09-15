@@ -28,19 +28,18 @@ import com.buuz135.industrial.module.ModuleResourceProduction;
 import com.buuz135.industrial.utils.IndustrialTags;
 import com.hrznstudio.titanium.recipe.generator.TitaniumShapedRecipeBuilder;
 import com.hrznstudio.titanium.util.TagUtil;
-import net.minecraft.data.recipes.FinishedRecipe;
+import net.minecraft.data.recipes.RecipeOutput;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 
 import javax.annotation.Nonnull;
-import java.util.function.Consumer;
 
 public class FluidPlacerBlock extends IndustrialBlock<FluidPlacerTile> {
 
     public FluidPlacerBlock() {
-        super("fluid_placer", Properties.copy(Blocks.IRON_BLOCK), FluidPlacerTile.class, ModuleResourceProduction.TAB_RESOURCE);
+        super("fluid_placer", Properties.ofFullCopy(Blocks.IRON_BLOCK), FluidPlacerTile.class, ModuleResourceProduction.TAB_RESOURCE);
     }
 
     @Override
@@ -55,14 +54,14 @@ public class FluidPlacerBlock extends IndustrialBlock<FluidPlacerTile> {
     }
 
     @Override
-    public void registerRecipe(Consumer<FinishedRecipe> consumer) {
+    public void registerRecipe(RecipeOutput consumer) {
         TitaniumShapedRecipeBuilder.shapedRecipe(this)
                 .pattern("PBP").pattern("BMB").pattern("SRS")
                 .define('P', IndustrialTags.Items.PLASTIC)
                 .define('B', Items.WATER_BUCKET)
                 .define('M', IndustrialTags.Items.MACHINE_FRAME_PITY)
                 .define('R', Items.REDSTONE)
-                .define('S', TagUtil.getItemTag(new ResourceLocation("forge:gears/iron")))
+                .define('S', TagUtil.getItemTag(ResourceLocation.fromNamespaceAndPath("c", "gears/iron")))
                 .save(consumer);
     }
 

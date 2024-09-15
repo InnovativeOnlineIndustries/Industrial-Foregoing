@@ -30,7 +30,6 @@ import com.buuz135.industrial.worlddata.MycelialDataManager;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
-import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
@@ -49,7 +48,7 @@ import java.util.List;
 public class MycelialReactorBlock extends IndustrialBlock<MycelialReactorTile> {
 
     public MycelialReactorBlock() {
-        super("mycelial_reactor", Properties.copy(Blocks.IRON_BLOCK), MycelialReactorTile.class, ModuleGenerator.TAB_GENERATOR);
+        super("mycelial_reactor", Properties.ofFullCopy(Blocks.IRON_BLOCK), MycelialReactorTile.class, ModuleGenerator.TAB_GENERATOR);
     }
 
     @Override
@@ -72,8 +71,9 @@ public class MycelialReactorBlock extends IndustrialBlock<MycelialReactorTile> {
         }
     }
 
+
     @Override
-    public InteractionResult use(BlockState state, Level worldIn, BlockPos pos, Player player, InteractionHand hand, BlockHitResult ray) {
+    public InteractionResult useWithoutItem(BlockState state, Level worldIn, BlockPos pos, Player player, BlockHitResult ray) {
         BlockEntity tileEntity = worldIn.getBlockEntity(pos);
         if (player.isShiftKeyDown() && !worldIn.isClientSide && tileEntity instanceof MycelialReactorTile) {
             List<String> available = MycelialDataManager.getReactorAvailable(((MycelialReactorTile) tileEntity).getOwner(), worldIn, false);
@@ -86,7 +86,7 @@ public class MycelialReactorBlock extends IndustrialBlock<MycelialReactorTile> {
                 }
             }
         }
-        return super.use(state, worldIn, pos, player, hand, ray);
+        return super.useWithoutItem(state, worldIn, pos, player, ray);
     }
 
 }

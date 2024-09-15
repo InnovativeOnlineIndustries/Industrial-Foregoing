@@ -24,7 +24,7 @@ package com.buuz135.industrial.proxy.client.model;
 
 import com.buuz135.industrial.api.transporter.TransporterType;
 import net.minecraft.core.Direction;
-import net.minecraftforge.client.model.data.ModelProperty;
+import net.neoforged.neoforge.client.model.data.ModelProperty;
 
 import java.util.Map;
 

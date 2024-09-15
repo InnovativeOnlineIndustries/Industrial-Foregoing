@@ -27,18 +27,17 @@ import com.buuz135.industrial.block.resourceproduction.tile.BlockPlacerTile;
 import com.buuz135.industrial.module.ModuleResourceProduction;
 import com.buuz135.industrial.utils.IndustrialTags;
 import com.hrznstudio.titanium.recipe.generator.TitaniumShapedRecipeBuilder;
-import net.minecraft.data.recipes.FinishedRecipe;
+import net.minecraft.data.recipes.RecipeOutput;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 
 import javax.annotation.Nonnull;
-import java.util.function.Consumer;
 
 public class BlockPlacerBlock extends IndustrialBlock<BlockPlacerTile> {
 
     public BlockPlacerBlock() {
-        super("block_placer", Properties.copy(Blocks.IRON_BLOCK), BlockPlacerTile.class, ModuleResourceProduction.TAB_RESOURCE);
+        super("block_placer", Properties.ofFullCopy(Blocks.IRON_BLOCK), BlockPlacerTile.class, ModuleResourceProduction.TAB_RESOURCE);
     }
 
     @Nonnull
@@ -53,7 +52,7 @@ public class BlockPlacerBlock extends IndustrialBlock<BlockPlacerTile> {
     }
 
     @Override
-    public void registerRecipe(Consumer<FinishedRecipe> consumer) {
+    public void registerRecipe(RecipeOutput consumer) {
         TitaniumShapedRecipeBuilder.shapedRecipe(this)
                 .pattern("PDP").pattern("DMD").pattern("PRP")
                 .define('P', IndustrialTags.Items.PLASTIC)

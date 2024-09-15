@@ -38,9 +38,13 @@ import com.buuz135.industrial.plugin.jei.generator.MycelialGeneratorCategory;
 import com.buuz135.industrial.plugin.jei.generator.MycelialGeneratorRecipe;
 import com.buuz135.industrial.plugin.jei.machineproduce.MachineProduceCategory;
 import com.buuz135.industrial.plugin.jei.machineproduce.MachineProduceWrapper;
+import com.buuz135.industrial.plugin.jei.subtype.AddonSubtypeInterpreter;
+import com.buuz135.industrial.plugin.jei.subtype.InfinitySubtypeInterpreter;
 import com.buuz135.industrial.recipe.*;
+import com.buuz135.industrial.utils.IFAttachments;
 import com.buuz135.industrial.utils.IndustrialTags;
 import com.buuz135.industrial.utils.Reference;
+import com.hrznstudio.titanium.module.BlockWithTile;
 import com.hrznstudio.titanium.util.RecipeUtil;
 import com.hrznstudio.titanium.util.TagUtil;
 import mezz.jei.api.IModPlugin;
@@ -53,6 +57,7 @@ import mezz.jei.api.runtime.IJeiRuntime;
 import mezz.jei.api.runtime.IRecipesGui;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.Rect2i;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.ItemTags;
 import net.minecraft.tags.TagKey;
@@ -60,16 +65,10 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.crafting.RecipeType;
-import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.material.Fluids;
-import net.minecraftforge.common.ForgeMod;
-import net.minecraftforge.common.Tags;
-import net.minecraftforge.fluids.FluidStack;
-import net.minecraftforge.items.ItemHandlerHelper;
-import net.minecraftforge.registries.ForgeRegistries;
-import net.minecraftforge.registries.RegistryObject;
-import org.apache.commons.lang3.tuple.Pair;
+import net.neoforged.neoforge.common.NeoForgeMod;
+import net.neoforged.neoforge.common.Tags;
+import net.neoforged.neoforge.fluids.FluidStack;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -99,8 +98,11 @@ public class JEICustomPlugin implements IModPlugin {
 
     @Override
     public void registerItemSubtypes(ISubtypeRegistration registration) {
-        registration.useNbtForSubtypes(ModuleTool.INFINITY_DRILL.get(), ModuleTool.INFINITY_SAW.get(), ModuleTool.INFINITY_HAMMER.get(), ModuleTool.INFINITY_TRIDENT.get(), ModuleTool.INFINITY_BACKPACK.get(), ModuleTool.INFINITY_LAUNCHER.get(), ModuleTool.INFINITY_NUKE.get(), ModuleCore.EFFICIENCY_ADDON_1.get(), ModuleCore.EFFICIENCY_ADDON_2.get(), ModuleCore.SPEED_ADDON_1.get(), ModuleCore.SPEED_ADDON_2.get(), ModuleCore.PROCESSING_ADDON_1.get());
-        Arrays.stream(ModuleCore.RANGE_ADDONS).map(RegistryObject::get).forEach(registration::useNbtForSubtypes);
+        List.of(ModuleTool.INFINITY_DRILL.get(), ModuleTool.INFINITY_SAW.get(), ModuleTool.INFINITY_HAMMER.get(), ModuleTool.INFINITY_TRIDENT.get(), ModuleTool.INFINITY_BACKPACK.get(), ModuleTool.INFINITY_LAUNCHER.get(), ModuleTool.INFINITY_NUKE.get())
+                .forEach(item -> registration.registerSubtypeInterpreter(item, new InfinitySubtypeInterpreter()));
+        Arrays.stream(ModuleCore.RANGE_ADDONS).forEach(itemItemDeferredHolder -> registration.registerSubtypeInterpreter(itemItemDeferredHolder.get(), new AddonSubtypeInterpreter()));
+        List.of(ModuleCore.EFFICIENCY_ADDON_1.get(), ModuleCore.EFFICIENCY_ADDON_2.get(), ModuleCore.SPEED_ADDON_1.get(), ModuleCore.SPEED_ADDON_2.get(), ModuleCore.PROCESSING_ADDON_1.get())
+                .forEach(item -> registration.registerSubtypeInterpreter(item, new AddonSubtypeInterpreter()));
     }
 
     @Override
@@ -203,7 +205,7 @@ public class JEICustomPlugin implements IModPlugin {
         registration.addRecipes(IndustrialRecipeTypes.LASER_ORE, RecipeUtil.getRecipes(Minecraft.getInstance().level, (RecipeType<LaserDrillOreRecipe>) ModuleCore.LASER_DRILL_TYPE.get()).stream().filter(laserDrillOreRecipe -> !laserDrillOreRecipe.output.isEmpty()).collect(Collectors.toList()));
         registration.addRecipes(IndustrialRecipeTypes.LASER_FLUID, RecipeUtil.getRecipes(Minecraft.getInstance().level, (RecipeType<LaserDrillFluidRecipe>) ModuleCore.LASER_DRILL_FLUID_TYPE.get()));
         for (int i = 0; i < IMycelialGeneratorType.TYPES.size(); i++) {
-            registration.addRecipes(mycelialGeneratorCategories.get(i).getRecipeType(), IMycelialGeneratorType.TYPES.get(i).getRecipes().stream().sorted(Comparator.comparingInt(value -> ((MycelialGeneratorRecipe) value).getTicks() * ((MycelialGeneratorRecipe) value).getPowerTick()).reversed()).collect(Collectors.toList()));
+            registration.addRecipes(mycelialGeneratorCategories.get(i).getRecipeType(), IMycelialGeneratorType.TYPES.get(i).getRecipes(IFAttachments.registryAccess()).stream().sorted(Comparator.comparingInt(value -> ((MycelialGeneratorRecipe) value).getTicks() * ((MycelialGeneratorRecipe) value).getPowerTick()).reversed()).collect(Collectors.toList()));
         }
 
         List<StoneWorkCategory.Wrapper> perfectStoneWorkWrappers = new ArrayList<>();
@@ -233,19 +235,19 @@ public class JEICustomPlugin implements IModPlugin {
         registration.addRecipes(
                 machineProduceCategory.getRecipeType(),
                 Arrays.asList(
-                        new MachineProduceWrapper(ModuleCore.LATEX_PROCESSING.getLeft().get(), new ItemStack(ModuleCore.DRY_RUBBER.get())),
-                        new MachineProduceWrapper(ModuleResourceProduction.SLUDGE_REFINER.getLeft().get(), IndustrialTags.Items.SLUDGE_OUTPUT),
-                        new MachineProduceWrapper(ModuleAgricultureHusbandry.SEWAGE_COMPOSTER.getLeft().get(), new ItemStack(ModuleCore.FERTILIZER.get())),
-                        new MachineProduceWrapper(ModuleResourceProduction.DYE_MIXER.getLeft().get(), Tags.Items.DYES),
-                        new MachineProduceWrapper(ModuleResourceProduction.SPORES_RECREATOR.getLeft().get(), Tags.Items.MUSHROOMS),
-                        new MachineProduceWrapper(ModuleResourceProduction.SPORES_RECREATOR.getLeft().get(), new ItemStack(Items.CRIMSON_FUNGUS), new ItemStack(Items.WARPED_FUNGUS)),
-                        new MachineProduceWrapper(ModuleAgricultureHusbandry.MOB_CRUSHER.getLeft().get(), new FluidStack(ModuleCore.ESSENCE.getSourceFluid().get(), 1000)),
-                        new MachineProduceWrapper(ModuleAgricultureHusbandry.SLAUGHTER_FACTORY.getLeft().get(), new FluidStack(ModuleCore.MEAT.getSourceFluid().get(), 1000)),
-                        new MachineProduceWrapper(ModuleAgricultureHusbandry.SLAUGHTER_FACTORY.getLeft().get(), new FluidStack(ModuleCore.PINK_SLIME.getSourceFluid().get(), 1000)),
-                        new MachineProduceWrapper(ModuleAgricultureHusbandry.ANIMAL_RANCHER.getLeft().get(), new FluidStack(ForgeMod.MILK.get(), 1000)),
-                        new MachineProduceWrapper(ModuleAgricultureHusbandry.SEWER.getLeft().get(), new FluidStack(ModuleCore.SEWAGE.getSourceFluid().get(), 1000)),
-                        new MachineProduceWrapper(ModuleAgricultureHusbandry.PLANT_GATHERER.getLeft().get(), new FluidStack(ModuleCore.SLUDGE.getSourceFluid().get(), 1000)),
-                        new MachineProduceWrapper(ModuleResourceProduction.WATER_CONDENSATOR.getLeft().get(), new FluidStack(Fluids.WATER, 1000))
+                        new MachineProduceWrapper(ModuleCore.LATEX_PROCESSING.getBlock(), new ItemStack(ModuleCore.DRY_RUBBER.get())),
+                        new MachineProduceWrapper(ModuleResourceProduction.SLUDGE_REFINER.getBlock(), IndustrialTags.Items.SLUDGE_OUTPUT),
+                        new MachineProduceWrapper(ModuleAgricultureHusbandry.SEWAGE_COMPOSTER.getBlock(), new ItemStack(ModuleCore.FERTILIZER.get())),
+                        new MachineProduceWrapper(ModuleResourceProduction.DYE_MIXER.getBlock(), Tags.Items.DYES),
+                        new MachineProduceWrapper(ModuleResourceProduction.SPORES_RECREATOR.getBlock(), Tags.Items.MUSHROOMS),
+                        new MachineProduceWrapper(ModuleResourceProduction.SPORES_RECREATOR.getBlock(), new ItemStack(Items.CRIMSON_FUNGUS), new ItemStack(Items.WARPED_FUNGUS)),
+                        new MachineProduceWrapper(ModuleAgricultureHusbandry.MOB_CRUSHER.getBlock(), new FluidStack(ModuleCore.ESSENCE.getSourceFluid().get(), 1000)),
+                        new MachineProduceWrapper(ModuleAgricultureHusbandry.SLAUGHTER_FACTORY.getBlock(), new FluidStack(ModuleCore.MEAT.getSourceFluid().get(), 1000)),
+                        new MachineProduceWrapper(ModuleAgricultureHusbandry.SLAUGHTER_FACTORY.getBlock(), new FluidStack(ModuleCore.PINK_SLIME.getSourceFluid().get(), 1000)),
+                        new MachineProduceWrapper(ModuleAgricultureHusbandry.ANIMAL_RANCHER.getBlock(), new FluidStack(NeoForgeMod.MILK.get(), 1000)),
+                        new MachineProduceWrapper(ModuleAgricultureHusbandry.SEWER.getBlock(), new FluidStack(ModuleCore.SEWAGE.getSourceFluid().get(), 1000)),
+                        new MachineProduceWrapper(ModuleAgricultureHusbandry.PLANT_GATHERER.getBlock(), new FluidStack(ModuleCore.SLUDGE.getSourceFluid().get(), 1000)),
+                        new MachineProduceWrapper(ModuleResourceProduction.WATER_CONDENSATOR.getBlock(), new FluidStack(Fluids.WATER, 1000))
                 )
         );
 
@@ -255,11 +257,11 @@ public class JEICustomPlugin implements IModPlugin {
         List<OreFluidEntryFermenter> fluidEntryFermenters = new ArrayList<>();
         List<OreFluidEntrySieve> fluidSieve = new ArrayList<>();
 
-        ForgeRegistries.ITEMS.tags().getTagNames().map(itemTagKey -> itemTagKey.location())
-                .filter(resourceLocation -> resourceLocation.toString().startsWith("forge:raw_materials/") && OreTitaniumFluidType.isValid(resourceLocation))
+        BuiltInRegistries.ITEM.getTagNames().map(itemTagKey -> itemTagKey.location())
+                .filter(resourceLocation -> resourceLocation.toString().startsWith("c:raw_materials/") && OreTitaniumFluidType.isValid(resourceLocation))
                 .forEach(resourceLocation -> {
-                    TagKey<Item> tag = ForgeRegistries.ITEMS.tags().createTagKey(resourceLocation);
-                    TagKey<Item> dust = ForgeRegistries.ITEMS.tags().createTagKey(new ResourceLocation(resourceLocation.toString().replace("forge:raw_materials/", "forge:dusts/")));
+                    TagKey<Item> tag = TagUtil.getItemTag(resourceLocation);
+                    TagKey<Item> dust = TagUtil.getItemTag(ResourceLocation.parse(resourceLocation.toString().replace("c:raw_materials/", "c:dusts/")));
                     washer.add(new OreFluidEntryRaw(tag, new FluidStack(ModuleCore.MEAT.getSourceFluid().get(), 100), OreTitaniumFluidType.getFluidWithTag(ModuleCore.RAW_ORE_MEAT, 100, resourceLocation)));
                     fluidEntryFermenters.add(new OreFluidEntryFermenter(OreTitaniumFluidType.getFluidWithTag(ModuleCore.RAW_ORE_MEAT, 100, resourceLocation), OreTitaniumFluidType.getFluidWithTag(ModuleCore.FERMENTED_ORE_MEAT, 200, resourceLocation)));
                     fluidSieve.add(new OreFluidEntrySieve(OreTitaniumFluidType.getFluidWithTag(ModuleCore.FERMENTED_ORE_MEAT, 100, resourceLocation), TagUtil.getItemWithPreference(dust), ItemTags.SAND));
@@ -278,7 +280,7 @@ public class JEICustomPlugin implements IModPlugin {
     }
 
     public ItemStack getStoneWorkOutputFrom(ItemStack stack, MaterialStoneWorkFactoryTile.StoneWorkAction mode) {
-        return mode.getWork().apply(Minecraft.getInstance().level, ItemHandlerHelper.copyStackWithSize(stack, 9));
+        return mode.getWork().apply(Minecraft.getInstance().level, stack.copyWithCount(9));
     }
 
     public ItemStack getStoneWorkOutputFrom(ItemStack stack, List<MaterialStoneWorkFactoryTile.StoneWorkAction> modes) {
@@ -307,27 +309,27 @@ public class JEICustomPlugin implements IModPlugin {
 
     @Override
     public void registerRecipeCatalysts(IRecipeCatalystRegistration registration) {
-        registration.addRecipeCatalyst(new ItemStack(ModuleCore.FLUID_EXTRACTOR.getLeft().get()), IndustrialRecipeTypes.FLUID_EXTRACTOR);
-        registration.addRecipeCatalyst(new ItemStack(ModuleCore.DISSOLUTION_CHAMBER.getLeft().get()), IndustrialRecipeTypes.DISSOLUTION);
-        registration.addRecipeCatalyst(new ItemStack(ModuleGenerator.BIOREACTOR.getLeft().get()), IndustrialRecipeTypes.BIOREACTOR);
-        registration.addRecipeCatalyst(new ItemStack(ModuleResourceProduction.ORE_LASER_BASE.getLeft().get()), IndustrialRecipeTypes.LASER_ORE);
-        registration.addRecipeCatalyst(new ItemStack(ModuleResourceProduction.LASER_DRILL.getLeft().get()), IndustrialRecipeTypes.LASER_ORE);
-        registration.addRecipeCatalyst(new ItemStack(ModuleResourceProduction.FLUID_LASER_BASE.getLeft().get()), IndustrialRecipeTypes.LASER_FLUID);
-        registration.addRecipeCatalyst(new ItemStack(ModuleResourceProduction.LASER_DRILL.getLeft().get()), IndustrialRecipeTypes.LASER_FLUID);
-        for (Pair<RegistryObject<Block>, RegistryObject<BlockEntityType<?>>> mycelialGenerator : ModuleGenerator.MYCELIAL_GENERATORS) {
+        registration.addRecipeCatalyst(new ItemStack(ModuleCore.FLUID_EXTRACTOR.getBlock()), IndustrialRecipeTypes.FLUID_EXTRACTOR);
+        registration.addRecipeCatalyst(new ItemStack(ModuleCore.DISSOLUTION_CHAMBER.getBlock()), IndustrialRecipeTypes.DISSOLUTION);
+        registration.addRecipeCatalyst(new ItemStack(ModuleGenerator.BIOREACTOR.getBlock()), IndustrialRecipeTypes.BIOREACTOR);
+        registration.addRecipeCatalyst(new ItemStack(ModuleResourceProduction.ORE_LASER_BASE.getBlock()), IndustrialRecipeTypes.LASER_ORE);
+        registration.addRecipeCatalyst(new ItemStack(ModuleResourceProduction.LASER_DRILL.getBlock()), IndustrialRecipeTypes.LASER_ORE);
+        registration.addRecipeCatalyst(new ItemStack(ModuleResourceProduction.FLUID_LASER_BASE.getBlock()), IndustrialRecipeTypes.LASER_FLUID);
+        registration.addRecipeCatalyst(new ItemStack(ModuleResourceProduction.LASER_DRILL.getBlock()), IndustrialRecipeTypes.LASER_FLUID);
+        for (BlockWithTile mycelialGenerator : ModuleGenerator.MYCELIAL_GENERATORS) {
             for (MycelialGeneratorCategory mycelialGeneratorCategory : mycelialGeneratorCategories) {
-                if (((MycelialGeneratorBlock) mycelialGenerator.getLeft().get()).getType().equals(mycelialGeneratorCategory.getType())) {
-                    registration.addRecipeCatalyst(new ItemStack(mycelialGenerator.getLeft().get()), mycelialGeneratorCategory.getRecipeType());
+                if (((MycelialGeneratorBlock) mycelialGenerator.getBlock()).getType().equals(mycelialGeneratorCategory.getType())) {
+                    registration.addRecipeCatalyst(new ItemStack(mycelialGenerator.getBlock()), mycelialGeneratorCategory.getRecipeType());
                 }
             }
         }
-        registration.addRecipeCatalyst(new ItemStack(ModuleResourceProduction.MATERIAL_STONEWORK_FACTORY.getLeft().get()), stoneWorkCategory.getRecipeType(), stoneWorkGeneratorCategory.getRecipeType());
-        registration.addRecipeCatalyst(new ItemStack(ModuleResourceProduction.POTION_BREWER.getLeft().get()), RecipeTypes.BREWING);
-        registration.addRecipeCatalyst(new ItemStack(ModuleMisc.ENCHANTMENT_APPLICATOR.getLeft().get()), RecipeTypes.ANVIL);
-        registration.addRecipeCatalyst(new ItemStack(ModuleResourceProduction.RESOURCEFUL_FURNACE.getLeft().get()), RecipeTypes.SMELTING);
-        registration.addRecipeCatalyst(new ItemStack(ModuleResourceProduction.WASHING_FACTORY.getLeft().get()), IndustrialRecipeTypes.ORE_WASHER);
-        registration.addRecipeCatalyst(new ItemStack(ModuleResourceProduction.FERMENTATION_STATION.getLeft().get()), IndustrialRecipeTypes.FERMENTER);
-        registration.addRecipeCatalyst(new ItemStack(ModuleResourceProduction.FLUID_SIEVING_MACHINE.getLeft().get()), IndustrialRecipeTypes.ORE_SIEVE);
+        registration.addRecipeCatalyst(new ItemStack(ModuleResourceProduction.MATERIAL_STONEWORK_FACTORY.getBlock()), stoneWorkCategory.getRecipeType(), stoneWorkGeneratorCategory.getRecipeType());
+        registration.addRecipeCatalyst(new ItemStack(ModuleResourceProduction.POTION_BREWER.getBlock()), RecipeTypes.BREWING);
+        registration.addRecipeCatalyst(new ItemStack(ModuleMisc.ENCHANTMENT_APPLICATOR.getBlock()), RecipeTypes.ANVIL);
+        registration.addRecipeCatalyst(new ItemStack(ModuleResourceProduction.RESOURCEFUL_FURNACE.getBlock()), RecipeTypes.SMELTING);
+        registration.addRecipeCatalyst(new ItemStack(ModuleResourceProduction.WASHING_FACTORY.getBlock()), IndustrialRecipeTypes.ORE_WASHER);
+        registration.addRecipeCatalyst(new ItemStack(ModuleResourceProduction.FERMENTATION_STATION.getBlock()), IndustrialRecipeTypes.FERMENTER);
+        registration.addRecipeCatalyst(new ItemStack(ModuleResourceProduction.FLUID_SIEVING_MACHINE.getBlock()), IndustrialRecipeTypes.ORE_SIEVE);
     }
 
     @Override
@@ -338,6 +340,6 @@ public class JEICustomPlugin implements IModPlugin {
 
     @Override
     public ResourceLocation getPluginUid() {
-        return new ResourceLocation(Reference.MOD_ID, "default");
+        return ResourceLocation.fromNamespaceAndPath(Reference.MOD_ID, "default");
     }
 }

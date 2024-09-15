@@ -33,7 +33,7 @@ import javax.annotation.Nonnull;
 public class MechanicalDirtBlock extends IndustrialBlock<MechanicalDirtTile> {
 
     public MechanicalDirtBlock() {
-        super("mechanical_dirt", Properties.copy(Blocks.IRON_BLOCK), MechanicalDirtTile.class, ModuleResourceProduction.TAB_RESOURCE);
+        super("mechanical_dirt", Properties.ofFullCopy(Blocks.IRON_BLOCK), MechanicalDirtTile.class, ModuleResourceProduction.TAB_RESOURCE);
     }
 
     @Override

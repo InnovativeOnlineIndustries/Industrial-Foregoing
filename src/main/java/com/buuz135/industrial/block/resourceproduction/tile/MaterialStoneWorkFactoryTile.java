@@ -54,25 +54,28 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.DyeColor;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
+import net.minecraft.world.item.crafting.RecipeHolder;
 import net.minecraft.world.item.crafting.RecipeType;
 import net.minecraft.world.item.crafting.SmeltingRecipe;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.material.Fluids;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
-import net.minecraftforge.items.ItemHandlerHelper;
+import net.neoforged.api.distmarker.Dist;
+import net.neoforged.api.distmarker.OnlyIn;
+import net.neoforged.neoforge.items.ItemHandlerHelper;
 import org.apache.commons.lang3.tuple.Pair;
 
 import javax.annotation.Nonnull;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.Optional;
 import java.util.function.BiFunction;
-import java.util.stream.Collectors;
 
 public class MaterialStoneWorkFactoryTile extends IndustrialProcessingTile<MaterialStoneWorkFactoryTile> {
 
-    public static ResourceLocation DEFAULT = new ResourceLocation(Reference.MOD_ID, "stonework_generate/cobblestone");
+    public static ResourceLocation DEFAULT = ResourceLocation.fromNamespaceAndPath(Reference.MOD_ID, "stonework_generate/cobblestone");
 
     private int maxProgress;
     private int powerPerOperation;
@@ -212,7 +215,7 @@ public class MaterialStoneWorkFactoryTile extends IndustrialProcessingTile<Mater
                     @Override
                     public List<Component> getTooltipLines() {
                         List<Component> lines = new ArrayList<>();
-                        lines.add(Component.literal(ChatFormatting.GOLD + LangUtil.getString("tooltip.industrialforegoing.action") + ChatFormatting.WHITE + LangUtil.getString("tooltip.industrialforegoing.stonework." + ACTION_RECIPES[firstRecipeId].getAction())));
+                        lines.add(Component.literal(ChatFormatting.GOLD + LangUtil.getString("tooltip.industrialforegoing.type") + ChatFormatting.WHITE + LangUtil.getString("tooltip.industrialforegoing.stonework." + ACTION_RECIPES[firstRecipeId].getAction())));
                         return lines;
                     }
                 });
@@ -238,7 +241,7 @@ public class MaterialStoneWorkFactoryTile extends IndustrialProcessingTile<Mater
                     @Override
                     public List<Component> getTooltipLines() {
                         List<Component> lines = new ArrayList<>();
-                        lines.add(Component.literal(ChatFormatting.GOLD + LangUtil.getString("tooltip.industrialforegoing.action") + ChatFormatting.WHITE + LangUtil.getString("tooltip.industrialforegoing.stonework." + ACTION_RECIPES[secondRecipeId].getAction())));
+                        lines.add(Component.literal(ChatFormatting.GOLD + LangUtil.getString("tooltip.industrialforegoing.type") + ChatFormatting.WHITE + LangUtil.getString("tooltip.industrialforegoing.stonework." + ACTION_RECIPES[secondRecipeId].getAction())));
                         return lines;
                     }
                 });
@@ -264,7 +267,7 @@ public class MaterialStoneWorkFactoryTile extends IndustrialProcessingTile<Mater
                     @Override
                     public List<Component> getTooltipLines() {
                         List<Component> lines = new ArrayList<>();
-                        lines.add(Component.literal(ChatFormatting.GOLD + LangUtil.getString("tooltip.industrialforegoing.action") + ChatFormatting.WHITE + LangUtil.getString("tooltip.industrialforegoing.stonework." + ACTION_RECIPES[thirdRecipeId].getAction())));
+                        lines.add(Component.literal(ChatFormatting.GOLD + LangUtil.getString("tooltip.industrialforegoing.type") + ChatFormatting.WHITE + LangUtil.getString("tooltip.industrialforegoing.stonework." + ACTION_RECIPES[thirdRecipeId].getAction())));
                         return lines;
                     }
                 });
@@ -290,7 +293,7 @@ public class MaterialStoneWorkFactoryTile extends IndustrialProcessingTile<Mater
                     @Override
                     public List<Component> getTooltipLines() {
                         List<Component> lines = new ArrayList<>();
-                        lines.add(Component.literal(ChatFormatting.GOLD + LangUtil.getString("tooltip.industrialforegoing.action") + ChatFormatting.WHITE + LangUtil.getString("tooltip.industrialforegoing.stonework." + ACTION_RECIPES[fourthRecipeId].getAction())));
+                        lines.add(Component.literal(ChatFormatting.GOLD + LangUtil.getString("tooltip.industrialforegoing.type") + ChatFormatting.WHITE + LangUtil.getString("tooltip.industrialforegoing.stonework." + ACTION_RECIPES[fourthRecipeId].getAction())));
                         return lines;
                     }
                 });
@@ -318,19 +321,20 @@ public class MaterialStoneWorkFactoryTile extends IndustrialProcessingTile<Mater
     }
 
     public Optional<StoneWorkGenerateRecipe> getRecipe() {
-        Collection<StoneWorkGenerateRecipe> recipes = RecipeUtil.getRecipes(this.level, (RecipeType<StoneWorkGenerateRecipe>) ModuleCore.STONEWORK_GENERATE_TYPE.get());
-        for (StoneWorkGenerateRecipe recipe : recipes) {
-            if (recipe.getId().equals(new ResourceLocation(generatorRecipe))) {
-                return Optional.of(recipe);
+        List<RecipeHolder<StoneWorkGenerateRecipe>> recipes = this.level.getRecipeManager().getAllRecipesFor((RecipeType<StoneWorkGenerateRecipe>) ModuleCore.STONEWORK_GENERATE_TYPE.get());
+        for (RecipeHolder<StoneWorkGenerateRecipe> recipe : recipes) {
+
+            if (recipe.id().equals(ResourceLocation.parse(generatorRecipe))) {
+                return Optional.of(recipe.value());
             }
         }
-        return recipes.stream().filter(stoneWorkGenerateRecipe -> stoneWorkGenerateRecipe.getId().equals(DEFAULT)).findFirst();
+        return recipes.stream().filter(stoneWorkGenerateRecipe -> stoneWorkGenerateRecipe.id().equals(DEFAULT)).map(RecipeHolder::value).findFirst();
     }
 
     public ResourceLocation getNextRecipe(boolean next) {
         if (generatorRecipe != null) {
-            List<ResourceLocation> rls = RecipeUtil.getRecipes(this.level, (RecipeType<StoneWorkGenerateRecipe>) ModuleCore.STONEWORK_GENERATE_TYPE.get()).stream().map(StoneWorkGenerateRecipe::getId).collect(Collectors.toList());
-            int currentIndex = rls.indexOf(new ResourceLocation(generatorRecipe));
+            List<ResourceLocation> rls = this.level.getRecipeManager().getAllRecipesFor((RecipeType<StoneWorkGenerateRecipe>) ModuleCore.STONEWORK_GENERATE_TYPE.get()).stream().map(RecipeHolder::id).toList();
+            int currentIndex = rls.indexOf(ResourceLocation.parse(generatorRecipe));
             if (next) {
                 this.generatorRecipe = rls.get((currentIndex + 1) % rls.size()).toString();
             } else {

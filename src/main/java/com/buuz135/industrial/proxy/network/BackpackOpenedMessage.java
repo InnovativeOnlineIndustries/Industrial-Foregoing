@@ -25,7 +25,7 @@ package com.buuz135.industrial.proxy.network;
 import com.buuz135.industrial.item.infinity.InfinityStackHolder;
 import com.hrznstudio.titanium.network.Message;
 import com.hrznstudio.titanium.network.locator.PlayerInventoryFinder;
-import net.minecraftforge.network.NetworkEvent;
+import net.neoforged.neoforge.network.handling.IPayloadContext;
 
 public class BackpackOpenedMessage extends Message {
 
@@ -41,7 +41,7 @@ public class BackpackOpenedMessage extends Message {
     }
 
     @Override
-    protected void handleMessage(NetworkEvent.Context context) {
+    protected void handleMessage(IPayloadContext context) {
         context.enqueueWork(() -> {
             InfinityStackHolder.TARGET = new PlayerInventoryFinder.Target(finder, PlayerInventoryFinder.get(finder).get(), slot);
         });

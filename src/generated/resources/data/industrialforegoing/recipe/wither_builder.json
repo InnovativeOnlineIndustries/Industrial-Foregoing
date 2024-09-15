@@ -1,0 +1,36 @@
+{
+  "neoforge:conditions": [
+    {
+      "type": "neoforge:item_exists",
+      "item": "industrialforegoing:wither_builder"
+    }
+  ],
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "C": {
+      "tag": "industrialforegoing:machine_frame/supreme"
+    },
+    "N": {
+      "item": "minecraft:nether_star"
+    },
+    "P": {
+      "tag": "c:plastic"
+    },
+    "S": {
+      "item": "minecraft:soul_sand"
+    },
+    "W": {
+      "item": "minecraft:wither_skeleton_skull"
+    }
+  },
+  "pattern": [
+    "PNP",
+    "WCW",
+    "SSS"
+  ],
+  "result": {
+    "count": 1,
+    "id": "industrialforegoing:wither_builder"
+  }
+}

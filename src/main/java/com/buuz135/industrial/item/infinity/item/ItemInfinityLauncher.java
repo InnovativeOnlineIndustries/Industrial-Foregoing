@@ -26,6 +26,7 @@ import com.buuz135.industrial.item.infinity.ItemInfinity;
 import com.buuz135.industrial.module.ModuleCore;
 import com.buuz135.industrial.module.ModuleTool;
 import com.buuz135.industrial.recipe.DissolutionChamberRecipe;
+import com.buuz135.industrial.utils.IFAttachments;
 import com.buuz135.industrial.utils.IndustrialTags;
 import com.hrznstudio.titanium.api.IFactory;
 import com.hrznstudio.titanium.api.client.IScreenAddon;
@@ -35,19 +36,21 @@ import com.hrznstudio.titanium.component.button.ArrowButtonComponent;
 import com.hrznstudio.titanium.item.BasicItem;
 import com.hrznstudio.titanium.tab.TitaniumTab;
 import com.hrznstudio.titanium.util.FacingUtil;
+import com.mojang.serialization.Codec;
 import net.minecraft.ChatFormatting;
-import net.minecraft.data.recipes.FinishedRecipe;
+import net.minecraft.core.Holder;
+import net.minecraft.data.recipes.RecipeOutput;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.stats.Stats;
+import net.minecraft.util.StringRepresentable;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResultHolder;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.projectile.AbstractArrow;
-import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.UseAnim;
@@ -56,14 +59,13 @@ import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.item.enchantment.Enchantments;
 import net.minecraft.world.level.Level;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
-import net.minecraftforge.fluids.FluidStack;
-import net.minecraftforge.registries.ForgeRegistries;
+import net.neoforged.api.distmarker.Dist;
+import net.neoforged.api.distmarker.OnlyIn;
+import net.neoforged.neoforge.fluids.FluidStack;
 
 import java.util.List;
 import java.util.Locale;
-import java.util.function.Consumer;
+import java.util.Optional;
 import java.util.function.Supplier;
 
 public class ItemInfinityLauncher extends ItemInfinity {
@@ -91,9 +93,7 @@ public class ItemInfinityLauncher extends ItemInfinity {
     @Override
     public void addNbt(ItemStack stack, long power, int fuel, boolean special) {
         super.addNbt(stack, power, fuel, special);
-        CompoundTag nbt = stack.getOrCreateTag();
-        nbt.putInt(PLUNGER_NBT, PlungerAction.RELEASE.getId());
-        stack.setTag(nbt);
+        stack.set(IFAttachments.PLUNGER_ACTION, PlungerAction.RELEASE);
     }
 
     @Override
@@ -104,11 +104,11 @@ public class ItemInfinityLauncher extends ItemInfinity {
     }
 
     public PlungerAction getPlungerAction(ItemStack stack) {
-        return PlungerAction.getFromId(stack.getOrCreateTag().getInt(PLUNGER_NBT));
+        return stack.get(IFAttachments.PLUNGER_ACTION);
     }
 
     public void setPlungerAction(ItemStack stack, PlungerAction plungerAction) {
-        stack.getOrCreateTag().putInt(PLUNGER_NBT, plungerAction.getId());
+        stack.set(IFAttachments.PLUNGER_ACTION, plungerAction);
     }
 
     @Override
@@ -116,14 +116,15 @@ public class ItemInfinityLauncher extends ItemInfinity {
         return UseAnim.BOW;
     }
 
+
     @Override
-    public int getUseDuration(ItemStack stack) {
+    public int getUseDuration(ItemStack stack, LivingEntity user) {
         return 72000 / 2;
     }
 
     @Override
-    public boolean canApplyAtEnchantingTable(ItemStack stack, Enchantment enchantment) {
-        return enchantment == Enchantments.UNBREAKING;
+    public boolean supportsEnchantment(ItemStack stack, Holder<Enchantment> enchantment) {
+        return enchantment.is(Enchantments.UNBREAKING);
     }
 
     @Override
@@ -139,27 +140,19 @@ public class ItemInfinityLauncher extends ItemInfinity {
     @Override
     public void releaseUsing(ItemStack stack, Level worldIn, LivingEntity entityLiving, int timeLeft) {
         if (entityLiving instanceof Player) {
-            int time = this.getUseDuration(stack) - timeLeft;
+            int time = this.getUseDuration(stack, entityLiving) - timeLeft;
             float velo = getArrowVelocity(time);
             if (!((double) velo < 0.1D) && enoughFuel(stack)) {
                 Player playerentity = (Player) entityLiving;
                 playerentity.getCooldowns().addCooldown(this, 20);
                 if (!worldIn.isClientSide) {
-                    InfinityLauncherProjectileEntity abstractarrowentity = new InfinityLauncherProjectileEntity(worldIn, playerentity, getPlungerAction(stack), getSelectedTier(stack).getRadius());
-                    abstractarrowentity.shootFromRotation(playerentity, playerentity.xRot, playerentity.yRot, 0.0F, velo * 3.0F, 1.0F);
+                    InfinityLauncherProjectileEntity abstractarrowentity = new InfinityLauncherProjectileEntity(worldIn, playerentity, getPlungerAction(stack), getSelectedTier(stack).getRadius(), stack);
+                    abstractarrowentity.shootFromRotation(playerentity, playerentity.xRotO, playerentity.yRotO, 0.0F, velo * 3.0F, 1.0F);
                     if (velo == 1.0F) {
                         abstractarrowentity.setCritArrow(true);
                     }
-                    int j = EnchantmentHelper.getItemEnchantmentLevel(Enchantments.POWER_ARROWS, stack);
-                    if (j > 0) {
-                        abstractarrowentity.setBaseDamage(abstractarrowentity.getBaseDamage() + (double) j * 0.5D + 0.5D);
-                    }
-                    int k = EnchantmentHelper.getItemEnchantmentLevel(Enchantments.PUNCH_ARROWS, stack);
-                    if (k > 0) {
-                        abstractarrowentity.setKnockback(k);
-                    }
-                    if (EnchantmentHelper.getItemEnchantmentLevel(Enchantments.FLAMING_ARROWS, stack) > 0) {
-                        abstractarrowentity.setSecondsOnFire(100);
+                    if (EnchantmentHelper.getItemEnchantmentLevel(worldIn.registryAccess().holderOrThrow(Enchantments.FLAME), stack) > 0) {
+                        abstractarrowentity.setSharedFlagOnFire(true);
                     }
                     consumeFuel(stack);
                     abstractarrowentity.pickup = AbstractArrow.Pickup.DISALLOWED;
@@ -202,23 +195,24 @@ public class ItemInfinityLauncher extends ItemInfinity {
     }
 
     @Override
-    public void registerRecipe(Consumer<FinishedRecipe> consumer) {
-        new DissolutionChamberRecipe(ForgeRegistries.ITEMS.getKey(this),
-                new Ingredient.Value[]{
-                        new Ingredient.ItemValue(new ItemStack(Items.DIAMOND_BLOCK)),
-                        new Ingredient.ItemValue(new ItemStack(Items.BOW)),
-                        new Ingredient.ItemValue(new ItemStack(Items.DIAMOND_BLOCK)),
-                        new Ingredient.ItemValue(new ItemStack(ModuleTool.MOB_IMPRISONMENT_TOOL.get())),
-                        new Ingredient.ItemValue(new ItemStack(ModuleCore.RANGE_ADDONS[11].get())),
-                        new Ingredient.TagValue(IndustrialTags.Items.GEAR_GOLD),
-                        new Ingredient.TagValue(IndustrialTags.Items.GEAR_GOLD),
-                        new Ingredient.TagValue(IndustrialTags.Items.GEAR_GOLD),
-                },
-                new FluidStack(ModuleCore.PINK_SLIME.getSourceFluid().get(), 2000), 400, new ItemStack(this), FluidStack.EMPTY);
+    public void registerRecipe(RecipeOutput consumer) {
+        DissolutionChamberRecipe.createRecipe(consumer, "infinity_launcher", new DissolutionChamberRecipe(
+                List.of(
+                        Ingredient.of(new ItemStack(Items.DIAMOND_BLOCK)),
+                        Ingredient.of(new ItemStack(Items.BOW)),
+                        Ingredient.of(new ItemStack(Items.DIAMOND_BLOCK)),
+                        Ingredient.of(new ItemStack(ModuleTool.MOB_IMPRISONMENT_TOOL.get())),
+                        Ingredient.of(new ItemStack(ModuleCore.RANGE_ADDONS[11].get())),
+                        Ingredient.of(IndustrialTags.Items.GEAR_GOLD),
+                        Ingredient.of(IndustrialTags.Items.GEAR_GOLD),
+                        Ingredient.of(IndustrialTags.Items.GEAR_GOLD)
+                ), new FluidStack(ModuleCore.PINK_SLIME.getSourceFluid().get(), 2000), 400, Optional.of(new ItemStack(this)), Optional.empty()));
     }
 
-    public enum PlungerAction {
+    public enum PlungerAction implements StringRepresentable {
         RELEASE(0, ChatFormatting.GREEN), CAPTURE(1, ChatFormatting.GOLD), DAMAGE(2, ChatFormatting.RED);
+
+        public static final Codec<PlungerAction> CODEC = StringRepresentable.fromValues(PlungerAction::values);
 
         private final int id;
         private final ChatFormatting color;
@@ -244,6 +238,11 @@ public class ItemInfinityLauncher extends ItemInfinity {
 
         public ChatFormatting getColor() {
             return color;
+        }
+
+        @Override
+        public String getSerializedName() {
+            return this.name();
         }
     }
 

@@ -24,6 +24,7 @@ package com.buuz135.industrial.entity;
 import com.buuz135.industrial.item.infinity.item.ItemInfinityNuke;
 import com.buuz135.industrial.module.ModuleTool;
 import com.buuz135.industrial.proxy.client.sound.TickeableSound;
+import com.buuz135.industrial.utils.IFAttachments;
 import com.buuz135.industrial.utils.explosion.ExplosionTickHandler;
 import com.buuz135.industrial.utils.explosion.ProcessExplosion;
 import net.minecraft.client.Minecraft;
@@ -31,8 +32,6 @@ import net.minecraft.client.resources.sounds.SimpleSoundInstance;
 import net.minecraft.core.particles.BlockParticleOption;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.network.protocol.Packet;
-import net.minecraft.network.protocol.game.ClientGamePacketListener;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
@@ -40,18 +39,14 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
-import net.minecraft.world.entity.Entity;
-import net.minecraft.world.entity.EntityType;
-import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.entity.MoverType;
+import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.Level;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
-import net.minecraftforge.items.ItemHandlerHelper;
-import net.minecraftforge.network.NetworkHooks;
+import net.neoforged.api.distmarker.Dist;
+import net.neoforged.api.distmarker.OnlyIn;
+import net.neoforged.neoforge.items.ItemHandlerHelper;
 
 import javax.annotation.Nullable;
 
@@ -82,7 +77,7 @@ public class InfinityNukeEntity extends Entity {
     }
 
     public InfinityNukeEntity(Level worldIn, LivingEntity owner, ItemStack original) {
-        this((EntityType<? extends InfinityNukeEntity>) ModuleTool.INFINITY_NUKE_ENTITY_TYPE.get(), worldIn);
+        this((EntityType<? extends InfinityNukeEntity>) ModuleTool.INFINITY_NUKE_ENTITY_TYPE.value(), worldIn);
         this.placedBy = owner;
         this.original = original;
         this.radius = ItemInfinityNuke.getRadius(original);
@@ -139,23 +134,18 @@ public class InfinityNukeEntity extends Entity {
         }
     }
 
-    @Override
-    public void onRemovedFromWorld() {
-        super.onRemovedFromWorld();
-
-    }
 
     @Override
-    protected void defineSynchedData() {
-        this.entityData.define(RADIUS, 1);
-        this.entityData.define(EXPLODING, false);
-        this.entityData.define(ARMED, false);
-        this.entityData.define(TICKS, 1);
+    protected void defineSynchedData(SynchedEntityData.Builder builder) {
+        builder.define(RADIUS, 1);
+        builder.define(EXPLODING, false);
+        builder.define(ARMED, false);
+        builder.define(TICKS, 1);
     }
 
     @Override
     protected void addAdditionalSaveData(CompoundTag compound) {
-        compound.put("Original", this.getOriginal().serializeNBT());
+        compound.put("Original", this.getOriginal().saveOptional(IFAttachments.registryAccess()));
         compound.putBoolean("Exploding", this.isExploding());
         compound.putBoolean("Armed", this.isArmed());
         compound.putInt("TicksExploding", this.getTicksExploding());
@@ -166,15 +156,11 @@ public class InfinityNukeEntity extends Entity {
     protected void readAdditionalSaveData(CompoundTag compound) {
         this.setArmed(compound.getBoolean("Armed"));
         this.setExploding(compound.getBoolean("Exploding"));
-        this.setOriginal(ItemStack.of(compound.getCompound("Original")));
+        this.setOriginal(ItemStack.parseOptional(IFAttachments.registryAccess(), compound.getCompound("Original")));
         this.setTicksExploding(compound.getInt("TicksExploding"));
         this.setRadius(compound.getInt("Radius"));
     }
 
-    @Override
-    public Packet<ClientGamePacketListener> getAddEntityPacket() {
-        return NetworkHooks.getEntitySpawningPacket(this);
-    }
 
     @Override
     public InteractionResult interact(Player player, InteractionHand hand) {
@@ -196,9 +182,8 @@ public class InfinityNukeEntity extends Entity {
             }
             if (!this.isExploding() && this.isArmed() && player.getItemInHand(hand).getItem().equals(Items.FLINT_AND_STEEL)) {
                 this.setExploding(true);
-                player.getItemInHand(hand).hurtAndBreak(1, player, (playerEntity) -> {
-                    playerEntity.broadcastBreakEvent(hand);
-                });
+                this.setNoGravity(true);
+                player.getItemInHand(hand).hurtAndBreak(1, player, EquipmentSlot.MAINHAND);
                 return InteractionResult.SUCCESS;
             }
         }

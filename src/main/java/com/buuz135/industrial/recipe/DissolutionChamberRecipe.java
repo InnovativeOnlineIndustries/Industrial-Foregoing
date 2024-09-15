@@ -23,52 +23,73 @@
 package com.buuz135.industrial.recipe;
 
 import com.buuz135.industrial.module.ModuleCore;
+import com.buuz135.industrial.utils.Reference;
 import com.hrznstudio.titanium.component.fluid.FluidTankComponent;
-import com.hrznstudio.titanium.recipe.serializer.GenericSerializer;
-import com.hrznstudio.titanium.recipe.serializer.SerializableRecipe;
-import net.minecraft.core.RegistryAccess;
+import com.mojang.serialization.Codec;
+import com.mojang.serialization.MapCodec;
+import com.mojang.serialization.codecs.RecordCodecBuilder;
+import net.minecraft.advancements.AdvancementRequirements;
+import net.minecraft.advancements.AdvancementRewards;
+import net.minecraft.advancements.critereon.RecipeUnlockedTrigger;
+import net.minecraft.core.HolderLookup;
+import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.data.recipes.RecipeOutput;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.Container;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.crafting.Ingredient;
-import net.minecraft.world.item.crafting.RecipeType;
+import net.minecraft.world.item.crafting.*;
 import net.minecraft.world.level.Level;
-import net.minecraftforge.fluids.FluidStack;
-import net.minecraftforge.fluids.capability.IFluidHandler;
-import net.minecraftforge.items.IItemHandler;
+import net.neoforged.neoforge.common.conditions.ICondition;
+import net.neoforged.neoforge.common.conditions.ItemExistsCondition;
+import net.neoforged.neoforge.fluids.FluidStack;
+import net.neoforged.neoforge.fluids.capability.IFluidHandler;
+import net.neoforged.neoforge.items.IItemHandler;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
-public class DissolutionChamberRecipe extends SerializableRecipe {
+public class DissolutionChamberRecipe implements Recipe<CraftingInput> {
 
-    public static List<DissolutionChamberRecipe> RECIPES = new ArrayList<>();
+    public static final MapCodec<DissolutionChamberRecipe> CODEC = RecordCodecBuilder.mapCodec(in -> in.group(
+            Ingredient.CODEC.listOf(0, 8).fieldOf("input").forGetter(o -> o.input),
+            FluidStack.CODEC.fieldOf("inputFluid").forGetter(o -> o.inputFluid),
+            Codec.INT.fieldOf("processingTime").forGetter(o -> o.processingTime),
+            ItemStack.CODEC.optionalFieldOf("output").forGetter(o -> o.output),
+            FluidStack.CODEC.optionalFieldOf("outputFluid").forGetter(o -> o.outputFluid)
+    ).apply(in, DissolutionChamberRecipe::new));
 
-
-    public Ingredient.Value[] input;
+    public List<Ingredient> input;
     public FluidStack inputFluid;
     public int processingTime;
-    public ItemStack output;
-    public FluidStack outputFluid;
+    public Optional<ItemStack> output;
+    public Optional<FluidStack> outputFluid;
 
-    public DissolutionChamberRecipe(ResourceLocation resourceLocation) {
-        super(resourceLocation);
-    }
-
-    public DissolutionChamberRecipe(ResourceLocation resourceLocation, Ingredient.Value[] input, FluidStack inputFluid, int processingTime, ItemStack output, FluidStack outputFluid) {
-        super(resourceLocation);
+    public DissolutionChamberRecipe(List<Ingredient> input, FluidStack inputFluid, int processingTime, Optional<ItemStack> output, Optional<FluidStack> outputFluid) {
         this.input = input;
         this.inputFluid = inputFluid;
         this.processingTime = processingTime;
         this.output = output;
-        this.output.getItem().onCraftedBy(this.output, null, null);
         this.outputFluid = outputFluid;
-        RECIPES.add(this);
     }
 
-    @Override
-    public boolean matches(Container inv, Level worldIn) {
-        return false;
+    public DissolutionChamberRecipe() {
+
+    }
+
+    public static void createRecipe(RecipeOutput recipeOutput, String name, DissolutionChamberRecipe recipe) {
+        var rl = generateRL(name);
+        var advancementHolder = recipeOutput.advancement()
+                .addCriterion("has_the_recipe", RecipeUnlockedTrigger.unlocked(rl))
+                .rewards(AdvancementRewards.Builder.recipe(rl))
+                .requirements(AdvancementRequirements.Strategy.OR).build(rl);
+        List<ICondition> conditions = new ArrayList<>();
+        if (recipe.output.isPresent())
+            conditions.add(new ItemExistsCondition(BuiltInRegistries.ITEM.getKey(recipe.output.get().getItem())));
+        recipeOutput.accept(rl, recipe, advancementHolder, conditions.toArray(new ICondition[conditions.size()]));
+    }
+
+    public static ResourceLocation generateRL(String key) {
+        return ResourceLocation.fromNamespaceAndPath(Reference.MOD_ID, "dissolution_chamber/" + key);
     }
 
     public boolean matches(IItemHandler handler, FluidTankComponent tank) {
@@ -77,9 +98,9 @@ public class DissolutionChamberRecipe extends SerializableRecipe {
         for (int i = 0; i < handler.getSlots(); i++) {
             if (!handler.getStackInSlot(i).isEmpty()) handlerItems.add(handler.getStackInSlot(i).copy());
         }
-        for (Ingredient.Value iItemList : input) {
+        for (Ingredient ingredient : input) {
             boolean found = false;
-            for (ItemStack stack : iItemList.getItems()) {
+            for (ItemStack stack : ingredient.getItems()) {
                 int i = 0;
                 for (; i < handlerItems.size(); i++) {
                     if (ItemStack.isSameItem(handlerItems.get(i), stack)) {
@@ -94,12 +115,18 @@ public class DissolutionChamberRecipe extends SerializableRecipe {
             }
             if (!found) return false;
         }
+
         return handlerItems.size() == 0 && tank.drainForced(inputFluid, IFluidHandler.FluidAction.SIMULATE).getAmount() == inputFluid.getAmount();
     }
 
     @Override
-    public ItemStack assemble(Container inv, RegistryAccess access) {
-        return ItemStack.EMPTY;
+    public boolean matches(CraftingInput craftingInput, Level level) {
+        return false;
+    }
+
+    @Override
+    public ItemStack assemble(CraftingInput craftingInput, HolderLookup.Provider provider) {
+        return null;
     }
 
     @Override
@@ -108,13 +135,13 @@ public class DissolutionChamberRecipe extends SerializableRecipe {
     }
 
     @Override
-    public ItemStack getResultItem(RegistryAccess access) {
-        return output;
+    public ItemStack getResultItem(HolderLookup.Provider provider) {
+        return null;
     }
 
     @Override
-    public GenericSerializer<? extends SerializableRecipe> getSerializer() {
-        return (GenericSerializer<? extends SerializableRecipe>) ModuleCore.DISSOLUTION_SERIALIZER.get();
+    public RecipeSerializer<?> getSerializer() {
+        return ModuleCore.DISSOLUTION_SERIALIZER.get();
     }
 
     @Override

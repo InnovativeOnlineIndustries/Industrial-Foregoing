@@ -28,15 +28,13 @@ import com.buuz135.industrial.utils.Reference;
 import com.hrznstudio.titanium.api.client.AssetTypes;
 import com.hrznstudio.titanium.client.screen.asset.DefaultAssetProvider;
 import com.hrznstudio.titanium.util.AssetUtil;
-import com.mojang.blaze3d.platform.InputConstants;
-import com.mojang.blaze3d.systems.RenderSystem;
-import com.mojang.blaze3d.vertex.PoseStack;
-import mezz.jei.api.forge.ForgeTypes;
 import mezz.jei.api.gui.builder.IRecipeLayoutBuilder;
+import mezz.jei.api.gui.builder.ITooltipBuilder;
 import mezz.jei.api.gui.drawable.IDrawable;
 import mezz.jei.api.gui.drawable.IDrawableStatic;
 import mezz.jei.api.gui.ingredient.IRecipeSlotsView;
 import mezz.jei.api.helpers.IGuiHelper;
+import mezz.jei.api.neoforge.NeoForgeTypes;
 import mezz.jei.api.recipe.IFocusGroup;
 import mezz.jei.api.recipe.RecipeIngredientRole;
 import mezz.jei.api.recipe.RecipeType;
@@ -44,17 +42,8 @@ import mezz.jei.api.recipe.category.IRecipeCategory;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
-import net.minecraft.client.resources.sounds.SimpleSoundInstance;
 import net.minecraft.network.chat.Component;
-import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.sounds.SoundEvents;
-import net.minecraft.world.level.biome.Biome;
-import net.minecraftforge.fluids.FluidStack;
-
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
 
 public class LaserDrillFluidCategory implements IRecipeCategory<LaserDrillFluidRecipe> {
 
@@ -79,7 +68,7 @@ public class LaserDrillFluidCategory implements IRecipeCategory<LaserDrillFluidR
 
     @Override
     public IDrawable getBackground() {
-        return guiHelper.drawableBuilder(new ResourceLocation(Reference.MOD_ID, "textures/gui/jei.png"), 0, 0, 52, 26).addPadding(0, 60, 35, 65).build();
+        return guiHelper.drawableBuilder(ResourceLocation.fromNamespaceAndPath(Reference.MOD_ID, "textures/gui/jei.png"), 0, 0, 52, 26).addPadding(0, 60, 35, 65).build();
     }
 
     @Override
@@ -90,7 +79,7 @@ public class LaserDrillFluidCategory implements IRecipeCategory<LaserDrillFluidR
     @Override
     public void setRecipe(IRecipeLayoutBuilder builder, LaserDrillFluidRecipe recipe, IFocusGroup focuses) {
         builder.addSlot(RecipeIngredientRole.INPUT, 36, 5).addIngredients(recipe.catalyst);
-        builder.addSlot(RecipeIngredientRole.OUTPUT, 60 + 35 + 6, 6).setFluidRenderer(200, false, 12, 13).setOverlay(smallTank, 0, 0).addIngredient(ForgeTypes.FLUID_STACK, FluidStack.loadFluidStackFromNBT(recipe.output));
+        builder.addSlot(RecipeIngredientRole.OUTPUT, 60 + 35 + 6, 6).setFluidRenderer(200, false, 12, 13).setOverlay(smallTank, 0, 0).addIngredient(NeoForgeTypes.FLUID_STACK, recipe.output);
 
     }
 
@@ -99,17 +88,17 @@ public class LaserDrillFluidCategory implements IRecipeCategory<LaserDrillFluidR
         int recipeWidth = 82 + 35 + 35;
         if (recipe.pointer > 0)
             AssetUtil.drawAsset(guiGraphics, Minecraft.getInstance().screen, DefaultAssetProvider.DEFAULT_PROVIDER.getAsset(AssetTypes.BUTTON_ARROW_LEFT), 0, 70);
-        if (recipe.pointer < recipe.rarity.length - 1)
+        if (recipe.pointer < recipe.rarity.size() - 1)
             AssetUtil.drawAsset(guiGraphics, Minecraft.getInstance().screen, DefaultAssetProvider.DEFAULT_PROVIDER.getAsset(AssetTypes.BUTTON_ARROW_RIGHT), 137, 70);
         AssetUtil.drawAsset(guiGraphics, Minecraft.getInstance().screen, DefaultAssetProvider.DEFAULT_PROVIDER.getAsset(AssetTypes.TANK_SMALL), 60 + 35 + 3, 3);
-        var toasts = new ResourceLocation("textures/gui/toasts.png");
+        var toasts = ResourceLocation.parse("minecraft:textures/gui/toasts.png");
         guiGraphics.blit(toasts, recipeWidth / 10 * 2, 30 + (Minecraft.getInstance().font.lineHeight + 2) * 3, 216, 0, 20, 20, 256, 256);
         guiGraphics.blit(toasts, recipeWidth / 10 * 7, 30 + (Minecraft.getInstance().font.lineHeight + 2) * 3, 216, 0, 20, 20, 256, 256);
-        var icons =  new ResourceLocation("forge", "textures/gui/icons.png");
+        var icons = ResourceLocation.fromNamespaceAndPath("neoforge", "textures/gui/icons.png");
         guiGraphics.blit(icons, recipeWidth / 10 * 7 + 1, 30 + (Minecraft.getInstance().font.lineHeight + 2) * 3 + 3, 0, 16, 16, 16);
 
-        String minY = Component.translatable("text.industrialforegoing.miny").getString() + " " + recipe.rarity[recipe.pointer].depth_min;
-        String maxY = Component.translatable("text.industrialforegoing.maxy").getString() + " " + recipe.rarity[recipe.pointer].depth_max;
+        String minY = Component.translatable("text.industrialforegoing.miny").getString() + " " + recipe.rarity.get(recipe.pointer).depth_min();
+        String maxY = Component.translatable("text.industrialforegoing.maxy").getString() + " " + recipe.rarity.get(recipe.pointer).depth_max();
         String biomes = Component.translatable("text.industrialforegoing.biomes").getString();
         guiGraphics.drawString(Minecraft.getInstance().font, ChatFormatting.DARK_GRAY + minY, recipeWidth / 10, 30, 0, false);
         if (!LaserDrillFluidRecipe.EMPTY.equals(recipe.entity)) {
@@ -122,17 +111,22 @@ public class LaserDrillFluidCategory implements IRecipeCategory<LaserDrillFluidR
     }
 
     @Override
+    public void getTooltip(ITooltipBuilder tooltip, LaserDrillFluidRecipe recipe, IRecipeSlotsView recipeSlotsView, double mouseX, double mouseY) {
+        IRecipeCategory.super.getTooltip(tooltip, recipe, recipeSlotsView, mouseX, mouseY);
+    }
+
+    /*@Override
     public List<Component> getTooltipStrings(LaserDrillFluidRecipe recipe, IRecipeSlotsView recipeSlotsView, double mouseX, double mouseY) {
         if (mouseX > 0 && mouseX < 15 && mouseY > 70 && mouseY < 85 && recipe.pointer > 0) { // Inside the back button
             return Collections.singletonList(Component.translatable("text.industrialforegoing.button.jei.prev_rarity"));
         }
-        if (mouseX > 137 && mouseX < (137 + 15) && mouseY > 70 && mouseY < 85 && recipe.pointer < recipe.rarity.length - 1) { //Inside the next button
+        if (mouseX > 137 && mouseX < (137 + 15) && mouseY > 70 && mouseY < 85 && recipe.pointer < recipe.rarity.size() - 1) { //Inside the next button
             return Collections.singletonList(Component.translatable("text.industrialforegoing.button.jei.next_rarity"));
         }
         if (mouseX > 13 * 2 && mouseX < 13 * 2 + 20 && mouseY > 30 + (Minecraft.getInstance().font.lineHeight + 2) * 3 && mouseY < 30 + (Minecraft.getInstance().font.lineHeight + 2) * 3 + 20) { //Inside the whitelisted biomes
             List<Component> biomes = new ArrayList<>();
             biomes.add(Component.translatable("text.industrialforegoing.tooltip.whitelisted_biomes").withStyle(ChatFormatting.UNDERLINE).withStyle(ChatFormatting.GOLD));
-            if (recipe.rarity[recipe.pointer].whitelist.length == 0) biomes.add(Component.literal("- Any"));
+            if (recipe.rarity.get(recipe.pointer).whitelist().length == 0) biomes.add(Component.literal("- Any"));
             else {
                 for (ResourceKey<Biome> registryKey : recipe.rarity[recipe.pointer].whitelist) {
                     biomes.add(Component.literal("- ").append(Component.translatable("biome." + registryKey.location().getNamespace() + "." + registryKey.location().getPath())));
@@ -167,5 +161,5 @@ public class LaserDrillFluidCategory implements IRecipeCategory<LaserDrillFluidR
             return true;
         }
         return false;
-    }
+    }*/
 }

@@ -27,18 +27,17 @@ import com.buuz135.industrial.block.agriculturehusbandry.tile.AnimalRancherTile;
 import com.buuz135.industrial.module.ModuleAgricultureHusbandry;
 import com.buuz135.industrial.utils.IndustrialTags;
 import com.hrznstudio.titanium.recipe.generator.TitaniumShapedRecipeBuilder;
-import net.minecraft.data.recipes.FinishedRecipe;
+import net.minecraft.data.recipes.RecipeOutput;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 
 import javax.annotation.Nonnull;
-import java.util.function.Consumer;
 
 public class AnimalRancherBlock extends IndustrialBlock<AnimalRancherTile> {
 
     public AnimalRancherBlock() {
-        super("animal_rancher", Properties.copy(Blocks.IRON_BLOCK), AnimalRancherTile.class, ModuleAgricultureHusbandry.TAB_AG_HUS);
+        super("animal_rancher", Properties.ofFullCopy(Blocks.IRON_BLOCK), AnimalRancherTile.class, ModuleAgricultureHusbandry.TAB_AG_HUS);
     }
 
     @Override
@@ -53,7 +52,7 @@ public class AnimalRancherBlock extends IndustrialBlock<AnimalRancherTile> {
     }
 
     @Override
-    public void registerRecipe(Consumer<FinishedRecipe> consumer) {
+    public void registerRecipe(RecipeOutput consumer) {
         TitaniumShapedRecipeBuilder.shapedRecipe(this)
                 .pattern("PPP").pattern("SBS").pattern("GMG")
                 .define('P', IndustrialTags.Items.PLASTIC)

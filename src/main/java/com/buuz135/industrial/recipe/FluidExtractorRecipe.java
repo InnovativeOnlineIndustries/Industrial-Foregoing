@@ -24,73 +24,85 @@ package com.buuz135.industrial.recipe;
 
 import com.buuz135.industrial.module.ModuleCore;
 import com.buuz135.industrial.utils.Reference;
-import com.hrznstudio.titanium.recipe.serializer.GenericSerializer;
-import com.hrznstudio.titanium.recipe.serializer.SerializableRecipe;
+import com.mojang.serialization.Codec;
+import com.mojang.serialization.MapCodec;
+import com.mojang.serialization.codecs.RecordCodecBuilder;
+import net.minecraft.advancements.AdvancementRequirements;
+import net.minecraft.advancements.AdvancementRewards;
+import net.minecraft.advancements.critereon.RecipeUnlockedTrigger;
 import net.minecraft.core.BlockPos;
-import net.minecraft.core.RegistryAccess;
+import net.minecraft.core.HolderLookup;
+import net.minecraft.data.recipes.RecipeOutput;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.ItemTags;
-import net.minecraft.world.Container;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.crafting.Ingredient;
-import net.minecraft.world.item.crafting.RecipeType;
+import net.minecraft.world.item.crafting.*;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
-import net.minecraftforge.fluids.FluidStack;
+import net.minecraft.world.level.block.state.BlockState;
+import net.neoforged.neoforge.fluids.FluidStack;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.stream.Stream;
+public class FluidExtractorRecipe implements Recipe<CraftingInput> {
 
-public class FluidExtractorRecipe extends SerializableRecipe {
-
-    public static List<FluidExtractorRecipe> RECIPES = new ArrayList<>();
-
-    static {
-        new FluidExtractorRecipe(new ResourceLocation(Reference.MOD_ID, "acacia"), new Ingredient.ItemValue(new ItemStack(Blocks.ACACIA_LOG)), Blocks.STRIPPED_ACACIA_LOG, 0.010f, new FluidStack(ModuleCore.LATEX.getSourceFluid().get(), 4), false);
-        new FluidExtractorRecipe(new ResourceLocation(Reference.MOD_ID, "dark_oak"), new Ingredient.ItemValue(new ItemStack(Blocks.DARK_OAK_LOG)), Blocks.STRIPPED_DARK_OAK_LOG, 0.010f, new FluidStack(ModuleCore.LATEX.getSourceFluid().get(), 3), false);
-        new FluidExtractorRecipe(new ResourceLocation(Reference.MOD_ID, "oak"), new Ingredient.ItemValue(new ItemStack(Blocks.OAK_LOG)), Blocks.STRIPPED_OAK_LOG, 0.010f, new FluidStack(ModuleCore.LATEX.getSourceFluid().get(), 2), false);
-        new FluidExtractorRecipe(new ResourceLocation(Reference.MOD_ID, "spruce"), new Ingredient.ItemValue(new ItemStack(Blocks.SPRUCE_LOG)), Blocks.STRIPPED_SPRUCE_LOG, 0.010f, new FluidStack(ModuleCore.LATEX.getSourceFluid().get(), 2), false);
-        new FluidExtractorRecipe(new ResourceLocation(Reference.MOD_ID, "birch"), new Ingredient.ItemValue(new ItemStack(Blocks.BIRCH_LOG)), Blocks.STRIPPED_BIRCH_LOG, 0.010f, new FluidStack(ModuleCore.LATEX.getSourceFluid().get(), 2), false);
-        new FluidExtractorRecipe(new ResourceLocation(Reference.MOD_ID, "jungle"), new Ingredient.ItemValue(new ItemStack(Blocks.JUNGLE_LOG)), Blocks.STRIPPED_JUNGLE_LOG, 0.010f, new FluidStack(ModuleCore.LATEX.getSourceFluid().get(), 2), false);
-        new FluidExtractorRecipe(new ResourceLocation(Reference.MOD_ID, "default"), new Ingredient.TagValue(ItemTags.LOGS), Blocks.AIR, 0.010f, new FluidStack(ModuleCore.LATEX.getSourceFluid().get(), 1), true);
-    }
-
-    public Ingredient.Value input;
-    public Block result;
+    public static final MapCodec<FluidExtractorRecipe> CODEC = RecordCodecBuilder.mapCodec(in -> in.group(
+            Ingredient.CODEC.fieldOf("input").forGetter(o -> o.input),
+            BlockState.CODEC.fieldOf("result").forGetter(o -> o.result),
+            Codec.FLOAT.fieldOf("breakChance").forGetter(o -> o.breakChance),
+            FluidStack.CODEC.fieldOf("output").forGetter(o -> o.output),
+            Codec.BOOL.fieldOf("defaultRecipe").forGetter(o -> o.defaultRecipe)
+    ).apply(in, FluidExtractorRecipe::new));
+    public Ingredient input;
+    public BlockState result;
     public float breakChance;
     public FluidStack output;
     public boolean defaultRecipe;
 
-    // see updateIngredient()
-    private transient Ingredient ingredient;
-
-    public FluidExtractorRecipe(ResourceLocation resourceLocation) {
-        super(resourceLocation);
-    }
-
-    public FluidExtractorRecipe(ResourceLocation resourceLocation, Ingredient.Value input, Block result, float breakChance, FluidStack output, boolean defaultRecipe) {
-        super(resourceLocation);
+    public FluidExtractorRecipe(Ingredient input, BlockState result, float breakChance, FluidStack output, boolean defaultRecipe) {
         this.input = input;
         this.result = result;
         this.breakChance = breakChance;
         this.output = output;
         this.defaultRecipe = defaultRecipe;
-        RECIPES.add(this);
+    }
+    public FluidExtractorRecipe() {
+    }
+
+    public static void init(RecipeOutput output) {
+        createRecipe(output, "acacia", new FluidExtractorRecipe(Ingredient.of(new ItemStack(Blocks.ACACIA_LOG)), Blocks.STRIPPED_ACACIA_LOG.defaultBlockState(), 0.010f, new FluidStack(ModuleCore.LATEX.getSourceFluid().get(), 4), false));
+        createRecipe(output, "mangrove", new FluidExtractorRecipe(Ingredient.of(new ItemStack(Blocks.MANGROVE_LOG)), Blocks.STRIPPED_MANGROVE_LOG.defaultBlockState(), 0.010f, new FluidStack(ModuleCore.LATEX.getSourceFluid().get(), 4), false));
+        createRecipe(output, "dark_oak", new FluidExtractorRecipe(Ingredient.of(new ItemStack(Blocks.DARK_OAK_LOG)), Blocks.STRIPPED_DARK_OAK_LOG.defaultBlockState(), 0.010f, new FluidStack(ModuleCore.LATEX.getSourceFluid().get(), 3), false));
+        createRecipe(output, "cherry", new FluidExtractorRecipe(Ingredient.of(new ItemStack(Blocks.CHERRY_LOG)), Blocks.STRIPPED_CHERRY_LOG.defaultBlockState(), 0.010f, new FluidStack(ModuleCore.LATEX.getSourceFluid().get(), 3), false));
+        createRecipe(output, "oak", new FluidExtractorRecipe(Ingredient.of(new ItemStack(Blocks.OAK_LOG)), Blocks.STRIPPED_OAK_LOG.defaultBlockState(), 0.010f, new FluidStack(ModuleCore.LATEX.getSourceFluid().get(), 2), false));
+        createRecipe(output, "spruce", new FluidExtractorRecipe(Ingredient.of(new ItemStack(Blocks.SPRUCE_LOG)), Blocks.STRIPPED_SPRUCE_LOG.defaultBlockState(), 0.010f, new FluidStack(ModuleCore.LATEX.getSourceFluid().get(), 2), false));
+        createRecipe(output, "birch", new FluidExtractorRecipe(Ingredient.of(new ItemStack(Blocks.BIRCH_LOG)), Blocks.STRIPPED_BIRCH_LOG.defaultBlockState(), 0.010f, new FluidStack(ModuleCore.LATEX.getSourceFluid().get(), 2), false));
+        createRecipe(output, "jungle", new FluidExtractorRecipe(Ingredient.of(new ItemStack(Blocks.JUNGLE_LOG)), Blocks.STRIPPED_JUNGLE_LOG.defaultBlockState(), 0.010f, new FluidStack(ModuleCore.LATEX.getSourceFluid().get(), 2), false));
+        createRecipe(output, "default", new FluidExtractorRecipe(Ingredient.of(ItemTags.LOGS), Blocks.AIR.defaultBlockState(), 0.010f, new FluidStack(ModuleCore.LATEX.getSourceFluid().get(), 1), true));
+    }
+
+    public static void createRecipe(RecipeOutput recipeOutput, String name, FluidExtractorRecipe recipe) {
+        var rl = generateRL(name);
+        var advancementHolder = recipeOutput.advancement()
+                .addCriterion("has_the_recipe", RecipeUnlockedTrigger.unlocked(rl))
+                .rewards(AdvancementRewards.Builder.recipe(rl))
+                .requirements(AdvancementRequirements.Strategy.OR).build(rl);
+        recipeOutput.accept(rl, recipe, advancementHolder);
+    }
+
+    public static ResourceLocation generateRL(String key) {
+        return ResourceLocation.fromNamespaceAndPath(Reference.MOD_ID, "fluid_extractor/" + key);
     }
 
     public boolean matches(Level world, BlockPos pos) {
-        return getOrCacheInput().test(new ItemStack(world.getBlockState(pos).getBlock()));
+        return input.test(new ItemStack(world.getBlockState(pos).getBlock()));
     }
 
     @Override
-    public boolean matches(Container inv, Level worldIn) {
+    public boolean matches(CraftingInput craftingInput, Level level) {
         return false;
     }
 
     @Override
-    public ItemStack assemble(Container inv, RegistryAccess access) {
+    public ItemStack assemble(CraftingInput craftingInput, HolderLookup.Provider provider) {
         return ItemStack.EMPTY;
     }
 
@@ -100,13 +112,13 @@ public class FluidExtractorRecipe extends SerializableRecipe {
     }
 
     @Override
-    public ItemStack getResultItem(RegistryAccess registryAccess) {
-        return input.getItems().iterator().next();
+    public ItemStack getResultItem(HolderLookup.Provider provider) {
+        return ItemStack.EMPTY;
     }
 
     @Override
-    public GenericSerializer<? extends SerializableRecipe> getSerializer() {
-        return (GenericSerializer<? extends SerializableRecipe>) ModuleCore.FLUID_EXTRACTOR_SERIALIZER.get();
+    public RecipeSerializer<?> getSerializer() {
+        return ModuleCore.FLUID_EXTRACTOR_SERIALIZER.get();
     }
 
     @Override
@@ -114,18 +126,5 @@ public class FluidExtractorRecipe extends SerializableRecipe {
         return ModuleCore.FLUID_EXTRACTOR_TYPE.get();
     }
 
-    /**
-     * This is used to cache the ingredient used in {@link #matches(Level, BlockPos)} in order to
-     * avoid creating the same Ingredient each work tick, which could cause a massive performance hit.
-     * <p>
-     * Note that this is not an optimal solution, as ideally, the recipe itself would use {@link Ingredient} directly,
-     * however due to the way recipes are currently being created at static init, this would cause crashes with unbound
-     * tags during Ingredient construction (specifically during Forge's isSimple check)
-     */
-    private Ingredient getOrCacheInput() {
-        if (ingredient == null) {
-            ingredient = Ingredient.fromValues(Stream.of(this.input));
-        }
-        return ingredient;
-    }
+
 }

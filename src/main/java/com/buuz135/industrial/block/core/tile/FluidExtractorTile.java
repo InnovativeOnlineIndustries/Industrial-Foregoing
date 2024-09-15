@@ -39,8 +39,8 @@ import net.minecraft.world.level.ChunkPos;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.dimension.DimensionType;
-import net.minecraftforge.fluids.FluidStack;
-import net.minecraftforge.fluids.capability.IFluidHandler;
+import net.neoforged.neoforge.fluids.FluidStack;
+import net.neoforged.neoforge.fluids.capability.IFluidHandler;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -86,7 +86,7 @@ public class FluidExtractorTile extends IndustrialAreaWorkingTile<FluidExtractor
                 }
                 if (extractionProgress.getProgress() > 7) {
                     extractionProgress.setProgress(0);
-                    this.level.setBlockAndUpdate(pos, currentRecipe.result.defaultBlockState());
+                    this.level.setBlockAndUpdate(pos, currentRecipe.result);
                     if (currentRecipe.output.getFluid().isSame(ModuleCore.LATEX.getSourceFluid().get())) {
                         tank.fillForced(new FluidStack(currentRecipe.output.getFluid(), currentRecipe.output.getAmount() * (hasEnergy(powerPerOperation) ? 200 : 1)), IFluidHandler.FluidAction.EXECUTE);
                     }

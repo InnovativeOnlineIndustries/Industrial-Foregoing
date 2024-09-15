@@ -34,19 +34,18 @@ import com.hrznstudio.titanium.component.fluid.FluidTankComponent;
 import com.hrznstudio.titanium.component.fluid.SidedFluidTankComponent;
 import com.hrznstudio.titanium.component.inventory.SidedInventoryComponent;
 import com.hrznstudio.titanium.component.progress.ProgressBarComponent;
+import com.hrznstudio.titanium.module.BlockWithTile;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.DyeColor;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
-import net.minecraftforge.common.util.INBTSerializable;
-import net.minecraftforge.registries.RegistryObject;
+import net.neoforged.api.distmarker.Dist;
+import net.neoforged.api.distmarker.OnlyIn;
+import net.neoforged.neoforge.common.util.INBTSerializable;
 import org.apache.commons.lang3.tuple.Pair;
 
 import javax.annotation.Nonnull;
@@ -65,7 +64,7 @@ public class MycelialGeneratorTile extends IndustrialGeneratorTile<MycelialGener
     @Save
     private String owner;
 
-    public MycelialGeneratorTile(Pair<RegistryObject<Block>, RegistryObject<BlockEntityType<?>>> basicTileBlock, IMycelialGeneratorType type, BlockPos blockPos, BlockState blockState) {
+    public MycelialGeneratorTile(BlockWithTile basicTileBlock, IMycelialGeneratorType type, BlockPos blockPos, BlockState blockState) {
         super(basicTileBlock, blockPos, blockState);
         this.type = type;
         this.powerGeneration = 10;
@@ -150,19 +149,19 @@ public class MycelialGeneratorTile extends IndustrialGeneratorTile<MycelialGener
     }
 
     @Override
-    protected void saveAdditional(CompoundTag compoundTag) {
-        super.saveAdditional(compoundTag);
+    protected void saveAdditional(CompoundTag compoundTag, HolderLookup.Provider provider) {
+        super.saveAdditional(compoundTag, provider);
         for (int i = 0; i < this.inputs.length; i++) {
-            compoundTag.put("input_" + i, this.inputs[i].serializeNBT());
+            compoundTag.put("input_" + i, this.inputs[i].serializeNBT(provider));
         }
     }
 
     @Override
-    public void load(CompoundTag compound) {
+    public void loadAdditional(CompoundTag compound, HolderLookup.Provider provider) {
         for (int i = 0; i < this.inputs.length; i++) {
-            this.inputs[i].deserializeNBT(compound.getCompound("input_" + i));
+            this.inputs[i].deserializeNBT(provider, compound.getCompound("input_" + i));
         }
-        super.load(compound);
+        super.loadAdditional(compound, provider);
     }
 
     @Override

@@ -33,23 +33,20 @@ import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.Vec3;
-import net.minecraftforge.common.ForgeHooks;
-import net.minecraftforge.common.util.FakePlayer;
+import net.neoforged.neoforge.common.CommonHooks;
+import net.neoforged.neoforge.common.util.FakePlayer;
 
 import java.util.UUID;
 
 public class IFFakePlayer extends FakePlayer {
 
-    private static final UUID uuid = UUID.fromString("ec5b5875-ebb5-4b47-833b-0de37ac9e6d7");
 
-    private static GameProfile PROFILE = new GameProfile(uuid, "[IF]");
-
-    public IFFakePlayer(ServerLevel worldIn) {
-        super(worldIn, PROFILE);
+    public IFFakePlayer(ServerLevel worldIn, String uuid) {
+        super(worldIn, new GameProfile(UUID.fromString(uuid), "[IF]"));
     }
 
     public boolean placeBlock(Level world, BlockPos pos, ItemStack stack) {
         this.setItemInHand(InteractionHand.MAIN_HAND, stack);
-        return ForgeHooks.onPlaceItemIntoWorld(new UseOnContext(this, InteractionHand.MAIN_HAND, new BlockHitResult(new Vec3(0, 0, 0), Direction.DOWN, pos, false))) == InteractionResult.SUCCESS;
+        return CommonHooks.onPlaceItemIntoWorld(new UseOnContext(this, InteractionHand.MAIN_HAND, new BlockHitResult(new Vec3(0, 0, 0), Direction.DOWN, pos, false))) == InteractionResult.SUCCESS;
     }
 }

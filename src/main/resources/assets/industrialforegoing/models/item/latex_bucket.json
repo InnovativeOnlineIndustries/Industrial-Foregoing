@@ -1,5 +1,5 @@
 {
-  "parent": "forge:item/bucket",
-  "loader": "forge:fluid_container",
+  "parent": "neoforge:item/bucket",
+  "loader": "neoforge:fluid_container",
   "fluid": "industrialforegoing:latex"
 }

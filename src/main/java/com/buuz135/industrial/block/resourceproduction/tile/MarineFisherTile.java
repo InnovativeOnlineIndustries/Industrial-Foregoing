@@ -38,14 +38,13 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.material.FluidState;
 import net.minecraft.world.level.material.Fluids;
 import net.minecraft.world.level.storage.loot.BuiltInLootTables;
-import net.minecraft.world.level.storage.loot.LootContext;
 import net.minecraft.world.level.storage.loot.LootParams;
 import net.minecraft.world.level.storage.loot.LootTable;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParamSets;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParams;
 import net.minecraft.world.phys.Vec3;
 import net.minecraft.world.phys.shapes.VoxelShape;
-import net.minecraftforge.items.ItemHandlerHelper;
+import net.neoforged.neoforge.items.ItemHandlerHelper;
 
 import javax.annotation.Nonnull;
 
@@ -71,9 +70,9 @@ public class MarineFisherTile extends IndustrialAreaWorkingTile<MarineFisherTile
     public WorkAction work() {
         if (hasEnergy(powerPerOperation)) {
             if (getWaterSources() < 9) return new WorkAction(1, 0);
-            LootTable fishingTable = this.level.getServer().getLootData().getLootTable(BuiltInLootTables.FISHING);
+            LootTable fishingTable = this.level.getServer().reloadableRegistries().getLootTable(BuiltInLootTables.FISHING);
             if (this.level.random.nextDouble() <= 0.02) {
-                fishingTable = this.level.getServer().getLootData().getLootTable(BuiltInLootTables.FISHING_TREASURE);
+                fishingTable = this.level.getServer().reloadableRegistries().getLootTable(BuiltInLootTables.FISHING_TREASURE);
             }
             var lootParams = new LootParams.Builder((ServerLevel) this.level).withParameter(LootContextParams.ORIGIN, new Vec3(this.worldPosition.getX(), this.worldPosition.getY(), this.worldPosition.getZ())).withParameter(LootContextParams.TOOL, new ItemStack(Items.FISHING_ROD)).create(LootContextParamSets.FISHING);
             fishingTable.getRandomItems(lootParams).forEach(stack -> ItemHandlerHelper.insertItem(output, stack, false));

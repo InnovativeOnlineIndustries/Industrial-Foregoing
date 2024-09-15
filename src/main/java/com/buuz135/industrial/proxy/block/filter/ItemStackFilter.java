@@ -24,14 +24,15 @@ package com.buuz135.industrial.proxy.block.filter;
 
 import com.buuz135.industrial.item.MobImprisonmentToolItem;
 import com.buuz135.industrial.module.ModuleTool;
+import net.minecraft.core.HolderLookup;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.item.ItemStack;
-import net.minecraftforge.fluids.FluidStack;
-import net.minecraftforge.fluids.FluidUtil;
-import net.minecraftforge.registries.ForgeRegistries;
+import net.neoforged.neoforge.fluids.FluidStack;
+import net.neoforged.neoforge.fluids.FluidUtil;
 
 public class ItemStackFilter extends AbstractFilter<Entity> {
 
@@ -54,8 +55,8 @@ public class ItemStackFilter extends AbstractFilter<Entity> {
         for (GhostSlot stack : this.getFilter()) {
             if (entity instanceof ItemEntity && ItemStack.isSameItem(stack.getStack(), ((ItemEntity) entity).getItem()))
                 return true;
-            if (entity instanceof LivingEntity && ForgeRegistries.ITEMS.getKey(stack.getStack().getItem()).equals(ForgeRegistries.ITEMS.getKey(ModuleTool.MOB_IMPRISONMENT_TOOL.get())) && ((MobImprisonmentToolItem) ModuleTool.MOB_IMPRISONMENT_TOOL.get()).containsEntity(stack.getStack())
-                    && ForgeRegistries.ENTITY_TYPES.getKey(entity.getType()).toString().equalsIgnoreCase(((MobImprisonmentToolItem) ModuleTool.MOB_IMPRISONMENT_TOOL.get()).getID(stack.getStack()))) {
+            if (entity instanceof LivingEntity && stack.getStack().is(ModuleTool.MOB_IMPRISONMENT_TOOL) && ((MobImprisonmentToolItem) ModuleTool.MOB_IMPRISONMENT_TOOL.get()).containsEntity(stack.getStack())
+                    && BuiltInRegistries.ENTITY_TYPE.getKey(entity.getType()).toString().equalsIgnoreCase(((MobImprisonmentToolItem) ModuleTool.MOB_IMPRISONMENT_TOOL.get()).getID(stack.getStack()))) {
                 return true;
             }
         }
@@ -84,7 +85,7 @@ public class ItemStackFilter extends AbstractFilter<Entity> {
         if (isEmpty) return false;
         for (GhostSlot stack : this.getFilter()) {
             FluidStack original = FluidUtil.getFluidContained(stack.getStack()).orElse(null);
-            if (original != null && original.isFluidEqual(fluidStack)) return true;
+            if (original != null && FluidStack.isSameFluidSameComponents(original, fluidStack)) return true;
         }
         return false;
     }
@@ -95,20 +96,20 @@ public class ItemStackFilter extends AbstractFilter<Entity> {
     }
 
     @Override
-    public CompoundTag serializeNBT() {
+    public CompoundTag serializeNBT(HolderLookup.Provider provider) {
         CompoundTag compound = new CompoundTag();
         for (int i = 0; i < this.getFilter().length; i++) {
             if (!this.getFilter()[i].getStack().isEmpty())
-                compound.put(String.valueOf(i), this.getFilter()[i].getStack().serializeNBT());
+                compound.put(String.valueOf(i), this.getFilter()[i].getStack().saveOptional(provider));
         }
         return compound;
     }
 
     @Override
-    public void deserializeNBT(CompoundTag nbt) {
+    public void deserializeNBT(HolderLookup.Provider provider, CompoundTag nbt) {
         for (int i = 0; i < this.getFilter().length; i++) {
             if (nbt.contains(String.valueOf(i))) {
-                this.getFilter()[i].setStack(ItemStack.of(nbt.getCompound(String.valueOf(i))));
+                this.getFilter()[i].setStack(ItemStack.parseOptional(provider, nbt.getCompound(String.valueOf(i))));
             } else this.getFilter()[i].setStack(ItemStack.EMPTY);
         }
     }

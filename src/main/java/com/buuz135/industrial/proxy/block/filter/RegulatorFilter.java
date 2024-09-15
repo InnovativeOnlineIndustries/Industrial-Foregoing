@@ -21,6 +21,7 @@
  */
 package com.buuz135.industrial.proxy.block.filter;
 
+import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.item.ItemStack;
 
@@ -85,12 +86,12 @@ public abstract class RegulatorFilter<TYPE, CAP> {
         }
     }
 
-    public CompoundTag serializeNBT() {
+    public CompoundTag serializeNBT(HolderLookup.Provider provider) {
         CompoundTag compound = new CompoundTag();
         for (int i = 0; i < this.getFilter().length; i++) {
             if (!this.getFilter()[i].getStack().isEmpty()) {
                 CompoundTag slot = new CompoundTag();
-                slot.put("Stack", this.getFilter()[i].getStack().serializeNBT());
+                slot.put("Stack", this.getFilter()[i].getStack().saveOptional(provider));
                 slot.putInt("Amount", this.getFilter()[i].getAmount());
                 compound.put(String.valueOf(i), slot);
             }
@@ -99,11 +100,11 @@ public abstract class RegulatorFilter<TYPE, CAP> {
         return compound;
     }
 
-    public void deserializeNBT(CompoundTag nbt) {
+    public void deserializeNBT(HolderLookup.Provider provider, CompoundTag nbt) {
         for (int i = 0; i < this.getFilter().length; i++) {
             if (nbt.contains(String.valueOf(i))) {
                 CompoundTag slot = nbt.getCompound(String.valueOf(i));
-                this.getFilter()[i].setStack(ItemStack.of(slot.getCompound("Stack")));
+                this.getFilter()[i].setStack(ItemStack.parseOptional(provider, slot.getCompound("Stack")));
                 this.getFilter()[i].setAmount(slot.getInt("Amount"));
             } else {
                 this.getFilter()[i].setStack(ItemStack.EMPTY);

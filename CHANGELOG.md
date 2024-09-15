@@ -1,3 +1,21 @@
+# Version 3.6.0
+
+* Working area renders shouldn't have z fighting anymore
+* Machine Frames can now be placed
+* Removed Black Hole Units and Tanks & Controller
+* Infinity Backpacks can now be placed so contents can be extracted easily
+* Laser recipes now use biome tags and dimensions
+* Infinity trident now has increased launch speed based on tier and increased max loyalty and riptide (no longer needs
+  water to use, and does more damage)
+* Machines that use fake players now use the player uuid
+* Addons now have a description of what they do
+* Transporters now have an inventory for addons
+* In the Enchantment Factory now you can choose what level you want to enchant an item on
+* Buffed bioreactor production
+* Ore/Fluid Laser Base depth selector is now a text field
+* Added a Filter to the Potion Brewer, now items can only be extracted if it matches the filter
+* Ported to 1.21
+
 # Version 3.5.19
 
 * Fixed Machine Settings Copier not working properly in some machines

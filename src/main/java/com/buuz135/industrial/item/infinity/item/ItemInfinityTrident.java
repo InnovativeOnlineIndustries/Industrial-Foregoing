@@ -27,6 +27,7 @@ import com.buuz135.industrial.item.infinity.InfinityTier;
 import com.buuz135.industrial.item.infinity.ItemInfinity;
 import com.buuz135.industrial.module.ModuleCore;
 import com.buuz135.industrial.recipe.DissolutionChamberRecipe;
+import com.buuz135.industrial.utils.IFAttachments;
 import com.buuz135.industrial.utils.IndustrialTags;
 import com.hrznstudio.titanium.api.IFactory;
 import com.hrznstudio.titanium.api.client.AssetTypes;
@@ -41,7 +42,8 @@ import com.hrznstudio.titanium.item.BasicItem;
 import com.hrznstudio.titanium.tab.TitaniumTab;
 import com.hrznstudio.titanium.util.FacingUtil;
 import net.minecraft.ChatFormatting;
-import net.minecraft.data.recipes.FinishedRecipe;
+import net.minecraft.core.Holder;
+import net.minecraft.data.recipes.RecipeOutput;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.sounds.SoundEvent;
@@ -51,27 +53,25 @@ import net.minecraft.stats.Stats;
 import net.minecraft.util.Mth;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResultHolder;
+import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.MoverType;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.projectile.AbstractArrow;
-import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.UseAnim;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.item.enchantment.Enchantment;
-import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.item.enchantment.Enchantments;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.Vec3;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
-import net.minecraftforge.fluids.FluidStack;
-import net.minecraftforge.registries.ForgeRegistries;
+import net.neoforged.api.distmarker.Dist;
+import net.neoforged.api.distmarker.OnlyIn;
+import net.neoforged.neoforge.fluids.FluidStack;
 
 import java.util.List;
-import java.util.function.Consumer;
+import java.util.Optional;
 import java.util.function.Supplier;
 
 public class ItemInfinityTrident extends ItemInfinity {
@@ -80,8 +80,8 @@ public class ItemInfinityTrident extends ItemInfinity {
     private static String RIPTIDE_NBT = "Riptide";
     private static String CHANNELING_NBT = "Channeling";
 
-    private static int LOYALTY_MAX = 5;
-    private static int RIPTIDE_MAX = 5;
+    private static int LOYALTY_MAX = 7;
+    private static int RIPTIDE_MAX = 7;
 
 
     public static int POWER_CONSUMPTION = 100000;
@@ -94,11 +94,9 @@ public class ItemInfinityTrident extends ItemInfinity {
     @Override
     public void addNbt(ItemStack stack, long power, int fuel, boolean special) {
         super.addNbt(stack, power, fuel, special);
-        CompoundTag nbt = stack.getOrCreateTag();
-        nbt.putInt(LOYALTY_NBT, 0);
-        nbt.putInt(RIPTIDE_NBT, 0);
-        nbt.putBoolean(CHANNELING_NBT, false);
-        stack.setTag(nbt);
+        stack.set(IFAttachments.INFINITY_TRIDENT_LOYALTY, 0);
+        stack.set(IFAttachments.INFINITY_TRIDENT_RIPTIDE, 0);
+        stack.set(IFAttachments.INFINITY_TRIDENT_CHANNELING, false);
     }
 
 
@@ -107,16 +105,18 @@ public class ItemInfinityTrident extends ItemInfinity {
         return UseAnim.SPEAR;
     }
 
+
     @Override
-    public int getUseDuration(ItemStack stack) {
+    public int getUseDuration(ItemStack stack, LivingEntity user) {
         return 72000 / 2;
     }
 
     @Override
     public InteractionResultHolder<ItemStack> use(Level worldIn, Player playerIn, InteractionHand handIn) {
         ItemStack itemstack = playerIn.getItemInHand(handIn);
-        if (EnchantmentHelper.getRiptide(itemstack) > 0 && !playerIn.isInWaterOrRain()) {
-            return InteractionResultHolder.fail(itemstack);
+        if (getCurrentRiptide(itemstack) > 0 && !playerIn.isShiftKeyDown()) {
+            playerIn.startUsingItem(handIn);
+            return InteractionResultHolder.consume(itemstack);
         } else if (!playerIn.isShiftKeyDown()) {
             playerIn.startUsingItem(handIn);
             return InteractionResultHolder.consume(itemstack);
@@ -125,44 +125,43 @@ public class ItemInfinityTrident extends ItemInfinity {
     }
 
     @Override
-    public boolean canApplyAtEnchantingTable(ItemStack stack, Enchantment enchantment) {
+    public boolean supportsEnchantment(ItemStack stack, Holder<Enchantment> enchantment) {
         if (enchantment.equals(Enchantments.LOYALTY) || enchantment.equals(Enchantments.RIPTIDE) || enchantment.equals(Enchantments.CHANNELING))
             return false;
-        return Items.TRIDENT.canApplyAtEnchantingTable(new ItemStack(Items.TRIDENT), enchantment);
+        return Items.TRIDENT.supportsEnchantment(new ItemStack(Items.TRIDENT), enchantment);
     }
 
     @Override
     public void releaseUsing(ItemStack stack, Level worldIn, LivingEntity entityLiving, int timeLeft) {
         if (entityLiving instanceof Player) {
             Player playerentity = (Player) entityLiving;
-            int i = this.getUseDuration(stack) - timeLeft;
+            int i = this.getUseDuration(stack, entityLiving) - timeLeft;
             if (i >= 10) {
                 int riptideModifier = getCurrentRiptide(stack);
                 if (riptideModifier <= 0 && enoughFuel(stack)) {
                     if (!worldIn.isClientSide) {
-                        stack.hurtAndBreak(1, playerentity, (player) -> {
-                            player.broadcastBreakEvent(entityLiving.getUsedItemHand());
-                        });
+                        stack.hurtAndBreak(1, playerentity, EquipmentSlot.MAINHAND);
                         if (riptideModifier == 0) {
                             consumeFuel(stack);
                             InfinityTridentEntity tridententity = new InfinityTridentEntity(worldIn, playerentity, stack);
-                            tridententity.shootFromRotation(playerentity, playerentity.xRot, playerentity.yRot, 0.0F, 2.5F + (float) riptideModifier * 0.5F, 1.0F);
-                            if (playerentity.abilities.instabuild) {
+                            tridententity.shootFromRotation(playerentity, playerentity.getXRot(), playerentity.getYRot(), 0.0F, 2.5F + InfinityTier.getTierBraquet(getPowerFromStack(stack)).getLeft().getRadius(), 0);
+
+                            if (playerentity.getAbilities().instabuild) {
                                 tridententity.pickup = AbstractArrow.Pickup.CREATIVE_ONLY;
                             }
 
                             worldIn.addFreshEntity(tridententity);
-                            worldIn.playSound((Player) null, tridententity, SoundEvents.TRIDENT_THROW, SoundSource.PLAYERS, 1.0F, 1.0F);
-                            if (!playerentity.abilities.instabuild) {
-                                playerentity.inventory.removeItem(stack);
+                            worldIn.playSound((Player) null, tridententity.getX(), tridententity.getY(), tridententity.getZ(), SoundEvents.TRIDENT_THROW, SoundSource.PLAYERS, 1.0F, 1.0F);
+                            if (!playerentity.getAbilities().instabuild) {
+                                playerentity.getInventory().removeItem(stack);
                             }
                         }
                     }
                 }
                 playerentity.awardStat(Stats.ITEM_USED.get(this));
                 if (riptideModifier > 0 && enoughFuel(stack)) {
-                    float f7 = playerentity.yRot;
-                    float f = playerentity.xRot;
+                    float f7 = playerentity.getYRot();
+                    float f = playerentity.getXRot();
                     float f1 = -Mth.sin(f7 * ((float) Math.PI / 180F)) * Mth.cos(f * ((float) Math.PI / 180F));
                     float f2 = -Mth.sin(f * ((float) Math.PI / 180F));
                     float f3 = Mth.cos(f7 * ((float) Math.PI / 180F)) * Mth.cos(f * ((float) Math.PI / 180F));
@@ -172,18 +171,18 @@ public class ItemInfinityTrident extends ItemInfinity {
                     f2 = f2 * (f5 / f4);
                     f3 = f3 * (f5 / f4);
                     playerentity.push((double) f1, (double) f2, (double) f3);
-                    playerentity.startAutoSpinAttack(20);
+                    playerentity.startAutoSpinAttack(20, (float) ((8 + riptideModifier + Math.pow(2, getSelectedTier(stack).getRadius())) * 0.5f), stack);
                     if (playerentity.onGround()) {
                         playerentity.move(MoverType.SELF, new Vec3(0.0D, (double) 1.1999999F, 0.0D));
                     }
 
                     SoundEvent soundevent;
                     if (riptideModifier >= 3) {
-                        soundevent = SoundEvents.TRIDENT_RIPTIDE_3;
+                        soundevent = SoundEvents.TRIDENT_RIPTIDE_3.value();
                     } else if (riptideModifier == 2) {
-                        soundevent = SoundEvents.TRIDENT_RIPTIDE_2;
+                        soundevent = SoundEvents.TRIDENT_RIPTIDE_2.value();
                     } else {
-                        soundevent = SoundEvents.TRIDENT_RIPTIDE_1;
+                        soundevent = SoundEvents.TRIDENT_RIPTIDE_1.value();
                     }
                     worldIn.playSound((Player) null, playerentity, soundevent, SoundSource.PLAYERS, 1.0F, 1.0F);
                     consumeFuel(stack);
@@ -195,33 +194,33 @@ public class ItemInfinityTrident extends ItemInfinity {
     //Trident stuff
 
     public int getCurrentLoyalty(ItemStack stack) {
-        return stack.getOrCreateTag().getInt(LOYALTY_NBT);
+        return stack.getOrDefault(IFAttachments.INFINITY_TRIDENT_LOYALTY, 0);
     }
 
     public int getMaxLoyalty(ItemStack stack) {
         InfinityTier infinityTier = InfinityTier.getTierBraquet(getPowerFromStack(stack)).getLeft();
-        return Math.min(Math.max(0, infinityTier.getRadius() - 1), LOYALTY_MAX);
+        return Math.min(Math.max(0, infinityTier.getRadius()), LOYALTY_MAX);
     }
 
     public void setLoyalty(ItemStack stack, int level) {
-        stack.getOrCreateTag().putInt(LOYALTY_NBT, level);
+        stack.set(IFAttachments.INFINITY_TRIDENT_LOYALTY, level);
     }
 
     public int getCurrentRiptide(ItemStack stack) {
-        return stack.getOrCreateTag().getInt(RIPTIDE_NBT);
+        return stack.getOrDefault(IFAttachments.INFINITY_TRIDENT_RIPTIDE, 0);
     }
 
     public int getMaxRiptide(ItemStack stack) {
         InfinityTier infinityTier = InfinityTier.getTierBraquet(getPowerFromStack(stack)).getLeft();
-        return Math.min(Math.max(0, infinityTier.getRadius() - 1), RIPTIDE_MAX);
+        return Math.min(Math.max(0, infinityTier.getRadius()), RIPTIDE_MAX);
     }
 
     public void setRiptide(ItemStack stack, int level) {
-        stack.getOrCreateTag().putInt(RIPTIDE_NBT, level);
+        stack.set(IFAttachments.INFINITY_TRIDENT_RIPTIDE, level);
     }
 
     public boolean getCurrentChanneling(ItemStack stack) {
-        return stack.getOrCreateTag().getBoolean(CHANNELING_NBT);
+        return stack.getOrDefault(IFAttachments.INFINITY_TRIDENT_CHANNELING, false);
     }
 
     public boolean canChanneling(ItemStack stack) {
@@ -229,7 +228,7 @@ public class ItemInfinityTrident extends ItemInfinity {
     }
 
     public void setChanneling(ItemStack stack, boolean enabled) {
-        stack.getOrCreateTag().putBoolean(CHANNELING_NBT, enabled);
+        stack.set(IFAttachments.INFINITY_TRIDENT_CHANNELING, enabled);
     }
 
     //GUI Stuff
@@ -292,19 +291,18 @@ public class ItemInfinityTrident extends ItemInfinity {
     }
 
     @Override
-    public void registerRecipe(Consumer<FinishedRecipe> consumer) {
-        new DissolutionChamberRecipe(ForgeRegistries.ITEMS.getKey(this),
-                new Ingredient.Value[]{
-                        new Ingredient.ItemValue(new ItemStack(Items.DIAMOND_BLOCK)),
-                        new Ingredient.ItemValue(new ItemStack(Items.TRIDENT)),
-                        new Ingredient.ItemValue(new ItemStack(Items.DIAMOND_BLOCK)),
-                        new Ingredient.ItemValue(new ItemStack(Items.DIAMOND_HOE)),
-                        new Ingredient.ItemValue(new ItemStack(ModuleCore.RANGE_ADDONS[11].get())),
-                        new Ingredient.TagValue(IndustrialTags.Items.GEAR_GOLD),
-                        new Ingredient.TagValue(IndustrialTags.Items.GEAR_GOLD),
-                        new Ingredient.TagValue(IndustrialTags.Items.GEAR_GOLD),
-                },
-                new FluidStack(ModuleCore.PINK_SLIME.getSourceFluid().get(), 2000), 400, new ItemStack(this), FluidStack.EMPTY);
+    public void registerRecipe(RecipeOutput consumer) {
+        DissolutionChamberRecipe.createRecipe(consumer, "ininity_trident", new DissolutionChamberRecipe(List.of(
+                Ingredient.of(new ItemStack(Items.DIAMOND_BLOCK)),
+                Ingredient.of(new ItemStack(Items.TRIDENT)),
+                Ingredient.of(new ItemStack(Items.DIAMOND_BLOCK)),
+                Ingredient.of(new ItemStack(Items.DIAMOND_HOE)),
+                Ingredient.of(new ItemStack(ModuleCore.RANGE_ADDONS[11].get())),
+                Ingredient.of(IndustrialTags.Items.GEAR_GOLD),
+                Ingredient.of(IndustrialTags.Items.GEAR_GOLD),
+                Ingredient.of(IndustrialTags.Items.GEAR_GOLD)
+        ), new FluidStack(ModuleCore.PINK_SLIME.getSourceFluid().get(), 2000), 400, Optional.of(new ItemStack(this)), Optional.empty()));
+
     }
 
     @Override
@@ -333,6 +331,12 @@ public class ItemInfinityTrident extends ItemInfinity {
                     break;
                 case 5:
                     level = "V";
+                    break;
+                case 6:
+                    level = "VI";
+                    break;
+                case 7:
+                    level = "VII";
                     break;
             }
             tooltip.add(Component.translatable(type).append(" " + level).withStyle(ChatFormatting.GRAY));

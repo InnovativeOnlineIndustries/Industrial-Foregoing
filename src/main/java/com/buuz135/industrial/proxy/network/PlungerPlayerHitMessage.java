@@ -23,7 +23,7 @@ package com.buuz135.industrial.proxy.network;
 
 import com.buuz135.industrial.entity.client.InfinityLauncherProjectileArmorLayer;
 import com.hrznstudio.titanium.network.Message;
-import net.minecraftforge.network.NetworkEvent;
+import net.neoforged.neoforge.network.handling.IPayloadContext;
 
 import java.util.UUID;
 
@@ -40,7 +40,7 @@ public class PlungerPlayerHitMessage extends Message {
     }
 
     @Override
-    protected void handleMessage(NetworkEvent.Context context) {
+    protected void handleMessage(IPayloadContext context) {
         context.enqueueWork(() -> {
             int amount = InfinityLauncherProjectileArmorLayer.PROJECTILE_AMOUNT.computeIfAbsent(entity.toString(), s -> 0);
             InfinityLauncherProjectileArmorLayer.PROJECTILE_AMOUNT.put(entity.toString(), amount + 1);

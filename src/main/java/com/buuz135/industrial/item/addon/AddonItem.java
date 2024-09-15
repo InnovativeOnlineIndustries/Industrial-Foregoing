@@ -5,7 +5,6 @@ import com.hrznstudio.titanium.block.tile.MachineTile;
 import com.hrznstudio.titanium.tab.TitaniumTab;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.item.context.UseOnContext;
-import net.minecraftforge.items.ItemHandlerHelper;
 
 public abstract class AddonItem extends IFCustomItem {
     public AddonItem(String name, TitaniumTab tab, Properties builder) {
@@ -22,7 +21,7 @@ public abstract class AddonItem extends IFCustomItem {
             var blockpos = context.getClickedPos();
             var entity = context.getLevel().getBlockEntity(blockpos);
             if (entity instanceof MachineTile<?> machineTile) {
-                var stack = ItemHandlerHelper.copyStackWithSize(context.getItemInHand(), 1);
+                var stack = context.getItemInHand().copyWithCount(1);
                 if (machineTile.canAcceptAugment(stack)) {
                     var augmentInv = machineTile.getAugmentInventory();
                     for (int i = 0; i < augmentInv.getSlots(); i++) {

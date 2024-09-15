@@ -1,339 +1,126 @@
-import se.bjurr.gitchangelog.plugin.gradle.GitChangelogTask
-
-buildscript {
-    repositories {
-        jcenter()
-        mavenCentral()
-        maven { url = "https://files.minecraftforge.net/maven" }
-        maven {
-            url "https://plugins.gradle.org/m2/"
-        }
-    }
-    configurations {
-        classpath.resolutionStrategy {
-            cacheDynamicVersionsFor 10, 'seconds'
-            cacheChangingModulesFor 0, 'seconds'
-        }
-    }
-    dependencies {
-        classpath group: 'net.minecraftforge.gradle', name: 'ForgeGradle', version: '5.1.+', changing: true
-        classpath "gradle.plugin.com.matthewprenger:CurseGradle:1.4.0"
-    }
-}
-
 plugins {
-    id "com.github.hierynomus.license" version "0.16.1"
-    id 'java'
+    id 'java-library'
+    id 'eclipse'
+    id 'idea'
     id 'maven-publish'
-    id "com.matthewprenger.cursegradle" version "1.4.0"
-    id "se.bjurr.gitchangelog.git-changelog-gradle-plugin" version "1.64"
-    id "com.modrinth.minotaur" version "2.+"
-}
-apply plugin: 'net.minecraftforge.gradle'
-apply plugin: 'eclipse'
-
-def isReleaseBranch = System.getenv("BRANCH") == "release-1.20";
-
-
-group = "com.buuz135"
-archivesBaseName = "industrial-foregoing"
-version = "${minecraftVersion}-${project.api_version}"
-if (System.getenv('BUILD_NUMBER') != null) {
-    version += "." + System.getenv('BUILD_NUMBER')
+    id 'net.neoforged.moddev' version '0.1.112'
 }
 
-java.toolchain.languageVersion = JavaLanguageVersion.of(17)
+version = minecraft_version + "-" + mod_version
+group = mod_group_id
 
-println('Java: ' + System.getProperty('java.version') + ' JVM: ' + System.getProperty('java.vm.version') + '(' + System.getProperty('java.vendor') + ') Arch: ' + System.getProperty('os.arch'))
+repositories {
+    mavenLocal()
+    maven {
+        name = "BlameJared maven"
+        url = "https://maven.blamejared.com/"
+    }
+    maven {
+        url "https://www.cursemaven.com"
+        content {
+            includeGroup "curse.maven"
+        }
+    }
+}
 
-minecraft {
-    mappings channel: 'official', version: '1.20.1'
-    accessTransformer = file('src/main/resources/META-INF/accesstransformer.cfg')
+base {
+    archivesName = mod_id
+}
+
+java.toolchain.languageVersion = JavaLanguageVersion.of(21)
+
+//minecraft.accessTransformers.file rootProject.file('src/main/resources/META-INF/accesstransformer.cfg')
+//minecraft.accessTransformers.entry public net.minecraft.client.Minecraft textureManager # textureManager
+
+// Default run configurations.
+// These can be tweaked, removed, or duplicated as needed.
+neoForge {
+    version = "${neo_version}"
+    //accessTransformers.add(file('src/main/resources/META-INF/accesstransformer.cfg'))
+    parchment {
+        minecraftVersion = '1.21'
+        mappingsVersion = '2024.06.23'
+    }
 
     runs {
         client {
-            workingDirectory project.file('run')
-
-            // Recommended logging data for a userdev environment
-            property 'forge.logging.markers', 'SCAN,REGISTRIES,REGISTRYDUMP'
-
-            // Recommended logging level for the console
-            property 'forge.logging.console.level', 'debug'
-
-            property 'mixin.env.disableRefMap', 'true'
-            property 'legacyClassPath', '{minecraft_classpath}'
-
-            mods {
-                industrialforegoing {
-                    source sourceSets.main
-                }
-            }
+            client()
         }
         server {
-            workingDirectory project.file('run')
-
-            // Recommended logging data for a userdev environment
-            property 'forge.logging.markers', 'SCAN,REGISTRIES,REGISTRYDUMP'
-
-            // Recommended logging level for the console
-            property 'forge.logging.console.level', 'debug'
-
-            property 'mixin.env.disableRefMap', 'true'
-
-
-            mods {
-                industrialforegoing {
-                    source sourceSets.main
-                }
-            }
+            server()
         }
         data {
-            workingDirectory project.file('run')
-
-            // Recommended logging data for a userdev environment
-            property 'forge.logging.markers', 'SCAN,REGISTRIES,REGISTRYDUMP'
-
-            // Recommended logging level for the console
-            property 'forge.logging.console.level', 'debug'
-
-            property 'mixin.env.disableRefMap', 'true'
-
-            // Specify the modid for data generation, where to output the resulting resource, and where to look for existing resources.
-            args '--mod', 'industrialforegoing', '--all', '--output', file('src/generated/resources/'), '--existing', file('src/main/resources/')
-
-            mods {
-                industrialforegoing {
-                    source sourceSets.main
-                }
-            }
+            data()
+            programArguments.addAll '--mod', 'industrialforegoing', '--all', '--output', file('src/generated/resources/').getAbsolutePath(), '--existing', file('src/main/resources/').getAbsolutePath()
         }
     }
+
+    mods {
+        industrialforegoing {
+            sourceSet sourceSets.main
+        }
+    }
+
 }
 
 // Include resources generated by data generators.
 sourceSets.main.resources { srcDir 'src/generated/resources' }
 
-repositories {
-    mavenLocal()
-    mavenCentral()
-    jcenter()
-
-    maven {
-        url "https://maven.tterrag.com/"
-    }
-    maven {
-        url 'https://cdn.hrzn.studio/maven/'
-    }
-    maven {
-        name 'jared maven'
-        url "https://maven.blamejared.com/"
-    }
-    maven {
-        url 'https://www.dogforce-games.com/maven/'
-    }
-    maven {
-        url = "https://www.cursemaven.com"
-    }
-    maven { url "https://maven.theillusivec4.top/" }
-    maven { url "https://maven.saps.dev/minecraft/"}
-    maven {
-        // location of a maven mirror for JEI files, as a fallback
-        name = "ModMaven"
-        url = "https://modmaven.dev"
-    }
-    maven {
-        url "https://maven.architectury.dev/"
-    }
-}
 
 dependencies {
-    minecraft 'net.minecraftforge:forge:1.20.1-47.1.1'
-    //compileOnly fg.deobf("mezz.jei:jei-1.18.2:9.5.5.174")
-    // at runtime, use the full JEI jar
-    compileOnly fg.deobf("mezz.jei:jei-1.20.1-common-api:15.2.0.23")
-    compileOnly fg.deobf("mezz.jei:jei-1.20.1-forge-api:15.2.0.23")
-    // at runtime, use the full JEI jar for Forge
-    runtimeOnly fg.deobf("mezz.jei:jei-1.20.1-forge:15.2.0.23")
-    implementation fg.deobf(project.dependencies.create('com.hrznstudio:titanium:1.20.1-3.8.32'))
-
-    implementation fg.deobf("curse.maven:curios-309927:5086821")
-    implementation fg.deobf("curse.maven:patchouli-306770:4636277")
-
-    implementation fg.deobf("curse.maven:placebo-283644:4913663")
-    implementation fg.deobf("curse.maven:apothic-attributes-898963:4954000")
-    implementation fg.deobf("curse.maven:apotheosis-313970:4960128")
-    //runtimeOnly fg.deobf("curse.maven:immersive-engineering-231951:3755665")
-    //runtimeOnly fg.deobf("mekanism:Mekanism:${mekanism_version}")// core
-
-    // compiled from github
-    //compileOnly fg.deobf("vazkii.patchouli:Patchouli:1.17.1-56-SNAPSHOT:api")
-    //runtimeOnly fg.deobf("vazkii.patchouli:Patchouli:1.17.1-56-SNAPSHOT")
-
-    //if (findProject(':workspace') == null) {
-//    compileOnly fg.deobf("mezz.jei:jei-1.16.4:7.6.1.71:api")
-//    // at runtime, use the full JEI jar
-//    runtimeOnly fg.deobf("mezz.jei:jei-1.16.4:7.6.1.71")
-//    //}
-//    compileOnly fg.deobf("curse.maven:astral-sorcery-241721:3156477")
-//    compileOnly fg.deobf("blusunrize.immersiveengineering:ImmersiveEngineering:1.16.3-4.1.0-+")
-//    compileOnly fg.deobf("vazkii.patchouli:Patchouli:1.16.4-53.1:api")
-//    runtimeOnly fg.deobf("vazkii.patchouli:Patchouli:1.16.4-53.1")
-//    //runtimeOnly fg.deobf("curse.maven:zycraft:3099577")
-//    compileOnly fg.deobf("curse.maven:farmers-delight-398521:3091999")
-//    compileOnly fg.deobf("top.theillusivec4.curios:curios-forge:1.16.5-4.0.5.2:api")
-//    runtimeOnly fg.deobf("top.theillusivec4.curios:curios-forge:1.16.5-4.0.5.2")
-//    compileOnly fg.deobf("dev.ftb.mods:ftb-chunks-forge:1605.3.1-build.25")
-//    compileOnly fg.deobf("me.shedaniel:architectury-forge:1.19.27")
-//    compileOnly fg.deobf("dev.ftb.mods:ftb-library-forge:1605.3.1-build.48")
-//    compileOnly fg.deobf("dev.ftb.mods:ftb-teams-forge:1605.2.1-build.17")
-//    compileOnly fg.deobf("dev.ftb.mods:ftb-ranks-forge:1605.1.4-build.6")
+    implementation "curse.maven:jei-238222:5700879"
+    implementation project.dependencies.create('com.hrznstudio:titanium:1.21-4.0.20')
+    implementation "curse.maven:jade-324717:5444008"
+    compileOnly "curse.maven:crafttweaker-239197:5606075"
+    compileOnly "vazkii.patchouli:Patchouli:${patchouli_version}"
+    //runtimeOnly "vazkii.patchouli:Patchouli:${patchouli_version}"
+    implementation "curse.maven:pneumaticcraft-repressurized-281849:5698172"
+    compileOnly "curse.maven:curios-continuation-1037991:5657610"
 }
 
-afterEvaluate {
-    tasks.withType(JavaCompile) {
-        options.compilerArgs << "-Xmaxerrs" << "2000"
+// This block of code expands all declared replace properties in the specified resource targets.
+// A missing property will result in an error. Properties are expanded using ${} Groovy notation.
+// When "copyIdeResources" is enabled, this will also run before the game launches in IDE environments.
+// See https://docs.gradle.org/current/dsl/org.gradle.language.jvm.tasks.ProcessResources.html
+tasks.withType(ProcessResources).configureEach {
+    var replaceProperties = [
+            minecraft_version      : minecraft_version,
+            minecraft_version_range: minecraft_version_range,
+            neo_version            : neo_version,
+            neo_version_range      : neo_version_range,
+            loader_version_range   : loader_version_range,
+            mod_id                 : mod_id,
+            mod_name               : mod_name,
+            mod_license            : mod_license,
+            mod_version            : mod_version,
+            mod_authors            : mod_authors,
+            mod_description        : mod_description
+    ]
+    inputs.properties replaceProperties
+
+    filesMatching(['META-INF/neoforge.mods.toml']) {
+        expand replaceProperties
     }
 }
 
-processResources {
-    // this will ensure that this task is redone when the versions change.
-    inputs.property 'version', project.version
-    inputs.property 'mcversion', '1.20.1'
-    duplicatesStrategy = DuplicatesStrategy.WARN
-
-    // replace stuff in mcmod.info, nothing else
-    from(sourceSets.main.resources.srcDirs) {
-        include 'META_INF/mods.toml'
-
-        // replace version and mcversion
-        expand 'version':project.version, 'mcversion': '1.17.1'
-    }
-
-    // copy everything else except the mcmod.info
-    from(sourceSets.main.resources.srcDirs) {
-        exclude 'META_INF/mods.toml'
-    }
-}
-
-task apiJar(type: Jar, dependsOn: 'classes') {
-    classifier = 'api'
-    from(sourceSets.main.output) {
-        include 'com/buuz135/industrial/api/**'
-    }
-}
-
-task sourcesJar(type: Jar, dependsOn: classes) {
-    classifier = 'sources'
-    from sourceSets.main.allSource
-}
-
-task deobfJar(type:Jar) {
-    from sourceSets.main.output
-    classifier 'deobf'
-}
-
-artifacts {
-    archives sourcesJar
-    archives deobfJar
-    archives apiJar
-}
-
-publish.dependsOn(project.tasks.getByName("assemble"))
-publish.mustRunAfter(project.tasks.getByName("build"))
-
+// Example configuration to allow publishing using the maven-publish plugin
 publishing {
     publications {
-        mavenJava(MavenPublication) {
-            artifact jar
-            artifact sourcesJar
-            artifact deobfJar
-            artifact apiJar
+        register('mavenJava', MavenPublication) {
+            from components.java
         }
     }
     repositories {
         maven {
-            url "file://" + System.getenv("local_maven")
+            url "file://${project.projectDir}/repo"
         }
     }
 }
 
-license {
-    header rootProject.file('HEADER')
-    include "**/*.java"
-    ext.year = Calendar.getInstance().get(Calendar.YEAR)
-    ext.name = 'Buuz135'
-    ext.project = "Industrial Foregoing"
-    ignoreFailures = true
-    mapping {
-        java='SLASHSTAR_STYLE'
+// IDEA no longer automatically downloads sources/javadoc jars for dependencies, so we need to explicitly enable the behavior.
+idea {
+    module {
+        downloadSources = true
+        downloadJavadoc = true
     }
-}
-jar {
-    manifest {
-        attributes([
-                "Specification-Title": "Industrial Foregoing",
-                "Specification-Vendor": "Buuz135",
-                "Specification-Version": "2.0", // We are version 1 of ourselves
-                "Implementation-Title": project.name,
-                "Implementation-Version": "${project.api_version + "." + System.getenv('BUILD_NUMBER')}",
-                "Implementation-Vendor" :"Buuz135",
-                "Implementation-Timestamp": new Date().format("yyyy-MM-dd'T'HH:mm:ssZ")
-        ])
-    }
-}
-
-tasks.curseforge.enabled = System.env["CURSE_API"] != null
-
-curseforge {
-    if (System.env["CURSE_API"] != null){
-        apiKey = System.env["CURSE_API"]
-    }
-    project {
-        id = '266515'
-        changelog = "https://github.com/InnovativeOnlineIndustries/Industrial-Foregoing/blob/release-1.20/CHANGELOG.md"
-        changelogType = 'markdown'
-        releaseType = 'beta'
-        addGameVersion '1.20.1'
-
-        mainArtifact(jar){
-            relations {
-                requiredDependency 'titanium'
-                requiredDependency 'patchouli'
-                optionalDependency 'curios'
-                optionalDependency 'jei'
-            }
-        }
-
-        addArtifact sourcesJar
-        addArtifact deobfJar
-    }
-}
-
-tasks.modrinth.enabled = System.env["MODRINTH_TOKEN"] != null
-
-modrinth {
-    token = System.getenv("MODRINTH_TOKEN")
-    // This is the default. Remember to have the MODRINTH_TOKEN environment variable set or else this will fail, or set it to whatever you want - just make sure it stays private!
-    projectId = "lWxpUd04" // This can be the project ID or the slug. Either will work!
-    versionType = "beta" // This is the default -- can also be `beta` or `alpha`
-    uploadFile = jar // With Loom, this MUST be set to `remapJar` instead of `jar`!
-    gameVersions = ["1.20.1"] // Must be an array, even with only one version
-    loaders = ["forge"] // Must also be an array - no need to specify this if you're using Loom or ForgeGradle
-    dependencies { // A special DSL for creating dependencies
-        required.project "titanium"
-    }
-    changelog = "https://github.com/InnovativeOnlineIndustries/Industrial-Foregoing/blob/release-1.20/CHANGELOG.md"
-}
-
-task makeChangelog(type: GitChangelogTask) {
-    file = new File("CHANGELOG.md")
-    untaggedName = "Version ${project.version}"
-    //fromCommit = "6a5a3df3665643ea181873312e3801db7c662686"
-    fromRef = "refs/tags/2.3.0"
-    toRef = "release-1.20"
-    templateContent = file("changelog.mustache").getText("UTF-8")
-}
-
-tasks.withType(Jar).all {
-    duplicatesStrategy = DuplicatesStrategy.INCLUDE
 }

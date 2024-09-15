@@ -29,7 +29,8 @@ import com.hrznstudio.titanium.api.ISpecialCreativeTabItem;
 import com.hrznstudio.titanium.api.augment.AugmentTypes;
 import com.hrznstudio.titanium.item.AugmentWrapper;
 import com.hrznstudio.titanium.tab.TitaniumTab;
-import net.minecraft.data.recipes.FinishedRecipe;
+import net.minecraft.ChatFormatting;
+import net.minecraft.data.recipes.RecipeOutput;
 import net.minecraft.network.chat.Component;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.entity.player.Player;
@@ -38,18 +39,19 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.level.Level;
-import net.minecraftforge.event.BuildCreativeModeTabContentsEvent;
-import net.minecraftforge.fluids.FluidStack;
-import net.minecraftforge.registries.ForgeRegistries;
+import net.neoforged.neoforge.event.BuildCreativeModeTabContentsEvent;
+import net.neoforged.neoforge.fluids.FluidStack;
 
-import java.util.function.Consumer;
+import javax.annotation.Nullable;
+import java.util.List;
+import java.util.Optional;
 
 public class EfficiencyAddonItem extends AddonItem implements ISpecialCreativeTabItem {
 
     private int tier;
 
     public EfficiencyAddonItem(int tier, TitaniumTab group) {
-        super("efficiency_addon_" + tier, group, new Properties().stacksTo(16));
+        super("efficiency_addon_tier_" + tier, group, new Properties().stacksTo(16));
         this.tier = tier;
     }
 
@@ -60,23 +62,34 @@ public class EfficiencyAddonItem extends AddonItem implements ISpecialCreativeTa
     }
 
     @Override
-    public void registerRecipe(Consumer<FinishedRecipe> consumer) {
+    public void registerRecipe(RecipeOutput consumer) {
         TagKey<Item> tierMaterial = tier == 1 ? IndustrialTags.Items.GEAR_GOLD : IndustrialTags.Items.GEAR_DIAMOND;
-        new DissolutionChamberRecipe(ForgeRegistries.ITEMS.getKey(this), new Ingredient.Value[]{
-                new Ingredient.ItemValue(new ItemStack(Items.REDSTONE)),
-                new Ingredient.ItemValue(new ItemStack(Items.REDSTONE)),
-                new Ingredient.ItemValue(new ItemStack(Items.GLASS_PANE)),
-                new Ingredient.ItemValue(new ItemStack(Items.GLASS_PANE)),
-                new Ingredient.TagValue(tierMaterial),
-                new Ingredient.TagValue(tierMaterial),
-                new Ingredient.ItemValue(new ItemStack(Items.BLAZE_ROD)),
-                new Ingredient.ItemValue(new ItemStack(Items.BLAZE_ROD))
-        }, new FluidStack(ModuleCore.LATEX.getSourceFluid().get(), 1000), 200, new ItemStack(this), FluidStack.EMPTY);
+        DissolutionChamberRecipe.createRecipe(consumer, "efficiency_addon_tier_" + tier, new DissolutionChamberRecipe(List.of(
+                Ingredient.of(new ItemStack(Items.REDSTONE)),
+                Ingredient.of(new ItemStack(Items.REDSTONE)),
+                Ingredient.of(new ItemStack(Items.GLASS_PANE)),
+                Ingredient.of(new ItemStack(Items.GLASS_PANE)),
+                Ingredient.of(tierMaterial),
+                Ingredient.of(tierMaterial),
+                Ingredient.of(new ItemStack(Items.BLAZE_ROD)),
+                Ingredient.of(new ItemStack(Items.BLAZE_ROD))
+        ), new FluidStack(ModuleCore.LATEX.getSourceFluid().get(), 1000), 200, Optional.of(new ItemStack(this)), Optional.empty()));
+
     }
 
     @Override
     public String getDescriptionId() {
         return Component.translatable("item.industrialforegoing.addon").getString() + Component.translatable("item.industrialforegoing.efficiency").getString() + "Tier " + tier + " ";
+    }
+
+    @Override
+    public void addTooltipDetails(@Nullable Key key, ItemStack stack, List<Component> tooltip, boolean advanced) {
+        tooltip.add(Component.literal(ChatFormatting.GRAY + Component.translatable("text.industrialforegoing.tooltip.efficiency").getString() + "-" + (tier * 10) + "%"));
+    }
+
+    @Override
+    public boolean hasTooltipDetails(@Nullable Key key) {
+        return key == null;
     }
 
     @Override

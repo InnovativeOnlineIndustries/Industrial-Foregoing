@@ -30,7 +30,6 @@ import com.mojang.math.Axis;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.model.EntityModel;
 import net.minecraft.client.renderer.MultiBufferSource;
-import net.minecraft.client.renderer.block.model.ItemTransforms;
 import net.minecraft.client.renderer.entity.RenderLayerParent;
 import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.client.resources.model.BakedModel;
@@ -38,15 +37,14 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.ItemDisplayContext;
 import net.minecraft.world.item.ItemStack;
 import top.theillusivec4.curios.api.SlotContext;
-import top.theillusivec4.curios.api.SlotTypePreset;
 import top.theillusivec4.curios.api.client.ICurioRenderer;
 import top.theillusivec4.curios.api.type.capability.ICurio;
 
 public class InfinityBackpackCurios implements ICurio, ICurioRenderer {
 
     @Override
-    public boolean canEquip(String identifier, LivingEntity livingEntity) {
-        return identifier.equals(SlotTypePreset.BACK.getIdentifier());
+    public boolean canEquip(SlotContext identifier) {
+        return identifier.identifier().equals("back");
     }
 
     @Override
@@ -57,7 +55,7 @@ public class InfinityBackpackCurios implements ICurio, ICurioRenderer {
     @Override
     public void curioTick(SlotContext slotContext) {
         LivingEntity livingEntity = slotContext.entity();
-        ItemStack stack = CuriosPlugin.getStack(livingEntity, SlotTypePreset.BACK, 0);
+        ItemStack stack = CuriosPlugin.getStack(livingEntity, "back", 0);
         if (stack.getItem() instanceof ItemInfinityBackpack) {
             ModuleTool.INFINITY_BACKPACK.get().inventoryTick(stack, livingEntity.level(), livingEntity, 0, false);
         }
@@ -66,7 +64,7 @@ public class InfinityBackpackCurios implements ICurio, ICurioRenderer {
     @Override
     public <T extends LivingEntity, M extends EntityModel<T>> void render(ItemStack stack, SlotContext slotContext, PoseStack matrixStack, RenderLayerParent<T, M> renderLayerParent, MultiBufferSource renderTypeBuffer, int light, float limbSwing, float limbSwingAmount, float partialTicks, float ageInTicks, float netHeadYaw, float headPitch) {
         LivingEntity entity = slotContext.entity();
-        ItemStack itemStack = CuriosPlugin.getStack(entity, SlotTypePreset.BACK, 0);
+        ItemStack itemStack = CuriosPlugin.getStack(entity, "back", 0);
         if (itemStack.getItem() instanceof ItemInfinityBackpack) {
             matrixStack.pushPose();
             if (entity.isCrouching()) {

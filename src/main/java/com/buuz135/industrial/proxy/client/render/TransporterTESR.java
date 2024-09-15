@@ -46,7 +46,7 @@ import java.util.Map;
 
 public class TransporterTESR implements BlockEntityRenderer<TransporterTile> {
 
-    public static ResourceLocation TEXTURE = new ResourceLocation("industrialforegoing", "textures/block/transporters/particle.png");
+    public static ResourceLocation TEXTURE = ResourceLocation.fromNamespaceAndPath("industrialforegoing", "textures/block/transporters/particle.png");
 
     public static RenderType TYPE = createRenderType();
 
@@ -55,7 +55,7 @@ public class TransporterTESR implements BlockEntityRenderer<TransporterTile> {
 
     public static RenderType createRenderType() {
         RenderType.CompositeState state = RenderType.CompositeState.builder()
-                .setShaderState(new RenderStateShard.ShaderStateShard(GameRenderer::getPositionColorTexShader))
+                .setShaderState(new RenderStateShard.ShaderStateShard(GameRenderer::getPositionTexColorShader))
                 .setTextureState(new RenderStateShard.TextureStateShard(TEXTURE, false, false))
                 .setTransparencyState(new RenderStateShard.TransparencyStateShard("translucent_transparency", () -> {
                     RenderSystem.enableBlend();
@@ -64,7 +64,7 @@ public class TransporterTESR implements BlockEntityRenderer<TransporterTile> {
                     RenderSystem.disableBlend();
                     RenderSystem.defaultBlendFunc();
                 })).createCompositeState(true);
-        return RenderType.create("transporter_render", DefaultVertexFormat.POSITION_COLOR_TEX, VertexFormat.Mode.QUADS, 256, false, false, state);
+        return RenderType.create("transporter_render", DefaultVertexFormat.POSITION_TEX_COLOR, VertexFormat.Mode.QUADS, 256, false, false, state);
     }
 
     public static Vector3f getPath(Direction from, Direction to, double step, float partialTicks) {

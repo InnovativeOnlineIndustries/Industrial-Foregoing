@@ -25,14 +25,17 @@ import com.buuz135.industrial.IndustrialForegoing;
 import com.buuz135.industrial.item.IFCustomItem;
 import com.buuz135.industrial.module.ModuleCore;
 import com.buuz135.industrial.proxy.network.BackpackOpenedMessage;
-import com.google.common.collect.Multimap;
-import com.google.common.collect.MultimapBuilder;
+import com.buuz135.industrial.utils.IFAttachments;
+import com.buuz135.industrial.utils.Reference;
 import com.hrznstudio.titanium.api.IFactory;
 import com.hrznstudio.titanium.api.ISpecialCreativeTabItem;
 import com.hrznstudio.titanium.api.client.AssetTypes;
 import com.hrznstudio.titanium.api.client.IScreenAddon;
-import com.hrznstudio.titanium.capability.FluidHandlerScreenProviderItemStack;
-import com.hrznstudio.titanium.client.screen.addon.*;
+import com.hrznstudio.titanium.block.tile.IScreenInfoProvider;
+import com.hrznstudio.titanium.client.screen.addon.ArrowButtonScreenAddon;
+import com.hrznstudio.titanium.client.screen.addon.StateButtonAddon;
+import com.hrznstudio.titanium.client.screen.addon.StateButtonInfo;
+import com.hrznstudio.titanium.client.screen.addon.TextScreenAddon;
 import com.hrznstudio.titanium.component.button.ArrowButtonComponent;
 import com.hrznstudio.titanium.component.button.ButtonComponent;
 import com.hrznstudio.titanium.component.fluid.FluidTankComponent;
@@ -48,16 +51,16 @@ import net.minecraft.ChatFormatting;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
-import net.minecraft.data.recipes.FinishedRecipe;
+import net.minecraft.data.recipes.RecipeOutput;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResultHolder;
 import net.minecraft.world.MenuProvider;
-import net.minecraft.world.entity.EquipmentSlot;
+import net.minecraft.world.entity.EquipmentSlotGroup;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.player.Inventory;
@@ -66,29 +69,30 @@ import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.inventory.ContainerLevelAccess;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.UseAnim;
+import net.minecraft.world.item.component.ItemAttributeModifiers;
 import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.item.enchantment.Enchantments;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
-import net.minecraftforge.common.capabilities.ICapabilityProvider;
-import net.minecraftforge.event.BuildCreativeModeTabContentsEvent;
-import net.minecraftforge.fluids.FluidStack;
-import net.minecraftforge.fml.DistExecutor;
-import net.minecraftforge.network.NetworkDirection;
-import net.minecraftforge.network.NetworkHooks;
+import net.neoforged.api.distmarker.Dist;
+import net.neoforged.api.distmarker.OnlyIn;
+import net.neoforged.fml.loading.FMLEnvironment;
+import net.neoforged.neoforge.capabilities.Capabilities;
+import net.neoforged.neoforge.event.BuildCreativeModeTabContentsEvent;
+import net.neoforged.neoforge.fluids.FluidStack;
+import net.neoforged.neoforge.fluids.capability.IFluidHandler;
 import org.apache.commons.lang3.tuple.Pair;
 
-import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.text.NumberFormat;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Locale;
+import java.util.Optional;
 import java.util.function.BiFunction;
-import java.util.function.Consumer;
 import java.util.function.Supplier;
 
-public class ItemInfinity extends IFCustomItem implements MenuProvider, IButtonHandler, IInfinityDrillScreenAddons, ISpecialCreativeTabItem {
+public class ItemInfinity extends IFCustomItem implements MenuProvider, IButtonHandler, IInfinityDrillScreenAddons, ISpecialCreativeTabItem, IScreenInfoProvider {
 
     private final int powerConsumption;
     private final int biofuelConsumption;
@@ -104,11 +108,7 @@ public class ItemInfinity extends IFCustomItem implements MenuProvider, IButtonH
     }
 
     public static long getPowerFromStack(ItemStack stack) {
-        long power = 0;
-        if (stack.hasTag() && stack.getTag().contains("Energy")) {
-            power = stack.getTag().getLong("Energy");
-        }
-        return power;
+        return stack.getOrDefault(IFAttachments.INFINITY_ITEM_POWER, 0L);
     }
 
     public void disableArea() {
@@ -121,31 +121,24 @@ public class ItemInfinity extends IFCustomItem implements MenuProvider, IButtonH
     }
 
     public static InfinityTier getSelectedTier(ItemStack stack) {
-        return stack.hasTag() && stack.getTag().contains("Selected") ? InfinityTier.valueOf(stack.getTag().getString("Selected")) : InfinityTier.getTierBraquet(getPowerFromStack(stack)).getLeft();
+        return stack.getOrDefault(IFAttachments.INFINITY_ITEM_SELECTED_TIER, InfinityTier.POOR);
     }
 
     public static boolean canCharge(ItemStack stack) {
-        if (stack.hasTag() && stack.getTag().contains("CanCharge")) return stack.getTag().getBoolean("CanCharge");
-        return true;
+        return stack.getOrDefault(IFAttachments.INFINITY_ITEM_CAN_CHARGE, false);
     }
 
     @Override
     public void onCraftedBy(ItemStack stack, Level worldIn, Player playerIn) {
         super.onCraftedBy(stack, worldIn, playerIn);
-        if (!stack.hasTag()) addNbt(stack, 0, 0, false);
+        addNbt(stack, 0, 0, false);
     }
 
     public void addNbt(ItemStack stack, long power, int fuel, boolean special) {
-        CompoundTag tagCompound = new CompoundTag();
-        tagCompound.putLong("Energy", power);
-        CompoundTag fluid = new CompoundTag();
-        fluid.putString("FluidName", "biofuel");
-        fluid.putInt("Amount", fuel);
-        tagCompound.put("Fluid", fluid);
-        tagCompound.putBoolean("Special", special);
-        tagCompound.putString("Selected", InfinityTier.getTierBraquet(power).getLeft().name());
-        tagCompound.putBoolean("CanCharge", true);
-        stack.setTag(tagCompound);
+        stack.set(IFAttachments.INFINITY_ITEM_POWER, power);
+        stack.set(IFAttachments.INFINITY_ITEM_SPECIAL, special);
+        stack.set(IFAttachments.INFINITY_ITEM_SELECTED_TIER, InfinityTier.getTierBraquet(power).getLeft());
+        stack.set(IFAttachments.INFINITY_ITEM_CAN_CHARGE, true);
     }
 
     @Override
@@ -199,7 +192,9 @@ public class ItemInfinity extends IFCustomItem implements MenuProvider, IButtonH
 
     @Override
     public int getBarWidth(ItemStack stack) {
-        if (!DistExecutor.safeRunForDist(() -> Screen::hasShiftDown, () -> Boolean.FALSE::booleanValue)) { //hasShiftDown
+        Supplier<Supplier<Boolean>> checker = () -> () -> false;
+        if (FMLEnvironment.dist.isClient()) checker = () -> Screen::hasShiftDown;
+        if (!checker.get().get()) { //hasShiftDown
             int fuel = getFuelFromStack(stack);
             return (int) Math.round(fuel * 13D / 1_000_000D);
         } else {
@@ -210,7 +205,9 @@ public class ItemInfinity extends IFCustomItem implements MenuProvider, IButtonH
 
     @Override
     public int getBarColor(ItemStack p_150901_) {
-        return !DistExecutor.safeRunForDist(() -> Screen::hasShiftDown, () -> Boolean.FALSE::booleanValue) ? 0xcb00ff /*Purple*/ : 0x00d0ff /*Cyan*/;
+        Supplier<Supplier<Boolean>> checker = () -> () -> false;
+        if (FMLEnvironment.dist.isClient()) checker = () -> Screen::hasShiftDown;
+        return !checker.get().get() ? 0xcb00ff /*Purple*/ : 0x00d0ff /*Cyan*/;
     }
 
     @Override
@@ -220,44 +217,57 @@ public class ItemInfinity extends IFCustomItem implements MenuProvider, IButtonH
 
     public int getFuelFromStack(ItemStack stack) {
         int fuelAmount = 0;
-        if (stack.hasTag() && stack.getTag().contains("Fluid") && stack.getTag().getCompound("Fluid").contains("Amount")) {
-            fuelAmount = stack.getTag().getCompound("Fluid").getInt("Amount");
+        var capability = stack.getCapability(Capabilities.FluidHandler.ITEM);
+        if (capability != null) {
+            for (int i = 0; i < capability.getTanks(); i++) {
+                if (capability.getFluidInTank(i).is(ModuleCore.BIOFUEL.getSourceFluid())) {
+                    return capability.getFluidInTank(i).getAmount();
+                }
+            }
         }
         return fuelAmount;
     }
 
     public boolean isSpecial(ItemStack stack) {
-        return stack.hasTag() && stack.getTag().contains("Special") && stack.getTag().getBoolean("Special");
+        return stack.getOrDefault(IFAttachments.INFINITY_ITEM_SPECIAL, false);
     }
 
     public boolean isSpecialEnabled(ItemStack stack) {
-        return isSpecial(stack) && stack.getTag().contains("SpecialEnabled") && stack.getTag().getBoolean("SpecialEnabled");
+        return isSpecial(stack) && stack.getOrDefault(IFAttachments.INFINITY_ITEM_SPECIAL_ENABLED, false);
     }
 
     public void setSpecialEnabled(ItemStack stack, boolean special) {
-        if (isSpecial(stack)) stack.getTag().putBoolean("SpecialEnabled", special);
+        if (isSpecial(stack)) stack.set(IFAttachments.INFINITY_ITEM_SPECIAL_ENABLED, special);
     }
 
     public boolean enoughFuel(ItemStack stack) {
-        int i = EnchantmentHelper.getItemEnchantmentLevel(Enchantments.UNBREAKING, stack);
-        return getFuelFromStack(stack) >= biofuelConsumption * (1D / (i + 1)) || getPowerFromStack(stack) >= powerConsumption * (1D / (i + 1));
+        int level = EnchantmentHelper.getItemEnchantmentLevel(IFAttachments.registryAccess().holderOrThrow(Enchantments.UNBREAKING), stack);
+        return getFuelFromStack(stack) >= biofuelConsumption * (1D / (level + 1)) || getPowerFromStack(stack) >= powerConsumption * (1D / (level + 1));
     }
 
     public void consumeFuel(ItemStack stack) {
-        double i = EnchantmentHelper.getItemEnchantmentLevel(Enchantments.UNBREAKING, stack);
-        if (getFuelFromStack(stack) >= biofuelConsumption * (1D / (i + 1))) {
-            stack.getTag().getCompound("Fluid").putInt("Amount", (int) Math.max(0, stack.getTag().getCompound("Fluid").getInt("Amount") - biofuelConsumption * (1D / (i + 1))));
+        int level = EnchantmentHelper.getItemEnchantmentLevel(IFAttachments.registryAccess().holderOrThrow(Enchantments.UNBREAKING), stack);
+        if (getFuelFromStack(stack) >= biofuelConsumption * (1D / (level + 1))) {
+            var capability = stack.getCapability(Capabilities.FluidHandler.ITEM);
+            if (capability != null) {
+                for (int i = 0; i < capability.getTanks(); i++) {
+                    if (capability.getFluidInTank(i).is(ModuleCore.BIOFUEL.getSourceFluid())) {
+                        capability.drain(new FluidStack(ModuleCore.BIOFUEL.getSourceFluid(), biofuelConsumption * (1 / (level + 1))), IFluidHandler.FluidAction.EXECUTE);
+                        return;
+                    }
+                }
+            }
         } else {
-            stack.getTag().putLong("Energy", (long) (stack.getTag().getLong("Energy") - powerConsumption * (1D / (i + 1))));
+            stack.set(IFAttachments.INFINITY_ITEM_POWER, (long) (stack.getOrDefault(IFAttachments.INFINITY_ITEM_POWER, 0L) - powerConsumption * (1D / (level + 1))));
         }
     }
 
     public void setCanCharge(ItemStack stack, boolean canCharge) {
-        stack.getTag().putBoolean("CanCharge", canCharge);
+        stack.set(IFAttachments.INFINITY_ITEM_CAN_CHARGE, canCharge);
     }
 
     public void setSelectedDrillTier(ItemStack stack, InfinityTier tier) {
-        stack.getTag().putString("Selected", tier.name());
+        stack.set(IFAttachments.INFINITY_ITEM_SELECTED_TIER, tier);
     }
 
     @Override
@@ -297,18 +307,16 @@ public class ItemInfinity extends IFCustomItem implements MenuProvider, IButtonH
     }
 
     @Override
-    public Multimap<Attribute, AttributeModifier> getAttributeModifiers(EquipmentSlot slot, ItemStack stack) {
-        Multimap<Attribute, AttributeModifier> multimap = MultimapBuilder.hashKeys().arrayListValues().build();
-        if (slot == EquipmentSlot.MAINHAND) {
-            multimap.put(Attributes.ATTACK_DAMAGE, new AttributeModifier(BASE_ATTACK_DAMAGE_UUID, "Tool modifier", 3, AttributeModifier.Operation.ADDITION)); //AttackDamage
-            multimap.put(Attributes.ATTACK_SPEED, new AttributeModifier(BASE_ATTACK_SPEED_UUID, "Tool modifier", -2.5D, AttributeModifier.Operation.ADDITION)); //AttackSpeed
-        }
-        return multimap;
+    public ItemAttributeModifiers getDefaultAttributeModifiers(ItemStack stack) {
+        var attributes = super.getDefaultAttributeModifiers(stack);
+        attributes = attributes.withModifierAdded(Attributes.ATTACK_DAMAGE, new AttributeModifier(ResourceLocation.fromNamespaceAndPath(Reference.MOD_ID, "base_attack_damage"), 3, AttributeModifier.Operation.ADD_VALUE), EquipmentSlotGroup.ANY);
+        attributes = attributes.withModifierAdded(Attributes.ATTACK_SPEED, new AttributeModifier(ResourceLocation.fromNamespaceAndPath(Reference.MOD_ID, "base_attack_speed"), -2.5D, AttributeModifier.Operation.ADD_VALUE), EquipmentSlotGroup.ANY);
+        return attributes;
     }
 
     @Override
     public Component getDisplayName() {
-        return Component.translatable(this.getDescriptionId()).withStyle(ChatFormatting.DARK_GRAY);
+        return getDescription().copy().withStyle(ChatFormatting.DARK_GRAY);
     }
 
     @Nullable
@@ -319,35 +327,25 @@ public class ItemInfinity extends IFCustomItem implements MenuProvider, IButtonH
             public <T> Optional<T> evaluate(BiFunction<Level, BlockPos, T> p_221484_1_) {
                 return Optional.empty();
             }
-        }, playerEntity.inventory, menu);
+        }, playerEntity.getInventory(), menu);
     }
 
     @Override
     public InteractionResultHolder<ItemStack> use(Level worldIn, Player player, InteractionHand handIn) {
         if (player.isCrouching()) {
             if (player instanceof ServerPlayer) {
-                IndustrialForegoing.NETWORK.get().sendTo(new BackpackOpenedMessage(player.inventory.selected, PlayerInventoryFinder.MAIN), ((ServerPlayer) player).connection.connection, NetworkDirection.PLAY_TO_CLIENT);
-                NetworkHooks.openScreen((ServerPlayer) player, this, buffer ->
+                IndustrialForegoing.NETWORK.sendTo(new BackpackOpenedMessage(player.getInventory().selected, PlayerInventoryFinder.MAIN), ((ServerPlayer) player));
+                player.openMenu(this, buffer ->
                         LocatorFactory.writePacketBuffer(buffer, new HeldStackLocatorInstance(handIn == InteractionHand.MAIN_HAND)));
             }
             return InteractionResultHolder.success(player.getItemInHand(handIn));
         }
         if (IndustrialForegoing.CAT_EARS.getPlayers().contains(player.getUUID())) {
-            player.getItemInHand(handIn).getOrCreateTag().putBoolean("Special", true);
+            player.getItemInHand(handIn).set(IFAttachments.INFINITY_ITEM_SPECIAL, true);
         }
         return super.use(worldIn, player, handIn);
     }
 
-    @Override
-    public boolean shouldOverrideMultiplayerNbt() {
-        return true;
-    }
-
-    @Nullable
-    @Override
-    public ICapabilityProvider initCapabilities(ItemStack stack, @Nullable CompoundTag nbt) {
-        return new InfinityCapabilityProvider(stack, getTankConstructor(stack), getEnergyConstructor(stack));
-    }
 
     @Override
     public void handleButtonMessage(int id, Player playerEntity, CompoundTag compound) {
@@ -372,7 +370,7 @@ public class ItemInfinity extends IFCustomItem implements MenuProvider, IButtonH
     }
 
     @Override
-    public void registerRecipe(Consumer<FinishedRecipe> consumer) {
+    public void registerRecipe(RecipeOutput consumer) {
 
     }
 
@@ -417,44 +415,20 @@ public class ItemInfinity extends IFCustomItem implements MenuProvider, IButtonH
         return factory;
     }
 
-    public IFactory<? extends FluidHandlerScreenProviderItemStack> getTankConstructor(ItemStack stack) {
-        return () -> new FluidHandlerScreenProviderItemStack(stack, 1_000_000) {
-            @Override
-            public boolean canFillFluidType(FluidStack fluid) {
-                return fluid != null && fluid.getFluid() != null && fluid.getFluid().equals(ModuleCore.BIOFUEL.getSourceFluid().get());
-            }
-
-            @Override
-            public boolean canDrainFluidType(FluidStack fluid) {
-                return false;
-            }
-
-            @Nonnull
-            @Override
-            @OnlyIn(Dist.CLIENT)
-            public List<IFactory<? extends IScreenAddon>> getScreenAddons() {
-                return Collections.singletonList(() -> new TankScreenAddon(30, 20, this, FluidTankComponent.Type.NORMAL));
-            }
-        };
+    public IFactory<InfinityTankStorage> getTankConstructor(ItemStack stack) {
+        return () -> new InfinityTankStorage(stack, new InfinityTankStorage.TankDefinition("biofuel", 1_000_000, 30, 20, fluidStack -> fluidStack.getFluid().isSame(ModuleCore.BIOFUEL.getSourceFluid().get()), false, true, FluidTankComponent.Type.NORMAL));
     }
 
     public IFactory<InfinityEnergyStorage> getEnergyConstructor(ItemStack stack) {
         return () -> new InfinityEnergyStorage(InfinityTier.ARTIFACT.getPowerNeeded(), 10, 20) {
             @Override
             public long getLongEnergyStored() {
-                if (stack.hasTag()) {
-                    return Math.min(stack.getTag().getLong("Energy"), InfinityTier.ARTIFACT.getPowerNeeded());
-                } else {
-                    return 0;
-                }
+                return Math.min(stack.getOrDefault(IFAttachments.INFINITY_ITEM_POWER, 0L), InfinityTier.ARTIFACT.getPowerNeeded());
             }
 
             @Override
             public void setEnergyStored(long energy) {
-                if (!stack.hasTag()) {
-                    stack.setTag(new CompoundTag());
-                }
-                stack.getTag().putLong("Energy", Math.min(energy, InfinityTier.ARTIFACT.getPowerNeeded()));
+                stack.set(IFAttachments.INFINITY_ITEM_POWER, Math.min(energy, InfinityTier.ARTIFACT.getPowerNeeded()));
             }
 
             @Override

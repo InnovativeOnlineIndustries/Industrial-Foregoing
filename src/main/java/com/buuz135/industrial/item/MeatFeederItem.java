@@ -24,49 +24,32 @@ package com.buuz135.industrial.item;
 
 import com.buuz135.industrial.module.ModuleCore;
 import com.buuz135.industrial.module.ModuleTool;
-import com.hrznstudio.titanium.Titanium;
+import com.hrznstudio.titanium.api.ISpecialCreativeTabItem;
 import com.hrznstudio.titanium.recipe.generator.TitaniumShapedRecipeBuilder;
 import com.hrznstudio.titanium.tab.TitaniumTab;
 import net.minecraft.ChatFormatting;
-import net.minecraft.data.recipes.FinishedRecipe;
-import net.minecraft.nbt.CompoundTag;
+import net.minecraft.data.recipes.RecipeOutput;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.Level;
-import net.minecraftforge.common.Tags;
-import net.minecraftforge.common.capabilities.ForgeCapabilities;
-import net.minecraftforge.common.capabilities.ICapabilityProvider;
-import net.minecraftforge.fluids.FluidStack;
-import net.minecraftforge.fluids.capability.IFluidHandler;
-import net.minecraftforge.fluids.capability.templates.FluidHandlerItemStack;
+import net.neoforged.neoforge.capabilities.Capabilities;
+import net.neoforged.neoforge.common.Tags;
+import net.neoforged.neoforge.event.BuildCreativeModeTabContentsEvent;
+import net.neoforged.neoforge.fluids.FluidStack;
+import net.neoforged.neoforge.fluids.capability.IFluidHandler;
 
 import javax.annotation.Nullable;
 import java.text.NumberFormat;
 import java.util.List;
 import java.util.Locale;
-import java.util.function.Consumer;
 
-public class MeatFeederItem extends IFCustomItem {
+public class MeatFeederItem extends IFCustomItem implements ISpecialCreativeTabItem {
 
     public MeatFeederItem(TitaniumTab group) {
         super("meat_feeder", group, new Properties().stacksTo(1));
-    }
-
-    @Nullable
-    @Override
-    public ICapabilityProvider initCapabilities(ItemStack stack, @Nullable CompoundTag nbt) {
-        FluidHandlerItemStack handlerItemStack = new FluidHandlerItemStack(stack, 512000) {
-            @Override
-            public boolean canFillFluidType(FluidStack fluid) {
-                return fluid.getFluid().isSame(ModuleCore.MEAT.getSourceFluid().get());
-            }
-        };
-        handlerItemStack.fill(new FluidStack(ModuleCore.MEAT.getSourceFluid().get(), 0), IFluidHandler.FluidAction.EXECUTE);
-        return handlerItemStack;
     }
 
     @Override
@@ -75,21 +58,28 @@ public class MeatFeederItem extends IFCustomItem {
     }
 
     @Override
+    public void onCraftedPostProcess(ItemStack stack, Level level) {
+        super.onCraftedPostProcess(stack, level);
+    }
+
+    @Override
     public void addTooltipDetails(@Nullable Key key, ItemStack stack, List<Component> tooltip, boolean advanced) {
         super.addTooltipDetails(key, stack, tooltip, advanced);
-        if (stack.getTag() != null && key == null) {
-            tooltip.add(Component.literal(NumberFormat.getNumberInstance(Locale.ROOT).format(stack.getTag().getCompound("Fluid").getInt("Amount")) + ChatFormatting.GOLD + "/" + ChatFormatting.WHITE + NumberFormat.getNumberInstance(Locale.ROOT).format(512000) + ChatFormatting.GOLD + "mb of Meat"));
+        var handlerItemStack = stack.getCapability(Capabilities.FluidHandler.ITEM);
+        if (handlerItemStack != null && key == null) {
+            tooltip.add(Component.literal(NumberFormat.getNumberInstance(Locale.ROOT).format(handlerItemStack.getFluidInTank(0).getAmount()) + ChatFormatting.GOLD + "/" + ChatFormatting.WHITE + NumberFormat.getNumberInstance(Locale.ROOT).format(512000) + ChatFormatting.GOLD + "mb of Meat"));
         }
     }
 
     public int getFilledAmount(ItemStack stack) {
-        FluidHandlerItemStack handlerItemStack = (FluidHandlerItemStack) stack.getCapability(ForgeCapabilities.FLUID_HANDLER_ITEM).orElseThrow(RuntimeException::new);
-        return (handlerItemStack.getFluid() == null ? 0 : handlerItemStack.getFluid().getAmount());
+        var handlerItemStack = stack.getCapability(Capabilities.FluidHandler.ITEM);
+        return (handlerItemStack == null || handlerItemStack.getFluidInTank(0).isEmpty() ? 0 : handlerItemStack.getFluidInTank(0).getAmount());
     }
 
     public void drain(ItemStack stack, int amount) {
-        FluidHandlerItemStack handlerItemStack = (FluidHandlerItemStack) stack.getCapability(ForgeCapabilities.FLUID_HANDLER_ITEM).orElseThrow(RuntimeException::new);
-        handlerItemStack.drain(new FluidStack(ModuleCore.MEAT.getSourceFluid().get(), amount), IFluidHandler.FluidAction.EXECUTE);
+        var handlerItemStack = stack.getCapability(Capabilities.FluidHandler.ITEM);
+        if (handlerItemStack != null)
+            handlerItemStack.drain(new FluidStack(ModuleCore.MEAT.getSourceFluid().get(), amount), IFluidHandler.FluidAction.EXECUTE);
     }
 
     @Override
@@ -116,12 +106,17 @@ public class MeatFeederItem extends IFCustomItem {
     }
 
     @Override
-    public void registerRecipe(Consumer<FinishedRecipe> consumer) {
+    public void registerRecipe(RecipeOutput consumer) {
         TitaniumShapedRecipeBuilder.shapedRecipe(this)
                 .pattern("pip").pattern("gig").pattern(" i ")
                 .define('p', ModuleCore.PLASTIC.get())
                 .define('i', Tags.Items.INGOTS_IRON)
                 .define('g', Items.GLASS_BOTTLE)
                 .save(consumer);
+    }
+
+    @Override
+    public void addToTab(BuildCreativeModeTabContentsEvent buildCreativeModeTabContentsEvent) {
+
     }
 }

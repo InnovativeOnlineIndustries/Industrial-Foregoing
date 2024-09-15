@@ -22,38 +22,16 @@
 
 package com.buuz135.industrial.plugin;
 
-import com.buuz135.industrial.item.MeatFeederItem;
-import com.buuz135.industrial.item.infinity.item.ItemInfinityBackpack;
 import com.buuz135.industrial.module.ModuleCore;
-import com.buuz135.industrial.plugin.curios.InfinityBackpackCurios;
-import com.buuz135.industrial.plugin.curios.MeatFeedCurios;
-import com.buuz135.industrial.utils.Reference;
 import com.hrznstudio.titanium.annotation.plugin.FeaturePlugin;
-import com.hrznstudio.titanium.api.ISpecialCreativeTabItem;
 import com.hrznstudio.titanium.event.handler.EventManager;
-import com.hrznstudio.titanium.network.locator.PlayerInventoryFinder;
 import com.hrznstudio.titanium.plugin.FeaturePluginInstance;
 import com.hrznstudio.titanium.plugin.PluginPhase;
-import com.hrznstudio.titanium.tab.TitaniumTab;
-import net.minecraft.core.Direction;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
-import net.minecraftforge.common.capabilities.Capability;
-import net.minecraftforge.common.capabilities.ICapabilityProvider;
-import net.minecraftforge.common.util.LazyOptional;
-import net.minecraftforge.event.AttachCapabilitiesEvent;
-import net.minecraftforge.event.BuildCreativeModeTabContentsEvent;
-import net.minecraftforge.fml.InterModComms;
-import net.minecraftforge.fml.event.lifecycle.InterModEnqueueEvent;
-import net.minecraftforge.registries.ForgeRegistries;
-import top.theillusivec4.curios.api.CuriosApi;
-import top.theillusivec4.curios.api.CuriosCapability;
-import top.theillusivec4.curios.api.SlotTypeMessage;
-import top.theillusivec4.curios.api.SlotTypePreset;
-
-import javax.annotation.Nullable;
+import net.neoforged.neoforge.event.BuildCreativeModeTabContentsEvent;
+import vazkii.patchouli.common.item.PatchouliDataComponents;
 
 @FeaturePlugin(value = "patchouli", type = FeaturePlugin.FeaturePluginType.MOD)
 public class PatchouliPlugin implements FeaturePluginInstance {
@@ -64,8 +42,8 @@ public class PatchouliPlugin implements FeaturePluginInstance {
         if (phase == PluginPhase.CONSTRUCTION) {
             EventManager.mod(BuildCreativeModeTabContentsEvent.class).process(buildCreativeModeTabContentsEvent -> {
                 if (ModuleCore.TAB_CORE.getResourceLocation().equals(buildCreativeModeTabContentsEvent.getTabKey().location())){
-                    var item = new ItemStack(ForgeRegistries.ITEMS.getValue(new ResourceLocation("patchouli", "guide_book")));
-                    item.getOrCreateTag().putString("patchouli:book", "industrialforegoing:industrial_foregoing");
+                    var item = new ItemStack(BuiltInRegistries.ITEM.get(ResourceLocation.fromNamespaceAndPath("patchouli", "guide_book")));
+                    item.set(PatchouliDataComponents.BOOK, ResourceLocation.parse("industrialforegoing:industrial_foregoing"));
                     buildCreativeModeTabContentsEvent.accept(item);
                 }
             }).subscribe();

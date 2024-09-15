@@ -41,8 +41,9 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.RecipeType;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraftforge.fluids.capability.IFluidHandler;
-import net.minecraftforge.items.ItemHandlerHelper;
+import net.neoforged.neoforge.fluids.FluidStack;
+import net.neoforged.neoforge.fluids.capability.IFluidHandler;
+import net.neoforged.neoforge.items.ItemHandlerHelper;
 import org.apache.commons.lang3.tuple.Pair;
 
 import javax.annotation.Nonnull;
@@ -115,7 +116,7 @@ public class DissolutionChamberTile extends IndustrialProcessingTile<Dissolution
 
     @Override
     public boolean canIncrease() {
-        return currentRecipe != null && ItemHandlerHelper.insertItem(output, currentRecipe.output.copy(), true).isEmpty() && (currentRecipe.outputFluid == null || outputFluid.fillForced(currentRecipe.outputFluid.copy(), IFluidHandler.FluidAction.SIMULATE) == currentRecipe.outputFluid.getAmount());
+        return currentRecipe != null && ItemHandlerHelper.insertItem(output, currentRecipe.output.orElse(ItemStack.EMPTY).copy(), true).isEmpty() && (currentRecipe.outputFluid.isEmpty() || outputFluid.fillForced(currentRecipe.outputFluid.orElse(FluidStack.EMPTY).copy(), IFluidHandler.FluidAction.SIMULATE) == currentRecipe.outputFluid.orElse(FluidStack.EMPTY).getAmount());
     }
 
     @Override
@@ -127,9 +128,9 @@ public class DissolutionChamberTile extends IndustrialProcessingTile<Dissolution
                 for (int i = 0; i < input.getInventory().getSlots(); i++) {
                     input.getInventory().getStackInSlot(i).shrink(1);
                 }
-                if (dissolutionChamberRecipe.outputFluid != null && !dissolutionChamberRecipe.outputFluid.isEmpty())
-                    outputFluid.fillForced(dissolutionChamberRecipe.outputFluid.copy(), IFluidHandler.FluidAction.EXECUTE);
-                ItemStack outputStack = dissolutionChamberRecipe.output.copy();
+                if (dissolutionChamberRecipe.outputFluid.isPresent() && !dissolutionChamberRecipe.outputFluid.get().isEmpty())
+                    outputFluid.fillForced(dissolutionChamberRecipe.outputFluid.get().copy(), IFluidHandler.FluidAction.EXECUTE);
+                ItemStack outputStack = dissolutionChamberRecipe.output.get().copy();
                 outputStack.getItem().onCraftedBy(outputStack, this.level, null);
                 ItemHandlerHelper.insertItem(output, outputStack, false);
                 checkForRecipe();
@@ -188,7 +189,7 @@ public class DissolutionChamberTile extends IndustrialProcessingTile<Dissolution
         }
         if (tag.contains("DC_filter")) {
             for (String psFilter : tag.getCompound("DC_filter").getAllKeys()) {
-                input.getFilter()[Integer.parseInt(psFilter)] = ItemStack.of(tag.getCompound("DC_filter").getCompound(psFilter));
+                input.getFilter()[Integer.parseInt(psFilter)] = ItemStack.parseOptional(this.level.registryAccess(), tag.getCompound("DC_filter").getCompound(psFilter));
             }
         }
         super.loadSettings(player, tag);
@@ -199,7 +200,7 @@ public class DissolutionChamberTile extends IndustrialProcessingTile<Dissolution
         tag.putBoolean("DC_locked", input.isLocked());
         CompoundTag filterTag = new CompoundTag();
         for (int i = 0; i < input.getFilter().length; i++) {
-            filterTag.put(i + "", input.getFilter()[i].serializeNBT());
+            filterTag.put(i + "", input.getFilter()[i].saveOptional(this.level.registryAccess()));
         }
         tag.put("DC_filter", filterTag);
         super.saveSettings(player, tag);

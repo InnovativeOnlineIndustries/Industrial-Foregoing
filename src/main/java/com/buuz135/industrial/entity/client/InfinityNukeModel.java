@@ -100,7 +100,7 @@ public class InfinityNukeModel extends EntityModel<InfinityNukeEntity> {
     }
 
     @Override
-    public void renderToBuffer(PoseStack poseStack, VertexConsumer buffer, int packedLight, int packedOverlay, float red, float green, float blue, float alpha) {
+    public void renderToBuffer(PoseStack poseStack, VertexConsumer buffer, int packedLight, int packedOverlay, int color) {
         top.render(poseStack, buffer, packedLight, packedOverlay);
         bottom.render(poseStack, buffer, packedLight, packedOverlay);
         core.render(poseStack, buffer, packedLight, packedOverlay);

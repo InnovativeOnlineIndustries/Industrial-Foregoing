@@ -1,0 +1,36 @@
+{
+  "neoforge:conditions": [
+    {
+      "type": "neoforge:item_exists",
+      "item": "industrialforegoing:mob_detector"
+    }
+  ],
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "c": {
+      "item": "minecraft:comparator"
+    },
+    "m": {
+      "tag": "industrialforegoing:machine_frame/simple"
+    },
+    "o": {
+      "item": "minecraft:observer"
+    },
+    "p": {
+      "tag": "c:plastic"
+    },
+    "r": {
+      "item": "minecraft:repeater"
+    }
+  },
+  "pattern": [
+    "ppp",
+    "rcr",
+    "omo"
+  ],
+  "result": {
+    "count": 1,
+    "id": "industrialforegoing:mob_detector"
+  }
+}

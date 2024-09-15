@@ -30,17 +30,16 @@ import com.buuz135.industrial.module.ModuleTool;
 import com.buuz135.industrial.recipe.DissolutionChamberRecipe;
 import com.hrznstudio.titanium.tab.TitaniumTab;
 import net.minecraft.core.BlockPos;
-import net.minecraft.data.recipes.FinishedRecipe;
+import net.minecraft.data.recipes.RecipeOutput;
 import net.minecraft.world.InteractionResult;
-import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.item.crafting.Ingredient;
-import net.minecraftforge.fluids.FluidStack;
-import net.minecraftforge.registries.ForgeRegistries;
+import net.neoforged.neoforge.fluids.FluidStack;
 
-import java.util.function.Consumer;
+import java.util.List;
+import java.util.Optional;
 
 public class ItemInfinityNuke extends ItemInfinity {
 
@@ -74,18 +73,16 @@ public class ItemInfinityNuke extends ItemInfinity {
     }
 
     @Override
-    public void registerRecipe(Consumer<FinishedRecipe> consumer) {
-        new DissolutionChamberRecipe(ForgeRegistries.ITEMS.getKey(this),
-                new Ingredient.Value[]{
-                        new Ingredient.ItemValue(new ItemStack(Items.TNT)),
-                        new Ingredient.ItemValue(new ItemStack(Items.TNT)),
-                        new Ingredient.ItemValue(new ItemStack(Items.TNT)),
-                        new Ingredient.ItemValue(new ItemStack(Items.TNT)),
-                        new Ingredient.ItemValue(new ItemStack(ModuleCore.RANGE_ADDONS[11].get())),
-                        new Ingredient.ItemValue(new ItemStack(Items.DIAMOND_BLOCK)),
-                        new Ingredient.ItemValue(new ItemStack(Items.NETHER_STAR)),
-                        new Ingredient.ItemValue(new ItemStack(Items.NETHER_STAR)),
-                },
-                new FluidStack(ModuleCore.ETHER.getSourceFluid().get(), 2000), 400, new ItemStack(this), FluidStack.EMPTY);
+    public void registerRecipe(RecipeOutput consumer) {
+        DissolutionChamberRecipe.createRecipe(consumer, "infinity_nuke", new DissolutionChamberRecipe(List.of(
+                Ingredient.of(new ItemStack(Items.TNT)),
+                Ingredient.of(new ItemStack(Items.TNT)),
+                Ingredient.of(new ItemStack(Items.TNT)),
+                Ingredient.of(new ItemStack(Items.TNT)),
+                Ingredient.of(new ItemStack(ModuleCore.RANGE_ADDONS[11].get())),
+                Ingredient.of(new ItemStack(Items.DIAMOND_BLOCK)),
+                Ingredient.of(new ItemStack(Items.NETHER_STAR)),
+                Ingredient.of(new ItemStack(Items.NETHER_STAR))
+        ), new FluidStack(ModuleCore.ETHER.getSourceFluid().get(), 2000), 400, Optional.of(new ItemStack(this)), Optional.empty()));
     }
 }

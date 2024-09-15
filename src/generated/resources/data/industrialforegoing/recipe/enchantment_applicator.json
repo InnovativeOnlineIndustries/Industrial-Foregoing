@@ -1,0 +1,33 @@
+{
+  "neoforge:conditions": [
+    {
+      "type": "neoforge:item_exists",
+      "item": "industrialforegoing:enchantment_applicator"
+    }
+  ],
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "B": {
+      "item": "minecraft:anvil"
+    },
+    "G": {
+      "tag": "c:gears/gold"
+    },
+    "M": {
+      "tag": "industrialforegoing:machine_frame/advanced"
+    },
+    "P": {
+      "tag": "c:plastic"
+    }
+  },
+  "pattern": [
+    "PPP",
+    "BMB",
+    "GBG"
+  ],
+  "result": {
+    "count": 1,
+    "id": "industrialforegoing:enchantment_applicator"
+  }
+}

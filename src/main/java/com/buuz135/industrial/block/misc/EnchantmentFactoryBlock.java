@@ -28,18 +28,16 @@ import com.buuz135.industrial.module.ModuleMisc;
 import com.buuz135.industrial.utils.IndustrialTags;
 import com.hrznstudio.titanium.block.RotatableBlock;
 import com.hrznstudio.titanium.recipe.generator.TitaniumShapedRecipeBuilder;
-import net.minecraft.data.recipes.FinishedRecipe;
+import net.minecraft.data.recipes.RecipeOutput;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 
-import java.util.function.Consumer;
-
 public class EnchantmentFactoryBlock extends IndustrialBlock<EnchantmentFactoryTile> {
 
     public EnchantmentFactoryBlock() {
-        super("enchantment_factory", BlockBehaviour.Properties.copy(Blocks.IRON_BLOCK), EnchantmentFactoryTile.class, ModuleMisc.TAB_MISC);
+        super("enchantment_factory", BlockBehaviour.Properties.ofFullCopy(Blocks.IRON_BLOCK), EnchantmentFactoryTile.class, ModuleMisc.TAB_MISC);
     }
 
     @Override
@@ -53,7 +51,7 @@ public class EnchantmentFactoryBlock extends IndustrialBlock<EnchantmentFactoryT
     }
 
     @Override
-    public void registerRecipe(Consumer<FinishedRecipe> consumer) {
+    public void registerRecipe(RecipeOutput consumer) {
         TitaniumShapedRecipeBuilder.shapedRecipe(this)
                 .pattern("PBP").pattern("DMD").pattern("OOO")
                 .define('P', IndustrialTags.Items.PLASTIC)

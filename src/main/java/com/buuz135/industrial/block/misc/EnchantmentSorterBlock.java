@@ -28,18 +28,16 @@ import com.buuz135.industrial.module.ModuleMisc;
 import com.buuz135.industrial.utils.IndustrialTags;
 import com.hrznstudio.titanium.recipe.generator.TitaniumShapedRecipeBuilder;
 import com.hrznstudio.titanium.util.TagUtil;
-import net.minecraft.data.recipes.FinishedRecipe;
+import net.minecraft.data.recipes.RecipeOutput;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 
-import java.util.function.Consumer;
-
 public class EnchantmentSorterBlock extends IndustrialBlock<EnchantmentSorterTile> {
 
     public EnchantmentSorterBlock() {
-        super("enchantment_sorter", Properties.copy(Blocks.IRON_BLOCK), EnchantmentSorterTile.class, ModuleMisc.TAB_MISC);
+        super("enchantment_sorter", Properties.ofFullCopy(Blocks.IRON_BLOCK), EnchantmentSorterTile.class, ModuleMisc.TAB_MISC);
     }
 
     @Override
@@ -53,7 +51,7 @@ public class EnchantmentSorterBlock extends IndustrialBlock<EnchantmentSorterTil
     }
 
     @Override
-    public void registerRecipe(Consumer<FinishedRecipe> consumer) {
+    public void registerRecipe(RecipeOutput consumer) {
         TitaniumShapedRecipeBuilder.shapedRecipe(this)
                 .pattern("PSP").pattern("BME").pattern("PGP")
                 .define('P', IndustrialTags.Items.PLASTIC)
@@ -61,7 +59,7 @@ public class EnchantmentSorterBlock extends IndustrialBlock<EnchantmentSorterTil
                 .define('B', Items.BOOK)
                 .define('E', Items.ENCHANTED_BOOK)
                 .define('M', IndustrialTags.Items.MACHINE_FRAME_ADVANCED)
-                .define('G', TagUtil.getItemTag(new ResourceLocation("forge:gears/diamond")))
+                .define('G', TagUtil.getItemTag(ResourceLocation.fromNamespaceAndPath("c", "gears/diamond")))
                 .save(consumer);
     }
 

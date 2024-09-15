@@ -24,8 +24,6 @@ package com.buuz135.industrial.proxy.client;
 
 import com.buuz135.industrial.block.generator.tile.MycelialReactorTile;
 import com.buuz135.industrial.block.tile.IndustrialAreaWorkingTile;
-import com.buuz135.industrial.block.transportstorage.tile.BHTile;
-import com.buuz135.industrial.block.transportstorage.tile.BlackHoleTankTile;
 import com.buuz135.industrial.block.transportstorage.tile.ConveyorTile;
 import com.buuz135.industrial.block.transportstorage.tile.TransporterTile;
 import com.buuz135.industrial.entity.InfinityLauncherProjectileEntity;
@@ -40,8 +38,10 @@ import com.buuz135.industrial.proxy.CommonProxy;
 import com.buuz135.industrial.proxy.client.event.IFClientEvents;
 import com.buuz135.industrial.proxy.client.render.*;
 import com.buuz135.industrial.utils.FluidUtils;
+import com.buuz135.industrial.utils.IFAttachments;
 import com.buuz135.industrial.utils.Reference;
 import com.hrznstudio.titanium.event.handler.EventManager;
+import com.hrznstudio.titanium.module.BlockWithTile;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.KeyMapping;
 import net.minecraft.client.Minecraft;
@@ -51,129 +51,34 @@ import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.entity.EntityRenderDispatcher;
 import net.minecraft.client.renderer.entity.player.PlayerRenderer;
 import net.minecraft.client.renderer.item.ItemProperties;
+import net.minecraft.client.resources.PlayerSkin;
 import net.minecraft.client.resources.model.BakedModel;
-import net.minecraft.nbt.CompoundTag;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.util.FastColor;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.SpawnEggItem;
-import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityType;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.client.event.EntityRenderersEvent;
-import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.common.capabilities.ForgeCapabilities;
-import net.minecraftforge.event.entity.player.ItemTooltipEvent;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fluids.capability.IFluidHandlerItem;
-import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.registries.ForgeRegistries;
-import net.minecraftforge.registries.RegistryObject;
-import org.apache.commons.lang3.tuple.Pair;
+import net.neoforged.api.distmarker.Dist;
+import net.neoforged.bus.api.SubscribeEvent;
+import net.neoforged.fml.common.EventBusSubscriber;
+import net.neoforged.neoforge.capabilities.Capabilities;
+import net.neoforged.neoforge.client.event.EntityRenderersEvent;
+import net.neoforged.neoforge.common.NeoForge;
+import net.neoforged.neoforge.event.entity.player.ItemTooltipEvent;
 
 import java.util.Calendar;
 
-@Mod.EventBusSubscriber(value = Dist.CLIENT, bus = Mod.EventBusSubscriber.Bus.MOD)
+@EventBusSubscriber(value = Dist.CLIENT, bus = EventBusSubscriber.Bus.MOD)
 public class ClientProxy extends CommonProxy {
 
-    public static ResourceLocation GUI = new ResourceLocation(Reference.MOD_ID, "textures/gui/machines.png");
+    public static ResourceLocation GUI = ResourceLocation.fromNamespaceAndPath(Reference.MOD_ID, "textures/gui/machines.png");
     public static BakedModel ears_baked;
 
     public static KeyMapping OPEN_BACKPACK;
-
-
-    @Override
-    public void run() {
-
-        MinecraftForge.EVENT_BUS.register(new IFClientEvents());
-
-        //((IReloadableResourceManager) Minecraft.getInstance().getResourceManager()).addReloadListener(resourceManager -> FluidUtils.colorCache.clear());
-
-        ItemBlockRenderTypes.setRenderLayer(ModuleTransportStorage.CONVEYOR.getLeft().get(), RenderType.cutout());
-        ItemBlockRenderTypes.setRenderLayer(ModuleTransportStorage.BLACK_HOLE_TANK_COMMON.getLeft().get(), RenderType.cutout());
-        ItemBlockRenderTypes.setRenderLayer(ModuleTransportStorage.BLACK_HOLE_TANK_PITY.getLeft().get(), RenderType.cutout());
-        ItemBlockRenderTypes.setRenderLayer(ModuleTransportStorage.BLACK_HOLE_TANK_SIMPLE.getLeft().get(), RenderType.cutout());
-        ItemBlockRenderTypes.setRenderLayer(ModuleTransportStorage.BLACK_HOLE_TANK_ADVANCED.getLeft().get(), RenderType.cutout());
-        ItemBlockRenderTypes.setRenderLayer(ModuleTransportStorage.BLACK_HOLE_TANK_SUPREME.getLeft().get(), RenderType.cutout());
-
-        Minecraft.getInstance().getBlockColors().register((state, worldIn, pos, tintIndex) -> {
-            if (tintIndex == 0 && worldIn != null && pos != null) {
-                BlockEntity entity = worldIn.getBlockEntity(pos);
-                if (entity instanceof ConveyorTile) {
-                    return ((ConveyorTile) entity).getColor();
-                }
-            }
-            return 0xFFFFFFF;
-        }, ModuleTransportStorage.CONVEYOR.getLeft().get());
-        Minecraft.getInstance().getItemColors().register((stack, tintIndex) -> {
-            if (tintIndex == 1 || tintIndex == 2 || tintIndex == 3) {
-                SpawnEggItem info = null;
-                if (stack.hasTag() && stack.getTag().contains("entity")) {
-                    ResourceLocation id = new ResourceLocation(stack.getTag().getString("entity"));
-                    info = SpawnEggItem.byId(ForgeRegistries.ENTITY_TYPES.getValue(id));
-                }
-                return info == null ? 0x636363 : tintIndex == 3 ? ((MobImprisonmentToolItem) ModuleTool.MOB_IMPRISONMENT_TOOL.get()).isBlacklisted(info.getType(new CompoundTag())) ? 0xDB201A : 0x636363 : info.getColor(tintIndex - 1);
-            }
-            return 0xFFFFFF;
-        }, ModuleTool.MOB_IMPRISONMENT_TOOL.get());
-        Minecraft.getInstance().getItemColors().register((stack, tintIndex) -> {
-            if (tintIndex == 0) {
-                return InfinityTier.getTierBraquet(ItemInfinity.getPowerFromStack(stack)).getLeft().getTextureColor();
-            }
-            return 0xFFFFFF;
-        }, ModuleTool.INFINITY_BACKPACK.get(), ModuleTool.INFINITY_LAUNCHER.get(), ModuleTool.INFINITY_NUKE.get(), ModuleTool.INFINITY_TRIDENT.get(), ModuleTool.INFINITY_HAMMER.get(), ModuleTool.INFINITY_SAW.get(), ModuleTool.INFINITY_DRILL.get());
-        Minecraft.getInstance().getBlockColors().register((state, worldIn, pos, tintIndex) -> {
-            if (tintIndex == 0 && worldIn != null && pos != null && worldIn.getBlockEntity(pos) instanceof BlackHoleTankTile) {
-                BlackHoleTankTile tank = (BlackHoleTankTile) worldIn.getBlockEntity(pos);
-                if (tank != null && tank.getTank().getFluidAmount() > 0) {
-                    int color = FluidUtils.getFluidColor(tank.getTank().getFluid());
-                    if (color != -1) return color;
-                }
-            }
-            return 0xFFFFFF;
-        }, ModuleTransportStorage.BLACK_HOLE_TANK_COMMON.getLeft().get(), ModuleTransportStorage.BLACK_HOLE_TANK_PITY.getLeft().get(), ModuleTransportStorage.BLACK_HOLE_TANK_SIMPLE.getLeft().get(), ModuleTransportStorage.BLACK_HOLE_TANK_ADVANCED.getLeft().get(), ModuleTransportStorage.BLACK_HOLE_TANK_SUPREME.getLeft().get());
-        Minecraft.getInstance().getItemColors().register((stack, tintIndex) -> {
-            if (tintIndex == 0 && stack.getCapability(ForgeCapabilities.FLUID_HANDLER_ITEM).isPresent()) {
-                IFluidHandlerItem fluidHandlerItem = stack.getCapability(ForgeCapabilities.FLUID_HANDLER_ITEM).orElseGet(null);
-                if (fluidHandlerItem.getFluidInTank(0).getAmount() > 0) {
-                    int color = FluidUtils.getFluidColor(fluidHandlerItem.getFluidInTank(0));
-                    if (color != -1) return color;
-                }
-            }
-            return 0xFFFFFF;
-        }, ModuleTransportStorage.BLACK_HOLE_TANK_COMMON.getLeft().get(), ModuleTransportStorage.BLACK_HOLE_TANK_PITY.getLeft().get(), ModuleTransportStorage.BLACK_HOLE_TANK_SIMPLE.getLeft().get(), ModuleTransportStorage.BLACK_HOLE_TANK_ADVANCED.getLeft().get(), ModuleTransportStorage.BLACK_HOLE_TANK_SUPREME.getLeft().get());
-        Minecraft.getInstance().getItemColors().register((stack, tintIndex) -> {
-            if (tintIndex == 1 && stack.getCapability(ForgeCapabilities.FLUID_HANDLER_ITEM).isPresent()) {
-                IFluidHandlerItem fluidHandlerItem = stack.getCapability(ForgeCapabilities.FLUID_HANDLER_ITEM).orElseGet(null);
-                if (fluidHandlerItem.getFluidInTank(0).getAmount() > 0) {
-                    int color = FluidUtils.getFluidColor(fluidHandlerItem.getFluidInTank(0));
-                    if (color != -1) return color;
-                }
-            }
-            return 0xFFFFFF;
-        }, ModuleCore.RAW_ORE_MEAT.getBucketFluid(), ModuleCore.FERMENTED_ORE_MEAT.getBucketFluid());
-
-        EventManager.forge(ItemTooltipEvent.class).filter(event -> ForgeRegistries.ITEMS.getKey(event.getItemStack().getItem()).getNamespace().equals(Reference.MOD_ID)).process(event -> {
-            if (Calendar.getInstance().get(Calendar.DAY_OF_MONTH) == 1 && Calendar.getInstance().get(Calendar.MONTH) == Calendar.APRIL) {
-                event.getToolTip().add(Component.literal("Press Alt + F4 to cheat this item").withStyle(ChatFormatting.DARK_AQUA));
-            }
-        }).subscribe();
-
-        Minecraft instance = Minecraft.getInstance();
-        EntityRenderDispatcher manager = instance.getEntityRenderDispatcher();
-
-        ItemProperties.register(ModuleTool.INFINITY_LAUNCHER.get(), new ResourceLocation(Reference.MOD_ID, "cooldown"), (stack, world, entity, number) -> {
-            if (entity instanceof Player) {
-                return ((Player) entity).getCooldowns().isOnCooldown(stack.getItem()) ? 1 : 2;
-            }
-            return 2f;
-        });
-        ItemProperties.register(ModuleCore.MACHINE_SETTINGS_COPIER.get(), new ResourceLocation(Reference.MOD_ID, "stored"), (stack, world, entity, number) -> {
-            return stack.hasTag() ? 1 : 0;
-        });
-    }
 
     @SubscribeEvent
     public static void onRegisterRenderers(EntityRenderersEvent.RegisterRenderers event) {
@@ -192,32 +97,30 @@ public class ClientProxy extends CommonProxy {
         registerAreaRender(event, ModuleResourceProduction.LASER_DRILL);
         registerAreaRender(event, ModuleAgricultureHusbandry.MOB_DUPLICATOR);
 
+        event.registerBlockEntityRenderer((BlockEntityType<? extends MycelialReactorTile>) ModuleGenerator.MYCELIAL_REACTOR.type().get(), MycelialReactorTESR::new);
 
-        event.registerBlockEntityRenderer((BlockEntityType<? extends BHTile>) ModuleTransportStorage.BLACK_HOLE_UNIT_COMMON.getRight().get(), BlackHoleUnitTESR::new);
-        event.registerBlockEntityRenderer((BlockEntityType<? extends BHTile>) ModuleTransportStorage.BLACK_HOLE_UNIT_PITY.getRight().get(), BlackHoleUnitTESR::new);
-        event.registerBlockEntityRenderer((BlockEntityType<? extends BHTile>) ModuleTransportStorage.BLACK_HOLE_UNIT_SIMPLE.getRight().get(), BlackHoleUnitTESR::new);
-        event.registerBlockEntityRenderer((BlockEntityType<? extends BHTile>) ModuleTransportStorage.BLACK_HOLE_UNIT_ADVANCED.getRight().get(), BlackHoleUnitTESR::new);
-        event.registerBlockEntityRenderer((BlockEntityType<? extends BHTile>) ModuleTransportStorage.BLACK_HOLE_UNIT_SUPREME.getRight().get(), BlackHoleUnitTESR::new);
-        event.registerBlockEntityRenderer((BlockEntityType<? extends BHTile>) ModuleTransportStorage.BLACK_HOLE_TANK_COMMON.getRight().get(), BlackHoleUnitTESR::new);
-        event.registerBlockEntityRenderer((BlockEntityType<? extends BHTile>) ModuleTransportStorage.BLACK_HOLE_TANK_PITY.getRight().get(), BlackHoleUnitTESR::new);
-        event.registerBlockEntityRenderer((BlockEntityType<? extends BHTile>) ModuleTransportStorage.BLACK_HOLE_TANK_SIMPLE.getRight().get(), BlackHoleUnitTESR::new);
-        event.registerBlockEntityRenderer((BlockEntityType<? extends BHTile>) ModuleTransportStorage.BLACK_HOLE_TANK_ADVANCED.getRight().get(), BlackHoleUnitTESR::new);
-        event.registerBlockEntityRenderer((BlockEntityType<? extends BHTile>) ModuleTransportStorage.BLACK_HOLE_UNIT_COMMON.getRight().get(), BlackHoleUnitTESR::new);
-        event.registerBlockEntityRenderer((BlockEntityType<? extends BHTile>) ModuleTransportStorage.BLACK_HOLE_TANK_SUPREME.getRight().get(), BlackHoleUnitTESR::new);
+        event.registerEntityRenderer((EntityType<? extends InfinityTridentEntity>) ModuleTool.TRIDENT_ENTITY_TYPE.value(), InfinityTridentRenderer::new);
+        event.registerEntityRenderer((EntityType<? extends InfinityNukeEntity>) ModuleTool.INFINITY_NUKE_ENTITY_TYPE.value(), InfinityNukeRenderer::new);
+        event.registerEntityRenderer((EntityType<? extends InfinityLauncherProjectileEntity>) ModuleTool.INFINITY_LAUNCHER_PROJECTILE_ENTITY_TYPE.value(), InfinityLauncherProjectileRenderer::new);
 
-        event.registerBlockEntityRenderer((BlockEntityType<? extends MycelialReactorTile>) ModuleGenerator.MYCELIAL_REACTOR.getRight().get(), MycelialReactorTESR::new);
+        event.registerBlockEntityRenderer(((BlockEntityType<? extends TransporterTile>) ModuleTransportStorage.TRANSPORTER.type().get()), TransporterTESR::new);
 
-        event.registerEntityRenderer((EntityType<? extends InfinityTridentEntity>) ModuleTool.TRIDENT_ENTITY_TYPE.get(), InfinityTridentRenderer::new);
-        event.registerEntityRenderer((EntityType<? extends InfinityNukeEntity>) ModuleTool.INFINITY_NUKE_ENTITY_TYPE.get(), InfinityNukeRenderer::new);
-        event.registerEntityRenderer((EntityType<? extends InfinityLauncherProjectileEntity>) ModuleTool.INFINITY_LAUNCHER_PROJECTILE_ENTITY_TYPE.get(), InfinityLauncherProjectileRenderer::new);
-
-        event.registerBlockEntityRenderer(((BlockEntityType<? extends TransporterTile>) ModuleTransportStorage.TRANSPORTER.getRight().get()), TransporterTESR::new);
-
-        event.registerBlockEntityRenderer(((BlockEntityType<? extends ConveyorTile>) ModuleTransportStorage.CONVEYOR.getRight().get()), FluidConveyorTESR::new);
+        event.registerBlockEntityRenderer(((BlockEntityType<? extends ConveyorTile>) ModuleTransportStorage.CONVEYOR.type().get()), FluidConveyorTESR::new);
     }
 
-    private static void registerAreaRender(EntityRenderersEvent.RegisterRenderers event, Pair<RegistryObject<Block>, RegistryObject<BlockEntityType<?>>> pair) {
-        event.registerBlockEntityRenderer((BlockEntityType<? extends IndustrialAreaWorkingTile>) pair.getRight().get(), WorkingAreaTESR::new);
+    private static void registerAreaRender(EntityRenderersEvent.RegisterRenderers event, BlockWithTile pair) {
+        event.registerBlockEntityRenderer((BlockEntityType<? extends IndustrialAreaWorkingTile>) pair.type().get(), WorkingAreaTESR::new);
+    }
+
+    @SubscribeEvent
+    public static void addLayers(EntityRenderersEvent.AddLayers event) {
+        for (PlayerSkin.Model skin : event.getSkins()) {
+            var renderer = event.getSkin(skin);
+            if (renderer instanceof PlayerRenderer playerRenderer) {
+                playerRenderer.addLayer(new ContributorsCatEarsRender(playerRenderer));
+                playerRenderer.addLayer(new InfinityLauncherProjectileArmorLayer(playerRenderer));
+            }
+        }
     }
 
     @SubscribeEvent
@@ -229,15 +132,75 @@ public class ClientProxy extends CommonProxy {
         event.registerLayerDefinition(InfinityLauncherProjectileRenderer.PROJECTILE_LAYER, InfinityLauncherProjectileModel::createBodyLayer);
     }
 
-    @SubscribeEvent
-    public static void addLayers(EntityRenderersEvent.AddLayers event) {
-        for (String skin : event.getSkins()) {
-            var renderer = event.getSkin(skin);
-            if (renderer instanceof PlayerRenderer playerRenderer) {
-                playerRenderer.addLayer(new ContributorsCatEarsRender(playerRenderer));
-                playerRenderer.addLayer(new InfinityLauncherProjectileArmorLayer(playerRenderer));
+    @Override
+    public void run() {
+
+        NeoForge.EVENT_BUS.register(new IFClientEvents());
+
+        //((IReloadableResourceManager) Minecraft.getInstance().getResourceManager()).addReloadListener(resourceManager -> FluidUtils.colorCache.clear());
+
+        ItemBlockRenderTypes.setRenderLayer(ModuleTransportStorage.CONVEYOR.getBlock(), RenderType.cutout());
+        ItemBlockRenderTypes.setRenderLayer(ModuleTool.INFINITY_BACKPACK_BLOCK.getBlock(), RenderType.cutoutMipped());
+
+        Minecraft.getInstance().getBlockColors().register((state, worldIn, pos, tintIndex) -> {
+            if (tintIndex == 0 && worldIn != null && pos != null) {
+                BlockEntity entity = worldIn.getBlockEntity(pos);
+                if (entity instanceof ConveyorTile) {
+                    return ((ConveyorTile) entity).getColor();
+                }
             }
-        }
+            return 0xFFFFFFF;
+        }, ModuleTransportStorage.CONVEYOR.getBlock());
+        Minecraft.getInstance().getItemColors().register((stack, tintIndex) -> {
+            if (tintIndex == 1 || tintIndex == 2 || tintIndex == 3) {
+                SpawnEggItem info = null;
+                var blacklisted = false;
+                if (stack.has(IFAttachments.MOB_IMPRISONMENT_TOOL)) {
+                    var tag = stack.get(IFAttachments.MOB_IMPRISONMENT_TOOL);
+                    ResourceLocation id = ResourceLocation.parse(tag.getString("entity"));
+                    var type = BuiltInRegistries.ENTITY_TYPE.get(id);
+                    info = SpawnEggItem.byId(type);
+                    blacklisted = ((MobImprisonmentToolItem) ModuleTool.MOB_IMPRISONMENT_TOOL.get()).isBlacklisted(type);
+                }
+                return info == null ? 0xFF636363 : tintIndex == 3 ? blacklisted ? 0xFFDB201A : 0xFF636363 : FastColor.ARGB32.opaque(info.getColor(tintIndex - 1));
+            }
+            return 0xFFFFFFFF;
+        }, ModuleTool.MOB_IMPRISONMENT_TOOL.get());
+        Minecraft.getInstance().getItemColors().register((stack, tintIndex) -> {
+            if (tintIndex == 0) {
+                return InfinityTier.getTierBraquet(ItemInfinity.getPowerFromStack(stack)).getLeft().getTextureColor();
+            }
+            return 0xFFFFFF;
+        }, ModuleTool.INFINITY_BACKPACK.get(), ModuleTool.INFINITY_LAUNCHER.get(), ModuleTool.INFINITY_NUKE.get(), ModuleTool.INFINITY_TRIDENT.get(), ModuleTool.INFINITY_HAMMER.get(), ModuleTool.INFINITY_SAW.get(), ModuleTool.INFINITY_DRILL.get());
+        Minecraft.getInstance().getItemColors().register((stack, tintIndex) -> {
+            var fluidHandlerItem = stack.getCapability(Capabilities.FluidHandler.ITEM);
+            if (tintIndex == 1 && fluidHandlerItem != null) {
+                if (fluidHandlerItem.getFluidInTank(0).getAmount() > 0) {
+                    int color = FluidUtils.getFluidColor(fluidHandlerItem.getFluidInTank(0));
+                    if (color != -1) return color;
+                }
+            }
+            return 0xFFFFFF;
+        }, ModuleCore.RAW_ORE_MEAT.getBucketFluid(), ModuleCore.FERMENTED_ORE_MEAT.getBucketFluid());
+
+        EventManager.forge(ItemTooltipEvent.class).filter(event -> BuiltInRegistries.ITEM.getKey(event.getItemStack().getItem()).getNamespace().equals(Reference.MOD_ID)).process(event -> {
+            if (Calendar.getInstance().get(Calendar.DAY_OF_MONTH) == 1 && Calendar.getInstance().get(Calendar.MONTH) == Calendar.APRIL) {
+                event.getToolTip().add(Component.literal("Press Alt + F4 to cheat this item").withStyle(ChatFormatting.DARK_AQUA));
+            }
+        }).subscribe();
+
+        Minecraft instance = Minecraft.getInstance();
+        EntityRenderDispatcher manager = instance.getEntityRenderDispatcher();
+
+        ItemProperties.register(ModuleTool.INFINITY_LAUNCHER.get(), ResourceLocation.fromNamespaceAndPath(Reference.MOD_ID, "cooldown"), (stack, world, entity, number) -> {
+            if (entity instanceof Player) {
+                return ((Player) entity).getCooldowns().isOnCooldown(stack.getItem()) ? 1 : 2;
+            }
+            return 2f;
+        });
+        ItemProperties.register(ModuleCore.MACHINE_SETTINGS_COPIER.get(), ResourceLocation.fromNamespaceAndPath(Reference.MOD_ID, "stored"), (stack, world, entity, number) -> {
+            return stack.has(IFAttachments.SETTINGS_COPIER) ? 1 : 0;
+        });
     }
 
 }

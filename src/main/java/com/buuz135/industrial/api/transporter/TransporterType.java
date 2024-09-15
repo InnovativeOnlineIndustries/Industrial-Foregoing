@@ -24,36 +24,28 @@ package com.buuz135.industrial.api.transporter;
 import com.buuz135.industrial.IndustrialForegoing;
 import com.buuz135.industrial.api.IBlockContainer;
 import com.buuz135.industrial.api.conveyor.gui.IGuiComponent;
+import com.buuz135.industrial.block.transportstorage.tile.TransporterTile;
 import com.buuz135.industrial.block.transportstorage.transporter.TransporterVoxelShapes;
-import com.buuz135.industrial.gui.component.custom.TextureGuiComponent;
-import com.buuz135.industrial.item.addon.EfficiencyAddonItem;
-import com.buuz135.industrial.item.addon.SpeedAddonItem;
 import com.buuz135.industrial.proxy.network.TransporterSyncMessage;
-import com.buuz135.industrial.utils.Reference;
 import com.hrznstudio.titanium.api.augment.AugmentTypes;
 import com.hrznstudio.titanium.item.AugmentWrapper;
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.network.chat.Component;
-import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.Entity;
-import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
-import net.minecraftforge.common.util.INBTSerializable;
-import net.minecraftforge.items.ItemHandlerHelper;
+import net.neoforged.api.distmarker.Dist;
+import net.neoforged.api.distmarker.OnlyIn;
+import net.neoforged.neoforge.common.util.INBTSerializable;
 import org.joml.Vector3f;
 
-import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -64,44 +56,17 @@ public class TransporterType implements INBTSerializable<CompoundTag> {
     private TransporterTypeFactory factory;
     private Direction side;
     private TransporterTypeFactory.TransporterAction action;
-    private ItemStack speed;
-    private ItemStack efficiency;
 
     public TransporterType(IBlockContainer container, TransporterTypeFactory factory, Direction side, TransporterTypeFactory.TransporterAction action) {
         this.container = container;
         this.factory = factory;
         this.side = side;
         this.action = action;
-        this.speed = ItemStack.EMPTY;
-        this.efficiency = ItemStack.EMPTY;
-    }
-
-    public boolean onUpgradeActivated(Player player, InteractionHand hand) {
-        ItemStack handStack = player.getItemInHand(hand);
-        if (!handStack.isEmpty()) {
-            if (efficiency.isEmpty() && handStack.getItem() instanceof EfficiencyAddonItem) {
-                efficiency = ItemHandlerHelper.copyStackWithSize(handStack, 1);
-                handStack.shrink(1);
-                return true;
-            }
-            if (speed.isEmpty() && handStack.getItem() instanceof SpeedAddonItem) {
-                speed = ItemHandlerHelper.copyStackWithSize(handStack, 1);
-                handStack.shrink(1);
-                return true;
-            }
-        }
-        return false;
     }
 
     public Collection<ItemStack> getDrops() {
         Collection<ItemStack> drops = new ArrayList<>();
         drops.add(new ItemStack(this.getFactory().getUpgradeItem(), 1));
-        if (!this.efficiency.isEmpty()) {
-            drops.add(this.efficiency);
-        }
-        if (!this.speed.isEmpty()) {
-            drops.add(this.speed);
-        }
         return drops;
     }
 
@@ -219,24 +184,8 @@ public class TransporterType implements INBTSerializable<CompoundTag> {
     }
 
     public void addComponentsToGui(List<IGuiComponent> componentList) {
-        ResourceLocation res = new ResourceLocation(Reference.MOD_ID, "textures/gui/machines.png");
-        componentList.add(new TextureGuiComponent(158, 4, 14, 14, res, 96, 233) {
-            @Nullable
-            @Override
-            public List<Component> getTooltip(int guiX, int guiY, double mouseX, double mouseY) {
-                List<Component> components = new ArrayList<>();
-                if (!speed.isEmpty()) {
-                    components.add(speed.getHoverName());
-                }
-                if (!efficiency.isEmpty()) {
-                    components.add(efficiency.getHoverName());
-                }
-                if (components.isEmpty()) {
-                    components.add(Component.literal("No Addons"));
-                }
-                return components;
-            }
-        });
+
+
     }
 
     public boolean ignoresCollision() {
@@ -255,27 +204,31 @@ public class TransporterType implements INBTSerializable<CompoundTag> {
     }
 
     @Override
-    public CompoundTag serializeNBT() {
+    public CompoundTag serializeNBT(HolderLookup.Provider provider) {
         CompoundTag compoundNBT = new CompoundTag();
         compoundNBT.putBoolean("Insert", action == TransporterTypeFactory.TransporterAction.INSERT);
-        compoundNBT.put("Efficiency", this.efficiency.serializeNBT());
-        compoundNBT.put("Speed", this.speed.serializeNBT());
         return compoundNBT;
     }
 
     @Override
-    public void deserializeNBT(CompoundTag nbt) {
+    public void deserializeNBT(HolderLookup.Provider provider, CompoundTag nbt) {
         action = nbt.getBoolean("Insert") ? TransporterTypeFactory.TransporterAction.INSERT : TransporterTypeFactory.TransporterAction.EXTRACT;
-        speed = ItemStack.of(nbt.getCompound("Speed"));
-        efficiency = ItemStack.of(nbt.getCompound("Efficiency"));
     }
 
     public float getSpeed() {
-        return this.speed.isEmpty() ? 1 : AugmentWrapper.getType(this.speed, AugmentTypes.SPEED);
+        var tile = getContainer();
+        if (tile instanceof TransporterTile transporterTile && transporterTile.hasAugmentInstalled(AugmentTypes.SPEED)) {
+            return AugmentWrapper.getType(transporterTile.getInstalledAugments(AugmentTypes.SPEED).getFirst(), AugmentTypes.SPEED);
+        }
+        return 1;
     }
 
     public float getEfficiency() {
-        return this.efficiency.isEmpty() ? 1 : ((1 - AugmentWrapper.getType(this.efficiency, AugmentTypes.EFFICIENCY)) / 0.1f) * 32;
+        var tile = getContainer();
+        if (tile instanceof TransporterTile transporterTile && transporterTile.hasAugmentInstalled(AugmentTypes.EFFICIENCY)) {
+            return ((1 - AugmentWrapper.getType(transporterTile.getInstalledAugments(AugmentTypes.EFFICIENCY).getFirst(), AugmentTypes.EFFICIENCY)) / 0.1f) * 32;
+        }
+        return 1;
     }
 
     @OnlyIn(Dist.CLIENT)

@@ -27,17 +27,15 @@ import com.buuz135.industrial.block.misc.tile.InfinityChargerTile;
 import com.buuz135.industrial.module.ModuleMisc;
 import com.buuz135.industrial.utils.IndustrialTags;
 import com.hrznstudio.titanium.recipe.generator.TitaniumShapedRecipeBuilder;
-import net.minecraft.data.recipes.FinishedRecipe;
+import net.minecraft.data.recipes.RecipeOutput;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 
-import java.util.function.Consumer;
-
 public class InfinityChargerBlock extends IndustrialBlock<InfinityChargerTile> {
 
     public InfinityChargerBlock() {
-        super("infinity_charger", Properties.copy(Blocks.IRON_BLOCK), InfinityChargerTile.class, ModuleMisc.TAB_MISC);
+        super("infinity_charger", Properties.ofFullCopy(Blocks.IRON_BLOCK), InfinityChargerTile.class, ModuleMisc.TAB_MISC);
     }
 
     @Override
@@ -51,7 +49,7 @@ public class InfinityChargerBlock extends IndustrialBlock<InfinityChargerTile> {
     }
 
     @Override
-    public void registerRecipe(Consumer<FinishedRecipe> consumer) {
+    public void registerRecipe(RecipeOutput consumer) {
         TitaniumShapedRecipeBuilder.shapedRecipe(this)
                 .pattern("ppp").pattern("rcr").pattern("omo")
                 .define('p', IndustrialTags.Items.PLASTIC)

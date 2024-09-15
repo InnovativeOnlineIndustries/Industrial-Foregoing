@@ -30,7 +30,7 @@ import com.hrznstudio.titanium.recipe.generator.TitaniumShapedRecipeBuilder;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Vec3i;
 import net.minecraft.core.particles.ParticleTypes;
-import net.minecraft.data.recipes.FinishedRecipe;
+import net.minecraft.data.recipes.RecipeOutput;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.Level;
@@ -38,15 +38,13 @@ import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.Vec3;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
-
-import java.util.function.Consumer;
+import net.neoforged.api.distmarker.Dist;
+import net.neoforged.api.distmarker.OnlyIn;
 
 public class LaserDrillBlock extends IndustrialBlock<LaserDrillTile> {
 
     public LaserDrillBlock() {
-        super("laser_drill", Properties.copy(Blocks.IRON_BLOCK), LaserDrillTile.class, ModuleResourceProduction.TAB_RESOURCE);
+        super("laser_drill", Properties.ofFullCopy(Blocks.IRON_BLOCK), LaserDrillTile.class, ModuleResourceProduction.TAB_RESOURCE);
     }
 
     @Override
@@ -77,7 +75,7 @@ public class LaserDrillBlock extends IndustrialBlock<LaserDrillTile> {
     }
 
     @Override
-    public void registerRecipe(Consumer<FinishedRecipe> consumer) {
+    public void registerRecipe(RecipeOutput consumer) {
         TitaniumShapedRecipeBuilder.shapedRecipe(this).pattern("pfp").pattern("bmb").pattern("grg")
                 .define('p', IndustrialTags.Items.PLASTIC)
                 .define('f', IndustrialTags.Items.GEAR_DIAMOND)

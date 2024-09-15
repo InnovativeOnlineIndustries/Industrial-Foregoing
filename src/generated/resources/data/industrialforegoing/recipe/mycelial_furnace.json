@@ -1,0 +1,33 @@
+{
+  "neoforge:conditions": [
+    {
+      "type": "neoforge:item_exists",
+      "item": "industrialforegoing:mycelial_furnace"
+    }
+  ],
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "B": {
+      "tag": "c:storage_blocks/coal"
+    },
+    "C": {
+      "item": "minecraft:furnace"
+    },
+    "M": {
+      "tag": "industrialforegoing:machine_frame/simple"
+    },
+    "R": {
+      "item": "minecraft:redstone"
+    }
+  },
+  "pattern": [
+    "BBB",
+    "BCB",
+    "RMR"
+  ],
+  "result": {
+    "count": 1,
+    "id": "industrialforegoing:mycelial_furnace"
+  }
+}

@@ -28,7 +28,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraftforge.network.NetworkEvent;
+import net.neoforged.neoforge.network.handling.IPayloadContext;
 
 public class TransporterSyncMessage extends Message {
 
@@ -48,7 +48,7 @@ public class TransporterSyncMessage extends Message {
     }
 
     @Override
-    protected void handleMessage(NetworkEvent.Context context) {
+    protected void handleMessage(IPayloadContext context) {
         context.enqueueWork(() -> {
             TileUtil.getTileEntity(Minecraft.getInstance().level, pos, TransporterTile.class).ifPresent(tileEntity -> {
                 tileEntity.getTransporterTypeMap().get(Direction.from3DDataValue(direction)).handleRenderSync(Direction.from3DDataValue(originDirection), sync);

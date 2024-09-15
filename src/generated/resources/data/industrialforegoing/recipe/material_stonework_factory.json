@@ -1,0 +1,42 @@
+{
+  "neoforge:conditions": [
+    {
+      "type": "neoforge:item_exists",
+      "item": "industrialforegoing:material_stonework_factory"
+    }
+  ],
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "a": {
+      "tag": "c:gears/gold"
+    },
+    "b": {
+      "item": "industrialforegoing:pink_slime"
+    },
+    "c": {
+      "item": "minecraft:crafting_table"
+    },
+    "f": {
+      "item": "minecraft:furnace"
+    },
+    "g": {
+      "item": "minecraft:diamond_pickaxe"
+    },
+    "m": {
+      "tag": "industrialforegoing:machine_frame/advanced"
+    },
+    "p": {
+      "tag": "c:plastic"
+    }
+  },
+  "pattern": [
+    "pcp",
+    "gmf",
+    "aba"
+  ],
+  "result": {
+    "count": 1,
+    "id": "industrialforegoing:material_stonework_factory"
+  }
+}

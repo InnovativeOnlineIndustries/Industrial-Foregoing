@@ -38,8 +38,8 @@ import net.minecraft.util.Mth;
 
 public class InfinityTridentRenderer extends EntityRenderer<InfinityTridentEntity> {
 
-    public static final ModelLayerLocation TRIDENT_LAYER = new ModelLayerLocation(new ResourceLocation(Reference.MOD_ID, "infinity_trident"), "main");
-    public static final ResourceLocation TRIDENT = new ResourceLocation(Reference.MOD_ID, "textures/item/infinity_trident.png");
+    public static final ModelLayerLocation TRIDENT_LAYER = new ModelLayerLocation(ResourceLocation.fromNamespaceAndPath(Reference.MOD_ID, "infinity_trident"), "main");
+    public static final ResourceLocation TRIDENT = ResourceLocation.fromNamespaceAndPath(Reference.MOD_ID, "textures/item/infinity_trident.png");
     private final InfinityTridentModel tridentModel;
 
     public InfinityTridentRenderer(EntityRendererProvider.Context p_174286_) {
@@ -50,11 +50,11 @@ public class InfinityTridentRenderer extends EntityRenderer<InfinityTridentEntit
     @Override
     public void render(InfinityTridentEntity entityIn, float entityYaw, float partialTicks, PoseStack matrixStackIn, MultiBufferSource bufferIn, int packedLightIn) {
         matrixStackIn.pushPose();
-        matrixStackIn.mulPose(Axis.YP.rotationDegrees(Mth.lerp(partialTicks, entityIn.yRotO, entityIn.yRot) - 90.0F));
-        matrixStackIn.mulPose(Axis.ZP.rotationDegrees(Mth.lerp(partialTicks, entityIn.xRotO, entityIn.xRot) + 90.0F));
+        matrixStackIn.mulPose(Axis.YP.rotationDegrees(Mth.lerp(partialTicks, entityIn.yRotO, entityIn.getYRot()) - 90.0F));
+        matrixStackIn.mulPose(Axis.ZP.rotationDegrees(Mth.lerp(partialTicks, entityIn.xRotO, entityIn.getXRot()) + 90.0F));
         matrixStackIn.translate(0.5, -0.5, -0.5);
         VertexConsumer ivertexbuilder = net.minecraft.client.renderer.entity.ItemRenderer.getFoilBufferDirect(bufferIn, RenderType.entityTranslucent(this.getTextureLocation(entityIn)), false, entityIn.isEnchanted());
-        this.tridentModel.renderToBuffer(matrixStackIn, ivertexbuilder, packedLightIn, OverlayTexture.NO_OVERLAY, 1.0F, 1.0F, 1.0F, 1.0F);
+        this.tridentModel.renderToBuffer(matrixStackIn, ivertexbuilder, packedLightIn, OverlayTexture.NO_OVERLAY, 0xFFFFFF);
         matrixStackIn.popPose();
         super.render(entityIn, entityYaw, partialTicks, matrixStackIn, bufferIn, packedLightIn);
     }

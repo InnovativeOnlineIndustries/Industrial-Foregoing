@@ -204,10 +204,10 @@ public class ExplosionHelper {
                         long pos = blocksToRmv.get(blocksToUpdatePointer + i);
                         BlockPos blockPos = BlockPos.of(pos);
                         BlockState state = helper.serverWorld.getBlockState(blockPos);
-                        if (state.getBlock() instanceof FallingBlock) {
-                            state.getBlock().tick(state, helper.serverWorld, blockPos, helper.serverWorld.random);
+                        if (state.getBlock() instanceof FallingBlock fallingBlock) {
+                            helper.serverWorld.scheduleTick(blockPos, fallingBlock, 1);
                         }
-                        state.neighborChanged(helper.serverWorld, blockPos, Blocks.AIR, blockPos.above(), false);
+                        state.onNeighborChange(helper.serverWorld, blockPos, blockPos.above());
                     } catch (Throwable e) {
                         IndustrialForegoing.LOGGER.error(e);
                     }

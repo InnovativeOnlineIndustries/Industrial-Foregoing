@@ -23,10 +23,7 @@
 package com.buuz135.industrial.item;
 
 import com.hrznstudio.titanium.tab.TitaniumTab;
-import net.minecraft.data.recipes.FinishedRecipe;
-import net.minecraft.world.item.CreativeModeTab;
-
-import java.util.function.Consumer;
+import net.minecraft.data.recipes.RecipeOutput;
 
 public class RecipelessCustomItem extends IFCustomItem {
 
@@ -39,7 +36,7 @@ public class RecipelessCustomItem extends IFCustomItem {
     }
 
     @Override
-    public void registerRecipe(Consumer<FinishedRecipe> consumer) {
+    public void registerRecipe(RecipeOutput consumer) {
 
     }
 }

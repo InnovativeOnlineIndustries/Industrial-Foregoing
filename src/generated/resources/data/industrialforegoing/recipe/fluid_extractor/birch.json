@@ -1,0 +1,18 @@
+{
+  "type": "industrialforegoing:fluid_extractor",
+  "breakChance": 0.01,
+  "defaultRecipe": false,
+  "input": {
+    "item": "minecraft:birch_log"
+  },
+  "output": {
+    "amount": 2,
+    "id": "industrialforegoing:latex"
+  },
+  "result": {
+    "Name": "minecraft:stripped_birch_log",
+    "Properties": {
+      "axis": "y"
+    }
+  }
+}

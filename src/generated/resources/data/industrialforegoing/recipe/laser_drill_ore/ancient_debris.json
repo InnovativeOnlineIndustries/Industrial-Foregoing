@@ -1,0 +1,26 @@
+{
+  "type": "industrialforegoing:laser_drill_ore",
+  "catalyst": {
+    "item": "industrialforegoing:brown_laser_lens"
+  },
+  "output": {
+    "item": "minecraft:ancient_debris"
+  },
+  "rarity": [
+    {
+      "biome_filter": {
+        "blacklist": [],
+        "whitelist": []
+      },
+      "depth_max": 20,
+      "depth_min": 1,
+      "dimension_filter": {
+        "blacklist": [],
+        "whitelist": [
+          "minecraft:the_nether"
+        ]
+      },
+      "weight": 1
+    }
+  ]
+}

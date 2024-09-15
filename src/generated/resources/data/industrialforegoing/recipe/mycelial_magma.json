@@ -1,0 +1,33 @@
+{
+  "neoforge:conditions": [
+    {
+      "type": "neoforge:item_exists",
+      "item": "industrialforegoing:mycelial_magma"
+    }
+  ],
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "B": {
+      "tag": "c:storage_blocks/redstone"
+    },
+    "C": {
+      "item": "minecraft:lava_bucket"
+    },
+    "M": {
+      "tag": "industrialforegoing:machine_frame/advanced"
+    },
+    "R": {
+      "item": "minecraft:redstone"
+    }
+  },
+  "pattern": [
+    "BBB",
+    "BCB",
+    "RMR"
+  ],
+  "result": {
+    "count": 1,
+    "id": "industrialforegoing:mycelial_magma"
+  }
+}

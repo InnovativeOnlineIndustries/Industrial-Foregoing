@@ -28,17 +28,15 @@ import com.buuz135.industrial.module.ModuleMisc;
 import com.buuz135.industrial.utils.IndustrialTags;
 import com.hrznstudio.titanium.recipe.generator.TitaniumShapedRecipeBuilder;
 import com.hrznstudio.titanium.util.TagUtil;
-import net.minecraft.data.recipes.FinishedRecipe;
+import net.minecraft.data.recipes.RecipeOutput;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 
-import java.util.function.Consumer;
-
 public class EnchantmentApplicatorBlock extends IndustrialBlock<EnchantmentApplicatorTile> {
 
     public EnchantmentApplicatorBlock() {
-        super("enchantment_applicator", Properties.copy(Blocks.IRON_BLOCK), EnchantmentApplicatorTile.class, ModuleMisc.TAB_MISC);
+        super("enchantment_applicator", Properties.ofFullCopy(Blocks.IRON_BLOCK), EnchantmentApplicatorTile.class, ModuleMisc.TAB_MISC);
     }
 
     @Override
@@ -52,13 +50,13 @@ public class EnchantmentApplicatorBlock extends IndustrialBlock<EnchantmentAppli
     }
 
     @Override
-    public void registerRecipe(Consumer<FinishedRecipe> consumer) {
+    public void registerRecipe(RecipeOutput consumer) {
         TitaniumShapedRecipeBuilder.shapedRecipe(this)
                 .pattern("PPP").pattern("BMB").pattern("GBG")
                 .define('P', IndustrialTags.Items.PLASTIC)
                 .define('B', Blocks.ANVIL)
                 .define('M', IndustrialTags.Items.MACHINE_FRAME_ADVANCED)
-                .define('G', TagUtil.getItemTag(new ResourceLocation("forge:gears/gold")))
+                .define('G', TagUtil.getItemTag(ResourceLocation.fromNamespaceAndPath("c", "gears/gold")))
                 .save(consumer);
     }
 }

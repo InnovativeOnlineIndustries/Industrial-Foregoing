@@ -33,13 +33,14 @@ import com.hrznstudio.titanium.component.fluid.FluidTankComponent;
 import com.hrznstudio.titanium.component.fluid.SidedFluidTankComponent;
 import com.hrznstudio.titanium.component.inventory.SidedInventoryComponent;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Holder;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.world.item.DyeColor;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraftforge.fluids.capability.IFluidHandler;
-import net.minecraftforge.items.ItemHandlerHelper;
-import net.minecraftforge.registries.ForgeRegistries;
+import net.neoforged.neoforge.fluids.capability.IFluidHandler;
+import net.neoforged.neoforge.items.ItemHandlerHelper;
 
 import javax.annotation.Nonnull;
 import java.util.Optional;
@@ -78,7 +79,7 @@ public class SludgeRefinerTile extends IndustrialProcessingTile<SludgeRefinerTil
     @Override
     public Runnable onFinish() {
         return () -> {
-            Optional<Item> optionalItem = ForgeRegistries.ITEMS.tags().getTag(IndustrialTags.Items.SLUDGE_OUTPUT).getRandomElement(this.level.random);
+            Optional<Holder<Item>> optionalItem = BuiltInRegistries.ITEM.getRandomElementOf(IndustrialTags.Items.SLUDGE_OUTPUT, this.level.random);
             optionalItem.ifPresent(item -> {
                 if (ItemHandlerHelper.insertItem(output, new ItemStack(item), true).isEmpty()) {
                     sludge.drainForced(500, IFluidHandler.FluidAction.EXECUTE);

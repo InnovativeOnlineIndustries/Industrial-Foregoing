@@ -50,6 +50,7 @@ public class WorkingAreaTESR implements BlockEntityRenderer<IndustrialAreaWorkin
                 .setShaderState(new RenderStateShard.ShaderStateShard(GameRenderer::getPositionColorShader))
                 .setTransparencyState(new RenderStateShard.TransparencyStateShard("translucent_transparency", () -> {
                     RenderSystem.enableBlend();
+                    RenderSystem.depthMask(false);
                     RenderSystem.blendFuncSeparate(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA, GlStateManager.SourceFactor.ONE, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA);
                 }, () -> {
                     RenderSystem.disableBlend();
@@ -75,8 +76,8 @@ public class WorkingAreaTESR implements BlockEntityRenderer<IndustrialAreaWorkin
         Color color = new Color(Math.abs(blockpos.getX() % 255), Math.abs(blockpos.getY() % 255), Math.abs(blockpos.getZ() % 255));
 
         VertexConsumer builder = renderTypeBuffer.getBuffer(RenderType.lines());
-        LevelRenderer.renderLineBox(stack, builder, shape.bounds().move((double) -blockpos.getX(), (double) -blockpos.getY(), (double) -blockpos.getZ()), (float) color.getRed() / 255f, (float) color.getGreen() / 255f, (float) color.getBlue() / 255f, 0.5F);
-        renderFaces(stack, renderTypeBuffer, shape.bounds(), (double) -blockpos.getX(), (double) -blockpos.getY(), (double) -blockpos.getZ(), (float) color.getRed() / 255f, (float) color.getGreen() / 255f, (float) color.getBlue() / 255f, 0.3F);
+        LevelRenderer.renderLineBox(stack, builder, shape.bounds().inflate(0.001).move((double) -blockpos.getX(), (double) -blockpos.getY(), (double) -blockpos.getZ()), (float) color.getRed() / 255f, (float) color.getGreen() / 255f, (float) color.getBlue() / 255f, 0.5F);
+        renderFaces(stack, renderTypeBuffer, shape.bounds().inflate(0.001), (double) -blockpos.getX(), (double) -blockpos.getY(), (double) -blockpos.getZ(), (float) color.getRed() / 255f, (float) color.getGreen() / 255f, (float) color.getBlue() / 255f, 0.3F);
 
     }
 
@@ -99,37 +100,42 @@ public class WorkingAreaTESR implements BlockEntityRenderer<IndustrialAreaWorkin
 
         buffer = renderTypeBuffer.getBuffer(AREA_TYPE);
 
-        buffer.vertex(matrix, x1, y1, z1).color(red, green, blue, alpha).endVertex();
-        buffer.vertex(matrix, x1, y2, z1).color(red, green, blue, alpha).endVertex();
-        buffer.vertex(matrix, x2, y2, z1).color(red, green, blue, alpha).endVertex();
-        buffer.vertex(matrix, x2, y1, z1).color(red, green, blue, alpha).endVertex();
+        buffer.addVertex(matrix, x1, y1, z1).setColor(red, green, blue, alpha);
+        buffer.addVertex(matrix, x1, y2, z1).setColor(red, green, blue, alpha);
+        buffer.addVertex(matrix, x2, y2, z1).setColor(red, green, blue, alpha);
+        buffer.addVertex(matrix, x2, y1, z1).setColor(red, green, blue, alpha);
 
-        buffer.vertex(matrix, x1, y1, z2).color(red, green, blue, alpha).endVertex();
-        buffer.vertex(matrix, x2, y1, z2).color(red, green, blue, alpha).endVertex();
-        buffer.vertex(matrix, x2, y2, z2).color(red, green, blue, alpha).endVertex();
-        buffer.vertex(matrix, x1, y2, z2).color(red, green, blue, alpha).endVertex();
-
-
-        buffer.vertex(matrix, x1, y1, z1).color(red, green, blue, alpha).endVertex();
-        buffer.vertex(matrix, x2, y1, z1).color(red, green, blue, alpha).endVertex();
-        buffer.vertex(matrix, x2, y1, z2).color(red, green, blue, alpha).endVertex();
-        buffer.vertex(matrix, x1, y1, z2).color(red, green, blue, alpha).endVertex();
-
-        buffer.vertex(matrix, x1, y2, z1).color(red, green, blue, alpha).endVertex();
-        buffer.vertex(matrix, x1, y2, z2).color(red, green, blue, alpha).endVertex();
-        buffer.vertex(matrix, x2, y2, z2).color(red, green, blue, alpha).endVertex();
-        buffer.vertex(matrix, x2, y2, z1).color(red, green, blue, alpha).endVertex();
+        buffer.addVertex(matrix, x1, y1, z2).setColor(red, green, blue, alpha);
+        buffer.addVertex(matrix, x2, y1, z2).setColor(red, green, blue, alpha);
+        buffer.addVertex(matrix, x2, y2, z2).setColor(red, green, blue, alpha);
+        buffer.addVertex(matrix, x1, y2, z2).setColor(red, green, blue, alpha);
 
 
-        buffer.vertex(matrix, x1, y1, z1).color(red, green, blue, alpha).endVertex();
-        buffer.vertex(matrix, x1, y1, z2).color(red, green, blue, alpha).endVertex();
-        buffer.vertex(matrix, x1, y2, z2).color(red, green, blue, alpha).endVertex();
-        buffer.vertex(matrix, x1, y2, z1).color(red, green, blue, alpha).endVertex();
+        buffer.addVertex(matrix, x1, y1, z1).setColor(red, green, blue, alpha);
+        buffer.addVertex(matrix, x2, y1, z1).setColor(red, green, blue, alpha);
+        buffer.addVertex(matrix, x2, y1, z2).setColor(red, green, blue, alpha);
+        buffer.addVertex(matrix, x1, y1, z2).setColor(red, green, blue, alpha);
 
-        buffer.vertex(matrix, x2, y1, z1).color(red, green, blue, alpha).endVertex();
-        buffer.vertex(matrix, x2, y2, z1).color(red, green, blue, alpha).endVertex();
-        buffer.vertex(matrix, x2, y2, z2).color(red, green, blue, alpha).endVertex();
-        buffer.vertex(matrix, x2, y1, z2).color(red, green, blue, alpha).endVertex();
+        buffer.addVertex(matrix, x1, y2, z1).setColor(red, green, blue, alpha);
+        buffer.addVertex(matrix, x1, y2, z2).setColor(red, green, blue, alpha);
+        buffer.addVertex(matrix, x2, y2, z2).setColor(red, green, blue, alpha);
+        buffer.addVertex(matrix, x2, y2, z1).setColor(red, green, blue, alpha);
 
+
+        buffer.addVertex(matrix, x1, y1, z1).setColor(red, green, blue, alpha);
+        buffer.addVertex(matrix, x1, y1, z2).setColor(red, green, blue, alpha);
+        buffer.addVertex(matrix, x1, y2, z2).setColor(red, green, blue, alpha);
+        buffer.addVertex(matrix, x1, y2, z1).setColor(red, green, blue, alpha);
+
+        buffer.addVertex(matrix, x2, y1, z1).setColor(red, green, blue, alpha);
+        buffer.addVertex(matrix, x2, y2, z1).setColor(red, green, blue, alpha);
+        buffer.addVertex(matrix, x2, y2, z2).setColor(red, green, blue, alpha);
+        buffer.addVertex(matrix, x2, y1, z2).setColor(red, green, blue, alpha);
+
+    }
+
+    @Override
+    public AABB getRenderBoundingBox(IndustrialAreaWorkingTile blockEntity) {
+        return blockEntity.getWorkingArea().bounds();
     }
 }

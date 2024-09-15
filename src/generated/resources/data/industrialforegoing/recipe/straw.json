@@ -1,0 +1,24 @@
+{
+  "neoforge:conditions": [
+    {
+      "type": "neoforge:item_exists",
+      "item": "industrialforegoing:straw"
+    }
+  ],
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "P": {
+      "tag": "c:plastic"
+    }
+  },
+  "pattern": [
+    "PP ",
+    " P ",
+    " P "
+  ],
+  "result": {
+    "count": 1,
+    "id": "industrialforegoing:straw"
+  }
+}

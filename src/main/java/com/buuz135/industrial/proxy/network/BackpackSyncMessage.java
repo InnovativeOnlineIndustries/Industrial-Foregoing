@@ -25,7 +25,8 @@ package com.buuz135.industrial.proxy.network;
 import com.buuz135.industrial.worlddata.BackpackDataManager;
 import com.hrznstudio.titanium.network.Message;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraftforge.network.NetworkEvent;
+import net.neoforged.neoforge.network.handling.IPayloadContext;
+
 
 public class BackpackSyncMessage extends Message {
 
@@ -41,10 +42,10 @@ public class BackpackSyncMessage extends Message {
     }
 
     @Override
-    protected void handleMessage(NetworkEvent.Context context) {
+    protected void handleMessage(IPayloadContext context) {
         context.enqueueWork(() -> {
             BackpackDataManager.BackpackItemHandler handler = new BackpackDataManager.BackpackItemHandler(null);
-            handler.deserializeNBT(backpack);
+            handler.deserializeNBT(context.player().level().registryAccess(), backpack);
             BackpackDataManager.CLIENT_SIDE_BACKPACKS.put(id, handler);
         });
     }

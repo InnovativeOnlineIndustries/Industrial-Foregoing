@@ -24,35 +24,38 @@ package com.buuz135.industrial.utils.data;
 
 import com.buuz135.industrial.block.IndustrialBlock;
 import com.buuz135.industrial.module.ModuleAgricultureHusbandry;
+import com.buuz135.industrial.module.ModuleCore;
+import com.buuz135.industrial.module.ModuleTool;
 import com.buuz135.industrial.module.ModuleTransportStorage;
+import com.hrznstudio.titanium.block.RotatableBlock;
 import net.minecraft.core.Direction;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.data.DataGenerator;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.properties.DirectionProperty;
-import net.minecraftforge.client.model.generators.BlockStateProvider;
-import net.minecraftforge.client.model.generators.ConfiguredModel;
-import net.minecraftforge.client.model.generators.ModelFile;
-import net.minecraftforge.client.model.generators.VariantBlockStateBuilder;
-import net.minecraftforge.common.data.ExistingFileHelper;
-import net.minecraftforge.common.util.NonNullLazy;
-import net.minecraftforge.registries.ForgeRegistries;
+import net.neoforged.neoforge.client.model.generators.BlockStateProvider;
+import net.neoforged.neoforge.client.model.generators.ConfiguredModel;
+import net.neoforged.neoforge.client.model.generators.ModelFile;
+import net.neoforged.neoforge.client.model.generators.VariantBlockStateBuilder;
+import net.neoforged.neoforge.common.data.ExistingFileHelper;
+import net.neoforged.neoforge.common.util.Lazy;
 
 import java.util.List;
 
 public class IndustrialBlockstateProvider extends BlockStateProvider {
 
     private ExistingFileHelper helper;
-    private final NonNullLazy<List<Block>> blocks;
+    private final Lazy<List<Block>> blocks;
 
-    public IndustrialBlockstateProvider(DataGenerator gen, ExistingFileHelper exFileHelper, NonNullLazy<List<Block>> blocks) {
+    public IndustrialBlockstateProvider(DataGenerator gen, ExistingFileHelper exFileHelper, Lazy<List<Block>> blocks) {
         super(gen.getPackOutput(), "industrialforegoing", exFileHelper);
         this.helper = exFileHelper;
         this.blocks = blocks;
     }
 
     public static ResourceLocation getModel(Block block) {
-        return new ResourceLocation(ForgeRegistries.BLOCKS.getKey(block).getNamespace(), "block/" + ForgeRegistries.BLOCKS.getKey(block).getPath());
+        return ResourceLocation.fromNamespaceAndPath(BuiltInRegistries.BLOCK.getKey(block).getNamespace(), "block/" + BuiltInRegistries.BLOCK.getKey(block).getPath());
     }
 
     @Override
@@ -60,26 +63,35 @@ public class IndustrialBlockstateProvider extends BlockStateProvider {
         blocks.get().stream().filter(blockBase -> blockBase instanceof IndustrialBlock)
                 .map(blockBase -> (IndustrialBlock) blockBase)
                 .filter(industrialBlock -> !(industrialBlock.equals(ModuleAgricultureHusbandry.PLANT_SOWER)))
-                .forEach(industrialBlock -> {
-                    VariantBlockStateBuilder builder = getVariantBuilder(industrialBlock);
-                    if (industrialBlock.getRotationType().getProperties().length > 0) {
-                        for (DirectionProperty property : industrialBlock.getRotationType().getProperties()) {
-                            for (Direction allowedValue : property.getPossibleValues()) {
-                                builder.partialState().with(property, allowedValue)
-                                        .addModels(new ConfiguredModel(new ModelFile.UncheckedModelFile(getModel(industrialBlock)), allowedValue.get2DDataValue() == -1 ? allowedValue.getOpposite().getAxisDirection().getStep() * 90 : 0, (int) allowedValue.getOpposite().toYRot(), false));
-                            }
-                        }
-                    } else {
-                        builder.partialState().addModels(new ConfiguredModel(new ModelFile.UncheckedModelFile(getModel(industrialBlock))));
-                    }
-                });
-        simpleBlock(ModuleTransportStorage.TRANSPORTER.getLeft().get(), new ModelFile.UncheckedModelFile(modLoc("block/" + ForgeRegistries.BLOCKS.getKey(ModuleTransportStorage.TRANSPORTER.getLeft().get()).getPath())));
+                .forEach(this::generateForBlock);
+        simpleBlock(ModuleTransportStorage.TRANSPORTER.getBlock(), new ModelFile.UncheckedModelFile(modLoc("block/" + BuiltInRegistries.BLOCK.getKey(ModuleTransportStorage.TRANSPORTER.getBlock()).getPath())));
+
+        simpleBlock(ModuleCore.PITY.get(), new ModelFile.UncheckedModelFile(modLoc("block/" + BuiltInRegistries.BLOCK.getKey(ModuleCore.PITY.get()).getPath())));
+        simpleBlock(ModuleCore.SIMPLE.get(), new ModelFile.UncheckedModelFile(modLoc("block/" + BuiltInRegistries.BLOCK.getKey(ModuleCore.SIMPLE.get()).getPath())));
+        simpleBlock(ModuleCore.ADVANCED.get(), new ModelFile.UncheckedModelFile(modLoc("block/" + BuiltInRegistries.BLOCK.getKey(ModuleCore.ADVANCED.get()).getPath())));
+        simpleBlock(ModuleCore.SUPREME.get(), new ModelFile.UncheckedModelFile(modLoc("block/" + BuiltInRegistries.BLOCK.getKey(ModuleCore.SUPREME.get()).getPath())));
+
+        generateForBlock((RotatableBlock<?>) ModuleTool.INFINITY_BACKPACK_BLOCK.getBlock());
         //VariantBlockStateBuilder conveyor = getVariantBuilder(ModuleTransport.CONVEYOR);
         //for (ConveyorBlock.EnumType type : ConveyorBlock.TYPE.getAllowedValues()) {
         //    for (Direction direction : ConveyorBlock.FACING.getAllowedValues()) {
         //        conveyor.partialState().with(ConveyorBlock.TYPE, type).with(ConveyorBlock.FACING, direction)
-        //                .addModels(new ConfiguredModel(new BlockModelBuilder(new ResourceLocation(Reference.MOD_ID, "block/conveyor_" + type.getName().toLowerCase() + "_" + direction.getName().toLowerCase()), helper).parent(new ModelFile.UncheckedModelFile(type.getModel())).texture("2", type.getTexture()), 0, (int) direction.getOpposite().getHorizontalAngle(), false));
+        //                .addModels(new ConfiguredModel(new BlockModelBuilder(ResourceLocation.fromNamespaceAndPath(Reference.MOD_ID, "block/conveyor_" + type.getName().toLowerCase() + "_" + direction.getName().toLowerCase()), helper).parent(new ModelFile.UncheckedModelFile(type.getModel())).texture("2", type.getTexture()), 0, (int) direction.getOpposite().getHorizontalAngle(), false));
         //    }
         //}
+    }
+
+    public void generateForBlock(RotatableBlock<?> rotatableBlock) {
+        VariantBlockStateBuilder builder = getVariantBuilder(rotatableBlock);
+        if (rotatableBlock.getRotationType().getProperties().length > 0) {
+            for (DirectionProperty property : rotatableBlock.getRotationType().getProperties()) {
+                for (Direction allowedValue : property.getPossibleValues()) {
+                    builder.partialState().with(property, allowedValue)
+                            .addModels(new ConfiguredModel(new ModelFile.UncheckedModelFile(getModel(rotatableBlock)), allowedValue.get2DDataValue() == -1 ? allowedValue.getOpposite().getAxisDirection().getStep() * 90 : 0, (int) allowedValue.getOpposite().toYRot(), false));
+                }
+            }
+        } else {
+            builder.partialState().addModels(new ConfiguredModel(new ModelFile.UncheckedModelFile(getModel(rotatableBlock))));
+        }
     }
 }

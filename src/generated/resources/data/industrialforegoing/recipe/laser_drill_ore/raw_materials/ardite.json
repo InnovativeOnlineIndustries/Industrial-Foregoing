@@ -1,0 +1,35 @@
+{
+  "neoforge:conditions": [
+    {
+      "type": "neoforge:not",
+      "value": {
+        "type": "neoforge:tag_empty",
+        "tag": "c:raw_materials/ardite"
+      }
+    }
+  ],
+  "type": "industrialforegoing:laser_drill_ore",
+  "catalyst": {
+    "item": "industrialforegoing:yellow_laser_lens"
+  },
+  "output": {
+    "tag": "c:raw_materials/ardite"
+  },
+  "rarity": [
+    {
+      "biome_filter": {
+        "blacklist": [],
+        "whitelist": []
+      },
+      "depth_max": 116,
+      "depth_min": 89,
+      "dimension_filter": {
+        "blacklist": [],
+        "whitelist": [
+          "minecraft:the_nether"
+        ]
+      },
+      "weight": 8
+    }
+  ]
+}

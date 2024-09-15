@@ -29,7 +29,7 @@ import com.buuz135.industrial.module.ModuleGenerator;
 import com.buuz135.industrial.worlddata.MycelialDataManager;
 import com.hrznstudio.titanium.recipe.generator.TitaniumShapedRecipeBuilder;
 import net.minecraft.core.BlockPos;
-import net.minecraft.data.recipes.FinishedRecipe;
+import net.minecraft.data.recipes.RecipeOutput;
 import net.minecraft.data.recipes.ShapedRecipeBuilder;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.ItemStack;
@@ -41,14 +41,13 @@ import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 
 import javax.annotation.Nullable;
-import java.util.function.Consumer;
 
 public class MycelialGeneratorBlock extends IndustrialBlock<MycelialGeneratorTile> {
 
     private final IMycelialGeneratorType type;
 
     public MycelialGeneratorBlock(IMycelialGeneratorType type) {
-        super("mycelial_" + type.getName(), Properties.copy(Blocks.IRON_BLOCK), MycelialGeneratorTile.class, ModuleGenerator.TAB_GENERATOR);
+        super("mycelial_" + type.getName(), Properties.ofFullCopy(Blocks.IRON_BLOCK), MycelialGeneratorTile.class, ModuleGenerator.TAB_GENERATOR);
         this.type = type;
     }
 
@@ -62,7 +61,7 @@ public class MycelialGeneratorBlock extends IndustrialBlock<MycelialGeneratorTil
 
     @Override
     public BlockEntityType.BlockEntitySupplier<MycelialGeneratorTile> getTileEntityFactory() {
-        return (p_155268_, p_155269_) -> new MycelialGeneratorTile(ModuleGenerator.MYCELIAL_GENERATORS.stream().filter(registryObjectRegistryObjectPair -> ((MycelialGeneratorBlock) registryObjectRegistryObjectPair.getLeft().get()).type == type).findFirst().get(), type, p_155268_, p_155269_);
+        return (p_155268_, p_155269_) -> new MycelialGeneratorTile(ModuleGenerator.MYCELIAL_GENERATORS.stream().filter(registryObjectRegistryObjectPair -> ((MycelialGeneratorBlock) registryObjectRegistryObjectPair.getBlock()).type == type).findFirst().get(), type, p_155268_, p_155269_);
     }
 
     @Override
@@ -93,7 +92,7 @@ public class MycelialGeneratorBlock extends IndustrialBlock<MycelialGeneratorTil
     }
 
     @Override
-    public void registerRecipe(Consumer<FinishedRecipe> consumer) {
+    public void registerRecipe(RecipeOutput consumer) {
         ShapedRecipeBuilder recipe = TitaniumShapedRecipeBuilder.shapedRecipe(this).pattern("BBB").pattern("BCB").pattern("RMR")
                 .define('R', Items.REDSTONE);
         type.addIngredients(recipe).save(consumer);

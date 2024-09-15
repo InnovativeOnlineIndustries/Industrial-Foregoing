@@ -24,14 +24,15 @@ package com.buuz135.industrial.block.generator.mycelial;
 
 import com.buuz135.industrial.plugin.jei.generator.MycelialGeneratorRecipe;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.RegistryAccess;
 import net.minecraft.data.recipes.ShapedRecipeBuilder;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.item.DyeColor;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
-import net.minecraftforge.common.util.INBTSerializable;
-import net.minecraftforge.fluids.FluidStack;
+import net.neoforged.neoforge.common.util.INBTSerializable;
+import net.neoforged.neoforge.fluids.FluidStack;
 import org.apache.commons.lang3.tuple.Pair;
 
 import java.util.Arrays;
@@ -63,7 +64,7 @@ public interface IMycelialGeneratorType {
 
     int getSlotSize();
 
-    List<MycelialGeneratorRecipe> getRecipes();
+    List<MycelialGeneratorRecipe> getRecipes(RegistryAccess registryAccess);
 
     ShapedRecipeBuilder addIngredients(ShapedRecipeBuilder recipeBuilder);
 

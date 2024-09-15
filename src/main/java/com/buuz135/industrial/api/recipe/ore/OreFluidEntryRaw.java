@@ -23,11 +23,11 @@
 package com.buuz135.industrial.api.recipe.ore;
 
 import com.hrznstudio.titanium.util.TagUtil;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
-import net.minecraftforge.fluids.FluidStack;
-import net.minecraftforge.registries.ForgeRegistries;
+import net.neoforged.neoforge.fluids.FluidStack;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -46,7 +46,7 @@ public class OreFluidEntryRaw {
         this.ore = ore;
         this.input = input;
         this.output = output;
-        this.cachedOres = TagUtil.getAllEntries(ForgeRegistries.ITEMS, ore);
+        this.cachedOres = TagUtil.getAllEntries(BuiltInRegistries.ITEM, ore);
     }
 
     public TagKey<Item> getOre() {
@@ -63,7 +63,7 @@ public class OreFluidEntryRaw {
 
     public boolean matches(ItemStack item, FluidStack fluid) {
         for (Item cachedOre : cachedOres) {
-            if (cachedOre.equals(item.getItem()) && input.isFluidEqual(fluid)) return true;
+            if (cachedOre.equals(item.getItem()) && FluidStack.isSameFluidSameComponents(input, fluid)) return true;
         }
         return false;
     }

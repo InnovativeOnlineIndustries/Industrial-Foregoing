@@ -32,7 +32,6 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.world.item.DyeColor;
 import net.minecraft.world.item.crafting.RecipeType;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraftforge.common.ForgeHooks;
 
 import javax.annotation.Nonnull;
 
@@ -47,7 +46,7 @@ public class PitifulGeneratorTile extends IndustrialGeneratorTile<PitifulGenerat
         super(ModuleGenerator.PITIFUL_GENERATOR, blockPos, blockState);
         this.addInventory(fuel = (SidedInventoryComponent<PitifulGeneratorTile>) new SidedInventoryComponent<PitifulGeneratorTile>("fuel_input", 46, 22, 1, 0)
                 .setColor(DyeColor.ORANGE)
-                .setInputFilter((itemStack, integer) -> ForgeHooks.getBurnTime(itemStack, RecipeType.SMELTING) != 0)
+                .setInputFilter((itemStack, integer) -> itemStack.getBurnTime(RecipeType.SMELTING) != 0)
                 .setComponentHarness(this)
         );
         this.getPowerPerTick = PitifulGeneratorConfig.powerPerTick;
@@ -55,14 +54,14 @@ public class PitifulGeneratorTile extends IndustrialGeneratorTile<PitifulGenerat
 
     @Override
     public int consumeFuel() {
-        int time = ForgeHooks.getBurnTime(fuel.getStackInSlot(0), RecipeType.SMELTING);
+        int time = fuel.getStackInSlot(0).getBurnTime(RecipeType.SMELTING);
         fuel.getStackInSlot(0).shrink(1);
         return time;
     }
 
     @Override
     public boolean canStart() {
-        return !fuel.getStackInSlot(0).isEmpty() && ForgeHooks.getBurnTime(fuel.getStackInSlot(0), RecipeType.SMELTING) != 0;
+        return !fuel.getStackInSlot(0).isEmpty() && fuel.getStackInSlot(0).getBurnTime(RecipeType.SMELTING) != 0;
     }
 
     @Override

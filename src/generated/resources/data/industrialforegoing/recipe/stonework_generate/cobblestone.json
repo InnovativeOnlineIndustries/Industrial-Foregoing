@@ -1,0 +1,11 @@
+{
+  "type": "industrialforegoing:stonework_generate",
+  "lavaConsume": 0,
+  "lavaNeed": 1000,
+  "output": {
+    "count": 1,
+    "id": "minecraft:cobblestone"
+  },
+  "waterConsume": 0,
+  "waterNeed": 1000
+}

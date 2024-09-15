@@ -1,6 +1,6 @@
 {
-  "parent": "forge:item/default",
-  "loader": "forge:obj",
+  "parent": "neoforge:item/default",
+  "loader": "neoforge:obj",
   "model": "industrialforegoing:models/block/catears.obj",
   "ambientToFullbright": true,
   "textures": {

@@ -22,6 +22,7 @@
 
 package com.buuz135.industrial.gui.component;
 
+import com.buuz135.industrial.utils.IFAttachments;
 import com.buuz135.industrial.utils.NumberUtils;
 import com.buuz135.industrial.worlddata.BackpackDataManager;
 import com.hrznstudio.titanium.Titanium;
@@ -32,7 +33,6 @@ import com.hrznstudio.titanium.component.button.ButtonComponent;
 import com.hrznstudio.titanium.network.locator.ILocatable;
 import com.hrznstudio.titanium.network.messages.ButtonClickNetworkMessage;
 import com.hrznstudio.titanium.util.AssetUtil;
-import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
@@ -57,13 +57,13 @@ public abstract class SlotDefinitionGuiAddon extends BasicButtonAddon {
 
     @Override
     public void drawBackgroundLayer(GuiGraphics guiGraphics, Screen screen, IAssetProvider provider, int guiX, int guiY, int mouseX, int mouseY, float partialTicks) {
-        if (!getItemStack().isEmpty() && getItemStack().hasTag()) {
-            BackpackDataManager.BackpackItemHandler handler = BackpackDataManager.CLIENT_SIDE_BACKPACKS.getOrDefault(getItemStack().getTag().getString("Id"), null);
-            AssetUtil.drawAsset(guiGraphics, screen, provider.getAsset(AssetTypes.SLOT), guiX + getPosX(), guiY + getPosY());
+        if (!getItemStack().isEmpty() && getItemStack().has(IFAttachments.INFINITY_BACKPACK_ID)) {
+            BackpackDataManager.BackpackItemHandler handler = BackpackDataManager.CLIENT_SIDE_BACKPACKS.getOrDefault(getItemStack().get(IFAttachments.INFINITY_BACKPACK_ID), null);
+            AssetUtil.drawAsset(guiGraphics, screen, provider.getAsset(AssetTypes.SLOT), guiX + getPosX() - 1, guiY + getPosY() - 1);
             if (handler != null) {
                 BackpackDataManager.SlotDefinition display = handler.getSlotDefinition(slotId);
                 if (!display.getStack().isEmpty()) {
-                    guiGraphics.renderItem(display.getStack(), guiX + getPosX() + 1, guiY + getPosY() + 1);
+                    guiGraphics.renderItem(display.getStack(), guiX + getPosX(), guiY + getPosY());
                     guiGraphics.pose().pushPose();
                     guiGraphics.pose().translate(0, 0, 260);
                     guiGraphics.pose().scale(0.5f, 0.5f, 0.5f);
@@ -80,7 +80,7 @@ public abstract class SlotDefinitionGuiAddon extends BasicButtonAddon {
         if (isMouseOver(mouseX - guiX, mouseY - guiY)) {
             guiGraphics.pose().pushPose();
             guiGraphics.pose().translate(0, 0, 256);
-            AssetUtil.drawSelectingOverlay(guiGraphics, getPosX() + 1, getPosY() + 1, getPosX() + getXSize() - 1, getPosY() + getYSize() - 1);
+            AssetUtil.drawSelectingOverlay(guiGraphics, getPosX(), getPosY(), getPosX() + getXSize() - 1, getPosY() + getYSize() - 1);
             guiGraphics.pose().popPose();
         }
     }
@@ -94,12 +94,12 @@ public abstract class SlotDefinitionGuiAddon extends BasicButtonAddon {
                 return false;
             ILocatable locatable = (ILocatable) ((AbstractContainerScreen) screen).getMenu();
             CompoundTag compoundNBT = new CompoundTag();
-            compoundNBT.putString("Id", getItemStack().getTag().getString("Id"));
+            compoundNBT.putString("Id", getItemStack().get(IFAttachments.INFINITY_BACKPACK_ID));
             compoundNBT.putInt("Slot", slotId);
             compoundNBT.putInt("Button", button);
             compoundNBT.putBoolean("Shift", Screen.hasShiftDown());
             compoundNBT.putBoolean("Ctrl", Screen.hasControlDown());
-            Titanium.NETWORK.get().sendToServer(new ButtonClickNetworkMessage(locatable.getLocatorInstance(), 4, compoundNBT));
+            Titanium.NETWORK.sendToServer(new ButtonClickNetworkMessage(locatable.getLocatorInstance(), 4, compoundNBT));
             return true;
         }
         return false;
@@ -110,7 +110,7 @@ public abstract class SlotDefinitionGuiAddon extends BasicButtonAddon {
     @Override
     public List<Component> getTooltipLines() {
         List<Component> lines = new ArrayList<>();
-        BackpackDataManager.BackpackItemHandler handler = BackpackDataManager.CLIENT_SIDE_BACKPACKS.getOrDefault(getItemStack().getTag().getString("Id"), null);
+        BackpackDataManager.BackpackItemHandler handler = BackpackDataManager.CLIENT_SIDE_BACKPACKS.getOrDefault(getItemStack().get(IFAttachments.INFINITY_BACKPACK_ID), null);
         if (handler != null) {
             BackpackDataManager.SlotDefinition display = handler.getSlotDefinition(slotId);
             if (!display.getStack().isEmpty()) {

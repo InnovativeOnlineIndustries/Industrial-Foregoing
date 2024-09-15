@@ -1,0 +1,41 @@
+{
+  "type": "industrialforegoing:laser_drill_ore",
+  "catalyst": {
+    "item": "industrialforegoing:yellow_laser_lens"
+  },
+  "output": {
+    "item": "minecraft:glowstone"
+  },
+  "rarity": [
+    {
+      "biome_filter": {
+        "blacklist": [],
+        "whitelist": []
+      },
+      "depth_max": 117,
+      "depth_min": 7,
+      "dimension_filter": {
+        "blacklist": [],
+        "whitelist": [
+          "minecraft:the_nether"
+        ]
+      },
+      "weight": 8
+    },
+    {
+      "biome_filter": {
+        "blacklist": [],
+        "whitelist": []
+      },
+      "depth_max": 255,
+      "depth_min": 0,
+      "dimension_filter": {
+        "blacklist": [
+          "minecraft:the_end"
+        ],
+        "whitelist": []
+      },
+      "weight": 1
+    }
+  ]
+}

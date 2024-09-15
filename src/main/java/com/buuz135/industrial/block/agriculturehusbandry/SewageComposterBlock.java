@@ -28,19 +28,18 @@ import com.buuz135.industrial.module.ModuleAgricultureHusbandry;
 import com.buuz135.industrial.utils.IndustrialTags;
 import com.hrznstudio.titanium.recipe.generator.TitaniumShapedRecipeBuilder;
 import com.hrznstudio.titanium.util.TagUtil;
-import net.minecraft.data.recipes.FinishedRecipe;
+import net.minecraft.data.recipes.RecipeOutput;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 
 import javax.annotation.Nonnull;
-import java.util.function.Consumer;
 
 public class SewageComposterBlock extends IndustrialBlock<SewageComposterTile> {
 
     public SewageComposterBlock() {
-        super("sewage_composter", Properties.copy(Blocks.IRON_BLOCK), SewageComposterTile.class, ModuleAgricultureHusbandry.TAB_AG_HUS);
+        super("sewage_composter", Properties.ofFullCopy(Blocks.IRON_BLOCK), SewageComposterTile.class, ModuleAgricultureHusbandry.TAB_AG_HUS);
     }
 
     @Nonnull
@@ -55,7 +54,7 @@ public class SewageComposterBlock extends IndustrialBlock<SewageComposterTile> {
     }
 
     @Override
-    public void registerRecipe(Consumer<FinishedRecipe> consumer) {
+    public void registerRecipe(RecipeOutput consumer) {
         TitaniumShapedRecipeBuilder.shapedRecipe(this)
                 .pattern("PFP").pattern("DMD").pattern("BGB")
                 .define('P', IndustrialTags.Items.PLASTIC)
@@ -63,7 +62,7 @@ public class SewageComposterBlock extends IndustrialBlock<SewageComposterTile> {
                 .define('D', Items.PISTON)
                 .define('B', Items.BRICK)
                 .define('M', IndustrialTags.Items.MACHINE_FRAME_PITY)
-                .define('G', TagUtil.getItemTag(new ResourceLocation("forge:gears/iron")))
+                .define('G', TagUtil.getItemTag(ResourceLocation.fromNamespaceAndPath("c", "gears/iron")))
                 .save(consumer);
     }
 }

@@ -23,19 +23,17 @@
 package com.buuz135.industrial.proxy;
 
 import com.buuz135.industrial.proxy.event.FakePlayerRideEntityHandler;
-import com.buuz135.industrial.proxy.event.SkullHandler;
 import com.buuz135.industrial.utils.explosion.ExplosionTickHandler;
 import com.hrznstudio.titanium.event.handler.EventManager;
-import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.event.TickEvent;
+import net.neoforged.neoforge.common.NeoForge;
+import net.neoforged.neoforge.event.tick.ServerTickEvent;
 
 public class CommonProxy {
 
     public void run() {
-        MinecraftForge.EVENT_BUS.register(new FakePlayerRideEntityHandler());
-        MinecraftForge.EVENT_BUS.register(new SkullHandler());
+        NeoForge.EVENT_BUS.register(new FakePlayerRideEntityHandler());
 
-        EventManager.forge(TickEvent.ServerTickEvent.class).process(ExplosionTickHandler::serverTick).subscribe();
+        EventManager.forge(ServerTickEvent.Pre.class).process(ExplosionTickHandler::serverTick).subscribe();
     }
 
 }

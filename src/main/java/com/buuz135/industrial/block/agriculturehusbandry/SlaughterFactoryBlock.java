@@ -28,19 +28,18 @@ import com.buuz135.industrial.module.ModuleAgricultureHusbandry;
 import com.buuz135.industrial.utils.IndustrialTags;
 import com.hrznstudio.titanium.recipe.generator.TitaniumShapedRecipeBuilder;
 import com.hrznstudio.titanium.util.TagUtil;
-import net.minecraft.data.recipes.FinishedRecipe;
+import net.minecraft.data.recipes.RecipeOutput;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 
 import javax.annotation.Nonnull;
-import java.util.function.Consumer;
 
 public class SlaughterFactoryBlock extends IndustrialBlock<SlaughterFactoryTile> {
 
     public SlaughterFactoryBlock() {
-        super("mob_slaughter_factory", Properties.copy(Blocks.IRON_BLOCK), SlaughterFactoryTile.class, ModuleAgricultureHusbandry.TAB_AG_HUS);
+        super("mob_slaughter_factory", Properties.ofFullCopy(Blocks.IRON_BLOCK), SlaughterFactoryTile.class, ModuleAgricultureHusbandry.TAB_AG_HUS);
     }
 
 
@@ -56,11 +55,11 @@ public class SlaughterFactoryBlock extends IndustrialBlock<SlaughterFactoryTile>
     }
 
     @Override
-    public void registerRecipe(Consumer<FinishedRecipe> consumer) {
+    public void registerRecipe(RecipeOutput consumer) {
         TitaniumShapedRecipeBuilder.shapedRecipe(this)
                 .pattern("PDP").pattern("SMS").pattern("ARA")
                 .define('P', IndustrialTags.Items.PLASTIC)
-                .define('D', TagUtil.getItemTag(new ResourceLocation("forge:gears/gold")))
+                .define('D', TagUtil.getItemTag(ResourceLocation.fromNamespaceAndPath("c", "gears/gold")))
                 .define('S', Items.IRON_SWORD)
                 .define('A', Items.IRON_AXE)
                 .define('M', IndustrialTags.Items.MACHINE_FRAME_PITY)

@@ -34,8 +34,8 @@ import java.awt.*;
 
 public class IndustrialAssetProvider implements IAssetProvider {
 
-    public static final ResourceLocation ASSET_LOCATION = new ResourceLocation(Reference.MOD_ID, "textures/gui/machines.png");
-    public static final ResourceLocation ASSET_EXTRA_LOCATION = new ResourceLocation(Reference.MOD_ID, "textures/gui/machines_extra.png");
+    public static final ResourceLocation ASSET_LOCATION = ResourceLocation.fromNamespaceAndPath(Reference.MOD_ID, "textures/gui/machines.png");
+    public static final ResourceLocation ASSET_EXTRA_LOCATION = ResourceLocation.fromNamespaceAndPath(Reference.MOD_ID, "textures/gui/machines_extra.png");
 
     public static final IAssetType<IAsset> BUTTON_SHOW_AREA = new GenericAssetType<>(IAssetProvider.DEFAULT_PROVIDER::getAsset, IAsset.class);
     public static final IAssetType<IAsset> BUTTON_HIDE_AREA = new GenericAssetType<>(IAssetProvider.DEFAULT_PROVIDER::getAsset, IAsset.class);

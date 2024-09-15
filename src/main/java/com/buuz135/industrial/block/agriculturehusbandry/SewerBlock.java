@@ -28,19 +28,18 @@ import com.buuz135.industrial.module.ModuleAgricultureHusbandry;
 import com.buuz135.industrial.utils.IndustrialTags;
 import com.hrznstudio.titanium.recipe.generator.TitaniumShapedRecipeBuilder;
 import com.hrznstudio.titanium.util.TagUtil;
-import net.minecraft.data.recipes.FinishedRecipe;
+import net.minecraft.data.recipes.RecipeOutput;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 
 import javax.annotation.Nonnull;
-import java.util.function.Consumer;
 
 public class SewerBlock extends IndustrialBlock<SewerTile> {
 
     public SewerBlock() {
-        super("sewer", Properties.copy(Blocks.IRON_BLOCK), SewerTile.class, ModuleAgricultureHusbandry.TAB_AG_HUS);
+        super("sewer", Properties.ofFullCopy(Blocks.IRON_BLOCK), SewerTile.class, ModuleAgricultureHusbandry.TAB_AG_HUS);
     }
 
     @Nonnull
@@ -55,14 +54,14 @@ public class SewerBlock extends IndustrialBlock<SewerTile> {
     }
 
     @Override
-    public void registerRecipe(Consumer<FinishedRecipe> consumer) {
+    public void registerRecipe(RecipeOutput consumer) {
         TitaniumShapedRecipeBuilder.shapedRecipe(this)
                 .pattern("PEP").pattern("BMB").pattern("BGB")
                 .define('P', IndustrialTags.Items.PLASTIC)
                 .define('E', Items.BUCKET)
                 .define('B', Items.BRICK)
                 .define('M', IndustrialTags.Items.MACHINE_FRAME_PITY)
-                .define('G', TagUtil.getItemTag(new ResourceLocation("forge:gears/iron")))
+                .define('G', TagUtil.getItemTag(ResourceLocation.fromNamespaceAndPath("c", "gears/iron")))
                 .save(consumer);
     }
 }

@@ -28,19 +28,18 @@ import com.buuz135.industrial.module.ModuleResourceProduction;
 import com.buuz135.industrial.utils.IndustrialTags;
 import com.hrznstudio.titanium.recipe.generator.TitaniumShapedRecipeBuilder;
 import com.hrznstudio.titanium.util.TagUtil;
-import net.minecraft.data.recipes.FinishedRecipe;
+import net.minecraft.data.recipes.RecipeOutput;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 
 import javax.annotation.Nonnull;
-import java.util.function.Consumer;
 
 public class BlockBreakerBlock extends IndustrialBlock<BlockBreakerTile> {
 
     public BlockBreakerBlock() {
-        super("block_breaker", Properties.copy(Blocks.IRON_BLOCK), BlockBreakerTile.class, ModuleResourceProduction.TAB_RESOURCE);
+        super("block_breaker", Properties.ofFullCopy(Blocks.IRON_BLOCK), BlockBreakerTile.class, ModuleResourceProduction.TAB_RESOURCE);
     }
 
     @Override
@@ -55,7 +54,7 @@ public class BlockBreakerBlock extends IndustrialBlock<BlockBreakerTile> {
     }
 
     @Override
-    public void registerRecipe(Consumer<FinishedRecipe> consumer) {
+    public void registerRecipe(RecipeOutput consumer) {
         TitaniumShapedRecipeBuilder.shapedRecipe(this)
                 .pattern("PGP").pattern("IMD").pattern("SRS")
                 .define('P', IndustrialTags.Items.PLASTIC)
@@ -63,8 +62,8 @@ public class BlockBreakerBlock extends IndustrialBlock<BlockBreakerTile> {
                 .define('D', Items.IRON_SHOVEL)
                 .define('M', IndustrialTags.Items.MACHINE_FRAME_PITY)
                 .define('R', Items.REDSTONE)
-                .define('G', TagUtil.getItemTag(new ResourceLocation("forge:gears/gold")))
-                .define('S', TagUtil.getItemTag(new ResourceLocation("forge:gears/iron")))
+                .define('G', TagUtil.getItemTag(ResourceLocation.fromNamespaceAndPath("c", "gears/gold")))
+                .define('S', TagUtil.getItemTag(ResourceLocation.fromNamespaceAndPath("c", "gears/iron")))
                 .save(consumer);
     }
 }

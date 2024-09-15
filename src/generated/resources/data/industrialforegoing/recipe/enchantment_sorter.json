@@ -1,0 +1,39 @@
+{
+  "neoforge:conditions": [
+    {
+      "type": "neoforge:item_exists",
+      "item": "industrialforegoing:enchantment_sorter"
+    }
+  ],
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "B": {
+      "item": "minecraft:book"
+    },
+    "E": {
+      "item": "minecraft:enchanted_book"
+    },
+    "G": {
+      "tag": "c:gears/diamond"
+    },
+    "M": {
+      "tag": "industrialforegoing:machine_frame/advanced"
+    },
+    "P": {
+      "tag": "c:plastic"
+    },
+    "S": {
+      "item": "minecraft:ender_pearl"
+    }
+  },
+  "pattern": [
+    "PSP",
+    "BME",
+    "PGP"
+  ],
+  "result": {
+    "count": 1,
+    "id": "industrialforegoing:enchantment_sorter"
+  }
+}

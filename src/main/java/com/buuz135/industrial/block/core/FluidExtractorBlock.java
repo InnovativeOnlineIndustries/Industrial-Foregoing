@@ -28,25 +28,23 @@ import com.buuz135.industrial.module.ModuleCore;
 import com.buuz135.industrial.utils.IndustrialTags;
 import com.hrznstudio.titanium.recipe.generator.TitaniumShapedRecipeBuilder;
 import net.minecraft.ChatFormatting;
-import net.minecraft.data.recipes.FinishedRecipe;
+import net.minecraft.data.recipes.RecipeOutput;
 import net.minecraft.network.chat.Component;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.TooltipFlag;
-import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.entity.BlockEntityType;
-import net.minecraftforge.common.Tags;
+import net.neoforged.neoforge.common.Tags;
 
 import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
 import java.util.List;
-import java.util.function.Consumer;
 
 public class FluidExtractorBlock extends IndustrialBlock<FluidExtractorTile> {
 
     public FluidExtractorBlock() {
-        super("fluid_extractor", Properties.copy(Blocks.STONE), FluidExtractorTile.class, ModuleCore.TAB_CORE);
+        super("fluid_extractor", Properties.ofFullCopy(Blocks.STONE), FluidExtractorTile.class, ModuleCore.TAB_CORE);
     }
 
     @Override
@@ -61,19 +59,21 @@ public class FluidExtractorBlock extends IndustrialBlock<FluidExtractorTile> {
     }
 
     @Override
-    public void registerRecipe(Consumer<FinishedRecipe> consumer) {
+    public void registerRecipe(RecipeOutput consumer) {
         TitaniumShapedRecipeBuilder.shapedRecipe(this)
                 .pattern("IGI").pattern("CMC").pattern("IPI")
                 .define('I', Tags.Items.INGOTS_IRON)
                 .define('G', Items.LIGHT_WEIGHTED_PRESSURE_PLATE)
-                .define('C', Tags.Items.COBBLESTONE)
+                .define('C', Tags.Items.COBBLESTONES)
                 .define('M', IndustrialTags.Items.MACHINE_FRAME_PITY)
                 .define('P', Blocks.PISTON)
                 .save(consumer);
     }
 
+
     @Override
-    public void appendHoverText(ItemStack stack, @Nullable BlockGetter worldIn, List<Component> tooltip, TooltipFlag flagIn) {
-        tooltip.add(Component.translatable("text.industrialforegoing.tooltip.power_optional").withStyle(ChatFormatting.GOLD));
+    public void appendHoverText(ItemStack stack, Item.TooltipContext context, List<Component> tooltipComponents, TooltipFlag tooltipFlag) {
+        super.appendHoverText(stack, context, tooltipComponents, tooltipFlag);
+        tooltipComponents.add(Component.translatable("text.industrialforegoing.tooltip.power_optional").withStyle(ChatFormatting.GOLD));
     }
 }

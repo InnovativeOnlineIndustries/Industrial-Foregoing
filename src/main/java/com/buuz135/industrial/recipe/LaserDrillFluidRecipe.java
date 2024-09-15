@@ -24,78 +24,102 @@ package com.buuz135.industrial.recipe;
 
 import com.buuz135.industrial.module.ModuleCore;
 import com.buuz135.industrial.utils.Reference;
-import com.hrznstudio.titanium.recipe.serializer.GenericSerializer;
-import com.hrznstudio.titanium.recipe.serializer.SerializableRecipe;
-import net.minecraft.core.RegistryAccess;
+import com.mojang.serialization.MapCodec;
+import com.mojang.serialization.codecs.RecordCodecBuilder;
+import me.desht.pneumaticcraft.common.registry.ModFluids;
+import net.minecraft.advancements.AdvancementRequirements;
+import net.minecraft.advancements.AdvancementRewards;
+import net.minecraft.advancements.critereon.RecipeUnlockedTrigger;
+import net.minecraft.core.HolderLookup;
+import net.minecraft.data.recipes.RecipeOutput;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.Container;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.crafting.Ingredient;
-import net.minecraft.world.item.crafting.RecipeType;
+import net.minecraft.world.item.crafting.*;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.dimension.BuiltinDimensionTypes;
 import net.minecraft.world.level.material.Fluids;
-import net.minecraftforge.common.crafting.conditions.ICondition;
-import net.minecraftforge.common.crafting.conditions.IConditionSerializer;
-import net.minecraftforge.common.crafting.conditions.ModLoadedCondition;
-import net.minecraftforge.fluids.FluidStack;
-import net.minecraftforge.registries.ForgeRegistries;
-import org.apache.commons.lang3.tuple.Pair;
+import net.neoforged.fml.ModList;
+import net.neoforged.neoforge.common.conditions.ModLoadedCondition;
+import net.neoforged.neoforge.fluids.FluidStack;
 
-import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-public class LaserDrillFluidRecipe extends SerializableRecipe {
+public class LaserDrillFluidRecipe implements Recipe<CraftingInput> {
 
-    public static List<LaserDrillFluidRecipe> RECIPES = new ArrayList<>();
+    public static final MapCodec<LaserDrillFluidRecipe> CODEC = RecordCodecBuilder.mapCodec(in -> in.group(
+            FluidStack.CODEC.fieldOf("output").forGetter(o -> o.output),
+            Ingredient.CODEC.fieldOf("catalyst").forGetter(o -> o.catalyst),
+            ResourceLocation.CODEC.fieldOf("entity").forGetter(o -> o.entity),
+            LaserDrillRarity.CODEC.listOf().fieldOf("rarity").forGetter(o -> o.rarity)
+    ).apply(in, LaserDrillFluidRecipe::new));
 
-    public static ResourceLocation EMPTY = new ResourceLocation("minecraft", "empty");
-
-    public static void init() {
-        new LaserDrillFluidRecipe(new FluidStack(Fluids.LAVA, 100), 1, EMPTY, new LaserDrillRarity(LaserDrillRarity.NETHER, new ResourceKey[0], 5, 20, 8));
-        new LaserDrillFluidRecipe(new FluidStack(ModuleCore.ETHER.getSourceFluid().get(), 10), 10, new ResourceLocation("minecraft", "wither"), new LaserDrillRarity(new ResourceKey[0], new ResourceKey[0], -64, 256, 8));
-        new LaserDrillFluidRecipe("oil", createNBT("pneumaticcraft:oil", 50), 15, EMPTY, new LaserDrillRarity(LaserDrillRarity.OIL, new ResourceKey[0], 20, 60, 8)).setModIdCondition("pneumaticcraft");
-    }
-
-    public CompoundTag output;
-    public LaserDrillRarity[] rarity;
+    public static ResourceLocation EMPTY = ResourceLocation.fromNamespaceAndPath("minecraft", "empty");
+    public FluidStack output;
+    public List<LaserDrillRarity> rarity;
     public int pointer = 0;
     public Ingredient catalyst;
     public ResourceLocation entity;
-    private String modIdCondition;
 
-    public LaserDrillFluidRecipe(String name, CompoundTag output, Ingredient catalyst, ResourceLocation entity, LaserDrillRarity... rarity) {
-        super(new ResourceLocation(Reference.MOD_ID, name));
+    public LaserDrillFluidRecipe(FluidStack output, Ingredient catalyst, ResourceLocation entity, List<LaserDrillRarity> rarity) {
         this.output = output;
         this.rarity = rarity;
         this.catalyst = catalyst;
         this.entity = entity;
-        System.out.println(this.output);
-        RECIPES.add(this);
     }
-
-    public LaserDrillFluidRecipe(String name, CompoundTag output, int color, ResourceLocation entity, LaserDrillRarity... rarity) {
-        this(name, output, Ingredient.of(ModuleCore.LASER_LENS[color].get()), entity, rarity);
+    public LaserDrillFluidRecipe(FluidStack output, Ingredient catalyst, ResourceLocation entity, LaserDrillRarity... rarity) {
+        this(output, catalyst, entity, Arrays.asList(rarity));
     }
-
     public LaserDrillFluidRecipe(FluidStack output, int color, ResourceLocation entity, LaserDrillRarity... rarity) {
-        this(ForgeRegistries.FLUIDS.getKey(output.getFluid()).getPath(), output.writeToNBT(new CompoundTag()), color, entity, rarity);
+        this(output, Ingredient.of(ModuleCore.LASER_LENS[color].get()), entity, rarity);
     }
 
-    public LaserDrillFluidRecipe(ResourceLocation resourceLocation) {
-        super(resourceLocation);
+    public LaserDrillFluidRecipe() {
+    }
+
+    public static void init(RecipeOutput output) {
+        createRecipe(output, "lava", "minecraft", new LaserDrillFluidRecipe(new FluidStack(Fluids.LAVA, 100), 1, EMPTY,
+                new LaserDrillRarity(
+                        new LaserDrillRarity.BiomeRarity(LaserDrillRarity.BiomeRarity.NETHER, new ArrayList<>()),
+                        new LaserDrillRarity.DimensionRarity(List.of(BuiltinDimensionTypes.NETHER), new ArrayList<>()),
+                        5, 20, 8)));
+        createRecipe(output, "ether", "minecraft", new LaserDrillFluidRecipe(new FluidStack(ModuleCore.ETHER.getSourceFluid().get(), 10), 10, ResourceLocation.fromNamespaceAndPath("minecraft", "wither"),
+                new LaserDrillRarity(
+                        new LaserDrillRarity.BiomeRarity(new ArrayList<>(), new ArrayList<>()),
+                        new LaserDrillRarity.DimensionRarity(new ArrayList<>(), new ArrayList<>()),
+                        -64, 256, 8)));
+        if (ModList.get().isLoaded("pneumaticcraft")) {
+            createRecipe(output, "oil", "pneumaticcraft",
+                    new LaserDrillFluidRecipe(new FluidStack(ModFluids.OIL.get(), 50), 15, EMPTY,
+                            new LaserDrillRarity(
+                                    new LaserDrillRarity.BiomeRarity(LaserDrillRarity.BiomeRarity.OIL, new ArrayList<>()),
+                                    new LaserDrillRarity.DimensionRarity(new ArrayList<>(), new ArrayList<>()),
+                                    20, 60, 8)));
+        }
+    }
+
+    public static void createRecipe(RecipeOutput recipeOutput, String name, String modIdCondition, LaserDrillFluidRecipe recipe) {
+        var rl = generateRL(name);
+        var advancementHolder = recipeOutput.advancement()
+                .addCriterion("has_the_recipe", RecipeUnlockedTrigger.unlocked(rl))
+                .rewards(AdvancementRewards.Builder.recipe(rl))
+                .requirements(AdvancementRequirements.Strategy.OR).build(rl);
+        recipeOutput.accept(rl, recipe, advancementHolder, new ModLoadedCondition(modIdCondition));
+    }
+
+    public static ResourceLocation generateRL(String key) {
+        return ResourceLocation.fromNamespaceAndPath(Reference.MOD_ID, "laser_drill_fluid/" + key);
     }
 
     @Override
-    public boolean matches(Container inv, Level worldIn) {
+    public boolean matches(CraftingInput craftingInput, Level level) {
         return false;
     }
 
     @Override
-    public ItemStack assemble(Container inv, RegistryAccess access) {
+    public ItemStack assemble(CraftingInput craftingInput, HolderLookup.Provider provider) {
         return ItemStack.EMPTY;
     }
 
@@ -105,13 +129,13 @@ public class LaserDrillFluidRecipe extends SerializableRecipe {
     }
 
     @Override
-    public ItemStack getResultItem(RegistryAccess access) {
+    public ItemStack getResultItem(HolderLookup.Provider provider) {
         return ItemStack.EMPTY;
     }
 
     @Override
-    public GenericSerializer<? extends SerializableRecipe> getSerializer() {
-        return (GenericSerializer<? extends SerializableRecipe>) ModuleCore.LASER_DRILL_FLUID_SERIALIZER.get();
+    public RecipeSerializer<?> getSerializer() {
+        return ModuleCore.LASER_DRILL_FLUID_SERIALIZER.get();
     }
 
     @Override
@@ -119,34 +143,12 @@ public class LaserDrillFluidRecipe extends SerializableRecipe {
         return ModuleCore.LASER_DRILL_FLUID_TYPE.get();
     }
 
-    @Override
-    public Pair<ICondition, IConditionSerializer> getOutputCondition() {
-        if (modIdCondition != null) {
-            return Pair.of(new ModLoadedCondition(modIdCondition), ModLoadedCondition.Serializer.INSTANCE);
-        }
-        return null;
-    }
-
-    public void setModIdCondition(String modIdCondition) {
-        this.modIdCondition = modIdCondition;
-    }
 
     public static CompoundTag createNBT(String name, int amount) {
         CompoundTag nbt = new CompoundTag();
         nbt.putString("FluidName", name);
         nbt.putInt("Amount", amount);
         return nbt;
-    }
-
-    @Nullable
-    public LaserDrillRarity getValidRarity(ResourceLocation biome, int height) {
-        for (LaserDrillRarity laserDrillRarity : rarity) {
-            if (laserDrillRarity.depth_max >= height && laserDrillRarity.depth_min <= height) {
-                if (laserDrillRarity.whitelist.length == 0 ? Arrays.stream(laserDrillRarity.blacklist).noneMatch(registryKey -> registryKey.location().equals(biome)) : Arrays.stream(laserDrillRarity.whitelist).anyMatch(registryKey -> registryKey.location().equals(biome)))
-                    return laserDrillRarity;
-            }
-        }
-        return null;
     }
 
 }

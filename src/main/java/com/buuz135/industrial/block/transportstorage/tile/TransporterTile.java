@@ -26,12 +26,27 @@ import com.buuz135.industrial.api.transporter.TransporterType;
 import com.buuz135.industrial.api.transporter.TransporterTypeFactory;
 import com.buuz135.industrial.block.transportstorage.TransporterBlock;
 import com.buuz135.industrial.gui.transporter.ContainerTransporter;
+import com.buuz135.industrial.item.addon.ProcessingAddonItem;
 import com.buuz135.industrial.module.ModuleTransportStorage;
 import com.buuz135.industrial.proxy.client.model.TransporterModelData;
+import com.hrznstudio.titanium.annotation.Save;
+import com.hrznstudio.titanium.api.IFactory;
+import com.hrznstudio.titanium.api.augment.AugmentTypes;
+import com.hrznstudio.titanium.api.augment.IAugmentType;
+import com.hrznstudio.titanium.api.client.AssetTypes;
+import com.hrznstudio.titanium.api.client.IScreenAddon;
 import com.hrznstudio.titanium.block.BasicTileBlock;
 import com.hrznstudio.titanium.block.tile.ActiveTile;
+import com.hrznstudio.titanium.client.screen.addon.AssetScreenAddon;
+import com.hrznstudio.titanium.component.inventory.InventoryComponent;
+import com.hrznstudio.titanium.component.inventory.SidedInventoryComponent;
+import com.hrznstudio.titanium.component.sideness.IFacingComponent;
+import com.hrznstudio.titanium.item.AugmentWrapper;
+import com.hrznstudio.titanium.util.FacingUtil;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.core.HolderLookup;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
@@ -39,27 +54,42 @@ import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
+import net.minecraft.world.item.DyeColor;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraftforge.client.model.data.ModelData;
-import net.minecraftforge.network.NetworkHooks;
-import net.minecraftforge.registries.ForgeRegistries;
+import net.neoforged.api.distmarker.Dist;
+import net.neoforged.api.distmarker.OnlyIn;
+import net.neoforged.neoforge.client.model.data.ModelData;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
+import java.util.stream.Collectors;
 
 public class TransporterTile extends ActiveTile<TransporterTile> implements IBlockContainer<TransporterTypeFactory> {
 
+    @Save
+    private SidedInventoryComponent<TransporterTile> augmentInventory;
     private Map<Direction, TransporterType> transporterTypeMap = new HashMap<>();
 
     public TransporterTile(BlockPos blockPos, BlockState blockState) {
-        super((BasicTileBlock<TransporterTile>) ModuleTransportStorage.TRANSPORTER.getLeft().get(), ModuleTransportStorage.TRANSPORTER.getRight().get(), blockPos, blockState);
+        super((BasicTileBlock<TransporterTile>) ModuleTransportStorage.TRANSPORTER.getBlock(), ModuleTransportStorage.TRANSPORTER.type().get(), blockPos, blockState);
+        addInventory(this.augmentInventory = (SidedInventoryComponent<TransporterTile>) getAugmentFactory()
+                .create()
+                .setComponentHarness(this.getSelf())
+                .setInputFilter((stack, integer) -> AugmentWrapper.isAugment(stack) && canAcceptAugment(stack)));
+        for (FacingUtil.Sideness value : FacingUtil.Sideness.values()) {
+            augmentInventory.getFacingModes().put(value, IFacingComponent.FaceMode.NONE);
+        }
+    }
+
+    @Override
+    @OnlyIn(Dist.CLIENT)
+    public void initClient() {
+        super.initClient();
+        addGuiAddonFactory(getAugmentBackground());
     }
 
     @Nonnull
@@ -91,7 +121,13 @@ public class TransporterTile extends ActiveTile<TransporterTile> implements IBlo
     @Override
     public void serverTick(Level level, BlockPos pos, BlockState state, TransporterTile blockEntity) {
         super.serverTick(level, pos, state, blockEntity);
-        getTransporterTypeMap().values().forEach(TransporterType::update);
+        var production = 1;
+        if (this.hasAugmentInstalled(ProcessingAddonItem.PROCESSING)) {
+            production += AugmentWrapper.getType(this.getInstalledAugments(ProcessingAddonItem.PROCESSING).getFirst(), ProcessingAddonItem.PROCESSING);
+        }
+        for (int i = 0; i < production; i++) {
+            getTransporterTypeMap().values().forEach(TransporterType::update);
+        }
     }
 
     @Override
@@ -137,7 +173,7 @@ public class TransporterTile extends ActiveTile<TransporterTile> implements IBlo
 
     public void openGui(Player player, Direction facing) {
         if (player instanceof ServerPlayer) {
-            NetworkHooks.openScreen((ServerPlayer) player, this, packetBuffer -> {
+            player.openMenu(this, packetBuffer -> {
                 packetBuffer.writeBlockPos(worldPosition);
                 packetBuffer.writeEnum(facing);
             });
@@ -147,7 +183,7 @@ public class TransporterTile extends ActiveTile<TransporterTile> implements IBlo
     @Nullable
     @Override
     public AbstractContainerMenu createMenu(int menu, Inventory inventoryPlayer, Player entityPlayer) {
-        return new ContainerTransporter(menu, this, ((TransporterBlock) ModuleTransportStorage.TRANSPORTER.getLeft().get()).getFacingUpgradeHit(this.level.getBlockState(this.worldPosition), this.level, this.worldPosition, entityPlayer).getLeft(), inventoryPlayer);
+        return new ContainerTransporter(menu, this, ((TransporterBlock) ModuleTransportStorage.TRANSPORTER.getBlock()).getFacingUpgradeHit(this.level.getBlockState(this.worldPosition), this.level, this.worldPosition, entityPlayer).getLeft(), inventoryPlayer);
     }
 
     @Override
@@ -166,8 +202,8 @@ public class TransporterTile extends ActiveTile<TransporterTile> implements IBlo
     }
 
     @Override
-    protected void saveAdditional(CompoundTag compoundTag) {
-        super.saveAdditional(compoundTag);
+    protected void saveAdditional(CompoundTag compoundTag, HolderLookup.Provider provider) {
+        super.saveAdditional(compoundTag, provider);
         CompoundTag upgrades = new CompoundTag();
         for (Direction facing : Direction.values()) {
             if (!hasUpgrade(facing)) {
@@ -175,8 +211,8 @@ public class TransporterTile extends ActiveTile<TransporterTile> implements IBlo
             }
             CompoundTag upgradeTag = new CompoundTag();
             TransporterType upgrade = getTransporterTypeMap().get(facing);
-            upgradeTag.putString("factory", ForgeRegistries.ITEMS.getKey(upgrade.getFactory().getUpgradeItem()).toString());
-            CompoundTag customNBT = upgrade.serializeNBT();
+            upgradeTag.putString("factory", BuiltInRegistries.ITEM.getKey(upgrade.getFactory().getUpgradeItem()).toString());
+            CompoundTag customNBT = upgrade.serializeNBT(provider);
             if (customNBT != null)
                 upgradeTag.put("customNBT", customNBT);
             upgrades.put(facing.getSerializedName(), upgradeTag);
@@ -185,8 +221,8 @@ public class TransporterTile extends ActiveTile<TransporterTile> implements IBlo
     }
 
     @Override
-    public void load(CompoundTag compound) {
-        super.load(compound);
+    public void loadAdditional(CompoundTag compound, HolderLookup.Provider provider) {
+        super.loadAdditional(compound, provider);
         if (compound.contains("Transporters")) {
             CompoundTag upgradesTag = compound.getCompound("Transporters");
             //upgradeMap.clear();
@@ -196,7 +232,7 @@ public class TransporterTile extends ActiveTile<TransporterTile> implements IBlo
                 CompoundTag upgradeTag = upgradesTag.getCompound(facing.getSerializedName());
                 TransporterTypeFactory factory = null;
                 for (TransporterTypeFactory transporterTypeFactory : TransporterTypeFactory.FACTORIES) {
-                    if (ForgeRegistries.ITEMS.getKey(transporterTypeFactory.getUpgradeItem()).equals(new ResourceLocation(upgradeTag.getString("factory")))) {
+                    if (BuiltInRegistries.ITEM.getKey(transporterTypeFactory.getUpgradeItem()).equals(ResourceLocation.parse(upgradeTag.getString("factory")))) {
                         factory = transporterTypeFactory;
                         break;
                     }
@@ -204,12 +240,62 @@ public class TransporterTile extends ActiveTile<TransporterTile> implements IBlo
                 if (factory != null) {
                     TransporterType upgrade = transporterTypeMap.getOrDefault(facing, factory.create(this, facing, TransporterTypeFactory.TransporterAction.EXTRACT));
                     if (upgradeTag.contains("customNBT")) {
-                        upgrade.deserializeNBT(upgradeTag.getCompound("customNBT"));
+                        upgrade.deserializeNBT(provider, upgradeTag.getCompound("customNBT"));
                         //upgradeMap.get(facing).deserializeNBT(upgradeTag.getCompound("customNBT"));
                     }
                     transporterTypeMap.put(facing, upgrade);
                 }
             }
         }
+    }
+
+    public List<ItemStack> getInstalledAugments() {
+        return getItemStackAugments().stream().filter(AugmentWrapper::isAugment).collect(Collectors.toList());
+    }
+
+    public List<ItemStack> getInstalledAugments(IAugmentType filter) {
+        return getItemStackAugments().stream().filter(AugmentWrapper::isAugment).filter(stack -> AugmentWrapper.hasType(stack, filter)).collect(Collectors.toList());
+    }
+
+    public boolean hasAugmentInstalled(IAugmentType augmentType) {
+        return getInstalledAugments(augmentType).size() > 0;
+    }
+
+    public IFactory<InventoryComponent<TransporterTile>> getAugmentFactory() {
+        return () -> new SidedInventoryComponent<TransporterTile>("augments", 180, 11, 4, 0)
+                .disableFacingAddon()
+                .setColor(DyeColor.PURPLE)
+                .setSlotLimit(1)
+                .setRange(1, 4);
+    }
+
+    @OnlyIn(Dist.CLIENT)
+    public IFactory<? extends IScreenAddon> getAugmentBackground() {
+        return () -> new AssetScreenAddon(AssetTypes.AUGMENT_BACKGROUND, 175, 4, true);
+    }
+
+    private List<ItemStack> getItemStackAugments() {
+        List<ItemStack> augments = new ArrayList<>();
+        for (int i = 0; i < augmentInventory.getSlots(); i++) {
+            augments.add(augmentInventory.getStackInSlot(i));
+        }
+        return augments;
+    }
+
+    public boolean canAcceptAugment(ItemStack augment) {
+        if (AugmentWrapper.hasType(augment, AugmentTypes.SPEED)) {
+            return !hasAugmentInstalled(AugmentTypes.SPEED);
+        }
+        if (AugmentWrapper.hasType(augment, AugmentTypes.EFFICIENCY)) {
+            return !hasAugmentInstalled(AugmentTypes.EFFICIENCY);
+        }
+        if (AugmentWrapper.hasType(augment, ProcessingAddonItem.PROCESSING)) {
+            return !hasAugmentInstalled(ProcessingAddonItem.PROCESSING);
+        }
+        return false;
+    }
+
+    public SidedInventoryComponent<TransporterTile> getAugmentInventory() {
+        return augmentInventory;
     }
 }

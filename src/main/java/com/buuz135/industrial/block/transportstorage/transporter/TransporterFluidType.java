@@ -34,7 +34,6 @@ import com.buuz135.industrial.utils.IndustrialTags;
 import com.buuz135.industrial.utils.Reference;
 import com.google.common.collect.Sets;
 import com.hrznstudio.titanium.recipe.generator.TitaniumShapedRecipeBuilder;
-import com.hrznstudio.titanium.util.TileUtil;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.mojang.math.Axis;
@@ -42,18 +41,18 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
-import net.minecraft.data.recipes.FinishedRecipe;
+import net.minecraft.data.recipes.RecipeOutput;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.Level;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
-import net.minecraftforge.common.Tags;
-import net.minecraftforge.common.capabilities.ForgeCapabilities;
-import net.minecraftforge.fluids.FluidStack;
-import net.minecraftforge.fluids.FluidUtil;
-import net.minecraftforge.fluids.capability.IFluidHandler;
+import net.neoforged.api.distmarker.Dist;
+import net.neoforged.api.distmarker.OnlyIn;
+import net.neoforged.neoforge.capabilities.Capabilities;
+import net.neoforged.neoforge.common.Tags;
+import net.neoforged.neoforge.fluids.FluidStack;
+import net.neoforged.neoforge.fluids.FluidUtil;
+import net.neoforged.neoforge.fluids.capability.IFluidHandler;
 import org.joml.Matrix4f;
 import org.joml.Vector3f;
 
@@ -63,7 +62,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Set;
-import java.util.function.Consumer;
 
 public class TransporterFluidType extends FilteredTransporterType<FluidStack, IFluidHandler> {
 
@@ -93,14 +91,14 @@ public class TransporterFluidType extends FilteredTransporterType<FluidStack, IF
                 if (isEmpty()) return stack.getAmount();
                 if (isRegulated) {
                     for (int i = 0; i < iFluidHandler.getTanks(); i++) {
-                        if (iFluidHandler.isFluidValid(i, stack) && iFluidHandler.getFluidInTank(i).isFluidEqual(stack)) {
+                        if (iFluidHandler.isFluidValid(i, stack) && FluidStack.isSameFluidSameComponents(iFluidHandler.getFluidInTank(i), stack)) {
                             amount += iFluidHandler.getFluidInTank(i).getAmount();
                         }
                     }
                 }
                 for (IFilter.GhostSlot slot : this.getFilter()) {
                     FluidStack original = FluidUtil.getFluidContained(slot.getStack()).orElse(null);
-                    if (original != null && original.isFluidEqual(stack)) {
+                    if (original != null && FluidStack.isSameFluidSameComponents(original, stack)) {
                         int allowedAmount = isRegulated ? slot.getAmount() : Integer.MAX_VALUE;
                         int returnAmount = Math.min(stack.getAmount(), allowedAmount - amount);
                         if (returnAmount > 0) return returnAmount;
@@ -121,8 +119,10 @@ public class TransporterFluidType extends FilteredTransporterType<FluidStack, IF
                 for (Direction direction : ((TransporterTile) container).getTransporterTypeMap().keySet()) {
                     TransporterType transporterType = ((TransporterTile) container).getTransporterTypeMap().get(direction);
                     if (transporterType instanceof TransporterFluidType && transporterType.getAction() == TransporterTypeFactory.TransporterAction.INSERT) {
-                        TileUtil.getTileEntity(getLevel(), getPos().relative(this.getSide())).ifPresent(tileEntity -> tileEntity.getCapability(ForgeCapabilities.FLUID_HANDLER, getSide().getOpposite()).ifPresent(origin -> {
-                            TileUtil.getTileEntity(getLevel(), getPos().relative(direction)).ifPresent(otherTile -> otherTile.getCapability(ForgeCapabilities.FLUID_HANDLER, direction.getOpposite()).ifPresent(destination -> {
+                        var origin = getLevel().getCapability(Capabilities.FluidHandler.BLOCK, getPos().relative(this.getSide()), getSide().getOpposite());
+                        if (origin != null) {
+                            var destination = getLevel().getCapability(Capabilities.FluidHandler.BLOCK, getPos().relative(direction), direction.getOpposite());
+                            if (destination != null) {
                                 int amount = (int) (50 * getEfficiency());
                                 FluidStack simulatedStack = origin.drain(amount, IFluidHandler.FluidAction.SIMULATE);
                                 int filteredAmount = ((TransporterFluidType) transporterType).getFilter().matches(simulatedStack, destination, ((TransporterFluidType) transporterType).isRegulated());
@@ -133,8 +133,8 @@ public class TransporterFluidType extends FilteredTransporterType<FluidStack, IF
                                         ((TransporterFluidType) transporterType).addTransferedStack(getSide(), simulatedStack);
                                     }
                                 }
-                            }));
-                        }));
+                            }
+                        }
                     }
                 }
             }
@@ -164,12 +164,12 @@ public class TransporterFluidType extends FilteredTransporterType<FluidStack, IF
     }
 
     public void addTransferedStack(Direction direction, FluidStack stack) {
-        syncRender(direction, stack.writeToNBT(new CompoundTag()));
+        syncRender(direction, (CompoundTag) stack.saveOptional(getLevel().registryAccess()));
     }
 
     @Override
     public void handleRenderSync(Direction origin, CompoundTag compoundNBT) {
-        this.queue.computeIfAbsent(origin, direction -> new ArrayList<>()).add(0, FluidStack.loadFluidStackFromNBT(compoundNBT));
+        this.queue.computeIfAbsent(origin, direction -> new ArrayList<>()).add(0, FluidStack.parseOptional(getLevel().registryAccess(), compoundNBT));
     }
 
     @OnlyIn(Dist.CLIENT)
@@ -182,8 +182,8 @@ public class TransporterFluidType extends FilteredTransporterType<FluidStack, IF
             FluidStack fluidStack = queue.get(direction).get(step);
             stack.pushPose();
             stack.mulPose(Minecraft.getInstance().getEntityRenderDispatcher().cameraOrientation());
-            stack.mulPose(Axis.ZP.rotationDegrees(90f));
-            stack.mulPose(Axis.XP.rotationDegrees(90f));
+            //stack.mulPose(Axis.ZP.rotationDegrees(90f));
+            stack.mulPose(Axis.XP.rotationDegrees(-90f));
             VertexConsumer buffer1 = buffer.getBuffer(TransporterTESR.TYPE);
             Matrix4f matrix = stack.last().pose();
             float pX1 = 1;
@@ -212,10 +212,10 @@ public class TransporterFluidType extends FilteredTransporterType<FluidStack, IF
                 blue = color.getBlue() / 256F;
                 stack.scale(0.75f, 0.75f, 0.75f);
             }
-            buffer1.vertex(matrix, pX2 + xOffset, yOffset, 0 + zOffset).color(red, green, blue, alpha).uv(u2, 0).endVertex();
-            buffer1.vertex(matrix, pX1 + xOffset + 0.5f, yOffset, 0 + zOffset).color(red, green, blue, alpha).uv(u, 0).endVertex();
-            buffer1.vertex(matrix, pX1 + xOffset + 0.5f, yOffset, 1.5f + zOffset).color(red, green, blue, alpha).uv(u, 1).endVertex();
-            buffer1.vertex(matrix, pX2 + xOffset, yOffset, 1.5f + zOffset).color(red, green, blue, alpha).uv(u2, 1).endVertex();
+            buffer1.addVertex(matrix, pX2 + xOffset, yOffset, 0 + zOffset).setColor(red, green, blue, alpha).setUv(u2, 0);
+            buffer1.addVertex(matrix, pX1 + xOffset + 0.5f, yOffset, 0 + zOffset).setColor(red, green, blue, alpha).setUv(u, 0);
+            buffer1.addVertex(matrix, pX1 + xOffset + 0.5f, yOffset, 1.5f + zOffset).setColor(red, green, blue, alpha).setUv(u, 1);
+            buffer1.addVertex(matrix, pX2 + xOffset, yOffset, 1.5f + zOffset).setColor(red, green, blue, alpha).setUv(u2, 1);
             stack.popPose();
 
         }
@@ -235,27 +235,27 @@ public class TransporterFluidType extends FilteredTransporterType<FluidStack, IF
         @Override
         @Nonnull
         public ResourceLocation getModel(Direction upgradeSide, TransporterAction action) {
-            return new ResourceLocation(Reference.MOD_ID, "block/transporters/fluid_transporter_" + action.name().toLowerCase() + "_" + upgradeSide.getSerializedName().toLowerCase());
+            return ResourceLocation.fromNamespaceAndPath(Reference.MOD_ID, "block/transporters/fluid_transporter_" + action.name().toLowerCase() + "_" + upgradeSide.getSerializedName().toLowerCase());
         }
 
         @Override
         public Set<ResourceLocation> getTextures() {
-            return Sets.newHashSet(new ResourceLocation("industrialforegoing:block/transporters/fluid"), new ResourceLocation("industrialforegoing:block/base/bottom"));
+            return Sets.newHashSet(ResourceLocation.parse("industrialforegoing:block/transporters/fluid"), ResourceLocation.parse("industrialforegoing:block/base/bottom"));
         }
 
         @Override
         public boolean canBeAttachedAgainst(Level world, BlockPos pos, Direction face) {
-            return TileUtil.getTileEntity(world, pos).map(tileEntity -> tileEntity.getCapability(ForgeCapabilities.FLUID_HANDLER, face).isPresent()).orElse(false);
+            return world.getCapability(Capabilities.FluidHandler.BLOCK, pos, face) != null;
         }
 
         @Nonnull
         @Override
         public ResourceLocation getItemModel() {
-            return new ResourceLocation(Reference.MOD_ID, "block/transporters/fluid_transporter_" + TransporterAction.EXTRACT.name().toLowerCase() + "_" + Direction.NORTH.getSerializedName().toLowerCase());
+            return ResourceLocation.fromNamespaceAndPath(Reference.MOD_ID, "block/transporters/fluid_transporter_" + TransporterAction.EXTRACT.name().toLowerCase() + "_" + Direction.NORTH.getSerializedName().toLowerCase());
         }
 
         @Override
-        public void registerRecipe(Consumer<FinishedRecipe> consumer) {
+        public void registerRecipe(RecipeOutput consumer) {
             TitaniumShapedRecipeBuilder.shapedRecipe(getUpgradeItem(), 2)
                     .pattern("IPI").pattern("GMG").pattern("ICI")
                     .define('I', Tags.Items.DUSTS_REDSTONE)

@@ -23,32 +23,39 @@ package com.buuz135.industrial.block.misc.tile;
 
 import com.buuz135.industrial.block.tile.IndustrialProcessingTile;
 import com.buuz135.industrial.config.machine.misc.EnchantmentApplicatorConfig;
-import com.buuz135.industrial.module.ModuleCore;
+import com.buuz135.industrial.gui.component.TextureScreenAddon;
 import com.buuz135.industrial.module.ModuleMisc;
 import com.buuz135.industrial.utils.IndustrialTags;
+import com.buuz135.industrial.utils.Reference;
 import com.hrznstudio.titanium.annotation.Save;
 import com.hrznstudio.titanium.component.energy.EnergyStorageComponent;
 import com.hrznstudio.titanium.component.fluid.SidedFluidTankComponent;
 import com.hrznstudio.titanium.component.inventory.SidedInventoryComponent;
 import com.hrznstudio.titanium.util.TagUtil;
+import it.unimi.dsi.fastutil.objects.Object2IntMap;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.core.Holder;
+import net.minecraft.core.component.DataComponents;
+import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.network.chat.Component;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.inventory.AnvilMenu;
 import net.minecraft.world.item.DyeColor;
-import net.minecraft.world.item.EnchantedBookItem;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraft.world.item.enchantment.EnchantmentHelper;
-import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.item.enchantment.ItemEnchantments;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraftforge.common.capabilities.ForgeCapabilities;
-import net.minecraftforge.fluids.FluidStack;
-import net.minecraftforge.fluids.capability.IFluidHandler;
-import net.minecraftforge.registries.ForgeRegistries;
+import net.neoforged.api.distmarker.Dist;
+import net.neoforged.api.distmarker.OnlyIn;
+import net.neoforged.neoforge.capabilities.Capabilities;
+import net.neoforged.neoforge.fluids.capability.IFluidHandler;
 import org.apache.commons.lang3.tuple.Pair;
 
-import java.util.Map;
-import java.util.concurrent.atomic.AtomicInteger;
+import java.util.ArrayList;
+import java.util.List;
 
 public class EnchantmentApplicatorTile extends IndustrialProcessingTile<EnchantmentApplicatorTile> {
 
@@ -67,7 +74,7 @@ public class EnchantmentApplicatorTile extends IndustrialProcessingTile<Enchantm
                 setColor(DyeColor.LIME).
                 setComponentHarness(this).
                 setOnContentChange(() -> syncObject(this.tank)).
-                setValidator(fluidStack -> TagUtil.hasTag(ForgeRegistries.FLUIDS, fluidStack.getFluid(), IndustrialTags.Fluids.EXPERIENCE))
+                setValidator(fluidStack -> TagUtil.hasTag(BuiltInRegistries.FLUID, fluidStack.getFluid(), IndustrialTags.Fluids.EXPERIENCE))
         );
         this.addInventory(inputFirst = (SidedInventoryComponent<EnchantmentApplicatorTile>) new SidedInventoryComponent<EnchantmentApplicatorTile>("inputFirst", 60, 40, 1, 1).
                 setColor(DyeColor.BLUE).
@@ -89,20 +96,26 @@ public class EnchantmentApplicatorTile extends IndustrialProcessingTile<Enchantm
         );
     }
 
-    @Override
-    public boolean canIncrease() {
-        Pair<ItemStack, Integer> output = updateRepairOutput();
-        long amount = this.tank.getFluidAmount();
-        BlockEntity tileEntity = this.level.getBlockEntity(this.worldPosition.above());
-        if (tileEntity != null && tileEntity.getCapability(ForgeCapabilities.FLUID_HANDLER).isPresent()) {
-            amount += tileEntity.getCapability(ForgeCapabilities.FLUID_HANDLER)
-                    .filter(iFluidHandler -> iFluidHandler.getTanks() > 0 && TagUtil.hasTag(ForgeRegistries.FLUIDS, iFluidHandler.getFluidInTank(0).getFluid(), IndustrialTags.Fluids.EXPERIENCE))
-                    .map(iFluidHandler -> iFluidHandler.getFluidInTank(0).getAmount()).orElse(0);
+    public static int getMatchingAmount(IFluidHandler capability) {
+        int amount = 0;
+        for (int i = 0; i < capability.getTanks(); i++) {
+            if (capability.getFluidInTank(i).is(IndustrialTags.Fluids.EXPERIENCE)) {
+                amount += capability.getFluidInTank(i).getAmount();
+            }
         }
-        return !output.getLeft().isEmpty() && amount >= getEssenceConsumed(output.getRight()) && this.output.getStackInSlot(0).isEmpty();
+        return amount;
     }
 
-    private int getEssenceConsumed(int experienceLevel) {
+    public static int drainAmount(int amount, IFluidHandler capability) {
+        for (int i = 0; i < capability.getTanks(); i++) {
+            if (capability.getFluidInTank(i).is(IndustrialTags.Fluids.EXPERIENCE)) {
+                amount -= capability.drain(amount, IFluidHandler.FluidAction.EXECUTE).getAmount();
+            }
+        }
+        return amount;
+    }
+
+    public static int getEssenceConsumed(int experienceLevel) {
         long xp = 0;
         if (experienceLevel >= 0 && experienceLevel <= 16)
             xp = (long) (Math.pow(experienceLevel, 2) + 6 * experienceLevel);
@@ -113,6 +126,33 @@ public class EnchantmentApplicatorTile extends IndustrialProcessingTile<Enchantm
         return xp > Integer.MAX_VALUE ? Integer.MAX_VALUE : (int) xp;
     }
 
+    @OnlyIn(Dist.CLIENT)
+    @Override
+    public void initClient() {
+        super.initClient();
+        ResourceLocation res = ResourceLocation.fromNamespaceAndPath(Reference.MOD_ID, "textures/gui/machines.png");
+        this.addGuiAddonFactory(() -> new TextureScreenAddon(158, 4, 14, 14, res, 96, 233) {
+
+            @Override
+            public List<Component> getTooltipLines() {
+                List<Component> components = new ArrayList<>();
+                components.add(Component.translatable("text.industrialforegoing.tooltip.accepts_fluid_on_top"));
+                return components;
+            }
+        });
+    }
+
+    @Override
+    public boolean canIncrease() {
+        Pair<ItemStack, Integer> output = updateRepairOutput();
+        long amount = this.tank.getFluidAmount();
+        var capability = this.level.getCapability(Capabilities.FluidHandler.BLOCK, this.worldPosition.above(), Direction.DOWN);
+        if (capability != null) {
+            amount += getMatchingAmount(capability);
+        }
+        return !output.getLeft().isEmpty() && amount >= getEssenceConsumed(output.getRight()) && this.output.getStackInSlot(0).isEmpty();
+    }
+
     @Override
     public Runnable onFinish() {
         return () -> {
@@ -120,12 +160,12 @@ public class EnchantmentApplicatorTile extends IndustrialProcessingTile<Enchantm
             this.inputFirst.setStackInSlot(0, ItemStack.EMPTY);
             this.inputSecond.getStackInSlot(0).shrink(1);
             this.output.setStackInSlot(0, output.getLeft());
-            AtomicInteger amount = new AtomicInteger(getEssenceConsumed(output.getRight()));
-            BlockEntity tileEntity = this.level.getBlockEntity(this.worldPosition.above());
-            if (tileEntity != null) {
-                tileEntity.getCapability(ForgeCapabilities.FLUID_HANDLER).ifPresent(iFluidHandler -> amount.addAndGet(-iFluidHandler.drain(new FluidStack(ModuleCore.ESSENCE.getSourceFluid().get(), amount.get()), IFluidHandler.FluidAction.EXECUTE).getAmount()));
+            var amount = getEssenceConsumed(output.getRight());
+            var capability = this.level.getCapability(Capabilities.FluidHandler.BLOCK, this.worldPosition.above(), Direction.DOWN);
+            if (capability != null) {
+                amount = drainAmount(amount, capability);
             }
-            if (amount.get() > 0) this.tank.drainForced(amount.get(), IFluidHandler.FluidAction.EXECUTE);
+            if (amount > 0) this.tank.drainForced(amount, IFluidHandler.FluidAction.EXECUTE);
         };
     }
 
@@ -160,12 +200,12 @@ public class EnchantmentApplicatorTile extends IndustrialProcessingTile<Enchantm
         } else {
             ItemStack inputFirstCopy = inputFirst.copy();
             ItemStack inputSecond = this.inputSecond.getStackInSlot(0);
-            Map<Enchantment, Integer> map = EnchantmentHelper.getEnchantments(inputFirstCopy);
-            j = j + inputFirst.getBaseRepairCost() + (inputSecond.isEmpty() ? 0 : inputSecond.getBaseRepairCost());
-            ;
+            ItemEnchantments.Mutable map = new ItemEnchantments.Mutable(EnchantmentHelper.getEnchantmentsForCrafting(inputFirstCopy));
+            j = j + inputFirst.get(DataComponents.REPAIR_COST) + (inputSecond.isEmpty() ? 0 : inputSecond.get(DataComponents.REPAIR_COST));
+
             boolean addEnchantment = false;
             if (!inputSecond.isEmpty()) {
-                addEnchantment = inputSecond.getItem() == Items.ENCHANTED_BOOK && !EnchantedBookItem.getEnchantments(inputSecond).isEmpty();
+                addEnchantment = inputSecond.has(DataComponents.STORED_ENCHANTMENTS);
                 if (inputFirstCopy.isDamageableItem() && inputFirstCopy.getItem().isValidRepairItem(inputFirst, inputSecond)) { //Combine
                     int l2 = Math.min(inputFirstCopy.getDamageValue(), inputFirstCopy.getMaxDamage() / 4);
                     if (l2 <= 0) { //No Output
@@ -195,17 +235,18 @@ public class EnchantmentApplicatorTile extends IndustrialProcessingTile<Enchantm
                             i += 2;
                         }
                     }
-                    Map<Enchantment, Integer> map1 = EnchantmentHelper.getEnchantments(inputSecond);
+                    ItemEnchantments map1 = EnchantmentHelper.getEnchantmentsForCrafting(inputSecond);
                     boolean flag2 = false;
                     boolean flag3 = false;
-                    for (Enchantment enchantment1 : map1.keySet()) {
+                    for (Object2IntMap.Entry<Holder<Enchantment>> enchantment1 : map1.entrySet()) {
                         if (enchantment1 != null) {
-                            int enchantmentValue = map.getOrDefault(enchantment1, 0);
-                            int j2 = map1.get(enchantment1);
+                            Holder<Enchantment> holder = enchantment1.getKey();
+                            int enchantmentValue = map.getLevel(holder);
+                            int j2 = enchantment1.getIntValue();
                             j2 = enchantmentValue == j2 ? j2 + 1 : Math.max(j2, enchantmentValue);
-                            boolean flag1 = enchantment1.canEnchant(inputFirst);
-                            for (Enchantment enchantment : map.keySet()) {
-                                if (enchantment != enchantment1 && !enchantment1.isCompatibleWith(enchantment)) {
+                            boolean flag1 = inputFirst.supportsEnchantment(holder);
+                            for (Holder<Enchantment> enchantment : map.keySet()) {
+                                if (!enchantment.equals(enchantment1) && !Enchantment.areCompatible(holder, enchantment)) {
                                     flag1 = false;
                                     ++i;
                                 }
@@ -214,24 +255,12 @@ public class EnchantmentApplicatorTile extends IndustrialProcessingTile<Enchantm
                                 flag3 = true;
                             } else {
                                 flag2 = true;
-                                if (!EnchantmentApplicatorConfig.ignoreEnchantMaxLevels && j2 > enchantment1.getMaxLevel()) {
-                                    j2 = enchantment1.getMaxLevel();
+                                if (!EnchantmentApplicatorConfig.ignoreEnchantMaxLevels && j2 > holder.value().getMaxLevel()) {
+                                    j2 = holder.value().getMaxLevel();
                                 }
-                                map.put(enchantment1, j2);
-                                int enchantmentRarity = 0;
-                                switch (enchantment1.getRarity()) {
-                                    case COMMON:
-                                        enchantmentRarity = 1;
-                                        break;
-                                    case UNCOMMON:
-                                        enchantmentRarity = 2;
-                                        break;
-                                    case RARE:
-                                        enchantmentRarity = 4;
-                                        break;
-                                    case VERY_RARE:
-                                        enchantmentRarity = 8;
-                                }
+                                map.set(holder, j2);
+                                int enchantmentRarity = holder.value().getAnvilCost();
+
                                 if (addEnchantment) {
                                     enchantmentRarity = Math.max(1, enchantmentRarity / 2);
                                 }
@@ -253,15 +282,15 @@ public class EnchantmentApplicatorTile extends IndustrialProcessingTile<Enchantm
                 inputFirstCopy = ItemStack.EMPTY;
             }
             if (!inputFirstCopy.isEmpty()) {
-                int repairCost = inputFirstCopy.getBaseRepairCost();
-                if (!inputSecond.isEmpty() && repairCost < inputSecond.getBaseRepairCost()) {
-                    repairCost = inputSecond.getBaseRepairCost();
+                int repairCost = inputFirstCopy.get(DataComponents.REPAIR_COST);
+                if (!inputSecond.isEmpty() && repairCost < inputSecond.get(DataComponents.REPAIR_COST)) {
+                    repairCost = inputSecond.get(DataComponents.REPAIR_COST);
                 }
                 if (k != i || k == 0) {
                     repairCost = AnvilMenu.calculateIncreasedRepairCost(repairCost);
                 }
-                inputFirstCopy.setRepairCost(repairCost);
-                EnchantmentHelper.setEnchantments(map, inputFirstCopy);
+                inputFirstCopy.set(DataComponents.REPAIR_COST, repairCost);
+                EnchantmentHelper.setEnchantments(inputFirstCopy, map.toImmutable());
             }
             //return inputFirstCopy
             return Pair.of(inputFirstCopy, maximumCost);

@@ -27,13 +27,10 @@ import com.buuz135.industrial.module.ModuleTransportStorage;
 import com.hrznstudio.titanium.tab.TitaniumTab;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
-import net.minecraft.data.recipes.FinishedRecipe;
+import net.minecraft.data.recipes.RecipeOutput;
 import net.minecraft.world.InteractionResult;
-import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.level.block.entity.BlockEntity;
-
-import java.util.function.Consumer;
 
 public class ItemTransporterType extends IFCustomItem {
 
@@ -50,8 +47,8 @@ public class ItemTransporterType extends IFCustomItem {
         BlockPos pos = context.getClickedPos().relative(context.getClickedFace());
         Direction side = context.getClickedFace().getOpposite();
         if (factory.canBeAttachedAgainst(context.getLevel(), context.getClickedPos(), side.getOpposite())) {
-            if (!context.getLevel().getBlockState(context.getClickedPos().relative(context.getClickedFace())).is(ModuleTransportStorage.TRANSPORTER.getLeft().get()) && context.getLevel().getBlockState(context.getClickedPos().relative(context.getClickedFace())).isAir()) {
-                context.getLevel().setBlockAndUpdate(context.getClickedPos().relative(context.getClickedFace()), ModuleTransportStorage.TRANSPORTER.getLeft().get().defaultBlockState());
+            if (!context.getLevel().getBlockState(context.getClickedPos().relative(context.getClickedFace())).is(ModuleTransportStorage.TRANSPORTER.getBlock()) && context.getLevel().getBlockState(context.getClickedPos().relative(context.getClickedFace())).isAir()) {
+                context.getLevel().setBlockAndUpdate(context.getClickedPos().relative(context.getClickedFace()), ModuleTransportStorage.TRANSPORTER.getBlock().defaultBlockState());
                 pos = context.getClickedPos().relative(context.getClickedFace());
             }
             BlockEntity tile = context.getLevel().getBlockEntity(pos);
@@ -69,7 +66,7 @@ public class ItemTransporterType extends IFCustomItem {
 
 
     @Override
-    public void registerRecipe(Consumer<FinishedRecipe> consumer) {
+    public void registerRecipe(RecipeOutput consumer) {
 
     }
 }

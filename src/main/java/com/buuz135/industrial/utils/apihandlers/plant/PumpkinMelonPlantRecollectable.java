@@ -29,7 +29,6 @@ import net.minecraft.core.NonNullList;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Blocks;
-import net.minecraft.world.level.block.MelonBlock;
 import net.minecraft.world.level.block.PumpkinBlock;
 import net.minecraft.world.level.block.state.BlockState;
 
@@ -44,7 +43,7 @@ public class PumpkinMelonPlantRecollectable extends PlantRecollectable {
 
     @Override
     public boolean canBeHarvested(Level world, BlockPos pos, BlockState blockState) {
-        return blockState.getBlock() instanceof PumpkinBlock || blockState.getBlock() instanceof MelonBlock;
+        return blockState.getBlock() instanceof PumpkinBlock || blockState.getBlock().equals(Blocks.MELON);
     }
 
     @Override

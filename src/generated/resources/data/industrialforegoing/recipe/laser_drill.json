@@ -1,0 +1,39 @@
+{
+  "neoforge:conditions": [
+    {
+      "type": "neoforge:item_exists",
+      "item": "industrialforegoing:laser_drill"
+    }
+  ],
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "b": {
+      "item": "minecraft:piston"
+    },
+    "f": {
+      "tag": "c:gears/diamond"
+    },
+    "g": {
+      "tag": "c:gears/gold"
+    },
+    "m": {
+      "tag": "industrialforegoing:machine_frame/simple"
+    },
+    "p": {
+      "tag": "c:plastic"
+    },
+    "r": {
+      "item": "minecraft:redstone"
+    }
+  },
+  "pattern": [
+    "pfp",
+    "bmb",
+    "grg"
+  ],
+  "result": {
+    "count": 1,
+    "id": "industrialforegoing:laser_drill"
+  }
+}

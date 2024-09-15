@@ -28,13 +28,12 @@ import com.buuz135.industrial.plugin.jei.IndustrialRecipeTypes;
 import com.buuz135.industrial.utils.Reference;
 import com.hrznstudio.titanium.client.screen.addon.SlotsScreenAddon;
 import com.hrznstudio.titanium.client.screen.asset.DefaultAssetProvider;
-import com.mojang.blaze3d.vertex.PoseStack;
 import mezz.jei.api.constants.VanillaTypes;
-import mezz.jei.api.forge.ForgeTypes;
 import mezz.jei.api.gui.builder.IRecipeLayoutBuilder;
 import mezz.jei.api.gui.drawable.IDrawable;
 import mezz.jei.api.gui.ingredient.IRecipeSlotsView;
 import mezz.jei.api.helpers.IGuiHelper;
+import mezz.jei.api.neoforge.NeoForgeTypes;
 import mezz.jei.api.recipe.IFocusGroup;
 import mezz.jei.api.recipe.RecipeIngredientRole;
 import mezz.jei.api.recipe.RecipeType;
@@ -58,7 +57,7 @@ public class FluidSieveCategory implements IRecipeCategory<OreFluidEntrySieve> {
 
     public FluidSieveCategory(IGuiHelper helper) {
         this.helper = helper;
-        tankOverlay = helper.createDrawable(new ResourceLocation(Reference.MOD_ID, "textures/gui/jei.png"), 1, 207, 12, 48);
+        tankOverlay = helper.createDrawable(ResourceLocation.fromNamespaceAndPath(Reference.MOD_ID, "textures/gui/jei.png"), 1, 207, 12, 48);
     }
 
     @Override
@@ -68,12 +67,12 @@ public class FluidSieveCategory implements IRecipeCategory<OreFluidEntrySieve> {
 
     @Override
     public Component getTitle() {
-        return Component.translatable(ModuleResourceProduction.FLUID_SIEVING_MACHINE.getLeft().get().getDescriptionId());
+        return Component.translatable(ModuleResourceProduction.FLUID_SIEVING_MACHINE.getBlock().getDescriptionId());
     }
 
     @Override
     public IDrawable getBackground() {
-        return helper.drawableBuilder(new ResourceLocation(Reference.MOD_ID, "textures/gui/jei.png"), 4, 78, 47, 50).addPadding(0, 4, 0, 20).build();
+        return helper.drawableBuilder(ResourceLocation.fromNamespaceAndPath(Reference.MOD_ID, "textures/gui/jei.png"), 4, 78, 47, 50).addPadding(0, 4, 0, 20).build();
     }
 
     @Override
@@ -84,7 +83,7 @@ public class FluidSieveCategory implements IRecipeCategory<OreFluidEntrySieve> {
     @Override
     public void setRecipe(IRecipeLayoutBuilder builder, OreFluidEntrySieve recipe, IFocusGroup focuses) {
         builder.addSlot(RecipeIngredientRole.INPUT, 24, 36).addIngredients(Ingredient.of(recipe.getSieveItem()));
-        builder.addSlot(RecipeIngredientRole.INPUT, 1, 1).setFluidRenderer(200, false, 12, 48).setOverlay(tankOverlay, 0, 0).addIngredient(ForgeTypes.FLUID_STACK, recipe.getInput());
+        builder.addSlot(RecipeIngredientRole.INPUT, 1, 1).setFluidRenderer(200, false, 12, 48).setOverlay(tankOverlay, 0, 0).addIngredient(NeoForgeTypes.FLUID_STACK, recipe.getInput());
         builder.addSlot(RecipeIngredientRole.OUTPUT, 50, 17).addIngredient(VanillaTypes.ITEM_STACK, recipe.getOutput());
     }
 

@@ -35,12 +35,14 @@ import com.buuz135.industrial.gui.component.custom.TexturedStateButtonGuiCompone
 import com.buuz135.industrial.module.ModuleTransportStorage;
 import com.buuz135.industrial.proxy.block.filter.IFilter;
 import com.buuz135.industrial.proxy.block.filter.ItemStackFilter;
+import com.buuz135.industrial.utils.IFAttachments;
 import com.buuz135.industrial.utils.Reference;
 import com.hrznstudio.titanium.recipe.generator.TitaniumShapedRecipeBuilder;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
-import net.minecraft.data.recipes.FinishedRecipe;
+import net.minecraft.core.HolderLookup;
+import net.minecraft.data.recipes.RecipeOutput;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundEvents;
@@ -54,13 +56,12 @@ import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.phys.Vec3;
 import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
-import net.minecraftforge.common.Tags;
+import net.neoforged.neoforge.common.Tags;
 
 import javax.annotation.Nonnull;
 import java.util.Collections;
 import java.util.List;
 import java.util.Set;
-import java.util.function.Consumer;
 
 public class ConveyorBlinkingUpgrade extends ConveyorUpgrade {
 
@@ -96,9 +97,9 @@ public class ConveyorBlinkingUpgrade extends ConveyorUpgrade {
     }
 
     @Override
-    public CompoundTag serializeNBT() {
-        CompoundTag compound = super.serializeNBT() == null ? new CompoundTag() : super.serializeNBT();
-        compound.put("Filter", filter.serializeNBT());
+    public CompoundTag serializeNBT(HolderLookup.Provider provider) {
+        CompoundTag compound = super.serializeNBT(provider) == null ? new CompoundTag() : super.serializeNBT(provider);
+        compound.put("Filter", filter.serializeNBT(provider));
         compound.putBoolean("Whitelist", whitelist);
         compound.putDouble("VerticalDisplacement", verticalDisplacement);
         compound.putDouble("HorizontalDisplacement", horizontalDisplacement);
@@ -106,9 +107,9 @@ public class ConveyorBlinkingUpgrade extends ConveyorUpgrade {
     }
 
     @Override
-    public void deserializeNBT(CompoundTag nbt) {
-        super.deserializeNBT(nbt);
-        if (nbt.contains("Filter")) filter.deserializeNBT(nbt.getCompound("Filter"));
+    public void deserializeNBT(HolderLookup.Provider provider, CompoundTag nbt) {
+        super.deserializeNBT(provider, nbt);
+        if (nbt.contains("Filter")) filter.deserializeNBT(provider, nbt.getCompound("Filter"));
         whitelist = nbt.getBoolean("Whitelist");
         horizontalDisplacement = nbt.getInt("HorizontalDisplacement");
         verticalDisplacement = nbt.getInt("VerticalDisplacement");
@@ -128,7 +129,7 @@ public class ConveyorBlinkingUpgrade extends ConveyorUpgrade {
     public void handleButtonInteraction(int buttonId, CompoundTag compound) {
         super.handleButtonInteraction(buttonId, compound);
         if (buttonId >= 0 && buttonId < filter.getFilter().length) {
-            this.filter.setFilter(buttonId, ItemStack.of(compound));
+            this.filter.setFilter(buttonId, ItemStack.parseOptional(IFAttachments.registryAccess(), compound));
             this.getContainer().requestSync();
         }
         if (buttonId == 10) {
@@ -162,7 +163,7 @@ public class ConveyorBlinkingUpgrade extends ConveyorUpgrade {
                 return ConveyorBlinkingUpgrade.this.filter;
             }
         });
-        ResourceLocation res = new ResourceLocation(Reference.MOD_ID, "textures/gui/machines.png");
+        ResourceLocation res = ResourceLocation.fromNamespaceAndPath(Reference.MOD_ID, "textures/gui/machines.png");
         componentList.add(new TexturedStateButtonGuiComponent(10, 80, 19, 18, 18,
                 new StateButtonInfo(0, res, 1, 214, new String[]{"whitelist"}),
                 new StateButtonInfo(1, res, 20, 214, new String[]{"blacklist"})) {
@@ -229,7 +230,7 @@ public class ConveyorBlinkingUpgrade extends ConveyorUpgrade {
 
         @Override
         public Set<ResourceLocation> getTextures() {
-            return Collections.singleton(new ResourceLocation(Reference.MOD_ID, "block/conveyor_blinking_upgrade"));
+            return Collections.singleton(ResourceLocation.fromNamespaceAndPath(Reference.MOD_ID, "block/conveyor_blinking_upgrade"));
         }
 
         @Nonnull
@@ -246,22 +247,22 @@ public class ConveyorBlinkingUpgrade extends ConveyorUpgrade {
         @Override
         @Nonnull
         public ResourceLocation getModel(Direction upgradeSide, Direction conveyorFacing) {
-            return new ResourceLocation(Reference.MOD_ID, "block/conveyor_upgrade_blinking");
+            return ResourceLocation.fromNamespaceAndPath(Reference.MOD_ID, "block/conveyor_upgrade_blinking");
         }
 
         @Nonnull
         @Override
         public ResourceLocation getItemModel() {
-            return new ResourceLocation(Reference.MOD_ID, "conveyor_blinking_upgrade");
+            return ResourceLocation.fromNamespaceAndPath(Reference.MOD_ID, "conveyor_blinking_upgrade");
         }
 
         @Override
-        public void registerRecipe(Consumer<FinishedRecipe> consumer) {
+        public void registerRecipe(RecipeOutput consumer) {
             TitaniumShapedRecipeBuilder.shapedRecipe(getUpgradeItem()).pattern("IPI").pattern("IDI").pattern("ICI")
                     .define('I', Tags.Items.INGOTS_IRON)
                     .define('P', Items.CHORUS_FRUIT)
                     .define('D', Blocks.PISTON)
-                    .define('C', ModuleTransportStorage.CONVEYOR.getLeft().get())
+                    .define('C', ModuleTransportStorage.CONVEYOR.getBlock())
                     .save(consumer);
         }
     }

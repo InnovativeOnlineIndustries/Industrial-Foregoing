@@ -28,7 +28,7 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.level.block.entity.BlockEntity;
-import net.minecraftforge.network.NetworkEvent;
+import net.neoforged.neoforge.network.handling.IPayloadContext;
 
 public class TransporterButtonInteractMessage extends Message {
 
@@ -49,9 +49,9 @@ public class TransporterButtonInteractMessage extends Message {
     }
 
     @Override
-    protected void handleMessage(NetworkEvent.Context context) {
+    protected void handleMessage(IPayloadContext context) {
         context.enqueueWork(() -> {
-            BlockEntity entity = context.getSender().level().getBlockEntity(pos);
+            BlockEntity entity = context.player().level().getBlockEntity(pos);
             Direction facing = Direction.from3DDataValue(this.facing);
             if (entity instanceof TransporterTile) {
                 if (((TransporterTile) entity).hasUpgrade(facing)) {

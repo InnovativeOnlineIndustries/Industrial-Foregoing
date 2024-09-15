@@ -31,14 +31,14 @@ import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.inventory.MenuType;
 import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.ItemStack;
-import net.minecraftforge.registries.ObjectHolder;
+import net.neoforged.neoforge.items.SlotItemHandler;
+import net.neoforged.neoforge.registries.DeferredHolder;
 
 public class ContainerTransporter extends AbstractContainerMenu {
 
-    @ObjectHolder(value = "industrialforegoing:transporter", registryName = "minecraft:menu")
-    public static MenuType<ContainerTransporter> TYPE;
+    public static DeferredHolder<MenuType<?>, MenuType<?>> TYPE;
 
-    private final TransporterTile conveyor;
+    private final TransporterTile transporterTile;
     private Direction facing;
 
     public ContainerTransporter(int id, Inventory player, FriendlyByteBuf buffer) {
@@ -46,8 +46,8 @@ public class ContainerTransporter extends AbstractContainerMenu {
     }
 
     public ContainerTransporter(int id, TransporterTile conveyor, Direction facing, Inventory player) {
-        super(TYPE, id);
-        this.conveyor = conveyor;
+        super(TYPE.get(), id);
+        this.transporterTile = conveyor;
         this.facing = facing;
         if (!conveyor.hasUpgrade(facing) && conveyor.getTransporterTypeMap().size() > 0) {
             this.facing = conveyor.getTransporterTypeMap().keySet().iterator().next();
@@ -64,6 +64,10 @@ public class ContainerTransporter extends AbstractContainerMenu {
                 addSlot(new Slot(player, j + i * 9 + 9, 8 + j * 18, 84 + i * 18));
             }
         }
+        var augment = transporterTile.getAugmentInventory();
+        for (int i = 0; i < augment.getSlots(); i++) {
+            addSlot(new SlotItemHandler(augment, i, augment.getXPos() + augment.getSlotPosition().apply(i).getLeft(), augment.getYPos() + augment.getSlotPosition().apply(i).getRight()));
+        }
     }
 
     @Override
@@ -71,8 +75,8 @@ public class ContainerTransporter extends AbstractContainerMenu {
         return true;
     }
 
-    public TransporterTile getConveyor() {
-        return conveyor;
+    public TransporterTile getTransporterTile() {
+        return transporterTile;
     }
 
     public Direction getFacing() {

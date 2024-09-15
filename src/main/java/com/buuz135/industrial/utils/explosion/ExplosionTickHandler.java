@@ -21,7 +21,7 @@
  */
 package com.buuz135.industrial.utils.explosion;
 
-import net.minecraftforge.event.TickEvent;
+import net.neoforged.neoforge.event.tick.ServerTickEvent;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -31,8 +31,8 @@ public class ExplosionTickHandler {
     public static List<ExplosionHelper.RemovalProcess> removalProcessList = new ArrayList<>();
     public static List<ProcessExplosion> processExplosionList = new ArrayList<>();
 
-    public static void serverTick(TickEvent.ServerTickEvent event) {
-        if (event.phase == TickEvent.Phase.START) {
+    public static void serverTick(ServerTickEvent.Pre event) {
+
             for (ExplosionHelper.RemovalProcess removalProcess : new ArrayList<>(removalProcessList)) {
                 if (removalProcess.isDead()) {
                     removalProcessList.remove(removalProcess);
@@ -47,7 +47,7 @@ public class ExplosionTickHandler {
                     processExplosion.updateProcess();
                 }
             }
-        }
+
     }
 
 }

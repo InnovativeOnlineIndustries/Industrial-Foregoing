@@ -1,0 +1,39 @@
+{
+  "neoforge:conditions": [
+    {
+      "type": "neoforge:item_exists",
+      "item": "industrialforegoing:enchantment_extractor"
+    }
+  ],
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "B": {
+      "item": "minecraft:book"
+    },
+    "D": {
+      "item": "minecraft:diamond"
+    },
+    "G": {
+      "tag": "c:gears/gold"
+    },
+    "M": {
+      "tag": "industrialforegoing:machine_frame/advanced"
+    },
+    "P": {
+      "tag": "c:plastic"
+    },
+    "S": {
+      "item": "minecraft:nether_bricks"
+    }
+  },
+  "pattern": [
+    "PSP",
+    "BMB",
+    "DGD"
+  ],
+  "result": {
+    "count": 1,
+    "id": "industrialforegoing:enchantment_extractor"
+  }
+}

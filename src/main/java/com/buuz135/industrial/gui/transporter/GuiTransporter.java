@@ -30,6 +30,9 @@ import com.buuz135.industrial.gui.component.custom.ICanSendNetworkMessage;
 import com.buuz135.industrial.proxy.block.filter.IFilter;
 import com.buuz135.industrial.proxy.network.TransporterButtonInteractMessage;
 import com.buuz135.industrial.utils.Reference;
+import com.hrznstudio.titanium.api.client.IScreenAddon;
+import com.hrznstudio.titanium.client.screen.addon.SlotsScreenAddon;
+import com.hrznstudio.titanium.client.screen.asset.IAssetProvider;
 import com.mojang.blaze3d.systems.RenderSystem;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
@@ -46,19 +49,21 @@ import java.util.List;
 
 public class GuiTransporter extends AbstractContainerScreen<ContainerTransporter> implements ICanSendNetworkMessage {
 
-    public static final ResourceLocation BG_TEXTURE = new ResourceLocation(Reference.MOD_ID, "textures/gui/conveyor.png");
+    public static final ResourceLocation BG_TEXTURE = ResourceLocation.fromNamespaceAndPath(Reference.MOD_ID, "textures/gui/conveyor.png");
 
     private TransporterType upgrade;
     private List<IGuiComponent> componentList;
+    private List<IScreenAddon> screenAddonList;
     private int x;
     private int y;
     private List<IFilter.GhostSlot> ghostSlots;
 
     public GuiTransporter(ContainerTransporter inventorySlotsIn, Inventory inventory, Component component) {
         super(inventorySlotsIn, inventory, component);
-        this.upgrade = getMenu().getConveyor().getTransporterTypeMap().get(getMenu().getFacing());
+        this.upgrade = getMenu().getTransporterTile().getTransporterTypeMap().get(getMenu().getFacing());
         this.componentList = new ArrayList<>();
         this.ghostSlots = new ArrayList<>();
+        this.screenAddonList = new ArrayList<>();
     }
 
     @Override
@@ -66,6 +71,8 @@ public class GuiTransporter extends AbstractContainerScreen<ContainerTransporter
         super.init();
         componentList.clear();
         upgrade.addComponentsToGui(componentList);
+        screenAddonList.add(this.menu.getTransporterTile().getAugmentBackground().create());
+        screenAddonList.add(new SlotsScreenAddon<>(this.menu.getTransporterTile().getAugmentInventory()));
         for (IGuiComponent iGuiComponent : componentList) {
             if (iGuiComponent instanceof FilterGuiComponent) {
                 ghostSlots.addAll(Arrays.asList(((FilterGuiComponent) iGuiComponent).getFilter().getFilter()));
@@ -75,7 +82,7 @@ public class GuiTransporter extends AbstractContainerScreen<ContainerTransporter
 
     @Override
     protected void renderBg(GuiGraphics guiGraphics, float partialTicks, int mouseX, int mouseY) { //background
-        this.renderBackground(guiGraphics);
+        //this.renderBackground(guiGraphics, mouseX, mouseY, partialTicks);
         RenderSystem.setShader(GameRenderer::getPositionTexShader);
         RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
         //RenderSystem.setShaderTexture(0, BG_TEXTURE);
@@ -88,6 +95,9 @@ public class GuiTransporter extends AbstractContainerScreen<ContainerTransporter
         }
         for (IGuiComponent iGuiComponent : componentList) {
             iGuiComponent.drawGuiBackgroundLayer(guiGraphics, x, y, mouseX, mouseY);
+        }
+        for (IScreenAddon iScreenAddon : screenAddonList) {
+            iScreenAddon.drawBackgroundLayer(guiGraphics, this, IAssetProvider.DEFAULT_PROVIDER, x, y, mouseX, mouseY, partialTicks);
         }
     }
 
@@ -124,11 +134,11 @@ public class GuiTransporter extends AbstractContainerScreen<ContainerTransporter
     }
 
     @Override
-    public boolean mouseScrolled(double mouseX, double mouseY, double delta) {
-        boolean click = super.mouseScrolled(mouseX, mouseY, delta);
+    public boolean mouseScrolled(double mouseX, double mouseY, double scrollX, double scrollY) {
+        boolean click = super.mouseScrolled(mouseX, mouseY, scrollX, scrollY);
         for (IGuiComponent iGuiComponent : componentList) {
             if (iGuiComponent.isInside(mouseX - x, mouseY - y)) {
-                if (iGuiComponent.onScrolled(this, x, y, mouseX, mouseY, delta))
+                if (iGuiComponent.onScrolled(this, x, y, mouseX, mouseY, scrollX, scrollY))
                     return true;
             }
         }
@@ -137,7 +147,7 @@ public class GuiTransporter extends AbstractContainerScreen<ContainerTransporter
 
     @Override
     public void sendMessage(int id, CompoundTag compound) {
-        IndustrialForegoing.NETWORK.get().sendToServer(new TransporterButtonInteractMessage(upgrade.getPos(), id, upgrade.getSide(), compound));
+        IndustrialForegoing.NETWORK.sendToServer(new TransporterButtonInteractMessage(upgrade.getPos(), id, upgrade.getSide(), compound));
     }
 
     public List<IFilter.GhostSlot> getGhostSlots() {

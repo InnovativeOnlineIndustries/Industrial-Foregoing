@@ -28,17 +28,16 @@ import com.buuz135.industrial.module.ModuleResourceProduction;
 import com.buuz135.industrial.module.ModuleTool;
 import com.buuz135.industrial.utils.IndustrialTags;
 import com.hrznstudio.titanium.recipe.generator.TitaniumShapedRecipeBuilder;
-import net.minecraft.data.recipes.FinishedRecipe;
+import net.minecraft.data.recipes.RecipeOutput;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 
 import javax.annotation.Nonnull;
-import java.util.function.Consumer;
 
 public class WashingFactoryBlock extends IndustrialBlock<WashingFactoryTile> {
 
     public WashingFactoryBlock() {
-        super("washing_factory", Properties.copy(Blocks.IRON_BLOCK), WashingFactoryTile.class, ModuleResourceProduction.TAB_RESOURCE);
+        super("washing_factory", Properties.ofFullCopy(Blocks.IRON_BLOCK), WashingFactoryTile.class, ModuleResourceProduction.TAB_RESOURCE);
     }
 
     @Override
@@ -53,7 +52,7 @@ public class WashingFactoryBlock extends IndustrialBlock<WashingFactoryTile> {
     }
 
     @Override
-    public void registerRecipe(Consumer<FinishedRecipe> consumer) {
+    public void registerRecipe(RecipeOutput consumer) {
         TitaniumShapedRecipeBuilder.shapedRecipe(this).pattern("pcp").pattern("gmg").pattern("aba")
                 .define('g', IndustrialTags.Items.PLASTIC)
                 .define('c', ModuleTool.MEAT_FEEDER.get())

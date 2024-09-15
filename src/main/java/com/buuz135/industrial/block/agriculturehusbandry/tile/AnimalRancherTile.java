@@ -41,12 +41,12 @@ import net.minecraft.world.item.DyeColor;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraftforge.common.IForgeShearable;
-import net.minecraftforge.common.capabilities.ForgeCapabilities;
-import net.minecraftforge.common.util.FakePlayer;
-import net.minecraftforge.fluids.capability.IFluidHandler;
-import net.minecraftforge.fluids.capability.IFluidHandlerItem;
-import net.minecraftforge.items.ItemHandlerHelper;
+import net.neoforged.neoforge.capabilities.Capabilities;
+import net.neoforged.neoforge.common.IShearable;
+import net.neoforged.neoforge.common.util.FakePlayer;
+import net.neoforged.neoforge.fluids.capability.IFluidHandler;
+import net.neoforged.neoforge.fluids.capability.IFluidHandlerItem;
+import net.neoforged.neoforge.items.ItemHandlerHelper;
 
 import javax.annotation.Nonnull;
 import java.util.List;
@@ -82,11 +82,11 @@ public class AnimalRancherTile extends IndustrialAreaWorkingTile<AnimalRancherTi
             List<PathfinderMob> mobs = this.level.getEntitiesOfClass(PathfinderMob.class, getWorkingArea().bounds());
             if (mobs.size() > 0) {
                 for (PathfinderMob mob : mobs) {
-                    FakePlayer player = IndustrialForegoing.getFakePlayer(level, mob.blockPosition()); //getPosition
+                    FakePlayer player = IndustrialForegoing.getFakePlayer(level, mob.blockPosition(), getUuid()); //getPosition
                     //SHEAR INTERACTION
                     ItemStack shears = new ItemStack(Items.SHEARS);
-                    if (mob instanceof IForgeShearable && ((IForgeShearable) mob).isShearable(shears, this.level, mob.blockPosition())) { //getPosition
-                        List<ItemStack> items = ((IForgeShearable) mob).onSheared(player, shears, this.level, mob.blockPosition(), 0); //getPosition
+                    if (mob instanceof IShearable shearable && shearable.isShearable(player, shears, this.level, mob.blockPosition())) { //getPosition
+                        List<ItemStack> items = shearable.onSheared(player, shears, this.level, mob.blockPosition()); //getPosition
                         items.forEach(stack -> ItemHandlerHelper.insertItem(output, stack, false));
                         if (items.size() > 0) {
                             return new WorkAction(0.35f, powerPerOperation);
@@ -101,7 +101,7 @@ public class AnimalRancherTile extends IndustrialAreaWorkingTile<AnimalRancherTi
                         player.setItemInHand(InteractionHand.MAIN_HAND, new ItemStack(Items.BUCKET));
                         if (((Animal) mob).mobInteract(player, InteractionHand.MAIN_HAND).consumesAction()) { //ProcessInteract
                             ItemStack stack = player.getItemInHand(InteractionHand.MAIN_HAND);
-                            IFluidHandlerItem fluidHandlerItem = stack.getCapability(ForgeCapabilities.FLUID_HANDLER_ITEM).orElse(null);
+                            IFluidHandlerItem fluidHandlerItem = stack.getCapability(Capabilities.FluidHandler.ITEM);
                             if (fluidHandlerItem != null) {
                                 tank.fillForced(fluidHandlerItem.drain(Integer.MAX_VALUE, IFluidHandler.FluidAction.EXECUTE), IFluidHandler.FluidAction.EXECUTE);
                                 player.setItemInHand(InteractionHand.MAIN_HAND, ItemStack.EMPTY);

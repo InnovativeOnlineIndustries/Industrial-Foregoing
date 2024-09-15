@@ -1,0 +1,36 @@
+{
+  "neoforge:conditions": [
+    {
+      "type": "neoforge:item_exists",
+      "item": "industrialforegoing:sewer"
+    }
+  ],
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "B": {
+      "item": "minecraft:brick"
+    },
+    "E": {
+      "item": "minecraft:bucket"
+    },
+    "G": {
+      "tag": "c:gears/iron"
+    },
+    "M": {
+      "tag": "industrialforegoing:machine_frame/pity"
+    },
+    "P": {
+      "tag": "c:plastic"
+    }
+  },
+  "pattern": [
+    "PEP",
+    "BMB",
+    "BGB"
+  ],
+  "result": {
+    "count": 1,
+    "id": "industrialforegoing:sewer"
+  }
+}

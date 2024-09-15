@@ -26,17 +26,15 @@ import com.buuz135.industrial.block.agriculturehusbandry.tile.MobDuplicatorTile;
 import com.buuz135.industrial.module.ModuleAgricultureHusbandry;
 import com.buuz135.industrial.utils.IndustrialTags;
 import com.hrznstudio.titanium.recipe.generator.TitaniumShapedRecipeBuilder;
-import net.minecraft.data.recipes.FinishedRecipe;
+import net.minecraft.data.recipes.RecipeOutput;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 
-import java.util.function.Consumer;
-
 public class MobDuplicatorBlock extends IndustrialBlock<MobDuplicatorTile> {
 
     public MobDuplicatorBlock() {
-        super("mob_duplicator", Properties.copy(Blocks.IRON_BLOCK), MobDuplicatorTile.class, ModuleAgricultureHusbandry.TAB_AG_HUS);
+        super("mob_duplicator", Properties.ofFullCopy(Blocks.IRON_BLOCK), MobDuplicatorTile.class, ModuleAgricultureHusbandry.TAB_AG_HUS);
     }
 
     @Override
@@ -45,7 +43,7 @@ public class MobDuplicatorBlock extends IndustrialBlock<MobDuplicatorTile> {
     }
 
     @Override
-    public void registerRecipe(Consumer<FinishedRecipe> consumer) {
+    public void registerRecipe(RecipeOutput consumer) {
         TitaniumShapedRecipeBuilder.shapedRecipe(this)
                 .pattern("PWP").pattern("CMC").pattern("ERE")
                 .define('P', IndustrialTags.Items.PLASTIC)

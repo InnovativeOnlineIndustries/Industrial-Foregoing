@@ -30,7 +30,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.world.level.block.entity.BlockEntity;
-import net.minecraftforge.network.NetworkEvent;
+import net.neoforged.neoforge.network.handling.IPayloadContext;
 
 public class ConveyorSplittingSyncEntityMessage extends Message {
 
@@ -48,7 +48,7 @@ public class ConveyorSplittingSyncEntityMessage extends Message {
     }
 
     @Override
-    protected void handleMessage(NetworkEvent.Context context) {
+    protected void handleMessage(IPayloadContext context) {
         context.enqueueWork(() -> {
             BlockEntity entity = Minecraft.getInstance().player.level().getBlockEntity(pos);
             Direction facingDirection = Direction.byName(facingCurrent);

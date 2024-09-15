@@ -1,0 +1,19 @@
+{
+  "variants": {
+    "subfacing=east": {
+      "model": "industrialforegoing:block/infinity_backpack_block",
+      "y": 90
+    },
+    "subfacing=north": {
+      "model": "industrialforegoing:block/infinity_backpack_block"
+    },
+    "subfacing=south": {
+      "model": "industrialforegoing:block/infinity_backpack_block",
+      "y": 180
+    },
+    "subfacing=west": {
+      "model": "industrialforegoing:block/infinity_backpack_block",
+      "y": 270
+    }
+  }
+}

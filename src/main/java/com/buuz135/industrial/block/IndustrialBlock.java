@@ -22,18 +22,16 @@
 
 package com.buuz135.industrial.block;
 
+import com.buuz135.industrial.block.tile.IndustrialMachineTile;
 import com.hrznstudio.titanium.block.RotatableBlock;
 import com.hrznstudio.titanium.block.tile.BasicTile;
 import com.hrznstudio.titanium.tab.TitaniumTab;
-import net.minecraft.network.chat.Component;
-import net.minecraft.world.item.BlockItem;
-import net.minecraft.world.item.CreativeModeTab;
-import net.minecraft.world.item.Item;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.level.block.Block;
-
-import javax.annotation.Nullable;
-import java.util.function.Supplier;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.state.BlockState;
+import org.jetbrains.annotations.Nullable;
 
 public abstract class IndustrialBlock<T extends BasicTile<T>> extends RotatableBlock<T> {
 
@@ -41,5 +39,16 @@ public abstract class IndustrialBlock<T extends BasicTile<T>> extends RotatableB
         super(name, properties, tileClass);
         setItemGroup(group);
         //setRegistryName(Reference.MOD_ID, name);
+    }
+
+    @Override
+    public void setPlacedBy(Level level, BlockPos pos, BlockState state, @Nullable LivingEntity placer, ItemStack stack) {
+        super.setPlacedBy(level, pos, state, placer, stack);
+        if (placer != null) {
+            var tile = level.getBlockEntity(pos);
+            if (tile instanceof IndustrialMachineTile<?> industrialMachineTile) {
+                industrialMachineTile.setUuid(placer.getStringUUID());
+            }
+        }
     }
 }

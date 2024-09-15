@@ -1,0 +1,9 @@
+{
+  "type": "industrialforegoing:crusher",
+  "input": {
+    "tag": "c:gravel"
+  },
+  "output": {
+    "tag": "c:gravel"
+  }
+}

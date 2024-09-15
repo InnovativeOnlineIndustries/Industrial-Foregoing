@@ -1,0 +1,39 @@
+{
+  "neoforge:conditions": [
+    {
+      "type": "neoforge:item_exists",
+      "item": "industrialforegoing:ore_laser_base"
+    }
+  ],
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "b": {
+      "tag": "c:ores/iron"
+    },
+    "f": {
+      "item": "minecraft:diamond_pickaxe"
+    },
+    "g": {
+      "tag": "c:gears/diamond"
+    },
+    "m": {
+      "tag": "industrialforegoing:machine_frame/advanced"
+    },
+    "p": {
+      "tag": "c:plastic"
+    },
+    "r": {
+      "tag": "c:dusts/redstone"
+    }
+  },
+  "pattern": [
+    "pfp",
+    "bmb",
+    "grg"
+  ],
+  "result": {
+    "count": 1,
+    "id": "industrialforegoing:ore_laser_base"
+  }
+}

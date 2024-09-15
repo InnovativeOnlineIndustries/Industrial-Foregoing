@@ -60,6 +60,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.item.enchantment.Enchantments;
+import net.minecraft.world.item.enchantment.ItemEnchantments;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.storage.loot.LootParams;
 import net.minecraft.world.level.storage.loot.LootTable;
@@ -68,15 +69,14 @@ import net.minecraft.world.level.storage.loot.parameters.LootContextParams;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 import net.minecraft.world.phys.shapes.VoxelShape;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
-import net.minecraftforge.common.ForgeHooks;
-import net.minecraftforge.common.util.FakePlayer;
-import net.minecraftforge.fluids.FluidStack;
-import net.minecraftforge.fluids.capability.IFluidHandler;
-import net.minecraftforge.fml.util.ObfuscationReflectionHelper;
-import net.minecraftforge.items.ItemHandlerHelper;
-import net.minecraftforge.registries.ForgeRegistries;
+import net.neoforged.api.distmarker.Dist;
+import net.neoforged.api.distmarker.OnlyIn;
+import net.neoforged.fml.util.ObfuscationReflectionHelper;
+import net.neoforged.neoforge.common.CommonHooks;
+import net.neoforged.neoforge.common.util.FakePlayer;
+import net.neoforged.neoforge.fluids.FluidStack;
+import net.neoforged.neoforge.fluids.capability.IFluidHandler;
+import net.neoforged.neoforge.items.ItemHandlerHelper;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
@@ -87,7 +87,7 @@ import java.util.stream.Collectors;
 
 public class MobCrusherTile extends IndustrialAreaWorkingTile<MobCrusherTile> {
 
-    private final Method DROP_CUSTOM_DEATH_LOOT = ObfuscationReflectionHelper.findMethod(Mob.class, "m_7472_", DamageSource.class, int.class, boolean.class);
+    private final Method DROP_CUSTOM_DEATH_LOOT = ObfuscationReflectionHelper.findMethod(Mob.class, "dropCustomDeathLoot", ServerLevel.class, DamageSource.class, boolean.class);
 
     @Save
     private SidedInventoryComponent<MobCrusherTile> output;
@@ -139,8 +139,8 @@ public class MobCrusherTile extends IndustrialAreaWorkingTile<MobCrusherTile> {
                     mobEntity.isBaby()) && !mobEntity.isInvulnerable() && !(mobEntity instanceof WitherBoss && ((WitherBoss) mobEntity).getInvulnerableTicks() > 0)).filter(LivingEntity::isAlive).collect(Collectors.toList());
             if (mobs.size() > 0) {
                 Mob entity = mobs.get(0);
-                FakePlayer player = IndustrialForegoing.getFakePlayer(this.level);
-                if (ForgeRegistries.ENTITY_TYPES.tags().getTag(IndustrialTags.EntityTypes.MOB_CRUSHER_INSTANT_KILL_BLACKLIST).contains(entity.getType())) {
+                FakePlayer player = IndustrialForegoing.getFakePlayer(this.level, this.getBlockPos(), this.getUuid());
+                if (entity.getType().is(IndustrialTags.EntityTypes.MOB_CRUSHER_INSTANT_KILL_BLACKLIST)) {
                     return damage(entity, player);
                 } else {
                     return instantKill(entity, player);
@@ -151,37 +151,39 @@ public class MobCrusherTile extends IndustrialAreaWorkingTile<MobCrusherTile> {
     }
 
     private WorkAction instantKill(Mob entity, FakePlayer player) {
-        int experience = entity.getExperienceReward();
+        int experience = entity.getExperienceReward((ServerLevel) this.level, player);
         int looting = 0;
         if (!dropXP) {
             looting = this.level.random.nextInt(4);
             ItemStack sword = new ItemStack(Items.DIAMOND_SWORD);
-            EnchantmentHelper.setEnchantments(Collections.singletonMap(Enchantments.MOB_LOOTING, looting), sword);
+            var enchants = new ItemEnchantments.Mutable(ItemEnchantments.EMPTY);
+            enchants.set(this.level.registryAccess().holderOrThrow(Enchantments.LOOTING), looting);
+            EnchantmentHelper.setEnchantments(sword, enchants.toImmutable());
             player.setItemInHand(InteractionHand.MAIN_HAND, sword);
         }
         //Loot from table
         DamageSource source = player.damageSources().playerAttack(player);
-        LootTable table = this.level.getServer().getLootData().getLootTable(entity.getLootTable());
+        LootTable table = this.level.getServer().reloadableRegistries().getLootTable(entity.getLootTable());
         LootParams.Builder context = new LootParams.Builder((ServerLevel) this.level)
                 .withParameter(LootContextParams.THIS_ENTITY, entity)
                 .withParameter(LootContextParams.DAMAGE_SOURCE, source)
                 .withParameter(LootContextParams.ORIGIN, new Vec3(this.worldPosition.getX(), this.worldPosition.getY(), this.worldPosition.getZ()))
-                .withParameter(LootContextParams.KILLER_ENTITY, player)
+                .withParameter(LootContextParams.ATTACKING_ENTITY, player)
                 .withParameter(LootContextParams.LAST_DAMAGE_PLAYER, player)
-                .withOptionalParameter(LootContextParams.DIRECT_KILLER_ENTITY, player);
+                .withOptionalParameter(LootContextParams.DIRECT_ATTACKING_ENTITY, player);
         table.getRandomItems(context.create(LootContextParamSets.ENTITY)).forEach(stack -> ItemHandlerHelper.insertItem(this.output, stack, false));
         List<ItemEntity> extra = new ArrayList<>();
         //Drop special items
         try {
             if (entity.captureDrops() == null) entity.captureDrops(new ArrayList<>());
-            DROP_CUSTOM_DEATH_LOOT.invoke(entity, source, looting, true);
+            DROP_CUSTOM_DEATH_LOOT.invoke(entity, (ServerLevel) this.level, source, true);
             if (entity.captureDrops() != null) {
                 extra.addAll(entity.captureDrops());
             }
         } catch (IllegalAccessException | InvocationTargetException e) {
             e.printStackTrace();
         }
-        ForgeHooks.onLivingDrops(entity, source, extra, looting, true);
+        CommonHooks.onLivingDrops(entity, source, extra, true);
         extra.forEach(itemEntity -> {
             ItemHandlerHelper.insertItem(this.output, itemEntity.getItem(), false);
             itemEntity.remove(Entity.RemovalReason.KILLED);

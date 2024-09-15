@@ -27,17 +27,15 @@ import com.buuz135.industrial.block.resourceproduction.tile.MarineFisherTile;
 import com.buuz135.industrial.module.ModuleResourceProduction;
 import com.buuz135.industrial.utils.IndustrialTags;
 import com.hrznstudio.titanium.recipe.generator.TitaniumShapedRecipeBuilder;
-import net.minecraft.data.recipes.FinishedRecipe;
+import net.minecraft.data.recipes.RecipeOutput;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 
-import java.util.function.Consumer;
-
 public class MarineFisherBlock extends IndustrialBlock<MarineFisherTile> {
 
     public MarineFisherBlock() {
-        super("marine_fisher", Properties.copy(Blocks.IRON_BLOCK), MarineFisherTile.class, ModuleResourceProduction.TAB_RESOURCE);
+        super("marine_fisher", Properties.ofFullCopy(Blocks.IRON_BLOCK), MarineFisherTile.class, ModuleResourceProduction.TAB_RESOURCE);
     }
 
     @Override
@@ -46,7 +44,7 @@ public class MarineFisherBlock extends IndustrialBlock<MarineFisherTile> {
     }
 
     @Override
-    public void registerRecipe(Consumer<FinishedRecipe> consumer) {
+    public void registerRecipe(RecipeOutput consumer) {
         TitaniumShapedRecipeBuilder.shapedRecipe(this).pattern("pfp").pattern("bmb").pattern("grg")
                 .define('p', IndustrialTags.Items.PLASTIC)
                 .define('f', Items.FISHING_ROD)

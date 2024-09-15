@@ -29,8 +29,10 @@ import com.buuz135.industrial.gui.component.custom.RegulatorFilterGuiComponent;
 import com.buuz135.industrial.gui.component.custom.TexturedStateButtonGuiComponent;
 import com.buuz135.industrial.proxy.block.filter.RegulatorFilter;
 import com.buuz135.industrial.proxy.network.TransporterSyncMessage;
+import com.buuz135.industrial.utils.IFAttachments;
 import com.buuz135.industrial.utils.Reference;
 import net.minecraft.core.Direction;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
@@ -59,7 +61,7 @@ public abstract class FilteredTransporterType<TYPE, CAP> extends TransporterType
             if (compound.contains("Amount")) {
                 this.filter.getFilter()[buttonId].increaseAmount(compound.getInt("Amount"));
             } else {
-                this.filter.setFilter(buttonId, ItemStack.of(compound));
+                this.filter.setFilter(buttonId, ItemStack.parseOptional(IFAttachments.registryAccess(), compound));
             }
             this.getContainer().requestSync();
         }
@@ -96,7 +98,7 @@ public abstract class FilteredTransporterType<TYPE, CAP> extends TransporterType
                 return isRegulated;
             }
         });
-        ResourceLocation res = new ResourceLocation(Reference.MOD_ID, "textures/gui/machines.png");
+        ResourceLocation res = ResourceLocation.fromNamespaceAndPath(Reference.MOD_ID, "textures/gui/machines.png");
         componentList.add(new TexturedStateButtonGuiComponent(16, 133, 20, 18, 18,
                 new StateButtonInfo(0, res, 1, 214, new String[]{"whitelist"}),
                 new StateButtonInfo(1, res, 20, 214, new String[]{"blacklist"})) {
@@ -120,18 +122,18 @@ public abstract class FilteredTransporterType<TYPE, CAP> extends TransporterType
     }
 
     @Override
-    public CompoundTag serializeNBT() {
-        CompoundTag compoundNBT = super.serializeNBT();
-        compoundNBT.put("Filter", filter.serializeNBT());
+    public CompoundTag serializeNBT(HolderLookup.Provider provider) {
+        CompoundTag compoundNBT = super.serializeNBT(provider);
+        compoundNBT.put("Filter", filter.serializeNBT(provider));
         compoundNBT.putBoolean("Whitelist", whitelist);
         compoundNBT.putBoolean("Regulated", isRegulated);
         return compoundNBT;
     }
 
     @Override
-    public void deserializeNBT(CompoundTag nbt) {
-        super.deserializeNBT(nbt);
-        if (nbt.contains("Filter")) filter.deserializeNBT(nbt.getCompound("Filter"));
+    public void deserializeNBT(HolderLookup.Provider provider, CompoundTag nbt) {
+        super.deserializeNBT(provider, nbt);
+        if (nbt.contains("Filter")) filter.deserializeNBT(provider, nbt.getCompound("Filter"));
         whitelist = nbt.getBoolean("Whitelist");
         isRegulated = nbt.getBoolean("Regulated");
     }

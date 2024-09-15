@@ -28,19 +28,18 @@ import com.buuz135.industrial.module.ModuleResourceProduction;
 import com.buuz135.industrial.utils.IndustrialTags;
 import com.hrznstudio.titanium.recipe.generator.TitaniumShapedRecipeBuilder;
 import com.hrznstudio.titanium.util.TagUtil;
-import net.minecraft.data.recipes.FinishedRecipe;
+import net.minecraft.data.recipes.RecipeOutput;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 
 import javax.annotation.Nonnull;
-import java.util.function.Consumer;
 
 public class PotionBrewerBlock extends IndustrialBlock<PotionBrewerTile> {
 
     public PotionBrewerBlock() {
-        super("potion_brewer", Properties.copy(Blocks.IRON_BLOCK), PotionBrewerTile.class, ModuleResourceProduction.TAB_RESOURCE);
+        super("potion_brewer", Properties.ofFullCopy(Blocks.IRON_BLOCK), PotionBrewerTile.class, ModuleResourceProduction.TAB_RESOURCE);
     }
 
     @Override
@@ -55,12 +54,12 @@ public class PotionBrewerBlock extends IndustrialBlock<PotionBrewerTile> {
     }
 
     @Override
-    public void registerRecipe(Consumer<FinishedRecipe> consumer) {
+    public void registerRecipe(RecipeOutput consumer) {
         TitaniumShapedRecipeBuilder.shapedRecipe(this)
                 .pattern("PSP").pattern("BMB").pattern("GBG")
                 .define('P', IndustrialTags.Items.PLASTIC)
                 .define('S', Blocks.BREWING_STAND)
-                .define('B', TagUtil.getItemTag(new ResourceLocation("forge:gears/gold")))
+                .define('B', TagUtil.getItemTag(ResourceLocation.fromNamespaceAndPath("c", "gears/gold")))
                 .define('M', IndustrialTags.Items.MACHINE_FRAME_ADVANCED)
                 .define('G', Items.REPEATER)
                 .save(consumer);

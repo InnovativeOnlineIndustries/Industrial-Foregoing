@@ -1,0 +1,18 @@
+{
+  "type": "industrialforegoing:fluid_extractor",
+  "breakChance": 0.01,
+  "defaultRecipe": false,
+  "input": {
+    "item": "minecraft:oak_log"
+  },
+  "output": {
+    "amount": 2,
+    "id": "industrialforegoing:latex"
+  },
+  "result": {
+    "Name": "minecraft:stripped_oak_log",
+    "Properties": {
+      "axis": "y"
+    }
+  }
+}

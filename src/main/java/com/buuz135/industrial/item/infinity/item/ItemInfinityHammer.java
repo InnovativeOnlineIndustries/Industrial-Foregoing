@@ -26,9 +26,9 @@ import com.buuz135.industrial.item.infinity.InfinityTier;
 import com.buuz135.industrial.item.infinity.ItemInfinity;
 import com.buuz135.industrial.module.ModuleCore;
 import com.buuz135.industrial.recipe.DissolutionChamberRecipe;
+import com.buuz135.industrial.utils.IFAttachments;
 import com.buuz135.industrial.utils.IndustrialTags;
-import com.google.common.collect.Multimap;
-import com.google.common.collect.MultimapBuilder;
+import com.buuz135.industrial.utils.Reference;
 import com.hrznstudio.titanium.api.IFactory;
 import com.hrznstudio.titanium.api.client.IScreenAddon;
 import com.hrznstudio.titanium.client.screen.addon.ArrowButtonScreenAddon;
@@ -37,19 +37,20 @@ import com.hrznstudio.titanium.component.button.ArrowButtonComponent;
 import com.hrznstudio.titanium.item.BasicItem;
 import com.hrznstudio.titanium.tab.TitaniumTab;
 import com.hrznstudio.titanium.util.FacingUtil;
+import com.mojang.authlib.GameProfile;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
-import net.minecraft.data.recipes.FinishedRecipe;
+import net.minecraft.core.Holder;
+import net.minecraft.core.component.DataComponents;
+import net.minecraft.data.recipes.RecipeOutput;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
-import net.minecraft.tags.BlockTags;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
-import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.*;
-import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.boss.enderdragon.EnderDragon;
@@ -60,9 +61,10 @@ import net.minecraft.world.entity.monster.WitherSkeleton;
 import net.minecraft.world.entity.monster.Zombie;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.projectile.EvokerFangs;
-import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
+import net.minecraft.world.item.component.ItemAttributeModifiers;
+import net.minecraft.world.item.component.ResolvableProfile;
 import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.item.enchantment.Enchantment;
@@ -73,14 +75,13 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 import net.minecraft.world.phys.shapes.VoxelShape;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
-import net.minecraftforge.fluids.FluidStack;
-import net.minecraftforge.registries.ForgeRegistries;
+import net.neoforged.api.distmarker.Dist;
+import net.neoforged.api.distmarker.OnlyIn;
+import net.neoforged.neoforge.fluids.FluidStack;
 
 import java.util.HashMap;
 import java.util.List;
-import java.util.function.Consumer;
+import java.util.Optional;
 import java.util.function.Function;
 import java.util.function.Supplier;
 
@@ -106,23 +107,21 @@ public class ItemInfinityHammer extends ItemInfinity {
         super("infinity_hammer", group, new Properties().stacksTo(1), POWER_CONSUMPTION, FUEL_CONSUMPTION, true);
     }
 
-    public static ItemStack createHead(String name) {
+    public static ItemStack createHead(GameProfile gameProfile) {
         ItemStack stack = new ItemStack(Items.PLAYER_HEAD);
-        stack.getOrCreateTag().putString("SkullOwner", name);
+        stack.set(DataComponents.PROFILE, new ResolvableProfile(gameProfile));
         return stack;
     }
 
     @Override
     public void addNbt(ItemStack stack, long power, int fuel, boolean special) {
         super.addNbt(stack, power, fuel, special);
-        CompoundTag nbt = stack.getOrCreateTag();
-        nbt.putInt(BEHEADING_NBT, 0);
-        stack.setTag(nbt);
+        stack.set(IFAttachments.INFINITY_HAMMER_BEHEADING, 0);
     }
 
     @Override
-    public boolean canApplyAtEnchantingTable(ItemStack stack, Enchantment enchantment) {
-        return Items.DIAMOND_SWORD.canApplyAtEnchantingTable(new ItemStack(Items.DIAMOND_SWORD), enchantment);
+    public boolean supportsEnchantment(ItemStack stack, Holder<Enchantment> enchantment) {
+        return Items.DIAMOND_SWORD.supportsEnchantment(new ItemStack(Items.DIAMOND_SWORD), enchantment);
     }
 
     @Override
@@ -167,7 +166,7 @@ public class ItemInfinityHammer extends ItemInfinity {
             attacker.getCommandSenderWorld().getEntitiesOfClass(ExperienceOrb.class, area.inflate(1)).forEach(entityXPOrb -> entityXPOrb.teleportTo(attacker.blockPosition().getX(), attacker.blockPosition().getY(), attacker.blockPosition().getZ()));
         }
         if (target.getHealth() <= 0 && target instanceof Player) {
-            Block.popResource(attacker.level(), attacker.blockPosition(), createHead(target.getDisplayName().getString()));
+            Block.popResource(attacker.level(), attacker.blockPosition(), createHead(((Player) target).getGameProfile()));
         }
         return true;
     }
@@ -223,29 +222,28 @@ public class ItemInfinityHammer extends ItemInfinity {
     @Override
     public boolean mineBlock(ItemStack stack, Level worldIn, BlockState state, BlockPos pos, LivingEntity entityLiving) {
         if (state.getDestroySpeed(worldIn, pos) != 0.0F) {
-            entityLiving.broadcastBreakEvent(EquipmentSlot.MAINHAND);
+            stack.hurtAndBreak(1, entityLiving, EquipmentSlot.MAINHAND);
         }
         return true;
     }
 
     @Override
-    public boolean isCorrectToolForDrops(BlockState blockIn) {
+    public boolean isCorrectToolForDrops(ItemStack stack, BlockState blockIn) {
         return blockIn.is(Blocks.COBWEB);
     }
 
     @Override
-    public Multimap<Attribute, AttributeModifier> getAttributeModifiers(EquipmentSlot slot, ItemStack stack) {
-        Multimap<Attribute, AttributeModifier> multimap = MultimapBuilder.hashKeys().arrayListValues().build();
-        if (slot == EquipmentSlot.MAINHAND) {
-            InfinityTier infinityTier = InfinityTier.getTierBraquet(getPowerFromStack(stack)).getLeft();
-            multimap.put(Attributes.ATTACK_DAMAGE, new AttributeModifier(BASE_ATTACK_DAMAGE_UUID, "Weapon modifier", DAMAGE + Math.pow(2, infinityTier.getRadius()), AttributeModifier.Operation.ADDITION)); //AttackDamage
-            multimap.put(Attributes.ATTACK_SPEED, new AttributeModifier(BASE_ATTACK_SPEED_UUID, "Weapon modifier", ATTACK_SPEED, AttributeModifier.Operation.ADDITION)); //AttackSpeed
-        }
-        return multimap;
+    public ItemAttributeModifiers getDefaultAttributeModifiers(ItemStack stack) {
+        var attributes = super.getDefaultAttributeModifiers(stack);
+        InfinityTier infinityTier = InfinityTier.getTierBraquet(getPowerFromStack(stack)).getLeft();
+        attributes = attributes.withModifierAdded(Attributes.ATTACK_DAMAGE, new AttributeModifier(ResourceLocation.fromNamespaceAndPath(Reference.MOD_ID, "base_attack_damage"), DAMAGE + Math.pow(2, infinityTier.getRadius()), AttributeModifier.Operation.ADD_VALUE), EquipmentSlotGroup.MAINHAND);
+        attributes = attributes.withModifierAdded(Attributes.ATTACK_SPEED, new AttributeModifier(ResourceLocation.fromNamespaceAndPath(Reference.MOD_ID, "base_attack_speed"), ATTACK_SPEED, AttributeModifier.Operation.ADD_VALUE), EquipmentSlotGroup.MAINHAND);
+        return attributes;
     }
 
+
     public int getCurrentBeheading(ItemStack stack) {
-        return stack.getOrCreateTag().getInt(BEHEADING_NBT);
+        return stack.getOrDefault(IFAttachments.INFINITY_HAMMER_BEHEADING, 0);
     }
 
     public int getMaxBeheading(ItemStack stack) {
@@ -254,7 +252,7 @@ public class ItemInfinityHammer extends ItemInfinity {
     }
 
     public void setBeheading(ItemStack stack, int level) {
-        stack.getOrCreateTag().putInt(BEHEADING_NBT, level);
+        stack.set(IFAttachments.INFINITY_HAMMER_BEHEADING, level);
     }
 
     @Override
@@ -305,18 +303,17 @@ public class ItemInfinityHammer extends ItemInfinity {
     }
 
     @Override
-    public void registerRecipe(Consumer<FinishedRecipe> consumer) {
-        new DissolutionChamberRecipe(ForgeRegistries.ITEMS.getKey(this),
-                new Ingredient.Value[]{
-                        new Ingredient.ItemValue(new ItemStack(Items.DIAMOND_BLOCK)),
-                        new Ingredient.ItemValue(new ItemStack(Items.DIAMOND_SWORD)),
-                        new Ingredient.ItemValue(new ItemStack(Items.DIAMOND_BLOCK)),
-                        new Ingredient.ItemValue(new ItemStack(Items.DIAMOND_AXE)),
-                        new Ingredient.ItemValue(new ItemStack(ModuleCore.RANGE_ADDONS[11].get())),
-                        new Ingredient.TagValue(IndustrialTags.Items.GEAR_GOLD),
-                        new Ingredient.TagValue(IndustrialTags.Items.GEAR_GOLD),
-                        new Ingredient.TagValue(IndustrialTags.Items.GEAR_GOLD),
-                },
-                new FluidStack(ModuleCore.PINK_SLIME.getSourceFluid().get(), 2000), 400, new ItemStack(this), FluidStack.EMPTY);
+    public void registerRecipe(RecipeOutput consumer) {
+        DissolutionChamberRecipe.createRecipe(consumer, "infinity_hammer", new DissolutionChamberRecipe(List.of(
+                Ingredient.of(new ItemStack(Items.DIAMOND_BLOCK)),
+                Ingredient.of(new ItemStack(Items.DIAMOND_SWORD)),
+                Ingredient.of(new ItemStack(Items.DIAMOND_BLOCK)),
+                Ingredient.of(new ItemStack(Items.DIAMOND_AXE)),
+                Ingredient.of(new ItemStack(ModuleCore.RANGE_ADDONS[11].get())),
+                Ingredient.of(IndustrialTags.Items.GEAR_GOLD),
+                Ingredient.of(IndustrialTags.Items.GEAR_GOLD),
+                Ingredient.of(IndustrialTags.Items.GEAR_GOLD)
+        ), new FluidStack(ModuleCore.PINK_SLIME.getSourceFluid().get(), 2000), 400, Optional.of(new ItemStack(this)), Optional.empty()));
+
     }
 }

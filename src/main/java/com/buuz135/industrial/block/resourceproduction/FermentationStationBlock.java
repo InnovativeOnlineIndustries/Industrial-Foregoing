@@ -26,18 +26,17 @@ import com.buuz135.industrial.block.resourceproduction.tile.FermentationStationT
 import com.buuz135.industrial.module.ModuleResourceProduction;
 import com.buuz135.industrial.utils.IndustrialTags;
 import com.hrznstudio.titanium.recipe.generator.TitaniumShapedRecipeBuilder;
-import net.minecraft.data.recipes.FinishedRecipe;
+import net.minecraft.data.recipes.RecipeOutput;
 import net.minecraft.tags.ItemTags;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 
 import javax.annotation.Nonnull;
-import java.util.function.Consumer;
 
 public class FermentationStationBlock extends IndustrialBlock<FermentationStationTile> {
 
     public FermentationStationBlock() {
-        super("fermentation_station", Properties.copy(Blocks.IRON_BLOCK), FermentationStationTile.class, ModuleResourceProduction.TAB_RESOURCE);
+        super("fermentation_station", Properties.ofFullCopy(Blocks.IRON_BLOCK), FermentationStationTile.class, ModuleResourceProduction.TAB_RESOURCE);
     }
 
     @Override
@@ -52,7 +51,7 @@ public class FermentationStationBlock extends IndustrialBlock<FermentationStatio
     }
 
     @Override
-    public void registerRecipe(Consumer<FinishedRecipe> consumer) {
+    public void registerRecipe(RecipeOutput consumer) {
         TitaniumShapedRecipeBuilder.shapedRecipe(this).pattern("pwp").pattern("wgw").pattern("pbp")
                 .define('p', IndustrialTags.Items.PLASTIC)
                 .define('w', ItemTags.LOGS)

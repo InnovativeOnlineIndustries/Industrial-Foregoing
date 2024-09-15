@@ -56,10 +56,10 @@ public class InfinityLauncherProjectileArmorLayer<T extends LivingEntity, M exte
     protected void renderStuckItem(PoseStack p_225632_1_, MultiBufferSource p_225632_2_, int p_225632_3_, Entity p_225632_4_, float p_225632_5_, float p_225632_6_, float p_225632_7_, float p_225632_8_) {
         float f = Mth.sqrt(p_225632_5_ * p_225632_5_ + p_225632_7_ * p_225632_7_);
         this.projectile = new InfinityLauncherProjectileEntity(p_225632_4_.level(), p_225632_4_.getX(), p_225632_4_.getY(), p_225632_4_.getZ());
-        this.projectile.yRot = (float) (Math.atan2((double) p_225632_5_, (double) p_225632_7_) * (double) (180F / (float) Math.PI));
-        this.projectile.xRot = (float) (Math.atan2((double) p_225632_6_, (double) f) * (double) (180F / (float) Math.PI));
-        this.projectile.yRotO = this.projectile.yRot;
-        this.projectile.xRotO = this.projectile.xRot;
+        this.projectile.setYRot((float) (Math.atan2((double) p_225632_5_, (double) p_225632_7_) * (double) (180F / (float) Math.PI)));
+        this.projectile.setXRot((float) (Math.atan2((double) p_225632_6_, (double) f) * (double) (180F / (float) Math.PI)));
+        this.projectile.yRotO = this.projectile.getYRot();
+        this.projectile.xRotO = this.projectile.getXRot();
         this.dispatcher.render(this.projectile, 0.0D, 0.0D, 0.0D, 0.0F, p_225632_8_, p_225632_1_, p_225632_2_, p_225632_3_);
     }
 }

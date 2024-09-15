@@ -24,9 +24,9 @@ package com.buuz135.industrial.utils.data;
 
 import com.buuz135.industrial.utils.Reference;
 import net.minecraft.data.DataGenerator;
-import net.minecraftforge.client.model.generators.BlockModelBuilder;
-import net.minecraftforge.client.model.generators.ModelProvider;
-import net.minecraftforge.common.data.ExistingFileHelper;
+import net.neoforged.neoforge.client.model.generators.BlockModelBuilder;
+import net.neoforged.neoforge.client.model.generators.ModelProvider;
+import net.neoforged.neoforge.common.data.ExistingFileHelper;
 
 public class IndustrialModelProvider extends ModelProvider<BlockModelBuilder> {
 

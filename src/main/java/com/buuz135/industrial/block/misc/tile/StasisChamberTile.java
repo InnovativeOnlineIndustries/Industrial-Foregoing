@@ -37,6 +37,7 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
+import net.neoforged.neoforge.common.Tags;
 
 import javax.annotation.Nonnull;
 import java.util.List;
@@ -59,7 +60,7 @@ public class StasisChamberTile extends IndustrialAreaWorkingTile<StasisChamberTi
             for (Mob entity : entities) {
                 entity.setNoAi(true);
                 entity.getPersistentData().putLong("StasisChamberTime", this.level.getGameTime());
-                if (!entity.canChangeDimensions() && level instanceof ServerLevel) {
+                if (!entity.getType().is(Tags.EntityTypes.BOSSES) && level instanceof ServerLevel) {
                     if (StasisChamberConfig.disableBossBars) {
                         level.players().forEach(entity1 -> entity.stopSeenByPlayer((ServerPlayer) entity1));
                     } else {

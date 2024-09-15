@@ -25,18 +25,17 @@ package com.buuz135.industrial.proxy.network;
 import com.buuz135.industrial.IndustrialForegoing;
 import com.buuz135.industrial.item.infinity.item.ItemInfinityBackpack;
 import com.buuz135.industrial.module.ModuleTool;
+import com.buuz135.industrial.utils.IFAttachments;
 import com.buuz135.industrial.worlddata.BackpackDataManager;
 import com.hrznstudio.titanium.network.Message;
 import com.hrznstudio.titanium.network.locator.LocatorFactory;
 import com.hrznstudio.titanium.network.locator.instance.InventoryStackLocatorInstance;
 import net.minecraft.ChatFormatting;
-import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
-import net.minecraftforge.network.NetworkDirection;
-import net.minecraftforge.network.NetworkEvent;
-import net.minecraftforge.network.NetworkHooks;
+import net.neoforged.neoforge.network.handling.IPayloadContext;
 
 import java.util.UUID;
 
@@ -52,20 +51,18 @@ public class BackpackOpenMessage extends Message {
     }
 
     @Override
-    protected void handleMessage(NetworkEvent.Context context) {
+    protected void handleMessage(IPayloadContext context) {
         context.enqueueWork(() -> {
-            ServerPlayer entity = context.getSender();
+            Player entity = context.player();
             ItemInfinityBackpack.findFirstBackpack(entity).ifPresent(target -> {
                 ItemStack stack = target.getFinder().getStackGetter().apply(entity, target.getSlot());
-                if (stack.getItem() instanceof ItemInfinityBackpack) {
-                    if (!stack.hasTag() || !stack.getTag().contains("Id")) {
+                if (stack.getItem() instanceof ItemInfinityBackpack && entity instanceof ServerPlayer serverPlayer) {
+                    if (!stack.has(IFAttachments.INFINITY_BACKPACK_ID)) {
                         UUID id = UUID.randomUUID();
-                        CompoundTag nbt = stack.getOrCreateTag();
-                        nbt.putString("Id", id.toString());
                         BackpackDataManager.getData(entity.level()).createBackPack(id);
-                        stack.setTag(nbt);
+                        stack.set(IFAttachments.INFINITY_BACKPACK_ID, id.toString());
                     }
-                    String id = stack.getTag().getString("Id");
+                    String id = stack.get(IFAttachments.INFINITY_BACKPACK_ID);
                     if (forceDisable) {
                         ItemInfinityBackpack.setPickUpMode(stack, 3);
                         entity.displayClientMessage(Component.translatable("tooltip.industrialforegoing.backpack.pickup_disabled").withStyle(ChatFormatting.RED), true);
@@ -86,9 +83,9 @@ public class BackpackOpenMessage extends Message {
                                 entity.displayClientMessage(Component.translatable("tooltip.industrialforegoing.backpack.pickup_disabled").withStyle(ChatFormatting.RED), true);
                         }
                     } else {
-                        ItemInfinityBackpack.sync(entity.level(), id, entity);
-                        IndustrialForegoing.NETWORK.get().sendTo(new BackpackOpenedMessage(target.getSlot(), target.getName()), entity.connection.connection, NetworkDirection.PLAY_TO_CLIENT);
-                        NetworkHooks.openScreen(entity, ((ItemInfinityBackpack) ModuleTool.INFINITY_BACKPACK.get()), buffer ->
+                        ItemInfinityBackpack.sync(entity.level(), id, serverPlayer);
+                        IndustrialForegoing.NETWORK.sendTo(new BackpackOpenedMessage(target.getSlot(), target.getName()), serverPlayer);
+                        serverPlayer.openMenu(((ItemInfinityBackpack) ModuleTool.INFINITY_BACKPACK.get()), buffer ->
                                 LocatorFactory.writePacketBuffer(buffer, new InventoryStackLocatorInstance(target.getName(), target.getSlot())));
                         return;
                     }

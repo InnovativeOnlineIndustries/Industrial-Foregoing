@@ -24,22 +24,21 @@ package com.buuz135.industrial.utils.apihandlers.straw;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.Items;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.material.Fluid;
-import net.minecraftforge.common.ForgeMod;
+import net.neoforged.neoforge.common.EffectCures;
+import net.neoforged.neoforge.common.NeoForgeMod;
 
 import javax.annotation.ParametersAreNonnullByDefault;
 
 @ParametersAreNonnullByDefault
 public class MilkStrawHandler extends StrawHandlerBase {
     public MilkStrawHandler() {
-        super(ForgeMod.MILK);
+        super(NeoForgeMod.MILK);
     }
 
     @Override
     public void onDrink(Level world, BlockPos pos, Fluid stack, Player player, boolean fromFluidContainer) {
-        player.curePotionEffects(new ItemStack(Items.MILK_BUCKET));
+        player.removeEffectsCuredBy(EffectCures.MILK);
     }
 }

@@ -49,12 +49,11 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.material.Fluids;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
-import net.minecraftforge.common.Tags;
-import net.minecraftforge.fluids.FluidStack;
-import net.minecraftforge.fluids.capability.IFluidHandler;
-import net.minecraftforge.registries.ForgeRegistries;
+import net.neoforged.api.distmarker.Dist;
+import net.neoforged.api.distmarker.OnlyIn;
+import net.neoforged.neoforge.common.Tags;
+import net.neoforged.neoforge.fluids.FluidStack;
+import net.neoforged.neoforge.fluids.capability.IFluidHandler;
 
 import javax.annotation.Nonnull;
 import java.util.Arrays;
@@ -64,7 +63,7 @@ import java.util.List;
 public class BioReactorTile extends IndustrialWorkingTile<BioReactorTile> {
 
     public static TagKey<Item>[] VALID = new TagKey[]{IndustrialTags.Items.BIOREACTOR_INPUT, Tags.Items.CROPS, Tags.Items.DYES,
-            Tags.Items.HEADS, Tags.Items.MUSHROOMS, Tags.Items.SEEDS, ItemTags.SAPLINGS};
+            ItemTags.SKULLS, Tags.Items.MUSHROOMS, Tags.Items.SEEDS, ItemTags.SAPLINGS};
 
     private int getMaxProgress;
     private int getPowerPerOperation;
@@ -126,7 +125,7 @@ public class BioReactorTile extends IndustrialWorkingTile<BioReactorTile> {
         if (hasEnergy(getPowerPerOperation)) {
             int efficiency = getEfficiency();
             if (efficiency <= 0) return new WorkAction(1, 0);
-            int fluidAmount = ((efficiency - 1) * 18 + 93) * efficiency + 2;
+            int fluidAmount = ((efficiency - 1) * 40 + 93) * efficiency + 2;
             if (water.getFluidAmount() >= fluidAmount && biofuel.getCapacity() - biofuel.getFluidAmount() >= fluidAmount) {
                 water.drainForced(fluidAmount, IFluidHandler.FluidAction.EXECUTE);
                 biofuel.fillForced(new FluidStack(ModuleCore.BIOFUEL.getSourceFluid().get(), fluidAmount), IFluidHandler.FluidAction.EXECUTE);
@@ -147,7 +146,7 @@ public class BioReactorTile extends IndustrialWorkingTile<BioReactorTile> {
             }
         }
         for (TagKey<Item> itemTag : VALID) {
-            if (ForgeRegistries.ITEMS.tags().getTag(itemTag).contains(stack.getItem()) && (foundSlot == -1 || (input.getInventory().getStackInSlot(foundSlot).getCount() + stack.getCount() <= input.getInventory().getStackInSlot(foundSlot).getMaxStackSize() && slot == foundSlot)))
+            if (stack.is(itemTag) && (foundSlot == -1 || (input.getInventory().getStackInSlot(foundSlot).getCount() + stack.getCount() <= input.getInventory().getStackInSlot(foundSlot).getMaxStackSize() && slot == foundSlot)))
                 return true; //contains
         }
         return false;
@@ -186,7 +185,7 @@ public class BioReactorTile extends IndustrialWorkingTile<BioReactorTile> {
         }
         if (tag.contains("BR_filter")) {
             for (String psFilter : tag.getCompound("BR_filter").getAllKeys()) {
-                input.getFilter()[Integer.parseInt(psFilter)] = ItemStack.of(tag.getCompound("BR_filter").getCompound(psFilter));
+                input.getFilter()[Integer.parseInt(psFilter)] = ItemStack.parseOptional(this.level.registryAccess(), tag.getCompound("BR_filter").getCompound(psFilter));
             }
         }
         super.loadSettings(player, tag);
@@ -197,7 +196,7 @@ public class BioReactorTile extends IndustrialWorkingTile<BioReactorTile> {
         tag.putBoolean("BR_locked", input.isLocked());
         CompoundTag filterTag = new CompoundTag();
         for (int i = 0; i < input.getFilter().length; i++) {
-            filterTag.put(i + "", input.getFilter()[i].serializeNBT());
+            filterTag.put(i + "", input.getFilter()[i].saveOptional(this.level.registryAccess()));
         }
         tag.put("BR_filter", filterTag);
         super.saveSettings(player, tag);

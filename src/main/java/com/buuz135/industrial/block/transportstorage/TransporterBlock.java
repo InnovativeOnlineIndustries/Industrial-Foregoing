@@ -33,12 +33,12 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.NonNullList;
 import net.minecraft.world.InteractionHand;
-import net.minecraft.world.InteractionResult;
+import net.minecraft.world.ItemInteractionResult;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.RenderShape;
@@ -56,7 +56,7 @@ import net.minecraft.world.phys.shapes.BooleanOp;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
-import net.minecraftforge.event.BuildCreativeModeTabContentsEvent;
+import net.neoforged.neoforge.event.BuildCreativeModeTabContentsEvent;
 import org.apache.commons.lang3.tuple.Pair;
 
 import javax.annotation.Nonnull;
@@ -69,7 +69,7 @@ import static net.minecraft.world.level.block.state.properties.BlockStatePropert
 public class TransporterBlock extends BasicTileBlock<TransporterTile> implements SimpleWaterloggedBlock {
 
     public TransporterBlock() {
-        super("transporter", Properties.copy(Blocks.IRON_BLOCK).noCollission().strength(2.0f), TransporterTile.class);
+        super(Properties.ofFullCopy(Blocks.IRON_BLOCK).noCollission().strength(2.0f), TransporterTile.class);
         //this.setRegistryName(Reference.MOD_ID, "transporter");
         this.registerDefaultState(this.defaultBlockState().setValue(WATERLOGGED, false));
     }
@@ -94,7 +94,7 @@ public class TransporterBlock extends BasicTileBlock<TransporterTile> implements
     }
 
     @Override
-    public ItemStack getCloneItemStack(BlockState state, HitResult target, BlockGetter world, BlockPos pos, Player player) {
+    public ItemStack getCloneItemStack(BlockState state, HitResult target, LevelReader world, BlockPos pos, Player player) {
         BlockEntity tileEntity = world.getBlockEntity(pos);
         if (tileEntity instanceof TransporterTile) {
             if (target instanceof BlockHitResult) {
@@ -171,9 +171,8 @@ public class TransporterBlock extends BasicTileBlock<TransporterTile> implements
     }
 
     @Override
-    public InteractionResult use(BlockState state, Level worldIn, BlockPos pos, Player player, InteractionHand hand, BlockHitResult ray) {
+    public ItemInteractionResult useItemOn(ItemStack handStack, BlockState state, Level worldIn, BlockPos pos, Player player, InteractionHand hand, BlockHitResult ray) {
         BlockEntity tileEntity = worldIn.getBlockEntity(pos);
-        ItemStack handStack = player.getItemInHand(hand);
         if (tileEntity instanceof TransporterTile) {
             Pair<Direction, Boolean> info = getFacingUpgradeHit(state, worldIn, pos, player);
             if (info != null) {
@@ -182,37 +181,38 @@ public class TransporterBlock extends BasicTileBlock<TransporterTile> implements
                 if (player.isShiftKeyDown() && handStack.isEmpty()) {
                     if (((TransporterTile) tileEntity).hasUpgrade(facing)) {
                         ((TransporterTile) tileEntity).removeUpgrade(facing, true);
-                        return InteractionResult.SUCCESS;
+                        return ItemInteractionResult.SUCCESS;
                     }
                 } else {
                     if (isMiddle) {
                         if (((TransporterTile) tileEntity).hasUpgrade(facing)) {
                             ((TransporterTile) tileEntity).getTransporterTypeMap().get(facing).toggleAction();
-                            return InteractionResult.SUCCESS;
+                            return ItemInteractionResult.SUCCESS;
                         }
                     } else {
                         if (((TransporterTile) tileEntity).hasUpgrade(facing)) {
                             TransporterType transporterType = ((TransporterTile) tileEntity).getTransporterTypeMap().get(facing);
-                            if (!handStack.isEmpty() && transporterType.onUpgradeActivated(player, hand)) {
-                                return InteractionResult.SUCCESS;
-                            } else if (transporterType.hasGui()) {
+                            if (transporterType.hasGui()) {
                                 ((TransporterTile) tileEntity).openGui(player, facing);
-                                return InteractionResult.SUCCESS;
+                                return ItemInteractionResult.SUCCESS;
                             }
                         }
                     }
                 }
             }
         }
-        return super.use(state, worldIn, pos, player, hand, ray);
+        return super.useItemOn(handStack, state, worldIn, pos, player, hand, ray);
     }
 
     @Override
     public NonNullList<ItemStack> getDynamicDrops(BlockState state, Level worldIn, BlockPos pos, BlockState newState, boolean isMoving) {
         NonNullList<ItemStack> itemStacks = NonNullList.create();
         BlockEntity tileEntity = worldIn.getBlockEntity(pos);
-        if (tileEntity instanceof TransporterTile) {
-            ((TransporterTile) tileEntity).getTransporterTypeMap().values().forEach(transporterType -> itemStacks.addAll(transporterType.getDrops()));
+        if (tileEntity instanceof TransporterTile transporterTile) {
+            transporterTile.getTransporterTypeMap().values().forEach(transporterType -> itemStacks.addAll(transporterType.getDrops()));
+            for (int i = 0; i < transporterTile.getAugmentInventory().getSlots(); i++) {
+                itemStacks.add(transporterTile.getAugmentInventory().getStackInSlot(i));
+            }
         }
         return itemStacks;
     }

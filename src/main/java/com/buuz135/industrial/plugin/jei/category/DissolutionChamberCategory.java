@@ -24,7 +24,6 @@ package com.buuz135.industrial.plugin.jei.category;
 import com.buuz135.industrial.block.core.tile.DissolutionChamberTile;
 import com.buuz135.industrial.config.machine.core.DissolutionChamberConfig;
 import com.buuz135.industrial.module.ModuleCore;
-import com.buuz135.industrial.plugin.jei.CustomJeiDrawable;
 import com.buuz135.industrial.plugin.jei.IndustrialRecipeTypes;
 import com.buuz135.industrial.recipe.DissolutionChamberRecipe;
 import com.hrznstudio.titanium.api.client.AssetTypes;
@@ -33,13 +32,12 @@ import com.hrznstudio.titanium.client.screen.addon.SlotsScreenAddon;
 import com.hrznstudio.titanium.client.screen.asset.DefaultAssetProvider;
 import com.hrznstudio.titanium.client.screen.asset.IAssetProvider;
 import com.hrznstudio.titanium.util.AssetUtil;
-import com.mojang.blaze3d.vertex.PoseStack;
 import mezz.jei.api.constants.VanillaTypes;
-import mezz.jei.api.forge.ForgeTypes;
 import mezz.jei.api.gui.builder.IRecipeLayoutBuilder;
 import mezz.jei.api.gui.drawable.IDrawable;
 import mezz.jei.api.gui.ingredient.IRecipeSlotsView;
 import mezz.jei.api.helpers.IGuiHelper;
+import mezz.jei.api.neoforge.NeoForgeTypes;
 import mezz.jei.api.recipe.IFocusGroup;
 import mezz.jei.api.recipe.RecipeIngredientRole;
 import mezz.jei.api.recipe.RecipeType;
@@ -74,7 +72,7 @@ public class DissolutionChamberCategory implements IRecipeCategory<DissolutionCh
 
     @Override
     public Component getTitle() {
-        return Component.translatable(ModuleCore.DISSOLUTION_CHAMBER.getLeft().get().getDescriptionId());
+        return Component.translatable(ModuleCore.DISSOLUTION_CHAMBER.getBlock().getDescriptionId());
     }
 
     @Override
@@ -89,21 +87,19 @@ public class DissolutionChamberCategory implements IRecipeCategory<DissolutionCh
 
     @Override
     public void setRecipe(IRecipeLayoutBuilder builder, DissolutionChamberRecipe recipe, IFocusGroup focuses) {
-        for (int i = 0; i < 8; i++) {
-            if (i < recipe.input.length) {
-                builder.addSlot(RecipeIngredientRole.INPUT, 24 + DissolutionChamberTile.getSlotPos(i).getLeft(), 11 + DissolutionChamberTile.getSlotPos(i).getRight()).addIngredients(VanillaTypes.ITEM_STACK, recipe.input[i].getItems().stream().toList());
-            }
+        for (int i = 0; i < recipe.input.size(); i++) {
+            builder.addSlot(RecipeIngredientRole.INPUT, 24 + DissolutionChamberTile.getSlotPos(i).getLeft(), 11 + DissolutionChamberTile.getSlotPos(i).getRight()).addIngredients(recipe.input.get(i));
         }
         if (recipe.inputFluid != null && !recipe.inputFluid.isEmpty()) {
-            builder.addSlot(RecipeIngredientRole.INPUT, 33 + 12 + 3, 32 + 3).setFluidRenderer(1000, false, 12, 13).setOverlay(smallTank, 0, 0).addIngredient(ForgeTypes.FLUID_STACK, recipe.inputFluid);
+            builder.addSlot(RecipeIngredientRole.INPUT, 33 + 12 + 3, 32 + 3).setFluidRenderer(1000, false, 12, 13).setOverlay(smallTank, 0, 0).addIngredient(NeoForgeTypes.FLUID_STACK, recipe.inputFluid);
         }
         if (!recipe.output.isEmpty()) {
-            ItemStack stack = recipe.output;
+            ItemStack stack = recipe.output.get();
             stack.getItem().onCraftedBy(stack, null, null);
             builder.addSlot(RecipeIngredientRole.OUTPUT, 119, 16).addIngredient(VanillaTypes.ITEM_STACK, stack);
         }
         if (recipe.outputFluid != null && !recipe.outputFluid.isEmpty()) {
-            builder.addSlot(RecipeIngredientRole.OUTPUT, 139 + 3, 14 + 3).setFluidRenderer(1000, false, 12, 50).setOverlay(bigTank, 0, 0).addIngredient(ForgeTypes.FLUID_STACK, recipe.outputFluid);
+            builder.addSlot(RecipeIngredientRole.OUTPUT, 139 + 3, 14 + 3).setFluidRenderer(1000, false, 12, 50).setOverlay(bigTank, 0, 0).addIngredient(NeoForgeTypes.FLUID_STACK, recipe.outputFluid.get());
         }
     }
 
@@ -134,4 +130,6 @@ public class DissolutionChamberCategory implements IRecipeCategory<DissolutionCh
         }
         return new ArrayList<>();
     }
+
+
 }

@@ -28,6 +28,7 @@ import com.buuz135.industrial.module.ModuleResourceProduction;
 import com.hrznstudio.titanium.annotation.Save;
 import com.hrznstudio.titanium.api.IFactory;
 import com.hrznstudio.titanium.api.client.IScreenAddon;
+import com.hrznstudio.titanium.api.filter.FilterSlot;
 import com.hrznstudio.titanium.client.screen.addon.ProgressBarScreenAddon;
 import com.hrznstudio.titanium.component.bundle.LockableInventoryBundle;
 import com.hrznstudio.titanium.component.energy.EnergyStorageComponent;
@@ -35,27 +36,27 @@ import com.hrznstudio.titanium.component.fluid.FluidTankComponent;
 import com.hrznstudio.titanium.component.fluid.SidedFluidTankComponent;
 import com.hrznstudio.titanium.component.inventory.SidedInventoryComponent;
 import com.hrznstudio.titanium.component.progress.ProgressBarComponent;
+import com.hrznstudio.titanium.filter.ItemStackFilter;
 import com.hrznstudio.titanium.util.InventoryUtil;
 import com.hrznstudio.titanium.util.ItemHandlerUtil;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.NonNullList;
+import net.minecraft.core.component.DataComponents;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.DyeColor;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
-import net.minecraft.world.item.alchemy.PotionBrewing;
-import net.minecraft.world.item.alchemy.PotionUtils;
+import net.minecraft.world.item.alchemy.PotionContents;
 import net.minecraft.world.item.alchemy.Potions;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.material.Fluids;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
-import net.minecraftforge.common.brewing.BrewingRecipeRegistry;
-import net.minecraftforge.event.ForgeEventFactory;
-import net.minecraftforge.items.ItemHandlerHelper;
+import net.neoforged.api.distmarker.Dist;
+import net.neoforged.api.distmarker.OnlyIn;
+import net.neoforged.neoforge.event.EventHooks;
+import net.neoforged.neoforge.items.ItemHandlerHelper;
 
 import java.text.DecimalFormat;
 import java.util.ArrayList;
@@ -78,10 +79,22 @@ public class PotionBrewerTile extends IndustrialProcessingTile<PotionBrewerTile>
     private SidedInventoryComponent<PotionBrewerTile> output;
     @Save
     private int state;
+    @Save
+    private ItemStackFilter filter;
 
     public PotionBrewerTile(BlockPos blockPos, BlockState blockState) {
         super(ModuleResourceProduction.POTION_BREWER, 100, 38, blockPos, blockState);
         this.state = 0;
+        addFilter(this.filter = new ItemStackFilter("filter", 1) {
+            @Override
+            public void onContentChanged() {
+                super.onContentChanged();
+                markForUpdate();
+            }
+        });
+        var filterSlot = new FilterSlot<>(140, 63, 0, ItemStack.EMPTY);
+        filterSlot.setColor(DyeColor.LIME);
+        this.filter.setFilter(0, filterSlot);
         addBundle(brewingItems = new LockableInventoryBundle<>(this, new SidedInventoryComponent<PotionBrewerTile>("brewingInput", 55, 19, 6, 3)
                 .setColor(DyeColor.BLUE)
                 .setInputFilter((stack, integer) -> true)
@@ -129,7 +142,7 @@ public class PotionBrewerTile extends IndustrialProcessingTile<PotionBrewerTile>
                 //.setRange(1,3)
                 .setSlotLimit(1)
                 .setInputFilter((stack, integer) -> false)
-                .setOutputFilter((stack, integer) -> true)
+                .setOutputFilter((stack, integer) -> this.filter.matches(stack))
         );
     }
 
@@ -155,7 +168,9 @@ public class PotionBrewerTile extends IndustrialProcessingTile<PotionBrewerTile>
             if (this.state == 0) {
                 int bottleAmount = Math.min(3, this.bottleInput.getStackInSlot(0).getCount());
                 for (int i = 0; i < bottleAmount; i++) {
-                    ItemHandlerHelper.insertItem(this.output, PotionUtils.setPotion(new ItemStack(Items.POTION), Potions.WATER), false);
+                    var stack = new ItemStack(Items.POTION);
+                    stack.set(DataComponents.POTION_CONTENTS, PotionContents.EMPTY.withPotion(Potions.WATER));
+                    ItemHandlerHelper.insertItem(this.output, stack, false);
                     this.bottleInput.getStackInSlot(0).shrink(1);
                 }
                 ++this.state;
@@ -189,21 +204,16 @@ public class PotionBrewerTile extends IndustrialProcessingTile<PotionBrewerTile>
     }
 
     private boolean canBrew(int slot) {
+        var potionBrewing = this.level.potionBrewing();
         ItemStack ingredient = this.brewingItems.getInventory().getStackInSlot(slot);
-        NonNullList<ItemStack> input = NonNullList.create();
-        input.addAll(InventoryUtil.getStacks(this.output));
-        int[] indices = new int[input.size()];
-        for (int i = 0; i < indices.length; i++) indices[i] = i;
-        if (!ingredient.isEmpty())
-            return BrewingRecipeRegistry.canBrew(input, ingredient, indices); // divert to VanillaBrewingRegistry
         if (ingredient.isEmpty()) {
             return false;
-        } else if (!PotionBrewing.isIngredient(ingredient)) {
+        } else if (!potionBrewing.isIngredient(ingredient)) {
             return false;
         } else {
             for (int i = 0; i < 3; ++i) {
                 ItemStack itemstack1 = this.output.getStackInSlot(i);
-                if (!itemstack1.isEmpty() && PotionBrewing.hasMix(itemstack1, ingredient)) {
+                if (!itemstack1.isEmpty() && potionBrewing.hasMix(ingredient, itemstack1)) {
                     return true;
                 }
             }
@@ -215,15 +225,15 @@ public class PotionBrewerTile extends IndustrialProcessingTile<PotionBrewerTile>
     private void brewPotions(int slot) {
         NonNullList<ItemStack> input = NonNullList.create();
         input.addAll(InventoryUtil.getStacks(this.output));
-        int[] indices = new int[input.size()];
-        for (int i = 0; i < indices.length; i++) indices[i] = i;
         ItemStack ingredient = this.brewingItems.getInventory().getStackInSlot(slot);
         input.add(ingredient);
-        if (ForgeEventFactory.onPotionAttemptBrew(input)) return;
-        BrewingRecipeRegistry.brewPotions(input, ingredient, indices);
+        if (EventHooks.onPotionAttemptBrew(input)) return;
+        for (int i = 0; i < this.output.getSlots(); i++) {
+            input.set(i, this.level.potionBrewing().mix(input.get(i), ingredient));
+        }
         ingredient.shrink(1);
-        ForgeEventFactory.onPotionBrewed(input);
-        for (int i : indices) {
+        EventHooks.onPotionBrewed(input);
+        for (int i = 0; i < this.output.getSlots(); i++) {
             this.output.setStackInSlot(i, input.get(i));
         }
     }
@@ -235,9 +245,10 @@ public class PotionBrewerTile extends IndustrialProcessingTile<PotionBrewerTile>
         }
         if (tag.contains("BR_filter")) {
             for (String psFilter : tag.getCompound("BR_filter").getAllKeys()) {
-                brewingItems.getFilter()[Integer.parseInt(psFilter)] = ItemStack.of(tag.getCompound("BR_filter").getCompound(psFilter));
+                brewingItems.getFilter()[Integer.parseInt(psFilter)] = ItemStack.parseOptional(this.level.registryAccess(), tag.getCompound("BR_filter").getCompound(psFilter));
             }
         }
+        this.filter.deserializeNBT(this.level.registryAccess(), tag.getCompound("PB_OutputFilter"));
         super.loadSettings(player, tag);
     }
 
@@ -246,9 +257,10 @@ public class PotionBrewerTile extends IndustrialProcessingTile<PotionBrewerTile>
         tag.putBoolean("BR_locked", brewingItems.isLocked());
         CompoundTag filterTag = new CompoundTag();
         for (int i = 0; i < brewingItems.getFilter().length; i++) {
-            filterTag.put(i + "", brewingItems.getFilter()[i].serializeNBT());
+            filterTag.put(i + "", brewingItems.getFilter()[i].saveOptional(this.level.registryAccess()));
         }
         tag.put("BR_filter", filterTag);
+        tag.put("PB_OutputFilter", this.filter.serializeNBT(this.level.registryAccess()));
         super.saveSettings(player, tag);
     }
 

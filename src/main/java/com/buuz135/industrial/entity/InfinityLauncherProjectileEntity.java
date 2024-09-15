@@ -26,12 +26,12 @@ import com.buuz135.industrial.item.MobImprisonmentToolItem;
 import com.buuz135.industrial.item.infinity.item.ItemInfinityLauncher;
 import com.buuz135.industrial.module.ModuleTool;
 import com.buuz135.industrial.proxy.network.PlungerPlayerHitMessage;
-import net.minecraft.network.protocol.Packet;
-import net.minecraft.network.protocol.game.ClientGamePacketListener;
+import com.buuz135.industrial.utils.IFAttachments;
 import net.minecraft.network.protocol.game.ClientboundGameEventPacket;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.util.Mth;
@@ -44,13 +44,11 @@ import net.minecraft.world.entity.projectile.AbstractArrow;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.EntityHitResult;
 import net.minecraft.world.phys.Vec3;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
-import net.minecraftforge.network.NetworkHooks;
+import net.neoforged.api.distmarker.Dist;
+import net.neoforged.api.distmarker.OnlyIn;
 
 public class InfinityLauncherProjectileEntity extends AbstractArrow {
 
@@ -61,15 +59,15 @@ public class InfinityLauncherProjectileEntity extends AbstractArrow {
         super(type, world);
     }
 
-    public InfinityLauncherProjectileEntity(Level worldIn, LivingEntity thrower, ItemInfinityLauncher.PlungerAction plungerAction, int tier) {
-        super((EntityType<? extends AbstractArrow>) ModuleTool.INFINITY_LAUNCHER_PROJECTILE_ENTITY_TYPE.get(), thrower, worldIn);
+    public InfinityLauncherProjectileEntity(Level worldIn, LivingEntity thrower, ItemInfinityLauncher.PlungerAction plungerAction, int tier, ItemStack stack) {
+        super((EntityType<? extends AbstractArrow>) ModuleTool.INFINITY_LAUNCHER_PROJECTILE_ENTITY_TYPE.value(), thrower, worldIn, ItemStack.EMPTY, stack);
         this.entityData.set(PLUNGER_ACTION, plungerAction.getId());
         this.entityData.set(TIER, tier);
     }
 
     @OnlyIn(Dist.CLIENT)
     public InfinityLauncherProjectileEntity(Level worldIn, double x, double y, double z) {
-        super((EntityType<? extends AbstractArrow>) ModuleTool.INFINITY_LAUNCHER_PROJECTILE_ENTITY_TYPE.get(), x, y, z, worldIn);
+        super((EntityType<? extends AbstractArrow>) ModuleTool.INFINITY_LAUNCHER_PROJECTILE_ENTITY_TYPE.value(), x, y, z, worldIn, ItemStack.EMPTY, ItemStack.EMPTY);
     }
 
     @Override
@@ -83,12 +81,12 @@ public class InfinityLauncherProjectileEntity extends AbstractArrow {
         Entity player = this.getOwner();
         ItemInfinityLauncher.PlungerAction action = ItemInfinityLauncher.PlungerAction.getFromId(this.entityData.get(PLUNGER_ACTION));
         if (player instanceof Player && action == ItemInfinityLauncher.PlungerAction.RELEASE) {
-            for (ItemStack itemStack : ((Player) player).inventory.items) {
-                if (itemStack.getItem() instanceof MobImprisonmentToolItem && itemStack.hasTag()) {
+            for (ItemStack itemStack : ((Player) player).getInventory().items) {
+                if (itemStack.getItem() instanceof MobImprisonmentToolItem && itemStack.has(IFAttachments.MOB_IMPRISONMENT_TOOL)) {
                     ItemStack copy = itemStack.copy();
                     if (((MobImprisonmentToolItem) itemStack.getItem()).release((Player) player, result.getBlockPos(), result.getDirection(), this.level(), copy)) {
-                        ((Player) player).inventory.removeItem(itemStack);
-                        ((Player) player).inventory.add(copy);
+                        ((Player) player).getInventory().removeItem(itemStack);
+                        ((Player) player).getInventory().add(copy);
                         break;
                     }
 
@@ -99,15 +97,20 @@ public class InfinityLauncherProjectileEntity extends AbstractArrow {
     }
 
     @Override
-    protected void defineSynchedData() {
-        super.defineSynchedData();
-        this.entityData.define(PLUNGER_ACTION, 0);
-        this.entityData.define(TIER, 0);
+    protected void defineSynchedData(SynchedEntityData.Builder builder) {
+        super.defineSynchedData(builder);
+        builder.define(PLUNGER_ACTION, 0);
+        builder.define(TIER, 0);
     }
 
     @Override
     protected ItemStack getPickupItem() {
-        return new ItemStack(Blocks.STONE);
+        return ItemStack.EMPTY;
+    }
+
+    @Override
+    protected ItemStack getDefaultPickupItem() {
+        return ItemStack.EMPTY;
     }
 
     @OnlyIn(Dist.CLIENT)
@@ -127,10 +130,10 @@ public class InfinityLauncherProjectileEntity extends AbstractArrow {
     }
 
 
-    @Override
+    /*@Override
     public Packet<ClientGamePacketListener> getAddEntityPacket() {
         return NetworkHooks.getEntitySpawningPacket(this);
-    }
+    }*/
 
 
 
@@ -159,7 +162,7 @@ public class InfinityLauncherProjectileEntity extends AbstractArrow {
             boolean flag = entity.getType() == EntityType.ENDERMAN;
             int k = entity.getRemainingFireTicks();
             if (this.isOnFire() && !flag) {
-                entity.setSecondsOnFire(5);
+                entity.igniteForSeconds(5);
             }
             if (entity.hurt(damagesource, (float) i)) {
                 if (flag) {
@@ -176,9 +179,8 @@ public class InfinityLauncherProjectileEntity extends AbstractArrow {
                             livingentity.push(vector3d.x, 0.1D, vector3d.z);
                         }
                     }
-                    if (!this.level().isClientSide && entity1 instanceof LivingEntity) {
-                        EnchantmentHelper.doPostHurtEffects(livingentity, entity1);
-                        EnchantmentHelper.doPostDamageEffects((LivingEntity) entity1, livingentity);
+                    if (this.level() instanceof ServerLevel serverLevel && entity1 instanceof LivingEntity) {
+                        EnchantmentHelper.doPostAttackEffectsWithItemSource(serverLevel, livingentity, damagesource, this.getWeaponItem());
                     }
                     this.doPostHurtEffects(livingentity);
                     if (entity1 != null && livingentity != entity1 && livingentity instanceof Player && entity1 instanceof ServerPlayer && !this.isSilent()) {
@@ -192,7 +194,7 @@ public class InfinityLauncherProjectileEntity extends AbstractArrow {
             } else {
                 entity.setRemainingFireTicks(k);
                 this.setDeltaMovement(this.getDeltaMovement().scale(-0.1D));
-                this.yRot += 180.0F;
+                this.setYRot(180.0F);
                 this.yRotO += 180.0F;
                 if (!this.level().isClientSide && this.getDeltaMovement().lengthSqr() < 1.0E-7D) {
                     if (this.pickup == AbstractArrow.Pickup.ALLOWED) {
@@ -205,12 +207,12 @@ public class InfinityLauncherProjectileEntity extends AbstractArrow {
         }
         Entity player = this.getOwner();
         if (player instanceof Player && entity instanceof LivingEntity && action == ItemInfinityLauncher.PlungerAction.CAPTURE) {
-            for (ItemStack itemStack : ((Player) player).inventory.items) {
-                if (itemStack.getItem() instanceof MobImprisonmentToolItem && !itemStack.hasTag()) {
+            for (ItemStack itemStack : ((Player) player).getInventory().items) {
+                if (itemStack.getItem() instanceof MobImprisonmentToolItem && !itemStack.has(IFAttachments.MOB_IMPRISONMENT_TOOL)) {
                     ItemStack copy = itemStack.copy();
                     if (((MobImprisonmentToolItem) itemStack.getItem()).capture(copy, (LivingEntity) entity)) {
-                        ((Player) player).inventory.removeItem(itemStack);
-                        ((Player) player).inventory.add(copy);
+                        ((Player) player).getInventory().removeItem(itemStack);
+                        ((Player) player).getInventory().add(copy);
                         break;
                     }
 

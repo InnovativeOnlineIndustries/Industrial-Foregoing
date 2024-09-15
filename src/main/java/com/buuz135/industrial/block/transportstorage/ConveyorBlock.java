@@ -36,20 +36,19 @@ import com.hrznstudio.titanium.util.TileUtil;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.NonNullList;
-import net.minecraft.data.recipes.FinishedRecipe;
+import net.minecraft.data.recipes.RecipeOutput;
 import net.minecraft.network.chat.Component;
 import net.minecraft.util.StringRepresentable;
 import net.minecraft.world.InteractionHand;
-import net.minecraft.world.InteractionResult;
+import net.minecraft.world.ItemInteractionResult;
 import net.minecraft.world.entity.Entity;
-import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.entity.SpawnPlacements;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.*;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.block.*;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityType;
@@ -68,16 +67,14 @@ import net.minecraft.world.phys.shapes.BooleanOp;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
-import net.minecraftforge.common.Tags;
+import net.neoforged.neoforge.common.Tags;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-import java.util.function.Consumer;
 import java.util.function.Predicate;
-import java.util.function.Supplier;
 
 public class ConveyorBlock extends BasicTileBlock<ConveyorTile> implements SimpleWaterloggedBlock, IRecipeProvider {
 
@@ -88,7 +85,7 @@ public class ConveyorBlock extends BasicTileBlock<ConveyorTile> implements Simpl
     private ConveyorItem item;
 
     public ConveyorBlock(TitaniumTab group) {
-        super("conveyor", Properties.copy(Blocks.IRON_BLOCK).noCollission().strength(2.0f), ConveyorTile.class);
+        super(Properties.ofFullCopy(Blocks.IRON_BLOCK).noCollission().strength(2.0f).isValidSpawn((blockState, blockGetter, blockPos, entityType) -> true), ConveyorTile.class);
         this.registerDefaultState(this.defaultBlockState().setValue(FACING, Direction.NORTH).setValue(WATERLOGGED, false));
         //this.item = new ConveyorItem(this, group);
         this.setItemGroup(group);
@@ -113,8 +110,9 @@ public class ConveyorBlock extends BasicTileBlock<ConveyorTile> implements Simpl
         return super.getDirectSignal(blockState, world, pos, side);
     }
 
+
     @Override
-    public ItemStack getCloneItemStack(BlockState state, HitResult target, BlockGetter world, BlockPos pos, Player player) {
+    public ItemStack getCloneItemStack(BlockState state, HitResult target, LevelReader world, BlockPos pos, Player player) {
         BlockEntity tileEntity = world.getBlockEntity(pos);
         if (tileEntity instanceof ConveyorTile) {
             if (target instanceof DistanceRayTraceResult) {
@@ -262,48 +260,47 @@ public class ConveyorBlock extends BasicTileBlock<ConveyorTile> implements Simpl
     }
 
     @Override
-    public InteractionResult use(BlockState state, Level worldIn, BlockPos pos, Player player, InteractionHand hand, BlockHitResult ray) {
+    public ItemInteractionResult useItemOn(ItemStack handStack, BlockState state, Level worldIn, BlockPos pos, Player player, InteractionHand hand, BlockHitResult ray) {
         BlockEntity tileEntity = worldIn.getBlockEntity(pos);
-        ItemStack handStack = player.getItemInHand(hand);
         if (tileEntity instanceof ConveyorTile) {
             Direction facing = getFacingUpgradeHit(state, worldIn, pos, player);
             if (player.isCrouching()) {
                 if (facing != null) {
                     ((ConveyorTile) tileEntity).removeUpgrade(facing, true);
-                    return InteractionResult.SUCCESS;
+                    return ItemInteractionResult.SUCCESS;
                 }
-                return InteractionResult.PASS;
+                return ItemInteractionResult.PASS_TO_DEFAULT_BLOCK_INTERACTION;
             } else {
                 if (facing == null) {
                     if (handStack.getItem().equals(Items.GLOWSTONE_DUST) && !((ConveyorTile) tileEntity).getConveyorType().isFast()) {
                         ((ConveyorTile) tileEntity).setType(((ConveyorTile) tileEntity).getConveyorType().getFast());
                         handStack.shrink(1);
-                        return InteractionResult.SUCCESS;
+                        return ItemInteractionResult.SUCCESS;
                     }
                     if (handStack.getItem().equals(ModuleCore.PLASTIC) && !((ConveyorTile) tileEntity).isSticky()) {
                         ((ConveyorTile) tileEntity).setSticky(true);
                         handStack.shrink(1);
-                        return InteractionResult.SUCCESS;
+                        return ItemInteractionResult.SUCCESS;
                     }
                     if (handStack.getItem() instanceof DyeItem) {
                         ((ConveyorTile) tileEntity).setColor(((DyeItem) handStack.getItem()).getDyeColor());
-                        return InteractionResult.SUCCESS;
+                        return ItemInteractionResult.SUCCESS;
                     }
                 } else {
                     if (((ConveyorTile) tileEntity).hasUpgrade(facing)) {
                         ConveyorUpgrade upgrade = ((ConveyorTile) tileEntity).getUpgradeMap().get(facing);
                         if (upgrade.onUpgradeActivated(player, hand)) {
-                            return InteractionResult.SUCCESS;
+                            return ItemInteractionResult.SUCCESS;
                         } else if (upgrade.hasGui()) {
                             ((ConveyorTile) tileEntity).openGui(player, facing);
-                            return InteractionResult.SUCCESS;
+                            return ItemInteractionResult.SUCCESS;
                         }
                     }
                 }
-                return InteractionResult.PASS;
+                return ItemInteractionResult.PASS_TO_DEFAULT_BLOCK_INTERACTION;
             }
         }
-        return super.use(state, worldIn, pos, player, hand, ray);
+        return super.useItemOn(handStack, state, worldIn, pos, player, hand, ray);
     }
 
     @Override
@@ -388,10 +385,6 @@ public class ConveyorBlock extends BasicTileBlock<ConveyorTile> implements Simpl
         return drops;
     }
 
-    @Override
-    public boolean isValidSpawn(BlockState state, BlockGetter world, BlockPos pos, SpawnPlacements.Type type, EntityType<?> entityType) {
-        return true;
-    }
 
     @Override
     public boolean isPossibleToRespawnInThis(BlockState p_279289_) {
@@ -403,7 +396,7 @@ public class ConveyorBlock extends BasicTileBlock<ConveyorTile> implements Simpl
     }
 
     @Override
-    public void registerRecipe(Consumer<FinishedRecipe> consumer) {
+    public void registerRecipe(RecipeOutput consumer) {
         TitaniumShapedRecipeBuilder.shapedRecipe(this, 6)
                 .pattern("ppp").pattern("iri").pattern("ppp")
                 .define('p', IndustrialTags.Items.PLASTIC)

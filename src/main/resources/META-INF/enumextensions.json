@@ -1,0 +1,40 @@
+{
+  "entries": [
+    {
+      "enum": "net/minecraft/world/item/Rarity",
+      "name": "industrialforegoing_pity",
+      "constructor": "(ILjava/lang/String;Ljava/util/function/UnaryOperator;)V",
+      "parameters": {
+        "class": "com/buuz135/industrial/utils/CustomRarity",
+        "field": "PITY"
+      }
+    },
+    {
+      "enum": "net/minecraft/world/item/Rarity",
+      "name": "industrialforegoing_simple",
+      "constructor": "(ILjava/lang/String;Ljava/util/function/UnaryOperator;)V",
+      "parameters": {
+        "class": "com/buuz135/industrial/utils/CustomRarity",
+        "field": "SIMPLE"
+      }
+    },
+    {
+      "enum": "net/minecraft/world/item/Rarity",
+      "name": "industrialforegoing_advanced",
+      "constructor": "(ILjava/lang/String;Ljava/util/function/UnaryOperator;)V",
+      "parameters": {
+        "class": "com/buuz135/industrial/utils/CustomRarity",
+        "field": "ADVANCED"
+      }
+    },
+    {
+      "enum": "net/minecraft/world/item/Rarity",
+      "name": "industrialforegoing_supreme",
+      "constructor": "(ILjava/lang/String;Ljava/util/function/UnaryOperator;)V",
+      "parameters": {
+        "class": "com/buuz135/industrial/utils/CustomRarity",
+        "field": "SUPREME"
+      }
+    }
+  ]
+}

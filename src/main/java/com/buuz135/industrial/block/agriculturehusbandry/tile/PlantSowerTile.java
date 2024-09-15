@@ -37,14 +37,14 @@ import com.hrznstudio.titanium.item.AugmentWrapper;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.tags.BlockTags;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.DyeColor;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.*;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraftforge.common.IPlantable;
+import net.neoforged.neoforge.common.SpecialPlantable;
 
 import javax.annotation.Nonnull;
 
@@ -80,7 +80,7 @@ public class PlantSowerTile extends IndustrialAreaWorkingTile<PlantSowerTile> {
         }
         addBundle(this.input = new LockableInventoryBundle<>(this, new SidedInventoryComponent<PlantSowerTile>("input", 54 + 18 * 3, 22, 9, 0).
                 setColor(DyeColor.CYAN).
-                setInputFilter((itemStack, integer) -> itemStack.getItem() instanceof BlockItem && ((BlockItem) itemStack.getItem()).getBlock() instanceof IPlantable).
+                setInputFilter((itemStack, integer) -> itemStack.getItem() instanceof SpecialPlantable || (itemStack.getItem() instanceof BlockItem blockItem && blockItem.getBlock() instanceof BushBlock)).
                 setRange(3, 3).
                 setComponentHarness(this), 118, 84, false));
         this.maxProgress = PlantSowerConfig.maxProgress;
@@ -100,15 +100,27 @@ public class PlantSowerTile extends IndustrialAreaWorkingTile<PlantSowerTile> {
                     break;
                 }
             }
-            if (!stack.isEmpty() && stack.getItem() instanceof BlockItem && ((BlockItem) stack.getItem()).getBlock() instanceof IPlantable) {
-                Block block = ((BlockItem) stack.getItem()).getBlock();
-                if (this.level.getBlockState(pos.below()).canSustainPlant(level, pos.below(), Direction.UP, (IPlantable) block)) {
-                    if (this.level.setBlockAndUpdate(pos, ((IPlantable) block).getPlant(level, pos))) {
-                        stack.shrink(1);
-                        increasePointer();
-                        return new WorkAction(0.2f, powerPerOperation);
-                    }
+
+            if (!stack.isEmpty() && stack.getItem() instanceof BlockItem blockItem && blockItem.getBlock() instanceof BushBlock bushBlock) {
+                var isValidFarm = false;
+                if (bushBlock instanceof SaplingBlock block) {
+                    isValidFarm = level.getBlockState(pos.below()).is(BlockTags.DIRT);
+                } else if (bushBlock instanceof CropBlock block) {
+                    isValidFarm = level.getBlockState(pos.below()).getBlock() instanceof FarmBlock;
                 }
+                if (isValidFarm) {
+                    BlockState blockstate1 = blockItem.getBlock().defaultBlockState();
+                    level.setBlockAndUpdate(pos, blockstate1);
+                    stack.shrink(1);
+                    increasePointer();
+                    return new WorkAction(0.2f, powerPerOperation);
+                }
+            }
+            if (!stack.isEmpty() && stack.getItem() instanceof SpecialPlantable specialPlantable && specialPlantable.canPlacePlantAtPosition(stack, level, pos.below(), Direction.UP)) {
+                specialPlantable.spawnPlantAtPosition(stack, level, pos.below(), Direction.UP);
+                stack.shrink(1);
+                increasePointer();
+                return new WorkAction(0.2f, powerPerOperation);
             }
         }
         increasePointer();
@@ -153,7 +165,7 @@ public class PlantSowerTile extends IndustrialAreaWorkingTile<PlantSowerTile> {
         }
         if (tag.contains("PS_filter")) {
             for (String psFilter : tag.getCompound("PS_filter").getAllKeys()) {
-                input.getFilter()[Integer.parseInt(psFilter)] = ItemStack.of(tag.getCompound("PS_filter").getCompound(psFilter));
+                input.getFilter()[Integer.parseInt(psFilter)] = ItemStack.parseOptional(this.level.registryAccess(), tag.getCompound("PS_filter").getCompound(psFilter));
             }
         }
         super.loadSettings(player, tag);
@@ -164,7 +176,7 @@ public class PlantSowerTile extends IndustrialAreaWorkingTile<PlantSowerTile> {
         tag.putBoolean("PS_locked", input.isLocked());
         CompoundTag filterTag = new CompoundTag();
         for (int i = 0; i < input.getFilter().length; i++) {
-            filterTag.put(i + "", input.getFilter()[i].serializeNBT());
+            filterTag.put(i + "", input.getFilter()[i].saveOptional(this.level.registryAccess()));
         }
         tag.put("PS_filter", filterTag);
         super.saveSettings(player, tag);
