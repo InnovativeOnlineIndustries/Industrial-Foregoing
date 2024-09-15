@@ -2,6 +2,7 @@
 
 * Fixed Meat Feeder not showing in JEI
 * Maybe fixed curios integration?
+* Fixed tint color issues
 
 # Version 3.6.4
 
