@@ -1,3 +1,7 @@
+# Version 3.6.4
+
+* Enchantment Factory tank now syncs properly
+
 # Version 3.6.2
 
 * Working area renders shouldn't have z fighting anymore
