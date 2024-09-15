@@ -50,6 +50,7 @@ public class MeatFeederItem extends IFCustomItem implements ISpecialCreativeTabI
 
     public MeatFeederItem(TitaniumTab group) {
         super("meat_feeder", group, new Properties().stacksTo(1));
+        group.getTabList().add(this);
     }
 
     @Override

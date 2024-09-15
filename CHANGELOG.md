@@ -1,3 +1,7 @@
+# Version 3.6.5
+
+* Fixed Meat Feeder not showing in JEI
+
 # Version 3.6.4
 
 * Enchantment Factory tank now syncs properly
