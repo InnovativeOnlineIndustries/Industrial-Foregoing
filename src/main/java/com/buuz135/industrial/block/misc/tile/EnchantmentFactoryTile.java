@@ -82,6 +82,7 @@ public class EnchantmentFactoryTile extends IndustrialProcessingTile<Enchantment
         this.addTank(tank = (SidedFluidTankComponent<EnchantmentFactoryTile>) new SidedFluidTankComponent<EnchantmentFactoryTile>("essence", EnchantmentFactoryConfig.tankSize, 34, 20, 0).
                 setColor(DyeColor.LIME).
                 setTankAction(FluidTankComponent.Action.FILL).
+                setOnContentChange(() -> syncObject(this.tank)).
                 setComponentHarness(this).
                 setValidator(fluidStack -> fluidStack.getFluid().is(IndustrialTags.Fluids.EXPERIENCE))
         );
