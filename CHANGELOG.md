@@ -1,3 +1,7 @@
+# Version 3.6.7
+
+* Fixed being able to enchant at level 0
+
 # Version 3.6.6
 
 * Fixed Fluid/Ore Laser drill JEI recipe closes #1467
