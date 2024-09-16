@@ -7,7 +7,7 @@
   "pages": [
     {
       "type": "text",
-      "text": "An automatic vanilla brewer.$(br2)When supplied with $(6)Power$() it will create a potion from the provided ingredients.$(br)Empty bottles will be filled if the internal $(6)water$() container is filled and it won't get consumed."
+      "text": "An automatic vanilla brewer.$(br2)When supplied with $(6)Power$() it will create a potion from the provided ingredients.$(br)Empty bottles will be filled if the internal $(6)water$() container is filled and it won't get consumed. $(br2)A potion needs to be configured in the green filter to be able to extract any potions."
     },
     {
       "type": "crafting",

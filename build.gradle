@@ -79,7 +79,7 @@ dependencies {
     implementation project.dependencies.create('com.hrznstudio:titanium:1.21-4.0.20')
     implementation "curse.maven:jade-324717:5444008"
     compileOnly "curse.maven:crafttweaker-239197:5606075"
-    compileOnly "vazkii.patchouli:Patchouli:${patchouli_version}"
+    implementation "vazkii.patchouli:Patchouli:${patchouli_version}"
     //runtimeOnly "vazkii.patchouli:Patchouli:${patchouli_version}"
     implementation "curse.maven:pneumaticcraft-repressurized-281849:5698172"
     implementation "curse.maven:curios-continuation-1037991:5690713"
@@ -99,7 +99,7 @@ tasks.withType(ProcessResources).configureEach {
             mod_id                 : mod_id,
             mod_name               : mod_name,
             mod_license            : mod_license,
-            mod_version            : mod_version,
+            mod_version: version,
             mod_authors            : mod_authors,
             mod_description        : mod_description
     ]

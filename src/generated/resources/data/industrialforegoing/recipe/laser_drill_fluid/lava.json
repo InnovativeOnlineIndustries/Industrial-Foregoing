@@ -18,9 +18,7 @@
     {
       "biome_filter": {
         "blacklist": [],
-        "whitelist": [
-          "minecraft:is_nether"
-        ]
+        "whitelist": []
       },
       "depth_max": 20,
       "depth_min": 5,

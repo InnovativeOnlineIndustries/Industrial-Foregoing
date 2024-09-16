@@ -12,7 +12,7 @@
       "item": "minecraft:bucket"
     },
     "C": {
-      "tag": "c:chests"
+      "tag": "c:chests/wooden"
     },
     "D": {
       "tag": "c:gears/diamond"
