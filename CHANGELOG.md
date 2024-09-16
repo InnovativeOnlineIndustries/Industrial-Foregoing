@@ -1,6 +1,7 @@
 # Version 3.6.8
 
 * Added donation link
+* Fixed Infinity Tools server side crash
 
 # Version 3.6.7
 
