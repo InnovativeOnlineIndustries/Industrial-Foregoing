@@ -2,6 +2,7 @@
 
 * Fixed Fluid/Ore Laser drill JEI recipe closes #1467
 * Fixed Fluid Laser Drill recipe requiring nether dimension and specific biomes
+* Fixed manual closes #1466
 
 # Version 3.6.5
 
