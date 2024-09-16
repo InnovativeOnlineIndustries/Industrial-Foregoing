@@ -8,13 +8,13 @@
   "type": "industrialforegoing:dissolution_chamber",
   "input": [
     {
-      "tag": "c:chests"
+      "tag": "c:chests/wooden"
     },
     {
       "tag": "c:gears/diamond"
     },
     {
-      "tag": "c:chests"
+      "tag": "c:chests/wooden"
     },
     {
       "item": "minecraft:bucket"

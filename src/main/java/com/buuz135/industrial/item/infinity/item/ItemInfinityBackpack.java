@@ -577,9 +577,9 @@ public class ItemInfinityBackpack extends ItemInfinity {
     public void registerRecipe(RecipeOutput consumer) {
         DissolutionChamberRecipe.createRecipe(consumer, "infinity_backpack", new DissolutionChamberRecipe(
                 List.of(
-                        Ingredient.of(Tags.Items.CHESTS),
+                        Ingredient.of(Tags.Items.CHESTS_WOODEN),
                         Ingredient.of(IndustrialTags.Items.GEAR_DIAMOND),
-                        Ingredient.of(Tags.Items.CHESTS),
+                        Ingredient.of(Tags.Items.CHESTS_WOODEN),
                         Ingredient.of(Items.BUCKET),
                         Ingredient.of(Items.BUCKET),
                         Ingredient.of(IndustrialTags.Items.GEAR_GOLD),

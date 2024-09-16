@@ -59,7 +59,7 @@ public class DissolutionChamberBlock extends IndustrialBlock<DissolutionChamberT
         TitaniumShapedRecipeBuilder.shapedRecipe(this)
                 .pattern("PCP").pattern("BMB").pattern("GDG")
                 .define('P', IndustrialTags.Items.PLASTIC)
-                .define('C', Tags.Items.CHESTS)
+                .define('C', Tags.Items.CHESTS_WOODEN)
                 .define('B', Items.BUCKET)
                 .define('M', IndustrialTags.Items.MACHINE_FRAME_PITY)
                 .define('G', Tags.Items.INGOTS_GOLD)
