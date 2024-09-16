@@ -8,6 +8,8 @@ import com.hrznstudio.titanium.api.client.IScreenAddonProvider;
 import com.hrznstudio.titanium.component.fluid.FluidTankComponent;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.item.ItemStack;
+import net.neoforged.api.distmarker.Dist;
+import net.neoforged.api.distmarker.OnlyIn;
 import net.neoforged.neoforge.fluids.FluidStack;
 import net.neoforged.neoforge.fluids.capability.IFluidHandlerItem;
 import net.neoforged.neoforge.fluids.capability.templates.FluidTank;
@@ -121,6 +123,7 @@ public class InfinityTankStorage implements IFluidHandlerItem, IScreenAddonProvi
         this.stack.set(IFAttachments.INFINITY_TANKS, component);
     }
 
+    @OnlyIn(Dist.CLIENT)
     @Override
     public @NotNull List<IFactory<? extends IScreenAddon>> getScreenAddons() {
         List<IFactory<? extends IScreenAddon>> list = new ArrayList<>();

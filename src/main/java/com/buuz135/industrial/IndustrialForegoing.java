@@ -63,6 +63,7 @@ import net.neoforged.api.distmarker.Dist;
 import net.neoforged.api.distmarker.OnlyIn;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.fml.ModContainer;
+import net.neoforged.fml.ModList;
 import net.neoforged.fml.common.Mod;
 import net.neoforged.fml.event.lifecycle.FMLClientSetupEvent;
 import net.neoforged.fml.event.lifecycle.FMLCommonSetupEvent;
@@ -76,15 +77,13 @@ import net.neoforged.neoforge.common.util.Lazy;
 import net.neoforged.neoforge.data.event.GatherDataEvent;
 import net.neoforged.neoforge.event.server.ServerStartingEvent;
 import net.neoforged.neoforge.registries.NewRegistryEvent;
+import net.neoforged.neoforgespi.language.IModInfo;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Optional;
-import java.util.UUID;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Mod(Reference.MOD_ID)
@@ -96,6 +95,7 @@ public class IndustrialForegoing extends ModuleController {
     public static Logger LOGGER = LogManager.getLogger(Reference.MOD_ID);
     public static IndustrialForegoing INSTANCE;
     public static Reward CAT_EARS;
+    public static List<String> OWN_MODS_LOADED = new ArrayList<>();
 
     public IndustrialForegoing(Dist dist, IEventBus modBus, ModContainer container) {
         super(container);
@@ -137,6 +137,9 @@ public class IndustrialForegoing extends ModuleController {
 
         IFAttachments.DR.register(modBus);
 
+        OWN_MODS_LOADED = ModList.get().getMods().stream()
+                .filter(iModInfo -> iModInfo.getConfig().getConfigElement("authors").orElse("").toString().contains("Buuz135"))
+                .map(IModInfo::getDisplayName).toList();
 
     }
 
