@@ -1,3 +1,7 @@
+# Version 3.6.8
+
+* Added donation link
+
 # Version 3.6.7
 
 * Fixed being able to enchant at level 0

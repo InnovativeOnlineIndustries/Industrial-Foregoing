@@ -24,6 +24,8 @@ package com.buuz135.industrial.block.tile;
 
 
 import com.buuz135.industrial.capability.tile.BigEnergyHandler;
+import com.buuz135.industrial.config.ClientConfig;
+import com.buuz135.industrial.gui.component.DonationGuiAddon;
 import com.hrznstudio.titanium.block.BasicTileBlock;
 import com.hrznstudio.titanium.block.tile.GeneratorTile;
 import com.hrznstudio.titanium.component.energy.EnergyStorageComponent;
@@ -34,6 +36,8 @@ import net.minecraft.world.InteractionHand;
 import net.minecraft.world.ItemInteractionResult;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.block.state.BlockState;
+import net.neoforged.api.distmarker.Dist;
+import net.neoforged.api.distmarker.OnlyIn;
 
 import javax.annotation.Nonnull;
 
@@ -41,6 +45,13 @@ public abstract class IndustrialGeneratorTile<T extends IndustrialGeneratorTile<
 
     public IndustrialGeneratorTile(BlockWithTile basicTileBlock, BlockPos blockPos, BlockState blockState) {
         super((BasicTileBlock<T>) basicTileBlock.getBlock(), basicTileBlock.type().get(), blockPos, blockState);
+    }
+
+    @OnlyIn(Dist.CLIENT)
+    @Override
+    public void initClient() {
+        super.initClient();
+        if (ClientConfig.DONATION_LINK_ENABLED) this.addGuiAddonFactory(() -> new DonationGuiAddon(-22, 4));
     }
 
     @Override

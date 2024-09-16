@@ -23,6 +23,8 @@
 package com.buuz135.industrial.block.tile;
 
 import com.buuz135.industrial.api.IMachineSettings;
+import com.buuz135.industrial.config.ClientConfig;
+import com.buuz135.industrial.gui.component.DonationGuiAddon;
 import com.buuz135.industrial.item.addon.ProcessingAddonItem;
 import com.buuz135.industrial.item.addon.RangeAddonItem;
 import com.buuz135.industrial.proxy.client.IndustrialAssetProvider;
@@ -93,6 +95,13 @@ public abstract class IndustrialMachineTile<T extends IndustrialMachineTile<T>> 
             this.addBundle(tankBundle = new TankInteractionBundle<>(() -> Optional.of(this.getFluidHandler(null)), 175, 94, this, 10));
             this.tankBundleAdded = true;
         }
+    }
+
+    @OnlyIn(Dist.CLIENT)
+    @Override
+    public void initClient() {
+        super.initClient();
+        if (ClientConfig.DONATION_LINK_ENABLED) this.addGuiAddonFactory(() -> new DonationGuiAddon(-22, 4));
     }
 
     @Override
