@@ -165,7 +165,7 @@ public class EnchantmentFactoryTile extends IndustrialProcessingTile<Enchantment
         if (capability != null) {
             amount += EnchantmentApplicatorTile.getMatchingAmount(capability);
         }
-        return amount >= EnchantmentApplicatorTile.getEssenceConsumed(this.selectedLevel) && !this.inputFirst.getStackInSlot(0).isEmpty() && this.output.getStackInSlot(0).isEmpty();
+        return this.selectedLevel > 0 && amount >= EnchantmentApplicatorTile.getEssenceConsumed(this.selectedLevel) && !this.inputFirst.getStackInSlot(0).isEmpty() && this.output.getStackInSlot(0).isEmpty();
     }
 
     @Override
