@@ -1,4 +1,4 @@
-// 1.21.1	2024-09-15T19:17:54.2153777	Recipes
+// 1.21.1	2024-09-16T15:51:34.853853	Recipes
 ff54d17224699a5788e882338fe087d8476c0195 data/industrialforegoing/advancement/crusher/cobblestone.json
 f382aca5aada80e9d4c28f54b235e3e6c2beabc7 data/industrialforegoing/advancement/crusher/gravel.json
 5ca54022be8019e73e79046c7988ef84cd02a8bb data/industrialforegoing/advancement/crusher/sand.json
@@ -305,7 +305,7 @@ b858c0d100f9a15797f47285cb9f6f7c9b2a9360 data/industrialforegoing/recipe/iron_ge
 2a034a23fbd7058b5ad81e7b5e1b18a50ddfeba2 data/industrialforegoing/recipe/item_transporter_type.json
 28c37fbd0be83d67d5c5cd62cdba3bbd410d10df data/industrialforegoing/recipe/laser_drill.json
 0e4fe31465c53463060a06cccda61db3102fe782 data/industrialforegoing/recipe/laser_drill_fluid/ether.json
-ff39fb008903fe1a3e1ac644d61a33c5f84329f4 data/industrialforegoing/recipe/laser_drill_fluid/lava.json
+5a46d4e6d33b7ca19ebe7013551abdf94e4644de data/industrialforegoing/recipe/laser_drill_fluid/lava.json
 1dd0c82aedd6843f59368fcb868167738a90782b data/industrialforegoing/recipe/laser_drill_fluid/oil.json
 93aaafccdb76a8f2d0ad27957ed3c0b9842cc459 data/industrialforegoing/recipe/laser_drill_ore/ancient_debris.json
 2367caf2d6b035047669b36faae36bcdf2613f88 data/industrialforegoing/recipe/laser_drill_ore/coal_ore.json

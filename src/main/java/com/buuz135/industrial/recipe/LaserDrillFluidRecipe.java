@@ -82,7 +82,7 @@ public class LaserDrillFluidRecipe implements Recipe<CraftingInput> {
     public static void init(RecipeOutput output) {
         createRecipe(output, "lava", "minecraft", new LaserDrillFluidRecipe(new FluidStack(Fluids.LAVA, 100), 1, EMPTY,
                 new LaserDrillRarity(
-                        new LaserDrillRarity.BiomeRarity(LaserDrillRarity.BiomeRarity.NETHER, new ArrayList<>()),
+                        new LaserDrillRarity.BiomeRarity(new ArrayList<>(), new ArrayList<>()),
                         new LaserDrillRarity.DimensionRarity(List.of(BuiltinDimensionTypes.NETHER), new ArrayList<>()),
                         5, 20, 8)));
         createRecipe(output, "ether", "minecraft", new LaserDrillFluidRecipe(new FluidStack(ModuleCore.ETHER.getSourceFluid().get(), 10), 10, ResourceLocation.fromNamespaceAndPath("minecraft", "wither"),
