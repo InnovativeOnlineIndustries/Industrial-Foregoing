@@ -1,3 +1,7 @@
+# Version 3.6.9
+
+* Fixed Potion Brewer Functionality
+
 # Version 3.6.8
 
 * Added donation link
