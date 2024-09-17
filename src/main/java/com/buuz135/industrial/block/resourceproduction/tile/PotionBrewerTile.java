@@ -213,7 +213,7 @@ public class PotionBrewerTile extends IndustrialProcessingTile<PotionBrewerTile>
         } else {
             for (int i = 0; i < 3; ++i) {
                 ItemStack itemstack1 = this.output.getStackInSlot(i);
-                if (!itemstack1.isEmpty() && potionBrewing.hasMix(ingredient, itemstack1)) {
+                if (!itemstack1.isEmpty() && potionBrewing.hasMix(itemstack1, ingredient)) {
                     return true;
                 }
             }
@@ -229,7 +229,7 @@ public class PotionBrewerTile extends IndustrialProcessingTile<PotionBrewerTile>
         input.add(ingredient);
         if (EventHooks.onPotionAttemptBrew(input)) return;
         for (int i = 0; i < this.output.getSlots(); i++) {
-            input.set(i, this.level.potionBrewing().mix(input.get(i), ingredient));
+            input.set(i, this.level.potionBrewing().mix(ingredient, input.get(i)));
         }
         ingredient.shrink(1);
         EventHooks.onPotionBrewed(input);
