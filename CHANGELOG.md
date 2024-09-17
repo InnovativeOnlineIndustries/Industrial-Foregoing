@@ -1,3 +1,7 @@
+# Version 3.6.10
+
+* Fixed manual recipe
+
 # Version 3.6.9
 
 * Fixed Potion Brewer Functionality
