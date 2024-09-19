@@ -79,6 +79,7 @@ public class LaserDrillTile extends IndustrialAreaWorkingTile<LaserDrillTile> {
             if (this.level.getBlockEntity(target) instanceof ILaserBase) {
                 ILaserBase laserBase = ((ILaserBase<?>) this.level.getBlockEntity(target));
                 laserBase.getBar().setProgress(laserBase.getBar().getProgress() + 1);
+                laserBase.getBar().tickBar();
                 return new WorkAction(1, LaserDrillConfig.powerPerOperation);
             }
         }

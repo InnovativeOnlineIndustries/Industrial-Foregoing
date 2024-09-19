@@ -2,6 +2,7 @@
 
 * Added Pink Slime Block
 * Fixed addon filter in the fluid/ore laser base
+* Fixed fluid/ore laser base progress bar going over the limit in big setups
 
 # Version 3.6.10
 
