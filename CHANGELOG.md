@@ -1,6 +1,7 @@
 # Version 3.6.11
 
 * Added Pink Slime Block
+* Fixed addon filter in the fluid/ore laser base
 
 # Version 3.6.10
 
