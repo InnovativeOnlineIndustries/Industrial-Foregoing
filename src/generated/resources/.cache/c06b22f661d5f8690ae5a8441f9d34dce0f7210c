@@ -1,7 +1,7 @@
-// 1.21.1	2024-09-09T15:04:24.366991	Tags for minecraft:block mod id industrialforegoing
+// 1.21.1	2024-09-19T21:04:00.6931667	Tags for minecraft:block mod id industrialforegoing
 d19fb5f318758fdaef5883eac670afb1d488f5ac data/industrialforegoing/tags/block/machine_frame/advanced.json
 078014cbf879ad3b7979dfd739a4f4a9f9436050 data/industrialforegoing/tags/block/machine_frame/pity.json
 3fc18d8c3f4e2763c5bacb8d3a7d34208cb0aac0 data/industrialforegoing/tags/block/machine_frame/simple.json
 62c1d369f5daa4c5411fce7042ba70e62cc604cc data/industrialforegoing/tags/block/machine_frame/supreme.json
 978c5cd1bafc1fdb56371e35cc3ce4b6759ab456 data/minecraft/tags/block/dirt.json
-0319be49440f098a4bff6c5ea5703593c60cb010 data/minecraft/tags/block/mineable/pickaxe.json
+e086df0e66d137da2850aa96c53d8c6595a2b9f0 data/minecraft/tags/block/mineable/pickaxe.json

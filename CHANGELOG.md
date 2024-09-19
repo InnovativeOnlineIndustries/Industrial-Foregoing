@@ -1,3 +1,7 @@
+# Version 3.6.11
+
+* Added Pink Slime Block
+
 # Version 3.6.10
 
 * Fixed manual recipe

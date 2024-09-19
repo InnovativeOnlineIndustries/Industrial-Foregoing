@@ -66,6 +66,13 @@ public class IndustrialRecipeProvider extends RecipeProvider {
     @Override
     public void buildRecipes(RecipeOutput consumer) {
         this.blocks.get().stream().filter(block -> block instanceof BasicBlock).map(block -> (BasicBlock) block).forEach(blockBase -> blockBase.registerRecipe(consumer));
+        TitaniumShapedRecipeBuilder.shapedRecipe(ModuleCore.PINK_SLIME_BLOCK.get())
+                .pattern("PPP").pattern("PPP").pattern("PPP")
+                .define('P', ModuleCore.PINK_SLIME_ITEM.get())
+                .save(consumer);
+        TitaniumShapelessRecipeBuilder.shapelessRecipe(ModuleCore.PINK_SLIME_ITEM.get(), 9)
+                .requires(ModuleCore.PINK_SLIME_BLOCK.get())
+                .save(consumer);
         //TRANSPORT
         ConveyorUpgradeFactory.FACTORIES.forEach(conveyorUpgradeFactory -> conveyorUpgradeFactory.registerRecipe(consumer));
         TransporterTypeFactory.FACTORIES.forEach(typeFactory -> typeFactory.registerRecipe(consumer));
