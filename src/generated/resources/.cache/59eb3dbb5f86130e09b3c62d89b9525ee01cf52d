@@ -1,4 +1,4 @@
-// 1.21.1	2024-09-09T15:04:24.3634904	Loot Tables
+// 1.21.1	2024-09-19T21:04:00.6866647	Loot Tables
 99864471e8960d8dbae74f72410eff78000fc751 data/industrialforegoing/loot_table/blocks/animal_baby_separator.json
 3c5056e2be30144a011c2957097ef922f111dd04 data/industrialforegoing/loot_table/blocks/animal_feeder.json
 a78d8fbadbeec60acf88997e26fc339b42fbbc28 data/industrialforegoing/loot_table/blocks/animal_rancher.json
@@ -53,6 +53,7 @@ f958e195e4383b320759dab085c86eed723b5956 data/industrialforegoing/loot_table/blo
 ea9d3aef6d24a635dbdf75468723aa3ae683464d data/industrialforegoing/loot_table/blocks/mycelial_rocket.json
 c99b31b89f2a3508e9ef08800dbf35a74389abc4 data/industrialforegoing/loot_table/blocks/mycelial_slimey.json
 2a6e13ccf4d134fa3af24c247869a040802c3f50 data/industrialforegoing/loot_table/blocks/ore_laser_base.json
+e0ca32980dcfcc808c899ce07f587c0c416ba587 data/industrialforegoing/loot_table/blocks/pink_slime_block.json
 d35e0193cbc2e67532a045fb5aaa72194fc24920 data/industrialforegoing/loot_table/blocks/pitiful_generator.json
 cd6e589922cb40f6412d807031177fda633e4011 data/industrialforegoing/loot_table/blocks/plant_fertilizer.json
 c66b8d76dfa3b230ab34289109e4357b8e0aeb57 data/industrialforegoing/loot_table/blocks/plant_gatherer.json

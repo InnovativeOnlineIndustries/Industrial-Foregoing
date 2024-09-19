@@ -217,10 +217,10 @@ public class FluidLaserBaseTile extends IndustrialMachineTile<FluidLaserBaseTile
 
     @Override
     public boolean canAcceptAugment(ItemStack augment) {
-        if (AugmentWrapper.hasType(augment, AugmentTypes.SPEED)) {
-            return false;
+        if (AugmentWrapper.hasType(augment, AugmentTypes.EFFICIENCY)) {
+            return true;
         }
-        return super.canAcceptAugment(augment);
+        return false;
     }
 
     @Override

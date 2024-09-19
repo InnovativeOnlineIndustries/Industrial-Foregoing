@@ -1,0 +1,13 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "ingredients": [
+    {
+      "item": "industrialforegoing:pink_slime_block"
+    }
+  ],
+  "result": {
+    "count": 9,
+    "id": "industrialforegoing:pink_slime"
+  }
+}

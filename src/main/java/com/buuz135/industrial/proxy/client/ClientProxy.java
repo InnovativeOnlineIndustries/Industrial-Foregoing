@@ -141,6 +141,7 @@ public class ClientProxy extends CommonProxy {
 
         ItemBlockRenderTypes.setRenderLayer(ModuleTransportStorage.CONVEYOR.getBlock(), RenderType.cutout());
         ItemBlockRenderTypes.setRenderLayer(ModuleTool.INFINITY_BACKPACK_BLOCK.getBlock(), RenderType.cutoutMipped());
+        ItemBlockRenderTypes.setRenderLayer(ModuleCore.PINK_SLIME_BLOCK.get(), RenderType.translucent());
 
         Minecraft.getInstance().getBlockColors().register((state, worldIn, pos, tintIndex) -> {
             if (tintIndex == 0 && worldIn != null && pos != null) {

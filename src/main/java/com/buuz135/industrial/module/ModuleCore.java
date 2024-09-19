@@ -28,6 +28,7 @@ import com.buuz135.industrial.block.MachineFrameBlock;
 import com.buuz135.industrial.block.core.DissolutionChamberBlock;
 import com.buuz135.industrial.block.core.FluidExtractorBlock;
 import com.buuz135.industrial.block.core.LatexProcessingUnitBlock;
+import com.buuz135.industrial.block.core.PinkSlimeBlock;
 import com.buuz135.industrial.block.core.tile.FluidExtractorTile;
 import com.buuz135.industrial.fluid.OreFluidInstance;
 import com.buuz135.industrial.fluid.OreTitaniumFluidType;
@@ -51,11 +52,15 @@ import com.hrznstudio.titanium.tab.TitaniumTab;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.effect.MobEffects;
+import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.DyeColor;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.crafting.RecipeSerializer;
 import net.minecraft.world.item.crafting.RecipeType;
 import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.SoundType;
+import net.minecraft.world.level.block.state.BlockBehaviour;
+import net.minecraft.world.level.material.MapColor;
 import net.neoforged.neoforge.event.tick.LevelTickEvent;
 import net.neoforged.neoforge.fluids.FluidType;
 import net.neoforged.neoforge.registries.DeferredHolder;
@@ -116,6 +121,7 @@ public class ModuleCore implements IModule {
     public static DeferredHolder<RecipeSerializer<?>, RecipeSerializer<?>> CRUSHER_SERIALIZER;
     public static DeferredHolder<RecipeType<?>, RecipeType<?>> CRUSHER_TYPE;
 
+    public static DeferredHolder<Block, Block> PINK_SLIME_BLOCK;
 
     @Override
     public void generateFeatures(DeferredRegistryHelper helper) {
@@ -200,6 +206,8 @@ public class ModuleCore implements IModule {
         STONEWORK_GENERATE_TYPE = helper.registerGeneric(Registries.RECIPE_TYPE, "stonework_generate", () -> RecipeType.simple(ResourceLocation.fromNamespaceAndPath(Reference.MOD_ID, "stonework_generate")));
         CRUSHER_SERIALIZER = helper.registerGeneric(Registries.RECIPE_SERIALIZER, "crusher", () -> new CodecRecipeSerializer<>(CrusherRecipe.class, CRUSHER_TYPE, CrusherRecipe.CODEC));
         CRUSHER_TYPE = helper.registerGeneric(Registries.RECIPE_TYPE, "crusher", () -> RecipeType.simple(ResourceLocation.fromNamespaceAndPath(Reference.MOD_ID, "crusher")));
+
+        PINK_SLIME_BLOCK = helper.registerBlockWithItem("pink_slime_block", () -> new PinkSlimeBlock(BlockBehaviour.Properties.of().mapColor(MapColor.GRASS).friction(0.8F).sound(SoundType.SLIME_BLOCK).noOcclusion()), (block) -> () -> new BlockItem(block.get(), new Item.Properties()), ModuleCore.TAB_CORE);
     }
 
 }
