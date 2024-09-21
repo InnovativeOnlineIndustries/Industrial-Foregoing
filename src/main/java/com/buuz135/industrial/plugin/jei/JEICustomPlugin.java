@@ -27,12 +27,11 @@ import com.buuz135.industrial.api.recipe.ore.OreFluidEntryRaw;
 import com.buuz135.industrial.api.recipe.ore.OreFluidEntrySieve;
 import com.buuz135.industrial.block.generator.MycelialGeneratorBlock;
 import com.buuz135.industrial.block.generator.mycelial.IMycelialGeneratorType;
-import com.buuz135.industrial.block.generator.tile.BioReactorTile;
-import com.buuz135.industrial.block.resourceproduction.tile.MaterialStoneWorkFactoryTile;
 import com.buuz135.industrial.fluid.OreTitaniumFluidType;
 import com.buuz135.industrial.gui.conveyor.GuiConveyor;
 import com.buuz135.industrial.gui.transporter.GuiTransporter;
 import com.buuz135.industrial.module.*;
+import com.buuz135.industrial.plugin.RecipeViewerHelper;
 import com.buuz135.industrial.plugin.jei.category.*;
 import com.buuz135.industrial.plugin.jei.generator.MycelialGeneratorCategory;
 import com.buuz135.industrial.plugin.jei.generator.MycelialGeneratorRecipe;
@@ -72,6 +71,8 @@ import net.neoforged.neoforge.fluids.FluidStack;
 
 import java.util.*;
 import java.util.stream.Collectors;
+
+import static com.buuz135.industrial.plugin.RecipeViewerHelper.generateBioreactorRecipes;
 
 
 @JeiPlugin
@@ -208,29 +209,8 @@ public class JEICustomPlugin implements IModPlugin {
             registration.addRecipes(mycelialGeneratorCategories.get(i).getRecipeType(), IMycelialGeneratorType.TYPES.get(i).getRecipes(IFAttachments.registryAccess()).stream().sorted(Comparator.comparingInt(value -> ((MycelialGeneratorRecipe) value).getTicks() * ((MycelialGeneratorRecipe) value).getPowerTick()).reversed()).collect(Collectors.toList()));
         }
 
-        List<StoneWorkCategory.Wrapper> perfectStoneWorkWrappers = new ArrayList<>();
-        for (StoneWorkGenerateRecipe generatorRecipe : RecipeUtil.getRecipes(Minecraft.getInstance().level, (RecipeType<StoneWorkGenerateRecipe>) ModuleCore.STONEWORK_GENERATE_TYPE.get())) {
-            List<StoneWorkCategory.Wrapper> wrappers = findAllStoneWorkOutputs(generatorRecipe.output, new ArrayList<>());
-            for (StoneWorkCategory.Wrapper workWrapper : new ArrayList<>(wrappers)) {
-                if (perfectStoneWorkWrappers.stream().noneMatch(stoneWorkWrapper -> ItemStack.isSameItem(workWrapper.getOutput(), stoneWorkWrapper.getOutput()))) {
-                    boolean isSomoneShorter = false;
-                    for (StoneWorkCategory.Wrapper workWrapperCompare : new ArrayList<>(wrappers)) {
-                        if (ItemStack.isSameItem(workWrapper.getOutput(), workWrapperCompare.getOutput())) {
-                            List<MaterialStoneWorkFactoryTile.StoneWorkAction> workWrapperCompareModes = new ArrayList<>(workWrapperCompare.getModes());
-                            workWrapperCompareModes.removeIf(mode -> mode.getAction().equalsIgnoreCase("none"));
-                            List<MaterialStoneWorkFactoryTile.StoneWorkAction> workWrapperModes = new ArrayList<>(workWrapper.getModes());
-                            workWrapperModes.removeIf(mode -> mode.getAction().equalsIgnoreCase("none"));
-                            if (workWrapperModes.size() > workWrapperCompareModes.size()) {
-                                isSomoneShorter = true;
-                                break;
-                            }
-                        }
-                    }
-                    if (!isSomoneShorter) perfectStoneWorkWrappers.add(workWrapper);
-                }
-            }
-        }
-        registration.addRecipes(IndustrialRecipeTypes.STONE_WORK, perfectStoneWorkWrappers);
+
+        registration.addRecipes(IndustrialRecipeTypes.STONE_WORK, RecipeViewerHelper.getStoneWork());
 
         registration.addRecipes(
                 machineProduceCategory.getRecipeType(),
@@ -271,41 +251,7 @@ public class JEICustomPlugin implements IModPlugin {
         registration.addRecipes(IndustrialRecipeTypes.ORE_SIEVE, fluidSieve);
     }
 
-    private List<BioReactorRecipeCategory.ReactorRecipeWrapper> generateBioreactorRecipes() {
-        List<BioReactorRecipeCategory.ReactorRecipeWrapper> recipes = new ArrayList<>();
-        for (TagKey<Item> itemTag : BioReactorTile.VALID) {
-            recipes.add(new BioReactorRecipeCategory.ReactorRecipeWrapper(itemTag, new FluidStack(ModuleCore.BIOFUEL.getSourceFluid().get(), 80)));
-        }
-        return recipes;
-    }
 
-    public ItemStack getStoneWorkOutputFrom(ItemStack stack, MaterialStoneWorkFactoryTile.StoneWorkAction mode) {
-        return mode.getWork().apply(Minecraft.getInstance().level, stack.copyWithCount(9));
-    }
-
-    public ItemStack getStoneWorkOutputFrom(ItemStack stack, List<MaterialStoneWorkFactoryTile.StoneWorkAction> modes) {
-        for (MaterialStoneWorkFactoryTile.StoneWorkAction mode : modes) {
-            stack = getStoneWorkOutputFrom(stack.copy(), mode);
-            if (stack.isEmpty()) return ItemStack.EMPTY;
-        }
-        return stack;
-    }
-
-    public List<StoneWorkCategory.Wrapper> findAllStoneWorkOutputs(ItemStack parent, List<MaterialStoneWorkFactoryTile.StoneWorkAction> usedModes) {
-        List<StoneWorkCategory.Wrapper> wrappers = new ArrayList<>();
-        if (usedModes.size() >= 4) return wrappers;
-        for (MaterialStoneWorkFactoryTile.StoneWorkAction mode : MaterialStoneWorkFactoryTile.ACTION_RECIPES) {
-            if (mode.getAction().equals("none")) continue;
-            List<MaterialStoneWorkFactoryTile.StoneWorkAction> usedModesInternal = new ArrayList<>(usedModes);
-            usedModesInternal.add(mode);
-            ItemStack output = getStoneWorkOutputFrom(parent, new ArrayList<>(usedModesInternal));
-            if (!output.isEmpty()) {
-                wrappers.add(new StoneWorkCategory.Wrapper(parent, new ArrayList<>(usedModesInternal), output.copy()));
-                wrappers.addAll(findAllStoneWorkOutputs(parent, new ArrayList<>(usedModesInternal)));
-            }
-        }
-        return wrappers;
-    }
 
     @Override
     public void registerRecipeCatalysts(IRecipeCatalystRegistration registration) {

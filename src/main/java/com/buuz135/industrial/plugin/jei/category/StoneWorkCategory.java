@@ -21,9 +21,9 @@
  */
 package com.buuz135.industrial.plugin.jei.category;
 
-import com.buuz135.industrial.block.resourceproduction.tile.MaterialStoneWorkFactoryTile;
 import com.buuz135.industrial.module.ModuleResourceProduction;
 import com.buuz135.industrial.plugin.jei.IndustrialRecipeTypes;
+import com.buuz135.industrial.plugin.jei.StoneWorkWrapper;
 import com.buuz135.industrial.utils.Reference;
 import mezz.jei.api.constants.VanillaTypes;
 import mezz.jei.api.gui.builder.IRecipeLayoutBuilder;
@@ -35,11 +35,8 @@ import mezz.jei.api.recipe.RecipeType;
 import mezz.jei.api.recipe.category.IRecipeCategory;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.item.ItemStack;
 
-import java.util.List;
-
-public class StoneWorkCategory implements IRecipeCategory<StoneWorkCategory.Wrapper> {
+public class StoneWorkCategory implements IRecipeCategory<StoneWorkWrapper> {
     private final IGuiHelper helper;
 
     public StoneWorkCategory(IGuiHelper helper) {
@@ -47,7 +44,7 @@ public class StoneWorkCategory implements IRecipeCategory<StoneWorkCategory.Wrap
     }
 
     @Override
-    public RecipeType<Wrapper> getRecipeType() {
+    public RecipeType<StoneWorkWrapper> getRecipeType() {
         return IndustrialRecipeTypes.STONE_WORK;
     }
 
@@ -67,39 +64,13 @@ public class StoneWorkCategory implements IRecipeCategory<StoneWorkCategory.Wrap
     }
 
     @Override
-    public void setRecipe(IRecipeLayoutBuilder builder, Wrapper recipe, IFocusGroup focuses) {
-        builder.addSlot(RecipeIngredientRole.INPUT, 1, 5).addIngredient(VanillaTypes.ITEM_STACK, recipe.getInput());
-        builder.addSlot(RecipeIngredientRole.OUTPUT, 139, 5).addIngredient(VanillaTypes.ITEM_STACK, recipe.getOutput());
-        for (int i = 0; i < recipe.getModes().size(); i++) {
-            builder.addSlot(RecipeIngredientRole.CATALYST, 29 + i * 24, 5).addIngredient(VanillaTypes.ITEM_STACK, recipe.getModes().get(i).getIcon());
+    public void setRecipe(IRecipeLayoutBuilder builder, StoneWorkWrapper recipe, IFocusGroup focuses) {
+        builder.addSlot(RecipeIngredientRole.INPUT, 1, 5).addIngredient(VanillaTypes.ITEM_STACK, recipe.input());
+        builder.addSlot(RecipeIngredientRole.OUTPUT, 139, 5).addIngredient(VanillaTypes.ITEM_STACK, recipe.output());
+        for (int i = 0; i < recipe.modes().size(); i++) {
+            builder.addSlot(RecipeIngredientRole.CATALYST, 29 + i * 24, 5).addIngredient(VanillaTypes.ITEM_STACK, recipe.modes().get(i).getIcon());
         }
     }
 
-    public static class Wrapper {
 
-        private final ItemStack input;
-        private final List<MaterialStoneWorkFactoryTile.StoneWorkAction> modes;
-        private final ItemStack output;
-
-        public Wrapper(ItemStack input, List<MaterialStoneWorkFactoryTile.StoneWorkAction> modes, ItemStack output) {
-            this.input = input;
-            this.modes = modes;
-            this.output = output;
-            while (this.modes.size() < 4) {
-                this.modes.add(MaterialStoneWorkFactoryTile.ACTION_RECIPES[4]);
-            }
-        }
-
-        public ItemStack getInput() {
-            return input;
-        }
-
-        public List<MaterialStoneWorkFactoryTile.StoneWorkAction> getModes() {
-            return modes;
-        }
-
-        public ItemStack getOutput() {
-            return output;
-        }
-    }
 }

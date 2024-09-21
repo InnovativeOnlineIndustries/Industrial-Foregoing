@@ -1,8 +1,8 @@
-// 1.21.1	2024-09-08T21:49:24.446492	Tags for minecraft:item mod id industrialforegoing
+// 1.21.1	2024-09-20T23:44:32.5934226	Tags for minecraft:item mod id industrialforegoing
 b4f05d39ccb4e9007094301213bb95a6938cc607 data/c/tags/item/gears/diamond.json
 90ab32de2c9647cd4563103fc413e8eb65356d39 data/c/tags/item/gears/gold.json
 9c226908886b9b4d08706cd03083d72437ce37a7 data/c/tags/item/gears/iron.json
-2d6e82b69161dd2e342201559591f852841ccac5 data/c/tags/item/plastic.json
+2d6e82b69161dd2e342201559591f852841ccac5 data/c/tags/item/plastics.json
 d918ebca6009eb14c2331d495ef14cfebc1511ea data/c/tags/item/slimeballs.json
 d19fb5f318758fdaef5883eac670afb1d488f5ac data/industrialforegoing/tags/item/machine_frame/advanced.json
 078014cbf879ad3b7979dfd739a4f4a9f9436050 data/industrialforegoing/tags/item/machine_frame/pity.json
