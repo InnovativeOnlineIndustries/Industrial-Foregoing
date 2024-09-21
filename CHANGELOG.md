@@ -3,6 +3,8 @@
 * Renamed some tags to add plural versions
 * Fixed Ore Fluids having repeated ore names
 * Added EMI support
+* Fixed Sneak + Right Click in the Mycelial Reactor not showing which generators aren't working
+* Fixed Myceliar Reactor Having the render enabled always
 
 # Version 3.6.11
 

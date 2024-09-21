@@ -69,7 +69,7 @@ public class MycelialReactorTESR implements BlockEntityRenderer<MycelialReactorT
 
     @Override
     public void render(MycelialReactorTile te, float partialTicks, PoseStack stack, MultiBufferSource buffer, int combinedLightIn, int combinedOverlayIn) {
-        //if (te.getBar().getProgress() == 0) return;
+        if (te.getBar().getProgress() == 0) return;
         stack.pushPose();
         stack.scale(1.5F, 1.5F, 1.5F);
         stack.translate(0.30, 1.75, 0.3D);
