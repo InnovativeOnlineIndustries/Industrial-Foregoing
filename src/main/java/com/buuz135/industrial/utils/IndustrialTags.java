@@ -33,7 +33,7 @@ public class IndustrialTags {
 
     public static class Items {
 
-        public static final TagKey<Item> PLASTIC = TagUtil.getItemTag(ResourceLocation.parse("c:" + "plastic"));
+        public static final TagKey<Item> PLASTIC = TagUtil.getItemTag(ResourceLocation.parse("c:" + "plastics"));
 
         public static final TagKey<Item> MACHINE_FRAME_PITY = TagUtil.getItemTag(ResourceLocation.parse(Reference.MOD_ID + ":" + "machine_frame/pity"));
         public static final TagKey<Item> MACHINE_FRAME_SIMPLE = TagUtil.getItemTag(ResourceLocation.parse(Reference.MOD_ID + ":" + "machine_frame/simple"));
@@ -47,7 +47,7 @@ public class IndustrialTags {
         public static final TagKey<Item> GEAR_DIAMOND = TagUtil.getItemTag(ResourceLocation.parse("c:" + "gears/diamond"));
         public static final TagKey<Item> GEAR_IRON = TagUtil.getItemTag(ResourceLocation.parse("c:" + "gears/iron"));
 
-        public static final TagKey<Item> FERTILIZER = TagUtil.getItemTag(ResourceLocation.parse("c:" + "fertilizer"));
+        public static final TagKey<Item> FERTILIZER = TagUtil.getItemTag(ResourceLocation.parse("c:" + "fertilizers"));
     }
 
     public static class Blocks {

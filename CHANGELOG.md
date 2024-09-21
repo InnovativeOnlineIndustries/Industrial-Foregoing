@@ -1,3 +1,9 @@
+# Version 3.6.12
+
+* Renamed some tags to add plural versions
+* Fixed Ore Fluids having repeated ore names
+* Added EMI support
+
 # Version 3.6.11
 
 * Added Pink Slime Block

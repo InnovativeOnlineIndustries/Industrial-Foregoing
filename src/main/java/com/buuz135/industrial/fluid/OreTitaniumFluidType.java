@@ -73,15 +73,7 @@ public class OreTitaniumFluidType extends FluidType {
 
     @Override
     public Component getDescription(FluidStack stack) {
-        String extra = "";
-        if (stack.has(IFAttachments.ORE_FLUID_TAG)) {
-            String tag = stack.get(IFAttachments.ORE_FLUID_TAG);
-            List<Item> items = TagUtil.getAllEntries(BuiltInRegistries.ITEM, TagUtil.getItemTag(ResourceLocation.parse(tag.replace("c:raw_materials/", "c:dusts/")))).stream().toList();
-            if (items.size() > 0) {
-                extra = " (" + Component.translatable(items.get(0).getDescriptionId()).getString() + ")";
-            }
-        }
-        return Component.literal(super.getDescription(stack).getString() + extra);
+        return super.getDescription(stack);
     }
 
     @Override

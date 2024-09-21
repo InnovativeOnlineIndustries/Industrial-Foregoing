@@ -8,13 +8,13 @@
   "type": "industrialforegoing:dissolution_chamber",
   "input": [
     {
-      "tag": "c:plastic"
+      "tag": "c:plastics"
     },
     {
       "tag": "industrialforegoing:machine_frame/supreme"
     },
     {
-      "tag": "c:plastic"
+      "tag": "c:plastics"
     },
     {
       "item": "minecraft:netherite_ingot"

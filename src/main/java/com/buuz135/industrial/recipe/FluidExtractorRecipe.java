@@ -51,6 +51,7 @@ public class FluidExtractorRecipe implements Recipe<CraftingInput> {
             FluidStack.CODEC.fieldOf("output").forGetter(o -> o.output),
             Codec.BOOL.fieldOf("defaultRecipe").forGetter(o -> o.defaultRecipe)
     ).apply(in, FluidExtractorRecipe::new));
+
     public Ingredient input;
     public BlockState result;
     public float breakChance;

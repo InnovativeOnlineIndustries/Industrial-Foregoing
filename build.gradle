@@ -28,6 +28,12 @@ repositories {
             includeGroup "curse.maven"
         }
     }
+    repositories {
+        maven {
+            name = "TerraformersMC"
+            url = "https://maven.terraformersmc.com/"
+        }
+    }
 }
 
 base {
@@ -75,14 +81,18 @@ sourceSets.main.resources { srcDir 'src/generated/resources' }
 
 
 dependencies {
-    implementation "curse.maven:jei-238222:5700879"
+    compileOnly("mezz.jei:jei-1.21.1-neoforge-api:${jei_version}")
+    runtimeOnly("mezz.jei:jei-1.21.1-neoforge:${jei_version}")
     implementation project.dependencies.create('com.hrznstudio:titanium:1.21-4.0.20')
     implementation "curse.maven:jade-324717:5444008"
     compileOnly "curse.maven:crafttweaker-239197:5606075"
     implementation "vazkii.patchouli:Patchouli:${patchouli_version}"
     //runtimeOnly "vazkii.patchouli:Patchouli:${patchouli_version}"
-    implementation "curse.maven:pneumaticcraft-repressurized-281849:5698172"
+    compileOnly "curse.maven:pneumaticcraft-repressurized-281849:5698172"
     implementation "curse.maven:curios-continuation-1037991:5690713"
+    compileOnly "dev.emi:emi-neoforge:${emi_version}:api"
+    runtimeOnly "dev.emi:emi-neoforge:${emi_version}"
+    runtimeOnly "curse.maven:mekanism-268560:5680395"
 }
 
 // This block of code expands all declared replace properties in the specified resource targets.
