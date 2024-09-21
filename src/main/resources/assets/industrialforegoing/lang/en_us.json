@@ -618,6 +618,7 @@
   "emi.category.industrialforegoing.fluid_extractor": "Fluid Extractor",
   "emi.category.industrialforegoing.laser_drill_ore": "Ore Laser Drill",
   "emi.category.industrialforegoing.stone_work": "Stonework Recipes",
-  "emi.category.industrialforegoing.stone_work_generator": "Stonework Generation"
-
+  "emi.category.industrialforegoing.stone_work_generator": "Stonework Generation",
+  "text.industrialforegoing.button.show_particles": "Show Position Particles",
+  "text.industrialforegoing.button.hide_particles": "Hide Position Particles"
 }

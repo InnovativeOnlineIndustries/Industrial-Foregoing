@@ -60,9 +60,8 @@ public class LaserDrillBlock extends IndustrialBlock<LaserDrillTile> {
     @OnlyIn(Dist.CLIENT)
     @Override
     public void animateTick(BlockState stateIn, Level world, BlockPos pos, RandomSource rand) {
-        if (world.getBlockEntity(pos) instanceof LaserDrillTile) {
-            LaserDrillTile tile = (LaserDrillTile) world.getBlockEntity(pos);
-            if (!tile.getTarget().equals(BlockPos.ZERO)) {
+        if (world.getBlockEntity(pos) instanceof LaserDrillTile tile) {
+            if (!tile.getTarget().equals(BlockPos.ZERO) && tile.isSpawnParticles()) {
                 BlockPos target = tile.getTarget();
                 Vec3i vector = tile.getFacingDirection().getOpposite().getNormal();
                 Vec3 vec = new Vec3(pos.getX(), pos.getY(), pos.getZ());

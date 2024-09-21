@@ -39,6 +39,8 @@ public class IndustrialAssetProvider implements IAssetProvider {
 
     public static final IAssetType<IAsset> BUTTON_SHOW_AREA = new GenericAssetType<>(IAssetProvider.DEFAULT_PROVIDER::getAsset, IAsset.class);
     public static final IAssetType<IAsset> BUTTON_HIDE_AREA = new GenericAssetType<>(IAssetProvider.DEFAULT_PROVIDER::getAsset, IAsset.class);
+    public static final IAssetType<IAsset> BUTTON_SHOW_PARTICLE = new GenericAssetType<>(IAssetProvider.DEFAULT_PROVIDER::getAsset, IAsset.class);
+    public static final IAssetType<IAsset> BUTTON_HIDE_PARTICLE = new GenericAssetType<>(IAssetProvider.DEFAULT_PROVIDER::getAsset, IAsset.class);
     public static final IAssetType<IAsset> FERMENTATION_TANK_FULL = new GenericAssetType<>(IAssetProvider.DEFAULT_PROVIDER::getAsset, IAsset.class);
     public static final IAssetType<IAsset> FERMENTATION_TANK_HALF = new GenericAssetType<>(IAssetProvider.DEFAULT_PROVIDER::getAsset, IAsset.class);
     public static final IAssetType<IAsset> FERMENTATION_TANK_ONE = new GenericAssetType<>(IAssetProvider.DEFAULT_PROVIDER::getAsset, IAsset.class);
@@ -65,6 +67,29 @@ public class IndustrialAssetProvider implements IAssetProvider {
         @Override
         public Rectangle getArea() {
             return new Rectangle(78, 1, 14, 14);
+        }
+
+        @Override
+        public ResourceLocation getResourceLocation() {
+            return ASSET_LOCATION;
+        }
+    };
+    private final IAsset SHOW_PARTICLE = new IAsset() {
+        @Override
+        public Rectangle getArea() {
+            return new Rectangle(95, 33, 14, 14);
+        }
+
+        @Override
+        public ResourceLocation getResourceLocation() {
+            return ASSET_LOCATION;
+        }
+    };
+
+    private final IAsset HIDE_PARTICLE = new IAsset() {
+        @Override
+        public Rectangle getArea() {
+            return new Rectangle(95, 49, 14, 14);
         }
 
         @Override
@@ -155,6 +180,8 @@ public class IndustrialAssetProvider implements IAssetProvider {
     public <T extends IAsset> T getAsset(IAssetType<T> assetType) {
         if (assetType == BUTTON_SHOW_AREA) return assetType.castOrDefault(SHOW_AREA);
         if (assetType == BUTTON_HIDE_AREA) return assetType.castOrDefault(HIDE_AREA);
+        if (assetType == BUTTON_SHOW_PARTICLE) return assetType.castOrDefault(SHOW_PARTICLE);
+        if (assetType == BUTTON_HIDE_PARTICLE) return assetType.castOrDefault(HIDE_PARTICLE);
         if (assetType == FERMENTATION_TANK_FULL) return assetType.castOrDefault(FERM_TANK_FULL);
         if (assetType == FERMENTATION_TANK_HALF) return assetType.castOrDefault(FERM_TANK_HALF);
         if (assetType == FERMENTATION_TANK_ONE) return assetType.castOrDefault(FERM_TANK_ONE);

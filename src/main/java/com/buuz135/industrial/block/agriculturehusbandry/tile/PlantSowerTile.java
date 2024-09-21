@@ -82,7 +82,7 @@ public class PlantSowerTile extends IndustrialAreaWorkingTile<PlantSowerTile> {
                 setColor(DyeColor.CYAN).
                 setInputFilter((itemStack, integer) -> itemStack.getItem() instanceof SpecialPlantable || (itemStack.getItem() instanceof BlockItem blockItem && blockItem.getBlock() instanceof BushBlock)).
                 setRange(3, 3).
-                setComponentHarness(this), 118, 84, false));
+                setComponentHarness(this), 100, 84, false));
         this.maxProgress = PlantSowerConfig.maxProgress;
         this.powerPerOperation = PlantSowerConfig.powerPerOperation;
     }

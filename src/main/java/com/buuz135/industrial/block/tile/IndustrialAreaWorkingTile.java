@@ -35,9 +35,10 @@ import com.hrznstudio.titanium.item.AugmentWrapper;
 import com.hrznstudio.titanium.module.BlockWithTile;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.DustParticleOptions;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import net.neoforged.api.distmarker.Dist;
@@ -53,7 +54,10 @@ public abstract class IndustrialAreaWorkingTile<T extends IndustrialAreaWorkingT
     private int pointer;
     @Save
     private boolean showingArea;
+    @Save
+    private boolean spawnParticles;
     private ButtonComponent areaButton;
+    private ButtonComponent particleButton;
     private RangeManager.RangeType type;
     private boolean acceptsRangeUpgrades;
 
@@ -61,6 +65,7 @@ public abstract class IndustrialAreaWorkingTile<T extends IndustrialAreaWorkingT
         super(basicTileBlock, estimatedPower, blockPos, blockState);
         this.pointer = 0;
         this.showingArea = false;
+        this.spawnParticles = true;
         addButton(areaButton = new ButtonComponent(154 - 18, 84, 14, 14) {
             @Override
             @OnlyIn(Dist.CLIENT)
@@ -76,6 +81,23 @@ public abstract class IndustrialAreaWorkingTile<T extends IndustrialAreaWorkingT
             }
         }.setPredicate((playerEntity, compoundNBT) -> {
             this.showingArea = !this.showingArea;
+            this.markForUpdate();
+        }));
+        addButton(particleButton = new ButtonComponent(154 - 18 - 18, 84, 14, 14) {
+            @Override
+            @OnlyIn(Dist.CLIENT)
+            public List<IFactory<? extends IScreenAddon>> getScreenAddons() {
+                List<IFactory<? extends IScreenAddon>> addons = new ArrayList<>();
+                addons.add(() -> new StateButtonAddon(particleButton, new StateButtonInfo(0, IndustrialAssetProvider.BUTTON_HIDE_PARTICLE, "text.industrialforegoing.button.hide_particles"), new StateButtonInfo(1, IndustrialAssetProvider.BUTTON_SHOW_PARTICLE, "text.industrialforegoing.button.show_particles")) {
+                    @Override
+                    public int getState() {
+                        return spawnParticles ? 0 : 1;
+                    }
+                });
+                return addons;
+            }
+        }.setPredicate((playerEntity, compoundNBT) -> {
+            this.spawnParticles = !this.spawnParticles;
             this.markForUpdate();
         }));
         this.type = type;
@@ -98,7 +120,7 @@ public abstract class IndustrialAreaWorkingTile<T extends IndustrialAreaWorkingT
 
     public void increasePointer() {
         BlockPos pointed = getPointedBlockPos();
-        if (this.level instanceof ServerLevel) {
+        if (this.level instanceof ServerLevel && this.spawnParticles) {
             ((ServerLevel) this.level).sendParticles(new DustParticleOptions(new Vector3f(Math.abs(this.worldPosition.getX() % 255) / 256f, Math.abs(this.worldPosition.getY() % 255) / 256f, Math.abs(this.worldPosition.getZ() % 255) / 256f), 1f), pointed.getX() + 0.5, pointed.getY() + 1, pointed.getZ() + 0.5, 1, 0, 0, 0, 0);
         }
         ++pointer;
@@ -119,12 +141,21 @@ public abstract class IndustrialAreaWorkingTile<T extends IndustrialAreaWorkingT
         return super.canAcceptAugment(augment);
     }
 
+    public boolean isSpawnParticles() {
+        return spawnParticles;
+    }
+
     @Override
-    public void serverTick(Level level, BlockPos pos, BlockState state, T blockEntity) {
-        super.serverTick(level, pos, state, blockEntity);
-        BlockPos pointed = getPointedBlockPos();
-        if (level instanceof ServerLevel && level.getGameTime() % 5 == 0 && false) {
-            ((ServerLevel) level).sendParticles(new DustParticleOptions(new Vector3f(Math.abs(pos.getX() % 255) / 256f, Math.abs(pos.getY() % 255) / 256f, Math.abs(pos.getZ() % 255) / 256f), 1f), pointed.getX() + 0.5, pointed.getY() + 1, pointed.getZ() + 0.5, 1, 0, 0, 0, 0);
-        }
+    public void loadSettings(Player player, CompoundTag tag) {
+        super.loadSettings(player, tag);
+        this.spawnParticles = tag.getBoolean("WA_spawnParticles");
+        this.showingArea = tag.getBoolean("WA_showingArea");
+    }
+
+    @Override
+    public void saveSettings(Player player, CompoundTag tag) {
+        super.saveSettings(player, tag);
+        tag.putBoolean("WA_spawnParticles", this.spawnParticles);
+        tag.putBoolean("WA_showingArea", this.showingArea);
     }
 }
