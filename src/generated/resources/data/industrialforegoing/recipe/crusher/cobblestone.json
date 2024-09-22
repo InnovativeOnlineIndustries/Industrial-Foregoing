@@ -1,9 +1,9 @@
 {
   "type": "industrialforegoing:crusher",
   "input": {
-    "tag": "c:cobblestone"
+    "tag": "c:cobblestones/normal"
   },
   "output": {
-    "tag": "c:cobblestone"
+    "item": "minecraft:gravel"
   }
 }

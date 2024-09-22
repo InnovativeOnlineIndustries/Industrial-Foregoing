@@ -1,3 +1,7 @@
+# Version 3.6.13
+
+* Fixed crusher recipes for the Material Stonework Factory
+
 # Version 3.6.12
 
 * Renamed some tags to add plural versions

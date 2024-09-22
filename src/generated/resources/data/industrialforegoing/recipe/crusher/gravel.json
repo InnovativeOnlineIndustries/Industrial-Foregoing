@@ -1,9 +1,9 @@
 {
   "type": "industrialforegoing:crusher",
   "input": {
-    "tag": "c:gravel"
+    "tag": "c:gravels"
   },
   "output": {
-    "tag": "c:gravel"
+    "item": "minecraft:sand"
   }
 }

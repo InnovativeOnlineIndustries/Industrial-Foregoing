@@ -4,7 +4,7 @@
       "type": "neoforge:not",
       "value": {
         "type": "neoforge:tag_empty",
-        "tag": "c:silicon"
+        "tag": "c:silicons"
       }
     }
   ],
@@ -13,6 +13,6 @@
     "tag": "c:sand"
   },
   "output": {
-    "tag": "c:sand"
+    "tag": "c:silicon"
   }
 }

@@ -47,7 +47,7 @@ public class CrusherRecipe implements Recipe<CraftingInput> {
 
     public static final MapCodec<CrusherRecipe> CODEC = RecordCodecBuilder.mapCodec(in -> in.group(
             Ingredient.CODEC.fieldOf("input").forGetter(crusherRecipe -> crusherRecipe.input),
-            Ingredient.CODEC.fieldOf("output").forGetter(crusherRecipe -> crusherRecipe.input)
+            Ingredient.CODEC.fieldOf("output").forGetter(crusherRecipe -> crusherRecipe.output)
     ).apply(in, CrusherRecipe::new));
 
 
@@ -69,9 +69,9 @@ public class CrusherRecipe implements Recipe<CraftingInput> {
     private ResourceLocation isTag;
 
     public static void init(RecipeOutput output) {
-        createRecipe(output, "cobblestone", new CrusherRecipe(Ingredient.of(TagUtil.getItemTag(ResourceLocation.fromNamespaceAndPath("c", "cobblestone"))), Ingredient.of(Items.GRAVEL)));
-        createRecipe(output, "gravel", new CrusherRecipe(Ingredient.of(TagUtil.getItemTag(ResourceLocation.fromNamespaceAndPath("c", "gravel"))), Ingredient.of(Items.SAND)));
-        createRecipe(output, "sand", new CrusherRecipe(Ingredient.of(TagUtil.getItemTag(ResourceLocation.fromNamespaceAndPath("c", "sand"))), Ingredient.of(TagUtil.getItemTag(ResourceLocation.fromNamespaceAndPath("c", "silicon"))), ResourceLocation.fromNamespaceAndPath("c", "silicon")));
+        createRecipe(output, "cobblestone", new CrusherRecipe(Ingredient.of(TagUtil.getItemTag(ResourceLocation.fromNamespaceAndPath("c", "cobblestones/normal"))), Ingredient.of(Items.GRAVEL)));
+        createRecipe(output, "gravel", new CrusherRecipe(Ingredient.of(TagUtil.getItemTag(ResourceLocation.fromNamespaceAndPath("c", "gravels"))), Ingredient.of(Items.SAND)));
+        createRecipe(output, "sand", new CrusherRecipe(Ingredient.of(TagUtil.getItemTag(ResourceLocation.fromNamespaceAndPath("c", "sand"))), Ingredient.of(TagUtil.getItemTag(ResourceLocation.fromNamespaceAndPath("c", "silicon"))), ResourceLocation.fromNamespaceAndPath("c", "silicons")));
     }
 
     public static void createRecipe(RecipeOutput recipeOutput, String name, CrusherRecipe recipe) {
