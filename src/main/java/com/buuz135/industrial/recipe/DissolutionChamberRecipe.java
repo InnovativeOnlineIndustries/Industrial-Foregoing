@@ -136,7 +136,12 @@ public class DissolutionChamberRecipe implements Recipe<CraftingInput> {
 
     @Override
     public ItemStack getResultItem(HolderLookup.Provider provider) {
-        return null;
+        return this.output.orElse(ItemStack.EMPTY).copy();
+    }
+
+    @Override
+    public ItemStack getToastSymbol() {
+        return new ItemStack(ModuleCore.DISSOLUTION_CHAMBER.getBlock());
     }
 
     @Override

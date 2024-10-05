@@ -12,6 +12,10 @@
     {
       "type": "text",
       "text": "When right clicked into the ground it will make a $(6)shatter$() effect into the ground in a cone shape in front of the user."
+    },
+    {
+      "type": "industrialforegoing:dissolution",
+      "recipe": "industrialforegoing:dissolution_chamber/infinity_hammer"
     }
   ]
 }
