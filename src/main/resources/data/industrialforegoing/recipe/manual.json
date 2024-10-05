@@ -1,4 +1,10 @@
 {
+  "neoforge:conditions": [
+    {
+      "type": "neoforge:item_exists",
+      "item": "patchouli:guide_book"
+    }
+  ],
   "type": "minecraft:crafting_shapeless",
   "ingredients": [
     {
