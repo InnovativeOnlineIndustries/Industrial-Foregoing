@@ -43,6 +43,7 @@ import net.minecraft.world.level.biome.MobSpawnSettings;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.AABB;
+import net.neoforged.neoforge.event.EventHooks;
 import net.neoforged.neoforge.fluids.FluidStack;
 import net.neoforged.neoforge.fluids.capability.IFluidHandler;
 
@@ -90,13 +91,13 @@ public class MechanicalDirtTile extends IndustrialWorkingTile<MechanicalDirtTile
 
     private Mob getMobToSpawn() {
         List<MobSpawnSettings.SpawnerData> spawnListEntries = ((ServerLevel) this.level).getChunkSource().getGenerator().getMobsAt(this.level.getBiome(this.worldPosition.above()), ((ServerLevel) this.level).structureManager(), MobCategory.MONSTER, this.worldPosition.above()).unwrap();
-        if (spawnListEntries.size() == 0) return null;
+        if (spawnListEntries.isEmpty()) return null;
         MobSpawnSettings.SpawnerData spawnListEntry = spawnListEntries.get(level.random.nextInt(spawnListEntries.size()));
         if (!SpawnPlacements.checkSpawnRules(spawnListEntry.type, (ServerLevelAccessor) this.level, MobSpawnType.NATURAL, worldPosition.above(), level.random))
             return null;
         Entity entity = spawnListEntry.type.create(level);
         if (entity instanceof Mob) {
-            ((Mob) entity).finalizeSpawn((ServerLevelAccessor) level, level.getCurrentDifficultyAt(worldPosition), MobSpawnType.NATURAL, null);
+            EventHooks.finalizeMobSpawn((Mob) entity, (ServerLevelAccessor) level, level.getCurrentDifficultyAt(worldPosition), MobSpawnType.NATURAL, null);
             entity.setPos(worldPosition.getX() + 0.5, worldPosition.getY() + 1.001, worldPosition.getZ() + 0.5);
             if (level.noCollision(entity) && level.isUnobstructed(entity, level.getBlockState(worldPosition.above()).getShape(level, worldPosition.above()))) { //doesNotCollide
                 return (Mob) entity;
