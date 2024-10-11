@@ -292,7 +292,7 @@ public class ItemInfinityTrident extends ItemInfinity {
 
     @Override
     public void registerRecipe(RecipeOutput consumer) {
-        DissolutionChamberRecipe.createRecipe(consumer, "ininity_trident", new DissolutionChamberRecipe(List.of(
+        DissolutionChamberRecipe.createRecipe(consumer, "infinity_trident", new DissolutionChamberRecipe(List.of(
                 Ingredient.of(new ItemStack(Items.DIAMOND_BLOCK)),
                 Ingredient.of(new ItemStack(Items.TRIDENT)),
                 Ingredient.of(new ItemStack(Items.DIAMOND_BLOCK)),

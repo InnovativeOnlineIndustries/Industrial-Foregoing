@@ -23,6 +23,8 @@
 package com.buuz135.industrial.plugin;
 
 import com.buuz135.industrial.module.ModuleCore;
+import com.buuz135.industrial.plugin.patchouli.PageDissolution;
+import com.buuz135.industrial.utils.Reference;
 import com.hrznstudio.titanium.annotation.plugin.FeaturePlugin;
 import com.hrznstudio.titanium.event.handler.EventManager;
 import com.hrznstudio.titanium.plugin.FeaturePluginInstance;
@@ -31,6 +33,7 @@ import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
 import net.neoforged.neoforge.event.BuildCreativeModeTabContentsEvent;
+import vazkii.patchouli.client.book.ClientBookRegistry;
 import vazkii.patchouli.common.item.PatchouliDataComponents;
 
 @FeaturePlugin(value = "patchouli", type = FeaturePlugin.FeaturePluginType.MOD)
@@ -47,6 +50,9 @@ public class PatchouliPlugin implements FeaturePluginInstance {
                     buildCreativeModeTabContentsEvent.accept(item);
                 }
             }).subscribe();
+        }
+        if (phase == PluginPhase.CLIENT_SETUP) {
+            ClientBookRegistry.INSTANCE.pageTypes.put(ResourceLocation.fromNamespaceAndPath(Reference.MOD_ID, "dissolution"), PageDissolution.class);
         }
     }
 

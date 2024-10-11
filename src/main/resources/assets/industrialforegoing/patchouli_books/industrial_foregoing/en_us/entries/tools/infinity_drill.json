@@ -8,6 +8,10 @@
     {
       "type": "text",
       "text": "The Infinity Drill is a tool that allows you to mine big areas, the bigger the tier the bigger the area."
+    },
+    {
+      "type": "industrialforegoing:dissolution",
+      "recipe": "industrialforegoing:dissolution_chamber/infinity_drill"
     }
   ]
 }

@@ -16,6 +16,10 @@
     {
       "type": "text",
       "text": "You can get special $(6)Shiny$() version of the tool by becoming a patreon. It will give you visual rewards! "
+    },
+    {
+      "type": "industrialforegoing:dissolution",
+      "recipe": "industrialforegoing:dissolution_chamber/infinity_drill"
     }
   ]
 }
