@@ -1,3 +1,7 @@
+# Version 3.6.15
+
+* Changed mods.toml config to use proper required dependencies, closes #1490
+
 # Version 3.6.14
 
 * Optimize JEI startup time (#1481) - mezz
