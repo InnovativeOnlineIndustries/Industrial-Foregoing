@@ -224,18 +224,18 @@ public class PotionBrewerTile extends IndustrialProcessingTile<PotionBrewerTile>
 
     private void brewPotions(int slot) {
         NonNullList<ItemStack> input = NonNullList.create();
-        input.addAll(InventoryUtil.getStacks(this.output));
         ItemStack ingredient = this.brewingItems.getInventory().getStackInSlot(slot);
-        input.add(ingredient);
+        input.addAll(InventoryUtil.getStacks(this.output));
+
         if (EventHooks.onPotionAttemptBrew(input)) return;
-        for (int i = 0; i < this.output.getSlots(); i++) {
-            input.set(i, this.level.potionBrewing().mix(ingredient, input.get(i)));
-        }
+
+        input.replaceAll(potionItem -> this.level.potionBrewing().mix(ingredient, potionItem));
+
         ingredient.shrink(1);
+
         EventHooks.onPotionBrewed(input);
-        for (int i = 0; i < this.output.getSlots(); i++) {
-            this.output.setStackInSlot(i, input.get(i));
-        }
+
+        for (int i = 0; i < input.size(); i++) this.output.setStackInSlot(i, input.get(i));
     }
 
     @Override

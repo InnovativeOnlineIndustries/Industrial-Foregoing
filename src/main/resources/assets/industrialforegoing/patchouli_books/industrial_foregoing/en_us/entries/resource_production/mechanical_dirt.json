@@ -12,6 +12,10 @@
     {
       "type": "text",
       "text": "When one block is supplied with $(6)Power$() or $(6)Liquid Meat$(), it will automatically be equally divided by any connected blocks."
+    },
+    {
+      "type": "industrialforegoing:dissolution",
+      "recipe": "industrialforegoing:dissolution_chamber/mechanical_dirt"
     }
   ]
 }

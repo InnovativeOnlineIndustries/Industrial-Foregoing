@@ -1,0 +1,9 @@
+{
+  "package": "com.buuz135.industrial.mixin",
+  "required": true,
+  "minVersion": "0.8",
+  "compatibilityLevel": "JAVA_21",
+  "mixins": [
+    "IBushBlockMixin"
+  ]
+}

@@ -12,6 +12,10 @@
     {
       "type": "text",
       "text": "Maybe new technologies can be discovered in the future using this network."
+    },
+    {
+      "type": "industrialforegoing:dissolution",
+      "recipe": "industrialforegoing:dissolution_chamber/mycelial_reactor"
     }
   ]
 }

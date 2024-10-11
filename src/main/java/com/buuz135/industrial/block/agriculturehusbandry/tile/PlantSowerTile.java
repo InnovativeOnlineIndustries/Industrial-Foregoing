@@ -26,6 +26,7 @@ import com.buuz135.industrial.block.tile.IndustrialAreaWorkingTile;
 import com.buuz135.industrial.block.tile.RangeManager;
 import com.buuz135.industrial.config.machine.agriculturehusbandry.PlantSowerConfig;
 import com.buuz135.industrial.item.addon.RangeAddonItem;
+import com.buuz135.industrial.mixin.IBushBlockMixin;
 import com.buuz135.industrial.module.ModuleAgricultureHusbandry;
 import com.hrznstudio.titanium.annotation.Save;
 import com.hrznstudio.titanium.api.filter.FilterSlot;
@@ -37,7 +38,6 @@ import com.hrznstudio.titanium.item.AugmentWrapper;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.tags.BlockTags;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.DyeColor;
@@ -101,21 +101,19 @@ public class PlantSowerTile extends IndustrialAreaWorkingTile<PlantSowerTile> {
                 }
             }
 
-            if (!stack.isEmpty() && stack.getItem() instanceof BlockItem blockItem && blockItem.getBlock() instanceof BushBlock bushBlock) {
-                var isValidFarm = false;
-                if (bushBlock instanceof SaplingBlock block) {
-                    isValidFarm = level.getBlockState(pos.below()).is(BlockTags.DIRT);
-                } else if (bushBlock instanceof CropBlock block) {
-                    isValidFarm = level.getBlockState(pos.below()).getBlock() instanceof FarmBlock;
-                }
-                if (isValidFarm) {
-                    BlockState blockstate1 = blockItem.getBlock().defaultBlockState();
-                    level.setBlockAndUpdate(pos, blockstate1);
-                    stack.shrink(1);
-                    increasePointer();
-                    return new WorkAction(0.2f, powerPerOperation);
-                }
+            if (
+                !stack.isEmpty() &&
+                stack.getItem() instanceof BlockItem blockItem &&
+                blockItem.getBlock() instanceof BushBlock bushBlock &&
+                ((IBushBlockMixin) bushBlock).invokeMayPlaceOn(this.level.getBlockState(pos.below()), level, pos.below())
+            ) {
+                BlockState blockstate1 = blockItem.getBlock().defaultBlockState();
+                level.setBlockAndUpdate(pos, blockstate1);
+                stack.shrink(1);
+                increasePointer();
+                return new WorkAction(0.2f, powerPerOperation);
             }
+            
             if (!stack.isEmpty() && stack.getItem() instanceof SpecialPlantable specialPlantable && specialPlantable.canPlacePlantAtPosition(stack, level, pos.below(), Direction.UP)) {
                 specialPlantable.spawnPlantAtPosition(stack, level, pos.below(), Direction.UP);
                 stack.shrink(1);
