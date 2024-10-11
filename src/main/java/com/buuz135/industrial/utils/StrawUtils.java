@@ -36,8 +36,7 @@ public class StrawUtils {
 
     @Nonnull
     public static Optional<StrawHandler> getStrawHandler(@Nonnull Fluid stack) {
-        @NotNull List<StrawHandler> current = IFRegistries.STRAW_HANDLER_REGISTRY.stream().toList();
-        current.sort(Comparator.comparingInt(StrawHandler::getPriority));
+        @NotNull List<StrawHandler> current = IFRegistries.STRAW_HANDLER_REGISTRY.stream().sorted(Comparator.comparingInt(StrawHandler::getPriority)).toList();
         for (StrawHandler handler : current) {
             if (handler.validFluid(stack))
                 return Optional.of(handler);

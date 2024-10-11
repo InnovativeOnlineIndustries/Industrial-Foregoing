@@ -113,7 +113,7 @@ public class MobCrusherTile extends IndustrialAreaWorkingTile<MobCrusherTile> {
                 setInputFilter((stack, integer) -> false).
                 setComponentHarness(this)
         );
-        this.addButton(buttonComponent = new ButtonComponent(154 - 18 * 2, 84, 14, 14) {
+        this.addButton(buttonComponent = new ButtonComponent(154 - 18 * 3, 84, 14, 14) {
             @Override
             @OnlyIn(Dist.CLIENT)
             public List<IFactory<? extends IScreenAddon>> getScreenAddons() {
