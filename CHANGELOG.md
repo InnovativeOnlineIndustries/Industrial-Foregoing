@@ -1,3 +1,19 @@
+# Version 3.6.15
+
+* Changed mods.toml config to use proper required dependencies, closes #1490
+
+# Version 3.6.14
+
+* Optimize JEI startup time (#1481) - mezz
+* Add item_exists condition to the guide recipe (#1482)  - Mrbysco
+* Add a Dissolution page to Patchouli (#1483) - Mrbysco
+* A bunch of Bug Fixes for 1.21 (#1486) - Kanzaji
+  * StrawUtils tries to sort immutable list causing crash #1478
+  * Infinity Tools don't appear to consume biofuel #1476
+  * Mob Crusher UI problem #1472
+  * Plant Sower isnt working with netherwart #1477
+  * Potion brewer causes game to exit upon adding ingredients after netherwart #1479
+
 # Version 3.6.13
 
 * Fixed crusher recipes for the Material Stonework Factory

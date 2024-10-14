@@ -8,6 +8,10 @@
     {
       "type": "text",
       "text": "The Infinity Trident is a tool that allows you to release the true power of a Trident. Increasing the tier will give you access to different levels of $(6)Loyalty$(), $(6)Riptide$() and $(6)Channeling$(). $(br2)Channeling and hit damage will be applied in aoe."
+    },
+    {
+      "type": "industrialforegoing:dissolution",
+      "recipe": "industrialforegoing:dissolution_chamber/infinity_trident"
     }
   ]
 }

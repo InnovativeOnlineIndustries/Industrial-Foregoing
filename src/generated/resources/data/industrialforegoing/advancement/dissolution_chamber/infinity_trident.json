@@ -9,7 +9,7 @@
   "criteria": {
     "has_the_recipe": {
       "conditions": {
-        "recipe": "industrialforegoing:dissolution_chamber/ininity_trident"
+        "recipe": "industrialforegoing:dissolution_chamber/infinity_trident"
       },
       "trigger": "minecraft:recipe_unlocked"
     }
@@ -21,7 +21,7 @@
   ],
   "rewards": {
     "recipes": [
-      "industrialforegoing:dissolution_chamber/ininity_trident"
+      "industrialforegoing:dissolution_chamber/infinity_trident"
     ]
   }
 }
