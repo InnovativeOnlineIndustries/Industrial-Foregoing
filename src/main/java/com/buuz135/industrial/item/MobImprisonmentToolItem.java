@@ -80,7 +80,7 @@ public class MobImprisonmentToolItem extends IFCustomItem {
         nbt.putString("entity", EntityType.getKey(target.getType()).toString());
         target.saveWithoutId(nbt);
         stack.setTag(nbt);
-        target.remove(Entity.RemovalReason.KILLED);
+        target.remove(Entity.RemovalReason.DISCARDED);
         return true;
     }
 
