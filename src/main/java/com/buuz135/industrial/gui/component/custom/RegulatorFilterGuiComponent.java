@@ -102,13 +102,13 @@ public abstract class RegulatorFilterGuiComponent extends PositionedGuiComponent
                 int posX = guiX + getXPos() + x * 18;
                 int posY = guiY + getXPos() + i * 18;
                 guiGraphics.blit(BG_TEXTURE, posX, posY, 176, 0, 18, 18); //blit
-                if (!getFilter().getFilter()[pos].getStack().isEmpty()) {
-                    guiGraphics.renderItem(getFilter().getFilter()[pos].getStack(), posX + 1, posY + 1);
+                if (!getFilter().getFilterSlots()[pos].getStack().isEmpty()) {
+                    guiGraphics.renderItem(getFilter().getFilterSlots()[pos].getStack(), posX + 1, posY + 1);
                     if (isRegulator()) {
                         guiGraphics.pose().pushPose();
                         guiGraphics.pose().translate(0, 0, 260);
                         guiGraphics.pose().scale(0.5f, 0.5f, 0.5f);
-                        String amount = getFilter().getFilter()[pos].getAmount() + "";
+                        String amount = getFilter().getFilterSlots()[pos].getAmount() + "";
                         guiGraphics.drawString(Minecraft.getInstance().font, ChatFormatting.WHITE + amount, (int) ((posX + 17 - Minecraft.getInstance().font.width(amount) / 2f) * 2), (posY + 13) * 2, 0xFFFFFF);
                         guiGraphics.pose().popPose();
                     }
@@ -139,7 +139,9 @@ public abstract class RegulatorFilterGuiComponent extends PositionedGuiComponent
 
     public abstract RegulatorFilter getFilter();
 
-    public abstract boolean isRegulator();
+    public boolean isRegulator() {
+        return getFilter().isRegulated();
+    };
 
     @Nullable
     @Override
@@ -149,8 +151,8 @@ public abstract class RegulatorFilterGuiComponent extends PositionedGuiComponent
             for (int x = 0; x < getXSize(); x++) {
                 int posX = guiX + getXPos() + x * 18;
                 int posY = guiY + getXPos() + i * 18;
-                if (mouseX > posX + 1 && mouseX < posX + 1 + 16 && mouseY > posY + 1 && mouseY < posY + 1 + 16 && !getFilter().getFilter()[pos].getStack().isEmpty()) {
-                    List<Component> strings = Minecraft.getInstance().screen.getTooltipFromItem(Minecraft.getInstance(), getFilter().getFilter()[pos].getStack());
+                if (mouseX > posX + 1 && mouseX < posX + 1 + 16 && mouseY > posY + 1 && mouseY < posY + 1 + 16 && !getFilter().getFilterSlots()[pos].getStack().isEmpty()) {
+                    List<Component> strings = Minecraft.getInstance().screen.getTooltipFromItem(Minecraft.getInstance(), getFilter().getFilterSlots()[pos].getStack());
                     if (isRegulator())
                         strings.add(Component.literal(ChatFormatting.DARK_GRAY + "*Use Scroll Wheel to change*"));
                     return strings;
