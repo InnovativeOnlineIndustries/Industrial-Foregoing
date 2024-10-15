@@ -26,7 +26,7 @@ import com.buuz135.industrial.api.transporter.FilteredTransporterType;
 import com.buuz135.industrial.api.transporter.TransporterType;
 import com.buuz135.industrial.api.transporter.TransporterTypeFactory;
 import com.buuz135.industrial.block.transportstorage.tile.TransporterTile;
-import com.buuz135.industrial.proxy.block.filter.IFilter;
+import com.buuz135.industrial.block.transportstorage.transporter.filter.ItemFilter;
 import com.buuz135.industrial.proxy.block.filter.RegulatorFilter;
 import com.buuz135.industrial.proxy.client.render.TransporterTESR;
 import com.buuz135.industrial.utils.IndustrialTags;
@@ -53,6 +53,7 @@ import net.neoforged.neoforge.capabilities.Capabilities;
 import net.neoforged.neoforge.common.Tags;
 import net.neoforged.neoforge.items.IItemHandler;
 import net.neoforged.neoforge.items.ItemHandlerHelper;
+import org.jetbrains.annotations.NotNull;
 import org.joml.Matrix4f;
 import org.joml.Vector3f;
 
@@ -67,100 +68,90 @@ public class TransporterItemType extends FilteredTransporterType<ItemStack, IIte
 
     public static final int QUEUE_SIZE = 6;
 
-    private HashMap<Direction, List<ItemStack>> queue;
+    private final HashMap<Direction, List<ItemStack>> queue;
     private int extractSlot;
 
-    public TransporterItemType(IBlockContainer container, TransporterTypeFactory factory, Direction side, TransporterTypeFactory.TransporterAction action) {
+    public TransporterItemType(IBlockContainer<?> container, TransporterTypeFactory factory, Direction side, TransporterTypeFactory.TransporterAction action) {
         super(container, factory, side, action);
         this.queue = new HashMap<>();
         this.extractSlot = 0;
         for (Direction value : Direction.values()) {
-            while (this.queue.computeIfAbsent(value, direction -> new ArrayList<>()).size() < QUEUE_SIZE) {
-                this.queue.get(value).add(0, ItemStack.EMPTY);
-            }
-            if (this.queue.size() > QUEUE_SIZE) {
-                this.queue.get(value).remove(this.queue.get(value).size() - 1);
-            }
+            while (this.queue.computeIfAbsent(value, direction -> new ArrayList<>()).size() < QUEUE_SIZE)
+                this.queue.get(value).addFirst(ItemStack.EMPTY);
+
+            if (this.queue.size() > QUEUE_SIZE)
+                this.queue.get(value).removeLast();
         }
     }
 
     @Override
     public RegulatorFilter<ItemStack, IItemHandler> createFilter() {
-        return new RegulatorFilter<ItemStack, IItemHandler>(20, 20, 5, 3, 16, 64, 1024 * 8, "") {
-            @Override
-            public int matches(ItemStack stack, IItemHandler itemHandler, boolean isRegulated) {
-                if (isEmpty()) return stack.getCount();
-                int amount = 0;
-                if (isRegulated) {
-                    for (int i = 0; i < itemHandler.getSlots(); i++) {
-                        if (ItemStack.isSameItem(itemHandler.getStackInSlot(i), stack)) {
-                            amount += itemHandler.getStackInSlot(i).getCount();
-                        }
-                    }
-                }
-
-                for (IFilter.GhostSlot slot : this.getFilter()) {
-                    if (ItemStack.isSameItem(slot.getStack(), stack)) {
-                        int maxAmount = isRegulated ? slot.getAmount() : Integer.MAX_VALUE;
-                        int returnAmount = Math.min(stack.getCount(), maxAmount - amount);
-                        if (returnAmount > 0) return returnAmount;
-                    }
-                }
-                return 0;
-            }
-        };
+        return new ItemFilter(20, 20, 5, 3, 16, 64, 1024 * 8, "");
     }
 
     @Override
     public void update() {
         super.update();
         float speed = getSpeed();
-        if (!getLevel().isClientSide && getLevel().getGameTime() % (Math.max(1, 4 - speed)) == 0) {
-            IBlockContainer container = getContainer();
-            if (getAction() == TransporterTypeFactory.TransporterAction.EXTRACT && container instanceof TransporterTile) {
-                for (Direction direction : ((TransporterTile) container).getTransporterTypeMap().keySet()) {
-                    TransporterType transporterType = ((TransporterTile) container).getTransporterTypeMap().get(direction);
-                    if (transporterType instanceof TransporterItemType && transporterType.getAction() == TransporterTypeFactory.TransporterAction.INSERT) {
-                        var origin = getLevel().getCapability(Capabilities.ItemHandler.BLOCK, getPos().relative(this.getSide()), getSide().getOpposite());
-                        if (origin != null) {
-                            var destination = getLevel().getCapability(Capabilities.ItemHandler.BLOCK, getPos().relative(direction), direction.getOpposite());
-                            if (destination != null) {
-                                if (extractSlot >= origin.getSlots() || origin.getStackInSlot(extractSlot).isEmpty()
-                                        || !filter(this.getFilter(), this.isWhitelist(), origin.getStackInSlot(extractSlot), origin, false)
-                                        || !filter(((TransporterItemType) transporterType).getFilter(), ((TransporterItemType) transporterType).isWhitelist(), origin.getStackInSlot(extractSlot), destination, ((TransporterItemType) transporterType).isRegulated()))
-                                    findSlot(origin, ((TransporterItemType) transporterType).getFilter(), ((TransporterItemType) transporterType).isWhitelist(), destination, ((TransporterItemType) transporterType).isRegulated());
-                                if (extractSlot >= origin.getSlots()) return;
-                                if (!origin.getStackInSlot(extractSlot).isEmpty()) {
-                                    int amount = (int) (1 * getEfficiency());
-                                    ItemStack extracted = origin.extractItem(extractSlot, amount, true);
-                                    int simulatedAmount = ((TransporterItemType) transporterType).getFilter().matches(extracted, destination, ((TransporterItemType) transporterType).isRegulated());
-                                    if (!extracted.isEmpty() && filter(this.getFilter(), this.isWhitelist(), extracted, origin, false) && filter(((TransporterItemType) transporterType).getFilter(), ((TransporterItemType) transporterType).isWhitelist(), origin.getStackInSlot(extractSlot), destination, ((TransporterItemType) transporterType).isRegulated()) && simulatedAmount > 0) {
-                                        ItemStack returned = ItemHandlerHelper.insertItem(destination, extracted, true);
-                                        if (returned.isEmpty() || amount - returned.getCount() > 0) {
-                                            extracted = origin.extractItem(extractSlot, returned.isEmpty() ? simulatedAmount : simulatedAmount - returned.getCount(), false);
-                                            ItemHandlerHelper.insertItem(destination, extracted, false);
-                                            ((TransporterItemType) transporterType).addTransferedStack(getSide(), extracted);
-                                        } else {
-                                            this.extractSlot++;
-                                            if (this.extractSlot >= origin.getSlots()) this.extractSlot = 0;
-                                        }
-                                    }
-                                }
-                                container.requestSync();
-                            }
-                        }
+        if (getLevel().isClientSide || getLevel().getGameTime() % (Math.max(1, 4 - speed)) != 0) return;
+
+        IBlockContainer<?> container = getContainer();
+        if (getAction() != TransporterTypeFactory.TransporterAction.EXTRACT || !(container instanceof TransporterTile transporterTile)) return;
+
+        for (Direction direction : transporterTile.getTransporterTypeMap().keySet()) {
+            TransporterType transporterType = transporterTile.getTransporterTypeMap().get(direction);
+            if (transporterType instanceof TransporterItemType itemTransporter && transporterType.getAction() == TransporterTypeFactory.TransporterAction.INSERT) {
+                var origin = getLevel().getCapability(Capabilities.ItemHandler.BLOCK, getPos().relative(this.getSide()), getSide().getOpposite());
+                if (origin == null) continue;
+
+                var destination = getLevel().getCapability(Capabilities.ItemHandler.BLOCK, getPos().relative(direction), direction.getOpposite());
+                if (destination == null) continue;
+
+                if (extractSlot >= origin.getSlots()
+                    || origin.getStackInSlot(extractSlot).isEmpty()
+                    || !this.getFilter().canExtract(origin.getStackInSlot(extractSlot), origin)
+                    || !itemTransporter.getFilter().canInsert(origin.getStackInSlot(extractSlot), destination)
+                ) findSlot(origin, destination, itemTransporter);
+
+                if (extractSlot >= origin.getSlots()) return;
+
+                if (origin.getStackInSlot(extractSlot).isEmpty()) {
+                    container.requestSync();
+                    continue;
+                }
+
+                int amount = (int) Math.ceil(1 * getEfficiency());
+                ItemStack extracted = origin.extractItem(extractSlot, amount, true);
+                int simulatedAmount = Math.min(
+                    this.getFilter().getExtractAmount(extracted, origin),
+                    itemTransporter.getFilter().getInsertAmount(extracted, destination)
+                );
+
+                // Here to avoid situations like this:
+                // Extract filter - 20
+                // Insert Filter - 100
+                // Extract Chest - 128
+
+                // Max 0 <> 128 - 20 -> 108 -> Extracted Items possible
+                // Max 0 <> 100 - 0 -> 100 -> Possible Inserted Items
+                // Min 108 <> 100 -> 100 -> From the above, simulated insertion is 100, but I can transfer 63 only!
+                simulatedAmount = Math.min(amount, simulatedAmount);
+
+                if (!extracted.isEmpty() && simulatedAmount > 0) {
+                    ItemStack returned = ItemHandlerHelper.insertItem(destination, extracted, true);
+                    if (returned.isEmpty() || amount - returned.getCount() > 0) {
+                        extracted = origin.extractItem(extractSlot, returned.isEmpty() ? simulatedAmount : simulatedAmount - returned.getCount(), false);
+                        ItemHandlerHelper.insertItem(destination, extracted, false);
+                        itemTransporter.addTransferedStack(getSide(), extracted);
+                    } else {
+                        this.extractSlot++;
+                        if (this.extractSlot >= origin.getSlots()) this.extractSlot = 0;
                     }
                 }
+
+                container.requestSync();
             }
         }
-    }
-
-    private boolean filter(RegulatorFilter<ItemStack, IItemHandler> filter, boolean whitelist, ItemStack stack, IItemHandler handler, boolean isRegulated) {
-        int accepts = filter.matches(stack, handler, isRegulated);
-        if (whitelist && filter.isEmpty()) {
-            return false;
-        }
-        return filter.isEmpty() != (whitelist == (accepts > 0));
     }
 
     @Override
@@ -168,18 +159,21 @@ public class TransporterItemType extends FilteredTransporterType<ItemStack, IIte
         super.updateClient();
         for (Direction value : Direction.values()) {
             while (this.queue.computeIfAbsent(value, direction -> new ArrayList<>()).size() < QUEUE_SIZE) {
-                this.queue.get(value).add(0, ItemStack.EMPTY);
+                this.queue.get(value).addFirst(ItemStack.EMPTY);
             }
-            this.queue.get(value).add(0, ItemStack.EMPTY);
+            this.queue.get(value).addFirst(ItemStack.EMPTY);
             while (this.queue.get(value).size() > QUEUE_SIZE) {
-                this.queue.get(value).remove(this.queue.get(value).size() - 1);
+                this.queue.get(value).removeLast();
             }
         }
     }
 
-    private void findSlot(IItemHandler itemHandler, RegulatorFilter<ItemStack, IItemHandler> otherFilter, boolean otherWhitelist, IItemHandler otherItemHandler, boolean otherRegulated) {
-        for (int i = this.extractSlot; i < itemHandler.getSlots(); i++) {
-            if (!itemHandler.getStackInSlot(i).isEmpty() && filter(this.getFilter(), this.isWhitelist(), itemHandler.getStackInSlot(i), itemHandler, false) && filter(otherFilter, otherWhitelist, itemHandler.getStackInSlot(i), otherItemHandler, otherRegulated)) {
+    private void findSlot(@NotNull IItemHandler origin, IItemHandler destination, TransporterItemType otherTile) {
+        for (int i = this.extractSlot; i < origin.getSlots(); i++) {
+            if (!origin.getStackInSlot(i).isEmpty()
+                && this.getFilter().canExtract(origin.getStackInSlot(i), origin)
+                && otherTile.getFilter().canInsert(origin.getStackInSlot(i), destination)
+            ) {
                 this.extractSlot = i;
                 return;
             }
@@ -187,13 +181,13 @@ public class TransporterItemType extends FilteredTransporterType<ItemStack, IIte
         this.extractSlot = 0;
     }
 
-    public void addTransferedStack(Direction direction, ItemStack stack) {
+    public void addTransferedStack(Direction direction, @NotNull ItemStack stack) {
         syncRender(direction, (CompoundTag) stack.saveOptional(getLevel().registryAccess()));
     }
 
     @Override
     public void handleRenderSync(Direction origin, CompoundTag compoundNBT) {
-        this.queue.computeIfAbsent(origin, direction -> new ArrayList<>()).add(0, ItemStack.parseOptional(getLevel().registryAccess(), compoundNBT));
+        this.queue.computeIfAbsent(origin, direction -> new ArrayList<>()).addFirst(ItemStack.parseOptional(getLevel().registryAccess(), compoundNBT));
     }
 
     @OnlyIn(Dist.CLIENT)
