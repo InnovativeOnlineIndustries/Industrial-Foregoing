@@ -1,3 +1,7 @@
+# Version 3.6.16
+
+* Fixed Processing addons toolip having the wrong number
+
 # Version 3.6.15
 
 * Changed mods.toml config to use proper required dependencies, closes #1490

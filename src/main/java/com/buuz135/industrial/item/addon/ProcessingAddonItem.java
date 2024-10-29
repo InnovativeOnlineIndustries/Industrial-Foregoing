@@ -87,7 +87,7 @@ public class ProcessingAddonItem extends AddonItem implements ISpecialCreativeTa
 
     @Override
     public void addTooltipDetails(@Nullable Key key, ItemStack stack, List<Component> tooltip, boolean advanced) {
-        tooltip.add(Component.literal(ChatFormatting.GRAY + Component.translatable("text.industrialforegoing.tooltip.processing").getString() + "x" + tier * 1.0));
+        tooltip.add(Component.literal(ChatFormatting.GRAY + Component.translatable("text.industrialforegoing.tooltip.processing").getString() + "x" + (tier + 1) * 1.0));
     }
 
     @Override
