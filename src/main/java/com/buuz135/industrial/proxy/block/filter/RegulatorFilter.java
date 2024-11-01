@@ -35,7 +35,9 @@ public abstract class RegulatorFilter<TYPE, CAP> {
     private final int bigMultiplier;
     private final int maxAmount;
     private final String label;
-    private IFilter.GhostSlot[] filter;
+    private final IFilter.GhostSlot[] filter;
+    private boolean whitelisted = false;
+    private boolean isRegulated = false;
 
     public RegulatorFilter(int locX, int locY, int sizeX, int sizeY, int smallMultiplier, int bigMultiplier, int maxAmount, String label) {
         this.locX = locX;
@@ -57,7 +59,68 @@ public abstract class RegulatorFilter<TYPE, CAP> {
         }
     }
 
-    public abstract int matches(TYPE stack, CAP cap, boolean isRegulated);
+    /**
+     * Used to check if provided TYPE matches the filter. This method ignores regulation rule.
+     * @param stack TYPE to check
+     * @param cap Capability of this filter.
+     * @return True if provided TYPE matches, false otherwise.
+     */
+    public abstract boolean matches(TYPE stack, CAP cap);
+
+    /**
+     * Used to get the amount to extract of the provided TYPE.
+     * @param stack TYPE to check.
+     * @param cap Capability of this filter.
+     * @return Amount to extract, complying to the regulation rule.
+     */
+    public abstract int getExtractAmount(TYPE stack, CAP cap);
+
+    /**
+     * Used to get the possible amount of TYPE to insert.
+     * @param stack TYPE to check.
+     * @param cap Capability of this filter.
+     * @return Possible amount to insert, complying to the regulation rule.
+     */
+    public abstract int getInsertAmount(TYPE stack, CAP cap);
+
+    /**
+     * Used to get the amount of the item set in the filter. Checks all slots of the filter.
+     * @param stack TYPE to look for.
+     * @return Amount of the TYPE set in the filter.
+     * @apiNote If not Regulated, will return either 0 or 1.
+     */
+    public abstract int getFilterAmount(TYPE stack);
+
+    /**
+     * Used to get the amount of the item in the provided IItemHandler.
+     * @param stack TYPE to look for.
+     * @return Amount of the TYPE in the storage.
+     */
+    public abstract int getStorageAmount(TYPE stack, CAP cap);
+
+    public boolean canExtract(TYPE stack, CAP cap) {
+        return this.getExtractAmount(stack, cap) > 0;
+    }
+
+    public boolean canInsert(TYPE stack, CAP cap) {
+        return this.getInsertAmount(stack, cap) > 0;
+    }
+
+    public boolean isRegulated() {
+        return isRegulated;
+    }
+
+    public boolean isWhitelisted() {
+        return whitelisted;
+    }
+
+    public void setWhitelisted(boolean whitelisted) {
+        this.whitelisted = whitelisted;
+    }
+
+    public void setRegulated(boolean regulated) {
+        isRegulated = regulated;
+    }
 
     public int getSizeX() {
         return sizeX;
@@ -75,45 +138,48 @@ public abstract class RegulatorFilter<TYPE, CAP> {
         return locY;
     }
 
-    public IFilter.GhostSlot[] getFilter() {
+    public IFilter.GhostSlot[] getFilterSlots() {
         return filter;
     }
 
     public void setFilter(int slot, ItemStack stack) {
-        if (slot >= 0 && slot < this.getFilter().length) {
-            this.getFilter()[slot].setStack(stack);
-            this.getFilter()[slot].setAmount(stack.getCount());
+        if (slot >= 0 && slot < this.getFilterSlots().length) {
+            this.getFilterSlots()[slot].setStack(stack);
+            this.getFilterSlots()[slot].setAmount(stack.getCount());
         }
     }
 
     public CompoundTag serializeNBT(HolderLookup.Provider provider) {
         CompoundTag compound = new CompoundTag();
-        for (int i = 0; i < this.getFilter().length; i++) {
-            if (!this.getFilter()[i].getStack().isEmpty()) {
+        compound.putBoolean("Whitelist", whitelisted);
+        compound.putBoolean("Regulated", isRegulated);
+        for (int i = 0; i < this.getFilterSlots().length; i++) {
+            if (!this.getFilterSlots()[i].getStack().isEmpty()) {
                 CompoundTag slot = new CompoundTag();
-                slot.put("Stack", this.getFilter()[i].getStack().saveOptional(provider));
-                slot.putInt("Amount", this.getFilter()[i].getAmount());
+                slot.put("Stack", this.getFilterSlots()[i].getStack().saveOptional(provider));
+                slot.putInt("Amount", this.getFilterSlots()[i].getAmount());
                 compound.put(String.valueOf(i), slot);
             }
-
         }
         return compound;
     }
 
     public void deserializeNBT(HolderLookup.Provider provider, CompoundTag nbt) {
-        for (int i = 0; i < this.getFilter().length; i++) {
+        whitelisted = nbt.getBoolean("Whitelist");
+        isRegulated = nbt.getBoolean("Regulated");
+        for (int i = 0; i < this.getFilterSlots().length; i++) {
             if (nbt.contains(String.valueOf(i))) {
                 CompoundTag slot = nbt.getCompound(String.valueOf(i));
-                this.getFilter()[i].setStack(ItemStack.parseOptional(provider, slot.getCompound("Stack")));
-                this.getFilter()[i].setAmount(slot.getInt("Amount"));
+                this.getFilterSlots()[i].setStack(ItemStack.parseOptional(provider, slot.getCompound("Stack")));
+                this.getFilterSlots()[i].setAmount(slot.getInt("Amount"));
             } else {
-                this.getFilter()[i].setStack(ItemStack.EMPTY);
+                this.getFilterSlots()[i].setStack(ItemStack.EMPTY);
             }
         }
     }
 
     public boolean isEmpty() {
-        for (IFilter.GhostSlot slot : this.getFilter()) {
+        for (IFilter.GhostSlot slot : this.getFilterSlots()) {
             if (!slot.getStack().isEmpty()) return false;
         }
         return true;
