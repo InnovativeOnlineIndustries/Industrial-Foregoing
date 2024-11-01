@@ -51,6 +51,7 @@ import org.apache.commons.lang3.tuple.Pair;
 
 import java.awt.*;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 public class DissolutionChamberCategory implements IRecipeCategory<DissolutionChamberRecipe> {
@@ -88,6 +89,8 @@ public class DissolutionChamberCategory implements IRecipeCategory<DissolutionCh
     @Override
     public void setRecipe(IRecipeLayoutBuilder builder, DissolutionChamberRecipe recipe, IFocusGroup focuses) {
         for (int i = 0; i < recipe.input.size(); i++) {
+            ItemStack stack = Arrays.stream(recipe.input.get(i).getItems()).toList().getFirst();
+            stack.getItem().onCraftedBy(stack, null, null);
             builder.addSlot(RecipeIngredientRole.INPUT, 24 + DissolutionChamberTile.getSlotPos(i).getLeft(), 11 + DissolutionChamberTile.getSlotPos(i).getRight()).addIngredients(recipe.input.get(i));
         }
         if (recipe.inputFluid != null && !recipe.inputFluid.isEmpty()) {
