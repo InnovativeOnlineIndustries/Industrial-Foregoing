@@ -1,6 +1,7 @@
 # Version 3.6.16
 
 * Fixed Processing addons toolip having the wrong number
+* Make DissolutionChamberRecipe JEI Category respect NBT on input items #1502
 
 # Version 3.6.15
 
