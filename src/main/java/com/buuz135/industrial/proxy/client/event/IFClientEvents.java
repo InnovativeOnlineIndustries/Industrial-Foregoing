@@ -27,7 +27,6 @@ import com.buuz135.industrial.item.infinity.item.ItemInfinityDrill;
 import com.buuz135.industrial.module.ModuleTool;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
-import com.mojang.math.Axis;
 import net.minecraft.client.Camera;
 import net.minecraft.client.CameraType;
 import net.minecraft.client.Minecraft;
@@ -51,7 +50,7 @@ public class IFClientEvents {
     @SubscribeEvent
     public void blockOverlayEvent(RenderHighlightEvent.Block event) {
         HitResult hit = event.getTarget();
-        if (hit.getType() == HitResult.Type.BLOCK && Minecraft.getInstance().player.getMainHandItem().getItem().equals(ModuleTool.INFINITY_DRILL)) {
+        if (hit.getType() == HitResult.Type.BLOCK && Minecraft.getInstance().player.getMainHandItem().getItem().equals(ModuleTool.INFINITY_DRILL.get())) {
             BlockHitResult blockRayTraceResult = (BlockHitResult) hit;
             event.setCanceled(true);
             ItemStack hand = Minecraft.getInstance().player.getMainHandItem();
@@ -61,8 +60,8 @@ public class IFClientEvents {
             PoseStack stack = new PoseStack();
             stack.pushPose();
             Camera info = event.getCamera();
-            stack.mulPose(Axis.XP.rotationDegrees(info.getXRot()));
-            stack.mulPose(Axis.YP.rotationDegrees(info.getYRot() + 180));
+            //stack.mulPose(Axis.XP.rotationDegrees(info.getXRot()));
+            //stack.mulPose(Axis.YP.rotationDegrees(info.getYRot() + 180));
             double d0 = info.getPosition().x();
             double d1 = info.getPosition().y();
             double d2 = info.getPosition().z();

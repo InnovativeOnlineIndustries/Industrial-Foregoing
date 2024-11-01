@@ -18,6 +18,7 @@
 * Fixed gears missing "c:gears" tag, closes #1504
 * Fixed infinity drill combining items passed their stack limit, closes #1501
 * Fixed infinity drill artifact tier not having the proper depth
+* Fixed infinity drill mining area not showing
 
 # Version 3.6.15
 
