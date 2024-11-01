@@ -16,6 +16,7 @@
 * Update ru_ru.json #1452 - gri3229
 * Create ko_kr.json #1444 - new-3
 * Fixed gears missing "c:gears" tag, closes #1504
+* Fixed infinity drill combining items passed their stack limit, closes #1501
 
 # Version 3.6.15
 

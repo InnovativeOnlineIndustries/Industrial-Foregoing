@@ -105,7 +105,7 @@ public class ItemInfinityDrill extends ItemInfinity {
                             Block.getDrops(tempState, (ServerLevel) worldIn, blockPos, null, (Player) entityLiving, stack).forEach(itemStack -> {
                                 boolean combined = false;
                                 for (ItemStack drop : totalDrops) {
-                                    if (ItemStack.isSameItemSameComponents(drop, itemStack)) {
+                                    if (ItemStack.isSameItemSameComponents(drop, itemStack) && drop.getCount() + itemStack.getCount() <= itemStack.getMaxStackSize()) {
                                         drop.setCount(drop.getCount() + itemStack.getCount());
                                         combined = true;
                                         break;
