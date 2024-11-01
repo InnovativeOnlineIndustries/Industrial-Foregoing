@@ -3,6 +3,8 @@ package com.buuz135.industrial.plugin.emi;
 import com.buuz135.industrial.api.recipe.ore.OreFluidEntryFermenter;
 import com.buuz135.industrial.api.recipe.ore.OreFluidEntryRaw;
 import com.buuz135.industrial.api.recipe.ore.OreFluidEntrySieve;
+import com.buuz135.industrial.block.generator.MycelialGeneratorBlock;
+import com.buuz135.industrial.block.generator.mycelial.IMycelialGeneratorType;
 import com.buuz135.industrial.fluid.OreTitaniumFluidType;
 import com.buuz135.industrial.module.ModuleCore;
 import com.buuz135.industrial.module.ModuleGenerator;
@@ -11,7 +13,11 @@ import com.buuz135.industrial.plugin.RecipeViewerHelper;
 import com.buuz135.industrial.plugin.emi.category.*;
 import com.buuz135.industrial.plugin.emi.recipe.*;
 import com.buuz135.industrial.plugin.jei.category.BioReactorRecipeCategory;
+import com.buuz135.industrial.plugin.jei.generator.MycelialGeneratorRecipe;
 import com.buuz135.industrial.recipe.*;
+import com.buuz135.industrial.utils.IFAttachments;
+import com.buuz135.industrial.utils.Reference;
+import com.hrznstudio.titanium.module.BlockWithTile;
 import com.hrznstudio.titanium.util.TagUtil;
 import dev.emi.emi.api.EmiEntrypoint;
 import dev.emi.emi.api.EmiInitRegistry;
@@ -19,6 +25,7 @@ import dev.emi.emi.api.EmiPlugin;
 import dev.emi.emi.api.EmiRegistry;
 import dev.emi.emi.api.recipe.VanillaEmiRecipeCategories;
 import dev.emi.emi.api.stack.EmiIngredient;
+import dev.emi.emi.api.stack.EmiStack;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.ItemTags;
@@ -28,10 +35,13 @@ import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.item.crafting.RecipeHolder;
 import net.minecraft.world.item.crafting.RecipeManager;
 import net.minecraft.world.item.crafting.RecipeType;
+import net.minecraft.world.level.ItemLike;
 import net.neoforged.neoforge.fluids.FluidStack;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @EmiEntrypoint
 public class IFEmiPlugin implements EmiPlugin {
@@ -127,6 +137,23 @@ public class IFEmiPlugin implements EmiPlugin {
         }
 
         registry.addWorkstation(VanillaEmiRecipeCategories.SMELTING, EmiIngredient.of(Ingredient.of(ModuleResourceProduction.RESOURCEFUL_FURNACE.getBlock())));
+
+        for (IMycelialGeneratorType type : IMycelialGeneratorType.TYPES) {
+            ItemLike display = type.getDisplay();
+            for (BlockWithTile mycelialGenerator : ModuleGenerator.MYCELIAL_GENERATORS) {
+                if (((MycelialGeneratorBlock) mycelialGenerator.getBlock()).getType().equals(type)) {
+                    display = mycelialGenerator.getBlock();
+                }
+            }
+            MycelialGeneratorEmiCategory category = new MycelialGeneratorEmiCategory(ResourceLocation.fromNamespaceAndPath(Reference.MOD_ID, "mycellial_" + type.getName()), display.asItem(), type);
+            registry.addCategory(category);
+            registry.addWorkstation(category, EmiStack.of(display));
+            var recipes = type.getRecipes(IFAttachments.registryAccess()).stream().sorted(Comparator.comparingInt(value -> ((MycelialGeneratorRecipe) value).getTicks() * ((MycelialGeneratorRecipe) value).getPowerTick()).reversed()).collect(Collectors.toList());
+            recipes.forEach(recipe -> {
+                registry.addRecipe(new MycelialGeneratorEmiRecipe(type, recipe, category));
+            });
+
+        }
 
     }
 }

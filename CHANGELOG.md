@@ -19,6 +19,7 @@
 * Fixed infinity drill combining items passed their stack limit, closes #1501
 * Fixed infinity drill artifact tier not having the proper depth
 * Fixed infinity drill mining area not showing
+* Added missing Mycelial Generator Catergory to EMI, closes #1505
 
 # Version 3.6.15
 
