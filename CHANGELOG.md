@@ -1,7 +1,20 @@
 # Version 3.6.16
 
-* Fixed Processing addons toolip having the wrong number
-* Make DissolutionChamberRecipe JEI Category respect NBT on input items #1502
+* Fixed Processing addons tooltip having the wrong number
+* Make DissolutionChamberRecipe JEI Category respect NBT on input items #1502 - Christofmeg
+* Rework Transporter Logic #1500 - Kanzaji
+  * Transporters now work in Regulate Mode on the Extraction side!
+  * They will leave in the storage the amount of items specified in the filter.
+  * Regulate Mode affects only whitelist mode - it's ignored in blacklist mode.
+  * Efficiency is being calculated now with use of Math.ceil(int) instead of direct cast to int, fixing an issue that
+    max transporters were able to handle "only" 63 of stuff per work cycle. (They now handle at max 64/t)
+  * Blacklist now correctly passes all items (except blacklisted ones) on the insertion side.
+  * Fluid Transporters now can handle 333,(3)mb/t without upgrades (16,(6)mb/t before), and 64 000mb/t with all tier 2
+    upgrades (3 200mb/t before)
+* Fix Enchanter Extractor making tools indestructible. #1498 - Kanzaji
+* Entity.RemovalReason change in MobImprisonmentToolItem.java #1494 - frikinjay
+* Update ru_ru.json #1452 - gri3229
+* Create ko_kr.json #1444 - new-3
 
 # Version 3.6.15
 
