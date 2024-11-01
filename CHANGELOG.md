@@ -1,4 +1,4 @@
-# Version 3.6.16
+# Version 3.6.17
 
 * Fixed Processing addons tooltip having the wrong number
 * Make DissolutionChamberRecipe JEI Category respect NBT on input items #1502 - Christofmeg
@@ -15,6 +15,7 @@
 * Entity.RemovalReason change in MobImprisonmentToolItem.java #1494 - frikinjay
 * Update ru_ru.json #1452 - gri3229
 * Create ko_kr.json #1444 - new-3
+* Fixed gears missing "c:gears" tag, closes #1504
 
 # Version 3.6.15
 

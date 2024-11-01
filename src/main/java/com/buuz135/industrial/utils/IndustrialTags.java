@@ -46,6 +46,7 @@ public class IndustrialTags {
         public static final TagKey<Item> GEAR_GOLD = TagUtil.getItemTag(ResourceLocation.parse("c:" + "gears/gold"));
         public static final TagKey<Item> GEAR_DIAMOND = TagUtil.getItemTag(ResourceLocation.parse("c:" + "gears/diamond"));
         public static final TagKey<Item> GEAR_IRON = TagUtil.getItemTag(ResourceLocation.parse("c:" + "gears/iron"));
+        public static final TagKey<Item> GEARS = TagUtil.getItemTag(ResourceLocation.parse("c:" + "gears"));
 
         public static final TagKey<Item> FERTILIZER = TagUtil.getItemTag(ResourceLocation.parse("c:" + "fertilizers"));
     }
