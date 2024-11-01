@@ -95,7 +95,6 @@ public class InfinityBackpackTile extends BasicTile<InfinityBackpackTile> implem
             if (handlerItem != null) {
                 for (ExperienceOrb entity : level.getEntitiesOfClass(ExperienceOrb.class, new AABB(getBlockPos()).inflate(5))) {
                     if (((ItemInfinityBackpack) ModuleTool.INFINITY_BACKPACK.get()).enoughFuel(getBackpack())) {
-                        System.out.println(handlerItem.fill(new FluidStack(ModuleCore.ESSENCE.getSourceFluid().get(), entity.getValue() * 20), IFluidHandler.FluidAction.SIMULATE));
                         if (handlerItem.fill(new FluidStack(ModuleCore.ESSENCE.getSourceFluid().get(), entity.getValue() * 20), IFluidHandler.FluidAction.SIMULATE) > 0) {
                             handlerItem.fill(new FluidStack(ModuleCore.ESSENCE.getSourceFluid().get(), entity.getValue() * 20), IFluidHandler.FluidAction.EXECUTE);
                             entity.remove(Entity.RemovalReason.KILLED);

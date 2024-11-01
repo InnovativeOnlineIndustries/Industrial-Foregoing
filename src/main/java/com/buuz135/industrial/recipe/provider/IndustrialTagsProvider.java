@@ -80,6 +80,7 @@ public class IndustrialTagsProvider {
             tag(IndustrialTags.Items.GEAR_DIAMOND).add(ModuleCore.DIAMOND_GEAR.get());
             tag(IndustrialTags.Items.GEAR_GOLD).add(ModuleCore.GOLD_GEAR.get());
             tag(IndustrialTags.Items.GEAR_IRON).add(ModuleCore.IRON_GEAR.get());
+            tag(IndustrialTags.Items.GEARS).add(ModuleCore.DIAMOND_GEAR.get(), ModuleCore.GOLD_GEAR.get(), ModuleCore.IRON_GEAR.get());
         }
     }
 

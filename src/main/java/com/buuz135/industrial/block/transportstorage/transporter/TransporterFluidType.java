@@ -26,7 +26,7 @@ import com.buuz135.industrial.api.transporter.FilteredTransporterType;
 import com.buuz135.industrial.api.transporter.TransporterType;
 import com.buuz135.industrial.api.transporter.TransporterTypeFactory;
 import com.buuz135.industrial.block.transportstorage.tile.TransporterTile;
-import com.buuz135.industrial.proxy.block.filter.IFilter;
+import com.buuz135.industrial.block.transportstorage.transporter.filter.FluidFilter;
 import com.buuz135.industrial.proxy.block.filter.RegulatorFilter;
 import com.buuz135.industrial.proxy.client.render.TransporterTESR;
 import com.buuz135.industrial.utils.FluidUtils;
@@ -51,8 +51,8 @@ import net.neoforged.api.distmarker.OnlyIn;
 import net.neoforged.neoforge.capabilities.Capabilities;
 import net.neoforged.neoforge.common.Tags;
 import net.neoforged.neoforge.fluids.FluidStack;
-import net.neoforged.neoforge.fluids.FluidUtil;
 import net.neoforged.neoforge.fluids.capability.IFluidHandler;
+import org.jetbrains.annotations.NotNull;
 import org.joml.Matrix4f;
 import org.joml.Vector3f;
 
@@ -67,109 +67,86 @@ public class TransporterFluidType extends FilteredTransporterType<FluidStack, IF
 
     public static final int QUEUE_SIZE = 6;
 
-    private HashMap<Direction, List<FluidStack>> queue;
+    private final HashMap<Direction, List<FluidStack>> queue;
 
-    public TransporterFluidType(IBlockContainer container, TransporterTypeFactory factory, Direction side, TransporterTypeFactory.TransporterAction action) {
+    public TransporterFluidType(IBlockContainer<?> container, TransporterTypeFactory factory, Direction side, TransporterTypeFactory.TransporterAction action) {
         super(container, factory, side, action);
         this.queue = new HashMap<>();
         for (Direction value : Direction.values()) {
-            while (this.queue.computeIfAbsent(value, direction -> new ArrayList<>()).size() < QUEUE_SIZE) {
-                this.queue.get(value).add(0, FluidStack.EMPTY);
-            }
-            if (this.queue.size() > QUEUE_SIZE) {
-                this.queue.get(value).remove(this.queue.get(value).size() - 1);
-            }
+            while (this.queue.computeIfAbsent(value, direction -> new ArrayList<>()).size() < QUEUE_SIZE)
+                this.queue.get(value).addFirst(FluidStack.EMPTY);
+
+            if (this.queue.size() > QUEUE_SIZE)
+                this.queue.get(value).removeLast();
         }
     }
 
     @Override
     public RegulatorFilter<FluidStack, IFluidHandler> createFilter() {
-        return new RegulatorFilter<FluidStack, IFluidHandler>(20, 20, 5, 3, 50, 250, 32000, "mb") {
-            @Override
-            public int matches(FluidStack stack, IFluidHandler iFluidHandler, boolean isRegulated) {
-                int amount = 0;
-                if (isEmpty()) return stack.getAmount();
-                if (isRegulated) {
-                    for (int i = 0; i < iFluidHandler.getTanks(); i++) {
-                        if (iFluidHandler.isFluidValid(i, stack) && FluidStack.isSameFluidSameComponents(iFluidHandler.getFluidInTank(i), stack)) {
-                            amount += iFluidHandler.getFluidInTank(i).getAmount();
-                        }
-                    }
-                }
-                for (IFilter.GhostSlot slot : this.getFilter()) {
-                    FluidStack original = FluidUtil.getFluidContained(slot.getStack()).orElse(null);
-                    if (original != null && FluidStack.isSameFluidSameComponents(original, stack)) {
-                        int allowedAmount = isRegulated ? slot.getAmount() : Integer.MAX_VALUE;
-                        int returnAmount = Math.min(stack.getAmount(), allowedAmount - amount);
-                        if (returnAmount > 0) return returnAmount;
-                    }
-                }
-                return 0;
-            }
-        };
+        // Max 8192 Buckets - 8 192 000 mb.
+        return new FluidFilter(20, 20, 5, 3, 50, 200, 8192000, "mb");
     }
 
     @Override
     public void update() {
         super.update();
         float speed = getSpeed();
-        if (!getLevel().isClientSide && getLevel().getGameTime() % (Math.max(1, 4 - speed)) == 0) {
-            IBlockContainer container = getContainer();
-            if (getAction() == TransporterTypeFactory.TransporterAction.EXTRACT && container instanceof TransporterTile) {
-                for (Direction direction : ((TransporterTile) container).getTransporterTypeMap().keySet()) {
-                    TransporterType transporterType = ((TransporterTile) container).getTransporterTypeMap().get(direction);
-                    if (transporterType instanceof TransporterFluidType && transporterType.getAction() == TransporterTypeFactory.TransporterAction.INSERT) {
-                        var origin = getLevel().getCapability(Capabilities.FluidHandler.BLOCK, getPos().relative(this.getSide()), getSide().getOpposite());
-                        if (origin != null) {
-                            var destination = getLevel().getCapability(Capabilities.FluidHandler.BLOCK, getPos().relative(direction), direction.getOpposite());
-                            if (destination != null) {
-                                int amount = (int) (50 * getEfficiency());
-                                FluidStack simulatedStack = origin.drain(amount, IFluidHandler.FluidAction.SIMULATE);
-                                int filteredAmount = ((TransporterFluidType) transporterType).getFilter().matches(simulatedStack, destination, ((TransporterFluidType) transporterType).isRegulated());
-                                if (filter(this.getFilter(), isWhitelist(), simulatedStack, origin, false) && filteredAmount > 0 && filter(((TransporterFluidType) transporterType).getFilter(), ((TransporterFluidType) transporterType).isWhitelist(), simulatedStack, destination, ((TransporterFluidType) transporterType).isRegulated())) {
-                                    int simulatedInserted = destination.fill(simulatedStack, IFluidHandler.FluidAction.SIMULATE);
-                                    if (simulatedInserted > 0) {
-                                        destination.fill(origin.drain(simulatedInserted, IFluidHandler.FluidAction.EXECUTE), IFluidHandler.FluidAction.EXECUTE);
-                                        ((TransporterFluidType) transporterType).addTransferedStack(getSide(), simulatedStack);
-                                    }
-                                }
-                            }
-                        }
-                    }
+
+        if (getLevel().isClientSide || getLevel().getGameTime() % (Math.max(1, 4 - speed)) != 0) return;
+
+        IBlockContainer<?> container = getContainer();
+        if (getAction() != TransporterTypeFactory.TransporterAction.EXTRACT || !(container instanceof TransporterTile transporterTile)) return;
+
+        for (Direction direction : transporterTile.getTransporterTypeMap().keySet()) {
+            TransporterType transporterType = transporterTile.getTransporterTypeMap().get(direction);
+            if (transporterType instanceof TransporterFluidType fluidTransporter && transporterType.getAction() == TransporterTypeFactory.TransporterAction.INSERT) {
+                var origin = getLevel().getCapability(Capabilities.FluidHandler.BLOCK, getPos().relative(this.getSide()), getSide().getOpposite());
+                if (origin == null) continue;
+
+                var destination = getLevel().getCapability(Capabilities.FluidHandler.BLOCK, getPos().relative(direction), direction.getOpposite());
+                if (destination == null) continue;
+
+                int possibleAmount = (int) Math.ceil(1000 * getEfficiency());
+                FluidStack simulatedStack = origin.drain(possibleAmount, IFluidHandler.FluidAction.SIMULATE);
+                int filteredAmount = Math.min(
+                    this.getFilter().getExtractAmount(simulatedStack, origin),
+                    fluidTransporter.getFilter().getInsertAmount(simulatedStack, destination)
+                );
+
+                int amount = Math.min(filteredAmount, possibleAmount);
+                if (amount <= 0) continue;
+                simulatedStack.setAmount(amount);
+
+                int simulatedInserted = destination.fill(simulatedStack, IFluidHandler.FluidAction.SIMULATE);
+                if (simulatedInserted > 0) {
+                    destination.fill(origin.drain(simulatedInserted, IFluidHandler.FluidAction.EXECUTE), IFluidHandler.FluidAction.EXECUTE);
+                    fluidTransporter.addTransferredStack(getSide(), simulatedStack);
                 }
             }
         }
-    }
-
-    private boolean filter(RegulatorFilter<FluidStack, IFluidHandler> filter, boolean whitelist, FluidStack fluidStack, IFluidHandler handler, boolean isRegulated) {
-        int accepts = filter.matches(fluidStack, handler, isRegulated);
-        if (whitelist && filter.isEmpty()) {
-            return false;
-        }
-        return filter.isEmpty() != (whitelist == (accepts > 0));
     }
 
     @Override
     public void updateClient() {
         super.updateClient();
         for (Direction value : Direction.values()) {
-            while (this.queue.computeIfAbsent(value, direction -> new ArrayList<>()).size() < QUEUE_SIZE) {
-                this.queue.get(value).add(0, FluidStack.EMPTY);
-            }
-            this.queue.get(value).add(0, FluidStack.EMPTY);
-            while (this.queue.get(value).size() > QUEUE_SIZE) {
-                this.queue.get(value).remove(this.queue.get(value).size() - 1);
-            }
+            while (this.queue.computeIfAbsent(value, direction -> new ArrayList<>()).size() < QUEUE_SIZE)
+                this.queue.get(value).addFirst(FluidStack.EMPTY);
+
+            this.queue.get(value).addFirst(FluidStack.EMPTY);
+
+            while (this.queue.get(value).size() > QUEUE_SIZE)
+                this.queue.get(value).removeLast();
         }
     }
 
-    public void addTransferedStack(Direction direction, FluidStack stack) {
+    public void addTransferredStack(Direction direction, @NotNull FluidStack stack) {
         syncRender(direction, (CompoundTag) stack.saveOptional(getLevel().registryAccess()));
     }
 
     @Override
     public void handleRenderSync(Direction origin, CompoundTag compoundNBT) {
-        this.queue.computeIfAbsent(origin, direction -> new ArrayList<>()).add(0, FluidStack.parseOptional(getLevel().registryAccess(), compoundNBT));
+        this.queue.computeIfAbsent(origin, direction -> new ArrayList<>()).addFirst(FluidStack.parseOptional(getLevel().registryAccess(), compoundNBT));
     }
 
     @OnlyIn(Dist.CLIENT)

@@ -301,7 +301,7 @@ public class ItemInfinity extends IFCustomItem implements MenuProvider, IButtonH
             topRight = topRight.relative(Direction.UP, radius - 1);
         }
         if (currentTier == InfinityTier.ARTIFACT && withDepth) {
-            topRight = topRight.relative(facing.getOpposite(), radius);
+            topRight = topRight.relative(facing.getOpposite(), radius * 2);
         }
         return Pair.of(bottomLeft, topRight);
     }

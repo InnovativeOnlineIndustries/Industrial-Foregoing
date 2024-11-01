@@ -77,6 +77,7 @@ public class BioReactorTile extends IndustrialWorkingTile<BioReactorTile> {
     @Save
     private ProgressBarComponent<BioReactorTile> bar;
 
+    @SuppressWarnings("unchecked")
     public BioReactorTile(BlockPos blockPos, BlockState blockState) {
         super(ModuleGenerator.BIOREACTOR, BioReactorConfig.powerPerOperation, blockPos, blockState);
         addTank(water = (SidedFluidTankComponent<BioReactorTile>) new SidedFluidTankComponent<BioReactorTile>("water", BioReactorConfig.maxWaterTankStorage, 45, 20, 0).
@@ -88,7 +89,7 @@ public class BioReactorTile extends IndustrialWorkingTile<BioReactorTile> {
         addBundle(input = new LockableInventoryBundle<>(this, new SidedInventoryComponent<BioReactorTile>("input", 69, 22, 9, 1).
                 setColor(DyeColor.BLUE).
                 setRange(3, 3).
-                setInputFilter((stack, integer) -> canInsert(integer - 2, stack)).
+                setInputFilter((stack, integer) -> canInsert(integer, stack)).
                 setOutputFilter((stack, integer) -> false).
                 setComponentHarness(this)
                 , 136, 84, false));
