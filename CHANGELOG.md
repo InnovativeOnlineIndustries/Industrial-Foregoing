@@ -1,4 +1,4 @@
-# Version 3.6.18
+# Version 3.6.19
 
 * Fixed EMI not having the crafting info from the Dissolution Chamber
 

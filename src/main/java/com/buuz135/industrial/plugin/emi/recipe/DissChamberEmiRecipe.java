@@ -16,11 +16,13 @@ import dev.emi.emi.api.widget.WidgetHolder;
 import net.minecraft.client.Minecraft;
 import net.minecraft.world.item.DyeColor;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.item.crafting.RecipeHolder;
 import net.neoforged.neoforge.fluids.FluidStack;
 import org.apache.commons.lang3.tuple.Pair;
 
 import java.awt.*;
+import java.util.ArrayList;
 import java.util.List;
 
 public class DissChamberEmiRecipe extends CustomEmiRecipe {
@@ -30,13 +32,33 @@ public class DissChamberEmiRecipe extends CustomEmiRecipe {
     public DissChamberEmiRecipe(RecipeHolder<DissolutionChamberRecipe> recipe) {
         super(recipe.id(), IFEmiPlugin.DISSOLUTION_CHAMBER_EMI_CATEGORY,
                 combineIng(
-                        fromInput(recipe.value().input),
+                        fromInputDiss(recipe.value().input),
                         fromInput(recipe.value().inputFluid)
                 ),
-                fromOutput(recipe.value().output.orElse(ItemStack.EMPTY), recipe.value().outputFluid.orElse(FluidStack.EMPTY)));
+                fromOutputDiss(recipe.value().output.orElse(ItemStack.EMPTY), recipe.value().outputFluid.orElse(FluidStack.EMPTY)));
         this.recipe = recipe;
     }
 
+    public static List<EmiIngredient> fromInputDiss(List<Ingredient> ingredients) {
+        List<Ingredient> result = new ArrayList<>();
+        for (Ingredient ingredient : ingredients) {
+            var stacks = new ArrayList<ItemStack>();
+            for (ItemStack item : ingredient.getItems()) {
+                item.getItem().onCraftedBy(item, null, null);
+                stacks.add(item);
+            }
+            result.add(Ingredient.of(stacks.toArray(new ItemStack[0])));
+        }
+        return result.stream().map(EmiIngredient::of).toList();
+    }
+
+    public static List<EmiStack> fromOutputDiss(ItemStack output, FluidStack fluidStack) {
+        output.getItem().onCraftedBy(output, null, null);
+        var list = new ArrayList<EmiStack>();
+        list.add(EmiStack.of(output));
+        list.add(EmiStack.of(fluidStack.getFluid(), fluidStack.getComponentsPatch(), fluidStack.getAmount()));
+        return list;
+    }
 
     @Override
     public int getDisplayWidth() {
@@ -53,9 +75,7 @@ public class DissChamberEmiRecipe extends CustomEmiRecipe {
         for (int i = 0; i < this.getInputs().size() - 1; i++) {
             widgets.addSlot(this.getInputs().get(i), 23 + DissolutionChamberTile.getSlotPos(i).getLeft(), 10 + DissolutionChamberTile.getSlotPos(i).getRight());
         }
-        var output = this.getOutputs().get(0).getItemStack();
-        output.onCraftedBy(Minecraft.getInstance().level, Minecraft.getInstance().player, 1);
-        widgets.addSlot(EmiIngredient.of(List.of(EmiStack.of(output))), 118, 15).recipeContext(this);
+        widgets.addSlot(EmiIngredient.of(List.of(this.getOutputs().get(0))), 118, 15).recipeContext(this);
         widgets.addTank(this.getInputs().get(this.getInputs().size() - 1), 33 + 12 + 2, 32 + 2, 14, 15, 1000).drawBack(false);
 
         widgets.addTank(this.getOutputs().get(1), 139 + 2, 14 + 2, 14, 52, 1000).backgroundTexture(DefaultAssetProvider.DEFAULT_LOCATION, 177 + 3, 1 + 3).drawBack(false).recipeContext(this);
