@@ -11,6 +11,7 @@ import com.hrznstudio.titanium.client.screen.asset.DefaultAssetProvider;
 import com.hrznstudio.titanium.client.screen.asset.IAssetProvider;
 import com.hrznstudio.titanium.util.AssetUtil;
 import dev.emi.emi.api.stack.EmiIngredient;
+import dev.emi.emi.api.stack.EmiStack;
 import dev.emi.emi.api.widget.WidgetHolder;
 import net.minecraft.client.Minecraft;
 import net.minecraft.world.item.DyeColor;
@@ -52,7 +53,9 @@ public class DissChamberEmiRecipe extends CustomEmiRecipe {
         for (int i = 0; i < this.getInputs().size() - 1; i++) {
             widgets.addSlot(this.getInputs().get(i), 23 + DissolutionChamberTile.getSlotPos(i).getLeft(), 10 + DissolutionChamberTile.getSlotPos(i).getRight());
         }
-        widgets.addSlot(EmiIngredient.of(List.of(this.getOutputs().get(0))), 118, 15).recipeContext(this);
+        var output = this.getOutputs().get(0).getItemStack();
+        output.onCraftedBy(Minecraft.getInstance().level, Minecraft.getInstance().player, 1);
+        widgets.addSlot(EmiIngredient.of(List.of(EmiStack.of(output))), 118, 15).recipeContext(this);
         widgets.addTank(this.getInputs().get(this.getInputs().size() - 1), 33 + 12 + 2, 32 + 2, 14, 15, 1000).drawBack(false);
 
         widgets.addTank(this.getOutputs().get(1), 139 + 2, 14 + 2, 14, 52, 1000).backgroundTexture(DefaultAssetProvider.DEFAULT_LOCATION, 177 + 3, 1 + 3).drawBack(false).recipeContext(this);
