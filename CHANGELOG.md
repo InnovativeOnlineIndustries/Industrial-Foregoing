@@ -1,3 +1,7 @@
+# Version 3.6.18
+
+* Fixed EMI not having the crafting info from the Dissolution Chamber
+
 # Version 3.6.17
 
 * Fixed Processing addons tooltip having the wrong number
