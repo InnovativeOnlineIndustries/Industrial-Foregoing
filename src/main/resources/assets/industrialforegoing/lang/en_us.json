@@ -379,7 +379,7 @@
   "item.industrialforegoing.dryrubber": "Dry Rubber",
   "item.industrialforegoing.plastic": "Plastic",
   "item.industrialforegoing.fertilizer": "Fertilizer",
-  "item.industrialforegoing.laser_lens": "Laser Lens",
+  "item.industrialforegoing.laser_lens": "%s Laser Lens",
   "item.industrialforegoing.laser_lens_inverted": "Laser Lens (Inverted)",
   "item.industrialforegoing.range_addon": "Range ",
   "item.industrialforegoing.adult_filter": "Adult Filter",
