@@ -106,8 +106,14 @@ public class BioReactorTile extends IndustrialWorkingTile<BioReactorTile> {
                         return Collections.singletonList(() -> new ProgressBarScreenAddon<BioReactorTile>(bar.getPosX(), bar.getPosY(), this) {
                             @Override
                             public List<Component> getTooltipLines() {
-                                return Arrays.asList(Component.literal(ChatFormatting.GOLD + "Efficiency: " + ChatFormatting.WHITE + (int) ((getEfficiency() / 9D) * 100) + ChatFormatting.DARK_AQUA + "%"));
+                                int efficiencyPercentage = (int) ((getEfficiency() / 9D) * 100);
+                                Component efficiencyComponent = Component.literal(ChatFormatting.GOLD + "Efficiency: " + ChatFormatting.WHITE + efficiencyPercentage + ChatFormatting.DARK_AQUA + "%");
+                                Component formatPercentageComponent = Component.literal(ChatFormatting.DARK_AQUA + "%");
+                                Component translatedComponent = Component.translatable("tooltip.industrialforegoing.bioreactor.efficiency", efficiencyComponent, formatPercentageComponent);
+                                return Arrays.asList(translatedComponent);
                             }
+
+
                         });
                     }
                 }.

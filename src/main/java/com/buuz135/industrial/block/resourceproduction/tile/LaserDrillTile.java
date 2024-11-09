@@ -55,7 +55,7 @@ public class LaserDrillTile extends IndustrialAreaWorkingTile<LaserDrillTile> {
     public void initClient() {
         super.initClient();
         addGuiAddonFactory(() -> new TextScreenAddon(ChatFormatting.DARK_GRAY + Component.translatable("text.industrialforegoing.target").getString(), 44, 26, false));
-        addGuiAddonFactory(() -> new TextScreenAddon("Target: ", 44, 36, false) {
+        addGuiAddonFactory(() -> new TextScreenAddon(Component.translatable("text.industrialforegoing.target").getString(), 44, 36, false) {
                     @Override
                     public String getText() {
                         if (target.equals(BlockPos.ZERO) || target == null)

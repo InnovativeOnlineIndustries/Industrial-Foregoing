@@ -114,7 +114,7 @@ public class PotionBrewerTile extends IndustrialProcessingTile<PotionBrewerTile>
                             @Override
                             public List<Component> getTooltipLines() {
                                 List<Component> tooltip = new ArrayList<>();
-                                tooltip.add(Component.literal(ChatFormatting.GOLD + "Blaze Fuel: " + ChatFormatting.WHITE + new DecimalFormat().format(blaze.getProgress()) + ChatFormatting.GOLD + "/" + ChatFormatting.WHITE + new DecimalFormat().format(blaze.getMaxProgress())));
+                                tooltip.add(Component.literal(ChatFormatting.GOLD + Component.translatable("tooltip.industrialforegoing.potion_brewer.blaze_fuel").getString() + ChatFormatting.WHITE + new DecimalFormat().format(blaze.getProgress()) + ChatFormatting.GOLD + "/" + ChatFormatting.WHITE + new DecimalFormat().format(blaze.getMaxProgress())));
                                 return tooltip;
                             }
                         });

@@ -126,7 +126,7 @@ public class MycelialGeneratorTile extends IndustrialGeneratorTile<MycelialGener
                         tooltip.add(Component.literal(ChatFormatting.GOLD + Component.translatable("tooltip.titanium.progressbar.progress").getString() + ChatFormatting.WHITE + new DecimalFormat().format(bar.getProgress()) + ChatFormatting.GOLD + "/" + ChatFormatting.WHITE + new DecimalFormat().format(bar.getMaxProgress())));
                         int progress = (bar.getMaxProgress() - bar.getProgress());
                         if (!bar.getIncreaseType()) progress = bar.getMaxProgress() - progress;
-                        tooltip.add(Component.literal(ChatFormatting.GOLD + "ETA: " + ChatFormatting.WHITE + new DecimalFormat().format(Math.ceil(progress * bar.getTickingTime() / 20D / bar.getProgressIncrease())) + ChatFormatting.DARK_AQUA + "s"));
+                        tooltip.add(Component.literal(ChatFormatting.GOLD + Component.translatable("tooltip.industrialforegoing.eta").getString() + ChatFormatting.WHITE + new DecimalFormat().format(Math.ceil(progress * bar.getTickingTime() / 20D / bar.getProgressIncrease())) + ChatFormatting.DARK_AQUA + Component.translatable("tooltip.industrialforegoing.sec_short").getString()));
                         tooltip.add(Component.literal(ChatFormatting.GOLD + Component.translatable("tooltip.industrialforegoing.generating").getString() + ChatFormatting.WHITE + powerGeneration + ChatFormatting.DARK_AQUA + " FE" + ChatFormatting.GOLD + "/" + ChatFormatting.WHITE + ChatFormatting.DARK_AQUA + "t"));
                         return tooltip;
                     }

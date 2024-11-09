@@ -121,7 +121,7 @@ public class DyeMixerTile extends IndustrialProcessingTile<DyeMixerTile> {
                 return Collections.singletonList(() -> new ProgressBarScreenAddon<DyeMixerTile>(red.getPosX(), red.getPosY(), this) {
                     @Override
                     public List<Component> getTooltipLines() {
-                        return Arrays.asList(Component.literal(ChatFormatting.GOLD + "Amount: " + ChatFormatting.WHITE + NumberFormat.getNumberInstance(Locale.ROOT).format(red.getProgress()) + ChatFormatting.GOLD + "/" + ChatFormatting.WHITE + NumberFormat.getNumberInstance(Locale.ROOT).format(red.getMaxProgress())));
+                        return Arrays.asList(Component.literal(ChatFormatting.GOLD + Component.translatable("tooltip.industrialforegoing.dye_mixer.amount").getString() + ChatFormatting.WHITE + NumberFormat.getNumberInstance(Locale.ROOT).format(red.getProgress()) + ChatFormatting.GOLD + "/" + ChatFormatting.WHITE + NumberFormat.getNumberInstance(Locale.ROOT).format(red.getMaxProgress())));
                     }
                 });
             }
@@ -136,7 +136,7 @@ public class DyeMixerTile extends IndustrialProcessingTile<DyeMixerTile> {
                 return Collections.singletonList(() -> new ProgressBarScreenAddon<DyeMixerTile>(blue.getPosX(), blue.getPosY(), this) {
                     @Override
                     public List<Component> getTooltipLines() {
-                        return Arrays.asList(Component.literal(ChatFormatting.GOLD + "Amount: " + ChatFormatting.WHITE + NumberFormat.getNumberInstance(Locale.ROOT).format(blue.getProgress()) + ChatFormatting.GOLD + "/" + ChatFormatting.WHITE + NumberFormat.getNumberInstance(Locale.ROOT).format(blue.getMaxProgress())));
+                        return Arrays.asList(Component.literal(ChatFormatting.GOLD + Component.translatable("tooltip.industrialforegoing.dye_mixer.amount").getString() + ChatFormatting.WHITE + NumberFormat.getNumberInstance(Locale.ROOT).format(blue.getProgress()) + ChatFormatting.GOLD + "/" + ChatFormatting.WHITE + NumberFormat.getNumberInstance(Locale.ROOT).format(blue.getMaxProgress())));
                     }
                 });
             }
@@ -151,7 +151,7 @@ public class DyeMixerTile extends IndustrialProcessingTile<DyeMixerTile> {
                 return Collections.singletonList(() -> new ProgressBarScreenAddon<DyeMixerTile>(green.getPosX(), green.getPosY(), this) {
                     @Override
                     public List<Component> getTooltipLines() {
-                        return Arrays.asList(Component.literal(ChatFormatting.GOLD + "Amount: " + ChatFormatting.WHITE + NumberFormat.getNumberInstance(Locale.ROOT).format(green.getProgress()) + ChatFormatting.GOLD + "/" + ChatFormatting.WHITE + NumberFormat.getNumberInstance(Locale.ROOT).format(green.getMaxProgress())));
+                        return Arrays.asList(Component.literal(ChatFormatting.GOLD + Component.translatable("tooltip.industrialforegoing.dye_mixer.amount").getString() + ChatFormatting.WHITE + NumberFormat.getNumberInstance(Locale.ROOT).format(green.getProgress()) + ChatFormatting.GOLD + "/" + ChatFormatting.WHITE + NumberFormat.getNumberInstance(Locale.ROOT).format(green.getMaxProgress())));
                     }
                 });
             }
