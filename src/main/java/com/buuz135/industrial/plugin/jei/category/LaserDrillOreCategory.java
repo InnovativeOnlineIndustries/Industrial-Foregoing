@@ -72,7 +72,7 @@ public class LaserDrillOreCategory implements IRecipeCategory<LaserDrillOreRecip
 
     @Override
     public Component getTitle() {
-        return Component.literal("Laser Drill Items");
+        return Component.literal(Component.translatable("text.industrialforegoing.jei.recipe.laser_drill_items").getString());
     }
 
     @Override
@@ -132,7 +132,7 @@ public class LaserDrillOreCategory implements IRecipeCategory<LaserDrillOreRecip
         if (mouseX > 13 * 2 && mouseX < 13 * 2 + 20 && mouseY > 30 + (Minecraft.getInstance().font.lineHeight + 2) * 3 && mouseY < 30 + (Minecraft.getInstance().font.lineHeight + 2) * 3 + 20) { //Inside the whitelisted biomes
             tooltip.add(Component.translatable("text.industrialforegoing.tooltip.whitelisted_dimensions").withStyle(ChatFormatting.UNDERLINE).withStyle(ChatFormatting.GOLD));
             if (recipe.rarity.get(recipe.pointer).dimensionRarity().whitelist().isEmpty())
-                tooltip.add(Component.literal("- Any"));
+                tooltip.add(Component.literal(Component.translatable("text.industrialforegoing.jei.recipe.any").getString()));
             else {
                 for (ResourceKey<DimensionType> registryKey : recipe.rarity.get(recipe.pointer).dimensionRarity().whitelist()) {
                     tooltip.add(Component.literal("- " + WordUtils.capitalize(Arrays.stream(registryKey.location().getPath().split("_")).reduce((string, string2) -> string + " " + string2).get())));
@@ -141,7 +141,7 @@ public class LaserDrillOreCategory implements IRecipeCategory<LaserDrillOreRecip
             tooltip.add(Component.empty());
             tooltip.add(Component.translatable("text.industrialforegoing.tooltip.whitelisted_biomes").withStyle(ChatFormatting.UNDERLINE).withStyle(ChatFormatting.GOLD));
             if (recipe.rarity.get(recipe.pointer).biomeRarity().whitelist().isEmpty())
-                tooltip.add(Component.literal("- Any"));
+                tooltip.add(Component.literal(Component.translatable("text.industrialforegoing.jei.recipe.any").getString()));
             else {
                 for (TagKey<Biome> registryKey : recipe.rarity.get(recipe.pointer).biomeRarity().whitelist()) {
                     for (Holder<Biome> biomeHolder : Minecraft.getInstance().level.registryAccess().registryOrThrow(Registries.BIOME).getTagOrEmpty(registryKey)) {
@@ -153,7 +153,7 @@ public class LaserDrillOreCategory implements IRecipeCategory<LaserDrillOreRecip
         if (mouseX > 13 * 8 && mouseX < 13 * 8 + 20 && mouseY > 30 + (Minecraft.getInstance().font.lineHeight + 2) * 3 && mouseY < 30 + (Minecraft.getInstance().font.lineHeight + 2) * 3 + 20) { //Inside the whitelisted biomes
             tooltip.add(Component.translatable("text.industrialforegoing.tooltip.blacklisted_dimensions").withStyle(ChatFormatting.UNDERLINE).withStyle(ChatFormatting.GOLD));
             if (recipe.rarity.get(recipe.pointer).dimensionRarity().blacklist().isEmpty())
-                tooltip.add(Component.literal("- None"));
+                tooltip.add(Component.literal(Component.translatable("text.industrialforegoing.jei.recipe.none").getString()));
             else {
                 for (ResourceKey<DimensionType> registryKey : recipe.rarity.get(recipe.pointer).dimensionRarity().blacklist()) {
                     tooltip.add(Component.literal("- " + WordUtils.capitalize(Arrays.stream(registryKey.location().getPath().split("_")).reduce((string, string2) -> string + " " + string2).get())));
@@ -162,7 +162,7 @@ public class LaserDrillOreCategory implements IRecipeCategory<LaserDrillOreRecip
             tooltip.add(Component.empty());
             tooltip.add(Component.translatable("text.industrialforegoing.tooltip.blacklisted_biomes").withStyle(ChatFormatting.UNDERLINE).withStyle(ChatFormatting.GOLD));
             if (recipe.rarity.get(recipe.pointer).biomeRarity().blacklist().isEmpty())
-                tooltip.add(Component.literal("- None"));
+                tooltip.add(Component.literal(Component.translatable("text.industrialforegoing.jei.recipe.none").getString()));
             else {
                 for (TagKey<Biome> registryKey : recipe.rarity.get(recipe.pointer).biomeRarity().blacklist()) {
                     for (Holder<Biome> biomeHolder : Minecraft.getInstance().level.registryAccess().registryOrThrow(Registries.BIOME).getTagOrEmpty(registryKey)) {

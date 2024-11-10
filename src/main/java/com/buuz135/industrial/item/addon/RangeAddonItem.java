@@ -65,7 +65,7 @@ public class RangeAddonItem extends AddonItem implements ISpecialCreativeTabItem
 
     @Override
     public String getDescriptionId() {
-        return Component.translatable("item.industrialforegoing.addon").getString() + Component.translatable("item.industrialforegoing.range_addon").getString() + "Tier " + (tier + 1) + " ";
+        return Component.translatable("item.industrialforegoing.addon").getString() + Component.translatable("item.industrialforegoing.range_addon").getString() + Component.translatable("item.industrialforegoing.tier").getString() + (tier + 1) + " ";
     }
 
     @Override

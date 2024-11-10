@@ -79,7 +79,7 @@ public class SpeedAddonItem extends AddonItem implements ISpecialCreativeTabItem
 
     @Override
     public String getDescriptionId() {
-        return Component.translatable("item.industrialforegoing.addon").getString() + Component.translatable("item.industrialforegoing.speed").getString() + "Tier " + tier + " ";
+        return Component.translatable("item.industrialforegoing.addon").getString() + Component.translatable("item.industrialforegoing.speed").getString() + Component.translatable("item.industrialforegoing.tier").getString() + tier + " ";
     }
 
     @Override

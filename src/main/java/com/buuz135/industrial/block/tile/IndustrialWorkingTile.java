@@ -69,7 +69,7 @@ public abstract class IndustrialWorkingTile<T extends IndustrialWorkingTile<T>> 
                         tooltip.add(Component.literal(ChatFormatting.GOLD + Component.translatable("tooltip.titanium.progressbar.progress").getString() + ChatFormatting.WHITE + new DecimalFormat().format(workingBar.getProgress()) + ChatFormatting.GOLD + "/" + ChatFormatting.WHITE + new DecimalFormat().format(workingBar.getMaxProgress())));
                         int progress = (workingBar.getMaxProgress() - workingBar.getProgress());
                         if (!workingBar.getIncreaseType()) progress = workingBar.getMaxProgress() - progress;
-                        tooltip.add(Component.literal(ChatFormatting.GOLD + "ETA: " + ChatFormatting.WHITE + new DecimalFormat().format(Math.ceil(progress * workingBar.getTickingTime() / 20D / workingBar.getProgressIncrease())) + ChatFormatting.DARK_AQUA + "s"));
+                        tooltip.add(Component.literal(ChatFormatting.GOLD + Component.translatable("tooltip.industrialforegoing.eta").getString() + ChatFormatting.WHITE + new DecimalFormat().format(Math.ceil(progress * workingBar.getTickingTime() / 20D / workingBar.getProgressIncrease())) + ChatFormatting.DARK_AQUA + Component.translatable("tooltip.industrialforegoing.sec_short").getString()));
                         if (estimatedPower > 0)
                             tooltip.add(Component.literal(ChatFormatting.GOLD + Component.translatable("tooltip.industrialforegoing.usage").getString() + ChatFormatting.WHITE + estimatedPower + ChatFormatting.DARK_AQUA + " FE"));
                         return tooltip;
