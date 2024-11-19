@@ -1,3 +1,7 @@
+# Version 3.6.20
+
+* Improve Hydroponic Bed code efficiency
+
 # Version 3.6.19
 
 * Fixed EMI not having the crafting info from the Dissolution Chamber

@@ -37,6 +37,7 @@ import javax.annotation.Nonnull;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.function.Supplier;
 
 public class HydroponicBedTile extends IndustrialWorkingTile<HydroponicBedTile> {
 
@@ -74,16 +75,19 @@ public class HydroponicBedTile extends IndustrialWorkingTile<HydroponicBedTile> 
         );
     }
 
-    public static boolean tryToHarvestAndReplant(Level level, BlockPos up, BlockState state, IItemHandler output, ProgressBarComponent<?> etherBuffer, IndustrialWorkingTile tile) {
-        Optional<PlantRecollectable> optional = IFRegistries.PLANT_RECOLLECTABLES_REGISTRY.stream().filter(plantRecollectable -> plantRecollectable.canBeHarvested(level, up, state)).findFirst();
-        if (optional.isPresent()) {
+    private PlantRecollectable cachedRecollectable = null;
+    private int errorAttempts = 0;
+
+    public static boolean tryToHarvestAndReplant(Level level, BlockPos up, BlockState state, IItemHandler output, ProgressBarComponent<?> etherBuffer, IndustrialWorkingTile tile, Supplier<PlantRecollectable> plantSupplier) {
+        var cachedRecollectable = plantSupplier.get();
+        if (cachedRecollectable != null) {
             List<ItemStack> drops = new ArrayList<>();
-            if (optional.get() instanceof TreePlantRecollectable) {
-                while (optional.get().canBeHarvested(level, up, state)) {
-                    drops.addAll(optional.get().doHarvestOperation(level, up, state));
+            if (cachedRecollectable instanceof TreePlantRecollectable) {
+                while (cachedRecollectable.canBeHarvested(level, up, state)) {
+                    drops.addAll(cachedRecollectable.doHarvestOperation(level, up, state));
                 }
             } else {
-                drops.addAll(optional.get().doHarvestOperation(level, up, state));
+                drops.addAll(cachedRecollectable.doHarvestOperation(level, up, state));
             }
             if (level.isEmptyBlock(up)) {
                 for (ItemStack drop : drops) {
@@ -101,13 +105,21 @@ public class HydroponicBedTile extends IndustrialWorkingTile<HydroponicBedTile> 
                 }
             }
             drops.forEach(stack -> ItemHandlerHelper.insertItem(output, stack, false));
-            if (tile instanceof IndustrialAreaWorkingTile<?> && optional.get().shouldCheckNextPlant(level, up, level.getBlockState(up))) {
+            if (tile instanceof IndustrialAreaWorkingTile<?> && cachedRecollectable.shouldCheckNextPlant(level, up, level.getBlockState(up))) {
                 ((IndustrialAreaWorkingTile<?>) tile).increasePointer();
             }
             etherBuffer.setProgress(etherBuffer.getProgress() - 1);
             return true;
         }
+
         return false;
+    }
+
+    private void findRecollectable(Level level, BlockPos up, BlockState state) {
+        Optional<PlantRecollectable> optional = IFRegistries.PLANT_RECOLLECTABLES_REGISTRY.stream().filter(plantRecollectable -> plantRecollectable.canBeHarvested(level, up, state)).findFirst();
+        if (optional.isPresent()) {
+            cachedRecollectable = optional.get();
+        }
     }
 
     @Override
@@ -119,6 +131,19 @@ public class HydroponicBedTile extends IndustrialWorkingTile<HydroponicBedTile> 
         if (hasEnergy(1000)) {
             BlockPos up = this.worldPosition.above();
             BlockState state = this.level.getBlockState(up);
+            Supplier<PlantRecollectable> plantRecollectableSupplier = () -> {
+                if (errorAttempts >= 15) {
+                    findRecollectable(level, up, state);
+                    errorAttempts = 0;
+                }
+                if (cachedRecollectable == null) {
+                    findRecollectable(level, up, state);
+                } else if (cachedRecollectable != null && !cachedRecollectable.canBeHarvested(level, up, state)) {
+                    ++errorAttempts;
+                    return null;
+                }
+                return cachedRecollectable;
+            };
             Block block = state.getBlock();
             if (!this.level.isEmptyBlock(up) && this.water.getFluidAmount() >= 10) {
                 //if (block instanceof SpecialPlantable specialPlantable && ((IPlantable) block).getPlantType(this.level, up) == PlantType.NETHER && !this.water.getFluid().getFluid().isSame(Fluids.LAVA))
@@ -137,11 +162,11 @@ public class HydroponicBedTile extends IndustrialWorkingTile<HydroponicBedTile> 
                         this.water.drainForced(10, IFluidHandler.FluidAction.EXECUTE);
                         return new WorkAction(1, HydroponicBedConfig.powerPerOperation);
                     } else if (this.etherBuffer.getProgress() > 0) {
-                        tryToHarvestAndReplant(this.level, up, state, this.output, this.etherBuffer, this);
+                        tryToHarvestAndReplant(this.level, up, state, this.output, this.etherBuffer, this, plantRecollectableSupplier);
                         return new WorkAction(1, HydroponicBedConfig.powerPerOperation);
                     }
                 } else {
-                    if (!tryToHarvestAndReplant(this.level, up, state, this.output, this.etherBuffer, this)) {
+                    if (!tryToHarvestAndReplant(this.level, up, state, this.output, this.etherBuffer, this, plantRecollectableSupplier)) {
                         if (this.etherBuffer.getProgress() > 0) {
                             for (int i = 0; i < 10; i++) {
                                 this.level.getBlockState(up).randomTick((ServerLevel) this.level, up, this.level.random);
