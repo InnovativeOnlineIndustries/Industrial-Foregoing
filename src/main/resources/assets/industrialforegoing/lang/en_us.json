@@ -583,6 +583,7 @@
   "text.industrialforegoing.tooltip.infinitydrill.epic": "Epic",
   "text.industrialforegoing.tooltip.infinitydrill.legendary": "Legendary",
   "text.industrialforegoing.tooltip.infinitydrill.artifact": "Artifact",
+  "tooltip.industrialforegoing.backpack.needs_biofuel": "Needs biofuel to work",
   "item.industrialforegoing.iron_gear": "Iron Gear",
   "item.industrialforegoing.gold_gear": "Gold Gear",
   "item.industrialforegoing.diamond_gear": "Diamond Gear",

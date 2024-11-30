@@ -5,38 +5,31 @@
       "item": "industrialforegoing:infinity_backpack"
     }
   ],
-  "type": "industrialforegoing:dissolution_chamber",
-  "input": [
-    {
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "B": {
+      "item": "minecraft:bucket"
+    },
+    "C": {
       "tag": "c:chests/wooden"
     },
-    {
+    "D": {
       "tag": "c:gears/diamond"
     },
-    {
-      "tag": "c:chests/wooden"
-    },
-    {
-      "item": "minecraft:bucket"
-    },
-    {
-      "item": "minecraft:bucket"
-    },
-    {
+    "G": {
       "tag": "c:gears/gold"
     },
-    {
-      "tag": "c:gears/gold"
-    },
-    {
-      "tag": "c:gears/gold"
+    "P": {
+      "item": "minecraft:ender_pearl"
     }
-  ],
-  "inputFluid": {
-    "amount": 2000,
-    "id": "industrialforegoing:pink_slime"
   },
-  "output": {
+  "pattern": [
+    "CDC",
+    "BPB",
+    "GGG"
+  ],
+  "result": {
     "components": {
       "industrialforegoing:infinity_can_charge": true,
       "industrialforegoing:infinity_item_power": 0,
@@ -45,6 +38,5 @@
     },
     "count": 1,
     "id": "industrialforegoing:infinity_backpack"
-  },
-  "processingTime": 400
+  }
 }

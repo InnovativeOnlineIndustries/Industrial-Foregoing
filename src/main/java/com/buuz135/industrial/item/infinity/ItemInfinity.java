@@ -420,7 +420,7 @@ public class ItemInfinity extends IFCustomItem implements MenuProvider, IButtonH
     }
 
     public IFactory<InfinityTankStorage> getTankConstructor(ItemStack stack) {
-        return () -> new InfinityTankStorage(stack, new InfinityTankStorage.TankDefinition("biofuel", 1_000_000, 30, 20, fluidStack -> fluidStack.getFluid().isSame(ModuleCore.BIOFUEL.getSourceFluid().get()), true, true, FluidTankComponent.Type.NORMAL));
+        return () -> new InfinityTankStorage(stack, new InfinityTankStorage.TankDefinition("biofuel", 1_000_000, 30, 20, fluidStack -> fluidStack.getFluid().isSame(ModuleCore.BIOFUEL.getSourceFluid().get()), true, true, FluidTankComponent.Type.NORMAL, new FluidStack(ModuleCore.BIOFUEL.getSourceFluid().get(), 1000)));
     }
 
     public IFactory<InfinityEnergyStorage> getEnergyConstructor(ItemStack stack) {

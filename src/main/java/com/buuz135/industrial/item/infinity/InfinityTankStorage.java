@@ -130,12 +130,12 @@ public class InfinityTankStorage implements IFluidHandlerItem, IScreenAddonProvi
         for (int i = 0; i < this.tanks.size(); i++) {
             var tankDefinition = this.tanks.get(i);
             int finalI = i;
-            list.add(() -> new ItemStackTankScreenAddon(tankDefinition.x, tankDefinition.y, this, finalI, tankDefinition.type));
+            list.add(() -> new ItemStackTankScreenAddon(tankDefinition.x, tankDefinition.y, this, finalI, tankDefinition.type, tankDefinition.definedFluidStack));
         }
         return list;
     }
 
     public record TankDefinition(String name, int capacity, int x, int y, Predicate<FluidStack> filter, boolean extract,
-                                 boolean insert, FluidTankComponent.Type type) {
+                                 boolean insert, FluidTankComponent.Type type, FluidStack definedFluidStack) {
     }
 }

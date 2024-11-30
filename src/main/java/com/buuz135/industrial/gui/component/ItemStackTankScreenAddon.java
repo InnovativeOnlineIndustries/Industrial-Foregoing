@@ -53,12 +53,14 @@ public class ItemStackTankScreenAddon extends BasicScreenAddon {
     private ITankAsset asset;
     private FluidTankComponent.Type type;
     private int tankSlot;
+    private final FluidStack definedFluidStack;
 
-    public ItemStackTankScreenAddon(int posX, int posY, IFluidHandler tank, int tankSlot, FluidTankComponent.Type type) {
+    public ItemStackTankScreenAddon(int posX, int posY, IFluidHandler tank, int tankSlot, FluidTankComponent.Type type, FluidStack definedFluidStack) {
         super(posX, posY);
         this.tank = tank;
         this.type = type;
         this.tankSlot = tankSlot;
+        this.definedFluidStack = definedFluidStack;
     }
 
     @Override
@@ -108,7 +110,7 @@ public class ItemStackTankScreenAddon extends BasicScreenAddon {
     @Override
     public List<Component> getTooltipLines() {
         List<Component> strings = new ArrayList<>();
-        strings.add(Component.literal(ChatFormatting.GOLD + Component.translatable("tooltip.titanium.tank.fluid").getString()).append(tank.getFluidInTank(tankSlot).isEmpty() ? Component.translatable("tooltip.titanium.tank.empty").withStyle(ChatFormatting.WHITE) : Component.translatable(tank.getFluidInTank(tankSlot).getFluid().getFluidType().getDescriptionId())).withStyle(ChatFormatting.WHITE));
+        strings.add(Component.literal(ChatFormatting.GOLD + Component.translatable("tooltip.titanium.tank.fluid").getString()).append(definedFluidStack.getHoverName()).withStyle(ChatFormatting.WHITE));
         strings.add(Component.translatable("tooltip.titanium.tank.amount").withStyle(ChatFormatting.GOLD).append(Component.literal(ChatFormatting.WHITE + new DecimalFormat().format(tank.getFluidInTank(tankSlot).getAmount()) + ChatFormatting.GOLD + "/" + ChatFormatting.WHITE + new DecimalFormat().format(tank.getTankCapacity(tankSlot)) + ChatFormatting.DARK_AQUA + "mb")));
         /*
         if (!Minecraft.getInstance().player.inventory.getSelected().isEmpty() && Minecraft.getInstance().player.inventory.getSelected().getCapability(ForgeCapabilities.FLUID_HANDLER_ITEM).isPresent()){
