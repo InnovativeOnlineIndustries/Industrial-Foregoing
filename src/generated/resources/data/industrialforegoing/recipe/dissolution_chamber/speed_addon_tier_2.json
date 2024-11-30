@@ -37,6 +37,11 @@
     "id": "industrialforegoing:latex"
   },
   "output": {
+    "components": {
+      "titanium:augments": {
+        "Speed": 3.0
+      }
+    },
     "count": 1,
     "id": "industrialforegoing:speed_addon_tier_2"
   },

@@ -37,6 +37,11 @@
     "id": "industrialforegoing:latex"
   },
   "output": {
+    "components": {
+      "titanium:augments": {
+        "Efficiency": 0.9
+      }
+    },
     "count": 1,
     "id": "industrialforegoing:efficiency_addon_tier_1"
   },

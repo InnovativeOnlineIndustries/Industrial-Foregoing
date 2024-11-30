@@ -37,6 +37,15 @@
     "id": "industrialforegoing:pink_slime"
   },
   "output": {
+    "components": {
+      "industrialforegoing:infinity_can_charge": true,
+      "industrialforegoing:infinity_item_power": 0,
+      "industrialforegoing:infinity_item_selected_tier": "poor",
+      "industrialforegoing:infinity_item_special": false,
+      "industrialforegoing:infinity_trident_channeling": false,
+      "industrialforegoing:infinity_trident_loyalty": 0,
+      "industrialforegoing:infinity_trident_riptide": 0
+    },
     "count": 1,
     "id": "industrialforegoing:infinity_trident"
   },

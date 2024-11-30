@@ -60,6 +60,11 @@ public class RangeAddonItem extends AddonItem implements ISpecialCreativeTabItem
     @Override
     public void onCraftedBy(ItemStack stack, Level worldIn, Player playerIn) {
         super.onCraftedBy(stack, worldIn, playerIn);
+    }
+
+    @Override
+    public void verifyComponentsAfterLoad(ItemStack stack) {
+        super.verifyComponentsAfterLoad(stack);
         AugmentWrapper.setType(stack, RANGE, tier);
     }
 

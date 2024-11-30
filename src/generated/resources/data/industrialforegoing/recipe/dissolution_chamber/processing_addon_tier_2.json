@@ -37,6 +37,11 @@
     "id": "industrialforegoing:latex"
   },
   "output": {
+    "components": {
+      "titanium:augments": {
+        "Processing": 3.0
+      }
+    },
     "count": 1,
     "id": "industrialforegoing:processing_addon_tier_2"
   },

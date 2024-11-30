@@ -99,6 +99,14 @@ public class ItemInfinityTrident extends ItemInfinity {
         stack.set(IFAttachments.INFINITY_TRIDENT_CHANNELING, false);
     }
 
+    @Override
+    public void verifyComponentsAfterLoad(ItemStack stack) {
+        super.verifyComponentsAfterLoad(stack);
+        if (!stack.has(IFAttachments.INFINITY_TRIDENT_LOYALTY)) stack.set(IFAttachments.INFINITY_TRIDENT_LOYALTY, 0);
+        if (!stack.has(IFAttachments.INFINITY_TRIDENT_RIPTIDE)) stack.set(IFAttachments.INFINITY_TRIDENT_RIPTIDE, 0);
+        if (!stack.has(IFAttachments.INFINITY_TRIDENT_CHANNELING))
+            stack.set(IFAttachments.INFINITY_TRIDENT_CHANNELING, false);
+    }
 
     @Override
     public UseAnim getUseAnimation(ItemStack stack) {

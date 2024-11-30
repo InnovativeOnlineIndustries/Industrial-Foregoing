@@ -37,6 +37,13 @@
     "id": "industrialforegoing:pink_slime"
   },
   "output": {
+    "components": {
+      "industrialforegoing:configuration_action": "RELEASE",
+      "industrialforegoing:infinity_can_charge": true,
+      "industrialforegoing:infinity_item_power": 0,
+      "industrialforegoing:infinity_item_selected_tier": "poor",
+      "industrialforegoing:infinity_item_special": false
+    },
     "count": 1,
     "id": "industrialforegoing:infinity_launcher"
   },

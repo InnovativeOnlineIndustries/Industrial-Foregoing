@@ -97,6 +97,12 @@ public class ItemInfinityLauncher extends ItemInfinity {
     }
 
     @Override
+    public void verifyComponentsAfterLoad(ItemStack stack) {
+        super.verifyComponentsAfterLoad(stack);
+        if (!stack.has(IFAttachments.PLUNGER_ACTION)) stack.set(IFAttachments.PLUNGER_ACTION, PlungerAction.RELEASE);
+    }
+
+    @Override
     public void addTooltipDetails(BasicItem.Key key, ItemStack stack, List<Component> tooltip, boolean advanced) {
         super.addTooltipDetails(key, stack, tooltip, advanced);
         PlungerAction action = getPlungerAction(stack);

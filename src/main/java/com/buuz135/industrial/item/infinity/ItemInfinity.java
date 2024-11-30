@@ -128,17 +128,21 @@ public class ItemInfinity extends IFCustomItem implements MenuProvider, IButtonH
         return stack.getOrDefault(IFAttachments.INFINITY_ITEM_CAN_CHARGE, false);
     }
 
-    @Override
-    public void onCraftedBy(ItemStack stack, Level worldIn, Player playerIn) {
-        super.onCraftedBy(stack, worldIn, playerIn);
-        addNbt(stack, 0, 0, false);
-    }
-
     public void addNbt(ItemStack stack, long power, int fuel, boolean special) {
         stack.set(IFAttachments.INFINITY_ITEM_POWER, power);
         stack.set(IFAttachments.INFINITY_ITEM_SPECIAL, special);
         stack.set(IFAttachments.INFINITY_ITEM_SELECTED_TIER, InfinityTier.getTierBraquet(power).getLeft());
         stack.set(IFAttachments.INFINITY_ITEM_CAN_CHARGE, true);
+    }
+
+    @Override
+    public void verifyComponentsAfterLoad(ItemStack stack) {
+        super.verifyComponentsAfterLoad(stack);
+        if (!stack.has(IFAttachments.INFINITY_ITEM_POWER)) stack.set(IFAttachments.INFINITY_ITEM_POWER, 0L);
+        if (!stack.has(IFAttachments.INFINITY_ITEM_SPECIAL)) stack.set(IFAttachments.INFINITY_ITEM_SPECIAL, false);
+        if (!stack.has(IFAttachments.INFINITY_ITEM_SELECTED_TIER))
+            stack.set(IFAttachments.INFINITY_ITEM_SELECTED_TIER, InfinityTier.getTierBraquet(0).getLeft());
+        if (!stack.has(IFAttachments.INFINITY_ITEM_CAN_CHARGE)) stack.set(IFAttachments.INFINITY_ITEM_CAN_CHARGE, true);
     }
 
     @Override

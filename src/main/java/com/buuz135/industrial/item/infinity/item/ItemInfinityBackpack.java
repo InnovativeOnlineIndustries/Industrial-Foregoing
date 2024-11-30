@@ -450,6 +450,11 @@ public class ItemInfinityBackpack extends ItemInfinity {
     }
 
     @Override
+    public void verifyComponentsAfterLoad(ItemStack stack) {
+        super.verifyComponentsAfterLoad(stack);
+    }
+
+    @Override
     public boolean enoughFuel(ItemStack stack) {
         int i = EnchantmentHelper.getItemEnchantmentLevel(IFAttachments.registryAccess().holderOrThrow(Enchantments.UNBREAKING), stack);
         return getFuelFromStack(stack) >= FUEL_CONSUMPTION * (1 / (i + 1));
