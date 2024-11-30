@@ -2,6 +2,7 @@
 
 * Changed how item components are added to items
 * Modified Infinity Backpack recipe easier to make
+* Added ingot tags to pink slime
 
 # Version 3.6.20
 

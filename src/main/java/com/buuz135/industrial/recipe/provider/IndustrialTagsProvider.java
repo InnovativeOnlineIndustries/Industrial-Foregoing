@@ -26,10 +26,12 @@ import com.buuz135.industrial.module.ModuleAgricultureHusbandry;
 import com.buuz135.industrial.module.ModuleCore;
 import com.buuz135.industrial.utils.IndustrialTags;
 import com.buuz135.industrial.utils.Reference;
+import com.hrznstudio.titanium.util.TagUtil;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.data.DataGenerator;
 import net.minecraft.data.tags.ItemTagsProvider;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.world.level.block.Block;
 import net.neoforged.neoforge.common.Tags;
@@ -81,6 +83,9 @@ public class IndustrialTagsProvider {
             tag(IndustrialTags.Items.GEAR_GOLD).add(ModuleCore.GOLD_GEAR.get());
             tag(IndustrialTags.Items.GEAR_IRON).add(ModuleCore.IRON_GEAR.get());
             tag(IndustrialTags.Items.GEARS).add(ModuleCore.DIAMOND_GEAR.get(), ModuleCore.GOLD_GEAR.get(), ModuleCore.IRON_GEAR.get());
+
+            tag(TagUtil.getItemTag(ResourceLocation.parse("c:ingots"))).add(ModuleCore.PINK_SLIME_ITEM.get());
+            tag(TagUtil.getItemTag(ResourceLocation.parse("c:ingots/pink_slime"))).add(ModuleCore.PINK_SLIME_ITEM.get());
         }
     }
 
