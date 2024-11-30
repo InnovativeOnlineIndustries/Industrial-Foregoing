@@ -154,7 +154,7 @@ public abstract class RegulatorFilterGuiComponent extends PositionedGuiComponent
                 if (mouseX > posX + 1 && mouseX < posX + 1 + 16 && mouseY > posY + 1 && mouseY < posY + 1 + 16 && !getFilter().getFilterSlots()[pos].getStack().isEmpty()) {
                     List<Component> strings = Minecraft.getInstance().screen.getTooltipFromItem(Minecraft.getInstance(), getFilter().getFilterSlots()[pos].getStack());
                     if (isRegulator())
-                        strings.add(Component.literal(ChatFormatting.DARK_GRAY + "*Use Scroll Wheel to change*"));
+                        strings.add(Component.literal(ChatFormatting.DARK_GRAY + Component.translatable("text.industrialforegoing.display.use_scroll").getString()));
                     return strings;
                 }
                 ++pos;

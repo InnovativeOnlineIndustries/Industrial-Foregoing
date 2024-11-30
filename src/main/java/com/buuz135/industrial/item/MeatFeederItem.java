@@ -65,7 +65,7 @@ public class MeatFeederItem extends IFCustomItem {
         super.addTooltipDetails(key, stack, tooltip, advanced);
         var handlerItemStack = stack.getCapability(Capabilities.FluidHandler.ITEM);
         if (handlerItemStack != null && key == null) {
-            tooltip.add(Component.literal(NumberFormat.getNumberInstance(Locale.ROOT).format(handlerItemStack.getFluidInTank(0).getAmount()) + ChatFormatting.GOLD + "/" + ChatFormatting.WHITE + NumberFormat.getNumberInstance(Locale.ROOT).format(512000) + ChatFormatting.GOLD + "mb of Meat"));
+            tooltip.add(Component.literal(NumberFormat.getNumberInstance(Locale.ROOT).format(handlerItemStack.getFluidInTank(0).getAmount()) + ChatFormatting.GOLD + "/" + ChatFormatting.WHITE + NumberFormat.getNumberInstance(Locale.ROOT).format(512000) + ChatFormatting.GOLD + Component.translatable("text.industrialforegoing.display.mb_of_meat").getString()));
         }
     }
 

@@ -10,6 +10,7 @@ import dev.emi.emi.api.neoforge.NeoForgeEmiStack;
 import dev.emi.emi.api.widget.WidgetHolder;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
+import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 
 public class FermentationStationEmiRecipe extends CustomEmiRecipe {
@@ -45,7 +46,7 @@ public class FermentationStationEmiRecipe extends CustomEmiRecipe {
         widgets.addDrawable(0, 0, 0, 0, (draw, mouseX, mouseY, delta) -> {
             AssetUtil.drawAsset(draw, Minecraft.getInstance().screen, DefaultAssetProvider.DEFAULT_PROVIDER.getAsset(AssetTypes.TANK_NORMAL), 2, 1);
             AssetUtil.drawAsset(draw, Minecraft.getInstance().screen, DefaultAssetProvider.DEFAULT_PROVIDER.getAsset(AssetTypes.TANK_NORMAL), 99 - 45, 1);
-            draw.drawString(Minecraft.getInstance().font, ChatFormatting.DARK_AQUA + "Up to 500mb", 8, 59, 0xFFFFFF, false);
+            draw.drawString(Minecraft.getInstance().font, ChatFormatting.DARK_AQUA + Component.translatable("text.industrialforegoing.jei.recipe.up_to_500mb").getString(), 8, 59, 0xFFFFFF, false);
         });
 
     }

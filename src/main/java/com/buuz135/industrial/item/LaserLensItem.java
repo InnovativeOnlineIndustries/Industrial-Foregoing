@@ -26,11 +26,13 @@ import com.buuz135.industrial.module.ModuleCore;
 import com.buuz135.industrial.recipe.DissolutionChamberRecipe;
 import net.minecraft.data.recipes.RecipeOutput;
 import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.world.item.DyeColor;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.neoforged.neoforge.common.Tags;
 import net.neoforged.neoforge.fluids.FluidStack;
+import org.spongepowered.asm.mixin.Mutable;
 
 import java.util.List;
 import java.util.Optional;
@@ -58,7 +60,7 @@ public class LaserLensItem extends IFCustomItem {
 
     @Override
     public Component getName(ItemStack stack) {
-        return Component.literal(Component.translatable("color.minecraft." + color.getName()).getString() +
-                " " + Component.translatable("item.industrialforegoing.laser_lens").getString());
+        String colorName = Component.translatable("color.minecraft." + color.getName()).getString();
+        return Component.translatable("item.industrialforegoing.laser_lens", colorName);
     }
 }

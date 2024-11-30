@@ -53,11 +53,11 @@ public class DonationGuiAddon extends BasicScreenAddon {
     @Override
     public List<Component> getTooltipLines() {
         List<Component> components = new ArrayList<>();
-        components.add(Component.literal("Consider donating to Buuz135,").withStyle(ChatFormatting.GOLD));
-        components.add(Component.literal("author of these mods in this pack:").withStyle(ChatFormatting.GOLD));
+        components.add(Component.literal(Component.translatable("text.industrialforegoing.donation.consider").getString()).withStyle(ChatFormatting.GOLD));
+        components.add(Component.literal(Component.translatable("text.industrialforegoing.donation.author_of").getString()).withStyle(ChatFormatting.GOLD));
         IndustrialForegoing.OWN_MODS_LOADED.forEach(string -> components.add(Component.literal("- " + string).withStyle(ChatFormatting.WHITE)));
         components.add(Component.empty());
-        components.add(Component.literal("*Click for more information*").withStyle(ChatFormatting.GRAY));
+        components.add(Component.literal(Component.translatable("text.industrialforegoing.donation.click_for").getString()).withStyle(ChatFormatting.GRAY));
         return components;
     }
 

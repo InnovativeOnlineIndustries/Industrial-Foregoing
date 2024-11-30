@@ -52,7 +52,7 @@ public class InfinityEnergyScreenAddon extends BasicScreenAddon {
     }
 
     public static java.util.List<Component> getTooltip(long stored, long capacity) {
-        return Arrays.asList(Component.literal(ChatFormatting.GOLD + "Power:"), Component.literal(new DecimalFormat().format(stored) + ChatFormatting.GOLD + "/" + ChatFormatting.WHITE + new DecimalFormat().format(capacity) + ChatFormatting.DARK_AQUA + " FE"));
+        return Arrays.asList(Component.literal(ChatFormatting.GOLD + Component.translatable("text.industrialforegoing.display.power").getString()), Component.literal(new DecimalFormat().format(stored) + ChatFormatting.GOLD + "/" + ChatFormatting.WHITE + new DecimalFormat().format(capacity) + ChatFormatting.DARK_AQUA + " FE"));
     }
 
     @Override

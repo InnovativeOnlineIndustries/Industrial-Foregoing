@@ -282,9 +282,9 @@ public class ItemInfinity extends IFCustomItem implements MenuProvider, IButtonH
         if (usesArea)
             tooltip.add(Component.translatable("text.industrialforegoing.display.current_area").append(" ").append(getFormattedArea(stack, current, current.getRadius(), this.usesDepth)).withStyle(ChatFormatting.GRAY));
         tooltip.add(Component.translatable("text.industrialforegoing.display.tier").append(" " + braquet.getLeft().getColor() + braquet.getLeft().getLocalizedName()).withStyle(ChatFormatting.GRAY));
-        tooltip.add(Component.translatable("text.industrialforegoing.display.power").append(" ").append(ChatFormatting.RED + NumberFormat.getNumberInstance(Locale.ROOT).format(power) + ChatFormatting.GREEN).append("/").append(NumberFormat.getNumberInstance(Locale.ROOT).format(braquet.getRight().getPowerNeeded())).append("RF ").append(Component.translatable("text.industrialforegoing.display.next_tier")).withStyle(ChatFormatting.GRAY));
+        tooltip.add(Component.translatable("text.industrialforegoing.display.power").append(" ").append(ChatFormatting.RED + NumberFormat.getNumberInstance(Locale.ROOT).format(power) + ChatFormatting.GREEN).append("/").append(NumberFormat.getNumberInstance(Locale.ROOT).format(braquet.getRight().getPowerNeeded())).append(Component.translatable("text.industrialforegoing.display.rf")).append(Component.translatable("text.industrialforegoing.display.next_tier")).withStyle(ChatFormatting.GRAY));
         int fuelAmount = getFuelFromStack(stack);
-        tooltip.add(Component.translatable("text.industrialforegoing.display.fluid").append(" ").append(ChatFormatting.LIGHT_PURPLE + NumberFormat.getNumberInstance(Locale.ROOT).format(fuelAmount) + ChatFormatting.GRAY).append("/").append(NumberFormat.getNumberInstance(Locale.ROOT).format(1000000)).append(" mb of Biofuel").withStyle(ChatFormatting.GRAY));
+        tooltip.add(Component.translatable("text.industrialforegoing.display.fluid").append(" ").append(ChatFormatting.LIGHT_PURPLE + NumberFormat.getNumberInstance(Locale.ROOT).format(fuelAmount) + ChatFormatting.GRAY).append("/").append(NumberFormat.getNumberInstance(Locale.ROOT).format(1000000)).append(Component.translatable("text.industrialforegoing.display.mb_of_biofuel").getString()).withStyle(ChatFormatting.GRAY));
         if (usesArea)
             tooltip.add(Component.translatable("text.industrialforegoing.display.max_area").append(" ").append(getFormattedArea(stack, braquet.getLeft(), braquet.getLeft().getRadius(), this.usesDepth)).withStyle(ChatFormatting.GRAY));
         if (canCharge(stack)) {
@@ -388,7 +388,7 @@ public class ItemInfinity extends IFCustomItem implements MenuProvider, IButtonH
             @Override
             public String getText() {
                 InfinityTier current = ItemInfinity.getSelectedTier(stack.get());
-                return ChatFormatting.DARK_GRAY + "Area: " + getFormattedArea(stack.get(), current, current.getRadius(), usesDepth);
+                return ChatFormatting.DARK_GRAY + Component.translatable("text.industrialforegoing.display.area").getString() + getFormattedArea(stack.get(), current, current.getRadius(), usesDepth);
             }
         });
         factory.add(() -> new StateButtonAddon(new ButtonComponent(54, 36, 14, 14).setId(3), new StateButtonInfo(0, AssetTypes.BUTTON_SIDENESS_ENABLED), new StateButtonInfo(1, AssetTypes.BUTTON_SIDENESS_DISABLED)) {

@@ -80,6 +80,6 @@ public class FermentationStationCategory implements IRecipeCategory<OreFluidEntr
 
     @Override
     public void draw(OreFluidEntryFermenter recipe, IRecipeSlotsView recipeSlotsView, GuiGraphics guiGraphics, double mouseX, double mouseY) {
-        guiGraphics.drawString(Minecraft.getInstance().font, ChatFormatting.DARK_AQUA + "Up to 500mb", 3, 52, 0xFFFFFF);
+        guiGraphics.drawString(Minecraft.getInstance().font, ChatFormatting.DARK_AQUA + Component.translatable("text.industrialforegoing.jei.recipe.up_to_500mb").getString(), 3, 52, 0xFFFFFF);
     }
 }
