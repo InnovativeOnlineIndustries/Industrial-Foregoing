@@ -79,7 +79,7 @@ public class MycelialReactorBlock extends IndustrialBlock<MycelialReactorTile> {
         if (player.isShiftKeyDown() && !worldIn.isClientSide && tileEntity instanceof MycelialReactorTile) {
             List<String> available = MycelialDataManager.getReactorAvailable(((MycelialReactorTile) tileEntity).getOwner(), worldIn, false);
             if (available.size() != IMycelialGeneratorType.TYPES.size()) {
-                player.sendSystemMessage(Component.literal("Generators not running:").withStyle(ChatFormatting.RED));
+                player.sendSystemMessage(Component.literal(Component.translatable("text.industrialforegoing.generators_not_running").getString()).withStyle(ChatFormatting.RED));
             }
             for (IMycelialGeneratorType type : IMycelialGeneratorType.TYPES) {
                 if (!available.contains(type.getName())) {
@@ -96,7 +96,7 @@ public class MycelialReactorBlock extends IndustrialBlock<MycelialReactorTile> {
         if (player.isShiftKeyDown() && !worldIn.isClientSide && tileEntity instanceof MycelialReactorTile) {
             List<String> available = MycelialDataManager.getReactorAvailable(((MycelialReactorTile) tileEntity).getOwner(), worldIn, false);
             if (available.size() != IMycelialGeneratorType.TYPES.size()) {
-                player.sendSystemMessage(Component.literal("Generators not running:").withStyle(ChatFormatting.RED));
+                player.sendSystemMessage(Component.literal(Component.translatable("text.industrialforegoing.generators_not_running").getString()).withStyle(ChatFormatting.RED));
             }
             for (IMycelialGeneratorType type : IMycelialGeneratorType.TYPES) {
                 if (!available.contains(type.getName())) {

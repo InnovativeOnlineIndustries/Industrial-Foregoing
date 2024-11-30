@@ -61,6 +61,7 @@ import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.neoforged.neoforge.capabilities.Capabilities;
 import net.neoforged.neoforge.capabilities.RegisterCapabilitiesEvent;
 import net.neoforged.neoforge.event.level.BlockEvent;
+import net.neoforged.neoforge.fluids.FluidStack;
 import net.neoforged.neoforge.registries.DeferredHolder;
 import net.neoforged.neoforge.server.ServerLifecycleHooks;
 
@@ -142,7 +143,7 @@ public class ModuleTool implements IModule {
                 }
                 return null;
             }, INFINITY_SAW.get(), INFINITY_DRILL.get(), INFINITY_HAMMER.get(), INFINITY_TRIDENT.get(), INFINITY_BACKPACK.get(), INFINITY_LAUNCHER.get(), INFINITY_NUKE.get());
-            event.registerItem(Capabilities.FluidHandler.ITEM, (o, unused) -> new InfinityTankStorage(o, new InfinityTankStorage.TankDefinition("meat", 512_000, 0, 0, fluidStack -> fluidStack.is(ModuleCore.MEAT.getSourceFluid()), false, true, FluidTankComponent.Type.SMALL)), MEAT_FEEDER.get());
+            event.registerItem(Capabilities.FluidHandler.ITEM, (o, unused) -> new InfinityTankStorage(o, new InfinityTankStorage.TankDefinition("meat", 512_000, 0, 0, fluidStack -> fluidStack.is(ModuleCore.MEAT.getSourceFluid()), false, true, FluidTankComponent.Type.SMALL, new FluidStack(ModuleCore.MEAT.getSourceFluid().get(), 1000))), MEAT_FEEDER.get());
             event.registerItem(CapabilityItemStackHolder.ITEMSTACK_HOLDER_CAPABILITY, (o, unused) -> new InfinityStackHolder(), INFINITY_SAW.get(), INFINITY_DRILL.get(), INFINITY_HAMMER.get(), INFINITY_TRIDENT.get(), INFINITY_BACKPACK.get(), INFINITY_LAUNCHER.get(), INFINITY_NUKE.get());
             event.registerItem(Capabilities.ItemHandler.ITEM, (o, unused) -> {
                 if (o.getItem() instanceof ItemInfinityBackpack itemInfinity && o.has(IFAttachments.INFINITY_BACKPACK_ID)) {

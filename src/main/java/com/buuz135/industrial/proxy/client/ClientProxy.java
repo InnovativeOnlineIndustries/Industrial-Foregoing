@@ -186,7 +186,7 @@ public class ClientProxy extends CommonProxy {
 
         EventManager.forge(ItemTooltipEvent.class).filter(event -> BuiltInRegistries.ITEM.getKey(event.getItemStack().getItem()).getNamespace().equals(Reference.MOD_ID)).process(event -> {
             if (Calendar.getInstance().get(Calendar.DAY_OF_MONTH) == 1 && Calendar.getInstance().get(Calendar.MONTH) == Calendar.APRIL) {
-                event.getToolTip().add(Component.literal("Press Alt + F4 to cheat this item").withStyle(ChatFormatting.DARK_AQUA));
+                event.getToolTip().add(Component.literal(Component.translatable("text.industrialforegoing.proxy.client.alt_f4").getString()).withStyle(ChatFormatting.DARK_AQUA));
             }
         }).subscribe();
 

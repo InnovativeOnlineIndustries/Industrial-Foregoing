@@ -120,6 +120,12 @@ public class ItemInfinityHammer extends ItemInfinity {
     }
 
     @Override
+    public void verifyComponentsAfterLoad(ItemStack stack) {
+        super.verifyComponentsAfterLoad(stack);
+        if (!stack.has(IFAttachments.INFINITY_HAMMER_BEHEADING)) stack.set(IFAttachments.INFINITY_HAMMER_BEHEADING, 0);
+    }
+
+    @Override
     public boolean supportsEnchantment(ItemStack stack, Holder<Enchantment> enchantment) {
         return Items.DIAMOND_SWORD.supportsEnchantment(new ItemStack(Items.DIAMOND_SWORD), enchantment);
     }

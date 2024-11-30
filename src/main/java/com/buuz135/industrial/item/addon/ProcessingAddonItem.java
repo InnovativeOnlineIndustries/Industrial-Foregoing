@@ -33,12 +33,10 @@ import net.minecraft.ChatFormatting;
 import net.minecraft.data.recipes.RecipeOutput;
 import net.minecraft.network.chat.Component;
 import net.minecraft.tags.TagKey;
-import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.crafting.Ingredient;
-import net.minecraft.world.level.Level;
 import net.neoforged.neoforge.event.BuildCreativeModeTabContentsEvent;
 import net.neoforged.neoforge.fluids.FluidStack;
 
@@ -59,8 +57,8 @@ public class ProcessingAddonItem extends AddonItem implements ISpecialCreativeTa
     }
 
     @Override
-    public void onCraftedBy(ItemStack stack, Level worldIn, Player playerIn) {
-        super.onCraftedBy(stack, worldIn, playerIn);
+    public void verifyComponentsAfterLoad(ItemStack stack) {
+        super.verifyComponentsAfterLoad(stack);
         AugmentWrapper.setType(stack, PROCESSING, 1 + tier);
     }
 
@@ -82,7 +80,7 @@ public class ProcessingAddonItem extends AddonItem implements ISpecialCreativeTa
 
     @Override
     public String getDescriptionId() {
-        return Component.translatable("item.industrialforegoing.addon").getString() + Component.translatable("item.industrialforegoing.processing").getString() + "Tier " + tier + " ";
+        return Component.translatable("item.industrialforegoing.addon").getString() + Component.translatable("item.industrialforegoing.processing").getString() + Component.translatable("item.industrialforegoing.tier").getString() + tier + " ";
     }
 
     @Override

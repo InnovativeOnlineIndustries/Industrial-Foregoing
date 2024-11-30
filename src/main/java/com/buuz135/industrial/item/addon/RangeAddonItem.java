@@ -60,12 +60,17 @@ public class RangeAddonItem extends AddonItem implements ISpecialCreativeTabItem
     @Override
     public void onCraftedBy(ItemStack stack, Level worldIn, Player playerIn) {
         super.onCraftedBy(stack, worldIn, playerIn);
+    }
+
+    @Override
+    public void verifyComponentsAfterLoad(ItemStack stack) {
+        super.verifyComponentsAfterLoad(stack);
         AugmentWrapper.setType(stack, RANGE, tier);
     }
 
     @Override
     public String getDescriptionId() {
-        return Component.translatable("item.industrialforegoing.addon").getString() + Component.translatable("item.industrialforegoing.range_addon").getString() + "Tier " + (tier + 1) + " ";
+        return Component.translatable("item.industrialforegoing.addon").getString() + Component.translatable("item.industrialforegoing.range_addon").getString() + Component.translatable("item.industrialforegoing.tier").getString() + (tier + 1) + " ";
     }
 
     @Override

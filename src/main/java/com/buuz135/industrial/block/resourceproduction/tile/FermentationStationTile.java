@@ -146,7 +146,7 @@ public class FermentationStationTile extends IndustrialProcessingTile<Fermentati
                                 ProductionType type = ProductionType.values()[production];
                                 List<Component> list = new ArrayList<>(super.getTooltipLines());
                                 list.add(Component.translatable("text.industrialforegoing.tooltip.fermentation_station.time").append(type.getTicks() / 20 + "s"));
-                                list.add(Component.translatable("text.industrialforegoing.tooltip.fermentation_station.catalyst").append(type.getNeededFluid().isEmpty() ? "None" : type.getNeededFluid().getHoverName().getString()));
+                                list.add(Component.translatable("text.industrialforegoing.tooltip.fermentation_station.catalyst").append(type.getNeededFluid().isEmpty() ? Component.translatable("text.industrialforegoing.display.none").getString() : type.getNeededFluid().getHoverName().getString()));
 
                                 return list;
                             }

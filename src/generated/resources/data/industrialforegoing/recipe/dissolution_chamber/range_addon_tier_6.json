@@ -37,6 +37,11 @@
     "id": "industrialforegoing:latex"
   },
   "output": {
+    "components": {
+      "titanium:augments": {
+        "Range": 6.0
+      }
+    },
     "count": 1,
     "id": "industrialforegoing:range_addon_tier_6"
   },

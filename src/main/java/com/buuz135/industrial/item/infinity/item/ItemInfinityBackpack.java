@@ -34,7 +34,6 @@ import com.buuz135.industrial.module.ModuleCore;
 import com.buuz135.industrial.module.ModuleTool;
 import com.buuz135.industrial.proxy.network.BackpackOpenedMessage;
 import com.buuz135.industrial.proxy.network.BackpackSyncMessage;
-import com.buuz135.industrial.recipe.DissolutionChamberRecipe;
 import com.buuz135.industrial.utils.IFAttachments;
 import com.buuz135.industrial.utils.IndustrialTags;
 import com.buuz135.industrial.worlddata.BackpackDataManager;
@@ -52,6 +51,7 @@ import com.hrznstudio.titanium.network.locator.LocatorFactory;
 import com.hrznstudio.titanium.network.locator.PlayerInventoryFinder;
 import com.hrznstudio.titanium.network.locator.instance.HeldStackLocatorInstance;
 import com.hrznstudio.titanium.network.locator.instance.InventoryStackLocatorInstance;
+import com.hrznstudio.titanium.recipe.generator.TitaniumShapedRecipeBuilder;
 import net.minecraft.ChatFormatting;
 import net.minecraft.advancements.CriteriaTriggers;
 import net.minecraft.core.BlockPos;
@@ -80,7 +80,6 @@ import net.minecraft.world.item.component.CustomData;
 import net.minecraft.world.item.component.ItemAttributeModifiers;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.item.context.UseOnContext;
-import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.item.enchantment.Enchantments;
 import net.minecraft.world.level.Level;
@@ -259,7 +258,7 @@ public class ItemInfinityBackpack extends ItemInfinity {
     public void inventoryTick(ItemStack stack, Level worldIn, Entity entityIn, int itemSlot, boolean isSelected) {
         if (isMagnetEnabled(stack)) {
             for (ItemEntity itemEntity : entityIn.level().getEntitiesOfClass(ItemEntity.class, new AABB(entityIn.getX(), entityIn.getY(), entityIn.getY(), entityIn.getX(), entityIn.getY(), entityIn.getZ()).inflate(5))) {
-                if (entityIn.level().isClientSide) {
+                if (entityIn.level().isClientSide && enoughFuel(stack)) {
                     if (itemEntity.onGround() && worldIn.random.nextInt(5) < 1)
                         itemEntity.level().addParticle(ParticleTypes.PORTAL, itemEntity.getX(), itemEntity.getY() + 0.5, itemEntity.getZ(), 0, -0.5, 0);
                 } else {
@@ -322,9 +321,9 @@ public class ItemInfinityBackpack extends ItemInfinity {
     public IFactory<InfinityTankStorage> getTankConstructor(ItemStack stack) {
         int y = 88;
         return () -> new InfinityTankStorage(stack,
-                new InfinityTankStorage.TankDefinition("biofuel", 1_000_000, -21, y + 25 * 0, fluidStack -> fluidStack.getFluid().isSame(ModuleCore.BIOFUEL.getSourceFluid().get()), true, true, FluidTankComponent.Type.SMALL),
-                new InfinityTankStorage.TankDefinition("essence", 1_000_000, -21, y + 25 * 1, fluidStack -> fluidStack.is(IndustrialTags.Fluids.EXPERIENCE), true, true, FluidTankComponent.Type.SMALL),
-                new InfinityTankStorage.TankDefinition("meat", 1_000_000, -21, y + 25 * 2, fluidStack -> fluidStack.getFluid().isSame(ModuleCore.MEAT.getSourceFluid().get()), false, true, FluidTankComponent.Type.SMALL)
+                new InfinityTankStorage.TankDefinition("biofuel", 1_000_000, -21, y + 25 * 0, fluidStack -> fluidStack.getFluid().isSame(ModuleCore.BIOFUEL.getSourceFluid().get()), true, true, FluidTankComponent.Type.SMALL, new FluidStack(ModuleCore.BIOFUEL.getSourceFluid().get(), 1000)),
+                new InfinityTankStorage.TankDefinition("essence", 1_000_000, -21, y + 25 * 1, fluidStack -> fluidStack.is(IndustrialTags.Fluids.EXPERIENCE), true, true, FluidTankComponent.Type.SMALL, new FluidStack(ModuleCore.ESSENCE.getSourceFluid().get(), 1000)),
+                new InfinityTankStorage.TankDefinition("meat", 1_000_000, -21, y + 25 * 2, fluidStack -> fluidStack.getFluid().isSame(ModuleCore.MEAT.getSourceFluid().get()), false, true, FluidTankComponent.Type.SMALL, new FluidStack(ModuleCore.MEAT.getSourceFluid().get(), 1000))
         );
     }
 
@@ -450,6 +449,11 @@ public class ItemInfinityBackpack extends ItemInfinity {
     }
 
     @Override
+    public void verifyComponentsAfterLoad(ItemStack stack) {
+        super.verifyComponentsAfterLoad(stack);
+    }
+
+    @Override
     public boolean enoughFuel(ItemStack stack) {
         int i = EnchantmentHelper.getItemEnchantmentLevel(IFAttachments.registryAccess().holderOrThrow(Enchantments.UNBREAKING), stack);
         return getFuelFromStack(stack) >= FUEL_CONSUMPTION * (1 / (i + 1));
@@ -528,7 +532,7 @@ public class ItemInfinityBackpack extends ItemInfinity {
         factory.add(() -> new AssetScreenAddon(AssetTypes.AUGMENT_BACKGROUND, 175, 10, true));
         int x = 181;
         int y = 19;
-        factory.add(() -> new StateButtonAddon(new ButtonComponent(x, 16 + y * 0, 14, 14).setId(10), new StateButtonInfo(0, AssetTypes.BUTTON_SIDENESS_ENABLED, ChatFormatting.GREEN + Component.translatable("tooltip.industrialforegoing.backpack.magnet_enabled").getString()), new StateButtonInfo(1, AssetTypes.BUTTON_SIDENESS_DISABLED, ChatFormatting.RED + Component.translatable("tooltip.industrialforegoing.backpack.magnet_disabled").getString())) {
+        factory.add(() -> new StateButtonAddon(new ButtonComponent(x, 16 + y * 0, 14, 14).setId(10), new StateButtonInfo(0, AssetTypes.BUTTON_SIDENESS_ENABLED, ChatFormatting.GREEN + Component.translatable("tooltip.industrialforegoing.backpack.magnet_enabled").getString(), ChatFormatting.DARK_GRAY + Component.translatable("tooltip.industrialforegoing.backpack.needs_biofuel").getString()), new StateButtonInfo(1, AssetTypes.BUTTON_SIDENESS_DISABLED, ChatFormatting.RED + Component.translatable("tooltip.industrialforegoing.backpack.magnet_disabled").getString())) {
             @Override
             public int getState() {
                 return isMagnetEnabled(stack.get()) ? 0 : 1;
@@ -575,19 +579,16 @@ public class ItemInfinityBackpack extends ItemInfinity {
 
     @Override
     public void registerRecipe(RecipeOutput consumer) {
-        DissolutionChamberRecipe.createRecipe(consumer, "infinity_backpack", new DissolutionChamberRecipe(
-                List.of(
-                        Ingredient.of(Tags.Items.CHESTS_WOODEN),
-                        Ingredient.of(IndustrialTags.Items.GEAR_DIAMOND),
-                        Ingredient.of(Tags.Items.CHESTS_WOODEN),
-                        Ingredient.of(Items.BUCKET),
-                        Ingredient.of(Items.BUCKET),
-                        Ingredient.of(IndustrialTags.Items.GEAR_GOLD),
-                        Ingredient.of(IndustrialTags.Items.GEAR_GOLD),
-                        Ingredient.of(IndustrialTags.Items.GEAR_GOLD)
-                ),
-                new FluidStack(ModuleCore.PINK_SLIME.getSourceFluid().get(), 2000), 400, Optional.of(new ItemStack(this)), Optional.empty()));
-
+        TitaniumShapedRecipeBuilder.shapedRecipe(this)
+                .pattern("CDC")
+                .pattern("BPB")
+                .pattern("GGG")
+                .define('C', Tags.Items.CHESTS_WOODEN)
+                .define('D', IndustrialTags.Items.GEAR_DIAMOND)
+                .define('B', Items.BUCKET)
+                .define('P', Items.ENDER_PEARL)
+                .define('G', IndustrialTags.Items.GEAR_GOLD)
+                .save(consumer);
     }
 
     @Override

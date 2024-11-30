@@ -98,7 +98,7 @@ dependencies {
     compileOnly "curse.maven:pneumaticcraft-repressurized-281849:5698172"
     implementation "curse.maven:curios-continuation-1037991:5690713"
     compileOnly "dev.emi:emi-neoforge:${emi_version}:api"
-    runtimeOnly "dev.emi:emi-neoforge:${emi_version}"
+    //runtimeOnly "dev.emi:emi-neoforge:${emi_version}"
     runtimeOnly "curse.maven:mekanism-268560:5680395"
     //runtimeOnly "com.enderio:enderio-base:${ender_io_version}"
     //runtimeOnly "com.enderio:enderio-conduits:${ender_io_version}"

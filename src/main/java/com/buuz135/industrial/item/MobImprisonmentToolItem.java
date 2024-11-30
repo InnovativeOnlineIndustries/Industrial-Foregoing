@@ -115,8 +115,8 @@ public class MobImprisonmentToolItem extends IFCustomItem {
         super.addTooltipDetails(key, stack, tooltip, advanced);
         if (containsEntity(stack)) {
             var nbt = stack.get(IFAttachments.MOB_IMPRISONMENT_TOOL);
-            tooltip.add(Component.literal("Mob: " + getID(stack)).withStyle(ChatFormatting.GRAY));//new TranslationTextComponent(EntityList.getTranslationName(ResourceLocation.fromNamespaceAndPath(getID(stack)))).getUnformattedComponentText());
-            tooltip.add(Component.literal("Health: " + nbt.getDouble("Health")).withStyle(ChatFormatting.GRAY));
+            tooltip.add(Component.literal(Component.translatable("text.industrialforegoing.display.mob").getString() + getID(stack)).withStyle(ChatFormatting.GRAY));//new TranslationTextComponent(EntityList.getTranslationName(ResourceLocation.fromNamespaceAndPath(getID(stack)))).getUnformattedComponentText());
+            tooltip.add(Component.literal(Component.translatable("text.industrialforegoing.display.health").getString() + nbt.getDouble("Health")).withStyle(ChatFormatting.GRAY));
             //if (BlockRegistry.mobDuplicatorBlock.blacklistedEntities.contains(stack.getTag().getString("entity")))
             //    tooltip.add(Component.literalString(TextFormatting.RED + "Entity blacklisted in the Mob Duplicator"));
         }

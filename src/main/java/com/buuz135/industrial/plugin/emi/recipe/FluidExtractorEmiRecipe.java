@@ -49,15 +49,15 @@ public class FluidExtractorEmiRecipe extends CustomEmiRecipe {
         widgets.addFillingArrow(26, 12, 5000);
 
         widgets.addDrawable(0, 0, 0, 0, (draw, mouseX, mouseY, delta) -> {
-            draw.drawString(Minecraft.getInstance().font, ChatFormatting.DARK_GRAY + "Production: ", 80, 6, 0xFFFFFF, false);
-            draw.drawString(Minecraft.getInstance().font, ChatFormatting.DARK_GRAY + "" + recipe.value().output.getAmount() + "mb/work", 80, 6 + (Minecraft.getInstance().font.lineHeight + 2) * 1, 0xFFFFFF, false);
-            draw.drawString(Minecraft.getInstance().font, ChatFormatting.DARK_AQUA + "" + "Tripled when", 80, 6 + (Minecraft.getInstance().font.lineHeight + 2) * 2, 0xFFFFFF, false);
-            draw.drawString(Minecraft.getInstance().font, ChatFormatting.DARK_AQUA + "" + "powered", 80, 6 + (Minecraft.getInstance().font.lineHeight + 2) * 3, 0xFFFFFF, false);
+            draw.drawString(Minecraft.getInstance().font, ChatFormatting.DARK_GRAY + Component.translatable("text.industrialforegoing.jei.recipe.production").getString(), 80, 6, 0xFFFFFF, false);
+            draw.drawString(Minecraft.getInstance().font, ChatFormatting.DARK_GRAY + "" + recipe.value().output.getAmount() + Component.translatable("text.industrialforegoing.jei.recipe.mb_work").getString(), 80, 6 + (Minecraft.getInstance().font.lineHeight + 2) * 1, 0xFFFFFF, false);
+            draw.drawString(Minecraft.getInstance().font, ChatFormatting.DARK_AQUA + "" + Component.translatable("text.industrialforegoing.jei.recipe.tripled_when").getString(), 80, 6 + (Minecraft.getInstance().font.lineHeight + 2) * 2, 0xFFFFFF, false);
+            draw.drawString(Minecraft.getInstance().font, ChatFormatting.DARK_AQUA + "" + Component.translatable("text.industrialforegoing.jei.recipe.powered").getString(), 80, 6 + (Minecraft.getInstance().font.lineHeight + 2) * 3, 0xFFFFFF, false);
             AssetUtil.drawAsset(draw, Minecraft.getInstance().screen, DefaultAssetProvider.DEFAULT_PROVIDER.getAsset(AssetTypes.TANK_NORMAL), 57, 1);
 
         });
 
-        widgets.addTooltipText(List.of(Component.literal("Production rate")), 78, 5, 140 - 78, 20);
+        widgets.addTooltipText(List.of(Component.literal(Component.translatable("text.industrialforegoing.jei.recipe.production_rate").getString())), 78, 5, 140 - 78, 20);
     }
 
     public RecipeHolder<FluidExtractorRecipe> getRecipe() {

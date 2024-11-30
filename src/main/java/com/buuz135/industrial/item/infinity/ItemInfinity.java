@@ -128,17 +128,21 @@ public class ItemInfinity extends IFCustomItem implements MenuProvider, IButtonH
         return stack.getOrDefault(IFAttachments.INFINITY_ITEM_CAN_CHARGE, false);
     }
 
-    @Override
-    public void onCraftedBy(ItemStack stack, Level worldIn, Player playerIn) {
-        super.onCraftedBy(stack, worldIn, playerIn);
-        addNbt(stack, 0, 0, false);
-    }
-
     public void addNbt(ItemStack stack, long power, int fuel, boolean special) {
         stack.set(IFAttachments.INFINITY_ITEM_POWER, power);
         stack.set(IFAttachments.INFINITY_ITEM_SPECIAL, special);
         stack.set(IFAttachments.INFINITY_ITEM_SELECTED_TIER, InfinityTier.getTierBraquet(power).getLeft());
         stack.set(IFAttachments.INFINITY_ITEM_CAN_CHARGE, true);
+    }
+
+    @Override
+    public void verifyComponentsAfterLoad(ItemStack stack) {
+        super.verifyComponentsAfterLoad(stack);
+        if (!stack.has(IFAttachments.INFINITY_ITEM_POWER)) stack.set(IFAttachments.INFINITY_ITEM_POWER, 0L);
+        if (!stack.has(IFAttachments.INFINITY_ITEM_SPECIAL)) stack.set(IFAttachments.INFINITY_ITEM_SPECIAL, false);
+        if (!stack.has(IFAttachments.INFINITY_ITEM_SELECTED_TIER))
+            stack.set(IFAttachments.INFINITY_ITEM_SELECTED_TIER, InfinityTier.getTierBraquet(0).getLeft());
+        if (!stack.has(IFAttachments.INFINITY_ITEM_CAN_CHARGE)) stack.set(IFAttachments.INFINITY_ITEM_CAN_CHARGE, true);
     }
 
     @Override
@@ -278,9 +282,9 @@ public class ItemInfinity extends IFCustomItem implements MenuProvider, IButtonH
         if (usesArea)
             tooltip.add(Component.translatable("text.industrialforegoing.display.current_area").append(" ").append(getFormattedArea(stack, current, current.getRadius(), this.usesDepth)).withStyle(ChatFormatting.GRAY));
         tooltip.add(Component.translatable("text.industrialforegoing.display.tier").append(" " + braquet.getLeft().getColor() + braquet.getLeft().getLocalizedName()).withStyle(ChatFormatting.GRAY));
-        tooltip.add(Component.translatable("text.industrialforegoing.display.power").append(" ").append(ChatFormatting.RED + NumberFormat.getNumberInstance(Locale.ROOT).format(power) + ChatFormatting.GREEN).append("/").append(NumberFormat.getNumberInstance(Locale.ROOT).format(braquet.getRight().getPowerNeeded())).append("RF ").append(Component.translatable("text.industrialforegoing.display.next_tier")).withStyle(ChatFormatting.GRAY));
+        tooltip.add(Component.translatable("text.industrialforegoing.display.power").append(" ").append(ChatFormatting.RED + NumberFormat.getNumberInstance(Locale.ROOT).format(power) + ChatFormatting.GREEN).append("/").append(NumberFormat.getNumberInstance(Locale.ROOT).format(braquet.getRight().getPowerNeeded())).append(Component.translatable("text.industrialforegoing.display.rf")).append(Component.translatable("text.industrialforegoing.display.next_tier")).withStyle(ChatFormatting.GRAY));
         int fuelAmount = getFuelFromStack(stack);
-        tooltip.add(Component.translatable("text.industrialforegoing.display.fluid").append(" ").append(ChatFormatting.LIGHT_PURPLE + NumberFormat.getNumberInstance(Locale.ROOT).format(fuelAmount) + ChatFormatting.GRAY).append("/").append(NumberFormat.getNumberInstance(Locale.ROOT).format(1000000)).append(" mb of Biofuel").withStyle(ChatFormatting.GRAY));
+        tooltip.add(Component.translatable("text.industrialforegoing.display.fluid").append(" ").append(ChatFormatting.LIGHT_PURPLE + NumberFormat.getNumberInstance(Locale.ROOT).format(fuelAmount) + ChatFormatting.GRAY).append("/").append(NumberFormat.getNumberInstance(Locale.ROOT).format(1000000)).append(Component.translatable("text.industrialforegoing.display.mb_of_biofuel").getString()).withStyle(ChatFormatting.GRAY));
         if (usesArea)
             tooltip.add(Component.translatable("text.industrialforegoing.display.max_area").append(" ").append(getFormattedArea(stack, braquet.getLeft(), braquet.getLeft().getRadius(), this.usesDepth)).withStyle(ChatFormatting.GRAY));
         if (canCharge(stack)) {
@@ -384,7 +388,7 @@ public class ItemInfinity extends IFCustomItem implements MenuProvider, IButtonH
             @Override
             public String getText() {
                 InfinityTier current = ItemInfinity.getSelectedTier(stack.get());
-                return ChatFormatting.DARK_GRAY + "Area: " + getFormattedArea(stack.get(), current, current.getRadius(), usesDepth);
+                return ChatFormatting.DARK_GRAY + Component.translatable("text.industrialforegoing.display.area").getString() + getFormattedArea(stack.get(), current, current.getRadius(), usesDepth);
             }
         });
         factory.add(() -> new StateButtonAddon(new ButtonComponent(54, 36, 14, 14).setId(3), new StateButtonInfo(0, AssetTypes.BUTTON_SIDENESS_ENABLED), new StateButtonInfo(1, AssetTypes.BUTTON_SIDENESS_DISABLED)) {
@@ -416,7 +420,7 @@ public class ItemInfinity extends IFCustomItem implements MenuProvider, IButtonH
     }
 
     public IFactory<InfinityTankStorage> getTankConstructor(ItemStack stack) {
-        return () -> new InfinityTankStorage(stack, new InfinityTankStorage.TankDefinition("biofuel", 1_000_000, 30, 20, fluidStack -> fluidStack.getFluid().isSame(ModuleCore.BIOFUEL.getSourceFluid().get()), true, true, FluidTankComponent.Type.NORMAL));
+        return () -> new InfinityTankStorage(stack, new InfinityTankStorage.TankDefinition("biofuel", 1_000_000, 30, 20, fluidStack -> fluidStack.getFluid().isSame(ModuleCore.BIOFUEL.getSourceFluid().get()), true, true, FluidTankComponent.Type.NORMAL, new FluidStack(ModuleCore.BIOFUEL.getSourceFluid().get(), 1000)));
     }
 
     public IFactory<InfinityEnergyStorage> getEnergyConstructor(ItemStack stack) {

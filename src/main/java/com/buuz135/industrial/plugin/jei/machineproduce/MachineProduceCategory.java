@@ -73,7 +73,7 @@ public class MachineProduceCategory implements IRecipeCategory<MachineProduceWra
 
     @Override
     public Component getTitle() {
-        return Component.literal("Machine Outputs");
+        return Component.literal(Component.translatable("text.industrialforegoing.jei.recipe.machine_outputs").getString());
     }
 
     @Override

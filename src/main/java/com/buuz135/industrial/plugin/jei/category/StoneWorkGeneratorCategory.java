@@ -63,7 +63,7 @@ public class StoneWorkGeneratorCategory implements IRecipeCategory<StoneWorkGene
 
     @Override
     public Component getTitle() {
-        return Component.literal("StoneWork Generation");
+        return Component.literal(Component.translatable("text.industrialforegoing.jei.recipe.stonework_generation").getString());
     }
 
     @Override

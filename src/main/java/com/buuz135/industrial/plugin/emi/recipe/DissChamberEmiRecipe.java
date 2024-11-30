@@ -22,7 +22,6 @@ import net.neoforged.neoforge.fluids.FluidStack;
 import org.apache.commons.lang3.tuple.Pair;
 
 import java.awt.*;
-import java.util.ArrayList;
 import java.util.List;
 
 public class DissChamberEmiRecipe extends CustomEmiRecipe {
@@ -40,24 +39,11 @@ public class DissChamberEmiRecipe extends CustomEmiRecipe {
     }
 
     public static List<EmiIngredient> fromInputDiss(List<Ingredient> ingredients) {
-        List<Ingredient> result = new ArrayList<>();
-        for (Ingredient ingredient : ingredients) {
-            var stacks = new ArrayList<ItemStack>();
-            for (ItemStack item : ingredient.getItems()) {
-                item.getItem().onCraftedBy(item, null, null);
-                stacks.add(item);
-            }
-            result.add(Ingredient.of(stacks.toArray(new ItemStack[0])));
-        }
-        return result.stream().map(EmiIngredient::of).toList();
+        return ingredients.stream().map(EmiIngredient::of).toList();
     }
 
     public static List<EmiStack> fromOutputDiss(ItemStack output, FluidStack fluidStack) {
-        output.getItem().onCraftedBy(output, null, null);
-        var list = new ArrayList<EmiStack>();
-        list.add(EmiStack.of(output));
-        list.add(EmiStack.of(fluidStack.getFluid(), fluidStack.getComponentsPatch(), fluidStack.getAmount()));
-        return list;
+        return fromOutput(output, fluidStack);
     }
 
     @Override

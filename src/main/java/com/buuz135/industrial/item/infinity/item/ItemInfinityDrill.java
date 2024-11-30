@@ -79,7 +79,6 @@ public class ItemInfinityDrill extends ItemInfinity {
         return Items.DIAMOND_PICKAXE.isCorrectToolForDrops(stack, blockIn) || Items.DIAMOND_SHOVEL.isCorrectToolForDrops(stack, blockIn);
     }
 
-
     @Override
     public boolean mineBlock(ItemStack stack, Level worldIn, BlockState state, BlockPos pos, LivingEntity entityLiving) {
         if (entityLiving instanceof Player) {
