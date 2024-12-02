@@ -1,0 +1,21 @@
+{
+  "name": "植物採集機",
+  "icon": "industrialforegoing:plant_gatherer",
+  "category": "industrialforegoing:agriculture_husbandry",
+  "sortnum": 1,
+  "read_by_default": true,
+  "pages": [
+    {
+      "type": "text",
+      "text": "木を$(6)伐採$()して作物を$(6)収穫$()するために使用される機械です。各操作で少量の$(l:agr_hus/sludge)ヘドロ$()が生成されます。$(br2)植物採集機が作業エリア内で木の収穫を開始すると基本の原木ブロックに接続されている丸太や葉の収穫も続行されます。"
+    },
+    {
+      "type": "text",
+      "text": "植物採集機は右クリックで植物を収穫できる場合でも収穫時に作物を壊します。ただし少量のエーテルが供給されている場合は自動的に再植えされます。"
+    },
+    {
+      "type": "crafting",
+      "recipe": "industrialforegoing:plant_gatherer"
+    }
+  ]
+}

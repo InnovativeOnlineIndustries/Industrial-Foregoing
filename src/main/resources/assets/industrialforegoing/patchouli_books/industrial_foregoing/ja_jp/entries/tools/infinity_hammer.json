@@ -1,0 +1,21 @@
+{
+  "name": "無限ハンマー",
+  "icon": "industrialforegoing:infinity_hammer",
+  "category": "industrialforegoing:tools",
+  "sortnum": 3,
+  "read_by_default": true,
+  "pages": [
+    {
+      "type": "text",
+      "text": "無限ハンマーはエリア内の敵にダメージを与えることができるツールです。ティアを上げるとさまざまなレベルの$(6)斬首$()にアクセスできるようになり、Mobの頭を簡単に手に入れることができます。"
+    },
+    {
+      "type": "text",
+      "text": "地面を右クリックするとユーザーの前に円錐形で地面に$(6)粉砕する$()効果が発生します。"
+    },
+    {
+      "type": "industrialforegoing:dissolution",
+      "recipe": "industrialforegoing:dissolution_chamber/infinity_hammer"
+    }
+  ]
+}

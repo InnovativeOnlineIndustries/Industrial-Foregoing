@@ -77,7 +77,7 @@ public class EfficiencyAddonItem extends AddonItem implements ISpecialCreativeTa
 
     @Override
     public String getDescriptionId() {
-        return Component.translatable("item.industrialforegoing.addon").getString() + Component.translatable("item.industrialforegoing.efficiency").getString() + "Tier " + tier + " ";
+        return Component.translatable("item.industrialforegoing.addon").getString() + Component.translatable("item.industrialforegoing.efficiency").getString() + Component.translatable("item.industrialforegoing.tier").getString() + tier + " ";
     }
 
     @Override

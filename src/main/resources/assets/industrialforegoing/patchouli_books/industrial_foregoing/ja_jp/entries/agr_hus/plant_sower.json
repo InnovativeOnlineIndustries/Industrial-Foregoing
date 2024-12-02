@@ -1,0 +1,17 @@
+{
+  "name": "植物播種機",
+  "icon": "industrialforegoing:plant_sower",
+  "category": "industrialforegoing:agriculture_husbandry",
+  "sortnum": 4,
+  "read_by_default": true,
+  "pages": [
+    {
+      "type": "text",
+      "text": "作物や苗木を$(6)植える$()ために使用する機械。$(br2)9つの内部インベントリスロットは$(6)色$()でコード化されており、植物播種機の上部にある色付きのマークに対応しています。機械の上部の作業領域は9つのセグメントに分割されており、各セクションには対応するインベントリスロットの種のみが植えられます。"
+    },
+    {
+      "type": "crafting",
+      "recipe": "industrialforegoing:plant_sower"
+    }
+  ]
+}

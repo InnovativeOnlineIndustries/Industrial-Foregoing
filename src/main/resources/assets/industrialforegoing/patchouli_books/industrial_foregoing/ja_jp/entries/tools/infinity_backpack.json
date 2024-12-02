@@ -1,0 +1,21 @@
+{
+  "name": "無限バックパック",
+  "icon": "industrialforegoing:infinity_backpack",
+  "category": "industrialforegoing:tools",
+  "sortnum": 3,
+  "read_by_default": true,
+  "pages": [
+    {
+      "type": "text",
+      "text": "無限バックパックは大量のアイテムを持ち運び可能な方法で保管できるツールです。$(br2)3つの特定の流体を保持できます。自動操作を機能させる$(6)バイオ燃料$()、拾った経験値からの$(6)エッセンス$()(自動取得が有効になっている場合)、および自動的に補給する$(6)液状ミート$()です。"
+    },
+    {
+      "type": "text",
+      "text": "$(6)マグネットモード$()が有効になっている場合近くのアイテムは拾えるときにプレイヤーのところにテレポートされます。$(br2)$(6)自動取得モード$()が有効になっている場合、バックパックに入れることのできるアイテムはプレイヤーが拾うと自動的にバックパックに入れられます。$(br2)各スロットは余分なものを$(6)無効$()にするかインベントリ内のいっぱいでないスタックを$(6)補充$()するように設定できます。"
+    },
+    {
+      "type": "industrialforegoing:dissolution",
+      "recipe": "industrialforegoing:dissolution_chamber/infinity_backpack"
+    }
+  ]
+}

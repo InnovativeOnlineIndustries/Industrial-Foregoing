@@ -1,0 +1,17 @@
+{
+  "name": "鉱石レーザーベース",
+  "icon": "industrialforegoing:ore_laser_base",
+  "category": "industrialforegoing:resource_production",
+  "sortnum": 14,
+  "read_by_default": true,
+  "pages": [
+    {
+      "type": "text",
+      "text": "$(l:resource_production/laser_drill)レーザードリル$()を完全に充電すると鉱石が生成されます。生成できる各鉱石にはマシンが配置されているバイオームと、マシンが採掘するように設定されている深さに基づいた重量があります。$(br2)レーザーレンズは生成された鉱石の重量を増加させます。$(br2)値についてはJEIを確認してください。"
+    },
+    {
+      "type": "crafting",
+      "recipe": "industrialforegoing:ore_laser_base"
+    }
+  ]
+}

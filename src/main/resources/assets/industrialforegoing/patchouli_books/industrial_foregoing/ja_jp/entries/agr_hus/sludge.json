@@ -1,0 +1,13 @@
+{
+  "name": "ヘドロ (入りバケツ)",
+  "icon": "industrialforegoing:sludge_bucket",
+  "category": "industrialforegoing:agriculture_husbandry",
+  "sortnum": 2,
+  "read_by_default": true,
+  "pages": [
+    {
+      "type": "text",
+      "text": "$(l:agr_hus/plant_gatherer)植物採集機$()によって生成され、$(l:resource_production/sludge_refiner)ヘドロ精製機$()で使用される液体です。"
+    }
+  ]
+}

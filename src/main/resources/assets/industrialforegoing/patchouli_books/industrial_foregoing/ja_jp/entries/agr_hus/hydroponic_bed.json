@@ -1,0 +1,17 @@
+{
+  "name": "水耕栽培ベッド",
+  "icon": "industrialforegoing:hydroponic_bed",
+  "category": "industrialforegoing:agriculture_husbandry",
+  "sortnum": 16,
+  "read_by_default": true,
+  "pages": [
+    {
+      "type": "text",
+      "text": "このマシンは電力と$(6)水$()(またはネザー作物の場合は$(6)溶岩$())と組み合わせると作物の成長を少し早めます。$(br2)ごく少量の$(l:resource_production/ether_gas)エーテルガス$()を供給することで作物ははるかに速く成長し、自動的に植え替えられます。"
+    },
+    {
+      "type": "crafting",
+      "recipe": "industrialforegoing:hydroponic_bed"
+    }
+  ]
+}
