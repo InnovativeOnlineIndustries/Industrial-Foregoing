@@ -1,0 +1,17 @@
+{
+  "name": "ヘドロ精製機",
+  "icon": "industrialforegoing:sludge_refiner",
+  "category": "industrialforegoing:resource_production",
+  "sortnum": 10,
+  "read_by_default": true,
+  "pages": [
+    {
+      "type": "text",
+      "text": "$(6)ヘドロ$()を何か有用なものに変える機械です。$(br2)$(l:agr_hus/plant_gatherer)植物採集機$()から取得した$(6)ヘドロ$()を供給すると$(6)何か$()を生成します。$(br)ただし、このプロセスには $(6)1,000$()FE/tが必要なので電力を蓄えておくようにしてください。"
+    },
+    {
+      "type": "crafting",
+      "recipe": "industrialforegoing:sludge_refiner"
+    }
+  ]
+}

@@ -1,0 +1,13 @@
+{
+  "name": "ラテックス(流体)",
+  "icon": "industrialforegoing:latex_bucket",
+  "category": "industrialforegoing:basics",
+  "sortnum": 3,
+  "read_by_default": true,
+  "pages": [
+    {
+      "type": "text",
+      "text": "この流体は$(l:basics/latex_processing_unit)ラテックス加工ユニット$()で小さな乾燥ゴムの製造に使用されます。"
+    }
+  ]
+}

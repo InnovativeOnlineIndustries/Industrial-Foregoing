@@ -1,0 +1,13 @@
+{
+  "name": "肥料",
+  "icon": "industrialforegoing:fertilizer",
+  "category": "industrialforegoing:agriculture_husbandry",
+  "sortnum": 15,
+  "read_by_default": true,
+  "pages": [
+    {
+      "type": "text",
+      "text": "$(l:agr_hus/sewage_composter)下水コンポスター$()によって生成される素材で、骨粉のように使用できます。"
+    }
+  ]
+}

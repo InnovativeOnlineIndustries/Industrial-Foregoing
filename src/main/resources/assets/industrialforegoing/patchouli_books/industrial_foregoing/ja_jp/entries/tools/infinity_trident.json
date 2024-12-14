@@ -1,0 +1,17 @@
+{
+  "name": "無限トライデント",
+  "icon": "industrialforegoing:infinity_trident",
+  "category": "industrialforegoing:tools",
+  "sortnum": 3,
+  "read_by_default": true,
+  "pages": [
+    {
+      "type": "text",
+      "text": "無限トライデントはトライデントの真の力を解放できるツールです。ティアを上げるとさまざまなレベルの$(6)忠誠心$()、$(6)激流$()、$(6)召雷$()にアクセスできるようになります。$(br2)召雷とヒットダメージはAoEに適用されます。"
+    },
+    {
+      "type": "industrialforegoing:dissolution",
+      "recipe": "industrialforegoing:dissolution_chamber/infinity_trident"
+    }
+  ]
+}

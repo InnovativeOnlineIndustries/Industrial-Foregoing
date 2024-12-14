@@ -1,0 +1,17 @@
+{
+  "name": "水凝縮機",
+  "icon": "industrialforegoing:water_condensator",
+  "category": "industrialforegoing:resource_production",
+  "sortnum": 11,
+  "read_by_default": true,
+  "pages": [
+    {
+      "type": "text",
+      "text": "周囲のソースブロックから$(6)水$()を生成する機械です。$(br2)少なくとも$(6)2個の水ソースブロック$()に隣接すると動作を開始します。$(br)ソースブロックを追加して操作ごとに$(6)1,000$()FEを供給するとマシンの速度が大幅に向上します。"
+    },
+    {
+      "type": "crafting",
+      "recipe": "industrialforegoing:water_condensator"
+    }
+  ]
+}

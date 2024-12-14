@@ -1,0 +1,17 @@
+{
+  "name": "バイオリアクター",
+  "icon": "industrialforegoing:bioreactor",
+  "category": "industrialforegoing:generators",
+  "sortnum": 2,
+  "read_by_default": true,
+  "pages": [
+    {
+      "type": "text",
+      "text": "水といくつかの$(6)種$()、$(6)苗木$()、$(6)染料$()、そして...$(6)頭蓋骨$()???を供給すると$(l:generators/biofuel)バイオ燃料$()を作成する機械です。$(br2)リアクターにさまざまな種類のアイテムがあればあるほどアイテムごとに作成されるバイオ燃料が多くなります。たとえばリアクターにアイテムが1つしかない場合、$(6)80$()mbしか作成されませんが、4つの異なるアイテムがある場合はアイテムごとに$(6)110$()mbが作成され合計で $(6)440$()mbになります。"
+    },
+    {
+      "type": "crafting",
+      "recipe": "industrialforegoing:bioreactor"
+    }
+  ]
+}
