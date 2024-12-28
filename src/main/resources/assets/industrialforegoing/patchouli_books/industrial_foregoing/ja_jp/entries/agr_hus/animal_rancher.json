@@ -1,0 +1,17 @@
+{
+  "name": "動物飼育機",
+  "icon": "industrialforegoing:animal_rancher",
+  "category": "industrialforegoing:agriculture_husbandry",
+  "sortnum": 0,
+  "read_by_default": true,
+  "pages": [
+    {
+      "type": "text",
+      "text": "ヒツジの$(6)毛刈り$()とウシの$(6)乳搾り$()に使用される機械です。"
+    },
+    {
+      "type": "crafting",
+      "recipe": "industrialforegoing:animal_rancher"
+    }
+  ]
+}

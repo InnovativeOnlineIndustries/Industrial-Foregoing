@@ -1,0 +1,17 @@
+{
+  "name": "ブロック配置機",
+  "icon": "industrialforegoing:block_placer",
+  "category": "industrialforegoing:resource_production",
+  "sortnum": 5,
+  "read_by_default": true,
+  "pages": [
+    {
+      "type": "text",
+      "text": "ブロックを配置します。$(br2)$(6)1,000$()FEを使用して内部コンテナからブロックを配置します。"
+    },
+    {
+      "type": "crafting",
+      "recipe": "industrialforegoing:block_placer"
+    }
+  ]
+}

@@ -1,0 +1,17 @@
+{
+  "name": "バイオ燃料発電機",
+  "icon": "industrialforegoing:biofuel_generator",
+  "category": "industrialforegoing:generators",
+  "sortnum": 3,
+  "read_by_default": true,
+  "pages": [
+    {
+      "type": "text",
+      "text": "$(l:generators/biofuel)バイオ燃料$()を使用して$(6)160$()FE/tを生成する発電機です。$(br2)この発電機は効率的なので内部バッファーがいっぱいになると燃料の消費を停止します。"
+    },
+    {
+      "type": "crafting",
+      "recipe": "industrialforegoing:biofuel_generator"
+    }
+  ]
+}

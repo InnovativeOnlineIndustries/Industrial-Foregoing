@@ -1,0 +1,33 @@
+{
+  "name": "アドオン",
+  "icon": "industrialforegoing:range_addon11",
+  "category": "industrialforegoing:basics",
+  "sortnum": 5,
+  "read_by_default": true,
+  "pages": [
+    {
+      "type": "spotlight",
+      "item": "industrialforegoing:range_addon_tier_11",
+      "title": "範囲",
+      "text": "作業領域を持つマシンの範囲を拡大します。すべてのマシンが範囲アドオンを受け入れるわけではありません。各ティアごとに範囲が1ずつ増加します。"
+    },
+    {
+      "type": "spotlight",
+      "item": "industrialforegoing:speed_addon_tier_2",
+      "title": "速度",
+      "text": "進捗バーがティックごとに進む量を増やします。$(br2)ティア1 -> +1$(br)ティア2 -> +2"
+    },
+    {
+      "type": "spotlight",
+      "item": "industrialforegoing:efficiency_addon_tier_2",
+      "title": "効率",
+      "text": "操作を完了するために必要なティック数を減らします。$(br2)ティア1 -> -10%$(br)ティア2 -> -20%"
+    },
+    {
+      "type": "spotlight",
+      "item": "industrialforegoing:processing_addon_tier_2",
+      "title": "処理",
+      "text": "マシンが処理を完了したときに実行される操作の増加量です。$(br2)ティア1 -> +1 操作 $(br)ティア2 -> +2 操作"
+    }
+  ]
+}

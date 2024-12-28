@@ -1,0 +1,27 @@
+{
+  "name": "ベルトコンベア",
+  "icon": "industrialforegoing:conveyor",
+  "category": "industrialforegoing:transport",
+  "sortnum": 0,
+  "read_by_default": true,
+  "pages": [
+    {
+      "type": "text",
+      "text": "ベルトコンベアはアイテム、エンティティ、流体を輸送するために使用できます。$(l:conveyor_upgrades)アップグレード$()を使用してワールドと相互作用できます。アイテムとエンティティはコンベア上で上下に移動できますが流体は水平方向にしか移動できません。$(br2)コンベアは右クリックして染料で色付けできます。"
+    },
+    {
+      "type": "crafting",
+      "recipe": "industrialforegoing:conveyor"
+    },
+    {
+      "type": "spotlight",
+      "item": "minecraft:glowstone_dust",
+      "text": "グロウストーンを使用するとコンベアでアイテムやエンティティを非常に高速に移動させることができます。"
+    },
+    {
+      "type": "spotlight",
+      "item": "industrialforegoing:plastic",
+      "text": "プラスチックを使用するとコンベアの上にあるアイテムが拾われてしまうのを防ぐことができます。"
+    }
+  ]
+}

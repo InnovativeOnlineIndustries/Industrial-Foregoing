@@ -1,0 +1,17 @@
+{
+  "name": "洗浄機",
+  "icon": "industrialforegoing:washing_factory",
+  "category": "industrialforegoing:resource_production",
+  "sortnum": 19,
+  "read_by_default": true,
+  "pages": [
+    {
+      "type": "text",
+      "text": "この機械は液状ミートと原石を使用してその鉱石の原石ミートに変えます。"
+    },
+    {
+      "type": "crafting",
+      "recipe": "industrialforegoing:washing_factory"
+    }
+  ]
+}

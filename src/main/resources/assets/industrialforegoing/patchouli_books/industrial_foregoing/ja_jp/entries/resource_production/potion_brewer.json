@@ -1,0 +1,17 @@
+{
+  "name": "ポーション醸造機",
+  "icon": "industrialforegoing:potion_brewer",
+  "category": "industrialforegoing:resource_production",
+  "sortnum": 9,
+  "read_by_default": true,
+  "pages": [
+    {
+      "type": "text",
+      "text": "自動バニラ醸造機です。$(br2)$(6)電力$()を供給すると提供された材料からポーションを作成します。$(br)内部の$(6)水$()コンテナが満たされている場合は空のボトルが満たされて消費されません。$(br2)ポーションを排出できるようにするには緑色のフィルターでポーションを構成する必要があります。"
+    },
+    {
+      "type": "crafting",
+      "recipe": "industrialforegoing:potion_brewer"
+    }
+  ]
+}
