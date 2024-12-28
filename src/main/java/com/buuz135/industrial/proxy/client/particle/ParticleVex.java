@@ -102,6 +102,8 @@ public class ParticleVex extends Particle {
     public void render(VertexConsumer bufferBad, Camera activeRenderInfo, float v) {
         if (entity instanceof LocalPlayer && Minecraft.getInstance().player.getUUID().equals(entity.getUUID()) && Minecraft.getInstance().options.getCameraType() == CameraType.FIRST_PERSON && this.entity.position().add(0, 1, 0).distanceToSqr(new Vec3(x, y, z)) < 3)
             return;
+        var bufferBuilder = RENDER.begin(Tesselator.getInstance(), Minecraft.getInstance().getTextureManager());
+
         Vec3 vector3d = activeRenderInfo.getPosition();
         float x = (float) (entity.xOld + (vector3d.x - entity.xOld));
         float y = (float) (entity.yOld + (vector3d.y - entity.yOld));
@@ -109,17 +111,18 @@ public class ParticleVex extends Particle {
 
 
         for (Vector3f line : lines) {
-            bufferBad.addVertex(line.x - x, line.y - y, line.z - z).setColor(1f, 1f, 1f, 1f).setUv2(240, 240);
+            bufferBuilder.addVertex(line.x - x, line.y - y, line.z - z).setColor(1f, 1f, 1f, 1f).setUv2(240, 240);
         }
-
+        var mesh = bufferBuilder.build();
+        if (mesh != null) {
+            BufferUploader.drawWithShader(mesh);
+        }
     }
 
     @Override
     public ParticleRenderType getRenderType() {
         return RENDER;
     }
-
-
 
     private Direction getRandomFacing(RandomSource random, Direction opposite) {
         Direction facing = Direction.getRandom(random); //random
