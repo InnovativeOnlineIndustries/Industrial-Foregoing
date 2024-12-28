@@ -37,7 +37,7 @@ description = '''${mod_description}'''
 enumExtensions = "META-INF/enumextensions.json"
 # The [[mixins]] block allows you to declare your mixin config to FML so that it gets loaded.
 [[mixins]]
-config = "META-INF/mixins.json"
+config = "META-INF/industrialforegoing.mixins.json"
 
 
 # The [[accessTransformers]] block allows you to declare where your AT file is.

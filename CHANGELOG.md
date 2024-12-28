@@ -1,3 +1,7 @@
+# Version 3.6.22
+
+* Renamed mixin file to avoid future problems, closes #1526
+
 # Version 3.6.21
 
 * Changed how item components are added to items
