@@ -1,0 +1,17 @@
+{
+  "name": "流体配置機",
+  "icon": "industrialforegoing:fluid_placer",
+  "category": "industrialforegoing:resource_production",
+  "sortnum": 4,
+  "read_by_default": true,
+  "pages": [
+    {
+      "type": "text",
+      "text": "流体を配置します。$(br2)$(6)1,000$()FE使用して内部容器から流体を配置します。"
+    },
+    {
+      "type": "crafting",
+      "recipe": "industrialforegoing:fluid_placer"
+    }
+  ]
+}

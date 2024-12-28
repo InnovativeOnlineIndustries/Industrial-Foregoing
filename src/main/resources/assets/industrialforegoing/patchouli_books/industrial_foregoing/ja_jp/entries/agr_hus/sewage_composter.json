@@ -1,0 +1,17 @@
+{
+  "name": "下水コンポスター",
+  "icon": "industrialforegoing:sewage_composter",
+  "category": "industrialforegoing:agriculture_husbandry",
+  "sortnum": 14,
+  "read_by_default": true,
+  "pages": [
+    {
+      "type": "text",
+      "text": "$(l:agr_hus/sewage)下水$()を供給するとこのマシンはそこから$(l:agr_hus/fertilizer)肥料$()を生成します。"
+    },
+    {
+      "type": "crafting",
+      "recipe": "industrialforegoing:sewage_composter"
+    }
+  ]
+}

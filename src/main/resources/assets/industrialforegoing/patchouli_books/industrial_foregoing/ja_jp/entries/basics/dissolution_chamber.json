@@ -1,0 +1,17 @@
+{
+  "name": "溶解室",
+  "icon": "industrialforegoing:dissolution_chamber",
+  "category": "industrialforegoing:basics",
+  "sortnum": 6,
+  "read_by_default": true,
+  "pages": [
+    {
+      "type": "text",
+      "text": "最大$(6)8$()個のアイテムおよび/または$(6)1$()個の流体を使用して材料を作成するために使用される強力なマシンです。このマシンはアイテムおよび/または流体を生成できます。$(br2)すべてのレシピは形がなく、材料はどのスロットにも入れることができます。$(br2)レシピが存在する場合、マシンはすべてのスロットをロックしてそれ以上のアイテムが挿入されないようにします。"
+    },
+    {
+      "type": "crafting",
+      "recipe": "industrialforegoing:dissolution_chamber"
+    }
+  ]
+}

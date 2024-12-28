@@ -1,0 +1,17 @@
+{
+  "name": "流体レーザーベース",
+  "icon": "industrialforegoing:fluid_laser_base",
+  "category": "industrialforegoing:resource_production",
+  "sortnum": 15,
+  "read_by_default": true,
+  "pages": [
+    {
+      "type": "text",
+      "text": "$(l:resource_production/laser_drill)レーザードリル$()が完全に充電されると流体が生成されます。これを実行するには消費されない特定の触媒が必要であり、マシンを特定のバイオームに配置して特定の深さで掘削する必要があります。$(br2)一部の流体では流体を生成するためにマシンの下にエンティティが必要になる場合があります。$(br2)値についてはJEIを確認してください。"
+    },
+    {
+      "type": "crafting",
+      "recipe": "industrialforegoing:fluid_laser_base"
+    }
+  ]
+}
