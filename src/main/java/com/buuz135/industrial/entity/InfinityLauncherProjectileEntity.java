@@ -60,7 +60,7 @@ public class InfinityLauncherProjectileEntity extends AbstractArrow {
     }
 
     public InfinityLauncherProjectileEntity(Level worldIn, LivingEntity thrower, ItemInfinityLauncher.PlungerAction plungerAction, int tier, ItemStack stack) {
-        super((EntityType<? extends AbstractArrow>) ModuleTool.INFINITY_LAUNCHER_PROJECTILE_ENTITY_TYPE.value(), thrower, worldIn, ItemStack.EMPTY, stack);
+        super((EntityType<? extends AbstractArrow>) ModuleTool.INFINITY_LAUNCHER_PROJECTILE_ENTITY_TYPE.value(), thrower, worldIn, stack, stack);
         this.entityData.set(PLUNGER_ACTION, plungerAction.getId());
         this.entityData.set(TIER, tier);
     }

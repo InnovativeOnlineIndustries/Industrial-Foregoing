@@ -57,6 +57,7 @@ import mezz.jei.api.runtime.IRecipesGui;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.Rect2i;
 import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.ItemTags;
 import net.minecraft.tags.TagKey;
@@ -167,7 +168,7 @@ public class JEICustomPlugin implements IModPlugin {
 
     @Override
     public void registerCategories(IRecipeCategoryRegistration registry) {
-        bioReactorRecipeCategory = new BioReactorRecipeCategory(registry.getJeiHelpers().getGuiHelper(), "Bioreactor accepted items");
+        bioReactorRecipeCategory = new BioReactorRecipeCategory(registry.getJeiHelpers().getGuiHelper(), Component.translatable("text.industrialforegoing.jei.recipe.title.bioreactor").getString());
         registry.addRecipeCategories(bioReactorRecipeCategory);
         fluidExtractorCategory = new FluidExtractorCategory(registry.getJeiHelpers().getGuiHelper());
         registry.addRecipeCategories(fluidExtractorCategory);

@@ -1,0 +1,17 @@
+{
+  "name": "エンチャント塗布機",
+  "icon": "industrialforegoing:enchantment_applicator",
+  "category": "industrialforegoing:misc",
+  "sortnum": 3,
+  "read_by_default": true,
+  "pages": [
+    {
+      "type": "text",
+      "text": "このマシンは金床と同じように機能しますが経験値の代わりに$(l:agr_hus/essence)エッセンス$()を使用します。コストが大きすぎる上にタンクからエッセンスを取得できます。"
+    },
+    {
+      "type": "crafting",
+      "recipe": "industrialforegoing:enchantment_applicator"
+    }
+  ]
+}

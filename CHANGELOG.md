@@ -1,3 +1,13 @@
+# Version 3.6.22
+
+* Renamed mixin file to avoid future problems, closes #1526
+* Changed how the wither builder works to just spawn the wither instead of building the structure, closes #1474
+* Fixed Backpacks saving when inserting stacks bigger than 64 items, closes #1525
+* Added missing translatable strings and translated to ja_jo by momo-i2
+* Fixed Shiny Vex Particles
+* Fixed wrong pink item added to the ingot tags, closes #1520
+* Fixed crash when Plungers got teleported, closes #1522
+
 # Version 3.6.21
 
 * Changed how item components are added to items

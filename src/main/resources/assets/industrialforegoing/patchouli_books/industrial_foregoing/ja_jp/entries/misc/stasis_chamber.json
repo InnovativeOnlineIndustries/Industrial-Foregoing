@@ -1,0 +1,17 @@
+{
+  "name": "静止室",
+  "icon": "industrialforegoing:stasis_chamber",
+  "category": "industrialforegoing:misc",
+  "sortnum": 5,
+  "read_by_default": true,
+  "pages": [
+    {
+      "type": "text",
+      "text": "この機械に電力が供給されるとその動作範囲内にあるあらゆるエンティティを$(6)凍結$()し、$(6)治癒$()します。"
+    },
+    {
+      "type": "crafting",
+      "recipe": "industrialforegoing:stasis_chamber"
+    }
+  ]
+}
