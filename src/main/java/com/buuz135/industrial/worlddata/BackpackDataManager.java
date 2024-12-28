@@ -230,7 +230,7 @@ public class BackpackDataManager extends SavedData {
         }
 
         public void setStack(ItemStack stack) {
-            this.stack = stack;
+            this.stack = stack.copyWithCount(1);
             parent.markDirty();
         }
 
