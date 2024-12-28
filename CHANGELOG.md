@@ -5,6 +5,7 @@
 * Fixed Backpacks saving when inserting stacks bigger than 64 items, closes #1525
 * Added missing translatable strings and translated to ja_jo by momo-i2
 * Fixed Shiny Vex Particles
+* Fixed wrong pink item added to the ingot tags, closes #1520
 
 # Version 3.6.21
 

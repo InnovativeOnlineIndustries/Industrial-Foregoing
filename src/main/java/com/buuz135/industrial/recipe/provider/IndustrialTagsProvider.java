@@ -84,8 +84,8 @@ public class IndustrialTagsProvider {
             tag(IndustrialTags.Items.GEAR_IRON).add(ModuleCore.IRON_GEAR.get());
             tag(IndustrialTags.Items.GEARS).add(ModuleCore.DIAMOND_GEAR.get(), ModuleCore.GOLD_GEAR.get(), ModuleCore.IRON_GEAR.get());
 
-            tag(TagUtil.getItemTag(ResourceLocation.parse("c:ingots"))).add(ModuleCore.PINK_SLIME_ITEM.get());
-            tag(TagUtil.getItemTag(ResourceLocation.parse("c:ingots/pink_slime"))).add(ModuleCore.PINK_SLIME_ITEM.get());
+            tag(TagUtil.getItemTag(ResourceLocation.parse("c:ingots"))).add(ModuleCore.PINK_SLIME_INGOT.get());
+            tag(TagUtil.getItemTag(ResourceLocation.parse("c:ingots/pink_slime"))).add(ModuleCore.PINK_SLIME_INGOT.get());
         }
     }
 
