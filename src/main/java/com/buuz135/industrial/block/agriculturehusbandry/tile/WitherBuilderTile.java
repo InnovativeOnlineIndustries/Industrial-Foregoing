@@ -21,19 +21,20 @@
  */
 package com.buuz135.industrial.block.agriculturehusbandry.tile;
 
-import com.buuz135.industrial.IndustrialForegoing;
 import com.buuz135.industrial.block.tile.IndustrialAreaWorkingTile;
 import com.buuz135.industrial.block.tile.RangeManager;
 import com.buuz135.industrial.capability.tile.BigEnergyHandler;
 import com.buuz135.industrial.config.machine.agriculturehusbandry.WitherBuilderConfig;
 import com.buuz135.industrial.module.ModuleAgricultureHusbandry;
 import com.buuz135.industrial.utils.BlockUtils;
-import com.buuz135.industrial.utils.IFFakePlayer;
 import com.hrznstudio.titanium.annotation.Save;
 import com.hrznstudio.titanium.component.energy.EnergyStorageComponent;
 import com.hrznstudio.titanium.component.inventory.SidedInventoryComponent;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.world.Difficulty;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.boss.wither.WitherBoss;
 import net.minecraft.world.item.DyeColor;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
@@ -42,6 +43,7 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import net.neoforged.neoforge.items.ItemStackHandler;
+import org.apache.commons.lang3.tuple.Pair;
 
 import javax.annotation.Nonnull;
 
@@ -53,8 +55,6 @@ public class WitherBuilderTile extends IndustrialAreaWorkingTile<WitherBuilderTi
     @Save
     private SidedInventoryComponent<WitherBuilderTile> middle;
 
-    @Save
-    private SidedInventoryComponent<WitherBuilderTile> bottom;
 
     public WitherBuilderTile(BlockPos blockPos, BlockState blockState) {
         super(ModuleAgricultureHusbandry.WITHER_BUILDER, RangeManager.RangeType.TOP_UP, true, WitherBuilderConfig.powerPerOperation, blockPos, blockState);
@@ -64,15 +64,15 @@ public class WitherBuilderTile extends IndustrialAreaWorkingTile<WitherBuilderTi
                 .setSlotLimit(1)
                 .setComponentHarness(this)
         );
-        this.addInventory(middle = (SidedInventoryComponent<WitherBuilderTile>) new SidedInventoryComponent<WitherBuilderTile>("soulsand", 64, 25 + 18, 3, 1)
-                .setColor(DyeColor.ORANGE)
+        this.addInventory(middle = (SidedInventoryComponent<WitherBuilderTile>) new SidedInventoryComponent<WitherBuilderTile>("soulsand", 64, 25 + 18, 4, 1)
+                .setColor(DyeColor.BROWN)
                 .setInputFilter((itemStack, integer) -> itemStack.getItem().equals(Blocks.SOUL_SAND.asItem()))
-                .setSlotLimit(1)
-                .setComponentHarness(this)
-        );
-        this.addInventory(bottom = (SidedInventoryComponent<WitherBuilderTile>) new SidedInventoryComponent<WitherBuilderTile>("soulsand", 64 + 18, 25 + 18 * 2, 1, 2)
-                .setColor(DyeColor.ORANGE)
-                .setInputFilter((itemStack, integer) -> itemStack.getItem().equals(Blocks.SOUL_SAND.asItem()))
+                .setSlotPosition(integer -> {
+                    if (integer == 3) {
+                        return Pair.of(18, 18);
+                    }
+                    return Pair.of(18 * (integer % 3), 18 * (integer / 3));
+                })
                 .setSlotLimit(1)
                 .setComponentHarness(this)
         );
@@ -80,63 +80,36 @@ public class WitherBuilderTile extends IndustrialAreaWorkingTile<WitherBuilderTi
 
     @Override
     public WorkAction work() {
-        if (!hasEnergy(WitherBuilderConfig.powerPerOperation) || !BlockUtils.canBlockBeBroken(this.level, this.worldPosition, this.getUuid()))
+        if (!hasEnergy(WitherBuilderConfig.powerPerOperation) || !BlockUtils.canBlockBeBroken(this.level, this.worldPosition, this.getUuid()) || this.level.getDifficulty() == Difficulty.PEACEFUL)
             return new WorkAction(1, 0);
+        //CHECK IF THERE ARE WITHERS SPAWNING
+        if (this.level.getEntitiesOfClass(WitherBoss.class, getWorkingArea().bounds()).size() > 5) {
+            return new WorkAction(1, 0);
+        }
+        //CHECK IF AREA IS CLEAR
+        for (BlockPos blockPos : BlockUtils.getBlockPosInAABB(getWorkingArea().bounds())) {
+            if (!this.level.getBlockState(blockPos).isAir()) {
+                return new WorkAction(1, 0);
+            }
+        }
+        //CHECK IF WE HAVE ITEMS
+        for (ItemStackHandler handler : new ItemStackHandler[]{top, middle}) {
+            for (int slot = 0; slot < handler.getSlots(); ++slot) {
+                if (handler.getStackInSlot(slot).isEmpty()) return new WorkAction(1, 0);
+            }
+        }
+        for (ItemStackHandler handler : new ItemStackHandler[]{top, middle}) {
+            for (int slot = 0; slot < handler.getSlots(); ++slot) {
+                handler.getStackInSlot(slot).shrink(1);
+            }
+        }
+        var wither = (WitherBoss) EntityType.WITHER.create(level);
         BlockPos pos = this.worldPosition.offset(0, 2, 0);
-        float power = 0;
-        if (this.level.getBlockState(pos).getBlock().equals(Blocks.AIR) && !getDefaultOrFind(0, bottom, new ItemStack(Blocks.SOUL_SAND)).isEmpty()) {
-            this.level.setBlockAndUpdate(pos, Blocks.SOUL_SAND.defaultBlockState());
-            getDefaultOrFind(0, bottom, new ItemStack(Blocks.SOUL_SAND)).shrink(1);
-            power += 1 / 7f;
-        }
-        if (this.level.getBlockState(pos).getBlock().equals(Blocks.SOUL_SAND)) {
-            for (int i = 0; i < 3; ++i) {
-                BlockPos temp;
-                if (getFacingDirection() == Direction.EAST || getFacingDirection() == Direction.WEST) {
-                    temp = pos.offset(0, 1, i - 1);
-                } else {
-                    temp = pos.offset(i - 1, 1, 0);
-                }
-                if (this.level.getBlockState(temp).getBlock().equals(Blocks.AIR) && !getDefaultOrFind(i, middle, new ItemStack(Blocks.SOUL_SAND)).isEmpty()) {
-                    this.level.setBlockAndUpdate(temp, Blocks.SOUL_SAND.defaultBlockState());
-                    getDefaultOrFind(i, middle, new ItemStack(Blocks.SOUL_SAND)).shrink(1);
-                    power += 1 / 7f;
-                }
-            }
-        }
-        if (this.level.getBlockState(pos).getBlock().equals(Blocks.SOUL_SAND)) {
-            boolean secondRow = true;
-            for (int i = 0; i < 3; ++i) {
-                BlockPos temp;
-                if (getFacingDirection() == Direction.EAST || getFacingDirection() == Direction.WEST) {
-                    temp = pos.offset(0, 1, i - 1);
-                } else {
-                    temp = pos.offset(i - 1, 1, 0);
-                }
-                if (!this.level.getBlockState(temp).getBlock().equals(Blocks.SOUL_SAND)) {
-                    secondRow = false;
-                    break;
-                }
-            }
-            if (secondRow) {
-                for (int i = 0; i < 3; ++i) {
-                    BlockPos temp;
-                    if (getFacingDirection() == Direction.EAST || getFacingDirection() == Direction.WEST) {
-                        temp = pos.offset(0, 2, i - 1);
-                    } else {
-                        temp = pos.offset(i - 1, 2, 0);
-                    }
-                    if (this.level.getBlockState(temp).getBlock().equals(Blocks.AIR) && !getDefaultOrFind(i, top, new ItemStack(Items.WITHER_SKELETON_SKULL)).isEmpty() && this.level.getBlockState(temp.offset(0, -1, 0)).getBlock().equals(Blocks.SOUL_SAND)) {
-                        IFFakePlayer fakePlayer = (IFFakePlayer) IndustrialForegoing.getFakePlayer(level, temp, this.getUuid());
-                        ItemStack stack = getDefaultOrFind(i, top, new ItemStack(Items.WITHER_SKELETON_SKULL));
-                        if (fakePlayer.placeBlock(this.level, temp, stack)) {
-                            power += 1 / 7f;
-                        }
-                    }
-                }
-            }
-        }
-        return new WorkAction(1, power > 0 ? WitherBuilderConfig.powerPerOperation : 0);
+        wither.moveTo(pos.getX() + 0.5, pos.getY(), pos.getZ() + 0.5f);
+        wither.yBodyRot = this.getFacingDirection().getAxis() != Direction.Axis.X ? 0.0F : 90.0F;
+        wither.makeInvulnerable();
+        level.addFreshEntity(wither);
+        return new WorkAction(1, WitherBuilderConfig.powerPerOperation);
     }
 
     @Override
@@ -180,7 +153,7 @@ public class WitherBuilderTile extends IndustrialAreaWorkingTile<WitherBuilderTi
 
     public ItemStack getDefaultOrFind(int i, ItemStackHandler handler, ItemStack filter) {
         if (ItemStack.isSameItem(handler.getStackInSlot(i), filter)) return handler.getStackInSlot(i);
-        for (ItemStackHandler h : new ItemStackHandler[]{top, middle, bottom}) {
+        for (ItemStackHandler h : new ItemStackHandler[]{top, middle}) {
             for (int s = 0; s < h.getSlots(); ++s) {
                 if (ItemStack.isSameItem(h.getStackInSlot(s), filter)) return h.getStackInSlot(s);
             }
