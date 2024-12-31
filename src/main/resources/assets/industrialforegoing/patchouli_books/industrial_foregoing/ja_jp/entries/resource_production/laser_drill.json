@@ -1,0 +1,17 @@
+{
+  "name": "レーザードリル",
+  "icon": "industrialforegoing:laser_drill",
+  "category": "industrialforegoing:resource_production",
+  "sortnum": 13,
+  "read_by_default": true,
+  "pages": [
+    {
+      "type": "text",
+      "text": "このマシンは電力が供給されると作業エリア内で最初に見つかった$(l:resource_production/ore_laser_base)鉱石レーザーベース$()と$(l:resource_production/fluid_laser_base)流体レーザーベース$()を充電します。"
+    },
+    {
+      "type": "crafting",
+      "recipe": "industrialforegoing:laser_drill"
+    }
+  ]
+}

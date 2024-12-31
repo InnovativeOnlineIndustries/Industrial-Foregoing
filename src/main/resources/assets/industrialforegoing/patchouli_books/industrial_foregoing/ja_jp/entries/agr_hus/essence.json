@@ -1,0 +1,13 @@
+{
+  "name": "エッセンス (入りバケツ)",
+  "icon": "industrialforegoing:essence_bucket",
+  "category": "industrialforegoing:agriculture_husbandry",
+  "sortnum": 7,
+  "read_by_default": true,
+  "pages": [
+    {
+      "type": "text",
+      "text": "$(l:agr_hus/mob_crusher)Mob粉砕機$()によって生み出される経験値の流体形式です。"
+    }
+  ]
+}
