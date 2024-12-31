@@ -1,0 +1,17 @@
+{
+  "name": "エンチャント抽出機",
+  "icon": "industrialforegoing:enchantment_extractor",
+  "category": "industrialforegoing:misc",
+  "sortnum": 4,
+  "read_by_default": true,
+  "pages": [
+    {
+      "type": "text",
+      "text": "このマシンは本が提供されている場合アイテムからエンチャントを抽出できます。$(br2)2つの方法で機能し、エンチャントを本に抽出するかエンチャントを抽出して$(l:agr_hus/essence)エッセンス$()に変換できます。"
+    },
+    {
+      "type": "crafting",
+      "recipe": "industrialforegoing:enchantment_extractor"
+    }
+  ]
+}

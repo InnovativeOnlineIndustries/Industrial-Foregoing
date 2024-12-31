@@ -1,0 +1,17 @@
+{
+  "name": "Mob検出機",
+  "icon": "industrialforegoing:mob_detector",
+  "category": "industrialforegoing:misc",
+  "sortnum": 6,
+  "read_by_default": true,
+  "pages": [
+    {
+      "type": "text",
+      "text": "このマシンは前方にいくつのエンティティが存在するかを検出し、検出されたエンティティの数と同じ強度のレッドストーン信号を後方に発信します。"
+    },
+    {
+      "type": "crafting",
+      "recipe": "industrialforegoing:mob_detector"
+    }
+  ]
+}

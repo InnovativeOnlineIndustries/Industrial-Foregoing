@@ -1,0 +1,13 @@
+{
+  "name": "ピンクスライム (入りバケツ)",
+  "icon": "industrialforegoing:pink_slime_bucket",
+  "category": "industrialforegoing:agriculture_husbandry",
+  "sortnum": 11,
+  "read_by_default": true,
+  "pages": [
+    {
+      "type": "text",
+      "text": "$(l:agr_hus/mob_slaughter_factory)Mob屠殺機$()で生成された液体です。"
+    }
+  ]
+}

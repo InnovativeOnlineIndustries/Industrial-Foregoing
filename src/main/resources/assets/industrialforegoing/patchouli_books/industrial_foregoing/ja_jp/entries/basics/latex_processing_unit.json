@@ -1,0 +1,17 @@
+{
+  "name": "ラテックス加工ユニット",
+  "icon": "industrialforegoing:latex_processing_unit",
+  "category": "industrialforegoing:basics",
+  "sortnum": 1,
+  "read_by_default": true,
+  "pages": [
+    {
+      "type": "text",
+      "text": "ラテックス加工ユニットは$(6)100mb$()の$(l:basics/latex)ラテックス$()と$(6)500$()mbの水を使用して、1つの$(l:basics/plastic)小さな乾燥ゴム$()を生産します。"
+    },
+    {
+      "type": "crafting",
+      "recipe": "industrialforegoing:latex_processing_unit"
+    }
+  ]
+}

@@ -1,0 +1,16 @@
+{
+  "name": "ウィザービルダー",
+  "icon": "industrialforegoing:wither_builder",
+  "category": "industrialforegoing:agriculture_husbandry",
+  "read_by_default": true,
+  "pages": [
+    {
+      "type": "text",
+      "text": "ウィザーをスポーンするために使用するマシンです。電源、 $(6)3つのウィザースケルトンの頭蓋骨$()、および$(6)4つのソウルサンド$()が提供されると作業エリアにウィザーのスポーン構造を完全に構築します。"
+    },
+    {
+      "type": "crafting",
+      "recipe": "industrialforegoing:wither_builder"
+    }
+  ]
+}

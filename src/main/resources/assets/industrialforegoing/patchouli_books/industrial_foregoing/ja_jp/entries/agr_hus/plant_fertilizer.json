@@ -1,0 +1,21 @@
+{
+  "name": "植物施肥機",
+  "icon": "industrialforegoing:plant_fertilizer",
+  "category": "industrialforegoing:agriculture_husbandry",
+  "sortnum": 5,
+  "read_by_default": true,
+  "pages": [
+    {
+      "type": "text",
+      "text": "植物に骨粉を$(6)散布$()するために使用される機械です。$(br2)機械は骨粉が受け入れられなくなるまで同じ作物に肥料を散布し続け、その後次の植物に移ります。これにより機会が$(6)ヒマワリ$()などの常に骨粉を受け入れる植物や最終的な成長状態に到達しない植物に引っかかってしまう可能性があります。"
+    },
+    {
+      "type": "text",
+      "text": "受け入れる植物肥料は以下の通り: $(br)$(li)骨粉 $(li)肥料"
+    },
+    {
+      "type": "crafting",
+      "recipe": "industrialforegoing:plant_fertilizer"
+    }
+  ]
+}

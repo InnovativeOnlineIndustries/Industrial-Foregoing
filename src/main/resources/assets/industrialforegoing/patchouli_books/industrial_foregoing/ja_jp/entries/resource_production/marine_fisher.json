@@ -1,0 +1,17 @@
+{
+  "name": "海洋釣り機",
+  "icon": "industrialforegoing:marine_fisher",
+  "category": "industrialforegoing:resource_production",
+  "sortnum": 3,
+  "read_by_default": true,
+  "pages": [
+    {
+      "type": "text",
+      "text": "ネコの親友💛$(br2)少なくとも$(6)3x3$()で$(6)1$()ブロックの深さの$(6)水たまり$()の上に置かれると$(6)釣り$()を開始して魚(及びそれ以外の何か？)を内部インベントリに入れます。操作ごとに$(6)5,000$()FEのコストがかかります。"
+    },
+    {
+      "type": "crafting",
+      "recipe": "industrialforegoing:marine_fisher"
+    }
+  ]
+}
