@@ -74,10 +74,13 @@ public class FluidExtractorTile extends IndustrialAreaWorkingTile<FluidExtractor
         if (isLoaded(pos) && !this.level.isEmptyBlock(pos) && this.tank.getFluidAmount() < this.tank.getCapacity()) {
             if (currentRecipe == null || !currentRecipe.matches(this.level, pos) || currentRecipe.defaultRecipe)
                 currentRecipe = findRecipe(this.level, pos);
+
             if (currentRecipe != null) {//GetDimensionType
+                boolean powered = hasEnergy(powerPerOperation);
+
                 FluidExtractionProgress extractionProgress = EXTRACTION.computeIfAbsent(this.level.dimensionType(), dimensionType -> new HashMap<>()).computeIfAbsent(this.level.getChunkAt(pos).getPos(), chunkPos -> new HashMap<>()).computeIfAbsent(pos, pos1 -> new FluidExtractionProgress(this.level));
-                if (currentRecipe.output.getFluid().isSame(ModuleCore.LATEX.getSourceFluid().get())) {
-                    tank.fillForced(new FluidStack(currentRecipe.output.getFluid(), currentRecipe.output.getAmount() * (hasEnergy(powerPerOperation) ? 3 : 1)), IFluidHandler.FluidAction.EXECUTE);
+                if (currentRecipe.outputsLatex()) {
+                    tank.fillForced(new FluidStack(currentRecipe.output.getFluid(), currentRecipe.output.getAmount() * (powered ? 3 : 1)), IFluidHandler.FluidAction.EXECUTE);
                 } else {
                     tank.fillForced(currentRecipe.output.copy(), IFluidHandler.FluidAction.EXECUTE);
                 }
@@ -87,11 +90,12 @@ public class FluidExtractorTile extends IndustrialAreaWorkingTile<FluidExtractor
                 if (extractionProgress.getProgress() > 7) {
                     extractionProgress.setProgress(0);
                     this.level.setBlockAndUpdate(pos, currentRecipe.result);
-                    if (currentRecipe.output.getFluid().isSame(ModuleCore.LATEX.getSourceFluid().get())) {
-                        tank.fillForced(new FluidStack(currentRecipe.output.getFluid(), currentRecipe.output.getAmount() * (hasEnergy(powerPerOperation) ? 200 : 1)), IFluidHandler.FluidAction.EXECUTE);
+                    if (currentRecipe.outputsLatex()) {
+                        tank.fillForced(new FluidStack(currentRecipe.output.getFluid(), currentRecipe.output.getAmount() * (powered ? 200 : 1)), IFluidHandler.FluidAction.EXECUTE);
                     }
                 }
-                if (hasEnergy(powerPerOperation)) return new WorkAction(0.4f, powerPerOperation);
+                if (powered)
+                    return new WorkAction(0.4f, powerPerOperation);
                 return new WorkAction(1f, 0);
             }
         }
