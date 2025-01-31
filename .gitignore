@@ -17,6 +17,7 @@ out
 logs
 build
 .gradle
+.cache
 
 # other
 eclipse
