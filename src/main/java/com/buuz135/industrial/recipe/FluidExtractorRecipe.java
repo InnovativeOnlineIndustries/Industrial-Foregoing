@@ -93,6 +93,10 @@ public class FluidExtractorRecipe implements Recipe<CraftingInput> {
         return ResourceLocation.fromNamespaceAndPath(Reference.MOD_ID, "fluid_extractor/" + key);
     }
 
+    public boolean outputsLatex() {
+        return output.getFluid().isSame(ModuleCore.LATEX.getSourceFluid().get());
+    }
+
     public boolean matches(Level world, BlockPos pos) {
         return input.test(new ItemStack(world.getBlockState(pos).getBlock()));
     }

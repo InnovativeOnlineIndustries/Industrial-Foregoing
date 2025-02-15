@@ -91,8 +91,10 @@ public class FluidExtractorCategory implements IRecipeCategory<FluidExtractorRec
     public void draw(FluidExtractorRecipe recipe, IRecipeSlotsView recipeSlotsView, GuiGraphics guiGraphics, double mouseX, double mouseY) {
         guiGraphics.drawString(Minecraft.getInstance().font, ChatFormatting.DARK_GRAY + Component.translatable("text.industrialforegoing.jei.recipe.production").getString(), 80, 6, 0xFFFFFF, false);
         guiGraphics.drawString(Minecraft.getInstance().font, ChatFormatting.DARK_GRAY + "" + recipe.output.getAmount() + Component.translatable("text.industrialforegoing.jei.recipe.mb_work").getString(), 80, 6 + (Minecraft.getInstance().font.lineHeight + 2) * 1, 0xFFFFFF, false);
-        guiGraphics.drawString(Minecraft.getInstance().font, ChatFormatting.DARK_AQUA + "" + Component.translatable("text.industrialforegoing.jei.recipe.tripled_when").getString(), 80, 6 + (Minecraft.getInstance().font.lineHeight + 2) * 2, 0xFFFFFF, false);
-        guiGraphics.drawString(Minecraft.getInstance().font, ChatFormatting.DARK_AQUA + "" + Component.translatable("text.industrialforegoing.jei.recipe.powered").getString(), 80, 6 + (Minecraft.getInstance().font.lineHeight + 2) * 3, 0xFFFFFF, false);
+        if (recipe.outputsLatex()) {
+            guiGraphics.drawString(Minecraft.getInstance().font, ChatFormatting.DARK_AQUA + "" + Component.translatable("text.industrialforegoing.jei.recipe.tripled_when").getString(), 80, 6 + (Minecraft.getInstance().font.lineHeight + 2) * 2, 0xFFFFFF, false);
+            guiGraphics.drawString(Minecraft.getInstance().font, ChatFormatting.DARK_AQUA + "" + Component.translatable("text.industrialforegoing.jei.recipe.powered").getString(), 80, 6 + (Minecraft.getInstance().font.lineHeight + 2) * 3, 0xFFFFFF, false);
+        }
     }
 
     @Override

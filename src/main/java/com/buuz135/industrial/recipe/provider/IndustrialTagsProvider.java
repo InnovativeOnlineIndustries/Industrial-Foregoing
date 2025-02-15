@@ -58,7 +58,8 @@ public class IndustrialTagsProvider {
             tag(BlockTags.DIRT).add(ModuleAgricultureHusbandry.HYDROPONIC_BED.getBlock());
 
             TagAppender<Block> tTagAppender = this.tag(BlockTags.MINEABLE_WITH_PICKAXE);
-
+            tag(TagUtil.getBlockTag(ResourceLocation.parse("c:storage_blocks"))).add(ModuleCore.PINK_SLIME_BLOCK.get());
+            tag(TagUtil.getBlockTag(ResourceLocation.parse("c:storage_blocks/pink_slime"))).add(ModuleCore.PINK_SLIME_BLOCK.get());
             BuiltInRegistries.BLOCK.stream().filter(block -> BuiltInRegistries.BLOCK.getKey(block).getNamespace().equals(Reference.MOD_ID)).forEach(block -> tTagAppender.add(BuiltInRegistries.BLOCK.getResourceKey(block).get()));
         }
     }

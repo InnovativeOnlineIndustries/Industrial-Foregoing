@@ -1,3 +1,11 @@
+# Version 3.6.23
+
+* DRY up latex bonus code, make "triple" display conditional by kylev
+* Fixed boss bar not being hidden when in the stasis chamber, closes #1549
+* Added missing tag to pink slime blocks, closes #1544
+* Added FTB Chunks integration back to the Infinity Nuke, closes #1543
+* Improved Pitiful Furnace fuel consumption, closes #1541
+
 # Version 3.6.22
 
 * Renamed mixin file to avoid future problems, closes #1526

@@ -55,7 +55,12 @@ public class PitifulGeneratorTile extends IndustrialGeneratorTile<PitifulGenerat
     @Override
     public int consumeFuel() {
         int time = fuel.getStackInSlot(0).getBurnTime(RecipeType.SMELTING);
-        fuel.getStackInSlot(0).shrink(1);
+        if (fuel.getStackInSlot(0).hasCraftingRemainingItem()) {
+            fuel.setStackInSlot(0, fuel.getStackInSlot(0).getCraftingRemainingItem());
+        } else {
+            fuel.getStackInSlot(0).shrink(1);
+        }
+
         return time;
     }
 
