@@ -2,6 +2,7 @@
 
 * DRY up latex bonus code, make "triple" display conditional by kylev
 * Fixed boss bar not being hidden when in the stasis chamber, closes #1549
+* Added missing tag to pink slime blocks, closes #1544
 
 # Version 3.6.22
 
