@@ -1,3 +1,8 @@
+# Version 3.6.23
+
+* DRY up latex bonus code, make "triple" display conditional by kylev
+* Fixed boss bar not being hidden when in the stasis chamber, closes #1549
+
 # Version 3.6.22
 
 * Renamed mixin file to avoid future problems, closes #1526
