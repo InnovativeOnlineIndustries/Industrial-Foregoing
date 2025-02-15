@@ -104,6 +104,11 @@ dependencies {
     compileOnly "dev.emi:emi-neoforge:${emi_version}:api"
     //runtimeOnly "dev.emi:emi-neoforge:${emi_version}"
     runtimeOnly "curse.maven:mekanism-268560:5680395"
+
+    runtimeOnly "curse.maven:architectury-api-419699:5786327"
+    runtimeOnly "curse.maven:ftb-teams-forge-404468:6119437"
+    implementation "curse.maven:ftb-library-forge-404465:6161173"
+    implementation "curse.maven:ftb-chunks-forge-314906:6121389"
     //runtimeOnly "com.enderio:enderio-base:${ender_io_version}"
     //runtimeOnly "com.enderio:enderio-conduits:${ender_io_version}"
     //runtimeOnly "com.enderio:enderio-machines:${ender_io_version}"
