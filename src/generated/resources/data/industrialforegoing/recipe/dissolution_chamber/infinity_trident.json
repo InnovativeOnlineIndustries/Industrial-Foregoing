@@ -34,7 +34,7 @@
   ],
   "inputFluid": {
     "amount": 2000,
-    "id": "industrialforegoing:pink_slime"
+    "fluid": "industrialforegoing:pink_slime"
   },
   "output": {
     "components": {

@@ -22,6 +22,7 @@ import net.neoforged.neoforge.fluids.FluidStack;
 import org.apache.commons.lang3.tuple.Pair;
 
 import java.awt.*;
+import java.util.Arrays;
 import java.util.List;
 
 public class DissChamberEmiRecipe extends CustomEmiRecipe {
