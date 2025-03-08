@@ -142,7 +142,7 @@ public class PotionBrewerTile extends IndustrialProcessingTile<PotionBrewerTile>
                 //.setRange(1,3)
                 .setSlotLimit(1)
                 .setInputFilter((stack, integer) -> false)
-                .setOutputFilter((stack, integer) -> this.filter.matches(stack))
+                .setOutputFilter((stack, integer) -> filterSlot.getFilter().isEmpty() || this.filter.matches(stack))
         );
     }
 
