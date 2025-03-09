@@ -7,7 +7,7 @@
   "pages": [
     {
       "type": "text",
-      "text": "The Latex Processing Unit will use $(6)100$()mb of $(l:basics/latex)Latex$() and $(6)500$()mb of Water to produce 1 $(l:basics/plastic) Tiny Dry Rubber$()"
+      "text": "The Latex Processing Unit will use $(6)750$()mb of $(l:basics/latex)Latex$() and $(6)500$()mb of Water to produce 1 $(l:basics/plastic) Dry Rubber$()"
     },
     {
       "type": "crafting",

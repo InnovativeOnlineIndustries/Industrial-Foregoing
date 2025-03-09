@@ -4,6 +4,7 @@
 * Allow potion brewer output if no filter is specified by ZeroMemes
 * Added Dissolution Chamber serializer support for fluid tags by Christofmeg
 * Added back oil fluid laser drill integration by Vectrobe, closes #1558
+* Updated Latex Processing Unit Manual entry to add the changes to latex processing, closes #1550
 
 # Version 3.6.23
 
