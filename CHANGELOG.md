@@ -1,3 +1,7 @@
+# Version 3.6.24
+
+* Added backpack safety checks when syncing to avoid NPE, closes #1553
+
 # Version 3.6.23
 
 * DRY up latex bonus code, make "triple" display conditional by kylev

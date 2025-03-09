@@ -171,7 +171,12 @@ public class ItemInfinityBackpack extends ItemInfinity {
     }
 
     public static void sync(Level world, String id, ServerPlayer player) {
-        IndustrialForegoing.NETWORK.sendTo(new BackpackSyncMessage(id, BackpackDataManager.getData(world).getBackpack(id).serializeNBT(world.registryAccess())), player);
+        var data = BackpackDataManager.getData(world);
+        if (data != null) {
+            var backpack = data.getBackpack(id);
+            if (backpack != null)
+                IndustrialForegoing.NETWORK.sendTo(new BackpackSyncMessage(id, backpack.serializeNBT(world.registryAccess())), player);
+        }
     }
 
     public static boolean isMagnetEnabled(ItemStack stack) {
