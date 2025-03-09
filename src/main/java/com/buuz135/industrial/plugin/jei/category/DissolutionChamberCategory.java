@@ -47,11 +47,14 @@ import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.DyeColor;
 import net.minecraft.world.item.ItemStack;
+import net.neoforged.neoforge.fluids.FluidStack;
 import org.apache.commons.lang3.tuple.Pair;
 
 import java.awt.*;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
 
 public class DissolutionChamberCategory implements IRecipeCategory<DissolutionChamberRecipe> {
 
@@ -90,8 +93,9 @@ public class DissolutionChamberCategory implements IRecipeCategory<DissolutionCh
         for (int i = 0; i < recipe.input.size(); i++) {
             builder.addSlot(RecipeIngredientRole.INPUT, 24 + DissolutionChamberTile.getSlotPos(i).getLeft(), 11 + DissolutionChamberTile.getSlotPos(i).getRight()).addIngredients(recipe.input.get(i));
         }
-        if (recipe.inputFluid != null && !recipe.inputFluid.isEmpty()) {
-            builder.addSlot(RecipeIngredientRole.INPUT, 33 + 12 + 3, 32 + 3).setFluidRenderer(1000, false, 12, 13).setOverlay(smallTank, 0, 0).addIngredient(NeoForgeTypes.FLUID_STACK, recipe.inputFluid);
+        if (recipe.inputFluid != null && !recipe.inputFluid.ingredient().isEmpty()) {
+            Optional<FluidStack> optionalInputFluid = Arrays.stream(recipe.inputFluid.getFluids()).findFirst();
+            optionalInputFluid.ifPresent(fluidStack -> builder.addSlot(RecipeIngredientRole.INPUT, 33 + 12 + 3, 32 + 3).setFluidRenderer(1000, false, 12, 13).setOverlay(smallTank, 0, 0).addIngredient(NeoForgeTypes.FLUID_STACK, fluidStack));
         }
         if (!recipe.output.isEmpty()) {
             ItemStack stack = recipe.output.get();

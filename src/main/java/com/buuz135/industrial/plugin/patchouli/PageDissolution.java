@@ -23,7 +23,9 @@ import net.neoforged.neoforge.fluids.FluidStack;
 import vazkii.patchouli.client.book.gui.GuiBook;
 import vazkii.patchouli.client.book.page.abstr.PageDoubleRecipeRegistry;
 
+import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
 
 public class PageDissolution extends PageDoubleRecipeRegistry<DissolutionChamberRecipe> {
     public final ResourceLocation patchouliTexture = ResourceLocation.fromNamespaceAndPath(Reference.MOD_ID, "textures/gui/patchouli.png");
@@ -52,8 +54,9 @@ public class PageDissolution extends PageDoubleRecipeRegistry<DissolutionChamber
                     mouseX, mouseY,
                     recipe.input.get(i));
         }
-        if (recipe.inputFluid != null && !recipe.inputFluid.isEmpty()) {
-            renderFluid(graphics, recipeX + 22, recipeY + 28, mouseX, mouseY, recipe.inputFluid);
+        if (recipe.inputFluid != null && !recipe.inputFluid.ingredient().isEmpty()) {
+            Optional<FluidStack> optionalInputFluid = Arrays.stream(recipe.inputFluid.getFluids()).findFirst();
+            optionalInputFluid.ifPresent(fluidStack -> renderFluid(graphics, recipeX + 22, recipeY + 28, mouseX, mouseY, fluidStack));
         }
         if (!recipe.output.isEmpty()) {
             ItemStack stack = recipe.output.get();
