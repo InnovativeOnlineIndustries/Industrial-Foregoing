@@ -1,6 +1,8 @@
 # Version 3.6.24
 
 * Added backpack safety checks when syncing to avoid NPE, closes #1553
+* Allow potion brewer output if no filter is specified by ZeroMemes
+* Added Dissolution Chamber serializer support for fluid tags by Christofmeg
 
 # Version 3.6.23
 
