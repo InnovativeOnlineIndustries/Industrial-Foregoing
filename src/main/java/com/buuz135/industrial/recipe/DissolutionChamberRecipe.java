@@ -42,9 +42,11 @@ import net.neoforged.neoforge.common.conditions.ICondition;
 import net.neoforged.neoforge.common.conditions.ItemExistsCondition;
 import net.neoforged.neoforge.fluids.FluidStack;
 import net.neoforged.neoforge.fluids.capability.IFluidHandler;
+import net.neoforged.neoforge.fluids.crafting.SizedFluidIngredient;
 import net.neoforged.neoforge.items.IItemHandler;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
@@ -52,21 +54,29 @@ public class DissolutionChamberRecipe implements Recipe<CraftingInput> {
 
     public static final MapCodec<DissolutionChamberRecipe> CODEC = RecordCodecBuilder.mapCodec(in -> in.group(
             Ingredient.CODEC.listOf(0, 8).fieldOf("input").forGetter(o -> o.input),
-            FluidStack.CODEC.fieldOf("inputFluid").forGetter(o -> o.inputFluid),
+            SizedFluidIngredient.FLAT_CODEC.fieldOf("inputFluid").forGetter(o -> o.inputFluid),
             Codec.INT.fieldOf("processingTime").forGetter(o -> o.processingTime),
             ItemStack.CODEC.optionalFieldOf("output").forGetter(o -> o.output),
             FluidStack.CODEC.optionalFieldOf("outputFluid").forGetter(o -> o.outputFluid)
     ).apply(in, DissolutionChamberRecipe::new));
 
     public List<Ingredient> input;
-    public FluidStack inputFluid;
+    public SizedFluidIngredient inputFluid;
     public int processingTime;
     public Optional<ItemStack> output;
     public Optional<FluidStack> outputFluid;
 
-    public DissolutionChamberRecipe(List<Ingredient> input, FluidStack inputFluid, int processingTime, Optional<ItemStack> output, Optional<FluidStack> outputFluid) {
+    public DissolutionChamberRecipe(List<Ingredient> input, SizedFluidIngredient inputFluid, int processingTime, Optional<ItemStack> output, Optional<FluidStack> outputFluid) {
         this.input = input;
         this.inputFluid = inputFluid;
+        this.processingTime = processingTime;
+        this.output = output;
+        this.outputFluid = outputFluid;
+    }
+
+    public DissolutionChamberRecipe(List<Ingredient> input, FluidStack inputFluid, int processingTime, Optional<ItemStack> output, Optional<FluidStack> outputFluid) {
+        this.input = input;
+        this.inputFluid = SizedFluidIngredient.of(inputFluid);
         this.processingTime = processingTime;
         this.output = output;
         this.outputFluid = outputFluid;
@@ -116,7 +126,9 @@ public class DissolutionChamberRecipe implements Recipe<CraftingInput> {
             if (!found) return false;
         }
 
-        return handlerItems.size() == 0 && tank.drainForced(inputFluid, IFluidHandler.FluidAction.SIMULATE).getAmount() == inputFluid.getAmount();
+        Optional<FluidStack> optionalInputFluid = Arrays.stream(inputFluid.getFluids()).findFirst();
+
+        return handlerItems.isEmpty() && optionalInputFluid.isPresent() && tank.drainForced(optionalInputFluid.get(), IFluidHandler.FluidAction.SIMULATE).getAmount() == optionalInputFluid.get().getAmount();
     }
 
     @Override

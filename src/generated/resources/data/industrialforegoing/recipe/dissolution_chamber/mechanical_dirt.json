@@ -25,7 +25,7 @@
   ],
   "inputFluid": {
     "amount": 1000,
-    "id": "industrialforegoing:meat"
+    "fluid": "industrialforegoing:meat"
   },
   "output": {
     "count": 1,

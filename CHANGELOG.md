@@ -1,3 +1,11 @@
+# Version 3.6.24
+
+* Added backpack safety checks when syncing to avoid NPE, closes #1553
+* Allow potion brewer output if no filter is specified by ZeroMemes
+* Added Dissolution Chamber serializer support for fluid tags by Christofmeg
+* Added back oil fluid laser drill integration by Vectrobe, closes #1558
+* Updated Latex Processing Unit Manual entry to add the changes to latex processing, closes #1550
+
 # Version 3.6.23
 
 * DRY up latex bonus code, make "triple" display conditional by kylev
