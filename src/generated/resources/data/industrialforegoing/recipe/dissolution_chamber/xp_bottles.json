@@ -9,7 +9,7 @@
   "input": [],
   "inputFluid": {
     "amount": 250,
-    "id": "industrialforegoing:essence"
+    "tag": "c:experience"
   },
   "output": {
     "count": 1,

@@ -34,7 +34,7 @@
   ],
   "inputFluid": {
     "amount": 500,
-    "id": "industrialforegoing:ether_gas"
+    "fluid": "industrialforegoing:ether_gas"
   },
   "output": {
     "count": 1,

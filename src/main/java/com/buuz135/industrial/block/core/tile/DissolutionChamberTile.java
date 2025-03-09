@@ -47,6 +47,8 @@ import net.neoforged.neoforge.items.ItemHandlerHelper;
 import org.apache.commons.lang3.tuple.Pair;
 
 import javax.annotation.Nonnull;
+import java.util.Arrays;
+import java.util.Optional;
 
 public class DissolutionChamberTile extends IndustrialProcessingTile<DissolutionChamberTile> {
 
@@ -124,16 +126,19 @@ public class DissolutionChamberTile extends IndustrialProcessingTile<Dissolution
         return () -> {
             if (currentRecipe != null) {
                 DissolutionChamberRecipe dissolutionChamberRecipe = currentRecipe;
-                inputFluid.drainForced(dissolutionChamberRecipe.inputFluid, IFluidHandler.FluidAction.EXECUTE);
-                for (int i = 0; i < input.getInventory().getSlots(); i++) {
-                    input.getInventory().getStackInSlot(i).shrink(1);
+                Optional<FluidStack> optionalInputFluid = Arrays.stream(dissolutionChamberRecipe.inputFluid.getFluids()).findFirst();
+                if (optionalInputFluid.isPresent()) {
+                    inputFluid.drainForced(optionalInputFluid.get(), IFluidHandler.FluidAction.EXECUTE);
+                    for (int i = 0; i < input.getInventory().getSlots(); i++) {
+                        input.getInventory().getStackInSlot(i).shrink(1);
+                    }
+                    if (dissolutionChamberRecipe.outputFluid.isPresent() && !dissolutionChamberRecipe.outputFluid.get().isEmpty())
+                        outputFluid.fillForced(dissolutionChamberRecipe.outputFluid.get().copy(), IFluidHandler.FluidAction.EXECUTE);
+                    ItemStack outputStack = dissolutionChamberRecipe.output.get().copy();
+                    outputStack.getItem().onCraftedBy(outputStack, this.level, null);
+                    ItemHandlerHelper.insertItem(output, outputStack, false);
+                    checkForRecipe();
                 }
-                if (dissolutionChamberRecipe.outputFluid.isPresent() && !dissolutionChamberRecipe.outputFluid.get().isEmpty())
-                    outputFluid.fillForced(dissolutionChamberRecipe.outputFluid.get().copy(), IFluidHandler.FluidAction.EXECUTE);
-                ItemStack outputStack = dissolutionChamberRecipe.output.get().copy();
-                outputStack.getItem().onCraftedBy(outputStack, this.level, null);
-                ItemHandlerHelper.insertItem(output, outputStack, false);
-                checkForRecipe();
             }
         };
     }
