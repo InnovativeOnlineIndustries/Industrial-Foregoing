@@ -32,6 +32,12 @@ public abstract class CustomEmiRecipe implements EmiRecipe {
         return Arrays.stream(inputs).flatMap(Collection::stream).toList();
     }
 
+    public static List<EmiIngredient> combineIng(List<EmiIngredient> inputs, EmiIngredient otherInput) {
+        List<EmiIngredient> result = new ArrayList<>(inputs);
+        result.add(otherInput);
+        return result;
+    }
+
     public static List<EmiStack> combineStack(List<EmiStack>... inputs) {
         return Arrays.stream(inputs).flatMap(Collection::stream).toList();
     }
@@ -48,9 +54,8 @@ public abstract class CustomEmiRecipe implements EmiRecipe {
         return fromInput(EmiIngredient.of(Collections.singletonList(NeoForgeEmiStack.of(fluidStack))));
     }
 
-    public static List<EmiIngredient> fromInput(SizedFluidIngredient fluidStack) {
-        Optional<FluidStack> optionalInputFluid = Arrays.stream(fluidStack.getFluids()).findFirst();
-        return optionalInputFluid.map(stack -> fromInput(EmiIngredient.of(Collections.singletonList(NeoForgeEmiStack.of(stack))))).orElseGet(ArrayList::new);
+    public static EmiIngredient fromInput(SizedFluidIngredient fluidStack) {
+        return EmiIngredient.of(Arrays.stream(fluidStack.getFluids()).map(NeoForgeEmiStack::of).toList());
     }
 
     public static List<EmiStack> fromOutput(ItemStack output, FluidStack fluidStack) {
