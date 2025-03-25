@@ -58,6 +58,7 @@ public class MycelialReactorTESR implements BlockEntityRenderer<MycelialReactorT
                     RenderSystem.blendFunc(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.SRC_ALPHA);
                 }, () -> {
                     RenderSystem.disableBlend();
+                    RenderSystem.depthMask(true);
                 })).createCompositeState(true);
         return RenderType.create("mycelial_render", DefaultVertexFormat.POSITION_TEX_COLOR, VertexFormat.Mode.QUADS, 262144, false, true, state);
     }

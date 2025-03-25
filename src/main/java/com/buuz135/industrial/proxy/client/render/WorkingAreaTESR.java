@@ -54,6 +54,7 @@ public class WorkingAreaTESR implements BlockEntityRenderer<IndustrialAreaWorkin
                     RenderSystem.blendFuncSeparate(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA, GlStateManager.SourceFactor.ONE, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA);
                 }, () -> {
                     RenderSystem.disableBlend();
+                    RenderSystem.depthMask(true);
                     RenderSystem.defaultBlendFunc();
                 })).createCompositeState(true);
         return RenderType.create("working_area_render", DefaultVertexFormat.POSITION_COLOR, VertexFormat.Mode.QUADS, 256, false, true, state);
