@@ -126,9 +126,10 @@ public class DissolutionChamberTile extends IndustrialProcessingTile<Dissolution
         return () -> {
             if (currentRecipe != null) {
                 DissolutionChamberRecipe dissolutionChamberRecipe = currentRecipe;
-                Optional<FluidStack> optionalInputFluid = Arrays.stream(dissolutionChamberRecipe.inputFluid.getFluids()).findFirst();
-                if (optionalInputFluid.isPresent()) {
-                    inputFluid.drainForced(optionalInputFluid.get(), IFluidHandler.FluidAction.EXECUTE);
+                // check the tank fluid is in ingredient
+                boolean flag = dissolutionChamberRecipe.inputFluid.test(inputFluid.getFluid());
+                if (flag) {
+                    inputFluid.drainForced(inputFluid.getFluid().copyWithAmount(dissolutionChamberRecipe.inputFluid.amount()), IFluidHandler.FluidAction.EXECUTE);
                     for (int i = 0; i < input.getInventory().getSlots(); i++) {
                         input.getInventory().getStackInSlot(i).shrink(1);
                     }

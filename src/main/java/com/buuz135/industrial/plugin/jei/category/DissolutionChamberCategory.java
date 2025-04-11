@@ -33,6 +33,7 @@ import com.hrznstudio.titanium.client.screen.asset.DefaultAssetProvider;
 import com.hrznstudio.titanium.client.screen.asset.IAssetProvider;
 import com.hrznstudio.titanium.util.AssetUtil;
 import mezz.jei.api.constants.VanillaTypes;
+import mezz.jei.api.gui.ITickTimer;
 import mezz.jei.api.gui.builder.IRecipeLayoutBuilder;
 import mezz.jei.api.gui.drawable.IDrawable;
 import mezz.jei.api.gui.ingredient.IRecipeSlotsView;
@@ -94,8 +95,10 @@ public class DissolutionChamberCategory implements IRecipeCategory<DissolutionCh
             builder.addSlot(RecipeIngredientRole.INPUT, 24 + DissolutionChamberTile.getSlotPos(i).getLeft(), 11 + DissolutionChamberTile.getSlotPos(i).getRight()).addIngredients(recipe.input.get(i));
         }
         if (recipe.inputFluid != null && !recipe.inputFluid.ingredient().isEmpty()) {
-            Optional<FluidStack> optionalInputFluid = Arrays.stream(recipe.inputFluid.getFluids()).findFirst();
-            optionalInputFluid.ifPresent(fluidStack -> builder.addSlot(RecipeIngredientRole.INPUT, 33 + 12 + 3, 32 + 3).setFluidRenderer(1000, false, 12, 13).setOverlay(smallTank, 0, 0).addIngredient(NeoForgeTypes.FLUID_STACK, fluidStack));
+            builder.addSlot(RecipeIngredientRole.INPUT, 33 + 12 + 3, 32 + 3)
+                .setFluidRenderer(1000, false, 12, 13)
+                .setOverlay(smallTank, 0, 0)
+                .addIngredients(NeoForgeTypes.FLUID_STACK, Arrays.asList(recipe.inputFluid.getFluids()));
         }
         if (!recipe.output.isEmpty()) {
             ItemStack stack = recipe.output.get();
