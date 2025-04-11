@@ -1,3 +1,9 @@
+# Version 3.6.25
+
+* Fixed tags in sand to silicon crush recipe by SiriosDev
+* Change depth mask back to true after rendering by RaphiMC closes #1562
+* fix DissolutionChamberRecipe only use first fluid in tag by DancingSnow0517
+
 # Version 3.6.24
 
 * Added backpack safety checks when syncing to avoid NPE, closes #1553
