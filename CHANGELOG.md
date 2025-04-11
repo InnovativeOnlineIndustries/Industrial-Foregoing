@@ -3,6 +3,7 @@
 * Fixed tags in sand to silicon crush recipe by SiriosDev
 * Change depth mask back to true after rendering by RaphiMC closes #1562
 * fix DissolutionChamberRecipe only use first fluid in tag by DancingSnow0517
+* Update Conveyor Facing, closes #1535
 
 # Version 3.6.24
 

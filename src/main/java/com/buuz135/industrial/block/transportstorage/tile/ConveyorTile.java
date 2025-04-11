@@ -322,6 +322,10 @@ public class ConveyorTile extends ActiveTile<ConveyorTile> implements IBlockCont
         if (type.isVertical() && !upgradeMap.isEmpty()) {
             new ArrayList<>(upgradeMap.keySet()).forEach(facing1 -> this.removeUpgrade(facing1, true));
         }
+        if (isServer() && this.level.getGameTime() % 20 == 0) {
+            this.facing = this.level.getBlockState(this.worldPosition).getValue(FACING);
+        }
+
         upgradeMap.values().forEach(ConveyorUpgrade::update);
     }
 
