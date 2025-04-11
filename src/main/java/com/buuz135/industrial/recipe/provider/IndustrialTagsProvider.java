@@ -56,6 +56,11 @@ public class IndustrialTagsProvider {
             tag(IndustrialTags.Blocks.MACHINE_FRAME_ADVANCED).add(ModuleCore.ADVANCED.get());
             tag(IndustrialTags.Blocks.MACHINE_FRAME_SUPREME).add(ModuleCore.SUPREME.get());
             tag(BlockTags.DIRT).add(ModuleAgricultureHusbandry.HYDROPONIC_BED.getBlock());
+            tag(BlockTags.LUSH_GROUND_REPLACEABLE).remove(ModuleAgricultureHusbandry.HYDROPONIC_BED.getBlock());
+            tag(BlockTags.AZALEA_ROOT_REPLACEABLE).remove(ModuleAgricultureHusbandry.HYDROPONIC_BED.getBlock());
+            tag(BlockTags.OVERWORLD_CARVER_REPLACEABLES).remove(ModuleAgricultureHusbandry.HYDROPONIC_BED.getBlock());
+            tag(BlockTags.SCULK_REPLACEABLE).remove(ModuleAgricultureHusbandry.HYDROPONIC_BED.getBlock());
+            tag(BlockTags.MOSS_REPLACEABLE).remove(ModuleAgricultureHusbandry.HYDROPONIC_BED.getBlock());
 
             TagAppender<Block> tTagAppender = this.tag(BlockTags.MINEABLE_WITH_PICKAXE);
             tag(TagUtil.getBlockTag(ResourceLocation.parse("c:storage_blocks"))).add(ModuleCore.PINK_SLIME_BLOCK.get());
