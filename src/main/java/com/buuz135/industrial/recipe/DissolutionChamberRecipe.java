@@ -125,10 +125,10 @@ public class DissolutionChamberRecipe implements Recipe<CraftingInput> {
             }
             if (!found) return false;
         }
+        // check the tank fluid is in ingredient
+        boolean flag = inputFluid.test(tank.getFluid());
 
-        Optional<FluidStack> optionalInputFluid = Arrays.stream(inputFluid.getFluids()).findFirst();
-
-        return handlerItems.isEmpty() && optionalInputFluid.isPresent() && tank.drainForced(optionalInputFluid.get(), IFluidHandler.FluidAction.SIMULATE).getAmount() == optionalInputFluid.get().getAmount();
+        return handlerItems.isEmpty() && flag && tank.drainForced(tank.getFluid().copyWithAmount(inputFluid.amount()), IFluidHandler.FluidAction.SIMULATE).getAmount() == inputFluid.amount();
     }
 
     @Override
