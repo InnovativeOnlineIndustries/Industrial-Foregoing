@@ -4,6 +4,8 @@
 * Change depth mask back to true after rendering by RaphiMC closes #1562
 * fix DissolutionChamberRecipe only use first fluid in tag by DancingSnow0517
 * Update Conveyor Facing, closes #1535
+* Ignore updating the durability of an item when extracting enchantments if the item is unbreakable to avoid other mods
+  faults, closes #1554
 
 # Version 3.6.24
 
