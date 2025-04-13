@@ -4,13 +4,13 @@
       "type": "neoforge:not",
       "value": {
         "type": "neoforge:tag_empty",
-        "tag": "c:silicons"
+        "tag": "c:silicon"
       }
     }
   ],
   "type": "industrialforegoing:crusher",
   "input": {
-    "tag": "c:sand"
+    "tag": "c:sands"
   },
   "output": {
     "tag": "c:silicon"

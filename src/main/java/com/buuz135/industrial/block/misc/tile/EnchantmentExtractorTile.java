@@ -219,7 +219,7 @@ public class EnchantmentExtractorTile extends IndustrialProcessingTile<Enchantme
         ItemStack itemstack = stack.copy();
         itemstack.remove(DataComponents.ENCHANTMENTS);
         itemstack.remove(DataComponents.STORED_ENCHANTMENTS);
-        itemstack.setDamageValue(damage);
+        if (!itemstack.has(DataComponents.UNBREAKABLE)) itemstack.setDamageValue(damage);
         itemstack.setCount(count);
         ItemEnchantments.Mutable map = new ItemEnchantments.Mutable(EnchantmentHelper.getEnchantmentsForCrafting(itemstack));
         map.removeIf(enchantmentHolder -> !enchantmentHolder.is(EnchantmentTags.CURSE));
