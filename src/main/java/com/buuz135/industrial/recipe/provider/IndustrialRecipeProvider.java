@@ -24,6 +24,7 @@ package com.buuz135.industrial.recipe.provider;
 
 import com.buuz135.industrial.api.conveyor.ConveyorUpgradeFactory;
 import com.buuz135.industrial.api.transporter.TransporterTypeFactory;
+import com.buuz135.industrial.module.ModuleAgricultureHusbandry;
 import com.buuz135.industrial.module.ModuleCore;
 import com.buuz135.industrial.module.ModuleTool;
 import com.buuz135.industrial.utils.Reference;
@@ -117,6 +118,7 @@ public class IndustrialRecipeProvider extends RecipeProvider {
                 .pattern(" P ").pattern("P P").pattern(" P ")
                 .define('P', Items.DIAMOND)
                 .save(consumer);
+        ((IRecipeProvider) ModuleAgricultureHusbandry.HYDROPONIC_SIMULATION_PROCESSOR.get()).registerRecipe(consumer);
         for (DeferredHolder<Item, Item> laserLen : ModuleCore.LASER_LENS) {
             ((IRecipeProvider) laserLen.get()).registerRecipe(consumer);
         }

@@ -1,0 +1,17 @@
+{
+  "name": "Simulated Hydroponic Bed",
+  "icon": "industrialforegoing:simulated_hydroponic_bed",
+  "category": "industrialforegoing:agriculture_husbandry",
+  "sortnum": 16,
+  "read_by_default": true,
+  "pages": [
+    {
+      "type": "text",
+      "text": "This machine when powered it will generate crop drops based on the Hydroponic Simulation Processor data"
+    },
+    {
+      "type": "crafting",
+      "recipe": "industrialforegoing:simulated_hydroponic_bed"
+    }
+  ]
+}

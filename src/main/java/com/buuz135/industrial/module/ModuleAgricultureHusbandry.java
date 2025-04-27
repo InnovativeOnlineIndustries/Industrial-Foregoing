@@ -25,13 +25,17 @@ package com.buuz135.industrial.module;
 import com.buuz135.industrial.IndustrialForegoing;
 import com.buuz135.industrial.block.IndustrialBlockItem;
 import com.buuz135.industrial.block.agriculturehusbandry.*;
+import com.buuz135.industrial.item.HydroponicSimulationProcessorItem;
 import com.buuz135.industrial.registry.IFRegistries;
 import com.buuz135.industrial.utils.Reference;
 import com.buuz135.industrial.utils.apihandlers.plant.*;
 import com.hrznstudio.titanium.module.BlockWithTile;
 import com.hrznstudio.titanium.module.DeferredRegistryHelper;
 import com.hrznstudio.titanium.tab.TitaniumTab;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.item.Item;
+import net.neoforged.neoforge.registries.DeferredHolder;
 
 
 public class ModuleAgricultureHusbandry implements IModule {
@@ -49,8 +53,11 @@ public class ModuleAgricultureHusbandry implements IModule {
     public static BlockWithTile ANIMAL_BABY_SEPARATOR = IndustrialForegoing.INSTANCE.getRegistries().registerBlockWithTileItem("animal_baby_separator", () -> new AnimalBabySeparatorBlock(), blockRegistryObject -> () -> new IndustrialBlockItem(blockRegistryObject.get(), TAB_AG_HUS), TAB_AG_HUS);
     public static BlockWithTile MOB_CRUSHER = IndustrialForegoing.INSTANCE.getRegistries().registerBlockWithTileItem("mob_crusher", () -> new MobCrusherBlock(), blockRegistryObject -> () -> new IndustrialBlockItem(blockRegistryObject.get(), TAB_AG_HUS), TAB_AG_HUS);
     public static BlockWithTile HYDROPONIC_BED = IndustrialForegoing.INSTANCE.getRegistries().registerBlockWithTileItem("hydroponic_bed", () -> new HydroponicBedBlock(), blockRegistryObject -> () -> new IndustrialBlockItem(blockRegistryObject.get(), TAB_AG_HUS), TAB_AG_HUS);
+    public static BlockWithTile SIMULATED_HYDROPONIC_BED = IndustrialForegoing.INSTANCE.getRegistries().registerBlockWithTileItem("simulated_hydroponic_bed", () -> new SimulatedHydroponicBedBlock(), blockRegistryObject -> () -> new IndustrialBlockItem(blockRegistryObject.get(), TAB_AG_HUS), TAB_AG_HUS);
     public static BlockWithTile MOB_DUPLICATOR = IndustrialForegoing.INSTANCE.getRegistries().registerBlockWithTileItem("mob_duplicator", () -> new MobDuplicatorBlock(), blockRegistryObject -> () -> new IndustrialBlockItem(blockRegistryObject.get(), TAB_AG_HUS), TAB_AG_HUS);
     public static BlockWithTile WITHER_BUILDER = IndustrialForegoing.INSTANCE.getRegistries().registerBlockWithTileItem("wither_builder", () -> new WitherBuilderBlock(), blockRegistryObject -> () -> new IndustrialBlockItem(blockRegistryObject.get(), TAB_AG_HUS), TAB_AG_HUS);
+    public static DeferredHolder<Item, Item> HYDROPONIC_SIMULATION_PROCESSOR = IndustrialForegoing.INSTANCE.getRegistries().registerGeneric(Registries.ITEM, "hydroponic_simulation_processor", () -> new HydroponicSimulationProcessorItem(TAB_AG_HUS));
+
 
     @Override
     public void generateFeatures(DeferredRegistryHelper registryHelper) {
