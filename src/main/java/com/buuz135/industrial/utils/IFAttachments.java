@@ -44,6 +44,7 @@ public class IFAttachments {
     public static final Supplier<DataComponentType<String>> ORE_FLUID_TAG = register("ore_fluid_nbt", () -> "", op -> op.persistent(Codec.STRING));
 
     public static final Supplier<DataComponentType<CompoundTag>> SETTINGS_COPIER = register("settings_copier", CompoundTag::new, op -> op.persistent(CompoundTag.CODEC));
+    public static final Supplier<DataComponentType<CompoundTag>> HYDROPONIC_SIMULATION_PROCESSOR = register("hydroponic_simulation_processor", CompoundTag::new, op -> op.persistent(CompoundTag.CODEC));
 
 
     private static <T> ComponentSupplier<T> register(String name, Supplier<T> defaultVal, UnaryOperator<DataComponentType.Builder<T>> op) {

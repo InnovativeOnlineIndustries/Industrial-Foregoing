@@ -106,7 +106,7 @@ public class PlantGathererTile extends IndustrialAreaWorkingTile<PlantGathererTi
                         if (HydroponicBedTile.tryToHarvestAndReplant(this.level, pointed, this.level.getBlockState(pointed), this.output, this.etherBar, this, () -> {
                             Optional<PlantRecollectable> optional = IFRegistries.PLANT_RECOLLECTABLES_REGISTRY.stream().filter(plantRecollectable -> plantRecollectable.canBeHarvested(level, pointed, this.level.getBlockState(pointed))).findFirst();
                             return optional.orElse(null);
-                        })) {
+                        }, ItemStack.EMPTY)) {
                             tank.fillForced(new FluidStack(ModuleCore.SLUDGE.getSourceFluid().get(), 10), IFluidHandler.FluidAction.EXECUTE);
                             return new WorkAction(0.3f, powerPerOperation);
                         }

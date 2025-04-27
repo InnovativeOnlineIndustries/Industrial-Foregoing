@@ -1,0 +1,39 @@
+{
+  "neoforge:conditions": [
+    {
+      "type": "neoforge:item_exists",
+      "item": "industrialforegoing:hydroponic_simulation_processor"
+    }
+  ],
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "C": {
+      "item": "minecraft:comparator"
+    },
+    "D": {
+      "item": "minecraft:observer"
+    },
+    "G": {
+      "tag": "c:gears/diamond"
+    },
+    "P": {
+      "tag": "c:plastics"
+    },
+    "R": {
+      "item": "minecraft:repeater"
+    }
+  },
+  "pattern": [
+    "PCP",
+    "DRD",
+    "PGP"
+  ],
+  "result": {
+    "components": {
+      "industrialforegoing:hydroponic_simulation_processor": {}
+    },
+    "count": 1,
+    "id": "industrialforegoing:hydroponic_simulation_processor"
+  }
+}

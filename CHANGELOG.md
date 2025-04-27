@@ -1,3 +1,7 @@
+# Version 3.6.26
+
+* Added Simulated Hydroponic Beds
+
 # Version 3.6.25
 
 * Fixed tags in sand to silicon crush recipe by SiriosDev
