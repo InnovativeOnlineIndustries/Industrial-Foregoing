@@ -1,3 +1,10 @@
+# Version 3.6.28
+
+* Fixed Simulated Hydroponic bed power config not being used
+* Added a chance to increase the executions of processor in the simulation chamber
+* Turkish Localization (#1575) - RuyaSavascis
+* ja-jp 2025/04/16 update (#1572) - kyuta683
+
 # Version 3.6.27
 
 * Changed Simulated Hydroponic beds default working time to 700 ticks to be more in line with Normal Hydroponic beds
