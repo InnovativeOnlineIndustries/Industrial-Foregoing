@@ -29,8 +29,8 @@ import com.hrznstudio.titanium.annotation.config.ConfigVal;
 @ConfigFile.Child(MachineResourceProductionConfig.class)
 public class SimulatedHydroponicBedConfig {
 
-    @ConfigVal(comment = "Cooldown Time in Ticks [20 Ticks per Second] - Default: [200 (5s)]")
-    public static int maxProgress = 200;
+    @ConfigVal(comment = "Cooldown Time in Ticks [20 Ticks per Second] - Default: [400 (20s)]")
+    public static int maxProgress = 400;
 
     @ConfigVal(comment = "Amount of Power Consumed per Operation - Default: [3000FE]")
     public static int powerPerOperation = 3000;

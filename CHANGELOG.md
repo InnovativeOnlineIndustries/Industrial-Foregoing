@@ -1,3 +1,7 @@
+# Version 3.6.27
+
+* Changed Simulated Hydroponic beds default working time to 400 ticks to be more in line with Normal Hydroponic beds
+
 # Version 3.6.26
 
 * Added Simulated Hydroponic Beds
