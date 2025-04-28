@@ -1,7 +1,6 @@
 package com.buuz135.industrial.block.agriculturehusbandry.tile;
 
 import com.buuz135.industrial.block.tile.IndustrialWorkingTile;
-import com.buuz135.industrial.config.machine.resourceproduction.HydroponicBedConfig;
 import com.buuz135.industrial.config.machine.resourceproduction.SimulatedHydroponicBedConfig;
 import com.buuz135.industrial.item.HydroponicSimulationProcessorItem;
 import com.buuz135.industrial.module.ModuleAgricultureHusbandry;
@@ -105,9 +104,39 @@ public class SimulatedHydroponicBedTile extends IndustrialWorkingTile<SimulatedH
                         }
                     }
 
+                    //ADD A RANDOM INCREASE CHANCE
+                    if (this.level.random.nextDouble() <= SimulatedHydroponicBedConfig.chanceToIncreaseExecutions) {
+                        var boostDrops = new ArrayList<ItemStack>();
+                        for (var simulationStack : simulation.getStats()) {
+                            ItemStack statStack = simulationStack.stack();
+                            long statAmount = simulationStack.amount();
+                            double amount = (statAmount / (double) executions);
+                            if (amount >= 1) {
+                                int fullAmount = (int) Math.floor(amount);
+                                ItemStack drop = statStack.copy();
+                                drop.setCount(fullAmount);
+                                boostDrops.add(drop);
+
+                                double fraction = amount - fullAmount;
+                                if (fraction > 0 && this.level.random.nextDouble() < fraction) {
+                                    ItemStack extraDrop = statStack.copy();
+                                    extraDrop.setCount(1);
+                                    boostDrops.add(extraDrop);
+                                }
+                            } else if (amount > 0 && this.level.random.nextDouble() < amount) {
+                                ItemStack drop = statStack.copy();
+                                drop.setCount(1);
+                                boostDrops.add(drop);
+                            }
+                        }
+                        this.simulation.acceptExecution(crop, boostDrops);
+                        simulationProcessor.set(IFAttachments.HYDROPONIC_SIMULATION_PROCESSOR, simulation.toNBT(level.registryAccess()));
+
+                    }
+
                     // Add drops to output
                     generatedDrops.forEach(stack -> ItemHandlerHelper.insertItem(output, stack, false));
-                    return new WorkAction(1, HydroponicBedConfig.powerPerOperation);
+                    return new WorkAction(1, SimulatedHydroponicBedConfig.powerPerOperation);
 
                 }
             }
