@@ -28,6 +28,7 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.NonNullList;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.AttachedStemBlock;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.PumpkinBlock;
 import net.minecraft.world.level.block.state.BlockState;
@@ -43,14 +44,19 @@ public class PumpkinMelonPlantRecollectable extends PlantRecollectable {
 
     @Override
     public boolean canBeHarvested(Level world, BlockPos pos, BlockState blockState) {
-        return blockState.getBlock() instanceof PumpkinBlock || blockState.getBlock().equals(Blocks.MELON);
+        return blockState.getBlock() instanceof PumpkinBlock || blockState.getBlock().equals(Blocks.MELON) || blockState.getBlock() instanceof AttachedStemBlock;
     }
 
     @Override
     public List<ItemStack> doHarvestOperation(Level world, BlockPos pos, BlockState blockState) {
         NonNullList<ItemStack> stacks = NonNullList.create();
-        stacks.addAll(BlockUtils.getBlockDrops(world, pos));
-        world.setBlockAndUpdate(pos, Blocks.AIR.defaultBlockState());
+        if (blockState.getBlock() instanceof AttachedStemBlock) {
+            stacks.addAll(BlockUtils.getBlockDrops(world, pos.relative(blockState.getValue(AttachedStemBlock.FACING))));
+            world.setBlockAndUpdate(pos.relative(blockState.getValue(AttachedStemBlock.FACING)), Blocks.AIR.defaultBlockState());
+        } else {
+            stacks.addAll(BlockUtils.getBlockDrops(world, pos));
+            world.setBlockAndUpdate(pos, Blocks.AIR.defaultBlockState());
+        }
         return stacks;
     }
 

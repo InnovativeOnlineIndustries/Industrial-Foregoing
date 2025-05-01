@@ -1,3 +1,7 @@
+# Version 3.629
+
+* Added better support pumpkins and melons in the hydroponic bed
+
 # Version 3.6.28
 
 * Fixed Simulated Hydroponic bed power config not being used
