@@ -111,7 +111,10 @@ public class IndustrialForegoing extends ModuleController {
         proxy = new CommonProxy();
         if (dist.isClient()) {
             EventManager.mod(FMLClientSetupEvent.class).process(fmlClientSetupEvent -> new ClientProxy().run()).subscribe();
-            EventManager.mod(ModelEvent.RegisterAdditional.class).process(modelRegistryEvent -> modelRegistryEvent.register(new ModelResourceLocation(ResourceLocation.fromNamespaceAndPath(Reference.MOD_ID, "block/catears"), "standalone"))).subscribe();
+            EventManager.mod(ModelEvent.RegisterAdditional.class).process(modelRegistryEvent -> {
+                modelRegistryEvent.register(new ModelResourceLocation(ResourceLocation.fromNamespaceAndPath(Reference.MOD_ID, "block/catears"), "standalone"));
+                modelRegistryEvent.register(new ModelResourceLocation(ResourceLocation.fromNamespaceAndPath(Reference.MOD_ID, "item/clean_hydroponic_simulation_processor"), "standalone"));
+            }).subscribe();
             this.initClient();
         }
 
@@ -219,6 +222,7 @@ public class IndustrialForegoing extends ModuleController {
         }).subscribe();
         EventManager.mod(ModelEvent.BakingCompleted.class).process(event -> {
             ClientProxy.ears_baked = event.getModels().get(new ModelResourceLocation(ResourceLocation.fromNamespaceAndPath(Reference.MOD_ID, "block/catears"), "standalone"));
+            ClientProxy.HYDROPONIC_SIM_PROCESSOR = event.getModels().get(new ModelResourceLocation(ResourceLocation.fromNamespaceAndPath(Reference.MOD_ID, "item/clean_hydroponic_simulation_processor"), "standalone"));
         }).subscribe();
         ClientProxy.OPEN_BACKPACK = new KeyMapping("key.industrialforegoing.backpack.desc", -1, "key.industrialforegoing.category");
         EventManager.mod(RegisterKeyMappingsEvent.class).process(event -> {

@@ -42,6 +42,7 @@ public class IndustrialTags {
         public static final TagKey<Item> SLUDGE_OUTPUT = TagUtil.getItemTag(ResourceLocation.parse(Reference.MOD_ID + ":" + "sludge"));
         public static final TagKey<Item> BIOREACTOR_INPUT = TagUtil.getItemTag(ResourceLocation.parse(Reference.MOD_ID + ":" + "bioreactor"));
         public static final TagKey<Item> ENCHANTMENT_EXTRACTOR_BLACKLIST = TagUtil.getItemTag(ResourceLocation.parse(Reference.MOD_ID + ":" + "enchantment_extractor_blacklist"));
+        public static final TagKey<Item> HYDROPONIC_SIMULATION_BLACKLIST = TagUtil.getItemTag(ResourceLocation.parse(Reference.MOD_ID + ":" + "hydroponic_simulation_blacklist"));
 
         public static final TagKey<Item> GEAR_GOLD = TagUtil.getItemTag(ResourceLocation.parse("c:" + "gears/gold"));
         public static final TagKey<Item> GEAR_DIAMOND = TagUtil.getItemTag(ResourceLocation.parse("c:" + "gears/diamond"));

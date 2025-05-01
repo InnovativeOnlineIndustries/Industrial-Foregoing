@@ -80,6 +80,18 @@ public abstract class PlantRecollectable {
     public abstract boolean shouldCheckNextPlant(Level world, BlockPos pos, BlockState blockState);
 
     /**
+     * Gives the seed for the current crop to configure the Simulation Processor in case it never drops
+     *
+     * @param world      The world where the Block is located.
+     * @param pos        The position where the Block is located.
+     * @param blockState The BlockState of the Block.
+     * @return The Seed
+     */
+    public ItemStack getSeedDrop(Level world, BlockPos pos, BlockState blockState) {
+        return ItemStack.EMPTY;
+    }
+
+    /**
      * Returns the priority of the handler. The bigger it is the more priority it has.
      *
      * @return The priority.
