@@ -69,4 +69,12 @@ public class PumpkinMelonPlantRecollectable extends PlantRecollectable {
     public List<String> getRecollectablesNames() {
         return Arrays.asList("text.industrialforegoing.plant.pumpkin", "text.industrialforegoing.plant.melon");
     }
+
+    @Override
+    public ItemStack getSeedDrop(Level world, BlockPos pos, BlockState blockState) {
+        if (blockState.getBlock() instanceof AttachedStemBlock) {
+            return blockState.getBlock().getCloneItemStack(world, pos, blockState);
+        }
+        return super.getSeedDrop(world, pos, blockState);
+    }
 }

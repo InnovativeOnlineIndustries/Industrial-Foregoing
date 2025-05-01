@@ -78,4 +78,15 @@ public class DoubleTallPlantRecollectable extends PlantRecollectable {
     public List<String> getRecollectablesNames() {
         return Arrays.asList("text.industrialforegoing.plant.sugar_cane", "text.industrialforegoing.plant.cactus");
     }
+
+    @Override
+    public ItemStack getSeedDrop(Level world, BlockPos pos, BlockState blockState) {
+        if (blockState.getBlock() instanceof CactusBlock) {
+            return new ItemStack(Blocks.CACTUS);
+        }
+        if (blockState.getBlock() instanceof SugarCaneBlock) {
+            return new ItemStack(Blocks.SUGAR_CANE);
+        }
+        return super.getSeedDrop(world, pos, blockState);
+    }
 }

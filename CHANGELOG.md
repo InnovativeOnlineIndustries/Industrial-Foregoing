@@ -1,6 +1,11 @@
 # Version 3.629
 
 * Added better support pumpkins and melons in the hydroponic bed
+* Added better Seed support in the Simulated Processor for:
+  * Bamboo
+  * Sugarcane & Cactus
+  * Kelp
+  * Pumpkin & Melon
 
 # Version 3.6.28
 

@@ -64,4 +64,9 @@ public class BambooPlantRecollectable extends PlantRecollectable {
     public boolean shouldCheckNextPlant(Level world, BlockPos pos, BlockState blockState) {
         return world.getBlockState(pos).getBlock().equals(Blocks.BAMBOO) && !world.getBlockState(pos.above()).getBlock().equals(Blocks.BAMBOO);
     }
+
+    @Override
+    public ItemStack getSeedDrop(Level world, BlockPos pos, BlockState blockState) {
+        return new ItemStack(Blocks.BAMBOO);
+    }
 }

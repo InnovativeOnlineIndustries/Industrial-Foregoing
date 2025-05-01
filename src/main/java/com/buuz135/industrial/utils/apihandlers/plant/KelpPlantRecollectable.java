@@ -58,4 +58,9 @@ public class KelpPlantRecollectable extends PlantRecollectable {
     public boolean shouldCheckNextPlant(Level world, BlockPos pos, BlockState blockState) {
         return world.getBlockState(pos).getBlock().equals(Blocks.KELP);
     }
+
+    @Override
+    public ItemStack getSeedDrop(Level world, BlockPos pos, BlockState blockState) {
+        return new ItemStack(Blocks.KELP);
+    }
 }
