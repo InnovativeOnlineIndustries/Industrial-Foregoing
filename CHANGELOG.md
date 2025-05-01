@@ -6,6 +6,7 @@
   * Sugarcane & Cactus
   * Kelp
   * Pumpkin & Melon
+* Added a render of the current crop to the Simulated Hydroponic Processor
 
 # Version 3.6.28
 

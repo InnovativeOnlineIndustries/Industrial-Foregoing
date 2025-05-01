@@ -1,5 +1,5 @@
 {
-  "parent": "builtin/entity",
+  "parent": "industrialforegoing:item/item",
   "textures": {
     "layer0": "industrialforegoing:item/hydroponic_simulation_processor"
   }
