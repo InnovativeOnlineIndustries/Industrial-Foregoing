@@ -40,6 +40,8 @@ public class HydroponicSimProcessorISTER extends IndustrialForegoingISTER {
                     matrix.scale(0.5f, 0.5f, 1);
                 }
                 Minecraft.getInstance().getItemRenderer().renderStatic(simulation.getCrop(), displayContext, light, overlayLight, matrix, renderer, Minecraft.getInstance().level, 0);
+            } else if (Screen.hasShiftDown()) {
+                renderItem(stack, displayContext, false, matrix, renderer, light, overlayLight, ClientProxy.HYDROPONIC_SIM_PROCESSOR);
             }
         }
 

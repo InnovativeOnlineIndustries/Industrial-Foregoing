@@ -1,4 +1,4 @@
-# Version 3.629
+# Version 3.6.29
 
 * Added better support pumpkins and melons in the hydroponic bed
 * Added better Seed support in the Simulated Processor for:
@@ -7,6 +7,7 @@
   * Kelp
   * Pumpkin & Melon
 * Added a render of the current crop to the Simulated Hydroponic Processor
+* Added a tag to blacklist from the simulated hydroponic bed `industrialforegoing:hydroponic_simulation_blacklist`
 
 # Version 3.6.28
 
