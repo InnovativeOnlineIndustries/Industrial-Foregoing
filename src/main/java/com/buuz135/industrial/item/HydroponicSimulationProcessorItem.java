@@ -25,7 +25,7 @@ public class HydroponicSimulationProcessorItem extends IFCustomItem {
         super("hydroponic_simulation_processor", tab, new Properties().stacksTo(1));
     }
 
-    public static double calculateEfficiency(double executions) {
+    public static double calculateEfficiency(long executions) {
         return Math.log(executions) / Math.log(200);
     }
 
@@ -80,7 +80,7 @@ public class HydroponicSimulationProcessorItem extends IFCustomItem {
         return key == null;
     }
 
-    private String getProgressBar(double executions) {
+    private String getProgressBar(long executions) {
         var currentEff = Math.floor(calculateEfficiency(executions) * 100) / 100;
         var nextEff = calculateNextEfficiency(currentEff);
         var lastEff = Math.floor(currentEff * 100) / 100;
@@ -90,8 +90,8 @@ public class HydroponicSimulationProcessorItem extends IFCustomItem {
         return ChatFormatting.GOLD + "[" + "|".repeat(progress) + ChatFormatting.DARK_GRAY + "|".repeat(linesAmount - progress) + ChatFormatting.GOLD + "]";
     }
 
-    private double calculateNextEfficiency(double executions) {
-        return Math.ceil(Math.pow(200, executions + 0.01));
+    private double calculateNextEfficiency(double efficiency) {
+        return Math.ceil(Math.pow(200, efficiency + 0.01));
     }
 
     public static class Simulation {
@@ -108,12 +108,12 @@ public class HydroponicSimulationProcessorItem extends IFCustomItem {
 
         public Simulation(CompoundTag nbt) {
             this.crop = ItemStack.parseOptional(IFAttachments.registryAccess(), nbt.getCompound("Crop"));
-            this.executions = nbt.getInt("Executions");
+            this.executions = nbt.getLong("Executions");
             this.stats = new ArrayList<>();
             var statsCompound = nbt.getCompound("Stats");
             for (String allKey : statsCompound.getAllKeys()) {
                 var stat = statsCompound.getCompound(allKey);
-                this.stats.add(new CountedStack(ItemStack.parseOptional(IFAttachments.registryAccess(), stat.getCompound("Stack")), stat.getInt("Count")));
+                this.stats.add(new CountedStack(ItemStack.parseOptional(IFAttachments.registryAccess(), stat.getCompound("Stack")), stat.getLong("Count")));
             }
         }
 
@@ -172,7 +172,7 @@ public class HydroponicSimulationProcessorItem extends IFCustomItem {
         private ItemStack stack;
         private long amount;
 
-        private CountedStack(ItemStack stack, int amount) {
+        private CountedStack(ItemStack stack, long amount) {
             this.stack = stack;
             this.amount = amount;
         }

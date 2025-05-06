@@ -1,3 +1,7 @@
+# Version 3.6.31
+
+* Fixed Hydroponic Simulation Processor number formatting on the tooltip
+
 # Version 3.6.29
 
 * Added better support pumpkins and melons in the hydroponic bed
