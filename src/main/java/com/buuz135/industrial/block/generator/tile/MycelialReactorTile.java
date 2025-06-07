@@ -31,28 +31,52 @@ import com.hrznstudio.titanium.api.IFactory;
 import com.hrznstudio.titanium.api.client.IScreenAddon;
 import com.hrznstudio.titanium.client.screen.addon.ProgressBarScreenAddon;
 import com.hrznstudio.titanium.component.progress.ProgressBarComponent;
+import com.hrznstudio.titanium.event.handler.EventManager;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.DyeColor;
+import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.api.distmarker.OnlyIn;
+import net.neoforged.neoforge.event.tick.LevelTickEvent;
 
 import javax.annotation.Nonnull;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
 
 public class MycelialReactorTile extends IndustrialGeneratorTile<MycelialReactorTile> {
 
+    public static final HashMap<Level, List<BlockPos>> REACTOR_POSITIONS = new HashMap<>();
+
+    static {
+        EventManager.forge(LevelTickEvent.Post.class).process(event -> {
+            for (BlockPos reactorPosition : REACTOR_POSITIONS.getOrDefault(event.getLevel(), new ArrayList<>())) {
+                var tile = event.getLevel().getBlockEntity(reactorPosition);
+                if (tile instanceof MycelialReactorTile reactorTile) {
+                    int amount = MycelialDataManager.getReactorAvailable(reactorTile.owner, tile.getLevel(), false).size();
+                    if (amount == IMycelialGeneratorType.TYPES.size()) {
+                        MycelialDataManager.getReactorAvailable(reactorTile.owner, tile.getLevel(), true);
+                        reactorTile.setCanWork(true);
+                    }
+                }
+            }
+            REACTOR_POSITIONS.getOrDefault(event.getLevel(), new ArrayList<>()).clear();
+        }).subscribe();
+    }
+
     @Save
     private String owner;
     private ProgressBarComponent<MycelialReactorTile> bar;
+    private boolean canWork;
 
     public MycelialReactorTile(BlockPos blockPos, BlockState blockState) {
         super(ModuleGenerator.MYCELIAL_REACTOR, blockPos, blockState);
+        this.canWork = false;
     }
 
     @Nonnull
@@ -63,19 +87,29 @@ public class MycelialReactorTile extends IndustrialGeneratorTile<MycelialReactor
 
     @Override
     public int consumeFuel() {
-        MycelialDataManager.getReactorAvailable(owner, this.level, true);
+        this.canWork = false;
+        markForUpdate();
         return 5;
     }
 
     @Override
     public boolean canStart() {
-        int amount = MycelialDataManager.getReactorAvailable(owner, this.level, false).size();
-        if (amount == IMycelialGeneratorType.TYPES.size()) {
-            MycelialDataManager.getReactorAvailable(owner, this.level, true);
+        if (this.canWork)
             return true;
-        }
         markForUpdate();
         return false;
+    }
+
+    public void setCanWork(boolean canWork) {
+        this.canWork = canWork;
+    }
+
+    @Override
+    public void serverTick(Level level, BlockPos pos, BlockState state, MycelialReactorTile blockEntity) {
+        super.serverTick(level, pos, state, blockEntity);
+        if (!REACTOR_POSITIONS.getOrDefault(this.level, new ArrayList<>()).contains(this.worldPosition)) {
+            REACTOR_POSITIONS.computeIfAbsent(this.level, (a) -> new ArrayList<>()).add(this.worldPosition);
+        }
     }
 
     @Override
