@@ -71,9 +71,12 @@ public record LaserDrillRarity(BiomeRarity biomeRarity, DimensionRarity dimensio
     }
 
     private static boolean checkForDimension(Level level, LaserDrillRarity rarity, DimensionType dimensionType) {
+        if (dimensionType == null) return false;
+        var registry = level.registryAccess().registry(Registries.DIMENSION_TYPE).orElse(null);
+        if (registry == null) return false;
         return rarity.dimensionRarity().whitelist().isEmpty() ?
-                rarity.dimensionRarity().blacklist().stream().noneMatch(dimensionTypeResourceKey -> level.registryAccess().registryOrThrow(Registries.DIMENSION_TYPE).get(dimensionTypeResourceKey).equals(dimensionType))
-                : rarity.dimensionRarity().whitelist().stream().anyMatch(dimensionTypeResourceKey -> level.registryAccess().registryOrThrow(Registries.DIMENSION_TYPE).get(dimensionTypeResourceKey).equals(dimensionType));
+                rarity.dimensionRarity().blacklist().stream().noneMatch(dimensionTypeResourceKey -> registry.get(dimensionTypeResourceKey).equals(dimensionType))
+                : rarity.dimensionRarity().whitelist().stream().anyMatch(dimensionTypeResourceKey -> registry.get(dimensionTypeResourceKey).equals(dimensionType));
     }
 
     private static boolean checkForBiome(LaserDrillRarity rarity, Holder<Biome> biome) {

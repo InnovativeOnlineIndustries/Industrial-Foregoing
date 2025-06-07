@@ -1,3 +1,8 @@
+# Version 3.6.32
+
+* Fixed Laser drill crashing when registry its not present, closes #1585
+* Improved Mycelial Reactor to be able to function better with multiple reactors, closes #1583
+
 # Version 3.6.31
 
 * Fixed Hydroponic Simulation Processor number formatting on the tooltip
