@@ -1,0 +1,17 @@
+{
+  "name": "無限充電機",
+  "icon": "industrialforegoing:infinity_charger",
+  "category": "industrialforegoing:misc",
+  "sortnum": 5,
+  "read_by_default": true,
+  "pages": [
+    {
+      "type": "text",
+      "text": "電力を保持できるアイテムを充電します。$(6)無限$()アイテムを非常に速く充電します。"
+    },
+    {
+      "type": "crafting",
+      "recipe": "industrialforegoing:infinity_charger"
+    }
+  ]
+}

@@ -1,0 +1,25 @@
+{
+  "name": "無限ツール",
+  "icon": "industrialforegoing:infinity_drill",
+  "category": "industrialforegoing:tools",
+  "sortnum": 2,
+  "read_by_default": true,
+  "pages": [
+    {
+      "type": "text",
+      "text": "無限ツールは電力が高ければ高いほど優れているという単純な原則に従います。ティアを上げるとツールに特別な特典が付与される可能性があります。$(l:generators/biofuel)バイオ燃料$()が含まれていると使用時に電力ではなく燃料を消費するため、ツールの効率が向上します。$(br2)ツールのGUIを開くには$(6)スニーク+右クリック$()をします。"
+    },
+    {
+      "type": "text",
+      "text": "ツールのGUIで充電を無効にすることでツールの$(6)充電$()を無効にすることができます。 $(br2)7つのティアがあります: $(li)プア$(li)コモン$(li)アンコモン$(li)レア$(li)エピック$(li)レジェンダリー$(li)アーティファクト$(br2)すべてのツールはドロップをプレイヤーにテレポートします。"
+    },
+    {
+      "type": "text",
+      "text": "Patreonに参加することでツールの特別な$(6)シャイニー$()バージョンを入手できます。視覚的な報酬が得られます！"
+    },
+    {
+      "type": "industrialforegoing:dissolution",
+      "recipe": "industrialforegoing:dissolution_chamber/infinity_drill"
+    }
+  ]
+}

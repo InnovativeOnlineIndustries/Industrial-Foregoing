@@ -1,0 +1,17 @@
+{
+  "name": "エンチャント仕分け機",
+  "icon": "industrialforegoing:enchantment_sorter",
+  "category": "industrialforegoing:misc",
+  "sortnum": 1,
+  "read_by_default": true,
+  "pages": [
+    {
+      "type": "text",
+      "text": "この機械はエンチャントされたアイテムとそうでないアイテムを分類します。"
+    },
+    {
+      "type": "crafting",
+      "recipe": "industrialforegoing:enchantment_sorter"
+    }
+  ]
+}
