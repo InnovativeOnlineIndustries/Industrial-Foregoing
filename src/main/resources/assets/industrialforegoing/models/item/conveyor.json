@@ -1,7 +1,6 @@
 {
-  "parent": "industrialforegoing:item/item",
+  "parent": "industrialforegoing:block/conveyor",
   "textures": {
-    "layer0": "industrialforegoing:item/conveyor_background",
-    "layer1": "industrialforegoing:item/conveyor_overlay"
+    "2": "industrialforegoing:item/conveyor_overlay"
   }
 }

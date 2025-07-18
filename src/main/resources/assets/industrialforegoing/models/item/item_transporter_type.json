@@ -1,3 +1,6 @@
 {
-  "parent": "industrialforegoing:block/transporters/item_transporter_extract_north"
+  "parent": "industrialforegoing:item/transporter",
+  "textures": {
+    "0": "industrialforegoing:block/transporters/item"
+  }
 }
