@@ -1,6 +1,3 @@
 {
-  "parent": "industrialforegoing:block/conveyor",
-  "textures": {
-    "2": "industrialforegoing:item/conveyor_overlay"
-  }
+  "parent": "industrialforegoing:block/conveyor"
 }
