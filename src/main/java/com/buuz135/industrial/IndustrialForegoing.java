@@ -110,7 +110,7 @@ public class IndustrialForegoing extends ModuleController {
         NETWORK.registerMessage("plunger_player_hit", PlungerPlayerHitMessage.class);
         proxy = new CommonProxy();
         if (dist.isClient()) {
-            EventManager.mod(FMLClientSetupEvent.class).process(fmlClientSetupEvent -> new ClientProxy().run()).subscribe();
+            EventManager.mod(FMLClientSetupEvent.class).process(fmlClientSetupEvent -> fmlClientSetupEvent.enqueueWork(() -> new ClientProxy().run())).subscribe();
             EventManager.mod(ModelEvent.RegisterAdditional.class).process(modelRegistryEvent -> {
                 modelRegistryEvent.register(new ModelResourceLocation(ResourceLocation.fromNamespaceAndPath(Reference.MOD_ID, "block/catears"), "standalone"));
                 modelRegistryEvent.register(new ModelResourceLocation(ResourceLocation.fromNamespaceAndPath(Reference.MOD_ID, "item/clean_hydroponic_simulation_processor"), "standalone"));
