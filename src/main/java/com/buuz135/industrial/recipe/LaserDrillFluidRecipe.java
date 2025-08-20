@@ -23,6 +23,8 @@
 package com.buuz135.industrial.recipe;
 
 import com.buuz135.industrial.module.ModuleCore;
+import com.buuz135.industrial.recipe.data.EntityData;
+import com.buuz135.industrial.recipe.data.EntityIngredient;
 import com.buuz135.industrial.utils.Reference;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
@@ -33,7 +35,10 @@ import net.minecraft.advancements.critereon.RecipeUnlockedTrigger;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.data.recipes.RecipeOutput;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.tags.EntityTypeTags;
+import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.*;
 import net.minecraft.world.level.Level;
@@ -41,58 +46,50 @@ import net.minecraft.world.level.dimension.BuiltinDimensionTypes;
 import net.minecraft.world.level.material.Fluids;
 import net.neoforged.fml.ModList;
 import net.neoforged.neoforge.common.conditions.ModLoadedCondition;
-import net.neoforged.neoforge.fluids.FluidStack;
+import net.neoforged.neoforge.fluids.crafting.FluidIngredient;
+import net.neoforged.neoforge.fluids.crafting.SizedFluidIngredient;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
 
-public class LaserDrillFluidRecipe implements Recipe<CraftingInput> {
+public class LaserDrillFluidRecipe extends DrillRecipe<SizedFluidIngredient> {
 
     public static final MapCodec<LaserDrillFluidRecipe> CODEC = RecordCodecBuilder.mapCodec(in -> in.group(
-            FluidStack.CODEC.fieldOf("output").forGetter(o -> o.output),
+            SizedFluidIngredient.FLAT_CODEC.fieldOf("output").forGetter(o -> o.output),
             Ingredient.CODEC.fieldOf("catalyst").forGetter(o -> o.catalyst),
-            ResourceLocation.CODEC.fieldOf("entity").forGetter(o -> o.entity),
+            EntityData.CODEC.optionalFieldOf("entity_data").forGetter(o -> o.entityData),
             LaserDrillRarity.CODEC.listOf().fieldOf("rarity").forGetter(o -> o.rarity)
     ).apply(in, LaserDrillFluidRecipe::new));
-
-    public static ResourceLocation EMPTY = ResourceLocation.fromNamespaceAndPath("minecraft", "empty");
-    public FluidStack output;
-    public List<LaserDrillRarity> rarity;
-    public int pointer = 0;
-    public Ingredient catalyst;
-    public ResourceLocation entity;
-
-    public LaserDrillFluidRecipe(FluidStack output, Ingredient catalyst, ResourceLocation entity, List<LaserDrillRarity> rarity) {
-        this.output = output;
-        this.rarity = rarity;
-        this.catalyst = catalyst;
-        this.entity = entity;
-    }
-    public LaserDrillFluidRecipe(FluidStack output, Ingredient catalyst, ResourceLocation entity, LaserDrillRarity... rarity) {
-        this(output, catalyst, entity, Arrays.asList(rarity));
-    }
-    public LaserDrillFluidRecipe(FluidStack output, int color, ResourceLocation entity, LaserDrillRarity... rarity) {
-        this(output, Ingredient.of(ModuleCore.LASER_LENS[color].get()), entity, rarity);
+    
+    public LaserDrillFluidRecipe(SizedFluidIngredient output, Ingredient catalyst, Optional<EntityData> entityData, List<LaserDrillRarity> rarity) {
+        super(output, catalyst, entityData, rarity);
     }
 
-    public LaserDrillFluidRecipe() {
+    public LaserDrillFluidRecipe(SizedFluidIngredient output, int color, Optional<EntityData> entityData, LaserDrillRarity... rarity) {
+        super(output, color, entityData, rarity);
     }
+    
+    public LaserDrillFluidRecipe(SizedFluidIngredient output, int color, LaserDrillRarity... rarity) {
+        super(output, color, Optional.empty(), rarity);
+    }
+
 
     public static void init(RecipeOutput output) {
-        createRecipe(output, "lava", "minecraft", new LaserDrillFluidRecipe(new FluidStack(Fluids.LAVA, 100), 1, EMPTY,
+        createRecipe(output, "lava", "minecraft", new LaserDrillFluidRecipe(new SizedFluidIngredient(FluidIngredient.of(Fluids.LAVA), 100), 1,
                 new LaserDrillRarity(
                         new LaserDrillRarity.BiomeRarity(new ArrayList<>(), new ArrayList<>()),
                         new LaserDrillRarity.DimensionRarity(List.of(BuiltinDimensionTypes.NETHER), new ArrayList<>()),
                         5, 20, 8)));
-        createRecipe(output, "ether", "minecraft", new LaserDrillFluidRecipe(new FluidStack(ModuleCore.ETHER.getSourceFluid().get(), 10), 10, ResourceLocation.fromNamespaceAndPath("minecraft", "wither"),
+        createRecipe(output, "ether", "minecraft", new LaserDrillFluidRecipe(new SizedFluidIngredient(FluidIngredient.of(ModuleCore.ETHER.getSourceFluid().get()), 10), 10,
+                Optional.of(EntityData.of(EntityType.WITHER)),
                 new LaserDrillRarity(
                         new LaserDrillRarity.BiomeRarity(new ArrayList<>(), new ArrayList<>()),
                         new LaserDrillRarity.DimensionRarity(new ArrayList<>(), new ArrayList<>()),
                         -64, 256, 8)));
         if (ModList.get().isLoaded("pneumaticcraft")) {
             createRecipe(output, "oil", "pneumaticcraft",
-                    new LaserDrillFluidRecipe(new FluidStack(ModFluids.OIL.get(), 50), 15, EMPTY,
+                    new LaserDrillFluidRecipe(new SizedFluidIngredient(FluidIngredient.of(ModFluids.OIL.get()), 50), 15,
                             new LaserDrillRarity(
                                     new LaserDrillRarity.BiomeRarity(LaserDrillRarity.BiomeRarity.OIL, new ArrayList<>()),
                                     new LaserDrillRarity.DimensionRarity(new ArrayList<>(), new ArrayList<>()),
@@ -150,5 +147,4 @@ public class LaserDrillFluidRecipe implements Recipe<CraftingInput> {
         nbt.putInt("Amount", amount);
         return nbt;
     }
-
 }

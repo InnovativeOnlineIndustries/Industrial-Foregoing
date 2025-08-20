@@ -50,9 +50,10 @@ import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.components.EditBox;
 import net.minecraft.core.BlockPos;
-import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.NbtUtils;
 import net.minecraft.network.chat.Component;
+import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.DyeColor;
@@ -69,6 +70,7 @@ import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class FluidLaserBaseTile extends IndustrialMachineTile<FluidLaserBaseTile> implements ILaserBase<FluidLaserBaseTile> {
 
@@ -183,18 +185,27 @@ public class FluidLaserBaseTile extends IndustrialMachineTile<FluidLaserBaseTile
                     .filter(laserDrillFluidRecipe -> laserDrillFluidRecipe.catalyst.test(catalyst.getStackInSlot(0)))
                     .filter(laserDrillFluidRecipe -> LaserDrillRarity.getValidRarity(this.level, laserDrillFluidRecipe.rarity, this.level.dimensionType(), this.level.getBiome(this.worldPosition), this.miningDepth) != null)
                     .findFirst()
-                    .ifPresent(laserDrillFluidRecipe -> {
-                        if (!LaserDrillFluidRecipe.EMPTY.equals(laserDrillFluidRecipe.entity)) {
-                            List<LivingEntity> entities = this.level.getEntitiesOfClass(LivingEntity.class, box.bounds(), entity -> BuiltInRegistries.ENTITY_TYPE.getKey(entity.getType()).equals(laserDrillFluidRecipe.entity));
-                            if (entities.size() > 0) {
-                                LivingEntity first = entities.get(0);
-                                if (first.getHealth() > 5) {
-                                    first.hurt(first.damageSources().generic(), 5);
-                                    output.fillForced(laserDrillFluidRecipe.output.copy(), IFluidHandler.FluidAction.EXECUTE);
-                                }
+                    .ifPresent(recipe -> {
+                        if(recipe.entityData.isPresent()) {
+                            List<LivingEntity> entities = this.level.getEntitiesOfClass(LivingEntity.class, box.bounds(), entity -> recipe.entityData.get().getEntity().test(entity));
+                            if (entities.isEmpty()) return;
+
+                            List<Entity> filtered = entities.stream().filter(Entity -> {
+                                if (recipe.entityData.isEmpty()) return true;
+                                CompoundTag data = new CompoundTag();
+                                Entity.saveWithoutId(data);
+                                return NbtUtils.compareNbt(recipe.entityData.get().getData(), data, true);
+                            }).collect(Collectors.toList());
+
+                            if (filtered.isEmpty()) return;
+
+                            LivingEntity first = entities.getFirst();
+                            if (first.getHealth() > 5) {
+                                first.hurt(first.damageSources().generic(), 5);
+                                output.fillForced(recipe.output.getFluids()[0].copy(), IFluidHandler.FluidAction.EXECUTE);
                             }
                         } else {
-                            output.fillForced(laserDrillFluidRecipe.output.copy(), IFluidHandler.FluidAction.EXECUTE);
+                            output.fillForced(recipe.output.getFluids()[0].copy(), IFluidHandler.FluidAction.EXECUTE);
                         }
                     });
         }

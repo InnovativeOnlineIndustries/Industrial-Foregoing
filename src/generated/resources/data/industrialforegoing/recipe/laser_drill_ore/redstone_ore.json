@@ -4,6 +4,7 @@
     "item": "industrialforegoing:red_laser_lens"
   },
   "output": {
+    "count": 1,
     "item": "minecraft:redstone_ore"
   },
   "rarity": [

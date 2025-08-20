@@ -13,6 +13,7 @@
     "item": "industrialforegoing:blue_laser_lens"
   },
   "output": {
+    "count": 1,
     "tag": "c:raw_materials/cobalt"
   },
   "rarity": [
