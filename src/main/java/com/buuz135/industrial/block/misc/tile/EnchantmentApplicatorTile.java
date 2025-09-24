@@ -246,7 +246,7 @@ public class EnchantmentApplicatorTile extends IndustrialProcessingTile<Enchantm
                             j2 = enchantmentValue == j2 ? j2 + 1 : Math.max(j2, enchantmentValue);
                             boolean flag1 = inputFirst.supportsEnchantment(holder);
                             for (Holder<Enchantment> enchantment : map.keySet()) {
-                                if (!enchantment.equals(enchantment1) && !Enchantment.areCompatible(holder, enchantment)) {
+                                if (!enchantment.equals(holder) && !Enchantment.areCompatible(holder, enchantment)) {
                                     flag1 = false;
                                     ++i;
                                 }
