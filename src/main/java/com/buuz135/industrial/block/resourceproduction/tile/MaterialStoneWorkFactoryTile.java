@@ -412,7 +412,7 @@ public class MaterialStoneWorkFactoryTile extends IndustrialProcessingTile<Mater
     }
 
     @Override
-    public void loadSettings(Player player, CompoundTag tag) {
+    public boolean loadSettings(Player player, CompoundTag tag) {
         if (tag.contains("MSWF_generatorRecipe")) {
             this.generatorRecipe = tag.getString("MSWF_generatorRecipe");
         }
@@ -428,7 +428,7 @@ public class MaterialStoneWorkFactoryTile extends IndustrialProcessingTile<Mater
         if (tag.contains("MSWF_fourthRecipeId")) {
             this.fourthRecipeId = tag.getInt("MSWF_fourthRecipeId");
         }
-        super.loadSettings(player, tag);
+        return super.loadSettings(player, tag);
     }
 
     public static class StoneWorkAction {

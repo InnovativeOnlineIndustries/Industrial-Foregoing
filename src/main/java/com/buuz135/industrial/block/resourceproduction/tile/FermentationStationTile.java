@@ -223,14 +223,14 @@ public class FermentationStationTile extends IndustrialProcessingTile<Fermentati
     }
 
     @Override
-    public void loadSettings(Player player, CompoundTag tag) {
+    public boolean loadSettings(Player player, CompoundTag tag) {
         if (tag.contains("FS_production")) {
             this.production = tag.getInt("FS_production");
         }
         if (tag.contains("FS_seal")) {
             this.seal = tag.getInt("FS_seal");
         }
-        super.loadSettings(player, tag);
+        return super.loadSettings(player, tag);
     }
 
     public enum ProductionType {

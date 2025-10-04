@@ -47,8 +47,6 @@ import net.neoforged.neoforge.items.ItemHandlerHelper;
 import org.apache.commons.lang3.tuple.Pair;
 
 import javax.annotation.Nonnull;
-import java.util.Arrays;
-import java.util.Optional;
 
 public class DissolutionChamberTile extends IndustrialProcessingTile<DissolutionChamberTile> {
 
@@ -189,7 +187,7 @@ public class DissolutionChamberTile extends IndustrialProcessingTile<Dissolution
     }
 
     @Override
-    public void loadSettings(Player player, CompoundTag tag) {
+    public boolean loadSettings(Player player, CompoundTag tag) {
         if (tag.contains("DC_locked")) {
             input.setLocked(tag.getBoolean("DC_locked"));
         }
@@ -198,7 +196,7 @@ public class DissolutionChamberTile extends IndustrialProcessingTile<Dissolution
                 input.getFilter()[Integer.parseInt(psFilter)] = ItemStack.parseOptional(this.level.registryAccess(), tag.getCompound("DC_filter").getCompound(psFilter));
             }
         }
-        super.loadSettings(player, tag);
+        return super.loadSettings(player, tag);
     }
 
     @Override

@@ -170,10 +170,10 @@ public class MobDuplicatorTile extends IndustrialAreaWorkingTile<MobDuplicatorTi
     }
 
     @Override
-    public void loadSettings(Player player, CompoundTag tag) {
+    public boolean loadSettings(Player player, CompoundTag tag) {
         if (tag.contains("MC_exactCopy")) {
             exactCopy = tag.getBoolean("MC_exactCopy");
         }
-        super.loadSettings(player, tag);
+        return super.loadSettings(player, tag);
     }
 }

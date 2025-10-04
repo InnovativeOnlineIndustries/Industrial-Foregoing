@@ -24,7 +24,9 @@ package com.buuz135.industrial.proxy.client;
 
 import com.buuz135.industrial.block.generator.tile.MycelialReactorTile;
 import com.buuz135.industrial.block.tile.IndustrialAreaWorkingTile;
+import com.buuz135.industrial.block.transportstorage.PowerCrystalBlock;
 import com.buuz135.industrial.block.transportstorage.tile.ConveyorTile;
+import com.buuz135.industrial.block.transportstorage.tile.PowerCrystalTile;
 import com.buuz135.industrial.block.transportstorage.tile.TransporterTile;
 import com.buuz135.industrial.entity.InfinityLauncherProjectileEntity;
 import com.buuz135.industrial.entity.InfinityNukeEntity;
@@ -38,6 +40,7 @@ import com.buuz135.industrial.proxy.CommonProxy;
 import com.buuz135.industrial.proxy.client.event.IFClientEvents;
 import com.buuz135.industrial.proxy.client.render.*;
 import com.buuz135.industrial.proxy.client.render.item.HydroponicSimProcessorISTER;
+import com.buuz135.industrial.utils.CustomRarity;
 import com.buuz135.industrial.utils.FluidUtils;
 import com.buuz135.industrial.utils.IFAttachments;
 import com.buuz135.industrial.utils.Reference;
@@ -61,6 +64,7 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.FastColor;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.SpawnEggItem;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityType;
@@ -74,6 +78,7 @@ import net.neoforged.neoforge.client.extensions.common.RegisterClientExtensionsE
 import net.neoforged.neoforge.common.NeoForge;
 import net.neoforged.neoforge.event.entity.player.ItemTooltipEvent;
 
+import java.awt.*;
 import java.util.Calendar;
 
 @EventBusSubscriber(value = Dist.CLIENT, bus = EventBusSubscriber.Bus.MOD)
@@ -111,6 +116,12 @@ public class ClientProxy extends CommonProxy {
         event.registerBlockEntityRenderer(((BlockEntityType<? extends TransporterTile>) ModuleTransportStorage.TRANSPORTER.type().get()), TransporterTESR::new);
 
         event.registerBlockEntityRenderer(((BlockEntityType<? extends ConveyorTile>) ModuleTransportStorage.CONVEYOR.type().get()), FluidConveyorTESR::new);
+        event.registerBlockEntityRenderer(((BlockEntityType<? extends PowerCrystalTile>) ModuleTransportStorage.PITY_POWER_CRYSTAL.type().get()), PowerCrystalTESR::new);
+        event.registerBlockEntityRenderer(((BlockEntityType<? extends PowerCrystalTile>) ModuleTransportStorage.SIMPLE_POWER_CRYSTAL.type().get()), PowerCrystalTESR::new);
+        event.registerBlockEntityRenderer(((BlockEntityType<? extends PowerCrystalTile>) ModuleTransportStorage.ADVANCED_POWER_CRYSTAL.type().get()), PowerCrystalTESR::new);
+        event.registerBlockEntityRenderer(((BlockEntityType<? extends PowerCrystalTile>) ModuleTransportStorage.SUPREME_POWER_CRYSTAL.type().get()), PowerCrystalTESR::new);
+
+
     }
 
     private static void registerAreaRender(EntityRenderersEvent.RegisterRenderers event, BlockWithTile pair) {
@@ -167,6 +178,19 @@ public class ClientProxy extends CommonProxy {
             }
             return 0xFFFFFFFF;
         }, ModuleTransportStorage.CONVEYOR.getBlock());
+        Minecraft.getInstance().getBlockColors().register((state, worldIn, pos, tintIndex) -> {
+            if (tintIndex == 0 && worldIn != null && pos != null && state.getBlock() instanceof PowerCrystalBlock powerCrystalBlock) {
+                var rarity = powerCrystalBlock.getRarity();
+                if (rarity == CustomRarity.PITY.getValue())
+                    return new Color(ChatFormatting.GREEN.getColor()).darker().getRGB();
+                if (rarity == CustomRarity.SIMPLE.getValue())
+                    return new Color(ChatFormatting.AQUA.getColor()).darker().getRGB();
+                if (rarity == CustomRarity.ADVANCED.getValue())
+                    return new Color(ChatFormatting.LIGHT_PURPLE.getColor()).darker().getRGB();
+                return new Color(ChatFormatting.GOLD.getColor()).darker().getRGB();
+            }
+            return 0xFFFFFFFF;
+        }, ModuleTransportStorage.PITY_POWER_CRYSTAL.getBlock(), ModuleTransportStorage.SIMPLE_POWER_CRYSTAL.getBlock(), ModuleTransportStorage.ADVANCED_POWER_CRYSTAL.getBlock(), ModuleTransportStorage.SUPREME_POWER_CRYSTAL.getBlock());
         Minecraft.getInstance().getItemColors().register((stack, tintIndex) -> {
             if (tintIndex == 1 || tintIndex == 2 || tintIndex == 3) {
                 SpawnEggItem info = null;
@@ -198,6 +222,20 @@ public class ClientProxy extends CommonProxy {
             }
             return 0xFFFFFFFF;
         }, ModuleCore.RAW_ORE_MEAT.getBucketFluid(), ModuleCore.FERMENTED_ORE_MEAT.getBucketFluid());
+        Minecraft.getInstance().getItemColors().register((stack, tintIndex) -> {
+            if (tintIndex == 0 && stack.getItem() instanceof BlockItem blockItem && blockItem.getBlock() instanceof PowerCrystalBlock powerCrystalBlock) {
+                var rarity = powerCrystalBlock.getRarity();
+                if (rarity == CustomRarity.PITY.getValue())
+                    return new Color(ChatFormatting.GREEN.getColor()).darker().getRGB();
+                if (rarity == CustomRarity.SIMPLE.getValue())
+                    return new Color(ChatFormatting.AQUA.getColor()).darker().getRGB();
+                if (rarity == CustomRarity.ADVANCED.getValue())
+                    return new Color(ChatFormatting.LIGHT_PURPLE.getColor()).darker().getRGB();
+                return new Color(ChatFormatting.GOLD.getColor()).darker().getRGB();
+            }
+            return 0xFFFFFFFF;
+        }, ModuleTransportStorage.PITY_POWER_CRYSTAL.getBlock(), ModuleTransportStorage.SIMPLE_POWER_CRYSTAL.getBlock(), ModuleTransportStorage.ADVANCED_POWER_CRYSTAL.getBlock(), ModuleTransportStorage.SUPREME_POWER_CRYSTAL.getBlock());
+
 
         EventManager.forge(ItemTooltipEvent.class).filter(event -> BuiltInRegistries.ITEM.getKey(event.getItemStack().getItem()).getNamespace().equals(Reference.MOD_ID)).process(event -> {
             if (Calendar.getInstance().get(Calendar.DAY_OF_MONTH) == 1 && Calendar.getInstance().get(Calendar.MONTH) == Calendar.APRIL) {

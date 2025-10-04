@@ -72,6 +72,12 @@ public class IndustrialBlockstateProvider extends BlockStateProvider {
         simpleBlock(ModuleCore.SUPREME.get(), new ModelFile.UncheckedModelFile(modLoc("block/" + BuiltInRegistries.BLOCK.getKey(ModuleCore.SUPREME.get()).getPath())));
 
         generateForBlock((RotatableBlock<?>) ModuleTool.INFINITY_BACKPACK_BLOCK.getBlock());
+        simpleBlock(ModuleTransportStorage.PITY_POWER_CRYSTAL.getBlock(), new ModelFile.UncheckedModelFile(modLoc("block/" + BuiltInRegistries.BLOCK.getKey(ModuleTransportStorage.PITY_POWER_CRYSTAL.getBlock()).getPath())));
+        simpleBlock(ModuleTransportStorage.SIMPLE_POWER_CRYSTAL.getBlock(), new ModelFile.UncheckedModelFile(modLoc("block/" + BuiltInRegistries.BLOCK.getKey(ModuleTransportStorage.SIMPLE_POWER_CRYSTAL.getBlock()).getPath())));
+        simpleBlock(ModuleTransportStorage.ADVANCED_POWER_CRYSTAL.getBlock(), new ModelFile.UncheckedModelFile(modLoc("block/" + BuiltInRegistries.BLOCK.getKey(ModuleTransportStorage.ADVANCED_POWER_CRYSTAL.getBlock()).getPath())));
+        simpleBlock(ModuleTransportStorage.SUPREME_POWER_CRYSTAL.getBlock(), new ModelFile.UncheckedModelFile(modLoc("block/" + BuiltInRegistries.BLOCK.getKey(ModuleTransportStorage.SUPREME_POWER_CRYSTAL.getBlock()).getPath())));
+
+
         //VariantBlockStateBuilder conveyor = getVariantBuilder(ModuleTransport.CONVEYOR);
         //for (ConveyorBlock.EnumType type : ConveyorBlock.TYPE.getAllowedValues()) {
         //    for (Direction direction : ConveyorBlock.FACING.getAllowedValues()) {

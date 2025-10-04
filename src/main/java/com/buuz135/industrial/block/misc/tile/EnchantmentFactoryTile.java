@@ -208,9 +208,10 @@ public class EnchantmentFactoryTile extends IndustrialProcessingTile<Enchantment
     }
 
     @Override
-    public void loadSettings(Player player, CompoundTag tag) {
+    public boolean loadSettings(Player player, CompoundTag tag) {
         super.loadSettings(player, tag);
         this.selectedLevel = tag.getInt("SelectedLevel");
+        return true;
     }
 
     @Override

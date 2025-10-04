@@ -239,7 +239,7 @@ public class PotionBrewerTile extends IndustrialProcessingTile<PotionBrewerTile>
     }
 
     @Override
-    public void loadSettings(Player player, CompoundTag tag) {
+    public boolean loadSettings(Player player, CompoundTag tag) {
         if (tag.contains("BR_locked")) {
             brewingItems.setLocked(tag.getBoolean("BR_locked"));
         }
@@ -249,7 +249,7 @@ public class PotionBrewerTile extends IndustrialProcessingTile<PotionBrewerTile>
             }
         }
         this.filter.deserializeNBT(this.level.registryAccess(), tag.getCompound("PB_OutputFilter"));
-        super.loadSettings(player, tag);
+        return super.loadSettings(player, tag);
     }
 
     @Override

@@ -156,7 +156,7 @@ public abstract class IndustrialMachineTile<T extends IndustrialMachineTile<T>> 
     }
 
     @Override
-    public void loadSettings(Player player, CompoundTag tag) {
+    public boolean loadSettings(Player player, CompoundTag tag) {
         if (tag.contains(settingsAddons)) {
             var stacks = IMachineSettings.readInventory(this.level.registryAccess(), tag.getCompound(settingsAddons));
             for (var stack : stacks) {
@@ -208,6 +208,7 @@ public abstract class IndustrialMachineTile<T extends IndustrialMachineTile<T>> 
             }
         }
         markForUpdate();
+        return true;
     }
 
     @Override

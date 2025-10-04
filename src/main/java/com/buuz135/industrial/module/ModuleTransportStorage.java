@@ -27,8 +27,10 @@ import com.buuz135.industrial.api.conveyor.ConveyorUpgradeFactory;
 import com.buuz135.industrial.api.transporter.TransporterTypeFactory;
 import com.buuz135.industrial.block.IndustrialBlockItem;
 import com.buuz135.industrial.block.transportstorage.ConveyorBlock;
+import com.buuz135.industrial.block.transportstorage.PowerCrystalBlock;
 import com.buuz135.industrial.block.transportstorage.TransporterBlock;
 import com.buuz135.industrial.block.transportstorage.conveyor.*;
+import com.buuz135.industrial.block.transportstorage.tile.PowerCrystalTile;
 import com.buuz135.industrial.block.transportstorage.transporter.TransporterFluidType;
 import com.buuz135.industrial.block.transportstorage.transporter.TransporterItemType;
 import com.buuz135.industrial.block.transportstorage.transporter.TransporterWorldType;
@@ -38,10 +40,12 @@ import com.buuz135.industrial.item.ItemConveyorUpgrade;
 import com.buuz135.industrial.item.ItemTransporterType;
 import com.buuz135.industrial.proxy.client.model.ConveyorBlockModel;
 import com.buuz135.industrial.proxy.client.model.TransporterBlockModel;
+import com.buuz135.industrial.utils.CustomRarity;
 import com.buuz135.industrial.utils.Reference;
 import com.hrznstudio.titanium.event.handler.EventManager;
 import com.hrznstudio.titanium.module.BlockWithTile;
 import com.hrznstudio.titanium.module.DeferredRegistryHelper;
+import com.hrznstudio.titanium.nbthandler.NBTManager;
 import com.hrznstudio.titanium.tab.TitaniumTab;
 import com.mojang.math.Transformation;
 import net.minecraft.client.resources.model.*;
@@ -79,6 +83,11 @@ public class ModuleTransportStorage implements IModule {
     public static BlockWithTile TRANSPORTER = IndustrialForegoing.INSTANCE.getRegistries().registerBlockWithTileItem("transporter", () -> new TransporterBlock(), blockRegistryObject -> () -> new TransporterBlock.Item(blockRegistryObject.get(), TAB_TRANSPORT), TAB_TRANSPORT);
     public static HashMap<ResourceLocation, BakedModel> TRANSPORTER_CACHE = new HashMap<>();
 
+    public static BlockWithTile PITY_POWER_CRYSTAL;
+    public static BlockWithTile SIMPLE_POWER_CRYSTAL;
+    public static BlockWithTile ADVANCED_POWER_CRYSTAL;
+    public static BlockWithTile SUPREME_POWER_CRYSTAL;
+
     @Override
     public void generateFeatures(DeferredRegistryHelper registryHelper) {
         ContainerConveyor.TYPE = registryHelper.registerGeneric(Registries.MENU, "conveyor", () -> IMenuTypeExtension.create(ContainerConveyor::new));
@@ -88,6 +97,11 @@ public class ModuleTransportStorage implements IModule {
         if (FMLEnvironment.dist.isClient()) {
             this.onClient();
         }
+        PITY_POWER_CRYSTAL = registryHelper.registerBlockWithTile("pity_power_crystal", () -> new PowerCrystalBlock(CustomRarity.PITY.getValue()), TAB_TRANSPORT);
+        SIMPLE_POWER_CRYSTAL = registryHelper.registerBlockWithTile("simple_power_crystal", () -> new PowerCrystalBlock(CustomRarity.SIMPLE.getValue()), TAB_TRANSPORT);
+        ADVANCED_POWER_CRYSTAL = registryHelper.registerBlockWithTile("advanced_power_crystal", () -> new PowerCrystalBlock(CustomRarity.ADVANCED.getValue()), TAB_TRANSPORT);
+        SUPREME_POWER_CRYSTAL = registryHelper.registerBlockWithTile("supreme_power_crystal", () -> new PowerCrystalBlock(CustomRarity.SUPREME.getValue()), TAB_TRANSPORT);
+        NBTManager.getInstance().scanTileClassForAnnotations(PowerCrystalTile.class);
     }
 
     @OnlyIn(Dist.CLIENT)

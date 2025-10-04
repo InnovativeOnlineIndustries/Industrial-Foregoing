@@ -180,7 +180,7 @@ public class BioReactorTile extends IndustrialWorkingTile<BioReactorTile> {
     }
 
     @Override
-    public void loadSettings(Player player, CompoundTag tag) {
+    public boolean loadSettings(Player player, CompoundTag tag) {
         if (tag.contains("BR_locked")) {
             input.setLocked(tag.getBoolean("BR_locked"));
         }
@@ -189,7 +189,7 @@ public class BioReactorTile extends IndustrialWorkingTile<BioReactorTile> {
                 input.getFilter()[Integer.parseInt(psFilter)] = ItemStack.parseOptional(this.level.registryAccess(), tag.getCompound("BR_filter").getCompound(psFilter));
             }
         }
-        super.loadSettings(player, tag);
+        return super.loadSettings(player, tag);
     }
 
     @Override

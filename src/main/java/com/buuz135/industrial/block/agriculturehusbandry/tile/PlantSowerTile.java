@@ -42,7 +42,8 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.DyeColor;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.level.block.*;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.BushBlock;
 import net.minecraft.world.level.block.state.BlockState;
 import net.neoforged.neoforge.common.SpecialPlantable;
 
@@ -157,7 +158,7 @@ public class PlantSowerTile extends IndustrialAreaWorkingTile<PlantSowerTile> {
     }
 
     @Override
-    public void loadSettings(Player player, CompoundTag tag) {
+    public boolean loadSettings(Player player, CompoundTag tag) {
         if (tag.contains("PS_locked")) {
             input.setLocked(tag.getBoolean("PS_locked"));
         }
@@ -166,7 +167,7 @@ public class PlantSowerTile extends IndustrialAreaWorkingTile<PlantSowerTile> {
                 input.getFilter()[Integer.parseInt(psFilter)] = ItemStack.parseOptional(this.level.registryAccess(), tag.getCompound("PS_filter").getCompound(psFilter));
             }
         }
-        super.loadSettings(player, tag);
+        return super.loadSettings(player, tag);
     }
 
     @Override

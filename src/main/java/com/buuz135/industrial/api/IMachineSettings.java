@@ -30,7 +30,7 @@ public interface IMachineSettings {
         return stacks;
     }
 
-    void loadSettings(Player player, CompoundTag tag);
+    boolean loadSettings(Player player, CompoundTag tag);
 
     void saveSettings(Player player, CompoundTag tag);
 }

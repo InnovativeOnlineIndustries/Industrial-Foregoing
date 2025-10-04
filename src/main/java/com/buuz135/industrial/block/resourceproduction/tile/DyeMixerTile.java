@@ -243,11 +243,11 @@ public class DyeMixerTile extends IndustrialProcessingTile<DyeMixerTile> {
     }
 
     @Override
-    public void loadSettings(Player player, CompoundTag tag) {
+    public boolean loadSettings(Player player, CompoundTag tag) {
         if (tag.contains("DM_dye")) {
             dye = tag.getInt("DM_dye");
         }
-        super.loadSettings(player, tag);
+        return super.loadSettings(player, tag);
     }
 
     @Override

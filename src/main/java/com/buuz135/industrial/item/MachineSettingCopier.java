@@ -7,10 +7,13 @@ import com.hrznstudio.titanium.item.BasicItem;
 import com.hrznstudio.titanium.recipe.generator.TitaniumShapedRecipeBuilder;
 import com.hrznstudio.titanium.tab.TitaniumTab;
 import net.minecraft.ChatFormatting;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.data.recipes.RecipeOutput;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvents;
+import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.InteractionResultHolder;
@@ -62,10 +65,16 @@ public class MachineSettingCopier extends IFCustomItem {
         var stack = context.getItemInHand();
         if (tile instanceof IMachineSettings machineSettings) {
             if (stack.has(IFAttachments.SETTINGS_COPIER)) {
-                if (!context.getLevel().isClientSide())
-                    machineSettings.loadSettings(player, stack.get(IFAttachments.SETTINGS_COPIER));
-                player.playSound(SoundEvents.ANVIL_USE, 0.1F, 1.0F);
-                player.displayClientMessage(Component.translatable("text.industrialforegoing.machine_settings_copier.settings_stored"), true);
+                if (player instanceof ServerPlayer serverPlayer) {
+                    if (machineSettings.loadSettings(player, stack.get(IFAttachments.SETTINGS_COPIER))) {
+                        serverPlayer.serverLevel().playSound(null, player.getX(), player.getY(), player.getZ(), SoundEvents.ANVIL_USE, SoundSource.PLAYERS, 0.2F, 1.0F);
+                        serverPlayer.displayClientMessage(Component.translatable("text.industrialforegoing.machine_settings_copier.settings_stored"), true);
+                    } else {
+                        serverPlayer.serverLevel().playSound(null, player.getX(), player.getY(), player.getZ(), SoundEvents.ZOMBIE_ATTACK_IRON_DOOR, SoundSource.PLAYERS, 0.3F, 0.05F);
+                        serverPlayer.displayClientMessage(Component.translatable("text.industrialforegoing.machine_settings_copier.error."
+                                + BuiltInRegistries.BLOCK.getKey(context.getLevel().getBlockState(context.getClickedPos()).getBlock()).getPath()), true);
+                    }
+                }
                 return InteractionResult.SUCCESS;
             } else {
                 if (!context.getLevel().isClientSide()) {

@@ -240,9 +240,9 @@ public class EnchantmentExtractorTile extends IndustrialProcessingTile<Enchantme
     }
 
     @Override
-    public void loadSettings(Player player, CompoundTag tag) {
+    public boolean loadSettings(Player player, CompoundTag tag) {
         if (tag.contains("EE_extractEnchants")) extractEnchants = tag.getBoolean("EE_extractEnchants");
-        super.loadSettings(player, tag);
+        return super.loadSettings(player, tag);
     }
 
     @Override

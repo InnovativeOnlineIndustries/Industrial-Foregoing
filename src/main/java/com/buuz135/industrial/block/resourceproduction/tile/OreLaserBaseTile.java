@@ -236,11 +236,11 @@ public class OreLaserBaseTile extends IndustrialMachineTile<OreLaserBaseTile> im
     }
 
     @Override
-    public void loadSettings(Player player, CompoundTag tag) {
+    public boolean loadSettings(Player player, CompoundTag tag) {
         if (tag.contains("OL_miningDepth")) {
             this.miningDepth = tag.getInt("OL_miningDepth");
         }
-        super.loadSettings(player, tag);
+        return super.loadSettings(player, tag);
     }
 
 }

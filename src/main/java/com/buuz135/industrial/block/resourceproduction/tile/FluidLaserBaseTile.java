@@ -230,10 +230,10 @@ public class FluidLaserBaseTile extends IndustrialMachineTile<FluidLaserBaseTile
     }
 
     @Override
-    public void loadSettings(Player player, CompoundTag tag) {
+    public boolean loadSettings(Player player, CompoundTag tag) {
         if (tag.contains("FL_miningDepth")) {
             this.miningDepth = tag.getInt("FL_miningDepth");
         }
-        super.loadSettings(player, tag);
+        return super.loadSettings(player, tag);
     }
 }
