@@ -4,6 +4,7 @@
     "item": "industrialforegoing:white_laser_lens"
   },
   "output": {
+    "count": 1,
     "item": "minecraft:nether_quartz_ore"
   },
   "rarity": [

@@ -9,10 +9,16 @@
   "catalyst": {
     "item": "industrialforegoing:purple_laser_lens"
   },
-  "entity": "minecraft:wither",
+  "entity_data": {
+    "data": {},
+    "display": "",
+    "entity": {
+      "type": "minecraft:wither"
+    }
+  },
   "output": {
     "amount": 10,
-    "id": "industrialforegoing:ether_gas"
+    "fluid": "industrialforegoing:ether_gas"
   },
   "rarity": [
     {

@@ -1,8 +1,8 @@
 {
   "parent": "industrialforegoing:block/base_block",
   "textures": {
-    "north": "industrialforegoing:block/animal_independence_selector_front",
-    "south": "industrialforegoing:block/animal_independence_selector_back",
+    "north": "industrialforegoing:block/animal_independence_selector_front_back",
+    "south": "industrialforegoing:block/animal_independence_selector_front_back",
     "west": "industrialforegoing:block/animal_independence_selector_side",
     "east": "industrialforegoing:block/animal_independence_selector_side"
   }

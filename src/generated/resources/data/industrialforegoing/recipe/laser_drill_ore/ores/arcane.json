@@ -13,6 +13,7 @@
     "item": "industrialforegoing:magenta_laser_lens"
   },
   "output": {
+    "count": 1,
     "tag": "c:ores/arcane"
   },
   "rarity": [

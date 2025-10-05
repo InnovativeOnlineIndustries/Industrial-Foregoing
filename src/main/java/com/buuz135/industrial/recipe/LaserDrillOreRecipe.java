@@ -23,6 +23,8 @@
 package com.buuz135.industrial.recipe;
 
 import com.buuz135.industrial.module.ModuleCore;
+import com.buuz135.industrial.recipe.data.EntityData;
+import com.buuz135.industrial.recipe.data.EntityIngredient;
 import com.buuz135.industrial.utils.Reference;
 import com.hrznstudio.titanium.util.TagUtil;
 import com.mojang.serialization.MapCodec;
@@ -33,9 +35,13 @@ import net.minecraft.advancements.critereon.RecipeUnlockedTrigger;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.data.recipes.RecipeOutput;
+import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.BiomeTags;
+import net.minecraft.tags.EntityTypeTags;
+import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
 import net.minecraft.world.item.crafting.*;
 import net.minecraft.world.level.ItemLike;
 import net.minecraft.world.level.Level;
@@ -43,33 +49,30 @@ import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.dimension.BuiltinDimensionTypes;
 import net.neoforged.neoforge.common.conditions.NotCondition;
 import net.neoforged.neoforge.common.conditions.TagEmptyCondition;
+import net.neoforged.neoforge.common.crafting.SizedIngredient;
 
 import java.util.List;
+import java.util.Optional;
 
-public class LaserDrillOreRecipe implements Recipe<CraftingInput> {
+public class LaserDrillOreRecipe extends DrillRecipe<SizedIngredient> {
 
     public static final MapCodec<LaserDrillOreRecipe> CODEC = RecordCodecBuilder.mapCodec(in -> in.group(
-            Ingredient.CODEC.fieldOf("output").forGetter(o -> o.output),
+            SizedIngredient.FLAT_CODEC.fieldOf("output").forGetter(o -> o.output),
             Ingredient.CODEC.fieldOf("catalyst").forGetter(o -> o.catalyst),
+            EntityData.CODEC.optionalFieldOf("entity_data").forGetter(o -> o.entityData),
             LaserDrillRarity.CODEC.listOf().fieldOf("rarity").forGetter(o -> o.rarity)
     ).apply(in, LaserDrillOreRecipe::new));
-    public List<LaserDrillRarity> rarity;
 
-    public LaserDrillOreRecipe(Ingredient output, Ingredient catalyst, LaserDrillRarity... rarity) {
-        this(output, catalyst, List.of(rarity));
+    public LaserDrillOreRecipe(SizedIngredient output, Ingredient catalyst, Optional<EntityData> entityData, List<LaserDrillRarity> rarity) {
+        super(output, catalyst, entityData, rarity);
     }
 
-    public LaserDrillOreRecipe(Ingredient output, Ingredient catalyst, List<LaserDrillRarity> rarity) {
-        this.output = output;
-        this.catalyst = catalyst;
-        this.rarity = rarity;
+    public LaserDrillOreRecipe(SizedIngredient output, int color, Optional<EntityData> entityData, LaserDrillRarity... rarity) {
+        super(output, color, entityData, rarity);
     }
 
-    public LaserDrillOreRecipe() {
-    }
-
-    public LaserDrillOreRecipe(Ingredient output, int color, LaserDrillRarity... rarity) {
-        this(output, Ingredient.of(ModuleCore.LASER_LENS[color].get()), rarity);
+    public LaserDrillOreRecipe(SizedIngredient output, int color, LaserDrillRarity... rarity) {
+        super(output, color, Optional.empty(), rarity);
     }
 
     public static void init(RecipeOutput output) {
@@ -191,8 +194,6 @@ public class LaserDrillOreRecipe implements Recipe<CraftingInput> {
                         0, 255, defaultWeight)};
     }
 
-    public Ingredient output;
-
     public static void createEnd(RecipeOutput recipeOutput, String name, int color, int min, int max, int weight) {
         createTagRecipe(recipeOutput, name, color,
                 new LaserDrillRarity(
@@ -200,8 +201,6 @@ public class LaserDrillOreRecipe implements Recipe<CraftingInput> {
                         new LaserDrillRarity.DimensionRarity(List.of(BuiltinDimensionTypes.END), List.of()),
                         min, max, weight));
     }
-    public int pointer = 0;
-    public Ingredient catalyst;
 
     public static void createNether(RecipeOutput recipeOutput, String name, int color, int min, int max, int weight) {
         createTagRecipe(recipeOutput, name, color,
@@ -211,7 +210,7 @@ public class LaserDrillOreRecipe implements Recipe<CraftingInput> {
     }
 
     public static void createItemRecipe(RecipeOutput recipeOutput, ItemLike itemLike, int color, LaserDrillRarity... rarity) {
-        var output = Ingredient.of(itemLike);
+        var output = SizedIngredient.of(itemLike, 1);
         var recipe = new LaserDrillOreRecipe(output, color, rarity);
         var rl = generateRL(BuiltInRegistries.ITEM.getKey(itemLike.asItem()).getPath());
         var advancementHolder = recipeOutput.advancement()
@@ -223,7 +222,7 @@ public class LaserDrillOreRecipe implements Recipe<CraftingInput> {
 
     public static void createTagRecipe(RecipeOutput recipeOutput, String tagString, int color, LaserDrillRarity... rarity) {
         var tag = TagUtil.getItemTag(ResourceLocation.fromNamespaceAndPath("c", tagString));
-        var output = Ingredient.of(tag);
+        var output = SizedIngredient.of(tag, 1);
         var recipe = new LaserDrillOreRecipe(output, color, rarity);
         var rl = generateRL(tagString);
         var advancementHolder = recipeOutput.advancement()

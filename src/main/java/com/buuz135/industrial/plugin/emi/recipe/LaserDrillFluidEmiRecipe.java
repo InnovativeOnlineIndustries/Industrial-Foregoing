@@ -2,6 +2,7 @@ package com.buuz135.industrial.plugin.emi.recipe;
 
 import com.buuz135.industrial.plugin.emi.IFEmiPlugin;
 import com.buuz135.industrial.recipe.LaserDrillFluidRecipe;
+import com.buuz135.industrial.recipe.data.EntityIngredient;
 import com.hrznstudio.titanium.api.client.AssetTypes;
 import com.hrznstudio.titanium.client.screen.asset.DefaultAssetProvider;
 import com.hrznstudio.titanium.util.AssetUtil;
@@ -33,7 +34,7 @@ public class LaserDrillFluidEmiRecipe extends CustomEmiRecipe {
     public LaserDrillFluidEmiRecipe(RecipeHolder<LaserDrillFluidRecipe> recipe) {
         super(recipe.id(), IFEmiPlugin.LASER_DRILL_FLUID_EMI_CATEGORY,
                 List.of(),
-                fromOutput(NeoForgeEmiStack.of(recipe.value().output)));
+                Arrays.stream(recipe.value().output.getFluids()).map(NeoForgeEmiStack::of).toList());
         this.recipe = recipe;
     }
 
@@ -73,11 +74,13 @@ public class LaserDrillFluidEmiRecipe extends CustomEmiRecipe {
             String biomes = Component.translatable("text.industrialforegoing.requirements").getString();
 
             draw.drawString(Minecraft.getInstance().font, ChatFormatting.DARK_GRAY + minY, recipeWidth / 10, 30, 0, false);
-            if (!LaserDrillFluidRecipe.EMPTY.equals(recipe.value().entity)) {
-                String wight = Component.translatable("text.industrialforegoing.jei.recipe.over").getString() + Component.translatable("entity." + recipe.value().entity.toString().replace(":", ".")).getString();
+            draw.drawString(Minecraft.getInstance().font, ChatFormatting.DARK_GRAY + maxY, recipeWidth / 10 * 6, 30, 0, false);
+            if (recipe.value().entityData.isPresent()) {
+                EntityIngredient entityIngredient = recipe.value().entityData.get().getEntity();
+                String name = entityIngredient.isTag() ? "#" + entityIngredient.tag().location() : entityIngredient.getType().getDescription().getString();
+                String wight = Component.translatable("text.industrialforegoing.jei.recipe.over").getString() + name;
                 draw.drawString(Minecraft.getInstance().font, ChatFormatting.DARK_GRAY + wight, recipeWidth / 10, 30 + (Minecraft.getInstance().font.lineHeight + 2), 0, false);
             }
-            draw.drawString(Minecraft.getInstance().font, ChatFormatting.DARK_GRAY + maxY, recipeWidth / 10 * 6, 30, 0, false);
             draw.drawString(Minecraft.getInstance().font, ChatFormatting.DARK_GRAY + "" + ChatFormatting.UNDERLINE + biomes, recipeWidth / 2 - Minecraft.getInstance().font.width(biomes) / 2, 30 + (Minecraft.getInstance().font.lineHeight + 2) * 2, 0, false);
 
 
@@ -102,6 +105,18 @@ public class LaserDrillFluidEmiRecipe extends CustomEmiRecipe {
         }
         if (mouseX > 137 && mouseX < (137 + 15) && mouseY > 70 && mouseY < 85 && recipe.pointer < recipe.rarity.size() - 1) { //Inside the next button
             tooltip.add(Component.translatable("text.industrialforegoing.button.jei.next_rarity"));
+        }
+        if (recipe.entityData.isPresent()) {
+            EntityIngredient entityIngredient = recipe.entityData.get().getEntity();
+            String name = entityIngredient.isTag() ? "#" + entityIngredient.tag().location() : entityIngredient.getType().getDescription().getString();
+            String text = Component.translatable("text.industrialforegoing.jei.recipe.over").getString() + name;
+            int width = Minecraft.getInstance().font.width(text);
+            if (mouseX > 12 && mouseX < 12 + width + 4 && mouseY > 28 + (Minecraft.getInstance().font.lineHeight + 2) && mouseY < 28 + (Minecraft.getInstance().font.lineHeight + 2) * 2) {
+                if (!recipe.entityData.get().getData().isEmpty()) {
+                    tooltip.add(Component.translatable("text.industrialforegoing.tooltip.data").withStyle(ChatFormatting.UNDERLINE).withStyle(ChatFormatting.GOLD));
+                    tooltip.add(recipe.entityData.get().getDisplay());
+                }
+            }
         }
         if (mouseX > 13 * 2 && mouseX < 13 * 2 + 20 && mouseY > 30 + (Minecraft.getInstance().font.lineHeight + 2) * 3 && mouseY < 30 + (Minecraft.getInstance().font.lineHeight + 2) * 3 + 20) { //Inside the whitelisted biomes
             tooltip.add(Component.translatable("text.industrialforegoing.tooltip.whitelisted_dimensions").withStyle(ChatFormatting.UNDERLINE).withStyle(ChatFormatting.GOLD));
