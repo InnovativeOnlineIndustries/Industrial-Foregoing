@@ -4,6 +4,7 @@
     "item": "industrialforegoing:lime_laser_lens"
   },
   "output": {
+    "count": 1,
     "item": "minecraft:emerald_ore"
   },
   "rarity": [

@@ -2,6 +2,7 @@ package com.buuz135.industrial.plugin.emi.recipe;
 
 import com.buuz135.industrial.plugin.emi.IFEmiPlugin;
 import com.buuz135.industrial.recipe.LaserDrillOreRecipe;
+import com.buuz135.industrial.recipe.data.EntityIngredient;
 import com.hrznstudio.titanium.client.screen.addon.SlotsScreenAddon;
 import com.hrznstudio.titanium.client.screen.asset.DefaultAssetProvider;
 import com.mojang.blaze3d.systems.RenderSystem;
@@ -47,7 +48,7 @@ public class LaserDrillOreEmiRecipe extends CustomEmiRecipe {
 
     @Override
     public int getDisplayHeight() {
-        return 26 + 60;
+        return 35 + 60;
     }
 
     @Override
@@ -67,10 +68,10 @@ public class LaserDrillOreEmiRecipe extends CustomEmiRecipe {
             RenderSystem.enableBlend();
 
             var toasts = ResourceLocation.fromNamespaceAndPath("minecraft", "toast/tree");
-            draw.blitSprite(toasts, recipeWidth / 10 * 2, 30 + (Minecraft.getInstance().font.lineHeight + 2) * 3, 20, 20);
-            draw.blitSprite(toasts, recipeWidth / 10 * 7, 30 + (Minecraft.getInstance().font.lineHeight + 2) * 3, 20, 20);
+            draw.blitSprite(toasts, recipeWidth / 10 * 2, 30 + (Minecraft.getInstance().font.lineHeight + 2) * 4, 20, 20);
+            draw.blitSprite(toasts, recipeWidth / 10 * 7, 30 + (Minecraft.getInstance().font.lineHeight + 2) * 4, 20, 20);
             var icons = ResourceLocation.fromNamespaceAndPath("neoforge", "textures/gui/icons.png");
-            draw.blit(icons, recipeWidth / 10 * 7 + 1, 30 + (Minecraft.getInstance().font.lineHeight + 2) * 3 + 3, 0, 16, 16, 16);
+            draw.blit(icons, recipeWidth / 10 * 7 + 1, 30 + (Minecraft.getInstance().font.lineHeight + 2) * 4 + 3, 0, 16, 16, 16);
 
             String minY = Component.translatable("text.industrialforegoing.miny").getString() + " " + recipe.value().rarity.get(recipe.value().pointer).depth_min();
             String maxY = Component.translatable("text.industrialforegoing.maxy").getString() + " " + recipe.value().rarity.get(recipe.value().pointer).depth_max();
@@ -78,9 +79,15 @@ public class LaserDrillOreEmiRecipe extends CustomEmiRecipe {
             String biomes = Component.translatable("text.industrialforegoing.requirements").getString();
 
             draw.drawString(Minecraft.getInstance().font, ChatFormatting.DARK_GRAY + minY, recipeWidth / 10, 30, 0, false);
-            draw.drawString(Minecraft.getInstance().font, ChatFormatting.DARK_GRAY + wight, recipeWidth / 10, 30 + (Minecraft.getInstance().font.lineHeight + 2), 0, false);
             draw.drawString(Minecraft.getInstance().font, ChatFormatting.DARK_GRAY + maxY, recipeWidth / 10 * 6, 30, 0, false);
-            draw.drawString(Minecraft.getInstance().font, ChatFormatting.DARK_GRAY + "" + ChatFormatting.UNDERLINE + biomes, recipeWidth / 2 - Minecraft.getInstance().font.width(biomes) / 2, 30 + (Minecraft.getInstance().font.lineHeight + 2) * 2, 0, false);
+            draw.drawString(Minecraft.getInstance().font, ChatFormatting.DARK_GRAY + wight, recipeWidth / 10, 30 + (Minecraft.getInstance().font.lineHeight + 2), 0, false);
+            if (recipe.value().entityData.isPresent()) {
+                EntityIngredient entityIngredient = recipe.value().entityData.get().getEntity();
+                String name = entityIngredient.isTag() ? "#" + entityIngredient.tag().location() : entityIngredient.getType().getDescription().getString();
+                String entity = Component.translatable("text.industrialforegoing.jei.recipe.over").getString() + name;
+                draw.drawString(Minecraft.getInstance().font, ChatFormatting.DARK_GRAY + entity, recipeWidth / 10, 30 + (Minecraft.getInstance().font.lineHeight + 2) * 2, 0, false);
+            }
+            draw.drawString(Minecraft.getInstance().font, ChatFormatting.DARK_GRAY + "" + ChatFormatting.UNDERLINE + biomes, recipeWidth / 2 - Minecraft.getInstance().font.width(biomes) / 2, 30 + (Minecraft.getInstance().font.lineHeight + 2) * 3, 0, false);
 
             SlotsScreenAddon.drawAsset(draw, Minecraft.getInstance().screen, DefaultAssetProvider.DEFAULT_PROVIDER, 37, 6, 0, 0, 1, integer -> Pair.of(0, 0), integer -> ItemStack.EMPTY, true, integer -> new Color(DyeColor.YELLOW.getFireworkColor()), integer -> true, 1);
             SlotsScreenAddon.drawAsset(draw, Minecraft.getInstance().screen, DefaultAssetProvider.DEFAULT_PROVIDER, 60 + 37, 6, 0, 0, 1, integer -> Pair.of(0, 0), integer -> ItemStack.EMPTY, true, integer -> new Color(DyeColor.ORANGE.getFireworkColor()), integer -> true, 1);
@@ -109,7 +116,19 @@ public class LaserDrillOreEmiRecipe extends CustomEmiRecipe {
         if (mouseX > 137 && mouseX < (137 + 14) && mouseY > 70 && mouseY < 84 && recipe.pointer < recipe.rarity.size() - 1) { //Inside the next button
             tooltip.add(Component.translatable("text.industrialforegoing.button.jei.next_rarity"));
         }
-        if (mouseX > 13 * 2 && mouseX < 13 * 2 + 20 && mouseY > 30 + (Minecraft.getInstance().font.lineHeight + 2) * 3 && mouseY < 30 + (Minecraft.getInstance().font.lineHeight + 2) * 3 + 20) { //Inside the whitelisted biomes
+        if (recipe.entityData.isPresent()) {
+            EntityIngredient entityIngredient = recipe.entityData.get().getEntity();
+            String name = entityIngredient.isTag() ? "#" + entityIngredient.tag().location() : entityIngredient.getType().getDescription().getString();
+            String text = Component.translatable("text.industrialforegoing.jei.recipe.over").getString() + name;
+            int width = Minecraft.getInstance().font.width(text);
+            if (mouseX > 12 && mouseX < 12 + width + 4 && mouseY > 28 + (Minecraft.getInstance().font.lineHeight + 2) * 2 && mouseY < 28 + (Minecraft.getInstance().font.lineHeight + 2) * 3) {
+                if (!recipe.entityData.get().getData().isEmpty()) {
+                    tooltip.add(Component.translatable("text.industrialforegoing.tooltip.data").withStyle(ChatFormatting.UNDERLINE).withStyle(ChatFormatting.GOLD));
+                    tooltip.add(recipe.entityData.get().getDisplay());
+                }
+            }
+        }
+        if (mouseX > 13 * 2 && mouseX < 13 * 2 + 20 && mouseY > 30 + (Minecraft.getInstance().font.lineHeight + 2) * 4 && mouseY < 30 + (Minecraft.getInstance().font.lineHeight + 2) * 4 + 20) { //Inside the whitelisted biomes
             tooltip.add(Component.translatable("text.industrialforegoing.tooltip.whitelisted_dimensions").withStyle(ChatFormatting.UNDERLINE).withStyle(ChatFormatting.GOLD));
             if (recipe.rarity.get(recipe.pointer).dimensionRarity().whitelist().isEmpty())
                 tooltip.add(Component.literal(Component.translatable("text.industrialforegoing.jei.recipe.any").getString()));
@@ -130,7 +149,7 @@ public class LaserDrillOreEmiRecipe extends CustomEmiRecipe {
                 }
             }
         }
-        if (mouseX > 13 * 8 && mouseX < 13 * 8 + 20 && mouseY > 30 + (Minecraft.getInstance().font.lineHeight + 2) * 3 && mouseY < 30 + (Minecraft.getInstance().font.lineHeight + 2) * 3 + 20) { //Inside the whitelisted biomes
+        if (mouseX > 13 * 8 && mouseX < 13 * 8 + 20 && mouseY > 30 + (Minecraft.getInstance().font.lineHeight + 2) * 4 && mouseY < 30 + (Minecraft.getInstance().font.lineHeight + 2) * 4 + 20) { //Inside the whitelisted biomes
             tooltip.add(Component.translatable("text.industrialforegoing.tooltip.blacklisted_dimensions").withStyle(ChatFormatting.UNDERLINE).withStyle(ChatFormatting.GOLD));
             if (recipe.rarity.get(recipe.pointer).dimensionRarity().blacklist().isEmpty())
                 tooltip.add(Component.literal(Component.translatable("text.industrialforegoing.jei.recipe.none").getString()));

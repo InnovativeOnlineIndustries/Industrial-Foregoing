@@ -28,6 +28,7 @@ import com.buuz135.industrial.module.ModuleCore;
 import com.buuz135.industrial.module.ModuleResourceProduction;
 import com.buuz135.industrial.recipe.LaserDrillOreRecipe;
 import com.buuz135.industrial.recipe.LaserDrillRarity;
+import com.buuz135.industrial.recipe.data.EntityData;
 import com.buuz135.industrial.utils.ItemStackUtils;
 import com.buuz135.industrial.utils.ItemStackWeightedItem;
 import com.hrznstudio.titanium.Titanium;
@@ -53,13 +54,19 @@ import net.minecraft.client.gui.components.EditBox;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.NbtUtils;
 import net.minecraft.network.chat.Component;
 import net.minecraft.util.random.WeightedRandom;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.DyeColor;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.RecipeType;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.phys.shapes.Shapes;
+import net.minecraft.world.phys.shapes.VoxelShape;
+
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.api.distmarker.OnlyIn;
 import net.neoforged.neoforge.items.ItemHandlerHelper;
@@ -68,6 +75,8 @@ import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Objects;
+import java.util.stream.Collectors;
 
 public class OreLaserBaseTile extends IndustrialMachineTile<OreLaserBaseTile> implements ILaserBase<OreLaserBaseTile> {
 
@@ -177,33 +186,63 @@ public class OreLaserBaseTile extends IndustrialMachineTile<OreLaserBaseTile> im
 
     private void onWork() {
         if (!ItemStackUtils.isInventoryFull(this.output)) {
+            VoxelShape box = Shapes.box(-1, 0, -1, 2, 3, 2).move(this.worldPosition.getX(), this.worldPosition.getY() - 1, this.worldPosition.getZ());
             List<ItemStackWeightedItem> items = RecipeUtil.getRecipes(this.level, (RecipeType<LaserDrillOreRecipe>) ModuleCore.LASER_DRILL_TYPE.get()).stream()
-                    .filter(laserDrillOreRecipe -> LaserDrillRarity.getValidRarity(this.level, laserDrillOreRecipe.rarity, this.level.dimensionType(), this.level.getBiome(this.worldPosition), this.miningDepth) != null)
-                    .map(laserDrillOreRecipe -> {
-                        var rarity = LaserDrillRarity.getValidRarity(this.level, laserDrillOreRecipe.rarity, this.level.dimensionType(), this.level.getBiome(this.worldPosition), this.miningDepth);
-                        int weight = rarity.weight();
-                        for (int i = 0; i < lens.getSlots(); i++) {
-                            if (laserDrillOreRecipe.catalyst.test(lens.getStackInSlot(i)))
-                                weight += OreLaserBaseConfig.catalystModifier;
-                        }
-                        ItemStack stack = ItemStack.EMPTY;
-                        for (String modid : TagConfig.ITEM_PREFERENCE) {
-                            for (ItemStack matchingStack : laserDrillOreRecipe.output.getItems()) {
-                                if (BuiltInRegistries.ITEM.getKey(matchingStack.getItem()).getNamespace().equals(modid)) {
-                                    stack = matchingStack;
-                                    break;
-                                }
-                            }
-                            if (!stack.isEmpty()) break;
-                        }
-                        if (stack.isEmpty()) stack = laserDrillOreRecipe.output.getItems()[0];
-                        return new ItemStackWeightedItem(stack.copy(), weight);
-                    }).toList();
+                .filter(laserDrillOreRecipe -> LaserDrillRarity.getValidRarity(this.level, laserDrillOreRecipe.rarity, this.level.dimensionType(), this.level.getBiome(this.worldPosition), this.miningDepth) != null)
+                .map(recipe -> processRecipe(recipe, box))
+                .filter(Objects::nonNull)
+                .toList();
             if (!items.isEmpty()) {
                 ItemStack stack = WeightedRandom.getRandomItem(this.level.getRandom(), items).get().getStack();
                 ItemHandlerHelper.insertItem(output, stack, false);
             }
         }
+    }
+
+    private ItemStackWeightedItem processRecipe(LaserDrillOreRecipe recipe, VoxelShape box) {
+        if (recipe.entityData.isPresent()) {
+            List<LivingEntity> entities = this.level.getEntitiesOfClass(LivingEntity.class, box.bounds(), 
+            entity -> recipe.entityData.get().getEntity().test(entity.getType()));
+            if (entities.isEmpty()) return null;
+
+            List<Entity> filtered = entities.stream().filter(entity -> {
+                CompoundTag data = new CompoundTag();
+                entity.saveWithoutId(data);
+                return NbtUtils.compareNbt(recipe.entityData.get().getData(), data, true);
+            }).collect(Collectors.toList());
+
+            if (filtered.isEmpty()) return null;
+
+            LivingEntity first = entities.getFirst();
+            if (first.getHealth() > 5) {
+                first.hurt(first.damageSources().generic(), 5);
+                return executeRecipe(recipe);
+            }
+            return null;
+        }
+        
+        return executeRecipe(recipe);
+    }
+        
+    private ItemStackWeightedItem executeRecipe(LaserDrillOreRecipe recipe) {
+        var rarity = LaserDrillRarity.getValidRarity(this.level, recipe.rarity, this.level.dimensionType(), this.level.getBiome(this.worldPosition), this.miningDepth);
+        int weight = rarity.weight();
+        for (int i = 0; i < lens.getSlots(); i++) {
+            if (recipe.catalyst.test(lens.getStackInSlot(i)))
+                weight += OreLaserBaseConfig.catalystModifier;
+        }
+        ItemStack stack = ItemStack.EMPTY;
+        for (String modid : TagConfig.ITEM_PREFERENCE) {
+            for (ItemStack matchingStack : recipe.output.getItems()) {
+                if (BuiltInRegistries.ITEM.getKey(matchingStack.getItem()).getNamespace().equals(modid)) {
+                    stack = matchingStack;
+                    break;
+                }
+            }
+            if (!stack.isEmpty()) break;
+        }
+        if (stack.isEmpty()) stack = recipe.output.getItems()[0];
+        return new ItemStackWeightedItem(stack.copy(), weight);
     }
 
     @Override

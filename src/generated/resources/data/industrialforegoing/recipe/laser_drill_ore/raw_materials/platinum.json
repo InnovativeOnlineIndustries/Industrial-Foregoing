@@ -13,6 +13,7 @@
     "item": "industrialforegoing:light_blue_laser_lens"
   },
   "output": {
+    "count": 1,
     "tag": "c:raw_materials/platinum"
   },
   "rarity": [

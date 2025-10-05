@@ -4,6 +4,7 @@
     "item": "industrialforegoing:black_laser_lens"
   },
   "output": {
+    "count": 1,
     "item": "minecraft:coal_ore"
   },
   "rarity": [

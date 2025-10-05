@@ -13,6 +13,7 @@
     "item": "industrialforegoing:red_laser_lens"
   },
   "output": {
+    "count": 1,
     "tag": "c:raw_materials/cinnabar"
   },
   "rarity": [

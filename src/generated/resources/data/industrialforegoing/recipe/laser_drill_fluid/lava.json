@@ -9,10 +9,9 @@
   "catalyst": {
     "item": "industrialforegoing:orange_laser_lens"
   },
-  "entity": "minecraft:empty",
   "output": {
     "amount": 100,
-    "id": "minecraft:lava"
+    "fluid": "minecraft:lava"
   },
   "rarity": [
     {
