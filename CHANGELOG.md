@@ -1,3 +1,13 @@
+# Version 3.6.33
+
+* Fix: java.util.ConcurrentModificationException in ItemProperties.register - Viola-Siemens 
+* Updated PT_BR localization - PrincessStelllar
+* Retextured Industrial-Foregoing - MHanHanBing & RuiXuqi
+* Update ru_ru.json - Shiro4ka
+* Fix equals check in EnchantmentApplicatorTile - LuminaSapphira
+* Ore Fluid Drilling recipe rework - Satherov
+* Spanish Translation for Industrial Foregoing - RadzRatz
+
 # Version 3.6.32
 
 * Fixed Laser drill crashing when registry its not present, closes #1585
