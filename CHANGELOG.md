@@ -1,3 +1,7 @@
+# Version 3.6.34
+
+* Fixed oil recipe, closes #1608
+
 # Version 3.6.33
 
 * Fix: java.util.ConcurrentModificationException in ItemProperties.register - Viola-Siemens 
