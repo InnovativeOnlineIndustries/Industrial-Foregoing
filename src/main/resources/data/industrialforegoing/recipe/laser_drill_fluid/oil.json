@@ -11,7 +11,7 @@
   },
   "output": {
     "amount": 50,
-    "id": "pneumaticcraft:oil"
+    "fluid": "pneumaticcraft:oil"
   },
   "rarity": [
     {
