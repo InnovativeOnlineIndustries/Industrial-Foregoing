@@ -1,3 +1,7 @@
+# Version 3.6.37
+
+* Fixed plant gatherer getting stuck on bamboo #1398
+
 # Version 3.6.36
 
 * Fixed oil recipe, closes #1608
