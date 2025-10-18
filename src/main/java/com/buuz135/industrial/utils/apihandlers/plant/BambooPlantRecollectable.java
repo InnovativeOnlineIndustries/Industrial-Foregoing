@@ -46,7 +46,7 @@ public class BambooPlantRecollectable extends PlantRecollectable {
 
     @Override
     public List<ItemStack> doHarvestOperation(Level world, BlockPos pos, BlockState blockState) {
-        var margin = 2;
+        var margin = 1;
         var orginalPos = pos.getY();
         while (world.getBlockState(pos.above()).getBlock().equals(Blocks.BAMBOO)) {
             pos = pos.above();
@@ -62,6 +62,8 @@ public class BambooPlantRecollectable extends PlantRecollectable {
 
     @Override
     public boolean shouldCheckNextPlant(Level world, BlockPos pos, BlockState blockState) {
-        return world.getBlockState(pos).getBlock().equals(Blocks.BAMBOO) && !world.getBlockState(pos.above()).getBlock().equals(Blocks.BAMBOO);
+        return world.getBlockState(pos).getBlock().equals(Blocks.BAMBOO)
+                && world.getBlockState(pos.above(1)).getBlock().equals(Blocks.BAMBOO)
+                && !world.getBlockState(pos.above(2)).getBlock().equals(Blocks.BAMBOO);
     }
 }

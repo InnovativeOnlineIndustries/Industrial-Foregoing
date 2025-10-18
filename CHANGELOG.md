@@ -1,3 +1,7 @@
+# Version 3.5.20
+
+* Fixed plant gatherer getting stuck on bamboo #1398
+
 # Version 3.5.19
 
 * Fixed Machine Settings Copier not working properly in some machines
