@@ -1,12 +1,8 @@
-# Version 3.6.35
-
-* Fixed plant gatherer getting stuck on bamboo #1398
-
-# Version 3.6.34
+# Version 3.6.36
 
 * Fixed oil recipe, closes #1608
 
-# Version 3.6.33
+# Version 3.6.35
 
 * Fix: java.util.ConcurrentModificationException in ItemProperties.register - Viola-Siemens 
 * Updated PT_BR localization - PrincessStelllar
