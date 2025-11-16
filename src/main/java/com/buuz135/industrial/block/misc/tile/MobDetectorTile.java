@@ -25,6 +25,7 @@ package com.buuz135.industrial.block.misc.tile;
 import com.buuz135.industrial.block.misc.MobDetectorBlock;
 import com.buuz135.industrial.block.tile.IndustrialAreaWorkingTile;
 import com.buuz135.industrial.block.tile.RangeManager;
+import com.buuz135.industrial.config.machine.misc.MobDetectorConfig;
 import com.buuz135.industrial.module.ModuleMisc;
 import com.hrznstudio.titanium.component.energy.EnergyStorageComponent;
 import net.minecraft.core.BlockPos;
@@ -37,25 +38,36 @@ import java.util.List;
 public class MobDetectorTile extends IndustrialAreaWorkingTile<MobDetectorTile> {
 
     private int redstoneSignal;
+    private int maxProgress;
+    private int powerPerOperation;
 
     public MobDetectorTile(BlockPos blockPos, BlockState blockState) {
         super(ModuleMisc.MOB_DETECTOR, RangeManager.RangeType.BEHIND, true, 0, blockPos, blockState);
         this.redstoneSignal = 0;
+        this.maxProgress = MobDetectorConfig.maxProgress;
+        this.powerPerOperation = MobDetectorConfig.powerPerOperation;
     }
 
     @Override
     public WorkAction work() {
         if (this.level != null && this.level.getBlockState(worldPosition).getBlock() instanceof MobDetectorBlock) {
-            List<LivingEntity> living = this.level.getEntitiesOfClass(LivingEntity.class, getWorkingArea().bounds());
-            redstoneSignal = Math.min(living.size(), 15);
-            this.level.updateNeighborsAt(this.worldPosition, this.getBasicTileBlock());
+            if (hasEnergy(powerPerOperation)) {
+                List<LivingEntity> living = this.level.getEntitiesOfClass(LivingEntity.class, getWorkingArea().bounds());
+                redstoneSignal = Math.min(living.size(), 15);
+                this.level.updateNeighborsAt(this.worldPosition, this.getBasicTileBlock());
+                return new WorkAction(1, powerPerOperation);
+            } else {
+                redstoneSignal = 0;
+                this.level.updateNeighborsAt(this.worldPosition, this.getBasicTileBlock());
+                return new WorkAction(1, 0);
+            }
         }
         return new WorkAction(1, 0);
     }
 
     @Override
     public int getMaxProgress() {
-        return 10;
+        return maxProgress;
     }
 
     @Nonnull
@@ -70,7 +82,7 @@ public class MobDetectorTile extends IndustrialAreaWorkingTile<MobDetectorTile> 
 
     @Override
     protected EnergyStorageComponent<MobDetectorTile> createEnergyStorage() {
-        return new EnergyStorageComponent<>(1, 10, 20);
+        return new EnergyStorageComponent<>(MobDetectorConfig.maxStoredPower, 10, 20);
     }
 
 }
