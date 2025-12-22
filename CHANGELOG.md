@@ -1,8 +1,16 @@
-# Version 3.6.34
+# Version 3.6.37
+
+* Fixed plant gatherer getting stuck on bamboo #1398
+* Fixed Meat Feeder not consuming meat #1597 - flutz1
+* Fix: Correct JEI energy display to use configured Dissolution Chamber powerPerTick value #1529 - flutz1
+* Fix: MobDetector should now work as intended #1609 - flutz1
+* Updated Simplified Chinese localization - UraraChiya
+
+# Version 3.6.36
 
 * Fixed oil recipe, closes #1608
 
-# Version 3.6.33
+# Version 3.6.35
 
 * Fix: java.util.ConcurrentModificationException in ItemProperties.register - Viola-Siemens 
 * Updated PT_BR localization - PrincessStelllar

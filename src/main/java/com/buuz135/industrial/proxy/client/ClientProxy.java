@@ -101,6 +101,7 @@ public class ClientProxy extends CommonProxy {
         registerAreaRender(event, ModuleMisc.STASIS_CHAMBER);
         registerAreaRender(event, ModuleResourceProduction.LASER_DRILL);
         registerAreaRender(event, ModuleAgricultureHusbandry.MOB_DUPLICATOR);
+        registerAreaRender(event, ModuleMisc.MOB_DETECTOR);
 
         event.registerBlockEntityRenderer((BlockEntityType<? extends MycelialReactorTile>) ModuleGenerator.MYCELIAL_REACTOR.type().get(), MycelialReactorTESR::new);
 

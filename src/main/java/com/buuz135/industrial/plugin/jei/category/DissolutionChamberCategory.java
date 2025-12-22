@@ -33,7 +33,6 @@ import com.hrznstudio.titanium.client.screen.asset.DefaultAssetProvider;
 import com.hrznstudio.titanium.client.screen.asset.IAssetProvider;
 import com.hrznstudio.titanium.util.AssetUtil;
 import mezz.jei.api.constants.VanillaTypes;
-import mezz.jei.api.gui.ITickTimer;
 import mezz.jei.api.gui.builder.IRecipeLayoutBuilder;
 import mezz.jei.api.gui.drawable.IDrawable;
 import mezz.jei.api.gui.ingredient.IRecipeSlotsView;
@@ -48,14 +47,12 @@ import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.DyeColor;
 import net.minecraft.world.item.ItemStack;
-import net.neoforged.neoforge.fluids.FluidStack;
 import org.apache.commons.lang3.tuple.Pair;
 
 import java.awt.*;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Optional;
 
 public class DissolutionChamberCategory implements IRecipeCategory<DissolutionChamberRecipe> {
 
@@ -131,7 +128,7 @@ public class DissolutionChamberCategory implements IRecipeCategory<DissolutionCh
     public List<Component> getTooltipStrings(DissolutionChamberRecipe recipe, IRecipeSlotsView recipeSlotsView, double mouseX, double mouseY) {
         Rectangle rec = DefaultAssetProvider.DEFAULT_PROVIDER.getAsset(AssetTypes.ENERGY_BACKGROUND).getArea();
         if (new Rectangle(0, 12, rec.width, rec.height).contains(mouseX, mouseY)) {
-            int consumed = recipe.processingTime * 60;
+            int consumed = recipe.processingTime * DissolutionChamberConfig.powerPerTick;
             return EnergyBarScreenAddon.getTooltip(consumed, (int) Math.max(50000, Math.ceil(consumed)));
         }
         return new ArrayList<>();
