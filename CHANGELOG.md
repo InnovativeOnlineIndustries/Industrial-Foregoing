@@ -1,6 +1,10 @@
 # Version 3.6.37
 
 * Fixed plant gatherer getting stuck on bamboo #1398
+* Fixed Meat Feeder not consuming meat #1597 - flutz1
+* Fix: Correct JEI energy display to use configured Dissolution Chamber powerPerTick value #1529 - flutz1
+* Fix: MobDetector should now work as intended #1609 - flutz1
+* Updated Simplified Chinese localization - UraraChiya
 
 # Version 3.6.36
 
