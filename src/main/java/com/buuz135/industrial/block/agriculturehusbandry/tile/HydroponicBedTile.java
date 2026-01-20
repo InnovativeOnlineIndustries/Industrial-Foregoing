@@ -47,6 +47,10 @@ import java.util.function.Supplier;
 
 public class HydroponicBedTile extends IndustrialWorkingTile<HydroponicBedTile> {
 
+    // Cached values for performance
+    private static final int BALANCE_INTERVAL = 10; // Ticks between neighbor balancing
+    private static final int NEIGHBOR_CACHE_INTERVAL = 100; // Ticks between neighbor cache refresh
+
     @Save
     private SidedFluidTankComponent<HydroponicBedTile> water;
     @Save
@@ -57,6 +61,11 @@ public class HydroponicBedTile extends IndustrialWorkingTile<HydroponicBedTile> 
     private SidedInventoryComponent<HydroponicBedTile> output;
     @Save
     private SidedInventoryComponent<HydroponicBedTile> simulation_slot;
+
+    // Cached positions and neighbors
+    private BlockPos cachedAbovePos;
+    private HydroponicBedTile[] cachedNeighbors;
+    private int neighborCacheCounter = 0;
 
     public HydroponicBedTile(BlockPos blockPos, BlockState blockState) {
         super(ModuleAgricultureHusbandry.HYDROPONIC_BED, HydroponicBedConfig.powerPerOperation, blockPos, blockState);
@@ -91,6 +100,29 @@ public class HydroponicBedTile extends IndustrialWorkingTile<HydroponicBedTile> 
 
     private PlantRecollectable cachedRecollectable = null;
     private int errorAttempts = 0;
+
+    private BlockPos getAbovePos() {
+        if (cachedAbovePos == null) {
+            cachedAbovePos = this.worldPosition.above();
+        }
+        return cachedAbovePos;
+    }
+
+    private static final Direction[] HORIZONTAL_DIRECTIONS = {Direction.NORTH, Direction.SOUTH, Direction.WEST, Direction.EAST};
+
+    private HydroponicBedTile[] getNeighborCache() {
+        if (cachedNeighbors == null || ++neighborCacheCounter >= NEIGHBOR_CACHE_INTERVAL) {
+            neighborCacheCounter = 0;
+            if (cachedNeighbors == null) {
+                cachedNeighbors = new HydroponicBedTile[4];
+            }
+            for (int i = 0; i < HORIZONTAL_DIRECTIONS.length; i++) {
+                BlockEntity tile = this.level.getBlockEntity(worldPosition.relative(HORIZONTAL_DIRECTIONS[i]));
+                cachedNeighbors[i] = tile instanceof HydroponicBedTile ? (HydroponicBedTile) tile : null;
+            }
+        }
+        return cachedNeighbors;
+    }
 
     public static boolean tryToHarvestAndReplant(Level level, BlockPos up, BlockState state, IItemHandler output, ProgressBarComponent<?> etherBuffer, IndustrialWorkingTile tile, Supplier<PlantRecollectable> plantSupplier, ItemStack simulationOutput) {
         var cachedRecollectable = plantSupplier.get();
@@ -205,7 +237,7 @@ public class HydroponicBedTile extends IndustrialWorkingTile<HydroponicBedTile> 
             this.etherBuffer.setProgress(this.etherBuffer.getMaxProgress());
         }
         if (hasEnergy(1000)) {
-            BlockPos up = this.worldPosition.above();
+            BlockPos up = getAbovePos();
             BlockState state = this.level.getBlockState(up);
             Block block = state.getBlock();
             if (!state.isAir() && this.water.getFluidAmount() >= 10) {
@@ -246,8 +278,12 @@ public class HydroponicBedTile extends IndustrialWorkingTile<HydroponicBedTile> 
     }
 
     private PlantRecollectable getPlantRecollectable() {
-        BlockPos up = this.worldPosition.above();
+        BlockPos up = getAbovePos();
         BlockState state = this.level.getBlockState(up);
+        return getPlantRecollectable(up, state);
+    }
+
+    private PlantRecollectable getPlantRecollectable(BlockPos up, BlockState state) {
         if (errorAttempts >= 15) {
             findRecollectable(level, up, state);
             errorAttempts = 0;
@@ -272,33 +308,38 @@ public class HydroponicBedTile extends IndustrialWorkingTile<HydroponicBedTile> 
     @Override
     public void serverTick(Level level, BlockPos pos, BlockState state, HydroponicBedTile blockEntity) {
         super.serverTick(level, pos, state, blockEntity);
-        if (this.level.getGameTime() % 5 == 0) {
+        if (this.level.getGameTime() % BALANCE_INTERVAL == 0) {
             var thisEnergy = getEnergyStorage();
-            for (Direction direction : Direction.Plane.HORIZONTAL) {
-                BlockEntity tile = level.getBlockEntity(worldPosition.relative(direction));
-                if (tile instanceof HydroponicBedTile neighbor) {
-                    var neighborWater = neighbor.water;
-                    int difference = water.getFluidAmount() - neighborWater.getFluidAmount();
-                    if (difference > 0 && (water.getFluid().is(neighborWater.getFluid().getFluid()) || neighborWater.isEmpty())) {
-                        difference = difference <= 25 ? difference / 2 : 25;
-                        if (water.getFluidAmount() >= difference) {
-                            int transferred = neighborWater.fill(new FluidStack(Fluids.WATER, difference), IFluidHandler.FluidAction.EXECUTE);
-                            water.drainForced(transferred, IFluidHandler.FluidAction.EXECUTE);
-                        }
+            HydroponicBedTile[] neighbors = getNeighborCache();
+            for (HydroponicBedTile neighbor : neighbors) {
+                if (neighbor == null || neighbor.isRemoved()) continue;
+
+                // Balance water
+                var neighborWater = neighbor.water;
+                int difference = water.getFluidAmount() - neighborWater.getFluidAmount();
+                if (difference > 0 && (water.getFluid().is(neighborWater.getFluid().getFluid()) || neighborWater.isEmpty())) {
+                    difference = difference <= 25 ? difference / 2 : 25;
+                    if (water.getFluidAmount() >= difference) {
+                        int transferred = neighborWater.fill(new FluidStack(Fluids.WATER, difference), IFluidHandler.FluidAction.EXECUTE);
+                        water.drainForced(transferred, IFluidHandler.FluidAction.EXECUTE);
                     }
-                    var neighborEther = neighbor.ether;
-                    difference = ether.getFluidAmount() - neighborEther.getFluidAmount();
-                    if (difference > 0 && ether.getFluidAmount() >= 1) {
-                        int transferred = neighborEther.fill(new FluidStack(ModuleCore.ETHER.getSourceFluid().get(), 1), IFluidHandler.FluidAction.EXECUTE);
-                        ether.drainForced(transferred, IFluidHandler.FluidAction.EXECUTE);
-                    }
-                    var neighborEnergy = neighbor.getEnergyStorage();
-                    difference = thisEnergy.getEnergyStored() - neighborEnergy.getEnergyStored();
-                    if (difference > 0) {
-                        difference = difference <= 1000 ? (difference > 1 ? difference / 2 : difference) : 1000;
-                        if (thisEnergy.getEnergyStored() >= difference) {
-                            thisEnergy.extractEnergy(neighborEnergy.receiveEnergy(difference, false), false);
-                        }
+                }
+
+                // Balance ether
+                var neighborEther = neighbor.ether;
+                difference = ether.getFluidAmount() - neighborEther.getFluidAmount();
+                if (difference > 0 && ether.getFluidAmount() >= 1) {
+                    int transferred = neighborEther.fill(new FluidStack(ModuleCore.ETHER.getSourceFluid().get(), 1), IFluidHandler.FluidAction.EXECUTE);
+                    ether.drainForced(transferred, IFluidHandler.FluidAction.EXECUTE);
+                }
+
+                // Balance energy
+                var neighborEnergy = neighbor.getEnergyStorage();
+                difference = thisEnergy.getEnergyStored() - neighborEnergy.getEnergyStored();
+                if (difference > 0) {
+                    difference = difference <= 1000 ? (difference > 1 ? difference / 2 : difference) : 1000;
+                    if (thisEnergy.getEnergyStored() >= difference) {
+                        thisEnergy.extractEnergy(neighborEnergy.receiveEnergy(difference, false), false);
                     }
                 }
             }
