@@ -28,6 +28,7 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.NonNullList;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.NetherWartBlock;
 import net.minecraft.world.level.block.state.BlockState;
@@ -50,7 +51,7 @@ public class BlockNetherWartRecollectable extends PlantRecollectable {
     public List<ItemStack> doHarvestOperation(Level world, BlockPos pos, BlockState blockState) {
         NonNullList<ItemStack> stacks = NonNullList.create();
         stacks.addAll(BlockUtils.getBlockDrops(world, pos));
-        world.setBlockAndUpdate(pos, Blocks.AIR.defaultBlockState());
+        world.setBlock(pos, Blocks.AIR.defaultBlockState(), Block.UPDATE_CLIENTS | Block.UPDATE_KNOWN_SHAPE);
         return stacks;
     }
 

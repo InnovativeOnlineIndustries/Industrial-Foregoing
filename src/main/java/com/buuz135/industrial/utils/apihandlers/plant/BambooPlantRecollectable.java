@@ -28,6 +28,7 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.NonNullList;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
 
@@ -52,9 +53,10 @@ public class BambooPlantRecollectable extends PlantRecollectable {
             pos = pos.above();
         }
         NonNullList<ItemStack> stacks = NonNullList.create();
+        int flags = Block.UPDATE_CLIENTS | Block.UPDATE_KNOWN_SHAPE;
         while (pos.getY() > margin + orginalPos) {
             stacks.addAll(BlockUtils.getBlockDrops(world, pos));
-            world.setBlockAndUpdate(pos, Blocks.AIR.defaultBlockState());
+            world.setBlock(pos, Blocks.AIR.defaultBlockState(), flags);
             pos = pos.below();
         }
         return stacks;

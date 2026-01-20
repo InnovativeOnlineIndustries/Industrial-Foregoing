@@ -27,9 +27,12 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.BonemealableBlock;
 import net.minecraft.world.level.block.BushBlock;
+import net.minecraft.world.level.block.CropBlock;
+import net.minecraft.world.level.block.NetherWartBlock;
 import net.minecraft.world.level.block.StemBlock;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.state.properties.IntegerProperty;
 import net.minecraft.world.level.material.Fluids;
 import net.neoforged.neoforge.common.SpecialPlantable;
 import net.neoforged.neoforge.fluids.FluidStack;
@@ -40,7 +43,6 @@ import net.neoforged.neoforge.items.ItemHandlerHelper;
 import javax.annotation.Nonnull;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 import java.util.function.Supplier;
 
 public class HydroponicBedTile extends IndustrialWorkingTile<HydroponicBedTile> {
@@ -73,6 +75,7 @@ public class HydroponicBedTile extends IndustrialWorkingTile<HydroponicBedTile> 
         addProgressBar(this.etherBuffer = new ProgressBarComponent<HydroponicBedTile>(63, 20, 200)
                 .setColor(DyeColor.CYAN)
                 .setCanReset(hydroponicBedTile -> false)
+                .setCanIncrease(hydroponicBedTile -> false) // Disable auto-tick, progress is managed manually
         );
         addInventory(this.output = (SidedInventoryComponent<HydroponicBedTile>) new SidedInventoryComponent<HydroponicBedTile>("output", 79, 22, 5 * 3, 2)
                 .setColor(DyeColor.ORANGE)
@@ -103,10 +106,11 @@ public class HydroponicBedTile extends IndustrialWorkingTile<HydroponicBedTile> 
             var planted = ItemStack.EMPTY;
             if (level.isEmptyBlock(up)) {
                 for (ItemStack drop : drops) {
-                    if (!drop.isEmpty() && drop.getItem() instanceof BlockItem blockItem && blockItem.getBlock() instanceof BushBlock bushBlock) {
+                    if (!drop.isEmpty() && drop.getItem() instanceof BlockItem blockItem && blockItem.getBlock() instanceof BushBlock) {
                         planted = drop.copyWithCount(1);
                         BlockState blockstate1 = blockItem.getBlock().defaultBlockState();
-                        level.setBlockAndUpdate(up, blockstate1);
+                        // Use UPDATE_CLIENTS | UPDATE_KNOWN_SHAPE to skip neighbor updates
+                        level.setBlock(up, blockstate1, Block.UPDATE_CLIENTS | Block.UPDATE_KNOWN_SHAPE);
                         drop.shrink(1);
                         break;
                     }
@@ -126,7 +130,13 @@ public class HydroponicBedTile extends IndustrialWorkingTile<HydroponicBedTile> 
                 sim.acceptExecution(planted, drops);
                 simulationOutput.set(IFAttachments.HYDROPONIC_SIMULATION_PROCESSOR, sim.toNBT(level.registryAccess()));
             }
-            drops.forEach(stack -> ItemHandlerHelper.insertItem(output, stack, false));
+            // Use regular for-loop to avoid lambda allocation
+            for (int i = 0, size = drops.size(); i < size; i++) {
+                ItemStack stack = drops.get(i);
+                if (!stack.isEmpty()) {
+                    ItemHandlerHelper.insertItem(output, stack, false);
+                }
+            }
             if (tile instanceof IndustrialAreaWorkingTile<?> && cachedRecollectable.shouldCheckNextPlant(level, up, level.getBlockState(up))) {
                 ((IndustrialAreaWorkingTile<?>) tile).increasePointer();
             }
@@ -138,10 +148,54 @@ public class HydroponicBedTile extends IndustrialWorkingTile<HydroponicBedTile> 
     }
 
     private void findRecollectable(Level level, BlockPos up, BlockState state) {
-        Optional<PlantRecollectable> optional = IFRegistries.PLANT_RECOLLECTABLES_REGISTRY.stream().filter(plantRecollectable -> plantRecollectable.canBeHarvested(level, up, state)).findFirst();
-        if (optional.isPresent()) {
-            cachedRecollectable = optional.get();
+        for (PlantRecollectable plantRecollectable : IFRegistries.PLANT_RECOLLECTABLES_REGISTRY) {
+            if (plantRecollectable.canBeHarvested(level, up, state)) {
+                cachedRecollectable = plantRecollectable;
+                return;
+            }
         }
+    }
+
+    /**
+     * Performs fast growth by directly manipulating the age property.
+     * This avoids the overhead of randomTick() which triggers neighbor updates,
+     * redstone updates, and other expensive operations.
+     *
+     * @return true if growth was performed, false if fallback to randomTick is needed
+     */
+    private boolean tryFastGrow(BlockPos pos, BlockState state, int increments) {
+        Block block = state.getBlock();
+
+        if (block instanceof CropBlock crop) {
+            int currentAge = crop.getAge(state);
+            int maxAge = crop.getMaxAge();
+            if (currentAge < maxAge) {
+                int newAge = Math.min(currentAge + increments, maxAge);
+                if (newAge != currentAge) {
+                    // UPDATE_CLIENTS (2) - only sync to clients, skip neighbor updates
+                    this.level.setBlock(pos, crop.getStateForAge(newAge), Block.UPDATE_CLIENTS);
+                    return true;
+                }
+            }
+            return true; // Already at max age, no need to do anything
+        }
+
+        if (block instanceof NetherWartBlock) {
+            IntegerProperty ageProperty = NetherWartBlock.AGE;
+            int currentAge = state.getValue(ageProperty);
+            int maxAge = 3;
+            if (currentAge < maxAge) {
+                int newAge = Math.min(currentAge + increments, maxAge);
+                if (newAge != currentAge) {
+                    this.level.setBlock(pos, state.setValue(ageProperty, newAge), Block.UPDATE_CLIENTS);
+                    return true;
+                }
+            }
+            return true;
+        }
+
+        // For other blocks (StemBlock, custom modded plants, etc.) fall back to randomTick
+        return false;
     }
 
     @Override
@@ -153,51 +207,34 @@ public class HydroponicBedTile extends IndustrialWorkingTile<HydroponicBedTile> 
         if (hasEnergy(1000)) {
             BlockPos up = this.worldPosition.above();
             BlockState state = this.level.getBlockState(up);
-            Supplier<PlantRecollectable> plantRecollectableSupplier = () -> {
-                if (errorAttempts >= 15) {
-                    findRecollectable(level, up, state);
-                    errorAttempts = 0;
-                }
-                if (cachedRecollectable == null) {
-                    findRecollectable(level, up, state);
-                } else if (cachedRecollectable != null && !cachedRecollectable.canBeHarvested(level, up, state)) {
-                    ++errorAttempts;
-                    return null;
-                }
-                return cachedRecollectable;
-            };
             Block block = state.getBlock();
-            if (!this.level.isEmptyBlock(up) && this.water.getFluidAmount() >= 10) {
-                //if (block instanceof SpecialPlantable specialPlantable && ((IPlantable) block).getPlantType(this.level, up) == PlantType.NETHER && !this.water.getFluid().getFluid().isSame(Fluids.LAVA))
-                //    return new WorkAction(1, 0);
-                if (state.getBlock() instanceof BonemealableBlock) {
-                    BonemealableBlock growable = (BonemealableBlock) this.level.getBlockState(up).getBlock();
-                    if (growable.isValidBonemealTarget(this.level, up, this.level.getBlockState(up)) || state.getBlock() instanceof StemBlock) {
+            if (!state.isAir() && this.water.getFluidAmount() >= 10) {
+                if (block instanceof BonemealableBlock growable) {
+                    if (growable.isValidBonemealTarget(this.level, up, state) || block instanceof StemBlock) {
                         if (this.etherBuffer.getProgress() > 0) {
-                            growable.performBonemeal((ServerLevel) this.level, this.level.random, up, this.level.getBlockState(up));
+                            growable.performBonemeal((ServerLevel) this.level, this.level.random, up, state);
                             this.etherBuffer.setProgress(this.etherBuffer.getProgress() - 1);
                         } else {
-                            for (int i = 0; i < 4; i++) {
-                                this.level.getBlockState(up).randomTick((ServerLevel) this.level, up, this.level.random);
+                            // Try fast growth first, fall back to randomTick for unsupported blocks
+                            if (!tryFastGrow(up, state, 1)) {
+                                state.randomTick((ServerLevel) this.level, up, this.level.random);
                             }
                         }
                         this.water.drainForced(10, IFluidHandler.FluidAction.EXECUTE);
                         return new WorkAction(1, HydroponicBedConfig.powerPerOperation);
                     } else if (this.etherBuffer.getProgress() > 0) {
-                        tryToHarvestAndReplant(this.level, up, state, this.output, this.etherBuffer, this, plantRecollectableSupplier, this.simulation_slot.getStackInSlot(0));
+                        tryToHarvestAndReplant(this.level, up, state, this.output, this.etherBuffer, this, this::getPlantRecollectable, this.simulation_slot.getStackInSlot(0));
                         return new WorkAction(1, HydroponicBedConfig.powerPerOperation);
                     }
                 } else {
-                    if (!tryToHarvestAndReplant(this.level, up, state, this.output, this.etherBuffer, this, plantRecollectableSupplier, this.simulation_slot.getStackInSlot(0))) {
+                    if (!tryToHarvestAndReplant(this.level, up, state, this.output, this.etherBuffer, this, this::getPlantRecollectable, this.simulation_slot.getStackInSlot(0))) {
+                        // Try fast growth first, fall back to randomTick for unsupported blocks
+                        int increments = this.etherBuffer.getProgress() > 0 ? 2 : 1;
+                        if (!tryFastGrow(up, state, increments)) {
+                            state.randomTick((ServerLevel) this.level, up, this.level.random);
+                        }
                         if (this.etherBuffer.getProgress() > 0) {
-                            for (int i = 0; i < 10; i++) {
-                                this.level.getBlockState(up).randomTick((ServerLevel) this.level, up, this.level.random);
-                            }
                             this.etherBuffer.setProgress(this.etherBuffer.getProgress() - 1);
-                        } else {
-                            for (int i = 0; i < 4; i++) {
-                                this.level.getBlockState(up).randomTick((ServerLevel) this.level, up, this.level.random);
-                            }
                         }
                         this.water.drainForced(10, IFluidHandler.FluidAction.EXECUTE);
                     }
@@ -206,6 +243,22 @@ public class HydroponicBedTile extends IndustrialWorkingTile<HydroponicBedTile> 
             }
         }
         return new WorkAction(1, 0);
+    }
+
+    private PlantRecollectable getPlantRecollectable() {
+        BlockPos up = this.worldPosition.above();
+        BlockState state = this.level.getBlockState(up);
+        if (errorAttempts >= 15) {
+            findRecollectable(level, up, state);
+            errorAttempts = 0;
+        }
+        if (cachedRecollectable == null) {
+            findRecollectable(level, up, state);
+        } else if (!cachedRecollectable.canBeHarvested(level, up, state)) {
+            ++errorAttempts;
+            return null;
+        }
+        return cachedRecollectable;
     }
 
     public SidedFluidTankComponent<HydroponicBedTile> getWater() {
@@ -220,30 +273,31 @@ public class HydroponicBedTile extends IndustrialWorkingTile<HydroponicBedTile> 
     public void serverTick(Level level, BlockPos pos, BlockState state, HydroponicBedTile blockEntity) {
         super.serverTick(level, pos, state, blockEntity);
         if (this.level.getGameTime() % 5 == 0) {
+            var thisEnergy = getEnergyStorage();
             for (Direction direction : Direction.Plane.HORIZONTAL) {
                 BlockEntity tile = level.getBlockEntity(worldPosition.relative(direction));
-                if (tile instanceof HydroponicBedTile) {
-                    int difference = water.getFluidAmount() - ((HydroponicBedTile) tile).getWater().getFluidAmount();
-                    if (difference > 0 && (water.getFluid().is(((HydroponicBedTile) tile).getWater().getFluid().getFluid()) || ((HydroponicBedTile) tile).getWater().isEmpty())) {
-                        if (difference <= 25) difference = difference / 2;
-                        else difference = 25;
+                if (tile instanceof HydroponicBedTile neighbor) {
+                    var neighborWater = neighbor.water;
+                    int difference = water.getFluidAmount() - neighborWater.getFluidAmount();
+                    if (difference > 0 && (water.getFluid().is(neighborWater.getFluid().getFluid()) || neighborWater.isEmpty())) {
+                        difference = difference <= 25 ? difference / 2 : 25;
                         if (water.getFluidAmount() >= difference) {
-                            water.drainForced(((HydroponicBedTile) tile).getWater().fill(new FluidStack(Fluids.WATER, water.drainForced(difference, IFluidHandler.FluidAction.SIMULATE).getAmount()), IFluidHandler.FluidAction.EXECUTE), IFluidHandler.FluidAction.EXECUTE);
+                            int transferred = neighborWater.fill(new FluidStack(Fluids.WATER, difference), IFluidHandler.FluidAction.EXECUTE);
+                            water.drainForced(transferred, IFluidHandler.FluidAction.EXECUTE);
                         }
                     }
-                    difference = ether.getFluidAmount() - ((HydroponicBedTile) tile).getEther().getFluidAmount();
-                    if (difference > 0) {
-                        difference = 1;
-                        if (ether.getFluidAmount() >= difference) {
-                            ether.drainForced(((HydroponicBedTile) tile).getEther().fill(new FluidStack(ModuleCore.ETHER.getSourceFluid().get(), ether.drainForced(difference, IFluidHandler.FluidAction.SIMULATE).getAmount()), IFluidHandler.FluidAction.EXECUTE), IFluidHandler.FluidAction.EXECUTE);
-                        }
+                    var neighborEther = neighbor.ether;
+                    difference = ether.getFluidAmount() - neighborEther.getFluidAmount();
+                    if (difference > 0 && ether.getFluidAmount() >= 1) {
+                        int transferred = neighborEther.fill(new FluidStack(ModuleCore.ETHER.getSourceFluid().get(), 1), IFluidHandler.FluidAction.EXECUTE);
+                        ether.drainForced(transferred, IFluidHandler.FluidAction.EXECUTE);
                     }
-                    difference = getEnergyStorage().getEnergyStored() - ((HydroponicBedTile) tile).getEnergyStorage().getEnergyStored();
+                    var neighborEnergy = neighbor.getEnergyStorage();
+                    difference = thisEnergy.getEnergyStored() - neighborEnergy.getEnergyStored();
                     if (difference > 0) {
-                        if (difference <= 1000 && difference > 1) difference = difference / 2;
-                        if (difference > 1000) difference = 1000;
-                        if (getEnergyStorage().getEnergyStored() >= difference) {
-                            getEnergyStorage().extractEnergy(((HydroponicBedTile) tile).getEnergyStorage().receiveEnergy(difference, false), false);
+                        difference = difference <= 1000 ? (difference > 1 ? difference / 2 : difference) : 1000;
+                        if (thisEnergy.getEnergyStored() >= difference) {
+                            thisEnergy.extractEnergy(neighborEnergy.receiveEnergy(difference, false), false);
                         }
                     }
                 }
