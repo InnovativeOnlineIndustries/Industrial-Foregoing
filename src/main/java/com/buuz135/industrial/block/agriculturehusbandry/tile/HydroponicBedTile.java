@@ -10,6 +10,7 @@ import com.buuz135.industrial.module.ModuleCore;
 import com.buuz135.industrial.registry.IFRegistries;
 import com.buuz135.industrial.utils.IFAttachments;
 import com.buuz135.industrial.utils.IndustrialTags;
+import com.buuz135.industrial.utils.ServerLoadBalancer;
 import com.buuz135.industrial.utils.apihandlers.plant.TreePlantRecollectable;
 import com.hrznstudio.titanium.annotation.Save;
 import com.hrznstudio.titanium.component.energy.EnergyStorageComponent;
@@ -70,6 +71,9 @@ public class HydroponicBedTile extends IndustrialWorkingTile<HydroponicBedTile> 
     // Cached simulation processor
     private HydroponicSimulationProcessorItem.Simulation cachedSimulation;
     private ItemStack lastSimulationStack = ItemStack.EMPTY;
+
+    // Adaptive tick skipping - stores current multiplier for growth compensation
+    private int currentSkipMultiplier = 1;
 
     public HydroponicBedTile(BlockPos blockPos, BlockState blockState) {
         super(ModuleAgricultureHusbandry.HYDROPONIC_BED, HydroponicBedConfig.powerPerOperation, blockPos, blockState);
@@ -258,19 +262,29 @@ public class HydroponicBedTile extends IndustrialWorkingTile<HydroponicBedTile> 
             BlockState state = this.level.getBlockState(up);
             Block block = state.getBlock();
             if (!state.isAir() && this.water.getFluidAmount() >= 10) {
+                // Apply skip multiplier to compensate for skipped ticks
+                int skipMultiplier = this.currentSkipMultiplier;
+
                 if (block instanceof BonemealableBlock growable) {
                     if (growable.isValidBonemealTarget(this.level, up, state) || block instanceof StemBlock) {
                         if (this.etherBuffer.getProgress() > 0) {
-                            // Try fast growth first (2 increments with ether bonus), avoids expensive neighbor updates
+                            // Try fast growth first (2 increments with ether bonus * skip multiplier)
                             // Fall back to performBonemeal only for unsupported blocks (StemBlock, modded plants)
-                            if (!tryFastGrow(up, state, 2)) {
-                                growable.performBonemeal((ServerLevel) this.level, this.level.random, up, state);
+                            int growthAmount = 2 * skipMultiplier;
+                            if (!tryFastGrow(up, state, growthAmount)) {
+                                // For fallback, call multiple times to compensate
+                                for (int i = 0; i < skipMultiplier; i++) {
+                                    growable.performBonemeal((ServerLevel) this.level, this.level.random, up, state);
+                                }
                             }
                             this.etherBuffer.setProgress(this.etherBuffer.getProgress() - 1);
                         } else {
                             // Try fast growth first, fall back to randomTick for unsupported blocks
-                            if (!tryFastGrow(up, state, 1)) {
-                                state.randomTick((ServerLevel) this.level, up, this.level.random);
+                            int growthAmount = skipMultiplier;
+                            if (!tryFastGrow(up, state, growthAmount)) {
+                                for (int i = 0; i < skipMultiplier; i++) {
+                                    state.randomTick((ServerLevel) this.level, up, this.level.random);
+                                }
                             }
                         }
                         this.water.drainForced(10, IFluidHandler.FluidAction.EXECUTE);
@@ -282,9 +296,11 @@ public class HydroponicBedTile extends IndustrialWorkingTile<HydroponicBedTile> 
                 } else {
                     if (!tryToHarvestAndReplant(this.level, up, state, this.output, this.etherBuffer, this, this::getPlantRecollectable, this.simulation_slot.getStackInSlot(0), getCachedSimulation())) {
                         // Try fast growth first, fall back to randomTick for unsupported blocks
-                        int increments = this.etherBuffer.getProgress() > 0 ? 2 : 1;
+                        int increments = (this.etherBuffer.getProgress() > 0 ? 2 : 1) * skipMultiplier;
                         if (!tryFastGrow(up, state, increments)) {
-                            state.randomTick((ServerLevel) this.level, up, this.level.random);
+                            for (int i = 0; i < skipMultiplier; i++) {
+                                state.randomTick((ServerLevel) this.level, up, this.level.random);
+                            }
                         }
                         if (this.etherBuffer.getProgress() > 0) {
                             this.etherBuffer.setProgress(this.etherBuffer.getProgress() - 1);
@@ -347,6 +363,15 @@ public class HydroponicBedTile extends IndustrialWorkingTile<HydroponicBedTile> 
 
     @Override
     public void serverTick(Level level, BlockPos pos, BlockState state, HydroponicBedTile blockEntity) {
+        // Adaptive tick skipping: skip ticks when TPS is low
+        int skipInterval = ServerLoadBalancer.getTickSkipInterval();
+        if (skipInterval > 1 && level.getGameTime() % skipInterval != 0) {
+            return; // Skip this tick
+        }
+
+        // Store the multiplier for growth compensation in work()
+        this.currentSkipMultiplier = skipInterval;
+
         super.serverTick(level, pos, state, blockEntity);
         if (this.level.getGameTime() % BALANCE_INTERVAL == 0) {
             var thisEnergy = getEnergyStorage();
