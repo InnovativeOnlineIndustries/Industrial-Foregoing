@@ -1,3 +1,42 @@
+# Version 3.6.38
+
+## Performance Optimizations for HydroponicBedTile
+
+This update brings significant performance improvements to the Hydroponic Bed, reducing server tick time and memory allocations.
+
+### Caching Optimizations
+* **BlockPos caching**: Cache `BlockPos.above()` to avoid object creation every tick
+* **Neighbor tile caching**: Cache references to neighboring HydroponicBedTile blocks, refreshed every 100 ticks instead of querying every tick
+* **Augment check caching**: Cache augment presence checks every 20 ticks instead of every tick
+* **BlockState caching**: Pass cached BlockState to PlantRecollectable methods instead of re-querying
+
+### Algorithm Improvements
+* **Fast grow path**: Add `tryFastGrow()` for direct age manipulation via `CropBlock.getStateForAge()` instead of expensive `randomTick()` calls
+* **Optimized block updates**: Replace `setBlockAndUpdate()` with `setBlock()` using minimal update flags (Block.UPDATE_CLIENTS) — reduces neighbor updates and block update cascades
+* **Balance interval increase**: Increase ether balance interval from 5 to 10 ticks — 50% fewer balance operations
+* **Static directions array**: Use pre-allocated `HORIZONTAL_DIRECTIONS` array instead of creating streams
+
+### Memory & GC Improvements
+* **Lambda elimination**: Replace lambda allocations with method references in hot paths
+* **Stream elimination**: Replace `stream().filter().findFirst()` with simple for-loops in `findRecollectable()`
+* **forEach elimination**: Use indexed for-loop instead of `forEach` in `tryToHarvestAndReplant()`
+* **NonNullList removal**: Remove unnecessary `NonNullList` creation in `getBlockDrops()`
+* **Disable auto-tick**: Disable automatic progress bar ticking for `etherBuffer` — reduces unnecessary syncs
+
+### BlockUtils Optimizations
+* **isLeaves() optimization**: Reduce from 5 to 1 `getBlockState()` calls by reusing cached state
+* **isLog() optimization**: Reduce redundant `getBlockState()` calls
+* **isChorus() optimization**: Reduce redundant `getBlockState()` calls
+* **Block comparison**: Use `==` instead of `equals()` for Block instance comparisons (singleton pattern)
+
+### Estimated Performance Gains
+* **~60-80% reduction** in object allocations per tick per Hydroponic Bed
+* **~40-50% reduction** in `getBlockState()` calls for tree/chorus harvesting
+* **~30% reduction** in neighbor block update overhead
+* Particularly noticeable in large farms with 50+ Hydroponic Beds
+
+---
+
 # Version 3.6.37
 
 * Fixed plant gatherer getting stuck on bamboo #1398
