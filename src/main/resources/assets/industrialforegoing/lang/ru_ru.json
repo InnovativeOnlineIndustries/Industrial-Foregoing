@@ -332,6 +332,7 @@
   "block.industrialforegoing.pity_black_hole_tank": "Ужасная жидкостная чёрная дыра",
   "block.industrialforegoing.common_black_hole_tank": "Обычная жидкостная чёрная дыра",
   "block.industrialforegoing.hydroponic_bed": "Кровать гидропоники",
+  "block.industrialforegoing.simulated_hydroponic_bed": "Симулированная кровать гидропоники",
   "block.essence": "Эссенция",
   "block.meat": "Жидкое мясо",
   "block.sewage": "Грязь",
@@ -396,6 +397,7 @@
   "item.industrialforegoing.fluid_transporter_type": "Жидкостный транспортёр",
   "item.industrialforegoing.world_transporter_type": "Мировой транспортёр",
   "item.industrialforegoing.machine_settings_copier": "Настройки копировальной машины",
+  "item.industrialforegoing.hydroponic_simulation_processor": "Процессор симуляции гидропоники",
   "tooltip.titanium.facing_handler.lens": "Лазерные линзы",
   "tooltip.titanium.facing_handler.fuel_input": "Топливный вход",
   "tooltip.titanium.facing_handler.input_fluid": "Жидкостный вход",
@@ -586,5 +588,13 @@
   "text.industrialforegoing.machine_settings_copier.settings_stored": "Сохранение настроек",
   "text.industrialforegoing.machine_settings_copier.settings_copied": "Копирование настроек",
   "text.industrialforegoing.machine_settings_copier.settings_clear": "* Незаметно щелкните правой кнопкой мыши, чтобы очистить скопированные настройки",
-  "text.industrialforegoing.machine_settings_copier.settings_can_copy": "* Незаметно щелкните правой кнопкой мыши на машине, чтобы скопировать ее настройки"
+  "text.industrialforegoing.machine_settings_copier.settings_can_copy": "* Незаметно щелкните правой кнопкой мыши на машине, чтобы скопировать ее настройки",
+  "tooltip.industrialforegoing.hydroponic.simulating": "Симулирует: ",
+  "tooltip.industrialforegoing.hydroponic.nothing": "Ничего",
+  "tooltip.industrialforegoing.hydroponic.executions": "Выполнений: ",
+  "tooltip.industrialforegoing.hydroponic.efficiency": "Эффективность: ",
+  "tooltip.industrialforegoing.hydroponic.next_efficiency": "До следующего бонуса: ",
+  "tooltip.industrialforegoing.hydroponic.potential_drops": "Возможный дроп:",
+  "tooltip.industrialforegoing.hydroponic.function_1": "* Используйте в Кровати гидропоники для сбора данных о культуре",
+  "tooltip.industrialforegoing.hydroponic.function_2": "* Используйте в Симулированной кровати гидропоники для получения дропа"
 }
