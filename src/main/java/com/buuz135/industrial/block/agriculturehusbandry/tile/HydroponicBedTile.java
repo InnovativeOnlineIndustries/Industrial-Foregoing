@@ -261,7 +261,11 @@ public class HydroponicBedTile extends IndustrialWorkingTile<HydroponicBedTile> 
                 if (block instanceof BonemealableBlock growable) {
                     if (growable.isValidBonemealTarget(this.level, up, state) || block instanceof StemBlock) {
                         if (this.etherBuffer.getProgress() > 0) {
-                            growable.performBonemeal((ServerLevel) this.level, this.level.random, up, state);
+                            // Try fast growth first (2 increments with ether bonus), avoids expensive neighbor updates
+                            // Fall back to performBonemeal only for unsupported blocks (StemBlock, modded plants)
+                            if (!tryFastGrow(up, state, 2)) {
+                                growable.performBonemeal((ServerLevel) this.level, this.level.random, up, state);
+                            }
                             this.etherBuffer.setProgress(this.etherBuffer.getProgress() - 1);
                         } else {
                             // Try fast growth first, fall back to randomTick for unsupported blocks

@@ -12,6 +12,11 @@
 * **Conditional updates**: `setProgressIncrease()` is only called when the value actually changes
 * **Reduced method call overhead**: Eliminates unnecessary calls to Titanium's ProgressBarComponent
 
+### Ether Growth Optimization (HydroponicBedTile)
+* **Fast growth with ether**: Now uses `tryFastGrow()` with 2 increments instead of `performBonemeal()` for standard crops
+* **Eliminates neighbor updates**: `performBonemeal()` triggers expensive `Level.setBlock()` with neighbor shape updates (~3% CPU)
+* **Fallback preserved**: `performBonemeal()` still used for StemBlock and modded plants that need special handling
+
 ---
 
 # Version 3.6.38
