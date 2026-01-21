@@ -2,6 +2,13 @@
 
 ## Additional Performance Optimizations
 
+### Adaptive Tick Skipping (ServerLoadBalancer)
+* **TPS-aware throttling**: Hydroponic beds automatically reduce tick frequency when server TPS drops
+* **Configurable thresholds**: TPS ≥19 = normal, 15-19 = every 2nd tick, 10-15 = every 4th tick, <10 = every 8th tick
+* **Growth compensation**: Skipped ticks are compensated by multiplying growth increments, maintaining overall growth rate
+* **Config options**: `adaptiveTickSkipping`, `highLoadThresholdTPS`, `criticalLoadThresholdTPS`, `maxTickSkip`
+* **Estimated savings**: Up to 87.5% CPU reduction for Hydroponic Beds during severe lag
+
 ### Simulation Processor Caching (HydroponicBedTile)
 * **Cached Simulation object**: NBT parsing for HydroponicSimulationProcessorItem now happens only when the item in the slot changes, not on every harvest operation
 * **Eliminates expensive codec parsing**: `ItemStack.parseOptional()` was being called every tick during harvesting — now cached
