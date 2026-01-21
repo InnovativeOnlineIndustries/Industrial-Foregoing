@@ -67,6 +67,10 @@ public class HydroponicBedTile extends IndustrialWorkingTile<HydroponicBedTile> 
     private HydroponicBedTile[] cachedNeighbors;
     private int neighborCacheCounter = 0;
 
+    // Cached simulation processor
+    private HydroponicSimulationProcessorItem.Simulation cachedSimulation;
+    private ItemStack lastSimulationStack = ItemStack.EMPTY;
+
     public HydroponicBedTile(BlockPos blockPos, BlockState blockState) {
         super(ModuleAgricultureHusbandry.HYDROPONIC_BED, HydroponicBedConfig.powerPerOperation, blockPos, blockState);
         addTank(this.water = (SidedFluidTankComponent<HydroponicBedTile>) new SidedFluidTankComponent<HydroponicBedTile>("water", 1000, 43, 20, 0)
@@ -125,6 +129,18 @@ public class HydroponicBedTile extends IndustrialWorkingTile<HydroponicBedTile> 
     }
 
     public static boolean tryToHarvestAndReplant(Level level, BlockPos up, BlockState state, IItemHandler output, ProgressBarComponent<?> etherBuffer, IndustrialWorkingTile tile, Supplier<PlantRecollectable> plantSupplier, ItemStack simulationOutput) {
+        return tryToHarvestAndReplantInternal(level, up, state, output, etherBuffer, tile, plantSupplier, simulationOutput, null);
+    }
+
+    /**
+     * Overload that accepts a cached Simulation to avoid NBT parsing overhead.
+     * The simulation is modified in-place and saved back to the ItemStack.
+     */
+    public static boolean tryToHarvestAndReplant(Level level, BlockPos up, BlockState state, IItemHandler output, ProgressBarComponent<?> etherBuffer, IndustrialWorkingTile tile, Supplier<PlantRecollectable> plantSupplier, ItemStack simulationOutput, HydroponicSimulationProcessorItem.Simulation cachedSim) {
+        return tryToHarvestAndReplantInternal(level, up, state, output, etherBuffer, tile, plantSupplier, simulationOutput, cachedSim);
+    }
+
+    private static boolean tryToHarvestAndReplantInternal(Level level, BlockPos up, BlockState state, IItemHandler output, ProgressBarComponent<?> etherBuffer, IndustrialWorkingTile tile, Supplier<PlantRecollectable> plantSupplier, ItemStack simulationOutput, HydroponicSimulationProcessorItem.Simulation cachedSim) {
         var cachedRecollectable = plantSupplier.get();
         if (cachedRecollectable != null) {
             List<ItemStack> drops = new ArrayList<>();
@@ -158,7 +174,8 @@ public class HydroponicBedTile extends IndustrialWorkingTile<HydroponicBedTile> 
                 planted = cachedRecollectable.getSeedDrop(level, up, state);
             }
             if (!planted.is(IndustrialTags.Items.HYDROPONIC_SIMULATION_BLACKLIST) && !simulationOutput.isEmpty() && simulationOutput.getItem() instanceof HydroponicSimulationProcessorItem) {
-                var sim = new HydroponicSimulationProcessorItem.Simulation(simulationOutput.get(IFAttachments.HYDROPONIC_SIMULATION_PROCESSOR));
+                // Use cached simulation if provided, otherwise create new one
+                var sim = cachedSim != null ? cachedSim : new HydroponicSimulationProcessorItem.Simulation(simulationOutput.get(IFAttachments.HYDROPONIC_SIMULATION_PROCESSOR));
                 sim.acceptExecution(planted, drops);
                 simulationOutput.set(IFAttachments.HYDROPONIC_SIMULATION_PROCESSOR, sim.toNBT(level.registryAccess()));
             }
@@ -255,11 +272,11 @@ public class HydroponicBedTile extends IndustrialWorkingTile<HydroponicBedTile> 
                         this.water.drainForced(10, IFluidHandler.FluidAction.EXECUTE);
                         return new WorkAction(1, HydroponicBedConfig.powerPerOperation);
                     } else if (this.etherBuffer.getProgress() > 0) {
-                        tryToHarvestAndReplant(this.level, up, state, this.output, this.etherBuffer, this, this::getPlantRecollectable, this.simulation_slot.getStackInSlot(0));
+                        tryToHarvestAndReplant(this.level, up, state, this.output, this.etherBuffer, this, this::getPlantRecollectable, this.simulation_slot.getStackInSlot(0), getCachedSimulation());
                         return new WorkAction(1, HydroponicBedConfig.powerPerOperation);
                     }
                 } else {
-                    if (!tryToHarvestAndReplant(this.level, up, state, this.output, this.etherBuffer, this, this::getPlantRecollectable, this.simulation_slot.getStackInSlot(0))) {
+                    if (!tryToHarvestAndReplant(this.level, up, state, this.output, this.etherBuffer, this, this::getPlantRecollectable, this.simulation_slot.getStackInSlot(0), getCachedSimulation())) {
                         // Try fast growth first, fall back to randomTick for unsupported blocks
                         int increments = this.etherBuffer.getProgress() > 0 ? 2 : 1;
                         if (!tryFastGrow(up, state, increments)) {
@@ -295,6 +312,25 @@ public class HydroponicBedTile extends IndustrialWorkingTile<HydroponicBedTile> 
             return null;
         }
         return cachedRecollectable;
+    }
+
+    /**
+     * Returns a cached Simulation object, creating/updating it only when the simulation slot changes.
+     * This avoids expensive NBT parsing on every harvest operation.
+     */
+    private HydroponicSimulationProcessorItem.Simulation getCachedSimulation() {
+        ItemStack currentStack = this.simulation_slot.getStackInSlot(0);
+
+        // Check if slot changed (different item or empty/non-empty transition)
+        if (!ItemStack.isSameItemSameComponents(currentStack, lastSimulationStack)) {
+            lastSimulationStack = currentStack.copy();
+            if (currentStack.isEmpty() || !(currentStack.getItem() instanceof HydroponicSimulationProcessorItem)) {
+                cachedSimulation = null;
+            } else {
+                cachedSimulation = new HydroponicSimulationProcessorItem.Simulation(currentStack.get(IFAttachments.HYDROPONIC_SIMULATION_PROCESSOR));
+            }
+        }
+        return cachedSimulation;
     }
 
     public SidedFluidTankComponent<HydroponicBedTile> getWater() {

@@ -51,6 +51,8 @@ public abstract class IndustrialProcessingTile<T extends IndustrialProcessingTil
 
     @Save
     private ProgressBarComponent<T> progressBar;
+    private int cachedProgressIncrease = 1;
+    private int augmentCheckCounter = 0;
 
     public IndustrialProcessingTile(BlockWithTile basicTileBlock, int x, int y, BlockPos blockPos, BlockState blockState) {
         super(basicTileBlock, blockPos, blockState);
@@ -83,7 +85,15 @@ public abstract class IndustrialProcessingTile<T extends IndustrialProcessingTil
                         setCanIncrease(tileEntity -> getEnergyStorage().getEnergyStored() >= getTickPower() && canIncrease() && this.getRedstoneManager().getAction().canRun(tileEntity.getEnvironmentValue(false, null)) && this.getRedstoneManager().shouldWork()).
                         setOnTickWork(() -> {
                             getEnergyStorage().extractEnergy(getTickPower(), false);
-                            progressBar.setProgressIncrease(this.hasAugmentInstalled(AugmentTypes.SPEED) ? (int) AugmentWrapper.getType(this.getInstalledAugments(AugmentTypes.SPEED).get(0), AugmentTypes.SPEED) : 1);
+                            // Check augments every 20 ticks (1 second) instead of every tick
+                            if (++augmentCheckCounter >= 20) {
+                                augmentCheckCounter = 0;
+                                int newProgressIncrease = this.hasAugmentInstalled(AugmentTypes.SPEED) ? (int) AugmentWrapper.getType(this.getInstalledAugments(AugmentTypes.SPEED).get(0), AugmentTypes.SPEED) : 1;
+                                if (newProgressIncrease != cachedProgressIncrease) {
+                                    cachedProgressIncrease = newProgressIncrease;
+                                    progressBar.setProgressIncrease(cachedProgressIncrease);
+                                }
+                            }
                         }).
                         setOnFinishWork(() -> {
                             int operations = (int) (this.hasAugmentInstalled(ProcessingAddonItem.PROCESSING) ? AugmentWrapper.getType(this.getInstalledAugments(ProcessingAddonItem.PROCESSING).get(0), ProcessingAddonItem.PROCESSING) : 1);

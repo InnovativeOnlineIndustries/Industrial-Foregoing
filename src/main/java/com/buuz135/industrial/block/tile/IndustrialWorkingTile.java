@@ -101,9 +101,13 @@ public abstract class IndustrialWorkingTile<T extends IndustrialWorkingTile<T>> 
                     // Check augments every 20 ticks (1 second) instead of every tick
                     if (++augmentCheckCounter >= 20) {
                         augmentCheckCounter = 0;
-                        cachedProgressIncrease = this.hasAugmentInstalled(AugmentTypes.SPEED) ? (int) AugmentWrapper.getType(this.getInstalledAugments(AugmentTypes.SPEED).get(0), AugmentTypes.SPEED) : 1;
+                        int newProgressIncrease = this.hasAugmentInstalled(AugmentTypes.SPEED) ? (int) AugmentWrapper.getType(this.getInstalledAugments(AugmentTypes.SPEED).get(0), AugmentTypes.SPEED) : 1;
+                        // Only update if value changed to avoid unnecessary method calls
+                        if (newProgressIncrease != cachedProgressIncrease) {
+                            cachedProgressIncrease = newProgressIncrease;
+                            workingBar.setProgressIncrease(cachedProgressIncrease);
+                        }
                     }
-                    workingBar.setProgressIncrease(cachedProgressIncrease);
                 })
                 .setCanReset(tileEntity -> true)
                 .setCanIncrease(tileEntity -> this.getRedstoneManager().shouldWork())

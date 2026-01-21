@@ -1,3 +1,19 @@
+# Version 3.6.39
+
+## Additional Performance Optimizations
+
+### Simulation Processor Caching (HydroponicBedTile)
+* **Cached Simulation object**: NBT parsing for HydroponicSimulationProcessorItem now happens only when the item in the slot changes, not on every harvest operation
+* **Eliminates expensive codec parsing**: `ItemStack.parseOptional()` was being called every tick during harvesting — now cached
+* **Estimated savings**: ~2% CPU reduction when using simulation processors
+
+### Progress Bar Optimization (IndustrialWorkingTile & IndustrialProcessingTile)
+* **Cached augment checks**: Speed augment checks now happen every 20 ticks instead of every tick
+* **Conditional updates**: `setProgressIncrease()` is only called when the value actually changes
+* **Reduced method call overhead**: Eliminates unnecessary calls to Titanium's ProgressBarComponent
+
+---
+
 # Version 3.6.38
 
 ## Performance Optimizations for HydroponicBedTile
