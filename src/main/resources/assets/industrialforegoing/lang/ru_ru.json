@@ -504,6 +504,8 @@
   "tooltip.titanium.facing_handler.meatallurgic.input_1": "вход для слитков",
   "tooltip.titanium.facing_handler.sand": "Ввод песка",
   "tooltip.titanium.facing_handler.catalyst": "Вход катализатора",
+  "tooltip.titanium.facing_handler.simulation": "Процессор симуляции",
+  "tooltip.titanium.facing_handler.seed": "Симулированное семя",
   "tooltip.industrialforegoing.generating": "Производство: ",
   "tooltip.industrialforegoing.usage": "Использование: ",
   "tooltip.industrialforegoing.needs": "Требуется: ",
