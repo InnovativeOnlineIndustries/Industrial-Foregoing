@@ -5,12 +5,14 @@ import com.buuz135.industrial.config.machine.resourceproduction.SimulatedHydropo
 import com.buuz135.industrial.item.HydroponicSimulationProcessorItem;
 import com.buuz135.industrial.module.ModuleAgricultureHusbandry;
 import com.buuz135.industrial.utils.IFAttachments;
+import com.buuz135.industrial.utils.ServerLoadBalancer;
 import com.hrznstudio.titanium.annotation.Save;
 import com.hrznstudio.titanium.component.energy.EnergyStorageComponent;
 import com.hrznstudio.titanium.component.inventory.SidedInventoryComponent;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.item.DyeColor;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
 import net.neoforged.neoforge.items.ItemHandlerHelper;
 
@@ -27,6 +29,9 @@ public class SimulatedHydroponicBedTile extends IndustrialWorkingTile<SimulatedH
     @Save
     private final SidedInventoryComponent<SimulatedHydroponicBedTile> seed;
     private HydroponicSimulationProcessorItem.Simulation simulation;
+
+    // Adaptive tick skipping - stores current multiplier for drop compensation
+    private int currentSkipMultiplier = 1;
 
     public SimulatedHydroponicBedTile(BlockPos blockPos, BlockState blockState) {
         super(ModuleAgricultureHusbandry.SIMULATED_HYDROPONIC_BED, SimulatedHydroponicBedConfig.powerPerOperation, blockPos, blockState);
@@ -68,8 +73,9 @@ public class SimulatedHydroponicBedTile extends IndustrialWorkingTile<SimulatedH
 
                 // If there's a crop configured in the processor and it has executions
                 if (!crop.isEmpty() && executions > 0) {
-                    // Calculate efficiency
+                    // Calculate efficiency with skip multiplier compensation
                     double efficiency = Math.floor(HydroponicSimulationProcessorItem.calculateEfficiency(executions) * 100) / 100;
+                    int skipMultiplier = this.currentSkipMultiplier;
 
                     // Generate drops based on simulation data
                     List<ItemStack> generatedDrops = new ArrayList<>();
@@ -81,8 +87,8 @@ public class SimulatedHydroponicBedTile extends IndustrialWorkingTile<SimulatedH
                         ItemStack statStack = simulationStack.stack();
                         long statAmount = simulationStack.amount();
 
-                        // Calculate the amount to generate based on efficiency
-                        double amount = (statAmount / (double) executions) * efficiency;
+                        // Calculate the amount to generate based on efficiency, multiplied by skip factor
+                        double amount = (statAmount / (double) executions) * efficiency * skipMultiplier;
 
                         if (amount >= 1) {
                             int fullAmount = (int) Math.floor(amount);
@@ -104,13 +110,13 @@ public class SimulatedHydroponicBedTile extends IndustrialWorkingTile<SimulatedH
                         }
                     }
 
-                    //ADD A RANDOM INCREASE CHANCE
-                    if (this.level.random.nextDouble() <= SimulatedHydroponicBedConfig.chanceToIncreaseExecutions) {
+                    //ADD A RANDOM INCREASE CHANCE (multiply chance by skipMultiplier for compensation)
+                    if (this.level.random.nextDouble() <= SimulatedHydroponicBedConfig.chanceToIncreaseExecutions * skipMultiplier) {
                         var boostDrops = new ArrayList<ItemStack>();
                         for (var simulationStack : simulation.getStats()) {
                             ItemStack statStack = simulationStack.stack();
                             long statAmount = simulationStack.amount();
-                            double amount = (statAmount / (double) executions);
+                            double amount = (statAmount / (double) executions) * skipMultiplier;
                             if (amount >= 1) {
                                 int fullAmount = (int) Math.floor(amount);
                                 ItemStack drop = statStack.copy();
@@ -145,6 +151,19 @@ public class SimulatedHydroponicBedTile extends IndustrialWorkingTile<SimulatedH
         return new WorkAction(1, 0);
     }
 
+    @Override
+    public void serverTick(Level level, BlockPos pos, BlockState state, SimulatedHydroponicBedTile blockEntity) {
+        // Adaptive tick skipping: skip ticks when TPS is low
+        int skipInterval = ServerLoadBalancer.getTickSkipInterval();
+        if (skipInterval > 1 && level.getGameTime() % skipInterval != 0) {
+            return; // Skip this tick
+        }
+
+        // Store the multiplier for drop compensation in work()
+        this.currentSkipMultiplier = skipInterval;
+
+        super.serverTick(level, pos, state, blockEntity);
+    }
 
     @Override
     public int getMaxProgress() {

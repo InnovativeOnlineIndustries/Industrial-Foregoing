@@ -3,7 +3,7 @@
 ## Additional Performance Optimizations
 
 ### Adaptive Tick Skipping (ServerLoadBalancer)
-* **TPS-aware throttling**: Hydroponic beds automatically reduce tick frequency when server TPS drops
+* **TPS-aware throttling**: Hydroponic beds and Simulated Hydroponic beds automatically reduce tick frequency when server TPS drops
 * **Configurable thresholds**: TPS ≥19 = normal, 15-19 = every 2nd tick, 10-15 = every 4th tick, <10 = every 8th tick
 * **Growth compensation**: Skipped ticks are compensated by multiplying growth increments, maintaining overall growth rate
 * **Config options**: `adaptiveTickSkipping`, `highLoadThresholdTPS`, `criticalLoadThresholdTPS`, `maxTickSkip`
