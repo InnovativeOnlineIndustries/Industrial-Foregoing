@@ -28,6 +28,7 @@ import com.buuz135.industrial.utils.explosion.ExplosionTickHandler;
 import com.hrznstudio.titanium.event.handler.EventManager;
 import net.neoforged.neoforge.common.NeoForge;
 import net.neoforged.neoforge.event.server.ServerStartingEvent;
+import net.neoforged.neoforge.event.tick.LevelTickEvent;
 import net.neoforged.neoforge.event.tick.ServerTickEvent;
 
 public class CommonProxy {
@@ -39,6 +40,7 @@ public class CommonProxy {
 
         // ServerLoadBalancer: TPS tracking for adaptive tick skipping
         EventManager.forge(ServerTickEvent.Pre.class).process(ServerLoadBalancer::onServerTick).subscribe();
+        EventManager.forge(LevelTickEvent.Pre.class).process(ServerLoadBalancer::onLevelTick).subscribe();
         EventManager.forge(ServerStartingEvent.class).process(event -> ServerLoadBalancer.reset()).subscribe();
     }
 

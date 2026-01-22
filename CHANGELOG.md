@@ -1,3 +1,40 @@
+# Version 3.6.42
+
+## ServerLoadBalancer Configuration Overhaul
+
+### Centralized Configuration
+* **Separate config section**: ServerLoadBalancer now has its own configuration in `[ServerConfig.ServerLoadBalancerConfig]`
+* **Removed duplicate settings**: Tick skipping settings removed from `HydroponicBedConfig` and `SimulatedHydroponicBedConfig`
+* **Master enable switch**: New `enabled` option to completely enable/disable the adaptive tick skipping system
+* **Per-world TPS tracking**: New `perWorldTps` option for servers with separate worlds per player
+  * When enabled, machines only slow down in worlds with low TPS
+  * Other worlds with normal TPS continue at full speed
+  * Ideal for skyblock/island servers where each player has their own dimension
+
+### Configuration Options
+| Option | Default | Description |
+|--------|---------|-------------|
+| `enabled` | true | Master switch for the entire system |
+| `perWorldTps` | false | Track TPS per-world instead of globally |
+| `tpsSampleInterval` | 20 | TPS sampling interval in ticks |
+| `normalTps` | 19.0 | TPS threshold for normal operation (no skipping) |
+| `highLoadTps` | 15.0 | TPS threshold for medium load (skip every 2nd tick) |
+| `criticalLoadTps` | 10.0 | TPS threshold for high load (skip every 4th tick) |
+| `minSkippedTicks` | 1 | Minimum skip interval (1 = no skipping) |
+| `maxSkippedTicks` | 8 | Maximum skip interval |
+| `criticalGradualProgressiveSkippedTicks` | true | Gradually increase skipping when load increases |
+| `nonCriticalGradualRegressiveSkippedTicks` | true | Gradually decrease skipping when load decreases |
+
+### Breaking Changes
+* **Config migration required**: Old tick skipping settings in `HydroponicBedConfig` and `SimulatedHydroponicBedConfig` are no longer used
+* All tick skipping settings are now in `[ServerConfig.ServerLoadBalancerConfig]`
+
+### Updated Machines
+* Hydroponic Bed and Simulated Hydroponic Bed now use centralized ServerLoadBalancer config
+* Both machines support per-world TPS mode
+
+---
+
 # Version 3.6.39
 
 ## Additional Performance Optimizations
@@ -6,7 +43,6 @@
 * **TPS-aware throttling**: Hydroponic beds and Simulated Hydroponic beds automatically reduce tick frequency when server TPS drops
 * **Configurable thresholds**: TPS ≥19 = normal, 15-19 = every 2nd tick, 10-15 = every 4th tick, <10 = every 8th tick
 * **Growth compensation**: Skipped ticks are compensated by multiplying growth increments, maintaining overall growth rate
-* **Config options**: `adaptiveTickSkipping`, `highLoadThresholdTPS`, `criticalLoadThresholdTPS`, `maxTickSkip`
 * **Estimated savings**: Up to 87.5% CPU reduction for Hydroponic Beds during severe lag
 
 ### Simulation Processor Caching (HydroponicBedTile)
