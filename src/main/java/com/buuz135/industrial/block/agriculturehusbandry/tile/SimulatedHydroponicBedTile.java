@@ -154,13 +154,16 @@ public class SimulatedHydroponicBedTile extends IndustrialWorkingTile<SimulatedH
     @Override
     public void serverTick(Level level, BlockPos pos, BlockState state, SimulatedHydroponicBedTile blockEntity) {
         // Adaptive tick skipping: skip ticks when TPS is low
-        int skipInterval = ServerLoadBalancer.getTickSkipInterval();
-        if (skipInterval > 1 && level.getGameTime() % skipInterval != 0) {
-            return; // Skip this tick
+        if (SimulatedHydroponicBedConfig.adaptiveTickSkipping) {
+            int skipInterval = ServerLoadBalancer.getTickSkipInterval();
+            if (skipInterval > 1 && level.getGameTime() % skipInterval != 0) {
+                return; // Skip this tick
+            }
+            // Store the multiplier for drop compensation in work()
+            this.currentSkipMultiplier = skipInterval;
+        } else {
+            this.currentSkipMultiplier = 1;
         }
-
-        // Store the multiplier for drop compensation in work()
-        this.currentSkipMultiplier = skipInterval;
 
         super.serverTick(level, pos, state, blockEntity);
     }
