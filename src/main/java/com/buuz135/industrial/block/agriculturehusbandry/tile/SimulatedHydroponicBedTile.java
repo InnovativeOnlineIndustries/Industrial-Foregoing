@@ -153,13 +153,8 @@ public class SimulatedHydroponicBedTile extends IndustrialWorkingTile<SimulatedH
 
     @Override
     public void serverTick(Level level, BlockPos pos, BlockState state, SimulatedHydroponicBedTile blockEntity) {
-        // Adaptive tick skipping: skip ticks when TPS is low (using own config)
-        int skipInterval = ServerLoadBalancer.getTickSkipInterval(
-            SimulatedHydroponicBedConfig.adaptiveTickSkipping,
-            SimulatedHydroponicBedConfig.highLoadThresholdTPS,
-            SimulatedHydroponicBedConfig.criticalLoadThresholdTPS,
-            SimulatedHydroponicBedConfig.maxTickSkip
-        );
+        // Adaptive tick skipping: skip ticks when TPS is low (supports per-world TPS)
+        int skipInterval = ServerLoadBalancer.getTickSkipInterval(level);
 
         if (skipInterval > 1 && level.getGameTime() % skipInterval != 0) {
             return; // Skip this tick

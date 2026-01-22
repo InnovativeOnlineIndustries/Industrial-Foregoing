@@ -363,8 +363,8 @@ public class HydroponicBedTile extends IndustrialWorkingTile<HydroponicBedTile> 
 
     @Override
     public void serverTick(Level level, BlockPos pos, BlockState state, HydroponicBedTile blockEntity) {
-        // Adaptive tick skipping: skip ticks when TPS is low
-        int skipInterval = ServerLoadBalancer.getTickSkipInterval();
+        // Adaptive tick skipping: skip ticks when TPS is low (supports per-world TPS)
+        int skipInterval = ServerLoadBalancer.getTickSkipInterval(level);
         if (skipInterval > 1 && level.getGameTime() % skipInterval != 0) {
             return; // Skip this tick
         }
