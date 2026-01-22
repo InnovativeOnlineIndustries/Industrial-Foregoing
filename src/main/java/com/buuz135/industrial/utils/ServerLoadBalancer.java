@@ -114,6 +114,36 @@ public class ServerLoadBalancer {
     }
 
     /**
+     * Calculates tick skip interval with custom thresholds.
+     * Use this for machines with their own config settings.
+     *
+     * @param enabled Whether adaptive tick skipping is enabled
+     * @param highLoadThreshold TPS threshold for light skipping (every 2nd tick)
+     * @param criticalLoadThreshold TPS threshold for heavy skipping (every 4th tick)
+     * @param maxSkip Maximum skip interval when TPS is critically low
+     * @return Skip interval (1 = every tick, 2 = every other tick, etc.)
+     */
+    public static int getTickSkipInterval(boolean enabled, int highLoadThreshold, int criticalLoadThreshold, int maxSkip) {
+        if (!enabled) {
+            return 1;
+        }
+
+        if (currentTPS >= 19.0) {
+            return 1;
+        }
+
+        if (currentTPS >= highLoadThreshold) {
+            return 2;
+        }
+
+        if (currentTPS >= criticalLoadThreshold) {
+            return 4;
+        }
+
+        return maxSkip;
+    }
+
+    /**
      * Returns the current measured TPS.
      *
      * @return Current TPS (0-20)

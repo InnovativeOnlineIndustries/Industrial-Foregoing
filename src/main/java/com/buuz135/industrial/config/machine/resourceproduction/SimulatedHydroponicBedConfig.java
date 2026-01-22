@@ -43,4 +43,13 @@ public class SimulatedHydroponicBedConfig {
 
     @ConfigVal(comment = "Enable adaptive tick skipping when server TPS is low - Default: [true]")
     public static boolean adaptiveTickSkipping = true;
+
+    @ConfigVal(comment = "TPS threshold below which light tick skipping begins (every 2nd tick) - Default: [15]")
+    public static int highLoadThresholdTPS = 15;
+
+    @ConfigVal(comment = "TPS threshold below which heavy tick skipping begins (every 4th tick) - Default: [10]")
+    public static int criticalLoadThresholdTPS = 10;
+
+    @ConfigVal(comment = "Maximum tick skip interval when TPS is critically low - Default: [8]")
+    public static int maxTickSkip = 8;
 }
