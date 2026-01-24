@@ -110,13 +110,13 @@ public class SimulatedHydroponicBedTile extends IndustrialWorkingTile<SimulatedH
                         }
                     }
 
-                    //ADD A RANDOM INCREASE CHANCE (multiply chance by skipMultiplier for compensation)
-                    if (this.level.random.nextDouble() <= SimulatedHydroponicBedConfig.chanceToIncreaseExecutions * skipMultiplier) {
+                    //ADD A RANDOM INCREASE CHANCE
+                    if (this.level.random.nextDouble() <= SimulatedHydroponicBedConfig.chanceToIncreaseExecutions) {
                         var boostDrops = new ArrayList<ItemStack>();
                         for (var simulationStack : simulation.getStats()) {
                             ItemStack statStack = simulationStack.stack();
                             long statAmount = simulationStack.amount();
-                            double amount = (statAmount / (double) executions) * skipMultiplier;
+                            double amount = (statAmount / (double) executions);
                             if (amount >= 1) {
                                 int fullAmount = (int) Math.floor(amount);
                                 ItemStack drop = statStack.copy();
