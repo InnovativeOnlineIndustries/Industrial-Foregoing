@@ -1,3 +1,22 @@
+# Version 3.7.0
+
+## Hydroponic Bed - Virtual-Only Mode
+
+### Changes
+* **Removed physical growth mode**: Hydroponic Bed now operates exclusively in virtual mode
+* **Removed mode toggle button**: The UI no longer has a button to switch between physical and virtual modes
+* **Seeds are no longer produced**: In virtual mode, the crop is not physically harvested, so seeds/plantable items are filtered from drops
+  * This fixes compatibility with mods like Mystical Agriculture that disable seed drops
+* **Improved Simulation Processor caching**: Cache is now invalidated only when the item changes, not when NBT data updates
+* **Deferred NBT saving**: Simulation data is saved every 20 ticks instead of every work cycle
+  * Reduces `toNBT()` calls by ~95%, significantly lowering CPU overhead from codec serialization
+
+### Breaking Changes
+* Physical growth mode is no longer available
+* Existing Hydroponic Beds will automatically use virtual mode
+
+---
+
 # Version 3.6.42
 
 ## ServerLoadBalancer Configuration Overhaul

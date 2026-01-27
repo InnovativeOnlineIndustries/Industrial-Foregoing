@@ -26,15 +26,15 @@ import net.minecraft.world.item.DyeColor;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.BonemealableBlock;
 import net.minecraft.world.level.block.BushBlock;
 import net.minecraft.world.level.block.CropBlock;
 import net.minecraft.world.level.block.NetherWartBlock;
-import net.minecraft.world.level.block.StemBlock;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.level.block.state.properties.IntegerProperty;
 import net.minecraft.world.level.material.Fluids;
+import net.minecraft.world.level.storage.loot.LootParams;
+import net.minecraft.world.level.storage.loot.parameters.LootContextParams;
+import net.minecraft.world.phys.Vec3;
 import net.neoforged.neoforge.common.SpecialPlantable;
 import net.neoforged.neoforge.fluids.FluidStack;
 import net.neoforged.neoforge.fluids.capability.IFluidHandler;
@@ -68,12 +68,13 @@ public class HydroponicBedTile extends IndustrialWorkingTile<HydroponicBedTile> 
     private HydroponicBedTile[] cachedNeighbors;
     private int neighborCacheCounter = 0;
 
-    // Cached simulation processor
+    // Cached simulation processor with deferred NBT saving
+    private static final int SIMULATION_SAVE_INTERVAL = 20;
     private HydroponicSimulationProcessorItem.Simulation cachedSimulation;
-    private ItemStack lastSimulationStack = ItemStack.EMPTY;
+    private ItemStack lastSimulationItem = ItemStack.EMPTY;
+    private boolean simulationDirty = false;
+    private int simulationSaveCounter = 0;
 
-    // Adaptive tick skipping - stores current multiplier for growth compensation
-    private int currentSkipMultiplier = 1;
 
     public HydroponicBedTile(BlockPos blockPos, BlockState blockState) {
         super(ModuleAgricultureHusbandry.HYDROPONIC_BED, HydroponicBedConfig.powerPerOperation, blockPos, blockState);
@@ -99,7 +100,7 @@ public class HydroponicBedTile extends IndustrialWorkingTile<HydroponicBedTile> 
                 .setRange(5, 3)
                 .setInputFilter((stack, integer) -> false)
         );
-        addInventory(this.simulation_slot = (SidedInventoryComponent<HydroponicBedTile>) new SidedInventoryComponent<HydroponicBedTile>("simulation", 70 + 18 * 2, 80, 1, 3)
+        addInventory(this.simulation_slot = (SidedInventoryComponent<HydroponicBedTile>) new SidedInventoryComponent<HydroponicBedTile>("simulation", 104, 80, 1, 3)
                 .setColor(DyeColor.LIME)
                 .setInputFilter((stack, integer) -> stack.getItem().equals(ModuleAgricultureHusbandry.HYDROPONIC_SIMULATION_PROCESSOR.get()))
                 .setOutputFilter((stack, integer) -> false)
@@ -108,6 +109,21 @@ public class HydroponicBedTile extends IndustrialWorkingTile<HydroponicBedTile> 
 
     private PlantRecollectable cachedRecollectable = null;
     private int errorAttempts = 0;
+
+    /**
+     * Gets the BlockState with maximum age for the given block.
+     * Used in virtual growth mode to simulate fully grown crops.
+     */
+    private BlockState getMaxAgeState(Block block) {
+        if (block instanceof CropBlock crop) {
+            return crop.getStateForAge(crop.getMaxAge());
+        }
+        if (block instanceof NetherWartBlock) {
+            return block.defaultBlockState().setValue(NetherWartBlock.AGE, 3);
+        }
+        // Fallback for other blocks (e.g., BushBlock)
+        return block.defaultBlockState();
+    }
 
     private BlockPos getAbovePos() {
         if (cachedAbovePos == null) {
@@ -209,109 +225,109 @@ public class HydroponicBedTile extends IndustrialWorkingTile<HydroponicBedTile> 
         }
     }
 
-    /**
-     * Performs fast growth by directly manipulating the age property.
-     * This avoids the overhead of randomTick() which triggers neighbor updates,
-     * redstone updates, and other expensive operations.
-     *
-     * @return true if growth was performed, false if fallback to randomTick is needed
-     */
-    private boolean tryFastGrow(BlockPos pos, BlockState state, int increments) {
-        Block block = state.getBlock();
-
-        if (block instanceof CropBlock crop) {
-            int currentAge = crop.getAge(state);
-            int maxAge = crop.getMaxAge();
-            if (currentAge < maxAge) {
-                int newAge = Math.min(currentAge + increments, maxAge);
-                if (newAge != currentAge) {
-                    // UPDATE_CLIENTS (2) - only sync to clients, skip neighbor updates
-                    this.level.setBlock(pos, crop.getStateForAge(newAge), Block.UPDATE_CLIENTS);
-                    return true;
-                }
-            }
-            return true; // Already at max age, no need to do anything
-        }
-
-        if (block instanceof NetherWartBlock) {
-            IntegerProperty ageProperty = NetherWartBlock.AGE;
-            int currentAge = state.getValue(ageProperty);
-            int maxAge = 3;
-            if (currentAge < maxAge) {
-                int newAge = Math.min(currentAge + increments, maxAge);
-                if (newAge != currentAge) {
-                    this.level.setBlock(pos, state.setValue(ageProperty, newAge), Block.UPDATE_CLIENTS);
-                    return true;
-                }
-            }
-            return true;
-        }
-
-        // For other blocks (StemBlock, custom modded plants, etc.) fall back to randomTick
-        return false;
-    }
-
     @Override
     public WorkAction work() {
         if (this.etherBuffer.getProgress() <= 0 && this.ether.getFluidAmount() > 0) {
             this.ether.drainForced(1, IFluidHandler.FluidAction.EXECUTE);
             this.etherBuffer.setProgress(this.etherBuffer.getMaxProgress());
         }
-        if (hasEnergy(1000)) {
-            BlockPos up = getAbovePos();
-            BlockState state = this.level.getBlockState(up);
-            Block block = state.getBlock();
-            if (!state.isAir() && this.water.getFluidAmount() >= 10) {
-                // Apply skip multiplier to compensate for skipped ticks
-                int skipMultiplier = this.currentSkipMultiplier;
 
-                if (block instanceof BonemealableBlock growable) {
-                    if (growable.isValidBonemealTarget(this.level, up, state) || block instanceof StemBlock) {
-                        if (this.etherBuffer.getProgress() > 0) {
-                            // Try fast growth first (2 increments with ether bonus * skip multiplier)
-                            // Fall back to performBonemeal only for unsupported blocks (StemBlock, modded plants)
-                            int growthAmount = 2 * skipMultiplier;
-                            if (!tryFastGrow(up, state, growthAmount)) {
-                                // For fallback, call multiple times to compensate
-                                for (int i = 0; i < skipMultiplier; i++) {
-                                    growable.performBonemeal((ServerLevel) this.level, this.level.random, up, state);
-                                }
-                            }
-                            this.etherBuffer.setProgress(this.etherBuffer.getProgress() - 1);
-                        } else {
-                            // Try fast growth first, fall back to randomTick for unsupported blocks
-                            int growthAmount = skipMultiplier;
-                            if (!tryFastGrow(up, state, growthAmount)) {
-                                for (int i = 0; i < skipMultiplier; i++) {
-                                    state.randomTick((ServerLevel) this.level, up, this.level.random);
-                                }
-                            }
+        return workVirtual();
+    }
+
+    /**
+     * Virtual growth mode: uses planted crop above the block, generates drops via Block.getDrops()
+     * for max-age state without physically growing the crop.
+     * Seeds/plantable items are filtered out since the crop is not physically harvested.
+     * Supports Simulation Processor for recording crop data.
+     */
+    private WorkAction workVirtual() {
+        if (!hasEnergy(HydroponicBedConfig.powerPerOperation)) {
+            return new WorkAction(1, 0);
+        }
+        if (this.water.getFluidAmount() < 10) {
+            return new WorkAction(1, 0);
+        }
+
+        BlockPos up = getAbovePos();
+        BlockState state = this.level.getBlockState(up);
+        Block block = state.getBlock();
+
+        // Check if there's a valid crop planted above
+        if (state.isAir() || (!(block instanceof CropBlock) && !(block instanceof NetherWartBlock) && !(block instanceof BushBlock))) {
+            return new WorkAction(1, 0);
+        }
+
+        // Consume water
+        this.water.drainForced(10, IFluidHandler.FluidAction.EXECUTE);
+
+        // Consume ether buffer if available (gives bonus via faster progress in base class)
+        if (this.etherBuffer.getProgress() > 0) {
+            this.etherBuffer.setProgress(this.etherBuffer.getProgress() - 1);
+        }
+
+        // Generate drops from max-age state (not the current state)
+        BlockState maxAgeState = getMaxAgeState(block);
+
+        if (this.level instanceof ServerLevel serverLevel) {
+            // Build loot context parameters
+            LootParams.Builder builder = new LootParams.Builder(serverLevel)
+                    .withParameter(LootContextParams.ORIGIN, Vec3.atCenterOf(this.worldPosition))
+                    .withParameter(LootContextParams.TOOL, ItemStack.EMPTY);
+
+            // Get drops from the max-age state
+            List<ItemStack> drops = maxAgeState.getDrops(builder);
+
+            // Determine the seed/planted item for simulation processor
+            ItemStack planted = ItemStack.EMPTY;
+            for (int i = 0; i < drops.size(); i++) {
+                ItemStack drop = drops.get(i);
+                if (!drop.isEmpty() && drop.getItem() instanceof BlockItem blockItem && blockItem.getBlock() instanceof BushBlock) {
+                    planted = drop.copyWithCount(1);
+                    break;
+                }
+            }
+            // Fallback: use PlantRecollectable to get seed
+            if (planted.isEmpty()) {
+                PlantRecollectable recollectable = getPlantRecollectable(up, state);
+                if (recollectable != null) {
+                    planted = recollectable.getSeedDrop(this.level, up, state);
+                }
+            }
+
+            // Record to Simulation Processor if present (deferred NBT saving for performance)
+            ItemStack simulationOutput = this.simulation_slot.getStackInSlot(0);
+            if (!planted.isEmpty() && !planted.is(IndustrialTags.Items.HYDROPONIC_SIMULATION_BLACKLIST)
+                    && !simulationOutput.isEmpty() && simulationOutput.getItem() instanceof HydroponicSimulationProcessorItem) {
+                var sim = getCachedSimulation();
+                if (sim != null) {
+                    sim.acceptExecution(planted, drops);
+                    simulationDirty = true;
+                }
+            }
+
+            // Add drops to output, filtering out one seed/plantable item (crop is not physically harvested)
+            boolean seedFiltered = planted.isEmpty(); // Skip filtering if no seed identified
+            for (int i = 0, size = drops.size(); i < size; i++) {
+                ItemStack drop = drops.get(i);
+                if (!drop.isEmpty()) {
+                    // Filter out one seed item only - keep other drops and extra seeds
+                    if (!seedFiltered && ItemStack.isSameItem(drop, planted)) {
+                        if (drop.getCount() > 1) {
+                            // Multiple items in stack - remove one, keep the rest
+                            drop.shrink(1);
+                            ItemHandlerHelper.insertItem(this.output, drop, false);
                         }
-                        this.water.drainForced(10, IFluidHandler.FluidAction.EXECUTE);
-                        return new WorkAction(1, HydroponicBedConfig.powerPerOperation);
-                    } else if (this.etherBuffer.getProgress() > 0) {
-                        tryToHarvestAndReplant(this.level, up, state, this.output, this.etherBuffer, this, this::getPlantRecollectable, this.simulation_slot.getStackInSlot(0), getCachedSimulation());
-                        return new WorkAction(1, HydroponicBedConfig.powerPerOperation);
+                        // Single item - just skip it entirely
+                        seedFiltered = true;
+                        continue;
                     }
-                } else {
-                    if (!tryToHarvestAndReplant(this.level, up, state, this.output, this.etherBuffer, this, this::getPlantRecollectable, this.simulation_slot.getStackInSlot(0), getCachedSimulation())) {
-                        // Try fast growth first, fall back to randomTick for unsupported blocks
-                        int increments = (this.etherBuffer.getProgress() > 0 ? 2 : 1) * skipMultiplier;
-                        if (!tryFastGrow(up, state, increments)) {
-                            for (int i = 0; i < skipMultiplier; i++) {
-                                state.randomTick((ServerLevel) this.level, up, this.level.random);
-                            }
-                        }
-                        if (this.etherBuffer.getProgress() > 0) {
-                            this.etherBuffer.setProgress(this.etherBuffer.getProgress() - 1);
-                        }
-                        this.water.drainForced(10, IFluidHandler.FluidAction.EXECUTE);
-                    }
-                    return new WorkAction(1, HydroponicBedConfig.powerPerOperation);
+                    ItemHandlerHelper.insertItem(this.output, drop, false);
                 }
             }
         }
-        return new WorkAction(1, 0);
+
+        return new WorkAction(1, HydroponicBedConfig.powerPerOperation);
     }
 
     private PlantRecollectable getPlantRecollectable() {
@@ -335,15 +351,19 @@ public class HydroponicBedTile extends IndustrialWorkingTile<HydroponicBedTile> 
     }
 
     /**
-     * Returns a cached Simulation object, creating/updating it only when the simulation slot changes.
-     * This avoids expensive NBT parsing on every harvest operation.
+     * Returns a cached Simulation object, creating it only when the item in the slot changes.
+     * Uses isSameItem instead of isSameItemSameComponents to avoid re-parsing NBT
+     * every tick when we update the simulation data.
      */
     private HydroponicSimulationProcessorItem.Simulation getCachedSimulation() {
         ItemStack currentStack = this.simulation_slot.getStackInSlot(0);
 
-        // Check if slot changed (different item or empty/non-empty transition)
-        if (!ItemStack.isSameItemSameComponents(currentStack, lastSimulationStack)) {
-            lastSimulationStack = currentStack.copy();
+        // Check if slot item changed (ignore component changes - we update them ourselves)
+        boolean slotChanged = (currentStack.isEmpty() != lastSimulationItem.isEmpty())
+                || (!currentStack.isEmpty() && !ItemStack.isSameItem(currentStack, lastSimulationItem));
+
+        if (slotChanged) {
+            lastSimulationItem = currentStack.copyWithCount(1);
             if (currentStack.isEmpty() || !(currentStack.getItem() instanceof HydroponicSimulationProcessorItem)) {
                 cachedSimulation = null;
             } else {
@@ -369,8 +389,15 @@ public class HydroponicBedTile extends IndustrialWorkingTile<HydroponicBedTile> 
             return; // Skip this tick
         }
 
-        // Store the multiplier for growth compensation in work()
-        this.currentSkipMultiplier = skipInterval;
+        // Deferred simulation NBT saving - save every N ticks instead of every work cycle
+        if (simulationDirty && ++simulationSaveCounter >= SIMULATION_SAVE_INTERVAL) {
+            simulationSaveCounter = 0;
+            simulationDirty = false;
+            ItemStack simulationOutput = this.simulation_slot.getStackInSlot(0);
+            if (cachedSimulation != null && !simulationOutput.isEmpty()) {
+                simulationOutput.set(IFAttachments.HYDROPONIC_SIMULATION_PROCESSOR, cachedSimulation.toNBT(this.level.registryAccess()));
+            }
+        }
 
         super.serverTick(level, pos, state, blockEntity);
         if (this.level.getGameTime() % BALANCE_INTERVAL == 0) {
@@ -425,5 +452,17 @@ public class HydroponicBedTile extends IndustrialWorkingTile<HydroponicBedTile> 
     @Override
     protected EnergyStorageComponent<HydroponicBedTile> createEnergyStorage() {
         return new EnergyStorageComponent<>(HydroponicBedConfig.maxStoredPower, 10, 20);
+    }
+
+    @Override
+    public void setRemoved() {
+        // Save pending simulation data before removal
+        if (simulationDirty && cachedSimulation != null && this.level != null) {
+            ItemStack simulationOutput = this.simulation_slot.getStackInSlot(0);
+            if (!simulationOutput.isEmpty()) {
+                simulationOutput.set(IFAttachments.HYDROPONIC_SIMULATION_PROCESSOR, cachedSimulation.toNBT(this.level.registryAccess()));
+            }
+        }
+        super.setRemoved();
     }
 }
