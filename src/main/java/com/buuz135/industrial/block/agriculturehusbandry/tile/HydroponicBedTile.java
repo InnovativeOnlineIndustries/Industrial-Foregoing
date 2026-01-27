@@ -295,35 +295,40 @@ public class HydroponicBedTile extends IndustrialWorkingTile<HydroponicBedTile> 
                 }
             }
 
+            // Filter out one seed from drops (crop is not physically harvested in virtual mode)
+            List<ItemStack> filteredDrops = new ArrayList<>(drops.size());
+            boolean seedFiltered = planted.isEmpty();
+            for (int i = 0, size = drops.size(); i < size; i++) {
+                ItemStack drop = drops.get(i);
+                if (drop.isEmpty()) continue;
+
+                // Filter out one seed item only
+                if (!seedFiltered && ItemStack.isSameItem(drop, planted)) {
+                    seedFiltered = true;
+                    if (drop.getCount() > 1) {
+                        // Multiple items - keep the rest
+                        filteredDrops.add(drop.copyWithCount(drop.getCount() - 1));
+                    }
+                    continue;
+                }
+                filteredDrops.add(drop);
+            }
+
             // Record to Simulation Processor if present (deferred NBT saving for performance)
             ItemStack simulationOutput = this.simulation_slot.getStackInSlot(0);
             if (!planted.isEmpty() && !planted.is(IndustrialTags.Items.HYDROPONIC_SIMULATION_BLACKLIST)
                     && !simulationOutput.isEmpty() && simulationOutput.getItem() instanceof HydroponicSimulationProcessorItem) {
                 var sim = getCachedSimulation();
                 if (sim != null) {
-                    sim.acceptExecution(planted, drops);
+                    sim.acceptExecution(planted, filteredDrops);
                     simulationDirty = true;
                 }
             }
 
-            // Add drops to output, filtering out one seed/plantable item (crop is not physically harvested)
-            boolean seedFiltered = planted.isEmpty(); // Skip filtering if no seed identified
-            for (int i = 0, size = drops.size(); i < size; i++) {
-                ItemStack drop = drops.get(i);
-                if (!drop.isEmpty()) {
-                    // Filter out one seed item only - keep other drops and extra seeds
-                    if (!seedFiltered && ItemStack.isSameItem(drop, planted)) {
-                        if (drop.getCount() > 1) {
-                            // Multiple items in stack - remove one, keep the rest
-                            drop.shrink(1);
-                            ItemHandlerHelper.insertItem(this.output, drop, false);
-                        }
-                        // Single item - just skip it entirely
-                        seedFiltered = true;
-                        continue;
-                    }
-                    ItemHandlerHelper.insertItem(this.output, drop, false);
-                }
+            // Add filtered drops to output
+            for (int i = 0, size = filteredDrops.size(); i < size; i++) {
+                ItemStack drop = filteredDrops.get(i);
+                ItemHandlerHelper.insertItem(this.output, drop, false);
             }
         }
 
