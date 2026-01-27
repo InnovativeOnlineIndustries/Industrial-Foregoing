@@ -8,7 +8,8 @@
 * **Seeds are no longer produced**: In virtual mode, the crop is not physically harvested, so seeds/plantable items are filtered from drops
   * This fixes compatibility with mods like Mystical Agriculture that disable seed drops
 * **Improved Simulation Processor caching**: Cache is now invalidated only when the item changes, not when NBT data updates
-  * Significantly reduces CPU overhead from NBT parsing
+* **Deferred NBT saving**: Simulation data is saved every 20 ticks instead of every work cycle
+  * Reduces `toNBT()` calls by ~95%, significantly lowering CPU overhead from codec serialization
 
 ### Breaking Changes
 * Physical growth mode is no longer available

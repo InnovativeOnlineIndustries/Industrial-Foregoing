@@ -68,9 +68,12 @@ public class HydroponicBedTile extends IndustrialWorkingTile<HydroponicBedTile> 
     private HydroponicBedTile[] cachedNeighbors;
     private int neighborCacheCounter = 0;
 
-    // Cached simulation processor
+    // Cached simulation processor with deferred NBT saving
+    private static final int SIMULATION_SAVE_INTERVAL = 20;
     private HydroponicSimulationProcessorItem.Simulation cachedSimulation;
     private ItemStack lastSimulationItem = ItemStack.EMPTY;
+    private boolean simulationDirty = false;
+    private int simulationSaveCounter = 0;
 
 
     public HydroponicBedTile(BlockPos blockPos, BlockState blockState) {
@@ -292,14 +295,14 @@ public class HydroponicBedTile extends IndustrialWorkingTile<HydroponicBedTile> 
                 }
             }
 
-            // Record to Simulation Processor if present
+            // Record to Simulation Processor if present (deferred NBT saving for performance)
             ItemStack simulationOutput = this.simulation_slot.getStackInSlot(0);
             if (!planted.isEmpty() && !planted.is(IndustrialTags.Items.HYDROPONIC_SIMULATION_BLACKLIST)
                     && !simulationOutput.isEmpty() && simulationOutput.getItem() instanceof HydroponicSimulationProcessorItem) {
                 var sim = getCachedSimulation();
                 if (sim != null) {
                     sim.acceptExecution(planted, drops);
-                    simulationOutput.set(IFAttachments.HYDROPONIC_SIMULATION_PROCESSOR, sim.toNBT(this.level.registryAccess()));
+                    simulationDirty = true;
                 }
             }
 
@@ -386,6 +389,16 @@ public class HydroponicBedTile extends IndustrialWorkingTile<HydroponicBedTile> 
             return; // Skip this tick
         }
 
+        // Deferred simulation NBT saving - save every N ticks instead of every work cycle
+        if (simulationDirty && ++simulationSaveCounter >= SIMULATION_SAVE_INTERVAL) {
+            simulationSaveCounter = 0;
+            simulationDirty = false;
+            ItemStack simulationOutput = this.simulation_slot.getStackInSlot(0);
+            if (cachedSimulation != null && !simulationOutput.isEmpty()) {
+                simulationOutput.set(IFAttachments.HYDROPONIC_SIMULATION_PROCESSOR, cachedSimulation.toNBT(this.level.registryAccess()));
+            }
+        }
+
         super.serverTick(level, pos, state, blockEntity);
         if (this.level.getGameTime() % BALANCE_INTERVAL == 0) {
             var thisEnergy = getEnergyStorage();
@@ -439,5 +452,17 @@ public class HydroponicBedTile extends IndustrialWorkingTile<HydroponicBedTile> 
     @Override
     protected EnergyStorageComponent<HydroponicBedTile> createEnergyStorage() {
         return new EnergyStorageComponent<>(HydroponicBedConfig.maxStoredPower, 10, 20);
+    }
+
+    @Override
+    public void setRemoved() {
+        // Save pending simulation data before removal
+        if (simulationDirty && cachedSimulation != null && this.level != null) {
+            ItemStack simulationOutput = this.simulation_slot.getStackInSlot(0);
+            if (!simulationOutput.isEmpty()) {
+                simulationOutput.set(IFAttachments.HYDROPONIC_SIMULATION_PROCESSOR, cachedSimulation.toNBT(this.level.registryAccess()));
+            }
+        }
+        super.setRemoved();
     }
 }
