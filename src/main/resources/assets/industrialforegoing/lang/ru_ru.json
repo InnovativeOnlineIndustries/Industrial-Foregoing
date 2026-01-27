@@ -598,5 +598,9 @@
   "tooltip.industrialforegoing.hydroponic.next_efficiency": "До следующего бонуса: ",
   "tooltip.industrialforegoing.hydroponic.potential_drops": "Возможный дроп:",
   "tooltip.industrialforegoing.hydroponic.function_1": "* Используйте в Кровати гидропоники для сбора данных о культуре",
-  "tooltip.industrialforegoing.hydroponic.function_2": "* Используйте в Симулированной кровати гидропоники для получения дропа"
+  "tooltip.industrialforegoing.hydroponic.function_2": "* Используйте в Симулированной кровати гидропоники для получения дропа",
+  "tooltip.industrialforegoing.hydroponic_bed.physical_mode": "Физический режим роста",
+  "tooltip.industrialforegoing.hydroponic_bed.physical_mode_desc": "Растения растут физически над блоком",
+  "tooltip.industrialforegoing.hydroponic_bed.virtual_mode": "Виртуальный режим роста",
+  "tooltip.industrialforegoing.hydroponic_bed.virtual_mode_desc": "Генерирует дроп без физического роста"
 }

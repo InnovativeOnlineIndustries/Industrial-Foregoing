@@ -13,14 +13,24 @@ import com.buuz135.industrial.utils.IndustrialTags;
 import com.buuz135.industrial.utils.ServerLoadBalancer;
 import com.buuz135.industrial.utils.apihandlers.plant.TreePlantRecollectable;
 import com.hrznstudio.titanium.annotation.Save;
+import com.hrznstudio.titanium.api.IFactory;
+import com.hrznstudio.titanium.api.client.AssetTypes;
+import com.hrznstudio.titanium.api.client.IScreenAddon;
+import com.hrznstudio.titanium.client.screen.addon.StateButtonAddon;
+import com.hrznstudio.titanium.client.screen.addon.StateButtonInfo;
+import com.hrznstudio.titanium.component.button.ButtonComponent;
 import com.hrznstudio.titanium.component.energy.EnergyStorageComponent;
 import com.hrznstudio.titanium.component.fluid.FluidTankComponent;
 import com.hrznstudio.titanium.component.fluid.SidedFluidTankComponent;
 import com.hrznstudio.titanium.component.inventory.SidedInventoryComponent;
 import com.hrznstudio.titanium.component.progress.ProgressBarComponent;
+import com.hrznstudio.titanium.util.LangUtil;
+import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.DyeColor;
 import net.minecraft.world.item.ItemStack;
@@ -35,6 +45,11 @@ import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.IntegerProperty;
 import net.minecraft.world.level.material.Fluids;
+import net.minecraft.world.level.storage.loot.LootParams;
+import net.minecraft.world.level.storage.loot.parameters.LootContextParams;
+import net.minecraft.world.phys.Vec3;
+import net.neoforged.api.distmarker.Dist;
+import net.neoforged.api.distmarker.OnlyIn;
 import net.neoforged.neoforge.common.SpecialPlantable;
 import net.neoforged.neoforge.fluids.FluidStack;
 import net.neoforged.neoforge.fluids.capability.IFluidHandler;
@@ -43,6 +58,7 @@ import net.neoforged.neoforge.items.ItemHandlerHelper;
 
 import javax.annotation.Nonnull;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.function.Supplier;
 
@@ -62,6 +78,8 @@ public class HydroponicBedTile extends IndustrialWorkingTile<HydroponicBedTile> 
     private SidedInventoryComponent<HydroponicBedTile> output;
     @Save
     private SidedInventoryComponent<HydroponicBedTile> simulation_slot;
+    @Save
+    private boolean virtualGrowthMode = true;
 
     // Cached positions and neighbors
     private BlockPos cachedAbovePos;
@@ -74,6 +92,7 @@ public class HydroponicBedTile extends IndustrialWorkingTile<HydroponicBedTile> 
 
     // Adaptive tick skipping - stores current multiplier for growth compensation
     private int currentSkipMultiplier = 1;
+
 
     public HydroponicBedTile(BlockPos blockPos, BlockState blockState) {
         super(ModuleAgricultureHusbandry.HYDROPONIC_BED, HydroponicBedConfig.powerPerOperation, blockPos, blockState);
@@ -99,15 +118,47 @@ public class HydroponicBedTile extends IndustrialWorkingTile<HydroponicBedTile> 
                 .setRange(5, 3)
                 .setInputFilter((stack, integer) -> false)
         );
-        addInventory(this.simulation_slot = (SidedInventoryComponent<HydroponicBedTile>) new SidedInventoryComponent<HydroponicBedTile>("simulation", 70 + 18 * 2, 80, 1, 3)
+        addInventory(this.simulation_slot = (SidedInventoryComponent<HydroponicBedTile>) new SidedInventoryComponent<HydroponicBedTile>("simulation", 104, 80, 1, 3)
                 .setColor(DyeColor.LIME)
                 .setInputFilter((stack, integer) -> stack.getItem().equals(ModuleAgricultureHusbandry.HYDROPONIC_SIMULATION_PROCESSOR.get()))
                 .setOutputFilter((stack, integer) -> false)
         );
+        addButton(new ButtonComponent(135, 84, 14, 14) {
+            @Override
+            @OnlyIn(Dist.CLIENT)
+            public List<IFactory<? extends IScreenAddon>> getScreenAddons() {
+                return Collections.singletonList(() -> new StateButtonAddon(this,
+                        new StateButtonInfo(0, AssetTypes.BUTTON_SIDENESS_DISABLED, ChatFormatting.GOLD + LangUtil.getString("tooltip.industrialforegoing.hydroponic_bed.physical_mode"), "tooltip.industrialforegoing.hydroponic_bed.physical_mode_desc"),
+                        new StateButtonInfo(1, AssetTypes.BUTTON_SIDENESS_ENABLED, ChatFormatting.GOLD + LangUtil.getString("tooltip.industrialforegoing.hydroponic_bed.virtual_mode"), "tooltip.industrialforegoing.hydroponic_bed.virtual_mode_desc")) {
+                    @Override
+                    public int getState() {
+                        return virtualGrowthMode ? 1 : 0;
+                    }
+                });
+            }
+        }.setPredicate((playerEntity, compoundNBT) -> {
+            virtualGrowthMode = !virtualGrowthMode;
+            markForUpdate();
+        }));
     }
 
     private PlantRecollectable cachedRecollectable = null;
     private int errorAttempts = 0;
+
+    /**
+     * Gets the BlockState with maximum age for the given block.
+     * Used in virtual growth mode to simulate fully grown crops.
+     */
+    private BlockState getMaxAgeState(Block block) {
+        if (block instanceof CropBlock crop) {
+            return crop.getStateForAge(crop.getMaxAge());
+        }
+        if (block instanceof NetherWartBlock) {
+            return block.defaultBlockState().setValue(NetherWartBlock.AGE, 3);
+        }
+        // Fallback for other blocks (e.g., BushBlock)
+        return block.defaultBlockState();
+    }
 
     private BlockPos getAbovePos() {
         if (cachedAbovePos == null) {
@@ -257,6 +308,100 @@ public class HydroponicBedTile extends IndustrialWorkingTile<HydroponicBedTile> 
             this.ether.drainForced(1, IFluidHandler.FluidAction.EXECUTE);
             this.etherBuffer.setProgress(this.etherBuffer.getMaxProgress());
         }
+
+        if (virtualGrowthMode) {
+            return workVirtual();
+        } else {
+            return workPhysical();
+        }
+    }
+
+    /**
+     * Virtual growth mode: uses planted crop above the block, generates drops via Block.getDrops()
+     * for max-age state without physically growing the crop.
+     * Supports Simulation Processor for recording crop data.
+     * Takes 3x longer than physical mode (generates drops every 3 cycles).
+     */
+    private WorkAction workVirtual() {
+        if (!hasEnergy(HydroponicBedConfig.powerPerOperation)) {
+            return new WorkAction(1, 0);
+        }
+        if (this.water.getFluidAmount() < 10) {
+            return new WorkAction(1, 0);
+        }
+
+        BlockPos up = getAbovePos();
+        BlockState state = this.level.getBlockState(up);
+        Block block = state.getBlock();
+
+        // Check if there's a valid crop planted above
+        if (state.isAir() || (!(block instanceof CropBlock) && !(block instanceof NetherWartBlock) && !(block instanceof BushBlock))) {
+            return new WorkAction(1, 0);
+        }
+
+        // Consume water
+        this.water.drainForced(10, IFluidHandler.FluidAction.EXECUTE);
+
+        // Consume ether buffer if available (gives bonus via faster progress in base class)
+        if (this.etherBuffer.getProgress() > 0) {
+            this.etherBuffer.setProgress(this.etherBuffer.getProgress() - 1);
+        }
+
+        // Generate drops from max-age state (not the current state)
+        BlockState maxAgeState = getMaxAgeState(block);
+
+        if (this.level instanceof ServerLevel serverLevel) {
+            // Build loot context parameters
+            LootParams.Builder builder = new LootParams.Builder(serverLevel)
+                    .withParameter(LootContextParams.ORIGIN, Vec3.atCenterOf(this.worldPosition))
+                    .withParameter(LootContextParams.TOOL, ItemStack.EMPTY);
+
+            // Get drops from the max-age state
+            List<ItemStack> drops = maxAgeState.getDrops(builder);
+
+            // Determine the seed/planted item for simulation processor
+            ItemStack planted = ItemStack.EMPTY;
+            for (ItemStack drop : drops) {
+                if (!drop.isEmpty() && drop.getItem() instanceof BlockItem blockItem && blockItem.getBlock() instanceof BushBlock) {
+                    planted = drop.copyWithCount(1);
+                    break;
+                }
+            }
+            // Fallback: use PlantRecollectable to get seed
+            if (planted.isEmpty()) {
+                PlantRecollectable recollectable = getPlantRecollectable(up, state);
+                if (recollectable != null) {
+                    planted = recollectable.getSeedDrop(this.level, up, state);
+                }
+            }
+
+            // Record to Simulation Processor if present
+            ItemStack simulationOutput = this.simulation_slot.getStackInSlot(0);
+            if (!planted.isEmpty() && !planted.is(IndustrialTags.Items.HYDROPONIC_SIMULATION_BLACKLIST)
+                    && !simulationOutput.isEmpty() && simulationOutput.getItem() instanceof HydroponicSimulationProcessorItem) {
+                var sim = getCachedSimulation();
+                if (sim == null) {
+                    sim = new HydroponicSimulationProcessorItem.Simulation(simulationOutput.get(IFAttachments.HYDROPONIC_SIMULATION_PROCESSOR));
+                }
+                sim.acceptExecution(planted, drops);
+                simulationOutput.set(IFAttachments.HYDROPONIC_SIMULATION_PROCESSOR, sim.toNBT(this.level.registryAccess()));
+            }
+
+            // Add all drops to output
+            for (ItemStack drop : drops) {
+                if (!drop.isEmpty()) {
+                    ItemHandlerHelper.insertItem(this.output, drop, false);
+                }
+            }
+        }
+
+        return new WorkAction(1, HydroponicBedConfig.powerPerOperation);
+    }
+
+    /**
+     * Physical growth mode: original behavior - plant grows above the block.
+     */
+    private WorkAction workPhysical() {
         if (hasEnergy(1000)) {
             BlockPos up = getAbovePos();
             BlockState state = this.level.getBlockState(up);
@@ -413,7 +558,8 @@ public class HydroponicBedTile extends IndustrialWorkingTile<HydroponicBedTile> 
 
     @Override
     public int getMaxProgress() {
-        return HydroponicBedConfig.maxProgress;
+        // Virtual mode: 3x slower progress
+        return virtualGrowthMode ? HydroponicBedConfig.maxProgress * 3 : HydroponicBedConfig.maxProgress;
     }
 
     @Nonnull
@@ -425,5 +571,23 @@ public class HydroponicBedTile extends IndustrialWorkingTile<HydroponicBedTile> 
     @Override
     protected EnergyStorageComponent<HydroponicBedTile> createEnergyStorage() {
         return new EnergyStorageComponent<>(HydroponicBedConfig.maxStoredPower, 10, 20);
+    }
+
+    @Override
+    public void saveSettings(Player player, CompoundTag tag) {
+        tag.putBoolean("HB_virtualGrowthMode", virtualGrowthMode);
+        super.saveSettings(player, tag);
+    }
+
+    @Override
+    public void loadSettings(Player player, CompoundTag tag) {
+        if (tag.contains("HB_virtualGrowthMode")) {
+            this.virtualGrowthMode = tag.getBoolean("HB_virtualGrowthMode");
+        }
+        super.loadSettings(player, tag);
+    }
+
+    public boolean isVirtualGrowthMode() {
+        return virtualGrowthMode;
     }
 }
