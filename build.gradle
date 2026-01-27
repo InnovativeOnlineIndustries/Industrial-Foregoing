@@ -1,3 +1,5 @@
+import net.darkhax.curseforgegradle.TaskPublishCurseForge
+
 plugins {
     id 'java-library'
     id 'eclipse'
@@ -176,7 +178,7 @@ publishing {
 
 //tasks.publishCurseForge.enabled = System.env["CURSE_API"] != null
 
-task publishCurseForge(type: net.darkhax.curseforgegradle.TaskPublishCurseForge) {
+tasks.register('publishCurseForge', TaskPublishCurseForge) {
 
     apiToken = System.env["CURSE_API"]
 
