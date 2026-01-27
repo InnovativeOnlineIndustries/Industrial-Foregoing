@@ -32,6 +32,9 @@ public class HydroponicBedConfig {
     @ConfigVal(comment = "Cooldown Time in Ticks [20 Ticks per Second] - Default: [100 (5s)]")
     public static int maxProgress = 100;
 
+    @ConfigVal(comment = "Progress multiplier for virtual growth mode. Higher = slower but more balanced. - Default: [3]")
+    public static int progressMultiplier = 3;
+
     @ConfigVal(comment = "Amount of Power Consumed per Operation - Default: [1000FE]")
     public static int powerPerOperation = 1000;
 

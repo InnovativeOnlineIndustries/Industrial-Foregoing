@@ -440,7 +440,7 @@ public class HydroponicBedTile extends IndustrialWorkingTile<HydroponicBedTile> 
 
     @Override
     public int getMaxProgress() {
-        return HydroponicBedConfig.maxProgress;
+        return HydroponicBedConfig.maxProgress * HydroponicBedConfig.progressMultiplier;
     }
 
     @Nonnull

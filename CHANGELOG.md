@@ -5,6 +5,7 @@
 ### Changes
 * **Removed physical growth mode**: Hydroponic Bed now operates exclusively in virtual mode
 * **Removed mode toggle button**: The UI no longer has a button to switch between physical and virtual modes
+* **New config option**: `progressMultiplier` controls how much slower virtual mode is (default: 3x)
 * **Seeds are no longer produced**: In virtual mode, the crop is not physically harvested, so seeds/plantable items are filtered from drops
   * This fixes compatibility with mods like Mystical Agriculture that disable seed drops
 * **Improved Simulation Processor caching**: Cache is now invalidated only when the item changes, not when NBT data updates
