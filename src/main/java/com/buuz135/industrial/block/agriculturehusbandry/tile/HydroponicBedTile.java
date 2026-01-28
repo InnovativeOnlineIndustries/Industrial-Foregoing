@@ -104,6 +104,12 @@ public class HydroponicBedTile extends IndustrialWorkingTile<HydroponicBedTile> 
                 .setColor(DyeColor.LIME)
                 .setInputFilter((stack, integer) -> stack.getItem().equals(ModuleAgricultureHusbandry.HYDROPONIC_SIMULATION_PROCESSOR.get()))
                 .setOutputFilter((stack, integer) -> false)
+                .setOnSlotChanged((itemStack, integer) -> {
+                    // Reset cache when slot changes to prevent data duplication between processors
+                    cachedSimulation = null;
+                    lastSimulationItem = ItemStack.EMPTY;
+                    simulationDirty = false;
+                })
         );
     }
 
