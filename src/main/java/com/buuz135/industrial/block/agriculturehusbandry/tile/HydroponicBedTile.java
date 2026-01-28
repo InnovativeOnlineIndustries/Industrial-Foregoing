@@ -363,18 +363,14 @@ public class HydroponicBedTile extends IndustrialWorkingTile<HydroponicBedTile> 
 
     /**
      * Returns a cached Simulation object, creating it only when the item in the slot changes.
-     * Uses isSameItem instead of isSameItemSameComponents to avoid re-parsing NBT
-     * every tick when we update the simulation data.
+     * Compares by object reference to detect when player swaps processors of the same type.
      */
     private HydroponicSimulationProcessorItem.Simulation getCachedSimulation() {
         ItemStack currentStack = this.simulation_slot.getStackInSlot(0);
 
-        // Check if slot item changed (ignore component changes - we update them ourselves)
-        boolean slotChanged = (currentStack.isEmpty() != lastSimulationItem.isEmpty())
-                || (!currentStack.isEmpty() && !ItemStack.isSameItem(currentStack, lastSimulationItem));
-
-        if (slotChanged) {
-            lastSimulationItem = currentStack.copyWithCount(1);
+        // Compare by reference - when player changes item, a different ItemStack object is in the slot
+        if (currentStack != lastSimulationItem) {
+            lastSimulationItem = currentStack;
             if (currentStack.isEmpty() || !(currentStack.getItem() instanceof HydroponicSimulationProcessorItem)) {
                 cachedSimulation = null;
             } else {
