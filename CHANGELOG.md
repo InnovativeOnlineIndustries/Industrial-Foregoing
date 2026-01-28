@@ -1,3 +1,10 @@
+# Version 3.7.2
+
+### Bug Fixes
+* **Fixed Simulation Processor data duplication**: Cached simulation data was being transferred between different processors when swapping them in Hydroponic Bed slot. Now uses object reference comparison to correctly detect processor changes.
+
+---
+
 # Version 3.7.0
 
 ## Hydroponic Bed - Virtual-Only Mode
