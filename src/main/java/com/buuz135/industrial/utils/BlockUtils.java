@@ -70,19 +70,24 @@ public class BlockUtils {
     }
 
     public static boolean isLog(Level world, BlockPos pos) {
-        return isBlockTag(world, pos, BlockTags.LOGS) || world.getBlockState(pos).is(Blocks.MANGROVE_ROOTS);
+        BlockState state = world.getBlockState(pos);
+        return state.is(BlockTags.LOGS) || state.is(Blocks.MANGROVE_ROOTS);
     }
 
     public static boolean isLeaves(Level world, BlockPos pos) {
-        return world.getBlockState(pos).is(BlockTags.WART_BLOCKS)
-                || world.getBlockState(pos).is(BlockTags.LEAVES)
-                || world.getBlockState(pos).getBlock().equals(Blocks.SHROOMLIGHT)
-                || world.getBlockState(pos).getBlock().equals(Blocks.MOSS_CARPET)
-                || (world.getBlockState(pos).getBlock().equals(Blocks.MANGROVE_PROPAGULE) && world.getBlockState(pos).getValue(MangrovePropaguleBlock.HANGING));
+        BlockState state = world.getBlockState(pos);
+        if (state.is(BlockTags.WART_BLOCKS) || state.is(BlockTags.LEAVES)) {
+            return true;
+        }
+        Block block = state.getBlock();
+        return block == Blocks.SHROOMLIGHT
+                || block == Blocks.MOSS_CARPET
+                || (block == Blocks.MANGROVE_PROPAGULE && state.getValue(MangrovePropaguleBlock.HANGING));
     }
 
     public static boolean isChorus(Level world, BlockPos pos) {
-        return world.getBlockState(pos).getBlock().equals(Blocks.CHORUS_PLANT) || world.getBlockState(pos).getBlock().equals(Blocks.CHORUS_FLOWER);
+        Block block = world.getBlockState(pos).getBlock();
+        return block == Blocks.CHORUS_PLANT || block == Blocks.CHORUS_FLOWER;
     }
 
     public static boolean canBlockBeBroken(Level world, BlockPos pos, String uuid) {
@@ -101,9 +106,13 @@ public class BlockUtils {
 
     public static List<ItemStack> getBlockDrops(Level world, BlockPos pos, int fortune) {
         BlockState state = world.getBlockState(pos);
-        NonNullList<ItemStack> stacks = NonNullList.create();
-        stacks.addAll(Block.getDrops(state, (ServerLevel) world, pos, world.getBlockEntity(pos)));
-        return stacks;
+        // Return directly without creating intermediate NonNullList
+        return Block.getDrops(state, (ServerLevel) world, pos, world.getBlockEntity(pos));
+    }
+
+    public static List<ItemStack> getBlockDrops(Level world, BlockPos pos, BlockState state) {
+        // Overload for when BlockState is already available
+        return Block.getDrops(state, (ServerLevel) world, pos, world.getBlockEntity(pos));
     }
 
     public static boolean spawnItemStack(ItemStack stack, Level world, BlockPos pos) {

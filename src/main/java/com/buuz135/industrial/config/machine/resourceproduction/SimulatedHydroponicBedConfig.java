@@ -40,4 +40,5 @@ public class SimulatedHydroponicBedConfig {
 
     @ConfigVal(comment = "Chance to increase the executions of the current processor, 0.1 = 10% chance - Default: [0.1]")
     public static double chanceToIncreaseExecutions = 0.1;
+
 }

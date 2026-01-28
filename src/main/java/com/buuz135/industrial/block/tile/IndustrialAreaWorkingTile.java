@@ -24,7 +24,7 @@ package com.buuz135.industrial.block.tile;
 
 import com.buuz135.industrial.item.addon.RangeAddonItem;
 import com.buuz135.industrial.proxy.client.IndustrialAssetProvider;
-import com.buuz135.industrial.utils.BlockUtils;
+import com.buuz135.industrial.utils.ServerLoadBalancer;
 import com.hrznstudio.titanium.annotation.Save;
 import com.hrznstudio.titanium.api.IFactory;
 import com.hrznstudio.titanium.api.client.IScreenAddon;
@@ -39,7 +39,9 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.api.distmarker.OnlyIn;
@@ -60,6 +62,16 @@ public abstract class IndustrialAreaWorkingTile<T extends IndustrialAreaWorkingT
     private ButtonComponent particleButton;
     private RangeManager.RangeType type;
     private boolean acceptsRangeUpgrades;
+
+    // Cached working area data for performance optimization
+    private transient AABB cachedAABB;
+    private transient int cachedAreaSize;
+    private transient int cachedSizeX;
+    private transient int cachedSizeZ;
+    private transient int cachedMinX;
+    private transient int cachedMinY;
+    private transient int cachedMinZ;
+    private transient int cachedRangeLevel = -1;
 
     public IndustrialAreaWorkingTile(BlockWithTile basicTileBlock, RangeManager.RangeType type, boolean acceptsRangeUpgrades, int estimatedPower, BlockPos blockPos, BlockState blockState) {
         super(basicTileBlock, estimatedPower, blockPos, blockState);
@@ -108,19 +120,45 @@ public abstract class IndustrialAreaWorkingTile<T extends IndustrialAreaWorkingT
         return new RangeManager(this.worldPosition, this.getFacingDirection(), this.type).get(hasAugmentInstalled(RangeAddonItem.RANGE) ? ((int) AugmentWrapper.getType(getInstalledAugments(RangeAddonItem.RANGE).get(0), RangeAddonItem.RANGE) + 1) : 0);
     }
 
-    public BlockPos getPointedBlockPos() {
-        List<BlockPos> blockPosList = BlockUtils.getBlockPosInAABB(getWorkingArea().bounds());
-        pointer = safetyPointerCheck(blockPosList);
-        return blockPosList.get(pointer);
+    private void ensureCachedAreaValid() {
+        int currentRangeLevel = hasAugmentInstalled(RangeAddonItem.RANGE) ? ((int) AugmentWrapper.getType(getInstalledAugments(RangeAddonItem.RANGE).get(0), RangeAddonItem.RANGE) + 1) : 0;
+        if (cachedAABB == null || cachedRangeLevel != currentRangeLevel) {
+            cachedRangeLevel = currentRangeLevel;
+            cachedAABB = getWorkingArea().bounds();
+            cachedSizeX = (int) (cachedAABB.maxX - cachedAABB.minX);
+            int sizeY = (int) (cachedAABB.maxY - cachedAABB.minY);
+            cachedSizeZ = (int) (cachedAABB.maxZ - cachedAABB.minZ);
+            cachedAreaSize = cachedSizeX * sizeY * cachedSizeZ;
+            cachedMinX = (int) cachedAABB.minX;
+            cachedMinY = (int) cachedAABB.minY;
+            cachedMinZ = (int) cachedAABB.minZ;
+        }
     }
 
-    private int safetyPointerCheck(List<BlockPos> blockPosList) {
-        return pointer < blockPosList.size() ? pointer : 0;
+    public int getWorkingAreaSize() {
+        ensureCachedAreaValid();
+        return cachedAreaSize;
+    }
+
+    public BlockPos getPointedBlockPos() {
+        ensureCachedAreaValid();
+        pointer = safetyPointerCheck();
+        // Calculate position from index mathematically instead of creating a list
+        int layerSize = cachedSizeX * cachedSizeZ;
+        int y = pointer / layerSize;
+        int remainder = pointer % layerSize;
+        int x = remainder / cachedSizeZ;
+        int z = remainder % cachedSizeZ;
+        return new BlockPos(cachedMinX + x, cachedMinY + y, cachedMinZ + z);
+    }
+
+    private int safetyPointerCheck() {
+        return pointer < cachedAreaSize ? pointer : 0;
     }
 
     public void increasePointer() {
-        BlockPos pointed = getPointedBlockPos();
         if (this.level instanceof ServerLevel && this.spawnParticles) {
+            BlockPos pointed = getPointedBlockPos();
             ((ServerLevel) this.level).sendParticles(new DustParticleOptions(new Vector3f(Math.abs(this.worldPosition.getX() % 255) / 256f, Math.abs(this.worldPosition.getY() % 255) / 256f, Math.abs(this.worldPosition.getZ() % 255) / 256f), 1f), pointed.getX() + 0.5, pointed.getY() + 1, pointed.getZ() + 0.5, 1, 0, 0, 0, 0);
         }
         ++pointer;
@@ -157,5 +195,16 @@ public abstract class IndustrialAreaWorkingTile<T extends IndustrialAreaWorkingT
         super.saveSettings(player, tag);
         tag.putBoolean("WA_spawnParticles", this.spawnParticles);
         tag.putBoolean("WA_showingArea", this.showingArea);
+    }
+
+    @Override
+    public void serverTick(Level level, BlockPos pos, BlockState state, T blockEntity) {
+        // Adaptive tick skipping: skip ticks when TPS is low (supports per-world TPS)
+        int skipInterval = ServerLoadBalancer.getTickSkipInterval(level);
+        if (skipInterval > 1 && level.getGameTime() % skipInterval != 0) {
+            return; // Skip this tick
+        }
+
+        super.serverTick(level, pos, state, blockEntity);
     }
 }

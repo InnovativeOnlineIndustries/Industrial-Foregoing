@@ -676,5 +676,9 @@
   "tooltip.titanium.facing_handler.simulation": "Hydroponic Simulation Processor",
   "tooltip.titanium.facing_handler.seed": "Simulated Seed",
   "tooltip.industrialforegoing.hydroponic.function_1": "* Use in the Hydroponic Bed to gather Crop Data",
-  "tooltip.industrialforegoing.hydroponic.function_2": "* Use in the Simulated Hydroponic Bed to get drops"
+  "tooltip.industrialforegoing.hydroponic.function_2": "* Use in the Simulated Hydroponic Bed to get drops",
+  "tooltip.industrialforegoing.hydroponic_bed.physical_mode": "Physical Growth Mode",
+  "tooltip.industrialforegoing.hydroponic_bed.physical_mode_desc": "Crops grow physically above the block",
+  "tooltip.industrialforegoing.hydroponic_bed.virtual_mode": "Virtual Growth Mode",
+  "tooltip.industrialforegoing.hydroponic_bed.virtual_mode_desc": "Generates drops without physical growth"
 }

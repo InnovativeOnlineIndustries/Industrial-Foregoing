@@ -20,25 +20,11 @@
  * ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-package com.buuz135.industrial.config.machine.resourceproduction;
+package com.buuz135.industrial.config;
 
-import com.buuz135.industrial.config.MachineResourceProductionConfig;
 import com.hrznstudio.titanium.annotation.config.ConfigFile;
-import com.hrznstudio.titanium.annotation.config.ConfigVal;
+import net.neoforged.fml.config.ModConfig;
 
-@ConfigFile.Child(MachineResourceProductionConfig.class)
-public class HydroponicBedConfig {
-
-    @ConfigVal(comment = "Cooldown Time in Ticks [20 Ticks per Second] - Default: [100 (5s)]")
-    public static int maxProgress = 100;
-
-    @ConfigVal(comment = "Progress multiplier for virtual growth mode. Higher = slower but more balanced. - Default: [3]")
-    public static int progressMultiplier = 3;
-
-    @ConfigVal(comment = "Amount of Power Consumed per Operation - Default: [1000FE]")
-    public static int powerPerOperation = 1000;
-
-    @ConfigVal(comment = "Max Stored Power [FE] - Default: [10000 FE]")
-    public static int maxStoredPower = 10000;
-
+@ConfigFile(value = "server", type = ModConfig.Type.COMMON)
+public class ServerConfig {
 }

@@ -55,6 +55,8 @@ public abstract class IndustrialWorkingTile<T extends IndustrialWorkingTile<T>> 
 
     @Save
     private ProgressBarComponent<T> workingBar;
+    private int cachedProgressIncrease = 1;
+    private int augmentCheckCounter = 0;
 
     public IndustrialWorkingTile(BlockWithTile basicTileBlock, int estimatedPower, BlockPos blockPos, BlockState blockState) {
         super(basicTileBlock, blockPos, blockState);
@@ -96,10 +98,19 @@ public abstract class IndustrialWorkingTile<T extends IndustrialWorkingTile<T>> 
                     }
                 })
                 .setOnTickWork(() -> {
-                    workingBar.setProgressIncrease(this.hasAugmentInstalled(AugmentTypes.SPEED) ? (int) AugmentWrapper.getType(this.getInstalledAugments(AugmentTypes.SPEED).get(0), AugmentTypes.SPEED) : 1);
+                    // Check augments every 20 ticks (1 second) instead of every tick
+                    if (++augmentCheckCounter >= 20) {
+                        augmentCheckCounter = 0;
+                        int newProgressIncrease = this.hasAugmentInstalled(AugmentTypes.SPEED) ? (int) AugmentWrapper.getType(this.getInstalledAugments(AugmentTypes.SPEED).get(0), AugmentTypes.SPEED) : 1;
+                        // Only update if value changed to avoid unnecessary method calls
+                        if (newProgressIncrease != cachedProgressIncrease) {
+                            cachedProgressIncrease = newProgressIncrease;
+                            workingBar.setProgressIncrease(cachedProgressIncrease);
+                        }
+                    }
                 })
                 .setCanReset(tileEntity -> true)
-                .setCanIncrease(tileEntity -> this.getRedstoneManager().getAction().canRun(tileEntity.getEnvironmentValue(false, null)) && this.getRedstoneManager().shouldWork())
+                .setCanIncrease(tileEntity -> this.getRedstoneManager().shouldWork())
                 .setColor(DyeColor.LIME));
     }
 

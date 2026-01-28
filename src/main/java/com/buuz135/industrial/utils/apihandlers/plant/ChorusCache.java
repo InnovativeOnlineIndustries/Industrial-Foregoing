@@ -28,6 +28,7 @@ import net.minecraft.core.Direction;
 import net.minecraft.core.NonNullList;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.ChorusFlowerBlock;
 
@@ -78,7 +79,7 @@ public class ChorusCache {
             } else {
                 stacks.addAll(BlockUtils.getBlockDrops(world, p));
             }
-            world.setBlockAndUpdate(p, Blocks.AIR.defaultBlockState());
+            world.setBlock(p, Blocks.AIR.defaultBlockState(), Block.UPDATE_CLIENTS | Block.UPDATE_KNOWN_SHAPE);
         }
     }
 

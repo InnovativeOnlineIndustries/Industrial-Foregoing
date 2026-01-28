@@ -29,6 +29,7 @@ import net.minecraft.core.Direction;
 import net.minecraft.core.NonNullList;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.CactusBlock;
 import net.minecraft.world.level.block.SugarCaneBlock;
@@ -66,10 +67,11 @@ public class DoubleTallPlantRecollectable extends PlantRecollectable {
         BlockState blockState = world.getBlockState(pos);
         if (blockState.getBlock() instanceof CactusBlock || blockState.getBlock() instanceof SugarCaneBlock) {
             stacks.addAll(BlockUtils.getBlockDrops(world, pos));
+            int flags = Block.UPDATE_CLIENTS | Block.UPDATE_KNOWN_SHAPE;
             if (!world.getFluidState(pos).isEmpty()) {
-                world.setBlockAndUpdate(pos, Blocks.WATER.defaultBlockState());
+                world.setBlock(pos, Blocks.WATER.defaultBlockState(), flags);
             } else {
-                world.setBlockAndUpdate(pos, Blocks.AIR.defaultBlockState());
+                world.setBlock(pos, Blocks.AIR.defaultBlockState(), flags);
             }
         }
     }

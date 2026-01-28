@@ -1,3 +1,133 @@
+# Version 3.7.2
+
+### Bug Fixes
+* **Fixed Simulation Processor data duplication**: Cached simulation data was being transferred between different processors when swapping them in Hydroponic Bed slot. Now uses object reference comparison to correctly detect processor changes.
+
+---
+
+# Version 3.7.0
+
+## Hydroponic Bed - Virtual-Only Mode
+
+### Changes
+* **Removed physical growth mode**: Hydroponic Bed now operates exclusively in virtual mode
+* **Removed mode toggle button**: The UI no longer has a button to switch between physical and virtual modes
+* **New config option**: `progressMultiplier` controls how much slower virtual mode is (default: 3x)
+* **Seeds are no longer produced**: In virtual mode, the crop is not physically harvested, so seeds/plantable items are filtered from drops
+  * This fixes compatibility with mods like Mystical Agriculture that disable seed drops
+* **Improved Simulation Processor caching**: Cache is now invalidated only when the item changes, not when NBT data updates
+* **Deferred NBT saving**: Simulation data is saved every 20 ticks instead of every work cycle
+  * Reduces `toNBT()` calls by ~95%, significantly lowering CPU overhead from codec serialization
+
+### Breaking Changes
+* Physical growth mode is no longer available
+* Existing Hydroponic Beds will automatically use virtual mode
+
+---
+
+# Version 3.6.42
+
+## ServerLoadBalancer Configuration Overhaul
+
+### Centralized Configuration
+* **Separate config section**: ServerLoadBalancer now has its own configuration in `[ServerConfig.ServerLoadBalancerConfig]`
+* **Removed duplicate settings**: Tick skipping settings removed from `HydroponicBedConfig` and `SimulatedHydroponicBedConfig`
+* **Master enable switch**: New `enabled` option to completely enable/disable the adaptive tick skipping system
+* **Per-world TPS tracking**: New `perWorldTps` option for servers with separate worlds per player
+  * When enabled, machines only slow down in worlds with low TPS
+  * Other worlds with normal TPS continue at full speed
+  * Ideal for skyblock/island servers where each player has their own dimension
+
+### Configuration Options
+| Option | Default | Description |
+|--------|---------|-------------|
+| `enabled` | true | Master switch for the entire system |
+| `perWorldTps` | false | Track TPS per-world instead of globally |
+| `tpsSampleInterval` | 20 | TPS sampling interval in ticks |
+| `normalTps` | 19.0 | TPS threshold for normal operation (no skipping) |
+| `highLoadTps` | 15.0 | TPS threshold for medium load (skip every 2nd tick) |
+| `criticalLoadTps` | 10.0 | TPS threshold for high load (skip every 4th tick) |
+| `minSkippedTicks` | 1 | Minimum skip interval (1 = no skipping) |
+| `maxSkippedTicks` | 8 | Maximum skip interval |
+| `criticalGradualProgressiveSkippedTicks` | true | Gradually increase skipping when load increases |
+| `nonCriticalGradualRegressiveSkippedTicks` | true | Gradually decrease skipping when load decreases |
+
+### Breaking Changes
+* **Config migration required**: Old tick skipping settings in `HydroponicBedConfig` and `SimulatedHydroponicBedConfig` are no longer used
+* All tick skipping settings are now in `[ServerConfig.ServerLoadBalancerConfig]`
+
+### Updated Machines
+* Hydroponic Bed and Simulated Hydroponic Bed now use centralized ServerLoadBalancer config
+* Both machines support per-world TPS mode
+
+---
+
+# Version 3.6.39
+
+## Additional Performance Optimizations
+
+### Adaptive Tick Skipping (ServerLoadBalancer)
+* **TPS-aware throttling**: Hydroponic beds and Simulated Hydroponic beds automatically reduce tick frequency when server TPS drops
+* **Configurable thresholds**: TPS ≥19 = normal, 15-19 = every 2nd tick, 10-15 = every 4th tick, <10 = every 8th tick
+* **Growth compensation**: Skipped ticks are compensated by multiplying growth increments, maintaining overall growth rate
+* **Estimated savings**: Up to 87.5% CPU reduction for Hydroponic Beds during severe lag
+
+### Simulation Processor Caching (HydroponicBedTile)
+* **Cached Simulation object**: NBT parsing for HydroponicSimulationProcessorItem now happens only when the item in the slot changes, not on every harvest operation
+* **Eliminates expensive codec parsing**: `ItemStack.parseOptional()` was being called every tick during harvesting — now cached
+* **Estimated savings**: ~2% CPU reduction when using simulation processors
+
+### Progress Bar Optimization (IndustrialWorkingTile & IndustrialProcessingTile)
+* **Cached augment checks**: Speed augment checks now happen every 20 ticks instead of every tick
+* **Conditional updates**: `setProgressIncrease()` is only called when the value actually changes
+* **Reduced method call overhead**: Eliminates unnecessary calls to Titanium's ProgressBarComponent
+
+### Ether Growth Optimization (HydroponicBedTile)
+* **Fast growth with ether**: Now uses `tryFastGrow()` with 2 increments instead of `performBonemeal()` for standard crops
+* **Eliminates neighbor updates**: `performBonemeal()` triggers expensive `Level.setBlock()` with neighbor shape updates (~3% CPU)
+* **Fallback preserved**: `performBonemeal()` still used for StemBlock and modded plants that need special handling
+
+---
+
+# Version 3.6.38
+
+## Performance Optimizations for HydroponicBedTile
+
+This update brings significant performance improvements to the Hydroponic Bed, reducing server tick time and memory allocations.
+
+### Caching Optimizations
+* **BlockPos caching**: Cache `BlockPos.above()` to avoid object creation every tick
+* **Neighbor tile caching**: Cache references to neighboring HydroponicBedTile blocks, refreshed every 100 ticks instead of querying every tick
+* **Augment check caching**: Cache augment presence checks every 20 ticks instead of every tick
+* **BlockState caching**: Pass cached BlockState to PlantRecollectable methods instead of re-querying
+
+### Algorithm Improvements
+* **Fast grow path**: Add `tryFastGrow()` for direct age manipulation via `CropBlock.getStateForAge()` instead of expensive `randomTick()` calls
+* **Optimized block updates**: Replace `setBlockAndUpdate()` with `setBlock()` using minimal update flags (Block.UPDATE_CLIENTS) — reduces neighbor updates and block update cascades
+* **Balance interval increase**: Increase ether balance interval from 5 to 10 ticks — 50% fewer balance operations
+* **Static directions array**: Use pre-allocated `HORIZONTAL_DIRECTIONS` array instead of creating streams
+
+### Memory & GC Improvements
+* **Lambda elimination**: Replace lambda allocations with method references in hot paths
+* **Stream elimination**: Replace `stream().filter().findFirst()` with simple for-loops in `findRecollectable()`
+* **forEach elimination**: Use indexed for-loop instead of `forEach` in `tryToHarvestAndReplant()`
+* **NonNullList removal**: Remove unnecessary `NonNullList` creation in `getBlockDrops()`
+* **Disable auto-tick**: Disable automatic progress bar ticking for `etherBuffer` — reduces unnecessary syncs
+
+### BlockUtils Optimizations
+* **isLeaves() optimization**: Reduce from 5 to 1 `getBlockState()` calls by reusing cached state
+* **isLog() optimization**: Reduce redundant `getBlockState()` calls
+* **isChorus() optimization**: Reduce redundant `getBlockState()` calls
+* **Block comparison**: Use `==` instead of `equals()` for Block instance comparisons (singleton pattern)
+
+### Estimated Performance Gains
+* **~60-80% reduction** in object allocations per tick per Hydroponic Bed
+* **~40-50% reduction** in `getBlockState()` calls for tree/chorus harvesting
+* **~30% reduction** in neighbor block update overhead
+* Particularly noticeable in large farms with 50+ Hydroponic Beds
+
+---
+
 # Version 3.6.37
 
 * Fixed plant gatherer getting stuck on bamboo #1398

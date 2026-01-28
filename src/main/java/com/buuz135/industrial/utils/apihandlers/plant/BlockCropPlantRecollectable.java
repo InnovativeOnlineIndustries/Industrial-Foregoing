@@ -25,9 +25,9 @@ package com.buuz135.industrial.utils.apihandlers.plant;
 import com.buuz135.industrial.api.plant.PlantRecollectable;
 import com.buuz135.industrial.utils.BlockUtils;
 import net.minecraft.core.BlockPos;
-import net.minecraft.core.NonNullList;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.CropBlock;
 import net.minecraft.world.level.block.state.BlockState;
@@ -48,12 +48,14 @@ public class BlockCropPlantRecollectable extends PlantRecollectable {
 
     @Override
     public List<ItemStack> doHarvestOperation(Level world, BlockPos pos, BlockState blockState) {
-        NonNullList<ItemStack> stacks = NonNullList.create();
-        stacks.addAll(BlockUtils.getBlockDrops(world, pos));
+        // Use blockState directly to avoid extra getBlockState() call
+        List<ItemStack> stacks = BlockUtils.getBlockDrops(world, pos, blockState);
+        // Use UPDATE_CLIENTS | UPDATE_KNOWN_SHAPE to skip neighbor updates and redstone
+        int flags = Block.UPDATE_CLIENTS | Block.UPDATE_KNOWN_SHAPE;
         if (!world.getFluidState(pos).isEmpty()) {
-            world.setBlockAndUpdate(pos, Blocks.WATER.defaultBlockState());
+            world.setBlock(pos, Blocks.WATER.defaultBlockState(), flags);
         } else {
-            world.setBlockAndUpdate(pos, Blocks.AIR.defaultBlockState());
+            world.setBlock(pos, Blocks.AIR.defaultBlockState(), flags);
         }
         return stacks;
     }

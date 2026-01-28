@@ -1,3 +1,5 @@
+import net.darkhax.curseforgegradle.TaskPublishCurseForge
+
 plugins {
     id 'java-library'
     id 'eclipse'
@@ -28,11 +30,13 @@ repositories {
             includeGroup "curse.maven"
         }
     }
-    repositories {
-        maven {
-            name = "TerraformersMC"
-            url = "https://maven.terraformersmc.com/"
-        }
+    maven {
+        name = "TerraformersMC"
+        url = "https://maven.terraformersmc.com/"
+    }
+    maven {
+        name = "JitPack"
+        url = "https://jitpack.io"
     }
     // Ender IO
     maven {
@@ -94,7 +98,8 @@ sourceSets.main.resources { srcDir 'src/generated/resources' }
 dependencies {
     compileOnly("mezz.jei:jei-1.21.1-neoforge-api:${jei_version}")
     runtimeOnly("mezz.jei:jei-1.21.1-neoforge:${jei_version}")
-    implementation project.dependencies.create('com.hrznstudio:titanium:1.21-4.0.34')
+    // implementation project.dependencies.create('com.hrznstudio:titanium:1.21-4.0.34')
+    implementation 'com.github.BazZziliuS:Titanium:1.21-SNAPSHOT'
     implementation "curse.maven:jade-324717:5444008"
     compileOnly "curse.maven:crafttweaker-239197:5606075"
     implementation "vazkii.patchouli:Patchouli:${patchouli_version}"
@@ -173,7 +178,7 @@ publishing {
 
 //tasks.publishCurseForge.enabled = System.env["CURSE_API"] != null
 
-task publishCurseForge(type: net.darkhax.curseforgegradle.TaskPublishCurseForge) {
+tasks.register('publishCurseForge', TaskPublishCurseForge) {
 
     apiToken = System.env["CURSE_API"]
 
