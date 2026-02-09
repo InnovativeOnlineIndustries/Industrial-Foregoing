@@ -58,10 +58,8 @@ import org.joml.Vector3f;
 
 import javax.annotation.Nonnull;
 import java.awt.*;
-import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.*;
 import java.util.List;
-import java.util.Set;
 
 public class TransporterFluidType extends FilteredTransporterType<FluidStack, IFluidHandler> {
 
@@ -212,7 +210,7 @@ public class TransporterFluidType extends FilteredTransporterType<FluidStack, IF
         @Override
         @Nonnull
         public ResourceLocation getModel(Direction upgradeSide, TransporterAction action) {
-            return ResourceLocation.fromNamespaceAndPath(Reference.MOD_ID, "block/transporters/fluid_transporter_" + action.name().toLowerCase() + "_" + upgradeSide.getSerializedName().toLowerCase());
+            return ResourceLocation.fromNamespaceAndPath(Reference.MOD_ID, "block/transporters/fluid_transporter_" + action.name().toLowerCase(Locale.ROOT) + "_" + upgradeSide.getSerializedName().toLowerCase(Locale.ROOT));
         }
 
         @Override
@@ -228,7 +226,7 @@ public class TransporterFluidType extends FilteredTransporterType<FluidStack, IF
         @Nonnull
         @Override
         public ResourceLocation getItemModel() {
-            return ResourceLocation.fromNamespaceAndPath(Reference.MOD_ID, "block/transporters/fluid_transporter_" + TransporterAction.EXTRACT.name().toLowerCase() + "_" + Direction.NORTH.getSerializedName().toLowerCase());
+            return ResourceLocation.fromNamespaceAndPath(Reference.MOD_ID, "block/transporters/fluid_transporter_" + TransporterAction.EXTRACT.name().toLowerCase(Locale.ROOT) + "_" + Direction.NORTH.getSerializedName().toLowerCase(Locale.ROOT));
         }
 
         @Override

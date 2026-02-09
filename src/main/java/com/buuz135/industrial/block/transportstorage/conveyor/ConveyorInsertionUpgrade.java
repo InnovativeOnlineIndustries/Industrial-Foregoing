@@ -60,6 +60,7 @@ import net.neoforged.neoforge.fluids.capability.IFluidHandler;
 
 import javax.annotation.Nonnull;
 import java.util.List;
+import java.util.Locale;
 import java.util.Optional;
 
 public class ConveyorInsertionUpgrade extends ConveyorUpgrade {
@@ -249,7 +250,7 @@ public class ConveyorInsertionUpgrade extends ConveyorUpgrade {
         @Override
         @Nonnull
         public ResourceLocation getModel(Direction upgradeSide, Direction conveyorFacing) {
-            return ResourceLocation.fromNamespaceAndPath(Reference.MOD_ID, "block/conveyor_upgrade_inserter_" + upgradeSide.getSerializedName().toLowerCase());
+            return ResourceLocation.fromNamespaceAndPath(Reference.MOD_ID, "block/conveyor_upgrade_inserter_" + upgradeSide.getSerializedName().toLowerCase(Locale.ROOT));
         }
 
         @Nonnull

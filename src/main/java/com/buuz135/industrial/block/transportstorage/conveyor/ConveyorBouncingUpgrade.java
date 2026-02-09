@@ -247,7 +247,7 @@ public class ConveyorBouncingUpgrade extends ConveyorUpgrade {
         @Override
         @Nonnull
         public ResourceLocation getModel(Direction upgradeSide, Direction conveyorFacing) {
-            return ResourceLocation.fromNamespaceAndPath(Reference.MOD_ID, "block/conveyor_upgrade_bouncing_" + conveyorFacing.getSerializedName().toLowerCase());
+            return ResourceLocation.fromNamespaceAndPath(Reference.MOD_ID, "block/conveyor_upgrade_bouncing_" + conveyorFacing.getSerializedName().toLowerCase(Locale.ROOT));
         }
 
         @Nonnull

@@ -38,7 +38,7 @@ public class IndustrialModelProvider extends ModelProvider<BlockModelBuilder> {
     protected void registerModels() {
         //for (ConveyorBlock.EnumType type : ConveyorBlock.TYPE.getAllowedValues()) {
         //    for (Direction direction : ConveyorBlock.FACING.getAllowedValues()) {
-        //        getBuilder(Reference.MOD_ID + ":conveyor_" + type.getName().toLowerCase() + "_" + direction.getName().toLowerCase()).parent(new ModelFile.UncheckedModelFile(type.getModel())).texture("2", type.getTexture());
+        //        getBuilder(Reference.MOD_ID + ":conveyor_" + type.getName().toLowerCase(Locale.ROOT) + "_" + direction.getName().toLowerCase(Locale.ROOT)).parent(new ModelFile.UncheckedModelFile(type.getModel())).texture("2", type.getTexture());
         //    }
         //}
     }

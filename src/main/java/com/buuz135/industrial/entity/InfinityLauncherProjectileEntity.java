@@ -210,7 +210,7 @@ public class InfinityLauncherProjectileEntity extends AbstractArrow {
             for (ItemStack itemStack : ((Player) player).getInventory().items) {
                 if (itemStack.getItem() instanceof MobImprisonmentToolItem && !itemStack.has(IFAttachments.MOB_IMPRISONMENT_TOOL)) {
                     ItemStack copy = itemStack.copy();
-                    if (((MobImprisonmentToolItem) itemStack.getItem()).capture(copy, (LivingEntity) entity)) {
+                    if (((MobImprisonmentToolItem) itemStack.getItem()).capture(copy, (LivingEntity) entity,((Player) player))) {
                         ((Player) player).getInventory().removeItem(itemStack);
                         ((Player) player).getInventory().add(copy);
                         break;

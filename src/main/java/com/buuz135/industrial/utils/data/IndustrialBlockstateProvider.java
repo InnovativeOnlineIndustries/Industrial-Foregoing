@@ -76,7 +76,7 @@ public class IndustrialBlockstateProvider extends BlockStateProvider {
         //for (ConveyorBlock.EnumType type : ConveyorBlock.TYPE.getAllowedValues()) {
         //    for (Direction direction : ConveyorBlock.FACING.getAllowedValues()) {
         //        conveyor.partialState().with(ConveyorBlock.TYPE, type).with(ConveyorBlock.FACING, direction)
-        //                .addModels(new ConfiguredModel(new BlockModelBuilder(ResourceLocation.fromNamespaceAndPath(Reference.MOD_ID, "block/conveyor_" + type.getName().toLowerCase() + "_" + direction.getName().toLowerCase()), helper).parent(new ModelFile.UncheckedModelFile(type.getModel())).texture("2", type.getTexture()), 0, (int) direction.getOpposite().getHorizontalAngle(), false));
+        //                .addModels(new ConfiguredModel(new BlockModelBuilder(ResourceLocation.fromNamespaceAndPath(Reference.MOD_ID, "block/conveyor_" + type.getName().toLowerCase(Locale.ROOT) + "_" + direction.getName().toLowerCase(Locale.ROOT)), helper).parent(new ModelFile.UncheckedModelFile(type.getModel())).texture("2", type.getTexture()), 0, (int) direction.getOpposite().getHorizontalAngle(), false));
         //    }
         //}
     }
