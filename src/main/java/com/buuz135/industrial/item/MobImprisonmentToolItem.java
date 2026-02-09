@@ -21,6 +21,7 @@
  */
 package com.buuz135.industrial.item;
 
+import com.buuz135.industrial.config.item.core.MobImprisonmentToolConfig;
 import com.buuz135.industrial.utils.IFAttachments;
 import com.buuz135.industrial.utils.IndustrialTags;
 import com.hrznstudio.titanium.recipe.generator.TitaniumShapedRecipeBuilder;
@@ -38,6 +39,8 @@ import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.TamableAnimal;
+import net.minecraft.world.entity.animal.horse.AbstractHorse;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
@@ -67,16 +70,17 @@ public class MobImprisonmentToolItem extends IFCustomItem {
 
     @Override
     public InteractionResult interactLivingEntity(ItemStack stack, Player playerIn, LivingEntity target, InteractionHand hand) {
-        if (!capture(stack, target)) return InteractionResult.FAIL;
+        if (!capture(stack, target,playerIn)) return InteractionResult.FAIL;
         playerIn.swing(hand);
         playerIn.setItemInHand(hand, stack);
         return InteractionResult.SUCCESS;
     }
 
-    public boolean capture(ItemStack stack, LivingEntity target) {
+    public boolean capture(ItemStack stack, LivingEntity target,Player player) {
         if (target.getCommandSenderWorld().isClientSide) return false;
         if (target instanceof Player || target.getType().is(Tags.EntityTypes.BOSSES) || !target.isAlive()) return false;
         if (containsEntity(stack)) return false;
+        if (!canPlayerCaptureEntity(target,player)) return false;
         if (isBlacklisted(target.getType())) return false;
         CompoundTag nbt = new CompoundTag();
         nbt.putString("entity", EntityType.getKey(target.getType()).toString());
@@ -97,6 +101,41 @@ public class MobImprisonmentToolItem extends IFCustomItem {
         return true;
     }
 
+    /**
+     * Determines whether the given player is allowed to capture the specified entity.
+     * The decision depends on the entity type and the current configuration:
+     *  Tamable animals: If owner-only capture is enabled, only the player
+     *       who tamed the animal may capture it. Untamed animals can always be captured.
+     *  Horses and horse-like entities: If owner-only capture is enabled,
+     *       only the owning player may capture a tamed horse. Untamed horses can always
+     *       be captured.
+     *   Other entities: Always capturable by default.
+     * </ul>
+     *
+     * @param entity the target living entity the player is attempting to capture
+     * @param player the player attempting to capture the entity
+     * @return {@code true} if the player is allowed to capture the entity,
+     *         {@code false} otherwise
+     */
+    private boolean canPlayerCaptureEntity(LivingEntity entity, Player player){
+        var ret = false;
+        switch (entity) {
+            case AbstractHorse horse -> {
+                if (!MobImprisonmentToolConfig.onlyOwnerCanCapture || ((horse.isTamed()
+                        && horse.getOwnerUUID() != null
+                        && horse.getOwnerUUID().equals(player.getUUID())) || !horse.isTamed())) {
+                    ret = true;
+                }
+            }
+            case TamableAnimal animal -> {
+                if (!MobImprisonmentToolConfig.onlyOwnerCanCapture || (animal.isTame() && animal.isOwnedBy(player)) || !animal.isTame()) {
+                        ret = true;
+                }
+            }
+            default -> ret = true;
+        }
+        return ret;
+    }
     public boolean isBlacklisted(EntityType<?> entity) {
         return TagUtil.hasTag(BuiltInRegistries.ENTITY_TYPE, entity, IndustrialTags.EntityTypes.MOB_IMPRISONMENT_TOOL_BLACKLIST);
     }
