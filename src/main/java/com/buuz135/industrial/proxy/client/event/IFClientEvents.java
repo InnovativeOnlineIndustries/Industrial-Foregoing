@@ -80,7 +80,7 @@ public class IFClientEvents {
     public void onRenderPre(RenderPlayerEvent.Pre event) {
         // todo: test if rewards are rendering.
         //event.getRenderer().addLayer(new ContributorsCatEarsRender(event.getRenderer()));
-
+        if (Minecraft.getInstance().player == null) return;
         if (event.getEntity().getUUID().equals(Minecraft.getInstance().player.getUUID()) && Minecraft.getInstance().options.getCameraType() == CameraType.FIRST_PERSON)
             return;
         if (event.getEntity().getItemInHand(InteractionHand.MAIN_HAND).getItem().equals(ModuleTool.INFINITY_DRILL))

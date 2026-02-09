@@ -2,6 +2,7 @@
 
 * MobImprisonmentTool: Handle special entity interactions and add owner-only capture config - flutz1
 * Replaced all the toLocaleString calls to toLowerCase(ROOT), closes #1632
+* Added safety check for infinity tool interactions, closes #1623
 
 # Version 3.6.37
 
