@@ -73,6 +73,7 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 import java.util.Optional;
 import java.util.function.Predicate;
 
@@ -500,12 +501,12 @@ public class ConveyorBlock extends BasicTileBlock<ConveyorTile> implements Simpl
 
         @Override
         public String toString() {
-            return super.toString().toLowerCase();
+            return super.toString().toLowerCase(Locale.ROOT);
         }
 
         @Override
         public String getSerializedName() { //getName
-            return this.toString().toLowerCase();
+            return this.toString().toLowerCase(Locale.ROOT);
         }
     }
 
@@ -518,7 +519,7 @@ public class ConveyorBlock extends BasicTileBlock<ConveyorTile> implements Simpl
 
         @Override
         public String getSerializedName() { //getName
-            return this.toString().toLowerCase();
+            return this.toString().toLowerCase(Locale.ROOT);
         }
     }
 

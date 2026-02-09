@@ -14,15 +14,16 @@ import dev.emi.emi.api.stack.EmiStack;
 import dev.emi.emi.api.widget.WidgetHolder;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
+import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
 import org.apache.commons.lang3.tuple.Pair;
-import net.minecraft.network.chat.Component;
 
 import java.awt.*;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 import java.util.UUID;
 
 public class MycelialGeneratorEmiRecipe extends CustomEmiRecipe {
@@ -31,7 +32,7 @@ public class MycelialGeneratorEmiRecipe extends CustomEmiRecipe {
     private final IMycelialGeneratorType type;
 
     public MycelialGeneratorEmiRecipe(IMycelialGeneratorType type, MycelialGeneratorRecipe recipe, EmiRecipeCategory category) {
-        super(ResourceLocation.fromNamespaceAndPath(Reference.MOD_ID, "emi_" + type.getName().toLowerCase() + "_" + UUID.randomUUID().toString()), category,
+        super(ResourceLocation.fromNamespaceAndPath(Reference.MOD_ID, "emi_" + type.getName().toLowerCase(Locale.ROOT) + "_" + UUID.randomUUID().toString()), category,
                 transformRecipe(recipe),
                 fromOutput(EmiStack.EMPTY));
         this.type = type;
