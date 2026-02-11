@@ -85,6 +85,7 @@
   "text.industrialforegoing.tooltip.blacklisted_biomes": "Biomas na Lista Negra",
   "text.industrialforegoing.tooltip.whitelisted_dimensions": "Dimensões na Lista Branca",
   "text.industrialforegoing.tooltip.blacklisted_dimensions": "Dimensões na Lista Negra",
+  "text.industrialforegoing.tooltip.data": "Dados Requeridos",
   "text.industrialforegoing.tooltip.power_optional": "* Energia Opcional",
   "text.industrialforegoing.tooltip.ctrl_left": "(Pressione Ctrl + Clique Esquerdo para mudar)",
   "text.industrialforegoing.tooltip.ctrl_right": "(Pressione Ctrl + Clique Direito para mudar)",
