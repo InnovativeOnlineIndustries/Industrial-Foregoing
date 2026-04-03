@@ -1,3 +1,10 @@
+# Version 3.7.3
+
+### Bug Fixes
+* **Fixed Potion Generator crash**: Added null check for PotionContents to prevent NullPointerException when ticking the Mycelial Potion Generator.
+
+---
+
 # Version 3.7.2
 
 ### Bug Fixes

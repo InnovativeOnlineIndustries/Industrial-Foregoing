@@ -118,6 +118,7 @@ public class PotionGeneratorType implements IMycelialGeneratorType {
         PotionContents potion = stack.get(DataComponents.POTION_CONTENTS);
         int duration = 80;
         int amplifier = 1;
+        if (potion == null) return Pair.of(duration, amplifier * 10);
         for (MobEffectInstance potionEffect : potion.getAllEffects()) {
             duration += potionEffect.getDuration();
             amplifier += potionEffect.getAmplifier();
