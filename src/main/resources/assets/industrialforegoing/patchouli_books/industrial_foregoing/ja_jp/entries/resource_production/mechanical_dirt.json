@@ -1,0 +1,21 @@
+{
+  "name": "メカニカルダート",
+  "icon": "industrialforegoing:mechanical_dirt",
+  "category": "industrialforegoing:resource_production",
+  "sortnum": 1,
+  "read_by_default": true,
+  "pages": [
+    {
+      "type": "text",
+      "text": "未知の技術で満たされたこのブロックは特定の条件が満たされると高速で$(6)Mob$()を生成します。$(br2)まず、操作ごとに$(6)1,000$()FEと$(6)20mb$()の$(6)液状ミート$()が必要です。次に、通常のMobスポーン条件を満たす必要があります(つまり光レベルが$(6)7$()以下でブロックがロードされている必要があります)$(br2)"
+    },
+    {
+      "type": "text",
+      "text": "1つのブロックに$(6)電力$()または$(6)液状ミート$()が供給されると接続されたブロックによって自動的に均等に分割されます。"
+    },
+    {
+      "type": "industrialforegoing:dissolution",
+      "recipe": "industrialforegoing:dissolution_chamber/mechanical_dirt"
+    }
+  ]
+}

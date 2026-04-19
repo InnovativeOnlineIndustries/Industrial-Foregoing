@@ -1,0 +1,17 @@
+{
+  "name": "ミートフィーダー",
+  "icon": "industrialforegoing:meat_feeder",
+  "category": "industrialforegoing:tools",
+  "sortnum": 1,
+  "read_by_default": true,
+  "pages": [
+    {
+      "type": "text",
+      "text": "インベントリ内にある場合ミートフィーダーはツール内に保存されている液状ミートを供給します。"
+    },
+    {
+      "type": "crafting",
+      "recipe": "industrialforegoing:meat_feeder"
+    }
+  ]
+}

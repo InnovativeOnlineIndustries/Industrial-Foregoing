@@ -1,0 +1,17 @@
+{
+  "name": "エンチャント機",
+  "icon": "industrialforegoing:enchantment_factory",
+  "category": "industrialforegoing:misc",
+  "sortnum": 0,
+  "read_by_default": true,
+  "pages": [
+    {
+      "type": "text",
+      "text": "このマシンに大量の$(l:agr_hus/essence)エッセンス$()とアイテムを供給するとアイテムがレベル$(6)30$()でエンチャントされます。"
+    },
+    {
+      "type": "crafting",
+      "recipe": "industrialforegoing:enchantment_factory"
+    }
+  ]
+}

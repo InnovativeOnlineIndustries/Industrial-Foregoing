@@ -1,0 +1,17 @@
+{
+  "name": "下水溝",
+  "icon": "industrialforegoing:sewer",
+  "category": "industrialforegoing:agriculture_husbandry",
+  "sortnum": 12,
+  "read_by_default": true,
+  "pages": [
+    {
+      "type": "text",
+      "text": "動物や経験値から$(l:agr_hus/sewage)下水$()を収集してエッセンスに変換するために使用される機械です。"
+    },
+    {
+      "type": "crafting",
+      "recipe": "industrialforegoing:sewer"
+    }
+  ]
+}

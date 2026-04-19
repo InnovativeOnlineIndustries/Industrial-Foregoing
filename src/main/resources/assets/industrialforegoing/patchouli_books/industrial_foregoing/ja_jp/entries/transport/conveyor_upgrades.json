@@ -1,0 +1,51 @@
+{
+  "name": "コンベアアップグレード",
+  "icon": "industrialforegoing:conveyor_extraction_upgrade",
+  "category": "industrialforegoing:transport",
+  "sortnum": 1,
+  "read_by_default": true,
+  "pages": [
+    {
+      "type": "spotlight",
+      "item": "industrialforegoing:conveyor_extraction_upgrade",
+      "title": "搬出",
+      "text": "インベントリからアイテムと流体を搬出します。プレイヤーのインベントリからアイテムを搬出することもできます。$(br2)搬出する必要があるアイテムと流体はGUIでフィルタリングできます。"
+    },
+    {
+      "type": "spotlight",
+      "item": "industrialforegoing:conveyor_insertion_upgrade",
+      "title": "搬入",
+      "text": "アイテムと流体をインベントリに搬入します。コンベアに触れるアイテムを搬入するか、アップグレードに直接触れるアイテムを搬入するかの2つのモードがあります。$(br2)挿入する必要があるアイテムと流体はGUIでフィルターできます。"
+    },
+    {
+      "type": "spotlight",
+      "item": "industrialforegoing:conveyor_detection_upgrade",
+      "title": "検出",
+      "text": "コンベアの上にあるアイテムとエンティティを検出します。$(br2)検出する必要があるアイテムとエンティティはGUIでフィルタリングできます。エンティティはエンティティを含むMob監禁ツールを使用してフィルタリングできます。"
+    },
+    {
+      "type": "spotlight",
+      "item": "industrialforegoing:conveyor_bouncing_upgrade",
+      "title": "跳躍",
+      "text": "コンベアの上にあるアイテムとエンティティを発射します。垂直方向と水平方向の強度はGUIで変更できます。$(br2)発射する必要があるアイテムとエンティティはGUIでフィルタリングできます。エンティティはエンティティを含むMob監禁ツールを使用してフィルタリングできます。"
+    },
+    {
+      "type": "spotlight",
+      "item": "industrialforegoing:conveyor_dropping_upgrade",
+      "title": "落下",
+      "text": "コンベアの真上にあるアイテムとエンティティをドロップします。$(br2)ドロップする必要があるアイテムとエンティティはGUIでフィルタリングできます。エンティティはエンティティを含むMob監禁ツールを使用してフィルタリングできます。"
+    },
+    {
+      "type": "spotlight",
+      "item": "industrialforegoing:conveyor_blinking_upgrade",
+      "title": "瞬間移動",
+      "text": "コンベアの上にあるアイテムとエンティティをテレポートします。垂直距離と水平距離はGUIで変更できます。$(br2)テレポートする必要があるアイテムとエンティティはGUIでフィルタリングできます。エンティティは、エンティティを含むMob監禁ツールを使用してフィルタリングできます。"
+    },
+    {
+      "type": "spotlight",
+      "item": "industrialforegoing:conveyor_splitting_upgrade",
+      "title": "分割",
+      "text": "コンベアの上にあるアイテムとエンティティをGUIで定義された比率で分割します。分配する必要があるすべての側でアップグレードが必要です。"
+    }
+  ]
+}

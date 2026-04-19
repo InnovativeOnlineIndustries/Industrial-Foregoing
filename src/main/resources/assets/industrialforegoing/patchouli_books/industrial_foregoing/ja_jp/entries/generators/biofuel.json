@@ -1,0 +1,13 @@
+{
+  "name": "バイオ燃料 (入りバケツ)",
+  "icon": "industrialforegoing:biofuel_bucket",
+  "category": "industrialforegoing:generators",
+  "sortnum": 1,
+  "read_by_default": true,
+  "pages": [
+    {
+      "type": "text",
+      "text": "$(l:generators/bioreactor)バイオリアクター$()内の植物、染料、頭蓋骨などの怪しいもので作られた紫色の液体です。$(br2)$(l:generators/biofuel_generator)バイオ燃料発電機$()または$(l:tools/infinity_tools)無限ツール$()に使用されます。"
+    }
+  ]
+}

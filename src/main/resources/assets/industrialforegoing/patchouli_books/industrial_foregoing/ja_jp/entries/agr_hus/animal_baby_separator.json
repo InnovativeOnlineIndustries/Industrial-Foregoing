@@ -1,0 +1,17 @@
+{
+  "name": "仔動物分離機",
+  "icon": "industrialforegoing:animal_baby_separator",
+  "category": "industrialforegoing:agriculture_husbandry",
+  "sortnum": 16,
+  "read_by_default": true,
+  "pages": [
+    {
+      "type": "text",
+      "text": "$(6)子供$()の動物と大人の動物を分離するために使用される機械です。子供の動物は機械の後ろにテレポートされます。移動するMobの種類はGUIで変更できます。"
+    },
+    {
+      "type": "crafting",
+      "recipe": "industrialforegoing:animal_baby_separator"
+    }
+  ]
+}

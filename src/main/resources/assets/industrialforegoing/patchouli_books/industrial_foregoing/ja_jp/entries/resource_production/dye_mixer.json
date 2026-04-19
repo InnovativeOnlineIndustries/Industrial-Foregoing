@@ -1,0 +1,17 @@
+{
+  "name": "染料ミキサー",
+  "icon": "industrialforegoing:dye_mixer",
+  "category": "industrialforegoing:resource_production",
+  "sortnum": 12,
+  "read_by_default": true,
+  "pages": [
+    {
+      "type": "text",
+      "text": "この機械は原色の染料を混ぜて虹の色を作ります。$(br2)例えば要求された$(6)染料$()が白の場合、$(4)赤$(0)、$(2)緑$(0)、$(1)青$(0)のいずれか1つが必要になります。$(br)消費量は$(6)30$()FE/tになります。"
+    },
+    {
+      "type": "crafting",
+      "recipe": "industrialforegoing:dye_mixer"
+    }
+  ]
+}

@@ -1,0 +1,17 @@
+{
+  "name": "流体収集機",
+  "icon": "industrialforegoing:fluid_collector",
+  "category": "industrialforegoing:resource_production",
+  "sortnum": 7,
+  "read_by_default": true,
+  "pages": [
+    {
+      "type": "text",
+      "text": "前方の流体ソースブロックを排出します。$(br2)$(6)1,000$()FEを使用して内部コンテナから流体を配置します。"
+    },
+    {
+      "type": "crafting",
+      "recipe": "industrialforegoing:fluid_collector"
+    }
+  ]
+}

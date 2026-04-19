@@ -1,0 +1,17 @@
+{
+  "name": "Mob粉砕機",
+  "icon": "industrialforegoing:mob_crusher",
+  "category": "industrialforegoing:agriculture_husbandry",
+  "sortnum": 6,
+  "read_by_default": true,
+  "pages": [
+    {
+      "type": "text",
+      "text": "プレイヤーがドロップとエッセンスを生成するのと同じようにMobを$(6)倒す$()ために使用されるマシン。ドロップはMobの戦利品プールから直接作成されます。$(br2)このマシンにはエッセンスを生成する代わりにランダムなレベルの$(6)幸運$()でドロップを生成する代替モードがあります。"
+    },
+    {
+      "type": "crafting",
+      "recipe": "industrialforegoing:mob_crusher"
+    }
+  ]
+}

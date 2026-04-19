@@ -1,0 +1,17 @@
+{
+  "name": "発酵ステーション",
+  "icon": "industrialforegoing:fermentation_station",
+  "category": "industrialforegoing:resource_production",
+  "sortnum": 20,
+  "read_by_default": true,
+  "pages": [
+    {
+      "type": "text",
+      "text": "このマシンは原石ミートを使用して、設定されたレベルに達するとその内容物を密封し、選択した生産タイプを使用してその肉を発酵させます。"
+    },
+    {
+      "type": "crafting",
+      "recipe": "industrialforegoing:fermentation_station"
+    }
+  ]
+}
