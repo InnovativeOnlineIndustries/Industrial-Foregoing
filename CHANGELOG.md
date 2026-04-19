@@ -3,6 +3,7 @@
 * Back port Simulated Hydroponic Bed to 1.20 - NightSparrows
 * Backport japanese translation - twister716
 * Fixed Infinity Nuke explosion calculation not being thread safe, closes #1437
+* Fixed Ore Meat not having the type on IF tanks and having duplicate type in not IF tanks, closes #1424
 
 # Version 3.5.20
 
