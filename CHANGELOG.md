@@ -1,3 +1,8 @@
+# Version 3.5.21
+
+* Back port Simulated Hydroponic Bed to 1.20 - NightSparrows
+* Backport japanese translation - twister716
+
 # Version 3.5.20
 
 * Fixed plant gatherer getting stuck on bamboo #1398
