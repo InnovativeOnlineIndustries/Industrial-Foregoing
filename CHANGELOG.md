@@ -1,7 +1,8 @@
-# Version 3.5.21
+# Version 3.5.22
 
 * Back port Simulated Hydroponic Bed to 1.20 - NightSparrows
 * Backport japanese translation - twister716
+* Fixed Infinity Nuke explosion calculation not being thread safe, closes #1437
 
 # Version 3.5.20
 
