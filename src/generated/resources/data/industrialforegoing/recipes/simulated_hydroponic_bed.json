@@ -1,0 +1,51 @@
+{
+        "type": "forge:conditional",
+        "recipes": [
+                {
+                        "conditions": [
+                                {
+                                        "type": "forge:and",
+                                        "values": [
+                                                {
+                                                        "type": "forge:item_exists",
+                                                        "item": "industrialforegoing:simulated_hydroponic_bed"
+                                                }
+                                        ]
+                                }
+                        ],
+                        "recipe": {
+                                "type": "minecraft:crafting_shaped",
+                                "category": "misc",
+                                "key": {
+                                        "B": {
+                                                "item": "industrialforegoing:fertilizer"
+                                        },
+                                        "D": {
+                                                "item": "industrialforegoing:hydroponic_simulation_processor"
+                                        },
+                                        "G": {
+                                                "tag": "forge:gears/gold"
+                                        },
+                                        "M": {
+                                                "tag": "industrialforegoing:machine_frame/simple"
+                                        },
+                                        "P": {
+                                                "tag": "forge:plastic"
+                                        },
+                                        "S": {
+                                                "item": "minecraft:iron_hoe"
+                                        }
+                                },
+                                "pattern": [
+                                        "PDP",
+                                        "SBS",
+                                        "GMG"
+                                ],
+                                "result": {
+                                        "item": "industrialforegoing:simulated_hydroponic_bed"
+                                },
+                                "show_notification": true
+                        }
+                }
+        ]
+}

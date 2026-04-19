@@ -1,0 +1,48 @@
+{
+  "type": "forge:conditional",
+  "recipes": [
+    {
+      "conditions": [
+        {
+          "type": "forge:and",
+          "values": [
+            {
+              "type": "forge:item_exists",
+              "item": "industrialforegoing:hydroponic_simulation_processor"
+            }
+          ]
+        }
+      ],
+      "recipe": {
+        "type": "minecraft:crafting_shaped",
+        "category": "misc",
+        "key": {
+          "C":{
+            "item": "minecraft:comparator"
+          },
+          "D": {
+            "item": "minecraft:observer"
+          },
+          "G":{
+            "tag": "forge:gears/diamond"
+          },
+          "P": {
+            "tag": "forge:plastic"
+          },
+          "R": {
+            "item": "minecraft:repeater"
+          }
+        },
+        "pattern": [
+          "PCP",
+          "DRD",
+          "PGP"
+        ],
+        "result": {
+          "item": "industrialforegoing:hydroponic_simulation_processor"
+        },
+        "show_notification": true
+      }
+    }
+  ]
+}
