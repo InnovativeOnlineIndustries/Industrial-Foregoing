@@ -1,0 +1,18 @@
+{
+  "name": "流体抽出機",
+  "icon": "industrialforegoing:fluid_extractor",
+  "category": "industrialforegoing:basics",
+  "sortnum": 0,
+  "read_by_default": true,
+  "pages": [
+    {
+      "type": "text",
+      "text": "流体抽出機はマシンの前に置かれた木材から$(l:basics/latex)ラテックス$()を抽出します。複数の抽出機を使用して同時に同じ原木から抽出することができます。$(br2)マシンは原木の消費を開始し消費されると原木から樹皮を取り除き樹皮を剥いだ原木に置き換えます。皮を樹皮剥いだ原木が消費されるとそれは消えます。"
+    },
+    {
+      "type": "crafting",
+      "recipe": "industrialforegoing:fluid_extractor",
+      "text": "$(br2)$(6)それぞれの原木から生成されるラテックス量は異なります。割合についてはJEIを確認してください。$(6)電源オプション: 電源を供給するとマシンの動作が速くなります"
+    }
+  ]
+}

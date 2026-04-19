@@ -1,0 +1,17 @@
+{
+  "name": "哀れな発電機",
+  "icon": "industrialforegoing:pitiful_generator",
+  "category": "industrialforegoing:generators",
+  "sortnum": 0,
+  "read_by_default": true,
+  "pages": [
+    {
+      "type": "text",
+      "text": "石炭などの可燃性燃料を消費する非常に非効率的な発電機です。$(br2)非常に非効率なのでマシンのエネルギーバッファーがいっぱいになると燃料を消費し続けます。"
+    },
+    {
+      "type": "crafting",
+      "recipe": "industrialforegoing:pitiful_generator"
+    }
+  ]
+}

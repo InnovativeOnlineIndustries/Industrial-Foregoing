@@ -1,0 +1,17 @@
+{
+  "name": "無限ランチャー",
+  "icon": "industrialforegoing:infinity_launcher",
+  "category": "industrialforegoing:tools",
+  "sortnum": 3,
+  "read_by_default": true,
+  "pages": [
+    {
+      "type": "text",
+      "text": "無限ランチャーはMob監禁ツールから一定距離のエンティティを捕獲または解放できるツールです。GUIでモードを選択してランチャーを起動すると、インベントリ内のMob監禁ツールを使用してMobを解放または捕獲できるようになります。"
+    },
+    {
+      "type": "industrialforegoing:dissolution",
+      "recipe": "industrialforegoing:dissolution_chamber/infinity_launcher"
+    }
+  ]
+}

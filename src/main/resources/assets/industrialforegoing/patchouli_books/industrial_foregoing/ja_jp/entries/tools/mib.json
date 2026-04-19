@@ -1,0 +1,17 @@
+{
+  "name": "Mob監禁ツール",
+  "icon": "industrialforegoing:mob_imprisonment_tool",
+  "category": "industrialforegoing:tools",
+  "sortnum": 0,
+  "read_by_default": true,
+  "pages": [
+    {
+      "type": "text",
+      "text": "監禁ツールを手に持った状態でエンティティを$(6)右クリック$()するとそのエンティティは監禁ツール内に格納されます。$(br2)地面にエンティティを置いた状態で$(6)右クリック$()するとエンティティを解放できます。"
+    },
+    {
+      "type": "crafting",
+      "recipe": "industrialforegoing:mob_imprisonment_tool"
+    }
+  ]
+}

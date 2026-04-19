@@ -1,0 +1,17 @@
+{
+  "name": "石材加工機",
+  "icon": "industrialforegoing:material_stonework_factory",
+  "category": "industrialforegoing:resource_production",
+  "sortnum": 0,
+  "read_by_default": true,
+  "pages": [
+    {
+      "type": "text",
+      "text": "次世代の$(6)丸石$()製造機です。$(br2)$(6)60$()FE/tに$(6)水$()と$(6)溶岩$()両方を供給すると、特定の材料を作成するように指示できます。$(br)これらの材料はアクションによってさらに操作できます:$(br)$(li)製錬$(br)$(li)粉砕$(br)$(li)クラフト"
+    },
+    {
+      "type": "crafting",
+      "recipe": "industrialforegoing:material_stonework_factory"
+    }
+  ]
+}

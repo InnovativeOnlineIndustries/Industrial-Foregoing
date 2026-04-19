@@ -1,0 +1,17 @@
+{
+  "name": "動物給餌機",
+  "icon": "industrialforegoing:animal_feeder",
+  "category": "industrialforegoing:agriculture_husbandry",
+  "sortnum": 8,
+  "read_by_default": true,
+  "pages": [
+    {
+      "type": "text",
+      "text": "動物に$(6)餌を与える$()ために使用される機械で、機械に動物用の餌が供給されると子供が生まれます。"
+    },
+    {
+      "type": "crafting",
+      "recipe": "industrialforegoing:animal_feeder"
+    }
+  ]
+}

@@ -1,0 +1,21 @@
+{
+  "name": "Mob複製機",
+  "icon": "industrialforegoing:mob_duplicator",
+  "category": "industrialforegoing:agriculture_husbandry",
+  "read_by_default": true,
+  "pages": [
+    {
+      "type": "text",
+      "text": "Mobをスポーンさせるためのマシンです。電源、$(l:agr_hus/essence)エッセンス$()、および$(l:tools/mib)Mob監禁ツール$()にいる任意のエンティティが提供されると周囲にMobがスポーンします。$(br2)近くにあるエンティティをカウントして数が多すぎる場合は停止します。"
+    },
+    {
+      "type": "crafting",
+      "recipe": "industrialforegoing:mob_duplicator"
+    }
+  ,
+    {
+      "type": "crafting",
+      "recipe": "industrialforegoing:mob_imprisonment_tool"
+    }
+  ]
+}
