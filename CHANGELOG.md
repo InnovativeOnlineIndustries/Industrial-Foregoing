@@ -1,3 +1,14 @@
+# Version 3.5.22
+
+* Back port Simulated Hydroponic Bed to 1.20 - NightSparrows
+* Backport japanese translation - twister716
+* Fixed Infinity Nuke explosion calculation not being thread safe, closes #1437
+* Fixed Ore Meat not having the type on IF tanks and having duplicate type in not IF tanks, closes #1424
+
+# Version 3.5.20
+
+* Fixed plant gatherer getting stuck on bamboo #1398
+
 # Version 3.5.19
 
 * Fixed Machine Settings Copier not working properly in some machines

@@ -1,0 +1,21 @@
+{
+  "name": "菌糸リアクター",
+  "icon": "industrialforegoing:mycelial_reactor",
+  "category": "industrialforegoing:generators",
+  "sortnum": 2,
+  "read_by_default": true,
+  "pages": [
+    {
+      "type": "text",
+      "text": "このリアクターは$(6)菌糸体ネットワーク$()(菌糸体と呼ばれる菌類の生きた栄養塊を含むサブスペース領域)を使用して他の$(6)菌糸体発電機$()を検出し、大量のFEを生成することができます。$(br2)これを実現するには各発電機のインスタンスが同時に動作している必要があります。"
+    },
+    {
+      "type": "text",
+      "text": "将来このネットワークを利用して新しい技術が発見されるかもしれません。"
+    },
+    {
+      "type": "industrialforegoing:dissolution",
+      "recipe": "industrialforegoing:dissolution_chamber/mycelial_reactor"
+    }
+  ]
+}

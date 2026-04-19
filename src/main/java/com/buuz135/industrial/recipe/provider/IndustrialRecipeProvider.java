@@ -1,7 +1,7 @@
 /*
  * This file is part of Industrial Foregoing.
  *
- * Copyright 2021, Buuz135
+ * Copyright 2026, Buuz135
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy of
  * this software and associated documentation files (the "Software"), to deal in the
@@ -19,11 +19,11 @@
  * FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE,
  * ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
-
 package com.buuz135.industrial.recipe.provider;
 
 import com.buuz135.industrial.api.conveyor.ConveyorUpgradeFactory;
 import com.buuz135.industrial.api.transporter.TransporterTypeFactory;
+import com.buuz135.industrial.module.ModuleAgricultureHusbandry;
 import com.buuz135.industrial.module.ModuleCore;
 import com.buuz135.industrial.module.ModuleTool;
 import com.buuz135.industrial.utils.Reference;
@@ -110,6 +110,7 @@ public class IndustrialRecipeProvider extends TitaniumRecipeProvider {
                 .pattern(" P ").pattern("P P").pattern(" P ")
                 .define('P', Items.DIAMOND)
                 .save(consumer);
+        ((IRecipeProvider) ModuleAgricultureHusbandry.HYDROPONIC_SIMULATION_PROCESSOR.get()).registerRecipe(consumer);
         for (RegistryObject<Item> laserLen : ModuleCore.LASER_LENS) {
             ((IRecipeProvider) laserLen.get()).registerRecipe(consumer);
         }

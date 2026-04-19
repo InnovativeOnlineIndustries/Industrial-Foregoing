@@ -1,0 +1,17 @@
+{
+  "name": "Mob屠殺機",
+  "icon": "industrialforegoing:mob_slaughter_factory",
+  "category": "industrialforegoing:agriculture_husbandry",
+  "sortnum": 9,
+  "read_by_default": true,
+  "pages": [
+    {
+      "type": "text",
+      "text": "Mobや動物を$(l:agr_hus/meat)液状肉$()や$(l:agr_hus/pink_slime)ピンクスライム$()に加工するために使用される機械です。この機械で殺されたMobはドロップや経験値を生成しません。$(br2)中立Mobは非中立Mobよりも多くピンクスライムを生成します。"
+    },
+    {
+      "type": "crafting",
+      "recipe": "industrialforegoing:mob_slaughter_factory"
+    }
+  ]
+}

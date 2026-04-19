@@ -1,0 +1,17 @@
+{
+  "name": "流体ふるい分け機",
+  "icon": "industrialforegoing:fluid_sieving_machine",
+  "category": "industrialforegoing:resource_production",
+  "sortnum": 21,
+  "read_by_default": true,
+  "pages": [
+    {
+      "type": "text",
+      "text": "この機械は発酵した鉱石ミートと砂を使用して、その肉を最初に生成された鉱石の粉に変えます。"
+    },
+    {
+      "type": "crafting",
+      "recipe": "industrialforegoing:fluid_sieving_machine"
+    }
+  ]
+}

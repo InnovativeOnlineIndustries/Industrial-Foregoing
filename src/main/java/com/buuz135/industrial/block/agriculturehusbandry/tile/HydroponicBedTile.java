@@ -1,9 +1,31 @@
+/*
+ * This file is part of Industrial Foregoing.
+ *
+ * Copyright 2026, Buuz135
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy of
+ * this software and associated documentation files (the "Software"), to deal in the
+ * Software without restriction, including without limitation the rights to use, copy,
+ * modify, merge, publish, distribute, sublicense, and/or sell copies of the Software,
+ * and to permit persons to whom the Software is furnished to do so, subject to the
+ * following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in all copies
+ * or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED,
+ * INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR
+ * PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE
+ * FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE,
+ * ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+ */
 package com.buuz135.industrial.block.agriculturehusbandry.tile;
 
 import com.buuz135.industrial.api.plant.PlantRecollectable;
 import com.buuz135.industrial.block.tile.IndustrialAreaWorkingTile;
 import com.buuz135.industrial.block.tile.IndustrialWorkingTile;
 import com.buuz135.industrial.config.machine.resourceproduction.HydroponicBedConfig;
+import com.buuz135.industrial.item.HydroponicSimulationProcessorItem;
 import com.buuz135.industrial.module.ModuleAgricultureHusbandry;
 import com.buuz135.industrial.module.ModuleCore;
 import com.buuz135.industrial.registry.IFRegistries;
@@ -16,6 +38,7 @@ import com.hrznstudio.titanium.component.inventory.SidedInventoryComponent;
 import com.hrznstudio.titanium.component.progress.ProgressBarComponent;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.DyeColor;
@@ -48,6 +71,8 @@ public class HydroponicBedTile extends IndustrialWorkingTile<HydroponicBedTile> 
     private ProgressBarComponent<HydroponicBedTile> etherBuffer;
     @Save
     private SidedInventoryComponent<HydroponicBedTile> output;
+    @Save
+    private SidedInventoryComponent<HydroponicBedTile> simulation_slot;
 
     public HydroponicBedTile(BlockPos blockPos, BlockState blockState) {
         super(ModuleAgricultureHusbandry.HYDROPONIC_BED, HydroponicBedConfig.powerPerOperation, blockPos, blockState);
@@ -71,6 +96,11 @@ public class HydroponicBedTile extends IndustrialWorkingTile<HydroponicBedTile> 
                 .setColor(DyeColor.ORANGE)
                 .setRange(5, 3)
                 .setInputFilter((stack, integer) -> false)
+        );
+        addInventory(this.simulation_slot = (SidedInventoryComponent<HydroponicBedTile>) new SidedInventoryComponent<HydroponicBedTile>("simulation", 70 + 18 * 2, 80, 1, 3)
+                .setColor(DyeColor.LIME)
+                .setInputFilter((stack, integer) -> stack.getItem().equals(ModuleAgricultureHusbandry.HYDROPONIC_SIMULATION_PROCESSOR.get()))
+                .setOutputFilter((stack, integer) -> false)
         );
     }
 
@@ -101,11 +131,11 @@ public class HydroponicBedTile extends IndustrialWorkingTile<HydroponicBedTile> 
                         this.water.drainForced(10, IFluidHandler.FluidAction.EXECUTE);
                         return new WorkAction(1, HydroponicBedConfig.powerPerOperation);
                     } else if (this.etherBuffer.getProgress() > 0) {
-                        tryToHarvestAndReplant(this.level, up, state, this.output, this.etherBuffer, this);
+                        tryToHarvestAndReplant(this.level, up, state, this.output, this.etherBuffer, this, this.simulation_slot.getStackInSlot(0));
                         return new WorkAction(1, HydroponicBedConfig.powerPerOperation);
                     }
                 } else {
-                    if (!tryToHarvestAndReplant(this.level, up, state, this.output, this.etherBuffer, this)) {
+                    if (!tryToHarvestAndReplant(this.level, up, state, this.output, this.etherBuffer, this, this.simulation_slot.getStackInSlot(0))) {
                         if (this.etherBuffer.getProgress() > 0) {
                             for (int i = 0; i < 10; i++) {
                                 this.level.getBlockState(up).randomTick((ServerLevel) this.level, up, this.level.random);
@@ -168,7 +198,7 @@ public class HydroponicBedTile extends IndustrialWorkingTile<HydroponicBedTile> 
         return ether;
     }
 
-    public static boolean tryToHarvestAndReplant(Level level, BlockPos up, BlockState state, IItemHandler output, ProgressBarComponent<?> etherBuffer, IndustrialWorkingTile tile) {
+    public static boolean tryToHarvestAndReplant(Level level, BlockPos up, BlockState state, IItemHandler output, ProgressBarComponent<?> etherBuffer, IndustrialWorkingTile tile, ItemStack simulationOutput) {
         Optional<PlantRecollectable> optional = IFRegistries.PLANT_RECOLLECTABLES_REGISTRY.get().getValues().stream().filter(plantRecollectable -> plantRecollectable.canBeHarvested(level, up, state)).findFirst();
         if (optional.isPresent()) {
             List<ItemStack> drops = new ArrayList<>();
@@ -179,19 +209,30 @@ public class HydroponicBedTile extends IndustrialWorkingTile<HydroponicBedTile> 
             } else {
                 drops.addAll(optional.get().doHarvestOperation(level, up, state));
             }
+            var planted = ItemStack.EMPTY;
             if (level.isEmptyBlock(up)) {
                 for (ItemStack drop : drops) {
                     if (drop.getItem() instanceof IPlantable) {
+                        planted = drop.copyWithCount(1);
                         level.setBlockAndUpdate(up, ((IPlantable) drop.getItem()).getPlant(level, up));
                         drop.shrink(1);
                         break;
                     } else if (drop.getItem() instanceof BlockItem && ((BlockItem) drop.getItem()).getBlock() instanceof IPlantable) {
+                        planted = drop.copyWithCount(1);
                         level.setBlockAndUpdate(up, ((IPlantable) ((BlockItem) drop.getItem()).getBlock()).getPlant(level, up));
                         drop.shrink(1);
                         break;
                     }
                 }
             }
+            if (!simulationOutput.isEmpty() && simulationOutput.getItem() instanceof HydroponicSimulationProcessorItem)
+            {
+                CompoundTag rootTag = simulationOutput.getOrCreateTag();
+                var sim = new HydroponicSimulationProcessorItem.Simulation(rootTag.getCompound(HydroponicSimulationProcessorItem.ITEM_NAME));
+                sim.acceptExecution(planted, drops);
+                rootTag.put(HydroponicSimulationProcessorItem.ITEM_NAME, sim.toNBT());
+            }
+
             drops.forEach(stack -> ItemHandlerHelper.insertItem(output, stack, false));
             if (tile instanceof IndustrialAreaWorkingTile<?> && optional.get().shouldCheckNextPlant(level, up, level.getBlockState(up))) {
                 ((IndustrialAreaWorkingTile<?>) tile).increasePointer();

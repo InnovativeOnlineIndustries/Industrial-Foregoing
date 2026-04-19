@@ -1,0 +1,17 @@
+{
+  "name": "胞子再生装置",
+  "icon": "industrialforegoing:spores_recreator",
+  "category": "industrialforegoing:resource_production",
+  "sortnum": 8,
+  "read_by_default": true,
+  "pages": [
+    {
+      "type": "text",
+      "text": "$(6)菌類$()を複製します。$(br2)$(6)40$()FE/tと$(6)水$()(1回の作業につき$(6)100$()mb)が必要です。$(br2)ネザー菌類の場合は$(6)溶岩$()が必要です。"
+    },
+    {
+      "type": "crafting",
+      "recipe": "industrialforegoing:spores_recreator"
+    }
+  ]
+}
