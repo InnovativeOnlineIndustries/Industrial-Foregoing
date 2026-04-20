@@ -201,7 +201,7 @@
   "text.industrialforegoing.book.wither_builder": "Quando fornecida energia, {3} Crânios de Esqueleto Wither e {4} areia de almas, construirá completamente a estrutura de invocação do Wither na área de trabalho.",
   "text.industrialforegoing.book.accepted_items": "Itens aceitos:",
   "text.industrialforegoing.book.produced_items": "Itens produzidos:",
-  "text.industrialforegoing.book.welcome_manual": "Bem-vindo ao Manual do Industrial Foregoing!@L@@L@Para começar, você precisa colocar um Extrator de Fluido de Árvore em frente a uma tora para coletar Látex e bombeá-lo para uma Unidade de Processamento de Látex com um pouco de água para obter Borracha Minúscula. @L@@L@{NOTA: As máquinas não ejetam nem puxam itens automaticamente! As máquinas aceitam energia RF, FE, Tesla e Mek.}",
+  "text.industrialforegoing.book.welcome_manual": "Bem-vindo ao Manual do Industrial Foregoing!@L@@L@Para começar, você precisa colocar um Extrator de Fluido de Árvore em frente a um tronco para coletar Látex e bombeá-lo para uma Unidade de Processamento de Látex com um pouco de água para obter Borracha Minúscula. @L@@L@{NOTA: As máquinas não ejetam nem puxam itens automaticamente! As máquinas aceitam energia RF, FE, Tesla e Mek.}",
   "text.industrialforegoing.book.mob_imprisonment_tool": "Ao clicar com o botão direito em uma entidade com o item na mão, {prenderá} a entidade dentro dele.",
   "text.industrialforegoing.book.meat_feeder": "Quando o Alimentador de Carne estiver em seu {inventário} e tiver um pouco de {Carne Líquida}, ele irá te {alimentar} automaticamente.@L@@L@Funciona como um recipiente de fluido normal.",
   "text.industrialforegoing.book.range_addon": "Aumentará o {alcance} de trabalho de algumas máquinas. Nem todas as máquinas os aceitarão.",
