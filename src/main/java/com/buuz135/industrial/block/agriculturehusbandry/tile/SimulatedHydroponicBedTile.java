@@ -78,7 +78,7 @@ public class SimulatedHydroponicBedTile extends IndustrialWorkingTile<SimulatedH
         {
             ItemStack simulationProcessor = this.simulation_slot.getStackInSlot(0);
             ItemStack seed = this.seed.getStackInSlot(0);
-            if (!seed.isEmpty() && !simulationProcessor.isEmpty() && simulationProcessor.getItem() instanceof HydroponicSimulationProcessorItem)
+            if (!seed.isEmpty() && !simulationProcessor.isEmpty() && simulationProcessor.getItem() instanceof HydroponicSimulationProcessorItem && simulationProcessor.hasTag())
             {
                 if (this.simulation == null)
                 {
