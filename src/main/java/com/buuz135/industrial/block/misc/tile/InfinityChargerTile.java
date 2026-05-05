@@ -25,6 +25,7 @@ import com.buuz135.industrial.block.tile.IndustrialMachineTile;
 import com.buuz135.industrial.item.infinity.InfinityEnergyStorage;
 import com.buuz135.industrial.module.ModuleMisc;
 import com.hrznstudio.titanium.annotation.Save;
+import com.hrznstudio.titanium.block.redstone.RedstoneAction;
 import com.hrznstudio.titanium.component.energy.EnergyStorageComponent;
 import com.hrznstudio.titanium.component.inventory.SidedInventoryComponent;
 import net.minecraft.core.BlockPos;
@@ -49,22 +50,23 @@ public class InfinityChargerTile extends IndustrialMachineTile<InfinityChargerTi
 
     @Override
     public void serverTick(Level level, BlockPos pos, BlockState state, InfinityChargerTile blockEntity) {
-        if (!chargingSlot.getStackInSlot(0).isEmpty() && this.getRedstoneManager().getAction().canRun(this.getEnvironmentValue(false, null)) && this.getRedstoneManager().shouldWork()) {
-            var iEnergyStorage = chargingSlot.getStackInSlot(0).getCapability(Capabilities.EnergyStorage.ITEM);
-            if (iEnergyStorage != null && this.getEnergyStorage() instanceof InfinityEnergyStorage) {
-                if (iEnergyStorage instanceof InfinityEnergyStorage) {
-                    long added = Math.min(Long.MAX_VALUE - ((InfinityEnergyStorage) iEnergyStorage).getLongEnergyStored(), Math.min(((InfinityEnergyStorage<InfinityChargerTile>) this.getEnergyStorage()).getLongCapacity(), ((InfinityEnergyStorage<InfinityChargerTile>) this.getEnergyStorage()).getLongEnergyStored()));
-                    ((InfinityEnergyStorage) iEnergyStorage).setEnergyStored(((InfinityEnergyStorage) iEnergyStorage).getLongEnergyStored() + added);
-                    ((InfinityEnergyStorage<InfinityChargerTile>) this.getEnergyStorage()).setEnergyStored(((InfinityEnergyStorage<InfinityChargerTile>) this.getEnergyStorage()).getLongEnergyStored() - added);
-                    markForUpdate();
-                } else {
-                    int extracted = this.getEnergyStorage().getEnergyStored();
-                    ((InfinityEnergyStorage<InfinityChargerTile>) this.getEnergyStorage()).setEnergyStored(((InfinityEnergyStorage<InfinityChargerTile>) this.getEnergyStorage()).getLongEnergyStored() - iEnergyStorage.receiveEnergy(extracted, false));
-                    markForUpdate();
+        if (!chargingSlot.getStackInSlot(0).isEmpty())
+            if (this.getRedstoneManager().getAction() == RedstoneAction.IGNORE || (this.getRedstoneManager().getAction().canRun(this.getEnvironmentValue(false, null)) && this.getRedstoneManager().shouldWork())) {
+                var iEnergyStorage = chargingSlot.getStackInSlot(0).getCapability(Capabilities.EnergyStorage.ITEM);
+                if (iEnergyStorage != null && this.getEnergyStorage() instanceof InfinityEnergyStorage) {
+                    if (iEnergyStorage instanceof InfinityEnergyStorage) {
+                        long added = Math.min(Long.MAX_VALUE - ((InfinityEnergyStorage) iEnergyStorage).getLongEnergyStored(), Math.min(((InfinityEnergyStorage<InfinityChargerTile>) this.getEnergyStorage()).getLongCapacity(), ((InfinityEnergyStorage<InfinityChargerTile>) this.getEnergyStorage()).getLongEnergyStored()));
+                        ((InfinityEnergyStorage) iEnergyStorage).setEnergyStored(((InfinityEnergyStorage) iEnergyStorage).getLongEnergyStored() + added);
+                        ((InfinityEnergyStorage<InfinityChargerTile>) this.getEnergyStorage()).setEnergyStored(((InfinityEnergyStorage<InfinityChargerTile>) this.getEnergyStorage()).getLongEnergyStored() - added);
+                        markForUpdate();
+                    } else {
+                        int extracted = this.getEnergyStorage().getEnergyStored();
+                        ((InfinityEnergyStorage<InfinityChargerTile>) this.getEnergyStorage()).setEnergyStored(((InfinityEnergyStorage<InfinityChargerTile>) this.getEnergyStorage()).getLongEnergyStored() - iEnergyStorage.receiveEnergy(extracted, false));
+                        markForUpdate();
+                    }
                 }
+                this.getRedstoneManager().finish();
             }
-            this.getRedstoneManager().finish();
-        }
     }
 
     @Override

@@ -28,6 +28,7 @@ import com.hrznstudio.titanium.annotation.Save;
 import com.hrznstudio.titanium.api.IFactory;
 import com.hrznstudio.titanium.api.augment.AugmentTypes;
 import com.hrznstudio.titanium.api.client.IScreenAddon;
+import com.hrznstudio.titanium.block.redstone.RedstoneAction;
 import com.hrznstudio.titanium.client.screen.addon.ProgressBarScreenAddon;
 import com.hrznstudio.titanium.client.screen.asset.IAssetProvider;
 import com.hrznstudio.titanium.component.progress.ProgressBarComponent;
@@ -99,7 +100,7 @@ public abstract class IndustrialWorkingTile<T extends IndustrialWorkingTile<T>> 
                     workingBar.setProgressIncrease(this.hasAugmentInstalled(AugmentTypes.SPEED) ? (int) AugmentWrapper.getType(this.getInstalledAugments(AugmentTypes.SPEED).get(0), AugmentTypes.SPEED) : 1);
                 })
                 .setCanReset(tileEntity -> true)
-                .setCanIncrease(tileEntity -> this.getRedstoneManager().getAction().canRun(tileEntity.getEnvironmentValue(false, null)) && this.getRedstoneManager().shouldWork())
+                .setCanIncrease(tileEntity -> this.getRedstoneManager().getAction() == RedstoneAction.IGNORE || (this.getRedstoneManager().getAction().canRun(tileEntity.getEnvironmentValue(false, null)) && this.getRedstoneManager().shouldWork()))
                 .setColor(DyeColor.LIME));
     }
 

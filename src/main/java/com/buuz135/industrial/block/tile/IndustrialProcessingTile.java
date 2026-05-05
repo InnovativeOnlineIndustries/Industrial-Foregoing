@@ -27,6 +27,7 @@ import com.hrznstudio.titanium.annotation.Save;
 import com.hrznstudio.titanium.api.IFactory;
 import com.hrznstudio.titanium.api.augment.AugmentTypes;
 import com.hrznstudio.titanium.api.client.IScreenAddon;
+import com.hrznstudio.titanium.block.redstone.RedstoneAction;
 import com.hrznstudio.titanium.client.screen.addon.ProgressBarScreenAddon;
 import com.hrznstudio.titanium.component.progress.ProgressBarComponent;
 import com.hrznstudio.titanium.item.AugmentWrapper;
@@ -80,7 +81,7 @@ public abstract class IndustrialProcessingTile<T extends IndustrialProcessingTil
                             int maxProgress = (int) Math.floor(getMaxProgress() * (this.hasAugmentInstalled(AugmentTypes.EFFICIENCY) ? AugmentWrapper.getType(this.getInstalledAugments(AugmentTypes.EFFICIENCY).get(0), AugmentTypes.EFFICIENCY) : 1));
                             progressBar.setMaxProgress(maxProgress);
                         }).
-                        setCanIncrease(tileEntity -> getEnergyStorage().getEnergyStored() >= getTickPower() && canIncrease() && this.getRedstoneManager().getAction().canRun(tileEntity.getEnvironmentValue(false, null)) && this.getRedstoneManager().shouldWork()).
+                        setCanIncrease(tileEntity -> getEnergyStorage().getEnergyStored() >= getTickPower() && canIncrease() && (this.getRedstoneManager().getAction() == RedstoneAction.IGNORE || (this.getRedstoneManager().getAction().canRun(tileEntity.getEnvironmentValue(false, null)) && this.getRedstoneManager().shouldWork()))).
                         setOnTickWork(() -> {
                             getEnergyStorage().extractEnergy(getTickPower(), false);
                             progressBar.setProgressIncrease(this.hasAugmentInstalled(AugmentTypes.SPEED) ? (int) AugmentWrapper.getType(this.getInstalledAugments(AugmentTypes.SPEED).get(0), AugmentTypes.SPEED) : 1);
