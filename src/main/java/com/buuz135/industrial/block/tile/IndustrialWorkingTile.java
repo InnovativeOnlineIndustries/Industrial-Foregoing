@@ -99,7 +99,7 @@ public abstract class IndustrialWorkingTile<T extends IndustrialWorkingTile<T>> 
                     workingBar.setProgressIncrease(this.hasAugmentInstalled(AugmentTypes.SPEED) ? (int) AugmentWrapper.getType(this.getInstalledAugments(AugmentTypes.SPEED).get(0), AugmentTypes.SPEED) : 1);
                 })
                 .setCanReset(tileEntity -> true)
-                .setCanIncrease(tileEntity -> this.getRedstoneManager().getAction().canRun(tileEntity.getEnvironmentValue(false, null)) && this.getRedstoneManager().shouldWork())
+                .setCanIncrease(IndustrialMachineTile::shouldWork)
                 .setColor(DyeColor.LIME));
     }
 

@@ -143,6 +143,20 @@ public abstract class IndustrialMachineTile<T extends IndustrialMachineTile<T>> 
         redstoneManager.setLastRedstoneState(this.getEnvironmentValue(false, null).isReceivingRedstone());
     }
 
+    public boolean shouldWork() {
+        var redstone = this.getRedstoneManager();
+        var action = redstone.getAction();
+
+        // Specialized impls for known actions to avoid having to call getEnvironmentValue every tick
+        return switch (action) {
+            case IGNORE -> true;
+            case ONCE -> redstone.shouldWork();
+            case WITH_REDSTONE -> redstone.getLastRedstoneState();
+            case NO_REDSTONE -> !redstone.getLastRedstoneState();
+            default -> redstone.shouldWork() && action.canRun(this.getEnvironmentValue(false, null));
+        };
+    }
+
     @Override
     public IAssetProvider getAssetProvider() {
         return IndustrialAssetProvider.INSTANCE;
