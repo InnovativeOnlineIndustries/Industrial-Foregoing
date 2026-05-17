@@ -49,7 +49,7 @@ public class InfinityChargerTile extends IndustrialMachineTile<InfinityChargerTi
 
     @Override
     public void serverTick(Level level, BlockPos pos, BlockState state, InfinityChargerTile blockEntity) {
-        if (!chargingSlot.getStackInSlot(0).isEmpty() && this.getRedstoneManager().getAction().canRun(this.getEnvironmentValue(false, null)) && this.getRedstoneManager().shouldWork()) {
+        if (!chargingSlot.getStackInSlot(0).isEmpty() && this.shouldWork()) {
             var iEnergyStorage = chargingSlot.getStackInSlot(0).getCapability(Capabilities.EnergyStorage.ITEM);
             if (iEnergyStorage != null && this.getEnergyStorage() instanceof InfinityEnergyStorage) {
                 if (iEnergyStorage instanceof InfinityEnergyStorage) {
