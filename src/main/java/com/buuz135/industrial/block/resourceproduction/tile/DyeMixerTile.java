@@ -58,7 +58,7 @@ import java.util.Locale;
 
 public class DyeMixerTile extends IndustrialProcessingTile<DyeMixerTile> {
 
-    private static ColorUsage[] colorUsages = {new ColorUsage(1, 1, 1), //0
+    public static final ColorUsage[] colorUsages = {new ColorUsage(1, 1, 1), //0
             new ColorUsage(1, 1, 1),//1
             new ColorUsage(1, 0, 1),//2
             new ColorUsage(0, 0, 1),//3
@@ -256,28 +256,5 @@ public class DyeMixerTile extends IndustrialProcessingTile<DyeMixerTile> {
         super.saveSettings(player, tag);
     }
 
-    private static class ColorUsage {
-
-        private int r;
-        private int g;
-        private int b;
-
-        public ColorUsage(int r, int g, int b) {
-            this.r = r;
-            this.g = g;
-            this.b = b;
-        }
-
-        public int getR() {
-            return r;
-        }
-
-        public int getG() {
-            return g;
-        }
-
-        public int getB() {
-            return b;
-        }
-    }
+    public record ColorUsage(int r, int g, int b) {}
 }
