@@ -23,7 +23,6 @@
 package com.buuz135.industrial.plugin.jei.category;
 
 import com.buuz135.industrial.block.resourceproduction.tile.DyeMixerTile;
-import com.buuz135.industrial.config.machine.core.LatexProcessingUnitConfig;
 import com.buuz135.industrial.config.machine.resourceproduction.DyeMixerConfig;
 import com.buuz135.industrial.module.ModuleResourceProduction;
 import com.buuz135.industrial.utils.Reference;
@@ -50,6 +49,7 @@ import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.DyeColor;
 import net.minecraft.world.item.DyeItem;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import org.apache.commons.lang3.tuple.Pair;
 
@@ -59,15 +59,17 @@ import java.util.List;
 import java.util.Locale;
 
 public class DyeMixerCategory implements IRecipeCategory<DyeMixerCategory.Recipe> {
-    public record Recipe(int red, int green, int blue, int dye) {}
+    public record Recipe(int red, int green, int blue, int dye) {
+        public Item dyeItem() {
+            return DyeItem.byColor(DyeColor.byId(this.dye));
+        }
+    }
     public static final RecipeType<Recipe> RECIPE_TYPE = RecipeType.create(Reference.MOD_ID, "dummy/dye_mixer", Recipe.class);
 
     private final IGuiHelper helper;
-    private final IDrawable bigTank;
 
     public DyeMixerCategory(IGuiHelper helper) {
         this.helper = helper;
-        this.bigTank = helper.createDrawable(DefaultAssetProvider.DEFAULT_LOCATION, 177 + 3, 1 + 3, 12, 50);
     }
 
     @Override
@@ -92,7 +94,7 @@ public class DyeMixerCategory implements IRecipeCategory<DyeMixerCategory.Recipe
 
     @Override
     public void setRecipe(IRecipeLayoutBuilder builder, Recipe recipe, IFocusGroup focuses) {
-        ItemStack dye = new ItemStack(DyeItem.byColor(DyeColor.byId(recipe.dye)));
+        ItemStack dye = new ItemStack(recipe.dyeItem());
         builder.addSlot(RecipeIngredientRole.OUTPUT, 92, 5).addIngredient(VanillaTypes.ITEM_STACK, dye);
     }
 
@@ -143,7 +145,7 @@ public class DyeMixerCategory implements IRecipeCategory<DyeMixerCategory.Recipe
         Rectangle rec = DefaultAssetProvider.DEFAULT_PROVIDER.getAsset(AssetTypes.ENERGY_BACKGROUND).getArea();
         if (new Rectangle(0, 3, rec.width, rec.height).contains(mouseX, mouseY)) {
             int consumed = DyeMixerConfig.powerPerTick * 100;
-            tooltip.addAll(EnergyBarScreenAddon.getTooltip(consumed, Math.max(LatexProcessingUnitConfig.maxStoredPower, consumed)));
+            tooltip.addAll(EnergyBarScreenAddon.getTooltip(consumed, Math.max(DyeMixerConfig.maxStoredPower, consumed)));
         }
 
         Rectangle prog = DefaultAssetProvider.DEFAULT_PROVIDER.getAsset(AssetTypes.PROGRESS_BAR_BORDER_VERTICAL).getArea();

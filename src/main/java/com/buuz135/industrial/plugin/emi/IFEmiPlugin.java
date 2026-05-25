@@ -5,16 +5,43 @@ import com.buuz135.industrial.api.recipe.ore.OreFluidEntryRaw;
 import com.buuz135.industrial.api.recipe.ore.OreFluidEntrySieve;
 import com.buuz135.industrial.block.generator.MycelialGeneratorBlock;
 import com.buuz135.industrial.block.generator.mycelial.IMycelialGeneratorType;
+import com.buuz135.industrial.block.resourceproduction.tile.DyeMixerTile;
 import com.buuz135.industrial.fluid.OreTitaniumFluidType;
 import com.buuz135.industrial.module.ModuleCore;
 import com.buuz135.industrial.module.ModuleGenerator;
 import com.buuz135.industrial.module.ModuleResourceProduction;
 import com.buuz135.industrial.plugin.RecipeViewerHelper;
-import com.buuz135.industrial.plugin.emi.category.*;
-import com.buuz135.industrial.plugin.emi.recipe.*;
+import com.buuz135.industrial.plugin.emi.category.BioreactorEmiCategory;
+import com.buuz135.industrial.plugin.emi.category.DissolutionChamberEmiCategory;
+import com.buuz135.industrial.plugin.emi.category.DyeMixerEmiCategory;
+import com.buuz135.industrial.plugin.emi.category.FermentationStationEmiCategory;
+import com.buuz135.industrial.plugin.emi.category.FluidExtractorEmiCategory;
+import com.buuz135.industrial.plugin.emi.category.FluidSieveEmiCategory;
+import com.buuz135.industrial.plugin.emi.category.LaserDrillFluidEmiCategory;
+import com.buuz135.industrial.plugin.emi.category.LaserDrillOreEmiCategory;
+import com.buuz135.industrial.plugin.emi.category.MycelialGeneratorEmiCategory;
+import com.buuz135.industrial.plugin.emi.category.OreWasherEmiCategory;
+import com.buuz135.industrial.plugin.emi.category.StoneWorkEmiCategory;
+import com.buuz135.industrial.plugin.emi.category.StoneWorkGeneratorEmiCategory;
+import com.buuz135.industrial.plugin.emi.recipe.BioreactorEmiRecipe;
+import com.buuz135.industrial.plugin.emi.recipe.DissChamberEmiRecipe;
+import com.buuz135.industrial.plugin.emi.recipe.DyeMixerEmiRecipe;
+import com.buuz135.industrial.plugin.emi.recipe.FermentationStationEmiRecipe;
+import com.buuz135.industrial.plugin.emi.recipe.FluidExtractorEmiRecipe;
+import com.buuz135.industrial.plugin.emi.recipe.FluidSieveEmiRecipe;
+import com.buuz135.industrial.plugin.emi.recipe.LaserDrillFluidEmiRecipe;
+import com.buuz135.industrial.plugin.emi.recipe.LaserDrillOreEmiRecipe;
+import com.buuz135.industrial.plugin.emi.recipe.MycelialGeneratorEmiRecipe;
+import com.buuz135.industrial.plugin.emi.recipe.OreWasherEmiRecipe;
+import com.buuz135.industrial.plugin.emi.recipe.StoneWorkEmiRecipe;
+import com.buuz135.industrial.plugin.emi.recipe.StoneWorkGeneratorEmiRecipe;
 import com.buuz135.industrial.plugin.jei.category.BioReactorRecipeCategory;
 import com.buuz135.industrial.plugin.jei.generator.MycelialGeneratorRecipe;
-import com.buuz135.industrial.recipe.*;
+import com.buuz135.industrial.recipe.DissolutionChamberRecipe;
+import com.buuz135.industrial.recipe.FluidExtractorRecipe;
+import com.buuz135.industrial.recipe.LaserDrillFluidRecipe;
+import com.buuz135.industrial.recipe.LaserDrillOreRecipe;
+import com.buuz135.industrial.recipe.StoneWorkGenerateRecipe;
 import com.buuz135.industrial.utils.IFAttachments;
 import com.buuz135.industrial.utils.Reference;
 import com.hrznstudio.titanium.module.BlockWithTile;
@@ -56,6 +83,7 @@ public class IFEmiPlugin implements EmiPlugin {
     public static final OreWasherEmiCategory ORE_WASHER_EMI_CATEGORY = new OreWasherEmiCategory();
     public static final StoneWorkEmiCategory STONE_WORK_EMI_CATEGORY = new StoneWorkEmiCategory();
     public static final StoneWorkGeneratorEmiCategory STONE_WORK_GENERATOR = new StoneWorkGeneratorEmiCategory();
+    public static final DyeMixerEmiCategory DYE_MIXER_EMI_CATEGORY = new DyeMixerEmiCategory();
 
     @Override
     public void initialize(EmiInitRegistry registry) {
@@ -155,5 +183,11 @@ public class IFEmiPlugin implements EmiPlugin {
 
         }
 
+        registry.addCategory(DYE_MIXER_EMI_CATEGORY);
+        registry.addWorkstation(DYE_MIXER_EMI_CATEGORY, EmiIngredient.of(Ingredient.of(ModuleResourceProduction.DYE_MIXER.getBlock())));
+        for (int i = 0; i < DyeMixerTile.colorUsages.length; i++) {
+            var u = DyeMixerTile.colorUsages[i];
+            registry.addRecipe(new DyeMixerEmiRecipe(u.r(), u.g(), u.b(), i));
+        }
     }
 }

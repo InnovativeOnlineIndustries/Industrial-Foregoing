@@ -233,7 +233,7 @@ public class DyeMixerTile extends IndustrialProcessingTile<DyeMixerTile> {
 
     @Override
     protected int getTickPower() {
-        return 30;
+        return getPowerPerTick;
     }
 
     @Nonnull
