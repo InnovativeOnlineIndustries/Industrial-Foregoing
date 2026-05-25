@@ -5,6 +5,7 @@ import com.buuz135.industrial.config.machine.core.DissolutionChamberConfig;
 import com.buuz135.industrial.plugin.emi.IFEmiPlugin;
 import com.buuz135.industrial.plugin.emi.widget.EnergyBarEmiWidget;
 import com.buuz135.industrial.plugin.emi.widget.NormalTankEmiWidget;
+import com.buuz135.industrial.plugin.emi.widget.SmallTankEmiWidget;
 import com.buuz135.industrial.recipe.DissolutionChamberRecipe;
 import com.hrznstudio.titanium.api.client.AssetTypes;
 import com.hrznstudio.titanium.client.screen.addon.EnergyBarScreenAddon;
@@ -64,7 +65,7 @@ public class DissChamberEmiRecipe extends CustomEmiRecipe {
             widgets.addSlot(this.getInputs().get(i), 23 + DissolutionChamberTile.getSlotPos(i).getLeft(), 10 + DissolutionChamberTile.getSlotPos(i).getRight());
         }
         widgets.addSlot(EmiIngredient.of(List.of(this.getOutputs().get(0))), 118, 15).recipeContext(this);
-        widgets.addTank(this.getInputs().get(this.getInputs().size() - 1), 33 + 12 + 2, 32 + 2, 14, 15, 1000).drawBack(false);
+        widgets.add(new SmallTankEmiWidget(this.getInputs().get(this.getInputs().size() - 1), 1000, 33 + 12, 32));
 
         widgets.add(new NormalTankEmiWidget(this.getOutputs().get(1), 1000, 139, 2)).recipeContext(this);
         int consumed = this.recipe.value().processingTime * DissolutionChamberConfig.powerPerTick;
@@ -75,8 +76,6 @@ public class DissChamberEmiRecipe extends CustomEmiRecipe {
 
             SlotsScreenAddon.drawAsset(draw, Minecraft.getInstance().screen, DefaultAssetProvider.DEFAULT_PROVIDER, 24, 11, 0, 0, 8, DissolutionChamberTile::getSlotPos, integer -> ItemStack.EMPTY, true, integer -> new Color(DyeColor.LIGHT_BLUE.getFireworkColor()), integer -> true, 1);
             SlotsScreenAddon.drawAsset(draw, Minecraft.getInstance().screen, DefaultAssetProvider.DEFAULT_PROVIDER, 119, 16, 0, 0, 3, integer -> Pair.of(18 * (integer % 1), 18 * (integer / 1)), integer -> ItemStack.EMPTY, true, integer -> new Color(DyeColor.ORANGE.getFireworkColor()), integer -> true, 1);
-
-            AssetUtil.drawAsset(draw, Minecraft.getInstance().screen, DefaultAssetProvider.DEFAULT_PROVIDER.getAsset(AssetTypes.TANK_SMALL), 33 + 12, 32);
 
             AssetUtil.drawAsset(draw, Minecraft.getInstance().screen, IAssetProvider.getAsset(DefaultAssetProvider.DEFAULT_PROVIDER, AssetTypes.PROGRESS_BAR_BACKGROUND_ARROW_HORIZONTAL), 92, 41 - 8);
         });
