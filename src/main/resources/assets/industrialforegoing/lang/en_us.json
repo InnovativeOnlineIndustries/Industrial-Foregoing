@@ -625,6 +625,7 @@
   "emi.category.industrialforegoing.stone_work": "Stonework Recipes",
   "emi.category.industrialforegoing.stone_work_generator": "Stonework Generation",
   "emi.category.industrialforegoing.dye_mixer": "Dye Mixer",
+  "emi.category.industrialforegoing.latex_processing_unit": "Dye Mixer",
   "text.industrialforegoing.button.show_particles": "Show Position Particles",
   "text.industrialforegoing.button.hide_particles": "Hide Position Particles",
   "text.industrialforegoing.display.moving_babies": "Moving babies",

@@ -19,6 +19,7 @@ import com.buuz135.industrial.plugin.emi.category.FluidExtractorEmiCategory;
 import com.buuz135.industrial.plugin.emi.category.FluidSieveEmiCategory;
 import com.buuz135.industrial.plugin.emi.category.LaserDrillFluidEmiCategory;
 import com.buuz135.industrial.plugin.emi.category.LaserDrillOreEmiCategory;
+import com.buuz135.industrial.plugin.emi.category.LatexProcessingUnitEmiCategory;
 import com.buuz135.industrial.plugin.emi.category.MycelialGeneratorEmiCategory;
 import com.buuz135.industrial.plugin.emi.category.OreWasherEmiCategory;
 import com.buuz135.industrial.plugin.emi.category.StoneWorkEmiCategory;
@@ -31,6 +32,7 @@ import com.buuz135.industrial.plugin.emi.recipe.FluidExtractorEmiRecipe;
 import com.buuz135.industrial.plugin.emi.recipe.FluidSieveEmiRecipe;
 import com.buuz135.industrial.plugin.emi.recipe.LaserDrillFluidEmiRecipe;
 import com.buuz135.industrial.plugin.emi.recipe.LaserDrillOreEmiRecipe;
+import com.buuz135.industrial.plugin.emi.recipe.LatexProcessingUnitEmiRecipe;
 import com.buuz135.industrial.plugin.emi.recipe.MycelialGeneratorEmiRecipe;
 import com.buuz135.industrial.plugin.emi.recipe.OreWasherEmiRecipe;
 import com.buuz135.industrial.plugin.emi.recipe.StoneWorkEmiRecipe;
@@ -84,6 +86,7 @@ public class IFEmiPlugin implements EmiPlugin {
     public static final StoneWorkEmiCategory STONE_WORK_EMI_CATEGORY = new StoneWorkEmiCategory();
     public static final StoneWorkGeneratorEmiCategory STONE_WORK_GENERATOR = new StoneWorkGeneratorEmiCategory();
     public static final DyeMixerEmiCategory DYE_MIXER_EMI_CATEGORY = new DyeMixerEmiCategory();
+    public static final LatexProcessingUnitEmiCategory LATEX_PROCESSING_UNIT_EMI_CATEGORY = new LatexProcessingUnitEmiCategory();
 
     @Override
     public void initialize(EmiInitRegistry registry) {
@@ -184,10 +187,14 @@ public class IFEmiPlugin implements EmiPlugin {
         }
 
         registry.addCategory(DYE_MIXER_EMI_CATEGORY);
-        registry.addWorkstation(DYE_MIXER_EMI_CATEGORY, EmiIngredient.of(Ingredient.of(ModuleResourceProduction.DYE_MIXER.getBlock())));
+        registry.addWorkstation(DYE_MIXER_EMI_CATEGORY, EmiStack.of(ModuleResourceProduction.DYE_MIXER.getBlock()));
         for (int i = 0; i < DyeMixerTile.colorUsages.length; i++) {
             var u = DyeMixerTile.colorUsages[i];
             registry.addRecipe(new DyeMixerEmiRecipe(u.r(), u.g(), u.b(), i));
         }
+
+        registry.addCategory(LATEX_PROCESSING_UNIT_EMI_CATEGORY);
+        registry.addWorkstation(LATEX_PROCESSING_UNIT_EMI_CATEGORY, EmiStack.of(ModuleCore.LATEX_PROCESSING));
+        registry.addRecipe(new LatexProcessingUnitEmiRecipe());
     }
 }

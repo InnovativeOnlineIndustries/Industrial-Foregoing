@@ -7,7 +7,6 @@ import dev.emi.emi.api.stack.EmiStack;
 import net.minecraft.resources.ResourceLocation;
 
 public class DyeMixerEmiCategory extends EmiRecipeCategory {
-
     public static ResourceLocation ID = ResourceLocation.fromNamespaceAndPath(Reference.MOD_ID, "dye_mixer");
 
     public DyeMixerEmiCategory() {
