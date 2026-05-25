@@ -7,6 +7,7 @@ import com.buuz135.industrial.block.generator.MycelialGeneratorBlock;
 import com.buuz135.industrial.block.generator.mycelial.IMycelialGeneratorType;
 import com.buuz135.industrial.block.resourceproduction.tile.DyeMixerTile;
 import com.buuz135.industrial.fluid.OreTitaniumFluidType;
+import com.buuz135.industrial.module.ModuleAgricultureHusbandry;
 import com.buuz135.industrial.module.ModuleCore;
 import com.buuz135.industrial.module.ModuleGenerator;
 import com.buuz135.industrial.module.ModuleResourceProduction;
@@ -22,6 +23,7 @@ import com.buuz135.industrial.plugin.emi.category.LaserDrillOreEmiCategory;
 import com.buuz135.industrial.plugin.emi.category.LatexProcessingUnitEmiCategory;
 import com.buuz135.industrial.plugin.emi.category.MycelialGeneratorEmiCategory;
 import com.buuz135.industrial.plugin.emi.category.OreWasherEmiCategory;
+import com.buuz135.industrial.plugin.emi.category.SewageComposterEmiCategory;
 import com.buuz135.industrial.plugin.emi.category.StoneWorkEmiCategory;
 import com.buuz135.industrial.plugin.emi.category.StoneWorkGeneratorEmiCategory;
 import com.buuz135.industrial.plugin.emi.recipe.BioreactorEmiRecipe;
@@ -35,6 +37,7 @@ import com.buuz135.industrial.plugin.emi.recipe.LaserDrillOreEmiRecipe;
 import com.buuz135.industrial.plugin.emi.recipe.LatexProcessingUnitEmiRecipe;
 import com.buuz135.industrial.plugin.emi.recipe.MycelialGeneratorEmiRecipe;
 import com.buuz135.industrial.plugin.emi.recipe.OreWasherEmiRecipe;
+import com.buuz135.industrial.plugin.emi.recipe.SewageComposterEmiRecipe;
 import com.buuz135.industrial.plugin.emi.recipe.StoneWorkEmiRecipe;
 import com.buuz135.industrial.plugin.emi.recipe.StoneWorkGeneratorEmiRecipe;
 import com.buuz135.industrial.plugin.jei.category.BioReactorRecipeCategory;
@@ -87,6 +90,7 @@ public class IFEmiPlugin implements EmiPlugin {
     public static final StoneWorkGeneratorEmiCategory STONE_WORK_GENERATOR = new StoneWorkGeneratorEmiCategory();
     public static final DyeMixerEmiCategory DYE_MIXER_EMI_CATEGORY = new DyeMixerEmiCategory();
     public static final LatexProcessingUnitEmiCategory LATEX_PROCESSING_UNIT_EMI_CATEGORY = new LatexProcessingUnitEmiCategory();
+    public static final SewageComposterEmiCategory SEWAGE_COMPOSTER_EMI_CATEGORY = new SewageComposterEmiCategory();
 
     @Override
     public void initialize(EmiInitRegistry registry) {
@@ -196,5 +200,9 @@ public class IFEmiPlugin implements EmiPlugin {
         registry.addCategory(LATEX_PROCESSING_UNIT_EMI_CATEGORY);
         registry.addWorkstation(LATEX_PROCESSING_UNIT_EMI_CATEGORY, EmiStack.of(ModuleCore.LATEX_PROCESSING));
         registry.addRecipe(new LatexProcessingUnitEmiRecipe());
+
+        registry.addCategory(SEWAGE_COMPOSTER_EMI_CATEGORY);
+        registry.addWorkstation(SEWAGE_COMPOSTER_EMI_CATEGORY, EmiStack.of(ModuleAgricultureHusbandry.SEWAGE_COMPOSTER));
+        registry.addRecipe(new SewageComposterEmiRecipe());
     }
 }

@@ -32,7 +32,7 @@ public class DyeMixerEmiRecipe extends CustomEmiRecipe {
     private final ProgressBarEmiWidget blueWidget;
 
     public DyeMixerEmiRecipe(int red, int green, int blue, int dye) {
-        super(ResourceLocation.fromNamespaceAndPath(Reference.MOD_ID, "dye_mixer_" + dye), IFEmiPlugin.DYE_MIXER_EMI_CATEGORY,
+        super(ResourceLocation.fromNamespaceAndPath(Reference.MOD_ID, "/emi/dye_mixer_" + dye), IFEmiPlugin.DYE_MIXER_EMI_CATEGORY,
                 List.of(EmiStack.EMPTY), List.of(EmiStack.of(DyeItem.byColor(DyeColor.byId(dye)))));
 
         var redProgress = new ProgressBarScreenAddon<>(20, 0, new ProgressBarComponent<>(0, 0, 3)) {
