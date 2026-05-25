@@ -13,6 +13,4 @@ public class DyeMixerEmiCategory extends EmiRecipeCategory {
     public DyeMixerEmiCategory() {
         super(ID, EmiStack.of(ModuleResourceProduction.DYE_MIXER.asItem()));
     }
-
-
 }
