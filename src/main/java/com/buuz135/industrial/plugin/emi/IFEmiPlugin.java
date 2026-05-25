@@ -25,6 +25,7 @@ import com.buuz135.industrial.plugin.emi.category.MycelialGeneratorEmiCategory;
 import com.buuz135.industrial.plugin.emi.category.OreWasherEmiCategory;
 import com.buuz135.industrial.plugin.emi.category.SewageComposterEmiCategory;
 import com.buuz135.industrial.plugin.emi.category.SludgeRefinerEmiCategory;
+import com.buuz135.industrial.plugin.emi.category.SporesRecreatorEmiCategory;
 import com.buuz135.industrial.plugin.emi.category.StoneWorkEmiCategory;
 import com.buuz135.industrial.plugin.emi.category.StoneWorkGeneratorEmiCategory;
 import com.buuz135.industrial.plugin.emi.recipe.BioreactorEmiRecipe;
@@ -40,6 +41,7 @@ import com.buuz135.industrial.plugin.emi.recipe.MycelialGeneratorEmiRecipe;
 import com.buuz135.industrial.plugin.emi.recipe.OreWasherEmiRecipe;
 import com.buuz135.industrial.plugin.emi.recipe.SewageComposterEmiRecipe;
 import com.buuz135.industrial.plugin.emi.recipe.SludgeRefinerEmiRecipe;
+import com.buuz135.industrial.plugin.emi.recipe.SporesRecreatorEmiRecipe;
 import com.buuz135.industrial.plugin.emi.recipe.StoneWorkEmiRecipe;
 import com.buuz135.industrial.plugin.emi.recipe.StoneWorkGeneratorEmiRecipe;
 import com.buuz135.industrial.plugin.jei.category.BioReactorRecipeCategory;
@@ -65,11 +67,13 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.ItemTags;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.Item;
+import net.minecraft.world.item.Items;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.item.crafting.RecipeHolder;
 import net.minecraft.world.item.crafting.RecipeManager;
 import net.minecraft.world.item.crafting.RecipeType;
 import net.minecraft.world.level.ItemLike;
+import net.neoforged.neoforge.common.Tags;
 import net.neoforged.neoforge.fluids.FluidStack;
 
 import java.util.ArrayList;
@@ -94,6 +98,7 @@ public class IFEmiPlugin implements EmiPlugin {
     public static final LatexProcessingUnitEmiCategory LATEX_PROCESSING_UNIT_EMI_CATEGORY = new LatexProcessingUnitEmiCategory();
     public static final SewageComposterEmiCategory SEWAGE_COMPOSTER_EMI_CATEGORY = new SewageComposterEmiCategory();
     public static final SludgeRefinerEmiCategory SLUDGE_REFINER_EMI_CATEGORY = new SludgeRefinerEmiCategory();
+    public static final SporesRecreatorEmiCategory SPORES_RECREATOR_EMI_CATEGORY = new SporesRecreatorEmiCategory();
 
     @Override
     public void initialize(EmiInitRegistry registry) {
@@ -213,5 +218,13 @@ public class IFEmiPlugin implements EmiPlugin {
         for (var output : SludgeRefinerEmiRecipe.getPossibleOutputs()) {
             registry.addRecipe(new SludgeRefinerEmiRecipe(output));
         }
+
+        registry.addCategory(SPORES_RECREATOR_EMI_CATEGORY);
+        registry.addWorkstation(SPORES_RECREATOR_EMI_CATEGORY, EmiStack.of(ModuleResourceProduction.SPORES_RECREATOR));
+        for (var shroom : EmiIngredient.of(Tags.Items.MUSHROOMS).getEmiStacks()) {
+            registry.addRecipe(new SporesRecreatorEmiRecipe(shroom));
+        }
+        registry.addRecipe(new SporesRecreatorEmiRecipe(EmiStack.of(Items.CRIMSON_FUNGUS)));
+        registry.addRecipe(new SporesRecreatorEmiRecipe(EmiStack.of(Items.WARPED_FUNGUS)));
     }
 }
