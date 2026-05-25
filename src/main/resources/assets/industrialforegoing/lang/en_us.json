@@ -627,6 +627,8 @@
   "emi.category.industrialforegoing.dye_mixer": "Dye Mixer",
   "emi.category.industrialforegoing.latex_processing_unit": "Latex Processing Unit",
   "emi.category.industrialforegoing.sewage_composter": "Sewage Composter",
+  "emi.category.industrialforegoing.sludge_refiner": "Sludge Refiner",
+  "emi.category.industrialforegoing.spores_recreator": "Spores Recreator",
   "text.industrialforegoing.button.show_particles": "Show Position Particles",
   "text.industrialforegoing.button.hide_particles": "Hide Position Particles",
   "text.industrialforegoing.display.moving_babies": "Moving babies",
