@@ -45,8 +45,8 @@ public class LatexProcessingUnitEmiRecipe extends CustomEmiRecipe {
         widgets.addSlot(this.getOutputs().getFirst(), 91, 1).recipeContext(this);
 
         widgets.add(new EnergyBarEmiWidget(0, 0, LatexProcessingUnitConfig.powerPerTick * LatexProcessingUnitConfig.maxProgress, LatexProcessingUnitConfig.maxStoredPower));
-        widgets.add(new NormalTankEmiWidget(24, 0, LATEX, LatexProcessingUnitConfig.maxLatexTankSize, null));
-        widgets.add(new NormalTankEmiWidget(48, 0, WATER, LatexProcessingUnitConfig.maxWaterTankSize, null));
+        widgets.add(new NormalTankEmiWidget(LATEX, 1000, 24, 0));
+        widgets.add(new NormalTankEmiWidget(WATER, 1000, 48, 0));
 
         widgets.addDrawable(0, 0, 0, 0, (draw, mouseX, mouseY, delta) -> {
             SlotsScreenAddon.drawAsset(draw, Minecraft.getInstance().screen, DefaultAssetProvider.DEFAULT_PROVIDER, 92, 2, 0, 0, 3, integer -> Pair.of(18 * (integer % 1), 18 * (integer / 1)), integer -> ItemStack.EMPTY, true, integer -> new Color(DyeColor.ORANGE.getFireworkColor()), integer -> true, 1);

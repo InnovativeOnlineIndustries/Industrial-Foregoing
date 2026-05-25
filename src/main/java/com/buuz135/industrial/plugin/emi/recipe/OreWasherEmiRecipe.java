@@ -3,6 +3,7 @@ package com.buuz135.industrial.plugin.emi.recipe;
 import com.buuz135.industrial.api.recipe.ore.OreFluidEntryRaw;
 import com.buuz135.industrial.fluid.OreTitaniumFluidType;
 import com.buuz135.industrial.plugin.emi.IFEmiPlugin;
+import com.buuz135.industrial.plugin.emi.widget.NormalTankEmiWidget;
 import com.buuz135.industrial.utils.Reference;
 import com.hrznstudio.titanium.api.client.AssetTypes;
 import com.hrznstudio.titanium.client.screen.addon.SlotsScreenAddon;
@@ -46,7 +47,7 @@ public class OreWasherEmiRecipe extends CustomEmiRecipe {
         widgets.addTank(this.getInputs().get(0), 4, 32, 14, 15, 200).drawBack(false);
         widgets.addSlot(this.getInputs().get(1), 2, 7).drawBack(false);
 
-        widgets.addTank(this.getOutputs().get(0), 56, 3, 14, 52, 200).drawBack(false).recipeContext(this);
+        widgets.add(new NormalTankEmiWidget(this.getOutputs().get(0), 1000, 54, 1)).recipeContext(this);
 
         widgets.addFillingArrow(26, 19, 2000);
 
@@ -54,10 +55,6 @@ public class OreWasherEmiRecipe extends CustomEmiRecipe {
             SlotsScreenAddon.drawAsset(draw, Minecraft.getInstance().screen, DefaultAssetProvider.DEFAULT_PROVIDER, 3, 8, 0, 0, 1, integer -> Pair.of(18 * (integer % 1), 18 * (integer / 1)), integer -> ItemStack.EMPTY, true, integer -> new Color(DyeColor.BLUE.getFireworkColor()), integer -> true, 1);
 
             AssetUtil.drawAsset(draw, Minecraft.getInstance().screen, DefaultAssetProvider.DEFAULT_PROVIDER.getAsset(AssetTypes.TANK_SMALL), 2, 30);
-            AssetUtil.drawAsset(draw, Minecraft.getInstance().screen, DefaultAssetProvider.DEFAULT_PROVIDER.getAsset(AssetTypes.TANK_NORMAL), 54, 1);
         });
-
     }
-
-
 }
