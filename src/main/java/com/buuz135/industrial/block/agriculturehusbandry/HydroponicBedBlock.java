@@ -30,12 +30,17 @@ import com.hrznstudio.titanium.recipe.generator.TitaniumShapedRecipeBuilder;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.data.recipes.RecipeOutput;
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.BlockGetter;
+import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.levelgen.feature.configurations.TreeConfiguration;
 import net.neoforged.neoforge.common.util.TriState;
+
+import java.util.function.BiConsumer;
 
 public class HydroponicBedBlock extends IndustrialBlock<HydroponicBedTile> {
 
@@ -51,6 +56,11 @@ public class HydroponicBedBlock extends IndustrialBlock<HydroponicBedTile> {
     @Override
     public TriState canSustainPlant(BlockState state, BlockGetter level, BlockPos soilPosition, Direction facing, BlockState plant) {
         return TriState.TRUE;
+    }
+
+    @Override
+    public boolean onTreeGrow(BlockState state, LevelReader level, BiConsumer<BlockPos, BlockState> placeFunction, RandomSource randomSource, BlockPos pos, TreeConfiguration config) {
+        return true;
     }
 
     /*@Override
