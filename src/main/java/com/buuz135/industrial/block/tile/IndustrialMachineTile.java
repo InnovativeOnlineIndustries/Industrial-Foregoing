@@ -63,6 +63,7 @@ import net.neoforged.api.distmarker.OnlyIn;
 import net.neoforged.neoforge.items.ItemHandlerHelper;
 
 import java.util.Optional;
+import com.buuz135.industrial.item.addon.SilkTouchAddonItem;
 
 public abstract class IndustrialMachineTile<T extends IndustrialMachineTile<T>> extends MachineTile<T> implements IRedstoneReader, IMachineSettings {
 
@@ -106,6 +107,9 @@ public abstract class IndustrialMachineTile<T extends IndustrialMachineTile<T>> 
 
     @Override
     public boolean canAcceptAugment(ItemStack augment) {
+        if (AugmentWrapper.hasType(augment, SilkTouchAddonItem.SILK_TOUCH)) {
+            return true;
+        }
         if (AugmentWrapper.hasType(augment, AugmentTypes.SPEED)) {
             return !hasAugmentInstalled(AugmentTypes.SPEED);
         }

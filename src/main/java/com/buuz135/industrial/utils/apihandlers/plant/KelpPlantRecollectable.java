@@ -46,10 +46,16 @@ public class KelpPlantRecollectable extends PlantRecollectable {
 
     @Override
     public List<ItemStack> doHarvestOperation(Level world, BlockPos pos, BlockState blockState) {
+        return doHarvestOperation(world, pos, blockState, false, false);
+    }
+
+    @Override
+    public List<ItemStack> doHarvestOperation(Level world, BlockPos pos, BlockState blockState, Object... extras) {
         while (world.getBlockState(pos.above()).getBlock().equals(Blocks.KELP) || world.getBlockState(pos.above()).getBlock().equals(Blocks.KELP_PLANT))
             pos = pos.above();
         NonNullList<ItemStack> stacks = NonNullList.create();
-        stacks.addAll(BlockUtils.getBlockDrops(world, pos));
+        boolean silkTouch = extras.length > 1 && (Boolean) extras[1];
+        stacks.addAll(BlockUtils.getBlockDrops(world, pos, 0, silkTouch));
         world.setBlockAndUpdate(pos, Blocks.WATER.defaultBlockState());
         return stacks;
     }

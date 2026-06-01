@@ -58,10 +58,16 @@ public class ChorusFruitRecollectable extends PlantRecollectable {
 
     @Override
     public List<ItemStack> doHarvestOperation(Level world, BlockPos pos, BlockState blockState) {
+        return doHarvestOperation(world, pos, blockState, false, false);
+    }
+
+    @Override
+    public List<ItemStack> doHarvestOperation(Level world, BlockPos pos, BlockState blockState, Object... extras) {
         List<ItemStack> stacks = new ArrayList<>();
         if (chorusCacheHashMap.containsKey(pos)) {
             ChorusCache chorusCache = chorusCacheHashMap.get(pos);
-            stacks.addAll(chorusCache.chop());
+            boolean silkTouch = extras.length > 1 && (Boolean) extras[1];
+            stacks.addAll(chorusCache.chop(silkTouch));
             if (chorusCache.getChorus().isEmpty()) chorusCacheHashMap.remove(pos);
         }
         return stacks;

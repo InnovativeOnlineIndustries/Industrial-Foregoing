@@ -63,20 +63,20 @@ public class ChorusCache {
         return chorus.stream().map(blockpos -> world.getBlockState(blockpos)).allMatch(blockState -> blockState.getBlock().equals(Blocks.CHORUS_PLANT) || (blockState.getBlock().equals(Blocks.CHORUS_FLOWER) && blockState.getValue(ChorusFlowerBlock.AGE) == 5));
     }
 
-    public List<ItemStack> chop() {
+    public List<ItemStack> chop(boolean silkTouch) {
         NonNullList<ItemStack> stacks = NonNullList.create();
         int maxY = getTopRowY();
-        chorus.stream().filter(pos -> pos.getY() == maxY).forEach(pos -> chop(stacks, pos));
+        chorus.stream().filter(pos -> pos.getY() == maxY).forEach(pos -> chop(stacks, pos, silkTouch));
         chorus.removeIf(pos -> pos.getY() == maxY);
         return stacks;
     }
 
-    public void chop(NonNullList<ItemStack> stacks, BlockPos p) {
+    public void chop(NonNullList<ItemStack> stacks, BlockPos p, boolean silkTouch) {
         if (BlockUtils.isChorus(world, p)) {
             if (world.getBlockState(p).getBlock().equals(Blocks.CHORUS_FLOWER)) {
                 stacks.add(new ItemStack(Blocks.CHORUS_FLOWER));
             } else {
-                stacks.addAll(BlockUtils.getBlockDrops(world, p));
+                stacks.addAll(BlockUtils.getBlockDrops(world, p, 0, silkTouch));
             }
             world.setBlockAndUpdate(p, Blocks.AIR.defaultBlockState());
         }

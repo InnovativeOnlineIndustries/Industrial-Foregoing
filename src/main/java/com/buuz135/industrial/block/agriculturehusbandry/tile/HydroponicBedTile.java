@@ -11,6 +11,7 @@ import com.buuz135.industrial.registry.IFRegistries;
 import com.buuz135.industrial.utils.IFAttachments;
 import com.buuz135.industrial.utils.IndustrialTags;
 import com.buuz135.industrial.utils.apihandlers.plant.TreePlantRecollectable;
+import com.buuz135.industrial.item.addon.SilkTouchAddonItem;
 import com.hrznstudio.titanium.annotation.Save;
 import com.hrznstudio.titanium.component.energy.EnergyStorageComponent;
 import com.hrznstudio.titanium.component.fluid.FluidTankComponent;
@@ -89,16 +90,16 @@ public class HydroponicBedTile extends IndustrialWorkingTile<HydroponicBedTile> 
     private PlantRecollectable cachedRecollectable = null;
     private int errorAttempts = 0;
 
-    public static boolean tryToHarvestAndReplant(Level level, BlockPos up, BlockState state, IItemHandler output, ProgressBarComponent<?> etherBuffer, IndustrialWorkingTile tile, Supplier<PlantRecollectable> plantSupplier, ItemStack simulationOutput) {
+    public static boolean tryToHarvestAndReplant(Level level, BlockPos up, BlockState state, IItemHandler output, ProgressBarComponent<?> etherBuffer, IndustrialWorkingTile tile, Supplier<PlantRecollectable> plantSupplier, ItemStack simulationOutput, boolean silkTouch) {
         var cachedRecollectable = plantSupplier.get();
         if (cachedRecollectable != null) {
             List<ItemStack> drops = new ArrayList<>();
             if (cachedRecollectable instanceof TreePlantRecollectable) {
                 while (cachedRecollectable.canBeHarvested(level, up, state)) {
-                    drops.addAll(cachedRecollectable.doHarvestOperation(level, up, state));
+                    drops.addAll(cachedRecollectable.doHarvestOperation(level, up, state, false, silkTouch));
                 }
             } else {
-                drops.addAll(cachedRecollectable.doHarvestOperation(level, up, state));
+                drops.addAll(cachedRecollectable.doHarvestOperation(level, up, state, false, silkTouch));
             }
             var planted = ItemStack.EMPTY;
             if (level.isEmptyBlock(up)) {
@@ -184,11 +185,12 @@ public class HydroponicBedTile extends IndustrialWorkingTile<HydroponicBedTile> 
                         this.water.drainForced(10, IFluidHandler.FluidAction.EXECUTE);
                         return new WorkAction(1, HydroponicBedConfig.powerPerOperation);
                     } else if (this.etherBuffer.getProgress() > 0) {
-                        tryToHarvestAndReplant(this.level, up, state, this.output, this.etherBuffer, this, plantRecollectableSupplier, this.simulation_slot.getStackInSlot(0));
+                        tryToHarvestAndReplant(this.level, up, state, this.output, this.etherBuffer, this, plantRecollectableSupplier, this.simulation_slot.getStackInSlot(0), false);
                         return new WorkAction(1, HydroponicBedConfig.powerPerOperation);
                     }
                 } else {
-                    if (!tryToHarvestAndReplant(this.level, up, state, this.output, this.etherBuffer, this, plantRecollectableSupplier, this.simulation_slot.getStackInSlot(0))) {
+                    boolean silkTouch = this.hasAugmentInstalled(SilkTouchAddonItem.SILK_TOUCH);
+                if (!tryToHarvestAndReplant(this.level, up, state, this.output, this.etherBuffer, this, plantRecollectableSupplier, this.simulation_slot.getStackInSlot(0), silkTouch)) {
                         if (this.etherBuffer.getProgress() > 0) {
                             for (int i = 0; i < 10; i++) {
                                 this.level.getBlockState(up).randomTick((ServerLevel) this.level, up, this.level.random);

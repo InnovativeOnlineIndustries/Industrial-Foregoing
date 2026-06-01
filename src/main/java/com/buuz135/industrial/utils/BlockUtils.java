@@ -31,6 +31,10 @@ import net.minecraft.tags.BlockTags;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
+import net.minecraft.world.item.enchantment.EnchantmentHelper;
+import net.minecraft.world.item.enchantment.Enchantments;
+import net.minecraft.world.item.enchantment.ItemEnchantments;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
@@ -96,13 +100,24 @@ public class BlockUtils {
     }
 
     public static List<ItemStack> getBlockDrops(Level world, BlockPos pos) {
-        return getBlockDrops(world, pos, 0);
+        return getBlockDrops(world, pos, 0, false);
     }
 
     public static List<ItemStack> getBlockDrops(Level world, BlockPos pos, int fortune) {
+        return getBlockDrops(world, pos, fortune, false);
+    }
+
+    public static List<ItemStack> getBlockDrops(Level world, BlockPos pos, int fortune, boolean silkTouch) {
         BlockState state = world.getBlockState(pos);
         NonNullList<ItemStack> stacks = NonNullList.create();
-        stacks.addAll(Block.getDrops(state, (ServerLevel) world, pos, world.getBlockEntity(pos)));
+        ItemStack tool = new ItemStack(Items.NETHERITE_PICKAXE);
+        if (silkTouch || fortune > 0) {
+            ItemEnchantments.Mutable enchants = new ItemEnchantments.Mutable(ItemEnchantments.EMPTY);
+            if (silkTouch) enchants.set(world.registryAccess().holderOrThrow(Enchantments.SILK_TOUCH), 1);
+            if (fortune > 0) enchants.set(world.registryAccess().holderOrThrow(Enchantments.FORTUNE), fortune);
+            EnchantmentHelper.setEnchantments(tool, enchants.toImmutable());
+        }
+        stacks.addAll(Block.getDrops(state, (ServerLevel) world, pos, world.getBlockEntity(pos), null, tool));
         return stacks;
     }
 
