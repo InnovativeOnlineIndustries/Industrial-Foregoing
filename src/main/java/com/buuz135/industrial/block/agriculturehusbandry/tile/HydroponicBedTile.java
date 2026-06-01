@@ -8,6 +8,7 @@ import com.buuz135.industrial.item.HydroponicSimulationProcessorItem;
 import com.buuz135.industrial.module.ModuleAgricultureHusbandry;
 import com.buuz135.industrial.module.ModuleCore;
 import com.buuz135.industrial.registry.IFRegistries;
+import com.buuz135.industrial.utils.BlockUtils;
 import com.buuz135.industrial.utils.IFAttachments;
 import com.buuz135.industrial.utils.IndustrialTags;
 import com.buuz135.industrial.utils.apihandlers.plant.TreePlantRecollectable;
@@ -18,6 +19,7 @@ import com.hrznstudio.titanium.component.fluid.FluidTankComponent;
 import com.hrznstudio.titanium.component.fluid.SidedFluidTankComponent;
 import com.hrznstudio.titanium.component.inventory.SidedInventoryComponent;
 import com.hrznstudio.titanium.component.progress.ProgressBarComponent;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.server.level.ServerLevel;
@@ -121,6 +123,23 @@ public class HydroponicBedTile extends IndustrialWorkingTile<HydroponicBedTile> 
             }
             if (planted.isEmpty()) {
                 planted = cachedRecollectable.getSeedDrop(level, up, state);
+            }
+            if (planted.isEmpty()) {
+                for (ItemStack drop : drops) {
+                    ItemStack sapling = BlockUtils.getSaplingFromLeaves(drop);
+                    if (!sapling.isEmpty()) {
+                        planted = sapling;
+                        break;
+                    }
+                }
+            }
+            if (planted.isEmpty()) {
+                for (ItemStack drop : drops) {
+                    if (BuiltInRegistries.ITEM.getKey(drop.getItem()).getPath().endsWith("_leaves")) {
+                        planted = drop.copyWithCount(1);
+                        break;
+                    }
+                }
             }
             if (!planted.is(IndustrialTags.Items.HYDROPONIC_SIMULATION_BLACKLIST) && !simulationOutput.isEmpty() && simulationOutput.getItem() instanceof HydroponicSimulationProcessorItem) {
                 var sim = new HydroponicSimulationProcessorItem.Simulation(simulationOutput.get(IFAttachments.HYDROPONIC_SIMULATION_PROCESSOR));

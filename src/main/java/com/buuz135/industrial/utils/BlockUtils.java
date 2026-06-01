@@ -26,6 +26,8 @@ import com.buuz135.industrial.IndustrialForegoing;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.NonNullList;
+import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.tags.TagKey;
@@ -119,6 +121,29 @@ public class BlockUtils {
         }
         stacks.addAll(Block.getDrops(state, (ServerLevel) world, pos, world.getBlockEntity(pos), null, tool));
         return stacks;
+    }
+
+    public static ItemStack getSaplingFromLeaves(ItemStack leaves) {
+        ResourceLocation key = BuiltInRegistries.ITEM.getKey(leaves.getItem());
+        String name = key.getPath();
+        if (name.endsWith("_leaves")) {
+            String prefix = name.substring(0, name.length() - 7);
+            ResourceLocation saplingRl = ResourceLocation.fromNamespaceAndPath(key.getNamespace(), prefix + "_sapling");
+            if (BuiltInRegistries.ITEM.containsKey(saplingRl)) {
+                return new ItemStack(BuiltInRegistries.ITEM.get(saplingRl));
+            }
+        }
+        // Special case for azalea
+        if (name.equals("azalea_leaves")) {
+            return new ItemStack(Items.AZALEA);
+        }
+        if (name.equals("flowering_azalea_leaves")) {
+            return new ItemStack(Items.FLOWERING_AZALEA);
+        }
+        if (name.equals("mangrove_leaves")) {
+            return new ItemStack(Items.MANGROVE_PROPAGULE);
+        }
+        return ItemStack.EMPTY;
     }
 
     public static boolean spawnItemStack(ItemStack stack, Level world, BlockPos pos) {

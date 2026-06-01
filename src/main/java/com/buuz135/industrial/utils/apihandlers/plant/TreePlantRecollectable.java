@@ -89,6 +89,18 @@ public class TreePlantRecollectable extends PlantRecollectable {
     }
 
     @Override
+    public ItemStack getSeedDrop(Level world, BlockPos pos, BlockState blockState) {
+        if (treeCache.containsKey(pos)) {
+            TreeCache cache = treeCache.get(pos);
+            for (BlockPos leavesPo : cache.getLeavesCache()) {
+                ItemStack sapling = BlockUtils.getSaplingFromLeaves(new ItemStack(world.getBlockState(leavesPo).getBlock()));
+                if (!sapling.isEmpty()) return sapling;
+            }
+        }
+        return super.getSeedDrop(world, pos, blockState);
+    }
+
+    @Override
     public boolean shouldCheckNextPlant(Level world, BlockPos pos, BlockState blockState) {
         return !canBeHarvested(world, pos, blockState);
     }
