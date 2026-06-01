@@ -26,11 +26,17 @@ import com.buuz135.industrial.IndustrialForegoing;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.NonNullList;
+import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
+import net.minecraft.world.item.enchantment.EnchantmentHelper;
+import net.minecraft.world.item.enchantment.Enchantments;
+import net.minecraft.world.item.enchantment.ItemEnchantments;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
@@ -96,14 +102,48 @@ public class BlockUtils {
     }
 
     public static List<ItemStack> getBlockDrops(Level world, BlockPos pos) {
-        return getBlockDrops(world, pos, 0);
+        return getBlockDrops(world, pos, 0, false);
     }
 
     public static List<ItemStack> getBlockDrops(Level world, BlockPos pos, int fortune) {
+        return getBlockDrops(world, pos, fortune, false);
+    }
+
+    public static List<ItemStack> getBlockDrops(Level world, BlockPos pos, int fortune, boolean silkTouch) {
         BlockState state = world.getBlockState(pos);
         NonNullList<ItemStack> stacks = NonNullList.create();
-        stacks.addAll(Block.getDrops(state, (ServerLevel) world, pos, world.getBlockEntity(pos)));
+        ItemStack tool = new ItemStack(Items.NETHERITE_PICKAXE);
+        if (silkTouch || fortune > 0) {
+            ItemEnchantments.Mutable enchants = new ItemEnchantments.Mutable(ItemEnchantments.EMPTY);
+            if (silkTouch) enchants.set(world.registryAccess().holderOrThrow(Enchantments.SILK_TOUCH), 1);
+            if (fortune > 0) enchants.set(world.registryAccess().holderOrThrow(Enchantments.FORTUNE), fortune);
+            EnchantmentHelper.setEnchantments(tool, enchants.toImmutable());
+        }
+        stacks.addAll(Block.getDrops(state, (ServerLevel) world, pos, world.getBlockEntity(pos), null, tool));
         return stacks;
+    }
+
+    public static ItemStack getSaplingFromLeaves(ItemStack leaves) {
+        ResourceLocation key = BuiltInRegistries.ITEM.getKey(leaves.getItem());
+        String name = key.getPath();
+        if (name.endsWith("_leaves")) {
+            String prefix = name.substring(0, name.length() - 7);
+            ResourceLocation saplingRl = ResourceLocation.fromNamespaceAndPath(key.getNamespace(), prefix + "_sapling");
+            if (BuiltInRegistries.ITEM.containsKey(saplingRl)) {
+                return new ItemStack(BuiltInRegistries.ITEM.get(saplingRl));
+            }
+        }
+        // Special case for azalea
+        if (name.equals("azalea_leaves")) {
+            return new ItemStack(Items.AZALEA);
+        }
+        if (name.equals("flowering_azalea_leaves")) {
+            return new ItemStack(Items.FLOWERING_AZALEA);
+        }
+        if (name.equals("mangrove_leaves")) {
+            return new ItemStack(Items.MANGROVE_PROPAGULE);
+        }
+        return ItemStack.EMPTY;
     }
 
     public static boolean spawnItemStack(ItemStack stack, Level world, BlockPos pos) {

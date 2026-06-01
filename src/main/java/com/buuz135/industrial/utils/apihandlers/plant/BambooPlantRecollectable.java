@@ -46,14 +46,20 @@ public class BambooPlantRecollectable extends PlantRecollectable {
 
     @Override
     public List<ItemStack> doHarvestOperation(Level world, BlockPos pos, BlockState blockState) {
+        return doHarvestOperation(world, pos, blockState, false, false);
+    }
+
+    @Override
+    public List<ItemStack> doHarvestOperation(Level world, BlockPos pos, BlockState blockState, Object... extras) {
         var margin = 1;
         var orginalPos = pos.getY();
         while (world.getBlockState(pos.above()).getBlock().equals(Blocks.BAMBOO)) {
             pos = pos.above();
         }
         NonNullList<ItemStack> stacks = NonNullList.create();
+        boolean silkTouch = extras.length > 1 && (Boolean) extras[1];
         while (pos.getY() > margin + orginalPos) {
-            stacks.addAll(BlockUtils.getBlockDrops(world, pos));
+            stacks.addAll(BlockUtils.getBlockDrops(world, pos, 0, silkTouch));
             world.setBlockAndUpdate(pos, Blocks.AIR.defaultBlockState());
             pos = pos.below();
         }

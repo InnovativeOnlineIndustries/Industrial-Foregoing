@@ -42,6 +42,8 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.item.enchantment.Enchantment;
+import net.minecraft.world.item.enchantment.EnchantmentHelper;
+import net.minecraft.world.item.enchantment.Enchantments;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
 import net.neoforged.neoforge.fluids.FluidStack;
@@ -99,10 +101,11 @@ public class ItemInfinitySaw extends ItemInfinity {
                                 break;
                             }
                             if (!enoughFuel(stack)) break;
+                            boolean silkTouch = EnchantmentHelper.getItemEnchantmentLevel(worldIn.registryAccess().holderOrThrow(Enchantments.SILK_TOUCH), stack) > 0;
                             if (!cache.getLeavesCache().isEmpty()) {
-                                itemStacks.addAll(cache.chop(cache.getLeavesCache(), false));
+                                itemStacks.addAll(cache.chop(cache.getLeavesCache(), false, silkTouch));
                             } else {
-                                itemStacks.addAll(cache.chop(cache.getWoodCache(), false));
+                                itemStacks.addAll(cache.chop(cache.getWoodCache(), false, silkTouch));
                             }
                             consumeFuel(stack);
                         }

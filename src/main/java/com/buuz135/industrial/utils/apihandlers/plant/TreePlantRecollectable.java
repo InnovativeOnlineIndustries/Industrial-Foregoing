@@ -78,13 +78,26 @@ public class TreePlantRecollectable extends PlantRecollectable {
             }
             for (int i = 0; i < operations; ++i) {
                 if (cache.getWoodCache().isEmpty() && cache.getLeavesCache().isEmpty()) break;
+                boolean silkTouch = extras.length > 1 && (Boolean) extras[1];
                 if (!cache.getLeavesCache().isEmpty())
-                    itemStacks.addAll(cache.chop(cache.getLeavesCache(), (Boolean) extras[0]));
-                else itemStacks.addAll(cache.chop(cache.getWoodCache(), (Boolean) extras[0]));
+                    itemStacks.addAll(cache.chop(cache.getLeavesCache(), (Boolean) extras[0], silkTouch));
+                else itemStacks.addAll(cache.chop(cache.getWoodCache(), (Boolean) extras[0], silkTouch));
             }
             if (cache.getWoodCache().isEmpty() && cache.getLeavesCache().isEmpty()) treeCache.remove(pos);
         }
         return itemStacks;
+    }
+
+    @Override
+    public ItemStack getSeedDrop(Level world, BlockPos pos, BlockState blockState) {
+        if (treeCache.containsKey(pos)) {
+            TreeCache cache = treeCache.get(pos);
+            for (BlockPos leavesPo : cache.getLeavesCache()) {
+                ItemStack sapling = BlockUtils.getSaplingFromLeaves(new ItemStack(world.getBlockState(leavesPo).getBlock()));
+                if (!sapling.isEmpty()) return sapling;
+            }
+        }
+        return super.getSeedDrop(world, pos, blockState);
     }
 
     @Override

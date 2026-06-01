@@ -49,15 +49,15 @@ public class TreeCache {
         this.current = current;
     }
 
-    public List<ItemStack> chop(Queue<BlockPos> cache, boolean shear) {
+    public List<ItemStack> chop(Queue<BlockPos> cache, boolean shear, boolean silkTouch) {
         BlockPos p = cache.peek();
         NonNullList<ItemStack> stacks = NonNullList.create();
-        if (BlockUtils.isLeaves(world, p) || BlockUtils.isLog(world, p)) {
+        if (BlockUtils.isLeaves(world, p) || BlockUtils.isLog(world, p) || world.getBlockState(p).getBlock().equals(net.minecraft.world.level.block.Blocks.BEE_NEST)) {
             BlockState s = world.getBlockState(p);
             if (s.getBlock() instanceof IShearable shearable && shear) {
                 stacks.addAll(shearable.onSheared(null, new ItemStack(Items.SHEARS), world, p));
             } else {
-                stacks.addAll(BlockUtils.getBlockDrops(world, p));
+                stacks.addAll(BlockUtils.getBlockDrops(world, p, 0, silkTouch));
             }
             world.setBlockAndUpdate(p, Blocks.AIR.defaultBlockState());
         }
@@ -88,12 +88,16 @@ public class TreeCache {
         }
         while (!tree.isEmpty()) {
             BlockPos checking = tree.pop();
-            if (BlockUtils.isLeaves(world, checking) || BlockUtils.isLog(world, checking)) {
+            if (BlockUtils.isLeaves(world, checking) || BlockUtils.isLog(world, checking) || world.getBlockState(checking).getBlock().equals(net.minecraft.world.level.block.Blocks.BEE_NEST)) {
                 for (BlockPos pos : BlockPos.betweenClosed(checking.offset(-1, 0, -1), checking.offset(1, 1, 1))) {
                     BlockPos blockPos = pos.immutable();
                     if (world.isEmptyBlock(blockPos) || checkedPositions.contains(blockPos) || blockPos.distManhattan(new Vec3i(current.getX(), current.getY(), current.getZ())) > 100 /*BlockRegistry.cropRecolectorBlock.getMaxDistanceTreeBlocksScan()*/)
                         continue;
                     if (BlockUtils.isLeaves(world, blockPos)) {
+                        tree.push(blockPos);
+                        leavesCache.add(blockPos);
+                        checkedPositions.add(blockPos);
+                    } else if (world.getBlockState(blockPos).getBlock().equals(net.minecraft.world.level.block.Blocks.BEE_NEST)) {
                         tree.push(blockPos);
                         leavesCache.add(blockPos);
                         checkedPositions.add(blockPos);

@@ -51,9 +51,15 @@ public class DoubleTallPlantRecollectable extends PlantRecollectable {
 
     @Override
     public List<ItemStack> doHarvestOperation(Level world, BlockPos pos, BlockState blockState) {
+        return doHarvestOperation(world, pos, blockState, false, false);
+    }
+
+    @Override
+    public List<ItemStack> doHarvestOperation(Level world, BlockPos pos, BlockState blockState, Object... extras) {
         NonNullList<ItemStack> stacks = NonNullList.create();
-        harvestBlock(stacks, world, pos.relative(Direction.UP, 2));
-        harvestBlock(stacks, world, pos.relative(Direction.UP, 1));
+        boolean silkTouch = extras.length > 1 && (Boolean) extras[1];
+        harvestBlock(stacks, world, pos.relative(Direction.UP, 2), silkTouch);
+        harvestBlock(stacks, world, pos.relative(Direction.UP, 1), silkTouch);
         return stacks;
     }
 
@@ -62,10 +68,10 @@ public class DoubleTallPlantRecollectable extends PlantRecollectable {
         return true;
     }
 
-    private void harvestBlock(NonNullList<ItemStack> stacks, Level world, BlockPos pos) {
+    private void harvestBlock(NonNullList<ItemStack> stacks, Level world, BlockPos pos, boolean silkTouch) {
         BlockState blockState = world.getBlockState(pos);
         if (blockState.getBlock() instanceof CactusBlock || blockState.getBlock() instanceof SugarCaneBlock) {
-            stacks.addAll(BlockUtils.getBlockDrops(world, pos));
+            stacks.addAll(BlockUtils.getBlockDrops(world, pos, 0, silkTouch));
             if (!world.getFluidState(pos).isEmpty()) {
                 world.setBlockAndUpdate(pos, Blocks.WATER.defaultBlockState());
             } else {

@@ -32,6 +32,7 @@ import com.buuz135.industrial.module.ModuleCore;
 import com.buuz135.industrial.registry.IFRegistries;
 import com.buuz135.industrial.utils.BlockUtils;
 import com.buuz135.industrial.utils.ItemStackUtils;
+import com.buuz135.industrial.item.addon.SilkTouchAddonItem;
 import com.hrznstudio.titanium.annotation.Save;
 import com.hrznstudio.titanium.component.energy.EnergyStorageComponent;
 import com.hrznstudio.titanium.component.fluid.FluidTankComponent;
@@ -102,18 +103,19 @@ public class PlantGathererTile extends IndustrialAreaWorkingTile<PlantGathererTi
             for (int i = 0; i < amount; i++) {
                 BlockPos pointed = getPointedBlockPos();
                 if (isLoaded(pointed) && !ItemStackUtils.isInventoryFull(output)) {
+                    boolean silkTouch = hasAugmentInstalled(SilkTouchAddonItem.SILK_TOUCH);
                     if (this.etherBar.getProgress() > 0) {
                         if (HydroponicBedTile.tryToHarvestAndReplant(this.level, pointed, this.level.getBlockState(pointed), this.output, this.etherBar, this, () -> {
                             Optional<PlantRecollectable> optional = IFRegistries.PLANT_RECOLLECTABLES_REGISTRY.stream().filter(plantRecollectable -> plantRecollectable.canBeHarvested(level, pointed, this.level.getBlockState(pointed))).findFirst();
                             return optional.orElse(null);
-                        }, ItemStack.EMPTY)) {
+                        }, ItemStack.EMPTY, silkTouch)) {
                             tank.fillForced(new FluidStack(ModuleCore.SLUDGE.getSourceFluid().get(), 10), IFluidHandler.FluidAction.EXECUTE);
                             return new WorkAction(0.3f, powerPerOperation);
                         }
                     } else {
                         Optional<PlantRecollectable> optional = IFRegistries.PLANT_RECOLLECTABLES_REGISTRY.stream().filter(plantRecollectable -> plantRecollectable.canBeHarvested(this.level, pointed, this.level.getBlockState(pointed))).findFirst();
                         if (optional.isPresent()) {
-                            List<ItemStack> drops = optional.get().doHarvestOperation(this.level, pointed, this.level.getBlockState(pointed));
+                            List<ItemStack> drops = optional.get().doHarvestOperation(this.level, pointed, this.level.getBlockState(pointed), false, silkTouch);
                             tank.fillForced(new FluidStack(ModuleCore.SLUDGE.getSourceFluid().get(), 10 * drops.size()), IFluidHandler.FluidAction.EXECUTE);
                             drops.forEach(stack -> ItemHandlerHelper.insertItem(output, stack, false));
                             if (optional.get().shouldCheckNextPlant(this.level, pointed, this.level.getBlockState(pointed))) {

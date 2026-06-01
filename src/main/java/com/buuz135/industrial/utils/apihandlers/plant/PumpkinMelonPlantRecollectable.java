@@ -49,12 +49,18 @@ public class PumpkinMelonPlantRecollectable extends PlantRecollectable {
 
     @Override
     public List<ItemStack> doHarvestOperation(Level world, BlockPos pos, BlockState blockState) {
+        return doHarvestOperation(world, pos, blockState, false, false);
+    }
+
+    @Override
+    public List<ItemStack> doHarvestOperation(Level world, BlockPos pos, BlockState blockState, Object... extras) {
         NonNullList<ItemStack> stacks = NonNullList.create();
+        boolean silkTouch = extras.length > 1 && (Boolean) extras[1];
         if (blockState.getBlock() instanceof AttachedStemBlock) {
-            stacks.addAll(BlockUtils.getBlockDrops(world, pos.relative(blockState.getValue(AttachedStemBlock.FACING))));
+            stacks.addAll(BlockUtils.getBlockDrops(world, pos.relative(blockState.getValue(AttachedStemBlock.FACING)), 0, silkTouch));
             world.setBlockAndUpdate(pos.relative(blockState.getValue(AttachedStemBlock.FACING)), Blocks.AIR.defaultBlockState());
         } else {
-            stacks.addAll(BlockUtils.getBlockDrops(world, pos));
+            stacks.addAll(BlockUtils.getBlockDrops(world, pos, 0, silkTouch));
             world.setBlockAndUpdate(pos, Blocks.AIR.defaultBlockState());
         }
         return stacks;

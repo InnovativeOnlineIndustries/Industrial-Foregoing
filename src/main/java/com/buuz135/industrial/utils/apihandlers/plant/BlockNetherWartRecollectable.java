@@ -48,8 +48,14 @@ public class BlockNetherWartRecollectable extends PlantRecollectable {
 
     @Override
     public List<ItemStack> doHarvestOperation(Level world, BlockPos pos, BlockState blockState) {
+        return doHarvestOperation(world, pos, blockState, false, false);
+    }
+
+    @Override
+    public List<ItemStack> doHarvestOperation(Level world, BlockPos pos, BlockState blockState, Object... extras) {
         NonNullList<ItemStack> stacks = NonNullList.create();
-        stacks.addAll(BlockUtils.getBlockDrops(world, pos));
+        boolean silkTouch = extras.length > 1 && (Boolean) extras[1];
+        stacks.addAll(BlockUtils.getBlockDrops(world, pos, 0, silkTouch));
         world.setBlockAndUpdate(pos, Blocks.AIR.defaultBlockState());
         return stacks;
     }

@@ -26,6 +26,7 @@ import com.buuz135.industrial.IndustrialForegoing;
 import com.buuz135.industrial.block.IndustrialBlockItem;
 import com.buuz135.industrial.block.agriculturehusbandry.*;
 import com.buuz135.industrial.item.HydroponicSimulationProcessorItem;
+import com.buuz135.industrial.item.addon.SilkTouchAddonItem;
 import com.buuz135.industrial.registry.IFRegistries;
 import com.buuz135.industrial.utils.Reference;
 import com.buuz135.industrial.utils.apihandlers.plant.*;
@@ -56,7 +57,9 @@ public class ModuleAgricultureHusbandry implements IModule {
     public static BlockWithTile SIMULATED_HYDROPONIC_BED = IndustrialForegoing.INSTANCE.getRegistries().registerBlockWithTileItem("simulated_hydroponic_bed", () -> new SimulatedHydroponicBedBlock(), blockRegistryObject -> () -> new IndustrialBlockItem(blockRegistryObject.get(), TAB_AG_HUS), TAB_AG_HUS);
     public static BlockWithTile MOB_DUPLICATOR = IndustrialForegoing.INSTANCE.getRegistries().registerBlockWithTileItem("mob_duplicator", () -> new MobDuplicatorBlock(), blockRegistryObject -> () -> new IndustrialBlockItem(blockRegistryObject.get(), TAB_AG_HUS), TAB_AG_HUS);
     public static BlockWithTile WITHER_BUILDER = IndustrialForegoing.INSTANCE.getRegistries().registerBlockWithTileItem("wither_builder", () -> new WitherBuilderBlock(), blockRegistryObject -> () -> new IndustrialBlockItem(blockRegistryObject.get(), TAB_AG_HUS), TAB_AG_HUS);
+    public static DeferredHolder<Item, Item> SILK_TOUCH_ADDON = IndustrialForegoing.INSTANCE.getRegistries().registerGeneric(Registries.ITEM, "silk_touch_addon", () -> new SilkTouchAddonItem(TAB_AG_HUS));
     public static DeferredHolder<Item, Item> HYDROPONIC_SIMULATION_PROCESSOR = IndustrialForegoing.INSTANCE.getRegistries().registerGeneric(Registries.ITEM, "hydroponic_simulation_processor", () -> new HydroponicSimulationProcessorItem(TAB_AG_HUS));
+
 
 
     @Override

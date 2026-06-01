@@ -1,0 +1,49 @@
+{
+  "neoforge:conditions": [
+    {
+      "type": "neoforge:item_exists",
+      "item": "industrialforegoing:silk_touch_addon"
+    }
+  ],
+  "type": "industrialforegoing:dissolution_chamber",
+  "input": [
+    {
+      "tag": "c:plastics"
+    },
+    {
+      "tag": "c:plastics"
+    },
+    {
+      "item": "minecraft:glass_pane"
+    },
+    {
+      "item": "minecraft:glass_pane"
+    },
+    {
+      "item": "minecraft:shears"
+    },
+    {
+      "tag": "c:gears/gold"
+    },
+    {
+      "tag": "c:plastics"
+    },
+    {
+      "tag": "c:plastics"
+    }
+  ],
+  "inputFluid": {
+    "amount": 1000,
+    "fluid": "industrialforegoing:latex"
+  },
+  "output": {
+    "components": {
+      "titanium:augments": {
+        "SilkTouch": 1.0
+      }
+    },
+    "count": 1,
+    "id": "industrialforegoing:silk_touch_addon"
+  },
+  "processingTime": 200
+}
