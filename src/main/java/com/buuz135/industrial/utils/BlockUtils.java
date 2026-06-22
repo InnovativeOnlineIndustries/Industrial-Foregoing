@@ -94,6 +94,7 @@ public class BlockUtils {
         var block = state.getBlock();
         return block.equals(Blocks.SHROOMLIGHT)
                 || block.equals(Blocks.MOSS_CARPET)
+                || block.equals(Blocks.WEEPING_VINES)
                 || (block.equals(Blocks.MANGROVE_PROPAGULE) && state.getValue(MangrovePropaguleBlock.HANGING))
                 || state.is(BlockTags.LEAVES)
                 || state.is(BlockTags.WART_BLOCKS);
