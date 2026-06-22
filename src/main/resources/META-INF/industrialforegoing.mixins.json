@@ -4,6 +4,8 @@
   "minVersion": "0.8",
   "compatibilityLevel": "JAVA_21",
   "mixins": [
+    "FungusBlockMixin",
+    "HugeFungusFeatureMixin",
     "IBushBlockMixin"
   ]
 }
