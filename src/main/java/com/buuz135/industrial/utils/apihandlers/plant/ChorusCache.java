@@ -30,6 +30,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.ChorusFlowerBlock;
+import net.minecraft.world.level.block.state.BlockState;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -60,20 +61,36 @@ public class ChorusCache {
     }
 
     public boolean isFullyGrown() {
-        return chorus.stream().map(blockpos -> world.getBlockState(blockpos)).allMatch(blockState -> blockState.getBlock().equals(Blocks.CHORUS_PLANT) || (blockState.getBlock().equals(Blocks.CHORUS_FLOWER) && blockState.getValue(ChorusFlowerBlock.AGE) == 5));
+        for (BlockPos blockpos : chorus) {
+            BlockState blockState = world.getBlockState(blockpos);
+            var block = blockState.getBlock();
+            if (!block.equals(Blocks.CHORUS_PLANT) && (!block.equals(Blocks.CHORUS_FLOWER) || blockState.getValue(ChorusFlowerBlock.AGE) != 5)) {
+                return false;
+            }
+        }
+
+        return true;
     }
 
     public List<ItemStack> chop() {
         NonNullList<ItemStack> stacks = NonNullList.create();
         int maxY = getTopRowY();
-        chorus.stream().filter(pos -> pos.getY() == maxY).forEach(pos -> chop(stacks, pos));
-        chorus.removeIf(pos -> pos.getY() == maxY);
+        var iter = chorus.listIterator();
+        while (iter.hasNext()) {
+            var blockPos = iter.next();
+            if (blockPos.getY() == maxY) {
+                chop(stacks, blockPos);
+                iter.remove();
+            }
+        }
         return stacks;
     }
 
     public void chop(NonNullList<ItemStack> stacks, BlockPos p) {
-        if (BlockUtils.isChorus(world, p)) {
-            if (world.getBlockState(p).getBlock().equals(Blocks.CHORUS_FLOWER)) {
+        var state = world.getBlockState(p);
+        var block = state.getBlock();
+        if (BlockUtils.isBlockChorus(block)) {
+            if (block.equals(Blocks.CHORUS_FLOWER)) {
                 stacks.add(new ItemStack(Blocks.CHORUS_FLOWER));
             } else {
                 stacks.addAll(BlockUtils.getBlockDrops(world, p));

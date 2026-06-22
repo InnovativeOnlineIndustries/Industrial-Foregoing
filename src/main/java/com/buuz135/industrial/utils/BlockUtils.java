@@ -61,6 +61,9 @@ public class BlockUtils {
         return blocks;
     }
 
+    /**
+     * Use {@link BlockUtils#isBlockStateTag(BlockState, TagKey)} if you need the {@code BlockState} anyways
+     */
     public static boolean isBlockTag(Level world, BlockPos pos, TagKey<Block> tag) {
         return isBlockStateTag(world.getBlockState(pos), tag);
     }
@@ -69,20 +72,42 @@ public class BlockUtils {
         return state.is(tag);
     }
 
+    /**
+     * Use {@link BlockUtils#isBlockStateLog(BlockState)} if you need the {@code BlockState} anyways
+     */
     public static boolean isLog(Level world, BlockPos pos) {
-        return isBlockTag(world, pos, BlockTags.LOGS) || world.getBlockState(pos).is(Blocks.MANGROVE_ROOTS);
+        return isBlockStateLog(world.getBlockState(pos));
     }
 
+    public static boolean isBlockStateLog(BlockState state) {
+        return state.is(BlockTags.LOGS) || state.is(Blocks.MANGROVE_ROOTS);
+    }
+
+    /**
+     * Use {@link BlockUtils#isBlockStateLeaves(BlockState)} if you need the {@code BlockState} anyways
+     */
     public static boolean isLeaves(Level world, BlockPos pos) {
-        return world.getBlockState(pos).is(BlockTags.WART_BLOCKS)
-                || world.getBlockState(pos).is(BlockTags.LEAVES)
-                || world.getBlockState(pos).getBlock().equals(Blocks.SHROOMLIGHT)
-                || world.getBlockState(pos).getBlock().equals(Blocks.MOSS_CARPET)
-                || (world.getBlockState(pos).getBlock().equals(Blocks.MANGROVE_PROPAGULE) && world.getBlockState(pos).getValue(MangrovePropaguleBlock.HANGING));
+        return isBlockStateLeaves(world.getBlockState(pos));
     }
 
+    public static boolean isBlockStateLeaves(BlockState state) {
+        var block = state.getBlock();
+        return block.equals(Blocks.SHROOMLIGHT)
+                || block.equals(Blocks.MOSS_CARPET)
+                || (block.equals(Blocks.MANGROVE_PROPAGULE) && state.getValue(MangrovePropaguleBlock.HANGING))
+                || state.is(BlockTags.LEAVES)
+                || state.is(BlockTags.WART_BLOCKS);
+    }
+
+    /**
+     * Use {@link BlockUtils#isBlockChorus(Block)} if you need the {@code BlockState} or {@code Block} anyways
+     */
     public static boolean isChorus(Level world, BlockPos pos) {
-        return world.getBlockState(pos).getBlock().equals(Blocks.CHORUS_PLANT) || world.getBlockState(pos).getBlock().equals(Blocks.CHORUS_FLOWER);
+        return isBlockChorus(world.getBlockState(pos).getBlock());
+    }
+
+    public static boolean isBlockChorus(Block block) {
+        return block.equals(Blocks.CHORUS_PLANT) || block.equals(Blocks.CHORUS_FLOWER);
     }
 
     public static boolean canBlockBeBroken(Level world, BlockPos pos, String uuid) {

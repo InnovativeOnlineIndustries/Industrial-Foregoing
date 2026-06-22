@@ -24,6 +24,7 @@ package com.buuz135.industrial.utils.apihandlers.plant;
 
 import com.buuz135.industrial.utils.BlockUtils;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
 import net.minecraft.core.NonNullList;
 import net.minecraft.core.Vec3i;
 import net.minecraft.world.item.ItemStack;
@@ -52,8 +53,8 @@ public class TreeCache {
     public List<ItemStack> chop(Queue<BlockPos> cache, boolean shear) {
         BlockPos p = cache.peek();
         NonNullList<ItemStack> stacks = NonNullList.create();
-        if (BlockUtils.isLeaves(world, p) || BlockUtils.isLog(world, p)) {
-            BlockState s = world.getBlockState(p);
+        BlockState s = world.getBlockState(p);
+        if (BlockUtils.isBlockStateLeaves(s) || BlockUtils.isBlockStateLog(s)) {
             if (s.getBlock() instanceof IShearable shearable && shear) {
                 stacks.addAll(shearable.onSheared(null, new ItemStack(Items.SHEARS), world, p));
             } else {
@@ -88,16 +89,18 @@ public class TreeCache {
         }
         while (!tree.isEmpty()) {
             BlockPos checking = tree.pop();
-            if (BlockUtils.isLeaves(world, checking) || BlockUtils.isLog(world, checking)) {
+            var checkingState = world.getBlockState(checking);
+            if (BlockUtils.isBlockStateLeaves(checkingState) || BlockUtils.isBlockStateLog(checkingState)) {
                 for (BlockPos pos : BlockPos.betweenClosed(checking.offset(-1, -1, -1), checking.offset(1, 1, 1))) {
                     BlockPos blockPos = pos.immutable();
-                    if (world.isEmptyBlock(blockPos) || checkedPositions.contains(blockPos) || blockPos.distManhattan(new Vec3i(current.getX(), current.getY(), current.getZ())) > 100 /*BlockRegistry.cropRecolectorBlock.getMaxDistanceTreeBlocksScan()*/)
+                    var state = world.getBlockState(blockPos);
+                    if (state.isAir() || checkedPositions.contains(blockPos) || blockPos.distManhattan(new Vec3i(current.getX(), current.getY(), current.getZ())) > 100 /*BlockRegistry.cropRecolectorBlock.getMaxDistanceTreeBlocksScan()*/)
                         continue;
-                    if (BlockUtils.isLeaves(world, blockPos)) {
+                    if (BlockUtils.isBlockStateLeaves(state)) {
                         tree.push(blockPos);
                         leavesCache.add(blockPos);
                         checkedPositions.add(blockPos);
-                    } else if (BlockUtils.isLog(world, blockPos)) {
+                    } else if (BlockUtils.isBlockStateLog(state)) {
                         tree.push(blockPos);
                         woodCache.add(blockPos);
                         checkedPositions.add(blockPos);
@@ -108,8 +111,14 @@ public class TreeCache {
     }
 
     public BlockPos getHighestBlock(BlockPos position) {
-        while (!this.world.isEmptyBlock(position.above()) && (BlockUtils.isLog(this.world, position.above()) || BlockUtils.isLeaves(this.world, position.above())))
-            position = position.above();
-        return position;
+        var chunk = this.world.getChunkAt(position);
+        var mutable = position.mutable();
+        BlockState state;
+        do {
+            mutable.move(Direction.UP);
+            state = chunk.getBlockState(mutable);
+        } while (!state.isAir() && (BlockUtils.isBlockStateLeaves(state) || BlockUtils.isBlockStateLog(state)));
+
+        return mutable.below();
     }
 }
