@@ -89,7 +89,7 @@ public class TreeCache {
         while (!tree.isEmpty()) {
             BlockPos checking = tree.pop();
             if (BlockUtils.isLeaves(world, checking) || BlockUtils.isLog(world, checking)) {
-                for (BlockPos pos : BlockPos.betweenClosed(checking.offset(-1, 0, -1), checking.offset(1, 1, 1))) {
+                for (BlockPos pos : BlockPos.betweenClosed(checking.offset(-1, -1, -1), checking.offset(1, 1, 1))) {
                     BlockPos blockPos = pos.immutable();
                     if (world.isEmptyBlock(blockPos) || checkedPositions.contains(blockPos) || blockPos.distManhattan(new Vec3i(current.getX(), current.getY(), current.getZ())) > 100 /*BlockRegistry.cropRecolectorBlock.getMaxDistanceTreeBlocksScan()*/)
                         continue;
