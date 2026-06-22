@@ -24,7 +24,6 @@ package com.buuz135.industrial.utils.apihandlers.plant;
 
 import com.buuz135.industrial.utils.BlockUtils;
 import net.minecraft.core.BlockPos;
-import net.minecraft.core.Direction;
 import net.minecraft.core.NonNullList;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
@@ -49,9 +48,16 @@ public class ChorusCache {
         while (!chorus.isEmpty()) {
             BlockPos checking = chorus.pop();
             if (BlockUtils.isChorus(world, checking)) {
-                Iterable<BlockPos> area = BlockPos.betweenClosed(checking.relative(Direction.DOWN).relative(Direction.SOUTH).relative(Direction.WEST), checking.relative(Direction.UP).relative(Direction.NORTH).relative(Direction.EAST));
+                Iterable<BlockPos> area = BlockPos.betweenClosed(checking.offset(-1, 0, -1), checking.offset(1, 1, 1));
                 for (BlockPos blockPos : area) {
-                    if (BlockUtils.isChorus(world, blockPos) && !this.chorus.contains(blockPos) && blockPos.distSqr(current) <= 100) {
+                    // Chorus can grow up to 22 blocks, tall - assuming it grows sideways each time as well, you have a
+                    // max distance of sqrt(22^2 + 22^2) = 31.11...
+                    // We round that up to 32 then square it to get 1024.
+                    if (blockPos.distSqr(current) > 1024) {
+                        continue;
+                    }
+                    
+                    if (BlockUtils.isChorus(world, blockPos) && !this.chorus.contains(blockPos)) {
                         chorus.push(blockPos.immutable());
                         this.chorus.add(blockPos.immutable());
                     }
@@ -75,6 +81,10 @@ public class ChorusCache {
     public List<ItemStack> chop() {
         NonNullList<ItemStack> stacks = NonNullList.create();
         int maxY = getTopRowY();
+        if (maxY == Integer.MIN_VALUE) {
+            return stacks;
+        }
+
         var iter = chorus.listIterator();
         while (iter.hasNext()) {
             var blockPos = iter.next();
@@ -100,7 +110,7 @@ public class ChorusCache {
     }
 
     public int getTopRowY() {
-        int i = 0;
+        int i = Integer.MIN_VALUE;
         for (BlockPos blockPos : chorus) {
             if (blockPos.getY() > i) i = blockPos.getY();
         }
