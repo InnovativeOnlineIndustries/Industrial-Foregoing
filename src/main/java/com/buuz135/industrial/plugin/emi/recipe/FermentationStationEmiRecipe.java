@@ -3,9 +3,7 @@ package com.buuz135.industrial.plugin.emi.recipe;
 import com.buuz135.industrial.api.recipe.ore.OreFluidEntryFermenter;
 import com.buuz135.industrial.fluid.OreTitaniumFluidType;
 import com.buuz135.industrial.plugin.emi.IFEmiPlugin;
-import com.hrznstudio.titanium.api.client.AssetTypes;
-import com.hrznstudio.titanium.client.screen.asset.DefaultAssetProvider;
-import com.hrznstudio.titanium.util.AssetUtil;
+import com.buuz135.industrial.plugin.emi.widget.NormalTankEmiWidget;
 import dev.emi.emi.api.neoforge.NeoForgeEmiStack;
 import dev.emi.emi.api.widget.WidgetHolder;
 import net.minecraft.ChatFormatting;
@@ -36,20 +34,13 @@ public class FermentationStationEmiRecipe extends CustomEmiRecipe {
 
     @Override
     public void addWidgets(WidgetHolder widgets) {
-
-        widgets.addTank(this.getInputs().get(0), 4, 3, 14, 52, 1000).drawBack(false);
-
-        widgets.addTank(this.getOutputs().get(0), 99 - 45 + 2, 3, 14, 52, 1000).drawBack(false).recipeContext(this);
+        widgets.add(new NormalTankEmiWidget(this.getInputs().get(0), 1000, 2, 1));
+        widgets.add(new NormalTankEmiWidget(this.getOutputs().get(0), 1000, 99 - 45, 1)).recipeContext(this);
 
         widgets.addFillingArrow(26, 21, 2000);
 
         widgets.addDrawable(0, 0, 0, 0, (draw, mouseX, mouseY, delta) -> {
-            AssetUtil.drawAsset(draw, Minecraft.getInstance().screen, DefaultAssetProvider.DEFAULT_PROVIDER.getAsset(AssetTypes.TANK_NORMAL), 2, 1);
-            AssetUtil.drawAsset(draw, Minecraft.getInstance().screen, DefaultAssetProvider.DEFAULT_PROVIDER.getAsset(AssetTypes.TANK_NORMAL), 99 - 45, 1);
             draw.drawString(Minecraft.getInstance().font, ChatFormatting.DARK_AQUA + Component.translatable("text.industrialforegoing.jei.recipe.up_to_500mb").getString(), 8, 59, 0xFFFFFF, false);
         });
-
     }
-
-
 }
