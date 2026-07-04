@@ -50,6 +50,7 @@ import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.components.EditBox;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Holder;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.NbtUtils;
 import net.minecraft.network.chat.Component;
@@ -59,6 +60,7 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.DyeColor;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.RecipeType;
+import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
@@ -70,6 +72,7 @@ import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 public class FluidLaserBaseTile extends IndustrialMachineTile<FluidLaserBaseTile> implements ILaserBase<FluidLaserBaseTile> {
@@ -178,36 +181,46 @@ public class FluidLaserBaseTile extends IndustrialMachineTile<FluidLaserBaseTile
     }
 
     private void onWork() {
-        if (!catalyst.getStackInSlot(0).isEmpty()) {
-            VoxelShape box = Shapes.box(-1, 0, -1, 2, 3, 2).move(this.worldPosition.getX(), this.worldPosition.getY() - 1, this.worldPosition.getZ());
-            RecipeUtil.getRecipes(this.level, (RecipeType<LaserDrillFluidRecipe>) ModuleCore.LASER_DRILL_FLUID_TYPE.get())
-                    .stream()
-                    .filter(laserDrillFluidRecipe -> laserDrillFluidRecipe.catalyst.test(catalyst.getStackInSlot(0)))
-                    .filter(laserDrillFluidRecipe -> LaserDrillRarity.getValidRarity(this.level, laserDrillFluidRecipe.rarity, this.level.dimensionType(), this.level.getBiome(this.worldPosition), this.miningDepth) != null)
-                    .findFirst()
-                    .ifPresent(recipe -> {
-                        if(recipe.entityData.isPresent()) {
-                            List<LivingEntity> entities = this.level.getEntitiesOfClass(LivingEntity.class, box.bounds(), entity -> recipe.entityData.get().getEntity().test(entity));
-                            if (entities.isEmpty()) return;
+        ItemStack catalystStack = catalyst.getStackInSlot(0);
+        if (catalystStack.isEmpty()) {
+            return;
+        }
 
-                            List<Entity> filtered = entities.stream().filter(Entity -> {
-                                if (recipe.entityData.isEmpty()) return true;
-                                CompoundTag data = new CompoundTag();
-                                Entity.saveWithoutId(data);
-                                return NbtUtils.compareNbt(recipe.entityData.get().getData(), data, true);
-                            }).collect(Collectors.toList());
+        VoxelShape box = Shapes.box(-1, 0, -1, 2, 3, 2).move(this.worldPosition.getX(), this.worldPosition.getY() - 1, this.worldPosition.getZ());
 
-                            if (filtered.isEmpty()) return;
+        Holder<Biome> biome = this.level.getBiome(this.worldPosition);
 
-                            LivingEntity first = entities.getFirst();
-                            if (first.getHealth() > 5) {
-                                first.hurt(first.damageSources().generic(), 5);
-                                output.fillForced(recipe.output.getFluids()[0].copy(), IFluidHandler.FluidAction.EXECUTE);
-                            }
-                        } else {
-                            output.fillForced(recipe.output.getFluids()[0].copy(), IFluidHandler.FluidAction.EXECUTE);
+        for (LaserDrillFluidRecipe recipe : RecipeUtil.getRecipes(this.level, (RecipeType<LaserDrillFluidRecipe>) ModuleCore.LASER_DRILL_FLUID_TYPE.get())) {
+            if (!recipe.catalyst.test(catalystStack)) {
+                continue;
+            }
+
+            if (LaserDrillRarity.getValidRarity(this.level, recipe.rarity, this.level.dimensionType(), biome, this.miningDepth) == null) {
+                continue;
+            }
+
+            if (recipe.entityData.isPresent()) {
+                var entityData = recipe.entityData.get();
+
+                List<LivingEntity> entities = this.level.getEntitiesOfClass(LivingEntity.class, box.bounds(), entity -> entity.getHealth() > 5 && entityData.getEntity().test(entity));
+
+                for (var candidate : entities) {
+                    if (!entityData.getData().isEmpty()) {
+                        CompoundTag data = new CompoundTag();
+                        candidate.saveWithoutId(data);
+                        if (!NbtUtils.compareNbt(recipe.entityData.get().getData(), data, true)) {
+                            continue;
                         }
-                    });
+                    }
+
+                    candidate.hurt(candidate.damageSources().generic(), 5);
+                    output.fillForced(recipe.output.getFluids()[0].copy(), IFluidHandler.FluidAction.EXECUTE);
+                    return;
+                }
+            } else {
+                output.fillForced(recipe.output.getFluids()[0].copy(), IFluidHandler.FluidAction.EXECUTE);
+                return;
+            }
         }
     }
 

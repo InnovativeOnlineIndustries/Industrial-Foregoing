@@ -27,21 +27,44 @@ import com.buuz135.industrial.api.recipe.ore.OreFluidEntryRaw;
 import com.buuz135.industrial.api.recipe.ore.OreFluidEntrySieve;
 import com.buuz135.industrial.block.generator.MycelialGeneratorBlock;
 import com.buuz135.industrial.block.generator.mycelial.IMycelialGeneratorType;
+import com.buuz135.industrial.block.resourceproduction.tile.DyeMixerTile;
 import com.buuz135.industrial.fluid.OreTitaniumFluidType;
 import com.buuz135.industrial.gui.conveyor.GuiConveyor;
 import com.buuz135.industrial.gui.transporter.GuiTransporter;
-import com.buuz135.industrial.module.*;
+import com.buuz135.industrial.module.ModuleAgricultureHusbandry;
+import com.buuz135.industrial.module.ModuleCore;
+import com.buuz135.industrial.module.ModuleGenerator;
+import com.buuz135.industrial.module.ModuleMisc;
+import com.buuz135.industrial.module.ModuleResourceProduction;
+import com.buuz135.industrial.module.ModuleTool;
 import com.buuz135.industrial.plugin.RecipeViewerHelper;
-import com.buuz135.industrial.plugin.jei.category.*;
+import com.buuz135.industrial.plugin.jei.category.BioReactorRecipeCategory;
+import com.buuz135.industrial.plugin.jei.category.DissolutionChamberCategory;
+import com.buuz135.industrial.plugin.jei.category.DyeMixerCategory;
+import com.buuz135.industrial.plugin.jei.category.FermentationStationCategory;
+import com.buuz135.industrial.plugin.jei.category.FluidExtractorCategory;
+import com.buuz135.industrial.plugin.jei.category.FluidSieveCategory;
+import com.buuz135.industrial.plugin.jei.category.LaserDrillFluidCategory;
+import com.buuz135.industrial.plugin.jei.category.LaserDrillOreCategory;
+import com.buuz135.industrial.plugin.jei.category.LatexProcessingUnitCategory;
+import com.buuz135.industrial.plugin.jei.category.OreWasherCategory;
+import com.buuz135.industrial.plugin.jei.category.SewageComposterCategory;
+import com.buuz135.industrial.plugin.jei.category.SludgeRefinerCategory;
+import com.buuz135.industrial.plugin.jei.category.SporesRecreatorCategory;
+import com.buuz135.industrial.plugin.jei.category.StoneWorkCategory;
+import com.buuz135.industrial.plugin.jei.category.StoneWorkGeneratorCategory;
 import com.buuz135.industrial.plugin.jei.generator.MycelialGeneratorCategory;
 import com.buuz135.industrial.plugin.jei.generator.MycelialGeneratorRecipe;
 import com.buuz135.industrial.plugin.jei.machineproduce.MachineProduceCategory;
 import com.buuz135.industrial.plugin.jei.machineproduce.MachineProduceWrapper;
 import com.buuz135.industrial.plugin.jei.subtype.AddonSubtypeInterpreter;
 import com.buuz135.industrial.plugin.jei.subtype.InfinitySubtypeInterpreter;
-import com.buuz135.industrial.recipe.*;
+import com.buuz135.industrial.recipe.DissolutionChamberRecipe;
+import com.buuz135.industrial.recipe.FluidExtractorRecipe;
+import com.buuz135.industrial.recipe.LaserDrillFluidRecipe;
+import com.buuz135.industrial.recipe.LaserDrillOreRecipe;
+import com.buuz135.industrial.recipe.StoneWorkGenerateRecipe;
 import com.buuz135.industrial.utils.IFAttachments;
-import com.buuz135.industrial.utils.IndustrialTags;
 import com.buuz135.industrial.utils.Reference;
 import com.hrznstudio.titanium.module.BlockWithTile;
 import com.hrznstudio.titanium.util.RecipeUtil;
@@ -51,7 +74,12 @@ import mezz.jei.api.JeiPlugin;
 import mezz.jei.api.constants.RecipeTypes;
 import mezz.jei.api.gui.handlers.IGhostIngredientHandler;
 import mezz.jei.api.ingredients.ITypedIngredient;
-import mezz.jei.api.registration.*;
+import mezz.jei.api.registration.IGuiHandlerRegistration;
+import mezz.jei.api.registration.IModIngredientRegistration;
+import mezz.jei.api.registration.IRecipeCatalystRegistration;
+import mezz.jei.api.registration.IRecipeCategoryRegistration;
+import mezz.jei.api.registration.IRecipeRegistration;
+import mezz.jei.api.registration.ISubtypeRegistration;
 import mezz.jei.api.runtime.IJeiRuntime;
 import mezz.jei.api.runtime.IRecipesGui;
 import net.minecraft.client.Minecraft;
@@ -64,13 +92,18 @@ import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
+import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.item.crafting.RecipeType;
 import net.minecraft.world.level.material.Fluids;
 import net.neoforged.neoforge.common.NeoForgeMod;
 import net.neoforged.neoforge.common.Tags;
 import net.neoforged.neoforge.fluids.FluidStack;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.List;
 import java.util.stream.Collectors;
 
 import static com.buuz135.industrial.plugin.RecipeViewerHelper.generateBioreactorRecipes;
@@ -92,6 +125,11 @@ public class JEICustomPlugin implements IModPlugin {
     private OreWasherCategory oreWasherCategory;
     private FermentationStationCategory fermentationStationCategory;
     private FluidSieveCategory fluidSieveCategory;
+    private LatexProcessingUnitCategory latexProcessingUnitCategory;
+    private SludgeRefinerCategory sludgeRefinerCategory;
+    private SewageComposterCategory sewageComposterCategory;
+    private DyeMixerCategory dyeMixerCategory;
+    private SporesRecreatorCategory sporesRecreatorCategory;
 
     public static void showUses(ItemStack stack) {
         //if (recipesGui != null && recipeRegistry != null)
@@ -196,6 +234,16 @@ public class JEICustomPlugin implements IModPlugin {
         registry.addRecipeCategories(fermentationStationCategory);
         fluidSieveCategory = new FluidSieveCategory(registry.getJeiHelpers().getGuiHelper());
         registry.addRecipeCategories(fluidSieveCategory);
+        latexProcessingUnitCategory = new LatexProcessingUnitCategory(registry.getJeiHelpers().getGuiHelper());
+        registry.addRecipeCategories(latexProcessingUnitCategory);
+        sludgeRefinerCategory = new SludgeRefinerCategory(registry.getJeiHelpers().getGuiHelper());
+        registry.addRecipeCategories(sludgeRefinerCategory);
+        sewageComposterCategory = new SewageComposterCategory(registry.getJeiHelpers().getGuiHelper());
+        registry.addRecipeCategories(sewageComposterCategory);
+        dyeMixerCategory = new DyeMixerCategory(registry.getJeiHelpers().getGuiHelper());
+        registry.addRecipeCategories(dyeMixerCategory);
+        sporesRecreatorCategory = new SporesRecreatorCategory(registry.getJeiHelpers().getGuiHelper());
+        registry.addRecipeCategories(sporesRecreatorCategory);
     }
 
 
@@ -216,12 +264,6 @@ public class JEICustomPlugin implements IModPlugin {
         registration.addRecipes(
                 machineProduceCategory.getRecipeType(),
                 Arrays.asList(
-                        new MachineProduceWrapper(ModuleCore.LATEX_PROCESSING.getBlock(), new ItemStack(ModuleCore.DRY_RUBBER.get())),
-                        new MachineProduceWrapper(ModuleResourceProduction.SLUDGE_REFINER.getBlock(), IndustrialTags.Items.SLUDGE_OUTPUT),
-                        new MachineProduceWrapper(ModuleAgricultureHusbandry.SEWAGE_COMPOSTER.getBlock(), new ItemStack(ModuleCore.FERTILIZER.get())),
-                        new MachineProduceWrapper(ModuleResourceProduction.DYE_MIXER.getBlock(), Tags.Items.DYES),
-                        new MachineProduceWrapper(ModuleResourceProduction.SPORES_RECREATOR.getBlock(), Tags.Items.MUSHROOMS),
-                        new MachineProduceWrapper(ModuleResourceProduction.SPORES_RECREATOR.getBlock(), new ItemStack(Items.CRIMSON_FUNGUS), new ItemStack(Items.WARPED_FUNGUS)),
                         new MachineProduceWrapper(ModuleAgricultureHusbandry.MOB_CRUSHER.getBlock(), new FluidStack(ModuleCore.ESSENCE.getSourceFluid().get(), 1000)),
                         new MachineProduceWrapper(ModuleAgricultureHusbandry.SLAUGHTER_FACTORY.getBlock(), new FluidStack(ModuleCore.MEAT.getSourceFluid().get(), 1000)),
                         new MachineProduceWrapper(ModuleAgricultureHusbandry.SLAUGHTER_FACTORY.getBlock(), new FluidStack(ModuleCore.PINK_SLIME.getSourceFluid().get(), 1000)),
@@ -250,6 +292,18 @@ public class JEICustomPlugin implements IModPlugin {
         registration.addRecipes(IndustrialRecipeTypes.ORE_WASHER, washer);
         registration.addRecipes(IndustrialRecipeTypes.FERMENTER, fluidEntryFermenters);
         registration.addRecipes(IndustrialRecipeTypes.ORE_SIEVE, fluidSieve);
+        registration.addRecipes(LatexProcessingUnitCategory.RECIPE_TYPE, Collections.singletonList(new LatexProcessingUnitCategory.Recipe()));
+        registration.addRecipes(SludgeRefinerCategory.RECIPE_TYPE, Collections.singletonList(new SludgeRefinerCategory.Recipe()));
+        registration.addRecipes(SewageComposterCategory.RECIPE_TYPE, Collections.singletonList(new SewageComposterCategory.Recipe()));
+
+        var mixerRecipes = new ArrayList<DyeMixerCategory.Recipe>(DyeMixerTile.colorUsages.length);
+        for (int i = 0; i < DyeMixerTile.colorUsages.length; i++) {
+            var u = DyeMixerTile.colorUsages[i];
+            mixerRecipes.add(new DyeMixerCategory.Recipe(u.r(), u.g(), u.b(), i));
+        }
+        registration.addRecipes(DyeMixerCategory.RECIPE_TYPE, mixerRecipes);
+
+        registration.addRecipes(SporesRecreatorCategory.RECIPE_TYPE, List.of(new SporesRecreatorCategory.Recipe(Ingredient.of(Tags.Items.MUSHROOMS)), new SporesRecreatorCategory.Recipe(Ingredient.of(Items.CRIMSON_FUNGUS, Items.WARPED_FUNGUS))));
     }
 
 
@@ -277,6 +331,11 @@ public class JEICustomPlugin implements IModPlugin {
         registration.addRecipeCatalyst(new ItemStack(ModuleResourceProduction.WASHING_FACTORY.getBlock()), IndustrialRecipeTypes.ORE_WASHER);
         registration.addRecipeCatalyst(new ItemStack(ModuleResourceProduction.FERMENTATION_STATION.getBlock()), IndustrialRecipeTypes.FERMENTER);
         registration.addRecipeCatalyst(new ItemStack(ModuleResourceProduction.FLUID_SIEVING_MACHINE.getBlock()), IndustrialRecipeTypes.ORE_SIEVE);
+        registration.addRecipeCatalyst(new ItemStack(ModuleCore.LATEX_PROCESSING.getBlock()), LatexProcessingUnitCategory.RECIPE_TYPE);
+        registration.addRecipeCatalyst(new ItemStack(ModuleResourceProduction.SLUDGE_REFINER.getBlock()), SludgeRefinerCategory.RECIPE_TYPE);
+        registration.addRecipeCatalyst(new ItemStack(ModuleAgricultureHusbandry.SEWAGE_COMPOSTER.getBlock()), SewageComposterCategory.RECIPE_TYPE);
+        registration.addRecipeCatalyst(new ItemStack(ModuleResourceProduction.DYE_MIXER.getBlock()), DyeMixerCategory.RECIPE_TYPE);
+        registration.addRecipeCatalyst(new ItemStack(ModuleResourceProduction.SPORES_RECREATOR.getBlock()), SporesRecreatorCategory.RECIPE_TYPE);
     }
 
     @Override

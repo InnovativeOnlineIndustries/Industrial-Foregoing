@@ -1,10 +1,8 @@
 package com.buuz135.industrial.plugin.emi.recipe;
 
 import com.buuz135.industrial.plugin.emi.IFEmiPlugin;
+import com.buuz135.industrial.plugin.emi.widget.NormalTankEmiWidget;
 import com.buuz135.industrial.recipe.FluidExtractorRecipe;
-import com.hrznstudio.titanium.api.client.AssetTypes;
-import com.hrznstudio.titanium.client.screen.asset.DefaultAssetProvider;
-import com.hrznstudio.titanium.util.AssetUtil;
 import dev.emi.emi.api.stack.EmiIngredient;
 import dev.emi.emi.api.widget.WidgetHolder;
 import net.minecraft.ChatFormatting;
@@ -44,7 +42,7 @@ public class FluidExtractorEmiRecipe extends CustomEmiRecipe {
         widgets.addSlot(this.getInputs().get(0), 1, 17);
 
         widgets.addSlot(EmiIngredient.of(List.of(this.getOutputs().get(0))), 27, 34).recipeContext(this);
-        widgets.addTank(this.getOutputs().get(1), 59, 3, 14, 52, 10).backgroundTexture(DefaultAssetProvider.DEFAULT_LOCATION, 177 + 3, 1 + 3).drawBack(false).recipeContext(this);
+        widgets.add(new NormalTankEmiWidget(this.getOutputs().get(1), 10, 57, 1)).recipeContext(this);
 
         widgets.addFillingArrow(26, 12, 5000);
 
@@ -55,8 +53,6 @@ public class FluidExtractorEmiRecipe extends CustomEmiRecipe {
                 draw.drawString(Minecraft.getInstance().font, ChatFormatting.DARK_AQUA + "" + Component.translatable("text.industrialforegoing.jei.recipe.tripled_when").getString(), 80, 6 + (Minecraft.getInstance().font.lineHeight + 2) * 2, 0xFFFFFF, false);
                 draw.drawString(Minecraft.getInstance().font, ChatFormatting.DARK_AQUA + "" + Component.translatable("text.industrialforegoing.jei.recipe.powered").getString(), 80, 6 + (Minecraft.getInstance().font.lineHeight + 2) * 3, 0xFFFFFF, false);
             }
-            AssetUtil.drawAsset(draw, Minecraft.getInstance().screen, DefaultAssetProvider.DEFAULT_PROVIDER.getAsset(AssetTypes.TANK_NORMAL), 57, 1);
-
         });
 
         widgets.addTooltipText(List.of(Component.literal(Component.translatable("text.industrialforegoing.jei.recipe.production_rate").getString())), 78, 5, 140 - 78, 20);

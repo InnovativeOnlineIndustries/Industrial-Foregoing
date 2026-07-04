@@ -1,11 +1,9 @@
 package com.buuz135.industrial.plugin.emi.recipe;
 
 import com.buuz135.industrial.plugin.emi.IFEmiPlugin;
+import com.buuz135.industrial.plugin.emi.widget.SmallTankEmiWidget;
 import com.buuz135.industrial.recipe.LaserDrillFluidRecipe;
 import com.buuz135.industrial.recipe.data.EntityIngredient;
-import com.hrznstudio.titanium.api.client.AssetTypes;
-import com.hrznstudio.titanium.client.screen.asset.DefaultAssetProvider;
-import com.hrznstudio.titanium.util.AssetUtil;
 import com.mojang.blaze3d.systems.RenderSystem;
 import dev.emi.emi.api.neoforge.NeoForgeEmiStack;
 import dev.emi.emi.api.stack.EmiIngredient;
@@ -58,7 +56,7 @@ public class LaserDrillFluidEmiRecipe extends CustomEmiRecipe {
 
         widgets.addSlot(this.getCatalysts().get(0), 36, 5).drawBack(false);
 
-        widgets.addTank(this.getOutputs().get(0), 60 + 40, 5, 14, 15, 50).drawBack(false).recipeContext(this);
+        widgets.add(new SmallTankEmiWidget(this.getOutputs().get(0), 1000, 60 + 35 + 3, 3)).recipeContext(this);
 
         widgets.addDrawable(0, 0, 0, 0, (draw, mouseX, mouseY, delta) -> {
             int recipeWidth = 82 + 35 + 35;
@@ -87,7 +85,6 @@ public class LaserDrillFluidEmiRecipe extends CustomEmiRecipe {
             List<Component> components = new ArrayList<>();
             getTooltip(components, this.recipe.value(), mouseX, mouseY);
             draw.renderComponentTooltip(Minecraft.getInstance().font, components, mouseX, mouseY);
-            AssetUtil.drawAsset(draw, Minecraft.getInstance().screen, DefaultAssetProvider.DEFAULT_PROVIDER.getAsset(AssetTypes.TANK_SMALL), 60 + 35 + 3, 3);
         });
 
         widgets.addButton(0, 70, 12, 12, 0, 0, () -> recipe.value().pointer > 0, (mouseX, mouseY, button) -> {
