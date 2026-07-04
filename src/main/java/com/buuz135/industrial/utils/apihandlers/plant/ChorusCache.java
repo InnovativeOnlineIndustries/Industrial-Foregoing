@@ -24,12 +24,12 @@ package com.buuz135.industrial.utils.apihandlers.plant;
 
 import com.buuz135.industrial.utils.BlockUtils;
 import net.minecraft.core.BlockPos;
-import net.minecraft.core.Direction;
 import net.minecraft.core.NonNullList;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.ChorusFlowerBlock;
+import net.minecraft.world.level.block.state.BlockState;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -48,9 +48,16 @@ public class ChorusCache {
         while (!chorus.isEmpty()) {
             BlockPos checking = chorus.pop();
             if (BlockUtils.isChorus(world, checking)) {
-                Iterable<BlockPos> area = BlockPos.betweenClosed(checking.relative(Direction.DOWN).relative(Direction.SOUTH).relative(Direction.WEST), checking.relative(Direction.UP).relative(Direction.NORTH).relative(Direction.EAST));
+                Iterable<BlockPos> area = BlockPos.betweenClosed(checking.offset(-1, 0, -1), checking.offset(1, 1, 1));
                 for (BlockPos blockPos : area) {
-                    if (BlockUtils.isChorus(world, blockPos) && !this.chorus.contains(blockPos) && blockPos.distSqr(current) <= 100) {
+                    // Chorus can grow up to 22 blocks, tall - assuming it grows sideways each time as well, you have a
+                    // max distance of sqrt(22^2 + 22^2) = 31.11...
+                    // We round that up to 32 then square it to get 1024.
+                    if (blockPos.distSqr(current) > 1024) {
+                        continue;
+                    }
+                    
+                    if (BlockUtils.isChorus(world, blockPos) && !this.chorus.contains(blockPos)) {
                         chorus.push(blockPos.immutable());
                         this.chorus.add(blockPos.immutable());
                     }
@@ -60,20 +67,40 @@ public class ChorusCache {
     }
 
     public boolean isFullyGrown() {
-        return chorus.stream().map(blockpos -> world.getBlockState(blockpos)).allMatch(blockState -> blockState.getBlock().equals(Blocks.CHORUS_PLANT) || (blockState.getBlock().equals(Blocks.CHORUS_FLOWER) && blockState.getValue(ChorusFlowerBlock.AGE) == 5));
+        for (BlockPos blockpos : chorus) {
+            BlockState blockState = world.getBlockState(blockpos);
+            var block = blockState.getBlock();
+            if (!block.equals(Blocks.CHORUS_PLANT) && (!block.equals(Blocks.CHORUS_FLOWER) || blockState.getValue(ChorusFlowerBlock.AGE) != 5)) {
+                return false;
+            }
+        }
+
+        return true;
     }
 
     public List<ItemStack> chop() {
         NonNullList<ItemStack> stacks = NonNullList.create();
         int maxY = getTopRowY();
-        chorus.stream().filter(pos -> pos.getY() == maxY).forEach(pos -> chop(stacks, pos));
-        chorus.removeIf(pos -> pos.getY() == maxY);
+        if (maxY == Integer.MIN_VALUE) {
+            return stacks;
+        }
+
+        var iter = chorus.listIterator();
+        while (iter.hasNext()) {
+            var blockPos = iter.next();
+            if (blockPos.getY() == maxY) {
+                chop(stacks, blockPos);
+                iter.remove();
+            }
+        }
         return stacks;
     }
 
     public void chop(NonNullList<ItemStack> stacks, BlockPos p) {
-        if (BlockUtils.isChorus(world, p)) {
-            if (world.getBlockState(p).getBlock().equals(Blocks.CHORUS_FLOWER)) {
+        var state = world.getBlockState(p);
+        var block = state.getBlock();
+        if (BlockUtils.isBlockChorus(block)) {
+            if (block.equals(Blocks.CHORUS_FLOWER)) {
                 stacks.add(new ItemStack(Blocks.CHORUS_FLOWER));
             } else {
                 stacks.addAll(BlockUtils.getBlockDrops(world, p));
@@ -83,7 +110,7 @@ public class ChorusCache {
     }
 
     public int getTopRowY() {
-        int i = 0;
+        int i = Integer.MIN_VALUE;
         for (BlockPos blockPos : chorus) {
             if (blockPos.getY() > i) i = blockPos.getY();
         }

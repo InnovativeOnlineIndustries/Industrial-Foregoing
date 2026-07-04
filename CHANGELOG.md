@@ -1,3 +1,16 @@
+# Version 3.6.39
+
+* perf: reduce unnecessary parsing in MaterialStoneWorkFactoryTile - Vonr
+* perf: FluidLaserBaseTile improvements - Vonr
+* perf: specialized early exits for known redstone actions - Vonr
+* Add French (fr_fr) translation - programgames
+* translation: update German translations - 13732348243521734
+* Updated PT_BR localization - PrincessStellar
+* refactor: harvesting things - Vonr
+* feat: allow nether fungi hydroponics - Vonr
+* fix: Prevent Hydroponic Bed from being replaced by Azalea roots - 13732348243521734
+* feat: better recipe viewer integration for some machines - Vonr
+
 # Version 3.6.38
 
 * MobImprisonmentTool: Handle special entity interactions and add owner-only capture config - flutz1

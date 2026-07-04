@@ -1,10 +1,9 @@
 package com.buuz135.industrial.plugin.emi.recipe;
 
 import com.buuz135.industrial.plugin.emi.IFEmiPlugin;
-import com.hrznstudio.titanium.api.client.AssetTypes;
+import com.buuz135.industrial.plugin.emi.widget.NormalTankEmiWidget;
 import com.hrznstudio.titanium.client.screen.addon.SlotsScreenAddon;
 import com.hrznstudio.titanium.client.screen.asset.DefaultAssetProvider;
-import com.hrznstudio.titanium.util.AssetUtil;
 import dev.emi.emi.api.neoforge.NeoForgeEmiStack;
 import dev.emi.emi.api.stack.EmiIngredient;
 import dev.emi.emi.api.widget.WidgetHolder;
@@ -45,17 +44,12 @@ public class BioreactorEmiRecipe extends CustomEmiRecipe {
 
         widgets.addSlot(EmiIngredient.of(List.of(this.getInputs().get(0))), 1, 19);
 
-        widgets.addTank(this.getOutputs().get(0), 59, 3, 14, 52, 1000).drawBack(false).recipeContext(this);
+        widgets.add(new NormalTankEmiWidget(this.getOutputs().get(0), 1000, 57, 1)).recipeContext(this);
 
         widgets.addFillingArrow(26, 20, 2000);
 
         widgets.addDrawable(0, 0, 0, 0, (draw, mouseX, mouseY, delta) -> {
-            AssetUtil.drawAsset(draw, Minecraft.getInstance().screen, DefaultAssetProvider.DEFAULT_PROVIDER.getAsset(AssetTypes.TANK_NORMAL), 57, 1);
             SlotsScreenAddon.drawAsset(draw, Minecraft.getInstance().screen, DefaultAssetProvider.DEFAULT_PROVIDER, 2, 20, 0, 0, 1, integer -> Pair.of(0, 0), integer -> ItemStack.EMPTY, true, integer -> new Color(DyeColor.LIGHT_BLUE.getFireworkColor()), integer -> true, 1);
         });
-
-
     }
-
-
 }

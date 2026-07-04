@@ -67,10 +67,7 @@ import net.neoforged.neoforge.items.ItemHandlerHelper;
 import org.apache.commons.lang3.tuple.Pair;
 
 import javax.annotation.Nonnull;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 import java.util.function.BiFunction;
 
 public class MaterialStoneWorkFactoryTile extends IndustrialProcessingTile<MaterialStoneWorkFactoryTile> {
@@ -102,6 +99,8 @@ public class MaterialStoneWorkFactoryTile extends IndustrialProcessingTile<Mater
     private SidedInventoryComponent<MaterialStoneWorkFactoryTile> inventoryGenerator;
     @Save
     private String generatorRecipe;
+    private String previousGeneratorRecipeString;
+    private ResourceLocation cachedGeneratorRecipeResourceLocation;
     @Save
     private SidedInventoryComponent<MaterialStoneWorkFactoryTile> inventoryFirst;
     @Save
@@ -134,6 +133,8 @@ public class MaterialStoneWorkFactoryTile extends IndustrialProcessingTile<Mater
                 .setComponentHarness(this)
                 .setValidator(fluidStack -> fluidStack.getFluid().isSame(Fluids.LAVA)));
         this.generatorRecipe = DEFAULT.toString();
+        this.previousGeneratorRecipeString = generatorRecipe;
+        this.cachedGeneratorRecipeResourceLocation = DEFAULT;
         addButton(new ButtonComponent(54, 64, 18, 18) {
             @Override
             @OnlyIn(Dist.CLIENT)
@@ -320,11 +321,20 @@ public class MaterialStoneWorkFactoryTile extends IndustrialProcessingTile<Mater
                 || process(inventoryGenerator, inventoryFirst, ACTION_RECIPES[firstRecipeId], true);
     }
 
+    private ResourceLocation getGeneratorRecipeLocation() {
+        if (generatorRecipe != null && !generatorRecipe.equals(previousGeneratorRecipeString)) {
+            cachedGeneratorRecipeResourceLocation = ResourceLocation.parse(generatorRecipe);
+            // Strings are immutable so this is fine.
+            previousGeneratorRecipeString = generatorRecipe;
+        }
+        return cachedGeneratorRecipeResourceLocation;
+    }
+
     public Optional<StoneWorkGenerateRecipe> getRecipe() {
         List<RecipeHolder<StoneWorkGenerateRecipe>> recipes = this.level.getRecipeManager().getAllRecipesFor((RecipeType<StoneWorkGenerateRecipe>) ModuleCore.STONEWORK_GENERATE_TYPE.get());
         for (RecipeHolder<StoneWorkGenerateRecipe> recipe : recipes) {
 
-            if (recipe.id().equals(ResourceLocation.parse(generatorRecipe))) {
+            if (recipe.id().equals(this.getGeneratorRecipeLocation())) {
                 return Optional.of(recipe.value());
             }
         }
@@ -334,7 +344,7 @@ public class MaterialStoneWorkFactoryTile extends IndustrialProcessingTile<Mater
     public ResourceLocation getNextRecipe(boolean next) {
         if (generatorRecipe != null) {
             List<ResourceLocation> rls = this.level.getRecipeManager().getAllRecipesFor((RecipeType<StoneWorkGenerateRecipe>) ModuleCore.STONEWORK_GENERATE_TYPE.get()).stream().map(RecipeHolder::id).toList();
-            int currentIndex = rls.indexOf(ResourceLocation.parse(generatorRecipe));
+            int currentIndex = rls.indexOf(this.getGeneratorRecipeLocation());
             if (next) {
                 this.generatorRecipe = rls.get((currentIndex + 1) % rls.size()).toString();
             } else {
