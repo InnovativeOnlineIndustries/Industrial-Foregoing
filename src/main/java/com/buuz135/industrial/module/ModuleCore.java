@@ -55,6 +55,9 @@ import net.minecraft.world.item.crafting.RecipeType;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraftforge.event.TickEvent;
+import net.minecraftforge.event.entity.player.PlayerEvent;
+import net.minecraft.network.protocol.game.ClientboundBlockDestructionPacket;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraftforge.fluids.FluidType;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.RegistryObject;
@@ -134,8 +137,21 @@ public class ModuleCore implements IModule {
         SUPREME = helper.registerBlockWithItem("machine_frame_supreme", () -> new MachineFrameBlock(SUPREME_RARITY, TAB_CORE), (block) -> () -> new MachineFrameBlock.MachineFrameItem(block.get(), SUPREME_RARITY, TAB_CORE), TAB_CORE);
         //DistExecutor.unsafeRunWhenOn(Dist.CLIENT, () -> this::onClient);
         EventManager.forge(TickEvent.LevelTickEvent.class).
-                filter(worldTickEvent -> worldTickEvent.phase == TickEvent.Phase.END && worldTickEvent.type == TickEvent.Type.LEVEL && worldTickEvent.level.getGameTime() % 40 == 0 && FluidExtractorTile.EXTRACTION.containsKey(worldTickEvent.level.dimensionType())).
-                process(worldTickEvent -> FluidExtractorTile.EXTRACTION.get(worldTickEvent.level.dimensionType()).values().forEach(blockPosFluidExtractionProgressHashMap -> blockPosFluidExtractionProgressHashMap.keySet().forEach(pos -> worldTickEvent.level.destroyBlockProgress(blockPosFluidExtractionProgressHashMap.get(pos).getBreakID(), pos, blockPosFluidExtractionProgressHashMap.get(pos).getProgress())))).subscribe();
+                filter(worldTickEvent -> worldTickEvent.phase == TickEvent.Phase.END && worldTickEvent.type == TickEvent.Type.LEVEL && worldTickEvent.level.getGameTime() % 40 == 0 && FluidExtractorTile.EXTRACTION.containsKey(worldTickEvent.level.dimension())).
+                process(worldTickEvent -> FluidExtractorTile.EXTRACTION.get(worldTickEvent.level.dimension()).values().forEach(blockPosFluidExtractionProgressHashMap -> blockPosFluidExtractionProgressHashMap.keySet().forEach(pos -> worldTickEvent.level.destroyBlockProgress(blockPosFluidExtractionProgressHashMap.get(pos).getBreakID(), pos, blockPosFluidExtractionProgressHashMap.get(pos).getProgress())))).subscribe();
+        EventManager.forge(PlayerEvent.PlayerChangedDimensionEvent.class).
+                filter(changedDimensionEvent -> changedDimensionEvent.getEntity() instanceof ServerPlayer).
+                process(changedDimensionEvent -> {
+                    ServerPlayer player = (ServerPlayer) changedDimensionEvent.getEntity();
+                    if (FluidExtractorTile.EXTRACTION.containsKey(changedDimensionEvent.getFrom())) {
+                        FluidExtractorTile.EXTRACTION.get(changedDimensionEvent.getFrom()).values().forEach(blockPosFluidExtractionProgressHashMap -> blockPosFluidExtractionProgressHashMap.forEach((pos, progress) ->
+                                player.connection.send(new ClientboundBlockDestructionPacket(progress.getBreakID(), pos, -1))));
+                    }
+                    if (FluidExtractorTile.EXTRACTION.containsKey(changedDimensionEvent.getTo())) {
+                        FluidExtractorTile.EXTRACTION.get(changedDimensionEvent.getTo()).values().forEach(blockPosFluidExtractionProgressHashMap -> blockPosFluidExtractionProgressHashMap.forEach((pos, progress) ->
+                                player.connection.send(new ClientboundBlockDestructionPacket(progress.getBreakID(), pos, progress.getProgress()))));
+                    }
+                }).subscribe();
         for (int i = 0; i < RANGE_ADDONS.length; i++) {
             int finalI = i;
             RANGE_ADDONS[i] = helper.registerGeneric(ForgeRegistries.ITEMS.getRegistryKey(), "range_addon" + i, () -> new RangeAddonItem(finalI, TAB_CORE));
