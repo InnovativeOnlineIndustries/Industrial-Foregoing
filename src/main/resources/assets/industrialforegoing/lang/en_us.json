@@ -103,7 +103,7 @@
   "text.industrialforegoing.tooltip.efficiency": "Processing Time Reduction: ",
   "text.industrialforegoing.tooltip.processing": "Processing: ",
   "text.industrialforegoing.tooltip.speed": "Speed Increase: ",
-  "text.industrialforegoing.tooltip.accepts_fluid_on_top": "Will use fluids from tanks placed on top of the mahcine",
+  "text.industrialforegoing.tooltip.accepts_fluid_on_top": "Will use fluids from tanks placed on top of the machine",
   "tooltip.industrialforegoing.type": "Type: ",
   "text.industrialforegoing.up": "Up",
   "text.industrialforegoing.down": "Down",
