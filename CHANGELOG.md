@@ -1,7 +1,7 @@
 # Version 3.7.4
 
 ### Changes
-* **Plant Gatherer seed blacklist**: Added config option `seedCollectionBlacklistTags` (default: `["mysticalagriculture:seeds"]`). Seeds matching any listed item tag are discarded from the Plant Gatherer's drops instead of being collected; the crop yield is still gathered, and any seed used for auto-replant (ether mode) is kept.
+* **Plant Gatherer seed blacklist**: Added config option `seedCollectionBlacklistTags` (comma-separated item tag ids, empty by default = disabled). Seeds matching any listed item tag are discarded from the Plant Gatherer's drops instead of being collected; the crop yield is still gathered, and any seed used for auto-replant (ether mode) is kept.
 
 ---
 

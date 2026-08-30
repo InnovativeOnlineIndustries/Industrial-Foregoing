@@ -136,22 +136,22 @@ public class PlantGathererTile extends IndustrialAreaWorkingTile<PlantGathererTi
         return new WorkAction(1f, 0);
     }
 
-    private static List<String> cachedRawSeedBlacklist;
+    private static String cachedRawSeedBlacklist;
     private static List<TagKey<Item>> cachedSeedBlacklistTags = List.of();
 
     /**
-     * Parses {@link PlantGathererConfig#seedCollectionBlacklistTags} into item tags, caching the result until the
-     * config list instance changes (it is replaced on every config (re)load).
+     * Parses {@link PlantGathererConfig#seedCollectionBlacklistTags} (a comma-separated list of item tag ids) into
+     * item tags, caching the result until the config string changes.
      */
     private static List<TagKey<Item>> getSeedBlacklistTags() {
-        List<String> raw = PlantGathererConfig.seedCollectionBlacklistTags;
-        if (raw != cachedRawSeedBlacklist) {
+        String raw = PlantGathererConfig.seedCollectionBlacklistTags;
+        if (!java.util.Objects.equals(raw, cachedRawSeedBlacklist)) {
             cachedRawSeedBlacklist = raw;
             List<TagKey<Item>> parsed = new ArrayList<>();
-            if (raw != null) {
-                for (String entry : raw) {
-                    if (entry == null || entry.isBlank()) continue;
+            if (raw != null && !raw.isBlank()) {
+                for (String entry : raw.split(",")) {
                     String trimmed = entry.strip();
+                    if (trimmed.isEmpty()) continue;
                     if (trimmed.startsWith("#")) trimmed = trimmed.substring(1);
                     ResourceLocation id = ResourceLocation.tryParse(trimmed);
                     if (id != null) parsed.add(TagKey.create(Registries.ITEM, id));
