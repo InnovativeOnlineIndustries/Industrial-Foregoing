@@ -26,6 +26,10 @@ import com.buuz135.industrial.config.MachineAgricultureHusbandryConfig;
 import com.hrznstudio.titanium.annotation.config.ConfigFile;
 import com.hrznstudio.titanium.annotation.config.ConfigVal;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
 @ConfigFile.Child(MachineAgricultureHusbandryConfig.class)
 public class PlantGathererConfig {
 
@@ -43,4 +47,7 @@ public class PlantGathererConfig {
 
     @ConfigVal(comment = "Max Amount of Stored Fluid for 'EtherTank' - Default: [1000mB]")
     public static int maxEtherTankSize = 1000;
+
+    @ConfigVal(comment = "List of item tags whose seeds the Plant Gatherer will NOT collect. The crop yield is still gathered, only the matching seed items are discarded from the drops (any seed used for auto-replant is kept). Format: 'namespace:path' (a leading '#' is ignored). Default: ['mysticalagriculture:seeds']")
+    public static List<String> seedCollectionBlacklistTags = new ArrayList<>(Arrays.asList("mysticalagriculture:seeds"));
 }

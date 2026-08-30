@@ -38,14 +38,20 @@ import com.hrznstudio.titanium.component.fluid.SidedFluidTankComponent;
 import com.hrznstudio.titanium.component.inventory.SidedInventoryComponent;
 import com.hrznstudio.titanium.component.progress.ProgressBarComponent;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.registries.Registries;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.DyeColor;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.state.BlockState;
 import net.neoforged.neoforge.fluids.FluidStack;
 import net.neoforged.neoforge.fluids.capability.IFluidHandler;
+import net.neoforged.neoforge.items.IItemHandler;
 import net.neoforged.neoforge.items.ItemHandlerHelper;
 
 import javax.annotation.Nonnull;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -102,7 +108,7 @@ public class PlantGathererTile extends IndustrialAreaWorkingTile<PlantGathererTi
                 BlockPos pointed = getPointedBlockPos();
                 if (isLoaded(pointed) && !ItemStackUtils.isInventoryFull(output)) {
                     if (this.etherBar.getProgress() > 0) {
-                        if (HydroponicBedTile.tryToHarvestAndReplant(this.level, pointed, this.level.getBlockState(pointed), this.output, this.etherBar, this, () -> {
+                        if (HydroponicBedTile.tryToHarvestAndReplant(this.level, pointed, this.level.getBlockState(pointed), wrapSeedFilteredOutput(this.output), this.etherBar, this, () -> {
                             Optional<PlantRecollectable> optional = IFRegistries.PLANT_RECOLLECTABLES_REGISTRY.stream().filter(plantRecollectable -> plantRecollectable.canBeHarvested(level, pointed, this.level.getBlockState(pointed))).findFirst();
                             return optional.orElse(null);
                         }, ItemStack.EMPTY)) {
@@ -112,7 +118,7 @@ public class PlantGathererTile extends IndustrialAreaWorkingTile<PlantGathererTi
                     } else {
                         Optional<PlantRecollectable> optional = IFRegistries.PLANT_RECOLLECTABLES_REGISTRY.stream().filter(plantRecollectable -> plantRecollectable.canBeHarvested(this.level, pointed, this.level.getBlockState(pointed))).findFirst();
                         if (optional.isPresent()) {
-                            List<ItemStack> drops = optional.get().doHarvestOperation(this.level, pointed, this.level.getBlockState(pointed));
+                            List<ItemStack> drops = filterBlacklistedSeeds(optional.get().doHarvestOperation(this.level, pointed, this.level.getBlockState(pointed)));
                             tank.fillForced(new FluidStack(ModuleCore.SLUDGE.getSourceFluid().get(), 10 * drops.size()), IFluidHandler.FluidAction.EXECUTE);
                             drops.forEach(stack -> ItemHandlerHelper.insertItem(output, stack, false));
                             if (optional.get().shouldCheckNextPlant(this.level, pointed, this.level.getBlockState(pointed))) {
@@ -128,6 +134,103 @@ public class PlantGathererTile extends IndustrialAreaWorkingTile<PlantGathererTi
             increasePointer();
         }
         return new WorkAction(1f, 0);
+    }
+
+    private static List<String> cachedRawSeedBlacklist;
+    private static List<TagKey<Item>> cachedSeedBlacklistTags = List.of();
+
+    /**
+     * Parses {@link PlantGathererConfig#seedCollectionBlacklistTags} into item tags, caching the result until the
+     * config list instance changes (it is replaced on every config (re)load).
+     */
+    private static List<TagKey<Item>> getSeedBlacklistTags() {
+        List<String> raw = PlantGathererConfig.seedCollectionBlacklistTags;
+        if (raw != cachedRawSeedBlacklist) {
+            cachedRawSeedBlacklist = raw;
+            List<TagKey<Item>> parsed = new ArrayList<>();
+            if (raw != null) {
+                for (String entry : raw) {
+                    if (entry == null || entry.isBlank()) continue;
+                    String trimmed = entry.strip();
+                    if (trimmed.startsWith("#")) trimmed = trimmed.substring(1);
+                    ResourceLocation id = ResourceLocation.tryParse(trimmed);
+                    if (id != null) parsed.add(TagKey.create(Registries.ITEM, id));
+                }
+            }
+            cachedSeedBlacklistTags = parsed;
+        }
+        return cachedSeedBlacklistTags;
+    }
+
+    private static boolean isSeedCollectionBlacklisted(ItemStack stack) {
+        if (stack.isEmpty()) return false;
+        List<TagKey<Item>> tags = getSeedBlacklistTags();
+        for (int i = 0, size = tags.size(); i < size; i++) {
+            if (stack.is(tags.get(i))) return true;
+        }
+        return false;
+    }
+
+    /**
+     * Returns the drop list with any blacklisted seeds removed. The input list is returned untouched when the
+     * blacklist is empty or matches nothing, so the common case allocates nothing and immutable drop lists are safe.
+     */
+    private static List<ItemStack> filterBlacklistedSeeds(List<ItemStack> drops) {
+        if (getSeedBlacklistTags().isEmpty()) return drops;
+        List<ItemStack> filtered = null;
+        for (int i = 0, size = drops.size(); i < size; i++) {
+            ItemStack stack = drops.get(i);
+            if (isSeedCollectionBlacklisted(stack)) {
+                if (filtered == null) filtered = new ArrayList<>(drops.subList(0, i));
+            } else if (filtered != null) {
+                filtered.add(stack);
+            }
+        }
+        return filtered != null ? filtered : drops;
+    }
+
+    /**
+     * Wraps the gatherer output so blacklisted seeds inserted from {@link HydroponicBedTile#tryToHarvestAndReplant}
+     * (the ether/auto-replant path) are discarded. Any seed consumed for replanting is removed from the drops before
+     * insertion, so only surplus seeds are voided here. Returns the handler unchanged when nothing is blacklisted.
+     */
+    private static IItemHandler wrapSeedFilteredOutput(IItemHandler delegate) {
+        if (getSeedBlacklistTags().isEmpty()) return delegate;
+        return new IItemHandler() {
+            @Override
+            public int getSlots() {
+                return delegate.getSlots();
+            }
+
+            @Nonnull
+            @Override
+            public ItemStack getStackInSlot(int slot) {
+                return delegate.getStackInSlot(slot);
+            }
+
+            @Nonnull
+            @Override
+            public ItemStack insertItem(int slot, @Nonnull ItemStack stack, boolean simulate) {
+                if (isSeedCollectionBlacklisted(stack)) return ItemStack.EMPTY;
+                return delegate.insertItem(slot, stack, simulate);
+            }
+
+            @Nonnull
+            @Override
+            public ItemStack extractItem(int slot, int amount, boolean simulate) {
+                return delegate.extractItem(slot, amount, simulate);
+            }
+
+            @Override
+            public int getSlotLimit(int slot) {
+                return delegate.getSlotLimit(slot);
+            }
+
+            @Override
+            public boolean isItemValid(int slot, @Nonnull ItemStack stack) {
+                return delegate.isItemValid(slot, stack);
+            }
+        };
     }
 
     @Override
