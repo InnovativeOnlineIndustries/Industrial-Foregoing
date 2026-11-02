@@ -41,6 +41,24 @@ repositories {
             includeGroup "com.enderio"
         }
     }
+    maven {
+        url 'https://maven.ftb.dev/releases'
+        content {
+            includeGroup "dev.ftb.mods"
+        }
+    }
+    maven {
+        url 'https://api.modrinth.com/maven'
+        content {
+            includeGroup "maven.modrinth"
+        }
+    }
+}
+
+// Mods that are only needed for local test runs: on the run classpath, but not on the compile classpath and not published.
+configurations {
+    localRuntime
+    runtimeClasspath.extendsFrom localRuntime
 }
 
 base {
@@ -102,17 +120,26 @@ dependencies {
     implementation "vazkii.patchouli:Patchouli:${patchouli_version}"
     //runtimeOnly "vazkii.patchouli:Patchouli:${patchouli_version}"
     compileOnly "curse.maven:pneumaticcraft-repressurized-281849:5698172"
-    implementation "curse.maven:curios-continuation-1037991:5690713"
+    implementation "maven.modrinth:curios:9.5.1+1.21.1"
     compileOnly "dev.emi:emi-neoforge:${emi_version}:api"
     if (project.use_emi == "true") {
         runtimeOnly "dev.emi:emi-neoforge:${emi_version}"
     }
     runtimeOnly "curse.maven:mekanism-268560:5680395"
 
-    runtimeOnly "curse.maven:architectury-api-419699:5786327"
-    runtimeOnly "curse.maven:ftb-teams-forge-404468:6119437"
-    implementation "curse.maven:ftb-library-forge-404465:6161173"
-    implementation "curse.maven:ftb-chunks-forge-314906:6121389"
+    // FTB's own POMs reference each other under these coordinates, so they're all taken from FTB's maven to avoid
+    // duplicate mods. Architectury comes from Modrinth, so the FTB POMs' references to dev.architectury are excluded in favour of it.
+    // implementation, not runtimeOnly: FTB Chunks needs Architectury on the compile classpath anyway, keep it at one version
+    implementation "maven.modrinth:architectury-api:13.0.11+neoforge"
+    runtimeOnly("dev.ftb.mods:ftb-teams-neoforge:2101.1.11") { exclude group: "dev.architectury" }
+    implementation("dev.ftb.mods:ftb-library-neoforge:2101.1.37") { exclude group: "dev.architectury" }
+    implementation("dev.ftb.mods:ftb-chunks-neoforge:2101.1.22") { exclude group: "dev.architectury" }
+    // Its POM also pulls FTB Ranks and FTB EZ Crystals, which are optional; its required mods are declared above.
+    localRuntime("dev.ftb.mods:ftb-ultimine-neoforge:2101.1.15") { transitive = false }
+    localRuntime "maven.modrinth:apotheosis:1.21.1-8.9.0"
+    localRuntime "maven.modrinth:placebo:1.21.1-9.9.4"
+    localRuntime "maven.modrinth:apothic-attributes:1.21.1-2.11.0"
+    localRuntime "maven.modrinth:apothic-enchanting:1.21.1-1.6.2"
     //runtimeOnly "com.enderio:enderio-base:${ender_io_version}"
     //runtimeOnly "com.enderio:enderio-conduits:${ender_io_version}"
     //runtimeOnly "com.enderio:enderio-machines:${ender_io_version}"

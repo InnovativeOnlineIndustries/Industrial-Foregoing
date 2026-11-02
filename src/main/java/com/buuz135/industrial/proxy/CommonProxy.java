@@ -23,6 +23,7 @@
 package com.buuz135.industrial.proxy;
 
 import com.buuz135.industrial.proxy.event.FakePlayerRideEntityHandler;
+import com.buuz135.industrial.proxy.event.InfinityDrillEventHandler;
 import com.buuz135.industrial.proxy.event.MobImprisonmentTamableEntitiesHandler;
 import com.buuz135.industrial.utils.explosion.ExplosionTickHandler;
 import com.hrznstudio.titanium.event.handler.EventManager;
@@ -34,6 +35,7 @@ public class CommonProxy {
     public void run() {
         NeoForge.EVENT_BUS.register(new FakePlayerRideEntityHandler());
         NeoForge.EVENT_BUS.register(new MobImprisonmentTamableEntitiesHandler());
+        NeoForge.EVENT_BUS.register(new InfinityDrillEventHandler());
         EventManager.forge(ServerTickEvent.Pre.class).process(ExplosionTickHandler::serverTick).subscribe();
     }
 
