@@ -53,6 +53,7 @@ import com.hrznstudio.titanium.util.FacingUtil;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
@@ -71,6 +72,7 @@ public abstract class IndustrialMachineTile<T extends IndustrialMachineTile<T>> 
     private static String sidenessTank = "SIDENESS_TANK";
     private static String sidenessInventory = "SIDENESS_INVENTORY";
     private static String filter = "FILTER";
+    private static final int UNREQUESTED_UPDATE_PACKET_INTERVAL = 100;
 
     @Save
     private TankInteractionBundle<IndustrialMachineTile> tankBundle;
@@ -80,6 +82,8 @@ public abstract class IndustrialMachineTile<T extends IndustrialMachineTile<T>> 
     private String uuid = "d28b7061-fb92-4064-90fb-7e02b95a72a5";
     private RedstoneControlButtonComponent<RedstoneAction> redstoneButton;
     private boolean tankBundleAdded;
+    private boolean updatePacketRequested;
+    private long nextUnrequestedUpdatePacket = -1;
 
     public IndustrialMachineTile(BlockWithTile basicTileBlock, BlockPos blockPos, BlockState blockState) {
         super((BasicTileBlock<T>) basicTileBlock.getBlock(), basicTileBlock.type().get(), blockPos, blockState);
@@ -102,6 +106,48 @@ public abstract class IndustrialMachineTile<T extends IndustrialMachineTile<T>> 
     public void initClient() {
         super.initClient();
         if (ClientConfig.DONATION_LINK_ENABLED) this.addGuiAddonFactory(() -> new DonationGuiAddon(-22, 4));
+    }
+
+    @Override
+    public void markForUpdate() {
+        this.updatePacketRequested = true;
+        super.markForUpdate();
+    }
+
+    @Override
+    public void markComponentForUpdate(boolean referenced) {
+        if (!referenced) {
+            this.updatePacketRequested = true;
+        }
+        super.markComponentForUpdate(referenced);
+    }
+
+    @Override
+    public void updateNeigh() {
+        this.updatePacketRequested = true;
+        super.updateNeigh();
+    }
+
+    /**
+     * Block updates requested from outside the machine (tick accelerators call sendBlockUpdated every tick)
+     * would send the whole NBT each time, so they are rate limited. The machine's own updates are always sent,
+     * and open screens are synced through the container, not through this packet.
+     */
+    @Override
+    public ClientboundBlockEntityDataPacket getUpdatePacket() {
+        long gameTime = this.level.getGameTime();
+        if (!this.updatePacketRequested) {
+            if (this.nextUnrequestedUpdatePacket < 0) {
+                // Offset by position so a large group of machines doesn't send in the same tick
+                this.nextUnrequestedUpdatePacket = gameTime + Math.floorMod(this.worldPosition.hashCode(), UNREQUESTED_UPDATE_PACKET_INTERVAL);
+            }
+            if (gameTime < this.nextUnrequestedUpdatePacket) {
+                return null;
+            }
+        }
+        this.updatePacketRequested = false;
+        this.nextUnrequestedUpdatePacket = gameTime + UNREQUESTED_UPDATE_PACKET_INTERVAL;
+        return super.getUpdatePacket();
     }
 
     @Override

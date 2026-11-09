@@ -1,3 +1,10 @@
+# Version 3.7.5
+
+### Changes
+* **Reduced network traffic from accelerated machines**: Block updates requested from outside a machine (for example by tick accelerators calling `sendBlockUpdated` every tick) now send at most one block entity packet per machine every 5 seconds, instead of the full NBT each time. The machine's own updates are still sent immediately.
+
+---
+
 # Version 3.7.4
 
 ### Changes
