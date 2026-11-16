@@ -214,28 +214,6 @@ processResources {
     }
 }
 
-task apiJar(type: Jar, dependsOn: 'classes') {
-    classifier = 'api'
-    from(sourceSets.main.output) {
-        include 'com/buuz135/industrial/api/**'
-    }
-}
-
-task sourcesJar(type: Jar, dependsOn: classes) {
-    classifier = 'sources'
-    from sourceSets.main.allSource
-}
-
-task deobfJar(type:Jar) {
-    from sourceSets.main.output
-    classifier 'deobf'
-}
-
-artifacts {
-    archives sourcesJar
-    archives deobfJar
-    archives apiJar
-}
 
 publish.dependsOn(project.tasks.getByName("assemble"))
 publish.mustRunAfter(project.tasks.getByName("build"))
@@ -244,9 +222,6 @@ publishing {
     publications {
         mavenJava(MavenPublication) {
             artifact jar
-            artifact sourcesJar
-            artifact deobfJar
-            artifact apiJar
         }
     }
     repositories {
@@ -303,9 +278,6 @@ curseforge {
                 optionalDependency 'jei'
             }
         }
-
-        addArtifact sourcesJar
-        addArtifact deobfJar
     }
 }
 
