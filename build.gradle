@@ -16,8 +16,7 @@ buildscript {
         }
     }
     dependencies {
-        classpath group: 'net.minecraftforge.gradle', name: 'ForgeGradle', version: '5.1.+', changing: true
-        classpath "gradle.plugin.com.matthewprenger:CurseGradle:1.4.0"
+        classpath group: 'net.minecraftforge.gradle', name: 'ForgeGradle', version: '5.1.77', changing: true
     }
 }
 
@@ -25,7 +24,7 @@ plugins {
     id "com.github.hierynomus.license" version "0.16.1"
     id 'java'
     id 'maven-publish'
-    id "com.matthewprenger.cursegradle" version "1.4.0"
+    id "de.maxhenkel.cursegradle" version "1.5.3"
     id "se.bjurr.gitchangelog.git-changelog-gradle-plugin" version "1.64"
     id "com.modrinth.minotaur" version "2.+"
 }
@@ -295,7 +294,8 @@ curseforge {
         changelogType = 'markdown'
         releaseType = 'beta'
         addGameVersion '1.20.1'
-
+        addGameVersion 'Client'
+        addGameVersion 'Server'
         mainArtifact(jar){
             relations {
                 requiredDependency 'titanium'
