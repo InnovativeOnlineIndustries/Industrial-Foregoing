@@ -32,12 +32,12 @@ import com.hrznstudio.titanium.component.fluid.FluidTankComponent;
 import com.hrznstudio.titanium.component.fluid.SidedFluidTankComponent;
 import com.hrznstudio.titanium.util.RecipeUtil;
 import net.minecraft.core.BlockPos;
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.item.DyeColor;
 import net.minecraft.world.item.crafting.RecipeType;
 import net.minecraft.world.level.ChunkPos;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.level.dimension.DimensionType;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.capability.IFluidHandler;
 
@@ -48,7 +48,7 @@ import java.util.HashMap;
 
 public class FluidExtractorTile extends IndustrialAreaWorkingTile<FluidExtractorTile> {
 
-    public static HashMap<DimensionType, HashMap<ChunkPos, HashMap<BlockPos, FluidExtractionProgress>>> EXTRACTION = new HashMap<>();
+    public static HashMap<ResourceKey<Level>, HashMap<ChunkPos, HashMap<BlockPos, FluidExtractionProgress>>> EXTRACTION = new HashMap<>();
 
     private int maxProgress;
     private int powerPerOperation;
@@ -73,8 +73,9 @@ public class FluidExtractorTile extends IndustrialAreaWorkingTile<FluidExtractor
         if (isLoaded(pos) && !this.level.isEmptyBlock(pos) && this.tank.getFluidAmount() < this.tank.getCapacity()) {
             if (currentRecipe == null || !currentRecipe.matches(this.level, pos) || currentRecipe.defaultRecipe)
                 currentRecipe = findRecipe(this.level, pos);
-            if (currentRecipe != null) {//GetDimensionType
-                FluidExtractionProgress extractionProgress = EXTRACTION.computeIfAbsent(this.level.dimensionType(), dimensionType -> new HashMap<>()).computeIfAbsent(this.level.getChunkAt(pos).getPos(), chunkPos -> new HashMap<>()).computeIfAbsent(pos, pos1 -> new FluidExtractionProgress(this.level));
+            if (currentRecipe != null) {//GetDimension
+                HashMap<BlockPos, FluidExtractionProgress> chunkExtractionMap = EXTRACTION.computeIfAbsent(this.level.dimension(), dimensionKey -> new HashMap<>()).computeIfAbsent(this.level.getChunkAt(pos).getPos(), chunkPos -> new HashMap<>());
+                FluidExtractionProgress extractionProgress = chunkExtractionMap.computeIfAbsent(pos, pos1 -> new FluidExtractionProgress(this.level));
                 if (currentRecipe.output.getFluid().isSame(ModuleCore.LATEX.getSourceFluid().get())) {
                     tank.fillForced(new FluidStack(currentRecipe.output.getFluid(), currentRecipe.output.getAmount() * (hasEnergy(powerPerOperation) ? 3 : 1)), IFluidHandler.FluidAction.EXECUTE);
                 } else {
@@ -84,7 +85,8 @@ public class FluidExtractorTile extends IndustrialAreaWorkingTile<FluidExtractor
                     extractionProgress.setProgress(extractionProgress.getProgress() + 1);
                 }
                 if (extractionProgress.getProgress() > 7) {
-                    extractionProgress.setProgress(0);
+                    this.level.destroyBlockProgress(extractionProgress.getBreakID(), pos, -1);
+                    chunkExtractionMap.remove(pos);
                     this.level.setBlockAndUpdate(pos, currentRecipe.result.defaultBlockState());
                     if (currentRecipe.output.getFluid().isSame(ModuleCore.LATEX.getSourceFluid().get())) {
                         tank.fillForced(new FluidStack(currentRecipe.output.getFluid(), currentRecipe.output.getAmount() * (hasEnergy(powerPerOperation) ? 200 : 1)), IFluidHandler.FluidAction.EXECUTE);
