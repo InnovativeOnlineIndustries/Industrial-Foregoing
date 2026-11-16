@@ -1,3 +1,11 @@
+# Version 3.5.23
+
+* Fix simulated hydroponic bed crash when inserting empty processor with seed - NightSparrows
+* fix: Fluid Extractor crack overlay leaking across dimensions and never clearing after a block is fully processed -  09milk
+* Entity.RemovalReason change in MobImprisonmentToolItem.java - frikinjay
+* Make DissolutionChamberRecipe and JEI Category respect NBT on input items - Christofmeg
+* Typo on the ore tag - ArthwrWilly
+
 # Version 3.5.22
 
 * Back port Simulated Hydroponic Bed to 1.20 - NightSparrows
