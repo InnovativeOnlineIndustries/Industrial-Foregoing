@@ -1,3 +1,10 @@
+pluginManagement {
+  repositories {
+    maven { url = 'https://maven.maxhenkel.de/repository/public' }
+    gradlePluginPortal()
+  }
+}
+
 rootProject.name='industrial-foregoing'
 
 
